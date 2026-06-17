@@ -1,0 +1,20 @@
+# BasicGeometryMeasurementStructure / BasicDifferenceStructure（中3）の Few-Shot 種コーパス
+
+examples:
+  - input_middle_representation:
+      problem_structure_type: BasicGeometryMeasurementStructure
+      selected_tags: [space_geometry, sphere, pi]
+      difficulty_score: 65
+      problem_form: calculation
+      sub_questions:
+        - label: ""
+          prompt_hint: 球の体積を求めなさい
+          answer:
+            type: expression
+            sympy_form: "36*pi"
+            text_form: "$36\\pi$ cm³"
+    ideal_problem_text: |
+      半径 3 cm の球の体積を求めなさい。
+    ideal_explanation_text: |
+      球の体積の公式は $V = \dfrac{4}{3}\pi r^3$。
+      $r = 3$ を代入して $V = \dfrac{4}{3}\pi \cdot 27 = 36\pi$（cm³）。

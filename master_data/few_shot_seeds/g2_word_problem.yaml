@@ -1,0 +1,21 @@
+# WordProblemStructure（中2）の Few-Shot 種コーパス
+
+examples:
+  - input_middle_representation:
+      problem_structure_type: WordProblemStructure
+      selected_tags: [linear_equation]
+      difficulty_score: 30
+      problem_form: word_problem
+      sub_questions:
+        - label: ""
+          prompt_hint: 方程式を立てて解きなさい
+          answer:
+            type: numeric
+            sympy_form: "5"
+            text_form: "5"
+    ideal_problem_text: |
+      花子さんは 1 個 80 円のりんごを何個か買い、合計 400 円でした。
+      花子さんはりんごを何個買いましたか。
+    ideal_explanation_text: |
+      買った個数を $x$ 個とすると $80x = 400$。
+      よって $x = 5$。

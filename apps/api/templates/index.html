@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>mongene-v2 中学数学問題ジェネレータ</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+  <style>
+    :root { color-scheme: light dark; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Sans", "Hiragino Kaku Gothic ProN", sans-serif;
+      max-width: 900px; margin: 0 auto; padding: 24px;
+      line-height: 1.6;
+    }
+    h1 { font-size: 1.5rem; }
+    fieldset { border: 1px solid #ddd; border-radius: 8px; padding: 16px; margin-bottom: 16px; }
+    legend { font-weight: bold; padding: 0 8px; }
+    .row { display: flex; gap: 12px; align-items: center; margin-bottom: 8px; flex-wrap: wrap; }
+    label { display: inline-block; min-width: 7em; font-weight: 500; }
+    input[type="text"], input[type="number"], select {
+      padding: 6px 8px; border: 1px solid #aaa; border-radius: 4px; flex: 1; min-width: 12em;
+    }
+    button {
+      padding: 10px 18px; border: none; border-radius: 6px;
+      background: #2563eb; color: white; cursor: pointer; font-size: 1rem;
+    }
+    button:disabled { background: #999; cursor: not-allowed; }
+    #result { border: 1px solid #ddd; border-radius: 8px; padding: 16px; margin-top: 16px; background: #fafafa; }
+    .problem-text { font-size: 1.1rem; padding: 12px; background: white; border-radius: 4px; }
+    .explanation { padding: 12px; background: white; border-radius: 4px; white-space: pre-wrap; }
+    .metadata { font-size: 0.85rem; color: #666; margin-top: 12px; }
+    .error { color: #b91c1c; padding: 12px; background: #fef2f2; border-radius: 4px; }
+    .loading { color: #2563eb; }
+  </style>
+</head>
+<body>
+  <h1>mongene-v2 中学数学問題ジェネレータ</h1>
+  <p>177 lesson から選んで、難易度を指定して問題を生成します。</p>
+
+  <fieldset>
+    <legend>問題生成リクエスト</legend>
+    <div class="row">
+      <label for="grade">学年</label>
+      <select id="grade">
+        <option value="1">中学1年</option>
+        <option value="2">中学2年</option>
+        <option value="3" selected>中学3年</option>
+      </select>
+    </div>
+    <div class="row">
+      <label for="lesson">単元 (lesson_id)</label>
+      <select id="lesson"><option>読み込み中...</option></select>
+    </div>
+    <div class="row">
+      <label for="form">問題形式</label>
+      <select id="form">
+        <option value="calculation">計算</option>
+        <option value="word_problem">文章題</option>
+        <option value="proof">証明</option>
+      </select>
+    </div>
+    <div class="row">
+      <label for="difficulty">難易度 (1-100)</label>
+      <input type="number" id="difficulty" value="50" min="1" max="100" />
+    </div>
+    <div class="row">
+      <label for="unlearned">未習熟 lesson</label>
+      <input type="text" id="unlearned" placeholder="g3_l24,g3_l51 のようにカンマ区切り" />
+    </div>
+    <div class="row">
+      <button id="submit">問題生成</button>
+      <span id="status"></span>
+    </div>
+  </fieldset>
+
+  <div id="result" style="display:none">
+    <h2>生成結果</h2>
+    <div class="problem-text" id="problemText"></div>
+    <h3>解説</h3>
+    <div class="explanation" id="explanationText"></div>
+    <details>
+      <summary>メタデータ</summary>
+      <pre class="metadata" id="metadata"></pre>
+    </details>
+  </div>
+
+  <script>
+    const $ = (id) => document.getElementById(id);
+    let lessons = [];
+
+    async function loadLessons() {
+      const res = await fetch('/problems/lessons');
+      const data = await res.json();
+      lessons = data.lessons;
+      filterLessons();
+    }
+
+    function filterLessons() {
+      const grade = parseInt($('grade').value, 10);
+      const filtered = lessons.filter((l) => l.grade === grade);
+      $('lesson').innerHTML = filtered
+        .map(
+          (l) =>
+            `<option value="${l.lesson_id}" data-y="${l.y_base}" data-forms="${l.supported_forms.join(',')}">${l.lesson_id} - ${l.title} [y=${l.y_base}]</option>`,
+        )
+        .join('');
+      onLessonChange();
+    }
+
+    function onLessonChange() {
+      const opt = $('lesson').options[$('lesson').selectedIndex];
+      if (!opt) return;
+      const forms = (opt.dataset.forms || '').split(',');
+      const formSel = $('form');
+      [...formSel.options].forEach((o) => (o.disabled = !forms.includes(o.value)));
+      if (!forms.includes(formSel.value) && forms.length) formSel.value = forms[0];
+      const y = parseInt(opt.dataset.y, 10);
+      if (!isNaN(y)) $('difficulty').value = y;
+    }
+
+    $('grade').addEventListener('change', filterLessons);
+    $('lesson').addEventListener('change', onLessonChange);
+
+    $('submit').addEventListener('click', async () => {
+      const lessonId = $('lesson').value;
+      const payload = {
+        curriculum: { grade: parseInt($('grade').value, 10), lesson_ids: [lessonId] },
+        problem_form: $('form').value,
+        target_difficulty: parseInt($('difficulty').value, 10),
+        unlearned_lesson_ids: $('unlearned').value
+          .split(',')
+          .map((s) => s.trim())
+          .filter(Boolean),
+      };
+
+      $('submit').disabled = true;
+      $('status').className = 'loading';
+      $('status').textContent = '生成中...（実 LLM で 10〜60 秒）';
+      $('result').style.display = 'none';
+
+      try {
+        const res = await fetch('/problems/generate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        const data = await res.json();
+        if (!res.ok) {
+          $('result').style.display = 'block';
+          $('problemText').innerHTML = `<div class="error">${data.detail || JSON.stringify(data)}</div>`;
+          $('explanationText').textContent = '';
+          $('metadata').textContent = '';
+        } else {
+          $('result').style.display = 'block';
+          $('problemText').textContent = data.content_problem_text;
+          const subs = (data.sub_questions || [])
+            .map((sq) => `${sq.label} ${sq.prompt_text}\n  答え: ${sq.answer.text_form}`)
+            .join('\n\n');
+          const explanation = (data.sub_questions[0]?.explanation_text || '');
+          $('explanationText').textContent = subs + (explanation ? '\n\n' + explanation : '');
+          $('metadata').textContent = JSON.stringify(data.metadata, null, 2);
+          if (window.renderMathInElement) {
+            renderMathInElement(document.getElementById('result'), {
+              delimiters: [
+                { left: '$', right: '$', display: false },
+                { left: '$$', right: '$$', display: true },
+              ],
+            });
+          }
+        }
+      } catch (e) {
+        $('result').style.display = 'block';
+        $('problemText').innerHTML = `<div class="error">${e.message}</div>`;
+      } finally {
+        $('submit').disabled = false;
+        $('status').textContent = '';
+      }
+    });
+
+    loadLessons();
+  </script>
+</body>
+</html>

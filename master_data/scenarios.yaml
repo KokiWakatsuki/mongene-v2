@@ -1,0 +1,175 @@
+# 文章題シナリオバンク（§25）
+# Phase 4 で 15 個のテンプレートを初期化。
+# 本来は LLM が生成するが、Phase 4 ではアルゴリズム的に最低限のものを用意する。
+
+scenarios:
+  - id: speed_walking_to_school
+    category: speed
+    setting: 通学路の移動
+    characters: [太郎, 花子, Aさん, Bさん]
+    locations: [家, 学校, 駅, 公園]
+    units:
+      distance: [km, m]
+      time: [分, 時間]
+      speed: [km/h, m/分]
+    narrative_templates:
+      - "{character_a}は{loc_a}から{loc_b}まで歩いて行きます。"
+      - "{character_a}は朝{loc_a}を出発し、{character_b}と{loc_b}で待ち合わせる予定です。"
+    applicable_lesson_ids: [g1_l27, g2_l17]
+
+  - id: train_meeting
+    category: speed
+    setting: 列車のすれ違い
+    characters: [Aさん, Bさん]
+    locations: [駅A, 駅B]
+    units:
+      distance: [km, m]
+      time: [分]
+      speed: [km/h, m/分]
+    narrative_templates:
+      - "A 駅と B 駅の間を、速さの異なる 2 つの列車が同時に出発しました。"
+    applicable_lesson_ids: [g2_l17]
+
+  - id: walking_uphill
+    category: speed
+    setting: 上り坂・下り坂
+    characters: [太郎]
+    locations: [家, ふもと, 頂上]
+    units:
+      distance: [km, m]
+      time: [分, 時間]
+      speed: [km/h]
+    narrative_templates:
+      - "太郎は家から山頂まで往復しました。"
+    applicable_lesson_ids: [g2_l17, g2_l18]
+
+  - id: salt_water_mixing
+    category: concentration
+    setting: 食塩水の混合
+    characters: [太郎, 花子, 実験者]
+    locations: [ビーカーA, ビーカーB, 容器A, 容器B]
+    units:
+      mass: [g]
+      concentration: ['%']
+    narrative_templates:
+      - "濃度{conc_a}%の食塩水{mass_a}gと、濃度{conc_b}%の食塩水{mass_b}gを混ぜます。"
+    applicable_lesson_ids: [g2_l18]
+
+  - id: dilution
+    category: concentration
+    setting: 食塩水の希釈
+    characters: [実験者]
+    units:
+      mass: [g]
+      concentration: ['%']
+    narrative_templates:
+      - "濃度{conc_a}%の食塩水{mass_a}g に水を加えて{conc_b}% にします。"
+    applicable_lesson_ids: [g2_l18]
+
+  - id: percent_discount
+    category: concentration
+    setting: 割合・割引
+    characters: [太郎, 花子]
+    units:
+      price: [円]
+      discount: ['%', '割']
+    narrative_templates:
+      - "{character_a}は{price_a}円の品を {discount}% 引きで購入しました。"
+    applicable_lesson_ids: [g2_l16, g2_l18]
+
+  - id: fruit_purchase
+    category: money_count
+    setting: 買い物
+    characters: [太郎, 花子, Aくん, Bさん]
+    items: [りんご, みかん, ノート, 鉛筆, ケーキ]
+    units:
+      price: [円]
+      count: [個, 冊, 本]
+    narrative_templates:
+      - "{character_a}は{item_a}を{count_a}{unit_a}と{item_b}を{count_b}{unit_b}買い、合計で{total}円でした。"
+    applicable_lesson_ids: [g1_l25, g2_l16]
+
+  - id: ticket_purchase
+    category: money_count
+    setting: チケット代金
+    characters: [グループ]
+    items: [大人, 子ども]
+    units:
+      price: [円]
+      count: [人]
+    narrative_templates:
+      - "大人 {count_a} 人と子ども {count_b} 人で合計 {total} 円でした。"
+    applicable_lesson_ids: [g1_l25, g2_l16]
+
+  - id: pen_difference
+    category: money_count
+    setting: 個数差の問題
+    characters: [太郎, 花子]
+    items: [鉛筆, ペン]
+    units:
+      count: [本]
+    narrative_templates:
+      - "太郎の持っている鉛筆は花子より {diff} 本多い。"
+    applicable_lesson_ids: [g1_l25]
+
+  - id: work_completion
+    category: work
+    setting: 共同作業
+    characters: [太郎, 花子, 兄, 弟, 母]
+    tasks: [庭掃除, 資料作成, ペンキ塗り, 本の整理]
+    units:
+      time: [分, 時間, 日]
+    narrative_templates:
+      - "{task}を{character_a}が一人ですると{time_a}{unit_a}かかり、{character_b}が一人ですると{time_b}{unit_b}かかります。"
+    applicable_lesson_ids: [g1_l27, g2_l17, g2_l18]
+
+  - id: tank_filling
+    category: work
+    setting: 水そうへの注水
+    characters: [蛇口A, 蛇口B]
+    units:
+      time: [分, 時間]
+      volume: [L]
+    narrative_templates:
+      - "蛇口 A と蛇口 B から同時に水そうに水を入れる。"
+    applicable_lesson_ids: [g2_l18]
+
+  - id: excess_shortage_seats
+    category: excess_shortage
+    setting: 席や物の配分
+    characters: [生徒たち, クラス]
+    items: [長いす, あめ, お菓子, プリント]
+    narrative_templates:
+      - "{item}に{count_a}{unit}ずつ配ると{rem_a}{remunit}余り、{count_b}{unit}ずつ配ると{rem_b}{remunit}足りません。"
+    applicable_lesson_ids: [g1_l26]
+
+  - id: candy_distribution
+    category: excess_shortage
+    setting: お菓子の分配
+    characters: [子どもたち]
+    items: [あめ, クッキー]
+    narrative_templates:
+      - "あめを {count_a} 個ずつ配ると {rem_a} 個余り、{count_b} 個ずつ配ると {rem_b} 個足りない。"
+    applicable_lesson_ids: [g1_l26]
+
+  - id: rectangular_garden
+    category: geometry_real
+    setting: 庭・花壇のレイアウト
+    characters: [太郎の家]
+    items: [長方形の花壇, 通路]
+    units:
+      length: [m]
+    narrative_templates:
+      - "縦が横より {diff} m 長い長方形の花壇がある。"
+    applicable_lesson_ids: [g3_l24, g3_l25, g3_l26]
+
+  - id: pool_lane
+    category: geometry_real
+    setting: プール・コース
+    characters: [Aさん]
+    units:
+      length: [m]
+      time: [秒]
+    narrative_templates:
+      - "プールの長さは {length} m。"
+    applicable_lesson_ids: [g3_l55]

@@ -1,0 +1,963 @@
+nodes:
+- id: g1_l1
+  title: 符号のついた数（0より小さい数、正・負の符号）
+  grade: 1
+  requires: []
+- id: g1_l10
+  title: 数の集合と四則計算の可能性
+  grade: 1
+  requires: []
+- id: g1_l11
+  title: 素数と素因数分解
+  grade: 1
+  requires:
+  - g1_l10
+  - g1_l9
+- id: g1_l12
+  title: 文字を使った式（文字の導入）
+  grade: 1
+  requires: []
+- id: g1_l13
+  title: 乗法の表し方のきまり
+  grade: 1
+  requires:
+  - g1_l12
+- id: g1_l14
+  title: 除法の表し方のきまり
+  grade: 1
+  requires:
+  - g1_l13
+- id: g1_l15
+  title: 数量の表し方（割合・速さなど）
+  grade: 1
+  requires:
+  - g1_l14
+- id: g1_l16
+  title: 代入と式の値
+  grade: 1
+  requires:
+  - g1_l15
+- id: g1_l17
+  title: 項と係数、一次式の加法・減法
+  grade: 1
+  requires:
+  - g1_l16
+- id: g1_l18
+  title: 一次式と数の乗法・除法
+  grade: 1
+  requires:
+  - g1_l17
+- id: g1_l19
+  title: 等式の作り方（左辺と右辺）
+  grade: 1
+  requires:
+  - g1_l18
+- id: g1_l2
+  title: 数直線と絶対値、数の大小関係
+  grade: 1
+  requires:
+  - g1_l1
+- id: g1_l20
+  title: 不等式の作り方（不等号の種類と意味）
+  grade: 1
+  requires:
+  - g1_l19
+- id: g1_l21
+  title: 方程式とその解、等式の性質
+  grade: 1
+  requires: []
+- id: g1_l22
+  title: 移項による方程式の解き方
+  grade: 1
+  requires:
+  - g1_l21
+- id: g1_l23
+  title: かっこや小数・分数を含む方程式
+  grade: 1
+  requires:
+  - g1_l22
+- id: g1_l24
+  title: 比例式とその解き方
+  grade: 1
+  requires:
+  - g1_l23
+- id: g1_l25
+  title: 方程式の利用（代金と個数の問題）
+  grade: 1
+  requires: []
+- id: g1_l26
+  title: 方程式の利用（過不足の問題）
+  grade: 1
+  requires: []
+- id: g1_l27
+  title: 方程式の利用（速さの問題・その他の応用）
+  grade: 1
+  requires:
+  - g1_l26
+- id: g1_l28
+  title: 変数と関数、変域の意味
+  grade: 1
+  requires:
+  - g1_l24
+- id: g1_l29
+  title: 比例の意味と式（y=ax）
+  grade: 1
+  requires:
+  - g1_l24
+  - g1_l28
+- id: g1_l3
+  title: 加法（同符号・異符号の和）
+  grade: 1
+  requires:
+  - g1_l2
+- id: g1_l30
+  title: 座標の概念と点のとり方
+  grade: 1
+  requires:
+  - g1_l24
+  - g1_l29
+- id: g1_l31
+  title: 比例のグラフの書き方と特徴
+  grade: 1
+  requires: []
+- id: g1_l32
+  title: グラフや条件から比例の式を求める
+  grade: 1
+  requires:
+  - g1_l24
+- id: g1_l33
+  title: 反比例の意味と式（y=a/x）
+  grade: 1
+  requires:
+  - g1_l24
+  - g1_l32
+- id: g1_l34
+  title: 反比例のグラフの書き方と特徴（双曲線）
+  grade: 1
+  requires:
+  - g1_l24
+  - g1_l33
+- id: g1_l35
+  title: グラフや条件から反比例の式を求める
+  grade: 1
+  requires:
+  - g1_l24
+  - g1_l34
+- id: g1_l36
+  title: 比例・反比例を利用して身のまわりの問題を解く
+  grade: 1
+  requires:
+  - g1_l24
+  - g1_l35
+- id: g1_l37
+  title: 直線・線分・半直線と角、点と直線の距離
+  grade: 1
+  requires: []
+- id: g1_l38
+  title: 平行移動
+  grade: 1
+  requires:
+  - g1_l37
+- id: g1_l39
+  title: 回転移動
+  grade: 1
+  requires:
+  - g1_l38
+- id: g1_l4
+  title: 減法（ひき算をたし算に直す）
+  grade: 1
+  requires:
+  - g1_l3
+- id: g1_l40
+  title: 対称移動
+  grade: 1
+  requires:
+  - g1_l39
+- id: g1_l41
+  title: 垂直二等分線の作図と性質
+  grade: 1
+  requires:
+  - g1_l2
+  - g1_l45
+- id: g1_l42
+  title: 角の二等分線の作図と性質
+  grade: 1
+  requires:
+  - g1_l2
+- id: g1_l43
+  title: 垂線の作図と性質
+  grade: 1
+  requires:
+  - g1_l2
+  - g1_l42
+- id: g1_l44
+  title: 作図の利用（条件を満たす点の見つけ方）
+  grade: 1
+  requires:
+  - g1_l2
+  - g1_l43
+- id: g1_l45
+  title: 円の性質とおうぎ形の意味
+  grade: 1
+  requires:
+  - g1_l44
+- id: g1_l46
+  title: おうぎ形の弧の長さと面積の計算
+  grade: 1
+  requires: []
+- id: g1_l47
+  title: 多面体（正多面体など）と角柱・円柱・角錐・円錐
+  grade: 1
+  requires:
+  - g1_l37
+  - g1_l46
+- id: g1_l48
+  title: 直線と平面の位置関係（平行・垂直・ねじれの位置）
+  grade: 1
+  requires:
+  - g1_l37
+  - g1_l46
+  - g1_l47
+- id: g1_l49
+  title: 面が動いてできる立体、回転体
+  grade: 1
+  requires:
+  - g1_l37
+  - g1_l46
+  - g1_l48
+- id: g1_l5
+  title: 加法と減法の混じった計算（項の概念）
+  grade: 1
+  requires: []
+- id: g1_l50
+  title: 立体の見方と投影図
+  grade: 1
+  requires:
+  - g1_l37
+  - g1_l46
+  - g1_l49
+- id: g1_l51
+  title: 柱体・錐体の表面積（展開図の利用）
+  grade: 1
+  requires:
+  - g1_l37
+  - g1_l46
+  - g1_l50
+  - g1_l52
+  - g1_l53
+  - g1_l9
+- id: g1_l52
+  title: 柱体・錐体の体積
+  grade: 1
+  requires: []
+- id: g1_l53
+  title: 球の表面積と体積
+  grade: 1
+  requires:
+  - g1_l37
+  - g1_l46
+- id: g1_l54
+  title: 度数分布表とヒストグラム
+  grade: 1
+  requires: []
+- id: g1_l55
+  title: 相対度数と度数折れ線
+  grade: 1
+  requires: []
+- id: g1_l56
+  title: 累積度数と累積相対度数
+  grade: 1
+  requires:
+  - g1_l55
+- id: g1_l57
+  title: 代表値（平均値、中央値、最頻値）
+  grade: 1
+  requires:
+  - g1_l56
+- id: g1_l58
+  title: データの比較と統計的探究プロセス
+  grade: 1
+  requires:
+  - g1_l57
+- id: g1_l59
+  title: 多数の観察や多数回の試行によって得られる確率の意味
+  grade: 1
+  requires: []
+- id: g1_l6
+  title: 乗法（同符号・異符号の積）
+  grade: 1
+  requires: []
+- id: g1_l60
+  title: 誤差・近似値の意味と a×10ⁿ（aは1以上10未満）の表現
+  grade: 1
+  requires: []
+- id: g1_l7
+  title: 累乗の計算（指数）
+  grade: 1
+  requires:
+  - g1_l6
+- id: g1_l8
+  title: 除法（逆数を使ったかけ算への変換）
+  grade: 1
+  requires:
+  - g1_l7
+- id: g1_l9
+  title: 四則の混じった計算と分配法則
+  grade: 1
+  requires: []
+- id: g2_l1
+  title: 単項式と多項式、式の次数
+  grade: 2
+  requires: []
+- id: g2_l10
+  title: 2元1次方程式と連立方程式の意味
+  grade: 2
+  requires:
+  - g1_l21
+- id: g2_l11
+  title: 加減法による解き方①（係数の絶対値が等しい場合）
+  grade: 2
+  requires:
+  - g1_l21
+  - g2_l10
+- id: g2_l12
+  title: 加減法による解き方②（係数をそろえる場合）
+  grade: 2
+  requires:
+  - g1_l21
+  - g2_l11
+- id: g2_l13
+  title: 代入法による解き方
+  grade: 2
+  requires:
+  - g1_l21
+  - g2_l12
+- id: g2_l14
+  title: いろいろな連立方程式（かっこ、小数、分数を含む）
+  grade: 2
+  requires:
+  - g1_l21
+  - g2_l13
+- id: g2_l15
+  title: A＝B＝Cの形の連立方程式
+  grade: 2
+  requires:
+  - g1_l21
+  - g2_l14
+- id: g2_l16
+  title: 個数と代金の問題
+  grade: 2
+  requires:
+  - g1_l21
+  - g2_l15
+- id: g2_l17
+  title: 連立方程式の利用：速さ・時間・道のりの問題
+  grade: 2
+  requires:
+  - g1_l21
+- id: g2_l18
+  title: 割合の問題（増減・食塩水など）
+  grade: 2
+  requires:
+  - g1_l21
+- id: g2_l19
+  title: 1次関数の意味と式（y=ax+b）
+  grade: 2
+  requires: []
+- id: g2_l2
+  title: 同類項のまとめ方
+  grade: 2
+  requires:
+  - g2_l1
+- id: g2_l20
+  title: 変化の割合の意味と計算
+  grade: 2
+  requires:
+  - g2_l19
+- id: g2_l21
+  title: 1次関数のグラフの特徴（傾きと切片）
+  grade: 2
+  requires:
+  - g2_l20
+- id: g2_l22
+  title: 1次関数のグラフの書き方
+  grade: 2
+  requires:
+  - g2_l21
+- id: g2_l23
+  title: 変域とグラフの端点
+  grade: 2
+  requires:
+  - g2_l22
+- id: g2_l24
+  title: 傾き（または切片）と1点の座標から式を求める
+  grade: 2
+  requires:
+  - g2_l23
+- id: g2_l25
+  title: 1次関数の式の求め方：2点の座標から式を求める
+  grade: 2
+  requires: []
+- id: g2_l26
+  title: 2元1次方程式（ax+by=c）のグラフ
+  grade: 2
+  requires: []
+- id: g2_l27
+  title: 連立方程式の解と2直線の交点の座標
+  grade: 2
+  requires:
+  - g1_l21
+  - g2_l26
+- id: g2_l28
+  title: 1次関数の利用（ばね、水そうなど）
+  grade: 2
+  requires:
+  - g2_l27
+- id: g2_l29
+  title: 動点の問題（面積の変化）
+  grade: 2
+  requires:
+  - g1_l46
+- id: g2_l3
+  title: 多項式の加法と減法（縦書きの計算を含む）
+  grade: 2
+  requires:
+  - g2_l2
+- id: g2_l30
+  title: 速さとダイヤグラム（2つのグラフの交点）
+  grade: 2
+  requires: []
+- id: g2_l31
+  title: 対頂角・同位角・錯角
+  grade: 2
+  requires: []
+- id: g2_l32
+  title: 平行線の性質と平行になるための条件
+  grade: 2
+  requires:
+  - g2_l31
+- id: g2_l33
+  title: 三角形の内角と外角の性質
+  grade: 2
+  requires:
+  - g2_l32
+- id: g2_l34
+  title: 多角形の内角の和
+  grade: 2
+  requires: []
+- id: g2_l35
+  title: 多角形の外角の和
+  grade: 2
+  requires: []
+- id: g2_l36
+  title: 合同な図形の性質（対応する辺と角）
+  grade: 2
+  requires:
+  - g2_l35
+- id: g2_l37
+  title: 三角形の合同条件
+  grade: 2
+  requires:
+  - g2_l36
+- id: g2_l38
+  title: 仮定と結論、証明の進め方の基本（反例による否定を含む）
+  grade: 2
+  requires:
+  - g2_l37
+- id: g2_l39
+  title: 三角形の合同条件を使った証明の書き方
+  grade: 2
+  requires:
+  - g2_l38
+- id: g2_l4
+  title: 単項式どうしの乗法と除法
+  grade: 2
+  requires:
+  - g2_l3
+- id: g2_l40
+  title: 合同な図形の性質を利用した辺や角の証明
+  grade: 2
+  requires: []
+- id: g2_l41
+  title: 二等辺三角形の性質とその証明
+  grade: 2
+  requires: []
+- id: g2_l42
+  title: 二等辺三角形になるための条件
+  grade: 2
+  requires:
+  - g2_l41
+- id: g2_l43
+  title: 正三角形の性質と条件
+  grade: 2
+  requires:
+  - g2_l42
+- id: g2_l44
+  title: 直角三角形の合同条件
+  grade: 2
+  requires:
+  - g2_l43
+- id: g2_l45
+  title: 直角三角形の合同条件を使った証明
+  grade: 2
+  requires:
+  - g2_l44
+- id: g2_l46
+  title: 平行四辺形の性質とその証明
+  grade: 2
+  requires:
+  - g2_l45
+- id: g2_l47
+  title: 平行四辺形になるための条件
+  grade: 2
+  requires:
+  - g2_l46
+- id: g2_l48
+  title: 平行四辺形になるための条件を使った証明
+  grade: 2
+  requires:
+  - g2_l47
+- id: g2_l49
+  title: 長方形・ひし形・正方形の性質と条件
+  grade: 2
+  requires:
+  - g2_l48
+- id: g2_l5
+  title: 多項式と数の乗法と除法（分配法則）
+  grade: 2
+  requires:
+  - g2_l4
+- id: g2_l50
+  title: 平行線と面積（等積変形）
+  grade: 2
+  requires:
+  - g2_l49
+- id: g2_l51
+  title: ことがらの起こりやすさと確率の意味
+  grade: 2
+  requires: []
+- id: g2_l52
+  title: 樹形図を使った場合の数の求め方（硬貨・さいころ）
+  grade: 2
+  requires: []
+- id: g2_l53
+  title: 樹形図を使った場合の数の求め方（カード・玉・くじ）
+  grade: 2
+  requires: []
+- id: g2_l54
+  title: 確率の性質（起こらない確率、少なくとも1つ起こる確率）
+  grade: 2
+  requires:
+  - g2_l53
+- id: g2_l55
+  title: 四分位数と四分位範囲
+  grade: 2
+  requires:
+  - g1_l54
+  - g1_l57
+- id: g2_l56
+  title: 箱ひげ図の書き方と読み取り
+  grade: 2
+  requires:
+  - g1_l54
+  - g1_l57
+  - g2_l55
+- id: g2_l57
+  title: 箱ひげ図を用いたデータの分布の比較と傾向の読み取り
+  grade: 2
+  requires:
+  - g1_l54
+  - g1_l57
+  - g2_l56
+- id: g2_l6
+  title: いろいろな式の計算（分数を含む式など）
+  grade: 2
+  requires:
+  - g2_l5
+- id: g2_l7
+  title: 文字式を使った数の性質の説明①（偶数・奇数・連続する整数）
+  grade: 2
+  requires:
+  - g2_l6
+- id: g2_l8
+  title: 文字式を使った数の性質の説明②（2けたの自然数など）
+  grade: 2
+  requires:
+  - g2_l7
+- id: g2_l9
+  title: 等式の変形（指定された文字について解く）
+  grade: 2
+  requires: []
+- id: g3_l1
+  title: 単項式と多項式の乗法・除法
+  grade: 3
+  requires: []
+- id: g3_l10
+  title: 乗法公式を利用した因数分解③（和と差の積の逆）
+  grade: 3
+  requires:
+  - g1_l9
+  - g2_l1
+  - g3_l9
+- id: g3_l11
+  title: いろいろな因数分解（共通因数をくくり出してから公式を使うなど）
+  grade: 3
+  requires:
+  - g1_l9
+  - g2_l1
+  - g3_l10
+- id: g3_l12
+  title: 式の計算の利用（数の計算への応用・式の値）
+  grade: 3
+  requires:
+  - g3_l11
+- id: g3_l13
+  title: 式の計算の利用（図形の性質の証明への応用）
+  grade: 3
+  requires:
+  - g3_l12
+- id: g3_l14
+  title: 平方根の意味と根号（ルート）の表し方
+  grade: 3
+  requires:
+  - g2_l7
+- id: g3_l15
+  title: 平方根の大小関係
+  grade: 3
+  requires:
+  - g2_l7
+  - g3_l14
+- id: g3_l16
+  title: 有理数と無理数、循環小数
+  grade: 3
+  requires:
+  - g2_l7
+  - g3_l15
+- id: g3_l17
+  title: 平方根の乗法と除法
+  grade: 3
+  requires:
+  - g2_l7
+  - g3_l16
+- id: g3_l18
+  title: 根号の中を簡単にする変形（a√bの形）
+  grade: 3
+  requires:
+  - g2_l7
+  - g3_l16
+  - g3_l17
+- id: g3_l19
+  title: 分母の有理化
+  grade: 3
+  requires: []
+- id: g3_l2
+  title: 多項式どうしの乗法（展開の基本）
+  grade: 3
+  requires:
+  - g1_l9
+  - g2_l1
+  - g3_l1
+- id: g3_l20
+  title: 平方根の加法と減法
+  grade: 3
+  requires:
+  - g2_l7
+  - g3_l16
+- id: g3_l21
+  title: 平方根のいろいろな計算（分配法則や乗法公式の利用）
+  grade: 3
+  requires:
+  - g2_l7
+  - g3_l16
+  - g3_l20
+- id: g3_l22
+  title: 近似値の計算と式の値
+  grade: 3
+  requires:
+  - g2_l7
+  - g3_l16
+  - g3_l21
+- id: g3_l23
+  title: 平方根の利用（図形や実生活への応用）
+  grade: 3
+  requires:
+  - g2_l7
+  - g3_l16
+  - g3_l22
+- id: g3_l24
+  title: 2次方程式の意味とその解
+  grade: 3
+  requires: []
+- id: g3_l25
+  title: 平方根の考え方による解き方（x^2=k, (x+a)^2=kの形）
+  grade: 3
+  requires:
+  - g2_l7
+  - g3_l16
+  - g3_l24
+- id: g3_l26
+  title: 解の公式の導出と利用
+  grade: 3
+  requires:
+  - g1_l11
+  - g1_l21
+  - g3_l14
+- id: g3_l27
+  title: 因数分解による解き方
+  grade: 3
+  requires:
+  - g1_l9
+  - g2_l1
+- id: g3_l28
+  title: いろいろな2次方程式の解き方（解き方の選択）
+  grade: 3
+  requires:
+  - g3_l27
+- id: g3_l29
+  title: 2次方程式の利用（数に関する問題）
+  grade: 3
+  requires:
+  - g3_l28
+- id: g3_l3
+  title: 乗法公式①（(x+a)(x+b)の展開）
+  grade: 3
+  requires:
+  - g1_l9
+  - g2_l1
+- id: g3_l30
+  title: 2次方程式の利用（図形に関する問題）
+  grade: 3
+  requires:
+  - g3_l29
+- id: g3_l31
+  title: 2次方程式の利用（動点などその他の応用）
+  grade: 3
+  requires:
+  - g1_l46
+  - g3_l30
+- id: g3_l32
+  title: 関数 y=ax^2 の意味と式
+  grade: 3
+  requires:
+  - g1_l24
+- id: g3_l33
+  title: 関数 y=ax^2 のグラフの書き方と特徴（放物線）
+  grade: 3
+  requires:
+  - g1_l24
+  - g3_l32
+- id: g3_l34
+  title: 関数 y=ax^2 の変域
+  grade: 3
+  requires:
+  - g1_l24
+  - g3_l33
+- id: g3_l35
+  title: 関数 y=ax^2 の変化の割合
+  grade: 3
+  requires:
+  - g1_l24
+  - g3_l34
+- id: g3_l36
+  title: 身のまわりの事象への利用（落下運動や制動距離など）
+  grade: 3
+  requires:
+  - g1_l24
+  - g3_l35
+- id: g3_l37
+  title: 放物線と直線が交わる図形の問題
+  grade: 3
+  requires:
+  - g1_l24
+- id: g3_l38
+  title: 動点と面積の変化の問題
+  grade: 3
+  requires:
+  - g1_l24
+  - g1_l46
+- id: g3_l39
+  title: 相似な図形の意味と性質（相似比）
+  grade: 3
+  requires:
+  - g2_l31
+- id: g3_l4
+  title: 乗法公式②（(x+a)^2, (x-a)^2の展開）
+  grade: 3
+  requires:
+  - g1_l9
+  - g2_l1
+- id: g3_l40
+  title: 三角形の相似条件
+  grade: 3
+  requires:
+  - g2_l31
+  - g3_l39
+- id: g3_l41
+  title: 相似条件を使った証明の進め方
+  grade: 3
+  requires:
+  - g2_l31
+  - g3_l40
+- id: g3_l42
+  title: 平行線と線分の比の定理
+  grade: 3
+  requires:
+  - g2_l31
+  - g3_l41
+- id: g3_l43
+  title: 平行線と線分の比の定理の逆と応用
+  grade: 3
+  requires:
+  - g2_l31
+  - g3_l42
+- id: g3_l44
+  title: 中点連結定理とその証明・利用
+  grade: 3
+  requires:
+  - g2_l31
+  - g3_l43
+- id: g3_l45
+  title: 相似な平面図形の面積比
+  grade: 3
+  requires:
+  - g2_l31
+  - g3_l44
+- id: g3_l46
+  title: 相似な立体の表面積比と体積比
+  grade: 3
+  requires:
+  - g1_l37
+  - g1_l46
+  - g2_l31
+  - g3_l45
+- id: g3_l47
+  title: 円周角と中心角の定理
+  grade: 3
+  requires:
+  - g1_l45
+  - g2_l33
+- id: g3_l48
+  title: 円周角の定理の逆
+  grade: 3
+  requires:
+  - g1_l45
+  - g2_l33
+  - g3_l47
+- id: g3_l49
+  title: 円周角の定理を利用した証明
+  grade: 3
+  requires:
+  - g1_l45
+  - g2_l33
+  - g3_l47
+  - g3_l48
+- id: g3_l5
+  title: 乗法公式③（(x+a)(x-a)の展開）
+  grade: 3
+  requires:
+  - g1_l9
+  - g2_l1
+  - g3_l4
+- id: g3_l50
+  title: 円周角と弧の長さの比
+  grade: 3
+  requires:
+  - g1_l45
+  - g2_l33
+  - g3_l47
+  - g3_l49
+- id: g3_l51
+  title: 三平方の定理の意味とその証明
+  grade: 3
+  requires:
+  - g3_l14
+- id: g3_l52
+  title: 三平方の定理の逆
+  grade: 3
+  requires:
+  - g3_l14
+  - g3_l51
+- id: g3_l53
+  title: 平面図形への利用（高さ、面積、特別な直角三角形の辺の比）
+  grade: 3
+  requires:
+  - g3_l14
+  - g3_l52
+- id: g3_l54
+  title: 座標平面上の2点間の距離
+  grade: 3
+  requires:
+  - g3_l14
+  - g3_l53
+- id: g3_l55
+  title: 空間図形への利用（対角線、錐体の高さと体積など）
+  grade: 3
+  requires:
+  - g1_l37
+  - g1_l46
+- id: g3_l56
+  title: 立体の表面上の最短距離（展開図の利用）
+  grade: 3
+  requires:
+  - g1_l37
+  - g1_l46
+  - g1_l51
+  - g1_l52
+  - g1_l9
+  - g2_l1
+  - g3_l14
+- id: g3_l57
+  title: 全数調査と標本調査、母集団と標本
+  grade: 3
+  requires:
+  - g1_l54
+  - g1_l59
+- id: g3_l58
+  title: 無作為抽出の方法と標本の偏り
+  grade: 3
+  requires:
+  - g1_l54
+  - g1_l59
+  - g3_l57
+- id: g3_l59
+  title: 標本の割合や平均から母集団の傾向を推定する
+  grade: 3
+  requires:
+  - g1_l54
+  - g1_l59
+  - g3_l58
+- id: g3_l6
+  title: いろいろな式の展開（置き換えや式の混じった計算）
+  grade: 3
+  requires:
+  - g1_l9
+  - g2_l1
+  - g3_l5
+- id: g3_l60
+  title: 標本調査の活用（実社会の問題解決）
+  grade: 3
+  requires:
+  - g1_l54
+  - g1_l59
+  - g3_l59
+- id: g3_l7
+  title: 因数分解の意味と共通因数のくくり出し
+  grade: 3
+  requires:
+  - g1_l9
+  - g2_l1
+  - g3_l6
+- id: g3_l8
+  title: 乗法公式を利用した因数分解①（x^2+(a+b)x+abの形）
+  grade: 3
+  requires:
+  - g1_l9
+  - g2_l1
+  - g3_l7
+- id: g3_l9
+  title: 乗法公式を利用した因数分解②（平方の公式の逆）
+  grade: 3
+  requires:
+  - g1_l9
+  - g2_l1
+  - g3_l8

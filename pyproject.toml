@@ -1,0 +1,45 @@
+[project]
+name = "mongene-v2"
+version = "0.1.0"
+description = "中学数学問題自動生成システム"
+requires-python = ">=3.12"
+dependencies = [
+    "sympy>=1.13.0",
+    "fastapi>=0.115.0",
+    "uvicorn[standard]>=0.32.0",
+    "pydantic>=2.9.0",
+    "google-genai>=2.0.0",
+    "svgwrite>=1.4.3",
+    "matplotlib>=3.9.0",
+    "networkx>=3.4.0",
+    "pyyaml>=6.0.2",
+    "python-dotenv>=1.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.3.0",
+    "pytest-cov>=6.0.0",
+    "ruff>=0.7.0",
+    "mypy>=1.13.0",
+]
+
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["apps*"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-v --cov=apps --cov-report=term-missing --cov-fail-under=80"
+
+[tool.mypy]
+python_version = "3.12"
+ignore_missing_imports = true

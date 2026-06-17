@@ -1,0 +1,41 @@
+# BasicCalculationStructure（中1）の Few-Shot 種コーパス
+# §21.3 で生成する想定だが、Phase 4 では手書きで最低限の例を用意する
+
+examples:
+  - input_middle_representation:
+      problem_structure_type: BasicCalculationStructure
+      selected_tags: [number, integer]
+      difficulty_score: 13
+      problem_form: calculation
+      sub_questions:
+        - label: ""
+          prompt_hint: 次の計算をしなさい
+          answer:
+            type: numeric
+            sympy_form: "8"
+            text_form: "8"
+    ideal_problem_text: |
+      次の計算をしなさい。
+
+      $(-3) + 11$
+    ideal_explanation_text: |
+      $(-3) + 11 = 11 - 3 = 8$
+
+  - input_middle_representation:
+      problem_structure_type: BasicCalculationStructure
+      selected_tags: [number, integer]
+      difficulty_score: 14
+      problem_form: calculation
+      sub_questions:
+        - label: ""
+          prompt_hint: 次の計算をしなさい
+          answer:
+            type: numeric
+            sympy_form: "-12"
+            text_form: "-12"
+    ideal_problem_text: |
+      次の計算をしなさい。
+
+      $(-4) \times 3$
+    ideal_explanation_text: |
+      $(-4) \times 3 = -12$

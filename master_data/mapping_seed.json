@@ -1,0 +1,316 @@
+{
+  "_meta": {
+    "description": "学習指導要領の代表的な小単元 20 件に対する手作りマッピング教師データ。Phase 4 で LLM が 177 件のマッピングを自動生成する際の Few-Shot 例 + 整合性検証の基準として使う。",
+    "format_version": "1.0",
+    "see": "implementation_plan.md §28"
+  },
+
+  "g1_l5": {
+    "title": "加法と減法の混じった計算（項の概念）",
+    "grade": 1,
+    "lesson_number": 5,
+    "execute_blueprint": "BasicCalculationStructure",
+    "required_tags": ["number", "integer"],
+    "optional_tags": [],
+    "atom_constraints": {
+      "NumberAtom": {"allow_negative": true, "max_value": 30, "force_fraction": false}
+    },
+    "visual_component": "NullRenderer",
+    "y_base": 13,
+    "supported_forms": ["calculation"]
+  },
+
+  "g1_l9": {
+    "title": "四則の混じった計算と分配法則",
+    "grade": 1,
+    "lesson_number": 9,
+    "execute_blueprint": "BasicCalculationStructure",
+    "required_tags": ["number", "integer"],
+    "atom_constraints": {
+      "NumberAtom": {"allow_negative": true, "max_value": 20}
+    },
+    "visual_component": "NullRenderer",
+    "y_base": 15,
+    "supported_forms": ["calculation"]
+  },
+
+  "g1_l25": {
+    "title": "方程式の利用（代金と個数の問題）",
+    "grade": 1,
+    "lesson_number": 25,
+    "execute_blueprint": "WordProblemStructure",
+    "required_tags": ["linear_equation"],
+    "atom_constraints": {
+      "EquationAtom": {"is_integer_solution": true, "max_coefficient": 10}
+    },
+    "visual_component": "NullRenderer",
+    "y_base": 19,
+    "supported_forms": ["word_problem"],
+    "scenario_categories": ["money_count", "excess_shortage"]
+  },
+
+  "g1_l31": {
+    "title": "比例のグラフの書き方と特徴",
+    "grade": 1,
+    "lesson_number": 31,
+    "execute_blueprint": "BasicGeometryMeasurementStructure",
+    "required_tags": ["linear_function", "proportion"],
+    "atom_constraints": {
+      "LinearFuncAtom": {"force_proportion": true, "max_slope": 5, "force_integer_slope": true}
+    },
+    "visual_component": "Graph_Renderer",
+    "y_base": 16,
+    "supported_forms": ["calculation", "word_problem"]
+  },
+
+  "g1_l41": {
+    "title": "垂直二等分線の作図と性質",
+    "grade": 1,
+    "lesson_number": 41,
+    "execute_blueprint": "ConstructionStructure",
+    "required_tags": ["plane_geometry"],
+    "atom_constraints": {
+      "PolygonAtom": {"polygon_type": "triangle", "force_integer_coords": true},
+      "ConstructGeometryVerb": {"construction_type": "perp_bisector"}
+    },
+    "visual_component": "2D_Geometry_Renderer",
+    "y_base": 17,
+    "supported_forms": ["calculation"]
+  },
+
+  "g1_l46": {
+    "title": "おうぎ形の弧の長さと面積の計算",
+    "grade": 1,
+    "lesson_number": 46,
+    "execute_blueprint": "BasicGeometryMeasurementStructure",
+    "required_tags": ["plane_geometry", "circle", "pi"],
+    "atom_constraints": {
+      "CircleAtom": {"is_sector": true, "max_radius": 10, "central_angle_choices": [30, 45, 60, 90, 120, 180]}
+    },
+    "visual_component": "2D_Geometry_Renderer",
+    "y_base": 19,
+    "supported_forms": ["calculation", "word_problem"]
+  },
+
+  "g1_l52": {
+    "title": "柱体・錐体の体積",
+    "grade": 1,
+    "lesson_number": 52,
+    "execute_blueprint": "BasicGeometryMeasurementStructure",
+    "required_tags": ["space_geometry"],
+    "atom_constraints": {
+      "PrismAtom": {"is_cube": false, "base_shape_type": "square"},
+      "PyramidAtom": {"is_regular_pyramid": true, "base_shape": "square"}
+    },
+    "visual_component": "3D_Renderer",
+    "y_base": 19,
+    "supported_forms": ["calculation", "word_problem"]
+  },
+
+  "g1_l54": {
+    "title": "度数分布表とヒストグラム",
+    "grade": 1,
+    "lesson_number": 54,
+    "execute_blueprint": "DataProbabilityStructure",
+    "required_tags": ["statistics", "data_analysis"],
+    "atom_constraints": {
+      "DataSetAtom": {"data_size": 30, "value_range": [0, 100], "distribution_type": "uniform"},
+      "AnalyzeDataVerb": {"metrics": ["mean", "histogram"]}
+    },
+    "visual_component": "Table_&_Chart_Renderer",
+    "y_base": 14,
+    "supported_forms": ["calculation"]
+  },
+
+  "g2_l9": {
+    "title": "等式の変形（指定された文字について解く）",
+    "grade": 2,
+    "lesson_number": 9,
+    "execute_blueprint": "BasicCalculationStructure",
+    "required_tags": ["polynomial"],
+    "atom_constraints": {
+      "EquationAtom": {"max_coefficient": 10}
+    },
+    "visual_component": "NullRenderer",
+    "y_base": 34,
+    "supported_forms": ["calculation"]
+  },
+
+  "g2_l17": {
+    "title": "連立方程式の利用：速さ・時間・道のりの問題",
+    "grade": 2,
+    "lesson_number": 17,
+    "execute_blueprint": "WordProblemStructure",
+    "required_tags": ["linear_equation"],
+    "atom_constraints": {
+      "EquationAtom": {"is_integer_solution": true, "max_coefficient": 15}
+    },
+    "visual_component": "NullRenderer",
+    "y_base": 40,
+    "supported_forms": ["word_problem"],
+    "scenario_categories": ["speed", "money_count"]
+  },
+
+  "g2_l25": {
+    "title": "1次関数の式の求め方：2点の座標から式を求める",
+    "grade": 2,
+    "lesson_number": 25,
+    "execute_blueprint": "BasicCalculationStructure",
+    "required_tags": ["linear_function"],
+    "atom_constraints": {
+      "PointAtom": {"range_x": [-10, 10], "range_y": [-10, 10], "integer_only": true},
+      "LinearFuncAtom": {"force_integer_slope": true}
+    },
+    "visual_component": "Graph_Renderer",
+    "y_base": 37,
+    "supported_forms": ["calculation"]
+  },
+
+  "g2_l29": {
+    "title": "動点の問題（面積の変化）",
+    "grade": 2,
+    "lesson_number": 29,
+    "execute_blueprint": "MovingPointStructure",
+    "required_tags": ["moving_point", "linear_function"],
+    "atom_constraints": {
+      "PolygonAtom": {"polygon_type": "rectangle", "max_side_length": 10},
+      "MovingPointAtom": {"num_points": 1, "path_type": "edge_traversal", "speed_range": [1, 3]}
+    },
+    "visual_component": "2D_Geometry_Renderer",
+    "y_base": 44,
+    "supported_forms": ["word_problem"]
+  },
+
+  "g2_l34": {
+    "title": "多角形の内角の和",
+    "grade": 2,
+    "lesson_number": 34,
+    "execute_blueprint": "AngleCalculationStructure",
+    "required_tags": ["plane_geometry", "angles"],
+    "atom_constraints": {
+      "PolygonAtom": {"polygon_type": "regular_polygon"},
+      "FindAngleVerb": {"theorem": "interior_angle_sum"}
+    },
+    "visual_component": "2D_Geometry_Renderer",
+    "y_base": 41,
+    "supported_forms": ["calculation", "word_problem"]
+  },
+
+  "g2_l40": {
+    "title": "合同な図形の性質を利用した辺や角の証明",
+    "grade": 2,
+    "lesson_number": 40,
+    "execute_blueprint": "ProofStructure",
+    "required_tags": ["plane_geometry", "triangle"],
+    "atom_constraints": {
+      "PolygonAtom": {"polygon_type": "triangle"},
+      "ProveGeometryVerb": {"proof_type": "congruence", "condition_set": "SAS"}
+    },
+    "visual_component": "2D_Geometry_Renderer",
+    "y_base": 53,
+    "supported_forms": ["proof"]
+  },
+
+  "g2_l52": {
+    "title": "樹形図を使った場合の数の求め方（硬貨・さいころ）",
+    "grade": 2,
+    "lesson_number": 52,
+    "execute_blueprint": "DataProbabilityStructure",
+    "required_tags": ["probability", "dice"],
+    "atom_constraints": {
+      "EventAtom": {"event_type": "dice", "num_trials": 2, "with_replacement": true},
+      "CalculateProbabilityVerb": {"condition": "目の和が指定値"}
+    },
+    "visual_component": "Tree_Renderer",
+    "y_base": 36,
+    "supported_forms": ["calculation", "word_problem"]
+  },
+
+  "g3_l3": {
+    "title": "乗法公式①（(x+a)(x+b)の展開）",
+    "grade": 3,
+    "lesson_number": 3,
+    "execute_blueprint": "BasicCalculationStructure",
+    "required_tags": ["polynomial"],
+    "atom_constraints": {
+      "PolynomialAtom": {"max_degree": 2, "num_variables": 1, "max_coefficient": 10}
+    },
+    "visual_component": "NullRenderer",
+    "y_base": 58,
+    "supported_forms": ["calculation"]
+  },
+
+  "g3_l19": {
+    "title": "分母の有理化",
+    "grade": 3,
+    "lesson_number": 19,
+    "execute_blueprint": "BasicCalculationStructure",
+    "required_tags": ["square_root"],
+    "atom_constraints": {
+      "SquareRootAtom": {"force_denominator_root": true, "allow_simplification": true}
+    },
+    "visual_component": "NullRenderer",
+    "y_base": 60,
+    "supported_forms": ["calculation"]
+  },
+
+  "g3_l26": {
+    "title": "解の公式の導出と利用",
+    "grade": 3,
+    "lesson_number": 26,
+    "execute_blueprint": "BasicCalculationStructure",
+    "required_tags": ["quadratic_equation"],
+    "atom_constraints": {
+      "EquationAtom": {"max_coefficient": 8, "is_integer_solution": false}
+    },
+    "visual_component": "NullRenderer",
+    "y_base": 63,
+    "supported_forms": ["calculation"]
+  },
+
+  "g3_l37": {
+    "title": "放物線と直線が交わる図形の問題",
+    "grade": 3,
+    "lesson_number": 37,
+    "execute_blueprint": "FunctionGeometryFusionStructure",
+    "required_tags": ["quadratic_function", "linear_function"],
+    "atom_constraints": {
+      "QuadraticFuncAtom": {"max_a_value": 2, "is_pure_form": true},
+      "LinearFuncAtom": {"force_integer_slope": true},
+      "IntersectVerb": {}
+    },
+    "visual_component": "Graph_Renderer",
+    "y_base": 70,
+    "supported_forms": ["word_problem", "calculation"]
+  },
+
+  "g3_l47": {
+    "title": "円周角と中心角の定理",
+    "grade": 3,
+    "lesson_number": 47,
+    "execute_blueprint": "AngleCalculationStructure",
+    "required_tags": ["circle_angles"],
+    "atom_constraints": {
+      "CircleAngleAtom": {"inscribed_quadrilateral": false, "tangent_chord_angle": false},
+      "FindAngleVerb": {"theorem": "inscribed_angle"}
+    },
+    "visual_component": "2D_Geometry_Renderer",
+    "y_base": 65,
+    "supported_forms": ["calculation", "word_problem"]
+  },
+
+  "g3_l55": {
+    "title": "空間図形への利用（対角線、錐体の高さと体積など）",
+    "grade": 3,
+    "lesson_number": 55,
+    "execute_blueprint": "BasicDifferenceStructure",
+    "required_tags": ["space_geometry", "pythagorean"],
+    "atom_constraints": {
+      "PrismAtom": {"is_cube": false, "max_height": 10},
+      "PyramidAtom": {"hide_height": true, "max_base_side": 8, "is_regular_pyramid": true}
+    },
+    "visual_component": "3D_Renderer",
+    "y_base": 76,
+    "supported_forms": ["word_problem", "calculation"]
+  }
+}

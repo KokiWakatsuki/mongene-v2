@@ -1,0 +1,1188 @@
+[
+  {
+    "grade": "中学1年",
+    "subject": "数学",
+    "domains": [
+      {
+        "domain_name": "数と式",
+        "large_units": [
+          {
+            "large_unit_name": "正の数・負の数",
+            "middle_units": [
+              {
+                "middle_unit_name": "正の数・負の数の意味と表し方",
+                "small_units": [
+                  {
+                    "lesson_number": 1,
+                    "title": "符号のついた数（0より小さい数、正・負の符号）"
+                  },
+                  {
+                    "lesson_number": 2,
+                    "title": "数直線と絶対値、数の大小関係"
+                  }
+                ]
+              },
+              {
+                "middle_unit_name": "加法と減法",
+                "small_units": [
+                  {
+                    "lesson_number": 3,
+                    "title": "加法（同符号・異符号の和）"
+                  },
+                  {
+                    "lesson_number": 4,
+                    "title": "減法（ひき算をたし算に直す）"
+                  },
+                  {
+                    "lesson_number": 5,
+                    "title": "加法と減法の混じった計算（項の概念）"
+                  }
+                ]
+              },
+              {
+                "middle_unit_name": "乗法と除法",
+                "small_units": [
+                  {
+                    "lesson_number": 6,
+                    "title": "乗法（同符号・異符号の積）"
+                  },
+                  {
+                    "lesson_number": 7,
+                    "title": "累乗の計算（指数）"
+                  },
+                  {
+                    "lesson_number": 8,
+                    "title": "除法（逆数を使ったかけ算への変換）"
+                  },
+                  {
+                    "lesson_number": 9,
+                    "title": "四則の混じった計算と分配法則"
+                  }
+                ]
+              },
+              {
+                "middle_unit_name": "数の集合と素因数分解",
+                "small_units": [
+                  {
+                    "lesson_number": 10,
+                    "title": "数の集合と四則計算の可能性"
+                  },
+                  {
+                    "lesson_number": 11,
+                    "title": "素数と素因数分解"
+                  }
+                ]
+              },
+              {
+                "middle_unit_name": "誤差と近似値",
+                "small_units": [
+                  {
+                    "lesson_number": 60,
+                    "title": "誤差・近似値の意味と a×10ⁿ（aは1以上10未満）の表現"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "large_unit_name": "文字の式",
+            "middle_units": [
+              {
+                "middle_unit_name": "文字式の表し方",
+                "small_units": [
+                  {
+                    "lesson_number": 12,
+                    "title": "文字を使った式（文字の導入）"
+                  },
+                  {
+                    "lesson_number": 13,
+                    "title": "乗法の表し方のきまり"
+                  },
+                  {
+                    "lesson_number": 14,
+                    "title": "除法の表し方のきまり"
+                  },
+                  {
+                    "lesson_number": 15,
+                    "title": "数量の表し方（割合・速さなど）"
+                  }
+                ]
+              },
+              {
+                "middle_unit_name": "文字式の計算",
+                "small_units": [
+                  {
+                    "lesson_number": 16,
+                    "title": "代入と式の値"
+                  },
+                  {
+                    "lesson_number": 17,
+                    "title": "項と係数、一次式の加法・減法"
+                  },
+                  {
+                    "lesson_number": 18,
+                    "title": "一次式と数の乗法・除法"
+                  }
+                ]
+              },
+              {
+                "middle_unit_name": "関係を表す式",
+                "small_units": [
+                  {
+                    "lesson_number": 19,
+                    "title": "等式の作り方（左辺と右辺）"
+                  },
+                  {
+                    "lesson_number": 20,
+                    "title": "不等式の作り方（不等号の種類と意味）"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "large_unit_name": "一次方程式",
+            "middle_units": [
+              {
+                "middle_unit_name": "方程式とその解き方",
+                "small_units": [
+                  {
+                    "lesson_number": 21,
+                    "title": "方程式とその解、等式の性質"
+                  },
+                  {
+                    "lesson_number": 22,
+                    "title": "移項による方程式の解き方"
+                  },
+                  {
+                    "lesson_number": 23,
+                    "title": "かっこや小数・分数を含む方程式"
+                  },
+                  {
+                    "lesson_number": 24,
+                    "title": "比例式とその解き方"
+                  }
+                ]
+              },
+              {
+                "middle_unit_name": "方程式の利用",
+                "small_units": [
+                  {
+                    "lesson_number": 25,
+                    "title": "方程式の利用（代金と個数の問題）"
+                  },
+                  {
+                    "lesson_number": 26,
+                    "title": "方程式の利用（過不足の問題）"
+                  },
+                  {
+                    "lesson_number": 27,
+                    "title": "方程式の利用（速さの問題・その他の応用）"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "domain_name": "関数",
+        "large_units": [
+          {
+            "large_unit_name": "比例と反比例",
+            "middle_units": [
+              {
+                "middle_unit_name": "関数と比例",
+                "small_units": [
+                  {
+                    "lesson_number": 28,
+                    "title": "変数と関数、変域の意味"
+                  },
+                  {
+                    "lesson_number": 29,
+                    "title": "比例の意味と式（y=ax）"
+                  },
+                  {
+                    "lesson_number": 30,
+                    "title": "座標の概念と点のとり方"
+                  },
+                  {
+                    "lesson_number": 31,
+                    "title": "比例のグラフの書き方と特徴"
+                  },
+                  {
+                    "lesson_number": 32,
+                    "title": "グラフや条件から比例の式を求める"
+                  }
+                ]
+              },
+              {
+                "middle_unit_name": "反比例",
+                "small_units": [
+                  {
+                    "lesson_number": 33,
+                    "title": "反比例の意味と式（y=a/x）"
+                  },
+                  {
+                    "lesson_number": 34,
+                    "title": "反比例のグラフの書き方と特徴（双曲線）"
+                  },
+                  {
+                    "lesson_number": 35,
+                    "title": "グラフや条件から反比例の式を求める"
+                  }
+                ]
+              },
+              {
+                "middle_unit_name": "比例・反比例の利用",
+                "small_units": [
+                  {
+                    "lesson_number": 36,
+                    "title": "比例・反比例を利用して身のまわりの問題を解く"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "domain_name": "図形",
+        "large_units": [
+          {
+            "large_unit_name": "平面図形",
+            "middle_units": [
+              {
+                "middle_unit_name": "直線と図形の移動",
+                "small_units": [
+                  {
+                    "lesson_number": 37,
+                    "title": "直線・線分・半直線と角、点と直線の距離"
+                  },
+                  {
+                    "lesson_number": 38,
+                    "title": "平行移動"
+                  },
+                  {
+                    "lesson_number": 39,
+                    "title": "回転移動"
+                  },
+                  {
+                    "lesson_number": 40,
+                    "title": "対称移動"
+                  }
+                ]
+              },
+              {
+                "middle_unit_name": "基本の作図",
+                "small_units": [
+                  {
+                    "lesson_number": 41,
+                    "title": "垂直二等分線の作図と性質"
+                  },
+                  {
+                    "lesson_number": 42,
+                    "title": "角の二等分線の作図と性質"
+                  },
+                  {
+                    "lesson_number": 43,
+                    "title": "垂線の作図と性質"
+                  },
+                  {
+                    "lesson_number": 44,
+                    "title": "作図の利用（条件を満たす点の見つけ方）"
+                  }
+                ]
+              },
+              {
+                "middle_unit_name": "おうぎ形",
+                "small_units": [
+                  {
+                    "lesson_number": 45,
+                    "title": "円の性質とおうぎ形の意味"
+                  },
+                  {
+                    "lesson_number": 46,
+                    "title": "おうぎ形の弧の長さと面積の計算"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "large_unit_name": "空間図形",
+            "middle_units": [
+              {
+                "middle_unit_name": "いろいろな立体と空間内の位置関係",
+                "small_units": [
+                  {
+                    "lesson_number": 47,
+                    "title": "多面体（正多面体など）と角柱・円柱・角錐・円錐"
+                  },
+                  {
+                    "lesson_number": 48,
+                    "title": "直線と平面の位置関係（平行・垂直・ねじれの位置）"
+                  },
+                  {
+                    "lesson_number": 49,
+                    "title": "面が動いてできる立体、回転体"
+                  },
+                  {
+                    "lesson_number": 50,
+                    "title": "立体の見方と投影図"
+                  }
+                ]
+              },
+              {
+                "middle_unit_name": "立体の表面積と体積",
+                "small_units": [
+                  {
+                    "lesson_number": 51,
+                    "title": "柱体・錐体の表面積（展開図の利用）"
+                  },
+                  {
+                    "lesson_number": 52,
+                    "title": "柱体・錐体の体積"
+                  },
+                  {
+                    "lesson_number": 53,
+                    "title": "球の表面積と体積"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "domain_name": "データの活用",
+        "large_units": [
+          {
+            "large_unit_name": "データの分布と統計的探究",
+            "middle_units": [
+              {
+                "middle_unit_name": "データの整理と分析",
+                "small_units": [
+                  {
+                    "lesson_number": 54,
+                    "title": "度数分布表とヒストグラム"
+                  },
+                  {
+                    "lesson_number": 55,
+                    "title": "相対度数と度数折れ線"
+                  },
+                  {
+                    "lesson_number": 56,
+                    "title": "累積度数と累積相対度数"
+                  },
+                  {
+                    "lesson_number": 57,
+                    "title": "代表値（平均値、中央値、最頻値）"
+                  },
+                  {
+                    "lesson_number": 58,
+                    "title": "データの比較と統計的探究プロセス"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "large_unit_name": "ことがらの起こりやすさ",
+            "middle_units": [
+              {
+                "middle_unit_name": "多数の観察・試行による確率",
+                "small_units": [
+                  {
+                    "lesson_number": 59,
+                    "title": "多数の観察や多数回の試行によって得られる確率の意味"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "grade": "中学2年",
+    "subject": "数学",
+    "domains": [
+      {
+        "domain_name": "数と式",
+        "large_units": [
+          {
+            "large_unit_name": "式の計算",
+            "middle_units": [
+              {
+                "middle_unit_name": "多項式の計算",
+                "small_units": [
+                  {
+                    "lesson_number": 1,
+                    "title": "単項式と多項式、式の次数"
+                  },
+                  {
+                    "lesson_number": 2,
+                    "title": "同類項のまとめ方"
+                  },
+                  {
+                    "lesson_number": 3,
+                    "title": "多項式の加法と減法（縦書きの計算を含む）"
+                  },
+                  {
+                    "lesson_number": 4,
+                    "title": "単項式どうしの乗法と除法"
+                  },
+                  {
+                    "lesson_number": 5,
+                    "title": "多項式と数の乗法と除法（分配法則）"
+                  },
+                  {
+                    "lesson_number": 6,
+                    "title": "いろいろな式の計算（分数を含む式など）"
+                  }
+                ]
+              },
+              {
+                "middle_unit_name": "文字式の利用",
+                "small_units": [
+                  {
+                    "lesson_number": 7,
+                    "title": "文字式を使った数の性質の説明①（偶数・奇数・連続する整数）"
+                  },
+                  {
+                    "lesson_number": 8,
+                    "title": "文字式を使った数の性質の説明②（2けたの自然数など）"
+                  },
+                  {
+                    "lesson_number": 9,
+                    "title": "等式の変形（指定された文字について解く）"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "large_unit_name": "連立方程式",
+            "middle_units": [
+              {
+                "middle_unit_name": "連立方程式とその解き方",
+                "small_units": [
+                  {
+                    "lesson_number": 10,
+                    "title": "2元1次方程式と連立方程式の意味"
+                  },
+                  {
+                    "lesson_number": 11,
+                    "title": "加減法による解き方①（係数の絶対値が等しい場合）"
+                  },
+                  {
+                    "lesson_number": 12,
+                    "title": "加減法による解き方②（係数をそろえる場合）"
+                  },
+                  {
+                    "lesson_number": 13,
+                    "title": "代入法による解き方"
+                  },
+                  {
+                    "lesson_number": 14,
+                    "title": "いろいろな連立方程式（かっこ、小数、分数を含む）"
+                  },
+                  {
+                    "lesson_number": 15,
+                    "title": "A＝B＝Cの形の連立方程式"
+                  }
+                ]
+              },
+              {
+                "middle_unit_name": "連立方程式の利用",
+                "small_units": [
+                  {
+                    "lesson_number": 16,
+                    "title": "個数と代金の問題"
+                  },
+                  {
+                    "lesson_number": 17,
+                    "title": "速さ・時間・道のりの問題"
+                  },
+                  {
+                    "lesson_number": 18,
+                    "title": "割合の問題（増減・食塩水など）"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "domain_name": "関数",
+        "large_units": [
+          {
+            "large_unit_name": "1次関数",
+            "middle_units": [
+              {
+                "middle_unit_name": "1次関数と変化の割合",
+                "small_units": [
+                  {
+                    "lesson_number": 19,
+                    "title": "1次関数の意味と式（y=ax+b）"
+                  },
+                  {
+                    "lesson_number": 20,
+                    "title": "変化の割合の意味と計算"
+                  }
+                ]
+              },
+              {
+                "middle_unit_name": "1次関数のグラフ",
+                "small_units": [
+                  {
+                    "lesson_number": 21,
+                    "title": "1次関数のグラフの特徴（傾きと切片）"
+                  },
+                  {
+                    "lesson_number": 22,
+                    "title": "1次関数のグラフの書き方"
+                  },
+                  {
+                    "lesson_number": 23,
+                    "title": "変域とグラフの端点"
+                  }
+                ]
+              },
+              {
+                "middle_unit_name": "1次関数の式の求め方",
+                "small_units": [
+                  {
+                    "lesson_number": 24,
+                    "title": "傾き（または切片）と1点の座標から式を求める"
+                  },
+                  {
+                    "lesson_number": 25,
+                    "title": "2点の座標から式を求める（連立方程式の利用）"
+                  }
+                ]
+              },
+              {
+                "middle_unit_name": "2元1次方程式と1次関数",
+                "small_units": [
+                  {
+                    "lesson_number": 26,
+                    "title": "2元1次方程式（ax+by=c）のグラフ"
+                  },
+                  {
+                    "lesson_number": 27,
+                    "title": "連立方程式の解と2直線の交点の座標"
+                  }
+                ]
+              },
+              {
+                "middle_unit_name": "1次関数の利用",
+                "small_units": [
+                  {
+                    "lesson_number": 28,
+                    "title": "1次関数の利用（ばね、水そうなど）"
+                  },
+                  {
+                    "lesson_number": 29,
+                    "title": "動点の問題（面積の変化）"
+                  },
+                  {
+                    "lesson_number": 30,
+                    "title": "速さとダイヤグラム（2つのグラフの交点）"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "domain_name": "図形",
+        "large_units": [
+          {
+            "large_unit_name": "平行と合同",
+            "middle_units": [
+              {
+                "middle_unit_name": "角と平行線",
+                "small_units": [
+                  {
+                    "lesson_number": 31,
+                    "title": "対頂角・同位角・錯角"
+                  },
+                  {
+                    "lesson_number": 32,
+                    "title": "平行線の性質と平行になるための条件"
+                  }
+                ]
+              },
+              {
+                "middle_unit_name": "多角形の角",
+                "small_units": [
+                  {
+                    "lesson_number": 33,
+                    "title": "三角形の内角と外角の性質"
+                  },
+                  {
+                    "lesson_number": 34,
+                    "title": "多角形の内角の和"
+                  },
+                  {
+                    "lesson_number": 35,
+                    "title": "多角形の外角の和"
+                  }
+                ]
+              },
+              {
+                "middle_unit_name": "三角形の合同",
+                "small_units": [
+                  {
+                    "lesson_number": 36,
+                    "title": "合同な図形の性質（対応する辺と角）"
+                  },
+                  {
+                    "lesson_number": 37,
+                    "title": "三角形の合同条件"
+                  }
+                ]
+              },
+              {
+                "middle_unit_name": "図形の証明",
+                "small_units": [
+                  {
+                    "lesson_number": 38,
+                    "title": "仮定と結論、証明の進め方の基本（反例による否定を含む）"
+                  },
+                  {
+                    "lesson_number": 39,
+                    "title": "三角形の合同条件を使った証明の書き方"
+                  },
+                  {
+                    "lesson_number": 40,
+                    "title": "合同な図形の性質を利用した辺や角の証明"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "large_unit_name": "三角形と四角形",
+            "middle_units": [
+              {
+                "middle_unit_name": "二等辺三角形と正三角形",
+                "small_units": [
+                  {
+                    "lesson_number": 41,
+                    "title": "二等辺三角形の性質とその証明"
+                  },
+                  {
+                    "lesson_number": 42,
+                    "title": "二等辺三角形になるための条件"
+                  },
+                  {
+                    "lesson_number": 43,
+                    "title": "正三角形の性質と条件"
+                  }
+                ]
+              },
+              {
+                "middle_unit_name": "直角三角形",
+                "small_units": [
+                  {
+                    "lesson_number": 44,
+                    "title": "直角三角形の合同条件"
+                  },
+                  {
+                    "lesson_number": 45,
+                    "title": "直角三角形の合同条件を使った証明"
+                  }
+                ]
+              },
+              {
+                "middle_unit_name": "平行四辺形",
+                "small_units": [
+                  {
+                    "lesson_number": 46,
+                    "title": "平行四辺形の性質とその証明"
+                  },
+                  {
+                    "lesson_number": 47,
+                    "title": "平行四辺形になるための条件"
+                  },
+                  {
+                    "lesson_number": 48,
+                    "title": "平行四辺形になるための条件を使った証明"
+                  }
+                ]
+              },
+              {
+                "middle_unit_name": "特別な平行四辺形と面積",
+                "small_units": [
+                  {
+                    "lesson_number": 49,
+                    "title": "長方形・ひし形・正方形の性質と条件"
+                  },
+                  {
+                    "lesson_number": 50,
+                    "title": "平行線と面積（等積変形）"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "domain_name": "データの活用",
+        "large_units": [
+          {
+            "large_unit_name": "確率",
+            "middle_units": [
+              {
+                "middle_unit_name": "確率の求め方",
+                "small_units": [
+                  {
+                    "lesson_number": 51,
+                    "title": "ことがらの起こりやすさと確率の意味"
+                  },
+                  {
+                    "lesson_number": 52,
+                    "title": "樹形図を使った場合の数の求め方（硬貨・さいころ）"
+                  },
+                  {
+                    "lesson_number": 53,
+                    "title": "樹形図を使った場合の数の求め方（カード・玉・くじ）"
+                  },
+                  {
+                    "lesson_number": 54,
+                    "title": "確率の性質（起こらない確率、少なくとも1つ起こる確率）"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "large_unit_name": "データの分布の比較",
+            "middle_units": [
+              {
+                "middle_unit_name": "四分位範囲と箱ひげ図",
+                "small_units": [
+                  {
+                    "lesson_number": 55,
+                    "title": "四分位数と四分位範囲"
+                  },
+                  {
+                    "lesson_number": 56,
+                    "title": "箱ひげ図の書き方と読み取り"
+                  },
+                  {
+                    "lesson_number": 57,
+                    "title": "箱ひげ図を用いたデータの分布の比較と傾向の読み取り"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "grade": "中学3年",
+    "subject": "数学",
+    "domains": [
+      {
+        "domain_name": "数と式",
+        "large_units": [
+          {
+            "large_unit_name": "多項式",
+            "middle_units": [
+              {
+                "middle_unit_name": "式の展開",
+                "small_units": [
+                  {
+                    "lesson_number": 1,
+                    "title": "単項式と多項式の乗法・除法"
+                  },
+                  {
+                    "lesson_number": 2,
+                    "title": "多項式どうしの乗法（展開の基本）"
+                  },
+                  {
+                    "lesson_number": 3,
+                    "title": "乗法公式①（x+a)(x+b)の展開）"
+                  },
+                  {
+                    "lesson_number": 4,
+                    "title": "乗法公式②（(x+a)^2, (x-a)^2の展開）"
+                  },
+                  {
+                    "lesson_number": 5,
+                    "title": "乗法公式③（(x+a)(x-a)の展開）"
+                  },
+                  {
+                    "lesson_number": 6,
+                    "title": "いろいろな式の展開（置き換えや式の混じった計算）"
+                  }
+                ]
+              },
+              {
+                "middle_unit_name": "因数分解",
+                "small_units": [
+                  {
+                    "lesson_number": 7,
+                    "title": "因数分解の意味と共通因数のくくり出し"
+                  },
+                  {
+                    "lesson_number": 8,
+                    "title": "乗法公式を利用した因数分解①（x^2+(a+b)x+abの形）"
+                  },
+                  {
+                    "lesson_number": 9,
+                    "title": "乗法公式を利用した因数分解②（平方の公式の逆）"
+                  },
+                  {
+                    "lesson_number": 10,
+                    "title": "乗法公式を利用した因数分解③（和と差の積の逆）"
+                  },
+                  {
+                    "lesson_number": 11,
+                    "title": "いろいろな因数分解（共通因数をくくり出してから公式を使うなど）"
+                  }
+                ]
+              },
+              {
+                "middle_unit_name": "式の計算の利用",
+                "small_units": [
+                  {
+                    "lesson_number": 12,
+                    "title": "式の計算の利用（数の計算への応用・式の値）"
+                  },
+                  {
+                    "lesson_number": 13,
+                    "title": "式の計算の利用（図形の性質の証明への応用）"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "large_unit_name": "平方根",
+            "middle_units": [
+              {
+                "middle_unit_name": "平方根の意味と表し方",
+                "small_units": [
+                  {
+                    "lesson_number": 14,
+                    "title": "平方根の意味と根号（ルート）の表し方"
+                  },
+                  {
+                    "lesson_number": 15,
+                    "title": "平方根の大小関係"
+                  },
+                  {
+                    "lesson_number": 16,
+                    "title": "有理数と無理数、循環小数"
+                  }
+                ]
+              },
+              {
+                "middle_unit_name": "平方根の計算",
+                "small_units": [
+                  {
+                    "lesson_number": 17,
+                    "title": "平方根の乗法と除法"
+                  },
+                  {
+                    "lesson_number": 18,
+                    "title": "根号の中を簡単にする変形（a√bの形）"
+                  },
+                  {
+                    "lesson_number": 19,
+                    "title": "分母の有理化"
+                  },
+                  {
+                    "lesson_number": 20,
+                    "title": "平方根の加法と減法"
+                  },
+                  {
+                    "lesson_number": 21,
+                    "title": "平方根のいろいろな計算（分配法則や乗法公式の利用）"
+                  }
+                ]
+              },
+              {
+                "middle_unit_name": "平方根の利用",
+                "small_units": [
+                  {
+                    "lesson_number": 22,
+                    "title": "近似値の計算と式の値"
+                  },
+                  {
+                    "lesson_number": 23,
+                    "title": "平方根の利用（図形や実生活への応用）"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "large_unit_name": "2次方程式",
+            "middle_units": [
+              {
+                "middle_unit_name": "2次方程式とその解き方",
+                "small_units": [
+                  {
+                    "lesson_number": 24,
+                    "title": "2次方程式の意味とその解"
+                  },
+                  {
+                    "lesson_number": 25,
+                    "title": "平方根の考え方による解き方（x^2=k, (x+a)^2=kの形）"
+                  },
+                  {
+                    "lesson_number": 26,
+                    "title": "解の公式の導出と利用"
+                  },
+                  {
+                    "lesson_number": 27,
+                    "title": "因数分解による解き方"
+                  },
+                  {
+                    "lesson_number": 28,
+                    "title": "いろいろな2次方程式の解き方（解き方の選択）"
+                  }
+                ]
+              },
+              {
+                "middle_unit_name": "2次方程式の利用",
+                "small_units": [
+                  {
+                    "lesson_number": 29,
+                    "title": "2次方程式の利用（数に関する問題）"
+                  },
+                  {
+                    "lesson_number": 30,
+                    "title": "2次方程式の利用（図形に関する問題）"
+                  },
+                  {
+                    "lesson_number": 31,
+                    "title": "2次方程式の利用（動点などその他の応用）"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "domain_name": "関数",
+        "large_units": [
+          {
+            "large_unit_name": "関数 y=ax^2",
+            "middle_units": [
+              {
+                "middle_unit_name": "関数 y=ax^2 とそのグラフ",
+                "small_units": [
+                  {
+                    "lesson_number": 32,
+                    "title": "関数 y=ax^2 の意味と式"
+                  },
+                  {
+                    "lesson_number": 33,
+                    "title": "関数 y=ax^2 のグラフの書き方と特徴（放物線）"
+                  },
+                  {
+                    "lesson_number": 34,
+                    "title": "関数 y=ax^2 の変域"
+                  },
+                  {
+                    "lesson_number": 35,
+                    "title": "関数 y=ax^2 の変化の割合"
+                  }
+                ]
+              },
+              {
+                "middle_unit_name": "関数 y=ax^2 の利用",
+                "small_units": [
+                  {
+                    "lesson_number": 36,
+                    "title": "身のまわりの事象への利用（落下運動や制動距離など）"
+                  },
+                  {
+                    "lesson_number": 37,
+                    "title": "放物線と直線が交わる図形の問題"
+                  },
+                  {
+                    "lesson_number": 38,
+                    "title": "動点と面積の変化の問題"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "domain_name": "図形",
+        "large_units": [
+          {
+            "large_unit_name": "相似な図形",
+            "middle_units": [
+              {
+                "middle_unit_name": "相似な図形",
+                "small_units": [
+                  {
+                    "lesson_number": 39,
+                    "title": "相似な図形の意味と性質（相似比）"
+                  },
+                  {
+                    "lesson_number": 40,
+                    "title": "三角形の相似条件"
+                  },
+                  {
+                    "lesson_number": 41,
+                    "title": "相似条件を使った証明の進め方"
+                  }
+                ]
+              },
+              {
+                "middle_unit_name": "平行線と線分の比",
+                "small_units": [
+                  {
+                    "lesson_number": 42,
+                    "title": "平行線と線分の比の定理"
+                  },
+                  {
+                    "lesson_number": 43,
+                    "title": "平行線と線分の比の定理の逆と応用"
+                  },
+                  {
+                    "lesson_number": 44,
+                    "title": "中点連結定理とその証明・利用"
+                  }
+                ]
+              },
+              {
+                "middle_unit_name": "相似な図形の計量",
+                "small_units": [
+                  {
+                    "lesson_number": 45,
+                    "title": "相似な平面図形の面積比"
+                  },
+                  {
+                    "lesson_number": 46,
+                    "title": "相似な立体の表面積比と体積比"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "large_unit_name": "円",
+            "middle_units": [
+              {
+                "middle_unit_name": "円周角の定理",
+                "small_units": [
+                  {
+                    "lesson_number": 47,
+                    "title": "円周角と中心角の定理"
+                  },
+                  {
+                    "lesson_number": 48,
+                    "title": "円周角の定理の逆"
+                  },
+                  {
+                    "lesson_number": 49,
+                    "title": "円周角の定理を利用した証明"
+                  },
+                  {
+                    "lesson_number": 50,
+                    "title": "円周角と弧の長さの比"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "large_unit_name": "三平方の定理",
+            "middle_units": [
+              {
+                "middle_unit_name": "三平方の定理",
+                "small_units": [
+                  {
+                    "lesson_number": 51,
+                    "title": "三平方の定理の意味とその証明"
+                  },
+                  {
+                    "lesson_number": 52,
+                    "title": "三平方の定理の逆"
+                  }
+                ]
+              },
+              {
+                "middle_unit_name": "三平方の定理の利用",
+                "small_units": [
+                  {
+                    "lesson_number": 53,
+                    "title": "平面図形への利用（高さ、面積、特別な直角三角形の辺の比）"
+                  },
+                  {
+                    "lesson_number": 54,
+                    "title": "座標平面上の2点間の距離"
+                  },
+                  {
+                    "lesson_number": 55,
+                    "title": "空間図形への利用（対角線、錐体の高さと体積など）"
+                  },
+                  {
+                    "lesson_number": 56,
+                    "title": "立体の表面上の最短距離（展開図の利用）"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "domain_name": "データの活用",
+        "large_units": [
+          {
+            "large_unit_name": "標本調査",
+            "middle_units": [
+              {
+                "middle_unit_name": "標本調査と母集団",
+                "small_units": [
+                  {
+                    "lesson_number": 57,
+                    "title": "全数調査と標本調査、母集団と標本"
+                  },
+                  {
+                    "lesson_number": 58,
+                    "title": "無作為抽出の方法と標本の偏り"
+                  }
+                ]
+              },
+              {
+                "middle_unit_name": "標本調査の利用",
+                "small_units": [
+                  {
+                    "lesson_number": 59,
+                    "title": "標本の割合や平均から母集団の傾向を推定する"
+                  },
+                  {
+                    "lesson_number": 60,
+                    "title": "標本調査の活用（実社会の問題解決）"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]
