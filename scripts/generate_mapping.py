@@ -131,17 +131,22 @@ VISUAL_BY_BLUEPRINT: Dict[str, str] = {
 
 
 SUPPORTED_FORMS: Dict[str, List[str]] = {
+    # calculation = 数値・式が全部与えられ計算するだけ
+    # word_problem = 場面設定から式を立てる
+    # proof = 論理的証明
     "BasicCalculationStructure": ["calculation"],
     "WordProblemStructure": ["word_problem"],
     "BasicGeometryMeasurementStructure": ["calculation", "word_problem"],
-    "BasicDifferenceStructure": ["calculation", "word_problem"],
+    "BasicDifferenceStructure": ["word_problem"],           # くり抜き文脈が必須
     "FunctionGeometryFusionStructure": ["calculation", "word_problem"],
-    "MovingPointStructure": ["calculation", "word_problem"],
-    "AngleCalculationStructure": ["calculation"],
+    "MovingPointStructure": ["word_problem"],               # 動点の時間文脈が必須
+    "AngleCalculationStructure": ["calculation"],           # 図が与えられ角度を求めるだけ
     "ConstructionStructure": ["calculation"],
     "ProofStructure": ["proof"],
     "DataProbabilityStructure": ["calculation", "word_problem"],
     "SequencePatternStructure": ["calculation", "word_problem"],
+    "PythagoreanStructure": ["calculation", "word_problem"],
+    "PythagoreanSpaceStructure": ["word_problem"],          # 空間図形の文脈が必須
 }
 
 
@@ -236,6 +241,9 @@ def generate_mapping(strict: bool = False) -> Dict[str, Any]:
 
                         if lesson_id in seed:
                             entry = dict(seed[lesson_id])
+                            # seed エントリに domain / large_unit が欠落していたら curriculum から補完
+                            entry.setdefault("domain", domain_name)
+                            entry.setdefault("large_unit", lu_name)
                             if strict:
                                 entry.setdefault(
                                     "is_clean_override",
@@ -244,7 +252,7 @@ def generate_mapping(strict: bool = False) -> Dict[str, Any]:
                                 # dedup は strict モードで有効
                             else:
                                 entry.setdefault("is_clean_override", {"disabled": True})
-                                entry.setdefault("dedup_disabled", True)
+                                # dedup は有効のまま（時刻ベース seed で再生成が異なる問題を返す）
                             mapping[lesson_id] = entry
                             continue
 
@@ -279,7 +287,7 @@ def generate_mapping(strict: bool = False) -> Dict[str, Any]:
                             entry["is_clean_override"] = infer_clean_config(title, blueprint_id)
                         else:
                             entry["is_clean_override"] = {"disabled": True}
-                            entry["dedup_disabled"] = True
+                            # dedup は有効のまま
                         mapping[lesson_id] = entry
 
     return mapping

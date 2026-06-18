@@ -14,7 +14,9 @@ class DuplicationGuard:
     def __init__(self, db_path: str = "master_data/cache/dedup.db") -> None:
         Path(db_path).parent.mkdir(parents=True, exist_ok=True)
         self.db_path = db_path
-        self.conn = sqlite3.connect(db_path)
+        # check_same_thread=False で BackgroundTasks (別 thread) からのアクセスを許可
+        # 競合は SQLite 内部のロックで自動シリアライズされる
+        self.conn = sqlite3.connect(db_path, check_same_thread=False)
         self.conn.execute(
             """
             CREATE TABLE IF NOT EXISTS generated_problems (

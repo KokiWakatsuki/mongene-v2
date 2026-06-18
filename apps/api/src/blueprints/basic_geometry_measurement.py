@@ -21,14 +21,7 @@ def build_basic_geometry_measurement_blueprint() -> BlueprintDefinition:
         noun_slots={
             "shape": NounSlot(
                 slot_name="shape",
-                accepted_tags=[],
-                accepted_noun_types=[
-                    "PolygonAtom",
-                    "CircleAtom",
-                    "PrismAtom",
-                    "PyramidAtom",
-                    "SphereAtom",
-                ],
+                accepted_tags=["geometry"],  # plane_geometry/space_geometry 両方を含む共通タグ
                 required=True,
             ),
         },

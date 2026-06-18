@@ -18,6 +18,7 @@ def build_sub_questions(
     strategy: Optional[SubQuestionStrategy],
     sampled_nouns: Dict[str, NounAtom],
     logic_steps_all: List[LogicStep],
+    logic_steps_by_slot: Optional[Dict[str, LogicStep]] = None,
 ) -> List[SubQuestion]:
     if not logic_steps_all:
         raise ValueError("logic_steps_all が空")
@@ -34,10 +35,22 @@ def build_sub_questions(
 
     if strategy.strategy_type == "incremental":
         sub_qs: List[SubQuestion] = []
+        use_slots = bool(strategy.intermediate_slots) and logic_steps_by_slot is not None
         for i, intermediate in enumerate(strategy.intermediate_outputs):
-            relevant_steps = _slice_steps_for(logic_steps_all, intermediate)
-            if not relevant_steps:
-                relevant_steps = [logic_steps_all[min(i, len(logic_steps_all) - 1)]]
+            # slot 名指定があれば logic_steps_by_slot[slot] を使う
+            if use_slots and i < len(strategy.intermediate_slots):
+                slot = strategy.intermediate_slots[i]
+                step = logic_steps_by_slot.get(slot) if logic_steps_by_slot else None
+                if step is not None:
+                    relevant_steps = [step]
+                else:
+                    relevant_steps = _slice_steps_for(logic_steps_all, intermediate) or [
+                        logic_steps_all[min(i, len(logic_steps_all) - 1)]
+                    ]
+            else:
+                relevant_steps = _slice_steps_for(logic_steps_all, intermediate)
+                if not relevant_steps:
+                    relevant_steps = [logic_steps_all[min(i, len(logic_steps_all) - 1)]]
             sub_qs.append(
                 SubQuestion(
                     label=f"({i + 1})",
@@ -47,12 +60,17 @@ def build_sub_questions(
                     depends_on=[f"({j + 1})" for j in range(i)],
                 )
             )
+        # 最終問題
+        if strategy.final_slot and logic_steps_by_slot and strategy.final_slot in logic_steps_by_slot:
+            final_steps = [logic_steps_by_slot[strategy.final_slot]]
+        else:
+            final_steps = list(logic_steps_all)
         sub_qs.append(
             SubQuestion(
                 label=f"({len(strategy.intermediate_outputs) + 1})",
                 prompt_hint=strategy.final_question,
-                logic_steps=list(logic_steps_all),
-                answer=_extract_final_answer(logic_steps_all),
+                logic_steps=final_steps,
+                answer=_extract_final_answer(final_steps),
                 depends_on=[f"({j + 1})" for j in range(len(strategy.intermediate_outputs))],
             )
         )

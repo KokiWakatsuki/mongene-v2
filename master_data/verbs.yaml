@@ -1,0 +1,158 @@
+verbs:
+- class_name: AnalyzeDataVerb
+  arity: 1
+  accepted_noun_types:
+  - DataSetAtom
+  tags:
+  - data_analysis
+- class_name: CalculateArithmeticVerb
+  arity: n-ary
+  accepted_noun_types:
+  - NumberAtom
+  - PolynomialAtom
+  - SquareRootAtom
+  tags:
+  - arithmetic
+- class_name: CalculateProbabilityVerb
+  arity: 1
+  accepted_noun_types:
+  - EventAtom
+  tags:
+  - probability
+- class_name: ConstructGeometryVerb
+  arity: n-ary
+  accepted_noun_types:
+  - PointAtom
+  - PolygonAtom
+  - CircleAtom
+  - LineAngleAtom
+  tags:
+  - construction
+- class_name: CutoutVerb
+  arity: 2
+  accepted_noun_types:
+  - PrismAtom
+  - PyramidAtom
+  - SphereAtom
+  tags:
+  - cutout_operation
+  - volume_difference
+- class_name: EstimatePopulationVerb
+  arity: 1
+  accepted_noun_types:
+  - SampleAtom
+  tags:
+  - estimation
+  - sampling
+- class_name: FindAngleVerb
+  arity: n-ary
+  accepted_noun_types:
+  - LineAngleAtom
+  - CircleAngleAtom
+  - PolygonAtom
+  tags:
+  - angle_calculation
+- class_name: FindDivisorsVerb
+  arity: n-ary
+  accepted_noun_types:
+  - NumberAtom
+  tags:
+  - divisors
+  - number_theory
+- class_name: FormShapeVerb
+  arity: n-ary
+  accepted_noun_types:
+  - PointAtom
+  - MovingPointAtom
+  tags:
+  - form_shape
+- class_name: GeneralizeFormulaVerb
+  arity: 1
+  accepted_noun_types:
+  - SequenceAtom
+  tags:
+  - sequence
+  - generalization
+- class_name: IntersectVerb
+  arity: 2
+  accepted_noun_types:
+  - LinearFuncAtom
+  - QuadraticFuncAtom
+  - PolygonAtom
+  - CircleAtom
+  tags:
+  - intersect
+- class_name: LocusVerb
+  arity: n-ary
+  accepted_noun_types:
+  - PointAtom
+  - PolygonAtom
+  - CircleAtom
+  tags:
+  - locus
+- class_name: MeasureGeometryVerb
+  arity: n-ary
+  accepted_noun_types:
+  - PointAtom
+  - PolygonAtom
+  - CircleAtom
+  - PrismAtom
+  - PyramidAtom
+  - SphereAtom
+  tags:
+  - measure_geometry
+- class_name: ProveAlgebraicVerb
+  arity: 1
+  accepted_noun_types:
+  - NumberAtom
+  - PolynomialAtom
+  tags:
+  - proof
+  - algebraic
+- class_name: ProveGeometryVerb
+  arity: 2
+  accepted_noun_types:
+  - PolygonAtom
+  - CircleAtom
+  tags:
+  - proof
+  - geometry
+- class_name: SliceSolidVerb
+  arity: 1
+  accepted_noun_types:
+  - PrismAtom
+  - PyramidAtom
+  - SphereAtom
+  tags:
+  - slice
+  - cross_section
+- class_name: SolveEqVerb
+  arity: 1
+  accepted_noun_types:
+  - EquationAtom
+  - ProportionAtom
+  tags:
+  - solve_equation
+- class_name: SolveLinearDiophantineVerb
+  arity: 1
+  accepted_noun_types:
+  - EquationAtom
+  tags:
+  - diophantine
+  - integer_solutions
+- class_name: TransformShapeVerb
+  arity: 1
+  accepted_noun_types:
+  - PolygonAtom
+  - PrismAtom
+  - LinearFuncAtom
+  tags:
+  - transform
+- class_name: UnfoldNetVerb
+  arity: 1
+  accepted_noun_types:
+  - PrismAtom
+  - PyramidAtom
+  tags:
+  - unfold
+  - net

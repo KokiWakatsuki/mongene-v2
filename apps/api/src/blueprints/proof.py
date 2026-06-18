@@ -21,15 +21,13 @@ def build_proof_blueprint() -> BlueprintDefinition:
         noun_slots={
             "figure_a": NounSlot(
                 slot_name="figure_a",
-                accepted_tags=[],
-                accepted_noun_types=["PolygonAtom"],
+                accepted_tags=["plane_geometry"],
                 required=True,
                 constraints_override={"polygon_type": "triangle"},
             ),
             "figure_b": NounSlot(
                 slot_name="figure_b",
-                accepted_tags=[],
-                accepted_noun_types=["PolygonAtom"],
+                accepted_tags=["plane_geometry"],
                 required=True,
                 constraints_override={"polygon_type": "triangle"},
             ),

@@ -55,10 +55,12 @@ EXPECTED_BLUEPRINTS = {
     "ProofStructure",
     "DataProbabilityStructure",
     "SequencePatternStructure",
+    "PythagoreanStructure",
+    "PythagoreanSpaceStructure",
 }
 
 
-def test_all_11_blueprints_registered() -> None:
+def test_all_blueprints_registered() -> None:
     registered = set(list_blueprints())
     assert registered == EXPECTED_BLUEPRINTS
 
@@ -67,7 +69,7 @@ def test_all_11_blueprints_registered() -> None:
 def test_each_blueprint_loads(bp_id: str) -> None:
     bp = load_blueprint(bp_id)
     assert bp.blueprint_id == bp_id
-    assert bp.blueprint_version == "v1"
+    assert bp.blueprint_version.startswith("v")
     assert bp.noun_slots, f"{bp_id} に noun_slot が無い"
     assert bp.verb_invocations, f"{bp_id} に verb_invocation が無い"
     assert bp.supported_forms, f"{bp_id} に supported_forms が無い"

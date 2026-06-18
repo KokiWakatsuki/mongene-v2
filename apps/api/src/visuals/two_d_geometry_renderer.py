@@ -69,7 +69,7 @@ class TwoDGeometryRenderer(VisualComponent):
                 cx, cy = transform(el["x"], el["y"])
                 dwg.add(dwg.circle(center=(cx, cy), r=3, fill="black"))
                 if el.get("label"):
-                    dwg.add(dwg.text(el["label"], insert=(cx + 5, cy - 5), font_size=14))
+                    dwg.add(dwg.text(el["label"], insert=(cx + 5, cy - 5), font_size=14, font_family="Hiragino Sans, sans-serif"))
             elif el_type == "line_segment":
                 p1 = transform(*el["p1"])
                 p2 = transform(*el["p2"])
@@ -79,7 +79,7 @@ class TwoDGeometryRenderer(VisualComponent):
                 dwg.add(line)
                 if el.get("label"):
                     mx, my = (p1[0] + p2[0]) / 2, (p1[1] + p2[1]) / 2
-                    dwg.add(dwg.text(el["label"], insert=(mx + 3, my - 3), font_size=12))
+                    dwg.add(dwg.text(el["label"], insert=(mx + 3, my - 3), font_size=12, font_family="Hiragino Sans, sans-serif"))
             elif el_type == "polygon":
                 points = [transform(*v) for v in el["vertices"]]
                 fill = "lightgray" if el.get("filled") else "none"
@@ -107,9 +107,9 @@ class TwoDGeometryRenderer(VisualComponent):
                 dwg.add(dwg.polyline(points=pts, fill="none", stroke="black", stroke_width=1))
             elif el_type == "angle_label":
                 vx, vy = transform(*el["vertex"])
-                dwg.add(dwg.text(el["label"], insert=(vx + 8, vy - 8), font_size=12))
+                dwg.add(dwg.text(el["label"], insert=(vx + 8, vy - 8), font_size=12, font_family="Hiragino Sans, sans-serif"))
             elif el_type == "text":
                 tx, ty = transform(el["x"], el["y"])
-                dwg.add(dwg.text(el["content"], insert=(tx, ty), font_size=14))
+                dwg.add(dwg.text(el["content"], insert=(tx, ty), font_size=14, font_family="Hiragino Sans, sans-serif"))
 
         return dwg.tostring()

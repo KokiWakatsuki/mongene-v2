@@ -19,17 +19,21 @@ def build_construction_blueprint() -> BlueprintDefinition:
         blueprint_id="ConstructionStructure",
         blueprint_version="v1",
         noun_slots={
-            "anchor": NounSlot(
-                slot_name="anchor",
-                accepted_tags=[],
-                accepted_noun_types=["PointAtom"],
+            "point_a": NounSlot(
+                slot_name="point_a",
+                accepted_tags=["coordinate"],
+                required=True,
+            ),
+            "point_b": NounSlot(
+                slot_name="point_b",
+                accepted_tags=["coordinate"],
                 required=True,
             ),
         },
         verb_invocations=[
             VerbInvocation(
                 verb=ConstructGeometryVerb(construction_type="perp_bisector"),
-                input_slots=["anchor"],
+                input_slots=["point_a", "point_b"],
                 output_slot="construction",
                 on_failure="retry_seed",
             ),

@@ -881,13 +881,11 @@ nodes:
   title: 平面図形への利用（高さ、面積、特別な直角三角形の辺の比）
   grade: 3
   requires:
-  - g3_l14
   - g3_l52
 - id: g3_l54
   title: 座標平面上の2点間の距離
   grade: 3
   requires:
-  - g3_l14
   - g3_l53
 - id: g3_l55
   title: 空間図形への利用（対角線、錐体の高さと体積など）
@@ -895,6 +893,7 @@ nodes:
   requires:
   - g1_l37
   - g1_l46
+  - g3_l54
 - id: g3_l56
   title: 立体の表面上の最短距離（展開図の利用）
   grade: 3
@@ -905,7 +904,7 @@ nodes:
   - g1_l52
   - g1_l9
   - g2_l1
-  - g3_l14
+  - g3_l55
 - id: g3_l57
   title: 全数調査と標本調査、母集団と標本
   grade: 3

@@ -45,3 +45,5 @@ class MiddleRepresentation:
     seed: int
     blueprint_id: str
     blueprint_version: str
+    # サンプルされた Atom の型情報・主要パラメータ（LLM プロンプトに渡して用語を一致させる）
+    sampled_nouns_info: Dict[str, Dict[str, Any]] = field(default_factory=dict)

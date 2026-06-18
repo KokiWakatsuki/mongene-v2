@@ -33,6 +33,8 @@ EXPECTED_BLUEPRINTS = {
     "ProofStructure",
     "DataProbabilityStructure",
     "SequencePatternStructure",
+    "PythagoreanStructure",
+    "PythagoreanSpaceStructure",
 }
 
 

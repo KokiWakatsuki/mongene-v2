@@ -114,7 +114,8 @@ def test_llm_translator_returns_three_values() -> None:
     problem_text, sub_texts, explanation = translator.translate(_make_simple_mr(), story=None, lesson_grade=1)
     assert isinstance(problem_text, str)
     assert isinstance(sub_texts, list)
-    assert isinstance(explanation, str)
+    assert isinstance(explanation, dict)
+    assert "_all" in explanation
 
 
 def test_atom_constraints_estimate_param_space() -> None:

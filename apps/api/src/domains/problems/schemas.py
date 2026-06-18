@@ -46,7 +46,8 @@ class MetadataSchema(BaseModel):
     seed: int
     blueprint_id: str
     blueprint_version: str
-    model_used: str = "gemini-2.5-flash"
+    model_used: str = "gemini-flash-lite-latest"
+    git_commit: Optional[str] = None
 
 
 class ProblemGenerationResponse(BaseModel):

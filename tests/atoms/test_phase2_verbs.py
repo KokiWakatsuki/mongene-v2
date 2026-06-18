@@ -152,9 +152,12 @@ def test_transform_shape_translates() -> None:
 
 # --- ConstructGeometryVerb ---
 def test_construct_geometry_returns_steps() -> None:
-    p = PointAtom().sample(_ac(), random.Random(0))
-    step = ConstructGeometryVerb("perp_bisector").solve(p, rng=random.Random(0))
-    assert int(step.sympy_expr) >= 1
+    p1 = PointAtom().sample(_ac(), random.Random(0))
+    p2 = PointAtom().sample(_ac(), random.Random(1))
+    step = ConstructGeometryVerb("perp_bisector").solve(p1, p2, rng=random.Random(0))
+    # 垂直二等分線の方程式が返る（sympy.Eq）
+    assert step.sympy_expr is not None
+    assert "perp_bisector" in step.operation_name
 
 
 # --- ProveGeometryVerb ---

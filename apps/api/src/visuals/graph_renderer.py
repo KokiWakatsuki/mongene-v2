@@ -7,9 +7,7 @@ from __future__ import annotations
 import io
 from typing import Optional, Tuple
 
-import matplotlib
-
-matplotlib.use("Agg")  # noqa: E402
+from apps.api.src.visuals import _matplotlib_setup  # noqa: F401
 import matplotlib.pyplot as plt  # noqa: E402
 import numpy as np  # noqa: E402
 import sympy  # noqa: E402
@@ -51,9 +49,15 @@ class GraphRenderer(VisualComponent):
                 except Exception:
                     continue
             elif t == "point_on_graph":
-                ax.scatter([el["x"]], [el["y"]], color="black", s=20)
+                ax.scatter([el["x"]], [el["y"]], color="black", s=40)
                 if el.get("label"):
-                    ax.annotate(el["label"], (el["x"], el["y"]), fontsize=10)
+                    ax.annotate(
+                        el["label"],
+                        (el["x"], el["y"]),
+                        textcoords="offset points",
+                        xytext=(8, 8),
+                        fontsize=14,
+                    )
             elif t == "axis_label":
                 if el["axis"] == "x":
                     ax.set_xlabel(el["label"])

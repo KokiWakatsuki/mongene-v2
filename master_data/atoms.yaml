@@ -1,0 +1,201 @@
+atoms:
+- class_name: CircleAngleAtom
+  category: B
+  default_tags:
+  - circle_angles
+  properties:
+  - central_angle
+  - inscribed_quadrilateral
+  - tangent_chord_angle
+  - power_of_point
+  - extra_tags
+- class_name: CircleAtom
+  category: B
+  default_tags:
+  - plane_geometry
+  - circle
+  - pi
+  properties:
+  - radius
+  - central_angle
+  - is_sector
+- class_name: DataSetAtom
+  category: D
+  default_tags:
+  - statistics
+  - data_analysis
+  properties:
+  - values
+  - frequency_distribution
+  - mean
+  - median
+  - mode
+  - q1
+  - q3
+  - distribution_type
+- class_name: EquationAtom
+  category: A
+  default_tags:
+  - linear_equation
+  - quadratic_equation
+  properties:
+  - lhs
+  - rhs
+  - variable
+  - degree
+  - extra_tags
+- class_name: EventAtom
+  category: D
+  default_tags:
+  - probability
+  - dice
+  - cards
+  properties:
+  - event_type
+  - sample_space_size
+  - event_descriptors
+  - tree_dsl
+  - num_trials
+  - with_replacement
+- class_name: InverseFuncAtom
+  category: C
+  default_tags:
+  - inverse_proportion
+  properties:
+  - constant
+- class_name: LineAngleAtom
+  category: B
+  default_tags:
+  - parallel_lines
+  - angles
+  properties:
+  - known_angle
+  - relation_type
+- class_name: LinearFuncAtom
+  category: C
+  default_tags:
+  - linear_function
+  - proportion
+  properties:
+  - slope
+  - intercept
+- class_name: MovingPointAtom
+  category: B
+  default_tags:
+  - moving_point
+  - time_function
+  properties:
+  - initial_position
+  - velocity
+  - path_type
+  - num_points
+  - direction
+  - time_var
+- class_name: NumberAtom
+  category: A
+  default_tags:
+  - number
+  - fraction
+  - integer
+  properties:
+  - value
+- class_name: PointAtom
+  category: C
+  default_tags:
+  - coordinate
+  properties:
+  - x
+  - y
+  - label
+- class_name: PolygonAtom
+  category: B
+  default_tags:
+  - plane_geometry
+  - triangle
+  - rectangle
+  properties:
+  - polygon_type
+  - vertices
+  - n_sides
+- class_name: PolynomialAtom
+  category: A
+  default_tags:
+  - polynomial
+  - factorization
+  properties:
+  - expression
+  - variables
+- class_name: PrismAtom
+  category: B
+  default_tags:
+  - space_geometry
+  - prism
+  properties:
+  - width
+  - depth
+  - height
+  - base_shape_type
+  - num_sides
+- class_name: ProportionAtom
+  category: A
+  default_tags:
+  - proportion_equation
+  properties:
+  - lhs_ratio
+  - rhs_ratio
+- class_name: PyramidAtom
+  category: B
+  default_tags:
+  - space_geometry
+  - pyramid
+  properties:
+  - base_side
+  - height
+  - base_shape
+  - num_sides
+  - is_regular_pyramid
+  - hide_height
+- class_name: QuadraticFuncAtom
+  category: C
+  default_tags:
+  - quadratic_function
+  properties:
+  - coefficient_a
+- class_name: SampleAtom
+  category: D
+  default_tags:
+  - sampling_survey
+  properties:
+  - population_size
+  - sample_size
+  - sample_count
+  - target_attribute
+  - population_estimate
+- class_name: SequenceAtom
+  category: E
+  default_tags:
+  - sequence
+  - pattern
+  - generalization
+  properties:
+  - pattern_type
+  - nth_term_expr
+  - first_term
+  - step_rule
+  - min_terms_required
+- class_name: SphereAtom
+  category: B
+  default_tags:
+  - space_geometry
+  - sphere
+  - pi
+  properties:
+  - radius
+- class_name: SquareRootAtom
+  category: A
+  default_tags:
+  - square_root
+  properties:
+  - coefficient
+  - base
+  - expression

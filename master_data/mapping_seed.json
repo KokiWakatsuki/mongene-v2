@@ -306,11 +306,88 @@
     "execute_blueprint": "BasicDifferenceStructure",
     "required_tags": ["space_geometry", "pythagorean"],
     "atom_constraints": {
-      "PrismAtom": {"is_cube": false, "max_height": 10},
-      "PyramidAtom": {"hide_height": true, "max_base_side": 8, "is_regular_pyramid": true}
+      "PrismAtom": {
+        "is_cube": false,
+        "base_shape_type": "square",
+        "max_dim": 10,
+        "min_dim": 6
+      },
+      "PyramidAtom": {
+        "hide_height": true,
+        "max_base_side": 3,
+        "max_height": 3,
+        "is_regular_pyramid": true,
+        "base_shape": "square"
+      }
     },
     "visual_component": "3D_Renderer",
     "y_base": 76,
+    "supported_forms": ["word_problem", "calculation"]
+  },
+
+  "g3_l51": {
+    "title": "三平方の定理の意味とその証明",
+    "grade": 3, "lesson_number": 51,
+    "execute_blueprint": "PythagoreanStructure",
+    "required_tags": ["pythagorean", "plane_geometry"],
+    "atom_constraints": {
+      "PolygonAtom": {"polygon_type": "right_triangle", "max_side_length": 12, "force_integer_coords": true}
+    },
+    "visual_component": "2D_Geometry_Renderer",
+    "y_base": 70,
+    "supported_forms": ["calculation", "word_problem"]
+  },
+
+  "g3_l52": {
+    "title": "三平方の定理の逆",
+    "grade": 3, "lesson_number": 52,
+    "execute_blueprint": "PythagoreanStructure",
+    "required_tags": ["pythagorean", "plane_geometry"],
+    "atom_constraints": {
+      "PolygonAtom": {"polygon_type": "right_triangle", "max_side_length": 13}
+    },
+    "visual_component": "2D_Geometry_Renderer",
+    "y_base": 66,
+    "supported_forms": ["calculation"]
+  },
+
+  "g3_l53": {
+    "title": "平面図形への利用（高さ、面積、特別な直角三角形の辺の比）",
+    "grade": 3, "lesson_number": 53,
+    "execute_blueprint": "PythagoreanStructure",
+    "required_tags": ["pythagorean", "plane_geometry"],
+    "atom_constraints": {
+      "PolygonAtom": {"polygon_type": "right_triangle", "max_side_length": 15}
+    },
+    "visual_component": "2D_Geometry_Renderer",
+    "y_base": 73,
+    "supported_forms": ["calculation", "word_problem"]
+  },
+
+  "g3_l54": {
+    "title": "座標平面上の2点間の距離",
+    "grade": 3, "lesson_number": 54,
+    "execute_blueprint": "PythagoreanStructure",
+    "required_tags": ["pythagorean", "coordinate"],
+    "atom_constraints": {
+      "PolygonAtom": {"polygon_type": "right_triangle", "max_side_length": 10, "force_integer_coords": true}
+    },
+    "visual_component": "Graph_Renderer",
+    "y_base": 70,
+    "supported_forms": ["calculation"]
+  },
+
+  "g3_l56": {
+    "title": "立体の表面上の最短距離（展開図の利用）",
+    "grade": 3, "lesson_number": 56,
+    "execute_blueprint": "PythagoreanSpaceStructure",
+    "required_tags": ["pythagorean", "space_geometry"],
+    "atom_constraints": {
+      "PrismAtom": {"is_cube": false, "max_height": 12, "base_shape_type": "square"},
+      "PyramidAtom": {"is_regular_pyramid": true, "max_base_side": 8, "max_height": 10}
+    },
+    "visual_component": "3D_Renderer",
+    "y_base": 78,
     "supported_forms": ["word_problem", "calculation"]
   }
 }

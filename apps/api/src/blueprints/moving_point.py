@@ -21,8 +21,7 @@ def build_moving_point_blueprint() -> BlueprintDefinition:
         noun_slots={
             "base_shape": NounSlot(
                 slot_name="base_shape",
-                accepted_tags=[],
-                accepted_noun_types=["PolygonAtom"],
+                accepted_tags=["plane_geometry"],
                 required=True,
             ),
         },
@@ -39,7 +38,7 @@ def build_moving_point_blueprint() -> BlueprintDefinition:
             compatible_noun_types=["PolygonAtom"],
             required=True,
         ),
-        supported_forms=["calculation", "word_problem"],
+        supported_forms=["word_problem"],
         story_required=False,
         base_difficulty_calculator=lambda nouns, ctx: int(ctx.get("y_base", 65)),
         subquestion_strategy=SubQuestionStrategy(

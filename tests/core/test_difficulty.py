@@ -57,7 +57,10 @@ def test_reconcile_target_too_high_marks_unsatisfiable() -> None:
     assert plan.unsatisfiable is True
 
 
-def test_reconcile_target_low_caps_at_minus_delta_max() -> None:
+def test_reconcile_target_low_caps_at_form_min() -> None:
+    # calculation form の下限は y_base - 5
+    from apps.api.src.core.runner.difficulty_reconciler import get_form_range
+    lo, hi = get_form_range(80, "calculation")
     plan = reconcile_difficulty(target=1, y_base=80, blueprint=_dummy_blueprint(), problem_form="calculation")
     assert plan.unsatisfiable is False
-    assert plan.computed_difficulty == 80 - DELTA_MAX
+    assert plan.computed_difficulty == lo

@@ -1,0 +1,32 @@
+{
+  "2d_triangle": {
+    "svg_path": "reports/visual_snapshots/2d_triangle.svg",
+    "hash": "149aea5a127e4f20",
+    "elements_count": 4
+  },
+  "2d_circle_with_sector": {
+    "svg_path": "reports/visual_snapshots/2d_circle_with_sector.svg",
+    "hash": "51493db12b09c431",
+    "elements_count": 6
+  },
+  "3d_cube": {
+    "svg_path": "reports/visual_snapshots/3d_cube.svg",
+    "hash": "db577ec7747d7025",
+    "elements_count": 20
+  },
+  "graph_parabola": {
+    "svg_path": "reports/visual_snapshots/graph_parabola.svg",
+    "hash": "98274f7de3f91334",
+    "elements_count": 2
+  },
+  "tree_dice": {
+    "svg_path": "reports/visual_snapshots/tree_dice.svg",
+    "hash": "7f16f0d726aa81c0",
+    "elements_count": 5
+  },
+  "table_histogram": {
+    "svg_path": "reports/visual_snapshots/table_histogram.svg",
+    "hash": "da2eadd2ac86e353",
+    "elements_count": 1
+  }
+}

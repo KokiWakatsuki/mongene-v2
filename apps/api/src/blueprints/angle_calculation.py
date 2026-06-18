@@ -21,8 +21,7 @@ def build_angle_calculation_blueprint() -> BlueprintDefinition:
         noun_slots={
             "angle_source": NounSlot(
                 slot_name="angle_source",
-                accepted_tags=[],
-                accepted_noun_types=["LineAngleAtom", "CircleAngleAtom", "PolygonAtom"],
+                accepted_tags=["angles"],
                 required=True,
             ),
         },
@@ -39,7 +38,7 @@ def build_angle_calculation_blueprint() -> BlueprintDefinition:
             compatible_noun_types=["LineAngleAtom", "CircleAngleAtom", "PolygonAtom"],
             required=True,
         ),
-        supported_forms=["calculation", "word_problem"],
+        supported_forms=["calculation"],
         story_required=False,
         base_difficulty_calculator=lambda nouns, ctx: int(ctx.get("y_base", 45)),
         subquestion_strategy=SubQuestionStrategy(

@@ -30,7 +30,7 @@ _VALID_POLYGON_TYPES = {
 
 @register_noun
 class PolygonAtom(NounAtom):
-    tags: ClassVar[List[str]] = ["plane_geometry", "triangle", "rectangle"]
+    tags: ClassVar[List[str]] = ["plane_geometry", "triangle", "rectangle", "angles", "geometry"]
 
     def __init__(
         self,

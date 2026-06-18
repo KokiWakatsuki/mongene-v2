@@ -15,7 +15,7 @@ from apps.api.src.core.abc.atoms import AtomConstraints, NounAtom
 
 @register_noun
 class CircleAngleAtom(NounAtom):
-    tags: ClassVar[List[str]] = ["circle_angles"]
+    tags: ClassVar[List[str]] = ["circle_angles", "angles"]
 
     def __init__(
         self,

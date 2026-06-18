@@ -23,13 +23,11 @@ def build_basic_calculation_blueprint() -> BlueprintDefinition:
             "left": NounSlot(
                 slot_name="left",
                 accepted_tags=["number"],
-                accepted_noun_types=["NumberAtom"],
                 required=True,
             ),
             "right": NounSlot(
                 slot_name="right",
                 accepted_tags=["number"],
-                accepted_noun_types=["NumberAtom"],
                 required=True,
             ),
         },

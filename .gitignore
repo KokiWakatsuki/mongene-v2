@@ -12,3 +12,7 @@ htmlcov/
 *.egg-info/
 build/
 dist/
+
+# uvicorn runtime
+.uvicorn.pid
+.uvicorn.log

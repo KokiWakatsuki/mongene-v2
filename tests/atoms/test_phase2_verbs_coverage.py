@@ -97,12 +97,26 @@ def test_construct_rejects_wrong_type() -> None:
 
 
 def test_construct_other_types() -> None:
+    from apps.api.src.atoms.noun.circle_atom import CircleAtom
     from apps.api.src.atoms.noun.point_atom import PointAtom
 
-    p = PointAtom().sample(_ac(), random.Random(0))
-    for t in ("angle_bisector", "perpendicular", "tangent", "copy_length"):
-        step = ConstructGeometryVerb(t).solve(p, rng=random.Random(0))
-        assert int(step.sympy_expr) >= 1
+    p1 = PointAtom().sample(_ac(), random.Random(0))
+    p2 = PointAtom().sample(_ac(), random.Random(1))
+    p3 = PointAtom().sample(_ac(), random.Random(2))
+    circle = CircleAtom().sample(_ac(), random.Random(3))
+
+    # 各タイプに必要な引数を揃えて検証
+    cases = [
+        ("perp_bisector", (p1, p2)),
+        ("angle_bisector", (p1, p2, p3)),
+        ("perpendicular", (p1, p2)),
+        ("tangent", (circle, p1)),
+        ("copy_length", (p1, p2)),
+    ]
+    for t, args in cases:
+        step = ConstructGeometryVerb(t).solve(*args, rng=random.Random(0))
+        assert step.sympy_expr is not None
+        assert t in step.operation_name
 
 
 def test_prove_algebraic_rejects_wrong_type() -> None:

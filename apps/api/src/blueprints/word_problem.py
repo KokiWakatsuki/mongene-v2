@@ -22,7 +22,6 @@ def build_word_problem_blueprint() -> BlueprintDefinition:
             "equation": NounSlot(
                 slot_name="equation",
                 accepted_tags=["linear_equation"],
-                accepted_noun_types=["EquationAtom"],
                 required=True,
             ),
         },

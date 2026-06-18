@@ -56,10 +56,47 @@ class MeasureGeometryVerb(VerbAtom):
             expr = sympy.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2)
             narration = "2 点間の距離（三平方の定理）"
         else:
-            key = self._KEY_MAP[self.measure_type]
             symbols = nouns[0].get_symbols()
-            expr = symbols.get(key, sympy.Integer(0))
-            narration = f"{type(nouns[0]).__name__} の {self.measure_type}"
+            atom_name = type(nouns[0]).__name__
+            # Atom 型に応じて適切な metric を自動選択
+            preferred_keys = {
+                "PrismAtom": ["volume_expr", "surface_area_expr"],
+                "PyramidAtom": ["volume_expr", "surface_area_expr"],
+                "SphereAtom": ["volume_expr", "surface_area_expr"],
+                "CircleAtom": ["area_expr", "circumference_expr"],
+                "PolygonAtom": ["area_expr", "perimeter_expr"],
+            }
+            # measure_type が "area" だが Atom が立体の場合は volume を優先
+            if self.measure_type == "area" and atom_name in preferred_keys:
+                candidates = preferred_keys[atom_name]
+            else:
+                key = self._KEY_MAP[self.measure_type]
+                candidates = [key] + preferred_keys.get(atom_name, [])
+
+            expr = sympy.Integer(0)
+            chosen_key = candidates[0]
+            for k in candidates:
+                v = symbols.get(k)
+                if v is None:
+                    continue
+                try:
+                    if hasattr(v, "is_zero") and v.is_zero:
+                        continue
+                except Exception:
+                    pass
+                expr = v
+                chosen_key = k
+                break
+
+            # narration を選んだ metric に合わせる
+            metric_jp = {
+                "volume_expr": "体積",
+                "surface_area_expr": "表面積",
+                "area_expr": "面積",
+                "perimeter_expr": "周の長さ",
+                "circumference_expr": "円周の長さ",
+            }.get(chosen_key, self.measure_type)
+            narration = f"{atom_name} の{metric_jp}"
         return LogicStep(
             operation_name=f"measure_{self.measure_type}",
             operands=[type(n).__name__ for n in nouns],

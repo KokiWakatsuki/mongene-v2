@@ -15,7 +15,7 @@ from apps.api.src.core.abc.atoms import AtomConstraints, NounAtom
 
 @register_noun
 class SphereAtom(NounAtom):
-    tags: ClassVar[List[str]] = ["space_geometry", "sphere", "pi"]
+    tags: ClassVar[List[str]] = ["space_geometry", "sphere", "pi", "geometry"]
 
     def __init__(self, radius: sympy.Expr | None = None) -> None:
         self.radius: sympy.Expr = sympy.Integer(1) if radius is None else radius

@@ -29,6 +29,10 @@ def _builder_map() -> Dict[str, Callable[[], BlueprintDefinition]]:
     from apps.api.src.blueprints.proof import build_proof_blueprint
     from apps.api.src.blueprints.sequence_pattern import build_sequence_pattern_blueprint
     from apps.api.src.blueprints.word_problem import build_word_problem_blueprint
+    from apps.api.src.blueprints.pythagorean import (
+        build_pythagorean_blueprint,
+        build_pythagorean_space_blueprint,
+    )
 
     return {
         "BasicCalculationStructure": build_basic_calculation_blueprint,
@@ -42,6 +46,8 @@ def _builder_map() -> Dict[str, Callable[[], BlueprintDefinition]]:
         "ProofStructure": build_proof_blueprint,
         "DataProbabilityStructure": build_data_probability_blueprint,
         "SequencePatternStructure": build_sequence_pattern_blueprint,
+        "PythagoreanStructure": build_pythagorean_blueprint,
+        "PythagoreanSpaceStructure": build_pythagorean_space_blueprint,
     }
 
 

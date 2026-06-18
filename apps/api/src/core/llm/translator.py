@@ -136,21 +136,40 @@ class LLMTranslator:
         mr: MiddleRepresentation,
         story: Any = None,
         lesson_grade: int = 1,
-    ) -> Tuple[str, List[Dict], str]:
-        """中間表現 → (問題文, 小問テキストリスト, 解説)"""
+        lesson_title: str = "",
+        target_difficulty: int = 50,
+    ) -> Tuple[str, List[Dict], Dict[str, str]]:
+        """中間表現 → (問題文, 小問テキストリスト, サブ問題ごとの解説 dict)
+
+        戻り値 3 番目は {"_all": "全体解説", "(1)": "...", "(2)": "..."} 形式の辞書。
+        """
+        from apps.api.src.core.evaluation.accuracy import verify_accuracy
+
         last_err: Optional[Exception] = None
         for tier in ("standard", "reasoning", "lite"):
             try:
                 problem_text, sub_texts = self._translate_problem(
-                    mr, story, lesson_grade, tier  # type: ignore[arg-type]
+                    mr, story, lesson_grade, tier, lesson_title, target_difficulty  # type: ignore[arg-type]
                 )
                 if not self._verify_translation(problem_text, mr):
                     last_err = LLMTranslationFailedError("解答漏洩を検出")
                     continue
-                explanation = self._translate_explanation(
+                explanation_map = self._translate_explanation(
                     mr, problem_text, lesson_grade, tier  # type: ignore[arg-type]
                 )
-                return problem_text, sub_texts, explanation
+                # Accuracy 検証: 解説内に SymPy 答えが含まれているかを確認（警告のみ、リジェクトしない）
+                # ※ 厳格なリジェクトにすると rate limit 環境で全 tier 失敗 → fallback になるため
+                for sq in mr.sub_questions:
+                    if sq.answer.sympy_form is None:
+                        continue
+                    exp_text = explanation_map.get(sq.label) or explanation_map.get("_all", "")
+                    if exp_text and not verify_accuracy(exp_text, sq.answer.sympy_form):
+                        import logging
+                        logging.getLogger(__name__).warning(
+                            "Accuracy 不一致: %s の解説に答え %s が含まれていない可能性",
+                            sq.label, sq.answer.sympy_form,
+                        )
+                return problem_text, sub_texts, explanation_map
             except LLMRateLimitError as e:
                 last_err = e
                 continue
@@ -166,9 +185,13 @@ class LLMTranslator:
         story: Any,
         grade: int,
         tier: ModelTier,
+        lesson_title: str = "",
+        target_difficulty: int = 50,
     ) -> Tuple[str, List[Dict]]:
         prompt = PROBLEM_TRANSLATION_PROMPT.format(
             grade=grade,
+            lesson_title=lesson_title or "（未指定）",
+            target_difficulty=target_difficulty,
             few_shot_examples=self._load_few_shots(mr.blueprint_id),
             middle_representation_yaml=self._mr_to_yaml(mr),
             story_context_yaml=self._story_to_yaml(story) if story else "（なし）",
@@ -183,7 +206,7 @@ class LLMTranslator:
         problem_text: str,
         grade: int,
         tier: ModelTier,
-    ) -> str:
+    ) -> Dict[str, str]:
         prompt = EXPLANATION_TRANSLATION_PROMPT.format(
             grade=grade,
             problem_text=problem_text,
@@ -192,7 +215,13 @@ class LLMTranslator:
         )
         raw = call_gemini(prompt, tier=tier)
         parsed = self._parse_json_response(raw)
-        return parsed.get("explanation_text", "")
+        result: Dict[str, str] = {"_all": parsed.get("explanation_text", "")}
+        for item in parsed.get("sub_question_explanations", []):
+            label = item.get("label", "")
+            text = item.get("text", "")
+            if label and text:
+                result[label] = text
+        return result
 
     def _verify_translation(self, problem_text: str, mr: MiddleRepresentation) -> bool:
         """LLM 出力テキストの解答漏洩を軽くチェック（§40）"""
@@ -211,9 +240,9 @@ class LLMTranslator:
             return True
         return True
 
-    def _fallback_template(self, mr: MiddleRepresentation) -> Tuple[str, List[Dict], str]:
+    def _fallback_template(self, mr: MiddleRepresentation) -> Tuple[str, List[Dict], Dict[str, str]]:
         text = template_fallback_text(mr)
-        return text, [], ""
+        return text, [], {"_all": ""}
 
     def _load_few_shots(self, blueprint_id: str) -> str:
         if self.few_shot_loader is None:
@@ -231,6 +260,7 @@ class LLMTranslator:
             "selected_tags": mr.selected_tags,
             "difficulty_score": mr.difficulty_score,
             "problem_form": mr.problem_form,
+            "sampled_atoms": mr.sampled_nouns_info,  # LLM が Atom 型を正しく呼ぶための情報
             "sub_questions": [
                 {
                     "label": sq.label,

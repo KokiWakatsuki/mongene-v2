@@ -1,0 +1,19 @@
+visual_components:
+- name: NullRenderer
+  library: '-'
+  output_format: empty
+- name: 2D_Geometry_Renderer
+  library: svgwrite
+  output_format: SVG
+- name: 3D_Renderer
+  library: matplotlib
+  output_format: SVG
+- name: Graph_Renderer
+  library: matplotlib
+  output_format: SVG
+- name: Table_&_Chart_Renderer
+  library: matplotlib+html
+  output_format: SVG+HTML
+- name: Tree_Renderer
+  library: svgwrite
+  output_format: SVG

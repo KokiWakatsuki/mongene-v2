@@ -18,7 +18,7 @@ _DEFAULT_CENTRAL_ANGLE_CHOICES: List[int] = [30, 45, 60, 90, 120, 180, 270, 360]
 
 @register_noun
 class CircleAtom(NounAtom):
-    tags: ClassVar[List[str]] = ["plane_geometry", "circle", "pi"]
+    tags: ClassVar[List[str]] = ["plane_geometry", "circle", "pi", "geometry"]
 
     def __init__(
         self,

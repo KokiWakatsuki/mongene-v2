@@ -22,7 +22,6 @@ def build_sequence_pattern_blueprint() -> BlueprintDefinition:
             "sequence": NounSlot(
                 slot_name="sequence",
                 accepted_tags=["sequence"],
-                accepted_noun_types=["SequenceAtom"],
                 required=True,
             ),
         },

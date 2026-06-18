@@ -8,39 +8,61 @@
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
   <style>
-    :root { color-scheme: light dark; }
+    /* light mode 固定（ダークモード時の文字白問題回避） */
+    :root { color-scheme: only light; --accent: #2563eb; --border: #d4d4d8; --muted: #71717a; --text: #1a1a1a; --bg: #ffffff; }
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Sans", "Hiragino Kaku Gothic ProN", sans-serif;
-      max-width: 900px; margin: 0 auto; padding: 24px;
+      max-width: 960px; margin: 0 auto; padding: 24px;
       line-height: 1.6;
+      color: var(--text);
+      background: var(--bg);
     }
-    h1 { font-size: 1.5rem; }
-    fieldset { border: 1px solid #ddd; border-radius: 8px; padding: 16px; margin-bottom: 16px; }
-    legend { font-weight: bold; padding: 0 8px; }
-    .row { display: flex; gap: 12px; align-items: center; margin-bottom: 8px; flex-wrap: wrap; }
-    label { display: inline-block; min-width: 7em; font-weight: 500; }
-    input[type="text"], input[type="number"], select {
-      padding: 6px 8px; border: 1px solid #aaa; border-radius: 4px; flex: 1; min-width: 12em;
+    h1 { font-size: 1.5rem; margin-bottom: 4px; }
+    .subtitle { color: var(--muted); font-size: 0.9rem; margin-bottom: 20px; }
+    fieldset { border: 1px solid var(--border); border-radius: 8px; padding: 16px 20px; margin-bottom: 14px; }
+    legend { font-weight: 600; padding: 0 8px; font-size: 0.95rem; }
+    .row { display: grid; grid-template-columns: 7em 1fr; gap: 12px; align-items: center; margin-bottom: 10px; }
+    label { font-weight: 500; }
+    select, input[type="number"] {
+      padding: 6px 10px; border: 1px solid #aaa; border-radius: 4px; font-size: 0.95rem;
+    }
+    select { width: 100%; }
+    input[type="range"] { width: 100%; accent-color: var(--accent); }
+    .slider-wrap { display: grid; grid-template-columns: 1fr 4.5em; gap: 10px; align-items: center; }
+    .slider-bounds { display: flex; justify-content: space-between; color: var(--muted); font-size: 0.75rem; margin-top: 2px; }
+    .difficulty-display {
+      text-align: center; font-weight: 600; font-size: 1.05rem;
+      padding: 3px 8px; border: 1px solid var(--border); border-radius: 4px; background: rgba(37, 99, 235, 0.08);
     }
     button {
-      padding: 10px 18px; border: none; border-radius: 6px;
-      background: #2563eb; color: white; cursor: pointer; font-size: 1rem;
+      padding: 10px 22px; border: none; border-radius: 6px;
+      background: var(--accent); color: white; cursor: pointer; font-size: 1rem; font-weight: 600;
     }
     button:disabled { background: #999; cursor: not-allowed; }
-    #result { border: 1px solid #ddd; border-radius: 8px; padding: 16px; margin-top: 16px; background: #fafafa; }
-    .problem-text { font-size: 1.1rem; padding: 12px; background: white; border-radius: 4px; }
-    .explanation { padding: 12px; background: white; border-radius: 4px; white-space: pre-wrap; }
-    .metadata { font-size: 0.85rem; color: #666; margin-top: 12px; }
+    .unlearned-list {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 4px 12px;
+      max-height: 200px; overflow-y: auto; padding: 8px; border: 1px solid var(--border); border-radius: 4px;
+    }
+    .unlearned-list label { font-weight: normal; font-size: 0.88rem; display: flex; align-items: center; gap: 6px; cursor: pointer; }
+    #result { border: 1px solid var(--border); border-radius: 8px; padding: 18px; margin-top: 16px; background: #fafafa; color: var(--text); }
+    .problem-text { font-size: 1.1rem; padding: 14px; background: white; border-radius: 4px; border: 1px solid #eee; color: var(--text); }
+    .explanation { padding: 14px; background: white; border-radius: 4px; border: 1px solid #eee; color: var(--text); }
+    #result h2, #result h3 { color: var(--text); }
+    .diagram { padding: 14px; background: white; border-radius: 4px; border: 1px solid #eee; text-align: center; margin: 10px 0; }
+    .diagram img { max-width: 100%; max-height: 400px; }
+    .metadata { font-size: 0.8rem; color: var(--muted); margin-top: 12px; }
     .error { color: #b91c1c; padding: 12px; background: #fef2f2; border-radius: 4px; }
-    .loading { color: #2563eb; }
+    .loading { color: var(--accent); }
+    .lesson-meta { color: var(--muted); font-size: 0.85rem; padding-left: 7em; margin-top: -4px; }
+    .submit-row { text-align: center; padding: 8px 0; }
   </style>
 </head>
 <body>
-  <h1>mongene-v2 中学数学問題ジェネレータ</h1>
-  <p>177 lesson から選んで、難易度を指定して問題を生成します。</p>
+  <h1>mongene-v2</h1>
+  <p class="subtitle">中学数学問題自動生成システム — 177 lesson 対応</p>
 
   <fieldset>
-    <legend>問題生成リクエスト</legend>
+    <legend>単元選択</legend>
     <div class="row">
       <label for="grade">学年</label>
       <select id="grade">
@@ -50,9 +72,22 @@
       </select>
     </div>
     <div class="row">
-      <label for="lesson">単元 (lesson_id)</label>
-      <select id="lesson"><option>読み込み中...</option></select>
+      <label for="domain">領域</label>
+      <select id="domain"></select>
     </div>
+    <div class="row">
+      <label for="large_unit">大単元</label>
+      <select id="large_unit"></select>
+    </div>
+    <div class="row">
+      <label for="lesson">小単元</label>
+      <select id="lesson"></select>
+    </div>
+    <div class="lesson-meta" id="lessonMeta"></div>
+  </fieldset>
+
+  <fieldset>
+    <legend>出題条件</legend>
     <div class="row">
       <label for="form">問題形式</label>
       <select id="form">
@@ -62,22 +97,41 @@
       </select>
     </div>
     <div class="row">
-      <label for="difficulty">難易度 (1-100)</label>
-      <input type="number" id="difficulty" value="50" min="1" max="100" />
-    </div>
-    <div class="row">
-      <label for="unlearned">未習熟 lesson</label>
-      <input type="text" id="unlearned" placeholder="g3_l24,g3_l51 のようにカンマ区切り" />
-    </div>
-    <div class="row">
-      <button id="submit">問題生成</button>
-      <span id="status"></span>
+      <label for="difficulty">難易度</label>
+      <div>
+        <div class="slider-wrap">
+          <input type="range" id="difficulty" min="1" max="100" value="50" />
+          <div class="difficulty-display" id="difficultyDisplay">50</div>
+        </div>
+        <div class="slider-bounds">
+          <span id="difficultyMin">最低 1</span>
+          <span id="difficultyLabel" style="color:var(--accent); font-weight:500;"></span>
+          <span id="difficultyMax">最高 100</span>
+        </div>
+        <div style="font-size:0.72rem; color:var(--muted); margin-top:2px;">
+          ※ 目安: 30=基礎計算 &nbsp; 50=標準 &nbsp; 70=応用 &nbsp; 85=高校入試標準 &nbsp; 95=入試難問
+        </div>
+      </div>
     </div>
   </fieldset>
+
+  <fieldset>
+    <legend>未習熟の大単元（チェックした単元の lesson は前提として連鎖排除されます）</legend>
+    <div class="unlearned-list" id="unlearnedList"></div>
+  </fieldset>
+
+  <div class="submit-row">
+    <button id="submit">問題生成（LLM あり）</button>
+    <button id="inspect" style="background:#6b7280; margin-left:12px;" title="LLM なしでシステムの SymPy 計算結果だけを表示">中間表現を確認（LLM なし）</button>
+    <span id="status"></span>
+  </div>
 
   <div id="result" style="display:none">
     <h2>生成結果</h2>
     <div class="problem-text" id="problemText"></div>
+    <div class="diagram" id="diagramBox" style="display:none">
+      <img id="diagramImg" alt="図" />
+    </div>
     <h3>解説</h3>
     <div class="explanation" id="explanationText"></div>
     <details>
@@ -88,56 +142,157 @@
 
   <script>
     const $ = (id) => document.getElementById(id);
-    let lessons = [];
+    const esc = (s) => String(s).replace(/[&<>]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
+    let allLessons = [];
 
     async function loadLessons() {
       const res = await fetch('/problems/lessons');
       const data = await res.json();
-      lessons = data.lessons;
-      filterLessons();
+      allLessons = data.lessons;
+      refreshDomain();
     }
 
-    function filterLessons() {
-      const grade = parseInt($('grade').value, 10);
-      const filtered = lessons.filter((l) => l.grade === grade);
-      $('lesson').innerHTML = filtered
-        .map(
-          (l) =>
-            `<option value="${l.lesson_id}" data-y="${l.y_base}" data-forms="${l.supported_forms.join(',')}">${l.lesson_id} - ${l.title} [y=${l.y_base}]</option>`,
-        )
+    function currentGrade() { return parseInt($('grade').value, 10); }
+
+    function refreshDomain() {
+      const g = currentGrade();
+      const domains = Array.from(new Set(allLessons.filter(l => l.grade === g).map(l => l.domain))).filter(Boolean);
+      $('domain').innerHTML = domains.map(d => `<option value="${d}">${d}</option>`).join('');
+      refreshLargeUnit();
+      refreshUnlearned();
+    }
+
+    function refreshLargeUnit() {
+      const g = currentGrade();
+      const dom = $('domain').value;
+      const lus = Array.from(new Set(allLessons.filter(l => l.grade === g && l.domain === dom).map(l => l.large_unit))).filter(Boolean);
+      $('large_unit').innerHTML = lus.map(lu => `<option value="${lu}">${lu}</option>`).join('');
+      refreshLesson();
+    }
+
+    function refreshLesson() {
+      const g = currentGrade();
+      const dom = $('domain').value;
+      const lu = $('large_unit').value;
+      const lessons = allLessons.filter(l => l.grade === g && l.domain === dom && l.large_unit === lu);
+      $('lesson').innerHTML = lessons
+        .map(l => `<option value="${l.lesson_id}" data-y="${l.y_base}" data-forms="${l.supported_forms.join(',')}">${l.lesson_id.split('_').pop()}: ${l.title}</option>`)
         .join('');
       onLessonChange();
     }
 
-    function onLessonChange() {
+    // §12.4: 問題形式別の delta レンジ
+    // 計算問題: 数値・式が全部与えられ計算するだけ → 狭い範囲（y_base±5）
+    // 文章題:   場面設定から式を立てる → 計算問題より広く難しくなれる（y_base-5〜+15）
+    // 証明:     論理的推論が必要で常に一定の難しさ → 最低 y_base+3
+    const FORM_DELTA = {
+      calculation:  { lo: -5, hi:  5 },
+      word_problem: { lo: -5, hi: 15 },
+      proof:        { lo:  3, hi: 15 },
+    };
+
+    function updateSliderForForm() {
       const opt = $('lesson').options[$('lesson').selectedIndex];
       if (!opt) return;
-      const forms = (opt.dataset.forms || '').split(',');
-      const formSel = $('form');
-      [...formSel.options].forEach((o) => (o.disabled = !forms.includes(o.value)));
-      if (!forms.includes(formSel.value) && forms.length) formSel.value = forms[0];
       const y = parseInt(opt.dataset.y, 10);
-      if (!isNaN(y)) $('difficulty').value = y;
+      if (isNaN(y)) return;
+      const form = $('form').value;
+      const delta = FORM_DELTA[form] || { lo: -15, hi: 15 };
+      const lo = Math.max(1, y + delta.lo);
+      const hi = Math.min(100, y + delta.hi);
+      const slider = $('difficulty');
+      // 現在値を範囲内にクランプ
+      const cur = parseInt(slider.value, 10);
+      slider.min = lo; slider.max = hi;
+      slider.value = Math.min(hi, Math.max(lo, isNaN(cur) ? y : cur));
+      $('difficultyMin').textContent = `最低 ${lo}`;
+      $('difficultyMax').textContent = `最高 ${hi}`;
+      $('difficultyDisplay').textContent = slider.value;
+      $('difficultyLabel').textContent = difficultyLabel(parseInt(slider.value, 10));
     }
 
-    $('grade').addEventListener('change', filterLessons);
+    function onLessonChange() {
+      const opt = $('lesson').options[$('lesson').selectedIndex];
+      if (!opt) { $('lessonMeta').textContent = ''; return; }
+      $('lessonMeta').textContent = `${opt.value} — 基礎難易度 y_base = ${opt.dataset.y}`;
+      // 問題形式のフィルタリング
+      const forms = (opt.dataset.forms || '').split(',');
+      const formSel = $('form');
+      [...formSel.options].forEach(o => (o.disabled = !forms.includes(o.value)));
+      if (!forms.includes(formSel.value) && forms.length) formSel.value = forms[0];
+      // y_base を基準に形式別の難易度レンジを設定
+      const y = parseInt(opt.dataset.y, 10);
+      if (!isNaN(y)) {
+        updateSliderForForm();
+        // デフォルト値を y_base に戻す
+        $('difficulty').value = y;
+        $('difficultyDisplay').textContent = y;
+        $('difficultyLabel').textContent = difficultyLabel(y);
+      }
+    }
+
+    function refreshUnlearned() {
+      const g = currentGrade();
+      // 同学年と下位学年の大単元を提示
+      const groups = {};
+      allLessons.filter(l => l.grade <= g).forEach(l => {
+        const key = `g${l.grade}|${l.large_unit}`;
+        if (!groups[key]) groups[key] = { grade: l.grade, large_unit: l.large_unit, lesson_ids: [] };
+        groups[key].lesson_ids.push(l.lesson_id);
+      });
+      const list = Object.values(groups).sort((a, b) =>
+        a.grade - b.grade || a.large_unit.localeCompare(b.large_unit, 'ja')
+      );
+      $('unlearnedList').innerHTML = list
+        .map(grp =>
+          `<label><input type="checkbox" value="${grp.lesson_ids.join(',')}" /> 中${grp.grade} ${grp.large_unit}</label>`
+        ).join('');
+    }
+
+    function collectUnlearned() {
+      const result = [];
+      $('unlearnedList').querySelectorAll('input[type="checkbox"]:checked').forEach(cb => {
+        cb.value.split(',').filter(Boolean).forEach(id => result.push(id));
+      });
+      return Array.from(new Set(result));
+    }
+
+    // イベント
+    $('grade').addEventListener('change', refreshDomain);
+    $('domain').addEventListener('change', refreshLargeUnit);
+    $('large_unit').addEventListener('change', refreshLesson);
     $('lesson').addEventListener('change', onLessonChange);
+    $('form').addEventListener('change', updateSliderForForm);
+    function difficultyLabel(v) {
+      if (v <= 20) return '基礎（中1 計算）';
+      if (v <= 35) return 'やさしい';
+      if (v <= 50) return '標準';
+      if (v <= 65) return 'やや難';
+      if (v <= 75) return '応用';
+      if (v <= 85) return '高校入試 標準';
+      if (v <= 92) return '高校入試 応用';
+      return '高校入試 最難関';
+    }
+    function updateDifficultyLabel() {
+      const v = parseInt($('difficulty').value, 10);
+      $('difficultyDisplay').textContent = v;
+      $('difficultyLabel').textContent = difficultyLabel(v);
+    }
+    $('difficulty').addEventListener('input', updateDifficultyLabel);
 
     $('submit').addEventListener('click', async () => {
-      const lessonId = $('lesson').value;
+      const opt = $('lesson').options[$('lesson').selectedIndex];
+      if (!opt) return;
       const payload = {
-        curriculum: { grade: parseInt($('grade').value, 10), lesson_ids: [lessonId] },
+        curriculum: { grade: currentGrade(), lesson_ids: [opt.value] },
         problem_form: $('form').value,
         target_difficulty: parseInt($('difficulty').value, 10),
-        unlearned_lesson_ids: $('unlearned').value
-          .split(',')
-          .map((s) => s.trim())
-          .filter(Boolean),
+        unlearned_lesson_ids: collectUnlearned(),
       };
 
       $('submit').disabled = true;
       $('status').className = 'loading';
-      $('status').textContent = '生成中...（実 LLM で 10〜60 秒）';
+      $('status').textContent = ' 生成中...（実 LLM 接続時は 10〜60 秒）';
       $('result').style.display = 'none';
 
       try {
@@ -147,26 +302,57 @@
           body: JSON.stringify(payload),
         });
         const data = await res.json();
+        $('result').style.display = 'block';
         if (!res.ok) {
-          $('result').style.display = 'block';
           $('problemText').innerHTML = `<div class="error">${data.detail || JSON.stringify(data)}</div>`;
           $('explanationText').textContent = '';
           $('metadata').textContent = '';
         } else {
-          $('result').style.display = 'block';
-          $('problemText').textContent = data.content_problem_text;
-          const subs = (data.sub_questions || [])
-            .map((sq) => `${sq.label} ${sq.prompt_text}\n  答え: ${sq.answer.text_form}`)
-            .join('\n\n');
-          const explanation = (data.sub_questions[0]?.explanation_text || '');
-          $('explanationText').textContent = subs + (explanation ? '\n\n' + explanation : '');
+          // ---- 問題文エリア: 大問テキスト + 小問の問題文のみ ----
+          const mainText = esc(data.content_problem_text).replace(/\n/g, '<br/>');
+          const subQTexts = (data.sub_questions || []).map((sq) => {
+            const label = sq.label ? `<strong>${esc(sq.label)}</strong>&nbsp;` : '';
+            return `<div style="margin-top:6px;">${label}${esc(sq.prompt_text)}</div>`;
+          }).join('');
+          $('problemText').innerHTML = mainText + (subQTexts ? `<div style="margin-top:10px; border-top:1px solid #eee; padding-top:8px;">${subQTexts}</div>` : '');
+
+          // 図の表示
+          const diagUrl = data.visuals?.problem_diagram_url;
+          if (diagUrl) {
+            $('diagramImg').src = diagUrl + '?t=' + Date.now();
+            $('diagramBox').style.display = 'block';
+          } else {
+            $('diagramBox').style.display = 'none';
+          }
+
+          // ---- 解説エリア: 各小問の答え + 解説 ----
+          const blocks = (data.sub_questions || []).map((sq) => {
+            const label = sq.label ? `<strong>${esc(sq.label)}</strong>&nbsp;` : '';
+            const prompt = esc(sq.prompt_text);
+            const answer = `<span style="color:#1d4ed8;font-weight:600;">${esc(`答え: ${sq.answer.text_form}`)}</span>`;
+            const exp = sq.explanation_text ? esc(sq.explanation_text).replace(/\n/g, '<br/>') : '';
+            return (
+              `<div style="margin-bottom:16px; padding:10px; background:#f8faff; border-radius:4px; border:1px solid #dbeafe;">` +
+              `<div style="margin-bottom:4px;">${label}${prompt}</div>` +
+              `<div style="margin-left:1em; margin-bottom:4px;">${answer}</div>` +
+              (exp ? `<div style="margin-left:1em; color:#374151; font-size:0.9rem;">${exp}</div>` : '') +
+              `</div>`
+            );
+          });
+          $('explanationText').innerHTML = blocks.join('');
           $('metadata').textContent = JSON.stringify(data.metadata, null, 2);
+
+          // KaTeX レンダリング
           if (window.renderMathInElement) {
             renderMathInElement(document.getElementById('result'), {
               delimiters: [
-                { left: '$', right: '$', display: false },
                 { left: '$$', right: '$$', display: true },
+                { left: '$', right: '$', display: false },
+                { left: '\\(', right: '\\)', display: false },
+                { left: '\\[', right: '\\]', display: true },
               ],
+              throwOnError: false,
+              ignoredTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
             });
           }
         }
@@ -175,6 +361,65 @@
         $('problemText').innerHTML = `<div class="error">${e.message}</div>`;
       } finally {
         $('submit').disabled = false;
+        $('status').textContent = '';
+      }
+    });
+
+    // 中間表現確認（LLM なし）
+    $('inspect').addEventListener('click', async () => {
+      const opt = $('lesson').options[$('lesson').selectedIndex];
+      if (!opt) return;
+      const payload = {
+        curriculum: { grade: currentGrade(), lesson_ids: [opt.value] },
+        problem_form: $('form').value,
+        target_difficulty: parseInt($('difficulty').value, 10),
+        unlearned_lesson_ids: [],
+      };
+      $('inspect').disabled = true;
+      $('status').textContent = ' 中間表現取得中...（LLM なし、即座に返却）';
+      $('result').style.display = 'none';
+      try {
+        const res = await fetch('/problems/inspect', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        const data = await res.json();
+        $('result').style.display = 'block';
+        if (!res.ok) {
+          $('problemText').innerHTML = `<div class="error">${data.detail}</div>`;
+          $('explanationText').innerHTML = '';
+          return;
+        }
+        // raw MR を整形して表示
+        const sqs = (data.sub_questions || []);
+        let html = `<div style="background:#f0f9ff;padding:12px;border-radius:4px;border:1px solid #7dd3fc;font-size:0.9rem;">`;
+        html += `<strong>Blueprint:</strong> ${esc(data.blueprint_id)} &nbsp; <strong>seed:</strong> ${data.seed} &nbsp; <strong>難易度:</strong> ${data.difficulty_score}<br/>`;
+        html += `<strong>selected_tags:</strong> ${esc(JSON.stringify(data.selected_tags))}<br/>`;
+        html += `<strong>Atom 情報:</strong><br/>`;
+        for (const [slot, info] of Object.entries(data.sampled_atoms || {})) {
+          html += `&nbsp; ${esc(slot)}: ${esc(JSON.stringify(info))}<br/>`;
+        }
+        html += `</div>`;
+        html += sqs.map(sq => {
+          const steps = (sq.logic_steps || []).map(s =>
+            `<div style="margin-left:1em;color:#555;font-family:monospace;font-size:0.85rem;">`+
+            `${esc(s.operation_name)}: <strong>${esc(s.sympy_expr)}</strong> &nbsp; — ${esc(s.narration_hint)}</div>`
+          ).join('');
+          return `<div style="margin-top:10px;"><strong>${esc(sq.label || '(1)')} ${esc(sq.prompt_hint)}</strong><br/>`+
+            steps +
+            `<div style="margin-left:1em;"><strong>答え (sympy_form): <span style="color:#1d4ed8">${esc(sq.answer.sympy_form)}</span></strong></div></div>`;
+        }).join('');
+        html += `<div style="margin-top:10px;color:#6b7280;font-size:0.8rem;">${esc(data.note)}</div>`;
+        $('problemText').innerHTML = html;
+        $('explanationText').innerHTML = '';
+        $('metadata').textContent = '';
+        $('diagramBox').style.display = 'none';
+      } catch (e) {
+        $('result').style.display = 'block';
+        $('problemText').innerHTML = `<div class="error">${e.message}</div>`;
+      } finally {
+        $('inspect').disabled = false;
         $('status').textContent = '';
       }
     });

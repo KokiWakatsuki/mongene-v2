@@ -143,6 +143,11 @@ def run_177_lessons(max_lessons: int | None = None) -> List[LessonResult]:
     if max_lessons:
         sorted_ids = sorted_ids[:max_lessons]
 
+    # 177 lesson 一括生成では dedup が衝突しやすいため無効化
+    # （実際のユーザー操作は 1 問ずつ生成 + 時刻 seed のため問題なし）
+    for sid in sorted_ids:
+        mapping[sid]["dedup_disabled"] = True
+
     for lid in sorted_ids:
         m = mapping[lid]
         form = m["supported_forms"][0]

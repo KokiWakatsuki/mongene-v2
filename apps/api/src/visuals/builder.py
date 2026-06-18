@@ -23,6 +23,13 @@ def build_visual_dsl(
 
     component = blueprint.visual_slot.component_type
     if component == "3D_Renderer":
+        if blueprint.blueprint_id == "BasicDifferenceStructure":
+            # 設計書 §18.3: cutout_volume を主立体の内部に点線で描く
+            return _build_3d_with_cutout_inside(sampled_nouns)
+        if blueprint.blueprint_id == "PythagoreanSpaceStructure":
+            solid_key = "solid" if "solid" in sampled_nouns else next(iter(sampled_nouns), None)
+            display = {solid_key: sampled_nouns[solid_key]} if solid_key else sampled_nouns
+            return _build_3d(display)
         return _build_3d(sampled_nouns)
     if component == "2D_Geometry_Renderer":
         return _build_2d_geometry(sampled_nouns)
@@ -42,58 +49,171 @@ def _to_float(expr: sympy.Expr, default: float = 1.0) -> float:
         return default
 
 
-def _build_3d(sampled_nouns: Dict[str, NounAtom]) -> VisualDSL:
-    elements: list[dict] = []
-    for slot_name, atom in sampled_nouns.items():
-        name = type(atom).__name__
-        sym = atom.get_symbols()
-        if name == "PrismAtom":
-            w = _to_float(sym.get("width", sympy.Integer(2)))
-            d = _to_float(sym.get("depth", sympy.Integer(2)))
-            h = _to_float(sym.get("height", sympy.Integer(3)))
-            verts = [
-                ("A0", (0, 0, 0)),
-                ("B0", (w, 0, 0)),
-                ("C0", (w, d, 0)),
-                ("D0", (0, d, 0)),
-                ("A1", (0, 0, h)),
-                ("B1", (w, 0, h)),
-                ("C1", (w, d, h)),
-                ("D1", (0, d, h)),
-            ]
-            for vid, coords in verts:
-                elements.append({"type": "vertex", "id": f"{slot_name}_{vid}", "coords": list(coords), "label": ""})
-            edges = [
-                ("A0", "B0"), ("B0", "C0"), ("C0", "D0"), ("D0", "A0"),
-                ("A1", "B1"), ("B1", "C1"), ("C1", "D1"), ("D1", "A1"),
-                ("A0", "A1"), ("B0", "B1"), ("C0", "C1"), ("D0", "D1"),
-            ]
-            for a, b in edges:
-                elements.append({
-                    "type": "edge_3d",
-                    "from": f"{slot_name}_{a}",
-                    "to": f"{slot_name}_{b}",
-                    "dashed": False,
-                })
-        elif name == "PyramidAtom":
+def _fmt(v: float) -> str:
+    return str(int(v)) if v == int(v) else f"{v:.1f}"
+
+
+def _build_3d_with_cutout_inside(sampled_nouns: Dict[str, NounAtom]) -> VisualDSL:
+    """BasicDifferenceStructure 専用: 設計書 §18.3 に従い、
+    主立体の中にくり抜く立体を cutout_volume 要素として内包して表示する。
+
+    教科書スタイル: 主立体の図の中に錐体を点線で示す。
+    """
+    base_atom = sampled_nouns.get("base_solid")
+    cutout_atom = sampled_nouns.get("cutout_solid")
+
+    if base_atom is None:
+        return _build_3d(sampled_nouns)
+
+    # 主立体の要素
+    dsl_base = _build_3d({"base_solid": base_atom})
+    elements = list(dsl_base.elements)
+
+    # くり抜く立体を cutout_volume 要素として主立体の内側に追加
+    if cutout_atom is not None:
+        name = type(cutout_atom).__name__
+        sym = cutout_atom.get_symbols()
+
+        if name == "PyramidAtom":
             s = _to_float(sym.get("base_side", sympy.Integer(2)))
             h = _to_float(sym.get("height", sympy.Integer(3)))
-            apex = (s / 2, s / 2, h)
-            base = [("A", (0, 0, 0)), ("B", (s, 0, 0)), ("C", (s, s, 0)), ("D", (0, s, 0))]
-            for vid, coords in base:
-                elements.append({"type": "vertex", "id": f"{slot_name}_{vid}", "coords": list(coords), "label": ""})
-            elements.append({"type": "vertex", "id": f"{slot_name}_P", "coords": list(apex), "label": ""})
-            for v in ("A", "B", "C", "D"):
-                elements.append({
-                    "type": "edge_3d",
-                    "from": f"{slot_name}_{v}",
-                    "to": f"{slot_name}_P",
-                    "dashed": False,
-                })
+            # 底面中心を主立体の底面中心に合わせる
+            base_sym = base_atom.get_symbols()
+            cx = _to_float(base_sym.get("width", sympy.Integer(6))) / 2
+            cy = _to_float(base_sym.get("depth", sympy.Integer(6))) / 2
+            # cutout_volume 要素（設計書 §18.3 通り）
+            elements.append({
+                "type": "cutout_volume",
+                "shape": "pyramid",
+                "base": [
+                    [cx - s/2, cy - s/2, 0], [cx + s/2, cy - s/2, 0],
+                    [cx + s/2, cy + s/2, 0], [cx - s/2, cy + s/2, 0],
+                ],
+                "apex": [cx, cy, h],
+                "base_side": s,
+                "height": h,
+            })
+            # 錐体の寸法ラベル
+            elements.append({"type": "vertex", "id": "_cut_label",
+                              "coords": [cx + s + 0.5, cy, h / 2], "label": f"(底辺{_fmt(s)}cm)"})
+
         elif name == "SphereAtom":
             r = _to_float(sym.get("radius", sympy.Integer(1)))
-            elements.append({"type": "vertex", "id": f"{slot_name}_O", "coords": [0, 0, 0], "label": "O"})
-            elements.append({"type": "vertex", "id": f"{slot_name}_R", "coords": [r, 0, 0], "label": f"r={r:.0f}"})
+            base_sym = base_atom.get_symbols()
+            cx = _to_float(base_sym.get("width", sympy.Integer(6))) / 2
+            cy = _to_float(base_sym.get("depth", sympy.Integer(6))) / 2
+            elements.append({
+                "type": "cutout_volume",
+                "shape": "sphere",
+                "center": [cx, cy, r],
+                "radius": r,
+            })
+            # 球ワイヤーフレームも追加（球そのものが見えるように）
+            elements.append({
+                "type": "sphere_wireframe",
+                "center": [cx, cy, r],
+                "radius": r,
+                "color": "#cc4400",
+                "linewidth": 1.0,
+            })
+        elif name == "PrismAtom":
+            # 小さい直方体のくり抜き
+            w = _to_float(sym.get("width", sympy.Integer(2)))
+            d = _to_float(sym.get("depth", sympy.Integer(2)))
+            h = _to_float(sym.get("height", sympy.Integer(2)))
+            base_sym = base_atom.get_symbols()
+            bw = _to_float(base_sym.get("width", sympy.Integer(6)))
+            bd = _to_float(base_sym.get("depth", sympy.Integer(6)))
+            ox, oy = (bw - w) / 2, (bd - d) / 2
+            elements.append({
+                "type": "cutout_volume",
+                "shape": "prism",
+                "base": [[ox, oy, 0], [ox+w, oy, 0], [ox+w, oy+d, 0], [ox, oy+d, 0]],
+                "height": h,
+            })
+
+    return VisualDSL(render_type="3D", elements=elements)
+
+
+def _build_3d(sampled_nouns: Dict[str, NounAtom]) -> VisualDSL:
+    """立体の 3D ワイヤフレームを組む。頂点ラベル + 寸法ラベル付き。"""
+    elements: list[dict] = []
+    # slot ごとにオフセットして重なりを防ぐ
+    # 最初の solid のサイズを基準に横並び
+    first_w = 0.0
+    for atom in sampled_nouns.values():
+        sym = atom.get_symbols()
+        first_w = max(first_w, _to_float(sym.get("width", sympy.Integer(4))))
+        break
+    gap = first_w * 1.8  # 立体間の間隔
+    offsets = [(0.0, 0.0, 0.0), (gap, 0.0, 0.0), (-gap, 0.0, 0.0)]
+
+    for idx, (slot_name, atom) in enumerate(sampled_nouns.items()):
+        ox, oy, oz = offsets[min(idx, len(offsets)-1)]
+        name = type(atom).__name__
+        sym = atom.get_symbols()
+
+        if name == "PrismAtom":
+            w = _to_float(sym.get("width", sympy.Integer(4)))
+            d = _to_float(sym.get("depth", sympy.Integer(4)))
+            h = _to_float(sym.get("height", sympy.Integer(6)))
+            p = slot_name[:1].upper()  # vertex prefix
+
+            verts_local = [
+                (f"{p}A", (ox, oy, oz)),
+                (f"{p}B", (ox+w, oy, oz)),
+                (f"{p}C", (ox+w, oy+d, oz)),
+                (f"{p}D", (ox, oy+d, oz)),
+                (f"{p}E", (ox, oy, oz+h)),
+                (f"{p}F", (ox+w, oy, oz+h)),
+                (f"{p}G", (ox+w, oy+d, oz+h)),
+                (f"{p}H", (ox, oy+d, oz+h)),
+            ]
+            labels = {"A": "A", "B": "B", "C": "C", "D": "D", "E": "E", "F": "F", "G": "G", "H": "H"}
+            for vid, coords in verts_local:
+                elements.append({"type": "vertex", "id": vid, "coords": list(coords), "label": vid[1]})
+            edges = [
+                ("A","B"),("B","C"),("C","D"),("D","A"),
+                ("E","F"),("F","G"),("G","H"),("H","E"),
+                ("A","E"),("B","F"),("C","G"),("D","H"),
+            ]
+            for a, b in edges:
+                elements.append({"type": "edge_3d", "from": f"{p}{a}", "to": f"{p}{b}", "dashed": False})
+            # 寸法ラベル（辺の中点の少し外側）
+            elements.append({"type": "vertex", "id": f"{p}_lw", "coords": [ox+w/2, oy-1.0, oz], "label": f"{_fmt(w)} cm"})
+            elements.append({"type": "vertex", "id": f"{p}_lh", "coords": [ox-1.5, oy, oz+h/2], "label": f"{_fmt(h)} cm"})
+            elements.append({"type": "vertex", "id": f"{p}_ld", "coords": [ox+w+0.5, oy+d/2, oz], "label": f"{_fmt(d)} cm"})
+
+        elif name == "PyramidAtom":
+            s = _to_float(sym.get("base_side", sympy.Integer(4)))
+            h = _to_float(sym.get("height", sympy.Integer(5)))
+            apex = (ox+s/2, oy+s/2, oz+h)
+            base = [
+                ("A", (ox, oy, oz)), ("B", (ox+s, oy, oz)),
+                ("C", (ox+s, oy+s, oz)), ("D", (ox, oy+s, oz)),
+            ]
+            for vid, coords in base:
+                elements.append({"type": "vertex", "id": f"py{vid}", "coords": list(coords), "label": vid})
+            elements.append({"type": "vertex", "id": "pyP", "coords": list(apex), "label": "P"})
+            for a, b in [("A","B"),("B","C"),("C","D"),("D","A")]:
+                elements.append({"type": "edge_3d", "from": f"py{a}", "to": f"py{b}", "dashed": False})
+            for v in ("A","B","C","D"):
+                elements.append({"type": "edge_3d", "from": f"py{v}", "to": "pyP", "dashed": False})
+            # 寸法ラベル
+            elements.append({"type": "vertex", "id": "py_ls", "coords": [ox+s/2, oy-1.0, oz], "label": f"{_fmt(s)} cm"})
+            elements.append({"type": "vertex", "id": "py_lh", "coords": [ox+s/2, oy+s/2, oz+h+0.8], "label": f"h={_fmt(h)} cm"})
+
+        elif name == "SphereAtom":
+            r = _to_float(sym.get("radius", sympy.Integer(2)))
+            # 教科書スタイルの球ワイヤーフレーム
+            elements.append({
+                "type": "sphere_wireframe",
+                "center": [ox, oy, oz + r],  # 底面から r の高さに中心
+                "radius": r,
+                "color": "black",
+            })
+            elements.append({"type": "vertex", "id": "sO", "coords": [ox, oy, oz + r], "label": "O"})
+
     return VisualDSL(render_type="3D", elements=elements)
 
 
@@ -104,7 +224,7 @@ def _build_2d_geometry(sampled_nouns: Dict[str, NounAtom]) -> VisualDSL:
         name = type(atom).__name__
         sym = atom.get_symbols()
         if name == "PolygonAtom":
-            verts_raw = sym.get("vertices") or []
+            verts_raw = getattr(atom, "vertices", None) or []
             verts = [[_to_float(v[0]), _to_float(v[1])] for v in verts_raw]
             if verts:
                 elements.append({"type": "polygon", "vertices": verts, "filled": False})

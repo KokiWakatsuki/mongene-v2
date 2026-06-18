@@ -1,0 +1,196 @@
+blueprints:
+- blueprint_id: AngleCalculationStructure
+  blueprint_version: v1
+  supported_forms:
+  - calculation
+  - word_problem
+  story_required: false
+  noun_slots:
+    angle_source:
+      accepted_tags: []
+      accepted_noun_types:
+      - LineAngleAtom
+      - CircleAngleAtom
+      - PolygonAtom
+      required: true
+  main_verbs:
+  - FindAngleVerb
+  visual_component: 2D_Geometry_Renderer
+- blueprint_id: BasicCalculationStructure
+  blueprint_version: v1
+  supported_forms:
+  - calculation
+  story_required: false
+  noun_slots:
+    left:
+      accepted_tags:
+      - number
+      accepted_noun_types:
+      - NumberAtom
+      required: true
+    right:
+      accepted_tags:
+      - number
+      accepted_noun_types:
+      - NumberAtom
+      required: true
+  main_verbs:
+  - CalculateArithmeticVerb
+  visual_component: NullRenderer
+- blueprint_id: BasicDifferenceStructure
+  blueprint_version: v1
+  supported_forms:
+  - word_problem
+  - calculation
+  story_required: false
+  noun_slots:
+    base_solid:
+      accepted_tags:
+      - space_geometry
+      accepted_noun_types:
+      - PrismAtom
+      required: true
+    cutout_solid:
+      accepted_tags:
+      - space_geometry
+      accepted_noun_types:
+      - PyramidAtom
+      required: true
+  main_verbs:
+  - MeasureGeometryVerb
+  - MeasureGeometryVerb
+  - CutoutVerb
+  visual_component: 3D_Renderer
+- blueprint_id: BasicGeometryMeasurementStructure
+  blueprint_version: v1
+  supported_forms:
+  - calculation
+  - word_problem
+  story_required: false
+  noun_slots:
+    shape:
+      accepted_tags: []
+      accepted_noun_types:
+      - PolygonAtom
+      - CircleAtom
+      - PrismAtom
+      - PyramidAtom
+      - SphereAtom
+      required: true
+  main_verbs:
+  - MeasureGeometryVerb
+  visual_component: 2D_Geometry_Renderer
+- blueprint_id: ConstructionStructure
+  blueprint_version: v1
+  supported_forms:
+  - calculation
+  story_required: false
+  noun_slots:
+    anchor:
+      accepted_tags: []
+      accepted_noun_types:
+      - PointAtom
+      required: true
+  main_verbs:
+  - ConstructGeometryVerb
+  visual_component: 2D_Geometry_Renderer
+- blueprint_id: DataProbabilityStructure
+  blueprint_version: v1
+  supported_forms:
+  - calculation
+  - word_problem
+  story_required: false
+  noun_slots:
+    event:
+      accepted_tags: []
+      accepted_noun_types:
+      - EventAtom
+      required: true
+  main_verbs:
+  - CalculateProbabilityVerb
+  visual_component: Tree_Renderer
+- blueprint_id: FunctionGeometryFusionStructure
+  blueprint_version: v1
+  supported_forms:
+  - calculation
+  - word_problem
+  story_required: false
+  noun_slots:
+    func_a:
+      accepted_tags: []
+      accepted_noun_types:
+      - LinearFuncAtom
+      required: true
+    func_b:
+      accepted_tags: []
+      accepted_noun_types:
+      - LinearFuncAtom
+      required: true
+  main_verbs:
+  - IntersectVerb
+  visual_component: Graph_Renderer
+- blueprint_id: MovingPointStructure
+  blueprint_version: v1
+  supported_forms:
+  - calculation
+  - word_problem
+  story_required: false
+  noun_slots:
+    base_shape:
+      accepted_tags: []
+      accepted_noun_types:
+      - PolygonAtom
+      required: true
+  main_verbs:
+  - MeasureGeometryVerb
+  visual_component: 2D_Geometry_Renderer
+- blueprint_id: ProofStructure
+  blueprint_version: v1
+  supported_forms:
+  - proof
+  story_required: false
+  noun_slots:
+    figure_a:
+      accepted_tags: []
+      accepted_noun_types:
+      - PolygonAtom
+      required: true
+    figure_b:
+      accepted_tags: []
+      accepted_noun_types:
+      - PolygonAtom
+      required: true
+  main_verbs:
+  - ProveGeometryVerb
+  visual_component: 2D_Geometry_Renderer
+- blueprint_id: SequencePatternStructure
+  blueprint_version: v1
+  supported_forms:
+  - calculation
+  - word_problem
+  story_required: false
+  noun_slots:
+    sequence:
+      accepted_tags:
+      - sequence
+      accepted_noun_types:
+      - SequenceAtom
+      required: true
+  main_verbs:
+  - GeneralizeFormulaVerb
+  visual_component: NullRenderer
+- blueprint_id: WordProblemStructure
+  blueprint_version: v1
+  supported_forms:
+  - word_problem
+  story_required: true
+  noun_slots:
+    equation:
+      accepted_tags:
+      - linear_equation
+      accepted_noun_types:
+      - EquationAtom
+      required: true
+  main_verbs:
+  - SolveEqVerb
+  visual_component: NullRenderer

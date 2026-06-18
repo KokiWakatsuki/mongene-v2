@@ -40,6 +40,10 @@ class SubQuestionStrategy:
     target_count: int = 1
     intermediate_outputs: List[str] = field(default_factory=list)
     final_question: str = ""
+    # intermediate_outputs[i] に対応する logic_steps_by_slot のキー
+    # 指定があれば slot ごとに別々の logic_step を割り当てる（同じ答えが繰り返される問題を回避）
+    intermediate_slots: List[str] = field(default_factory=list)
+    final_slot: str | None = None
 
 
 # (sampled_nouns, ctx) -> y_base (1-100)

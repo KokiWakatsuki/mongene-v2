@@ -15,7 +15,7 @@ from apps.api.src.core.abc.atoms import AtomConstraints, NounAtom
 
 @register_noun
 class PrismAtom(NounAtom):
-    tags: ClassVar[List[str]] = ["space_geometry", "prism"]
+    tags: ClassVar[List[str]] = ["space_geometry", "prism", "geometry"]
 
     def __init__(
         self,
@@ -36,6 +36,8 @@ class PrismAtom(NounAtom):
         is_cube: bool = bool(custom.get("is_cube", False))
         base_shape_type: str = str(custom.get("base_shape_type", "square"))
         max_dim: int = int(custom.get("max_dim", 10))
+        min_dim: int = max(2, int(custom.get("min_dim", 2)))
+        max_height: int = int(custom.get("max_height", max_dim))
         num_sides: int = int(custom.get("num_sides", 6 if base_shape_type == "regular_polygon" else 4))
 
         if base_shape_type not in ("triangle", "square", "regular_polygon"):
@@ -49,32 +51,21 @@ class PrismAtom(NounAtom):
             )
 
         if base_shape_type == "triangle":
-            # 三角柱：width = 底辺、depth = 高さ（底面三角形の）、height = 柱高
-            width = sympy.Integer(rng.randint(2, max_dim))
-            depth = sympy.Integer(rng.randint(2, max_dim))
-            height = sympy.Integer(rng.randint(2, max_dim))
-            return PrismAtom(
-                width=width, depth=depth, height=height,
-                base_shape_type="triangle", num_sides=3,
-            )
+            width = sympy.Integer(rng.randint(min_dim, max_dim))
+            depth = sympy.Integer(rng.randint(min_dim, max_dim))
+            height = sympy.Integer(rng.randint(min_dim, max_height))
+            return PrismAtom(width=width, depth=depth, height=height, base_shape_type="triangle", num_sides=3)
 
         if base_shape_type == "regular_polygon":
-            # 正 n 角柱：width = 一辺、depth は使用しない（同じ値で保持）
-            side = sympy.Integer(rng.randint(2, max_dim))
-            height = sympy.Integer(rng.randint(2, max_dim))
-            return PrismAtom(
-                width=side, depth=side, height=height,
-                base_shape_type="regular_polygon", num_sides=num_sides,
-            )
+            side = sympy.Integer(rng.randint(min_dim, max_dim))
+            height = sympy.Integer(rng.randint(min_dim, max_height))
+            return PrismAtom(width=side, depth=side, height=height, base_shape_type="regular_polygon", num_sides=num_sides)
 
-        # 直方体
-        width = sympy.Integer(rng.randint(2, max_dim))
-        depth = sympy.Integer(rng.randint(2, max_dim))
-        height = sympy.Integer(rng.randint(2, max_dim))
-        return PrismAtom(
-            width=width, depth=depth, height=height,
-            base_shape_type="square", num_sides=4,
-        )
+        # 直方体（min_dim でフロア保証）
+        width = sympy.Integer(rng.randint(min_dim, max_dim))
+        depth = sympy.Integer(rng.randint(min_dim, max_dim))
+        height = sympy.Integer(rng.randint(min_dim, max_height))
+        return PrismAtom(width=width, depth=depth, height=height, base_shape_type="square", num_sides=4)
 
     @property
     def is_cube(self) -> bool:

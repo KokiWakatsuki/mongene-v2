@@ -21,8 +21,7 @@ def build_data_probability_blueprint() -> BlueprintDefinition:
         noun_slots={
             "event": NounSlot(
                 slot_name="event",
-                accepted_tags=[],
-                accepted_noun_types=["EventAtom"],
+                accepted_tags=["probability"],
                 required=True,
             ),
         },

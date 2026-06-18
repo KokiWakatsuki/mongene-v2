@@ -7,9 +7,7 @@ from __future__ import annotations
 import io
 from typing import Literal
 
-import matplotlib
-
-matplotlib.use("Agg")  # noqa: E402
+from apps.api.src.visuals import _matplotlib_setup  # noqa: F401
 import matplotlib.pyplot as plt  # noqa: E402
 
 from apps.api.src.core.abc.visuals import VisualComponent, VisualDSL

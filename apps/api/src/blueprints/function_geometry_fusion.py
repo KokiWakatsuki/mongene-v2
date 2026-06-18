@@ -21,14 +21,12 @@ def build_function_geometry_fusion_blueprint() -> BlueprintDefinition:
         noun_slots={
             "func_a": NounSlot(
                 slot_name="func_a",
-                accepted_tags=[],
-                accepted_noun_types=["LinearFuncAtom"],
+                accepted_tags=["linear_function"],
                 required=True,
             ),
             "func_b": NounSlot(
                 slot_name="func_b",
-                accepted_tags=[],
-                accepted_noun_types=["LinearFuncAtom"],
+                accepted_tags=["linear_function"],
                 required=True,
             ),
         },

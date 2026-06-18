@@ -15,7 +15,7 @@ from apps.api.src.core.abc.atoms import AtomConstraints, NounAtom
 
 @register_noun
 class PyramidAtom(NounAtom):
-    tags: ClassVar[List[str]] = ["space_geometry", "pyramid"]
+    tags: ClassVar[List[str]] = ["space_geometry", "pyramid", "geometry"]
 
     def __init__(
         self,
