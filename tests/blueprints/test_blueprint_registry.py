@@ -57,6 +57,8 @@ EXPECTED_BLUEPRINTS = {
     "SequencePatternStructure",
     "PythagoreanStructure",
     "PythagoreanSpaceStructure",
+    "GraphStructure",
+    "TwoFunctionsStructure",
 }
 
 

@@ -27,6 +27,10 @@ BLUEPRINT_RULES: List[Tuple[str, str]] = [
     (r"規則性|数列|マッチ棒|並べ方|個数の規則", "SequencePatternStructure"),
     (r"動点|点 P|時間 t", "MovingPointStructure"),
     (r"角度|円周角|中心角|接弦角|内接四角形|内角|外角|平行線.*角|錯角|同位角", "AngleCalculationStructure"),
+    # グラフ「書き方」「かき方」は GraphStructure に振り分ける
+    (r"グラフの書き方|グラフをかく|グラフの特徴|座標の概念|点のとり方", "GraphStructure"),
+    # 2直線の交点・面積は TwoFunctionsStructure
+    (r"2直線|交点の座標|速さとダイヤグラム|2つのグラフ", "TwoFunctionsStructure"),
     # 関数系を幾何系より先に判定（「グラフ」と「面積」が同居しないよう）
     (r"比例|反比例|一次関数|二次関数|放物線|y\s*=\s*ax|交点|グラフ", "FunctionGeometryFusionStructure"),
     (r"くり抜|切断|回転体|展開図", "BasicDifferenceStructure"),
@@ -112,6 +116,14 @@ DEFAULT_CONSTRAINTS: Dict[str, Dict[str, Any]] = {
     "SequencePatternStructure": {
         "SequenceAtom": {"pattern_type": "arithmetic", "min_terms_required": 3},
     },
+    "GraphStructure": {
+        "LinearFuncAtom": {"max_slope": 4, "force_integer_slope": True},
+        "QuadraticFuncAtom": {"max_a_value": 2, "is_pure_form": True},
+        "InverseFuncAtom": {"max_constant": 12, "integer_only": True},
+    },
+    "TwoFunctionsStructure": {
+        "LinearFuncAtom": {"max_slope": 3, "force_integer_slope": True},
+    },
 }
 
 
@@ -127,26 +139,34 @@ VISUAL_BY_BLUEPRINT: Dict[str, str] = {
     "ProofStructure": "2D_Geometry_Renderer",
     "DataProbabilityStructure": "Tree_Renderer",
     "SequencePatternStructure": "NullRenderer",
+    "GraphStructure": "Graph_Renderer",
+    "TwoFunctionsStructure": "Graph_Renderer",
 }
 
 
 SUPPORTED_FORMS: Dict[str, List[str]] = {
-    # calculation = 数値・式が全部与えられ計算するだけ
-    # word_problem = 場面設定から式を立てる
-    # proof = 論理的証明
+    # implementation_plan.md ③ 問題形式定義:
+    # calculation    (+0 raw):   式・数値が与えられ計算するだけ
+    # word_problem   (+400 raw): 場面設定から式を立てる
+    # proof          (+800 raw): 論理的証明
+    # construction   (+700 raw): コンパス・定規による作図 ★新形式
+    # graph          (+200 raw): 関数グラフの書き方・読み取り ★新形式
+    # data_analysis  (+300 raw): データ読み取り・統計的解釈 ★新形式
     "BasicCalculationStructure": ["calculation"],
     "WordProblemStructure": ["word_problem"],
-    "BasicGeometryMeasurementStructure": ["calculation", "word_problem"],
-    "BasicDifferenceStructure": ["word_problem"],           # くり抜き文脈が必須
+    "BasicGeometryMeasurementStructure": ["word_problem"],  # 図形は常に文脈が必要
+    "BasicDifferenceStructure": ["word_problem"],
     "FunctionGeometryFusionStructure": ["calculation", "word_problem"],
-    "MovingPointStructure": ["word_problem"],               # 動点の時間文脈が必須
-    "AngleCalculationStructure": ["calculation"],           # 図が与えられ角度を求めるだけ
-    "ConstructionStructure": ["calculation"],
+    "MovingPointStructure": ["word_problem"],
+    "AngleCalculationStructure": ["word_problem"],          # 図形の説明が必要
+    "ConstructionStructure": ["construction"],              # 作図専用
     "ProofStructure": ["proof"],
-    "DataProbabilityStructure": ["calculation", "word_problem"],
+    "DataProbabilityStructure": ["calculation", "word_problem", "data_analysis"],
     "SequencePatternStructure": ["calculation", "word_problem"],
-    "PythagoreanStructure": ["calculation", "word_problem"],
-    "PythagoreanSpaceStructure": ["word_problem"],          # 空間図形の文脈が必須
+    "PythagoreanStructure": ["word_problem"],
+    "PythagoreanSpaceStructure": ["word_problem"],
+    "GraphStructure": ["graph", "calculation"],             # グラフ問題専用
+    "TwoFunctionsStructure": ["graph", "word_problem"],
 }
 
 
@@ -290,37 +310,43 @@ def generate_mapping(strict: bool = False) -> Dict[str, Any]:
                             # dedup は有効のまま
                         mapping[lesson_id] = entry
 
-    # ドメイン・Blueprint 別の supported_forms 後処理
-    # ルール:
-    # 1. domain == "図形": 図形は必ず図の描写が必要 → calculation を除去
-    # 2. ProofStructure: proof のみ
-    # 3. WordProblemStructure: word_problem のみ
-    # 4. BasicCalculationStructure: calculation のみ
+    # ドメイン・Blueprint 別の supported_forms 後処理（新形式対応版）
     for lesson_id, entry in mapping.items():
         domain = entry.get("domain", "")
         bp = entry.get("execute_blueprint", "")
+        title = entry.get("title", "")
         forms = list(entry.get("supported_forms", []))
 
-        # 図形領域は calculation 不可（figure/context の描写が必須）
-        if domain == "図形" and "calculation" in forms:
-            forms = [f for f in forms if f != "calculation"]
-            if not forms:
-                forms = ["word_problem"]
-
-        # Blueprint 固有ルール（seed の個別設定より Blueprint の性質を優先）
+        # ── Blueprint 固有の確定ルール（最優先）──
         if bp == "ProofStructure":
             forms = ["proof"]
         elif bp == "WordProblemStructure":
             forms = ["word_problem"]
         elif bp == "BasicCalculationStructure":
             forms = ["calculation"]
+        elif bp == "ConstructionStructure":
+            forms = ["construction"]             # 作図は construction 専用
         elif bp in ("BasicDifferenceStructure", "MovingPointStructure",
-                    "PythagoreanSpaceStructure", "ConstructionStructure"):
-            # 文脈が必須な Blueprint → word_problem のみ
+                    "PythagoreanSpaceStructure"):
             forms = ["word_problem"]
         elif bp == "AngleCalculationStructure":
-            # 角度計算も図形の説明が必要 → word_problem のみ
             forms = ["word_problem"]
+        elif bp == "GraphStructure":
+            forms = ["graph", "calculation"]     # グラフ書き方 + 値の計算
+        elif bp == "TwoFunctionsStructure":
+            forms = ["graph", "word_problem"]    # 交点・面積
+
+        # ── ドメイン補正 ──
+        # 図形領域は calculation を持てない（図の描写が必須）
+        if domain == "図形" and "calculation" in forms and bp not in (
+            "GraphStructure", "TwoFunctionsStructure"
+        ):
+            forms = [f for f in forms if f != "calculation"] or ["word_problem"]
+
+        # データの活用: 箱ひげ図/ヒストグラムの「書き方」は data_analysis 追加
+        if domain == "データの活用" and re.search(r"箱ひげ|ヒストグラム.*書|度数分布表.*書|累積", title):
+            if "data_analysis" not in forms:
+                forms.append("data_analysis")
 
         if not forms:
             forms = ["word_problem"]

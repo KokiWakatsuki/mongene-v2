@@ -1085,7 +1085,7 @@
     "lesson_number": 30,
     "domain": "関数",
     "large_unit": "比例と反比例",
-    "execute_blueprint": "FunctionGeometryFusionStructure",
+    "execute_blueprint": "GraphStructure",
     "required_tags": [
       "inverse_proportion",
       "linear_function"
@@ -1093,20 +1093,24 @@
     "optional_tags": [],
     "atom_constraints": {
       "LinearFuncAtom": {
-        "max_slope": 5,
+        "max_slope": 4,
         "force_integer_slope": true
       },
       "QuadraticFuncAtom": {
-        "max_a_value": 3,
+        "max_a_value": 2,
         "is_pure_form": true
+      },
+      "InverseFuncAtom": {
+        "max_constant": 12,
+        "integer_only": true
       }
     },
     "visual_component": "Graph_Renderer",
     "raw_y_base": 300,
     "y_base": 6,
     "supported_forms": [
-      "calculation",
-      "word_problem"
+      "graph",
+      "calculation"
     ],
     "is_clean_override": {
       "disabled": true
@@ -1213,7 +1217,7 @@
     "lesson_number": 34,
     "domain": "関数",
     "large_unit": "比例と反比例",
-    "execute_blueprint": "FunctionGeometryFusionStructure",
+    "execute_blueprint": "GraphStructure",
     "required_tags": [
       "inverse_proportion",
       "linear_function"
@@ -1221,20 +1225,24 @@
     "optional_tags": [],
     "atom_constraints": {
       "LinearFuncAtom": {
-        "max_slope": 5,
+        "max_slope": 4,
         "force_integer_slope": true
       },
       "QuadraticFuncAtom": {
-        "max_a_value": 3,
+        "max_a_value": 2,
         "is_pure_form": true
+      },
+      "InverseFuncAtom": {
+        "max_constant": 12,
+        "integer_only": true
       }
     },
     "visual_component": "Graph_Renderer",
     "raw_y_base": 300,
     "y_base": 6,
     "supported_forms": [
-      "calculation",
-      "word_problem"
+      "graph",
+      "calculation"
     ],
     "is_clean_override": {
       "disabled": true
@@ -1494,7 +1502,7 @@
     "visual_component": "2D_Geometry_Renderer",
     "y_base": 9,
     "supported_forms": [
-      "word_problem"
+      "construction"
     ],
     "domain": "図形",
     "large_unit": "平面図形",
@@ -1531,7 +1539,7 @@
     "raw_y_base": 450,
     "y_base": 9,
     "supported_forms": [
-      "word_problem"
+      "construction"
     ],
     "is_clean_override": {
       "disabled": true
@@ -1565,7 +1573,7 @@
     "raw_y_base": 450,
     "y_base": 9,
     "supported_forms": [
-      "word_problem"
+      "construction"
     ],
     "is_clean_override": {
       "disabled": true
@@ -1599,7 +1607,7 @@
     "raw_y_base": 600,
     "y_base": 13,
     "supported_forms": [
-      "word_problem"
+      "construction"
     ],
     "is_clean_override": {
       "disabled": true
@@ -2027,7 +2035,8 @@
     "y_base": 3,
     "supported_forms": [
       "calculation",
-      "word_problem"
+      "word_problem",
+      "data_analysis"
     ],
     "is_clean_override": {
       "disabled": true
@@ -2066,7 +2075,8 @@
     "y_base": 3,
     "supported_forms": [
       "calculation",
-      "word_problem"
+      "word_problem",
+      "data_analysis"
     ],
     "is_clean_override": {
       "disabled": true
@@ -2105,7 +2115,8 @@
     "y_base": 3,
     "supported_forms": [
       "calculation",
-      "word_problem"
+      "word_problem",
+      "data_analysis"
     ],
     "is_clean_override": {
       "disabled": true
@@ -2144,7 +2155,8 @@
     "y_base": 3,
     "supported_forms": [
       "calculation",
-      "word_problem"
+      "word_problem",
+      "data_analysis"
     ],
     "is_clean_override": {
       "disabled": true
@@ -2185,7 +2197,8 @@
     "y_base": 3,
     "supported_forms": [
       "calculation",
-      "word_problem"
+      "word_problem",
+      "data_analysis"
     ],
     "is_clean_override": {
       "disabled": true
@@ -2921,25 +2934,29 @@
     "lesson_number": 21,
     "domain": "関数",
     "large_unit": "1次関数",
-    "execute_blueprint": "FunctionGeometryFusionStructure",
+    "execute_blueprint": "GraphStructure",
     "required_tags": [],
     "optional_tags": [],
     "atom_constraints": {
       "LinearFuncAtom": {
-        "max_slope": 5,
+        "max_slope": 4,
         "force_integer_slope": true
       },
       "QuadraticFuncAtom": {
-        "max_a_value": 3,
+        "max_a_value": 2,
         "is_pure_form": true
+      },
+      "InverseFuncAtom": {
+        "max_constant": 12,
+        "integer_only": true
       }
     },
     "visual_component": "Graph_Renderer",
     "raw_y_base": 550,
     "y_base": 12,
     "supported_forms": [
-      "calculation",
-      "word_problem"
+      "graph",
+      "calculation"
     ],
     "is_clean_override": {
       "disabled": true
@@ -2951,25 +2968,29 @@
     "lesson_number": 22,
     "domain": "関数",
     "large_unit": "1次関数",
-    "execute_blueprint": "FunctionGeometryFusionStructure",
+    "execute_blueprint": "GraphStructure",
     "required_tags": [],
     "optional_tags": [],
     "atom_constraints": {
       "LinearFuncAtom": {
-        "max_slope": 5,
+        "max_slope": 4,
         "force_integer_slope": true
       },
       "QuadraticFuncAtom": {
-        "max_a_value": 3,
+        "max_a_value": 2,
         "is_pure_form": true
+      },
+      "InverseFuncAtom": {
+        "max_constant": 12,
+        "integer_only": true
       }
     },
     "visual_component": "Graph_Renderer",
     "raw_y_base": 550,
     "y_base": 12,
     "supported_forms": [
-      "calculation",
-      "word_problem"
+      "graph",
+      "calculation"
     ],
     "is_clean_override": {
       "disabled": true
@@ -3107,26 +3128,22 @@
     "lesson_number": 27,
     "domain": "関数",
     "large_unit": "1次関数",
-    "execute_blueprint": "FunctionGeometryFusionStructure",
+    "execute_blueprint": "TwoFunctionsStructure",
     "required_tags": [
       "linear_equation"
     ],
     "optional_tags": [],
     "atom_constraints": {
       "LinearFuncAtom": {
-        "max_slope": 5,
+        "max_slope": 3,
         "force_integer_slope": true
-      },
-      "QuadraticFuncAtom": {
-        "max_a_value": 3,
-        "is_pure_form": true
       }
     },
     "visual_component": "Graph_Renderer",
     "raw_y_base": 550,
     "y_base": 12,
     "supported_forms": [
-      "calculation",
+      "graph",
       "word_problem"
     ],
     "is_clean_override": {
@@ -3200,24 +3217,20 @@
     "lesson_number": 30,
     "domain": "関数",
     "large_unit": "1次関数",
-    "execute_blueprint": "FunctionGeometryFusionStructure",
+    "execute_blueprint": "TwoFunctionsStructure",
     "required_tags": [],
     "optional_tags": [],
     "atom_constraints": {
       "LinearFuncAtom": {
-        "max_slope": 5,
+        "max_slope": 3,
         "force_integer_slope": true
-      },
-      "QuadraticFuncAtom": {
-        "max_a_value": 3,
-        "is_pure_form": true
       }
     },
     "visual_component": "Graph_Renderer",
     "raw_y_base": 550,
     "y_base": 12,
     "supported_forms": [
-      "calculation",
+      "graph",
       "word_problem"
     ],
     "is_clean_override": {
@@ -3895,7 +3908,8 @@
     "y_base": 9,
     "supported_forms": [
       "calculation",
-      "word_problem"
+      "word_problem",
+      "data_analysis"
     ],
     "is_clean_override": {
       "disabled": true
@@ -3968,7 +3982,8 @@
     "y_base": 10,
     "supported_forms": [
       "calculation",
-      "word_problem"
+      "word_problem",
+      "data_analysis"
     ],
     "is_clean_override": {
       "disabled": true
@@ -4009,7 +4024,8 @@
     "y_base": 12,
     "supported_forms": [
       "calculation",
-      "word_problem"
+      "word_problem",
+      "data_analysis"
     ],
     "is_clean_override": {
       "disabled": true
@@ -4050,7 +4066,8 @@
     "y_base": 7,
     "supported_forms": [
       "calculation",
-      "word_problem"
+      "word_problem",
+      "data_analysis"
     ],
     "is_clean_override": {
       "disabled": true
@@ -4091,7 +4108,8 @@
     "y_base": 7,
     "supported_forms": [
       "calculation",
-      "word_problem"
+      "word_problem",
+      "data_analysis"
     ],
     "is_clean_override": {
       "disabled": true
@@ -4132,7 +4150,8 @@
     "y_base": 7,
     "supported_forms": [
       "calculation",
-      "word_problem"
+      "word_problem",
+      "data_analysis"
     ],
     "is_clean_override": {
       "disabled": true
@@ -5219,27 +5238,31 @@
     "lesson_number": 33,
     "domain": "関数",
     "large_unit": "関数 y=ax^2",
-    "execute_blueprint": "FunctionGeometryFusionStructure",
+    "execute_blueprint": "GraphStructure",
     "required_tags": [
       "quadratic_function"
     ],
     "optional_tags": [],
     "atom_constraints": {
       "LinearFuncAtom": {
-        "max_slope": 5,
+        "max_slope": 4,
         "force_integer_slope": true
       },
       "QuadraticFuncAtom": {
-        "max_a_value": 3,
+        "max_a_value": 2,
         "is_pure_form": true
+      },
+      "InverseFuncAtom": {
+        "max_constant": 12,
+        "integer_only": true
       }
     },
     "visual_component": "Graph_Renderer",
     "raw_y_base": 700,
     "y_base": 15,
     "supported_forms": [
-      "calculation",
-      "word_problem"
+      "graph",
+      "calculation"
     ],
     "is_clean_override": {
       "disabled": true
@@ -5964,7 +5987,8 @@
     "y_base": 13,
     "supported_forms": [
       "calculation",
-      "word_problem"
+      "word_problem",
+      "data_analysis"
     ],
     "is_clean_override": {
       "disabled": true
@@ -6005,7 +6029,8 @@
     "y_base": 13,
     "supported_forms": [
       "calculation",
-      "word_problem"
+      "word_problem",
+      "data_analysis"
     ],
     "is_clean_override": {
       "disabled": true
@@ -6046,7 +6071,8 @@
     "y_base": 13,
     "supported_forms": [
       "calculation",
-      "word_problem"
+      "word_problem",
+      "data_analysis"
     ],
     "is_clean_override": {
       "disabled": true
@@ -6087,7 +6113,8 @@
     "y_base": 19,
     "supported_forms": [
       "calculation",
-      "word_problem"
+      "word_problem",
+      "data_analysis"
     ],
     "is_clean_override": {
       "disabled": true

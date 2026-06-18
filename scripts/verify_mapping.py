@@ -35,7 +35,10 @@ EXPECTED_BLUEPRINTS = {
     "SequencePatternStructure",
     "PythagoreanStructure",
     "PythagoreanSpaceStructure",
+    "GraphStructure",
+    "TwoFunctionsStructure",
 }
+VALID_FORMS = {"calculation", "word_problem", "proof", "construction", "graph", "data_analysis"}
 
 
 def enumerate_lesson_ids(curriculum: list) -> set[str]:
@@ -86,6 +89,9 @@ def verify() -> List[str]:
             errors.append(f"[blueprint] {lid} が未登録 Blueprint を参照: {bp}")
         if not m.get("supported_forms"):
             errors.append(f"[forms] {lid} の supported_forms が空")
+        for f in m.get("supported_forms", []):
+            if f not in VALID_FORMS:
+                errors.append(f"[forms] {lid} に未定義の form: {f}")
 
     # 4. 前提グラフが DAG
     graph_doc = yaml.safe_load(GRAPH_PATH.read_text(encoding="utf-8"))
