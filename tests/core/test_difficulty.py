@@ -57,18 +57,21 @@ def test_raw_y_base_g1_intro() -> None:
 
 
 def test_raw_y_base_g3_pythagorean_app() -> None:
-    # 三平方の定理(900) + 利用(250) = 1150 → normalize ≒ 88
+    # 三平方の定理(900) + 利用(250) = 1150 → RAW_MAX=4300 で正規化 ≒ 26
     raw = compute_raw_y_base("三平方の定理", "空間図形への利用")
     assert raw == 1150
     y = normalize(raw)
-    assert 85 <= y <= 92
+    # (1150-100)/(4300-100)*99+1 ≈ 26
+    assert 23 <= y <= 29
 
 
 def test_raw_y_base_g3_surface_path() -> None:
-    # 三平方の定理(900) + 融合/発展(400) = 1300 → normalize = 100
+    # 三平方の定理(900) + 融合/発展(400) = 1300 → RAW_MAX=4300 で正規化 ≒ 29
     raw = compute_raw_y_base("三平方の定理", "立体の表面上の最短距離（展開図の利用）")
-    assert raw == RAW_MAX
-    assert normalize(raw) == 100
+    assert raw == 1300
+    y = normalize(raw)
+    # ベース難易度は29前後（全ファクター足せば100に到達可能）
+    assert 26 <= y <= 32
 
 
 def test_large_unit_scores_are_ordered() -> None:

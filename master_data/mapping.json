@@ -169,7 +169,7 @@
       }
     },
     "visual_component": "NullRenderer",
-    "y_base": 5,
+    "y_base": 2,
     "supported_forms": [
       "calculation"
     ],
@@ -248,7 +248,7 @@
     },
     "visual_component": "NullRenderer",
     "raw_y_base": 150,
-    "y_base": 5,
+    "y_base": 2,
     "supported_forms": [
       "calculation"
     ],
@@ -286,7 +286,7 @@
     },
     "visual_component": "NullRenderer",
     "raw_y_base": 200,
-    "y_base": 9,
+    "y_base": 3,
     "supported_forms": [
       "calculation"
     ],
@@ -310,7 +310,7 @@
       }
     },
     "visual_component": "NullRenderer",
-    "y_base": 5,
+    "y_base": 2,
     "supported_forms": [
       "calculation"
     ],
@@ -351,7 +351,7 @@
     },
     "visual_component": "NullRenderer",
     "raw_y_base": 150,
-    "y_base": 5,
+    "y_base": 2,
     "supported_forms": [
       "calculation"
     ],
@@ -466,7 +466,7 @@
     },
     "visual_component": "NullRenderer",
     "raw_y_base": 150,
-    "y_base": 5,
+    "y_base": 2,
     "supported_forms": [
       "calculation"
     ],
@@ -504,7 +504,7 @@
     },
     "visual_component": "NullRenderer",
     "raw_y_base": 150,
-    "y_base": 5,
+    "y_base": 2,
     "supported_forms": [
       "calculation"
     ],
@@ -542,7 +542,7 @@
     },
     "visual_component": "NullRenderer",
     "raw_y_base": 150,
-    "y_base": 5,
+    "y_base": 2,
     "supported_forms": [
       "calculation"
     ],
@@ -580,7 +580,7 @@
     },
     "visual_component": "NullRenderer",
     "raw_y_base": 150,
-    "y_base": 5,
+    "y_base": 2,
     "supported_forms": [
       "calculation"
     ],
@@ -618,7 +618,7 @@
     },
     "visual_component": "NullRenderer",
     "raw_y_base": 150,
-    "y_base": 5,
+    "y_base": 2,
     "supported_forms": [
       "calculation"
     ],
@@ -656,7 +656,7 @@
     },
     "visual_component": "NullRenderer",
     "raw_y_base": 150,
-    "y_base": 5,
+    "y_base": 2,
     "supported_forms": [
       "calculation"
     ],
@@ -694,7 +694,7 @@
     },
     "visual_component": "NullRenderer",
     "raw_y_base": 150,
-    "y_base": 5,
+    "y_base": 2,
     "supported_forms": [
       "calculation"
     ],
@@ -732,7 +732,7 @@
     },
     "visual_component": "NullRenderer",
     "raw_y_base": 150,
-    "y_base": 5,
+    "y_base": 2,
     "supported_forms": [
       "calculation"
     ],
@@ -770,7 +770,7 @@
     },
     "visual_component": "NullRenderer",
     "raw_y_base": 150,
-    "y_base": 5,
+    "y_base": 2,
     "supported_forms": [
       "calculation"
     ],
@@ -808,7 +808,7 @@
     },
     "visual_component": "NullRenderer",
     "raw_y_base": 350,
-    "y_base": 22,
+    "y_base": 7,
     "supported_forms": [
       "calculation"
     ],
@@ -846,7 +846,7 @@
     },
     "visual_component": "NullRenderer",
     "raw_y_base": 300,
-    "y_base": 18,
+    "y_base": 6,
     "supported_forms": [
       "calculation"
     ],
@@ -885,7 +885,7 @@
     },
     "visual_component": "NullRenderer",
     "raw_y_base": 250,
-    "y_base": 13,
+    "y_base": 5,
     "supported_forms": [
       "calculation"
     ],
@@ -918,7 +918,7 @@
     },
     "visual_component": "Graph_Renderer",
     "raw_y_base": 300,
-    "y_base": 18,
+    "y_base": 6,
     "supported_forms": [
       "calculation",
       "word_problem"
@@ -942,7 +942,7 @@
       }
     },
     "visual_component": "NullRenderer",
-    "y_base": 34,
+    "y_base": 10,
     "supported_forms": [
       "word_problem"
     ],
@@ -977,7 +977,7 @@
     },
     "visual_component": "NullRenderer",
     "raw_y_base": 500,
-    "y_base": 34,
+    "y_base": 10,
     "supported_forms": [
       "word_problem"
     ],
@@ -1005,7 +1005,7 @@
     },
     "visual_component": "NullRenderer",
     "raw_y_base": 500,
-    "y_base": 34,
+    "y_base": 10,
     "supported_forms": [
       "word_problem"
     ],
@@ -1037,7 +1037,7 @@
     },
     "visual_component": "Graph_Renderer",
     "raw_y_base": 300,
-    "y_base": 18,
+    "y_base": 6,
     "supported_forms": [
       "calculation",
       "word_problem"
@@ -1070,7 +1070,7 @@
     },
     "visual_component": "Graph_Renderer",
     "raw_y_base": 300,
-    "y_base": 18,
+    "y_base": 6,
     "supported_forms": [
       "calculation",
       "word_problem"
@@ -1103,7 +1103,7 @@
     },
     "visual_component": "Graph_Renderer",
     "raw_y_base": 300,
-    "y_base": 18,
+    "y_base": 6,
     "supported_forms": [
       "calculation",
       "word_problem"
@@ -1129,7 +1129,7 @@
       }
     },
     "visual_component": "Graph_Renderer",
-    "y_base": 18,
+    "y_base": 6,
     "supported_forms": [
       "calculation",
       "word_problem"
@@ -1165,7 +1165,7 @@
     },
     "visual_component": "Graph_Renderer",
     "raw_y_base": 300,
-    "y_base": 18,
+    "y_base": 6,
     "supported_forms": [
       "calculation",
       "word_problem"
@@ -1198,7 +1198,7 @@
     },
     "visual_component": "Graph_Renderer",
     "raw_y_base": 300,
-    "y_base": 18,
+    "y_base": 6,
     "supported_forms": [
       "calculation",
       "word_problem"
@@ -1231,7 +1231,7 @@
     },
     "visual_component": "Graph_Renderer",
     "raw_y_base": 300,
-    "y_base": 18,
+    "y_base": 6,
     "supported_forms": [
       "calculation",
       "word_problem"
@@ -1264,7 +1264,7 @@
     },
     "visual_component": "Graph_Renderer",
     "raw_y_base": 300,
-    "y_base": 18,
+    "y_base": 6,
     "supported_forms": [
       "calculation",
       "word_problem"
@@ -1297,7 +1297,7 @@
     },
     "visual_component": "Graph_Renderer",
     "raw_y_base": 550,
-    "y_base": 38,
+    "y_base": 12,
     "supported_forms": [
       "calculation",
       "word_problem"
@@ -1340,7 +1340,7 @@
     },
     "visual_component": "2D_Geometry_Renderer",
     "raw_y_base": 350,
-    "y_base": 22,
+    "y_base": 7,
     "supported_forms": [
       "word_problem"
     ],
@@ -1382,7 +1382,7 @@
     },
     "visual_component": "2D_Geometry_Renderer",
     "raw_y_base": 350,
-    "y_base": 22,
+    "y_base": 7,
     "supported_forms": [
       "word_problem"
     ],
@@ -1424,7 +1424,7 @@
     },
     "visual_component": "2D_Geometry_Renderer",
     "raw_y_base": 350,
-    "y_base": 22,
+    "y_base": 7,
     "supported_forms": [
       "word_problem"
     ],
@@ -1466,7 +1466,7 @@
     },
     "visual_component": "2D_Geometry_Renderer",
     "raw_y_base": 350,
-    "y_base": 22,
+    "y_base": 7,
     "supported_forms": [
       "word_problem"
     ],
@@ -1492,7 +1492,7 @@
       }
     },
     "visual_component": "2D_Geometry_Renderer",
-    "y_base": 30,
+    "y_base": 9,
     "supported_forms": [
       "word_problem"
     ],
@@ -1529,7 +1529,7 @@
     },
     "visual_component": "2D_Geometry_Renderer",
     "raw_y_base": 450,
-    "y_base": 30,
+    "y_base": 9,
     "supported_forms": [
       "word_problem"
     ],
@@ -1563,7 +1563,7 @@
     },
     "visual_component": "2D_Geometry_Renderer",
     "raw_y_base": 450,
-    "y_base": 30,
+    "y_base": 9,
     "supported_forms": [
       "word_problem"
     ],
@@ -1597,7 +1597,7 @@
     },
     "visual_component": "2D_Geometry_Renderer",
     "raw_y_base": 600,
-    "y_base": 42,
+    "y_base": 13,
     "supported_forms": [
       "word_problem"
     ],
@@ -1642,7 +1642,7 @@
     },
     "visual_component": "2D_Geometry_Renderer",
     "raw_y_base": 450,
-    "y_base": 30,
+    "y_base": 9,
     "supported_forms": [
       "word_problem"
     ],
@@ -1675,7 +1675,7 @@
       }
     },
     "visual_component": "2D_Geometry_Renderer",
-    "y_base": 26,
+    "y_base": 8,
     "supported_forms": [
       "word_problem"
     ],
@@ -1722,7 +1722,7 @@
     },
     "visual_component": "2D_Geometry_Renderer",
     "raw_y_base": 400,
-    "y_base": 26,
+    "y_base": 8,
     "supported_forms": [
       "word_problem"
     ],
@@ -1766,7 +1766,7 @@
     },
     "visual_component": "2D_Geometry_Renderer",
     "raw_y_base": 400,
-    "y_base": 26,
+    "y_base": 8,
     "supported_forms": [
       "word_problem"
     ],
@@ -1798,7 +1798,7 @@
     },
     "visual_component": "3D_Renderer",
     "raw_y_base": 400,
-    "y_base": 26,
+    "y_base": 8,
     "supported_forms": [
       "word_problem"
     ],
@@ -1842,7 +1842,7 @@
     },
     "visual_component": "2D_Geometry_Renderer",
     "raw_y_base": 400,
-    "y_base": 26,
+    "y_base": 8,
     "supported_forms": [
       "word_problem"
     ],
@@ -1875,7 +1875,7 @@
     },
     "visual_component": "3D_Renderer",
     "raw_y_base": 650,
-    "y_base": 46,
+    "y_base": 14,
     "supported_forms": [
       "word_problem"
     ],
@@ -1902,7 +1902,7 @@
       }
     },
     "visual_component": "3D_Renderer",
-    "y_base": 26,
+    "y_base": 8,
     "supported_forms": [
       "word_problem"
     ],
@@ -1949,7 +1949,7 @@
     },
     "visual_component": "2D_Geometry_Renderer",
     "raw_y_base": 400,
-    "y_base": 26,
+    "y_base": 8,
     "supported_forms": [
       "word_problem"
     ],
@@ -1983,7 +1983,7 @@
       }
     },
     "visual_component": "Table_&_Chart_Renderer",
-    "y_base": 9,
+    "y_base": 3,
     "supported_forms": [
       "calculation"
     ],
@@ -2024,7 +2024,7 @@
     },
     "visual_component": "Tree_Renderer",
     "raw_y_base": 200,
-    "y_base": 9,
+    "y_base": 3,
     "supported_forms": [
       "calculation",
       "word_problem"
@@ -2063,7 +2063,7 @@
     },
     "visual_component": "Tree_Renderer",
     "raw_y_base": 200,
-    "y_base": 9,
+    "y_base": 3,
     "supported_forms": [
       "calculation",
       "word_problem"
@@ -2102,7 +2102,7 @@
     },
     "visual_component": "Tree_Renderer",
     "raw_y_base": 200,
-    "y_base": 9,
+    "y_base": 3,
     "supported_forms": [
       "calculation",
       "word_problem"
@@ -2141,7 +2141,7 @@
     },
     "visual_component": "Tree_Renderer",
     "raw_y_base": 200,
-    "y_base": 9,
+    "y_base": 3,
     "supported_forms": [
       "calculation",
       "word_problem"
@@ -2182,7 +2182,7 @@
     },
     "visual_component": "Tree_Renderer",
     "raw_y_base": 200,
-    "y_base": 9,
+    "y_base": 3,
     "supported_forms": [
       "calculation",
       "word_problem"
@@ -2221,7 +2221,7 @@
     },
     "visual_component": "NullRenderer",
     "raw_y_base": 450,
-    "y_base": 30,
+    "y_base": 9,
     "supported_forms": [
       "calculation"
     ],
@@ -2259,7 +2259,7 @@
     },
     "visual_component": "NullRenderer",
     "raw_y_base": 450,
-    "y_base": 30,
+    "y_base": 9,
     "supported_forms": [
       "calculation"
     ],
@@ -2297,7 +2297,7 @@
     },
     "visual_component": "NullRenderer",
     "raw_y_base": 500,
-    "y_base": 34,
+    "y_base": 10,
     "supported_forms": [
       "calculation"
     ],
@@ -2335,7 +2335,7 @@
     },
     "visual_component": "NullRenderer",
     "raw_y_base": 450,
-    "y_base": 30,
+    "y_base": 9,
     "supported_forms": [
       "calculation"
     ],
@@ -2373,7 +2373,7 @@
     },
     "visual_component": "NullRenderer",
     "raw_y_base": 450,
-    "y_base": 30,
+    "y_base": 9,
     "supported_forms": [
       "calculation"
     ],
@@ -2411,7 +2411,7 @@
     },
     "visual_component": "NullRenderer",
     "raw_y_base": 500,
-    "y_base": 34,
+    "y_base": 10,
     "supported_forms": [
       "calculation"
     ],
@@ -2449,7 +2449,7 @@
     },
     "visual_component": "NullRenderer",
     "raw_y_base": 550,
-    "y_base": 38,
+    "y_base": 12,
     "supported_forms": [
       "calculation"
     ],
@@ -2487,7 +2487,7 @@
     },
     "visual_component": "NullRenderer",
     "raw_y_base": 550,
-    "y_base": 38,
+    "y_base": 12,
     "supported_forms": [
       "calculation"
     ],
@@ -2509,7 +2509,7 @@
       }
     },
     "visual_component": "NullRenderer",
-    "y_base": 30,
+    "y_base": 9,
     "supported_forms": [
       "calculation"
     ],
@@ -2550,7 +2550,7 @@
     },
     "visual_component": "NullRenderer",
     "raw_y_base": 500,
-    "y_base": 34,
+    "y_base": 10,
     "supported_forms": [
       "calculation"
     ],
@@ -2588,7 +2588,7 @@
     },
     "visual_component": "NullRenderer",
     "raw_y_base": 550,
-    "y_base": 38,
+    "y_base": 12,
     "supported_forms": [
       "calculation"
     ],
@@ -2626,7 +2626,7 @@
     },
     "visual_component": "NullRenderer",
     "raw_y_base": 550,
-    "y_base": 38,
+    "y_base": 12,
     "supported_forms": [
       "calculation"
     ],
@@ -2664,7 +2664,7 @@
     },
     "visual_component": "NullRenderer",
     "raw_y_base": 550,
-    "y_base": 38,
+    "y_base": 12,
     "supported_forms": [
       "calculation"
     ],
@@ -2703,7 +2703,7 @@
     },
     "visual_component": "NullRenderer",
     "raw_y_base": 500,
-    "y_base": 34,
+    "y_base": 10,
     "supported_forms": [
       "calculation"
     ],
@@ -2741,7 +2741,7 @@
     },
     "visual_component": "NullRenderer",
     "raw_y_base": 500,
-    "y_base": 34,
+    "y_base": 10,
     "supported_forms": [
       "calculation"
     ],
@@ -2779,7 +2779,7 @@
     },
     "visual_component": "NullRenderer",
     "raw_y_base": 500,
-    "y_base": 34,
+    "y_base": 10,
     "supported_forms": [
       "calculation"
     ],
@@ -2802,7 +2802,7 @@
       }
     },
     "visual_component": "NullRenderer",
-    "y_base": 34,
+    "y_base": 10,
     "supported_forms": [
       "word_problem"
     ],
@@ -2847,7 +2847,7 @@
     },
     "visual_component": "NullRenderer",
     "raw_y_base": 500,
-    "y_base": 34,
+    "y_base": 10,
     "supported_forms": [
       "calculation"
     ],
@@ -2876,7 +2876,7 @@
     },
     "visual_component": "Graph_Renderer",
     "raw_y_base": 550,
-    "y_base": 38,
+    "y_base": 12,
     "supported_forms": [
       "calculation",
       "word_problem"
@@ -2906,7 +2906,7 @@
     },
     "visual_component": "Graph_Renderer",
     "raw_y_base": 600,
-    "y_base": 42,
+    "y_base": 13,
     "supported_forms": [
       "calculation",
       "word_problem"
@@ -2936,7 +2936,7 @@
     },
     "visual_component": "Graph_Renderer",
     "raw_y_base": 550,
-    "y_base": 38,
+    "y_base": 12,
     "supported_forms": [
       "calculation",
       "word_problem"
@@ -2966,7 +2966,7 @@
     },
     "visual_component": "Graph_Renderer",
     "raw_y_base": 550,
-    "y_base": 38,
+    "y_base": 12,
     "supported_forms": [
       "calculation",
       "word_problem"
@@ -2996,7 +2996,7 @@
     },
     "visual_component": "Graph_Renderer",
     "raw_y_base": 550,
-    "y_base": 38,
+    "y_base": 12,
     "supported_forms": [
       "calculation",
       "word_problem"
@@ -3026,7 +3026,7 @@
     },
     "visual_component": "Graph_Renderer",
     "raw_y_base": 550,
-    "y_base": 38,
+    "y_base": 12,
     "supported_forms": [
       "calculation",
       "word_problem"
@@ -3060,7 +3060,7 @@
       }
     },
     "visual_component": "Graph_Renderer",
-    "y_base": 59,
+    "y_base": 18,
     "supported_forms": [
       "calculation"
     ],
@@ -3092,7 +3092,7 @@
     },
     "visual_component": "Graph_Renderer",
     "raw_y_base": 550,
-    "y_base": 38,
+    "y_base": 12,
     "supported_forms": [
       "calculation",
       "word_problem"
@@ -3124,7 +3124,7 @@
     },
     "visual_component": "Graph_Renderer",
     "raw_y_base": 550,
-    "y_base": 38,
+    "y_base": 12,
     "supported_forms": [
       "calculation",
       "word_problem"
@@ -3151,7 +3151,7 @@
     },
     "visual_component": "NullRenderer",
     "raw_y_base": 800,
-    "y_base": 59,
+    "y_base": 18,
     "supported_forms": [
       "word_problem"
     ],
@@ -3183,7 +3183,7 @@
       }
     },
     "visual_component": "2D_Geometry_Renderer",
-    "y_base": 38,
+    "y_base": 12,
     "supported_forms": [
       "word_problem"
     ],
@@ -3215,7 +3215,7 @@
     },
     "visual_component": "Graph_Renderer",
     "raw_y_base": 550,
-    "y_base": 38,
+    "y_base": 12,
     "supported_forms": [
       "calculation",
       "word_problem"
@@ -3243,7 +3243,7 @@
     },
     "visual_component": "2D_Geometry_Renderer",
     "raw_y_base": 500,
-    "y_base": 34,
+    "y_base": 10,
     "supported_forms": [
       "proof"
     ],
@@ -3270,7 +3270,7 @@
     },
     "visual_component": "2D_Geometry_Renderer",
     "raw_y_base": 600,
-    "y_base": 42,
+    "y_base": 13,
     "supported_forms": [
       "proof"
     ],
@@ -3298,7 +3298,7 @@
     },
     "visual_component": "2D_Geometry_Renderer",
     "raw_y_base": 600,
-    "y_base": 42,
+    "y_base": 13,
     "supported_forms": [
       "proof"
     ],
@@ -3324,7 +3324,7 @@
       }
     },
     "visual_component": "2D_Geometry_Renderer",
-    "y_base": 34,
+    "y_base": 10,
     "supported_forms": [
       "word_problem"
     ],
@@ -3355,7 +3355,7 @@
     },
     "visual_component": "2D_Geometry_Renderer",
     "raw_y_base": 500,
-    "y_base": 34,
+    "y_base": 10,
     "supported_forms": [
       "proof"
     ],
@@ -3382,7 +3382,7 @@
     },
     "visual_component": "2D_Geometry_Renderer",
     "raw_y_base": 600,
-    "y_base": 42,
+    "y_base": 13,
     "supported_forms": [
       "proof"
     ],
@@ -3410,7 +3410,7 @@
     },
     "visual_component": "2D_Geometry_Renderer",
     "raw_y_base": 500,
-    "y_base": 34,
+    "y_base": 10,
     "supported_forms": [
       "proof"
     ],
@@ -3437,7 +3437,7 @@
     },
     "visual_component": "2D_Geometry_Renderer",
     "raw_y_base": 600,
-    "y_base": 42,
+    "y_base": 13,
     "supported_forms": [
       "proof"
     ],
@@ -3465,7 +3465,7 @@
     },
     "visual_component": "2D_Geometry_Renderer",
     "raw_y_base": 600,
-    "y_base": 42,
+    "y_base": 13,
     "supported_forms": [
       "proof"
     ],
@@ -3492,7 +3492,7 @@
       }
     },
     "visual_component": "2D_Geometry_Renderer",
-    "y_base": 55,
+    "y_base": 16,
     "supported_forms": [
       "proof"
     ],
@@ -3522,7 +3522,7 @@
     },
     "visual_component": "2D_Geometry_Renderer",
     "raw_y_base": 650,
-    "y_base": 46,
+    "y_base": 14,
     "supported_forms": [
       "proof"
     ],
@@ -3566,7 +3566,7 @@
     },
     "visual_component": "2D_Geometry_Renderer",
     "raw_y_base": 550,
-    "y_base": 38,
+    "y_base": 12,
     "supported_forms": [
       "word_problem"
     ],
@@ -3610,7 +3610,7 @@
     },
     "visual_component": "2D_Geometry_Renderer",
     "raw_y_base": 650,
-    "y_base": 46,
+    "y_base": 14,
     "supported_forms": [
       "word_problem"
     ],
@@ -3638,7 +3638,7 @@
     },
     "visual_component": "2D_Geometry_Renderer",
     "raw_y_base": 550,
-    "y_base": 38,
+    "y_base": 12,
     "supported_forms": [
       "proof"
     ],
@@ -3666,7 +3666,7 @@
     },
     "visual_component": "2D_Geometry_Renderer",
     "raw_y_base": 650,
-    "y_base": 46,
+    "y_base": 14,
     "supported_forms": [
       "proof"
     ],
@@ -3693,7 +3693,7 @@
     },
     "visual_component": "2D_Geometry_Renderer",
     "raw_y_base": 650,
-    "y_base": 46,
+    "y_base": 14,
     "supported_forms": [
       "proof"
     ],
@@ -3737,7 +3737,7 @@
     },
     "visual_component": "2D_Geometry_Renderer",
     "raw_y_base": 550,
-    "y_base": 38,
+    "y_base": 12,
     "supported_forms": [
       "word_problem"
     ],
@@ -3764,7 +3764,7 @@
     },
     "visual_component": "2D_Geometry_Renderer",
     "raw_y_base": 650,
-    "y_base": 46,
+    "y_base": 14,
     "supported_forms": [
       "proof"
     ],
@@ -3808,7 +3808,7 @@
     },
     "visual_component": "2D_Geometry_Renderer",
     "raw_y_base": 650,
-    "y_base": 46,
+    "y_base": 14,
     "supported_forms": [
       "word_problem"
     ],
@@ -3852,7 +3852,7 @@
     },
     "visual_component": "2D_Geometry_Renderer",
     "raw_y_base": 550,
-    "y_base": 38,
+    "y_base": 12,
     "supported_forms": [
       "word_problem"
     ],
@@ -3892,7 +3892,7 @@
     },
     "visual_component": "Tree_Renderer",
     "raw_y_base": 450,
-    "y_base": 30,
+    "y_base": 9,
     "supported_forms": [
       "calculation",
       "word_problem"
@@ -3921,7 +3921,7 @@
       }
     },
     "visual_component": "Tree_Renderer",
-    "y_base": 34,
+    "y_base": 10,
     "supported_forms": [
       "calculation",
       "word_problem"
@@ -3965,7 +3965,7 @@
     },
     "visual_component": "Tree_Renderer",
     "raw_y_base": 500,
-    "y_base": 34,
+    "y_base": 10,
     "supported_forms": [
       "calculation",
       "word_problem"
@@ -4006,7 +4006,7 @@
     },
     "visual_component": "Tree_Renderer",
     "raw_y_base": 550,
-    "y_base": 38,
+    "y_base": 12,
     "supported_forms": [
       "calculation",
       "word_problem"
@@ -4047,7 +4047,7 @@
     },
     "visual_component": "Tree_Renderer",
     "raw_y_base": 350,
-    "y_base": 22,
+    "y_base": 7,
     "supported_forms": [
       "calculation",
       "word_problem"
@@ -4088,7 +4088,7 @@
     },
     "visual_component": "Tree_Renderer",
     "raw_y_base": 350,
-    "y_base": 22,
+    "y_base": 7,
     "supported_forms": [
       "calculation",
       "word_problem"
@@ -4129,7 +4129,7 @@
     },
     "visual_component": "Tree_Renderer",
     "raw_y_base": 350,
-    "y_base": 22,
+    "y_base": 7,
     "supported_forms": [
       "calculation",
       "word_problem"
@@ -4168,7 +4168,7 @@
     },
     "visual_component": "NullRenderer",
     "raw_y_base": 650,
-    "y_base": 46,
+    "y_base": 14,
     "supported_forms": [
       "calculation"
     ],
@@ -4206,7 +4206,7 @@
     },
     "visual_component": "NullRenderer",
     "raw_y_base": 650,
-    "y_base": 46,
+    "y_base": 14,
     "supported_forms": [
       "calculation"
     ],
@@ -4230,7 +4230,7 @@
       }
     },
     "visual_component": "NullRenderer",
-    "y_base": 46,
+    "y_base": 14,
     "supported_forms": [
       "calculation"
     ],
@@ -4271,7 +4271,7 @@
     },
     "visual_component": "NullRenderer",
     "raw_y_base": 650,
-    "y_base": 46,
+    "y_base": 14,
     "supported_forms": [
       "calculation"
     ],
@@ -4309,7 +4309,7 @@
     },
     "visual_component": "NullRenderer",
     "raw_y_base": 650,
-    "y_base": 46,
+    "y_base": 14,
     "supported_forms": [
       "calculation"
     ],
@@ -4347,7 +4347,7 @@
     },
     "visual_component": "NullRenderer",
     "raw_y_base": 700,
-    "y_base": 50,
+    "y_base": 15,
     "supported_forms": [
       "calculation"
     ],
@@ -4385,7 +4385,7 @@
     },
     "visual_component": "NullRenderer",
     "raw_y_base": 650,
-    "y_base": 46,
+    "y_base": 14,
     "supported_forms": [
       "calculation"
     ],
@@ -4413,7 +4413,7 @@
     },
     "visual_component": "NullRenderer",
     "raw_y_base": 900,
-    "y_base": 67,
+    "y_base": 20,
     "supported_forms": [
       "word_problem"
     ],
@@ -4441,7 +4441,7 @@
     },
     "visual_component": "NullRenderer",
     "raw_y_base": 900,
-    "y_base": 67,
+    "y_base": 20,
     "supported_forms": [
       "word_problem"
     ],
@@ -4469,7 +4469,7 @@
     },
     "visual_component": "NullRenderer",
     "raw_y_base": 900,
-    "y_base": 67,
+    "y_base": 20,
     "supported_forms": [
       "word_problem"
     ],
@@ -4507,7 +4507,7 @@
     },
     "visual_component": "NullRenderer",
     "raw_y_base": 650,
-    "y_base": 46,
+    "y_base": 14,
     "supported_forms": [
       "calculation"
     ],
@@ -4535,7 +4535,7 @@
     },
     "visual_component": "NullRenderer",
     "raw_y_base": 900,
-    "y_base": 67,
+    "y_base": 20,
     "supported_forms": [
       "word_problem"
     ],
@@ -4562,7 +4562,7 @@
     },
     "visual_component": "2D_Geometry_Renderer",
     "raw_y_base": 900,
-    "y_base": 67,
+    "y_base": 20,
     "supported_forms": [
       "proof"
     ],
@@ -4600,7 +4600,7 @@
     },
     "visual_component": "NullRenderer",
     "raw_y_base": 700,
-    "y_base": 50,
+    "y_base": 15,
     "supported_forms": [
       "calculation"
     ],
@@ -4638,7 +4638,7 @@
     },
     "visual_component": "NullRenderer",
     "raw_y_base": 700,
-    "y_base": 50,
+    "y_base": 15,
     "supported_forms": [
       "calculation"
     ],
@@ -4676,7 +4676,7 @@
     },
     "visual_component": "NullRenderer",
     "raw_y_base": 700,
-    "y_base": 50,
+    "y_base": 15,
     "supported_forms": [
       "calculation"
     ],
@@ -4714,7 +4714,7 @@
     },
     "visual_component": "NullRenderer",
     "raw_y_base": 700,
-    "y_base": 50,
+    "y_base": 15,
     "supported_forms": [
       "calculation"
     ],
@@ -4752,7 +4752,7 @@
     },
     "visual_component": "NullRenderer",
     "raw_y_base": 700,
-    "y_base": 50,
+    "y_base": 15,
     "supported_forms": [
       "calculation"
     ],
@@ -4775,7 +4775,7 @@
       }
     },
     "visual_component": "NullRenderer",
-    "y_base": 50,
+    "y_base": 15,
     "supported_forms": [
       "calculation"
     ],
@@ -4816,7 +4816,7 @@
     },
     "visual_component": "NullRenderer",
     "raw_y_base": 700,
-    "y_base": 50,
+    "y_base": 15,
     "supported_forms": [
       "calculation"
     ],
@@ -4844,7 +4844,7 @@
     },
     "visual_component": "NullRenderer",
     "raw_y_base": 950,
-    "y_base": 71,
+    "y_base": 21,
     "supported_forms": [
       "word_problem"
     ],
@@ -4882,7 +4882,7 @@
     },
     "visual_component": "NullRenderer",
     "raw_y_base": 750,
-    "y_base": 55,
+    "y_base": 16,
     "supported_forms": [
       "calculation"
     ],
@@ -4910,7 +4910,7 @@
     },
     "visual_component": "NullRenderer",
     "raw_y_base": 950,
-    "y_base": 71,
+    "y_base": 21,
     "supported_forms": [
       "word_problem"
     ],
@@ -4948,7 +4948,7 @@
     },
     "visual_component": "NullRenderer",
     "raw_y_base": 750,
-    "y_base": 55,
+    "y_base": 16,
     "supported_forms": [
       "calculation"
     ],
@@ -4986,7 +4986,7 @@
     },
     "visual_component": "NullRenderer",
     "raw_y_base": 800,
-    "y_base": 59,
+    "y_base": 18,
     "supported_forms": [
       "calculation"
     ],
@@ -5009,7 +5009,7 @@
       }
     },
     "visual_component": "NullRenderer",
-    "y_base": 75,
+    "y_base": 22,
     "supported_forms": [
       "calculation"
     ],
@@ -5050,7 +5050,7 @@
     },
     "visual_component": "NullRenderer",
     "raw_y_base": 800,
-    "y_base": 59,
+    "y_base": 18,
     "supported_forms": [
       "calculation"
     ],
@@ -5088,7 +5088,7 @@
     },
     "visual_component": "NullRenderer",
     "raw_y_base": 800,
-    "y_base": 59,
+    "y_base": 18,
     "supported_forms": [
       "calculation"
     ],
@@ -5114,7 +5114,7 @@
     },
     "visual_component": "NullRenderer",
     "raw_y_base": 1000,
-    "y_base": 75,
+    "y_base": 22,
     "supported_forms": [
       "word_problem"
     ],
@@ -5140,7 +5140,7 @@
     },
     "visual_component": "NullRenderer",
     "raw_y_base": 1000,
-    "y_base": 75,
+    "y_base": 22,
     "supported_forms": [
       "word_problem"
     ],
@@ -5173,7 +5173,7 @@
     },
     "visual_component": "2D_Geometry_Renderer",
     "raw_y_base": 1000,
-    "y_base": 75,
+    "y_base": 22,
     "supported_forms": [
       "word_problem"
     ],
@@ -5204,7 +5204,7 @@
     },
     "visual_component": "Graph_Renderer",
     "raw_y_base": 700,
-    "y_base": 50,
+    "y_base": 15,
     "supported_forms": [
       "calculation",
       "word_problem"
@@ -5236,7 +5236,7 @@
     },
     "visual_component": "Graph_Renderer",
     "raw_y_base": 700,
-    "y_base": 50,
+    "y_base": 15,
     "supported_forms": [
       "calculation",
       "word_problem"
@@ -5268,7 +5268,7 @@
     },
     "visual_component": "Graph_Renderer",
     "raw_y_base": 700,
-    "y_base": 50,
+    "y_base": 15,
     "supported_forms": [
       "calculation",
       "word_problem"
@@ -5300,7 +5300,7 @@
     },
     "visual_component": "Graph_Renderer",
     "raw_y_base": 700,
-    "y_base": 50,
+    "y_base": 15,
     "supported_forms": [
       "calculation",
       "word_problem"
@@ -5332,7 +5332,7 @@
     },
     "visual_component": "Graph_Renderer",
     "raw_y_base": 950,
-    "y_base": 71,
+    "y_base": 21,
     "supported_forms": [
       "calculation",
       "word_problem"
@@ -5361,7 +5361,7 @@
       "IntersectVerb": {}
     },
     "visual_component": "Graph_Renderer",
-    "y_base": 50,
+    "y_base": 15,
     "supported_forms": [
       "word_problem",
       "calculation"
@@ -5400,7 +5400,7 @@
     },
     "visual_component": "2D_Geometry_Renderer",
     "raw_y_base": 700,
-    "y_base": 50,
+    "y_base": 15,
     "supported_forms": [
       "word_problem"
     ],
@@ -5427,7 +5427,7 @@
     },
     "visual_component": "2D_Geometry_Renderer",
     "raw_y_base": 900,
-    "y_base": 67,
+    "y_base": 20,
     "supported_forms": [
       "proof"
     ],
@@ -5455,7 +5455,7 @@
     },
     "visual_component": "2D_Geometry_Renderer",
     "raw_y_base": 800,
-    "y_base": 59,
+    "y_base": 18,
     "supported_forms": [
       "proof"
     ],
@@ -5482,7 +5482,7 @@
     },
     "visual_component": "2D_Geometry_Renderer",
     "raw_y_base": 900,
-    "y_base": 67,
+    "y_base": 20,
     "supported_forms": [
       "proof"
     ],
@@ -5509,7 +5509,7 @@
     },
     "visual_component": "2D_Geometry_Renderer",
     "raw_y_base": 900,
-    "y_base": 67,
+    "y_base": 20,
     "supported_forms": [
       "proof"
     ],
@@ -5536,7 +5536,7 @@
     },
     "visual_component": "2D_Geometry_Renderer",
     "raw_y_base": 1050,
-    "y_base": 79,
+    "y_base": 23,
     "supported_forms": [
       "proof"
     ],
@@ -5563,7 +5563,7 @@
     },
     "visual_component": "2D_Geometry_Renderer",
     "raw_y_base": 1050,
-    "y_base": 79,
+    "y_base": 23,
     "supported_forms": [
       "proof"
     ],
@@ -5590,7 +5590,7 @@
     },
     "visual_component": "2D_Geometry_Renderer",
     "raw_y_base": 800,
-    "y_base": 59,
+    "y_base": 18,
     "supported_forms": [
       "proof"
     ],
@@ -5618,7 +5618,7 @@
     },
     "visual_component": "2D_Geometry_Renderer",
     "raw_y_base": 800,
-    "y_base": 59,
+    "y_base": 18,
     "supported_forms": [
       "proof"
     ],
@@ -5644,7 +5644,7 @@
       }
     },
     "visual_component": "2D_Geometry_Renderer",
-    "y_base": 63,
+    "y_base": 19,
     "supported_forms": [
       "word_problem"
     ],
@@ -5681,7 +5681,7 @@
     },
     "visual_component": "2D_Geometry_Renderer",
     "raw_y_base": 850,
-    "y_base": 63,
+    "y_base": 19,
     "supported_forms": [
       "word_problem"
     ],
@@ -5708,7 +5708,7 @@
     },
     "visual_component": "2D_Geometry_Renderer",
     "raw_y_base": 1000,
-    "y_base": 75,
+    "y_base": 22,
     "supported_forms": [
       "proof"
     ],
@@ -5742,7 +5742,7 @@
     },
     "visual_component": "2D_Geometry_Renderer",
     "raw_y_base": 750,
-    "y_base": 55,
+    "y_base": 16,
     "supported_forms": [
       "word_problem"
     ],
@@ -5767,7 +5767,7 @@
       }
     },
     "visual_component": "2D_Geometry_Renderer",
-    "y_base": 75,
+    "y_base": 22,
     "supported_forms": [
       "word_problem"
     ],
@@ -5794,7 +5794,7 @@
       }
     },
     "visual_component": "2D_Geometry_Renderer",
-    "y_base": 75,
+    "y_base": 22,
     "supported_forms": [
       "word_problem"
     ],
@@ -5821,7 +5821,7 @@
       }
     },
     "visual_component": "2D_Geometry_Renderer",
-    "y_base": 88,
+    "y_base": 26,
     "supported_forms": [
       "word_problem"
     ],
@@ -5849,7 +5849,7 @@
       }
     },
     "visual_component": "Graph_Renderer",
-    "y_base": 67,
+    "y_base": 20,
     "supported_forms": [
       "word_problem"
     ],
@@ -5885,7 +5885,7 @@
       }
     },
     "visual_component": "3D_Renderer",
-    "y_base": 88,
+    "y_base": 26,
     "supported_forms": [
       "word_problem"
     ],
@@ -5918,7 +5918,7 @@
       }
     },
     "visual_component": "3D_Renderer",
-    "y_base": 100,
+    "y_base": 29,
     "supported_forms": [
       "word_problem"
     ],
@@ -5961,7 +5961,7 @@
     },
     "visual_component": "Tree_Renderer",
     "raw_y_base": 600,
-    "y_base": 42,
+    "y_base": 13,
     "supported_forms": [
       "calculation",
       "word_problem"
@@ -6002,7 +6002,7 @@
     },
     "visual_component": "Tree_Renderer",
     "raw_y_base": 600,
-    "y_base": 42,
+    "y_base": 13,
     "supported_forms": [
       "calculation",
       "word_problem"
@@ -6043,7 +6043,7 @@
     },
     "visual_component": "Tree_Renderer",
     "raw_y_base": 600,
-    "y_base": 42,
+    "y_base": 13,
     "supported_forms": [
       "calculation",
       "word_problem"
@@ -6084,7 +6084,7 @@
     },
     "visual_component": "Tree_Renderer",
     "raw_y_base": 850,
-    "y_base": 63,
+    "y_base": 19,
     "supported_forms": [
       "calculation",
       "word_problem"

@@ -38,8 +38,11 @@ def get_form_range(raw_y_base: int, problem_form: str) -> Tuple[int, int]:
     form_bonus = FORM_RAW_BONUS.get(problem_form, 0)
     base_raw = raw_y_base + form_bonus
     # 最小: ベーススコアのみ（追加ファクターゼロ）
-    # 最大: ベース + 全ファクター最大（steps+digits+unit_mix）
-    max_delta_raw = 500 + 300 + 500  # step(500) + digit(300) + unit_mix(500)
+    # 最大: ベース + 単一単元で加算可能なファクターのみ（unit_mix・subquestion は除外）
+    # → unit_mix(+500)・subquestion(+600) は複数単元を組み合わせた場合のみ加算
+    # → 単一単元では difficulty 100 に到達できない設計
+    # step(500) + digit(300) + no_figure(300) = 1100
+    max_delta_raw = 500 + 300 + 300  # = 1100
     lo = normalize(base_raw)
     hi = normalize(min(RAW_MAX_FULL, base_raw + max_delta_raw))
     return lo, hi
