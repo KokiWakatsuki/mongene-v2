@@ -181,27 +181,20 @@
       onLessonChange();
     }
 
-    // §12.4: 問題形式別の delta レンジ
-    // 計算問題: 数値・式が全部与えられ計算するだけ → 狭い範囲（y_base±5）
-    // 文章題:   場面設定から式を立てる → 計算問題より広く難しくなれる（y_base-5〜+15）
-    // 証明:     論理的推論が必要で常に一定の難しさ → 最低 y_base+3
-    const FORM_DELTA = {
-      calculation:  { lo: -5, hi:  5 },
-      word_problem: { lo: -5, hi: 15 },
-      proof:        { lo:  3, hi: 15 },
-    };
-
-    function updateSliderForForm() {
+    // Raw Score モデル: 難易度レンジは /problems/difficulty-range API から取得
+    // (implementation_plan.md: 大単元100-900 + 小単元0-400 + 形式0-800 → 正規化1-100)
+    async function updateSliderForForm() {
       const opt = $('lesson').options[$('lesson').selectedIndex];
       if (!opt) return;
-      const y = parseInt(opt.dataset.y, 10);
-      if (isNaN(y)) return;
+      const lessonId = opt.value;
       const form = $('form').value;
-      const delta = FORM_DELTA[form] || { lo: -15, hi: 15 };
-      const lo = Math.max(1, y + delta.lo);
-      const hi = Math.min(100, y + delta.hi);
+      const y = parseInt(opt.dataset.y, 10);
+      let lo = Math.max(1, y - 5), hi = Math.min(100, y + 15);
+      try {
+        const res = await fetch(`/problems/difficulty-range/${lessonId}?form=${form}`);
+        if (res.ok) { const d = await res.json(); lo = d.min_difficulty; hi = d.max_difficulty; }
+      } catch (_) {}
       const slider = $('difficulty');
-      // 現在値を範囲内にクランプ
       const cur = parseInt(slider.value, 10);
       slider.min = lo; slider.max = hi;
       slider.value = Math.min(hi, Math.max(lo, isNaN(cur) ? y : cur));

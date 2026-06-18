@@ -28,7 +28,8 @@
       }
     },
     "visual_component": "NullRenderer",
-    "y_base": 11,
+    "raw_y_base": 100,
+    "y_base": 1,
     "supported_forms": [
       "calculation"
     ],
@@ -65,7 +66,8 @@
       }
     },
     "visual_component": "NullRenderer",
-    "y_base": 12,
+    "raw_y_base": 100,
+    "y_base": 1,
     "supported_forms": [
       "calculation"
     ],
@@ -102,7 +104,8 @@
       }
     },
     "visual_component": "NullRenderer",
-    "y_base": 12,
+    "raw_y_base": 100,
+    "y_base": 1,
     "supported_forms": [
       "calculation"
     ],
@@ -139,7 +142,8 @@
       }
     },
     "visual_component": "NullRenderer",
-    "y_base": 13,
+    "raw_y_base": 100,
+    "y_base": 1,
     "supported_forms": [
       "calculation"
     ],
@@ -165,12 +169,13 @@
       }
     },
     "visual_component": "NullRenderer",
-    "y_base": 13,
+    "y_base": 5,
     "supported_forms": [
       "calculation"
     ],
     "domain": "数と式",
     "large_unit": "正の数・負の数",
+    "raw_y_base": 150,
     "is_clean_override": {
       "disabled": true
     }
@@ -204,7 +209,8 @@
       }
     },
     "visual_component": "NullRenderer",
-    "y_base": 15,
+    "raw_y_base": 100,
+    "y_base": 1,
     "supported_forms": [
       "calculation"
     ],
@@ -241,7 +247,8 @@
       }
     },
     "visual_component": "NullRenderer",
-    "y_base": 18,
+    "raw_y_base": 150,
+    "y_base": 5,
     "supported_forms": [
       "calculation"
     ],
@@ -278,7 +285,8 @@
       }
     },
     "visual_component": "NullRenderer",
-    "y_base": 17,
+    "raw_y_base": 200,
+    "y_base": 9,
     "supported_forms": [
       "calculation"
     ],
@@ -302,12 +310,13 @@
       }
     },
     "visual_component": "NullRenderer",
-    "y_base": 15,
+    "y_base": 5,
     "supported_forms": [
       "calculation"
     ],
     "domain": "数と式",
     "large_unit": "正の数・負の数",
+    "raw_y_base": 150,
     "is_clean_override": {
       "disabled": true
     }
@@ -341,7 +350,8 @@
       }
     },
     "visual_component": "NullRenderer",
-    "y_base": 20,
+    "raw_y_base": 150,
+    "y_base": 5,
     "supported_forms": [
       "calculation"
     ],
@@ -379,7 +389,8 @@
       }
     },
     "visual_component": "NullRenderer",
-    "y_base": 19,
+    "raw_y_base": 100,
+    "y_base": 1,
     "supported_forms": [
       "calculation"
     ],
@@ -416,7 +427,8 @@
       }
     },
     "visual_component": "NullRenderer",
-    "y_base": 20,
+    "raw_y_base": 100,
+    "y_base": 1,
     "supported_forms": [
       "calculation"
     ],
@@ -453,7 +465,8 @@
       }
     },
     "visual_component": "NullRenderer",
-    "y_base": 11,
+    "raw_y_base": 150,
+    "y_base": 5,
     "supported_forms": [
       "calculation"
     ],
@@ -490,7 +503,8 @@
       }
     },
     "visual_component": "NullRenderer",
-    "y_base": 12,
+    "raw_y_base": 150,
+    "y_base": 5,
     "supported_forms": [
       "calculation"
     ],
@@ -527,7 +541,8 @@
       }
     },
     "visual_component": "NullRenderer",
-    "y_base": 13,
+    "raw_y_base": 150,
+    "y_base": 5,
     "supported_forms": [
       "calculation"
     ],
@@ -564,7 +579,8 @@
       }
     },
     "visual_component": "NullRenderer",
-    "y_base": 14,
+    "raw_y_base": 150,
+    "y_base": 5,
     "supported_forms": [
       "calculation"
     ],
@@ -601,7 +617,8 @@
       }
     },
     "visual_component": "NullRenderer",
-    "y_base": 16,
+    "raw_y_base": 150,
+    "y_base": 5,
     "supported_forms": [
       "calculation"
     ],
@@ -638,7 +655,8 @@
       }
     },
     "visual_component": "NullRenderer",
-    "y_base": 17,
+    "raw_y_base": 150,
+    "y_base": 5,
     "supported_forms": [
       "calculation"
     ],
@@ -675,7 +693,8 @@
       }
     },
     "visual_component": "NullRenderer",
-    "y_base": 18,
+    "raw_y_base": 150,
+    "y_base": 5,
     "supported_forms": [
       "calculation"
     ],
@@ -712,7 +731,8 @@
       }
     },
     "visual_component": "NullRenderer",
-    "y_base": 19,
+    "raw_y_base": 150,
+    "y_base": 5,
     "supported_forms": [
       "calculation"
     ],
@@ -749,7 +769,8 @@
       }
     },
     "visual_component": "NullRenderer",
-    "y_base": 20,
+    "raw_y_base": 150,
+    "y_base": 5,
     "supported_forms": [
       "calculation"
     ],
@@ -786,7 +807,8 @@
       }
     },
     "visual_component": "NullRenderer",
-    "y_base": 11,
+    "raw_y_base": 350,
+    "y_base": 22,
     "supported_forms": [
       "calculation"
     ],
@@ -823,7 +845,8 @@
       }
     },
     "visual_component": "NullRenderer",
-    "y_base": 15,
+    "raw_y_base": 300,
+    "y_base": 18,
     "supported_forms": [
       "calculation"
     ],
@@ -861,7 +884,8 @@
       }
     },
     "visual_component": "NullRenderer",
-    "y_base": 14,
+    "raw_y_base": 250,
+    "y_base": 13,
     "supported_forms": [
       "calculation"
     ],
@@ -893,6 +917,7 @@
       }
     },
     "visual_component": "Graph_Renderer",
+    "raw_y_base": 300,
     "y_base": 18,
     "supported_forms": [
       "calculation",
@@ -917,7 +942,7 @@
       }
     },
     "visual_component": "NullRenderer",
-    "y_base": 19,
+    "y_base": 34,
     "supported_forms": [
       "word_problem"
     ],
@@ -927,6 +952,7 @@
     ],
     "domain": "数と式",
     "large_unit": "一次方程式",
+    "raw_y_base": 500,
     "is_clean_override": {
       "disabled": true
     }
@@ -950,7 +976,8 @@
       }
     },
     "visual_component": "NullRenderer",
-    "y_base": 24,
+    "raw_y_base": 500,
+    "y_base": 34,
     "supported_forms": [
       "word_problem"
     ],
@@ -977,7 +1004,8 @@
       }
     },
     "visual_component": "NullRenderer",
-    "y_base": 25,
+    "raw_y_base": 500,
+    "y_base": 34,
     "supported_forms": [
       "word_problem"
     ],
@@ -1008,7 +1036,8 @@
       }
     },
     "visual_component": "Graph_Renderer",
-    "y_base": 16,
+    "raw_y_base": 300,
+    "y_base": 18,
     "supported_forms": [
       "calculation",
       "word_problem"
@@ -1040,7 +1069,8 @@
       }
     },
     "visual_component": "Graph_Renderer",
-    "y_base": 17,
+    "raw_y_base": 300,
+    "y_base": 18,
     "supported_forms": [
       "calculation",
       "word_problem"
@@ -1072,6 +1102,7 @@
       }
     },
     "visual_component": "Graph_Renderer",
+    "raw_y_base": 300,
     "y_base": 18,
     "supported_forms": [
       "calculation",
@@ -1098,13 +1129,14 @@
       }
     },
     "visual_component": "Graph_Renderer",
-    "y_base": 16,
+    "y_base": 18,
     "supported_forms": [
       "calculation",
       "word_problem"
     ],
     "domain": "関数",
     "large_unit": "比例と反比例",
+    "raw_y_base": 300,
     "is_clean_override": {
       "disabled": true
     }
@@ -1132,7 +1164,8 @@
       }
     },
     "visual_component": "Graph_Renderer",
-    "y_base": 21,
+    "raw_y_base": 300,
+    "y_base": 18,
     "supported_forms": [
       "calculation",
       "word_problem"
@@ -1164,7 +1197,8 @@
       }
     },
     "visual_component": "Graph_Renderer",
-    "y_base": 22,
+    "raw_y_base": 300,
+    "y_base": 18,
     "supported_forms": [
       "calculation",
       "word_problem"
@@ -1196,7 +1230,8 @@
       }
     },
     "visual_component": "Graph_Renderer",
-    "y_base": 23,
+    "raw_y_base": 300,
+    "y_base": 18,
     "supported_forms": [
       "calculation",
       "word_problem"
@@ -1228,7 +1263,8 @@
       }
     },
     "visual_component": "Graph_Renderer",
-    "y_base": 24,
+    "raw_y_base": 300,
+    "y_base": 18,
     "supported_forms": [
       "calculation",
       "word_problem"
@@ -1260,7 +1296,8 @@
       }
     },
     "visual_component": "Graph_Renderer",
-    "y_base": 30,
+    "raw_y_base": 550,
+    "y_base": 38,
     "supported_forms": [
       "calculation",
       "word_problem"
@@ -1302,7 +1339,8 @@
       }
     },
     "visual_component": "2D_Geometry_Renderer",
-    "y_base": 19,
+    "raw_y_base": 350,
+    "y_base": 22,
     "supported_forms": [
       "word_problem"
     ],
@@ -1343,7 +1381,8 @@
       }
     },
     "visual_component": "2D_Geometry_Renderer",
-    "y_base": 20,
+    "raw_y_base": 350,
+    "y_base": 22,
     "supported_forms": [
       "word_problem"
     ],
@@ -1384,7 +1423,8 @@
       }
     },
     "visual_component": "2D_Geometry_Renderer",
-    "y_base": 21,
+    "raw_y_base": 350,
+    "y_base": 22,
     "supported_forms": [
       "word_problem"
     ],
@@ -1425,6 +1465,7 @@
       }
     },
     "visual_component": "2D_Geometry_Renderer",
+    "raw_y_base": 350,
     "y_base": 22,
     "supported_forms": [
       "word_problem"
@@ -1451,12 +1492,13 @@
       }
     },
     "visual_component": "2D_Geometry_Renderer",
-    "y_base": 17,
+    "y_base": 30,
     "supported_forms": [
       "word_problem"
     ],
     "domain": "図形",
     "large_unit": "平面図形",
+    "raw_y_base": 450,
     "is_clean_override": {
       "disabled": true
     }
@@ -1486,7 +1528,8 @@
       }
     },
     "visual_component": "2D_Geometry_Renderer",
-    "y_base": 24,
+    "raw_y_base": 450,
+    "y_base": 30,
     "supported_forms": [
       "word_problem"
     ],
@@ -1519,7 +1562,8 @@
       }
     },
     "visual_component": "2D_Geometry_Renderer",
-    "y_base": 25,
+    "raw_y_base": 450,
+    "y_base": 30,
     "supported_forms": [
       "word_problem"
     ],
@@ -1552,7 +1596,8 @@
       }
     },
     "visual_component": "2D_Geometry_Renderer",
-    "y_base": 31,
+    "raw_y_base": 600,
+    "y_base": 42,
     "supported_forms": [
       "word_problem"
     ],
@@ -1596,7 +1641,8 @@
       }
     },
     "visual_component": "2D_Geometry_Renderer",
-    "y_base": 27,
+    "raw_y_base": 450,
+    "y_base": 30,
     "supported_forms": [
       "word_problem"
     ],
@@ -1629,12 +1675,13 @@
       }
     },
     "visual_component": "2D_Geometry_Renderer",
-    "y_base": 19,
+    "y_base": 26,
     "supported_forms": [
       "word_problem"
     ],
     "domain": "図形",
     "large_unit": "平面図形",
+    "raw_y_base": 400,
     "is_clean_override": {
       "disabled": true
     }
@@ -1674,7 +1721,8 @@
       }
     },
     "visual_component": "2D_Geometry_Renderer",
-    "y_base": 19,
+    "raw_y_base": 400,
+    "y_base": 26,
     "supported_forms": [
       "word_problem"
     ],
@@ -1717,7 +1765,8 @@
       }
     },
     "visual_component": "2D_Geometry_Renderer",
-    "y_base": 21,
+    "raw_y_base": 400,
+    "y_base": 26,
     "supported_forms": [
       "word_problem"
     ],
@@ -1748,7 +1797,8 @@
       }
     },
     "visual_component": "3D_Renderer",
-    "y_base": 22,
+    "raw_y_base": 400,
+    "y_base": 26,
     "supported_forms": [
       "word_problem"
     ],
@@ -1791,7 +1841,8 @@
       }
     },
     "visual_component": "2D_Geometry_Renderer",
-    "y_base": 24,
+    "raw_y_base": 400,
+    "y_base": 26,
     "supported_forms": [
       "word_problem"
     ],
@@ -1823,7 +1874,8 @@
       }
     },
     "visual_component": "3D_Renderer",
-    "y_base": 30,
+    "raw_y_base": 650,
+    "y_base": 46,
     "supported_forms": [
       "word_problem"
     ],
@@ -1850,12 +1902,13 @@
       }
     },
     "visual_component": "3D_Renderer",
-    "y_base": 19,
+    "y_base": 26,
     "supported_forms": [
       "word_problem"
     ],
     "domain": "図形",
     "large_unit": "空間図形",
+    "raw_y_base": 400,
     "is_clean_override": {
       "disabled": true
     }
@@ -1895,7 +1948,8 @@
       }
     },
     "visual_component": "2D_Geometry_Renderer",
-    "y_base": 28,
+    "raw_y_base": 400,
+    "y_base": 26,
     "supported_forms": [
       "word_problem"
     ],
@@ -1929,12 +1983,13 @@
       }
     },
     "visual_component": "Table_&_Chart_Renderer",
-    "y_base": 14,
+    "y_base": 9,
     "supported_forms": [
       "calculation"
     ],
     "domain": "データの活用",
     "large_unit": "データの分布と統計的探究",
+    "raw_y_base": 200,
     "is_clean_override": {
       "disabled": true
     }
@@ -1968,7 +2023,8 @@
       }
     },
     "visual_component": "Tree_Renderer",
-    "y_base": 17,
+    "raw_y_base": 200,
+    "y_base": 9,
     "supported_forms": [
       "calculation",
       "word_problem"
@@ -2006,7 +2062,8 @@
       }
     },
     "visual_component": "Tree_Renderer",
-    "y_base": 19,
+    "raw_y_base": 200,
+    "y_base": 9,
     "supported_forms": [
       "calculation",
       "word_problem"
@@ -2044,7 +2101,8 @@
       }
     },
     "visual_component": "Tree_Renderer",
-    "y_base": 21,
+    "raw_y_base": 200,
+    "y_base": 9,
     "supported_forms": [
       "calculation",
       "word_problem"
@@ -2082,7 +2140,8 @@
       }
     },
     "visual_component": "Tree_Renderer",
-    "y_base": 23,
+    "raw_y_base": 200,
+    "y_base": 9,
     "supported_forms": [
       "calculation",
       "word_problem"
@@ -2122,7 +2181,8 @@
       }
     },
     "visual_component": "Tree_Renderer",
-    "y_base": 23,
+    "raw_y_base": 200,
+    "y_base": 9,
     "supported_forms": [
       "calculation",
       "word_problem"
@@ -2160,7 +2220,8 @@
       }
     },
     "visual_component": "NullRenderer",
-    "y_base": 31,
+    "raw_y_base": 450,
+    "y_base": 30,
     "supported_forms": [
       "calculation"
     ],
@@ -2197,7 +2258,8 @@
       }
     },
     "visual_component": "NullRenderer",
-    "y_base": 32,
+    "raw_y_base": 450,
+    "y_base": 30,
     "supported_forms": [
       "calculation"
     ],
@@ -2234,7 +2296,8 @@
       }
     },
     "visual_component": "NullRenderer",
-    "y_base": 35,
+    "raw_y_base": 500,
+    "y_base": 34,
     "supported_forms": [
       "calculation"
     ],
@@ -2271,7 +2334,8 @@
       }
     },
     "visual_component": "NullRenderer",
-    "y_base": 34,
+    "raw_y_base": 450,
+    "y_base": 30,
     "supported_forms": [
       "calculation"
     ],
@@ -2308,7 +2372,8 @@
       }
     },
     "visual_component": "NullRenderer",
-    "y_base": 36,
+    "raw_y_base": 450,
+    "y_base": 30,
     "supported_forms": [
       "calculation"
     ],
@@ -2345,7 +2410,8 @@
       }
     },
     "visual_component": "NullRenderer",
-    "y_base": 39,
+    "raw_y_base": 500,
+    "y_base": 34,
     "supported_forms": [
       "calculation"
     ],
@@ -2382,6 +2448,7 @@
       }
     },
     "visual_component": "NullRenderer",
+    "raw_y_base": 550,
     "y_base": 38,
     "supported_forms": [
       "calculation"
@@ -2419,7 +2486,8 @@
       }
     },
     "visual_component": "NullRenderer",
-    "y_base": 39,
+    "raw_y_base": 550,
+    "y_base": 38,
     "supported_forms": [
       "calculation"
     ],
@@ -2441,12 +2509,13 @@
       }
     },
     "visual_component": "NullRenderer",
-    "y_base": 34,
+    "y_base": 30,
     "supported_forms": [
       "calculation"
     ],
     "domain": "数と式",
     "large_unit": "式の計算",
+    "raw_y_base": 450,
     "is_clean_override": {
       "disabled": true
     }
@@ -2480,7 +2549,8 @@
       }
     },
     "visual_component": "NullRenderer",
-    "y_base": 31,
+    "raw_y_base": 500,
+    "y_base": 34,
     "supported_forms": [
       "calculation"
     ],
@@ -2517,7 +2587,8 @@
       }
     },
     "visual_component": "NullRenderer",
-    "y_base": 34,
+    "raw_y_base": 550,
+    "y_base": 38,
     "supported_forms": [
       "calculation"
     ],
@@ -2554,7 +2625,8 @@
       }
     },
     "visual_component": "NullRenderer",
-    "y_base": 35,
+    "raw_y_base": 550,
+    "y_base": 38,
     "supported_forms": [
       "calculation"
     ],
@@ -2591,7 +2663,8 @@
       }
     },
     "visual_component": "NullRenderer",
-    "y_base": 36,
+    "raw_y_base": 550,
+    "y_base": 38,
     "supported_forms": [
       "calculation"
     ],
@@ -2629,7 +2702,8 @@
       }
     },
     "visual_component": "NullRenderer",
-    "y_base": 36,
+    "raw_y_base": 500,
+    "y_base": 34,
     "supported_forms": [
       "calculation"
     ],
@@ -2666,7 +2740,8 @@
       }
     },
     "visual_component": "NullRenderer",
-    "y_base": 37,
+    "raw_y_base": 500,
+    "y_base": 34,
     "supported_forms": [
       "calculation"
     ],
@@ -2703,7 +2778,8 @@
       }
     },
     "visual_component": "NullRenderer",
-    "y_base": 38,
+    "raw_y_base": 500,
+    "y_base": 34,
     "supported_forms": [
       "calculation"
     ],
@@ -2726,7 +2802,7 @@
       }
     },
     "visual_component": "NullRenderer",
-    "y_base": 40,
+    "y_base": 34,
     "supported_forms": [
       "word_problem"
     ],
@@ -2736,6 +2812,7 @@
     ],
     "domain": "数と式",
     "large_unit": "連立方程式",
+    "raw_y_base": 500,
     "is_clean_override": {
       "disabled": true
     }
@@ -2769,7 +2846,8 @@
       }
     },
     "visual_component": "NullRenderer",
-    "y_base": 40,
+    "raw_y_base": 500,
+    "y_base": 34,
     "supported_forms": [
       "calculation"
     ],
@@ -2797,7 +2875,8 @@
       }
     },
     "visual_component": "Graph_Renderer",
-    "y_base": 36,
+    "raw_y_base": 550,
+    "y_base": 38,
     "supported_forms": [
       "calculation",
       "word_problem"
@@ -2826,7 +2905,8 @@
       }
     },
     "visual_component": "Graph_Renderer",
-    "y_base": 39,
+    "raw_y_base": 600,
+    "y_base": 42,
     "supported_forms": [
       "calculation",
       "word_problem"
@@ -2855,6 +2935,7 @@
       }
     },
     "visual_component": "Graph_Renderer",
+    "raw_y_base": 550,
     "y_base": 38,
     "supported_forms": [
       "calculation",
@@ -2884,6 +2965,7 @@
       }
     },
     "visual_component": "Graph_Renderer",
+    "raw_y_base": 550,
     "y_base": 38,
     "supported_forms": [
       "calculation",
@@ -2913,7 +2995,8 @@
       }
     },
     "visual_component": "Graph_Renderer",
-    "y_base": 39,
+    "raw_y_base": 550,
+    "y_base": 38,
     "supported_forms": [
       "calculation",
       "word_problem"
@@ -2942,7 +3025,8 @@
       }
     },
     "visual_component": "Graph_Renderer",
-    "y_base": 40,
+    "raw_y_base": 550,
+    "y_base": 38,
     "supported_forms": [
       "calculation",
       "word_problem"
@@ -2976,12 +3060,13 @@
       }
     },
     "visual_component": "Graph_Renderer",
-    "y_base": 37,
+    "y_base": 59,
     "supported_forms": [
       "calculation"
     ],
     "domain": "関数",
     "large_unit": "1次関数",
+    "raw_y_base": 800,
     "is_clean_override": {
       "disabled": true
     }
@@ -3006,7 +3091,8 @@
       }
     },
     "visual_component": "Graph_Renderer",
-    "y_base": 42,
+    "raw_y_base": 550,
+    "y_base": 38,
     "supported_forms": [
       "calculation",
       "word_problem"
@@ -3037,7 +3123,8 @@
       }
     },
     "visual_component": "Graph_Renderer",
-    "y_base": 42,
+    "raw_y_base": 550,
+    "y_base": 38,
     "supported_forms": [
       "calculation",
       "word_problem"
@@ -3063,7 +3150,8 @@
       }
     },
     "visual_component": "NullRenderer",
-    "y_base": 48,
+    "raw_y_base": 800,
+    "y_base": 59,
     "supported_forms": [
       "word_problem"
     ],
@@ -3095,12 +3183,13 @@
       }
     },
     "visual_component": "2D_Geometry_Renderer",
-    "y_base": 44,
+    "y_base": 38,
     "supported_forms": [
       "word_problem"
     ],
     "domain": "関数",
     "large_unit": "1次関数",
+    "raw_y_base": 550,
     "is_clean_override": {
       "disabled": true
     }
@@ -3125,7 +3214,8 @@
       }
     },
     "visual_component": "Graph_Renderer",
-    "y_base": 45,
+    "raw_y_base": 550,
+    "y_base": 38,
     "supported_forms": [
       "calculation",
       "word_problem"
@@ -3152,7 +3242,8 @@
       }
     },
     "visual_component": "2D_Geometry_Renderer",
-    "y_base": 39,
+    "raw_y_base": 500,
+    "y_base": 34,
     "supported_forms": [
       "proof"
     ],
@@ -3178,7 +3269,8 @@
       }
     },
     "visual_component": "2D_Geometry_Renderer",
-    "y_base": 40,
+    "raw_y_base": 600,
+    "y_base": 42,
     "supported_forms": [
       "proof"
     ],
@@ -3205,7 +3297,8 @@
       }
     },
     "visual_component": "2D_Geometry_Renderer",
-    "y_base": 41,
+    "raw_y_base": 600,
+    "y_base": 42,
     "supported_forms": [
       "proof"
     ],
@@ -3231,12 +3324,13 @@
       }
     },
     "visual_component": "2D_Geometry_Renderer",
-    "y_base": 41,
+    "y_base": 34,
     "supported_forms": [
       "word_problem"
     ],
     "domain": "図形",
     "large_unit": "平行と合同",
+    "raw_y_base": 500,
     "is_clean_override": {
       "disabled": true
     }
@@ -3260,7 +3354,8 @@
       }
     },
     "visual_component": "2D_Geometry_Renderer",
-    "y_base": 43,
+    "raw_y_base": 500,
+    "y_base": 34,
     "supported_forms": [
       "proof"
     ],
@@ -3286,7 +3381,8 @@
       }
     },
     "visual_component": "2D_Geometry_Renderer",
-    "y_base": 44,
+    "raw_y_base": 600,
+    "y_base": 42,
     "supported_forms": [
       "proof"
     ],
@@ -3313,7 +3409,8 @@
       }
     },
     "visual_component": "2D_Geometry_Renderer",
-    "y_base": 45,
+    "raw_y_base": 500,
+    "y_base": 34,
     "supported_forms": [
       "proof"
     ],
@@ -3339,7 +3436,8 @@
       }
     },
     "visual_component": "2D_Geometry_Renderer",
-    "y_base": 56,
+    "raw_y_base": 600,
+    "y_base": 42,
     "supported_forms": [
       "proof"
     ],
@@ -3366,7 +3464,8 @@
       }
     },
     "visual_component": "2D_Geometry_Renderer",
-    "y_base": 57,
+    "raw_y_base": 600,
+    "y_base": 42,
     "supported_forms": [
       "proof"
     ],
@@ -3393,12 +3492,13 @@
       }
     },
     "visual_component": "2D_Geometry_Renderer",
-    "y_base": 53,
+    "y_base": 55,
     "supported_forms": [
       "proof"
     ],
     "domain": "図形",
     "large_unit": "平行と合同",
+    "raw_y_base": 750,
     "is_clean_override": {
       "disabled": true
     }
@@ -3421,7 +3521,8 @@
       }
     },
     "visual_component": "2D_Geometry_Renderer",
-    "y_base": 49,
+    "raw_y_base": 650,
+    "y_base": 46,
     "supported_forms": [
       "proof"
     ],
@@ -3464,7 +3565,8 @@
       }
     },
     "visual_component": "2D_Geometry_Renderer",
-    "y_base": 40,
+    "raw_y_base": 550,
+    "y_base": 38,
     "supported_forms": [
       "word_problem"
     ],
@@ -3507,7 +3609,8 @@
       }
     },
     "visual_component": "2D_Geometry_Renderer",
-    "y_base": 41,
+    "raw_y_base": 650,
+    "y_base": 46,
     "supported_forms": [
       "word_problem"
     ],
@@ -3534,7 +3637,8 @@
       }
     },
     "visual_component": "2D_Geometry_Renderer",
-    "y_base": 42,
+    "raw_y_base": 550,
+    "y_base": 38,
     "supported_forms": [
       "proof"
     ],
@@ -3561,7 +3665,8 @@
       }
     },
     "visual_component": "2D_Geometry_Renderer",
-    "y_base": 53,
+    "raw_y_base": 650,
+    "y_base": 46,
     "supported_forms": [
       "proof"
     ],
@@ -3587,7 +3692,8 @@
       }
     },
     "visual_component": "2D_Geometry_Renderer",
-    "y_base": 54,
+    "raw_y_base": 650,
+    "y_base": 46,
     "supported_forms": [
       "proof"
     ],
@@ -3630,7 +3736,8 @@
       }
     },
     "visual_component": "2D_Geometry_Renderer",
-    "y_base": 45,
+    "raw_y_base": 550,
+    "y_base": 38,
     "supported_forms": [
       "word_problem"
     ],
@@ -3656,7 +3763,8 @@
       }
     },
     "visual_component": "2D_Geometry_Renderer",
-    "y_base": 56,
+    "raw_y_base": 650,
+    "y_base": 46,
     "supported_forms": [
       "proof"
     ],
@@ -3699,7 +3807,8 @@
       }
     },
     "visual_component": "2D_Geometry_Renderer",
-    "y_base": 47,
+    "raw_y_base": 650,
+    "y_base": 46,
     "supported_forms": [
       "word_problem"
     ],
@@ -3742,7 +3851,8 @@
       }
     },
     "visual_component": "2D_Geometry_Renderer",
-    "y_base": 48,
+    "raw_y_base": 550,
+    "y_base": 38,
     "supported_forms": [
       "word_problem"
     ],
@@ -3781,7 +3891,8 @@
       }
     },
     "visual_component": "Tree_Renderer",
-    "y_base": 36,
+    "raw_y_base": 450,
+    "y_base": 30,
     "supported_forms": [
       "calculation",
       "word_problem"
@@ -3810,13 +3921,14 @@
       }
     },
     "visual_component": "Tree_Renderer",
-    "y_base": 36,
+    "y_base": 34,
     "supported_forms": [
       "calculation",
       "word_problem"
     ],
     "domain": "データの活用",
     "large_unit": "確率",
+    "raw_y_base": 500,
     "is_clean_override": {
       "disabled": true
     }
@@ -3852,7 +3964,8 @@
       }
     },
     "visual_component": "Tree_Renderer",
-    "y_base": 40,
+    "raw_y_base": 500,
+    "y_base": 34,
     "supported_forms": [
       "calculation",
       "word_problem"
@@ -3892,7 +4005,8 @@
       }
     },
     "visual_component": "Tree_Renderer",
-    "y_base": 43,
+    "raw_y_base": 550,
+    "y_base": 38,
     "supported_forms": [
       "calculation",
       "word_problem"
@@ -3932,7 +4046,8 @@
       }
     },
     "visual_component": "Tree_Renderer",
-    "y_base": 36,
+    "raw_y_base": 350,
+    "y_base": 22,
     "supported_forms": [
       "calculation",
       "word_problem"
@@ -3972,7 +4087,8 @@
       }
     },
     "visual_component": "Tree_Renderer",
-    "y_base": 40,
+    "raw_y_base": 350,
+    "y_base": 22,
     "supported_forms": [
       "calculation",
       "word_problem"
@@ -4012,7 +4128,8 @@
       }
     },
     "visual_component": "Tree_Renderer",
-    "y_base": 43,
+    "raw_y_base": 350,
+    "y_base": 22,
     "supported_forms": [
       "calculation",
       "word_problem"
@@ -4050,7 +4167,8 @@
       }
     },
     "visual_component": "NullRenderer",
-    "y_base": 56,
+    "raw_y_base": 650,
+    "y_base": 46,
     "supported_forms": [
       "calculation"
     ],
@@ -4087,7 +4205,8 @@
       }
     },
     "visual_component": "NullRenderer",
-    "y_base": 57,
+    "raw_y_base": 650,
+    "y_base": 46,
     "supported_forms": [
       "calculation"
     ],
@@ -4111,12 +4230,13 @@
       }
     },
     "visual_component": "NullRenderer",
-    "y_base": 58,
+    "y_base": 46,
     "supported_forms": [
       "calculation"
     ],
     "domain": "数と式",
     "large_unit": "多項式",
+    "raw_y_base": 650,
     "is_clean_override": {
       "disabled": true
     }
@@ -4150,7 +4270,8 @@
       }
     },
     "visual_component": "NullRenderer",
-    "y_base": 58,
+    "raw_y_base": 650,
+    "y_base": 46,
     "supported_forms": [
       "calculation"
     ],
@@ -4187,7 +4308,8 @@
       }
     },
     "visual_component": "NullRenderer",
-    "y_base": 59,
+    "raw_y_base": 650,
+    "y_base": 46,
     "supported_forms": [
       "calculation"
     ],
@@ -4224,7 +4346,8 @@
       }
     },
     "visual_component": "NullRenderer",
-    "y_base": 62,
+    "raw_y_base": 700,
+    "y_base": 50,
     "supported_forms": [
       "calculation"
     ],
@@ -4261,7 +4384,8 @@
       }
     },
     "visual_component": "NullRenderer",
-    "y_base": 60,
+    "raw_y_base": 650,
+    "y_base": 46,
     "supported_forms": [
       "calculation"
     ],
@@ -4288,7 +4412,8 @@
       }
     },
     "visual_component": "NullRenderer",
-    "y_base": 66,
+    "raw_y_base": 900,
+    "y_base": 67,
     "supported_forms": [
       "word_problem"
     ],
@@ -4315,6 +4440,7 @@
       }
     },
     "visual_component": "NullRenderer",
+    "raw_y_base": 900,
     "y_base": 67,
     "supported_forms": [
       "word_problem"
@@ -4342,7 +4468,8 @@
       }
     },
     "visual_component": "NullRenderer",
-    "y_base": 68,
+    "raw_y_base": 900,
+    "y_base": 67,
     "supported_forms": [
       "word_problem"
     ],
@@ -4379,7 +4506,8 @@
       }
     },
     "visual_component": "NullRenderer",
-    "y_base": 63,
+    "raw_y_base": 650,
+    "y_base": 46,
     "supported_forms": [
       "calculation"
     ],
@@ -4406,7 +4534,8 @@
       }
     },
     "visual_component": "NullRenderer",
-    "y_base": 69,
+    "raw_y_base": 900,
+    "y_base": 67,
     "supported_forms": [
       "word_problem"
     ],
@@ -4432,7 +4561,8 @@
       }
     },
     "visual_component": "2D_Geometry_Renderer",
-    "y_base": 75,
+    "raw_y_base": 900,
+    "y_base": 67,
     "supported_forms": [
       "proof"
     ],
@@ -4469,7 +4599,8 @@
       }
     },
     "visual_component": "NullRenderer",
-    "y_base": 56,
+    "raw_y_base": 700,
+    "y_base": 50,
     "supported_forms": [
       "calculation"
     ],
@@ -4506,7 +4637,8 @@
       }
     },
     "visual_component": "NullRenderer",
-    "y_base": 57,
+    "raw_y_base": 700,
+    "y_base": 50,
     "supported_forms": [
       "calculation"
     ],
@@ -4543,7 +4675,8 @@
       }
     },
     "visual_component": "NullRenderer",
-    "y_base": 58,
+    "raw_y_base": 700,
+    "y_base": 50,
     "supported_forms": [
       "calculation"
     ],
@@ -4580,7 +4713,8 @@
       }
     },
     "visual_component": "NullRenderer",
-    "y_base": 59,
+    "raw_y_base": 700,
+    "y_base": 50,
     "supported_forms": [
       "calculation"
     ],
@@ -4617,7 +4751,8 @@
       }
     },
     "visual_component": "NullRenderer",
-    "y_base": 60,
+    "raw_y_base": 700,
+    "y_base": 50,
     "supported_forms": [
       "calculation"
     ],
@@ -4640,12 +4775,13 @@
       }
     },
     "visual_component": "NullRenderer",
-    "y_base": 60,
+    "y_base": 50,
     "supported_forms": [
       "calculation"
     ],
     "domain": "数と式",
     "large_unit": "平方根",
+    "raw_y_base": 700,
     "is_clean_override": {
       "disabled": true
     }
@@ -4679,7 +4815,8 @@
       }
     },
     "visual_component": "NullRenderer",
-    "y_base": 62,
+    "raw_y_base": 700,
+    "y_base": 50,
     "supported_forms": [
       "calculation"
     ],
@@ -4706,7 +4843,8 @@
       }
     },
     "visual_component": "NullRenderer",
-    "y_base": 68,
+    "raw_y_base": 950,
+    "y_base": 71,
     "supported_forms": [
       "word_problem"
     ],
@@ -4743,7 +4881,8 @@
       }
     },
     "visual_component": "NullRenderer",
-    "y_base": 66,
+    "raw_y_base": 750,
+    "y_base": 55,
     "supported_forms": [
       "calculation"
     ],
@@ -4770,7 +4909,8 @@
       }
     },
     "visual_component": "NullRenderer",
-    "y_base": 70,
+    "raw_y_base": 950,
+    "y_base": 71,
     "supported_forms": [
       "word_problem"
     ],
@@ -4807,7 +4947,8 @@
       }
     },
     "visual_component": "NullRenderer",
-    "y_base": 56,
+    "raw_y_base": 750,
+    "y_base": 55,
     "supported_forms": [
       "calculation"
     ],
@@ -4844,7 +4985,8 @@
       }
     },
     "visual_component": "NullRenderer",
-    "y_base": 60,
+    "raw_y_base": 800,
+    "y_base": 59,
     "supported_forms": [
       "calculation"
     ],
@@ -4867,12 +5009,13 @@
       }
     },
     "visual_component": "NullRenderer",
-    "y_base": 63,
+    "y_base": 75,
     "supported_forms": [
       "calculation"
     ],
     "domain": "数と式",
     "large_unit": "2次方程式",
+    "raw_y_base": 1000,
     "is_clean_override": {
       "disabled": true
     }
@@ -4906,7 +5049,8 @@
       }
     },
     "visual_component": "NullRenderer",
-    "y_base": 62,
+    "raw_y_base": 800,
+    "y_base": 59,
     "supported_forms": [
       "calculation"
     ],
@@ -4943,7 +5087,8 @@
       }
     },
     "visual_component": "NullRenderer",
-    "y_base": 63,
+    "raw_y_base": 800,
+    "y_base": 59,
     "supported_forms": [
       "calculation"
     ],
@@ -4968,7 +5113,8 @@
       }
     },
     "visual_component": "NullRenderer",
-    "y_base": 68,
+    "raw_y_base": 1000,
+    "y_base": 75,
     "supported_forms": [
       "word_problem"
     ],
@@ -4993,7 +5139,8 @@
       }
     },
     "visual_component": "NullRenderer",
-    "y_base": 69,
+    "raw_y_base": 1000,
+    "y_base": 75,
     "supported_forms": [
       "word_problem"
     ],
@@ -5025,7 +5172,8 @@
       }
     },
     "visual_component": "2D_Geometry_Renderer",
-    "y_base": 70,
+    "raw_y_base": 1000,
+    "y_base": 75,
     "supported_forms": [
       "word_problem"
     ],
@@ -5055,7 +5203,8 @@
       }
     },
     "visual_component": "Graph_Renderer",
-    "y_base": 61,
+    "raw_y_base": 700,
+    "y_base": 50,
     "supported_forms": [
       "calculation",
       "word_problem"
@@ -5086,7 +5235,8 @@
       }
     },
     "visual_component": "Graph_Renderer",
-    "y_base": 63,
+    "raw_y_base": 700,
+    "y_base": 50,
     "supported_forms": [
       "calculation",
       "word_problem"
@@ -5117,7 +5267,8 @@
       }
     },
     "visual_component": "Graph_Renderer",
-    "y_base": 64,
+    "raw_y_base": 700,
+    "y_base": 50,
     "supported_forms": [
       "calculation",
       "word_problem"
@@ -5148,7 +5299,8 @@
       }
     },
     "visual_component": "Graph_Renderer",
-    "y_base": 66,
+    "raw_y_base": 700,
+    "y_base": 50,
     "supported_forms": [
       "calculation",
       "word_problem"
@@ -5179,7 +5331,8 @@
       }
     },
     "visual_component": "Graph_Renderer",
-    "y_base": 72,
+    "raw_y_base": 950,
+    "y_base": 71,
     "supported_forms": [
       "calculation",
       "word_problem"
@@ -5208,13 +5361,14 @@
       "IntersectVerb": {}
     },
     "visual_component": "Graph_Renderer",
-    "y_base": 70,
+    "y_base": 50,
     "supported_forms": [
       "word_problem",
       "calculation"
     ],
     "domain": "関数",
     "large_unit": "関数 y=ax^2",
+    "raw_y_base": 700,
     "is_clean_override": {
       "disabled": true
     }
@@ -5245,7 +5399,8 @@
       }
     },
     "visual_component": "2D_Geometry_Renderer",
-    "y_base": 70,
+    "raw_y_base": 700,
+    "y_base": 50,
     "supported_forms": [
       "word_problem"
     ],
@@ -5271,7 +5426,8 @@
       }
     },
     "visual_component": "2D_Geometry_Renderer",
-    "y_base": 64,
+    "raw_y_base": 900,
+    "y_base": 67,
     "supported_forms": [
       "proof"
     ],
@@ -5298,7 +5454,8 @@
       }
     },
     "visual_component": "2D_Geometry_Renderer",
-    "y_base": 66,
+    "raw_y_base": 800,
+    "y_base": 59,
     "supported_forms": [
       "proof"
     ],
@@ -5324,7 +5481,8 @@
       }
     },
     "visual_component": "2D_Geometry_Renderer",
-    "y_base": 77,
+    "raw_y_base": 900,
+    "y_base": 67,
     "supported_forms": [
       "proof"
     ],
@@ -5350,7 +5508,8 @@
       }
     },
     "visual_component": "2D_Geometry_Renderer",
-    "y_base": 68,
+    "raw_y_base": 900,
+    "y_base": 67,
     "supported_forms": [
       "proof"
     ],
@@ -5376,7 +5535,8 @@
       }
     },
     "visual_component": "2D_Geometry_Renderer",
-    "y_base": 74,
+    "raw_y_base": 1050,
+    "y_base": 79,
     "supported_forms": [
       "proof"
     ],
@@ -5402,7 +5562,8 @@
       }
     },
     "visual_component": "2D_Geometry_Renderer",
-    "y_base": 80,
+    "raw_y_base": 1050,
+    "y_base": 79,
     "supported_forms": [
       "proof"
     ],
@@ -5428,7 +5589,8 @@
       }
     },
     "visual_component": "2D_Geometry_Renderer",
-    "y_base": 72,
+    "raw_y_base": 800,
+    "y_base": 59,
     "supported_forms": [
       "proof"
     ],
@@ -5455,7 +5617,8 @@
       }
     },
     "visual_component": "2D_Geometry_Renderer",
-    "y_base": 73,
+    "raw_y_base": 800,
+    "y_base": 59,
     "supported_forms": [
       "proof"
     ],
@@ -5481,12 +5644,13 @@
       }
     },
     "visual_component": "2D_Geometry_Renderer",
-    "y_base": 65,
+    "y_base": 63,
     "supported_forms": [
       "word_problem"
     ],
     "domain": "図形",
     "large_unit": "円",
+    "raw_y_base": 850,
     "is_clean_override": {
       "disabled": true
     }
@@ -5516,7 +5680,8 @@
       }
     },
     "visual_component": "2D_Geometry_Renderer",
-    "y_base": 68,
+    "raw_y_base": 850,
+    "y_base": 63,
     "supported_forms": [
       "word_problem"
     ],
@@ -5542,7 +5707,8 @@
       }
     },
     "visual_component": "2D_Geometry_Renderer",
-    "y_base": 80,
+    "raw_y_base": 1000,
+    "y_base": 75,
     "supported_forms": [
       "proof"
     ],
@@ -5575,7 +5741,8 @@
       }
     },
     "visual_component": "2D_Geometry_Renderer",
-    "y_base": 73,
+    "raw_y_base": 750,
+    "y_base": 55,
     "supported_forms": [
       "word_problem"
     ],
@@ -5600,12 +5767,13 @@
       }
     },
     "visual_component": "2D_Geometry_Renderer",
-    "y_base": 70,
+    "y_base": 75,
     "supported_forms": [
       "word_problem"
     ],
     "domain": "図形",
     "large_unit": "三平方の定理",
+    "raw_y_base": 1000,
     "is_clean_override": {
       "disabled": true
     }
@@ -5626,12 +5794,13 @@
       }
     },
     "visual_component": "2D_Geometry_Renderer",
-    "y_base": 66,
+    "y_base": 75,
     "supported_forms": [
       "word_problem"
     ],
     "domain": "図形",
     "large_unit": "三平方の定理",
+    "raw_y_base": 1000,
     "is_clean_override": {
       "disabled": true
     }
@@ -5652,12 +5821,13 @@
       }
     },
     "visual_component": "2D_Geometry_Renderer",
-    "y_base": 73,
+    "y_base": 88,
     "supported_forms": [
       "word_problem"
     ],
     "domain": "図形",
     "large_unit": "三平方の定理",
+    "raw_y_base": 1150,
     "is_clean_override": {
       "disabled": true
     }
@@ -5679,12 +5849,13 @@
       }
     },
     "visual_component": "Graph_Renderer",
-    "y_base": 70,
+    "y_base": 67,
     "supported_forms": [
       "word_problem"
     ],
     "domain": "図形",
     "large_unit": "三平方の定理",
+    "raw_y_base": 900,
     "is_clean_override": {
       "disabled": true
     }
@@ -5714,12 +5885,13 @@
       }
     },
     "visual_component": "3D_Renderer",
-    "y_base": 76,
+    "y_base": 88,
     "supported_forms": [
       "word_problem"
     ],
     "domain": "図形",
     "large_unit": "三平方の定理",
+    "raw_y_base": 1150,
     "is_clean_override": {
       "disabled": true
     }
@@ -5746,12 +5918,13 @@
       }
     },
     "visual_component": "3D_Renderer",
-    "y_base": 78,
+    "y_base": 100,
     "supported_forms": [
       "word_problem"
     ],
     "domain": "図形",
     "large_unit": "三平方の定理",
+    "raw_y_base": 1300,
     "is_clean_override": {
       "disabled": true
     }
@@ -5787,7 +5960,8 @@
       }
     },
     "visual_component": "Tree_Renderer",
-    "y_base": 60,
+    "raw_y_base": 600,
+    "y_base": 42,
     "supported_forms": [
       "calculation",
       "word_problem"
@@ -5827,7 +6001,8 @@
       }
     },
     "visual_component": "Tree_Renderer",
-    "y_base": 63,
+    "raw_y_base": 600,
+    "y_base": 42,
     "supported_forms": [
       "calculation",
       "word_problem"
@@ -5867,7 +6042,8 @@
       }
     },
     "visual_component": "Tree_Renderer",
-    "y_base": 66,
+    "raw_y_base": 600,
+    "y_base": 42,
     "supported_forms": [
       "calculation",
       "word_problem"
@@ -5907,7 +6083,8 @@
       }
     },
     "visual_component": "Tree_Renderer",
-    "y_base": 73,
+    "raw_y_base": 850,
+    "y_base": 63,
     "supported_forms": [
       "calculation",
       "word_problem"

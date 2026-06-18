@@ -374,3 +374,23 @@ def list_lessons() -> Dict[str, Any]:
             )
         ],
     }
+
+
+@router.get("/difficulty-range/{lesson_id}")
+def get_difficulty_range(lesson_id: str, form: str = "calculation") -> Dict[str, Any]:
+    """新 Raw Score モデルに基づく lesson × form の難易度レンジを返す"""
+    mapping = _load_mapping()
+    if lesson_id not in mapping:
+        raise HTTPException(status_code=404, detail=f"未登録: {lesson_id}")
+    m = mapping[lesson_id]
+    from apps.api.src.core.runner.difficulty_reconciler import get_form_range_from_y_base
+    lo, hi = get_form_range_from_y_base(m["y_base"], form)
+    return {
+        "lesson_id": lesson_id,
+        "form": form,
+        "y_base": m["y_base"],
+        "raw_y_base": m.get("raw_y_base", m["y_base"]),
+        "min_difficulty": lo,
+        "max_difficulty": hi,
+        "default_difficulty": m["y_base"],
+    }

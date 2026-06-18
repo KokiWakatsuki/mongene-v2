@@ -11,7 +11,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Tuple
 
 from apps.api.src.core.constants import JHS_GRADE_FROM_LABEL
-from apps.api.src.core.difficulty.base_difficulty import compute_y_base
+from apps.api.src.core.difficulty.base_difficulty import compute_y_base, compute_raw_y_base, normalize
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 CURRICULUM_PATH = REPO_ROOT / "master_data" / "curriculum_math.json"
@@ -241,9 +241,12 @@ def generate_mapping(strict: bool = False) -> Dict[str, Any]:
 
                         if lesson_id in seed:
                             entry = dict(seed[lesson_id])
-                            # seed エントリに domain / large_unit が欠落していたら curriculum から補完
+                            # seed エントリに domain / large_unit を補完
                             entry.setdefault("domain", domain_name)
                             entry.setdefault("large_unit", lu_name)
+                            # 常に新 Raw Score モデルで raw_y_base / y_base を再計算
+                            entry["raw_y_base"] = compute_raw_y_base(lu_name, title)
+                            entry["y_base"] = normalize(entry["raw_y_base"])
                             if strict:
                                 entry.setdefault(
                                     "is_clean_override",
@@ -257,13 +260,9 @@ def generate_mapping(strict: bool = False) -> Dict[str, Any]:
                             continue
 
                         blueprint_id = infer_blueprint(domain_name, lu_name, title)
-                        y_base = compute_y_base(
-                            grade=grade_label,
-                            domain=domain_name,
-                            title=title,
-                            order_in_large_unit=order,
-                            total_in_large_unit=total_in_lu,
-                        )
+                        # 新 Raw Score モデルで y_base を計算
+                        raw_y_base = compute_raw_y_base(lu_name, title)
+                        y_base = normalize(raw_y_base)
                         required_tags = infer_required_tags(title, lu_name, blueprint_id)
                         atom_constraints = DEFAULT_CONSTRAINTS.get(blueprint_id, {})
                         visual = VISUAL_BY_BLUEPRINT.get(blueprint_id, "NullRenderer")
@@ -280,7 +279,8 @@ def generate_mapping(strict: bool = False) -> Dict[str, Any]:
                             "optional_tags": [],
                             "atom_constraints": atom_constraints,
                             "visual_component": visual,
-                            "y_base": y_base,
+                            "raw_y_base": raw_y_base,  # Raw Score（新規追加）
+                            "y_base": y_base,           # 正規化後 1-100
                             "supported_forms": forms,
                         }
                         if strict:
