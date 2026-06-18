@@ -38,7 +38,7 @@ def build_basic_geometry_measurement_blueprint() -> BlueprintDefinition:
             compatible_noun_types=["PolygonAtom", "CircleAtom"],
             required=False,
         ),
-        supported_forms=["calculation", "word_problem"],
+        supported_forms=["word_problem"],
         story_required=False,
         base_difficulty_calculator=lambda nouns, ctx: int(ctx.get("y_base", 25)),
         subquestion_strategy=SubQuestionStrategy(

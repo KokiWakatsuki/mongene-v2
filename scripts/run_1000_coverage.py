@@ -220,6 +220,10 @@ def _enumerate_cases(mapping: Dict[str, Any]) -> List[Dict[str, Any]]:
 def main() -> None:
     os.environ.setdefault("SKIP_LLM_IN_TESTS", "true")
     mapping = json.loads(MAPPING_PATH.read_text(encoding="utf-8"))
+    # 品質ゲート一括生成では dedup / is_clean フィルタを全無効化
+    for m in mapping.values():
+        m["dedup_disabled"] = True
+        m.setdefault("is_clean_override", {"disabled": True})
     forbidden = load_forbidden_words()
     runner = _make_runner()
     cases = _enumerate_cases(mapping)

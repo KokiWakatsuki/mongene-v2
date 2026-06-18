@@ -90,16 +90,41 @@ class BlueprintRunner:
         blueprint = plan.blueprint
         atom_constraints = {k: dict(v) for k, v in mapping.get("atom_constraints", {}).items()}
 
-        # 難易度デルタ（target - y_base）に応じて Atom の寸法制約をスケールアップ
-        # digit_penalty が大きいほど数値計算が複雑になる（§12.4）
+        # §12.4 全 delta_factors を Atom constraints に反映
+        factors = plan.delta_factors
         raw_delta = request.target_difficulty - int(mapping.get("y_base", 50))
-        if raw_delta > 0:
-            # delta 5 ごとに max_dim / max_base_side / max_radius を +20% スケール
-            scale = 1.0 + min(raw_delta, 15) * 0.02  # 最大 +30%
-            for cname, cdict in atom_constraints.items():
-                for size_key in ("max_dim", "max_height", "max_base_side", "max_radius", "max_side_length"):
-                    if size_key in cdict:
-                        cdict[size_key] = max(int(cdict[size_key]), int(cdict[size_key] * scale))
+
+        # digit_penalty: 数値の桁数を増やす（+1 / 3桁以上の計算 → Atom の max_value/max_dim を拡大）
+        if factors.get("digit_penalty", 0) > 0:
+            scale = 1.0 + factors["digit_penalty"] * 0.2  # +20% per penalty point
+            for cdict in atom_constraints.values():
+                for key in ("max_dim", "max_height", "max_base_side", "max_radius",
+                            "max_side_length", "max_value", "max_slope"):
+                    if key in cdict:
+                        cdict[key] = max(int(cdict[key]), int(cdict[key] * scale))
+
+        # step_depth: 演算ステップを増やす（Blueprint の subquestion 戦略で target_count を加算）
+        # ProofStructure / ConstructionStructure は固定構造なので対象外
+        _no_depth_blueprints = {"ProofStructure", "ConstructionStructure", "BasicCalculationStructure"}
+        if (factors.get("step_depth", 0) > 0
+                and blueprint.subquestion_strategy is not None
+                and blueprint.blueprint_id not in _no_depth_blueprints):
+            import copy as _copy
+            blueprint = _copy.deepcopy(blueprint)
+            old_count = blueprint.subquestion_strategy.target_count
+            blueprint.subquestion_strategy.target_count = min(
+                old_count + factors["step_depth"] // 2, 5  # 最大 5 小問
+            )
+
+        # hint_reduction: 図あり(-2)=制約なし / 文章のみ(+3)=最小値を引き上げ（難易度下限を上げる）
+        if factors.get("hint_reduction", 0) > 0:
+            # 文章のみモード: Atom の値の下限を上げて「きれいでない」数値を増やす
+            for cdict in atom_constraints.values():
+                if "max_value" in cdict:
+                    cdict.setdefault("min_value", max(5, int(cdict["max_value"] * 0.3)))
+
+        # unit_mix_bonus: 複合単元（+2/単元追加）→ 制約を多様化
+        # 現状 Atom レベルでは直接対応困難。LLM プロンプトへの目安として計算のみ
 
         # 時刻ベースの XOR で衝突を防ぐ（ナノ秒精度のため再生成でも別の問題が生成される）
         import time as _time

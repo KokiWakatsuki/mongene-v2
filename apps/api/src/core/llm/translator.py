@@ -245,12 +245,33 @@ class LLMTranslator:
         return text, [], {"_all": ""}
 
     def _load_few_shots(self, blueprint_id: str) -> str:
-        if self.few_shot_loader is None:
-            return "（Few-Shot 例なし）"
+        """§8.3: master_data/few_shot_seeds/ から Blueprint に対応する例を読み込む"""
+        if self.few_shot_loader is not None:
+            try:
+                return self.few_shot_loader(blueprint_id)
+            except Exception:
+                pass
+        # デフォルト: ファイルシステムから直接読み込む
         try:
-            return self.few_shot_loader(blueprint_id)
+            from pathlib import Path
+            import yaml as _yaml
+            seeds_dir = Path(__file__).resolve().parents[5] / "master_data" / "few_shot_seeds"
+            examples: list[str] = []
+            # blueprint_id にマッチするファイルを検索
+            for f in sorted(seeds_dir.glob("*.yaml")):
+                data = _yaml.safe_load(f.read_text(encoding="utf-8"))
+                for ex in (data.get("examples") or []):
+                    mr = ex.get("input_middle_representation", {})
+                    if mr.get("problem_structure_type") == blueprint_id:
+                        examples.append(
+                            f"問題例:\n{ex.get('ideal_problem_text','').strip()}\n"
+                            f"解説例:\n{ex.get('ideal_explanation_text','').strip()}"
+                        )
+            if examples:
+                return "\n\n---\n\n".join(examples[:2])  # 最大 2 例
         except Exception:
-            return "（Few-Shot 取得失敗）"
+            pass
+        return "（Few-Shot 例なし）"
 
     def _mr_to_yaml(self, mr: MiddleRepresentation) -> str:
         import yaml

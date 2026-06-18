@@ -1304,7 +1304,6 @@
     "visual_component": "2D_Geometry_Renderer",
     "y_base": 19,
     "supported_forms": [
-      "calculation",
       "word_problem"
     ],
     "is_clean_override": {
@@ -1346,7 +1345,6 @@
     "visual_component": "2D_Geometry_Renderer",
     "y_base": 20,
     "supported_forms": [
-      "calculation",
       "word_problem"
     ],
     "is_clean_override": {
@@ -1388,7 +1386,6 @@
     "visual_component": "2D_Geometry_Renderer",
     "y_base": 21,
     "supported_forms": [
-      "calculation",
       "word_problem"
     ],
     "is_clean_override": {
@@ -1430,7 +1427,6 @@
     "visual_component": "2D_Geometry_Renderer",
     "y_base": 22,
     "supported_forms": [
-      "calculation",
       "word_problem"
     ],
     "is_clean_override": {
@@ -1457,7 +1453,7 @@
     "visual_component": "2D_Geometry_Renderer",
     "y_base": 17,
     "supported_forms": [
-      "calculation"
+      "word_problem"
     ],
     "domain": "図形",
     "large_unit": "平面図形",
@@ -1492,7 +1488,7 @@
     "visual_component": "2D_Geometry_Renderer",
     "y_base": 24,
     "supported_forms": [
-      "calculation"
+      "word_problem"
     ],
     "is_clean_override": {
       "disabled": true
@@ -1525,7 +1521,7 @@
     "visual_component": "2D_Geometry_Renderer",
     "y_base": 25,
     "supported_forms": [
-      "calculation"
+      "word_problem"
     ],
     "is_clean_override": {
       "disabled": true
@@ -1558,7 +1554,7 @@
     "visual_component": "2D_Geometry_Renderer",
     "y_base": 31,
     "supported_forms": [
-      "calculation"
+      "word_problem"
     ],
     "is_clean_override": {
       "disabled": true
@@ -1602,7 +1598,6 @@
     "visual_component": "2D_Geometry_Renderer",
     "y_base": 27,
     "supported_forms": [
-      "calculation",
       "word_problem"
     ],
     "is_clean_override": {
@@ -1636,7 +1631,6 @@
     "visual_component": "2D_Geometry_Renderer",
     "y_base": 19,
     "supported_forms": [
-      "calculation",
       "word_problem"
     ],
     "domain": "図形",
@@ -1682,7 +1676,6 @@
     "visual_component": "2D_Geometry_Renderer",
     "y_base": 19,
     "supported_forms": [
-      "calculation",
       "word_problem"
     ],
     "is_clean_override": {
@@ -1726,7 +1719,6 @@
     "visual_component": "2D_Geometry_Renderer",
     "y_base": 21,
     "supported_forms": [
-      "calculation",
       "word_problem"
     ],
     "is_clean_override": {
@@ -1801,7 +1793,6 @@
     "visual_component": "2D_Geometry_Renderer",
     "y_base": 24,
     "supported_forms": [
-      "calculation",
       "word_problem"
     ],
     "is_clean_override": {
@@ -1861,7 +1852,6 @@
     "visual_component": "3D_Renderer",
     "y_base": 19,
     "supported_forms": [
-      "calculation",
       "word_problem"
     ],
     "domain": "図形",
@@ -1907,7 +1897,6 @@
     "visual_component": "2D_Geometry_Renderer",
     "y_base": 28,
     "supported_forms": [
-      "calculation",
       "word_problem"
     ],
     "is_clean_override": {
@@ -3244,7 +3233,6 @@
     "visual_component": "2D_Geometry_Renderer",
     "y_base": 41,
     "supported_forms": [
-      "calculation",
       "word_problem"
     ],
     "domain": "図形",
@@ -3478,7 +3466,6 @@
     "visual_component": "2D_Geometry_Renderer",
     "y_base": 40,
     "supported_forms": [
-      "calculation",
       "word_problem"
     ],
     "is_clean_override": {
@@ -3522,7 +3509,6 @@
     "visual_component": "2D_Geometry_Renderer",
     "y_base": 41,
     "supported_forms": [
-      "calculation",
       "word_problem"
     ],
     "is_clean_override": {
@@ -3646,7 +3632,6 @@
     "visual_component": "2D_Geometry_Renderer",
     "y_base": 45,
     "supported_forms": [
-      "calculation",
       "word_problem"
     ],
     "is_clean_override": {
@@ -3716,7 +3701,6 @@
     "visual_component": "2D_Geometry_Renderer",
     "y_base": 47,
     "supported_forms": [
-      "calculation",
       "word_problem"
     ],
     "is_clean_override": {
@@ -3760,7 +3744,6 @@
     "visual_component": "2D_Geometry_Renderer",
     "y_base": 48,
     "supported_forms": [
-      "calculation",
       "word_problem"
     ],
     "is_clean_override": {
@@ -5500,7 +5483,6 @@
     "visual_component": "2D_Geometry_Renderer",
     "y_base": 65,
     "supported_forms": [
-      "calculation",
       "word_problem"
     ],
     "domain": "図形",
@@ -5536,7 +5518,7 @@
     "visual_component": "2D_Geometry_Renderer",
     "y_base": 68,
     "supported_forms": [
-      "calculation"
+      "word_problem"
     ],
     "is_clean_override": {
       "disabled": true
@@ -5595,7 +5577,7 @@
     "visual_component": "2D_Geometry_Renderer",
     "y_base": 73,
     "supported_forms": [
-      "calculation"
+      "word_problem"
     ],
     "is_clean_override": {
       "disabled": true
@@ -5620,7 +5602,6 @@
     "visual_component": "2D_Geometry_Renderer",
     "y_base": 70,
     "supported_forms": [
-      "calculation",
       "word_problem"
     ],
     "domain": "図形",
@@ -5647,7 +5628,7 @@
     "visual_component": "2D_Geometry_Renderer",
     "y_base": 66,
     "supported_forms": [
-      "calculation"
+      "word_problem"
     ],
     "domain": "図形",
     "large_unit": "三平方の定理",
@@ -5673,7 +5654,6 @@
     "visual_component": "2D_Geometry_Renderer",
     "y_base": 73,
     "supported_forms": [
-      "calculation",
       "word_problem"
     ],
     "domain": "図形",
@@ -5701,7 +5681,7 @@
     "visual_component": "Graph_Renderer",
     "y_base": 70,
     "supported_forms": [
-      "calculation"
+      "word_problem"
     ],
     "domain": "図形",
     "large_unit": "三平方の定理",
@@ -5736,8 +5716,7 @@
     "visual_component": "3D_Renderer",
     "y_base": 76,
     "supported_forms": [
-      "word_problem",
-      "calculation"
+      "word_problem"
     ],
     "domain": "図形",
     "large_unit": "三平方の定理",
@@ -5769,8 +5748,7 @@
     "visual_component": "3D_Renderer",
     "y_base": 78,
     "supported_forms": [
-      "word_problem",
-      "calculation"
+      "word_problem"
     ],
     "domain": "図形",
     "large_unit": "三平方の定理",

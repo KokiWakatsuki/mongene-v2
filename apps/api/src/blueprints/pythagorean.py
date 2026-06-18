@@ -42,7 +42,7 @@ def build_pythagorean_blueprint() -> BlueprintDefinition:
             compatible_noun_types=["PolygonAtom"],
             required=True,
         ),
-        supported_forms=["calculation", "word_problem"],
+        supported_forms=["word_problem"],
         story_required=False,
         base_difficulty_calculator=lambda nouns, ctx: int(ctx.get("y_base", 65)),
         subquestion_strategy=SubQuestionStrategy(

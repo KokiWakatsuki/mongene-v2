@@ -290,6 +290,42 @@ def generate_mapping(strict: bool = False) -> Dict[str, Any]:
                             # dedup は有効のまま
                         mapping[lesson_id] = entry
 
+    # ドメイン・Blueprint 別の supported_forms 後処理
+    # ルール:
+    # 1. domain == "図形": 図形は必ず図の描写が必要 → calculation を除去
+    # 2. ProofStructure: proof のみ
+    # 3. WordProblemStructure: word_problem のみ
+    # 4. BasicCalculationStructure: calculation のみ
+    for lesson_id, entry in mapping.items():
+        domain = entry.get("domain", "")
+        bp = entry.get("execute_blueprint", "")
+        forms = list(entry.get("supported_forms", []))
+
+        # 図形領域は calculation 不可（figure/context の描写が必須）
+        if domain == "図形" and "calculation" in forms:
+            forms = [f for f in forms if f != "calculation"]
+            if not forms:
+                forms = ["word_problem"]
+
+        # Blueprint 固有ルール（seed の個別設定より Blueprint の性質を優先）
+        if bp == "ProofStructure":
+            forms = ["proof"]
+        elif bp == "WordProblemStructure":
+            forms = ["word_problem"]
+        elif bp == "BasicCalculationStructure":
+            forms = ["calculation"]
+        elif bp in ("BasicDifferenceStructure", "MovingPointStructure",
+                    "PythagoreanSpaceStructure", "ConstructionStructure"):
+            # 文脈が必須な Blueprint → word_problem のみ
+            forms = ["word_problem"]
+        elif bp == "AngleCalculationStructure":
+            # 角度計算も図形の説明が必要 → word_problem のみ
+            forms = ["word_problem"]
+
+        if not forms:
+            forms = ["word_problem"]
+        entry["supported_forms"] = forms
+
     return mapping
 
 

@@ -43,7 +43,7 @@ def build_construction_blueprint() -> BlueprintDefinition:
             compatible_noun_types=["PointAtom", "PolygonAtom", "CircleAtom"],
             required=True,
         ),
-        supported_forms=["calculation"],
+        supported_forms=["word_problem"],
         story_required=False,
         base_difficulty_calculator=lambda nouns, ctx: int(ctx.get("y_base", 50)),
         subquestion_strategy=SubQuestionStrategy(

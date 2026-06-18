@@ -1,6 +1,7 @@
 """SubQuestion 構築（§27）"""
 from __future__ import annotations
 
+import re
 from typing import Dict, List, Optional
 
 import sympy
@@ -24,10 +25,14 @@ def build_sub_questions(
         raise ValueError("logic_steps_all が空")
 
     if strategy is None or strategy.strategy_type == "single":
+        hint = strategy.final_question if strategy else "次を求めなさい"
+        # §12.1: arithmetic 系の計算問題は operands から式を生成して prompt_hint に追加
+        if logic_steps_all and logic_steps_all[-1].operation_name.startswith("arithmetic_"):
+            hint = _augment_prompt_hint(hint, logic_steps_all[-1])
         return [
             SubQuestion(
                 label="",
-                prompt_hint=(strategy.final_question if strategy else "次を求めなさい"),
+                prompt_hint=hint,
                 logic_steps=list(logic_steps_all),
                 answer=_extract_final_answer(logic_steps_all),
             )
@@ -179,6 +184,44 @@ def _extract_final_answer(steps: List[LogicStep]) -> AnswerObject:
 
 def _extract_intermediate_answer(sub_steps: List[LogicStep]) -> AnswerObject:
     return _extract_final_answer(sub_steps)
+
+
+_OP_SYMBOL = {
+    "arithmetic_+": "+",
+    "arithmetic_-": "-",
+    "arithmetic_*": "\\times",
+    "arithmetic_/": "\\div",
+    "arithmetic_**": "^",
+}
+
+
+def _format_calc_expression(step: LogicStep) -> str:
+    """§12.1: 計算問題用に operands から LaTeX 式を生成する。
+
+    例: operands=['-25','22'], op='arithmetic_+' → '$(-25) + 22$'
+    """
+    sym = _OP_SYMBOL.get(step.operation_name, "")
+    ops = [o for o in step.operands if not o.startswith("{")]  # JSON chunk を除外
+    if sym and len(ops) >= 2:
+        def _wrap(s: str) -> str:
+            s = str(s).strip()
+            if s.startswith("-") or ("+" in s and len(s) > 1):
+                return f"({s})"
+            return s
+        terms = [_wrap(ops[0])] + [f"{sym} {_wrap(o)}" for o in ops[1:]]
+        return "$" + " ".join(terms) + "$"
+    return ""
+
+
+def _augment_prompt_hint(hint: str, step: LogicStep) -> str:
+    """計算問題の prompt_hint に実際の式を追加する（§12.1 operands の活用）"""
+    expr = _format_calc_expression(step)
+    if not expr:
+        return hint
+    # 既に式が含まれていれば追加しない
+    if "$" in hint:
+        return hint
+    return f"{hint}\n{expr}"
 
 
 def _extract_keyword(label: str) -> str:
