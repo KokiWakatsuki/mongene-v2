@@ -1,6 +1,6 @@
 """Blueprint 統合レジストリ（Phase 3）
 
-全 11 個の Blueprint を一元的に load する。
+全 Blueprint を一元的に load する。
 """
 from __future__ import annotations
 
@@ -10,10 +10,7 @@ from apps.api.src.core.abc.blueprint import BlueprintDefinition
 
 
 def _builder_map() -> Dict[str, Callable[[], BlueprintDefinition]]:
-    """各 Blueprint モジュールの build 関数を集約
-
-    遅延 import で循環参照を防ぐ。
-    """
+    """各 Blueprint モジュールの build 関数を集約（遅延 import で循環参照を防ぐ）"""
     from apps.api.src.blueprints.angle_calculation import build_angle_calculation_blueprint
     from apps.api.src.blueprints.basic_calculation import build_basic_calculation_blueprint
     from apps.api.src.blueprints.basic_difference import build_basic_difference_blueprint
@@ -33,10 +30,6 @@ def _builder_map() -> Dict[str, Callable[[], BlueprintDefinition]]:
         build_pythagorean_blueprint,
         build_pythagorean_space_blueprint,
     )
-    from apps.api.src.blueprints.graph_structure import (
-        build_graph_structure_blueprint,
-        build_two_functions_blueprint,
-    )
 
     return {
         "BasicCalculationStructure": build_basic_calculation_blueprint,
@@ -52,8 +45,6 @@ def _builder_map() -> Dict[str, Callable[[], BlueprintDefinition]]:
         "SequencePatternStructure": build_sequence_pattern_blueprint,
         "PythagoreanStructure": build_pythagorean_blueprint,
         "PythagoreanSpaceStructure": build_pythagorean_space_blueprint,
-        "GraphStructure": build_graph_structure_blueprint,
-        "TwoFunctionsStructure": build_two_functions_blueprint,
     }
 
 

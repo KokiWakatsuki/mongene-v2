@@ -24,18 +24,19 @@ from apps.api.src.core.difficulty.base_difficulty import RAW_MIN, normalize, den
 # 全 delta_factors を含む Raw Score の最大値
 RAW_MAX_FULL = 4300  # implementation_plan.md の理論最大値
 
-# 問題形式ボーナス（Raw Score 加算値, implementation_plan.md ③）
-# 新形式（2026-06-18 追加）:
-#   construction: コンパス・定規による作図 → 空間把握 + 手順設計で proof に匹敵
-#   graph:        関数グラフの書き方・読み取り → 軽度の追加難度
-#   data_analysis: データ読み取り・解釈 → 文脈理解が必要
+# 問題形式ボーナス（Raw Score 加算値）
+# docs/problem_form_classification/implementation_plan.md より:
+#   knowledge (-100): 記憶の引き出しのみ、計算なし
+#   calculation (0):  立式不要でアルゴリズム適用のみ（基準）
+#   visual (+200):    図形・グラフから視覚的に情報を抽出して立式
+#   word_problem (+400): 自然言語から変数抽出・立式
+#   proof (+800):     ゼロから論理構成を記述
 FORM_RAW_BONUS: Dict[str, int] = {
-    "calculation":    0,    # 計算問題: ボーナスなし
-    "word_problem":   400,  # 文章題: 読解・設定の複雑さ
-    "proof":          800,  # 証明: 論理的推論の要求
-    "construction":   700,  # 作図: 空間把握 + 手順設計（証明に準じる難しさ）
-    "graph":          200,  # グラフ: 関数の理解と描画/読み取り
-    "data_analysis":  300,  # データ分析: 統計的解釈
+    "knowledge":      -100,  # 知識問題: 定義・用語・条件の確認
+    "calculation":       0,  # 計算問題: 立式不要、アルゴリズム適用のみ
+    "visual":          200,  # 視覚読解: 図・グラフから情報抽出して立式
+    "word_problem":    400,  # 文章題: 自然言語から変数抽出・立式
+    "proof":           800,  # 証明: ゼロから論理構成を記述
 }
 
 # 問題形式が必ず加算するため、最低難易度は form_bonus 込みの正規化値になる
@@ -135,19 +136,17 @@ def _distribute_raw_delta(raw_delta: int, problem_form: str) -> Dict[str, int]:
     """
     factors: Dict[str, int] = {}
 
-    # 問題形式固有のベースファクター
-    if problem_form == "calculation":
+    # 問題形式固有のベースファクター（設計書 problem_form_classification/implementation_plan.md）
+    if problem_form == "knowledge":
+        factors["knowledge_only"] = -100   # 記憶引き出しのみ → さらに易しめ
+    elif problem_form == "calculation":
         factors["hint_reduction"] = -100   # 図あり → 易しめ
+    elif problem_form == "visual":
+        factors["visual_modeling"] = 200   # 図・グラフから立式
     elif problem_form == "word_problem":
         factors["hint_reduction"] = 300    # 図なし文章 → 難しめ
     elif problem_form == "proof":
         factors["proof_complexity"] = 800  # 証明の複雑さ（form_bonus として処理済み）
-    elif problem_form == "construction":
-        factors["spatial_reasoning"] = 700 # 空間把握 + 手順設計
-    elif problem_form == "graph":
-        factors["graph_skill"] = 200       # グラフ描画/読み取り
-    elif problem_form == "data_analysis":
-        factors["statistical_literacy"] = 300  # 統計的解釈
 
     remaining = max(0, raw_delta)
 

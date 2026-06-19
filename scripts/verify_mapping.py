@@ -35,10 +35,10 @@ EXPECTED_BLUEPRINTS = {
     "SequencePatternStructure",
     "PythagoreanStructure",
     "PythagoreanSpaceStructure",
-    "GraphStructure",
-    "TwoFunctionsStructure",
+    
+    
 }
-VALID_FORMS = {"calculation", "word_problem", "proof", "construction", "graph", "data_analysis"}
+VALID_FORMS = {"knowledge", "calculation", "visual", "word_problem", "proof"}
 
 
 def enumerate_lesson_ids(curriculum: list) -> set[str]:

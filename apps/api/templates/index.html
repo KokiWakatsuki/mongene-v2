@@ -91,7 +91,9 @@
     <div class="row">
       <label for="form">問題形式</label>
       <select id="form">
+        <option value="knowledge">知識</option>
         <option value="calculation">計算</option>
+        <option value="visual">視覚読解</option>
         <option value="word_problem">文章題</option>
         <option value="proof">証明</option>
       </select>
@@ -301,11 +303,22 @@
           $('explanationText').textContent = '';
           $('metadata').textContent = '';
         } else {
+          // LaTeX を安全に処理するヘルパー
+          // $$...$$, \[...\] → $...$（inline に統一して <br/> 混入を防ぐ）
+          // その後 \n → <br/> 変換を適用
+          function prepareLatex(raw) {
+            if (!raw) return '';
+            return esc(raw)
+              .replace(/\$\$([\s\S]+?)\$\$/g, (_, m) => '$' + m.trim().replace(/<br\s*\/?>/g, ' ') + '$')
+              .replace(/\\\[([\s\S]+?)\\\]/g, (_, m) => '$' + m.trim().replace(/<br\s*\/?>/g, ' ') + '$')
+              .replace(/\n/g, '<br/>');
+          }
+
           // ---- 問題文エリア: 大問テキスト + 小問の問題文のみ ----
-          const mainText = esc(data.content_problem_text).replace(/\n/g, '<br/>');
+          const mainText = prepareLatex(data.content_problem_text);
           const subQTexts = (data.sub_questions || []).map((sq) => {
             const label = sq.label ? `<strong>${esc(sq.label)}</strong>&nbsp;` : '';
-            return `<div style="margin-top:6px;">${label}${esc(sq.prompt_text)}</div>`;
+            return `<div style="margin-top:6px;">${label}${prepareLatex(sq.prompt_text)}</div>`;
           }).join('');
           $('problemText').innerHTML = mainText + (subQTexts ? `<div style="margin-top:10px; border-top:1px solid #eee; padding-top:8px;">${subQTexts}</div>` : '');
 
@@ -321,28 +334,26 @@
           // ---- 解説エリア: 各小問の答え + 解説 ----
           const blocks = (data.sub_questions || []).map((sq) => {
             const label = sq.label ? `<strong>${esc(sq.label)}</strong>&nbsp;` : '';
-            const prompt = esc(sq.prompt_text);
-            const answer = `<span style="color:#1d4ed8;font-weight:600;">${esc(`答え: ${sq.answer.text_form}`)}</span>`;
-            const exp = sq.explanation_text ? esc(sq.explanation_text).replace(/\n/g, '<br/>') : '';
+            const prompt = prepareLatex(sq.prompt_text);
+            const answer = `<span style="color:#1d4ed8;font-weight:600;">${esc('答え: ' + sq.answer.text_form)}</span>`;
+            const exp = sq.explanation_text ? prepareLatex(sq.explanation_text) : '';
             return (
               `<div style="margin-bottom:16px; padding:10px; background:#f8faff; border-radius:4px; border:1px solid #dbeafe;">` +
               `<div style="margin-bottom:4px;">${label}${prompt}</div>` +
               `<div style="margin-left:1em; margin-bottom:4px;">${answer}</div>` +
-              (exp ? `<div style="margin-left:1em; color:#374151; font-size:0.9rem;">${exp}</div>` : '') +
+              (exp ? `<div style="margin-left:1em; color:#374151; font-size:0.9rem; line-height:1.8;">${exp}</div>` : '') +
               `</div>`
             );
           });
           $('explanationText').innerHTML = blocks.join('');
           $('metadata').textContent = JSON.stringify(data.metadata, null, 2);
 
-          // KaTeX レンダリング
+          // KaTeX レンダリング（inline のみ; display math は inline で代替済み）
           if (window.renderMathInElement) {
             renderMathInElement(document.getElementById('result'), {
               delimiters: [
-                { left: '$$', right: '$$', display: true },
                 { left: '$', right: '$', display: false },
                 { left: '\\(', right: '\\)', display: false },
-                { left: '\\[', right: '\\]', display: true },
               ],
               throwOnError: false,
               ignoredTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
@@ -397,17 +408,24 @@
         html += sqs.map(sq => {
           const steps = (sq.logic_steps || []).map(s =>
             `<div style="margin-left:1em;color:#555;font-family:monospace;font-size:0.85rem;">`+
-            `${esc(s.operation_name)}: <strong>${esc(s.sympy_expr)}</strong> &nbsp; — ${esc(s.narration_hint)}</div>`
+            `${esc(s.operation_name)}: <strong>$${esc(s.sympy_expr)}$</strong> &nbsp; — ${esc(s.narration_hint)}</div>`
           ).join('');
           return `<div style="margin-top:10px;"><strong>${esc(sq.label || '(1)')} ${esc(sq.prompt_hint)}</strong><br/>`+
             steps +
-            `<div style="margin-left:1em;"><strong>答え (sympy_form): <span style="color:#1d4ed8">${esc(sq.answer.sympy_form)}</span></strong></div></div>`;
+            `<div style="margin-left:1em;"><strong>答え (sympy_form): <span style="color:#1d4ed8">$${esc(sq.answer.sympy_form)}$</span></strong></div></div>`;
         }).join('');
         html += `<div style="margin-top:10px;color:#6b7280;font-size:0.8rem;">${esc(data.note)}</div>`;
         $('problemText').innerHTML = html;
         $('explanationText').innerHTML = '';
         $('metadata').textContent = '';
         $('diagramBox').style.display = 'none';
+        // inspect 結果にも KaTeX を適用
+        if (window.renderMathInElement) {
+          renderMathInElement($('problemText'), {
+            delimiters: [{ left: '$', right: '$', display: false }],
+            throwOnError: false,
+          });
+        }
       } catch (e) {
         $('result').style.display = 'block';
         $('problemText').innerHTML = `<div class="error">${e.message}</div>`;

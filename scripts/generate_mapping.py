@@ -27,10 +27,6 @@ BLUEPRINT_RULES: List[Tuple[str, str]] = [
     (r"規則性|数列|マッチ棒|並べ方|個数の規則", "SequencePatternStructure"),
     (r"動点|点 P|時間 t", "MovingPointStructure"),
     (r"角度|円周角|中心角|接弦角|内接四角形|内角|外角|平行線.*角|錯角|同位角", "AngleCalculationStructure"),
-    # グラフ「書き方」「かき方」は GraphStructure に振り分ける
-    (r"グラフの書き方|グラフをかく|グラフの特徴|座標の概念|点のとり方", "GraphStructure"),
-    # 2直線の交点・面積は TwoFunctionsStructure
-    (r"2直線|交点の座標|速さとダイヤグラム|2つのグラフ", "TwoFunctionsStructure"),
     # 関数系を幾何系より先に判定（「グラフ」と「面積」が同居しないよう）
     (r"比例|反比例|一次関数|二次関数|放物線|y\s*=\s*ax|交点|グラフ", "FunctionGeometryFusionStructure"),
     (r"くり抜|切断|回転体|展開図", "BasicDifferenceStructure"),
@@ -145,28 +141,25 @@ VISUAL_BY_BLUEPRINT: Dict[str, str] = {
 
 
 SUPPORTED_FORMS: Dict[str, List[str]] = {
-    # implementation_plan.md ③ 問題形式定義:
-    # calculation    (+0 raw):   式・数値が与えられ計算するだけ
-    # word_problem   (+400 raw): 場面設定から式を立てる
-    # proof          (+800 raw): 論理的証明
-    # construction   (+700 raw): コンパス・定規による作図 ★新形式
-    # graph          (+200 raw): 関数グラフの書き方・読み取り ★新形式
-    # data_analysis  (+300 raw): データ読み取り・統計的解釈 ★新形式
+    # docs/problem_form_classification/implementation_plan.md 5分類:
+    # knowledge   (-100 raw): 定義・用語・条件の確認（立式・計算不要）
+    # calculation  (+0 raw):  立式不要、アルゴリズム適用のみ
+    # visual      (+200 raw): 図形・グラフから視覚的に情報抽出して立式
+    # word_problem (+400 raw): 自然言語から変数抽出・立式
+    # proof       (+800 raw): ゼロから論理構成を記述
     "BasicCalculationStructure": ["calculation"],
     "WordProblemStructure": ["word_problem"],
-    "BasicGeometryMeasurementStructure": ["word_problem"],  # 図形は常に文脈が必要
+    "BasicGeometryMeasurementStructure": ["visual", "word_problem"],  # 図を読んで計量
     "BasicDifferenceStructure": ["word_problem"],
-    "FunctionGeometryFusionStructure": ["calculation", "word_problem"],
+    "FunctionGeometryFusionStructure": ["visual", "word_problem"],    # グラフを読んで計算
     "MovingPointStructure": ["word_problem"],
-    "AngleCalculationStructure": ["word_problem"],          # 図形の説明が必要
-    "ConstructionStructure": ["construction"],              # 作図専用
+    "AngleCalculationStructure": ["visual"],                          # 図を読んで角度計算
+    "ConstructionStructure": ["visual"],                              # 図形情報から作図
     "ProofStructure": ["proof"],
-    "DataProbabilityStructure": ["calculation", "word_problem", "data_analysis"],
+    "DataProbabilityStructure": ["calculation", "word_problem", "knowledge"],
     "SequencePatternStructure": ["calculation", "word_problem"],
-    "PythagoreanStructure": ["word_problem"],
+    "PythagoreanStructure": ["visual", "word_problem"],               # 図を読んで三平方
     "PythagoreanSpaceStructure": ["word_problem"],
-    "GraphStructure": ["graph", "calculation"],             # グラフ問題専用
-    "TwoFunctionsStructure": ["graph", "word_problem"],
 }
 
 
@@ -318,6 +311,7 @@ def generate_mapping(strict: bool = False) -> Dict[str, Any]:
         forms = list(entry.get("supported_forms", []))
 
         # ── Blueprint 固有の確定ルール（最優先）──
+        # Blueprint 固有の確定ルール（設計書 5 形式に準拠）
         if bp == "ProofStructure":
             forms = ["proof"]
         elif bp == "WordProblemStructure":
@@ -325,28 +319,27 @@ def generate_mapping(strict: bool = False) -> Dict[str, Any]:
         elif bp == "BasicCalculationStructure":
             forms = ["calculation"]
         elif bp == "ConstructionStructure":
-            forms = ["construction"]             # 作図は construction 専用
+            forms = ["visual"]                   # 作図 = 図から立式 = visual
         elif bp in ("BasicDifferenceStructure", "MovingPointStructure",
                     "PythagoreanSpaceStructure"):
             forms = ["word_problem"]
         elif bp == "AngleCalculationStructure":
-            forms = ["word_problem"]
-        elif bp == "GraphStructure":
-            forms = ["graph", "calculation"]     # グラフ書き方 + 値の計算
-        elif bp == "TwoFunctionsStructure":
-            forms = ["graph", "word_problem"]    # 交点・面積
+            forms = ["visual"]                   # 図を読んで角度を求める = visual
 
         # ── ドメイン補正 ──
-        # 図形領域は calculation を持てない（図の描写が必須）
-        if domain == "図形" and "calculation" in forms and bp not in (
-            "GraphStructure", "TwoFunctionsStructure"
-        ):
-            forms = [f for f in forms if f != "calculation"] or ["word_problem"]
+        # 図形領域: calculation は不可（図の描写が必須）→ visual か word_problem のみ
+        if domain == "図形" and "calculation" in forms:
+            forms = [f for f in forms if f != "calculation"] or ["visual"]
 
-        # データの活用: 箱ひげ図/ヒストグラムの「書き方」は data_analysis 追加
-        if domain == "データの活用" and re.search(r"箱ひげ|ヒストグラム.*書|度数分布表.*書|累積", title):
-            if "data_analysis" not in forms:
-                forms.append("data_analysis")
+        # データ単元の「用語・定義」系 lesson → knowledge 追加
+        if domain == "データの活用" and re.search(r"意味|定義|用語|読み取り|確認", title):
+            if "knowledge" not in forms:
+                forms.append("knowledge")
+
+        # 数と式: 「定義・意味」系 → knowledge 追加
+        if domain == "数と式" and re.search(r"意味|定義|用語|導入|概念", title):
+            if "knowledge" not in forms and "calculation" in forms:
+                forms.append("knowledge")
 
         if not forms:
             forms = ["word_problem"]
