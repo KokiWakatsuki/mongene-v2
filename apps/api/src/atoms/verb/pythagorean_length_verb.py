@@ -25,14 +25,15 @@ class PythagoreanLengthVerb(VerbAtom):
     mode="leg_from_hypotenuse_and_leg": 斜辺 c と 1 脚 a → 他の脚 b = sqrt(c² - a²)
     """
 
-    arity: ClassVar = 2
+    arity: ClassVar = "n-ary"
     accepted_noun_types: ClassVar[List[str]] = [
         "PolygonAtom",  # right_triangle の 2 脚
         "NumberAtom",   # 長さを数値で直接渡す場合
         "PrismAtom",    # 直方体の対角線
         "PyramidAtom",  # 角錐の母線
+        "PointAtom",    # 座標平面上の 2 点間の距離
     ]
-    tags: ClassVar[List[str]] = ["pythagorean", "plane_geometry"]
+    tags: ClassVar[List[str]] = ["pythagorean", "plane_geometry", "coordinate"]
 
     def __init__(self, mode: Mode = "hypotenuse") -> None:
         self.mode: Mode = mode
@@ -55,6 +56,10 @@ class PythagoreanLengthVerb(VerbAtom):
         return True, None
 
     def solve(self, *nouns: NounAtom, rng: random.Random) -> LogicStep:
+        # PointAtom が 2 つある → 座標平面上の 2 点間の距離
+        if len(nouns) >= 2 and all(type(n).__name__ == "PointAtom" for n in nouns[:2]):
+            return self._from_two_points(nouns[0], nouns[1])
+
         # PolygonAtom から 2 辺を取得
         if type(nouns[0]).__name__ == "PolygonAtom":
             return self._from_polygon(nouns[0], rng)
@@ -135,6 +140,22 @@ class PythagoreanLengthVerb(VerbAtom):
             operands=[str(base_side), str(height)],
             sympy_expr=sympy.simplify(slant_edge),
             narration_hint=f"正四角錐の母線 = $\\sqrt{{(\\frac{{base}}{{\\sqrt{{2}}}})^2 + h^2}}$",
+        )
+
+    def _from_two_points(self, p1: NounAtom, p2: NounAtom) -> LogicStep:
+        """座標平面上の 2 点 A(x1,y1), B(x2,y2) の距離 = sqrt((x2-x1)^2 + (y2-y1)^2)"""
+        s1 = p1.get_symbols()
+        s2 = p2.get_symbols()
+        x1, y1 = s1.get("x", sympy.Integer(0)), s1.get("y", sympy.Integer(0))
+        x2, y2 = s2.get("x", sympy.Integer(0)), s2.get("y", sympy.Integer(0))
+        dx = x2 - x1
+        dy = y2 - y1
+        dist = sympy.sqrt(dx**2 + dy**2)
+        return LogicStep(
+            operation_name="pythagorean_distance",
+            operands=[f"({x1},{y1})", f"({x2},{y2})"],
+            sympy_expr=sympy.simplify(dist),
+            narration_hint=f"2点間の距離 = $\\sqrt{{({dx})^2+({dy})^2}}$",
         )
 
     def _compute(self, a: sympy.Expr, b: sympy.Expr) -> LogicStep:

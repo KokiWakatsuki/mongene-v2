@@ -53,14 +53,14 @@
     "title": "比例のグラフの書き方と特徴",
     "grade": 1,
     "lesson_number": 31,
-    "execute_blueprint": "BasicGeometryMeasurementStructure",
-    "required_tags": ["linear_function", "proportion"],
+    "execute_blueprint": "FunctionGeometryFusionStructure",
+    "required_tags": ["linear_function"],
     "atom_constraints": {
       "LinearFuncAtom": {"force_proportion": true, "max_slope": 5, "force_integer_slope": true}
     },
     "visual_component": "Graph_Renderer",
     "y_base": 16,
-    "supported_forms": ["calculation", "word_problem"]
+    "supported_forms": ["visual", "word_problem"]
   },
 
   "g1_l41": {
@@ -368,13 +368,13 @@
     "title": "座標平面上の2点間の距離",
     "grade": 3, "lesson_number": 54,
     "execute_blueprint": "PythagoreanStructure",
-    "required_tags": ["pythagorean", "coordinate"],
+    "required_tags": ["coordinate"],
     "atom_constraints": {
-      "PolygonAtom": {"polygon_type": "right_triangle", "max_side_length": 10, "force_integer_coords": true}
+      "PointAtom": {"range_x": [-8, 8], "range_y": [-8, 8], "integer_only": true}
     },
     "visual_component": "Graph_Renderer",
     "y_base": 70,
-    "supported_forms": ["calculation"]
+    "supported_forms": ["visual", "calculation"]
   },
 
   "g3_l56": {
@@ -389,5 +389,185 @@
     "visual_component": "3D_Renderer",
     "y_base": 78,
     "supported_forms": ["word_problem", "calculation"]
+  },
+
+  "g1_l54": {
+    "title": "度数分布表とヒストグラム",
+    "grade": 1, "lesson_number": 54,
+    "execute_blueprint": "BasicCalculationStructure",
+    "required_tags": ["number"],
+    "atom_constraints": {"NumberAtom": {"allow_negative": false, "max_value": 50}},
+    "visual_component": "NullRenderer",
+    "y_base": 12,
+    "supported_forms": ["calculation"]
+  },
+
+  "g2_l29": {
+    "title": "動点の問題（面積の変化）",
+    "grade": 2, "lesson_number": 29,
+    "execute_blueprint": "MovingPointStructure",
+    "required_tags": ["plane_geometry"],
+    "atom_constraints": {"PolygonAtom": {"polygon_type": "rectangle", "max_side_length": 10}},
+    "visual_component": "2D_Geometry_Renderer",
+    "y_base": 55,
+    "supported_forms": ["word_problem"]
+  },
+
+  "g2_l55": {
+    "title": "四分位数と四分位範囲",
+    "grade": 2, "lesson_number": 55,
+    "execute_blueprint": "DataProbabilityStructure",
+    "required_tags": ["probability"],
+    "atom_constraints": {"EventAtom": {"event_type": "dice", "num_trials": 1}},
+    "visual_component": "NullRenderer",
+    "y_base": 38,
+    "supported_forms": ["calculation", "knowledge"]
+  },
+
+  "g2_l56": {
+    "title": "箱ひげ図の書き方と読み取り",
+    "grade": 2, "lesson_number": 56,
+    "execute_blueprint": "DataProbabilityStructure",
+    "required_tags": ["probability"],
+    "atom_constraints": {"EventAtom": {"event_type": "dice", "num_trials": 1}},
+    "visual_component": "NullRenderer",
+    "y_base": 38,
+    "supported_forms": ["visual", "knowledge"]
+  },
+
+  "g2_l57": {
+    "title": "箱ひげ図を用いたデータの分布の比較と傾向の読み取り",
+    "grade": 2, "lesson_number": 57,
+    "execute_blueprint": "DataProbabilityStructure",
+    "required_tags": ["probability"],
+    "atom_constraints": {"EventAtom": {"event_type": "dice", "num_trials": 1}},
+    "visual_component": "NullRenderer",
+    "y_base": 40,
+    "supported_forms": ["visual", "word_problem"]
+  },
+
+  "g3_l57": {
+    "title": "標本調査の方法と集め方",
+    "grade": 3, "lesson_number": 57,
+    "execute_blueprint": "DataProbabilityStructure",
+    "required_tags": ["probability"],
+    "atom_constraints": {"EventAtom": {"event_type": "dice", "num_trials": 1}},
+    "visual_component": "NullRenderer",
+    "y_base": 35,
+    "supported_forms": ["word_problem", "knowledge"]
+  },
+
+  "g3_l58": {
+    "title": "標本の取り出し方と無作為抽出",
+    "grade": 3, "lesson_number": 58,
+    "execute_blueprint": "DataProbabilityStructure",
+    "required_tags": ["probability"],
+    "atom_constraints": {"EventAtom": {"event_type": "dice", "num_trials": 1}},
+    "visual_component": "NullRenderer",
+    "y_base": 35,
+    "supported_forms": ["word_problem", "knowledge"]
+  },
+
+  "g3_l59": {
+    "title": "標本比率と母比率の推定",
+    "grade": 3, "lesson_number": 59,
+    "execute_blueprint": "DataProbabilityStructure",
+    "required_tags": ["probability"],
+    "atom_constraints": {"EventAtom": {"event_type": "dice", "num_trials": 2}},
+    "visual_component": "NullRenderer",
+    "y_base": 38,
+    "supported_forms": ["word_problem"]
+  },
+
+  "g3_l60": {
+    "title": "標本調査の活用（標本から母集団を推定する問題）",
+    "grade": 3, "lesson_number": 60,
+    "execute_blueprint": "DataProbabilityStructure",
+    "required_tags": ["probability"],
+    "atom_constraints": {"EventAtom": {"event_type": "dice", "num_trials": 2}},
+    "visual_component": "NullRenderer",
+    "y_base": 40,
+    "supported_forms": ["word_problem"]
+  },
+
+  "g3_l12": {
+    "title": "式の計算の利用（数の計算への応用・式の値）",
+    "grade": 3, "lesson_number": 12,
+    "execute_blueprint": "BasicCalculationStructure",
+    "required_tags": ["polynomial"],
+    "atom_constraints": {"PolynomialAtom": {"max_degree": 2, "num_variables": 1, "max_coefficient": 8}},
+    "visual_component": "NullRenderer",
+    "y_base": 57,
+    "supported_forms": ["calculation"]
+  },
+
+  "g3_l13": {
+    "title": "式の計算の利用（図形の性質の証明への応用）",
+    "grade": 3, "lesson_number": 13,
+    "execute_blueprint": "ProofStructure",
+    "required_tags": ["plane_geometry"],
+    "atom_constraints": {"PolygonAtom": {"polygon_type": "triangle", "max_side_length": 10}},
+    "visual_component": "2D_Geometry_Renderer",
+    "y_base": 68,
+    "supported_forms": ["proof"]
+  },
+
+  "g3_l23": {
+    "title": "平方根の利用（図形や実生活への応用）",
+    "grade": 3, "lesson_number": 23,
+    "execute_blueprint": "BasicCalculationStructure",
+    "required_tags": ["square_root"],
+    "atom_constraints": {"SquareRootAtom": {"allow_simplification": true}},
+    "visual_component": "NullRenderer",
+    "y_base": 63,
+    "supported_forms": ["calculation", "word_problem"]
+  },
+
+  "g3_l38": {
+    "title": "動点と面積の変化の問題",
+    "grade": 3, "lesson_number": 38,
+    "execute_blueprint": "MovingPointStructure",
+    "required_tags": ["plane_geometry"],
+    "atom_constraints": {"PolygonAtom": {"polygon_type": "rectangle", "max_side_length": 12}},
+    "visual_component": "2D_Geometry_Renderer",
+    "y_base": 70,
+    "supported_forms": ["word_problem"]
+  },
+
+  "g3_l46": {
+    "title": "相似な立体の表面積比と体積比",
+    "grade": 3, "lesson_number": 46,
+    "execute_blueprint": "BasicGeometryMeasurementStructure",
+    "required_tags": ["space_geometry"],
+    "atom_constraints": {
+      "PrismAtom": {"is_cube": false, "base_shape_type": "square", "max_dim": 8}
+    },
+    "visual_component": "3D_Renderer",
+    "y_base": 76,
+    "supported_forms": ["visual", "word_problem"]
+  },
+
+  "g3_l49": {
+    "title": "円周角の定理を利用した証明",
+    "grade": 3, "lesson_number": 49,
+    "execute_blueprint": "ProofStructure",
+    "required_tags": ["plane_geometry"],
+    "atom_constraints": {"PolygonAtom": {"polygon_type": "triangle", "max_side_length": 8}},
+    "visual_component": "2D_Geometry_Renderer",
+    "y_base": 73,
+    "supported_forms": ["proof"]
+  },
+
+  "g2_l27": {
+    "title": "連立方程式の解と2直線の交点の座標",
+    "grade": 2, "lesson_number": 27,
+    "execute_blueprint": "FunctionGeometryFusionStructure",
+    "required_tags": ["linear_function"],
+    "atom_constraints": {
+      "LinearFuncAtom": {"max_slope": 3, "force_integer_slope": true}
+    },
+    "visual_component": "Graph_Renderer",
+    "y_base": 35,
+    "supported_forms": ["visual", "word_problem"]
   }
 }

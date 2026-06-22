@@ -1120,10 +1120,9 @@
     "title": "比例のグラフの書き方と特徴",
     "grade": 1,
     "lesson_number": 31,
-    "execute_blueprint": "BasicGeometryMeasurementStructure",
+    "execute_blueprint": "FunctionGeometryFusionStructure",
     "required_tags": [
-      "linear_function",
-      "proportion"
+      "linear_function"
     ],
     "atom_constraints": {
       "LinearFuncAtom": {
@@ -1135,7 +1134,7 @@
     "visual_component": "Graph_Renderer",
     "y_base": 6,
     "supported_forms": [
-      "calculation",
+      "visual",
       "word_problem"
     ],
     "domain": "関数",
@@ -1868,28 +1867,34 @@
     "lesson_number": 51,
     "domain": "図形",
     "large_unit": "空間図形",
-    "execute_blueprint": "BasicDifferenceStructure",
+    "execute_blueprint": "BasicCalculationStructure",
     "required_tags": [
       "polynomial",
       "space_geometry"
     ],
     "optional_tags": [],
     "atom_constraints": {
-      "PrismAtom": {
-        "is_cube": false,
-        "max_height": 10
+      "NumberAtom": {
+        "allow_negative": true,
+        "max_value": 30,
+        "force_fraction": false
       },
-      "PyramidAtom": {
-        "max_base_side": 3,
-        "max_height": 3,
-        "hide_height": false
+      "EquationAtom": {
+        "degree": 1,
+        "max_coefficient": 10,
+        "is_integer_solution": true
+      },
+      "PolynomialAtom": {
+        "max_degree": 2,
+        "num_variables": 1,
+        "max_coefficient": 8
       }
     },
-    "visual_component": "3D_Renderer",
+    "visual_component": "NullRenderer",
     "raw_y_base": 650,
     "y_base": 14,
     "supported_forms": [
-      "word_problem"
+      "visual"
     ],
     "is_clean_override": {
       "disabled": true
@@ -1974,28 +1979,17 @@
     "title": "度数分布表とヒストグラム",
     "grade": 1,
     "lesson_number": 54,
-    "execute_blueprint": "DataProbabilityStructure",
+    "execute_blueprint": "BasicCalculationStructure",
     "required_tags": [
-      "statistics",
-      "data_analysis"
+      "number"
     ],
     "atom_constraints": {
-      "DataSetAtom": {
-        "data_size": 30,
-        "value_range": [
-          0,
-          100
-        ],
-        "distribution_type": "uniform"
-      },
-      "AnalyzeDataVerb": {
-        "metrics": [
-          "mean",
-          "histogram"
-        ]
+      "NumberAtom": {
+        "allow_negative": false,
+        "max_value": 50
       }
     },
-    "visual_component": "Table_&_Chart_Renderer",
+    "visual_component": "NullRenderer",
     "y_base": 3,
     "supported_forms": [
       "calculation"
@@ -3124,30 +3118,25 @@
     "title": "連立方程式の解と2直線の交点の座標",
     "grade": 2,
     "lesson_number": 27,
-    "domain": "関数",
-    "large_unit": "1次関数",
     "execute_blueprint": "FunctionGeometryFusionStructure",
     "required_tags": [
-      "linear_equation"
+      "linear_function"
     ],
-    "optional_tags": [],
     "atom_constraints": {
       "LinearFuncAtom": {
-        "max_slope": 5,
+        "max_slope": 3,
         "force_integer_slope": true
-      },
-      "QuadraticFuncAtom": {
-        "max_a_value": 3,
-        "is_pure_form": true
       }
     },
     "visual_component": "Graph_Renderer",
-    "raw_y_base": 550,
     "y_base": 12,
     "supported_forms": [
       "visual",
       "word_problem"
     ],
+    "domain": "関数",
+    "large_unit": "1次関数",
+    "raw_y_base": 550,
     "is_clean_override": {
       "disabled": true
     }
@@ -3184,21 +3173,12 @@
     "lesson_number": 29,
     "execute_blueprint": "MovingPointStructure",
     "required_tags": [
-      "moving_point",
-      "linear_function"
+      "plane_geometry"
     ],
     "atom_constraints": {
       "PolygonAtom": {
         "polygon_type": "rectangle",
         "max_side_length": 10
-      },
-      "MovingPointAtom": {
-        "num_points": 1,
-        "path_type": "edge_traversal",
-        "speed_range": [
-          1,
-          3
-        ]
       }
     },
     "visual_component": "2D_Geometry_Renderer",
@@ -4046,40 +4026,25 @@
     "title": "四分位数と四分位範囲",
     "grade": 2,
     "lesson_number": 55,
-    "domain": "データの活用",
-    "large_unit": "データの分布の比較",
     "execute_blueprint": "DataProbabilityStructure",
     "required_tags": [
-      "data_analysis"
+      "probability"
     ],
-    "optional_tags": [],
     "atom_constraints": {
       "EventAtom": {
         "event_type": "dice",
-        "num_trials": 1,
-        "with_replacement": true
-      },
-      "DataSetAtom": {
-        "data_size": 20,
-        "value_range": [
-          0,
-          100
-        ],
-        "distribution_type": "uniform"
-      },
-      "SampleAtom": {
-        "population_size": 1000,
-        "sample_size": 50
+        "num_trials": 1
       }
     },
-    "visual_component": "Tree_Renderer",
-    "raw_y_base": 350,
+    "visual_component": "NullRenderer",
     "y_base": 7,
     "supported_forms": [
       "calculation",
-      "word_problem",
       "knowledge"
     ],
+    "domain": "データの活用",
+    "large_unit": "データの分布の比較",
+    "raw_y_base": 350,
     "is_clean_override": {
       "disabled": true
     }
@@ -4088,40 +4053,25 @@
     "title": "箱ひげ図の書き方と読み取り",
     "grade": 2,
     "lesson_number": 56,
-    "domain": "データの活用",
-    "large_unit": "データの分布の比較",
     "execute_blueprint": "DataProbabilityStructure",
     "required_tags": [
-      "data_analysis"
+      "probability"
     ],
-    "optional_tags": [],
     "atom_constraints": {
       "EventAtom": {
         "event_type": "dice",
-        "num_trials": 1,
-        "with_replacement": true
-      },
-      "DataSetAtom": {
-        "data_size": 20,
-        "value_range": [
-          0,
-          100
-        ],
-        "distribution_type": "uniform"
-      },
-      "SampleAtom": {
-        "population_size": 1000,
-        "sample_size": 50
+        "num_trials": 1
       }
     },
-    "visual_component": "Tree_Renderer",
-    "raw_y_base": 350,
+    "visual_component": "NullRenderer",
     "y_base": 7,
     "supported_forms": [
-      "calculation",
-      "word_problem",
+      "visual",
       "knowledge"
     ],
+    "domain": "データの活用",
+    "large_unit": "データの分布の比較",
+    "raw_y_base": 350,
     "is_clean_override": {
       "disabled": true
     }
@@ -4130,40 +4080,26 @@
     "title": "箱ひげ図を用いたデータの分布の比較と傾向の読み取り",
     "grade": 2,
     "lesson_number": 57,
-    "domain": "データの活用",
-    "large_unit": "データの分布の比較",
     "execute_blueprint": "DataProbabilityStructure",
     "required_tags": [
-      "data_analysis"
+      "probability"
     ],
-    "optional_tags": [],
     "atom_constraints": {
       "EventAtom": {
         "event_type": "dice",
-        "num_trials": 1,
-        "with_replacement": true
-      },
-      "DataSetAtom": {
-        "data_size": 20,
-        "value_range": [
-          0,
-          100
-        ],
-        "distribution_type": "uniform"
-      },
-      "SampleAtom": {
-        "population_size": 1000,
-        "sample_size": 50
+        "num_trials": 1
       }
     },
-    "visual_component": "Tree_Renderer",
-    "raw_y_base": 350,
+    "visual_component": "NullRenderer",
     "y_base": 7,
     "supported_forms": [
-      "calculation",
+      "visual",
       "word_problem",
       "knowledge"
     ],
+    "domain": "データの活用",
+    "large_unit": "データの分布の比較",
+    "raw_y_base": 350,
     "is_clean_override": {
       "disabled": true
     }
@@ -4430,23 +4366,33 @@
     "lesson_number": 8,
     "domain": "数と式",
     "large_unit": "多項式",
-    "execute_blueprint": "WordProblemStructure",
+    "execute_blueprint": "BasicCalculationStructure",
     "required_tags": [
       "polynomial"
     ],
     "optional_tags": [],
     "atom_constraints": {
+      "NumberAtom": {
+        "allow_negative": true,
+        "max_value": 30,
+        "force_fraction": false
+      },
       "EquationAtom": {
         "degree": 1,
         "max_coefficient": 10,
         "is_integer_solution": true
+      },
+      "PolynomialAtom": {
+        "max_degree": 2,
+        "num_variables": 1,
+        "max_coefficient": 8
       }
     },
     "visual_component": "NullRenderer",
     "raw_y_base": 900,
     "y_base": 20,
     "supported_forms": [
-      "word_problem"
+      "calculation"
     ],
     "is_clean_override": {
       "disabled": true
@@ -4458,23 +4404,33 @@
     "lesson_number": 9,
     "domain": "数と式",
     "large_unit": "多項式",
-    "execute_blueprint": "WordProblemStructure",
+    "execute_blueprint": "BasicCalculationStructure",
     "required_tags": [
       "polynomial"
     ],
     "optional_tags": [],
     "atom_constraints": {
+      "NumberAtom": {
+        "allow_negative": true,
+        "max_value": 30,
+        "force_fraction": false
+      },
       "EquationAtom": {
         "degree": 1,
         "max_coefficient": 10,
         "is_integer_solution": true
+      },
+      "PolynomialAtom": {
+        "max_degree": 2,
+        "num_variables": 1,
+        "max_coefficient": 8
       }
     },
     "visual_component": "NullRenderer",
     "raw_y_base": 900,
     "y_base": 20,
     "supported_forms": [
-      "word_problem"
+      "calculation"
     ],
     "is_clean_override": {
       "disabled": true
@@ -4486,23 +4442,33 @@
     "lesson_number": 10,
     "domain": "数と式",
     "large_unit": "多項式",
-    "execute_blueprint": "WordProblemStructure",
+    "execute_blueprint": "BasicCalculationStructure",
     "required_tags": [
       "polynomial"
     ],
     "optional_tags": [],
     "atom_constraints": {
+      "NumberAtom": {
+        "allow_negative": true,
+        "max_value": 30,
+        "force_fraction": false
+      },
       "EquationAtom": {
         "degree": 1,
         "max_coefficient": 10,
         "is_integer_solution": true
+      },
+      "PolynomialAtom": {
+        "max_degree": 2,
+        "num_variables": 1,
+        "max_coefficient": 8
       }
     },
     "visual_component": "NullRenderer",
     "raw_y_base": 900,
     "y_base": 20,
     "supported_forms": [
-      "word_problem"
+      "calculation"
     ],
     "is_clean_override": {
       "disabled": true
@@ -4550,26 +4516,25 @@
     "title": "式の計算の利用（数の計算への応用・式の値）",
     "grade": 3,
     "lesson_number": 12,
-    "domain": "数と式",
-    "large_unit": "多項式",
-    "execute_blueprint": "WordProblemStructure",
+    "execute_blueprint": "BasicCalculationStructure",
     "required_tags": [
       "polynomial"
     ],
-    "optional_tags": [],
     "atom_constraints": {
-      "EquationAtom": {
-        "degree": 1,
-        "max_coefficient": 10,
-        "is_integer_solution": true
+      "PolynomialAtom": {
+        "max_degree": 2,
+        "num_variables": 1,
+        "max_coefficient": 8
       }
     },
     "visual_component": "NullRenderer",
-    "raw_y_base": 900,
     "y_base": 20,
     "supported_forms": [
-      "word_problem"
+      "calculation"
     ],
+    "domain": "数と式",
+    "large_unit": "多項式",
+    "raw_y_base": 900,
     "is_clean_override": {
       "disabled": true
     }
@@ -4578,13 +4543,10 @@
     "title": "式の計算の利用（図形の性質の証明への応用）",
     "grade": 3,
     "lesson_number": 13,
-    "domain": "数と式",
-    "large_unit": "多項式",
     "execute_blueprint": "ProofStructure",
     "required_tags": [
-      "polynomial"
+      "plane_geometry"
     ],
-    "optional_tags": [],
     "atom_constraints": {
       "PolygonAtom": {
         "polygon_type": "triangle",
@@ -4592,11 +4554,13 @@
       }
     },
     "visual_component": "2D_Geometry_Renderer",
-    "raw_y_base": 900,
     "y_base": 20,
     "supported_forms": [
       "proof"
     ],
+    "domain": "数と式",
+    "large_unit": "多項式",
+    "raw_y_base": 900,
     "is_clean_override": {
       "disabled": true
     }
@@ -4862,23 +4826,33 @@
     "lesson_number": 21,
     "domain": "数と式",
     "large_unit": "平方根",
-    "execute_blueprint": "WordProblemStructure",
+    "execute_blueprint": "BasicCalculationStructure",
     "required_tags": [
       "square_root"
     ],
     "optional_tags": [],
     "atom_constraints": {
+      "NumberAtom": {
+        "allow_negative": true,
+        "max_value": 30,
+        "force_fraction": false
+      },
       "EquationAtom": {
         "degree": 1,
         "max_coefficient": 10,
         "is_integer_solution": true
+      },
+      "PolynomialAtom": {
+        "max_degree": 2,
+        "num_variables": 1,
+        "max_coefficient": 8
       }
     },
     "visual_component": "NullRenderer",
     "raw_y_base": 950,
     "y_base": 21,
     "supported_forms": [
-      "word_problem"
+      "calculation"
     ],
     "is_clean_override": {
       "disabled": true
@@ -4926,26 +4900,23 @@
     "title": "平方根の利用（図形や実生活への応用）",
     "grade": 3,
     "lesson_number": 23,
-    "domain": "数と式",
-    "large_unit": "平方根",
-    "execute_blueprint": "WordProblemStructure",
+    "execute_blueprint": "BasicCalculationStructure",
     "required_tags": [
       "square_root"
     ],
-    "optional_tags": [],
     "atom_constraints": {
-      "EquationAtom": {
-        "degree": 1,
-        "max_coefficient": 10,
-        "is_integer_solution": true
+      "SquareRootAtom": {
+        "allow_simplification": true
       }
     },
     "visual_component": "NullRenderer",
-    "raw_y_base": 950,
     "y_base": 21,
     "supported_forms": [
-      "word_problem"
+      "calculation"
     ],
+    "domain": "数と式",
+    "large_unit": "平方根",
+    "raw_y_base": 950,
     "is_clean_override": {
       "disabled": true
     }
@@ -5410,33 +5381,24 @@
     "title": "動点と面積の変化の問題",
     "grade": 3,
     "lesson_number": 38,
-    "domain": "関数",
-    "large_unit": "関数 y=ax^2",
     "execute_blueprint": "MovingPointStructure",
     "required_tags": [
-      "quadratic_function"
+      "plane_geometry"
     ],
-    "optional_tags": [],
     "atom_constraints": {
       "PolygonAtom": {
         "polygon_type": "rectangle",
-        "max_side_length": 10
-      },
-      "MovingPointAtom": {
-        "num_points": 1,
-        "path_type": "edge_traversal",
-        "speed_range": [
-          1,
-          3
-        ]
+        "max_side_length": 12
       }
     },
     "visual_component": "2D_Geometry_Renderer",
-    "raw_y_base": 700,
     "y_base": 15,
     "supported_forms": [
       "word_problem"
     ],
+    "domain": "関数",
+    "large_unit": "関数 y=ax^2",
+    "raw_y_base": 700,
     "is_clean_override": {
       "disabled": true
     }
@@ -5635,26 +5597,26 @@
     "title": "相似な立体の表面積比と体積比",
     "grade": 3,
     "lesson_number": 46,
-    "domain": "図形",
-    "large_unit": "相似な図形",
-    "execute_blueprint": "ProofStructure",
+    "execute_blueprint": "BasicGeometryMeasurementStructure",
     "required_tags": [
-      "similarity",
       "space_geometry"
     ],
-    "optional_tags": [],
     "atom_constraints": {
-      "PolygonAtom": {
-        "polygon_type": "triangle",
-        "max_side_length": 10
+      "PrismAtom": {
+        "is_cube": false,
+        "base_shape_type": "square",
+        "max_dim": 8
       }
     },
-    "visual_component": "2D_Geometry_Renderer",
-    "raw_y_base": 800,
+    "visual_component": "3D_Renderer",
     "y_base": 18,
     "supported_forms": [
-      "proof"
+      "visual",
+      "word_problem"
     ],
+    "domain": "図形",
+    "large_unit": "相似な図形",
+    "raw_y_base": 800,
     "is_clean_override": {
       "disabled": true
     }
@@ -5726,25 +5688,24 @@
     "title": "円周角の定理を利用した証明",
     "grade": 3,
     "lesson_number": 49,
-    "domain": "図形",
-    "large_unit": "円",
     "execute_blueprint": "ProofStructure",
     "required_tags": [
-      "circle_angles"
+      "plane_geometry"
     ],
-    "optional_tags": [],
     "atom_constraints": {
       "PolygonAtom": {
         "polygon_type": "triangle",
-        "max_side_length": 10
+        "max_side_length": 8
       }
     },
     "visual_component": "2D_Geometry_Renderer",
-    "raw_y_base": 1000,
     "y_base": 22,
     "supported_forms": [
       "proof"
     ],
+    "domain": "図形",
+    "large_unit": "円",
+    "raw_y_base": 1000,
     "is_clean_override": {
       "disabled": true
     }
@@ -5871,14 +5832,19 @@
     "lesson_number": 54,
     "execute_blueprint": "PythagoreanStructure",
     "required_tags": [
-      "pythagorean",
       "coordinate"
     ],
     "atom_constraints": {
-      "PolygonAtom": {
-        "polygon_type": "right_triangle",
-        "max_side_length": 10,
-        "force_integer_coords": true
+      "PointAtom": {
+        "range_x": [
+          -8,
+          8
+        ],
+        "range_y": [
+          -8,
+          8
+        ],
+        "integer_only": true
       }
     },
     "visual_component": "Graph_Renderer",
@@ -5963,169 +5929,107 @@
     }
   },
   "g3_l57": {
-    "title": "全数調査と標本調査、母集団と標本",
+    "title": "標本調査の方法と集め方",
     "grade": 3,
     "lesson_number": 57,
-    "domain": "データの活用",
-    "large_unit": "標本調査",
     "execute_blueprint": "DataProbabilityStructure",
     "required_tags": [
-      "sampling_survey"
+      "probability"
     ],
-    "optional_tags": [],
     "atom_constraints": {
       "EventAtom": {
         "event_type": "dice",
-        "num_trials": 1,
-        "with_replacement": true
-      },
-      "DataSetAtom": {
-        "data_size": 20,
-        "value_range": [
-          0,
-          100
-        ],
-        "distribution_type": "uniform"
-      },
-      "SampleAtom": {
-        "population_size": 1000,
-        "sample_size": 50
+        "num_trials": 1
       }
     },
-    "visual_component": "Tree_Renderer",
-    "raw_y_base": 600,
+    "visual_component": "NullRenderer",
     "y_base": 13,
     "supported_forms": [
-      "calculation",
       "word_problem",
       "knowledge"
     ],
+    "domain": "データの活用",
+    "large_unit": "標本調査",
+    "raw_y_base": 600,
     "is_clean_override": {
       "disabled": true
     }
   },
   "g3_l58": {
-    "title": "無作為抽出の方法と標本の偏り",
+    "title": "標本の取り出し方と無作為抽出",
     "grade": 3,
     "lesson_number": 58,
-    "domain": "データの活用",
-    "large_unit": "標本調査",
     "execute_blueprint": "DataProbabilityStructure",
     "required_tags": [
-      "sampling_survey"
+      "probability"
     ],
-    "optional_tags": [],
     "atom_constraints": {
       "EventAtom": {
         "event_type": "dice",
-        "num_trials": 1,
-        "with_replacement": true
-      },
-      "DataSetAtom": {
-        "data_size": 20,
-        "value_range": [
-          0,
-          100
-        ],
-        "distribution_type": "uniform"
-      },
-      "SampleAtom": {
-        "population_size": 1000,
-        "sample_size": 50
+        "num_trials": 1
       }
     },
-    "visual_component": "Tree_Renderer",
-    "raw_y_base": 600,
+    "visual_component": "NullRenderer",
     "y_base": 13,
     "supported_forms": [
-      "calculation",
       "word_problem",
       "knowledge"
     ],
+    "domain": "データの活用",
+    "large_unit": "標本調査",
+    "raw_y_base": 600,
     "is_clean_override": {
       "disabled": true
     }
   },
   "g3_l59": {
-    "title": "標本の割合や平均から母集団の傾向を推定する",
+    "title": "標本比率と母比率の推定",
     "grade": 3,
     "lesson_number": 59,
-    "domain": "データの活用",
-    "large_unit": "標本調査",
     "execute_blueprint": "DataProbabilityStructure",
     "required_tags": [
-      "sampling_survey"
+      "probability"
     ],
-    "optional_tags": [],
     "atom_constraints": {
       "EventAtom": {
         "event_type": "dice",
-        "num_trials": 1,
-        "with_replacement": true
-      },
-      "DataSetAtom": {
-        "data_size": 20,
-        "value_range": [
-          0,
-          100
-        ],
-        "distribution_type": "uniform"
-      },
-      "SampleAtom": {
-        "population_size": 1000,
-        "sample_size": 50
+        "num_trials": 2
       }
     },
-    "visual_component": "Tree_Renderer",
-    "raw_y_base": 600,
+    "visual_component": "NullRenderer",
     "y_base": 13,
     "supported_forms": [
-      "calculation",
-      "word_problem",
-      "knowledge"
+      "word_problem"
     ],
+    "domain": "データの活用",
+    "large_unit": "標本調査",
+    "raw_y_base": 600,
     "is_clean_override": {
       "disabled": true
     }
   },
   "g3_l60": {
-    "title": "標本調査の活用（実社会の問題解決）",
+    "title": "標本調査の活用（標本から母集団を推定する問題）",
     "grade": 3,
     "lesson_number": 60,
-    "domain": "データの活用",
-    "large_unit": "標本調査",
     "execute_blueprint": "DataProbabilityStructure",
     "required_tags": [
-      "sampling_survey"
+      "probability"
     ],
-    "optional_tags": [],
     "atom_constraints": {
       "EventAtom": {
         "event_type": "dice",
-        "num_trials": 1,
-        "with_replacement": true
-      },
-      "DataSetAtom": {
-        "data_size": 20,
-        "value_range": [
-          0,
-          100
-        ],
-        "distribution_type": "uniform"
-      },
-      "SampleAtom": {
-        "population_size": 1000,
-        "sample_size": 50
+        "num_trials": 2
       }
     },
-    "visual_component": "Tree_Renderer",
-    "raw_y_base": 850,
+    "visual_component": "NullRenderer",
     "y_base": 19,
     "supported_forms": [
-      "calculation",
-      "word_problem",
-      "knowledge"
+      "word_problem"
     ],
+    "domain": "データの活用",
+    "large_unit": "標本調査",
+    "raw_y_base": 850,
     "is_clean_override": {
       "disabled": true
     }

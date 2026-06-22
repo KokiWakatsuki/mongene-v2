@@ -8,19 +8,21 @@
 - Solvability: 177/177 (100.0%)
 - Accuracy (=Solvability, モック前提): 177/177 (100.0%)
 - Appropriateness: 177/177 (100.0%)
-- Standards Alignment: 177/177 (100.0%)
+- Standards Alignment: 175/177 (98.9%)
 
 ## Blueprint distribution
-- BasicCalculationStructure: 63
-- ProofStructure: 25
-- FunctionGeometryFusionStructure: 24
-- BasicGeometryMeasurementStructure: 20
-- DataProbabilityStructure: 17
-- WordProblemStructure: 13
+- BasicCalculationStructure: 71
+- FunctionGeometryFusionStructure: 25
+- ProofStructure: 23
+- BasicGeometryMeasurementStructure: 17
+- DataProbabilityStructure: 16
+- WordProblemStructure: 7
 - ConstructionStructure: 4
-- BasicDifferenceStructure: 4
 - AngleCalculationStructure: 4
+- PythagoreanStructure: 4
 - MovingPointStructure: 3
+- BasicDifferenceStructure: 2
+- PythagoreanSpaceStructure: 1
 
 ## Grade distribution
 - 中1: 60

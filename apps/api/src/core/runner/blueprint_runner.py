@@ -141,6 +141,7 @@ class BlueprintRunner:
                     atom_constraints=atom_constraints,
                     rng=rng,
                     diversity=self.diversity,
+                    required_tags=mapping.get("required_tags"),  # §38.2: mapping の tags で Atom 選択をガイド
                 )
 
                 selected_tags = self._aggregate_tags(sampled_nouns, mapping)

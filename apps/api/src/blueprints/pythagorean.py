@@ -22,9 +22,12 @@ def build_pythagorean_blueprint() -> BlueprintDefinition:
         blueprint_id="PythagoreanStructure",
         blueprint_version="v1",
         noun_slots={
+            # accepted_tags=["plane_geometry"] は直角三角形用フォールバック
+            # required_tags=["coordinate"] のとき PointAtom が選ばれる（2点間距離）
             "right_triangle": NounSlot(
                 slot_name="right_triangle",
                 accepted_tags=["plane_geometry"],
+                accepted_noun_types=["PolygonAtom", "PointAtom"],
                 required=True,
                 constraints_override={"polygon_type": "right_triangle", "max_side_length": 15},
             ),

@@ -15,19 +15,30 @@ from apps.api.src.core.abc.visuals import VisualSlot
 
 
 def build_basic_calculation_blueprint() -> BlueprintDefinition:
-    """中1 四則計算用の最小 Blueprint"""
+    """BasicCalculationStructure: 四則・方程式・展開・因数分解・整数論（設計書 §17.4）
+
+    slot の accepted_tags を空にして mapping の required_tags に委ねる（§38.2）。
+    → number タグ lesson: NumberAtom が選ばれ足し算・引き算
+    → polynomial タグ lesson: PolynomialAtom が選ばれ展開・因数分解
+    → square_root タグ lesson: SquareRootAtom が選ばれ根号計算
+    """
     return BlueprintDefinition(
         blueprint_id="BasicCalculationStructure",
         blueprint_version="v1",
         noun_slots={
+            # accepted_noun_types で CalculateArithmeticVerb が受け付ける型を明示
+            # → required_tags が "polynomial" なら PolynomialAtom が選ばれる（§38.2）
+            # → required_tags が "linear_equation" 等の場合 NumberAtom にフォールバック
             "left": NounSlot(
                 slot_name="left",
                 accepted_tags=["number"],
+                accepted_noun_types=["NumberAtom", "PolynomialAtom", "SquareRootAtom"],
                 required=True,
             ),
             "right": NounSlot(
                 slot_name="right",
                 accepted_tags=["number"],
+                accepted_noun_types=["NumberAtom", "PolynomialAtom", "SquareRootAtom"],
                 required=True,
             ),
         },

@@ -23,10 +23,15 @@ OUTPUT_PATH = REPO_ROOT / "master_data" / "mapping.json"
 BLUEPRINT_RULES: List[Tuple[str, str]] = [
     (r"証明|合同|相似", "ProofStructure"),
     (r"作図|軌跡", "ConstructionStructure"),
-    (r"確率|樹形図|平均|中央値|最頻値|度数|相対度数|ヒストグラム|箱ひげ|四分位|標本|起こりやすさ|データの分布", "DataProbabilityStructure"),
+    # 統計/確率系（データの読み取り・確率計算）
+    (r"確率|樹形図", "DataProbabilityStructure"),
+    # データの活用：ヒストグラム・箱ひげ図・平均・中央値は BasicCalculation（計算のみ）
+    (r"ヒストグラム|箱ひげ|四分位|標本|起こりやすさ|データの分布|度数分布|相対度数|累積|代表値|平均値|中央値|最頻値", "DataProbabilityStructure"),
     (r"規則性|数列|マッチ棒|並べ方|個数の規則", "SequencePatternStructure"),
     (r"動点|点 P|時間 t", "MovingPointStructure"),
     (r"角度|円周角|中心角|接弦角|内接四角形|内角|外角|平行線.*角|錯角|同位角", "AngleCalculationStructure"),
+    # 展開・因数分解・平方根の計算 → BasicCalculation（計算問題）
+    (r"展開|因数分解|乗法公式|有理化|根号.*計算|計算.*根号", "BasicCalculationStructure"),
     # 関数系を幾何系より先に判定（「グラフ」と「面積」が同居しないよう）
     (r"比例|反比例|一次関数|二次関数|放物線|y\s*=\s*ax|交点|グラフ", "FunctionGeometryFusionStructure"),
     (r"くり抜|切断|回転体|展開図", "BasicDifferenceStructure"),
