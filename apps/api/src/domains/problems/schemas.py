@@ -48,6 +48,9 @@ class MetadataSchema(BaseModel):
     blueprint_version: str
     model_used: str = "gemini-flash-lite-latest"
     git_commit: Optional[str] = None
+    # 個別最適化ループ用: 採点結果を lesson に逆紐付けするために生成元を明示する
+    lesson_id: Optional[str] = None
+    problem_form: Optional[str] = None
 
 
 class ProblemGenerationResponse(BaseModel):
