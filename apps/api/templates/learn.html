@@ -66,6 +66,11 @@
   </fieldset>
 
   <div id="main" style="display:none;">
+    <div class="row" style="margin-bottom:8px;">
+      <label>単元しぼり込み（任意）
+        <select id="focus-unit"><option value="">前提順におまかせ</option></select>
+      </label>
+    </div>
     <div class="row">
       <button id="btn-next">▶ 次の問題を出す</button>
       <span id="status" class="meta"></span>
@@ -76,6 +81,11 @@
     <fieldset style="margin-top:16px;">
       <legend>② 習熟状況</legend>
       <div id="mastery-area" class="meta">まだ解答がありません。</div>
+    </fieldset>
+
+    <fieldset>
+      <legend>③ 学習パス（前提グラフが導く今後の単元）</legend>
+      <div id="path-area" class="meta">—</div>
     </fieldset>
   </div>
 
@@ -101,7 +111,21 @@
       $('active-sid').textContent = id;
       $('active-grade').textContent = '中' + grade;
       $('main').style.display = 'block';
+      populateUnits(grade);
       refreshMastery();
+      refreshPath();
+    }
+
+    async function populateUnits(grade) {
+      const sel = $('focus-unit');
+      sel.innerHTML = '<option value="">前提順におまかせ</option>';
+      try {
+        const r = await fetch('/problems/lessons');
+        if (!r.ok) return;
+        const d = await r.json();
+        const units = [...new Set(d.lessons.filter(l => l.grade === grade && (l.supported_forms || []).includes('calculation')).map(l => l.large_unit))];
+        units.forEach(u => { const o = document.createElement('option'); o.value = u; o.textContent = u; sel.appendChild(o); });
+      } catch (e) {}
     }
 
     $('btn-create').onclick = async () => {
@@ -137,7 +161,8 @@
       $('btn-next').disabled = true;
       $('problem-area').innerHTML = '';
       try {
-        const r = await fetch('/learning/next', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ student_id: state.studentId }) });
+        const focus = $('focus-unit').value || null;
+        const r = await fetch('/learning/next', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ student_id: state.studentId, large_unit: focus }) });
         if (r.status === 409) { $('status').innerHTML = '🎉 出題可能な未習得の単元がありません（この学年は習得済み）'; return; }
         if (!r.ok) { const e = await r.json(); $('problem-area').innerHTML = `<div class="error">${e.detail||'生成エラー'}</div>`; return; }
         const data = await r.json();
@@ -162,7 +187,7 @@
       $('problem-area').innerHTML = `
         <div class="problem-card">
           <div class="row" style="justify-content:space-between;">
-            <strong>${d.lesson_title} <span style="color:var(--muted);font-weight:400;">(${d.lesson_id})</span></strong>
+            <strong>${d.lesson_title} <span style="color:var(--muted);font-weight:400;">[${d.large_unit}] (${d.lesson_id})</span></strong>
             <span class="pill diff">難易度 ${d.target_difficulty}/100</span>
           </div>
           <div class="meta">出題方針: ${d.rationale}</div>
@@ -186,6 +211,7 @@
         const res = await r.json();
         showResults(res);
         refreshMastery();
+        refreshPath();
       } finally {
         $('btn-grade').disabled = false; $('grade-status').textContent = '';
       }
@@ -234,6 +260,16 @@
       </tr>`).join('');
       $('mastery-area').innerHTML = `<div class="meta">習得 ${d.mastered_count} / 学習中 ${d.in_progress_count}</div>
         <table class="lessons-table"><thead><tr><th>単元</th><th>習熟</th><th></th><th>状態</th></tr></thead><tbody>${rows}</tbody></table>`;
+    }
+
+    async function refreshPath() {
+      const r = await fetch('/learning/path/' + state.studentId);
+      if (!r.ok) return;
+      const d = await r.json();
+      if (!d.upcoming.length) { $('path-area').textContent = '全単元を習得しました 🎉'; return; }
+      $('path-area').innerHTML = d.upcoming.map((u, i) =>
+        `<span class="pill ${i === 0 ? 'diff' : ''}" style="margin:2px; ${i ? 'background:#f1f5f9;color:#555;' : ''}">${i === 0 ? '▶ ' : ''}${u.title} <small>(${u.lesson_id})</small></span>`
+      ).join(' → ');
     }
 
     // 復帰: localStorage に生徒IDがあれば自動で続行

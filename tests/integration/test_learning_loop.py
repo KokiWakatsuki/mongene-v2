@@ -129,3 +129,58 @@ def test_full_loop_reaches_mastery_and_advances(client: TestClient) -> None:
         assert nxt.json()["lesson_id"] != mastered_lesson
     else:
         assert nxt.status_code == 409
+
+
+# ── 「ちゃんと最適か」を担保する検証テスト ──
+
+def test_difficulty_adapts_to_performance(client: TestClient) -> None:
+    """同一 lesson 内で、正答すると次問の難易度が上がる（個別最適化が実際に効く）。"""
+    sid = _create_student(client, grade=1)
+    n1 = client.post("/learning/next", json={"student_id": sid}).json()
+    d1, lesson1 = n1["target_difficulty"], n1["lesson_id"]
+    # 正答 → 習熟ウィンドウに正解が入る
+    client.post("/learning/submit", json={"student_id": sid, "problem_id": n1["problem_id"], "answers": _correct_answers(n1["problem"])})
+    n2 = client.post("/learning/next", json={"student_id": sid}).json()
+    # まだ習得していない（1問のみ）ので同じ lesson、難易度は上昇しているはず
+    assert n2["lesson_id"] == lesson1
+    assert n2["target_difficulty"] > d1, (d1, n2["target_difficulty"])
+
+
+def test_session_never_violates_prerequisites(client: TestClient) -> None:
+    """ループ中に出題される全 lesson は、その時点で前提を全て習得済み（グラフが出題順を支配）。"""
+    from apps.api.src.core.curriculum import load_prerequisite_graph
+
+    graph = load_prerequisite_graph()
+    sid = _create_student(client, grade=1)
+    for _ in range(10):
+        # 出題直前の習得集合
+        summary = client.get(f"/students/{sid}/mastery").json()
+        mastered = {item["lesson_id"] for item in summary["lessons"] if item["mastered"]}
+        nxt = client.post("/learning/next", json={"student_id": sid})
+        if nxt.status_code == 409:
+            break
+        nxt = nxt.json()
+        # この lesson の全前提が習得済みであること
+        for prereq in graph.prerequisites(nxt["lesson_id"]):
+            assert prereq in mastered, f"前提 {prereq} 未習得で {nxt['lesson_id']} が出題された"
+        client.post("/learning/submit", json={"student_id": sid, "problem_id": nxt["problem_id"], "answers": _correct_answers(nxt["problem"])})
+
+
+def test_learning_path_is_curriculum_ordered(client: TestClient) -> None:
+    sid = _create_student(client, grade=1)
+    r = client.get(f"/learning/path/{sid}")
+    assert r.status_code == 200
+    upcoming = r.json()["upcoming"]
+    assert upcoming, "学習パスが空"
+    assert upcoming[0]["lesson_id"] == "g1_l1"  # 最初の単元
+    nums = [u["lesson_id"] for u in upcoming]
+    # g1_l5 が g1_l10 より前（教科書順）
+    if "g1_l5" in nums and "g1_l10" in nums:
+        assert nums.index("g1_l5") < nums.index("g1_l10")
+
+
+def test_focus_large_unit_scopes_selection(client: TestClient) -> None:
+    sid = _create_student(client, grade=1)
+    r = client.post("/learning/next", json={"student_id": sid, "large_unit": "正の数・負の数"})
+    assert r.status_code == 200, r.text
+    assert r.json()["large_unit"] == "正の数・負の数"

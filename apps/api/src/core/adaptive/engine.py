@@ -3,16 +3,20 @@
 生成本体（/problems/generate）は呼ばず、生成リクエストの『仕様』だけを決める純粋ロジック。
 副作用（DB 読み取り）は AdaptiveStore 経由で注入し、テスト可能に保つ。
 
-MVP の制約:
+MVP の制約と方針:
   * problem_form は calculation のみ（自動採点が成立する numeric/expression 中心）。
-  * 完全習得ゲート: 習得済み lesson の全前提を満たす『未習得フロンティア』から、
-    進行中（attempted・未習得）を優先して継続、無ければ最浅の新規 lesson を選ぶ。
+  * 完全習得ゲート: 習得済み lesson の全前提を満たす『未習得フロンティア』から選ぶ
+    （= 前提を満たさない lesson は決して出さない。グラフが出題順を支配する）。
+  * 候補は教科書順（grade, lesson_number）で並べる（前提制約は frontier が担保済みなので、
+    その中で最も学年・単元番号が浅いものを「次」とするのが自然な学習順）。
+  * 進行中（attempted・未習得）を優先して継続（習得まで同 lesson を反復）。
   * grade <= 生徒の学年 でフィルタ（先取りしない）。
+  * focus_large_unit を指定すると、その大単元の候補を優先（無ければ通常フロンティアにフォールバック）。
 """
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any, Dict
+from typing import Any, Dict, List, Optional
 
 from apps.api.src.core.adaptive.ability_mapping import target_difficulty_for
 from apps.api.src.core.curriculum.prerequisite_loader import PrerequisiteGraph
@@ -29,10 +33,37 @@ class NextDecision:
     lesson_id: str
     lesson_title: str
     grade: int
+    large_unit: str
     problem_form: str
     target_difficulty: int
     mastery: MasteryState
     rationale: str
+
+
+def _curriculum_key(mapping: Dict[str, Any], lid: str):
+    m = mapping[lid]
+    return (m.get("grade", 99), m.get("lesson_number", 0), lid)
+
+
+def candidate_lessons(
+    student: Student,
+    store: AdaptiveStore,
+    graph: PrerequisiteGraph,
+    mapping: Dict[str, Any],
+    *,
+    problem_form: str = "calculation",
+) -> List[str]:
+    """前提を満たす未習得 lesson を教科書順（grade, lesson_number）で返す。"""
+    mastered = store.mastered_lesson_ids(student.id)
+    frontier = graph.frontier(mastered)  # 前提充足の未習得フロンティア
+    candidates = [
+        lid
+        for lid in frontier
+        if lid in mapping
+        and problem_form in mapping[lid].get("supported_forms", [])
+        and mapping[lid].get("grade", 99) <= student.grade
+    ]
+    return sorted(candidates, key=lambda lid: _curriculum_key(mapping, lid))
 
 
 def decide_next_lesson(
@@ -42,26 +73,25 @@ def decide_next_lesson(
     mapping: Dict[str, Any],
     *,
     problem_form: str = "calculation",
+    focus_large_unit: Optional[str] = None,
 ) -> NextDecision:
-    mastered = store.mastered_lesson_ids(student.id)
-    frontier = graph.frontier(mastered)  # トポロジカル順（浅い順）
-
-    candidates = [
-        lid
-        for lid in frontier
-        if lid in mapping
-        and problem_form in mapping[lid].get("supported_forms", [])
-        and mapping[lid].get("grade", 99) <= student.grade
-    ]
+    candidates = candidate_lessons(student, store, graph, mapping, problem_form=problem_form)
     if not candidates:
         raise NoLessonAvailableError(
             f"student={student.id} grade={student.grade} form={problem_form}: "
             "出題可能な未習得 lesson がありません（全習得 または 形式非対応）"
         )
 
-    # 進行中（attempted かつ未習得）を優先して継続、無ければ最浅の新規 lesson
-    in_progress = [lid for lid in candidates if store.get_mastery(student.id, lid).attempted]
-    lesson_id = in_progress[0] if in_progress else candidates[0]
+    # 大単元フォーカス: 指定単元の候補があればそれに絞る（無ければ通常フロンティア）
+    pool = candidates
+    if focus_large_unit:
+        focused = [lid for lid in candidates if mapping[lid].get("large_unit") == focus_large_unit]
+        if focused:
+            pool = focused
+
+    # 進行中（attempted かつ未習得）を優先して継続、無ければ教科書順で最初の新規 lesson
+    in_progress = [lid for lid in pool if store.get_mastery(student.id, lid).attempted]
+    lesson_id = in_progress[0] if in_progress else pool[0]
 
     m = mapping[lesson_id]
     state = store.get_mastery(student.id, lesson_id)
@@ -76,6 +106,7 @@ def decide_next_lesson(
         lesson_id=lesson_id,
         lesson_title=m.get("title", lesson_id),
         grade=int(m.get("grade", student.grade)),
+        large_unit=m.get("large_unit", ""),
         problem_form=problem_form,
         target_difficulty=target,
         mastery=state,
