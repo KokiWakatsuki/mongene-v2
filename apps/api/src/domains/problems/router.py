@@ -174,6 +174,8 @@ def _build_response(result, request: ProblemGenerationRequest, lesson_mapping: D
             blueprint_id=mr.blueprint_id,
             blueprint_version=mr.blueprint_version,
             git_commit=_GIT_COMMIT,
+            lesson_id=(request.curriculum.lesson_ids[0] if request.curriculum.lesson_ids else None),
+            problem_form=request.problem_form,
         ),
     )
 
