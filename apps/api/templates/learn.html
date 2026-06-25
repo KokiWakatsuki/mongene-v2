@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>モンジェネ 個別最適化・完全習得学習</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+  <style>
+    :root { color-scheme: only light; --accent:#2563eb; --ok:#16a34a; --ng:#dc2626; --border:#d4d4d8; --muted:#71717a; --text:#1a1a1a; --bg:#fff; }
+    body { font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Hiragino Sans",sans-serif; max-width:860px; margin:0 auto; padding:24px; line-height:1.6; color:var(--text); background:var(--bg); }
+    h1 { font-size:1.5rem; margin-bottom:2px; }
+    .subtitle { color:var(--muted); font-size:.9rem; margin-bottom:18px; }
+    fieldset { border:1px solid var(--border); border-radius:8px; padding:14px 18px; margin-bottom:14px; }
+    legend { font-weight:600; padding:0 8px; font-size:.95rem; }
+    label { font-weight:500; }
+    input[type=text], input[type=number], select { padding:6px 10px; border:1px solid #aaa; border-radius:4px; font-size:.95rem; }
+    button { padding:9px 20px; border:none; border-radius:6px; background:var(--accent); color:#fff; cursor:pointer; font-size:.98rem; font-weight:600; }
+    button.secondary { background:#fff; color:var(--accent); border:1px solid var(--accent); }
+    button:disabled { background:#bbb; cursor:not-allowed; }
+    .pill { display:inline-block; padding:2px 10px; border-radius:999px; font-size:.78rem; font-weight:600; }
+    .pill.diff { background:rgba(37,99,235,.1); color:var(--accent); }
+    .pill.ok { background:rgba(22,163,74,.12); color:var(--ok); }
+    .pill.ng { background:rgba(220,38,38,.1); color:var(--ng); }
+    .problem-card { border:1px solid var(--border); border-radius:8px; padding:18px; margin-top:14px; background:#fafafa; }
+    .problem-text { font-size:1.12rem; padding:14px; background:#fff; border:1px solid #eee; border-radius:4px; }
+    .subq { display:grid; grid-template-columns:2.4em 1fr 9em; gap:10px; align-items:center; margin:8px 0; padding:8px; background:#fff; border:1px solid #eee; border-radius:4px; }
+    .subq .lbl { font-weight:700; color:var(--accent); }
+    .subq input[type=text] { width:100%; }
+    .res-correct { border-left:4px solid var(--ok); }
+    .res-wrong { border-left:4px solid var(--ng); }
+    .mark { font-size:1.4rem; font-weight:800; text-align:center; }
+    .mark.ok { color:var(--ok); } .mark.ng { color:var(--ng); }
+    .meta { color:var(--muted); font-size:.82rem; margin-top:8px; }
+    .mastery-bar { height:10px; border-radius:5px; background:#eee; overflow:hidden; }
+    .mastery-bar > div { height:100%; background:var(--accent); }
+    .lessons-table { width:100%; border-collapse:collapse; font-size:.85rem; }
+    .lessons-table th, .lessons-table td { text-align:left; padding:5px 8px; border-bottom:1px solid #eee; }
+    .error { color:var(--ng); padding:10px; background:#fef2f2; border-radius:4px; }
+    .loading { color:var(--accent); }
+    .row { display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+    code.sid { background:#f1f5f9; padding:1px 6px; border-radius:4px; font-size:.82rem; }
+    .banner-mastered { background:rgba(22,163,74,.12); color:var(--ok); border:1px solid var(--ok); padding:8px 12px; border-radius:6px; font-weight:700; }
+  </style>
+</head>
+<body>
+  <h1>個別最適化・完全習得学習</h1>
+  <div class="subtitle">採点 → 習熟更新 → 前提グラフで次単元・難易度を決定 → 出題 の閉ループ（MVP / 自動採点）</div>
+
+  <fieldset>
+    <legend>① 生徒</legend>
+    <div class="row" id="student-setup">
+      <label>学年
+        <select id="grade"><option value="1">中1</option><option value="2">中2</option><option value="3">中3</option></select>
+      </label>
+      <button id="btn-create">新しい生徒で開始</button>
+      <span style="color:var(--muted)">または既存ID:</span>
+      <input type="text" id="existing-id" placeholder="student_id" />
+      <button class="secondary" id="btn-load">読み込む</button>
+    </div>
+    <div class="row" id="student-active" style="display:none; margin-top:8px;">
+      生徒: <code class="sid" id="active-sid"></code>（<span id="active-grade"></span>）
+      <button class="secondary" id="btn-reset">別の生徒</button>
+    </div>
+  </fieldset>
+
+  <div id="main" style="display:none;">
+    <div class="row">
+      <button id="btn-next">▶ 次の問題を出す</button>
+      <span id="status" class="meta"></span>
+    </div>
+
+    <div id="problem-area"></div>
+
+    <fieldset style="margin-top:16px;">
+      <legend>② 習熟状況</legend>
+      <div id="mastery-area" class="meta">まだ解答がありません。</div>
+    </fieldset>
+  </div>
+
+  <script>
+    const $ = (id) => document.getElementById(id);
+    let state = { studentId: null, grade: null, problem: null };
+
+    function renderMath(el) {
+      if (window.renderMathInElement) {
+        renderMathInElement(el, { delimiters: [
+          {left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false},
+          {left:'\\(',right:'\\)',display:false},{left:'\\[',right:'\\]',display:true},
+        ], throwOnError:false });
+      }
+    }
+
+    function setStudent(id, grade) {
+      state.studentId = id; state.grade = grade;
+      localStorage.setItem('mongene_sid', id);
+      localStorage.setItem('mongene_grade', grade);
+      $('student-setup').style.display = 'none';
+      $('student-active').style.display = 'flex';
+      $('active-sid').textContent = id;
+      $('active-grade').textContent = '中' + grade;
+      $('main').style.display = 'block';
+      refreshMastery();
+    }
+
+    $('btn-create').onclick = async () => {
+      const grade = parseInt($('grade').value);
+      const r = await fetch('/students', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ grade }) });
+      if (!r.ok) { alert('生徒の作成に失敗'); return; }
+      const s = await r.json();
+      setStudent(s.id, s.grade);
+    };
+
+    $('btn-load').onclick = async () => {
+      const id = $('existing-id').value.trim();
+      if (!id) return;
+      const r = await fetch('/students/' + id);
+      if (!r.ok) { alert('その生徒IDは見つかりません'); return; }
+      const s = await r.json();
+      setStudent(s.id, s.grade);
+    };
+
+    $('btn-reset').onclick = () => {
+      localStorage.removeItem('mongene_sid');
+      state = { studentId:null, grade:null, problem:null };
+      $('student-setup').style.display = 'flex';
+      $('student-active').style.display = 'none';
+      $('main').style.display = 'none';
+      $('problem-area').innerHTML = '';
+    };
+
+    $('btn-next').onclick = nextProblem;
+
+    async function nextProblem() {
+      $('status').innerHTML = '<span class="loading">生成中…（実LLM接続時は数十秒かかります）</span>';
+      $('btn-next').disabled = true;
+      $('problem-area').innerHTML = '';
+      try {
+        const r = await fetch('/learning/next', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ student_id: state.studentId }) });
+        if (r.status === 409) { $('status').innerHTML = '🎉 出題可能な未習得の単元がありません（この学年は習得済み）'; return; }
+        if (!r.ok) { const e = await r.json(); $('problem-area').innerHTML = `<div class="error">${e.detail||'生成エラー'}</div>`; return; }
+        const data = await r.json();
+        state.problem = data;
+        renderProblem(data);
+      } catch (e) {
+        $('problem-area').innerHTML = `<div class="error">通信エラー: ${e}</div>`;
+      } finally {
+        $('status').textContent = '';
+        $('btn-next').disabled = false;
+      }
+    }
+
+    function renderProblem(d) {
+      const p = d.problem;
+      const subqs = p.sub_questions.map(sq => `
+        <div class="subq" data-label="${sq.label}">
+          <span class="lbl">${sq.label}</span>
+          <span class="prompt">${sq.prompt_text || ''}</span>
+          <input type="text" class="ans" placeholder="解答を入力" />
+        </div>`).join('');
+      $('problem-area').innerHTML = `
+        <div class="problem-card">
+          <div class="row" style="justify-content:space-between;">
+            <strong>${d.lesson_title} <span style="color:var(--muted);font-weight:400;">(${d.lesson_id})</span></strong>
+            <span class="pill diff">難易度 ${d.target_difficulty}/100</span>
+          </div>
+          <div class="meta">出題方針: ${d.rationale}</div>
+          <div class="problem-text" style="margin-top:10px;">${p.content_problem_text}</div>
+          <div style="margin-top:10px;">${subqs}</div>
+          <div class="row" style="margin-top:12px;">
+            <button id="btn-grade">採点する</button>
+            <span id="grade-status" class="meta"></span>
+          </div>
+        </div>`;
+      renderMath($('problem-area'));
+      $('btn-grade').onclick = gradeProblem;
+    }
+
+    async function gradeProblem() {
+      const answers = [...document.querySelectorAll('.subq')].map(el => ({ label: el.dataset.label, answer: el.querySelector('.ans').value }));
+      $('btn-grade').disabled = true; $('grade-status').textContent = '採点中…';
+      try {
+        const r = await fetch('/learning/submit', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ student_id: state.studentId, problem_id: state.problem.problem_id, answers }) });
+        if (!r.ok) { const e = await r.json(); $('grade-status').innerHTML = `<span class="error">${e.detail}</span>`; return; }
+        const res = await r.json();
+        showResults(res);
+        refreshMastery();
+      } finally {
+        $('btn-grade').disabled = false; $('grade-status').textContent = '';
+      }
+    }
+
+    function showResults(res) {
+      const byLabel = Object.fromEntries(res.results.map(r => [r.label, r]));
+      document.querySelectorAll('.subq').forEach(el => {
+        const r = byLabel[el.dataset.label];
+        if (!r) return;
+        el.classList.add(r.is_correct ? 'res-correct' : 'res-wrong');
+        let tail = el.querySelector('.mark');
+        if (!tail) { tail = document.createElement('span'); tail.className='mark'; el.appendChild(tail); }
+        tail.classList.add(r.is_correct ? 'ok' : 'ng');
+        tail.textContent = r.is_correct ? '○' : '×';
+        if (!r.is_correct && r.expected) {
+          const hint = document.createElement('div'); hint.className='meta'; hint.style.gridColumn='2/4';
+          hint.innerHTML = '正答: ' + r.expected; el.appendChild(hint); renderMath(hint);
+        }
+      });
+      const m = res.mastery;
+      const banner = res.mastered ? `<div class="banner-mastered">✓ この単元を習得しました！次は新しい単元に進めます。</div>` : '';
+      const overall = res.overall_correct === null ? '（自動採点対象外 → 手書き採点が必要）'
+        : (res.overall_correct ? '<span class="pill ok">全問正解</span>' : '<span class="pill ng">不正解あり</span>');
+      $('grade-status').innerHTML = '';
+      const card = $('problem-area').querySelector('.problem-card');
+      const summary = document.createElement('div');
+      summary.style.marginTop = '12px';
+      summary.innerHTML = `${banner}<div class="row" style="margin-top:8px;">${overall}
+        <span class="meta">習熟度 ${(m.mastery*100).toFixed(0)}% / 連続正答 ${m.correct_streak} / 試行 ${m.attempt_count}</span></div>
+        <div class="row" style="margin-top:10px;"><button id="btn-continue">▶ 次の問題へ</button></div>`;
+      card.appendChild(summary);
+      $('btn-continue').onclick = nextProblem;
+    }
+
+    async function refreshMastery() {
+      const r = await fetch('/students/' + state.studentId + '/mastery');
+      if (!r.ok) return;
+      const d = await r.json();
+      if (!d.lessons.length) { $('mastery-area').textContent = 'まだ解答がありません。'; return; }
+      const rows = d.lessons.map(l => `<tr>
+        <td>${l.title} <span style="color:var(--muted)">(${l.lesson_id})</span></td>
+        <td style="width:120px;"><div class="mastery-bar"><div style="width:${(l.mastery*100).toFixed(0)}%"></div></div></td>
+        <td style="width:70px;">${(l.mastery*100).toFixed(0)}%</td>
+        <td style="width:70px;">${l.mastered ? '<span class="pill ok">習得</span>' : '<span class="pill diff">学習中</span>'}</td>
+      </tr>`).join('');
+      $('mastery-area').innerHTML = `<div class="meta">習得 ${d.mastered_count} / 学習中 ${d.in_progress_count}</div>
+        <table class="lessons-table"><thead><tr><th>単元</th><th>習熟</th><th></th><th>状態</th></tr></thead><tbody>${rows}</tbody></table>`;
+    }
+
+    // 復帰: localStorage に生徒IDがあれば自動で続行
+    window.addEventListener('DOMContentLoaded', () => {
+      const sid = localStorage.getItem('mongene_sid');
+      const grade = localStorage.getItem('mongene_grade');
+      if (sid && grade) setStudent(sid, parseInt(grade));
+    });
+  </script>
+</body>
+</html>
