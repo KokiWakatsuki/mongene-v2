@@ -17,6 +17,7 @@ from apps.api.src.core.adaptive.mastery import (
 from apps.api.src.core.adaptive.engine import (
     NextDecision,
     NoLessonAvailableError,
+    candidate_lessons,
     decide_next_lesson,
 )
 
@@ -29,5 +30,6 @@ __all__ = [
     "STREAK_TO_MASTER",
     "NextDecision",
     "NoLessonAvailableError",
+    "candidate_lessons",
     "decide_next_lesson",
 ]

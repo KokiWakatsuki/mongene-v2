@@ -11,7 +11,11 @@ from typing import Any, Dict, List, Optional
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 
-from apps.api.src.core.adaptive.engine import NoLessonAvailableError, decide_next_lesson
+from apps.api.src.core.adaptive.engine import (
+    NoLessonAvailableError,
+    candidate_lessons,
+    decide_next_lesson,
+)
 from apps.api.src.core.adaptive.mastery import update_mastery
 from apps.api.src.core.grading.auto_grader import grade_answer
 from apps.api.src.core.exceptions import MongeneError
@@ -33,6 +37,7 @@ _DEFAULT_MAX_SCORE = 10
 # ── スキーマ ────────────────────────────────────────────────
 class NextRequest(BaseModel):
     student_id: str
+    large_unit: Optional[str] = None  # 大単元フォーカス（任意）。指定するとその単元を優先
 
 
 class MasterySnapshot(BaseModel):
@@ -47,10 +52,23 @@ class NextResponse(BaseModel):
     problem_id: str
     lesson_id: str
     lesson_title: str
+    large_unit: str
     target_difficulty: int
     rationale: str
     problem: ProblemGenerationResponse
     mastery: MasterySnapshot
+
+
+class PathItem(BaseModel):
+    lesson_id: str
+    title: str
+    large_unit: str
+    grade: int
+
+
+class PathResponse(BaseModel):
+    student_id: str
+    upcoming: List[PathItem]
 
 
 class AnswerItem(BaseModel):
@@ -104,7 +122,9 @@ def next_problem(req: NextRequest) -> NextResponse:
     mapping = get_mapping()
     graph = get_graph()
     try:
-        decision = decide_next_lesson(student, store, graph, mapping)
+        decision = decide_next_lesson(
+            student, store, graph, mapping, focus_large_unit=req.large_unit
+        )
     except NoLessonAvailableError as e:
         raise HTTPException(status_code=409, detail=str(e))
 
@@ -160,10 +180,39 @@ def next_problem(req: NextRequest) -> NextResponse:
         problem_id=problem_id,
         lesson_id=decision.lesson_id,
         lesson_title=decision.lesson_title,
+        large_unit=decision.large_unit,
         target_difficulty=decision.target_difficulty,
         rationale=decision.rationale,
         problem=response,
         mastery=_snapshot(decision.mastery),
+    )
+
+
+@router.get("/path/{student_id}", response_model=PathResponse)
+def learning_path(student_id: str, limit: int = 8) -> PathResponse:
+    """前提グラフが導く『次に出題され得る単元』の予定（学習パス）を返す。
+
+    完全習得で前提を満たした未習得フロンティアを教科書順に並べたもの。
+    グラフが出題順を支配していることを可視化するための read-only エンドポイント。
+    """
+    store = get_store()
+    student = store.get_student(student_id)
+    if student is None:
+        raise HTTPException(status_code=404, detail=f"未登録の student_id: {student_id}")
+    mapping = get_mapping()
+    graph = get_graph()
+    upcoming = candidate_lessons(student, store, graph, mapping)[: max(0, limit)]
+    return PathResponse(
+        student_id=student_id,
+        upcoming=[
+            PathItem(
+                lesson_id=lid,
+                title=mapping[lid].get("title", lid),
+                large_unit=mapping[lid].get("large_unit", ""),
+                grade=int(mapping[lid].get("grade", student.grade)),
+            )
+            for lid in upcoming
+        ],
     )
 
 
