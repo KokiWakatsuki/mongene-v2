@@ -16,3 +16,5 @@ dist/
 # uvicorn runtime
 .uvicorn.pid
 .uvicorn.log
+
+.tmp
