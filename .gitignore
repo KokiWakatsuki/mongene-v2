@@ -16,3 +16,21 @@ dist/
 # uvicorn runtime
 .uvicorn.pid
 .uvicorn.log
+
+# Collected real problems images
+tests/fixtures/real_problems/
+
+# 性能評価用（大容量・非コミット）
+reports/perf_eval/
+
+# macOS
+**/.DS_Store
+
+# 評価成果物（LLM評価バッチ・レポート等。再生成可能なため非コミット）
+reports/*.json
+reports/*.jsonl
+reports/*.csv
+reports/*.md
+reports/*.txt
+reports/visual_snapshots/
+reports/visual_snapshots_png/
