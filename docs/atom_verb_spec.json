@@ -1,0 +1,920 @@
+{
+  "_comment": "Atom/Verb/Blueprint 制御可能パラメータ仕様書（Phase 1 成果物）",
+  "_purpose": "LLM が (lesson_id, form) ごとのレベル定義を生成する際の入力として使用する",
+  "_structure": "atoms: NounAtom の custom_params / verbs: VerbAtom の init_params / blueprints: Blueprint の blueprint_params と使用 Atom・Verb",
+
+  "atoms": {
+
+    "NumberAtom": {
+      "tags": ["number", "fraction", "integer"],
+      "description": "整数・分数・小数を表す最基本の Atom。四則計算や方程式で使う。",
+      "custom_params": {
+        "allow_negative": {
+          "type": "bool", "default": true,
+          "description": "false にすると正の数のみ。中1序盤など負数未習段階で使用"
+        },
+        "force_fraction": {
+          "type": "bool", "default": false,
+          "description": "true にすると分数専用。分数の四則計算レッスンで使用"
+        },
+        "max_value": {
+          "type": "int", "default": 30,
+          "description": "値の絶対最大値。小さいほど計算が簡単"
+        },
+        "range_constraint": {
+          "type": "[int, int] | null", "default": null,
+          "description": "[lo, hi] で値の範囲を直接指定。max_value より優先される"
+        }
+      },
+      "difficulty_notes": "max_value 小 + allow_negative=false → 易。max_value 大 + force_fraction=true → 難。"
+    },
+
+    "PolynomialAtom": {
+      "tags": ["polynomial", "factorization"],
+      "description": "多項式 ax^n + bx^(n-1) + … を表す Atom。展開・因数分解・文字式で使用。",
+      "custom_params": {
+        "max_degree": {
+          "type": "int", "default": 2, "range": "1-2",
+          "description": "最高次数。1 = 一次式、2 = 二次式"
+        },
+        "num_variables": {
+          "type": "int", "default": 1, "range": "1-2",
+          "description": "変数の数。1 = x のみ、2 = x,y 両方"
+        },
+        "max_coefficient": {
+          "type": "int", "default": 10,
+          "description": "係数の絶対最大値。小さいほど計算が簡単"
+        }
+      },
+      "difficulty_notes": "max_degree=1, max_coefficient 小 → 易。max_degree=2, num_variables=2 → 難。"
+    },
+
+    "EquationAtom": {
+      "tags": ["linear_equation", "quadratic_equation"],
+      "description": "等式 lhs = rhs を表す Atom。SolveEqVerb で解かせる。",
+      "custom_params": {
+        "degree": {
+          "type": "int", "default": 1, "range": "1-2",
+          "description": "方程式の次数。1 = 一次方程式、2 = 二次方程式"
+        },
+        "is_integer_solution": {
+          "type": "bool", "default": true,
+          "description": "true にすると解が整数になるよう係数を逆算生成"
+        },
+        "diophantine_form": {
+          "type": "bool", "default": false,
+          "description": "true にすると ax + by = c 形式の二変数方程式"
+        },
+        "max_coefficient": {
+          "type": "int", "default": 10,
+          "description": "係数の絶対最大値。小さいほど計算が簡単"
+        }
+      },
+      "difficulty_notes": "degree=1 + is_integer_solution=true → 易。degree=2 + is_integer_solution=false → 難。"
+    },
+
+    "ProportionAtom": {
+      "tags": ["proportion_equation"],
+      "description": "比例式 a:b = c:d を表す Atom。SolveEqVerb で x を求めさせる。",
+      "custom_params": {
+        "is_integer_solution": {
+          "type": "bool", "default": true,
+          "description": "true にすると x が整数になるよう d を逆算"
+        },
+        "max_ratio_value": {
+          "type": "int", "default": 10,
+          "description": "比の各要素の最大値。小さいほど計算が簡単"
+        }
+      },
+      "difficulty_notes": "max_ratio_value 小 → 易。max_ratio_value 大 + is_integer_solution=false → 難。"
+    },
+
+    "PolygonAtom": {
+      "tags": ["plane_geometry", "triangle", "rectangle", "angles", "geometry"],
+      "description": "三角形・四角形・正多角形を表す Atom。面積・周長・辺長・頂点を保持。",
+      "custom_params": {
+        "polygon_type": {
+          "type": "str",
+          "choices": ["triangle", "right_triangle", "isoceles_triangle", "equilateral_triangle",
+                      "square", "rectangle", "parallelogram", "rhombus", "trapezoid", "regular_polygon"],
+          "default": "triangle",
+          "description": "図形の種類。right_triangle → 三平方利用、regular_polygon → 内角計算向き"
+        },
+        "max_side_length": {
+          "type": "int", "default": 10,
+          "description": "辺長の最大値。小さいほど数値が扱いやすい"
+        },
+        "force_integer_coords": {
+          "type": "bool", "default": true,
+          "description": "頂点座標を整数に限定"
+        },
+        "n_sides": {
+          "type": "int", "default": 5,
+          "description": "regular_polygon のみ有効。辺の数（≥3）"
+        }
+      },
+      "difficulty_notes": "square/right_triangle + max_side_length 小 → 易。triangle (一般) + max_side_length 大 → 難。regular_polygon(n=5,6) → 中〜難。"
+    },
+
+    "CircleAtom": {
+      "tags": ["plane_geometry", "circle", "pi", "geometry"],
+      "description": "円・おうぎ形を表す Atom。面積・周長・弧長を π 含む式で保持。",
+      "custom_params": {
+        "is_sector": {
+          "type": "bool", "default": false,
+          "description": "true にするとおうぎ形（中心角が 360 未満）"
+        },
+        "max_radius": {
+          "type": "int", "default": 10,
+          "description": "半径の最大値"
+        },
+        "central_angle_choices": {
+          "type": "[int]", "default": [30, 45, 60, 90, 120, 180, 270, 360],
+          "description": "おうぎ形の中心角候補リスト。限定するほど予測可能な問題になる"
+        }
+      },
+      "difficulty_notes": "is_sector=false + max_radius 小 → 易（面積・周長のみ）。is_sector=true + 非標準角度 → 難。"
+    },
+
+    "CircleAngleAtom": {
+      "tags": ["circle_angles", "angles"],
+      "description": "円周角の環境（中心角・円周角・内接四角形・接弦角）を表す Atom。",
+      "custom_params": {
+        "inscribed_quadrilateral": {
+          "type": "bool", "default": false,
+          "description": "true にすると円に内接する四角形の角度（対角の和=180°）問題"
+        },
+        "tangent_chord_angle": {
+          "type": "bool", "default": false,
+          "description": "true にすると接弦角問題"
+        },
+        "power_of_point": {
+          "type": "bool", "default": false,
+          "description": "true にすると方べきの定理問題"
+        }
+      },
+      "difficulty_notes": "全 false → 基本の円周角（易）。inscribed_quadrilateral=true → 中。power_of_point=true → 難。"
+    },
+
+    "LineAngleAtom": {
+      "tags": ["parallel_lines", "angles"],
+      "description": "平行線と交線（錯角・同位角・同側内角）を表す Atom。",
+      "custom_params": {
+        "relation_type": {
+          "type": "str",
+          "choices": ["alternate", "corresponding", "co_interior"],
+          "default": "alternate",
+          "description": "錯角/同位角/同側内角。co_interior は補角計算が必要"
+        },
+        "angle_range": {
+          "type": "[int, int]", "default": [30, 150],
+          "description": "既知角度の範囲 [lo, hi]（度数）"
+        }
+      },
+      "difficulty_notes": "alternate/corresponding は直読み（易）。co_interior は補角計算必要（中）。"
+    },
+
+    "SquareRootAtom": {
+      "tags": ["square_root"],
+      "description": "係数 × √底数 を表す Atom。根号の四則計算で使用。",
+      "custom_params": {
+        "allow_simplification": {
+          "type": "bool", "default": true,
+          "description": "true にすると √12 → 2√3 のような簡約を行う"
+        },
+        "force_denominator_root": {
+          "type": "bool", "default": false,
+          "description": "true にすると 1/√n 形式（有理化問題用）"
+        },
+        "max_base": {
+          "type": "int", "default": 30,
+          "description": "被開平数の最大値。大きいほど複雑な根号が出やすい"
+        },
+        "max_coefficient": {
+          "type": "int", "default": 5,
+          "description": "係数の最大値"
+        }
+      },
+      "difficulty_notes": "max_base 小 + allow_simplification=true → 易（簡約後が整数になりやすい）。force_denominator_root=true → 難（有理化必要）。"
+    },
+
+    "LinearFuncAtom": {
+      "tags": ["linear_function", "proportion"],
+      "description": "一次関数 y=ax+b（比例なら b=0）を表す Atom。",
+      "custom_params": {
+        "force_proportion": {
+          "type": "bool", "default": false,
+          "description": "true にすると y=ax の比例関数（切片=0）に限定"
+        },
+        "max_slope": {
+          "type": "int", "default": 5,
+          "description": "傾き a の絶対最大値"
+        },
+        "force_integer_slope": {
+          "type": "bool", "default": true,
+          "description": "true にすると傾きを整数に限定。false なら分数傾きあり"
+        },
+        "allow_negative": {
+          "type": "bool", "default": true,
+          "description": "false にすると傾き・切片ともに正のみ"
+        },
+        "max_intercept": {
+          "type": "int", "default": "max_slope と同値",
+          "description": "切片 b の絶対最大値"
+        }
+      },
+      "difficulty_notes": "force_proportion=true → 易（比例）。force_integer_slope=false → 難（分数傾き）。"
+    },
+
+    "QuadraticFuncAtom": {
+      "tags": ["quadratic_function"],
+      "description": "y=ax^2 を表す Atom（現在は純粋形のみ）。",
+      "custom_params": {
+        "max_a_value": {
+          "type": "int", "default": 4,
+          "description": "係数 a の絶対最大値"
+        },
+        "allow_negative_a": {
+          "type": "bool", "default": true,
+          "description": "false にすると a>0（上向き放物線のみ）"
+        },
+        "force_integer": {
+          "type": "bool", "default": false,
+          "description": "true にすると係数を整数に限定"
+        }
+      },
+      "difficulty_notes": "max_a_value 小 + allow_negative_a=false → 易。分数係数あり → 難。"
+    },
+
+    "SequenceAtom": {
+      "tags": ["sequence", "pattern", "generalization"],
+      "description": "数列（等差/等比/図形数列/分数列/表格子）を表す Atom。",
+      "custom_params": {
+        "pattern_type": {
+          "type": "str",
+          "choices": ["arithmetic", "geometric", "figurate", "fraction_seq", "table_grid"],
+          "default": "arithmetic",
+          "description": "数列の種類。arithmetic は最も基本。geometric や fraction_seq は複雑"
+        },
+        "min_terms_required": {
+          "type": "int", "default": 3,
+          "description": "問題文に提示する最小項数"
+        }
+      },
+      "difficulty_notes": "arithmetic → 易。geometric / figurate → 中。fraction_seq / table_grid → 難。"
+    },
+
+    "DataSetAtom": {
+      "tags": ["statistics", "data_analysis"],
+      "description": "統計データ（数値リスト・度数分布）を表す Atom。",
+      "custom_params": {
+        "data_size": {
+          "type": "int", "default": 20, "range": "10-100",
+          "description": "データ数。多いほど計算量が増える"
+        },
+        "value_range": {
+          "type": "[int, int]", "default": [0, 100],
+          "description": "データ値の範囲。狭いほど計算が簡単"
+        },
+        "distribution_type": {
+          "type": "str",
+          "choices": ["uniform", "normal", "skewed"],
+          "default": "uniform",
+          "description": "分布形状。skewed は外れ値問題に向く"
+        }
+      },
+      "difficulty_notes": "data_size 小 + value_range 狭い → 易。distribution_type=skewed + data_size 大 → 難。"
+    },
+
+    "EventAtom": {
+      "tags": ["probability", "dice", "cards"],
+      "description": "確率の事象（サイコロ/硬貨/カード/玉/くじ）を表す Atom。",
+      "custom_params": {
+        "event_type": {
+          "type": "str",
+          "choices": ["dice", "coin", "card_draw", "ball_draw", "lottery"],
+          "default": "dice",
+          "description": "事象の種類。coin は最小（2択）、lottery は複雑"
+        },
+        "num_trials": {
+          "type": "int", "default": 1,
+          "description": "試行回数。増やすと標本空間が指数的に拡大"
+        },
+        "with_replacement": {
+          "type": "bool", "default": true,
+          "description": "復元抽出か否か。false（非復元）だと排反計算が必要"
+        },
+        "card_count": {
+          "type": "int", "default": "4-10 のランダム",
+          "description": "card_draw 時のカード枚数"
+        },
+        "red_balls": {
+          "type": "int", "default": "1-4 のランダム",
+          "description": "ball_draw 時の赤玉の数"
+        },
+        "white_balls": {
+          "type": "int", "default": "1-4 のランダム",
+          "description": "ball_draw 時の白玉の数"
+        }
+      },
+      "difficulty_notes": "coin + num_trials=1 → 易（2/4通り）。ball_draw + with_replacement=false + num_trials=2 → 難。"
+    },
+
+    "PrismAtom": {
+      "tags": ["space_geometry", "prism", "geometry"],
+      "description": "柱体（直方体・立方体・三角柱・正n角柱）の体積・表面積を保持する Atom。",
+      "custom_params": {
+        "base_shape_type": {
+          "type": "str",
+          "choices": ["square", "triangle", "regular_polygon"],
+          "default": "square",
+          "description": "底面の形状。square は直方体/立方体、triangle は三角柱"
+        },
+        "is_cube": {
+          "type": "bool", "default": false,
+          "description": "true にすると全辺が等しい立方体"
+        },
+        "max_dim": {
+          "type": "int", "default": 10,
+          "description": "縦横の最大値"
+        },
+        "min_dim": {
+          "type": "int", "default": 2,
+          "description": "縦横の最小値（≥2）"
+        },
+        "max_height": {
+          "type": "int", "default": "max_dim と同値",
+          "description": "高さの最大値"
+        },
+        "num_sides": {
+          "type": "int", "default": 6,
+          "description": "regular_polygon のみ有効。底面の辺数"
+        }
+      },
+      "difficulty_notes": "is_cube=true → 易（1辺の値のみ）。base_shape_type=triangle → 中（底面積計算必要）。regular_polygon → 難（三角比が必要な場合あり）。"
+    },
+
+    "PyramidAtom": {
+      "tags": ["space_geometry", "pyramid", "geometry"],
+      "description": "角錐（三角錐・四角錐・正n角錐）の体積・表面積を保持する Atom。",
+      "custom_params": {
+        "base_shape": {
+          "type": "str",
+          "choices": ["square", "triangle", "regular_polygon"],
+          "default": "square",
+          "description": "底面の形状"
+        },
+        "is_regular_pyramid": {
+          "type": "bool", "default": true,
+          "description": "true にすると正多角錐（頂点が底面中心の真上）"
+        },
+        "hide_height": {
+          "type": "bool", "default": false,
+          "description": "true にすると高さを直接与えず三平方で求めさせる"
+        },
+        "max_base_side": {
+          "type": "int", "default": 10,
+          "description": "底面辺長の最大値"
+        },
+        "max_height": {
+          "type": "int", "default": 12,
+          "description": "高さの最大値"
+        }
+      },
+      "difficulty_notes": "base_shape=square + is_regular_pyramid=true + hide_height=false → 易。hide_height=true → 難（三平方利用）。"
+    },
+
+    "SphereAtom": {
+      "tags": ["space_geometry", "sphere", "pi", "geometry"],
+      "description": "球の体積 (4/3)πr³ と表面積 4πr² を保持する Atom。",
+      "custom_params": {
+        "max_radius": {
+          "type": "int", "default": 10,
+          "description": "半径の最大値"
+        },
+        "integer_radius": {
+          "type": "bool", "default": true,
+          "description": "false にすると半整数（1/2刻み）の半径も出現"
+        }
+      },
+      "difficulty_notes": "integer_radius=true + max_radius 小 → 易。integer_radius=false → 難（分数計算必要）。"
+    },
+
+    "SampleAtom": {
+      "tags": ["sampling_survey"],
+      "description": "標本調査データを表す Atom。母集団推定値を計算させる。",
+      "custom_params": {
+        "population_size": {
+          "type": "int", "default": "500-5000 のランダム",
+          "description": "母集団サイズ（問題文の設定値）"
+        },
+        "sample_size": {
+          "type": "int", "default": "30-200 のランダム",
+          "description": "標本サイズ"
+        },
+        "target_attribute": {
+          "type": "str", "default": "不良品割合",
+          "description": "調査する属性名（問題文のシナリオ文言）"
+        }
+      },
+      "difficulty_notes": "population_size と sample_size が綺麗な比になるほど計算が簡単。"
+    },
+
+    "PointAtom": {
+      "tags": ["coordinate"],
+      "description": "座標平面上の点 (x, y) を表す Atom。PythagoreanStructure (two_points) や ConstructionStructure で使用。",
+      "custom_params": {
+        "range_x": {
+          "type": "[int, int]", "default": [-10, 10],
+          "description": "x 座標の範囲"
+        },
+        "range_y": {
+          "type": "[int, int]", "default": [-10, 10],
+          "description": "y 座標の範囲"
+        },
+        "integer_only": {
+          "type": "bool", "default": true,
+          "description": "true にすると整数座標のみ。false は半整数刻みも許可"
+        }
+      },
+      "difficulty_notes": "integer_only=true + 狭い範囲 → 易。半整数座標 → 難。"
+    },
+
+    "MovingPointAtom": {
+      "tags": ["moving_point", "time_function"],
+      "description": "動点（初期座標・速さ・経路型）を表す Atom。時刻 t の関数として位置を返す。",
+      "custom_params": {
+        "path_type": {
+          "type": "str",
+          "choices": ["linear", "edge_traversal", "circular"],
+          "default": "linear",
+          "description": "動点の経路。linear = 直線移動、edge_traversal = 辺上移動、circular = 円運動"
+        },
+        "num_points": {
+          "type": "int", "default": 1, "range": "1-3",
+          "description": "同時に動く点の数。増やすと複雑な場合分けが必要"
+        },
+        "speed_range": {
+          "type": "[int, int]", "default": [1, 5],
+          "description": "速さの範囲 [lo, hi]"
+        },
+        "max_init": {
+          "type": "int", "default": 10,
+          "description": "初期位置座標の最大値"
+        }
+      },
+      "difficulty_notes": "linear + num_points=1 → 易。edge_traversal + num_points=2 → 難（場合分け必要）。"
+    }
+  },
+
+  "verbs": {
+
+    "CalculateArithmeticVerb": {
+      "accepted_atoms": ["NumberAtom", "PolynomialAtom", "SquareRootAtom"],
+      "description": "2つ以上の Atom に対して四則演算を行う Verb。",
+      "init_params": {
+        "operation": {
+          "type": "str | null",
+          "choices": ["+", "-", "*", "/"],
+          "default": null,
+          "description": "null のときは Atom 型に応じてランダム選択。固定すると難易度が安定する"
+        }
+      },
+      "difficulty_notes": "+/-は易、*/は中、/（除算）は難。SquareRootAtom での */ は特に難（根号の乗除）。"
+    },
+
+    "SolveEqVerb": {
+      "accepted_atoms": ["EquationAtom", "ProportionAtom"],
+      "description": "方程式または比例式を解く Verb。難易度は Atom 側のパラメータに依存。",
+      "init_params": {},
+      "difficulty_notes": "EquationAtom の degree と max_coefficient で難易度が変わる。"
+    },
+
+    "FactorizeVerb": {
+      "accepted_atoms": ["PolynomialAtom", "PolynomialAtom"],
+      "description": "2つの PolynomialAtom の積を展開し、その式を因数分解させる Verb。",
+      "init_params": {},
+      "difficulty_notes": "PolynomialAtom の max_coefficient と max_degree で難易度が変わる。両方 degree=1 → (x+a)(x+b) 型（易）。"
+    },
+
+    "FindAngleVerb": {
+      "accepted_atoms": ["LineAngleAtom", "CircleAngleAtom", "PolygonAtom"],
+      "description": "各種角度定理を用いて角度を求める Verb。",
+      "init_params": {
+        "theorem": {
+          "type": "str",
+          "choices": ["parallel_alternate", "interior_angle_sum", "exterior_angle", "exterior_angle_sum", "inscribed_angle", "tangent_chord", "inscribed_quadrilateral"],
+          "default": "parallel_alternate",
+          "description": "使用する定理を指定。theorem ごとに対応 Atom が異なる"
+        }
+      },
+      "theorem_atom_mapping": {
+        "parallel_alternate": "LineAngleAtom",
+        "interior_angle_sum": "PolygonAtom",
+        "exterior_angle": "PolygonAtom",
+        "exterior_angle_sum": "PolygonAtom",
+        "inscribed_angle": "CircleAngleAtom",
+        "tangent_chord": "CircleAngleAtom",
+        "inscribed_quadrilateral": "CircleAngleAtom"
+      },
+      "difficulty_notes": "parallel_alternate → 易（錯角=既知値）。interior_angle_sum → 中。inscribed_quadrilateral / power_of_point → 難。"
+    },
+
+    "ProveGeometryVerb": {
+      "accepted_atoms": ["PolygonAtom × 2"],
+      "description": "2つの多角形の合同・相似を証明する Verb。",
+      "init_params": {
+        "proof_type": {
+          "type": "str",
+          "choices": ["congruence", "similarity"],
+          "default": "congruence",
+          "description": "合同証明か相似証明か"
+        },
+        "condition_set": {
+          "type": "str",
+          "choices": ["SSS", "SAS", "ASA", "RHS", "AA"],
+          "default": "SAS",
+          "description": "合同・相似条件。実際は solve 内でランダム選択されるため init では主に記録用"
+        }
+      },
+      "difficulty_notes": "congruence(SSS/SAS/ASA) → 標準。congruence(RHS) → 中（直角三角形の特殊条件）。similarity(AA/SAS/SSS) → 難。"
+    },
+
+    "GeneralizeFormulaVerb": {
+      "accepted_atoms": ["SequenceAtom"],
+      "description": "数列の第n項の一般式を導く Verb。難易度は SequenceAtom に依存。",
+      "init_params": {},
+      "difficulty_notes": "SequenceAtom の pattern_type で難易度が変わる。arithmetic → 易、fraction_seq → 難。"
+    },
+
+    "CalculateProbabilityVerb": {
+      "accepted_atoms": ["EventAtom"],
+      "description": "事象の確率 P = 有利な結果数 / 全事象数 を計算する Verb。",
+      "init_params": {
+        "favorable": {
+          "type": "int | null", "default": null,
+          "description": "有利な結果数を固定する場合に指定。null のときは rng でランダム"
+        }
+      },
+      "difficulty_notes": "EventAtom の num_trials と with_replacement が難易度を決める。"
+    },
+
+    "ConstructGeometryVerb": {
+      "accepted_atoms": ["PointAtom", "PolygonAtom", "CircleAtom", "LineAngleAtom"],
+      "description": "コンパスと定規による作図手順を生成する Verb。",
+      "init_params": {
+        "construction_type": {
+          "type": "str",
+          "choices": ["perp_bisector", "angle_bisector", "perpendicular", "tangent", "copy_length"],
+          "default": "perp_bisector",
+          "description": "作図の種類。perp_bisector → 垂直二等分線、tangent → 接線（最難）"
+        }
+      },
+      "difficulty_notes": "copy_length / perp_bisector → 易（2ステップ）。angle_bisector / perpendicular → 中（3ステップ）。tangent → 難（4ステップ + 外接円の知識）。"
+    },
+
+    "TriangleAreaVerb": {
+      "accepted_atoms": ["LinearFuncAtom × 2"],
+      "description": "2直線と y 軸で囲まれる三角形の面積を求める Verb。",
+      "init_params": {},
+      "difficulty_notes": "LinearFuncAtom の max_slope / max_intercept で数値の複雑さが変わる。"
+    },
+
+    "MeasureGeometryVerb": {
+      "accepted_atoms": ["PolygonAtom", "CircleAtom", "PrismAtom", "PyramidAtom", "SphereAtom"],
+      "description": "図形の面積・体積・表面積を計算する Verb。",
+      "init_params": {
+        "measure_type": {
+          "type": "str",
+          "choices": ["area", "volume", "surface_area", "perimeter", "circumference", "arc_length"],
+          "default": "area",
+          "description": "測定量の種類"
+        }
+      },
+      "difficulty_notes": "area（平面）→ 易。volume / surface_area（立体）→ 難。"
+    },
+
+    "PythagoreanLengthVerb": {
+      "accepted_atoms": ["PolygonAtom", "PrismAtom", "PyramidAtom", "PointAtom"],
+      "description": "三平方の定理で辺長・対角線・空間距離を求める Verb。",
+      "init_params": {
+        "mode": {
+          "type": "str",
+          "choices": ["hypotenuse", "leg", "distance"],
+          "default": "hypotenuse",
+          "description": "斜辺 / 脚 / 2点間距離"
+        }
+      },
+      "difficulty_notes": "hypotenuse（斜辺）→ 易。leg（脚を逆算）→ 中。空間内の最短距離 → 難。"
+    },
+
+    "AnalyzeDataVerb": {
+      "accepted_atoms": ["DataSetAtom"],
+      "description": "統計量（平均・中央値・最頻値・四分位数）を求める Verb。",
+      "init_params": {
+        "metric": {
+          "type": "str",
+          "choices": ["mean", "median", "mode", "q1", "q3", "iqr"],
+          "default": "mean",
+          "description": "求める統計量。mean は最も基本、iqr（四分位範囲）は最複雑"
+        }
+      },
+      "difficulty_notes": "mean → 易（総和 ÷ n）。median → 中（ソート必要）。iqr → 難（q1, q3 両方計算）。"
+    },
+
+    "EstimatePopulationVerb": {
+      "accepted_atoms": ["SampleAtom"],
+      "description": "標本から母集団を推定する Verb。",
+      "init_params": {},
+      "difficulty_notes": "SampleAtom の population_size と sample_size の比の単純さで難易度が変わる。"
+    }
+  },
+
+  "blueprints": {
+
+    "BasicCalculationStructure": {
+      "supported_forms": ["calculation"],
+      "atoms": ["NumberAtom または PolynomialAtom または SquareRootAtom × 2"],
+      "verb": "CalculateArithmeticVerb",
+      "blueprint_params": {
+        "operation": {
+          "type": "str",
+          "choices": ["+", "-", "*", "/"],
+          "description": "演算子を固定。null/未指定なら Verb 側でランダム選択"
+        }
+      },
+      "level_knobs": [
+        "NumberAtom.allow_negative", "NumberAtom.max_value", "NumberAtom.force_fraction",
+        "PolynomialAtom.max_degree", "PolynomialAtom.max_coefficient",
+        "SquareRootAtom.max_base", "SquareRootAtom.force_denominator_root",
+        "operation(+/-/*//)"
+      ],
+      "usage_note": "single_subquestion 固定。対象単元: 四則計算・文字式・展開・根号計算"
+    },
+
+    "SolveEquationStructure": {
+      "supported_forms": ["calculation", "word_problem"],
+      "atoms": ["EquationAtom または ProportionAtom"],
+      "verb": "SolveEqVerb",
+      "blueprint_params": {},
+      "level_knobs": [
+        "EquationAtom.degree", "EquationAtom.is_integer_solution",
+        "EquationAtom.max_coefficient", "EquationAtom.diophantine_form",
+        "ProportionAtom.max_ratio_value"
+      ],
+      "usage_note": "対象単元: 一次方程式・比例式・二次方程式・連立方程式（予定）"
+    },
+
+    "FactorizeStructure": {
+      "supported_forms": ["calculation"],
+      "atoms": ["PolynomialAtom × 2"],
+      "verb": "FactorizeVerb",
+      "blueprint_params": {},
+      "level_knobs": [
+        "PolynomialAtom.max_coefficient",
+        "PolynomialAtom.max_degree（2つとも度数1 → (x+a)(x+b) 型）"
+      ],
+      "usage_note": "問題文 = 展開形、答え = 因数分解形"
+    },
+
+    "WordProblemStructure": {
+      "supported_forms": ["word_problem"],
+      "atoms": ["EquationAtom"],
+      "verb": "SolveEqVerb",
+      "blueprint_params": {},
+      "level_knobs": [
+        "EquationAtom.degree", "EquationAtom.max_coefficient"
+      ],
+      "usage_note": "story_required=true。StoryContext でシナリオを与えて LLM が文章題に変換する"
+    },
+
+    "BasicGeometryMeasurementStructure": {
+      "supported_forms": ["word_problem"],
+      "atoms": ["PolygonAtom または CircleAtom または PrismAtom または PyramidAtom または SphereAtom"],
+      "verb": "MeasureGeometryVerb(measure_type=area/volume/surface_area)",
+      "blueprint_params": {},
+      "level_knobs": [
+        "PolygonAtom.polygon_type", "PolygonAtom.max_side_length",
+        "CircleAtom.is_sector", "CircleAtom.max_radius",
+        "PrismAtom.base_shape_type", "PrismAtom.max_dim",
+        "PyramidAtom.base_shape", "PyramidAtom.hide_height"
+      ],
+      "usage_note": "対象単元: 面積（中1）・体積・表面積（中1後半〜中3）"
+    },
+
+    "AngleCalculationStructure": {
+      "supported_forms": ["word_problem"],
+      "atoms": ["LineAngleAtom または CircleAngleAtom または PolygonAtom"],
+      "verb": "FindAngleVerb",
+      "blueprint_params": {
+        "theorem": {
+          "type": "str",
+          "choices": ["parallel_alternate", "interior_angle_sum", "exterior_angle", "exterior_angle_sum", "inscribed_angle", "tangent_chord", "inscribed_quadrilateral"],
+          "description": "使用定理。NounSlot の accepted_tags と合わせる必要あり"
+        }
+      },
+      "level_knobs": [
+        "theorem（定理の複雑さ）",
+        "LineAngleAtom.relation_type", "LineAngleAtom.angle_range",
+        "CircleAngleAtom.inscribed_quadrilateral", "CircleAngleAtom.power_of_point"
+      ],
+      "usage_note": "対象単元: 角度計算全般（中1〜中3）"
+    },
+
+    "ProofStructure": {
+      "supported_forms": ["proof"],
+      "atoms": ["PolygonAtom × 2"],
+      "verb": "ProveGeometryVerb",
+      "blueprint_params": {},
+      "level_knobs": [
+        "ProveGeometryVerb.proof_type（congruence vs similarity）",
+        "条件は solve 内でランダム選択（SSS/SAS/ASA/RHS/AA）"
+      ],
+      "usage_note": "全レベルで唯一の proof 形式 Blueprint"
+    },
+
+    "FunctionGeometryFusionStructure": {
+      "supported_forms": ["calculation", "word_problem"],
+      "atoms": ["LinearFuncAtom × 2"],
+      "verb": "IntersectVerb + TriangleAreaVerb（直列）",
+      "blueprint_params": {},
+      "level_knobs": [
+        "LinearFuncAtom.max_slope", "LinearFuncAtom.max_intercept",
+        "LinearFuncAtom.force_integer_slope", "LinearFuncAtom.force_proportion"
+      ],
+      "usage_note": "小問(1)=交点座標、小問(2)=三角形面積。対象単元: 一次関数の融合問題"
+    },
+
+    "SequencePatternStructure": {
+      "supported_forms": ["calculation", "word_problem"],
+      "atoms": ["SequenceAtom"],
+      "verb": "GeneralizeFormulaVerb",
+      "blueprint_params": {},
+      "level_knobs": [
+        "SequenceAtom.pattern_type", "SequenceAtom.min_terms_required"
+      ],
+      "usage_note": "小問(1)=第N項の値、小問(2)=一般式。対象単元: 規則性・数列"
+    },
+
+    "DataProbabilityStructure": {
+      "supported_forms": ["calculation", "word_problem"],
+      "atoms": ["EventAtom"],
+      "verb": "CalculateProbabilityVerb",
+      "blueprint_params": {},
+      "level_knobs": [
+        "EventAtom.event_type", "EventAtom.num_trials", "EventAtom.with_replacement"
+      ],
+      "usage_note": "対象単元: 確率（中2）"
+    },
+
+    "DescriptiveStatsStructure": {
+      "supported_forms": ["calculation", "word_problem"],
+      "atoms": ["DataSetAtom"],
+      "verb": "AnalyzeDataVerb",
+      "blueprint_params": {
+        "metric": {
+          "type": "str",
+          "choices": ["mean", "median", "mode", "q1", "q3", "iqr"],
+          "description": "求める統計量"
+        }
+      },
+      "level_knobs": [
+        "metric（mean→median→iqr の順で難化）",
+        "DataSetAtom.data_size", "DataSetAtom.value_range", "DataSetAtom.distribution_type"
+      ],
+      "usage_note": "対象単元: データの活用（中1/中2）"
+    },
+
+    "PythagoreanStructure": {
+      "supported_forms": ["visual", "word_problem"],
+      "atoms": ["PolygonAtom(right_triangle) または PointAtom × 2"],
+      "verb": "PythagoreanLengthVerb",
+      "blueprint_params": {
+        "mode": {
+          "type": "str",
+          "choices": ["polygon", "two_points"],
+          "description": "polygon = 直角三角形の辺長、two_points = 座標上の2点間距離"
+        }
+      },
+      "level_knobs": [
+        "mode（polygon vs two_points）",
+        "PolygonAtom.max_side_length"
+      ],
+      "usage_note": "対象単元: 三平方の定理（平面）"
+    },
+
+    "PythagoreanSpaceStructure": {
+      "supported_forms": ["word_problem"],
+      "atoms": ["PrismAtom または PyramidAtom"],
+      "verb": "PythagoreanLengthVerb + ShortestPathOnSolidVerb（直列）",
+      "blueprint_params": {},
+      "level_knobs": [
+        "PrismAtom.base_shape_type", "PrismAtom.max_dim",
+        "PyramidAtom.base_shape", "PyramidAtom.hide_height"
+      ],
+      "usage_note": "小問(1)=母線/空間対角線、小問(2)=展開図最短距離。対象単元: 三平方の定理（空間）"
+    },
+
+    "BasicDifferenceStructure": {
+      "supported_forms": ["word_problem"],
+      "atoms": ["PrismAtom（底面）", "PrismAtom/PyramidAtom/SphereAtom（くり抜き）"],
+      "verb": "MeasureGeometryVerb + PythagoreanLengthVerb + CutoutVerb（直列）",
+      "blueprint_params": {},
+      "level_knobs": [
+        "base_solid の Atom 型（PrismAtom のみ）",
+        "cutout_solid の Atom 型（Pyramid/Sphere → 難化）",
+        "PrismAtom.max_dim", "PyramidAtom.max_base_side"
+      ],
+      "usage_note": "小問複数あり（立体くり抜き）。対象単元: 複合立体（中3）"
+    },
+
+    "SampleSurveyStructure": {
+      "supported_forms": ["word_problem"],
+      "atoms": ["SampleAtom"],
+      "verb": "EstimatePopulationVerb",
+      "blueprint_params": {},
+      "level_knobs": [
+        "SampleAtom.population_size", "SampleAtom.sample_size"
+      ],
+      "usage_note": "対象単元: 標本調査（中3）"
+    },
+
+    "ConstructionStructure": {
+      "supported_forms": ["visual"],
+      "atoms": ["PointAtom / PolygonAtom / CircleAtom / LineAngleAtom"],
+      "verb": "ConstructGeometryVerb",
+      "blueprint_params": {
+        "construction_type": {
+          "type": "str",
+          "choices": ["perp_bisector", "angle_bisector", "perpendicular", "tangent", "copy_length"],
+          "description": "作図の種類"
+        }
+      },
+      "level_knobs": [
+        "construction_type（copy_length → 易、tangent → 難）"
+      ],
+      "usage_note": "対象単元: 作図（中1/中3）"
+    },
+
+    "MovingPointStructure": {
+      "supported_forms": ["word_problem", "calculation"],
+      "atoms": ["LinearFuncAtom + PolygonAtom（予定）"],
+      "verb": "TriangleAreaVerb + IntersectVerb",
+      "blueprint_params": {},
+      "level_knobs": [
+        "LinearFuncAtom.max_slope", "PolygonAtom.polygon_type"
+      ],
+      "usage_note": "対象単元: 動点問題（中2〜中3）"
+    }
+  },
+
+  "level_definition_template": {
+    "_comment": "mapping.json の difficulty_levels に格納する形式",
+    "example": {
+      "lesson_id": "g1_l3",
+      "form": "calculation",
+      "levels": [
+        {
+          "lv": 1,
+          "description": "正の整数2項の加法（max_value=10）",
+          "atom_constraints": {
+            "NumberAtom": {
+              "allow_negative": false,
+              "max_value": 10,
+              "force_fraction": false
+            }
+          },
+          "verb_config": {},
+          "blueprint_params": {
+            "operation": "+"
+          }
+        },
+        {
+          "lv": 2,
+          "description": "正負の整数2項の加減法（max_value=20）",
+          "atom_constraints": {
+            "NumberAtom": {
+              "allow_negative": true,
+              "max_value": 20
+            }
+          },
+          "verb_config": {},
+          "blueprint_params": {}
+        },
+        {
+          "lv": 3,
+          "description": "正負の分数2項の四則計算（max_value=30）",
+          "atom_constraints": {
+            "NumberAtom": {
+              "allow_negative": true,
+              "force_fraction": true,
+              "max_value": 30
+            }
+          },
+          "verb_config": {},
+          "blueprint_params": {}
+        }
+      ]
+    }
+  }
+}

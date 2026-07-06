@@ -1,0 +1,9 @@
+- [x] `reports/problem_collection_progress.csv`（進捗管理シート）の初期生成スクリプト作成と実行
+- [x] 画像保存用ディレクトリ `tests/fixtures/real_problems/` の準備
+- [x] 【PoC】`g1_l1` (符号のついた数) の各問題形式 × min / mid / max 画像を検索・保存
+- [x] 【PoC】`g1_l2` (数直線と絶対値) の各問題形式 × min / mid / max 画像を検索・保存
+- [x] 【PoC】`g1_l3` (加法) の各問題形式 × min / mid / max 画像を検索・保存
+- [x] 取得した情報で進捗管理シートを更新し、結果をユーザーに報告
+- [ ] 【Phase1】検索APIを用いたURLマッピング自動生成スクリプトの作成と実行 (`reports/url_mapping.json`)
+- [ ] 【Phase2】1134件のPDF一括自動収集＆画像変換バッチの作成とバックグラウンド実行
+- [ ] 【Phase3】収集された画像の検証（エラー画像の確認やサンプリングチェック）
