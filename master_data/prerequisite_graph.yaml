@@ -960,3 +960,64 @@ nodes:
   - g1_l9
   - g2_l1
   - g3_l8
+- id: exam_l1
+  title: 一次関数と図形の融合（交点・三角形の面積）
+  grade: 3
+  requires:
+  - g2_l19
+  - g2_l21
+  - g2_l25
+  - g2_l27
+  - g2_l50
+- id: exam_l2
+  title: 放物線と直線の融合（二次関数×一次関数）
+  grade: 3
+  requires:
+  - g3_l32
+  - g3_l33
+  - g3_l35
+  - g3_l37
+- id: exam_l3
+  title: 動点と面積変化（一次関数・二次関数の利用）
+  grade: 3
+  requires:
+  - g2_l29
+  - g2_l19
+  - g2_l25
+  - g3_l38
+- id: exam_l4
+  title: 三平方の定理と空間図形（対角線・高さ・最短距離）
+  grade: 3
+  requires:
+  - g3_l51
+  - g3_l52
+  - g3_l53
+  - g3_l55
+  - g3_l56
+- id: exam_l5
+  title: 確率（複合事象・余事象）
+  grade: 3
+  requires:
+  - g2_l51
+  - g2_l52
+  - g2_l53
+  - g2_l54
+- id: exam_l6
+  title: 相似と面積比・体積比の融合
+  grade: 3
+  requires:
+  - g3_l39
+  - g3_l40
+  - g3_l43
+  - g3_l45
+  - g3_l46
+- id: exam_l7
+  title: データの活用（箱ひげ図・標本調査）
+  grade: 3
+  requires:
+  - g1_l54
+  - g1_l57
+  - g2_l55
+  - g2_l56
+  - g3_l57
+  - g3_l60

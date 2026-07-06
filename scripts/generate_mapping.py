@@ -13,23 +13,36 @@ from typing import Any, Dict, List, Tuple
 from apps.api.src.core.constants import JHS_GRADE_FROM_LABEL
 from apps.api.src.core.difficulty.base_difficulty import compute_y_base, compute_raw_y_base, normalize
 
+import csv
+
 REPO_ROOT = Path(__file__).resolve().parent.parent
 CURRICULUM_PATH = REPO_ROOT / "master_data" / "curriculum_math.json"
 SEED_PATH = REPO_ROOT / "master_data" / "mapping_seed.json"
 OUTPUT_PATH = REPO_ROOT / "master_data" / "mapping.json"
+FORMS_CSV_PATH = REPO_ROOT / "reports" / "forms_research.csv"
 
 
 # (regex, blueprint_id) — 上から順に最初にマッチしたものを採用
 BLUEPRINT_RULES: List[Tuple[str, str]] = [
+    # 面積比・体積比は計算問題（「相似」より先に判定して ProofStructure に落ちないようにする）
+    (r"面積比|体積比|相似比.*面積|辺の比.*面積", "BasicGeometryMeasurementStructure"),
     (r"証明|合同|相似", "ProofStructure"),
     (r"作図|軌跡", "ConstructionStructure"),
     # 統計/確率系（データの読み取り・確率計算）
     (r"確率|樹形図", "DataProbabilityStructure"),
-    # データの活用：ヒストグラム・箱ひげ図・平均・中央値は BasicCalculation（計算のみ）
-    (r"ヒストグラム|箱ひげ|四分位|標本|起こりやすさ|データの分布|度数分布|相対度数|累積|代表値|平均値|中央値|最頻値", "DataProbabilityStructure"),
+    # データ統計：記述統計・箱ひげ図・度数分布は DescriptiveStatsStructure
+    (r"ヒストグラム|箱ひげ|四分位|度数分布|相対度数|累積度数|代表値|平均値|中央値|最頻値|データの比較|統計的探究", "DescriptiveStatsStructure"),
+    # 標本調査は SampleSurveyStructure
+    (r"標本|母集団|無作為抽出|標本調査", "SampleSurveyStructure"),
+    # 起こりやすさ・確率の意味も DataProbabilityStructure
+    (r"起こりやすさ|データの分布", "DataProbabilityStructure"),
     (r"規則性|数列|マッチ棒|並べ方|個数の規則", "SequencePatternStructure"),
     (r"動点|点 P|時間 t", "MovingPointStructure"),
     (r"角度|円周角|中心角|接弦角|内接四角形|内角|外角|平行線.*角|錯角|同位角", "AngleCalculationStructure"),
+    # 方程式の解き方 → SolveEquation（1/2次方程式・連立方程式を解く）
+    (r"方程式の解き方|移項.*方程式|かっこ.*方程式|解の公式|加減法|代入法|A＝B.*方程式|いろいろな.*方程式|2元1次方程式|方程式とその解|等式の性質", "SolveEquationStructure"),
+    # 応用文章題 → WordProblem（方程式を立てて解く）
+    (r"個数と代金|割合の問題|速さ.*時間.*道のり|増減.*食塩", "WordProblemStructure"),
     # 展開・因数分解・平方根の計算 → BasicCalculation（計算問題）
     (r"展開|因数分解|乗法公式|有理化|根号.*計算|計算.*根号", "BasicCalculationStructure"),
     # 関数系を幾何系より先に判定（「グラフ」と「面積」が同居しないよう）
@@ -114,8 +127,14 @@ DEFAULT_CONSTRAINTS: Dict[str, Dict[str, Any]] = {
         "DataSetAtom": {"data_size": 20, "value_range": (0, 100), "distribution_type": "uniform"},
         "SampleAtom": {"population_size": 1000, "sample_size": 50},
     },
+    "DescriptiveStatsStructure": {
+        "DataSetAtom": {"data_size": 20, "value_range": (0, 100), "distribution_type": "uniform"},
+    },
     "SequencePatternStructure": {
         "SequenceAtom": {"pattern_type": "arithmetic", "min_terms_required": 3},
+    },
+    "SolveEquationStructure": {
+        "EquationAtom": {"degree": 1, "max_coefficient": 10, "is_integer_solution": True},
     },
     "GraphStructure": {
         "LinearFuncAtom": {"max_slope": 4, "force_integer_slope": True},
@@ -130,6 +149,7 @@ DEFAULT_CONSTRAINTS: Dict[str, Dict[str, Any]] = {
 
 VISUAL_BY_BLUEPRINT: Dict[str, str] = {
     "BasicCalculationStructure": "NullRenderer",
+    "SolveEquationStructure": "NullRenderer",
     "WordProblemStructure": "NullRenderer",
     "BasicGeometryMeasurementStructure": "2D_Geometry_Renderer",
     "BasicDifferenceStructure": "3D_Renderer",
@@ -139,6 +159,7 @@ VISUAL_BY_BLUEPRINT: Dict[str, str] = {
     "ConstructionStructure": "2D_Geometry_Renderer",
     "ProofStructure": "2D_Geometry_Renderer",
     "DataProbabilityStructure": "Tree_Renderer",
+    "DescriptiveStatsStructure": "NullRenderer",
     "SequencePatternStructure": "NullRenderer",
     "GraphStructure": "Graph_Renderer",
     "TwoFunctionsStructure": "Graph_Renderer",
@@ -153,6 +174,7 @@ SUPPORTED_FORMS: Dict[str, List[str]] = {
     # word_problem (+400 raw): 自然言語から変数抽出・立式
     # proof       (+800 raw): ゼロから論理構成を記述
     "BasicCalculationStructure": ["calculation"],
+    "SolveEquationStructure": ["calculation"],
     "WordProblemStructure": ["word_problem"],
     "BasicGeometryMeasurementStructure": ["visual", "word_problem"],  # 図を読んで計量
     "BasicDifferenceStructure": ["word_problem"],
@@ -161,11 +183,43 @@ SUPPORTED_FORMS: Dict[str, List[str]] = {
     "AngleCalculationStructure": ["visual"],                          # 図を読んで角度計算
     "ConstructionStructure": ["visual"],                              # 図形情報から作図
     "ProofStructure": ["proof"],
-    "DataProbabilityStructure": ["calculation", "word_problem", "knowledge"],
+    "DataProbabilityStructure": ["calculation", "word_problem"],
+    "DescriptiveStatsStructure": ["calculation", "word_problem"],
     "SequencePatternStructure": ["calculation", "word_problem"],
     "PythagoreanStructure": ["visual", "word_problem"],               # 図を読んで三平方
     "PythagoreanSpaceStructure": ["word_problem"],
 }
+
+
+def load_forms_from_csv() -> Dict[str, List[str]]:
+    """forms_research.csv を読み込み、lesson_id → supported_forms の辞書を返す。"""
+    result: Dict[str, List[str]] = {}
+    if not FORMS_CSV_PATH.exists():
+        return result
+    with FORMS_CSV_PATH.open(encoding="utf-8") as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            lid = row.get("lesson_id", "").strip()
+            if not lid:
+                continue
+            forms = [
+                form for form in ["calculation", "word_problem", "proof", "knowledge", "visual"]
+                if row.get(form, "0").strip() == "1"
+            ]
+            if forms:
+                result[lid] = forms
+    return result
+
+
+# CSV をモジュールロード時に一度だけ読み込む
+_FORMS_FROM_CSV: Dict[str, List[str]] = {}
+
+
+def _get_forms_from_csv() -> Dict[str, List[str]]:
+    global _FORMS_FROM_CSV
+    if not _FORMS_FROM_CSV:
+        _FORMS_FROM_CSV = load_forms_from_csv()
+    return _FORMS_FROM_CSV
 
 
 def infer_blueprint(domain: str, large_unit: str, title: str) -> str:
@@ -259,9 +313,23 @@ def generate_mapping(strict: bool = False) -> Dict[str, Any]:
 
                         if lesson_id in seed:
                             entry = dict(seed[lesson_id])
-                            # seed エントリに domain / large_unit を補完
+                            # seed エントリに必須フィールドを補完
+                            entry.setdefault("title", title)
+                            entry.setdefault("grade", grade_int)
+                            entry.setdefault("lesson_number", lesson_number)
                             entry.setdefault("domain", domain_name)
                             entry.setdefault("large_unit", lu_name)
+                            # execute_blueprint が未指定のときは自動推定で補完
+                            if "execute_blueprint" not in entry:
+                                entry["execute_blueprint"] = infer_blueprint(domain_name, lu_name, title)
+                            if "required_tags" not in entry:
+                                entry["required_tags"] = infer_required_tags(title, lu_name, entry["execute_blueprint"])
+                            if "atom_constraints" not in entry:
+                                entry["atom_constraints"] = DEFAULT_CONSTRAINTS.get(entry["execute_blueprint"], {})
+                            # forms_research.csv が存在すれば supported_forms を上書き
+                            csv_forms = _get_forms_from_csv().get(lesson_id)
+                            if csv_forms:
+                                entry["supported_forms"] = csv_forms
                             # 常に新 Raw Score モデルで raw_y_base / y_base を再計算
                             entry["raw_y_base"] = compute_raw_y_base(lu_name, title)
                             entry["y_base"] = normalize(entry["raw_y_base"])
@@ -284,7 +352,8 @@ def generate_mapping(strict: bool = False) -> Dict[str, Any]:
                         required_tags = infer_required_tags(title, lu_name, blueprint_id)
                         atom_constraints = DEFAULT_CONSTRAINTS.get(blueprint_id, {})
                         visual = VISUAL_BY_BLUEPRINT.get(blueprint_id, "NullRenderer")
-                        forms = SUPPORTED_FORMS.get(blueprint_id, ["calculation"])
+                        # forms_research.csv が存在すればそちらを優先、なければ Blueprint デフォルト
+                        forms = _get_forms_from_csv().get(lesson_id) or SUPPORTED_FORMS.get(blueprint_id, ["calculation"])
 
                         entry = {
                             "title": title,
@@ -309,14 +378,19 @@ def generate_mapping(strict: bool = False) -> Dict[str, Any]:
                         mapping[lesson_id] = entry
 
     # ドメイン・Blueprint 別の supported_forms 後処理（新形式対応版）
+    csv_forms_map = _get_forms_from_csv()
     for lesson_id, entry in mapping.items():
+        # forms_research.csv にエントリがある場合は後処理をスキップ（CSV が正解）
+        if lesson_id in csv_forms_map:
+            entry["supported_forms"] = csv_forms_map[lesson_id]
+            continue
+
         domain = entry.get("domain", "")
         bp = entry.get("execute_blueprint", "")
         title = entry.get("title", "")
         forms = list(entry.get("supported_forms", []))
 
-        # ── Blueprint 固有の確定ルール（最優先）──
-        # Blueprint 固有の確定ルール（設計書 5 形式に準拠）
+        # ── Blueprint 固有の確定ルール（CSV がない場合のみ適用）──
         if bp == "ProofStructure":
             forms = ["proof"]
         elif bp == "WordProblemStructure":
@@ -324,24 +398,21 @@ def generate_mapping(strict: bool = False) -> Dict[str, Any]:
         elif bp == "BasicCalculationStructure":
             forms = ["calculation"]
         elif bp == "ConstructionStructure":
-            forms = ["visual"]                   # 作図 = 図から立式 = visual
+            forms = ["visual"]
         elif bp in ("BasicDifferenceStructure", "MovingPointStructure",
                     "PythagoreanSpaceStructure"):
             forms = ["word_problem"]
         elif bp == "AngleCalculationStructure":
-            forms = ["visual"]                   # 図を読んで角度を求める = visual
+            forms = ["visual"]
 
         # ── ドメイン補正 ──
-        # 図形領域: calculation は不可（図の描写が必須）→ visual か word_problem のみ
         if domain == "図形" and "calculation" in forms:
             forms = [f for f in forms if f != "calculation"] or ["visual"]
 
-        # データ単元の「用語・定義」系 lesson → knowledge 追加
         if domain == "データの活用" and re.search(r"意味|定義|用語|読み取り|確認", title):
             if "knowledge" not in forms:
                 forms.append("knowledge")
 
-        # 数と式: 「定義・意味」系 → knowledge 追加
         if domain == "数と式" and re.search(r"意味|定義|用語|導入|概念", title):
             if "knowledge" not in forms and "calculation" in forms:
                 forms.append("knowledge")
