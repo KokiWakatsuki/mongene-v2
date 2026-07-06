@@ -52,7 +52,7 @@ def build_function_geometry_fusion_blueprint(params: dict | None = None) -> Blue
             compatible_noun_types=["LinearFuncAtom", "QuadraticFuncAtom"],
             required=True,
         ),
-        supported_forms=["calculation", "word_problem"],
+        supported_forms=["calculation", "word_problem", "visual"],
         story_required=False,
         base_difficulty_calculator=lambda nouns, ctx: int(ctx.get("y_base", 50)),
         subquestion_strategy=SubQuestionStrategy(
