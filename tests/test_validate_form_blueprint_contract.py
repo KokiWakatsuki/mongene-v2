@@ -30,13 +30,15 @@ def test_known_violation_g1_l30_visual_is_detected() -> None:
     assert ("g1_l30", "visual") in violation_keys
 
 
-def test_known_violation_g2_l7_proof_is_detected() -> None:
-    """g2_l7 は proof を宣言するが execute_blueprint は BasicCalculationStructure
-    のみで proof をサポートしない。Opus のパイロット調査で実証済みの既知の違反。
+def test_g2_l7_proof_violation_is_fixed() -> None:
+    """g2_l7 はかつて proof を宣言しながら execute_blueprint が BasicCalculationStructure
+    のみで proof をサポートせず違反だった（Opus のパイロット調査で実証済み）。
+    代数証明capability パイロット(even_odd)で execute_blueprint_by_form.proof に
+    AlgebraicProofStructure を配線し、この違反は解消された。回帰があればこのテストで検知する。
     """
     result = validate_contract()
     violation_keys = {(v["lesson_id"], v["form"]) for v in result["violations"]}
-    assert ("g2_l7", "proof") in violation_keys
+    assert ("g2_l7", "proof") not in violation_keys
 
 
 def test_by_form_breakdown_matches_violation_list() -> None:

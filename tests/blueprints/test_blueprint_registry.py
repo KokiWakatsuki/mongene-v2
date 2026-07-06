@@ -64,6 +64,7 @@ EXPECTED_BLUEPRINTS = {
     "QuadraticFunctionStructure",
     "SimultaneousEquationsStructure",
     "KnowledgeBaseStructure",
+    "AlgebraicProofStructure",
 }
 
 

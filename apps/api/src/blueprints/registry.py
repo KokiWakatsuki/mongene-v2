@@ -17,6 +17,7 @@ def _builder_map() -> Dict[str, Callable[[], BlueprintDefinition]]:
     from apps.api.src.blueprints.basic_geometry_measurement import (
         build_basic_geometry_measurement_blueprint,
     )
+    from apps.api.src.blueprints.algebraic_proof import build_algebraic_proof_blueprint
     from apps.api.src.blueprints.construction import build_construction_blueprint
     from apps.api.src.blueprints.data_probability import build_data_probability_blueprint
     from apps.api.src.blueprints.function_geometry_fusion import (
@@ -59,6 +60,7 @@ def _builder_map() -> Dict[str, Callable[[], BlueprintDefinition]]:
         "QuadraticFunctionStructure": build_quadratic_function_blueprint,
         "SimultaneousEquationsStructure": build_simultaneous_equations_blueprint,
         "KnowledgeBaseStructure": build_knowledge_base_blueprint,
+        "AlgebraicProofStructure": build_algebraic_proof_blueprint,
     }
 
 

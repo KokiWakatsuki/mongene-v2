@@ -11334,6 +11334,9 @@
     "domain": "数と式",
     "large_unit": "式の計算",
     "execute_blueprint": "BasicCalculationStructure",
+    "execute_blueprint_by_form": {
+      "proof": "AlgebraicProofStructure"
+    },
     "required_tags": [
       "number"
     ],

@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import random
 
+import pytest
 import sympy
 
 from apps.api.src.atoms.noun.circle_atom import CircleAtom
@@ -102,7 +103,13 @@ def test_diophantine_rejects_unsolvable() -> None:
 # --- ProveAlgebraicVerb ---
 def test_prove_algebraic_returns_step() -> None:
     step = ProveAlgebraicVerb("even_odd").solve(_num(4), rng=random.Random(0))
-    assert "代数的証明" in step.narration_hint or "代数" in step.narration_hint
+    assert "偶数" in step.narration_hint or "奇数" in step.narration_hint
+    assert step.operation_name.startswith("prove_algebraic_")
+
+
+def test_prove_algebraic_unsupported_proof_type_raises() -> None:
+    with pytest.raises(ValueError):
+        ProveAlgebraicVerb("unsupported_type").solve(_num(4), rng=random.Random(0))
 
 
 # --- GeneralizeFormulaVerb ---
