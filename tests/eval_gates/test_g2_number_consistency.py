@@ -67,3 +67,46 @@ def test_allowed_unattributed_numbers_do_not_warn():
     )
     result = check(product, gt)
     assert result.verdict == "PASS"
+
+
+def test_pass_when_required_numbers_only_in_sub_question_prompt_text():
+    """実LLM生成でよくある形: content は指示文のみ、実際の式は sub_questions[].prompt_text にある。
+
+    例: g1_l5_calc_mid のような calculation form。
+    content_problem_text="次の計算をしなさい。" で式が prompt_text にある場合、
+    従来の content 単独スコープでは偽FAILになっていた。
+    """
+    gt = make_ground_truth(operands=[8, -8], answer_sympy_form="0")
+    product = make_product(
+        content_problem_text="次の計算をしなさい。",
+        prompt_texts=[r"$8 + (-8)$"],
+    )
+    result = check(product, gt)
+    assert result.verdict == "PASS"
+
+
+def test_string_operand_not_included_in_required_numbers():
+    """knowledge form などで operand が文の丸ごと文字列(数値でない)の場合、
+    必要数値に混入させてはならない（混入すると必ず欠落FAILになってしまう）。
+    """
+    gt = make_ground_truth(operands=["次の問いに答えなさい：自然数の性質について"], answer_sympy_form="")
+    gt["sub_questions"][0]["answer"] = {"type": "text", "sympy_form": None, "text_form": ""}
+    product = make_product(content_problem_text="自然数の性質について説明しなさい。")
+    result = check(product, gt)
+    assert result.verdict == "N/A"
+    assert result.details.get("required") in (None, [])
+
+
+def test_fail_when_number_missing_even_though_present_in_explanation_only():
+    """explanation_text はスコープに含めない。数値が explanation にしかない場合は
+    欠落FAILのままであるべき（本文/設問に答えの導出数値が漏れているわけではないと誤判定しない）。
+    """
+    gt = make_ground_truth(operands=[8, -8], answer_sympy_form="0")
+    product = make_product(
+        content_problem_text="次の計算をしなさい。",
+        prompt_texts=["この問題を解きなさい。"],
+        explanation_texts=[r"$8 + (-8) = 0$"],
+    )
+    result = check(product, gt)
+    assert result.verdict == "FAIL"
+    assert "missing" in result.details

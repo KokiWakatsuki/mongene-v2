@@ -1,8 +1,11 @@
 """G2 数値整合 (number_consistency)
 
 spec §3-G2:
-- 必要入力数値 = logic_steps[].operands の数値 ＋ sampled_atoms の寸法(dimensions_cm 等)。
-- これらが content_problem_text に過不足なく出現するか。
+- 必要入力数値 = logic_steps[].operands のうち数値として抽出できるもの
+  ＋ sampled_atoms の寸法(dimensions_cm 等)。
+- これらが「content_problem_text ＋ 全 sub_questions[].prompt_text を連結したテキスト」に
+  過不足なく出現するか（explanation_text は含めない。解説には導出過程の数値が
+  正当に出現するため、素性不明数値WARNを誤爆させないため）。
   - 必要数値が欠落 → FAIL（LLMが数値を落とした/改変した）。
   - 入力にも正解にも無い「素性不明の数値」が問題文の数値スロットに出現 → WARN
     （図番号(1)(2)等は許容リストで除外）。
@@ -25,13 +28,30 @@ from scripts.eval_gates.common import (
 GATE_ID = "G2"
 
 
+def _full_problem_text(product: dict[str, Any]) -> str:
+    """content_problem_text ＋ 全 sub_questions[].prompt_text を連結したテキスト。
+
+    explanation_text は含めない（解説の数値は導出過程で正当に出現するため）。
+    """
+    content = product.get("content_problem_text", "") or ""
+    prompts = [sq.get("prompt_text", "") or "" for sq in product.get("sub_questions", []) or []]
+    return "\n".join([content, *prompts])
+
+
 def _required_input_numbers(ground_truth: dict[str, Any]) -> list[str]:
-    """logic_steps[].operands + sampled_atoms の寸法(dimensions_cm等) の数値集合。"""
+    """logic_steps[].operands のうち数値抽出できるもの + sampled_atoms の寸法(dimensions_cm等)。
+
+    operand が数値化できない文字列（knowledge form の設問文など）は
+    「必要数値」に混入させない。
+    """
     values: list[str] = []
     for sq in ground_truth.get("sub_questions", []) or []:
         for step in sq.get("logic_steps", []) or []:
             for operand in step.get("operands", []) or []:
-                values.append(str(operand))
+                operand_str = str(operand)
+                if not extract_numbers(operand_str):
+                    continue
+                values.append(operand_str)
 
     sampled_atoms = ground_truth.get("sampled_atoms", {}) or {}
     for atom_info in sampled_atoms.values():
@@ -56,7 +76,7 @@ def _answer_numbers(ground_truth: dict[str, Any]) -> list[str]:
 
 def check(product: dict[str, Any], ground_truth: dict[str, Any]) -> GateResult:
     required = _required_input_numbers(ground_truth)
-    content = product.get("content_problem_text", "") or ""
+    content = _full_problem_text(product)
 
     missing = [v for v in required if v.strip() not in ("", "None") and not contains_number(content, v)]
 
