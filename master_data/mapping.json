@@ -125,7 +125,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "正の数の概念認識"
+            "knowledge_hint": "正の数の概念認識",
+            "knowledge_hints": [
+              "正の数の概念認識",
+              "正の数の概念認識の定義を答えなさい",
+              "正の数の概念認識の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "type": "identify_sign"
@@ -143,7 +148,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "負の数の導入と大小比較"
+            "knowledge_hint": "負の数の導入と大小比較",
+            "knowledge_hints": [
+              "負の数の導入と大小比較",
+              "負の数の導入と大小比較の定義を答えなさい",
+              "負の数の導入と大小比較の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "type": "compare_magnitude"
@@ -161,7 +171,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "負の数の範囲拡大と判断"
+            "knowledge_hint": "負の数の範囲拡大と判断",
+            "knowledge_hints": [
+              "負の数の範囲拡大と判断",
+              "負の数の範囲拡大と判断の定義を答えなさい",
+              "負の数の範囲拡大と判断の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "type": "order_numbers"
@@ -180,7 +195,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "分数を含む数の概念理解"
+            "knowledge_hint": "分数を含む数の概念理解",
+            "knowledge_hints": [
+              "分数を含む数の概念理解",
+              "分数を含む数の概念理解の定義を答えなさい",
+              "分数を含む数の概念理解の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "type": "compare_magnitude"
@@ -310,7 +330,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "正の整数の大小比較と絶対値"
+            "knowledge_hint": "正の整数の大小比較と絶対値",
+            "knowledge_hints": [
+              "正の整数の大小比較と絶対値",
+              "正の整数の大小比較と絶対値の定義を答えなさい",
+              "正の整数の大小比較と絶対値の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "task_type": "compare_or_absolute_value"
@@ -328,7 +353,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "負の数を含む大小比較と絶対値"
+            "knowledge_hint": "負の数を含む大小比較と絶対値",
+            "knowledge_hints": [
+              "負の数を含む大小比較と絶対値",
+              "負の数を含む大小比較と絶対値の定義を答えなさい",
+              "負の数を含む大小比較と絶対値の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "task_type": "compare_or_absolute_value"
@@ -347,7 +377,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "分数・小数を含む大小比較"
+            "knowledge_hint": "分数・小数を含む大小比較",
+            "knowledge_hints": [
+              "分数・小数を含む大小比較",
+              "分数・小数を含む大小比較の定義を答えなさい",
+              "分数・小数を含む大小比較の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "task_type": "compare"
@@ -365,7 +400,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "絶対値の大小関係の総合判断"
+            "knowledge_hint": "絶対値の大小関係の総合判断",
+            "knowledge_hints": [
+              "絶対値の大小関係の総合判断",
+              "絶対値の大小関係の総合判断の定義を答えなさい",
+              "絶対値の大小関係の総合判断の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "task_type": "complex_judgment"
@@ -1260,7 +1300,12 @@
           },
           "blueprint_params": {
             "operation": "+",
-            "knowledge_hint": "自然数の加法・乗法の認識"
+            "knowledge_hint": "自然数の加法・乗法の認識",
+            "knowledge_hints": [
+              "自然数の加法・乗法の認識",
+              "自然数の加法・乗法の認識の定義を答えなさい",
+              "自然数の加法・乗法の認識の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "task_type": "identify_set_closure"
@@ -1279,7 +1324,12 @@
           },
           "blueprint_params": {
             "operation": "-",
-            "knowledge_hint": "整数の減法における可能性"
+            "knowledge_hint": "整数の減法における可能性",
+            "knowledge_hints": [
+              "整数の減法における可能性",
+              "整数の減法における可能性の定義を答えなさい",
+              "整数の減法における可能性の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "task_type": "identify_set_closure"
@@ -1299,7 +1349,12 @@
           },
           "blueprint_params": {
             "operation": "/",
-            "knowledge_hint": "有理数と除法の定義理解"
+            "knowledge_hint": "有理数と除法の定義理解",
+            "knowledge_hints": [
+              "有理数と除法の定義理解",
+              "有理数と除法の定義理解の定義を答えなさい",
+              "有理数と除法の定義理解の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "task_type": "identify_set_closure"
@@ -1318,7 +1373,12 @@
           },
           "blueprint_params": {
             "operation": "*",
-            "knowledge_hint": "四則計算の可能性の総合判断"
+            "knowledge_hint": "四則計算の可能性の総合判断",
+            "knowledge_hints": [
+              "四則計算の可能性の総合判断",
+              "四則計算の可能性の総合判断の定義を答えなさい",
+              "四則計算の可能性の総合判断の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "task_type": "judge_closure_property"
@@ -1456,7 +1516,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "素数の定義と小数の判定"
+            "knowledge_hint": "素数の定義と小数の判定",
+            "knowledge_hints": [
+              "素数の定義と小数の判定",
+              "素数の定義と小数の判定の定義を答えなさい",
+              "素数の定義と小数の判定の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "type": "is_prime"
@@ -1474,7 +1539,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "2桁の数における素数判定"
+            "knowledge_hint": "2桁の数における素数判定",
+            "knowledge_hints": [
+              "2桁の数における素数判定",
+              "2桁の数における素数判定の定義を答えなさい",
+              "2桁の数における素数判定の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "type": "is_prime"
@@ -1492,7 +1562,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "2桁の数の素因数分解"
+            "knowledge_hint": "2桁の数の素因数分解",
+            "knowledge_hints": [
+              "2桁の数の素因数分解",
+              "2桁の数の素因数分解の定義を答えなさい",
+              "2桁の数の素因数分解の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "type": "prime_factorization"
@@ -1624,7 +1699,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "10の累乗への変換（基本）"
+            "knowledge_hint": "10の累乗への変換（基本）",
+            "knowledge_hints": [
+              "10の累乗への変換（基本）",
+              "10の累乗への変換（基本）の定義を答えなさい",
+              "10の累乗への変換（基本）の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "task_type": "convert_to_scientific_notation"
@@ -1643,7 +1723,12 @@
           },
           "blueprint_params": {
             "operation": "*",
-            "knowledge_hint": "科学的表記の乗法計算"
+            "knowledge_hint": "科学的表記の乗法計算",
+            "knowledge_hints": [
+              "科学的表記の乗法計算",
+              "科学的表記の乗法計算の定義を答えなさい",
+              "科学的表記の乗法計算の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "task_type": "calculate_and_format"
@@ -1661,7 +1746,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "近似値と誤差の範囲判断"
+            "knowledge_hint": "近似値と誤差の範囲判断",
+            "knowledge_hints": [
+              "近似値と誤差の範囲判断",
+              "近似値と誤差の範囲判断の定義を答えなさい",
+              "近似値と誤差の範囲判断の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "task_type": "identify_error_range"
@@ -1680,7 +1770,12 @@
           },
           "blueprint_params": {
             "operation": "/",
-            "knowledge_hint": "科学的表記の除法と桁数判断"
+            "knowledge_hint": "科学的表記の除法と桁数判断",
+            "knowledge_hints": [
+              "科学的表記の除法と桁数判断",
+              "科学的表記の除法と桁数判断の定義を答えなさい",
+              "科学的表記の除法と桁数判断の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "task_type": "calculate_and_analyze"
@@ -1836,7 +1931,12 @@
           },
           "blueprint_params": {
             "operation": "*",
-            "knowledge_hint": "正の数のみの単純な積の表現"
+            "knowledge_hint": "正の数のみの単純な積の表現",
+            "knowledge_hints": [
+              "正の数のみの単純な積の表現",
+              "正の数のみの単純な積の表現の定義を答えなさい",
+              "正の数のみの単純な積の表現の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "type": "identify_expression"
@@ -1860,7 +1960,12 @@
           },
           "blueprint_params": {
             "operation": "*",
-            "knowledge_hint": "負の数を含む積の表現"
+            "knowledge_hint": "負の数を含む積の表現",
+            "knowledge_hints": [
+              "負の数を含む積の表現",
+              "負の数を含む積の表現の定義を答えなさい",
+              "負の数を含む積の表現の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "type": "identify_expression"
@@ -1884,7 +1989,12 @@
           },
           "blueprint_params": {
             "operation": "*",
-            "knowledge_hint": "累乗を用いた積の表現"
+            "knowledge_hint": "累乗を用いた積の表現",
+            "knowledge_hints": [
+              "累乗を用いた積の表現",
+              "累乗を用いた積の表現の定義を答えなさい",
+              "累乗を用いた積の表現の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "type": "identify_expression"
@@ -1908,7 +2018,12 @@
           },
           "blueprint_params": {
             "operation": "*",
-            "knowledge_hint": "複数変数を含む積の表現"
+            "knowledge_hint": "複数変数を含む積の表現",
+            "knowledge_hints": [
+              "複数変数を含む積の表現",
+              "複数変数を含む積の表現の定義を答えなさい",
+              "複数変数を含む積の表現の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "type": "identify_expression"
@@ -2044,7 +2159,12 @@
           },
           "blueprint_params": {
             "operation": "*",
-            "knowledge_hint": "数と文字の積の基本ルール"
+            "knowledge_hint": "数と文字の積の基本ルール",
+            "knowledge_hints": [
+              "数と文字の積の基本ルール",
+              "数と文字の積の基本ルールの定義を答えなさい",
+              "数と文字の積の基本ルールの具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "task": "identify_correct_notation"
@@ -2064,7 +2184,12 @@
           },
           "blueprint_params": {
             "operation": "*",
-            "knowledge_hint": "文字同士の積と順序のルール"
+            "knowledge_hint": "文字同士の積と順序のルール",
+            "knowledge_hints": [
+              "文字同士の積と順序のルール",
+              "文字同士の積と順序のルールの定義を答えなさい",
+              "文字同士の積と順序のルールの具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "task": "identify_correct_notation"
@@ -2084,7 +2209,12 @@
           },
           "blueprint_params": {
             "operation": "*",
-            "knowledge_hint": "1や-1の省略と符号のルール"
+            "knowledge_hint": "1や-1の省略と符号のルール",
+            "knowledge_hints": [
+              "1や-1の省略と符号のルール",
+              "1や-1の省略と符号のルールの定義を答えなさい",
+              "1や-1の省略と符号のルールの具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "task": "identify_correct_notation"
@@ -2104,7 +2234,12 @@
           },
           "blueprint_params": {
             "operation": "*",
-            "knowledge_hint": "累乗と括弧を含む積のルール"
+            "knowledge_hint": "累乗と括弧を含む積のルール",
+            "knowledge_hints": [
+              "累乗と括弧を含む積のルール",
+              "累乗と括弧を含む積のルールの定義を答えなさい",
+              "累乗と括弧を含む積のルールの具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "task": "identify_correct_notation"
@@ -2249,7 +2384,12 @@
           },
           "blueprint_params": {
             "operation": "/",
-            "knowledge_hint": "正の数・変数の単純な除法"
+            "knowledge_hint": "正の数・変数の単純な除法",
+            "knowledge_hints": [
+              "正の数・変数の単純な除法",
+              "正の数・変数の単純な除法の定義を答えなさい",
+              "正の数・変数の単純な除法の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "task_type": "convert_to_fraction_form"
@@ -2273,7 +2413,12 @@
           },
           "blueprint_params": {
             "operation": "/",
-            "knowledge_hint": "負の数を含む除法の表現"
+            "knowledge_hint": "負の数を含む除法の表現",
+            "knowledge_hints": [
+              "負の数を含む除法の表現",
+              "負の数を含む除法の表現の定義を答えなさい",
+              "負の数を含む除法の表現の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "task_type": "convert_to_fraction_form"
@@ -2297,7 +2442,12 @@
           },
           "blueprint_params": {
             "operation": "/",
-            "knowledge_hint": "多項式の除法（括弧あり）"
+            "knowledge_hint": "多項式の除法（括弧あり）",
+            "knowledge_hints": [
+              "多項式の除法（括弧あり）",
+              "多項式の除法（括弧あり）の定義を答えなさい",
+              "多項式の除法（括弧あり）の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "task_type": "convert_to_fraction_form"
@@ -2321,7 +2471,12 @@
           },
           "blueprint_params": {
             "operation": "/",
-            "knowledge_hint": "変数で割る除法の表現"
+            "knowledge_hint": "変数で割る除法の表現",
+            "knowledge_hints": [
+              "変数で割る除法の表現",
+              "変数で割る除法の表現の定義を答えなさい",
+              "変数で割る除法の表現の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "task_type": "convert_to_fraction_form"
@@ -2706,7 +2861,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "正の係数を持つ単項式の識別"
+            "knowledge_hint": "正の係数を持つ単項式の識別",
+            "knowledge_hints": [
+              "正の係数を持つ単項式の識別",
+              "正の係数を持つ単項式の識別の定義を答えなさい",
+              "正の係数を持つ単項式の識別の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "identify_coefficient"
@@ -2728,7 +2888,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "負の数を含む一次式の項と係数"
+            "knowledge_hint": "負の数を含む一次式の項と係数",
+            "knowledge_hints": [
+              "負の数を含む一次式の項と係数",
+              "負の数を含む一次式の項と係数の定義を答えなさい",
+              "負の数を含む一次式の項と係数の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "identify_term_and_coefficient"
@@ -2751,7 +2916,12 @@
           },
           "blueprint_params": {
             "operation": "+",
-            "knowledge_hint": "同類項の判断と加減の概念"
+            "knowledge_hint": "同類項の判断と加減の概念",
+            "knowledge_hints": [
+              "同類項の判断と加減の概念",
+              "同類項の判断と加減の概念の定義を答えなさい",
+              "同類項の判断と加減の概念の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "identify_like_terms"
@@ -2774,7 +2944,12 @@
           },
           "blueprint_params": {
             "operation": "-",
-            "knowledge_hint": "括弧を含む式の項の整理"
+            "knowledge_hint": "括弧を含む式の項の整理",
+            "knowledge_hints": [
+              "括弧を含む式の項の整理",
+              "括弧を含む式の項の整理の定義を答えなさい",
+              "括弧を含む式の項の整理の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "identify_terms_after_expansion"
@@ -3040,7 +3215,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "等式の左辺と右辺の識別（基礎）"
+            "knowledge_hint": "等式の左辺と右辺の識別（基礎）",
+            "knowledge_hints": [
+              "等式の左辺と右辺の識別（基礎）",
+              "等式の左辺と右辺の識別（基礎）の定義を答えなさい",
+              "等式の左辺と右辺の識別（基礎）の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "task": "identify_sides"
@@ -3061,7 +3241,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "係数を含む等式の構成要素の識別"
+            "knowledge_hint": "係数を含む等式の構成要素の識別",
+            "knowledge_hints": [
+              "係数を含む等式の構成要素の識別",
+              "係数を含む等式の構成要素の識別の定義を答えなさい",
+              "係数を含む等式の構成要素の識別の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "task": "identify_sides"
@@ -3082,7 +3267,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "等式かどうかの判断（概念理解）"
+            "knowledge_hint": "等式かどうかの判断（概念理解）",
+            "knowledge_hints": [
+              "等式かどうかの判断（概念理解）",
+              "等式かどうかの判断（概念理解）の定義を答えなさい",
+              "等式かどうかの判断（概念理解）の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "task": "judge_equation_definition"
@@ -3103,7 +3293,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "等式の定義と構成要素の複合判断"
+            "knowledge_hint": "等式の定義と構成要素の複合判断",
+            "knowledge_hints": [
+              "等式の定義と構成要素の複合判断",
+              "等式の定義と構成要素の複合判断の定義を答えなさい",
+              "等式の定義と構成要素の複合判断の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "task": "analyze_equation_structure"
@@ -3245,7 +3440,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "不等号の基本的な意味の理解"
+            "knowledge_hint": "不等号の基本的な意味の理解",
+            "knowledge_hints": [
+              "不等号の基本的な意味の理解",
+              "不等号の基本的な意味の理解の定義を答えなさい",
+              "不等号の基本的な意味の理解の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "task": "identify_inequality_sign"
@@ -3267,7 +3467,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "「以上・以下」を含む不等号の理解"
+            "knowledge_hint": "「以上・以下」を含む不等号の理解",
+            "knowledge_hints": [
+              "「以上・以下」を含む不等号の理解",
+              "「以上・以下」を含む不等号の理解の定義を答えなさい",
+              "「以上・以下」を含む不等号の理解の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "task": "match_verbal_to_inequality"
@@ -3289,7 +3494,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "負の数を含む不等式の判断"
+            "knowledge_hint": "負の数を含む不等式の判断",
+            "knowledge_hints": [
+              "負の数を含む不等式の判断",
+              "負の数を含む不等式の判断の定義を答えなさい",
+              "負の数を含む不等式の判断の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "task": "evaluate_inequality_truth"
@@ -3399,7 +3609,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "方程式の解の定義の確認（小）"
+            "knowledge_hint": "方程式の解の定義の確認（小）",
+            "knowledge_hints": [
+              "方程式の解の定義の確認（小）",
+              "方程式の解の定義の確認（小）の定義を答えなさい",
+              "方程式の解の定義の確認（小）の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "verb": "CheckSolution"
@@ -3418,7 +3633,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "方程式の解の定義の確認（中）"
+            "knowledge_hint": "方程式の解の定義の確認（中）",
+            "knowledge_hints": [
+              "方程式の解の定義の確認（中）",
+              "方程式の解の定義の確認（中）の定義を答えなさい",
+              "方程式の解の定義の確認（中）の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "verb": "CheckSolution"
@@ -3437,7 +3657,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "等式の性質を用いた判断"
+            "knowledge_hint": "等式の性質を用いた判断",
+            "knowledge_hints": [
+              "等式の性質を用いた判断",
+              "等式の性質を用いた判断の定義を答えなさい",
+              "等式の性質を用いた判断の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "verb": "IdentifyEquivalent"
@@ -3455,7 +3680,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "比例式の概念と解の判断"
+            "knowledge_hint": "比例式の概念と解の判断",
+            "knowledge_hints": [
+              "比例式の概念と解の判断",
+              "比例式の概念と解の判断の定義を答えなさい",
+              "比例式の概念と解の判断の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "verb": "CheckSolution"
@@ -3473,7 +3703,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "複雑な比例式の解の判断"
+            "knowledge_hint": "複雑な比例式の解の判断",
+            "knowledge_hints": [
+              "複雑な比例式の解の判断",
+              "複雑な比例式の解の判断の定義を答えなさい",
+              "複雑な比例式の解の判断の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "verb": "CheckSolution"
@@ -4187,7 +4422,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "比例関係の認識と定義の理解"
+            "knowledge_hint": "比例関係の認識と定義の理解",
+            "knowledge_hints": [
+              "比例関係の認識と定義の理解",
+              "比例関係の認識と定義の理解の定義を答えなさい",
+              "比例関係の認識と定義の理解の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "identify"
@@ -4205,7 +4445,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "一次関数の式と変域の基礎"
+            "knowledge_hint": "一次関数の式と変域の基礎",
+            "knowledge_hints": [
+              "一次関数の式と変域の基礎",
+              "一次関数の式と変域の基礎の定義を答えなさい",
+              "一次関数の式と変域の基礎の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "define"
@@ -4224,7 +4469,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "負の数を含む関数の判断"
+            "knowledge_hint": "負の数を含む関数の判断",
+            "knowledge_hints": [
+              "負の数を含む関数の判断",
+              "負の数を含む関数の判断の定義を答えなさい",
+              "負の数を含む関数の判断の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "analyze"
@@ -4243,7 +4493,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "分数を含む関数の応用判断"
+            "knowledge_hint": "分数を含む関数の応用判断",
+            "knowledge_hints": [
+              "分数を含む関数の応用判断",
+              "分数を含む関数の応用判断の定義を答えなさい",
+              "分数を含む関数の応用判断の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "evaluate"
@@ -4433,7 +4688,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "比例の式の形（y=ax）の認識"
+            "knowledge_hint": "比例の式の形（y=ax）の認識",
+            "knowledge_hints": [
+              "比例の式の形（y=ax）の認識",
+              "比例の式の形（y=ax）の認識の定義を答えなさい",
+              "比例の式の形（y=ax）の認識の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "verb": "identify_formula"
@@ -4451,7 +4711,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "負の数を含む比例定数の理解"
+            "knowledge_hint": "負の数を含む比例定数の理解",
+            "knowledge_hints": [
+              "負の数を含む比例定数の理解",
+              "負の数を含む比例定数の理解の定義を答えなさい",
+              "負の数を含む比例定数の理解の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "verb": "extract_constant"
@@ -4469,7 +4734,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "分数を含む比例定数の判断"
+            "knowledge_hint": "分数を含む比例定数の判断",
+            "knowledge_hints": [
+              "分数を含む比例定数の判断",
+              "分数を含む比例定数の判断の定義を答えなさい",
+              "分数を含む比例定数の判断の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "verb": "judge_proportionality"
@@ -4574,7 +4844,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "第1象限の正の座標の認識"
+            "knowledge_hint": "第1象限の正の座標の認識",
+            "knowledge_hints": [
+              "第1象限の正の座標の認識",
+              "第1象限の正の座標の認識の定義を答えなさい",
+              "第1象限の正の座標の認識の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "identify",
@@ -4593,7 +4868,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "全象限の整数座標の読み取り"
+            "knowledge_hint": "全象限の整数座標の読み取り",
+            "knowledge_hints": [
+              "全象限の整数座標の読み取り",
+              "全象限の整数座標の読み取りの定義を答えなさい",
+              "全象限の整数座標の読み取りの具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "read",
@@ -4612,7 +4892,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "軸上の点と座標の定義理解"
+            "knowledge_hint": "軸上の点と座標の定義理解",
+            "knowledge_hints": [
+              "軸上の点と座標の定義理解",
+              "軸上の点と座標の定義理解の定義を答えなさい",
+              "軸上の点と座標の定義理解の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "define",
@@ -4632,7 +4917,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "座標の性質と位置関係の判断"
+            "knowledge_hint": "座標の性質と位置関係の判断",
+            "knowledge_hints": [
+              "座標の性質と位置関係の判断",
+              "座標の性質と位置関係の判断の定義を答えなさい",
+              "座標の性質と位置関係の判断の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "judge",
@@ -4835,7 +5125,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "正の整数傾きの比例グラフ認識"
+            "knowledge_hint": "正の整数傾きの比例グラフ認識",
+            "knowledge_hints": [
+              "正の整数傾きの比例グラフ認識",
+              "正の整数傾きの比例グラフ認識の定義を答えなさい",
+              "正の整数傾きの比例グラフ認識の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {},
           "implementable": true,
@@ -4852,7 +5147,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "負の整数傾きを含むグラフの識別"
+            "knowledge_hint": "負の整数傾きを含むグラフの識別",
+            "knowledge_hints": [
+              "負の整数傾きを含むグラフの識別",
+              "負の整数傾きを含むグラフの識別の定義を答えなさい",
+              "負の整数傾きを含むグラフの識別の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {},
           "implementable": true,
@@ -4869,7 +5169,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "分数傾きを含むグラフの座標判断"
+            "knowledge_hint": "分数傾きを含むグラフの座標判断",
+            "knowledge_hints": [
+              "分数傾きを含むグラフの座標判断",
+              "分数傾きを含むグラフの座標判断の定義を答えなさい",
+              "分数傾きを含むグラフの座標判断の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {},
           "implementable": true,
@@ -4886,7 +5191,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "傾きの絶対値とグラフの傾き具合の判断"
+            "knowledge_hint": "傾きの絶対値とグラフの傾き具合の判断",
+            "knowledge_hints": [
+              "傾きの絶対値とグラフの傾き具合の判断",
+              "傾きの絶対値とグラフの傾き具合の判断の定義を答えなさい",
+              "傾きの絶対値とグラフの傾き具合の判断の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {},
           "implementable": true,
@@ -5319,7 +5629,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "反比例の式の形を識別する"
+            "knowledge_hint": "反比例の式の形を識別する",
+            "knowledge_hints": [
+              "反比例の式の形を識別する",
+              "反比例の式の形を識別するの定義を答えなさい",
+              "反比例の式の形を識別するの具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "identify"
@@ -5337,7 +5652,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "比例定数aを求める計算"
+            "knowledge_hint": "比例定数aを求める計算",
+            "knowledge_hints": [
+              "比例定数aを求める計算",
+              "比例定数aを求める計算の定義を答えなさい",
+              "比例定数aを求める計算の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "calculate"
@@ -5355,7 +5675,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "反比例の式を決定する"
+            "knowledge_hint": "反比例の式を決定する",
+            "knowledge_hints": [
+              "反比例の式を決定する",
+              "反比例の式を決定するの定義を答えなさい",
+              "反比例の式を決定するの具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "derive"
@@ -5373,7 +5698,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "分数を含む比例定数の算出"
+            "knowledge_hint": "分数を含む比例定数の算出",
+            "knowledge_hints": [
+              "分数を含む比例定数の算出",
+              "分数を含む比例定数の算出の定義を答えなさい",
+              "分数を含む比例定数の算出の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "derive"
@@ -5391,7 +5721,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "文章題から反比例を判断する"
+            "knowledge_hint": "文章題から反比例を判断する",
+            "knowledge_hints": [
+              "文章題から反比例を判断する",
+              "文章題から反比例を判断するの定義を答えなさい",
+              "文章題から反比例を判断するの具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "judge"
@@ -5452,7 +5787,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "反比例の式の基本形(y=a/x)の認識"
+            "knowledge_hint": "反比例の式の基本形(y=a/x)の認識",
+            "knowledge_hints": [
+              "反比例の式の基本形(y=a/x)の認識",
+              "反比例の式の基本形(y=a/x)の認識の定義を答えなさい",
+              "反比例の式の基本形(y=a/x)の認識の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "identify"
@@ -5472,7 +5812,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "グラフの形状（双曲線）の識別"
+            "knowledge_hint": "グラフの形状（双曲線）の識別",
+            "knowledge_hints": [
+              "グラフの形状（双曲線）の識別",
+              "グラフの形状（双曲線）の識別の定義を答えなさい",
+              "グラフの形状（双曲線）の識別の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "classify"
@@ -5492,7 +5837,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "比例定数の符号と象限の関係判断"
+            "knowledge_hint": "比例定数の符号と象限の関係判断",
+            "knowledge_hints": [
+              "比例定数の符号と象限の関係判断",
+              "比例定数の符号と象限の関係判断の定義を答えなさい",
+              "比例定数の符号と象限の関係判断の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "judge"
@@ -5512,7 +5862,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "比例定数の絶対値とグラフの開き具合"
+            "knowledge_hint": "比例定数の絶対値とグラフの開き具合",
+            "knowledge_hints": [
+              "比例定数の絶対値とグラフの開き具合",
+              "比例定数の絶対値とグラフの開き具合の定義を答えなさい",
+              "比例定数の絶対値とグラフの開き具合の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "compare"
@@ -5898,7 +6253,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "三角形の辺と頂点の識別"
+            "knowledge_hint": "三角形の辺と頂点の識別",
+            "knowledge_hints": [
+              "三角形の辺と頂点の識別",
+              "三角形の辺と頂点の識別の定義を答えなさい",
+              "三角形の辺と頂点の識別の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "identify_components"
@@ -5915,7 +6275,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "四角形の辺と頂点の識別"
+            "knowledge_hint": "四角形の辺と頂点の識別",
+            "knowledge_hints": [
+              "四角形の辺と頂点の識別",
+              "四角形の辺と頂点の識別の定義を答えなさい",
+              "四角形の辺と頂点の識別の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "identify_components"
@@ -5932,7 +6297,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "直角三角形における点と直線の距離"
+            "knowledge_hint": "直角三角形における点と直線の距離",
+            "knowledge_hints": [
+              "直角三角形における点と直線の距離",
+              "直角三角形における点と直線の距離の定義を答えなさい",
+              "直角三角形における点と直線の距離の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "calculate_distance"
@@ -5949,7 +6319,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "多角形における辺の関係と距離の判断"
+            "knowledge_hint": "多角形における辺の関係と距離の判断",
+            "knowledge_hints": [
+              "多角形における辺の関係と距離の判断",
+              "多角形における辺の関係と距離の判断の定義を答えなさい",
+              "多角形における辺の関係と距離の判断の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "analyze_relationship"
@@ -6079,7 +6454,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "平行移動における対応する点の認識"
+            "knowledge_hint": "平行移動における対応する点の認識",
+            "knowledge_hints": [
+              "平行移動における対応する点の認識",
+              "平行移動における対応する点の認識の定義を答えなさい",
+              "平行移動における対応する点の認識の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "identify_corresponding_vertex"
@@ -6097,7 +6477,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "平行移動における対応する辺の平行関係"
+            "knowledge_hint": "平行移動における対応する辺の平行関係",
+            "knowledge_hints": [
+              "平行移動における対応する辺の平行関係",
+              "平行移動における対応する辺の平行関係の定義を答えなさい",
+              "平行移動における対応する辺の平行関係の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "identify_parallel_segments"
@@ -6115,7 +6500,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "平行移動の方向と距離の判断"
+            "knowledge_hint": "平行移動の方向と距離の判断",
+            "knowledge_hints": [
+              "平行移動の方向と距離の判断",
+              "平行移動の方向と距離の判断の定義を答えなさい",
+              "平行移動の方向と距離の判断の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "determine_translation_vector"
@@ -6241,7 +6631,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "回転移動の基本概念と90度回転"
+            "knowledge_hint": "回転移動の基本概念と90度回転",
+            "knowledge_hints": [
+              "回転移動の基本概念と90度回転",
+              "回転移動の基本概念と90度回転の定義を答えなさい",
+              "回転移動の基本概念と90度回転の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "identify",
@@ -6259,7 +6654,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "三角形の180度回転と対応点の認識"
+            "knowledge_hint": "三角形の180度回転と対応点の認識",
+            "knowledge_hints": [
+              "三角形の180度回転と対応点の認識",
+              "三角形の180度回転と対応点の認識の定義を答えなさい",
+              "三角形の180度回転と対応点の認識の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "match",
@@ -6278,7 +6678,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "正多角形の回転と中心角の判断"
+            "knowledge_hint": "正多角形の回転と中心角の判断",
+            "knowledge_hints": [
+              "正多角形の回転と中心角の判断",
+              "正多角形の回転と中心角の判断の定義を答えなさい",
+              "正多角形の回転と中心角の判断の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "calculate",
@@ -6299,7 +6704,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "回転移動における円弧の軌跡の理解"
+            "knowledge_hint": "回転移動における円弧の軌跡の理解",
+            "knowledge_hints": [
+              "回転移動における円弧の軌跡の理解",
+              "回転移動における円弧の軌跡の理解の定義を答えなさい",
+              "回転移動における円弧の軌跡の理解の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "analyze",
@@ -6426,7 +6836,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "線対称な図形の基本的な認識"
+            "knowledge_hint": "線対称な図形の基本的な認識",
+            "knowledge_hints": [
+              "線対称な図形の基本的な認識",
+              "線対称な図形の基本的な認識の定義を答えなさい",
+              "線対称な図形の基本的な認識の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "identify_symmetry_type"
@@ -6443,7 +6858,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "点対称な図形の基本的な認識"
+            "knowledge_hint": "点対称な図形の基本的な認識",
+            "knowledge_hints": [
+              "点対称な図形の基本的な認識",
+              "点対称な図形の基本的な認識の定義を答えなさい",
+              "点対称な図形の基本的な認識の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "identify_symmetry_type"
@@ -6461,7 +6881,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "正多角形の対称軸の数の判断"
+            "knowledge_hint": "正多角形の対称軸の数の判断",
+            "knowledge_hints": [
+              "正多角形の対称軸の数の判断",
+              "正多角形の対称軸の数の判断の定義を答えなさい",
+              "正多角形の対称軸の数の判断の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "count_symmetry_axes"
@@ -6478,7 +6903,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "図形の対称性の総合的な判断"
+            "knowledge_hint": "図形の対称性の総合的な判断",
+            "knowledge_hints": [
+              "図形の対称性の総合的な判断",
+              "図形の対称性の総合的な判断の定義を答えなさい",
+              "図形の対称性の総合的な判断の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "judge_symmetry_existence"
@@ -6594,7 +7024,12 @@
           "atom_constraints": {},
           "blueprint_params": {
             "construction_type": "perp_bisector",
-            "knowledge_hint": "垂直二等分線の定義の理解"
+            "knowledge_hint": "垂直二等分線の定義の理解",
+            "knowledge_hints": [
+              "垂直二等分線の定義の理解",
+              "垂直二等分線の定義の理解の定義を答えなさい",
+              "垂直二等分線の定義の理解の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "task": "identify_definition"
@@ -6608,7 +7043,12 @@
           "atom_constraints": {},
           "blueprint_params": {
             "construction_type": "perp_bisector",
-            "knowledge_hint": "垂直二等分線上の点の性質"
+            "knowledge_hint": "垂直二等分線上の点の性質",
+            "knowledge_hints": [
+              "垂直二等分線上の点の性質",
+              "垂直二等分線上の点の性質の定義を答えなさい",
+              "垂直二等分線上の点の性質の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "task": "apply_property"
@@ -6622,7 +7062,12 @@
           "atom_constraints": {},
           "blueprint_params": {
             "construction_type": "perp_bisector",
-            "knowledge_hint": "作図手順の論理的な判断"
+            "knowledge_hint": "作図手順の論理的な判断",
+            "knowledge_hints": [
+              "作図手順の論理的な判断",
+              "作図手順の論理的な判断の定義を答えなさい",
+              "作図手順の論理的な判断の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "task": "evaluate_process"
@@ -6647,7 +7092,12 @@
           },
           "blueprint_params": {
             "construction_type": "perp_bisector",
-            "knowledge_hint": "条件を満たす点の位置の判断"
+            "knowledge_hint": "条件を満たす点の位置の判断",
+            "knowledge_hints": [
+              "条件を満たす点の位置の判断",
+              "条件を満たす点の位置の判断の定義を答えなさい",
+              "条件を満たす点の位置の判断の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "task": "solve_application"
@@ -6765,7 +7215,12 @@
           "atom_constraints": {},
           "blueprint_params": {
             "construction_type": "angle_bisector",
-            "knowledge_hint": "角の二等分線の定義の認識"
+            "knowledge_hint": "角の二等分線の定義の認識",
+            "knowledge_hints": [
+              "角の二等分線の定義の認識",
+              "角の二等分線の定義の認識の定義を答えなさい",
+              "角の二等分線の定義の認識の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "task": "identify_definition"
@@ -6779,7 +7234,12 @@
           "atom_constraints": {},
           "blueprint_params": {
             "construction_type": "angle_bisector",
-            "knowledge_hint": "作図手順の正誤判断"
+            "knowledge_hint": "作図手順の正誤判断",
+            "knowledge_hints": [
+              "作図手順の正誤判断",
+              "作図手順の正誤判断の定義を答えなさい",
+              "作図手順の正誤判断の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "task": "evaluate_procedure"
@@ -6793,7 +7253,12 @@
           "atom_constraints": {},
           "blueprint_params": {
             "construction_type": "angle_bisector",
-            "knowledge_hint": "角の二等分線の性質の理解"
+            "knowledge_hint": "角の二等分線の性質の理解",
+            "knowledge_hints": [
+              "角の二等分線の性質の理解",
+              "角の二等分線の性質の理解の定義を答えなさい",
+              "角の二等分線の性質の理解の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "task": "apply_property"
@@ -6939,7 +7404,12 @@
           "atom_constraints": {},
           "blueprint_params": {
             "construction_type": "copy_length",
-            "knowledge_hint": "垂線の定義と基本概念の確認"
+            "knowledge_hint": "垂線の定義と基本概念の確認",
+            "knowledge_hints": [
+              "垂線の定義と基本概念の確認",
+              "垂線の定義と基本概念の確認の定義を答えなさい",
+              "垂線の定義と基本概念の確認の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {},
           "implementable": true,
@@ -6951,7 +7421,12 @@
           "atom_constraints": {},
           "blueprint_params": {
             "construction_type": "perpendicular",
-            "knowledge_hint": "垂線の作図手順の理解"
+            "knowledge_hint": "垂線の作図手順の理解",
+            "knowledge_hints": [
+              "垂線の作図手順の理解",
+              "垂線の作図手順の理解の定義を答えなさい",
+              "垂線の作図手順の理解の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {},
           "implementable": true,
@@ -6963,7 +7438,12 @@
           "atom_constraints": {},
           "blueprint_params": {
             "construction_type": "perp_bisector",
-            "knowledge_hint": "垂直二等分線の性質の理解"
+            "knowledge_hint": "垂直二等分線の性質の理解",
+            "knowledge_hints": [
+              "垂直二等分線の性質の理解",
+              "垂直二等分線の性質の理解の定義を答えなさい",
+              "垂直二等分線の性質の理解の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {},
           "implementable": true,
@@ -6975,7 +7455,12 @@
           "atom_constraints": {},
           "blueprint_params": {
             "construction_type": "tangent",
-            "knowledge_hint": "接線と垂線の関係の判断"
+            "knowledge_hint": "接線と垂線の関係の判断",
+            "knowledge_hints": [
+              "接線と垂線の関係の判断",
+              "接線と垂線の関係の判断の定義を答えなさい",
+              "接線と垂線の関係の判断の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {},
           "implementable": true,
@@ -7075,7 +7560,12 @@
           "atom_constraints": {},
           "blueprint_params": {
             "construction_type": "copy_length",
-            "knowledge_hint": "基本作図の名称と定義の照合"
+            "knowledge_hint": "基本作図の名称と定義の照合",
+            "knowledge_hints": [
+              "基本作図の名称と定義の照合",
+              "基本作図の名称と定義の照合の定義を答えなさい",
+              "基本作図の名称と定義の照合の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {},
           "implementable": true,
@@ -7087,7 +7577,12 @@
           "atom_constraints": {},
           "blueprint_params": {
             "construction_type": "perp_bisector",
-            "knowledge_hint": "2点からの距離が等しい点の条件"
+            "knowledge_hint": "2点からの距離が等しい点の条件",
+            "knowledge_hints": [
+              "2点からの距離が等しい点の条件",
+              "2点からの距離が等しい点の条件の定義を答えなさい",
+              "2点からの距離が等しい点の条件の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {},
           "implementable": true,
@@ -7099,7 +7594,12 @@
           "atom_constraints": {},
           "blueprint_params": {
             "construction_type": "angle_bisector",
-            "knowledge_hint": "2辺からの距離が等しい点の条件"
+            "knowledge_hint": "2辺からの距離が等しい点の条件",
+            "knowledge_hints": [
+              "2辺からの距離が等しい点の条件",
+              "2辺からの距離が等しい点の条件の定義を答えなさい",
+              "2辺からの距離が等しい点の条件の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {},
           "implementable": true,
@@ -7111,7 +7611,12 @@
           "atom_constraints": {},
           "blueprint_params": {
             "construction_type": "perpendicular",
-            "knowledge_hint": "点と直線の距離の作図条件"
+            "knowledge_hint": "点と直線の距離の作図条件",
+            "knowledge_hints": [
+              "点と直線の距離の作図条件",
+              "点と直線の距離の作図条件の定義を答えなさい",
+              "点と直線の距離の作図条件の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {},
           "implementable": true,
@@ -7123,7 +7628,12 @@
           "atom_constraints": {},
           "blueprint_params": {
             "construction_type": "tangent",
-            "knowledge_hint": "円の接線の作図条件の判断"
+            "knowledge_hint": "円の接線の作図条件の判断",
+            "knowledge_hints": [
+              "円の接線の作図条件の判断",
+              "円の接線の作図条件の判断の定義を答えなさい",
+              "円の接線の作図条件の判断の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {},
           "implementable": true,
@@ -7249,7 +7759,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "円の定義と基本要素の認識"
+            "knowledge_hint": "円の定義と基本要素の認識",
+            "knowledge_hints": [
+              "円の定義と基本要素の認識",
+              "円の定義と基本要素の認識の定義を答えなさい",
+              "円の定義と基本要素の認識の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "identify"
@@ -7270,7 +7785,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "基本的なおうぎ形の認識"
+            "knowledge_hint": "基本的なおうぎ形の認識",
+            "knowledge_hints": [
+              "基本的なおうぎ形の認識",
+              "基本的なおうぎ形の認識の定義を答えなさい",
+              "基本的なおうぎ形の認識の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "define"
@@ -7293,7 +7813,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "様々なおうぎ形の性質理解"
+            "knowledge_hint": "様々なおうぎ形の性質理解",
+            "knowledge_hints": [
+              "様々なおうぎ形の性質理解",
+              "様々なおうぎ形の性質理解の定義を答えなさい",
+              "様々なおうぎ形の性質理解の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "calculate"
@@ -7314,7 +7839,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "複雑な中心角を持つおうぎ形の判断"
+            "knowledge_hint": "複雑な中心角を持つおうぎ形の判断",
+            "knowledge_hints": [
+              "複雑な中心角を持つおうぎ形の判断",
+              "複雑な中心角を持つおうぎ形の判断の定義を答えなさい",
+              "複雑な中心角を持つおうぎ形の判断の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "analyze"
@@ -7577,7 +8107,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "直方体・立方体の認識"
+            "knowledge_hint": "直方体・立方体の認識",
+            "knowledge_hints": [
+              "直方体・立方体の認識",
+              "直方体・立方体の認識の定義を答えなさい",
+              "直方体・立方体の認識の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "identify",
@@ -7596,7 +8131,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "三角柱の構成要素の理解"
+            "knowledge_hint": "三角柱の構成要素の理解",
+            "knowledge_hints": [
+              "三角柱の構成要素の理解",
+              "三角柱の構成要素の理解の定義を答えなさい",
+              "三角柱の構成要素の理解の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "count_elements",
@@ -7615,7 +8155,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "四角錐の定義と判別"
+            "knowledge_hint": "四角錐の定義と判別",
+            "knowledge_hints": [
+              "四角錐の定義と判別",
+              "四角錐の定義と判別の定義を答えなさい",
+              "四角錐の定義と判別の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "classify",
@@ -7746,7 +8291,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "立方体における平行な直線の認識"
+            "knowledge_hint": "立方体における平行な直線の認識",
+            "knowledge_hints": [
+              "立方体における平行な直線の認識",
+              "立方体における平行な直線の認識の定義を答えなさい",
+              "立方体における平行な直線の認識の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "task": "identify_parallel_lines"
@@ -7764,7 +8314,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "立方体における垂直な直線・平面の認識"
+            "knowledge_hint": "立方体における垂直な直線・平面の認識",
+            "knowledge_hints": [
+              "立方体における垂直な直線・平面の認識",
+              "立方体における垂直な直線・平面の認識の定義を答えなさい",
+              "立方体における垂直な直線・平面の認識の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "task": "identify_perpendicular_elements"
@@ -7782,7 +8337,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "立方体におけるねじれの位置の認識"
+            "knowledge_hint": "立方体におけるねじれの位置の認識",
+            "knowledge_hints": [
+              "立方体におけるねじれの位置の認識",
+              "立方体におけるねじれの位置の認識の定義を答えなさい",
+              "立方体におけるねじれの位置の認識の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "task": "identify_skew_lines"
@@ -7800,7 +8360,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "三角柱における位置関係の総合判断"
+            "knowledge_hint": "三角柱における位置関係の総合判断",
+            "knowledge_hints": [
+              "三角柱における位置関係の総合判断",
+              "三角柱における位置関係の総合判断の定義を答えなさい",
+              "三角柱における位置関係の総合判断の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "task": "identify_all_relationships"
@@ -7928,7 +8493,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "立方体の定義と構成要素の認識"
+            "knowledge_hint": "立方体の定義と構成要素の認識",
+            "knowledge_hints": [
+              "立方体の定義と構成要素の認識",
+              "立方体の定義と構成要素の認識の定義を答えなさい",
+              "立方体の定義と構成要素の認識の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "identify"
@@ -7946,7 +8516,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "三角柱の底面と側面の関係の理解"
+            "knowledge_hint": "三角柱の底面と側面の関係の理解",
+            "knowledge_hints": [
+              "三角柱の底面と側面の関係の理解",
+              "三角柱の底面と側面の関係の理解の定義を答えなさい",
+              "三角柱の底面と側面の関係の理解の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "analyze"
@@ -7964,7 +8539,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "四角錐の定義と頂点の認識"
+            "knowledge_hint": "四角錐の定義と頂点の認識",
+            "knowledge_hints": [
+              "四角錐の定義と頂点の認識",
+              "四角錐の定義と頂点の認識の定義を答えなさい",
+              "四角錐の定義と頂点の認識の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "identify"
@@ -7983,7 +8563,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "三角錐の構造と高さの概念理解"
+            "knowledge_hint": "三角錐の構造と高さの概念理解",
+            "knowledge_hints": [
+              "三角錐の構造と高さの概念理解",
+              "三角錐の構造と高さの概念理解の定義を答えなさい",
+              "三角錐の構造と高さの概念理解の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "evaluate"
@@ -8116,7 +8701,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "直方体・立方体の投影図の識別"
+            "knowledge_hint": "直方体・立方体の投影図の識別",
+            "knowledge_hints": [
+              "直方体・立方体の投影図の識別",
+              "直方体・立方体の投影図の識別の定義を答えなさい",
+              "直方体・立方体の投影図の識別の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "identify"
@@ -8134,7 +8724,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "三角柱の投影図の識別"
+            "knowledge_hint": "三角柱の投影図の識別",
+            "knowledge_hints": [
+              "三角柱の投影図の識別",
+              "三角柱の投影図の識別の定義を答えなさい",
+              "三角柱の投影図の識別の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "identify"
@@ -8152,7 +8747,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "四角錐の投影図の識別"
+            "knowledge_hint": "四角錐の投影図の識別",
+            "knowledge_hints": [
+              "四角錐の投影図の識別",
+              "四角錐の投影図の識別の定義を答えなさい",
+              "四角錐の投影図の識別の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "identify"
@@ -8172,7 +8772,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "正多角柱・正多角錐の投影図の判断"
+            "knowledge_hint": "正多角柱・正多角錐の投影図の判断",
+            "knowledge_hints": [
+              "正多角柱・正多角錐の投影図の判断",
+              "正多角柱・正多角錐の投影図の判断の定義を答えなさい",
+              "正多角柱・正多角錐の投影図の判断の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "analyze"
@@ -8824,7 +9429,12 @@
           },
           "blueprint_params": {
             "metric": "mode",
-            "knowledge_hint": "度数分布表から最頻値を読み取る"
+            "knowledge_hint": "度数分布表から最頻値を読み取る",
+            "knowledge_hints": [
+              "度数分布表から最頻値を読み取る",
+              "度数分布表から最頻値を読み取るの定義を答えなさい",
+              "度数分布表から最頻値を読み取るの具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "identify"
@@ -8844,7 +9454,12 @@
           },
           "blueprint_params": {
             "metric": "median",
-            "knowledge_hint": "度数分布表から中央値の階級を特定する"
+            "knowledge_hint": "度数分布表から中央値の階級を特定する",
+            "knowledge_hints": [
+              "度数分布表から中央値の階級を特定する",
+              "度数分布表から中央値の階級を特定するの定義を答えなさい",
+              "度数分布表から中央値の階級を特定するの具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "locate"
@@ -8861,7 +9476,12 @@
           },
           "blueprint_params": {
             "metric": "mean",
-            "knowledge_hint": "度数分布表から平均値を算出する"
+            "knowledge_hint": "度数分布表から平均値を算出する",
+            "knowledge_hints": [
+              "度数分布表から平均値を算出する",
+              "度数分布表から平均値を算出するの定義を答えなさい",
+              "度数分布表から平均値を算出するの具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "calculate"
@@ -8882,7 +9502,12 @@
           },
           "blueprint_params": {
             "metric": "iqr",
-            "knowledge_hint": "偏りのある分布から四分位範囲を判断する"
+            "knowledge_hint": "偏りのある分布から四分位範囲を判断する",
+            "knowledge_hints": [
+              "偏りのある分布から四分位範囲を判断する",
+              "偏りのある分布から四分位範囲を判断するの定義を答えなさい",
+              "偏りのある分布から四分位範囲を判断するの具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "analyze"
@@ -9436,7 +10061,12 @@
           },
           "blueprint_params": {
             "metric": "mean",
-            "knowledge_hint": "代表値の定義を問う"
+            "knowledge_hint": "代表値の定義を問う",
+            "knowledge_hints": [
+              "代表値の定義を問う",
+              "代表値の定義を問うの定義を答えなさい",
+              "代表値の定義を問うの具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "define"
@@ -9456,7 +10086,12 @@
           },
           "blueprint_params": {
             "metric": "mode",
-            "knowledge_hint": "小規模データの統計量特定"
+            "knowledge_hint": "小規模データの統計量特定",
+            "knowledge_hints": [
+              "小規模データの統計量特定",
+              "小規模データの統計量特定の定義を答えなさい",
+              "小規模データの統計量特定の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "identify"
@@ -9476,7 +10111,12 @@
           },
           "blueprint_params": {
             "metric": "median",
-            "knowledge_hint": "中央値の計算と理解"
+            "knowledge_hint": "中央値の計算と理解",
+            "knowledge_hints": [
+              "中央値の計算と理解",
+              "中央値の計算と理解の定義を答えなさい",
+              "中央値の計算と理解の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "calculate"
@@ -9493,7 +10133,12 @@
           },
           "blueprint_params": {
             "metric": "mean",
-            "knowledge_hint": "分布形状と代表値の判断"
+            "knowledge_hint": "分布形状と代表値の判断",
+            "knowledge_hints": [
+              "分布形状と代表値の判断",
+              "分布形状と代表値の判断の定義を答えなさい",
+              "分布形状と代表値の判断の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "evaluate"
@@ -9692,7 +10337,12 @@
           },
           "blueprint_params": {
             "metric": "mode",
-            "knowledge_hint": "最頻値や平均値の定義の理解"
+            "knowledge_hint": "最頻値や平均値の定義の理解",
+            "knowledge_hints": [
+              "最頻値や平均値の定義の理解",
+              "最頻値や平均値の定義の理解の定義を答えなさい",
+              "最頻値や平均値の定義の理解の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "identify"
@@ -9712,7 +10362,12 @@
           },
           "blueprint_params": {
             "metric": "median",
-            "knowledge_hint": "中央値の定義と算出の理解"
+            "knowledge_hint": "中央値の定義と算出の理解",
+            "knowledge_hints": [
+              "中央値の定義と算出の理解",
+              "中央値の定義と算出の理解の定義を答えなさい",
+              "中央値の定義と算出の理解の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "calculate"
@@ -9733,7 +10388,12 @@
           },
           "blueprint_params": {
             "metric": "q3",
-            "knowledge_hint": "四分位数の定義と算出"
+            "knowledge_hint": "四分位数の定義と算出",
+            "knowledge_hints": [
+              "四分位数の定義と算出",
+              "四分位数の定義と算出の定義を答えなさい",
+              "四分位数の定義と算出の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "calculate"
@@ -9754,7 +10414,12 @@
           },
           "blueprint_params": {
             "metric": "iqr",
-            "knowledge_hint": "四分位範囲を用いた分布の判断"
+            "knowledge_hint": "四分位範囲を用いた分布の判断",
+            "knowledge_hints": [
+              "四分位範囲を用いた分布の判断",
+              "四分位範囲を用いた分布の判断の定義を答えなさい",
+              "四分位範囲を用いた分布の判断の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "analyze"
@@ -9972,7 +10637,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "確率の定義と意味の理解"
+            "knowledge_hint": "確率の定義と意味の理解",
+            "knowledge_hints": [
+              "確率の定義と意味の理解",
+              "確率の定義と意味の理解の定義を答えなさい",
+              "確率の定義と意味の理解の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "type": "definition_check"
@@ -9989,7 +10659,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "少数の試行による結果の判断"
+            "knowledge_hint": "少数の試行による結果の判断",
+            "knowledge_hints": [
+              "少数の試行による結果の判断",
+              "少数の試行による結果の判断の定義を答えなさい",
+              "少数の試行による結果の判断の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "type": "observation_judgment"
@@ -10006,7 +10681,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "多数の試行と相対度数の安定"
+            "knowledge_hint": "多数の試行と相対度数の安定",
+            "knowledge_hints": [
+              "多数の試行と相対度数の安定",
+              "多数の試行と相対度数の安定の定義を答えなさい",
+              "多数の試行と相対度数の安定の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "type": "trend_analysis"
@@ -10023,7 +10703,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "大数の法則の応用と推論"
+            "knowledge_hint": "大数の法則の応用と推論",
+            "knowledge_hints": [
+              "大数の法則の応用と推論",
+              "大数の法則の応用と推論の定義を答えなさい",
+              "大数の法則の応用と推論の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "type": "inference"
@@ -10156,7 +10841,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "単項式の識別"
+            "knowledge_hint": "単項式の識別",
+            "knowledge_hints": [
+              "単項式の識別",
+              "単項式の識別の定義を答えなさい",
+              "単項式の識別の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "task": "identify_monomial"
@@ -10174,7 +10864,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "多項式の識別と項の認識"
+            "knowledge_hint": "多項式の識別と項の認識",
+            "knowledge_hints": [
+              "多項式の識別と項の認識",
+              "多項式の識別と項の認識の定義を答えなさい",
+              "多項式の識別と項の認識の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "task": "identify_polynomial"
@@ -10192,7 +10887,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "単項式の次数と係数の特定"
+            "knowledge_hint": "単項式の次数と係数の特定",
+            "knowledge_hints": [
+              "単項式の次数と係数の特定",
+              "単項式の次数と係数の特定の定義を答えなさい",
+              "単項式の次数と係数の特定の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "task": "identify_degree_and_coefficient"
@@ -10210,7 +10910,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "多項式の次数判定（2変数）"
+            "knowledge_hint": "多項式の次数判定（2変数）",
+            "knowledge_hints": [
+              "多項式の次数判定（2変数）",
+              "多項式の次数判定（2変数）の定義を答えなさい",
+              "多項式の次数判定（2変数）の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "task": "identify_polynomial_degree"
@@ -11355,7 +12060,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "2元1次方程式の基本認識"
+            "knowledge_hint": "2元1次方程式の基本認識",
+            "knowledge_hints": [
+              "2元1次方程式の基本認識",
+              "2元1次方程式の基本認識の定義を答えなさい",
+              "2元1次方程式の基本認識の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {},
           "implementable": true,
@@ -11371,7 +12081,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "係数の大きい方程式の判断"
+            "knowledge_hint": "係数の大きい方程式の判断",
+            "knowledge_hints": [
+              "係数の大きい方程式の判断",
+              "係数の大きい方程式の判断の定義を答えなさい",
+              "係数の大きい方程式の判断の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {},
           "implementable": true,
@@ -11388,7 +12103,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "非整数解を含む方程式の判定"
+            "knowledge_hint": "非整数解を含む方程式の判定",
+            "knowledge_hints": [
+              "非整数解を含む方程式の判定",
+              "非整数解を含む方程式の判定の定義を答えなさい",
+              "非整数解を含む方程式の判定の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {},
           "implementable": true,
@@ -12366,7 +13086,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "比例の式(y=ax)の認識"
+            "knowledge_hint": "比例の式(y=ax)の認識",
+            "knowledge_hints": [
+              "比例の式(y=ax)の認識",
+              "比例の式(y=ax)の認識の定義を答えなさい",
+              "比例の式(y=ax)の認識の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "identify"
@@ -12385,7 +13110,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "正の係数を持つ1次関数の理解"
+            "knowledge_hint": "正の係数を持つ1次関数の理解",
+            "knowledge_hints": [
+              "正の係数を持つ1次関数の理解",
+              "正の係数を持つ1次関数の理解の定義を答えなさい",
+              "正の係数を持つ1次関数の理解の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "define"
@@ -12404,7 +13134,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "負の数を含む1次関数の理解"
+            "knowledge_hint": "負の数を含む1次関数の理解",
+            "knowledge_hints": [
+              "負の数を含む1次関数の理解",
+              "負の数を含む1次関数の理解の定義を答えなさい",
+              "負の数を含む1次関数の理解の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "interpret"
@@ -12423,7 +13158,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "分数傾きを含む1次関数の判断"
+            "knowledge_hint": "分数傾きを含む1次関数の判断",
+            "knowledge_hints": [
+              "分数傾きを含む1次関数の判断",
+              "分数傾きを含む1次関数の判断の定義を答えなさい",
+              "分数傾きを含む1次関数の判断の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "analyze"
@@ -12637,7 +13377,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "比例のグラフの傾きを理解する"
+            "knowledge_hint": "比例のグラフの傾きを理解する",
+            "knowledge_hints": [
+              "比例のグラフの傾きを理解する",
+              "比例のグラフの傾きを理解するの定義を答えなさい",
+              "比例のグラフの傾きを理解するの具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "identify"
@@ -12655,7 +13400,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "1次関数の傾きと切片を識別する"
+            "knowledge_hint": "1次関数の傾きと切片を識別する",
+            "knowledge_hints": [
+              "1次関数の傾きと切片を識別する",
+              "1次関数の傾きと切片を識別するの定義を答えなさい",
+              "1次関数の傾きと切片を識別するの具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "identify"
@@ -12673,7 +13423,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "負の数を含む傾きと切片を判断する"
+            "knowledge_hint": "負の数を含む傾きと切片を判断する",
+            "knowledge_hints": [
+              "負の数を含む傾きと切片を判断する",
+              "負の数を含む傾きと切片を判断するの定義を答えなさい",
+              "負の数を含む傾きと切片を判断するの具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "judge"
@@ -12691,7 +13446,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "分数を含む傾きのグラフを認識する"
+            "knowledge_hint": "分数を含む傾きのグラフを認識する",
+            "knowledge_hints": [
+              "分数を含む傾きのグラフを認識する",
+              "分数を含む傾きのグラフを認識するの定義を答えなさい",
+              "分数を含む傾きのグラフを認識するの具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "apply"
@@ -14344,7 +15104,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "対頂角の性質を用いた角度特定"
+            "knowledge_hint": "対頂角の性質を用いた角度特定",
+            "knowledge_hints": [
+              "対頂角の性質を用いた角度特定",
+              "対頂角の性質を用いた角度特定の定義を答えなさい",
+              "対頂角の性質を用いた角度特定の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "type": "identify_angle_property"
@@ -14362,7 +15127,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "同位角・錯角の性質の判断"
+            "knowledge_hint": "同位角・錯角の性質の判断",
+            "knowledge_hints": [
+              "同位角・錯角の性質の判断",
+              "同位角・錯角の性質の判断の定義を答えなさい",
+              "同位角・錯角の性質の判断の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "type": "judge_parallel_angle"
@@ -14381,7 +15151,12 @@
           },
           "blueprint_params": {
             "operation": "+",
-            "knowledge_hint": "性質を組み合わせた計算"
+            "knowledge_hint": "性質を組み合わせた計算",
+            "knowledge_hints": [
+              "性質を組み合わせた計算",
+              "性質を組み合わせた計算の定義を答えなさい",
+              "性質を組み合わせた計算の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "type": "calculate_combined_angle"
@@ -14595,7 +15370,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "平行線の同位角・錯角の認識"
+            "knowledge_hint": "平行線の同位角・錯角の認識",
+            "knowledge_hints": [
+              "平行線の同位角・錯角の認識",
+              "平行線の同位角・錯角の認識の定義を答えなさい",
+              "平行線の同位角・錯角の認識の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "type": "identify_angle_property"
@@ -14614,7 +15394,12 @@
           },
           "blueprint_params": {
             "operation": "+",
-            "knowledge_hint": "平行線を用いた角度の計算"
+            "knowledge_hint": "平行線を用いた角度の計算",
+            "knowledge_hints": [
+              "平行線を用いた角度の計算",
+              "平行線を用いた角度の計算の定義を答えなさい",
+              "平行線を用いた角度の計算の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "type": "calculate_angle_with_parallel"
@@ -14636,7 +15421,12 @@
           },
           "blueprint_params": {
             "operation": "-",
-            "knowledge_hint": "平行線と三角形の性質の統合"
+            "knowledge_hint": "平行線と三角形の性質の統合",
+            "knowledge_hints": [
+              "平行線と三角形の性質の統合",
+              "平行線と三角形の性質の統合の定義を答えなさい",
+              "平行線と三角形の性質の統合の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "type": "complex_angle_deduction"
@@ -15028,7 +15818,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "三角形・四角形の内角の和"
+            "knowledge_hint": "三角形・四角形の内角の和",
+            "knowledge_hints": [
+              "三角形・四角形の内角の和",
+              "三角形・四角形の内角の和の定義を答えなさい",
+              "三角形・四角形の内角の和の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "identify_sum"
@@ -15048,7 +15843,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "五角形〜六角形の内角の和"
+            "knowledge_hint": "五角形〜六角形の内角の和",
+            "knowledge_hints": [
+              "五角形〜六角形の内角の和",
+              "五角形〜六角形の内角の和の定義を答えなさい",
+              "五角形〜六角形の内角の和の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "calculate_sum"
@@ -15068,7 +15868,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "七角形〜八角形の内角の和"
+            "knowledge_hint": "七角形〜八角形の内角の和",
+            "knowledge_hints": [
+              "七角形〜八角形の内角の和",
+              "七角形〜八角形の内角の和の定義を答えなさい",
+              "七角形〜八角形の内角の和の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "calculate_sum"
@@ -15088,7 +15893,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "十角形以上の内角の和"
+            "knowledge_hint": "十角形以上の内角の和",
+            "knowledge_hints": [
+              "十角形以上の内角の和",
+              "十角形以上の内角の和の定義を答えなさい",
+              "十角形以上の内角の和の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "calculate_sum"
@@ -15275,7 +16085,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "外角の和の定義の確認"
+            "knowledge_hint": "外角の和の定義の確認",
+            "knowledge_hints": [
+              "外角の和の定義の確認",
+              "外角の和の定義の確認の定義を答えなさい",
+              "外角の和の定義の確認の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "type": "identify_sum"
@@ -15294,7 +16109,12 @@
           },
           "blueprint_params": {
             "operation": "/",
-            "knowledge_hint": "正多角形の1つの外角の計算"
+            "knowledge_hint": "正多角形の1つの外角の計算",
+            "knowledge_hints": [
+              "正多角形の1つの外角の計算",
+              "正多角形の1つの外角の計算の定義を答えなさい",
+              "正多角形の1つの外角の計算の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "type": "calculate_single_exterior_angle"
@@ -15313,7 +16133,12 @@
           },
           "blueprint_params": {
             "operation": "/",
-            "knowledge_hint": "外角から辺の数を求める逆算"
+            "knowledge_hint": "外角から辺の数を求める逆算",
+            "knowledge_hints": [
+              "外角から辺の数を求める逆算",
+              "外角から辺の数を求める逆算の定義を答えなさい",
+              "外角から辺の数を求める逆算の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "type": "calculate_n_sides_from_exterior"
@@ -15332,7 +16157,12 @@
           },
           "blueprint_params": {
             "operation": "-",
-            "knowledge_hint": "内角と外角の判別と計算"
+            "knowledge_hint": "内角と外角の判別と計算",
+            "knowledge_hints": [
+              "内角と外角の判別と計算",
+              "内角と外角の判別と計算の定義を答えなさい",
+              "内角と外角の判別と計算の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "type": "calculate_exterior_from_interior"
@@ -15540,7 +16370,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "合同な三角形の対応点の認識"
+            "knowledge_hint": "合同な三角形の対応点の認識",
+            "knowledge_hints": [
+              "合同な三角形の対応点の認識",
+              "合同な三角形の対応点の認識の定義を答えなさい",
+              "合同な三角形の対応点の認識の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "task": "identify_corresponding_vertex"
@@ -15559,7 +16394,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "回転・反転した図形の対応辺の特定"
+            "knowledge_hint": "回転・反転した図形の対応辺の特定",
+            "knowledge_hints": [
+              "回転・反転した図形の対応辺の特定",
+              "回転・反転した図形の対応辺の特定の定義を答えなさい",
+              "回転・反転した図形の対応辺の特定の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "task": "identify_corresponding_side"
@@ -15578,7 +16418,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "四角形における対応角の特定"
+            "knowledge_hint": "四角形における対応角の特定",
+            "knowledge_hints": [
+              "四角形における対応角の特定",
+              "四角形における対応角の特定の定義を答えなさい",
+              "四角形における対応角の特定の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "task": "identify_corresponding_angle"
@@ -15825,7 +16670,12 @@
           "description": "合同条件の名称の選択",
           "atom_constraints": {},
           "blueprint_params": {
-            "knowledge_hint": "合同条件の名称の選択"
+            "knowledge_hint": "合同条件の名称の選択",
+            "knowledge_hints": [
+              "合同条件の名称の選択",
+              "合同条件の名称の選択の定義を答えなさい",
+              "合同条件の名称の選択の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "type": "select_multiple_choice"
@@ -15838,7 +16688,12 @@
           "description": "図形と合同条件の対応付け",
           "atom_constraints": {},
           "blueprint_params": {
-            "knowledge_hint": "図形と合同条件の対応付け"
+            "knowledge_hint": "図形と合同条件の対応付け",
+            "knowledge_hints": [
+              "図形と合同条件の対応付け",
+              "図形と合同条件の対応付けの定義を答えなさい",
+              "図形と合同条件の対応付けの具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "type": "match_diagram_to_condition"
@@ -15851,7 +16706,12 @@
           "description": "合同条件の不成立の判断",
           "atom_constraints": {},
           "blueprint_params": {
-            "knowledge_hint": "合同条件の不成立の判断"
+            "knowledge_hint": "合同条件の不成立の判断",
+            "knowledge_hints": [
+              "合同条件の不成立の判断",
+              "合同条件の不成立の判断の定義を答えなさい",
+              "合同条件の不成立の判断の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "type": "identify_invalid_condition"
@@ -16026,7 +16886,12 @@
           "description": "証明の論理構造の理解",
           "atom_constraints": {},
           "blueprint_params": {
-            "knowledge_hint": "証明の論理構造の理解"
+            "knowledge_hint": "証明の論理構造の理解",
+            "knowledge_hints": [
+              "証明の論理構造の理解",
+              "証明の論理構造の理解の定義を答えなさい",
+              "証明の論理構造の理解の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {},
           "implementable": false,
@@ -16577,7 +17442,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "二等辺三角形の定義の認識"
+            "knowledge_hint": "二等辺三角形の定義の認識",
+            "knowledge_hints": [
+              "二等辺三角形の定義の認識",
+              "二等辺三角形の定義の認識の定義を答えなさい",
+              "二等辺三角形の定義の認識の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "type": "identify_properties"
@@ -16596,7 +17466,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "二等辺三角形の性質の理解"
+            "knowledge_hint": "二等辺三角形の性質の理解",
+            "knowledge_hints": [
+              "二等辺三角形の性質の理解",
+              "二等辺三角形の性質の理解の定義を答えなさい",
+              "二等辺三角形の性質の理解の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "type": "calculate_angle_by_property"
@@ -16615,7 +17490,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "性質を用いた図形の判断"
+            "knowledge_hint": "性質を用いた図形の判断",
+            "knowledge_hints": [
+              "性質を用いた図形の判断",
+              "性質を用いた図形の判断の定義を答えなさい",
+              "性質を用いた図形の判断の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "type": "judge_triangle_type"
@@ -16815,7 +17695,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "二等辺三角形の定義の認識"
+            "knowledge_hint": "二等辺三角形の定義の認識",
+            "knowledge_hints": [
+              "二等辺三角形の定義の認識",
+              "二等辺三角形の定義の認識の定義を答えなさい",
+              "二等辺三角形の定義の認識の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "identify_definition"
@@ -16832,7 +17717,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "二等辺三角形になる条件の理解"
+            "knowledge_hint": "二等辺三角形になる条件の理解",
+            "knowledge_hints": [
+              "二等辺三角形になる条件の理解",
+              "二等辺三角形になる条件の理解の定義を答えなさい",
+              "二等辺三角形になる条件の理解の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "identify_condition"
@@ -16850,7 +17740,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "辺の長さによる二等辺三角形の判断"
+            "knowledge_hint": "辺の長さによる二等辺三角形の判断",
+            "knowledge_hints": [
+              "辺の長さによる二等辺三角形の判断",
+              "辺の長さによる二等辺三角形の判断の定義を答えなさい",
+              "辺の長さによる二等辺三角形の判断の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "judge_by_sides"
@@ -16868,7 +17763,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "角度の条件による二等辺三角形の判断"
+            "knowledge_hint": "角度の条件による二等辺三角形の判断",
+            "knowledge_hints": [
+              "角度の条件による二等辺三角形の判断",
+              "角度の条件による二等辺三角形の判断の定義を答えなさい",
+              "角度の条件による二等辺三角形の判断の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "judge_by_angles"
@@ -17102,7 +18002,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "正三角形の定義の認識"
+            "knowledge_hint": "正三角形の定義の認識",
+            "knowledge_hints": [
+              "正三角形の定義の認識",
+              "正三角形の定義の認識の定義を答えなさい",
+              "正三角形の定義の認識の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "task": "identify_definition"
@@ -17120,7 +18025,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "辺の長さと周長の計算"
+            "knowledge_hint": "辺の長さと周長の計算",
+            "knowledge_hints": [
+              "辺の長さと周長の計算",
+              "辺の長さと周長の計算の定義を答えなさい",
+              "辺の長さと周長の計算の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "task": "calculate_perimeter"
@@ -17138,7 +18048,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "角の性質の理解"
+            "knowledge_hint": "角の性質の理解",
+            "knowledge_hints": [
+              "角の性質の理解",
+              "角の性質の理解の定義を答えなさい",
+              "角の性質の理解の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "task": "identify_angles"
@@ -17156,7 +18071,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "正三角形であるかの判断"
+            "knowledge_hint": "正三角形であるかの判断",
+            "knowledge_hints": [
+              "正三角形であるかの判断",
+              "正三角形であるかの判断の定義を答えなさい",
+              "正三角形であるかの判断の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "task": "judge_condition"
@@ -17321,7 +18241,12 @@
           "description": "直角三角形の用語と定義の認識",
           "atom_constraints": {},
           "blueprint_params": {
-            "knowledge_hint": "直角三角形の用語と定義の認識"
+            "knowledge_hint": "直角三角形の用語と定義の認識",
+            "knowledge_hints": [
+              "直角三角形の用語と定義の認識",
+              "直角三角形の用語と定義の認識の定義を答えなさい",
+              "直角三角形の用語と定義の認識の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "identify_terminology"
@@ -17334,7 +18259,12 @@
           "description": "直角三角形の合同条件の理解",
           "atom_constraints": {},
           "blueprint_params": {
-            "knowledge_hint": "直角三角形の合同条件の理解"
+            "knowledge_hint": "直角三角形の合同条件の理解",
+            "knowledge_hints": [
+              "直角三角形の合同条件の理解",
+              "直角三角形の合同条件の理解の定義を答えなさい",
+              "直角三角形の合同条件の理解の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "select_correct_condition"
@@ -17352,7 +18282,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "合同条件の適用判断"
+            "knowledge_hint": "合同条件の適用判断",
+            "knowledge_hints": [
+              "合同条件の適用判断",
+              "合同条件の適用判断の定義を答えなさい",
+              "合同条件の適用判断の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "judge_congruence_condition"
@@ -17903,7 +18838,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "平行四辺形の定義の認識"
+            "knowledge_hint": "平行四辺形の定義の認識",
+            "knowledge_hints": [
+              "平行四辺形の定義の認識",
+              "平行四辺形の定義の認識の定義を答えなさい",
+              "平行四辺形の定義の認識の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "identify",
@@ -17922,7 +18862,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "5つの条件の判別"
+            "knowledge_hint": "5つの条件の判別",
+            "knowledge_hints": [
+              "5つの条件の判別",
+              "5つの条件の判別の定義を答えなさい",
+              "5つの条件の判別の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "evaluate",
@@ -17941,7 +18886,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "条件を用いた数値的判断"
+            "knowledge_hint": "条件を用いた数値的判断",
+            "knowledge_hints": [
+              "条件を用いた数値的判断",
+              "条件を用いた数値的判断の定義を答えなさい",
+              "条件を用いた数値的判断の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "calculate_and_judge",
@@ -17960,7 +18910,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "複合的な条件の応用"
+            "knowledge_hint": "複合的な条件の応用",
+            "knowledge_hints": [
+              "複合的な条件の応用",
+              "複合的な条件の応用の定義を答えなさい",
+              "複合的な条件の応用の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "analyze",
@@ -18434,7 +19389,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "長方形・ひし形・正方形の定義認識"
+            "knowledge_hint": "長方形・ひし形・正方形の定義認識",
+            "knowledge_hints": [
+              "長方形・ひし形・正方形の定義認識",
+              "長方形・ひし形・正方形の定義認識の定義を答えなさい",
+              "長方形・ひし形・正方形の定義認識の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "identify"
@@ -18451,7 +19411,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "対角線の性質に関する知識"
+            "knowledge_hint": "対角線の性質に関する知識",
+            "knowledge_hints": [
+              "対角線の性質に関する知識",
+              "対角線の性質に関する知識の定義を答えなさい",
+              "対角線の性質に関する知識の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "describe_property"
@@ -18468,7 +19433,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "四角形が特定の図形になる条件の判断"
+            "knowledge_hint": "四角形が特定の図形になる条件の判断",
+            "knowledge_hints": [
+              "四角形が特定の図形になる条件の判断",
+              "四角形が特定の図形になる条件の判断の定義を答えなさい",
+              "四角形が特定の図形になる条件の判断の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "evaluate_condition"
@@ -18485,7 +19455,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "包含関係と性質の複合的な判断"
+            "knowledge_hint": "包含関係と性質の複合的な判断",
+            "knowledge_hints": [
+              "包含関係と性質の複合的な判断",
+              "包含関係と性質の複合的な判断の定義を答えなさい",
+              "包含関係と性質の複合的な判断の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "analyze_relationship"
@@ -18657,7 +19632,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "平行線上の三角形の面積の等しさの認識"
+            "knowledge_hint": "平行線上の三角形の面積の等しさの認識",
+            "knowledge_hints": [
+              "平行線上の三角形の面積の等しさの認識",
+              "平行線上の三角形の面積の等しさの認識の定義を答えなさい",
+              "平行線上の三角形の面積の等しさの認識の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "identify",
@@ -18675,7 +19655,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "平行四辺形における等積変形の理解"
+            "knowledge_hint": "平行四辺形における等積変形の理解",
+            "knowledge_hints": [
+              "平行四辺形における等積変形の理解",
+              "平行四辺形における等積変形の理解の定義を答えなさい",
+              "平行四辺形における等積変形の理解の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "analyze",
@@ -18693,7 +19678,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "台形や複雑な図形での等積変形の応用"
+            "knowledge_hint": "台形や複雑な図形での等積変形の応用",
+            "knowledge_hints": [
+              "台形や複雑な図形での等積変形の応用",
+              "台形や複雑な図形での等積変形の応用の定義を答えなさい",
+              "台形や複雑な図形での等積変形の応用の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "evaluate",
@@ -18958,7 +19948,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "確率の定義と範囲の理解"
+            "knowledge_hint": "確率の定義と範囲の理解",
+            "knowledge_hints": [
+              "確率の定義と範囲の理解",
+              "確率の定義と範囲の理解の定義を答えなさい",
+              "確率の定義と範囲の理解の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "type": "identify_definition"
@@ -18976,7 +19971,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "単純な事象の確率計算"
+            "knowledge_hint": "単純な事象の確率計算",
+            "knowledge_hints": [
+              "単純な事象の確率計算",
+              "単純な事象の確率計算の定義を答えなさい",
+              "単純な事象の確率計算の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "type": "calculate_probability"
@@ -18998,7 +19998,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "相対度数と確率の近似"
+            "knowledge_hint": "相対度数と確率の近似",
+            "knowledge_hints": [
+              "相対度数と確率の近似",
+              "相対度数と確率の近似の定義を答えなさい",
+              "相対度数と確率の近似の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "type": "compare_frequency_and_probability"
@@ -19016,7 +20021,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "確率の応用と判断"
+            "knowledge_hint": "確率の応用と判断",
+            "knowledge_hints": [
+              "確率の応用と判断",
+              "確率の応用と判断の定義を答えなさい",
+              "確率の応用と判断の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "type": "judge_likelihood"
@@ -19900,7 +20910,12 @@
           },
           "blueprint_params": {
             "metric": "median",
-            "knowledge_hint": "中央値の定義と算出"
+            "knowledge_hint": "中央値の定義と算出",
+            "knowledge_hints": [
+              "中央値の定義と算出",
+              "中央値の定義と算出の定義を答えなさい",
+              "中央値の定義と算出の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "identify"
@@ -19925,7 +20940,12 @@
           },
           "blueprint_params": {
             "metric": "q1",
-            "knowledge_hint": "第1・第3四分位数の算出"
+            "knowledge_hint": "第1・第3四分位数の算出",
+            "knowledge_hints": [
+              "第1・第3四分位数の算出",
+              "第1・第3四分位数の算出の定義を答えなさい",
+              "第1・第3四分位数の算出の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "calculate"
@@ -19950,7 +20970,12 @@
           },
           "blueprint_params": {
             "metric": "iqr",
-            "knowledge_hint": "四分位範囲(IQR)の算出"
+            "knowledge_hint": "四分位範囲(IQR)の算出",
+            "knowledge_hints": [
+              "四分位範囲(IQR)の算出",
+              "四分位範囲(IQR)の算出の定義を答えなさい",
+              "四分位範囲(IQR)の算出の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "calculate"
@@ -19975,7 +21000,12 @@
           },
           "blueprint_params": {
             "metric": "iqr",
-            "knowledge_hint": "偏りのあるデータの四分位範囲"
+            "knowledge_hint": "偏りのあるデータの四分位範囲",
+            "knowledge_hints": [
+              "偏りのあるデータの四分位範囲",
+              "偏りのあるデータの四分位範囲の定義を答えなさい",
+              "偏りのあるデータの四分位範囲の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "analyze"
@@ -20188,7 +21218,12 @@
           "atom_constraints": {},
           "blueprint_params": {
             "metric": "median",
-            "knowledge_hint": "箱ひげ図の各構成要素の名称理解"
+            "knowledge_hint": "箱ひげ図の各構成要素の名称理解",
+            "knowledge_hints": [
+              "箱ひげ図の各構成要素の名称理解",
+              "箱ひげ図の各構成要素の名称理解の定義を答えなさい",
+              "箱ひげ図の各構成要素の名称理解の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "identify"
@@ -20208,7 +21243,12 @@
           },
           "blueprint_params": {
             "metric": "median",
-            "knowledge_hint": "小規模データからの統計量読み取り"
+            "knowledge_hint": "小規模データからの統計量読み取り",
+            "knowledge_hints": [
+              "小規模データからの統計量読み取り",
+              "小規模データからの統計量読み取りの定義を答えなさい",
+              "小規模データからの統計量読み取りの具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "read"
@@ -20228,7 +21268,12 @@
           },
           "blueprint_params": {
             "metric": "iqr",
-            "knowledge_hint": "四分位範囲(IQR)の算出と理解"
+            "knowledge_hint": "四分位範囲(IQR)の算出と理解",
+            "knowledge_hints": [
+              "四分位範囲(IQR)の算出と理解",
+              "四分位範囲(IQR)の算出と理解の定義を答えなさい",
+              "四分位範囲(IQR)の算出と理解の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "calculate"
@@ -20249,7 +21294,12 @@
           },
           "blueprint_params": {
             "metric": "iqr",
-            "knowledge_hint": "歪んだ分布における統計量の判断"
+            "knowledge_hint": "歪んだ分布における統計量の判断",
+            "knowledge_hints": [
+              "歪んだ分布における統計量の判断",
+              "歪んだ分布における統計量の判断の定義を答えなさい",
+              "歪んだ分布における統計量の判断の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "evaluate"
@@ -20550,7 +21600,12 @@
           },
           "blueprint_params": {
             "metric": "median",
-            "knowledge_hint": "中央値の定義と認識"
+            "knowledge_hint": "中央値の定義と認識",
+            "knowledge_hints": [
+              "中央値の定義と認識",
+              "中央値の定義と認識の定義を答えなさい",
+              "中央値の定義と認識の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "identify"
@@ -20575,7 +21630,12 @@
           },
           "blueprint_params": {
             "metric": "q1",
-            "knowledge_hint": "四分位数の定義の理解"
+            "knowledge_hint": "四分位数の定義の理解",
+            "knowledge_hints": [
+              "四分位数の定義の理解",
+              "四分位数の定義の理解の定義を答えなさい",
+              "四分位数の定義の理解の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "define"
@@ -20600,7 +21660,12 @@
           },
           "blueprint_params": {
             "metric": "iqr",
-            "knowledge_hint": "四分位範囲の算出と理解"
+            "knowledge_hint": "四分位範囲の算出と理解",
+            "knowledge_hints": [
+              "四分位範囲の算出と理解",
+              "四分位範囲の算出と理解の定義を答えなさい",
+              "四分位範囲の算出と理解の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "calculate"
@@ -20625,7 +21690,12 @@
           },
           "blueprint_params": {
             "metric": "iqr",
-            "knowledge_hint": "偏りのある分布の傾向判断"
+            "knowledge_hint": "偏りのある分布の傾向判断",
+            "knowledge_hints": [
+              "偏りのある分布の傾向判断",
+              "偏りのある分布の傾向判断の定義を答えなさい",
+              "偏りのある分布の傾向判断の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "evaluate"
@@ -21076,7 +22146,12 @@
           },
           "blueprint_params": {
             "operation": "*",
-            "knowledge_hint": "正の数のみの基本的な展開"
+            "knowledge_hint": "正の数のみの基本的な展開",
+            "knowledge_hints": [
+              "正の数のみの基本的な展開",
+              "正の数のみの基本的な展開の定義を答えなさい",
+              "正の数のみの基本的な展開の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "type": "expand_polynomial"
@@ -21100,7 +22175,12 @@
           },
           "blueprint_params": {
             "operation": "*",
-            "knowledge_hint": "負の数を含む展開"
+            "knowledge_hint": "負の数を含む展開",
+            "knowledge_hints": [
+              "負の数を含む展開",
+              "負の数を含む展開の定義を答えなさい",
+              "負の数を含む展開の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "type": "expand_polynomial"
@@ -21124,7 +22204,12 @@
           },
           "blueprint_params": {
             "operation": "*",
-            "knowledge_hint": "2変数を含む多項式の展開"
+            "knowledge_hint": "2変数を含む多項式の展開",
+            "knowledge_hints": [
+              "2変数を含む多項式の展開",
+              "2変数を含む多項式の展開の定義を答えなさい",
+              "2変数を含む多項式の展開の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "type": "expand_polynomial"
@@ -21236,7 +22321,12 @@
           },
           "blueprint_params": {
             "operation": "*",
-            "knowledge_hint": "正の数のみの基本展開"
+            "knowledge_hint": "正の数のみの基本展開",
+            "knowledge_hints": [
+              "正の数のみの基本展開",
+              "正の数のみの基本展開の定義を答えなさい",
+              "正の数のみの基本展開の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {},
           "implementable": true,
@@ -21253,7 +22343,12 @@
           },
           "blueprint_params": {
             "operation": "*",
-            "knowledge_hint": "負数を含む展開"
+            "knowledge_hint": "負数を含む展開",
+            "knowledge_hints": [
+              "負数を含む展開",
+              "負数を含む展開の定義を答えなさい",
+              "負数を含む展開の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {},
           "implementable": true,
@@ -21273,7 +22368,12 @@
           },
           "blueprint_params": {
             "operation": "*",
-            "knowledge_hint": "絶対値の大きい数を含む展開"
+            "knowledge_hint": "絶対値の大きい数を含む展開",
+            "knowledge_hints": [
+              "絶対値の大きい数を含む展開",
+              "絶対値の大きい数を含む展開の定義を答えなさい",
+              "絶対値の大きい数を含む展開の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {},
           "implementable": true,
@@ -21719,7 +22819,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "共通因数の認識と抽出（1次式）"
+            "knowledge_hint": "共通因数の認識と抽出（1次式）",
+            "knowledge_hints": [
+              "共通因数の認識と抽出（1次式）",
+              "共通因数の認識と抽出（1次式）の定義を答えなさい",
+              "共通因数の認識と抽出（1次式）の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "verb": "factorize"
@@ -21737,7 +22842,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "2次式の共通因数のくくり出し"
+            "knowledge_hint": "2次式の共通因数のくくり出し",
+            "knowledge_hints": [
+              "2次式の共通因数のくくり出し",
+              "2次式の共通因数のくくり出しの定義を答えなさい",
+              "2次式の共通因数のくくり出しの具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "verb": "factorize"
@@ -21755,7 +22865,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "係数が大きい2次式のくくり出し"
+            "knowledge_hint": "係数が大きい2次式のくくり出し",
+            "knowledge_hints": [
+              "係数が大きい2次式のくくり出し",
+              "係数が大きい2次式のくくり出しの定義を答えなさい",
+              "係数が大きい2次式のくくり出しの具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "verb": "factorize"
@@ -21774,7 +22889,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "2変数を含む式のくくり出し"
+            "knowledge_hint": "2変数を含む式のくくり出し",
+            "knowledge_hints": [
+              "2変数を含む式のくくり出し",
+              "2変数を含む式のくくり出しの定義を答えなさい",
+              "2変数を含む式のくくり出しの具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "verb": "factorize"
@@ -22567,7 +23687,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "1桁の平方根の値を求める"
+            "knowledge_hint": "1桁の平方根の値を求める",
+            "knowledge_hints": [
+              "1桁の平方根の値を求める",
+              "1桁の平方根の値を求めるの定義を答えなさい",
+              "1桁の平方根の値を求めるの具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "verb": "evaluate"
@@ -22585,7 +23710,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "2桁の平方根の値を求める"
+            "knowledge_hint": "2桁の平方根の値を求める",
+            "knowledge_hints": [
+              "2桁の平方根の値を求める",
+              "2桁の平方根の値を求めるの定義を答えなさい",
+              "2桁の平方根の値を求めるの具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "verb": "evaluate"
@@ -22603,7 +23733,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "負の符号を含む平方根の評価"
+            "knowledge_hint": "負の符号を含む平方根の評価",
+            "knowledge_hints": [
+              "負の符号を含む平方根の評価",
+              "負の符号を含む平方根の評価の定義を答えなさい",
+              "負の符号を含む平方根の評価の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "verb": "evaluate"
@@ -22621,7 +23756,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "簡約が必要な平方根の認識"
+            "knowledge_hint": "簡約が必要な平方根の認識",
+            "knowledge_hints": [
+              "簡約が必要な平方根の認識",
+              "簡約が必要な平方根の認識の定義を答えなさい",
+              "簡約が必要な平方根の認識の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "verb": "simplify"
@@ -22753,7 +23893,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "単純な根号同士の比較"
+            "knowledge_hint": "単純な根号同士の比較",
+            "knowledge_hints": [
+              "単純な根号同士の比較",
+              "単純な根号同士の比較の定義を答えなさい",
+              "単純な根号同士の比較の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "type": "compare_roots"
@@ -22771,7 +23916,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "整数と根号の比較"
+            "knowledge_hint": "整数と根号の比較",
+            "knowledge_hints": [
+              "整数と根号の比較",
+              "整数と根号の比較の定義を答えなさい",
+              "整数と根号の比較の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "type": "compare_integer_and_root"
@@ -22789,7 +23939,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "係数を含む根号の比較"
+            "knowledge_hint": "係数を含む根号の比較",
+            "knowledge_hints": [
+              "係数を含む根号の比較",
+              "係数を含む根号の比較の定義を答えなさい",
+              "係数を含む根号の比較の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "type": "compare_coefficient_roots"
@@ -22810,7 +23965,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "負の数を含む根号の比較"
+            "knowledge_hint": "負の数を含む根号の比較",
+            "knowledge_hints": [
+              "負の数を含む根号の比較",
+              "負の数を含む根号の比較の定義を答えなさい",
+              "負の数を含む根号の比較の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "type": "compare_negative_roots"
@@ -22939,7 +24099,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "有理数と無理数の定義の判別"
+            "knowledge_hint": "有理数と無理数の定義の判別",
+            "knowledge_hints": [
+              "有理数と無理数の定義の判別",
+              "有理数と無理数の定義の判別の定義を答えなさい",
+              "有理数と無理数の定義の判別の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "type": "identify_rational"
@@ -22956,7 +24121,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "平方根を含む数の分類"
+            "knowledge_hint": "平方根を含む数の分類",
+            "knowledge_hints": [
+              "平方根を含む数の分類",
+              "平方根を含む数の分類の定義を答えなさい",
+              "平方根を含む数の分類の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "type": "identify_irrational"
@@ -22973,7 +24143,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "循環小数の分数変換"
+            "knowledge_hint": "循環小数の分数変換",
+            "knowledge_hints": [
+              "循環小数の分数変換",
+              "循環小数の分数変換の定義を答えなさい",
+              "循環小数の分数変換の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "type": "convert_recurring_decimal"
@@ -22991,7 +24166,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "複雑な数の性質の総合判断"
+            "knowledge_hint": "複雑な数の性質の総合判断",
+            "knowledge_hints": [
+              "複雑な数の性質の総合判断",
+              "複雑な数の性質の総合判断の定義を答えなさい",
+              "複雑な数の性質の総合判断の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "type": "analyze_number_property"
@@ -23927,7 +25107,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "基本的な2次方程式の解法"
+            "knowledge_hint": "基本的な2次方程式の解法",
+            "knowledge_hints": [
+              "基本的な2次方程式の解法",
+              "基本的な2次方程式の解法の定義を答えなさい",
+              "基本的な2次方程式の解法の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "verb": "SolveEqVerb"
@@ -23946,7 +25131,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "標準的な2次方程式の解法"
+            "knowledge_hint": "標準的な2次方程式の解法",
+            "knowledge_hints": [
+              "標準的な2次方程式の解法",
+              "標準的な2次方程式の解法の定義を答えなさい",
+              "標準的な2次方程式の解法の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "verb": "SolveEqVerb"
@@ -23965,7 +25155,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "係数が大きい2次方程式"
+            "knowledge_hint": "係数が大きい2次方程式",
+            "knowledge_hints": [
+              "係数が大きい2次方程式",
+              "係数が大きい2次方程式の定義を答えなさい",
+              "係数が大きい2次方程式の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "verb": "SolveEqVerb"
@@ -23984,7 +25179,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "解が整数にならない方程式"
+            "knowledge_hint": "解が整数にならない方程式",
+            "knowledge_hints": [
+              "解が整数にならない方程式",
+              "解が整数にならない方程式の定義を答えなさい",
+              "解が整数にならない方程式の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "verb": "SolveEqVerb"
@@ -24241,7 +25441,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "公式の適用と整数解の確認"
+            "knowledge_hint": "公式の適用と整数解の確認",
+            "knowledge_hints": [
+              "公式の適用と整数解の確認",
+              "公式の適用と整数解の確認の定義を答えなさい",
+              "公式の適用と整数解の確認の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {},
           "implementable": true,
@@ -24258,7 +25463,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "無理数解を含む標準的な計算"
+            "knowledge_hint": "無理数解を含む標準的な計算",
+            "knowledge_hints": [
+              "無理数解を含む標準的な計算",
+              "無理数解を含む標準的な計算の定義を答えなさい",
+              "無理数解を含む標準的な計算の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {},
           "implementable": true,
@@ -24275,7 +25485,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "係数が大きい複雑な計算"
+            "knowledge_hint": "係数が大きい複雑な計算",
+            "knowledge_hints": [
+              "係数が大きい複雑な計算",
+              "係数が大きい複雑な計算の定義を答えなさい",
+              "係数が大きい複雑な計算の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {},
           "implementable": true,
@@ -24292,7 +25507,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "高難度係数による応用判断"
+            "knowledge_hint": "高難度係数による応用判断",
+            "knowledge_hints": [
+              "高難度係数による応用判断",
+              "高難度係数による応用判断の定義を答えなさい",
+              "高難度係数による応用判断の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {},
           "implementable": true,
@@ -25154,7 +26374,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "正の整数係数の式認識"
+            "knowledge_hint": "正の整数係数の式認識",
+            "knowledge_hints": [
+              "正の整数係数の式認識",
+              "正の整数係数の式認識の定義を答えなさい",
+              "正の整数係数の式認識の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "identify"
@@ -25172,7 +26397,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "負の係数を含む式認識"
+            "knowledge_hint": "負の係数を含む式認識",
+            "knowledge_hints": [
+              "負の係数を含む式認識",
+              "負の係数を含む式認識の定義を答えなさい",
+              "負の係数を含む式認識の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "identify"
@@ -25190,7 +26420,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "分数係数と定義の判断"
+            "knowledge_hint": "分数係数と定義の判断",
+            "knowledge_hints": [
+              "分数係数と定義の判断",
+              "分数係数と定義の判断の定義を答えなさい",
+              "分数係数と定義の判断の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "evaluate"
@@ -25310,7 +26545,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "正の係数を持つ放物線の認識"
+            "knowledge_hint": "正の係数を持つ放物線の認識",
+            "knowledge_hints": [
+              "正の係数を持つ放物線の認識",
+              "正の係数を持つ放物線の認識の定義を答えなさい",
+              "正の係数を持つ放物線の認識の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "identify_graph_shape"
@@ -25328,7 +26568,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "負の係数を持つ放物線の認識"
+            "knowledge_hint": "負の係数を持つ放物線の認識",
+            "knowledge_hints": [
+              "負の係数を持つ放物線の認識",
+              "負の係数を持つ放物線の認識の定義を答えなさい",
+              "負の係数を持つ放物線の認識の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "compare_graph_direction"
@@ -25346,7 +26591,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "係数の絶対値と開きの広さの判断"
+            "knowledge_hint": "係数の絶対値と開きの広さの判断",
+            "knowledge_hints": [
+              "係数の絶対値と開きの広さの判断",
+              "係数の絶対値と開きの広さの判断の定義を答えなさい",
+              "係数の絶対値と開きの広さの判断の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "judge_graph_steepness"
@@ -25364,7 +26614,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "グラフ上の点と座標の対応関係"
+            "knowledge_hint": "グラフ上の点と座標の対応関係",
+            "knowledge_hints": [
+              "グラフ上の点と座標の対応関係",
+              "グラフ上の点と座標の対応関係の定義を答えなさい",
+              "グラフ上の点と座標の対応関係の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "calculate_coordinate"
@@ -25695,7 +26950,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "変化の割合の定義と基本計算"
+            "knowledge_hint": "変化の割合の定義と基本計算",
+            "knowledge_hints": [
+              "変化の割合の定義と基本計算",
+              "変化の割合の定義と基本計算の定義を答えなさい",
+              "変化の割合の定義と基本計算の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "calculate"
@@ -25713,7 +26973,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "正の範囲での変化の割合計算"
+            "knowledge_hint": "正の範囲での変化の割合計算",
+            "knowledge_hints": [
+              "正の範囲での変化の割合計算",
+              "正の範囲での変化の割合計算の定義を答えなさい",
+              "正の範囲での変化の割合計算の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "calculate"
@@ -25731,7 +26996,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "負の数を含む変化の割合計算"
+            "knowledge_hint": "負の数を含む変化の割合計算",
+            "knowledge_hints": [
+              "負の数を含む変化の割合計算",
+              "負の数を含む変化の割合計算の定義を答えなさい",
+              "負の数を含む変化の割合計算の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "calculate"
@@ -25749,7 +27019,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "変化の割合の性質の理解"
+            "knowledge_hint": "変化の割合の性質の理解",
+            "knowledge_hints": [
+              "変化の割合の性質の理解",
+              "変化の割合の性質の理解の定義を答えなさい",
+              "変化の割合の性質の理解の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "explain"
@@ -26462,7 +27737,12 @@
           },
           "blueprint_params": {
             "operation": "*",
-            "knowledge_hint": "相似比1:nの辺の長さの算出"
+            "knowledge_hint": "相似比1:nの辺の長さの算出",
+            "knowledge_hints": [
+              "相似比1:nの辺の長さの算出",
+              "相似比1:nの辺の長さの算出の定義を答えなさい",
+              "相似比1:nの辺の長さの算出の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "type": "find_side_length"
@@ -26481,7 +27761,12 @@
           },
           "blueprint_params": {
             "operation": "*",
-            "knowledge_hint": "相似比m:nの辺の長さの算出"
+            "knowledge_hint": "相似比m:nの辺の長さの算出",
+            "knowledge_hints": [
+              "相似比m:nの辺の長さの算出",
+              "相似比m:nの辺の長さの算出の定義を答えなさい",
+              "相似比m:nの辺の長さの算出の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "type": "find_side_length"
@@ -26503,7 +27788,12 @@
           },
           "blueprint_params": {
             "operation": "*",
-            "knowledge_hint": "分数を含む相似比の辺の計算"
+            "knowledge_hint": "分数を含む相似比の辺の計算",
+            "knowledge_hints": [
+              "分数を含む相似比の辺の計算",
+              "分数を含む相似比の辺の計算の定義を答えなさい",
+              "分数を含む相似比の辺の計算の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "type": "find_side_length"
@@ -26522,7 +27812,12 @@
           },
           "blueprint_params": {
             "operation": "*",
-            "knowledge_hint": "相似比と面積比の知識判断"
+            "knowledge_hint": "相似比と面積比の知識判断",
+            "knowledge_hints": [
+              "相似比と面積比の知識判断",
+              "相似比と面積比の知識判断の定義を答えなさい",
+              "相似比と面積比の知識判断の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "type": "calculate_area_ratio"
@@ -26690,7 +27985,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "相似条件の名称と定義の照合"
+            "knowledge_hint": "相似条件の名称と定義の照合",
+            "knowledge_hints": [
+              "相似条件の名称と定義の照合",
+              "相似条件の名称と定義の照合の定義を答えなさい",
+              "相似条件の名称と定義の照合の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "type": "select_definition"
@@ -26707,7 +28007,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "辺の比による相似条件の判定"
+            "knowledge_hint": "辺の比による相似条件の判定",
+            "knowledge_hints": [
+              "辺の比による相似条件の判定",
+              "辺の比による相似条件の判定の定義を答えなさい",
+              "辺の比による相似条件の判定の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "type": "identify_condition"
@@ -26724,7 +28029,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "角の大きさによる相似条件の判定"
+            "knowledge_hint": "角の大きさによる相似条件の判定",
+            "knowledge_hints": [
+              "角の大きさによる相似条件の判定",
+              "角の大きさによる相似条件の判定の定義を答えなさい",
+              "角の大きさによる相似条件の判定の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "type": "identify_condition"
@@ -26741,7 +28051,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "複合的な相似条件の判断"
+            "knowledge_hint": "複合的な相似条件の判断",
+            "knowledge_hints": [
+              "複合的な相似条件の判断",
+              "複合的な相似条件の判断の定義を答えなさい",
+              "複合的な相似条件の判断の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "type": "identify_condition"
@@ -27063,7 +28378,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "定理の基本形の認識"
+            "knowledge_hint": "定理の基本形の認識",
+            "knowledge_hints": [
+              "定理の基本形の認識",
+              "定理の基本形の認識の定義を答えなさい",
+              "定理の基本形の認識の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "identify_theorem_condition"
@@ -27082,7 +28402,12 @@
           },
           "blueprint_params": {
             "operation": "*",
-            "knowledge_hint": "比の計算への直接適用"
+            "knowledge_hint": "比の計算への直接適用",
+            "knowledge_hints": [
+              "比の計算への直接適用",
+              "比の計算への直接適用の定義を答えなさい",
+              "比の計算への直接適用の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "calculate_segment_ratio"
@@ -27100,7 +28425,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "平行線の判定と応用"
+            "knowledge_hint": "平行線の判定と応用",
+            "knowledge_hints": [
+              "平行線の判定と応用",
+              "平行線の判定と応用の定義を答えなさい",
+              "平行線の判定と応用の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "judge_parallelism"
@@ -27443,7 +28773,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "中点連結定理の定義の認識"
+            "knowledge_hint": "中点連結定理の定義の認識",
+            "knowledge_hints": [
+              "中点連結定理の定義の認識",
+              "中点連結定理の定義の認識の定義を答えなさい",
+              "中点連結定理の定義の認識の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "identify_definition"
@@ -27461,7 +28796,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "定理を用いた辺の長さの算出"
+            "knowledge_hint": "定理を用いた辺の長さの算出",
+            "knowledge_hints": [
+              "定理を用いた辺の長さの算出",
+              "定理を用いた辺の長さの算出の定義を答えなさい",
+              "定理を用いた辺の長さの算出の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "calculate_length"
@@ -27479,7 +28819,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "複合図形での定理の適用"
+            "knowledge_hint": "複合図形での定理の適用",
+            "knowledge_hints": [
+              "複合図形での定理の適用",
+              "複合図形での定理の適用の定義を答えなさい",
+              "複合図形での定理の適用の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "identify_application_point"
@@ -27497,7 +28842,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "定理の逆を用いた証明の判断"
+            "knowledge_hint": "定理の逆を用いた証明の判断",
+            "knowledge_hints": [
+              "定理の逆を用いた証明の判断",
+              "定理の逆を用いた証明の判断の定義を答えなさい",
+              "定理の逆を用いた証明の判断の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "evaluate_proof_step"
@@ -27730,7 +29080,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "正方形の相似比と面積比の理解"
+            "knowledge_hint": "正方形の相似比と面積比の理解",
+            "knowledge_hints": [
+              "正方形の相似比と面積比の理解",
+              "正方形の相似比と面積比の理解の定義を答えなさい",
+              "正方形の相似比と面積比の理解の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "calculate_area_ratio"
@@ -27748,7 +29103,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "三角形の相似比と面積比の計算"
+            "knowledge_hint": "三角形の相似比と面積比の計算",
+            "knowledge_hints": [
+              "三角形の相似比と面積比の計算",
+              "三角形の相似比と面積比の計算の定義を答えなさい",
+              "三角形の相似比と面積比の計算の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "calculate_area_ratio"
@@ -27766,7 +29126,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "おうぎ形の相似比と面積比の判断"
+            "knowledge_hint": "おうぎ形の相似比と面積比の判断",
+            "knowledge_hints": [
+              "おうぎ形の相似比と面積比の判断",
+              "おうぎ形の相似比と面積比の判断の定義を答えなさい",
+              "おうぎ形の相似比と面積比の判断の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "calculate_area_ratio"
@@ -28000,7 +29365,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "相似比から面積比・体積比を求める"
+            "knowledge_hint": "相似比から面積比・体積比を求める",
+            "knowledge_hints": [
+              "相似比から面積比・体積比を求める",
+              "相似比から面積比・体積比を求めるの定義を答えなさい",
+              "相似比から面積比・体積比を求めるの具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "calculate_ratio"
@@ -28019,7 +29389,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "面積比から相似比・体積比を逆算する"
+            "knowledge_hint": "面積比から相似比・体積比を逆算する",
+            "knowledge_hints": [
+              "面積比から相似比・体積比を逆算する",
+              "面積比から相似比・体積比を逆算するの定義を答えなさい",
+              "面積比から相似比・体積比を逆算するの具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "derive_ratios"
@@ -28038,7 +29413,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "立体の寸法から体積比を求める"
+            "knowledge_hint": "立体の寸法から体積比を求める",
+            "knowledge_hints": [
+              "立体の寸法から体積比を求める",
+              "立体の寸法から体積比を求めるの定義を答えなさい",
+              "立体の寸法から体積比を求めるの具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "apply_similarity"
@@ -28059,7 +29439,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "三平方の定理を伴う錐体の体積比計算"
+            "knowledge_hint": "三平方の定理を伴う錐体の体積比計算",
+            "knowledge_hints": [
+              "三平方の定理を伴う錐体の体積比計算",
+              "三平方の定理を伴う錐体の体積比計算の定義を答えなさい",
+              "三平方の定理を伴う錐体の体積比計算の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "solve_complex_similarity"
@@ -28266,7 +29651,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "中心角と円周角の基本関係"
+            "knowledge_hint": "中心角と円周角の基本関係",
+            "knowledge_hints": [
+              "中心角と円周角の基本関係",
+              "中心角と円周角の基本関係の定義を答えなさい",
+              "中心角と円周角の基本関係の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {},
           "implementable": true,
@@ -28281,7 +29671,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "同一弧に対する円周角の相等"
+            "knowledge_hint": "同一弧に対する円周角の相等",
+            "knowledge_hints": [
+              "同一弧に対する円周角の相等",
+              "同一弧に対する円周角の相等の定義を答えなさい",
+              "同一弧に対する円周角の相等の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {},
           "implementable": true,
@@ -28296,7 +29691,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "半円の弧に対する円周角"
+            "knowledge_hint": "半円の弧に対する円周角",
+            "knowledge_hints": [
+              "半円の弧に対する円周角",
+              "半円の弧に対する円周角の定義を答えなさい",
+              "半円の弧に対する円周角の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {},
           "implementable": true,
@@ -28311,7 +29711,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "円周角と二等辺三角形の複合"
+            "knowledge_hint": "円周角と二等辺三角形の複合",
+            "knowledge_hints": [
+              "円周角と二等辺三角形の複合",
+              "円周角と二等辺三角形の複合の定義を答えなさい",
+              "円周角と二等辺三角形の複合の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {},
           "implementable": true,
@@ -28510,7 +29915,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "円周角の定理の逆の定義の理解"
+            "knowledge_hint": "円周角の定理の逆の定義の理解",
+            "knowledge_hints": [
+              "円周角の定理の逆の定義の理解",
+              "円周角の定理の逆の定義の理解の定義を答えなさい",
+              "円周角の定理の逆の定義の理解の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "type": "select"
@@ -28531,7 +29941,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "同一円周上にあるかの単純判定"
+            "knowledge_hint": "同一円周上にあるかの単純判定",
+            "knowledge_hints": [
+              "同一円周上にあるかの単純判定",
+              "同一円周上にあるかの単純判定の定義を答えなさい",
+              "同一円周上にあるかの単純判定の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "type": "boolean"
@@ -28552,7 +29967,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "四角形が円に内接する条件の判断"
+            "knowledge_hint": "四角形が円に内接する条件の判断",
+            "knowledge_hints": [
+              "四角形が円に内接する条件の判断",
+              "四角形が円に内接する条件の判断の定義を答えなさい",
+              "四角形が円に内接する条件の判断の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "type": "boolean"
@@ -28573,7 +29993,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "複合図形における条件の推論"
+            "knowledge_hint": "複合図形における条件の推論",
+            "knowledge_hints": [
+              "複合図形における条件の推論",
+              "複合図形における条件の推論の定義を答えなさい",
+              "複合図形における条件の推論の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "type": "multiple_choice"
@@ -28944,7 +30369,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "円周角と弧の比例関係の定義"
+            "knowledge_hint": "円周角と弧の比例関係の定義",
+            "knowledge_hints": [
+              "円周角と弧の比例関係の定義",
+              "円周角と弧の比例関係の定義の定義を答えなさい",
+              "円周角と弧の比例関係の定義の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "verb": "identify"
@@ -28966,7 +30396,12 @@
           },
           "blueprint_params": {
             "operation": "*",
-            "knowledge_hint": "単純な比を用いた弧の長さの計算"
+            "knowledge_hint": "単純な比を用いた弧の長さの計算",
+            "knowledge_hints": [
+              "単純な比を用いた弧の長さの計算",
+              "単純な比を用いた弧の長さの計算の定義を答えなさい",
+              "単純な比を用いた弧の長さの計算の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "verb": "calculate"
@@ -28988,7 +30423,12 @@
           },
           "blueprint_params": {
             "operation": "*",
-            "knowledge_hint": "複雑な比を用いた弧の長さの計算"
+            "knowledge_hint": "複雑な比を用いた弧の長さの計算",
+            "knowledge_hints": [
+              "複雑な比を用いた弧の長さの計算",
+              "複雑な比を用いた弧の長さの計算の定義を答えなさい",
+              "複雑な比を用いた弧の長さの計算の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "verb": "calculate"
@@ -29007,7 +30447,12 @@
           },
           "blueprint_params": {
             "operation": "/",
-            "knowledge_hint": "複数の弧の長さの比較と判断"
+            "knowledge_hint": "複数の弧の長さの比較と判断",
+            "knowledge_hints": [
+              "複数の弧の長さの比較と判断",
+              "複数の弧の長さの比較と判断の定義を答えなさい",
+              "複数の弧の長さの比較と判断の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "verb": "judge"
@@ -29276,7 +30721,12 @@
           },
           "blueprint_params": {
             "mode": "polygon",
-            "knowledge_hint": "基本の直角三角形の辺長確認"
+            "knowledge_hint": "基本の直角三角形の辺長確認",
+            "knowledge_hints": [
+              "基本の直角三角形の辺長確認",
+              "基本の直角三角形の辺長確認の定義を答えなさい",
+              "基本の直角三角形の辺長確認の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "identify"
@@ -29293,7 +30743,12 @@
           },
           "blueprint_params": {
             "mode": "polygon",
-            "knowledge_hint": "標準的な直角三角形の辺長計算"
+            "knowledge_hint": "標準的な直角三角形の辺長計算",
+            "knowledge_hints": [
+              "標準的な直角三角形の辺長計算",
+              "標準的な直角三角形の辺長計算の定義を答えなさい",
+              "標準的な直角三角形の辺長計算の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "calculate"
@@ -29310,7 +30765,12 @@
           },
           "blueprint_params": {
             "mode": "polygon",
-            "knowledge_hint": "直角三角形かどうかの判定"
+            "knowledge_hint": "直角三角形かどうかの判定",
+            "knowledge_hints": [
+              "直角三角形かどうかの判定",
+              "直角三角形かどうかの判定の定義を答えなさい",
+              "直角三角形かどうかの判定の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "judge"
@@ -29326,7 +30786,12 @@
           },
           "blueprint_params": {
             "mode": "two_points",
-            "knowledge_hint": "座標上の2点間距離の導出"
+            "knowledge_hint": "座標上の2点間距離の導出",
+            "knowledge_hints": [
+              "座標上の2点間距離の導出",
+              "座標上の2点間距離の導出の定義を答えなさい",
+              "座標上の2点間距離の導出の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "apply"
@@ -29585,7 +31050,12 @@
           },
           "blueprint_params": {
             "mode": "polygon",
-            "knowledge_hint": "基本のピタゴラス数で判断"
+            "knowledge_hint": "基本のピタゴラス数で判断",
+            "knowledge_hints": [
+              "基本のピタゴラス数で判断",
+              "基本のピタゴラス数で判断の定義を答えなさい",
+              "基本のピタゴラス数で判断の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {},
           "implementable": true,
@@ -29602,7 +31072,12 @@
           },
           "blueprint_params": {
             "mode": "polygon",
-            "knowledge_hint": "少し大きな値の3辺で判断"
+            "knowledge_hint": "少し大きな値の3辺で判断",
+            "knowledge_hints": [
+              "少し大きな値の3辺で判断",
+              "少し大きな値の3辺で判断の定義を答えなさい",
+              "少し大きな値の3辺で判断の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {},
           "implementable": true,
@@ -29619,7 +31094,12 @@
           },
           "blueprint_params": {
             "mode": "polygon",
-            "knowledge_hint": "直角三角形ではない3辺で判断"
+            "knowledge_hint": "直角三角形ではない3辺で判断",
+            "knowledge_hints": [
+              "直角三角形ではない3辺で判断",
+              "直角三角形ではない3辺で判断の定義を答えなさい",
+              "直角三角形ではない3辺で判断の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {},
           "implementable": true,
@@ -29636,7 +31116,12 @@
           },
           "blueprint_params": {
             "mode": "two_points",
-            "knowledge_hint": "座標上の3点から判断"
+            "knowledge_hint": "座標上の3点から判断",
+            "knowledge_hints": [
+              "座標上の3点から判断",
+              "座標上の3点から判断の定義を答えなさい",
+              "座標上の3点から判断の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {},
           "implementable": true,
@@ -29811,7 +31296,12 @@
           },
           "blueprint_params": {
             "mode": "polygon",
-            "knowledge_hint": "直角三角形の辺の長さの確認"
+            "knowledge_hint": "直角三角形の辺の長さの確認",
+            "knowledge_hints": [
+              "直角三角形の辺の長さの確認",
+              "直角三角形の辺の長さの確認の定義を答えなさい",
+              "直角三角形の辺の長さの確認の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {},
           "implementable": true,
@@ -29826,7 +31316,12 @@
           },
           "blueprint_params": {
             "mode": "polygon",
-            "knowledge_hint": "二等辺三角形の高さの算出"
+            "knowledge_hint": "二等辺三角形の高さの算出",
+            "knowledge_hints": [
+              "二等辺三角形の高さの算出",
+              "二等辺三角形の高さの算出の定義を答えなさい",
+              "二等辺三角形の高さの算出の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {},
           "implementable": true,
@@ -29841,7 +31336,12 @@
           },
           "blueprint_params": {
             "mode": "polygon",
-            "knowledge_hint": "長方形の対角線の長さの算出"
+            "knowledge_hint": "長方形の対角線の長さの算出",
+            "knowledge_hints": [
+              "長方形の対角線の長さの算出",
+              "長方形の対角線の長さの算出の定義を答えなさい",
+              "長方形の対角線の長さの算出の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {},
           "implementable": true,
@@ -29855,7 +31355,12 @@
           },
           "blueprint_params": {
             "mode": "two_points",
-            "knowledge_hint": "座標平面上の2点間距離の算出"
+            "knowledge_hint": "座標平面上の2点間距離の算出",
+            "knowledge_hints": [
+              "座標平面上の2点間距離の算出",
+              "座標平面上の2点間距離の算出の定義を答えなさい",
+              "座標平面上の2点間距離の算出の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {},
           "implementable": true,
@@ -30395,7 +31900,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "立方体の対角線と体積の認識"
+            "knowledge_hint": "立方体の対角線と体積の認識",
+            "knowledge_hints": [
+              "立方体の対角線と体積の認識",
+              "立方体の対角線と体積の認識の定義を答えなさい",
+              "立方体の対角線と体積の認識の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {},
           "implementable": true,
@@ -30411,7 +31921,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "直方体の対角線と体積の理解"
+            "knowledge_hint": "直方体の対角線と体積の理解",
+            "knowledge_hints": [
+              "直方体の対角線と体積の理解",
+              "直方体の対角線と体積の理解の定義を答えなさい",
+              "直方体の対角線と体積の理解の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {},
           "implementable": true,
@@ -30426,7 +31941,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "三角柱の体積と表面積の理解"
+            "knowledge_hint": "三角柱の体積と表面積の理解",
+            "knowledge_hints": [
+              "三角柱の体積と表面積の理解",
+              "三角柱の体積と表面積の理解の定義を答えなさい",
+              "三角柱の体積と表面積の理解の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {},
           "implementable": true,
@@ -30442,7 +31962,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "角錐の高さと体積の計算"
+            "knowledge_hint": "角錐の高さと体積の計算",
+            "knowledge_hints": [
+              "角錐の高さと体積の計算",
+              "角錐の高さと体積の計算の定義を答えなさい",
+              "角錐の高さと体積の計算の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {},
           "implementable": true,
@@ -30458,7 +31983,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "正多角錐の体積と空間把握"
+            "knowledge_hint": "正多角錐の体積と空間把握",
+            "knowledge_hints": [
+              "正多角錐の体積と空間把握",
+              "正多角錐の体積と空間把握の定義を答えなさい",
+              "正多角錐の体積と空間把握の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {},
           "implementable": true,
@@ -30810,7 +32340,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "標本調査の用語と定義の理解"
+            "knowledge_hint": "標本調査の用語と定義の理解",
+            "knowledge_hints": [
+              "標本調査の用語と定義の理解",
+              "標本調査の用語と定義の理解の定義を答えなさい",
+              "標本調査の用語と定義の理解の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "identify"
@@ -30828,7 +32363,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "単純な比率を用いた推定計算"
+            "knowledge_hint": "単純な比率を用いた推定計算",
+            "knowledge_hints": [
+              "単純な比率を用いた推定計算",
+              "単純な比率を用いた推定計算の定義を答えなさい",
+              "単純な比率を用いた推定計算の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "calculate"
@@ -30846,7 +32386,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "複雑な数値を用いた推定計算"
+            "knowledge_hint": "複雑な数値を用いた推定計算",
+            "knowledge_hints": [
+              "複雑な数値を用いた推定計算",
+              "複雑な数値を用いた推定計算の定義を答えなさい",
+              "複雑な数値を用いた推定計算の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "calculate"
@@ -30864,7 +32409,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "標本調査の妥当性の判断"
+            "knowledge_hint": "標本調査の妥当性の判断",
+            "knowledge_hints": [
+              "標本調査の妥当性の判断",
+              "標本調査の妥当性の判断の定義を答えなさい",
+              "標本調査の妥当性の判断の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "evaluate"
@@ -30975,7 +32525,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "標本調査の用語の定義理解"
+            "knowledge_hint": "標本調査の用語の定義理解",
+            "knowledge_hints": [
+              "標本調査の用語の定義理解",
+              "標本調査の用語の定義理解の定義を答えなさい",
+              "標本調査の用語の定義理解の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "identify_definition"
@@ -30994,7 +32549,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "無作為抽出の必要性の理解"
+            "knowledge_hint": "無作為抽出の必要性の理解",
+            "knowledge_hints": [
+              "無作為抽出の必要性の理解",
+              "無作為抽出の必要性の理解の定義を答えなさい",
+              "無作為抽出の必要性の理解の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "explain_reasoning"
@@ -31013,7 +32573,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "標本比率を用いた推定の計算"
+            "knowledge_hint": "標本比率を用いた推定の計算",
+            "knowledge_hints": [
+              "標本比率を用いた推定の計算",
+              "標本比率を用いた推定の計算の定義を答えなさい",
+              "標本比率を用いた推定の計算の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "calculate_estimate"
@@ -31032,7 +32597,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "調査結果の妥当性の判断"
+            "knowledge_hint": "調査結果の妥当性の判断",
+            "knowledge_hints": [
+              "調査結果の妥当性の判断",
+              "調査結果の妥当性の判断の定義を答えなさい",
+              "調査結果の妥当性の判断の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {
             "action": "evaluate_validity"
@@ -31210,7 +32780,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "標本比率の定義と基本計算"
+            "knowledge_hint": "標本比率の定義と基本計算",
+            "knowledge_hints": [
+              "標本比率の定義と基本計算",
+              "標本比率の定義と基本計算の定義を答えなさい",
+              "標本比率の定義と基本計算の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {},
           "implementable": true,
@@ -31227,7 +32802,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "標本比率を用いた母比率の推定"
+            "knowledge_hint": "標本比率を用いた母比率の推定",
+            "knowledge_hints": [
+              "標本比率を用いた母比率の推定",
+              "標本比率を用いた母比率の推定の定義を答えなさい",
+              "標本比率を用いた母比率の推定の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {},
           "implementable": true,
@@ -31244,7 +32824,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "標本比率からの母集団総数の推定"
+            "knowledge_hint": "標本比率からの母集団総数の推定",
+            "knowledge_hints": [
+              "標本比率からの母集団総数の推定",
+              "標本比率からの母集団総数の推定の定義を答えなさい",
+              "標本比率からの母集団総数の推定の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {},
           "implementable": true,
@@ -31261,7 +32846,12 @@
             }
           },
           "blueprint_params": {
-            "knowledge_hint": "複雑な数値設定での母集団推定"
+            "knowledge_hint": "複雑な数値設定での母集団推定",
+            "knowledge_hints": [
+              "複雑な数値設定での母集団推定",
+              "複雑な数値設定での母集団推定の定義を答えなさい",
+              "複雑な数値設定での母集団推定の具体的な例を一つ挙げなさい"
+            ]
           },
           "verb_config": {},
           "implementable": true,
