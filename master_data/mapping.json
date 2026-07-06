@@ -13300,11 +13300,12 @@
       "calculation": [
         {
           "lv": 1,
-          "description": "比例のグラフ（切片なし）",
+          "description": "正の傾きと小さい切片を持つグラフ",
           "atom_constraints": {
             "LinearFuncAtom": {
               "force_proportion": false,
               "max_slope": 3,
+              "max_intercept": 2,
               "allow_negative": false
             }
           },
@@ -13315,11 +13316,12 @@
         },
         {
           "lv": 2,
-          "description": "正の傾きと切片を持つグラフ",
+          "description": "正の傾きと大きめの切片を持つグラフ",
           "atom_constraints": {
             "LinearFuncAtom": {
               "force_proportion": false,
               "max_slope": 3,
+              "max_intercept": 6,
               "allow_negative": false
             }
           },
@@ -13461,11 +13463,12 @@
       "calculation": [
         {
           "lv": 1,
-          "description": "比例の変域を求める",
+          "description": "正の傾きと小さい切片の一次関数変域",
           "atom_constraints": {
             "LinearFuncAtom": {
               "force_proportion": false,
               "max_slope": 3,
+              "max_intercept": 2,
               "allow_negative": false
             }
           },
@@ -13476,11 +13479,12 @@
         },
         {
           "lv": 2,
-          "description": "正の傾きの一次関数変域",
+          "description": "正の傾きと大きめの切片の一次関数変域",
           "atom_constraints": {
             "LinearFuncAtom": {
               "force_proportion": false,
               "max_slope": 3,
+              "max_intercept": 6,
               "allow_negative": false
             }
           },
@@ -14647,10 +14651,11 @@
       "word_problem": [
         {
           "lv": 1,
-          "description": "比例のみの単純な追いつき問題",
+          "description": "正の傾きと小さい切片の単純な追いつき問題",
           "atom_constraints": {
             "LinearFuncAtom": {
               "force_proportion": false,
+              "max_intercept": 2,
               "allow_negative": false
             }
           },
@@ -14661,10 +14666,11 @@
         },
         {
           "lv": 2,
-          "description": "比例と一次関数の交点問題",
+          "description": "正の傾きと大きめの切片の追いつき問題",
           "atom_constraints": {
             "LinearFuncAtom": {
               "force_proportion": false,
+              "max_intercept": 6,
               "allow_negative": false
             }
           },
