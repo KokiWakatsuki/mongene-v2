@@ -478,7 +478,8 @@
           "atom_constraints": {
             "NumberAtom": {
               "allow_negative": true,
-              "max_value": 10
+              "max_value": 10,
+              "range_constraint": [-10, -1]
             }
           },
           "blueprint_params": {
@@ -789,7 +790,8 @@
           "atom_constraints": {
             "NumberAtom": {
               "allow_negative": true,
-              "max_value": 9
+              "max_value": 9,
+              "range_constraint": [-9, -1]
             }
           },
           "blueprint_params": {
