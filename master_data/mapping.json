@@ -26000,7 +26000,9 @@
           "description": "正の整数係数の計算",
           "atom_constraints": {
             "QuadraticFuncAtom": {
-              "max_a_value": 3
+              "max_a_value": 3,
+              "allow_negative_a": false,
+              "force_integer": true
             }
           },
           "blueprint_params": {},
@@ -26013,7 +26015,9 @@
           "description": "負の整数係数を含む計算",
           "atom_constraints": {
             "QuadraticFuncAtom": {
-              "max_a_value": 5
+              "max_a_value": 5,
+              "allow_negative_a": true,
+              "force_integer": true
             }
           },
           "blueprint_params": {},
@@ -26026,26 +26030,30 @@
           "description": "分数係数を含む計算",
           "atom_constraints": {
             "QuadraticFuncAtom": {
-              "max_a_value": 5
+              "max_a_value": 5,
+              "allow_negative_a": true,
+              "force_integer": false
             }
           },
           "blueprint_params": {},
           "verb_config": {},
           "implementable": true,
-          "implementation_note": "QuadraticFuncAtomに分数係数を許可するフラグが必要。現状のmax_a_valueがint型のため、拡張を想定。"
+          "implementation_note": ""
         },
         {
           "lv": 4,
           "description": "逆算を含む計算問題",
           "atom_constraints": {
             "QuadraticFuncAtom": {
-              "max_a_value": 5
+              "max_a_value": 5,
+              "allow_negative_a": true,
+              "force_integer": false
             }
           },
           "blueprint_params": {},
           "verb_config": {},
           "implementable": true,
-          "implementation_note": "計算の方向を「yを求める」から「xを求める」へ拡張。"
+          "implementation_note": "計算の方向を「yを求める」から「xを求める」へ拡張。符号/分数の軸はLv3と同一（(c)=逆算方向のみ未実装のため崩壊が残る）。"
         }
       ],
       "word_problem": [
@@ -26499,7 +26507,9 @@
           "description": "正の係数、0を含む変域",
           "atom_constraints": {
             "QuadraticFuncAtom": {
-              "max_a_value": 1
+              "max_a_value": 1,
+              "allow_negative_a": false,
+              "force_integer": true
             }
           },
           "blueprint_params": {},
@@ -26512,7 +26522,9 @@
           "description": "正の係数、0を含まない変域",
           "atom_constraints": {
             "QuadraticFuncAtom": {
-              "max_a_value": 2
+              "max_a_value": 2,
+              "allow_negative_a": false,
+              "force_integer": true
             }
           },
           "blueprint_params": {},
@@ -26525,7 +26537,9 @@
           "description": "負の係数、0を含む変域",
           "atom_constraints": {
             "QuadraticFuncAtom": {
-              "max_a_value": 2
+              "max_a_value": 2,
+              "allow_negative_a": true,
+              "force_integer": true
             }
           },
           "blueprint_params": {},
@@ -26538,7 +26552,9 @@
           "description": "負の係数、0を含まない変域",
           "atom_constraints": {
             "QuadraticFuncAtom": {
-              "max_a_value": 3
+              "max_a_value": 3,
+              "allow_negative_a": true,
+              "force_integer": true
             }
           },
           "blueprint_params": {},
@@ -26845,7 +26861,8 @@
           "description": "比例定数が整数の基本計算",
           "atom_constraints": {
             "QuadraticFuncAtom": {
-              "max_a_value": 3
+              "max_a_value": 3,
+              "force_integer": true
             }
           },
           "blueprint_params": {},
@@ -26858,7 +26875,8 @@
           "description": "比例定数が分数の基本計算",
           "atom_constraints": {
             "QuadraticFuncAtom": {
-              "max_a_value": 5
+              "max_a_value": 5,
+              "force_integer": false
             }
           },
           "blueprint_params": {},
@@ -26871,20 +26889,22 @@
           "description": "yの値からxを求める逆算",
           "atom_constraints": {
             "QuadraticFuncAtom": {
-              "max_a_value": 5
+              "max_a_value": 5,
+              "force_integer": false
             }
           },
           "blueprint_params": {},
           "verb_config": {},
           "implementable": true,
-          "implementation_note": "y=ax^2の変形（x=√(y/a)）を問う形式"
+          "implementation_note": "y=ax^2の変形（x=√(y/a)）を問う形式。計算方向（逆算）の軸は未実装のためLv2と区別できず崩壊が残る（(c)フェーズ3送り）。"
         },
         {
           "lv": 4,
           "description": "大きな数値を用いた実用計算",
           "atom_constraints": {
             "QuadraticFuncAtom": {
-              "max_a_value": 10
+              "max_a_value": 10,
+              "force_integer": false
             }
           },
           "blueprint_params": {},
