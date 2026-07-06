@@ -1,6 +1,6 @@
 """G6 難易度レベル健全性 (difficulty_level_soundness)
 
-spec `docs/phase2_eval_gates_spec.md` §3-G6（2026-07-06 改訂版）:
+spec `docs/phase2_eval_gates_spec.md` §3-G6（2026-07-06 生成ベース再改訂版）:
 
 現行仕様は離散 Lv 制（`mapping.json.difficulty_levels[form]` に Lv1..LvN を定義し、
 `target_level` で `/inspect` 生成する）。min/mid/max という連続値の合成スコア単調性検査は
@@ -8,10 +8,17 @@ spec `docs/phase2_eval_gates_spec.md` §3-G6（2026-07-06 改訂版）:
 
 正しい LLM フリー判定は target_level 軸で以下の2つ:
 
-- **G6-b レベル非崩壊 (distinctness)**: 同一 (lesson, form) の Lv 定義が互いに異なるか。
-  生成不要・`mapping.json` の静的データだけで判定できる。
-  シグネチャ = `{atom_constraints, blueprint_override, verb_config}` を JSON 正規化して比較し、
-  重複があれば FAIL。
+- **G6-b レベル非崩壊 (distinctness)**: 同一 (lesson, form) の Lv 定義が互いに異なる問題を
+  生成するか。**生成ベース**判定（2026-07-06 再設計。旧版は静的シグネチャのみで判定しており、
+  knowledge/construction 系（差異が `blueprint_params.knowledge_hint` や `construction_type` 等、
+  静的シグネチャに含めていないフィールドにしか現れない）を偽陽性で崩壊扱いしていた）。
+  - 効率のため「静的シグネチャが同一の Lv ペア」を崩壊候補としてプレフィルタする
+    （`compute_level_signature` を流用）。
+  - 候補ペアについて、各 Lv を `target_level=Lv` で M 回 `/inspect` 生成し（LLMフリー）、
+    各サンプルから**生成内容フィンガープリント**（`build_generation_fingerprint`）を作る。
+  - 両 Lv のフィンガープリント集合が完全一致（M 回生成しても一度も区別できない）なら FAIL。
+    集合が異なれば（knowledge_hint 文言違い等）静的シグネチャが同一でも PASS。
+  - 静的シグネチャが最初から異なる Lv ペアは生成を待たずに PASS 扱い（プレフィルタで除外）。
 - **G6-a 制約適合 (conformance)**: 各 (lesson, form, Lv) を `target_level=Lv` で複数 seed 生成し、
   Lv の宣言した atom_constraints（ベース設定へシャローマージ後）が実際に生成物へ反映されているか。
   観測可能な制約（allow_negative / max_value / force_fraction 等）だけを検査し、
@@ -69,15 +76,117 @@ def compute_level_signature(lv_def: dict[str, Any]) -> str:
     return json.dumps(payload, sort_keys=True, ensure_ascii=False)
 
 
+def _static_signature_groups(level_defs: list[dict[str, Any]]) -> dict[str, list[int]]:
+    """静的シグネチャが一致する Lv 番号をグルーピングする（プレフィルタ用）。"""
+    sig_to_levels: dict[str, list[int]] = {}
+    for lv_def in level_defs:
+        sig = compute_level_signature(lv_def)
+        sig_to_levels.setdefault(sig, []).append(lv_def.get("lv"))
+    return sig_to_levels
+
+
+# ---------------------------------------------------------------------------
+# 生成内容フィンガープリント（G6-b 生成ベース判定の核）
+# ---------------------------------------------------------------------------
+
+
+def _is_numeric_token(token: Any) -> bool:
+    return _to_float(str(token)) is not None
+
+
+def build_generation_fingerprint(sample: dict[str, Any]) -> tuple:
+    """`/inspect` の1サンプルから、問題文に現れる差異を表す不変フィンガープリントを作る。
+
+    静的 config（atom_constraints 等）ではなく**実際に生成された内容**から作るのが肝。
+    含める要素（すべて Lv/Blueprint/Atom/Verb の宣言に由来し、seed 乱数では変わらないもの）:
+    - answer.type（knowledge/proof/numeric 等の答えの種別）
+    - 各 logic_step の operation_name
+    - 各 logic_step の**数値でない** operand（construction_type・証明対象の図形種別ラベル等の
+      固定文字列。knowledge_hint 文言はここか narration_hint に verbatim で乗る）
+    - 各 logic_step の operand 個数（項数。max_terms 等 Lv 宣言で変わりうる構造情報）
+    - narration_hint（knowledge_hint 本文や作図手順の説明文などの固定文言が乗る）
+
+    **意図的に除外**するもの: 数値オペランドの具体値・符号・答えの数値（text_form の数値部分）。
+    これらは同じ Lv 内でも seed ごとの乱数で決まり、M回のサンプリングでは分布の全体像を
+    観測しきれない（=たまたま重ならないだけで「区別できた」と誤判定する偽PASSの原因になる）。
+    Lv 間の数値制約差（allow_negative/max_value 等）の適否は G6-a（conformance）の管轄であり、
+    G6-b は「問題の型・文言が Lv ごとに変わるか」だけを見る。これにより、乱数使用済みの
+    真の崩壊（例: g1_l33 の全Lv同一乱数加算）は M 回生成しても常に同一フィンガープリントに
+    収束し FAIL、knowledge_hint/construction_type の文言差は毎回のサンプルに verbatim で
+    含まれるため必ず PASS になる。
+    """
+    sq_prints: list[tuple] = []
+    for sq in sample.get("sub_questions", []) or []:
+        answer = sq.get("answer") or {}
+        step_prints: list[tuple] = []
+        for step in sq.get("logic_steps", []) or []:
+            operands = step.get("operands", []) or []
+            non_numeric = tuple(str(op) for op in operands if not _is_numeric_token(op))
+            step_prints.append(
+                (
+                    step.get("operation_name"),
+                    len(operands),
+                    non_numeric,
+                    str(step.get("narration_hint") or ""),
+                )
+            )
+        sq_prints.append(
+            (
+                answer.get("type"),
+                tuple(step_prints),
+            )
+        )
+    return tuple(sq_prints)
+
+
+def _fingerprint_set(
+    lesson_id: str,
+    form: str,
+    lv: int,
+    sample_fn: Any,
+    n_samples: int,
+) -> Optional[frozenset]:
+    """target_level=lv で n_samples 回生成し、フィンガープリントの集合を作る。
+
+    生成が1件も成功しなければ None（判定不能）を返す。一部失敗は無視して続行する
+    （NoCompatibleBlueprintError 等、能力ギャップは G6-a/生成失敗集計側の関心事のため）。
+    """
+    prints: set[tuple] = set()
+    n_ok = 0
+    for _ in range(n_samples):
+        try:
+            sample = sample_fn(lesson_id, form, lv)
+        except Exception:  # noqa: BLE001 - 生成失敗は無視して続行（精度優先）
+            continue
+        if sample is None:
+            continue
+        n_ok += 1
+        prints.add(build_generation_fingerprint(sample))
+    if n_ok == 0:
+        return None
+    return frozenset(prints)
+
+
 def check_distinctness(
     lesson_id: str,
     form: str,
     level_defs: list[dict[str, Any]],
+    sample_fn: Optional[Any] = None,
+    n_samples: int = 6,
 ) -> GateResult:
-    """同一 (lesson, form) の Lv 定義群が互いに異なるシグネチャを持つか判定する。
+    """同一 (lesson, form) の Lv 定義群が互いに異なる問題を生成するか判定する（生成ベース）。
 
-    重複シグネチャの Lv があれば FAIL（崩壊した Lv 番号を列挙）。
-    Lv が1個以下の場合は判定不能として N/A。
+    - `sample_fn` が None の場合: 生成器が無い環境向けのフォールバックとして、静的シグネチャの
+      重複のみで判定する（後方互換・単体テストの一部で使用）。
+    - `sample_fn(lesson_id, form, lv) -> ground_truth_dict` が渡された場合:
+      1) 静的シグネチャが同一の Lv をプレフィルタで候補ペアとしてグルーピング。
+      2) 候補グループについてのみ、各 Lv を n_samples 回 `/inspect` 相当で生成し、
+         フィンガープリント集合を作る。
+      3) 集合が完全一致（=生成しても一度も区別できない）なら FAIL。
+         集合が異なれば（静的シグネチャは同じでも実際は区別可能）PASS 扱いでそのグループは除外。
+      4) 生成が全滅（None）した Lv を含むグループは判定不能として除外（偽 FAIL を避ける）。
+
+    Lv が1個以下、または difficulty_levels 未定義の場合は N/A。
     """
     if not level_defs:
         return GateResult(GATE_ID, "N/A", f"{lesson_id}/{form}: difficulty_levels が未定義")
@@ -89,36 +198,98 @@ def check_distinctness(
             details={"levels": [lv.get("lv") for lv in level_defs]},
         )
 
-    sig_to_levels: dict[str, list[int]] = {}
-    for lv_def in level_defs:
-        sig = compute_level_signature(lv_def)
-        sig_to_levels.setdefault(sig, []).append(lv_def.get("lv"))
+    sig_to_levels = _static_signature_groups(level_defs)
+    candidate_groups = [lvs for lvs in sig_to_levels.values() if len(lvs) > 1]
 
-    collapsed_groups = [lvs for lvs in sig_to_levels.values() if len(lvs) > 1]
+    if not candidate_groups:
+        return GateResult(
+            GATE_ID,
+            "PASS",
+            f"{lesson_id}/{form}: 全 {len(level_defs)} Lv が静的シグネチャの時点で相異なる",
+            details={"total_levels": len(level_defs)},
+        )
 
-    if collapsed_groups:
+    if sample_fn is None:
+        # フォールバック: 生成器が渡されない場合は静的シグネチャの重複のみで判定する。
         total_levels = len(level_defs)
         distinct_sigs = len(sig_to_levels)
         groups_desc = "; ".join(
-            "Lv" + "=Lv".join(str(lv) for lv in sorted(group)) for group in collapsed_groups
+            "Lv" + "=Lv".join(str(lv) for lv in sorted(group)) for group in candidate_groups
         )
         return GateResult(
             GATE_ID,
             "FAIL",
-            f"{lesson_id}/{form}: レベル定義が崩壊 ({total_levels}Lv定義中 {distinct_sigs} 種類のみ区別可能)。"
+            f"{lesson_id}/{form}: レベル定義が崩壊 ({total_levels}Lv定義中 {distinct_sigs} 種類のみ区別可能、"
+            "静的シグネチャのみで判定・生成未実施)。"
             f" 重複グループ: {groups_desc}",
             details={
                 "total_levels": total_levels,
                 "distinct_signatures": distinct_sigs,
-                "collapsed_groups": collapsed_groups,
+                "collapsed_groups": candidate_groups,
+                "mode": "static_only",
             },
         )
+
+    # --- 生成ベース判定 ---
+    fp_cache: dict[int, Optional[frozenset]] = {}
+
+    def _get_fp(lv: int) -> Optional[frozenset]:
+        if lv not in fp_cache:
+            fp_cache[lv] = _fingerprint_set(lesson_id, form, lv, sample_fn, n_samples)
+        return fp_cache[lv]
+
+    truly_collapsed_groups: list[list[int]] = []
+    inconclusive_groups: list[list[int]] = []
+
+    for group in candidate_groups:
+        fps = {lv: _get_fp(lv) for lv in group}
+        if any(fp is None for fp in fps.values()):
+            # いずれかの Lv が1件も生成できなかった → 判定不能（偽FAILを避けるため除外）
+            inconclusive_groups.append(sorted(group))
+            continue
+        distinct_fp_values = {fp for fp in fps.values()}
+        if len(distinct_fp_values) == 1:
+            # 全 Lv のフィンガープリント集合が完全一致 = 生成しても区別できない = 真の崩壊
+            truly_collapsed_groups.append(sorted(group))
+
+    if truly_collapsed_groups:
+        total_levels = len(level_defs)
+        groups_desc = "; ".join(
+            "Lv" + "=Lv".join(str(lv) for lv in group) for group in truly_collapsed_groups
+        )
+        detail: dict[str, Any] = {
+            "total_levels": total_levels,
+            "collapsed_groups": truly_collapsed_groups,
+            "mode": "generation_based",
+            "n_samples": n_samples,
+        }
+        if inconclusive_groups:
+            detail["inconclusive_groups"] = inconclusive_groups
+        return GateResult(
+            GATE_ID,
+            "FAIL",
+            f"{lesson_id}/{form}: レベル定義が崩壊 ({n_samples}回生成しても区別不能な Lv 群あり)。"
+            f" 崩壊グループ: {groups_desc}",
+            details=detail,
+        )
+
+    note = ""
+    if inconclusive_groups:
+        groups_desc = "; ".join(
+            "Lv" + "=Lv".join(str(lv) for lv in group) for group in inconclusive_groups
+        )
+        note = f"（判定不能グループあり・生成失敗のため除外: {groups_desc}）"
 
     return GateResult(
         GATE_ID,
         "PASS",
-        f"{lesson_id}/{form}: 全 {len(level_defs)} Lv が相異なる設定を持つ",
-        details={"total_levels": len(level_defs)},
+        f"{lesson_id}/{form}: 静的シグネチャ重複候補は生成内容で区別可能{note}",
+        details={
+            "total_levels": len(level_defs),
+            "mode": "generation_based",
+            "n_samples": n_samples,
+            "inconclusive_groups": inconclusive_groups,
+        },
     )
 
 

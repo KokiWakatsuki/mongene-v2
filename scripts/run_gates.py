@@ -66,18 +66,43 @@ def load_mapping(path: Path = MAPPING_PATH) -> dict[str, Any]:
 # ---------------------------------------------------------------------------
 
 
-def run_g6b_distinctness(mapping: dict[str, Any]) -> list[dict[str, Any]]:
-    """全 (lesson, form) について G6-b を評価する。難易度レベル未定義の (lesson,form) は N/A。"""
+DEFAULT_G6B_SAMPLES = 6
+
+
+def run_g6b_distinctness(
+    mapping: dict[str, Any],
+    client: Optional[Any] = None,
+    n_samples: int = DEFAULT_G6B_SAMPLES,
+    lesson_filter: Optional[str] = None,
+    form_filter: Optional[str] = None,
+) -> list[dict[str, Any]]:
+    """全 (lesson, form) について G6-b を評価する。難易度レベル未定義の (lesson,form) は N/A。
+
+    `client` が渡されれば生成ベース判定（静的シグネチャ重複候補のみ `/inspect` で複数回生成し
+    フィンガープリントを比較）。渡されなければ静的シグネチャのみのフォールバック判定になる。
+    """
     from scripts.eval_gates.g6_difficulty_level_soundness import check_distinctness
 
+    sample_fn = None
+    if client is not None:
+        def sample_fn(lesson_id: str, form: str, lv: int) -> dict[str, Any]:
+            grade = mapping[lesson_id].get("grade", 1)
+            return _inspect_once(client, lesson_id, grade, form, lv)
+
     results: list[dict[str, Any]] = []
-    for lesson_id in sorted(mapping.keys()):
+    lesson_ids = sorted(mapping.keys())
+    if lesson_filter:
+        lesson_ids = [lid for lid in lesson_ids if lid == lesson_filter]
+
+    for lesson_id in lesson_ids:
         lesson_mapping = mapping[lesson_id]
         forms = lesson_mapping.get("supported_forms", []) or []
+        if form_filter:
+            forms = [f for f in forms if f == form_filter]
         difficulty_levels = lesson_mapping.get("difficulty_levels", {}) or {}
         for form in forms:
             level_defs = difficulty_levels.get(form, []) or []
-            gate_result = check_distinctness(lesson_id, form, level_defs)
+            gate_result = check_distinctness(lesson_id, form, level_defs, sample_fn=sample_fn, n_samples=n_samples)
             results.append(
                 {
                     "lesson_id": lesson_id,
@@ -122,6 +147,7 @@ def run_g6a_conformance(
     n_seeds: int = DEFAULT_G6A_SEEDS,
     lesson_filter: Optional[str] = None,
     form_filter: Optional[str] = None,
+    client: Optional[Any] = None,
 ) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
     """全 (lesson, form, Lv) を複数seedで /inspect 生成し G6-a を評価する。
 
@@ -129,7 +155,8 @@ def run_g6a_conformance(
     """
     from scripts.eval_gates.g6_difficulty_level_soundness import check_conformance
 
-    client = _make_inspect_client()
+    if client is None:
+        client = _make_inspect_client()
 
     results: list[dict[str, Any]] = []
     failures: list[dict[str, Any]] = []
@@ -427,22 +454,42 @@ def main() -> None:
     parser.add_argument("--product-dir", default=str(PRODUCT_DIR))
     parser.add_argument("--out", default=str(DEFAULT_REPORT_PATH))
     parser.add_argument("--seeds", type=int, default=DEFAULT_G6A_SEEDS, help="G6-a の seed 数")
+    parser.add_argument(
+        "--g6b-samples", type=int, default=DEFAULT_G6B_SAMPLES, help="G6-b 生成ベース判定の1Lvあたり生成回数"
+    )
     parser.add_argument("--skip-g6a", action="store_true", help="G6-a（生成あり）をスキップし G6-bのみ走らせる")
-    parser.add_argument("--lesson", default=None, help="この lesson_id だけ G6-a を走らせる（デバッグ用）")
-    parser.add_argument("--form", default=None, help="この problem_form だけ G6-a を走らせる（デバッグ用）")
+    parser.add_argument(
+        "--skip-g6b-generation",
+        action="store_true",
+        help="G6-b の生成ベース判定をスキップし静的シグネチャのみで判定する（旧挙動・高速）",
+    )
+    parser.add_argument("--lesson", default=None, help="この lesson_id だけ G6-a/G6-b を走らせる（デバッグ用）")
+    parser.add_argument("--form", default=None, help="この problem_form だけ G6-a/G6-b を走らせる（デバッグ用）")
     args = parser.parse_args()
 
     gate_fns = _import_gates()
     mapping = load_mapping(Path(args.mapping))
 
-    g6b_results = run_g6b_distinctness(mapping)
+    # G6-a と G6-b の生成ベース判定は同じ TestClient を使い回す（プロセス起動コストを1回に）。
+    shared_client = None
+    if not args.skip_g6a or not args.skip_g6b_generation:
+        shared_client = _make_inspect_client()
+
+    g6b_client = None if args.skip_g6b_generation else shared_client
+    g6b_results = run_g6b_distinctness(
+        mapping,
+        client=g6b_client,
+        n_samples=args.g6b_samples,
+        lesson_filter=args.lesson,
+        form_filter=args.form,
+    )
 
     if args.skip_g6a:
         g6a_results: list[dict[str, Any]] = []
         g6a_failures: list[dict[str, Any]] = []
     else:
         g6a_results, g6a_failures = run_g6a_conformance(
-            mapping, n_seeds=args.seeds, lesson_filter=args.lesson, form_filter=args.form
+            mapping, n_seeds=args.seeds, lesson_filter=args.lesson, form_filter=args.form, client=shared_client
         )
 
     ground_truth_grouped = load_ground_truth_corpus(Path(args.ground_truth_dir))

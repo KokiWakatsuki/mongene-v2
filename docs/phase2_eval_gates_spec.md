@@ -84,12 +84,30 @@ def check(product: dict, ground_truth: dict) -> GateResult
 - **G6-a 制約適合（conformance）**: 各 (lesson, form, Lv) を `target_level=Lv` で /inspect 生成し、その問題が当該Lvの
   `atom_constraints`（＋ベース設定へのマージ後）を満たすか。例: Lv1 が `allow_negative=false` なら負のオペランドが出ない、
   `max_value` 超過が無い、`max_terms` 準拠。**違反＝FAIL**（＝レベル定義がランナーに効いていない実バグ）。
-- **G6-b レベル非崩壊（distinctness）**: 同一 (lesson, form) の Lv 定義が相互に異なること。
-  判定は (1) 定義時: `atom_constraints + blueprint_override + verb_config` のシグネチャが重複する Lv があれば FAIL
-  （データ走査で **385中40件が重複、うち十数件は全Lv崩壊** = 既知の修正対象）、
-  (2) 生成時: 各Lvを複数seedで生成した分布が実際に区別可能か（任意・補助）。
+- **G6-b レベル非崩壊（distinctness）】※2026-07-06 生成ベースに再設計（`scripts/eval_gates/g6_difficulty_level_soundness.py`）:
+  - 旧版は `atom_constraints + blueprint_override + verb_config` の**静的シグネチャ**のみで判定しており、
+    knowledge（difficulty は `blueprint_params.knowledge_hint` で表現）や construction/visual
+    （`construction_type` 等で表現）が静的シグネチャに現れないフィールドでしか区別されないため
+    **偽陽性で崩壊判定されていた**（385中41件 FAIL のうち相当数が偽陽性）。
+  - 新版は次の手順で判定する:
+    1. 効率のため「静的シグネチャが同一の Lv ペア」を崩壊候補としてプレフィルタする（旧ロジック流用）。
+    2. 候補ペアについてのみ、各 Lv を `target_level=Lv` で **M回（デフォルト6）** `/inspect` 生成し
+       （LLMフリー・`SKIP_LLM_IN_TESTS=true`）、各サンプルから**生成内容フィンガープリント**
+       （`build_generation_fingerprint`）を作る。フィンガープリントは
+       `(answer.type, operation_name, operand個数, 非数値operand, narration_hint文字列)` から構成する。
+       **数値オペランドの具体値・符号は意図的に除外**する（同一 Lv 内でも seed 乱数で変わり、
+       M回のサンプリングでは分布全体を観測しきれず「たまたま重ならない」だけで区別できたと
+       誤判定する偽PASSの原因になるため。allow_negative/max_value 等の数値制約の適否は G6-a の管轄）。
+    3. 候補ペアの Lv 間でフィンガープリント**集合**が完全一致（M回生成しても一度も区別できない）
+       なら FAIL（真の崩壊）。集合が異なれば（knowledge_hint 文言差・construction_type 差等）
+       静的シグネチャが同一でも PASS。
+    4. 静的シグネチャが最初から異なる Lv ペアは生成せず PASS（プレフィルタで除外・高速化）。
+    5. 候補ペアのいずれかの Lv が1件も生成できない（NoCompatibleBlueprintError 等）場合は
+       判定不能として除外する（偽FAILを出さない・精度優先）。
+  - `sample_fn` 未指定時は後方互換のため旧・静的シグネチャのみのフォールバック判定になる
+    （単体テストの一部・生成器を用意できない環境向け）。
 - **意味的順序（Lv4が本当にLv1より難しいか）は決定論では判定不能**。LLM/人手のマイルストーン・スポットチェックに回す（設計書§12 Phase5）。日常ループには入れない。
-- `difficulty_features.py`（step_count等）は G6 の主判定には使わないが、G6-b(2)の分布比較や参考表示に流用可。フェーズ3の難易度設計とも共有。
+- `difficulty_features.py`（step_count等）は G6 の主判定には使わないが、参考表示に流用可。フェーズ3の難易度設計とも共有。
 
 ### G7 レンダリング健全性（render_sanity）
 - content_problem_text＋explanation の LaTeX: `$...$` が均衡し、`$$` `\[` `\]`（ブロック数式）を**使っていない**こと。使用で FAIL。
