@@ -190,7 +190,6 @@
           "atom_constraints": {
             "NumberAtom": {
               "allow_negative": true,
-              "force_fraction": true,
               "max_value": 10
             }
           },
@@ -206,7 +205,7 @@
             "type": "compare_magnitude"
           },
           "implementable": true,
-          "implementation_note": ""
+          "implementation_note": "knowledge form は KnowledgeCheckVerb がサンプルした Atom の数値を出力に一切反映しない設計（operands=[hint] のみ）。force_fraction 等の atom_constraints はここでは観測不能なため削除。本Lvの実際の難易度差別化は blueprint_params.knowledge_hint（既に相互に異なる文言）で行われている。"
         }
       ]
     },
@@ -372,8 +371,7 @@
           "atom_constraints": {
             "NumberAtom": {
               "allow_negative": true,
-              "max_value": 5,
-              "force_fraction": true
+              "max_value": 5
             }
           },
           "blueprint_params": {
@@ -388,7 +386,7 @@
             "task_type": "compare"
           },
           "implementable": true,
-          "implementation_note": ""
+          "implementation_note": "knowledge form は KnowledgeCheckVerb がサンプルした Atom の数値を出力に一切反映しない設計（operands=[hint] のみ）。force_fraction 等の atom_constraints はここでは観測不能なため削除。本Lvの実際の難易度差別化は blueprint_params.knowledge_hint（既に相互に異なる文言）で行われている。"
         },
         {
           "lv": 4,
@@ -1343,7 +1341,6 @@
           "atom_constraints": {
             "NumberAtom": {
               "allow_negative": true,
-              "force_fraction": true,
               "max_value": 10
             }
           },
@@ -1360,7 +1357,7 @@
             "task_type": "identify_set_closure"
           },
           "implementable": true,
-          "implementation_note": ""
+          "implementation_note": "knowledge form は KnowledgeCheckVerb がサンプルした Atom の数値を出力に一切反映しない設計（operands=[hint] のみ）。force_fraction 等の atom_constraints はここでは観測不能なため削除。本Lvの実際の難易度差別化は blueprint_params.knowledge_hint（既に相互に異なる文言）で行われている。"
         },
         {
           "lv": 4,
@@ -2573,14 +2570,9 @@
           "lv": 3,
           "description": "分数や複数の項を含む式",
           "atom_constraints": {
-            "NumberAtom": {
-              "allow_negative": false,
-              "max_value": 20,
-              "force_fraction": true
-            },
             "PolynomialAtom": {
               "max_degree": 1,
-              "max_coefficient": 15
+              "max_coefficient": 22
             }
           },
           "blueprint_params": {},
@@ -2588,7 +2580,7 @@
             "complexity": "high"
           },
           "implementable": true,
-          "implementation_note": ""
+          "implementation_note": "元は NumberAtom.force_fraction=true を宣言していたが、required_tags=['polynomial'] のため 実際に選択されるのは PolynomialAtom（NumberAtomは選ばれない）。PolynomialAtomは係数が常に整数で 分数概念が無いため force_fraction は表現不能。代替として max_coefficient を引き上げて難易度を維持。"
         },
         {
           "lv": 4,
@@ -2695,18 +2687,13 @@
           "atom_constraints": {
             "PolynomialAtom": {
               "max_degree": 1,
-              "max_coefficient": 10
-            },
-            "NumberAtom": {
-              "allow_negative": true,
-              "force_fraction": true,
-              "max_value": 5
+              "max_coefficient": 16
             }
           },
           "blueprint_params": {},
           "verb_config": {},
           "implementable": true,
-          "implementation_note": ""
+          "implementation_note": "元は NumberAtom.force_fraction=true を宣言していたが、required_tags=['polynomial'] のため 実際に選択されるのは PolynomialAtom（NumberAtomは選ばれない）。PolynomialAtomは係数が常に整数で 分数概念が無いため force_fraction は表現不能。代替として max_coefficient を引き上げて難易度を維持。"
         },
         {
           "lv": 4,
@@ -3068,12 +3055,7 @@
           "atom_constraints": {
             "PolynomialAtom": {
               "max_degree": 1,
-              "max_coefficient": 10
-            },
-            "NumberAtom": {
-              "allow_negative": true,
-              "force_fraction": true,
-              "max_value": 10
+              "max_coefficient": 18
             }
           },
           "blueprint_params": {
@@ -3081,7 +3063,7 @@
           },
           "verb_config": {},
           "implementable": true,
-          "implementation_note": "NumberAtomのforce_fractionをtrueにすることで分数計算を強制。"
+          "implementation_note": "元は NumberAtom.force_fraction=true を宣言していたが、required_tags=['polynomial'] のため 実際に選択されるのは PolynomialAtom（NumberAtomは選ばれない）。PolynomialAtomは係数が常に整数で 分数概念が無いため force_fraction は表現不能。代替として max_coefficient を引き上げて難易度を維持。"
         }
       ]
     }
@@ -4324,16 +4306,7 @@
       "linear_function"
     ],
     "optional_tags": [],
-    "atom_constraints": {
-      "LinearFuncAtom": {
-        "max_slope": 5,
-        "force_integer_slope": true
-      },
-      "QuadraticFuncAtom": {
-        "max_a_value": 3,
-        "is_pure_form": true
-      }
-    },
+    "atom_constraints": {},
     "visual_component": "Graph_Renderer",
     "raw_y_base": 300,
     "y_base": 6,
@@ -4350,10 +4323,9 @@
           "lv": 1,
           "description": "比例の式の決定と値の計算",
           "atom_constraints": {
-            "LinearFuncAtom": {
-              "force_proportion": true,
-              "max_slope": 3,
-              "allow_negative": false
+            "NumberAtom": {
+              "allow_negative": false,
+              "max_value": 3
             }
           },
           "blueprint_params": {},
@@ -4365,11 +4337,9 @@
           "lv": 2,
           "description": "一次関数の式の決定と値の計算",
           "atom_constraints": {
-            "LinearFuncAtom": {
-              "force_proportion": false,
-              "max_slope": 5,
+            "NumberAtom": {
               "allow_negative": false,
-              "max_intercept": 5
+              "max_value": 5
             }
           },
           "blueprint_params": {},
@@ -4381,11 +4351,9 @@
           "lv": 3,
           "description": "負の数を含む一次関数の計算",
           "atom_constraints": {
-            "LinearFuncAtom": {
-              "force_proportion": false,
-              "max_slope": 8,
+            "NumberAtom": {
               "allow_negative": true,
-              "max_intercept": 8
+              "max_value": 8
             }
           },
           "blueprint_params": {},
@@ -4397,12 +4365,9 @@
           "lv": 4,
           "description": "分数を含む一次関数の計算",
           "atom_constraints": {
-            "LinearFuncAtom": {
-              "force_proportion": false,
-              "max_slope": 10,
-              "force_integer_slope": false,
+            "NumberAtom": {
               "allow_negative": true,
-              "max_intercept": 10
+              "max_value": 10
             }
           },
           "blueprint_params": {},
@@ -4524,16 +4489,7 @@
       "linear_function"
     ],
     "optional_tags": [],
-    "atom_constraints": {
-      "LinearFuncAtom": {
-        "max_slope": 5,
-        "force_integer_slope": true
-      },
-      "QuadraticFuncAtom": {
-        "max_a_value": 3,
-        "is_pure_form": true
-      }
-    },
+    "atom_constraints": {},
     "visual_component": "Graph_Renderer",
     "raw_y_base": 300,
     "y_base": 6,
@@ -4558,11 +4514,9 @@
           "lv": 1,
           "description": "正の整数のみの単純な比例計算",
           "atom_constraints": {
-            "LinearFuncAtom": {
-              "force_proportion": true,
-              "max_slope": 3,
-              "force_integer_slope": true,
-              "allow_negative": false
+            "NumberAtom": {
+              "allow_negative": false,
+              "max_value": 3
             }
           },
           "blueprint_params": {},
@@ -4574,11 +4528,9 @@
           "lv": 2,
           "description": "正の整数で傾きが大きい計算",
           "atom_constraints": {
-            "LinearFuncAtom": {
-              "force_proportion": true,
-              "max_slope": 9,
-              "force_integer_slope": true,
-              "allow_negative": false
+            "NumberAtom": {
+              "allow_negative": false,
+              "max_value": 9
             }
           },
           "blueprint_params": {},
@@ -4590,11 +4542,9 @@
           "lv": 3,
           "description": "負の数を含む整数の比例計算",
           "atom_constraints": {
-            "LinearFuncAtom": {
-              "force_proportion": true,
-              "max_slope": 5,
-              "force_integer_slope": true,
-              "allow_negative": true
+            "NumberAtom": {
+              "allow_negative": true,
+              "max_value": 5
             }
           },
           "blueprint_params": {},
@@ -4606,11 +4556,9 @@
           "lv": 4,
           "description": "分数を含む比例の計算",
           "atom_constraints": {
-            "LinearFuncAtom": {
-              "force_proportion": true,
-              "max_slope": 5,
-              "force_integer_slope": false,
-              "allow_negative": true
+            "NumberAtom": {
+              "allow_negative": true,
+              "max_value": 12
             }
           },
           "blueprint_params": {},
@@ -4753,11 +4701,9 @@
           "lv": 1,
           "description": "正の整数の傾きを持つ比例",
           "atom_constraints": {
-            "LinearFuncAtom": {
-              "force_proportion": true,
-              "max_slope": 2,
-              "force_integer_slope": true,
-              "allow_negative": false
+            "NumberAtom": {
+              "allow_negative": false,
+              "max_value": 2
             }
           },
           "blueprint_params": {},
@@ -4769,11 +4715,9 @@
           "lv": 2,
           "description": "負の整数を含む比例",
           "atom_constraints": {
-            "LinearFuncAtom": {
-              "force_proportion": true,
-              "max_slope": 3,
-              "force_integer_slope": true,
-              "allow_negative": true
+            "NumberAtom": {
+              "allow_negative": true,
+              "max_value": 3
             }
           },
           "blueprint_params": {},
@@ -4785,11 +4729,9 @@
           "lv": 3,
           "description": "分数傾きを含む比例",
           "atom_constraints": {
-            "LinearFuncAtom": {
-              "force_proportion": true,
-              "max_slope": 4,
-              "force_integer_slope": false,
-              "allow_negative": true
+            "NumberAtom": {
+              "allow_negative": true,
+              "max_value": 4
             }
           },
           "blueprint_params": {},
@@ -4812,16 +4754,7 @@
       "linear_function"
     ],
     "optional_tags": [],
-    "atom_constraints": {
-      "LinearFuncAtom": {
-        "max_slope": 5,
-        "force_integer_slope": true
-      },
-      "QuadraticFuncAtom": {
-        "max_a_value": 3,
-        "is_pure_form": true
-      }
-    },
+    "atom_constraints": {},
     "visual_component": "Graph_Renderer",
     "raw_y_base": 300,
     "y_base": 6,
@@ -4937,10 +4870,9 @@
           "lv": 1,
           "description": "第1象限の点読み取りとプロット",
           "atom_constraints": {
-            "LinearFuncAtom": {
+            "NumberAtom": {
               "allow_negative": false,
-              "force_proportion": true,
-              "max_slope": 2
+              "max_value": 2
             }
           },
           "blueprint_params": {},
@@ -4952,10 +4884,9 @@
           "lv": 2,
           "description": "全象限の点読み取りとプロット",
           "atom_constraints": {
-            "LinearFuncAtom": {
+            "NumberAtom": {
               "allow_negative": true,
-              "force_proportion": true,
-              "max_slope": 3
+              "max_value": 3
             }
           },
           "blueprint_params": {},
@@ -4967,11 +4898,9 @@
           "lv": 3,
           "description": "比例のグラフと座標の対応",
           "atom_constraints": {
-            "LinearFuncAtom": {
+            "NumberAtom": {
               "allow_negative": true,
-              "force_proportion": true,
-              "max_slope": 5,
-              "force_integer_slope": true
+              "max_value": 5
             }
           },
           "blueprint_params": {},
@@ -4983,12 +4912,9 @@
           "lv": 4,
           "description": "一次関数のグラフと座標の読み取り",
           "atom_constraints": {
-            "LinearFuncAtom": {
+            "NumberAtom": {
               "allow_negative": true,
-              "force_proportion": false,
-              "max_slope": 3,
-              "max_intercept": 3,
-              "force_integer_slope": true
+              "max_value": 4
             }
           },
           "blueprint_params": {},
@@ -5000,12 +4926,9 @@
           "lv": 5,
           "description": "分数傾きを含む複雑なグラフ",
           "atom_constraints": {
-            "LinearFuncAtom": {
+            "NumberAtom": {
               "allow_negative": true,
-              "force_proportion": false,
-              "max_slope": 5,
-              "max_intercept": 5,
-              "force_integer_slope": false
+              "max_value": 7
             }
           },
           "blueprint_params": {},
@@ -5027,12 +4950,7 @@
     "required_tags": [
       "linear_function"
     ],
-    "atom_constraints": {
-      "LinearFuncAtom": {
-        "max_slope": 5,
-        "force_integer_slope": true
-      }
-    },
+    "atom_constraints": {},
     "visual_component": "Graph_Renderer",
     "y_base": 6,
     "supported_forms": [
@@ -5052,11 +4970,9 @@
           "lv": 1,
           "description": "正の整数傾きの比例計算",
           "atom_constraints": {
-            "LinearFuncAtom": {
-              "force_proportion": true,
-              "max_slope": 3,
-              "force_integer_slope": true,
-              "allow_negative": false
+            "NumberAtom": {
+              "allow_negative": false,
+              "max_value": 3
             }
           },
           "blueprint_params": {},
@@ -5068,11 +4984,9 @@
           "lv": 2,
           "description": "負の整数を含む比例計算",
           "atom_constraints": {
-            "LinearFuncAtom": {
-              "force_proportion": true,
-              "max_slope": 5,
-              "force_integer_slope": true,
-              "allow_negative": true
+            "NumberAtom": {
+              "allow_negative": true,
+              "max_value": 5
             }
           },
           "blueprint_params": {},
@@ -5084,11 +4998,9 @@
           "lv": 3,
           "description": "正の分数傾きの比例計算",
           "atom_constraints": {
-            "LinearFuncAtom": {
-              "force_proportion": true,
-              "max_slope": 3,
-              "force_integer_slope": false,
-              "allow_negative": false
+            "NumberAtom": {
+              "allow_negative": false,
+              "max_value": 4
             }
           },
           "blueprint_params": {},
@@ -5100,11 +5012,9 @@
           "lv": 4,
           "description": "負の分数を含む比例計算",
           "atom_constraints": {
-            "LinearFuncAtom": {
-              "force_proportion": true,
-              "max_slope": 5,
-              "force_integer_slope": false,
-              "allow_negative": true
+            "NumberAtom": {
+              "allow_negative": true,
+              "max_value": 8
             }
           },
           "blueprint_params": {},
@@ -5208,11 +5118,9 @@
           "lv": 1,
           "description": "正の整数傾きの比例グラフ描画",
           "atom_constraints": {
-            "LinearFuncAtom": {
-              "force_proportion": true,
-              "max_slope": 2,
-              "force_integer_slope": true,
-              "allow_negative": false
+            "NumberAtom": {
+              "allow_negative": false,
+              "max_value": 2
             }
           },
           "blueprint_params": {},
@@ -5224,11 +5132,9 @@
           "lv": 2,
           "description": "負を含む整数傾きの比例グラフ",
           "atom_constraints": {
-            "LinearFuncAtom": {
-              "force_proportion": true,
-              "max_slope": 3,
-              "force_integer_slope": true,
-              "allow_negative": true
+            "NumberAtom": {
+              "allow_negative": true,
+              "max_value": 3
             }
           },
           "blueprint_params": {},
@@ -5240,11 +5146,9 @@
           "lv": 3,
           "description": "分数傾きを含む比例グラフ",
           "atom_constraints": {
-            "LinearFuncAtom": {
-              "force_proportion": true,
-              "max_slope": 3,
-              "force_integer_slope": false,
-              "allow_negative": false
+            "NumberAtom": {
+              "allow_negative": false,
+              "max_value": 3
             }
           },
           "blueprint_params": {},
@@ -5256,11 +5160,9 @@
           "lv": 4,
           "description": "負と分数を含む複雑な比例グラフ",
           "atom_constraints": {
-            "LinearFuncAtom": {
-              "force_proportion": true,
-              "max_slope": 5,
-              "force_integer_slope": false,
-              "allow_negative": true
+            "NumberAtom": {
+              "allow_negative": true,
+              "max_value": 5
             }
           },
           "blueprint_params": {},
@@ -5286,16 +5188,7 @@
       "linear_function"
     ],
     "optional_tags": [],
-    "atom_constraints": {
-      "LinearFuncAtom": {
-        "max_slope": 5,
-        "force_integer_slope": true
-      },
-      "QuadraticFuncAtom": {
-        "max_a_value": 3,
-        "is_pure_form": true
-      }
-    },
+    "atom_constraints": {},
     "visual_component": "Graph_Renderer",
     "raw_y_base": 300,
     "y_base": 6,
@@ -5313,11 +5206,9 @@
           "lv": 1,
           "description": "正の整数のみの比例式",
           "atom_constraints": {
-            "LinearFuncAtom": {
-              "force_proportion": true,
-              "max_slope": 3,
-              "force_integer_slope": true,
-              "allow_negative": false
+            "NumberAtom": {
+              "allow_negative": false,
+              "max_value": 3
             }
           },
           "blueprint_params": {},
@@ -5329,11 +5220,9 @@
           "lv": 2,
           "description": "負の数を含む比例式",
           "atom_constraints": {
-            "LinearFuncAtom": {
-              "force_proportion": true,
-              "max_slope": 5,
-              "force_integer_slope": true,
-              "allow_negative": true
+            "NumberAtom": {
+              "allow_negative": true,
+              "max_value": 5
             }
           },
           "blueprint_params": {},
@@ -5345,11 +5234,9 @@
           "lv": 3,
           "description": "分数傾きの比例式",
           "atom_constraints": {
-            "LinearFuncAtom": {
-              "force_proportion": true,
-              "max_slope": 5,
-              "force_integer_slope": false,
-              "allow_negative": true
+            "NumberAtom": {
+              "allow_negative": true,
+              "max_value": 7
             }
           },
           "blueprint_params": {},
@@ -5361,12 +5248,9 @@
           "lv": 4,
           "description": "切片を持つ一次関数の式",
           "atom_constraints": {
-            "LinearFuncAtom": {
-              "force_proportion": false,
-              "max_slope": 5,
-              "force_integer_slope": true,
+            "NumberAtom": {
               "allow_negative": true,
-              "max_intercept": 5
+              "max_value": 9
             }
           },
           "blueprint_params": {},
@@ -5380,11 +5264,9 @@
           "lv": 1,
           "description": "正の整数のみの単純な比例問題",
           "atom_constraints": {
-            "LinearFuncAtom": {
-              "force_proportion": true,
-              "max_slope": 5,
-              "force_integer_slope": true,
-              "allow_negative": false
+            "EquationAtom": {
+              "is_integer_solution": true,
+              "max_coefficient": 5
             }
           },
           "blueprint_params": {},
@@ -5396,11 +5278,9 @@
           "lv": 2,
           "description": "負の数を含む比例の文章題",
           "atom_constraints": {
-            "LinearFuncAtom": {
-              "force_proportion": true,
-              "max_slope": 5,
-              "force_integer_slope": true,
-              "allow_negative": true
+            "EquationAtom": {
+              "is_integer_solution": true,
+              "max_coefficient": 8
             }
           },
           "blueprint_params": {},
@@ -5412,11 +5292,9 @@
           "lv": 3,
           "description": "分数や単位変換を伴う比例問題",
           "atom_constraints": {
-            "LinearFuncAtom": {
-              "force_proportion": true,
-              "max_slope": 10,
-              "force_integer_slope": false,
-              "allow_negative": true
+            "EquationAtom": {
+              "is_integer_solution": false,
+              "max_coefficient": 10
             }
           },
           "blueprint_params": {},
@@ -5430,10 +5308,9 @@
           "lv": 1,
           "description": "正の傾きを持つ比例のグラフ",
           "atom_constraints": {
-            "LinearFuncAtom": {
-              "force_proportion": true,
+            "NumberAtom": {
               "allow_negative": false,
-              "max_slope": 3
+              "max_value": 3
             }
           },
           "blueprint_params": {},
@@ -5445,10 +5322,9 @@
           "lv": 2,
           "description": "負の傾きを含む比例のグラフ",
           "atom_constraints": {
-            "LinearFuncAtom": {
-              "force_proportion": true,
+            "NumberAtom": {
               "allow_negative": true,
-              "max_slope": 5
+              "max_value": 5
             }
           },
           "blueprint_params": {},
@@ -5460,11 +5336,9 @@
           "lv": 3,
           "description": "一次関数のグラフと交点・面積",
           "atom_constraints": {
-            "LinearFuncAtom": {
-              "force_proportion": false,
+            "NumberAtom": {
               "allow_negative": false,
-              "max_slope": 3,
-              "max_intercept": 3
+              "max_value": 4
             }
           },
           "blueprint_params": {},
@@ -5476,12 +5350,9 @@
           "lv": 4,
           "description": "分数傾きを含む複雑な図形問題",
           "atom_constraints": {
-            "LinearFuncAtom": {
-              "force_proportion": false,
+            "NumberAtom": {
               "allow_negative": true,
-              "max_slope": 5,
-              "force_integer_slope": false,
-              "max_intercept": 5
+              "max_value": 8
             }
           },
           "blueprint_params": {},
@@ -5491,7 +5362,9 @@
         }
       ]
     },
-    "execute_blueprint_by_form": {}
+    "execute_blueprint_by_form": {
+      "word_problem": "SolveEquationStructure"
+    }
   },
   "g1_l33": {
     "title": "反比例の意味と式（y=a/x）",
@@ -5505,16 +5378,7 @@
       "linear_function"
     ],
     "optional_tags": [],
-    "atom_constraints": {
-      "LinearFuncAtom": {
-        "max_slope": 5,
-        "force_integer_slope": true
-      },
-      "QuadraticFuncAtom": {
-        "max_a_value": 3,
-        "is_pure_form": true
-      }
-    },
+    "atom_constraints": {},
     "visual_component": "Graph_Renderer",
     "raw_y_base": 300,
     "y_base": 6,
@@ -5561,10 +5425,9 @@
           "lv": 1,
           "description": "正の整数のみの単純な反比例",
           "atom_constraints": {
-            "InverseProportionalityAtom": {
-              "max_a": 12,
-              "allow_negative": false,
-              "force_integer_a": true
+            "EquationAtom": {
+              "is_integer_solution": true,
+              "max_coefficient": 12
             }
           },
           "blueprint_params": {},
@@ -5576,10 +5439,9 @@
           "lv": 2,
           "description": "負の数を含む反比例の文章題",
           "atom_constraints": {
-            "InverseProportionalityAtom": {
-              "max_a": 20,
-              "allow_negative": true,
-              "force_integer_a": true
+            "EquationAtom": {
+              "is_integer_solution": true,
+              "max_coefficient": 20
             }
           },
           "blueprint_params": {},
@@ -5591,10 +5453,9 @@
           "lv": 3,
           "description": "定数aを求めてから計算する2段階問題",
           "atom_constraints": {
-            "InverseProportionalityAtom": {
-              "max_a": 30,
-              "allow_negative": true,
-              "force_integer_a": true
+            "EquationAtom": {
+              "is_integer_solution": true,
+              "max_coefficient": 30
             }
           },
           "blueprint_params": {},
@@ -5606,10 +5467,9 @@
           "lv": 4,
           "description": "分数や単位変換を伴う複雑な文章題",
           "atom_constraints": {
-            "InverseProportionalityAtom": {
-              "max_a": 50,
-              "allow_negative": true,
-              "force_integer_a": false
+            "EquationAtom": {
+              "is_integer_solution": false,
+              "max_coefficient": 50
             }
           },
           "blueprint_params": {},
@@ -5737,7 +5597,8 @@
       ]
     },
     "execute_blueprint_by_form": {
-      "knowledge": "KnowledgeBaseStructure"
+      "knowledge": "KnowledgeBaseStructure",
+      "word_problem": "SolveEquationStructure"
     }
   },
   "g1_l34": {
@@ -5752,16 +5613,7 @@
       "linear_function"
     ],
     "optional_tags": [],
-    "atom_constraints": {
-      "LinearFuncAtom": {
-        "max_slope": 5,
-        "force_integer_slope": true
-      },
-      "QuadraticFuncAtom": {
-        "max_a_value": 3,
-        "is_pure_form": true
-      }
-    },
+    "atom_constraints": {},
     "visual_component": "Graph_Renderer",
     "raw_y_base": 300,
     "y_base": 6,
@@ -5922,16 +5774,7 @@
       "linear_function"
     ],
     "optional_tags": [],
-    "atom_constraints": {
-      "LinearFuncAtom": {
-        "max_slope": 5,
-        "force_integer_slope": true
-      },
-      "QuadraticFuncAtom": {
-        "max_a_value": 3,
-        "is_pure_form": true
-      }
-    },
+    "atom_constraints": {},
     "visual_component": "Graph_Renderer",
     "raw_y_base": 300,
     "y_base": 6,
@@ -5977,10 +5820,9 @@
           "lv": 1,
           "description": "正の整数aのグラフ読み取り",
           "atom_constraints": {
-            "LinearFuncAtom": {
-              "max_slope": 6,
-              "force_integer_slope": true,
-              "allow_negative": false
+            "NumberAtom": {
+              "allow_negative": false,
+              "max_value": 6
             }
           },
           "blueprint_params": {},
@@ -5992,10 +5834,9 @@
           "lv": 2,
           "description": "負の整数aを含むグラフ読み取り",
           "atom_constraints": {
-            "LinearFuncAtom": {
-              "max_slope": 6,
-              "force_integer_slope": true,
-              "allow_negative": true
+            "NumberAtom": {
+              "allow_negative": true,
+              "max_value": 6
             }
           },
           "blueprint_params": {},
@@ -6007,9 +5848,8 @@
           "lv": 3,
           "description": "座標条件からの式決定",
           "atom_constraints": {
-            "LinearFuncAtom": {
-              "max_slope": 12,
-              "force_integer_slope": true
+            "NumberAtom": {
+              "max_value": 12
             }
           },
           "blueprint_params": {},
@@ -6021,9 +5861,8 @@
           "lv": 4,
           "description": "図形面積と絡めた複合問題",
           "atom_constraints": {
-            "LinearFuncAtom": {
-              "max_slope": 10,
-              "force_integer_slope": false
+            "NumberAtom": {
+              "max_value": 10
             }
           },
           "blueprint_params": {},
@@ -6032,7 +5871,8 @@
           "implementation_note": "面積計算を伴うため、計算負荷を考慮し傾き(定数)の範囲を調整。"
         }
       ]
-    }
+    },
+    "execute_blueprint_by_form": {}
   },
   "g1_l36": {
     "title": "比例・反比例を利用して身のまわりの問題を解く",
@@ -6046,16 +5886,7 @@
       "linear_function"
     ],
     "optional_tags": [],
-    "atom_constraints": {
-      "LinearFuncAtom": {
-        "max_slope": 5,
-        "force_integer_slope": true
-      },
-      "QuadraticFuncAtom": {
-        "max_a_value": 3,
-        "is_pure_form": true
-      }
-    },
+    "atom_constraints": {},
     "visual_component": "Graph_Renderer",
     "raw_y_base": 550,
     "y_base": 12,
@@ -6072,10 +5903,9 @@
           "lv": 1,
           "description": "正の整数のみの比例計算",
           "atom_constraints": {
-            "LinearFuncAtom": {
-              "force_proportion": true,
+            "NumberAtom": {
               "allow_negative": false,
-              "max_slope": 3
+              "max_value": 3
             }
           },
           "blueprint_params": {},
@@ -6087,10 +5917,9 @@
           "lv": 2,
           "description": "負の数を含む比例計算",
           "atom_constraints": {
-            "LinearFuncAtom": {
-              "force_proportion": true,
+            "NumberAtom": {
               "allow_negative": true,
-              "max_slope": 5
+              "max_value": 5
             }
           },
           "blueprint_params": {},
@@ -6102,12 +5931,9 @@
           "lv": 3,
           "description": "一次関数の整数計算",
           "atom_constraints": {
-            "LinearFuncAtom": {
-              "force_proportion": false,
-              "force_integer_slope": true,
+            "NumberAtom": {
               "allow_negative": true,
-              "max_slope": 5,
-              "max_intercept": 5
+              "max_value": 7
             }
           },
           "blueprint_params": {},
@@ -6119,12 +5945,9 @@
           "lv": 4,
           "description": "分数を含む一次関数計算",
           "atom_constraints": {
-            "LinearFuncAtom": {
-              "force_proportion": false,
-              "force_integer_slope": false,
+            "NumberAtom": {
               "allow_negative": true,
-              "max_slope": 5,
-              "max_intercept": 5
+              "max_value": 9
             }
           },
           "blueprint_params": {},
@@ -6138,10 +5961,9 @@
           "lv": 1,
           "description": "比例の基本的な文章題",
           "atom_constraints": {
-            "LinearFuncAtom": {
-              "force_proportion": true,
-              "max_slope": 5,
-              "force_integer_slope": true
+            "EquationAtom": {
+              "is_integer_solution": true,
+              "max_coefficient": 5
             }
           },
           "blueprint_params": {},
@@ -6153,10 +5975,9 @@
           "lv": 2,
           "description": "比例の数値が大きな文章題",
           "atom_constraints": {
-            "LinearFuncAtom": {
-              "force_proportion": true,
-              "max_slope": 20,
-              "force_integer_slope": true
+            "EquationAtom": {
+              "is_integer_solution": true,
+              "max_coefficient": 20
             }
           },
           "blueprint_params": {},
@@ -6168,11 +5989,9 @@
           "lv": 3,
           "description": "一次関数の文章題（整数）",
           "atom_constraints": {
-            "LinearFuncAtom": {
-              "force_proportion": false,
-              "max_slope": 10,
-              "max_intercept": 10,
-              "force_integer_slope": true
+            "EquationAtom": {
+              "is_integer_solution": true,
+              "max_coefficient": 10
             }
           },
           "blueprint_params": {},
@@ -6184,11 +6003,9 @@
           "lv": 4,
           "description": "一次関数の文章題（分数含む）",
           "atom_constraints": {
-            "LinearFuncAtom": {
-              "force_proportion": false,
-              "max_slope": 10,
-              "max_intercept": 20,
-              "force_integer_slope": false
+            "EquationAtom": {
+              "is_integer_solution": false,
+              "max_coefficient": 10
             }
           },
           "blueprint_params": {},
@@ -6198,7 +6015,9 @@
         }
       ]
     },
-    "execute_blueprint_by_form": {}
+    "execute_blueprint_by_form": {
+      "word_problem": "SolveEquationStructure"
+    }
   },
   "g1_l37": {
     "title": "直線・線分・半直線と角、点と直線の距離",
@@ -11387,12 +11206,7 @@
           "atom_constraints": {
             "PolynomialAtom": {
               "max_degree": 1,
-              "max_coefficient": 10
-            },
-            "NumberAtom": {
-              "allow_negative": true,
-              "force_fraction": true,
-              "max_value": 5
+              "max_coefficient": 18
             }
           },
           "blueprint_params": {
@@ -11400,7 +11214,7 @@
           },
           "verb_config": {},
           "implementable": true,
-          "implementation_note": ""
+          "implementation_note": "元は NumberAtom.force_fraction=true を宣言していたが、required_tags=['polynomial'] のため 実際に選択されるのは PolynomialAtom（NumberAtomは選ばれない）。PolynomialAtomは係数が常に整数で 分数概念が無いため force_fraction は表現不能。代替として max_coefficient を引き上げて難易度を維持。"
         }
       ]
     }
@@ -11945,18 +11759,13 @@
           "atom_constraints": {
             "PolynomialAtom": {
               "max_degree": 1,
-              "max_coefficient": 30
-            },
-            "NumberAtom": {
-              "max_value": 30,
-              "allow_negative": true,
-              "force_fraction": true
+              "max_coefficient": 45
             }
           },
           "blueprint_params": {},
           "verb_config": {},
           "implementable": true,
-          "implementation_note": ""
+          "implementation_note": "元は NumberAtom.force_fraction=true を宣言していたが、required_tags=['polynomial'] のため 実際に選択されるのは PolynomialAtom（NumberAtomは選ばれない）。PolynomialAtomは係数が常に整数で 分数概念が無いため force_fraction は表現不能。代替として max_coefficient を引き上げて難易度を維持。"
         }
       ]
     }
@@ -23787,11 +23596,6 @@
     ],
     "optional_tags": [],
     "atom_constraints": {
-      "NumberAtom": {
-        "allow_negative": true,
-        "max_value": 30,
-        "force_fraction": false
-      },
       "EquationAtom": {
         "degree": 1,
         "max_coefficient": 10,
@@ -23851,17 +23655,14 @@
           "atom_constraints": {
             "SquareRootAtom": {
               "max_base": 20,
-              "max_coefficient": 2,
+              "max_coefficient": 4,
               "allow_simplification": true
-            },
-            "NumberAtom": {
-              "allow_negative": true
             }
           },
           "blueprint_params": {},
           "verb_config": {},
           "implementable": true,
-          "implementation_note": ""
+          "implementation_note": "元は NumberAtom.allow_negative=true を宣言していたが、required_tags=['square_root'] のため両スロットとも SquareRootAtom が選ばれ NumberAtom は生成されない（空振り）。SquareRootAtomに符号概念は無いため、代替として max_coefficient を引き上げて難易度を維持。"
         },
         {
           "lv": 4,
@@ -23869,17 +23670,14 @@
           "atom_constraints": {
             "SquareRootAtom": {
               "max_base": 50,
-              "max_coefficient": 5,
+              "max_coefficient": 6,
               "allow_simplification": true
-            },
-            "NumberAtom": {
-              "max_value": 10
             }
           },
           "blueprint_params": {},
           "verb_config": {},
           "implementable": true,
-          "implementation_note": ""
+          "implementation_note": "元は NumberAtom.max_value=10 を宣言していたが、required_tags=['square_root'] のため両スロットとも SquareRootAtom が選ばれ NumberAtom は生成されない（空振り）。代替として max_coefficient を引き上げ。"
         }
       ],
       "knowledge": [
@@ -23996,11 +23794,6 @@
     ],
     "optional_tags": [],
     "atom_constraints": {
-      "NumberAtom": {
-        "allow_negative": true,
-        "max_value": 30,
-        "force_fraction": false
-      },
       "EquationAtom": {
         "degree": 1,
         "max_coefficient": 10,
@@ -24028,9 +23821,10 @@
           "lv": 1,
           "description": "分数の小数変換と基本計算",
           "atom_constraints": {
-            "NumberAtom": {
-              "max_value": 10,
-              "force_fraction": true
+            "SquareRootAtom": {
+              "max_base": 6,
+              "allow_simplification": false,
+              "max_coefficient": 1
             }
           },
           "blueprint_params": {
@@ -24038,7 +23832,7 @@
           },
           "verb_config": {},
           "implementable": true,
-          "implementation_note": ""
+          "implementation_note": "元は NumberAtom.force_fraction=true を宣言していたが、required_tags=['square_root'] のため SquareRootAtom が選ばれ NumberAtom は生成されない（空振り）。SquareRootAtomに分数概念は無いため、max_base/max_coefficientを最小にして「入門レベル」の位置づけを維持。"
         },
         {
           "lv": 2,
@@ -24137,11 +23931,7 @@
         {
           "lv": 3,
           "description": "循環小数の分数変換",
-          "atom_constraints": {
-            "NumberAtom": {
-              "force_fraction": true
-            }
-          },
+          "atom_constraints": {},
           "blueprint_params": {
             "knowledge_hint": "循環小数の分数変換",
             "knowledge_hints": [
@@ -24154,7 +23944,7 @@
             "type": "convert_recurring_decimal"
           },
           "implementable": true,
-          "implementation_note": "循環小数の表記を扱う特殊なverbが必要。"
+          "implementation_note": "knowledge form は KnowledgeCheckVerb がサンプルした Atom の数値を出力に一切反映しない設計（operands=[hint] のみ）。force_fraction 等の atom_constraints はここでは観測不能なため削除。本Lvの実際の難易度差別化は blueprint_params.knowledge_hint（既に相互に異なる文言）で行われている。"
         },
         {
           "lv": 4,
@@ -24301,11 +24091,6 @@
     ],
     "optional_tags": [],
     "atom_constraints": {
-      "NumberAtom": {
-        "allow_negative": true,
-        "max_value": 30,
-        "force_fraction": false
-      },
       "EquationAtom": {
         "degree": 1,
         "max_coefficient": 10,
@@ -24595,11 +24380,6 @@
     ],
     "optional_tags": [],
     "atom_constraints": {
-      "NumberAtom": {
-        "allow_negative": true,
-        "max_value": 30,
-        "force_fraction": false
-      },
       "EquationAtom": {
         "degree": 1,
         "max_coefficient": 10,
@@ -24626,91 +24406,81 @@
           "lv": 1,
           "description": "単項×多項式の分配法則",
           "atom_constraints": {
-            "NumberAtom": {
-              "max_value": 5
-            },
             "SquareRootAtom": {
               "max_base": 10,
-              "allow_simplification": false
+              "allow_simplification": false,
+              "max_coefficient": 3
             }
           },
           "blueprint_params": {
             "operation": "*"
           },
           "implementable": true,
-          "implementation_note": ""
+          "implementation_note": "元は NumberAtom.max_value を宣言していたが、required_tags=['square_root'] のため両スロットとも SquareRootAtom が選ばれ NumberAtom は生成されない（空振り）。max_coefficient に再ターゲット。"
         },
         {
           "lv": 2,
           "description": "乗法公式(和の平方)の利用",
           "atom_constraints": {
-            "NumberAtom": {
-              "max_value": 5
-            },
             "SquareRootAtom": {
               "max_base": 15,
-              "allow_simplification": true
+              "allow_simplification": true,
+              "max_coefficient": 4
             }
           },
           "blueprint_params": {
             "operation": "*"
           },
           "implementable": true,
-          "implementation_note": ""
+          "implementation_note": "元は NumberAtom.max_value を宣言していたが、required_tags=['square_root'] のため両スロットとも SquareRootAtom が選ばれ NumberAtom は生成されない（空振り）。max_coefficient に再ターゲット。"
         },
         {
           "lv": 3,
           "description": "乗法公式(差の積)の利用",
           "atom_constraints": {
-            "NumberAtom": {
-              "max_value": 8
-            },
             "SquareRootAtom": {
               "max_base": 20,
-              "allow_simplification": true
+              "allow_simplification": true,
+              "max_coefficient": 5
             }
           },
           "blueprint_params": {
             "operation": "*"
           },
           "implementable": true,
-          "implementation_note": ""
+          "implementation_note": "元は NumberAtom.max_value を宣言していたが、required_tags=['square_root'] のため両スロットとも SquareRootAtom が選ばれ NumberAtom は生成されない（空振り）。max_coefficient に再ターゲット。"
         },
         {
           "lv": 4,
           "description": "簡約を含む分配法則と加減",
           "atom_constraints": {
-            "NumberAtom": {
-              "max_value": 10
-            },
             "SquareRootAtom": {
               "max_base": 30,
-              "allow_simplification": true
+              "allow_simplification": true,
+              "max_coefficient": 7
             }
           },
           "blueprint_params": {
             "operation": "+"
           },
           "implementable": true,
-          "implementation_note": ""
+          "implementation_note": "元は NumberAtom.max_value を宣言していたが、required_tags=['square_root'] のため両スロットとも SquareRootAtom が選ばれ NumberAtom は生成されない（空振り）。max_coefficient に再ターゲット。"
         },
         {
           "lv": 5,
           "description": "複雑な展開と加減の混合",
           "atom_constraints": {
-            "NumberAtom": {
-              "max_value": 15
-            },
             "SquareRootAtom": {
               "max_base": 50,
-              "allow_simplification": true
+              "allow_simplification": true,
+              "max_coefficient": 10
             }
           },
           "blueprint_params": {
             "operation": "-"
           },
           "implementable": true,
-          "implementation_note": ""
+          "implementation_note": "元は NumberAtom.max_value を宣言していたが、required_tags=['square_root'] のため両スロットとも SquareRootAtom が選ばれ NumberAtom は生成されない（空振り）。max_coefficient に再ターゲット。"
         }
       ]
     }
@@ -27781,9 +27551,6 @@
             "PolygonAtom": {
               "polygon_type": "triangle",
               "max_side_length": 20
-            },
-            "NumberAtom": {
-              "force_fraction": true
             }
           },
           "blueprint_params": {
@@ -27799,7 +27566,7 @@
             "type": "find_side_length"
           },
           "implementable": true,
-          "implementation_note": ""
+          "implementation_note": "knowledge form は KnowledgeCheckVerb がサンプルした Atom の数値を出力に一切反映しない設計（operands=[hint] のみ）。force_fraction 等の atom_constraints はここでは観測不能なため削除。本Lvの実際の難易度差別化は blueprint_params.knowledge_hint（既に相互に異なる文言）で行われている。"
         },
         {
           "lv": 4,
