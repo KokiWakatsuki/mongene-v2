@@ -1,8 +1,11 @@
 """G3 答え正当性 (answer_correctness)
 
 spec §3-G3:
-- スコープを明示: `calculation` 形式のみ自動化。content_problem_text から数式を抽出し
-  SymPy で再解答、ground truth の答えと一致するか。
+- スコープを明示: `calculation` 形式のみ自動化。content_problem_text と各
+  sub_questions[].prompt_text から数式を抽出し（content を先に試し、無ければ各
+  prompt_text を順に試す）、最初に抽出できた数式で SymPy 再解答、
+  ground truth の答えと一致するか判定する。
+  実LLM生成では計算式が content ではなく prompt_text に入るケースが多いため。
 - 非計算形式は N/A（G1/G2/G4 で代替）。過剰な自然言語パースを試みない（誤判定を避ける）。
 - 誤判定を出さない方を優先（高精度・中再現率でよい）。
 
@@ -85,7 +88,14 @@ def check(product: dict[str, Any], ground_truth: dict[str, Any]) -> GateResult:
         return GateResult(GATE_ID, "N/A", "ground truth に sub_questions が無い")
 
     content = product.get("content_problem_text", "") or ""
-    expr_str = _extract_calculation_expr(content)
+    prompt_texts = [sq.get("prompt_text", "") or "" for sq in product.get("sub_questions", []) or []]
+
+    expr_str = None
+    for candidate_text in [content, *prompt_texts]:
+        expr_str = _extract_calculation_expr(candidate_text)
+        if expr_str is not None:
+            break
+
     if expr_str is None:
         return GateResult(GATE_ID, "N/A", "問題文から再解答可能な数式を抽出できなかった")
 
