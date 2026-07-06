@@ -14991,10 +14991,10 @@
         },
         {
           "lv": 2,
-          "description": "同側内角を用いた補角の計算",
+          "description": "同位角の直接的な認識",
           "atom_constraints": {
             "LineAngleAtom": {
-              "relation_type": "co_interior"
+              "relation_type": "corresponding"
             }
           },
           "blueprint_params": {
@@ -15006,7 +15006,7 @@
         },
         {
           "lv": 3,
-          "description": "複合的な平行線図形の角度計算",
+          "description": "同側内角を用いた補角の計算",
           "atom_constraints": {
             "LineAngleAtom": {
               "relation_type": "co_interior"
