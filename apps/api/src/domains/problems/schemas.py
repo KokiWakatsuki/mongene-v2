@@ -19,6 +19,7 @@ class ProblemGenerationRequest(BaseModel):
     target_difficulty: Optional[int] = Field(default=None, ge=1, le=100)
     target_level: Optional[int] = Field(default=None, ge=1)
     unlearned_lesson_ids: List[str] = Field(default_factory=list)
+    seed: Optional[int] = Field(default=None, ge=1)
 
     @model_validator(mode="after")
     def check_difficulty_or_level(self) -> "ProblemGenerationRequest":

@@ -207,6 +207,7 @@ def generate_problem(
         problem_form=request.problem_form,
         lesson_id=lesson_id,
         unlearned_lesson_ids=request.unlearned_lesson_ids,
+        seed=request.seed,
     )
 
     # 1. PrefetchCache から取り出し（あれば即返却 + バックグラウンドで補充）
@@ -309,6 +310,7 @@ def inspect_middle_representation(request: ProblemGenerationRequest) -> Dict[str
             target_level=request.target_level,
             problem_form=request.problem_form,
             lesson_id=lesson_id,
+            seed=request.seed,
         )
         result = runner.run(gen_request, lesson_mapping)
     finally:

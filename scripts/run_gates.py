@@ -129,13 +129,17 @@ def _make_inspect_client():
     return TestClient(app)
 
 
-def _inspect_once(client, lesson_id: str, grade: int, form: str, level: int) -> dict[str, Any]:
+def _inspect_once(
+    client, lesson_id: str, grade: int, form: str, level: int, seed: Optional[int] = None
+) -> dict[str, Any]:
     payload = {
         "curriculum": {"grade": grade, "lesson_ids": [lesson_id]},
         "problem_form": form,
         "target_level": level,
         "unlearned_lesson_ids": [],
     }
+    if seed is not None:
+        payload["seed"] = seed
     r = client.post("/problems/inspect", json=payload)
     if r.status_code != 200:
         raise RuntimeError(f"inspect failed status={r.status_code} body={r.text[:300]}")
