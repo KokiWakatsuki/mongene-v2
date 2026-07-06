@@ -1,8 +1,11 @@
-"""`scripts/run_gates.py` のグルーピング/G6走査ロジックの単体テスト。
+"""`scripts/run_gates.py` の G6走査ロジック（+ 既存の1:1ゲート読み込み）の単体テスト。
 
-実コーパスは使わず、合成した3レベル(min/mid/max) ground truth JSON を一時ディレクトリに書き出し、
-`load_ground_truth_corpus` + `run_g6_monotonicity` に通して、単調/非単調を正しく分類できることを
-確認する。LLM は使わない。
+G6-b は `master_data/mapping.json` 相当の合成 dict を直接渡して判定する（生成不要）。
+G6-a は生成を要するため、ここでは `run_g6a_conformance` 本体ではなく、その内部で使う
+`check_conformance` 呼び出し部分の配線を確認する薄いテストに留める（実生成は
+`scripts/build_ground_truth_corpus.py` 等の統合実行で確認する）。
+
+LLM は使わない。
 """
 from __future__ import annotations
 
@@ -10,19 +13,11 @@ import json
 from pathlib import Path
 from typing import Any
 
-from scripts.eval_gates.g6_difficulty_monotonicity import check_monotonicity
-from scripts.run_gates import load_ground_truth_corpus, run_g6_monotonicity
+from scripts.run_gates import (
+    load_ground_truth_corpus,
+    run_g6b_distinctness,
+)
 from tests.eval_gates.conftest import make_ground_truth
-
-
-def _gt_with_steps(step_count: int, max_operand: int, has_sqrt: bool = False) -> dict[str, Any]:
-    gt = make_ground_truth(answer_sympy_form="sqrt(2)" if has_sqrt else "10")
-    logic_steps = [
-        {"operation_name": "op", "operands": [max_operand, 1], "sympy_expr": "10"}
-        for _ in range(step_count)
-    ]
-    gt["sub_questions"][0]["logic_steps"] = logic_steps
-    return gt
 
 
 def _write_gt(out_dir: Path, lesson: str, form: str, level: str, data: dict[str, Any]) -> None:
@@ -31,10 +26,11 @@ def _write_gt(out_dir: Path, lesson: str, form: str, level: str, data: dict[str,
 
 
 def test_load_ground_truth_corpus_groups_by_lesson_and_form(tmp_path: Path) -> None:
-    _write_gt(tmp_path, "g1_l1", "calculation", "min", _gt_with_steps(1, 5))
-    _write_gt(tmp_path, "g1_l1", "calculation", "mid", _gt_with_steps(2, 20))
-    _write_gt(tmp_path, "g1_l1", "calculation", "max", _gt_with_steps(3, 50))
-    _write_gt(tmp_path, "g1_l1", "word_problem", "min", _gt_with_steps(1, 5))
+    gt = make_ground_truth()
+    _write_gt(tmp_path, "g1_l1", "calculation", "min", gt)
+    _write_gt(tmp_path, "g1_l1", "calculation", "mid", gt)
+    _write_gt(tmp_path, "g1_l1", "calculation", "max", gt)
+    _write_gt(tmp_path, "g1_l1", "word_problem", "min", gt)
 
     grouped = load_ground_truth_corpus(tmp_path)
 
@@ -44,8 +40,7 @@ def test_load_ground_truth_corpus_groups_by_lesson_and_form(tmp_path: Path) -> N
 
 
 def test_load_ground_truth_corpus_ignores_non_matching_files(tmp_path: Path) -> None:
-    _write_gt(tmp_path, "g1_l1", "calculation", "min", _gt_with_steps(1, 5))
-    # 命名規則に合わない補助ファイル（失敗ログ等）は無視されるべき
+    _write_gt(tmp_path, "g1_l1", "calculation", "min", make_ground_truth())
     (tmp_path / "ground_truth_build_failures.json").write_text("[]", encoding="utf-8")
 
     grouped = load_ground_truth_corpus(tmp_path)
@@ -53,77 +48,122 @@ def test_load_ground_truth_corpus_ignores_non_matching_files(tmp_path: Path) -> 
     assert list(grouped.keys()) == [("g1_l1", "calculation")]
 
 
-def test_run_g6_monotonicity_classifies_monotonic_group_as_pass(tmp_path: Path) -> None:
-    grouped = {
-        ("g1_l1", "calculation"): {
-            "min": _gt_with_steps(1, 5),
-            "mid": _gt_with_steps(2, 20),
-            "max": _gt_with_steps(3, 50, has_sqrt=True),
-        }
-    }
-
-    results = run_g6_monotonicity(grouped, check_monotonicity)
-
-    assert len(results) == 1
-    assert results[0]["lesson_id"] == "g1_l1"
-    assert results[0]["form"] == "calculation"
-    assert results[0]["verdict"] == "PASS"
-
-
-def test_run_g6_monotonicity_classifies_non_monotonic_group_as_fail(tmp_path: Path) -> None:
-    grouped = {
-        ("g1_l2", "knowledge"): {
-            # min/mid/max のスコアが全部同じ = 実データで頻出する「分離しない」パターンを再現
-            "min": _gt_with_steps(1, 5),
-            "mid": _gt_with_steps(1, 5),
-            "max": _gt_with_steps(1, 5),
-        }
-    }
-
-    results = run_g6_monotonicity(grouped, check_monotonicity)
-
-    assert len(results) == 1
-    assert results[0]["verdict"] == "FAIL"
-
-
-def test_run_g6_monotonicity_marks_incomplete_group_as_na() -> None:
-    grouped = {
-        ("g2_l45", "visual"): {
-            "min": _gt_with_steps(1, 5),
-            "mid": _gt_with_steps(1, 5),
-            # max が無い（例: NoCompatibleBlueprintError でground truth生成に失敗したケース）
-        }
-    }
-
-    results = run_g6_monotonicity(grouped, check_monotonicity)
-
-    assert len(results) == 1
-    assert results[0]["verdict"] == "N/A"
-    assert "揃っていない" in results[0]["reason"]
-
-
-def test_run_g6_monotonicity_handles_multiple_groups_independently() -> None:
-    grouped = {
-        ("g1_l1", "calculation"): {
-            "min": _gt_with_steps(1, 5),
-            "mid": _gt_with_steps(2, 20),
-            "max": _gt_with_steps(3, 50),
-        },
-        ("g1_l2", "knowledge"): {
-            "min": _gt_with_steps(1, 5),
-            "mid": _gt_with_steps(1, 5),
-            "max": _gt_with_steps(1, 5),
-        },
-    }
-
-    results = run_g6_monotonicity(grouped, check_monotonicity)
-
-    verdicts = {(r["lesson_id"], r["form"]): r["verdict"] for r in results}
-    assert verdicts[("g1_l1", "calculation")] == "PASS"
-    assert verdicts[("g1_l2", "knowledge")] == "FAIL"
-
-
 def test_load_ground_truth_corpus_empty_dir_returns_empty(tmp_path: Path) -> None:
     empty_dir = tmp_path / "does_not_exist"
     grouped = load_ground_truth_corpus(empty_dir)
     assert grouped == {}
+
+
+# ---------------------------------------------------------------------------
+# G6-b: mapping.json 相当の合成 dict を直接走査する
+# ---------------------------------------------------------------------------
+
+
+def _mapping_with_levels(lesson_id: str, form: str, level_defs: list[dict[str, Any]]) -> dict[str, Any]:
+    return {
+        lesson_id: {
+            "grade": 1,
+            "supported_forms": [form],
+            "atom_constraints": {},
+            "difficulty_levels": {form: level_defs},
+        }
+    }
+
+
+def test_run_g6b_distinctness_pass_for_all_distinct_levels() -> None:
+    mapping = _mapping_with_levels(
+        "g1_l3",
+        "calculation",
+        [
+            {"lv": 1, "atom_constraints": {"NumberAtom": {"allow_negative": False}}, "verb_config": {}},
+            {"lv": 2, "atom_constraints": {"NumberAtom": {"allow_negative": True}}, "verb_config": {}},
+        ],
+    )
+    results = run_g6b_distinctness(mapping)
+    assert len(results) == 1
+    assert results[0]["lesson_id"] == "g1_l3"
+    assert results[0]["form"] == "calculation"
+    assert results[0]["verdict"] == "PASS"
+
+
+def test_run_g6b_distinctness_fail_for_collapsed_levels() -> None:
+    """spec 回帰アンカーの縮小版: 同一シグネチャの Lv 群は FAIL。"""
+    mapping = _mapping_with_levels(
+        "g1_l33",
+        "calculation",
+        [
+            {"lv": 1, "atom_constraints": {}, "verb_config": {}},
+            {"lv": 2, "atom_constraints": {}, "verb_config": {}},
+            {"lv": 3, "atom_constraints": {}, "verb_config": {}},
+        ],
+    )
+    results = run_g6b_distinctness(mapping)
+    assert len(results) == 1
+    assert results[0]["verdict"] == "FAIL"
+
+
+def test_run_g6b_distinctness_na_when_no_difficulty_levels() -> None:
+    mapping = {
+        "g1_lX": {
+            "grade": 1,
+            "supported_forms": ["calculation"],
+            "atom_constraints": {},
+            # difficulty_levels 未定義
+        }
+    }
+    results = run_g6b_distinctness(mapping)
+    assert len(results) == 1
+    assert results[0]["verdict"] == "N/A"
+
+
+def test_run_g6b_distinctness_handles_multiple_lessons_independently() -> None:
+    mapping = {
+        "g1_l3": {
+            "grade": 1,
+            "supported_forms": ["calculation"],
+            "atom_constraints": {},
+            "difficulty_levels": {
+                "calculation": [
+                    {"lv": 1, "atom_constraints": {"NumberAtom": {"allow_negative": False}}, "verb_config": {}},
+                    {"lv": 2, "atom_constraints": {"NumberAtom": {"allow_negative": True}}, "verb_config": {}},
+                ]
+            },
+        },
+        "g1_l33": {
+            "grade": 1,
+            "supported_forms": ["calculation"],
+            "atom_constraints": {},
+            "difficulty_levels": {
+                "calculation": [
+                    {"lv": 1, "atom_constraints": {}, "verb_config": {}},
+                    {"lv": 2, "atom_constraints": {}, "verb_config": {}},
+                ]
+            },
+        },
+    }
+    results = run_g6b_distinctness(mapping)
+    verdicts = {(r["lesson_id"], r["form"]): r["verdict"] for r in results}
+    assert verdicts[("g1_l3", "calculation")] == "PASS"
+    assert verdicts[("g1_l33", "calculation")] == "FAIL"
+
+
+def test_run_g6b_distinctness_covers_all_supported_forms_per_lesson() -> None:
+    """1 lesson が複数 form をサポートする場合、form ごとに個別の (lesson,form) 判定を出す。"""
+    mapping = {
+        "g1_l3": {
+            "grade": 1,
+            "supported_forms": ["calculation", "word_problem"],
+            "atom_constraints": {},
+            "difficulty_levels": {
+                "calculation": [
+                    {"lv": 1, "atom_constraints": {"NumberAtom": {"allow_negative": False}}, "verb_config": {}},
+                    {"lv": 2, "atom_constraints": {"NumberAtom": {"allow_negative": True}}, "verb_config": {}},
+                ],
+                # word_problem は difficulty_levels 未定義 → N/A
+            },
+        }
+    }
+    results = run_g6b_distinctness(mapping)
+    by_form = {r["form"]: r["verdict"] for r in results}
+    assert by_form["calculation"] == "PASS"
+    assert by_form["word_problem"] == "N/A"
