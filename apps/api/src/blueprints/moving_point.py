@@ -38,7 +38,14 @@ def build_moving_point_blueprint(params: dict | None = None) -> BlueprintDefinit
             compatible_noun_types=["PolygonAtom"],
             required=True,
         ),
-        supported_forms=["calculation", "word_problem", "visual"],
+        # NOTE(2026-07-07): calc/visual は意図的に未開通。MovingPointStructure は
+        # (1) noun_slot が accepted_tags=["plane_geometry"] のみで CircleAtom が混入
+        #     （動点問題なのに円が約57%出る）、(2) 3小問が動点の時間変化を反映せず
+        #     全て同一答えを返す、という構造欠陥を持つ。契約哲学「壊れた出力を隠すより
+        #     422で誠実に失敗」に従い、これらが直る（accepted_noun_types付与＋
+        #     時間パラメトリックな面積Verb）までは word_problem 以外を開通しない。
+        #     詳細は docs/HANDOFF_2026-07-06.md §13。
+        supported_forms=["word_problem"],
         story_required=False,
         base_difficulty_calculator=lambda nouns, ctx: int(ctx.get("y_base", 65)),
         subquestion_strategy=SubQuestionStrategy(
