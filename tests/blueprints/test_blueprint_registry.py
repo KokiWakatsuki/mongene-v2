@@ -160,10 +160,9 @@ def test_sequence_pattern_runs(tmp_path: Path) -> None:
 
 
 def test_angle_calculation_runs(tmp_path: Path) -> None:
-    # AngleCalculationStructure の実際の supported_forms は ["word_problem"] のみ
-    # （calculation ではない）。form/blueprint 契約強制により、blueprint が
-    # 実際にサポートしない form を渡すと NoCompatibleBlueprintError になるため、
-    # 実態に合わせて word_problem で検証する。
+    # AngleCalculationStructure の supported_forms は Slice 3a（2026-07-07）で
+    # ["calculation", "word_problem"] に是正済み（visual は builder 未対応の
+    # ため Slice 3b まで追加しない）。ここでは word_problem 経路を引き続き検証する。
     runner = _make_runner(tmp_path / "dedup.db")
     request = GenerationRequest(target_difficulty=45, problem_form="word_problem", lesson_id="g2_l40")
     result = runner.run(request, _mapping_for("AngleCalculationStructure", 2, 45, "word_problem"))

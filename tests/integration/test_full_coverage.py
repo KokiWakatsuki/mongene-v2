@@ -14,6 +14,10 @@ lesson には引き続き 100% 成功を要求する。mapping.json 側の修正
 2026-07-07: 層B（3D_Renderer）に visual を開通（BasicDifferenceStructure /
 PythagoreanSpaceStructure の supported_forms に "visual" を追加）したことで、
 g3_l56 は visual form が契約適合となり生成成功に転じたため、このリストから除外。
+
+2026-07-07 Slice 3a: under-declared blueprint 是正（AngleCalculationStructure.
+supported_forms に "calculation" を追加）したことで、g2_l33 は calculation form
+が契約適合となり生成成功に転じたため、このリストから除外。
 """
 from __future__ import annotations
 
@@ -28,7 +32,7 @@ MAPPING_PATH = REPO_ROOT / "master_data" / "mapping.json"
 # 宣言された supported_forms の全てが、候補 blueprint の supported_forms と
 # 一致しない lesson（= mapping.json 側の宣言ミス）。
 # `.venv/bin/python scripts/validate_form_blueprint_contract.py` で確認済み。
-KNOWN_CONTRACT_VIOLATION_LESSONS = {"g1_l15", "g2_l33"}
+KNOWN_CONTRACT_VIOLATION_LESSONS = {"g1_l15"}
 
 
 def test_full_coverage_meets_quality_gates() -> None:
