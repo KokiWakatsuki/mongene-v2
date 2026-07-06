@@ -32,6 +32,8 @@ class DataSetAtom(NounAtom):
         q1: sympy.Expr | None = None,
         q3: sympy.Expr | None = None,
         distribution_type: str = "uniform",
+        cumulative_frequency: sympy.Expr | None = None,
+        cumulative_relative_frequency: sympy.Expr | None = None,
     ) -> None:
         self.values: List[sympy.Expr] = values or []
         self.frequency_distribution: List[Tuple[float, float, int]] = (
@@ -43,6 +45,8 @@ class DataSetAtom(NounAtom):
         self.q1: sympy.Expr = sympy.Integer(0) if q1 is None else q1
         self.q3: sympy.Expr = sympy.Integer(0) if q3 is None else q3
         self.distribution_type: str = distribution_type
+        self.cumulative_frequency: sympy.Expr = sympy.Integer(0) if cumulative_frequency is None else cumulative_frequency
+        self.cumulative_relative_frequency: sympy.Expr = sympy.Integer(0) if cumulative_relative_frequency is None else cumulative_relative_frequency
 
     def sample(self, constraints: AtomConstraints, rng: random.Random) -> "DataSetAtom":
         custom = constraints.custom or {}
@@ -110,6 +114,11 @@ class DataSetAtom(NounAtom):
                 count = sum(1 for v in raw_values if bin_lo <= v < bin_hi)
             freq_dist.append((float(bin_lo), float(bin_hi), count))
 
+        # 3番目の階級（中間）までの累積度数・累積相対度数
+        mid_idx = min(2, len(freq_dist) - 1)
+        cum_freq = sum(c for (_, _, c) in freq_dist[:mid_idx + 1])
+        cum_rel_freq = sympy.Rational(cum_freq, data_size).limit_denominator(1000)
+
         return DataSetAtom(
             values=values,
             frequency_distribution=freq_dist,
@@ -119,6 +128,8 @@ class DataSetAtom(NounAtom):
             q1=q1_val,
             q3=q3_val,
             distribution_type=distribution_type,
+            cumulative_frequency=sympy.Integer(cum_freq),
+            cumulative_relative_frequency=cum_rel_freq,
         )
 
     def get_symbols(self) -> Dict[str, sympy.Expr]:
@@ -129,6 +140,8 @@ class DataSetAtom(NounAtom):
             "q1": self.q1,
             "q3": self.q3,
             "size": sympy.Integer(len(self.values)),
+            "cumulative_frequency": self.cumulative_frequency,
+            "cumulative_relative_frequency": self.cumulative_relative_frequency,
         }
 
     @classmethod

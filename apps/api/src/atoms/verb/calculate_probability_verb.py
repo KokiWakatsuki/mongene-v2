@@ -38,8 +38,8 @@ class CalculateProbabilityVerb(VerbAtom):
         if self.favorable is not None:
             fav = max(0, min(self.favorable, sample_space))
         else:
-            descriptors = symbols.get("event_descriptors") or []
-            fav = max(1, len(descriptors)) if descriptors else max(1, sample_space // 2)
+            # rng を使って有利な結果数をランダム選択（1 以上 sample_space 未満）
+            fav = rng.randint(1, max(1, sample_space - 1))
         prob = sympy.Rational(fav, sample_space)
         return LogicStep(
             operation_name="calculate_probability",

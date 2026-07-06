@@ -14,26 +14,25 @@ from apps.api.src.core.abc.blueprint import (
 from apps.api.src.core.abc.visuals import VisualSlot
 
 
-def build_construction_blueprint() -> BlueprintDefinition:
+def build_construction_blueprint(params: dict | None = None) -> BlueprintDefinition:
+    p = params or {}
+    construction_type = p.get("construction_type", "perp_bisector")
+    needs_three_points = construction_type == "angle_bisector"
+    input_slots = ["point_a", "point_b", "point_c"] if needs_three_points else ["point_a", "point_b"]
+    noun_slots = {
+        "point_a": NounSlot(slot_name="point_a", accepted_tags=["coordinate"], required=True),
+        "point_b": NounSlot(slot_name="point_b", accepted_tags=["coordinate"], required=True),
+    }
+    if needs_three_points:
+        noun_slots["point_c"] = NounSlot(slot_name="point_c", accepted_tags=["coordinate"], required=True)
     return BlueprintDefinition(
         blueprint_id="ConstructionStructure",
         blueprint_version="v1",
-        noun_slots={
-            "point_a": NounSlot(
-                slot_name="point_a",
-                accepted_tags=["coordinate"],
-                required=True,
-            ),
-            "point_b": NounSlot(
-                slot_name="point_b",
-                accepted_tags=["coordinate"],
-                required=True,
-            ),
-        },
+        noun_slots=noun_slots,
         verb_invocations=[
             VerbInvocation(
-                verb=ConstructGeometryVerb(construction_type="perp_bisector"),
-                input_slots=["point_a", "point_b"],
+                verb=ConstructGeometryVerb(construction_type=construction_type),
+                input_slots=input_slots,
                 output_slot="construction",
                 on_failure="retry_seed",
             ),
@@ -43,7 +42,7 @@ def build_construction_blueprint() -> BlueprintDefinition:
             compatible_noun_types=["PointAtom", "PolygonAtom", "CircleAtom"],
             required=True,
         ),
-        supported_forms=["visual"],  # 作図は visual（図形情報から立式）に分類
+        supported_forms=["visual", "knowledge"],
         story_required=False,
         base_difficulty_calculator=lambda nouns, ctx: int(ctx.get("y_base", 50)),
         subquestion_strategy=SubQuestionStrategy(

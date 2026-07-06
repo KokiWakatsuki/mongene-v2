@@ -45,6 +45,7 @@ from apps.api.src.core.runner.blueprint_runner import (
 
 EXPECTED_BLUEPRINTS = {
     "BasicCalculationStructure",
+    "SolveEquationStructure",
     "WordProblemStructure",
     "BasicGeometryMeasurementStructure",
     "BasicDifferenceStructure",
@@ -57,8 +58,12 @@ EXPECTED_BLUEPRINTS = {
     "SequencePatternStructure",
     "PythagoreanStructure",
     "PythagoreanSpaceStructure",
-    
-    
+    "DescriptiveStatsStructure",
+    "SampleSurveyStructure",
+    "FactorizeStructure",
+    "QuadraticFunctionStructure",
+    "SimultaneousEquationsStructure",
+    "KnowledgeBaseStructure",
 }
 
 

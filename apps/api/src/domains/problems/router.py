@@ -49,8 +49,10 @@ from apps.api.src.atoms.verb import (  # noqa: F401 - Verb 登録のため
     measure_geometry_verb,
     prove_algebraic_verb,
     prove_geometry_verb,
+    simultaneous_eq_verb,
     slice_solid_verb,
     solve_eq_verb,
+    knowledge_check_verb,
     solve_linear_diophantine_verb,
     transform_shape_verb,
     unfold_net_verb,
@@ -201,6 +203,7 @@ def generate_problem(
     runner = _get_runner()
     gen_request = GenerationRequest(
         target_difficulty=request.target_difficulty,
+        target_level=request.target_level,
         problem_form=request.problem_form,
         lesson_id=lesson_id,
         unlearned_lesson_ids=request.unlearned_lesson_ids,
@@ -303,6 +306,7 @@ def inspect_middle_representation(request: ProblemGenerationRequest) -> Dict[str
         )
         gen_request = GenerationRequest(
             target_difficulty=request.target_difficulty,
+            target_level=request.target_level,
             problem_form=request.problem_form,
             lesson_id=lesson_id,
         )

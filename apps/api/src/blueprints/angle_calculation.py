@@ -14,7 +14,8 @@ from apps.api.src.core.abc.blueprint import (
 from apps.api.src.core.abc.visuals import VisualSlot
 
 
-def build_angle_calculation_blueprint() -> BlueprintDefinition:
+def build_angle_calculation_blueprint(params: dict | None = None) -> BlueprintDefinition:
+    theorem = (params or {}).get("theorem", "parallel_alternate")
     return BlueprintDefinition(
         blueprint_id="AngleCalculationStructure",
         blueprint_version="v1",
@@ -27,7 +28,7 @@ def build_angle_calculation_blueprint() -> BlueprintDefinition:
         },
         verb_invocations=[
             VerbInvocation(
-                verb=FindAngleVerb(theorem="parallel_alternate"),
+                verb=FindAngleVerb(theorem=theorem),
                 input_slots=["angle_source"],
                 output_slot="target_angle",
                 on_failure="retry_seed",

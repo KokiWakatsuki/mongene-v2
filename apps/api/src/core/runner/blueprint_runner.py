@@ -35,10 +35,41 @@ class _FallbackAtomNeeded(Exception):
 class GenerationRequest:
     """BlueprintRunner.run の入力（API 層から渡される簡易版）"""
 
-    target_difficulty: int
     problem_form: str
     lesson_id: str
+    target_difficulty: Optional[int] = None  # 旧設計フォールバック用
+    target_level: Optional[int] = None       # 新設計（離散レベル制）
     unlearned_lesson_ids: List[str] = field(default_factory=list)
+
+
+def get_level_config(lesson_mapping: Dict[str, Any], form: str, level: int) -> Dict[str, Any]:
+    """mapping.json から指定フォーム・レベルの設定を返す。"""
+    levels = lesson_mapping.get("difficulty_levels", {}).get(form, [])
+    for lv_def in levels:
+        if lv_def["lv"] == level:
+            return lv_def
+    from apps.api.src.core.exceptions import NoCompatibleBlueprintError
+    raise NoCompatibleBlueprintError(f"{form} Lv{level} は定義されていません")
+
+
+def _merge_constraints(base: Dict[str, Any], patch: Dict[str, Any]) -> Dict[str, Any]:
+    """ベース atom_constraints にパッチを差分マージする（シャローマージ）。
+
+    patch の値が dict でない場合（LLM 生成のフラット形式: {パラメータ名: 値}）は
+    既存の全 Atom クラスに対してそのパラメータを設定する。
+    """
+    merged = {k: dict(v) for k, v in base.items()}
+    for atom_class, params in patch.items():
+        if not isinstance(params, dict):
+            # フラット形式: atom_class がパラメータ名で params がその値
+            for ac_dict in merged.values():
+                ac_dict[atom_class] = params
+            continue
+        if atom_class in merged:
+            merged[atom_class].update(params)
+        else:
+            merged[atom_class] = dict(params)
+    return merged
 
 
 @dataclass
@@ -70,58 +101,93 @@ class BlueprintRunner:
         self.max_retries = max_retries
 
     def run(self, request: GenerationRequest, mapping: Dict[str, Any]) -> GeneratedProblem:
-        # execute_blueprints（リスト）があればランダム選択、なければ execute_blueprint を使用
-        blueprints_list = mapping.get("execute_blueprints")
-        if blueprints_list and isinstance(blueprints_list, list) and len(blueprints_list) > 1:
-            bp_id = random.choice(blueprints_list)
+        # フォーム別Blueprint優先: execute_blueprint_by_form があればそちらを使う
+        bp_by_form = mapping.get("execute_blueprint_by_form", {})
+        if request.problem_form in bp_by_form:
+            bp_id = bp_by_form[request.problem_form]
         else:
-            bp_id = mapping.get("execute_blueprint", blueprints_list[0] if blueprints_list else "BasicCalculationStructure")
-        blueprint = self.blueprint_loader(bp_id)
+            # execute_blueprints（リスト）があればランダム選択、なければ execute_blueprint を使用
+            blueprints_list = mapping.get("execute_blueprints")
+            if blueprints_list and isinstance(blueprints_list, list) and len(blueprints_list) > 1:
+                bp_id = random.choice(blueprints_list)
+            else:
+                bp_id = mapping.get("execute_blueprint", blueprints_list[0] if blueprints_list else "BasicCalculationStructure")
+        blueprint_params = mapping.get("blueprint_params", {})
+        blueprint = self.blueprint_loader(bp_id, params=blueprint_params)
 
-        plan = reconcile_difficulty(
-            target=request.target_difficulty,
-            y_base=int(mapping.get("y_base", 50)),
-            blueprint=blueprint,
-            problem_form=request.problem_form,
+        # --- 難易度設定パス ---
+        # 新設計（離散レベル制）: target_level 指定 + difficulty_levels 定義済みの場合
+        has_level_path = (
+            request.target_level is not None
+            and "difficulty_levels" in mapping
+            and request.problem_form in mapping["difficulty_levels"]
         )
-        if plan.unsatisfiable:
-            raise NoCompatibleBlueprintError(plan.reason or "難易度が達成不能")
 
-        blueprint = plan.blueprint
-        atom_constraints = {k: dict(v) for k, v in mapping.get("atom_constraints", {}).items()}
-
-        # §12.4 全 delta_factors を Atom constraints に反映
-        factors = plan.delta_factors
-        raw_delta = request.target_difficulty - int(mapping.get("y_base", 50))
-
-        # digit_penalty: 数値の桁数を増やす（+1 / 3桁以上の計算 → Atom の max_value/max_dim を拡大）
-        if factors.get("digit_penalty", 0) > 0:
-            scale = 1.0 + factors["digit_penalty"] * 0.2  # +20% per penalty point
-            for cdict in atom_constraints.values():
-                for key in ("max_dim", "max_height", "max_base_side", "max_radius",
-                            "max_side_length", "max_value", "max_slope"):
-                    if key in cdict:
-                        cdict[key] = max(int(cdict[key]), int(cdict[key] * scale))
-
-        # step_depth: 演算ステップを増やす（Blueprint の subquestion 戦略で target_count を加算）
-        # ProofStructure / ConstructionStructure は固定構造なので対象外
-        _no_depth_blueprints = {"ProofStructure", "ConstructionStructure", "BasicCalculationStructure"}
-        if (factors.get("step_depth", 0) > 0
-                and blueprint.subquestion_strategy is not None
-                and blueprint.blueprint_id not in _no_depth_blueprints):
-            import copy as _copy
-            blueprint = _copy.deepcopy(blueprint)
-            old_count = blueprint.subquestion_strategy.target_count
-            blueprint.subquestion_strategy.target_count = min(
-                old_count + factors["step_depth"] // 2, 5  # 最大 5 小問
+        if has_level_path:
+            lv_config = get_level_config(mapping, request.problem_form, request.target_level)  # type: ignore[arg-type]
+            if not lv_config.get("implementable", True):
+                note = lv_config.get("implementation_note", "")
+                raise NoCompatibleBlueprintError(f"Lv{request.target_level} は未実装: {note}")
+            # レベル固有の blueprint_params をベース設定にマージ
+            level_bp_params = {**blueprint_params, **lv_config.get("blueprint_params", {})}
+            if lv_config.get("blueprint_override"):
+                blueprint = self.blueprint_loader(lv_config["blueprint_override"], params=level_bp_params)
+            elif level_bp_params != blueprint_params:
+                blueprint = self.blueprint_loader(bp_id, params=level_bp_params)
+            base_constraints = {k: dict(v) for k, v in mapping.get("atom_constraints", {}).items()}
+            atom_constraints = _merge_constraints(base_constraints, lv_config.get("atom_constraints", {}))
+            # UI 表示用スコア: y_base を基準に lv に応じてスケール
+            n_levels = len(mapping["difficulty_levels"][request.problem_form])
+            y_base = int(mapping.get("y_base", 50))
+            computed_difficulty = float(y_base + (request.target_level / max(n_levels, 1)) * 30)  # type: ignore[operator]
+        else:
+            # 旧設計フォールバック（y_base + delta_factors）
+            plan = reconcile_difficulty(
+                target=request.target_difficulty or int(mapping.get("y_base", 50)),
+                y_base=int(mapping.get("y_base", 50)),
+                blueprint=blueprint,
+                problem_form=request.problem_form,
             )
+            if plan.unsatisfiable:
+                raise NoCompatibleBlueprintError(plan.reason or "難易度が達成不能")
 
-        # hint_reduction: 図あり(-2)=制約なし / 文章のみ(+3)=最小値を引き上げ（難易度下限を上げる）
-        if factors.get("hint_reduction", 0) > 0:
-            # 文章のみモード: Atom の値の下限を上げて「きれいでない」数値を増やす
-            for cdict in atom_constraints.values():
-                if "max_value" in cdict:
-                    cdict.setdefault("min_value", max(5, int(cdict["max_value"] * 0.3)))
+            blueprint = plan.blueprint
+            atom_constraints = {k: dict(v) for k, v in mapping.get("atom_constraints", {}).items()}
+
+            # §12.4 全 delta_factors を Atom constraints に反映
+            factors = plan.delta_factors
+            raw_delta = (request.target_difficulty or int(mapping.get("y_base", 50))) - int(mapping.get("y_base", 50))
+
+            # digit_penalty: 数値の桁数を増やす（+1 / 3桁以上の計算 → Atom の max_value/max_dim を拡大）
+            if factors.get("digit_penalty", 0) > 0:
+                scale = 1.0 + factors["digit_penalty"] * 0.2  # +20% per penalty point
+                for cdict in atom_constraints.values():
+                    for key in ("max_dim", "max_height", "max_base_side", "max_radius",
+                                "max_side_length", "max_value", "max_slope"):
+                        if key in cdict:
+                            cdict[key] = max(int(cdict[key]), int(cdict[key] * scale))
+
+            # step_depth: 演算ステップを増やす（Blueprint の subquestion 戦略で target_count を加算）
+            # ProofStructure / ConstructionStructure は固定構造なので対象外
+            _no_depth_blueprints = {"ProofStructure", "ConstructionStructure", "BasicCalculationStructure"}
+            if (factors.get("step_depth", 0) > 0
+                    and blueprint.subquestion_strategy is not None
+                    and blueprint.blueprint_id not in _no_depth_blueprints):
+                import copy as _copy
+                blueprint = _copy.deepcopy(blueprint)
+                old_count = blueprint.subquestion_strategy.target_count
+                blueprint.subquestion_strategy.target_count = min(
+                    old_count + factors["step_depth"] // 2, 5  # 最大 5 小問
+                )
+
+            # hint_reduction: 図あり(-2)=制約なし / 文章のみ(+3)=最小値を引き上げ（難易度下限を上げる）
+            if factors.get("hint_reduction", 0) > 0:
+                # 文章のみモード: Atom の値の下限を上げて「きれいでない」数値を増やす
+                for cdict in atom_constraints.values():
+                    if "max_value" in cdict:
+                        cdict.setdefault("min_value", max(5, int(cdict["max_value"] * 0.3)))
+
+            computed_difficulty = float(plan.computed_difficulty)
 
         # unit_mix_bonus: 複合単元（+2/単元追加）→ 制約を多様化
         # 現状 Atom レベルでは直接対応困難。LLM プロンプトへの目安として計算のみ
@@ -215,7 +281,7 @@ class BlueprintRunner:
                 mr = MiddleRepresentation(
                     problem_structure_type=blueprint.blueprint_id,
                     selected_tags=selected_tags,
-                    difficulty_score=float(plan.computed_difficulty),
+                    difficulty_score=computed_difficulty,
                     problem_form=request.problem_form,  # type: ignore[arg-type]
                     sub_questions=sub_questions,
                     visual_dsl=visual_dsl,
@@ -223,6 +289,7 @@ class BlueprintRunner:
                     blueprint_id=blueprint.blueprint_id,
                     blueprint_version=blueprint.blueprint_version,
                     sampled_nouns_info=sampled_nouns_info,
+                    difficulty_level=request.target_level,
                 )
 
                 if not mapping.get("dedup_disabled", False) and self.dedup.is_duplicate(mr):
@@ -249,7 +316,7 @@ class BlueprintRunner:
                     story=story,
                     lesson_grade=int(mapping.get("grade", 1)),
                     lesson_title=str(mapping.get("title", "")),
-                    target_difficulty=int(request.target_difficulty),
+                    target_difficulty=int(computed_difficulty),
                 )
 
                 self.dedup.register(mr, problem_text)

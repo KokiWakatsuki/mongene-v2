@@ -20,10 +20,15 @@ class PrefetchCache:
     def _key(self, request: Any, lesson_mapping_key: str) -> str:
         # 同一 lesson + form + difficulty + unlearned で同じキー
         unlearned = tuple(getattr(request, "unlearned_lesson_ids", []) or [])
+        difficulty_key = (
+            f"lv{getattr(request, 'target_level', None)}"
+            if getattr(request, "target_level", None) is not None
+            else f"diff{getattr(request, 'target_difficulty', 0)}"
+        )
         return (
             f"{lesson_mapping_key}|"
             f"{getattr(request, 'problem_form', '')}|"
-            f"{getattr(request, 'target_difficulty', 0)}|"
+            f"{difficulty_key}|"
             f"{unlearned}"
         )
 

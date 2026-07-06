@@ -18,8 +18,8 @@ def test_list_lessons() -> None:
     r = client.get("/problems/lessons")
     assert r.status_code == 200
     data = r.json()
-    assert data["total"] == 177
-    assert len(data["lessons"]) == 177
+    assert data["total"] == 184
+    assert len(data["lessons"]) == 184
 
 
 def test_get_mapping_existing() -> None:

@@ -14,7 +14,7 @@ from apps.api.src.core.abc.blueprint import (
 from apps.api.src.core.abc.visuals import VisualSlot
 
 
-def build_sequence_pattern_blueprint() -> BlueprintDefinition:
+def build_sequence_pattern_blueprint(params: dict | None = None) -> BlueprintDefinition:
     return BlueprintDefinition(
         blueprint_id="SequencePatternStructure",
         blueprint_version="v1",

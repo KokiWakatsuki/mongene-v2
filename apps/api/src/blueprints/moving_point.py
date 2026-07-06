@@ -14,7 +14,7 @@ from apps.api.src.core.abc.blueprint import (
 from apps.api.src.core.abc.visuals import VisualSlot
 
 
-def build_moving_point_blueprint() -> BlueprintDefinition:
+def build_moving_point_blueprint(params: dict | None = None) -> BlueprintDefinition:
     return BlueprintDefinition(
         blueprint_id="MovingPointStructure",
         blueprint_version="v1",

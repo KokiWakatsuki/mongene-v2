@@ -33,18 +33,38 @@ class DuplicationGuard:
 
     def compute_hash(self, mr: "MiddleRepresentation") -> str:
         # §12.6 ハッシュ粒度の分岐
-        # - 証明問題: logic_steps の operation_name 列で判定（言い回し違いを別問題扱い）
-        # - 計算/文章題: answer + logic_steps の sympy_expr で判定
-        components: list[str] = []
+        # problem_form と selected_tags を先頭に加えて
+        # 異なるレッスン・難易度で同一数学答案が重複扱いにならないようにする
+        components: list[str] = [mr.problem_form]
+        # レッスン固有タグ（上位3件）をプレフィックスに含める
+        components.extend(sorted(mr.selected_tags)[:3])
+
         if mr.problem_form == "proof":
+            # 証明問題: operation_name + 合同/相似条件(operands[2]) + 頂点ラベル(proof_output) で判定
+            import json as _json
             for sq in mr.sub_questions:
                 for step in sq.logic_steps:
                     components.append(step.operation_name)
+                    if len(step.operands) >= 3:
+                        components.append(str(step.operands[2]))  # condition_set (SAS/SSS/etc.)
+                    # proof_output JSON から to_prove を取得（頂点ラベルを含む）
+                    for op in step.operands:
+                        if isinstance(op, str) and op.startswith("{"):
+                            try:
+                                po = _json.loads(op)
+                                tp = po.get("to_prove", "")
+                                if tp:
+                                    components.append(tp[:30])  # △ABC ≡ △DEF 等
+                            except Exception:
+                                pass
+                            break
         else:
             for sq in mr.sub_questions:
                 components.append(str(sq.answer.sympy_form))
                 for step in sq.logic_steps:
                     components.append(str(step.sympy_expr))
+                    # operands の先頭 2 件も含める（同答案でも式の形が違う問題を区別）
+                    components.extend(str(o) for o in step.operands[:2])
         return hashlib.sha256("|".join(components).encode()).hexdigest()
 
     def is_duplicate(self, mr: "MiddleRepresentation") -> bool:

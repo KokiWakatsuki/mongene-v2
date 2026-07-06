@@ -40,6 +40,9 @@ class SolveEqVerb(VerbAtom):
         if not sols:
             return False, "解が存在しない"
         for s in sols:
+            if s.free_symbols:
+                # パラメータを含む解（ディオファントス形 ax+by=c → x=(c-by)/a）は許容
+                continue
             if not s.is_real:
                 return False, "解が実数でない"
         return True, None
@@ -48,17 +51,15 @@ class SolveEqVerb(VerbAtom):
         eq = nouns[0]
         symbols = eq.get_symbols()
         if type(eq).__name__ == "ProportionAtom":
-            lhs_ratio = symbols.get("lhs_ratio_a"), symbols.get("lhs_ratio_b")
-            rhs_ratio = symbols.get("rhs_ratio_a"), symbols.get("rhs_ratio_b")
-            if all(v is not None for v in lhs_ratio + rhs_ratio):
-                # a:b = c:d → a*d = b*c
-                expr = sympy.simplify(lhs_ratio[0] * rhs_ratio[1] - lhs_ratio[1] * rhs_ratio[0])
-            else:
-                expr = sympy.Integer(0)
+            # a:b = c:x → x = b*c/a（ProportionAtom は lhs_a, lhs_b, rhs_c を公開）
+            a = symbols.get("lhs_a", sympy.Integer(1))
+            b = symbols.get("lhs_b", sympy.Integer(1))
+            c = symbols.get("rhs_c", sympy.Integer(1))
+            x_val = sympy.Rational(b * c, a) if a != 0 else sympy.Integer(0)
             return LogicStep(
                 operation_name="solve_proportion",
-                operands=[],
-                sympy_expr=expr,
+                operands=[str(a), str(b), str(c)],
+                sympy_expr=sympy.simplify(x_val),
                 narration_hint="比例式を解く",
             )
 

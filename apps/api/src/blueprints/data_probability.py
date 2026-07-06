@@ -14,7 +14,7 @@ from apps.api.src.core.abc.blueprint import (
 from apps.api.src.core.abc.visuals import VisualSlot
 
 
-def build_data_probability_blueprint() -> BlueprintDefinition:
+def build_data_probability_blueprint(params: dict | None = None) -> BlueprintDefinition:
     return BlueprintDefinition(
         blueprint_id="DataProbabilityStructure",
         blueprint_version="v1",

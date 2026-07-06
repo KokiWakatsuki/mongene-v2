@@ -16,14 +16,60 @@ from apps.api.src.core.abc.blueprint import (
 from apps.api.src.core.abc.visuals import VisualSlot
 
 
-def build_pythagorean_blueprint() -> BlueprintDefinition:
-    """平面図形（直角三角形）で斜辺または脚を求める"""
+def build_pythagorean_blueprint(params: dict | None = None) -> BlueprintDefinition:
+    """三平方の定理で辺の長さを求める。
+
+    params["mode"] == "two_points": 座標平面上の2点間の距離（PointAtom 2つ使用）
+    それ以外:                        直角三角形の斜辺・脚（PolygonAtom 使用）
+    """
+    p = params or {}
+    mode = p.get("mode", "polygon")
+
+    if mode == "two_points":
+        return BlueprintDefinition(
+            blueprint_id="PythagoreanStructure",
+            blueprint_version="v1",
+            noun_slots={
+                "point_a": NounSlot(
+                    slot_name="point_a",
+                    accepted_tags=["coordinate"],
+                    accepted_noun_types=["PointAtom"],
+                    required=True,
+                ),
+                "point_b": NounSlot(
+                    slot_name="point_b",
+                    accepted_tags=["coordinate"],
+                    accepted_noun_types=["PointAtom"],
+                    required=True,
+                ),
+            },
+            verb_invocations=[
+                VerbInvocation(
+                    verb=PythagoreanLengthVerb(mode="hypotenuse"),
+                    input_slots=["point_a", "point_b"],
+                    output_slot="distance",
+                    on_failure="retry_seed",
+                ),
+            ],
+            visual_slot=VisualSlot(
+                component_type="Graph_Renderer",
+                compatible_noun_types=["PointAtom"],
+                required=True,
+            ),
+            supported_forms=["visual", "word_problem"],
+            story_required=False,
+            base_difficulty_calculator=lambda nouns, ctx: int(ctx.get("y_base", 65)),
+            subquestion_strategy=SubQuestionStrategy(
+                strategy_type="single",
+                final_question="三平方の定理を用いて求めなさい",
+            ),
+        )
+
+    # デフォルト: polygon モード（直角三角形）
     return BlueprintDefinition(
         blueprint_id="PythagoreanStructure",
         blueprint_version="v1",
         noun_slots={
-            # accepted_tags=["plane_geometry"] は直角三角形用フォールバック
-            # required_tags=["coordinate"] のとき PointAtom が選ばれる（2点間距離）
             "right_triangle": NounSlot(
                 slot_name="right_triangle",
                 accepted_tags=["plane_geometry"],
@@ -45,7 +91,7 @@ def build_pythagorean_blueprint() -> BlueprintDefinition:
             compatible_noun_types=["PolygonAtom"],
             required=True,
         ),
-        supported_forms=["word_problem"],
+        supported_forms=["visual", "word_problem"],
         story_required=False,
         base_difficulty_calculator=lambda nouns, ctx: int(ctx.get("y_base", 65)),
         subquestion_strategy=SubQuestionStrategy(
@@ -55,7 +101,7 @@ def build_pythagorean_blueprint() -> BlueprintDefinition:
     )
 
 
-def build_pythagorean_space_blueprint() -> BlueprintDefinition:
+def build_pythagorean_space_blueprint(params: dict | None = None) -> BlueprintDefinition:
     """空間図形（直方体・角錐）で三平方の定理を利用する"""
     from apps.api.src.atoms.verb.shortest_path_on_solid_verb import ShortestPathOnSolidVerb
 

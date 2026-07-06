@@ -30,9 +30,17 @@ def _builder_map() -> Dict[str, Callable[[], BlueprintDefinition]]:
         build_pythagorean_blueprint,
         build_pythagorean_space_blueprint,
     )
+    from apps.api.src.blueprints.solve_equation import build_solve_equation_blueprint
+    from apps.api.src.blueprints.descriptive_stats import build_descriptive_stats_blueprint
+    from apps.api.src.blueprints.sample_survey import build_sample_survey_blueprint
+    from apps.api.src.blueprints.factorize import build_factorize_blueprint
+    from apps.api.src.blueprints.quadratic_function import build_quadratic_function_blueprint
+    from apps.api.src.blueprints.simultaneous_equations import build_simultaneous_equations_blueprint
+    from apps.api.src.blueprints.knowledge_base import build_knowledge_base_blueprint
 
     return {
         "BasicCalculationStructure": build_basic_calculation_blueprint,
+        "SolveEquationStructure": build_solve_equation_blueprint,
         "WordProblemStructure": build_word_problem_blueprint,
         "BasicGeometryMeasurementStructure": build_basic_geometry_measurement_blueprint,
         "BasicDifferenceStructure": build_basic_difference_blueprint,
@@ -45,14 +53,20 @@ def _builder_map() -> Dict[str, Callable[[], BlueprintDefinition]]:
         "SequencePatternStructure": build_sequence_pattern_blueprint,
         "PythagoreanStructure": build_pythagorean_blueprint,
         "PythagoreanSpaceStructure": build_pythagorean_space_blueprint,
+        "DescriptiveStatsStructure": build_descriptive_stats_blueprint,
+        "SampleSurveyStructure": build_sample_survey_blueprint,
+        "FactorizeStructure": build_factorize_blueprint,
+        "QuadraticFunctionStructure": build_quadratic_function_blueprint,
+        "SimultaneousEquationsStructure": build_simultaneous_equations_blueprint,
+        "KnowledgeBaseStructure": build_knowledge_base_blueprint,
     }
 
 
-def load_blueprint(blueprint_id: str) -> BlueprintDefinition:
+def load_blueprint(blueprint_id: str, params: dict | None = None) -> BlueprintDefinition:
     builders = _builder_map()
     if blueprint_id not in builders:
         raise KeyError(f"未登録の Blueprint: {blueprint_id}")
-    return builders[blueprint_id]()
+    return builders[blueprint_id](params=params or {})
 
 
 def list_blueprints() -> list[str]:

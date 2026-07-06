@@ -52,6 +52,16 @@ class ConstructGeometryVerb(VerbAtom):
         n_needed = need[self.construction_type]
         if len(nouns) < n_needed:
             return False, f"{self.construction_type} には {n_needed} 個の Atom 必要"
+
+        # perp_bisector / perpendicular / copy_length: 2点が一致すると退化（True になる）
+        if self.construction_type in ("perp_bisector", "perpendicular", "copy_length"):
+            ax, ay = self._get_xy(nouns[0])
+            bx, by = self._get_xy(nouns[1])
+            import sympy as _sp
+            ab2 = (bx - ax) ** 2 + (by - ay) ** 2
+            if _sp.simplify(ab2) == 0:
+                return False, "2点が一致しているため作図が退化します"
+
         return True, None
 
     def solve(self, *nouns: NounAtom, rng: random.Random) -> LogicStep:

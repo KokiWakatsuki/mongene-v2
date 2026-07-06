@@ -14,14 +14,17 @@ from apps.api.src.core.abc.blueprint import (
 from apps.api.src.core.abc.visuals import VisualSlot
 
 
-def build_basic_calculation_blueprint() -> BlueprintDefinition:
+def build_basic_calculation_blueprint(params: dict | None = None) -> BlueprintDefinition:
     """BasicCalculationStructure: 四則・方程式・展開・因数分解・整数論（設計書 §17.4）
 
     slot の accepted_tags を空にして mapping の required_tags に委ねる（§38.2）。
     → number タグ lesson: NumberAtom が選ばれ足し算・引き算
     → polynomial タグ lesson: PolynomialAtom が選ばれ展開・因数分解
     → square_root タグ lesson: SquareRootAtom が選ばれ根号計算
+
+    params.operation: 四則演算子（"+""-""*""/"）。None または未指定なら Verb 側でランダム選択。
     """
+    op = (params or {}).get("operation", "+")
     return BlueprintDefinition(
         blueprint_id="BasicCalculationStructure",
         blueprint_version="v1",
@@ -44,7 +47,7 @@ def build_basic_calculation_blueprint() -> BlueprintDefinition:
         },
         verb_invocations=[
             VerbInvocation(
-                verb=CalculateArithmeticVerb(operation="+"),
+                verb=CalculateArithmeticVerb(operation=op),
                 input_slots=["left", "right"],
                 output_slot="result",
                 on_failure="retry_seed",

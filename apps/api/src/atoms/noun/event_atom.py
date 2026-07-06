@@ -105,10 +105,11 @@ class EventAtom(NounAtom):
             with_replacement=with_replacement,
         )
 
-    def get_symbols(self) -> Dict[str, sympy.Expr]:
+    def get_symbols(self) -> Dict[str, Any]:  # type: ignore[override]
         return {
             "sample_space_size": sympy.Integer(self.sample_space_size),
             "num_trials": sympy.Integer(self.num_trials),
+            "event_descriptors": self.event_descriptors,  # CalculateProbabilityVerb が参照
         }
 
     @classmethod

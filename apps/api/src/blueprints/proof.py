@@ -14,7 +14,10 @@ from apps.api.src.core.abc.blueprint import (
 from apps.api.src.core.abc.visuals import VisualSlot
 
 
-def build_proof_blueprint() -> BlueprintDefinition:
+def build_proof_blueprint(params: dict | None = None) -> BlueprintDefinition:
+    p = params or {}
+    proof_type = p.get("proof_type", "congruence")
+    condition_set = p.get("condition_set", "SAS")
     return BlueprintDefinition(
         blueprint_id="ProofStructure",
         blueprint_version="v1",
@@ -34,7 +37,7 @@ def build_proof_blueprint() -> BlueprintDefinition:
         },
         verb_invocations=[
             VerbInvocation(
-                verb=ProveGeometryVerb(proof_type="congruence", condition_set="SAS"),
+                verb=ProveGeometryVerb(proof_type=proof_type, condition_set=condition_set),
                 input_slots=["figure_a", "figure_b"],
                 output_slot="proof",
                 on_failure="retry_seed",

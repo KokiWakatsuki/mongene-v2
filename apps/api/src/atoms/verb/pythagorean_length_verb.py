@@ -45,12 +45,17 @@ class PythagoreanLengthVerb(VerbAtom):
             if type(n).__name__ not in self.accepted_noun_types:
                 return False, f"{type(n).__name__} は PythagoreanLengthVerb に渡せない"
 
-        # PolygonAtom の場合は right_triangle であること
+        # PolygonAtom の場合は三平方の定理を適用できる図形であること
+        # （直角三角形以外の図形も補助線で分解して適用可能）
+        _PYTHAGOREAN_APPLICABLE = {
+            "right_triangle", "isoceles_right_triangle", "triangle",
+            "isoceles_triangle", "equilateral_triangle",
+            "rectangle", "square", "trapezoid",
+            "parallelogram", "rhombus", "regular_polygon",
+        }
         for n in nouns:
             if type(n).__name__ == "PolygonAtom":
-                if getattr(n, "polygon_type", "") not in (
-                    "right_triangle", "isoceles_right_triangle", "triangle"
-                ):
+                if getattr(n, "polygon_type", "") not in _PYTHAGOREAN_APPLICABLE:
                     return False, "PolygonAtom は直角三角形である必要がある"
 
         return True, None

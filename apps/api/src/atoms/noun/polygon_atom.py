@@ -213,10 +213,15 @@ class PolygonAtom(NounAtom):
         return sympy.simplify(sympy.Abs(s) / 2)
 
     def get_symbols(self) -> Dict[str, sympy.Expr]:
+        area = self.area_expr
+        perimeter = self.perimeter_expr
+        n_sides = sympy.Integer(len(self.vertices))
         return {
-            "area": self.area_expr,
-            "perimeter": self.perimeter_expr,
-            "n_sides": sympy.Integer(len(self.vertices)),
+            "area": area,
+            "area_expr": area,          # MeasureGeometryVerb が参照するキー
+            "perimeter": perimeter,
+            "perimeter_expr": perimeter,  # 同上
+            "n_sides": n_sides,           # FindAngleVerb が参照するキー
         }
 
     @classmethod

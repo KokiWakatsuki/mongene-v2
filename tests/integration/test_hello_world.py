@@ -14,7 +14,7 @@ import sympy
 
 from apps.api.src.atoms.noun import number_atom  # noqa: F401 -- register_noun 実行
 from apps.api.src.atoms.verb import calculate_arithmetic_verb  # noqa: F401
-from apps.api.src.blueprints.basic_calculation import load_blueprint
+from apps.api.src.blueprints.registry import load_blueprint
 from apps.api.src.core.dedup.diversity_rotation import DiversityRotation
 from apps.api.src.core.dedup.hash_cache import DuplicationGuard
 from apps.api.src.core.evaluation.solvability import is_solvable

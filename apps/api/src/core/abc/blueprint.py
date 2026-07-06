@@ -57,7 +57,7 @@ class BlueprintDefinition:
     noun_slots: Dict[str, NounSlot]
     verb_invocations: List[VerbInvocation]
     visual_slot: Optional[VisualSlot]
-    supported_forms: List[Literal["word_problem", "calculation", "proof"]]
+    supported_forms: List[Literal["word_problem", "calculation", "proof", "knowledge", "visual"]]
     base_difficulty_calculator: BaseDifficultyCalc
     story_required: bool = False
     subquestion_strategy: Optional[SubQuestionStrategy] = None

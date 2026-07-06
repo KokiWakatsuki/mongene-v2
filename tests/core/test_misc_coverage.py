@@ -95,7 +95,9 @@ def _make_simple_mr() -> MiddleRepresentation:
 
 def test_template_fallback_text_includes_narration() -> None:
     text = template_fallback_text(_make_simple_mr())
-    assert "和を計算" in text
+    # 新形式: prompt_hint + 答えが含まれる（narration_hint は省略）
+    assert "計算" in text  # prompt_hint に「計算」が含まれる
+    assert "答え" in text   # 答えが含まれる
 
 
 def test_strip_json_fence() -> None:
@@ -126,3 +128,95 @@ def test_atom_constraints_estimate_param_space() -> None:
         custom={"max_value": 30, "allow_negative": True},
     )
     assert NumberAtom.estimate_param_space(constraints) > 0
+
+
+def _make_mr_with_form(form: str, seed: int = 42) -> MiddleRepresentation:
+    step = LogicStep(
+        operation_name="arithmetic_+",
+        operands=["-3", "5"],
+        sympy_expr=sympy.Integer(2),
+        narration_hint="計算",
+    )
+    return MiddleRepresentation(
+        problem_structure_type="X",
+        selected_tags=["number"],
+        difficulty_score=10.0,
+        problem_form=form,
+        sub_questions=[
+            SubQuestion(
+                label="",
+                prompt_hint="次の計算をしなさい\n$(-3) + 5$",
+                logic_steps=[step],
+                answer=AnswerObject(type="numeric", sympy_form=sympy.Integer(2), text_form="2"),
+            )
+        ],
+        visual_dsl=None,
+        seed=seed,
+        blueprint_id="X",
+        blueprint_version="v1",
+    )
+
+
+def test_fallback_knowledge_generates_4_choice() -> None:
+    mr = _make_mr_with_form("knowledge")
+    text = template_fallback_text(mr)
+    # 4択形式：ア〜エ が含まれること
+    assert "ア" in text
+    assert "イ" in text
+    assert "答え" in text
+
+
+def test_fallback_word_problem_wraps_intro() -> None:
+    mr = _make_mr_with_form("word_problem")
+    text = template_fallback_text(mr)
+    # 文章題ラッパーが追加されること
+    assert "なさい" in text or "求め" in text or "値" in text
+    assert "答え" in text
+
+
+def test_fallback_proof_uses_prove_format() -> None:
+    import json as _json
+    proof_output = {
+        "to_prove": "△ABC ≡ △DEF",
+        "steps": [{"step_number": 1, "statement": "辺が等しい", "reason": "仮定"}],
+        "conclusion": "よって証明された",
+    }
+    step = LogicStep(
+        operation_name="prove_congruence",
+        operands=["PolygonAtom", "PolygonAtom", "SAS", _json.dumps(proof_output, ensure_ascii=False)],
+        sympy_expr=sympy.Integer(1),
+        narration_hint="合同証明",
+    )
+    mr = MiddleRepresentation(
+        problem_structure_type="ProofStructure",
+        selected_tags=["proof"],
+        difficulty_score=50.0,
+        problem_form="proof",
+        sub_questions=[
+            SubQuestion(
+                label="",
+                prompt_hint="証明しなさい",
+                logic_steps=[step],
+                answer=AnswerObject(
+                    type="proof",
+                    sympy_form=sympy.Integer(1),
+                    text_form="△ABC ≡ △DEF",
+                    extras={"proof_output": proof_output},
+                ),
+            )
+        ],
+        visual_dsl=None,
+        seed=1,
+        blueprint_id="ProofStructure",
+        blueprint_version="v1",
+    )
+    text = template_fallback_text(mr)
+    assert "証明" in text
+    assert "△ABC" in text
+
+
+def test_fallback_calculation_unchanged() -> None:
+    mr = _make_mr_with_form("calculation")
+    text = template_fallback_text(mr)
+    assert "計算" in text
+    assert "答え" in text

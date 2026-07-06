@@ -67,6 +67,14 @@ class LinearFuncAtom(NounAtom):
             "expression": self.expression,
         }
 
+    def y_intercept(self) -> sympy.Expr:
+        return self.intercept
+
+    def x_intercept(self) -> sympy.Expr | None:
+        if sympy.simplify(self.slope) == 0:
+            return None
+        return sympy.Rational(-self.intercept, self.slope)
+
     @classmethod
     def estimate_param_space(cls, constraints: AtomConstraints) -> int:
         custom = constraints.custom or {}

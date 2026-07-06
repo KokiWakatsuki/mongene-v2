@@ -14,7 +14,7 @@ from apps.api.src.core.abc.blueprint import (
 from apps.api.src.core.abc.visuals import VisualSlot
 
 
-def build_word_problem_blueprint() -> BlueprintDefinition:
+def build_word_problem_blueprint(params: dict | None = None) -> BlueprintDefinition:
     return BlueprintDefinition(
         blueprint_id="WordProblemStructure",
         blueprint_version="v1",

@@ -10,7 +10,7 @@ from apps.api.src.atoms.registry import register_verb
 from apps.api.src.core.abc.atoms import NounAtom, VerbAtom
 from apps.api.src.core.representation.middle_representation import LogicStep
 
-Metric = Literal["mean", "median", "mode", "q1", "q3", "iqr"]
+Metric = Literal["mean", "median", "mode", "q1", "q3", "iqr", "cumulative_frequency", "cumulative_relative_frequency"]
 
 
 @register_verb
@@ -19,7 +19,12 @@ class AnalyzeDataVerb(VerbAtom):
     accepted_noun_types: ClassVar[List[str]] = ["DataSetAtom"]
     tags: ClassVar[List[str]] = ["data_analysis"]
 
-    _KEY_MAP = {"mean": "mean", "median": "median", "mode": "mode", "q1": "q1", "q3": "q3"}
+    _KEY_MAP = {
+        "mean": "mean", "median": "median", "mode": "mode",
+        "q1": "q1", "q3": "q3",
+        "cumulative_frequency": "cumulative_frequency",
+        "cumulative_relative_frequency": "cumulative_relative_frequency",
+    }
 
     def __init__(self, metric: Metric = "mean") -> None:
         self.metric: Metric = metric

@@ -69,12 +69,18 @@ class CircleAtom(NounAtom):
         return sympy.simplify(self.circumference_expr * self.central_angle / 360)
 
     def get_symbols(self) -> Dict[str, sympy.Expr]:
+        area = self.area_expr
+        circ = self.circumference_expr
+        arc = self.arc_length_expr
         return {
             "radius": self.radius,
             "central_angle": self.central_angle,
-            "area": self.area_expr,
-            "circumference": self.circumference_expr,
-            "arc_length": self.arc_length_expr,
+            "area": area,
+            "area_expr": area,              # MeasureGeometryVerb が参照するキー
+            "circumference": circ,
+            "circumference_expr": circ,     # 同上
+            "arc_length": arc,
+            "arc_length_expr": arc,         # 同上
         }
 
     @classmethod

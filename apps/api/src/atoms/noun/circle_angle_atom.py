@@ -81,8 +81,10 @@ class CircleAngleAtom(NounAtom):
         return sympy.Integer(180) - self.inscribed_angle_expr
 
     def get_symbols(self) -> Dict[str, sympy.Expr]:
+        inscribed = self.inscribed_angle_expr
         return {
-            "inscribed_angle": self.inscribed_angle_expr,
+            "inscribed_angle": inscribed,
+            "inscribed_angle_expr": inscribed,  # FindAngleVerb が参照するキー
             "central_angle": self.central_angle_expr,
             "opposite_inscribed_angle": self.opposite_inscribed_angle_expr,
         }

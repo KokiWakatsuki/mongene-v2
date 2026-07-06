@@ -30,6 +30,7 @@ def _load_graph() -> dict:
 
 EXPECTED_BLUEPRINTS = {
     "BasicCalculationStructure",
+    "SolveEquationStructure",
     "WordProblemStructure",
     "BasicGeometryMeasurementStructure",
     "BasicDifferenceStructure",
@@ -41,9 +42,12 @@ EXPECTED_BLUEPRINTS = {
     "DataProbabilityStructure",
     "SequencePatternStructure",
     "PythagoreanStructure",
-        "PythagoreanSpaceStructure",
-    
-    
+    "PythagoreanSpaceStructure",
+    "DescriptiveStatsStructure",
+    "SampleSurveyStructure",
+    "FactorizeStructure",
+    "QuadraticFunctionStructure",
+    "SimultaneousEquationsStructure",
 }
 
 
@@ -60,7 +64,8 @@ def test_mapping_covers_all_177_lessons() -> None:
                     for su in mu["small_units"]:
                         expected.add(f"g{g}_l{su['lesson_number']}")
     assert len(expected) == 177
-    assert set(mapping.keys()) == expected
+    # exam_l* は入試対策レッスンとして別途追加されるため、上位集合チェックを使用
+    assert expected.issubset(set(mapping.keys()))
 
 
 def test_mapping_references_only_known_blueprints() -> None:
