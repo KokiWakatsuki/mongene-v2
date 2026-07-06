@@ -28,6 +28,8 @@ os.environ["SKIP_LLM_IN_TESTS"] = "true"
 REPO_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO_ROOT))
 
+from scripts.corpus_seed import pinned_seed  # noqa: E402
+
 MAPPING_PATH = REPO_ROOT / "master_data" / "mapping.json"
 CORPUS_DIR = REPO_ROOT / "tests" / "fixtures" / "reference_corpus" / "ground_truth"
 
@@ -56,13 +58,22 @@ def _pick_levels(lesson_mapping: dict[str, Any], form: str) -> dict[str, int]:
     return {"min": lo, "mid": mid, "max": hi}
 
 
-def _inspect(client, lesson_id: str, lesson_mapping: dict[str, Any], form: str, level: int) -> dict[str, Any]:
+def _inspect(
+    client,
+    lesson_id: str,
+    lesson_mapping: dict[str, Any],
+    form: str,
+    level: int,
+    level_label: Optional[str] = None,
+) -> dict[str, Any]:
     payload = {
         "curriculum": {"grade": lesson_mapping["grade"], "lesson_ids": [lesson_id]},
         "problem_form": form,
         "target_level": level,
         "unlearned_lesson_ids": [],
     }
+    if level_label is not None:
+        payload["seed"] = pinned_seed(lesson_id, form, level_label)
     r = client.post("/problems/inspect", json=payload)
     if r.status_code != 200:
         raise RuntimeError(f"inspect failed status={r.status_code} body={r.text[:500]}")
@@ -111,11 +122,14 @@ def build_corpus(
                 level_num = levels[level_label]
                 key = f"{lesson_id}_{form}_{level_label}"
                 try:
-                    data = _inspect(client, lesson_id, lesson_mapping, form, level_num)
+                    data = _inspect(
+                        client, lesson_id, lesson_mapping, form, level_num, level_label=level_label
+                    )
                     data["_difficulty_label"] = level_label
                     data["_target_level"] = level_num
                     data["_lesson_id"] = lesson_id
                     data["_problem_form"] = form
+                    data["_pinned_seed"] = pinned_seed(lesson_id, form, level_label)
                     out_path = out_dir / f"{key}.json"
                     out_path.write_text(
                         json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8"
