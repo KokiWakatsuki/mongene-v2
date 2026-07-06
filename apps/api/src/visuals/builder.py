@@ -4,6 +4,7 @@ Blueprint と sampled_nouns / logic_steps から VisualDSL を組み立てる。
 """
 from __future__ import annotations
 
+import math
 from typing import Any, Dict
 
 import sympy
@@ -235,7 +236,149 @@ def _build_2d_geometry(sampled_nouns: Dict[str, NounAtom]) -> VisualDSL:
             x = _to_float(sym.get("x", sympy.Integer(0)))
             y = _to_float(sym.get("y", sympy.Integer(0)))
             elements.append({"type": "point", "x": x, "y": y, "label": "P"})
+        elif name == "LineAngleAtom":
+            new_elements, new_viewport = _build_line_angle(atom)
+            elements.extend(new_elements)
+            viewport = new_viewport
+        elif name == "CircleAngleAtom":
+            new_elements, new_viewport = _build_circle_angle(atom)
+            elements.extend(new_elements)
+            viewport = new_viewport
     return VisualDSL(render_type="2D_Geometry", elements=elements, viewport=tuple(viewport))
+
+
+def _build_line_angle(atom: NounAtom) -> tuple[list[dict], list[float]]:
+    """LineAngleAtom（平行線＋横断線）の DSL 要素を組み立てる。
+
+    2 本の平行線 a, b と、それらを貫く横断線を描き、既知角 θ と
+    relation_type（alternate/corresponding/co_interior）に応じた目標角を
+    それぞれ arc + angle_label で示す。
+    """
+    theta = _to_float(atom.known_angle)
+    rel = getattr(atom, "relation_type", "alternate")
+
+    # tan の発散を避けるための安全域クランプ
+    th = max(15.0, min(theta, 165.0))
+    th_rad = math.radians(th)
+    tan_th = math.tan(th_rad)
+    if abs(tan_th) < 1e-6:
+        tan_th = 1e-6 if tan_th >= 0 else -1e-6
+
+    elements: list[dict] = []
+
+    # 1. 平行な2直線
+    elements.append({"type": "line_segment", "p1": [0.0, 7.0], "p2": [10.0, 7.0]})
+    elements.append({"type": "line_segment", "p1": [0.0, 3.0], "p2": [10.0, 3.0]})
+
+    # 2. 直線ラベル
+    elements.append({"type": "text", "x": 10.2, "y": 7.0, "content": "a"})
+    elements.append({"type": "text", "x": 10.2, "y": 3.0, "content": "b"})
+
+    # 3. 横断線
+    m = -tan_th
+    p1 = (4.0, 7.0)
+    p2_x = 4.0 + (3.0 - 7.0) / m
+    p2 = (p2_x, 3.0)
+    d = (math.cos(th_rad), -math.sin(th_rad))
+    top_end = (p1[0] - 2.2 * d[0], p1[1] - 2.2 * d[1])
+    bot_end = (p2[0] + 1.5 * d[0], p2[1] + 1.5 * d[1])
+    elements.append({"type": "line_segment", "p1": list(top_end), "p2": list(bot_end)})
+
+    # 4. 既知角（P1）
+    elements.append({
+        "type": "arc",
+        "center": list(p1),
+        "radius": 0.9,
+        "start_angle": -th,
+        "end_angle": 0.0,
+    })
+    elements.append({"type": "angle_label", "vertex": list(p1), "label": f"{int(round(theta))}°"})
+
+    # 5. target角（P2、relation_type別）
+    if rel == "alternate":
+        start_angle, end_angle = 180.0 - th, 180.0
+    elif rel == "corresponding":
+        start_angle, end_angle = -th, 0.0
+    else:  # co_interior
+        start_angle, end_angle = 0.0, 180.0 - th
+
+    elements.append({
+        "type": "arc",
+        "center": list(p2),
+        "radius": 0.9,
+        "start_angle": start_angle,
+        "end_angle": end_angle,
+    })
+    elements.append({"type": "angle_label", "vertex": list(p2), "label": "x°"})
+
+    viewport = [-1.0, 0.0, 12.0, 10.0]
+    return elements, viewport
+
+
+def _build_circle_angle(atom: NounAtom) -> tuple[list[dict], list[float]]:
+    """CircleAngleAtom（円＋中心角＋円周角）の DSL 要素を組み立てる。"""
+    gamma = _to_float(atom.central_angle)
+    ox, oy, r = 5.0, 5.0, 4.0
+
+    a_ang = 270.0 - gamma / 2.0
+    b_ang = 270.0 + gamma / 2.0
+    c_ang = 90.0
+
+    def point_on_circle(ang_deg: float) -> tuple[float, float]:
+        rad = math.radians(ang_deg)
+        return (ox + r * math.cos(rad), oy + r * math.sin(rad))
+
+    pa = point_on_circle(a_ang)
+    pb = point_on_circle(b_ang)
+    pc = point_on_circle(c_ang)
+
+    elements: list[dict] = []
+    elements.append({"type": "circle", "center": [ox, oy], "radius": r})
+    elements.append({"type": "point", "x": ox, "y": oy, "label": "O"})
+    elements.append({"type": "point", "x": pa[0], "y": pa[1], "label": "A"})
+    elements.append({"type": "point", "x": pb[0], "y": pb[1], "label": "B"})
+    elements.append({"type": "point", "x": pc[0], "y": pc[1], "label": "C"})
+
+    elements.append({"type": "line_segment", "p1": [ox, oy], "p2": list(pa), "dashed": True})
+    elements.append({"type": "line_segment", "p1": [ox, oy], "p2": list(pb), "dashed": True})
+    elements.append({"type": "line_segment", "p1": list(pc), "p2": list(pa)})
+    elements.append({"type": "line_segment", "p1": list(pc), "p2": list(pb)})
+
+    # 中心角: A_ang(=270-γ/2) から B_ang(=270+γ/2) へ反時計回りで270を通る小弧
+    elements.append({
+        "type": "arc",
+        "center": [ox, oy],
+        "radius": 1.0,
+        "start_angle": a_ang,
+        "end_angle": b_ang,
+    })
+    elements.append({"type": "angle_label", "vertex": [ox, oy], "label": f"{int(round(gamma))}°"})
+
+    # 円周角: C から見た A, B 方向の角度（atan2）
+    def angle_from(origin: tuple[float, float], target: tuple[float, float]) -> float:
+        return math.degrees(math.atan2(target[1] - origin[1], target[0] - origin[0]))
+
+    ang_ca = angle_from(pc, pa)
+    ang_cb = angle_from(pc, pb)
+
+    # 小さい方の弧（差が180未満）になるよう start/end を選ぶ
+    diff = (ang_cb - ang_ca) % 360.0
+    if diff <= 180.0:
+        start_c, end_c = ang_ca, ang_ca + diff
+    else:
+        start_c, end_c = ang_cb, ang_cb + (360.0 - diff)
+
+    elements.append({
+        "type": "arc",
+        "center": list(pc),
+        "radius": 1.0,
+        "start_angle": start_c,
+        "end_angle": end_c,
+    })
+    elements.append({"type": "angle_label", "vertex": list(pc), "label": "x°"})
+
+    viewport = [0.0, 0.0, 10.0, 10.0]
+    return elements, viewport
 
 
 def _build_graph(sampled_nouns: Dict[str, NounAtom]) -> VisualDSL:
