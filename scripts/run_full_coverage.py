@@ -125,7 +125,8 @@ def _make_runner() -> BlueprintRunner:
 def _evaluate_one(result_text: str, mr, lesson_id: str, forbidden: List[str]) -> Dict[str, bool]:
     answer = mr.sub_questions[0].answer if mr.sub_questions else None
     return {
-        "solvable": answer is not None and is_solvable(answer.sympy_form),
+        # knowledge 型は sympy_form=None が正常（概念問題に数値解はない）
+        "solvable": answer is not None and (answer.type == "knowledge" or is_solvable(answer.sympy_form)),
         "appropriate": is_appropriate(result_text, forbidden),
         "standards_ok": evaluate_standards_alignment(mr, lesson_id),
     }

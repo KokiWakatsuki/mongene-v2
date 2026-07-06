@@ -26,9 +26,11 @@ def build_sub_questions(
 
     if strategy is None or strategy.strategy_type == "single":
         hint = strategy.final_question if strategy else "次を求めなさい"
-        # §12.1: arithmetic 系の計算問題は operands から式を生成して prompt_hint に追加
-        if logic_steps_all and logic_steps_all[-1].operation_name.startswith("arithmetic_"):
-            hint = _augment_prompt_hint(hint, logic_steps_all[-1])
+        # §12.1: 計算問題 / 方程式問題は operands から式を生成して prompt_hint に追加
+        if logic_steps_all:
+            last_op = logic_steps_all[-1].operation_name
+            if last_op.startswith("arithmetic_") or last_op in ("solve_equation", "solve_proportion", "factorize"):
+                hint = _augment_prompt_hint(hint, logic_steps_all[-1])
         return [
             SubQuestion(
                 label="",
@@ -174,6 +176,35 @@ def _extract_final_answer(steps: List[LogicStep]) -> AnswerObject:
             extras={"proof_output": proof_output} if proof_output else {},
         )
 
+    # Knowledge 系 Verb: narration_hint が問いの概念テキストになっている
+    if last.operation_name == "knowledge_check":
+        hint = last.narration_hint or "概念確認"
+        return AnswerObject(
+            type="knowledge",
+            sympy_form=None,
+            text_form="（概念説明・用語定義）",
+            extras={"knowledge_hint": hint},
+        )
+
+    # Construction 系 Verb の場合は LogicStep.operands の末尾に JSON 化された steps リストが入る
+    if last.operation_name.startswith("construct_"):
+        import json
+
+        construction_steps = None
+        for operand in reversed(last.operands):
+            if isinstance(operand, str) and operand.startswith("["):
+                try:
+                    construction_steps = json.loads(operand)
+                    break
+                except json.JSONDecodeError:
+                    continue
+        return AnswerObject(
+            type="expression",
+            sympy_form=last.sympy_expr,
+            text_form=last.narration_hint,
+            extras={"construction_steps": construction_steps} if construction_steps else {},
+        )
+
     is_number = bool(getattr(last.sympy_expr, "is_number", False))
     return AnswerObject(
         type="numeric" if is_number else "expression",
@@ -192,23 +223,57 @@ _OP_SYMBOL = {
     "arithmetic_*": "\\times",
     "arithmetic_/": "\\div",
     "arithmetic_**": "^",
+    "solve_equation": "=",
 }
 
 
-def _format_calc_expression(step: LogicStep) -> str:
-    """§12.1: 計算問題用に operands から LaTeX 式を生成する。
+def _operand_to_latex(op_str: str) -> str:
+    """operand 文字列を SymPy 経由で LaTeX に変換する"""
+    try:
+        expr = sympy.sympify(op_str)
+        return sympy.latex(expr)
+    except Exception:
+        # SymPy で解析できない場合はそのまま（Python の ** 等を残す）
+        return op_str
 
-    例: operands=['-25','22'], op='arithmetic_+' → '$(-25) + 22$'
+
+def _format_calc_expression(step: LogicStep) -> str:
+    """§12.1: 計算問題・方程式問題用に operands から LaTeX 式を生成する。
+
+    arithmetic_ 系: '$(-3x^{2} - x - 2) + ...$'
+    solve_equation: '$lhs = rhs$'
     """
     sym = _OP_SYMBOL.get(step.operation_name, "")
     ops = [o for o in step.operands if not o.startswith("{")]  # JSON chunk を除外
+
+    # 方程式 "lhs = rhs" の特別処理
+    if step.operation_name == "solve_equation" and len(ops) >= 2:
+        lhs_latex = _operand_to_latex(ops[0])
+        rhs_latex = _operand_to_latex(ops[1])
+        return f"${lhs_latex} = {rhs_latex}$"
+
+    # 比例式 "a:b = c:x" の特別処理
+    if step.operation_name == "solve_proportion" and len(ops) >= 3:
+        return f"${ops[0]}:{ops[1]} = {ops[2]}:x$"
+
+    # 因数分解 "展開形 を因数分解" の特別処理
+    if step.operation_name == "factorize" and len(ops) >= 1:
+        try:
+            expr = sympy.sympify(ops[0])
+            return f"${sympy.latex(expr)}$"
+        except Exception:
+            return f"${ops[0]}$"
+
     if sym and len(ops) >= 2:
+        latex_ops = [_operand_to_latex(o) for o in ops]
+
         def _wrap(s: str) -> str:
-            s = str(s).strip()
-            if s.startswith("-") or ("+" in s and len(s) > 1):
-                return f"({s})"
+            # 多項式や負の式はカッコで包む
+            if s.startswith("-") or "+" in s or "-" in s[1:]:
+                return f"\\left({s}\\right)"
             return s
-        terms = [_wrap(ops[0])] + [f"{sym} {_wrap(o)}" for o in ops[1:]]
+
+        terms = [_wrap(latex_ops[0])] + [f"{sym} {_wrap(lt)}" for lt in latex_ops[1:]]
         return "$" + " ".join(terms) + "$"
     return ""
 
@@ -233,7 +298,8 @@ def _extract_keyword(label: str) -> str:
 
 
 def _sympy_to_japanese(expr: sympy.Expr, unit: str = "") -> str:
-    if getattr(expr, "is_number", False):
+    # 整数のみ素のテキスト表現、それ以外（分数・根号等）は LaTeX で返す
+    if isinstance(expr, sympy.Integer):
         return f"{expr}{unit}".strip()
     try:
         return f"${sympy.latex(expr)}${unit}".strip()

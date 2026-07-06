@@ -3,7 +3,7 @@ from __future__ import annotations
 
 from typing import Any, List, Literal, Optional
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, model_validator
 
 
 class CurriculumInput(BaseModel):
@@ -15,13 +15,20 @@ class CurriculumInput(BaseModel):
 
 class ProblemGenerationRequest(BaseModel):
     curriculum: CurriculumInput
-    problem_form: Literal["word_problem", "calculation", "proof"]
-    target_difficulty: int = Field(ge=1, le=100)
+    problem_form: Literal["word_problem", "calculation", "proof", "knowledge", "visual"]
+    target_difficulty: Optional[int] = Field(default=None, ge=1, le=100)
+    target_level: Optional[int] = Field(default=None, ge=1)
     unlearned_lesson_ids: List[str] = Field(default_factory=list)
+
+    @model_validator(mode="after")
+    def check_difficulty_or_level(self) -> "ProblemGenerationRequest":
+        if self.target_difficulty is None and self.target_level is None:
+            raise ValueError("target_difficulty または target_level のどちらかを指定してください")
+        return self
 
 
 class AnswerSchema(BaseModel):
-    type: Literal["numeric", "expression", "proof", "set", "graph"]
+    type: Literal["numeric", "expression", "proof", "set", "graph", "knowledge"]
     sympy_form: Optional[str] = None
     text_form: str
     extras: dict[str, Any] = Field(default_factory=dict)

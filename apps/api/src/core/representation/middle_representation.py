@@ -19,7 +19,7 @@ class LogicStep:
 
 @dataclass
 class AnswerObject:
-    type: Literal["numeric", "expression", "proof", "set", "graph"]
+    type: Literal["numeric", "expression", "proof", "set", "graph", "knowledge"]
     sympy_form: Optional[sympy.Expr]
     text_form: str
     extras: Dict[str, Any] = field(default_factory=dict)
@@ -39,7 +39,7 @@ class MiddleRepresentation:
     problem_structure_type: str
     selected_tags: List[str]
     difficulty_score: float
-    problem_form: Literal["word_problem", "calculation", "proof"]
+    problem_form: Literal["word_problem", "calculation", "proof", "knowledge", "visual"]
     sub_questions: List[SubQuestion]
     visual_dsl: Optional[VisualDSL]
     seed: int
@@ -47,3 +47,5 @@ class MiddleRepresentation:
     blueprint_version: str
     # サンプルされた Atom の型情報・主要パラメータ（LLM プロンプトに渡して用語を一致させる）
     sampled_nouns_info: Dict[str, Dict[str, Any]] = field(default_factory=dict)
+    # 離散レベル制（新設計）: レベル指定生成時のみ設定
+    difficulty_level: Optional[int] = None

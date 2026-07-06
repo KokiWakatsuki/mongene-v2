@@ -290,11 +290,21 @@ class LLMTranslator:
                         "type": sq.answer.type,
                         "sympy_form": str(sq.answer.sympy_form),
                         "text_form": sq.answer.text_form,
+                        **({"extras": sq.answer.extras} if sq.answer.extras else {}),
                     },
                 }
                 for sq in mr.sub_questions
             ],
         }
+        # visual_dsl の要点を追加（render_type と主要 elements のラベルのみ）
+        if mr.visual_dsl:
+            data["visual_summary"] = {
+                "render_type": mr.visual_dsl.render_type,
+                "element_labels": [
+                    e.get("label", e.get("type", str(i)))
+                    for i, e in enumerate(mr.visual_dsl.elements or [])
+                ],
+            }
         return yaml.safe_dump(data, allow_unicode=True, sort_keys=False)
 
     def _mr_logic_steps_yaml(self, mr: MiddleRepresentation) -> str:
