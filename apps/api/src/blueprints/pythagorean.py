@@ -56,7 +56,7 @@ def build_pythagorean_blueprint(params: dict | None = None) -> BlueprintDefiniti
                 compatible_noun_types=["PointAtom"],
                 required=True,
             ),
-            supported_forms=["visual", "word_problem"],
+            supported_forms=["calculation", "visual", "word_problem"],
             story_required=False,
             base_difficulty_calculator=lambda nouns, ctx: int(ctx.get("y_base", 65)),
             subquestion_strategy=SubQuestionStrategy(
@@ -91,7 +91,7 @@ def build_pythagorean_blueprint(params: dict | None = None) -> BlueprintDefiniti
             compatible_noun_types=["PolygonAtom"],
             required=True,
         ),
-        supported_forms=["visual", "word_problem"],
+        supported_forms=["calculation", "visual", "word_problem"],
         story_required=False,
         base_difficulty_calculator=lambda nouns, ctx: int(ctx.get("y_base", 65)),
         subquestion_strategy=SubQuestionStrategy(
@@ -136,7 +136,7 @@ def build_pythagorean_space_blueprint(params: dict | None = None) -> BlueprintDe
             compatible_noun_types=["PrismAtom", "PyramidAtom"],
             required=True,
         ),
-        supported_forms=["word_problem", "visual"],
+        supported_forms=["calculation", "word_problem", "visual"],
         story_required=False,
         base_difficulty_calculator=lambda nouns, ctx: int(ctx.get("y_base", 78)),
         subquestion_strategy=SubQuestionStrategy(

@@ -70,7 +70,7 @@ def build_basic_difference_blueprint(params: dict | None = None) -> BlueprintDef
             compatible_noun_types=["PrismAtom", "PyramidAtom", "SphereAtom"],
             required=True,
         ),
-        supported_forms=["word_problem", "visual"],
+        supported_forms=["calculation", "word_problem", "visual"],
         story_required=False,
         base_difficulty_calculator=lambda nouns, ctx: int(ctx.get("y_base", 60)),
         subquestion_strategy=SubQuestionStrategy(
