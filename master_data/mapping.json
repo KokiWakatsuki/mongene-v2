@@ -3882,19 +3882,13 @@
     "large_unit": "一次方程式",
     "execute_blueprint": "SolveEquationStructure",
     "required_tags": [
-      "linear_equation",
-      "proportion_equation",
-      "linear_function"
+      "proportion_equation"
     ],
     "optional_tags": [],
     "atom_constraints": {
-      "LinearFuncAtom": {
-        "max_slope": 5,
-        "force_integer_slope": true
-      },
-      "QuadraticFuncAtom": {
-        "max_a_value": 3,
-        "is_pure_form": true
+      "ProportionAtom": {
+        "max_ratio_value": 20,
+        "is_integer_solution": true
       }
     },
     "visual_component": "Graph_Renderer",
@@ -3917,10 +3911,9 @@
           "lv": 1,
           "description": "正の整数のみの単純な比例式",
           "atom_constraints": {
-            "LinearFuncAtom": {
-              "force_proportion": true,
-              "max_slope": 5,
-              "force_integer_slope": true,
+            "ProportionAtom": {
+              "max_ratio_value": 5,
+              "is_integer_solution": true,
               "allow_negative": false
             }
           },
@@ -3933,10 +3926,9 @@
           "lv": 2,
           "description": "2桁の整数を含む比例式",
           "atom_constraints": {
-            "LinearFuncAtom": {
-              "force_proportion": true,
-              "max_slope": 20,
-              "force_integer_slope": true,
+            "ProportionAtom": {
+              "max_ratio_value": 20,
+              "is_integer_solution": true,
               "allow_negative": false
             }
           },
@@ -3949,33 +3941,31 @@
           "lv": 3,
           "description": "負の数を含む比例式",
           "atom_constraints": {
-            "LinearFuncAtom": {
-              "force_proportion": true,
-              "max_slope": 10,
-              "force_integer_slope": true,
+            "ProportionAtom": {
+              "max_ratio_value": 20,
+              "is_integer_solution": true,
               "allow_negative": true
             }
           },
           "blueprint_params": {},
           "verb_config": {},
           "implementable": true,
-          "implementation_note": ""
+          "implementation_note": "ProportionAtom は比 a:b=c:d を常に正の整数で表現するため負の値を生成できない（構造的能力ギャップ）。allow_negative=true は宣言のみで実効なし。max_ratio_valueで難易度差は維持。"
         },
         {
           "lv": 4,
           "description": "分数解となる比例式",
           "atom_constraints": {
-            "LinearFuncAtom": {
-              "force_proportion": true,
-              "max_slope": 10,
-              "force_integer_slope": false,
+            "ProportionAtom": {
+              "max_ratio_value": 30,
+              "is_integer_solution": false,
               "allow_negative": true
             }
           },
           "blueprint_params": {},
           "verb_config": {},
           "implementable": true,
-          "implementation_note": ""
+          "implementation_note": "ProportionAtom は比 a:b=c:d を常に正の整数で表現するため負の値を生成できない（構造的能力ギャップ）。allow_negative=true は宣言のみで実効なし。is_integer_solution=falseで分数解を生成し難易度差は維持。"
         }
       ],
       "word_problem": [
@@ -8682,27 +8672,25 @@
     "lesson_number": 51,
     "domain": "図形",
     "large_unit": "空間図形",
-    "execute_blueprint": "BasicDifferenceStructure",
+    "execute_blueprint": "BasicGeometryMeasurementStructure",
     "required_tags": [
-      "polynomial",
       "space_geometry"
     ],
     "optional_tags": [],
+    "blueprint_params": {
+      "measure_type": "surface_area"
+    },
     "atom_constraints": {
-      "NumberAtom": {
-        "allow_negative": true,
-        "max_value": 30,
-        "force_fraction": false
+      "PrismAtom": {
+        "max_dim": 30,
+        "min_dim": 2
       },
-      "EquationAtom": {
-        "degree": 1,
-        "max_coefficient": 10,
-        "is_integer_solution": true
+      "PyramidAtom": {
+        "max_base_side": 30,
+        "max_height": 30
       },
-      "PolynomialAtom": {
-        "max_degree": 2,
-        "num_variables": 1,
-        "max_coefficient": 8
+      "SphereAtom": {
+        "max_radius": 20
       }
     },
     "visual_component": "3D_Renderer",
@@ -8721,67 +8709,67 @@
           "lv": 1,
           "description": "単純な直方体の表面積計算",
           "atom_constraints": {
-            "NumberAtom": {
-              "allow_negative": false,
-              "max_value": 10
+            "PrismAtom": {
+              "max_dim": 10,
+              "min_dim": 2
             }
           },
           "blueprint_params": {
-            "operation": "+"
+            "measure_type": "surface_area"
           },
           "verb_config": {},
           "implementable": true,
-          "implementation_note": ""
+          "implementation_note": "BasicGeometryMeasurementStructure(measure_type=surface_area)へ再ターゲット。PrismAtomのmax_dimで直方体の大きさを制御。"
         },
         {
           "lv": 2,
           "description": "直方体の表面積（数値の拡大）",
           "atom_constraints": {
-            "NumberAtom": {
-              "allow_negative": false,
-              "max_value": 30
+            "PrismAtom": {
+              "max_dim": 30,
+              "min_dim": 2
             }
           },
           "blueprint_params": {
-            "operation": "+"
+            "measure_type": "surface_area"
           },
           "verb_config": {},
           "implementable": true,
-          "implementation_note": ""
+          "implementation_note": "同上（Lv1参照）。max_dimを拡大。"
         },
         {
           "lv": 3,
           "description": "三角柱の表面積（1/2の計算含む）",
           "atom_constraints": {
-            "NumberAtom": {
-              "allow_negative": false,
-              "max_value": 20,
-              "force_fraction": true
+            "PrismAtom": {
+              "max_dim": 20,
+              "min_dim": 2,
+              "base_shape_type": "regular_polygon",
+              "num_sides": 3
             }
           },
           "blueprint_params": {
-            "operation": "*"
+            "measure_type": "surface_area"
           },
           "verb_config": {},
           "implementable": true,
-          "implementation_note": "三角形の面積算出に必要な乗算を想定。"
+          "implementation_note": "三角柱の底面（1/2計算）はPrismAtomのbase_shape_type=regular_polygon,num_sides=3で表現。"
         },
         {
           "lv": 4,
           "description": "錐体の表面積（複雑な数値）",
           "atom_constraints": {
-            "NumberAtom": {
-              "allow_negative": false,
-              "max_value": 50,
-              "force_fraction": true
+            "PyramidAtom": {
+              "max_base_side": 30,
+              "max_height": 30
             }
           },
           "blueprint_params": {
-            "operation": "*"
+            "measure_type": "surface_area"
           },
           "verb_config": {},
           "implementable": true,
-          "implementation_note": ""
+          "implementation_note": "錐体の表面積はPyramidAtomを想定。"
         }
       ],
       "visual": [
@@ -8789,82 +8777,85 @@
           "lv": 1,
           "description": "直方体の表面積（整数・小）",
           "atom_constraints": {
-            "NumberAtom": {
-              "allow_negative": false,
-              "max_value": 5
+            "PrismAtom": {
+              "max_dim": 5,
+              "min_dim": 2,
+              "base_shape_type": "square"
             }
           },
-          "blueprint_params": {},
-          "verb_config": {
-            "shape_type": "rectangular_prism"
+          "blueprint_params": {
+            "measure_type": "surface_area"
           },
+          "verb_config": {},
           "implementable": true,
-          "implementation_note": "図形生成エンジン側で直方体を選択する。"
+          "implementation_note": "PrismAtom(base_shape_type=square)へ再ターゲット。shape_typeはBlueprintに未配線のため削除。"
         },
         {
           "lv": 2,
           "description": "三角柱の表面積（整数・小）",
           "atom_constraints": {
-            "NumberAtom": {
-              "allow_negative": false,
-              "max_value": 8
+            "PrismAtom": {
+              "max_dim": 8,
+              "min_dim": 2,
+              "base_shape_type": "triangle"
             }
           },
-          "blueprint_params": {},
-          "verb_config": {
-            "shape_type": "triangular_prism"
+          "blueprint_params": {
+            "measure_type": "surface_area"
           },
+          "verb_config": {},
           "implementable": true,
-          "implementation_note": "図形生成エンジン側で三角柱を選択する。"
+          "implementation_note": "PrismAtom(base_shape_type=triangle)へ再ターゲット。"
         },
         {
           "lv": 3,
           "description": "正四角錐の表面積（整数・中）",
           "atom_constraints": {
-            "NumberAtom": {
-              "allow_negative": false,
-              "max_value": 12
+            "PyramidAtom": {
+              "max_base_side": 12,
+              "max_height": 12,
+              "base_shape": "square"
             }
           },
-          "blueprint_params": {},
-          "verb_config": {
-            "shape_type": "square_pyramid"
+          "blueprint_params": {
+            "measure_type": "surface_area"
           },
+          "verb_config": {},
           "implementable": true,
-          "implementation_note": "図形生成エンジン側で正四角錐を選択する。"
+          "implementation_note": "PyramidAtom(base_shape=square)へ再ターゲット。"
         },
         {
           "lv": 4,
           "description": "三角錐の表面積（整数・大）",
           "atom_constraints": {
-            "NumberAtom": {
-              "allow_negative": false,
-              "max_value": 20
+            "PyramidAtom": {
+              "max_base_side": 20,
+              "max_height": 20,
+              "base_shape": "triangle"
             }
           },
-          "blueprint_params": {},
-          "verb_config": {
-            "shape_type": "triangular_pyramid"
+          "blueprint_params": {
+            "measure_type": "surface_area"
           },
+          "verb_config": {},
           "implementable": true,
-          "implementation_note": "図形生成エンジン側で三角錐を選択する。"
+          "implementation_note": "PyramidAtom(base_shape=triangle)へ再ターゲット。"
         },
         {
           "lv": 5,
           "description": "柱体・錐体の表面積（分数含む）",
           "atom_constraints": {
-            "NumberAtom": {
-              "allow_negative": false,
-              "max_value": 10,
-              "force_fraction": true
+            "SphereAtom": {
+              "max_radius": 10,
+              "integer_radius": false
             }
           },
-          "blueprint_params": {},
-          "verb_config": {
-            "shape_type": "mixed"
+          "blueprint_params": {
+            "measure_type": "surface_area"
           },
+          "verb_config": {},
           "implementable": true,
-          "implementation_note": "図形生成エンジン側でランダムに柱体・錐体を選択する。"
+          "implementation_note": "force_fraction はPrism/Pyramid/SphereAtomいずれも非対応（表面積の公式上、半整数寸法でも分数が約分されて整数係数になるため生成不能な能力ギャップ）。SphereAtom(integer_radius=false)で半整数半径による難易度差は維持するが、表面積の結果自体は整数係数×πになる点に留意。"
         }
       ]
     }
