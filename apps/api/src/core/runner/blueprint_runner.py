@@ -40,6 +40,7 @@ class GenerationRequest:
     target_difficulty: Optional[int] = None  # 旧設計フォールバック用
     target_level: Optional[int] = None       # 新設計（離散レベル制）
     unlearned_lesson_ids: List[str] = field(default_factory=list)
+    seed: Optional[int] = None  # 外部から注入する再現用シード（None なら従来の非決定挙動）
 
 
 def get_level_config(lesson_mapping: Dict[str, Any], form: str, level: int) -> Dict[str, Any]:
@@ -101,15 +102,23 @@ class BlueprintRunner:
         self.max_retries = max_retries
 
     def run(self, request: GenerationRequest, mapping: Dict[str, Any]) -> GeneratedProblem:
+        # seed 決定（冒頭で確定させ、以降の乱択・リトライループ全体で使う）
+        # request.seed が指定されていれば再現的、None なら従来通り毎回変わる非決定挙動を維持する。
+        import time as _time
+        if request.seed is not None:
+            base_seed = request.seed
+        else:
+            base_seed = (random.randint(1, 1_000_000) ^ (int(_time.time_ns()) & 0xFFFFF)) % 1_000_000 + 1
+
         # フォーム別Blueprint優先: execute_blueprint_by_form があればそちらを使う
         bp_by_form = mapping.get("execute_blueprint_by_form", {})
         if request.problem_form in bp_by_form:
             bp_id = bp_by_form[request.problem_form]
         else:
-            # execute_blueprints（リスト）があればランダム選択、なければ execute_blueprint を使用
+            # execute_blueprints（リスト）があれば base_seed を種にした決定論的選択、なければ execute_blueprint を使用
             blueprints_list = mapping.get("execute_blueprints")
             if blueprints_list and isinstance(blueprints_list, list) and len(blueprints_list) > 1:
-                bp_id = random.choice(blueprints_list)
+                bp_id = random.Random(base_seed).choice(blueprints_list)
             else:
                 bp_id = mapping.get("execute_blueprint", blueprints_list[0] if blueprints_list else "BasicCalculationStructure")
         blueprint_params = mapping.get("blueprint_params", {})
@@ -192,9 +201,7 @@ class BlueprintRunner:
         # unit_mix_bonus: 複合単元（+2/単元追加）→ 制約を多様化
         # 現状 Atom レベルでは直接対応困難。LLM プロンプトへの目安として計算のみ
 
-        # 時刻ベースの XOR で衝突を防ぐ（ナノ秒精度のため再生成でも別の問題が生成される）
-        import time as _time
-        base_seed = (random.randint(1, 1_000_000) ^ (int(_time.time_ns()) & 0xFFFFF)) % 1_000_000 + 1
+        # base_seed は run() 冒頭で決定済み（request.seed 指定時は再現的、未指定時は時刻ベースで従来通り非決定）
         last_error: Optional[Exception] = None
 
         for attempt in range(self.max_retries):
