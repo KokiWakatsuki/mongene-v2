@@ -150,7 +150,10 @@ def normalize_math_text(text: str) -> str:
     return s
 
 
-_NUMBER_RE = re.compile(r"-?\d+(?:\.\d+)?(?:/\d+)?")
+# 単項マイナスが括弧付きトークンと空白で分離しているケース（`- (1/3)` や `-(1/3)`）を
+# 1トークンとして拾う分岐を先に試し、それ以外は従来通り整数・小数・分数 a/b を拾う。
+# 例: "(- (1/3)) + (8/7)" -> ["- (1/3)", "8/7"]
+_NUMBER_RE = re.compile(r"-\s*\([^()]*\)|-?\d+(?:\.\d+)?(?:/\d+)?")
 
 
 def extract_numbers(text: str) -> list[str]:
@@ -159,23 +162,39 @@ def extract_numbers(text: str) -> list[str]:
     return _NUMBER_RE.findall(normalized)
 
 
+_LEADING_MINUS_PAREN_RE = re.compile(r"^-\s*\((?P<inner>.*)\)$")
+
+
 def _to_fraction(token: str) -> Optional[Fraction]:
     token = token.strip()
-    # (1/2) のように外側を丸括弧で包まれているケース（\dfrac 正規化後など）を剥がす
-    while token.startswith("(") and token.endswith(")"):
-        inner = token[1:-1]
-        if not inner:
-            break
-        token = inner
+    negate = False
+    # "(1/2)" の外側丸括弧、および "- (1/3)" / "-(1/3)" の分離した単項マイナスを
+    # 交互に剥がしていく（例: "(- (1/2))" -> "- (1/2)" -> "(1/2)" -> "1/2"）。
+    changed = True
+    while changed:
+        changed = False
+        m = _LEADING_MINUS_PAREN_RE.match(token)
+        if m:
+            token = m.group("inner").strip()
+            negate = not negate
+            changed = True
+            continue
+        if token.startswith("(") and token.endswith(")"):
+            inner = token[1:-1].strip()
+            if inner:
+                token = inner
+                changed = True
     if not token:
         return None
     try:
         if "/" in token:
             num_str, den_str = token.split("/", 1)
-            return Fraction(num_str) / Fraction(den_str)
-        return Fraction(token)
+            result = Fraction(num_str) / Fraction(den_str)
+        else:
+            result = Fraction(token)
     except (ValueError, ZeroDivisionError):
         return None
+    return -result if negate else result
 
 
 def numbers_equal(a: str, b: str, tol: float = 1e-9) -> bool:
