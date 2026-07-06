@@ -312,7 +312,12 @@ def inspect_middle_representation(request: ProblemGenerationRequest) -> Dict[str
             lesson_id=lesson_id,
             seed=request.seed,
         )
-        result = runner.run(gen_request, lesson_mapping)
+        try:
+            result = runner.run(gen_request, lesson_mapping)
+        except UnsupportedFormError as e:
+            raise HTTPException(status_code=422, detail=str(e))
+        except NoCompatibleBlueprintError as e:
+            raise HTTPException(status_code=422, detail=str(e))
     finally:
         os.environ.pop("SKIP_LLM_IN_TESTS", None)
         try:

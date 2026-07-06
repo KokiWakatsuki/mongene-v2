@@ -113,16 +113,35 @@ class BlueprintRunner:
         # フォーム別Blueprint優先: execute_blueprint_by_form があればそちらを使う
         bp_by_form = mapping.get("execute_blueprint_by_form", {})
         if request.problem_form in bp_by_form:
-            bp_id = bp_by_form[request.problem_form]
+            candidate_ids = [bp_by_form[request.problem_form]]
         else:
-            # execute_blueprints（リスト）があれば base_seed を種にした決定論的選択、なければ execute_blueprint を使用
+            # execute_blueprints（リスト）があればその全要素が候補、なければ execute_blueprint 単体が候補
             blueprints_list = mapping.get("execute_blueprints")
             if blueprints_list and isinstance(blueprints_list, list) and len(blueprints_list) > 1:
-                bp_id = random.Random(base_seed).choice(blueprints_list)
+                candidate_ids = list(blueprints_list)
             else:
-                bp_id = mapping.get("execute_blueprint", blueprints_list[0] if blueprints_list else "BasicCalculationStructure")
+                candidate_ids = [
+                    mapping.get("execute_blueprint", blueprints_list[0] if blueprints_list else "BasicCalculationStructure")
+                ]
         blueprint_params = mapping.get("blueprint_params", {})
-        blueprint = self.blueprint_loader(bp_id, params=blueprint_params)
+
+        # 契約強制: mapping が要求する form を supported_forms に持たない blueprint に
+        # 黙って退化させない。候補を form でフィルタし、空なら正直にエラーにする。
+        candidate_blueprints = {
+            cid: self.blueprint_loader(cid, params=blueprint_params) for cid in candidate_ids
+        }
+        filtered_ids = [
+            cid for cid in candidate_ids
+            if request.problem_form in candidate_blueprints[cid].supported_forms
+        ]
+        if not filtered_ids:
+            raise NoCompatibleBlueprintError(
+                f"lesson={request.lesson_id} は form={request.problem_form} を要求するが、"
+                f"候補blueprint {candidate_ids} はいずれも supported_forms に "
+                f"{request.problem_form} を含まない（静かなフォールバック禁止）"
+            )
+        bp_id = random.Random(base_seed).choice(filtered_ids)
+        blueprint = candidate_blueprints[bp_id]
 
         # --- 難易度設定パス ---
         # 新設計（離散レベル制）: target_level 指定 + difficulty_levels 定義済みの場合
@@ -197,6 +216,16 @@ class BlueprintRunner:
                         cdict.setdefault("min_value", max(5, int(cdict["max_value"] * 0.3)))
 
             computed_difficulty = float(plan.computed_difficulty)
+
+        # 契約強制（最終アサート）: レベル固有 blueprint_override や旧設計フォールバックの
+        # plan.blueprint によって最終的な blueprint が差し替わった場合も、
+        # request.problem_form を supported_forms が満たすかを再検証する。
+        if request.problem_form not in blueprint.supported_forms:
+            raise NoCompatibleBlueprintError(
+                f"lesson={request.lesson_id} は form={request.problem_form} を要求するが、"
+                f"最終選択された blueprint {blueprint.blueprint_id} は supported_forms に "
+                f"{request.problem_form} を含まない（静かなフォールバック禁止）"
+            )
 
         # unit_mix_bonus: 複合単元（+2/単元追加）→ 制約を多様化
         # 現状 Atom レベルでは直接対応困難。LLM プロンプトへの目安として計算のみ

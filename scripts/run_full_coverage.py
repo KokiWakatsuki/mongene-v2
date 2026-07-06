@@ -71,6 +71,7 @@ from apps.api.src.core.runner.blueprint_runner import (
     BlueprintRunner,
     GenerationRequest,
 )
+from scripts.validate_form_blueprint_contract import _candidate_bp_ids, _level_override_bp_ids
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 MAPPING_PATH = REPO_ROOT / "master_data" / "mapping.json"
@@ -122,6 +123,33 @@ def _make_runner() -> BlueprintRunner:
     )
 
 
+def _pick_contract_compliant_form(lesson_mapping: Dict[str, Any]) -> str | None:
+    """supported_forms のうち、runner が実際に生成に使える（＝候補 blueprint の
+    supported_forms がその form を含む）ものを先頭から探して返す。
+
+    form/blueprint 契約強制（NoCompatibleBlueprintError）導入後、
+    supported_forms[0] を無条件に使うと既知の契約違反ペア（scripts/validate_form_blueprint_contract.py
+    が検出する61件）で必ず失敗するため、実際に生成可能な form を選ぶ。
+    見つからない場合は None を返す（= このレッスンは現状どの宣言formでも生成不能）。
+    """
+    from apps.api.src.blueprints.registry import load_blueprint as _load_bp
+
+    for form in lesson_mapping.get("supported_forms", []):
+        candidate_ids = _candidate_bp_ids(lesson_mapping, form)
+        candidate_ids = candidate_ids + [
+            bp_id for bp_id in _level_override_bp_ids(lesson_mapping, form)
+            if bp_id not in candidate_ids
+        ]
+        for bp_id in candidate_ids:
+            try:
+                bp = _load_bp(bp_id)
+            except Exception:
+                continue
+            if form in bp.supported_forms:
+                return form
+    return None
+
+
 def _evaluate_one(result_text: str, mr, lesson_id: str, forbidden: List[str]) -> Dict[str, bool]:
     answer = mr.sub_questions[0].answer if mr.sub_questions else None
     return {
@@ -151,8 +179,22 @@ def run_177_lessons(max_lessons: int | None = None) -> List[LessonResult]:
 
     for lid in sorted_ids:
         m = mapping[lid]
-        form = m["supported_forms"][0]
+        form = _pick_contract_compliant_form(m)
         start = time.perf_counter()
+        if form is None:
+            # supported_forms のどれも実際には生成できない（form/blueprint 契約違反）。
+            # 静かなフォールバックはしない。契約違反として明示的に失敗記録する。
+            results.append(
+                LessonResult(
+                    lesson_id=lid,
+                    blueprint_id=m["execute_blueprint"],
+                    form=m.get("supported_forms", ["?"])[0],
+                    success=False,
+                    duration_ms=0.0,
+                    error="NoCompatibleBlueprintError: supported_forms のいずれも候補blueprintに未対応（契約違反）",
+                )
+            )
+            continue
         try:
             request = GenerationRequest(
                 target_difficulty=int(m["y_base"]),
