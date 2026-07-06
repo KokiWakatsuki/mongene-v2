@@ -39,7 +39,7 @@ def build_angle_calculation_blueprint(params: dict | None = None) -> BlueprintDe
             compatible_noun_types=["LineAngleAtom", "CircleAngleAtom", "PolygonAtom"],
             required=True,
         ),
-        supported_forms=["calculation", "word_problem"],
+        supported_forms=["calculation", "word_problem", "visual"],
         story_required=False,
         base_difficulty_calculator=lambda nouns, ctx: int(ctx.get("y_base", 45)),
         subquestion_strategy=SubQuestionStrategy(
