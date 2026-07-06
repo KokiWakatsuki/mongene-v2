@@ -74,11 +74,22 @@ def check(product: dict, ground_truth: dict) -> GateResult
 - content_problem_text＋explanation が `master_data/forbidden_words.txt`（既存・353語）に該当したら FAIL。
 - さらに `master_data/prerequisite_graph.yaml` を使い、当該 lesson の前提に**含まれない未習単元の固有語彙**が出たら FAIL（初期は用語ブロックリストで簡易実装、拡張余地として明記）。
 
-### G6 難易度単調性（difficulty_monotonicity）※ product不要・LLMゼロで走る
-- ground truth の MR から**難易度特徴ベクトル**を算出（LLM不使用）:
-  `step_count = Σ len(logic_steps)`、最大オペランド絶対値、`has_sqrt/has_pi/has_fraction/has_negative`（sympy_form文字列から検出）、`sub_question_count`。
-- 合成難易度スコアを定義し、同一 (lesson, form) で **min < mid < max** の単調増加を検査。単調でなければ FAIL。
-- **これはフェーズ3の難易度Lv再設計と同じ特徴セット**。二度手間にせず共通モジュール `difficulty_features.py` に置く。
+### G6 難易度レベル健全性（difficulty_level_soundness）※ product不要・LLMゼロで走る
+> **【重要・2026-07-06 改訂】** 旧版は min/mid/max の連続 target_difficulty を合成スコアで単調性検査していたが、これは**測定軸の誤り**。
+> 現行は離散Lv制（`mapping.json.difficulty_levels[form]` に Lv1..LvN を定義、`target_level` で生成。184/184定義済み）。
+> min/mid/max は生成に存在しない（設計書 difficulty_level_design.md §6）。また多くの単元の難易度は「正の数同士<同符号<異符号」のように
+> **問題の"型"**で定義され、合成スコア（数の大小/step数）では順位化できない。→ 合成スコア単調性は廃止。
+
+正しいLLMフリー判定は **target_level 軸**で以下2つ:
+- **G6-a 制約適合（conformance）**: 各 (lesson, form, Lv) を `target_level=Lv` で /inspect 生成し、その問題が当該Lvの
+  `atom_constraints`（＋ベース設定へのマージ後）を満たすか。例: Lv1 が `allow_negative=false` なら負のオペランドが出ない、
+  `max_value` 超過が無い、`max_terms` 準拠。**違反＝FAIL**（＝レベル定義がランナーに効いていない実バグ）。
+- **G6-b レベル非崩壊（distinctness）**: 同一 (lesson, form) の Lv 定義が相互に異なること。
+  判定は (1) 定義時: `atom_constraints + blueprint_override + verb_config` のシグネチャが重複する Lv があれば FAIL
+  （データ走査で **385中40件が重複、うち十数件は全Lv崩壊** = 既知の修正対象）、
+  (2) 生成時: 各Lvを複数seedで生成した分布が実際に区別可能か（任意・補助）。
+- **意味的順序（Lv4が本当にLv1より難しいか）は決定論では判定不能**。LLM/人手のマイルストーン・スポットチェックに回す（設計書§12 Phase5）。日常ループには入れない。
+- `difficulty_features.py`（step_count等）は G6 の主判定には使わないが、G6-b(2)の分布比較や参考表示に流用可。フェーズ3の難易度設計とも共有。
 
 ### G7 レンダリング健全性（render_sanity）
 - content_problem_text＋explanation の LaTeX: `$...$` が均衡し、`$$` `\[` `\]`（ブロック数式）を**使っていない**こと。使用で FAIL。
