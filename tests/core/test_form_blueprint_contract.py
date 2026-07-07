@@ -57,17 +57,21 @@ def _make_runner(tmp_db: Path) -> BlueprintRunner:
     )
 
 
-# 契約違反の例として使う lesson/form。以前は g2_l16 calculation だったが、calc を
-# SimultaneousEquationsStructure に配線して解消したため、凍結中の MovingPoint 系へ張り替えた。
-# g2_l29「動点の問題」は calculation を宣言するが候補は MovingPointStructure のみで、
-# §9 の構造欠陥（動点の運動モデル未実装）が直るまで honest 422 に凍結される真の能力ギャップ。
+# 「宣言 form を候補 blueprint が supported_forms に持たない → 静かなフォールバックせず
+# NoCompatibleBlueprintError」の機構テスト用。実データの契約違反は全解消したため、
+# g2_l29（候補=MovingPointStructure）に **MovingPointStructure が対応しない proof** を
+# 合成注入して未対応 form を再現する（MovingPointStructure.supported_forms=
+# [calculation, word_problem, visual]）。
 VIOLATION_LESSON_ID = "g2_l29"
-VIOLATION_FORM = "calculation"
+VIOLATION_FORM = "proof"
 
 
 def _violation_lesson_mapping() -> dict:
     mapping = json.loads(MAPPING_PATH.read_text(encoding="utf-8"))
-    return mapping[VIOLATION_LESSON_ID]
+    m = dict(mapping[VIOLATION_LESSON_ID])
+    # proof を supported_forms に宣言注入（候補 blueprint は proof 非対応 → 契約違反を再現）
+    m["supported_forms"] = list(m.get("supported_forms", [])) + ["proof"]
+    return m
 
 
 def test_unsupported_form_raises_no_compatible_blueprint_error(tmp_path: Path) -> None:

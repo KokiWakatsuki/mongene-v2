@@ -395,6 +395,8 @@ def _polygon_marks(polygon_type: str, verts: list[list[float]]) -> list[dict]:
 def _build_2d_geometry(sampled_nouns: Dict[str, NounAtom]) -> VisualDSL:
     elements: list[dict] = []
     viewport = [-1.0, -1.0, 10.0, 10.0]
+    # 動点（MovingPointAtom）が同席する場合は PolygonAtom の辺上に点 P を描く（題材一致）
+    has_mover = any(type(a).__name__ == "MovingPointAtom" for a in sampled_nouns.values())
     for slot_name, atom in sampled_nouns.items():
         name = type(atom).__name__
         sym = atom.get_symbols()
@@ -413,6 +415,18 @@ def _build_2d_geometry(sampled_nouns: Dict[str, NounAtom]) -> VisualDSL:
                     }
                 )
                 elements.extend(_polygon_marks(polygon_type, verts))
+                if has_mover and len(verts) >= 3:
+                    # 点 P を辺 B→C（頂点[1]→[2]）の中点に描く（動点の代表位置・表示のみ）
+                    bx, by = verts[1]
+                    cx, cy = verts[2]
+                    elements.append(
+                        {
+                            "type": "point",
+                            "x": (bx + cx) / 2.0,
+                            "y": (by + cy) / 2.0,
+                            "label": "P",
+                        }
+                    )
         elif name == "CircleAtom":
             r = _to_float(sym.get("radius", sympy.Integer(1)))
             elements.append({"type": "circle", "center": [0, 0], "radius": r})

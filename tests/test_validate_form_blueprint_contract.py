@@ -20,13 +20,25 @@ def test_validate_contract_returns_violation_list() -> None:
     assert result["total_violations"] == len(result["violations"])
 
 
-def test_known_violation_g2_l29_calculation_is_detected() -> None:
-    """g2_l29（動点の問題）は calculation を宣言するが候補は MovingPointStructure のみ
-    （§9 の構造欠陥で凍結中＝honest 422）。検出器が現存の契約違反を取りこぼさないことを保証する。
+def test_moving_point_g2_l29_calculation_violation_is_fixed() -> None:
+    """g2_l29（動点の問題）はかつて calculation を宣言しながら候補が MovingPointStructure
+    のみ、かつ MovingPointStructure が構造欠陥（CircleAtom混入・3小問同一答え）で凍結され
+    calculation 未対応だったため honest 422 の契約違反だった。時間パラメトリックな
+    MovingPointAreaVerb 実装で構造欠陥を解消し calc/visual を開通したため違反が消えたことを
+    回帰検知する（§9 の凍結解除）。
     """
     result = validate_contract()
     violation_keys = {(v["lesson_id"], v["form"]) for v in result["violations"]}
-    assert ("g2_l29", "calculation") in violation_keys
+    assert ("g2_l29", "calculation") not in violation_keys
+    assert ("g2_l29", "visual") not in violation_keys
+
+
+def test_no_contract_violations_remain() -> None:
+    """MovingPoint 凍結解除で凍結分を含む全契約違反が解消（違反 0）。
+    新たに未対応 form を宣言すると検出器が拾って FAIL する回帰ガード。
+    """
+    result = validate_contract()
+    assert result["violations"] == [], f"想定外の契約違反: {result['violations']}"
 
 
 def test_g2_l16_calculation_violation_is_fixed() -> None:

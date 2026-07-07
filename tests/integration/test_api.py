@@ -81,14 +81,10 @@ def test_generate_rejects_empty_lesson_ids() -> None:
     assert r.status_code == 400
 
 
-def test_inspect_rejects_form_not_in_blueprint_supported_forms() -> None:
-    """g2_l29「動点の問題」は mapping.supported_forms に calculation を含むが、
-    実際に選ばれる候補 blueprint（MovingPointStructure）は calculation をサポートしない
-    （§9 の構造欠陥で凍結中＝honest 422 の既知の form/blueprint 契約違反）。
-
-    黙って別 form にフォールバックせず、NoCompatibleBlueprintError → 422 を返すべきで、
-    200 で偽の結果を返してはならない。（以前は g2_l16 calculation がこの例だったが、
-    SimultaneousEquationsStructure への配線で解消したため、凍結中の例に張り替えた。）
+def test_inspect_moving_point_calculation_now_generates() -> None:
+    """g2_l29「動点の問題」の calculation は、かつて候補 blueprint（MovingPointStructure）が
+    構造欠陥で凍結され未対応だったため honest 422 だったが、時間パラメトリックな
+    MovingPointAreaVerb 実装で凍結解除（§9）。退化せず 200 で生成されることを回帰検知する。
     """
     payload = {
         "curriculum": {"grade": 2, "lesson_ids": ["g2_l29"]},
@@ -96,8 +92,21 @@ def test_inspect_rejects_form_not_in_blueprint_supported_forms() -> None:
         "target_difficulty": 6,
     }
     r = client.post("/problems/inspect", json=payload)
-    assert r.status_code == 422
-    assert "calculation" in r.json()["detail"]
+    assert r.status_code == 200
+
+
+def test_inspect_rejects_undeclared_form() -> None:
+    """mapping.supported_forms に宣言の無い form（g2_l29 に proof は無い）を要求すると、
+    黙って別 form にフォールバックせず honest に拒否すること（200 で偽の結果を返さない）。
+    """
+    payload = {
+        "curriculum": {"grade": 2, "lesson_ids": ["g2_l29"]},
+        "problem_form": "proof",
+        "target_difficulty": 6,
+    }
+    r = client.post("/problems/inspect", json=payload)
+    assert r.status_code in (400, 422)
+    assert "proof" in r.json()["detail"]
 
 
 def test_inspect_supported_form_still_generates() -> None:

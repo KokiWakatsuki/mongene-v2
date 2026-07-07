@@ -1,10 +1,11 @@
 """MovingPointStructure（§17.4 #6）
 
-動点による面積変化（時間関数）。
+動点による三角形面積の時間変化。点 P が図形の底辺を基線として一定の速さで高さ方向に
+進むとき、三角形の面積 S(t) が時刻 t の関数として変化する（比例／1次）。
 """
 from __future__ import annotations
 
-from apps.api.src.atoms.verb.measure_geometry_verb import MeasureGeometryVerb
+from apps.api.src.atoms.verb.moving_point_area_verb import MovingPointAreaVerb
 from apps.api.src.core.abc.blueprint import (
     BlueprintDefinition,
     NounSlot,
@@ -17,19 +18,44 @@ from apps.api.src.core.abc.visuals import VisualSlot
 def build_moving_point_blueprint(params: dict | None = None) -> BlueprintDefinition:
     return BlueprintDefinition(
         blueprint_id="MovingPointStructure",
-        blueprint_version="v1",
+        blueprint_version="v2",
         noun_slots={
-            "base_shape": NounSlot(
-                slot_name="base_shape",
+            # 底面図形。accepted_noun_types で PolygonAtom に限定し CircleAtom 混入を防ぐ
+            # （2026-07-07 §9 の構造欠陥①を解消）。
+            "figure": NounSlot(
+                slot_name="figure",
                 accepted_tags=["plane_geometry"],
+                accepted_noun_types=["PolygonAtom"],
+                required=True,
+            ),
+            # 動点（速さ v を提供）。accepted_tags は空にして required_tags=plane_geometry
+            # のフィルタで落ちないようにする（AtomSelector のフォールバック経路）。
+            "mover": NounSlot(
+                slot_name="mover",
+                accepted_tags=[],
+                accepted_noun_types=["MovingPointAtom"],
                 required=True,
             ),
         },
+        # 同一の sampled atom を共有する 3 つの決定論 query で、動点設定が整合した
+        # 3 小問（特定時刻の面積 / t の式 / 最大面積）を作る（§9 の構造欠陥②を解消）。
         verb_invocations=[
             VerbInvocation(
-                verb=MeasureGeometryVerb(measure_type="area"),
-                input_slots=["base_shape"],
-                output_slot="area",
+                verb=MovingPointAreaVerb(query="area_at_t"),
+                input_slots=["figure", "mover"],
+                output_slot="area_at_t",
+                on_failure="retry_seed",
+            ),
+            VerbInvocation(
+                verb=MovingPointAreaVerb(query="area_function"),
+                input_slots=["figure", "mover"],
+                output_slot="area_function",
+                on_failure="retry_seed",
+            ),
+            VerbInvocation(
+                verb=MovingPointAreaVerb(query="max_area"),
+                input_slots=["figure", "mover"],
+                output_slot="max_area",
                 on_failure="retry_seed",
             ),
         ],
@@ -38,20 +64,19 @@ def build_moving_point_blueprint(params: dict | None = None) -> BlueprintDefinit
             compatible_noun_types=["PolygonAtom"],
             required=True,
         ),
-        # NOTE(2026-07-07): calc/visual は意図的に未開通。MovingPointStructure は
-        # (1) noun_slot が accepted_tags=["plane_geometry"] のみで CircleAtom が混入
-        #     （動点問題なのに円が約57%出る）、(2) 3小問が動点の時間変化を反映せず
-        #     全て同一答えを返す、という構造欠陥を持つ。契約哲学「壊れた出力を隠すより
-        #     422で誠実に失敗」に従い、これらが直る（accepted_noun_types付与＋
-        #     時間パラメトリックな面積Verb）までは word_problem 以外を開通しない。
-        #     詳細は docs/HANDOFF_2026-07-06.md §13。
-        supported_forms=["word_problem"],
+        # §9 の構造欠陥（① CircleAtom 混入・② 3 小問同一答え）を解消したため calc/visual を開通。
+        supported_forms=["calculation", "word_problem", "visual"],
         story_required=False,
         base_difficulty_calculator=lambda nouns, ctx: int(ctx.get("y_base", 65)),
         subquestion_strategy=SubQuestionStrategy(
             strategy_type="incremental",
             target_count=2,
-            intermediate_outputs=["t=2 秒の点 P の位置", "△APQ の面積を t の式で表す"],
-            final_question="△APQ の面積が最大となる時刻 t と、その面積",
+            intermediate_outputs=[
+                "点 P が出発してからの時間を t 秒とするとき、ある時刻での三角形の面積",
+                "三角形の面積 S を t の式で表しなさい",
+            ],
+            intermediate_slots=["area_at_t", "area_function"],
+            final_question="点 P が動くときの三角形の面積の最大値を求めなさい",
+            final_slot="max_area",
         ),
     )
