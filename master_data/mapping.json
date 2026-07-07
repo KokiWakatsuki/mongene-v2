@@ -30268,7 +30268,8 @@
     "lesson_number": 49,
     "execute_blueprint": "ProofStructure",
     "required_tags": [
-      "plane_geometry"
+      "plane_geometry",
+      "circle_angles"
     ],
     "atom_constraints": {
       "PolygonAtom": {
@@ -30290,7 +30291,7 @@
     },
     "execute_blueprint_by_form": {
       "proof": "ProofStructure",
-      "visual": "BasicGeometryMeasurementStructure"
+      "visual": "AngleCalculationStructure"
     },
     "dedup_disabled": true,
     "difficulty_levels": {
@@ -30298,7 +30299,9 @@
         {
           "lv": 1,
           "description": "円周角の定理の直接適用",
-          "atom_constraints": {},
+          "atom_constraints": {
+            "PolygonAtom": {}
+          },
           "blueprint_params": {
             "ProveGeometryVerb.proof_type": "congruence"
           },
@@ -30330,7 +30333,9 @@
         {
           "lv": 3,
           "description": "円周角を用いた相似証明",
-          "atom_constraints": {},
+          "atom_constraints": {
+            "PolygonAtom": {}
+          },
           "blueprint_params": {
             "ProveGeometryVerb.proof_type": "similarity"
           },
@@ -30365,58 +30370,65 @@
           "lv": 1,
           "description": "円周角の定理の基本適用",
           "atom_constraints": {
-            "PolygonAtom": {
-              "polygon_type": "triangle",
-              "max_side_length": 5
+            "CircleAngleAtom": {
+              "inscribed_quadrilateral": false,
+              "tangent_chord_angle": false,
+              "power_of_point": false
             }
           },
-          "blueprint_params": {},
+          "blueprint_params": {
+            "theorem": "inscribed_angle"
+          },
           "verb_config": {},
           "implementable": true,
-          "implementation_note": "図形構成は可能だが、証明問題としての論理生成は別途ロジックが必要。"
+          "implementation_note": "AngleCalculationStructure+FindAngleVerb(inscribed_angle) で円と円周角を描画・実生成"
         },
         {
           "lv": 2,
           "description": "直径を含む円周角の利用",
           "atom_constraints": {
-            "PolygonAtom": {
-              "polygon_type": "right_triangle",
-              "max_side_length": 8
+            "CircleAngleAtom": {
+              "inscribed_quadrilateral": false,
+              "tangent_chord_angle": false,
+              "power_of_point": false
             }
           },
-          "blueprint_params": {},
+          "blueprint_params": {
+            "theorem": "inscribed_angle"
+          },
           "verb_config": {},
           "implementable": true,
-          "implementation_note": ""
+          "implementation_note": "AngleCalculationStructure+FindAngleVerb(inscribed_angle) で円と円周角を描画・実生成"
         },
         {
           "lv": 3,
           "description": "円に内接する四角形の性質",
           "atom_constraints": {
-            "PolygonAtom": {
-              "polygon_type": "square",
-              "max_side_length": 10
+            "CircleAngleAtom": {
+              "inscribed_quadrilateral": true
             }
           },
-          "blueprint_params": {},
+          "blueprint_params": {
+            "theorem": "inscribed_quadrilateral"
+          },
           "verb_config": {},
           "implementable": true,
-          "implementation_note": ""
+          "implementation_note": "AngleCalculationStructure+FindAngleVerb(inscribed_quadrilateral) で内接四角形を描画・実生成"
         },
         {
           "lv": 4,
-          "description": "複合的な円周角と多角形",
+          "description": "円に内接する四角形の応用",
           "atom_constraints": {
-            "PolygonAtom": {
-              "polygon_type": "regular_polygon",
-              "max_side_length": 10,
-              "n_sides": 6
+            "CircleAngleAtom": {
+              "inscribed_quadrilateral": true
             }
           },
-          "blueprint_params": {},
+          "blueprint_params": {
+            "theorem": "inscribed_quadrilateral"
+          },
           "verb_config": {},
           "implementable": true,
-          "implementation_note": "図形の複雑度を上げることで、証明のステップ数を増やす。"
+          "implementation_note": "AngleCalculationStructure+FindAngleVerb(inscribed_quadrilateral) で内接四角形を描画・実生成"
         }
       ]
     },
