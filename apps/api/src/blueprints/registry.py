@@ -38,6 +38,9 @@ def _builder_map() -> Dict[str, Callable[[], BlueprintDefinition]]:
     from apps.api.src.blueprints.quadratic_function import build_quadratic_function_blueprint
     from apps.api.src.blueprints.simultaneous_equations import build_simultaneous_equations_blueprint
     from apps.api.src.blueprints.knowledge_base import build_knowledge_base_blueprint
+    from apps.api.src.blueprints.word_problem_formulation import (
+        build_word_problem_formulation_blueprint,
+    )
 
     return {
         "BasicCalculationStructure": build_basic_calculation_blueprint,
@@ -61,6 +64,7 @@ def _builder_map() -> Dict[str, Callable[[], BlueprintDefinition]]:
         "SimultaneousEquationsStructure": build_simultaneous_equations_blueprint,
         "KnowledgeBaseStructure": build_knowledge_base_blueprint,
         "AlgebraicProofStructure": build_algebraic_proof_blueprint,
+        "WordProblemFormulationStructure": build_word_problem_formulation_blueprint,
     }
 
 

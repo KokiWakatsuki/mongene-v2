@@ -2606,7 +2606,9 @@
         }
       ]
     },
-    "execute_blueprint_by_form": {}
+    "execute_blueprint_by_form": {
+      "word_problem": "WordProblemFormulationStructure"
+    }
   },
   "g1_l16": {
     "title": "代入と式の値",

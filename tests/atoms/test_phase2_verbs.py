@@ -15,6 +15,7 @@ from apps.api.src.atoms.noun.linear_func_atom import LinearFuncAtom
 from apps.api.src.atoms.noun.number_atom import NumberAtom
 from apps.api.src.atoms.noun.point_atom import PointAtom
 from apps.api.src.atoms.noun.polygon_atom import PolygonAtom
+from apps.api.src.atoms.noun.polynomial_atom import PolynomialAtom
 from apps.api.src.atoms.noun.prism_atom import PrismAtom
 from apps.api.src.atoms.noun.pyramid_atom import PyramidAtom
 from apps.api.src.atoms.noun.sample_atom import SampleAtom
@@ -27,6 +28,7 @@ from apps.api.src.atoms.verb.estimate_population_verb import EstimatePopulationV
 from apps.api.src.atoms.verb.find_angle_verb import FindAngleVerb
 from apps.api.src.atoms.verb.find_divisors_verb import FindDivisorsVerb
 from apps.api.src.atoms.verb.form_shape_verb import FormShapeVerb
+from apps.api.src.atoms.verb.formulate_verb import FormulateVerb
 from apps.api.src.atoms.verb.generalize_formula_verb import GeneralizeFormulaVerb
 from apps.api.src.atoms.verb.intersect_verb import IntersectVerb
 from apps.api.src.atoms.verb.locus_verb import LocusVerb
@@ -137,6 +139,31 @@ def test_prove_algebraic_extended_proof_types_return_step(proof_type: str) -> No
     for i, s in enumerate(proof_output["steps"], start=1):
         assert s["step_number"] == i
     assert proof_output["conclusion"]
+
+
+# --- FormulateVerb（立式型 word_problem） ---
+def _poly(expr: sympy.Expr, variables=None) -> PolynomialAtom:
+    return PolynomialAtom(expression=expr, variables=variables or [sympy.Symbol("x")])
+
+
+def test_formulate_expression_returns_expression_as_answer() -> None:
+    """FormulateVerb(expression) は式そのものを答え（sympy_expr）として返す（解かない）。"""
+    x = sympy.Symbol("x")
+    step = FormulateVerb("expression").solve(_poly(3 * x + 2), rng=random.Random(0))
+    assert step.operation_name == "formulate_expression"
+    assert step.sympy_expr == 3 * x + 2
+
+
+def test_formulate_rejects_constant_without_variable() -> None:
+    """変数を含まない式は立式題材に不適として validate が弾く（moat）。"""
+    ok, _ = FormulateVerb("expression").validate(_num(5))
+    assert ok is False
+
+
+def test_formulate_unsupported_mode_raises() -> None:
+    x = sympy.Symbol("x")
+    with pytest.raises(ValueError):
+        FormulateVerb("equation").solve(_poly(3 * x + 2), rng=random.Random(0))
 
 
 # --- GeneralizeFormulaVerb ---
