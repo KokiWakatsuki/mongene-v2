@@ -35,15 +35,26 @@ class CalculateProbabilityVerb(VerbAtom):
         event = nouns[0]
         symbols = event.get_symbols()
         sample_space = int(symbols["sample_space_size"])
+        # EventAtom が記述可能な事象条件から導出した適合数を最優先で使う
+        # （乱数の任意 favorable は「何の確率か」が定まらず題材が破綻するため廃止）。
+        derived = symbols.get("favorable")
+        description = symbols.get("event_description") or ""
         if self.favorable is not None:
             fav = max(0, min(self.favorable, sample_space))
+        elif derived is not None and int(derived) > 0:
+            fav = min(int(derived), sample_space)
         else:
-            # rng を使って有利な結果数をランダム選択（1 以上 sample_space 未満）
+            # 後方互換フォールバック（本来 EventAtom が favorable を供給する）
             fav = rng.randint(1, max(1, sample_space - 1))
         prob = sympy.Rational(fav, sample_space)
+        hint = (
+            f"{description}確率（全事象 {sample_space} のうち適合 {fav}）"
+            if description
+            else f"全事象 {sample_space} のうち適合 {fav} の確率"
+        )
         return LogicStep(
             operation_name="calculate_probability",
             operands=[str(fav), str(sample_space)],
             sympy_expr=prob,
-            narration_hint=f"全事象 {sample_space} のうち適合 {fav} の確率",
+            narration_hint=hint,
         )
