@@ -15,7 +15,7 @@ from apps.api.src.core.abc.atoms import AtomConstraints, NounAtom
 
 @register_noun
 class PolynomialAtom(NounAtom):
-    tags: ClassVar[List[str]] = ["polynomial", "factorization"]
+    tags: ClassVar[List[str]] = ["polynomial"]
 
     def __init__(
         self,

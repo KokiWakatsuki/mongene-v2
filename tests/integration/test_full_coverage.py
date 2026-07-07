@@ -68,14 +68,12 @@ def test_full_coverage_meets_quality_gates() -> None:
     # 5. Appropriateness 100%
     assert report.appropriateness_pass == expected_successes
 
-    # 6. Standards Alignment 100%（1〜2 件の許容誤差を認める）
-    # 既知の偽FAIL cluster: grade1「文字の式」レッスン（g1_l12〜g1_l19）は PolynomialAtom
-    # を使うため、その intrinsic tag "factorization"（grade3 概念）が selected_tags に漏れ、
-    # standards_alignment が grade1 禁止タグとして弾く。生成物自体は grade1 妥当（偽FAIL）。
-    # 立式型 word_problem 開通で g1_l15（式）・g1_l19（等式）が生成成功しこの cluster に
-    # 復帰したため 8 件（g1_l12,13,14,15,16,17,18,19）。真因は PolynomialAtom の vestigial
-    # "factorization" tag（どのレッスンも required/optional_tags で使っておらず、除去は GT
-    # fixture 再生成を伴う別課題）。HANDOFF §14 に記録。
-    assert report.standards_pass >= expected_successes - 8, (
+    # 6. Standards Alignment 100%（許容誤差なし）
+    # かつて grade1「文字の式」レッスン（g1_l12〜g1_l19）が偽FAILしていた。原因は PolynomialAtom
+    # の vestigial tag "factorization"（grade3 概念）が selected_tags に漏れ、standards_alignment
+    # が grade1 禁止タグとして弾いていたこと。どのレッスンも required/optional_tags で
+    # "factorization" を使っておらず atom 選択に不要なため、PolynomialAtom.tags から除去して
+    # 偽FAIL cluster を解消した（GT fixture も pinned seed で再生成済み）。
+    assert report.standards_pass == expected_successes, (
         f"Standards Alignment が {report.standards_pass}/{expected_successes}"
     )

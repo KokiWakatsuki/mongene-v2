@@ -121,7 +121,6 @@ atoms:
   category: A
   default_tags:
   - polynomial
-  - factorization
   properties:
   - expression
   - variables
