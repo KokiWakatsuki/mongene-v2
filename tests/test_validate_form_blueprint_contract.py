@@ -20,14 +20,22 @@ def test_validate_contract_returns_violation_list() -> None:
     assert result["total_violations"] == len(result["violations"])
 
 
-def test_known_violation_g2_l16_calculation_is_detected() -> None:
-    """g2_l16 は mapping.supported_forms に calculation を含むが、候補 blueprint は
-    WordProblemStructure（word_problem 専用で素の方程式求解を calculation として
-    生成できない）のみ。検出器が現存の契約違反を取りこぼさないことを保証する。
+def test_known_violation_g2_l29_calculation_is_detected() -> None:
+    """g2_l29（動点の問題）は calculation を宣言するが候補は MovingPointStructure のみ
+    （§9 の構造欠陥で凍結中＝honest 422）。検出器が現存の契約違反を取りこぼさないことを保証する。
     """
     result = validate_contract()
     violation_keys = {(v["lesson_id"], v["form"]) for v in result["violations"]}
-    assert ("g2_l16", "calculation") in violation_keys
+    assert ("g2_l29", "calculation") in violation_keys
+
+
+def test_g2_l16_calculation_violation_is_fixed() -> None:
+    """g2_l16（個数と代金）はかつて calc を宣言しながら候補が WordProblemStructure のみで
+    違反だった。calc を SimultaneousEquationsStructure に配線して解消。回帰を検知する。
+    """
+    result = validate_contract()
+    violation_keys = {(v["lesson_id"], v["form"]) for v in result["violations"]}
+    assert ("g2_l16", "calculation") not in violation_keys
 
 
 def test_g1_l30_visual_violation_is_fixed() -> None:

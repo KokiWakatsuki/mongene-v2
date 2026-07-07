@@ -57,12 +57,11 @@ def _make_runner(tmp_db: Path) -> BlueprintRunner:
     )
 
 
-# 契約違反の例として使う lesson/form。g1_l1 の word_problem はかつて違反だったが立式型/文脈計算型
-# capability の開通で解消したため、まだ真の能力ギャップとして残る例に張り替えた。
-# g2_l16「個数と代金の問題」は calculation を宣言するが候補 blueprint は WordProblemStructure
-# （supported_forms=["word_problem"]）のみで calculation を含まないため契約違反（calc を扱える
-# blueprint を配線するか mapping 宣言を見直すまで残る）。
-VIOLATION_LESSON_ID = "g2_l16"
+# 契約違反の例として使う lesson/form。以前は g2_l16 calculation だったが、calc を
+# SimultaneousEquationsStructure に配線して解消したため、凍結中の MovingPoint 系へ張り替えた。
+# g2_l29「動点の問題」は calculation を宣言するが候補は MovingPointStructure のみで、
+# §9 の構造欠陥（動点の運動モデル未実装）が直るまで honest 422 に凍結される真の能力ギャップ。
+VIOLATION_LESSON_ID = "g2_l29"
 VIOLATION_FORM = "calculation"
 
 
@@ -87,7 +86,7 @@ def test_unsupported_form_raises_no_compatible_blueprint_error(tmp_path: Path) -
     message = str(excinfo.value)
     assert VIOLATION_LESSON_ID in message
     assert VIOLATION_FORM in message
-    assert "WordProblemStructure" in message
+    assert "MovingPointStructure" in message
 
 
 def test_supported_form_generates_without_degradation(tmp_path: Path) -> None:

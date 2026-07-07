@@ -12451,8 +12451,8 @@
     "raw_y_base": 500,
     "y_base": 10,
     "supported_forms": [
-      "calculation",
-      "word_problem"
+      "word_problem",
+      "calculation"
     ],
     "is_clean_override": {
       "disabled": true
@@ -12463,10 +12463,11 @@
           "lv": 1,
           "description": "小さな係数の基本的な連立方程式",
           "atom_constraints": {
-            "degree": 1,
-            "max_coefficient": 5,
-            "is_integer_solution": true,
-            "diophantine_form": true
+            "EquationAtom": {
+              "diophantine_form": true,
+              "max_coefficient": 3,
+              "is_integer_solution": true
+            }
           },
           "blueprint_params": {},
           "verb_config": {},
@@ -12477,10 +12478,11 @@
           "lv": 2,
           "description": "標準的な係数を持つ連立方程式",
           "atom_constraints": {
-            "degree": 1,
-            "max_coefficient": 20,
-            "is_integer_solution": true,
-            "diophantine_form": true
+            "EquationAtom": {
+              "diophantine_form": true,
+              "max_coefficient": 4,
+              "is_integer_solution": true
+            }
           },
           "blueprint_params": {},
           "verb_config": {},
@@ -12491,10 +12493,11 @@
           "lv": 3,
           "description": "大きな係数を含む連立方程式",
           "atom_constraints": {
-            "degree": 1,
-            "max_coefficient": 50,
-            "is_integer_solution": true,
-            "diophantine_form": true
+            "EquationAtom": {
+              "diophantine_form": true,
+              "max_coefficient": 5,
+              "is_integer_solution": true
+            }
           },
           "blueprint_params": {},
           "verb_config": {},
@@ -12505,10 +12508,11 @@
           "lv": 4,
           "description": "非整数解を含む複雑な連立方程式",
           "atom_constraints": {
-            "degree": 1,
-            "max_coefficient": 100,
-            "is_integer_solution": false,
-            "diophantine_form": true
+            "EquationAtom": {
+              "diophantine_form": true,
+              "max_coefficient": 6,
+              "is_integer_solution": true
+            }
           },
           "blueprint_params": {},
           "verb_config": {},
@@ -12568,7 +12572,8 @@
       ]
     },
     "execute_blueprint_by_form": {
-      "word_problem": "WordProblemStructure"
+      "word_problem": "WordProblemStructure",
+      "calculation": "SimultaneousEquationsStructure"
     }
   },
   "g2_l17": {
@@ -12588,8 +12593,8 @@
     "visual_component": "NullRenderer",
     "y_base": 10,
     "supported_forms": [
-      "calculation",
-      "word_problem"
+      "word_problem",
+      "calculation"
     ],
     "scenario_categories": [
       "speed",
@@ -12608,7 +12613,9 @@
           "description": "係数が小さく計算が容易",
           "atom_constraints": {
             "EquationAtom": {
-              "max_coefficient": 5
+              "diophantine_form": true,
+              "max_coefficient": 3,
+              "is_integer_solution": true
             }
           },
           "blueprint_params": {},
@@ -12621,7 +12628,9 @@
           "description": "標準的な係数と計算量",
           "atom_constraints": {
             "EquationAtom": {
-              "max_coefficient": 15
+              "diophantine_form": true,
+              "max_coefficient": 4,
+              "is_integer_solution": true
             }
           },
           "blueprint_params": {},
@@ -12634,7 +12643,9 @@
           "description": "係数が大きく計算が複雑",
           "atom_constraints": {
             "EquationAtom": {
-              "max_coefficient": 30
+              "diophantine_form": true,
+              "max_coefficient": 5,
+              "is_integer_solution": true
             }
           },
           "blueprint_params": {},
@@ -12647,7 +12658,9 @@
           "description": "大きな係数と複雑な数値",
           "atom_constraints": {
             "EquationAtom": {
-              "max_coefficient": 50
+              "diophantine_form": true,
+              "max_coefficient": 6,
+              "is_integer_solution": true
             }
           },
           "blueprint_params": {},
@@ -12716,7 +12729,8 @@
       ]
     },
     "execute_blueprint_by_form": {
-      "word_problem": "WordProblemStructure"
+      "word_problem": "WordProblemStructure",
+      "calculation": "SimultaneousEquationsStructure"
     }
   },
   "g2_l18": {
@@ -12741,8 +12755,8 @@
     "raw_y_base": 500,
     "y_base": 10,
     "supported_forms": [
-      "calculation",
-      "word_problem"
+      "word_problem",
+      "calculation"
     ],
     "is_clean_override": {
       "disabled": true
@@ -12753,8 +12767,11 @@
           "lv": 1,
           "description": "小さな係数で解が整数の基本問題",
           "atom_constraints": {
-            "diophantine_form": true,
-            "max_coefficient": 5
+            "EquationAtom": {
+              "diophantine_form": true,
+              "max_coefficient": 3,
+              "is_integer_solution": true
+            }
           },
           "blueprint_params": {},
           "verb_config": {},
@@ -12765,8 +12782,11 @@
           "lv": 2,
           "description": "係数を10まで広げた標準的な問題",
           "atom_constraints": {
-            "diophantine_form": true,
-            "max_coefficient": 10
+            "EquationAtom": {
+              "diophantine_form": true,
+              "max_coefficient": 4,
+              "is_integer_solution": true
+            }
           },
           "blueprint_params": {},
           "verb_config": {},
@@ -12777,8 +12797,11 @@
           "lv": 3,
           "description": "係数を20まで広げた計算練習",
           "atom_constraints": {
-            "diophantine_form": true,
-            "max_coefficient": 20
+            "EquationAtom": {
+              "diophantine_form": true,
+              "max_coefficient": 5,
+              "is_integer_solution": true
+            }
           },
           "blueprint_params": {},
           "verb_config": {},
@@ -12789,9 +12812,11 @@
           "lv": 4,
           "description": "解が整数にならない複雑な計算",
           "atom_constraints": {
-            "diophantine_form": true,
-            "max_coefficient": 20,
-            "is_integer_solution": false
+            "EquationAtom": {
+              "diophantine_form": true,
+              "max_coefficient": 6,
+              "is_integer_solution": true
+            }
           },
           "blueprint_params": {},
           "verb_config": {},
@@ -12852,7 +12877,8 @@
       ]
     },
     "execute_blueprint_by_form": {
-      "word_problem": "WordProblemStructure"
+      "word_problem": "WordProblemStructure",
+      "calculation": "SimultaneousEquationsStructure"
     }
   },
   "g2_l19": {
@@ -25629,9 +25655,11 @@
           "lv": 1,
           "description": "小さな係数の整数解を持つ2次方程式",
           "atom_constraints": {
-            "degree": 2,
-            "max_coefficient": 5,
-            "is_integer_solution": true
+            "EquationAtom": {
+              "degree": 2,
+              "max_coefficient": 5,
+              "is_integer_solution": true
+            }
           },
           "blueprint_params": {},
           "verb_config": {},
@@ -25642,9 +25670,11 @@
           "lv": 2,
           "description": "標準的な係数の整数解を持つ2次方程式",
           "atom_constraints": {
-            "degree": 2,
-            "max_coefficient": 10,
-            "is_integer_solution": true
+            "EquationAtom": {
+              "degree": 2,
+              "max_coefficient": 10,
+              "is_integer_solution": true
+            }
           },
           "blueprint_params": {},
           "verb_config": {},
@@ -25655,9 +25685,11 @@
           "lv": 3,
           "description": "やや大きな係数の整数解を持つ2次方程式",
           "atom_constraints": {
-            "degree": 2,
-            "max_coefficient": 20,
-            "is_integer_solution": true
+            "EquationAtom": {
+              "degree": 2,
+              "max_coefficient": 20,
+              "is_integer_solution": true
+            }
           },
           "blueprint_params": {},
           "verb_config": {},
@@ -25668,9 +25700,11 @@
           "lv": 4,
           "description": "解が整数にならない2次方程式",
           "atom_constraints": {
-            "degree": 2,
-            "max_coefficient": 20,
-            "is_integer_solution": false
+            "EquationAtom": {
+              "degree": 2,
+              "max_coefficient": 20,
+              "is_integer_solution": false
+            }
           },
           "blueprint_params": {},
           "verb_config": {},
@@ -25741,7 +25775,9 @@
         }
       ]
     },
-    "execute_blueprint_by_form": {}
+    "execute_blueprint_by_form": {
+      "calculation": "SolveEquationStructure"
+    }
   },
   "g3_l30": {
     "title": "2次方程式の利用（図形に関する問題）",
@@ -25775,9 +25811,11 @@
           "lv": 1,
           "description": "整数解を持つ単純な図形問題",
           "atom_constraints": {
-            "degree": 2,
-            "max_coefficient": 5,
-            "is_integer_solution": true
+            "EquationAtom": {
+              "degree": 2,
+              "max_coefficient": 5,
+              "is_integer_solution": true
+            }
           },
           "blueprint_params": {},
           "verb_config": {},
@@ -25788,9 +25826,11 @@
           "lv": 2,
           "description": "係数がやや大きい整数解の問題",
           "atom_constraints": {
-            "degree": 2,
-            "max_coefficient": 10,
-            "is_integer_solution": true
+            "EquationAtom": {
+              "degree": 2,
+              "max_coefficient": 10,
+              "is_integer_solution": true
+            }
           },
           "blueprint_params": {},
           "verb_config": {},
@@ -25801,9 +25841,11 @@
           "lv": 3,
           "description": "無理数解を含む図形問題",
           "atom_constraints": {
-            "degree": 2,
-            "max_coefficient": 10,
-            "is_integer_solution": false
+            "EquationAtom": {
+              "degree": 2,
+              "max_coefficient": 10,
+              "is_integer_solution": false
+            }
           },
           "blueprint_params": {},
           "verb_config": {},
@@ -25814,9 +25856,11 @@
           "lv": 4,
           "description": "複雑な係数と無理数解の問題",
           "atom_constraints": {
-            "degree": 2,
-            "max_coefficient": 20,
-            "is_integer_solution": false
+            "EquationAtom": {
+              "degree": 2,
+              "max_coefficient": 20,
+              "is_integer_solution": false
+            }
           },
           "blueprint_params": {},
           "verb_config": {},
@@ -25879,7 +25923,9 @@
         }
       ]
     },
-    "execute_blueprint_by_form": {}
+    "execute_blueprint_by_form": {
+      "calculation": "SolveEquationStructure"
+    }
   },
   "g3_l31": {
     "title": "2次方程式の利用（動点などその他の応用）",

@@ -82,16 +82,16 @@ def test_generate_rejects_empty_lesson_ids() -> None:
 
 
 def test_inspect_rejects_form_not_in_blueprint_supported_forms() -> None:
-    """g2_l16「個数と代金の問題」は mapping.supported_forms に calculation を含むが、
-    実際に選ばれる候補 blueprint（WordProblemStructure）は supported_forms=["word_problem"]
-    のみで calculation をサポートしない（既知の form/blueprint 契約違反）。
+    """g2_l29「動点の問題」は mapping.supported_forms に calculation を含むが、
+    実際に選ばれる候補 blueprint（MovingPointStructure）は calculation をサポートしない
+    （§9 の構造欠陥で凍結中＝honest 422 の既知の form/blueprint 契約違反）。
 
     黙って別 form にフォールバックせず、NoCompatibleBlueprintError → 422 を返すべきで、
-    200 で偽の結果を返してはならない。（g1_l1 word_problem はかつてこの例だったが、
-    文脈計算型 capability の開通で解消したため、まだ違反として残る例に張り替えた。）
+    200 で偽の結果を返してはならない。（以前は g2_l16 calculation がこの例だったが、
+    SimultaneousEquationsStructure への配線で解消したため、凍結中の例に張り替えた。）
     """
     payload = {
-        "curriculum": {"grade": 2, "lesson_ids": ["g2_l16"]},
+        "curriculum": {"grade": 2, "lesson_ids": ["g2_l29"]},
         "problem_form": "calculation",
         "target_difficulty": 6,
     }
