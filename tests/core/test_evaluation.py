@@ -4,7 +4,12 @@ from __future__ import annotations
 import sympy
 
 from apps.api.src.core.evaluation.appropriateness import is_appropriate
-from apps.api.src.core.evaluation.solvability import is_clean, is_solvable
+from apps.api.src.core.evaluation.solvability import (
+    has_degenerate_step,
+    is_clean,
+    is_degenerate_step,
+    is_solvable,
+)
 from apps.api.src.core.evaluation.standards import evaluate_standards_alignment
 from apps.api.src.core.representation.middle_representation import (
     AnswerObject,
@@ -84,3 +89,34 @@ def test_standards_alignment_grade1_rejects_square_root() -> None:
 def test_standards_alignment_grade3_allows_pythagorean() -> None:
     mr = _make_mr_with_tags(["pythagorean", "space_geometry"])
     assert evaluate_standards_alignment(mr, "g3_l55") is True
+
+
+# --- 退化検出ゲート（打開策2） ---
+def test_degenerate_zero_area_is_rejected() -> None:
+    # 三角形の面積 0 は退化（同一切片の直線で座標軸と作る三角形など）
+    assert is_degenerate_step("triangle_area", sympy.Integer(0)) is True
+    assert is_degenerate_step("measure_area", sympy.Integer(0)) is True
+    assert is_degenerate_step("measure_volume", sympy.Integer(-5)) is True
+
+
+def test_nonzero_area_is_ok() -> None:
+    assert is_degenerate_step("triangle_area", sympy.Rational(25, 4)) is False
+
+
+def test_degenerate_probability_out_of_range() -> None:
+    assert is_degenerate_step("calculate_probability", sympy.Integer(0)) is True
+    assert is_degenerate_step("calculate_probability", sympy.Integer(1)) is True
+    assert is_degenerate_step("calculate_probability", sympy.Rational(3, 2)) is True
+    assert is_degenerate_step("calculate_probability", sympy.Rational(1, 2)) is False
+
+
+def test_non_magnitude_op_zero_is_ok() -> None:
+    # 一般の計算結果 0（例: 加算結果 0）は退化ではない
+    assert is_degenerate_step("arithmetic_+", sympy.Integer(0)) is False
+
+
+def test_has_degenerate_step_scans_all() -> None:
+    good = LogicStep(operation_name="intersect", operands=[], sympy_expr=sympy.Integer(4), narration_hint="")
+    bad = LogicStep(operation_name="triangle_area", operands=[], sympy_expr=sympy.Integer(0), narration_hint="")
+    assert has_degenerate_step([good, bad]) is True
+    assert has_degenerate_step([good]) is False

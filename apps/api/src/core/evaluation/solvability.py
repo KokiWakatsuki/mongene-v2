@@ -69,3 +69,65 @@ def is_clean(
                     return False
 
     return True
+
+
+# 幾何量（面積・体積・表面積・長さ）は 0 以下だと退化（図形がつぶれている）。
+_POSITIVE_MAGNITUDE_OPS = frozenset(
+    {
+        "measure_area",
+        "triangle_area",
+        "measure_volume",
+        "measure_surface_area",
+        "cutout",
+        "moving_point_area_at_t",
+        "moving_point_max_area",
+        "pythagorean_hypotenuse",
+        "pythagorean_slant_edge",
+        "pythagorean_space_diagonal",
+        "pythagorean_distance",
+        "shortest_path_prism",
+        "shortest_path_pyramid",
+        "revolution",
+    }
+)
+
+
+def is_degenerate_step(operation_name: str, expr: Optional[sympy.Expr]) -> bool:
+    """1 つの logic_step が退化（＝ moat は通るが問題として破綻）しているか。
+
+    - 面積/体積/長さ等の正であるべき幾何量が 0 以下（図形がつぶれている。例: 同一切片の
+      2 直線で座標軸と作る三角形の面積 0）。
+    - 確率が (0, 1) の外（0 や 1、負、1 超）＝自明または不可能。
+    """
+    if expr is None:
+        return False
+    try:
+        val = sympy.simplify(expr)
+    except Exception:
+        return False
+    if not getattr(val, "is_number", False):
+        return False  # 関数式など数値でないものは対象外
+
+    if operation_name in _POSITIVE_MAGNITUDE_OPS:
+        try:
+            if val <= 0:
+                return True
+        except TypeError:
+            return False
+    elif operation_name == "calculate_probability":
+        try:
+            if val <= 0 or val >= 1:
+                return True
+        except TypeError:
+            return False
+    return False
+
+
+def has_degenerate_step(logic_steps) -> bool:
+    """logic_step 群のいずれかが退化していれば True。"""
+    for step in logic_steps:
+        op = getattr(step, "operation_name", "")
+        expr = getattr(step, "sympy_expr", None)
+        if is_degenerate_step(op, expr):
+            return True
+    return False

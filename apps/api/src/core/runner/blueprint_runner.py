@@ -9,7 +9,7 @@ from apps.api.src.core.abc.atoms import NounAtom
 from apps.api.src.core.abc.blueprint import BlueprintDefinition
 from apps.api.src.core.dedup.diversity_rotation import DiversityRotation
 from apps.api.src.core.dedup.hash_cache import DuplicationGuard
-from apps.api.src.core.evaluation.solvability import is_clean
+from apps.api.src.core.evaluation.solvability import has_degenerate_step, is_clean
 from apps.api.src.core.exceptions import (
     CleanSolutionExhaustedError,
     LLMTranslationFailedError,
@@ -297,6 +297,12 @@ class BlueprintRunner:
                 clean_config = dict(mapping.get("is_clean_override", {}))
                 disabled = clean_config.pop("disabled", False)
                 if not disabled and not is_clean(final_step.sympy_expr, **clean_config):
+                    continue
+
+                # 退化検出（moat 強化）: 面積/体積/長さが 0 以下、確率が (0,1) 外など
+                # 「答えは SymPy で正しいが問題として破綻」しているものを弾いて retry_seed する。
+                # is_clean_override.disabled とは独立（退化は美観でなく正しさの問題）。
+                if has_degenerate_step(logic_steps_by_slot.values()):
                     continue
 
                 sub_questions = build_sub_questions(
