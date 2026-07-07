@@ -154,6 +154,12 @@ class LLMTranslator:
                 if not self._verify_translation(problem_text, mr, sub_texts):
                     last_err = LLMTranslationFailedError("解答漏洩を検出")
                     continue
+                grounding_miss = self._verify_grounding(problem_text, mr, sub_texts)
+                if grounding_miss:
+                    last_err = LLMTranslationFailedError(
+                        f"文章題が入力数値を接地していない（欠落: {grounding_miss}）"
+                    )
+                    continue
                 explanation_map = self._translate_explanation(
                     mr, problem_text, lesson_grade, tier  # type: ignore[arg-type]
                 )
@@ -248,6 +254,31 @@ class LLMTranslator:
             return not leaked
         except Exception:
             return True
+
+    def _verify_grounding(
+        self,
+        problem_text: str,
+        mr: MiddleRepresentation,
+        sub_texts: Optional[List[Dict]] = None,
+    ) -> List[str]:
+        """word_problem が MR の必要入力数値を接地しているかを検査（G2 と同一定義）。
+
+        generate-then-verify 反転（§16 ④-3）: 文章題が入力数値を落とす/変える「乖離」を
+        受理条件で棄却する。誤棄却回避のため word_problem form のみ・**非ゼロ整数 operand を
+        絶対値で照合**（記号式・分数/小数・値0・符号は対象外/許容）。欠落した必要数値の
+        リストを返す（空なら受理）。
+        """
+        if getattr(mr, "problem_form", None) != "word_problem":
+            return []
+        try:
+            from apps.api.src.core.evaluation.grounding import find_missing_required_numbers
+
+            sub_prompt_texts = [
+                (item.get("text", "") or "") for item in (sub_texts or [])
+            ]
+            return find_missing_required_numbers(problem_text, sub_prompt_texts, mr)
+        except Exception:
+            return []
 
     def _fallback_template(self, mr: MiddleRepresentation) -> Tuple[str, List[Dict], Dict[str, str]]:
         text = template_fallback_text(mr)
