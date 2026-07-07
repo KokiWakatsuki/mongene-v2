@@ -67,6 +67,7 @@ EXPECTED_BLUEPRINTS = {
     "AlgebraicProofStructure",
     "WordProblemFormulationStructure",
     "ContextualCalculationStructure",
+    "CoordinatePlaneStructure",
 }
 
 

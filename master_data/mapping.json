@@ -4494,7 +4494,11 @@
       "linear_function"
     ],
     "optional_tags": [],
-    "atom_constraints": {},
+    "atom_constraints": {
+      "LinearFuncAtom": {
+        "force_proportion": true
+      }
+    },
     "visual_component": "Graph_Renderer",
     "raw_y_base": 300,
     "y_base": 6,
@@ -4511,7 +4515,7 @@
       "calculation": "BasicCalculationStructure",
       "word_problem": "SolveEquationStructure",
       "knowledge": "KnowledgeBaseStructure",
-      "visual": "BasicCalculationStructure"
+      "visual": "CoordinatePlaneStructure"
     },
     "difficulty_levels": {
       "calculation": [
@@ -4745,6 +4749,9 @@
           "implementation_note": ""
         }
       ]
+    },
+    "blueprint_params": {
+      "func_type": "proportion"
     }
   },
   "g1_l30": {
@@ -4955,7 +4962,11 @@
     "required_tags": [
       "linear_function"
     ],
-    "atom_constraints": {},
+    "atom_constraints": {
+      "LinearFuncAtom": {
+        "force_proportion": true
+      }
+    },
     "visual_component": "Graph_Renderer",
     "y_base": 6,
     "supported_forms": [
@@ -5178,7 +5189,11 @@
       ]
     },
     "execute_blueprint_by_form": {
-      "knowledge": "KnowledgeBaseStructure"
+      "knowledge": "KnowledgeBaseStructure",
+      "visual": "CoordinatePlaneStructure"
+    },
+    "blueprint_params": {
+      "func_type": "proportion"
     }
   },
   "g1_l32": {
@@ -5193,7 +5208,11 @@
       "linear_function"
     ],
     "optional_tags": [],
-    "atom_constraints": {},
+    "atom_constraints": {
+      "LinearFuncAtom": {
+        "force_proportion": true
+      }
+    },
     "visual_component": "Graph_Renderer",
     "raw_y_base": 300,
     "y_base": 6,
@@ -5368,7 +5387,11 @@
       ]
     },
     "execute_blueprint_by_form": {
-      "word_problem": "SolveEquationStructure"
+      "word_problem": "SolveEquationStructure",
+      "visual": "CoordinatePlaneStructure"
+    },
+    "blueprint_params": {
+      "func_type": "proportion"
     }
   },
   "g1_l33": {
@@ -5764,7 +5787,11 @@
       ]
     },
     "execute_blueprint_by_form": {
-      "knowledge": "KnowledgeBaseStructure"
+      "knowledge": "KnowledgeBaseStructure",
+      "visual": "CoordinatePlaneStructure"
+    },
+    "blueprint_params": {
+      "func_type": "inverse"
     }
   },
   "g1_l35": {
@@ -5877,7 +5904,12 @@
         }
       ]
     },
-    "execute_blueprint_by_form": {}
+    "execute_blueprint_by_form": {
+      "visual": "CoordinatePlaneStructure"
+    },
+    "blueprint_params": {
+      "func_type": "inverse"
+    }
   },
   "g1_l36": {
     "title": "比例・反比例を利用して身のまわりの問題を解く",

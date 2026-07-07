@@ -44,6 +44,7 @@ def _builder_map() -> Dict[str, Callable[[], BlueprintDefinition]]:
     from apps.api.src.blueprints.contextual_calculation import (
         build_contextual_calculation_blueprint,
     )
+    from apps.api.src.blueprints.coordinate_plane import build_coordinate_plane_blueprint
 
     return {
         "BasicCalculationStructure": build_basic_calculation_blueprint,
@@ -69,6 +70,7 @@ def _builder_map() -> Dict[str, Callable[[], BlueprintDefinition]]:
         "AlgebraicProofStructure": build_algebraic_proof_blueprint,
         "WordProblemFormulationStructure": build_word_problem_formulation_blueprint,
         "ContextualCalculationStructure": build_contextual_calculation_blueprint,
+        "CoordinatePlaneStructure": build_coordinate_plane_blueprint,
     }
 
 
