@@ -4497,59 +4497,64 @@
       "calculation": [
         {
           "lv": 1,
-          "description": "比例の式の決定と値の計算",
+          "description": "正の整数の比例定数で y=f(x) の値を求める",
           "atom_constraints": {
-            "NumberAtom": {
-              "allow_negative": false,
-              "max_value": 3
+            "LinearFuncAtom": {
+              "force_proportion": true,
+              "max_slope": 4,
+              "allow_negative": false
             }
           },
           "blueprint_params": {},
           "verb_config": {},
           "implementable": true,
-          "implementation_note": ""
+          "implementation_note": "CoordinatePlaneStructure(func_type=proportion)+EvaluateFunctionVerb で比例 y=f(x) を実生成。中1は比例のみ(一次関数は中2)"
         },
         {
           "lv": 2,
-          "description": "一次関数の式の決定と値の計算",
+          "description": "傾きの大きい正の比例で y=f(x) を求める",
           "atom_constraints": {
-            "NumberAtom": {
-              "allow_negative": false,
-              "max_value": 5
+            "LinearFuncAtom": {
+              "force_proportion": true,
+              "max_slope": 8,
+              "allow_negative": false
             }
           },
           "blueprint_params": {},
           "verb_config": {},
           "implementable": true,
-          "implementation_note": ""
+          "implementation_note": "CoordinatePlaneStructure(func_type=proportion)+EvaluateFunctionVerb で比例 y=f(x) を実生成"
         },
         {
           "lv": 3,
-          "description": "負の数を含む一次関数の計算",
+          "description": "負の比例定数を含む y=ax の計算",
           "atom_constraints": {
-            "NumberAtom": {
-              "allow_negative": true,
-              "max_value": 8
+            "LinearFuncAtom": {
+              "force_proportion": true,
+              "max_slope": 6,
+              "allow_negative": true
             }
           },
           "blueprint_params": {},
           "verb_config": {},
           "implementable": true,
-          "implementation_note": ""
+          "implementation_note": "CoordinatePlaneStructure(func_type=proportion)+EvaluateFunctionVerb で比例 y=f(x) を実生成"
         },
         {
           "lv": 4,
-          "description": "分数を含む一次関数の計算",
+          "description": "分数の比例定数を含む y=ax の計算",
           "atom_constraints": {
-            "NumberAtom": {
+            "LinearFuncAtom": {
+              "force_proportion": true,
+              "max_slope": 9,
               "allow_negative": true,
-              "max_value": 10
+              "force_integer_slope": false
             }
           },
           "blueprint_params": {},
           "verb_config": {},
           "implementable": true,
-          "implementation_note": ""
+          "implementation_note": "CoordinatePlaneStructure(func_type=proportion)+EvaluateFunctionVerb で比例 y=f(x) を実生成"
         }
       ],
       "knowledge": [
@@ -4650,7 +4655,11 @@
       ]
     },
     "execute_blueprint_by_form": {
+      "calculation": "CoordinatePlaneStructure",
       "knowledge": "KnowledgeBaseStructure"
+    },
+    "blueprint_params": {
+      "func_type": "proportion"
     }
   },
   "g1_l29": {
