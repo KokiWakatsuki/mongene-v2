@@ -86,13 +86,20 @@ class ProveGeometryVerb(VerbAtom):
         labels_b: str = "DEF",
     ) -> dict:
         cs = condition_set if condition_set is not None else self.condition_set
-        condition_text = {
-            "SSS": "3 組の辺がそれぞれ等しい",
-            "SAS": "2 組の辺とその間の角がそれぞれ等しい",
-            "ASA": "1 組の辺とその両端の角がそれぞれ等しい",
-            "RHS": "直角三角形の斜辺と他の 1 辺がそれぞれ等しい",
-            "AA": "2 組の角がそれぞれ等しい",
-        }.get(cs, cs)
+        if self.proof_type == "similarity":
+            # 相似条件は「辺の比が等しい」（合同の「辺が等しい」ではない）
+            condition_text = {
+                "SSS": "3 組の辺の比がそれぞれ等しい",
+                "SAS": "2 組の辺の比とその間の角がそれぞれ等しい",
+                "AA": "2 組の角がそれぞれ等しい",
+            }.get(cs, cs)
+        else:
+            condition_text = {
+                "SSS": "3 組の辺がそれぞれ等しい",
+                "SAS": "2 組の辺とその間の角がそれぞれ等しい",
+                "ASA": "1 組の辺とその両端の角がそれぞれ等しい",
+                "RHS": "直角三角形の斜辺と他の 1 辺がそれぞれ等しい",
+            }.get(cs, cs)
 
         if self.proof_type == "congruence":
             relation = "≡"

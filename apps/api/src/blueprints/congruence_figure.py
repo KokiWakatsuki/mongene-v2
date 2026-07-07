@@ -23,12 +23,12 @@ def build_congruence_figure_blueprint(params: dict | None = None) -> BlueprintDe
     p = params or {}
     proof_type = p.get("proof_type", "congruence")
     condition_set = p.get("condition_set", "SAS")
+    # 答えは「△ABC ≡ △DEF」等の1式なので、問いも合同/相似の式表現に限定する
+    # （対応辺・角を全列挙させると答え(1式)と不整合になる＝Phase B で確認）。
     if proof_type == "similarity":
-        relation = "∽"
-        final_q = "図の2つの三角形は相似である。対応する頂点の順に記号で相似を表し、対応する角をすべて答えなさい。"
+        final_q = "図の2つの三角形は相似である。対応する頂点の順に、記号 ∽ を使って相似を式で表しなさい。"
     else:
-        relation = "≡"
-        final_q = "図の2つの三角形は合同である。対応する頂点の順に記号で合同を表し、対応する辺と角をすべて答えなさい。"
+        final_q = "図の2つの三角形は合同である。対応する頂点の順に、記号 ≡ を使って合同を式で表しなさい。"
     return BlueprintDefinition(
         blueprint_id="CongruenceFigureStructure",
         blueprint_version="v1",
