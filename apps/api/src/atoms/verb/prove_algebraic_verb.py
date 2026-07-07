@@ -143,7 +143,111 @@ class ProveAlgebraicVerb(VerbAtom):
             return self._solve_digit_three(atom, rng)
         if self.proof_type == "quadratic_formula":
             return self._solve_quadratic_formula(atom, rng)
+        if self.proof_type == "cube_diagonal":
+            return self._solve_cube_diagonal(atom, rng)
+        if self.proof_type == "box_diagonal":
+            return self._solve_box_diagonal(atom, rng)
+        if self.proof_type == "square_pyramid_height":
+            return self._solve_square_pyramid_height(atom, rng)
+        if self.proof_type == "tetrahedron_height":
+            return self._solve_tetrahedron_height(atom, rng)
         raise ValueError(f"未対応の proof_type: {self.proof_type}")
+
+    # --- 空間図形の導出証明（三平方の定理の反復適用・SymPy で moat 検証）---
+    def _solve_cube_diagonal(self, atom: NounAtom, rng: random.Random) -> LogicStep:
+        """1辺 a の立方体の対角線が √3·a であることを導出する。"""
+        s = sympy.Symbol("a", positive=True)
+        face = sympy.sqrt(s**2 + s**2)      # 面の対角線
+        space = sympy.sqrt(face**2 + s**2)  # 空間対角線
+        # moat: 面対角線^2=2a^2、空間対角線=√3 a
+        if sympy.simplify(face**2 - 2 * s**2) != 0:
+            raise AssertionError("立方体の面対角線が 2a^2 にならない")
+        if sympy.simplify(space - sympy.sqrt(3) * s) != 0:
+            raise AssertionError("立方体の空間対角線が √3·a にならない")
+        return self._build_logic_step(
+            atom, "cube_diagonal",
+            given=[r"1 辺の長さが $a$ の立方体"],
+            to_prove=r"立方体の対角線の長さは $\sqrt{3}\,a$ である",
+            step1=r"面の対角線を $f$ とすると $f^2 = a^2 + a^2 = 2a^2$",
+            step2=r"$f = \sqrt{2}\,a$",
+            step3=r"対角線を $d$ とすると $d^2 = f^2 + a^2 = 2a^2 + a^2 = 3a^2$",
+            step4=r"$d = \sqrt{3}\,a$",
+            step1_reason="底面の直角三角形に三平方の定理を用いる",
+            step2_reason="正の平方根をとる",
+            step3_reason="面対角線と高さがつくる直角三角形に三平方の定理を用いる",
+            step4_reason="正の平方根をとる",
+            conclusion=r"よって立方体の対角線の長さは $\sqrt{3}\,a$ である。",
+        )
+
+    def _solve_box_diagonal(self, atom: NounAtom, rng: random.Random) -> LogicStep:
+        """3辺 a, b, c の直方体の対角線が √(a²+b²+c²) であることを導出する。"""
+        sa, sb, sc = sympy.symbols("a b c", positive=True)
+        d1 = sympy.sqrt(sa**2 + sb**2)
+        d = sympy.sqrt(d1**2 + sc**2)
+        if sympy.simplify(d - sympy.sqrt(sa**2 + sb**2 + sc**2)) != 0:
+            raise AssertionError("直方体の対角線が √(a^2+b^2+c^2) にならない")
+        return self._build_logic_step(
+            atom, "box_diagonal",
+            given=[r"3 辺の長さが $a, b, c$ の直方体"],
+            to_prove=r"直方体の対角線の長さは $\sqrt{a^2+b^2+c^2}$ である",
+            step1=r"底面の対角線を $f$ とすると $f^2 = a^2 + b^2$",
+            step2=r"$f = \sqrt{a^2+b^2}$",
+            step3=r"対角線を $d$ とすると $d^2 = f^2 + c^2 = a^2 + b^2 + c^2$",
+            step4=r"$d = \sqrt{a^2+b^2+c^2}$",
+            step1_reason="底面の直角三角形に三平方の定理を用いる",
+            step2_reason="正の平方根をとる",
+            step3_reason="底面対角線と高さがつくる直角三角形に三平方の定理を用いる",
+            step4_reason="正の平方根をとる",
+            conclusion=r"よって直方体の対角線の長さは $\sqrt{a^2+b^2+c^2}$ である。",
+        )
+
+    def _solve_square_pyramid_height(self, atom: NounAtom, rng: random.Random) -> LogicStep:
+        """底面が 1 辺 a の正方形、側稜 l の正四角錐の高さが √(l²−a²/2) であることを導出する。"""
+        sa, sl = sympy.symbols("a l", positive=True)
+        half_diag = sa / sympy.sqrt(2)  # 底面の対角線の半分
+        h = sympy.sqrt(sl**2 - half_diag**2)
+        if sympy.simplify(h**2 + half_diag**2 - sl**2) != 0:
+            raise AssertionError("正四角錐の高さの関係式が成り立たない")
+        if sympy.simplify(h - sympy.sqrt(sl**2 - sa**2 / 2)) != 0:
+            raise AssertionError("正四角錐の高さが √(l^2−a^2/2) にならない")
+        return self._build_logic_step(
+            atom, "square_pyramid_height",
+            given=[r"底面が 1 辺 $a$ の正方形、側稜の長さが $l$ の正四角錐"],
+            to_prove=r"この正四角錐の高さは $\sqrt{l^2-\dfrac{a^2}{2}}$ である",
+            step1=r"底面の対角線は $\sqrt{2}\,a$ で、その半分は $\dfrac{a}{\sqrt{2}}$",
+            step2=r"頂点・底面の中心・底面の頂点がつくる直角三角形で $l^2 = h^2 + \left(\dfrac{a}{\sqrt{2}}\right)^2$",
+            step3=r"$h^2 = l^2 - \dfrac{a^2}{2}$",
+            step4=r"$h = \sqrt{l^2 - \dfrac{a^2}{2}}$",
+            step1_reason="底面の正方形に三平方の定理を用いる",
+            step2_reason="高さ・底面中心からの距離・側稜がつくる直角三角形に三平方の定理を用いる",
+            step3_reason="式を整理する",
+            step4_reason="正の平方根をとる",
+            conclusion=r"よって正四角錐の高さは $\sqrt{l^2-\dfrac{a^2}{2}}$ である。",
+        )
+
+    def _solve_tetrahedron_height(self, atom: NounAtom, rng: random.Random) -> LogicStep:
+        """1辺 a の正三角錐（正四面体）の高さが a·√(2/3) であることを導出する。"""
+        sa = sympy.Symbol("a", positive=True)
+        r = sa / sympy.sqrt(3)  # 底面（正三角形）の重心から頂点までの距離
+        h = sympy.sqrt(sa**2 - r**2)
+        if sympy.simplify(h**2 + r**2 - sa**2) != 0:
+            raise AssertionError("正四面体の高さの関係式が成り立たない")
+        if sympy.simplify(h - sa * sympy.sqrt(sympy.Rational(2, 3))) != 0:
+            raise AssertionError("正四面体の高さが a·√(2/3) にならない")
+        return self._build_logic_step(
+            atom, "tetrahedron_height",
+            given=[r"すべての辺の長さが $a$ の正三角錐（正四面体）"],
+            to_prove=r"この正四面体の高さは $a\sqrt{\dfrac{2}{3}}$ である",
+            step1=r"底面の正三角形の重心から頂点までの距離は $r = \dfrac{a}{\sqrt{3}}$",
+            step2=r"頂点・底面の重心・底面の頂点がつくる直角三角形で $a^2 = h^2 + r^2$",
+            step3=r"$h^2 = a^2 - \dfrac{a^2}{3} = \dfrac{2}{3}a^2$",
+            step4=r"$h = a\sqrt{\dfrac{2}{3}}$",
+            step1_reason="正三角形の重心の性質（外接円の半径）を用いる",
+            step2_reason="高さ・重心からの距離・辺がつくる直角三角形に三平方の定理を用いる",
+            step3_reason="式を整理する",
+            step4_reason="正の平方根をとる",
+            conclusion=r"よって正四面体の高さは $a\sqrt{\dfrac{2}{3}}$ である。",
+        )
 
     def _solve_quadratic_formula(self, atom: NounAtom, rng: random.Random) -> LogicStep:
         """2次方程式 ax²+bx+c=0 (a≠0) の解の公式を平方完成で導出する。

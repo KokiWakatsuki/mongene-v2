@@ -125,6 +125,10 @@ def test_prove_algebraic_unsupported_proof_type_raises() -> None:
         "digit_two",
         "digit_three",
         "quadratic_formula",
+        "cube_diagonal",
+        "box_diagonal",
+        "square_pyramid_height",
+        "tetrahedron_height",
     ],
 )
 def test_prove_algebraic_extended_proof_types_return_step(proof_type: str) -> None:

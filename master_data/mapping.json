@@ -31700,12 +31700,14 @@
               "base_shape_type": "square"
             }
           },
-          "blueprint_params": {},
+          "blueprint_params": {
+            "proof_type": "cube_diagonal"
+          },
           "verb_config": {
             "task": "derive_formula"
           },
           "implementable": true,
-          "implementation_note": ""
+          "implementation_note": "三平方の定理の反復適用で立方体の対角線の長さの導出。ProveAlgebraicVerb(cube_diagonal)がSymPyで関係式を検証(moat)。"
         },
         {
           "lv": 2,
@@ -31716,12 +31718,14 @@
               "base_shape_type": "square"
             }
           },
-          "blueprint_params": {},
+          "blueprint_params": {
+            "proof_type": "box_diagonal"
+          },
           "verb_config": {
             "task": "derive_formula"
           },
           "implementable": true,
-          "implementation_note": ""
+          "implementation_note": "三平方の定理の反復適用で直方体の対角線の長さの導出。ProveAlgebraicVerb(box_diagonal)がSymPyで関係式を検証(moat)。"
         },
         {
           "lv": 3,
@@ -31733,12 +31737,14 @@
               "hide_height": true
             }
           },
-          "blueprint_params": {},
+          "blueprint_params": {
+            "proof_type": "square_pyramid_height"
+          },
           "verb_config": {
             "task": "prove_relationship"
           },
           "implementable": true,
-          "implementation_note": ""
+          "implementation_note": "三平方の定理の反復適用で正四角錐の高さと斜辺の関係証明。ProveAlgebraicVerb(square_pyramid_height)がSymPyで関係式を検証(moat)。"
         },
         {
           "lv": 4,
@@ -31750,12 +31756,14 @@
               "hide_height": true
             }
           },
-          "blueprint_params": {},
+          "blueprint_params": {
+            "proof_type": "tetrahedron_height"
+          },
           "verb_config": {
             "task": "prove_relationship"
           },
           "implementable": true,
-          "implementation_note": ""
+          "implementation_note": "三平方の定理の反復適用で三角錐の高さと辺の長さの論証。ProveAlgebraicVerb(tetrahedron_height)がSymPyで関係式を検証(moat)。"
         }
       ],
       "knowledge": [
@@ -31942,7 +31950,8 @@
       ]
     },
     "execute_blueprint_by_form": {
-      "knowledge": "KnowledgeBaseStructure"
+      "knowledge": "KnowledgeBaseStructure",
+      "proof": "AlgebraicProofStructure"
     }
   },
   "g3_l56": {
