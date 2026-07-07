@@ -15390,7 +15390,7 @@
       "disabled": true
     },
     "execute_blueprint_by_form": {
-      "calculation": "BasicCalculationStructure",
+      "calculation": "AngleCalculationStructure",
       "proof": "ProofStructure",
       "knowledge": "KnowledgeBaseStructure",
       "visual": "BasicGeometryMeasurementStructure"
@@ -15399,51 +15399,48 @@
       "calculation": [
         {
           "lv": 1,
-          "description": "180度からの単純な引き算",
+          "description": "錯角の性質を用いた角度計算",
           "atom_constraints": {
-            "NumberAtom": {
-              "max_value": 90,
-              "allow_negative": false
+            "LineAngleAtom": {
+              "relation_type": "alternate"
             }
           },
           "blueprint_params": {
-            "operation": "-"
+            "theorem": "parallel_alternate"
           },
           "verb_config": {},
           "implementable": true,
-          "implementation_note": ""
+          "implementation_note": "AngleCalculationStructure+FindAngleVerb(parallel_alternate) で平行線の角を実生成"
         },
         {
           "lv": 2,
-          "description": "180度からの2つの角の引き算",
+          "description": "同位角の性質を用いた角度計算",
           "atom_constraints": {
-            "NumberAtom": {
-              "max_value": 120,
-              "allow_negative": false
+            "LineAngleAtom": {
+              "relation_type": "corresponding"
             }
           },
           "blueprint_params": {
-            "operation": "-"
+            "theorem": "parallel_alternate"
           },
           "verb_config": {},
           "implementable": true,
-          "implementation_note": "計算式として 180 - a - b を想定。"
+          "implementation_note": "AngleCalculationStructure+FindAngleVerb(parallel_alternate) で平行線の角を実生成"
         },
         {
           "lv": 3,
-          "description": "複雑な角度の加減算",
+          "description": "同側内角の性質を用いた角度計算",
           "atom_constraints": {
-            "NumberAtom": {
-              "max_value": 180,
-              "allow_negative": false
+            "LineAngleAtom": {
+              "relation_type": "co_interior"
             }
           },
           "blueprint_params": {
-            "operation": "+"
+            "theorem": "parallel_alternate"
           },
           "verb_config": {},
           "implementable": true,
-          "implementation_note": "錯角の和（a + b）を求めるようなケース。"
+          "implementation_note": "AngleCalculationStructure+FindAngleVerb(parallel_alternate) で平行線の角を実生成"
         }
       ],
       "proof": [
