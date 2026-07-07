@@ -155,6 +155,11 @@ class BlueprintRunner:
         bp_id = random.Random(base_seed).choice(filtered_ids)
         blueprint = candidate_blueprints[bp_id]
 
+        # レベル固有 atom_constraints が明示指定した Atom 型（＝そのレベルの意図する型）。
+        # トップレベルの atom_constraints が複数型のメニューを持つ場合でも、レベルの意図を優先して
+        # Atom 型選択を絞るために使う（tag駆動でCircleAtom等が混入するのを防ぐ）。
+        level_atom_type_keys: Optional[List[str]] = None
+
         # --- 難易度設定パス ---
         # 新設計（離散レベル制）: target_level 指定 + difficulty_levels 定義済みの場合
         has_level_path = (
@@ -175,7 +180,9 @@ class BlueprintRunner:
             elif level_bp_params != blueprint_params:
                 blueprint = self.blueprint_loader(bp_id, params=level_bp_params)
             base_constraints = {k: dict(v) for k, v in mapping.get("atom_constraints", {}).items()}
-            atom_constraints = _merge_constraints(base_constraints, lv_config.get("atom_constraints", {}))
+            level_constraints = lv_config.get("atom_constraints", {}) or {}
+            atom_constraints = _merge_constraints(base_constraints, level_constraints)
+            level_atom_type_keys = list(level_constraints.keys()) or None
             # UI 表示用スコア: y_base を基準に lv に応じてスケール
             n_levels = len(mapping["difficulty_levels"][request.problem_form])
             y_base = int(mapping.get("y_base", 50))
@@ -256,6 +263,7 @@ class BlueprintRunner:
                     rng=rng,
                     diversity=self.diversity,
                     required_tags=mapping.get("required_tags"),  # §38.2: mapping の tags で Atom 選択をガイド
+                    preferred_noun_types=level_atom_type_keys,  # レベルが明示した Atom 型を優先
                 )
 
                 selected_tags = self._aggregate_tags(sampled_nouns, mapping)
