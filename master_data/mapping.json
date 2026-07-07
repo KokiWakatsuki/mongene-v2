@@ -5597,30 +5597,45 @@
       "calculation": [
         {
           "lv": 1,
-          "description": "正の整数aの反比例式を求める",
-          "atom_constraints": {},
+          "description": "正の整数aの反比例で y=f(x) の値を求める",
+          "atom_constraints": {
+            "InverseFuncAtom": {
+              "max_constant": 6,
+              "allow_negative": false
+            }
+          },
           "blueprint_params": {},
           "verb_config": {},
           "implementable": true,
-          "implementation_note": "BasicCalculationStructure で代替実装（反比例専用 Atom は未実装）"
+          "implementation_note": "CoordinatePlaneStructure(func_type=inverse)+EvaluateFunctionVerb で反比例を実生成"
         },
         {
           "lv": 2,
-          "description": "負の整数aを含む反比例式を求める",
-          "atom_constraints": {},
+          "description": "負の整数aを含む反比例で y=f(x) の値を求める",
+          "atom_constraints": {
+            "InverseFuncAtom": {
+              "max_constant": 12,
+              "allow_negative": true
+            }
+          },
           "blueprint_params": {},
           "verb_config": {},
           "implementable": true,
-          "implementation_note": "BasicCalculationStructure で代替実装（反比例専用 Atom は未実装）"
+          "implementation_note": "CoordinatePlaneStructure(func_type=inverse)+EvaluateFunctionVerb で反比例を実生成"
         },
         {
           "lv": 3,
-          "description": "分数や大きな数を含む反比例式の計算",
-          "atom_constraints": {},
+          "description": "大きな比例定数を含む反比例の計算",
+          "atom_constraints": {
+            "InverseFuncAtom": {
+              "max_constant": 24,
+              "allow_negative": true
+            }
+          },
           "blueprint_params": {},
           "verb_config": {},
           "implementable": true,
-          "implementation_note": "BasicCalculationStructure で代替実装（反比例専用 Atom は未実装）"
+          "implementation_note": "CoordinatePlaneStructure(func_type=inverse)+EvaluateFunctionVerb で反比例を実生成"
         }
       ],
       "word_problem": [
@@ -5801,7 +5816,11 @@
     },
     "execute_blueprint_by_form": {
       "knowledge": "KnowledgeBaseStructure",
-      "word_problem": "SolveEquationStructure"
+      "word_problem": "SolveEquationStructure",
+      "calculation": "CoordinatePlaneStructure"
+    },
+    "blueprint_params": {
+      "func_type": "inverse"
     }
   },
   "g1_l34": {
@@ -5996,30 +6015,45 @@
       "calculation": [
         {
           "lv": 1,
-          "description": "正の整数aの単純な反比例",
-          "atom_constraints": {},
+          "description": "正の整数aの単純な反比例で y の値を求める",
+          "atom_constraints": {
+            "InverseFuncAtom": {
+              "max_constant": 6,
+              "allow_negative": false
+            }
+          },
           "blueprint_params": {},
           "verb_config": {},
           "implementable": true,
-          "implementation_note": "BasicCalculationStructure で代替実装（反比例専用 Atom は未実装）"
+          "implementation_note": "CoordinatePlaneStructure(func_type=inverse)+EvaluateFunctionVerb で反比例を実生成"
         },
         {
           "lv": 2,
-          "description": "負の整数aを含む反比例",
-          "atom_constraints": {},
+          "description": "負の整数aを含む反比例で y の値を求める",
+          "atom_constraints": {
+            "InverseFuncAtom": {
+              "max_constant": 12,
+              "allow_negative": true
+            }
+          },
           "blueprint_params": {},
           "verb_config": {},
           "implementable": true,
-          "implementation_note": "BasicCalculationStructure で代替実装（反比例専用 Atom は未実装）"
+          "implementation_note": "CoordinatePlaneStructure(func_type=inverse)+EvaluateFunctionVerb で反比例を実生成"
         },
         {
           "lv": 3,
-          "description": "分数となる比例定数の算出",
-          "atom_constraints": {},
+          "description": "大きな比例定数の反比例の計算",
+          "atom_constraints": {
+            "InverseFuncAtom": {
+              "max_constant": 24,
+              "allow_negative": true
+            }
+          },
           "blueprint_params": {},
           "verb_config": {},
           "implementable": true,
-          "implementation_note": "BasicCalculationStructure で代替実装（反比例専用 Atom は未実装）"
+          "implementation_note": "CoordinatePlaneStructure(func_type=inverse)+EvaluateFunctionVerb で反比例を実生成"
         }
       ],
       "visual": [
@@ -6080,7 +6114,8 @@
       ]
     },
     "execute_blueprint_by_form": {
-      "visual": "CoordinatePlaneStructure"
+      "visual": "CoordinatePlaneStructure",
+      "calculation": "CoordinatePlaneStructure"
     },
     "blueprint_params": {
       "func_type": "inverse"
