@@ -86,6 +86,66 @@ class TwoDGeometryRenderer(VisualComponent):
                 dwg.add(
                     dwg.polygon(points=points, fill=fill, stroke="black", stroke_width=1)
                 )
+                labels = el.get("vertex_labels")
+                if labels and points:
+                    gx = sum(p[0] for p in points) / len(points)
+                    gy = sum(p[1] for p in points) / len(points)
+                    for (sx, sy), label in zip(points, labels):
+                        dx, dy = sx - gx, sy - gy
+                        norm = math.hypot(dx, dy)
+                        if norm < 1e-9:
+                            ox, oy = 6.0, -6.0
+                        else:
+                            ox, oy = dx / norm * 14.0, dy / norm * 14.0
+                        dwg.add(
+                            dwg.text(
+                                label,
+                                insert=(sx + ox, sy + oy),
+                                font_size=14,
+                                font_family="Hiragino Sans, sans-serif",
+                            )
+                        )
+            elif el_type == "right_angle_mark":
+                vx, vy = transform(*el["vertex"])
+                p1x, p1y = transform(*el["p1"])
+                p2x, p2y = transform(*el["p2"])
+                d = 12.0
+                n1 = math.hypot(p1x - vx, p1y - vy)
+                n2 = math.hypot(p2x - vx, p2y - vy)
+                if n1 > 1e-9 and n2 > 1e-9:
+                    u1 = ((p1x - vx) / n1, (p1y - vy) / n1)
+                    u2 = ((p2x - vx) / n2, (p2y - vy) / n2)
+                    a = (vx + u1[0] * d, vy + u1[1] * d)
+                    b = (vx + u1[0] * d + u2[0] * d, vy + u1[1] * d + u2[1] * d)
+                    c = (vx + u2[0] * d, vy + u2[1] * d)
+                    dwg.add(
+                        dwg.polyline(
+                            points=[a, b, c],
+                            fill="none",
+                            stroke="black",
+                            stroke_width=1,
+                        )
+                    )
+            elif el_type == "tick_mark":
+                p1x, p1y = transform(*el["p1"])
+                p2x, p2y = transform(*el["p2"])
+                count = int(el.get("count", 1))
+                mx, my = (p1x + p2x) / 2, (p1y + p2y) / 2
+                length = math.hypot(p2x - p1x, p2y - p1y)
+                if length > 1e-9:
+                    tx, ty = (p2x - p1x) / length, (p2y - p1y) / length
+                    nx, ny = -ty, tx
+                    for i in range(count):
+                        off = (i - (count - 1) / 2) * 5.0
+                        ccx, ccy = mx + tx * off, my + ty * off
+                        dwg.add(
+                            dwg.line(
+                                start=(ccx - nx * 5.0, ccy - ny * 5.0),
+                                end=(ccx + nx * 5.0, ccy + ny * 5.0),
+                                stroke="black",
+                                stroke_width=1,
+                            )
+                        )
             elif el_type == "circle":
                 cx, cy = transform(*el["center"])
                 r = el["radius"] * scale

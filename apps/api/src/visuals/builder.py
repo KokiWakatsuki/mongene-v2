@@ -218,6 +218,63 @@ def _build_3d(sampled_nouns: Dict[str, NounAtom]) -> VisualDSL:
     return VisualDSL(render_type="3D", elements=elements)
 
 
+def _polygon_marks(polygon_type: str, verts: list[list[float]]) -> list[dict]:
+    """polygon_type と頂点列から幾何記号（直角マーク・等長マーク）要素を導出する。
+
+    表示のみ。数値・answer には一切影響しない。頂点ラベルは polygon 要素側で付与し、
+    ここでは right_angle_mark / tick_mark のみを返す。
+    """
+    marks: list[dict] = []
+    n = len(verts)
+    if n == 0:
+        return marks
+
+    def _tick(i: int, count: int) -> dict:
+        return {
+            "type": "tick_mark",
+            "p1": verts[i],
+            "p2": verts[(i + 1) % n],
+            "count": count,
+        }
+
+    # (b) 直角マーク
+    if polygon_type == "right_triangle" and n >= 3:
+        marks.append(
+            {
+                "type": "right_angle_mark",
+                "vertex": verts[0],
+                "p1": verts[1],
+                "p2": verts[2],
+            }
+        )
+    elif polygon_type in ("square", "rectangle") and n >= 3:
+        marks.append(
+            {
+                "type": "right_angle_mark",
+                "vertex": verts[0],
+                "p1": verts[1],
+                "p2": verts[-1],
+            }
+        )
+
+    # (c) 等長マーク
+    if polygon_type in ("square", "rhombus", "equilateral_triangle"):
+        for i in range(n):
+            marks.append(_tick(i, 1))
+    elif polygon_type == "isoceles_triangle" and n >= 3:
+        # verts=[底辺左, 底辺右, 頂点]。等しい2脚 = 辺(v1->v2), 辺(v2->v0)
+        marks.append(_tick(1, 1))
+        marks.append(_tick(2, 1))
+    elif polygon_type == "parallelogram" and n >= 4:
+        # 対辺が等しい: 辺0/辺2 に count=1、辺1/辺3 に count=2
+        marks.append(_tick(0, 1))
+        marks.append(_tick(2, 1))
+        marks.append(_tick(1, 2))
+        marks.append(_tick(3, 2))
+
+    return marks
+
+
 def _build_2d_geometry(sampled_nouns: Dict[str, NounAtom]) -> VisualDSL:
     elements: list[dict] = []
     viewport = [-1.0, -1.0, 10.0, 10.0]
@@ -228,7 +285,17 @@ def _build_2d_geometry(sampled_nouns: Dict[str, NounAtom]) -> VisualDSL:
             verts_raw = getattr(atom, "vertices", None) or []
             verts = [[_to_float(v[0]), _to_float(v[1])] for v in verts_raw]
             if verts:
-                elements.append({"type": "polygon", "vertices": verts, "filled": False})
+                polygon_type = getattr(atom, "polygon_type", "triangle")
+                vertex_labels = [chr(ord("A") + i) for i in range(len(verts))]
+                elements.append(
+                    {
+                        "type": "polygon",
+                        "vertices": verts,
+                        "filled": False,
+                        "vertex_labels": vertex_labels,
+                    }
+                )
+                elements.extend(_polygon_marks(polygon_type, verts))
         elif name == "CircleAtom":
             r = _to_float(sym.get("radius", sympy.Integer(1)))
             elements.append({"type": "circle", "center": [0, 0], "radius": r})
