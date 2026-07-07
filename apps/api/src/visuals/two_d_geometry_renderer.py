@@ -30,16 +30,67 @@ class TwoDGeometryRenderer(VisualComponent):
         self.margin = margin
 
     def render(self, dsl: VisualDSL) -> str:
-        x_min, y_min, x_max, y_max = dsl.viewport
+        # --- 内容バウンディングボックスを計算し、有効 viewport とする ---
+        xs: list[float] = []
+        ys: list[float] = []
+
+        def _add(px, py) -> None:
+            xs.append(float(px))
+            ys.append(float(py))
+
+        for el in dsl.elements:
+            et = el.get("type")
+            if et == "point":
+                _add(el["x"], el["y"])
+            elif et == "text":
+                _add(el["x"], el["y"])
+            elif et == "angle_label":
+                _add(el["vertex"][0], el["vertex"][1])
+            elif et == "line_segment":
+                _add(el["p1"][0], el["p1"][1])
+                _add(el["p2"][0], el["p2"][1])
+            elif et == "polygon":
+                for v in el["vertices"]:
+                    _add(v[0], v[1])
+            elif et in ("circle", "arc"):
+                cx, cy = el["center"]
+                r = el["radius"]
+                _add(cx - r, cy - r)
+                _add(cx + r, cy + r)
+            elif et in ("right_angle_mark", "angle_arc"):
+                _add(el["vertex"][0], el["vertex"][1])
+                _add(el["p1"][0], el["p1"][1])
+                _add(el["p2"][0], el["p2"][1])
+            elif et in ("tick_mark", "parallel_mark"):
+                _add(el["p1"][0], el["p1"][1])
+                _add(el["p2"][0], el["p2"][1])
+
+        if xs and ys:
+            x_min, x_max = min(xs), max(xs)
+            y_min, y_max = min(ys), max(ys)
+            span = max(x_max - x_min, y_max - y_min, 1e-6)
+            pad = span * 0.12
+            x_min -= pad
+            x_max += pad
+            y_min -= pad
+            y_max += pad
+        else:
+            # フォールバック: 座標を持つ要素が無ければ従来通り viewport を使う
+            x_min, y_min, x_max, y_max = dsl.viewport
+
         usable_w = self.image_width - 2 * self.margin
         usable_h = self.image_height - 2 * self.margin
         scale_x = usable_w / (x_max - x_min) if x_max != x_min else 1
         scale_y = usable_h / (y_max - y_min) if y_max != y_min else 1
         scale = min(scale_x, scale_y) if self.auto_scale else 1
+        content_w = (x_max - x_min) * scale
+        content_h = (y_max - y_min) * scale
+        off_x = (usable_w - content_w) / 2.0
+        off_y = (usable_h - content_h) / 2.0
 
         def transform(x: float, y: float) -> Tuple[float, float]:
-            sx = self.margin + (x - x_min) * scale
-            sy = self.image_height - self.margin - (y - y_min) * scale
+            sx = self.margin + off_x + (x - x_min) * scale
+            sy = self.image_height - self.margin - off_y - (y - y_min) * scale
             return sx, sy
 
         dwg = svgwrite.Drawing(size=(self.image_width, self.image_height))
