@@ -4951,7 +4951,11 @@
       ]
     },
     "execute_blueprint_by_form": {
-      "knowledge": "KnowledgeBaseStructure"
+      "knowledge": "KnowledgeBaseStructure",
+      "visual": "CoordinatePlaneStructure"
+    },
+    "blueprint_params": {
+      "func_type": "point"
     }
   },
   "g1_l31": {

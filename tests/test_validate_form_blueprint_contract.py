@@ -20,14 +20,24 @@ def test_validate_contract_returns_violation_list() -> None:
     assert result["total_violations"] == len(result["violations"])
 
 
-def test_known_violation_g1_l30_visual_is_detected() -> None:
-    """g1_l30 は mapping.supported_forms に visual を含むが、execute_blueprint は
-    BasicCalculationStructure（supported_forms=["calculation"]）のみで visual を
-    サポートしない。Opus のパイロット調査で実証済みの既知の違反。
+def test_known_violation_g2_l16_calculation_is_detected() -> None:
+    """g2_l16 は mapping.supported_forms に calculation を含むが、候補 blueprint は
+    WordProblemStructure（word_problem 専用で素の方程式求解を calculation として
+    生成できない）のみ。検出器が現存の契約違反を取りこぼさないことを保証する。
     """
     result = validate_contract()
     violation_keys = {(v["lesson_id"], v["form"]) for v in result["violations"]}
-    assert ("g1_l30", "visual") in violation_keys
+    assert ("g2_l16", "calculation") in violation_keys
+
+
+def test_g1_l30_visual_violation_is_fixed() -> None:
+    """g1_l30(座標) はかつて visual を宣言しながら候補が BasicCalculationStructure
+    のみで違反だった。CoordinatePlaneStructure(func_type=point)+ReadCoordinateVerb を
+    実装し execute_blueprint_by_form.visual に配線して解消。回帰をこのテストで検知する。
+    """
+    result = validate_contract()
+    violation_keys = {(v["lesson_id"], v["form"]) for v in result["violations"]}
+    assert ("g1_l30", "visual") not in violation_keys
 
 
 def test_g2_l7_proof_violation_is_fixed() -> None:

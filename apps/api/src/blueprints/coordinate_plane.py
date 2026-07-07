@@ -15,6 +15,7 @@ params:
 from __future__ import annotations
 
 from apps.api.src.atoms.verb.evaluate_function_verb import EvaluateFunctionVerb
+from apps.api.src.atoms.verb.read_coordinate_verb import ReadCoordinateVerb
 from apps.api.src.core.abc.blueprint import (
     BlueprintDefinition,
     NounSlot,
@@ -28,13 +29,20 @@ def build_coordinate_plane_blueprint(params: dict | None = None) -> BlueprintDef
     params = params or {}
     func_type = params.get("func_type", "proportion")
 
-    if func_type == "inverse":
+    if func_type == "point":
+        noun_type = "PointAtom"
+        tag = "coordinate"
+        verb = ReadCoordinateVerb()
+        question = "座標平面上の点をとり、その点の座標を答えなさい"
+    elif func_type == "inverse":
         noun_type = "InverseFuncAtom"
         tag = "inverse_proportion"
+        verb = EvaluateFunctionVerb()
         question = "反比例のグラフをかき、指定した x の値に対応する y の値を求めなさい"
     else:
         noun_type = "LinearFuncAtom"
         tag = "linear_function"
+        verb = EvaluateFunctionVerb()
         question = "比例のグラフをかき、指定した x の値に対応する y の値を求めなさい"
 
     return BlueprintDefinition(
@@ -50,7 +58,7 @@ def build_coordinate_plane_blueprint(params: dict | None = None) -> BlueprintDef
         },
         verb_invocations=[
             VerbInvocation(
-                verb=EvaluateFunctionVerb(),
+                verb=verb,
                 input_slots=["func"],
                 output_slot="value",
                 on_failure="retry_seed",

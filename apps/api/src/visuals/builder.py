@@ -396,6 +396,14 @@ def _build_graph(sampled_nouns: Dict[str, NounAtom]) -> VisualDSL:
         elif name == "InverseFuncAtom":
             c = _to_float(sym.get("constant", sympy.Integer(1)))
             elements.append({"type": "function", "expr": f"{c}/x", "domain": [0.5, 10], "color": "black"})
+        elif name == "PointAtom":
+            label = str(sym.get("label", sympy.Symbol("A")))
+            elements.append({
+                "type": "point_on_graph",
+                "x": _to_float(sym.get("x", sympy.Integer(0))),
+                "y": _to_float(sym.get("y", sympy.Integer(0))),
+                "label": label,
+            })
     elements.append({"type": "axis_label", "axis": "x", "label": "x"})
     elements.append({"type": "axis_label", "axis": "y", "label": "y"})
     return VisualDSL(render_type="Graph", elements=elements)
