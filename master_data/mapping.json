@@ -4060,7 +4060,8 @@
     "visual_component": "NullRenderer",
     "y_base": 10,
     "supported_forms": [
-      "word_problem"
+      "word_problem",
+      "calculation"
     ],
     "scenario_categories": [
       "money_count",
@@ -4127,10 +4128,66 @@
           "implementable": true,
           "implementation_note": "diophantine_form=trueにより、二変数一次方程式の形式で生成される。"
         }
+      ],
+      "calculation": [
+        {
+          "lv": 1,
+          "description": "基本の移項（係数小）",
+          "atom_constraints": {
+            "EquationAtom": {
+              "max_coefficient": 5
+            }
+          },
+          "blueprint_params": {},
+          "verb_config": {},
+          "implementable": true,
+          "implementation_note": ""
+        },
+        {
+          "lv": 2,
+          "description": "標準的な移項（係数中）",
+          "atom_constraints": {
+            "EquationAtom": {
+              "max_coefficient": 10
+            }
+          },
+          "blueprint_params": {},
+          "verb_config": {},
+          "implementable": true,
+          "implementation_note": ""
+        },
+        {
+          "lv": 3,
+          "description": "複雑な移項（係数大）",
+          "atom_constraints": {
+            "EquationAtom": {
+              "max_coefficient": 20
+            }
+          },
+          "blueprint_params": {},
+          "verb_config": {},
+          "implementable": true,
+          "implementation_note": ""
+        },
+        {
+          "lv": 4,
+          "description": "分数解を含む移項",
+          "atom_constraints": {
+            "EquationAtom": {
+              "max_coefficient": 20,
+              "is_integer_solution": false
+            }
+          },
+          "blueprint_params": {},
+          "verb_config": {},
+          "implementable": true,
+          "implementation_note": ""
+        }
       ]
     },
     "execute_blueprint_by_form": {
-      "word_problem": "WordProblemStructure"
+      "word_problem": "WordProblemStructure",
+      "calculation": "SolveEquationStructure"
     }
   },
   "g1_l26": {
@@ -4155,7 +4212,8 @@
     "raw_y_base": 500,
     "y_base": 10,
     "supported_forms": [
-      "word_problem"
+      "word_problem",
+      "calculation"
     ],
     "is_clean_override": {
       "disabled": true
@@ -4206,10 +4264,66 @@
           "implementable": true,
           "implementation_note": ""
         }
+      ],
+      "calculation": [
+        {
+          "lv": 1,
+          "description": "基本の移項（係数小）",
+          "atom_constraints": {
+            "EquationAtom": {
+              "max_coefficient": 5
+            }
+          },
+          "blueprint_params": {},
+          "verb_config": {},
+          "implementable": true,
+          "implementation_note": ""
+        },
+        {
+          "lv": 2,
+          "description": "標準的な移項（係数中）",
+          "atom_constraints": {
+            "EquationAtom": {
+              "max_coefficient": 10
+            }
+          },
+          "blueprint_params": {},
+          "verb_config": {},
+          "implementable": true,
+          "implementation_note": ""
+        },
+        {
+          "lv": 3,
+          "description": "複雑な移項（係数大）",
+          "atom_constraints": {
+            "EquationAtom": {
+              "max_coefficient": 20
+            }
+          },
+          "blueprint_params": {},
+          "verb_config": {},
+          "implementable": true,
+          "implementation_note": ""
+        },
+        {
+          "lv": 4,
+          "description": "分数解を含む移項",
+          "atom_constraints": {
+            "EquationAtom": {
+              "max_coefficient": 20,
+              "is_integer_solution": false
+            }
+          },
+          "blueprint_params": {},
+          "verb_config": {},
+          "implementable": true,
+          "implementation_note": ""
+        }
       ]
     },
     "execute_blueprint_by_form": {
-      "word_problem": "WordProblemStructure"
+      "word_problem": "WordProblemStructure",
+      "calculation": "SolveEquationStructure"
     }
   },
   "g1_l27": {
@@ -4234,7 +4348,8 @@
     "raw_y_base": 500,
     "y_base": 10,
     "supported_forms": [
-      "word_problem"
+      "word_problem",
+      "calculation"
     ],
     "is_clean_override": {
       "disabled": true
@@ -4293,10 +4408,66 @@
           "implementable": true,
           "implementation_note": ""
         }
+      ],
+      "calculation": [
+        {
+          "lv": 1,
+          "description": "基本の移項（係数小）",
+          "atom_constraints": {
+            "EquationAtom": {
+              "max_coefficient": 5
+            }
+          },
+          "blueprint_params": {},
+          "verb_config": {},
+          "implementable": true,
+          "implementation_note": ""
+        },
+        {
+          "lv": 2,
+          "description": "標準的な移項（係数中）",
+          "atom_constraints": {
+            "EquationAtom": {
+              "max_coefficient": 10
+            }
+          },
+          "blueprint_params": {},
+          "verb_config": {},
+          "implementable": true,
+          "implementation_note": ""
+        },
+        {
+          "lv": 3,
+          "description": "複雑な移項（係数大）",
+          "atom_constraints": {
+            "EquationAtom": {
+              "max_coefficient": 20
+            }
+          },
+          "blueprint_params": {},
+          "verb_config": {},
+          "implementable": true,
+          "implementation_note": ""
+        },
+        {
+          "lv": 4,
+          "description": "分数解を含む移項",
+          "atom_constraints": {
+            "EquationAtom": {
+              "max_coefficient": 20,
+              "is_integer_solution": false
+            }
+          },
+          "blueprint_params": {},
+          "verb_config": {},
+          "implementable": true,
+          "implementation_note": ""
+        }
       ]
     },
     "execute_blueprint_by_form": {
-      "word_problem": "WordProblemStructure"
+      "word_problem": "WordProblemStructure",
+      "calculation": "SolveEquationStructure"
     }
   },
   "g1_l28": {
@@ -21751,8 +21922,7 @@
     "raw_y_base": 650,
     "y_base": 14,
     "supported_forms": [
-      "calculation",
-      "word_problem"
+      "calculation"
     ],
     "is_clean_override": {
       "disabled": true
@@ -21840,99 +22010,9 @@
           "implementable": true,
           "implementation_note": ""
         }
-      ],
-      "word_problem": [
-        {
-          "lv": 1,
-          "description": "長方形の面積を求める単純な乗法",
-          "atom_constraints": {
-            "NumberAtom": {
-              "allow_negative": false,
-              "max_value": 5
-            },
-            "PolynomialAtom": {
-              "max_degree": 1,
-              "max_coefficient": 5
-            }
-          },
-          "blueprint_params": {
-            "operation": "*"
-          },
-          "verb_config": {
-            "context": "rectangle_area"
-          },
-          "implementable": true,
-          "implementation_note": ""
-        },
-        {
-          "lv": 2,
-          "description": "立体の体積を求める乗法と負数の導入",
-          "atom_constraints": {
-            "NumberAtom": {
-              "allow_negative": true,
-              "max_value": 10
-            },
-            "PolynomialAtom": {
-              "max_degree": 1,
-              "max_coefficient": 8
-            }
-          },
-          "blueprint_params": {
-            "operation": "*"
-          },
-          "verb_config": {
-            "context": "prism_volume"
-          },
-          "implementable": true,
-          "implementation_note": ""
-        },
-        {
-          "lv": 3,
-          "description": "図形の差を求める多項式の加減と乗法",
-          "atom_constraints": {
-            "NumberAtom": {
-              "max_value": 15
-            },
-            "PolynomialAtom": {
-              "max_degree": 2,
-              "max_coefficient": 10
-            }
-          },
-          "blueprint_params": {},
-          "verb_config": {
-            "context": "combined_area_difference"
-          },
-          "implementable": true,
-          "implementation_note": ""
-        },
-        {
-          "lv": 4,
-          "description": "面積から辺の長さを求める除法",
-          "atom_constraints": {
-            "NumberAtom": {
-              "force_fraction": true,
-              "max_value": 20
-            },
-            "PolynomialAtom": {
-              "max_degree": 2,
-              "num_variables": 2,
-              "max_coefficient": 15
-            }
-          },
-          "blueprint_params": {
-            "operation": "/"
-          },
-          "verb_config": {
-            "context": "find_side_from_area"
-          },
-          "implementable": true,
-          "implementation_note": ""
-        }
       ]
     },
-    "execute_blueprint_by_form": {
-      "word_problem": "ContextualCalculationStructure"
-    }
+    "execute_blueprint_by_form": {}
   },
   "g3_l2": {
     "title": "多項式どうしの乗法（展開の基本）",
