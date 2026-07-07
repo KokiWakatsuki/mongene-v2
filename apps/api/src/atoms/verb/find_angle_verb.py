@@ -18,6 +18,9 @@ Theorem = Literal[
     "inscribed_angle",
     "tangent_chord",
     "inscribed_quadrilateral",
+    "isosceles_base_angle",       # 二等辺三角形: 頂角 known から底角 =(180-known)/2
+    "isosceles_vertex_angle",     # 二等辺三角形: 底角 known から頂角 =180-2*known
+    "parallelogram_adjacent",     # 平行四辺形: 1つの角 known から隣角 =180-known
 ]
 
 
@@ -61,6 +64,18 @@ class FindAngleVerb(VerbAtom):
         elif self.theorem == "exterior_angle_sum":
             # 凸多角形の外角の和は常に 360°（多角形の種類によらない）
             expr = sympy.Integer(360)
+        elif self.theorem == "isosceles_base_angle":
+            # 二等辺三角形: 頂角 known_angle から底角 = (180 - 頂角) / 2
+            apex = symbols.get("known_angle", sympy.Integer(40))
+            expr = (sympy.Integer(180) - apex) / 2
+        elif self.theorem == "isosceles_vertex_angle":
+            # 二等辺三角形: 底角 known_angle から頂角 = 180 - 2 * 底角
+            base = symbols.get("known_angle", sympy.Integer(50))
+            expr = sympy.Integer(180) - 2 * base
+        elif self.theorem == "parallelogram_adjacent":
+            # 平行四辺形: 1つの内角 known_angle からその隣角 = 180 - known（対角は等しい）
+            angle = symbols.get("known_angle", sympy.Integer(60))
+            expr = sympy.Integer(180) - angle
         else:
             expr = sympy.Integer(90)
         return LogicStep(

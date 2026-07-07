@@ -300,6 +300,34 @@ def test_find_angle_polygon_interior_sum() -> None:
     assert sympy.simplify(step.sympy_expr - 180) == 0
 
 
+def test_find_angle_isosceles_base_angle() -> None:
+    # 頂角 40° の二等辺三角形の底角 = (180 - 40) / 2 = 70°
+    from apps.api.src.atoms.noun.line_angle_atom import LineAngleAtom
+
+    atom = LineAngleAtom(known_angle=sympy.Integer(40))
+    step = FindAngleVerb("isosceles_base_angle").solve(atom, rng=random.Random(0))
+    assert sympy.simplify(step.sympy_expr - 70) == 0
+    assert step.operation_name == "find_angle_isosceles_base_angle"
+
+
+def test_find_angle_isosceles_vertex_angle() -> None:
+    # 底角 50° の二等辺三角形の頂角 = 180 - 2*50 = 80°
+    from apps.api.src.atoms.noun.line_angle_atom import LineAngleAtom
+
+    atom = LineAngleAtom(known_angle=sympy.Integer(50))
+    step = FindAngleVerb("isosceles_vertex_angle").solve(atom, rng=random.Random(0))
+    assert sympy.simplify(step.sympy_expr - 80) == 0
+
+
+def test_find_angle_parallelogram_adjacent() -> None:
+    # 平行四辺形の 1 つの内角 70° の隣角 = 180 - 70 = 110°
+    from apps.api.src.atoms.noun.line_angle_atom import LineAngleAtom
+
+    atom = LineAngleAtom(known_angle=sympy.Integer(70))
+    step = FindAngleVerb("parallelogram_adjacent").solve(atom, rng=random.Random(0))
+    assert sympy.simplify(step.sympy_expr - 110) == 0
+
+
 # --- MeasureGeometryVerb ---
 def test_measure_distance_between_points() -> None:
     p1 = PointAtom(x=sympy.Integer(0), y=sympy.Integer(0))

@@ -17421,7 +17421,8 @@
     "large_unit": "三角形と四角形",
     "execute_blueprint": "ProofStructure",
     "required_tags": [
-      "plane_geometry"
+      "plane_geometry",
+      "angles"
     ],
     "optional_tags": [],
     "atom_constraints": {
@@ -17455,33 +17456,33 @@
           "lv": 1,
           "description": "頂角から底角を求める計算",
           "atom_constraints": {
-            "NumberAtom": {
-              "allow_negative": false,
-              "max_value": 20
+            "LineAngleAtom": {
+              "angle_range": [20, 80]
             }
           },
+          "blueprint_override": "AngleCalculationStructure",
           "blueprint_params": {
-            "operation": "-"
+            "theorem": "isosceles_base_angle"
           },
           "verb_config": {},
           "implementable": true,
-          "implementation_note": ""
+          "implementation_note": "AngleCalculationStructure+FindAngleVerb(isosceles_base_angle) で頂角→底角=(180-頂角)/2 を実生成"
         },
         {
           "lv": 2,
           "description": "底角から頂角を求める計算",
           "atom_constraints": {
-            "NumberAtom": {
-              "allow_negative": false,
-              "max_value": 50
+            "LineAngleAtom": {
+              "angle_range": [30, 80]
             }
           },
+          "blueprint_override": "AngleCalculationStructure",
           "blueprint_params": {
-            "operation": "*"
+            "theorem": "isosceles_vertex_angle"
           },
           "verb_config": {},
           "implementable": true,
-          "implementation_note": ""
+          "implementation_note": "AngleCalculationStructure+FindAngleVerb(isosceles_vertex_angle) で底角→頂角=180-2*底角 を実生成"
         },
         {
           "lv": 3,
