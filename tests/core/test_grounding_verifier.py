@@ -104,3 +104,33 @@ def test_symbolic_operand_never_flagged_missing():
     mr = _wp_mr(["3*sqrt(2)", "3*(2*sqrt(2))"], sympy.sympify("9*sqrt(2)"), "9*sqrt(2)")
     miss = find_missing_required_numbers("根号を含む場面。", [], mr)
     assert miss == []
+
+
+# ── 打開策4: 誤棄却回避の精緻化 ──────────────────────────────
+def test_probability_derived_operands_not_required():
+    """確率の適合数・標本空間（導出値）は入力量でないため必須にしない（誤棄却回避）。"""
+    step = LogicStep(
+        operation_name="calculate_probability",
+        operands=["1", "36"],  # 適合1 / 全事象36（導出値）
+        sympy_expr=sympy.Rational(1, 36),
+        narration_hint="2つのさいころの和が2になる確率",
+    )
+    mr = MiddleRepresentation(
+        problem_structure_type="DataProbabilityStructure",
+        selected_tags=[], difficulty_score=40.0, problem_form="word_problem",
+        sub_questions=[SubQuestion(
+            label="", prompt_hint="確率を求めなさい", logic_steps=[step],
+            answer=AnswerObject(type="numeric", sympy_form=sympy.Rational(1, 36), text_form="1/36"),
+        )],
+        visual_dsl=None, seed=1, blueprint_id="DataProbabilityStructure", blueprint_version="v1",
+    )
+    # 36 も 1 も問題文に無くても欠落扱いしない
+    miss = find_missing_required_numbers("2つのさいころを投げて出た目の和が2になる確率を求めなさい。", [], mr)
+    assert miss == []
+
+
+def test_magnitude_one_not_required():
+    """大きさ 1（暗黙の係数 y=x 等）は問題文に現れなくても欠落扱いしない。"""
+    mags = required_integer_magnitudes_from_mr(_wp_mr(["1", "3"], sympy.Integer(3), "3"))
+    assert 1 not in mags
+    assert 3 in mags

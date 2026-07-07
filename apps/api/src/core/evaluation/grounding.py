@@ -38,14 +38,26 @@ def _integer_magnitude(value: str) -> Optional[int]:
     return abs(int(frac))
 
 
+# operands が「入力量」でなく導出値（適合数・標本空間など）である operation。
+# これらの operand を必須入力扱いすると確率文章題を誤棄却するため除外する。
+_DERIVED_OPERAND_OPS = frozenset({"calculate_probability", "estimate_total_count"})
+
+
 def required_integer_magnitudes_from_mr(mr: Any) -> List[int]:
-    """MR の全 logic_steps[].operands のうち「非ゼロ整数」の絶対値集合（順序保持）。"""
+    """MR の全 logic_steps[].operands のうち「非ゼロ整数」の絶対値集合（順序保持）。
+
+    誤棄却回避（§16.3）:
+    - 大きさ 1 は暗黙の係数（`y=x` の傾き 1 等）として問題文に現れないことが多いため除外。
+    - 導出値を operand に持つ operation（確率の適合数/標本空間など）は入力量でないため除外。
+    """
     mags: List[int] = []
     for sq in getattr(mr, "sub_questions", []) or []:
         for step in getattr(sq, "logic_steps", []) or []:
+            if getattr(step, "operation_name", "") in _DERIVED_OPERAND_OPS:
+                continue
             for operand in getattr(step, "operands", []) or []:
                 mag = _integer_magnitude(operand)
-                if mag is not None:
+                if mag is not None and mag != 1:
                     mags.append(mag)
     # 重複除去（順序保持）
     seen: Set[int] = set()
