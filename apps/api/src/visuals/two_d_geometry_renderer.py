@@ -146,6 +146,59 @@ class TwoDGeometryRenderer(VisualComponent):
                                 stroke_width=1,
                             )
                         )
+            elif el_type == "angle_arc":
+                vx, vy = transform(*el["vertex"])
+                p1x, p1y = transform(*el["p1"])
+                p2x, p2y = transform(*el["p2"])
+                count = int(el.get("count", 1))
+                # スクリーン y は下向きなので反転して数学的角度に合わせる
+                a1 = math.atan2(-(p1y - vy), p1x - vx)
+                a2 = math.atan2(-(p2y - vy), p2x - vx)
+                d = a2 - a1
+                while d <= -math.pi:
+                    d += 2 * math.pi
+                while d > math.pi:
+                    d -= 2 * math.pi
+                for k in range(count):
+                    r = 14.0 + 4.0 * k
+                    pts = []
+                    steps = 16
+                    for i in range(steps + 1):
+                        t = a1 + d * i / steps
+                        px = vx + r * math.cos(t)
+                        py = vy - r * math.sin(t)
+                        pts.append((px, py))
+                    dwg.add(
+                        dwg.polyline(
+                            points=pts, fill="none", stroke="black", stroke_width=1
+                        )
+                    )
+            elif el_type == "parallel_mark":
+                p1x, p1y = transform(*el["p1"])
+                p2x, p2y = transform(*el["p2"])
+                count = int(el.get("count", 1))
+                length = math.hypot(p2x - p1x, p2y - p1y)
+                if length > 1e-9:
+                    mx, my = (p1x + p2x) / 2, (p1y + p2y) / 2
+                    tx, ty = (p2x - p1x) / length, (p2y - p1y) / length
+                    nx, ny = -ty, tx
+                    s = 5.0
+                    for k in range(count):
+                        off = (k - (count - 1) / 2) * 6.0
+                        cxs, cys = mx + tx * off, my + ty * off
+                        tip = (cxs + tx * s, cys + ty * s)
+                        arm1 = (cxs - tx * s + nx * s, cys - ty * s + ny * s)
+                        arm2 = (cxs - tx * s - nx * s, cys - ty * s - ny * s)
+                        dwg.add(
+                            dwg.line(
+                                start=arm1, end=tip, stroke="black", stroke_width=1
+                            )
+                        )
+                        dwg.add(
+                            dwg.line(
+                                start=arm2, end=tip, stroke="black", stroke_width=1
+                            )
+                        )
             elif el_type == "circle":
                 cx, cy = transform(*el["center"])
                 r = el["radius"] * scale

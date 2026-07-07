@@ -219,10 +219,10 @@ def _build_3d(sampled_nouns: Dict[str, NounAtom]) -> VisualDSL:
 
 
 def _polygon_marks(polygon_type: str, verts: list[list[float]]) -> list[dict]:
-    """polygon_type と頂点列から幾何記号（直角マーク・等長マーク）要素を導出する。
+    """polygon_type と頂点列から幾何記号要素を導出する。
 
     表示のみ。数値・answer には一切影響しない。頂点ラベルは polygon 要素側で付与し、
-    ここでは right_angle_mark / tick_mark のみを返す。
+    ここでは right_angle_mark / tick_mark / angle_arc / parallel_mark を返す。
     """
     marks: list[dict] = []
     n = len(verts)
@@ -232,6 +232,23 @@ def _polygon_marks(polygon_type: str, verts: list[list[float]]) -> list[dict]:
     def _tick(i: int, count: int) -> dict:
         return {
             "type": "tick_mark",
+            "p1": verts[i],
+            "p2": verts[(i + 1) % n],
+            "count": count,
+        }
+
+    def _angle_arc(vi: int, count: int) -> dict:
+        return {
+            "type": "angle_arc",
+            "vertex": verts[vi],
+            "p1": verts[(vi - 1) % n],
+            "p2": verts[(vi + 1) % n],
+            "count": count,
+        }
+
+    def _parallel(i: int, count: int) -> dict:
+        return {
+            "type": "parallel_mark",
             "p1": verts[i],
             "p2": verts[(i + 1) % n],
             "count": count,
@@ -265,12 +282,28 @@ def _polygon_marks(polygon_type: str, verts: list[list[float]]) -> list[dict]:
         # verts=[底辺左, 底辺右, 頂点]。等しい2脚 = 辺(v1->v2), 辺(v2->v0)
         marks.append(_tick(1, 1))
         marks.append(_tick(2, 1))
-    elif polygon_type == "parallelogram" and n >= 4:
-        # 対辺が等しい: 辺0/辺2 に count=1、辺1/辺3 に count=2
-        marks.append(_tick(0, 1))
-        marks.append(_tick(2, 1))
-        marks.append(_tick(1, 2))
-        marks.append(_tick(3, 2))
+
+    # (d) 等角マーク（angle_arc）
+    if polygon_type == "equilateral_triangle" and n >= 3:
+        # 正三角形: 全3頂点の内角が等しい
+        for i in range(n):
+            marks.append(_angle_arc(i, 1))
+    elif polygon_type == "isoceles_triangle" and n >= 3:
+        # verts=[底辺左v0, 底辺右v1, 頂点v2]。底角 = v0, v1
+        marks.append(_angle_arc(0, 1))
+        marks.append(_angle_arc(1, 1))
+
+    # (e) 平行マーク（parallel_mark）
+    if polygon_type == "parallelogram" and n >= 4:
+        # 対辺が平行: 辺0/辺2 に count=1（水平対辺）、辺1/辺3 に count=2（斜辺対辺）
+        marks.append(_parallel(0, 1))
+        marks.append(_parallel(2, 1))
+        marks.append(_parallel(1, 2))
+        marks.append(_parallel(3, 2))
+    elif polygon_type == "trapezoid" and n >= 4:
+        # 上底・下底のみ平行: 辺0（下底）/辺2（上底）に count=1
+        marks.append(_parallel(0, 1))
+        marks.append(_parallel(2, 1))
 
     return marks
 
