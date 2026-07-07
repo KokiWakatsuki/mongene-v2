@@ -1,0 +1,42 @@
+# CongruenceFigureStructure（中2/中3・合同/相似の2図形提示）Few-Shot 種コーパス
+# 図を前提に「対応する頂点の順に記号で表す」型の問い。図に無い辺長などは問わない。
+# 答え（合同/相似の式）は問題文に書かない（漏洩禁止）。
+
+examples:
+  - input_middle_representation:
+      problem_structure_type: CongruenceFigureStructure
+      selected_tags: [congruence, plane_geometry, triangle]
+      difficulty_score: 35
+      problem_form: visual
+      sub_questions:
+        - label: ""
+          prompt_hint: 図の2つの三角形は合同である。対応する頂点の順に、記号 ≡ を使って合同を式で表しなさい。
+          answer:
+            type: proof
+            sympy_form: "1"
+            text_form: "△ABC ≡ △DEF"
+    ideal_problem_text: |
+      右の図で、$\triangle ABC$ と $\triangle DEF$ は合同である。
+      対応する頂点の順に注意して、この 2 つの三角形が合同であることを記号を使って表しなさい。
+    ideal_explanation_text: |
+      合同な図形は、対応する頂点を同じ順に並べて表す。
+      図で示された対応から、$\triangle ABC \equiv \triangle DEF$ となる。
+
+  - input_middle_representation:
+      problem_structure_type: CongruenceFigureStructure
+      selected_tags: [similarity, plane_geometry, triangle]
+      difficulty_score: 45
+      problem_form: visual
+      sub_questions:
+        - label: ""
+          prompt_hint: 図の2つの三角形は相似である。対応する頂点の順に、記号 ∽ を使って相似を式で表しなさい。
+          answer:
+            type: proof
+            sympy_form: "1"
+            text_form: "△ABC ∽ △DEF"
+    ideal_problem_text: |
+      右の図で、$\triangle ABC$ と $\triangle DEF$ は相似である。
+      対応する頂点の順に注意して、この 2 つの三角形が相似であることを記号を使って表しなさい。
+    ideal_explanation_text: |
+      相似な図形は、対応する頂点を同じ順に並べて表す。
+      図で示された対応から、$\triangle ABC \sim \triangle DEF$ となる。

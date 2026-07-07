@@ -1,0 +1,48 @@
+# SimilarityStructure（中3・相似/線分比/中点連結の長さ算出）Few-Shot 種コーパス
+# 幾何の定理文脈（相似比・平行線と線分の比・中点連結）を問題文の骨組みに使う手本。
+# 答えの値は ideal_problem_text に書かない（漏洩禁止）。
+
+examples:
+  - input_middle_representation:
+      problem_structure_type: SimilarityStructure
+      selected_tags: [similarity, proportion_equation]
+      difficulty_score: 45
+      problem_form: calculation
+      sub_questions:
+        - label: ""
+          prompt_hint: 平行線と線分の比の定理を使って、$x$ の長さを求めなさい。
+          answer:
+            type: numeric
+            sympy_form: "12"
+            text_form: "12"
+          logic_steps:
+            - operation_name: solve_parallel_segment_ratio
+              narration_hint: 平行線と線分の比の定理より 2:3 = 8:x が成り立つ。x = 3×8÷2 で求める
+    ideal_problem_text: |
+      右の図で、3 本の直線 $\ell$、$m$、$n$ は平行である。
+      $AB:BC = 2:3$、$DE = 8$ cm のとき、$EF$ の長さ $x$ を求めなさい。
+    ideal_explanation_text: |
+      平行線と線分の比の定理より $AB:BC = DE:EF$ が成り立つ。
+      $2:3 = 8:x$ だから $x = \dfrac{3 \times 8}{2} = 12$（cm）。
+
+  - input_middle_representation:
+      problem_structure_type: SimilarityStructure
+      selected_tags: [similarity, proportion_equation]
+      difficulty_score: 40
+      problem_form: calculation
+      sub_questions:
+        - label: ""
+          prompt_hint: 相似な図形の相似比と対応する辺の長さから、$x$ の長さを求めなさい。
+          answer:
+            type: numeric
+            sympy_form: "15"
+            text_form: "15"
+          logic_steps:
+            - operation_name: solve_similarity_ratio
+              narration_hint: 相似比が 2:3 の相似な図形で、対応する辺が 10 のとき、対応する辺 x = 10×3÷2 で求める
+    ideal_problem_text: |
+      $\triangle ABC \sim \triangle DEF$ で、相似比は $2:3$ である。
+      $\triangle ABC$ の辺 $AB = 10$ cm に対応する $\triangle DEF$ の辺 $DE$ の長さ $x$ を求めなさい。
+    ideal_explanation_text: |
+      相似な図形では対応する辺の比は相似比に等しい。
+      $2:3 = 10:x$ だから $x = \dfrac{10 \times 3}{2} = 15$（cm）。
