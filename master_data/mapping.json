@@ -25249,28 +25249,34 @@
           "lv": 1,
           "description": "平方完成の穴埋め証明",
           "atom_constraints": {},
-          "blueprint_params": {},
+          "blueprint_params": {
+            "proof_type": "quadratic_formula"
+          },
           "verb_config": {},
-          "implementable": false,
-          "implementation_note": "現在のBlueprintは計算結果を求めるSolveEqVerbに特化しており、数式の変形過程（証明）を評価するロジックが未実装のため。"
+          "implementable": true,
+          "implementation_note": "解の公式を平方完成で導出。ProveAlgebraicVerb(quadratic_formula)がSymPyで恒等式・逆代入を検証(moat)。"
         },
         {
           "lv": 2,
           "description": "導出過程の正誤判定",
           "atom_constraints": {},
-          "blueprint_params": {},
+          "blueprint_params": {
+            "proof_type": "quadratic_formula"
+          },
           "verb_config": {},
-          "implementable": false,
-          "implementation_note": "証明の論理構造を検証する機能が現在のAtom構成に含まれていないため。"
+          "implementable": true,
+          "implementation_note": "解の公式を平方完成で導出。ProveAlgebraicVerb(quadratic_formula)がSymPyで恒等式・逆代入を検証(moat)。"
         },
         {
           "lv": 3,
           "description": "一般形からの導出証明",
           "atom_constraints": {},
-          "blueprint_params": {},
+          "blueprint_params": {
+            "proof_type": "quadratic_formula"
+          },
           "verb_config": {},
-          "implementable": false,
-          "implementation_note": "数式の変形ステップを逐次評価する証明エンジンが必要であり、現状の計算エンジンでは対応不可。"
+          "implementable": true,
+          "implementation_note": "解の公式を平方完成で導出。ProveAlgebraicVerb(quadratic_formula)がSymPyで恒等式・逆代入を検証(moat)。"
         }
       ],
       "knowledge": [
@@ -25365,7 +25371,8 @@
       ]
     },
     "execute_blueprint_by_form": {
-      "knowledge": "KnowledgeBaseStructure"
+      "knowledge": "KnowledgeBaseStructure",
+      "proof": "AlgebraicProofStructure"
     }
   },
   "g3_l27": {

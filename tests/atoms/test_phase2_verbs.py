@@ -124,6 +124,7 @@ def test_prove_algebraic_unsupported_proof_type_raises() -> None:
         "square_diff_consecutive",
         "digit_two",
         "digit_three",
+        "quadratic_formula",
     ],
 )
 def test_prove_algebraic_extended_proof_types_return_step(proof_type: str) -> None:
@@ -139,6 +140,20 @@ def test_prove_algebraic_extended_proof_types_return_step(proof_type: str) -> No
     for i, s in enumerate(proof_output["steps"], start=1):
         assert s["step_number"] == i
     assert proof_output["conclusion"]
+
+
+def test_prove_algebraic_quadratic_formula_moat() -> None:
+    """解の公式導出は SymPy で恒等式・逆代入を検証してからステップ化する（moat）。
+    導出結果（解の公式）が元の方程式を満たすことを本テストでも独立に確認する。"""
+    step = ProveAlgebraicVerb("quadratic_formula").solve(_num(4), rng=random.Random(0))
+    proof_output = json.loads(step.operands[-1])
+    assert "解" in proof_output["to_prove"] and "sqrt" in proof_output["to_prove"]
+    # 独立検証: 両根が ax^2+bx+c=0 を満たす
+    a, b, c, x = sympy.symbols("a b c x")
+    disc = b**2 - 4 * a * c
+    for sign in (1, -1):
+        root = (-b + sign * sympy.sqrt(disc)) / (2 * a)
+        assert sympy.simplify(a * root**2 + b * root + c) == 0
 
 
 # --- FormulateVerb（立式型 word_problem） ---

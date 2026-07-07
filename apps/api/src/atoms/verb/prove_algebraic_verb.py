@@ -141,7 +141,48 @@ class ProveAlgebraicVerb(VerbAtom):
             return self._solve_digit_two(atom, rng)
         if self.proof_type == "digit_three":
             return self._solve_digit_three(atom, rng)
+        if self.proof_type == "quadratic_formula":
+            return self._solve_quadratic_formula(atom, rng)
         raise ValueError(f"未対応の proof_type: {self.proof_type}")
+
+    def _solve_quadratic_formula(self, atom: NounAtom, rng: random.Random) -> LogicStep:
+        """2次方程式 ax²+bx+c=0 (a≠0) の解の公式を平方完成で導出する。
+
+        moat: (1)平方完成の恒等式、(2)右辺の一致、(3)両根の逆代入=0 を SymPy で
+        検証してから証明ステップを組み立てる。
+        """
+        x = sympy.Symbol("x")
+        disc = b**2 - 4 * a * c
+
+        # --- moat 検証（証明の各変形が恒等的に正しいことを SymPy で確認）---
+        # (1) 平方完成: (x + b/2a)^2 == x^2 + (b/a)x + b^2/4a^2
+        if sympy.expand((x + b / (2 * a)) ** 2 - (x**2 + (b / a) * x + b**2 / (4 * a**2))) != 0:
+            raise AssertionError("平方完成の恒等式が成り立たない")
+        # (2) 右辺の整理: b^2/4a^2 - c/a == (b^2-4ac)/4a^2
+        if sympy.simplify((b**2 / (4 * a**2) - c / a) - disc / (4 * a**2)) != 0:
+            raise AssertionError("平方完成の右辺が一致しない")
+        # (3) 逆代入: 両根が元の方程式を満たす
+        for sign in (1, -1):
+            root = (-b + sign * sympy.sqrt(disc)) / (2 * a)
+            if sympy.simplify(a * root**2 + b * root + c) != 0:
+                raise AssertionError(f"導出した解 (sign={sign}) が方程式を満たさない")
+
+        to_prove = r"2次方程式 $ax^2+bx+c=0$（$a \neq 0$）の解は $x = \dfrac{-b \pm \sqrt{b^2-4ac}}{2a}$ である"
+        return self._build_logic_step(
+            atom,
+            "quadratic_formula",
+            given=[r"$a, b, c$ を定数、$a \neq 0$ とする 2 次方程式 $ax^2+bx+c=0$"],
+            to_prove=to_prove,
+            step1=r"$x^2 + \dfrac{b}{a}x + \dfrac{c}{a} = 0$",
+            step2=r"$x^2 + \dfrac{b}{a}x = -\dfrac{c}{a}$",
+            step3=r"$\left(x + \dfrac{b}{2a}\right)^2 = \dfrac{b^2-4ac}{4a^2}$",
+            step4=r"$x = \dfrac{-b \pm \sqrt{b^2-4ac}}{2a}$",
+            step1_reason=r"両辺を $a$ で割る",
+            step2_reason="定数項を右辺に移項する",
+            step3_reason=r"両辺に $\left(\dfrac{b}{2a}\right)^2$ を加えて左辺を平方完成する",
+            step4_reason=r"両辺の平方根をとり $\dfrac{b}{2a}$ を移項する",
+            conclusion=r"よって解の公式 $x = \dfrac{-b \pm \sqrt{b^2-4ac}}{2a}$ が得られる。",
+        )
 
     def _solve_even_odd(self, atom: NounAtom, rng: random.Random) -> LogicStep:
         chosen_key = rng.choice(list(_EVEN_ODD_PROPOSITIONS.keys()))
