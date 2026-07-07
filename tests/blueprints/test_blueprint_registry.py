@@ -68,6 +68,7 @@ EXPECTED_BLUEPRINTS = {
     "WordProblemFormulationStructure",
     "ContextualCalculationStructure",
     "CoordinatePlaneStructure",
+    "AngleProofStructure",
 }
 
 

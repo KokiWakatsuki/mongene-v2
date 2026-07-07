@@ -14890,7 +14890,7 @@
     },
     "execute_blueprint_by_form": {
       "calculation": "AngleCalculationStructure",
-      "proof": "BasicCalculationStructure",
+      "proof": "AngleProofStructure",
       "knowledge": "KnowledgeBaseStructure",
       "visual": "AngleCalculationStructure"
     },
@@ -14947,29 +14947,44 @@
         {
           "lv": 1,
           "description": "錯角の性質を用いた直接証明",
-          "atom_constraints": {},
+          "atom_constraints": {
+            "LineAngleAtom": {
+              "relation_type": "alternate",
+              "angle_range": [30, 150]
+            }
+          },
           "blueprint_params": {},
           "verb_config": {},
-          "implementable": false,
-          "implementation_note": "現在のBlueprintおよびAtom定義は計算問題に特化しており、図形の証明問題に必要な論理ステップや幾何学的オブジェクトの生成機能が欠如しているため。"
+          "implementable": true,
+          "implementation_note": "alternateの性質を平行線の同位角+対頂角/一直線の角で演繹証明。ProveAngleRelationVerbがSymPyで角度を検証(moat)。"
         },
         {
           "lv": 2,
           "description": "対頂角と錯角を組み合わせた証明",
-          "atom_constraints": {},
+          "atom_constraints": {
+            "LineAngleAtom": {
+              "relation_type": "corresponding",
+              "angle_range": [30, 150]
+            }
+          },
           "blueprint_params": {},
           "verb_config": {},
-          "implementable": false,
-          "implementation_note": "同上。"
+          "implementable": true,
+          "implementation_note": "correspondingの性質を平行線の同位角+対頂角/一直線の角で演繹証明。ProveAngleRelationVerbがSymPyで角度を検証(moat)。"
         },
         {
           "lv": 3,
           "description": "補助線を用いた間接的な証明",
-          "atom_constraints": {},
+          "atom_constraints": {
+            "LineAngleAtom": {
+              "relation_type": "co_interior",
+              "angle_range": [30, 150]
+            }
+          },
           "blueprint_params": {},
           "verb_config": {},
-          "implementable": false,
-          "implementation_note": "同上。"
+          "implementable": true,
+          "implementation_note": "co_interiorの性質を平行線の同位角+対頂角/一直線の角で演繹証明。ProveAngleRelationVerbがSymPyで角度を検証(moat)。"
         }
       ],
       "knowledge": [
@@ -29686,10 +29701,7 @@
     "atom_constraints": {
       "LineAngleAtom": {
         "relation_type": "alternate",
-        "angle_range": [
-          30,
-          150
-        ]
+        "angle_range": [30, 150]
       },
       "CircleAngleAtom": {},
       "PolygonAtom": {
@@ -29802,10 +29814,7 @@
           "atom_constraints": {
             "CircleAngleAtom": {
               "check_type": "simple_angle_equality",
-              "angle_range": [
-                45,
-                45
-              ]
+              "angle_range": [45, 45]
             }
           },
           "blueprint_params": {
@@ -30117,10 +30126,7 @@
     "atom_constraints": {
       "LineAngleAtom": {
         "relation_type": "alternate",
-        "angle_range": [
-          30,
-          150
-        ]
+        "angle_range": [30, 150]
       },
       "CircleAngleAtom": {},
       "PolygonAtom": {
