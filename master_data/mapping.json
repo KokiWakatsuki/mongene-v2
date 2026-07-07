@@ -3295,7 +3295,11 @@
       ]
     },
     "execute_blueprint_by_form": {
-      "knowledge": "KnowledgeBaseStructure"
+      "knowledge": "KnowledgeBaseStructure",
+      "word_problem": "WordProblemFormulationStructure"
+    },
+    "blueprint_params": {
+      "mode": "equation"
     }
   },
   "g1_l20": {
@@ -3496,7 +3500,11 @@
       ]
     },
     "execute_blueprint_by_form": {
-      "knowledge": "KnowledgeBaseStructure"
+      "knowledge": "KnowledgeBaseStructure",
+      "word_problem": "WordProblemFormulationStructure"
+    },
+    "blueprint_params": {
+      "mode": "inequality"
     }
   },
   "g1_l21": {

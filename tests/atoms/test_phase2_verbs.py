@@ -160,10 +160,28 @@ def test_formulate_rejects_constant_without_variable() -> None:
     assert ok is False
 
 
+def test_formulate_equation_returns_eq_as_answer() -> None:
+    """FormulateVerb(equation) は sympy.Eq を答えとして返す（解かない）。"""
+    step = FormulateVerb("equation").solve(_num(3), rng=random.Random(0))
+    assert step.operation_name == "formulate_equation"
+    assert isinstance(step.sympy_expr, sympy.Eq)
+    assert step.sympy_expr.free_symbols  # 変数を含む
+
+
+def test_formulate_inequality_returns_relational_as_answer() -> None:
+    """FormulateVerb(inequality) は不等式（Relational）を答えとして返す。"""
+    from sympy.core.relational import Relational
+
+    step = FormulateVerb("inequality").solve(_num(3), rng=random.Random(1))
+    assert step.operation_name == "formulate_inequality"
+    assert isinstance(step.sympy_expr, Relational)
+    assert step.sympy_expr.free_symbols
+
+
 def test_formulate_unsupported_mode_raises() -> None:
     x = sympy.Symbol("x")
     with pytest.raises(ValueError):
-        FormulateVerb("equation").solve(_poly(3 * x + 2), rng=random.Random(0))
+        FormulateVerb("nonsense_mode").solve(_poly(3 * x + 2), rng=random.Random(0))
 
 
 # --- GeneralizeFormulaVerb ---
