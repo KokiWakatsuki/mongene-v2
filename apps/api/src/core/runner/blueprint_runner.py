@@ -136,6 +136,10 @@ class BlueprintRunner:
                     mapping.get("execute_blueprint", blueprints_list[0] if blueprints_list else "BasicCalculationStructure")
                 ]
         blueprint_params = mapping.get("blueprint_params", {})
+        # 問題文を form 別に出し分けたい blueprint（例: CoordinatePlaneStructure は calc で
+        # 「グラフをかき」を出さない）のために現在の form を params に注入する。未知 params を
+        # 無視する blueprint には無害。
+        blueprint_params = {**blueprint_params, "_problem_form": request.problem_form}
 
         # 契約強制: mapping が要求する form を supported_forms に持たない blueprint に
         # 黙って退化させない。候補を form でフィルタし、空なら正直にエラーにする。

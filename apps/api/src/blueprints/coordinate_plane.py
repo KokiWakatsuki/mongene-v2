@@ -28,6 +28,9 @@ from apps.api.src.core.abc.visuals import VisualSlot
 def build_coordinate_plane_blueprint(params: dict | None = None) -> BlueprintDefinition:
     params = params or {}
     func_type = params.get("func_type", "proportion")
+    # calculation form は「グラフをかき」を含めない（計算問題でグラフ作図を指示するのは不自然）。
+    # visual form はグラフ描画そのものが題材なので従来どおり作図を促す。
+    is_calc = params.get("_problem_form") == "calculation"
 
     if func_type == "point":
         noun_type = "PointAtom"
@@ -38,12 +41,20 @@ def build_coordinate_plane_blueprint(params: dict | None = None) -> BlueprintDef
         noun_type = "InverseFuncAtom"
         tag = "inverse_proportion"
         verb = EvaluateFunctionVerb()
-        question = "反比例のグラフをかき、指定した x の値に対応する y の値を求めなさい"
+        question = (
+            "反比例の式で、指定した x の値に対応する y の値を求めなさい"
+            if is_calc
+            else "反比例のグラフをかき、指定した x の値に対応する y の値を求めなさい"
+        )
     else:
         noun_type = "LinearFuncAtom"
         tag = "linear_function"
         verb = EvaluateFunctionVerb()
-        question = "比例のグラフをかき、指定した x の値に対応する y の値を求めなさい"
+        question = (
+            "比例の式で、指定した x の値に対応する y の値を求めなさい"
+            if is_calc
+            else "比例のグラフをかき、指定した x の値に対応する y の値を求めなさい"
+        )
 
     return BlueprintDefinition(
         blueprint_id="CoordinatePlaneStructure",
