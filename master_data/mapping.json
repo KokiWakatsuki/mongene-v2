@@ -27811,7 +27811,7 @@
       "disabled": true
     },
     "execute_blueprint_by_form": {
-      "calculation": "BasicCalculationStructure",
+      "calculation": "SimilarityStructure",
       "knowledge": "KnowledgeBaseStructure",
       "visual": "CongruenceFigureStructure"
     },
@@ -27820,69 +27820,67 @@
       "calculation": [
         {
           "lv": 1,
-          "description": "簡単な整数比の計算",
+          "description": "整数の相似比で対応する辺の長さを求める（基礎）",
           "atom_constraints": {
-            "NumberAtom": {
-              "max_value": 10,
-              "allow_negative": false
+            "ProportionAtom": {
+              "max_ratio_value": 4,
+              "is_integer_solution": true
             }
           },
           "blueprint_params": {
-            "operation": "*"
+            "context": "similarity_ratio"
           },
           "verb_config": {},
           "implementable": true,
-          "implementation_note": ""
+          "implementation_note": "SimilarityStructure+SolveSimilarityVerb(similarity_ratio) で比から長さを実算出"
         },
         {
           "lv": 2,
-          "description": "2桁の整数比の計算",
+          "description": "整数の相似比で対応する辺の長さを求める（標準）",
           "atom_constraints": {
-            "NumberAtom": {
-              "max_value": 50,
-              "allow_negative": false
+            "ProportionAtom": {
+              "max_ratio_value": 6,
+              "is_integer_solution": true
             }
           },
           "blueprint_params": {
-            "operation": "*"
+            "context": "similarity_ratio"
           },
           "verb_config": {},
           "implementable": true,
-          "implementation_note": ""
+          "implementation_note": "SimilarityStructure+SolveSimilarityVerb(similarity_ratio) で比から長さを実算出"
         },
         {
           "lv": 3,
-          "description": "分数を含む比の計算",
+          "description": "分数を含む相似比で辺の長さを求める",
           "atom_constraints": {
-            "NumberAtom": {
-              "max_value": 20,
-              "force_fraction": true,
-              "allow_negative": false
+            "ProportionAtom": {
+              "max_ratio_value": 5,
+              "is_integer_solution": false
             }
           },
           "blueprint_params": {
-            "operation": "*"
+            "context": "similarity_ratio"
           },
           "verb_config": {},
           "implementable": true,
-          "implementation_note": ""
+          "implementation_note": "SimilarityStructure+SolveSimilarityVerb(similarity_ratio) で比から長さを実算出"
         },
         {
           "lv": 4,
-          "description": "複雑な分数比の計算",
+          "description": "複雑な相似比で辺の長さを求める",
           "atom_constraints": {
-            "NumberAtom": {
-              "max_value": 50,
-              "force_fraction": true,
-              "allow_negative": false
+            "ProportionAtom": {
+              "max_ratio_value": 7,
+              "is_integer_solution": false
             }
           },
           "blueprint_params": {
-            "operation": "*"
+            "context": "similarity_ratio"
           },
           "verb_config": {},
           "implementable": true,
-          "implementation_note": ""
+          "implementation_note": "SimilarityStructure+SolveSimilarityVerb(similarity_ratio) で比から長さを実算出"
         }
       ],
       "knowledge": [
@@ -28080,7 +28078,7 @@
       "disabled": true
     },
     "execute_blueprint_by_form": {
-      "calculation": "BasicCalculationStructure",
+      "calculation": "SimilarityStructure",
       "knowledge": "KnowledgeBaseStructure",
       "visual": "CongruenceFigureStructure"
     },
@@ -28089,54 +28087,51 @@
       "calculation": [
         {
           "lv": 1,
-          "description": "簡単な整数の比の計算",
+          "description": "整数の相似比で対応する辺の長さを求める（基礎）",
           "atom_constraints": {
-            "NumberAtom": {
-              "allow_negative": false,
-              "max_value": 10,
-              "force_fraction": false
+            "ProportionAtom": {
+              "max_ratio_value": 4,
+              "is_integer_solution": true
             }
           },
           "blueprint_params": {
-            "operation": "*"
+            "context": "similarity_ratio"
           },
           "verb_config": {},
           "implementable": true,
-          "implementation_note": ""
+          "implementation_note": "SimilarityStructure+SolveSimilarityVerb(similarity_ratio) で比から長さを実算出"
         },
         {
           "lv": 2,
-          "description": "2桁の整数を含む比の計算",
+          "description": "整数の相似比で対応する辺の長さを求める（標準）",
           "atom_constraints": {
-            "NumberAtom": {
-              "allow_negative": false,
-              "max_value": 30,
-              "force_fraction": false
+            "ProportionAtom": {
+              "max_ratio_value": 6,
+              "is_integer_solution": true
             }
           },
           "blueprint_params": {
-            "operation": "*"
+            "context": "similarity_ratio"
           },
           "verb_config": {},
           "implementable": true,
-          "implementation_note": ""
+          "implementation_note": "SimilarityStructure+SolveSimilarityVerb(similarity_ratio) で比から長さを実算出"
         },
         {
           "lv": 3,
-          "description": "分数を含む相似比の計算",
+          "description": "分数を含む相似比で辺の長さを求める",
           "atom_constraints": {
-            "NumberAtom": {
-              "allow_negative": false,
-              "max_value": 20,
-              "force_fraction": true
+            "ProportionAtom": {
+              "max_ratio_value": 6,
+              "is_integer_solution": false
             }
           },
           "blueprint_params": {
-            "operation": "*"
+            "context": "similarity_ratio"
           },
           "verb_config": {},
           "implementable": true,
-          "implementation_note": ""
+          "implementation_note": "SimilarityStructure+SolveSimilarityVerb(similarity_ratio) で比から長さを実算出"
         }
       ],
       "knowledge": [
@@ -28488,7 +28483,7 @@
       "disabled": true
     },
     "execute_blueprint_by_form": {
-      "calculation": "BasicCalculationStructure",
+      "calculation": "SimilarityStructure",
       "knowledge": "KnowledgeBaseStructure",
       "visual": "BasicGeometryMeasurementStructure"
     },
@@ -28497,54 +28492,51 @@
       "calculation": [
         {
           "lv": 1,
-          "description": "簡単な整数の比の計算",
+          "description": "平行線と線分の比の定理で長さを求める（基礎）",
           "atom_constraints": {
-            "NumberAtom": {
-              "allow_negative": false,
-              "max_value": 10,
-              "force_fraction": false
+            "ProportionAtom": {
+              "max_ratio_value": 4,
+              "is_integer_solution": true
             }
           },
           "blueprint_params": {
-            "operation": "*"
+            "context": "parallel_segments"
           },
           "verb_config": {},
           "implementable": true,
-          "implementation_note": ""
+          "implementation_note": "SimilarityStructure+SolveSimilarityVerb(parallel_segments) で比から長さを実算出"
         },
         {
           "lv": 2,
-          "description": "20以下の整数を用いた比の計算",
+          "description": "平行線と線分の比の定理で長さを求める（標準）",
           "atom_constraints": {
-            "NumberAtom": {
-              "allow_negative": false,
-              "max_value": 20,
-              "force_fraction": false
+            "ProportionAtom": {
+              "max_ratio_value": 6,
+              "is_integer_solution": true
             }
           },
           "blueprint_params": {
-            "operation": "*"
+            "context": "parallel_segments"
           },
           "verb_config": {},
           "implementable": true,
-          "implementation_note": ""
+          "implementation_note": "SimilarityStructure+SolveSimilarityVerb(parallel_segments) で比から長さを実算出"
         },
         {
           "lv": 3,
-          "description": "分数を含む比の計算",
+          "description": "平行線と線分の比の定理で長さを求める（分数）",
           "atom_constraints": {
-            "NumberAtom": {
-              "allow_negative": false,
-              "max_value": 30,
-              "force_fraction": true
+            "ProportionAtom": {
+              "max_ratio_value": 6,
+              "is_integer_solution": false
             }
           },
           "blueprint_params": {
-            "operation": "/"
+            "context": "parallel_segments"
           },
           "verb_config": {},
           "implementable": true,
-          "implementation_note": ""
+          "implementation_note": "SimilarityStructure+SolveSimilarityVerb(parallel_segments) で比から長さを実算出"
         }
       ],
       "knowledge": [
@@ -28690,7 +28682,7 @@
       "disabled": true
     },
     "execute_blueprint_by_form": {
-      "calculation": "BasicCalculationStructure",
+      "calculation": "SimilarityStructure",
       "visual": "BasicGeometryMeasurementStructure"
     },
     "dedup_disabled": true,
@@ -28698,52 +28690,51 @@
       "calculation": [
         {
           "lv": 1,
-          "description": "簡単な整数の比の計算",
+          "description": "線分の比の定理で長さを求める（基礎）",
           "atom_constraints": {
-            "NumberAtom": {
-              "allow_negative": false,
-              "max_value": 10
+            "ProportionAtom": {
+              "max_ratio_value": 4,
+              "is_integer_solution": true
             }
           },
           "blueprint_params": {
-            "operation": "*"
+            "context": "parallel_segments"
           },
           "verb_config": {},
           "implementable": true,
-          "implementation_note": ""
+          "implementation_note": "SimilarityStructure+SolveSimilarityVerb(parallel_segments) で比から長さを実算出"
         },
         {
           "lv": 2,
-          "description": "大きな値を含む比の計算",
+          "description": "線分の比の定理で長さを求める（標準）",
           "atom_constraints": {
-            "NumberAtom": {
-              "allow_negative": false,
-              "max_value": 50
+            "ProportionAtom": {
+              "max_ratio_value": 6,
+              "is_integer_solution": true
             }
           },
           "blueprint_params": {
-            "operation": "*"
+            "context": "parallel_segments"
           },
           "verb_config": {},
           "implementable": true,
-          "implementation_note": ""
+          "implementation_note": "SimilarityStructure+SolveSimilarityVerb(parallel_segments) で比から長さを実算出"
         },
         {
           "lv": 3,
-          "description": "分数を含む比の計算",
+          "description": "線分の比の定理で長さを求める（分数）",
           "atom_constraints": {
-            "NumberAtom": {
-              "allow_negative": false,
-              "force_fraction": true,
-              "max_value": 20
+            "ProportionAtom": {
+              "max_ratio_value": 6,
+              "is_integer_solution": false
             }
           },
           "blueprint_params": {
-            "operation": "/"
+            "context": "parallel_segments"
           },
           "verb_config": {},
           "implementable": true,
-          "implementation_note": ""
+          "implementation_note": "SimilarityStructure+SolveSimilarityVerb(parallel_segments) で比から長さを実算出"
         }
       ],
       "visual": [
@@ -28836,7 +28827,7 @@
       "disabled": true
     },
     "execute_blueprint_by_form": {
-      "calculation": "BasicCalculationStructure",
+      "calculation": "SimilarityStructure",
       "proof": "ProofStructure",
       "knowledge": "KnowledgeBaseStructure",
       "visual": "BasicGeometryMeasurementStructure"
@@ -28846,74 +28837,67 @@
       "calculation": [
         {
           "lv": 1,
-          "description": "偶数の長さを2で割る計算",
+          "description": "中点連結定理で底辺の長さを求める（基礎）",
           "atom_constraints": {
-            "NumberAtom": {
-              "allow_negative": false,
-              "max_value": 10
+            "ProportionAtom": {
+              "max_ratio_value": 4,
+              "is_integer_solution": true
             }
           },
           "blueprint_params": {
-            "operation": "/"
-          },
-          "verb_config": {
-            "divisor": 2
-          },
-          "implementable": true,
-          "implementation_note": "verb_configで除数を2に固定する前提"
-        },
-        {
-          "lv": 2,
-          "description": "奇数の長さを2で割る計算",
-          "atom_constraints": {
-            "NumberAtom": {
-              "allow_negative": false,
-              "max_value": 20
-            }
-          },
-          "blueprint_params": {
-            "operation": "/"
-          },
-          "verb_config": {
-            "divisor": 2
-          },
-          "implementable": true,
-          "implementation_note": ""
-        },
-        {
-          "lv": 3,
-          "description": "中点連結定理による辺の和の計算",
-          "atom_constraints": {
-            "NumberAtom": {
-              "allow_negative": false,
-              "max_value": 30
-            }
-          },
-          "blueprint_params": {
-            "operation": "+"
+            "context": "midpoint_connector"
           },
           "verb_config": {},
           "implementable": true,
-          "implementation_note": "2つのNumberAtomの和を求める構成"
+          "implementation_note": "SimilarityStructure+SolveSimilarityVerb(midpoint_connector) で比から長さを実算出"
         },
         {
-          "lv": 4,
-          "description": "分数を含む複雑な辺の長さ計算",
+          "lv": 2,
+          "description": "中点連結定理で底辺の長さを求める（標準）",
           "atom_constraints": {
-            "NumberAtom": {
-              "allow_negative": false,
-              "force_fraction": true,
-              "max_value": 20
+            "ProportionAtom": {
+              "max_ratio_value": 6,
+              "is_integer_solution": true
             }
           },
           "blueprint_params": {
-            "operation": "*"
+            "context": "midpoint_connector"
           },
-          "verb_config": {
-            "multiplier": 0.5
-          },
+          "verb_config": {},
           "implementable": true,
-          "implementation_note": "分数の乗算（1/2を掛ける）として実装"
+          "implementation_note": "SimilarityStructure+SolveSimilarityVerb(midpoint_connector) で比から長さを実算出"
+        },
+        {
+          "lv": 3,
+          "description": "中点連結定理で底辺の長さを求める（発展）",
+          "atom_constraints": {
+            "ProportionAtom": {
+              "max_ratio_value": 8,
+              "is_integer_solution": true
+            }
+          },
+          "blueprint_params": {
+            "context": "midpoint_connector"
+          },
+          "verb_config": {},
+          "implementable": true,
+          "implementation_note": "SimilarityStructure+SolveSimilarityVerb(midpoint_connector) で比から長さを実算出"
+        },
+        {
+          "lv": 4,
+          "description": "中点連結定理で底辺の長さを求める（応用）",
+          "atom_constraints": {
+            "ProportionAtom": {
+              "max_ratio_value": 7,
+              "is_integer_solution": true
+            }
+          },
+          "blueprint_params": {
+            "context": "midpoint_connector"
+          },
+          "verb_config": {},
+          "implementable": true,
+          "implementation_note": "SimilarityStructure+SolveSimilarityVerb(midpoint_connector) で比から長さを実算出"
         }
       ],
       "proof": [

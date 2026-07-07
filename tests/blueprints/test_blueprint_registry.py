@@ -18,6 +18,7 @@ from apps.api.src.atoms.noun import (  # noqa: F401
     point_atom,
     polygon_atom,
     prism_atom,
+    proportion_atom,
     pyramid_atom,
     sequence_atom,
 )
@@ -70,6 +71,7 @@ EXPECTED_BLUEPRINTS = {
     "CoordinatePlaneStructure",
     "AngleProofStructure",
     "CongruenceFigureStructure",
+    "SimilarityStructure",
 }
 
 
@@ -199,6 +201,36 @@ def test_congruence_figure_runs(tmp_path: Path) -> None:
         # 答えが合同/相似の記号を含む
         answer = mr.sub_questions[0].answer
         assert relation in (answer.text_form or ""), f"{proof_type}: {answer.text_form}"
+
+
+def test_similarity_runs(tmp_path: Path) -> None:
+    """SimilarityStructure（calc）は比から長さを幾何文脈付きで実算出する。
+
+    3 context（相似比・平行線と線分の比・中点連結）で数値解 + 定理別 operation を検証。
+    """
+    expected_op = {
+        "similarity_ratio": "solve_similarity_ratio",
+        "parallel_segments": "solve_parallel_segment_ratio",
+        "midpoint_connector": "solve_midpoint_connector",
+    }
+    for ctx, op in expected_op.items():
+        runner = _make_runner(tmp_path / f"dedup_{ctx}.db")
+        mapping = _mapping_for("SimilarityStructure", 3, 55, "calculation")
+        mapping["blueprint_params"] = {"context": ctx}
+        mapping["atom_constraints"] = {
+            "ProportionAtom": {"max_ratio_value": 10, "is_integer_solution": True}
+        }
+        request = GenerationRequest(
+            target_difficulty=55, problem_form="calculation", lesson_id="g3_l40", seed=4
+        )
+        result = runner.run(request, mapping)
+        mr = result.middle_representation
+        assert mr.sub_questions
+        answer = mr.sub_questions[0].answer
+        # 数値解（比例式・中点連結の長さ）が出る
+        assert answer.sympy_form is not None
+        steps = mr.sub_questions[0].logic_steps or []
+        assert any(s.operation_name == op for s in steps), f"{ctx}: op {op} 不在"
 
 
 def test_angle_calculation_runs(tmp_path: Path) -> None:

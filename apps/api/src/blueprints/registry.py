@@ -47,6 +47,7 @@ def _builder_map() -> Dict[str, Callable[[], BlueprintDefinition]]:
     from apps.api.src.blueprints.coordinate_plane import build_coordinate_plane_blueprint
     from apps.api.src.blueprints.angle_proof import build_angle_proof_blueprint
     from apps.api.src.blueprints.congruence_figure import build_congruence_figure_blueprint
+    from apps.api.src.blueprints.similarity import build_similarity_blueprint
 
     return {
         "BasicCalculationStructure": build_basic_calculation_blueprint,
@@ -75,6 +76,7 @@ def _builder_map() -> Dict[str, Callable[[], BlueprintDefinition]]:
         "CoordinatePlaneStructure": build_coordinate_plane_blueprint,
         "AngleProofStructure": build_angle_proof_blueprint,
         "CongruenceFigureStructure": build_congruence_figure_blueprint,
+        "SimilarityStructure": build_similarity_blueprint,
     }
 
 
