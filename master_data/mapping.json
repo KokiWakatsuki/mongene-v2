@@ -18639,7 +18639,8 @@
     "large_unit": "三角形と四角形",
     "execute_blueprint": "ProofStructure",
     "required_tags": [
-      "plane_geometry"
+      "plane_geometry",
+      "angles"
     ],
     "optional_tags": [],
     "atom_constraints": {
@@ -18671,19 +18672,19 @@
       "calculation": [
         {
           "lv": 1,
-          "description": "平行四辺形の辺や角の基本計算",
+          "description": "1つの内角から隣り合う角を求める計算",
           "atom_constraints": {
-            "NumberAtom": {
-              "allow_negative": false,
-              "max_value": 20
+            "LineAngleAtom": {
+              "angle_range": [40, 140]
             }
           },
+          "blueprint_override": "AngleCalculationStructure",
           "blueprint_params": {
-            "operation": "+"
+            "theorem": "parallelogram_adjacent"
           },
           "verb_config": {},
           "implementable": true,
-          "implementation_note": ""
+          "implementation_note": "AngleCalculationStructure+FindAngleVerb(parallelogram_adjacent) で内角→隣角=180-内角 を実生成"
         },
         {
           "lv": 2,
@@ -18824,7 +18825,11 @@
         {
           "lv": 1,
           "description": "平行四辺形の定義の認識",
-          "atom_constraints": {},
+          "atom_constraints": {
+            "PolygonAtom": {
+              "polygon_type": "parallelogram"
+            }
+          },
           "blueprint_params": {
             "knowledge_hint": "平行四辺形の定義",
             "knowledge_hints": [
@@ -18839,7 +18844,11 @@
         {
           "lv": 2,
           "description": "平行四辺形の性質の理解（対辺・対角・対角線）",
-          "atom_constraints": {},
+          "atom_constraints": {
+            "PolygonAtom": {
+              "polygon_type": "parallelogram"
+            }
+          },
           "blueprint_params": {
             "knowledge_hint": "平行四辺形の性質",
             "knowledge_hints": [
@@ -18854,7 +18863,11 @@
         {
           "lv": 3,
           "description": "平行四辺形になるための条件",
-          "atom_constraints": {},
+          "atom_constraints": {
+            "PolygonAtom": {
+              "polygon_type": "parallelogram"
+            }
+          },
           "blueprint_params": {
             "knowledge_hint": "平行四辺形になるための条件",
             "knowledge_hints": [
