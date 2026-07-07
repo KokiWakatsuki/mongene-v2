@@ -57,23 +57,37 @@ def _make_runner(tmp_db: Path) -> BlueprintRunner:
     )
 
 
+# 契約違反の例として使う lesson/form。g1_l1 の word_problem はかつて違反だったが立式型/文脈計算型
+# capability の開通で解消したため、まだ真の能力ギャップとして残る例に張り替えた。
+# g2_l16「個数と代金の問題」は calculation を宣言するが候補 blueprint は WordProblemStructure
+# （supported_forms=["word_problem"]）のみで calculation を含まないため契約違反（calc を扱える
+# blueprint を配線するか mapping 宣言を見直すまで残る）。
+VIOLATION_LESSON_ID = "g2_l16"
+VIOLATION_FORM = "calculation"
+
+
+def _violation_lesson_mapping() -> dict:
+    mapping = json.loads(MAPPING_PATH.read_text(encoding="utf-8"))
+    return mapping[VIOLATION_LESSON_ID]
+
+
 def test_unsupported_form_raises_no_compatible_blueprint_error(tmp_path: Path) -> None:
     """mapping が要求する form を候補 blueprint が supported_forms に持たない場合、
     黙って calculation に退化せず NoCompatibleBlueprintError を投げること。
     """
     runner = _make_runner(tmp_path / "dedup.db")
     request = GenerationRequest(
-        problem_form="word_problem",
-        lesson_id=LESSON_ID,
+        problem_form=VIOLATION_FORM,
+        lesson_id=VIOLATION_LESSON_ID,
         target_difficulty=6,
     )
     with pytest.raises(NoCompatibleBlueprintError) as excinfo:
-        runner.run(request, _lesson_mapping())
+        runner.run(request, _violation_lesson_mapping())
 
     message = str(excinfo.value)
-    assert LESSON_ID in message
-    assert "word_problem" in message
-    assert "BasicCalculationStructure" in message
+    assert VIOLATION_LESSON_ID in message
+    assert VIOLATION_FORM in message
+    assert "WordProblemStructure" in message
 
 
 def test_supported_form_generates_without_degradation(tmp_path: Path) -> None:

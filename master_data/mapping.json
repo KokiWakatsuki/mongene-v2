@@ -210,7 +210,8 @@
       ]
     },
     "execute_blueprint_by_form": {
-      "knowledge": "KnowledgeBaseStructure"
+      "knowledge": "KnowledgeBaseStructure",
+      "word_problem": "ContextualCalculationStructure"
     }
   },
   "g1_l2": {
@@ -1248,7 +1249,9 @@
         }
       ]
     },
-    "execute_blueprint_by_form": {}
+    "execute_blueprint_by_form": {
+      "word_problem": "ContextualCalculationStructure"
+    }
   },
   "g1_l10": {
     "title": "数の集合と四則計算の可能性",
@@ -21850,7 +21853,9 @@
         }
       ]
     },
-    "execute_blueprint_by_form": {}
+    "execute_blueprint_by_form": {
+      "word_problem": "ContextualCalculationStructure"
+    }
   },
   "g3_l2": {
     "title": "多項式どうしの乗法（展開の基本）",
@@ -24789,7 +24794,9 @@
         }
       ]
     },
-    "execute_blueprint_by_form": {}
+    "execute_blueprint_by_form": {
+      "word_problem": "ContextualCalculationStructure"
+    }
   },
   "g3_l24": {
     "title": "2次方程式の意味とその解",

@@ -66,6 +66,7 @@ EXPECTED_BLUEPRINTS = {
     "KnowledgeBaseStructure",
     "AlgebraicProofStructure",
     "WordProblemFormulationStructure",
+    "ContextualCalculationStructure",
 }
 
 

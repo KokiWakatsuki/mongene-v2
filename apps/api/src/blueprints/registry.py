@@ -41,6 +41,9 @@ def _builder_map() -> Dict[str, Callable[[], BlueprintDefinition]]:
     from apps.api.src.blueprints.word_problem_formulation import (
         build_word_problem_formulation_blueprint,
     )
+    from apps.api.src.blueprints.contextual_calculation import (
+        build_contextual_calculation_blueprint,
+    )
 
     return {
         "BasicCalculationStructure": build_basic_calculation_blueprint,
@@ -65,6 +68,7 @@ def _builder_map() -> Dict[str, Callable[[], BlueprintDefinition]]:
         "KnowledgeBaseStructure": build_knowledge_base_blueprint,
         "AlgebraicProofStructure": build_algebraic_proof_blueprint,
         "WordProblemFormulationStructure": build_word_problem_formulation_blueprint,
+        "ContextualCalculationStructure": build_contextual_calculation_blueprint,
     }
 
 

@@ -82,21 +82,22 @@ def test_generate_rejects_empty_lesson_ids() -> None:
 
 
 def test_inspect_rejects_form_not_in_blueprint_supported_forms() -> None:
-    """g1_l1 は mapping.supported_forms に word_problem を含むが、実際に選ばれる
-    候補 blueprint（BasicCalculationStructure）は supported_forms=["calculation"]
-    のみで word_problem をサポートしない（既知の form/blueprint 契約違反）。
+    """g2_l16「個数と代金の問題」は mapping.supported_forms に calculation を含むが、
+    実際に選ばれる候補 blueprint（WordProblemStructure）は supported_forms=["word_problem"]
+    のみで calculation をサポートしない（既知の form/blueprint 契約違反）。
 
-    以前は黙って calculation 構造にフォールバックしていたが、契約強制導入後は
-    NoCompatibleBlueprintError → 422 を返すべきで、200 で偽の結果を返してはならない。
+    黙って別 form にフォールバックせず、NoCompatibleBlueprintError → 422 を返すべきで、
+    200 で偽の結果を返してはならない。（g1_l1 word_problem はかつてこの例だったが、
+    文脈計算型 capability の開通で解消したため、まだ違反として残る例に張り替えた。）
     """
     payload = {
-        "curriculum": {"grade": 1, "lesson_ids": ["g1_l1"]},
-        "problem_form": "word_problem",
+        "curriculum": {"grade": 2, "lesson_ids": ["g2_l16"]},
+        "problem_form": "calculation",
         "target_difficulty": 6,
     }
     r = client.post("/problems/inspect", json=payload)
     assert r.status_code == 422
-    assert "word_problem" in r.json()["detail"]
+    assert "calculation" in r.json()["detail"]
 
 
 def test_inspect_supported_form_still_generates() -> None:
