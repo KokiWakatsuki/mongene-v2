@@ -20,11 +20,14 @@ class TableChartRenderer(VisualComponent):
         self.chart_type: ChartType = chart_type
 
     def render(self, dsl: VisualDSL) -> str:
-        if self.chart_type == "table":
-            return self._render_table(dsl)
-        if self.chart_type == "histogram":
+        # 要素から描画モードを自動選択（constructor の chart_type 固定は無視）:
+        # quartiles があれば箱ひげ図、bins があればヒストグラム、それ以外は HTML table。
+        types = {el.get("type") for el in dsl.elements}
+        if "quartiles" in types:
+            return self._render_boxplot(dsl)
+        if "bins" in types:
             return self._render_histogram(dsl)
-        return self._render_boxplot(dsl)
+        return self._render_table(dsl)
 
     def _render_table(self, dsl: VisualDSL) -> str:
         rows: list[str] = []

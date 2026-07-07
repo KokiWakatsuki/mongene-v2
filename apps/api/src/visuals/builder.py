@@ -42,8 +42,8 @@ def build_visual_dsl(
         return _build_graph(sampled_nouns)
     if component == "Tree_Renderer":
         return _build_tree(sampled_nouns)
-    if component in {"Table_&_Chart_Renderer", "TableChart_Renderer"}:
-        return _build_table_chart(sampled_nouns)
+    if component in {"Table_&_Chart_Renderer", "TableChart_Renderer", "Table_Chart_Renderer"}:
+        return _build_table_chart(sampled_nouns, logic_steps)
     return None
 
 
@@ -825,14 +825,79 @@ def _build_tree(sampled_nouns: Dict[str, NounAtom]) -> VisualDSL:
     return VisualDSL(render_type="Tree", elements=elements)
 
 
-def _build_table_chart(sampled_nouns: Dict[str, NounAtom]) -> VisualDSL:
-    elements: list[dict] = []
-    for slot_name, atom in sampled_nouns.items():
-        if type(atom).__name__ == "DataSetAtom":
-            elements.append({"type": "header_row", "cells": ["指標", "値"]})
-            sym = atom.get_symbols()
-            for key in ("mean", "median", "q1", "q3"):
-                if key in sym:
-                    elements.append({"type": "data_row", "cells": [key, str(sym[key])]})
+def _build_table_chart(
+    sampled_nouns: Dict[str, NounAtom],
+    logic_steps: Dict[str, Any] | None = None,
+) -> VisualDSL:
+    """統計 visual を metric に応じて 箱ひげ図 / ヒストグラム(SVG) で組む。
+
+    表示のみ。値は DataSetAtom（verb 計算済）から載せるだけで answer/logic_steps は不変。
+    - metric が q1/q3/iqr/median → 箱ひげ図（quartiles 要素）
+    - それ以外（mean/mode/cumulative 系・既定）→ ヒストグラム（bins 要素）
+    どちらも作れない場合のみ従来の header_row/data_row（HTML table）にフォールバック。
+    """
+    # DataSetAtom を探す
+    atom = None
+    for _slot_name, cand in sampled_nouns.items():
+        if type(cand).__name__ == "DataSetAtom":
+            atom = cand
             break
+
+    if atom is None:
+        return VisualDSL(render_type="Table", elements=[])
+
+    # metric 判定: logic_steps["result"].operation_name = "analyze_q1" 等
+    metric = "mean"
+    if logic_steps:
+        step = logic_steps.get("result")
+        op = getattr(step, "operation_name", "") or ""
+        if op.startswith("analyze_"):
+            metric = op.replace("analyze_", "")
+
+    sym = atom.get_symbols()
+    vals = [_to_float(v) for v in getattr(atom, "values", [])]
+    fd = getattr(atom, "frequency_distribution", []) or []
+
+    def _boxplot_elements() -> list[dict] | None:
+        if not vals:
+            return None
+        q1 = _to_float(sym["q1"]) if "q1" in sym else min(vals)
+        med = _to_float(sym["median"]) if "median" in sym else sorted(vals)[len(vals) // 2]
+        q3 = _to_float(sym["q3"]) if "q3" in sym else max(vals)
+        return [{
+            "type": "quartiles",
+            "quartiles": {
+                "min": min(vals),
+                "q1": q1,
+                "median": med,
+                "q3": q3,
+                "max": max(vals),
+            },
+        }]
+
+    def _histogram_elements() -> list[dict] | None:
+        if not fd:
+            return None
+        return [{
+            "type": "bins",
+            "bins": [[float(lo), float(hi), int(c)] for (lo, hi, c) in fd],
+        }]
+
+    elements: list[dict] | None
+    if metric in ("q1", "q3", "iqr", "median"):
+        elements = _boxplot_elements()
+        if elements is None:
+            elements = _histogram_elements()
+    else:
+        elements = _histogram_elements()
+        if elements is None:
+            elements = _boxplot_elements()
+
+    # 両方作れない場合のみ従来の HTML table フォールバック
+    if elements is None:
+        elements = [{"type": "header_row", "cells": ["指標", "値"]}]
+        for key in ("mean", "median", "q1", "q3"):
+            if key in sym:
+                elements.append({"type": "data_row", "cells": [key, str(sym[key])]})
+
     return VisualDSL(render_type="Table", elements=elements)
