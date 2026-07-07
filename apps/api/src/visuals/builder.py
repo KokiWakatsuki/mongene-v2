@@ -35,7 +35,7 @@ def build_visual_dsl(
             return _build_3d_with_cutout_inside(sampled_nouns)
         return _build_3d(sampled_nouns)
     if component == "2D_Geometry_Renderer":
-        if blueprint.blueprint_id == "ProofStructure":
+        if blueprint.blueprint_id in ("ProofStructure", "CongruenceFigureStructure"):
             return _build_congruence_proof(sampled_nouns, logic_steps)
         return _build_2d_geometry(sampled_nouns)
     if component == "Graph_Renderer":

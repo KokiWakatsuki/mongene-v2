@@ -16430,7 +16430,7 @@
     "execute_blueprint_by_form": {
       "calculation": "BasicCalculationStructure",
       "knowledge": "KnowledgeBaseStructure",
-      "visual": "BasicGeometryMeasurementStructure"
+      "visual": "CongruenceFigureStructure"
     },
     "difficulty_levels": {
       "calculation": [
@@ -16589,7 +16589,7 @@
           "description": "基本図形の対応（回転なし）",
           "atom_constraints": {
             "PolygonAtom": {
-              "polygon_type": "rectangle",
+              "polygon_type": "right_triangle",
               "max_side_length": 5
             }
           },
@@ -16631,7 +16631,7 @@
           "description": "台形の対応（複合的な変形）",
           "atom_constraints": {
             "PolygonAtom": {
-              "polygon_type": "trapezoid",
+              "polygon_type": "isoceles_triangle",
               "max_side_length": 10
             }
           },
@@ -16677,7 +16677,7 @@
       "calculation": "BasicCalculationStructure",
       "proof": "ProofStructure",
       "knowledge": "KnowledgeBaseStructure",
-      "visual": "BasicGeometryMeasurementStructure"
+      "visual": "CongruenceFigureStructure"
     },
     "difficulty_levels": {
       "calculation": [
@@ -16907,7 +16907,7 @@
           "description": "平行四辺形内の三角形の合同判定",
           "atom_constraints": {
             "PolygonAtom": {
-              "polygon_type": "parallelogram"
+              "polygon_type": "isoceles_triangle"
             }
           },
           "blueprint_params": {},
@@ -16922,7 +16922,7 @@
           "description": "補助線が必要な複合図形の合同判定",
           "atom_constraints": {
             "PolygonAtom": {
-              "polygon_type": "rectangle"
+              "polygon_type": "right_triangle"
             }
           },
           "blueprint_params": {},
@@ -17144,7 +17144,7 @@
     },
     "execute_blueprint_by_form": {
       "proof": "ProofStructure",
-      "visual": "BasicGeometryMeasurementStructure"
+      "visual": "CongruenceFigureStructure"
     },
     "dedup_disabled": true,
     "difficulty_levels": {
@@ -17246,7 +17246,7 @@
           "description": "平行線の性質を利用する証明",
           "atom_constraints": {
             "PolygonAtom": {
-              "polygon_type": "parallelogram"
+              "polygon_type": "isoceles_triangle"
             }
           },
           "blueprint_params": {},
@@ -17291,7 +17291,7 @@
     },
     "execute_blueprint_by_form": {
       "proof": "ProofStructure",
-      "visual": "BasicGeometryMeasurementStructure"
+      "visual": "CongruenceFigureStructure"
     },
     "dedup_disabled": true,
     "difficulty_levels": {
@@ -17356,10 +17356,6 @@
           "atom_constraints": {
             "PolygonAtom": {
               "polygon_type": "triangle"
-            },
-            "ProveGeometryVerb": {
-              "proof_type": "congruence",
-              "condition_set": "SAS"
             }
           },
           "blueprint_params": {},
@@ -17376,10 +17372,6 @@
           "atom_constraints": {
             "PolygonAtom": {
               "polygon_type": "isoceles_triangle"
-            },
-            "ProveGeometryVerb": {
-              "proof_type": "congruence",
-              "condition_set": "ASA"
             }
           },
           "blueprint_params": {},
@@ -17395,11 +17387,7 @@
           "description": "平行四辺形の性質を利用した証明",
           "atom_constraints": {
             "PolygonAtom": {
-              "polygon_type": "parallelogram"
-            },
-            "ProveGeometryVerb": {
-              "proof_type": "congruence",
-              "condition_set": "SSS"
+              "polygon_type": "isoceles_triangle"
             }
           },
           "blueprint_params": {},
@@ -18316,7 +18304,7 @@
     "execute_blueprint_by_form": {
       "proof": "ProofStructure",
       "knowledge": "KnowledgeBaseStructure",
-      "visual": "BasicGeometryMeasurementStructure"
+      "visual": "CongruenceFigureStructure"
     },
     "dedup_disabled": true,
     "difficulty_levels": {
@@ -18530,7 +18518,7 @@
     },
     "execute_blueprint_by_form": {
       "proof": "ProofStructure",
-      "visual": "BasicGeometryMeasurementStructure"
+      "visual": "CongruenceFigureStructure"
     },
     "dedup_disabled": true,
     "difficulty_levels": {
@@ -27825,7 +27813,7 @@
     "execute_blueprint_by_form": {
       "calculation": "BasicCalculationStructure",
       "knowledge": "KnowledgeBaseStructure",
-      "visual": "BasicGeometryMeasurementStructure"
+      "visual": "CongruenceFigureStructure"
     },
     "dedup_disabled": true,
     "difficulty_levels": {
@@ -28001,11 +27989,13 @@
           "description": "正方形の相似比と辺の長さ",
           "atom_constraints": {
             "PolygonAtom": {
-              "polygon_type": "square",
+              "polygon_type": "right_triangle",
               "max_side_length": 5
             }
           },
-          "blueprint_params": {},
+          "blueprint_params": {
+            "proof_type": "similarity"
+          },
           "verb_config": {},
           "implementable": true,
           "implementation_note": ""
@@ -28019,7 +28009,9 @@
               "max_side_length": 8
             }
           },
-          "blueprint_params": {},
+          "blueprint_params": {
+            "proof_type": "similarity"
+          },
           "verb_config": {},
           "implementable": true,
           "implementation_note": ""
@@ -28033,7 +28025,9 @@
               "max_side_length": 12
             }
           },
-          "blueprint_params": {},
+          "blueprint_params": {
+            "proof_type": "similarity"
+          },
           "verb_config": {},
           "implementable": true,
           "implementation_note": ""
@@ -28042,12 +28036,13 @@
           "lv": 4,
           "description": "三角柱の相似比と体積比の考察",
           "atom_constraints": {
-            "PrismAtom": {
-              "base_shape_type": "triangle",
-              "max_dim": 6
+            "PolygonAtom": {
+              "polygon_type": "triangle"
             }
           },
-          "blueprint_params": {},
+          "blueprint_params": {
+            "proof_type": "similarity"
+          },
           "verb_config": {},
           "implementable": true,
           "implementation_note": ""
@@ -28087,7 +28082,7 @@
     "execute_blueprint_by_form": {
       "calculation": "BasicCalculationStructure",
       "knowledge": "KnowledgeBaseStructure",
-      "visual": "BasicGeometryMeasurementStructure"
+      "visual": "CongruenceFigureStructure"
     },
     "dedup_disabled": true,
     "difficulty_levels": {
@@ -28244,7 +28239,9 @@
               "max_side_length": 5
             }
           },
-          "blueprint_params": {},
+          "blueprint_params": {
+            "proof_type": "similarity"
+          },
           "verb_config": {
             "task": "identify_similarity_condition"
           },
@@ -28260,7 +28257,9 @@
               "max_side_length": 8
             }
           },
-          "blueprint_params": {},
+          "blueprint_params": {
+            "proof_type": "similarity"
+          },
           "verb_config": {
             "task": "identify_similarity_condition"
           },
@@ -28276,7 +28275,9 @@
               "max_side_length": 10
             }
           },
-          "blueprint_params": {},
+          "blueprint_params": {
+            "proof_type": "similarity"
+          },
           "verb_config": {
             "task": "identify_similarity_condition"
           },
@@ -28292,7 +28293,9 @@
               "max_side_length": 10
             }
           },
-          "blueprint_params": {},
+          "blueprint_params": {
+            "proof_type": "similarity"
+          },
           "verb_config": {
             "task": "find_similar_triangles_in_complex"
           },
@@ -28331,7 +28334,7 @@
     },
     "execute_blueprint_by_form": {
       "proof": "ProofStructure",
-      "visual": "BasicGeometryMeasurementStructure"
+      "visual": "CongruenceFigureStructure"
     },
     "dedup_disabled": true,
     "difficulty_levels": {
@@ -28398,7 +28401,9 @@
               "polygon_type": "triangle"
             }
           },
-          "blueprint_params": {},
+          "blueprint_params": {
+            "proof_type": "similarity"
+          },
           "verb_config": {},
           "implementable": true,
           "implementation_note": "三角形を2つ配置し、対応する頂点と角の情報を付与する。"
@@ -28411,7 +28416,9 @@
               "polygon_type": "triangle"
             }
           },
-          "blueprint_params": {},
+          "blueprint_params": {
+            "proof_type": "similarity"
+          },
           "verb_config": {},
           "implementable": true,
           "implementation_note": "三角形の内部に底辺と平行な線分を配置する構成。"
@@ -28424,7 +28431,9 @@
               "polygon_type": "triangle"
             }
           },
-          "blueprint_params": {},
+          "blueprint_params": {
+            "proof_type": "similarity"
+          },
           "verb_config": {},
           "implementable": true,
           "implementation_note": "頂点を共有する大小2つの三角形を配置する。"
@@ -28437,7 +28446,9 @@
               "polygon_type": "triangle"
             }
           },
-          "blueprint_params": {},
+          "blueprint_params": {
+            "proof_type": "similarity"
+          },
           "verb_config": {},
           "implementable": true,
           "implementation_note": "複数の三角形が複雑に重なり合う構成。"
