@@ -1,6 +1,7 @@
 """Phase 2 Verb 群の最低限テスト（型ガード + 単純 sympy 検算）"""
 from __future__ import annotations
 
+import json
 import random
 
 import pytest
@@ -110,6 +111,32 @@ def test_prove_algebraic_returns_step() -> None:
 def test_prove_algebraic_unsupported_proof_type_raises() -> None:
     with pytest.raises(ValueError):
         ProveAlgebraicVerb("unsupported_type").solve(_num(4), rng=random.Random(0))
+
+
+@pytest.mark.parametrize(
+    "proof_type",
+    [
+        "consecutive_two_sum",
+        "consecutive_three_sum",
+        "consecutive_two_odds_sum",
+        "square_diff_consecutive",
+        "digit_two",
+        "digit_three",
+    ],
+)
+def test_prove_algebraic_extended_proof_types_return_step(proof_type: str) -> None:
+    """拡張フェーズで追加した6つの proof_type が、例外なく LogicStep を返し、
+    4ステップ構成の proof_output（moat 検証済み）を持つこと。"""
+    step = ProveAlgebraicVerb(proof_type).solve(_num(4), rng=random.Random(0))
+    assert step.operation_name == f"prove_algebraic_{proof_type}"
+    assert step.narration_hint
+
+    proof_output = json.loads(step.operands[-1])
+    assert proof_output["to_prove"] == step.narration_hint
+    assert len(proof_output["steps"]) == 4
+    for i, s in enumerate(proof_output["steps"], start=1):
+        assert s["step_number"] == i
+    assert proof_output["conclusion"]
 
 
 # --- GeneralizeFormulaVerb ---

@@ -12,6 +12,7 @@ from apps.api.src.core.abc.atoms import NounAtom, VerbAtom
 from apps.api.src.core.representation.middle_representation import LogicStep
 
 m, n = sympy.symbols("m n", integer=True)
+a, b, c = sympy.symbols("a b c", integer=True)
 
 
 def _all_coeffs_even(expr: sympy.Expr) -> bool:
@@ -38,6 +39,27 @@ def _verify_odd(expanded: sympy.Expr) -> None:
     shifted = sympy.expand(expanded - 1)
     if not _all_coeffs_even(shifted):
         raise AssertionError(f"{expanded} は奇数式ではない（{shifted} の係数に奇数あり）")
+
+
+def _is_multiple_of(expr: sympy.Expr, k: int) -> bool:
+    """expr（複数変数の多項式、定数項も可）の全係数が k の倍数かどうかを SymPy で判定する。"""
+    expr = sympy.expand(expr)
+    free_syms = sorted(expr.free_symbols, key=str)
+    if not free_syms:
+        return int(expr) % k == 0
+    poly = sympy.Poly(expr, *free_syms)
+    coeffs = poly.coeffs()
+    return all(int(c) % k == 0 for c in coeffs)
+
+
+def _verify_multiple_of(expanded: sympy.Expr, k: int) -> sympy.Expr:
+    """expanded が k の倍数式であることを SymPy で検証し（moat）、core = expanded/k を返す。"""
+    if not _is_multiple_of(expanded, k):
+        raise AssertionError(f"{expanded} は{k}の倍数式ではない（係数に{k}の倍数でないものあり）")
+    factored_core = sympy.expand(expanded / k)
+    if sympy.simplify(k * factored_core - expanded) != 0:
+        raise AssertionError(f"{expanded} の{k}分の1 {factored_core} が一致しない")
+    return factored_core
 
 
 # even_odd の命題集合
@@ -107,6 +129,18 @@ class ProveAlgebraicVerb(VerbAtom):
         atom = nouns[0]
         if self.proof_type == "even_odd":
             return self._solve_even_odd(atom, rng)
+        if self.proof_type == "consecutive_two_sum":
+            return self._solve_consecutive_two_sum(atom, rng)
+        if self.proof_type == "consecutive_three_sum":
+            return self._solve_consecutive_three_sum(atom, rng)
+        if self.proof_type == "consecutive_two_odds_sum":
+            return self._solve_consecutive_two_odds_sum(atom, rng)
+        if self.proof_type == "square_diff_consecutive":
+            return self._solve_square_diff_consecutive(atom, rng)
+        if self.proof_type == "digit_two":
+            return self._solve_digit_two(atom, rng)
+        if self.proof_type == "digit_three":
+            return self._solve_digit_three(atom, rng)
         raise ValueError(f"未対応の proof_type: {self.proof_type}")
 
     def _solve_even_odd(self, atom: NounAtom, rng: random.Random) -> LogicStep:
@@ -214,4 +248,181 @@ class ProveAlgebraicVerb(VerbAtom):
             ],
             sympy_expr=sympy.Integer(1),
             narration_hint=to_prove,
+        )
+
+    @staticmethod
+    def _build_logic_step(
+        atom: NounAtom,
+        proof_type: str,
+        given: List[str],
+        to_prove: str,
+        step1: str,
+        step2: str,
+        step3: str,
+        step4: str,
+        step1_reason: str,
+        step2_reason: str,
+        step3_reason: str,
+        step4_reason: str,
+        conclusion: str,
+    ) -> LogicStep:
+        proof_output = {
+            "given": given,
+            "to_prove": to_prove,
+            "steps": [
+                {"step_number": 1, "statement": step1, "reason": step1_reason, "references": []},
+                {"step_number": 2, "statement": step2, "reason": step2_reason, "references": [1]},
+                {"step_number": 3, "statement": step3, "reason": step3_reason, "references": [2]},
+                {"step_number": 4, "statement": step4, "reason": step4_reason, "references": [3]},
+            ],
+            "conclusion": conclusion,
+        }
+        return LogicStep(
+            operation_name=f"prove_algebraic_{proof_type}",
+            operands=[
+                type(atom).__name__,
+                proof_type,
+                proof_type,
+                json.dumps(proof_output, ensure_ascii=False),
+            ],
+            sympy_expr=sympy.Integer(1),
+            narration_hint=to_prove,
+        )
+
+    def _solve_consecutive_two_sum(self, atom: NounAtom, rng: random.Random) -> LogicStep:
+        to_prove = "連続する2つの整数の和は奇数である"
+        expr = n + (n + 1)
+        expanded = sympy.expand(expr)
+        core = _verify_multiple_of(expr - 1, 2)
+        core_str = str(sympy.expand(core))
+        expanded_str = str(expanded)
+        return self._build_logic_step(
+            atom,
+            "consecutive_two_sum",
+            given=["n を整数とする。"],
+            to_prove=to_prove,
+            step1="連続する2つの整数を n, n+1 と表す。",
+            step2=f"n+(n+1) = {expanded_str}",
+            step3=f"{expanded_str} = 2({core_str})+1",
+            step4=f"{core_str} は整数だから 2({core_str})+1 は奇数である。",
+            step1_reason="整数の表し方",
+            step2_reason="式を整理する",
+            step3_reason="2でくくり1を加える",
+            step4_reason="奇数の定義",
+            conclusion="よって連続する2つの整数の和は奇数である。",
+        )
+
+    def _solve_consecutive_three_sum(self, atom: NounAtom, rng: random.Random) -> LogicStep:
+        to_prove = "連続する3つの整数の和は3の倍数である"
+        expr = n + (n + 1) + (n + 2)
+        expanded = sympy.expand(expr)
+        core = _verify_multiple_of(expr, 3)
+        core_str = str(sympy.expand(core))
+        expanded_str = str(expanded)
+        return self._build_logic_step(
+            atom,
+            "consecutive_three_sum",
+            given=["n を整数とする。"],
+            to_prove=to_prove,
+            step1="連続する3つの整数を n, n+1, n+2 と表す。",
+            step2=f"n+(n+1)+(n+2) = {expanded_str}",
+            step3=f"{expanded_str} = 3({core_str})",
+            step4=f"{core_str} は整数だから 3({core_str}) は3の倍数である。",
+            step1_reason="整数の表し方",
+            step2_reason="式を整理する",
+            step3_reason="3でくくる",
+            step4_reason="3の倍数の定義",
+            conclusion="よって連続する3つの整数の和は3の倍数である。",
+        )
+
+    def _solve_consecutive_two_odds_sum(self, atom: NounAtom, rng: random.Random) -> LogicStep:
+        to_prove = "連続する2つの奇数の和は4の倍数である"
+        expr = (2 * n + 1) + (2 * n + 3)
+        expanded = sympy.expand(expr)
+        core = _verify_multiple_of(expr, 4)
+        core_str = str(sympy.expand(core))
+        expanded_str = str(expanded)
+        return self._build_logic_step(
+            atom,
+            "consecutive_two_odds_sum",
+            given=["n を整数とする。"],
+            to_prove=to_prove,
+            step1="連続する2つの奇数を 2n+1, 2n+3 と表す。",
+            step2=f"(2n+1)+(2n+3) = {expanded_str}",
+            step3=f"{expanded_str} = 4({core_str})",
+            step4=f"{core_str} は整数だから 4({core_str}) は4の倍数である。",
+            step1_reason="奇数の表し方",
+            step2_reason="式を整理する",
+            step3_reason="4でくくる",
+            step4_reason="4の倍数の定義",
+            conclusion="よって連続する2つの奇数の和は4の倍数である。",
+        )
+
+    def _solve_square_diff_consecutive(self, atom: NounAtom, rng: random.Random) -> LogicStep:
+        to_prove = "連続する2つの整数で、大きい方の2乗から小さい方の2乗をひいた差は奇数である"
+        expr = (n + 1) ** 2 - n ** 2
+        expanded = sympy.expand(expr)
+        core = _verify_multiple_of(expanded - 1, 2)
+        core_str = str(sympy.expand(core))
+        expanded_str = str(expanded)
+        return self._build_logic_step(
+            atom,
+            "square_diff_consecutive",
+            given=["n を整数とする。"],
+            to_prove=to_prove,
+            step1="連続する2つの整数を n, n+1 と表す。",
+            step2=f"(n+1)^2 - n^2 = {expanded_str}",
+            step3=f"{expanded_str} = 2({core_str})+1",
+            step4=f"{core_str} は整数だから 2({core_str})+1 は奇数である。",
+            step1_reason="整数の表し方",
+            step2_reason="式を展開して整理する",
+            step3_reason="2でくくり1を加える",
+            step4_reason="奇数の定義",
+            conclusion="よって差は奇数である。",
+        )
+
+    def _solve_digit_two(self, atom: NounAtom, rng: random.Random) -> LogicStep:
+        to_prove = "2けたの自然数と、十の位と一の位を入れかえた数の和は11の倍数である"
+        expr = (10 * a + b) + (10 * b + a)
+        expanded = sympy.expand(expr)
+        core = _verify_multiple_of(expr, 11)
+        core_str = str(sympy.expand(core))
+        expanded_str = str(expanded)
+        return self._build_logic_step(
+            atom,
+            "digit_two",
+            given=["a, b を整数とする（a は十の位、b は一の位）。"],
+            to_prove=to_prove,
+            step1="2けたの自然数を 10a+b、入れかえた数を 10b+a と表す。",
+            step2=f"(10a+b)+(10b+a) = {expanded_str}",
+            step3=f"{expanded_str} = 11({core_str})",
+            step4=f"{core_str} は整数だから 11({core_str}) は11の倍数である。",
+            step1_reason="整数の表し方",
+            step2_reason="式を整理する",
+            step3_reason="11でくくる",
+            step4_reason="11の倍数の定義",
+            conclusion="よって2けたの自然数と入れかえた数の和は11の倍数である。",
+        )
+
+    def _solve_digit_three(self, atom: NounAtom, rng: random.Random) -> LogicStep:
+        to_prove = "3けたの自然数と、百の位と一の位を入れかえた数の差は99の倍数である"
+        expr = (100 * a + 10 * b + c) - (100 * c + 10 * b + a)
+        expanded = sympy.expand(expr)
+        core = _verify_multiple_of(expr, 99)
+        core_str = str(sympy.expand(core))
+        expanded_str = str(expanded)
+        return self._build_logic_step(
+            atom,
+            "digit_three",
+            given=["a, b, c を整数とする。"],
+            to_prove=to_prove,
+            step1="3けたの自然数を 100a+10b+c、百の位と一の位を入れかえた数を 100c+10b+a と表す。",
+            step2=f"(100a+10b+c)-(100c+10b+a) = {expanded_str}",
+            step3=f"{expanded_str} = 99({core_str})",
+            step4=f"{core_str} は整数だから 99({core_str}) は99の倍数である。",
+            step1_reason="整数の表し方",
+            step2_reason="式を整理する",
+            step3_reason="99でくくる",
+            step4_reason="99の倍数の定義",
+            conclusion="よって3けたの自然数と入れかえた数の差は99の倍数である。",
         )

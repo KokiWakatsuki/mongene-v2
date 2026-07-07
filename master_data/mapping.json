@@ -11446,7 +11446,9 @@
               "max_coefficient": 2
             }
           },
-          "blueprint_params": {},
+          "blueprint_params": {
+            "proof_type": "even_odd"
+          },
           "verb_config": {},
           "implementable": true,
           "implementation_note": ""
@@ -11460,7 +11462,9 @@
               "max_coefficient": 3
             }
           },
-          "blueprint_params": {},
+          "blueprint_params": {
+            "proof_type": "consecutive_two_sum"
+          },
           "verb_config": {},
           "implementable": true,
           "implementation_note": ""
@@ -11474,7 +11478,9 @@
               "max_coefficient": 5
             }
           },
-          "blueprint_params": {},
+          "blueprint_params": {
+            "proof_type": "consecutive_three_sum"
+          },
           "verb_config": {},
           "implementable": true,
           "implementation_note": ""
@@ -11488,7 +11494,9 @@
               "max_coefficient": 8
             }
           },
-          "blueprint_params": {},
+          "blueprint_params": {
+            "proof_type": "consecutive_two_odds_sum"
+          },
           "verb_config": {},
           "implementable": true,
           "implementation_note": ""
@@ -11502,7 +11510,9 @@
               "max_coefficient": 10
             }
           },
-          "blueprint_params": {},
+          "blueprint_params": {
+            "proof_type": "square_diff_consecutive"
+          },
           "verb_config": {},
           "implementable": true,
           "implementation_note": ""
@@ -11517,6 +11527,9 @@
     "domain": "数と式",
     "large_unit": "式の計算",
     "execute_blueprint": "BasicCalculationStructure",
+    "execute_blueprint_by_form": {
+      "proof": "AlgebraicProofStructure"
+    },
     "required_tags": [
       "number"
     ],
@@ -11631,10 +11644,12 @@
               "max_coefficient": 9
             }
           },
-          "blueprint_params": {},
+          "blueprint_params": {
+            "proof_type": "digit_two"
+          },
           "verb_config": {},
-          "implementable": false,
-          "implementation_note": "本Blueprintは計算結果を求める形式であり、証明問題に必要な「論理的な記述・文章生成」の機能が不足しているため。"
+          "implementable": true,
+          "implementation_note": ""
         },
         {
           "lv": 2,
@@ -11646,10 +11661,12 @@
               "max_coefficient": 9
             }
           },
-          "blueprint_params": {},
+          "blueprint_params": {
+            "proof_type": "digit_three"
+          },
           "verb_config": {},
-          "implementable": false,
-          "implementation_note": "証明問題の論理構成を評価・生成するエンジンが現在のBlueprintには含まれていないため。"
+          "implementable": true,
+          "implementation_note": ""
         },
         {
           "lv": 3,
@@ -11661,10 +11678,12 @@
               "max_coefficient": 5
             }
           },
-          "blueprint_params": {},
+          "blueprint_params": {
+            "proof_type": "consecutive_three_sum"
+          },
           "verb_config": {},
-          "implementable": false,
-          "implementation_note": "証明問題特有の「〜であることを示せ」という形式の出題および解答の正誤判定ロジックが未実装のため。"
+          "implementable": true,
+          "implementation_note": ""
         }
       ]
     }
