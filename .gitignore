@@ -34,6 +34,8 @@ reports/*.md
 reports/*.txt
 reports/visual_snapshots/
 reports/visual_snapshots_png/
+reports/mr_dump/
+reports/quality_audit.jsonl
 
 # フェーズ2 評価ハーネス: ground truth / product コーパス（seedが非決定論的なため
 # `build_ground_truth_corpus.py` / `build_product_corpus.py` で再生成可能。大容量のため非コミット）
