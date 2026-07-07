@@ -481,6 +481,17 @@ def _build_circle_angle(atom: NounAtom) -> tuple[list[dict], list[float]]:
     return elements, viewport
 
 
+def _fmt_coord(v: sympy.Expr) -> str:
+    """座標ラベル用に sympy 値を整数/分数の綺麗な文字列にする（表示専用）。"""
+    try:
+        s = sympy.nsimplify(v)
+    except Exception:
+        s = v
+    if getattr(s, "is_integer", False):
+        return str(int(s))
+    return str(s)
+
+
 def _build_graph(sampled_nouns: Dict[str, NounAtom]) -> VisualDSL:
     elements: list[dict] = []
     for slot_name, atom in sampled_nouns.items():
@@ -506,6 +517,67 @@ def _build_graph(sampled_nouns: Dict[str, NounAtom]) -> VisualDSL:
             })
     elements.append({"type": "axis_label", "axis": "x", "label": "x"})
     elements.append({"type": "axis_label", "axis": "y", "label": "y"})
+
+    # --- 交点マーカー・三角形の塗り（表示専用: answer/logic_steps は不変） ---
+    # (a) 関数 Atom（LinearFuncAtom / QuadraticFuncAtom）を収集
+    x = sympy.Symbol("x")
+    linear_atoms: list[NounAtom] = []
+    func_atoms: list[NounAtom] = []  # Linear + Quadratic（宣言順）
+    for atom in sampled_nouns.values():
+        name = type(atom).__name__
+        if name == "LinearFuncAtom":
+            linear_atoms.append(atom)
+            func_atoms.append(atom)
+        elif name == "QuadraticFuncAtom":
+            func_atoms.append(atom)
+
+    filled_region_els: list[dict] = []
+    intersection_els: list[dict] = []
+
+    if len(func_atoms) >= 2:
+        f1, f2 = func_atoms[0], func_atoms[1]
+        try:
+            e1 = f1.get_symbols()["expression"]
+            e2 = f2.get_symbols()["expression"]
+            sols = sympy.solve(e1 - e2, x)
+            real_sols: list[sympy.Expr] = []
+            for s in sols:
+                # 実数解のみ
+                if sympy.im(s) == 0 and s.is_real is not False:
+                    real_sols.append(s)
+                    y = e1.subs(x, s)
+                    intersection_els.append({
+                        "type": "intersection_point",
+                        "x": float(s),
+                        "y": float(y),
+                        "label": f"({_fmt_coord(s)}, {_fmt_coord(y)})",
+                    })
+
+            # (c) 三角形の塗り（FGF のみ）: ちょうど2つの LinearFuncAtom、
+            #     slope が異なり、実数交点がちょうど1つのとき y軸三角形を塗る
+            is_two_linear = len(func_atoms) == 2 and len(linear_atoms) == 2
+            if is_two_linear and len(real_sols) == 1:
+                slope1 = f1.get_symbols().get("slope")
+                slope2 = f2.get_symbols().get("slope")
+                if slope1 is not None and slope2 is not None and sympy.simplify(slope1 - slope2) != 0:
+                    b1 = float(f1.y_intercept())
+                    b2 = float(f2.y_intercept())
+                    x0 = float(real_sols[0])
+                    y0 = float(e1.subs(x, real_sols[0]))
+                    filled_region_els.append({
+                        "type": "filled_region",
+                        "vertices": [[0, b1], [0, b2], [x0, y0]],
+                        "color": "#cccccc",
+                        "alpha": 0.35,
+                    })
+        except Exception:
+            # solve 失敗・複素数のみ・平行（解なし）等では交点/塗りを出さない
+            pass
+
+    # filled_region を先（背面）、intersection_point を後（前面）
+    elements.extend(filled_region_els)
+    elements.extend(intersection_els)
+
     return VisualDSL(render_type="Graph", elements=elements)
 
 

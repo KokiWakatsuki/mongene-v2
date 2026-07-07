@@ -58,6 +58,28 @@ class GraphRenderer(VisualComponent):
                         xytext=(8, 8),
                         fontsize=14,
                     )
+            elif t == "filled_region":
+                verts = el["vertices"]
+                xs_v = [v[0] for v in verts]
+                ys_v = [v[1] for v in verts]
+                ax.fill(
+                    xs_v,
+                    ys_v,
+                    color=el.get("color", "#cccccc"),
+                    alpha=el.get("alpha", 0.35),
+                    zorder=0,
+                )
+            elif t == "intersection_point":
+                ax.scatter([el["x"]], [el["y"]], color="black", s=45, zorder=5)
+                if el.get("label"):
+                    ax.annotate(
+                        el["label"],
+                        (el["x"], el["y"]),
+                        textcoords="offset points",
+                        xytext=(8, -12),
+                        fontsize=12,
+                        zorder=6,
+                    )
             elif t == "axis_label":
                 if el["axis"] == "x":
                     ax.set_xlabel(el["label"])
