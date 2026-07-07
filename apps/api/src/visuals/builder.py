@@ -26,13 +26,13 @@ def build_visual_dsl(
 
     component = blueprint.visual_slot.component_type
     if component == "3D_Renderer":
+        if blueprint.blueprint_id == "PythagoreanSpaceStructure":
+            # 題材が「展開図を利用した表面上の最短距離」なので、立体ワイヤフレーム
+            # ではなく 2D 展開図(net)を描く（表示専用・answer は不変）。
+            return _build_net(sampled_nouns, logic_steps)
         if blueprint.blueprint_id == "BasicDifferenceStructure":
             # 設計書 §18.3: cutout_volume を主立体の内部に点線で描く
             return _build_3d_with_cutout_inside(sampled_nouns)
-        if blueprint.blueprint_id == "PythagoreanSpaceStructure":
-            solid_key = "solid" if "solid" in sampled_nouns else next(iter(sampled_nouns), None)
-            display = {solid_key: sampled_nouns[solid_key]} if solid_key else sampled_nouns
-            return _build_3d(display)
         return _build_3d(sampled_nouns)
     if component == "2D_Geometry_Renderer":
         if blueprint.blueprint_id == "ProofStructure":
@@ -220,6 +220,86 @@ def _build_3d(sampled_nouns: Dict[str, NounAtom]) -> VisualDSL:
             elements.append({"type": "vertex", "id": "sO", "coords": [ox, oy, oz + r], "label": "O"})
 
     return VisualDSL(render_type="3D", elements=elements)
+
+
+def _build_net(sampled_nouns: Dict[str, NounAtom], logic_steps: Dict[str, Any]) -> VisualDSL:
+    """PythagoreanSpaceStructure 専用: 直方体の表面最短距離を、立体ではなく
+    2D 展開図(net)として描く。verb が採用した展開パターン（3通りの最小）を
+    a,b,h から再導出するだけ（表示専用・answer/logic_steps は不変）。
+    PrismAtom 以外（pyramid 等）は今回対象外＝3D にフォールバック。
+    """
+    solids = [
+        atom for atom in sampled_nouns.values()
+        if type(atom).__name__ in ("PrismAtom", "PyramidAtom")
+    ]
+    if not solids:
+        return _build_3d(sampled_nouns)
+    solid = solids[0]
+    if type(solid).__name__ != "PrismAtom":
+        return _build_3d(sampled_nouns)
+
+    sym = solid.get_symbols()
+    a = _to_float(sym.get("width", sympy.Integer(4)))
+    b = _to_float(sym.get("depth", sympy.Integer(4)))
+    h = _to_float(sym.get("height", sympy.Integer(5)))
+
+    # verb と同じ 3 パターンの距離を再計算し、採用パターン(最小)を選ぶ
+    d = [math.hypot(a, b + h), math.hypot(b, a + h), math.hypot(a + b, h)]
+    idx = d.index(min(d))
+
+    elements: list[dict] = []
+
+    if idx == 0:
+        W, H = a, b + h
+        fold = b  # 水平折り線 y=b
+        vertical_fold = False
+        # 寸法ラベル: 下辺=a, 左辺下部(0..b)=b, 左辺上部(b..b+h)=h
+        dim_labels = [
+            (W / 2, -0.8, a),      # 下辺
+            (-0.9, b / 2, b),      # 左辺下部
+            (-0.9, b + h / 2, h),  # 左辺上部
+        ]
+    elif idx == 1:
+        W, H = b, a + h
+        fold = a  # 水平折り線 y=a
+        vertical_fold = False
+        dim_labels = [
+            (W / 2, -0.8, b),      # 下辺
+            (-0.9, a / 2, a),      # 左辺下部
+            (-0.9, a + h / 2, h),  # 左辺上部
+        ]
+    else:
+        W, H = a + b, h
+        fold = a  # 垂直折り線 x=a
+        vertical_fold = True
+        dim_labels = [
+            (a / 2, -0.8, a),          # 下辺左(0..a)
+            (a + b / 2, -0.8, b),      # 下辺右(a..a+b)
+            (-0.9, H / 2, h),          # 左辺
+        ]
+
+    # 外枠矩形
+    elements.append({
+        "type": "polygon",
+        "vertices": [[0, 0], [W, 0], [W, H], [0, H]],
+        "filled": False,
+    })
+    # 折り線（破線）
+    if vertical_fold:
+        elements.append({"type": "line_segment", "p1": [fold, 0], "p2": [fold, H], "dashed": True})
+    else:
+        elements.append({"type": "line_segment", "p1": [0, fold], "p2": [W, fold], "dashed": True})
+    # 最短経路（実線）
+    elements.append({"type": "line_segment", "p1": [0, 0], "p2": [W, H]})
+    # 端点ラベル
+    elements.append({"type": "point", "x": 0, "y": 0, "label": "A"})
+    elements.append({"type": "point", "x": W, "y": H, "label": "G"})
+    # 寸法ラベル
+    for lx, ly, val in dim_labels:
+        elements.append({"type": "text", "x": lx, "y": ly, "content": f"{_fmt(val)}"})
+
+    viewport = (-1.5, -1.5, W + 1.5, H + 1.5)
+    return VisualDSL(render_type="2D_Geometry", elements=elements, viewport=tuple(viewport))
 
 
 def _polygon_marks(polygon_type: str, verts: list[list[float]]) -> list[dict]:

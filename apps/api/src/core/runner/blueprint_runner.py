@@ -26,6 +26,18 @@ from apps.api.src.core.runner.difficulty_reconciler import reconcile_difficulty
 from apps.api.src.core.runner.subquestion_builder import build_sub_questions
 
 
+# DSL が宣言した render_type を正としてレンダラを選ぶ。既存の全 DSL は
+# render_type ↔ component_type が一致するので挙動不変。展開図(net)だけ
+# component_type=3D_Renderer のまま render_type=2D_Geometry に流れる。
+_RENDER_TYPE_TO_COMPONENT = {
+    "3D": "3D_Renderer",
+    "2D_Geometry": "2D_Geometry_Renderer",
+    "Graph": "Graph_Renderer",
+    "Tree": "Tree_Renderer",
+    "Table": "Table_&_Chart_Renderer",
+}
+
+
 class _FallbackAtomNeeded(Exception):
     def __init__(self, slot: str) -> None:
         self.slot = slot
@@ -413,7 +425,10 @@ class BlueprintRunner:
             return None
 
         try:
-            component = blueprint.visual_slot.component_type
+            component = _RENDER_TYPE_TO_COMPONENT.get(
+                getattr(mr.visual_dsl, "render_type", None),
+                blueprint.visual_slot.component_type,
+            )
             if component == "3D_Renderer":
                 from apps.api.src.visuals.three_d_renderer import ThreeDRenderer
                 renderer = ThreeDRenderer()
