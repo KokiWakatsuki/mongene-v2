@@ -78,9 +78,31 @@ class FindAngleVerb(VerbAtom):
             expr = sympy.Integer(180) - angle
         else:
             expr = sympy.Integer(90)
+
+        # narration_hint に「どの角が既知でどの角を問うか」を明示する。
+        # これが無いと翻訳器は既知角が頂角か底角かを判別できず矛盾した問題文を作る（Phase B で確認）。
+        known = symbols.get("known_angle")
+        narration = self._narration(self.theorem, known)
         return LogicStep(
             operation_name=f"find_angle_{self.theorem}",
-            operands=[name],
+            operands=[name] + ([f"known_angle={int(known)}"] if known is not None and getattr(known, "is_number", False) else []),
             sympy_expr=sympy.simplify(expr),
-            narration_hint=f"{self.theorem} により角度を求める",
+            narration_hint=narration,
         )
+
+    @staticmethod
+    def _narration(theorem: str, known) -> str:
+        k = None
+        if known is not None and getattr(known, "is_number", False):
+            try:
+                k = int(known)
+            except (TypeError, ValueError):
+                k = None
+        deg = f"{k}°" if k is not None else "与えられた角"
+        if theorem == "isosceles_base_angle":
+            return f"二等辺三角形で頂角が{deg}のとき、底角を求める（底角＝(180°−頂角)÷2）"
+        if theorem == "isosceles_vertex_angle":
+            return f"二等辺三角形で底角が{deg}のとき、頂角を求める（頂角＝180°−2×底角）"
+        if theorem == "parallelogram_adjacent":
+            return f"平行四辺形で1つの内角が{deg}のとき、となり合う角を求める（＝180°−その角）"
+        return f"{theorem} により角度を求める"
