@@ -151,7 +151,107 @@ class ProveAlgebraicVerb(VerbAtom):
             return self._solve_square_pyramid_height(atom, rng)
         if self.proof_type == "tetrahedron_height":
             return self._solve_tetrahedron_height(atom, rng)
+        if self.proof_type == "pythagorean_square":
+            return self._solve_pythagorean_square(atom, rng)
+        if self.proof_type == "pythagorean_trapezoid":
+            return self._solve_pythagorean_trapezoid(atom, rng)
+        if self.proof_type == "pythagorean_coordinate":
+            return self._solve_pythagorean_coordinate(atom, rng)
+        if self.proof_type == "pythagorean_converse":
+            return self._solve_pythagorean_converse(atom, rng)
         raise ValueError(f"未対応の proof_type: {self.proof_type}")
+
+    @staticmethod
+    def _var_logic_step(atom: NounAtom, proof_type: str, given: List[str],
+                        to_prove: str, steps: List[Dict[str, Any]], conclusion: str) -> LogicStep:
+        """可変長ステップの proof_output を組み立てる（三平方の証明群で使用）。"""
+        proof_output = {"given": given, "to_prove": to_prove, "steps": steps, "conclusion": conclusion}
+        return LogicStep(
+            operation_name=f"prove_algebraic_{proof_type}",
+            operands=[type(atom).__name__, proof_type, proof_type,
+                      json.dumps(proof_output, ensure_ascii=False)],
+            sympy_expr=sympy.Integer(1),
+            narration_hint=to_prove,
+        )
+
+    def _solve_pythagorean_square(self, atom: NounAtom, rng: random.Random) -> LogicStep:
+        """1辺(a+b)の正方形に直角三角形4つを並べる分割で a²+b²=c² を証明する。"""
+        sa, sb, sc = sympy.symbols("a b c", positive=True)
+        # moat: 大正方形の面積 = 三角形4つ + 内側正方形。両辺から2abを引くと a²+b²=c²
+        if sympy.expand((sa + sb) ** 2) != sympy.expand(sa**2 + 2 * sa * sb + sb**2):
+            raise AssertionError("(a+b)^2 の展開が誤り")
+        if sympy.expand((sa + sb) ** 2 - 4 * (sa * sb / 2)) != sympy.expand(sa**2 + sb**2):
+            raise AssertionError("正方形分割の恒等式が成り立たない")
+        return self._var_logic_step(
+            atom, "pythagorean_square",
+            given=[r"直角をはさむ2辺が $a, b$、斜辺が $c$ の直角三角形"],
+            to_prove=r"$a^2 + b^2 = c^2$",
+            steps=[
+                {"step_number": 1, "statement": r"1辺 $a+b$ の正方形の中にこの直角三角形を4つ並べると、内側に1辺 $c$ の正方形ができる", "reason": "図形の構成", "references": []},
+                {"step_number": 2, "statement": r"大きい正方形の面積は $(a+b)^2 = a^2 + 2ab + b^2$", "reason": "正方形の面積", "references": [1]},
+                {"step_number": 3, "statement": r"それは直角三角形4つ $4 \times \dfrac{1}{2}ab = 2ab$ と内側の正方形 $c^2$ の和に等しく $a^2 + 2ab + b^2 = 2ab + c^2$", "reason": "面積の分割", "references": [2]},
+                {"step_number": 4, "statement": r"両辺から $2ab$ を引いて $a^2 + b^2 = c^2$", "reason": "式を整理する", "references": [3]},
+            ],
+            conclusion=r"よって $a^2 + b^2 = c^2$ が成り立つ。",
+        )
+
+    def _solve_pythagorean_trapezoid(self, atom: NounAtom, rng: random.Random) -> LogicStep:
+        """上底a・下底b・高さ(a+b)の台形の面積計算（ガーフィールドの証明）で a²+b²=c² を示す。"""
+        sa, sb, sc = sympy.symbols("a b c", positive=True)
+        # moat: 台形面積 ½(a+b)² = 三角形2つ(ab) + 直角二等辺三角形(½c²) → a²+b²=c²
+        if sympy.expand(2 * (sympy.Rational(1, 2) * (sa + sb) ** 2)) != sympy.expand((sa + sb) ** 2):
+            raise AssertionError("台形面積の2倍が誤り")
+        if sympy.expand((sa + sb) ** 2 - 2 * sa * sb) != sympy.expand(sa**2 + sb**2):
+            raise AssertionError("台形分割の恒等式が成り立たない")
+        return self._var_logic_step(
+            atom, "pythagorean_trapezoid",
+            given=[r"直角をはさむ2辺が $a, b$、斜辺が $c$ の直角三角形"],
+            to_prove=r"$a^2 + b^2 = c^2$",
+            steps=[
+                {"step_number": 1, "statement": r"上底 $a$、下底 $b$、高さ $a+b$ の台形をつくると、その面積は $\dfrac{1}{2}(a+b)(a+b) = \dfrac{1}{2}(a+b)^2$", "reason": "台形の面積", "references": []},
+                {"step_number": 2, "statement": r"この台形は直角三角形2つ（合計 $ab$）と直角二等辺三角形1つ（$\dfrac{1}{2}c^2$）に分けられ、面積は $ab + \dfrac{1}{2}c^2$", "reason": "面積の分割", "references": [1]},
+                {"step_number": 3, "statement": r"$\dfrac{1}{2}(a+b)^2 = ab + \dfrac{1}{2}c^2$ より $(a+b)^2 = 2ab + c^2$", "reason": "両辺を2倍する", "references": [2]},
+                {"step_number": 4, "statement": r"$a^2 + 2ab + b^2 = 2ab + c^2$ の両辺から $2ab$ を引いて $a^2 + b^2 = c^2$", "reason": "式を整理する", "references": [3]},
+            ],
+            conclusion=r"よって $a^2 + b^2 = c^2$ が成り立つ。",
+        )
+
+    def _solve_pythagorean_coordinate(self, atom: NounAtom, rng: random.Random) -> LogicStep:
+        """直角の頂点を原点、2辺を座標軸上にとり、斜辺の長さを2点間の距離で求めて示す。"""
+        sa, sb, sc = sympy.symbols("a b c", positive=True)
+        # moat: (a,0) と (0,b) の距離の2乗 = a²+b²
+        if sympy.expand((sa - 0) ** 2 + (0 - sb) ** 2) != sympy.expand(sa**2 + sb**2):
+            raise AssertionError("2点間の距離の2乗が a²+b² にならない")
+        return self._var_logic_step(
+            atom, "pythagorean_coordinate",
+            given=[r"直角をはさむ2辺が $a, b$、斜辺が $c$ の直角三角形"],
+            to_prove=r"$c^2 = a^2 + b^2$",
+            steps=[
+                {"step_number": 1, "statement": r"直角の頂点を原点に、2辺を $x$ 軸・$y$ 軸上にとると、他の頂点は $(a, 0)$ と $(0, b)$ になる", "reason": "座標の設定", "references": []},
+                {"step_number": 2, "statement": r"斜辺の長さ $c$ は2点 $(a,0)$, $(0,b)$ の距離で $c^2 = (a-0)^2 + (0-b)^2$", "reason": "2点間の距離", "references": [1]},
+                {"step_number": 3, "statement": r"$c^2 = a^2 + b^2$", "reason": "式を整理する", "references": [2]},
+            ],
+            conclusion=r"よって $c^2 = a^2 + b^2$ が成り立つ。",
+        )
+
+    def _solve_pythagorean_converse(self, atom: NounAtom, rng: random.Random) -> LogicStep:
+        """三平方の定理の逆: a²+b²=c² ならば直角三角形であることを合同を用いて証明する。"""
+        sa, sb, sc = sympy.symbols("a b c", positive=True)
+        # moat: 直角をはさむ2辺a,bの直角三角形の斜辺は √(a²+b²)、仮定 a²+b²=c² より c に等しい
+        if sympy.simplify(sympy.sqrt(sa**2 + sb**2) ** 2 - (sa**2 + sb**2)) != 0:
+            raise AssertionError("構成した直角三角形の斜辺の2乗が a²+b² にならない")
+        return self._var_logic_step(
+            atom, "pythagorean_converse",
+            given=[r"3辺の長さが $a, b, c$ で $a^2 + b^2 = c^2$ を満たす三角形 ABC"],
+            to_prove=r"三角形 ABC は直角三角形である（$c$ を斜辺とする直角をもつ）",
+            steps=[
+                {"step_number": 1, "statement": r"直角をはさむ2辺が $a, b$ の直角三角形 A'B'C' をつくると、その斜辺の長さは $\sqrt{a^2+b^2}$", "reason": "三平方の定理", "references": []},
+                {"step_number": 2, "statement": r"仮定 $a^2 + b^2 = c^2$ より、A'B'C' の斜辺は $\sqrt{c^2} = c$", "reason": "仮定", "references": [1]},
+                {"step_number": 3, "statement": r"三角形 ABC と A'B'C' は3辺がそれぞれ $a, b, c$ で等しいので合同である", "reason": "3辺相等（SSS）", "references": [2]},
+                {"step_number": 4, "statement": r"合同な図形の対応する角は等しいから、ABC の $c$ に対する角も直角である", "reason": "合同な図形の対応する角", "references": [3]},
+            ],
+            conclusion=r"よって三角形 ABC は直角三角形である。",
+        )
 
     # --- 空間図形の導出証明（三平方の定理の反復適用・SymPy で moat 検証）---
     def _solve_cube_diagonal(self, atom: NounAtom, rng: random.Random) -> LogicStep:

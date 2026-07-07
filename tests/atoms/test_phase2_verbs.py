@@ -129,18 +129,22 @@ def test_prove_algebraic_unsupported_proof_type_raises() -> None:
         "box_diagonal",
         "square_pyramid_height",
         "tetrahedron_height",
+        "pythagorean_square",
+        "pythagorean_trapezoid",
+        "pythagorean_coordinate",
+        "pythagorean_converse",
     ],
 )
 def test_prove_algebraic_extended_proof_types_return_step(proof_type: str) -> None:
-    """拡張フェーズで追加した6つの proof_type が、例外なく LogicStep を返し、
-    4ステップ構成の proof_output（moat 検証済み）を持つこと。"""
+    """拡張フェーズで追加した proof_type が、例外なく LogicStep を返し、
+    step_number が連番の proof_output（moat 検証済み）を持つこと。"""
     step = ProveAlgebraicVerb(proof_type).solve(_num(4), rng=random.Random(0))
     assert step.operation_name == f"prove_algebraic_{proof_type}"
     assert step.narration_hint
 
     proof_output = json.loads(step.operands[-1])
     assert proof_output["to_prove"] == step.narration_hint
-    assert len(proof_output["steps"]) == 4
+    assert len(proof_output["steps"]) >= 3
     for i, s in enumerate(proof_output["steps"], start=1):
         assert s["step_number"] == i
     assert proof_output["conclusion"]
@@ -158,6 +162,20 @@ def test_prove_algebraic_quadratic_formula_moat() -> None:
     for sign in (1, -1):
         root = (-b + sign * sympy.sqrt(disc)) / (2 * a)
         assert sympy.simplify(a * root**2 + b * root + c) == 0
+
+
+def test_prove_algebraic_pythagorean_moat() -> None:
+    """三平方の証明群は面積恒等式/距離を SymPy 検証してからステップ化する（moat）。
+    正方形分割・台形の恒等式が a²+b²=c² を導くことを独立に確認する。"""
+    a, b, c = sympy.symbols("a b c", positive=True)
+    # 正方形分割・台形とも (…) - 2ab の展開が a²+b² に一致
+    assert sympy.expand((a + b) ** 2 - 4 * (a * b / 2)) == sympy.expand(a**2 + b**2)
+    assert sympy.expand((a + b) ** 2 - 2 * a * b) == sympy.expand(a**2 + b**2)
+    for pt in ("pythagorean_square", "pythagorean_trapezoid",
+               "pythagorean_coordinate", "pythagorean_converse"):
+        step = ProveAlgebraicVerb(pt).solve(_num(4), rng=random.Random(0))
+        po = json.loads(step.operands[-1])
+        assert "c^2" in po["to_prove"] or "直角三角形" in po["to_prove"]
 
 
 # --- FormulateVerb（立式型 word_problem） ---

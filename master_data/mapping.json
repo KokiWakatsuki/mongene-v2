@@ -30528,13 +30528,13 @@
             "max_side_length": 5
           },
           "blueprint_params": {
-            "mode": "polygon"
+            "proof_type": "pythagorean_square"
           },
           "verb_config": {
             "action": "prove_theorem"
           },
           "implementable": true,
-          "implementation_note": ""
+          "implementation_note": "ProveAlgebraicVerb(pythagorean_square)がSymPyで恒等式/斜辺を検証(moat)してから証明ステップ化。"
         },
         {
           "lv": 2,
@@ -30544,13 +30544,13 @@
             "max_side_length": 10
           },
           "blueprint_params": {
-            "mode": "polygon"
+            "proof_type": "pythagorean_square"
           },
           "verb_config": {
             "action": "prove_by_area"
           },
           "implementable": true,
-          "implementation_note": ""
+          "implementation_note": "ProveAlgebraicVerb(pythagorean_square)がSymPyで恒等式/斜辺を検証(moat)してから証明ステップ化。"
         },
         {
           "lv": 3,
@@ -30560,13 +30560,13 @@
             "max_side_length": 10
           },
           "blueprint_params": {
-            "mode": "polygon"
+            "proof_type": "pythagorean_trapezoid"
           },
           "verb_config": {
             "action": "prove_by_area"
           },
           "implementable": true,
-          "implementation_note": ""
+          "implementation_note": "ProveAlgebraicVerb(pythagorean_trapezoid)がSymPyで恒等式/斜辺を検証(moat)してから証明ステップ化。"
         },
         {
           "lv": 4,
@@ -30576,13 +30576,13 @@
             "max_side_length": 12
           },
           "blueprint_params": {
-            "mode": "two_points"
+            "proof_type": "pythagorean_coordinate"
           },
           "verb_config": {
             "action": "derive_formula"
           },
           "implementable": true,
-          "implementation_note": ""
+          "implementation_note": "ProveAlgebraicVerb(pythagorean_coordinate)がSymPyで恒等式/斜辺を検証(moat)してから証明ステップ化。"
         }
       ],
       "knowledge": [
@@ -30746,7 +30746,8 @@
       ]
     },
     "execute_blueprint_by_form": {
-      "knowledge": "KnowledgeBaseStructure"
+      "knowledge": "KnowledgeBaseStructure",
+      "proof": "AlgebraicProofStructure"
     }
   },
   "g3_l52": {
@@ -30855,13 +30856,13 @@
             "max_side_length": 10
           },
           "blueprint_params": {
-            "mode": "polygon"
+            "proof_type": "pythagorean_converse"
           },
           "verb_config": {
             "action": "prove_right_triangle"
           },
           "implementable": true,
-          "implementation_note": ""
+          "implementation_note": "ProveAlgebraicVerb(pythagorean_converse)がSymPyで恒等式/斜辺を検証(moat)してから証明ステップ化。"
         },
         {
           "lv": 2,
@@ -30871,13 +30872,13 @@
             "max_side_length": 5
           },
           "blueprint_params": {
-            "mode": "two_points"
+            "proof_type": "pythagorean_converse"
           },
           "verb_config": {
             "action": "prove_right_triangle_by_coords"
           },
           "implementable": true,
-          "implementation_note": ""
+          "implementation_note": "ProveAlgebraicVerb(pythagorean_converse)がSymPyで恒等式/斜辺を検証(moat)してから証明ステップ化。"
         },
         {
           "lv": 3,
@@ -30887,13 +30888,13 @@
             "max_side_length": 15
           },
           "blueprint_params": {
-            "mode": "polygon"
+            "proof_type": "pythagorean_converse"
           },
           "verb_config": {
             "action": "prove_right_triangle_in_polygon"
           },
           "implementable": true,
-          "implementation_note": ""
+          "implementation_note": "ProveAlgebraicVerb(pythagorean_converse)がSymPyで恒等式/斜辺を検証(moat)してから証明ステップ化。"
         },
         {
           "lv": 4,
@@ -30903,13 +30904,13 @@
             "max_side_length": 20
           },
           "blueprint_params": {
-            "mode": "polygon"
+            "proof_type": "pythagorean_converse"
           },
           "verb_config": {
             "action": "prove_right_triangle_with_auxiliary"
           },
           "implementable": true,
-          "implementation_note": "補助線の描画ロジックと証明の論理ステップの連動が必要。"
+          "implementation_note": "ProveAlgebraicVerb(pythagorean_converse)がSymPyで恒等式/斜辺を検証(moat)してから証明ステップ化。"
         }
       ],
       "knowledge": [
@@ -31062,7 +31063,8 @@
       ]
     },
     "execute_blueprint_by_form": {
-      "knowledge": "KnowledgeBaseStructure"
+      "knowledge": "KnowledgeBaseStructure",
+      "proof": "AlgebraicProofStructure"
     }
   },
   "g3_l53": {
