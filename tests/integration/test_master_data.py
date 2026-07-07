@@ -123,3 +123,22 @@ def test_few_shot_seeds_are_valid_yaml() -> None:
         data = yaml.safe_load(f.read_text(encoding="utf-8"))
         assert "examples" in data
         assert isinstance(data["examples"], list)
+
+
+def test_declared_forms_have_generatable_levels() -> None:
+    """宣言した supported_form は、少なくとも1つ implementable=True な difficulty_level を
+    持たねばならない（＝約束した form は必ず生成できる）。
+
+    契約検証（validate_form_blueprint_contract）は blueprint 互換性のみを見るため、
+    difficulty_levels が空 or 全 implementable=False の「宣言したのに生成できない」form を
+    見逃す。この不変条件をここで守り、honest 化の哲学を難易度レベル層でも保証する。
+    """
+    mapping = _load_mapping()
+    offenders = []
+    for lesson_id, m in mapping.items():
+        levels = m.get("difficulty_levels", {})
+        for form in m.get("supported_forms", []):
+            lvs = levels.get(form, [])
+            if not lvs or all(not lv.get("implementable", True) for lv in lvs):
+                offenders.append((lesson_id, form))
+    assert not offenders, f"宣言したのに生成できない form: {offenders}"

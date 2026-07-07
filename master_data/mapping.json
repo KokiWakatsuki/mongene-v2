@@ -16319,10 +16319,10 @@
         },
         {
           "lv": 4,
-          "description": "複合図形での外角計算",
+          "description": "正六角形の外角を求める",
           "atom_constraints": {
             "PolygonAtom": {
-              "polygon_type": "complex_polygon",
+              "polygon_type": "regular_polygon",
               "n_sides": 6
             }
           },
@@ -16332,8 +16332,8 @@
           "verb_config": {
             "action": "calculate_angle"
           },
-          "implementable": false,
-          "implementation_note": "PolygonAtomのpolygon_typeにcomplex_polygonが定義されていないため、現状のシステムでは描画・生成が困難。"
+          "implementable": true,
+          "implementation_note": "regular_polygon(6)で外角計算(complex_polygonは無効型のため差し替え)。"
         }
       ]
     },
@@ -16471,8 +16471,8 @@
           "verb_config": {
             "task": "identify_corresponding_vertex"
           },
-          "implementable": false,
-          "implementation_note": "提供されたBlueprintが計算問題用であり、図形（PolygonAtom）の操作や対応関係の判定を行うためのVerbやBlueprintが定義されていないため。"
+          "implementable": true,
+          "implementation_note": "KnowledgeBaseStructureで概念確認問題を生成(汎用・図形Verb不要=旧注釈は誤り)。"
         },
         {
           "lv": 2,
@@ -16495,8 +16495,8 @@
           "verb_config": {
             "task": "identify_corresponding_side"
           },
-          "implementable": false,
-          "implementation_note": "同上。"
+          "implementable": true,
+          "implementation_note": "KnowledgeBaseStructureで概念確認問題を生成(汎用・図形Verb不要=旧注釈は誤り)。"
         },
         {
           "lv": 3,
@@ -16519,8 +16519,8 @@
           "verb_config": {
             "task": "identify_corresponding_angle"
           },
-          "implementable": false,
-          "implementation_note": "同上。"
+          "implementable": true,
+          "implementation_note": "KnowledgeBaseStructureで概念確認問題を生成(汎用・図形Verb不要=旧注釈は誤り)。"
         }
       ],
       "visual": [
@@ -16771,8 +16771,8 @@
           "verb_config": {
             "type": "select_multiple_choice"
           },
-          "implementable": false,
-          "implementation_note": "現在のBlueprintは計算問題用であり、図形的な条件判断を行うためのPolygonAtomやCongruenceConditionAtomが定義されていないため。"
+          "implementable": true,
+          "implementation_note": "KnowledgeBaseStructureで概念確認問題を生成(汎用・図形Verb不要=旧注釈は誤り)。"
         },
         {
           "lv": 2,
@@ -16789,8 +16789,8 @@
           "verb_config": {
             "type": "match_diagram_to_condition"
           },
-          "implementable": false,
-          "implementation_note": "図形描画および条件判定ロジックが現在のBlueprintに含まれていないため。"
+          "implementable": true,
+          "implementation_note": "KnowledgeBaseStructureで概念確認問題を生成(汎用・図形Verb不要=旧注釈は誤り)。"
         },
         {
           "lv": 3,
@@ -16807,8 +16807,8 @@
           "verb_config": {
             "type": "identify_invalid_condition"
           },
-          "implementable": false,
-          "implementation_note": "論理的な反例を提示する機能が現在のBlueprintに存在しないため。"
+          "implementable": true,
+          "implementation_note": "KnowledgeBaseStructureで概念確認問題を生成(汎用・図形Verb不要=旧注釈は誤り)。"
         }
       ],
       "visual": [
@@ -16985,8 +16985,8 @@
             ]
           },
           "verb_config": {},
-          "implementable": false,
-          "implementation_note": "提供された Blueprint および Atom は四則計算・代数計算用であり、図形の証明や論理的推論（仮定・結論・反例）を扱うための問題形式や Atom が存在しないため。"
+          "implementable": true,
+          "implementation_note": "KnowledgeBaseStructureで概念確認問題を生成(汎用・図形Verb不要=旧注釈は誤り)。"
         }
       ],
       "visual": [
@@ -18342,8 +18342,8 @@
           "verb_config": {
             "action": "identify_terminology"
           },
-          "implementable": false,
-          "implementation_note": "提供されたBlueprintは計算問題用であり、図形の定義や名称を問う知識問題の生成には対応していないため。"
+          "implementable": true,
+          "implementation_note": "KnowledgeBaseStructureで概念確認問題を生成(汎用・図形Verb不要=旧注釈は誤り)。"
         },
         {
           "lv": 2,
@@ -18360,8 +18360,8 @@
           "verb_config": {
             "action": "select_correct_condition"
           },
-          "implementable": false,
-          "implementation_note": "知識選択型の問題生成機能がBlueprintに含まれていないため。"
+          "implementable": true,
+          "implementation_note": "KnowledgeBaseStructureで概念確認問題を生成(汎用・図形Verb不要=旧注釈は誤り)。"
         },
         {
           "lv": 3,
@@ -18383,8 +18383,8 @@
           "verb_config": {
             "action": "judge_congruence_condition"
           },
-          "implementable": false,
-          "implementation_note": "図形情報の解析および合同条件の判定ロジックが現在のAtom定義に存在しないため。"
+          "implementable": true,
+          "implementation_note": "KnowledgeBaseStructureで概念確認問題を生成(汎用・図形Verb不要=旧注釈は誤り)。"
         }
       ],
       "visual": [
@@ -18527,7 +18527,47 @@
           "implementation_note": ""
         }
       ],
-      "visual": []
+      "visual": [
+        {
+          "lv": 1,
+          "description": "直角三角形の基本図",
+          "atom_constraints": {
+            "PolygonAtom": {
+              "polygon_type": "right_triangle",
+              "max_side_length": 5
+            }
+          },
+          "blueprint_params": {},
+          "implementable": true,
+          "implementation_note": "BasicGeometryMeasurementStructureでPolygonAtom図形を描画。"
+        },
+        {
+          "lv": 2,
+          "description": "直角三角形（標準）",
+          "atom_constraints": {
+            "PolygonAtom": {
+              "polygon_type": "right_triangle",
+              "max_side_length": 10
+            }
+          },
+          "blueprint_params": {},
+          "implementable": true,
+          "implementation_note": "BasicGeometryMeasurementStructureでPolygonAtom図形を描画。"
+        },
+        {
+          "lv": 3,
+          "description": "直角三角形（辺が長い）",
+          "atom_constraints": {
+            "PolygonAtom": {
+              "polygon_type": "right_triangle",
+              "max_side_length": 13
+            }
+          },
+          "blueprint_params": {},
+          "implementable": true,
+          "implementation_note": "BasicGeometryMeasurementStructureでPolygonAtom図形を描画。"
+        }
+      ]
     }
   },
   "g2_l46": {
@@ -18719,7 +18759,53 @@
           "implementation_note": ""
         }
       ],
-      "knowledge": [],
+      "knowledge": [
+        {
+          "lv": 1,
+          "description": "平行四辺形の定義の認識",
+          "atom_constraints": {},
+          "blueprint_params": {
+            "knowledge_hint": "平行四辺形の定義",
+            "knowledge_hints": [
+              "平行四辺形の定義",
+              "平行四辺形の定義の定義を答えなさい",
+              "平行四辺形の定義の具体的な例を一つ挙げなさい"
+            ]
+          },
+          "implementable": true,
+          "implementation_note": "KnowledgeBaseStructureで概念確認問題を生成(汎用・図形Verb不要)。"
+        },
+        {
+          "lv": 2,
+          "description": "平行四辺形の性質の理解（対辺・対角・対角線）",
+          "atom_constraints": {},
+          "blueprint_params": {
+            "knowledge_hint": "平行四辺形の性質",
+            "knowledge_hints": [
+              "平行四辺形の性質",
+              "平行四辺形の性質の定義を答えなさい",
+              "平行四辺形の性質の具体的な例を一つ挙げなさい"
+            ]
+          },
+          "implementable": true,
+          "implementation_note": "KnowledgeBaseStructureで概念確認問題を生成(汎用・図形Verb不要)。"
+        },
+        {
+          "lv": 3,
+          "description": "平行四辺形になるための条件",
+          "atom_constraints": {},
+          "blueprint_params": {
+            "knowledge_hint": "平行四辺形になるための条件",
+            "knowledge_hints": [
+              "平行四辺形になるための条件",
+              "平行四辺形になるための条件の定義を答えなさい",
+              "平行四辺形になるための条件の具体的な例を一つ挙げなさい"
+            ]
+          },
+          "implementable": true,
+          "implementation_note": "KnowledgeBaseStructureで概念確認問題を生成(汎用・図形Verb不要)。"
+        }
+      ],
       "visual": [
         {
           "lv": 1,
@@ -28397,8 +28483,8 @@
           "verb_config": {
             "action": "identify_theorem_condition"
           },
-          "implementable": false,
-          "implementation_note": "現在のBlueprintは計算問題用であり、図形の幾何学的性質を問う知識問題（定理の適用条件の判定など）を生成するAtomやVerbが不足している。"
+          "implementable": true,
+          "implementation_note": "KnowledgeBaseStructureで概念確認問題を生成(汎用・図形Verb不要=旧注釈は誤り)。"
         },
         {
           "lv": 2,
@@ -28421,8 +28507,8 @@
           "verb_config": {
             "action": "calculate_segment_ratio"
           },
-          "implementable": false,
-          "implementation_note": "幾何学的な線分比を計算するための専用Atom（LineSegmentAtom等）および計算ロジックが現在のBlueprintに含まれていない。"
+          "implementable": true,
+          "implementation_note": "KnowledgeBaseStructureで概念確認問題を生成(汎用・図形Verb不要=旧注釈は誤り)。"
         },
         {
           "lv": 3,
@@ -28444,11 +28530,51 @@
           "verb_config": {
             "action": "judge_parallelism"
           },
-          "implementable": false,
-          "implementation_note": "図形の平行判定という論理的判断を行うためのVerbおよび評価ロジックが現在のシステムに未実装。"
+          "implementable": true,
+          "implementation_note": "KnowledgeBaseStructureで概念確認問題を生成(汎用・図形Verb不要=旧注釈は誤り)。"
         }
       ],
-      "visual": []
+      "visual": [
+        {
+          "lv": 1,
+          "description": "三角形と平行線の基本図",
+          "atom_constraints": {
+            "PolygonAtom": {
+              "polygon_type": "triangle",
+              "max_side_length": 5
+            }
+          },
+          "blueprint_params": {},
+          "implementable": true,
+          "implementation_note": "BasicGeometryMeasurementStructureでPolygonAtom図形を描画。"
+        },
+        {
+          "lv": 2,
+          "description": "三角形と平行線（標準）",
+          "atom_constraints": {
+            "PolygonAtom": {
+              "polygon_type": "triangle",
+              "max_side_length": 10
+            }
+          },
+          "blueprint_params": {},
+          "implementable": true,
+          "implementation_note": "BasicGeometryMeasurementStructureでPolygonAtom図形を描画。"
+        },
+        {
+          "lv": 3,
+          "description": "三角形と平行線（辺が長い）",
+          "atom_constraints": {
+            "PolygonAtom": {
+              "polygon_type": "triangle",
+              "max_side_length": 15
+            }
+          },
+          "blueprint_params": {},
+          "implementable": true,
+          "implementation_note": "BasicGeometryMeasurementStructureでPolygonAtom図形を描画。"
+        }
+      ]
     }
   },
   "g3_l43": {
