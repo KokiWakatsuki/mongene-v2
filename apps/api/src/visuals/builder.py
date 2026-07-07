@@ -4,7 +4,9 @@ Blueprint と sampled_nouns / logic_steps から VisualDSL を組み立てる。
 """
 from __future__ import annotations
 
+import json
 import math
+import re
 from typing import Any, Dict
 
 import sympy
@@ -33,6 +35,8 @@ def build_visual_dsl(
             return _build_3d(display)
         return _build_3d(sampled_nouns)
     if component == "2D_Geometry_Renderer":
+        if blueprint.blueprint_id == "ProofStructure":
+            return _build_congruence_proof(sampled_nouns, logic_steps)
         return _build_2d_geometry(sampled_nouns)
     if component == "Graph_Renderer":
         return _build_graph(sampled_nouns)
@@ -344,6 +348,152 @@ def _build_2d_geometry(sampled_nouns: Dict[str, NounAtom]) -> VisualDSL:
             new_elements, new_viewport = _build_circle_angle(atom)
             elements.extend(new_elements)
             viewport = new_viewport
+    return VisualDSL(render_type="2D_Geometry", elements=elements, viewport=tuple(viewport))
+
+
+def _build_congruence_proof(
+    sampled_nouns: Dict[str, NounAtom],
+    logic_steps: Dict[str, Any],
+) -> VisualDSL:
+    """ProofStructure 専用: 合同/相似の証明を 2 図形並置 + 対応マーク付きで描く。
+
+    表示のみ。answer/logic_steps は不変（証明 template は sympy_expr=Integer(1)）。
+    figure_b は figure_a の合同(平行移動)/相似(拡大+平行移動)コピーとして生成し、
+    condition_set に応じて対応する辺・角に同じ count のマークを両図形へ打つ。
+    """
+    # 1. figure_a 取得（PolygonAtom を宣言順に集める）
+    polygons = [a for a in sampled_nouns.values() if type(a).__name__ == "PolygonAtom"]
+    if not polygons:
+        return _build_2d_geometry(sampled_nouns)
+    figure_a = polygons[0]
+    verts_raw = getattr(figure_a, "vertices", None) or []
+    base = [[_to_float(v[0]), _to_float(v[1])] for v in verts_raw]
+    if not base:
+        return _build_2d_geometry(sampled_nouns)
+
+    # 2. proof 情報の抽出（既定値）
+    proof_type = "congruence"
+    condition_set = "SSS"
+    labels_a = "ABC"
+    labels_b = "DEF"
+    step = logic_steps.get("proof") if logic_steps else None
+    if step is not None:
+        op = getattr(step, "operation_name", "")
+        if "similarity" in op:
+            proof_type = "similarity"
+        ops = getattr(step, "operands", [])
+        if len(ops) >= 3 and isinstance(ops[2], str):
+            condition_set = ops[2]
+        if len(ops) >= 4:
+            try:
+                tp = json.loads(ops[3])["to_prove"]
+                found = re.findall(r"△(\w+)", tp)
+                if len(found) >= 2:
+                    labels_a = found[0][:3]
+                    labels_b = found[1][:3]
+            except Exception:
+                pass
+
+    # 3. RHS は直角三角形が要る（表示専用の正準直角三角形に置換）
+    if proof_type == "congruence" and condition_set == "RHS":
+        base = [[0.0, 0.0], [4.0, 0.0], [0.0, 3.0]]
+
+    n = len(base)
+
+    # 4. figure_b を base の変換コピーで作る
+    xs = [p[0] for p in base]
+    ys = [p[1] for p in base]
+    w = max(xs) - min(xs)
+    h = max(ys) - min(ys)
+    gap = max(w, 2.0) * 0.6 + 1.0
+    if proof_type == "similarity":
+        k = 1.4
+        cx = sum(xs) / n
+        cy = sum(ys) / n
+        scaled = [[cx + (px - cx) * k, cy + (py - cy) * k] for px, py in base]
+        sxs = [p[0] for p in scaled]
+        dx = (max(xs) - min(sxs)) + gap
+        fig_b = [[px + dx, py] for px, py in scaled]
+    else:
+        dx = w + gap
+        fig_b = [[px + dx, py] for px, py in base]
+
+    # 5. 要素生成
+    def tick(verts: list[list[float]], i: int, c: int) -> dict:
+        return {
+            "type": "tick_mark",
+            "p1": verts[i],
+            "p2": verts[(i + 1) % len(verts)],
+            "count": c,
+        }
+
+    def arc(verts: list[list[float]], vi: int, c: int) -> dict:
+        m = len(verts)
+        return {
+            "type": "angle_arc",
+            "vertex": verts[vi],
+            "p1": verts[(vi - 1) % m],
+            "p2": verts[(vi + 1) % m],
+            "count": c,
+        }
+
+    def ramark(verts: list[list[float]], vi: int) -> dict:
+        m = len(verts)
+        return {
+            "type": "right_angle_mark",
+            "vertex": verts[vi],
+            "p1": verts[(vi + 1) % m],
+            "p2": verts[(vi - 1) % m],
+        }
+
+    elements: list[dict] = [
+        {
+            "type": "polygon",
+            "vertices": base,
+            "filled": False,
+            "vertex_labels": list(labels_a)[:n],
+        },
+        {
+            "type": "polygon",
+            "vertices": fig_b,
+            "filled": False,
+            "vertex_labels": list(labels_b)[:n],
+        },
+    ]
+
+    for verts in (base, fig_b):
+        if proof_type == "similarity":
+            # 相似: 辺の長さは等しくない → 対応角に arc のみ
+            elements.append(arc(verts, 0, 1))
+            elements.append(arc(verts, 1, 2))
+        elif condition_set == "SAS":
+            elements.append(tick(verts, 0, 1))
+            elements.append(tick(verts, 1, 2))
+            elements.append(arc(verts, 1, 1))
+        elif condition_set == "ASA":
+            elements.append(tick(verts, 0, 1))
+            elements.append(arc(verts, 0, 1))
+            elements.append(arc(verts, 1, 2))
+        elif condition_set == "RHS":
+            elements.append(ramark(verts, 0))
+            elements.append(tick(verts, 1, 1))  # 斜辺 v1->v2
+            elements.append(tick(verts, 0, 2))  # 脚 v0->v1
+        else:  # SSS（およびその他）
+            elements.append(tick(verts, 0, 1))
+            elements.append(tick(verts, 1, 2))
+            elements.append(tick(verts, 2, 3))
+
+    # 6. viewport
+    allx = [p[0] for p in base] + [p[0] for p in fig_b]
+    ally = [p[1] for p in base] + [p[1] for p in fig_b]
+    margin = 1.5
+    viewport = (
+        min(allx) - margin,
+        min(ally) - margin,
+        max(allx) + margin,
+        max(ally) + margin,
+    )
+
     return VisualDSL(render_type="2D_Geometry", elements=elements, viewport=tuple(viewport))
 
 
