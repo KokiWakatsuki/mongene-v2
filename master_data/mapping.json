@@ -19645,7 +19645,7 @@
       "calculation": "DataProbabilityStructure",
       "word_problem": "DataProbabilityStructure",
       "knowledge": "KnowledgeBaseStructure",
-      "visual": "BasicCalculationStructure"
+      "visual": "DataProbabilityStructure"
     },
     "dedup_disabled": true,
     "difficulty_levels": {
@@ -20342,7 +20342,7 @@
     "execute_blueprint_by_form": {
       "calculation": "DataProbabilityStructure",
       "word_problem": "DataProbabilityStructure",
-      "visual": "BasicCalculationStructure"
+      "visual": "DataProbabilityStructure"
     },
     "dedup_disabled": true,
     "difficulty_levels": {

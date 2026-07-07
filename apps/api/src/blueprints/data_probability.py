@@ -38,7 +38,7 @@ def build_data_probability_blueprint(params: dict | None = None) -> BlueprintDef
             compatible_noun_types=["EventAtom"],
             required=False,
         ),
-        supported_forms=["calculation", "word_problem"],
+        supported_forms=["calculation", "word_problem", "visual"],
         story_required=False,
         base_difficulty_calculator=lambda nouns, ctx: int(ctx.get("y_base", 40)),
         subquestion_strategy=SubQuestionStrategy(
