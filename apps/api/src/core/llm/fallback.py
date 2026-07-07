@@ -2,7 +2,6 @@
 from __future__ import annotations
 
 import random
-import sympy
 
 from apps.api.src.core.representation.middle_representation import MiddleRepresentation
 
@@ -30,18 +29,11 @@ def template_fallback_text(mr: MiddleRepresentation) -> str:
 
 # ─── 計算問題（基本） ─────────────────────────────────────────────
 def _calculation_fallback(mr: MiddleRepresentation) -> str:
+    # 問題文には答えを出さない（答えは解説に属す・G1 漏洩防止）。
     lines: list[str] = []
     for sq in mr.sub_questions:
         label = f"{sq.label} " if sq.label else ""
         lines.append(f"{label}{sq.prompt_hint}")
-        try:
-            if sq.answer.sympy_form is not None:
-                ans_latex = sympy.latex(sq.answer.sympy_form)
-                lines.append(f"  答え: ${ans_latex}$")
-            else:
-                lines.append(f"  答え: {sq.answer.text_form}")
-        except Exception:
-            lines.append(f"  答え: {sq.answer.text_form}")
     return "\n".join(lines)
 
 
@@ -82,7 +74,8 @@ def _knowledge_fallback(mr: MiddleRepresentation) -> str:
                 lines.append(f"計算式: {expr_part}")
             for lbl, v in label_map.items():
                 lines.append(f"  {lbl}. {v}")
-            lines.append(f"  答え: {answer_label}")
+            # 正解ラベルは問題文に出さない（漏洩防止）。answer_label は選択肢生成にのみ使用。
+            _ = answer_label
             return "\n".join(lines)
         except Exception:
             pass
@@ -101,7 +94,7 @@ def _knowledge_fallback(mr: MiddleRepresentation) -> str:
         lines.append("  イ. 成り立たない場合がある。")
         lines.append("  ウ. 定義による。")
         lines.append("  エ. 上のいずれでもない。")
-    lines.append("  答え: ア")
+    # 正解（ア）は問題文に出さない（漏洩防止）。
     return "\n".join(lines)
 
 
@@ -121,15 +114,8 @@ def _word_problem_fallback(mr: MiddleRepresentation) -> str:
     sq = mr.sub_questions[0]
     rng = random.Random(mr.seed)
     intro = rng.choice(_STORY_TEMPLATES)
+    # 問題文には答えを出さない（答えは解説に属す・G1 漏洩防止）。
     lines = [intro, sq.prompt_hint]
-    try:
-        if sq.answer.sympy_form is not None:
-            ans_latex = sympy.latex(sq.answer.sympy_form)
-            lines.append(f"  答え: ${ans_latex}$")
-        else:
-            lines.append(f"  答え: {sq.answer.text_form}")
-    except Exception:
-        lines.append(f"  答え: {sq.answer.text_form}")
     return "\n".join(lines)
 
 
@@ -157,14 +143,10 @@ def _proof_fallback(mr: MiddleRepresentation) -> str:
                 break
 
     if proof_output:
+        # 証明問題は「証明すべきこと」だけを提示する。証明手順・結論（＝答え）は
+        # 問題文に出さない（漏洩防止・答えは解説側）。
         to_prove = proof_output.get("to_prove", "図形の合同または相似")
-        lines = [f"次のことを証明しなさい。", f"  {to_prove}"]
-        for step_info in proof_output.get("steps", []):
-            lines.append(f"  {step_info.get('step_number', '')}. {step_info.get('statement', '')}（{step_info.get('reason', '')}）")
-        conclusion = proof_output.get("conclusion", "")
-        if conclusion:
-            lines.append(f"  結論: {conclusion}")
-        return "\n".join(lines)
+        return "\n".join(["次のことを証明しなさい。", f"  {to_prove}"])
 
     # フォールバック
     hint = sq.prompt_hint or "図形の性質"

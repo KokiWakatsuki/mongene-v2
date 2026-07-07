@@ -93,11 +93,12 @@ def _make_simple_mr() -> MiddleRepresentation:
     )
 
 
-def test_template_fallback_text_includes_narration() -> None:
+def test_template_fallback_text_omits_answer() -> None:
     text = template_fallback_text(_make_simple_mr())
-    # 新形式: prompt_hint + 答えが含まれる（narration_hint は省略）
+    # prompt_hint は含むが、答え（値・ラベル）は問題文に出さない（G1 漏洩防止）
     assert "計算" in text  # prompt_hint に「計算」が含まれる
-    assert "答え" in text   # 答えが含まれる
+    assert "答え" not in text  # 答えマーカーが無い
+    assert "3" not in text  # 正解値 3 が漏れていない
 
 
 def test_strip_json_fence() -> None:
@@ -160,18 +161,18 @@ def _make_mr_with_form(form: str, seed: int = 42) -> MiddleRepresentation:
 def test_fallback_knowledge_generates_4_choice() -> None:
     mr = _make_mr_with_form("knowledge")
     text = template_fallback_text(mr)
-    # 4択形式：ア〜エ が含まれること
+    # 4択形式：ア〜エ が含まれること。正解ラベルは問題文に出さない（漏洩防止）
     assert "ア" in text
     assert "イ" in text
-    assert "答え" in text
+    assert "答え" not in text
 
 
 def test_fallback_word_problem_wraps_intro() -> None:
     mr = _make_mr_with_form("word_problem")
     text = template_fallback_text(mr)
-    # 文章題ラッパーが追加されること
+    # 文章題ラッパーが追加されること。答えは問題文に出さない（漏洩防止）
     assert "なさい" in text or "求め" in text or "値" in text
-    assert "答え" in text
+    assert "答え" not in text
 
 
 def test_fallback_proof_uses_prove_format() -> None:
@@ -215,8 +216,10 @@ def test_fallback_proof_uses_prove_format() -> None:
     assert "△ABC" in text
 
 
-def test_fallback_calculation_unchanged() -> None:
+def test_fallback_calculation_omits_answer() -> None:
     mr = _make_mr_with_form("calculation")
     text = template_fallback_text(mr)
     assert "計算" in text
-    assert "答え" in text
+    # 答え（値・マーカー）は問題文に出さない（G1 漏洩防止）
+    assert "答え" not in text
+    assert "2" not in text

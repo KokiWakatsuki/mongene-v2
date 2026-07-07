@@ -13,7 +13,8 @@ from __future__ import annotations
 
 from typing import Any
 
-from scripts.eval_gates.common import GateResult, contains_number, dedupe_preserve_order
+from apps.api.src.core.evaluation.leakage import detect_leaked_values
+from scripts.eval_gates.common import GateResult, dedupe_preserve_order
 
 GATE_ID = "G1"
 
@@ -60,16 +61,10 @@ def check(product: dict[str, Any], ground_truth: dict[str, Any]) -> GateResult:
 
     operand_values = _input_operands(ground_truth)
 
-    leaked: list[str] = []
-    leaked_but_also_operand: list[str] = []
-    for value in answer_values:
-        if not value or value.strip() in ("", "None", "nan"):
-            continue
-        if contains_number(full_text, value):
-            if any(contains_number(value, op) or contains_number(op, value) for op in operand_values):
-                leaked_but_also_operand.append(value)
-            else:
-                leaked.append(value)
+    # ランタイム翻訳器と同一の共有コアで判定する（evaluator = verifier）。
+    leaked, leaked_but_also_operand = detect_leaked_values(
+        full_text, answer_values, operand_values
+    )
 
     if leaked:
         return GateResult(

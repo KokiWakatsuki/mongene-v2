@@ -151,7 +151,7 @@ class LLMTranslator:
                 problem_text, sub_texts = self._translate_problem(
                     mr, story, lesson_grade, tier, lesson_title, target_difficulty  # type: ignore[arg-type]
                 )
-                if not self._verify_translation(problem_text, mr):
+                if not self._verify_translation(problem_text, mr, sub_texts):
                     last_err = LLMTranslationFailedError("解答漏洩を検出")
                     continue
                 explanation_map = self._translate_explanation(
@@ -223,22 +223,31 @@ class LLMTranslator:
                 result[label] = text
         return result
 
-    def _verify_translation(self, problem_text: str, mr: MiddleRepresentation) -> bool:
-        """LLM 出力テキストの解答漏洩を軽くチェック（§40）"""
+    def _verify_translation(
+        self,
+        problem_text: str,
+        mr: MiddleRepresentation,
+        sub_texts: Optional[List[Dict]] = None,
+    ) -> bool:
+        """LLM 出力テキストの解答漏洩を決定論ゲート（G1 と同一コア）で検査する。
+
+        generate-then-verify 反転（HANDOFF §4）: オフライン評価ゲート G1 の共有コア
+        `find_problem_answer_leak` を受理/棄却フィルタとして使う。正解値（LaTeX/分数/
+        符号異体字を正規化）が問題文・小問プロンプトに漏れていれば False（棄却→次 tier）。
+        入力オペランドと一致する曖昧ケースは棄却しない（誤棄却回避）。
+        """
         try:
-            for sq in mr.sub_questions:
-                if sq.answer.sympy_form is None:
-                    continue
-                if sq.answer.type != "numeric":
-                    continue
-                ans_str = str(sq.answer.sympy_form).strip()
-                if not ans_str:
-                    continue
-                if len(ans_str) >= 2 and ans_str in problem_text:
-                    return False
+            from apps.api.src.core.evaluation.leakage import find_problem_answer_leak
+
+            sub_prompt_texts = [
+                (item.get("text", "") or "") for item in (sub_texts or [])
+            ]
+            leaked = find_problem_answer_leak(
+                problem_text, sub_prompt_texts, mr, numeric_only=True
+            )
+            return not leaked
         except Exception:
             return True
-        return True
 
     def _fallback_template(self, mr: MiddleRepresentation) -> Tuple[str, List[Dict], Dict[str, str]]:
         text = template_fallback_text(mr)
