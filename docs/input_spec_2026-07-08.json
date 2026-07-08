@@ -507,12 +507,12 @@
           "rationale": "変数・関数・変域の意味理解が核"
         },
         {
-          "form": "calculation",
+          "form": "find_value",
           "bands": "F〜S",
-          "rationale": "変域を不等号で表す・yがxの関数かの判別処理"
+          "rationale": "与えられた条件から変域を不等号で求める(立式ありのため求値)"
         }
       ],
-      "notes": "v1と型変更なし。"
+      "notes": "変域を求める部分は求値に統一(g2_l23/g3_l34と整合)。"
     },
     {
       "lesson_id": "g1_l29",
@@ -1423,17 +1423,17 @@
       "unit_flag": "ok",
       "forms": [
         {
-          "form": "calculation",
+          "form": "find_value",
           "bands": "F〜S",
-          "rationale": "与えられた表/式から変化の割合=(yの増加量)/(xの増加量)を計算処理"
+          "rationale": "表/式/2点から(yの増加量)/(xの増加量)を自分で立式して求める(立式ありのため求値)"
         },
         {
           "form": "knowledge",
           "bands": "F〜S",
-          "rationale": "変化の割合が一定=傾きに等しいという意味理解"
+          "rationale": "変化の割合の意味(1次関数では傾きと一致)の理解"
         }
       ],
-      "notes": "変化の割合回。calculation主。式や表から一定手順で求めるためcalculationのまま。"
+      "notes": "変化の割合を求める=立式ありのため求値(旧calculationから是正・ユーザー指摘)。"
     },
     {
       "lesson_id": "g2_l21",
@@ -2789,17 +2789,17 @@
       "unit_flag": "ok",
       "forms": [
         {
-          "form": "calculation",
-          "bands": "F〜S",
-          "rationale": "式と区間が与えられ(yの増加量)/(xの増加量)を処理"
+          "form": "find_value",
+          "bands": "F〜A",
+          "rationale": "y=ax²の変化の割合を2点/区間から自分で立式して求める(立式ありのため求値)"
         },
         {
           "form": "knowledge",
           "bands": "F",
-          "rationale": "y=ax^2では変化の割合が一定でない意味理解"
+          "rationale": "y=ax²は変化の割合が一定でないことの理解"
         }
       ],
-      "notes": "式が与えられ処理する計算。"
+      "notes": "変化の割合=求値(旧calculationから是正・ユーザー指摘)。"
     },
     {
       "lesson_id": "g3_l36",
@@ -3166,9 +3166,14 @@
           "form": "knowledge",
           "bands": "F",
           "rationale": "30-60-90・45-45-90の辺の比の理解"
+        },
+        {
+          "form": "word_problem",
+          "bands": "A〜D",
+          "rationale": "平面図形の総合大問(設定+小問)。何を使い何を求めるか構成する(誘導あり↔なし)"
         }
       ],
-      "notes": "v1 Pythagorean=計算だが図から求める求値。find_value主に。"
+      "notes": "v1 Pythagorean=計算だが図から求める求値。find_value主に。 2階層モデル: 図形の総合大問=文章題を追加(小問は求値)。"
     },
     {
       "lesson_id": "g3_l54",
@@ -3202,9 +3207,14 @@
           "form": "graph_table",
           "bands": "S",
           "rationale": "見取図/断面を読み補助線を引く"
+        },
+        {
+          "form": "word_problem",
+          "bands": "A〜D",
+          "rationale": "空間図形の総合大問(例:立方体を切断→断面積/表面積/体積)。小問は求値の連なり"
         }
       ],
-      "notes": "v1 BasicDifference/calculation系だが図から求める求値。find_value主に。"
+      "notes": "v1 BasicDifference/calculation系だが図から求める求値。find_value主に。 2階層モデル: 図形の総合大問=文章題を追加(小問は求値)。"
     },
     {
       "lesson_id": "g3_l56",
@@ -3220,9 +3230,14 @@
           "form": "graph_table",
           "bands": "S",
           "rationale": "立体を展開図に開いて経路を把握"
+        },
+        {
+          "form": "word_problem",
+          "bands": "A〜D",
+          "rationale": "展開図・立体の総合大問(最短距離・付随する面積/体積を構成)"
         }
       ],
-      "notes": "最短距離展開図＝find_value（指示通り）。"
+      "notes": "最短距離展開図＝find_value（指示通り）。 2階層モデル: 図形の総合大問=文章題を追加(小問は求値)。"
     },
     {
       "lesson_id": "g3_l57",
