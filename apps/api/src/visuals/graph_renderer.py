@@ -86,9 +86,17 @@ class GraphRenderer(VisualComponent):
                 else:
                     ax.set_ylabel(el["label"])
 
+        ax.set_xlim(*self.x_range)
         if self.y_range:
             ax.set_ylim(*self.y_range)
-        ax.set_xlim(*self.x_range)
+        else:
+            # y_range 未指定なら x と同じ範囲の正方ウィンドウにする。
+            # 縦横で縮尺が違うと傾き・長さ・角度が視覚的に嘘になる（1次関数の傾きや
+            # 座標幾何で致命的）ため、既定は縦横同一範囲＝同一縮尺にする。
+            ax.set_ylim(self.x_range[0], self.x_range[1])
+        # 1 目盛りを縦横で等しくする（傾き・距離・角度を忠実に描く）。
+        # 範囲外に出る急な直線は正しい傾きのままクリップされる（縮尺を歪めるより誠実）。
+        ax.set_aspect("equal", adjustable="box")
 
         buf = io.StringIO()
         fig.savefig(buf, format="svg", bbox_inches="tight")
