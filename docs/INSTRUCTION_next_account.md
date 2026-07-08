@@ -4,55 +4,51 @@
 別アカウントからの引き継ぎで、あなたにはメモリも会話履歴もありません。
 
 ## 最初に読む
-1. `docs/HANDOFF_2026-07-06.md` 冒頭「★ 最新の現在地」の **🎯🎯 最新の到達点（§17.8-17.13）** を読む。
-2. 続けて **§17 全体**（特に §17.0 評価の原則、§17.7 図形の残 scope、§17.8 Phase B 発見、§17.9-17.13 打開策1-5、§17.13 残作業と定点観測）。
-3. 文脈補完に §2（システム構成）・§4（中核戦略）・§16（generate-then-verify）・§9（能力ギャップ）。
-4. `git log --oneline -25` で直近コミットを確認。HANDOFF はこのプロジェクト唯一の引き継ぎ媒体。
+1. `docs/HANDOFF_2026-07-06.md` 冒頭「★ 最新の現在地」の **🎯🎯🎯🎯🎯🎯🎯 最新の到達点（§17.18）** を読む。
+2. 続けて **§17.14-17.18**（capability 開通・図の自然さ修正・本番Gemini再測定・次タスク）。文脈補完に §17.0（評価原則）・§17.7（図形残scope）・§2（システム構成）・§4（中核戦略）。
+3. `git log --oneline -30` で直近を確認。HANDOFF はこのプロジェクト唯一の引き継ぎ媒体。
 
-## いまどこにいるか（要約）
-- 正しさ(SymPy moat)＋契約違反0 は堅い。「質の監査ループ」を **Phase A（題材忠実性・LLMフリー）→ Phase B（翻訳後 product の自然さ・要LLM）** まで一巡した。
-- **Phase B の最大発見＝moat は弱い**: 決定論ゲート（契約/SymPy/is_clean）は「答えが計算と一致」は保証するが「**問題として意味が通るか**」は保証しない（確率6/7・面積0・二等辺の頂角底角曖昧 が全ゲートを通過していた）。
-- これを受け **打開策1-5 を系統実施**（§17.9-17.13）: ①確率の実標本空間化 ②退化検出ゲート ③MR意味的曖昧性解消 ④offline generate-then-verify＋接地ゲート精緻化 ⑤プロンプト自然さ（通貨は円/離散量に分数禁止）。
-- **完成度 ~40% → ~65-68%**。pytest **461**・契約違反0・生成不能form0。HEAD=`9924678`（作業ツリーclean）。
+## いまどこにいるか（要約・2026-07-07 時点）
+- 正しさ(SymPy moat)＋契約違反0 は堅い。「質の監査ループ」を Phase A（題材・LLMフリー）→ Phase B（翻訳後の自然さ・要LLM）で回し、**capability を多数開通＋図の自然さを実目視で修正**した。
+- **本番 Gemini で完成度を再測定＝~72-75%**（代表14セル×Opus監査）。軸別: SymPy正しさ~95%✅／問題として意味が通る~88-90%✅／**図の自然さ~85%✅**／**題材忠実性~78-80%⚠️／文章の自然さ~75%⚠️**。
+- ユーザー目標＝**他科目展開以外の全軸で85%（理想90%）**。未達は題材忠実性・文章の自然さの2軸。
+- pytest **465**・契約違反0・生成不能form0。HEAD は `git log` で確認（作業ツリー clean）。**GEMINI_API_KEY は `.env` にあり利用可（無料枠）**。
 
-## あなたのタスク＝残りを費用対効果順に潰す（ユーザー指定「費用対効果が高いものから」）
-残る主レバーは §17.13 に列挙済み。**安い順**に:
-1. **【最小・まず着手】g2_l46 平行四辺形 calc の配線**: `parallelogram_adjacent` theorem は実装済み（`find_angle_verb.py`）。g2_l41 二等辺と同じ手（per-level `blueprint_override`＝AngleCalculationStructure＋`required_tags` に `angles` を OR 追加＋他form の空制約 level に PolygonAtom を pin）で calc lv1（角度）を配線するだけ。雛形コミット＝g2_l41（`7c2517b` 系）と g3_l49（`bdba14b`）。**calc lv2-4 は辺の長さ/代数題材なので対象外・据置**。
-2. **visual題材ズレ ~26レッスンの横展開**（§17.7）: 円周角 g3_l49 の再配線パターン（既存 AngleCalculationStructure・CircleAngleAtom）を他の円レッスンへ。合同/相似の proof レッスンの visual（今は measure_area＝面積を出す題材ズレ）は **ProofStructure が proof 専用**なので、visual 用に「2図形＋対応マーク」を出す `CongruenceFigureStructure` 相当の新 blueprint が要る（中規模）。移動系 g1_l38/39/40 は**孤児の `TransformShapeVerb`（translation/rotation/reflection/revolution・実装済だが未配線）**＋2D before/after renderer。
-3. **図形capability**: 相似 `SimilarityStructure`（`ProportionAtom`＋`solve_proportion` 既存を内部に、幾何 framing＋2図形 visual）＝中3相似の本丸。g2_l25 の2点→式決定 verb。
-4. **④-4 プロンプト/few-shot 底上げ**（要 LLM クォータで効果測定）。
+### このセッションで完了した主な作業（履歴・§17.14-17.18）
+- capability: g2_l46平行四辺形calc・**CongruenceFigureStructure**（合同/相似9レッスンの visual を2図形＋対応マークへ）・**SimilarityStructure**（相似/線分比/中点連結5レッスンの calc を実算出へ＝ARITH_FOREIGN 36→19）。
+- C1: 翻訳プロンプトに**忠実性ブロック（捏造禁止）**＋新blueprint few-shot（本番Geminiで確率捏造の再発なしを確認）。
+- **図の自然さ 5欠陥を修正（表示のみ・answer不変）**: 円周角ラベル衝突／確率tree重なり＋枝確率／おうぎ形が素の円／3D頂点ラベル＋隠れ辺破線／**グラフの縦横等スケール化**（`set_aspect("equal")`）。
 
-各修正後、**Phase B 定点観測**（下記）で完成度が上がったか確認する。
+## 🎯 あなたのタスク＝FunctionGeometryFusion の題材ズレ解消（ユーザー選択・完成度の最大レバー）
+再測定で判明した**全体の天井＝残る2軸（題材忠実性・文章自然さ）**、その最大ドラッグがこれ。詳細は **§17.18**。
+- **診断**: `FunctionGeometryFusionStructure` は form によらず**「2直線の交点＋座標軸との三角形の面積」を生成**するが、この題材が正しいのは **exam_l1（一次関数と図形の融合）だけ**。他10レッスン（g2_l19/20/21/22/23/24/26/27/28/30）は題材ズレ。例: g2_l21「傾きと切片」なのに交点+面積、g2_l28「1次関数の利用（ばね/水そう）」wp が交点+三角形面積。
+- **正題材（レッスン別・要出し分け）**: 意味と式(評価)・変化の割合(Δy/Δx)・傾きと切片(読み取り)・式決定(傾き+1点)・ax+by=cのグラフ・グラフの書き方(単一直線)・変域(線分＋端点)・連立=2直線交点(面積は蛇足)・利用/速さ(実世界の線形場面)。
+- **方針の候補（設計はあなたが判断）**: (a) FunctionGeometryFusion に `mode`/`context` パラメータを足し lesson 別に題材を出し分け、(b) 交点+面積は exam_l1・g2_l27 に限定、(c) g2_l28/l30 の wp は scenario_bank 連携で速さ/ばね等の場面を持たせ三角形面積の蛇足を外す。
+- **既存 backlog `task_643ed872`（g2_l30 調査）と同根＝統合**。**別セッションで進行中の可能性あり**＝着手前に必ず `git log --oneline`/`git status` で成果を確認（重複作業回避）。
+- 図は §17.17 で等スケール化済み＝**題材が直れば図も正題材に乗る**。
 
-## Phase B（品質監査ループ）の回し方＝この体制を維持せよ
-- **評価原則（§17.0・ユーザー厳守）**: 数学的に検証できるものは決定論で（LLMを浪費しない）。**LLMでしか測れない意味的質（題材・自然さ）にはLLMを使う**が、**生成器と監査役は別モデルにして循環を避ける**。
-- **生成器＝Haiku 4.5 のサブエージェント**（使用中の生成モデル `gemini-3-flash` と同格）、**監査役＝Opus（あなた・main）**。`GEMINI_API_KEY` は未設定なので Gemini は使えない＝Claude 経路で回す。
-- **手順**:
-  1. 代表サンプルを選ぶ（例: 全学年×全5form×large_unit を代表する10レッスン、mid レベル＝31セル）。
-  2. GT 再生成: `SKIP_LLM_IN_TESTS=true .venv/bin/python scripts/build_ground_truth_corpus.py`（LLMフリー）。
-  3. 翻訳プロンプト書き出し: `.venv/bin/python scripts/build_product_corpus.py --engine claude --dump --lesson <L>`（`_staging/{key}.prompt.txt`＋`.mr.json`。APIキー不要）。
-  4. **翻訳**: Haiku 4.5 サブエージェントに `_staging/{key}.prompt.txt` を読ませ、指示通りの JSON を `_responses/{key}.json` に書かせる（バッチ分割・model="haiku"）。
-  5. 組み立て: `build_product_corpus.py --engine claude --ingest --lesson <L>`（答えは GT の SymPy 値で固定）。
-  6. **検証**: `.venv/bin/python scripts/verify_products.py`（解答漏洩/数値接地の PASS率）＋**Opus(あなた)が題材忠実性・文章/図の自然さを監査**。
-  7. 破綻カテゴリを構造パターンで束ねて修正 → 再測定。
+## 品質監査ループ／再測定の回し方（この体制を維持せよ）
+- **評価原則（§17.0・ユーザー厳守）**: 数学的に検証できるものは決定論で。**意味的質（題材・自然さ）にはLLMを使う**が、**生成器と監査役は別モデルにして循環を避ける**（生成=Gemini/Haiku、監査=Opus=あなた）。
+- **本番測定（Gemini・推奨）**: `scratchpad/gen_real.py` パターン＝`import apps.api.main`(.env ロード)→`SKIP_LLM_IN_TESTS` を立てず real `LLMTranslator` で `runner.run`→problem_text/explanation を実生成し Opus 監査。
+  **⚠️ 無料枠のレート制限が測定を汚染する**（連続生成で途中から全tier失敗→テンプレフォールバック＝空解説＋素の質問文）。**セル間に ~12秒 sleep 必須**。フォールバックは品質失敗でなくレート制限の産物（間隔を空けて再試行すると高品質で成功）。
+- **図の目視**: runner が SVG を `master_data/cache/diagrams/{seed}.svg` に保存。`cairosvg`/`rsvg-convert` で PNG 化して Read で見る（inspect レスポンスは SVG を落とす。visual_dsl は `mr.visual_dsl.elements`）。
+- Haiku サブエージェント経路（offline）も可: `build_product_corpus.py --engine claude --dump`→Haikuが翻訳→`--ingest`→`verify_products.py`＋Opus監査。
 
 ## 厳守事項
-- **moat 不変**: SymPy が計算した答え・数値・logic_steps は絶対に変えない。監査は「表示/題材/翻訳」を直すだけ。退化ゲート（打開策2）は「答えが正しくても問題が破綻」を弾く別軸。
-- **決定論ゲートを過信しない（Phase B の教訓）**: 契約違反0でも「意味が破綻」した問題は通る。新しい題材/verb を足したら **必ず Phase B で実 product を見る**（MR だけ見て安心しない）。
-- Python は必ず `.venv/bin/python`。runner 直呼びは `apps.api.main` 経由 import＋`BlueprintRunner(dedup, diversity, translator, atom_selector, blueprint_loader, scenario_bank)` 構築、`GenerationRequest(problem_form=, lesson_id=, target_level=, seed=)`。
-- **回帰**: `SKIP_LLM_IN_TESTS=true .venv/bin/pytest tests/ -q`（現 **461** 通過を維持）。契約違反0（`scripts/validate_form_blueprint_contract.py`）・生成不能form0（`tests/integration/test_master_data.py::test_declared_forms_have_generatable_levels`）。
-- `master_data/mapping.json` は非標準のインライン配列整形。`json.dump` で全体再整形しない（外科的テキスト編集で最小diff。同一 ebf ブロックが複数レッスンで重複するので行番号指定 or レッスン範囲限定の Python 編集が安全）。
-- **図形 re-wire の必須テクニック（実証済・毎回要る）**:
-  - **tag-coupling 税**: atom 選択は lesson-level `required_tags`（OR 支配）が決める。目的 atom（LineAngleAtom/CircleAngleAtom）を候補化するため required_tags に必要タグ（`angles`/`circle_angles`）を OR 追加し、**同レッスンの他 form の空制約 level に PolygonAtom を明示 pin** して proof 等を非破壊に保つ（`atom_selector.py` Step2/preferred_noun_types）。
-  - **per-level `blueprint_override`**: 図形 calc は角度 level と代数 level（周/連立/根号）が混在→丸ごと再配線不可。level 個別に `blueprint_override` で対応 blueprint を差す。
-- **作業分担**: 思考・設計・監査判断・レビューは Opus（あなた）、機械的実装／Phase B 翻訳は Haiku/Sonnet サブエージェントに委譲可。ただし完了報告は鵜呑みにせず `git log/status`・`git diff`・検証スクリプト再実行で実体確認。
-- **サブタスク／マイルストーンごとに逐次コミット**（push はユーザーが明示依頼するまでしない）。コミットメッセージ末尾に必ず：
+- **moat 不変**: SymPy が計算した答え・数値・logic_steps は絶対に変えない。監査は「表示/題材/翻訳」を直すだけ。
+- **回帰**: `SKIP_LLM_IN_TESTS=true .venv/bin/pytest tests/ -q`（現 **465** 維持）・契約違反0（`scripts/validate_form_blueprint_contract.py`）・生成不能form0（`test_declared_forms_have_generatable_levels`）。Python は必ず `.venv/bin/python`。
+- **`master_data/mapping.json` は非標準のインライン配列整形**。`json.dump` で全体再整形しない（**レッスン範囲限定の Python 外科編集**＝該当 form 配列だけ json.loads→変換→6空白 indent で再emit・angle_range 等インライン配列は非破壊）。手本＝§17.14/17.15 の visual/calc 一括再配線スクリプト。
+- **図形 re-wire の税**: atom 選択は lesson-level `required_tags`（OR支配）＋他form の空制約levelに目的atomを pin。per-level `blueprint_override`。slot の `constraints_override` は `atom_selector._build_atom_constraints` で**無視される**（polygon_type等はレッスン atom_constraints でしか制御不可）。
+- runner 直呼び検証は `import apps.api.main` を先に（atom/verb registry 登録。さもないと `NoCompatibleAtomError`）。/inspect(TestClient) 経由が最も確実。
+- **作業分担**: 設計・監査・レビューは Opus（あなた）、機械実装／翻訳は Haiku/Sonnet サブエージェント委譲可。ただし完了報告は鵜呑みにせず `git log/status`・`git diff`・検証再実行で実体確認。
+- **サブタスク／マイルストーンごとに逐次コミット**（push はユーザー明示依頼まで禁止）。コミット末尾に必ず：
   ```
   Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
   ```
-- **マイルストーンごとに `docs/HANDOFF_2026-07-06.md` を更新・コミット**（§17 に追記）。双方向引き継ぎの最優先規律。複数アカウントを行き来し、メモリ・履歴は非共有。
-- 複数セッションが同一作業ツリーを触ると未コミット変更が失われうる。自分の work は早めにコミットして確定。
+- **マイルストーンごとに `docs/HANDOFF_2026-07-06.md` を更新・コミット**（§17 に追記）。双方向引き継ぎの最優先規律。複数アカウントを行き来しメモリ・履歴は非共有。
+
+## その他の残タスク（§17.14-17.18・費用対効果順）
+- 合同の対応部分calc（g2_l36/37）・関数式決定verb（g2_l25）・移動系renderer（g1_l38/39/40 の孤児 TransformShapeVerb＋before/after描画）・単一図形マークvisual（二等辺/平行四辺形等）・few-shot拡充（高トラフィックblueprint・要LLMクォータ）・**g1_l25 word_problem の恒常フォールバック調査**（場面なしの裸方程式＝WordProblem検証棄却の疑い）。
 
 ## 現在の git 状態
-master・HEAD `9924678`・作業ツリークリーン・push なし。pytest **461**・契約違反0・生成不能form0。
-`reports/`・`tests/fixtures/reference_corpus/` は gitignore 済（Phase B の中間生成物はローカル・再生成可能）。
+master・作業ツリークリーン・push なし。pytest **465**・契約違反0・生成不能form0。`reports/`・`tests/fixtures/reference_corpus/`・`master_data/cache/` は gitignore 済（中間生成物・再生成可能）。HEAD は `git log --oneline -1` で確認。
