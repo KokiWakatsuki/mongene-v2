@@ -78,10 +78,13 @@ v1 の「計算」は2つの別物を混ぜていた＝①純計算（式を処�
 - 文章題・証明・求値の上位段は「誘導なし＝自分で筋道/ゴールを構成」を含意。
 
 ## 各レッスンの成果物（1件ごと）
-- `lesson_id`, `title`, `unit_flag`
-- `forms`: 必要な形式（主要度順）。各 = { form(7型key), levels:[ {level:1, band:"基礎/標準/応用/発展", desc:"この段は構造的に何か(1行)"} ... ], rationale }。
-  - **levels は構造的に区別できる段だけ**を列挙（1〜3個）。band はその段の位置づけ。
-- `notes`: 特記。
+- `lesson_id`, `title`, `section`（学年／領域／単元）, `unit_flag`
+- `forms`: 必要な形式（主要度順）。各 = { form(7型key), levels:[ {level, band, desc, example, market_ref} ... ], rationale }。
+  - **levels は構造的に区別できる段だけ**を列挙（1〜3個）。band はその段の位置づけ。level は band 絶対値。
+  - `example`: そのLvの**具体例（自作の問題文1つ・答えは書かない）**。desc の抽象を「こういう問題」に接地。
+  - `market_ref`: そのLvの**市販問題での位置づけ**（緩い目安・書名は出さない。教科書例題／標準問題集／公立入試 大問1／難関私立頻出／腕試し 等）。出題現実性（このLvは実際には出ない 等）も適宜。
+- `notes`: レッスン横断の特記。
+- **`.md` は `input_spec_2026-07-08.json` から `docs/gen_input_spec_md.py` で生成（JSONが唯一の正・.md は手編集しない）。**
 
 ## 各レッスンの成果物（1件ごと）
 - `lesson_id`, `title`
