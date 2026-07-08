@@ -102,13 +102,19 @@ class TreeRenderer(VisualComponent):
             x2, y2 = nodes_xy[dst]
             dwg.add(dwg.line(start=(x1, y1), end=(x2, y2), stroke="black", stroke_width=1))
             if edge_label and self.show_probabilities:
-                mx, my = (x1 + x2) / 2, (y1 + y2) / 2
+                # ラベルは子ノード寄り（t=0.62）に中央寄せで置く。単一の親から扇状に
+                # 出る多数の枝では、中点だと全ラベルが同じ高さに密集して重なるため、
+                # 子側に寄せて葉の水平方向の広がりを反映させ、重なりを避ける。
+                t = 0.62
+                lx = x1 + (x2 - x1) * t
+                ly = y1 + (y2 - y1) * t
                 dwg.add(
                     dwg.text(
                         edge_label,
-                        insert=(mx + 4, my - 4),
+                        insert=(lx, ly),
                         font_size=11,
                         font_family="Hiragino Sans, sans-serif",
+                        text_anchor="middle",
                     )
                 )
 

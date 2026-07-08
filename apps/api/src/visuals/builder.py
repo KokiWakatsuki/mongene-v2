@@ -859,17 +859,50 @@ def _build_graph(sampled_nouns: Dict[str, NounAtom]) -> VisualDSL:
 
 
 def _build_tree(sampled_nouns: Dict[str, NounAtom]) -> VisualDSL:
-    elements: list[dict] = [{"type": "node", "id": "root", "label": "始"}]
-    for slot_name, atom in sampled_nouns.items():
-        name = type(atom).__name__
+    for atom in sampled_nouns.values():
+        if type(atom).__name__ != "EventAtom":
+            continue
+        # EventAtom 自身が持つ tree_dsl を優先。これは枝ラベルが 1/unit_size（例 さいころ
+        # なら 1/6）で葉が実際の結果（1〜6 等）＝正しい。builder が sample_space_size で
+        # 「1/36」を付けていた旧実装は 2 個振り等で誤解を招くため置き換える。
+        td = getattr(atom, "tree_dsl", None)
+        if td and td.get("nodes"):
+            elements: list[dict] = []
+            # 読みやすさのため葉は最大 6 に抑える（root + 6 枝）
+            kept_leaf_ids: set[str] = set()
+            leaf_count = 0
+            for n in td.get("nodes", []):
+                nid = n.get("id")
+                if nid == "root":
+                    elements.append({"type": "node", "id": nid, "label": str(n.get("label", "始"))})
+                elif leaf_count < 6:
+                    elements.append({"type": "node", "id": nid, "label": str(n.get("label", ""))})
+                    kept_leaf_ids.add(nid)
+                    leaf_count += 1
+            for e in td.get("edges", []):
+                if e.get("to") in kept_leaf_ids:
+                    elements.append({
+                        "type": "edge", "from": e.get("from"), "to": e.get("to"),
+                        "label": str(e.get("label", "")),
+                    })
+            return VisualDSL(render_type="Tree", elements=elements)
+
+        # フォールバック（tree_dsl 無し）: unit_size を推定して 1/unit_size で最大6枝
         sym = atom.get_symbols()
-        if name == "EventAtom":
-            size = int(sym.get("sample_space_size", sympy.Integer(2)))
-            for i in range(min(size, 6)):
-                node_id = f"{slot_name}_{i}"
-                elements.append({"type": "node", "id": node_id, "label": str(i + 1)})
-                elements.append({"type": "edge", "from": "root", "to": node_id, "label": f"1/{size}"})
-    return VisualDSL(render_type="Tree", elements=elements)
+        size = int(sym.get("sample_space_size", sympy.Integer(2)))
+        trials = int(sym.get("num_trials", sympy.Integer(1)) or 1)
+        unit = size
+        if trials > 1:
+            root_unit = round(size ** (1.0 / trials))
+            if root_unit ** trials == size:
+                unit = root_unit
+        elements = [{"type": "node", "id": "root", "label": "始"}]
+        for i in range(min(unit, 6)):
+            node_id = f"leaf_{i}"
+            elements.append({"type": "node", "id": node_id, "label": str(i + 1)})
+            elements.append({"type": "edge", "from": "root", "to": node_id, "label": f"1/{unit}"})
+        return VisualDSL(render_type="Tree", elements=elements)
+    return VisualDSL(render_type="Tree", elements=[{"type": "node", "id": "root", "label": "始"}])
 
 
 def _build_table_chart(
