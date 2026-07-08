@@ -113,8 +113,11 @@ class ThreeDRenderer(VisualComponent):
             elif t == "edge_3d":
                 edges_to_draw.append(el)
 
-        # 隠れ辺の判定
-        hidden_vids = _compute_hidden_edges(vertices, self.view_angle[0], self.view_angle[1])
+        # 隠れ辺の判定（寸法ラベルの疑似頂点を除外し、実頂点 A-H のみで最小 dot を求める。
+        # 寸法ラベルを混ぜると oy-1.0 等の座標が最小 dot になり奥頂点 A が隠れ判定されず、
+        # 破線化が効かなくなる）
+        real_vertices = {vid: vertices[vid] for vid in vertex_ids_single_char if vid in vertices}
+        hidden_vids = _compute_hidden_edges(real_vertices, self.view_angle[0], self.view_angle[1])
 
         # 辺を描画
         for el in edges_to_draw:
@@ -123,9 +126,11 @@ class ThreeDRenderer(VisualComponent):
             p1 = vertices.get(vid_from, (0, 0, 0))
             p2 = vertices.get(vid_to, (0, 0, 0))
 
-            # 隠れ辺判定: 元の dashed フラグ OR 自動判定
+            # 隠れ辺判定: 元の dashed フラグ OR 奥（最小 dot）の頂点に接する辺。
+            # 教科書標準では奥の頂点から出る 3 辺を破線にする。両端が hidden の辺は
+            # 立方体では存在しないため（隣接頂点は可視）、どちらか一端が hidden なら破線。
             is_hidden = el.get("dashed", False) or (
-                vid_from in hidden_vids and vid_to in hidden_vids
+                vid_from in hidden_vids or vid_to in hidden_vids
             )
 
             if is_hidden:
@@ -140,6 +145,15 @@ class ThreeDRenderer(VisualComponent):
                 )
 
         # 頂点ラベル（A-H）: 小さな点 + テキスト
+        # ラベルは立体の重心から「外向き」にオフセットする。一律 +(0.3,0.3,0.3) だと
+        # 原点側の頂点（A など）のラベルが立体の内側へ潜り込んで中央に見えてしまう。
+        _vpts = [vertices[v] for v in vertex_ids_single_char if v in vertices]
+        if _vpts:
+            gx = sum(c[0] for c in _vpts) / len(_vpts)
+            gy = sum(c[1] for c in _vpts) / len(_vpts)
+            gz = sum(c[2] for c in _vpts) / len(_vpts)
+        else:
+            gx = gy = gz = 0.0
         for vid in vertex_ids_single_char:
             if vid not in vertices:
                 continue
@@ -147,14 +161,15 @@ class ThreeDRenderer(VisualComponent):
             # 点は非常に小さく（目立たない程度）
             ax.scatter(*coords, color="black", s=10, zorder=5)
             label = vertex_labels[vid]
-            # オフセットを少し大きめに
-            off = 0.3
+            dx, dy, dz = coords[0] - gx, coords[1] - gy, coords[2] - gz
+            n = math.sqrt(dx * dx + dy * dy + dz * dz) or 1.0
+            off = 0.5
             ax.text(
-                coords[0] + off, coords[1] + off, coords[2] + off,
+                coords[0] + dx / n * off, coords[1] + dy / n * off, coords[2] + dz / n * off,
                 label,
                 fontsize=13,
                 fontweight="bold",
-                ha="left", va="bottom",
+                ha="center", va="center",
             )
 
         # 寸法ラベル: 点なし、テキストのみ
