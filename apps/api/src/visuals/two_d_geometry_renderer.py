@@ -270,8 +270,18 @@ class TwoDGeometryRenderer(VisualComponent):
                     pts.append((px, py))
                 dwg.add(dwg.polyline(points=pts, fill="none", stroke="black", stroke_width=1))
             elif el_type == "angle_label":
-                vx, vy = transform(*el["vertex"])
-                dwg.add(dwg.text(el["label"], insert=(vx + 8, vy - 8), font_size=12, font_family="Hiragino Sans, sans-serif"))
+                # pos（データ座標）が指定されていれば、角の内部など明示位置に中央寄せで置く。
+                # 指定が無ければ従来どおり頂点の右上にずらす。pos 指定時は頂点ラベル
+                # （point の label）との衝突を避けるため builder 側が角の内側を指定する。
+                if el.get("pos") is not None:
+                    lx, ly = transform(*el["pos"])
+                    dwg.add(dwg.text(
+                        el["label"], insert=(lx, ly), font_size=12,
+                        font_family="Hiragino Sans, sans-serif", text_anchor="middle",
+                    ))
+                else:
+                    vx, vy = transform(*el["vertex"])
+                    dwg.add(dwg.text(el["label"], insert=(vx + 8, vy - 8), font_size=12, font_family="Hiragino Sans, sans-serif"))
             elif el_type == "text":
                 tx, ty = transform(el["x"], el["y"])
                 dwg.add(dwg.text(el["content"], insert=(tx, ty), font_size=14, font_family="Hiragino Sans, sans-serif"))

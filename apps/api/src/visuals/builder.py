@@ -696,7 +696,35 @@ def _build_circle_angle(atom: NounAtom) -> tuple[list[dict], list[float]]:
         "start_angle": a_ang,
         "end_angle": b_ang,
     })
-    elements.append({"type": "angle_label", "vertex": [ox, oy], "label": f"{int(round(gamma))}°"})
+
+    def _bisector_pos(vertex, t1, t2, dist):
+        """vertex から2点 t1,t2 への方向の二等分線上、距離 dist の点。
+        角度ラベルを角の内側に置き、頂点ラベル（点の名前）との衝突を避ける。"""
+        import math as _m
+        vx, vy = vertex
+
+        def _unit(p):
+            dx, dy = p[0] - vx, p[1] - vy
+            n = _m.hypot(dx, dy) or 1.0
+            return dx / n, dy / n
+
+        u1 = _unit(t1)
+        u2 = _unit(t2)
+        bx, by = u1[0] + u2[0], u1[1] + u2[1]
+        n = _m.hypot(bx, by)
+        if n < 1e-9:  # 反対向き（一直線）なら法線方向へ
+            bx, by = -u1[1], u1[0]
+            n = 1.0
+        return [vx + bx / n * dist, vy + by / n * dist]
+
+    # 中心角の弧は常に 270°（真下）を通るよう描かれる（a_ang=270-γ/2 → b_ang=270+γ/2）。
+    # よって中心角ラベルは γ が反射角でも必ず O の真下（弧側）に置く。
+    # （_bisector_pos だと反射角のとき小さい角側＝上を向き、円周角ラベルと衝突する）
+    elements.append({
+        "type": "angle_label", "vertex": [ox, oy],
+        "pos": [ox, oy - 1.7],
+        "label": f"{int(round(gamma))}°",
+    })
 
     # 円周角: C から見た A, B 方向の角度（atan2）
     def angle_from(origin: tuple[float, float], target: tuple[float, float]) -> float:
@@ -719,7 +747,12 @@ def _build_circle_angle(atom: NounAtom) -> tuple[list[dict], list[float]]:
         "start_angle": start_c,
         "end_angle": end_c,
     })
-    elements.append({"type": "angle_label", "vertex": list(pc), "label": "x°"})
+    # 円周角ラベルも C から見た A,B の二等分線上（＝弧側・円の内側）に置く
+    elements.append({
+        "type": "angle_label", "vertex": list(pc),
+        "pos": _bisector_pos(tuple(pc), pa, pb, 1.7),
+        "label": "x°",
+    })
 
     viewport = [0.0, 0.0, 10.0, 10.0]
     return elements, viewport
