@@ -429,7 +429,32 @@ def _build_2d_geometry(sampled_nouns: Dict[str, NounAtom]) -> VisualDSL:
                     )
         elif name == "CircleAtom":
             r = _to_float(sym.get("radius", sympy.Integer(1)))
-            elements.append({"type": "circle", "center": [0, 0], "radius": r})
+            gamma = _to_float(sym.get("central_angle", sympy.Integer(360)))
+            is_sector = bool(getattr(atom, "is_sector", False)) or gamma < 360.0
+            cx, cy = 0.0, 0.0
+            if is_sector and 0.0 < gamma < 360.0:
+                a0, a1 = 0.0, gamma
+                p0 = (cx + r * math.cos(math.radians(a0)), cy + r * math.sin(math.radians(a0)))
+                p1 = (cx + r * math.cos(math.radians(a1)), cy + r * math.sin(math.radians(a1)))
+                elements.append({"type": "point", "x": cx, "y": cy, "label": "O"})
+                elements.append({"type": "line_segment", "p1": [cx, cy], "p2": [p0[0], p0[1]]})
+                elements.append({"type": "line_segment", "p1": [cx, cy], "p2": [p1[0], p1[1]]})
+                elements.append({"type": "arc", "center": [cx, cy], "radius": r, "start_angle": a0, "end_angle": a1})
+                # 半径の値ラベル（下側の半径の中点上）
+                elements.append({"type": "text", "x": (cx + p0[0]) / 2.0, "y": cy - 0.5, "content": _fmt(r)})
+                # 中心角ラベルを扇の内側（二等分線方向）に
+                bis = math.radians(gamma / 2.0)
+                elements.append({
+                    "type": "angle_label", "vertex": [cx, cy],
+                    "pos": [cx + 1.7 * math.cos(bis), cy + 1.7 * math.sin(bis)],
+                    "label": f"{int(round(gamma))}°",
+                })
+            else:
+                # 完全な円: 中心 O・半径線・半径の値を添えて素の円を避ける
+                elements.append({"type": "circle", "center": [cx, cy], "radius": r})
+                elements.append({"type": "point", "x": cx, "y": cy, "label": "O"})
+                elements.append({"type": "line_segment", "p1": [cx, cy], "p2": [cx + r, cy]})
+                elements.append({"type": "text", "x": cx + r / 2.0, "y": cy - 0.5, "content": _fmt(r)})
         elif name == "PointAtom":
             x = _to_float(sym.get("x", sympy.Integer(0)))
             y = _to_float(sym.get("y", sympy.Integer(0)))
