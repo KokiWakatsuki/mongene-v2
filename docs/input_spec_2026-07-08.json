@@ -2,9 +2,11 @@
   "forms_taxonomy": [
     "knowledge",
     "calculation",
-    "visual",
-    "word_problem",
-    "proof"
+    "find_value",
+    "construction",
+    "graph_table",
+    "proof",
+    "word_problem"
   ],
   "difficulty_bands": [
     "F",
@@ -20,18 +22,16 @@
       "forms": [
         {
           "form": "knowledge",
-          "kanten": "知識",
           "bands": "F〜S",
-          "rationale": "正負・符号・反対の性質量（増減/損得/前後）の意味理解が単元の核"
+          "rationale": "正負・符号・反対の性質量の意味理解が核"
         },
         {
           "form": "word_problem",
-          "kanten": "思考・判断・表現",
           "bands": "F〜S",
-          "rationale": "基準を決めて反対向きの量を正負で表す活用（気温・標高・収支）"
+          "rationale": "気温・標高・収支など現実場面で基準を決め反対向きの量を正負で表す活用"
         }
       ],
-      "notes": "計算単元ではなく意味導入回。calculationよりknowledge/word_problemが中心。"
+      "notes": "v1と型変更なし。導入回でknowledge/word_problem中心。"
     },
     {
       "lesson_id": "g1_l2",
@@ -40,24 +40,21 @@
       "forms": [
         {
           "form": "knowledge",
-          "kanten": "知識",
           "bands": "F〜S",
           "rationale": "絶対値・数直線上の位置・大小の意味理解が核"
         },
         {
           "form": "calculation",
-          "kanten": "技能",
           "bands": "F〜S",
-          "rationale": "大小比較・絶対値を求める・不等号で並べる基本処理"
+          "rationale": "与えられた数の絶対値を求める・不等号で並べる処理（立式不要）"
         },
         {
-          "form": "visual",
-          "kanten": "技能",
+          "form": "graph_table",
           "bands": "F",
-          "rationale": "数直線上に数を対応させる読図（数と式で唯一visualが自然な場面）"
+          "rationale": "数直線という一次元の図に数を対応させて読む/かく（旧visual→数直線の読図はgraph_table）"
         }
       ],
-      "notes": ""
+      "notes": "旧visual→graph_tableへ再割当（数直線上の対応の読図/作図）。"
     },
     {
       "lesson_id": "g1_l3",
@@ -66,12 +63,16 @@
       "forms": [
         {
           "form": "calculation",
-          "kanten": "技能",
           "bands": "F〜S",
-          "rationale": "正負の数の加法の基本処理が単元の核"
+          "rationale": "与えられた式の正負の加法を処理する技能が核"
+        },
+        {
+          "form": "knowledge",
+          "bands": "F",
+          "rationale": "同符号・異符号の和の規則の理解"
         }
       ],
-      "notes": "基礎計算回のため計算のみ（規則理解は計算の中で扱う）。"
+      "notes": "v1と型変更なし。"
     },
     {
       "lesson_id": "g1_l4",
@@ -80,12 +81,16 @@
       "forms": [
         {
           "form": "calculation",
-          "kanten": "技能",
           "bands": "F〜S",
-          "rationale": "減法を加法に直して処理する技能が核"
+          "rationale": "与えられた式の減法を加法に直して処理する技能が核"
+        },
+        {
+          "form": "knowledge",
+          "bands": "F",
+          "rationale": "減法＝符号を変えた加法という仕組みの理解"
         }
       ],
-      "notes": "基礎計算回のため計算のみ（規則理解は計算の中で扱う）。"
+      "notes": "v1と型変更なし。"
     },
     {
       "lesson_id": "g1_l5",
@@ -94,18 +99,16 @@
       "forms": [
         {
           "form": "calculation",
-          "kanten": "技能",
           "bands": "F〜A",
-          "rationale": "項をまとめる加減混合計算の技能が核。項数増でAまで"
+          "rationale": "与えられた式の加減混合を項でまとめて処理する技能が核。項数増でAまで"
         },
         {
           "form": "knowledge",
-          "kanten": "知識",
           "bands": "F",
           "rationale": "項・正の項/負の項の用語理解"
         }
       ],
-      "notes": ""
+      "notes": "v1と型変更なし。"
     },
     {
       "lesson_id": "g1_l6",
@@ -114,12 +117,16 @@
       "forms": [
         {
           "form": "calculation",
-          "kanten": "技能",
           "bands": "F〜S",
-          "rationale": "正負の乗法の符号処理と計算が核"
+          "rationale": "与えられた式の正負の乗法の符号処理と計算が核"
+        },
+        {
+          "form": "knowledge",
+          "bands": "F",
+          "rationale": "積の符号決定規則の理解"
         }
       ],
-      "notes": "基礎計算回のため計算のみ（規則理解は計算の中で扱う）。"
+      "notes": "v1と型変更なし。"
     },
     {
       "lesson_id": "g1_l7",
@@ -128,18 +135,16 @@
       "forms": [
         {
           "form": "calculation",
-          "kanten": "技能",
           "bands": "F〜S",
-          "rationale": "累乗の値を求める処理が核。(-2)^2と-2^2の区別含む"
+          "rationale": "与えられた累乗式の値を求める処理が核。(-2)^2と-2^2の区別含む"
         },
         {
           "form": "knowledge",
-          "kanten": "知識",
           "bands": "F",
           "rationale": "指数・累乗・底の意味理解"
         }
       ],
-      "notes": ""
+      "notes": "v1と型変更なし。"
     },
     {
       "lesson_id": "g1_l8",
@@ -148,12 +153,16 @@
       "forms": [
         {
           "form": "calculation",
-          "kanten": "技能",
           "bands": "F〜S",
-          "rationale": "逆数を用いた除法・乗除混合の計算が核"
+          "rationale": "与えられた式の逆数を用いた除法・乗除混合の計算が核"
+        },
+        {
+          "form": "knowledge",
+          "bands": "F",
+          "rationale": "逆数の意味・除法＝逆数の乗法の理解"
         }
       ],
-      "notes": "基礎計算回のため計算のみ（規則理解は計算の中で扱う）。"
+      "notes": "v1と型変更なし。"
     },
     {
       "lesson_id": "g1_l9",
@@ -162,18 +171,16 @@
       "forms": [
         {
           "form": "calculation",
-          "kanten": "技能",
           "bands": "F〜A",
-          "rationale": "四則混合・分配法則の適用が核。括弧・累乗絡みでAまで"
+          "rationale": "与えられた式の四則混合・分配法則の適用が核。括弧・累乗絡みでAまで"
         },
         {
           "form": "knowledge",
-          "kanten": "知識",
           "bands": "F",
           "rationale": "計算の順序・分配法則の理解"
         }
       ],
-      "notes": "現行[cw]だがword_problemは不自然。純計算回のためcalc主knowledge従に。"
+      "notes": "v1と型変更なし。純計算回。"
     },
     {
       "lesson_id": "g1_l10",
@@ -182,12 +189,11 @@
       "forms": [
         {
           "form": "knowledge",
-          "kanten": "知識",
           "bands": "F〜S",
-          "rationale": "自然数・整数の集合内で四則が閉じるかの判別が核（概念回）"
+          "rationale": "自然数・整数の集合内で四則が閉じるかの判別（概念回）が核"
         }
       ],
-      "notes": "計算そのものではなく集合と演算の可能性の理解。knowledge主体。"
+      "notes": "v1と型変更なし。集合と演算の可能性の理解でknowledge主体。"
     },
     {
       "lesson_id": "g1_l11",
@@ -196,24 +202,21 @@
       "forms": [
         {
           "form": "calculation",
-          "kanten": "技能",
           "bands": "F〜S",
-          "rationale": "素因数分解の実行・指数表記が核"
+          "rationale": "与えられた数の素因数分解の実行・指数表記が核"
         },
         {
           "form": "knowledge",
-          "kanten": "知識",
           "bands": "F〜S",
           "rationale": "素数・素因数の意味、素数判定"
         },
         {
           "form": "word_problem",
-          "kanten": "思考・判断・表現",
           "bands": "S〜A",
-          "rationale": "素因数分解の利用（平方数にする最小の数・約数の個数など）"
+          "rationale": "平方数にする最小の数・約数の個数など現実/数学的活用"
         }
       ],
-      "notes": ""
+      "notes": "v1と型変更なし。"
     },
     {
       "lesson_id": "g1_l12",
@@ -222,18 +225,16 @@
       "forms": [
         {
           "form": "knowledge",
-          "kanten": "知識",
           "bands": "F〜S",
           "rationale": "文字で数量を表す意味・文字式の必要性の理解が核"
         },
         {
           "form": "word_problem",
-          "kanten": "思考・判断・表現",
           "bands": "F〜S",
-          "rationale": "具体的数量を文字式で表す（個数・代金・長さ）"
+          "rationale": "個数・代金・長さなど具体的場面を文字式で表す活用"
         }
       ],
-      "notes": ""
+      "notes": "v1と型変更なし。"
     },
     {
       "lesson_id": "g1_l13",
@@ -242,18 +243,16 @@
       "forms": [
         {
           "form": "calculation",
-          "kanten": "技能",
           "bands": "F〜S",
-          "rationale": "×省略・数を前・同じ文字は累乗などの表記変換が核"
+          "rationale": "与えられた式の×省略・数を前・累乗などの表記変換が核"
         },
         {
           "form": "knowledge",
-          "kanten": "知識",
           "bands": "F",
           "rationale": "積の表し方のきまりの理解"
         }
       ],
-      "notes": ""
+      "notes": "v1と型変更なし。"
     },
     {
       "lesson_id": "g1_l14",
@@ -262,18 +261,16 @@
       "forms": [
         {
           "form": "calculation",
-          "kanten": "技能",
           "bands": "F〜S",
-          "rationale": "÷を分数の形で表す・混合式の表記変換が核"
+          "rationale": "与えられた式の÷を分数形にする表記変換が核"
         },
         {
           "form": "knowledge",
-          "kanten": "知識",
           "bands": "F",
           "rationale": "商の表し方のきまりの理解"
         }
       ],
-      "notes": ""
+      "notes": "v1と型変更なし。"
     },
     {
       "lesson_id": "g1_l15",
@@ -282,18 +279,16 @@
       "forms": [
         {
           "form": "word_problem",
-          "kanten": "思考・判断・表現",
           "bands": "F〜A",
-          "rationale": "割合・速さ・単位量あたりを文字式で表す活用が核"
+          "rationale": "割合・速さ・単位量あたりの現実場面を文字式で表す活用が核"
         },
         {
           "form": "knowledge",
-          "kanten": "知識",
           "bands": "F〜S",
           "rationale": "割合/速さ/百分率を式で表す規則の理解"
         }
       ],
-      "notes": "立式が中心で計算解答は伴わない（文字式で表現する）ためword_problem主体。"
+      "notes": "v1と型変更なし。現実場面から立式（表現まで）でword_problem主体。"
     },
     {
       "lesson_id": "g1_l16",
@@ -302,18 +297,16 @@
       "forms": [
         {
           "form": "calculation",
-          "kanten": "技能",
           "bands": "F〜A",
-          "rationale": "文字に数を代入して式の値を求める処理が核。負の数・累乗代入でAまで"
+          "rationale": "与えられた式に数を代入して値を求める処理が核。負の数・累乗代入でAまで"
         },
         {
           "form": "knowledge",
-          "kanten": "知識",
           "bands": "F",
           "rationale": "代入・式の値の意味理解"
         }
       ],
-      "notes": ""
+      "notes": "v1と型変更なし。式が与えられ代入するだけ＝calculation（物差しv2の明示例）。"
     },
     {
       "lesson_id": "g1_l17",
@@ -322,18 +315,16 @@
       "forms": [
         {
           "form": "calculation",
-          "kanten": "技能",
           "bands": "F〜S",
-          "rationale": "同類項をまとめる一次式の加減が核"
+          "rationale": "与えられた一次式の同類項をまとめる加減が核"
         },
         {
           "form": "knowledge",
-          "kanten": "知識",
           "bands": "F",
           "rationale": "項・係数・一次式の用語理解"
         }
       ],
-      "notes": ""
+      "notes": "v1と型変更なし。"
     },
     {
       "lesson_id": "g1_l18",
@@ -342,12 +333,11 @@
       "forms": [
         {
           "form": "calculation",
-          "kanten": "技能",
           "bands": "F〜A",
-          "rationale": "分配法則で一次式に数を掛ける/割る、括弧を外す計算が核。分数係数でAまで"
+          "rationale": "与えられた一次式に数を掛ける/割る、括弧を外す計算が核。分数係数でAまで"
         }
       ],
-      "notes": "純計算回。knowledgeは前レッスンと重複するため省略。"
+      "notes": "v1と型変更なし。純計算回。"
     },
     {
       "lesson_id": "g1_l19",
@@ -356,18 +346,16 @@
       "forms": [
         {
           "form": "word_problem",
-          "kanten": "思考・判断・表現",
           "bands": "F〜S",
-          "rationale": "数量関係を等式で表す立式が核"
+          "rationale": "現実の数量関係を等式で表す立式が核"
         },
         {
           "form": "knowledge",
-          "kanten": "知識",
           "bands": "F",
           "rationale": "等式・左辺/右辺/両辺の用語と意味の理解"
         }
       ],
-      "notes": ""
+      "notes": "v1と型変更なし。"
     },
     {
       "lesson_id": "g1_l20",
@@ -376,18 +364,16 @@
       "forms": [
         {
           "form": "word_problem",
-          "kanten": "思考・判断・表現",
           "bands": "F〜S",
-          "rationale": "数量関係（以上・未満など）を不等式で表す立式が核"
+          "rationale": "現実の数量関係（以上・未満など）を不等式で表す立式が核"
         },
         {
           "form": "knowledge",
-          "kanten": "知識",
           "bands": "F",
           "rationale": "不等号の種類・意味の理解"
         }
       ],
-      "notes": ""
+      "notes": "v1と型変更なし。"
     },
     {
       "lesson_id": "g1_l21",
@@ -396,18 +382,16 @@
       "forms": [
         {
           "form": "knowledge",
-          "kanten": "知識",
           "bands": "F〜S",
           "rationale": "方程式・解の意味、等式の性質の理解が核"
         },
         {
           "form": "calculation",
-          "kanten": "技能",
           "bands": "F〜S",
-          "rationale": "解の確認・等式の性質を使った簡単な解法"
+          "rationale": "与えられた式で解の確認・等式の性質を使った簡単な解法"
         }
       ],
-      "notes": ""
+      "notes": "v1と型変更なし。"
     },
     {
       "lesson_id": "g1_l22",
@@ -416,18 +400,16 @@
       "forms": [
         {
           "form": "calculation",
-          "kanten": "技能",
           "bands": "F〜S",
-          "rationale": "移項して一次方程式を解く基本技能が核"
+          "rationale": "与えられた一次方程式を移項して解く基本技能が核"
         },
         {
           "form": "knowledge",
-          "kanten": "知識",
           "bands": "F",
           "rationale": "移項の意味・符号変化の理解"
         }
       ],
-      "notes": ""
+      "notes": "v1と型変更なし。"
     },
     {
       "lesson_id": "g1_l23",
@@ -436,12 +418,11 @@
       "forms": [
         {
           "form": "calculation",
-          "kanten": "技能",
           "bands": "F〜A",
-          "rationale": "係数を整数化して解く複雑な一次方程式の技能が核"
+          "rationale": "与えられた式の係数を整数化して解く複雑な一次方程式の技能が核"
         }
       ],
-      "notes": "純計算回。"
+      "notes": "v1と型変更なし。純計算回。"
     },
     {
       "lesson_id": "g1_l24",
@@ -450,18 +431,16 @@
       "forms": [
         {
           "form": "calculation",
-          "kanten": "技能",
           "bands": "F〜S",
-          "rationale": "a:b=c:d の性質で比例式を解く技能が核"
+          "rationale": "与えられたa:b=c:dの性質で比例式を解く技能が核"
         },
         {
           "form": "word_problem",
-          "kanten": "思考・判断・表現",
           "bands": "S〜A",
-          "rationale": "比例式を立てて解く活用（縮尺・分配など）"
+          "rationale": "縮尺・分配など現実場面を比例式で立式して解く活用"
         }
       ],
-      "notes": ""
+      "notes": "v1と型変更なし。"
     },
     {
       "lesson_id": "g1_l25",
@@ -470,18 +449,16 @@
       "forms": [
         {
           "form": "word_problem",
-          "kanten": "思考・判断・表現",
           "bands": "S〜A",
-          "rationale": "代金・個数の場面を方程式で立式・解決する活用が核"
+          "rationale": "代金・個数の現実場面を方程式で立式・解決する活用が核"
         },
         {
           "form": "calculation",
-          "kanten": "技能",
           "bands": "F〜S",
           "rationale": "立てた方程式を解く処理"
         }
       ],
-      "notes": ""
+      "notes": "v1と型変更なし。"
     },
     {
       "lesson_id": "g1_l26",
@@ -490,18 +467,16 @@
       "forms": [
         {
           "form": "word_problem",
-          "kanten": "思考・判断・表現",
           "bands": "S〜A",
-          "rationale": "過不足の場面を方程式化する活用が核"
+          "rationale": "過不足の現実場面を方程式化する活用が核"
         },
         {
           "form": "calculation",
-          "kanten": "技能",
           "bands": "F〜S",
           "rationale": "立てた方程式を解く処理"
         }
       ],
-      "notes": ""
+      "notes": "v1と型変更なし。"
     },
     {
       "lesson_id": "g1_l27",
@@ -510,18 +485,16 @@
       "forms": [
         {
           "form": "word_problem",
-          "kanten": "思考・判断・表現",
           "bands": "S〜D",
-          "rationale": "速さ・追いつき等を方程式化する活用が核。融合でDまで"
+          "rationale": "速さ・追いつき等の現実場面を方程式化する活用が核。融合でDまで"
         },
         {
           "form": "calculation",
-          "kanten": "技能",
           "bands": "S〜A",
           "rationale": "立てた方程式を解く処理"
         }
       ],
-      "notes": ""
+      "notes": "v1と型変更なし。"
     },
     {
       "lesson_id": "g1_l28",
@@ -530,18 +503,16 @@
       "forms": [
         {
           "form": "knowledge",
-          "kanten": "知識",
           "bands": "F〜S",
           "rationale": "変数・関数・変域の意味理解が核"
         },
         {
           "form": "calculation",
-          "kanten": "技能",
           "bands": "F〜S",
-          "rationale": "変域を不等号で表す・yがxの関数かの判別"
+          "rationale": "変域を不等号で表す・yがxの関数かの判別処理"
         }
       ],
-      "notes": ""
+      "notes": "v1と型変更なし。"
     },
     {
       "lesson_id": "g1_l29",
@@ -550,24 +521,21 @@
       "forms": [
         {
           "form": "knowledge",
-          "kanten": "知識",
           "bands": "F〜S",
           "rationale": "比例の意味・比例定数・y=axの理解が核"
         },
         {
           "form": "calculation",
-          "kanten": "技能",
           "bands": "F〜S",
-          "rationale": "比例定数を求める・対応する値を出す処理"
+          "rationale": "与えられた比例定数から対応する値を求める代入処理"
         },
         {
           "form": "word_problem",
-          "kanten": "思考・判断・表現",
           "bands": "S〜A",
-          "rationale": "比例する事象を式で表す活用"
+          "rationale": "比例する現実事象を式で表す活用"
         }
       ],
-      "notes": ""
+      "notes": "v1と型変更なし。"
     },
     {
       "lesson_id": "g1_l30",
@@ -575,19 +543,17 @@
       "unit_flag": "ok",
       "forms": [
         {
-          "form": "visual",
-          "kanten": "技能",
+          "form": "graph_table",
           "bands": "F〜S",
           "rationale": "座標平面に点をとる/点の座標を読む読図・作図が核"
         },
         {
           "form": "knowledge",
-          "kanten": "知識",
           "bands": "F",
           "rationale": "x座標/y座標/原点/象限の用語理解"
         }
       ],
-      "notes": ""
+      "notes": "旧visual→graph_table（座標平面という図表の読図/作図）。"
     },
     {
       "lesson_id": "g1_l31",
@@ -595,25 +561,17 @@
       "unit_flag": "ok",
       "forms": [
         {
-          "form": "visual",
-          "kanten": "技能＋思考",
+          "form": "graph_table",
           "bands": "F〜A",
           "rationale": "比例のグラフをかく・特徴を読む作図/読図が核"
         },
         {
-          "form": "calculation",
-          "kanten": "技能",
-          "bands": "F〜S",
-          "rationale": "通る点の座標を求めてグラフに対応させる"
-        },
-        {
           "form": "knowledge",
-          "kanten": "知識",
           "bands": "F",
           "rationale": "原点を通る直線・比例定数の符号と傾きの理解"
         }
       ],
-      "notes": ""
+      "notes": "旧visual→graph_table。旧calculation（通る点算出）はグラフ作成の一部として吸収。"
     },
     {
       "lesson_id": "g1_l32",
@@ -621,19 +579,17 @@
       "unit_flag": "ok",
       "forms": [
         {
-          "form": "calculation",
-          "kanten": "技能",
+          "form": "find_value",
           "bands": "F〜A",
-          "rationale": "1組の値やグラフの通る点からy=axを決定する処理が核"
+          "rationale": "グラフの通る点や1組の値という条件から自分でy=axの式を決定する求値が核"
         },
         {
-          "form": "visual",
-          "kanten": "技能＋思考",
+          "form": "graph_table",
           "bands": "F〜S",
-          "rationale": "グラフから通る点を読み取って式を決める読図"
+          "rationale": "グラフから通る点を読み取る読図"
         }
       ],
-      "notes": ""
+      "notes": "型変更: 旧calculation主→find_value主。図表の条件から立式して式を決めるため求値（物差しv2の関数の式決定＝find_value）。"
     },
     {
       "lesson_id": "g1_l33",
@@ -642,24 +598,21 @@
       "forms": [
         {
           "form": "knowledge",
-          "kanten": "知識",
           "bands": "F〜S",
           "rationale": "反比例の意味・比例定数・y=a/xの理解が核"
         },
         {
           "form": "calculation",
-          "kanten": "技能",
           "bands": "F〜S",
-          "rationale": "比例定数を求める・対応する値を出す処理"
+          "rationale": "与えられた比例定数から対応する値を求める代入処理"
         },
         {
           "form": "word_problem",
-          "kanten": "思考・判断・表現",
           "bands": "S〜A",
-          "rationale": "反比例する事象を式で表す活用"
+          "rationale": "反比例する現実事象を式で表す活用"
         }
       ],
-      "notes": ""
+      "notes": "v1と型変更なし。"
     },
     {
       "lesson_id": "g1_l34",
@@ -667,25 +620,17 @@
       "unit_flag": "ok",
       "forms": [
         {
-          "form": "visual",
-          "kanten": "技能＋思考",
+          "form": "graph_table",
           "bands": "F〜A",
-          "rationale": "双曲線をかく・特徴を読む作図/読図が核"
-        },
-        {
-          "form": "calculation",
-          "kanten": "技能",
-          "bands": "F〜S",
-          "rationale": "対応表を作り通る点の座標を求める"
+          "rationale": "対応表を作り双曲線をかく・特徴を読む作表/作図/読図が核"
         },
         {
           "form": "knowledge",
-          "kanten": "知識",
           "bands": "F",
           "rationale": "双曲線・2つの曲線・軸に近づく性質の理解"
         }
       ],
-      "notes": ""
+      "notes": "旧visual→graph_table。旧calculation（対応点算出）はグラフ作成に吸収。"
     },
     {
       "lesson_id": "g1_l35",
@@ -693,19 +638,17 @@
       "unit_flag": "ok",
       "forms": [
         {
-          "form": "calculation",
-          "kanten": "技能",
+          "form": "find_value",
           "bands": "F〜A",
-          "rationale": "1組の値やグラフの通る点からy=a/xを決定する処理が核"
+          "rationale": "グラフの通る点や1組の値という条件から自分でy=a/xの式を決定する求値が核"
         },
         {
-          "form": "visual",
-          "kanten": "技能＋思考",
+          "form": "graph_table",
           "bands": "F〜S",
-          "rationale": "グラフから通る点を読み取って式を決める読図"
+          "rationale": "グラフから通る点を読み取る読図"
         }
       ],
-      "notes": ""
+      "notes": "型変更: 旧calculation主→find_value主。図表の条件から式を決める求値。"
     },
     {
       "lesson_id": "g1_l36",
@@ -714,18 +657,16 @@
       "forms": [
         {
           "form": "word_problem",
-          "kanten": "思考・判断・表現",
           "bands": "S〜D",
-          "rationale": "身のまわりの事象を比例/反比例で数学化する活用が核"
+          "rationale": "歯車・水量・時間など身のまわりの現実事象を比例/反比例で数学化する活用が核"
         },
         {
-          "form": "visual",
-          "kanten": "技能＋思考",
+          "form": "graph_table",
           "bands": "S〜A",
-          "rationale": "事象をグラフで表現・読解する（歯車・水量・時間など）"
+          "rationale": "事象をグラフ・表で表現/読解する"
         }
       ],
-      "notes": ""
+      "notes": "旧visual→graph_table。word_problem主は不変。"
     },
     {
       "lesson_id": "g1_l37",
@@ -734,18 +675,16 @@
       "forms": [
         {
           "form": "knowledge",
-          "kanten": "知識",
           "bands": "F〜S",
           "rationale": "直線/線分/半直線/角/距離の用語・記号の理解が核"
         },
         {
-          "form": "visual",
-          "kanten": "技能",
-          "bands": "F〜S",
-          "rationale": "図から線分・角・点と直線の距離を読み取る/表す読図"
+          "form": "graph_table",
+          "bands": "F",
+          "rationale": "図から線分・角・位置関係を読み取る読図"
         }
       ],
-      "notes": ""
+      "notes": "旧visual→graph_table（位置関係の読図）に再割当。用語中心のためknowledge主。"
     },
     {
       "lesson_id": "g1_l38",
@@ -753,19 +692,17 @@
       "unit_flag": "ok",
       "forms": [
         {
-          "form": "visual",
-          "kanten": "技能",
+          "form": "graph_table",
           "bands": "F〜S",
-          "rationale": "平行移動した図をかく・移動先を読む作図/読図が核"
+          "rationale": "方眼/座標上で平行移動した図をかく・移動先を読む作図/読図が核"
         },
         {
           "form": "knowledge",
-          "kanten": "知識",
           "bands": "F",
           "rationale": "平行移動の性質（対応する点を結ぶ線分は平行で等長）の理解"
         }
       ],
-      "notes": ""
+      "notes": "旧visual→graph_table。作図はコンパス定規でなく方眼上の移動作図のためconstructionでなくgraph_table。"
     },
     {
       "lesson_id": "g1_l39",
@@ -773,19 +710,17 @@
       "unit_flag": "ok",
       "forms": [
         {
-          "form": "visual",
-          "kanten": "技能",
+          "form": "graph_table",
           "bands": "F〜A",
-          "rationale": "回転中心・角で回転移動した図をかく作図/読図が核"
+          "rationale": "回転中心・角で回転移動した図をかく/読む作図・読図が核"
         },
         {
           "form": "knowledge",
-          "kanten": "知識",
           "bands": "F",
           "rationale": "回転移動の性質（回転中心から等距離・回転角一定）の理解"
         }
       ],
-      "notes": "点対称移動（180°回転）を含む。"
+      "notes": "旧visual→graph_table。点対称移動（180°回転）を含む。"
     },
     {
       "lesson_id": "g1_l40",
@@ -793,19 +728,17 @@
       "unit_flag": "ok",
       "forms": [
         {
-          "form": "visual",
-          "kanten": "技能",
+          "form": "graph_table",
           "bands": "F〜S",
-          "rationale": "対称軸に関して対称移動した図をかく作図/読図が核"
+          "rationale": "対称軸に関して対称移動した図をかく/読む作図・読図が核"
         },
         {
           "form": "knowledge",
-          "kanten": "知識",
           "bands": "F",
-          "rationale": "対称移動の性質（軸は対応する点を結ぶ線分の垂直二等分線）の理解"
+          "rationale": "対称移動の性質（軸は対応点を結ぶ線分の垂直二等分線）の理解"
         }
       ],
-      "notes": ""
+      "notes": "旧visual→graph_table。基本作図としての軸を用いる場面はl41で扱う。ここは移動そのものの作図/読図。"
     },
     {
       "lesson_id": "g1_l41",
@@ -813,19 +746,17 @@
       "unit_flag": "ok",
       "forms": [
         {
-          "form": "visual",
-          "kanten": "技能＋思考",
+          "form": "construction",
           "bands": "F〜A",
-          "rationale": "コンパスと定規による垂直二等分線の作図が核（作図）"
+          "rationale": "コンパスと定規で垂直二等分線を作図するのが核"
         },
         {
           "form": "knowledge",
-          "kanten": "知識",
           "bands": "F〜S",
           "rationale": "垂直二等分線＝2点から等距離の点の集合という性質の理解"
         }
       ],
-      "notes": ""
+      "notes": "旧visual→construction（コンパス定規の作図）。"
     },
     {
       "lesson_id": "g1_l42",
@@ -833,19 +764,17 @@
       "unit_flag": "ok",
       "forms": [
         {
-          "form": "visual",
-          "kanten": "技能＋思考",
+          "form": "construction",
           "bands": "F〜A",
-          "rationale": "コンパスと定規による角の二等分線の作図が核（作図）"
+          "rationale": "コンパスと定規で角の二等分線を作図するのが核"
         },
         {
           "form": "knowledge",
-          "kanten": "知識",
           "bands": "F〜S",
           "rationale": "角の二等分線＝2辺から等距離の点の集合という性質の理解"
         }
       ],
-      "notes": ""
+      "notes": "旧visual→construction。"
     },
     {
       "lesson_id": "g1_l43",
@@ -853,19 +782,17 @@
       "unit_flag": "ok",
       "forms": [
         {
-          "form": "visual",
-          "kanten": "技能＋思考",
+          "form": "construction",
           "bands": "F〜A",
-          "rationale": "直線上/外の点を通る垂線の作図が核（作図）"
+          "rationale": "コンパスと定規で直線上/外の点を通る垂線を作図するのが核"
         },
         {
           "form": "knowledge",
-          "kanten": "知識",
           "bands": "F",
           "rationale": "垂線・点と直線の距離の性質の理解"
         }
       ],
-      "notes": ""
+      "notes": "旧visual→construction。"
     },
     {
       "lesson_id": "g1_l44",
@@ -873,19 +800,17 @@
       "unit_flag": "ok",
       "forms": [
         {
-          "form": "visual",
-          "kanten": "技能＋思考",
+          "form": "construction",
           "bands": "S〜D",
-          "rationale": "基本作図を組合せ条件を満たす点/図を作図する活用が核（作図）"
+          "rationale": "基本作図を組合せ条件を満たす点/図をコンパス定規で作図する活用が核"
         },
         {
           "form": "knowledge",
-          "kanten": "知識",
           "bands": "S〜A",
-          "rationale": "どの基本作図の性質を使うか（垂直二等分線/角の二等分線）を根拠に選ぶ説明"
+          "rationale": "どの基本作図の性質を使うかを根拠に選ぶ説明"
         }
       ],
-      "notes": "組合せ・条件読替のため作図の中で最も難度が高い（Dまで）。"
+      "notes": "旧visual→construction。組合せ・条件読替でDまで。"
     },
     {
       "lesson_id": "g1_l45",
@@ -894,18 +819,16 @@
       "forms": [
         {
           "form": "knowledge",
-          "kanten": "知識",
           "bands": "F〜S",
           "rationale": "弦/弧/中心角/接線/おうぎ形などの用語と円の性質の理解が核"
         },
         {
-          "form": "visual",
-          "kanten": "技能",
+          "form": "construction",
           "bands": "F〜S",
-          "rationale": "円の各部を図で読み取る/接線をかく読図・作図"
+          "rationale": "接線など円に関する基本作図"
         }
       ],
-      "notes": ""
+      "notes": "旧visualのうち接線作図はconstruction、円各部の読図はknowledgeに吸収。"
     },
     {
       "lesson_id": "g1_l46",
@@ -913,19 +836,17 @@
       "unit_flag": "ok",
       "forms": [
         {
-          "form": "calculation",
-          "kanten": "技能",
+          "form": "find_value",
           "bands": "F〜A",
-          "rationale": "中心角から弧の長さ・面積を求める公式計算が核。逆算・複合図形でAまで"
+          "rationale": "図と半径・中心角から弧の長さ・面積を自分で立式して求める求値が核。複合図形でAまで"
         },
         {
-          "form": "visual",
-          "kanten": "技能",
-          "bands": "S〜A",
-          "rationale": "複合図形（一部が欠けた/組合せ）の周・面積を図から読んで計算"
+          "form": "calculation",
+          "bands": "F〜S",
+          "rationale": "半径・中心角の値が式で与えられ公式に代入するだけの純計算回"
         }
       ],
-      "notes": ""
+      "notes": "型変更: 旧calculation主→find_value主。図から量を求めるため求値（指示通り図から考える回はfind_value、純粋な公式代入回のみcalculation）。"
     },
     {
       "lesson_id": "g1_l47",
@@ -934,18 +855,16 @@
       "forms": [
         {
           "form": "knowledge",
-          "kanten": "知識",
           "bands": "F〜S",
           "rationale": "多面体/正多面体/角柱錐・面辺頂点の数などの分類・用語理解が核"
         },
         {
-          "form": "visual",
-          "kanten": "技能",
+          "form": "graph_table",
           "bands": "F〜S",
-          "rationale": "立体を図から識別・面/辺/頂点を数える読図"
+          "rationale": "立体の図から識別・面/辺/頂点を数える読図"
         }
       ],
-      "notes": ""
+      "notes": "旧visual→graph_table（読図）。分類中心でknowledge主。"
     },
     {
       "lesson_id": "g1_l48",
@@ -954,18 +873,16 @@
       "forms": [
         {
           "form": "knowledge",
-          "kanten": "知識",
           "bands": "F〜S",
           "rationale": "直線と直線/直線と平面/平面と平面の位置関係の判別が核"
         },
         {
-          "form": "visual",
-          "kanten": "技能",
+          "form": "graph_table",
           "bands": "F〜A",
           "rationale": "見取図から平行/垂直/ねじれの位置の辺・面を読み取る読図"
         }
       ],
-      "notes": ""
+      "notes": "旧visual→graph_table（読図）。判別中心でknowledge主。"
     },
     {
       "lesson_id": "g1_l49",
@@ -973,19 +890,17 @@
       "unit_flag": "ok",
       "forms": [
         {
-          "form": "visual",
-          "kanten": "技能＋思考",
+          "form": "graph_table",
           "bands": "F〜A",
-          "rationale": "回転体/平面図形が動いてできる立体を図で捉える・回転体をかく読図が核"
+          "rationale": "回転体/面が動いてできる立体を図で捉える・回転体をかく読図/作図が核"
         },
         {
           "form": "knowledge",
-          "kanten": "知識",
           "bands": "F〜S",
-          "rationale": "回転体・底面が動く/軸のとり方など生成の仕組みの理解"
+          "rationale": "回転体・軸のとり方など生成の仕組みの理解"
         }
       ],
-      "notes": "現行structureがBasicDifferenceだが題材は空間図形の生成。form観点では読図中心。"
+      "notes": "旧visual→graph_table（立体生成の読図/作図）。"
     },
     {
       "lesson_id": "g1_l50",
@@ -993,19 +908,17 @@
       "unit_flag": "ok",
       "forms": [
         {
-          "form": "visual",
-          "kanten": "技能＋思考",
+          "form": "graph_table",
           "bands": "F〜A",
           "rationale": "投影図（立面図・平面図）を読む/かく、見取図との相互変換が核"
         },
         {
           "form": "knowledge",
-          "kanten": "知識",
           "bands": "F",
           "rationale": "投影図・立面図・平面図の用語理解"
         }
       ],
-      "notes": ""
+      "notes": "旧visual→graph_table（投影図の読図/作図）。"
     },
     {
       "lesson_id": "g1_l51",
@@ -1013,19 +926,17 @@
       "unit_flag": "ok",
       "forms": [
         {
-          "form": "calculation",
-          "kanten": "技能",
+          "form": "find_value",
           "bands": "F〜A",
-          "rationale": "展開図をもとに側面積+底面積で表面積を求める計算が核。円錐側面の中心角絡みでAまで"
+          "rationale": "立体/展開図と寸法から側面積+底面積で表面積を自分で立式して求める求値が核。円錐側面の中心角絡みでAまで"
         },
         {
-          "form": "visual",
-          "kanten": "技能",
+          "form": "graph_table",
           "bands": "S〜A",
-          "rationale": "展開図を読み取る/対応させる読図"
+          "rationale": "展開図を読み取る/見取図と対応させる読図"
         }
       ],
-      "notes": ""
+      "notes": "型変更: 旧calculation主→find_value主。図から寸法を読み量を求めるため求値。展開図読図はgraph_table。"
     },
     {
       "lesson_id": "g1_l52",
@@ -1033,13 +944,17 @@
       "unit_flag": "ok",
       "forms": [
         {
-          "form": "calculation",
-          "kanten": "技能",
+          "form": "find_value",
           "bands": "F〜A",
-          "rationale": "柱体/錐体（×1/3）の体積を求める公式計算が核。複合立体でAまで"
+          "rationale": "立体の図と寸法から体積を自分で立式して求める求値（公式適用・複合立体でAまで）"
+        },
+        {
+          "form": "calculation",
+          "bands": "F〜S",
+          "rationale": "寸法が式で与えられ公式に代入するだけの純計算回"
         }
       ],
-      "notes": "純計算回。"
+      "notes": "型変更: 旧calculation主→find_value主。図から求める求値問題。"
     },
     {
       "lesson_id": "g1_l53",
@@ -1047,19 +962,22 @@
       "unit_flag": "ok",
       "forms": [
         {
-          "form": "calculation",
-          "kanten": "技能",
+          "form": "find_value",
           "bands": "F〜A",
-          "rationale": "球の表面積4πr²・体積4/3πr³の公式計算が核。半球・複合でAまで"
+          "rationale": "図と半径から表面積4πr²・体積4/3πr³を求める求値。半球・複合でAまで"
+        },
+        {
+          "form": "calculation",
+          "bands": "F〜S",
+          "rationale": "半径が与えられ公式に代入するだけの純計算回"
         },
         {
           "form": "knowledge",
-          "kanten": "知識",
           "bands": "F",
           "rationale": "球の表面積・体積の公式の理解"
         }
       ],
-      "notes": ""
+      "notes": "型変更: 旧calculation主→find_value主（図から求める）。純代入回はcalculationに残す。"
     },
     {
       "lesson_id": "g1_l54",
@@ -1067,25 +985,22 @@
       "unit_flag": "ok",
       "forms": [
         {
-          "form": "visual",
-          "kanten": "技能＋思考",
+          "form": "graph_table",
           "bands": "F〜A",
-          "rationale": "度数分布表からヒストグラムをかく/読む作表・読図が核"
+          "rationale": "度数分布表からヒストグラムをかく/読む作表・作図・読図が核"
         },
         {
           "form": "calculation",
-          "kanten": "技能",
           "bands": "F〜S",
           "rationale": "階級・階級値・度数を求める処理"
         },
         {
           "form": "knowledge",
-          "kanten": "知識",
           "bands": "F",
           "rationale": "階級/階級値/度数/階級の幅の用語理解"
         }
       ],
-      "notes": ""
+      "notes": "旧visual→graph_table。"
     },
     {
       "lesson_id": "g1_l55",
@@ -1094,24 +1009,21 @@
       "forms": [
         {
           "form": "calculation",
-          "kanten": "技能",
           "bands": "F〜S",
           "rationale": "相対度数（度数÷総度数）を求める計算が核"
         },
         {
-          "form": "visual",
-          "kanten": "技能＋思考",
+          "form": "graph_table",
           "bands": "F〜A",
-          "rationale": "度数折れ線/相対度数のグラフをかく・読む作図"
+          "rationale": "度数折れ線/相対度数のグラフをかく・読む作図・読図"
         },
         {
           "form": "knowledge",
-          "kanten": "知識",
           "bands": "F",
           "rationale": "相対度数・度数折れ線の意味理解"
         }
       ],
-      "notes": ""
+      "notes": "旧visual→graph_table。"
     },
     {
       "lesson_id": "g1_l56",
@@ -1120,24 +1032,21 @@
       "forms": [
         {
           "form": "calculation",
-          "kanten": "技能",
           "bands": "F〜S",
           "rationale": "累積度数・累積相対度数を順次加算して求める計算が核"
         },
         {
-          "form": "visual",
-          "kanten": "技能＋思考",
+          "form": "graph_table",
           "bands": "S〜A",
-          "rationale": "累積度数分布のグラフを読む/かく読図"
+          "rationale": "累積度数分布のグラフを読む/かく読図・作図"
         },
         {
           "form": "knowledge",
-          "kanten": "知識",
           "bands": "F",
           "rationale": "累積度数・累積相対度数の意味理解"
         }
       ],
-      "notes": ""
+      "notes": "旧visual→graph_table。"
     },
     {
       "lesson_id": "g1_l57",
@@ -1146,18 +1055,16 @@
       "forms": [
         {
           "form": "calculation",
-          "kanten": "技能",
           "bands": "F〜A",
-          "rationale": "平均値・中央値・最頻値を求める計算が核。度数分布表からの平均でAまで"
+          "rationale": "与えられたデータから平均値・中央値・最頻値を求める計算が核。度数分布表からの平均でAまで"
         },
         {
           "form": "knowledge",
-          "kanten": "知識",
           "bands": "F〜S",
           "rationale": "各代表値の意味・使い分け（外れ値の影響など）の理解"
         }
       ],
-      "notes": ""
+      "notes": "v1と型変更なし。データ（表）が与えられ処理するのでcalculation主。"
     },
     {
       "lesson_id": "g1_l58",
@@ -1166,18 +1073,16 @@
       "forms": [
         {
           "form": "word_problem",
-          "kanten": "思考・判断・表現",
           "bands": "S〜D",
-          "rationale": "分布/代表値を根拠に比較・判断・結論づける統計的探究の活用が核"
+          "rationale": "分布/代表値を根拠に現実データを比較・判断・結論づける統計的探究の活用が核"
         },
         {
-          "form": "visual",
-          "kanten": "技能＋思考",
+          "form": "graph_table",
           "bands": "S〜A",
           "rationale": "複数のヒストグラム/分布を比較して読み取る読図"
         }
       ],
-      "notes": "PPDACに沿う判断・説明中心。calculationよりword_problem/visualが本質。"
+      "notes": "旧visual→graph_table。PPDACに沿う判断・説明でword_problem主。"
     },
     {
       "lesson_id": "g1_l59",
@@ -1186,24 +1091,21 @@
       "forms": [
         {
           "form": "knowledge",
-          "kanten": "知識",
           "bands": "F〜S",
           "rationale": "相対度数が一定値に近づく＝確率という意味の理解が核（統計的確率の導入）"
         },
         {
           "form": "word_problem",
-          "kanten": "思考・判断・表現",
           "bands": "S〜A",
           "rationale": "実験・観察データの相対度数から確率を見積もり判断する活用"
         },
         {
           "form": "calculation",
-          "kanten": "技能",
           "bands": "F〜S",
           "rationale": "相対度数を確率として求める処理"
         }
       ],
-      "notes": "中1は統計的確率（多数回試行）で、場合の数による理論確率は中2。"
+      "notes": "v1と型変更なし。中1は統計的確率のみ（理論確率は中2）。"
     },
     {
       "lesson_id": "g1_l60",
@@ -1212,18 +1114,16 @@
       "forms": [
         {
           "form": "calculation",
-          "kanten": "技能",
           "bands": "F〜S",
-          "rationale": "有効数字を用いたa×10ⁿ表記・近似値の処理が核"
+          "rationale": "与えられた測定値を有効数字を用いたa×10ⁿ表記・近似値に処理するのが核"
         },
         {
           "form": "knowledge",
-          "kanten": "知識",
           "bands": "F〜S",
           "rationale": "誤差・近似値・有効数字の意味理解"
         }
       ],
-      "notes": "配列末尾だが領域は正の数・負の数（測定値）。単元順序としては連続性がやや不自然だが小単元としては妥当。"
+      "notes": "v1と型変更なし。配列末尾だが領域は正負の数（測定値）。単元順序の連続性はやや不自然。"
     },
     {
       "lesson_id": "g2_l1",
@@ -1232,15 +1132,13 @@
       "forms": [
         {
           "form": "knowledge",
-          "kanten": "知識",
           "bands": "F〜S",
-          "rationale": "単項式/多項式/項/次数/係数の用語と判別"
+          "rationale": "単項式/多項式/項/次数/係数の用語と判別を問う"
         },
         {
           "form": "calculation",
-          "kanten": "技能",
           "bands": "F〜S",
-          "rationale": "次数を求める・同類項を見分ける基本操作"
+          "rationale": "与えられた式の次数を求める・同類項を見分ける処理"
         }
       ],
       "notes": "意味・用語導入回。knowledge主。"
@@ -1252,12 +1150,16 @@
       "forms": [
         {
           "form": "calculation",
-          "kanten": "技能",
           "bands": "F〜S",
-          "rationale": "同類項をまとめて式を簡単にする"
+          "rationale": "式が与えられ同類項をまとめて簡単にする処理(立式不要)"
+        },
+        {
+          "form": "knowledge",
+          "bands": "F",
+          "rationale": "同類項の定義理解"
         }
       ],
-      "notes": "計算技能回。 基礎計算回のため計算のみ（規則理解は計算の中で扱う）。"
+      "notes": "計算技能回。"
     },
     {
       "lesson_id": "g2_l3",
@@ -1266,9 +1168,8 @@
       "forms": [
         {
           "form": "calculation",
-          "kanten": "技能",
           "bands": "F〜S",
-          "rationale": "多項式の加減（かっこ外し・符号処理）"
+          "rationale": "与えられた多項式の加減(かっこ外し・符号処理)"
         }
       ],
       "notes": "計算技能回。"
@@ -1280,9 +1181,8 @@
       "forms": [
         {
           "form": "calculation",
-          "kanten": "技能",
           "bands": "F〜A",
-          "rationale": "単項式の乗除（指数法則・係数処理）"
+          "rationale": "与えられた単項式の乗除(指数法則・係数処理)"
         }
       ],
       "notes": "計算技能回。累乗混じりでAまで。"
@@ -1294,9 +1194,8 @@
       "forms": [
         {
           "form": "calculation",
-          "kanten": "技能",
           "bands": "F〜S",
-          "rationale": "分配法則での多項式×数・÷数"
+          "rationale": "分配法則での多項式×数・÷数の処理"
         }
       ],
       "notes": "計算技能回。"
@@ -1308,9 +1207,8 @@
       "forms": [
         {
           "form": "calculation",
-          "kanten": "技能",
           "bands": "S〜A",
-          "rationale": "分数係数・複数項の混合計算"
+          "rationale": "分数係数・複数項の混合計算処理"
         }
       ],
       "notes": "計算技能回（応用寄り）。"
@@ -1322,18 +1220,16 @@
       "forms": [
         {
           "form": "proof",
-          "kanten": "思考・判断・表現",
           "bands": "S〜A",
-          "rationale": "偶数奇数・連続整数の和などを文字式で説明"
+          "rationale": "偶数奇数・連続整数の和などが常に成り立つ理由を文字式で説明(記述)"
         },
         {
           "form": "calculation",
-          "kanten": "技能",
           "bands": "F〜S",
-          "rationale": "説明に必要な式変形"
+          "rationale": "説明の途中で必要な式変形の処理"
         }
       ],
-      "notes": "数の性質の説明回。proof主。"
+      "notes": "数の性質の説明回。proof主(数と式の証明)。"
     },
     {
       "lesson_id": "g2_l8",
@@ -1342,15 +1238,13 @@
       "forms": [
         {
           "form": "proof",
-          "kanten": "思考・判断・表現",
           "bands": "S〜A",
-          "rationale": "2けた自然数10a+b等の性質を文字式で説明"
+          "rationale": "2けた自然数10a+b等の性質が成り立つ理由を文字式で説明(記述)"
         },
         {
           "form": "calculation",
-          "kanten": "技能",
           "bands": "F〜S",
-          "rationale": "位取り表現の立式・変形"
+          "rationale": "位取り表現の式変形の処理"
         }
       ],
       "notes": "数の性質の説明回。proof主。"
@@ -1362,9 +1256,8 @@
       "forms": [
         {
           "form": "calculation",
-          "kanten": "技能",
           "bands": "F〜A",
-          "rationale": "指定文字について等式を変形して解く"
+          "rationale": "与えられた等式を指定文字について変形して解く処理"
         }
       ],
       "notes": "計算技能回。"
@@ -1376,15 +1269,13 @@
       "forms": [
         {
           "form": "knowledge",
-          "kanten": "知識",
           "bands": "F〜S",
           "rationale": "2元1次方程式・連立方程式・解の意味の理解"
         },
         {
           "form": "calculation",
-          "kanten": "技能",
           "bands": "F〜S",
-          "rationale": "解の組が方程式を満たすか確認・解を代入判定"
+          "rationale": "解の組が方程式を満たすか代入判定する処理"
         }
       ],
       "notes": "意味・用語導入回。knowledge主。"
@@ -1396,9 +1287,8 @@
       "forms": [
         {
           "form": "calculation",
-          "kanten": "技能",
           "bands": "F〜S",
-          "rationale": "加減法で連立方程式を解く（基本）"
+          "rationale": "与えられた連立方程式を加減法で解く処理(基本)"
         }
       ],
       "notes": "計算技能回。"
@@ -1410,9 +1300,8 @@
       "forms": [
         {
           "form": "calculation",
-          "kanten": "技能",
           "bands": "F〜A",
-          "rationale": "係数をそろえて加減法で解く"
+          "rationale": "係数をそろえて加減法で解く処理"
         }
       ],
       "notes": "計算技能回。"
@@ -1424,9 +1313,8 @@
       "forms": [
         {
           "form": "calculation",
-          "kanten": "技能",
           "bands": "F〜A",
-          "rationale": "代入法で連立方程式を解く"
+          "rationale": "与えられた連立方程式を代入法で解く処理"
         }
       ],
       "notes": "計算技能回。"
@@ -1438,9 +1326,8 @@
       "forms": [
         {
           "form": "calculation",
-          "kanten": "技能",
           "bands": "S〜A",
-          "rationale": "かっこ・小数・分数を整理してから解く"
+          "rationale": "かっこ・小数・分数を整理してから解く処理"
         }
       ],
       "notes": "計算技能回（応用寄り）。"
@@ -1452,9 +1339,8 @@
       "forms": [
         {
           "form": "calculation",
-          "kanten": "技能",
           "bands": "S〜A",
-          "rationale": "A=B=Cを2式に分けて解く"
+          "rationale": "A=B=Cを2式に分けて解く処理"
         }
       ],
       "notes": "計算技能回。"
@@ -1466,15 +1352,13 @@
       "forms": [
         {
           "form": "word_problem",
-          "kanten": "思考・判断・表現",
           "bands": "S〜A",
-          "rationale": "個数・代金を連立で立式し解決"
+          "rationale": "現実場面(個数・代金)を連立で自分で立式し解決(活用)"
         },
         {
           "form": "calculation",
-          "kanten": "技能",
           "bands": "F〜S",
-          "rationale": "立てた連立方程式を解く"
+          "rationale": "立てた連立方程式を解く処理"
         }
       ],
       "notes": "利用回。word_problem主。"
@@ -1486,15 +1370,13 @@
       "forms": [
         {
           "form": "word_problem",
-          "kanten": "思考・判断・表現",
           "bands": "S〜D",
-          "rationale": "速さ・時間・道のりを連立で立式し解決"
+          "rationale": "現実場面(速さ・時間・道のり)を連立で立式し解決(活用)"
         },
         {
           "form": "calculation",
-          "kanten": "技能",
           "bands": "F〜S",
-          "rationale": "立てた連立方程式を解く"
+          "rationale": "立てた連立方程式を解く処理"
         }
       ],
       "notes": "利用回。word_problem主。"
@@ -1506,15 +1388,13 @@
       "forms": [
         {
           "form": "word_problem",
-          "kanten": "思考・判断・表現",
           "bands": "S〜D",
-          "rationale": "増減率・濃度を連立で立式し解決"
+          "rationale": "現実場面(増減率・濃度)を連立で立式し解決(活用)"
         },
         {
           "form": "calculation",
-          "kanten": "技能",
           "bands": "F〜S",
-          "rationale": "立てた連立方程式を解く"
+          "rationale": "立てた連立方程式を解く処理"
         }
       ],
       "notes": "利用回。word_problem主。"
@@ -1526,18 +1406,16 @@
       "forms": [
         {
           "form": "knowledge",
-          "kanten": "知識",
           "bands": "F〜S",
           "rationale": "1次関数の意味・y=ax+bの形・比例との違いの理解"
         },
         {
           "form": "calculation",
-          "kanten": "技能",
           "bands": "F〜S",
-          "rationale": "式に値を代入してyを求める・1次関数か判別"
+          "rationale": "式が与えられ値を代入してyを求める・1次関数か判別する処理"
         }
       ],
-      "notes": "意味と式の導入回。knowledge主。現行FunctionGeometryFusionは交点+面積で完全な題材ズレ。ここでは交点/面積を一切出さず、意味と対応表・代入に限定。"
+      "notes": "意味と式の導入回。knowledge主。代入は式が与えられる純処理なのでcalculation。交点/面積は題材外。"
     },
     {
       "lesson_id": "g2_l20",
@@ -1546,18 +1424,16 @@
       "forms": [
         {
           "form": "calculation",
-          "kanten": "技能",
           "bands": "F〜S",
-          "rationale": "変化の割合=(yの増加量)/(xの増加量)を計算"
+          "rationale": "与えられた表/式から変化の割合=(yの増加量)/(xの増加量)を計算処理"
         },
         {
           "form": "knowledge",
-          "kanten": "知識",
           "bands": "F〜S",
           "rationale": "変化の割合が一定=傾きに等しいという意味理解"
         }
       ],
-      "notes": "変化の割合回。calculation主。現行の交点+面積は題材ズレ。表や式から変化の割合を求める/増加量を求めるに限定。"
+      "notes": "変化の割合回。calculation主。式や表から一定手順で求めるためcalculationのまま。"
     },
     {
       "lesson_id": "g2_l21",
@@ -1566,24 +1442,21 @@
       "forms": [
         {
           "form": "knowledge",
-          "kanten": "知識",
           "bands": "F〜S",
           "rationale": "傾き=変化の割合・切片=y切片の意味理解"
         },
         {
-          "form": "visual",
-          "kanten": "技能",
+          "form": "graph_table",
           "bands": "F〜S",
           "rationale": "グラフから傾き・切片を読み取る"
         },
         {
           "form": "calculation",
-          "kanten": "技能",
           "bands": "F〜S",
-          "rationale": "式から傾き・切片を答える・増減や傾きの向きを判断"
+          "rationale": "式から傾き・切片を答える・増減や向きを判断する処理"
         }
       ],
-      "notes": "現行は交点+三角形面積を出しており題材ズレ。本来は傾き・切片の意味と読取り/算出。"
+      "notes": "旧visual→graph_table。傾き・切片の意味理解とグラフ読取り/式からの算出。"
     },
     {
       "lesson_id": "g2_l22",
@@ -1591,19 +1464,17 @@
       "unit_flag": "ok",
       "forms": [
         {
-          "form": "visual",
-          "kanten": "技能＋思考",
+          "form": "graph_table",
           "bands": "F〜A",
-          "rationale": "傾き・切片を使って1次関数のグラフをかく（作図）"
+          "rationale": "傾き・切片を使って1次関数のグラフをかく"
         },
         {
           "form": "calculation",
-          "kanten": "技能",
           "bands": "F〜S",
-          "rationale": "2点の座標を求めて作図準備"
+          "rationale": "作図準備に必要な2点の座標を求める処理"
         }
       ],
-      "notes": "現行は交点+面積で題材ズレ。本来は式→グラフを自分でかく作図が中心。"
+      "notes": "旧visual→graph_table。式→グラフをかくのが目的なのでgraph_table主。"
     },
     {
       "lesson_id": "g2_l23",
@@ -1611,25 +1482,22 @@
       "unit_flag": "ok",
       "forms": [
         {
-          "form": "calculation",
-          "kanten": "技能",
+          "form": "find_value",
           "bands": "S〜A",
-          "rationale": "xの変域からyの変域を求める・端点の値を計算"
+          "rationale": "xの変域と式の条件からyの変域・端点の値を自分で立式して求める"
         },
         {
-          "form": "visual",
-          "kanten": "技能＋思考",
+          "form": "graph_table",
           "bands": "S〜A",
-          "rationale": "変域に対応する線分（端点含む/含まない）をグラフで表す"
+          "rationale": "変域に対応する線分(端点含む/含まない)をグラフで表す/読む"
         },
         {
           "form": "knowledge",
-          "kanten": "知識",
           "bands": "F〜S",
           "rationale": "端点を含む/含まないの表記の意味"
         }
       ],
-      "notes": "現行は交点+面積で題材ズレ。本来は変域→対応するyの範囲・端点の扱い。"
+      "notes": "旧calculation→find_value。単なる代入でなく変域の両端を吟味して立式する求値。旧visual→graph_table。"
     },
     {
       "lesson_id": "g2_l24",
@@ -1637,13 +1505,12 @@
       "unit_flag": "ok",
       "forms": [
         {
-          "form": "calculation",
-          "kanten": "技能",
+          "form": "find_value",
           "bands": "F〜A",
-          "rationale": "傾き/切片と1点から1次関数の式を決定"
+          "rationale": "傾き/切片と1点の条件から自分でy=ax+bを立てて式を決定(立式あり・場面なし)"
         }
       ],
-      "notes": "現行は交点+面積で題材ズレ。本来は与条件から式を決定する計算。"
+      "notes": "旧calculationだが式が与えられず条件から立式して求めるためfind_value。"
     },
     {
       "lesson_id": "g2_l25",
@@ -1651,19 +1518,17 @@
       "unit_flag": "ok",
       "forms": [
         {
-          "form": "calculation",
-          "kanten": "技能",
+          "form": "find_value",
           "bands": "S〜A",
-          "rationale": "2点から傾きを求め式を決定"
+          "rationale": "2点の条件から傾きを求め連立/代入で式を決定(立式あり・場面なし)"
         },
         {
-          "form": "visual",
-          "kanten": "技能",
+          "form": "graph_table",
           "bands": "S",
-          "rationale": "グラフ上の2点を読み取って式を求める"
+          "rationale": "グラフ上の2点を読み取って式を求める入口"
         }
       ],
-      "notes": "現行BasicCalculationは妥当だが面積題材が混じるなら除外。式決定に限定。"
+      "notes": "旧calculation→find_value。2点から関係を立式して式決定。旧visual→graph_table。"
     },
     {
       "lesson_id": "g2_l26",
@@ -1671,25 +1536,22 @@
       "unit_flag": "ok",
       "forms": [
         {
-          "form": "calculation",
-          "kanten": "技能",
+          "form": "graph_table",
           "bands": "F〜S",
-          "rationale": "ax+by=cをy=…に変形しグラフの傾き・切片を求める"
+          "rationale": "2元1次方程式を直線としてかく/読む(x軸y軸平行の特殊形含む)"
         },
         {
-          "form": "visual",
-          "kanten": "技能＋思考",
+          "form": "calculation",
           "bands": "F〜S",
-          "rationale": "2元1次方程式を直線としてかく（x軸y軸に平行な特殊形含む）"
+          "rationale": "ax+by=cをy=…に変形し傾き・切片を求める処理"
         },
         {
           "form": "knowledge",
-          "kanten": "知識",
           "bands": "F〜S",
           "rationale": "2元1次方程式の解が直線上の点全体という意味理解"
         }
       ],
-      "notes": "現行の交点+面積は題材ズレ。本来は方程式↔直線の対応。"
+      "notes": "旧visual→graph_table。方程式↔直線の対応が中心なのでgraph_table主。"
     },
     {
       "lesson_id": "g2_l27",
@@ -1697,25 +1559,22 @@
       "unit_flag": "ok",
       "forms": [
         {
-          "form": "calculation",
-          "kanten": "技能",
+          "form": "find_value",
           "bands": "S〜A",
-          "rationale": "連立方程式を解いて交点の座標を求める"
+          "rationale": "2直線の式(条件)から交点座標を自分で連立を立てて求める(立式あり・場面なし)"
         },
         {
-          "form": "visual",
-          "kanten": "技能＋思考",
+          "form": "graph_table",
           "bands": "S〜A",
           "rationale": "グラフから2直線の交点を読み取る"
         },
         {
           "form": "knowledge",
-          "kanten": "知識",
           "bands": "F〜S",
           "rationale": "連立方程式の解＝2直線の交点という関係理解"
         }
       ],
-      "notes": "この単元では交点は本来の題材（面積は依然として題材外。ここは交点座標に限定）。"
+      "notes": "指示通りfind_value+graph_table。交点は連立を立てて求める求値。旧calculationは立式ありなのでfind_valueへ。"
     },
     {
       "lesson_id": "g2_l28",
@@ -1724,24 +1583,21 @@
       "forms": [
         {
           "form": "word_problem",
-          "kanten": "思考・判断・表現",
           "bands": "S〜D",
-          "rationale": "事象をy=ax+bで数学化し予測・立式して解決"
+          "rationale": "現実事象(ばね・水そう)をy=ax+bで数学化し立式して予測・解決(活用)"
         },
         {
-          "form": "visual",
-          "kanten": "技能＋思考",
+          "form": "graph_table",
           "bands": "S〜A",
           "rationale": "測定データをグラフ化・グラフから読み取り"
         },
         {
           "form": "calculation",
-          "kanten": "技能",
           "bands": "F〜S",
-          "rationale": "式を求め特定値を計算"
+          "rationale": "求めた式に特定値を代入して計算する処理"
         }
       ],
-      "notes": "利用回。word_problem主。ここでの図は事象のグラフ化であって幾何面積ではない。"
+      "notes": "利用回。word_problem主。旧visual→graph_table。図は事象のグラフ化であって幾何ではない。"
     },
     {
       "lesson_id": "g2_l29",
@@ -1750,24 +1606,21 @@
       "forms": [
         {
           "form": "word_problem",
-          "kanten": "思考・判断・表現",
           "bands": "A〜D",
-          "rationale": "動点の位置に応じて面積を1次関数で表し解決"
+          "rationale": "現実場面(動点の運動)に応じ面積を1次関数で表し立式して解決(活用)"
         },
         {
-          "form": "visual",
-          "kanten": "技能＋思考",
+          "form": "graph_table",
           "bands": "S〜A",
           "rationale": "xと面積yの関係をグラフ化・区間ごとに読み取り"
         },
         {
-          "form": "calculation",
-          "kanten": "技能",
+          "form": "find_value",
           "bands": "S〜A",
-          "rationale": "区間ごとの式を立てて値を求める"
+          "rationale": "区間ごとに面積の式を立てて特定の値を求める"
         }
       ],
-      "notes": "現行MovingPointは妥当。ここで面積が題材になるのは正しい（動点×面積が単元の狙い）。"
+      "notes": "利用回。word_problem主。旧visual→graph_table。区間の式立ては立式ありなのでcalcでなくfind_value。"
     },
     {
       "lesson_id": "g2_l30",
@@ -1776,24 +1629,21 @@
       "forms": [
         {
           "form": "word_problem",
-          "kanten": "思考・判断・表現",
           "bands": "A〜D",
-          "rationale": "ダイヤグラムを読み速さ・出会い・追いつきを解決"
+          "rationale": "現実場面(ダイヤグラム)を読み速さ・出会い・追いつきを立式して解決(活用)"
         },
         {
-          "form": "visual",
-          "kanten": "技能＋思考",
+          "form": "graph_table",
           "bands": "S〜A",
           "rationale": "時間-道のりグラフを読む/かく・交点=出会いを解釈"
         },
         {
-          "form": "calculation",
-          "kanten": "技能",
+          "form": "find_value",
           "bands": "S〜A",
-          "rationale": "各区間の式・交点の時刻/位置を計算"
+          "rationale": "各区間の式や交点の時刻/位置を立式して求める"
         }
       ],
-      "notes": "利用回。word_problem主。交点はここでは出会い/追いつきの意味を持つ本来の題材。"
+      "notes": "利用回。word_problem主。旧visual→graph_table。交点=出会い/追いつきの本来題材。"
     },
     {
       "lesson_id": "g2_l31",
@@ -1802,24 +1652,21 @@
       "forms": [
         {
           "form": "knowledge",
-          "kanten": "知識",
           "bands": "F〜S",
           "rationale": "対頂角・同位角・錯角の意味と位置関係の判別"
         },
         {
-          "form": "visual",
-          "kanten": "技能",
-          "bands": "F〜S",
-          "rationale": "図から同位角・錯角を指摘・読図"
+          "form": "find_value",
+          "bands": "F〜A",
+          "rationale": "図と平行線・対頂角の関係から角度を自分で立式して求める"
         },
         {
-          "form": "calculation",
-          "kanten": "技能",
-          "bands": "F〜A",
-          "rationale": "平行線と角の関係を使い角度を求める"
+          "form": "graph_table",
+          "bands": "F〜S",
+          "rationale": "図から同位角・錯角を指摘する読図"
         }
       ],
-      "notes": "用語・性質回だが角度計算も自然。"
+      "notes": "旧calculation(角度)→find_value(図から立式して角を求める)。旧visual(読図)→graph_table。"
     },
     {
       "lesson_id": "g2_l32",
@@ -1828,30 +1675,26 @@
       "forms": [
         {
           "form": "knowledge",
-          "kanten": "知識",
           "bands": "F〜S",
           "rationale": "平行線の性質・平行になる条件の理解と判別"
         },
         {
-          "form": "calculation",
-          "kanten": "技能",
+          "form": "find_value",
           "bands": "F〜A",
-          "rationale": "平行線の性質を用いた角度計算"
-        },
-        {
-          "form": "visual",
-          "kanten": "技能",
-          "bands": "F〜S",
-          "rationale": "図から平行判定・角の対応を読む"
+          "rationale": "平行線の性質を用い図から角度を立式して求める"
         },
         {
           "form": "proof",
-          "kanten": "思考・判断・表現",
           "bands": "S〜A",
-          "rationale": "2直線が平行であることの理由を説明"
+          "rationale": "2直線が平行である理由を記述で説明"
+        },
+        {
+          "form": "graph_table",
+          "bands": "F〜S",
+          "rationale": "図から平行判定・角の対応を読む"
         }
       ],
-      "notes": "現行ProofStructure。条件判定と角度計算が中心、説明もあり。"
+      "notes": "旧calculation(角度)→find_value。条件判定・角度・説明の複合。"
     },
     {
       "lesson_id": "g2_l33",
@@ -1859,25 +1702,22 @@
       "unit_flag": "ok",
       "forms": [
         {
-          "form": "calculation",
-          "kanten": "技能",
+          "form": "find_value",
           "bands": "F〜A",
-          "rationale": "内角の和・外角=隣り合わない2内角の和で角度を求める"
-        },
-        {
-          "form": "visual",
-          "kanten": "技能",
-          "bands": "F〜S",
-          "rationale": "図から角の関係を読む"
+          "rationale": "内角の和・外角の性質を使い図から角度を自分で立式して求める"
         },
         {
           "form": "knowledge",
-          "kanten": "知識",
           "bands": "F〜S",
           "rationale": "内角・外角の性質の理解"
+        },
+        {
+          "form": "graph_table",
+          "bands": "F〜S",
+          "rationale": "図から角の関係を読む"
         }
       ],
-      "notes": "角度計算回。calculation主。"
+      "notes": "旧calculation主→find_value主(角を求める求値)。求値+knowledgeの指示通り。"
     },
     {
       "lesson_id": "g2_l34",
@@ -1885,19 +1725,17 @@
       "unit_flag": "ok",
       "forms": [
         {
-          "form": "calculation",
-          "kanten": "技能",
+          "form": "find_value",
           "bands": "F〜A",
-          "rationale": "180(n-2)で内角の和・1つの内角・辺数を求める"
+          "rationale": "180(n-2)を用い図・条件から内角の和・1つの内角・辺数を立式して求める"
         },
         {
           "form": "knowledge",
-          "kanten": "知識",
           "bands": "F〜S",
           "rationale": "内角の和の公式の意味理解"
         }
       ],
-      "notes": "角度計算回。calculation主。"
+      "notes": "旧calculation→find_value。単純代入もあるが辺数を逆算する立式が中心なので求値。"
     },
     {
       "lesson_id": "g2_l35",
@@ -1905,19 +1743,17 @@
       "unit_flag": "ok",
       "forms": [
         {
-          "form": "calculation",
-          "kanten": "技能",
+          "form": "find_value",
           "bands": "F〜A",
-          "rationale": "外角の和360を使い1つの外角・辺数を求める"
+          "rationale": "外角の和360から1つの外角・辺数を立式して求める"
         },
         {
           "form": "knowledge",
-          "kanten": "知識",
           "bands": "F〜S",
           "rationale": "外角の和が常に360である理解"
         }
       ],
-      "notes": "角度計算回。calculation主。"
+      "notes": "旧calculation→find_value。"
     },
     {
       "lesson_id": "g2_l36",
@@ -1926,18 +1762,21 @@
       "forms": [
         {
           "form": "knowledge",
-          "kanten": "知識",
           "bands": "F〜S",
-          "rationale": "合同の意味・対応する辺と角・合同の記号≡の理解"
+          "rationale": "合同の意味・対応する辺と角・記号≡の理解"
         },
         {
-          "form": "visual",
-          "kanten": "技能",
+          "form": "find_value",
           "bands": "F〜S",
-          "rationale": "図で対応する辺・角を対応づけ、等しい辺長・角度を答える"
+          "rationale": "図で対応関係から等しい辺長・角度を求める"
+        },
+        {
+          "form": "graph_table",
+          "bands": "F〜S",
+          "rationale": "図で対応する辺・角を対応づける読図"
         }
       ],
-      "notes": "用語・性質回。knowledge主。証明はl39から。"
+      "notes": "旧visual→対応づけの読図(graph_table)と対応する量を求める(find_value)に分離。knowledge主。証明はl39から。"
     },
     {
       "lesson_id": "g2_l37",
@@ -1946,18 +1785,16 @@
       "forms": [
         {
           "form": "knowledge",
-          "kanten": "知識",
           "bands": "F〜S",
           "rationale": "3つの合同条件を述べ、どの条件で合同かを判別"
         },
         {
-          "form": "visual",
-          "kanten": "技能",
+          "form": "graph_table",
           "bands": "F〜S",
-          "rationale": "図から等しい辺・角を読み合同条件を対応づけ"
+          "rationale": "図から等しい辺・角を読み合同条件に対応づける読図"
         }
       ],
-      "notes": "性質・条件回。knowledge主。証明の準備。"
+      "notes": "性質・条件回。knowledge主。旧visual→graph_table。証明の準備。"
     },
     {
       "lesson_id": "g2_l38",
@@ -1966,15 +1803,13 @@
       "forms": [
         {
           "form": "knowledge",
-          "kanten": "知識",
           "bands": "F〜S",
           "rationale": "仮定・結論の区別、逆・反例の意味理解"
         },
         {
           "form": "proof",
-          "kanten": "思考・判断・表現",
           "bands": "S〜A",
-          "rationale": "命題の仮定/結論を書き分け、反例で否定・簡単な説明"
+          "rationale": "命題の仮定/結論を書き分け、反例で否定・簡単な説明を記述"
         }
       ],
       "notes": "証明入門回。knowledgeで仮定結論・反例、proofで説明の骨組み。"
@@ -1986,18 +1821,16 @@
       "forms": [
         {
           "form": "proof",
-          "kanten": "思考・判断・表現",
           "bands": "S〜A",
           "rationale": "合同条件を用いて三角形の合同を証明する記述"
         },
         {
-          "form": "visual",
-          "kanten": "技能",
+          "form": "graph_table",
           "bands": "F〜S",
           "rationale": "図から仮定・等しい辺角を読み取る"
         }
       ],
-      "notes": "証明回。proof主。"
+      "notes": "証明回。proof主。旧visual→graph_table(読図)。"
     },
     {
       "lesson_id": "g2_l40",
@@ -2006,18 +1839,16 @@
       "forms": [
         {
           "form": "proof",
-          "kanten": "思考・判断・表現",
           "bands": "S〜D",
-          "rationale": "合同を示し対応する辺・角が等しいことを証明"
+          "rationale": "合同を示し対応する辺・角が等しいことを証明する記述"
         },
         {
-          "form": "visual",
-          "kanten": "技能",
+          "form": "graph_table",
           "bands": "F〜S",
           "rationale": "図から証明に使う関係を読む"
         }
       ],
-      "notes": "証明回。proof主。"
+      "notes": "証明回。proof主。旧visual→graph_table。"
     },
     {
       "lesson_id": "g2_l41",
@@ -2026,30 +1857,21 @@
       "forms": [
         {
           "form": "proof",
-          "kanten": "思考・判断・表現",
           "bands": "S〜D",
-          "rationale": "底角が等しい・頂角の二等分線が底辺を垂直に二等分する等の証明"
+          "rationale": "底角相等・頂角の二等分線が底辺を垂直に二等分する等を証明する記述"
         },
         {
           "form": "knowledge",
-          "kanten": "知識",
           "bands": "F〜S",
           "rationale": "二等辺三角形の定義と性質の理解"
         },
         {
-          "form": "calculation",
-          "kanten": "技能",
+          "form": "find_value",
           "bands": "F〜S",
-          "rationale": "底角・頂角の角度を求める"
-        },
-        {
-          "form": "visual",
-          "kanten": "技能",
-          "bands": "F〜S",
-          "rationale": "図から性質を読む"
+          "rationale": "性質を用い図から底角・頂角の角度を立式して求める"
         }
       ],
-      "notes": "性質＋証明回。proof主。角度計算も定番。"
+      "notes": "性質＋証明回。proof主。旧calculation(角度)→find_value。旧visualはfind_value/読図に吸収。"
     },
     {
       "lesson_id": "g2_l42",
@@ -2058,24 +1880,21 @@
       "forms": [
         {
           "form": "knowledge",
-          "kanten": "知識",
           "bands": "F〜S",
-          "rationale": "2角が等しい→二等辺という条件（逆）の理解"
+          "rationale": "2角が等しい→二等辺という条件(逆)の理解"
         },
         {
           "form": "proof",
-          "kanten": "思考・判断・表現",
           "bands": "S〜A",
-          "rationale": "条件を用いて二等辺三角形であることを証明"
+          "rationale": "条件を用いて二等辺三角形であることを証明する記述"
         },
         {
-          "form": "visual",
-          "kanten": "技能",
+          "form": "graph_table",
           "bands": "F〜S",
-          "rationale": "図から等しい角を読み判定"
+          "rationale": "図から等しい角を読み判定する読図"
         }
       ],
-      "notes": "現行BasicGeometryMeasurement。本来は条件（逆）の理解と証明。角度計算より条件判定・証明が中心。"
+      "notes": "旧BasicGeometryMeasurement。本来は条件(逆)理解と証明。旧visual→graph_table。"
     },
     {
       "lesson_id": "g2_l43",
@@ -2084,24 +1903,21 @@
       "forms": [
         {
           "form": "knowledge",
-          "kanten": "知識",
           "bands": "F〜S",
-          "rationale": "正三角形の定義・性質（3辺3角相等）と条件の理解"
+          "rationale": "正三角形の定義・性質(3辺3角相等)と条件の理解"
         },
         {
           "form": "proof",
-          "kanten": "思考・判断・表現",
           "bands": "S〜A",
-          "rationale": "正三角形であることの証明・性質の利用"
+          "rationale": "正三角形であることの証明・性質の利用を記述"
         },
         {
-          "form": "calculation",
-          "kanten": "技能",
+          "form": "find_value",
           "bands": "F〜S",
-          "rationale": "60度を用いた角度計算"
+          "rationale": "60度を用い図から角度を立式して求める"
         }
       ],
-      "notes": "現行BasicGeometryMeasurement。性質・条件理解と証明が中心。"
+      "notes": "旧BasicGeometryMeasurement。性質・条件理解と証明が中心。旧calculation→find_value。"
     },
     {
       "lesson_id": "g2_l44",
@@ -2110,18 +1926,16 @@
       "forms": [
         {
           "form": "knowledge",
-          "kanten": "知識",
           "bands": "F〜S",
           "rationale": "斜辺と1鋭角・斜辺と他の1辺の2条件の理解と判別"
         },
         {
-          "form": "visual",
-          "kanten": "技能",
+          "form": "graph_table",
           "bands": "F〜S",
-          "rationale": "図から直角三角形の合同条件を対応づけ"
+          "rationale": "図から直角三角形の合同条件を対応づける読図"
         }
       ],
-      "notes": "性質・条件回。knowledge主。証明はl45。"
+      "notes": "性質・条件回。knowledge主。旧visual→graph_table。証明はl45。"
     },
     {
       "lesson_id": "g2_l45",
@@ -2130,18 +1944,16 @@
       "forms": [
         {
           "form": "proof",
-          "kanten": "思考・判断・表現",
           "bands": "S〜D",
           "rationale": "直角三角形の合同条件を用いた証明の記述"
         },
         {
-          "form": "visual",
-          "kanten": "技能",
+          "form": "graph_table",
           "bands": "F〜S",
           "rationale": "図から直角・斜辺等の関係を読む"
         }
       ],
-      "notes": "証明回。proof主。"
+      "notes": "証明回。proof主。旧visual→graph_table。"
     },
     {
       "lesson_id": "g2_l46",
@@ -2150,30 +1962,21 @@
       "forms": [
         {
           "form": "proof",
-          "kanten": "思考・判断・表現",
           "bands": "S〜D",
-          "rationale": "2組の対辺・対角相等、対角線が中点で交わる等の証明"
+          "rationale": "2組の対辺・対角相等、対角線が中点で交わる等を証明する記述"
         },
         {
           "form": "knowledge",
-          "kanten": "知識",
           "bands": "F〜S",
           "rationale": "平行四辺形の定義と性質の理解"
         },
         {
-          "form": "calculation",
-          "kanten": "技能",
+          "form": "find_value",
           "bands": "F〜S",
-          "rationale": "性質を用いて辺の長さ・角度を求める"
-        },
-        {
-          "form": "visual",
-          "kanten": "技能",
-          "bands": "F〜S",
-          "rationale": "図から対辺・対角を読む"
+          "rationale": "性質を用い図から辺の長さ・角度を立式して求める"
         }
       ],
-      "notes": "性質＋証明回。proof主。"
+      "notes": "性質＋証明回。proof主。旧calculation(辺角)→find_value。旧visualはfind_value/読図に吸収。"
     },
     {
       "lesson_id": "g2_l47",
@@ -2182,24 +1985,21 @@
       "forms": [
         {
           "form": "knowledge",
-          "kanten": "知識",
           "bands": "F〜S",
           "rationale": "平行四辺形になる5つの条件の理解と判別"
         },
         {
           "form": "proof",
-          "kanten": "思考・判断・表現",
           "bands": "S〜A",
-          "rationale": "条件を用いて平行四辺形であることを証明"
+          "rationale": "条件を用いて平行四辺形であることを証明する記述"
         },
         {
-          "form": "visual",
-          "kanten": "技能",
+          "form": "graph_table",
           "bands": "F〜S",
-          "rationale": "図から条件成立を判定"
+          "rationale": "図から条件成立を判定する読図"
         }
       ],
-      "notes": "現行BasicGeometryMeasurement。本来は条件理解と証明が中心。"
+      "notes": "旧BasicGeometryMeasurement。本来は条件理解と証明が中心。旧visual→graph_table。"
     },
     {
       "lesson_id": "g2_l48",
@@ -2208,18 +2008,16 @@
       "forms": [
         {
           "form": "proof",
-          "kanten": "思考・判断・表現",
           "bands": "S〜D",
-          "rationale": "条件を用いて四角形が平行四辺形であることを証明"
+          "rationale": "条件を用いて四角形が平行四辺形であることを証明する記述"
         },
         {
-          "form": "visual",
-          "kanten": "技能",
+          "form": "graph_table",
           "bands": "F〜S",
           "rationale": "図から証明に使う関係を読む"
         }
       ],
-      "notes": "証明回。proof主。"
+      "notes": "証明回。proof主。旧visual→graph_table。"
     },
     {
       "lesson_id": "g2_l49",
@@ -2228,30 +2026,21 @@
       "forms": [
         {
           "form": "knowledge",
-          "kanten": "知識",
           "bands": "F〜S",
           "rationale": "特別な平行四辺形の定義・対角線の性質・包含関係の理解"
         },
         {
           "form": "proof",
-          "kanten": "思考・判断・表現",
           "bands": "S〜A",
-          "rationale": "対角線の条件から長方形/ひし形/正方形であることを証明"
+          "rationale": "対角線の条件から長方形/ひし形/正方形であることを証明する記述"
         },
         {
-          "form": "calculation",
-          "kanten": "技能",
+          "form": "find_value",
           "bands": "F〜S",
-          "rationale": "対角線・角度・辺の計算"
-        },
-        {
-          "form": "visual",
-          "kanten": "技能",
-          "bands": "F〜S",
-          "rationale": "図から性質を読む"
+          "rationale": "性質から対角線・角度・辺を立式して求める"
         }
       ],
-      "notes": "性質・条件回。knowledge主、証明も定番。"
+      "notes": "性質・条件回。knowledge主、証明も定番。旧calculation→find_value。"
     },
     {
       "lesson_id": "g2_l50",
@@ -2260,30 +2049,26 @@
       "forms": [
         {
           "form": "knowledge",
-          "kanten": "知識",
           "bands": "F〜S",
           "rationale": "底辺共通・高さ一定なら面積が等しいという原理理解"
         },
         {
-          "form": "visual",
-          "kanten": "技能＋思考",
-          "bands": "S〜A",
-          "rationale": "等積変形で面積を変えず形を変える・等しい面積の三角形を図で指摘"
-        },
-        {
           "form": "proof",
-          "kanten": "思考・判断・表現",
           "bands": "S〜A",
-          "rationale": "2つの三角形の面積が等しい理由を説明"
+          "rationale": "2つの三角形の面積が等しい理由を記述で説明"
         },
         {
-          "form": "calculation",
-          "kanten": "技能",
+          "form": "find_value",
           "bands": "S〜A",
-          "rationale": "等積変形を利用して面積を求める"
+          "rationale": "等積変形を利用して図から面積を立式して求める"
+        },
+        {
+          "form": "graph_table",
+          "bands": "S〜A",
+          "rationale": "等しい面積の三角形を図で指摘・等積変形を図で表す"
         }
       ],
-      "notes": "等積変形回。原理理解＋図的操作が中心。"
+      "notes": "等積変形回。原理理解＋説明＋求値。旧calculation(面積)→find_value。旧visual→graph_table。"
     },
     {
       "lesson_id": "g2_l51",
@@ -2292,24 +2077,21 @@
       "forms": [
         {
           "form": "knowledge",
-          "kanten": "知識",
           "bands": "F〜S",
           "rationale": "確率の意味・同様に確からしい・確率の範囲0〜1の理解"
         },
         {
           "form": "calculation",
-          "kanten": "技能",
           "bands": "F〜S",
-          "rationale": "同様に確からしい場合の基本的な確率を求める"
+          "rationale": "同様に確からしい場合の基本的な確率を求める処理"
         },
         {
           "form": "word_problem",
-          "kanten": "思考・判断・表現",
           "bands": "S〜A",
-          "rationale": "相対度数からの確率の見積り・意味の活用"
+          "rationale": "相対度数からの確率の見積り・現実場面での意味の活用"
         }
       ],
-      "notes": "意味・用語導入回。knowledge主。"
+      "notes": "意味・用語導入回。knowledge主。確率を求める=calculation。"
     },
     {
       "lesson_id": "g2_l52",
@@ -2318,24 +2100,21 @@
       "forms": [
         {
           "form": "calculation",
-          "kanten": "技能",
           "bands": "F〜A",
-          "rationale": "樹形図/表で全場合と該当場合を数え確率を求める"
+          "rationale": "全場合と該当場合を数え確率p=該当/全体を求める処理"
         },
         {
           "form": "word_problem",
-          "kanten": "思考・判断・表現",
           "bands": "S〜A",
-          "rationale": "硬貨・さいころの事象を確率として解決"
+          "rationale": "硬貨・さいころの現実場面の事象を確率として解決"
         },
         {
-          "form": "visual",
-          "kanten": "技能",
+          "form": "graph_table",
           "bands": "F〜S",
-          "rationale": "樹形図・表を用いて場合を整理する"
+          "rationale": "樹形図・表を用いて場合を整理して書く"
         }
       ],
-      "notes": "確率計算回。calculation主。樹形図はvisualとして併記。"
+      "notes": "確率計算回。calculation主。旧visual(樹形図)→graph_table。"
     },
     {
       "lesson_id": "g2_l53",
@@ -2344,24 +2123,21 @@
       "forms": [
         {
           "form": "calculation",
-          "kanten": "技能",
           "bands": "S〜A",
-          "rationale": "並べ方・取り出し方の場合を数え確率を求める（区別/順序の扱い）"
+          "rationale": "並べ方・取り出し方の場合を数え確率を求める処理(区別/順序の扱い)"
         },
         {
           "form": "word_problem",
-          "kanten": "思考・判断・表現",
           "bands": "S〜A",
-          "rationale": "カード・玉・くじの事象を確率として解決"
+          "rationale": "カード・玉・くじの現実場面を確率として解決"
         },
         {
-          "form": "visual",
-          "kanten": "技能",
+          "form": "graph_table",
           "bands": "F〜S",
-          "rationale": "樹形図・表で整理する"
+          "rationale": "樹形図・表で場合を整理して書く"
         }
       ],
-      "notes": "確率計算回。calculation主。"
+      "notes": "確率計算回。calculation主。旧visual→graph_table。"
     },
     {
       "lesson_id": "g2_l54",
@@ -2370,19 +2146,16 @@
       "forms": [
         {
           "form": "calculation",
-          "kanten": "技能",
           "bands": "S〜A",
-          "rationale": "余事象1-pを使い起こらない/少なくとも1つ起こる確率を求める"
+          "rationale": "余事象1-pを使い起こらない/少なくとも1つ起こる確率を求める処理"
         },
         {
           "form": "word_problem",
-          "kanten": "思考・判断・表現",
           "bands": "S〜D",
-          "rationale": "余事象の活用が有効な事象を判断し解決"
+          "rationale": "余事象の活用が有効な現実事象を判断し解決"
         },
         {
           "form": "knowledge",
-          "kanten": "知識",
           "bands": "F〜S",
           "rationale": "余事象・(ある確率)+(起こらない確率)=1の理解"
         }
@@ -2396,13 +2169,11 @@
       "forms": [
         {
           "form": "calculation",
-          "kanten": "技能",
           "bands": "F〜A",
-          "rationale": "データから第1/第2/第3四分位数・四分位範囲を求める"
+          "rationale": "データから第1/第2/第3四分位数・四分位範囲を求める処理"
         },
         {
           "form": "knowledge",
-          "kanten": "知識",
           "bands": "F〜S",
           "rationale": "四分位数・四分位範囲の意味理解"
         }
@@ -2415,25 +2186,22 @@
       "unit_flag": "ok",
       "forms": [
         {
-          "form": "visual",
-          "kanten": "技能＋思考",
+          "form": "graph_table",
           "bands": "F〜A",
           "rationale": "五数要約から箱ひげ図をかく／箱ひげ図から値を読み取る"
         },
         {
           "form": "calculation",
-          "kanten": "技能",
           "bands": "F〜S",
-          "rationale": "五数要約（最小・四分位数・最大）を求める"
+          "rationale": "五数要約(最小・四分位数・最大)を求める処理"
         },
         {
           "form": "knowledge",
-          "kanten": "知識",
           "bands": "F〜S",
           "rationale": "箱ひげ図の各部が表す量の理解"
         }
       ],
-      "notes": "作図・読解回。visual主。"
+      "notes": "作図・読解回。旧visual→graph_table主。"
     },
     {
       "lesson_id": "g2_l57",
@@ -2442,24 +2210,21 @@
       "forms": [
         {
           "form": "word_problem",
-          "kanten": "思考・判断・表現",
           "bands": "S〜D",
-          "rationale": "複数の箱ひげ図を比較し分布の傾向を読み取り判断・説明"
+          "rationale": "複数の箱ひげ図から現実データの分布傾向を読み取り判断・説明(活用)"
         },
         {
-          "form": "visual",
-          "kanten": "技能＋思考",
+          "form": "graph_table",
           "bands": "F〜A",
           "rationale": "複数の箱ひげ図を読み比較する"
         },
         {
           "form": "knowledge",
-          "kanten": "知識",
           "bands": "F〜S",
           "rationale": "散らばり・偏りの読み取りに必要な用語理解"
         }
       ],
-      "notes": "読み取り・活用回。word_problem（活用）主。"
+      "notes": "読み取り・活用回。word_problem(活用)主。旧visual→graph_table。"
     },
     {
       "lesson_id": "g3_l1",
@@ -2468,12 +2233,11 @@
       "forms": [
         {
           "form": "calculation",
-          "kanten": "技能",
           "bands": "F〜S",
-          "rationale": "単項式×多項式・÷単項式の分配計算そのものが単元の中心"
+          "rationale": "式が与えられ分配計算・除法で処理する純計算"
         }
       ],
-      "notes": "純粋な計算技能回。knowledge不要（用語導入は前学年）。"
+      "notes": ""
     },
     {
       "lesson_id": "g3_l2",
@@ -2482,15 +2246,13 @@
       "forms": [
         {
           "form": "calculation",
-          "kanten": "技能",
           "bands": "F〜S",
-          "rationale": "分配法則で(a+b)(c+d)を展開する手続き技能"
+          "rationale": "与えられた積を分配法則で展開する処理"
         },
         {
           "form": "knowledge",
-          "kanten": "知識",
           "bands": "F",
-          "rationale": "『展開』の意味・多項式×多項式の項数の理解を確認"
+          "rationale": "『展開』の意味の確認"
         }
       ],
       "notes": ""
@@ -2502,15 +2264,13 @@
       "forms": [
         {
           "form": "calculation",
-          "kanten": "技能",
           "bands": "F〜S",
-          "rationale": "公式の適用による展開計算が中心"
+          "rationale": "式が与えられ公式で展開処理"
         },
         {
           "form": "knowledge",
-          "kanten": "知識",
           "bands": "F",
-          "rationale": "どの公式を使うかの判別"
+          "rationale": "どの公式かの判別"
         }
       ],
       "notes": ""
@@ -2522,9 +2282,8 @@
       "forms": [
         {
           "form": "calculation",
-          "kanten": "技能",
           "bands": "F〜S",
-          "rationale": "平方の公式による展開計算"
+          "rationale": "平方の公式で与式を展開処理"
         }
       ],
       "notes": ""
@@ -2536,9 +2295,8 @@
       "forms": [
         {
           "form": "calculation",
-          "kanten": "技能",
           "bands": "F〜S",
-          "rationale": "和と差の積の公式による展開計算"
+          "rationale": "和と差の積の公式で与式を展開処理"
         }
       ],
       "notes": ""
@@ -2550,12 +2308,11 @@
       "forms": [
         {
           "form": "calculation",
-          "kanten": "技能",
           "bands": "S〜A",
-          "rationale": "置き換え・複数公式の組合せ・同類項整理を要する応用展開"
+          "rationale": "置換・複数公式・同類項整理を要する与式処理"
         }
       ],
-      "notes": "公式選択と置換の複合で応用まで届く。"
+      "notes": ""
     },
     {
       "lesson_id": "g3_l7",
@@ -2564,15 +2321,13 @@
       "forms": [
         {
           "form": "calculation",
-          "kanten": "技能",
           "bands": "F〜S",
-          "rationale": "共通因数のくくり出し計算"
+          "rationale": "与式から共通因数をくくり出す処理"
         },
         {
           "form": "knowledge",
-          "kanten": "知識",
           "bands": "F",
-          "rationale": "『因数分解』は展開の逆操作という意味理解"
+          "rationale": "因数分解＝展開の逆という意味理解"
         }
       ],
       "notes": ""
@@ -2584,9 +2339,8 @@
       "forms": [
         {
           "form": "calculation",
-          "kanten": "技能",
           "bands": "F〜S",
-          "rationale": "積和からa,bを探す因数分解計算"
+          "rationale": "積和からa,bを探す与式の因数分解処理"
         }
       ],
       "notes": ""
@@ -2598,9 +2352,8 @@
       "forms": [
         {
           "form": "calculation",
-          "kanten": "技能",
           "bands": "F〜S",
-          "rationale": "完全平方式の判別と因数分解"
+          "rationale": "完全平方式を判別し因数分解する処理"
         }
       ],
       "notes": ""
@@ -2612,9 +2365,8 @@
       "forms": [
         {
           "form": "calculation",
-          "kanten": "技能",
           "bands": "F〜S",
-          "rationale": "a^2-b^2型の因数分解"
+          "rationale": "a^2-b^2型の与式を因数分解する処理"
         }
       ],
       "notes": ""
@@ -2626,9 +2378,8 @@
       "forms": [
         {
           "form": "calculation",
-          "kanten": "技能",
           "bands": "S〜A",
-          "rationale": "くくり出し＋公式・置換など複数手順の因数分解"
+          "rationale": "くくり出し＋公式・置換の複数手順の与式処理"
         }
       ],
       "notes": ""
@@ -2640,18 +2391,11 @@
       "forms": [
         {
           "form": "calculation",
-          "kanten": "技能",
           "bands": "S〜A",
-          "rationale": "展開/因数分解を用いた工夫計算・式の値の効率的計算"
-        },
-        {
-          "form": "word_problem",
-          "kanten": "思考",
-          "bands": "S",
-          "rationale": "『◯◯を工夫して求めよ』等、数の性質を利用する場面設定"
+          "rationale": "与式を展開/因数分解で工夫し数値計算・式の値を処理"
         }
       ],
-      "notes": "式変形を道具として使う活用回。"
+      "notes": "v1でword_problemも付けたが、場面は数学的で式が与えられる工夫計算=calculationに一本化。"
     },
     {
       "lesson_id": "g3_l13",
@@ -2660,18 +2404,16 @@
       "forms": [
         {
           "form": "proof",
-          "kanten": "思考・判断・表現",
           "bands": "S〜A",
-          "rationale": "文字式で図形の数量関係（面積差など）を一般的に説明する記述証明が中心"
+          "rationale": "文字式で図形の数量関係を一般的に説明する記述証明が主"
         },
         {
           "form": "calculation",
-          "kanten": "技能",
           "bands": "S",
-          "rationale": "証明の途中の式変形の技能"
+          "rationale": "証明途中の式変形の処理"
         }
       ],
-      "notes": "証明が主。中2の数の性質の説明の図形版。"
+      "notes": "数の性質の証明の図形版。proofが主。"
     },
     {
       "lesson_id": "g3_l14",
@@ -2680,18 +2422,16 @@
       "forms": [
         {
           "form": "knowledge",
-          "kanten": "知識",
           "bands": "F〜S",
-          "rationale": "平方根・根号の意味、正負2つの平方根の理解が中心"
+          "rationale": "平方根・根号の意味、正負2つの平方根の理解が主"
         },
         {
           "form": "calculation",
-          "kanten": "技能",
           "bands": "F",
-          "rationale": "√を外す/つける基本変形、√の値の判定"
+          "rationale": "√を外す/つける基本変形"
         }
       ],
-      "notes": "意味導入回なのでknowledgeを主に。"
+      "notes": "意味導入回でknowledge主。"
     },
     {
       "lesson_id": "g3_l15",
@@ -2700,15 +2440,13 @@
       "forms": [
         {
           "form": "calculation",
-          "kanten": "技能",
           "bands": "F〜S",
-          "rationale": "根号を含む数の大小比較（2乗して比較）"
+          "rationale": "与えられた根号数を2乗比較で大小処理"
         },
         {
           "form": "knowledge",
-          "kanten": "知識",
           "bands": "F",
-          "rationale": "√a<√b ⟺ a<b の性質理解"
+          "rationale": "√a<√b⟺a<b の性質理解"
         }
       ],
       "notes": ""
@@ -2720,15 +2458,13 @@
       "forms": [
         {
           "form": "knowledge",
-          "kanten": "知識",
           "bands": "F〜S",
-          "rationale": "有理数/無理数の分類・循環小数の意味という概念理解が中心"
+          "rationale": "有理数/無理数の分類・循環小数の意味という概念理解が主"
         },
         {
           "form": "calculation",
-          "kanten": "技能",
           "bands": "F〜S",
-          "rationale": "分数⇔小数変換、循環小数の表記"
+          "rationale": "分数⇔小数変換・循環小数表記の処理"
         }
       ],
       "notes": "分類・判別の知識回。"
@@ -2740,9 +2476,8 @@
       "forms": [
         {
           "form": "calculation",
-          "kanten": "技能",
           "bands": "F〜S",
-          "rationale": "√a×√b=√(ab)等による乗除計算"
+          "rationale": "√a×√b=√(ab)等で与式を乗除処理"
         }
       ],
       "notes": ""
@@ -2754,9 +2489,8 @@
       "forms": [
         {
           "form": "calculation",
-          "kanten": "技能",
           "bands": "F〜S",
-          "rationale": "√を素因数分解して外に出す変形"
+          "rationale": "与えられた√を素因数分解し外に出す処理"
         }
       ],
       "notes": ""
@@ -2768,9 +2502,8 @@
       "forms": [
         {
           "form": "calculation",
-          "kanten": "技能",
           "bands": "F〜S",
-          "rationale": "分母の有理化の手続き技能"
+          "rationale": "与式の分母を有理化する処理"
         }
       ],
       "notes": ""
@@ -2782,9 +2515,8 @@
       "forms": [
         {
           "form": "calculation",
-          "kanten": "技能",
           "bands": "F〜S",
-          "rationale": "同じ√をまとめる加減計算"
+          "rationale": "与式の同じ√をまとめる加減処理"
         }
       ],
       "notes": ""
@@ -2796,12 +2528,11 @@
       "forms": [
         {
           "form": "calculation",
-          "kanten": "技能",
           "bands": "S〜A",
-          "rationale": "展開公式・分配法則を絡めた四則混合の√計算"
+          "rationale": "展開公式・分配法則を絡めた四則混合の√与式処理"
         }
       ],
-      "notes": "乗法公式×平方根で応用まで届く。"
+      "notes": ""
     },
     {
       "lesson_id": "g3_l22",
@@ -2810,13 +2541,11 @@
       "forms": [
         {
           "form": "calculation",
-          "kanten": "技能",
           "bands": "S〜A",
-          "rationale": "x=√?+? を代入して式の値を有理化/公式活用で求める"
+          "rationale": "x=√?+?を代入し有理化/公式で式の値を処理"
         },
         {
           "form": "knowledge",
-          "kanten": "知識",
           "bands": "F",
           "rationale": "近似値・有効数字の意味"
         }
@@ -2830,24 +2559,21 @@
       "forms": [
         {
           "form": "word_problem",
-          "kanten": "思考・判断・表現",
           "bands": "S〜A",
-          "rationale": "面積から一辺、実生活の量を√で表し評価する活用問題"
+          "rationale": "面積から一辺・実生活の量を√で表し評価する現実場面の活用"
+        },
+        {
+          "form": "find_value",
+          "bands": "S",
+          "rationale": "図形場面では図・条件から立式し長さ等を求める求値も併記"
         },
         {
           "form": "calculation",
-          "kanten": "技能",
           "bands": "S",
-          "rationale": "立式後の√計算"
-        },
-        {
-          "form": "visual",
-          "kanten": "技能＋思考",
-          "bands": "S",
-          "rationale": "正方形の面積↔一辺など図と結びつける読図"
+          "rationale": "立式後の√計算処理"
         }
       ],
-      "notes": "利用回なのでword_problem主。"
+      "notes": "利用回でword_problem主。図形絡みはfind_value併記。"
     },
     {
       "lesson_id": "g3_l24",
@@ -2856,18 +2582,16 @@
       "forms": [
         {
           "form": "knowledge",
-          "kanten": "知識",
           "bands": "F〜S",
-          "rationale": "2次方程式・その解の意味、解であることの判定"
+          "rationale": "2次方程式・その解の意味、解であることの判定が主"
         },
         {
           "form": "calculation",
-          "kanten": "技能",
           "bands": "F",
-          "rationale": "代入して解かどうか確かめる"
+          "rationale": "代入して解か確かめる処理"
         }
       ],
-      "notes": "意味導入回。"
+      "notes": "意味導入回でknowledge主。"
     },
     {
       "lesson_id": "g3_l25",
@@ -2876,9 +2600,8 @@
       "forms": [
         {
           "form": "calculation",
-          "kanten": "技能",
           "bands": "F〜S",
-          "rationale": "平方根の形に直して解く手続き"
+          "rationale": "与えられた方程式を平方根の形に直して解く処理"
         }
       ],
       "notes": ""
@@ -2890,24 +2613,21 @@
       "forms": [
         {
           "form": "calculation",
-          "kanten": "技能",
           "bands": "S〜A",
-          "rationale": "解の公式に代入して解く計算が中心"
+          "rationale": "解の公式に代入して与式を解く処理が主"
         },
         {
           "form": "proof",
-          "kanten": "思考・判断・表現",
           "bands": "A",
-          "rationale": "平方完成による公式の導出過程の説明"
+          "rationale": "平方完成による公式の導出過程の記述説明"
         },
         {
           "form": "knowledge",
-          "kanten": "知識",
           "bands": "F",
           "rationale": "公式の各項a,b,cの対応理解"
         }
       ],
-      "notes": "導出はproof寄りの記述、利用はcalculation。"
+      "notes": "導出はproof、利用はcalculation。"
     },
     {
       "lesson_id": "g3_l27",
@@ -2916,9 +2636,8 @@
       "forms": [
         {
           "form": "calculation",
-          "kanten": "技能",
           "bands": "F〜S",
-          "rationale": "AB=0の性質で因数分解して解く"
+          "rationale": "AB=0の性質で与式を因数分解し解く処理"
         }
       ],
       "notes": ""
@@ -2930,13 +2649,11 @@
       "forms": [
         {
           "form": "calculation",
-          "kanten": "技能",
           "bands": "S〜A",
-          "rationale": "整理してから最適な解法を選び解く"
+          "rationale": "与式を整理し最適解法を選んで解く処理"
         },
         {
           "form": "knowledge",
-          "kanten": "知識",
           "bands": "S",
           "rationale": "どの解法が有効かの判断"
         }
@@ -2950,18 +2667,16 @@
       "forms": [
         {
           "form": "word_problem",
-          "kanten": "思考・判断・表現",
           "bands": "S〜A",
-          "rationale": "連続する整数・積などを2次方程式で立式し、解の吟味まで行う"
+          "rationale": "連続整数・積などの現実場面を2次方程式で立式し解を吟味"
         },
         {
           "form": "calculation",
-          "kanten": "技能",
           "bands": "S",
-          "rationale": "立てた方程式を解く"
+          "rationale": "立てた方程式を解く処理"
         }
       ],
-      "notes": "解の吟味（不適解の除外）が思考要素。"
+      "notes": "解の吟味（不適解除外）が思考要素。word_problem主。"
     },
     {
       "lesson_id": "g3_l30",
@@ -2970,24 +2685,21 @@
       "forms": [
         {
           "form": "word_problem",
-          "kanten": "思考・判断・表現",
           "bands": "S〜A",
-          "rationale": "面積・長さの図形場面を2次方程式で立式し解を吟味"
+          "rationale": "面積・長さの図形場面を2次方程式で立式し解を吟味する活用"
         },
         {
-          "form": "visual",
-          "kanten": "技能＋思考",
+          "form": "find_value",
           "bands": "S",
-          "rationale": "道幅・切り取りなど図から数量関係を把握"
+          "rationale": "図・条件から立式して長さ・面積を求める求値も併記"
         },
         {
           "form": "calculation",
-          "kanten": "技能",
           "bands": "S",
-          "rationale": "立式後の求解"
+          "rationale": "立式後の求解処理"
         }
       ],
-      "notes": ""
+      "notes": "利用回でword_problem主。図形絡みはfind_value併記。"
     },
     {
       "lesson_id": "g3_l31",
@@ -2996,24 +2708,21 @@
       "forms": [
         {
           "form": "word_problem",
-          "kanten": "思考・判断・表現",
-          "bands": "A〜D",
-          "rationale": "動点による面積が特定値になる時刻等を2次方程式化する融合活用"
+          "bands": "S〜D",
+          "rationale": "動点等の現実場面を2次方程式で立式・解の吟味する活用"
         },
         {
-          "form": "visual",
-          "kanten": "技能＋思考",
+          "form": "find_value",
           "bands": "S〜A",
-          "rationale": "動点の位置・場合分けを図で把握"
+          "rationale": "動点位置での長さ・面積を図から立式して求める求値"
         },
         {
-          "form": "calculation",
-          "kanten": "技能",
+          "form": "graph_table",
           "bands": "S",
-          "rationale": "立式後の求解と吟味"
+          "rationale": "時間と面積の対応を表・グラフで把握"
         }
       ],
-      "notes": "動点。場合分け・吟味で発展まで。"
+      "notes": "動点利用。word_problem主、find_value併記。"
     },
     {
       "lesson_id": "g3_l32",
@@ -3022,24 +2731,21 @@
       "forms": [
         {
           "form": "knowledge",
-          "kanten": "知識",
           "bands": "F〜S",
-          "rationale": "yがxの2乗に比例するという意味・比例定数の理解"
+          "rationale": "y=ax^2が表す関数の意味・yがxの2乗に比例する理解が主"
         },
         {
           "form": "calculation",
-          "kanten": "技能",
           "bands": "F〜S",
-          "rationale": "対応する値からa（式）を決定、値の計算"
+          "rationale": "式が与えられx代入でy値を処理"
         },
         {
           "form": "word_problem",
-          "kanten": "思考",
           "bands": "S",
-          "rationale": "2乗比例の関係を事象から立式"
+          "rationale": "2乗比例の身近な事象の把握"
         }
       ],
-      "notes": "意味と式の導入回。"
+      "notes": "意味導入回。"
     },
     {
       "lesson_id": "g3_l33",
@@ -3047,25 +2753,17 @@
       "unit_flag": "ok",
       "forms": [
         {
-          "form": "visual",
-          "kanten": "技能＋思考",
-          "bands": "F〜A",
-          "rationale": "放物線をかく・aによる開き/向き・軸/頂点の特徴を読む（作図含む）"
+          "form": "graph_table",
+          "bands": "F〜S",
+          "rationale": "表から放物線をかく・グラフの特徴を読むのが主"
         },
         {
           "form": "knowledge",
-          "kanten": "知識",
-          "bands": "F〜S",
-          "rationale": "放物線・軸・頂点・対称性の性質理解"
-        },
-        {
-          "form": "calculation",
-          "kanten": "技能",
           "bands": "F",
-          "rationale": "グラフ用に対応表の値を計算"
+          "rationale": "放物線・軸・頂点・開き方の性質理解"
         }
       ],
-      "notes": "visual主。作図をrationaleに明記。"
+      "notes": "グラフをかく/読むが目的でgraph_table主。"
     },
     {
       "lesson_id": "g3_l34",
@@ -3073,19 +2771,17 @@
       "unit_flag": "ok",
       "forms": [
         {
-          "form": "calculation",
-          "kanten": "技能",
+          "form": "find_value",
           "bands": "S〜A",
-          "rationale": "xの変域からyの変域を求める（0を挟む場合の最小/最大の扱い）"
+          "rationale": "xの変域と放物線の形からyの変域を立式して求める（頂点0を含むか吟味）"
         },
         {
-          "form": "visual",
-          "kanten": "技能＋思考",
-          "bands": "S〜A",
-          "rationale": "グラフ上で変域の対応を把握（放物線の底0を跨ぐ判断）"
+          "form": "graph_table",
+          "bands": "S",
+          "rationale": "変域をグラフ上で把握"
         }
       ],
-      "notes": "0を含む変域の落とし穴が応用要素。calc主・visual併記。"
+      "notes": "v1 calculation。実際は0を含むか考えて変域を求める求値でfind_value主。"
     },
     {
       "lesson_id": "g3_l35",
@@ -3094,18 +2790,16 @@
       "forms": [
         {
           "form": "calculation",
-          "kanten": "技能",
-          "bands": "F〜A",
-          "rationale": "区間平均の変化の割合 a(p+q) を計算する"
+          "bands": "F〜S",
+          "rationale": "式と区間が与えられ(yの増加量)/(xの増加量)を処理"
         },
         {
           "form": "knowledge",
-          "kanten": "知識",
           "bands": "F",
-          "rationale": "1次関数と違い一定でないことの理解"
+          "rationale": "y=ax^2では変化の割合が一定でない意味理解"
         }
       ],
-      "notes": ""
+      "notes": "式が与えられ処理する計算。"
     },
     {
       "lesson_id": "g3_l36",
@@ -3114,24 +2808,16 @@
       "forms": [
         {
           "form": "word_problem",
-          "kanten": "思考・判断・表現",
           "bands": "S〜A",
-          "rationale": "落下・制動距離など2乗比例の実事象を立式し値を予測する活用"
+          "rationale": "落下・制動距離など現実場面をy=ax^2で立式して解く活用"
         },
         {
-          "form": "calculation",
-          "kanten": "技能",
+          "form": "graph_table",
           "bands": "S",
-          "rationale": "式に代入して量を求める"
-        },
-        {
-          "form": "visual",
-          "kanten": "技能＋思考",
-          "bands": "S",
-          "rationale": "表やグラフから関係を読む"
+          "rationale": "現象の対応を表・グラフで把握"
         }
       ],
-      "notes": "利用回。"
+      "notes": "利用回でword_problem主。"
     },
     {
       "lesson_id": "g3_l37",
@@ -3139,25 +2825,22 @@
       "unit_flag": "ok",
       "forms": [
         {
-          "form": "calculation",
-          "kanten": "技能",
+          "form": "find_value",
           "bands": "S〜A",
-          "rationale": "放物線と直線の交点座標を連立(2次方程式)で求める。傾き・直線の式決定もここ"
+          "rationale": "放物線と直線の交点座標を連立(2次方程式)で立式して求める求値が中心"
         },
         {
-          "form": "visual",
-          "kanten": "技能＋思考",
-          "bands": "S〜A",
-          "rationale": "交点で囲む三角形/四角形をグラフで把握し面積・等分・比を思考する。図は座標軸と2曲線・囲む領域の骨格のみ"
+          "form": "graph_table",
+          "bands": "S",
+          "rationale": "放物線と直線が囲む図形をグラフ上で把握"
         },
         {
           "form": "word_problem",
-          "kanten": "思考・判断・表現",
           "bands": "A〜D",
-          "rationale": "面積を2等分する直線・原点を通り面積を分ける点など逆算融合"
+          "rationale": "交点を用いた面積・線分比などの融合活用"
         }
       ],
-      "notes": "重要: 現行visualフォームは『交点の座標を求めよ』で答え=交点座標。これは本質はcalculation。visualに残すなら『図から面積/大小/囲む形を読む・かく』に限定し、交点座標そのものを答えにする問いはcalculationへ移す。いずれのフォームでも参照図に答えの座標値をラベルしてはいけない（交点座標を答えさせる問題で図に (-4,8) 等を描くのは答えの露出）。fixture g3_l37_visual_min.json が交点座標を答えにしている点が要修正。"
+      "notes": "確定型=find_value（交点座標を連立で求める）。図に答え座標を描いてしまう不具合あり→図には条件のみ描き解答座標は描かないよう要修正。"
     },
     {
       "lesson_id": "g3_l38",
@@ -3166,24 +2849,21 @@
       "forms": [
         {
           "form": "word_problem",
-          "kanten": "思考・判断・表現",
-          "bands": "A〜D",
-          "rationale": "動点の位置で場合分けし面積をxの関数(1次/2次)で表す融合活用"
+          "bands": "S〜D",
+          "rationale": "動点の現実場面を関数で立式し面積変化を解く活用"
         },
         {
-          "form": "visual",
-          "kanten": "技能＋思考",
+          "form": "find_value",
           "bands": "S〜A",
-          "rationale": "動点の各区間・面積とxの関係グラフを読む/かく"
+          "rationale": "各区間で図から面積を立式して求める求値"
         },
         {
-          "form": "calculation",
-          "kanten": "技能",
-          "bands": "S",
-          "rationale": "面積の式や特定時刻の求解"
+          "form": "graph_table",
+          "bands": "S〜A",
+          "rationale": "時間と面積の対応をグラフ・表で表す"
         }
       ],
-      "notes": "y=ax^2章末の動点。場合分けが核。"
+      "notes": "動点利用。word_problem主。"
     },
     {
       "lesson_id": "g3_l39",
@@ -3192,24 +2872,16 @@
       "forms": [
         {
           "form": "knowledge",
-          "kanten": "知識",
           "bands": "F〜S",
-          "rationale": "相似の意味・対応・相似比・相似記号∽の理解が中心"
+          "rationale": "相似の意味・対応・相似比という概念理解が主"
         },
         {
-          "form": "visual",
-          "kanten": "技能＋思考",
-          "bands": "F〜S",
-          "rationale": "相似な図形の対応辺/角を図で読み取る"
-        },
-        {
-          "form": "calculation",
-          "kanten": "技能",
-          "bands": "F〜S",
-          "rationale": "相似比を使って対応辺の長さを求める"
+          "form": "find_value",
+          "bands": "S",
+          "rationale": "相似比から対応する辺の長さを立式して求める求値"
         }
       ],
-      "notes": "意味導入回なのでknowledge主。現行blueprintはProofだが証明はl41で扱う。"
+      "notes": "意味回でknowledge主。"
     },
     {
       "lesson_id": "g3_l40",
@@ -3218,18 +2890,16 @@
       "forms": [
         {
           "form": "knowledge",
-          "kanten": "知識",
           "bands": "F〜S",
-          "rationale": "3つの相似条件を述べ、どれで相似かを判別"
+          "rationale": "3つの相似条件の理解・どれが成り立つか判別が主"
         },
         {
-          "form": "visual",
-          "kanten": "技能＋思考",
-          "bands": "F〜S",
-          "rationale": "図から対応する辺の比・角を読み条件に当てはめる"
+          "form": "find_value",
+          "bands": "S",
+          "rationale": "相似から対応辺の長さを求める求値"
         }
       ],
-      "notes": "条件の把握・判別が主。証明の書き方はl41。"
+      "notes": ""
     },
     {
       "lesson_id": "g3_l41",
@@ -3238,18 +2908,16 @@
       "forms": [
         {
           "form": "proof",
-          "kanten": "思考・判断・表現",
-          "bands": "S〜A",
-          "rationale": "相似条件を根拠に三角形の相似を記述証明する"
+          "bands": "S〜D",
+          "rationale": "相似条件を根拠に2つの三角形の相似を記述証明するのが主"
         },
         {
-          "form": "visual",
-          "kanten": "技能＋思考",
+          "form": "find_value",
           "bands": "S",
-          "rationale": "証明対象の図から対応関係を把握"
+          "rationale": "証明後に相似比で長さを求める求値"
         }
       ],
-      "notes": "証明主。"
+      "notes": "proof主。"
     },
     {
       "lesson_id": "g3_l42",
@@ -3257,25 +2925,22 @@
       "unit_flag": "ok",
       "forms": [
         {
-          "form": "calculation",
-          "kanten": "技能",
-          "bands": "F〜A",
-          "rationale": "平行線に切り取られた線分比から未知の長さを求める"
-        },
-        {
-          "form": "visual",
-          "kanten": "技能＋思考",
-          "bands": "F〜S",
-          "rationale": "図の対応する線分の比を読み取る"
+          "form": "find_value",
+          "bands": "S〜A",
+          "rationale": "平行線と線分の比から未知の長さ・比を立式して求める求値が主"
         },
         {
           "form": "knowledge",
-          "kanten": "知識",
           "bands": "F",
-          "rationale": "定理の内容理解"
+          "rationale": "平行線と線分の比の定理の理解"
+        },
+        {
+          "form": "proof",
+          "bands": "A",
+          "rationale": "比の関係の記述証明"
         }
       ],
-      "notes": "計算利用が中心。証明はl41/l44側。"
+      "notes": "v1 proof主だが計量が中心の求値でfind_value主に。"
     },
     {
       "lesson_id": "g3_l43",
@@ -3283,25 +2948,22 @@
       "unit_flag": "ok",
       "forms": [
         {
-          "form": "calculation",
-          "kanten": "技能",
+          "form": "find_value",
           "bands": "S〜A",
-          "rationale": "比の関係から平行判定・長さの応用計算"
+          "rationale": "比の条件から長さを求める・平行判定に伴う値を求める求値が主"
         },
         {
-          "form": "visual",
-          "kanten": "技能＋思考",
-          "bands": "S",
-          "rationale": "図で比の対応を把握し平行かを判断"
+          "form": "proof",
+          "bands": "A",
+          "rationale": "定理の逆を用いた平行の記述証明"
         },
         {
           "form": "knowledge",
-          "kanten": "知識",
           "bands": "F",
-          "rationale": "逆の定理の理解"
+          "rationale": "定理の逆の理解"
         }
       ],
-      "notes": ""
+      "notes": "find_value主に。"
     },
     {
       "lesson_id": "g3_l44",
@@ -3309,31 +2971,22 @@
       "unit_flag": "ok",
       "forms": [
         {
-          "form": "calculation",
-          "kanten": "技能",
-          "bands": "F〜S",
-          "rationale": "中点連結定理で線分の長さを求める利用"
-        },
-        {
           "form": "proof",
-          "kanten": "思考・判断・表現",
           "bands": "S〜A",
-          "rationale": "中点連結定理そのもの・関連命題の証明"
+          "rationale": "中点連結定理の証明・それを用いた記述証明が主"
         },
         {
-          "form": "visual",
-          "kanten": "技能＋思考",
-          "bands": "F〜S",
-          "rationale": "中点・平行/長さ半分の関係を図で把握"
+          "form": "find_value",
+          "bands": "S",
+          "rationale": "中点連結定理で中点を結ぶ線分の長さを求める求値"
         },
         {
           "form": "knowledge",
-          "kanten": "知識",
           "bands": "F",
           "rationale": "定理の内容理解"
         }
       ],
-      "notes": "証明・計算利用の両輪。"
+      "notes": "proofと求値の両輪。proof主。"
     },
     {
       "lesson_id": "g3_l45",
@@ -3341,25 +2994,22 @@
       "unit_flag": "ok",
       "forms": [
         {
-          "form": "calculation",
-          "kanten": "技能",
-          "bands": "F〜A",
-          "rationale": "相似比m:n→面積比m^2:n^2を用いて面積を求める"
-        },
-        {
-          "form": "visual",
-          "kanten": "技能＋思考",
-          "bands": "S",
-          "rationale": "相似な図形/部分図形を図で把握し面積比に結ぶ"
+          "form": "find_value",
+          "bands": "S〜A",
+          "rationale": "相似比から面積比・実際の面積を立式して求める求値が主"
         },
         {
           "form": "knowledge",
-          "kanten": "知識",
           "bands": "F",
-          "rationale": "面積比=相似比の2乗の理解"
+          "rationale": "面積比＝相似比の2乗の理解"
+        },
+        {
+          "form": "word_problem",
+          "bands": "A",
+          "rationale": "面積比を用いた現実場面の活用"
         }
       ],
-      "notes": ""
+      "notes": "v1 BasicGeometryMeasurement=計算だが図から求める求値。find_value主。"
     },
     {
       "lesson_id": "g3_l46",
@@ -3367,25 +3017,22 @@
       "unit_flag": "ok",
       "forms": [
         {
-          "form": "calculation",
-          "kanten": "技能",
-          "bands": "F〜A",
-          "rationale": "相似比m:n→表面積比m^2:n^2, 体積比m^3:n^3で求める"
-        },
-        {
-          "form": "visual",
-          "kanten": "技能＋思考",
-          "bands": "S",
-          "rationale": "相似な立体（円錐の相似など）を図で把握"
+          "form": "find_value",
+          "bands": "S〜A",
+          "rationale": "相似比から表面積比・体積比・実際の量を立式して求める求値が主"
         },
         {
           "form": "knowledge",
-          "kanten": "知識",
           "bands": "F",
-          "rationale": "面積比2乗/体積比3乗の理解"
+          "rationale": "体積比＝相似比の3乗の理解"
+        },
+        {
+          "form": "word_problem",
+          "bands": "A",
+          "rationale": "容器・模型など現実場面の活用"
         }
       ],
-      "notes": ""
+      "notes": "figから求める求値。find_value主に移した。"
     },
     {
       "lesson_id": "g3_l47",
@@ -3393,25 +3040,17 @@
       "unit_flag": "ok",
       "forms": [
         {
-          "form": "calculation",
-          "kanten": "技能",
+          "form": "find_value",
           "bands": "F〜A",
-          "rationale": "円周角=中心角の半分・同弧の円周角相等で角度を求める"
-        },
-        {
-          "form": "visual",
-          "kanten": "技能＋思考",
-          "bands": "F〜A",
-          "rationale": "円と弧・角の位置関係を図で読み取る"
+          "rationale": "円周角・中心角の定理から図の角の大きさを立式して求める求値が主"
         },
         {
           "form": "knowledge",
-          "kanten": "知識",
           "bands": "F",
-          "rationale": "定理の内容理解"
+          "rationale": "円周角の定理の内容理解"
         }
       ],
-      "notes": "角度計算が中心。図の弧/角の対応が肝。"
+      "notes": "v1 AngleCalculation=計算だが図から角を求める求値。find_value主に。円周角が90°に固定される不具合に注意。"
     },
     {
       "lesson_id": "g3_l48",
@@ -3419,22 +3058,14 @@
       "unit_flag": "ok",
       "forms": [
         {
-          "form": "calculation",
-          "kanten": "技能",
-          "bands": "S〜A",
-          "rationale": "等しい角から4点が同一円周上にあるかを判断し角を求める"
-        },
-        {
           "form": "knowledge",
-          "kanten": "知識",
           "bands": "F〜S",
-          "rationale": "定理の逆の内容・共円条件の理解"
+          "rationale": "円周角の定理の逆・4点が同一円周上にある条件の理解が主"
         },
         {
-          "form": "visual",
-          "kanten": "技能＋思考",
+          "form": "find_value",
           "bands": "S",
-          "rationale": "4点と角の配置を図で判断"
+          "rationale": "逆を用いて角や位置関係に伴う値を求める求値"
         }
       ],
       "notes": ""
@@ -3446,18 +3077,16 @@
       "forms": [
         {
           "form": "proof",
-          "kanten": "思考・判断・表現",
-          "bands": "S〜A",
-          "rationale": "円周角の相等を根拠に相似・合同・角の等しさを記述証明"
+          "bands": "S〜D",
+          "rationale": "円周角の定理を根拠に相似・合同・角の等しさを記述証明するのが主"
         },
         {
-          "form": "visual",
-          "kanten": "技能＋思考",
+          "form": "find_value",
           "bands": "S",
-          "rationale": "円内の角の対応を図で把握"
+          "rationale": "証明を用いた長さ・角の求値"
         }
       ],
-      "notes": "証明主。相似証明×円周角の融合。"
+      "notes": "proof主。"
     },
     {
       "lesson_id": "g3_l50",
@@ -3465,25 +3094,17 @@
       "unit_flag": "ok",
       "forms": [
         {
-          "form": "calculation",
-          "kanten": "技能",
+          "form": "find_value",
           "bands": "S〜A",
-          "rationale": "円周角の比=弧の比の関係で角度/弧を求める"
+          "rationale": "円周角と弧の比の関係から角・弧の長さを立式して求める求値が主"
         },
         {
           "form": "knowledge",
-          "kanten": "知識",
           "bands": "F",
-          "rationale": "弧と円周角が比例することの理解"
-        },
-        {
-          "form": "visual",
-          "kanten": "技能＋思考",
-          "bands": "S",
-          "rationale": "弧と角の対応を図で読む"
+          "rationale": "弧の長さは円周角に比例する理解"
         }
       ],
-      "notes": ""
+      "notes": "figから求める求値。find_value主。"
     },
     {
       "lesson_id": "g3_l51",
@@ -3492,30 +3113,21 @@
       "forms": [
         {
           "form": "knowledge",
-          "kanten": "知識",
           "bands": "F〜S",
-          "rationale": "定理 a^2+b^2=c^2 の意味と直角三角形での成立の理解"
+          "rationale": "三平方の定理の意味・a^2+b^2=c^2の理解が主"
         },
         {
           "form": "proof",
-          "kanten": "思考・判断・表現",
-          "bands": "S〜A",
-          "rationale": "正方形の面積等による定理の証明の説明"
+          "bands": "A〜D",
+          "rationale": "面積を用いた定理の記述証明"
         },
         {
-          "form": "calculation",
-          "kanten": "技能",
-          "bands": "F",
-          "rationale": "定理を使い残りの辺を求める基本"
-        },
-        {
-          "form": "visual",
-          "kanten": "技能＋思考",
-          "bands": "F",
-          "rationale": "証明図（面積分割）の読解"
+          "form": "find_value",
+          "bands": "F〜S",
+          "rationale": "定理で直角三角形の残る1辺を求める求値"
         }
       ],
-      "notes": "意味＋証明の導入回。"
+      "notes": "意味＋証明回。"
     },
     {
       "lesson_id": "g3_l52",
@@ -3523,22 +3135,19 @@
       "unit_flag": "ok",
       "forms": [
         {
-          "form": "calculation",
-          "kanten": "技能",
+          "form": "knowledge",
           "bands": "F〜S",
-          "rationale": "3辺からa^2+b^2=c^2を確かめ直角三角形か判定"
+          "rationale": "三平方の定理の逆・直角三角形かの判定が主"
         },
         {
-          "form": "knowledge",
-          "kanten": "知識",
-          "bands": "F",
-          "rationale": "定理の逆の意味理解"
+          "form": "find_value",
+          "bands": "S",
+          "rationale": "3辺から直角の有無を確かめる計量的判定"
         },
         {
           "form": "proof",
-          "kanten": "思考・判断・表現",
-          "bands": "S",
-          "rationale": "逆の成立の説明"
+          "bands": "A",
+          "rationale": "逆の記述による説明"
         }
       ],
       "notes": ""
@@ -3549,25 +3158,17 @@
       "unit_flag": "ok",
       "forms": [
         {
-          "form": "calculation",
-          "kanten": "技能",
-          "bands": "F〜A",
-          "rationale": "三平方で高さ・対角線・面積、45/30-60直角三角形の辺の比を求める"
-        },
-        {
-          "form": "visual",
-          "kanten": "技能＋思考",
+          "form": "find_value",
           "bands": "S〜A",
-          "rationale": "補助線を引き直角三角形を見出す（図の読解が肝）"
+          "rationale": "図から補助線を引き三平方で高さ・面積・辺の長さを立式して求める求値が中心"
         },
         {
           "form": "knowledge",
-          "kanten": "知識",
           "bands": "F",
-          "rationale": "特別な直角三角形の辺の比の理解"
+          "rationale": "30-60-90・45-45-90の辺の比の理解"
         }
       ],
-      "notes": ""
+      "notes": "v1 Pythagorean=計算だが図から求める求値。find_value主に。"
     },
     {
       "lesson_id": "g3_l54",
@@ -3575,19 +3176,17 @@
       "unit_flag": "ok",
       "forms": [
         {
-          "form": "calculation",
-          "kanten": "技能",
-          "bands": "F〜S",
-          "rationale": "座標差から三平方で2点間距離を求める"
+          "form": "find_value",
+          "bands": "S〜A",
+          "rationale": "2点の座標から三平方で距離を立式して求める求値"
         },
         {
-          "form": "visual",
-          "kanten": "技能＋思考",
+          "form": "graph_table",
           "bands": "S",
-          "rationale": "座標平面上に直角三角形を見て距離を把握"
+          "rationale": "座標平面上に2点をとり直角三角形を把握"
         }
       ],
-      "notes": ""
+      "notes": "座標平面上の距離＝find_value（指示通り）。"
     },
     {
       "lesson_id": "g3_l55",
@@ -3595,25 +3194,17 @@
       "unit_flag": "ok",
       "forms": [
         {
-          "form": "calculation",
-          "kanten": "技能",
+          "form": "find_value",
           "bands": "S〜A",
-          "rationale": "直方体の対角線・錐体の高さ/体積を三平方で求める"
+          "rationale": "立体の図から対角線/高さ/体積を三平方で立式・構想して求める求値"
         },
         {
-          "form": "visual",
-          "kanten": "技能＋思考",
-          "bands": "S〜A",
-          "rationale": "立体内の直角三角形を切り出して把握（空間把握が肝）"
-        },
-        {
-          "form": "knowledge",
-          "kanten": "知識",
-          "bands": "F",
-          "rationale": "空間での三平方適用面の理解"
+          "form": "graph_table",
+          "bands": "S",
+          "rationale": "見取図/断面を読み補助線を引く"
         }
       ],
-      "notes": "現行blueprintがBasicDifferenceだが本質は三平方の空間利用。"
+      "notes": "v1 BasicDifference/calculation系だが図から求める求値。find_value主に。"
     },
     {
       "lesson_id": "g3_l56",
@@ -3621,19 +3212,17 @@
       "unit_flag": "ok",
       "forms": [
         {
-          "form": "visual",
-          "kanten": "技能＋思考",
-          "bands": "S〜A",
-          "rationale": "展開図に開いて最短経路を直線で捉える（図的思考が中心）"
+          "form": "find_value",
+          "bands": "A〜D",
+          "rationale": "展開図に開いて最短経路を三平方で立式して求める求値（構想を要す）"
         },
         {
-          "form": "calculation",
-          "kanten": "技能",
-          "bands": "S〜A",
-          "rationale": "展開図上で三平方により最短距離を計算"
+          "form": "graph_table",
+          "bands": "S",
+          "rationale": "立体を展開図に開いて経路を把握"
         }
       ],
-      "notes": "visualが主導、計算が従。"
+      "notes": "最短距離展開図＝find_value（指示通り）。"
     },
     {
       "lesson_id": "g3_l57",
@@ -3642,18 +3231,16 @@
       "forms": [
         {
           "form": "knowledge",
-          "kanten": "知識",
           "bands": "F〜S",
-          "rationale": "全数調査/標本調査の区別・母集団/標本の意味・調査法の適否判断"
+          "rationale": "全数調査/標本調査の意味・使い分けの理解が主"
         },
         {
           "form": "word_problem",
-          "kanten": "思考・判断・表現",
           "bands": "S",
-          "rationale": "具体場面でどちらの調査が適切かを判断・説明"
+          "rationale": "どの調査が適切か現実場面で判断する活用"
         }
       ],
-      "notes": "概念理解回。"
+      "notes": "意味回でknowledge主。"
     },
     {
       "lesson_id": "g3_l58",
@@ -3662,15 +3249,13 @@
       "forms": [
         {
           "form": "knowledge",
-          "kanten": "知識",
           "bands": "F〜S",
-          "rationale": "無作為抽出の意味・必要性・方法（乱数等）の理解"
+          "rationale": "母集団・標本・無作為抽出の意味と方法の理解が主"
         },
         {
           "form": "word_problem",
-          "kanten": "思考・判断・表現",
           "bands": "S",
-          "rationale": "抽出法の適否・偏りを判断し説明する"
+          "rationale": "偏りのない抽出方法を場面で判断する活用"
         }
       ],
       "notes": ""
@@ -3681,25 +3266,22 @@
       "unit_flag": "ok",
       "forms": [
         {
-          "form": "calculation",
-          "kanten": "技能",
-          "bands": "F〜S",
-          "rationale": "標本の比率から母集団の個数/比率を比例的に推定する"
+          "form": "word_problem",
+          "bands": "S〜A",
+          "rationale": "標本の比率から母集団の数量を推定する現実場面の活用が主"
         },
         {
-          "form": "word_problem",
-          "kanten": "思考・判断・表現",
-          "bands": "S〜A",
-          "rationale": "標本結果を根拠に母集団を推定し説明する"
+          "form": "calculation",
+          "bands": "F〜S",
+          "rationale": "標本比率・比例式による推定値の計算処理"
         },
         {
           "form": "knowledge",
-          "kanten": "知識",
           "bands": "F",
           "rationale": "標本比率≒母比率の考え方の理解"
         }
       ],
-      "notes": ""
+      "notes": "推定の活用＋比率計算。word_problem主。"
     },
     {
       "lesson_id": "g3_l60",
@@ -3708,18 +3290,16 @@
       "forms": [
         {
           "form": "word_problem",
-          "kanten": "思考・判断・表現",
-          "bands": "S〜A",
-          "rationale": "捕獲再捕獲・不良品率など実場面で標本から母集団を推定する活用"
+          "bands": "S〜D",
+          "rationale": "捕獲再捕獲など現実場面から母集団を推定する活用が中心"
         },
         {
           "form": "calculation",
-          "kanten": "技能",
           "bands": "S",
-          "rationale": "比例式による推定計算"
+          "rationale": "比例式による推定値の計算処理"
         }
       ],
-      "notes": "活用回。"
+      "notes": "活用回でword_problem主。"
     },
     {
       "lesson_id": "exam_l1",
@@ -3728,24 +3308,21 @@
       "forms": [
         {
           "form": "word_problem",
-          "kanten": "思考・判断・表現",
           "bands": "A〜D",
-          "rationale": "座標平面上の直線・交点・三角形の面積・面積2等分など多段の融合活用"
+          "rationale": "座標平面上の融合場面を読み解き段階的に解く入試融合活用が主"
         },
         {
-          "form": "calculation",
-          "kanten": "技能",
+          "form": "find_value",
           "bands": "S〜A",
-          "rationale": "交点座標・直線の式・面積の求解"
+          "rationale": "交点座標・三角形の面積を立式して求める求値"
         },
         {
-          "form": "visual",
-          "kanten": "技能＋思考",
-          "bands": "S〜A",
-          "rationale": "座標平面の図で交点・囲む三角形を把握（答え座標はラベルしない）"
+          "form": "graph_table",
+          "bands": "S",
+          "rationale": "直線と図形の位置関係をグラフ上で把握"
         }
       ],
-      "notes": "融合セクション（複数単元を横断・発展）。生徒が「入試対策」として選択可のまま残す。難易度は発展(D)まで。"
+      "notes": "融合セクション（入試対策）。生徒の『入試対策やりたい』に応える正当な節。"
     },
     {
       "lesson_id": "exam_l2",
@@ -3754,24 +3331,21 @@
       "forms": [
         {
           "form": "word_problem",
-          "kanten": "思考・判断・表現",
           "bands": "A〜D",
-          "rationale": "放物線と直線の交点・面積・等分・比の多段融合（g3_l37の入試強化版）"
+          "rationale": "放物線と直線の融合場面を段階的に解く入試活用が主"
         },
         {
-          "form": "calculation",
-          "kanten": "技能",
+          "form": "find_value",
           "bands": "S〜A",
-          "rationale": "交点座標・面積・直線の式の求解"
+          "rationale": "交点座標・面積・線分比を連立/相似で立式して求める求値"
         },
         {
-          "form": "visual",
-          "kanten": "技能＋思考",
-          "bands": "S〜A",
-          "rationale": "放物線と直線と囲む図形を把握（答え座標はラベルしない）"
+          "form": "graph_table",
+          "bands": "S",
+          "rationale": "放物線と直線が囲む図形をグラフ上で把握"
         }
       ],
-      "notes": "融合セクション（複数単元を横断・発展）。生徒が「入試対策」として選択可のまま残す。難易度は発展(D)まで。"
+      "notes": "融合セクション（入試対策）。"
     },
     {
       "lesson_id": "exam_l3",
@@ -3780,24 +3354,21 @@
       "forms": [
         {
           "form": "word_problem",
-          "kanten": "思考・判断・表現",
           "bands": "A〜D",
-          "rationale": "動点の位置で場合分けし面積を関数化する融合（g2_l29/g3_l38の入試版）"
+          "rationale": "動点の現実場面を関数で立式し面積変化を解く入試活用が主"
         },
         {
-          "form": "visual",
-          "kanten": "技能＋思考",
+          "form": "graph_table",
           "bands": "S〜A",
-          "rationale": "動点の区間と面積-時間グラフを読む/かく"
+          "rationale": "時間と面積の対応をグラフ・表で表す"
         },
         {
-          "form": "calculation",
-          "kanten": "技能",
-          "bands": "S",
-          "rationale": "各区間の式・特定値の求解"
+          "form": "find_value",
+          "bands": "S〜A",
+          "rationale": "各区間で面積を図から立式して求める求値"
         }
       ],
-      "notes": "融合セクション（複数単元を横断・発展）。生徒が「入試対策」として選択可のまま残す。難易度は発展(D)まで。"
+      "notes": "融合セクション（入試対策）。"
     },
     {
       "lesson_id": "exam_l4",
@@ -3806,24 +3377,21 @@
       "forms": [
         {
           "form": "word_problem",
-          "kanten": "思考・判断・表現",
           "bands": "A〜D",
-          "rationale": "立体内で切断面・直角三角形を見出し高さ/体積/最短距離を多段で求める"
+          "rationale": "空間図形の融合場面を段階的に解く入試活用が主"
         },
         {
-          "form": "visual",
-          "kanten": "技能＋思考",
-          "bands": "A〜D",
-          "rationale": "立体を切る/展開して直角三角形を作る空間把握が核"
-        },
-        {
-          "form": "calculation",
-          "kanten": "技能",
+          "form": "find_value",
           "bands": "S〜A",
-          "rationale": "三平方による長さ・体積の計算"
+          "rationale": "対角線・高さ・体積・最短距離を三平方で立式して求める求値"
+        },
+        {
+          "form": "graph_table",
+          "bands": "S",
+          "rationale": "見取図・断面・展開図を読む"
         }
       ],
-      "notes": "融合セクション（複数単元を横断・発展）。生徒が「入試対策」として選択可のまま残す。難易度は発展(D)まで。"
+      "notes": "融合セクション（入試対策）。"
     },
     {
       "lesson_id": "exam_l5",
@@ -3832,24 +3400,16 @@
       "forms": [
         {
           "form": "word_problem",
-          "kanten": "思考・判断・表現",
-          "bands": "S〜A",
-          "rationale": "複合試行・余事象・条件付き場面を場合の数で処理する典型問題"
+          "bands": "S〜D",
+          "rationale": "複合事象・余事象の現実場面を場合の数から立式して解く入試活用が主"
         },
         {
           "form": "calculation",
-          "kanten": "技能",
           "bands": "S",
-          "rationale": "樹形図/表で数え上げ確率を計算"
-        },
-        {
-          "form": "visual",
-          "kanten": "技能＋思考",
-          "bands": "S",
-          "rationale": "樹形図・表で全事象を整理"
+          "rationale": "樹形図・場合の数から確率を計算処理"
         }
       ],
-      "notes": "融合セクション（複数単元を横断・発展）。生徒が「入試対策」として選択可のまま残す。難易度は発展(D)まで。"
+      "notes": "融合セクション（入試対策）。"
     },
     {
       "lesson_id": "exam_l6",
@@ -3858,24 +3418,21 @@
       "forms": [
         {
           "form": "word_problem",
-          "kanten": "思考・判断・表現",
           "bands": "A〜D",
-          "rationale": "相似の発見→相似比→面積比/体積比を連鎖させる多段融合"
+          "rationale": "相似と面積比・体積比を組み合わせた融合場面を段階的に解く入試活用が主"
         },
         {
-          "form": "visual",
-          "kanten": "技能＋思考",
+          "form": "find_value",
           "bands": "S〜A",
-          "rationale": "相似な部分図形を図から見出す"
+          "rationale": "相似比から面積比・体積比・実際の量を立式して求める求値"
         },
         {
-          "form": "calculation",
-          "kanten": "技能",
-          "bands": "S〜A",
-          "rationale": "比の連鎖計算"
+          "form": "proof",
+          "bands": "A",
+          "rationale": "融合で相似を根拠づける記述証明"
         }
       ],
-      "notes": "融合セクション（複数単元を横断・発展）。生徒が「入試対策」として選択可のまま残す。難易度は発展(D)まで。"
+      "notes": "融合セクション（入試対策）。"
     },
     {
       "lesson_id": "exam_l7",
@@ -3884,24 +3441,26 @@
       "forms": [
         {
           "form": "word_problem",
-          "kanten": "思考・判断・表現",
           "bands": "S〜A",
-          "rationale": "箱ひげ図/標本の結果を根拠に傾向を判断・説明する活用"
+          "rationale": "データを読み解き判断・推定する入試活用が主"
         },
         {
-          "form": "visual",
-          "kanten": "技能＋思考",
+          "form": "graph_table",
           "bands": "S〜A",
-          "rationale": "箱ひげ図・分布を読み比較する"
+          "rationale": "箱ひげ図・ヒストグラムを読む/かく"
+        },
+        {
+          "form": "find_value",
+          "bands": "S",
+          "rationale": "四分位数・推定値を求める"
         },
         {
           "form": "calculation",
-          "kanten": "技能",
           "bands": "S",
-          "rationale": "四分位数・推定値の計算"
+          "rationale": "相対度数・比率の計算処理"
         }
       ],
-      "notes": "融合セクション（複数単元を横断・発展）。生徒が「入試対策」として選択可のまま残す。難易度は発展(D)まで。"
+      "notes": "融合セクション（入試対策）。"
     }
   ]
 }
