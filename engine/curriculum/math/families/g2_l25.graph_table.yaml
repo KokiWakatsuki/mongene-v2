@@ -9,9 +9,13 @@ levels:
     signature: graph_read_two_lattice_points
     recipe: math.graph_read_two_points
     params:
-      slope_domain: {int_range: [-4, 4], exclude: [0]}
-      intercept_domain: {int_range: [-6, 6]}
-      point_domain: {lattice: {x: {int_range: [-5, 5]}, y: {int_range: [-8, 8]}}, distinct: [x]}
+      # 図の可読性: 答え点の y = a*x + b が過大にならない域に絞る（傾き±3・切片±4・
+      # x∈[-4,4]）。旧域(傾き±4・切片±6・x∈[-5,5])は y が±26に達し、グリッドが
+      # 最大36目盛の縦長になって「格子点を読む」題材として点が潰れていた（Task9 検収指摘）。
+      # 本域では |y| ≤ 3*4+4 = 16、2点の y 差 ≤ 3*8 = 24 に有界化される。
+      slope_domain: {int_range: [-3, 3], exclude: [0]}
+      intercept_domain: {int_range: [-4, 4]}
+      point_domain: {lattice: {x: {int_range: [-4, 4]}, y: {int_range: [-8, 8]}}, distinct: [x]}
     given: []
     asked: [read_point]
     visual: required
