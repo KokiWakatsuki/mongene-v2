@@ -1,0 +1,70 @@
+meta:
+  cause_tags:
+  - lf.confused_with_proportional
+  - lf.substitution_error
+  concept_tags:
+  - linear_function.expression_from_slope_point
+  - linear_function.intercept_from_point
+  provenance:
+    git_commit: ''
+    recipe: math.linear_from_slope_point
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_expr_slope_point_v1
+    tier: T1
+  requested:
+    form: find_value
+    level: 1
+    subject: math
+    unit: g2_l24
+  resolved:
+    form: find_value
+    level: 1
+    subject: math
+    unit: g2_l24
+  seed: 1
+  signature: lf_expr_slope_point_basic
+problem_ref: fb95e4aeaf974923
+problem_text: 傾きが -5 で、点 (1, -2) を通る直線の式を求めよ。
+sub_questions:
+- answer:
+    display: y = -5x + 3
+    kind: symbolic
+    srepr: Add(Integer(3), Mul(Integer(-1), Integer(5), Symbol('x')))
+  cause_tags:
+  - lf.confused_with_proportional
+  - lf.substitution_error
+  concept_tags:
+  - linear_function.expression_from_slope_point
+  - linear_function.intercept_from_point
+  explanation: まず、傾きと通る点の座標を y = ax + b に代入する。 -5 × 1 + b = -2次に、代入した式を b について解き、切片を求める。 切片 b = 3最後に、傾きと切片から一次関数の式を組み立てる。 y = -5x + 3
+  hints:
+  - 傾きと通る点の座標を y = ax + b に代入する。
+  - 代入した式を b について解き、切片を求める。
+  label: (1)
+  prompt_text: expression を求めなさい。
+  solution_steps:
+  - args:
+    - '-5'
+    - (1, -2)
+    narration: 傾きと通る点の座標を y = ax + b に代入する。
+    op: substitute_point
+    result_display: -5 × 1 + b = -2
+    result_srepr: Equality(Add(Symbol('b'), Integer(-5)), Integer(-2))
+  - args:
+    - '-5'
+    - (1, -2)
+    narration: 代入した式を b について解き、切片を求める。
+    op: compute_intercept
+    result_display: 切片 b = 3
+    result_srepr: Integer(3)
+  - args:
+    - '-5'
+    - '3'
+    narration: 傾きと切片から一次関数の式を組み立てる。
+    op: form_expression
+    result_display: y = -5x + 3
+    result_srepr: Add(Integer(3), Mul(Integer(-1), Integer(5), Symbol('x')))
+visual_svg: null

@@ -1,0 +1,72 @@
+meta:
+  cause_tags:
+  - lf.confused_with_proportional
+  - lf.substitution_error
+  concept_tags:
+  - linear_function.slope_from_two_points
+  - linear_function.intercept_from_point
+  - linear_function.expression_from_two_points
+  provenance:
+    git_commit: ''
+    recipe: math.linear_from_two_points
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_expr_two_points_v1
+    tier: T1
+  requested:
+    form: find_value
+    level: 3
+    subject: math
+    unit: g2_l25
+  resolved:
+    form: find_value
+    level: 3
+    subject: math
+    unit: g2_l25
+  seed: 1
+  signature: lf_expr_two_points_simultaneous
+problem_ref: aad7c0eac3a1f8c1
+problem_text: 2点 (5, -41/2) と (0, -8) を通る直線の式を求めよ。
+sub_questions:
+- answer:
+    display: y = -5/2x - 8
+    kind: symbolic
+    srepr: Add(Mul(Integer(-1), Rational(5, 2), Symbol('x')), Integer(-8))
+  cause_tags:
+  - lf.confused_with_proportional
+  - lf.substitution_error
+  concept_tags:
+  - linear_function.slope_from_two_points
+  - linear_function.intercept_from_point
+  - linear_function.expression_from_two_points
+  explanation: まず、2点をそれぞれ y = ax + b に代入し、a, b の連立方程式を立てる。 Eq(5*a + b, -41/2), Eq(b, -8)次に、連立方程式を解いて a, b を同時に求める。 a = -5/2, b = -8最後に、求めた a, b から一次関数の式を組み立てる。 y = -5/2x - 8
+  hints:
+  - 2点をそれぞれ y = ax + b に代入し、a, b の連立方程式を立てる。
+  - 連立方程式を解いて a, b を同時に求める。
+  label: (1)
+  prompt_text: expression を求めなさい。
+  solution_steps:
+  - args:
+    - (5, -41/2)
+    - (0, -8)
+    narration: 2点をそれぞれ y = ax + b に代入し、a, b の連立方程式を立てる。
+    op: setup_simultaneous
+    result_display: Eq(5*a + b, -41/2), Eq(b, -8)
+    result_srepr: '[Equality(Add(Mul(Integer(5), Symbol(''a'')), Symbol(''b'')), Rational(-41, 2)), Equality(Symbol(''b''), Integer(-8))]'
+  - args:
+    - Eq(5*a + b, -41/2)
+    - Eq(b, -8)
+    narration: 連立方程式を解いて a, b を同時に求める。
+    op: solve_simultaneous
+    result_display: a = -5/2, b = -8
+    result_srepr: '{''a'': Rational(-5, 2), ''b'': Integer(-8)}'
+  - args:
+    - -5/2
+    - '-8'
+    narration: 求めた a, b から一次関数の式を組み立てる。
+    op: form_expression
+    result_display: y = -5/2x - 8
+    result_srepr: Add(Mul(Integer(-1), Rational(5, 2), Symbol('x')), Integer(-8))
+visual_svg: null

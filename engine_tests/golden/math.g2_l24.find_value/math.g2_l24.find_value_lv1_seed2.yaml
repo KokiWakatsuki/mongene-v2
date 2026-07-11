@@ -1,0 +1,70 @@
+meta:
+  cause_tags:
+  - lf.confused_with_proportional
+  - lf.substitution_error
+  concept_tags:
+  - linear_function.expression_from_slope_point
+  - linear_function.intercept_from_point
+  provenance:
+    git_commit: ''
+    recipe: math.linear_from_slope_point
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_expr_slope_point_v1
+    tier: T1
+  requested:
+    form: find_value
+    level: 1
+    subject: math
+    unit: g2_l24
+  resolved:
+    form: find_value
+    level: 1
+    subject: math
+    unit: g2_l24
+  seed: 2
+  signature: lf_expr_slope_point_basic
+problem_ref: a713983a89b745f8
+problem_text: 傾きが 1 で、点 (2, 8) を通る直線の式を求めよ。
+sub_questions:
+- answer:
+    display: y = x + 6
+    kind: symbolic
+    srepr: Add(Symbol('x'), Integer(6))
+  cause_tags:
+  - lf.confused_with_proportional
+  - lf.substitution_error
+  concept_tags:
+  - linear_function.expression_from_slope_point
+  - linear_function.intercept_from_point
+  explanation: まず、傾きと通る点の座標を y = ax + b に代入する。 1 × 2 + b = 8次に、代入した式を b について解き、切片を求める。 切片 b = 6最後に、傾きと切片から一次関数の式を組み立てる。 y = x + 6
+  hints:
+  - 傾きと通る点の座標を y = ax + b に代入する。
+  - 代入した式を b について解き、切片を求める。
+  label: (1)
+  prompt_text: expression を求めなさい。
+  solution_steps:
+  - args:
+    - '1'
+    - (2, 8)
+    narration: 傾きと通る点の座標を y = ax + b に代入する。
+    op: substitute_point
+    result_display: 1 × 2 + b = 8
+    result_srepr: Equality(Add(Symbol('b'), Integer(2)), Integer(8))
+  - args:
+    - '1'
+    - (2, 8)
+    narration: 代入した式を b について解き、切片を求める。
+    op: compute_intercept
+    result_display: 切片 b = 6
+    result_srepr: Integer(6)
+  - args:
+    - '1'
+    - '6'
+    narration: 傾きと切片から一次関数の式を組み立てる。
+    op: form_expression
+    result_display: y = x + 6
+    result_srepr: Add(Symbol('x'), Integer(6))
+visual_svg: null

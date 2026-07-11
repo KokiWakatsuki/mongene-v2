@@ -1,0 +1,69 @@
+meta:
+  cause_tags:
+  - lf.confused_with_proportional
+  - lf.substitution_error
+  concept_tags:
+  - linear_function.parallel_condition
+  - linear_function.expression_from_slope_point
+  provenance:
+    git_commit: ''
+    recipe: math.linear_from_parallel_condition
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_expr_parallel_v1
+    tier: T1
+  requested:
+    form: find_value
+    level: 3
+    subject: math
+    unit: g2_l24
+  resolved:
+    form: find_value
+    level: 3
+    subject: math
+    unit: g2_l24
+  seed: 3
+  signature: lf_expr_parallel_condition
+problem_ref: 5bf1fd686bb4ccc5
+problem_text: 点 (-4, -5) を通り、直線 y = 1/2x + 2 に平行な直線の式を求めよ。
+sub_questions:
+- answer:
+    display: y = 1/2x - 3
+    kind: symbolic
+    srepr: Add(Mul(Rational(1, 2), Symbol('x')), Integer(-3))
+  cause_tags:
+  - lf.confused_with_proportional
+  - lf.substitution_error
+  concept_tags:
+  - linear_function.parallel_condition
+  - linear_function.expression_from_slope_point
+  explanation: まず、平行な直線は傾きが等しいので、与えられた直線の傾きをそのまま用いる。 傾き a = 1/2次に、傾きと通る1点を y = ax + b に代入し、切片を求める。 切片 b = -3最後に、傾きと切片から一次関数の式を組み立てる。 y = 1/2x - 3
+  hints:
+  - 平行な直線は傾きが等しいので、与えられた直線の傾きをそのまま用いる。
+  - 傾きと通る1点を y = ax + b に代入し、切片を求める。
+  label: (1)
+  prompt_text: expression を求めなさい。
+  solution_steps:
+  - args:
+    - 1/2
+    narration: 平行な直線は傾きが等しいので、与えられた直線の傾きをそのまま用いる。
+    op: read_parallel_slope
+    result_display: 傾き a = 1/2
+    result_srepr: Rational(1, 2)
+  - args:
+    - 1/2
+    - (-4, -5)
+    narration: 傾きと通る1点を y = ax + b に代入し、切片を求める。
+    op: compute_intercept
+    result_display: 切片 b = -3
+    result_srepr: Integer(-3)
+  - args:
+    - 1/2
+    - '-3'
+    narration: 傾きと切片から一次関数の式を組み立てる。
+    op: form_expression
+    result_display: y = 1/2x - 3
+    result_srepr: Add(Mul(Rational(1, 2), Symbol('x')), Integer(-3))
+visual_svg: null
