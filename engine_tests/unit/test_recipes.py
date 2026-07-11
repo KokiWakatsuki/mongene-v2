@@ -185,16 +185,20 @@ def test_graph_read_two_points_lv2_construct():
     mr = recipe(ctx, rng)
 
     assert mr.signature == "graph_read_two_lattice_points"
-    assert set(mr.given.keys()) == {"expression"}
+    # given は空: 直線は図で提示され、テキストに接地すべき given は無い（Task8 設計判断）
+    assert mr.given == {}
     sq = mr.sub_questions[0]
     assert sq.asked == "read_point"
     assert [s.op for s in sq.steps] == ["read_point", "read_point"]
     # visual_plan は非 None（frame.visual="required" を満たす）
     assert mr.visual_plan is not None
     assert mr.visual_plan.style == "grid"
-    # 答え（読み取るべき座標そのもの）を labels に載せない
+    # labels は軸目盛の単独数値のみ（式や座標ペアそのものは載せない）
     for label in mr.visual_plan.labels:
-        assert "," not in label or "y = " in label  # 座標値そのものの文字列は含めない
+        assert "," not in label  # 座標ペア表記なし
+        assert "y" not in label  # 式（y = ...）なし
+    # 答えの点マーカー（labeled_answer_point）を elements に含めない（幾何的リーク規則）
+    assert all(el.kind != "labeled_answer_point" for el in mr.visual_plan.elements)
 
 
 @pytest.mark.parametrize("seed", range(200))

@@ -12,10 +12,10 @@ levels:
       slope_domain: {int_range: [-4, 4], exclude: [0]}
       intercept_domain: {int_range: [-6, 6]}
       point_domain: {lattice: {x: {int_range: [-5, 5]}, y: {int_range: [-8, 8]}}, distinct: [x]}
-    given: [expression]
+    given: []
     asked: [read_point]
     visual: required
-    text: {tier: T1, template: graph_read_two_points_v1}
+    text: {tier: T1, template: graph_read_two_points_v1, visual_builder: math.linear_graph}
     hints: [steps_prefix]
     concept_tags: [graph.read_lattice_points]
     cause_tags: [lf.point_reading_error]

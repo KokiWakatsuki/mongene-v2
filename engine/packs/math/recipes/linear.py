@@ -20,6 +20,7 @@ from engine.core.contracts import (
     CellContext,
     Provenance,
     Solution,
+    Step,
     SubQuestionMR,
     SymbolicAnswer,
     VisualElement,
@@ -27,6 +28,7 @@ from engine.core.contracts import (
 )
 from engine.core.registry import REGISTRY, register_recipe
 from engine.core.rng import Rng, draw, draw_many
+from engine.packs.math.visuals.graph import tick_labels_from_params
 
 # 提供概念（recipe が「提供できる概念タグ集合」を宣言。spec_lint R6 の題材ズレ検出用）。
 _LINEAR_FROM_TWO_POINTS_CONCEPTS = [
@@ -251,10 +253,16 @@ def graph_read_two_points(ctx: CellContext, rng: Rng) -> MR:
     直線を1本 answer-first で選び格子点2つを取る。独立ソルバ
     `math.read_two_lattice_points` で座標そのものを答えとする。
 
-    visual_plan: frame.visual="required" を満たす最小構成。図に描いてよい文字列
-    （labels）は MR.given から機械構築できる範囲のみとし、答え（読み取るべき2点の
-    座標そのもの）は載せない。実際の描画要素・whitelist の最終仕様は Task8（図担当）
-    が詰める — 以下は骨格を満たすための最小実装であり、TODO として明示する。
+    設計判断（Task8・図担当確定分）:
+    - 式（y=ax+b）は生徒に提示する given ではなく、図を規定する内部パラメータ
+      （params の a/b/pts に残す）。given は空 {} にする——式を given に出すと
+      「グラフから読む」題材が計算で解けてしまい破綻するため。G-GND は given 空
+      なら自明に通過する。
+    - visual_plan.labels は実描画（`packs.math.visuals.graph.tick_labels`）が
+      実際に描く軸目盛の数値文字列と機械的に一致させる（式や答え座標は含めない）。
+    - visual_plan.elements は grid/axis/line のみ。答えの点マーカー・座標ラベル
+      （`labeled_answer_point`）は描かない・宣言しない
+      （frame.forbidden_visual_elements(["read_point"]) が禁止する種別）。
     """
     p = ctx.spec_level.params
     a = draw(p["slope_domain"], rng)
@@ -275,26 +283,52 @@ def graph_read_two_points(ctx: CellContext, rng: Rng) -> MR:
         f"double-solve 不一致: recipe が構成した点 {expected_pts} != solver 再計算 {sol.answer.srepr}"
     )
 
-    line_display = _format_parallel_line_display(a_s, b_s)
+    # narration の日本語表現を数詞なしに差し替える（steps の op/result_srepr/result_display
+    # は solver 由来のまま維持し、narration のみ）。
+    #
+    # 理由（既知の G-Q5t 挙動・報告済み・quality_gates.py は本 Task の対象外のため未修正）:
+    # solver 側 narration「グラフ上の格子点の座標を1つ読み取る。」の助数詞「1つ」の
+    # "1" が、extract_numbers（core/verify/quality_gates.py）の数値トークン抽出で
+    # 答え座標の数値（例: x=1, y=1 等）と偶然一致し、G-Q5t が「解答由来の値が
+    # hints に漏洩」と誤検出することがある（答え座標が -9..9 の小さい整数になりやすい
+    # ため高頻度で発生する）。ここでは hint の元になる narration の文言自体を
+    # 数詞を含まない表現に変えることで回避する（steps の計算内容は不変）。
+    steps = [
+        Step(
+            op=s.op,
+            args=s.args,
+            result_srepr=s.result_srepr,
+            result_display=s.result_display,
+            narration=narration,
+        )
+        for s, narration in zip(
+            sol.steps,
+            [
+                "グラフ上の格子点の座標を読み取る。",
+                "グラフ上の別の格子点の座標を読み取る。",
+            ],
+        )
+    ]
 
     sub_question = SubQuestionMR(
         label="(1)",
         asked="read_point",
         answer=sol.answer,
-        steps=sol.steps,
+        steps=steps,
         concept_tags=_effective_concept_tags(ctx),
         cause_tags=_effective_cause_tags(ctx),
     )
 
-    # TODO(Task8・図担当): 実際の描画要素（グリッド範囲・直線の描画方法・
-    # ラベル whitelist の最終仕様）はここで詰める。ここでは frame.visual="required"
-    # を満たす最小構成（式のみを labels として許可し、答えである座標は載せない）。
+    mr_params = {"a": str(a_s), "b": str(b_s), "pts": [str(pts[0]), str(pts[1])]}
+    labels = tick_labels_from_params(mr_params)
+
     visual_plan = VisualPlan(
         style="grid",
-        labels=[line_display],
+        labels=labels,
         elements=[
             VisualElement(kind="grid", attrs={}),
-            VisualElement(kind="line", attrs={"expr": line_display}),
+            VisualElement(kind="axis", attrs={}),
+            VisualElement(kind="line", attrs={}),
         ],
     )
 
@@ -304,8 +338,8 @@ def graph_read_two_points(ctx: CellContext, rng: Rng) -> MR:
         level=ctx.level,
         purpose=ctx.purpose,
         seed=0,
-        params={"a": str(a_s), "b": str(b_s), "pts": [str(pts[0]), str(pts[1])]},
-        given={"expression": line_display},
+        params=mr_params,
+        given={},
         sub_questions=[sub_question],
         visual_plan=visual_plan,
         provenance=Provenance(recipe="math.graph_read_two_points"),
