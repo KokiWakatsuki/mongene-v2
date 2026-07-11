@@ -1,0 +1,16 @@
+# 誤答要因の語彙と戻り先座標（実装設計 §5.2）。正 = このファイル（手書き）。
+# remediation.{unit,form,level} = 戻り先座標（静的対応・送り側が唯一の決定者）。
+# G-Q7r: 戻り先セルの concept_tags ⊇ target_concepts であること（curriculum_lint が静的検査）。
+error_causes:
+  - id: lf.confused_with_proportional
+    label: "比例 y=ax と混同して切片 b を無視した"
+    target_concepts: [linear_function.intercept_from_point]
+    remediation: {unit: g2_l24, form: find_value, level: 1}
+  - id: lf.substitution_error
+    label: "傾きは正しいが、代入して切片を求める計算を誤った"
+    target_concepts: [linear_function.intercept_from_point]
+    remediation: {unit: g2_l24, form: find_value, level: 1}
+  - id: lf.point_reading_error
+    label: "グラフから2点の座標を読み違えた"
+    target_concepts: [graph.read_lattice_points]
+    remediation: {unit: g2_l25, form: graph_table, level: 2}

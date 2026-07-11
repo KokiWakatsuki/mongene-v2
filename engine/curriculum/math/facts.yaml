@@ -1,0 +1,4 @@
+# fact テーブル（knowledge form の Q1 根拠・実装設計 §6.2）。正 = このファイル（手書き）。
+# M0 縦串は knowledge form を含まないため空。スキーマのみ提示（横展開時に追加）。
+# 各 fact: {id, statement, truth: true|false, source_unit}
+facts: []

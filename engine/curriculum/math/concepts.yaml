@@ -1,0 +1,21 @@
+# 概念ノード（BKT 習得度追跡・知識グラフの節点）。正 = このファイル（手書き）。
+# M0 縦串（g2_l25 + 戻り先 g2_l24）分のみ整備。横展開は M1。
+concepts:
+  - id: linear_function.slope_from_two_points
+    label: "2点の座標から傾きを求める"
+    unit: g2_l25
+  - id: linear_function.intercept_from_point
+    label: "1点を代入して切片を求める"
+    unit: g2_l24
+  - id: linear_function.expression_from_two_points
+    label: "2点から1次関数の式を決定する"
+    unit: g2_l25
+  - id: linear_function.expression_from_slope_point
+    label: "傾きと1点から1次関数の式を決定する"
+    unit: g2_l24
+  - id: linear_function.parallel_condition
+    label: "平行条件から傾きを読み式を構成する"
+    unit: g2_l24
+  - id: graph.read_lattice_points
+    label: "グラフ上の格子点の座標を読み取る"
+    unit: g2_l25
