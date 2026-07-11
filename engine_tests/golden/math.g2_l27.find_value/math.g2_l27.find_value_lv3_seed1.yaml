@@ -1,0 +1,63 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - linear_function.intersection_of_two_lines
+  provenance:
+    git_commit: ''
+    recipe: math.intersection
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_intersection_v1
+    tier: T1
+  requested:
+    form: find_value
+    level: 3
+    subject: math
+    unit: g2_l27
+  resolved:
+    form: find_value
+    level: 3
+    subject: math
+    unit: g2_l27
+  seed: 1
+  signature: lf_intersection_elimination
+problem_ref: 7fa727256fc27214
+problem_text: 2つの直線 3x - y = -16 と 2x + y = -14 の交点の座標を求めよ。
+sub_questions:
+- answer:
+    display: (-6, -2)
+    kind: symbolic
+    srepr: Tuple(Integer(-6), Integer(-2))
+  cause_tags: []
+  concept_tags:
+  - linear_function.intersection_of_two_lines
+  explanation: まず、2つの直線を ax + by = c の形にそろえて連立方程式を立てる。 Eq(3*x - y, -16), Eq(2*x + y, -14)次に、係数をそろえて一方の文字を消去し、残った文字を求める。 x = -6最後に、求めた値をもとの式に代入し、もう一方の文字を求める。 y = -2
+  hints:
+  - 2つの直線を ax + by = c の形にそろえて連立方程式を立てる。
+  - 係数をそろえて一方の文字を消去し、残った文字を求める。
+  label: (1)
+  prompt_text: intersection を求めなさい。
+  solution_steps:
+  - args:
+    - Eq(3*x - y, -16)
+    - Eq(2*x + y, -14)
+    narration: 2つの直線を ax + by = c の形にそろえて連立方程式を立てる。
+    op: setup_system
+    result_display: Eq(3*x - y, -16), Eq(2*x + y, -14)
+    result_srepr: '[Equality(Add(Mul(Integer(3), Symbol(''x'')), Mul(Integer(-1), Symbol(''y''))), Integer(-16)), Equality(Add(Mul(Integer(2), Symbol(''x'')), Symbol(''y'')), Integer(-14))]'
+  - args:
+    - Eq(3*x - y, -16)
+    - Eq(2*x + y, -14)
+    narration: 係数をそろえて一方の文字を消去し、残った文字を求める。
+    op: eliminate_variable
+    result_display: x = -6
+    result_srepr: Equality(Symbol('x'), Integer(-6))
+  - args:
+    - '-6'
+    narration: 求めた値をもとの式に代入し、もう一方の文字を求める。
+    op: back_substitute
+    result_display: y = -2
+    result_srepr: Integer(-2)
+visual_svg: null

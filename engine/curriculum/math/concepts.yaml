@@ -23,3 +23,6 @@ concepts:
   - id: linear_function.rate_of_change
     label: "2点から一次関数の変化の割合（傾き）を求める"
     unit: g2_l20
+  - id: linear_function.intersection_of_two_lines
+    label: "2直線の交点の座標を求める（連立方程式の解）"
+    unit: g2_l27

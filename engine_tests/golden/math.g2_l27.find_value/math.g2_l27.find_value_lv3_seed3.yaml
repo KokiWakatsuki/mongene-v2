@@ -1,0 +1,63 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - linear_function.intersection_of_two_lines
+  provenance:
+    git_commit: ''
+    recipe: math.intersection
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_intersection_v1
+    tier: T1
+  requested:
+    form: find_value
+    level: 3
+    subject: math
+    unit: g2_l27
+  resolved:
+    form: find_value
+    level: 3
+    subject: math
+    unit: g2_l27
+  seed: 3
+  signature: lf_intersection_elimination
+problem_ref: f96bd89461a59597
+problem_text: 2つの直線 x - y = 5 と 3x - y = 15 の交点の座標を求めよ。
+sub_questions:
+- answer:
+    display: (5, 0)
+    kind: symbolic
+    srepr: Tuple(Integer(5), Integer(0))
+  cause_tags: []
+  concept_tags:
+  - linear_function.intersection_of_two_lines
+  explanation: まず、2つの直線を ax + by = c の形にそろえて連立方程式を立てる。 Eq(x - y, 5), Eq(3*x - y, 15)次に、係数をそろえて一方の文字を消去し、残った文字を求める。 x = 5最後に、求めた値をもとの式に代入し、もう一方の文字を求める。 y = 0
+  hints:
+  - 2つの直線を ax + by = c の形にそろえて連立方程式を立てる。
+  - 係数をそろえて一方の文字を消去し、残った文字を求める。
+  label: (1)
+  prompt_text: intersection を求めなさい。
+  solution_steps:
+  - args:
+    - Eq(x - y, 5)
+    - Eq(3*x - y, 15)
+    narration: 2つの直線を ax + by = c の形にそろえて連立方程式を立てる。
+    op: setup_system
+    result_display: Eq(x - y, 5), Eq(3*x - y, 15)
+    result_srepr: '[Equality(Add(Symbol(''x''), Mul(Integer(-1), Symbol(''y''))), Integer(5)), Equality(Add(Mul(Integer(3), Symbol(''x'')), Mul(Integer(-1), Symbol(''y''))), Integer(15))]'
+  - args:
+    - Eq(x - y, 5)
+    - Eq(3*x - y, 15)
+    narration: 係数をそろえて一方の文字を消去し、残った文字を求める。
+    op: eliminate_variable
+    result_display: x = 5
+    result_srepr: Equality(Symbol('x'), Integer(5))
+  - args:
+    - '5'
+    narration: 求めた値をもとの式に代入し、もう一方の文字を求める。
+    op: back_substitute
+    result_display: y = 0
+    result_srepr: Integer(0)
+visual_svg: null

@@ -47,6 +47,15 @@ LF_RATE_OF_CHANGE_V1 = (
     "2点 {{ given.point_a }} と {{ given.point_b }} を通る1次関数について、変化の割合を求めよ。"
 )
 
+# ---------------------------------------------------------------------------
+# g2_l27.find_value Lv2/Lv3: 2直線の交点の座標（横展開の第2セル・両レベル共用）
+# ---------------------------------------------------------------------------
+LF_INTERSECTION_V1 = (
+    # 「2直線」ではなく「2つの直線」: 助数詞「つ」は G-Q5t 漏洩スキャンの除外対象で、
+    # 先頭の "2" が答え座標の数値と衝突する偽陽性を避ける（graph_table と同種）。
+    "2つの直線 {{ given.line_a }} と {{ given.line_b }} の交点の座標を求めよ。"
+)
+
 
 def _register_all() -> None:
     REGISTRY.register_template("lf_expr_two_points_v1", LF_EXPR_TWO_POINTS_V1)
@@ -54,6 +63,7 @@ def _register_all() -> None:
     REGISTRY.register_template("lf_expr_parallel_v1", LF_EXPR_PARALLEL_V1)
     REGISTRY.register_template("graph_read_two_points_v1", GRAPH_READ_TWO_POINTS_V1)
     REGISTRY.register_template("lf_rate_of_change_v1", LF_RATE_OF_CHANGE_V1)
+    REGISTRY.register_template("lf_intersection_v1", LF_INTERSECTION_V1)
 
 
 _register_all()
@@ -65,4 +75,5 @@ __all__ = [
     "LF_EXPR_PARALLEL_V1",
     "GRAPH_READ_TWO_POINTS_V1",
     "LF_RATE_OF_CHANGE_V1",
+    "LF_INTERSECTION_V1",
 ]

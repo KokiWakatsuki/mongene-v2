@@ -263,10 +263,95 @@ def rate_of_change_from_two_points(p1: tuple[object, object], p2: tuple[object, 
     return Solution(answer=answer, steps=steps)
 
 
+@register_solver("math.intersection_of_two_lines")
+def intersection_of_two_lines(
+    line_a: tuple[object, object, object],
+    line_b: tuple[object, object, object],
+    method: str,
+) -> Solution:
+    """2直線 A1 x + B1 y = C1, A2 x + B2 y = C2 の交点座標を求める（g2_l27.find_value）。
+
+    method="substitute"（Lv2・傾き切片形を等値して代入）／"elimination"（Lv3・
+    一般形を連立して1文字消去）。答え（交点）は同一だが steps の op 列が異なる（Q3 の核）。
+    """
+    if method not in ("substitute", "elimination"):
+        raise ValueError(f"未知の method: {method!r}")
+
+    A1, B1, C1 = (sympy.nsimplify(v) for v in line_a)
+    A2, B2, C2 = (sympy.nsimplify(v) for v in line_b)
+    det = A1 * B2 - A2 * B1
+    if det == 0:
+        raise ValueError("2直線が平行または一致で交点が定まらない")
+
+    x0 = (C1 * B2 - C2 * B1) / det
+    y0 = (A1 * C2 - A2 * C1) / det
+    pt = sympy.Tuple(x0, y0)
+    x_sym, y_sym = sympy.symbols("x y")
+    eq1 = sympy.Eq(A1 * x_sym + B1 * y_sym, C1)
+    eq2 = sympy.Eq(A2 * x_sym + B2 * y_sym, C2)
+
+    if method == "substitute":
+        steps = [
+            Step(
+                op="equate_expressions",
+                args=[sympy.sstr(eq1), sympy.sstr(eq2)],
+                result_srepr=sympy.srepr(sympy.Eq(x_sym, x0)),
+                result_display=f"x = {_format_number(x0)}",
+                # 「2つの直線」: 助数詞「つ」除外により先頭 "2" が答えと衝突する偽陽性を避ける。
+                narration="2つの直線の y を等しいとおき、x についての方程式を解く。",
+            ),
+            Step(
+                op="solve_for_x",
+                args=[_format_number(x0)],
+                result_srepr=sympy.srepr(x0),
+                result_display=f"x = {_format_number(x0)}",
+                narration="x の値を求める。",
+            ),
+            Step(
+                op="compute_y",
+                args=[_format_number(x0)],
+                result_srepr=sympy.srepr(y0),
+                result_display=f"y = {_format_number(y0)}",
+                narration="求めた x をどちらかの式に代入し、y を求める。",
+            ),
+        ]
+    else:  # elimination
+        steps = [
+            Step(
+                op="setup_system",
+                args=[sympy.sstr(eq1), sympy.sstr(eq2)],
+                result_srepr=sympy.srepr([eq1, eq2]),
+                result_display=f"{sympy.sstr(eq1)}, {sympy.sstr(eq2)}",
+                narration="2つの直線を ax + by = c の形にそろえて連立方程式を立てる。",
+            ),
+            Step(
+                op="eliminate_variable",
+                args=[sympy.sstr(eq1), sympy.sstr(eq2)],
+                result_srepr=sympy.srepr(sympy.Eq(x_sym, x0)),
+                result_display=f"x = {_format_number(x0)}",
+                narration="係数をそろえて一方の文字を消去し、残った文字を求める。",
+            ),
+            Step(
+                op="back_substitute",
+                args=[_format_number(x0)],
+                result_srepr=sympy.srepr(y0),
+                result_display=f"y = {_format_number(y0)}",
+                narration="求めた値をもとの式に代入し、もう一方の文字を求める。",
+            ),
+        ]
+
+    answer = SymbolicAnswer(
+        srepr=sympy.srepr(pt),
+        display=f"({_format_number(x0)}, {_format_number(y0)})",
+    )
+    return Solution(answer=answer, steps=steps)
+
+
 __all__ = [
     "linear_expr_from_two_points",
     "linear_expr_from_slope_point",
     "linear_expr_parallel_through_point",
     "read_two_lattice_points",
     "rate_of_change_from_two_points",
+    "intersection_of_two_lines",
 ]

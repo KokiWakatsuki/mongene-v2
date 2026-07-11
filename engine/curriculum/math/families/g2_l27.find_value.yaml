@@ -1,0 +1,41 @@
+family: math.g2_l27.find_value
+form: find_value
+source_desc: |
+  2直線の交点の座標を求める（＝連立方程式の解）。Lv2=2直線を傾き切片形 y=ax+b で
+  与え、y を等しいとおいて代入で解く（例: 2直線 y = 2x - 1 と y = -x + 5 の交点の
+  座標を求めよ。答え (2, 3)）。Lv3=一般形 ax+by=c で与え、連立して1文字消去で解く
+  （例: 2直線 3x - y = 1 と x + y = 7 の交点の座標を求めよ）。答えは座標 (x, y)。
+concepts_default: [linear_function.intersection_of_two_lines]
+levels:
+  "2":
+    signature: lf_intersection_substitute
+    recipe: math.intersection
+    params:
+      method: substitute                       # 傾き切片形を等値して代入
+      x_domain: {int_range: [-5, 5]}
+      y_domain: {int_range: [-6, 6]}
+      slope_pair_domain: {int_set: [-3, -2, -1, 1, 2, 3], distinct: ["value"]}
+    given: [line_a, line_b]
+    asked: [intersection]
+    visual: none
+    text: {tier: T1, template: lf_intersection_v1}
+    hints: [steps_prefix]
+    concept_tags: [linear_function.intersection_of_two_lines]
+    cause_tags: []
+  "3":
+    signature: lf_intersection_elimination
+    recipe: math.intersection
+    params:
+      method: elimination                      # 一般形 ax+by=c を連立して消去
+      x_domain: {int_range: [-6, 6]}
+      y_domain: {int_range: [-7, 7]}
+      slope_pair_domain: {int_set: [-3, -2, -1, 1, 2, 3], distinct: ["value"]}
+    given: [line_a, line_b]
+    asked: [intersection]
+    visual: none
+    text: {tier: T1, template: lf_intersection_v1}
+    hints: [steps_prefix]
+    concept_tags: [linear_function.intersection_of_two_lines]
+    cause_tags: []
+remedial:
+  default_level: 2

@@ -251,6 +251,55 @@ def test_rate_of_change_double_solve_property(seed):
 
 
 # ---------------------------------------------------------------------------
+# math.intersection（g2_l27.find_value Lv2/Lv3）— 横展開の第2セル（2直線の交点）
+# ---------------------------------------------------------------------------
+def test_intersection_lv2_substitute_construct():
+    ctx = _make_ctx("math.g2_l27.find_value", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "lf_intersection_substitute"
+    assert set(mr.given.keys()) == {"line_a", "line_b"}
+    assert mr.given["line_a"].startswith("y = ")  # Lv2 は傾き切片形
+    sq = mr.sub_questions[0]
+    assert sq.asked == "intersection"
+    assert [s.op for s in sq.steps] == ["equate_expressions", "solve_for_x", "compute_y"]
+
+
+def test_intersection_lv3_elimination_different_ops():
+    ctx = _make_ctx("math.g2_l27.find_value", 3)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "lf_intersection_elimination"
+    assert "=" in mr.given["line_a"] and not mr.given["line_a"].startswith("y = ")  # 一般形
+    sq = mr.sub_questions[0]
+    assert [s.op for s in sq.steps] == ["setup_system", "eliminate_variable", "back_substitute"]
+
+
+@pytest.mark.parametrize("level", [2, 3])
+@pytest.mark.parametrize("seed", range(100))
+def test_intersection_double_solve_property(level, seed):
+    ctx = _make_ctx("math.g2_l27.find_value", level)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+
+    A1, B1, C1 = (sympy.sympify(c) for c in mr.params["line_a"])
+    A2, B2, C2 = (sympy.sympify(c) for c in mr.params["line_b"])
+    solver = REGISTRY.solver("math.intersection_of_two_lines")
+    sol = solver((A1, B1, C1), (A2, B2, C2), mr.params["method"])
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+
+    # 交点が両直線を満たす（構成の恒真性を独立確認）: 独立に連立を解いて代入する
+    x_sym, y_sym = sympy.symbols("x y")
+    solution = sympy.solve(
+        [sympy.Eq(A1 * x_sym + B1 * y_sym, C1), sympy.Eq(A2 * x_sym + B2 * y_sym, C2)],
+        [x_sym, y_sym],
+    )
+    x0, y0 = solution[x_sym], solution[y_sym]
+    assert A1 * x0 + B1 * y0 == C1
+    assert A2 * x0 + B2 * y0 == C2
+
+
+# ---------------------------------------------------------------------------
 # provides_concepts の宣言確認（R6 の前提）
 # ---------------------------------------------------------------------------
 def test_recipes_declare_provides_concepts():

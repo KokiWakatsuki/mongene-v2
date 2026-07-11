@@ -1,0 +1,62 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - linear_function.intersection_of_two_lines
+  provenance:
+    git_commit: ''
+    recipe: math.intersection
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_intersection_v1
+    tier: T1
+  requested:
+    form: find_value
+    level: 2
+    subject: math
+    unit: g2_l27
+  resolved:
+    form: find_value
+    level: 2
+    subject: math
+    unit: g2_l27
+  seed: 2
+  signature: lf_intersection_substitute
+problem_ref: 22953dbad1df2066
+problem_text: 2つの直線 y = -x + 7 と y = x + 3 の交点の座標を求めよ。
+sub_questions:
+- answer:
+    display: (2, 5)
+    kind: symbolic
+    srepr: Tuple(Integer(2), Integer(5))
+  cause_tags: []
+  concept_tags:
+  - linear_function.intersection_of_two_lines
+  explanation: まず、2つの直線の y を等しいとおき、x についての方程式を解く。 x = 2次に、x の値を求める。 x = 2最後に、求めた x をどちらかの式に代入し、y を求める。 y = 5
+  hints:
+  - 2つの直線の y を等しいとおき、x についての方程式を解く。
+  - x の値を求める。
+  label: (1)
+  prompt_text: intersection を求めなさい。
+  solution_steps:
+  - args:
+    - Eq(x + y, 7)
+    - Eq(x - y, -3)
+    narration: 2つの直線の y を等しいとおき、x についての方程式を解く。
+    op: equate_expressions
+    result_display: x = 2
+    result_srepr: Equality(Symbol('x'), Integer(2))
+  - args:
+    - '2'
+    narration: x の値を求める。
+    op: solve_for_x
+    result_display: x = 2
+    result_srepr: Integer(2)
+  - args:
+    - '2'
+    narration: 求めた x をどちらかの式に代入し、y を求める。
+    op: compute_y
+    result_display: y = 5
+    result_srepr: Integer(5)
+visual_svg: null

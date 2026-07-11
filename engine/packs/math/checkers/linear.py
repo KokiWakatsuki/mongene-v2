@@ -71,10 +71,20 @@ def double_solve_rate_of_change(mr: MR) -> Solution:
     return cast(Solution, solver(p1, p2))
 
 
+@register_checker("math.intersection.double_solve")
+def double_solve_intersection(mr: MR) -> Solution:
+    p = mr.params
+    line_a = tuple(sympy.sympify(c) for c in p["line_a"])
+    line_b = tuple(sympy.sympify(c) for c in p["line_b"])
+    solver = REGISTRY.solver("math.intersection_of_two_lines")
+    return cast(Solution, solver(line_a, line_b, p["method"]))
+
+
 __all__ = [
     "double_solve_two_points",
     "double_solve_slope_point",
     "double_solve_parallel",
     "double_solve_graph_read",
     "double_solve_rate_of_change",
+    "double_solve_intersection",
 ]

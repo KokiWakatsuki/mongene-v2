@@ -86,6 +86,7 @@ def test_find_value_vocab_and_visual():
     assert f.given_vocab == frozenset({
         "point_a", "point_b", "slope", "intercept", "expression_coeffs",
         "condition", "figure_spec",
+        "line_a", "line_b",  # 横展開: 2直線の交点（g2_l27）
     })
     assert f.asked_vocab == frozenset({
         "value", "expression", "coordinate", "rate_of_change",

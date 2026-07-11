@@ -402,10 +402,104 @@ def rate_of_change(ctx: CellContext, rng: Rng) -> MR:
     )
 
 
+# ---------------------------------------------------------------------------
+# math.intersection（g2_l27.find_value Lv2/Lv3 用）— 横展開の第2セル（2直線の交点）
+# ---------------------------------------------------------------------------
+_INTERSECTION_CONCEPTS = [
+    "linear_function.intersection_of_two_lines",
+]
+
+
+def _format_general_form(a_coeff: sympy.Expr, b_coeff: sympy.Expr, c_coeff: sympy.Expr) -> str:
+    """A x + B y = C 形の表示（例: "2x - y = 5"）。先頭係数は正に正規化済みを前提。"""
+
+    def term(coeff: sympy.Expr, var: str, *, lead: bool) -> str:
+        if coeff == 0:
+            return ""
+        sign = "-" if coeff < 0 else ("+" if not lead else "")
+        mag = abs(coeff)
+        mag_part = "" if mag == 1 else sympy.sstr(mag)
+        joiner = "" if lead else " "
+        return f"{joiner}{sign}{joiner if not lead else ''}{mag_part}{var}"
+
+    lhs = term(a_coeff, "x", lead=True) + term(b_coeff, "y", lead=False)
+    return f"{lhs} = {sympy.sstr(c_coeff)}"
+
+
+@register_recipe("math.intersection", provides_concepts=_INTERSECTION_CONCEPTS)
+def intersection(ctx: CellContext, rng: Rng) -> MR:
+    """2直線の交点の座標を求める（answer-first）。
+
+    交点 (x0, y0) と相異な2傾き a1, a2 を先に選び、各直線が (x0, y0) を通るよう
+    切片を逆算する（構成で非平行・交点一意を恒真に保証）。Lv2 は傾き切片形を等値
+    （method=substitute）、Lv3 は一般形 ax+by=c を連立消去（method=elimination）。
+    独立ソルバ `math.intersection_of_two_lines` で交点を再計算し一致を assert する。
+    """
+    p = ctx.spec_level.params
+    method: str = p["method"]
+
+    x0 = draw(p["x_domain"], rng)
+    y0 = draw(p["y_domain"], rng)
+    a1, a2 = draw_many(p["slope_pair_domain"], rng, k=2)  # distinct:[value] で相異保証
+
+    x0_s, y0_s = sympy.nsimplify(x0), sympy.nsimplify(y0)
+    a1_s, a2_s = sympy.nsimplify(a1), sympy.nsimplify(a2)
+    b1_s = y0_s - a1_s * x0_s
+    b2_s = y0_s - a2_s * x0_s
+
+    def to_coeffs_and_display(a_slope: sympy.Expr, b_int: sympy.Expr) -> tuple[list[sympy.Expr], str]:
+        # 傾き切片 y = a x + b ⇔ -a x + y = b。一般形は先頭係数を正に正規化する。
+        A, B, C = -a_slope, sympy.Integer(1), b_int
+        if A < 0:
+            A, B, C = -A, -B, -C
+        if method == "substitute":
+            return [A, B, C], _format_parallel_line_display(a_slope, b_int)  # "y = a x + b"
+        return [A, B, C], _format_general_form(A, B, C)  # "A x + B y = C"
+
+    coeffs1, disp1 = to_coeffs_and_display(a1_s, b1_s)
+    coeffs2, disp2 = to_coeffs_and_display(a2_s, b2_s)
+
+    solver = REGISTRY.solver("math.intersection_of_two_lines")
+    sol = cast(Solution, solver(tuple(coeffs1), tuple(coeffs2), method))
+    assert isinstance(sol.answer, SymbolicAnswer)
+
+    expected_pt = sympy.Tuple(x0_s, y0_s)
+    assert sol.answer.srepr == sympy.srepr(expected_pt), (
+        f"double-solve 不一致: recipe が構成した交点 {expected_pt} != solver 再計算 {sol.answer.srepr}"
+    )
+
+    sub_question = SubQuestionMR(
+        label="(1)",
+        asked="intersection",
+        answer=sol.answer,
+        steps=sol.steps,
+        concept_tags=_effective_concept_tags(ctx),
+        cause_tags=_effective_cause_tags(ctx),
+    )
+
+    return MR(
+        signature=ctx.spec_level.signature,
+        family=ctx.family,
+        level=ctx.level,
+        purpose=ctx.purpose,
+        seed=0,
+        params={
+            "line_a": [str(c) for c in coeffs1],
+            "line_b": [str(c) for c in coeffs2],
+            "method": method,
+        },
+        given={"line_a": disp1, "line_b": disp2},
+        sub_questions=[sub_question],
+        visual_plan=None,
+        provenance=Provenance(recipe="math.intersection"),
+    )
+
+
 __all__ = [
     "linear_from_two_points",
     "linear_from_slope_point",
     "linear_from_parallel_condition",
     "graph_read_two_points",
     "rate_of_change",
+    "intersection",
 ]

@@ -1,0 +1,62 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - linear_function.intersection_of_two_lines
+  provenance:
+    git_commit: ''
+    recipe: math.intersection
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_intersection_v1
+    tier: T1
+  requested:
+    form: find_value
+    level: 2
+    subject: math
+    unit: g2_l27
+  resolved:
+    form: find_value
+    level: 2
+    subject: math
+    unit: g2_l27
+  seed: 1
+  signature: lf_intersection_substitute
+problem_ref: 3c65ae82a579a477
+problem_text: 2つの直線 y = x + 1 と y = -2x - 11 の交点の座標を求めよ。
+sub_questions:
+- answer:
+    display: (-4, -3)
+    kind: symbolic
+    srepr: Tuple(Integer(-4), Integer(-3))
+  cause_tags: []
+  concept_tags:
+  - linear_function.intersection_of_two_lines
+  explanation: まず、2つの直線の y を等しいとおき、x についての方程式を解く。 x = -4次に、x の値を求める。 x = -4最後に、求めた x をどちらかの式に代入し、y を求める。 y = -3
+  hints:
+  - 2つの直線の y を等しいとおき、x についての方程式を解く。
+  - x の値を求める。
+  label: (1)
+  prompt_text: intersection を求めなさい。
+  solution_steps:
+  - args:
+    - Eq(x - y, -1)
+    - Eq(2*x + y, -11)
+    narration: 2つの直線の y を等しいとおき、x についての方程式を解く。
+    op: equate_expressions
+    result_display: x = -4
+    result_srepr: Equality(Symbol('x'), Integer(-4))
+  - args:
+    - '-4'
+    narration: x の値を求める。
+    op: solve_for_x
+    result_display: x = -4
+    result_srepr: Integer(-4)
+  - args:
+    - '-4'
+    narration: 求めた x をどちらかの式に代入し、y を求める。
+    op: compute_y
+    result_display: y = -3
+    result_srepr: Integer(-3)
+visual_svg: null
