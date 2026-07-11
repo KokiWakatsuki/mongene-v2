@@ -300,6 +300,20 @@ def _numeric_answer_tokens(answer: "AnswerPayload") -> list[str]:
     return tokens
 
 
+def _expr_has_free_symbol(srepr: str) -> bool:
+    """symbolic answer の srepr を復元し、自由変数（x 等）を含む「式」かを判定する。
+
+    復元に失敗した場合は False（= 定数扱いで従来の値レベル検査に委ねる）。
+    """
+    try:
+        import sympy
+
+        expr = sympy.sympify(srepr)
+    except Exception:  # noqa: BLE001 - 復元不能な srepr は定数扱いにフォールバック
+        return False
+    return bool(getattr(expr, "free_symbols", set()))
+
+
 def _gate_q5t(obj: object, ctx: "CellContext") -> tuple[bool, str]:
     stage_input: "TextStageInput" = obj  # type: ignore[assignment]
     mr = stage_input.mr
@@ -311,9 +325,22 @@ def _gate_q5t(obj: object, ctx: "CellContext") -> tuple[bool, str]:
     for hint_list in text.hints.values():
         check_texts.extend(hint_list)
     full_text = "\n".join(check_texts)
+    norm_full = normalize_math_text(full_text)
 
     for sq in mr.sub_questions:
-        for tok in _numeric_answer_tokens(sq.answer):
+        ans = sq.answer
+        # 式（自由変数を含む symbolic answer, 例 y = ax + b）: 係数 a, b は §8.2 の
+        # 除外規則「式中係数」に当たるため数値レベルの漏洩検査から外す。答えの式
+        # そのものが丸ごと本文/ヒントに現れていないかだけを検査する（find_value の
+        # ように答え＝式の場合、個々の係数は given 座標や構造語（「2点」等）と偶然
+        # 一致するため、数値分解での検査は偽陽性になる）。
+        if ans.kind == "symbolic" and _expr_has_free_symbol(ans.srepr):
+            disp = normalize_math_text(ans.display)
+            if disp and disp in norm_full:
+                return False, f"{sq.label}: 解答の式 {ans.display!r} が problem_text/hints に漏洩"
+            continue
+        # 定数・choice・graph（答え＝具体値）: 個々の数値を given whitelist 除外の上で検査。
+        for tok in _numeric_answer_tokens(ans):
             frac = _to_fraction(tok)
             norm_key = str(frac) if frac is not None else normalize_math_text(tok)
             if norm_key in whitelist:
