@@ -174,9 +174,12 @@ register_frame = REGISTRY.register_frame
 register_visual = REGISTRY.register_visual
 register_hint = REGISTRY.register_hint
 register_gate = REGISTRY.register_gate
+# 直接呼び出しの登録（デコレータではない）。register_template(name, src) を副作用モジュールで使う。
+register_template = REGISTRY.register_template
 
 __all__ = [
     "REGISTRY", "RecipeFn", "GateFn",
     "register_recipe", "register_solver", "register_checker",
     "register_frame", "register_visual", "register_hint", "register_gate",
+    "register_template",
 ]

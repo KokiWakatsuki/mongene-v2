@@ -27,7 +27,7 @@ from engine.core.render.t1_template import TextResult, render_text, render_visua
 from engine.core.rng import Rng, derive_rng, issue_seed
 from engine.core.signature import fingerprint_hash
 from engine.core.spec.loader import load_family_dir
-from engine.core.verify.gates import GateFailure, run_gates
+from engine.core.verify.gates import GateFailure, TextStageInput, VisualStageInput, run_gates
 
 if TYPE_CHECKING:  # pragma: no cover - 型のみ
     from engine.core.contracts import MR, SpecFamily
@@ -196,7 +196,12 @@ def _resolve_remedial(
                 detail=f"remediation 戻り先が未実装: {rem.unit}/{rem.form}/Lv{rem_level}（{result.detail}）",
             )
         return result
-    return result
+    # G-Q7r 用: 要因の対象概念を curriculum_view に載せる（戻り先セルの concept_tags が
+    # これを被覆することをゲートが検査する）。CellContext は frozen なので model_copy で更新。
+    view = dict(result.curriculum_view)
+    view["remedial_target_concepts"] = list(cause.target_concepts)
+    view["remedial_cause_id"] = cause_id
+    return result.model_copy(update={"curriculum_view": view})
 
 
 # ---------------------------------------------------------------------------
@@ -227,10 +232,14 @@ class GeneratorSupplier:
         run_gates(mr, ctx, "mr", registry=registry)
 
         text = render_text(mr, ctx, registry=registry)
-        run_gates(text, ctx, "text", registry=registry)
+        # text 段ゲートは MR（answer/given 値）と描画結果の両方を要するためバンドルで渡す。
+        run_gates(TextStageInput(mr=mr, text=text), ctx, "text", registry=registry)
 
         svg = render_visual(mr, ctx, registry=registry)
-        run_gates(svg, ctx, "visual", registry=registry)
+        run_gates(
+            VisualStageInput(mr=mr, svg=svg, visual_plan=mr.visual_plan),
+            ctx, "visual", registry=registry,
+        )
 
         return assemble_problem(mr, text, svg, ctx)
 

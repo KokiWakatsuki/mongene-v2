@@ -11,12 +11,33 @@ Task6 が本体を追加する。
 """
 from __future__ import annotations
 
+from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
 from engine.core.registry import REGISTRY, _Registry, register_gate
 
 if TYPE_CHECKING:  # pragma: no cover - 型のみ
-    from engine.core.contracts import MR, CellContext
+    from engine.core.contracts import MR, CellContext, VisualPlan
+    from engine.core.render.t1_template import TextResult
+
+
+# ---------------------------------------------------------------------------
+# 段入力バンドル
+# ---------------------------------------------------------------------------
+# text / visual 段のゲート（G-Q5t 漏洩・G-GND 接地・G-Q5v 図内漏洩）は、
+# レンダリング結果だけでなく MR（answer/given 値・visual_plan）を必要とするため、
+# 段の obj として MR を同梱したバンドルを渡す。mr 段は MR をそのまま渡す。
+@dataclass(frozen=True)
+class TextStageInput:
+    mr: "MR"
+    text: "TextResult"
+
+
+@dataclass(frozen=True)
+class VisualStageInput:
+    mr: "MR"
+    svg: str | None
+    visual_plan: "VisualPlan | None"
 
 
 class GateFailure(Exception):
@@ -56,4 +77,4 @@ def _gate_schema(obj: object, ctx: "CellContext") -> tuple[bool, str]:
     return True, ""
 
 
-__all__ = ["GateFailure", "run_gates"]
+__all__ = ["GateFailure", "run_gates", "TextStageInput", "VisualStageInput"]
