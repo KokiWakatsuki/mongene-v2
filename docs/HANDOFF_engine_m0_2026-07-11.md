@@ -55,8 +55,9 @@
 - `g2_l25.find_value` Lv2/Lv3・`g2_l24.find_value` Lv1/Lv3（全 seed）
 - `g2_l25.graph_table` Lv2（図つき・全 seed）
 - remedial: `g2_l25` fv Lv2 → cause `lf.substitution_error` → `g2_l24` fv Lv1 に解決・G-Q7r 通過
-- テスト全体 **1224 passed**（最終確認スイートで唯一の失敗=graph_read旧形テストは新設計に更新済 `77aeb8b`後の `8df0465`）・mypy strict・ruff クリーン
+- テスト全体 **1224 passed**・mypy strict・ruff クリーン
 - `tools/spec_cli.py check math.g2_l25.find_value` → lint/smoke クリーン・dup_rate 0.0
+- **G-Q5t 助数詞誤検知を修正済み（`9c9dc3b`）**: graph_table のテンプレ「2**つ**の格子点」の助数詞 "2" が答え座標の "2" と衝突し 19%(38/200 seed) が偽陽性 `verification_exhausted` になっていた。§8.2 除外規則の一種として日本語助数詞（数字+つ/点/個…）を漏洩スキャンから除外。**graph_table Lv2 は 200/200 seed 生成成功**。連続 seed 全域の回帰テストで cherry-pick 隠蔽を防止（`test_graph_table_slice.py`）。
 
 ### ★サブエージェント運用の教訓（次セッション必読）
 - `general-purpose` サブエージェントは `Agent` ツールを持つため、**「実装せよ」と投げると自分で書かず孫エージェントに委譲する連鎖に陥る**事例が Task8 で多発した（tool_uses 2〜4 で「起動しました。待ちます」と返して何も書かない）。結局 descendant の一部が部分的にファイルを land させたが、**packs/math/__init__ の配線・テスト2本・spec更新・mypy戻り型が抜けており、オーケストレータ(私)が git 実体を精査して手で補完**した。
@@ -111,7 +112,7 @@ git status --porcelain               # Task5b の未追跡ファイルが見え�
 - 以降 §4 統合 → Task7(制作ツール spec preview/check/approve/golden) → Task8(図: 旧`apps/api/src/visuals/graph_renderer.py`・`builder.py`(line~855の答え漏洩が対策対象)を `packs/math/visuals/` へ・whitelist/幾何リーク/モノクロ) → Task9(縦串制作 全セルDoD+remedial DoD) → Task10(eval: coverage_scan/dup_rate2系統/level_sep(fp必須)/retry_stats)。
 
 ## 6. タスク状態（TaskList・2026-07-11 セッション2 末時点）
-- #1〜#8 + §4統合 **完了・コミット済み**（最新コミット `4b97471`）。
+- #1〜#8 + §4統合 **完了・コミット済み**（`git log --oneline` で最新確認。graph_table 偽陽性修正 `9c9dc3b` 含む）。
 - **残: #9 縦串制作（全セル DoD + remedial DoD = coverage_scan green）／#10 eval 一式**。
 
 ## 5.5 次セッションの最初の一手（Task9→Task10）
