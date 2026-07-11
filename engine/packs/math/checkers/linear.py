@@ -62,9 +62,19 @@ def double_solve_graph_read(mr: MR) -> Solution:
     return cast(Solution, solver(p1, p2))
 
 
+@register_checker("math.rate_of_change.double_solve")
+def double_solve_rate_of_change(mr: MR) -> Solution:
+    p = mr.params
+    p1 = _parse_point(p["pts"][0])
+    p2 = _parse_point(p["pts"][1])
+    solver = REGISTRY.solver("math.rate_of_change_from_two_points")
+    return cast(Solution, solver(p1, p2))
+
+
 __all__ = [
     "double_solve_two_points",
     "double_solve_slope_point",
     "double_solve_parallel",
     "double_solve_graph_read",
+    "double_solve_rate_of_change",
 ]

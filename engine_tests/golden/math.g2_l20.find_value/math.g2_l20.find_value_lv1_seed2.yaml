@@ -1,0 +1,56 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - linear_function.rate_of_change
+  provenance:
+    git_commit: ''
+    recipe: math.rate_of_change
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_rate_of_change_v1
+    tier: T1
+  requested:
+    form: find_value
+    level: 1
+    subject: math
+    unit: g2_l20
+  resolved:
+    form: find_value
+    level: 1
+    subject: math
+    unit: g2_l20
+  seed: 2
+  signature: lf_rate_of_change_two_points
+problem_ref: 08ed8bdf796fdd66
+problem_text: 2点 (-5, -9) と (3, 7) を通る1次関数について、変化の割合を求めよ。
+sub_questions:
+- answer:
+    display: '2'
+    kind: symbolic
+    srepr: Integer(2)
+  cause_tags: []
+  concept_tags:
+  - linear_function.rate_of_change
+  explanation: まず、2点から y の増加量と x の増加量をそれぞれ求める。 y の増加量 = 16, x の増加量 = 8次に、y の増加量を x の増加量で割り、変化の割合を求める。 変化の割合 = 2
+  hints:
+  - 2点から y の増加量と x の増加量をそれぞれ求める。
+  label: (1)
+  prompt_text: rate_of_change を求めなさい。
+  solution_steps:
+  - args:
+    - (-5, -9)
+    - (3, 7)
+    narration: 2点から y の増加量と x の増加量をそれぞれ求める。
+    op: compute_differences
+    result_display: y の増加量 = 16, x の増加量 = 8
+    result_srepr: Tuple(Integer(16), Integer(8))
+  - args:
+    - '16'
+    - '8'
+    narration: y の増加量を x の増加量で割り、変化の割合を求める。
+    op: compute_rate_of_change
+    result_display: 変化の割合 = 2
+    result_srepr: Integer(2)
+visual_svg: null

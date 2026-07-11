@@ -27,12 +27,16 @@ def _frames() -> dict:
 
 
 def test_families_dir_has_expected_m0_vertical_slice():
+    # M0 縦串の3 family は常に存在する（横展開で family が増えても縦串は不変）。
     families = load_family_dir(FAMILIES_DIR)
-    assert set(families.keys()) == {
+    m0_slice = {
         "math.g2_l25.find_value",
         "math.g2_l24.find_value",
         "math.g2_l25.graph_table",
     }
+    assert m0_slice <= set(families.keys())
+    # 横展開の第1セル（g2_l20 変化の割合）も存在
+    assert "math.g2_l20.find_value" in families
 
 
 def test_all_m0_families_lint_clean():

@@ -40,11 +40,20 @@ GRAPH_READ_TWO_POINTS_V1 = (
 )
 
 
+# ---------------------------------------------------------------------------
+# g2_l20.find_value Lv1: 2点から変化の割合を求める（横展開の第1セル）
+# ---------------------------------------------------------------------------
+LF_RATE_OF_CHANGE_V1 = (
+    "2点 {{ given.point_a }} と {{ given.point_b }} を通る1次関数について、変化の割合を求めよ。"
+)
+
+
 def _register_all() -> None:
     REGISTRY.register_template("lf_expr_two_points_v1", LF_EXPR_TWO_POINTS_V1)
     REGISTRY.register_template("lf_expr_slope_point_v1", LF_EXPR_SLOPE_POINT_V1)
     REGISTRY.register_template("lf_expr_parallel_v1", LF_EXPR_PARALLEL_V1)
     REGISTRY.register_template("graph_read_two_points_v1", GRAPH_READ_TWO_POINTS_V1)
+    REGISTRY.register_template("lf_rate_of_change_v1", LF_RATE_OF_CHANGE_V1)
 
 
 _register_all()
@@ -55,4 +64,5 @@ __all__ = [
     "LF_EXPR_SLOPE_POINT_V1",
     "LF_EXPR_PARALLEL_V1",
     "GRAPH_READ_TWO_POINTS_V1",
+    "LF_RATE_OF_CHANGE_V1",
 ]

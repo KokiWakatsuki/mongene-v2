@@ -346,9 +346,66 @@ def graph_read_two_points(ctx: CellContext, rng: Rng) -> MR:
     )
 
 
+# ---------------------------------------------------------------------------
+# math.rate_of_change（g2_l20.find_value Lv1 用）— 横展開の第1セル
+# ---------------------------------------------------------------------------
+_RATE_OF_CHANGE_CONCEPTS = [
+    "linear_function.rate_of_change",
+]
+
+
+@register_recipe("math.rate_of_change", provides_concepts=_RATE_OF_CHANGE_CONCEPTS)
+def rate_of_change(ctx: CellContext, rng: Rng) -> MR:
+    """2点から一次関数の変化の割合（＝傾き）を求める（answer-first）。
+
+    整数傾き a・切片 b を先に選び、直線 y=ax+b 上の格子点2つを逆算する。答えは
+    a（変化の割合）そのもの。独立ソルバ `math.rate_of_change_from_two_points` で
+    (y2-y1)/(x2-x1) を再計算し a と一致することを assert する。
+    """
+    p = ctx.spec_level.params
+    a = draw(p["slope_domain"], rng)
+    b = draw(p.get("intercept_domain", {"int_range": [-8, 8]}), rng)
+    (x1, _y1), (x2, _y2) = draw_many(p["point_domain"], rng, k=2)
+
+    a_s = sympy.nsimplify(a)
+    b_s = sympy.nsimplify(b)
+    x1_s, x2_s = sympy.nsimplify(x1), sympy.nsimplify(x2)
+    pts = [(x1_s, a_s * x1_s + b_s), (x2_s, a_s * x2_s + b_s)]
+
+    solver = REGISTRY.solver("math.rate_of_change_from_two_points")
+    sol = cast(Solution, solver(pts[0], pts[1]))
+    assert isinstance(sol.answer, SymbolicAnswer)
+    assert sol.answer.srepr == sympy.srepr(a_s), (
+        f"double-solve 不一致: recipe が構成した変化の割合 {a_s} != solver 再計算 {sol.answer.srepr}"
+    )
+
+    sub_question = SubQuestionMR(
+        label="(1)",
+        asked="rate_of_change",
+        answer=sol.answer,
+        steps=sol.steps,
+        concept_tags=_effective_concept_tags(ctx),
+        cause_tags=_effective_cause_tags(ctx),
+    )
+
+    return MR(
+        signature=ctx.spec_level.signature,
+        family=ctx.family,
+        level=ctx.level,
+        purpose=ctx.purpose,
+        seed=0,
+        params={"a": str(a_s), "pts": [str(pts[0]), str(pts[1])]},
+        given={"point_a": _fmt_point(pts[0]), "point_b": _fmt_point(pts[1])},
+        sub_questions=[sub_question],
+        visual_plan=None,
+        provenance=Provenance(recipe="math.rate_of_change"),
+    )
+
+
 __all__ = [
     "linear_from_two_points",
     "linear_from_slope_point",
     "linear_from_parallel_condition",
     "graph_read_two_points",
+    "rate_of_change",
 ]

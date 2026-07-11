@@ -227,9 +227,46 @@ def read_two_lattice_points(p1: tuple[object, object], p2: tuple[object, object]
     return Solution(answer=answer, steps=steps)
 
 
+@register_solver("math.rate_of_change_from_two_points")
+def rate_of_change_from_two_points(p1: tuple[object, object], p2: tuple[object, object]) -> Solution:
+    """2点から一次関数の変化の割合（＝傾き）を求める（g2_l20.find_value Lv1）。
+
+    変化の割合 = (y の増加量)/(x の増加量) = (y2 - y1)/(x2 - x1)。答えは式ではなく
+    数値（傾きそのもの）で、g2_l25 の「2点→式」とは asked も steps も異なる別構造。
+    """
+    x1, y1 = sympy.nsimplify(p1[0]), sympy.nsimplify(p1[1])
+    x2, y2 = sympy.nsimplify(p2[0]), sympy.nsimplify(p2[1])
+    if x1 == x2:
+        raise ValueError("p1, p2 の x 座標が一致しており変化の割合が定まらない")
+
+    dy = y2 - y1
+    dx = x2 - x1
+    rate = dy / dx
+
+    steps = [
+        Step(
+            op="compute_differences",
+            args=[str(p1), str(p2)],
+            result_srepr=sympy.srepr(sympy.Tuple(dy, dx)),
+            result_display=f"y の増加量 = {_format_number(dy)}, x の増加量 = {_format_number(dx)}",
+            narration="2点から y の増加量と x の増加量をそれぞれ求める。",
+        ),
+        Step(
+            op="compute_rate_of_change",
+            args=[_format_number(dy), _format_number(dx)],
+            result_srepr=sympy.srepr(rate),
+            result_display=f"変化の割合 = {_format_number(rate)}",
+            narration="y の増加量を x の増加量で割り、変化の割合を求める。",
+        ),
+    ]
+    answer = SymbolicAnswer(srepr=sympy.srepr(rate), display=_format_number(rate))
+    return Solution(answer=answer, steps=steps)
+
+
 __all__ = [
     "linear_expr_from_two_points",
     "linear_expr_from_slope_point",
     "linear_expr_parallel_through_point",
     "read_two_lattice_points",
+    "rate_of_change_from_two_points",
 ]

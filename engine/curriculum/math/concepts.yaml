@@ -19,3 +19,7 @@ concepts:
   - id: graph.read_lattice_points
     label: "グラフ上の格子点の座標を読み取る"
     unit: g2_l25
+  # 横展開（M1 初手・g2 一次関数クラスタ）
+  - id: linear_function.rate_of_change
+    label: "2点から一次関数の変化の割合（傾き）を求める"
+    unit: g2_l20

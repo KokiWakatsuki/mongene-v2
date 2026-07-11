@@ -217,6 +217,40 @@ def test_graph_read_two_points_double_solve_property(seed):
 
 
 # ---------------------------------------------------------------------------
+# math.rate_of_change（g2_l20.find_value Lv1）— 横展開の第1セル
+# ---------------------------------------------------------------------------
+def test_rate_of_change_lv1_construct():
+    ctx = _make_ctx("math.g2_l20.find_value", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    recipe = REGISTRY.recipe(ctx.spec_level.recipe)
+    mr = recipe(ctx, rng)
+
+    assert mr.signature == "lf_rate_of_change_two_points"
+    assert set(mr.given.keys()) == {"point_a", "point_b"}
+    sq = mr.sub_questions[0]
+    assert sq.asked == "rate_of_change"
+    assert sq.cause_tags == []  # cause_tags 空でも G-Q7 は通る（concept_tags のみ非空必須）
+    assert [s.op for s in sq.steps] == ["compute_differences", "compute_rate_of_change"]
+
+
+@pytest.mark.parametrize("seed", range(200))
+def test_rate_of_change_double_solve_property(seed):
+    ctx = _make_ctx("math.g2_l20.find_value", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    recipe = REGISTRY.recipe(ctx.spec_level.recipe)
+    mr = recipe(ctx, rng)
+
+    pts_strs = mr.params["pts"]
+    p1 = sympy.sympify(pts_strs[0])
+    p2 = sympy.sympify(pts_strs[1])
+    solver = REGISTRY.solver("math.rate_of_change_from_two_points")
+    sol = solver((p1[0], p1[1]), (p2[0], p2[1]))
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+    # 変化の割合 = 傾き a と一致
+    assert sol.answer.srepr == sympy.srepr(sympy.nsimplify(mr.params["a"]))
+
+
+# ---------------------------------------------------------------------------
 # provides_concepts の宣言確認（R6 の前提）
 # ---------------------------------------------------------------------------
 def test_recipes_declare_provides_concepts():

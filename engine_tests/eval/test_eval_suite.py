@@ -24,11 +24,16 @@ def env():  # type: ignore[no-untyped-def]
 # coverage_scan
 # ---------------------------------------------------------------------------
 def test_coverage_scan_ok_on_slice(env) -> None:  # type: ignore[no-untyped-def]
+    from engine.eval._harness import capability_cells, remedial_cases
+
     report = coverage_scan.run_coverage_scan(env, seeds=5)
     assert report.ok, report.to_json()
-    # 5 base セル + 3 remedial 要因
-    assert len(report.cells) == 5
-    assert len(report.remedial) == 3
+    # base セル数は capabilities と一致（横展開でセルが増えても追随する動的検査）。
+    assert len(report.cells) == len(capability_cells(env))
+    assert len(report.remedial) == len(remedial_cases(env))
+    # M0 縦串 + 横展開の代表セルが含まれる
+    cell_names = {c.cell for c in report.cells}
+    assert {"g2_l25.find_value.Lv2", "g2_l20.find_value.Lv1"} <= cell_names
     # ゲートが実際に登録されている（素通り防止）
     assert report.gate_counts["mr"] > 0
     assert report.gate_counts["text"] > 0
