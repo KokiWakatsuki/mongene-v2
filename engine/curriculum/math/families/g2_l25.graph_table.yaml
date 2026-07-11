@@ -1,0 +1,23 @@
+family: math.g2_l25.graph_table
+form: graph_table
+source_desc: |
+  グラフ上の2点の座標を読み取る（例: 座標平面上にかかれた直線が通る2つの格子点の座標を読み取り、
+  それぞれの座標を答えよ。）。式決定の前段としてのグラフ読み取り。
+concepts_default: [graph.read_lattice_points]
+levels:
+  "2":
+    signature: graph_read_two_lattice_points
+    recipe: math.graph_read_two_points
+    params:
+      slope_domain: {int_range: [-4, 4], exclude: [0]}
+      intercept_domain: {int_range: [-6, 6]}
+      point_domain: {lattice: {x: {int_range: [-5, 5]}, y: {int_range: [-8, 8]}}, distinct: [x]}
+    given: [expression]
+    asked: [read_point]
+    visual: required
+    text: {tier: T1, template: graph_read_two_points_v1}
+    hints: [steps_prefix]
+    concept_tags: [graph.read_lattice_points]
+    cause_tags: [lf.point_reading_error]
+remedial:
+  default_level: 2
