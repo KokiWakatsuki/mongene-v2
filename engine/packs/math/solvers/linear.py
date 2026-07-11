@@ -347,6 +347,59 @@ def intersection_of_two_lines(
     return Solution(answer=answer, steps=steps)
 
 
+def _format_y_range(y_lo: sympy.Expr, y_hi: sympy.Expr) -> str:
+    """y の変域表示（例: "-1 ≦ y ≦ 5"）。全角 ≦ を使う（教科書表記）。"""
+    return f"{_format_number(y_lo)} ≦ y ≦ {_format_number(y_hi)}"
+
+
+@register_solver("math.y_range_over_domain")
+def y_range_over_domain(
+    a: object, b: object, x_lo: object, x_hi: object
+) -> Solution:
+    """1次関数 y=ax+b の x の変域 [x_lo, x_hi] に対する y の変域を求める（g2_l23 Lv2）。
+
+    傾きの正負で端点の対応が入れかわる（a>0 なら x_lo→y_lo・x_hi→y_hi、a<0 で逆）。
+    """
+    a_s, b_s = sympy.nsimplify(a), sympy.nsimplify(b)
+    x1, x2 = sympy.nsimplify(x_lo), sympy.nsimplify(x_hi)
+    if x1 >= x2:
+        raise ValueError("x の変域は x_lo < x_hi であること")
+    y_at_x1 = a_s * x1 + b_s
+    y_at_x2 = a_s * x2 + b_s
+    y_lo = sympy.Min(y_at_x1, y_at_x2)
+    y_hi = sympy.Max(y_at_x1, y_at_x2)
+
+    sign_word = "正" if a_s > 0 else "負"
+    steps = [
+        Step(
+            op="determine_sign",
+            args=[_format_number(a_s)],
+            result_srepr=sympy.srepr(a_s),
+            result_display=f"傾きは {sign_word}",
+            narration="傾きの正負を調べ、端点の対応（どちらの端が最大・最小か）を決める。",
+        ),
+        Step(
+            op="eval_endpoints",
+            args=[_format_number(x1), _format_number(x2)],
+            result_srepr=sympy.srepr(sympy.Tuple(y_at_x1, y_at_x2)),
+            result_display=(
+                f"x = {_format_number(x1)} のとき y = {_format_number(y_at_x1)}, "
+                f"x = {_format_number(x2)} のとき y = {_format_number(y_at_x2)}"
+            ),
+            narration="変域の両端の x を式に代入し、対応する y の値を求める。",
+        ),
+        Step(
+            op="form_range",
+            args=[_format_number(y_lo), _format_number(y_hi)],
+            result_srepr=sympy.srepr(sympy.Tuple(y_lo, y_hi)),
+            result_display=_format_y_range(y_lo, y_hi),
+            narration="小さい方を下限、大きい方を上限として y の変域を書く。",
+        ),
+    ]
+    answer = SymbolicAnswer(srepr=sympy.srepr(sympy.Tuple(y_lo, y_hi)), display=_format_y_range(y_lo, y_hi))
+    return Solution(answer=answer, steps=steps)
+
+
 __all__ = [
     "linear_expr_from_two_points",
     "linear_expr_from_slope_point",
@@ -354,4 +407,5 @@ __all__ = [
     "read_two_lattice_points",
     "rate_of_change_from_two_points",
     "intersection_of_two_lines",
+    "y_range_over_domain",
 ]

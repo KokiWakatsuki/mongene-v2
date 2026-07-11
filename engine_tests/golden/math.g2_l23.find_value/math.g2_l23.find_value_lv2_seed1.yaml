@@ -1,0 +1,63 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - linear_function.variable_range
+  provenance:
+    git_commit: ''
+    recipe: math.y_range_from_domain
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_y_range_v1
+    tier: T1
+  requested:
+    form: find_value
+    level: 2
+    subject: math
+    unit: g2_l23
+  resolved:
+    form: find_value
+    level: 2
+    subject: math
+    unit: g2_l23
+  seed: 1
+  signature: lf_y_range_forward
+problem_ref: d242ddab8d556782
+problem_text: 1次関数 y = x + 5 について、x の変域が -1 ≦ x ≦ 3 のときの y の変域を求めよ。
+sub_questions:
+- answer:
+    display: 4 ≦ y ≦ 8
+    kind: symbolic
+    srepr: Tuple(Integer(4), Integer(8))
+  cause_tags: []
+  concept_tags:
+  - linear_function.variable_range
+  explanation: まず、傾きの正負を調べ、端点の対応（どちらの端が最大・最小か）を決める。 傾きは 正次に、変域の両端の x を式に代入し、対応する y の値を求める。 x = -1 のとき y = 4, x = 3 のとき y = 8最後に、小さい方を下限、大きい方を上限として y の変域を書く。 4 ≦ y ≦ 8
+  hints:
+  - 傾きの正負を調べ、端点の対応（どちらの端が最大・最小か）を決める。
+  - 変域の両端の x を式に代入し、対応する y の値を求める。
+  label: (1)
+  prompt_text: domain_range を求めなさい。
+  solution_steps:
+  - args:
+    - '1'
+    narration: 傾きの正負を調べ、端点の対応（どちらの端が最大・最小か）を決める。
+    op: determine_sign
+    result_display: 傾きは 正
+    result_srepr: Integer(1)
+  - args:
+    - '-1'
+    - '3'
+    narration: 変域の両端の x を式に代入し、対応する y の値を求める。
+    op: eval_endpoints
+    result_display: x = -1 のとき y = 4, x = 3 のとき y = 8
+    result_srepr: Tuple(Integer(4), Integer(8))
+  - args:
+    - '4'
+    - '8'
+    narration: 小さい方を下限、大きい方を上限として y の変域を書く。
+    op: form_range
+    result_display: 4 ≦ y ≦ 8
+    result_srepr: Tuple(Integer(4), Integer(8))
+visual_svg: null

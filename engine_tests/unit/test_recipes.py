@@ -300,6 +300,55 @@ def test_intersection_double_solve_property(level, seed):
 
 
 # ---------------------------------------------------------------------------
+# math.y_range_from_domain / math.expr_from_range（g2_l23.find_value）— 横展開#3 変域
+# ---------------------------------------------------------------------------
+def test_y_range_lv2_forward_construct():
+    ctx = _make_ctx("math.g2_l23.find_value", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "lf_y_range_forward"
+    assert set(mr.given.keys()) == {"expression", "x_domain"}
+    sq = mr.sub_questions[0]
+    assert sq.asked == "domain_range"
+    assert [s.op for s in sq.steps] == ["determine_sign", "eval_endpoints", "form_range"]
+
+
+def test_expr_from_range_lv3_inverse_construct():
+    ctx = _make_ctx("math.g2_l23.find_value", 3)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "lf_expr_from_range_inverse"
+    assert set(mr.given.keys()) == {"x_domain", "y_range", "condition"}
+    sq = mr.sub_questions[0]
+    assert sq.asked == "expression"  # Lv2(domain_range) と asked が異なる＝別構造
+
+
+@pytest.mark.parametrize("seed", range(200))
+def test_y_range_lv2_double_solve_property(seed):
+    ctx = _make_ctx("math.g2_l23.find_value", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.y_range_over_domain")
+    sol = solver(
+        sympy.sympify(mr.params["a"]), sympy.sympify(mr.params["b"]),
+        sympy.sympify(mr.params["x_lo"]), sympy.sympify(mr.params["x_hi"]),
+    )
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+
+
+@pytest.mark.parametrize("seed", range(200))
+def test_expr_from_range_lv3_double_solve_property(seed):
+    ctx = _make_ctx("math.g2_l23.find_value", 3)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    p1 = sympy.sympify(mr.params["pts"][0])
+    p2 = sympy.sympify(mr.params["pts"][1])
+    solver = REGISTRY.solver("math.linear_expr_from_two_points")
+    sol = solver((p1[0], p1[1]), (p2[0], p2[1]), mr.params["method"])
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+
+
+# ---------------------------------------------------------------------------
 # provides_concepts の宣言確認（R6 の前提）
 # ---------------------------------------------------------------------------
 def test_recipes_declare_provides_concepts():

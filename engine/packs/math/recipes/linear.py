@@ -495,6 +495,117 @@ def intersection(ctx: CellContext, rng: Rng) -> MR:
     )
 
 
+# ---------------------------------------------------------------------------
+# math.y_range_from_domain / math.expr_from_range（g2_l23.find_value）— 横展開#3
+# 変域とグラフの端点。Lv2=順方向(関数+x変域→y変域)、Lv3=逆算(x変域+y変域+符号→式)。
+# ---------------------------------------------------------------------------
+_Y_RANGE_CONCEPTS = ["linear_function.variable_range"]
+
+
+def _format_x_domain(x_lo: sympy.Expr, x_hi: sympy.Expr) -> str:
+    return f"{_fmt_number(x_lo)} ≦ x ≦ {_fmt_number(x_hi)}"
+
+
+def _format_y_range_display(y_lo: sympy.Expr, y_hi: sympy.Expr) -> str:
+    return f"{_fmt_number(y_lo)} ≦ y ≦ {_fmt_number(y_hi)}"
+
+
+def _draw_ordered_x_pair(p: dict[str, Any], rng: Rng) -> tuple[sympy.Expr, sympy.Expr]:
+    """x の変域端点 x_lo < x_hi を2つ引く（distinct 保証つき domain を昇順に）。"""
+    x_a, x_b = draw_many(p["x_domain"], rng, k=2)
+    xs = sorted([sympy.nsimplify(x_a), sympy.nsimplify(x_b)])
+    return xs[0], xs[1]
+
+
+@register_recipe("math.y_range_from_domain", provides_concepts=_Y_RANGE_CONCEPTS)
+def y_range_from_domain(ctx: CellContext, rng: Rng) -> MR:
+    """順方向（g2_l23 Lv2）: 1次関数 y=ax+b と x の変域から y の変域を求める。"""
+    p = ctx.spec_level.params
+    a = draw(p["slope_domain"], rng)
+    b = draw(p.get("intercept_domain", {"int_range": [-6, 6]}), rng)
+    x_lo, x_hi = _draw_ordered_x_pair(p, rng)
+
+    a_s, b_s = sympy.nsimplify(a), sympy.nsimplify(b)
+    solver = REGISTRY.solver("math.y_range_over_domain")
+    sol = cast(Solution, solver(a_s, b_s, x_lo, x_hi))
+    assert isinstance(sol.answer, SymbolicAnswer)
+
+    sub_question = SubQuestionMR(
+        label="(1)",
+        asked="domain_range",
+        answer=sol.answer,
+        steps=sol.steps,
+        concept_tags=_effective_concept_tags(ctx),
+        cause_tags=_effective_cause_tags(ctx),
+    )
+    return MR(
+        signature=ctx.spec_level.signature,
+        family=ctx.family,
+        level=ctx.level,
+        purpose=ctx.purpose,
+        seed=0,
+        params={"a": str(a_s), "b": str(b_s), "x_lo": str(x_lo), "x_hi": str(x_hi)},
+        given={
+            "expression": _format_parallel_line_display(a_s, b_s),
+            "x_domain": _format_x_domain(x_lo, x_hi),
+        },
+        sub_questions=[sub_question],
+        visual_plan=None,
+        provenance=Provenance(recipe="math.y_range_from_domain"),
+    )
+
+
+@register_recipe("math.expr_from_range", provides_concepts=_Y_RANGE_CONCEPTS)
+def expr_from_range(ctx: CellContext, rng: Rng) -> MR:
+    """逆算（g2_l23 Lv3）: x の変域・y の変域・傾きの符号（正）から式を求める。
+
+    傾き正のとき x_lo↔y_lo・x_hi↔y_hi と対応するので、端点2点から式を復元する
+    （既存ソルバ `math.linear_expr_from_two_points` を再利用）。
+    """
+    p = ctx.spec_level.params
+    a = draw(p["slope_domain"], rng)  # 正の傾き（spec で exclude<=0 を保証）
+    b = draw(p.get("intercept_domain", {"int_range": [-6, 6]}), rng)
+    x_lo, x_hi = _draw_ordered_x_pair(p, rng)
+
+    a_s, b_s = sympy.nsimplify(a), sympy.nsimplify(b)
+    y_lo = a_s * x_lo + b_s
+    y_hi = a_s * x_hi + b_s  # a>0 なので y_lo < y_hi
+    pts = [(x_lo, y_lo), (x_hi, y_hi)]
+
+    solver = REGISTRY.solver("math.linear_expr_from_two_points")
+    sol = cast(Solution, solver(pts[0], pts[1], "slope_then_intercept"))
+    assert isinstance(sol.answer, SymbolicAnswer)
+    expected = a_s * sympy.Symbol("x") + b_s
+    assert sol.answer.srepr == sympy.srepr(expected), (
+        f"double-solve 不一致: 構成 {expected} != solver {sol.answer.srepr}"
+    )
+
+    sub_question = SubQuestionMR(
+        label="(1)",
+        asked="expression",
+        answer=sol.answer,
+        steps=sol.steps,
+        concept_tags=_effective_concept_tags(ctx),
+        cause_tags=_effective_cause_tags(ctx),
+    )
+    return MR(
+        signature=ctx.spec_level.signature,
+        family=ctx.family,
+        level=ctx.level,
+        purpose=ctx.purpose,
+        seed=0,
+        params={"pts": [str(pts[0]), str(pts[1])], "method": "slope_then_intercept"},
+        given={
+            "x_domain": _format_x_domain(x_lo, x_hi),
+            "y_range": _format_y_range_display(y_lo, y_hi),
+            "condition": "傾き a が正のとき",
+        },
+        sub_questions=[sub_question],
+        visual_plan=None,
+        provenance=Provenance(recipe="math.expr_from_range"),
+    )
+
+
 __all__ = [
     "linear_from_two_points",
     "linear_from_slope_point",
@@ -502,4 +613,6 @@ __all__ = [
     "graph_read_two_points",
     "rate_of_change",
     "intersection",
+    "y_range_from_domain",
+    "expr_from_range",
 ]

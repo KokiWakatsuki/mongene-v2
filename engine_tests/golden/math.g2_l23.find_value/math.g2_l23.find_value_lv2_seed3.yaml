@@ -1,0 +1,63 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - linear_function.variable_range
+  provenance:
+    git_commit: ''
+    recipe: math.y_range_from_domain
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_y_range_v1
+    tier: T1
+  requested:
+    form: find_value
+    level: 2
+    subject: math
+    unit: g2_l23
+  resolved:
+    form: find_value
+    level: 2
+    subject: math
+    unit: g2_l23
+  seed: 3
+  signature: lf_y_range_forward
+problem_ref: c698a9291eca841c
+problem_text: 1次関数 y = -3x + 6 について、x の変域が -3 ≦ x ≦ -1 のときの y の変域を求めよ。
+sub_questions:
+- answer:
+    display: 9 ≦ y ≦ 15
+    kind: symbolic
+    srepr: Tuple(Integer(9), Integer(15))
+  cause_tags: []
+  concept_tags:
+  - linear_function.variable_range
+  explanation: まず、傾きの正負を調べ、端点の対応（どちらの端が最大・最小か）を決める。 傾きは 負次に、変域の両端の x を式に代入し、対応する y の値を求める。 x = -3 のとき y = 15, x = -1 のとき y = 9最後に、小さい方を下限、大きい方を上限として y の変域を書く。 9 ≦ y ≦ 15
+  hints:
+  - 傾きの正負を調べ、端点の対応（どちらの端が最大・最小か）を決める。
+  - 変域の両端の x を式に代入し、対応する y の値を求める。
+  label: (1)
+  prompt_text: domain_range を求めなさい。
+  solution_steps:
+  - args:
+    - '-3'
+    narration: 傾きの正負を調べ、端点の対応（どちらの端が最大・最小か）を決める。
+    op: determine_sign
+    result_display: 傾きは 負
+    result_srepr: Integer(-3)
+  - args:
+    - '-3'
+    - '-1'
+    narration: 変域の両端の x を式に代入し、対応する y の値を求める。
+    op: eval_endpoints
+    result_display: x = -3 のとき y = 15, x = -1 のとき y = 9
+    result_srepr: Tuple(Integer(15), Integer(9))
+  - args:
+    - '9'
+    - '15'
+    narration: 小さい方を下限、大きい方を上限として y の変域を書く。
+    op: form_range
+    result_display: 9 ≦ y ≦ 15
+    result_srepr: Tuple(Integer(9), Integer(15))
+visual_svg: null

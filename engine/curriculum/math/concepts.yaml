@@ -26,3 +26,6 @@ concepts:
   - id: linear_function.intersection_of_two_lines
     label: "2直線の交点の座標を求める（連立方程式の解）"
     unit: g2_l27
+  - id: linear_function.variable_range
+    label: "x の変域から y の変域を求める・端点の対応（逆算含む）"
+    unit: g2_l23

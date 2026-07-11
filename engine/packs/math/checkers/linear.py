@@ -80,6 +80,25 @@ def double_solve_intersection(mr: MR) -> Solution:
     return cast(Solution, solver(line_a, line_b, p["method"]))
 
 
+@register_checker("math.y_range_from_domain.double_solve")
+def double_solve_y_range(mr: MR) -> Solution:
+    p = mr.params
+    solver = REGISTRY.solver("math.y_range_over_domain")
+    return cast(Solution, solver(
+        sympy.sympify(p["a"]), sympy.sympify(p["b"]),
+        sympy.sympify(p["x_lo"]), sympy.sympify(p["x_hi"]),
+    ))
+
+
+@register_checker("math.expr_from_range.double_solve")
+def double_solve_expr_from_range(mr: MR) -> Solution:
+    p = mr.params
+    p1 = _parse_point(p["pts"][0])
+    p2 = _parse_point(p["pts"][1])
+    solver = REGISTRY.solver("math.linear_expr_from_two_points")
+    return cast(Solution, solver(p1, p2, p["method"]))
+
+
 __all__ = [
     "double_solve_two_points",
     "double_solve_slope_point",
@@ -87,4 +106,6 @@ __all__ = [
     "double_solve_graph_read",
     "double_solve_rate_of_change",
     "double_solve_intersection",
+    "double_solve_y_range",
+    "double_solve_expr_from_range",
 ]

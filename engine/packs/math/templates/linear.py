@@ -56,6 +56,19 @@ LF_INTERSECTION_V1 = (
     "2つの直線 {{ given.line_a }} と {{ given.line_b }} の交点の座標を求めよ。"
 )
 
+# ---------------------------------------------------------------------------
+# g2_l23.find_value: 変域とグラフの端点（横展開#3）
+# Lv2=順方向（関数+x変域→y変域）／Lv3=逆算（x変域+y変域+符号→式）
+# ---------------------------------------------------------------------------
+LF_Y_RANGE_V1 = (
+    "1次関数 {{ given.expression }} について、"
+    "x の変域が {{ given.x_domain }} のときの y の変域を求めよ。"
+)
+LF_EXPR_FROM_RANGE_V1 = (
+    "1次関数 y = ax + b について、x の変域が {{ given.x_domain }} のとき "
+    "y の変域が {{ given.y_range }} であった。{{ given.condition }}、この1次関数の式を求めよ。"
+)
+
 
 def _register_all() -> None:
     REGISTRY.register_template("lf_expr_two_points_v1", LF_EXPR_TWO_POINTS_V1)
@@ -64,6 +77,8 @@ def _register_all() -> None:
     REGISTRY.register_template("graph_read_two_points_v1", GRAPH_READ_TWO_POINTS_V1)
     REGISTRY.register_template("lf_rate_of_change_v1", LF_RATE_OF_CHANGE_V1)
     REGISTRY.register_template("lf_intersection_v1", LF_INTERSECTION_V1)
+    REGISTRY.register_template("lf_y_range_v1", LF_Y_RANGE_V1)
+    REGISTRY.register_template("lf_expr_from_range_v1", LF_EXPR_FROM_RANGE_V1)
 
 
 _register_all()
@@ -76,4 +91,6 @@ __all__ = [
     "GRAPH_READ_TWO_POINTS_V1",
     "LF_RATE_OF_CHANGE_V1",
     "LF_INTERSECTION_V1",
+    "LF_Y_RANGE_V1",
+    "LF_EXPR_FROM_RANGE_V1",
 ]
