@@ -75,6 +75,15 @@ def resolve(
     if req.purpose == "remedial":
         return _resolve_remedial(req, curriculum=curriculum, families=families, registry=registry)
 
+    # M0 は base と remedial のみ実装。variant（類題A/B/C）は variant_of 再抽選機構（§5.3）が
+    # 必要で M1 送り。ここで明示拒否しないと variant が base 相当の問題を返し、F-5
+    # 「未対応座標を受理して別種を返す」違反になる（黙って別 purpose の問題を返すのを防ぐ）。
+    if req.purpose != "base":
+        return Unsupported(
+            code="purpose_not_supported",
+            detail=f"purpose={req.purpose!r} は M0 未対応（variant は M1・§5.3）",
+        )
+
     return _resolve_coordinate(
         subject=req.subject,
         unit=req.unit,

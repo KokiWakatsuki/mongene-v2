@@ -132,6 +132,11 @@ git status --porcelain               # 空（クリーン）のはず
 - **Task9 完了**: graph_table の描画範囲を spec domain 調整（`g2_l25.graph_table.yaml`: slope±4→±3・intercept±6→±4・x±5→±4。答え点 y を±26→±16 に有界化。グリッド最大36→28目盛）。preview 機械検収（Unsupported0・答え座標が本文/図に非漏洩・グリッド有界）→ `spec approve` で golden 固定。remedial DoD は `engine_tests/contract/test_remedial_dod.py` が curriculum の全誤答要因を正として走査（要因追加で自動拡張）。
 - **Task10 完了**: `engine/eval/`（core/pack を一切変更しない読み取り+生成のみ）。MR 実体が要る指標（dup_key/fp）は `_harness.build_mr` が pipeline の recipe 構成部（derive_rng + seed 刻印 + bounded_retry）を忠実に再現して MR を得る（Problem は params を運ばないため）。**設計判断**: dup_rate の fp 系はセル内では同一 signature ゆえ fp 一定（G-FP 安定の傍証）なので、意味論的に正しい「別署名を貼った実質同一構造」の検出は **family 横断の署名跨ぎ fp 衝突**として実装した（level_sep の fp 相異検査と表裏）。
 
+### M0 DoD 完全性監査（要件 §10 = Q1〜Q7 + F-1/2/3/5/9）で見つけた F-5 穴を修正
+- **F-5 バグ修正**: `purpose="variant"` が Unsupported でなく **base 相当の Problem を黙って返していた**（variant 機構=variant_of 再抽選は §5.3 で M1 送りなのに未対応 purpose を受理＝F-5「別種を返す」違反）。`resolve()` に `purpose not in (base, remedial) → Unsupported(purpose_not_supported)` ガードを追加。これで `purpose_not_supported` コードが初めて実際に emit される。
+- **F-5 全コード発火テスト** `engine_tests/contract/test_unsupported_codes.py`: 実エンジンで unit_not_found/form_not_supported/level_not_supported/purpose_not_supported/cause_not_found/not_implemented を発火し、いずれも Problem を返さない（別種非返却）ことを固定。M0 外の verification_exhausted はダミーゲートで test_generate_end_to_end が、supply_exhausted は M1(variant/avoid) が担当。
+- N-4 モノクロは `test_visuals.py::test_monochrome_only` で被覆済み（彩度色で情報区別していないこと）。
+
 ### 既知の設計 smell（M1 で対処候補・今回は範囲外）
 - `math.graph_read_two_points` は整数傾き a×切片 b から点を逆算するため、spec の `point_domain.y` が**実質デッド**（実際の答え点 y は a*x+b で決まる）。今回は spec domain を絞って可読性を確保したが、本筋は「2 格子点を直接選び、傾きは有理数でよい」構成に変える方が y を宣言域で有界化でき題材とも整合する（要 recipe 改修 + golden 再承認）。
 - ruff nit（**私の変更外・既存**）: `engine_tests/unit/test_gates.py`・`test_core_foundation.py`・`golden/test_golden_slice.py` に未使用 import が数件残る（前セッションが engine_tests に ruff をかけていなかった痕跡）。`engine/` ソースは clean。CI で engine_tests も lint するなら別途一掃。
