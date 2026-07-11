@@ -50,6 +50,8 @@
 | §4統合 | 金の縦串 contract テスト `engine_tests/contract/test_vertical_slice.py`(find_value全セル+remedial+G-Q7r) 17件 | `2194dbb` |
 | 8 | 図エンジン `packs/math/visuals/graph.py`(座標平面SVG・matplotlib非依存・モノクロ・軸目盛のみtext)。**設計判断**: graph_table「読む」は図に式も答え座標も描かず、recipeの `given={}`(式は図提示・内部param)でG-GND自明通過。`visual_builder=math.linear_graph` をspecに配線。test_visuals/test_graph_table_slice | `8df0465` |
 | 7 | 制作ツール `tools/spec_cli.py`(preview HTML/check=lint+smoke+簡易dup_rate/approve=golden保存)・golden回帰機構 `engine_tests/golden/`。find_value縦串を承認済みgoldenで固定 | `4b97471` |
+| 9 | **縦串制作の仕上げ(DoD締め)**: graph_table描画範囲改善(spec domain調整=YAMLのみ・答え点y有界化±26→±16でグリッド最大36→28目盛)→ preview検収 → `spec approve` で golden固定(`engine_tests/golden/math.g2_l25.graph_table/` seed1-3)。remedial DoD機械判定 `engine_tests/contract/test_remedial_dod.py`(全誤答要因×5seedがgenerate成功+G-Q7r被覆・対応表完全性) | 本セッション |
+| 10 | **eval一式** `engine/eval/`: `_harness.py`(MR構築=pipeline忠実再現/セル走査/remedial走査)・`coverage_scan.py`(生成不能0・ゲート素通り0=登録ゲート数検査・remedial対応表)・`dup_rate.py`(2系統: dup_key系セル内衝突率+fp系family横断署名跨ぎ衝突)・`level_sep.py`(署名相異[静的]+fp相異[必須]+単調性=not_declared)・`retry_stats.py`(bounded_retry発動率/構成失敗)・統合CLI `python -m engine.eval`。各CLI・JSON・終了コード。テスト `engine_tests/eval/test_eval_suite.py`(合格+わざと壊すfail経路) | 本セッション |
 
 **現状の到達点（縦串は実物エンジンで完動）**: `from engine.bootstrap import bootstrap; bootstrap()` 後、`generate()` で以下が全ゲート通過し Problem を返す:
 - `g2_l25.find_value` Lv2/Lv3・`g2_l24.find_value` Lv1/Lv3（全 seed）
@@ -111,22 +113,28 @@ git status --porcelain               # Task5b の未追跡ファイルが見え�
 - Task6 を再ディスパッチ（§3 のブリーフを sonnet サブエージェントへ。`engine/packs/math/` は触らせない）。
 - 以降 §4 統合 → Task7(制作ツール spec preview/check/approve/golden) → Task8(図: 旧`apps/api/src/visuals/graph_renderer.py`・`builder.py`(line~855の答え漏洩が対策対象)を `packs/math/visuals/` へ・whitelist/幾何リーク/モノクロ) → Task9(縦串制作 全セルDoD+remedial DoD) → Task10(eval: coverage_scan/dup_rate2系統/level_sep(fp必須)/retry_stats)。
 
-## 6. タスク状態（TaskList・2026-07-11 セッション2 末時点）
-- #1〜#8 + §4統合 **完了・コミット済み**（`git log --oneline` で最新確認。graph_table 偽陽性修正 `9c9dc3b` 含む）。
-- **残: #9 縦串制作（全セル DoD + remedial DoD = coverage_scan green）／#10 eval 一式**。
+## 6. タスク状態（TaskList・2026-07-11 セッション3 末時点）
+- #1〜#10 + §4統合 **全完了・コミット済み**（`git log --oneline` で最新確認）。
+- **M0 金の縦串は実装完了**。全 base セル（find_value 4 + graph_table 1）DoD 締め済み（lint/smoke/dup_rate/level_sep/golden 承認/remedial DoD）。eval 一式が `python -m engine.eval` で 1 コマンド実行でき終了コードで CI 連携可能。
+- 縦串スライスの eval 現況（全 OK）: coverage_scan=生成不能0・ゲート素通り0（mr7/text3/visual1 ゲート登録）・remedial 3要因 G-Q7r 通過／dup_rate=各セル≤0.04(閾0.20)・署名跨ぎ fp 衝突なし／level_sep=両 find_value family で署名・fp とも相異／retry_stats=発動0・構成失敗0。
+- **M1 送り（未着手）**: FastAPI ラッパ・T2/T3・audit_runner(LLM監査 V3)・cost_meter・dashboard HTML・プール(Supplier差し込み)・採点フィクスチャ(D-2)・縦串クラスタ拡張(g2一次関数38セル)。
 
-## 5.5 次セッションの最初の一手（Task9→Task10）
+## 5.5 【完了】Task9→Task10（2026-07-11 セッション3）
 ```bash
 cd /Users/koki/workspace/mongene-v2
 git branch --show-current            # engine-m0-rework
-git log --oneline -8                 # 4b97471 が最新
+git log --oneline -8
 git status --porcelain               # 空（クリーン）のはず
-# 現状の縦串が全ゲート通過することを再確認（bootstrap→generate）:
-.venv/bin/python -m pytest engine_tests/contract/ engine_tests/golden/ -o addopts="" -p no:cacheprovider -q
+# 縦串 + eval の再確認:
+.venv/bin/python -m pytest engine_tests/contract/ engine_tests/golden/ engine_tests/eval/ -o addopts="" -p no:cacheprovider -q
+.venv/bin/python -m engine.eval --seeds 5 --dup-seeds 100    # 一式が OK・exit 0
 ```
-- **Task9（縦串制作の仕上げ）**: 縦串セル（find_value 4セル + graph_table 1セル + remedial）の DoD を機械判定で締める。各セルを `spec check` 緑・`spec approve` で golden 固定（graph_table はまだ approve していない→ preview 検収→approve）。remedial DoD（§5.2）= cause→戻り先→G-Q7r の対応表が全 cause で引けること。**注意**: preview HTML で graph_table の図がグリッド過大（点が y=±20 等だと縦長）になる審美課題あり→ Task9 か図の描画範囲調整で対処（ゲートは通る）。
-- **Task10（eval 一式・§8.3）**: `engine/eval/` に `coverage_scan.py`(capabilities全セル×S seed生成・生成不能0/ゲート素通り0)・`dup_rate.py`(2系統: problem_ref と dup_key/fp)・`level_sep.py`(fp必須のレベル間相異)・`retry_stats.py`。CLI・JSONレポート・終了コードでCI連携。`spec_cli check` の dup_rate は簡易版なので Task10 で fp ベース第2系統を足す。
-- サブエージェントに投げる場合は §2.5 の教訓（委譲連鎖・要git検証）を必ず適用。**Task9/10 は core/pack を壊さない（eval は読み取り+生成のみ）ので `engine/eval/` 新規ディレクトリで隔離可能**。
+- **Task9 完了**: graph_table の描画範囲を spec domain 調整（`g2_l25.graph_table.yaml`: slope±4→±3・intercept±6→±4・x±5→±4。答え点 y を±26→±16 に有界化。グリッド最大36→28目盛）。preview 機械検収（Unsupported0・答え座標が本文/図に非漏洩・グリッド有界）→ `spec approve` で golden 固定。remedial DoD は `engine_tests/contract/test_remedial_dod.py` が curriculum の全誤答要因を正として走査（要因追加で自動拡張）。
+- **Task10 完了**: `engine/eval/`（core/pack を一切変更しない読み取り+生成のみ）。MR 実体が要る指標（dup_key/fp）は `_harness.build_mr` が pipeline の recipe 構成部（derive_rng + seed 刻印 + bounded_retry）を忠実に再現して MR を得る（Problem は params を運ばないため）。**設計判断**: dup_rate の fp 系はセル内では同一 signature ゆえ fp 一定（G-FP 安定の傍証）なので、意味論的に正しい「別署名を貼った実質同一構造」の検出は **family 横断の署名跨ぎ fp 衝突**として実装した（level_sep の fp 相異検査と表裏）。
+
+### 既知の設計 smell（M1 で対処候補・今回は範囲外）
+- `math.graph_read_two_points` は整数傾き a×切片 b から点を逆算するため、spec の `point_domain.y` が**実質デッド**（実際の答え点 y は a*x+b で決まる）。今回は spec domain を絞って可読性を確保したが、本筋は「2 格子点を直接選び、傾きは有理数でよい」構成に変える方が y を宣言域で有界化でき題材とも整合する（要 recipe 改修 + golden 再承認）。
+- ruff nit（**私の変更外・既存**）: `engine_tests/unit/test_gates.py`・`test_core_foundation.py`・`golden/test_golden_slice.py` に未使用 import が数件残る（前セッションが engine_tests に ruff をかけていなかった痕跡）。`engine/` ソースは clean。CI で engine_tests も lint するなら別途一掃。
 
 ## 5. 【旧】再開手順（Task5b/6 用・履歴）
 

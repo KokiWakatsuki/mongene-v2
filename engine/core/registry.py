@@ -12,7 +12,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Callable, Protocol
 
 if TYPE_CHECKING:  # pragma: no cover - 型のみ
-    from engine.core.contracts import MR, CellContext, FrameProtocol, VisualPlan
+    from engine.core.contracts import MR, CellContext, FrameProtocol
     from engine.core.rng import Rng
 
 
