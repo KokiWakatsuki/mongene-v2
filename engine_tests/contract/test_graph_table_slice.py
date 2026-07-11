@@ -53,6 +53,20 @@ def test_graph_table_answer_not_leaked(seed: int) -> None:
         assert "," not in t
 
 
+def test_graph_table_no_false_positive_over_seed_range() -> None:
+    """連続 seed 全域で生成不能が出ない（cherry-pick で偽陽性を隠さないための回帰防止）。
+
+    かつて G-Q5t が答え座標の数値とテンプレ「2つの格子点」の "2" を衝突させ約19%の
+    seed を偽陽性で弾いていた（助数詞除外で解消）。生成不能0（N-5）を広域で固定する。
+    """
+    fails = []
+    for seed in range(1, 61):
+        r = generate(_req(seed))
+        if not isinstance(r, Problem):
+            fails.append((seed, getattr(r, "code", "?"), getattr(r, "detail", "")))
+    assert not fails, f"生成不能が発生: {fails[:5]}"
+
+
 def test_graph_table_reproducible() -> None:
     r1 = generate(_req(777))
     r2 = generate(_req(777))

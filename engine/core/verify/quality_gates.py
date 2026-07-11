@@ -314,6 +314,19 @@ def _expr_has_free_symbol(srepr: str) -> bool:
     return bool(getattr(expr, "free_symbols", set()))
 
 
+# 日本語の助数詞表現（数字+助数詞: 例「2つ」「3点」「5個」）を検出する。これらは
+# 数を『数える』構造語であって解答値そのものではないため、漏洩スキャンから除外する。
+# 例: graph_table テンプレ「グラフ上の直線が通る2つの格子点」の "2" が、答え座標に
+# 含まれる "2" と偶然一致して偽陽性になるのを防ぐ（§8.2 の除外規則の一種）。
+_COUNTER_EXPR_RE = re.compile(
+    r"\d+\s*(?:つ|点|個|本|回|番|枚|人|組|冊|台|匹|問|桁|倍|割|面|辺|角|次|乗|号|階|歳|才)"
+)
+
+
+def _strip_counter_expressions(text: str) -> str:
+    return _COUNTER_EXPR_RE.sub(" ", text)
+
+
 def _gate_q5t(obj: object, ctx: "CellContext") -> tuple[bool, str]:
     stage_input: "TextStageInput" = obj  # type: ignore[assignment]
     mr = stage_input.mr
@@ -326,6 +339,8 @@ def _gate_q5t(obj: object, ctx: "CellContext") -> tuple[bool, str]:
         check_texts.extend(hint_list)
     full_text = "\n".join(check_texts)
     norm_full = normalize_math_text(full_text)
+    # 数値レベル検査用のスキャンテキスト（助数詞表現を除去して偽陽性を防ぐ）
+    scan_text = _strip_counter_expressions(full_text)
 
     for sq in mr.sub_questions:
         ans = sq.answer
@@ -345,7 +360,7 @@ def _gate_q5t(obj: object, ctx: "CellContext") -> tuple[bool, str]:
             norm_key = str(frac) if frac is not None else normalize_math_text(tok)
             if norm_key in whitelist:
                 continue  # given 由来（係数・軸目盛など）は許可
-            if contains_number(full_text, tok):
+            if contains_number(scan_text, tok):
                 return False, f"{sq.label}: 解答由来の値 {tok!r} が problem_text/hints に漏洩"
     return True, ""
 
