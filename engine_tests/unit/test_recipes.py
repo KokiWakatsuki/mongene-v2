@@ -217,6 +217,52 @@ def test_graph_read_two_points_double_solve_property(seed):
 
 
 # ---------------------------------------------------------------------------
+# math.read_slope_intercept（g2_l21.graph_table Lv1）— 横展開#4（グラフから傾き・切片）
+# ---------------------------------------------------------------------------
+def test_read_slope_intercept_lv1_construct():
+    ctx = _make_ctx("math.g2_l21.graph_table", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    recipe = REGISTRY.recipe(ctx.spec_level.recipe)
+    mr = recipe(ctx, rng)
+
+    assert mr.signature == "graph_read_slope_intercept"
+    # given は空: 直線は図で提示され、テキストに接地すべき given は無い（式を出さない）
+    assert mr.given == {}
+    sq = mr.sub_questions[0]
+    assert sq.asked == "read_slope_intercept"
+    assert sq.cause_tags == []  # cause_tags 空でも G-Q7 は通る
+    assert [s.op for s in sq.steps] == ["read_slope", "read_intercept"]
+    # visual_plan は非 None（frame.visual="required" を満たす）
+    assert mr.visual_plan is not None
+    assert mr.visual_plan.style == "grid"
+    # labels は軸目盛の単独数値のみ（傾き・切片や式そのものは載せない）
+    for label in mr.visual_plan.labels:
+        assert "," not in label
+        assert "y" not in label
+        assert "傾き" not in label and "切片" not in label
+    # 答えの点マーカー（labeled_answer_point）を elements に含めない（幾何的リーク規則）
+    assert all(el.kind != "labeled_answer_point" for el in mr.visual_plan.elements)
+
+
+@pytest.mark.parametrize("seed", range(200))
+def test_read_slope_intercept_double_solve_property(seed):
+    ctx = _make_ctx("math.g2_l21.graph_table", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    recipe = REGISTRY.recipe(ctx.spec_level.recipe)
+    mr = recipe(ctx, rng)
+
+    pts_strs = mr.params["pts"]
+    p1 = sympy.sympify(pts_strs[0])
+    p2 = sympy.sympify(pts_strs[1])
+    solver = REGISTRY.solver("math.read_slope_intercept_from_graph")
+    sol = solver((p1[0], p1[1]), (p2[0], p2[1]))
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+    # 答え (傾き, 切片) は構成した a, b と一致
+    expected = sympy.Tuple(sympy.nsimplify(mr.params["a"]), sympy.nsimplify(mr.params["b"]))
+    assert sol.answer.srepr == sympy.srepr(expected)
+
+
+# ---------------------------------------------------------------------------
 # math.rate_of_change（g2_l20.find_value Lv1）— 横展開の第1セル
 # ---------------------------------------------------------------------------
 def test_rate_of_change_lv1_construct():
@@ -367,4 +413,7 @@ def test_recipes_declare_provides_concepts():
     })
     assert REGISTRY.recipe_concepts("math.graph_read_two_points") == frozenset({
         "graph.read_lattice_points",
+    })
+    assert REGISTRY.recipe_concepts("math.read_slope_intercept") == frozenset({
+        "graph.read_slope_intercept",
     })

@@ -1,0 +1,85 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - graph.read_slope_intercept
+  provenance:
+    git_commit: ''
+    recipe: math.read_slope_intercept
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: graph_read_slope_intercept_v1
+    tier: T1
+  requested:
+    form: graph_table
+    level: 1
+    subject: math
+    unit: g2_l21
+  resolved:
+    form: graph_table
+    level: 1
+    subject: math
+    unit: g2_l21
+  seed: 3
+  signature: graph_read_slope_intercept
+problem_ref: df820a319ca72a14
+problem_text: 座標平面にかかれた直線のグラフから、この直線の傾きと切片を読み取れ。
+sub_questions:
+- answer:
+    display: 傾き -2, 切片 1
+    kind: symbolic
+    srepr: Tuple(Integer(-2), Integer(1))
+  cause_tags: []
+  concept_tags:
+  - graph.read_slope_intercept
+  explanation: まず、グラフ上の格子点で、右へ進む量に対する上下の変化の割合を読み取り、傾きとする。 傾き a = -2次に、グラフが y 軸と交わる点の y 座標を読み取り、切片とする。 切片 b = 1
+  hints:
+  - グラフ上の格子点で、右へ進む量に対する上下の変化の割合を読み取り、傾きとする。
+  label: (1)
+  prompt_text: read_slope_intercept を求めなさい。
+  solution_steps:
+  - args:
+    - (-3, 7)
+    - (-2, 5)
+    narration: グラフ上の格子点で、右へ進む量に対する上下の変化の割合を読み取り、傾きとする。
+    op: read_slope
+    result_display: 傾き a = -2
+    result_srepr: Integer(-2)
+  - args:
+    - '-2'
+    - (-3, 7)
+    narration: グラフが y 軸と交わる点の y 座標を読み取り、切片とする。
+    op: read_intercept
+    result_display: 切片 b = 1
+    result_srepr: Integer(1)
+visual_svg: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400"><rect x="0" y="0" width="400" height="400" fill="none" stroke="none"/><line x1="28.00" y1="28.00" x2="28.00"
+  y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="49.50" y1="28.00" x2="49.50" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="71.00" y1="28.00" x2="71.00" y2="372.00" stroke="#bbbbbb"
+  stroke-width="0.5"/><line x1="92.50" y1="28.00" x2="92.50" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="114.00" y1="28.00" x2="114.00" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line
+  x1="135.50" y1="28.00" x2="135.50" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="157.00" y1="28.00" x2="157.00" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="178.50" y1="28.00"
+  x2="178.50" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="200.00" y1="28.00" x2="200.00" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="221.50" y1="28.00" x2="221.50" y2="372.00"
+  stroke="#bbbbbb" stroke-width="0.5"/><line x1="243.00" y1="28.00" x2="243.00" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="264.50" y1="28.00" x2="264.50" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line
+  x1="286.00" y1="28.00" x2="286.00" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="307.50" y1="28.00" x2="307.50" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="329.00" y1="28.00"
+  x2="329.00" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="350.50" y1="28.00" x2="350.50" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="372.00" y1="28.00" x2="372.00" y2="372.00"
+  stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="372.00" x2="372.00" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="350.50" x2="372.00" y2="350.50" stroke="#bbbbbb" stroke-width="0.5"/><line
+  x1="28.00" y1="329.00" x2="372.00" y2="329.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="307.50" x2="372.00" y2="307.50" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="286.00"
+  x2="372.00" y2="286.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="264.50" x2="372.00" y2="264.50" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="243.00" x2="372.00" y2="243.00"
+  stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="221.50" x2="372.00" y2="221.50" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="200.00" x2="372.00" y2="200.00" stroke="#bbbbbb" stroke-width="0.5"/><line
+  x1="28.00" y1="178.50" x2="372.00" y2="178.50" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="157.00" x2="372.00" y2="157.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="135.50"
+  x2="372.00" y2="135.50" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="114.00" x2="372.00" y2="114.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="92.50" x2="372.00" y2="92.50"
+  stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="71.00" x2="372.00" y2="71.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="49.50" x2="372.00" y2="49.50" stroke="#bbbbbb" stroke-width="0.5"/><line
+  x1="28.00" y1="28.00" x2="372.00" y2="28.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="221.50" x2="372.00" y2="221.50" stroke="#000000" stroke-width="1.5"/><line x1="200.00" y1="28.00"
+  x2="200.00" y2="372.00" stroke="#000000" stroke-width="1.5"/><line x1="28.00" y1="-144.00" x2="372.00" y2="544.00" stroke="#000000" stroke-width="2.5"/><text x="28.00" y="233.50" font-size="10" text-anchor="middle"
+  fill="#000000">-8</text><text x="49.50" y="233.50" font-size="10" text-anchor="middle" fill="#000000">-7</text><text x="71.00" y="233.50" font-size="10" text-anchor="middle" fill="#000000">-6</text><text
+  x="92.50" y="233.50" font-size="10" text-anchor="middle" fill="#000000">-5</text><text x="114.00" y="233.50" font-size="10" text-anchor="middle" fill="#000000">-4</text><text x="135.50" y="233.50" font-size="10"
+  text-anchor="middle" fill="#000000">-3</text><text x="157.00" y="233.50" font-size="10" text-anchor="middle" fill="#000000">-2</text><text x="178.50" y="233.50" font-size="10" text-anchor="middle" fill="#000000">-1</text><text
+  x="221.50" y="233.50" font-size="10" text-anchor="middle" fill="#000000">1</text><text x="243.00" y="233.50" font-size="10" text-anchor="middle" fill="#000000">2</text><text x="264.50" y="233.50" font-size="10"
+  text-anchor="middle" fill="#000000">3</text><text x="286.00" y="233.50" font-size="10" text-anchor="middle" fill="#000000">4</text><text x="307.50" y="233.50" font-size="10" text-anchor="middle" fill="#000000">5</text><text
+  x="329.00" y="233.50" font-size="10" text-anchor="middle" fill="#000000">6</text><text x="350.50" y="233.50" font-size="10" text-anchor="middle" fill="#000000">7</text><text x="372.00" y="233.50" font-size="10"
+  text-anchor="middle" fill="#000000">8</text><text x="192.00" y="375.00" font-size="10" text-anchor="end" fill="#000000">-7</text><text x="192.00" y="353.50" font-size="10" text-anchor="end" fill="#000000">-6</text><text
+  x="192.00" y="332.00" font-size="10" text-anchor="end" fill="#000000">-5</text><text x="192.00" y="310.50" font-size="10" text-anchor="end" fill="#000000">-4</text><text x="192.00" y="289.00" font-size="10"
+  text-anchor="end" fill="#000000">-3</text><text x="192.00" y="267.50" font-size="10" text-anchor="end" fill="#000000">-2</text><text x="192.00" y="246.00" font-size="10" text-anchor="end" fill="#000000">-1</text><text
+  x="192.00" y="224.50" font-size="10" text-anchor="end" fill="#000000">0</text><text x="192.00" y="203.00" font-size="10" text-anchor="end" fill="#000000">1</text><text x="192.00" y="181.50" font-size="10"
+  text-anchor="end" fill="#000000">2</text><text x="192.00" y="160.00" font-size="10" text-anchor="end" fill="#000000">3</text><text x="192.00" y="138.50" font-size="10" text-anchor="end" fill="#000000">4</text><text
+  x="192.00" y="117.00" font-size="10" text-anchor="end" fill="#000000">5</text><text x="192.00" y="95.50" font-size="10" text-anchor="end" fill="#000000">6</text><text x="192.00" y="74.00" font-size="10"
+  text-anchor="end" fill="#000000">7</text><text x="192.00" y="52.50" font-size="10" text-anchor="end" fill="#000000">8</text><text x="192.00" y="31.00" font-size="10" text-anchor="end" fill="#000000">9</text></svg>

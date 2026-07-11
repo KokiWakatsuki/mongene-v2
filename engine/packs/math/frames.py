@@ -25,6 +25,8 @@ _FORBIDDEN_BY_ASKED: dict[str, frozenset[str]] = {
     # graph_table: 読む対象そのものを図に先出ししてはならない
     "read_intersection": frozenset({"grid_with_both_lines"}),
     "read_point": frozenset({"labeled_answer_point"}),
+    # 傾き・切片を読む題材でも、答えの点/注記を図に先出ししない
+    "read_slope_intercept": frozenset({"labeled_answer_point"}),
     "read_table": frozenset({"completed_table"}),
     "complete_table": frozenset({"completed_table"}),
 }
@@ -127,11 +129,13 @@ GRAPH_TABLE_FRAME = Frame(
     given_vocab=frozenset({"expression", "data_table", "situation_params"}),
     asked_vocab=frozenset({
         "draw_graph", "read_point", "read_intersection", "read_table", "complete_table",
+        "read_slope_intercept",  # 横展開#4: グラフから傾き・切片を読む（g2_l21）
     }),
     visual="required",
     _forbidden_by_asked={
         "read_intersection": _FORBIDDEN_BY_ASKED["read_intersection"],
         "read_point": _FORBIDDEN_BY_ASKED["read_point"],
+        "read_slope_intercept": _FORBIDDEN_BY_ASKED["read_slope_intercept"],
         "read_table": _FORBIDDEN_BY_ASKED["read_table"],
         "complete_table": _FORBIDDEN_BY_ASKED["complete_table"],
     },

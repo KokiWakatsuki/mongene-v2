@@ -101,6 +101,7 @@ def test_graph_table_vocab_and_visual():
     assert f.given_vocab == frozenset({"expression", "data_table", "situation_params"})
     assert f.asked_vocab == frozenset({
         "draw_graph", "read_point", "read_intersection", "read_table", "complete_table",
+        "read_slope_intercept",
     })
     assert f.visual == "required"
 
@@ -216,6 +217,12 @@ def test_forbidden_visual_elements_find_value_value_is_empty():
 def test_forbidden_visual_elements_graph_table_read_point():
     f = REGISTRY.frame("graph_table")
     forbidden = f.forbidden_visual_elements(["read_point"])
+    assert forbidden == frozenset({"labeled_answer_point"})
+
+
+def test_forbidden_visual_elements_graph_table_read_slope_intercept():
+    f = REGISTRY.frame("graph_table")
+    forbidden = f.forbidden_visual_elements(["read_slope_intercept"])
     assert forbidden == frozenset({"labeled_answer_point"})
 
 

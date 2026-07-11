@@ -29,3 +29,6 @@ concepts:
   - id: linear_function.variable_range
     label: "x の変域から y の変域を求める・端点の対応（逆算含む）"
     unit: g2_l23
+  - id: graph.read_slope_intercept
+    label: "直線のグラフから傾きと切片を読み取る"
+    unit: g2_l21

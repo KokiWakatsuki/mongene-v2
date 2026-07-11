@@ -1,0 +1,30 @@
+family: math.g2_l21.graph_table
+form: graph_table
+source_desc: |
+  直線のグラフから傾きと切片を読み取る（units.generated.yaml の desc/example を正として転記）。
+  desc: 直線のグラフから傾きと切片を読み取る。
+  example: 右の座標平面にかかれた直線のグラフから、この直線の傾きと切片を読み取って答えよ。
+  グラフ上の格子点から傾き（右へ1進むときの上下の変化＝変化の割合）を、y 軸との交点から
+  切片を読む。式は生徒に提示せず図のみを与える（式を与えると計算で解けてしまい「グラフから
+  読む」題材が破綻するため。g2_l25.graph_table と同じ設計判断）。
+concepts_default: [graph.read_slope_intercept]
+levels:
+  "1":
+    signature: graph_read_slope_intercept
+    recipe: math.read_slope_intercept
+    params:
+      # 図の可読性: 傾き±3・切片±4・x∈[-4,4]（graph_read_two_points と同じ有界域）。
+      # 整数傾き・整数切片により (0,b) と (1,b+a) が格子点になり、傾きを「右1・上a」で、
+      # 切片を「y 軸との交点」で読み取れる。|y| ≤ 3*4+4 = 16 に有界化。
+      slope_domain: {int_range: [-3, 3], exclude: [0]}
+      intercept_domain: {int_range: [-4, 4]}
+      point_domain: {lattice: {x: {int_range: [-4, 4]}, y: {int_range: [-8, 8]}}, distinct: [x]}
+    given: []
+    asked: [read_slope_intercept]
+    visual: required
+    text: {tier: T1, template: graph_read_slope_intercept_v1, visual_builder: math.linear_graph}
+    hints: [steps_prefix]
+    concept_tags: [graph.read_slope_intercept]
+    cause_tags: []
+remedial:
+  default_level: 1

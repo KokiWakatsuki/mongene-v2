@@ -347,6 +347,47 @@ def intersection_of_two_lines(
     return Solution(answer=answer, steps=steps)
 
 
+@register_solver("math.read_slope_intercept_from_graph")
+def read_slope_intercept_from_graph(
+    p1: tuple[object, object], p2: tuple[object, object]
+) -> Solution:
+    """グラフ上の直線から傾きと切片を読み取る（graph_table Lv1「読む」・g2_l21）。
+
+    グラフ上の2格子点から傾き a = (y2-y1)/(x2-x1) を（変化の割合として）読み、
+    y 軸との交点の y 座標として切片 b を読む。答えは (傾き, 切片) の組。式は与えられず
+    図から読むため、g2_l20 の「変化の割合（数値）」・g2_l25 の「2点→式」とは asked も
+    steps も異なる別構造。
+    """
+    x1, y1 = sympy.nsimplify(p1[0]), sympy.nsimplify(p1[1])
+    x2, y2 = sympy.nsimplify(p2[0]), sympy.nsimplify(p2[1])
+    if x1 == x2:
+        raise ValueError("p1, p2 の x 座標が一致しており傾きが定まらない")
+
+    a = (y2 - y1) / (x2 - x1)
+    b = y1 - a * x1
+    pair = sympy.Tuple(a, b)
+
+    steps = [
+        Step(
+            op="read_slope",
+            args=[str(p1), str(p2)],
+            result_srepr=sympy.srepr(a),
+            result_display=f"傾き a = {_format_number(a)}",
+            narration="グラフ上の格子点で、右へ進む量に対する上下の変化の割合を読み取り、傾きとする。",
+        ),
+        Step(
+            op="read_intercept",
+            args=[_format_number(a), str(p1)],
+            result_srepr=sympy.srepr(b),
+            result_display=f"切片 b = {_format_number(b)}",
+            narration="グラフが y 軸と交わる点の y 座標を読み取り、切片とする。",
+        ),
+    ]
+    display = f"傾き {_format_number(a)}, 切片 {_format_number(b)}"
+    answer = SymbolicAnswer(srepr=sympy.srepr(pair), display=display)
+    return Solution(answer=answer, steps=steps)
+
+
 def _format_y_range(y_lo: sympy.Expr, y_hi: sympy.Expr) -> str:
     """y の変域表示（例: "-1 ≦ y ≦ 5"）。全角 ≦ を使う（教科書表記）。"""
     return f"{_format_number(y_lo)} ≦ y ≦ {_format_number(y_hi)}"
@@ -405,6 +446,7 @@ __all__ = [
     "linear_expr_from_slope_point",
     "linear_expr_parallel_through_point",
     "read_two_lattice_points",
+    "read_slope_intercept_from_graph",
     "rate_of_change_from_two_points",
     "intersection_of_two_lines",
     "y_range_over_domain",

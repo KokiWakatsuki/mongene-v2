@@ -347,6 +347,88 @@ def graph_read_two_points(ctx: CellContext, rng: Rng) -> MR:
 
 
 # ---------------------------------------------------------------------------
+# math.read_slope_intercept（g2_l21.graph_table Lv1 用）— 横展開#4（グラフから傾き・切片を読む）
+# ---------------------------------------------------------------------------
+_READ_SLOPE_INTERCEPT_CONCEPTS = [
+    "graph.read_slope_intercept",
+]
+
+
+@register_recipe("math.read_slope_intercept", provides_concepts=_READ_SLOPE_INTERCEPT_CONCEPTS)
+def read_slope_intercept(ctx: CellContext, rng: Rng) -> MR:
+    """グラフ上の直線から傾きと切片を読み取る（answer-first・graph_table「読む」Lv1）。
+
+    整数傾き a(≠0)・整数切片 b を先に選び、直線 y=ax+b 上の格子点2つを逆算する。独立
+    ソルバ `math.read_slope_intercept_from_graph` で2点から傾き・切片を再計算し、答え
+    (a, b) の一致を assert する。
+
+    設計判断（graph_read_two_points と同じ・Task8 図担当確定分）:
+    - 式（y=ax+b）は生徒に提示する given ではなく図を規定する内部パラメータ（params の
+      a/b/pts に残す）。given は空 {}——式を given に出すと「グラフから読む」題材が計算で
+      解けてしまい破綻する。G-GND は given 空なら自明に通過する。
+    - 整数傾き・整数切片により (0,b) と (1,b+a) が格子点になり、傾きを「右1・上a」で、
+      切片を「y 軸との交点」で読める（可読性）。
+    - visual_plan.labels は実描画の軸目盛の数値文字列と機械的に一致させる（式や答えの
+      傾き・切片は含めない）。elements は grid/axis/line のみ（labeled_answer_point は
+      描かない・宣言しない＝frame.forbidden_visual_elements(["read_slope_intercept"])）。
+    """
+    p = ctx.spec_level.params
+    a = draw(p["slope_domain"], rng)
+    b = draw(p.get("intercept_domain", {"int_range": [-4, 4]}), rng)
+    (x1, _y1), (x2, _y2) = draw_many(p["point_domain"], rng, k=2)
+
+    a_s = sympy.nsimplify(a)
+    b_s = sympy.nsimplify(b)
+    x1_s, x2_s = sympy.nsimplify(x1), sympy.nsimplify(x2)
+    pts = [(x1_s, a_s * x1_s + b_s), (x2_s, a_s * x2_s + b_s)]
+
+    solver = REGISTRY.solver("math.read_slope_intercept_from_graph")
+    sol = cast(Solution, solver(pts[0], pts[1]))
+    assert isinstance(sol.answer, SymbolicAnswer)
+
+    expected_pair = sympy.Tuple(a_s, b_s)
+    assert sol.answer.srepr == sympy.srepr(expected_pair), (
+        f"double-solve 不一致: recipe が構成した (傾き, 切片) {expected_pair} "
+        f"!= solver 再計算 {sol.answer.srepr}"
+    )
+
+    sub_question = SubQuestionMR(
+        label="(1)",
+        asked="read_slope_intercept",
+        answer=sol.answer,
+        steps=sol.steps,
+        concept_tags=_effective_concept_tags(ctx),
+        cause_tags=_effective_cause_tags(ctx),
+    )
+
+    mr_params = {"a": str(a_s), "b": str(b_s), "pts": [str(pts[0]), str(pts[1])]}
+    labels = tick_labels_from_params(mr_params)
+
+    visual_plan = VisualPlan(
+        style="grid",
+        labels=labels,
+        elements=[
+            VisualElement(kind="grid", attrs={}),
+            VisualElement(kind="axis", attrs={}),
+            VisualElement(kind="line", attrs={}),
+        ],
+    )
+
+    return MR(
+        signature=ctx.spec_level.signature,
+        family=ctx.family,
+        level=ctx.level,
+        purpose=ctx.purpose,
+        seed=0,
+        params=mr_params,
+        given={},
+        sub_questions=[sub_question],
+        visual_plan=visual_plan,
+        provenance=Provenance(recipe="math.read_slope_intercept"),
+    )
+
+
+# ---------------------------------------------------------------------------
 # math.rate_of_change（g2_l20.find_value Lv1 用）— 横展開の第1セル
 # ---------------------------------------------------------------------------
 _RATE_OF_CHANGE_CONCEPTS = [
@@ -611,6 +693,7 @@ __all__ = [
     "linear_from_slope_point",
     "linear_from_parallel_condition",
     "graph_read_two_points",
+    "read_slope_intercept",
     "rate_of_change",
     "intersection",
     "y_range_from_domain",

@@ -41,6 +41,15 @@ GRAPH_READ_TWO_POINTS_V1 = (
 
 
 # ---------------------------------------------------------------------------
+# g2_l21.graph_table Lv1: グラフから傾きと切片を読む（横展開#4）
+# given は空（式は提示せず図のみ）。answer/params は参照不能なので数値は本文に出ない。
+# ---------------------------------------------------------------------------
+GRAPH_READ_SLOPE_INTERCEPT_V1 = (
+    "座標平面にかかれた直線のグラフから、この直線の傾きと切片を読み取れ。"
+)
+
+
+# ---------------------------------------------------------------------------
 # g2_l20.find_value Lv1: 2点から変化の割合を求める（横展開の第1セル）
 # ---------------------------------------------------------------------------
 LF_RATE_OF_CHANGE_V1 = (
@@ -75,6 +84,7 @@ def _register_all() -> None:
     REGISTRY.register_template("lf_expr_slope_point_v1", LF_EXPR_SLOPE_POINT_V1)
     REGISTRY.register_template("lf_expr_parallel_v1", LF_EXPR_PARALLEL_V1)
     REGISTRY.register_template("graph_read_two_points_v1", GRAPH_READ_TWO_POINTS_V1)
+    REGISTRY.register_template("graph_read_slope_intercept_v1", GRAPH_READ_SLOPE_INTERCEPT_V1)
     REGISTRY.register_template("lf_rate_of_change_v1", LF_RATE_OF_CHANGE_V1)
     REGISTRY.register_template("lf_intersection_v1", LF_INTERSECTION_V1)
     REGISTRY.register_template("lf_y_range_v1", LF_Y_RANGE_V1)
@@ -89,6 +99,7 @@ __all__ = [
     "LF_EXPR_SLOPE_POINT_V1",
     "LF_EXPR_PARALLEL_V1",
     "GRAPH_READ_TWO_POINTS_V1",
+    "GRAPH_READ_SLOPE_INTERCEPT_V1",
     "LF_RATE_OF_CHANGE_V1",
     "LF_INTERSECTION_V1",
     "LF_Y_RANGE_V1",
