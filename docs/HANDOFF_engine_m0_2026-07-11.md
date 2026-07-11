@@ -113,6 +113,27 @@ git status --porcelain               # Task5b の未追跡ファイルが見え�
 - Task6 を再ディスパッチ（§3 のブリーフを sonnet サブエージェントへ。`engine/packs/math/` は触らせない）。
 - 以降 §4 統合 → Task7(制作ツール spec preview/check/approve/golden) → Task8(図: 旧`apps/api/src/visuals/graph_renderer.py`・`builder.py`(line~855の答え漏洩が対策対象)を `packs/math/visuals/` へ・whitelist/幾何リーク/モノクロ) → Task9(縦串制作 全セルDoD+remedial DoD) → Task10(eval: coverage_scan/dup_rate2系統/level_sep(fp必須)/retry_stats)。
 
+## 6.5 横展開（M1 初手・g2 一次関数クラスタ）進行中 — 2026-07-12 セッション4
+M0 縦串の外へ Open-Closed でセルを追加中。**セル追加 = 部品(solver/recipe/checker/template)＋
+spec＋concept の追加だけ**で、frame/ゲート/eval は原則不変（eval は capabilities を走査するので
+新セルを自動被覆する）。手順は `spec check`→`generate`広域確認→`spec approve`→`eval`。
+
+| セル | 内容 | 追加物 | コミット |
+|---|---|---|---|
+| g2_l20.find_value Lv1 | 変化の割合（2点→傾き） | solver/recipe/checker/template/concept/spec。cause_tags:[]（G-Q7はconcept_tagsのみ非空必須）。frame不変 | `45b0ecc` |
+| g2_l27.find_value Lv2/Lv3 | 2直線の交点 | 上記一式 ＋ **frame find_value に given語彙 line_a/line_b 追加**。Lv2=代入(substitute)/Lv3=消去(elimination)で op列相異→fp相異=真のレベル分離 | `67ac9c1` |
+
+capabilities は 5→**8セル**。全体テスト 1668 passed。**教訓**: 答えが数値/座標のセルは、テンプレ/narration の
+「N直線」「N式」等の助数詞が答えと衝突し G-Q5t 偽陽性を起こす。助数詞リスト外の語（直線・式）は
+「Nつの直線」等（つ は除外対象）に言い換える（core 不変）。新セルは連続100+ seed 広域生成で偽陽性隠蔽を防ぐ。
+
+**残クラスタの見通し（faithfulnessに注意）**:
+- find_value/graph_table 系（変域 l23・グラフ読み l21/l26・ダイヤ交点 l30 等）→ recipe追加＋一部frame語彙で T1 のまま可。**レベル間は必ず構造(op列)を変える**（数値ジッター禁止＝P-1回帰の防止）。level_sep が fp相異で機械検証。
+- knowledge 系 → fact テーブル（facts.yaml・V2）が要る。
+- word_problem 系 → T3 翻訳（LLM）＝M1 本体。
+- calculation 系 → 各計算 recipe 群。
+faithful なレベル分けが不確かな単元は source_desc に設計モデルを明記し preview 検収（人間・Q4）に委ねる。
+
 ## 6. タスク状態（TaskList・2026-07-11 セッション3 末時点）
 - #1〜#10 + §4統合 **全完了・コミット済み**（`git log --oneline` で最新確認）。
 - **M0 金の縦串は実装完了**。全 base セル（find_value 4 + graph_table 1）DoD 締め済み（lint/smoke/dup_rate/level_sep/golden 承認/remedial DoD）。eval 一式が `python -m engine.eval` で 1 コマンド実行でき終了コードで CI 連携可能。
