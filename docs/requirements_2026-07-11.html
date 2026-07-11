@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>mongene-v2 要件定義書 v1.0（ドラフト）</title>
+<title>問題供給エンジン 要件定義書 v2.0（ドラフト）</title>
 <style>
   :root {
     --ink: #1a2333;
@@ -26,14 +26,15 @@
     color: var(--ink); background: var(--bg);
     margin: 0; padding: 0; line-height: 1.75; font-size: 15px;
   }
-  .page { max-width: 1000px; margin: 0 auto; padding: 40px 48px 120px; }
+  .page { max-width: 1020px; margin: 0 auto; padding: 40px 48px 120px; }
   h1 { font-size: 26px; border-bottom: 3px solid var(--accent); padding-bottom: 10px; margin: 0 0 4px; }
-  .docmeta { color: var(--sub); font-size: 13px; margin-bottom: 28px; }
+  .docmeta { color: var(--sub); font-size: 13px; margin-bottom: 24px; }
   h2 {
     font-size: 20px; margin: 52px 0 14px; padding: 6px 12px;
     background: var(--accent-bg); border-left: 5px solid var(--accent); border-radius: 0 4px 4px 0;
   }
   h3 { font-size: 16px; margin: 30px 0 8px; color: var(--accent); }
+  h4 { font-size: 14px; margin: 18px 0 6px; }
   p { margin: 8px 0; }
   table { border-collapse: collapse; width: 100%; margin: 12px 0 18px; font-size: 13.5px; }
   th, td { border: 1px solid var(--line); padding: 7px 10px; text-align: left; vertical-align: top; }
@@ -51,9 +52,8 @@
   .must   { background: var(--must); }
   .should { background: var(--should); }
   .may    { background: var(--may); }
-  .st-ok   { color: var(--ok); font-weight: 600; }
-  .st-ng   { color: var(--ng); font-weight: 600; }
-  .st-part { color: var(--warn); font-weight: 600; }
+  .phase-chip { display: inline-block; font-size: 11px; font-weight: 700; padding: 1px 8px; border-radius: 10px; border: 1.5px solid var(--accent); color: var(--accent); white-space: nowrap; }
+  .vlevel { display: inline-block; font-size: 11px; font-weight: 700; padding: 1px 7px; border-radius: 4px; background: #eef2f7; border: 1px solid var(--line); white-space: nowrap; }
   .callout {
     border: 1px solid var(--line); border-left: 5px solid var(--accent);
     background: var(--panel); border-radius: 0 6px 6px 0; padding: 12px 18px; margin: 16px 0;
@@ -61,472 +61,495 @@
   .callout.warn { border-left-color: var(--must); background: #fdf3f2; }
   .callout.key  { border-left-color: var(--may); background: #f2f8f2; }
   .callout b.tag { display: block; font-size: 12px; letter-spacing: .08em; margin-bottom: 4px; }
-  /* ---- 層構成図 ---- */
-  .layers { margin: 20px 0; }
-  .layer {
-    display: grid; grid-template-columns: 190px 1fr 260px; gap: 0;
-    border: 1.5px solid var(--line); border-radius: 8px; margin-bottom: 8px; overflow: hidden;
-  }
-  .layer .lname { padding: 12px 14px; font-weight: 700; background: var(--accent-bg); border-right: 1px solid var(--line); }
-  .layer .lname small { display:block; font-weight: 400; color: var(--sub); font-size: 11.5px; line-height: 1.5; }
-  .layer .ldo   { padding: 12px 14px; font-size: 13.5px; }
-  .layer .ldont { padding: 12px 14px; font-size: 12.5px; color: var(--sub); background: #fafbfc; border-left: 1px dashed var(--line); }
-  .layer.host { opacity: .65; border-style: dashed; }
-  .layer.moat .lname { background: #fdeeee; }
-  .larrow { text-align: center; color: var(--sub); font-size: 13px; margin: -2px 0 6px; }
-  /* ---- パイプライン図 ---- */
+  /* 責務3分割図 */
+  .tri { display: flex; gap: 10px; flex-wrap: wrap; margin: 16px 0; }
+  .tri .box { flex: 1 1 280px; border: 1.5px solid var(--line); border-radius: 8px; padding: 12px 16px; background: var(--panel); }
+  .tri .box.engine { border-color: var(--accent); background: var(--accent-bg); }
+  .tri .box h4 { margin: 0 0 6px; color: var(--accent); }
+  .tri .box ul { margin: 4px 0; padding-left: 18px; font-size: 13px; }
+  /* ユースケースカード */
+  .uc { border: 1.5px solid var(--line); border-radius: 8px; margin: 10px 0; overflow: hidden; }
+  .uc .uc-head { background: var(--panel); padding: 6px 14px; font-weight: 700; font-size: 14px; border-bottom: 1px solid var(--line); }
+  .uc .uc-body { padding: 8px 14px; font-size: 13.5px; display: grid; grid-template-columns: 1fr 1fr; gap: 4px 20px; }
+  .uc .uc-body .lbl { color: var(--sub); font-size: 12px; font-weight: 600; }
+  /* アーキ図 */
+  .arch { border: 1.5px solid var(--line); border-radius: 10px; padding: 16px; margin: 16px 0; background: #fbfcfe; }
+  .arch-row { display: flex; gap: 10px; margin: 8px 0; align-items: stretch; flex-wrap: wrap; }
+  .arch-box { flex: 1 1 140px; border: 1.5px solid var(--line); border-radius: 8px; padding: 8px 12px; font-size: 12.5px; background: #fff; text-align: center; }
+  .arch-box b { display: block; font-size: 13px; color: var(--accent); }
+  .arch-box.kernel { border-color: var(--accent); background: var(--accent-bg); }
+  .arch-box.data { border-style: dashed; }
+  .arch-box.moat { border-color: var(--must); }
+  .arch-note { text-align: center; color: var(--sub); font-size: 12px; }
+  /* パイプライン */
   .pipe { display: flex; flex-wrap: wrap; gap: 6px; align-items: stretch; margin: 16px 0; }
   .pipe .step {
     flex: 1 1 130px; min-width: 128px; border: 1.5px solid var(--line); border-radius: 8px;
-    background: var(--panel); padding: 8px 10px; font-size: 12px; line-height: 1.5; position: relative;
+    background: var(--panel); padding: 8px 10px; font-size: 12px; line-height: 1.5;
   }
   .pipe .step b { display: block; font-size: 12.5px; color: var(--accent); }
-  .pipe .step .gate { display:block; margin-top: 4px; font-size: 11px; color: var(--must); font-weight: 600; }
-  .pipe .step .loc { display:block; margin-top: 2px; font-size: 10.5px; color: var(--sub); font-family: Menlo, monospace; }
   .pipe .sep { align-self: center; color: var(--sub); font-weight: 700; }
-  /* ---- 拡張則の図 ---- */
-  .growth { display: flex; gap: 24px; flex-wrap: wrap; margin: 16px 0; }
-  .growth .col { flex: 1 1 300px; border: 1.5px solid var(--line); border-radius: 8px; padding: 14px 16px; background: var(--panel); }
-  .growth .col h4 { margin: 0 0 8px; font-size: 14px; }
-  .chip { display: inline-block; border: 1px solid var(--line); background: #fff; border-radius: 14px; padding: 2px 10px; font-size: 12px; margin: 2px 2px; }
-  .chip.new { border-color: var(--may); color: var(--may); font-weight: 700; border-style: dashed; }
   .toc { columns: 2; font-size: 13.5px; background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 14px 30px; }
   .toc li { margin: 3px 0; }
   a { color: var(--accent); }
   .small { font-size: 12.5px; color: var(--sub); }
-  @media print { .page { padding: 10mm; } h2 { break-after: avoid; } table, .callout, .layer { break-inside: avoid; } }
+  .principle { border: 1.5px solid var(--line); border-radius: 8px; padding: 10px 16px; margin: 8px 0; }
+  .principle b.pnum { color: var(--accent); }
+  @media print { .page { padding: 10mm; } h2 { break-after: avoid; } table, .callout, .uc, .arch { break-inside: avoid; } }
 </style>
 </head>
 <body>
 <div class="page">
 
-<h1>mongene-v2 要件定義書</h1>
+<h1>問題供給エンジン「モンジェネ」要件定義書</h1>
 <div class="docmeta">
-  版: v1.0 ドラフト（ユーザー確認待ち） ／ 作成: 2026-07-11 ／
-  正: 本書＋<code>docs/input_spec_2026-07-08.json</code>（入力座標系の正） ／
-  実装状況の根拠: リポジトリ棚卸し（blueprint 27・Noun Atom 21・Verb 33・pytest 465）
+  版: <b>v2.0 ドラフト</b>（v1.0 を全面改訂・ユーザー確認待ち） ／ 作成: 2026-07-11 ／
+  前提: <b>現行システム設計は何も確定していない（ゼロベース）</b>。blueprint×atom は検討の一案として §9 で評価する。<br>
+  出典: 未踏提案書(2026-03)・経営計画書/事業計画書/サービス紹介資料(2026-06)・学習フロー設計図3枚（ロードマップ/先生フロー/生徒フロー）・input_spec_2026-07-08.json・mongene-v2 実装棚卸し
 </div>
 
 <ol class="toc">
-  <li><a href="#s1">背景と経緯</a></li>
-  <li><a href="#s2">製品定義とスコープ</a></li>
-  <li><a href="#s3">コアコンセプト：blueprint × atom</a></li>
-  <li><a href="#s4">システム構成（4層と責務境界）</a></li>
-  <li><a href="#s5">生成フロー</a></li>
-  <li><a href="#s6">機能要件（F）</a></li>
-  <li><a href="#s7">品質要件（Q）＝セルの完成定義</a></li>
-  <li><a href="#s8">非機能要件（N）</a></li>
-  <li><a href="#s9">現状ギャップと優先順位</a></li>
-  <li><a href="#s10">未決事項（要決定）</a></li>
-  <li><a href="#s11">用語集</a></li>
+  <li><a href="#s1">ミッションと最終ゴール</a></li>
+  <li><a href="#s2">エンジンが仕える学習ループ</a></li>
+  <li><a href="#s3">製品定義と責務の3分割</a></li>
+  <li><a href="#s4">ドメインモデルと生成契約</a></li>
+  <li><a href="#s5">機能要件（F）</a></li>
+  <li><a href="#s6">品質要件（Q）と検証水準</a></li>
+  <li><a href="#s7">非機能要件（N）</a></li>
+  <li><a href="#s8">多科目展開の要件</a></li>
+  <li><a href="#s9">アーキテクチャ方針（失敗診断と設計原則）</a></li>
+  <li><a href="#s10">段階計画（事業マイルストーン整合）</a></li>
+  <li><a href="#s11">未決事項（要決定）</a></li>
+  <li><a href="#s12">用語集</a></li>
 </ol>
 
 <!-- ============================================================ -->
-<h2 id="s1">1. 背景と経緯</h2>
-<p>本システムは4世代の試行を経ている。各世代で「何が得られ、何が課題として残ったか」が現行設計の根拠である。</p>
+<h2 id="s1">1. ミッションと最終ゴール</h2>
 
-<table>
-  <tr><th>世代</th><th>アプローチ</th><th>得られたもの</th><th>残った課題</th></tr>
-  <tr>
-    <td>①</td><td>チャットで生成AIに問題を直接作らせる</td>
-    <td>問題自体は生成できる</td>
-    <td>難易度のコントロールが微妙・図の精度が低い</td>
-  </tr>
-  <tr>
-    <td>②</td><td>問題そのものではなく <b>Pythonコードを生成</b>させ、コードが図を描く</td>
-    <td>図の質が安定</td>
-    <td>生成コストが高い</td>
-  </tr>
-  <tr>
-    <td>③</td><td>問題PDFを入力し<b>類題を生成</b></td>
-    <td>既存問題に似た問題が作れる</td>
-    <td>生成コスト＋<b>元の問題がないと生成できない</b></td>
-  </tr>
-  <tr>
-    <td>④<br>(現行)</td><td><b>blueprint（問題構造）× atom（部品）の組合せ生成</b>。正解は SymPy が決定論的に計算</td>
-    <td>元問題不要・正しさが機械保証・<b>追加作業だけで生成空間が爆発的に増える</b>設計</td>
-    <td><b>設計思想が実装に正しく伝わらず</b>、形式忠実性・難易度分離・図の従属性が未達 ← <b>本書の動機</b></td>
-  </tr>
-</table>
-
-<div class="callout warn">
-  <b class="tag">本書が解決するメタ問題</b>
-  これまで失敗が繰り返された根因は2つ。<b>(a) 「何ができたら完成か」の定義（受け入れ基準）が無かった</b>ため修正が場当たりになった。<b>(b) 世代④のコアコンセプト（追加のみで拡張する組合せ設計）が実装者に伝わる形で文書化されていなかった</b>。本書は (a) を §6–7 の要件表で、(b) を §3 で固定する。
-</div>
-
-<!-- ============================================================ -->
-<h2 id="s2">2. 製品定義とスコープ</h2>
-
-<p><b>mongene-v2 は、教育システムに組み込まれる「問題生成エンジン」である。</b>
-「問題が確定していない問題集」は完成イメージの比喩であり、実体は API 部品。直接の顧客は生徒ではなく<b>ホスト（周囲の教育システム）</b>であり、生徒はホスト越しにエンジンの出力に触れる。</p>
-
-<h3>2.1 エンジンの中心契約（＝製品そのもの）</h3>
-<pre><code>generate(unit, form, level, seed) → Problem
-   unit  : 単元（レッスンID。例 g3_l51）
-   form  : 問題形式（7型。§6 F-2）
-   level : 難易度段（band絶対Lv。基礎1/標準2/応用3/発展4）
-   seed  : 乱数種（指定→決定論的に同一問題／省略→毎回異なる問題）
-
-   Problem : 問題文・小問列（解答＋解説）・図（form が要求する場合のみ）・メタ情報
-             の構造化データ。ホストが機械的に扱える。</code></pre>
-<p>エンジンの価値はこの契約の<b>信頼性</b>に尽きる：同じ座標を叩けば、いつでも「その単元・その形式・その難しさの、数学的に正しい問題」が無限バリエーションで返ること。</p>
-
-<h3>2.2 スコープ外（ホストの責務）</h3>
-<table>
-  <tr><th>スコープ内（エンジン）</th><th>スコープ外（ホスト側）</th></tr>
-  <tr>
-    <td>座標＋seed → 問題1件の生成／生成可能な座標の告知／正しさ・形式・難易度・図の保証</td>
-    <td>アダプティブ出題・習熟度モデル／出題順序・カリキュラム進行／採点UI・提出フロー／認証・課金・学習履歴</td>
-  </tr>
-</table>
-
-<!-- ============================================================ -->
-<h2 id="s3">3. コアコンセプト：blueprint × atom（最重要・実装失敗の再発防止）</h2>
-
-<h3>3.1 三要素の定義</h3>
-<table>
-  <tr><th>要素</th><th>定義</th><th>現行実装</th></tr>
-  <tr>
-    <td><b>blueprint</b><br>（問題構造）</td>
-    <td>「どんな部品スロットを持ち、部品に何をさせ、何を問うか」という<b>問題の骨組み</b>。部品の中身は知らない。</td>
-    <td>27種（<code>BasicGeometryMeasurementStructure</code>, <code>PythagoreanStructure</code> 等。<code>apps/api/src/blueprints/registry.py</code>）。スロットは <code>noun_slots</code>（タグで部品を募集）</td>
-  </tr>
-  <tr>
-    <td><b>atom</b><br>（部品・名詞）</td>
-    <td>問題に登場する<b>交換可能な素材</b>（図形・数・式・データ等）。自分の性質（体積の求め方等）は自分が知っている。</td>
-    <td>21種（<code>PrismAtom</code>, <code>PyramidAtom</code>, <code>SphereAtom</code>, <code>PolygonAtom</code>, <code>LinearFuncAtom</code> 等。<code>apps/api/src/atoms/noun/</code>、タグ登録制）</td>
-  </tr>
-  <tr>
-    <td><b>verb</b><br>（操作）</td>
-    <td>atom に対して行う<b>数学的操作</b>。SymPy で解き、答えと途中式（logic_steps）を確定する。<b>ここが moat（正しさの堀）</b>。</td>
-    <td>33種（<code>MeasureGeometryVerb</code>, <code>TriangleAreaVerb</code>, <code>SolveSimilarityVerb</code>, <code>FactorizeVerb</code> 等。<code>apps/api/src/atoms/verb/</code>）</td>
-  </tr>
-</table>
-
-<h3>3.2 拡張則（Open-Closed 原則）— このシステムの存在理由</h3>
 <div class="callout key">
-  <b class="tag">拡張則（絶対要件）</b>
-  生成できる問題は <b>「追加」だけで増えること。既存コードの「修正」を要してはならない。</b><br>
-  atom を1つ追加すると、そのタグを受け入れる<b>すべての blueprint</b> の生成空間が同時に広がる（M×N の掛け算で増える）。blueprint を1つ追加すると、既存の atom 資産をそのまま使った新しい問題構造が生まれる。
+  <b class="tag">最終ゴール（北極星）</b>
+  <b>全ての学生が、自分で課題を発見できる能力を養うこと。</b><br>
+  本エンジンはそのための教育システム（Education OS）の一部品＝<b>Layer 1 教材AI の問題供給部</b>である。
 </div>
 
-<div class="growth">
-  <div class="col">
-    <h4>例：空間図形の計量 blueprint</h4>
-    <p class="small">「立体を1つ選び、その体積・表面積を問う」という骨組み。スロットは「タグ=solid の atom」を募集するだけで、<b>特定の立体名を知らない</b>。</p>
-    部品プール：
-    <span class="chip">直方体</span>
-    <span class="chip">円柱</span>
-    <span class="chip">角錐</span>
-    <span class="chip new">＋ 立方体（新規追加）</span>
-    <p class="small">→ 立方体 atom を追加した瞬間、この blueprint（および solid を使う他の全 blueprint）が立方体の問題を生成できるようになる。<b>blueprint のコードは1行も変えない。</b></p>
+<h3>1.1 「自分で課題を発見する」がエンジン要件に落ちる糸</h3>
+<p>生徒フロー設計（設計図③）は、システムが診断を<b>与える</b>のではなく、生徒が<b>自分で誤りを特定する</b>よう組まれている：</p>
+<ol>
+  <li>誤答時は<b>○×のみ表示</b>（答え・解説をすぐ見せない）</li>
+  <li>生徒が自分の解答（撮影画像）の<b>間違えた箇所に自分で赤丸を移動</b>する（「わからない」も選べる）</li>
+  <li><b>なぜ間違えたかを選択肢から自分で選ぶ</b>（例: 二次関数のステージで「一次関数だと思った」）</li>
+  <li>選んだ原因に対応する<b>戻り先</b>（再インプット／一次関数／四則演算／グラフ読み取り／ケアレスミス訓練）へ移動し、そこで問題を解いて仮説を検証する</li>
+</ol>
+<p>この営みが成立するために、エンジンには次が要求される（→ 対応する機能要件）：</p>
+<table>
+  <tr><th>学習設計上の仕掛け</th><th>エンジンへの要求</th><th>要件</th></tr>
+  <tr><td>○×のみ→段階的に開示</td><td>答え・途中過程・解説・ヒントを<b>分離した部品</b>として返し、開示タイミングをホストが制御できる</td><td>F-8, F-9</td></tr>
+  <tr><td>原因の選択肢を提示</td><td>単元ごとの<b>誤答要因の語彙</b>と、問題への<b>要因タグ付け</b></td><td>F-7・F-11・カリキュラムモデル（§3②）</td></tr>
+  <tr><td>戻り先で仮説検証</td><td>原因→前提単元の座標を解決し、<b>その場で戻り先問題を供給</b></td><td>F-7</td></tr>
+  <tr><td>できるまで出続ける</td><td><b>無限供給</b>（数値・題材が変わる同型問題）＝完全習得学習の前提条件</td><td>F-3, F-4</td></tr>
+</table>
+
+<h3>1.2 事業文脈（なぜ無限供給か）</h3>
+<ul>
+  <li><b>Bloom の完全習得学習（2σ）</b>: 習得判定（BKT 85%・直近5問80%・3問連続正解）を回すには、判定のたびに新しい問題が要る。既存問題集では枯渇する——<b>無限性は飾りではなく mastery learning の前提</b>。</li>
+  <li><b>先生の時間の解放</b>: 指導時間の25%が「問題を探す時間」に消えている（未踏提案書）。エンジンは探す時間をゼロにし、先生を「生徒に向き合う」役割へ返す。</li>
+  <li><b>授業経験ゼロ採用</b>（Education OS の核）: 問題作成・採点・分析をシステムが持つことで、先生の学力依存を解消する。エンジンの品質保証はその土台。</li>
+  <li><b>北極星KPI＝継続率85%</b>: エンジンの寄与は「生徒に合う問題が途切れず出る」「問題切れ・破綻問題ゼロ」。</li>
+</ul>
+
+<!-- ============================================================ -->
+<h2 id="s2">2. エンジンが仕える学習ループ（ユースケース）</h2>
+<p>設計図3枚と未踏提案書のサイクル「採点・苦手分析 → FB＋対策問題生成 → 生徒が解く」を、エンジン視点のユースケースに翻訳する。<b>エンジンの要件はすべてここから導出される</b>。</p>
+
+<div class="uc"><div class="uc-head">UC-1 ステージ進行（授業の背骨）</div>
+  <div class="uc-body">
+    <div><span class="lbl">流れ</span><br>インプットフェーズ（公式を書く・説明できる）→ <b>ベース問題</b> → 正解 → <b>最終問題</b> → 正解 → ステージクリア</div>
+    <div><span class="lbl">エンジンへの要求</span><br>単元×難易度段に対する<b>ベース問題</b>の供給。単元の必須要素を全て含む<b>最終問題</b>（＝これが解けたら単元クリアと言い切れる合成問題）の供給。</div>
   </div>
-  <div class="col">
-    <h4>禁止パターン（過去の実装失敗の形）</h4>
-    <ul class="small" style="margin:6px 0; padding-left: 18px;">
-      <li>blueprint 内に特定 atom 名の <code>if</code> 分岐を書く（部品を増やすたび blueprint の修正が要る＝拡張則違反）</li>
-      <li>特定の数値・図形・題材のハードコード（seed を変えても同じ問題しか出ない）</li>
-      <li>form を無視して常に同じ生成物を返す（形式を選ぶ意味が消える）</li>
-      <li>LLM に答え・数値を生成/改変させる（moat 崩壊）</li>
+</div>
+
+<div class="uc"><div class="uc-head">UC-2 誤答からの戻り（自己課題発見の核）</div>
+  <div class="uc-body">
+    <div><span class="lbl">流れ</span><br>誤答 → ○×のみ → 自分で誤り箇所マーク → 原因を選択 → 原因に応じた<b>戻り先</b>の問題へ → クリアで復帰</div>
+    <div><span class="lbl">エンジンへの要求</span><br>誤答要因（例:「一次関数だと思った」）から<b>戻り先座標を解決</b>し、そこの問題を即時供給。知識グラフを遡った根本原因の問題（例: 空間図形の躓き→三平方→因数分解）。</div>
+  </div>
+</div>
+
+<div class="uc"><div class="uc-head">UC-3 宿題生成</div>
+  <div class="uc-body">
+    <div><span class="lbl">流れ</span><br>授業内で終わらない→残りが宿題／原因再選択で授業終了→<b>その時点で生成された問題が宿題</b>になる</div>
+    <div><span class="lbl">エンジンへの要求</span><br>「何を宿題に残すか」の判断はホスト。エンジンは構成表を受けた<b>セット組成（F-13）</b>と、<b>紙に印刷できる</b>出力（問題・図・解答が紙ワークフローに耐える）を担う。</div>
+  </div>
+</div>
+
+<div class="uc"><div class="uc-head">UC-4 類題再生成（モンジェネETSUZAN版の継承）</div>
+  <div class="uc-body">
+    <div><span class="lbl">流れ</span><br>解き直したい問題に対し、A: 数値のみ変更（ケアレス克服）／B: 文脈を変更（定着確認）／C: 問われる内容が異なる（解法戦略の強化）</div>
+    <div><span class="lbl">エンジンへの要求</span><br>基準問題を指定した<b>3モードの類題生成</b>。A=同構造・数値再抽選、B=同構造・題材/文脈差し替え、C=同概念・別構造。</div>
+  </div>
+</div>
+
+<div class="uc"><div class="uc-head">UC-5 先生ダッシュボード連携（Layer 2）</div>
+  <div class="uc-body">
+    <div><span class="lbl">流れ</span><br>先生は生徒の進捗（インプット/解答/採点/要因選択の4フェーズ＋経過時間）を監視。詰まった生徒に<b>段階ヒント1を開放</b>。</div>
+    <div><span class="lbl">エンジンへの要求</span><br>問題に付随する<b>段階ヒント列</b>（少しずつ核心に近づく複数段）。解説とは別部品であること。</div>
+  </div>
+</div>
+
+<div class="uc"><div class="uc-head">UC-6 カリキュラム並べ替え（ロードマップ）</div>
+  <div class="uc-body">
+    <div><span class="lbl">流れ</span><br>学習指導要領ベースのロードマップを、生徒が持ってきた<b>教科書の目次で並べ替え</b>。学校・地域ごとに最適化。指導要領改訂（高校内容が降りてくる等）にも追従。</div>
+    <div><span class="lbl">エンジンへの要求</span><br>単元は<b>順序に依存しない独立部品</b>であること（並べ替えはホストの自由）。単元の追加・分割・移動が<b>データ変更のみ</b>で済むこと。</div>
+  </div>
+</div>
+
+<div class="uc"><div class="uc-head">UC-7 採点・苦手分析との結合（Layer 1 内の相方）</div>
+  <div class="uc-body">
+    <div><span class="lbl">流れ</span><br>採点エンジン（手書き答案の撮影→途中式レベル採点→エラー4分類: 読解/変換/処理/書き写し）→ 苦手プロファイル → 次の問題生成へ</div>
+    <div><span class="lbl">エンジンへの要求</span><br>採点が参照する<b>模範解答＋途中過程</b>を機械可読で出力。問題・小問への<b>概念タグ</b>（BKTが習得度を概念単位で追跡するための鍵）。</div>
+  </div>
+</div>
+
+<div class="uc"><div class="uc-head">UC-8 模試対策（将来）</div>
+  <div class="uc-body">
+    <div><span class="lbl">流れ</span><br>志望校の出題傾向・難易度構成を解析し、本番と同一構成の模擬テスト一式を生成（未踏提案書の第3モード）</div>
+    <div><span class="lbl">エンジンへの要求</span><br>複数座標の<b>セット組成</b>（構成表→問題一式）。将来は問題DB（IRT較正済み）とのハイブリッド供給。</div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<h2 id="s3">3. 製品定義と責務の3分割</h2>
+
+<p><b>本エンジンは「問題供給エンジン」である</b>：座標と目的を渡されたら、正しさが保証された問題（問題文・図・答え・途中過程・解説・ヒント・タグ）を1件返す装置。生成はその主要な実現手段だが、契約上は供給源（生成器／将来の問題バンク）を抽象化する。</p>
+
+<p>周辺システムとの境界を3つに分割する。<b>過去の混乱の一因は、この3つが未分化だったこと</b>（単元定義・難易度・誤答要因のような「教育の知識」が、生成コードの中に埋没していた）。</p>
+
+<div class="tri">
+  <div class="box engine">
+    <h4>① 問題供給エンジン（本書の対象）</h4>
+    <ul>
+      <li>契約: <code>generate(座標, 目的, seed) → Problem</code></li>
+      <li>正しさ・形式・難易度・図の品質保証</li>
+      <li>供給可能座標の告知（capabilities）</li>
+      <li>類題3モード・段階ヒント・概念タグ付け</li>
+    </ul>
+  </div>
+  <div class="box">
+    <h4>② カリキュラムモデル（共有データ資産）</h4>
+    <ul>
+      <li>単元タクソノミー（科目×単元×形式×難易度段）</li>
+      <li><b>知識グラフ</b>（前提関係DAG）</li>
+      <li><b>誤答要因の語彙</b>と要因→戻り先座標の対応</li>
+      <li>単元クリア基準（最終問題の要素定義）</li>
+      <li>エンジンとホストの<b>共通言語</b>。教育者（高橋）が編集できる形式</li>
+    </ul>
+  </div>
+  <div class="box">
+    <h4>③ ホスト（スコープ外・Education OS 各層）</h4>
+    <ul>
+      <li>採点エンジン（手書き採点・エラー分類）＝舛田</li>
+      <li>適応学習（BKT/FSRS/IRT・苦手プロファイル）</li>
+      <li>授業OS（ステージ進行・先生ダッシュボード）</li>
+      <li>生徒UI・印刷・通知＝小武</li>
+      <li>インプットフェーズ素材（公式・説明教材）の提示 <span class="small">※素材の出所・整備はカリキュラムモデルの論点＝D-5</span></li>
     </ul>
   </div>
 </div>
 
-<h3>3.3 正しさの保証構造（moat）</h3>
-<p>問題の<b>答え・数値・論理ステップ（logic_steps）は SymPy が決定論的に計算</b>し、以後どの層も改変できない。LLM の役割は「確定した構造を自然な日本語に翻訳する」ことだけ（§4 L4）。これにより<b>生成AIの不確かさが正しさに混入しない</b>。世代①の失敗（難易度・図・正しさの不安定）の直接の対策である。</p>
-
-<!-- ============================================================ -->
-<h2 id="s4">4. システム構成（4層と責務境界）</h2>
-<p>各層が「保証すること」を固定し、層をまたぐ責務の滲み出しを禁止する。現状の主要欠陥（計算問題にも図が付く／図に答えが書いてある）は<b>境界規則の欠如</b>が原因（§9）。</p>
-
-<div class="layers">
-  <div class="layer host">
-    <div class="lname">L0 ホスト<small>教育システム（スコープ外）</small></div>
-    <div class="ldo">生徒UI・出題戦略・採点フロー。エンジンに (unit, form, level, seed) を渡す</div>
-    <div class="ldont">保証しない：問題の中身</div>
-  </div>
-  <div class="larrow">▼ 座標＋seed</div>
-  <div class="layer">
-    <div class="lname">L1 入力層<small>座標系＝input_spec</small></div>
-    <div class="ldo"><b>保証：</b>座標（単元×形式7型×難易度段）が教育的に一貫し、相互排他で、生成可能な座標が問い合わせ可能</div>
-    <div class="ldont">保証しない：生成の中身（L2以降）</div>
-  </div>
-  <div class="larrow">▼</div>
-  <div class="layer moat">
-    <div class="lname">L2 構造層<small>blueprint runner＋moat</small></div>
-    <div class="ldo"><b>保証：</b>数学的正しさ（SymPy）・<b>form の構造的忠実性</b>・<b>難易度の構造的分離</b>・決定論（seed）</div>
-    <div class="ldont">保証しない：自然な日本語・図の描画</div>
-  </div>
-  <div class="larrow">▼ 中間表現（MR）＝構造＋答え確定済み</div>
-  <div class="layer">
-    <div class="lname">L3 図層<small>visual DSL＋renderer</small></div>
-    <div class="ldo"><b>保証：</b><b>form が図を要求するときだけ</b>描く・<b>答えを図に描かない</b>・問題を解くのに必要な情報だけを持つ図</div>
-    <div class="ldont">保証しない：問題文</div>
-  </div>
-  <div class="larrow">▼</div>
-  <div class="layer">
-    <div class="lname">L4 言語層<small>LLM翻訳</small></div>
-    <div class="ldo"><b>保証：</b>MR に忠実な自然文（問題文・解説）。捏造・省略の検出ゲート付き</div>
-    <div class="ldont">保証しない（禁止）：数値・答え・論理の改変</div>
-  </div>
+<div class="callout">
+  <b class="tag">境界の原則</b>
+  「生徒が今どこにいて次に何をすべきか」を決めるのは<b>ホスト（適応学習）</b>。エンジンは決められた座標・目的に対し<b>最良の1問を返す</b>ことに徹する。ただし判断の材料（概念タグ・要因タグ・難易度メタ）はエンジンが全問題に付与する。カリキュラムモデルは両者が参照する辞書であり、<b>コードから独立したデータ</b>として管理する。概念単位の絞り込みが必要なとき、ホストは <code>options.target_concepts</code> で要求できる（「判断はホスト・供給はエンジン」の分担は変えない）。
 </div>
 
 <!-- ============================================================ -->
-<h2 id="s5">5. 生成フロー</h2>
-<p>1リクエストの処理系列。<span style="color:var(--must); font-weight:600;">G0〜G7</span> は決定論検証ゲート（LLM不使用。G1/G2のみ LLM 出力を機械検査）。現行実装の実配線に基づく。</p>
+<h2 id="s4">4. ドメインモデルと生成契約</h2>
 
-<div class="pipe">
-  <div class="step"><b>① 座標受付</b>(unit, form, level, seed)<span class="gate">G0 form対応検証</span><span class="loc">router.py:183</span></div>
-  <div class="sep">→</div>
-  <div class="step"><b>② mapping解決</b>単元→blueprint・制約をデータで引く<span class="loc">mapping.json</span></div>
-  <div class="sep">→</div>
-  <div class="step"><b>③ blueprint選択</b>form別配線・Lv別制約をマージ<span class="loc">runner:126-189</span></div>
-  <div class="sep">→</div>
-  <div class="step"><b>④ atom抽選</b>スロットのタグに合う部品をseedで抽選<span class="loc">runner:264</span></div>
-  <div class="sep">→</div>
-  <div class="step"><b>⑤ verb実行 = moat</b>SymPyが答え・logic_steps確定<span class="gate">G4 verb契約<br>G5 clean<br>G6 退化検出</span><span class="loc">runner:276-306</span></div>
-</div>
-<div class="pipe">
-  <div class="step"><b>⑥ 小問構成</b>SubQuestion列を構築<span class="loc">runner:308</span></div>
-  <div class="sep">→</div>
-  <div class="step"><b>⑦ 図DSL構築</b><b style="color:var(--must)">要件: formが要求する時のみ</b><span class="gate">G7 重複検出</span><span class="loc">runner:317</span></div>
-  <div class="sep">→</div>
-  <div class="step"><b>⑧ MR確定</b>構造＋答えが確定した中間表現<span class="loc">runner:347</span></div>
-  <div class="sep">→</div>
-  <div class="step"><b>⑨ LLM翻訳</b>問題文・解説を自然文化（moat改変禁止）<span class="gate">G1 答え漏洩<br>G2 数値接地</span><span class="loc">translator.py:197</span></div>
-  <div class="sep">→</div>
-  <div class="step"><b>⑩ 出力</b>Problem（構造化JSON＋SVG）を返却<span class="loc">runner:393</span></div>
-</div>
+<h3>4.1 生成リクエスト（エンジンAPI＝製品そのもの）</h3>
+<pre><code>generate(request) → Problem | Unsupported(理由コード)
+  // 理由コード語彙: 座標不在 / form非対応 / level非対応 / 検証全滅(F-14) / 供給枯渇
 
-<p class="small">検証で不合格なら seed を進めてリトライ（最大50回）。全滅なら「生成不能」を明示的に返す（黙って別種の問題を返すことは禁止＝F-4）。</p>
-
-<h3>5.1 出力データ（Problem）の構造</h3>
-<pre><code>Problem {
-  content_problem_text : 問題文（LLM翻訳・答え非含有）
-  sub_questions[] {
-    label            : "(1)" …
-    prompt_text      : 小問の問い
-    answer           : { sympy_form, text_form, type }   ← SymPy確定値（moat）
-    explanation_text : 解説（logic_steps 準拠の翻訳）
+request = {
+  subject : "math"                     // 科目（科目パックの選択）
+  unit    : "g3_l51"                   // 単元（カリキュラムモデルのID）
+  form    : "find_value"               // 問題形式（科目パックが定義。数学=7型）
+  level   : 2                          // 難易度段（band絶対値: 基礎1/標準2/応用3/発展4）
+  purpose : "base"                     // 目的: base | final | remedial | variant
+                                       //（宿題・模試は1問APIではなくセット組成 F-13 のセット種別）
+  seed    : 12345                      // 再現用乱数種（省略時=毎回異なる）
+  options : {
+    cause_id        : "confused_with_linear"   // remedial時: 誤答要因ID（語彙の正=カリキュラムモデル）
+    target_concepts : [concept_id...]          // 概念単位の絞り込み（BKTのピンポイント要求・任意）
+    variant_of      : {problem_ref, mode:"A|B|C"}  // variant時: 基準問題と類題モード
+    avoid           : [problem_ref...]             // 既出回避（同一性の定義=D-1）
   }
-  visuals  : { problem_diagram_url }   ← form が図を要求する場合のみ
-  metadata : { blueprint_id, used_atoms, seed, difficulty, git_commit }
 }</code></pre>
 
-<!-- ============================================================ -->
-<h2 id="s6">6. 機能要件（F）</h2>
-<p>優先度：<span class="badge must">MUST</span> 無いとエンジンとして成立しない ／ <span class="badge should">SHOULD</span> 品質・運用上強く必要 ／ <span class="badge may">MAY</span> あると良い。<br>
-現状：<span class="st-ok">済</span>＝実装済み ／ <span class="st-part">部分</span>＝一部実装 ／ <span class="st-ng">未</span>＝未実装。</p>
+<h3>4.2 Problem（出力契約）</h3>
+<pre><code>Problem = {
+  problem_text   : 問題文（答え非含有・自然な日本語）
+  visual         : 図/グラフ/表（形式が要求する場合のみ・答え非含有・紙印刷可）
+  sub_questions[]: {
+    label, prompt_text
+    answer        : { 正答(記号厳密形), 表示形, 型 }      ← 決定論的に検証済み
+    solution_steps: 途中過程（採点エンジンが途中式採点に使う粒度）
+    explanation   : 解説（steps に忠実な翻訳）
+    hints[]       : 段階ヒント列（開示順に複数段）
+    concept_tags[]: カリキュラムモデルの概念ノードID     ← BKT・知識グラフ遡りの鍵
+    cause_tags[]  : この問題が検証できる誤答要因ID
+  }
+  meta           : { 座標, purpose, seed, 生成器ID/版, problem_ref, 再現情報 }
+}</code></pre>
+<p class="small">重要: answer / solution_steps / explanation / hints は<b>分離した部品</b>。ホストが「○×のみ→ヒント1→ヒント2→解説」の開示順を制御できる（§1.1）。「部品の分離」とはテキスト内容を他部品に内包しないことの意（ID参照は可）。</p>
+<p class="small"><b>problem_ref（一意参照）の定義</b>: {座標, purpose, seed, 生成器ID＋版, 翻訳キャッシュキー} の組。variant_of・avoid・F-2再現・F-17監査の4機能が共通で使う。<b>決定論の境界</b>: 計算骨格（数値・答え・途中過程）は seed で完全再現し、文章化（LLM翻訳）は翻訳キャッシュを再現情報に含めることで再現する。</p>
 
+<h3>4.3 座標系の正</h3>
+<p>数学の座標系（184単元×形式7型×band絶対Lv・各段の構造定義・例・市販位置づけ）は<b>確定済み資産</b> <code>docs/input_spec_2026-07-08.json</code> を初版とし、カリキュラムモデルへ昇格させる。知識グラフ・誤答要因・クリア基準は未整備＝カリキュラムモデルの拡張として整備する（§10 M1）。</p>
+<p class="small">注意: セルごとの有効な form×level は<b>疎</b>である（全単元が7型×4段を持つわけではない。例: knowledge が Lv1-2 のみの単元がある）。有効セルの正は capabilities（＝カリキュラムモデル）が返すものとする。</p>
+
+<!-- ============================================================ -->
+<h2 id="s5">5. 機能要件（F）</h2>
+<p>優先度: <span class="badge must">MUST</span>=無いと学習ループが回らない ／ <span class="badge should">SHOULD</span>=品質・運用上強く必要 ／ <span class="badge may">MAY</span>=将来。
+フェーズ（§10）: <span class="phase-chip">M0</span>金の縦串 <span class="phase-chip">M1</span>知人塾MVP <span class="phase-chip">M2</span>v1.0 <span class="phase-chip">M3</span>実証・拡張</p>
+
+<h3>A. 生成コア</h3>
 <table>
-  <tr><th style="width:64px">ID</th><th>要件</th><th>受け入れ基準（検証方法）</th><th style="width:70px">優先度</th><th style="width:52px">現状</th></tr>
-  <tr>
-    <td><b>F-1</b></td>
-    <td><b>生成契約</b>：<code>generate(unit, form, level, seed) → Problem</code> を単一APIで提供。Problem は §5.1 の構造化データ</td>
-    <td>任意の対応座標で 問題文・解答・解説・メタ が揃った応答が返る</td>
-    <td><span class="badge must">MUST</span></td>
-    <td><span class="st-ok">済</span></td>
-  </tr>
-  <tr>
-    <td><b>F-2</b></td>
-    <td><b>7型 form 語彙</b>：知識／計算／<b>求値</b>／<b>作図</b>／<b>図・グラフ・表</b>／証明・説明／文章題 をエンジンが語彙として理解する。判別軸＝（与えられるもの・立式の有無・現実場面の有無）で相互排他</td>
-    <td>enum・契約検証・runner 分岐に7語が存在し、7語すべてで G0 を通過する座標が存在する</td>
-    <td><span class="badge must">MUST</span></td>
-    <td><span class="st-ng">未</span><br><span class="small">5語のみ</span></td>
-  </tr>
-  <tr>
-    <td><b>F-3</b></td>
-    <td><b>form 忠実な生成</b>：blueprint は form を入力に取り、同じ単元でも form によって生成物を変える（求値=図・条件から値を求める／図表=かく・読むが目的／計算=式が与えられ立式なし…）</td>
-    <td>Q2 の機械検査に合格（例：calculation の Problem に図が付かない、find_value に式がそのまま与えられない）</td>
-    <td><span class="badge must">MUST</span></td>
-    <td><span class="st-part">部分</span><br><span class="small">_problem_form フックのみ</span></td>
-  </tr>
-  <tr>
-    <td><b>F-4</b></td>
-    <td><b>未対応座標の明示拒否</b>：生成できない (unit, form, level) は「未対応」を明示的に返す。<b>受理して別種の問題を返すことを禁止</b>（現状最大の罠）</td>
-    <td>未対応座標のリクエストがエラー応答（理由コード付き）になる。別 form の問題が返るケース 0 件</td>
-    <td><span class="badge must">MUST</span></td>
-    <td><span class="st-part">部分</span><br><span class="small">G0はあるが誤配線あり</span></td>
-  </tr>
-  <tr>
-    <td><b>F-5</b></td>
-    <td><b>能力問い合わせ</b>：ホストが「いま生成可能な座標の一覧」を取得できる（capabilities API）。ホストはこれをメニューとして生徒に提示するため「選んだのに出ない」が構造的に起きない</td>
-    <td>API応答の全座標が実際に生成成功する（全座標スキャンで生成不能 0）</td>
-    <td><span class="badge should">SHOULD</span></td>
-    <td><span class="st-ng">未</span></td>
-  </tr>
-  <tr>
-    <td><b>F-6</b></td>
-    <td><b>決定論と無限性</b>：seed 指定→同一 Problem を再現。seed 省略→毎回異なる問題。同一セル内で atom・数値の組合せが変わる</td>
-    <td>同 seed 2回で bit 同一の MR。異 seed 100 回で重複率が基準以下（基準は D-1 で決定）</td>
-    <td><span class="badge must">MUST</span></td>
-    <td><span class="st-ok">済</span><br><span class="small">seed注入可</span></td>
-  </tr>
-  <tr>
-    <td><b>F-7</b></td>
-    <td><b>難易度＝band絶対Lv</b>：基礎1/標準2/応用3/発展4。(単元×形式) ごとに<b>構造的に区別できる段だけ</b>を提供（数字を大きくするだけの段は禁止）。座標系の正は <code>input_spec_2026-07-08.json</code></td>
-    <td>mapping の difficulty_levels が input_spec の段集合と一致。Lv を上げると生成構造が実際に変わる（Q3）</td>
-    <td><span class="badge must">MUST</span></td>
-    <td><span class="st-ng">未</span><br><span class="small">265セルずれ</span></td>
-  </tr>
-  <tr>
-    <td><b>F-8</b></td>
-    <td><b>図の form 従属と答え非漏洩</b>：図は form が要求するときだけ生成。図のラベル・マーカーに答え（交点座標等）を出力しない</td>
-    <td>calculation 等図不要 form の Problem に図が付かない。全 form で図中文字列に answer 値が現れない（機械検査）</td>
-    <td><span class="badge must">MUST</span></td>
-    <td><span class="st-ng">未</span><br><span class="small">常時描画＋答え漏洩中</span></td>
-  </tr>
-  <tr>
-    <td><b>F-9</b></td>
-    <td><b>拡張則（Open-Closed）</b>：atom 追加・blueprint 追加・mapping（データ）編集<b>のみ</b>で生成空間が拡大する。既存 blueprint/atom のコード修正を要する拡張は設計違反</td>
-    <td>新 atom 追加時、それを受け入れる既存 blueprint の diff が 0 行。レビュー時のチェック項目化</td>
-    <td><span class="badge must">MUST</span></td>
-    <td><span class="st-ok">済</span><br><span class="small">registry＋タグ制</span></td>
-  </tr>
-  <tr>
-    <td><b>F-10</b></td>
-    <td><b>データ駆動の配線</b>：単元→blueprint→form→難易度の対応は mapping.json（データ）が持ち、コードは対応表を持たない</td>
-    <td>新単元の追加が mapping 編集のみで完了する</td>
-    <td><span class="badge should">SHOULD</span></td>
-    <td><span class="st-ok">済</span></td>
-  </tr>
-  <tr>
-    <td><b>F-11</b></td>
-    <td><b>生成物の自己検証（generate-then-verify）</b>：出力前に G0〜G7 の決定論ゲートを通し、不合格はリトライ・全滅は生成不能として報告</td>
-    <td>ゲート素通りの経路が存在しない。ゲート判定はすべて LLM 不使用</td>
-    <td><span class="badge must">MUST</span></td>
-    <td><span class="st-ok">済</span></td>
-  </tr>
+  <tr><th style="width:56px">ID</th><th>要件</th><th>受け入れ基準</th><th style="width:66px">優先度</th><th style="width:52px">導入</th></tr>
+  <tr><td><b>F-1</b></td><td><b>生成契約</b>: §4.1/4.2 のAPIを提供。全部品（答え/途中過程/解説/ヒント/タグ）が揃った構造化データを返す</td><td>対応座標で全フィールドが非空。スキーマ検証に合格</td><td><span class="badge must">MUST</span></td><td><span class="phase-chip">M0</span></td></tr>
+  <tr><td><b>F-2</b></td><td><b>決定論・再現性</b>: seed 指定で同一問題を再現。障害報告・回帰・監査の前提</td><td>計算骨格は同 seed 2回で同一。文章化は翻訳キャッシュ込みの再現情報（§4.2 problem_ref）で再現できる</td><td><span class="badge must">MUST</span></td><td><span class="phase-chip">M0</span></td></tr>
+  <tr><td><b>F-3</b></td><td><b>無限性</b>: 同一セルで数値・題材・小問構成が変わる同型問題が出続ける（完全習得学習の前提）</td><td>異 seed 100回で実質重複率が基準以下（D-1で確定。仮: ≤20%）</td><td><span class="badge must">MUST</span></td><td><span class="phase-chip">M0</span></td></tr>
+  <tr><td><b>F-4</b></td><td><b>類題3モード</b>: 基準問題に対し A数値のみ／B文脈変更／C別構造（ETSUZAN 3パターンの継承）</td><td>各モードで「変わるもの/変わらないもの」が仕様通り（A: 構造・題材固定、B: 構造固定、C: 概念固定＝concept_tags が基準問題と一致）。基準問題はエンジン生成物（外部教材を基準にする類題は将来＝F-21 関連）</td><td><span class="badge should">SHOULD</span></td><td><span class="phase-chip">M1</span>(A)<br><span class="phase-chip">M2</span>(B/C)</td></tr>
+  <tr><td><b>F-5</b></td><td><b>未対応座標の明示拒否</b>: 供給できない座標は理由コード付きで拒否。<b>受理して別種の問題を返すことを禁止</b>（現行最大の欠陥）</td><td>未対応座標→Unsupported応答。別形式・別題材の問題が返るケース0件</td><td><span class="badge must">MUST</span></td><td><span class="phase-chip">M0</span></td></tr>
+  <tr><td><b>F-6</b></td><td><b>能力問い合わせ</b>: 供給可能な座標×目的の一覧を返す capabilities API。ホストはこれをメニュー・ロードマップ構築に使う</td><td>capabilities の全座標が実際に生成成功（全走査で生成不能0）</td><td><span class="badge must">MUST</span></td><td><span class="phase-chip">M1</span></td></tr>
+</table>
+
+<h3>B. 学習ループ支援（本書v2で新規——設計図・未踏提案書由来）</h3>
+<table>
+  <tr><th style="width:56px">ID</th><th>要件</th><th>受け入れ基準</th><th style="width:66px">優先度</th><th style="width:52px">導入</th></tr>
+  <tr><td><b>F-7</b></td><td><b>戻り先問題（remedial）</b>: 誤答要因IDを受け取り、カリキュラムモデルに定義された<b>静的対応</b>（要因→戻り先座標）を解決して問題を供給。<b>知識グラフをどこまで根本へ遡るか（習得度依存の判断）はホストの責務</b>——エンジンは生徒データを持たない（N-8）</td><td>カリキュラムモデルに定義された全要因で問題が返る。返る問題の概念タグが要因の対象概念と一致</td><td><span class="badge must">MUST</span></td><td><span class="phase-chip">M1</span></td></tr>
+  <tr><td><b>F-8</b></td><td><b>段階ヒント</b>: 各小問に、核心へ段階的に近づくヒント列（2段以上）。解説とは独立の部品</td><td>ヒントが答えを直接含まない（漏洩検査）。各段が前段に無い新情報を1つ以上含む（V4 サンプリングで確認）</td><td><span class="badge should">SHOULD</span></td><td><span class="phase-chip">M1</span></td></tr>
+  <tr><td><b>F-9</b></td><td><b>段階的開示に耐える部品分離</b>: 答え/途中過程/解説/ヒントを別部品で返す（○×のみ→自己発見のUXの前提）</td><td>ホストが任意の開示順を組める（部品間に埋め込み参照がない）</td><td><span class="badge must">MUST</span></td><td><span class="phase-chip">M0</span></td></tr>
+  <tr><td><b>F-10</b></td><td><b>最終問題（final）</b>: 単元クリア基準＝「必要な要素を全て満たす合成問題」を供給。クリア基準はカリキュラムモデルが定義</td><td>final の概念タグ集合が、単元のクリア基準要素集合を被覆する</td><td><span class="badge should">SHOULD</span></td><td><span class="phase-chip">M2</span></td></tr>
+  <tr><td><b>F-11</b></td><td><b>概念タグ・要因タグ付け</b>: 全問題・小問にカリキュラムモデルの概念ノードID（BKT習得度追跡の鍵）と、その問題が検証できる誤答要因ID（cause_tags）を付与</td><td>タグ無し問題0件。タグはカリキュラムモデルに実在するID</td><td><span class="badge must">MUST</span></td><td><span class="phase-chip">M1</span></td></tr>
+  <tr><td><b>F-12</b></td><td><b>採点適合</b>: solution_steps が採点エンジン（手書き途中式採点・エラー4分類）の要求粒度を満たす。answer は記号厳密形＋表示形の両建て</td><td>採点エンジンとの結合テストに合格（スキーマは舛田と共同設計＝D-2）</td><td><span class="badge must">MUST</span></td><td><span class="phase-chip">M1</span></td></tr>
+  <tr><td><b>F-13</b></td><td><b>セット組成</b>: 宿題・小テスト・模試などの構成表（座標×問数×配列）から問題一式を組成</td><td>構成表通りのセットが返り、セット内重複がない</td><td><span class="badge should">SHOULD</span></td><td><span class="phase-chip">M2</span></td></tr>
+</table>
+
+<h3>C. 品質・検証</h3>
+<table>
+  <tr><th style="width:56px">ID</th><th>要件</th><th>受け入れ基準</th><th style="width:66px">優先度</th><th style="width:52px">導入</th></tr>
+  <tr><td><b>F-14</b></td><td><b>generate-then-verify</b>: 全出力は検証ゲート（§6）を通過したものだけ。ゲート全滅時は Unsupported を返す（壊れた問題を出すくらいなら出さない）</td><td>ゲート素通り経路が存在しない。破綻問題の流出0（監査で計測）</td><td><span class="badge must">MUST</span></td><td><span class="phase-chip">M0</span></td></tr>
+  <tr><td><b>F-15</b></td><td><b>形式・難易度・題材の忠実性</b>: 出た問題が選んだ form/level/unit の定義（カリキュラムモデル）に一致（§6 Q2-Q4）</td><td>Q2-Q4 の検査に合格</td><td><span class="badge must">MUST</span></td><td><span class="phase-chip">M0</span></td></tr>
+  <tr><td><b>F-16</b></td><td><b>図の従属・非漏洩</b>: 図は形式が要求するときだけ。図・問題文に答えを含めない</td><td>漏洩の定義＝「問題を解かずに答えが読み取れる」。機械検査は除外規則（式中の係数・軸目盛等）を仕様化した上で図中文字列・問題文・ヒントを検査（素朴な文字列一致は偽陽性の山になるため不可）</td><td><span class="badge must">MUST</span></td><td><span class="phase-chip">M0</span></td></tr>
+  <tr><td><b>F-17</b></td><td><b>品質監査ループ</b>: 意味的品質（題材忠実・自然さ）を LLM 監査で定期スキャンし、劣化を検知・修正する運用が組み込まれている</td><td>監査レポートが再現可能（seed付き）で、修正が回帰テスト化される</td><td><span class="badge should">SHOULD</span></td><td><span class="phase-chip">M1</span></td></tr>
+</table>
+
+<h3>D. 拡張性・運用</h3>
+<table>
+  <tr><th style="width:56px">ID</th><th>要件</th><th>受け入れ基準</th><th style="width:66px">優先度</th><th style="width:52px">導入</th></tr>
+  <tr><td><b>F-18</b></td><td><b>科目パック</b>: 科目固有物（タクソノミー・形式・生成部品・検証器）はパックとして分離され、コア（契約・カーネル・ゲート枠組み・翻訳/監査基盤）は科目非依存（§8）</td><td>第2科目の追加時にコアの diff が0行（データ・パック追加のみ）</td><td><span class="badge must">MUST</span></td><td><span class="phase-chip">M0</span>(構造)<br><span class="phase-chip">M3</span>(実証)</td></tr>
+  <tr><td><b>F-19</b></td><td><b>追加による拡張</b>: 生成空間の拡大は「部品・スペック・データの追加」で行い、既存コードの修正を要しない（Open-Closed。blueprint×atom 案の核心を要件として継承）</td><td>新部品追加時、既存部品・スペックの diff 0行。レビューチェック項目化</td><td><span class="badge must">MUST</span></td><td><span class="phase-chip">M0</span></td></tr>
+  <tr><td><b>F-20</b></td><td><b>カリキュラム改訂耐性</b>: 単元の追加・分割・移動・指導要領改訂への追従がカリキュラムモデル（データ）の変更で完結（UC-6）</td><td>単元操作でエンジンコードの変更が不要</td><td><span class="badge should">SHOULD</span></td><td><span class="phase-chip">M2</span></td></tr>
+  <tr><td><b>F-21</b></td><td><b>供給源の抽象化</b>: 生成器のほかに、問題バンク（IRT較正済みDB・国語の題材バンク等）を同一契約で接続できる（未踏構想のDB×生成ハイブリッド）</td><td>契約（§4.2）が供給源に依存しない</td><td><span class="badge may">MAY</span></td><td><span class="phase-chip">M3</span></td></tr>
+  <tr><td><b>F-22</b></td><td><b>事前生成プール</b>: 授業内の即時供給のため、座標×目的ごとに検証済み問題をプールしておける（生成は非同期・供給は即時）</td><td>プール供給の応答が体感即時（N-2）。プール枯渇時はオンデマンドにフォールバック</td><td><span class="badge should">SHOULD</span></td><td><span class="phase-chip">M1</span></td></tr>
 </table>
 
 <!-- ============================================================ -->
-<h2 id="s7">7. 品質要件（Q）＝1セルの「完成の定義」</h2>
-<p><b>座標セル (unit, form, level) が出荷可 ⇔ そのセルから生成される Problem が Q1〜Q6 をすべて満たす。</b>これが従来欠けていた "done" の定義であり、以後の全修正はどの Q を改善するかを宣言して行う。</p>
+<h2 id="s6">6. 品質要件（Q）と検証水準</h2>
+
+<p>セル（座標×目的）が<b>出荷可 ⇔ 生成される問題が Q1〜Q7 を全て満たす</b>。これが「完成の定義」であり、以後の全修正はどの Q の改善かを宣言して行う。</p>
+
+<p><b>検証水準（V）</b>——科目により可能な検証の強さが違うため、水準を明示的に区別する：</p>
+<table>
+  <tr><th style="width:70px">水準</th><th>意味</th><th>例</th></tr>
+  <tr><td><span class="vlevel">V1 決定論</span></td><td>数学的・機械的に恒真検証。LLM不使用・コストゼロ</td><td>SymPy による解の検証、スキーマ検査、漏洩文字列検査</td></tr>
+  <tr><td><span class="vlevel">V2 ルール</span></td><td>決定論だが規則ベース（形式・構造の検査）</td><td>form別の構造検査、難易度の構造差分検査、辞書・文法照合</td></tr>
+  <tr><td><span class="vlevel">V3 LLM監査</span></td><td>意味的品質を LLM が判定（広く安く候補特定→絞って深く）</td><td>題材忠実性、文章の自然さ</td></tr>
+  <tr><td><span class="vlevel">V4 人間</span></td><td>教育者によるサンプリング確認</td><td>教育的妥当性の最終確認、現場FB</td></tr>
+</table>
 
 <table>
-  <tr><th style="width:64px">ID</th><th>品質特性</th><th>満たすべきこと</th><th style="width:190px">検証手段</th></tr>
-  <tr>
-    <td><b>Q1</b></td><td><b>正しさ（moat）</b></td>
-    <td>解答・数値・logic_steps が数学的に正しい。<b>最優先・不可侵</b></td>
-    <td>決定論（SymPy 恒真・G4/G5/G6）</td>
-  </tr>
-  <tr>
-    <td><b>Q2</b></td><td><b>形式忠実性</b></td>
-    <td>出た問題が本当に選んだ form である（計算セルに図付き文章題が出ない等）</td>
-    <td>決定論（form別の構造検査）</td>
-  </tr>
-  <tr>
-    <td><b>Q3</b></td><td><b>難易度の分離</b></td>
-    <td>同一 (unit×form) 内で Lv を上げると<b>構造が実際に変わり</b>、易→難に単調</td>
-    <td>決定論（構造差分検査）＋LLM監査で意味確認</td>
-  </tr>
-  <tr>
-    <td><b>Q4</b></td><td><b>題材忠実性</b></td>
-    <td>出た問題が選んだ単元の題材である（別単元の問題や固定パターンへの固着をしない）</td>
-    <td>LLM監査（Opus・広く安く候補特定→絞って深く判定）</td>
-  </tr>
-  <tr>
-    <td><b>Q5</b></td><td><b>答え非漏洩</b></td>
-    <td>問題文・図に答えが含まれない。図は解くのに必要な情報だけを持つ</td>
-    <td>決定論（G1 leakage＋図中文字列検査）</td>
-  </tr>
-  <tr>
-    <td><b>Q6</b></td><td><b>自然さ</b></td>
-    <td>問題文・図が人間の教材として自然（通貨は円・離散量に分数を出さない・図のラベル衝突なし等）</td>
-    <td>LLM監査＋人間サンプリング</td>
-  </tr>
+  <tr><th style="width:56px">ID</th><th>品質特性</th><th>満たすべきこと</th><th style="width:150px">検証水準（数学）</th></tr>
+  <tr><td><b>Q1</b></td><td><b>正しさ</b></td><td>答え・途中過程が正しい。<b>最優先・不可侵</b>。保証手段はパックが宣言する（数学パックは V1＝LLM非依存で保証すると宣言。§8③）</td><td><span class="vlevel">V1 決定論</span> 必須</td></tr>
+  <tr><td><b>Q2</b></td><td><b>形式忠実</b></td><td>選んだ形式の問題が出る（計算セルに図付き文章題が出ない等）。形式定義＝カリキュラムモデル</td><td><span class="vlevel">V2 ルール</span></td></tr>
+  <tr><td><b>Q3</b></td><td><b>難易度整合</b></td><td>段を上げると構造が実際に変わり、易→難に単調。段の定義（構造記述）に一致</td><td><span class="vlevel">V2</span>＋<span class="vlevel">V3</span></td></tr>
+  <tr><td><b>Q4</b></td><td><b>題材忠実</b></td><td>選んだ単元の題材の問題が出る（別単元・固定パターンへの固着をしない）</td><td><span class="vlevel">V3 LLM監査</span></td></tr>
+  <tr><td><b>Q5</b></td><td><b>非漏洩</b></td><td>問題文・図・ヒントに答えが含まれない。図は解くのに必要な情報のみ</td><td><span class="vlevel">V1</span>／<span class="vlevel">V2</span></td></tr>
+  <tr><td><b>Q6</b></td><td><b>自然さ</b></td><td>人間の教材として自然（言い回し・単位・図のレイアウト・現実性）。「AIが作った変な問題」と生徒に思われた瞬間に信頼を失う</td><td><span class="vlevel">V3</span>＋<span class="vlevel">V4</span></td></tr>
+  <tr><td><b>Q7</b></td><td><b>採点・追跡適合</b></td><td>途中過程が採点可能な粒度、概念タグが正しい（BKT・要因分析が機能する）</td><td><span class="vlevel">V2</span>＋結合テスト</td></tr>
 </table>
 
 <div class="callout">
-  <b class="tag">検証コストの原則（確定済み方針）</b>
-  数学的に検証できるもの（Q1/Q2/Q3構造/Q5）に LLM を浪費しない。LLM でしか測れない意味的品質（Q4/Q6）にだけ LLM を使い、<b>全体評価（広く安く候補を特定）→個別評価（絞って深く判定）</b>の二段で使う。
+  <b class="tag">検証コストの原則</b>
+  機械で検証できるもの（Q1/Q2/Q3構造/Q5/Q7）に LLM を使わない。LLM でしか測れない意味的品質（Q4/Q6）にだけ使い、全体スキャン（安く広く）→個別判定（深く狭く）の二段で運用する。
 </div>
 
 <!-- ============================================================ -->
-<h2 id="s8">8. 非機能要件（N）</h2>
+<h2 id="s7">7. 非機能要件（N）</h2>
 <table>
-  <tr><th style="width:64px">ID</th><th>要件</th><th>内容</th></tr>
-  <tr><td><b>N-1</b></td><td>moat 不可侵</td><td>SymPy が確定した答え・数値・logic_steps はいかなる層・いかなる修正でも改変しない</td></tr>
-  <tr><td><b>N-2</b></td><td>正しさの LLM 非依存</td><td>LLM は L4（翻訳）と Q4/Q6 監査のみに使う。正しさの経路・検証ゲートには入れない</td></tr>
-  <tr><td><b>N-3</b></td><td>生成コスト</td><td>1問あたりの LLM 呼び出しは翻訳に必要な最小回数。構造生成・検証はゼロコスト（決定論）。※世代②③の反省</td></tr>
-  <tr><td><b>N-4</b></td><td>回帰ゲート</td><td><code>SKIP_LLM_IN_TESTS=true .venv/bin/pytest tests/ -q</code>（現465）常時グリーン・契約違反0・生成不能form0 を維持。座標系変更時は全座標スキャンを再実行</td></tr>
-  <tr><td><b>N-5</b></td><td>データの正</td><td>入力座標系の正は <code>input_spec_2026-07-08.json</code>（唯一）。mapping.json はそれへの追従物。仕様と実装が食い違ったら仕様が勝つ</td></tr>
-  <tr><td><b>N-6</b></td><td>再現性</td><td>すべての生成は seed で再現可能（障害報告・監査・回帰テストの前提）</td></tr>
+  <tr><th style="width:56px">ID</th><th>項目</th><th>要件</th></tr>
+  <tr><td><b>N-1</b></td><td>正しさの不可侵</td><td>決定論的に確定した答え・途中過程は、以後のどの層（図・翻訳・監査・修正）も改変しない</td></tr>
+  <tr><td><b>N-2</b></td><td>レイテンシ</td><td>授業内供給（戻り先問題・次の問題）は<b>体感即時（≤3秒）</b>。オンデマンド生成は ≤60秒（宿題・バッチは非同期可）。実現方式（プール等）は要件でなく設計＝D-3 で確定。<span class="small">※数値は仮置き</span></td></tr>
+  <tr><td><b>N-3</b></td><td>生成コスト</td><td><b>1問あたりコスト上限を持つ</b>。事業計画の API 予算（A案 ¥500／B案 ¥3,000 /生徒/月）は<b>採点エンジン等も含む全システム分</b>であり、生成の取り分はその一部——B案前提でも ≤¥10/問、A案では ¥1〜2/問水準が必要。採点との予算配分を D-1 で確定。再利用（プール等）による償却で圧縮</td></tr>
+  <tr><td><b>N-4</b></td><td>紙適合</td><td>問題・図・解答は印刷（モノクロ紙）で成立する（「紙の現場に溶け込む」がモンジェネの差別化。宿題印刷・親御さん確認用）</td></tr>
+  <tr><td><b>N-5</b></td><td>回帰ゲート</td><td>決定論テスト常時グリーン・契約違反0・capabilities全座標の生成不能0。座標系・スペック変更時は全走査を再実行</td></tr>
+  <tr><td><b>N-6</b></td><td>データの正</td><td>カリキュラムモデルが座標系の唯一の正（数学初版=input_spec_2026-07-08.json）。実装が食い違ったら仕様が勝つ</td></tr>
+  <tr><td><b>N-7</b></td><td>可用性・規模</td><td>塾の授業時間帯に安定稼働。当面の規模は小（実証: 数十名〜500名）。インフラは軽量（サーバー予算 ¥4,000/月）。複数塾への提供（B2B A案）のテナント分離は M3 以降の検討</td></tr>
+  <tr><td><b>N-8</b></td><td>個人情報</td><td>エンジンは生徒個人データを保持しない（座標・目的のみ受け取る）。苦手プロファイル等はホスト側</td></tr>
 </table>
 
 <!-- ============================================================ -->
-<h2 id="s9">9. 現状ギャップと優先順位</h2>
-<p>2026-07-08 の静的スキャン（<code>docs/phase2_form_gap_scan.py</code>）による、input_spec（あるべき座標系・375 form-cell）と現行エンジンの差分：</p>
+<h2 id="s8">8. 多科目展開の要件</h2>
+<p>最終目標＝中学5科目（数学・英語・理科・社会・国語）。<b>コアは科目非依存、科目固有物はパックに閉じ込める</b>（F-18）。科目で本質的に違うのは次の3点であり、これらを「パックが宣言するもの」と定義する：</p>
 
 <table>
-  <tr><th>分類</th><th>件数</th><th>意味</th><th>対応</th></tr>
-  <tr><td>ok</td><td><b>0</b></td><td>そのまま一致するセルは実質ゼロ</td><td>—</td></tr>
-  <tr><td>new_form</td><td><b>110</b></td><td>求値59・図表47・作図4：エンジンに form 語彙が無い（旧 visual が3分裂）</td><td>F-2/F-3（語彙登録→既存能力の流用可否をセル単位で判定）</td></tr>
-  <tr><td>level_remap</td><td><b>233</b></td><td>配線済みだが難易度段の集合がずれている（band絶対化の影響）</td><td>F-7（mapping の外科編集）</td></tr>
-  <tr><td>wire_only</td><td><b>32</b></td><td>語彙はあるが当該単元に未配線（安い）</td><td>F-7 と同時に配線</td></tr>
+  <tr><th>パックが宣言するもの</th><th>数学（現行）</th><th>他科目の見通し</th></tr>
+  <tr>
+    <td><b>① タクソノミー</b><br>単元・形式・難易度段・知識グラフ・誤答要因</td>
+    <td>184単元×7型×band絶対Lv（input_spec 確定済み）</td>
+    <td>科目ごとに再設計（英語: 文法項目×技能、理科: 分野×計算/知識…）。<b>形式の型集合は科目ごとに異なってよい</b></td>
+  </tr>
+  <tr>
+    <td><b>② 生成部品と供給源</b><br>題材部品・解法・テンプレート／バンク</td>
+    <td>決定論ソルバ（SymPy）による構成的生成</td>
+    <td>英語: 文法パターン＋語彙辞書（準決定論）／理科: 計算=数学同型＋知識=fact DB／社会: fact DB／国語: 題材バンク＋設問生成（F-21）</td>
+  </tr>
+  <tr>
+    <td><b>③ 検証水準の宣言</b><br>各QをどのVで保証するか</td>
+    <td>Q1=V1（SymPy恒真）</td>
+    <td>Q1 の到達水準は科目で異なる（英語=V2辞書/文法、社会=fact DB照合、国語=V3+V4）。<b>「数学と同じ保証はできない」ことを設計が正直に扱う</b></td>
+  </tr>
 </table>
 
-<p>加えて、要件に直接違反している既知欠陥：</p>
-<table>
-  <tr><th>欠陥</th><th>違反要件</th><th>場所</th></tr>
-  <tr><td>図が form 非依存で常に生成される</td><td>F-8 / Q2</td><td><code>blueprint_runner.py:317</code></td></tr>
-  <tr><td>交点マーカーのラベルに答え座標を出力（計算問題にも答え入り図が付く）</td><td>F-8 / Q5</td><td><code>visuals/builder.py:855</code></td></tr>
-</table>
-
-<h3>9.1 実装の優先順位（要件確定後）</h3>
-<ol>
-  <li><b>F-8 の欠陥除去</b>（図の form 従属化＋答えラベル抑止）— 方針非依存で今すぐ潰せる Q5 違反</li>
-  <li><b>F-2 語彙登録</b>（3新 form の enum・契約・分岐。「未知 form で落ちない」土台）</li>
-  <li><b>F-3 new_form 110 の二分</b>（既存 blueprint の能力で足りるセル→分岐＋配線／要新規→blueprint/builder 追加）</li>
-  <li><b>F-7 難易度再配線</b>（level_remap 233＋wire_only 32 を input_spec に追従）</li>
-  <li><b>F-5 capabilities API</b>（全座標スキャンが常態化した後）</li>
-</ol>
+<div class="callout warn">
+  <b class="tag">多科目要件の含意（重要）</b>
+  コアに「SymPy」「図形」「数式」を焼き付けてはならない。コアが知ってよいのは<b>抽象契約のみ</b>：座標系・Problem契約・「検証器を通ったものだけ出す」枠組み・翻訳/監査基盤・プール。数学の SymPy moat は「数学パックの検証器が V1 水準」という一宣言に位置づけ直す。これが「大元を変更せずに科目を足す」の正体である。
+</div>
 
 <!-- ============================================================ -->
-<h2 id="s10">10. 未決事項（ユーザー決定待ち）</h2>
+<h2 id="s9">9. アーキテクチャ方針（失敗診断と設計原則）</h2>
+
+<h3>9.1 なぜ実装が失敗し続けたか（正直な診断）</h3>
+<p>結論から：<b>blueprint×atom という発想自体は誤りではない</b>（組合せで無限性を得る・追加のみで拡張する、は本書でも F-3/F-19 として維持）。失敗の真因は発想ではなく、次の4点にある。</p>
 <table>
-  <tr><th style="width:56px">ID</th><th>論点</th><th>選択肢と推奨</th></tr>
+  <tr><th style="width:30px">#</th><th>真因</th><th>何が起きたか</th></tr>
+  <tr><td>1</td><td><b>要件の不在</b></td><td>「何ができたら完成か」（本書のQ）が定義されず、実装は「とにかく生成が通る」ことに最適化された。ゲートは「壊れていない」ことは保証したが「意図通り」であることは誰も測らなかった</td></tr>
+  <tr><td>2</td><td><b>著作単位の粒度ミスマッチ（最大）</b></td><td>教育的な意図の単位は「単元×形式×難易度段」のセル（約1,000セル）なのに、実装の単位は27個の Python クラス（blueprint）だった。1クラスが数十セルを兼務した結果、<b>セルごとの意図を書く場所がどこにもない</b>。「同じ問題ばかり出る」「難易度を上げても構造が変わらない」「形式を無視する」は全てこの帰結</td></tr>
+  <tr><td>3</td><td><b>意図の非伝搬</b></td><td>形式・目的・難易度が生成パイプラインの末端（図・翻訳）まで届かず、図が形式を無視して常に描かれ、答えまで図に書かれた</td></tr>
+  <tr><td>4</td><td><b>教育知識のコード埋没</b></td><td>単元定義・難易度の意味・誤答要因といった「教育の知識」がコードと設定に散在し、教育者がレビュー・編集できなかった（＝イメージが実装者に伝わらない構造）</td></tr>
+</table>
+
+<h3>9.2 設計原則（要件から導出）</h3>
+<div class="principle"><b class="pnum">P1 薄いコア・科目非依存</b> — コアは契約の解釈器＋検証枠組み＋翻訳/監査基盤＋プールのみ。科目・単元・題材の知識を持たない（F-18）。</div>
+<div class="principle"><b class="pnum">P2 著作の単位＝セルに紐づく宣言的スペック</b> — 「この単元・この形式・この段の問題はこういうものだ」を書く場所を、<b>コードでなく宣言的データ（問題族スペック）</b>として1セル単位に持つ。教育者が読める形式にする（真因2・4の直接対策）。</div>
+<div class="principle"><b class="pnum">P3 部品は共有ライブラリ</b> — 題材部品（atom）と解法・検証部品（solver/verb）はスペックから参照される共有資産。部品追加で全スペックの生成空間が同時に広がる（F-19。blueprint×atom の正統な継承部分）。</div>
+<div class="principle"><b class="pnum">P4 意図の全層伝搬</b> — 座標・目的は Problem 完成まで全段に渡り、図・翻訳もそれに従属する（真因3の対策・F-15/F-16）。</div>
+<div class="principle"><b class="pnum">P5 検証を通ったものだけが存在する</b> — generate-then-verify。検証器（V1〜V3）はパックが宣言し、コアは枠組みだけ持つ（F-14・§8）。</div>
+<div class="principle"><b class="pnum">P6 カリキュラムモデルの独立</b> — 教育の知識（単元・知識グラフ・誤答要因・クリア基準）はエンジン外のデータ資産。教育者が編集し、エンジンとホストが共有参照する（§3）。</div>
+
+<h3>9.3 推奨アーキテクチャ（設計案・要件ではない）</h3>
+<div class="arch">
+  <div class="arch-row">
+    <div class="arch-box" style="flex:2"><b>ホスト（Education OS）</b>授業OS・採点・適応学習(BKT)・UI・印刷</div>
+  </div>
+  <div class="arch-note">▼ generate(座標, purpose, seed) ／ capabilities ▲ Problem</div>
+  <div class="arch-row">
+    <div class="arch-box kernel" style="flex:2"><b>コア（科目非依存）</b>契約解釈・スペック実行・検証枠組み・LLM翻訳/監査基盤・プール・再現性</div>
+    <div class="arch-box data"><b>カリキュラムモデル</b>単元・形式・段・知識グラフ・誤答要因・クリア基準<br><span class="small">（教育者が編集）</span></div>
+  </div>
+  <div class="arch-row">
+    <div class="arch-box data"><b>問題族スペック</b><span class="small">セル単位の宣言的定義：題材制約・構造・問い・段差・図要否</span></div>
+    <div class="arch-box moat"><b>数学パック</b><span class="small">atom部品・SymPyソルバ（V1検証）・form検査器・図ビルダ</span></div>
+    <div class="arch-box data"><b>（将来）他科目パック</b><span class="small">英・理・社・国：部品＋検証器＋バンク接続</span></div>
+  </div>
+  <div class="arch-note">生成＝スペックが部品を組み合わせ（seed抽選）→ ソルバが答え確定 → 検証 → 図 → 翻訳 → Problem</div>
+</div>
+
+<p><b>blueprint×atom との関係</b>：atom（部品）と verb/solver（解法・検証）はそのまま生きる。変わるのは <b>blueprint の実装形</b>——「Python クラス」から「<b>宣言的な問題族スペック（データ）＋それを実行する小さなコア</b>」へ分解する。これにより：</p>
+<ul>
+  <li>セルごとの教育的意図に<b>書く場所</b>ができる（1スペック=1〜数セル。1クラス=数十セルの兼務が消える）</li>
+  <li>スペックはデータなので、<b>教育者がレビューでき、LLM に下書きさせて人が検収する</b>制作フローが組める（約1,000セルのスケール手段）</li>
+  <li>「追加のみで拡張」がむしろ強まる（スペック追加=ファイル追加。コード修正なし）</li>
+</ul>
+
+<h3>9.4 mongene-v2 資産の扱い（移行方針案・要件ではない。リポジトリの扱いは D-6）</h3>
+<table>
+  <tr><th>資産</th><th>評価</th><th>扱い</th></tr>
+  <tr><td>SymPy ソルバ群（verb 33種）・決定論検証の枠組み（ゲート）</td><td class="small">価値の核。Q1=V1 の実現物</td><td><b>数学パックへ移設・継続利用</b></td></tr>
+  <tr><td>atom 部品群（21種）・タグ選択機構</td><td class="small">P3 に適合</td><td><b>継続利用</b></td></tr>
+  <tr><td>input_spec_2026-07-08.json（座標系）</td><td class="small">確定済みの教育資産</td><td><b>カリキュラムモデルの数学初版へ昇格</b>（知識グラフ・誤答要因を拡張）</td></tr>
+  <tr><td>LLM翻訳プロンプト・忠実性ゲート・監査ループの知見</td><td class="small">実戦で鍛えた資産</td><td><b>コアの翻訳/監査基盤へ継承</b></td></tr>
+  <tr><td>27 blueprint クラス群・mapping.json の配線</td><td class="small">真因2の担体</td><td><b>問題族スペックへ分解・移行</b>（能力は部品として救出。クラス自体は段階的に廃止）</td></tr>
+</table>
+<p class="small">つまり「全部書き直し」ではない。moat・部品・座標系・翻訳知見を保ちながら、<b>著作単位だけを組み替える</b>再構築である。</p>
+
+<!-- ============================================================ -->
+<h2 id="s10">10. 段階計画（事業マイルストーン整合）</h2>
+<p>経営計画: 2026/08 Layer1プロトタイプ → 2026/10 知人塾テスト → 2027/03 v1.0 → 2027/04 阿武町実証。エンジンの計画をこれに整合させる。</p>
+
+<table>
+  <tr><th style="width:60px">段階</th><th>期間</th><th>スコープ</th><th>完了の定義（DoD）</th></tr>
   <tr>
-    <td><b>D-1</b></td>
-    <td><b>無限性の要求水準</b>：1セルあたり何をもって「十分なバリエーション」とするか</td>
-    <td>推奨：<b>異 seed 100 回生成で MR 重複率 ≤ 20%</b> を F-6 の受け入れ基準に採用（数値だけ違う問題は重複とみなさない緩和は D-1b として別途）</td>
+    <td><b>M0</b><br>金の縦串</td><td>〜2026/08 上旬</td>
+    <td>本書確定 → コア骨格＋数学パック骨格 → <b>代表1単元</b>（知人塾のテスト範囲から選定=D-4）で 全形式×全段×purpose(base/remedial) を完全達成</td>
+    <td>縦串単元の全セルが Q1〜Q7 合格・F-1/2/3/5/9 動作。<b>これが以後の全セルの「合格見本」になる</b></td>
   </tr>
   <tr>
-    <td><b>D-2</b></td>
-    <td><b>完成の単位</b>：375セル一括で進めるか、代表単元1本を Q1〜Q6 完全達成（金の縦串）してから横展開するか</td>
-    <td>推奨：<b>金の縦串</b>。まず1単元（例：三平方の定理 g3_l51〜）で7型×全Lvを完成させ「合格セルの見本」を作る。場当たり修正を止める唯一の方法</td>
+    <td><b>M1</b><br>知人塾MVP</td><td>〜2026/10</td>
+    <td>テスト対象学年の単元へ横展開。remedial(F-7)・ヒント(F-8)・タグ(F-11)・採点結合(F-12)・プール(F-22)・capabilities(F-6)。<br><span class="small"><b>前提依存</b>: カリキュラムモデル初版（知識グラフ・誤答要因＝D-5 の体制で整備）が M1 中盤までに存在すること。遅れると F-7/F-10/F-11 が連鎖して落ちる</span></td>
+    <td>エンジン単体で検証可能な DoD: 対象学年×テスト範囲の capabilities 網羅・全セル Q1〜Q7 合格・採点結合テスト合格。<span class="small">参考（チーム全体の統合DoD）: 授業1コマがエンジン供給の問題だけで回り、先生が問題を探さない</span></td>
   </tr>
   <tr>
-    <td><b>D-3</b></td>
-    <td><b>「かく」問題の解答表現</b>：graph_table（グラフをかく）・construction（作図）は生徒の作業が解答になる。エンジンは何を「answer」として返すか</td>
-    <td>推奨：<b>模範解答図（SVG）＋検証可能な特徴点リスト</b>（例：通るべき2点・切片）を answer.extras に格納。採点方式はホスト責務とし境界を明記</td>
+    <td><b>M2</b><br>v1.0</td><td>〜2027/03</td>
+    <td>中学数学全単元。final(F-10)・セット組成(F-13)・類題B/C(F-4)・カリキュラム改訂耐性(F-20)。監査ループ常態化(F-17)</td>
+    <td>capabilities 全座標で生成不能0・破綻流出0。FoundingBase デモに耐える</td>
   </tr>
   <tr>
-    <td><b>D-4</b></td>
-    <td><b>ホストAPIの具体形</b>：capabilities のスキーマ・Problem スキーマの版管理（教育システム側の要求仕様）</td>
-    <td>ホスト側の設計が見えた時点で確定（本書 v1.1 で追記）。それまで F-5 は内部スキャンツールとして先行実装</td>
+    <td><b>M3</b><br>実証・拡張</td><td>2027/04〜</td>
+    <td>阿武町実証の現場FBで品質改善。<b>第2科目パイロット</b>（推奨: 理科——計算問題が数学パック資産をそのまま使え、F-18 の実証に最適）<br><span class="small">⚠ 阿武町の対象は<b>小学生約24名＋中学生約10名</b>。小学算数の扱いは未決（D-7）——本書の座標系は現在中学数学のみ</span></td>
+    <td>継続率KPIへの寄与を計測。第2科目がコア diff 0 で追加できたこと（F-18 実証）</td>
   </tr>
 </table>
 
+<p class="small">注: 経営計画書の「〜2026/07末 問題生成v1・知人塾テスト実施」「2027/02 FoundingBase デモ」とは日付のズレがある。デモ・テストに必要な最低水準（M1相当／M2途中）をチーム計画と突合して確定すること（D-4 と併せて）。</p>
+
+<div class="callout">
+  <b class="tag">進め方の規律（場当たり防止）</b>
+  ① 全ての作業は F/Q 番号を宣言して行う。② セルの完成は Q1〜Q7 で判定し、部分的な「動いた」で先へ進まない。③ M0 の縦串が合格するまで横展開しない——<b>1つの完全な見本が、1000個の中途半端に勝る</b>。
+</div>
+
 <!-- ============================================================ -->
-<h2 id="s11">11. 用語集</h2>
+<h2 id="s11">11. 未決事項（ユーザー決定待ち）</h2>
 <table>
-  <tr><th style="width:180px">用語</th><th>定義</th></tr>
-  <tr><td>moat（堀）</td><td>SymPy が決定論計算した答え・数値・logic_steps。システムの正しさの源泉であり不可侵</td></tr>
-  <tr><td>blueprint</td><td>問題の構造（部品スロット＋操作＋問い）。27種</td></tr>
-  <tr><td>atom（noun）</td><td>交換可能な部品（図形・数・式など）。タグで blueprint のスロットに応募する。21種</td></tr>
-  <tr><td>verb</td><td>atom への数学操作。SymPy で解き logic_steps を残す。33種</td></tr>
-  <tr><td>MR（中間表現）</td><td>構造・atom・答えが確定した問題の内部表現。LLM 翻訳の入力</td></tr>
-  <tr><td>mapping.json</td><td>単元→blueprint・form・難易度制約の配線データ（184レッスン）</td></tr>
-  <tr><td>input_spec</td><td><code>docs/input_spec_2026-07-08.json</code>。あるべき入力座標系（184単元×7型×band絶対Lv）の唯一の正</td></tr>
-  <tr><td>form（7型）</td><td>知識／計算／求値／作図／図・グラフ・表／証明・説明／文章題。判別軸＝与えられるもの・立式の有無・現実場面の有無</td></tr>
-  <tr><td>band / Lv</td><td>難易度帯。基礎=Lv1／標準=Lv2／応用=Lv3／発展=Lv4 の絶対値。構造的に区別できる段のみ実在</td></tr>
-  <tr><td>ゲート G0〜G7</td><td>決定論検証：G0 form対応／G1 答え漏洩／G2 数値接地／G3(G5) clean／G4 verb契約／G6 退化／G7 重複</td></tr>
-  <tr><td>form-cell / セル</td><td>座標 (unit × form) またはそこに level を加えた1点。品質判定の最小単位</td></tr>
+  <tr><th style="width:56px">ID</th><th>論点</th><th>推奨</th></tr>
+  <tr><td><b>D-1</b></td><td><b>重複の同値定義・無限性の下限・コスト配分</b>：「何をもって同一問題とみなすか」（数値のみ変更を重複と数えるか等。F-3 の測定と options.avoid の判定の前提）、重複率の閾値、採点エンジンとの予算配分を含む1問コスト（N-3）</td><td>同値定義=「構造＋正規化した数値の一致」を仮採用。異seed 100回で重複率≤20%・B案≤¥10/問・A案≤¥2/問 を仮置きし、M0 で実測して見直す</td></tr>
+  <tr><td><b>D-2</b></td><td><b>採点エンジンとの共同スキーマ</b>：solution_steps の粒度・answer 形式（F-12）</td><td>舛田さんと M0 期間中にスキーマ合意（エラー4分類が途中式のどの粒度を要るかが決め手）。本書 §4.2 を叩き台に。合意前の M0 暫定粒度は「式変形1ステップ＝1要素」とする（M0 実装を止めないため）</td></tr>
+  <tr><td><b>D-3</b></td><td><b>供給方式</b>：授業内は事前生成プール＋非同期補充（推奨）か、常時オンデマンドか</td><td>ハイブリッド推奨（N-2/N-3 を同時に満たす唯一の現実解）。プールの鮮度・容量は M1 で調整</td></tr>
+  <tr><td><b>D-4</b></td><td><b>M0 縦串単元の選定</b></td><td>知人塾テスト（2026/10）の対象学年・進度から逆算して1単元。候補: 一次方程式 or 一次関数（形式が豊富で remedial 連鎖の見本になる）</td></tr>
+  <tr><td><b>D-5</b></td><td><b>カリキュラムモデルの編集体制</b>：知識グラフ・誤答要因・クリア基準・インプット素材を誰がどう作るか。<b>採点のエラー4分類（読解/変換/処理/書き写し）と誤答要因語彙の対応設計</b>を含む（UC-7 の接続部）</td><td>高橋さん（塾講師5年の現場知）が編集主体、LLM が下書き、エンジン側が整合検証。編集可能なデータ形式は M0 で設計</td></tr>
+  <tr><td><b>D-6</b></td><td><b>mongene-v2 リポジトリの扱い</b>：現リポジトリ内で再構築か、新リポジトリか</td><td>現リポジトリ内で新構造を並行構築し、資産（§9.4）を移設しながら旧構造を段階廃止（履歴・テスト資産を保つ）</td></tr>
+  <tr><td><b>D-7</b></td><td><b>小学算数の扱い</b>：阿武町実証（2027/04〜）の対象は小学生約24名＋中学生約10名だが、エンジンの座標系は現在中学数学のみ</td><td>M2 までに要判断。含めるなら小学算数のカリキュラムモデル＋数学パック拡張で対応（コアの変更は不要のはず＝F-18/F-20 の範囲で吸収）。含めないなら実証 KPI の計測範囲を中学生に限定すると明記</td></tr>
+</table>
+
+<!-- ============================================================ -->
+<h2 id="s12">12. 用語集</h2>
+<table>
+  <tr><th style="width:190px">用語</th><th>定義</th></tr>
+  <tr><td>問題供給エンジン</td><td>本書の対象。座標＋目的→検証済み問題1件を返す装置（モンジェネの中核）</td></tr>
+  <tr><td>座標</td><td>(subject, unit, form, level)。問題の教育的な住所</td></tr>
+  <tr><td>purpose（目的）</td><td>base（ベース問題）/ final（最終問題）/ remedial（戻り先）/ variant（類題A/B/C）。宿題・模試は purpose ではなくセット組成（F-13）のセット種別</td></tr>
+  <tr><td>カリキュラムモデル</td><td>単元タクソノミー・知識グラフ（前提DAG）・誤答要因語彙・クリア基準を持つ共有データ資産。教育者が編集</td></tr>
+  <tr><td>問題族スペック</td><td>セル（座標）単位の宣言的な問題定義（題材制約・構造・問い・段差・図要否）。著作の単位（設計案）</td></tr>
+  <tr><td>atom / solver</td><td>共有部品。atom=題材部品（図形・数・式…）、solver=解法・検証演算（数学: SymPy）。追加のみで生成空間が拡大</td></tr>
+  <tr><td>科目パック</td><td>科目固有物の集合: タクソノミー・部品・供給源・検証器（検証水準の宣言を含む）</td></tr>
+  <tr><td>検証水準 V1〜V4</td><td>V1 決定論恒真／V2 ルール／V3 LLM監査／V4 人間サンプリング</td></tr>
+  <tr><td>金の縦串</td><td>代表1単元を Q1〜Q7 完全合格させた「見本」。横展開の基準器</td></tr>
+  <tr><td>完全習得学習</td><td>Bloom のマスタリーラーニング。習得判定（BKT85%等）を満たすまで問題を出し続ける——無限供給の存在理由</td></tr>
+  <tr><td>エラー4分類</td><td>採点エンジンの誤答分類: 読解・理解／変換／処理／書き写し（未踏提案書）</td></tr>
+  <tr><td>ベース問題／最終問題</td><td>ステージ進行の2段階。最終問題＝単元の必須要素を全て満たす合成問題（解けたら単元クリア）</td></tr>
 </table>
 
 <p class="small" style="margin-top:40px; border-top: 1px solid var(--line); padding-top: 12px;">
-mongene-v2 要件定義書 v1.0（ドラフト・2026-07-11）／本書確定後、HANDOFF・実装計画は本書の F/Q/N 番号を参照して進める。
+問題供給エンジン「モンジェネ」要件定義書 v2.0（ドラフト・2026-07-11）／確定後、全実装・全レビューは本書の F/Q/N/D 番号を参照して進める。v1.0 からの主な変更: エンジン単体の視点 → 学習ループ（Education OS）全体から要件を導出し直し、購読者を「問題を選ぶ生徒」から「完全習得学習のサイクル」へ拡張。設計（blueprint×atom）を要件から分離し、失敗診断と設計原則を追加。
 </p>
 
 </div>
