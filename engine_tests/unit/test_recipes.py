@@ -263,6 +263,45 @@ def test_read_slope_intercept_double_solve_property(seed):
 
 
 # ---------------------------------------------------------------------------
+# math.solve_equation_for_y（g2_l26.calculation Lv1）— 横展開#5（ax+by=c→y=…）
+# ---------------------------------------------------------------------------
+def test_solve_equation_for_y_lv1_construct():
+    ctx = _make_ctx("math.g2_l26.calculation", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    recipe = REGISTRY.recipe(ctx.spec_level.recipe)
+    mr = recipe(ctx, rng)
+
+    assert mr.signature == "solve_two_var_equation_for_y"
+    assert set(mr.given.keys()) == {"equation"}
+    assert "=" in mr.given["equation"]  # ax+by=c の等式
+    assert mr.visual_plan is None  # calculation は図なし
+    sq = mr.sub_questions[0]
+    assert sq.asked == "simplified_expr"
+    assert sq.cause_tags == []
+    assert [s.op for s in sq.steps] == ["isolate_y_term", "divide_by_coefficient"]
+    # 答えは y = mx + k の式（結果は整数係数の clean な式）
+    assert sq.answer.display.startswith("y = ")
+
+
+@pytest.mark.parametrize("seed", range(200))
+def test_solve_equation_for_y_double_solve_property(seed):
+    ctx = _make_ctx("math.g2_l26.calculation", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    recipe = REGISTRY.recipe(ctx.spec_level.recipe)
+    mr = recipe(ctx, rng)
+
+    solver = REGISTRY.solver("math.solve_equation_for_y")
+    sol = solver(
+        sympy.sympify(mr.params["a"]),
+        sympy.sympify(mr.params["b"]),
+        sympy.sympify(mr.params["c"]),
+    )
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+    # y の係数 b は正・2 以上（非自明な除算）
+    assert sympy.sympify(mr.params["b"]) >= 2
+
+
+# ---------------------------------------------------------------------------
 # math.rate_of_change（g2_l20.find_value Lv1）— 横展開の第1セル
 # ---------------------------------------------------------------------------
 def test_rate_of_change_lv1_construct():
@@ -416,4 +455,7 @@ def test_recipes_declare_provides_concepts():
     })
     assert REGISTRY.recipe_concepts("math.read_slope_intercept") == frozenset({
         "graph.read_slope_intercept",
+    })
+    assert REGISTRY.recipe_concepts("math.solve_equation_for_y") == frozenset({
+        "linear_function.solve_equation_for_y",
     })

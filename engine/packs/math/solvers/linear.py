@@ -19,26 +19,28 @@ def _format_number(v: sympy.Expr) -> str:
     return str(sympy.sstr(v))
 
 
-def _format_expr_display(a: sympy.Expr, b: sympy.Expr) -> str:
-    """y = a*x + b を日本語的な標準表示形にする（例: "y = 3x - 1"）。"""
+def _format_linear_rhs(a: sympy.Expr, b: sympy.Expr) -> str:
+    """a*x + b の右辺表示（例: "3x - 1", "-x", "5"）。"""
     a_s = sympy.nsimplify(a)
     b_s = sympy.nsimplify(b)
     if a_s == 0:
-        rhs = _format_number(b_s)
+        return _format_number(b_s)
+    if a_s == 1:
+        a_part = "x"
+    elif a_s == -1:
+        a_part = "-x"
     else:
-        if a_s == 1:
-            a_part = "x"
-        elif a_s == -1:
-            a_part = "-x"
-        else:
-            a_part = f"{_format_number(a_s)}x"
-        if b_s == 0:
-            rhs = a_part
-        elif b_s > 0:
-            rhs = f"{a_part} + {_format_number(b_s)}"
-        else:
-            rhs = f"{a_part} - {_format_number(-b_s)}"
-    return f"y = {rhs}"
+        a_part = f"{_format_number(a_s)}x"
+    if b_s == 0:
+        return a_part
+    if b_s > 0:
+        return f"{a_part} + {_format_number(b_s)}"
+    return f"{a_part} - {_format_number(-b_s)}"
+
+
+def _format_expr_display(a: sympy.Expr, b: sympy.Expr) -> str:
+    """y = a*x + b を日本語的な標準表示形にする（例: "y = 3x - 1"）。"""
+    return f"y = {_format_linear_rhs(a, b)}"
 
 
 def _build_expr(a: sympy.Expr, b: sympy.Expr) -> sympy.Expr:
@@ -441,6 +443,56 @@ def y_range_over_domain(
     return Solution(answer=answer, steps=steps)
 
 
+def _format_two_var_equation(a: sympy.Expr, b: sympy.Expr, c: sympy.Expr) -> str:
+    """2元1次方程式 a x + b y = c の表示形（例: "4x + 2y = 10", "-3x + 2y = 6"）。
+
+    b > 0 を前提とする（recipe が保証）。a は任意符号、a≠0・b≠0。
+    """
+
+    def coeff_term(coeff: sympy.Expr, var: str) -> str:
+        mag = abs(coeff)
+        mag_part = "" if mag == 1 else _format_number(mag)
+        return f"{mag_part}{var}"
+
+    ax = ("-" if a < 0 else "") + coeff_term(a, "x")
+    by = coeff_term(b, "y")  # b > 0
+    return f"{ax} + {by} = {_format_number(c)}"
+
+
+@register_solver("math.solve_equation_for_y")
+def solve_equation_for_y(a: object, b: object, c: object) -> Solution:
+    """2元1次方程式 a x + b y = c を y について解く（g2_l26.calculation Lv1）。
+
+    b y = c - a x → y = (c - a x)/b = (-a/b) x + c/b。答えは y = m x + k の式。
+    """
+    a_s, b_s, c_s = sympy.nsimplify(a), sympy.nsimplify(b), sympy.nsimplify(c)
+    if b_s == 0:
+        raise ValueError("y の係数 b が 0 で y について解けない")
+
+    m = -a_s / b_s
+    k = c_s / b_s
+    expr = _build_expr(m, k)
+
+    steps = [
+        Step(
+            op="isolate_y_term",
+            args=[_format_two_var_equation(a_s, b_s, c_s)],
+            result_srepr=sympy.srepr(sympy.Eq(b_s * Y, c_s - a_s * X)),
+            result_display=f"{_format_number(b_s)}y = {_format_linear_rhs(-a_s, c_s)}",
+            narration="x の項を右辺に移項し、y の項だけを左辺に残す。",
+        ),
+        Step(
+            op="divide_by_coefficient",
+            args=[_format_number(b_s)],
+            result_srepr=sympy.srepr(expr),
+            result_display=_format_expr_display(m, k),
+            narration="両辺を y の係数で割り、y = の形にする。",
+        ),
+    ]
+    answer = SymbolicAnswer(srepr=sympy.srepr(expr), display=_format_expr_display(m, k))
+    return Solution(answer=answer, steps=steps)
+
+
 __all__ = [
     "linear_expr_from_two_points",
     "linear_expr_from_slope_point",
@@ -450,4 +502,5 @@ __all__ = [
     "rate_of_change_from_two_points",
     "intersection_of_two_lines",
     "y_range_over_domain",
+    "solve_equation_for_y",
 ]

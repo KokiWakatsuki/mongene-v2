@@ -50,6 +50,14 @@ GRAPH_READ_SLOPE_INTERCEPT_V1 = (
 
 
 # ---------------------------------------------------------------------------
+# g2_l26.calculation Lv1: ax+by=c を y=… に変形する（横展開#5・最初の calculation セル）
+# ---------------------------------------------------------------------------
+LF_SOLVE_FOR_Y_V1 = (
+    "2元1次方程式 {{ given.equation }} を、y について解いた式（y = … の形）に変形せよ。"
+)
+
+
+# ---------------------------------------------------------------------------
 # g2_l20.find_value Lv1: 2点から変化の割合を求める（横展開の第1セル）
 # ---------------------------------------------------------------------------
 LF_RATE_OF_CHANGE_V1 = (
@@ -85,6 +93,7 @@ def _register_all() -> None:
     REGISTRY.register_template("lf_expr_parallel_v1", LF_EXPR_PARALLEL_V1)
     REGISTRY.register_template("graph_read_two_points_v1", GRAPH_READ_TWO_POINTS_V1)
     REGISTRY.register_template("graph_read_slope_intercept_v1", GRAPH_READ_SLOPE_INTERCEPT_V1)
+    REGISTRY.register_template("lf_solve_for_y_v1", LF_SOLVE_FOR_Y_V1)
     REGISTRY.register_template("lf_rate_of_change_v1", LF_RATE_OF_CHANGE_V1)
     REGISTRY.register_template("lf_intersection_v1", LF_INTERSECTION_V1)
     REGISTRY.register_template("lf_y_range_v1", LF_Y_RANGE_V1)
@@ -100,6 +109,7 @@ __all__ = [
     "LF_EXPR_PARALLEL_V1",
     "GRAPH_READ_TWO_POINTS_V1",
     "GRAPH_READ_SLOPE_INTERCEPT_V1",
+    "LF_SOLVE_FOR_Y_V1",
     "LF_RATE_OF_CHANGE_V1",
     "LF_INTERSECTION_V1",
     "LF_Y_RANGE_V1",

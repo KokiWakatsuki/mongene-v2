@@ -71,6 +71,15 @@ def double_solve_read_slope_intercept(mr: MR) -> Solution:
     return cast(Solution, solver(p1, p2))
 
 
+@register_checker("math.solve_equation_for_y.double_solve")
+def double_solve_solve_for_y(mr: MR) -> Solution:
+    p = mr.params
+    solver = REGISTRY.solver("math.solve_equation_for_y")
+    return cast(Solution, solver(
+        sympy.sympify(p["a"]), sympy.sympify(p["b"]), sympy.sympify(p["c"]),
+    ))
+
+
 @register_checker("math.rate_of_change.double_solve")
 def double_solve_rate_of_change(mr: MR) -> Solution:
     p = mr.params
@@ -114,6 +123,7 @@ __all__ = [
     "double_solve_parallel",
     "double_solve_graph_read",
     "double_solve_read_slope_intercept",
+    "double_solve_solve_for_y",
     "double_solve_rate_of_change",
     "double_solve_intersection",
     "double_solve_y_range",

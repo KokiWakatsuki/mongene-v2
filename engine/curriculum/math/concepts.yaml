@@ -32,3 +32,6 @@ concepts:
   - id: graph.read_slope_intercept
     label: "直線のグラフから傾きと切片を読み取る"
     unit: g2_l21
+  - id: linear_function.solve_equation_for_y
+    label: "2元1次方程式 ax+by=c を y=… の形に変形する"
+    unit: g2_l26

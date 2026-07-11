@@ -429,6 +429,78 @@ def read_slope_intercept(ctx: CellContext, rng: Rng) -> MR:
 
 
 # ---------------------------------------------------------------------------
+# math.solve_equation_for_y（g2_l26.calculation Lv1 用）— 横展開#5
+# 2元1次方程式 ax+by=c を y=… に変形する（最初の calculation セル）
+# ---------------------------------------------------------------------------
+_SOLVE_FOR_Y_CONCEPTS = [
+    "linear_function.solve_equation_for_y",
+]
+
+
+def _format_two_var_equation_display(a: sympy.Expr, b: sympy.Expr, c: sympy.Expr) -> str:
+    """2元1次方程式 a x + b y = c の given 表示（b>0 前提・solver の step 表示と一致）。"""
+
+    def coeff_term(coeff: sympy.Expr, var: str) -> str:
+        mag = abs(coeff)
+        mag_part = "" if mag == 1 else _fmt_number(mag)
+        return f"{mag_part}{var}"
+
+    ax = ("-" if a < 0 else "") + coeff_term(a, "x")
+    by = coeff_term(b, "y")
+    return f"{ax} + {by} = {_fmt_number(c)}"
+
+
+@register_recipe("math.solve_equation_for_y", provides_concepts=_SOLVE_FOR_Y_CONCEPTS)
+def solve_equation_for_y(ctx: CellContext, rng: Rng) -> MR:
+    """2元1次方程式 ax+by=c を y について解く（answer-first・calculation Lv1）。
+
+    結果の式 y = m x + k（整数 m≠0・整数 k）を先に決め、y の係数 b (>0, ≥2) を選び、
+    a = -m*b・c = k*b として方程式 a x + b y = c を逆算する（b で割ると必ず整数係数に
+    戻る＝基礎レベルの clean な変形）。独立ソルバ `math.solve_equation_for_y` で ax+by=c
+    を y について解き直し、y = m x + k との一致を assert する。図は無し（calculation）。
+    """
+    p = ctx.spec_level.params
+    m = draw(p["result_slope_domain"], rng)
+    k = draw(p["result_intercept_domain"], rng)
+    b = draw(p["b_domain"], rng)  # y の係数（正・2 以上で非自明な除算を保証）
+
+    m_s, k_s, b_s = sympy.nsimplify(m), sympy.nsimplify(k), sympy.nsimplify(b)
+    a_s = -m_s * b_s
+    c_s = k_s * b_s
+
+    solver = REGISTRY.solver("math.solve_equation_for_y")
+    sol = cast(Solution, solver(a_s, b_s, c_s))
+    assert isinstance(sol.answer, SymbolicAnswer)
+
+    expected_expr = m_s * sympy.Symbol("x") + k_s
+    assert sol.answer.srepr == sympy.srepr(expected_expr), (
+        f"double-solve 不一致: recipe が構成した式 {expected_expr} != solver 再計算 {sol.answer.srepr}"
+    )
+
+    sub_question = SubQuestionMR(
+        label="(1)",
+        asked="simplified_expr",
+        answer=sol.answer,
+        steps=sol.steps,
+        concept_tags=_effective_concept_tags(ctx),
+        cause_tags=_effective_cause_tags(ctx),
+    )
+
+    return MR(
+        signature=ctx.spec_level.signature,
+        family=ctx.family,
+        level=ctx.level,
+        purpose=ctx.purpose,
+        seed=0,
+        params={"a": str(a_s), "b": str(b_s), "c": str(c_s)},
+        given={"equation": _format_two_var_equation_display(a_s, b_s, c_s)},
+        sub_questions=[sub_question],
+        visual_plan=None,
+        provenance=Provenance(recipe="math.solve_equation_for_y"),
+    )
+
+
+# ---------------------------------------------------------------------------
 # math.rate_of_change（g2_l20.find_value Lv1 用）— 横展開の第1セル
 # ---------------------------------------------------------------------------
 _RATE_OF_CHANGE_CONCEPTS = [
@@ -694,6 +766,7 @@ __all__ = [
     "linear_from_parallel_condition",
     "graph_read_two_points",
     "read_slope_intercept",
+    "solve_equation_for_y",
     "rate_of_change",
     "intersection",
     "y_range_from_domain",

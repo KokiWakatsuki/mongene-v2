@@ -1,0 +1,54 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - linear_function.solve_equation_for_y
+  provenance:
+    git_commit: ''
+    recipe: math.solve_equation_for_y
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_solve_for_y_v1
+    tier: T1
+  requested:
+    form: calculation
+    level: 1
+    subject: math
+    unit: g2_l26
+  resolved:
+    form: calculation
+    level: 1
+    subject: math
+    unit: g2_l26
+  seed: 1
+  signature: solve_two_var_equation_for_y
+problem_ref: 4163c815af6dbfb1
+problem_text: 2元1次方程式 -12x + 3y = -9 を、y について解いた式（y = … の形）に変形せよ。
+sub_questions:
+- answer:
+    display: y = 4x - 3
+    kind: symbolic
+    srepr: Add(Mul(Integer(4), Symbol('x')), Integer(-3))
+  cause_tags: []
+  concept_tags:
+  - linear_function.solve_equation_for_y
+  explanation: まず、x の項を右辺に移項し、y の項だけを左辺に残す。 3y = 12x - 9次に、両辺を y の係数で割り、y = の形にする。 y = 4x - 3
+  hints:
+  - x の項を右辺に移項し、y の項だけを左辺に残す。
+  label: (1)
+  prompt_text: simplified_expr を求めなさい。
+  solution_steps:
+  - args:
+    - -12x + 3y = -9
+    narration: x の項を右辺に移項し、y の項だけを左辺に残す。
+    op: isolate_y_term
+    result_display: 3y = 12x - 9
+    result_srepr: Equality(Mul(Integer(3), Symbol('y')), Add(Mul(Integer(12), Symbol('x')), Integer(-9)))
+  - args:
+    - '3'
+    narration: 両辺を y の係数で割り、y = の形にする。
+    op: divide_by_coefficient
+    result_display: y = 4x - 3
+    result_srepr: Add(Mul(Integer(4), Symbol('x')), Integer(-3))
+visual_svg: null

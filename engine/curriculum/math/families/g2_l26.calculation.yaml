@@ -1,0 +1,32 @@
+family: math.g2_l26.calculation
+form: calculation
+source_desc: |
+  2元1次方程式（ax+by=c）を y について解いた式 y=… の形に変形する
+  （units.generated.yaml の desc/example を正として転記）。
+  desc: ax+by=c を y=… に変形する。
+  example: 2元1次方程式 4x+2y=10 を、y について解いた式 y=… の形に変形せよ。
+  グラフをかく前段の基本計算。x の項を移項し、y の係数で両辺を割る。基礎レベルは
+  y の係数が a と c を割り切り、結果が整数係数の clean な式になる（例 y=-2x+5）。
+concepts_default: [linear_function.solve_equation_for_y]
+levels:
+  "1":
+    signature: solve_two_var_equation_for_y
+    recipe: math.solve_equation_for_y
+    params:
+      # answer-first: 結果 y=mx+k の m(≠0)・k を先に選び、y の係数 b(≥2) を掛けて
+      # a=-m*b・c=k*b とする。b で割ると必ず整数に戻る（基礎レベルの clean な変形）。
+      # 例 4x+2y=10（a=4,b=2,c=10 ⇔ m=-2,k=5）は m=-2,b=2,k=5 で生成される。
+      # 域: 傾き m は例と同規模（|a|=|m*b|≤16 に抑制）、定数 k を広くとり組合せ数を
+      # 確保（8*25*3=600 通り）。dup_rate（eval・100seed・閾値0.20）に十分な余裕。
+      result_slope_domain: {int_range: [-4, 4], exclude: [0]}
+      result_intercept_domain: {int_range: [-12, 12]}
+      b_domain: {int_range: [2, 4]}
+    given: [equation]
+    asked: [simplified_expr]
+    visual: none
+    text: {tier: T1, template: lf_solve_for_y_v1}
+    hints: [steps_prefix]
+    concept_tags: [linear_function.solve_equation_for_y]
+    cause_tags: []
+remedial:
+  default_level: 1
