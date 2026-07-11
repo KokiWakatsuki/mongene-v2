@@ -112,6 +112,16 @@ class GraphAnswer(BaseModel):     # graph_table「かく」・construction
 AnswerPayload = Union[SymbolicAnswer, ChoiceAnswer, GraphAnswer]
 
 
+class Solution(BaseModel):
+    """独立ソルバの出力（§6.2 double-solve）。問題パラメータのみから導く。
+
+    answer は AnswerPayload（form により symbolic/choice/graph）。steps は採点粒度。
+    """
+    model_config = ConfigDict(extra="forbid")
+    answer: AnswerPayload = Field(discriminator="kind")
+    steps: list[Step] = Field(default_factory=list)
+
+
 class SubQuestionMR(BaseModel):
     model_config = ConfigDict(extra="forbid")
     label: str                     # "(1)"
@@ -281,7 +291,7 @@ class CellContext(BaseModel):
 __all__ = [
     "Purpose", "VariantMode", "Tier", "VisualReq", "UnsupportedCode",
     "VariantRef", "GenerateOptions", "GenerateRequest", "Unsupported",
-    "Step", "SymbolicAnswer", "ChoiceAnswer", "Feature", "GraphAnswer", "AnswerPayload",
+    "Step", "SymbolicAnswer", "ChoiceAnswer", "Feature", "GraphAnswer", "AnswerPayload", "Solution",
     "SubQuestionMR", "VisualElement", "VisualPlan", "Provenance", "MR",
     "SubQuestionOut", "Coordinate", "Meta", "Problem", "GenerateResult",
     "FrameProtocol", "SpecLevel", "SpecFamily", "CellContext",
