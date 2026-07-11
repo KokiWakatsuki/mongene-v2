@@ -501,6 +501,64 @@ def solve_equation_for_y(ctx: CellContext, rng: Rng) -> MR:
 
 
 # ---------------------------------------------------------------------------
+# math.evaluate_linear（g2_l19.calculation Lv1 用）— 横展開#6
+# 1次関数 y=ax+b に x の値を代入して y を求める（最初の asked=value セル）
+# ---------------------------------------------------------------------------
+_EVALUATE_LINEAR_CONCEPTS = [
+    "linear_function.evaluate_at_x",
+]
+
+
+@register_recipe("math.evaluate_linear", provides_concepts=_EVALUATE_LINEAR_CONCEPTS)
+def evaluate_linear(ctx: CellContext, rng: Rng) -> MR:
+    """1次関数 y=ax+b に x=x0 を代入して y を求める（answer-first・calculation Lv1）。
+
+    傾き a(≠0)・切片 b・代入する x0(≠0) を選び、独立ソルバ `math.evaluate_linear_at_x`
+    で y = a*x0 + b を再計算する（代入するだけなので構成＝解が自明に一致）。答えは1つの
+    数値 y（asked=value）。図は無し（calculation frame visual=none）。
+    """
+    p = ctx.spec_level.params
+    a = draw(p["slope_domain"], rng)
+    b = draw(p.get("intercept_domain", {"int_range": [-9, 9]}), rng)
+    x0 = draw(p["x_domain"], rng)
+
+    a_s, b_s, x_s = sympy.nsimplify(a), sympy.nsimplify(b), sympy.nsimplify(x0)
+    y_expected = a_s * x_s + b_s
+
+    solver = REGISTRY.solver("math.evaluate_linear_at_x")
+    sol = cast(Solution, solver(a_s, b_s, x_s))
+    assert isinstance(sol.answer, SymbolicAnswer)
+    assert sol.answer.srepr == sympy.srepr(y_expected), (
+        f"double-solve 不一致: recipe が構成した y {y_expected} != solver 再計算 {sol.answer.srepr}"
+    )
+
+    sub_question = SubQuestionMR(
+        label="(1)",
+        asked="value",
+        answer=sol.answer,
+        steps=sol.steps,
+        concept_tags=_effective_concept_tags(ctx),
+        cause_tags=_effective_cause_tags(ctx),
+    )
+
+    return MR(
+        signature=ctx.spec_level.signature,
+        family=ctx.family,
+        level=ctx.level,
+        purpose=ctx.purpose,
+        seed=0,
+        params={"a": str(a_s), "b": str(b_s), "x0": str(x_s)},
+        given={
+            "expression": _format_parallel_line_display(a_s, b_s),
+            "input_value": f"x = {_fmt_number(x_s)}",
+        },
+        sub_questions=[sub_question],
+        visual_plan=None,
+        provenance=Provenance(recipe="math.evaluate_linear"),
+    )
+
+
+# ---------------------------------------------------------------------------
 # math.rate_of_change（g2_l20.find_value Lv1 用）— 横展開の第1セル
 # ---------------------------------------------------------------------------
 _RATE_OF_CHANGE_CONCEPTS = [
@@ -767,6 +825,7 @@ __all__ = [
     "graph_read_two_points",
     "read_slope_intercept",
     "solve_equation_for_y",
+    "evaluate_linear",
     "rate_of_change",
     "intersection",
     "y_range_from_domain",

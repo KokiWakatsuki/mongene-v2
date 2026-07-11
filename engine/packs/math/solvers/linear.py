@@ -443,6 +443,49 @@ def y_range_over_domain(
     return Solution(answer=answer, steps=steps)
 
 
+def _paren_neg(v: sympy.Expr) -> str:
+    """負数は括弧で囲む（代入表示の可読性。例: -4 → "(-4)"）。"""
+    s = _format_number(v)
+    return f"({s})" if v < 0 else s
+
+
+@register_solver("math.evaluate_linear_at_x")
+def evaluate_linear_at_x(a: object, b: object, x0: object) -> Solution:
+    """1次関数 y = a x + b の x = x0 における y の値を求める（g2_l19.calculation Lv1）。
+
+    代入して計算するだけ。答えは1つの数値 y。asked=value。
+    """
+    a_s, b_s, x_s = sympy.nsimplify(a), sympy.nsimplify(b), sympy.nsimplify(x0)
+    y = a_s * x_s + b_s
+
+    prod = f"{_paren_neg(a_s)} × {_paren_neg(x_s)}"
+    if b_s == 0:
+        rhs = prod
+    elif b_s > 0:
+        rhs = f"{prod} + {_format_number(b_s)}"
+    else:
+        rhs = f"{prod} - {_format_number(-b_s)}"
+
+    steps = [
+        Step(
+            op="substitute_x",
+            args=[_format_number(a_s), _format_number(b_s), _format_number(x_s)],
+            result_srepr=sympy.srepr(a_s * x_s + b_s),
+            result_display=f"y = {rhs}",
+            narration="x の値を式に代入する。",
+        ),
+        Step(
+            op="evaluate",
+            args=[f"y = {rhs}"],
+            result_srepr=sympy.srepr(y),
+            result_display=f"y = {_format_number(y)}",
+            narration="計算して y の値を求める。",
+        ),
+    ]
+    answer = SymbolicAnswer(srepr=sympy.srepr(y), display=_format_number(y))
+    return Solution(answer=answer, steps=steps)
+
+
 def _format_two_var_equation(a: sympy.Expr, b: sympy.Expr, c: sympy.Expr) -> str:
     """2元1次方程式 a x + b y = c の表示形（例: "4x + 2y = 10", "-3x + 2y = 6"）。
 
@@ -503,4 +546,5 @@ __all__ = [
     "intersection_of_two_lines",
     "y_range_over_domain",
     "solve_equation_for_y",
+    "evaluate_linear_at_x",
 ]

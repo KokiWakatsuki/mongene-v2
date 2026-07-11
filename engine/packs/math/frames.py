@@ -88,7 +88,10 @@ class Frame:
 # calculation: 式・方程式を与え、値/簡約式/解を問う。図は禁止。
 CALCULATION_FRAME = Frame(
     form="calculation",
-    given_vocab=frozenset({"expression", "equation"}),
+    given_vocab=frozenset({
+        "expression", "equation",
+        "input_value",  # 横展開#6: 代入する x の値（g2_l19 y=ax+b に x を代入）
+    }),
     asked_vocab=frozenset({"value", "simplified_expr", "solution"}),
     visual="none",
 )

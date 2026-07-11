@@ -1,0 +1,56 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - linear_function.evaluate_at_x
+  provenance:
+    git_commit: ''
+    recipe: math.evaluate_linear
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_evaluate_at_x_v1
+    tier: T1
+  requested:
+    form: calculation
+    level: 1
+    subject: math
+    unit: g2_l19
+  resolved:
+    form: calculation
+    level: 1
+    subject: math
+    unit: g2_l19
+  seed: 3
+  signature: evaluate_linear_at_x
+problem_ref: 7a8fce4811c6f629
+problem_text: 1次関数 y = -3x + 8 について、x = -5 のときの y の値を求めよ。
+sub_questions:
+- answer:
+    display: '23'
+    kind: symbolic
+    srepr: Integer(23)
+  cause_tags: []
+  concept_tags:
+  - linear_function.evaluate_at_x
+  explanation: まず、x の値を式に代入する。 y = (-3) × (-5) + 8次に、計算して y の値を求める。 y = 23
+  hints:
+  - x の値を式に代入する。
+  label: (1)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args:
+    - '-3'
+    - '8'
+    - '-5'
+    narration: x の値を式に代入する。
+    op: substitute_x
+    result_display: y = (-3) × (-5) + 8
+    result_srepr: Integer(23)
+  - args:
+    - y = (-3) × (-5) + 8
+    narration: 計算して y の値を求める。
+    op: evaluate
+    result_display: y = 23
+    result_srepr: Integer(23)
+visual_svg: null

@@ -1,0 +1,28 @@
+family: math.g2_l19.calculation
+form: calculation
+source_desc: |
+  1次関数 y=ax+b に x の値を代入して y を求める
+  （units.generated.yaml の desc/example を正として転記）。
+  desc: y=ax+b に x を代入して y を求める。
+  example: 1次関数 y=2x+3 について、x=4 のときの y の値を求めよ。
+  教科書例題レベルの代入計算。x の値を式に代入し、計算して y の値を1つ求める。
+concepts_default: [linear_function.evaluate_at_x]
+levels:
+  "1":
+    signature: evaluate_linear_at_x
+    recipe: math.evaluate_linear
+    params:
+      # 傾き a(≠0)・切片 b・代入する x0(≠0) を選ぶ。答え y=a*x0+b は1つの数値。
+      # 組合せ 10*19*12=2280 通りで dup_rate に十分な余裕。|y|≤5*6+9=39 に有界。
+      slope_domain: {int_range: [-5, 5], exclude: [0]}
+      intercept_domain: {int_range: [-9, 9]}
+      x_domain: {int_range: [-6, 6], exclude: [0]}
+    given: [expression, input_value]
+    asked: [value]
+    visual: none
+    text: {tier: T1, template: lf_evaluate_at_x_v1}
+    hints: [steps_prefix]
+    concept_tags: [linear_function.evaluate_at_x]
+    cause_tags: []
+remedial:
+  default_level: 1
