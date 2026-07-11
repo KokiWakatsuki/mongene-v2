@@ -41,7 +41,28 @@
 - ゲート段の obj: mr段=`MR`／text段=`TextStageInput(.mr,.text)`／visual段=`VisualStageInput(.mr,.svg,.visual_plan)`。`@register_gate(stage,name)`・fn `(obj,ctx)->(ok,detail)`・`run_gates` 最初の失敗で `GateFailure`→generate が `Unsupported(verification_exhausted)` 化。
 - Unsupportedコード: unit_not_found/form_not_supported/level_not_supported/purpose_not_supported/cause_not_found/verification_exhausted/supply_exhausted/not_implemented。
 
-## 3. 中断時に走っていた作業（★要再検証／再開）
+## 2.5 追加完了（2026-07-11 セッション2・全 green・コミット済み）
+| Task | 内容 | コミット |
+|---|---|---|
+| 5b | 数学 recipe4本(`math.linear_from_two_points`/`_slope_point`/`_parallel_condition`/`graph_read_two_points`)・T1テンプレ・families(`g2_l25`/`g2_l24` find_value・`g2_l25` graph_table)。**1013 property tests**(各200seed double-solve)。mypy strict修正込 | `77aeb8b` |
+| 6 | 動的ゲート本体 `core/verify/quality_gates.py`(G-SIG/G-FP/G-Q1/G-Q2/G-Q7[+Q7r]/G-Q5t/G-GND/G-STY/G-Q5v)を `install_quality_gates(registry)` 明示登録。漏洩/接地の数値正規化は self-contained 再実装。各ゲートに壊しテスト(32) | `650f9ca` |
+| §4統合 | pack側 `double_solve` checker(`packs/math/checkers/linear.py`)・`engine/bootstrap.py`(pack登録+ゲートinstallの単一入口)・**G-Q5t修正**(式の答えは係数分解でなく式全体で漏洩判定=§8.2「式中係数除外」準拠。分数傾きLv3の偽陽性解消) | `89529c1` |
+| §4統合 | 金の縦串 contract テスト `engine_tests/contract/test_vertical_slice.py`(find_value全セル+remedial+G-Q7r) 17件 | `2194dbb` |
+| 8 | 図エンジン `packs/math/visuals/graph.py`(座標平面SVG・matplotlib非依存・モノクロ・軸目盛のみtext)。**設計判断**: graph_table「読む」は図に式も答え座標も描かず、recipeの `given={}`(式は図提示・内部param)でG-GND自明通過。`visual_builder=math.linear_graph` をspecに配線。test_visuals/test_graph_table_slice | `8df0465` |
+| 7 | 制作ツール `tools/spec_cli.py`(preview HTML/check=lint+smoke+簡易dup_rate/approve=golden保存)・golden回帰機構 `engine_tests/golden/`。find_value縦串を承認済みgoldenで固定 | `4b97471` |
+
+**現状の到達点（縦串は実物エンジンで完動）**: `from engine.bootstrap import bootstrap; bootstrap()` 後、`generate()` で以下が全ゲート通過し Problem を返す:
+- `g2_l25.find_value` Lv2/Lv3・`g2_l24.find_value` Lv1/Lv3（全 seed）
+- `g2_l25.graph_table` Lv2（図つき・全 seed）
+- remedial: `g2_l25` fv Lv2 → cause `lf.substitution_error` → `g2_l24` fv Lv1 に解決・G-Q7r 通過
+- テスト全体 **1224 passed**（最終確認スイートで唯一の失敗=graph_read旧形テストは新設計に更新済 `77aeb8b`後の `8df0465`）・mypy strict・ruff クリーン
+- `tools/spec_cli.py check math.g2_l25.find_value` → lint/smoke クリーン・dup_rate 0.0
+
+### ★サブエージェント運用の教訓（次セッション必読）
+- `general-purpose` サブエージェントは `Agent` ツールを持つため、**「実装せよ」と投げると自分で書かず孫エージェントに委譲する連鎖に陥る**事例が Task8 で多発した（tool_uses 2〜4 で「起動しました。待ちます」と返して何も書かない）。結局 descendant の一部が部分的にファイルを land させたが、**packs/math/__init__ の配線・テスト2本・spec更新・mypy戻り型が抜けており、オーケストレータ(私)が git 実体を精査して手で補完**した。
+- 対策: 図のような設計判断を含む中規模タスクは**サブエージェントに丸投げせずオーケストレータが主導**するか、投げるなら「委譲禁止・自分でRead/Write/Bashせよ」を明記し、**完了後は必ず git 実体+個別テスト実走+mypyで検証**（報告は信用しない）。並行サブエージェントの共有ツリー書き込みは stale pycache で `has_visual=False` 等の一時的誤検出も起こす→`__pycache__` 一掃して再確認。
+
+## 3. 【旧】中断時に走っていた作業（下記は 2.5 で解決済み・履歴として残す）
 
 ### Task5b（数学 recipe/template/spec）— **ほぼ完成・未検証・未コミット**
 作業ツリーに以下が存在（サブエージェント完了報告前に中断）:
@@ -89,8 +110,24 @@ git status --porcelain               # Task5b の未追跡ファイルが見え�
 - Task6 を再ディスパッチ（§3 のブリーフを sonnet サブエージェントへ。`engine/packs/math/` は触らせない）。
 - 以降 §4 統合 → Task7(制作ツール spec preview/check/approve/golden) → Task8(図: 旧`apps/api/src/visuals/graph_renderer.py`・`builder.py`(line~855の答え漏洩が対策対象)を `packs/math/visuals/` へ・whitelist/幾何リーク/モノクロ) → Task9(縦串制作 全セルDoD+remedial DoD) → Task10(eval: coverage_scan/dup_rate2系統/level_sep(fp必須)/retry_stats)。
 
-## 6. タスク状態（TaskList）
-- #1-#4, #5a 完了。#5(Task5b残) in_progress（ほぼ完・未検証）。#6 in_progress（未着手同然・要再ディスパッチ）。#7-#10 pending。
+## 6. タスク状態（TaskList・2026-07-11 セッション2 末時点）
+- #1〜#8 + §4統合 **完了・コミット済み**（最新コミット `4b97471`）。
+- **残: #9 縦串制作（全セル DoD + remedial DoD = coverage_scan green）／#10 eval 一式**。
+
+## 5.5 次セッションの最初の一手（Task9→Task10）
+```bash
+cd /Users/koki/workspace/mongene-v2
+git branch --show-current            # engine-m0-rework
+git log --oneline -8                 # 4b97471 が最新
+git status --porcelain               # 空（クリーン）のはず
+# 現状の縦串が全ゲート通過することを再確認（bootstrap→generate）:
+.venv/bin/python -m pytest engine_tests/contract/ engine_tests/golden/ -o addopts="" -p no:cacheprovider -q
+```
+- **Task9（縦串制作の仕上げ）**: 縦串セル（find_value 4セル + graph_table 1セル + remedial）の DoD を機械判定で締める。各セルを `spec check` 緑・`spec approve` で golden 固定（graph_table はまだ approve していない→ preview 検収→approve）。remedial DoD（§5.2）= cause→戻り先→G-Q7r の対応表が全 cause で引けること。**注意**: preview HTML で graph_table の図がグリッド過大（点が y=±20 等だと縦長）になる審美課題あり→ Task9 か図の描画範囲調整で対処（ゲートは通る）。
+- **Task10（eval 一式・§8.3）**: `engine/eval/` に `coverage_scan.py`(capabilities全セル×S seed生成・生成不能0/ゲート素通り0)・`dup_rate.py`(2系統: problem_ref と dup_key/fp)・`level_sep.py`(fp必須のレベル間相異)・`retry_stats.py`。CLI・JSONレポート・終了コードでCI連携。`spec_cli check` の dup_rate は簡易版なので Task10 で fp ベース第2系統を足す。
+- サブエージェントに投げる場合は §2.5 の教訓（委譲連鎖・要git検証）を必ず適用。**Task9/10 は core/pack を壊さない（eval は読み取り+生成のみ）ので `engine/eval/` 新規ディレクトリで隔離可能**。
+
+## 5. 【旧】再開手順（Task5b/6 用・履歴）
 
 ## 7. 注意点・落とし穴
 - **並行サブエージェントの共有ツリー衝突**: 実際に `register_template` の未export で一時衝突が起きた（core に shortcut 追加で解決済）。core のインタフェース不足を見つけたら core を先に直す（§0）。
