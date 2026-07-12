@@ -1878,6 +1878,118 @@ def knowledge_rate_constant(ctx: CellContext, rng: Rng) -> MR:
 
 
 # ---------------------------------------------------------------------------
+# math.knowledge_equation_solution_set（g2_l26.knowledge Lv1 用）— 横展開#23（P1・C5）
+# 2元1次方程式の解の集合は直線、という性質の想起。答え固定型。
+# ---------------------------------------------------------------------------
+_KNOWLEDGE_EQUATION_SOLUTION_SET_CONCEPTS = [
+    "linear_function.equation_solution_set_is_line",
+]
+
+
+@register_recipe(
+    "math.knowledge_equation_solution_set",
+    provides_concepts=_KNOWLEDGE_EQUATION_SOLUTION_SET_CONCEPTS,
+)
+def knowledge_equation_solution_set(ctx: CellContext, rng: Rng) -> MR:
+    """2元1次方程式 ax+by=c の解の集合が直線になる性質を問う（knowledge・答え固定型）。
+
+    独立 solver `math.equation_solution_set_shape` が「直線」を返す（係数によらず不変）。答えは
+    ChoiceAnswer（correct 固定）。無限性(F-3)は方程式の係数 a,b,c（答えに無関係な surface）で満たす。
+    """
+    p = ctx.spec_level.params
+    x_sym, y_sym = sympy.symbols("x y")
+    a = sympy.nsimplify(draw(p["coeff_domain"], rng))  # ≠0
+    b = sympy.nsimplify(draw(p["coeff_domain"], rng))  # ≠0
+    c = sympy.nsimplify(draw(p["const_domain"], rng))
+    statement = _fmt_eq(a * x_sym + b * y_sym, c)  # 例 "3x + 2y = 6"
+
+    solver = REGISTRY.solver("math.equation_solution_set_shape")
+    sol = cast(Solution, solver())
+    assert isinstance(sol.answer, ChoiceAnswer)
+
+    sub_question = SubQuestionMR(
+        label="(1)",
+        asked="choice",
+        answer=sol.answer,
+        steps=sol.steps,
+        concept_tags=_effective_concept_tags(ctx),
+        cause_tags=_effective_cause_tags(ctx),
+    )
+    return MR(
+        signature=ctx.spec_level.signature,
+        family=ctx.family,
+        level=ctx.level,
+        purpose=ctx.purpose,
+        seed=0,
+        params={"a": str(a), "b": str(b), "c": str(c)},
+        given={"statement": statement},
+        sub_questions=[sub_question],
+        visual_plan=None,
+        provenance=Provenance(recipe="math.knowledge_equation_solution_set"),
+    )
+
+
+# ---------------------------------------------------------------------------
+# math.knowledge_system_intersection（g2_l27.knowledge Lv1 用）— 横展開#24（P1・C5）
+# 連立方程式の解は2直線の交点、という性質の想起。答え固定型。
+# ---------------------------------------------------------------------------
+_KNOWLEDGE_SYSTEM_INTERSECTION_CONCEPTS = [
+    "linear_function.system_solution_is_intersection",
+]
+
+
+@register_recipe(
+    "math.knowledge_system_intersection",
+    provides_concepts=_KNOWLEDGE_SYSTEM_INTERSECTION_CONCEPTS,
+)
+def knowledge_system_intersection(ctx: CellContext, rng: Rng) -> MR:
+    """連立方程式の解が2直線の交点である性質を問う（knowledge・答え固定型）。
+
+    独立 solver `math.system_solution_is_intersection` が「2直線の交点」を返す（係数によらず不変）。
+    答えは ChoiceAnswer（correct 固定）。無限性(F-3)は連立の係数（答えに無関係な surface）で満たす。
+    """
+    p = ctx.spec_level.params
+    x_sym, y_sym = sympy.symbols("x y")
+    a1 = sympy.nsimplify(draw(p["coeff_domain"], rng))
+    b1 = sympy.nsimplify(draw(p["coeff_domain"], rng))
+    c1 = sympy.nsimplify(draw(p["const_domain"], rng))
+    a2 = sympy.nsimplify(draw(p["coeff_domain"], rng))
+    b2 = sympy.nsimplify(draw(p["coeff_domain"], rng))
+    c2 = sympy.nsimplify(draw(p["const_domain"], rng))
+    statement = (
+        f"{_fmt_eq(a1 * x_sym + b1 * y_sym, c1)}, {_fmt_eq(a2 * x_sym + b2 * y_sym, c2)}"
+    )
+
+    solver = REGISTRY.solver("math.system_solution_is_intersection")
+    sol = cast(Solution, solver())
+    assert isinstance(sol.answer, ChoiceAnswer)
+
+    sub_question = SubQuestionMR(
+        label="(1)",
+        asked="choice",
+        answer=sol.answer,
+        steps=sol.steps,
+        concept_tags=_effective_concept_tags(ctx),
+        cause_tags=_effective_cause_tags(ctx),
+    )
+    return MR(
+        signature=ctx.spec_level.signature,
+        family=ctx.family,
+        level=ctx.level,
+        purpose=ctx.purpose,
+        seed=0,
+        params={
+            "line_a": [str(a1), str(b1), str(c1)],
+            "line_b": [str(a2), str(b2), str(c2)],
+        },
+        given={"statement": statement},
+        sub_questions=[sub_question],
+        visual_plan=None,
+        provenance=Provenance(recipe="math.knowledge_system_intersection"),
+    )
+
+
+# ---------------------------------------------------------------------------
 # math.knowledge_coefficient_role（g2_l19.knowledge Lv1 用）— 横展開#21（P1・C5）
 # 1次関数 y=ax+b の x の係数・定数項がグラフの何を表すか（傾き/切片）を単一選択で問う。
 # which（係数/定数項）で答えが変わる（用語想起・#19 判別 Lv2 と op 列が異なり level_sep）。
@@ -2277,6 +2389,8 @@ __all__ = [
     "knowledge_classify_linear",
     "knowledge_coefficient_role",
     "knowledge_rate_constant",
+    "knowledge_equation_solution_set",
+    "knowledge_system_intersection",
     "linear_slope_as_rate",
     "rate_of_change",
     "intersection",

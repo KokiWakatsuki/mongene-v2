@@ -1,0 +1,26 @@
+family: math.g2_l26.knowledge
+form: knowledge
+source_desc: |
+  2元1次方程式のグラフの意味の想起（units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: 方程式の解の集合が直線になることを想起する。
+       example: 2元1次方程式 x+y=5 の解を座標とする点をすべて集めると、どのような図形になるか
+                答えよ。
+  【設計モデル】原題を単一選択（直線／放物線／1つの点）で realize。正しい答え（直線）が常に正解
+  ＝答え固定型（性質の理解を問う C5 完成に必要なセル）。Q1 は「2元1次方程式の解の集合は直線」
+  という規則の想起＝V2。無限性(F-3)は方程式 ax+by=c の係数 a,b,c（答えに無関係な surface）で満たす。
+concepts_default: [linear_function.equation_solution_set_is_line]
+levels:
+  "1":
+    signature: knowledge_equation_solution_set
+    recipe: math.knowledge_equation_solution_set
+    params:
+      # 答えは固定（直線）。a,b,c は方程式の見かけ（答えに無関係な surface）で dup を分散。
+      coeff_domain: {int_range: [-9, 9], exclude: [0]}
+      const_domain: {int_range: [-12, 12]}
+    given: [statement]
+    asked: [choice]
+    visual: none
+    text: {tier: T1, template: lf_knowledge_equation_solution_set_v1}
+    hints: [steps_prefix]
+    concept_tags: [linear_function.equation_solution_set_is_line]
+    cause_tags: []

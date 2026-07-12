@@ -1,0 +1,55 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - linear_function.equation_solution_set_is_line
+  provenance:
+    git_commit: ''
+    recipe: math.knowledge_equation_solution_set
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_knowledge_equation_solution_set_v1
+    tier: T1
+  requested:
+    form: knowledge
+    level: 1
+    subject: math
+    unit: g2_l26
+  resolved:
+    form: knowledge
+    level: 1
+    subject: math
+    unit: g2_l26
+  seed: 3
+  signature: knowledge_equation_solution_set
+problem_ref: d474b3b360c93c71
+problem_text: 2元1次方程式 -5x - 6y = -3 の解を座標とする点をすべて集めると、どのような図形になりますか。次のア〜ウから選べ。ア 直線 イ 放物線 ウ 1つの点
+sub_questions:
+- answer:
+    correct: 直線
+    distractors:
+    - 放物線
+    - 1つの点
+    fact_id: lf.equation_solution_set_is_line
+    kind: choice
+  cause_tags: []
+  concept_tags:
+  - linear_function.equation_solution_set_is_line
+  explanation: まず、2元1次方程式の解を座標とする点をすべて集めると、どんな形になるかを思い出す。 解の集合の形を思い出す次に、2元1次方程式の解の集合は直線になる。 直線
+  hints:
+  - 2元1次方程式の解を座標とする点をすべて集めると、どんな形になるかを思い出す。
+  label: (1)
+  prompt_text: choice を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 2元1次方程式の解を座標とする点をすべて集めると、どんな形になるかを思い出す。
+    op: recall_property
+    result_display: 解の集合の形を思い出す
+    result_srepr: solution_set_is_line
+  - args: []
+    narration: 2元1次方程式の解の集合は直線になる。
+    op: select_correct
+    result_display: 直線
+    result_srepr: 直線
+visual_svg: null

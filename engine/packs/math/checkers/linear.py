@@ -223,6 +223,20 @@ def double_solve_knowledge_rate_constant(mr: MR) -> Solution:
     return cast(Solution, solver())
 
 
+@register_checker("math.knowledge_equation_solution_set.double_solve")
+def double_solve_knowledge_equation_solution_set(mr: MR) -> Solution:
+    # 解の集合は直線（係数によらず不変・答え固定型）。solver は引数を取らない。
+    solver = REGISTRY.solver("math.equation_solution_set_shape")
+    return cast(Solution, solver())
+
+
+@register_checker("math.knowledge_system_intersection.double_solve")
+def double_solve_knowledge_system_intersection(mr: MR) -> Solution:
+    # 連立の解は2直線の交点（係数によらず不変・答え固定型）。solver は引数を取らない。
+    solver = REGISTRY.solver("math.system_solution_is_intersection")
+    return cast(Solution, solver())
+
+
 @register_checker("math.rate_of_change.double_solve")
 def double_solve_rate_of_change(mr: MR) -> Solution:
     p = mr.params
@@ -284,6 +298,8 @@ __all__ = [
     "double_solve_linear_slope_as_rate",
     "double_solve_knowledge_coefficient_role",
     "double_solve_knowledge_rate_constant",
+    "double_solve_knowledge_equation_solution_set",
+    "double_solve_knowledge_system_intersection",
     "double_solve_rate_of_change",
     "double_solve_intersection",
     "double_solve_y_range",

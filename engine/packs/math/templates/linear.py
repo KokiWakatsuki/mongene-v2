@@ -157,6 +157,18 @@ LF_KNOWLEDGE_COEFFICIENT_ROLE_V1 = (
     "傾きと切片のどちらですか。"
 )
 
+# g2_l26.knowledge Lv1: 2元1次方程式の解の集合は直線（横展開#23・P1/C5）
+LF_KNOWLEDGE_EQUATION_SOLUTION_SET_V1 = (
+    "2元1次方程式 {{ given.statement }} の解を座標とする点をすべて集めると、どのような図形に"
+    "なりますか。次のア〜ウから選べ。ア 直線 イ 放物線 ウ 1つの点"
+)
+
+# g2_l27.knowledge Lv1: 連立の解は2直線の交点（横展開#24・P1/C5）
+LF_KNOWLEDGE_SYSTEM_INTERSECTION_V1 = (
+    "連立方程式 {{ given.statement }} の解は、2つの式が表す2つの直線のどこにあたりますか。"
+    "次のア〜ウから選べ。ア 2つの直線の交点 イ 2つの直線の傾き ウ 2つの直線とy軸との交点"
+)
+
 # g2_l20.knowledge Lv1: 変化の割合はつねに一定で傾きに等しい（横展開#22・P1/C5）
 # 選択肢は本文に固定並記（テキスト選択肢答えは G-Q5t 素通り・全選択肢の提示は漏洩でない §7.7）。
 # 表示順は T1 preview 用。実際の出題では ChoiceAnswer の correct/distractors をホストがシャッフルする。
@@ -236,6 +248,12 @@ def _register_all() -> None:
     REGISTRY.register_template(
         "lf_knowledge_rate_constant_v1", LF_KNOWLEDGE_RATE_CONSTANT_V1
     )
+    REGISTRY.register_template(
+        "lf_knowledge_equation_solution_set_v1", LF_KNOWLEDGE_EQUATION_SOLUTION_SET_V1
+    )
+    REGISTRY.register_template(
+        "lf_knowledge_system_intersection_v1", LF_KNOWLEDGE_SYSTEM_INTERSECTION_V1
+    )
     REGISTRY.register_template("lf_rate_of_change_v1", LF_RATE_OF_CHANGE_V1)
     REGISTRY.register_template("lf_intersection_v1", LF_INTERSECTION_V1)
     REGISTRY.register_template("lf_y_range_v1", LF_Y_RANGE_V1)
@@ -268,6 +286,8 @@ __all__ = [
     "LF_LINEAR_SLOPE_AS_RATE_V1",
     "LF_KNOWLEDGE_COEFFICIENT_ROLE_V1",
     "LF_KNOWLEDGE_RATE_CONSTANT_V1",
+    "LF_KNOWLEDGE_EQUATION_SOLUTION_SET_V1",
+    "LF_KNOWLEDGE_SYSTEM_INTERSECTION_V1",
     "LF_RATE_OF_CHANGE_V1",
     "LF_INTERSECTION_V1",
     "LF_Y_RANGE_V1",

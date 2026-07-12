@@ -902,6 +902,58 @@ def test_knowledge_rate_constant_double_solve_property(seed):
 
 
 # ---------------------------------------------------------------------------
+# math.knowledge_equation_solution_set（g2_l26.knowledge Lv1）— 横展開#23（P1・C5・答え固定）
+# ---------------------------------------------------------------------------
+def test_knowledge_equation_solution_set_construct():
+    ctx = _make_ctx("math.g2_l26.knowledge", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+
+    assert mr.signature == "knowledge_equation_solution_set"
+    assert set(mr.given.keys()) == {"statement"}
+    sq = mr.sub_questions[0]
+    assert sq.asked == "choice"
+    assert sq.answer.correct == "直線"
+    assert sq.answer.fact_id == "lf.equation_solution_set_is_line"
+    assert [s.op for s in sq.steps] == ["recall_property", "select_correct"]
+
+
+@pytest.mark.parametrize("seed", range(200))
+def test_knowledge_equation_solution_set_double_solve_property(seed):
+    ctx = _make_ctx("math.g2_l26.knowledge", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    sol = REGISTRY.solver("math.equation_solution_set_shape")()
+    assert sol.answer.correct == mr.sub_questions[0].answer.correct == "直線"
+
+
+# ---------------------------------------------------------------------------
+# math.knowledge_system_intersection（g2_l27.knowledge Lv1）— 横展開#24（P1・C5・答え固定）
+# ---------------------------------------------------------------------------
+def test_knowledge_system_intersection_construct():
+    ctx = _make_ctx("math.g2_l27.knowledge", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+
+    assert mr.signature == "knowledge_system_intersection"
+    assert set(mr.given.keys()) == {"statement"}
+    sq = mr.sub_questions[0]
+    assert sq.asked == "choice"
+    assert sq.answer.correct == "2つの直線の交点"
+    assert sq.answer.fact_id == "lf.system_solution_is_intersection"
+    assert [s.op for s in sq.steps] == ["recall_property", "select_correct"]
+
+
+@pytest.mark.parametrize("seed", range(200))
+def test_knowledge_system_intersection_double_solve_property(seed):
+    ctx = _make_ctx("math.g2_l27.knowledge", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    sol = REGISTRY.solver("math.system_solution_is_intersection")()
+    assert sol.answer.correct == mr.sub_questions[0].answer.correct == "2つの直線の交点"
+
+
+# ---------------------------------------------------------------------------
 # math.knowledge_coefficient_role（g2_l19.knowledge Lv1）— 横展開#21（P1・C5・用語想起）
 # ---------------------------------------------------------------------------
 def test_knowledge_coefficient_role_construct():
@@ -1179,4 +1231,10 @@ def test_recipes_declare_provides_concepts():
     })
     assert REGISTRY.recipe_concepts("math.knowledge_rate_constant") == frozenset({
         "linear_function.rate_of_change_is_constant",
+    })
+    assert REGISTRY.recipe_concepts("math.knowledge_equation_solution_set") == frozenset({
+        "linear_function.equation_solution_set_is_line",
+    })
+    assert REGISTRY.recipe_concepts("math.knowledge_system_intersection") == frozenset({
+        "linear_function.system_solution_is_intersection",
     })

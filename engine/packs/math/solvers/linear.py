@@ -878,6 +878,68 @@ def rate_of_change_is_constant(_marker: object = None) -> Solution:
     return Solution(answer=answer, steps=steps)
 
 
+@register_solver("math.equation_solution_set_shape")
+def equation_solution_set_shape(_marker: object = None) -> Solution:
+    """2元1次方程式 ax+by=c の解を座標とする点をすべて集めると直線になる、という性質の想起
+    （knowledge・g2_l26 Lv1）。答えは常に「直線」（命題の正誤想起・V2 規則）。solver は引数を
+    取らない（性質は係数によらず不変）。無限性は recipe 側の surface param（係数）で確保する。
+    """
+    correct = "直線"
+    distractors = ["放物線", "1つの点"]
+    steps = [
+        Step(
+            op="recall_property",
+            args=[],
+            result_srepr="solution_set_is_line",
+            result_display="解の集合の形を思い出す",
+            narration="2元1次方程式の解を座標とする点をすべて集めると、どんな形になるかを思い出す。",
+        ),
+        Step(
+            op="select_correct",
+            args=[],
+            result_srepr=correct,
+            result_display=correct,
+            narration="2元1次方程式の解の集合は直線になる。",
+        ),
+    ]
+    answer = ChoiceAnswer(
+        correct=correct, distractors=distractors, fact_id="lf.equation_solution_set_is_line"
+    )
+    return Solution(answer=answer, steps=steps)
+
+
+@register_solver("math.system_solution_is_intersection")
+def system_solution_is_intersection(_marker: object = None) -> Solution:
+    """連立方程式の解は、2つの式が表す2直線の交点である、という性質の想起
+    （knowledge・g2_l27 Lv1）。答えは常に「2直線の交点」（命題の正誤想起・V2 規則）。solver は
+    引数を取らない（性質は係数によらず不変）。無限性は recipe 側の surface param（係数）で確保する。
+    """
+    # 「2つの直線」形（助数詞「つ」は G-Q5t スキャンの除外対象）。「2直線」だと "2" が本文と
+    # 衝突し漏洩誤検出になる（直 は助数詞でない）。
+    correct = "2つの直線の交点"
+    distractors = ["2つの直線の傾き", "2つの直線とy軸との交点"]
+    steps = [
+        Step(
+            op="recall_property",
+            args=[],
+            result_srepr="solution_is_intersection",
+            result_display="連立の解とグラフの関係を思い出す",
+            narration="連立方程式の解が、2つの式のグラフのどこにあたるかを思い出す。",
+        ),
+        Step(
+            op="select_correct",
+            args=[],
+            result_srepr=correct,
+            result_display=correct,
+            narration="連立方程式の解は、2つの直線の交点の座標である。",
+        ),
+    ]
+    answer = ChoiceAnswer(
+        correct=correct, distractors=distractors, fact_id="lf.system_solution_is_intersection"
+    )
+    return Solution(answer=answer, steps=steps)
+
+
 @register_solver("math.linear_coefficient_role")
 def linear_coefficient_role(which: object) -> Solution:
     """1次関数 y=ax+b で x の係数 a・定数項 b がグラフの何を表すかを答える
@@ -932,4 +994,6 @@ __all__ = [
     "linear_slope_as_rate",
     "linear_coefficient_role",
     "rate_of_change_is_constant",
+    "equation_solution_set_shape",
+    "system_solution_is_intersection",
 ]

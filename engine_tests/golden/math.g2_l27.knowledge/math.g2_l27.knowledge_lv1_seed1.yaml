@@ -1,0 +1,55 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - linear_function.system_solution_is_intersection
+  provenance:
+    git_commit: ''
+    recipe: math.knowledge_system_intersection
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_knowledge_system_intersection_v1
+    tier: T1
+  requested:
+    form: knowledge
+    level: 1
+    subject: math
+    unit: g2_l27
+  resolved:
+    form: knowledge
+    level: 1
+    subject: math
+    unit: g2_l27
+  seed: 1
+  signature: knowledge_system_intersection
+problem_ref: ec6e8220c148edf2
+problem_text: 連立方程式 x - 9y = 11, 3x - 3y = 7 の解は、2つの式が表す2つの直線のどこにあたりますか。次のア〜ウから選べ。ア 2つの直線の交点 イ 2つの直線の傾き ウ 2つの直線とy軸との交点
+sub_questions:
+- answer:
+    correct: 2つの直線の交点
+    distractors:
+    - 2つの直線の傾き
+    - 2つの直線とy軸との交点
+    fact_id: lf.system_solution_is_intersection
+    kind: choice
+  cause_tags: []
+  concept_tags:
+  - linear_function.system_solution_is_intersection
+  explanation: まず、連立方程式の解が、2つの式のグラフのどこにあたるかを思い出す。 連立の解とグラフの関係を思い出す次に、連立方程式の解は、2つの直線の交点の座標である。 2つの直線の交点
+  hints:
+  - 連立方程式の解が、2つの式のグラフのどこにあたるかを思い出す。
+  label: (1)
+  prompt_text: choice を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 連立方程式の解が、2つの式のグラフのどこにあたるかを思い出す。
+    op: recall_property
+    result_display: 連立の解とグラフの関係を思い出す
+    result_srepr: solution_is_intersection
+  - args: []
+    narration: 連立方程式の解は、2つの直線の交点の座標である。
+    op: select_correct
+    result_display: 2つの直線の交点
+    result_srepr: 2つの直線の交点
+visual_svg: null
