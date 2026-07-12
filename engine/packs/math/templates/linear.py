@@ -150,6 +150,13 @@ LF_LINEAR_SLOPE_AS_RATE_V1 = (
     "1次関数 {{ given.expression }} について、x が1増加したときの y の増加量を求めよ。"
 )
 
+# g2_l19.knowledge Lv1: 係数・定数項が傾き/切片のどちらか（横展開#21・P1/C5）
+# 選択肢（傾き/切片）はテンプレ本文に固定並記（テキスト選択肢答えは G-Q5t 素通り）。
+LF_KNOWLEDGE_COEFFICIENT_ROLE_V1 = (
+    "1次関数 {{ given.statement }} について、{{ given.term_context }}が表すものは、"
+    "傾きと切片のどちらですか。"
+)
+
 
 # ---------------------------------------------------------------------------
 # g2_l20.find_value Lv1: 2点から変化の割合を求める（横展開の第1セル）
@@ -212,6 +219,9 @@ def _register_all() -> None:
     REGISTRY.register_template(
         "lf_linear_slope_as_rate_v1", LF_LINEAR_SLOPE_AS_RATE_V1
     )
+    REGISTRY.register_template(
+        "lf_knowledge_coefficient_role_v1", LF_KNOWLEDGE_COEFFICIENT_ROLE_V1
+    )
     REGISTRY.register_template("lf_rate_of_change_v1", LF_RATE_OF_CHANGE_V1)
     REGISTRY.register_template("lf_intersection_v1", LF_INTERSECTION_V1)
     REGISTRY.register_template("lf_y_range_v1", LF_Y_RANGE_V1)
@@ -242,6 +252,7 @@ __all__ = [
     "LF_KNOWLEDGE_VERIFY_SOLUTION_V1",
     "LF_KNOWLEDGE_CLASSIFY_LINEAR_V1",
     "LF_LINEAR_SLOPE_AS_RATE_V1",
+    "LF_KNOWLEDGE_COEFFICIENT_ROLE_V1",
     "LF_RATE_OF_CHANGE_V1",
     "LF_INTERSECTION_V1",
     "LF_Y_RANGE_V1",

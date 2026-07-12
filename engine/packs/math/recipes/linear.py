@@ -1826,6 +1826,66 @@ def knowledge_classify_linear(ctx: CellContext, rng: Rng) -> MR:
 
 
 # ---------------------------------------------------------------------------
+# math.knowledge_coefficient_role（g2_l19.knowledge Lv1 用）— 横展開#21（P1・C5）
+# 1次関数 y=ax+b の x の係数・定数項がグラフの何を表すか（傾き/切片）を単一選択で問う。
+# which（係数/定数項）で答えが変わる（用語想起・#19 判別 Lv2 と op 列が異なり level_sep）。
+# ---------------------------------------------------------------------------
+_KNOWLEDGE_COEFFICIENT_ROLE_CONCEPTS = [
+    "linear_function.coefficient_role",
+]
+
+
+@register_recipe(
+    "math.knowledge_coefficient_role", provides_concepts=_KNOWLEDGE_COEFFICIENT_ROLE_CONCEPTS
+)
+def knowledge_coefficient_role(ctx: CellContext, rng: Rng) -> MR:
+    """1次関数の式の x の係数・定数項が傾き・切片のどちらを表すかを問う（knowledge・answer-first）。
+
+    which（slope=x の係数／intercept=定数項）を引き、具体式 y=ax+b を statement に提示。答えは
+    独立 solver `math.linear_coefficient_role` が which だけから判定（式の値は無関係・double-solve）。
+    答えは ChoiceAnswer（which で correct が「傾き/切片」に変わる用語想起型）。無限性(F-3)は which と
+    式の見かけ a,b のパラメータ化で満たす（具体式で realize＝dup 分散のため。source_desc 参照）。図なし。
+    """
+    p = ctx.spec_level.params
+    x_sym, y_sym = sympy.symbols("x y")
+    which = "slope" if int(draw(p["which_domain"], rng)) == 0 else "intercept"
+    a = sympy.nsimplify(draw(p["slope_domain"], rng))  # x の係数（見かけ・答えに無関係）
+    b = sympy.nsimplify(draw(p["intercept_domain"], rng))  # 定数項（見かけ・答えに無関係）
+    statement = _fmt_eq(y_sym, a * x_sym + b)  # 例 "y = 3x + 5"
+    term_context = "x の係数" if which == "slope" else "定数項"
+
+    solver = REGISTRY.solver("math.linear_coefficient_role")
+    sol = cast(Solution, solver(which))
+    assert isinstance(sol.answer, ChoiceAnswer)
+    expected = "傾き" if which == "slope" else "切片"
+    assert sol.answer.correct == expected, (
+        f"double-solve 不一致: which={which}（{expected}）!= solver 判定 {sol.answer.correct}"
+    )
+
+    sub_question = SubQuestionMR(
+        label="(1)",
+        asked="choice",
+        answer=sol.answer,
+        steps=sol.steps,
+        concept_tags=_effective_concept_tags(ctx),
+        cause_tags=_effective_cause_tags(ctx),
+    )
+
+    return MR(
+        signature=ctx.spec_level.signature,
+        family=ctx.family,
+        level=ctx.level,
+        purpose=ctx.purpose,
+        seed=0,
+        params={"which": which, "a": str(a), "b": str(b)},
+        given={"statement": statement, "term_context": term_context},
+        sub_questions=[sub_question],
+        visual_plan=None,
+        provenance=Provenance(recipe="math.knowledge_coefficient_role"),
+    )
+
+
+# ---------------------------------------------------------------------------
 # math.linear_slope_as_rate（g2_l21.calculation Lv1 用）— 横展開#20（P1・C5）
 # 1次関数 y=ax+b で x が1増加したときの y の増加量（＝変化の割合＝傾き a）を数値で求める。
 # ---------------------------------------------------------------------------
@@ -2163,6 +2223,7 @@ __all__ = [
     "knowledge_range_endpoint",
     "knowledge_verify_solution",
     "knowledge_classify_linear",
+    "knowledge_coefficient_role",
     "linear_slope_as_rate",
     "rate_of_change",
     "intersection",

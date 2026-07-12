@@ -209,6 +209,13 @@ def double_solve_linear_slope_as_rate(mr: MR) -> Solution:
     return cast(Solution, solver(a))
 
 
+@register_checker("math.knowledge_coefficient_role.double_solve")
+def double_solve_knowledge_coefficient_role(mr: MR) -> Solution:
+    # which（係数/定数項）だけから傾き/切片を再判定（式の値は無関係）。
+    solver = REGISTRY.solver("math.linear_coefficient_role")
+    return cast(Solution, solver(mr.params["which"]))
+
+
 @register_checker("math.rate_of_change.double_solve")
 def double_solve_rate_of_change(mr: MR) -> Solution:
     p = mr.params
@@ -268,6 +275,7 @@ __all__ = [
     "double_solve_knowledge_verify_solution",
     "double_solve_knowledge_classify_linear",
     "double_solve_linear_slope_as_rate",
+    "double_solve_knowledge_coefficient_role",
     "double_solve_rate_of_change",
     "double_solve_intersection",
     "double_solve_y_range",

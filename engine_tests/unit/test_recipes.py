@@ -865,6 +865,41 @@ def test_knowledge_classify_linear_double_solve_property(seed):
 
 
 # ---------------------------------------------------------------------------
+# math.knowledge_coefficient_role（g2_l19.knowledge Lv1）— 横展開#21（P1・C5・用語想起）
+# ---------------------------------------------------------------------------
+def test_knowledge_coefficient_role_construct():
+    ctx = _make_ctx("math.g2_l19.knowledge", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+
+    assert mr.signature == "knowledge_coefficient_role"
+    assert set(mr.given.keys()) == {"statement", "term_context"}
+    assert mr.visual_plan is None
+    sq = mr.sub_questions[0]
+    assert sq.asked == "choice"
+    assert sq.answer.kind == "choice"
+    assert sq.answer.correct in {"傾き", "切片"}
+    assert sq.answer.fact_id == "lf.coefficient_role"
+    assert [s.op for s in sq.steps] == ["locate_part", "recall_term"]
+
+
+@pytest.mark.parametrize("seed", range(200))
+def test_knowledge_coefficient_role_double_solve_property(seed):
+    ctx = _make_ctx("math.g2_l19.knowledge", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+
+    which = mr.params["which"]
+    solver = REGISTRY.solver("math.linear_coefficient_role")
+    sol = solver(which)
+    assert sol.answer.kind == "choice"
+    assert sol.answer.correct == mr.sub_questions[0].answer.correct
+    # which（係数/定数項）で答えが変わる: slope→傾き / intercept→切片
+    assert (which == "slope") == (sol.answer.correct == "傾き")
+    assert (which == "intercept") == (sol.answer.correct == "切片")
+
+
+# ---------------------------------------------------------------------------
 # math.linear_slope_as_rate（g2_l21.calculation Lv1）— 横展開#20（P1・C5）
 # ---------------------------------------------------------------------------
 def test_linear_slope_as_rate_construct():
@@ -1101,4 +1136,7 @@ def test_recipes_declare_provides_concepts():
     })
     assert REGISTRY.recipe_concepts("math.linear_slope_as_rate") == frozenset({
         "linear_function.slope_as_rate_of_change",
+    })
+    assert REGISTRY.recipe_concepts("math.knowledge_coefficient_role") == frozenset({
+        "linear_function.coefficient_role",
     })

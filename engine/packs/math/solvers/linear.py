@@ -845,6 +845,39 @@ def classify_linear_function(rhs: object) -> Solution:
     return Solution(answer=answer, steps=steps)
 
 
+@register_solver("math.linear_coefficient_role")
+def linear_coefficient_role(which: object) -> Solution:
+    """1次関数 y=ax+b で x の係数 a・定数項 b がグラフの何を表すかを答える
+    （knowledge・g2_l19 Lv1）。which="slope"→a は傾き／which="intercept"→b は切片。
+    用語想起の規則で判定＝Q1 は V2（規則ベース）。solver は which だけで決める（式の値は無関係）。
+    """
+    w = str(which)
+    if w == "slope":
+        correct, other = "傾き", "切片"
+    elif w == "intercept":
+        correct, other = "切片", "傾き"
+    else:
+        raise ValueError(f"which は 'slope' か 'intercept' のいずれか（受領: {which!r}）")
+    steps = [
+        Step(
+            op="locate_part",
+            args=[],
+            result_srepr=w,
+            result_display="式のどの部分に注目するかを確かめる",
+            narration="1次関数の式の、x の係数の部分か、定数項の部分かを確かめる。",
+        ),
+        Step(
+            op="recall_term",
+            args=[],
+            result_srepr=correct,
+            result_display=correct,
+            narration="x の係数は傾き、定数項は切片を表すことを思い出す。",
+        ),
+    ]
+    answer = ChoiceAnswer(correct=correct, distractors=[other], fact_id="lf.coefficient_role")
+    return Solution(answer=answer, steps=steps)
+
+
 __all__ = [
     "linear_expr_from_two_points",
     "linear_expr_from_slope_point",
@@ -864,4 +897,5 @@ __all__ = [
     "verify_system_solution",
     "classify_linear_function",
     "linear_slope_as_rate",
+    "linear_coefficient_role",
 ]

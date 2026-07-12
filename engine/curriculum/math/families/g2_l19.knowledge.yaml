@@ -2,9 +2,16 @@ family: math.g2_l19.knowledge
 form: knowledge
 source_desc: |
   1次関数の定義・与式が1次関数かの判別（units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: 1次関数の定義・y=ax+b の各文字の意味を想起する。
+       example: 1次関数 y=ax+b について、a と b はそれぞれ何を表すか答えよ。
   Lv2 desc: 与式が1次関数か・aやbが何を表すかを判別・適用する。
        example: 次の（ア）〜（エ）のうち、y が x の1次関数であるものをすべて選び、そのときの
                 傾きと切片を答えよ。（ア）y=3x−2 （イ）y=x² （ウ）y=5 （エ）y=−x
+  【Lv1 設計モデル・要検収(Q4)】原題（a と b が何を表すか）を、具体式 y=ax+b の「x の係数」
+  または「定数項」が傾き・切片のどちらを表すかの単一選択に realize（which で答えが変わる用語想起
+  型）。一般形のままでは surface param が無く dup が出せないため、具体式で realize し a,b を見かけ
+  として引く（source_desc に明記＝preview 検収に委ねる）。Lv1（用語想起・op=locate_part/recall_term）
+  と Lv2（判別・op=inspect_rate_of_change/judge_linear）は steps op 列が異なり level_sep を満たす。
   【設計モデル・要検収(Q4)】原題の複数選択（4式から1次関数を選ぶ）を、1式ごとの単一選択
   （1次関数である/ではない）に realize する。式の種類（1次/定数/2次/反比例）で答えが変わる
   真の verify 型（#18 の連立解の判定と同思想・"常に同じ答え"の弱点を回避）。Q1 は式を x で
@@ -13,6 +20,22 @@ source_desc: |
   （ChoiceAnswer 経路）を spec＋小規則 solver classify_linear_function で再利用＝償却の実証。
 concepts_default: [linear_function.classify_as_linear]
 levels:
+  "1":
+    signature: knowledge_coefficient_role
+    recipe: math.knowledge_coefficient_role
+    params:
+      # which: 0=x の係数(→傾き) / 1=定数項(→切片)。which で答えが変わる（用語想起 verify 型）。
+      # a,b は式の見かけ（答えに無関係な surface）。which 2 × a × b で dup 分散。
+      which_domain: {int_set: [0, 1]}
+      slope_domain: {int_range: [-9, 9], exclude: [0]}
+      intercept_domain: {int_range: [-9, 9], exclude: [0]}
+    given: [statement, term_context]
+    asked: [choice]
+    visual: none
+    text: {tier: T1, template: lf_knowledge_coefficient_role_v1}
+    hints: [steps_prefix]
+    concept_tags: [linear_function.coefficient_role]
+    cause_tags: []
   "2":
     signature: knowledge_classify_linear
     recipe: math.knowledge_classify_linear

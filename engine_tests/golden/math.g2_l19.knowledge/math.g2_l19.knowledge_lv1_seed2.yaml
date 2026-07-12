@@ -1,0 +1,54 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - linear_function.coefficient_role
+  provenance:
+    git_commit: ''
+    recipe: math.knowledge_coefficient_role
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_knowledge_coefficient_role_v1
+    tier: T1
+  requested:
+    form: knowledge
+    level: 1
+    subject: math
+    unit: g2_l19
+  resolved:
+    form: knowledge
+    level: 1
+    subject: math
+    unit: g2_l19
+  seed: 2
+  signature: knowledge_coefficient_role
+problem_ref: 9b149acc27ee1033
+problem_text: 1次関数 y = 5x - 2 について、x の係数が表すものは、傾きと切片のどちらですか。
+sub_questions:
+- answer:
+    correct: 傾き
+    distractors:
+    - 切片
+    fact_id: lf.coefficient_role
+    kind: choice
+  cause_tags: []
+  concept_tags:
+  - linear_function.coefficient_role
+  explanation: まず、1次関数の式の、x の係数の部分か、定数項の部分かを確かめる。 式のどの部分に注目するかを確かめる次に、x の係数は傾き、定数項は切片を表すことを思い出す。 傾き
+  hints:
+  - 1次関数の式の、x の係数の部分か、定数項の部分かを確かめる。
+  label: (1)
+  prompt_text: choice を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 1次関数の式の、x の係数の部分か、定数項の部分かを確かめる。
+    op: locate_part
+    result_display: 式のどの部分に注目するかを確かめる
+    result_srepr: slope
+  - args: []
+    narration: x の係数は傾き、定数項は切片を表すことを思い出す。
+    op: recall_term
+    result_display: 傾き
+    result_srepr: 傾き
+visual_svg: null
