@@ -251,6 +251,13 @@ LF_RATE_OF_CHANGE_V1 = (
     "2点 {{ given.point_a }} と {{ given.point_b }} を通る1次関数について、変化の割合を求めよ。"
 )
 
+# g2_l29.find_value Lv3: 面積の式から目標面積となる時刻を逆算する（P1/C5）
+# 面積の式は given.expression、区間は given.x_domain、目標は given.condition（すべて whitelist）。
+LF_SOLVE_TIME_FROM_AREA_V1 = (
+    "動点が辺上を動くとき、三角形の面積 y cm² と時間 x 秒の関係が {{ given.expression }} で表され、"
+    "この区間は {{ given.x_domain }} である。この区間で{{ given.condition }}時刻 x を求めよ。"
+)
+
 # ---------------------------------------------------------------------------
 # g2_l27.find_value Lv2/Lv3: 2直線の交点の座標（横展開の第2セル・両レベル共用）
 # ---------------------------------------------------------------------------
@@ -336,6 +343,7 @@ def _register_all() -> None:
         "lf_knowledge_system_intersection_v1", LF_KNOWLEDGE_SYSTEM_INTERSECTION_V1
     )
     REGISTRY.register_template("lf_rate_of_change_v1", LF_RATE_OF_CHANGE_V1)
+    REGISTRY.register_template("lf_solve_time_from_area_v1", LF_SOLVE_TIME_FROM_AREA_V1)
     REGISTRY.register_template("lf_intersection_v1", LF_INTERSECTION_V1)
     REGISTRY.register_template("lf_intersection_diagram_v1", LF_INTERSECTION_DIAGRAM_V1)
     REGISTRY.register_template("lf_y_range_v1", LF_Y_RANGE_V1)
@@ -377,6 +385,7 @@ __all__ = [
     "LF_KNOWLEDGE_EQUATION_SOLUTION_SET_V1",
     "LF_KNOWLEDGE_SYSTEM_INTERSECTION_V1",
     "LF_RATE_OF_CHANGE_V1",
+    "LF_SOLVE_TIME_FROM_AREA_V1",
     "LF_INTERSECTION_V1",
     "LF_INTERSECTION_DIAGRAM_V1",
     "LF_Y_RANGE_V1",

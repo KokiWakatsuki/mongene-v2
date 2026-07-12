@@ -68,6 +68,9 @@ concepts:
   - id: linear_function.draw_segment
     label: "変域つき1次関数を、端点の開閉を区別して線分でかく"
     unit: g2_l23
+  - id: linear_function.solve_time_from_area
+    label: "面積の式 y=ax で目標の面積となる時刻を逆算する"
+    unit: g2_l29
   - id: simultaneous_equations.solve_by_elimination
     label: "連立方程式を加減法で解く（係数の絶対値が等しい）"
     unit: g2_l11

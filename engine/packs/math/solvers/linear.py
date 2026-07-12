@@ -972,6 +972,38 @@ def classify_line_by_signs(a: object, b: object) -> Solution:
     return Solution(answer=answer, steps=steps)
 
 
+@register_solver("math.solve_time_from_area")
+def solve_time_from_area(a: object, y_target: object) -> Solution:
+    """面積の式 y=ax（比例・a>0）で、面積が y_target となる時刻 x を逆算する（g2_l29.find_value Lv3）。
+
+    a·x = y_target を x について解く（x = y_target / a）。answer=value（時刻 x）。動点の面積の式は
+    既知として与え、目標の面積から時刻を逆算する技能のみを問う（面積の式の立式は word_problem g2_l29）。
+    narration には数字を書かない。
+    """
+    a_s, y_s = sympy.nsimplify(a), sympy.nsimplify(y_target)
+    if a_s <= 0:
+        raise ValueError("面積の比例定数 a は正である必要がある（a>0）")
+    x = y_s / a_s
+    steps = [
+        Step(
+            op="set_up_equation",
+            args=[],
+            result_srepr=sympy.srepr(sympy.Eq(a_s * X, y_s)),
+            result_display=f"{_format_linear_rhs(a_s, sympy.Integer(0))} = {_format_number(y_s)}",
+            narration="面積の式に、求める面積の値を代入して、時刻 x についての方程式をつくる。",
+        ),
+        Step(
+            op="solve_for_x",
+            args=[],
+            result_srepr=sympy.srepr(x),
+            result_display=f"x = {_format_number(x)}",
+            narration="両辺を x の係数で割って、時刻 x を求める。",
+        ),
+    ]
+    answer = SymbolicAnswer(srepr=sympy.srepr(x), display=_format_number(x))
+    return Solution(answer=answer, steps=steps)
+
+
 @register_solver("math.verify_system_solution")
 def verify_system_solution(
     line_a: tuple[object, object, object],

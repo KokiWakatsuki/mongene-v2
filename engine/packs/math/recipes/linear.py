@@ -2260,6 +2260,71 @@ def knowledge_classify_line_signs(ctx: CellContext, rng: Rng) -> MR:
 
 
 # ---------------------------------------------------------------------------
+# math.solve_time_from_area（g2_l29.find_value Lv3 用）— 横展開・P1/C5
+# 動点の面積の式 y=ax（比例）で、面積が y_target となる時刻 x を逆算する（a·x=y_target を解く）。
+# 面積の式は既知として与え、目標面積から時刻を逆算する技能のみ（面積の式の立式は wp g2_l29）。
+# ---------------------------------------------------------------------------
+_SOLVE_TIME_FROM_AREA_CONCEPTS = [
+    "linear_function.solve_time_from_area",
+]
+
+
+@register_recipe("math.solve_time_from_area", provides_concepts=_SOLVE_TIME_FROM_AREA_CONCEPTS)
+def solve_time_from_area(ctx: CellContext, rng: Rng) -> MR:
+    """面積の式 y=ax で面積が y_target となる時刻を逆算する（answer-first・find_value Lv3）。
+
+    比例定数 a（>0）・答えの時刻 x_ans（区間内）・区間の上端 x_max（>x_ans）を選び、
+    y_target = a·x_ans（区間内で必ず到達する面積）を逆算する。時刻は独立ソルバ
+    `math.solve_time_from_area` で a·x=y_target を解き直し x_ans と一致を assert。図なし。
+    """
+    p = ctx.spec_level.params
+    a = draw(p["slope_domain"], rng)          # 比例定数（>0）
+    x_ans = draw(p["x_answer_domain"], rng)    # 答えの時刻（区間内）
+    margin = draw(p["margin_domain"], rng)     # 区間上端までの余白（>0）
+
+    a_s = sympy.nsimplify(a)
+    x_ans_s = sympy.nsimplify(x_ans)
+    x_max_s = x_ans_s + sympy.nsimplify(margin)
+    y_target = a_s * x_ans_s  # 区間内で到達する面積（answer-first で clean）
+
+    solver = REGISTRY.solver("math.solve_time_from_area")
+    sol = cast(Solution, solver(a_s, y_target))
+    assert isinstance(sol.answer, SymbolicAnswer)
+    assert sol.answer.srepr == sympy.srepr(x_ans_s), (
+        f"double-solve 不一致: 構成時刻 {x_ans_s} != solver 再計算 {sol.answer.srepr}"
+    )
+
+    sub_question = SubQuestionMR(
+        label="(1)",
+        asked="value",
+        answer=sol.answer,
+        steps=sol.steps,
+        concept_tags=_effective_concept_tags(ctx),
+        cause_tags=_effective_cause_tags(ctx),
+    )
+
+    x_domain_disp = f"0 ≦ x ≦ {_fmt_number(x_max_s)}"
+    condition_disp = f"面積が {_fmt_number(y_target)} cm² となる"
+
+    return MR(
+        signature=ctx.spec_level.signature,
+        family=ctx.family,
+        level=ctx.level,
+        purpose=ctx.purpose,
+        seed=0,
+        params={"a": str(a_s), "y_target": str(y_target), "x_max": str(x_max_s)},
+        given={
+            "expression": _format_parallel_line_display(a_s, sympy.Integer(0)),
+            "x_domain": x_domain_disp,
+            "condition": condition_disp,
+        },
+        sub_questions=[sub_question],
+        visual_plan=None,
+        provenance=Provenance(recipe="math.solve_time_from_area"),
+    )
+
+
+# ---------------------------------------------------------------------------
 # math.knowledge_range_endpoint（g2_l23.knowledge Lv1 用）— 横展開#17・knowledge 償却の実証
 # 変域の端点が含まれるか（≦/≧なら含む・</>なら含まない）を単一選択で問う。#16 で開通した
 # knowledge capability（ChoiceAnswer 経路）を spec＋小規則 solver だけで再利用＝償却の実証。

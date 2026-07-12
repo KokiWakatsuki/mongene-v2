@@ -323,6 +323,14 @@ def double_solve_intersection(mr: MR) -> Solution:
     return cast(Solution, solver(line_a, line_b, p["method"]))
 
 
+@register_checker("math.solve_time_from_area.double_solve")
+def double_solve_solve_time_from_area(mr: MR) -> Solution:
+    # 面積の比例定数 a と目標面積 y_target から時刻 x=y_target/a を再計算（区間端は無関係）。
+    p = mr.params
+    solver = REGISTRY.solver("math.solve_time_from_area")
+    return cast(Solution, solver(sympy.sympify(p["a"]), sympy.sympify(p["y_target"])))
+
+
 @register_checker("math.y_range_from_domain.double_solve")
 def double_solve_y_range(mr: MR) -> Solution:
     p = mr.params
@@ -377,6 +385,7 @@ __all__ = [
     "double_solve_knowledge_system_intersection",
     "double_solve_rate_of_change",
     "double_solve_intersection",
+    "double_solve_solve_time_from_area",
     "double_solve_y_range",
     "double_solve_expr_from_range",
 ]

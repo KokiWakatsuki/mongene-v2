@@ -1,0 +1,52 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - linear_function.solve_time_from_area
+  provenance:
+    git_commit: ''
+    recipe: math.solve_time_from_area
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_solve_time_from_area_v1
+    tier: T1
+  requested:
+    form: find_value
+    level: 3
+    subject: math
+    unit: g2_l29
+  resolved:
+    form: find_value
+    level: 3
+    subject: math
+    unit: g2_l29
+  seed: 3
+  signature: solve_time_from_area
+problem_ref: 904c87af8bbabd6e
+problem_text: 動点が辺上を動くとき、三角形の面積 y cm² と時間 x 秒の関係が y = x で表され、この区間は 0 ≦ x ≦ 10 である。この区間で面積が 7 cm² となる時刻 x を求めよ。
+sub_questions:
+- answer:
+    display: '7'
+    kind: symbolic
+    srepr: Integer(7)
+  cause_tags: []
+  concept_tags:
+  - linear_function.solve_time_from_area
+  explanation: まず、面積の式に、求める面積の値を代入して、時刻 x についての方程式をつくる。 x = 7次に、両辺を x の係数で割って、時刻 x を求める。 x = 7
+  hints:
+  - 面積の式に、求める面積の値を代入して、時刻 x についての方程式をつくる。
+  label: (1)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 面積の式に、求める面積の値を代入して、時刻 x についての方程式をつくる。
+    op: set_up_equation
+    result_display: x = 7
+    result_srepr: Equality(Symbol('x'), Integer(7))
+  - args: []
+    narration: 両辺を x の係数で割って、時刻 x を求める。
+    op: solve_for_x
+    result_display: x = 7
+    result_srepr: Integer(7)
+visual_svg: null

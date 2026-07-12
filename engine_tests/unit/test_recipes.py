@@ -771,6 +771,37 @@ def test_intersection_diagram_lv2_positive_quadrant(seed):
 
 
 # ---------------------------------------------------------------------------
+# math.solve_time_from_area（g2_l29.find_value Lv3）— P1/C5（面積の式から時刻を逆算）
+# ---------------------------------------------------------------------------
+def test_solve_time_from_area_lv3_construct():
+    ctx = _make_ctx("math.g2_l29.find_value", 3)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+
+    assert mr.signature == "solve_time_from_area"
+    assert set(mr.given.keys()) == {"expression", "x_domain", "condition"}
+    sq = mr.sub_questions[0]
+    assert sq.asked == "value"
+    assert sq.answer.kind == "symbolic"
+    assert [s.op for s in sq.steps] == ["set_up_equation", "solve_for_x"]
+    assert mr.visual_plan is None
+
+
+@pytest.mark.parametrize("seed", range(200))
+def test_solve_time_from_area_double_solve_property(seed):
+    ctx = _make_ctx("math.g2_l29.find_value", 3)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+
+    solver = REGISTRY.solver("math.solve_time_from_area")
+    sol = solver(sympy.sympify(mr.params["a"]), sympy.sympify(mr.params["y_target"]))
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+    # 答えの時刻は区間 0≦x≦x_max 内
+    x_ans = sympy.sympify(sol.answer.srepr)
+    assert 0 < x_ans <= sympy.sympify(mr.params["x_max"])
+
+
+# ---------------------------------------------------------------------------
 # math.solve_system_elimination（g2_l11.calculation Lv1）— 横展開#11（連立・加減法）
 # ---------------------------------------------------------------------------
 def test_solve_system_elimination_lv1_construct():
