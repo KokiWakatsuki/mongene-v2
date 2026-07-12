@@ -1826,6 +1826,63 @@ def knowledge_classify_linear(ctx: CellContext, rng: Rng) -> MR:
 
 
 # ---------------------------------------------------------------------------
+# math.linear_slope_as_rate（g2_l21.calculation Lv1 用）— 横展開#20（P1・C5）
+# 1次関数 y=ax+b で x が1増加したときの y の増加量（＝変化の割合＝傾き a）を数値で求める。
+# ---------------------------------------------------------------------------
+_LINEAR_SLOPE_AS_RATE_CONCEPTS = [
+    "linear_function.slope_as_rate_of_change",
+]
+
+
+@register_recipe(
+    "math.linear_slope_as_rate", provides_concepts=_LINEAR_SLOPE_AS_RATE_CONCEPTS
+)
+def linear_slope_as_rate(ctx: CellContext, rng: Rng) -> MR:
+    """1次関数の式から変化の割合（x が1増えたときの y の増加量＝傾き a）を求める（answer-first）。
+
+    傾き a（≠0・±1除外）と切片 b を選び、式 y=ax+b を given.expression に提示。答えは傾き a を
+    独立 solver `math.linear_slope_as_rate` が a だけから再計算（double-solve）。答えは数値。
+    ★±1 を除外する理由: テンプレの「x が1増加」の "1" と答え a=±1 が G-Q5t で衝突するため
+    （傾き ±1 は特別扱い＝この増加量セルの対象外とする。他の傾きで概念は十分伝わる）。
+    無限性(F-3)は a,b のパラメータ化で満たす。図なし（calculation）。
+    """
+    p = ctx.spec_level.params
+    x_sym, y_sym = sympy.symbols("x y")
+    a = sympy.nsimplify(draw(p["slope_domain"], rng))  # 傾き（≠0・±1除外）
+    b = sympy.nsimplify(draw(p["intercept_domain"], rng))  # 切片（増加量に無関係）
+    expr = _fmt_eq(y_sym, a * x_sym + b)  # 例 "y = -4x + 1"
+
+    solver = REGISTRY.solver("math.linear_slope_as_rate")
+    sol = cast(Solution, solver(a))
+    assert isinstance(sol.answer, SymbolicAnswer)
+    assert sol.answer.srepr == sympy.srepr(a), (
+        f"double-solve 不一致: 構成傾き {a} != solver 再計算 {sol.answer.srepr}"
+    )
+
+    sub_question = SubQuestionMR(
+        label="(1)",
+        asked="value",
+        answer=sol.answer,
+        steps=sol.steps,
+        concept_tags=_effective_concept_tags(ctx),
+        cause_tags=_effective_cause_tags(ctx),
+    )
+
+    return MR(
+        signature=ctx.spec_level.signature,
+        family=ctx.family,
+        level=ctx.level,
+        purpose=ctx.purpose,
+        seed=0,
+        params={"a": str(a), "b": str(b)},
+        given={"expression": expr},
+        sub_questions=[sub_question],
+        visual_plan=None,
+        provenance=Provenance(recipe="math.linear_slope_as_rate"),
+    )
+
+
+# ---------------------------------------------------------------------------
 # math.rate_of_change（g2_l20.find_value Lv1 用）— 横展開の第1セル
 # ---------------------------------------------------------------------------
 _RATE_OF_CHANGE_CONCEPTS = [
@@ -2106,6 +2163,7 @@ __all__ = [
     "knowledge_range_endpoint",
     "knowledge_verify_solution",
     "knowledge_classify_linear",
+    "linear_slope_as_rate",
     "rate_of_change",
     "intersection",
     "y_range_from_domain",

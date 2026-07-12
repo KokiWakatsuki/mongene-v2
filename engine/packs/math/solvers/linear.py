@@ -778,6 +778,34 @@ def range_endpoint_inclusion(inclusive: object) -> Solution:
     return Solution(answer=answer, steps=steps)
 
 
+@register_solver("math.linear_slope_as_rate")
+def linear_slope_as_rate(a: object) -> Solution:
+    """1次関数 y=ax+b で x が1増加したときの y の増加量（＝変化の割合＝傾き a）を求める
+    （calculation・g2_l21）。増加量 = a(x+1)+b − (ax+b) = a で、切片 b にも x にも依らない。
+    solver は傾き a だけから答えを出す（recipe の切片は見ない・double-solve）。答えは数値。
+    """
+    a_s = sympy.nsimplify(a)
+    steps = [
+        Step(
+            op="compute_increment",
+            args=[],
+            result_srepr=sympy.srepr(a_s),
+            result_display="x が1増えたときの y の増加量を式の変化から調べる",
+            # 数字を出さない（§5-#9: narration/ヒントに数値を書かない）。
+            narration="x が1増えると y がいくつ増えるかを、式の変化から調べる。",
+        ),
+        Step(
+            op="state_rate_of_change",
+            args=[],
+            result_srepr=sympy.srepr(a_s),
+            result_display=_format_number(a_s),
+            narration="1次関数では、x が1増えるときの y の増加量は傾きに等しい。",
+        ),
+    ]
+    answer = SymbolicAnswer(srepr=sympy.srepr(a_s), display=_format_number(a_s))
+    return Solution(answer=answer, steps=steps)
+
+
 @register_solver("math.classify_linear_function")
 def classify_linear_function(rhs: object) -> Solution:
     """与えられた式 y=<rhs> が x の1次関数かを判定する（knowledge・g2_l19）。
@@ -835,4 +863,5 @@ __all__ = [
     "range_endpoint_inclusion",
     "verify_system_solution",
     "classify_linear_function",
+    "linear_slope_as_rate",
 ]

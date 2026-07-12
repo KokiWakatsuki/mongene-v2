@@ -865,6 +865,41 @@ def test_knowledge_classify_linear_double_solve_property(seed):
 
 
 # ---------------------------------------------------------------------------
+# math.linear_slope_as_rate（g2_l21.calculation Lv1）— 横展開#20（P1・C5）
+# ---------------------------------------------------------------------------
+def test_linear_slope_as_rate_construct():
+    ctx = _make_ctx("math.g2_l21.calculation", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+
+    assert mr.signature == "linear_slope_as_rate"
+    assert set(mr.given.keys()) == {"expression"}
+    assert mr.visual_plan is None
+    sq = mr.sub_questions[0]
+    assert sq.asked == "value"
+    assert sq.answer.kind == "symbolic"
+    assert [s.op for s in sq.steps] == ["compute_increment", "state_rate_of_change"]
+
+
+@pytest.mark.parametrize("seed", range(200))
+def test_linear_slope_as_rate_double_solve_property(seed):
+    ctx = _make_ctx("math.g2_l21.calculation", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+
+    # 傾き a だけから変化の割合を再計算（切片 b は無関係）→ recipe の答えと一致
+    a = sympy.sympify(mr.params["a"])
+    solver = REGISTRY.solver("math.linear_slope_as_rate")
+    sol = solver(a)
+    assert sol.answer.kind == "symbolic"
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+    # 答え＝傾き a（x が1増えたときの y の増加量）
+    assert sol.answer.srepr == sympy.srepr(a)
+    # ±1・0 は除外されている（G-Q5t 衝突回避）
+    assert a not in (0, 1, -1)
+
+
+# ---------------------------------------------------------------------------
 # math.rate_of_change（g2_l20.find_value Lv1）— 横展開の第1セル
 # ---------------------------------------------------------------------------
 def test_rate_of_change_lv1_construct():
@@ -1063,4 +1098,7 @@ def test_recipes_declare_provides_concepts():
     })
     assert REGISTRY.recipe_concepts("math.knowledge_classify_linear") == frozenset({
         "linear_function.classify_as_linear",
+    })
+    assert REGISTRY.recipe_concepts("math.linear_slope_as_rate") == frozenset({
+        "linear_function.slope_as_rate_of_change",
     })

@@ -77,3 +77,6 @@ concepts:
   - id: linear_function.classify_as_linear
     label: "与えられた式が y が x の1次関数かどうかを判別する"
     unit: g2_l19
+  - id: linear_function.slope_as_rate_of_change
+    label: "1次関数の式から変化の割合（x が1増えたときの y の増加量＝傾き）を求める"
+    unit: g2_l21

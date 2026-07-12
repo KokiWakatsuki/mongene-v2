@@ -201,6 +201,14 @@ def double_solve_knowledge_classify_linear(mr: MR) -> Solution:
     return cast(Solution, solver(rhs))
 
 
+@register_checker("math.linear_slope_as_rate.double_solve")
+def double_solve_linear_slope_as_rate(mr: MR) -> Solution:
+    # 傾き a だけから変化の割合（＝a）を再計算（切片 b は無関係）。
+    a = sympy.sympify(mr.params["a"])
+    solver = REGISTRY.solver("math.linear_slope_as_rate")
+    return cast(Solution, solver(a))
+
+
 @register_checker("math.rate_of_change.double_solve")
 def double_solve_rate_of_change(mr: MR) -> Solution:
     p = mr.params
@@ -259,6 +267,7 @@ __all__ = [
     "double_solve_knowledge_range_endpoint",
     "double_solve_knowledge_verify_solution",
     "double_solve_knowledge_classify_linear",
+    "double_solve_linear_slope_as_rate",
     "double_solve_rate_of_change",
     "double_solve_intersection",
     "double_solve_y_range",

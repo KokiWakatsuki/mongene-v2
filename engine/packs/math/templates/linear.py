@@ -145,6 +145,11 @@ LF_KNOWLEDGE_CLASSIFY_LINEAR_V1 = (
     "式 {{ given.statement }} は、y が x の1次関数であるといえますか、いえませんか。"
 )
 
+# g2_l21.calculation Lv1: 傾き=変化の割合の数値計算（横展開#20・P1/C5）
+LF_LINEAR_SLOPE_AS_RATE_V1 = (
+    "1次関数 {{ given.expression }} について、x が1増加したときの y の増加量を求めよ。"
+)
+
 
 # ---------------------------------------------------------------------------
 # g2_l20.find_value Lv1: 2点から変化の割合を求める（横展開の第1セル）
@@ -204,6 +209,9 @@ def _register_all() -> None:
     REGISTRY.register_template(
         "lf_knowledge_classify_linear_v1", LF_KNOWLEDGE_CLASSIFY_LINEAR_V1
     )
+    REGISTRY.register_template(
+        "lf_linear_slope_as_rate_v1", LF_LINEAR_SLOPE_AS_RATE_V1
+    )
     REGISTRY.register_template("lf_rate_of_change_v1", LF_RATE_OF_CHANGE_V1)
     REGISTRY.register_template("lf_intersection_v1", LF_INTERSECTION_V1)
     REGISTRY.register_template("lf_y_range_v1", LF_Y_RANGE_V1)
@@ -233,6 +241,7 @@ __all__ = [
     "LF_KNOWLEDGE_RANGE_ENDPOINT_V1",
     "LF_KNOWLEDGE_VERIFY_SOLUTION_V1",
     "LF_KNOWLEDGE_CLASSIFY_LINEAR_V1",
+    "LF_LINEAR_SLOPE_AS_RATE_V1",
     "LF_RATE_OF_CHANGE_V1",
     "LF_INTERSECTION_V1",
     "LF_Y_RANGE_V1",

@@ -1,0 +1,27 @@
+family: math.g2_l21.calculation
+form: calculation
+source_desc: |
+  1次関数のグラフの特徴（傾き）＝変化の割合の数値計算（units.generated.yaml の desc/example を正）。
+  Lv1 desc: 傾き＝変化の割合を数値計算する。
+       example: 1次関数 y=−4x+1 において、x が1増加したときの y の増加量を求めよ。（答え −4）
+  【設計モデル】x が1増加したときの y の増加量 = a(x+1)+b − (ax+b) = a（傾き）で、切片・x に
+  依らない。solver `linear_slope_as_rate` が傾き a だけから再計算＝double-solve は V1（恒真）。
+  無限性(F-3)は a,b のパラメータ化で満たす。★傾き ±1 は除外（テンプレの「x が1増加」の "1" と
+  答え a=±1 が G-Q5t で衝突するため。±1 は特別扱いで本セルの対象外・他の傾きで概念は伝わる）。
+concepts_default: [linear_function.slope_as_rate_of_change]
+levels:
+  "1":
+    signature: linear_slope_as_rate
+    recipe: math.linear_slope_as_rate
+    params:
+      # 傾き a（≠0・±1除外）＝答え。切片 b は増加量に無関係な見かけの変化。
+      # 組合せ 16×31=496 通り（狭いと dup_rate 超過: [-5,5]×[-9,9]=152 は実測 0.25 だった）。
+      slope_domain: {int_range: [-9, 9], exclude: [0, 1, -1]}
+      intercept_domain: {int_range: [-15, 15]}
+    given: [expression]
+    asked: [value]
+    visual: none
+    text: {tier: T1, template: lf_linear_slope_as_rate_v1}
+    hints: [steps_prefix]
+    concept_tags: [linear_function.slope_as_rate_of_change]
+    cause_tags: []

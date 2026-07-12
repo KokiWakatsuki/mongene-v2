@@ -1,0 +1,52 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - linear_function.slope_as_rate_of_change
+  provenance:
+    git_commit: ''
+    recipe: math.linear_slope_as_rate
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_linear_slope_as_rate_v1
+    tier: T1
+  requested:
+    form: calculation
+    level: 1
+    subject: math
+    unit: g2_l21
+  resolved:
+    form: calculation
+    level: 1
+    subject: math
+    unit: g2_l21
+  seed: 2
+  signature: linear_slope_as_rate
+problem_ref: 843a23a3f953135d
+problem_text: 1次関数 y = 3x + 14 について、x が1増加したときの y の増加量を求めよ。
+sub_questions:
+- answer:
+    display: '3'
+    kind: symbolic
+    srepr: Integer(3)
+  cause_tags: []
+  concept_tags:
+  - linear_function.slope_as_rate_of_change
+  explanation: まず、x が1増えると y がいくつ増えるかを、式の変化から調べる。 x が1増えたときの y の増加量を式の変化から調べる次に、1次関数では、x が1増えるときの y の増加量は傾きに等しい。 3
+  hints:
+  - x が1増えると y がいくつ増えるかを、式の変化から調べる。
+  label: (1)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args: []
+    narration: x が1増えると y がいくつ増えるかを、式の変化から調べる。
+    op: compute_increment
+    result_display: x が1増えたときの y の増加量を式の変化から調べる
+    result_srepr: Integer(3)
+  - args: []
+    narration: 1次関数では、x が1増えるときの y の増加量は傾きに等しい。
+    op: state_rate_of_change
+    result_display: '3'
+    result_srepr: Integer(3)
+visual_svg: null
