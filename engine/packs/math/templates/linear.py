@@ -157,6 +157,17 @@ LF_KNOWLEDGE_COEFFICIENT_ROLE_V1 = (
     "傾きと切片のどちらですか。"
 )
 
+# g2_l20.knowledge Lv1: 変化の割合はつねに一定で傾きに等しい（横展開#22・P1/C5）
+# 選択肢は本文に固定並記（テキスト選択肢答えは G-Q5t 素通り・全選択肢の提示は漏洩でない §7.7）。
+# 表示順は T1 preview 用。実際の出題では ChoiceAnswer の correct/distractors をホストがシャッフルする。
+LF_KNOWLEDGE_RATE_CONSTANT_V1 = (
+    "1次関数 {{ given.statement }} の変化の割合について、正しく説明しているものを"
+    "次のア〜ウから選べ。"
+    "ア 変化の割合はつねに一定で、傾きに等しい "
+    "イ 変化の割合は x の値によって変わる "
+    "ウ 変化の割合は切片に等しい"
+)
+
 
 # ---------------------------------------------------------------------------
 # g2_l20.find_value Lv1: 2点から変化の割合を求める（横展開の第1セル）
@@ -222,6 +233,9 @@ def _register_all() -> None:
     REGISTRY.register_template(
         "lf_knowledge_coefficient_role_v1", LF_KNOWLEDGE_COEFFICIENT_ROLE_V1
     )
+    REGISTRY.register_template(
+        "lf_knowledge_rate_constant_v1", LF_KNOWLEDGE_RATE_CONSTANT_V1
+    )
     REGISTRY.register_template("lf_rate_of_change_v1", LF_RATE_OF_CHANGE_V1)
     REGISTRY.register_template("lf_intersection_v1", LF_INTERSECTION_V1)
     REGISTRY.register_template("lf_y_range_v1", LF_Y_RANGE_V1)
@@ -253,6 +267,7 @@ __all__ = [
     "LF_KNOWLEDGE_CLASSIFY_LINEAR_V1",
     "LF_LINEAR_SLOPE_AS_RATE_V1",
     "LF_KNOWLEDGE_COEFFICIENT_ROLE_V1",
+    "LF_KNOWLEDGE_RATE_CONSTANT_V1",
     "LF_RATE_OF_CHANGE_V1",
     "LF_INTERSECTION_V1",
     "LF_Y_RANGE_V1",

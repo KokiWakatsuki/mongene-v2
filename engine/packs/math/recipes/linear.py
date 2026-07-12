@@ -1826,6 +1826,58 @@ def knowledge_classify_linear(ctx: CellContext, rng: Rng) -> MR:
 
 
 # ---------------------------------------------------------------------------
+# math.knowledge_rate_constant（g2_l20.knowledge Lv1 用）— 横展開#22（P1・C5）
+# 1次関数の変化の割合はつねに一定で傾きに等しい、という性質の正しい説明を選ぶ。答え固定型。
+# ---------------------------------------------------------------------------
+_KNOWLEDGE_RATE_CONSTANT_CONCEPTS = [
+    "linear_function.rate_of_change_is_constant",
+]
+
+
+@register_recipe(
+    "math.knowledge_rate_constant", provides_concepts=_KNOWLEDGE_RATE_CONSTANT_CONCEPTS
+)
+def knowledge_rate_constant(ctx: CellContext, rng: Rng) -> MR:
+    """1次関数の変化の割合の性質（つねに一定・傾きに等しい）の正しい説明を選ぶ（knowledge）。
+
+    独立 solver `math.rate_of_change_is_constant` が正しい説明を返す（式によらず不変・答え固定型）。
+    答えは ChoiceAnswer（correct 固定・distractors=誤った説明）。無限性(F-3)は具体式 y=ax+b の
+    見かけ a,b（答えに無関係な surface param）で満たす（source_desc の設計モデル参照）。図なし。
+    """
+    p = ctx.spec_level.params
+    x_sym, y_sym = sympy.symbols("x y")
+    a = sympy.nsimplify(draw(p["slope_domain"], rng))
+    b = sympy.nsimplify(draw(p["intercept_domain"], rng))
+    statement = _fmt_eq(y_sym, a * x_sym + b)
+
+    solver = REGISTRY.solver("math.rate_of_change_is_constant")
+    sol = cast(Solution, solver())
+    assert isinstance(sol.answer, ChoiceAnswer)
+
+    sub_question = SubQuestionMR(
+        label="(1)",
+        asked="choice",
+        answer=sol.answer,
+        steps=sol.steps,
+        concept_tags=_effective_concept_tags(ctx),
+        cause_tags=_effective_cause_tags(ctx),
+    )
+
+    return MR(
+        signature=ctx.spec_level.signature,
+        family=ctx.family,
+        level=ctx.level,
+        purpose=ctx.purpose,
+        seed=0,
+        params={"a": str(a), "b": str(b)},
+        given={"statement": statement},
+        sub_questions=[sub_question],
+        visual_plan=None,
+        provenance=Provenance(recipe="math.knowledge_rate_constant"),
+    )
+
+
+# ---------------------------------------------------------------------------
 # math.knowledge_coefficient_role（g2_l19.knowledge Lv1 用）— 横展開#21（P1・C5）
 # 1次関数 y=ax+b の x の係数・定数項がグラフの何を表すか（傾き/切片）を単一選択で問う。
 # which（係数/定数項）で答えが変わる（用語想起・#19 判別 Lv2 と op 列が異なり level_sep）。
@@ -2224,6 +2276,7 @@ __all__ = [
     "knowledge_verify_solution",
     "knowledge_classify_linear",
     "knowledge_coefficient_role",
+    "knowledge_rate_constant",
     "linear_slope_as_rate",
     "rate_of_change",
     "intersection",

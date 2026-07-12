@@ -83,3 +83,6 @@ concepts:
   - id: linear_function.slope_as_rate_of_change
     label: "1次関数の式から変化の割合（x が1増えたときの y の増加量＝傾き）を求める"
     unit: g2_l21
+  - id: linear_function.rate_of_change_is_constant
+    label: "1次関数の変化の割合はつねに一定で傾きに等しいことを想起する"
+    unit: g2_l20

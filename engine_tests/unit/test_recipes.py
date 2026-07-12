@@ -865,6 +865,43 @@ def test_knowledge_classify_linear_double_solve_property(seed):
 
 
 # ---------------------------------------------------------------------------
+# math.knowledge_rate_constant（g2_l20.knowledge Lv1）— 横展開#22（P1・C5・答え固定型）
+# ---------------------------------------------------------------------------
+_RATE_CONSTANT_CORRECT = "変化の割合はつねに一定で、傾きに等しい"
+
+
+def test_knowledge_rate_constant_construct():
+    ctx = _make_ctx("math.g2_l20.knowledge", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+
+    assert mr.signature == "knowledge_rate_constant"
+    assert set(mr.given.keys()) == {"statement"}
+    assert mr.visual_plan is None
+    sq = mr.sub_questions[0]
+    assert sq.asked == "choice"
+    assert sq.answer.kind == "choice"
+    assert sq.answer.correct == _RATE_CONSTANT_CORRECT
+    assert sq.answer.fact_id == "lf.rate_of_change_is_constant"
+    assert [s.op for s in sq.steps] == ["recall_property", "select_correct"]
+
+
+@pytest.mark.parametrize("seed", range(200))
+def test_knowledge_rate_constant_double_solve_property(seed):
+    ctx = _make_ctx("math.g2_l20.knowledge", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+
+    # 答え固定型: solver は引数なしで常に同じ正しい説明を返す
+    solver = REGISTRY.solver("math.rate_of_change_is_constant")
+    sol = solver()
+    assert sol.answer.kind == "choice"
+    assert sol.answer.correct == mr.sub_questions[0].answer.correct == _RATE_CONSTANT_CORRECT
+    # distractors は誤った説明（correct を含まない）
+    assert _RATE_CONSTANT_CORRECT not in sol.answer.distractors
+
+
+# ---------------------------------------------------------------------------
 # math.knowledge_coefficient_role（g2_l19.knowledge Lv1）— 横展開#21（P1・C5・用語想起）
 # ---------------------------------------------------------------------------
 def test_knowledge_coefficient_role_construct():
@@ -1139,4 +1176,7 @@ def test_recipes_declare_provides_concepts():
     })
     assert REGISTRY.recipe_concepts("math.knowledge_coefficient_role") == frozenset({
         "linear_function.coefficient_role",
+    })
+    assert REGISTRY.recipe_concepts("math.knowledge_rate_constant") == frozenset({
+        "linear_function.rate_of_change_is_constant",
     })

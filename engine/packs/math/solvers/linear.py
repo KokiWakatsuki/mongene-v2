@@ -845,6 +845,39 @@ def classify_linear_function(rhs: object) -> Solution:
     return Solution(answer=answer, steps=steps)
 
 
+@register_solver("math.rate_of_change_is_constant")
+def rate_of_change_is_constant(_marker: object = None) -> Solution:
+    """1次関数の変化の割合はつねに一定で傾きに等しい、という性質の想起（knowledge・g2_l20 Lv1）。
+    正しい説明（一定・傾きに等しい）を選ぶ規則。答えは常に同じ命題（命題の正誤想起・V2 規則）。
+    solver は引数を取らない（性質は式によらず不変）。無限性は recipe 側の surface param で確保する。
+    """
+    correct = "変化の割合はつねに一定で、傾きに等しい"
+    distractors = [
+        "変化の割合は x の値によって変わる",
+        "変化の割合は切片に等しい",
+    ]
+    steps = [
+        Step(
+            op="recall_property",
+            args=[],
+            result_srepr="rate_is_constant",
+            result_display="変化の割合の性質を思い出す",
+            narration="1次関数では、x がどこで増えても y の増え方が同じであることを思い出す。",
+        ),
+        Step(
+            op="select_correct",
+            args=[],
+            result_srepr=correct,
+            result_display=correct,
+            narration="変化の割合はつねに一定で、x の係数（傾き）に等しい。",
+        ),
+    ]
+    answer = ChoiceAnswer(
+        correct=correct, distractors=distractors, fact_id="lf.rate_of_change_is_constant"
+    )
+    return Solution(answer=answer, steps=steps)
+
+
 @register_solver("math.linear_coefficient_role")
 def linear_coefficient_role(which: object) -> Solution:
     """1次関数 y=ax+b で x の係数 a・定数項 b がグラフの何を表すかを答える
@@ -898,4 +931,5 @@ __all__ = [
     "classify_linear_function",
     "linear_slope_as_rate",
     "linear_coefficient_role",
+    "rate_of_change_is_constant",
 ]

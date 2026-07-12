@@ -1,0 +1,55 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - linear_function.rate_of_change_is_constant
+  provenance:
+    git_commit: ''
+    recipe: math.knowledge_rate_constant
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_knowledge_rate_constant_v1
+    tier: T1
+  requested:
+    form: knowledge
+    level: 1
+    subject: math
+    unit: g2_l20
+  resolved:
+    form: knowledge
+    level: 1
+    subject: math
+    unit: g2_l20
+  seed: 3
+  signature: knowledge_rate_constant
+problem_ref: 6e6611e7dc19e470
+problem_text: 1次関数 y = 4x - 11 の変化の割合について、正しく説明しているものを次のア〜ウから選べ。ア 変化の割合はつねに一定で、傾きに等しい イ 変化の割合は x の値によって変わる ウ 変化の割合は切片に等しい
+sub_questions:
+- answer:
+    correct: 変化の割合はつねに一定で、傾きに等しい
+    distractors:
+    - 変化の割合は x の値によって変わる
+    - 変化の割合は切片に等しい
+    fact_id: lf.rate_of_change_is_constant
+    kind: choice
+  cause_tags: []
+  concept_tags:
+  - linear_function.rate_of_change_is_constant
+  explanation: まず、1次関数では、x がどこで増えても y の増え方が同じであることを思い出す。 変化の割合の性質を思い出す次に、変化の割合はつねに一定で、x の係数（傾き）に等しい。 変化の割合はつねに一定で、傾きに等しい
+  hints:
+  - 1次関数では、x がどこで増えても y の増え方が同じであることを思い出す。
+  label: (1)
+  prompt_text: choice を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 1次関数では、x がどこで増えても y の増え方が同じであることを思い出す。
+    op: recall_property
+    result_display: 変化の割合の性質を思い出す
+    result_srepr: rate_is_constant
+  - args: []
+    narration: 変化の割合はつねに一定で、x の係数（傾き）に等しい。
+    op: select_correct
+    result_display: 変化の割合はつねに一定で、傾きに等しい
+    result_srepr: 変化の割合はつねに一定で、傾きに等しい
+visual_svg: null

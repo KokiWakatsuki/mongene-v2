@@ -216,6 +216,13 @@ def double_solve_knowledge_coefficient_role(mr: MR) -> Solution:
     return cast(Solution, solver(mr.params["which"]))
 
 
+@register_checker("math.knowledge_rate_constant.double_solve")
+def double_solve_knowledge_rate_constant(mr: MR) -> Solution:
+    # 変化の割合の性質は式によらず不変（答え固定型）。solver は引数を取らない。
+    solver = REGISTRY.solver("math.rate_of_change_is_constant")
+    return cast(Solution, solver())
+
+
 @register_checker("math.rate_of_change.double_solve")
 def double_solve_rate_of_change(mr: MR) -> Solution:
     p = mr.params
@@ -276,6 +283,7 @@ __all__ = [
     "double_solve_knowledge_classify_linear",
     "double_solve_linear_slope_as_rate",
     "double_solve_knowledge_coefficient_role",
+    "double_solve_knowledge_rate_constant",
     "double_solve_rate_of_change",
     "double_solve_intersection",
     "double_solve_y_range",
