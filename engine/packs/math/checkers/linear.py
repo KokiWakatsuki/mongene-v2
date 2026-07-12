@@ -123,6 +123,16 @@ def double_solve_read_intersection(mr: MR) -> Solution:
     return cast(Solution, solver(line_a, line_b, p["method"]))
 
 
+@register_checker("math.draw_linear_fraction.double_solve")
+def double_solve_draw_linear_fraction(mr: MR) -> Solution:
+    # 問題パラメータ（分子 p・分母 q・切片 b）だけから特徴を再計算（GraphAnswer）。
+    p = mr.params
+    solver = REGISTRY.solver("math.draw_linear_features_fraction")
+    return cast(Solution, solver(
+        sympy.sympify(p["p"]), sympy.sympify(p["q"]), sympy.sympify(p["b"]),
+    ))
+
+
 @register_checker("math.draw_from_table.double_solve")
 def double_solve_draw_from_table(mr: MR) -> Solution:
     # 対応表から作った線も y=ax+b の傾き・切片で採点＝draw_linear_features を再利用。
@@ -317,6 +327,7 @@ __all__ = [
     "double_solve_read_diagram_intersection",
     "double_solve_draw_special_lines",
     "double_solve_draw_from_table",
+    "double_solve_draw_linear_fraction",
     "double_solve_solve_system_elimination",
     "double_solve_solve_system_substitution",
     "double_solve_solve_system_elim_scaled",

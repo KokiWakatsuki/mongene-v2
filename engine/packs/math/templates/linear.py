@@ -84,6 +84,16 @@ LF_DRAW_GRAPH_V1 = (
 
 
 # ---------------------------------------------------------------------------
+# g2_l22.graph_table Lv3: 分数の傾きのグラフを格子点を通るようにかく（P1/C5）
+# 傾き・切片は given.expression の係数由来で whitelist（両符号化）。
+# ---------------------------------------------------------------------------
+LF_DRAW_GRAPH_FRACTION_V1 = (
+    "1次関数 {{ given.expression }} のグラフを、通る格子点を利用して"
+    "正確に座標平面にかけ。"
+)
+
+
+# ---------------------------------------------------------------------------
 # g2_l26.graph_table Lv1: ax+by=c を変形してグラフをかく（横展開#9・「かく」流用）
 # ---------------------------------------------------------------------------
 LF_DRAW_FROM_EQUATION_V1 = (
@@ -254,6 +264,7 @@ def _register_all() -> None:
     REGISTRY.register_template("lf_evaluate_at_x_v1", LF_EVALUATE_AT_X_V1)
     REGISTRY.register_template("lf_point_on_line_v1", LF_POINT_ON_LINE_V1)
     REGISTRY.register_template("lf_draw_graph_v1", LF_DRAW_GRAPH_V1)
+    REGISTRY.register_template("lf_draw_graph_fraction_v1", LF_DRAW_GRAPH_FRACTION_V1)
     REGISTRY.register_template("lf_draw_from_equation_v1", LF_DRAW_FROM_EQUATION_V1)
     REGISTRY.register_template("lf_read_intersection_v1", LF_READ_INTERSECTION_V1)
     REGISTRY.register_template(
@@ -311,6 +322,7 @@ __all__ = [
     "LF_EVALUATE_AT_X_V1",
     "LF_POINT_ON_LINE_V1",
     "LF_DRAW_GRAPH_V1",
+    "LF_DRAW_GRAPH_FRACTION_V1",
     "LF_DRAW_FROM_EQUATION_V1",
     "LF_READ_INTERSECTION_V1",
     "LF_READ_DIAGRAM_INTERSECTION_V1",

@@ -602,6 +602,49 @@ def test_draw_from_table_double_solve_property(seed):
 
 
 # ---------------------------------------------------------------------------
+# math.draw_linear_fraction（g2_l22.graph_table Lv3）— P1/C5（分数傾き・格子点）
+# ---------------------------------------------------------------------------
+def test_draw_linear_fraction_lv3_construct():
+    ctx = _make_ctx("math.g2_l22.graph_table", 3)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+
+    assert mr.signature == "draw_linear_fraction_slope"
+    assert set(mr.given.keys()) == {"expression"}
+    sq = mr.sub_questions[0]
+    assert sq.asked == "draw_graph"
+    assert sq.answer.kind == "graph"
+    assert len(sq.answer.features) == 3  # 傾き・切片・格子点
+    assert [s.op for s in sq.steps] == [
+        "plot_intercept", "apply_slope_denominator", "apply_slope_numerator",
+        "mark_lattice_point", "draw_line",
+    ]
+    # 傾きは非整数（分母 q≥2）
+    q = int(mr.params["q"])
+    assert q >= 2
+    slope = sympy.sympify(mr.params["a"])
+    assert not slope.is_integer
+    assert mr.visual_plan is not None
+    assert {e.kind for e in mr.visual_plan.elements} == {"grid", "axis"}
+
+
+@pytest.mark.parametrize("seed", range(200))
+def test_draw_linear_fraction_double_solve_property(seed):
+    ctx = _make_ctx("math.g2_l22.graph_table", 3)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+
+    solver = REGISTRY.solver("math.draw_linear_features_fraction")
+    sol = solver(
+        sympy.sympify(mr.params["p"]), sympy.sympify(mr.params["q"]),
+        sympy.sympify(mr.params["b"]),
+    )
+    set_recipe = {f.srepr for f in mr.sub_questions[0].answer.features}
+    set_solver = {f.srepr for f in sol.answer.features}
+    assert set_recipe == set_solver
+
+
+# ---------------------------------------------------------------------------
 # math.solve_system_elimination（g2_l11.calculation Lv1）— 横展開#11（連立・加減法）
 # ---------------------------------------------------------------------------
 def test_solve_system_elimination_lv1_construct():

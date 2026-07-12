@@ -1,8 +1,11 @@
-approved_at: '2026-07-12T09:46:53.760317'
+approved_at: '2026-07-13T02:22:18.178760'
 approver: koki
-content_sha256: 8949a0030ce674c057615c5124197c0e6c52b73794d9e781f143f48c16615702
+content_sha256: 32eea9d49d227d23340841da10b0a24977f0abfef290c22a01ee2c804f451954
 family: math.g2_l22.graph_table
 files:
 - engine_tests/golden/math.g2_l22.graph_table/math.g2_l22.graph_table_lv1_seed1.yaml
 - engine_tests/golden/math.g2_l22.graph_table/math.g2_l22.graph_table_lv1_seed2.yaml
 - engine_tests/golden/math.g2_l22.graph_table/math.g2_l22.graph_table_lv1_seed3.yaml
+- engine_tests/golden/math.g2_l22.graph_table/math.g2_l22.graph_table_lv3_seed1.yaml
+- engine_tests/golden/math.g2_l22.graph_table/math.g2_l22.graph_table_lv3_seed2.yaml
+- engine_tests/golden/math.g2_l22.graph_table/math.g2_l22.graph_table_lv3_seed3.yaml

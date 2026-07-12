@@ -746,6 +746,75 @@ def draw_special_lines(xi: object, yi: object, axis: object, k: object) -> Solut
     return Solution(answer=answer, steps=steps)
 
 
+@register_solver("math.draw_linear_features_fraction")
+def draw_linear_features_fraction(p: object, q: object, b: object) -> Solution:
+    """分数の傾き p/q の直線 y=(p/q)x+b を、格子点を通るようにかく（g2_l22.graph_table Lv3）。
+
+    傾き p/q（q>0・既約・非整数）と切片 b から、y 軸との交点 (0,b) と、そこから x を +q・
+    y を +p 進んだ格子点 (q, p+b) を採る（分数傾きでも整数座標で正確にかける）。答えは GraphAnswer
+    ＝傾き・切片・通る格子点の3特徴。steps は分母/分子ぶんの移動→格子点印づけ（Lv1 の整数傾きとは
+    op 列が異なる＝level_sep）。narration には数字を書かない。
+    """
+    p_s, q_s, b_s = sympy.nsimplify(p), sympy.nsimplify(q), sympy.nsimplify(b)
+    if q_s <= 1:
+        raise ValueError("分数傾きの分母 q は 2 以上（非整数の傾き）である必要がある")
+    slope = p_s / q_s  # sympy Rational（q≥2・既約）
+    intercept_pt = sympy.Tuple(sympy.Integer(0), b_s)
+    lattice_pt = sympy.Tuple(q_s, p_s + b_s)  # x=q で y=(p/q)*q+b=p+b（整数）
+    features = [
+        Feature(kind="slope", srepr=sympy.srepr(slope), display=f"傾き {_format_number(slope)}"),
+        Feature(
+            kind="intercept",
+            srepr=sympy.srepr(intercept_pt),
+            display=f"切片の点 (0, {_format_number(b_s)})",
+        ),
+        Feature(
+            kind="lattice_point",
+            srepr=sympy.srepr(lattice_pt),
+            display=f"通る格子点 ({_format_number(q_s)}, {_format_number(p_s + b_s)})",
+        ),
+    ]
+    steps = [
+        Step(
+            op="plot_intercept",
+            args=[],
+            result_srepr=sympy.srepr(intercept_pt),
+            result_display=f"(0, {_format_number(b_s)})",
+            narration="y 軸との交点（切片）に点をとる。",
+        ),
+        Step(
+            op="apply_slope_denominator",
+            args=[],
+            result_srepr=sympy.srepr(q_s),
+            result_display="分母のぶん x 方向へ",
+            narration="切片から、傾きの分母のぶんだけ x 軸の正の向きに進む。",
+        ),
+        Step(
+            op="apply_slope_numerator",
+            args=[],
+            result_srepr=sympy.srepr(p_s),
+            result_display="分子のぶん y 方向へ",
+            narration="そこから、傾きの分子のぶんだけ y 軸方向に進む（分子の符号にしたがう）。",
+        ),
+        Step(
+            op="mark_lattice_point",
+            args=[],
+            result_srepr=sympy.srepr(lattice_pt),
+            result_display=f"({_format_number(q_s)}, {_format_number(p_s + b_s)})",
+            narration="進んだ先の格子点に印をつける。",
+        ),
+        Step(
+            op="draw_line",
+            args=[],
+            result_srepr=sympy.srepr(slope * X + b_s),
+            result_display=_format_linear_rhs(slope, b_s),
+            narration="切片と格子点の2点を通る直線をひく。",
+        ),
+    ]
+    answer = GraphAnswer(features=features, solution_svg_ref="")
+    return Solution(answer=answer, steps=steps)
+
+
 @register_solver("math.linear_direction_from_slope")
 def linear_direction_from_slope(a: object) -> Solution:
     """1次関数 y=ax+b のグラフの向き（右上がり/右下がり）を傾き a の符号から判定する

@@ -1257,6 +1257,100 @@ def draw_from_table(ctx: CellContext, rng: Rng) -> MR:
 
 
 # ---------------------------------------------------------------------------
+# math.draw_linear_fraction（g2_l22.graph_table Lv3 用）— 横展開・P1/C5
+# 分数の傾き y=(p/q)x+b のグラフを、格子点 (0,b)・(q,p+b) を通るように正確にかく。
+# Lv1（整数傾き・draw_linear）と op 列を変える（分母/分子ぶんの移動→格子点印づけ）＝level_sep。
+# 答えは GraphAnswer（傾き・切片・通る格子点の3特徴）。問題図＝空の方眼。傾き・切片は given の
+# 式係数由来で whitelist（両符号化）。
+# ---------------------------------------------------------------------------
+_DRAW_FRACTION_CONCEPTS = [
+    "linear_function.draw_graph_fraction",
+]
+
+
+def _format_line_display_frac(slope: sympy.Rational, b: sympy.Expr) -> str:
+    """分数の傾き y=(p/q)x+b の given 表示（例: "y = -(2/3)x - 1", "y = (3/4)x + 2"）。"""
+    p_num, q_den = slope.p, slope.q
+    sign = "-" if p_num < 0 else ""
+    a_part = f"{sign}({abs(p_num)}/{q_den})x"
+    if b == 0:
+        rhs = a_part
+    elif b > 0:
+        rhs = f"{a_part} + {sympy.sstr(b)}"
+    else:
+        rhs = f"{a_part} - {sympy.sstr(-b)}"
+    return f"y = {rhs}"
+
+
+@register_recipe("math.draw_linear_fraction", provides_concepts=_DRAW_FRACTION_CONCEPTS)
+def draw_linear_fraction(ctx: CellContext, rng: Rng) -> MR:
+    """分数の傾きの直線を格子点を通るようにかく（answer-first・graph_table「かく」Lv3）。
+
+    傾き p/q（frac_range で q≥2・既約・非整数）と切片 b を選ぶ。独立ソルバ
+    `math.draw_linear_features_fraction` で採点用の特徴（傾き・切片・通る格子点 (q,p+b)）を得る。
+    問題図は空の方眼、模範解答図は直線つき。dup_key は実質 (p,q,b)。
+    """
+    prm = ctx.spec_level.params
+    slope = draw(prm["slope_domain"], rng)  # frac_range → 非整数・非ゼロの既約 Rational
+    b = draw(prm["intercept_domain"], rng)
+
+    slope_s = sympy.Rational(slope)
+    b_s = sympy.nsimplify(b)
+    p_num = sympy.Integer(slope_s.p)
+    q_den = sympy.Integer(slope_s.q)
+
+    solver = REGISTRY.solver("math.draw_linear_features_fraction")
+    sol = cast(Solution, solver(p_num, q_den, b_s))
+    assert isinstance(sol.answer, GraphAnswer)
+    expected_feature_sreprs = {
+        sympy.srepr(slope_s),
+        sympy.srepr(sympy.Tuple(sympy.Integer(0), b_s)),
+        sympy.srepr(sympy.Tuple(q_den, p_num + b_s)),
+    }
+    assert {f.srepr for f in sol.answer.features} == expected_feature_sreprs, (
+        f"double-solve 不一致: 想定特徴 {expected_feature_sreprs} "
+        f"!= solver 再計算 {{f.srepr for f in sol.answer.features}}"
+    )
+
+    pts = [
+        str((sympy.Integer(0), b_s)),
+        str((q_den, p_num + b_s)),
+    ]
+    render_params = {"a": str(slope_s), "b": str(b_s), "pts": pts}
+    solution_svg = render_line_solution_svg(render_params)
+    answer = GraphAnswer(features=sol.answer.features, solution_svg_ref=solution_svg)
+
+    sub_question = SubQuestionMR(
+        label="(1)",
+        asked="draw_graph",
+        answer=answer,
+        steps=sol.steps,
+        concept_tags=_effective_concept_tags(ctx),
+        cause_tags=_effective_cause_tags(ctx),
+    )
+
+    labels = tick_labels_from_params({"pts": pts})
+    visual_plan = VisualPlan(
+        style="grid",
+        labels=labels,
+        elements=[VisualElement(kind="grid", attrs={}), VisualElement(kind="axis", attrs={})],
+    )
+
+    return MR(
+        signature=ctx.spec_level.signature,
+        family=ctx.family,
+        level=ctx.level,
+        purpose=ctx.purpose,
+        seed=0,
+        params={"p": str(p_num), "q": str(q_den), "b": str(b_s), "a": str(slope_s), "pts": pts},
+        given={"expression": _format_line_display_frac(slope_s, b_s)},
+        sub_questions=[sub_question],
+        visual_plan=visual_plan,
+        provenance=Provenance(recipe="math.draw_linear_fraction"),
+    )
+
+
+# ---------------------------------------------------------------------------
 # math.solve_system_elimination（g2_l11.calculation Lv1 用）— 横展開#11・連立クラスタへ横展開
 # 加減法（係数の絶対値が等しい）。答え(x,y)は既存 intersection_of_two_lines を再利用（新solverゼロ）。
 # ---------------------------------------------------------------------------
