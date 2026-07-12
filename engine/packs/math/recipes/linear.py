@@ -2205,6 +2205,61 @@ def knowledge_slope_direction(ctx: CellContext, rng: Rng) -> MR:
 
 
 # ---------------------------------------------------------------------------
+# math.knowledge_classify_line_signs（g2_l21.knowledge Lv2 用）— 横展開・P1/C5
+# 傾き・切片の符号を合わせてグラフのようすを4分類で判別・適用する。Lv1（向き単独）と
+# op 列（identify_slope_sign→identify_intercept_sign→combine_signs）が異なる＝level_sep。
+# ---------------------------------------------------------------------------
+_KNOWLEDGE_CLASSIFY_SIGNS_CONCEPTS = [
+    "linear_function.classify_line_by_signs",
+]
+
+
+@register_recipe(
+    "math.knowledge_classify_line_signs", provides_concepts=_KNOWLEDGE_CLASSIFY_SIGNS_CONCEPTS
+)
+def knowledge_classify_line_signs(ctx: CellContext, rng: Rng) -> MR:
+    """傾き・切片の符号からグラフのようすを判別・適用する（knowledge・answer-first・Lv2）。
+
+    傾き a（≠0）・切片 b（≠0＝判別対象）を選び、式 y=ax+b を statement として提示。グラフのようす
+    （向き×y 軸のどちら側で交わるか＝4分類）は独立 solver `math.classify_line_by_signs` が a,b の
+    符号だけから判定する（double-solve）。答えは ChoiceAnswer（テキスト4択・数字なしで G-Q5t 素通り）。
+    無限性は a,b のパラメータ化で満たす（答えは4値だが dup_key は params(a,b) で測る）。
+    """
+    p = ctx.spec_level.params
+    x_sym = sympy.symbols("x")
+    y_sym = sympy.symbols("y")
+    a = sympy.nsimplify(draw(p["slope_domain"], rng))  # 傾き（≠0）
+    b = sympy.nsimplify(draw(p["intercept_domain"], rng))  # 切片（≠0・判別対象）
+    statement = _fmt_eq(y_sym, a * x_sym + b)  # "y = -3x + 4"
+
+    solver = REGISTRY.solver("math.classify_line_by_signs")
+    sol = cast(Solution, solver(a, b))
+    assert isinstance(sol.answer, ChoiceAnswer)
+
+    sub_question = SubQuestionMR(
+        label="(1)",
+        asked="choice",
+        answer=sol.answer,
+        steps=sol.steps,
+        concept_tags=_effective_concept_tags(ctx),
+        cause_tags=_effective_cause_tags(ctx),
+    )
+
+    return MR(
+        signature=ctx.spec_level.signature,
+        family=ctx.family,
+        level=ctx.level,
+        purpose=ctx.purpose,
+        seed=0,
+        params={"a": str(a), "b": str(b)},
+        given={"statement": statement},
+        sub_questions=[sub_question],
+        visual_plan=None,
+        provenance=Provenance(recipe="math.knowledge_classify_line_signs"),
+    )
+
+
+# ---------------------------------------------------------------------------
 # math.knowledge_range_endpoint（g2_l23.knowledge Lv1 用）— 横展開#17・knowledge 償却の実証
 # 変域の端点が含まれるか（≦/≧なら含む・</>なら含まない）を単一選択で問う。#16 で開通した
 # knowledge capability（ChoiceAnswer 経路）を spec＋小規則 solver だけで再利用＝償却の実証。

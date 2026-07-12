@@ -236,6 +236,14 @@ def double_solve_knowledge_slope_direction(mr: MR) -> Solution:
     return cast(Solution, solver(a))
 
 
+@register_checker("math.knowledge_classify_line_signs.double_solve")
+def double_solve_knowledge_classify_line_signs(mr: MR) -> Solution:
+    # 傾き a・切片 b の符号だけから4分類を再判定（式の値は無関係）。
+    p = mr.params
+    solver = REGISTRY.solver("math.classify_line_by_signs")
+    return cast(Solution, solver(sympy.sympify(p["a"]), sympy.sympify(p["b"])))
+
+
 @register_checker("math.knowledge_range_endpoint.double_solve")
 def double_solve_knowledge_range_endpoint(mr: MR) -> Solution:
     # 包含は不等号の等号の有無（inclusive）だけから再判定（端点値・関数は無関係）。
@@ -358,6 +366,7 @@ __all__ = [
     "double_solve_solve_system_preprocessed",
     "double_solve_solve_system_abc",
     "double_solve_knowledge_slope_direction",
+    "double_solve_knowledge_classify_line_signs",
     "double_solve_knowledge_range_endpoint",
     "double_solve_knowledge_verify_solution",
     "double_solve_knowledge_classify_linear",

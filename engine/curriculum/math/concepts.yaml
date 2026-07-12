@@ -86,6 +86,9 @@ concepts:
   - id: linear_function.slope_sign_to_direction
     label: "傾きの符号からグラフの向き（右上がり/右下がり）を判別する"
     unit: g2_l21
+  - id: linear_function.classify_line_by_signs
+    label: "傾き・切片の符号からグラフのようす（向き×y軸の交わり方）を判別・適用する"
+    unit: g2_l21
   - id: linear_function.range_endpoint_inclusion
     label: "変域の不等号（等号の有無）から端点が含まれるかを判別する"
     unit: g2_l23

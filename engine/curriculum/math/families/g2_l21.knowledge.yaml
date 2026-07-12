@@ -9,6 +9,14 @@ source_desc: |
   グラフの向き（右上がり/右下がり）」の判別を単一選択（ChoiceAnswer）で realize する。無限性(F-3)は
   係数 a,b のパラメータ化で満たす（式 y=ax+b を変え、向きは a の符号で決まる）。傾き/切片の用語想起
   （a=傾き, b=切片）は別の knowledge セルとして後続で追加可能。Q1 は fact_id 照合の V2（規則ベース）。
+  ---
+  Lv2 desc: グラフや式から傾き/切片の意味を判別・適用する。
+       example: 1次関数 y=−3x+4 のグラフについて、傾きと切片を答え、グラフが右上がり・右下がりの
+                どちらであるかを理由とともに答えよ。
+  【Lv2 設計モデル・要検収(Q4)】傾きの符号→向き（右上がり/右下がり）と、切片の符号→y 軸の正/負の
+  どちらで交わるか、の両方を合わせた4分類の単一選択（ChoiceAnswer）で「傾き/切片の意味を判別・適用」を
+  realize する。Lv1（向き単独＝傾きの符号のみ）と op 列（identify_slope_sign→identify_intercept_sign→
+  combine_signs）が異なる＝level_sep。切片 b は判別対象なので b≠0。
 concepts_default: [linear_function.slope_sign_to_direction]
 levels:
   "1":
@@ -25,4 +33,19 @@ levels:
     text: {tier: T1, template: lf_knowledge_slope_direction_v1}
     hints: [steps_prefix]
     concept_tags: [linear_function.slope_sign_to_direction]
+    cause_tags: []
+  "2":
+    signature: knowledge_classify_line_signs
+    recipe: math.knowledge_classify_line_signs
+    params:
+      # 傾き a（≠0）・切片 b（≠0＝判別対象）の符号で4分類が決まる。dup_key は params(a,b)。
+      # 答えは符号のみに依存し大きさは surface＝域を広くとって dup_rate を下げる（#19 の定石）。
+      slope_domain: {int_range: [-40, 40], exclude: [0]}
+      intercept_domain: {int_range: [-40, 40], exclude: [0]}
+    given: [statement]
+    asked: [choice]
+    visual: none
+    text: {tier: T1, template: lf_knowledge_classify_line_signs_v1}
+    hints: [steps_prefix]
+    concept_tags: [linear_function.classify_line_by_signs]
     cause_tags: []

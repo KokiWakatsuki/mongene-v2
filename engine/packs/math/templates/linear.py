@@ -181,6 +181,16 @@ LF_KNOWLEDGE_SLOPE_DIRECTION_V1 = (
     "1次関数 {{ given.statement }} のグラフは、右上がりと右下がりのどちらですか。"
 )
 
+# g2_l21.knowledge Lv2: 傾き・切片の符号からグラフのようすを判別・適用（P1/C5）
+# 4分類の選択肢は本文に固定並記（テキスト選択肢答えは G-Q5t 素通り・§7.7）。
+LF_KNOWLEDGE_CLASSIFY_LINE_SIGNS_V1 = (
+    "1次関数 {{ given.statement }} のグラフのようすとして正しいものを、次のア〜エから選べ。"
+    "ア 右上がりで、y 軸の正の部分で y 軸と交わる "
+    "イ 右上がりで、y 軸の負の部分で y 軸と交わる "
+    "ウ 右下がりで、y 軸の正の部分で y 軸と交わる "
+    "エ 右下がりで、y 軸の負の部分で y 軸と交わる"
+)
+
 # g2_l23.knowledge Lv1: 変域の端点がグラフにふくまれるか（横展開#17・knowledge 償却実証）
 LF_KNOWLEDGE_RANGE_ENDPOINT_V1 = (
     "{{ given.statement }}、変域の端の点はグラフにふくまれますか、ふくまれませんか。"
@@ -291,6 +301,9 @@ def _register_all() -> None:
         "lf_knowledge_slope_direction_v1", LF_KNOWLEDGE_SLOPE_DIRECTION_V1
     )
     REGISTRY.register_template(
+        "lf_knowledge_classify_line_signs_v1", LF_KNOWLEDGE_CLASSIFY_LINE_SIGNS_V1
+    )
+    REGISTRY.register_template(
         "lf_knowledge_range_endpoint_v1", LF_KNOWLEDGE_RANGE_ENDPOINT_V1
     )
     REGISTRY.register_template(
@@ -345,6 +358,7 @@ __all__ = [
     "LF_SOLVE_SYSTEM_VARIOUS_V1",
     "LF_SOLVE_SYSTEM_ABC_V1",
     "LF_KNOWLEDGE_SLOPE_DIRECTION_V1",
+    "LF_KNOWLEDGE_CLASSIFY_LINE_SIGNS_V1",
     "LF_KNOWLEDGE_RANGE_ENDPOINT_V1",
     "LF_KNOWLEDGE_VERIFY_SOLUTION_V1",
     "LF_KNOWLEDGE_CLASSIFY_LINEAR_V1",

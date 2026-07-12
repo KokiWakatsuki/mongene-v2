@@ -716,6 +716,38 @@ def test_evaluate_linear_fraction_double_solve_property(seed):
 
 
 # ---------------------------------------------------------------------------
+# math.knowledge_classify_line_signs（g2_l21.knowledge Lv2）— P1/C5（傾き/切片の符号判別）
+# ---------------------------------------------------------------------------
+def test_knowledge_classify_line_signs_lv2_construct():
+    ctx = _make_ctx("math.g2_l21.knowledge", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+
+    assert mr.signature == "knowledge_classify_line_signs"
+    assert set(mr.given.keys()) == {"statement"}
+    sq = mr.sub_questions[0]
+    assert sq.asked == "choice"
+    assert sq.answer.kind == "choice"
+    assert len(sq.answer.distractors) == 3  # 4分類のうち残り3つが妨害
+    assert [s.op for s in sq.steps] == [
+        "identify_slope_sign", "identify_intercept_sign", "combine_signs",
+    ]
+    assert mr.visual_plan is None
+
+
+@pytest.mark.parametrize("seed", range(200))
+def test_knowledge_classify_line_signs_double_solve_property(seed):
+    ctx = _make_ctx("math.g2_l21.knowledge", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+
+    solver = REGISTRY.solver("math.classify_line_by_signs")
+    sol = solver(sympy.sympify(mr.params["a"]), sympy.sympify(mr.params["b"]))
+    assert sol.answer.correct == mr.sub_questions[0].answer.correct
+    assert sol.answer.fact_id == mr.sub_questions[0].answer.fact_id
+
+
+# ---------------------------------------------------------------------------
 # math.solve_system_elimination（g2_l11.calculation Lv1）— 横展開#11（連立・加減法）
 # ---------------------------------------------------------------------------
 def test_solve_system_elimination_lv1_construct():

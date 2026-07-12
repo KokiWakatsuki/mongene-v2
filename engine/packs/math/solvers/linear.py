@@ -912,6 +912,66 @@ def linear_direction_from_slope(a: object) -> Solution:
     return Solution(answer=answer, steps=steps)
 
 
+def _line_sign_description(a_positive: bool, b_positive: bool) -> str:
+    """傾き・切片の符号からグラフのようすの説明文を作る（4分類の各文言）。"""
+    direction = "右上がり" if a_positive else "右下がり"
+    inter = "y 軸の正の部分" if b_positive else "y 軸の負の部分"
+    return f"{direction}で、{inter}で y 軸と交わる"
+
+
+@register_solver("math.classify_line_by_signs")
+def classify_line_by_signs(a: object, b: object) -> Solution:
+    """1次関数 y=ax+b のグラフのようすを、傾き a と切片 b の符号から判別する（knowledge・g2_l21 Lv2）。
+
+    傾きの符号→向き（右上がり/右下がり）と、切片の符号→y 軸の正/負のどちらで交わるか、の
+    2つを合わせた4分類の単一選択。傾き・切片の両方の意味を判別・適用する（Lv1 の向き単独＝
+    傾きの符号のみ、とは op 列も答えの構造も異なる）。b（切片）は本セルでは判別対象なので b≠0 必須。
+    Q1 は fact_id 照合の V2（規則ベース）。答えは ChoiceAnswer（テキスト＝数字なしで G-Q5t 素通り）。
+    """
+    a_s, b_s = sympy.nsimplify(a), sympy.nsimplify(b)
+    if a_s == 0:
+        raise ValueError("傾き a=0 は1次関数でない（a≠0）")
+    if b_s == 0:
+        raise ValueError("切片 b=0（原点を通る）は本セルの4分類の対象外（b≠0）")
+    ap, bp = a_s > 0, b_s > 0
+    correct = _line_sign_description(ap, bp)
+    # 決定論的な順序で4分類を並べ、correct を除いたものを妨害選択肢にする。
+    all_four = [
+        _line_sign_description(True, True),
+        _line_sign_description(True, False),
+        _line_sign_description(False, True),
+        _line_sign_description(False, False),
+    ]
+    distractors = [d for d in all_four if d != correct]
+    steps = [
+        Step(
+            op="identify_slope_sign",
+            args=[],
+            result_srepr=sympy.srepr(sympy.sign(a_s)),
+            result_display="傾きの符号",
+            narration="傾き a の符号から、グラフが右上がりか右下がりかを判断する。",
+        ),
+        Step(
+            op="identify_intercept_sign",
+            args=[],
+            result_srepr=sympy.srepr(sympy.sign(b_s)),
+            result_display="切片の符号",
+            narration="切片 b の符号から、y 軸の正の部分・負の部分のどちらで交わるかを判断する。",
+        ),
+        Step(
+            op="combine_signs",
+            args=[],
+            result_srepr=correct,
+            result_display=correct,
+            narration="傾きと切片の符号を合わせて、グラフのようすを選ぶ。",
+        ),
+    ]
+    answer = ChoiceAnswer(
+        correct=correct, distractors=distractors, fact_id="lf.slope_and_intercept_signs"
+    )
+    return Solution(answer=answer, steps=steps)
+
+
 @register_solver("math.verify_system_solution")
 def verify_system_solution(
     line_a: tuple[object, object, object],
