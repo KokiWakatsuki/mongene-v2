@@ -911,6 +911,121 @@ def read_intersection_from_graph(ctx: CellContext, rng: Rng) -> MR:
 
 
 # ---------------------------------------------------------------------------
+# math.read_diagram_intersection（g2_l30.graph_table Lv2 用）— 横展開・P1/C5
+# ダイヤグラム（時間-道のり）の2直線をかき、交点（出会い/追いつき）をグラフから読む。
+# #10 read_intersection_from_graph の流用: solver は `intersection_of_two_lines`（g2_l27 と共有）
+# を再利用＝新 solver ゼロ。追加分は「交点を第1象限の格子点（時間・道のり>0）に限定」と
+# 「シナリオ（meet=傾き異符号で向かい合う／catchup=傾き同符号で相異＝追いつき）」のみ。
+# ★式は既知として与え、グラフ読解のみを問う（場面→立式は word_problem g2_l30 の領域）。
+#   問題図は空の方眼（l27 前例。生徒が2直線をかいて交点を読む＝幾何リーク規則は不発）。
+# ---------------------------------------------------------------------------
+_DIAGRAM_INTERSECTION_CONCEPTS = [
+    "linear_function.diagram_intersection",
+]
+
+
+@register_recipe("math.read_diagram_intersection", provides_concepts=_DIAGRAM_INTERSECTION_CONCEPTS)
+def read_diagram_intersection(ctx: CellContext, rng: Rng) -> MR:
+    """ダイヤグラムの2直線の交点（出会い/追いつき）をグラフから読み取る（answer-first・「読む」Lv2）。
+
+    交点 (x0,y0) を第1象限の格子点（時間 x>0・道のり y>0）に先に決め、シナリオ
+    （meet=向かい合う＝傾き異符号／catchup=同方向で追いつき＝傾き同符号かつ相異）に応じて
+    2傾き a1,a2 を選び、各直線が (x0,y0) を通るよう切片を逆算する。答え（交点）は既存 solver
+    `math.intersection_of_two_lines`（g2_l27 と共有）で再計算して一致を確認する（新 solver ゼロ）。
+    問題図は空の方眼（生徒が2直線をかいて交点を読む）。steps はグラフ読解の手順（数字を含めない）。
+    """
+    p = ctx.spec_level.params
+    x0 = draw(p["x_domain"], rng)
+    y0 = draw(p["y_domain"], rng)
+    scenario = draw(p["scenario_domain"], rng)  # 素の配列 [meet, catchup] からの一様選択
+    if scenario == "meet":
+        a1 = draw(p["pos_slope_domain"], rng)  # 向かい合う: 一方は正の傾き
+        a2 = draw(p["neg_slope_domain"], rng)  # もう一方は負の傾き（異符号）
+    else:  # catchup: 同方向（同符号）で傾きが相異＝速い方が追いつく
+        a1, a2 = draw_many(p["pos_slope_domain"], rng, k=2)  # distinct:[value] で相異保証
+
+    x0_s, y0_s = sympy.nsimplify(x0), sympy.nsimplify(y0)
+    a1_s, a2_s = sympy.nsimplify(a1), sympy.nsimplify(a2)
+    b1_s = y0_s - a1_s * x0_s
+    b2_s = y0_s - a2_s * x0_s
+
+    # 一般形係数（y = a x + b ⇔ -a x + y = b）で solver に渡す（g2_l27 と同じ規約）。
+    coeffs1 = [-a1_s, sympy.Integer(1), b1_s]
+    coeffs2 = [-a2_s, sympy.Integer(1), b2_s]
+    solver = REGISTRY.solver("math.intersection_of_two_lines")
+    sol = cast(Solution, solver(tuple(coeffs1), tuple(coeffs2), "substitute"))
+    assert isinstance(sol.answer, SymbolicAnswer)
+    expected_pt = sympy.Tuple(x0_s, y0_s)
+    assert sol.answer.srepr == sympy.srepr(expected_pt), (
+        f"double-solve 不一致: 構成交点 {expected_pt} != solver 再計算 {sol.answer.srepr}"
+    )
+
+    disp1 = _format_parallel_line_display(a1_s, b1_s)
+    disp2 = _format_parallel_line_display(a2_s, b2_s)
+    # グラフ読解の手順（narration に数字を書かない＝G-Q5t 偽陽性回避。§5-#9）。
+    steps = [
+        Step(
+            op="draw_line_a",
+            args=[disp1],
+            result_srepr=sympy.srepr(a1_s * sympy.Symbol("x") + b1_s),
+            result_display=disp1,
+            narration="Aさんの進むようすを表す直線を座標平面にかく。",
+        ),
+        Step(
+            op="draw_line_b",
+            args=[disp2],
+            result_srepr=sympy.srepr(a2_s * sympy.Symbol("x") + b2_s),
+            result_display=disp2,
+            narration="Bさんの進むようすを表す直線を同じ平面にかく。",
+        ),
+        Step(
+            op="read_intersection",
+            args=[],
+            result_srepr=sol.answer.srepr,
+            result_display=sol.answer.display,
+            narration="2つの直線が交わる点の座標（同じ地点にいる時間と道のり）を読み取る。",
+        ),
+    ]
+
+    sub_question = SubQuestionMR(
+        label="(1)",
+        asked="read_intersection",
+        answer=sol.answer,
+        steps=steps,
+        concept_tags=_effective_concept_tags(ctx),
+        cause_tags=_effective_cause_tags(ctx),
+    )
+
+    # 空の方眼の描画範囲: 交点と両直線の y切片を含める（生徒が両直線をかける窓）。
+    pts = [str((x0_s, y0_s)), str((sympy.Integer(0), b1_s)), str((sympy.Integer(0), b2_s))]
+    labels = tick_labels_from_params({"pts": pts})
+    visual_plan = VisualPlan(
+        style="grid",
+        labels=labels,
+        elements=[VisualElement(kind="grid", attrs={}), VisualElement(kind="axis", attrs={})],
+    )
+
+    return MR(
+        signature=ctx.spec_level.signature,
+        family=ctx.family,
+        level=ctx.level,
+        purpose=ctx.purpose,
+        seed=0,
+        params={
+            "line_a": [str(c) for c in coeffs1],
+            "line_b": [str(c) for c in coeffs2],
+            "method": "substitute",
+            "scenario": scenario,  # dup_key 分散のため（＋faithful な題材差の記録）
+            "pts": pts,
+        },
+        given={"line_a": disp1, "line_b": disp2},
+        sub_questions=[sub_question],
+        visual_plan=visual_plan,
+        provenance=Provenance(recipe="math.read_diagram_intersection"),
+    )
+
+
+# ---------------------------------------------------------------------------
 # math.solve_system_elimination（g2_l11.calculation Lv1 用）— 横展開#11・連立クラスタへ横展開
 # 加減法（係数の絶対値が等しい）。答え(x,y)は既存 intersection_of_two_lines を再利用（新solverゼロ）。
 # ---------------------------------------------------------------------------

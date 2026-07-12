@@ -103,6 +103,19 @@ LF_READ_INTERSECTION_V1 = (
 
 
 # ---------------------------------------------------------------------------
+# g2_l30.graph_table Lv2: ダイヤグラム（時間-道のり）の2直線の交点を読む（P1/C5）
+# 式は既知として与え、グラフ読解のみを問う（立式は word_problem l30）。
+# 「2つの直線」: 助数詞「つ」は G-Q5t 除外対象で先頭 "2" が答え座標と衝突する偽陽性を避ける。
+# ---------------------------------------------------------------------------
+LF_READ_DIAGRAM_INTERSECTION_V1 = (
+    "AさんとBさんが動くようすを、出発してからの時間 x とP地点からの道のり y の関係で表す。"
+    "Aさんの進むようすは {{ given.line_a }}、Bさんの進むようすは {{ given.line_b }} である。"
+    "この2つの直線を同じ座標平面にかき、2つの直線が交わる点の座標"
+    "（2人が同じ地点にいる時間と、そのときの道のり）を読み取れ。"
+)
+
+
+# ---------------------------------------------------------------------------
 # g2_l11.calculation Lv1: 連立方程式を加減法で解く（横展開#11・連立クラスタ）
 # ---------------------------------------------------------------------------
 LF_SOLVE_SYSTEM_ELIM_V1 = (
@@ -223,6 +236,9 @@ def _register_all() -> None:
     REGISTRY.register_template("lf_draw_graph_v1", LF_DRAW_GRAPH_V1)
     REGISTRY.register_template("lf_draw_from_equation_v1", LF_DRAW_FROM_EQUATION_V1)
     REGISTRY.register_template("lf_read_intersection_v1", LF_READ_INTERSECTION_V1)
+    REGISTRY.register_template(
+        "lf_read_diagram_intersection_v1", LF_READ_DIAGRAM_INTERSECTION_V1
+    )
     REGISTRY.register_template("lf_solve_system_elim_v1", LF_SOLVE_SYSTEM_ELIM_V1)
     REGISTRY.register_template("lf_solve_system_subst_v1", LF_SOLVE_SYSTEM_SUBST_V1)
     REGISTRY.register_template("lf_solve_system_various_v1", LF_SOLVE_SYSTEM_VARIOUS_V1)
@@ -275,6 +291,7 @@ __all__ = [
     "LF_DRAW_GRAPH_V1",
     "LF_DRAW_FROM_EQUATION_V1",
     "LF_READ_INTERSECTION_V1",
+    "LF_READ_DIAGRAM_INTERSECTION_V1",
     "LF_SOLVE_SYSTEM_ELIM_V1",
     "LF_SOLVE_SYSTEM_SUBST_V1",
     "LF_SOLVE_SYSTEM_VARIOUS_V1",

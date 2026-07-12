@@ -490,6 +490,45 @@ def test_read_intersection_from_graph_double_solve_property(seed):
 
 
 # ---------------------------------------------------------------------------
+# math.read_diagram_intersection（g2_l30.graph_table Lv2）— P1/C5（ダイヤ交点読み）
+# ---------------------------------------------------------------------------
+def test_read_diagram_intersection_lv2_construct():
+    ctx = _make_ctx("math.g2_l30.graph_table", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+
+    assert mr.signature == "read_diagram_intersection_graph"
+    assert set(mr.given.keys()) == {"line_a", "line_b"}
+    sq = mr.sub_questions[0]
+    assert sq.asked == "read_intersection"
+    assert sq.answer.kind == "symbolic"  # 交点座標（点）
+    assert [s.op for s in sq.steps] == ["draw_line_a", "draw_line_b", "read_intersection"]
+    # 交点は第1象限の格子点（時間・道のり>0）
+    x0, y0 = sympy.sympify(mr.params["pts"][0])
+    assert x0 > 0 and y0 > 0
+    assert mr.params["scenario"] in {"meet", "catchup"}
+    # 問題図は空の方眼（生徒が2直線をかく）
+    assert mr.visual_plan is not None
+    assert {e.kind for e in mr.visual_plan.elements} == {"grid", "axis"}
+
+
+@pytest.mark.parametrize("seed", range(200))
+def test_read_diagram_intersection_double_solve_property(seed):
+    ctx = _make_ctx("math.g2_l30.graph_table", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+
+    line_a = tuple(sympy.sympify(c) for c in mr.params["line_a"])
+    line_b = tuple(sympy.sympify(c) for c in mr.params["line_b"])
+    solver = REGISTRY.solver("math.intersection_of_two_lines")
+    sol = solver(line_a, line_b, mr.params["method"])
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+    # 交点は第1象限（時間・道のり>0）
+    x0, y0 = sympy.sympify(mr.params["pts"][0])
+    assert x0 > 0 and y0 > 0
+
+
+# ---------------------------------------------------------------------------
 # math.solve_system_elimination（g2_l11.calculation Lv1）— 横展開#11（連立・加減法）
 # ---------------------------------------------------------------------------
 def test_solve_system_elimination_lv1_construct():

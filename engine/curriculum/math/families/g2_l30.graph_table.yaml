@@ -1,0 +1,40 @@
+family: math.g2_l30.graph_table
+form: graph_table
+source_desc: |
+  ダイヤグラム（時間-道のり）の2者の直線をかき、交点（出会い/追いつき）の位置を読む
+  （units.generated.yaml の desc/example を正として転記）。
+  desc: 2者の直線を読み交点(出会い/追いつき)の位置を読む。
+  example: 次のダイヤグラムは、AさんとBさんがそれぞれ地点Pを出発して地点Qへ向かうようすを
+    表している。2人が同じ地点を通過してすれちがう（追いつく）ときの、出発してからの時間と
+    地点Pからの道のりをグラフから読み取って答えよ。
+  答えは交点の座標（SymbolicAnswer＝出会う/追いつく時間と道のり）。検証は g2_l27 と同じ
+  intersection_of_two_lines solver を再利用（新 solver ゼロ＝償却）。問題図は空の方眼
+  （生徒が2直線をかいて交点を読む）。
+  ★設計モデル（preview 検収 Q4 に委ねる点）: 本セルは「2人の進むようすの式は既知として与え、
+  グラフ読解のみ」を問う T1 セルである（場面→立式は word_problem g2_l30 の領域）。交点は
+  第1象限の格子点（時間・道のり>0）に限定し、シナリオ meet（傾き異符号＝向かい合う）/
+  catchup（傾き同符号で相異＝追いつき）で faithful な題材差を出す。切片（t=0 の道のり）は
+  与式から定まる値をそのまま提示する。
+concepts_default: [linear_function.diagram_intersection]
+levels:
+  "2":
+    signature: read_diagram_intersection_graph
+    recipe: math.read_diagram_intersection
+    params:
+      # 交点 (x0,y0) は第1象限の格子点（時間 x>0・道のり y>0）。
+      # meet: 正傾き×負傾き（向かい合う）。catchup: 正傾き2本を相異（追いつき）。
+      # 組合せは (scenario, x0, y0, 傾き対) で dup_rate を確保（eval/100seed で確認）。
+      x_domain: {int_range: [1, 6]}
+      y_domain: {int_range: [1, 9]}
+      scenario_domain: [meet, catchup]
+      pos_slope_domain: {int_range: [1, 4], distinct: [value]}
+      neg_slope_domain: {int_range: [-4, -1]}
+    given: [line_a, line_b]
+    asked: [read_intersection]
+    visual: required
+    text: {tier: T1, template: lf_read_diagram_intersection_v1, visual_builder: math.linear_graph}
+    hints: [steps_prefix]
+    concept_tags: [linear_function.diagram_intersection]
+    cause_tags: []
+remedial:
+  default_level: 2
