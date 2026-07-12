@@ -182,5 +182,17 @@ engine_tests/      unit/ golden/ contract/ eval/
 ## 7. M1 送り（横展開と別軸の本体作業）
 FastAPI ラッパ / T2(磨き)・T3(翻訳) / audit_runner(LLM 監査 V3) / cost_meter / dashboard HTML / プール(Supplier 差し込み・授業内≤3秒) / 採点フィクスチャ(D-2 スキーマ合意) / variant・avoid(supply_exhausted 機構)。
 
+## 7.5 graph_table「かく」capability の実装計画（★次セッション最有力・スコープ済み）
+本セッション末に feasibility を精査した。**answer 経路とゲートは既に GraphAnswer 対応済み**（`contracts.GraphAnswer(features, solution_svg_ref)`／`AnswerPayload` union に kind="graph"／`quality_gates._answers_match` は features の srepr 集合一致で G-Q1 を判定＝§6.2 V1' が実装済／`_answer_values` も graph 対応）。**GraphAnswer を生成する recipe/solver と解答図の描画だけが未実装**。最初のセルは g2_l22.graph_table[1]「y=ax+b のグラフをかく」（例「y=2x−1 のグラフをかけ」）が最小。
+
+実装手順（パイプライン改修は不要と判明）:
+1. `visuals/graph.py` を軽く refactor: 描画本体を `render_grid_svg(a,b,pts,*,draw_line: bool)` に切出し、`render_linear_graph(mr,ctx)` は `draw_line = ("line" in [e.kind for e in visual_plan.elements])` で呼ぶ（**既存 read セルは line 要素を宣言済 → draw_line=True で不変＝後方互換**）。作図セルの**問題図は空グリッド**（elements=[grid,axis]・line なし→ draw_line=False）。
+2. solver `math.draw_linear_features(a,b)` → `Solution(answer=GraphAnswer(features=[Feature(kind="slope",...), Feature(kind="point", (0,b) の切片)], solution_svg_ref=""))`。**solver は SVG を描かない**（features のみ）。
+3. recipe `math.draw_linear`: a,b,pts を選び solver で features 構成→一致 assert。**解答図は visual 層の純ヘルパ `render_grid_svg(a,b,pts,draw_line=True)` を recipe から呼んで `GraphAnswer.solution_svg_ref` に格納**（問題図＝空グリッドは通常の visual 段が visual_plan から描く）。MR.sub_question.answer=GraphAnswer。
+4. checker `math.draw_linear.double_solve` → solver。`_answers_match` は features 集合のみ比較（solution_svg_ref は無視）なので checker 側 svg は "" でよい。
+5. template「1次関数 {{ given.expression }} のグラフを、座標平面にかけ。」／concept `linear_function.draw_graph`（unit g2_l22）／spec `g2_l22.graph_table.yaml`（asked=[draw_graph]・visual=required・**問題図の grid 範囲は固定推奨**＝答えを示唆しない方眼紙）。frame は draw_graph 済（vocab 済・forbidden 空でよい：問題図が空グリッドなので幾何リークなし）。
+
+**★実装前に確定すべき設計判断（§0・core を触る戦略事項）**: 作図セルは **答え(傾き・切片)＝given の式係数** なので、`_gate_q5t` の given whitelist と feature トークンの**符号整合**が問題になる。実測（本セッション）: given `y = 2x - 1` → `extract_numbers` は `['2','1']`（符号なし）で whitelist=`{2,1}`。一方 切片 feature `-1` は `_to_fraction('-1')=-1`→ norm_key `'-1'` が whitelist に無く、`contains_number(scan_text,'-1')` が本文の "- 1" に一致 → **負の切片で G-Q5t が漏洩誤検出→ Unsupported になる**（§5-#9 の具体化。文言では回避不可）。要決定: (a) `_build_given_whitelist` を式について符号込みで数値抽出するよう core を原則的に改良（推奨・全 draw セルに効く）、または (b) draw セルは feature 数値を whitelist に明示合流させる仕組み。**どちらも core/verify に触れるので設計を先に確定してから実装**。決めたら必ず「負の切片を含む連続100+seed」で拒否0を確認（数値/座標答えの偽陽性隠蔽防止）。
+
 ## 8. 既知の設計 smell（M1 で対処候補）
 - `graph_read_two_points` の spec `point_domain.y` は実質デッド（答え点 y は a*x+b で決まる）。可読性は domain を絞って確保済みだが、本筋は「2格子点を直接選び傾きは有理数でよい」構成へ（要 recipe 改修 + golden 再承認）。
