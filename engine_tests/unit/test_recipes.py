@@ -634,6 +634,53 @@ def test_solve_system_elim_scaled_double_solve_property(level, seed):
 
 
 # ---------------------------------------------------------------------------
+# math.solve_system_preprocessed（g2_l14.calculation Lv2/Lv3）— 横展開#14（前処理を伴う連立）
+# ---------------------------------------------------------------------------
+def test_solve_system_preprocessed_lv2_construct():
+    ctx = _make_ctx("math.g2_l14.calculation", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+
+    assert mr.signature == "solve_system_expand_parens"
+    assert set(mr.given.keys()) == {"equation_a", "equation_b"}
+    assert mr.visual_plan is None
+    sq = mr.sub_questions[0]
+    assert sq.asked == "solution"
+    assert sq.answer.kind == "symbolic"
+    # Lv2「かっこ展開」= 先頭 op が expand_parentheses
+    assert [s.op for s in sq.steps] == ["expand_parentheses", "eliminate_and_solve_x", "back_substitute"]
+    # 提示式はかっこを含む（未整理の見かけ）
+    assert "(" in mr.given["equation_a"] or "(" in mr.given["equation_b"]
+
+
+def test_solve_system_preprocessed_lv3_construct():
+    ctx = _make_ctx("math.g2_l14.calculation", 3)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+
+    assert mr.signature == "solve_system_clear_fractions"
+    sq = mr.sub_questions[0]
+    # Lv3「分数払い」= 先頭 op が clear_denominators（Lv2 と op 列相異＝level_sep）
+    assert [s.op for s in sq.steps] == ["clear_denominators", "eliminate_and_solve_x", "back_substitute"]
+    # 提示式は分数（/）を含む（未整理の見かけ）
+    assert "/" in mr.given["equation_a"] or "/" in mr.given["equation_b"]
+
+
+@pytest.mark.parametrize("level", [2, 3])
+@pytest.mark.parametrize("seed", range(200))
+def test_solve_system_preprocessed_double_solve_property(level, seed):
+    ctx = _make_ctx("math.g2_l14.calculation", level)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+
+    line_a = tuple(sympy.sympify(c) for c in mr.params["line_a"])
+    line_b = tuple(sympy.sympify(c) for c in mr.params["line_b"])
+    solver = REGISTRY.solver("math.intersection_of_two_lines")
+    sol = solver(line_a, line_b, mr.params["method"])
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+
+
+# ---------------------------------------------------------------------------
 # math.rate_of_change（g2_l20.find_value Lv1）— 横展開の第1セル
 # ---------------------------------------------------------------------------
 def test_rate_of_change_lv1_construct():
@@ -814,4 +861,7 @@ def test_recipes_declare_provides_concepts():
     })
     assert REGISTRY.recipe_concepts("math.solve_system_elim_scaled") == frozenset({
         "simultaneous_equations.solve_by_elimination_scaled",
+    })
+    assert REGISTRY.recipe_concepts("math.solve_system_preprocessed") == frozenset({
+        "simultaneous_equations.solve_with_preprocessing",
     })

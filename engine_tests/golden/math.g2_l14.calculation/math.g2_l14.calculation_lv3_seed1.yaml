@@ -1,0 +1,65 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - simultaneous_equations.solve_with_preprocessing
+  provenance:
+    git_commit: ''
+    recipe: math.solve_system_preprocessed
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_solve_system_various_v1
+    tier: T1
+  requested:
+    form: calculation
+    level: 3
+    subject: math
+    unit: g2_l14
+  resolved:
+    form: calculation
+    level: 3
+    subject: math
+    unit: g2_l14
+  seed: 1
+  signature: solve_system_clear_fractions
+problem_ref: a6aa14163ba39cef
+problem_text: '次の連立方程式を解け。
+
+  -3x/2 + y = 23/2 , 2x/3 + y = 2/3'
+sub_questions:
+- answer:
+    display: (-5, 4)
+    kind: symbolic
+    srepr: Tuple(Integer(-5), Integer(4))
+  cause_tags: []
+  concept_tags:
+  - simultaneous_equations.solve_with_preprocessing
+  explanation: まず、分母を払って整数の連立方程式に直す。 -3x + 2y = 23 , 2x + 3y = 2次に、整理した連立方程式を加減法で解いて x を求める。 x = -5最後に、求めた x をもとの式に代入して y を求める。 y = 4
+  hints:
+  - 分母を払って整数の連立方程式に直す。
+  - 整理した連立方程式を加減法で解いて x を求める。
+  label: (1)
+  prompt_text: solution を求めなさい。
+  solution_steps:
+  - args:
+    - -3x/2 + y = 23/2
+    - 2x/3 + y = 2/3
+    narration: 分母を払って整数の連立方程式に直す。
+    op: clear_denominators
+    result_display: -3x + 2y = 23 , 2x + 3y = 2
+    result_srepr: '[Equality(Add(Mul(Integer(-1), Integer(3), Symbol(''x'')), Mul(Integer(2), Symbol(''y''))), Integer(23)), Equality(Add(Mul(Integer(2), Symbol(''x'')), Mul(Integer(3), Symbol(''y''))),
+      Integer(2))]'
+  - args:
+    - -3x + 2y = 23 , 2x + 3y = 2
+    narration: 整理した連立方程式を加減法で解いて x を求める。
+    op: eliminate_and_solve_x
+    result_display: x = -5
+    result_srepr: Integer(-5)
+  - args:
+    - '-5'
+    narration: 求めた x をもとの式に代入して y を求める。
+    op: back_substitute
+    result_display: y = 4
+    result_srepr: Integer(4)
+visual_svg: null

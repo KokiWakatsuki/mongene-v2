@@ -1285,6 +1285,154 @@ def solve_system_elim_scaled(ctx: CellContext, rng: Rng) -> MR:
 
 
 # ---------------------------------------------------------------------------
+# math.solve_system_preprocessed（g2_l14.calculation Lv2/Lv3 用）— 横展開#14・連立クラスタ
+# いろいろな連立方程式（前処理を伴う）。答え(x,y)は前処理後の整数系に対し既存
+# intersection_of_two_lines を再利用（新solverゼロ）。レベル間は前処理 op で構造を変える:
+#   Lv2 "expand_parens"   = かっこを展開して整数係数に直す [expand_parentheses, ...]
+#   Lv3 "clear_fractions" = 分数を払って整数化する         [clear_denominators, ...]
+# ---------------------------------------------------------------------------
+_SOLVE_SYSTEM_PREPROCESSED_CONCEPTS = [
+    "simultaneous_equations.solve_with_preprocessing",
+]
+
+
+@register_recipe(
+    "math.solve_system_preprocessed", provides_concepts=_SOLVE_SYSTEM_PREPROCESSED_CONCEPTS
+)
+def solve_system_preprocessed(ctx: CellContext, rng: Rng) -> MR:
+    """前処理を伴う連立方程式を解く（answer-first・calculation）。
+
+    解 (x0,y0) を先に選び、前処理後の整数係数の連立系（非退化は係数の大きさで恒真化）を
+    逆算し、それを未整理の見かけ（かっこ／分数）で提示する。答え (x0,y0) は前処理後の整数系に
+    対して既存 solver `math.intersection_of_two_lines`（g2_l11/l12/l27 と共有）で再計算し一致を確認。
+      - Lv2 "expand_parens": eq_a=k(x+s)+m·y=r、eq_b=a·x−(y+t)=u。展開すると整数係数の系
+        (k, m, ·), (a, −1, ·) になる。|a·m|≥4 > k≤3 で det=−k−a·m≠0 が恒真。
+      - Lv3 "clear_fractions": 非退化な整数系（|A1|=3,|A2|=2,|B1|=2,|B2|=3・det≠0 恒真）を作り、
+        各式を da,db で割った分数係数の見かけで提示する。分数を払うと元の整数系に戻る。
+    steps は前処理→加減法。図なし（calculation）。
+    """
+    p = ctx.spec_level.params
+    mode: str = p["mode"]
+    x_sym, y_sym = sympy.symbols("x y")
+    x0 = sympy.nsimplify(draw(p["x_domain"], rng))
+    y0 = sympy.nsimplify(draw(p["y_domain"], rng))
+
+    def sign() -> sympy.Integer:
+        return sympy.Integer(draw(p["sign_domain"], rng))
+
+    if mode == "expand_parens":
+        k = sympy.Integer(draw(p["outer_coeff_domain"], rng))  # かっこ前の係数（正・2〜3）
+        s = sympy.Integer(draw(p["offset_domain"], rng))  # かっこ内オフセット x+s（≠0）
+        m = sympy.Integer(draw(p["mag_domain"], rng)) * sign()  # eq_a の y 係数 |m|∈{2,3}
+        a = sympy.Integer(draw(p["mag_domain"], rng)) * sign()  # eq_b の x 係数 |a|∈{2,3}
+        t = sympy.Integer(draw(p["offset_domain"], rng))  # eq_b のかっこ内 y+t（≠0）
+        # 展開後の整数系: eq_a= k x + m y = k x0 + m y0 / eq_b= a x − y = a x0 − y0
+        A1, B1 = k, m
+        A2, B2 = a, sympy.Integer(-1)
+        C1 = A1 * x0 + B1 * y0
+        C2 = A2 * x0 + B2 * y0
+        r = k * (x0 + s) + m * y0  # eq_a 右辺（かっこ形のまま）
+        u = a * x0 - (y0 + t)  # eq_b 右辺（かっこ形のまま）
+        paren_a = f"{_fmt_number(k)}(x {'+' if s > 0 else '-'} {_fmt_number(abs(s))})"
+        y_sign = "+" if m > 0 else "-"
+        y_term = _fmt_expr(abs(m) * y_sym)
+        disp_a = f"{paren_a} {y_sign} {y_term} = {_fmt_number(r)}"
+        paren_b = f"(y {'+' if t > 0 else '-'} {_fmt_number(abs(t))})"
+        disp_b = f"{_fmt_expr(a * x_sym)} - {paren_b} = {_fmt_number(u)}"
+        cleared_a = _fmt_eq(A1 * x_sym + B1 * y_sym, C1)
+        cleared_b = _fmt_eq(A2 * x_sym + B2 * y_sym, C2)
+        first_op = "expand_parentheses"
+        pre_narr = "かっこを展開して整数の連立方程式に直す。"
+        cleared_disp = f"{cleared_a} , {cleared_b}"
+    elif mode == "clear_fractions":
+        # 非退化な整数系（互いに素な大きさ・det≠0 恒真）を作り、各式を割って分数で提示。
+        A1 = sympy.Integer(3) * sign()
+        B1 = sympy.Integer(2) * sign()
+        A2 = sympy.Integer(2) * sign()
+        B2 = sympy.Integer(3) * sign()
+        C1 = A1 * x0 + B1 * y0
+        C2 = A2 * x0 + B2 * y0
+        da = sympy.Integer(draw(p["denom_domain"], rng))
+        db = sympy.Integer(draw(p["denom_domain"], rng))
+        disp_a = _fmt_eq(
+            sympy.Rational(A1, da) * x_sym + sympy.Rational(B1, da) * y_sym,
+            sympy.Rational(C1, da),
+        )
+        disp_b = _fmt_eq(
+            sympy.Rational(A2, db) * x_sym + sympy.Rational(B2, db) * y_sym,
+            sympy.Rational(C2, db),
+        )
+        cleared_a = _fmt_eq(A1 * x_sym + B1 * y_sym, C1)
+        cleared_b = _fmt_eq(A2 * x_sym + B2 * y_sym, C2)
+        first_op = "clear_denominators"
+        pre_narr = "分母を払って整数の連立方程式に直す。"
+        cleared_disp = f"{cleared_a} , {cleared_b}"
+    else:
+        raise ValueError(f"未知の mode: {mode!r}")
+
+    coeffs_a = [A1, B1, C1]
+    coeffs_b = [A2, B2, C2]
+    steps = [
+        Step(
+            op=first_op,
+            args=[disp_a, disp_b],
+            result_srepr=sympy.srepr([sympy.Eq(A1 * x_sym + B1 * y_sym, C1),
+                                      sympy.Eq(A2 * x_sym + B2 * y_sym, C2)]),
+            result_display=cleared_disp,
+            narration=pre_narr,
+        ),
+        Step(
+            op="eliminate_and_solve_x",
+            args=[cleared_disp],
+            result_srepr=sympy.srepr(x0),
+            result_display=f"x = {_fmt_number(x0)}",
+            narration="整理した連立方程式を加減法で解いて x を求める。",
+        ),
+        Step(
+            op="back_substitute",
+            args=[_fmt_number(x0)],
+            result_srepr=sympy.srepr(y0),
+            result_display=f"y = {_fmt_number(y0)}",
+            narration="求めた x をもとの式に代入して y を求める。",
+        ),
+    ]
+
+    solver = REGISTRY.solver("math.intersection_of_two_lines")
+    sol = cast(Solution, solver(tuple(coeffs_a), tuple(coeffs_b), "elimination"))
+    assert isinstance(sol.answer, SymbolicAnswer)
+    expected_pt = sympy.Tuple(x0, y0)
+    assert sol.answer.srepr == sympy.srepr(expected_pt), (
+        f"double-solve 不一致: 構成解 {expected_pt} != solver 再計算 {sol.answer.srepr}"
+    )
+
+    sub_question = SubQuestionMR(
+        label="(1)",
+        asked="solution",
+        answer=sol.answer,
+        steps=steps,
+        concept_tags=_effective_concept_tags(ctx),
+        cause_tags=_effective_cause_tags(ctx),
+    )
+
+    return MR(
+        signature=ctx.spec_level.signature,
+        family=ctx.family,
+        level=ctx.level,
+        purpose=ctx.purpose,
+        seed=0,
+        params={
+            "line_a": [str(c) for c in coeffs_a],
+            "line_b": [str(c) for c in coeffs_b],
+            "method": "elimination",
+        },
+        given={"equation_a": disp_a, "equation_b": disp_b},
+        sub_questions=[sub_question],
+        visual_plan=None,
+        provenance=Provenance(recipe="math.solve_system_preprocessed"),
+    )
+
+
+# ---------------------------------------------------------------------------
 # math.rate_of_change（g2_l20.find_value Lv1 用）— 横展開の第1セル
 # ---------------------------------------------------------------------------
 _RATE_OF_CHANGE_CONCEPTS = [
@@ -1559,6 +1707,7 @@ __all__ = [
     "solve_system_elimination",
     "solve_system_substitution",
     "solve_system_elim_scaled",
+    "solve_system_preprocessed",
     "rate_of_change",
     "intersection",
     "y_range_from_domain",

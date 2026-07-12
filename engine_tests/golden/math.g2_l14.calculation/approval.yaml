@@ -1,0 +1,11 @@
+approved_at: '2026-07-12T18:38:26.379050'
+approver: koki
+content_sha256: 29bfa2dc2770bedfa9f45eff8336ae36d17a58d66320cb45efbf563b6c1d3955
+family: math.g2_l14.calculation
+files:
+- engine_tests/golden/math.g2_l14.calculation/math.g2_l14.calculation_lv2_seed1.yaml
+- engine_tests/golden/math.g2_l14.calculation/math.g2_l14.calculation_lv2_seed2.yaml
+- engine_tests/golden/math.g2_l14.calculation/math.g2_l14.calculation_lv2_seed3.yaml
+- engine_tests/golden/math.g2_l14.calculation/math.g2_l14.calculation_lv3_seed1.yaml
+- engine_tests/golden/math.g2_l14.calculation/math.g2_l14.calculation_lv3_seed2.yaml
+- engine_tests/golden/math.g2_l14.calculation/math.g2_l14.calculation_lv3_seed3.yaml

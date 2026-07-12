@@ -114,6 +114,11 @@ LF_SOLVE_SYSTEM_SUBST_V1 = (
     "次の連立方程式を代入法で解け。\n{{ given.equation_a }} , {{ given.equation_b }}"
 )
 
+# g2_l14.calculation Lv2/Lv3: いろいろな連立方程式（かっこ／分数の前処理・横展開#14）
+LF_SOLVE_SYSTEM_VARIOUS_V1 = (
+    "次の連立方程式を解け。\n{{ given.equation_a }} , {{ given.equation_b }}"
+)
+
 
 # ---------------------------------------------------------------------------
 # g2_l20.find_value Lv1: 2点から変化の割合を求める（横展開の第1セル）
@@ -159,6 +164,7 @@ def _register_all() -> None:
     REGISTRY.register_template("lf_read_intersection_v1", LF_READ_INTERSECTION_V1)
     REGISTRY.register_template("lf_solve_system_elim_v1", LF_SOLVE_SYSTEM_ELIM_V1)
     REGISTRY.register_template("lf_solve_system_subst_v1", LF_SOLVE_SYSTEM_SUBST_V1)
+    REGISTRY.register_template("lf_solve_system_various_v1", LF_SOLVE_SYSTEM_VARIOUS_V1)
     REGISTRY.register_template("lf_rate_of_change_v1", LF_RATE_OF_CHANGE_V1)
     REGISTRY.register_template("lf_intersection_v1", LF_INTERSECTION_V1)
     REGISTRY.register_template("lf_y_range_v1", LF_Y_RANGE_V1)
@@ -182,6 +188,7 @@ __all__ = [
     "LF_READ_INTERSECTION_V1",
     "LF_SOLVE_SYSTEM_ELIM_V1",
     "LF_SOLVE_SYSTEM_SUBST_V1",
+    "LF_SOLVE_SYSTEM_VARIOUS_V1",
     "LF_RATE_OF_CHANGE_V1",
     "LF_INTERSECTION_V1",
     "LF_Y_RANGE_V1",

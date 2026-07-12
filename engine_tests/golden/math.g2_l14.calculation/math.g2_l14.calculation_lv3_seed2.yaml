@@ -1,0 +1,65 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - simultaneous_equations.solve_with_preprocessing
+  provenance:
+    git_commit: ''
+    recipe: math.solve_system_preprocessed
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_solve_system_various_v1
+    tier: T1
+  requested:
+    form: calculation
+    level: 3
+    subject: math
+    unit: g2_l14
+  resolved:
+    form: calculation
+    level: 3
+    subject: math
+    unit: g2_l14
+  seed: 2
+  signature: solve_system_clear_fractions
+problem_ref: 76f3f86f9fff8cab
+problem_text: '次の連立方程式を解け。
+
+  -x + 2y/3 = -2/3 , x - 3y/2 = 3/2'
+sub_questions:
+- answer:
+    display: (0, -1)
+    kind: symbolic
+    srepr: Tuple(Integer(0), Integer(-1))
+  cause_tags: []
+  concept_tags:
+  - simultaneous_equations.solve_with_preprocessing
+  explanation: まず、分母を払って整数の連立方程式に直す。 -3x + 2y = -2 , 2x - 3y = 3次に、整理した連立方程式を加減法で解いて x を求める。 x = 0最後に、求めた x をもとの式に代入して y を求める。 y = -1
+  hints:
+  - 分母を払って整数の連立方程式に直す。
+  - 整理した連立方程式を加減法で解いて x を求める。
+  label: (1)
+  prompt_text: solution を求めなさい。
+  solution_steps:
+  - args:
+    - -x + 2y/3 = -2/3
+    - x - 3y/2 = 3/2
+    narration: 分母を払って整数の連立方程式に直す。
+    op: clear_denominators
+    result_display: -3x + 2y = -2 , 2x - 3y = 3
+    result_srepr: '[Equality(Add(Mul(Integer(-1), Integer(3), Symbol(''x'')), Mul(Integer(2), Symbol(''y''))), Integer(-2)), Equality(Add(Mul(Integer(2), Symbol(''x'')), Mul(Integer(-1), Integer(3), Symbol(''y''))),
+      Integer(3))]'
+  - args:
+    - -3x + 2y = -2 , 2x - 3y = 3
+    narration: 整理した連立方程式を加減法で解いて x を求める。
+    op: eliminate_and_solve_x
+    result_display: x = 0
+    result_srepr: Integer(0)
+  - args:
+    - '0'
+    narration: 求めた x をもとの式に代入して y を求める。
+    op: back_substitute
+    result_display: y = -1
+    result_srepr: Integer(-1)
+visual_svg: null
