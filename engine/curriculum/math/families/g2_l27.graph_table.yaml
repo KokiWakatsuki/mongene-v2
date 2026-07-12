@@ -1,0 +1,29 @@
+family: math.g2_l27.graph_table
+form: graph_table
+source_desc: |
+  2直線をかき、交点の座標をグラフから読み取る
+  （units.generated.yaml の desc/example を正として転記）。
+  desc: 2直線をかき交点を読み取る。
+  example: 2直線 y=x+1 と y=−2x+4 を同じ座標平面にかき、その交点の座標を読み取って答えよ。
+  答えは交点の座標（SymbolicAnswer）。検証は g2_l27.find_value と同じ intersection_of_two_lines
+  solver を再利用（新 solver ゼロ＝償却）。問題図は空の方眼（生徒が2直線をかいて交点を読む）。
+concepts_default: [linear_function.read_intersection_from_graph]
+levels:
+  "2":
+    signature: read_intersection_two_lines_graph
+    recipe: math.read_intersection_from_graph
+    params:
+      # 交点 (x0,y0) は格子点（グラフから読める）。相異な整数傾き2本。切片は逆算。
+      # 組合せは (x0,y0)×傾き対で十分（実測 dup_rate は eval で確認）。
+      x_domain: {int_range: [-4, 4]}
+      y_domain: {int_range: [-4, 4]}
+      slope_pair_domain: {int_range: [-3, 3], exclude: [0], distinct: ["value"]}
+    given: [line_a, line_b]
+    asked: [read_intersection]
+    visual: required
+    text: {tier: T1, template: lf_read_intersection_v1, visual_builder: math.linear_graph}
+    hints: [steps_prefix]
+    concept_tags: [linear_function.read_intersection_from_graph]
+    cause_tags: []
+remedial:
+  default_level: 2

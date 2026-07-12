@@ -788,6 +788,110 @@ def draw_linear_from_equation(ctx: CellContext, rng: Rng) -> MR:
 
 
 # ---------------------------------------------------------------------------
+# math.read_intersection_from_graph（g2_l27.graph_table Lv1 用）— 横展開#10
+# 2直線をかき交点をグラフから読む。answer は交点座標（SymbolicAnswer）、検証は既存
+# intersection_of_two_lines を再利用（新 solver ゼロ）。問題図＝空の方眼（生徒が描く）。
+# ---------------------------------------------------------------------------
+_READ_INTERSECTION_CONCEPTS = [
+    "linear_function.read_intersection_from_graph",
+]
+
+
+@register_recipe("math.read_intersection_from_graph", provides_concepts=_READ_INTERSECTION_CONCEPTS)
+def read_intersection_from_graph(ctx: CellContext, rng: Rng) -> MR:
+    """2直線をかき交点の座標をグラフから読み取る（answer-first・graph_table「読む」）。
+
+    交点 (x0,y0) と相異な2傾き a1,a2 を先に選び、各直線が (x0,y0) を通るよう切片を逆算する
+    （交点は格子点＝グラフから読める）。答え（交点）は既存 solver
+    `math.intersection_of_two_lines`（g2_l27.find_value と共有）で再計算して一致を確認する。
+    問題図は空の方眼（生徒が2直線をかいて読む）、steps はグラフ読解の手順。
+    """
+    p = ctx.spec_level.params
+    x0 = draw(p["x_domain"], rng)
+    y0 = draw(p["y_domain"], rng)
+    a1, a2 = draw_many(p["slope_pair_domain"], rng, k=2)  # distinct:[value] で相異保証
+
+    x0_s, y0_s = sympy.nsimplify(x0), sympy.nsimplify(y0)
+    a1_s, a2_s = sympy.nsimplify(a1), sympy.nsimplify(a2)
+    b1_s = y0_s - a1_s * x0_s
+    b2_s = y0_s - a2_s * x0_s
+
+    # 一般形係数（y = a x + b ⇔ -a x + y = b）で solver に渡す。
+    coeffs1 = [-a1_s, sympy.Integer(1), b1_s]
+    coeffs2 = [-a2_s, sympy.Integer(1), b2_s]
+    solver = REGISTRY.solver("math.intersection_of_two_lines")
+    sol = cast(Solution, solver(tuple(coeffs1), tuple(coeffs2), "substitute"))
+    assert isinstance(sol.answer, SymbolicAnswer)
+    expected_pt = sympy.Tuple(x0_s, y0_s)
+    assert sol.answer.srepr == sympy.srepr(expected_pt), (
+        f"double-solve 不一致: 構成交点 {expected_pt} != solver 再計算 {sol.answer.srepr}"
+    )
+
+    disp1 = _format_parallel_line_display(a1_s, b1_s)
+    disp2 = _format_parallel_line_display(a2_s, b2_s)
+    # グラフ読解の手順（narration は助数詞「本」で数を表し答え座標と衝突させない）。
+    steps = [
+        Step(
+            op="draw_line_1",
+            args=[disp1],
+            result_srepr=sympy.srepr(a1_s * sympy.Symbol("x") + b1_s),
+            result_display=disp1,
+            narration="1本目の直線を座標平面にかく。",
+        ),
+        Step(
+            op="draw_line_2",
+            args=[disp2],
+            result_srepr=sympy.srepr(a2_s * sympy.Symbol("x") + b2_s),
+            result_display=disp2,
+            narration="2本目の直線を同じ平面にかく。",
+        ),
+        Step(
+            op="read_intersection",
+            args=[],
+            result_srepr=sol.answer.srepr,
+            result_display=sol.answer.display,
+            narration="2本の直線が交わる点の座標を読み取る。",
+        ),
+    ]
+
+    sub_question = SubQuestionMR(
+        label="(1)",
+        asked="read_intersection",
+        answer=sol.answer,
+        steps=steps,
+        concept_tags=_effective_concept_tags(ctx),
+        cause_tags=_effective_cause_tags(ctx),
+    )
+
+    # 空の方眼の描画範囲: 交点と両直線の y切片を含める（生徒が両直線をかける窓）。
+    pts = [str((x0_s, y0_s)), str((sympy.Integer(0), b1_s)), str((sympy.Integer(0), b2_s))]
+    labels = tick_labels_from_params({"pts": pts})
+    visual_plan = VisualPlan(
+        style="grid",
+        labels=labels,
+        elements=[VisualElement(kind="grid", attrs={}), VisualElement(kind="axis", attrs={})],
+    )
+
+    return MR(
+        signature=ctx.spec_level.signature,
+        family=ctx.family,
+        level=ctx.level,
+        purpose=ctx.purpose,
+        seed=0,
+        params={
+            "line_a": [str(c) for c in coeffs1],
+            "line_b": [str(c) for c in coeffs2],
+            "method": "substitute",
+            "pts": pts,
+        },
+        given={"line_a": disp1, "line_b": disp2},
+        sub_questions=[sub_question],
+        visual_plan=visual_plan,
+        provenance=Provenance(recipe="math.read_intersection_from_graph"),
+    )
+
+
+# ---------------------------------------------------------------------------
 # math.rate_of_change（g2_l20.find_value Lv1 用）— 横展開の第1セル
 # ---------------------------------------------------------------------------
 _RATE_OF_CHANGE_CONCEPTS = [
@@ -1058,6 +1162,7 @@ __all__ = [
     "point_on_line",
     "draw_linear",
     "draw_linear_from_equation",
+    "read_intersection_from_graph",
     "rate_of_change",
     "intersection",
     "y_range_from_domain",

@@ -92,6 +92,17 @@ LF_DRAW_FROM_EQUATION_V1 = (
 
 
 # ---------------------------------------------------------------------------
+# g2_l27.graph_table Lv1: 2直線をかき交点をグラフから読む（横展開#10）
+# 「2直線」ではなく「2本の直線」: 助数詞「本」は G-Q5t 除外対象で先頭 "2" が答え座標と
+# 衝突する偽陽性を避ける（数値答えセルの定石）。
+# ---------------------------------------------------------------------------
+LF_READ_INTERSECTION_V1 = (
+    "2本の直線 {{ given.line_a }} と {{ given.line_b }} を同じ座標平面にかき、"
+    "その交点の座標を読み取れ。"
+)
+
+
+# ---------------------------------------------------------------------------
 # g2_l20.find_value Lv1: 2点から変化の割合を求める（横展開の第1セル）
 # ---------------------------------------------------------------------------
 LF_RATE_OF_CHANGE_V1 = (
@@ -132,6 +143,7 @@ def _register_all() -> None:
     REGISTRY.register_template("lf_point_on_line_v1", LF_POINT_ON_LINE_V1)
     REGISTRY.register_template("lf_draw_graph_v1", LF_DRAW_GRAPH_V1)
     REGISTRY.register_template("lf_draw_from_equation_v1", LF_DRAW_FROM_EQUATION_V1)
+    REGISTRY.register_template("lf_read_intersection_v1", LF_READ_INTERSECTION_V1)
     REGISTRY.register_template("lf_rate_of_change_v1", LF_RATE_OF_CHANGE_V1)
     REGISTRY.register_template("lf_intersection_v1", LF_INTERSECTION_V1)
     REGISTRY.register_template("lf_y_range_v1", LF_Y_RANGE_V1)
@@ -152,6 +164,7 @@ __all__ = [
     "LF_POINT_ON_LINE_V1",
     "LF_DRAW_GRAPH_V1",
     "LF_DRAW_FROM_EQUATION_V1",
+    "LF_READ_INTERSECTION_V1",
     "LF_RATE_OF_CHANGE_V1",
     "LF_INTERSECTION_V1",
     "LF_Y_RANGE_V1",

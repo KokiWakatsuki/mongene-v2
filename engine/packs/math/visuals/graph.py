@@ -119,10 +119,8 @@ def render_grid_svg(params: dict[str, Any], *, draw_line: bool) -> str:
 
     draw_line=True: グリッド+軸+目盛+直線1本（read セルの問題図／かくセルの解答図）。
     draw_line=False: グリッド+軸+目盛のみの空の方眼（かくセルの問題図＝生徒が描き込む）。
+      この場合 params に "a"/"b"（直線の傾き・切片）は不要（"pts" で描画範囲だけ決める）。
     """
-    a = sympy.nsimplify(sympy.sympify(params["a"]))
-    b = sympy.nsimplify(sympy.sympify(params["b"]))
-
     x_lo, x_hi, y_lo, y_hi = compute_grid_bounds_from_params(params)
 
     plot_lo = _MARGIN
@@ -166,8 +164,10 @@ def render_grid_svg(params: dict[str, Any], *, draw_line: bool) -> str:
         )
 
     # --- 直線（太い黒の実線。線種・太さのみで区別＝モノクロ印刷可） ---
-    # draw_line=False（かくセルの問題図＝空の方眼）では直線を描かない。
+    # draw_line=False（かくセルの問題図＝空の方眼）では直線を描かない（a/b も参照しない）。
     if draw_line:
+        a = sympy.nsimplify(sympy.sympify(params["a"]))
+        b = sympy.nsimplify(sympy.sympify(params["b"]))
         x_start, x_end = x_lo, x_hi
         y_start = a * x_start + b
         y_end = a * x_end + b

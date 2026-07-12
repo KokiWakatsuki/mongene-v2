@@ -457,6 +457,38 @@ def test_draw_from_equation_double_solve_property(seed):
 
 
 # ---------------------------------------------------------------------------
+# math.read_intersection_from_graph（g2_l27.graph_table Lv2）— 横展開#10（交点をグラフから読む）
+# ---------------------------------------------------------------------------
+def test_read_intersection_from_graph_lv2_construct():
+    ctx = _make_ctx("math.g2_l27.graph_table", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+
+    assert mr.signature == "read_intersection_two_lines_graph"
+    assert set(mr.given.keys()) == {"line_a", "line_b"}
+    sq = mr.sub_questions[0]
+    assert sq.asked == "read_intersection"
+    assert sq.answer.kind == "symbolic"  # 交点座標（点）
+    assert [s.op for s in sq.steps] == ["draw_line_1", "draw_line_2", "read_intersection"]
+    # 問題図は空の方眼（生徒が2直線をかく）
+    assert mr.visual_plan is not None
+    assert {e.kind for e in mr.visual_plan.elements} == {"grid", "axis"}
+
+
+@pytest.mark.parametrize("seed", range(200))
+def test_read_intersection_from_graph_double_solve_property(seed):
+    ctx = _make_ctx("math.g2_l27.graph_table", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+
+    line_a = tuple(sympy.sympify(c) for c in mr.params["line_a"])
+    line_b = tuple(sympy.sympify(c) for c in mr.params["line_b"])
+    solver = REGISTRY.solver("math.intersection_of_two_lines")
+    sol = solver(line_a, line_b, mr.params["method"])
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+
+
+# ---------------------------------------------------------------------------
 # math.rate_of_change（g2_l20.find_value Lv1）— 横展開の第1セル
 # ---------------------------------------------------------------------------
 def test_rate_of_change_lv1_construct():
@@ -625,4 +657,7 @@ def test_recipes_declare_provides_concepts():
     })
     assert REGISTRY.recipe_concepts("math.draw_linear_from_equation") == frozenset({
         "linear_function.draw_graph_from_equation",
+    })
+    assert REGISTRY.recipe_concepts("math.read_intersection_from_graph") == frozenset({
+        "linear_function.read_intersection_from_graph",
     })

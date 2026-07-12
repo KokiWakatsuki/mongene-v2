@@ -98,7 +98,9 @@ def test_find_value_vocab_and_visual():
 
 def test_graph_table_vocab_and_visual():
     f = REGISTRY.frame("graph_table")
-    assert f.given_vocab == frozenset({"expression", "data_table", "situation_params", "equation"})
+    assert f.given_vocab == frozenset({
+        "expression", "data_table", "situation_params", "equation", "line_a", "line_b",
+    })
     assert f.asked_vocab == frozenset({
         "draw_graph", "read_point", "read_intersection", "read_table", "complete_table",
         "read_slope_intercept",
