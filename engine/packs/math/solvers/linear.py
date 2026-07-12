@@ -666,6 +666,86 @@ def draw_from_equation(a: object, b: object, c: object) -> Solution:
     return Solution(answer=draw.answer, steps=steps)
 
 
+@register_solver("math.draw_special_lines")
+def draw_special_lines(xi: object, yi: object, axis: object, k: object) -> Solution:
+    """切片法で 2元1次方程式の直線をかき、さらに特殊直線 x=k / y=k もかく（g2_l26.graph_table Lv2）。
+
+    主直線は x 軸との交点 (xi,0)・y 軸との交点 (0,yi) を通る直線（切片法）。特殊直線は
+    axis="vertical"→x=k（y 軸に平行）／axis="horizontal"→y=k（x 軸に平行）。答えは GraphAnswer
+    ＝2交点＋特殊直線の特徴集合（srepr 集合一致で採点）。steps は切片法の手順（Lv1 の y= 変形とは
+    op 列が異なる＝level_sep）。narration には数字を書かない（切片の 0 が答え値＝漏洩回避）。
+    """
+    xi_s, yi_s, k_s = sympy.nsimplify(xi), sympy.nsimplify(yi), sympy.nsimplify(k)
+    if xi_s == 0 or yi_s == 0:
+        raise ValueError("切片法には x/y 軸との交点が原点以外である必要がある（xi≠0, yi≠0）")
+
+    x_int_pt = sympy.Tuple(xi_s, sympy.Integer(0))
+    y_int_pt = sympy.Tuple(sympy.Integer(0), yi_s)
+
+    if axis == "vertical":
+        special = Feature(
+            kind="vertical_line",
+            srepr=sympy.srepr(sympy.Eq(X, k_s)),
+            display=f"x = {_format_number(k_s)}",
+        )
+        special_narr = "x = 定数 のグラフは、y 軸に平行な縦の直線としてかく。"
+    elif axis == "horizontal":
+        special = Feature(
+            kind="horizontal_line",
+            srepr=sympy.srepr(sympy.Eq(Y, k_s)),
+            display=f"y = {_format_number(k_s)}",
+        )
+        special_narr = "y = 定数 のグラフは、x 軸に平行な横の直線としてかく。"
+    else:
+        raise ValueError(f"axis は vertical/horizontal のいずれか: {axis!r}")
+
+    features = [
+        Feature(
+            kind="x_intercept",
+            srepr=sympy.srepr(x_int_pt),
+            display=f"x 軸との交点 ({_format_number(xi_s)}, 0)",
+        ),
+        Feature(
+            kind="y_intercept",
+            srepr=sympy.srepr(y_int_pt),
+            display=f"y 軸との交点 (0, {_format_number(yi_s)})",
+        ),
+        special,
+    ]
+    steps = [
+        Step(
+            op="find_x_intercept",
+            args=[],
+            result_srepr=sympy.srepr(x_int_pt),
+            result_display=f"({_format_number(xi_s)}, 0)",
+            narration="グラフが x 軸と交わる点（x 軸との交点）を求める。",
+        ),
+        Step(
+            op="find_y_intercept",
+            args=[],
+            result_srepr=sympy.srepr(y_int_pt),
+            result_display=f"(0, {_format_number(yi_s)})",
+            narration="グラフが y 軸と交わる点（y 軸との交点）を求める。",
+        ),
+        Step(
+            op="draw_line",
+            args=[],
+            result_srepr=sympy.srepr(sympy.Tuple(x_int_pt, y_int_pt)),
+            result_display="2つの交点を通る直線",
+            narration="求めた2つの交点を通る直線をひく。",
+        ),
+        Step(
+            op="draw_special_line",
+            args=[special.display],
+            result_srepr=special.srepr,
+            result_display=special.display,
+            narration=special_narr,
+        ),
+    ]
+    answer = GraphAnswer(features=features, solution_svg_ref="")
+    return Solution(answer=answer, steps=steps)
+
+
 @register_solver("math.linear_direction_from_slope")
 def linear_direction_from_slope(a: object) -> Solution:
     """1次関数 y=ax+b のグラフの向き（右上がり/右下がり）を傾き a の符号から判定する

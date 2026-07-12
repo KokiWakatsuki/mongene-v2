@@ -47,6 +47,9 @@ concepts:
   - id: linear_function.draw_graph_from_equation
     label: "2元1次方程式 ax+by=c を y=… に変形してグラフをかく"
     unit: g2_l26
+  - id: linear_function.draw_special_lines
+    label: "切片法で2元1次方程式をかき、x=k・y=k の特殊直線もかく"
+    unit: g2_l26
   - id: linear_function.read_intersection_from_graph
     label: "2直線をかき交点の座標をグラフから読み取る"
     unit: g2_l27

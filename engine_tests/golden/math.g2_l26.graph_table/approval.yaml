@@ -1,8 +1,11 @@
-approved_at: '2026-07-12T10:17:50.951823'
+approved_at: '2026-07-13T02:05:07.576942'
 approver: koki
-content_sha256: a0812345bc9664f20b08e885c5b8055dea7847b5e0fc8c96f26b11746ea1ba3c
+content_sha256: d80b3d1c70e6e726998ff2ca3fb945a00ce1a49f0beca82df1269ae4374ece78
 family: math.g2_l26.graph_table
 files:
 - engine_tests/golden/math.g2_l26.graph_table/math.g2_l26.graph_table_lv1_seed1.yaml
 - engine_tests/golden/math.g2_l26.graph_table/math.g2_l26.graph_table_lv1_seed2.yaml
 - engine_tests/golden/math.g2_l26.graph_table/math.g2_l26.graph_table_lv1_seed3.yaml
+- engine_tests/golden/math.g2_l26.graph_table/math.g2_l26.graph_table_lv2_seed1.yaml
+- engine_tests/golden/math.g2_l26.graph_table/math.g2_l26.graph_table_lv2_seed2.yaml
+- engine_tests/golden/math.g2_l26.graph_table/math.g2_l26.graph_table_lv2_seed3.yaml

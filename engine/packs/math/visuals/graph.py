@@ -114,12 +114,23 @@ def tick_labels(mr: "MR") -> list[str]:
     return tick_labels_from_params(mr.params)
 
 
-def render_grid_svg(params: dict[str, Any], *, draw_line: bool) -> str:
+def render_grid_svg(
+    params: dict[str, Any],
+    *,
+    draw_line: bool,
+    vline_x: Any = None,
+    hline_y: Any = None,
+) -> str:
     """params（a, b, pts）と描画範囲から座標平面 SVG を組む（決定論・自己完結）。
 
     draw_line=True: グリッド+軸+目盛+直線1本（read セルの問題図／かくセルの解答図）。
     draw_line=False: グリッド+軸+目盛のみの空の方眼（かくセルの問題図＝生徒が描き込む）。
       この場合 params に "a"/"b"（直線の傾き・切片）は不要（"pts" で描画範囲だけ決める）。
+
+    vline_x/hline_y（keyword-only・任意）: x=k / y=k の特殊直線を追加で描く（g2_l26 Lv2）。
+      既定 None では描かないため、既存の呼び出し（傾きのある直線1本）は完全に後方互換
+      （出力バイト列が不変＝既存 golden 不変）。特殊直線も主直線と同じ黒の実線・太さで描く
+      （色に情報を載せない＝モノクロ印刷可・N-4 適合）。
     """
     x_lo, x_hi, y_lo, y_hi = compute_grid_bounds_from_params(params)
 
@@ -178,6 +189,22 @@ def render_grid_svg(params: dict[str, Any], *, draw_line: bool) -> str:
             f'stroke="#000000" stroke-width="2.5"/>'
         )
 
+    # --- 特殊直線 x=k（垂直）/ y=k（水平）（g2_l26 Lv2・任意） ---
+    if vline_x is not None:
+        vx = float(sympy.nsimplify(sympy.sympify(vline_x)))
+        pvx = to_px_x(vx)
+        parts.append(
+            f'<line x1="{pvx:.2f}" y1="{plot_lo:.2f}" x2="{pvx:.2f}" y2="{plot_hi:.2f}" '
+            f'stroke="#000000" stroke-width="2.5"/>'
+        )
+    if hline_y is not None:
+        hy = float(sympy.nsimplify(sympy.sympify(hline_y)))
+        phy = to_px_y(hy)
+        parts.append(
+            f'<line x1="{plot_lo:.2f}" y1="{phy:.2f}" x2="{plot_hi:.2f}" y2="{phy:.2f}" '
+            f'stroke="#000000" stroke-width="2.5"/>'
+        )
+
     # --- 軸目盛の数値ラベル（<text> はこれのみ。visual_plan.labels と一致させる） ---
     py0 = to_px_y(0) if y_lo <= 0 <= y_hi else plot_hi
     for gx in range(x_lo, x_hi + 1):
@@ -225,6 +252,20 @@ def render_line_solution_svg(params: dict[str, Any]) -> str:
     return render_grid_svg(params, draw_line=True)
 
 
+def render_special_lines_solution_svg(params: dict[str, Any]) -> str:
+    """特殊直線つきの模範解答図（g2_l26 Lv2）。主直線 y=ax+b＋特殊直線 x=k / y=k を描く。
+
+    params に "a"/"b"（主直線）と、"vline_x"（x=k）または "hline_y"（y=k）のいずれかを持つ。
+    問題図（空の方眼）と同じ pts・描画範囲を使うので座標系が一致する。
+    """
+    return render_grid_svg(
+        params,
+        draw_line=True,
+        vline_x=params.get("vline_x"),
+        hline_y=params.get("hline_y"),
+    )
+
+
 register_visual("math.linear_graph")(render_linear_graph)
 
 
@@ -232,6 +273,7 @@ __all__ = [
     "render_linear_graph",
     "render_grid_svg",
     "render_line_solution_svg",
+    "render_special_lines_solution_svg",
     "compute_grid_bounds",
     "compute_grid_bounds_from_params",
     "tick_labels",

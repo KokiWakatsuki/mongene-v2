@@ -123,6 +123,16 @@ def double_solve_read_intersection(mr: MR) -> Solution:
     return cast(Solution, solver(line_a, line_b, p["method"]))
 
 
+@register_checker("math.draw_special_lines.double_solve")
+def double_solve_draw_special_lines(mr: MR) -> Solution:
+    # 問題パラメータ（2交点 xi/yi と特殊直線 axis/k）だけから特徴を再計算（GraphAnswer）。
+    p = mr.params
+    solver = REGISTRY.solver("math.draw_special_lines")
+    return cast(Solution, solver(
+        sympy.sympify(p["xi"]), sympy.sympify(p["yi"]), p["axis"], sympy.sympify(p["k"]),
+    ))
+
+
 @register_checker("math.read_diagram_intersection.double_solve")
 def double_solve_read_diagram_intersection(mr: MR) -> Solution:
     # ダイヤグラムの交点も 2直線の交点そのもの＝g2_l27 と同じ intersection solver を再利用。
@@ -297,6 +307,7 @@ __all__ = [
     "double_solve_draw_from_equation",
     "double_solve_read_intersection",
     "double_solve_read_diagram_intersection",
+    "double_solve_draw_special_lines",
     "double_solve_solve_system_elimination",
     "double_solve_solve_system_substitution",
     "double_solve_solve_system_elim_scaled",

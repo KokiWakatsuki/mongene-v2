@@ -529,6 +529,46 @@ def test_read_diagram_intersection_double_solve_property(seed):
 
 
 # ---------------------------------------------------------------------------
+# math.draw_special_lines（g2_l26.graph_table Lv2）— P1/C5（切片法＋特殊直線 x=k/y=k）
+# ---------------------------------------------------------------------------
+def test_draw_special_lines_lv2_construct():
+    ctx = _make_ctx("math.g2_l26.graph_table", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+
+    assert mr.signature == "draw_intercept_method_with_special_line"
+    assert set(mr.given.keys()) == {"equation", "equation2"}
+    sq = mr.sub_questions[0]
+    assert sq.asked == "draw_graph"
+    assert sq.answer.kind == "graph"
+    # 単一小問に3特徴（2交点＋特殊直線）を集約
+    assert len(sq.answer.features) == 3
+    assert [s.op for s in sq.steps] == [
+        "find_x_intercept", "find_y_intercept", "draw_line", "draw_special_line",
+    ]
+    assert mr.params["axis"] in {"vertical", "horizontal"}
+    # 問題図は空の方眼（生徒が描き込む）
+    assert mr.visual_plan is not None
+    assert {e.kind for e in mr.visual_plan.elements} == {"grid", "axis"}
+
+
+@pytest.mark.parametrize("seed", range(200))
+def test_draw_special_lines_double_solve_property(seed):
+    ctx = _make_ctx("math.g2_l26.graph_table", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+
+    solver = REGISTRY.solver("math.draw_special_lines")
+    sol = solver(
+        sympy.sympify(mr.params["xi"]), sympy.sympify(mr.params["yi"]),
+        mr.params["axis"], sympy.sympify(mr.params["k"]),
+    )
+    set_recipe = {f.srepr for f in mr.sub_questions[0].answer.features}
+    set_solver = {f.srepr for f in sol.answer.features}
+    assert set_recipe == set_solver
+
+
+# ---------------------------------------------------------------------------
 # math.solve_system_elimination（g2_l11.calculation Lv1）— 横展開#11（連立・加減法）
 # ---------------------------------------------------------------------------
 def test_solve_system_elimination_lv1_construct():

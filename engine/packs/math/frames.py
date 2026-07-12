@@ -136,6 +136,7 @@ GRAPH_TABLE_FRAME = Frame(
     given_vocab=frozenset({
         "expression", "data_table", "situation_params",
         "equation",  # 横展開#9: 2元1次方程式 ax+by=c を変形してかく（g2_l26）
+        "equation2",  # P1/C5: 特殊直線 x=k / y=k を追加で与える（g2_l26 Lv2）
         "line_a", "line_b",  # 横展開#10: 2直線をかき交点を読む（g2_l27 graph）
     }),
     asked_vocab=frozenset({

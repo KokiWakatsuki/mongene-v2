@@ -30,7 +30,11 @@ from engine.core.contracts import (
 )
 from engine.core.registry import REGISTRY, register_recipe
 from engine.core.rng import Rng, draw, draw_many
-from engine.packs.math.visuals.graph import render_line_solution_svg, tick_labels_from_params
+from engine.packs.math.visuals.graph import (
+    render_line_solution_svg,
+    render_special_lines_solution_svg,
+    tick_labels_from_params,
+)
 
 # 提供概念（recipe が「提供できる概念タグ集合」を宣言。spec_lint R6 の題材ズレ検出用）。
 _LINEAR_FROM_TWO_POINTS_CONCEPTS = [
@@ -1022,6 +1026,125 @@ def read_diagram_intersection(ctx: CellContext, rng: Rng) -> MR:
         sub_questions=[sub_question],
         visual_plan=visual_plan,
         provenance=Provenance(recipe="math.read_diagram_intersection"),
+    )
+
+
+# ---------------------------------------------------------------------------
+# math.draw_special_lines（g2_l26.graph_table Lv2 用）— 横展開・P1/C5
+# 2元1次方程式を切片法（x軸/y軸との交点）でかき、さらに x=k / y=k の特殊直線もかく。
+# Lv1（y= 変形して1本）と op 列を変える（find_x_intercept→find_y_intercept→draw_line→
+# draw_special_line）＝level_sep。答えは GraphAnswer（2交点＋特殊直線の特徴集合・単一小問で
+# 両方を採点。G-Q1 は sub_questions[0] のみ検査するため単一小問に集約）。問題図＝空の方眼。
+# ---------------------------------------------------------------------------
+_DRAW_SPECIAL_LINES_CONCEPTS = [
+    "linear_function.draw_special_lines",
+]
+
+
+@register_recipe("math.draw_special_lines", provides_concepts=_DRAW_SPECIAL_LINES_CONCEPTS)
+def draw_special_lines(ctx: CellContext, rng: Rng) -> MR:
+    """切片法で 2元1次方程式の直線をかき、特殊直線 x=k / y=k もかく（answer-first・「かく」Lv2）。
+
+    answer-first: x 軸との交点 (xi,0)・y 軸との交点 (0,yi)（ともに整数・xi>0）を先に決め、
+    直線が両交点を通るよう方程式 (yi)x + (xi)y = xi·yi を逆算する（切片が clean な整数に戻る）。
+    特殊直線は axis（vertical→x=k / horizontal→y=k）と k を選ぶ。答え（2交点＋特殊直線の特徴）は
+    独立ソルバ `math.draw_special_lines` で再計算し一致を assert（新 solver）。問題図は空の方眼、
+    模範解答図は主直線＋特殊直線つき（render_special_lines_solution_svg）。
+    """
+    p = ctx.spec_level.params
+    xi = draw(p["x_intercept_domain"], rng)  # x 軸との交点（正＝方程式の y 係数 b>0 を保証）
+    yi = draw(p["y_intercept_domain"], rng)  # y 軸との交点（0 以外・任意符号）
+    axis = draw(p["axis_domain"], rng)       # 素の配列 [vertical, horizontal]
+    k = draw(p["special_k_domain"], rng)     # 特殊直線の定数（0 以外）
+
+    xi_s, yi_s, k_s = sympy.nsimplify(xi), sympy.nsimplify(yi), sympy.nsimplify(k)
+    a_coeff = yi_s          # x の係数
+    b_coeff = xi_s          # y の係数（>0）
+    c_coeff = xi_s * yi_s   # 右辺
+
+    solver = REGISTRY.solver("math.draw_special_lines")
+    sol = cast(Solution, solver(xi_s, yi_s, axis, k_s))
+    assert isinstance(sol.answer, GraphAnswer)
+    if axis == "vertical":
+        special_srepr = sympy.srepr(sympy.Eq(sympy.Symbol("x"), k_s))
+        equation2_disp = f"x = {_fmt_number(k_s)}"
+    else:
+        special_srepr = sympy.srepr(sympy.Eq(sympy.Symbol("y"), k_s))
+        equation2_disp = f"y = {_fmt_number(k_s)}"
+    expected_feature_sreprs = {
+        sympy.srepr(sympy.Tuple(xi_s, sympy.Integer(0))),
+        sympy.srepr(sympy.Tuple(sympy.Integer(0), yi_s)),
+        special_srepr,
+    }
+    assert {f.srepr for f in sol.answer.features} == expected_feature_sreprs, (
+        f"double-solve 不一致: 想定特徴 {expected_feature_sreprs} "
+        f"!= solver 再計算 {{f.srepr for f in sol.answer.features}}"
+    )
+
+    # 描画: 主直線 y = m x + yi（m=-yi/xi）＋特殊直線。pts は2交点と特殊直線の位置を含める。
+    m_s = -yi_s / xi_s
+    render_params: dict[str, Any] = {
+        "a": str(m_s),
+        "b": str(yi_s),
+        "pts": [
+            str((xi_s, sympy.Integer(0))),
+            str((sympy.Integer(0), yi_s)),
+        ],
+    }
+    if axis == "vertical":
+        render_params["vline_x"] = str(k_s)
+        render_params["pts"].append(str((k_s, sympy.Integer(0))))
+    else:
+        render_params["hline_y"] = str(k_s)
+        render_params["pts"].append(str((sympy.Integer(0), k_s)))
+
+    solution_svg = render_special_lines_solution_svg(render_params)
+    answer = GraphAnswer(features=sol.answer.features, solution_svg_ref=solution_svg)
+
+    sub_question = SubQuestionMR(
+        label="(1)",
+        asked="draw_graph",
+        answer=answer,
+        steps=sol.steps,
+        concept_tags=_effective_concept_tags(ctx),
+        cause_tags=_effective_cause_tags(ctx),
+    )
+
+    labels = tick_labels_from_params({"pts": render_params["pts"]})
+    visual_plan = VisualPlan(
+        style="grid",
+        labels=labels,
+        elements=[VisualElement(kind="grid", attrs={}), VisualElement(kind="axis", attrs={})],
+    )
+
+    mr_params: dict[str, Any] = {
+        "xi": str(xi_s),
+        "yi": str(yi_s),
+        "axis": axis,
+        "k": str(k_s),
+        "a": str(m_s),
+        "b": str(yi_s),
+        "pts": render_params["pts"],
+    }
+    if axis == "vertical":
+        mr_params["vline_x"] = str(k_s)
+    else:
+        mr_params["hline_y"] = str(k_s)
+
+    return MR(
+        signature=ctx.spec_level.signature,
+        family=ctx.family,
+        level=ctx.level,
+        purpose=ctx.purpose,
+        seed=0,
+        params=mr_params,
+        given={
+            "equation": _format_two_var_equation_display(a_coeff, b_coeff, c_coeff),
+            "equation2": equation2_disp,
+        },
+        sub_questions=[sub_question],
+        visual_plan=visual_plan,
+        provenance=Provenance(recipe="math.draw_special_lines"),
     )
 
 

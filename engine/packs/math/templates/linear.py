@@ -116,6 +116,16 @@ LF_READ_DIAGRAM_INTERSECTION_V1 = (
 
 
 # ---------------------------------------------------------------------------
+# g2_l26.graph_table Lv2: 切片法で2元1次方程式をかき、特殊直線 x=k / y=k もかく（P1/C5）
+# 式は given（equation / equation2）で提示＝答えの交点値は given 係数由来で whitelist。
+# ---------------------------------------------------------------------------
+LF_DRAW_SPECIAL_LINES_V1 = (
+    "2元1次方程式 {{ given.equation }} のグラフを、x 軸・y 軸との交点を利用して"
+    "座標平面にかけ。また、方程式 {{ given.equation2 }} のグラフも同じ平面にかけ。"
+)
+
+
+# ---------------------------------------------------------------------------
 # g2_l11.calculation Lv1: 連立方程式を加減法で解く（横展開#11・連立クラスタ）
 # ---------------------------------------------------------------------------
 LF_SOLVE_SYSTEM_ELIM_V1 = (
@@ -239,6 +249,7 @@ def _register_all() -> None:
     REGISTRY.register_template(
         "lf_read_diagram_intersection_v1", LF_READ_DIAGRAM_INTERSECTION_V1
     )
+    REGISTRY.register_template("lf_draw_special_lines_v1", LF_DRAW_SPECIAL_LINES_V1)
     REGISTRY.register_template("lf_solve_system_elim_v1", LF_SOLVE_SYSTEM_ELIM_V1)
     REGISTRY.register_template("lf_solve_system_subst_v1", LF_SOLVE_SYSTEM_SUBST_V1)
     REGISTRY.register_template("lf_solve_system_various_v1", LF_SOLVE_SYSTEM_VARIOUS_V1)
@@ -292,6 +303,7 @@ __all__ = [
     "LF_DRAW_FROM_EQUATION_V1",
     "LF_READ_INTERSECTION_V1",
     "LF_READ_DIAGRAM_INTERSECTION_V1",
+    "LF_DRAW_SPECIAL_LINES_V1",
     "LF_SOLVE_SYSTEM_ELIM_V1",
     "LF_SOLVE_SYSTEM_SUBST_V1",
     "LF_SOLVE_SYSTEM_VARIOUS_V1",
