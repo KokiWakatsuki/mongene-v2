@@ -32,6 +32,7 @@ from engine.core.registry import REGISTRY, register_recipe
 from engine.core.rng import Rng, draw, draw_many
 from engine.packs.math.visuals.graph import (
     render_line_solution_svg,
+    render_segment_solution_svg,
     render_special_lines_solution_svg,
     tick_labels_from_params,
 )
@@ -1347,6 +1348,106 @@ def draw_linear_fraction(ctx: CellContext, rng: Rng) -> MR:
         sub_questions=[sub_question],
         visual_plan=visual_plan,
         provenance=Provenance(recipe="math.draw_linear_fraction"),
+    )
+
+
+# ---------------------------------------------------------------------------
+# math.draw_segment（g2_l23.graph_table Lv2 用）— 横展開・P1/C5
+# 変域つき1次関数 y=ax+b（x_lo≦/<x≦/<x_hi）を、端点の開閉（●/○）を区別して線分としてかく。
+# 新 solver draw_segment_features（端点2つ・開閉を srepr flag で区別）＋新 visual render_segment。
+# 答えは GraphAnswer。問題図＝空の方眼。given=expression（式）+x_domain（不等号つき変域）。
+# ---------------------------------------------------------------------------
+_DRAW_SEGMENT_CONCEPTS = [
+    "linear_function.draw_segment",
+]
+
+
+def _format_segment_x_domain(
+    x_lo: sympy.Expr, x_hi: sympy.Expr, closed_lo: bool, closed_hi: bool
+) -> str:
+    """変域の表示（例: "-1 ≦ x ≦ 2", "-1 < x ≦ 2"）。等号の有無が端点の開閉を表す。"""
+    lo_sign = "≦" if closed_lo else "<"
+    hi_sign = "≦" if closed_hi else "<"
+    return f"{_fmt_number(x_lo)} {lo_sign} x {hi_sign} {_fmt_number(x_hi)}"
+
+
+@register_recipe("math.draw_segment", provides_concepts=_DRAW_SEGMENT_CONCEPTS)
+def draw_segment(ctx: CellContext, rng: Rng) -> MR:
+    """変域つき1次関数を端点の開閉を区別して線分としてかく（answer-first・「かく」Lv2）。
+
+    傾き a(≠0)・切片 b・変域 [x_lo, x_hi]（x_lo<x_hi）・両端の開閉 closed_lo/closed_hi を選ぶ。
+    端点 (x_lo, a·x_lo+b)・(x_hi, a·x_hi+b) は整数（a,b,x 整数）。答え（両端点＋開閉）は独立ソルバ
+    `math.draw_segment_features` で再計算し一致を assert。問題図は空の方眼、模範解答図は端点マーカー
+    つきの線分（render_segment_solution_svg）。
+    """
+    p = ctx.spec_level.params
+    a = draw(p["slope_domain"], rng)
+    b = draw(p["intercept_domain"], rng)
+    x_lo, x_hi = sorted(draw_many(p["x_domain_endpoints"], rng, k=2))  # 相異な2整数を昇順に
+    closed_lo = draw(p["closed_domain"], rng)  # 素の配列 [True, False]
+    closed_hi = draw(p["closed_domain"], rng)
+
+    a_s, b_s = sympy.nsimplify(a), sympy.nsimplify(b)
+    x_lo_s, x_hi_s = sympy.nsimplify(x_lo), sympy.nsimplify(x_hi)
+    cl, ch = bool(closed_lo), bool(closed_hi)
+    y_lo = a_s * x_lo_s + b_s
+    y_hi = a_s * x_hi_s + b_s
+
+    solver = REGISTRY.solver("math.draw_segment_features")
+    sol = cast(Solution, solver(a_s, b_s, x_lo_s, x_hi_s, cl, ch))
+    assert isinstance(sol.answer, GraphAnswer)
+    expected_feature_sreprs = {
+        sympy.srepr(sympy.Tuple(x_lo_s, y_lo, sympy.Integer(1 if cl else 0))),
+        sympy.srepr(sympy.Tuple(x_hi_s, y_hi, sympy.Integer(1 if ch else 0))),
+    }
+    assert {f.srepr for f in sol.answer.features} == expected_feature_sreprs, (
+        f"double-solve 不一致: 想定端点 {expected_feature_sreprs} "
+        f"!= solver 再計算 {{f.srepr for f in sol.answer.features}}"
+    )
+
+    pts = [str((x_lo_s, y_lo)), str((x_hi_s, y_hi))]
+    render_params: dict[str, Any] = {
+        "a": str(a_s), "b": str(b_s),
+        "seg_x_lo": str(x_lo_s), "seg_x_hi": str(x_hi_s),
+        "closed_lo": cl, "closed_hi": ch, "pts": pts,
+    }
+    solution_svg = render_segment_solution_svg(render_params)
+    answer = GraphAnswer(features=sol.answer.features, solution_svg_ref=solution_svg)
+
+    sub_question = SubQuestionMR(
+        label="(1)",
+        asked="draw_segment",
+        answer=answer,
+        steps=sol.steps,
+        concept_tags=_effective_concept_tags(ctx),
+        cause_tags=_effective_cause_tags(ctx),
+    )
+
+    labels = tick_labels_from_params({"pts": pts})
+    visual_plan = VisualPlan(
+        style="grid",
+        labels=labels,
+        elements=[VisualElement(kind="grid", attrs={}), VisualElement(kind="axis", attrs={})],
+    )
+
+    return MR(
+        signature=ctx.spec_level.signature,
+        family=ctx.family,
+        level=ctx.level,
+        purpose=ctx.purpose,
+        seed=0,
+        params={
+            "a": str(a_s), "b": str(b_s),
+            "seg_x_lo": str(x_lo_s), "seg_x_hi": str(x_hi_s),
+            "closed_lo": cl, "closed_hi": ch, "pts": pts,
+        },
+        given={
+            "expression": _format_parallel_line_display(a_s, b_s),
+            "x_domain": _format_segment_x_domain(x_lo_s, x_hi_s, cl, ch),
+        },
+        sub_questions=[sub_question],
+        visual_plan=visual_plan,
+        provenance=Provenance(recipe="math.draw_segment"),
     )
 
 

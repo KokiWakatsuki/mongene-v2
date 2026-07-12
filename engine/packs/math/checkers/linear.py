@@ -123,6 +123,18 @@ def double_solve_read_intersection(mr: MR) -> Solution:
     return cast(Solution, solver(line_a, line_b, p["method"]))
 
 
+@register_checker("math.draw_segment.double_solve")
+def double_solve_draw_segment(mr: MR) -> Solution:
+    # 問題パラメータ（a,b・変域端 x_lo/x_hi・開閉 closed_lo/closed_hi）だけから端点特徴を再計算。
+    p = mr.params
+    solver = REGISTRY.solver("math.draw_segment_features")
+    return cast(Solution, solver(
+        sympy.sympify(p["a"]), sympy.sympify(p["b"]),
+        sympy.sympify(p["seg_x_lo"]), sympy.sympify(p["seg_x_hi"]),
+        bool(p["closed_lo"]), bool(p["closed_hi"]),
+    ))
+
+
 @register_checker("math.draw_linear_fraction.double_solve")
 def double_solve_draw_linear_fraction(mr: MR) -> Solution:
     # 問題パラメータ（分子 p・分母 q・切片 b）だけから特徴を再計算（GraphAnswer）。
@@ -328,6 +340,7 @@ __all__ = [
     "double_solve_draw_special_lines",
     "double_solve_draw_from_table",
     "double_solve_draw_linear_fraction",
+    "double_solve_draw_segment",
     "double_solve_solve_system_elimination",
     "double_solve_solve_system_substitution",
     "double_solve_solve_system_elim_scaled",

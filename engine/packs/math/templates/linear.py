@@ -146,6 +146,16 @@ LF_DRAW_FROM_TABLE_V1 = (
 
 
 # ---------------------------------------------------------------------------
+# g2_l23.graph_table Lv2: 変域つき1次関数を端点の開閉を区別して線分でかく（P1/C5）
+# 変域の不等号（given.x_domain の ≦/<）が端点の開閉を表す。答えの端点値は given 係数由来。
+# ---------------------------------------------------------------------------
+LF_DRAW_SEGMENT_V1 = (
+    "1次関数 {{ given.expression }}（{{ given.x_domain }}）のグラフを、"
+    "両端の点をふくむ・ふくまないがわかるように線分で座標平面にかけ。"
+)
+
+
+# ---------------------------------------------------------------------------
 # g2_l11.calculation Lv1: 連立方程式を加減法で解く（横展開#11・連立クラスタ）
 # ---------------------------------------------------------------------------
 LF_SOLVE_SYSTEM_ELIM_V1 = (
@@ -272,6 +282,7 @@ def _register_all() -> None:
     )
     REGISTRY.register_template("lf_draw_special_lines_v1", LF_DRAW_SPECIAL_LINES_V1)
     REGISTRY.register_template("lf_draw_from_table_v1", LF_DRAW_FROM_TABLE_V1)
+    REGISTRY.register_template("lf_draw_segment_v1", LF_DRAW_SEGMENT_V1)
     REGISTRY.register_template("lf_solve_system_elim_v1", LF_SOLVE_SYSTEM_ELIM_V1)
     REGISTRY.register_template("lf_solve_system_subst_v1", LF_SOLVE_SYSTEM_SUBST_V1)
     REGISTRY.register_template("lf_solve_system_various_v1", LF_SOLVE_SYSTEM_VARIOUS_V1)
@@ -328,6 +339,7 @@ __all__ = [
     "LF_READ_DIAGRAM_INTERSECTION_V1",
     "LF_DRAW_SPECIAL_LINES_V1",
     "LF_DRAW_FROM_TABLE_V1",
+    "LF_DRAW_SEGMENT_V1",
     "LF_SOLVE_SYSTEM_ELIM_V1",
     "LF_SOLVE_SYSTEM_SUBST_V1",
     "LF_SOLVE_SYSTEM_VARIOUS_V1",

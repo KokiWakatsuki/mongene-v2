@@ -815,6 +815,66 @@ def draw_linear_features_fraction(p: object, q: object, b: object) -> Solution:
     return Solution(answer=answer, steps=steps)
 
 
+def _endpoint_feature(x: sympy.Expr, y: sympy.Expr, closed: bool) -> Feature:
+    """線分の端点の特徴（開閉を srepr の flag に埋め込むので double-solve で開閉を区別できる）。"""
+    flag = sympy.Integer(1) if closed else sympy.Integer(0)
+    kind = "endpoint_closed" if closed else "endpoint_open"
+    status = "ふくむ" if closed else "ふくまない"
+    return Feature(
+        kind=kind,
+        srepr=sympy.srepr(sympy.Tuple(x, y, flag)),  # 座標＋開閉フラグ＝開/閉で srepr が相異
+        display=f"端点 ({_format_number(x)}, {_format_number(y)}) を{status}（{'●' if closed else '○'}）",
+    )
+
+
+@register_solver("math.draw_segment_features")
+def draw_segment_features(
+    a: object, b: object, x_lo: object, x_hi: object, closed_lo: object, closed_hi: object
+) -> Solution:
+    """変域つき1次関数 y=ax+b（x_lo≦/<x≦/<x_hi）を線分としてかく（g2_l23.graph_table Lv2）。
+
+    両端の点 (x_lo, a·x_lo+b)・(x_hi, a·x_hi+b) を、変域の不等号（等号の有無）にしたがって
+    閉端（ふくむ＝●）/開端（ふくまない＝○）で表す。答えは GraphAnswer＝両端点の特徴集合
+    （開閉は srepr の flag に埋め込むので集合一致で開閉まで検証できる）。narration に数字を書かない。
+    """
+    a_s, b_s = sympy.nsimplify(a), sympy.nsimplify(b)
+    x_lo_s, x_hi_s = sympy.nsimplify(x_lo), sympy.nsimplify(x_hi)
+    if x_lo_s >= x_hi_s:
+        raise ValueError("変域は x_lo < x_hi である必要がある")
+    cl, ch = bool(closed_lo), bool(closed_hi)
+    y_lo = a_s * x_lo_s + b_s
+    y_hi = a_s * x_hi_s + b_s
+    features = [
+        _endpoint_feature(x_lo_s, y_lo, cl),
+        _endpoint_feature(x_hi_s, y_hi, ch),
+    ]
+    steps = [
+        Step(
+            op="plot_endpoint_lo",
+            args=[],
+            result_srepr=sympy.srepr(sympy.Tuple(x_lo_s, y_lo)),
+            result_display=f"({_format_number(x_lo_s)}, {_format_number(y_lo)})",
+            narration="変域の左端の x に対応する点をとり、端をふくむなら●、ふくまないなら○で表す。",
+        ),
+        Step(
+            op="plot_endpoint_hi",
+            args=[],
+            result_srepr=sympy.srepr(sympy.Tuple(x_hi_s, y_hi)),
+            result_display=f"({_format_number(x_hi_s)}, {_format_number(y_hi)})",
+            narration="変域の右端の x に対応する点をとり、端をふくむなら●、ふくまないなら○で表す。",
+        ),
+        Step(
+            op="draw_segment",
+            args=[],
+            result_srepr=sympy.srepr(sympy.Tuple(sympy.Tuple(x_lo_s, y_lo), sympy.Tuple(x_hi_s, y_hi))),
+            result_display="両端点を結ぶ線分",
+            narration="とった2つの端点を結ぶ線分をひく。",
+        ),
+    ]
+    answer = GraphAnswer(features=features, solution_svg_ref="")
+    return Solution(answer=answer, steps=steps)
+
+
 @register_solver("math.linear_direction_from_slope")
 def linear_direction_from_slope(a: object) -> Solution:
     """1次関数 y=ax+b のグラフの向き（右上がり/右下がり）を傾き a の符号から判定する

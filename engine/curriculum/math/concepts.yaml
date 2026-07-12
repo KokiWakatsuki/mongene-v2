@@ -62,6 +62,9 @@ concepts:
   - id: linear_function.draw_from_table
     label: "x-y の対応表からグラフ（直線）をかく"
     unit: g2_l28
+  - id: linear_function.draw_segment
+    label: "変域つき1次関数を、端点の開閉を区別して線分でかく"
+    unit: g2_l23
   - id: simultaneous_equations.solve_by_elimination
     label: "連立方程式を加減法で解く（係数の絶対値が等しい）"
     unit: g2_l11

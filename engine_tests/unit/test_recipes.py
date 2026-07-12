@@ -645,6 +645,44 @@ def test_draw_linear_fraction_double_solve_property(seed):
 
 
 # ---------------------------------------------------------------------------
+# math.draw_segment（g2_l23.graph_table Lv2）— P1/C5（端点開閉の線分）
+# ---------------------------------------------------------------------------
+def test_draw_segment_lv2_construct():
+    ctx = _make_ctx("math.g2_l23.graph_table", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+
+    assert mr.signature == "draw_segment_with_endpoints"
+    assert set(mr.given.keys()) == {"expression", "x_domain"}
+    sq = mr.sub_questions[0]
+    assert sq.asked == "draw_segment"
+    assert sq.answer.kind == "graph"
+    assert len(sq.answer.features) == 2  # 両端点
+    assert {f.kind for f in sq.answer.features} <= {"endpoint_closed", "endpoint_open"}
+    assert [s.op for s in sq.steps] == ["plot_endpoint_lo", "plot_endpoint_hi", "draw_segment"]
+    assert sympy.sympify(mr.params["seg_x_lo"]) < sympy.sympify(mr.params["seg_x_hi"])
+    assert mr.visual_plan is not None
+    assert {e.kind for e in mr.visual_plan.elements} == {"grid", "axis"}
+
+
+@pytest.mark.parametrize("seed", range(200))
+def test_draw_segment_double_solve_property(seed):
+    ctx = _make_ctx("math.g2_l23.graph_table", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+
+    solver = REGISTRY.solver("math.draw_segment_features")
+    sol = solver(
+        sympy.sympify(mr.params["a"]), sympy.sympify(mr.params["b"]),
+        sympy.sympify(mr.params["seg_x_lo"]), sympy.sympify(mr.params["seg_x_hi"]),
+        bool(mr.params["closed_lo"]), bool(mr.params["closed_hi"]),
+    )
+    set_recipe = {f.srepr for f in mr.sub_questions[0].answer.features}
+    set_solver = {f.srepr for f in sol.answer.features}
+    assert set_recipe == set_solver
+
+
+# ---------------------------------------------------------------------------
 # math.solve_system_elimination（g2_l11.calculation Lv1）— 横展開#11（連立・加減法）
 # ---------------------------------------------------------------------------
 def test_solve_system_elimination_lv1_construct():

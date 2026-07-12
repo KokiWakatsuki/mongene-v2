@@ -24,6 +24,8 @@ _FORBIDDEN_BY_ASKED: dict[str, frozenset[str]] = {
     "intersection": frozenset({"grid_with_both_lines"}),
     # graph_table: 読む対象そのものを図に先出ししてはならない
     "read_intersection": frozenset({"grid_with_both_lines"}),
+    # draw_segment（g2_l23 Lv2・かく）: 問題図は空の方眼で禁止要素なし（明示登録）
+    "draw_segment": frozenset(),
     "read_point": frozenset({"labeled_answer_point"}),
     # 傾き・切片を読む題材でも、答えの点/注記を図に先出ししない
     "read_slope_intercept": frozenset({"labeled_answer_point"}),
@@ -137,11 +139,13 @@ GRAPH_TABLE_FRAME = Frame(
         "expression", "data_table", "situation_params",
         "equation",  # 横展開#9: 2元1次方程式 ax+by=c を変形してかく（g2_l26）
         "equation2",  # P1/C5: 特殊直線 x=k / y=k を追加で与える（g2_l26 Lv2）
+        "x_domain",  # P1/C5: 変域つきグラフを線分でかく（g2_l23 Lv2）
         "line_a", "line_b",  # 横展開#10: 2直線をかき交点を読む（g2_l27 graph）
     }),
     asked_vocab=frozenset({
         "draw_graph", "read_point", "read_intersection", "read_table", "complete_table",
         "read_slope_intercept",  # 横展開#4: グラフから傾き・切片を読む（g2_l21）
+        "draw_segment",  # P1/C5: 端点の開閉を区別して線分をかく（g2_l23 Lv2）
     }),
     visual="required",
     _forbidden_by_asked={
@@ -150,6 +154,7 @@ GRAPH_TABLE_FRAME = Frame(
         "read_slope_intercept": _FORBIDDEN_BY_ASKED["read_slope_intercept"],
         "read_table": _FORBIDDEN_BY_ASKED["read_table"],
         "complete_table": _FORBIDDEN_BY_ASKED["complete_table"],
+        "draw_segment": _FORBIDDEN_BY_ASKED["draw_segment"],
     },
 )
 

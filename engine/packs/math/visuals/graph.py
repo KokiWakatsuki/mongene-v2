@@ -11,7 +11,7 @@ matplotlib に依存しない自己完結の SVG 文字列生成。座標平面�
 """
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any, Callable
+from typing import TYPE_CHECKING, Any, Callable, NamedTuple
 
 import sympy
 
@@ -114,24 +114,26 @@ def tick_labels(mr: "MR") -> list[str]:
     return tick_labels_from_params(mr.params)
 
 
-def render_grid_svg(
-    params: dict[str, Any],
-    *,
-    draw_line: bool,
-    vline_x: Any = None,
-    hline_y: Any = None,
-) -> str:
-    """params（a, b, pts）と描画範囲から座標平面 SVG を組む（決定論・自己完結）。
+class _GridScaffold(NamedTuple):
+    """座標平面の土台（SVG open+rect+グリッド+軸）と座標変換・範囲。
 
-    draw_line=True: グリッド+軸+目盛+直線1本（read セルの問題図／かくセルの解答図）。
-    draw_line=False: グリッド+軸+目盛のみの空の方眼（かくセルの問題図＝生徒が描き込む）。
-      この場合 params に "a"/"b"（直線の傾き・切片）は不要（"pts" で描画範囲だけ決める）。
-
-    vline_x/hline_y（keyword-only・任意）: x=k / y=k の特殊直線を追加で描く（g2_l26 Lv2）。
-      既定 None では描かないため、既存の呼び出し（傾きのある直線1本）は完全に後方互換
-      （出力バイト列が不変＝既存 golden 不変）。特殊直線も主直線と同じ黒の実線・太さで描く
-      （色に情報を載せない＝モノクロ印刷可・N-4 適合）。
+    render_grid_svg / render_segment_solution_svg / render_polyline_svg が共有し、
+    土台の後に各自の描画要素（直線・線分＋端点・折れ線）を挿し、最後に目盛を足す。
     """
+
+    parts: list[str]
+    to_px_x: Callable[[float], float]
+    to_px_y: Callable[[float], float]
+    x_lo: int
+    x_hi: int
+    y_lo: int
+    y_hi: int
+    plot_lo: float
+    plot_hi: float
+
+
+def _grid_scaffold(params: dict[str, Any]) -> _GridScaffold:
+    """SVG open+rect+グリッド線+軸までを組む（描画要素・目盛の手前まで・決定論）。"""
     x_lo, x_hi, y_lo, y_hi = compute_grid_bounds_from_params(params)
 
     plot_lo = _MARGIN
@@ -174,16 +176,62 @@ def render_grid_svg(
             f'stroke="#000000" stroke-width="1.5"/>'
         )
 
+    return _GridScaffold(parts, to_px_x, to_px_y, x_lo, x_hi, y_lo, y_hi, plot_lo, plot_hi)
+
+
+def _grid_ticks(sc: _GridScaffold) -> list[str]:
+    """軸目盛の数値ラベル（<text> はこれのみ。visual_plan.labels と一致させる）。"""
+    ticks: list[str] = []
+    py0 = sc.to_px_y(0) if sc.y_lo <= 0 <= sc.y_hi else sc.plot_hi
+    for gx in range(sc.x_lo, sc.x_hi + 1):
+        if gx == 0:
+            continue  # 原点の重複表記を避ける（0 は y 軸側で1回だけ出す）
+        px = sc.to_px_x(gx)
+        ticks.append(
+            f'<text x="{px:.2f}" y="{py0 + 12:.2f}" font-size="10" '
+            f'text-anchor="middle" fill="#000000">{_format_tick(sympy.Integer(gx))}</text>'
+        )
+    px0 = sc.to_px_x(0) if sc.x_lo <= 0 <= sc.x_hi else sc.plot_lo
+    for gy in range(sc.y_lo, sc.y_hi + 1):
+        py = sc.to_px_y(gy)
+        ticks.append(
+            f'<text x="{px0 - 8:.2f}" y="{py + 3:.2f}" font-size="10" '
+            f'text-anchor="end" fill="#000000">{_format_tick(sympy.Integer(gy))}</text>'
+        )
+    return ticks
+
+
+def render_grid_svg(
+    params: dict[str, Any],
+    *,
+    draw_line: bool,
+    vline_x: Any = None,
+    hline_y: Any = None,
+) -> str:
+    """params（a, b, pts）と描画範囲から座標平面 SVG を組む（決定論・自己完結）。
+
+    draw_line=True: グリッド+軸+目盛+直線1本（read セルの問題図／かくセルの解答図）。
+    draw_line=False: グリッド+軸+目盛のみの空の方眼（かくセルの問題図＝生徒が描き込む）。
+      この場合 params に "a"/"b"（直線の傾き・切片）は不要（"pts" で描画範囲だけ決める）。
+
+    vline_x/hline_y（keyword-only・任意）: x=k / y=k の特殊直線を追加で描く（g2_l26 Lv2）。
+      既定 None では描かないため、既存の呼び出し（傾きのある直線1本）は完全に後方互換
+      （出力バイト列が不変＝既存 golden 不変）。特殊直線も主直線と同じ黒の実線・太さで描く
+      （色に情報を載せない＝モノクロ印刷可・N-4 適合）。
+    """
+    sc = _grid_scaffold(params)
+    parts = sc.parts
+
     # --- 直線（太い黒の実線。線種・太さのみで区別＝モノクロ印刷可） ---
     # draw_line=False（かくセルの問題図＝空の方眼）では直線を描かない（a/b も参照しない）。
     if draw_line:
         a = sympy.nsimplify(sympy.sympify(params["a"]))
         b = sympy.nsimplify(sympy.sympify(params["b"]))
-        x_start, x_end = x_lo, x_hi
+        x_start, x_end = sc.x_lo, sc.x_hi
         y_start = a * x_start + b
         y_end = a * x_end + b
-        px1, py1 = to_px_x(x_start), to_px_y(float(y_start))
-        px2, py2 = to_px_x(x_end), to_px_y(float(y_end))
+        px1, py1 = sc.to_px_x(x_start), sc.to_px_y(float(y_start))
+        px2, py2 = sc.to_px_x(x_end), sc.to_px_y(float(y_end))
         parts.append(
             f'<line x1="{px1:.2f}" y1="{py1:.2f}" x2="{px2:.2f}" y2="{py2:.2f}" '
             f'stroke="#000000" stroke-width="2.5"/>'
@@ -192,37 +240,20 @@ def render_grid_svg(
     # --- 特殊直線 x=k（垂直）/ y=k（水平）（g2_l26 Lv2・任意） ---
     if vline_x is not None:
         vx = float(sympy.nsimplify(sympy.sympify(vline_x)))
-        pvx = to_px_x(vx)
+        pvx = sc.to_px_x(vx)
         parts.append(
-            f'<line x1="{pvx:.2f}" y1="{plot_lo:.2f}" x2="{pvx:.2f}" y2="{plot_hi:.2f}" '
+            f'<line x1="{pvx:.2f}" y1="{sc.plot_lo:.2f}" x2="{pvx:.2f}" y2="{sc.plot_hi:.2f}" '
             f'stroke="#000000" stroke-width="2.5"/>'
         )
     if hline_y is not None:
         hy = float(sympy.nsimplify(sympy.sympify(hline_y)))
-        phy = to_px_y(hy)
+        phy = sc.to_px_y(hy)
         parts.append(
-            f'<line x1="{plot_lo:.2f}" y1="{phy:.2f}" x2="{plot_hi:.2f}" y2="{phy:.2f}" '
+            f'<line x1="{sc.plot_lo:.2f}" y1="{phy:.2f}" x2="{sc.plot_hi:.2f}" y2="{phy:.2f}" '
             f'stroke="#000000" stroke-width="2.5"/>'
         )
 
-    # --- 軸目盛の数値ラベル（<text> はこれのみ。visual_plan.labels と一致させる） ---
-    py0 = to_px_y(0) if y_lo <= 0 <= y_hi else plot_hi
-    for gx in range(x_lo, x_hi + 1):
-        if gx == 0:
-            continue  # 原点の重複表記を避ける（0 は y 軸側で1回だけ出す）
-        px = to_px_x(gx)
-        parts.append(
-            f'<text x="{px:.2f}" y="{py0 + 12:.2f}" font-size="10" '
-            f'text-anchor="middle" fill="#000000">{_format_tick(sympy.Integer(gx))}</text>'
-        )
-    px0 = to_px_x(0) if x_lo <= 0 <= x_hi else plot_lo
-    for gy in range(y_lo, y_hi + 1):
-        py = to_px_y(gy)
-        parts.append(
-            f'<text x="{px0 - 8:.2f}" y="{py + 3:.2f}" font-size="10" '
-            f'text-anchor="end" fill="#000000">{_format_tick(sympy.Integer(gy))}</text>'
-        )
-
+    parts.extend(_grid_ticks(sc))
     parts.append("</svg>")
     return "".join(parts)
 
@@ -266,6 +297,50 @@ def render_special_lines_solution_svg(params: dict[str, Any]) -> str:
     )
 
 
+def render_segment_solution_svg(params: dict[str, Any]) -> str:
+    """線分（変域つきグラフ）の模範解答図（g2_l23 Lv2）。
+
+    params: a, b（直線 y=ax+b）／seg_x_lo, seg_x_hi（変域の両端 x）／closed_lo, closed_hi（端点の
+    開閉＝閉区間は塗り● / 開区間は白抜き○）。端点の開閉は「塗り/白抜き」で区別する（色に情報を
+    載せない＝モノクロ印刷可・N-4 適合）。問題図は空の方眼（render_grid_svg draw_line=False）と
+    同じ pts・範囲を使う。
+    """
+    sc = _grid_scaffold(params)
+    parts = sc.parts
+
+    a = sympy.nsimplify(sympy.sympify(params["a"]))
+    b = sympy.nsimplify(sympy.sympify(params["b"]))
+    x_lo = sympy.sympify(params["seg_x_lo"])
+    x_hi = sympy.sympify(params["seg_x_hi"])
+    y_lo = a * x_lo + b
+    y_hi = a * x_hi + b
+    px1, py1 = sc.to_px_x(float(x_lo)), sc.to_px_y(float(y_lo))
+    px2, py2 = sc.to_px_x(float(x_hi)), sc.to_px_y(float(y_hi))
+
+    # --- 線分本体（太い黒の実線・変域の両端で止める） ---
+    parts.append(
+        f'<line x1="{px1:.2f}" y1="{py1:.2f}" x2="{px2:.2f}" y2="{py2:.2f}" '
+        f'stroke="#000000" stroke-width="2.5"/>'
+    )
+
+    # --- 端点マーカー（閉=塗り● / 開=白抜き○・色以外で区別） ---
+    for (px, py), closed in ((( px1, py1), bool(params["closed_lo"])),
+                             ((px2, py2), bool(params["closed_hi"]))):
+        if closed:
+            parts.append(
+                f'<circle cx="{px:.2f}" cy="{py:.2f}" r="4" fill="#000000"/>'
+            )
+        else:
+            parts.append(
+                f'<circle cx="{px:.2f}" cy="{py:.2f}" r="4" fill="#ffffff" '
+                f'stroke="#000000" stroke-width="1.5"/>'
+            )
+
+    parts.extend(_grid_ticks(sc))
+    parts.append("</svg>")
+    return "".join(parts)
+
+
 register_visual("math.linear_graph")(render_linear_graph)
 
 
@@ -274,6 +349,7 @@ __all__ = [
     "render_grid_svg",
     "render_line_solution_svg",
     "render_special_lines_solution_svg",
+    "render_segment_solution_svg",
     "compute_grid_bounds",
     "compute_grid_bounds_from_params",
     "tick_labels",

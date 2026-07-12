@@ -102,11 +102,11 @@ def test_graph_table_vocab_and_visual():
     f = REGISTRY.frame("graph_table")
     assert f.given_vocab == frozenset({
         "expression", "data_table", "situation_params", "equation", "equation2",
-        "line_a", "line_b",
+        "x_domain", "line_a", "line_b",
     })
     assert f.asked_vocab == frozenset({
         "draw_graph", "read_point", "read_intersection", "read_table", "complete_table",
-        "read_slope_intercept",
+        "read_slope_intercept", "draw_segment",
     })
     assert f.visual == "required"
 
