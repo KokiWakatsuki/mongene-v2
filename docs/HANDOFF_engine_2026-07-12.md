@@ -9,7 +9,8 @@
 ## 0. まず読む（順に）
 1. 要件: `docs/requirements_2026-07-11.html`（v2.1・F/Q/N/D 番号体系）
 2. 実装設計: `docs/implementation_design_2026-07-11.md`（v1.1・H1〜H8 の穴・§4契約・§5 pipeline・§6 pack・§7 T1・§8 gates・§10 制作フロー・§11 タスク表）
-3. 本書（最新の進捗と横展開の手順書）
+3. **ゴール仕様: `docs/goal_spec_2026-07-12.md`（v1.0・§1入力設計・§2組み合わせ設計R-IN1〜6・§3数値ゴール=green 630/630・台帳C1〜C16・Phase P1〜P8）**——全実装は「どのCグループ・どのPhaseか」を宣言して行う。進捗実測は `python -m engine.tools.goal_progress`（未分類セル検出=exit 1）
+4. 本書（最新の進捗と横展開の手順書）
 4. 旧引き継ぎ書 `docs/HANDOFF_engine_m0_2026-07-11.md`（M0 の Task1〜10 の詳細な経緯。歴史資料）
 
 - ブランチ: **`engine-m0-rework`**（master から分岐・未マージ）
@@ -256,8 +257,9 @@ feasibility 精査（当時）: **answer 経路とゲートは既に GraphAnswer
 - **実装パターン（次の knowledge セルはこれをコピー）**: solver `math.<rule>`（規則→ChoiceAnswer 返す・純関数）＋ recipe `math.knowledge_<x>`（surface param を引いて statement 構成・solver で double-solve）＋ checker `.double_solve`（params から solver 再判定）＋ template（`given.statement` を出し選択肢は本文固定）＋ concept（unit 実在）＋ spec（given=[statement], asked=[choice], visual=none）。#16/#17 の `knowledge_*` をそのまま雛形に。
 - **次の knowledge セル候補（spec+小規則で作れる）**: ~~g2_l19~~（#19 で被覆済）／g2_l26 knowledge（ax+by=c の解の集合は直線か）／g2_l27 knowledge（連立の解＝2直線の交点）。**ただし l26/l27 は「答えが常に固定」型**（"直線"/"交点"）で verify にならず F-3 も surface のみ頼み＝弱点型。作るなら妨害選択肢（放物線・接点 等）で単一選択化し surface param で無限性を出すが、#18/#19 のような「答えが変わる」型が枯れたら価値は下がる。用語「何というか」系の自由記述は ChoiceAnswer 化（正解語＋妨害語）で対応。g2_l19 は Lv1（a/b の用語想起）も未着手＝2レベル化するなら Lv2(判別) と op 列を変えて level_sep を満たすこと。
 
-### 次の一手の候補（#20 以降・方針判断）
-1. **knowledge を横に伸ばす**（最も低リスク・償却が効く）: 残候補（g2_l26/l27 knowledge・g2_l19 Lv1 用語想起）を §7.7 パターンで spec+小規則追加。**ただし残る knowledge は「答え固定」型が主で verify の妙味は薄い**（#18/#19 で verify 型は概ね出し切った）。
+### 次の一手（#20 以降）——★ゴール仕様 v1.0（2026-07-12）で確定
+**`docs/goal_spec_2026-07-12.md` §3.6 の Phase 順に従う**: 次は **P1（C5 g2一次関数の残16セル → C2 g2数と式の残23セル）**。規律: (1) C グループ単位で T1 を 100% にしてから次へ（薄く広くの宙ぶらりん禁止）、(2) 事業優先（知人塾範囲=D-4）判明時は該当グループ前倒しのみ許す。進捗は `python -m engine.tools.goal_progress` で実測（現在 29/630=4.6%）。
+（参考・旧候補の評価）残 knowledge（l26/l27/l19Lv1）は「答え固定」型が主で verify の妙味は薄い（#18/#19 で verify 型は概ね出し切った）——P1 の中で C5 の一部として埋める。
 2. **g2_l23 graph_table[2]**（作図の残り）＝端点の開閉つき線分（segment 描画＋端点マーカー）。graph「かく」capability の延長（visuals/graph.py 拡張）。純 T1 で残る作図セル。
 3. **別の calc/find_value クラスタへ横展開**（一次方程式・比例反比例・式の計算 等）＝既存 solver で作れる純 T1 セルを他単元で探す。
 4. **word_problem（T3・LLM）着手＝M1 本体**（利用 l16/l17/l18/l28〜l30）。T1 では作れない・翻訳ゲート実装が要る。
