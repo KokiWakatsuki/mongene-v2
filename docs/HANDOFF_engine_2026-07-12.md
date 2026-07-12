@@ -18,12 +18,14 @@
 
 ---
 
-## 1. 現状サマリ（2026-07-12・最新コミット `04d3813`）
+## 1. 現状サマリ（2026-07-12・最新コミット `b5c4ec5`）
 
-**M0 金の縦串は実装完了**（要件 §10 M0 DoD = Q1〜Q7 + F-1/2/3/5/9 を充足）。続けて **横展開を9セル分**進めた（#1〜#3 前セッション、#4〜#9 本セッション）。#8 で **graph_table「かく」capability を新設**、#9 でそれを**新solverゼロで再利用**（#5変形＋#8作図の合成）＝償却を実データで実証。
+**M0 金の縦串は実装完了**（要件 §10 M0 DoD = Q1〜Q7 + F-1/2/3/5/9 を充足）。続けて **横展開を11セル分**進めた（#1〜#3 前々セッション、#4〜#11 本セッション群）。#8 で **graph_table「かく」capability を新設**、#9〜#11 でそれ／intersection solver を**新solverゼロで再利用**＝償却を実データで実証（#11 で連立方程式クラスタへも横展開）。
 
-- テスト全体 **3301 passed**・`mypy --strict` クリーン・`ruff`（engine/ ソース）クリーン。
-- **capabilities = 16 セル**（`spec check` 済みで generate 可能なセル）:
+> ★**本セッション終了時の未完タスク**: #11（g2_l11 加減法）は**フルスイート未走のままコミット済み**（`b5c4ec5`）。中断のため。check/300seed広域/dup/mypy/ruff/200seed property/golden/eval は全緑・core 不触なので緑と強く見込むが未確認。**再開の最初に `pytest engine_tests/` を走らせて確認**（下記コマンド）。赤なら #11 を修正、緑ならそのまま次へ。
+
+- テスト全体 **3505 passed**（#10 時点。#11 分は未走）・`mypy --strict` クリーン・`ruff`（engine/ ソース）クリーン。
+- **capabilities = 18 セル**（`spec check` 済みで generate 可能なセル。level 単位では 18）:
 
 | unit | form | levels | 内容 | recipe |
 |---|---|---|---|---|
@@ -39,16 +41,23 @@
 | g2_l22 | calculation | 1 | グラフが通る点を代入で求める（asked=coordinate・#7） | point_on_line |
 | g2_l22 | graph_table | 1 | y=ax+b のグラフをかく（初の「かく」＝GraphAnswer・#8） | draw_linear |
 | g2_l26 | graph_table | 1 | ax+by=c を変形してかく（#5＋#8 合成・新数学ゼロ・#9） | draw_linear_from_equation |
+| g2_l27 | graph_table | 2 | 2直線をかき交点を読む（intersection 再利用・#10） | read_intersection_from_graph |
+| g2_l11 | calculation | 1 | 連立を加減法で解く（intersection 再利用・連立クラスタ初・#11） | solve_system_elimination |
 
-- M0 縦串 = g2_l25 + 戻り先 g2_l24（find_value）+ g2_l25 graph_table + remedial。**横展開分** = l20 / l27 / l23 / l21 / l26(calc) / l19 / l22(calc) / l22(graph) / l26(graph)。
-- **償却の前進**: (#7) solver `evaluate_linear_at_x` を素関数化し g2_l19/g2_l22(calc) で共有。(#8) **graph「かく」capability 新設**（GraphAnswer 生成経路）。**(#9) それを実証**: g2_l26.graph は `_solve_equation_for_y_core`(#5)＋`_draw_linear_features_core`(#8) を合成する solver `draw_from_equation` だけで、**新しい数学ロジックを1行も書かず**に作れた＝「capability を作れば以後は spec＋薄い recipe で増える」当初目的の実証。
-- `git log --oneline`: 04d3813(#9 l26.graph) / a158974 / 4364abf(#8 かくcapability) / d680c3d(#7) / 352dcd7 / 916fb3c(#6)。
+- M0 縦串 = g2_l25 + 戻り先 g2_l24（find_value）+ g2_l25 graph_table + remedial。**横展開分** = l20 / l27(fv) / l23 / l21 / l26(calc) / l19 / l22(calc) / l22(graph) / l26(graph) / l27(graph) / l11(calc)。
+- **償却の実証（当初目的の達成確認）**:
+  - (#7) solver `evaluate_linear_at_x` を素関数化し g2_l19/g2_l22(calc) で共有。
+  - (#8) **graph「かく」capability 新設**（GraphAnswer 生成経路・初）。
+  - (#9) g2_l26.graph は `_solve_equation_for_y_core`(#5)＋`_draw_linear_features_core`(#8) の**合成 solver だけ**（新数学ゼロ）で作成。
+  - (#10) g2_l27.graph は `intersection_of_two_lines`(#2 の solver) を再利用（新 solver ゼロ）。
+  - (#11) g2_l11.calc（連立・加減法）も `intersection_of_two_lines` を再利用＝**同 solver が4セル**（l27fv/l27graph/l11、＋派生）を支える。連立クラスタ（l11〜l15の9レベル）は全て同 solver で作れる見込み（§下の調査）。
+- `git log --oneline`: b5c4ec5(#11 l11.calc・**FS未走**) / 07af176(#10 l27.graph) / 44aa938 / 04d3813(#9 l26.graph) / 4364abf(#8 かくcapability) / d680c3d(#7)。
 
 ### 再開時の最初のコマンド（実状態の確認）
 ```bash
 cd /Users/koki/workspace/mongene-v2
 git branch --show-current            # engine-m0-rework
-git log --oneline -6                 # 最新 04d3813（#9 l26.graph 償却実証）
+git log --oneline -6                 # 最新 b5c4ec5（#11 l11.calc・★FS未走でコミット）
 git status --porcelain               # 空（クリーン）のはず。preview_*.html / problem_*.svg は生成物なので無視/削除可
 # 縦串 + 横展開 + eval が緑であることを再確認:
 .venv/bin/python -m pytest engine_tests/contract/ engine_tests/golden/ engine_tests/eval/ -o addopts="" -p no:cacheprovider -q
@@ -199,9 +208,16 @@ feasibility 精査（当時）: **answer 経路とゲートは既に GraphAnswer
 **★実装前に確定すべき設計判断（§0・core を触る戦略事項）**: 作図セルは **答え(傾き・切片)＝given の式係数** なので、`_gate_q5t` の given whitelist と feature トークンの**符号整合**が問題になる。実測（本セッション）: given `y = 2x - 1` → `extract_numbers` は `['2','1']`（符号なし）で whitelist=`{2,1}`。一方 切片 feature `-1` は `_to_fraction('-1')=-1`→ norm_key `'-1'` が whitelist に無く、`contains_number(scan_text,'-1')` が本文の "- 1" に一致 → **負の切片で G-Q5t が漏洩誤検出→ Unsupported になる**（§5-#9 の具体化。文言では回避不可）。要決定: (a) `_build_given_whitelist` を式について符号込みで数値抽出するよう core を原則的に改良（推奨・全 draw セルに効く）、または (b) draw セルは feature 数値を whitelist に明示合流させる仕組み。**どちらも core/verify に触れるので設計を先に確定してから実装**。決めたら必ず「負の切片を含む連続100+seed」で拒否0を確認（数値/座標答えの偽陽性隠蔽防止）。→ **(a) を採用・実装済み**（両符号を whitelist に追加。負係数 200seed で拒否0 を確認）。
 
 ### 次の作図セル
-- **g2_l26 graph_table[1]** = #9 で実装済み（`draw_from_equation` = #5＋#8 コア合成・新数学ゼロ）。★このセルが「capability を作れば以後は合成＋spec で増える」の実証。
-- 残る作図セルは描画拡張が要る: **g2_l23 graph_table[2]**（端点の開閉つき線分＝segment 描画と端点マーカーの追加）／**g2_l27 graph_table[2]**（2直線＋交点読み＝2本描画＋ read_intersection の幾何リーク規則の再検討。§6.4 の "grid_with_both_lines 禁止" が graph_table の「読む」題材と衝突する点を先に設計判断）／**g2_l28/l29 graph**（対応表→折れ線・動点面積＝word_problem/データ表寄り）。
-- graph「かく」以外の残 capability は §6 の分岐（連立へ intersection 横展開／knowledge=fact テーブル）。
+- **g2_l26 graph_table[1]** = #9 実装済み／**g2_l27 graph_table[2]**（2直線＋交点読み）= #10 実装済み（空の方眼＋ `intersection_of_two_lines` 再利用。当初懸念の "grid_with_both_lines 禁止" は問題図を空の方眼にしたため不発＝規則変更不要だった）。
+- 残る作図セルは描画拡張が要る: **g2_l23 graph_table[2]**（端点の開閉つき線分＝segment 描画と端点マーカーの追加）／**g2_l28/l29 graph**（対応表→折れ線・動点面積＝word_problem/データ表寄り・M1）。
+
+## 7.6 連立方程式クラスタ（g2_l11〜l15）＝ intersection 再利用の最大の償却先（#11 で着手）
+本セッションで read-only 調査を実施（引き継ぎ書 §0 の subagent 検証ルールに従い、結論は要点のみ採用）。**結論: g2_l11〜l15 の calculation は全て既存 `intersection_of_two_lines`（method=substitute/elimination）で答え(x,y)を出せる＝新 solver ゼロ**。#11 で g2_l11（加減法・単一レベル）を実装済み。残り:
+- **g2_l12 加減法（Lv2 係数そろえ / Lv3 両式そろえ）**・**g2_l13 代入法（Lv1 そのまま / Lv2 変形して代入）**・**g2_l14（かっこ / 小数・分数）**・**g2_l15（A=B=C 形）**。
+- 実装方針: #11 と同じく「解を先に決め→係数を構成→ intersection solver で答え検算→ steps は各解法（加減法/代入法/前処理）の代数手順を recipe で別建て」。given は equation_a/equation_b（frame 済）。
+- **★level_sep の注意（調査報告の穴を補正）**: 調査は「レベル差は係数の複雑さで付く」としたが、**level_sep は fp（steps の op 列 or asked or 小問数）の相異を必須**とする。同一 unit 内で Lv 違いが同じ op 列だと**偽レベルで落ちる**（P-1 回帰）。→ multi-level 単元（l12/l13/l14）は **Lv 間で steps の op 列を必ず変える**こと（例 l13: Lv1=そのまま代入 [substitute, solve, back_sub] / Lv2=まず1文字について解く前処理を1手足す [isolate_var, substitute, solve, back_sub]）。数値域だけの差は不可。
+- **g2_l10 は例外**: 「解が成り立つか確認」で asked が別（verify）＝ intersection では作れない・独立 solver（bool 判定）が要る。後回し。
+- 残 capability（連立以外）: knowledge=fact テーブル（§6・未整備）／word_problem=T3（M1）。
 
 ### G-Q5t の助数詞除外に追加した語（core・数値答えセルの偽陽性対策の履歴）
 `_COUNTER_EXPR_RE` に「次」に加え **「元」**（2元1次方程式の "2元"）を追加済み（#9 で傾き=2 が衝突）。数値/座標/特徴を答えに持つ新セルを作るときは、本文中の「N○○（○○=数える語）」が答え値と衝突しないか**必ず連続200+seed の広域で確認**する（check の smoke=20seed はすり抜ける・#9 で実証）。新たな衝突語が出たら同リストに追記（core を触るが原則的な対処）。
