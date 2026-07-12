@@ -18,14 +18,19 @@
 
 ---
 
-## 1. 現状サマリ（2026-07-12・最新コミット `b5c4ec5`）
+## 1. 現状サマリ（2026-07-12 更新・最新コミット `ffeda8f`）
 
-**M0 金の縦串は実装完了**（要件 §10 M0 DoD = Q1〜Q7 + F-1/2/3/5/9 を充足）。続けて **横展開を11セル分**進めた（#1〜#3 前々セッション、#4〜#11 本セッション群）。#8 で **graph_table「かく」capability を新設**、#9〜#11 でそれ／intersection solver を**新solverゼロで再利用**＝償却を実データで実証（#11 で連立方程式クラスタへも横展開）。
+**M0 金の縦串は実装完了**（要件 §10 M0 DoD = Q1〜Q7 + F-1/2/3/5/9 を充足）。続けて **横展開を13セル分**進めた（#1〜#3 前々セッション、#4〜#11 前セッション群、#12〜#13 本セッション）。#8 で **graph_table「かく」capability を新設**、#9〜#13 でそれ／intersection solver を**新solverゼロで再利用**＝償却を実データで実証（#11〜#14 で連立方程式クラスタへ横展開）。
 
-> ★**本セッション終了時の未完タスク**: #11（g2_l11 加減法）は**フルスイート未走のままコミット済み**（`b5c4ec5`）。中断のため。check/300seed広域/dup/mypy/ruff/200seed property/golden/eval は全緑・core 不触なので緑と強く見込むが未確認。**再開の最初に `pytest engine_tests/` を走らせて確認**（下記コマンド）。赤なら #11 を修正、緑ならそのまま次へ。
+> ★**旧#11 FS未走は解消済み**: 本セッション冒頭で `pytest engine_tests/` を実走し **3709 passed / exit 0** を確認（#11 緑確定）。以降の #12（`7f7107e`）・#13（`ffeda8f`）はそれぞれ**フルスイート緑（4117 / 4525 passed）を確認してコミット済み**。
 
-- テスト全体 **3505 passed**（#10 時点。#11 分は未走）・`mypy --strict` クリーン・`ruff`（engine/ ソース）クリーン。
-- **capabilities = 18 セル**（`spec check` 済みで generate 可能なセル。level 単位では 18）:
+> ★★**再開の最初にやること（本セッション終了時の未完タスク＝#14）**: **#14（g2_l14 いろいろな連立方程式・かっこ/分数）は作業ツリーに未コミットで残っている**（下記「作業ツリーの未コミット変更」参照）。spec check 緑・生成目視で両レベル正答を確認済みだが、**property テスト未追加・golden 未承認・eval 未走・フルスイート未走**。中断のため。再開手順:
+> 1. `git status --porcelain` で #14 の未コミット変更（concepts/checkers/recipes/templates/g2_l14.yaml）が残っていることを確認。
+> 2. §3 プレイブックの手順10（property テスト追加）以降を #14 について実施 → 手順11（全ゲート緑＋フルスイート）→ commit。
+> 3. **#14 の設計・残作業の詳細は §7.6 末尾「#14 の状態」に記載**。もし作業ツリーが失われていたら §7.6 の設計に沿って再実装（recipe/checker/template/concept/spec は下記に全て記録済み）。
+
+- テスト全体 **4525 passed**（#13 時点・フルスイート緑）・`mypy --strict` クリーン・`ruff`（engine/ ソース）クリーン。#14 分は未走。
+- **capabilities = 22 セル**（`spec check` 済みで generate 可能なセル。level 単位。#14 未コミット分を入れれば 24）:
 
 | unit | form | levels | 内容 | recipe |
 |---|---|---|---|---|
@@ -43,8 +48,11 @@
 | g2_l26 | graph_table | 1 | ax+by=c を変形してかく（#5＋#8 合成・新数学ゼロ・#9） | draw_linear_from_equation |
 | g2_l27 | graph_table | 2 | 2直線をかき交点を読む（intersection 再利用・#10） | read_intersection_from_graph |
 | g2_l11 | calculation | 1 | 連立を加減法で解く（intersection 再利用・連立クラスタ初・#11） | solve_system_elimination |
+| g2_l13 | calculation | 1, 2 | 連立を代入法で解く（Lv1そのまま/Lv2変形して代入・#12） | solve_system_substitution |
+| g2_l12 | calculation | 2, 3 | 加減法で係数をそろえる（Lv2片方倍/Lv3両式倍・#13） | solve_system_elim_scaled |
+| _(未コミット)_ g2_l14 | calculation | 2, 3 | いろいろな連立（Lv2かっこ展開/Lv3分数払い・#14・**作業ツリー**） | solve_system_preprocessed |
 
-- M0 縦串 = g2_l25 + 戻り先 g2_l24（find_value）+ g2_l25 graph_table + remedial。**横展開分** = l20 / l27(fv) / l23 / l21 / l26(calc) / l19 / l22(calc) / l22(graph) / l26(graph) / l27(graph) / l11(calc)。
+- M0 縦串 = g2_l25 + 戻り先 g2_l24（find_value）+ g2_l25 graph_table + remedial。**横展開分** = l20 / l27(fv) / l23 / l21 / l26(calc) / l19 / l22(calc) / l22(graph) / l26(graph) / l27(graph) / l11(calc) / l13(calc) / l12(calc)（＋未コミット l14）。
 - **償却の実証（当初目的の達成確認）**:
   - (#7) solver `evaluate_linear_at_x` を素関数化し g2_l19/g2_l22(calc) で共有。
   - (#8) **graph「かく」capability 新設**（GraphAnswer 生成経路・初）。
@@ -211,13 +219,26 @@ feasibility 精査（当時）: **answer 経路とゲートは既に GraphAnswer
 - **g2_l26 graph_table[1]** = #9 実装済み／**g2_l27 graph_table[2]**（2直線＋交点読み）= #10 実装済み（空の方眼＋ `intersection_of_two_lines` 再利用。当初懸念の "grid_with_both_lines 禁止" は問題図を空の方眼にしたため不発＝規則変更不要だった）。
 - 残る作図セルは描画拡張が要る: **g2_l23 graph_table[2]**（端点の開閉つき線分＝segment 描画と端点マーカーの追加）／**g2_l28/l29 graph**（対応表→折れ線・動点面積＝word_problem/データ表寄り・M1）。
 
-## 7.6 連立方程式クラスタ（g2_l11〜l15）＝ intersection 再利用の最大の償却先（#11 で着手）
-本セッションで read-only 調査を実施（引き継ぎ書 §0 の subagent 検証ルールに従い、結論は要点のみ採用）。**結論: g2_l11〜l15 の calculation は全て既存 `intersection_of_two_lines`（method=substitute/elimination）で答え(x,y)を出せる＝新 solver ゼロ**。#11 で g2_l11（加減法・単一レベル）を実装済み。残り:
-- **g2_l12 加減法（Lv2 係数そろえ / Lv3 両式そろえ）**・**g2_l13 代入法（Lv1 そのまま / Lv2 変形して代入）**・**g2_l14（かっこ / 小数・分数）**・**g2_l15（A=B=C 形）**。
-- 実装方針: #11 と同じく「解を先に決め→係数を構成→ intersection solver で答え検算→ steps は各解法（加減法/代入法/前処理）の代数手順を recipe で別建て」。given は equation_a/equation_b（frame 済）。
-- **★level_sep の注意（調査報告の穴を補正）**: 調査は「レベル差は係数の複雑さで付く」としたが、**level_sep は fp（steps の op 列 or asked or 小問数）の相異を必須**とする。同一 unit 内で Lv 違いが同じ op 列だと**偽レベルで落ちる**（P-1 回帰）。→ multi-level 単元（l12/l13/l14）は **Lv 間で steps の op 列を必ず変える**こと（例 l13: Lv1=そのまま代入 [substitute, solve, back_sub] / Lv2=まず1文字について解く前処理を1手足す [isolate_var, substitute, solve, back_sub]）。数値域だけの差は不可。
+## 7.6 連立方程式クラスタ（g2_l11〜l15）＝ intersection 再利用の最大の償却先（#11〜#14）
+**結論: g2_l11〜l15 の calculation は全て既存 `intersection_of_two_lines`（method=substitute/elimination）で答え(x,y)を出せる＝新 solver ゼロ**。前処理を伴う l14 も「前処理後の整数系」に対して同 solver を再利用する。進捗:
+- **済（コミット）**: #11 g2_l11 加減法（係数の絶対値が等しい・単一Lv）／#12 g2_l13 代入法（Lv1 そのまま/Lv2 変形して代入）／#13 g2_l12 加減法・係数そろえ（Lv2 片方倍/Lv3 両式倍）。
+- **未コミット（作業ツリー）**: #14 g2_l14 いろいろな連立（Lv2 かっこ展開/Lv3 分数払い）。下「#14 の状態」参照。
+- **残**: **g2_l15（A=B=C 形・Lv2 のみ）** ＝ 次の一手。
+- 実装方針: #11〜#14 と同じく「解を先に決め→係数を構成→ intersection solver で答え検算→ steps は各解法の代数手順を recipe で別建て」。given は equation_a/equation_b（frame 済）。
+- **★level_sep（P-1 回帰防止）**: multi-level 単元は **Lv 間で steps の op 列を必ず変える**（数値域だけの差は不可）。実績: l13={substitute_expr,…} vs {isolate_variable,…}／l12={scale_one_equation,…} vs {scale_both_equations,…}／l14={expand_parentheses,…} vs {clear_denominators,…}。いずれも先頭 op を変えて fp を相異にした。
+- **★faithfulness（本セッションで学んだ落とし穴）**: 「Lv の骨格（op 列）」だけでなく「その Lv が要求する操作が本当に必要か」も要確認。l12 で当初、x 係数が偶然そろって"倍が不要"になり **Lv2/Lv3 が l11 相当（倍不要）に退化**する題材が混じった。→ 係数を互いに素な大きさに固定して「そろえる倍が真に必要」な構成にした（recipe 内コメント参照）。**新 calc セルは「その Lv でしか解けない」かを生成物 5〜10 個で目視**すること。
+- **★G-Q5t 偽陽性（本セッションで再発）**: l13 の isolate narration に書いた「係数が **1** の式」の "1" が答え座標の値 1 と衝突して漏洩誤検出→ Unsupported。**narration/ヒントには数字を一切書かない**（#9 の再確認。§5-#9）。修正後 250seed 広域で拒否0 を確認。
 - **g2_l10 は例外**: 「解が成り立つか確認」で asked が別（verify）＝ intersection では作れない・独立 solver（bool 判定）が要る。後回し。
 - 残 capability（連立以外）: knowledge=fact テーブル（§6・未整備）／word_problem=T3（M1）。
+
+### #14 の状態（未コミット・作業ツリーに実装済み・再開時に DoD を仕上げてコミット）
+recipe `math.solve_system_preprocessed`（recipes/linear.py・mode="expand_parens"/"clear_fractions"）＋ checker `math.solve_system_preprocessed.double_solve` ＋ template `lf_solve_system_various_v1`（"次の連立方程式を解け。"）＋ concept `simultaneous_equations.solve_with_preprocessing`（unit g2_l14）＋ spec `families/g2_l14.calculation.yaml`（Lv2/Lv3）を**追加済み**。
+- **設計**: answer-first で「前処理後の整数系」を作り（非退化は係数の大きさで恒真化）、それを未整理の見かけ（Lv2=かっこ／Lv3=分数）で提示。答えは整数系に対し intersection solver（elimination）で検算。
+  - Lv2 "expand_parens": eq_a=k(x+s)+m·y=r, eq_b=a·x−(y+t)=u → 展開後 (k,m,·),(a,−1,·)。|a·m|≥4>k≤3 で det≠0 恒真。op 列 [expand_parentheses, eliminate_and_solve_x, back_substitute]。
+  - Lv3 "clear_fractions": 整数系 |A1|=3,|A2|=2,|B1|=2,|B2|=3（|A1·B2|=9>|A2·B1|=4 で det≠0 恒真）を作り、各式を da,db(∈{2,3}) で割った分数係数の見かけで提示（sympy.Rational で表示）。op 列 [clear_denominators, …]。
+  - **分数表示は sympy 任せ**（`_fmt_expr` が sstr の * を除去）で符号バグを避けた。**小数（÷10）表示は保留**＝Lv3 は当面「分数を払う」変種で realize（spec の source_desc に設計モデルとして明記済み・preview 検収に委ねる＝§6 の sanction 手順）。
+- **検証済**: spec check 緑（lint0/smoke0/dup 0.0,0.0）／生成目視で Lv2/Lv3 各 seed4,7 が正答・整形クリーン。
+- **残 DoD（再開時に実施）**: ①250seed 広域で拒否0 確認（§3手順9・G-Q5t 偽陽性チェック）②実 dup_rate 100seed ≤0.20（§5-#8 スニペット）③property テスト（construct×2 + double-solve 200seed×2Lv）を `engine_tests/unit/test_recipes.py` に追加（#12/#13 の `test_solve_system_*` に倣う。recipe_concepts assert も追加）④`spec approve math.g2_l14.calculation`（golden 固定）⑤`mypy --strict`＋`ruff`⑥`eval`⑦フルスイート緑→ commit。**注意: 冒頭で `find engine -name __pycache__ -type d -exec rm -rf {} +` を実行**（並行編集後の stale 対策）。
 
 ### G-Q5t の助数詞除外に追加した語（core・数値答えセルの偽陽性対策の履歴）
 `_COUNTER_EXPR_RE` に「次」に加え **「元」**（2元1次方程式の "2元"）を追加済み（#9 で傾き=2 が衝突）。数値/座標/特徴を答えに持つ新セルを作るときは、本文中の「N○○（○○=数える語）」が答え値と衝突しないか**必ず連続200+seed の広域で確認**する（check の smoke=20seed はすり抜ける・#9 で実証）。新たな衝突語が出たら同リストに追記（core を触るが原則的な対処）。
