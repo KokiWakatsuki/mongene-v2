@@ -56,3 +56,6 @@ concepts:
   - id: simultaneous_equations.solve_by_substitution
     label: "連立方程式を代入法で解く（そのまま代入／変形して代入）"
     unit: g2_l13
+  - id: simultaneous_equations.solve_by_elimination_scaled
+    label: "連立方程式を加減法で解く（係数をそろえる／両式を倍する）"
+    unit: g2_l12

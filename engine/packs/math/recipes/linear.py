@@ -1151,6 +1151,140 @@ def solve_system_substitution(ctx: CellContext, rng: Rng) -> MR:
 
 
 # ---------------------------------------------------------------------------
+# math.solve_system_elim_scaled（g2_l12.calculation Lv2/Lv3 用）— 横展開#13・連立クラスタ
+# 加減法（係数をそろえる）。答え(x,y)は既存 intersection_of_two_lines を再利用（新solverゼロ）。
+# レベル間は steps の先頭 op で構造を変える（level_sep=fp 相異の必須）:
+#   Lv2 "scale_one"  = 片方を整数倍して係数をそろえる [scale_one_equation, ...]
+#   Lv3 "scale_both" = 両式を別々に倍して最小公倍数にそろえる [scale_both_equations, ...]
+# ---------------------------------------------------------------------------
+_SOLVE_SYSTEM_ELIM_SCALED_CONCEPTS = [
+    "simultaneous_equations.solve_by_elimination_scaled",
+]
+
+
+@register_recipe(
+    "math.solve_system_elim_scaled", provides_concepts=_SOLVE_SYSTEM_ELIM_SCALED_CONCEPTS
+)
+def solve_system_elim_scaled(ctx: CellContext, rng: Rng) -> MR:
+    """連立方程式を加減法（係数をそろえる）で解く（answer-first・calculation）。
+
+    解 (x0,y0) を先に選び、2式を逆算する。非退化（非平行）は構成で保証する:
+      - Lv2 "scale_one": eq_a=a1·x+y=c1（|a1|≥2・y 係数 1）、eq_b=a2·x+b2·y=c2（|b2|≥2）。
+        |a1·b2|≥4 > |a2|≤3 なので det=a1·b2−a2≠0。y 係数を eq_a の整数倍でそろえる。
+      - Lv3 "scale_both": eq_a=a1·x+b1·y=c1（a1 奇数・|b1|=2）、eq_b=a2·x+b2·y=c2（|b2|=3）。
+        a1·b2 は奇数・a2·b1 は偶数で det=a1·b2−a2·b1≠0（恒真）。|b1|,|b2| は互いに割り切れない
+        ので両式を別々に倍して最小公倍数 6 にそろえる（真の Lv3）。
+    答え (x0,y0) は既存 solver `math.intersection_of_two_lines`（method=elimination・g2_l11/l27 と
+    共有）で再計算し一致を確認。steps は加減法の代数手順。図なし（calculation）。
+    """
+    p = ctx.spec_level.params
+    mode: str = p["mode"]
+    x_sym, y_sym = sympy.symbols("x y")
+    x0 = sympy.nsimplify(draw(p["x_domain"], rng))
+    y0 = sympy.nsimplify(draw(p["y_domain"], rng))
+
+    def sign() -> sympy.Integer:
+        return sympy.Integer(draw(p["sign_domain"], rng))
+
+    if mode == "scale_one":
+        # y は係数 (1, b2) で「片方を倍す」だけで消去できる易しい変数＝生徒はこの手を選ぶ。
+        # x は係数を互いに素な大きさ (2,3) にして「両方倍す」が要る＝x では消しにくくする
+        # （＝この題材は真に「片方を倍してそろえる」Lv2。係数が偶然そろって倍が要らない＝
+        # g2_l11 相当への退化を構成で禁止する）。
+        m1 = sympy.Integer(draw(p["x_coeff_mag_domain"], rng))  # |a1| ∈ {2,3}
+        a1 = m1 * sign()
+        a2 = (5 - m1) * sign()  # |a2| = 5-|a1| ∈ {3,2}（x 係数は互いに素・|·|≥2）
+        b1 = sympy.Integer(1)  # eq_a の y 係数 1（これを整数倍してそろえる）
+        b2 = sympy.Integer(draw(p["eqb_y_coeff_mag_domain"], rng)) * sign()  # |b2| ∈ {2,3}
+        first_op = "scale_one_equation"
+        scale_narr = "y の係数をそろえるため、一方の式を何倍かする。"
+        # eq_a を b2 倍して y 係数を b2 にそろえた式（表示用）。
+        scaled_disp = _fmt_eq(a1 * b2 * x_sym + b2 * y_sym, (x0 * a1 + b1 * y0) * b2)
+    elif mode == "scale_both":
+        # x 係数 (3,2)・y 係数 (2,3) いずれも互いに素で大きさ≥2＝どちらの変数も「両方倍す」が
+        # 要る（真の Lv3）。|a1·b2|=9 > |a2·b1|=4 で det≠0 が恒真（非平行）。
+        a1 = sympy.Integer(3) * sign()
+        a2 = sympy.Integer(2) * sign()
+        b1 = sympy.Integer(2) * sign()
+        b2 = sympy.Integer(3) * sign()
+        first_op = "scale_both_equations"
+        scale_narr = "y の係数を最小公倍数にそろえるため、両方の式をそれぞれ何倍かする。"
+        c1_tmp = x0 * a1 + b1 * y0
+        c2_tmp = x0 * a2 + b2 * y0
+        # eq_a を b2 倍・eq_b を b1 倍し、y 係数を b1·b2 にそろえた2式（表示用）。
+        sa = _fmt_eq(a1 * b2 * x_sym + b1 * b2 * y_sym, c1_tmp * b2)
+        sb = _fmt_eq(a2 * b1 * x_sym + b1 * b2 * y_sym, c2_tmp * b1)
+        scaled_disp = f"{sa} , {sb}"
+    else:
+        raise ValueError(f"未知の mode: {mode!r}")
+
+    c1 = a1 * x0 + b1 * y0
+    c2 = a2 * x0 + b2 * y0
+    coeffs_a = [a1, b1, c1]
+    coeffs_b = [a2, b2, c2]
+    disp_a = _fmt_eq(a1 * x_sym + b1 * y_sym, c1)
+    disp_b = _fmt_eq(a2 * x_sym + b2 * y_sym, c2)
+
+    steps = [
+        Step(
+            op=first_op,
+            args=[disp_a, disp_b],
+            result_srepr=sympy.srepr(b1 * b2),
+            result_display=scaled_disp,
+            narration=scale_narr,
+        ),
+        Step(
+            op="eliminate_and_solve_x",
+            args=[scaled_disp],
+            result_srepr=sympy.srepr(x0),
+            result_display=f"x = {_fmt_number(x0)}",
+            narration="2式を加減して y を消去し、x を求める。",
+        ),
+        Step(
+            op="back_substitute",
+            args=[_fmt_number(x0)],
+            result_srepr=sympy.srepr(y0),
+            result_display=f"y = {_fmt_number(y0)}",
+            narration="求めた x をもとの式に代入して y を求める。",
+        ),
+    ]
+
+    solver = REGISTRY.solver("math.intersection_of_two_lines")
+    sol = cast(Solution, solver(tuple(coeffs_a), tuple(coeffs_b), "elimination"))
+    assert isinstance(sol.answer, SymbolicAnswer)
+    expected_pt = sympy.Tuple(x0, y0)
+    assert sol.answer.srepr == sympy.srepr(expected_pt), (
+        f"double-solve 不一致: 構成解 {expected_pt} != solver 再計算 {sol.answer.srepr}"
+    )
+
+    sub_question = SubQuestionMR(
+        label="(1)",
+        asked="solution",
+        answer=sol.answer,
+        steps=steps,
+        concept_tags=_effective_concept_tags(ctx),
+        cause_tags=_effective_cause_tags(ctx),
+    )
+
+    return MR(
+        signature=ctx.spec_level.signature,
+        family=ctx.family,
+        level=ctx.level,
+        purpose=ctx.purpose,
+        seed=0,
+        params={
+            "line_a": [str(c) for c in coeffs_a],
+            "line_b": [str(c) for c in coeffs_b],
+            "method": "elimination",
+        },
+        given={"equation_a": disp_a, "equation_b": disp_b},
+        sub_questions=[sub_question],
+        visual_plan=None,
+        provenance=Provenance(recipe="math.solve_system_elim_scaled"),
+    )
+
+
+# ---------------------------------------------------------------------------
 # math.rate_of_change（g2_l20.find_value Lv1 用）— 横展開の第1セル
 # ---------------------------------------------------------------------------
 _RATE_OF_CHANGE_CONCEPTS = [
@@ -1424,6 +1558,7 @@ __all__ = [
     "read_intersection_from_graph",
     "solve_system_elimination",
     "solve_system_substitution",
+    "solve_system_elim_scaled",
     "rate_of_change",
     "intersection",
     "y_range_from_domain",

@@ -7,6 +7,7 @@ CellContext で construct し、MR が正しく組み立てられること・sig
 """
 from __future__ import annotations
 
+import math
 from pathlib import Path
 
 import pytest
@@ -576,6 +577,63 @@ def test_solve_system_substitution_double_solve_property(level, seed):
 
 
 # ---------------------------------------------------------------------------
+# math.solve_system_elim_scaled（g2_l12.calculation Lv2/Lv3）— 横展開#13（加減法・係数そろえ）
+# ---------------------------------------------------------------------------
+def test_solve_system_elim_scaled_lv2_construct():
+    ctx = _make_ctx("math.g2_l12.calculation", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+
+    assert mr.signature == "solve_system_elim_scale_one"
+    assert set(mr.given.keys()) == {"equation_a", "equation_b"}
+    assert mr.visual_plan is None
+    sq = mr.sub_questions[0]
+    assert sq.asked == "solution"
+    assert sq.answer.kind == "symbolic"
+    # Lv2「片方を倍す」= 先頭 op が scale_one_equation
+    assert [s.op for s in sq.steps] == ["scale_one_equation", "eliminate_and_solve_x", "back_substitute"]
+    a1, b1 = sympy.sympify(mr.params["line_a"][0]), sympy.sympify(mr.params["line_a"][1])
+    a2, b2 = sympy.sympify(mr.params["line_b"][0]), sympy.sympify(mr.params["line_b"][1])
+    # eq_a の y 係数は 1（片方を倍して y をそろえる易しい変数）
+    assert b1 == 1
+    # x 係数は互いに素・大きさ≥2（偶然そろって倍不要＝l11 相当への退化を禁止）
+    assert abs(a1) != abs(a2)
+    assert abs(a1) >= 2 and abs(a2) >= 2
+    assert math.gcd(int(abs(a1)), int(abs(a2))) == 1
+
+
+def test_solve_system_elim_scaled_lv3_construct():
+    ctx = _make_ctx("math.g2_l12.calculation", 3)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+
+    assert mr.signature == "solve_system_elim_scale_both"
+    sq = mr.sub_questions[0]
+    # Lv3「両式を倍す」= 先頭 op が scale_both_equations（Lv2 と op 列相異＝level_sep）
+    assert [s.op for s in sq.steps] == ["scale_both_equations", "eliminate_and_solve_x", "back_substitute"]
+    a1, b1 = sympy.sympify(mr.params["line_a"][0]), sympy.sympify(mr.params["line_a"][1])
+    a2, b2 = sympy.sympify(mr.params["line_b"][0]), sympy.sympify(mr.params["line_b"][1])
+    # x 係数も y 係数も互いに素・大きさ≥2＝どちらの変数も両式を倍す必要がある（真の Lv3）
+    for u, v in ((a1, a2), (b1, b2)):
+        assert abs(u) >= 2 and abs(v) >= 2
+        assert math.gcd(int(abs(u)), int(abs(v))) == 1
+
+
+@pytest.mark.parametrize("level", [2, 3])
+@pytest.mark.parametrize("seed", range(200))
+def test_solve_system_elim_scaled_double_solve_property(level, seed):
+    ctx = _make_ctx("math.g2_l12.calculation", level)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+
+    line_a = tuple(sympy.sympify(c) for c in mr.params["line_a"])
+    line_b = tuple(sympy.sympify(c) for c in mr.params["line_b"])
+    solver = REGISTRY.solver("math.intersection_of_two_lines")
+    sol = solver(line_a, line_b, mr.params["method"])
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+
+
+# ---------------------------------------------------------------------------
 # math.rate_of_change（g2_l20.find_value Lv1）— 横展開の第1セル
 # ---------------------------------------------------------------------------
 def test_rate_of_change_lv1_construct():
@@ -753,4 +811,7 @@ def test_recipes_declare_provides_concepts():
     })
     assert REGISTRY.recipe_concepts("math.solve_system_substitution") == frozenset({
         "simultaneous_equations.solve_by_substitution",
+    })
+    assert REGISTRY.recipe_concepts("math.solve_system_elim_scaled") == frozenset({
+        "simultaneous_equations.solve_by_elimination_scaled",
     })

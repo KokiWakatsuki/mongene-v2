@@ -1,0 +1,64 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - simultaneous_equations.solve_by_elimination_scaled
+  provenance:
+    git_commit: ''
+    recipe: math.solve_system_elim_scaled
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_solve_system_elim_v1
+    tier: T1
+  requested:
+    form: calculation
+    level: 3
+    subject: math
+    unit: g2_l12
+  resolved:
+    form: calculation
+    level: 3
+    subject: math
+    unit: g2_l12
+  seed: 2
+  signature: solve_system_elim_scale_both
+problem_ref: 3721ee5de48a3f9f
+problem_text: '次の連立方程式を加減法で解け。
+
+  3x - 2y = 12 , -2x - 3y = -21'
+sub_questions:
+- answer:
+    display: (6, 3)
+    kind: symbolic
+    srepr: Tuple(Integer(6), Integer(3))
+  cause_tags: []
+  concept_tags:
+  - simultaneous_equations.solve_by_elimination_scaled
+  explanation: まず、y の係数を最小公倍数にそろえるため、両方の式をそれぞれ何倍かする。 -9x + 6y = -36 , 4x + 6y = 42次に、2式を加減して y を消去し、x を求める。 x = 6最後に、求めた x をもとの式に代入して y を求める。 y = 3
+  hints:
+  - y の係数を最小公倍数にそろえるため、両方の式をそれぞれ何倍かする。
+  - 2式を加減して y を消去し、x を求める。
+  label: (1)
+  prompt_text: solution を求めなさい。
+  solution_steps:
+  - args:
+    - 3x - 2y = 12
+    - -2x - 3y = -21
+    narration: y の係数を最小公倍数にそろえるため、両方の式をそれぞれ何倍かする。
+    op: scale_both_equations
+    result_display: -9x + 6y = -36 , 4x + 6y = 42
+    result_srepr: Integer(6)
+  - args:
+    - -9x + 6y = -36 , 4x + 6y = 42
+    narration: 2式を加減して y を消去し、x を求める。
+    op: eliminate_and_solve_x
+    result_display: x = 6
+    result_srepr: Integer(6)
+  - args:
+    - '6'
+    narration: 求めた x をもとの式に代入して y を求める。
+    op: back_substitute
+    result_display: y = 3
+    result_srepr: Integer(3)
+visual_svg: null

@@ -1,0 +1,64 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - simultaneous_equations.solve_by_elimination_scaled
+  provenance:
+    git_commit: ''
+    recipe: math.solve_system_elim_scaled
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_solve_system_elim_v1
+    tier: T1
+  requested:
+    form: calculation
+    level: 2
+    subject: math
+    unit: g2_l12
+  resolved:
+    form: calculation
+    level: 2
+    subject: math
+    unit: g2_l12
+  seed: 1
+  signature: solve_system_elim_scale_one
+problem_ref: b1b81d1d28076a25
+problem_text: '次の連立方程式を加減法で解け。
+
+  2x + y = -8 , -3x + 2y = -2'
+sub_questions:
+- answer:
+    display: (-2, -4)
+    kind: symbolic
+    srepr: Tuple(Integer(-2), Integer(-4))
+  cause_tags: []
+  concept_tags:
+  - simultaneous_equations.solve_by_elimination_scaled
+  explanation: まず、y の係数をそろえるため、一方の式を何倍かする。 4x + 2y = -16次に、2式を加減して y を消去し、x を求める。 x = -2最後に、求めた x をもとの式に代入して y を求める。 y = -4
+  hints:
+  - y の係数をそろえるため、一方の式を何倍かする。
+  - 2式を加減して y を消去し、x を求める。
+  label: (1)
+  prompt_text: solution を求めなさい。
+  solution_steps:
+  - args:
+    - 2x + y = -8
+    - -3x + 2y = -2
+    narration: y の係数をそろえるため、一方の式を何倍かする。
+    op: scale_one_equation
+    result_display: 4x + 2y = -16
+    result_srepr: Integer(2)
+  - args:
+    - 4x + 2y = -16
+    narration: 2式を加減して y を消去し、x を求める。
+    op: eliminate_and_solve_x
+    result_display: x = -2
+    result_srepr: Integer(-2)
+  - args:
+    - '-2'
+    narration: 求めた x をもとの式に代入して y を求める。
+    op: back_substitute
+    result_display: y = -4
+    result_srepr: Integer(-4)
+visual_svg: null
