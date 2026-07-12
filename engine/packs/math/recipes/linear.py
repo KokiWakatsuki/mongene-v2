@@ -2825,6 +2825,9 @@ def rate_of_change(ctx: CellContext, rng: Rng) -> MR:
 # ---------------------------------------------------------------------------
 _INTERSECTION_CONCEPTS = [
     "linear_function.intersection_of_two_lines",
+    # P1/C5: ダイヤグラム（時間-道のり）の2直線を連立し交点=出会いの時刻・道のりを求める
+    # （g2_l30.find_value）。計算は intersection と同一なので同 recipe を再利用（新 recipe ゼロ）。
+    "linear_function.diagram_intersection",
 ]
 
 

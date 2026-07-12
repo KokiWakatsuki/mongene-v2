@@ -748,6 +748,29 @@ def test_knowledge_classify_line_signs_double_solve_property(seed):
 
 
 # ---------------------------------------------------------------------------
+# g2_l30.find_value Lv2 — P1/C5（ダイヤ交点を連立で求める・math.intersection 再利用）
+# ---------------------------------------------------------------------------
+@pytest.mark.parametrize("seed", range(100))
+def test_intersection_diagram_lv2_positive_quadrant(seed):
+    ctx = _make_ctx("math.g2_l30.find_value", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+
+    assert mr.signature == "lf_intersection_diagram_substitute"
+    assert set(mr.given.keys()) == {"line_a", "line_b"}
+    sq = mr.sub_questions[0]
+    assert sq.asked == "intersection"
+    # 交点は第1象限（時刻・道のり>0）
+    x0, y0 = sympy.sympify(sq.answer.srepr)
+    assert x0 > 0 and y0 > 0
+    # double-solve（intersection_of_two_lines 再利用）
+    line_a = tuple(sympy.sympify(c) for c in mr.params["line_a"])
+    line_b = tuple(sympy.sympify(c) for c in mr.params["line_b"])
+    solver = REGISTRY.solver("math.intersection_of_two_lines")
+    assert solver(line_a, line_b, mr.params["method"]).answer.srepr == sq.answer.srepr
+
+
+# ---------------------------------------------------------------------------
 # math.solve_system_elimination（g2_l11.calculation Lv1）— 横展開#11（連立・加減法）
 # ---------------------------------------------------------------------------
 def test_solve_system_elimination_lv1_construct():

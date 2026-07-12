@@ -260,6 +260,14 @@ LF_INTERSECTION_V1 = (
     "2つの直線 {{ given.line_a }} と {{ given.line_b }} の交点の座標を求めよ。"
 )
 
+# g2_l30.find_value Lv2: ダイヤグラムの2直線を連立し交点=出会いの時刻・道のりを求める（P1/C5）
+# 式は既知として与え、連立して交点を計算する（intersection recipe 再利用）。
+LF_INTERSECTION_DIAGRAM_V1 = (
+    "AさんとBさんが動くようすを、出発してからの時間 x とP地点からの道のり y の関係で表すと、"
+    "Aさんは {{ given.line_a }}、Bさんは {{ given.line_b }} である。"
+    "2人が同じ地点にいる（2つの直線が交わる）ときの時間 x と道のり y を求めよ。"
+)
+
 # ---------------------------------------------------------------------------
 # g2_l23.find_value: 変域とグラフの端点（横展開#3）
 # Lv2=順方向（関数+x変域→y変域）／Lv3=逆算（x変域+y変域+符号→式）
@@ -329,6 +337,7 @@ def _register_all() -> None:
     )
     REGISTRY.register_template("lf_rate_of_change_v1", LF_RATE_OF_CHANGE_V1)
     REGISTRY.register_template("lf_intersection_v1", LF_INTERSECTION_V1)
+    REGISTRY.register_template("lf_intersection_diagram_v1", LF_INTERSECTION_DIAGRAM_V1)
     REGISTRY.register_template("lf_y_range_v1", LF_Y_RANGE_V1)
     REGISTRY.register_template("lf_expr_from_range_v1", LF_EXPR_FROM_RANGE_V1)
 
@@ -369,6 +378,7 @@ __all__ = [
     "LF_KNOWLEDGE_SYSTEM_INTERSECTION_V1",
     "LF_RATE_OF_CHANGE_V1",
     "LF_INTERSECTION_V1",
+    "LF_INTERSECTION_DIAGRAM_V1",
     "LF_Y_RANGE_V1",
     "LF_EXPR_FROM_RANGE_V1",
 ]

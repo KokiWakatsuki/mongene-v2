@@ -1,0 +1,34 @@
+family: math.g2_l30.find_value
+form: find_value
+source_desc: |
+  ダイヤグラム（時間-道のり）の2直線を連立し、交点＝出会い（追いつき）の時刻・道のりを求める
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv2 desc: 2直線を連立し交点の時刻・道のりを求める。
+       example: Aさんの進むようすが y=60x、Bさんの進むようすが y=−40x+600 で表される
+                （x は分、y は m）。2人が出会うときの時刻 x と、そのときの地点からの道のり y を求めよ。
+  答えは交点の座標（SymbolicAnswer＝時刻 x と道のり y）。計算は既存 intersection_of_two_lines
+  solver を再利用（g2_l27 と共有・新 solver ゼロ）。
+  ★設計モデル（preview 検収 Q4）: 本セルは「2人の進むようすの式は既知として与え、連立して交点を
+  計算する」T1 セル（場面→立式は word_problem g2_l30）。交点は第1象限（時刻・道のり>0）に限定し
+  motion 文脈で提示する。Lv3（速さの変化・複数区間）は場面からの立式を要し word_problem 寄りのため
+  本ファイルでは未実装（M1 の T3 翻訳で対応）。
+concepts_default: [linear_function.diagram_intersection]
+levels:
+  "2":
+    signature: lf_intersection_diagram_substitute
+    recipe: math.intersection
+    params:
+      # 交点 (x0,y0) を第1象限（時刻 x>0・道のり y>0）に限定。傾き切片形を等値して解く。
+      method: substitute
+      x_domain: {int_range: [1, 8]}
+      y_domain: {int_range: [1, 10]}
+      slope_pair_domain: {int_set: [-4, -3, -2, -1, 1, 2, 3, 4], distinct: ["value"]}
+    given: [line_a, line_b]
+    asked: [intersection]
+    visual: none
+    text: {tier: T1, template: lf_intersection_diagram_v1}
+    hints: [steps_prefix]
+    concept_tags: [linear_function.diagram_intersection]
+    cause_tags: []
+remedial:
+  default_level: 2
