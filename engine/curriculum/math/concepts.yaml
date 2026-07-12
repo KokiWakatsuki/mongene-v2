@@ -128,3 +128,15 @@ concepts:
   - id: polynomial.combine_like_terms_mixed
     label: "同類項をまとめて式を簡単にする（複数文字が混在し選別を要する）"
     unit: g2_l2
+  - id: polynomial.add_polynomials
+    label: "多項式の加法をかっこをそのまま外して整理する"
+    unit: g2_l3
+  - id: polynomial.subtract_polynomials
+    label: "多項式の減法をうしろのかっこの符号を変えて外して整理する"
+    unit: g2_l3
+  - id: polynomial.distribute_multiply
+    label: "分配法則で整数を多項式にかけて展開する"
+    unit: g2_l5
+  - id: polynomial.divide_polynomial
+    label: "多項式を数で割る（逆数の乗法に直して分配する）"
+    unit: g2_l5

@@ -1,0 +1,54 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - polynomial.add_polynomials
+  provenance:
+    git_commit: ''
+    recipe: math.add_or_subtract_polynomials
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_add_subtract_polynomials_v1
+    tier: T1
+  requested:
+    form: calculation
+    level: 1
+    subject: math
+    unit: g2_l3
+  resolved:
+    form: calculation
+    level: 1
+    subject: math
+    unit: g2_l3
+  seed: 3
+  signature: add_polynomials
+problem_ref: ef6df8a9d54bb508
+problem_text: '次の計算をせよ。
+
+  (2x - 6y) + (-4x - 6y)'
+sub_questions:
+- answer:
+    display: -2x - 12y
+    kind: symbolic
+    srepr: Add(Mul(Integer(-1), Integer(2), Symbol('x')), Mul(Integer(-1), Integer(12), Symbol('y')))
+  cause_tags: []
+  concept_tags:
+  - polynomial.add_polynomials
+  explanation: まず、かっこの前が + なので、そのままかっこを外す。 かっこをそのまま外す次に、同類項をまとめて計算する。 -2x - 12y
+  hints:
+  - かっこの前が + なので、そのままかっこを外す。
+  label: (1)
+  prompt_text: simplified_expr を求めなさい。
+  solution_steps:
+  - args: []
+    narration: かっこの前が + なので、そのままかっこを外す。
+    op: remove_parentheses
+    result_display: かっこをそのまま外す
+    result_srepr: Add(Mul(Integer(-1), Integer(2), Symbol('x')), Mul(Integer(-1), Integer(12), Symbol('y')))
+  - args: []
+    narration: 同類項をまとめて計算する。
+    op: add_like_terms
+    result_display: -2x - 12y
+    result_srepr: Add(Mul(Integer(-1), Integer(2), Symbol('x')), Mul(Integer(-1), Integer(12), Symbol('y')))
+visual_svg: null

@@ -1708,3 +1708,81 @@ def test_substitute_into_equation_double_solve_property(seed):
         sympy.sympify(mr.params["x_cand"]), sympy.sympify(mr.params["y_cand"]),
     )
     assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+
+
+# ---------------------------------------------------------------------------
+# math.add_or_subtract_polynomials（g2_l3.calculation Lv1/Lv2）— P1/C2（多項式の加減）
+# ---------------------------------------------------------------------------
+def test_add_polynomials_lv1_construct():
+    ctx = _make_ctx("math.g2_l3.calculation", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "add_polynomials"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "simplified_expr"
+    assert [s.op for s in sq.steps] == ["remove_parentheses", "add_like_terms"]
+    assert mr.params["is_subtraction"] is False
+
+
+def test_subtract_polynomials_lv2_construct():
+    ctx = _make_ctx("math.g2_l3.calculation", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "subtract_polynomials"
+    sq = mr.sub_questions[0]
+    assert [s.op for s in sq.steps] == ["distribute_negative_sign", "add_like_terms"]
+    assert mr.params["is_subtraction"] is True
+
+
+@pytest.mark.parametrize("level", [1, 2])
+@pytest.mark.parametrize("seed", range(100))
+def test_add_or_subtract_polynomials_double_solve_property(level, seed):
+    ctx = _make_ctx("math.g2_l3.calculation", level)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+
+    solver = REGISTRY.solver("math.add_or_subtract_polynomials")
+    sol = solver(mr.params["expr_str"], mr.params["is_subtraction"])
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+    # 答えは expand と一致
+    assert sol.answer.srepr == sympy.srepr(sympy.expand(sympy.sympify(mr.params["expr_str"])))
+
+
+# ---------------------------------------------------------------------------
+# math.distribute_or_divide（g2_l5.calculation Lv1/Lv2）— P1/C2（分配・除法）
+# ---------------------------------------------------------------------------
+def test_distribute_multiply_lv1_construct():
+    ctx = _make_ctx("math.g2_l5.calculation", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "distribute_multiply"
+    sq = mr.sub_questions[0]
+    assert [s.op for s in sq.steps] == ["distribute_multiplication"]
+    assert mr.params["is_division"] is False
+
+
+def test_divide_polynomial_lv2_construct():
+    ctx = _make_ctx("math.g2_l5.calculation", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "divide_polynomial"
+    sq = mr.sub_questions[0]
+    assert [s.op for s in sq.steps] == ["convert_division_to_multiplication", "distribute"]
+    assert mr.params["is_division"] is True
+    # 割り切れる（答えは整数係数）
+    ans = sympy.sympify(sq.answer.srepr)
+    for c in ans.as_coefficients_dict().values():
+        assert c == int(c)
+
+
+@pytest.mark.parametrize("level", [1, 2])
+@pytest.mark.parametrize("seed", range(100))
+def test_distribute_or_divide_double_solve_property(level, seed):
+    ctx = _make_ctx("math.g2_l5.calculation", level)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+
+    solver = REGISTRY.solver("math.distribute_or_divide")
+    sol = solver(mr.params["expr_str"], mr.params["is_division"])
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+    assert sol.answer.srepr == sympy.srepr(sympy.expand(sympy.sympify(mr.params["expr_str"])))

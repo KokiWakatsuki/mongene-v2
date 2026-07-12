@@ -222,6 +222,177 @@ def combine_like_terms(ctx: CellContext, rng: Rng) -> MR:
     )
 
 
+# ---------------------------------------------------------------------------
+# math.add_or_subtract_polynomials（g2_l3.calculation Lv1/Lv2 用）— C2
+# 多項式の加減 (A)±(B) をかっこを外して整理する。answer-first: 2群の各項の係数を先に決め、
+# 見かけの与式を組み立てる。独立ソルバで expand し一致を確認。
+#   Lv1 "add"      : (x,y の1項ずつ)+(x,y の1項ずつ)  op列 [remove_parentheses, add_like_terms]
+#   Lv2 "subtract" : (a,b,定数)-(a,b,定数)            op列 [distribute_negative_sign, add_like_terms]
+# ---------------------------------------------------------------------------
+_ADD_SUB_POLY_CONCEPTS = [
+    "polynomial.add_polynomials",
+    "polynomial.subtract_polynomials",
+]
+
+
+@register_recipe("math.add_or_subtract_polynomials", provides_concepts=_ADD_SUB_POLY_CONCEPTS)
+def add_or_subtract_polynomials(ctx: CellContext, rng: Rng) -> MR:
+    """多項式の加減をかっこを外して整理する（answer-first・calculation）。
+
+    Lv1（mode="add"）: (x,y の1項ずつ) + (x,y の1項ずつ)。かっこをそのまま外す。
+    Lv2（mode="subtract"）: (a,b,定数) - (a,b,定数)。うしろのかっこの符号を変えて外す。
+    各項の係数は nonzero で引き、答えが完全に消える（全項相殺）場合のみ bounded_retry で再構成。
+    """
+    p = ctx.spec_level.params
+    mode: str = p["mode"]
+    variables = ["x", "y"] if mode == "add" else ["a", "b", ""]
+    cands = [v for v in _domain_candidates(p["coeff_domain"]) if v != 0]
+
+    # 各「変数」の項は答えに必ず残す（相殺しない）ように群Bの係数を候補から絞って引く。
+    # これで答えが bare な単項（例 "y"）になって与式中に部分文字列として漏洩する事故を構造的に防ぐ
+    # （G-Q5t は答えの表示文字列も検査する・retry を使わず候補制限で回避）。定数項（var=""）は相殺可。
+    coeffs_a: list[int] = []
+    coeffs_b: list[int] = []
+    for var in variables:
+        ca = int(draw({"int_set": cands}, rng))
+        if var == "":
+            cb_cands = cands
+        elif mode == "add":
+            cb_cands = [v for v in cands if v != -ca]  # 和 ca+cb ≠ 0
+        else:
+            cb_cands = [v for v in cands if v != ca]   # 差 ca-cb ≠ 0
+        cb = int(draw({"int_set": cb_cands}, rng))
+        coeffs_a.append(ca)
+        coeffs_b.append(cb)
+    group_a = list(zip(coeffs_a, variables))
+    group_b = list(zip(coeffs_b, variables))
+
+    op_sym = "+" if mode == "add" else "-"
+    expr_str = f"({_sympy_str_from_terms(group_a)}){op_sym}({_sympy_str_from_terms(group_b)})"
+    simplified = sympy.expand(sympy.sympify(expr_str))
+
+    given_display = (
+        f"({_fmt_expr_from_terms(group_a)}) {op_sym} ({_fmt_expr_from_terms(group_b)})"
+    )
+
+    solver = REGISTRY.solver("math.add_or_subtract_polynomials")
+    sol = cast(Solution, solver(expr_str, mode == "subtract"))
+    assert isinstance(sol.answer, SymbolicAnswer)
+    assert sol.answer.srepr == sympy.srepr(simplified), (
+        f"double-solve 不一致: 構成 {simplified} != solver 再計算 {sol.answer.srepr}"
+    )
+    steps_ops = (
+        ["distribute_negative_sign", "add_like_terms"]
+        if mode == "subtract"
+        else ["remove_parentheses", "add_like_terms"]
+    )
+    assert [s.op for s in sol.steps] == steps_ops
+
+    sub_question = SubQuestionMR(
+        label="(1)",
+        asked="simplified_expr",
+        answer=sol.answer,
+        steps=sol.steps,
+        concept_tags=_effective_concept_tags(ctx),
+        cause_tags=_effective_cause_tags(ctx),
+    )
+
+    return MR(
+        signature=ctx.spec_level.signature,
+        family=ctx.family,
+        level=ctx.level,
+        purpose=ctx.purpose,
+        seed=0,
+        params={"expr_str": expr_str, "is_subtraction": mode == "subtract", "mode": mode},
+        given={"expression": given_display},
+        sub_questions=[sub_question],
+        visual_plan=None,
+        provenance=Provenance(recipe="math.add_or_subtract_polynomials"),
+    )
+
+
+# ---------------------------------------------------------------------------
+# math.distribute_or_divide（g2_l5.calculation Lv1/Lv2 用）— C2
+# 分配法則 k(A)（乗法）/ (A)÷d（除法）をかっこを外して計算する。
+#   Lv1 "multiply": k(px + qy)            op列 [distribute_multiplication]
+#   Lv2 "divide"  : (rx·d x + ry·d y)÷d   op列 [convert_division_to_multiplication, distribute]
+#     （answer-first で結果係数 rx,ry と除数 d を選び、割り切れる被除数を逆算）
+# ---------------------------------------------------------------------------
+_DISTRIBUTE_CONCEPTS = [
+    "polynomial.distribute_multiply",
+    "polynomial.divide_polynomial",
+]
+
+
+@register_recipe("math.distribute_or_divide", provides_concepts=_DISTRIBUTE_CONCEPTS)
+def distribute_or_divide(ctx: CellContext, rng: Rng) -> MR:
+    """分配法則 k(A) / (A)÷d をかっこを外して計算する（answer-first・calculation）。
+
+    Lv1（mode="multiply"）: 係数 k(≠0,±1) と2項の多項式 (px+qy) を選び、k(px+qy) を分配する。
+    Lv2（mode="divide"）: 割り切れるよう結果係数 rx,ry(≠0) と除数 d(|d|≥2) を先に選び、
+    被除数 (rx·d x + ry·d y) を逆算して (…)÷d を構成する（除法→逆数の乗法に直して分配）。
+    独立ソルバ `math.distribute_or_divide` で expand し一致を確認する。
+    """
+    p = ctx.spec_level.params
+    mode: str = p["mode"]
+    inner_cands = [v for v in _domain_candidates(p["coeff_domain"]) if v != 0]
+
+    if mode == "multiply":
+        k = int(draw(p["multiplier_domain"], rng))  # ≠0,±1
+        px = int(draw({"int_set": inner_cands}, rng))
+        qy = int(draw({"int_set": inner_cands}, rng))
+        group = [(px, "x"), (qy, "y")]
+        expr_str = f"({k})*({_sympy_str_from_terms(group)})"
+        given_display = f"{k}({_fmt_expr_from_terms(group)})"
+        is_division = False
+    else:  # divide
+        d = int(draw(p["divisor_domain"], rng))  # |d|≥2
+        rx = int(draw({"int_set": inner_cands}, rng))  # 結果（答え）の係数
+        ry = int(draw({"int_set": inner_cands}, rng))
+        group = [(rx * d, "x"), (ry * d, "y")]  # 割り切れる被除数
+        expr_str = f"({_sympy_str_from_terms(group)})/({d})"
+        given_display = f"({_fmt_expr_from_terms(group)}) ÷ ({d})"
+        is_division = True
+
+    simplified = sympy.expand(sympy.sympify(expr_str))
+    solver = REGISTRY.solver("math.distribute_or_divide")
+    sol = cast(Solution, solver(expr_str, is_division))
+    assert isinstance(sol.answer, SymbolicAnswer)
+    assert sol.answer.srepr == sympy.srepr(simplified), (
+        f"double-solve 不一致: 構成 {simplified} != solver 再計算 {sol.answer.srepr}"
+    )
+    steps_ops = (
+        ["convert_division_to_multiplication", "distribute"]
+        if is_division
+        else ["distribute_multiplication"]
+    )
+    assert [s.op for s in sol.steps] == steps_ops
+
+    sub_question = SubQuestionMR(
+        label="(1)",
+        asked="simplified_expr",
+        answer=sol.answer,
+        steps=sol.steps,
+        concept_tags=_effective_concept_tags(ctx),
+        cause_tags=_effective_cause_tags(ctx),
+    )
+
+    return MR(
+        signature=ctx.spec_level.signature,
+        family=ctx.family,
+        level=ctx.level,
+        purpose=ctx.purpose,
+        seed=0,
+        params={"expr_str": expr_str, "is_division": is_division, "mode": mode},
+        given={"expression": given_display},
+        sub_questions=[sub_question],
+        visual_plan=None,
+        provenance=Provenance(recipe="math.distribute_or_divide"),
+    )
+
+
 __all__ = [
     "combine_like_terms",
+    "add_or_subtract_polynomials",
+    "distribute_or_divide",
 ]

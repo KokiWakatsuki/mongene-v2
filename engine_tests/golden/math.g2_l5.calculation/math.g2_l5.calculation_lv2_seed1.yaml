@@ -1,0 +1,54 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - polynomial.divide_polynomial
+  provenance:
+    git_commit: ''
+    recipe: math.distribute_or_divide
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_add_subtract_polynomials_v1
+    tier: T1
+  requested:
+    form: calculation
+    level: 2
+    subject: math
+    unit: g2_l5
+  resolved:
+    form: calculation
+    level: 2
+    subject: math
+    unit: g2_l5
+  seed: 1
+  signature: divide_polynomial
+problem_ref: dd17cb234ded352f
+problem_text: '次の計算をせよ。
+
+  (-24x - 12y) ÷ (-6)'
+sub_questions:
+- answer:
+    display: 4x + 2y
+    kind: symbolic
+    srepr: Add(Mul(Integer(4), Symbol('x')), Mul(Integer(2), Symbol('y')))
+  cause_tags: []
+  concept_tags:
+  - polynomial.divide_polynomial
+  explanation: まず、÷ の計算を、その数の逆数をかっこにかける計算に直す。 ÷ を逆数をかける計算に直す次に、逆数をかっこの中の各項にかけて計算する。 4x + 2y
+  hints:
+  - ÷ の計算を、その数の逆数をかっこにかける計算に直す。
+  label: (1)
+  prompt_text: simplified_expr を求めなさい。
+  solution_steps:
+  - args: []
+    narration: ÷ の計算を、その数の逆数をかっこにかける計算に直す。
+    op: convert_division_to_multiplication
+    result_display: ÷ を逆数をかける計算に直す
+    result_srepr: Add(Mul(Integer(4), Symbol('x')), Mul(Integer(2), Symbol('y')))
+  - args: []
+    narration: 逆数をかっこの中の各項にかけて計算する。
+    op: distribute
+    result_display: 4x + 2y
+    result_srepr: Add(Mul(Integer(4), Symbol('x')), Mul(Integer(2), Symbol('y')))
+visual_svg: null

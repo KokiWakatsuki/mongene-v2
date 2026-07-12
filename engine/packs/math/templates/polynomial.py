@@ -16,9 +16,15 @@ from engine.core.registry import REGISTRY
 # ---------------------------------------------------------------------------
 LF_COMBINE_LIKE_TERMS_V1 = "次の式の同類項をまとめよ。\n{{ given.expression }}"
 
+# g2_l3.calculation Lv1/Lv2: 多項式の加減（かっこを外して整理する）
+LF_ADD_SUBTRACT_POLYNOMIALS_V1 = "次の計算をせよ。\n{{ given.expression }}"
+
 
 def _register_all() -> None:
     REGISTRY.register_template("lf_combine_like_terms_v1", LF_COMBINE_LIKE_TERMS_V1)
+    REGISTRY.register_template(
+        "lf_add_subtract_polynomials_v1", LF_ADD_SUBTRACT_POLYNOMIALS_V1
+    )
 
 
 _register_all()
@@ -26,4 +32,5 @@ _register_all()
 
 __all__ = [
     "LF_COMBINE_LIKE_TERMS_V1",
+    "LF_ADD_SUBTRACT_POLYNOMIALS_V1",
 ]

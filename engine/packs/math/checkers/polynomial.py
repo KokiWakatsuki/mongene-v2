@@ -29,6 +29,24 @@ def double_solve_combine_like_terms(mr: MR) -> Solution:
     return cast(Solution, solver(expr_str))
 
 
+@register_checker("math.add_or_subtract_polynomials.double_solve")
+def double_solve_add_or_subtract_polynomials(mr: MR) -> Solution:
+    # 与式の文字列 expr_str と加減の別（is_subtraction）から独立に expand で再計算。
+    p = mr.params
+    solver = REGISTRY.solver("math.add_or_subtract_polynomials")
+    return cast(Solution, solver(p["expr_str"], p["is_subtraction"]))
+
+
+@register_checker("math.distribute_or_divide.double_solve")
+def double_solve_distribute_or_divide(mr: MR) -> Solution:
+    # 与式の文字列 expr_str と乗除の別（is_division）から独立に expand で再計算。
+    p = mr.params
+    solver = REGISTRY.solver("math.distribute_or_divide")
+    return cast(Solution, solver(p["expr_str"], p["is_division"]))
+
+
 __all__ = [
     "double_solve_combine_like_terms",
+    "double_solve_add_or_subtract_polynomials",
+    "double_solve_distribute_or_divide",
 ]

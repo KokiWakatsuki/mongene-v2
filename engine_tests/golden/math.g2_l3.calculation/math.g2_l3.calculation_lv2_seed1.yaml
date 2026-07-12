@@ -1,0 +1,54 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - polynomial.subtract_polynomials
+  provenance:
+    git_commit: ''
+    recipe: math.add_or_subtract_polynomials
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_add_subtract_polynomials_v1
+    tier: T1
+  requested:
+    form: calculation
+    level: 2
+    subject: math
+    unit: g2_l3
+  resolved:
+    form: calculation
+    level: 2
+    subject: math
+    unit: g2_l3
+  seed: 1
+  signature: subtract_polynomials
+problem_ref: 38c1d2b829294e64
+problem_text: '次の計算をせよ。
+
+  (a + 4b - 4) - (3a + 3b + 5)'
+sub_questions:
+- answer:
+    display: -2a + b - 9
+    kind: symbolic
+    srepr: Add(Mul(Integer(-1), Integer(2), Symbol('a')), Symbol('b'), Integer(-9))
+  cause_tags: []
+  concept_tags:
+  - polynomial.subtract_polynomials
+  explanation: まず、うしろのかっこの前が - なので、かっこの中の各項の符号を変えてかっこを外す。 うしろのかっこの符号を変えて外す次に、同類項をまとめて計算する。 -2a + b - 9
+  hints:
+  - うしろのかっこの前が - なので、かっこの中の各項の符号を変えてかっこを外す。
+  label: (1)
+  prompt_text: simplified_expr を求めなさい。
+  solution_steps:
+  - args: []
+    narration: うしろのかっこの前が - なので、かっこの中の各項の符号を変えてかっこを外す。
+    op: distribute_negative_sign
+    result_display: うしろのかっこの符号を変えて外す
+    result_srepr: Add(Mul(Integer(-1), Integer(2), Symbol('a')), Symbol('b'), Integer(-9))
+  - args: []
+    narration: 同類項をまとめて計算する。
+    op: add_like_terms
+    result_display: -2a + b - 9
+    result_srepr: Add(Mul(Integer(-1), Integer(2), Symbol('a')), Symbol('b'), Integer(-9))
+visual_svg: null
