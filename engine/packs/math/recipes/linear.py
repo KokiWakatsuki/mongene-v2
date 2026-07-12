@@ -1149,6 +1149,114 @@ def draw_special_lines(ctx: CellContext, rng: Rng) -> MR:
 
 
 # ---------------------------------------------------------------------------
+# math.draw_from_table（g2_l28.graph_table Lv2 用）— 横展開・P1/C5
+# 対応表（x-y の4組）からグラフ（直線）をかく。solver は既存 draw_linear_features を再利用
+# ＝新 solver ゼロ（答えの線は y=ax+b の傾き・切片で採点）。given=data_table（表）、
+# 答え=GraphAnswer。問題図＝空の方眼。x=0 を含めるので切片 b は表に現れ whitelist される。
+# ---------------------------------------------------------------------------
+_DRAW_FROM_TABLE_CONCEPTS = [
+    "linear_function.draw_from_table",
+]
+
+
+def _format_data_table(xs: list[sympy.Expr], ys: list[sympy.Expr]) -> str:
+    """x-y 対応表を教材表記（1行目 x・2行目 y）で返す。"""
+    x_row = " | ".join(_fmt_number(x) for x in xs)
+    y_row = " | ".join(_fmt_number(y) for y in ys)
+    return f"| x | {x_row} |\n| y | {y_row} |"
+
+
+@register_recipe("math.draw_from_table", provides_concepts=_DRAW_FROM_TABLE_CONCEPTS)
+def draw_from_table(ctx: CellContext, rng: Rng) -> MR:
+    """対応表からグラフ（直線）をかく（answer-first・graph_table「かく」Lv2）。
+
+    傾き a(≠0)・切片 b・x の刻み幅 d を選び、x=0,d,2d,3d の4点で y=ax+b を計算して対応表を作る
+    （y は必ず整数）。答え（線の傾き・切片）は既存ソルバ `math.draw_linear_features` を再利用して
+    再計算し一致を assert（新 solver ゼロ）。問題図は空の方眼、模範解答図は直線つき。
+    刻み幅 d は線そのものを変えない surface param（表の見かけを変え dup_rate を分散）。
+    """
+    p = ctx.spec_level.params
+    a = draw(p["slope_domain"], rng)
+    b = draw(p["intercept_domain"], rng)
+    d = draw(p["step_domain"], rng)  # x の刻み幅（線に無関係な surface param）
+
+    a_s, b_s, d_s = sympy.nsimplify(a), sympy.nsimplify(b), sympy.nsimplify(d)
+    xs = [d_s * i for i in range(4)]  # x = 0, d, 2d, 3d（0 を含む＝切片が表に出る）
+    ys = [a_s * x + b_s for x in xs]
+
+    solver = REGISTRY.solver("math.draw_linear_features")
+    sol = cast(Solution, solver(a_s, b_s))
+    assert isinstance(sol.answer, GraphAnswer)
+    expected_feature_sreprs = {
+        sympy.srepr(a_s),
+        sympy.srepr(sympy.Tuple(sympy.Integer(0), b_s)),
+    }
+    assert {f.srepr for f in sol.answer.features} == expected_feature_sreprs, (
+        f"double-solve 不一致: 想定特徴 {expected_feature_sreprs} "
+        f"!= solver 再計算 {{f.srepr for f in sol.answer.features}}"
+    )
+
+    # 対応表からグラフをかく手順（narration に数字を書かない＝漏洩回避）。
+    steps = [
+        Step(
+            op="read_table_points",
+            args=[],
+            result_srepr=sympy.srepr(sympy.Tuple(*[sympy.Tuple(x, y) for x, y in zip(xs, ys)])),
+            result_display="表の x と y の組",
+            narration="表から x と y の値の組を読み取り、座標平面上の点とみる。",
+        ),
+        Step(
+            op="plot_points",
+            args=[],
+            result_srepr=sympy.srepr(sympy.Tuple(*xs)),
+            result_display="表の各点",
+            narration="読み取った点を座標平面にとる。",
+        ),
+        Step(
+            op="draw_line",
+            args=[],
+            result_srepr=sympy.srepr(a_s * sympy.Symbol("x") + b_s),
+            result_display=_format_parallel_line_display(a_s, b_s),
+            narration="とった点を通る直線をひく。",
+        ),
+    ]
+
+    pts = [str((x, y)) for x, y in zip(xs, ys)]
+    render_params = {"a": str(a_s), "b": str(b_s), "pts": pts}
+    solution_svg = render_line_solution_svg(render_params)
+    answer = GraphAnswer(features=sol.answer.features, solution_svg_ref=solution_svg)
+
+    sub_question = SubQuestionMR(
+        label="(1)",
+        asked="draw_graph",
+        answer=answer,
+        steps=steps,
+        concept_tags=_effective_concept_tags(ctx),
+        cause_tags=_effective_cause_tags(ctx),
+    )
+
+    labels = tick_labels_from_params({"pts": pts})
+    visual_plan = VisualPlan(
+        style="grid",
+        labels=labels,
+        elements=[VisualElement(kind="grid", attrs={}), VisualElement(kind="axis", attrs={})],
+    )
+
+    return MR(
+        signature=ctx.spec_level.signature,
+        family=ctx.family,
+        level=ctx.level,
+        purpose=ctx.purpose,
+        seed=0,
+        params={"a": str(a_s), "b": str(b_s), "pts": pts},
+        given={"data_table": _format_data_table(xs, ys)},
+        sub_questions=[sub_question],
+        visual_plan=visual_plan,
+        provenance=Provenance(recipe="math.draw_from_table"),
+    )
+
+
+# ---------------------------------------------------------------------------
 # math.solve_system_elimination（g2_l11.calculation Lv1 用）— 横展開#11・連立クラスタへ横展開
 # 加減法（係数の絶対値が等しい）。答え(x,y)は既存 intersection_of_two_lines を再利用（新solverゼロ）。
 # ---------------------------------------------------------------------------

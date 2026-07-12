@@ -569,6 +569,39 @@ def test_draw_special_lines_double_solve_property(seed):
 
 
 # ---------------------------------------------------------------------------
+# math.draw_from_table（g2_l28.graph_table Lv2）— P1/C5（対応表からグラフをかく）
+# ---------------------------------------------------------------------------
+def test_draw_from_table_lv2_construct():
+    ctx = _make_ctx("math.g2_l28.graph_table", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+
+    assert mr.signature == "draw_line_from_correspondence_table"
+    assert set(mr.given.keys()) == {"data_table"}
+    sq = mr.sub_questions[0]
+    assert sq.asked == "draw_graph"
+    assert sq.answer.kind == "graph"
+    assert [s.op for s in sq.steps] == ["read_table_points", "plot_points", "draw_line"]
+    # 表は x=0 を含む4点（切片が表に現れる）
+    assert "| x | 0 |" in mr.given["data_table"]
+    assert mr.visual_plan is not None
+    assert {e.kind for e in mr.visual_plan.elements} == {"grid", "axis"}
+
+
+@pytest.mark.parametrize("seed", range(200))
+def test_draw_from_table_double_solve_property(seed):
+    ctx = _make_ctx("math.g2_l28.graph_table", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+
+    solver = REGISTRY.solver("math.draw_linear_features")
+    sol = solver(sympy.sympify(mr.params["a"]), sympy.sympify(mr.params["b"]))
+    set_recipe = {f.srepr for f in mr.sub_questions[0].answer.features}
+    set_solver = {f.srepr for f in sol.answer.features}
+    assert set_recipe == set_solver
+
+
+# ---------------------------------------------------------------------------
 # math.solve_system_elimination（g2_l11.calculation Lv1）— 横展開#11（連立・加減法）
 # ---------------------------------------------------------------------------
 def test_solve_system_elimination_lv1_construct():

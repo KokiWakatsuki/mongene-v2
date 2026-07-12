@@ -126,6 +126,16 @@ LF_DRAW_SPECIAL_LINES_V1 = (
 
 
 # ---------------------------------------------------------------------------
+# g2_l28.graph_table Lv2: 対応表からグラフ（直線）をかく（P1/C5）
+# 表の数値は given.data_table（whitelist 対象）。答えの傾き・切片は表から読み取れる。
+# ---------------------------------------------------------------------------
+LF_DRAW_FROM_TABLE_V1 = (
+    "次の表は、x と y の関係を表したものである。"
+    "この関係を表すグラフ（直線）を座標平面にかけ。\n{{ given.data_table }}"
+)
+
+
+# ---------------------------------------------------------------------------
 # g2_l11.calculation Lv1: 連立方程式を加減法で解く（横展開#11・連立クラスタ）
 # ---------------------------------------------------------------------------
 LF_SOLVE_SYSTEM_ELIM_V1 = (
@@ -250,6 +260,7 @@ def _register_all() -> None:
         "lf_read_diagram_intersection_v1", LF_READ_DIAGRAM_INTERSECTION_V1
     )
     REGISTRY.register_template("lf_draw_special_lines_v1", LF_DRAW_SPECIAL_LINES_V1)
+    REGISTRY.register_template("lf_draw_from_table_v1", LF_DRAW_FROM_TABLE_V1)
     REGISTRY.register_template("lf_solve_system_elim_v1", LF_SOLVE_SYSTEM_ELIM_V1)
     REGISTRY.register_template("lf_solve_system_subst_v1", LF_SOLVE_SYSTEM_SUBST_V1)
     REGISTRY.register_template("lf_solve_system_various_v1", LF_SOLVE_SYSTEM_VARIOUS_V1)
@@ -304,6 +315,7 @@ __all__ = [
     "LF_READ_INTERSECTION_V1",
     "LF_READ_DIAGRAM_INTERSECTION_V1",
     "LF_DRAW_SPECIAL_LINES_V1",
+    "LF_DRAW_FROM_TABLE_V1",
     "LF_SOLVE_SYSTEM_ELIM_V1",
     "LF_SOLVE_SYSTEM_SUBST_V1",
     "LF_SOLVE_SYSTEM_VARIOUS_V1",

@@ -56,6 +56,9 @@ concepts:
   - id: linear_function.diagram_intersection
     label: "ダイヤグラム(時間-道のり)の2直線の交点(出会い/追いつき)をグラフから読み取る"
     unit: g2_l30
+  - id: linear_function.draw_from_table
+    label: "x-y の対応表からグラフ（直線）をかく"
+    unit: g2_l28
   - id: simultaneous_equations.solve_by_elimination
     label: "連立方程式を加減法で解く（係数の絶対値が等しい）"
     unit: g2_l11

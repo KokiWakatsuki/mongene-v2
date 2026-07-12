@@ -123,6 +123,14 @@ def double_solve_read_intersection(mr: MR) -> Solution:
     return cast(Solution, solver(line_a, line_b, p["method"]))
 
 
+@register_checker("math.draw_from_table.double_solve")
+def double_solve_draw_from_table(mr: MR) -> Solution:
+    # 対応表から作った線も y=ax+b の傾き・切片で採点＝draw_linear_features を再利用。
+    p = mr.params
+    solver = REGISTRY.solver("math.draw_linear_features")
+    return cast(Solution, solver(sympy.sympify(p["a"]), sympy.sympify(p["b"])))
+
+
 @register_checker("math.draw_special_lines.double_solve")
 def double_solve_draw_special_lines(mr: MR) -> Solution:
     # 問題パラメータ（2交点 xi/yi と特殊直線 axis/k）だけから特徴を再計算（GraphAnswer）。
@@ -308,6 +316,7 @@ __all__ = [
     "double_solve_read_intersection",
     "double_solve_read_diagram_intersection",
     "double_solve_draw_special_lines",
+    "double_solve_draw_from_table",
     "double_solve_solve_system_elimination",
     "double_solve_solve_system_substitution",
     "double_solve_solve_system_elim_scaled",
