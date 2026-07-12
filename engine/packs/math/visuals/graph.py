@@ -114,12 +114,16 @@ def tick_labels(mr: "MR") -> list[str]:
     return tick_labels_from_params(mr.params)
 
 
-def render_linear_graph(mr: "MR", ctx: "CellContext") -> str:
-    """MR.params の a, b, pts と描画範囲から SVG を組む（決定論・自己完結）。"""
-    a = sympy.nsimplify(sympy.sympify(mr.params["a"]))
-    b = sympy.nsimplify(sympy.sympify(mr.params["b"]))
+def render_grid_svg(params: dict[str, Any], *, draw_line: bool) -> str:
+    """params（a, b, pts）と描画範囲から座標平面 SVG を組む（決定論・自己完結）。
 
-    x_lo, x_hi, y_lo, y_hi = compute_grid_bounds_from_params(mr.params)
+    draw_line=True: グリッド+軸+目盛+直線1本（read セルの問題図／かくセルの解答図）。
+    draw_line=False: グリッド+軸+目盛のみの空の方眼（かくセルの問題図＝生徒が描き込む）。
+    """
+    a = sympy.nsimplify(sympy.sympify(params["a"]))
+    b = sympy.nsimplify(sympy.sympify(params["b"]))
+
+    x_lo, x_hi, y_lo, y_hi = compute_grid_bounds_from_params(params)
 
     plot_lo = _MARGIN
     plot_hi = _SVG_SIZE - _MARGIN
@@ -162,15 +166,17 @@ def render_linear_graph(mr: "MR", ctx: "CellContext") -> str:
         )
 
     # --- 直線（太い黒の実線。線種・太さのみで区別＝モノクロ印刷可） ---
-    x_start, x_end = x_lo, x_hi
-    y_start = a * x_start + b
-    y_end = a * x_end + b
-    px1, py1 = to_px_x(x_start), to_px_y(float(y_start))
-    px2, py2 = to_px_x(x_end), to_px_y(float(y_end))
-    parts.append(
-        f'<line x1="{px1:.2f}" y1="{py1:.2f}" x2="{px2:.2f}" y2="{py2:.2f}" '
-        f'stroke="#000000" stroke-width="2.5"/>'
-    )
+    # draw_line=False（かくセルの問題図＝空の方眼）では直線を描かない。
+    if draw_line:
+        x_start, x_end = x_lo, x_hi
+        y_start = a * x_start + b
+        y_end = a * x_end + b
+        px1, py1 = to_px_x(x_start), to_px_y(float(y_start))
+        px2, py2 = to_px_x(x_end), to_px_y(float(y_end))
+        parts.append(
+            f'<line x1="{px1:.2f}" y1="{py1:.2f}" x2="{px2:.2f}" y2="{py2:.2f}" '
+            f'stroke="#000000" stroke-width="2.5"/>'
+        )
 
     # --- 軸目盛の数値ラベル（<text> はこれのみ。visual_plan.labels と一致させる） ---
     py0 = to_px_y(0) if y_lo <= 0 <= y_hi else plot_hi
@@ -194,11 +200,38 @@ def render_linear_graph(mr: "MR", ctx: "CellContext") -> str:
     return "".join(parts)
 
 
+def _draw_line_from_plan(mr: "MR") -> bool:
+    """visual_plan.elements に "line" 要素が宣言されていれば直線を描く。
+
+    既存の read セル（g2_l25.graph_table / g2_l21）は line 要素を宣言済みなので
+    draw_line=True で従来どおり。かくセルの問題図は elements=[grid, axis] のみ
+    （line なし）にして空の方眼を描く。
+    """
+    if mr.visual_plan is None:
+        return True
+    return any(e.kind == "line" for e in mr.visual_plan.elements)
+
+
+def render_linear_graph(mr: "MR", ctx: "CellContext") -> str:
+    """登録 visual（問題図）。visual_plan の line 要素の有無で直線描画を切替える。"""
+    return render_grid_svg(mr.params, draw_line=_draw_line_from_plan(mr))
+
+
+def render_line_solution_svg(params: dict[str, Any]) -> str:
+    """かくセルの模範解答図（直線つき）。recipe が GraphAnswer.solution_svg_ref に格納する。
+
+    問題図（空の方眼）と同じ params・同じ描画範囲を使うので図の座標系が一致する。
+    """
+    return render_grid_svg(params, draw_line=True)
+
+
 register_visual("math.linear_graph")(render_linear_graph)
 
 
 __all__ = [
     "render_linear_graph",
+    "render_grid_svg",
+    "render_line_solution_svg",
     "compute_grid_bounds",
     "compute_grid_bounds_from_params",
     "tick_labels",

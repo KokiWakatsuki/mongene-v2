@@ -281,13 +281,22 @@ def _answer_values(answer: "AnswerPayload") -> list[str]:
 
 
 def _build_given_whitelist(mr: "MR") -> set[str]:
-    """given 由来の数値トークン許可集合（数値正規化した文字列表現）。"""
+    """given 由来の数値トークン許可集合（数値正規化した文字列表現）。
+
+    式・方程式中の係数は前置の符号が演算子として分離されトークン化されるため
+    （例: given "y = 2x - 1" → extract_numbers は ['2','1'] で -1 が得られない）、
+    given に現れた各数値は**両符号**を許可する。これにより「答え＝given 式の係数」に
+    なる題材（graph_table「かく」等・答えの傾き/切片が given の係数そのもの）で、
+    負の切片が漏洩誤検出されるのを防ぐ。given に無い値は依然として検出される
+    （両符号化は given に実在する数値の符号違いのみを許すため、真の漏洩は素通りしない）。
+    """
     whitelist: set[str] = set()
     for v in mr.given.values():
         for tok in extract_numbers(v):
             frac = _to_fraction(tok)
             if frac is not None:
                 whitelist.add(str(frac))
+                whitelist.add(str(-frac))
     return whitelist
 
 

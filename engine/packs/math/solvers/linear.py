@@ -7,7 +7,7 @@ from __future__ import annotations
 
 import sympy
 
-from engine.core.contracts import Solution, Step, SymbolicAnswer
+from engine.core.contracts import Feature, GraphAnswer, Solution, Step, SymbolicAnswer
 from engine.core.registry import register_solver
 
 X = sympy.Symbol("x")
@@ -526,6 +526,52 @@ def point_on_line_at_x(a: object, b: object, x0: object) -> Solution:
     return Solution(answer=answer, steps=steps)
 
 
+@register_solver("math.draw_linear_features")
+def draw_linear_features(a: object, b: object) -> Solution:
+    """1次関数 y=ax+b のグラフをかくための検証可能な特徴を求める（g2_l22.graph_table Lv1）。
+
+    答えは GraphAnswer（傾き a・y切片の点 (0,b) の2特徴の集合で採点＝§6.2 V1'）。solver は
+    SVG を描かない（特徴のみ）。模範解答図の描画は recipe が visual 層のヘルパで行う。
+    「読む」（SymbolicAnswer）と違い answer.kind="graph" になる別構造。
+    """
+    a_s, b_s = sympy.nsimplify(a), sympy.nsimplify(b)
+    intercept_pt = sympy.Tuple(sympy.Integer(0), b_s)
+    features = [
+        Feature(kind="slope", srepr=sympy.srepr(a_s), display=f"傾き {_format_number(a_s)}"),
+        Feature(
+            kind="intercept",
+            srepr=sympy.srepr(intercept_pt),
+            display=f"切片の点 (0, {_format_number(b_s)})",
+        ),
+    ]
+    line_expr = _build_expr(a_s, b_s)
+    steps = [
+        Step(
+            op="plot_intercept",
+            args=[_format_number(b_s)],
+            result_srepr=sympy.srepr(intercept_pt),
+            result_display=f"(0, {_format_number(b_s)})",
+            narration="y 軸との交点（切片）に点をとる。",
+        ),
+        Step(
+            op="apply_slope",
+            args=[_format_number(a_s)],
+            result_srepr=sympy.srepr(a_s),
+            result_display=f"傾き {_format_number(a_s)}",
+            narration="傾きにしたがって、右へ進んだときの上下の変化の分だけ動いた点をとる。",
+        ),
+        Step(
+            op="draw_line",
+            args=[],
+            result_srepr=sympy.srepr(line_expr),
+            result_display=_format_expr_display(a_s, b_s),
+            narration="とった2点を通る直線をひく。",
+        ),
+    ]
+    answer = GraphAnswer(features=features, solution_svg_ref="")
+    return Solution(answer=answer, steps=steps)
+
+
 def _format_two_var_equation(a: sympy.Expr, b: sympy.Expr, c: sympy.Expr) -> str:
     """2元1次方程式 a x + b y = c の表示形（例: "4x + 2y = 10", "-3x + 2y = 6"）。
 
@@ -588,4 +634,5 @@ __all__ = [
     "solve_equation_for_y",
     "evaluate_linear_at_x",
     "point_on_line_at_x",
+    "draw_linear_features",
 ]

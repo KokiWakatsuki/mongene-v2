@@ -376,6 +376,43 @@ def test_point_on_line_double_solve_property(seed):
 
 
 # ---------------------------------------------------------------------------
+# math.draw_linear（g2_l22.graph_table Lv1）— 横展開#8・「かく」capability
+# ---------------------------------------------------------------------------
+def test_draw_linear_lv1_construct():
+    ctx = _make_ctx("math.g2_l22.graph_table", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+
+    assert mr.signature == "draw_linear_from_slope_intercept"
+    assert set(mr.given.keys()) == {"expression"}
+    sq = mr.sub_questions[0]
+    assert sq.asked == "draw_graph"
+    assert sq.answer.kind == "graph"  # 答えは GraphAnswer
+    assert {f.kind for f in sq.answer.features} == {"slope", "intercept"}
+    assert sq.answer.solution_svg_ref != ""  # 模範解答図（直線つき）を持つ
+    assert 'stroke-width="2.5"' in sq.answer.solution_svg_ref  # 解答図には直線がある
+    assert [s.op for s in sq.steps] == ["plot_intercept", "apply_slope", "draw_line"]
+    # 問題図は空の方眼: visual_plan.elements に line を宣言しない
+    assert mr.visual_plan is not None
+    assert {e.kind for e in mr.visual_plan.elements} == {"grid", "axis"}
+
+
+@pytest.mark.parametrize("seed", range(200))
+def test_draw_linear_double_solve_property(seed):
+    ctx = _make_ctx("math.g2_l22.graph_table", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+
+    solver = REGISTRY.solver("math.draw_linear_features")
+    sol = solver(sympy.sympify(mr.params["a"]), sympy.sympify(mr.params["b"]))
+    # 特徴点の srepr 集合が一致（GraphAnswer の double-solve＝§6.2 V1'）
+    assert {f.srepr for f in sol.answer.features} == {f.srepr for f in mr.sub_questions[0].answer.features}
+    # 期待特徴（傾き a・y切片の点 (0,b)）と一致
+    a = sympy.nsimplify(mr.params["a"]); b = sympy.nsimplify(mr.params["b"])
+    assert {f.srepr for f in sol.answer.features} == {sympy.srepr(a), sympy.srepr(sympy.Tuple(sympy.Integer(0), b))}
+
+
+# ---------------------------------------------------------------------------
 # math.rate_of_change（g2_l20.find_value Lv1）— 横展開の第1セル
 # ---------------------------------------------------------------------------
 def test_rate_of_change_lv1_construct():
@@ -538,4 +575,7 @@ def test_recipes_declare_provides_concepts():
     })
     assert REGISTRY.recipe_concepts("math.point_on_line") == frozenset({
         "linear_function.point_on_line",
+    })
+    assert REGISTRY.recipe_concepts("math.draw_linear") == frozenset({
+        "linear_function.draw_graph",
     })

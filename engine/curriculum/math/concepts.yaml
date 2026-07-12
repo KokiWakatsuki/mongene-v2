@@ -41,3 +41,6 @@ concepts:
   - id: linear_function.point_on_line
     label: "y=ax+b のグラフが通る点(x0, y0)を代入で求める"
     unit: g2_l22
+  - id: linear_function.draw_graph
+    label: "傾きと切片を使い y=ax+b のグラフ（直線）をかく"
+    unit: g2_l22

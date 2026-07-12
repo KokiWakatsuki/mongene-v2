@@ -18,6 +18,7 @@ import sympy
 from engine.core.contracts import (
     MR,
     CellContext,
+    GraphAnswer,
     Provenance,
     Solution,
     Step,
@@ -28,7 +29,7 @@ from engine.core.contracts import (
 )
 from engine.core.registry import REGISTRY, register_recipe
 from engine.core.rng import Rng, draw, draw_many
-from engine.packs.math.visuals.graph import tick_labels_from_params
+from engine.packs.math.visuals.graph import render_line_solution_svg, tick_labels_from_params
 
 # 提供概念（recipe が「提供できる概念タグ集合」を宣言。spec_lint R6 の題材ズレ検出用）。
 _LINEAR_FROM_TWO_POINTS_CONCEPTS = [
@@ -617,6 +618,88 @@ def point_on_line(ctx: CellContext, rng: Rng) -> MR:
 
 
 # ---------------------------------------------------------------------------
+# math.draw_linear（g2_l22.graph_table Lv1 用）— 横展開#8・「かく」capability の初セル
+# y=ax+b のグラフをかく。答えは GraphAnswer(特徴点集合で採点)、問題図＝空の方眼、
+# 模範解答図＝直線つき（solution_svg_ref）。
+# ---------------------------------------------------------------------------
+_DRAW_GRAPH_CONCEPTS = [
+    "linear_function.draw_graph",
+]
+
+
+@register_recipe("math.draw_linear", provides_concepts=_DRAW_GRAPH_CONCEPTS)
+def draw_linear(ctx: CellContext, rng: Rng) -> MR:
+    """1次関数 y=ax+b のグラフをかく（answer-first・graph_table「かく」Lv1）。
+
+    傾き a(≠0)・切片 b を選ぶ。独立ソルバ `math.draw_linear_features` で採点用の特徴
+    （傾き・y切片の点）を得る（answer.kind="graph"）。問題図は**空の方眼**（生徒が描き込む・
+    visual_plan.elements に line を宣言しない）、模範解答図は visual 純ヘルパ
+    `render_line_solution_svg` で描いて GraphAnswer.solution_svg_ref に格納する。
+
+    グリッド範囲を決める pts は (a, b) から決定論的に定める（切片と傾き1つ分の点）ので、
+    dup_key は実質 (a, b) に一致する＝同じ直線は grid の窓が違っても重複として数えられる。
+    """
+    p = ctx.spec_level.params
+    a = draw(p["slope_domain"], rng)
+    b = draw(p.get("intercept_domain", {"int_range": [-9, 9]}), rng)
+
+    a_s = sympy.nsimplify(a)
+    b_s = sympy.nsimplify(b)
+    # グリッド範囲用の代表点（決定論・(a,b)のみに依存）: 切片と、傾き1つ分進んだ点。
+    pts = [(sympy.Integer(0), b_s), (sympy.Integer(1), a_s + b_s)]
+
+    solver = REGISTRY.solver("math.draw_linear_features")
+    sol = cast(Solution, solver(a_s, b_s))
+    assert isinstance(sol.answer, GraphAnswer)
+
+    expected_feature_sreprs = {
+        sympy.srepr(a_s),
+        sympy.srepr(sympy.Tuple(sympy.Integer(0), b_s)),
+    }
+    assert {f.srepr for f in sol.answer.features} == expected_feature_sreprs, (
+        f"double-solve 不一致: recipe が想定した特徴 {expected_feature_sreprs} "
+        f"!= solver 再計算 {{f.srepr for f in sol.answer.features}}"
+    )
+
+    mr_params = {"a": str(a_s), "b": str(b_s), "pts": [str(pts[0]), str(pts[1])]}
+    solution_svg = render_line_solution_svg(mr_params)  # 直線つきの模範解答図
+    answer = GraphAnswer(features=sol.answer.features, solution_svg_ref=solution_svg)
+
+    sub_question = SubQuestionMR(
+        label="(1)",
+        asked="draw_graph",
+        answer=answer,
+        steps=sol.steps,
+        concept_tags=_effective_concept_tags(ctx),
+        cause_tags=_effective_cause_tags(ctx),
+    )
+
+    labels = tick_labels_from_params(mr_params)
+    # 問題図＝空の方眼（line を宣言しない＝render_visual が直線を描かない）。
+    visual_plan = VisualPlan(
+        style="grid",
+        labels=labels,
+        elements=[
+            VisualElement(kind="grid", attrs={}),
+            VisualElement(kind="axis", attrs={}),
+        ],
+    )
+
+    return MR(
+        signature=ctx.spec_level.signature,
+        family=ctx.family,
+        level=ctx.level,
+        purpose=ctx.purpose,
+        seed=0,
+        params=mr_params,
+        given={"expression": _format_parallel_line_display(a_s, b_s)},
+        sub_questions=[sub_question],
+        visual_plan=visual_plan,
+        provenance=Provenance(recipe="math.draw_linear"),
+    )
+
+
+# ---------------------------------------------------------------------------
 # math.rate_of_change（g2_l20.find_value Lv1 用）— 横展開の第1セル
 # ---------------------------------------------------------------------------
 _RATE_OF_CHANGE_CONCEPTS = [
@@ -885,6 +968,7 @@ __all__ = [
     "solve_equation_for_y",
     "evaluate_linear",
     "point_on_line",
+    "draw_linear",
     "rate_of_change",
     "intersection",
     "y_range_from_domain",
