@@ -1,0 +1,29 @@
+family: math.g2_l23.knowledge
+form: knowledge
+source_desc: |
+  変域とグラフの端点の意味の想起（units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: 変域・以上以下と端点の対応の意味を想起する。
+       example: 1次関数のグラフで x の変域が 2≦x のように「以上」で表されるとき、グラフの端の点は
+                ふくまれるか、ふくまれないか答えよ。
+  【設計モデル・要検収(Q4)】「不等号の等号の有無（≦/≧＝以上/以下は端点を含む・</>は含まない）」の
+  判別を単一選択（ChoiceAnswer）で realize。無限性(F-3)は 1次関数 y=ax+b の a,b と端点 n の
+  パラメータ化で満たす（a,b は包含に無関係な見かけの変化）。#16 で開通した knowledge capability
+  （ChoiceAnswer 経路）を spec＋小規則 solver で再利用＝償却の実証。Q1 は fact_id 照合の V2。
+concepts_default: [linear_function.range_endpoint_inclusion]
+levels:
+  "1":
+    signature: knowledge_range_endpoint
+    recipe: math.knowledge_range_endpoint
+    params:
+      # 包含は inclusive（1=≦ 含む / 0=< 含まない）だけで決まる。a,b,n は見かけの変化で無限性に寄与。
+      slope_domain: {int_range: [-6, 6], exclude: [0]}
+      intercept_domain: {int_range: [-9, 9]}
+      endpoint_domain: {int_range: [-6, 6]}
+      inclusive_domain: {int_set: [0, 1]}
+    given: [statement]
+    asked: [choice]
+    visual: none
+    text: {tier: T1, template: lf_knowledge_range_endpoint_v1}
+    hints: [steps_prefix]
+    concept_tags: [linear_function.range_endpoint_inclusion]
+    cause_tags: []

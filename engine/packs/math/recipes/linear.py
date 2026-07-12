@@ -1598,6 +1598,68 @@ def knowledge_slope_direction(ctx: CellContext, rng: Rng) -> MR:
 
 
 # ---------------------------------------------------------------------------
+# math.knowledge_range_endpoint（g2_l23.knowledge Lv1 用）— 横展開#17・knowledge 償却の実証
+# 変域の端点が含まれるか（≦/≧なら含む・</>なら含まない）を単一選択で問う。#16 で開通した
+# knowledge capability（ChoiceAnswer 経路）を spec＋小規則 solver だけで再利用＝償却の実証。
+# ---------------------------------------------------------------------------
+_KNOWLEDGE_RANGE_ENDPOINT_CONCEPTS = [
+    "linear_function.range_endpoint_inclusion",
+]
+
+
+@register_recipe(
+    "math.knowledge_range_endpoint", provides_concepts=_KNOWLEDGE_RANGE_ENDPOINT_CONCEPTS
+)
+def knowledge_range_endpoint(ctx: CellContext, rng: Rng) -> MR:
+    """変域の端点がグラフにふくまれるかを不等号の種類から判別する（knowledge・answer-first）。
+
+    包含は不等号の等号の有無だけで決まる（端点値・関数は無関係）。独立 solver
+    `math.range_endpoint_inclusion` が inclusive の真偽から判定（double-solve）。答えは ChoiceAnswer。
+    無限性(F-3)は「1次関数 y=ax+b のグラフで変域…」の a,b,端点 n のパラメータ化で満たす
+    （包含に無関係な a,b が式の見かけを変え、dup_key は params で広く分散する）。図なし（knowledge）。
+    """
+    p = ctx.spec_level.params
+    x_sym, y_sym = sympy.symbols("x y")
+    a = sympy.nsimplify(draw(p["slope_domain"], rng))  # 見かけの1次関数の傾き（≠0・包含に無関係）
+    b = sympy.nsimplify(draw(p["intercept_domain"], rng))  # 切片（包含に無関係）
+    n = sympy.nsimplify(draw(p["endpoint_domain"], rng))  # 変域の端点の値
+    inclusive = int(draw(p["inclusive_domain"], rng))  # 1=等号あり(≦) / 0=等号なし(<)
+    sym = "≦" if inclusive else "<"
+    eq = _fmt_eq(y_sym, a * x_sym + b)
+    statement = f"1次関数 {eq} のグラフで、x の変域が {_fmt_number(n)} {sym} x のとき"
+
+    solver = REGISTRY.solver("math.range_endpoint_inclusion")
+    sol = cast(Solution, solver(bool(inclusive)))
+    assert isinstance(sol.answer, ChoiceAnswer)
+    expected = "ふくまれる" if inclusive else "ふくまれない"
+    assert sol.answer.correct == expected, (
+        f"double-solve 不一致: 構成 {expected} != solver 判定 {sol.answer.correct}"
+    )
+
+    sub_question = SubQuestionMR(
+        label="(1)",
+        asked="choice",
+        answer=sol.answer,
+        steps=sol.steps,
+        concept_tags=_effective_concept_tags(ctx),
+        cause_tags=_effective_cause_tags(ctx),
+    )
+
+    return MR(
+        signature=ctx.spec_level.signature,
+        family=ctx.family,
+        level=ctx.level,
+        purpose=ctx.purpose,
+        seed=0,
+        params={"a": str(a), "b": str(b), "n": str(n), "inclusive": inclusive},
+        given={"statement": statement},
+        sub_questions=[sub_question],
+        visual_plan=None,
+        provenance=Provenance(recipe="math.knowledge_range_endpoint"),
+    )
+
+
+# ---------------------------------------------------------------------------
 # math.rate_of_change（g2_l20.find_value Lv1 用）— 横展開の第1セル
 # ---------------------------------------------------------------------------
 _RATE_OF_CHANGE_CONCEPTS = [
@@ -1875,6 +1937,7 @@ __all__ = [
     "solve_system_preprocessed",
     "solve_system_abc",
     "knowledge_slope_direction",
+    "knowledge_range_endpoint",
     "rate_of_change",
     "intersection",
     "y_range_from_domain",

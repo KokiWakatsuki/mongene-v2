@@ -128,6 +128,11 @@ LF_KNOWLEDGE_SLOPE_DIRECTION_V1 = (
     "1次関数 {{ given.statement }} のグラフは、右上がりと右下がりのどちらですか。"
 )
 
+# g2_l23.knowledge Lv1: 変域の端点がグラフにふくまれるか（横展開#17・knowledge 償却実証）
+LF_KNOWLEDGE_RANGE_ENDPOINT_V1 = (
+    "{{ given.statement }}、変域の端の点はグラフにふくまれますか、ふくまれませんか。"
+)
+
 
 # ---------------------------------------------------------------------------
 # g2_l20.find_value Lv1: 2点から変化の割合を求める（横展開の第1セル）
@@ -178,6 +183,9 @@ def _register_all() -> None:
     REGISTRY.register_template(
         "lf_knowledge_slope_direction_v1", LF_KNOWLEDGE_SLOPE_DIRECTION_V1
     )
+    REGISTRY.register_template(
+        "lf_knowledge_range_endpoint_v1", LF_KNOWLEDGE_RANGE_ENDPOINT_V1
+    )
     REGISTRY.register_template("lf_rate_of_change_v1", LF_RATE_OF_CHANGE_V1)
     REGISTRY.register_template("lf_intersection_v1", LF_INTERSECTION_V1)
     REGISTRY.register_template("lf_y_range_v1", LF_Y_RANGE_V1)
@@ -204,6 +212,7 @@ __all__ = [
     "LF_SOLVE_SYSTEM_VARIOUS_V1",
     "LF_SOLVE_SYSTEM_ABC_V1",
     "LF_KNOWLEDGE_SLOPE_DIRECTION_V1",
+    "LF_KNOWLEDGE_RANGE_ENDPOINT_V1",
     "LF_RATE_OF_CHANGE_V1",
     "LF_INTERSECTION_V1",
     "LF_Y_RANGE_V1",

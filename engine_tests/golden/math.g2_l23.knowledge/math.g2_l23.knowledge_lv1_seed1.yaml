@@ -1,0 +1,54 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - linear_function.range_endpoint_inclusion
+  provenance:
+    git_commit: ''
+    recipe: math.knowledge_range_endpoint
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_knowledge_range_endpoint_v1
+    tier: T1
+  requested:
+    form: knowledge
+    level: 1
+    subject: math
+    unit: g2_l23
+  resolved:
+    form: knowledge
+    level: 1
+    subject: math
+    unit: g2_l23
+  seed: 1
+  signature: knowledge_range_endpoint
+problem_ref: fafab4c5da49cfb9
+problem_text: 1次関数 y = x - 3 のグラフで、x の変域が -6 < x のとき、変域の端の点はグラフにふくまれますか、ふくまれませんか。
+sub_questions:
+- answer:
+    correct: ふくまれない
+    distractors:
+    - ふくまれる
+    fact_id: range.endpoint_inclusion
+    kind: choice
+  cause_tags: []
+  concept_tags:
+  - linear_function.range_endpoint_inclusion
+  explanation: まず、変域の不等号に等号がついているか（≦・≧か、<・>か）に注目する。 等号なし（<・>）次に、等号つきの不等号なら端の点はふくまれ、等号がなければふくまれない。 ふくまれない
+  hints:
+  - 変域の不等号に等号がついているか（≦・≧か、<・>か）に注目する。
+  label: (1)
+  prompt_text: choice を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 変域の不等号に等号がついているか（≦・≧か、<・>か）に注目する。
+    op: identify_inequality_type
+    result_display: 等号なし（<・>）
+    result_srepr: open
+  - args: []
+    narration: 等号つきの不等号なら端の点はふくまれ、等号がなければふくまれない。
+    op: determine_inclusion
+    result_display: ふくまれない
+    result_srepr: ふくまれない
+visual_svg: null

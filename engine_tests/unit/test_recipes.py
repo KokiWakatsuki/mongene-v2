@@ -751,6 +751,39 @@ def test_knowledge_slope_direction_double_solve_property(seed):
 
 
 # ---------------------------------------------------------------------------
+# math.knowledge_range_endpoint（g2_l23.knowledge Lv1）— 横展開#17（knowledge 償却の実証）
+# ---------------------------------------------------------------------------
+def test_knowledge_range_endpoint_construct():
+    ctx = _make_ctx("math.g2_l23.knowledge", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+
+    assert mr.signature == "knowledge_range_endpoint"
+    assert set(mr.given.keys()) == {"statement"}
+    assert mr.visual_plan is None
+    sq = mr.sub_questions[0]
+    assert sq.asked == "choice"
+    assert sq.answer.kind == "choice"
+    assert sq.answer.correct in {"ふくまれる", "ふくまれない"}
+    assert sq.answer.fact_id == "range.endpoint_inclusion"
+    assert [s.op for s in sq.steps] == ["identify_inequality_type", "determine_inclusion"]
+
+
+@pytest.mark.parametrize("seed", range(200))
+def test_knowledge_range_endpoint_double_solve_property(seed):
+    ctx = _make_ctx("math.g2_l23.knowledge", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+
+    # 包含は inclusive（不等号の等号の有無）だけから再判定（端点値・関数は無関係）
+    solver = REGISTRY.solver("math.range_endpoint_inclusion")
+    sol = solver(bool(mr.params["inclusive"]))
+    assert sol.answer.kind == "choice"
+    assert sol.answer.correct == mr.sub_questions[0].answer.correct
+    assert sol.answer.correct == ("ふくまれる" if mr.params["inclusive"] else "ふくまれない")
+
+
+# ---------------------------------------------------------------------------
 # math.rate_of_change（g2_l20.find_value Lv1）— 横展開の第1セル
 # ---------------------------------------------------------------------------
 def test_rate_of_change_lv1_construct():
@@ -940,4 +973,7 @@ def test_recipes_declare_provides_concepts():
     })
     assert REGISTRY.recipe_concepts("math.knowledge_slope_direction") == frozenset({
         "linear_function.slope_sign_to_direction",
+    })
+    assert REGISTRY.recipe_concepts("math.knowledge_range_endpoint") == frozenset({
+        "linear_function.range_endpoint_inclusion",
     })

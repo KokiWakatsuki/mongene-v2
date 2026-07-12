@@ -703,6 +703,40 @@ def linear_direction_from_slope(a: object) -> Solution:
     return Solution(answer=answer, steps=steps)
 
 
+@register_solver("math.range_endpoint_inclusion")
+def range_endpoint_inclusion(inclusive: object) -> Solution:
+    """変域の端点がグラフにふくまれるかを不等号の種類から判定する（knowledge・g2_l23）。
+
+    等号つきの不等号（≦・≧＝以上・以下）→ 端点はふくまれる／等号なし（<・>＝より大きい・
+    未満）→ ふくまれない。答えは ChoiceAnswer（単一選択）、fact_id で根拠（等号の有無と端点の
+    包含の対応規則）を刻む＝Q1 は V2（規則ベース・§6.2）。端点の値・関数は包含に無関係（規則は
+    不等号の種類だけで決まる）ので solver は inclusive の真偽だけで判定する（double-solve）。
+    """
+    inc = bool(inclusive)
+    correct = "ふくまれる" if inc else "ふくまれない"
+    other = "ふくまれない" if inc else "ふくまれる"
+    steps = [
+        Step(
+            op="identify_inequality_type",
+            args=[],
+            result_srepr="closed" if inc else "open",
+            result_display="等号あり（≦・≧）" if inc else "等号なし（<・>）",
+            narration="変域の不等号に等号がついているか（≦・≧か、<・>か）に注目する。",
+        ),
+        Step(
+            op="determine_inclusion",
+            args=[],
+            result_srepr=correct,
+            result_display=correct,
+            narration="等号つきの不等号なら端の点はふくまれ、等号がなければふくまれない。",
+        ),
+    ]
+    answer = ChoiceAnswer(
+        correct=correct, distractors=[other], fact_id="range.endpoint_inclusion"
+    )
+    return Solution(answer=answer, steps=steps)
+
+
 __all__ = [
     "linear_expr_from_two_points",
     "linear_expr_from_slope_point",
@@ -718,4 +752,5 @@ __all__ = [
     "draw_linear_features",
     "draw_from_equation",
     "linear_direction_from_slope",
+    "range_endpoint_inclusion",
 ]
