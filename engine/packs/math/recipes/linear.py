@@ -1433,6 +1433,111 @@ def solve_system_preprocessed(ctx: CellContext, rng: Rng) -> MR:
 
 
 # ---------------------------------------------------------------------------
+# math.solve_system_abc（g2_l15.calculation Lv2 用）— 横展開#15・連立クラスタ（A=B=C 形）
+# A=B=C を A=C, B=C の2式に組み替えて解く。答え(x,y)は既存 intersection_of_two_lines を再利用。
+# 単一レベル（level_sep のペア無し）。
+# ---------------------------------------------------------------------------
+_SOLVE_SYSTEM_ABC_CONCEPTS = [
+    "simultaneous_equations.solve_abc_form",
+]
+
+
+@register_recipe("math.solve_system_abc", provides_concepts=_SOLVE_SYSTEM_ABC_CONCEPTS)
+def solve_system_abc(ctx: CellContext, rng: Rng) -> MR:
+    """A=B=C 形の等式を連立にして解く（answer-first・calculation Lv2）。
+
+    A=a1·x+b1·y, B=a2·x+b2·y+k, C=V（定数）を A=B=C=V が解 (x0,y0) で成り立つよう逆算し、
+    「A = B = C」の見かけで提示する。組み替えた2式 A=C（a1·x+b1·y=V）, B=C（a2·x+b2·y=V−k）は
+    既存 solver `math.intersection_of_two_lines`（連立クラスタ共有）で解を検算。非退化は係数の
+    大きさで恒真化（|a1|=3,|a2|=2,|b1|=2,|b2|=3・|a1·b2|=9>|a2·b1|=4 → det≠0）。図なし。
+    """
+    p = ctx.spec_level.params
+    x_sym, y_sym = sympy.symbols("x y")
+    x0 = sympy.nsimplify(draw(p["x_domain"], rng))
+    y0 = sympy.nsimplify(draw(p["y_domain"], rng))
+
+    def sign() -> sympy.Integer:
+        return sympy.Integer(draw(p["sign_domain"], rng))
+
+    a1 = sympy.Integer(3) * sign()
+    b1 = sympy.Integer(2) * sign()
+    a2 = sympy.Integer(2) * sign()
+    b2 = sympy.Integer(3) * sign()
+    v = a1 * x0 + b1 * y0  # 共通の値 C = V（A=C が解で成立）
+    k = v - (a2 * x0 + b2 * y0)  # B の定数項（B=C が解で成立）
+
+    # 組み替えた整数系: A=C → a1 x + b1 y = V / B=C → a2 x + b2 y = V − k
+    A1, B1, C1 = a1, b1, v
+    A2, B2, C2 = a2, b2, v - k
+    coeffs_a = [A1, B1, C1]
+    coeffs_b = [A2, B2, C2]
+
+    a_disp = _fmt_expr(a1 * x_sym + b1 * y_sym)
+    b_disp = _fmt_expr(a2 * x_sym + b2 * y_sym + k)
+    abc_disp = f"{a_disp} = {b_disp} = {_fmt_number(v)}"
+    split_disp = f"{_fmt_eq(a1 * x_sym + b1 * y_sym, C1)} , {_fmt_eq(a2 * x_sym + b2 * y_sym, C2)}"
+
+    steps = [
+        Step(
+            op="split_abc_equation",
+            args=[abc_disp],
+            result_srepr=sympy.srepr([sympy.Eq(a1 * x_sym + b1 * y_sym, C1),
+                                      sympy.Eq(a2 * x_sym + b2 * y_sym, C2)]),
+            result_display=split_disp,
+            narration="A=B=C を A=C と B=C の2つの式に分けて連立方程式にする。",
+        ),
+        Step(
+            op="eliminate_and_solve_x",
+            args=[split_disp],
+            result_srepr=sympy.srepr(x0),
+            result_display=f"x = {_fmt_number(x0)}",
+            narration="連立方程式を解いて x を求める。",
+        ),
+        Step(
+            op="back_substitute",
+            args=[_fmt_number(x0)],
+            result_srepr=sympy.srepr(y0),
+            result_display=f"y = {_fmt_number(y0)}",
+            narration="求めた x をもとの式に代入して y を求める。",
+        ),
+    ]
+
+    solver = REGISTRY.solver("math.intersection_of_two_lines")
+    sol = cast(Solution, solver(tuple(coeffs_a), tuple(coeffs_b), "elimination"))
+    assert isinstance(sol.answer, SymbolicAnswer)
+    expected_pt = sympy.Tuple(x0, y0)
+    assert sol.answer.srepr == sympy.srepr(expected_pt), (
+        f"double-solve 不一致: 構成解 {expected_pt} != solver 再計算 {sol.answer.srepr}"
+    )
+
+    sub_question = SubQuestionMR(
+        label="(1)",
+        asked="solution",
+        answer=sol.answer,
+        steps=steps,
+        concept_tags=_effective_concept_tags(ctx),
+        cause_tags=_effective_cause_tags(ctx),
+    )
+
+    return MR(
+        signature=ctx.spec_level.signature,
+        family=ctx.family,
+        level=ctx.level,
+        purpose=ctx.purpose,
+        seed=0,
+        params={
+            "line_a": [str(c) for c in coeffs_a],
+            "line_b": [str(c) for c in coeffs_b],
+            "method": "elimination",
+        },
+        given={"equation": abc_disp},
+        sub_questions=[sub_question],
+        visual_plan=None,
+        provenance=Provenance(recipe="math.solve_system_abc"),
+    )
+
+
+# ---------------------------------------------------------------------------
 # math.rate_of_change（g2_l20.find_value Lv1 用）— 横展開の第1セル
 # ---------------------------------------------------------------------------
 _RATE_OF_CHANGE_CONCEPTS = [
@@ -1708,6 +1813,7 @@ __all__ = [
     "solve_system_substitution",
     "solve_system_elim_scaled",
     "solve_system_preprocessed",
+    "solve_system_abc",
     "rate_of_change",
     "intersection",
     "y_range_from_domain",

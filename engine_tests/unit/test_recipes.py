@@ -681,6 +681,39 @@ def test_solve_system_preprocessed_double_solve_property(level, seed):
 
 
 # ---------------------------------------------------------------------------
+# math.solve_system_abc（g2_l15.calculation Lv2）— 横展開#15（A=B=C 形・単一レベル）
+# ---------------------------------------------------------------------------
+def test_solve_system_abc_construct():
+    ctx = _make_ctx("math.g2_l15.calculation", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+
+    assert mr.signature == "solve_system_abc_form"
+    assert set(mr.given.keys()) == {"equation"}
+    assert mr.visual_plan is None
+    sq = mr.sub_questions[0]
+    assert sq.asked == "solution"
+    assert sq.answer.kind == "symbolic"
+    assert sq.answer.display.startswith("(")
+    assert [s.op for s in sq.steps] == ["split_abc_equation", "eliminate_and_solve_x", "back_substitute"]
+    # A=B=C の見かけ（"=" が2つ）で提示される
+    assert mr.given["equation"].count("=") == 2
+
+
+@pytest.mark.parametrize("seed", range(200))
+def test_solve_system_abc_double_solve_property(seed):
+    ctx = _make_ctx("math.g2_l15.calculation", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+
+    line_a = tuple(sympy.sympify(c) for c in mr.params["line_a"])
+    line_b = tuple(sympy.sympify(c) for c in mr.params["line_b"])
+    solver = REGISTRY.solver("math.intersection_of_two_lines")
+    sol = solver(line_a, line_b, mr.params["method"])
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+
+
+# ---------------------------------------------------------------------------
 # math.rate_of_change（g2_l20.find_value Lv1）— 横展開の第1セル
 # ---------------------------------------------------------------------------
 def test_rate_of_change_lv1_construct():
@@ -864,4 +897,7 @@ def test_recipes_declare_provides_concepts():
     })
     assert REGISTRY.recipe_concepts("math.solve_system_preprocessed") == frozenset({
         "simultaneous_equations.solve_with_preprocessing",
+    })
+    assert REGISTRY.recipe_concepts("math.solve_system_abc") == frozenset({
+        "simultaneous_equations.solve_abc_form",
     })

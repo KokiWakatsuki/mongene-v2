@@ -62,3 +62,6 @@ concepts:
   - id: simultaneous_equations.solve_with_preprocessing
     label: "前処理を伴う連立方程式を解く（かっこ展開／分母を払う）"
     unit: g2_l14
+  - id: simultaneous_equations.solve_abc_form
+    label: "A=B=C 形の等式を連立に組み替えて解く"
+    unit: g2_l15

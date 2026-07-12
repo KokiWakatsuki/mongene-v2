@@ -1,0 +1,30 @@
+family: math.g2_l15.calculation
+form: calculation
+source_desc: |
+  A＝B＝C の形の等式を連立に組み替えて解く（units.generated.yaml の desc/example を正として転記）。
+  Lv2: A=B=C を2つの式に組み替えて連立として解く。
+       example: 次の等式を満たす x, y を求めよ。 2x + y = x − y + 3 = 5
+  答えは解 (x, y)（SymbolicAnswer）。A=C・B=C の2式に組み替え、g2_l11/l12/l14/l27 と同じ
+  intersection_of_two_lines（交点＝連立解）を再利用（新 solver ゼロ＝連立クラスタへの償却横展開）。
+  A=a1·x+b1·y, B=a2·x+b2·y+k, C=V（定数）を A=B=C=V が解で成立するよう逆算して提示する。
+  単一レベル（level_sep のペア無し）。図は無し（calculation）。
+concepts_default: [simultaneous_equations.solve_abc_form]
+levels:
+  "2":
+    signature: solve_system_abc_form
+    recipe: math.solve_system_abc
+    params:
+      # 非退化（非平行）は係数の大きさで恒真化: |a1|=3,|a2|=2,|b1|=2,|b2|=3 で
+      # |a1·b2|=9 > |a2·b1|=4 → det=a1·b2−a2·b1≠0。符号のみ抽選。
+      x_domain: {int_range: [-5, 5]}
+      y_domain: {int_range: [-5, 5]}
+      sign_domain: {int_set: [-1, 1]}
+    given: [equation]
+    asked: [solution]
+    visual: none
+    text: {tier: T1, template: lf_solve_system_abc_v1}
+    hints: [steps_prefix]
+    concept_tags: [simultaneous_equations.solve_abc_form]
+    cause_tags: []
+remedial:
+  default_level: 2
