@@ -18,12 +18,12 @@
 
 ---
 
-## 1. 現状サマリ（2026-07-12・最新コミット `d680c3d`）
+## 1. 現状サマリ（2026-07-12・最新コミット `4364abf`）
 
-**M0 金の縦串は実装完了**（要件 §10 M0 DoD = Q1〜Q7 + F-1/2/3/5/9 を充足）。続けて **横展開を7セル分**進めた（#1〜#3 前セッション、#4〜#7 本セッション）。**一次関数クラスタの「純T1で作れる」find_value/calculation/graph読み取りセルはここで出し切り**（残りは新capability必須＝下記 §6）。
+**M0 金の縦串は実装完了**（要件 §10 M0 DoD = Q1〜Q7 + F-1/2/3/5/9 を充足）。続けて **横展開を8セル分**進めた（#1〜#3 前セッション、#4〜#8 本セッション）。#8 で **graph_table「かく」capability を新設**（初の GraphAnswer 生成・§7.5 の計画通り）＝以後の作図セルは薄い recipe＋spec で量産可能に。
 
-- テスト全体 **2893 passed**・`mypy --strict` クリーン・`ruff`（engine/ ソース）クリーン。
-- **capabilities = 14 セル**（`spec check` 済みで generate 可能なセル）:
+- テスト全体 **3097 passed**・`mypy --strict` クリーン・`ruff`（engine/ ソース）クリーン。
+- **capabilities = 15 セル**（`spec check` 済みで generate 可能なセル）:
 
 | unit | form | levels | 内容 | recipe |
 |---|---|---|---|---|
@@ -37,16 +37,17 @@
 | g2_l26 | calculation | 1 | ax+by=c を y=… に変形（最初の calc・#5） | solve_equation_for_y |
 | g2_l19 | calculation | 1 | y=ax+b に x を代入し y の値（最初の asked=value・#6） | evaluate_linear |
 | g2_l22 | calculation | 1 | グラフが通る点を代入で求める（asked=coordinate・#7） | point_on_line |
+| g2_l22 | graph_table | 1 | y=ax+b のグラフをかく（初の「かく」＝GraphAnswer・#8） | draw_linear |
 
-- M0 縦串 = g2_l25 + 戻り先 g2_l24（find_value）+ g2_l25 graph_table + remedial。**横展開分** = g2_l20 / g2_l27 / g2_l23 / g2_l21 / g2_l26 / g2_l19 / g2_l22。
-- **償却の前進（#7）**: solver `evaluate_linear_at_x` を素関数 `_evaluate_linear_at_x_core` に切り出し、g2_l19（値）と g2_l22（座標）の**2セルで共有**。1演算が複数セルを支える最初の実例（recipe:セル比が下がり始めた）。
-- `git log --oneline -6`: d680c3d(横展開#7 l22) / 352dcd7(引継書) / 916fb3c(#6 l19) / f1fd124(#5 l26) / 5c8c8ab(#4 l21) / 99e4d19(引継書)。
+- M0 縦串 = g2_l25 + 戻り先 g2_l24（find_value）+ g2_l25 graph_table + remedial。**横展開分** = l20 / l27 / l23 / l21 / l26 / l19 / l22(calc) / l22(graph_table)。
+- **償却の前進**: (#7) solver `evaluate_linear_at_x` を素関数化し g2_l19（値）/g2_l22（座標）で共有。(#8) **graph「かく」capability 新設**＝GraphAnswer 生成経路が通り、以後 l23/l26/l27 等の作図セルは新 solver 不要で `draw_linear_features`＋spec で作れる（＝当初目的「部品追加で問題が増える」の本丸に到達）。
+- `git log --oneline`: 4364abf(#8 かくcapability l22.graph) / d6b66d9(§7.5計画) / d680c3d(#7 l22.calc) / 352dcd7 / 916fb3c(#6) / f1fd124(#5)。
 
 ### 再開時の最初のコマンド（実状態の確認）
 ```bash
 cd /Users/koki/workspace/mongene-v2
 git branch --show-current            # engine-m0-rework
-git log --oneline -6                 # 最新 d680c3d（横展開#7 l22）
+git log --oneline -6                 # 最新 4364abf（#8 かくcapability）
 git status --porcelain               # 空（クリーン）のはず。preview_*.html / problem_*.svg は生成物なので無視/削除可
 # 縦串 + 横展開 + eval が緑であることを再確認:
 .venv/bin/python -m pytest engine_tests/contract/ engine_tests/golden/ engine_tests/eval/ -o addopts="" -p no:cacheprovider -q
@@ -182,8 +183,10 @@ engine_tests/      unit/ golden/ contract/ eval/
 ## 7. M1 送り（横展開と別軸の本体作業）
 FastAPI ラッパ / T2(磨き)・T3(翻訳) / audit_runner(LLM 監査 V3) / cost_meter / dashboard HTML / プール(Supplier 差し込み・授業内≤3秒) / 採点フィクスチャ(D-2 スキーマ合意) / variant・avoid(supply_exhausted 機構)。
 
-## 7.5 graph_table「かく」capability の実装計画（★次セッション最有力・スコープ済み）
-本セッション末に feasibility を精査した。**answer 経路とゲートは既に GraphAnswer 対応済み**（`contracts.GraphAnswer(features, solution_svg_ref)`／`AnswerPayload` union に kind="graph"／`quality_gates._answers_match` は features の srepr 集合一致で G-Q1 を判定＝§6.2 V1' が実装済／`_answer_values` も graph 対応）。**GraphAnswer を生成する recipe/solver と解答図の描画だけが未実装**。最初のセルは g2_l22.graph_table[1]「y=ax+b のグラフをかく」（例「y=2x−1 のグラフをかけ」）が最小。
+## 7.5 graph_table「かく」capability（★#8 で実装完了・commit 4364abf）
+下記は当初の実装計画。**#8 で計画どおり実装済み**（solver `math.draw_linear_features`／recipe `math.draw_linear`／`visuals/graph.py` の `render_grid_svg(params,*,draw_line)`＋`render_line_solution_svg`／G-Q5t 符号対称化）。★の設計判断は「(a) `_build_given_whitelist` を両符号化」を採用して確定・実装済み。次の作図セルはこの構造を踏襲する（下の「次の作図セル」参照）。
+
+feasibility 精査（当時）: **answer 経路とゲートは既に GraphAnswer 対応済み**（`contracts.GraphAnswer(features, solution_svg_ref)`／`AnswerPayload` union に kind="graph"／`quality_gates._answers_match` は features の srepr 集合一致で G-Q1 を判定＝§6.2 V1' が実装済／`_answer_values` も graph 対応）。**GraphAnswer を生成する recipe/solver と解答図の描画だけが未実装**。最初のセルは g2_l22.graph_table[1]「y=ax+b のグラフをかく」（例「y=2x−1 のグラフをかけ」）が最小。
 
 実装手順（パイプライン改修は不要と判明）:
 1. `visuals/graph.py` を軽く refactor: 描画本体を `render_grid_svg(a,b,pts,*,draw_line: bool)` に切出し、`render_linear_graph(mr,ctx)` は `draw_line = ("line" in [e.kind for e in visual_plan.elements])` で呼ぶ（**既存 read セルは line 要素を宣言済 → draw_line=True で不変＝後方互換**）。作図セルの**問題図は空グリッド**（elements=[grid,axis]・line なし→ draw_line=False）。
@@ -192,7 +195,12 @@ FastAPI ラッパ / T2(磨き)・T3(翻訳) / audit_runner(LLM 監査 V3) / cost
 4. checker `math.draw_linear.double_solve` → solver。`_answers_match` は features 集合のみ比較（solution_svg_ref は無視）なので checker 側 svg は "" でよい。
 5. template「1次関数 {{ given.expression }} のグラフを、座標平面にかけ。」／concept `linear_function.draw_graph`（unit g2_l22）／spec `g2_l22.graph_table.yaml`（asked=[draw_graph]・visual=required・**問題図の grid 範囲は固定推奨**＝答えを示唆しない方眼紙）。frame は draw_graph 済（vocab 済・forbidden 空でよい：問題図が空グリッドなので幾何リークなし）。
 
-**★実装前に確定すべき設計判断（§0・core を触る戦略事項）**: 作図セルは **答え(傾き・切片)＝given の式係数** なので、`_gate_q5t` の given whitelist と feature トークンの**符号整合**が問題になる。実測（本セッション）: given `y = 2x - 1` → `extract_numbers` は `['2','1']`（符号なし）で whitelist=`{2,1}`。一方 切片 feature `-1` は `_to_fraction('-1')=-1`→ norm_key `'-1'` が whitelist に無く、`contains_number(scan_text,'-1')` が本文の "- 1" に一致 → **負の切片で G-Q5t が漏洩誤検出→ Unsupported になる**（§5-#9 の具体化。文言では回避不可）。要決定: (a) `_build_given_whitelist` を式について符号込みで数値抽出するよう core を原則的に改良（推奨・全 draw セルに効く）、または (b) draw セルは feature 数値を whitelist に明示合流させる仕組み。**どちらも core/verify に触れるので設計を先に確定してから実装**。決めたら必ず「負の切片を含む連続100+seed」で拒否0を確認（数値/座標答えの偽陽性隠蔽防止）。
+**★実装前に確定すべき設計判断（§0・core を触る戦略事項）**: 作図セルは **答え(傾き・切片)＝given の式係数** なので、`_gate_q5t` の given whitelist と feature トークンの**符号整合**が問題になる。実測（本セッション）: given `y = 2x - 1` → `extract_numbers` は `['2','1']`（符号なし）で whitelist=`{2,1}`。一方 切片 feature `-1` は `_to_fraction('-1')=-1`→ norm_key `'-1'` が whitelist に無く、`contains_number(scan_text,'-1')` が本文の "- 1" に一致 → **負の切片で G-Q5t が漏洩誤検出→ Unsupported になる**（§5-#9 の具体化。文言では回避不可）。要決定: (a) `_build_given_whitelist` を式について符号込みで数値抽出するよう core を原則的に改良（推奨・全 draw セルに効く）、または (b) draw セルは feature 数値を whitelist に明示合流させる仕組み。**どちらも core/verify に触れるので設計を先に確定してから実装**。決めたら必ず「負の切片を含む連続100+seed」で拒否0を確認（数値/座標答えの偽陽性隠蔽防止）。→ **(a) を採用・実装済み**（両符号を whitelist に追加。負係数 200seed で拒否0 を確認）。
+
+### 次の作図セル（capability 流用でほぼ spec だけ・新 solver 不要が狙い＝償却の実証）
+- **g2_l26 graph_table[1]**「ax+by=c を y=… に変形してかく」: given=方程式、答え=変形後の直線。`draw_linear_features` を流用し steps に「y=…へ変形」（`solve_equation_for_y` 系の手順）を前置する薄い recipe＋spec で作れる＝**次の一手に最適**。
+- g2_l23 graph_table[2]（端点の開閉つき線分＝segment 描画の追加が要る）／g2_l27 graph_table[2]（2直線＋交点読み＝2本描画＋read_intersection の幾何リーク規則の再検討が要る）は、もう一段の描画拡張が必要。
+- graph「かく」以外の残 capability は §6 の分岐（連立へ intersection 横展開／knowledge=fact テーブル）。
 
 ## 8. 既知の設計 smell（M1 で対処候補）
 - `graph_read_two_points` の spec `point_domain.y` は実質デッド（答え点 y は a*x+b で決まる）。可読性は domain を絞って確保済みだが、本筋は「2格子点を直接選び傾きは有理数でよい」構成へ（要 recipe 改修 + golden 再承認）。
