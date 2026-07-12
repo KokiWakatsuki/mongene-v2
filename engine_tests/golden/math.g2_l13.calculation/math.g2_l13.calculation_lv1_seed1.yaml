@@ -1,0 +1,64 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - simultaneous_equations.solve_by_substitution
+  provenance:
+    git_commit: ''
+    recipe: math.solve_system_substitution
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_solve_system_subst_v1
+    tier: T1
+  requested:
+    form: calculation
+    level: 1
+    subject: math
+    unit: g2_l13
+  resolved:
+    form: calculation
+    level: 1
+    subject: math
+    unit: g2_l13
+  seed: 1
+  signature: solve_system_substitution_direct
+problem_ref: 81b26c7c9b8c7083
+problem_text: '次の連立方程式を代入法で解け。
+
+  y = 10 - 2x , -3x + y = -10'
+sub_questions:
+- answer:
+    display: (4, 2)
+    kind: symbolic
+    srepr: Tuple(Integer(4), Integer(2))
+  cause_tags: []
+  concept_tags:
+  - simultaneous_equations.solve_by_substitution
+  explanation: まず、一方の式の y を、もう一方の式に代入して x だけの方程式にする。 -5x = -20次に、x の値を求める。 x = 4最後に、求めた x を y = … の式に代入して y を求める。 y = 2
+  hints:
+  - 一方の式の y を、もう一方の式に代入して x だけの方程式にする。
+  - x の値を求める。
+  label: (1)
+  prompt_text: solution を求めなさい。
+  solution_steps:
+  - args:
+    - y = 10 - 2x
+    - -3x + y = -10
+    narration: 一方の式の y を、もう一方の式に代入して x だけの方程式にする。
+    op: substitute_expr
+    result_display: -5x = -20
+    result_srepr: Equality(Mul(Integer(-1), Integer(5), Symbol('x')), Integer(-20))
+  - args:
+    - -5x = -20
+    narration: x の値を求める。
+    op: solve_for_x
+    result_display: x = 4
+    result_srepr: Integer(4)
+  - args:
+    - '4'
+    narration: 求めた x を y = … の式に代入して y を求める。
+    op: back_substitute
+    result_display: y = 2
+    result_srepr: Integer(2)
+visual_svg: null

@@ -1,0 +1,64 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - simultaneous_equations.solve_by_substitution
+  provenance:
+    git_commit: ''
+    recipe: math.solve_system_substitution
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_solve_system_subst_v1
+    tier: T1
+  requested:
+    form: calculation
+    level: 1
+    subject: math
+    unit: g2_l13
+  resolved:
+    form: calculation
+    level: 1
+    subject: math
+    unit: g2_l13
+  seed: 2
+  signature: solve_system_substitution_direct
+problem_ref: 3e95a0ce92b97c52
+problem_text: '次の連立方程式を代入法で解け。
+
+  y = x + 6 , 3x + y = -18'
+sub_questions:
+- answer:
+    display: (-6, 0)
+    kind: symbolic
+    srepr: Tuple(Integer(-6), Integer(0))
+  cause_tags: []
+  concept_tags:
+  - simultaneous_equations.solve_by_substitution
+  explanation: まず、一方の式の y を、もう一方の式に代入して x だけの方程式にする。 4x = -24次に、x の値を求める。 x = -6最後に、求めた x を y = … の式に代入して y を求める。 y = 0
+  hints:
+  - 一方の式の y を、もう一方の式に代入して x だけの方程式にする。
+  - x の値を求める。
+  label: (1)
+  prompt_text: solution を求めなさい。
+  solution_steps:
+  - args:
+    - y = x + 6
+    - 3x + y = -18
+    narration: 一方の式の y を、もう一方の式に代入して x だけの方程式にする。
+    op: substitute_expr
+    result_display: 4x = -24
+    result_srepr: Equality(Mul(Integer(4), Symbol('x')), Integer(-24))
+  - args:
+    - 4x = -24
+    narration: x の値を求める。
+    op: solve_for_x
+    result_display: x = -6
+    result_srepr: Integer(-6)
+  - args:
+    - '-6'
+    narration: 求めた x を y = … の式に代入して y を求める。
+    op: back_substitute
+    result_display: y = 0
+    result_srepr: Integer(0)
+visual_svg: null

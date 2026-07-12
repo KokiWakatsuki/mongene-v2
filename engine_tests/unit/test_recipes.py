@@ -522,6 +522,60 @@ def test_solve_system_elimination_double_solve_property(seed):
 
 
 # ---------------------------------------------------------------------------
+# math.solve_system_substitution（g2_l13.calculation Lv1/Lv2）— 横展開#12（連立・代入法）
+# ---------------------------------------------------------------------------
+def test_solve_system_substitution_lv1_construct():
+    ctx = _make_ctx("math.g2_l13.calculation", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+
+    assert mr.signature == "solve_system_substitution_direct"
+    assert set(mr.given.keys()) == {"equation_a", "equation_b"}
+    assert mr.visual_plan is None  # calculation は図なし
+    sq = mr.sub_questions[0]
+    assert sq.asked == "solution"
+    assert sq.answer.kind == "symbolic"  # 解 (x,y)
+    assert sq.answer.display.startswith("(")
+    # Lv1「そのまま代入」= 3 手（前処理なし）
+    assert [s.op for s in sq.steps] == ["substitute_expr", "solve_for_x", "back_substitute"]
+    # eq_a は解けた形 y = … で与えられる
+    assert mr.given["equation_a"].startswith("y =")
+
+
+def test_solve_system_substitution_lv2_construct():
+    ctx = _make_ctx("math.g2_l13.calculation", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+
+    assert mr.signature == "solve_system_substitution_transform"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "solution"
+    # Lv2「変形して代入」= 前処理 isolate_variable を足した 4 手（Lv1 と op 列が相異＝level_sep）
+    assert [s.op for s in sq.steps] == [
+        "isolate_variable",
+        "substitute_expr",
+        "solve_for_y",
+        "back_substitute",
+    ]
+    # eq_a は x の係数 1（変形して代入する対象）
+    assert sympy.sympify(mr.params["line_a"][0]) == 1
+
+
+@pytest.mark.parametrize("level", [1, 2])
+@pytest.mark.parametrize("seed", range(200))
+def test_solve_system_substitution_double_solve_property(level, seed):
+    ctx = _make_ctx("math.g2_l13.calculation", level)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+
+    line_a = tuple(sympy.sympify(c) for c in mr.params["line_a"])
+    line_b = tuple(sympy.sympify(c) for c in mr.params["line_b"])
+    solver = REGISTRY.solver("math.intersection_of_two_lines")
+    sol = solver(line_a, line_b, mr.params["method"])
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+
+
+# ---------------------------------------------------------------------------
 # math.rate_of_change（g2_l20.find_value Lv1）— 横展開の第1セル
 # ---------------------------------------------------------------------------
 def test_rate_of_change_lv1_construct():
@@ -696,4 +750,7 @@ def test_recipes_declare_provides_concepts():
     })
     assert REGISTRY.recipe_concepts("math.solve_system_elimination") == frozenset({
         "simultaneous_equations.solve_by_elimination",
+    })
+    assert REGISTRY.recipe_concepts("math.solve_system_substitution") == frozenset({
+        "simultaneous_equations.solve_by_substitution",
     })

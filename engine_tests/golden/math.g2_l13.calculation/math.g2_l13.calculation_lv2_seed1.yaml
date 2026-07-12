@@ -1,0 +1,71 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - simultaneous_equations.solve_by_substitution
+  provenance:
+    git_commit: ''
+    recipe: math.solve_system_substitution
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_solve_system_subst_v1
+    tier: T1
+  requested:
+    form: calculation
+    level: 2
+    subject: math
+    unit: g2_l13
+  resolved:
+    form: calculation
+    level: 2
+    subject: math
+    unit: g2_l13
+  seed: 1
+  signature: solve_system_substitution_transform
+problem_ref: e92404051d33514d
+problem_text: '次の連立方程式を代入法で解け。
+
+  x + 2y = 9 , 3x + 2y = 19'
+sub_questions:
+- answer:
+    display: (5, 2)
+    kind: symbolic
+    srepr: Tuple(Integer(5), Integer(2))
+  cause_tags: []
+  concept_tags:
+  - simultaneous_equations.solve_by_substitution
+  explanation: まず、はじめの式を x について解く。 x = 9 - 2y次に、これをもう一方の式に代入して y だけの方程式にする。 -4y = -8最後に、y の値を求める。 y = 2さらに、求めた y を x = … の式に代入して x を求める。 x = 5
+  hints:
+  - はじめの式を x について解く。
+  - これをもう一方の式に代入して y だけの方程式にする。
+  - y の値を求める。
+  label: (1)
+  prompt_text: solution を求めなさい。
+  solution_steps:
+  - args:
+    - x + 2y = 9
+    narration: はじめの式を x について解く。
+    op: isolate_variable
+    result_display: x = 9 - 2y
+    result_srepr: Equality(Symbol('x'), Add(Integer(9), Mul(Integer(-1), Integer(2), Symbol('y'))))
+  - args:
+    - x = 9 - 2y
+    - 3x + 2y = 19
+    narration: これをもう一方の式に代入して y だけの方程式にする。
+    op: substitute_expr
+    result_display: -4y = -8
+    result_srepr: Equality(Mul(Integer(-1), Integer(4), Symbol('y')), Integer(-8))
+  - args:
+    - -4y = -8
+    narration: y の値を求める。
+    op: solve_for_y
+    result_display: y = 2
+    result_srepr: Integer(2)
+  - args:
+    - '2'
+    narration: 求めた y を x = … の式に代入して x を求める。
+    op: back_substitute
+    result_display: x = 5
+    result_srepr: Integer(5)
+visual_svg: null

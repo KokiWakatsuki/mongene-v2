@@ -59,6 +59,20 @@ def _fmt_number(v: Any) -> str:
     return str(sympy.sstr(sympy.nsimplify(v)))
 
 
+def _fmt_expr(expr: Any) -> str:
+    """1次式を教材表記に整形（sympy sstr の乗算記号 * を除去）。
+
+    例: 2*x - 1 -> "2x - 1" / 7 - 2*y -> "7 - 2y" / 1*x -> "x"（sstr が係数1を省く）。
+    連立クラスタの方程式・途中式の表示に使う（符号処理を sympy に委ねて手作業のバグを避ける）。
+    """
+    return str(sympy.sstr(sympy.nsimplify(expr))).replace("*", "")
+
+
+def _fmt_eq(lhs: Any, rhs: Any) -> str:
+    """等式 lhs = rhs を教材表記で返す（両辺を `_fmt_expr` で整形）。"""
+    return f"{_fmt_expr(lhs)} = {_fmt_expr(rhs)}"
+
+
 def _effective_concept_tags(ctx: CellContext) -> list[str]:
     """spec_level.concept_tags が非空ならそれを、無ければ spec_family.concepts_default を使う。"""
     return list(ctx.spec_level.concept_tags or ctx.spec_family.concepts_default)
@@ -985,6 +999,158 @@ def solve_system_elimination(ctx: CellContext, rng: Rng) -> MR:
 
 
 # ---------------------------------------------------------------------------
+# math.solve_system_substitution（g2_l13.calculation Lv1/Lv2 用）— 横展開#12・連立クラスタ
+# 代入法。答え(x,y)は既存 intersection_of_two_lines を再利用（新solverゼロ）。
+# レベル間は steps の op 列で構造を変える（level_sep=fp 相異の必須）:
+#   Lv1 "prepared" = そのまま代入 [substitute_expr, solve_for_x, back_substitute]（3手）
+#   Lv2 "isolate"  = 1文字について解いてから代入 [isolate_variable, substitute_expr,
+#                    solve_for_y, back_substitute]（4手・前処理1手を足す）
+# ---------------------------------------------------------------------------
+_SOLVE_SYSTEM_SUBST_CONCEPTS = [
+    "simultaneous_equations.solve_by_substitution",
+]
+
+
+@register_recipe("math.solve_system_substitution", provides_concepts=_SOLVE_SYSTEM_SUBST_CONCEPTS)
+def solve_system_substitution(ctx: CellContext, rng: Rng) -> MR:
+    """連立方程式を代入法で解く（answer-first・calculation）。
+
+    解 (x0,y0) を先に選び、2式を逆算する。非退化（2直線が非平行）は構成で保証する:
+      - Lv1: 両式の y 係数を 1 にそろえ、x 係数を相異な整数対 (p,q) にとる（det=p-q≠0）。
+        一方を y=… の解けた形で与える＝「そのまま代入」。
+      - Lv2: eq_a を x 係数 1（x+b1·y=c1・|b1|≥2）に、eq_b を全係数 |·|≥2 にとる。
+        |a2·b1|≥4 > |b2|≤3 なので det=b2−a2·b1≠0 が恒真。eq_a を x について解いてから代入。
+    答え (x0,y0) は既存 solver `math.intersection_of_two_lines`（g2_l27 と共有）で再計算し一致を確認。
+    steps は代入法の代数手順（交点 solver の幾何 narration とは別立て）。図なし（calculation）。
+    """
+    p = ctx.spec_level.params
+    mode: str = p["mode"]
+    x_sym, y_sym = sympy.symbols("x y")
+    x0 = sympy.nsimplify(draw(p["x_domain"], rng))
+    y0 = sympy.nsimplify(draw(p["y_domain"], rng))
+
+    if mode == "prepared":
+        # 両式 y 係数 1・x 係数対 (p_coef,q_coef) は相異（=非平行）。
+        p_coef, q_coef = (sympy.nsimplify(v) for v in draw_many(p["x_coeff_pair_domain"], rng, k=2))
+        m_s = -p_coef  # eq_a の解けた形 y = m x + k の傾き
+        k_s = y0 - m_s * x0
+        c2_s = q_coef * x0 + y0
+        coeffs_a = [p_coef, sympy.Integer(1), k_s]  # p_coef x + y = k  (= y = m x + k)
+        coeffs_b = [q_coef, sympy.Integer(1), c2_s]  # q_coef x + y = c2
+        disp_a = _fmt_eq(y_sym, m_s * x_sym + k_s)
+        disp_b = _fmt_eq(q_coef * x_sym + y_sym, c2_s)
+        # 代入後の x だけの方程式: (q_coef + m) x = c2 - k
+        coef_x = q_coef + m_s
+        sub_eq_disp = _fmt_eq(coef_x * x_sym, c2_s - k_s)
+        steps = [
+            Step(
+                op="substitute_expr",
+                args=[disp_a, disp_b],
+                result_srepr=sympy.srepr(sympy.Eq(coef_x * x_sym, c2_s - k_s)),
+                result_display=sub_eq_disp,
+                narration="一方の式の y を、もう一方の式に代入して x だけの方程式にする。",
+            ),
+            Step(
+                op="solve_for_x",
+                args=[sub_eq_disp],
+                result_srepr=sympy.srepr(x0),
+                result_display=f"x = {_fmt_number(x0)}",
+                narration="x の値を求める。",
+            ),
+            Step(
+                op="back_substitute",
+                args=[_fmt_number(x0)],
+                result_srepr=sympy.srepr(y0),
+                result_display=f"y = {_fmt_number(y0)}",
+                narration="求めた x を y = … の式に代入して y を求める。",
+            ),
+        ]
+    elif mode == "isolate":
+        # eq_a: x + b1 y = c1（x 係数 1・|b1|≥2）、eq_b: a2 x + b2 y = c2（全係数 |·|≥2）。
+        b1_s = sympy.nsimplify(draw(p["eqa_y_coeff_domain"], rng))
+        a2_s = sympy.nsimplify(draw(p["eqb_x_coeff_domain"], rng))
+        b2_s = sympy.nsimplify(draw(p["eqb_y_coeff_domain"], rng))
+        c1_s = x0 + b1_s * y0
+        c2_s = a2_s * x0 + b2_s * y0
+        coeffs_a = [sympy.Integer(1), b1_s, c1_s]  # x + b1 y = c1
+        coeffs_b = [a2_s, b2_s, c2_s]  # a2 x + b2 y = c2
+        disp_a = _fmt_eq(x_sym + b1_s * y_sym, c1_s)
+        disp_b = _fmt_eq(a2_s * x_sym + b2_s * y_sym, c2_s)
+        iso_disp = _fmt_eq(x_sym, c1_s - b1_s * y_sym)  # x = c1 - b1 y
+        # 代入後の y だけの方程式: (b2 - a2 b1) y = c2 - a2 c1
+        coef_y = b2_s - a2_s * b1_s
+        sub_eq_disp = _fmt_eq(coef_y * y_sym, c2_s - a2_s * c1_s)
+        steps = [
+            Step(
+                op="isolate_variable",
+                args=[disp_a],
+                result_srepr=sympy.srepr(sympy.Eq(x_sym, c1_s - b1_s * y_sym)),
+                result_display=iso_disp,
+                # narration に数字を書かない（例「係数が 1」の "1" が答えの値と衝突して
+                # G-Q5t 偽陽性になる・§5-#9）。eq_a は常に x 係数 1 の「はじめの式」。
+                narration="はじめの式を x について解く。",
+            ),
+            Step(
+                op="substitute_expr",
+                args=[iso_disp, disp_b],
+                result_srepr=sympy.srepr(sympy.Eq(coef_y * y_sym, c2_s - a2_s * c1_s)),
+                result_display=sub_eq_disp,
+                narration="これをもう一方の式に代入して y だけの方程式にする。",
+            ),
+            Step(
+                op="solve_for_y",
+                args=[sub_eq_disp],
+                result_srepr=sympy.srepr(y0),
+                result_display=f"y = {_fmt_number(y0)}",
+                narration="y の値を求める。",
+            ),
+            Step(
+                op="back_substitute",
+                args=[_fmt_number(y0)],
+                result_srepr=sympy.srepr(x0),
+                result_display=f"x = {_fmt_number(x0)}",
+                narration="求めた y を x = … の式に代入して x を求める。",
+            ),
+        ]
+    else:
+        raise ValueError(f"未知の mode: {mode!r}")
+
+    solver = REGISTRY.solver("math.intersection_of_two_lines")
+    sol = cast(Solution, solver(tuple(coeffs_a), tuple(coeffs_b), "substitute"))
+    assert isinstance(sol.answer, SymbolicAnswer)
+    expected_pt = sympy.Tuple(x0, y0)
+    assert sol.answer.srepr == sympy.srepr(expected_pt), (
+        f"double-solve 不一致: 構成解 {expected_pt} != solver 再計算 {sol.answer.srepr}"
+    )
+
+    sub_question = SubQuestionMR(
+        label="(1)",
+        asked="solution",
+        answer=sol.answer,
+        steps=steps,
+        concept_tags=_effective_concept_tags(ctx),
+        cause_tags=_effective_cause_tags(ctx),
+    )
+
+    return MR(
+        signature=ctx.spec_level.signature,
+        family=ctx.family,
+        level=ctx.level,
+        purpose=ctx.purpose,
+        seed=0,
+        params={
+            "line_a": [str(c) for c in coeffs_a],
+            "line_b": [str(c) for c in coeffs_b],
+            "method": "substitute",
+        },
+        given={"equation_a": disp_a, "equation_b": disp_b},
+        sub_questions=[sub_question],
+        visual_plan=None,
+        provenance=Provenance(recipe="math.solve_system_substitution"),
+    )
+
+
+# ---------------------------------------------------------------------------
 # math.rate_of_change（g2_l20.find_value Lv1 用）— 横展開の第1セル
 # ---------------------------------------------------------------------------
 _RATE_OF_CHANGE_CONCEPTS = [
@@ -1257,6 +1423,7 @@ __all__ = [
     "draw_linear_from_equation",
     "read_intersection_from_graph",
     "solve_system_elimination",
+    "solve_system_substitution",
     "rate_of_change",
     "intersection",
     "y_range_from_domain",

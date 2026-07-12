@@ -53,3 +53,6 @@ concepts:
   - id: simultaneous_equations.solve_by_elimination
     label: "連立方程式を加減法で解く（係数の絶対値が等しい）"
     unit: g2_l11
+  - id: simultaneous_equations.solve_by_substitution
+    label: "連立方程式を代入法で解く（そのまま代入／変形して代入）"
+    unit: g2_l13

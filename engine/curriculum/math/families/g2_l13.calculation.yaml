@@ -1,0 +1,52 @@
+family: math.g2_l13.calculation
+form: calculation
+source_desc: |
+  連立方程式を代入法で解く（units.generated.yaml の desc/example を正として転記）。
+  Lv1: 一方が y=… の形で、そのまま代入して解く。
+       example: 次の連立方程式を代入法で解け。 { y = 2x − 1, 3x + y = 9 }
+  Lv2: 1文字について解いてから代入する変形を要する解法。
+       example: 次の連立方程式を代入法で解け。 { x + 2y = 7, 2x − 3y = 0 }
+  答えは解 (x, y)（SymbolicAnswer）。検証は g2_l27/g2_l11 と同じ intersection_of_two_lines
+  （交点＝連立解）を再利用（新 solver ゼロ＝連立クラスタへの償却横展開）。
+  レベル間は steps の op 列で構造を変える（Lv1=3手のそのまま代入／Lv2=前処理1手を足した4手）。
+  図は無し（calculation）。
+concepts_default: [simultaneous_equations.solve_by_substitution]
+levels:
+  "1":
+    signature: solve_system_substitution_direct
+    recipe: math.solve_system_substitution
+    params:
+      # answer-first: 解 (x0,y0) を先に選ぶ。両式の y 係数を 1 にそろえ、x 係数対 (p,q) を
+      # 相異にとる（det=p-q≠0＝非平行）。一方を y=… の解けた形で与え「そのまま代入」。
+      mode: prepared
+      x_domain: {int_range: [-6, 6]}
+      y_domain: {int_range: [-6, 6]}
+      x_coeff_pair_domain: {int_range: [-3, 3], exclude: [0], distinct: ["value"]}
+    given: [equation_a, equation_b]
+    asked: [solution]
+    visual: none
+    text: {tier: T1, template: lf_solve_system_subst_v1}
+    hints: [steps_prefix]
+    concept_tags: [simultaneous_equations.solve_by_substitution]
+    cause_tags: []
+  "2":
+    signature: solve_system_substitution_transform
+    recipe: math.solve_system_substitution
+    params:
+      # eq_a: x + b1·y = c1（x 係数 1・|b1|≥2）を x について解いてから代入する変形が要る。
+      # eq_b: a2·x + b2·y = c2（全係数 |·|≥2）。|a2·b1|≥4 > |b2|≤3 で det=b2−a2·b1≠0 が恒真。
+      mode: isolate
+      x_domain: {int_range: [-6, 6]}
+      y_domain: {int_range: [-6, 6]}
+      eqa_y_coeff_domain: {int_set: [-3, -2, 2, 3]}
+      eqb_x_coeff_domain: {int_set: [-3, -2, 2, 3]}
+      eqb_y_coeff_domain: {int_set: [-3, -2, 2, 3]}
+    given: [equation_a, equation_b]
+    asked: [solution]
+    visual: none
+    text: {tier: T1, template: lf_solve_system_subst_v1}
+    hints: [steps_prefix]
+    concept_tags: [simultaneous_equations.solve_by_substitution]
+    cause_tags: []
+remedial:
+  default_level: 1

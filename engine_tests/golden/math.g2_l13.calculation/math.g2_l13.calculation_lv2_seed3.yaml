@@ -1,0 +1,71 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - simultaneous_equations.solve_by_substitution
+  provenance:
+    git_commit: ''
+    recipe: math.solve_system_substitution
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_solve_system_subst_v1
+    tier: T1
+  requested:
+    form: calculation
+    level: 2
+    subject: math
+    unit: g2_l13
+  resolved:
+    form: calculation
+    level: 2
+    subject: math
+    unit: g2_l13
+  seed: 3
+  signature: solve_system_substitution_transform
+problem_ref: 09311b904ca30e68
+problem_text: '次の連立方程式を代入法で解け。
+
+  x + 3y = 0 , -3x + 3y = 12'
+sub_questions:
+- answer:
+    display: (-3, 1)
+    kind: symbolic
+    srepr: Tuple(Integer(-3), Integer(1))
+  cause_tags: []
+  concept_tags:
+  - simultaneous_equations.solve_by_substitution
+  explanation: まず、はじめの式を x について解く。 x = -3y次に、これをもう一方の式に代入して y だけの方程式にする。 12y = 12最後に、y の値を求める。 y = 1さらに、求めた y を x = … の式に代入して x を求める。 x = -3
+  hints:
+  - はじめの式を x について解く。
+  - これをもう一方の式に代入して y だけの方程式にする。
+  - y の値を求める。
+  label: (1)
+  prompt_text: solution を求めなさい。
+  solution_steps:
+  - args:
+    - x + 3y = 0
+    narration: はじめの式を x について解く。
+    op: isolate_variable
+    result_display: x = -3y
+    result_srepr: Equality(Symbol('x'), Mul(Integer(-1), Integer(3), Symbol('y')))
+  - args:
+    - x = -3y
+    - -3x + 3y = 12
+    narration: これをもう一方の式に代入して y だけの方程式にする。
+    op: substitute_expr
+    result_display: 12y = 12
+    result_srepr: Equality(Mul(Integer(12), Symbol('y')), Integer(12))
+  - args:
+    - 12y = 12
+    narration: y の値を求める。
+    op: solve_for_y
+    result_display: y = 1
+    result_srepr: Integer(1)
+  - args:
+    - '1'
+    narration: 求めた y を x = … の式に代入して x を求める。
+    op: back_substitute
+    result_display: x = -3
+    result_srepr: Integer(-3)
+visual_svg: null
