@@ -38,3 +38,6 @@ concepts:
   - id: linear_function.evaluate_at_x
     label: "1次関数 y=ax+b に x の値を代入して y を求める"
     unit: g2_l19
+  - id: linear_function.point_on_line
+    label: "y=ax+b のグラフが通る点(x0, y0)を代入で求める"
+    unit: g2_l22

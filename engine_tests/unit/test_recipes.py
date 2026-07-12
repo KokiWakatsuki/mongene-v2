@@ -339,6 +339,43 @@ def test_evaluate_linear_double_solve_property(seed):
 
 
 # ---------------------------------------------------------------------------
+# math.point_on_line（g2_l22.calculation Lv1）— 横展開#7（通過点・evaluate 再利用）
+# ---------------------------------------------------------------------------
+def test_point_on_line_lv1_construct():
+    ctx = _make_ctx("math.g2_l22.calculation", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+
+    assert mr.signature == "point_on_line_by_substitution"
+    assert set(mr.given.keys()) == {"expression", "input_value"}
+    assert mr.visual_plan is None  # calculation は図なし
+    sq = mr.sub_questions[0]
+    assert sq.asked == "coordinate"
+    assert sq.cause_tags == []
+    # evaluate_linear_at_x の substitute_x/evaluate を再利用し、末尾に座標組み立てを足す
+    assert [s.op for s in sq.steps] == ["substitute_x", "evaluate", "form_coordinate"]
+    assert sq.answer.display.startswith("(") and sq.answer.display.endswith(")")
+
+
+@pytest.mark.parametrize("seed", range(200))
+def test_point_on_line_double_solve_property(seed):
+    ctx = _make_ctx("math.g2_l22.calculation", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+
+    solver = REGISTRY.solver("math.point_on_line_at_x")
+    sol = solver(
+        sympy.sympify(mr.params["a"]),
+        sympy.sympify(mr.params["b"]),
+        sympy.sympify(mr.params["x0"]),
+    )
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+    # 通過点 (x0, a*x0 + b) と一致
+    a = sympy.sympify(mr.params["a"]); b = sympy.sympify(mr.params["b"]); x0 = sympy.sympify(mr.params["x0"])
+    assert sol.answer.srepr == sympy.srepr(sympy.Tuple(sympy.nsimplify(x0), sympy.nsimplify(a * x0 + b)))
+
+
+# ---------------------------------------------------------------------------
 # math.rate_of_change（g2_l20.find_value Lv1）— 横展開の第1セル
 # ---------------------------------------------------------------------------
 def test_rate_of_change_lv1_construct():
@@ -498,4 +535,7 @@ def test_recipes_declare_provides_concepts():
     })
     assert REGISTRY.recipe_concepts("math.evaluate_linear") == frozenset({
         "linear_function.evaluate_at_x",
+    })
+    assert REGISTRY.recipe_concepts("math.point_on_line") == frozenset({
+        "linear_function.point_on_line",
     })

@@ -1,0 +1,64 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - linear_function.point_on_line
+  provenance:
+    git_commit: ''
+    recipe: math.point_on_line
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_point_on_line_v1
+    tier: T1
+  requested:
+    form: calculation
+    level: 1
+    subject: math
+    unit: g2_l22
+  resolved:
+    form: calculation
+    level: 1
+    subject: math
+    unit: g2_l22
+  seed: 1
+  signature: point_on_line_by_substitution
+problem_ref: 24c40a951f96c24e
+problem_text: 1次関数 y = -2x - 6 のグラフが通る点のうち、x 座標が -6 である点の座標を求めよ。
+sub_questions:
+- answer:
+    display: (-6, 6)
+    kind: symbolic
+    srepr: Tuple(Integer(-6), Integer(6))
+  cause_tags: []
+  concept_tags:
+  - linear_function.point_on_line
+  explanation: まず、x の値を式に代入する。 y = (-2) × (-6) - 6次に、計算して y の値を求める。 y = 6最後に、与えられた x の値と求めた y の値を組にして、通過点の座標とする。 (-6, 6)
+  hints:
+  - x の値を式に代入する。
+  - 計算して y の値を求める。
+  label: (1)
+  prompt_text: coordinate を求めなさい。
+  solution_steps:
+  - args:
+    - '-2'
+    - '-6'
+    - '-6'
+    narration: x の値を式に代入する。
+    op: substitute_x
+    result_display: y = (-2) × (-6) - 6
+    result_srepr: Integer(6)
+  - args:
+    - y = (-2) × (-6) - 6
+    narration: 計算して y の値を求める。
+    op: evaluate
+    result_display: y = 6
+    result_srepr: Integer(6)
+  - args:
+    - '-6'
+    - '6'
+    narration: 与えられた x の値と求めた y の値を組にして、通過点の座標とする。
+    op: form_coordinate
+    result_display: (-6, 6)
+    result_srepr: Tuple(Integer(-6), Integer(6))
+visual_svg: null

@@ -449,11 +449,11 @@ def _paren_neg(v: sympy.Expr) -> str:
     return f"({s})" if v < 0 else s
 
 
-@register_solver("math.evaluate_linear_at_x")
-def evaluate_linear_at_x(a: object, b: object, x0: object) -> Solution:
-    """1次関数 y = a x + b の x = x0 における y の値を求める（g2_l19.calculation Lv1）。
+def _evaluate_linear_at_x_core(a: object, b: object, x0: object) -> Solution:
+    """`evaluate_linear_at_x` の本体（型付き素関数）。
 
-    代入して計算するだけ。答えは1つの数値 y。asked=value。
+    solver 間で再利用する（`point_on_line_at_x` が呼ぶ）。`@register_solver` の戻り型は
+    `Callable[..., object]` で型が消えるため、solver 同士は登録名でなくこの素関数を呼ぶ。
     """
     a_s, b_s, x_s = sympy.nsimplify(a), sympy.nsimplify(b), sympy.nsimplify(x0)
     y = a_s * x_s + b_s
@@ -483,6 +483,46 @@ def evaluate_linear_at_x(a: object, b: object, x0: object) -> Solution:
         ),
     ]
     answer = SymbolicAnswer(srepr=sympy.srepr(y), display=_format_number(y))
+    return Solution(answer=answer, steps=steps)
+
+
+@register_solver("math.evaluate_linear_at_x")
+def evaluate_linear_at_x(a: object, b: object, x0: object) -> Solution:
+    """1次関数 y = a x + b の x = x0 における y の値を求める（g2_l19.calculation Lv1）。
+
+    代入して計算するだけ。答えは1つの数値 y。asked=value。
+    """
+    return _evaluate_linear_at_x_core(a, b, x0)
+
+
+@register_solver("math.point_on_line_at_x")
+def point_on_line_at_x(a: object, b: object, x0: object) -> Solution:
+    """1次関数 y=ax+b のグラフ上で x=x0 における通過点 (x0, y0) を求める（g2_l22.calculation Lv1）。
+
+    値の計算は `evaluate_linear_at_x`（同モジュール・g2_l19 と共有）を再利用し、その
+    substitute/evaluate ステップに座標を組み立てる1手を足す。答えは座標 (x0, y0)。
+    asked=coordinate で、g2_l19（asked=value）とは答えの形も steps も異なる別構造。
+    """
+    a_s, b_s, x_s = sympy.nsimplify(a), sympy.nsimplify(b), sympy.nsimplify(x0)
+    inner = _evaluate_linear_at_x_core(a_s, b_s, x_s)  # 代入計算を再利用（g2_l19 と同一ロジック）
+    y0 = a_s * x_s + b_s
+    assert isinstance(inner.answer, SymbolicAnswer)
+    assert inner.answer.srepr == sympy.srepr(y0)  # 再利用元の値と一致を確認
+
+    point = sympy.Tuple(x_s, y0)
+    steps = list(inner.steps) + [
+        Step(
+            op="form_coordinate",
+            args=[_format_number(x_s), _format_number(y0)],
+            result_srepr=sympy.srepr(point),
+            result_display=f"({_format_number(x_s)}, {_format_number(y0)})",
+            narration="与えられた x の値と求めた y の値を組にして、通過点の座標とする。",
+        ),
+    ]
+    answer = SymbolicAnswer(
+        srepr=sympy.srepr(point),
+        display=f"({_format_number(x_s)}, {_format_number(y0)})",
+    )
     return Solution(answer=answer, steps=steps)
 
 
@@ -547,4 +587,5 @@ __all__ = [
     "y_range_over_domain",
     "solve_equation_for_y",
     "evaluate_linear_at_x",
+    "point_on_line_at_x",
 ]

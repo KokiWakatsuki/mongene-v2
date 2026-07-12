@@ -92,7 +92,10 @@ CALCULATION_FRAME = Frame(
         "expression", "equation",
         "input_value",  # 横展開#6: 代入する x の値（g2_l19 y=ax+b に x を代入）
     }),
-    asked_vocab=frozenset({"value", "simplified_expr", "solution"}),
+    asked_vocab=frozenset({
+        "value", "simplified_expr", "solution",
+        "coordinate",  # 横展開#7: 代入して通過点の座標を求める（g2_l22）
+    }),
     visual="none",
 )
 

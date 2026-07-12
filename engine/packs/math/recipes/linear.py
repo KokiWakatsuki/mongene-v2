@@ -559,6 +559,64 @@ def evaluate_linear(ctx: CellContext, rng: Rng) -> MR:
 
 
 # ---------------------------------------------------------------------------
+# math.point_on_line（g2_l22.calculation Lv1 用）— 横展開#7
+# グラフが通る点を代入で求める。solver は evaluate_linear_at_x を再利用（償却前進）。
+# ---------------------------------------------------------------------------
+_POINT_ON_LINE_CONCEPTS = [
+    "linear_function.point_on_line",
+]
+
+
+@register_recipe("math.point_on_line", provides_concepts=_POINT_ON_LINE_CONCEPTS)
+def point_on_line(ctx: CellContext, rng: Rng) -> MR:
+    """y=ax+b のグラフが通る点(x0, y0)を代入で求める（answer-first・calculation Lv1）。
+
+    傾き a(≠0)・切片 b・x 座標 x0(≠0) を選び、独立ソルバ `math.point_on_line_at_x`
+    （内部で g2_l19 と同じ `evaluate_linear_at_x` を再利用）で通過点 (x0, a*x0+b) を得る。
+    答えは座標。図は無し（calculation）。
+    """
+    p = ctx.spec_level.params
+    a = draw(p["slope_domain"], rng)
+    b = draw(p.get("intercept_domain", {"int_range": [-9, 9]}), rng)
+    x0 = draw(p["x_domain"], rng)
+
+    a_s, b_s, x_s = sympy.nsimplify(a), sympy.nsimplify(b), sympy.nsimplify(x0)
+    point_expected = sympy.Tuple(x_s, a_s * x_s + b_s)
+
+    solver = REGISTRY.solver("math.point_on_line_at_x")
+    sol = cast(Solution, solver(a_s, b_s, x_s))
+    assert isinstance(sol.answer, SymbolicAnswer)
+    assert sol.answer.srepr == sympy.srepr(point_expected), (
+        f"double-solve 不一致: recipe が構成した通過点 {point_expected} != solver 再計算 {sol.answer.srepr}"
+    )
+
+    sub_question = SubQuestionMR(
+        label="(1)",
+        asked="coordinate",
+        answer=sol.answer,
+        steps=sol.steps,
+        concept_tags=_effective_concept_tags(ctx),
+        cause_tags=_effective_cause_tags(ctx),
+    )
+
+    return MR(
+        signature=ctx.spec_level.signature,
+        family=ctx.family,
+        level=ctx.level,
+        purpose=ctx.purpose,
+        seed=0,
+        params={"a": str(a_s), "b": str(b_s), "x0": str(x_s)},
+        given={
+            "expression": _format_parallel_line_display(a_s, b_s),
+            "input_value": _fmt_number(x_s),
+        },
+        sub_questions=[sub_question],
+        visual_plan=None,
+        provenance=Provenance(recipe="math.point_on_line"),
+    )
+
+
+# ---------------------------------------------------------------------------
 # math.rate_of_change（g2_l20.find_value Lv1 用）— 横展開の第1セル
 # ---------------------------------------------------------------------------
 _RATE_OF_CHANGE_CONCEPTS = [
@@ -826,6 +884,7 @@ __all__ = [
     "read_slope_intercept",
     "solve_equation_for_y",
     "evaluate_linear",
+    "point_on_line",
     "rate_of_change",
     "intersection",
     "y_range_from_domain",

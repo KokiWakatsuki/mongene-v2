@@ -70,7 +70,7 @@ def test_all_seven_frames_registered(form: str) -> None:
 def test_calculation_vocab_and_visual():
     f = REGISTRY.frame("calculation")
     assert f.given_vocab == frozenset({"expression", "equation", "input_value"})
-    assert f.asked_vocab == frozenset({"value", "simplified_expr", "solution"})
+    assert f.asked_vocab == frozenset({"value", "simplified_expr", "solution", "coordinate"})
     assert f.visual == "none"
 
 

@@ -89,6 +89,15 @@ def double_solve_evaluate_linear(mr: MR) -> Solution:
     ))
 
 
+@register_checker("math.point_on_line.double_solve")
+def double_solve_point_on_line(mr: MR) -> Solution:
+    p = mr.params
+    solver = REGISTRY.solver("math.point_on_line_at_x")
+    return cast(Solution, solver(
+        sympy.sympify(p["a"]), sympy.sympify(p["b"]), sympy.sympify(p["x0"]),
+    ))
+
+
 @register_checker("math.rate_of_change.double_solve")
 def double_solve_rate_of_change(mr: MR) -> Solution:
     p = mr.params
@@ -134,6 +143,7 @@ __all__ = [
     "double_solve_read_slope_intercept",
     "double_solve_solve_for_y",
     "double_solve_evaluate_linear",
+    "double_solve_point_on_line",
     "double_solve_rate_of_change",
     "double_solve_intersection",
     "double_solve_y_range",

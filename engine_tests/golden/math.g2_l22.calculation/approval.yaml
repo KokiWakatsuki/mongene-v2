@@ -1,0 +1,8 @@
+approved_at: '2026-07-12T09:08:15.587495'
+approver: koki
+content_sha256: d8570f2d8d830f227525de46d910adefa11edb12d68235b2dde39bfd0fdd2ed8
+family: math.g2_l22.calculation
+files:
+- engine_tests/golden/math.g2_l22.calculation/math.g2_l22.calculation_lv1_seed1.yaml
+- engine_tests/golden/math.g2_l22.calculation/math.g2_l22.calculation_lv1_seed2.yaml
+- engine_tests/golden/math.g2_l22.calculation/math.g2_l22.calculation_lv1_seed3.yaml
