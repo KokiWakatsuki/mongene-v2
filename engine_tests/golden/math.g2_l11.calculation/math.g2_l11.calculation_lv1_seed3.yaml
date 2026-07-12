@@ -1,0 +1,63 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - simultaneous_equations.solve_by_elimination
+  provenance:
+    git_commit: ''
+    recipe: math.solve_system_elimination
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_solve_system_elim_v1
+    tier: T1
+  requested:
+    form: calculation
+    level: 1
+    subject: math
+    unit: g2_l11
+  resolved:
+    form: calculation
+    level: 1
+    subject: math
+    unit: g2_l11
+  seed: 3
+  signature: solve_system_elimination_equal_coeff
+problem_ref: 47c655d12bda7f80
+problem_text: '次の連立方程式を加減法で解け。
+
+  -2x + y = 9 , 3x + y = -16'
+sub_questions:
+- answer:
+    display: (-5, -1)
+    kind: symbolic
+    srepr: Tuple(Integer(-5), Integer(-1))
+  cause_tags: []
+  concept_tags:
+  - simultaneous_equations.solve_by_elimination
+  explanation: まず、y の係数が等しいので、辺々を引いて y を消去する。 y の係数はどちらも 1次に、残った式から x の値を求める。 x = -5最後に、求めた x を一方の式に代入して y を求める。 y = -1
+  hints:
+  - y の係数が等しいので、辺々を引いて y を消去する。
+  - 残った式から x の値を求める。
+  label: (1)
+  prompt_text: solution を求めなさい。
+  solution_steps:
+  - args:
+    - -2x + y = 9
+    - 3x + y = -16
+    narration: y の係数が等しいので、辺々を引いて y を消去する。
+    op: identify_equal_coeff
+    result_display: y の係数はどちらも 1
+    result_srepr: Integer(1)
+  - args: []
+    narration: 残った式から x の値を求める。
+    op: eliminate_and_solve_x
+    result_display: x = -5
+    result_srepr: Integer(-5)
+  - args:
+    - '-5'
+    narration: 求めた x を一方の式に代入して y を求める。
+    op: back_substitute
+    result_display: y = -1
+    result_srepr: Integer(-1)
+visual_svg: null

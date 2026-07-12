@@ -1,0 +1,32 @@
+family: math.g2_l11.calculation
+form: calculation
+source_desc: |
+  連立方程式を加減法で解く（係数の絶対値が等しく、そのまま加減で1文字消去できる）
+  （units.generated.yaml の desc/example を正として転記）。
+  desc: そのまま加減で1文字消去。
+  example: 連立方程式 {x+y=7, x-y=1} を加減法で解け。
+  答えは解 (x, y)（SymbolicAnswer）。検証は g2_l27 と同じ intersection_of_two_lines
+  （交点＝連立解）を再利用（新 solver ゼロ＝連立クラスタへの償却横展開）。y の係数を両式で
+  等しくとり、辺々を引くだけで消去できる基礎レベル。図は無し（calculation）。
+concepts_default: [simultaneous_equations.solve_by_elimination]
+levels:
+  "1":
+    signature: solve_system_elimination_equal_coeff
+    recipe: math.solve_system_elimination
+    params:
+      # answer-first: 解 (x0,y0) を先に選び、y の係数を両式共通の b(>0) にとる（x係数 a1≠a2）。
+      # C1,C2 を逆算すると辺々引くだけで y が消える＝「係数の絶対値が等しい」加減法。
+      # 組合せは 解×x係数対×y係数で十分（実測 dup_rate は eval で確認）。
+      x_domain: {int_range: [-6, 6]}
+      y_domain: {int_range: [-6, 6]}
+      x_coeff_pair_domain: {int_range: [-3, 3], exclude: [0], distinct: ["value"]}
+      y_coeff_domain: {int_range: [1, 3]}
+    given: [equation_a, equation_b]
+    asked: [solution]
+    visual: none
+    text: {tier: T1, template: lf_solve_system_elim_v1}
+    hints: [steps_prefix]
+    concept_tags: [simultaneous_equations.solve_by_elimination]
+    cause_tags: []
+remedial:
+  default_level: 1

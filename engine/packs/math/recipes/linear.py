@@ -892,6 +892,99 @@ def read_intersection_from_graph(ctx: CellContext, rng: Rng) -> MR:
 
 
 # ---------------------------------------------------------------------------
+# math.solve_system_elimination（g2_l11.calculation Lv1 用）— 横展開#11・連立クラスタへ横展開
+# 加減法（係数の絶対値が等しい）。答え(x,y)は既存 intersection_of_two_lines を再利用（新solverゼロ）。
+# ---------------------------------------------------------------------------
+_SOLVE_SYSTEM_ELIM_CONCEPTS = [
+    "simultaneous_equations.solve_by_elimination",
+]
+
+
+@register_recipe("math.solve_system_elimination", provides_concepts=_SOLVE_SYSTEM_ELIM_CONCEPTS)
+def solve_system_elimination(ctx: CellContext, rng: Rng) -> MR:
+    """連立方程式を加減法で解く（answer-first・calculation Lv1・係数の絶対値が等しい）。
+
+    解 (x0,y0) を先に選び、y の係数を両式で同じ b にとる（A1≠A2）。C1,C2 を逆算すると、
+    2式を辺々引くだけで y が消える＝「係数の絶対値が等しい」加減法。答え (x0,y0) は既存
+    solver `math.intersection_of_two_lines`（g2_l27 と共有・交点＝連立解）で再計算し一致を確認。
+    steps は加減法の手順（幾何 narration の交点 solver とは別に、代数の手順を書く）。図なし。
+    """
+    p = ctx.spec_level.params
+    x0 = draw(p["x_domain"], rng)
+    y0 = draw(p["y_domain"], rng)
+    a1, a2 = draw_many(p["x_coeff_pair_domain"], rng, k=2)  # x の係数（相異＝非平行）
+    bcoef = draw(p["y_coeff_domain"], rng)  # y の係数（両式で共通・正）
+
+    x0_s, y0_s = sympy.nsimplify(x0), sympy.nsimplify(y0)
+    a1_s, a2_s = sympy.nsimplify(a1), sympy.nsimplify(a2)
+    b_s = sympy.nsimplify(bcoef)
+    c1_s = a1_s * x0_s + b_s * y0_s
+    c2_s = a2_s * x0_s + b_s * y0_s
+
+    coeffs1 = [a1_s, b_s, c1_s]
+    coeffs2 = [a2_s, b_s, c2_s]
+    solver = REGISTRY.solver("math.intersection_of_two_lines")
+    sol = cast(Solution, solver(tuple(coeffs1), tuple(coeffs2), "elimination"))
+    assert isinstance(sol.answer, SymbolicAnswer)
+    expected_pt = sympy.Tuple(x0_s, y0_s)
+    assert sol.answer.srepr == sympy.srepr(expected_pt), (
+        f"double-solve 不一致: 構成解 {expected_pt} != solver 再計算 {sol.answer.srepr}"
+    )
+
+    disp1 = _format_two_var_equation_display(a1_s, b_s, c1_s)
+    disp2 = _format_two_var_equation_display(a2_s, b_s, c2_s)
+    steps = [
+        Step(
+            op="identify_equal_coeff",
+            args=[disp1, disp2],
+            result_srepr=sympy.srepr(b_s),
+            result_display=f"y の係数はどちらも {_fmt_number(b_s)}",
+            narration="y の係数が等しいので、辺々を引いて y を消去する。",
+        ),
+        Step(
+            op="eliminate_and_solve_x",
+            args=[],
+            result_srepr=sympy.srepr(x0_s),
+            result_display=f"x = {_fmt_number(x0_s)}",
+            narration="残った式から x の値を求める。",
+        ),
+        Step(
+            op="back_substitute",
+            args=[_fmt_number(x0_s)],
+            result_srepr=sympy.srepr(y0_s),
+            result_display=f"y = {_fmt_number(y0_s)}",
+            narration="求めた x を一方の式に代入して y を求める。",
+        ),
+    ]
+
+    sub_question = SubQuestionMR(
+        label="(1)",
+        asked="solution",
+        answer=sol.answer,
+        steps=steps,
+        concept_tags=_effective_concept_tags(ctx),
+        cause_tags=_effective_cause_tags(ctx),
+    )
+
+    return MR(
+        signature=ctx.spec_level.signature,
+        family=ctx.family,
+        level=ctx.level,
+        purpose=ctx.purpose,
+        seed=0,
+        params={
+            "line_a": [str(c) for c in coeffs1],
+            "line_b": [str(c) for c in coeffs2],
+            "method": "elimination",
+        },
+        given={"equation_a": disp1, "equation_b": disp2},
+        sub_questions=[sub_question],
+        visual_plan=None,
+        provenance=Provenance(recipe="math.solve_system_elimination"),
+    )
+
+
+# ---------------------------------------------------------------------------
 # math.rate_of_change（g2_l20.find_value Lv1 用）— 横展開の第1セル
 # ---------------------------------------------------------------------------
 _RATE_OF_CHANGE_CONCEPTS = [
@@ -1163,6 +1256,7 @@ __all__ = [
     "draw_linear",
     "draw_linear_from_equation",
     "read_intersection_from_graph",
+    "solve_system_elimination",
     "rate_of_change",
     "intersection",
     "y_range_from_domain",

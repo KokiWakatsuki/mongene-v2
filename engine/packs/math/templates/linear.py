@@ -103,6 +103,14 @@ LF_READ_INTERSECTION_V1 = (
 
 
 # ---------------------------------------------------------------------------
+# g2_l11.calculation Lv1: 連立方程式を加減法で解く（横展開#11・連立クラスタ）
+# ---------------------------------------------------------------------------
+LF_SOLVE_SYSTEM_ELIM_V1 = (
+    "次の連立方程式を加減法で解け。\n{{ given.equation_a }} , {{ given.equation_b }}"
+)
+
+
+# ---------------------------------------------------------------------------
 # g2_l20.find_value Lv1: 2点から変化の割合を求める（横展開の第1セル）
 # ---------------------------------------------------------------------------
 LF_RATE_OF_CHANGE_V1 = (
@@ -144,6 +152,7 @@ def _register_all() -> None:
     REGISTRY.register_template("lf_draw_graph_v1", LF_DRAW_GRAPH_V1)
     REGISTRY.register_template("lf_draw_from_equation_v1", LF_DRAW_FROM_EQUATION_V1)
     REGISTRY.register_template("lf_read_intersection_v1", LF_READ_INTERSECTION_V1)
+    REGISTRY.register_template("lf_solve_system_elim_v1", LF_SOLVE_SYSTEM_ELIM_V1)
     REGISTRY.register_template("lf_rate_of_change_v1", LF_RATE_OF_CHANGE_V1)
     REGISTRY.register_template("lf_intersection_v1", LF_INTERSECTION_V1)
     REGISTRY.register_template("lf_y_range_v1", LF_Y_RANGE_V1)
@@ -165,6 +174,7 @@ __all__ = [
     "LF_DRAW_GRAPH_V1",
     "LF_DRAW_FROM_EQUATION_V1",
     "LF_READ_INTERSECTION_V1",
+    "LF_SOLVE_SYSTEM_ELIM_V1",
     "LF_RATE_OF_CHANGE_V1",
     "LF_INTERSECTION_V1",
     "LF_Y_RANGE_V1",

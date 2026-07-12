@@ -91,6 +91,7 @@ CALCULATION_FRAME = Frame(
     given_vocab=frozenset({
         "expression", "equation",
         "input_value",  # 横展開#6: 代入する x の値（g2_l19 y=ax+b に x を代入）
+        "equation_a", "equation_b",  # 横展開#11: 連立方程式2式（g2_l11 加減法）
     }),
     asked_vocab=frozenset({
         "value", "simplified_expr", "solution",

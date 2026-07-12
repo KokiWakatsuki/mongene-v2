@@ -489,6 +489,39 @@ def test_read_intersection_from_graph_double_solve_property(seed):
 
 
 # ---------------------------------------------------------------------------
+# math.solve_system_elimination（g2_l11.calculation Lv1）— 横展開#11（連立・加減法）
+# ---------------------------------------------------------------------------
+def test_solve_system_elimination_lv1_construct():
+    ctx = _make_ctx("math.g2_l11.calculation", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+
+    assert mr.signature == "solve_system_elimination_equal_coeff"
+    assert set(mr.given.keys()) == {"equation_a", "equation_b"}
+    assert mr.visual_plan is None  # calculation は図なし
+    sq = mr.sub_questions[0]
+    assert sq.asked == "solution"
+    assert sq.answer.kind == "symbolic"  # 解 (x,y)
+    assert sq.answer.display.startswith("(")
+    assert [s.op for s in sq.steps] == ["identify_equal_coeff", "eliminate_and_solve_x", "back_substitute"]
+    # y の係数が両式で等しい（加減法で辺々引ける＝係数の絶対値が等しい）
+    assert sympy.sympify(mr.params["line_a"][1]) == sympy.sympify(mr.params["line_b"][1])
+
+
+@pytest.mark.parametrize("seed", range(200))
+def test_solve_system_elimination_double_solve_property(seed):
+    ctx = _make_ctx("math.g2_l11.calculation", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+
+    line_a = tuple(sympy.sympify(c) for c in mr.params["line_a"])
+    line_b = tuple(sympy.sympify(c) for c in mr.params["line_b"])
+    solver = REGISTRY.solver("math.intersection_of_two_lines")
+    sol = solver(line_a, line_b, mr.params["method"])
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+
+
+# ---------------------------------------------------------------------------
 # math.rate_of_change（g2_l20.find_value Lv1）— 横展開の第1セル
 # ---------------------------------------------------------------------------
 def test_rate_of_change_lv1_construct():
@@ -660,4 +693,7 @@ def test_recipes_declare_provides_concepts():
     })
     assert REGISTRY.recipe_concepts("math.read_intersection_from_graph") == frozenset({
         "linear_function.read_intersection_from_graph",
+    })
+    assert REGISTRY.recipe_concepts("math.solve_system_elimination") == frozenset({
+        "simultaneous_equations.solve_by_elimination",
     })

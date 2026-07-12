@@ -123,6 +123,15 @@ def double_solve_read_intersection(mr: MR) -> Solution:
     return cast(Solution, solver(line_a, line_b, p["method"]))
 
 
+@register_checker("math.solve_system_elimination.double_solve")
+def double_solve_solve_system_elimination(mr: MR) -> Solution:
+    p = mr.params
+    line_a = tuple(sympy.sympify(c) for c in p["line_a"])
+    line_b = tuple(sympy.sympify(c) for c in p["line_b"])
+    solver = REGISTRY.solver("math.intersection_of_two_lines")
+    return cast(Solution, solver(line_a, line_b, p["method"]))
+
+
 @register_checker("math.rate_of_change.double_solve")
 def double_solve_rate_of_change(mr: MR) -> Solution:
     p = mr.params
@@ -172,6 +181,7 @@ __all__ = [
     "double_solve_draw_linear",
     "double_solve_draw_from_equation",
     "double_solve_read_intersection",
+    "double_solve_solve_system_elimination",
     "double_solve_rate_of_change",
     "double_solve_intersection",
     "double_solve_y_range",
