@@ -71,3 +71,6 @@ concepts:
   - id: linear_function.range_endpoint_inclusion
     label: "変域の不等号（等号の有無）から端点が含まれるかを判別する"
     unit: g2_l23
+  - id: simultaneous_equations.verify_solution
+    label: "与えられた組が連立方程式の解かどうかを代入して判定する"
+    unit: g2_l10

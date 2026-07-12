@@ -784,6 +784,47 @@ def test_knowledge_range_endpoint_double_solve_property(seed):
 
 
 # ---------------------------------------------------------------------------
+# math.knowledge_verify_solution（g2_l10.knowledge Lv2）— 横展開#18（連立の解の判定）
+# ---------------------------------------------------------------------------
+def test_knowledge_verify_solution_construct():
+    ctx = _make_ctx("math.g2_l10.knowledge", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+
+    assert mr.signature == "knowledge_verify_solution"
+    assert set(mr.given.keys()) == {"statement", "term_context"}
+    assert mr.visual_plan is None
+    sq = mr.sub_questions[0]
+    assert sq.asked == "choice"
+    assert sq.answer.kind == "choice"
+    assert sq.answer.correct in {"解である", "解でない"}
+    assert sq.answer.fact_id == "simultaneous.solution_verification"
+    assert [s.op for s in sq.steps] == ["substitute_candidate", "judge_solution"]
+
+
+@pytest.mark.parametrize("seed", range(200))
+def test_knowledge_verify_solution_double_solve_property(seed):
+    ctx = _make_ctx("math.g2_l10.knowledge", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+
+    # 候補と係数だけから代入判定（真偽ビットは見ない）→ recipe の答えと一致
+    line_a = tuple(sympy.sympify(c) for c in mr.params["line_a"])
+    line_b = tuple(sympy.sympify(c) for c in mr.params["line_b"])
+    cand = sympy.sympify(mr.params["candidate"])
+    solver = REGISTRY.solver("math.verify_system_solution")
+    sol = solver(line_a, line_b, (cand[0], cand[1]))
+    assert sol.answer.kind == "choice"
+    assert sol.answer.correct == mr.sub_questions[0].answer.correct
+    # 代入検証の健全性: 「解である」⇔ 両式が成り立つ
+    both_hold = all(
+        sympy.simplify(line[0] * cand[0] + line[1] * cand[1] - line[2]) == 0
+        for line in (line_a, line_b)
+    )
+    assert (sol.answer.correct == "解である") == both_hold
+
+
+# ---------------------------------------------------------------------------
 # math.rate_of_change（g2_l20.find_value Lv1）— 横展開の第1セル
 # ---------------------------------------------------------------------------
 def test_rate_of_change_lv1_construct():
@@ -976,4 +1017,7 @@ def test_recipes_declare_provides_concepts():
     })
     assert REGISTRY.recipe_concepts("math.knowledge_range_endpoint") == frozenset({
         "linear_function.range_endpoint_inclusion",
+    })
+    assert REGISTRY.recipe_concepts("math.knowledge_verify_solution") == frozenset({
+        "simultaneous_equations.verify_solution",
     })

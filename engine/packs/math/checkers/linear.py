@@ -183,6 +183,16 @@ def double_solve_knowledge_range_endpoint(mr: MR) -> Solution:
     return cast(Solution, solver(bool(mr.params["inclusive"])))
 
 
+@register_checker("math.knowledge_verify_solution.double_solve")
+def double_solve_knowledge_verify_solution(mr: MR) -> Solution:
+    p = mr.params
+    line_a = tuple(sympy.sympify(c) for c in p["line_a"])
+    line_b = tuple(sympy.sympify(c) for c in p["line_b"])
+    cand = sympy.sympify(p["candidate"])  # "(x, y)" -> sympy Tuple
+    solver = REGISTRY.solver("math.verify_system_solution")
+    return cast(Solution, solver(line_a, line_b, (cand[0], cand[1])))
+
+
 @register_checker("math.rate_of_change.double_solve")
 def double_solve_rate_of_change(mr: MR) -> Solution:
     p = mr.params
@@ -239,6 +249,7 @@ __all__ = [
     "double_solve_solve_system_abc",
     "double_solve_knowledge_slope_direction",
     "double_solve_knowledge_range_endpoint",
+    "double_solve_knowledge_verify_solution",
     "double_solve_rate_of_change",
     "double_solve_intersection",
     "double_solve_y_range",

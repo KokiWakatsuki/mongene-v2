@@ -1,0 +1,31 @@
+family: math.g2_l10.knowledge
+form: knowledge
+source_desc: |
+  2元1次方程式と連立方程式の意味（units.generated.yaml の desc/example を正として転記）。
+  Lv2 desc: 与えられた組が解かどうかを判別・意味を適用する。
+       example: 連立方程式 { x + y = 5, 2x − y = 1 } について、x=2, y=3 の組はこの連立方程式の
+                解といえるか、理由とともに答えよ。
+  【設計モデル・要検収(Q4)】「与えられた組が解か」を単一選択（解である/解でない）で realize。
+  両式に代入して両方成り立てば解＝Q1 は代入検証で実質 V1（決定論恒真）。無限性(F-3)は 係数・解・
+  候補・真偽ビット のパラメータ化で満たす。#16 で開通した knowledge capability（ChoiceAnswer 経路）を
+  小規則 solver verify_system_solution で再利用（l10 の verify セルを開ける）。
+concepts_default: [simultaneous_equations.verify_solution]
+levels:
+  "2":
+    signature: knowledge_verify_solution
+    recipe: math.knowledge_verify_solution
+    params:
+      # 非退化な連立系（|A1|=3,|A2|=2,|B1|=2,|B2|=3・det≠0 恒真）を作り、解 (x0,y0) を構成。
+      # truth=1 なら候補=(x0,y0)、truth=0 なら x を perturb（≠0）ずらして「解でない」候補にする。
+      x_domain: {int_range: [-5, 5]}
+      y_domain: {int_range: [-5, 5]}
+      sign_domain: {int_set: [-1, 1]}
+      truth_domain: {int_set: [0, 1]}
+      perturb_domain: {int_set: [-2, -1, 1, 2]}
+    given: [statement, term_context]
+    asked: [choice]
+    visual: none
+    text: {tier: T1, template: lf_knowledge_verify_solution_v1}
+    hints: [steps_prefix]
+    concept_tags: [simultaneous_equations.verify_solution]
+    cause_tags: []

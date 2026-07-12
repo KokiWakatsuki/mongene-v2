@@ -1660,6 +1660,91 @@ def knowledge_range_endpoint(ctx: CellContext, rng: Rng) -> MR:
 
 
 # ---------------------------------------------------------------------------
+# math.knowledge_verify_solution（g2_l10.knowledge Lv2 用）— 横展開#18・knowledge 横展開
+# 連立方程式の与えられた組(x,y)が解かを判定（○×）。knowledge capability（ChoiceAnswer）を
+# 新しい小規則 solver verify_system_solution で再利用＝l10 の verify セルを開ける。
+# ---------------------------------------------------------------------------
+_KNOWLEDGE_VERIFY_SOLUTION_CONCEPTS = [
+    "simultaneous_equations.verify_solution",
+]
+
+
+@register_recipe(
+    "math.knowledge_verify_solution", provides_concepts=_KNOWLEDGE_VERIFY_SOLUTION_CONCEPTS
+)
+def knowledge_verify_solution(ctx: CellContext, rng: Rng) -> MR:
+    """連立方程式の組(x,y)が解かを判定する knowledge セル（answer-first）。
+
+    真偽ビット truth を先に引き、非退化な連立系（解 (x0,y0)）を構成する。truth=1 なら候補
+    (x0,y0) をそのまま、truth=0 なら x を delta（≠0）ずらして「解でない」候補にする（一意解の
+    系では他の点は必ず少なくとも一方の式を満たさない）。独立 solver `math.verify_system_solution`
+    が候補と係数だけから代入判定（double-solve・切片/真偽ビットは見ない）。答えは ChoiceAnswer。
+    無限性(F-3)は 係数・解・候補・真偽 のパラメータ化で満たす。図なし（knowledge）。
+    """
+    p = ctx.spec_level.params
+    x_sym, y_sym = sympy.symbols("x y")
+
+    def sign() -> sympy.Integer:
+        return sympy.Integer(draw(p["sign_domain"], rng))
+
+    x0 = sympy.nsimplify(draw(p["x_domain"], rng))
+    y0 = sympy.nsimplify(draw(p["y_domain"], rng))
+    # 非退化（非平行）を係数の大きさで恒真化: |A1|=3,|A2|=2,|B1|=2,|B2|=3（|A1·B2|=9>|A2·B1|=4）。
+    a1 = sympy.Integer(3) * sign()
+    b1 = sympy.Integer(2) * sign()
+    a2 = sympy.Integer(2) * sign()
+    b2 = sympy.Integer(3) * sign()
+    c1 = a1 * x0 + b1 * y0
+    c2 = a2 * x0 + b2 * y0
+    coeffs_a = [a1, b1, c1]
+    coeffs_b = [a2, b2, c2]
+
+    truth = int(draw(p["truth_domain"], rng))  # 1=解である / 0=解でない
+    if truth:
+        xc, yc = x0, y0
+    else:
+        delta = sympy.Integer(draw(p["perturb_domain"], rng))  # ≠0
+        xc, yc = x0 + delta, y0  # 一意解の系なので少なくとも eq_a を満たさない＝解でない
+
+    solver = REGISTRY.solver("math.verify_system_solution")
+    sol = cast(Solution, solver(tuple(coeffs_a), tuple(coeffs_b), (xc, yc)))
+    assert isinstance(sol.answer, ChoiceAnswer)
+    expected = "解である" if truth else "解でない"
+    assert sol.answer.correct == expected, (
+        f"double-solve 不一致: 構成 {expected} != solver 判定 {sol.answer.correct}"
+    )
+
+    system_disp = f"{_fmt_eq(a1 * x_sym + b1 * y_sym, c1)}, {_fmt_eq(a2 * x_sym + b2 * y_sym, c2)}"
+    candidate_disp = f"x = {_fmt_number(xc)}, y = {_fmt_number(yc)}"
+
+    sub_question = SubQuestionMR(
+        label="(1)",
+        asked="choice",
+        answer=sol.answer,
+        steps=sol.steps,
+        concept_tags=_effective_concept_tags(ctx),
+        cause_tags=_effective_cause_tags(ctx),
+    )
+
+    return MR(
+        signature=ctx.spec_level.signature,
+        family=ctx.family,
+        level=ctx.level,
+        purpose=ctx.purpose,
+        seed=0,
+        params={
+            "line_a": [str(c) for c in coeffs_a],
+            "line_b": [str(c) for c in coeffs_b],
+            "candidate": f"({xc}, {yc})",
+        },
+        given={"statement": system_disp, "term_context": candidate_disp},
+        sub_questions=[sub_question],
+        visual_plan=None,
+        provenance=Provenance(recipe="math.knowledge_verify_solution"),
+    )
+
+
+# ---------------------------------------------------------------------------
 # math.rate_of_change（g2_l20.find_value Lv1 用）— 横展開の第1セル
 # ---------------------------------------------------------------------------
 _RATE_OF_CHANGE_CONCEPTS = [
@@ -1938,6 +2023,7 @@ __all__ = [
     "solve_system_abc",
     "knowledge_slope_direction",
     "knowledge_range_endpoint",
+    "knowledge_verify_solution",
     "rate_of_change",
     "intersection",
     "y_range_from_domain",

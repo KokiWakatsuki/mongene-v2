@@ -703,6 +703,47 @@ def linear_direction_from_slope(a: object) -> Solution:
     return Solution(answer=answer, steps=steps)
 
 
+@register_solver("math.verify_system_solution")
+def verify_system_solution(
+    line_a: tuple[object, object, object],
+    line_b: tuple[object, object, object],
+    candidate: tuple[object, object],
+) -> Solution:
+    """与えられた組 (x,y) が連立方程式 A1x+B1y=C1, A2x+B2y=C2 の解かを判定する
+    （knowledge・g2_l10）。両式に代入して**両方**成り立てば「解である」、片方でも
+    成り立たなければ「解でない」。答えは ChoiceAnswer。Q1 は代入検証＝実質 V1（決定論恒真）。
+    solver は与えられた候補と係数だけから判定する（recipe の真偽ビットは見ない・double-solve）。
+    """
+    A1, B1, C1 = (sympy.nsimplify(v) for v in line_a)
+    A2, B2, C2 = (sympy.nsimplify(v) for v in line_b)
+    xc, yc = sympy.nsimplify(candidate[0]), sympy.nsimplify(candidate[1])
+    ok1 = sympy.simplify(A1 * xc + B1 * yc - C1) == 0
+    ok2 = sympy.simplify(A2 * xc + B2 * yc - C2) == 0
+    is_sol = bool(ok1 and ok2)
+    correct = "解である" if is_sol else "解でない"
+    other = "解でない" if is_sol else "解である"
+    steps = [
+        Step(
+            op="substitute_candidate",
+            args=[_format_number(xc), _format_number(yc)],
+            result_srepr=sympy.srepr(sympy.Tuple(A1 * xc + B1 * yc, A2 * xc + B2 * yc)),
+            result_display="左辺を計算する",
+            narration="組の x, y の値を2つの式の左辺にそれぞれ代入する。",
+        ),
+        Step(
+            op="judge_solution",
+            args=[],
+            result_srepr=correct,
+            result_display=correct,
+            narration="両方の式が成り立てば解、片方でも成り立たなければ解でない。",
+        ),
+    ]
+    answer = ChoiceAnswer(
+        correct=correct, distractors=[other], fact_id="simultaneous.solution_verification"
+    )
+    return Solution(answer=answer, steps=steps)
+
+
 @register_solver("math.range_endpoint_inclusion")
 def range_endpoint_inclusion(inclusive: object) -> Solution:
     """変域の端点がグラフにふくまれるかを不等号の種類から判定する（knowledge・g2_l23）。
@@ -753,4 +794,5 @@ __all__ = [
     "draw_from_equation",
     "linear_direction_from_slope",
     "range_endpoint_inclusion",
+    "verify_system_solution",
 ]

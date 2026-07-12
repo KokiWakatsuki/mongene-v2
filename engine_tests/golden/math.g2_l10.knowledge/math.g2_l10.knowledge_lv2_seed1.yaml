@@ -1,0 +1,56 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - simultaneous_equations.verify_solution
+  provenance:
+    git_commit: ''
+    recipe: math.knowledge_verify_solution
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_knowledge_verify_solution_v1
+    tier: T1
+  requested:
+    form: knowledge
+    level: 2
+    subject: math
+    unit: g2_l10
+  resolved:
+    form: knowledge
+    level: 2
+    subject: math
+    unit: g2_l10
+  seed: 1
+  signature: knowledge_verify_solution
+problem_ref: b60a34d47c706d44
+problem_text: 連立方程式 3x + 2y = -12, 2x + 3y = -8 について、x = -4, y = 0 の組はこの連立方程式の解といえますか、いえませんか。
+sub_questions:
+- answer:
+    correct: 解である
+    distractors:
+    - 解でない
+    fact_id: simultaneous.solution_verification
+    kind: choice
+  cause_tags: []
+  concept_tags:
+  - simultaneous_equations.verify_solution
+  explanation: まず、組の x, y の値を2つの式の左辺にそれぞれ代入する。 左辺を計算する次に、両方の式が成り立てば解、片方でも成り立たなければ解でない。 解である
+  hints:
+  - 組の x, y の値を2つの式の左辺にそれぞれ代入する。
+  label: (1)
+  prompt_text: choice を求めなさい。
+  solution_steps:
+  - args:
+    - '-4'
+    - '0'
+    narration: 組の x, y の値を2つの式の左辺にそれぞれ代入する。
+    op: substitute_candidate
+    result_display: 左辺を計算する
+    result_srepr: Tuple(Integer(-12), Integer(-8))
+  - args: []
+    narration: 両方の式が成り立てば解、片方でも成り立たなければ解でない。
+    op: judge_solution
+    result_display: 解である
+    result_srepr: 解である
+visual_svg: null

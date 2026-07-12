@@ -133,6 +133,12 @@ LF_KNOWLEDGE_RANGE_ENDPOINT_V1 = (
     "{{ given.statement }}、変域の端の点はグラフにふくまれますか、ふくまれませんか。"
 )
 
+# g2_l10.knowledge Lv2: 連立方程式の組(x,y)が解かを判定（横展開#18・knowledge 横展開）
+LF_KNOWLEDGE_VERIFY_SOLUTION_V1 = (
+    "連立方程式 {{ given.statement }} について、{{ given.term_context }} の組は"
+    "この連立方程式の解といえますか、いえませんか。"
+)
+
 
 # ---------------------------------------------------------------------------
 # g2_l20.find_value Lv1: 2点から変化の割合を求める（横展開の第1セル）
@@ -186,6 +192,9 @@ def _register_all() -> None:
     REGISTRY.register_template(
         "lf_knowledge_range_endpoint_v1", LF_KNOWLEDGE_RANGE_ENDPOINT_V1
     )
+    REGISTRY.register_template(
+        "lf_knowledge_verify_solution_v1", LF_KNOWLEDGE_VERIFY_SOLUTION_V1
+    )
     REGISTRY.register_template("lf_rate_of_change_v1", LF_RATE_OF_CHANGE_V1)
     REGISTRY.register_template("lf_intersection_v1", LF_INTERSECTION_V1)
     REGISTRY.register_template("lf_y_range_v1", LF_Y_RANGE_V1)
@@ -213,6 +222,7 @@ __all__ = [
     "LF_SOLVE_SYSTEM_ABC_V1",
     "LF_KNOWLEDGE_SLOPE_DIRECTION_V1",
     "LF_KNOWLEDGE_RANGE_ENDPOINT_V1",
+    "LF_KNOWLEDGE_VERIFY_SOLUTION_V1",
     "LF_RATE_OF_CHANGE_V1",
     "LF_INTERSECTION_V1",
     "LF_Y_RANGE_V1",
