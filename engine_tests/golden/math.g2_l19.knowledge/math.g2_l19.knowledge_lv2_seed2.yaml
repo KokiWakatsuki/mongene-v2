@@ -1,0 +1,54 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - linear_function.classify_as_linear
+  provenance:
+    git_commit: ''
+    recipe: math.knowledge_classify_linear
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_knowledge_classify_linear_v1
+    tier: T1
+  requested:
+    form: knowledge
+    level: 2
+    subject: math
+    unit: g2_l19
+  resolved:
+    form: knowledge
+    level: 2
+    subject: math
+    unit: g2_l19
+  seed: 2
+  signature: knowledge_classify_linear
+problem_ref: a2dcc3635f0f53a1
+problem_text: 式 y = 36/x は、y が x の1次関数であるといえますか、いえませんか。
+sub_questions:
+- answer:
+    correct: 1次関数ではない
+    distractors:
+    - 1次関数である
+    fact_id: lf.classify_linear_function
+    kind: choice
+  cause_tags: []
+  concept_tags:
+  - linear_function.classify_as_linear
+  explanation: まず、式の形から、x が増えるときに y がどのように変わるかを調べる。 x が増えるときの y の変わり方を調べる次に、変化の割合がつねに一定なら1次関数、一定でなければ1次関数でない。 1次関数ではない
+  hints:
+  - 式の形から、x が増えるときに y がどのように変わるかを調べる。
+  label: (1)
+  prompt_text: choice を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 式の形から、x が増えるときに y がどのように変わるかを調べる。
+    op: inspect_rate_of_change
+    result_display: x が増えるときの y の変わり方を調べる
+    result_srepr: Mul(Integer(-1), Integer(36), Pow(Symbol('x'), Integer(-2)))
+  - args: []
+    narration: 変化の割合がつねに一定なら1次関数、一定でなければ1次関数でない。
+    op: judge_linear
+    result_display: 1次関数ではない
+    result_srepr: 1次関数ではない
+visual_svg: null

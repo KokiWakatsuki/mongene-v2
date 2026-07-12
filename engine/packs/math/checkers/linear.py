@@ -193,6 +193,14 @@ def double_solve_knowledge_verify_solution(mr: MR) -> Solution:
     return cast(Solution, solver(line_a, line_b, (cand[0], cand[1])))
 
 
+@register_checker("math.knowledge_classify_linear.double_solve")
+def double_solve_knowledge_classify_linear(mr: MR) -> Solution:
+    # 問題パラメータの式 rhs だけから1次関数か再判定（category ビットは見ない）。
+    rhs = sympy.sympify(mr.params["rhs"])
+    solver = REGISTRY.solver("math.classify_linear_function")
+    return cast(Solution, solver(rhs))
+
+
 @register_checker("math.rate_of_change.double_solve")
 def double_solve_rate_of_change(mr: MR) -> Solution:
     p = mr.params
@@ -250,6 +258,7 @@ __all__ = [
     "double_solve_knowledge_slope_direction",
     "double_solve_knowledge_range_endpoint",
     "double_solve_knowledge_verify_solution",
+    "double_solve_knowledge_classify_linear",
     "double_solve_rate_of_change",
     "double_solve_intersection",
     "double_solve_y_range",

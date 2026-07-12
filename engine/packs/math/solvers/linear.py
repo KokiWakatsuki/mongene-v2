@@ -778,6 +778,45 @@ def range_endpoint_inclusion(inclusive: object) -> Solution:
     return Solution(answer=answer, steps=steps)
 
 
+@register_solver("math.classify_linear_function")
+def classify_linear_function(rhs: object) -> Solution:
+    """与えられた式 y=<rhs> が x の1次関数かを判定する（knowledge・g2_l19）。
+
+    x で微分した「変化の割合（導関数）」が **x を含まない 0 でない定数** であれば
+    1次関数（y=ax+b, a≠0）、そうでなければ1次関数でない（定数関数=導関数0／2次=導関数が
+    x を含む／反比例 y=a/x=導関数が x を含む）。答えは ChoiceAnswer。Q1 は導関数による
+    恒真判定＝実質 V1（決定論恒真・§6.2）。solver は式そのものだけから判定する
+    （recipe が仕込んだ category ビットは見ない・double-solve）。
+    """
+    x = sympy.symbols("x")
+    expr = rhs if isinstance(rhs, sympy.Basic) else sympy.sympify(rhs)
+    deriv = sympy.diff(expr, x)
+    is_linear = (not deriv.is_zero) and (x not in deriv.free_symbols)
+    correct = "1次関数である" if is_linear else "1次関数ではない"
+    other = "1次関数ではない" if is_linear else "1次関数である"
+    steps = [
+        Step(
+            op="inspect_rate_of_change",
+            args=[],
+            result_srepr=sympy.srepr(deriv),
+            result_display="x が増えるときの y の変わり方を調べる",
+            # 数字を出さない（§5-#9: narration/ヒントに数値を書かない）。
+            narration="式の形から、x が増えるときに y がどのように変わるかを調べる。",
+        ),
+        Step(
+            op="judge_linear",
+            args=[],
+            result_srepr=correct,
+            result_display=correct,
+            narration="変化の割合がつねに一定なら1次関数、一定でなければ1次関数でない。",
+        ),
+    ]
+    answer = ChoiceAnswer(
+        correct=correct, distractors=[other], fact_id="lf.classify_linear_function"
+    )
+    return Solution(answer=answer, steps=steps)
+
+
 __all__ = [
     "linear_expr_from_two_points",
     "linear_expr_from_slope_point",
@@ -795,4 +834,5 @@ __all__ = [
     "linear_direction_from_slope",
     "range_endpoint_inclusion",
     "verify_system_solution",
+    "classify_linear_function",
 ]

@@ -1,0 +1,36 @@
+family: math.g2_l19.knowledge
+form: knowledge
+source_desc: |
+  1次関数の定義・与式が1次関数かの判別（units.generated.yaml の desc/example を正として転記）。
+  Lv2 desc: 与式が1次関数か・aやbが何を表すかを判別・適用する。
+       example: 次の（ア）〜（エ）のうち、y が x の1次関数であるものをすべて選び、そのときの
+                傾きと切片を答えよ。（ア）y=3x−2 （イ）y=x² （ウ）y=5 （エ）y=−x
+  【設計モデル・要検収(Q4)】原題の複数選択（4式から1次関数を選ぶ）を、1式ごとの単一選択
+  （1次関数である/ではない）に realize する。式の種類（1次/定数/2次/反比例）で答えが変わる
+  真の verify 型（#18 の連立解の判定と同思想・"常に同じ答え"の弱点を回避）。Q1 は式を x で
+  微分し「変化の割合が 0 でない定数か」で判定＝実質 V1（決定論恒真）。無限性(F-3)は式の種類
+  category と係数 a,b のパラメータ化で満たす。#16 で開通した knowledge capability
+  （ChoiceAnswer 経路）を spec＋小規則 solver classify_linear_function で再利用＝償却の実証。
+concepts_default: [linear_function.classify_as_linear]
+levels:
+  "2":
+    signature: knowledge_classify_linear
+    recipe: math.knowledge_classify_linear
+    params:
+      # category: 0=1次(y=ax+b)/1=定数(y=c)/2=2次(y=ax²+b)/3=反比例(y=k/x)。
+      # 0 のみ「1次関数である」・他は「でない」＝式の種類で答えが変わる（verify 型）。
+      # a は主係数（≠0）、b は定数項（0可）。定数値 c・反比例定数 k は線形性に無関係な
+      # surface param で、狭い1係数域だと dup_rate が上がる（1次/2次は a×b で広い）ため、
+      # 広い専用域で無限性(F-3)を稼ぐ（eval/dup_rate ≤0.20・実測 0.10）。
+      category_domain: {int_set: [0, 1, 2, 3]}
+      coeff_domain: {int_range: [-6, 6], exclude: [0]}
+      intercept_domain: {int_range: [-9, 9]}
+      const_domain: {int_range: [-40, 40], exclude: [0]}
+      inverse_domain: {int_range: [-40, 40], exclude: [0]}
+    given: [statement]
+    asked: [choice]
+    visual: none
+    text: {tier: T1, template: lf_knowledge_classify_linear_v1}
+    hints: [steps_prefix]
+    concept_tags: [linear_function.classify_as_linear]
+    cause_tags: []

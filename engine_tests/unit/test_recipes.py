@@ -825,6 +825,46 @@ def test_knowledge_verify_solution_double_solve_property(seed):
 
 
 # ---------------------------------------------------------------------------
+# math.knowledge_classify_linear（g2_l19.knowledge Lv2）— 横展開#19（与式が1次関数か判別・verify型）
+# ---------------------------------------------------------------------------
+def test_knowledge_classify_linear_construct():
+    ctx = _make_ctx("math.g2_l19.knowledge", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+
+    assert mr.signature == "knowledge_classify_linear"
+    assert set(mr.given.keys()) == {"statement"}
+    assert mr.visual_plan is None
+    sq = mr.sub_questions[0]
+    assert sq.asked == "choice"
+    assert sq.answer.kind == "choice"
+    assert sq.answer.correct in {"1次関数である", "1次関数ではない"}
+    assert sq.answer.fact_id == "lf.classify_linear_function"
+    assert [s.op for s in sq.steps] == ["inspect_rate_of_change", "judge_linear"]
+
+
+@pytest.mark.parametrize("seed", range(200))
+def test_knowledge_classify_linear_double_solve_property(seed):
+    ctx = _make_ctx("math.g2_l19.knowledge", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+
+    # 式 rhs だけから微分判定（category ビットは見ない）→ recipe の答えと一致
+    rhs = sympy.sympify(mr.params["rhs"])
+    solver = REGISTRY.solver("math.classify_linear_function")
+    sol = solver(rhs)
+    assert sol.answer.kind == "choice"
+    assert sol.answer.correct == mr.sub_questions[0].answer.correct
+    # 判定の健全性: 「1次関数である」⇔ 導関数が x を含まない非ゼロ定数
+    x = sympy.symbols("x")
+    deriv = sympy.diff(rhs, x)
+    is_linear = (not deriv.is_zero) and (x not in deriv.free_symbols)
+    assert (sol.answer.correct == "1次関数である") == is_linear
+    # category ビットと答えの整合（0=1次のみ「である」）
+    assert (mr.params["category"] == 0) == is_linear
+
+
+# ---------------------------------------------------------------------------
 # math.rate_of_change（g2_l20.find_value Lv1）— 横展開の第1セル
 # ---------------------------------------------------------------------------
 def test_rate_of_change_lv1_construct():
@@ -1020,4 +1060,7 @@ def test_recipes_declare_provides_concepts():
     })
     assert REGISTRY.recipe_concepts("math.knowledge_verify_solution") == frozenset({
         "simultaneous_equations.verify_solution",
+    })
+    assert REGISTRY.recipe_concepts("math.knowledge_classify_linear") == frozenset({
+        "linear_function.classify_as_linear",
     })

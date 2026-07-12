@@ -74,3 +74,6 @@ concepts:
   - id: simultaneous_equations.verify_solution
     label: "与えられた組が連立方程式の解かどうかを代入して判定する"
     unit: g2_l10
+  - id: linear_function.classify_as_linear
+    label: "与えられた式が y が x の1次関数かどうかを判別する"
+    unit: g2_l19

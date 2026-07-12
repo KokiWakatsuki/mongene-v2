@@ -65,8 +65,12 @@ def _fmt_expr(expr: Any) -> str:
 
     例: 2*x - 1 -> "2x - 1" / 7 - 2*y -> "7 - 2y" / 1*x -> "x"（sstr が係数1を省く）。
     連立クラスタの方程式・途中式の表示に使う（符号処理を sympy に委ねて手作業のバグを避ける）。
+    冪は上付き表記に直す（x**2 -> x²）。knowledge の1次関数判別セル（2次式の提示）で使う。
+    既存の1次式には冪が現れないため後方互換（golden 不変）。
     """
-    return str(sympy.sstr(sympy.nsimplify(expr))).replace("*", "")
+    s = str(sympy.sstr(sympy.nsimplify(expr)))
+    s = s.replace("**2", "²").replace("**3", "³")
+    return s.replace("*", "")
 
 
 def _fmt_eq(lhs: Any, rhs: Any) -> str:
@@ -1745,6 +1749,83 @@ def knowledge_verify_solution(ctx: CellContext, rng: Rng) -> MR:
 
 
 # ---------------------------------------------------------------------------
+# math.knowledge_classify_linear（g2_l19.knowledge Lv2 用）— 横展開#19・knowledge verify型
+# 与えられた式 y=… が x の1次関数かを単一選択で判別（式の種類で答えが変わる真の verify 型）。
+# #16 で開通した knowledge capability（ChoiceAnswer 経路）を spec＋小規則 solver で再利用。
+# ---------------------------------------------------------------------------
+_KNOWLEDGE_CLASSIFY_LINEAR_CONCEPTS = [
+    "linear_function.classify_as_linear",
+]
+
+
+@register_recipe(
+    "math.knowledge_classify_linear", provides_concepts=_KNOWLEDGE_CLASSIFY_LINEAR_CONCEPTS
+)
+def knowledge_classify_linear(ctx: CellContext, rng: Rng) -> MR:
+    """与式が1次関数かを判別する knowledge セル（answer-first・verify 型）。
+
+    category（0=1次/1=定数/2=2次/3=反比例）を先に引き、対応する式 y=<rhs> を構成する。
+    1次関数か否かは独立 solver `math.classify_linear_function` が式そのものを微分して判定
+    （category ビットは見ない・double-solve）。答えは ChoiceAnswer（式の種類で correct が
+    「1次関数である/ではない」に変わる真の verify 型）。無限性(F-3)は category と係数 a,b の
+    パラメータ化で満たす。図なし（knowledge）。
+    """
+    p = ctx.spec_level.params
+    x_sym, y_sym = sympy.symbols("x y")
+    category = int(draw(p["category_domain"], rng))  # 0..3
+
+    if category == 0:  # 1次関数: y = ax + b（a≠0）
+        a = sympy.nsimplify(draw(p["coeff_domain"], rng))
+        b = sympy.nsimplify(draw(p["intercept_domain"], rng))
+        rhs = a * x_sym + b
+    elif category == 1:  # 定数関数: y = c（c≠0・傾き0で1次関数でない）
+        # 定数値は線形性判定に無関係な surface param。広い域で無限性(F-3)を稼ぐ（§7.7）。
+        c = sympy.nsimplify(draw(p["const_domain"], rng))
+        rhs = c
+    elif category == 2:  # 2次関数: y = ax² + b（a≠0）
+        a = sympy.nsimplify(draw(p["coeff_domain"], rng))
+        b = sympy.nsimplify(draw(p["intercept_domain"], rng))
+        rhs = a * x_sym**2 + b
+    else:  # 反比例: y = k/x（k≠0）
+        # 反比例定数も線形性判定に無関係な surface param。広い域で無限性を稼ぐ。
+        k = sympy.nsimplify(draw(p["inverse_domain"], rng))
+        rhs = k / x_sym
+
+    solver = REGISTRY.solver("math.classify_linear_function")
+    sol = cast(Solution, solver(rhs))
+    assert isinstance(sol.answer, ChoiceAnswer)
+    expected = "1次関数である" if category == 0 else "1次関数ではない"
+    assert sol.answer.correct == expected, (
+        f"double-solve 不一致: 構成 category={category}（{expected}）"
+        f" != solver 判定 {sol.answer.correct}"
+    )
+
+    statement = _fmt_eq(y_sym, rhs)  # 例 "y = 2x - 1" / "y = 2x² + 3" / "y = 3/x"
+
+    sub_question = SubQuestionMR(
+        label="(1)",
+        asked="choice",
+        answer=sol.answer,
+        steps=sol.steps,
+        concept_tags=_effective_concept_tags(ctx),
+        cause_tags=_effective_cause_tags(ctx),
+    )
+
+    return MR(
+        signature=ctx.spec_level.signature,
+        family=ctx.family,
+        level=ctx.level,
+        purpose=ctx.purpose,
+        seed=0,
+        params={"category": category, "rhs": str(rhs)},
+        given={"statement": statement},
+        sub_questions=[sub_question],
+        visual_plan=None,
+        provenance=Provenance(recipe="math.knowledge_classify_linear"),
+    )
+
+
+# ---------------------------------------------------------------------------
 # math.rate_of_change（g2_l20.find_value Lv1 用）— 横展開の第1セル
 # ---------------------------------------------------------------------------
 _RATE_OF_CHANGE_CONCEPTS = [
@@ -2024,6 +2105,7 @@ __all__ = [
     "knowledge_slope_direction",
     "knowledge_range_endpoint",
     "knowledge_verify_solution",
+    "knowledge_classify_linear",
     "rate_of_change",
     "intersection",
     "y_range_from_domain",

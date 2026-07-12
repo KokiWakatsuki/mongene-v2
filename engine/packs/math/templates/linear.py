@@ -139,6 +139,12 @@ LF_KNOWLEDGE_VERIFY_SOLUTION_V1 = (
     "この連立方程式の解といえますか、いえませんか。"
 )
 
+# g2_l19.knowledge Lv2: 与式が1次関数か判別（横展開#19・knowledge verify型）
+# 選択肢（1次関数である/でない）は ChoiceAnswer 側。式は given.statement（given 由来）。
+LF_KNOWLEDGE_CLASSIFY_LINEAR_V1 = (
+    "式 {{ given.statement }} は、y が x の1次関数であるといえますか、いえませんか。"
+)
+
 
 # ---------------------------------------------------------------------------
 # g2_l20.find_value Lv1: 2点から変化の割合を求める（横展開の第1セル）
@@ -195,6 +201,9 @@ def _register_all() -> None:
     REGISTRY.register_template(
         "lf_knowledge_verify_solution_v1", LF_KNOWLEDGE_VERIFY_SOLUTION_V1
     )
+    REGISTRY.register_template(
+        "lf_knowledge_classify_linear_v1", LF_KNOWLEDGE_CLASSIFY_LINEAR_V1
+    )
     REGISTRY.register_template("lf_rate_of_change_v1", LF_RATE_OF_CHANGE_V1)
     REGISTRY.register_template("lf_intersection_v1", LF_INTERSECTION_V1)
     REGISTRY.register_template("lf_y_range_v1", LF_Y_RANGE_V1)
@@ -223,6 +232,7 @@ __all__ = [
     "LF_KNOWLEDGE_SLOPE_DIRECTION_V1",
     "LF_KNOWLEDGE_RANGE_ENDPOINT_V1",
     "LF_KNOWLEDGE_VERIFY_SOLUTION_V1",
+    "LF_KNOWLEDGE_CLASSIFY_LINEAR_V1",
     "LF_RATE_OF_CHANGE_V1",
     "LF_INTERSECTION_V1",
     "LF_Y_RANGE_V1",
