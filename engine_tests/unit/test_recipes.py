@@ -714,6 +714,43 @@ def test_solve_system_abc_double_solve_property(seed):
 
 
 # ---------------------------------------------------------------------------
+# math.knowledge_slope_direction（g2_l21.knowledge Lv1）— 横展開#16（knowledge form 初セル）
+# ---------------------------------------------------------------------------
+def test_knowledge_slope_direction_construct():
+    ctx = _make_ctx("math.g2_l21.knowledge", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+
+    assert mr.signature == "knowledge_slope_direction"
+    assert set(mr.given.keys()) == {"statement"}
+    assert mr.visual_plan is None  # knowledge は図なし
+    sq = mr.sub_questions[0]
+    assert sq.asked == "choice"
+    assert sq.answer.kind == "choice"  # 初の ChoiceAnswer 生成経路
+    assert sq.answer.correct in {"右上がり", "右下がり"}
+    assert sq.answer.distractors and sq.answer.correct not in sq.answer.distractors
+    assert sq.answer.fact_id == "lf.slope_sign_to_direction"
+    assert [s.op for s in sq.steps] == ["identify_slope_sign", "determine_direction"]
+
+
+@pytest.mark.parametrize("seed", range(200))
+def test_knowledge_slope_direction_double_solve_property(seed):
+    ctx = _make_ctx("math.g2_l21.knowledge", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+
+    # 問題パラメータの傾き a だけから向きを再判定（切片 b は無関係）→ recipe の答えと一致
+    a = sympy.sympify(mr.params["a"])
+    solver = REGISTRY.solver("math.linear_direction_from_slope")
+    sol = solver(a)
+    assert sol.answer.kind == "choice"
+    assert sol.answer.correct == mr.sub_questions[0].answer.correct
+    assert sol.answer.fact_id == mr.sub_questions[0].answer.fact_id
+    # 傾きの符号と向きの対応が正しい（規則の健全性）
+    assert sol.answer.correct == ("右上がり" if a > 0 else "右下がり")
+
+
+# ---------------------------------------------------------------------------
 # math.rate_of_change（g2_l20.find_value Lv1）— 横展開の第1セル
 # ---------------------------------------------------------------------------
 def test_rate_of_change_lv1_construct():
@@ -900,4 +937,7 @@ def test_recipes_declare_provides_concepts():
     })
     assert REGISTRY.recipe_concepts("math.solve_system_abc") == frozenset({
         "simultaneous_equations.solve_abc_form",
+    })
+    assert REGISTRY.recipe_concepts("math.knowledge_slope_direction") == frozenset({
+        "linear_function.slope_sign_to_direction",
     })

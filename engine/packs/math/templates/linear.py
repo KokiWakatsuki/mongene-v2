@@ -122,6 +122,12 @@ LF_SOLVE_SYSTEM_VARIOUS_V1 = (
 # g2_l15.calculation Lv2: A=B=C 形の等式を連立に組み替えて解く（横展開#15）
 LF_SOLVE_SYSTEM_ABC_V1 = "次の等式を満たす x, y を求めよ。\n{{ given.equation }}"
 
+# g2_l21.knowledge Lv1: グラフの向き（傾きの符号）を単一選択で問う（横展開#16・knowledge 初）
+# 選択肢はテンプレ本文に固定（答えの向き語は ChoiceAnswer 側・本文にはどちらも並記＝漏洩でない）。
+LF_KNOWLEDGE_SLOPE_DIRECTION_V1 = (
+    "1次関数 {{ given.statement }} のグラフは、右上がりと右下がりのどちらですか。"
+)
+
 
 # ---------------------------------------------------------------------------
 # g2_l20.find_value Lv1: 2点から変化の割合を求める（横展開の第1セル）
@@ -169,6 +175,9 @@ def _register_all() -> None:
     REGISTRY.register_template("lf_solve_system_subst_v1", LF_SOLVE_SYSTEM_SUBST_V1)
     REGISTRY.register_template("lf_solve_system_various_v1", LF_SOLVE_SYSTEM_VARIOUS_V1)
     REGISTRY.register_template("lf_solve_system_abc_v1", LF_SOLVE_SYSTEM_ABC_V1)
+    REGISTRY.register_template(
+        "lf_knowledge_slope_direction_v1", LF_KNOWLEDGE_SLOPE_DIRECTION_V1
+    )
     REGISTRY.register_template("lf_rate_of_change_v1", LF_RATE_OF_CHANGE_V1)
     REGISTRY.register_template("lf_intersection_v1", LF_INTERSECTION_V1)
     REGISTRY.register_template("lf_y_range_v1", LF_Y_RANGE_V1)
@@ -194,6 +203,7 @@ __all__ = [
     "LF_SOLVE_SYSTEM_SUBST_V1",
     "LF_SOLVE_SYSTEM_VARIOUS_V1",
     "LF_SOLVE_SYSTEM_ABC_V1",
+    "LF_KNOWLEDGE_SLOPE_DIRECTION_V1",
     "LF_RATE_OF_CHANGE_V1",
     "LF_INTERSECTION_V1",
     "LF_Y_RANGE_V1",

@@ -1,0 +1,28 @@
+family: math.g2_l21.knowledge
+form: knowledge
+source_desc: |
+  1次関数のグラフの特徴（傾きと切片）の想起（units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: 傾き・切片の意味と正負での上がり下がりを想起する。
+       example: 1次関数 y=ax+b のグラフについて、傾き a と切片 b はそれぞれグラフの何を表すか
+                答えよ。また、a>0 のときグラフは右上がりか右下がりか答えよ。
+  【設計モデル・要検収(Q4)】本セルは knowledge form の初セルとして、上記のうち「傾きの符号→
+  グラフの向き（右上がり/右下がり）」の判別を単一選択（ChoiceAnswer）で realize する。無限性(F-3)は
+  係数 a,b のパラメータ化で満たす（式 y=ax+b を変え、向きは a の符号で決まる）。傾き/切片の用語想起
+  （a=傾き, b=切片）は別の knowledge セルとして後続で追加可能。Q1 は fact_id 照合の V2（規則ベース）。
+concepts_default: [linear_function.slope_sign_to_direction]
+levels:
+  "1":
+    signature: knowledge_slope_direction
+    recipe: math.knowledge_slope_direction
+    params:
+      # 傾き a（≠0・両符号）で向きが決まる。切片 b は向きに無関係だが式の見かけを変え無限性に寄与。
+      # dup_key は params(a,b) で測る（答えは2値だが a,b の組合せは十分広い）。
+      slope_domain: {int_range: [-9, 9], exclude: [0]}
+      intercept_domain: {int_range: [-12, 12]}
+    given: [statement]
+    asked: [choice]
+    visual: none
+    text: {tier: T1, template: lf_knowledge_slope_direction_v1}
+    hints: [steps_prefix]
+    concept_tags: [linear_function.slope_sign_to_direction]
+    cause_tags: []

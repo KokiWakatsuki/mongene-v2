@@ -65,3 +65,6 @@ concepts:
   - id: simultaneous_equations.solve_abc_form
     label: "A=B=C 形の等式を連立に組み替えて解く"
     unit: g2_l15
+  - id: linear_function.slope_sign_to_direction
+    label: "傾きの符号からグラフの向き（右上がり/右下がり）を判別する"
+    unit: g2_l21

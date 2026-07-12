@@ -168,6 +168,14 @@ def double_solve_solve_system_abc(mr: MR) -> Solution:
     return cast(Solution, solver(line_a, line_b, p["method"]))
 
 
+@register_checker("math.knowledge_slope_direction.double_solve")
+def double_solve_knowledge_slope_direction(mr: MR) -> Solution:
+    # 問題パラメータの傾き a だけから向き（ChoiceAnswer）を再判定（切片 b は無関係）。
+    a = sympy.sympify(mr.params["a"])
+    solver = REGISTRY.solver("math.linear_direction_from_slope")
+    return cast(Solution, solver(a))
+
+
 @register_checker("math.rate_of_change.double_solve")
 def double_solve_rate_of_change(mr: MR) -> Solution:
     p = mr.params
@@ -222,6 +230,7 @@ __all__ = [
     "double_solve_solve_system_elim_scaled",
     "double_solve_solve_system_preprocessed",
     "double_solve_solve_system_abc",
+    "double_solve_knowledge_slope_direction",
     "double_solve_rate_of_change",
     "double_solve_intersection",
     "double_solve_y_range",

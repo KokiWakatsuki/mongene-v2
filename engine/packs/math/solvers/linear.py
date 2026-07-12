@@ -7,7 +7,14 @@ from __future__ import annotations
 
 import sympy
 
-from engine.core.contracts import Feature, GraphAnswer, Solution, Step, SymbolicAnswer
+from engine.core.contracts import (
+    ChoiceAnswer,
+    Feature,
+    GraphAnswer,
+    Solution,
+    Step,
+    SymbolicAnswer,
+)
 from engine.core.registry import register_solver
 
 X = sympy.Symbol("x")
@@ -659,6 +666,43 @@ def draw_from_equation(a: object, b: object, c: object) -> Solution:
     return Solution(answer=draw.answer, steps=steps)
 
 
+@register_solver("math.linear_direction_from_slope")
+def linear_direction_from_slope(a: object) -> Solution:
+    """1次関数 y=ax+b のグラフの向き（右上がり/右下がり）を傾き a の符号から判定する
+    （knowledge・g2_l21）。a>0 → 右上がり／a<0 → 右下がり。答えは ChoiceAnswer（単一選択）、
+    fact_id で根拠（傾きの符号と向きの対応規則）を刻む＝Q1 は V2（規則ベース照合・§6.2）。
+
+    b（切片）は向きに無関係なので solver は a のみで判定する（recipe の構成値は見ない・double-solve）。
+    """
+    a_s = sympy.nsimplify(a)
+    if a_s == 0:
+        raise ValueError("傾き a=0 は1次関数でない（a≠0）")
+    positive = a_s > 0
+    direction = "右上がり" if positive else "右下がり"
+    other = "右下がり" if positive else "右上がり"
+    steps = [
+        Step(
+            op="identify_slope_sign",
+            args=[_format_number(a_s)],
+            result_srepr=sympy.srepr(sympy.sign(a_s)),
+            result_display="傾きは正" if positive else "傾きは負",
+            # 数字を出さない（答えの向きは a の符号で決まるが、ヒントでは向きを言わない）
+            narration="傾き a の符号に注目する。",
+        ),
+        Step(
+            op="determine_direction",
+            args=[],
+            result_srepr=direction,
+            result_display=direction,
+            narration="傾きが正なら右上がり、傾きが負なら右下がりになる。",
+        ),
+    ]
+    answer = ChoiceAnswer(
+        correct=direction, distractors=[other], fact_id="lf.slope_sign_to_direction"
+    )
+    return Solution(answer=answer, steps=steps)
+
+
 __all__ = [
     "linear_expr_from_two_points",
     "linear_expr_from_slope_point",
@@ -673,4 +717,5 @@ __all__ = [
     "point_on_line_at_x",
     "draw_linear_features",
     "draw_from_equation",
+    "linear_direction_from_slope",
 ]

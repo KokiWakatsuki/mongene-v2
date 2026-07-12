@@ -18,6 +18,7 @@ import sympy
 from engine.core.contracts import (
     MR,
     CellContext,
+    ChoiceAnswer,
     GraphAnswer,
     Provenance,
     Solution,
@@ -1538,6 +1539,65 @@ def solve_system_abc(ctx: CellContext, rng: Rng) -> MR:
 
 
 # ---------------------------------------------------------------------------
+# math.knowledge_slope_direction（g2_l21.knowledge Lv1 用）— 横展開#16・knowledge capability 初
+# 1次関数のグラフの向き（傾きの符号→右上がり/右下がり）を単一選択で問う。答えは ChoiceAnswer。
+# knowledge form の初セル（ChoiceAnswer 生成経路・初）。無限性は係数 a,b のパラメータ化で満たす。
+# ---------------------------------------------------------------------------
+_KNOWLEDGE_SLOPE_DIRECTION_CONCEPTS = [
+    "linear_function.slope_sign_to_direction",
+]
+
+
+@register_recipe(
+    "math.knowledge_slope_direction", provides_concepts=_KNOWLEDGE_SLOPE_DIRECTION_CONCEPTS
+)
+def knowledge_slope_direction(ctx: CellContext, rng: Rng) -> MR:
+    """1次関数のグラフの向きを傾きの符号から判別する（knowledge・answer-first）。
+
+    傾き a（≠0）と切片 b を選び、式 y=ax+b を statement として提示。向き（右上がり/右下がり）は
+    独立 solver `math.linear_direction_from_slope` が a の符号だけから判定（b は無関係＝double-solve）。
+    答えは ChoiceAnswer（correct=向き・distractors=もう一方・fact_id=規則ID）。図なし（knowledge）。
+    無限性は a,b のパラメータ化で満たす（答えは2値だが dup_key は params(a,b) で測る）。
+    """
+    p = ctx.spec_level.params
+    x_sym = sympy.symbols("x")
+    a = sympy.nsimplify(draw(p["slope_domain"], rng))  # 傾き（≠0）
+    b = sympy.nsimplify(draw(p["intercept_domain"], rng))  # 切片（向きに無関係）
+    y_sym = sympy.symbols("y")
+    statement = _fmt_eq(y_sym, a * x_sym + b)  # "y = -3x + 4"
+
+    solver = REGISTRY.solver("math.linear_direction_from_slope")
+    sol = cast(Solution, solver(a))
+    assert isinstance(sol.answer, ChoiceAnswer)
+    expected = "右上がり" if a > 0 else "右下がり"
+    assert sol.answer.correct == expected, (
+        f"double-solve 不一致: 構成向き {expected} != solver 判定 {sol.answer.correct}"
+    )
+
+    sub_question = SubQuestionMR(
+        label="(1)",
+        asked="choice",
+        answer=sol.answer,
+        steps=sol.steps,
+        concept_tags=_effective_concept_tags(ctx),
+        cause_tags=_effective_cause_tags(ctx),
+    )
+
+    return MR(
+        signature=ctx.spec_level.signature,
+        family=ctx.family,
+        level=ctx.level,
+        purpose=ctx.purpose,
+        seed=0,
+        params={"a": str(a), "b": str(b)},
+        given={"statement": statement},
+        sub_questions=[sub_question],
+        visual_plan=None,
+        provenance=Provenance(recipe="math.knowledge_slope_direction"),
+    )
+
+
+# ---------------------------------------------------------------------------
 # math.rate_of_change（g2_l20.find_value Lv1 用）— 横展開の第1セル
 # ---------------------------------------------------------------------------
 _RATE_OF_CHANGE_CONCEPTS = [
@@ -1814,6 +1874,7 @@ __all__ = [
     "solve_system_elim_scaled",
     "solve_system_preprocessed",
     "solve_system_abc",
+    "knowledge_slope_direction",
     "rate_of_change",
     "intersection",
     "y_range_from_domain",
