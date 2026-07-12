@@ -18,12 +18,12 @@
 
 ---
 
-## 1. 現状サマリ（2026-07-12・最新コミット `916fb3c`）
+## 1. 現状サマリ（2026-07-12・最新コミット `d680c3d`）
 
-**M0 金の縦串は実装完了**（要件 §10 M0 DoD = Q1〜Q7 + F-1/2/3/5/9 を充足）。続けて **横展開を6セル分**進めた（#1〜#3 は前セッション、#4〜#6 は本セッション）。
+**M0 金の縦串は実装完了**（要件 §10 M0 DoD = Q1〜Q7 + F-1/2/3/5/9 を充足）。続けて **横展開を7セル分**進めた（#1〜#3 前セッション、#4〜#7 本セッション）。**一次関数クラスタの「純T1で作れる」find_value/calculation/graph読み取りセルはここで出し切り**（残りは新capability必須＝下記 §6）。
 
-- テスト全体 **2689 passed**・`mypy --strict` クリーン・`ruff`（engine/ ソース）クリーン。
-- **capabilities = 13 セル**（`spec check` 済みで generate 可能なセル）:
+- テスト全体 **2893 passed**・`mypy --strict` クリーン・`ruff`（engine/ ソース）クリーン。
+- **capabilities = 14 セル**（`spec check` 済みで generate 可能なセル）:
 
 | unit | form | levels | 内容 | recipe |
 |---|---|---|---|---|
@@ -36,15 +36,17 @@
 | g2_l21 | graph_table | 1 | グラフから傾き・切片を読む（図つき・#4） | read_slope_intercept |
 | g2_l26 | calculation | 1 | ax+by=c を y=… に変形（最初の calc・#5） | solve_equation_for_y |
 | g2_l19 | calculation | 1 | y=ax+b に x を代入し y の値（最初の asked=value・#6） | evaluate_linear |
+| g2_l22 | calculation | 1 | グラフが通る点を代入で求める（asked=coordinate・#7） | point_on_line |
 
-- M0 縦串 = g2_l25 + 戻り先 g2_l24（find_value）+ g2_l25 graph_table + remedial。**横展開分** = g2_l20 / g2_l27 / g2_l23 / g2_l21 / g2_l26 / g2_l19。
-- `git log --oneline -6`: 916fb3c(横展開#6 l19) / f1fd124(#5 l26) / 5c8c8ab(#4 l21) / 99e4d19(引き継ぎ書) / ba37019(#3 l23) / 67ac9c1(#2 l27)。
+- M0 縦串 = g2_l25 + 戻り先 g2_l24（find_value）+ g2_l25 graph_table + remedial。**横展開分** = g2_l20 / g2_l27 / g2_l23 / g2_l21 / g2_l26 / g2_l19 / g2_l22。
+- **償却の前進（#7）**: solver `evaluate_linear_at_x` を素関数 `_evaluate_linear_at_x_core` に切り出し、g2_l19（値）と g2_l22（座標）の**2セルで共有**。1演算が複数セルを支える最初の実例（recipe:セル比が下がり始めた）。
+- `git log --oneline -6`: d680c3d(横展開#7 l22) / 352dcd7(引継書) / 916fb3c(#6 l19) / f1fd124(#5 l26) / 5c8c8ab(#4 l21) / 99e4d19(引継書)。
 
 ### 再開時の最初のコマンド（実状態の確認）
 ```bash
 cd /Users/koki/workspace/mongene-v2
 git branch --show-current            # engine-m0-rework
-git log --oneline -6                 # 最新 916fb3c（横展開#6 l19）
+git log --oneline -6                 # 最新 d680c3d（横展開#7 l22）
 git status --porcelain               # 空（クリーン）のはず。preview_*.html / problem_*.svg は生成物なので無視/削除可
 # 縦串 + 横展開 + eval が緑であることを再確認:
 .venv/bin/python -m pytest engine_tests/contract/ engine_tests/golden/ engine_tests/eval/ -o addopts="" -p no:cacheprovider -q
@@ -162,16 +164,18 @@ engine_tests/      unit/ golden/ contract/ eval/
 
 **faithful なレベル分けが不確かな単元は、`source_desc` に設計モデルを明記し preview 検収（人間・Q4）に委ねる**——これは設計が sanction した手順（§10）。推測で量産しない。
 
-### 次の一手（推奨）
-**済（本セッション #4〜#6）**: g2_l21 graph_table[1] グラフから傾き・切片 / g2_l26 calculation[1] ax+by=c→y= / g2_l19 calculation[1] 代入して y の値。
-残りの T1 で作れる候補（find_value/graph_table「読む」/calculation を優先。**word_problem と graph_table「かく」は避ける**＝下記の理由）:
-1. **g2_l22 calculation[1]**「整数座標の通過点」= y=ax+b の x に代入して通る点(x0, y0) を求める。**注意**: asked が座標なので calculation 語彙に無い（asked_vocab={value,simplified_expr,solution}）。faithful には find_value 寄り＝`coordinate` を asked にしたいが taxonomy は calculation。**要判断**（calculation に coordinate を足すか、evaluate_linear を拡張して座標返しにするか）。g2_l19 の evaluate ソルバを座標返しに一般化するのが素直。
-2. **g2_l9 calculation[1,2,3]**「等式の変形（指定文字について解く）」= g2_l26 の solve_for_y の一般化（一次関数クラスタ外だが calc 資産を活かせる。Lv で解く文字/係数の複雑さを変える＝構造差を作りやすい）。
-3. **knowledge クラスタ**（l19/l21/l26 に knowledge[1,2] あり）: **fact テーブル**（`facts.yaml`・§6.2 V2）＋ knowledge 用 recipe/frame(ChoiceAnswer) が未整備。着手するならまず fact table 機構を1本作る（M1 寄りだが T1 で解説まで出せる）。
+### 次の一手 ― ★重要な分岐（純T1セルは出し切った）
+**済（本セッション #4〜#7）**: g2_l21 graph_table[1]読む / g2_l26 calc[1] ax+by=c→y= / g2_l19 calc[1] 代入→値 / g2_l22 calc[1] 代入→座標。
 
-**T1 で今すぐは作れないもの（保留・要新capability）**:
-- **graph_table「かく」（draw_graph）**: l22/l26/l29 等。GraphAnswer(features+solution_svg_ref)・特徴点 double-solve（§6.2 V1'）・解答図描画が未実装。既存 graph_table は全て「読む」→SymbolicAnswer。**新 answer 経路の実装が要る**（M1 初手候補）。
-- **word_problem（l16〜l18/l28〜l30 等）**: T3 翻訳(LLM)＝M1 本体。find_value 版でも「Aさんが…」等シナリオ文脈は context_slots + 自然文が要り、T1 で faithful に書けない（推測量産の禁止）。g2_l30 find_value[2] は交点計算自体は `intersection` 再利用可だが、忠実な文面は word_problem 側で。
+**一次関数クラスタで「部品ほぼ流用＋spec だけ」で作れる純T1セルは、ここでほぼ枯れた**（残りの unit×form×level を全走査して確認済み）。残りは3つとも**新しい capability の実装**が要る＝これまでの「1セル追加」とは作業の質が変わる。どれを次に投資するかは方針判断:
+
+1. **graph_table「かく」capability（draw_graph）** ― ★T1 で最大の解放。l22/l23/l26/l27/l28/l29 の作図セルを一気に開ける。要実装: `GraphAnswer(features+solution_svg_ref)` の answer 経路、特徴点 double-solve（§6.2 V1'）、解答図の決定論描画、問題図＝空グリッド。**LLM は不要（T1のまま）**なので「T1優先」方針と両立。現 graph_table は全て「読む」→SymbolicAnswer なので、これが初の「かく」。gate 枠組みが GraphAnswer を通すか要確認。→ **推奨の第一候補**。
+2. **連立方程式クラスタ（g2_l10〜l15）へ intersection 資産を横展開** ― `intersection_of_two_lines`（＝2×2連立の解法）は加減法/代入法そのもの。別クラスタだが償却効果は最大級（1 solver が多数の calc セルを支える）。「一次関数クラスタ」の指示からは外れるので要相談。
+3. **knowledge capability（fact テーブル）** ― l19/l21/l26 等。`facts.yaml`＋ChoiceAnswer frame＋fact 照合ゲート（§6.2 V2）が未整備。T1 で解説まで出せるが機構が要る。
+
+**当面 T1 で作れないもの**: word_problem/利用（l28〜l30・T3 翻訳＝M1本体）。g2_l30 find_value[2] は交点計算は `intersection` 流用可だが、忠実な文面はシナリオ翻訳が要り word_problem 側（推測量産の禁止）。
+
+※ 上記1〜3 はいずれも旧引き継ぎ書の「M1 寄り」に該当。**次セッションは「セルを1つ足す」より先に、どの capability を1本作るかを決めてから着手すること**（capability を1本作れば、その形式のセルは再び spec だけで量産に戻れる＝償却の本丸）。
 
 ---
 
