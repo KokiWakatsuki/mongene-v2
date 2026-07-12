@@ -1607,6 +1607,103 @@ def solve_system_elimination(ctx: CellContext, rng: Rng) -> MR:
 
 
 # ---------------------------------------------------------------------------
+# math.solve_system_elimination_add（g2_l16.calculation Lv1 用）— P1/C2・連立クラスタ
+# 整数係数の連立を加減法で解く。y の係数が「絶対値が等しく符号が逆」→辺々を足して消去する
+# （g2_l11 の「等しい係数→引く」とは別構造）。答え(x,y)は既存 intersection_of_two_lines を再利用。
+# ---------------------------------------------------------------------------
+_SOLVE_SYSTEM_ELIM_ADD_CONCEPTS = [
+    "simultaneous_equations.solve_by_elimination_add",
+]
+
+
+@register_recipe(
+    "math.solve_system_elimination_add", provides_concepts=_SOLVE_SYSTEM_ELIM_ADD_CONCEPTS
+)
+def solve_system_elimination_add(ctx: CellContext, rng: Rng) -> MR:
+    """連立方程式を加減法で解く（answer-first・Lv1・y の係数が絶対値等しく符号が逆＝足す）。
+
+    解 (x0,y0) を先に選び、y の係数を一方は +b・他方は -b にとる（x の係数 a1≠a2 で非平行）。
+    C1,C2 を逆算すると、2式を辺々**足す**だけで y が消える。答え (x0,y0) は既存 solver
+    `math.intersection_of_two_lines`（連立解＝交点）で再計算し一致を確認する（新 solver ゼロ）。
+    steps は「足して消去」の代数手順（g2_l11 の「引いて消去」とは op が異なる）。図なし。
+    """
+    p = ctx.spec_level.params
+    x0 = draw(p["x_domain"], rng)
+    y0 = draw(p["y_domain"], rng)
+    a1, a2 = draw_many(p["x_coeff_pair_domain"], rng, k=2)  # x の係数（相異＝非平行・正）
+    bcoef = draw(p["y_coeff_domain"], rng)  # y の係数の絶対値（正）
+
+    x0_s, y0_s = sympy.nsimplify(x0), sympy.nsimplify(y0)
+    a1_s, a2_s = sympy.nsimplify(a1), sympy.nsimplify(a2)
+    b_s = sympy.nsimplify(bcoef)
+    # eq1 の y 係数 +b、eq2 の y 係数 -b（絶対値等しく符号逆）。
+    c1_s = a1_s * x0_s + b_s * y0_s
+    c2_s = a2_s * x0_s - b_s * y0_s
+
+    coeffs1 = [a1_s, b_s, c1_s]
+    coeffs2 = [a2_s, -b_s, c2_s]
+    solver = REGISTRY.solver("math.intersection_of_two_lines")
+    sol = cast(Solution, solver(tuple(coeffs1), tuple(coeffs2), "elimination"))
+    assert isinstance(sol.answer, SymbolicAnswer)
+    expected_pt = sympy.Tuple(x0_s, y0_s)
+    assert sol.answer.srepr == sympy.srepr(expected_pt), (
+        f"double-solve 不一致: 構成解 {expected_pt} != solver 再計算 {sol.answer.srepr}"
+    )
+
+    disp1 = _format_general_form(a1_s, b_s, c1_s)
+    disp2 = _format_general_form(a2_s, -b_s, c2_s)
+    steps = [
+        Step(
+            op="identify_opposite_coeff",
+            args=[disp1, disp2],
+            result_srepr=sympy.srepr(b_s),
+            result_display=f"y の係数は {_fmt_number(b_s)} と {_fmt_number(-b_s)}",
+            narration="y の係数が絶対値が等しく符号が逆なので、辺々を足して y を消去する。",
+        ),
+        Step(
+            op="add_and_solve_x",
+            args=[],
+            result_srepr=sympy.srepr(x0_s),
+            result_display=f"x = {_fmt_number(x0_s)}",
+            narration="足してできた式から x の値を求める。",
+        ),
+        Step(
+            op="back_substitute",
+            args=[_fmt_number(x0_s)],
+            result_srepr=sympy.srepr(y0_s),
+            result_display=f"y = {_fmt_number(y0_s)}",
+            narration="求めた x を一方の式に代入して y を求める。",
+        ),
+    ]
+
+    sub_question = SubQuestionMR(
+        label="(1)",
+        asked="solution",
+        answer=sol.answer,
+        steps=steps,
+        concept_tags=_effective_concept_tags(ctx),
+        cause_tags=_effective_cause_tags(ctx),
+    )
+
+    return MR(
+        signature=ctx.spec_level.signature,
+        family=ctx.family,
+        level=ctx.level,
+        purpose=ctx.purpose,
+        seed=0,
+        params={
+            "line_a": [str(c) for c in coeffs1],
+            "line_b": [str(c) for c in coeffs2],
+            "method": "elimination",
+        },
+        given={"equation_a": disp1, "equation_b": disp2},
+        sub_questions=[sub_question],
+        visual_plan=None,
+        provenance=Provenance(recipe="math.solve_system_elimination_add"),
+    )
+
+
+# ---------------------------------------------------------------------------
 # math.solve_system_substitution（g2_l13.calculation Lv1/Lv2 用）— 横展開#12・連立クラスタ
 # 代入法。答え(x,y)は既存 intersection_of_two_lines を再利用（新solverゼロ）。
 # レベル間は steps の op 列で構造を変える（level_sep=fp 相異の必須）:
@@ -2321,6 +2418,74 @@ def solve_time_from_area(ctx: CellContext, rng: Rng) -> MR:
         sub_questions=[sub_question],
         visual_plan=None,
         provenance=Provenance(recipe="math.solve_time_from_area"),
+    )
+
+
+# ---------------------------------------------------------------------------
+# math.substitute_into_equation（g2_l10.calculation Lv1 用）— P1/C2・連立クラスタ
+# 2元1次方程式 ax+by=c に (x,y) の値を代入し、左辺の値を求める（代入計算）。
+# ★knowledge l10 Lv2（○×判定・ChoiceAnswer）とは別: asked=value・answer=左辺の値（数値）。
+# ---------------------------------------------------------------------------
+_SUBSTITUTE_INTO_EQUATION_CONCEPTS = [
+    "simultaneous_equations.substitute_and_evaluate",
+]
+
+
+@register_recipe(
+    "math.substitute_into_equation", provides_concepts=_SUBSTITUTE_INTO_EQUATION_CONCEPTS
+)
+def substitute_into_equation(ctx: CellContext, rng: Rng) -> MR:
+    """2元1次方程式の左辺に (x,y) を代入して左辺の値を求める（answer-first・calculation Lv1）。
+
+    係数 a(>0)・b(≠0)・代入する x,y を選び、左辺の値 lhs=a·x+b·y を独立ソルバ
+    `math.evaluate_two_var_lhs` で再計算する。右辺 c は holds（成り立つ）なら lhs、そうでなければ
+    lhs+δ にとる（等式が成り立つ場合も成り立たない場合もある＝確かめる文脈）。答えは左辺の値。
+    """
+    p = ctx.spec_level.params
+    a = draw(p["a_coeff_domain"], rng)     # x の係数（正）
+    b = draw(p["b_coeff_domain"], rng)     # y の係数（≠0）
+    x_cand = draw(p["x_cand_domain"], rng)
+    y_cand = draw(p["y_cand_domain"], rng)
+    holds = draw(p["holds_domain"], rng)   # [true, false]
+
+    a_s, b_s = sympy.nsimplify(a), sympy.nsimplify(b)
+    x_s, y_s = sympy.nsimplify(x_cand), sympy.nsimplify(y_cand)
+    lhs = a_s * x_s + b_s * y_s
+    if holds:
+        c_s = lhs
+    else:
+        c_s = lhs + sympy.nsimplify(draw(p["delta_domain"], rng))  # ≠0 の δ で成り立たない
+
+    solver = REGISTRY.solver("math.evaluate_two_var_lhs")
+    sol = cast(Solution, solver(a_s, b_s, x_s, y_s))
+    assert isinstance(sol.answer, SymbolicAnswer)
+    assert sol.answer.srepr == sympy.srepr(lhs), (
+        f"double-solve 不一致: 構成左辺 {lhs} != solver 再計算 {sol.answer.srepr}"
+    )
+
+    equation_disp = _format_general_form(a_s, b_s, c_s)
+    candidate_disp = f"x = {_fmt_number(x_s)}, y = {_fmt_number(y_s)}"
+
+    sub_question = SubQuestionMR(
+        label="(1)",
+        asked="value",
+        answer=sol.answer,
+        steps=sol.steps,
+        concept_tags=_effective_concept_tags(ctx),
+        cause_tags=_effective_cause_tags(ctx),
+    )
+
+    return MR(
+        signature=ctx.spec_level.signature,
+        family=ctx.family,
+        level=ctx.level,
+        purpose=ctx.purpose,
+        seed=0,
+        params={"a": str(a_s), "b": str(b_s), "x_cand": str(x_s), "y_cand": str(y_s)},
+        given={"equation": equation_disp, "candidate": candidate_disp},
+        sub_questions=[sub_question],
+        visual_plan=None,
+        provenance=Provenance(recipe="math.substitute_into_equation"),
     )
 
 

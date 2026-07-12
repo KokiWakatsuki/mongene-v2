@@ -1,0 +1,63 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - simultaneous_equations.solve_by_elimination_add
+  provenance:
+    git_commit: ''
+    recipe: math.solve_system_elimination_add
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_solve_system_elim_v1
+    tier: T1
+  requested:
+    form: calculation
+    level: 1
+    subject: math
+    unit: g2_l16
+  resolved:
+    form: calculation
+    level: 1
+    subject: math
+    unit: g2_l16
+  seed: 3
+  signature: solve_system_elimination_add
+problem_ref: d3c269f0be04000e
+problem_text: '次の連立方程式を加減法で解け。
+
+  5x + 3y = 10 , 4x - 3y = 8'
+sub_questions:
+- answer:
+    display: (2, 0)
+    kind: symbolic
+    srepr: Tuple(Integer(2), Integer(0))
+  cause_tags: []
+  concept_tags:
+  - simultaneous_equations.solve_by_elimination_add
+  explanation: まず、y の係数が絶対値が等しく符号が逆なので、辺々を足して y を消去する。 y の係数は 3 と -3次に、足してできた式から x の値を求める。 x = 2最後に、求めた x を一方の式に代入して y を求める。 y = 0
+  hints:
+  - y の係数が絶対値が等しく符号が逆なので、辺々を足して y を消去する。
+  - 足してできた式から x の値を求める。
+  label: (1)
+  prompt_text: solution を求めなさい。
+  solution_steps:
+  - args:
+    - 5x + 3y = 10
+    - 4x - 3y = 8
+    narration: y の係数が絶対値が等しく符号が逆なので、辺々を足して y を消去する。
+    op: identify_opposite_coeff
+    result_display: y の係数は 3 と -3
+    result_srepr: Integer(3)
+  - args: []
+    narration: 足してできた式から x の値を求める。
+    op: add_and_solve_x
+    result_display: x = 2
+    result_srepr: Integer(2)
+  - args:
+    - '2'
+    narration: 求めた x を一方の式に代入して y を求める。
+    op: back_substitute
+    result_display: y = 0
+    result_srepr: Integer(0)
+visual_svg: null

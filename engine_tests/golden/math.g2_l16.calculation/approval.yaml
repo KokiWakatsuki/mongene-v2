@@ -1,0 +1,8 @@
+approved_at: '2026-07-13T07:28:58.267826'
+approver: koki
+content_sha256: 9a8caad90c9f2c5a398aa78f837ac2cc69d89cbc858dc06fafd7c0d759685dd5
+family: math.g2_l16.calculation
+files:
+- engine_tests/golden/math.g2_l16.calculation/math.g2_l16.calculation_lv1_seed1.yaml
+- engine_tests/golden/math.g2_l16.calculation/math.g2_l16.calculation_lv1_seed2.yaml
+- engine_tests/golden/math.g2_l16.calculation/math.g2_l16.calculation_lv1_seed3.yaml

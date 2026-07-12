@@ -74,6 +74,9 @@ concepts:
   - id: simultaneous_equations.solve_by_elimination
     label: "連立方程式を加減法で解く（係数の絶対値が等しい）"
     unit: g2_l11
+  - id: simultaneous_equations.solve_by_elimination_add
+    label: "連立方程式を加減法で解く（係数が絶対値等しく符号逆→足して消去）"
+    unit: g2_l16
   - id: simultaneous_equations.solve_by_substitution
     label: "連立方程式を代入法で解く（そのまま代入／変形して代入）"
     unit: g2_l13
@@ -97,6 +100,9 @@ concepts:
     unit: g2_l23
   - id: simultaneous_equations.verify_solution
     label: "与えられた組が連立方程式の解かどうかを代入して判定する"
+    unit: g2_l10
+  - id: simultaneous_equations.substitute_and_evaluate
+    label: "2元1次方程式の左辺に (x,y) を代入して左辺の値を求める"
     unit: g2_l10
   - id: linear_function.classify_as_linear
     label: "与えられた式が y が x の1次関数かどうかを判別する"

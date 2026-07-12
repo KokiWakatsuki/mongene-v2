@@ -1,0 +1,31 @@
+family: math.g2_l10.calculation
+form: calculation
+source_desc: |
+  2元1次方程式の左辺に (x,y) を代入して左辺の値を求める
+  （units.generated.yaml の desc/example を正として転記）。
+  desc: 値を代入して成り立つか確かめる。
+  example: 2元1次方程式 x + 2y = 8 に x=2, y=3 を代入し、この等式が成り立つかどうか確かめよ。
+  ★設計モデル（preview 検収 Q4）: knowledge Lv2（○×判定・ChoiceAnswer）とは別に、本 calc セルは
+  「左辺の値を求める」代入計算を asked=value で問う（答えは左辺の数値）。右辺と比べれば等式が
+  成り立つか確かめられる。holds で右辺を左辺と一致/不一致にとり、成り立つ場合も成り立たない場合も出す。
+concepts_default: [simultaneous_equations.substitute_and_evaluate]
+levels:
+  "1":
+    signature: substitute_into_equation_lhs
+    recipe: math.substitute_into_equation
+    params:
+      a_coeff_domain: {int_range: [1, 6]}
+      b_coeff_domain: {int_range: [-6, 6], exclude: [0]}
+      x_cand_domain: {int_range: [-6, 6]}
+      y_cand_domain: {int_range: [-6, 6]}
+      holds_domain: [true, false]
+      delta_domain: {int_range: [-4, 4], exclude: [0]}
+    given: [equation, candidate]
+    asked: [value]
+    visual: none
+    text: {tier: T1, template: lf_substitute_into_equation_v1}
+    hints: [steps_prefix]
+    concept_tags: [simultaneous_equations.substitute_and_evaluate]
+    cause_tags: []
+remedial:
+  default_level: 1

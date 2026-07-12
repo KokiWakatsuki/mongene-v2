@@ -94,6 +94,7 @@ CALCULATION_FRAME = Frame(
         "expression", "equation",
         "input_value",  # 横展開#6: 代入する x の値（g2_l19 y=ax+b に x を代入）
         "equation_a", "equation_b",  # 横展開#11: 連立方程式2式（g2_l11 加減法）
+        "candidate",  # P1/C2: 代入する (x,y) の組（g2_l10 左辺の値を求める）
     }),
     asked_vocab=frozenset({
         "value", "simplified_expr", "solution",

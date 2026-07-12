@@ -162,6 +162,12 @@ LF_SOLVE_SYSTEM_ELIM_V1 = (
     "次の連立方程式を加減法で解け。\n{{ given.equation_a }} , {{ given.equation_b }}"
 )
 
+# g2_l10.calculation Lv1: 2元1次方程式の左辺に (x,y) を代入して左辺の値を求める（P1/C2）
+LF_SUBSTITUTE_INTO_EQUATION_V1 = (
+    "2元1次方程式 {{ given.equation }} の左辺に {{ given.candidate }} を代入して、"
+    "左辺の値を求めよ。"
+)
+
 # g2_l13.calculation Lv1/Lv2: 連立方程式を代入法で解く（横展開#12）
 LF_SOLVE_SYSTEM_SUBST_V1 = (
     "次の連立方程式を代入法で解け。\n{{ given.equation_a }} , {{ given.equation_b }}"
@@ -309,6 +315,9 @@ def _register_all() -> None:
     REGISTRY.register_template("lf_draw_from_table_v1", LF_DRAW_FROM_TABLE_V1)
     REGISTRY.register_template("lf_draw_segment_v1", LF_DRAW_SEGMENT_V1)
     REGISTRY.register_template("lf_solve_system_elim_v1", LF_SOLVE_SYSTEM_ELIM_V1)
+    REGISTRY.register_template(
+        "lf_substitute_into_equation_v1", LF_SUBSTITUTE_INTO_EQUATION_V1
+    )
     REGISTRY.register_template("lf_solve_system_subst_v1", LF_SOLVE_SYSTEM_SUBST_V1)
     REGISTRY.register_template("lf_solve_system_various_v1", LF_SOLVE_SYSTEM_VARIOUS_V1)
     REGISTRY.register_template("lf_solve_system_abc_v1", LF_SOLVE_SYSTEM_ABC_V1)
@@ -371,6 +380,7 @@ __all__ = [
     "LF_DRAW_FROM_TABLE_V1",
     "LF_DRAW_SEGMENT_V1",
     "LF_SOLVE_SYSTEM_ELIM_V1",
+    "LF_SUBSTITUTE_INTO_EQUATION_V1",
     "LF_SOLVE_SYSTEM_SUBST_V1",
     "LF_SOLVE_SYSTEM_VARIOUS_V1",
     "LF_SOLVE_SYSTEM_ABC_V1",

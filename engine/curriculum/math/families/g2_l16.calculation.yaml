@@ -1,0 +1,30 @@
+family: math.g2_l16.calculation
+form: calculation
+source_desc: |
+  整数係数の連立を加減法で解く（y の係数が絶対値等しく符号逆→辺々を足して消去）
+  （units.generated.yaml の desc/example を正として転記）。
+  desc: 整数係数の連立を解く。
+  example: 次の連立方程式を解け。{ 3x + 2y = 16, 5x − 2y = 8 }
+  g2_l11（等しい係数→引く）とは別構造で、y の係数を +b / -b にとり辺々を足して消去する。
+  答え (x,y) は既存 intersection_of_two_lines solver を再利用（新 solver ゼロ）。answer-first で
+  整数解に構成する（例の非整数解と違い clean な整数解にする）。
+concepts_default: [simultaneous_equations.solve_by_elimination_add]
+levels:
+  "1":
+    signature: solve_system_elimination_add
+    recipe: math.solve_system_elimination_add
+    params:
+      # 解 (x0,y0)・x 係数対 a1≠a2（正）・y 係数の絶対値 b。y 係数は +b/-b で足して消去。
+      x_domain: {int_range: [-6, 6]}
+      y_domain: {int_range: [-6, 6]}
+      x_coeff_pair_domain: {int_range: [2, 6], distinct: [value]}
+      y_coeff_domain: {int_range: [2, 5]}
+    given: [equation_a, equation_b]
+    asked: [solution]
+    visual: none
+    text: {tier: T1, template: lf_solve_system_elim_v1}
+    hints: [steps_prefix]
+    concept_tags: [simultaneous_equations.solve_by_elimination_add]
+    cause_tags: []
+remedial:
+  default_level: 1

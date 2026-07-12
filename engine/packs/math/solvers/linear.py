@@ -1004,6 +1004,36 @@ def solve_time_from_area(a: object, y_target: object) -> Solution:
     return Solution(answer=answer, steps=steps)
 
 
+@register_solver("math.evaluate_two_var_lhs")
+def evaluate_two_var_lhs(a: object, b: object, x_cand: object, y_cand: object) -> Solution:
+    """2元1次方程式 ax+by=c の左辺 ax+by に (x,y) の値を代入して左辺の値を求める
+    （g2_l10.calculation Lv1）。答えは左辺の値（数値・SymbolicAnswer）。右辺 c と比べれば等式が
+    成り立つか確かめられるが、本セルは「左辺の値を求める」代入計算を問う（○×判定は knowledge Lv2）。
+    narration には数字を書かない。
+    """
+    a_s, b_s = sympy.nsimplify(a), sympy.nsimplify(b)
+    x_s, y_s = sympy.nsimplify(x_cand), sympy.nsimplify(y_cand)
+    lhs = a_s * x_s + b_s * y_s
+    steps = [
+        Step(
+            op="substitute_candidate",
+            args=[],
+            result_srepr=sympy.srepr(sympy.Tuple(x_s, y_s)),
+            result_display="左辺に x, y の値を代入する",
+            narration="左辺の x と y に、与えられた値をそれぞれ代入する。",
+        ),
+        Step(
+            op="compute_lhs",
+            args=[],
+            result_srepr=sympy.srepr(lhs),
+            result_display=_format_number(lhs),
+            narration="代入した左辺を計算して、その値を求める。",
+        ),
+    ]
+    answer = SymbolicAnswer(srepr=sympy.srepr(lhs), display=_format_number(lhs))
+    return Solution(answer=answer, steps=steps)
+
+
 @register_solver("math.verify_system_solution")
 def verify_system_solution(
     line_a: tuple[object, object, object],

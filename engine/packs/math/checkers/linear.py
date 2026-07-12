@@ -192,6 +192,27 @@ def double_solve_solve_system_elimination(mr: MR) -> Solution:
     return cast(Solution, solver(line_a, line_b, p["method"]))
 
 
+@register_checker("math.substitute_into_equation.double_solve")
+def double_solve_substitute_into_equation(mr: MR) -> Solution:
+    # 係数 a,b と代入値 x,y から左辺の値 ax+by を再計算（右辺 c は左辺の値に無関係）。
+    p = mr.params
+    solver = REGISTRY.solver("math.evaluate_two_var_lhs")
+    return cast(Solution, solver(
+        sympy.sympify(p["a"]), sympy.sympify(p["b"]),
+        sympy.sympify(p["x_cand"]), sympy.sympify(p["y_cand"]),
+    ))
+
+
+@register_checker("math.solve_system_elimination_add.double_solve")
+def double_solve_solve_system_elimination_add(mr: MR) -> Solution:
+    # y の係数が絶対値等しく符号逆の連立も 2×2 の解＝intersection_of_two_lines を再利用。
+    p = mr.params
+    line_a = tuple(sympy.sympify(c) for c in p["line_a"])
+    line_b = tuple(sympy.sympify(c) for c in p["line_b"])
+    solver = REGISTRY.solver("math.intersection_of_two_lines")
+    return cast(Solution, solver(line_a, line_b, p["method"]))
+
+
 @register_checker("math.solve_system_substitution.double_solve")
 def double_solve_solve_system_substitution(mr: MR) -> Solution:
     p = mr.params
@@ -369,6 +390,8 @@ __all__ = [
     "double_solve_draw_segment",
     "double_solve_evaluate_linear_fraction",
     "double_solve_solve_system_elimination",
+    "double_solve_solve_system_elimination_add",
+    "double_solve_substitute_into_equation",
     "double_solve_solve_system_substitution",
     "double_solve_solve_system_elim_scaled",
     "double_solve_solve_system_preprocessed",

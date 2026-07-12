@@ -802,6 +802,39 @@ def test_solve_time_from_area_double_solve_property(seed):
 
 
 # ---------------------------------------------------------------------------
+# math.solve_system_elimination_add（g2_l16.calculation Lv1）— P1/C2（足して消去）
+# ---------------------------------------------------------------------------
+def test_solve_system_elimination_add_lv1_construct():
+    ctx = _make_ctx("math.g2_l16.calculation", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+
+    assert mr.signature == "solve_system_elimination_add"
+    assert set(mr.given.keys()) == {"equation_a", "equation_b"}
+    sq = mr.sub_questions[0]
+    assert sq.asked == "solution"
+    assert [s.op for s in sq.steps] == [
+        "identify_opposite_coeff", "add_and_solve_x", "back_substitute",
+    ]
+    # y 係数が絶対値等しく符号逆（line_a[1] = -line_b[1]）
+    assert sympy.sympify(mr.params["line_a"][1]) == -sympy.sympify(mr.params["line_b"][1])
+    assert mr.visual_plan is None
+
+
+@pytest.mark.parametrize("seed", range(200))
+def test_solve_system_elimination_add_double_solve_property(seed):
+    ctx = _make_ctx("math.g2_l16.calculation", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+
+    line_a = tuple(sympy.sympify(c) for c in mr.params["line_a"])
+    line_b = tuple(sympy.sympify(c) for c in mr.params["line_b"])
+    solver = REGISTRY.solver("math.intersection_of_two_lines")
+    sol = solver(line_a, line_b, mr.params["method"])
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+
+
+# ---------------------------------------------------------------------------
 # math.solve_system_elimination（g2_l11.calculation Lv1）— 横展開#11（連立・加減法）
 # ---------------------------------------------------------------------------
 def test_solve_system_elimination_lv1_construct():
@@ -1641,3 +1674,37 @@ def test_combine_like_terms_lv2_double_solve_property(seed):
     # 両方の文字が答えに残る（どちらかが完全に消える退化を回避）かつ絶対値は0/1にならない
     assert abs(coeff_a) not in (0, 1)
     assert abs(coeff_b) not in (0, 1)
+
+
+# ---------------------------------------------------------------------------
+# math.substitute_into_equation（g2_l10.calculation Lv1）— P1/C2（左辺の値を求める）
+# ---------------------------------------------------------------------------
+def test_substitute_into_equation_lv1_construct():
+    ctx = _make_ctx("math.g2_l10.calculation", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+
+    assert mr.signature == "substitute_into_equation_lhs"
+    assert set(mr.given.keys()) == {"equation", "candidate"}
+    sq = mr.sub_questions[0]
+    assert sq.asked == "value"
+    assert sq.answer.kind == "symbolic"
+    assert [s.op for s in sq.steps] == ["substitute_candidate", "compute_lhs"]
+    a, b = sympy.sympify(mr.params["a"]), sympy.sympify(mr.params["b"])
+    xc, yc = sympy.sympify(mr.params["x_cand"]), sympy.sympify(mr.params["y_cand"])
+    assert sympy.sympify(sq.answer.srepr) == a * xc + b * yc
+    assert mr.visual_plan is None
+
+
+@pytest.mark.parametrize("seed", range(200))
+def test_substitute_into_equation_double_solve_property(seed):
+    ctx = _make_ctx("math.g2_l10.calculation", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+
+    solver = REGISTRY.solver("math.evaluate_two_var_lhs")
+    sol = solver(
+        sympy.sympify(mr.params["a"]), sympy.sympify(mr.params["b"]),
+        sympy.sympify(mr.params["x_cand"]), sympy.sympify(mr.params["y_cand"]),
+    )
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
