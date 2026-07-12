@@ -1,0 +1,53 @@
+family: math.g2_l2.calculation
+form: calculation
+source_desc: |
+  同類項をまとめる（units.generated.yaml の desc/example を正として転記）。
+  Lv1: 2〜3項の同類項をそのまままとめる。
+       example: 次の式の同類項をまとめよ。　5x + 3x − 2x
+  Lv2: 負の係数・複数文字が混在し、同類項の選別を要する整理。
+       example: 次の式の同類項をまとめて簡単にせよ。　4a − 7b − 6a + 2b + 3a
+  答えは簡約後の式（SymbolicAnswer）。solver は与式の文字列だけから sympy.expand で
+  独立に再計算する（recipe が構成した個々の項の内訳は見ない・double-solve）。
+  レベル間は steps の op 列で構造を変える（Lv1=2手のそのままの集約／Lv2=同類項の
+  選別を要する1手を先頭に足した3手）。図は無し（calculation）。C2（数と式）クラスタの
+  初セルで polynomial.py（solvers/recipes/checkers/templates）を新設した。
+concepts_default: [polynomial.combine_like_terms_basic]
+levels:
+  "1":
+    signature: combine_like_terms_single_var
+    recipe: math.combine_like_terms
+    params:
+      # answer-first: 1種の文字 x の項を n(2〜3)個、1つずつ動的 exclude つきで draw する
+      # （engine/packs/math/recipes/polynomial.py の _draw_term_group）。合計が0になる
+      # （同類項が消える）・合計の絶対値が0/1になる／既存項や最後の項自身の絶対値と一致する
+      # （答えの式が与式中に部分文字列として現れる G-Q5t 漏洩）の3種の退化を構造的に排除する。
+      # 組合せ: n(2通り)×係数域(18^(n-1)通り)で dup_rate に十分な余裕。
+      mode: single_var
+      term_count_domain: {int_set: [2, 3]}
+      coeff_domain: {int_range: [-9, 9], exclude: [0]}
+    given: [expression]
+    asked: [simplified_expr]
+    visual: none
+    text: {tier: T1, template: lf_combine_like_terms_v1}
+    hints: [steps_prefix]
+    concept_tags: [polynomial.combine_like_terms_basic]
+    cause_tags: []
+  "2":
+    signature: combine_like_terms_mixed_vars
+    recipe: math.combine_like_terms
+    params:
+      # answer-first: 文字 a の項 n_a(2〜3)個・文字 b の項 n_b(2〜3)個をそれぞれ独立に選び、
+      # a,b を交互に配置する（同類項の選別＝識別が必須になる構造）。各文字内は Lv1 と同じ
+      # 「合計≠0を動的 exclude で構造保証」。
+      mode: mixed_vars
+      term_count_domain: {int_set: [2, 3]}
+      coeff_domain: {int_range: [-9, 9], exclude: [0]}
+    given: [expression]
+    asked: [simplified_expr]
+    visual: none
+    text: {tier: T1, template: lf_combine_like_terms_v1}
+    hints: [steps_prefix]
+    concept_tags: [polynomial.combine_like_terms_mixed]
+    cause_tags: []
+remedial:
+  default_level: 1

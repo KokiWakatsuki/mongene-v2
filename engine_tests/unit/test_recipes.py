@@ -1238,3 +1238,94 @@ def test_recipes_declare_provides_concepts():
     assert REGISTRY.recipe_concepts("math.knowledge_system_intersection") == frozenset({
         "linear_function.system_solution_is_intersection",
     })
+    assert REGISTRY.recipe_concepts("math.combine_like_terms") == frozenset({
+        "polynomial.combine_like_terms_basic",
+        "polynomial.combine_like_terms_mixed",
+    })
+
+
+# ---------------------------------------------------------------------------
+# math.combine_like_terms（g2_l2.calculation Lv1/Lv2）— C2（数と式）クラスタ初セル
+# ---------------------------------------------------------------------------
+def test_combine_like_terms_lv1_construct():
+    ctx = _make_ctx("math.g2_l2.calculation", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+
+    assert mr.signature == "combine_like_terms_single_var"
+    assert set(mr.given.keys()) == {"expression"}
+    assert mr.visual_plan is None
+    sq = mr.sub_questions[0]
+    assert sq.asked == "simplified_expr"
+    assert sq.answer.kind == "symbolic"
+    assert [s.op for s in sq.steps] == ["group_like_terms", "add_coefficients"]
+    # Lv1 は1種の文字（x）のみ
+    assert mr.params["mode"] == "single_var"
+    assert all(v == "x" for _, v in mr.params["terms"])
+
+
+def test_combine_like_terms_lv2_construct():
+    ctx = _make_ctx("math.g2_l2.calculation", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+
+    assert mr.signature == "combine_like_terms_mixed_vars"
+    assert set(mr.given.keys()) == {"expression"}
+    assert mr.visual_plan is None
+    sq = mr.sub_questions[0]
+    assert sq.asked == "simplified_expr"
+    assert sq.answer.kind == "symbolic"
+    # Lv2 は先頭に「同類項を見分ける」1手を足した3手（level_sep=steps の op 列が相異）
+    assert [s.op for s in sq.steps] == [
+        "identify_like_terms",
+        "group_like_terms",
+        "add_coefficients",
+    ]
+    # Lv2 は2種の文字（a, b）が混在する（選別が必須になる構造）
+    assert mr.params["mode"] == "mixed_vars"
+    variables = {v for _, v in mr.params["terms"]}
+    assert variables == {"a", "b"}
+
+
+@pytest.mark.parametrize("seed", range(200))
+def test_combine_like_terms_lv1_double_solve_property(seed):
+    ctx = _make_ctx("math.g2_l2.calculation", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+
+    terms = mr.params["terms"]
+    expr_str = "+".join(f"({c})*{v}" if v else f"({c})" for c, v in terms)
+    solver = REGISTRY.solver("math.simplify_polynomial")
+    sol = solver(expr_str)
+    assert sol.answer.kind == "symbolic"
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+
+    # 健全性: 答え（展開後）は sympy.expand(与式) と一致し、係数の絶対値は0/1にならない
+    # （0=同類項が消える退化、1="x"/"-x" が与式中に部分文字列として現れる G-Q5t 漏洩を回避）。
+    expected = sympy.expand(sympy.sympify(expr_str))
+    assert sol.answer.srepr == sympy.srepr(expected)
+    coeff = expected.as_coefficients_dict()[sympy.Symbol("x")]
+    assert abs(coeff) not in (0, 1)
+
+
+@pytest.mark.parametrize("seed", range(200))
+def test_combine_like_terms_lv2_double_solve_property(seed):
+    ctx = _make_ctx("math.g2_l2.calculation", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+
+    terms = mr.params["terms"]
+    expr_str = "+".join(f"({c})*{v}" if v else f"({c})" for c, v in terms)
+    solver = REGISTRY.solver("math.simplify_polynomial")
+    sol = solver(expr_str)
+    assert sol.answer.kind == "symbolic"
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+
+    expected = sympy.expand(sympy.sympify(expr_str))
+    assert sol.answer.srepr == sympy.srepr(expected)
+    coeffs = expected.as_coefficients_dict()
+    coeff_a = coeffs[sympy.Symbol("a")]
+    coeff_b = coeffs[sympy.Symbol("b")]
+    # 両方の文字が答えに残る（どちらかが完全に消える退化を回避）かつ絶対値は0/1にならない
+    assert abs(coeff_a) not in (0, 1)
+    assert abs(coeff_b) not in (0, 1)

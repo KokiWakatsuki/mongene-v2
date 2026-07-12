@@ -92,3 +92,9 @@ concepts:
   - id: linear_function.system_solution_is_intersection
     label: "連立方程式の解が2直線の交点であることを想起する"
     unit: g2_l27
+  - id: polynomial.combine_like_terms_basic
+    label: "同類項をまとめて式を簡単にする（1種の文字）"
+    unit: g2_l2
+  - id: polynomial.combine_like_terms_mixed
+    label: "同類項をまとめて式を簡単にする（複数文字が混在し選別を要する）"
+    unit: g2_l2
