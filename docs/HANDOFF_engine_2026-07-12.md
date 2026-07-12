@@ -19,25 +19,27 @@
 
 ---
 
-## 1. 現状サマリ（2026-07-12 更新・最新コミット `73ba361`（#19）・作業ツリー clean）
+## 1. 現状サマリ（2026-07-13 更新・最新コミット `d53373c`（#25）・作業ツリー clean）
 
-**M0 金の縦串は実装完了**（要件 §10 M0 DoD = Q1〜Q7 + F-1/2/3/5/9 を充足）。続けて **横展開を19セル分**進めた（#1〜#3 前々セッション、#4〜#11 前セッション群、#12〜#18 前セッション、#19 本セッション）。**capability を2本新設し償却を実データで実証**: #8 graph_table「かく」（GraphAnswer 経路）、#16 **knowledge form（ChoiceAnswer 経路）**。intersection solver / 「かく」/ knowledge を**新solverゼロ or 小規則だけで再利用**。
-- **#11〜#15 で連立方程式クラスタ（g2_l11〜l15）完成**（同 solver `intersection_of_two_lines` が連立5+交点2セルを支える）。
-- **#16〜#19 で knowledge form を4単元に展開**（g2_l21/l23/l10/l19）。#16 が初セル（capability 新設）、#17〜#19 が spec+小規則だけで作れる償却の実証。**#18 で g2_l10 verify（○×）解消**・**#19 で g2_l19 Lv2「与式が1次関数か判別」を verify 型で被覆**（式の種類で答えが変わる・微分判定＝V1相当）。
+**M0 金の縦串は実装完了**（要件 §10 M0 DoD 充足）。**ゴール仕様 v1.0 確定**（`docs/goal_spec_2026-07-12.md`・§0 に追加・§3 台帳 C1〜C16・Phase P1〜P8・完成=green 630/630）。以後は「**どの C グループ・どの Phase か**」を宣言して進める。続けて **横展開を25セル分**進めた（#1〜#19 前セッション群、**#20〜#25 本セッション**）。**capability を2本新設**（#8 graph「かく」/#16 knowledge）＋ **#25 で新パック polynomial.py（式の計算）を新設**。
+- **#11〜#15 連立クラスタ完成／#16〜#24 knowledge を6単元に展開**（l21/l23/l10/l19×2/l20/l26/l27）。verify 型（#18/#19）と用語想起（#21）と答え固定型（#20/#22〜#24）。
+- **本セッション（ゴール仕様の Phase P1 に着手）**: #20 g2_l21 calc（傾き=変化の割合）／#21 g2_l19 knowledge Lv1（用語想起）／#22 g2_l20 knowledge／#23 g2_l26 knowledge／#24 g2_l27 knowledge／**#25 g2_l2 calc Lv1/Lv2（同類項・polynomial.py 基盤新設・sonnet サブエージェントが worktree で並行実装→git 実体検証してマージ）**。
+- **進捗（`python -m engine.tools.goal_progress` 実測）: capabilities 36/630（5.7%）**。C5 g2一次関数 25/36（69%）・C2 g2数と式 11/32（34%）。
 
-> ★**全セル フルスイート緑でコミット済み・作業ツリー clean**: 旧#11 FS未走は前セッション冒頭で **3709 passed** 確認し解消。以降 #12〜#19 は各々フルスイート緑を確認してコミット（#12=4117 / #13=4525 / #14=4933 / #15=5137 / #16=5341 / #17=5545 / #18=5749 / #19=5953 passed）。**再開時は未コミットの積み残し無し**——次の新セルからそのまま §3 プレイブックで始めてよい。
+> ★**各セルは個別 property(当該recipe 200seed)＋eval一式(exit 0)＋mypy/ruff＋spec check＋approve を緑にしてコミット**。フルスイート（全 property・約25分）は数セルごとにまとめて後追い検証する運用（毎セル25分は非現実的なため）。**⚠️ #20〜#25 の最終フルスイートは別アカウント引き継ぎのため中断（未走）**——ただし各セルは個別 property 200seed＋eval一式 exit0＋mypy strict＋ruff＋spec check＋approve＋level_sep（該当セル）＋dup_rate 100seed 実測＋250seed拒否0 で個別検証済み。**★再開時の最初にフルスイートを1本走らせて緑を最終確認すること**（`.venv/bin/python -m pytest engine_tests/ -o addopts="" -p no:cacheprovider -q`・約25分・他 pytest と競合させない）。**再開時は未コミットの積み残し無し**。
 
 > ★**再開時の最初のコマンド**（実状態の確認）:
 > ```bash
 > git branch --show-current            # engine-m0-rework
-> git log --oneline -6                 # 最新 73ba361（#19 l19 knowledge）＋引き継ぎ書更新
+> git log --oneline -8                 # 最新 d53373c（#25 l2 polynomial）
 > git status --porcelain               # 空（clean）のはず
+> .venv/bin/python -m engine.tools.goal_progress          # 進捗 36/630・グループ別被覆
 > .venv/bin/python -m engine.eval --seeds 5 --dup-seeds 100   # 一式OK・exit 0（約1分）
 > ```
-> フルスイート（**約25分**・property テスト増で伸長。`-q` は tty 無しだと末尾までバッファ＝途中出力は空・プロセス生存で判断）は変更を積んでから走らせればよい（現時点の 73ba361 は #19 コミット時に 5953 passed 確認済み）。
+> フルスイート（**約25分**・`-q` は tty 無しだと末尾までバッファ＝途中出力は空・プロセス生存で判断）は変更を積んでから走らせればよい。**並行実装の教訓**: linear.py は共有＝直列必須／別ファイル（polynomial.py 等）なら sonnet サブエージェントを `isolation:worktree` で並行実装可・完了後 git 実体で検証してマージ（#25 で実証）。ただし pytest 多重起動は CPU 飽和で全体が遅くなる（フルスイートは1本ずつ）。
 
-- テスト全体 **5953 passed**（#19 時点・フルスイート緑）・`mypy --strict` クリーン・`ruff`（engine/ ソース）クリーン。
-- **capabilities = 29 セル**（`spec check` 済みで generate 可能なセル。level 単位）:
+- テスト全体: #20〜#25 の各セル個別緑（property 200seed）・eval一式 exit 0・`mypy --strict`／`ruff` クリーン。**フルスイートは中断（未走）＝再開時に1本走らせて最終確認**（上記）。
+- **capabilities = 36 セル**（`spec check` 済みで generate 可能。level 単位。`goal_progress` が正）:
 
 | unit | form | levels | 内容 | recipe |
 |---|---|---|---|---|
@@ -63,6 +65,12 @@
 | g2_l23 | knowledge | 1 | 変域の端点の包含判別（≦/≧→含む・#17・knowledge償却実証） | knowledge_range_endpoint |
 | g2_l10 | knowledge | 2 | 連立の解の判定（組が解か○×・#18・l10 verify解消・Q1=V1相当） | knowledge_verify_solution |
 | g2_l19 | knowledge | 2 | 与式が1次関数か判別（式の種類で答え変化・verify・#19・微分判定Q1=V1相当） | knowledge_classify_linear |
+| g2_l21 | calculation | 1 | 傾き=変化の割合の数値計算（#20・P1/C5・±1除外） | linear_slope_as_rate |
+| g2_l19 | knowledge | 1 | 係数/定数項の意味=傾き/切片（用語想起・which で答え変化・#21） | knowledge_coefficient_role |
+| g2_l20 | knowledge | 1 | 変化の割合はつねに一定で傾きに等しい（答え固定・#22） | knowledge_rate_constant |
+| g2_l26 | knowledge | 1 | 2元1次方程式の解の集合は直線（答え固定・#23） | knowledge_equation_solution_set |
+| g2_l27 | knowledge | 1 | 連立の解は2つの直線の交点（答え固定・#24） | knowledge_system_intersection |
+| g2_l2 | calculation | 1, 2 | 同類項をまとめる（Lv1=1文字/Lv2=2文字混在・**polynomial.py 新設**・#25） | combine_like_terms |
 
 - M0 縦串 = g2_l25 + 戻り先 g2_l24（find_value）+ g2_l25 graph_table + remedial。**横展開分** = l20 / l27(fv) / l23(fv) / l21(graph) / l26(calc) / l19 / l22(calc) / l22(graph) / l26(graph) / l27(graph) / **連立クラスタ l11/l13/l12/l14/l15(calc)** / **knowledge l21/l23**。
 - **償却の実証（当初目的の達成確認）**:
@@ -257,9 +265,19 @@ feasibility 精査（当時）: **answer 経路とゲートは既に GraphAnswer
 - **実装パターン（次の knowledge セルはこれをコピー）**: solver `math.<rule>`（規則→ChoiceAnswer 返す・純関数）＋ recipe `math.knowledge_<x>`（surface param を引いて statement 構成・solver で double-solve）＋ checker `.double_solve`（params から solver 再判定）＋ template（`given.statement` を出し選択肢は本文固定）＋ concept（unit 実在）＋ spec（given=[statement], asked=[choice], visual=none）。#16/#17 の `knowledge_*` をそのまま雛形に。
 - **次の knowledge セル候補（spec+小規則で作れる）**: ~~g2_l19~~（#19 で被覆済）／g2_l26 knowledge（ax+by=c の解の集合は直線か）／g2_l27 knowledge（連立の解＝2直線の交点）。**ただし l26/l27 は「答えが常に固定」型**（"直線"/"交点"）で verify にならず F-3 も surface のみ頼み＝弱点型。作るなら妨害選択肢（放物線・接点 等）で単一選択化し surface param で無限性を出すが、#18/#19 のような「答えが変わる」型が枯れたら価値は下がる。用語「何というか」系の自由記述は ChoiceAnswer 化（正解語＋妨害語）で対応。g2_l19 は Lv1（a/b の用語想起）も未着手＝2レベル化するなら Lv2(判別) と op 列を変えて level_sep を満たすこと。
 
-### 次の一手（#20 以降）——★ゴール仕様 v1.0（2026-07-12）で確定
-**`docs/goal_spec_2026-07-12.md` §3.6 の Phase 順に従う**: 次は **P1（C5 g2一次関数の残16セル → C2 g2数と式の残23セル）**。規律: (1) C グループ単位で T1 を 100% にしてから次へ（薄く広くの宙ぶらりん禁止）、(2) 事業優先（知人塾範囲=D-4）判明時は該当グループ前倒しのみ許す。進捗は `python -m engine.tools.goal_progress` で実測（現在 29/630=4.6%）。
-（参考・旧候補の評価）残 knowledge（l26/l27/l19Lv1）は「答え固定」型が主で verify の妙味は薄い（#18/#19 で verify 型は概ね出し切った）——P1 の中で C5 の一部として埋める。
+### 次の一手（#26 以降）——★ゴール仕様 v1.0 の Phase P1 継続中
+**`docs/goal_spec_2026-07-12.md` §3.6 の Phase 順に従う**。現在 **P1（C5 一次関数 → C2 数と式）を実行中**。規律: (1) C グループ単位で T1 を 100% にしてから次へ（薄く広くの宙ぶらりん禁止）、(2) 事業優先（知人塾範囲=D-4）判明時のみ前倒し。進捗は `python -m engine.tools.goal_progress`（現在 36/630）。
+**★実装設計書（次セッション必読・`docs/design_C5_graph_2026-07-13.md`／`docs/design_C2_polynomial_2026-07-13.md`）** に残セルの solver/level_sep/落とし穴が実装可能な粒度で書いてある（sonnet サブエージェントの調査成果）。
+
+- **C5 残 11セル（一次関数・linear.py + visuals/graph.py・私＝直列）**:
+  - knowledge: **l21 Lv2**（傾き/切片の判別・適用。#16 の向き判別 Lv1 と差別化する設計が要る＝設計難・後回し可）
+  - calc: **l28 Lv1**（式に代入して値・evaluate_linear 流用＋小数/文脈の設計判断）
+  - graph（設計書 design_C5_graph 参照。流用度順 l30→l26→l28→l22→l23→l29）: **l30 Lv2**（ダイヤ交点読み・intersection 流用・新solverゼロ）／**l26 Lv2**（特殊直線 x=k/y=k・render_grid_with_special_lines_svg 追加）／**l28 Lv2**（対応表・data_table）／**l22 Lv3**（分数傾き・格子点特徴）／**l23 Lv2**（端点開閉の線分＝segment 描画・新規中規模）／**l29 Lv3**（折れ線面積・最重量）
+  - fv: **l30 Lv2/Lv3**（intersection 流用＋文脈）／**l29 Lv3**（動点面積・逆算）
+- **C2 残 21セル（式の計算・polynomial.py に追記・別ファイル＝サブエージェント worktree 並行の好適地）**:
+  - 設計書 design_C2_polynomial の実装順: **l16**(連立・intersection 流用・linear.py)→**l10**(代入検証・別 asked=value)→**l3/l5/l4/l6**(加減/分配/乗除/通分・polynomial.py)→**l1**(次数・2小問)→**l9**(等式変形・一般化 solve_for_variable)→**l7/l8**(数の性質の式・dup_rate 構造的困難＝設計判断/preview 検収)
+  - ★frame 語彙追加が要るセル（l1 degree/expression_b・l3 expression_a/b・l5 coefficient・l9 target_variable/expression・l10 candidate）は `frames.py` と `test_frames.py` を同時更新（§5-#7）。frame 不要は l2(済)/l4/l6。
+- **P1 完了後**: P2（C1 g1数と式・C3 g3数と式＝SymPy 直・visual 不要・最安160セル）→ P3（関数）→ P4（幾何 visual 基盤＝1本で C7〜C10 の140セルを解放）… → P7（T3 翻訳基盤＝word_problem/proof 151セル・M1本体）。
 2. **g2_l23 graph_table[2]**（作図の残り）＝端点の開閉つき線分（segment 描画＋端点マーカー）。graph「かく」capability の延長（visuals/graph.py 拡張）。純 T1 で残る作図セル。
 3. **別の calc/find_value クラスタへ横展開**（一次方程式・比例反比例・式の計算 等）＝既存 solver で作れる純 T1 セルを他単元で探す。
 4. **word_problem（T3・LLM）着手＝M1 本体**（利用 l16/l17/l18/l28〜l30）。T1 では作れない・翻訳ゲート実装が要る。
