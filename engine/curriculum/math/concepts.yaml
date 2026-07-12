@@ -44,3 +44,6 @@ concepts:
   - id: linear_function.draw_graph
     label: "傾きと切片を使い y=ax+b のグラフ（直線）をかく"
     unit: g2_l22
+  - id: linear_function.draw_graph_from_equation
+    label: "2元1次方程式 ax+by=c を y=… に変形してグラフをかく"
+    unit: g2_l26

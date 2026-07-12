@@ -413,6 +413,50 @@ def test_draw_linear_double_solve_property(seed):
 
 
 # ---------------------------------------------------------------------------
+# math.draw_linear_from_equation（g2_l26.graph_table Lv1）— 横展開#9（変形してかく・合成）
+# ---------------------------------------------------------------------------
+def test_draw_from_equation_lv1_construct():
+    ctx = _make_ctx("math.g2_l26.graph_table", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+
+    assert mr.signature == "draw_from_two_var_equation"
+    assert set(mr.given.keys()) == {"equation"}
+    assert "=" in mr.given["equation"]
+    sq = mr.sub_questions[0]
+    assert sq.asked == "draw_graph"
+    assert sq.answer.kind == "graph"
+    assert {f.kind for f in sq.answer.features} == {"slope", "intercept"}
+    assert sq.answer.solution_svg_ref != ""
+    # #5(変形)＋#8(作図)のコア合成: 手順が変形2手＋作図3手
+    assert [s.op for s in sq.steps] == [
+        "isolate_y_term", "divide_by_coefficient", "plot_intercept", "apply_slope", "draw_line",
+    ]
+    # 問題図は空の方眼
+    assert mr.visual_plan is not None
+    assert {e.kind for e in mr.visual_plan.elements} == {"grid", "axis"}
+
+
+@pytest.mark.parametrize("seed", range(200))
+def test_draw_from_equation_double_solve_property(seed):
+    ctx = _make_ctx("math.g2_l26.graph_table", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+
+    solver = REGISTRY.solver("math.draw_from_equation")
+    sol = solver(
+        sympy.sympify(mr.params["eq_a"]),
+        sympy.sympify(mr.params["eq_b"]),
+        sympy.sympify(mr.params["eq_c"]),
+    )
+    assert {f.srepr for f in sol.answer.features} == {f.srepr for f in mr.sub_questions[0].answer.features}
+    # 変形後の直線 y=mx+k（m=-A/B, k=C/B）の特徴と一致
+    A = sympy.nsimplify(mr.params["eq_a"]); B = sympy.nsimplify(mr.params["eq_b"]); C = sympy.nsimplify(mr.params["eq_c"])
+    m = -A / B; k = C / B
+    assert {f.srepr for f in sol.answer.features} == {sympy.srepr(m), sympy.srepr(sympy.Tuple(sympy.Integer(0), k))}
+
+
+# ---------------------------------------------------------------------------
 # math.rate_of_change（g2_l20.find_value Lv1）— 横展開の第1セル
 # ---------------------------------------------------------------------------
 def test_rate_of_change_lv1_construct():
@@ -578,4 +622,7 @@ def test_recipes_declare_provides_concepts():
     })
     assert REGISTRY.recipe_concepts("math.draw_linear") == frozenset({
         "linear_function.draw_graph",
+    })
+    assert REGISTRY.recipe_concepts("math.draw_linear_from_equation") == frozenset({
+        "linear_function.draw_graph_from_equation",
     })

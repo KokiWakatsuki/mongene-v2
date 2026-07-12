@@ -132,7 +132,10 @@ FIND_VALUE_FRAME = Frame(
 # Answer型: 「かく」= GraphAnswer / 「読む」= SymbolicAnswer（§6.2 V1'）
 GRAPH_TABLE_FRAME = Frame(
     form="graph_table",
-    given_vocab=frozenset({"expression", "data_table", "situation_params"}),
+    given_vocab=frozenset({
+        "expression", "data_table", "situation_params",
+        "equation",  # 横展開#9: 2元1次方程式 ax+by=c を変形してかく（g2_l26）
+    }),
     asked_vocab=frozenset({
         "draw_graph", "read_point", "read_intersection", "read_table", "complete_table",
         "read_slope_intercept",  # 横展開#4: グラフから傾き・切片を読む（g2_l21）

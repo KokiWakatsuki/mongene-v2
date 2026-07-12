@@ -526,13 +526,12 @@ def point_on_line_at_x(a: object, b: object, x0: object) -> Solution:
     return Solution(answer=answer, steps=steps)
 
 
-@register_solver("math.draw_linear_features")
-def draw_linear_features(a: object, b: object) -> Solution:
-    """1次関数 y=ax+b のグラフをかくための検証可能な特徴を求める（g2_l22.graph_table Lv1）。
+def _draw_linear_features_core(a: object, b: object) -> Solution:
+    """`draw_linear_features` の本体（型付き素関数）。
 
-    答えは GraphAnswer（傾き a・y切片の点 (0,b) の2特徴の集合で採点＝§6.2 V1'）。solver は
-    SVG を描かない（特徴のみ）。模範解答図の描画は recipe が visual 層のヘルパで行う。
-    「読む」（SymbolicAnswer）と違い answer.kind="graph" になる別構造。
+    solver 間で再利用する（`draw_from_equation` が変形後の直線を描くのに呼ぶ）。
+    `@register_solver` の戻り型は `Callable[..., object]` で型が消えるため、solver 同士は
+    登録名でなくこの素関数を呼ぶ。
     """
     a_s, b_s = sympy.nsimplify(a), sympy.nsimplify(b)
     intercept_pt = sympy.Tuple(sympy.Integer(0), b_s)
@@ -572,6 +571,17 @@ def draw_linear_features(a: object, b: object) -> Solution:
     return Solution(answer=answer, steps=steps)
 
 
+@register_solver("math.draw_linear_features")
+def draw_linear_features(a: object, b: object) -> Solution:
+    """1次関数 y=ax+b のグラフをかくための検証可能な特徴を求める（g2_l22.graph_table Lv1）。
+
+    答えは GraphAnswer（傾き a・y切片の点 (0,b) の2特徴の集合で採点＝§6.2 V1'）。solver は
+    SVG を描かない（特徴のみ）。模範解答図の描画は recipe が visual 層のヘルパで行う。
+    「読む」（SymbolicAnswer）と違い answer.kind="graph" になる別構造。
+    """
+    return _draw_linear_features_core(a, b)
+
+
 def _format_two_var_equation(a: sympy.Expr, b: sympy.Expr, c: sympy.Expr) -> str:
     """2元1次方程式 a x + b y = c の表示形（例: "4x + 2y = 10", "-3x + 2y = 6"）。
 
@@ -588,11 +598,10 @@ def _format_two_var_equation(a: sympy.Expr, b: sympy.Expr, c: sympy.Expr) -> str
     return f"{ax} + {by} = {_format_number(c)}"
 
 
-@register_solver("math.solve_equation_for_y")
-def solve_equation_for_y(a: object, b: object, c: object) -> Solution:
-    """2元1次方程式 a x + b y = c を y について解く（g2_l26.calculation Lv1）。
+def _solve_equation_for_y_core(a: object, b: object, c: object) -> Solution:
+    """`solve_equation_for_y` の本体（型付き素関数）。
 
-    b y = c - a x → y = (c - a x)/b = (-a/b) x + c/b。答えは y = m x + k の式。
+    solver 間で再利用する（`draw_from_equation` が変形手順の取得に呼ぶ）。
     """
     a_s, b_s, c_s = sympy.nsimplify(a), sympy.nsimplify(b), sympy.nsimplify(c)
     if b_s == 0:
@@ -622,6 +631,34 @@ def solve_equation_for_y(a: object, b: object, c: object) -> Solution:
     return Solution(answer=answer, steps=steps)
 
 
+@register_solver("math.solve_equation_for_y")
+def solve_equation_for_y(a: object, b: object, c: object) -> Solution:
+    """2元1次方程式 a x + b y = c を y について解く（g2_l26.calculation Lv1）。
+
+    b y = c - a x → y = (c - a x)/b = (-a/b) x + c/b。答えは y = m x + k の式。
+    """
+    return _solve_equation_for_y_core(a, b, c)
+
+
+@register_solver("math.draw_from_equation")
+def draw_from_equation(a: object, b: object, c: object) -> Solution:
+    """2元1次方程式 a x + b y = c を y=… に変形してからグラフをかく（g2_l26.graph_table Lv1）。
+
+    **合成ソルバ**: 変形手順は `_solve_equation_for_y_core`（#5 の資産）、作図の特徴・手順は
+    `_draw_linear_features_core`（#8「かく」capability）を再利用するだけで、新しい数学ロジックは
+    書かない。答えは GraphAnswer（変形後の直線 y=mx+k の傾き・切片の特徴集合）。
+    """
+    a_s, b_s, c_s = sympy.nsimplify(a), sympy.nsimplify(b), sympy.nsimplify(c)
+    if b_s == 0:
+        raise ValueError("y の係数 b が 0 でグラフ（1次関数）にならない")
+    transform = _solve_equation_for_y_core(a_s, b_s, c_s)  # 変形手順（#5 再利用）
+    m = -a_s / b_s
+    k = c_s / b_s
+    draw = _draw_linear_features_core(m, k)  # 作図の特徴・手順（#8 再利用）
+    steps = list(transform.steps) + list(draw.steps)
+    return Solution(answer=draw.answer, steps=steps)
+
+
 __all__ = [
     "linear_expr_from_two_points",
     "linear_expr_from_slope_point",
@@ -635,4 +672,5 @@ __all__ = [
     "evaluate_linear_at_x",
     "point_on_line_at_x",
     "draw_linear_features",
+    "draw_from_equation",
 ]

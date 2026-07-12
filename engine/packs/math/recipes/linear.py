@@ -700,6 +700,94 @@ def draw_linear(ctx: CellContext, rng: Rng) -> MR:
 
 
 # ---------------------------------------------------------------------------
+# math.draw_linear_from_equation（g2_l26.graph_table Lv1 用）— 横展開#9
+# ax+by=c を y=… に変形してグラフをかく。solver は #5(変形)＋#8(かく)のコア合成のみ＝
+# 新 solver の数学ロジックはゼロ。capability 投資の償却（部品追加なしでセルが増える）の実証。
+# ---------------------------------------------------------------------------
+_DRAW_FROM_EQUATION_CONCEPTS = [
+    "linear_function.draw_graph_from_equation",
+]
+
+
+@register_recipe("math.draw_linear_from_equation", provides_concepts=_DRAW_FROM_EQUATION_CONCEPTS)
+def draw_linear_from_equation(ctx: CellContext, rng: Rng) -> MR:
+    """2元1次方程式 ax+by=c を y=… に変形してグラフをかく（answer-first・graph_table「かく」Lv1）。
+
+    answer-first: 変形後の直線 y=mx+k（整数 m≠0・整数 k）と y の係数 B(≥1) を先に選び、
+    A=-m*B・C=k*B として方程式を逆算する（B で割ると整数に戻る clean な変形）。合成ソルバ
+    `math.draw_from_equation` が #5 の変形手順と #8 の作図特徴を再利用して GraphAnswer を返す。
+    問題図＝空の方眼、模範解答図＝変形後の直線つき（#8 と同じ経路）。
+    """
+    p = ctx.spec_level.params
+    m = draw(p["result_slope_domain"], rng)
+    k = draw(p["result_intercept_domain"], rng)
+    bcoef = draw(p["b_domain"], rng)  # y の係数 B（正）
+
+    m_s, k_s, b_s = sympy.nsimplify(m), sympy.nsimplify(k), sympy.nsimplify(bcoef)
+    a_coeff = -m_s * b_s
+    c_coeff = k_s * b_s
+
+    solver = REGISTRY.solver("math.draw_from_equation")
+    sol = cast(Solution, solver(a_coeff, b_s, c_coeff))
+    assert isinstance(sol.answer, GraphAnswer)
+    expected_feature_sreprs = {
+        sympy.srepr(m_s),
+        sympy.srepr(sympy.Tuple(sympy.Integer(0), k_s)),
+    }
+    assert {f.srepr for f in sol.answer.features} == expected_feature_sreprs, (
+        f"double-solve 不一致: 変形後の直線の特徴 {expected_feature_sreprs} "
+        f"!= solver 再計算 {{f.srepr for f in sol.answer.features}}"
+    )
+
+    # 描画（問題図の方眼＋模範解答図）は変形後の直線 y=mx+k で行う。
+    render_params = {
+        "a": str(m_s),
+        "b": str(k_s),
+        "pts": [str((sympy.Integer(0), k_s)), str((sympy.Integer(1), m_s + k_s))],
+    }
+    solution_svg = render_line_solution_svg(render_params)
+    answer = GraphAnswer(features=sol.answer.features, solution_svg_ref=solution_svg)
+
+    sub_question = SubQuestionMR(
+        label="(1)",
+        asked="draw_graph",
+        answer=answer,
+        steps=sol.steps,
+        concept_tags=_effective_concept_tags(ctx),
+        cause_tags=_effective_cause_tags(ctx),
+    )
+
+    labels = tick_labels_from_params(render_params)
+    visual_plan = VisualPlan(
+        style="grid",
+        labels=labels,
+        elements=[VisualElement(kind="grid", attrs={}), VisualElement(kind="axis", attrs={})],
+    )
+
+    # params: checker 用の方程式係数（eq_*）と、描画（問題図の方眼）用の直線係数 a/b/pts の両方。
+    mr_params = {
+        "eq_a": str(a_coeff),
+        "eq_b": str(b_s),
+        "eq_c": str(c_coeff),
+        "a": str(m_s),
+        "b": str(k_s),
+        "pts": render_params["pts"],
+    }
+    return MR(
+        signature=ctx.spec_level.signature,
+        family=ctx.family,
+        level=ctx.level,
+        purpose=ctx.purpose,
+        seed=0,
+        params=mr_params,
+        given={"equation": _format_two_var_equation_display(a_coeff, b_s, c_coeff)},
+        sub_questions=[sub_question],
+        visual_plan=visual_plan,
+        provenance=Provenance(recipe="math.draw_linear_from_equation"),
+    )
+
+
+# ---------------------------------------------------------------------------
 # math.rate_of_change（g2_l20.find_value Lv1 用）— 横展開の第1セル
 # ---------------------------------------------------------------------------
 _RATE_OF_CHANGE_CONCEPTS = [
@@ -969,6 +1057,7 @@ __all__ = [
     "evaluate_linear",
     "point_on_line",
     "draw_linear",
+    "draw_linear_from_equation",
     "rate_of_change",
     "intersection",
     "y_range_from_domain",

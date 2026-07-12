@@ -84,6 +84,14 @@ LF_DRAW_GRAPH_V1 = (
 
 
 # ---------------------------------------------------------------------------
+# g2_l26.graph_table Lv1: ax+by=c を変形してグラフをかく（横展開#9・「かく」流用）
+# ---------------------------------------------------------------------------
+LF_DRAW_FROM_EQUATION_V1 = (
+    "2元1次方程式 {{ given.equation }} のグラフを、y=… の形に変形してから座標平面にかけ。"
+)
+
+
+# ---------------------------------------------------------------------------
 # g2_l20.find_value Lv1: 2点から変化の割合を求める（横展開の第1セル）
 # ---------------------------------------------------------------------------
 LF_RATE_OF_CHANGE_V1 = (
@@ -123,6 +131,7 @@ def _register_all() -> None:
     REGISTRY.register_template("lf_evaluate_at_x_v1", LF_EVALUATE_AT_X_V1)
     REGISTRY.register_template("lf_point_on_line_v1", LF_POINT_ON_LINE_V1)
     REGISTRY.register_template("lf_draw_graph_v1", LF_DRAW_GRAPH_V1)
+    REGISTRY.register_template("lf_draw_from_equation_v1", LF_DRAW_FROM_EQUATION_V1)
     REGISTRY.register_template("lf_rate_of_change_v1", LF_RATE_OF_CHANGE_V1)
     REGISTRY.register_template("lf_intersection_v1", LF_INTERSECTION_V1)
     REGISTRY.register_template("lf_y_range_v1", LF_Y_RANGE_V1)
@@ -142,6 +151,7 @@ __all__ = [
     "LF_EVALUATE_AT_X_V1",
     "LF_POINT_ON_LINE_V1",
     "LF_DRAW_GRAPH_V1",
+    "LF_DRAW_FROM_EQUATION_V1",
     "LF_RATE_OF_CHANGE_V1",
     "LF_INTERSECTION_V1",
     "LF_Y_RANGE_V1",

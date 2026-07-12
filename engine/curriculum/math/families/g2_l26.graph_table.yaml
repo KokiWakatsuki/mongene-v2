@@ -1,0 +1,32 @@
+family: math.g2_l26.graph_table
+form: graph_table
+source_desc: |
+  2元1次方程式（ax+by=c）を y=… に変形して直線をかく
+  （units.generated.yaml の desc/example を正として転記）。
+  desc: y=…に変形して直線をかく。
+  example: 2元1次方程式 2x+y=4 のグラフを、座標平面にかけ。
+  答えはグラフ（GraphAnswer）＝変形後の直線 y=mx+k の傾き・y切片の点の特徴集合で採点
+  （§6.2 V1'）。問題図は空の方眼、模範解答図は直線つき（solution_svg_ref）。
+  ★実装は #8「かく」capability の流用: solver は #5 の変形手順（solve_equation_for_y）と
+  #8 の作図特徴（draw_linear_features）のコアを合成するだけで、新しい数学ロジックは書かない。
+concepts_default: [linear_function.draw_graph_from_equation]
+levels:
+  "1":
+    signature: draw_from_two_var_equation
+    recipe: math.draw_linear_from_equation
+    params:
+      # answer-first: 変形後の直線 y=mx+k（m≠0・k）と y の係数 B を先に選び、A=-m*B・C=k*B で
+      # 方程式を逆算（B で割ると整数に戻る clean な変形＝基礎）。組合せ 8*19*3=456 通り。
+      # B=1 は移項のみ（例 2x+y=4）、B≥2 は割り算を伴う。
+      result_slope_domain: {int_range: [-4, 4], exclude: [0]}
+      result_intercept_domain: {int_range: [-9, 9]}
+      b_domain: {int_range: [1, 3]}
+    given: [equation]
+    asked: [draw_graph]
+    visual: required
+    text: {tier: T1, template: lf_draw_from_equation_v1, visual_builder: math.linear_graph}
+    hints: [steps_prefix]
+    concept_tags: [linear_function.draw_graph_from_equation]
+    cause_tags: []
+remedial:
+  default_level: 1
