@@ -1452,6 +1452,68 @@ def draw_segment(ctx: CellContext, rng: Rng) -> MR:
 
 
 # ---------------------------------------------------------------------------
+# math.evaluate_linear_fraction（g2_l28.calculation Lv1 用）— 横展開・P1/C5
+# 分数係数の1次関数 y=(p/q)x+b に x を代入して y を求める。solver は既存 evaluate_linear_at_x
+# （g2_l19 と共有）を再利用＝新 solver ゼロ。x0 を分母 q の倍数に選び y を整数に保つ。
+# g2_l19（整数係数）と別セル＝分数係数の代入という別の練習。asked=value。図なし。
+# ---------------------------------------------------------------------------
+_EVALUATE_FRACTION_CONCEPTS = [
+    "linear_function.evaluate_at_x_fraction",
+]
+
+
+@register_recipe("math.evaluate_linear_fraction", provides_concepts=_EVALUATE_FRACTION_CONCEPTS)
+def evaluate_linear_fraction(ctx: CellContext, rng: Rng) -> MR:
+    """分数係数の1次関数 y=(p/q)x+b に x を代入して y を求める（answer-first・calculation Lv1）。
+
+    傾き p/q（frac_range で非整数）・切片 b・倍率 m を選び、x0 = q·m（分母の倍数）とすることで
+    y = (p/q)·(q·m)+b = p·m+b が必ず整数になる（分数係数でも答えは clean な整数）。答えと steps は
+    既存ソルバ `math.evaluate_linear_at_x`（g2_l19 と共有）を再利用して再計算し一致を assert。
+    """
+    p = ctx.spec_level.params
+    slope = draw(p["slope_domain"], rng)  # frac_range → 非整数の既約 Rational
+    b = draw(p["intercept_domain"], rng)
+    m = draw(p["x_mult_domain"], rng)
+
+    slope_s = sympy.Rational(slope)
+    b_s = sympy.nsimplify(b)
+    q = sympy.Integer(slope_s.q)
+    x0 = q * sympy.nsimplify(m)  # 分母の倍数 → 代入後の y は整数
+
+    solver = REGISTRY.solver("math.evaluate_linear_at_x")
+    sol = cast(Solution, solver(slope_s, b_s, x0))
+    assert isinstance(sol.answer, SymbolicAnswer)
+    y = slope_s * x0 + b_s
+    assert sol.answer.srepr == sympy.srepr(y), (
+        f"double-solve 不一致: 構成 y={y} != solver 再計算 {sol.answer.srepr}"
+    )
+
+    sub_question = SubQuestionMR(
+        label="(1)",
+        asked="value",
+        answer=sol.answer,
+        steps=sol.steps,
+        concept_tags=_effective_concept_tags(ctx),
+        cause_tags=_effective_cause_tags(ctx),
+    )
+
+    return MR(
+        signature=ctx.spec_level.signature,
+        family=ctx.family,
+        level=ctx.level,
+        purpose=ctx.purpose,
+        seed=0,
+        params={"a": str(slope_s), "b": str(b_s), "x0": str(x0)},
+        given={
+            "expression": _format_line_display_frac(slope_s, b_s),
+            "input_value": f"x = {_fmt_number(x0)}",
+        },
+        sub_questions=[sub_question],
+        provenance=Provenance(recipe="math.evaluate_linear_fraction"),
+    )
+
+
+# ---------------------------------------------------------------------------
 # math.solve_system_elimination（g2_l11.calculation Lv1 用）— 横展開#11・連立クラスタへ横展開
 # 加減法（係数の絶対値が等しい）。答え(x,y)は既存 intersection_of_two_lines を再利用（新solverゼロ）。
 # ---------------------------------------------------------------------------

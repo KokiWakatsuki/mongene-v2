@@ -683,6 +683,39 @@ def test_draw_segment_double_solve_property(seed):
 
 
 # ---------------------------------------------------------------------------
+# math.evaluate_linear_fraction（g2_l28.calculation Lv1）— P1/C5（分数係数の代入）
+# ---------------------------------------------------------------------------
+def test_evaluate_linear_fraction_lv1_construct():
+    ctx = _make_ctx("math.g2_l28.calculation", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+
+    assert mr.signature == "evaluate_linear_fraction_at_x"
+    assert set(mr.given.keys()) == {"expression", "input_value"}
+    sq = mr.sub_questions[0]
+    assert sq.asked == "value"
+    assert sq.answer.kind == "symbolic"
+    # 傾きは非整数（分数係数）だが、x0=分母の倍数なので答え y は整数
+    assert not sympy.sympify(mr.params["a"]).is_integer
+    assert sympy.sympify(sq.answer.srepr).is_integer
+    assert mr.visual_plan is None  # calculation は図なし
+
+
+@pytest.mark.parametrize("seed", range(200))
+def test_evaluate_linear_fraction_double_solve_property(seed):
+    ctx = _make_ctx("math.g2_l28.calculation", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+
+    solver = REGISTRY.solver("math.evaluate_linear_at_x")
+    sol = solver(
+        sympy.sympify(mr.params["a"]), sympy.sympify(mr.params["b"]),
+        sympy.sympify(mr.params["x0"]),
+    )
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+
+
+# ---------------------------------------------------------------------------
 # math.solve_system_elimination（g2_l11.calculation Lv1）— 横展開#11（連立・加減法）
 # ---------------------------------------------------------------------------
 def test_solve_system_elimination_lv1_construct():

@@ -123,6 +123,16 @@ def double_solve_read_intersection(mr: MR) -> Solution:
     return cast(Solution, solver(line_a, line_b, p["method"]))
 
 
+@register_checker("math.evaluate_linear_fraction.double_solve")
+def double_solve_evaluate_linear_fraction(mr: MR) -> Solution:
+    # 分数係数の代入も y=ax+b の x=x0 での値＝evaluate_linear_at_x を再利用（g2_l19 と共有）。
+    p = mr.params
+    solver = REGISTRY.solver("math.evaluate_linear_at_x")
+    return cast(Solution, solver(
+        sympy.sympify(p["a"]), sympy.sympify(p["b"]), sympy.sympify(p["x0"]),
+    ))
+
+
 @register_checker("math.draw_segment.double_solve")
 def double_solve_draw_segment(mr: MR) -> Solution:
     # 問題パラメータ（a,b・変域端 x_lo/x_hi・開閉 closed_lo/closed_hi）だけから端点特徴を再計算。
@@ -341,6 +351,7 @@ __all__ = [
     "double_solve_draw_from_table",
     "double_solve_draw_linear_fraction",
     "double_solve_draw_segment",
+    "double_solve_evaluate_linear_fraction",
     "double_solve_solve_system_elimination",
     "double_solve_solve_system_substitution",
     "double_solve_solve_system_elim_scaled",

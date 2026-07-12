@@ -1,0 +1,32 @@
+family: math.g2_l28.calculation
+form: calculation
+source_desc: |
+  分数係数の1次関数 y=(p/q)x+b に x を代入して y を求める
+  （units.generated.yaml の desc/example を正として転記）。
+  desc: 式に代入して値を求める。
+  example: ばねの長さ y cm がおもりの重さ x g について y=0.4x+10 と表されるとき、
+    x=25 のときのばねの長さを求めよ。
+  ★設計モデル（preview 検収 Q4 に委ねる点）: 例は小数係数だが、式・途中式・答えの表記の
+  一貫性を保つため分数係数（y=(p/q)x+b）で一般化する。x0 を分母 q の倍数に選び、代入後の y を
+  必ず整数に保つ。代入して値を求める技能は同一。文脈（ばね等）は word_problem 領域と切り分けて
+  一般化する。solver は g2_l19（整数係数）と共有（evaluate_linear_at_x・新 solver ゼロ＝償却）。
+concepts_default: [linear_function.evaluate_at_x_fraction]
+levels:
+  "1":
+    signature: evaluate_linear_fraction_at_x
+    recipe: math.evaluate_linear_fraction
+    params:
+      # 傾き p/q（frac_range で非整数）・切片 b・倍率 m。x0=q·m（分母の倍数）で y=p·m+b は整数。
+      # 組合せ 分数(~40)*b(19)*m(8) で dup_rate に十分な余裕。
+      slope_domain: {frac_range: {num: [-9, 9], den: [2, 5]}}
+      intercept_domain: {int_range: [-9, 9]}
+      x_mult_domain: {int_range: [1, 8]}
+    given: [expression, input_value]
+    asked: [value]
+    visual: none
+    text: {tier: T1, template: lf_evaluate_at_x_v1}
+    hints: [steps_prefix]
+    concept_tags: [linear_function.evaluate_at_x_fraction]
+    cause_tags: []
+remedial:
+  default_level: 1
