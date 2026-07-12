@@ -18,23 +18,25 @@
 
 ---
 
-## 1. 現状サマリ（2026-07-12 更新・最新コミット `d1550d3`・作業ツリー clean）
+## 1. 現状サマリ（2026-07-12 更新・最新コミット `50340ac`・作業ツリー clean）
 
-**M0 金の縦串は実装完了**（要件 §10 M0 DoD = Q1〜Q7 + F-1/2/3/5/9 を充足）。続けて **横展開を15セル分**進めた（#1〜#3 前々セッション、#4〜#11 前セッション群、#12〜#15 本セッション）。#8 で **graph_table「かく」capability を新設**、#9〜#15 でそれ／intersection solver を**新solverゼロで再利用**＝償却を実データで実証。**#11〜#15 で連立方程式クラスタ（g2_l11〜l15）が完成**（残 l10 のみ後回し・下記）。
+**M0 金の縦串は実装完了**（要件 §10 M0 DoD = Q1〜Q7 + F-1/2/3/5/9 を充足）。続けて **横展開を17セル分**進めた（#1〜#3 前々セッション、#4〜#11 前セッション群、#12〜#17 本セッション）。**capability を2本新設し償却を実データで実証**: #8 graph_table「かく」（GraphAnswer 経路）、#16 **knowledge form（ChoiceAnswer 経路）**。intersection solver / 「かく」/ knowledge を**新solverゼロ or 小規則だけで再利用**。
+- **#11〜#15 で連立方程式クラスタ（g2_l11〜l15）完成**（同 solver `intersection_of_two_lines` が連立5+交点2セルを支える。残 l10 のみ・下記）。
+- **#16〜#17 で knowledge form 開通**（g2_l21/l23）。#16 が初セル（capability 新設）、#17 が spec+小規則だけで作れる償却の実証。
 
-> ★**全セル フルスイート緑でコミット済み・作業ツリー clean**: 旧#11 FS未走は本セッション冒頭で **3709 passed** 確認し解消。以降 #12〜#15 は各々フルスイート緑を確認してコミット（#12=4117 / #13=4525 / #14=4933 / #15=5137 passed）。**再開時は未コミットの積み残し無し**——次の新セルからそのまま §3 プレイブックで始めてよい。
+> ★**全セル フルスイート緑でコミット済み・作業ツリー clean**: 旧#11 FS未走は本セッション冒頭で **3709 passed** 確認し解消。以降 #12〜#17 は各々フルスイート緑を確認してコミット（#12=4117 / #13=4525 / #14=4933 / #15=5137 / #16=5341 / #17=5545 passed）。**再開時は未コミットの積み残し無し**——次の新セルからそのまま §3 プレイブックで始めてよい。
 
 > ★**再開時の最初のコマンド**（実状態の確認）:
 > ```bash
 > git branch --show-current            # engine-m0-rework
-> git log --oneline -6                 # 最新 d1550d3（#15 l15）
+> git log --oneline -6                 # 最新 50340ac（#17 l23 knowledge）
 > git status --porcelain               # 空（clean）のはず
 > .venv/bin/python -m engine.eval --seeds 5 --dup-seeds 100   # 一式OK・exit 0（約1分）
 > ```
-> フルスイート（約20分）は変更を積んでから走らせればよい（現時点の d1550d3 は #15 コミット時に 5137 passed 確認済み）。
+> フルスイート（約23分）は変更を積んでから走らせればよい（現時点の 50340ac は #17 コミット時に 5545 passed 確認済み）。
 
-- テスト全体 **5137 passed**（#15 時点・フルスイート緑）・`mypy --strict` クリーン・`ruff`（engine/ ソース）クリーン。
-- **capabilities = 25 セル**（`spec check` 済みで generate 可能なセル。level 単位）:
+- テスト全体 **5545 passed**（#17 時点・フルスイート緑）・`mypy --strict` クリーン・`ruff`（engine/ ソース）クリーン。
+- **capabilities = 27 セル**（`spec check` 済みで generate 可能なセル。level 単位）:
 
 | unit | form | levels | 内容 | recipe |
 |---|---|---|---|---|
@@ -56,8 +58,10 @@
 | g2_l12 | calculation | 2, 3 | 加減法で係数をそろえる（Lv2片方倍/Lv3両式倍・#13） | solve_system_elim_scaled |
 | g2_l14 | calculation | 2, 3 | いろいろな連立（Lv2かっこ展開/Lv3分数払い・#14） | solve_system_preprocessed |
 | g2_l15 | calculation | 2 | A=B=C 形を連立に組み替えて解く（#15・連立クラスタ完了） | solve_system_abc |
+| g2_l21 | knowledge | 1 | グラフの向き判別（傾きの符号→右上/右下・**knowledge初**・#16） | knowledge_slope_direction |
+| g2_l23 | knowledge | 1 | 変域の端点の包含判別（≦/≧→含む・#17・knowledge償却実証） | knowledge_range_endpoint |
 
-- M0 縦串 = g2_l25 + 戻り先 g2_l24（find_value）+ g2_l25 graph_table + remedial。**横展開分** = l20 / l27(fv) / l23 / l21 / l26(calc) / l19 / l22(calc) / l22(graph) / l26(graph) / l27(graph) / **連立クラスタ l11/l13/l12/l14/l15(calc)**。
+- M0 縦串 = g2_l25 + 戻り先 g2_l24（find_value）+ g2_l25 graph_table + remedial。**横展開分** = l20 / l27(fv) / l23(fv) / l21(graph) / l26(calc) / l19 / l22(calc) / l22(graph) / l26(graph) / l27(graph) / **連立クラスタ l11/l13/l12/l14/l15(calc)** / **knowledge l21/l23**。
 - **償却の実証（当初目的の達成確認）**:
   - (#7) solver `evaluate_linear_at_x` を素関数化し g2_l19/g2_l22(calc) で共有。
   - (#8) **graph「かく」capability 新設**（GraphAnswer 生成経路・初）。
@@ -237,15 +241,23 @@ feasibility 精査（当時）: **answer 経路とゲートは既に GraphAnswer
 - **★faithfulness（本セッションで学んだ落とし穴）**: 「Lv の骨格（op 列）」だけでなく「その Lv が要求する操作が本当に必要か」も要確認。l12 で当初、x 係数が偶然そろって"倍が不要"になり **Lv2/Lv3 が l11 相当（倍不要）に退化**する題材が混じった。→ 係数を互いに素な大きさに固定して「そろえる倍が真に必要」な構成にした（recipe 内コメント参照）。**新 calc セルは「その Lv でしか解けない」かを生成物 5〜10 個で目視**すること。
 - **★G-Q5t 偽陽性（本セッションで再発）**: l13 の isolate narration に書いた「係数が **1** の式」の "1" が答え座標の値 1 と衝突して漏洩誤検出→ Unsupported。**narration/ヒントには数字を一切書かない**（#9 の再確認。§5-#9）。修正後 250seed 広域で拒否0 を確認。
 - **g2_l10 は例外（クラスタで唯一の残り）**: 「解が成り立つか確認」で asked が別（verify・○×）＝ intersection では作れない。**独立 solver（連立解を解いて与えられた候補と一致するか bool 判定）＋新 answer 型（ChoiceAnswer か bool 相当）＋ frame の asked=true_false 語彙**が要る＝これまでの「spec だけ」ではなく小さな capability 追加。優先度は低め（連立の主要スキルは l11〜l15 で被覆済み）。
-- 残 capability（連立以外）: knowledge=fact テーブル（§6・未整備）／word_problem=T3（M1）。
+- 残 capability（連立以外）: word_problem=T3（M1）。**knowledge は #16 で開通済み**（下 §7.7）。
 
-### 次の一手の候補（連立クラスタ完成後・#16 以降）
-連立クラスタは出そろった。次のフロンティアは方針判断（引き継ぎ書 §6「次の一手」と整合）:
-1. **g2_l23 graph_table[2]**（作図の残り）＝端点の開閉つき線分（segment 描画＋端点マーカー）の描画拡張が要る。graph「かく」capability の自然な延長。
-2. **g2_l10 連立の verify セル**（上記）＝ asked=true_false の小 capability 追加。連立クラスタを"完全被覆"にしたいなら。
-3. **knowledge capability**（fact テーブル §6.2 V2）＝ l19/l21/l26 等の用語・真偽セルを開ける。未整備の機構（facts.yaml + ChoiceAnswer frame + fact 照合ゲート）が要る。
-4. **別の calc/find_value クラスタへ横展開**（例: 一次方程式・比例反比例・式の計算など units.generated.yaml の他単元）＝ 既存 solver で作れる純 T1 セルを他クラスタで探す。
-※ いずれも「1セル追加」で済むもの（1・4 の一部）と「capability を1本作る」もの（2・3）に分かれる。§6 の分岐指針に従い、着手前にどれを投資するか決める。
+## 7.7 knowledge form capability（#16 開通・#17 で償却実証）
+**knowledge form（ChoiceAnswer 単一選択）を新設**。要件のフォーム被覆で唯一ゼロだった大穴（g2_l10/l19/l20/l21/l23/l26/l27 の7単元に定義）を開けた。**core/frame/ゲートの改修はゼロ**——既存資産だけで通った:
+- **既存資産の再利用**: `knowledge` frame（frames.py・given=statement/term_context, asked=term/true_false/choice, visual 禁止）／`ChoiceAnswer` 契約（correct/distractors/fact_id）／`_answers_match` の choice 分岐（correct+fact_id 照合）は**すべて実装済みだった**。#16 が初めてこの経路を生成で通した。
+- **★漏洩ゲートは素通り（重要）**: `_gate_q5t` は答え由来の**数値トークンだけ**を検査する（`_answer_values(choice)=[correct]` → `extract_numbers` で数字なし → 検査対象ゼロ）。よって**テキストの選択肢答え（「右上がり」「ふくまれる」等）は G-Q5t 偽陽性を起こさない**。選択肢の文言はテンプレ本文に固定で並記してよい（両方見せるのは漏洩でない）。
+- **★F-3 無限性の定石（knowledge の勘所）**: knowledge の答えは2値/少数で **params 変化が乏しく dup_rate が上がりやすい**。→ **答えに無関係な surface パラメータ**（#16=切片 b・#17=関数 y=ax+b と端点 n）を式の見かけとして混ぜ、dup_key(params) を広く分散させる（#16=0.12 / #17=0.0）。「答えは a の符号だけで決まるが、b も引いて式の見かけを変える」がパターン。
+- **Q1（double-solve）は V2（規則ベース）**: solver は問題パラメータから**規則**で答えを再判定（#16=傾きの符号→向き／#17=不等号の等号→包含）。fact_id は根拠規則の識別子（`lf.slope_sign_to_direction` 等）。**現状 fact_id の実在検証（facts.yaml 照合）は無い**（_answers_match は recipe/checker 間の一致のみ検査）＝設計 §6.2 の facts.yaml は未整備。当面は規則ベースで faithful に作れる（用語想起系のように fact 表が要る種別は facts.yaml 整備後）。**この差は spec の source_desc に設計モデルとして明記し preview 検収に委ねる**（§6 の sanction 手順）。
+- **実装パターン（次の knowledge セルはこれをコピー）**: solver `math.<rule>`（規則→ChoiceAnswer 返す・純関数）＋ recipe `math.knowledge_<x>`（surface param を引いて statement 構成・solver で double-solve）＋ checker `.double_solve`（params から solver 再判定）＋ template（`given.statement` を出し選択肢は本文固定）＋ concept（unit 実在）＋ spec（given=[statement], asked=[choice], visual=none）。#16/#17 の `knowledge_*` をそのまま雛形に。
+- **次の knowledge セル候補（spec+小規則で作れる）**: g2_l19 knowledge（y=ax+b の a/b が傾き/切片か・用語判別）／g2_l26 knowledge（ax+by=c の解の集合は直線か）／g2_l27 knowledge（連立の解＝2直線の交点）。いずれも判別を単一選択化し surface param で無限性を出す。用語「何というか」系の自由記述は ChoiceAnswer 化（正解語＋妨害語）で対応。
+
+### 次の一手の候補（#18 以降・方針判断）
+1. **knowledge を横に伸ばす**（最も低リスク・償却が効く）: 上記候補を §7.7 パターンで spec+小規則追加。knowledge form の被覆を一気に上げられる。
+2. **g2_l23 graph_table[2]**（作図の残り）＝端点の開閉つき線分（segment 描画＋端点マーカー）。graph「かく」capability の延長（visuals/graph.py 拡張）。
+3. **g2_l10 連立の verify セル**（asked=true_false・○×）＝連立クラスタの完全被覆。ChoiceAnswer/knowledge 経路が開いた今、bool 判定 solver を足せば作れる（連立解と候補の一致判定）＝#16 の資産が効く。
+4. **別の calc/find_value クラスタへ横展開**（一次方程式・比例反比例・式の計算 等）＝既存 solver で作れる純 T1 セルを他単元で探す。
+※ 1・3 は #16 の knowledge 資産が効いて低コスト。着手前にどれを投資するか §6 の指針で決める。
 
 ### G-Q5t の助数詞除外に追加した語（core・数値答えセルの偽陽性対策の履歴）
 `_COUNTER_EXPR_RE` に「次」に加え **「元」**（2元1次方程式の "2元"）を追加済み（#9 で傾き=2 が衝突）。数値/座標/特徴を答えに持つ新セルを作るときは、本文中の「N○○（○○=数える語）」が答え値と衝突しないか**必ず連続200+seed の広域で確認**する（check の smoke=20seed はすり抜ける・#9 で実証）。新たな衝突語が出たら同リストに追記（core を触るが原則的な対処）。
