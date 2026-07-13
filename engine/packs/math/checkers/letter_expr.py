@@ -74,6 +74,12 @@ def double_solve_judge_set_closure(mr: MR) -> Solution:
     return cast(Solution, solver(mr.params["number_set"], mr.params["operation"]))
 
 
+@register_checker("math.count_significant_figures.double_solve")
+def double_solve_count_significant_figures(mr: MR) -> Solution:
+    solver = REGISTRY.solver("math.count_significant_figures")
+    return cast(Solution, solver(mr.params["measurement"]))
+
+
 __all__ = [
     "double_solve_compute_letter_expression",
     "double_solve_compute_substitution",
@@ -85,4 +91,5 @@ __all__ = [
     "double_solve_classify_number_sign",
     "double_solve_represent_opposite_quantity",
     "double_solve_judge_set_closure",
+    "double_solve_count_significant_figures",
 ]

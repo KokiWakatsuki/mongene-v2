@@ -42,6 +42,11 @@ LF_CLASSIFY_SIGN_V1 = "次の数は、正の数・負の数のどちらですか
 LF_OPPOSITE_QUANTITY_V1 = "{{ given.statement }} を、符号を使って表しなさい。"
 # g1_l10.knowledge Lv2: 数の集合が四則について閉じているかを判別する
 LF_SET_CLOSURE_V1 = "{{ given.statement }}。あてはまるものを選びなさい。"
+# g1_l60.knowledge Lv2: 測定値の有効数字が何けたかを判別する
+LF_SIGFIG_JUDGE_V1 = (
+    "ある量を測定して {{ given.statement }} と表した。"
+    "この測定値の有効数字は何けたか、正しいものを1つ選びなさい。"
+)
 
 
 def _register_all() -> None:
@@ -56,6 +61,7 @@ def _register_all() -> None:
     REGISTRY.register_template("lf_classify_sign_v1", LF_CLASSIFY_SIGN_V1)
     REGISTRY.register_template("lf_opposite_quantity_v1", LF_OPPOSITE_QUANTITY_V1)
     REGISTRY.register_template("lf_set_closure_v1", LF_SET_CLOSURE_V1)
+    REGISTRY.register_template("lf_sigfig_judge_v1", LF_SIGFIG_JUDGE_V1)
 
 
 _register_all()
@@ -73,4 +79,5 @@ __all__ = [
     "LF_CLASSIFY_SIGN_V1",
     "LF_OPPOSITE_QUANTITY_V1",
     "LF_SET_CLOSURE_V1",
+    "LF_SIGFIG_JUDGE_V1",
 ]

@@ -10,10 +10,15 @@ source_desc: |
   （term_recall_definition・domain=approximation）。concept で correct が変わる（approximation＝
   近似値／error＝誤差／significant_figures＝有効数字）。distractors は同 domain の他の用語。具体例の
   測定値 n を説明文に埋め込み surface として dup 分散。op 列[identify_description, name_concept]。
-  答えはテキストの ChoiceAnswer＝数字トークンを含まず G-Q5t 素通り（§7.7）。Lv2（有効数字の桁の判別・
-  誤差の適用）と calc（a×10ⁿ・四捨五入・有効数字）は bespoke ソルバが未整備のため残タスク
-  （HANDOFF 参照）。a×10ⁿ表現の名称は g1 で crisp な単一用語が定まらないため concept から除外し、
-  誤差/近似値/有効数字の3語に絞って realize した（§10 sanction）。図は無し。
+  答えはテキストの ChoiceAnswer＝数字トークンを含まず G-Q5t 素通り（§7.7）。Lv2 は「測定値
+  （小数）の有効数字が何けたか」を判別する（count_significant_figures）。答えは漢数字「○けた」
+  （ASCII 数字なし）＝G-Q5t 素通り。measurement を surface として dup 分散。op 列
+  [find_first_significant_digit, count_significant_digits]＝Lv1 と相異で level_sep。
+  a×10ⁿ表現の名称は g1 で crisp な単一用語が定まらないため concept から除外し、
+  誤差/近似値/有効数字の3語に絞って realize した（§10 sanction）。
+  【§10 sanction】Lv2 の「誤差の意味を適用する」は答えの型（区間・数値）が桁数判別（choice）と
+  異なり knowledge の choice 制約（G-Q2）と相性が悪いため、Lv2 は「有効数字の桁の判別」に絞って
+  realize した（末尾0を含む有効数字の判別＝market_ref の差がつく点）。図は無し。
 concepts_default: [approximation.term_recall]
 levels:
   "1":
@@ -30,6 +35,17 @@ levels:
     text: {tier: T1, template: lf_term_recall_v1}
     hints: [steps_prefix]
     concept_tags: [approximation.term_recall]
+    cause_tags: []
+  "2":
+    signature: approximation_judge_sigfig
+    recipe: math.count_significant_figures
+    params: {}
+    given: [statement]
+    asked: [choice]
+    visual: none
+    text: {tier: T1, template: lf_sigfig_judge_v1}
+    hints: [steps_prefix]
+    concept_tags: [approximation.judge_significant_figures]
     cause_tags: []
 remedial:
   default_level: 1

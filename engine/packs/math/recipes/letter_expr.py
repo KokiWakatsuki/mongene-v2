@@ -918,6 +918,59 @@ def recall_rule(ctx: CellContext, rng: Rng) -> MR:
     )
 
 
+# 有効数字の桁判別（g1_l60 knowledge Lv2）。測定値（小数）を構成し、有効数字の桁数を問う。
+# 答えは漢数字「○けた」（ASCII 数字なし）＝G-Q5t 素通り。measurement を surface として params に
+# 含め dup を分散する（§7.7・鉄則④）。
+_SIGFIG_UNITS = ["m", "kg", "cm", "L", "g", "km"]
+
+
+@register_recipe(
+    "math.count_significant_figures",
+    provides_concepts=["approximation.judge_significant_figures"],
+)
+def count_significant_figures(ctx: CellContext, rng: Rng) -> MR:
+    """測定値の有効数字が何けたかを判別する（構成的生成・knowledge Lv2）。
+
+    有効数字の桁数 c（2〜4）と数字列・小数点位置を引いて測定値の表記を作り、独立ソルバで
+    桁数を数え直す（double-solve）。答えは ChoiceAnswer（漢数字「○けた」）。
+    """
+    c = int(draw({"int_set": [2, 3, 4]}, rng))
+    first = int(draw({"int_range": [1, 9]}, rng))
+    rest = "".join(str(int(draw({"int_range": [0, 9]}, rng))) for _ in range(c - 1))
+    sig_digits = f"{first}{rest}"  # c 桁の数字列（先頭は 0 でない）
+
+    form = str(draw(["intfrac", "lessone"], rng))
+    if form == "intfrac":
+        # 1 以上: 小数点を pos 桁目の後に置く（pos は 1〜c-1 で必ず小数部が残る）。
+        pos = int(draw({"int_range": [1, c - 1]}, rng))
+        measurement = f"{sig_digits[:pos]}.{sig_digits[pos:]}"
+    else:
+        # 1 未満: "0." のあとに位取りの 0 を lz 個おいてから有効数字を並べる。
+        lz = int(draw({"int_set": [0, 1, 2]}, rng))
+        measurement = "0." + "0" * lz + sig_digits
+
+    unit = str(draw(_SIGFIG_UNITS, rng))
+    statement = f"{measurement} {unit}"
+
+    solver = REGISTRY.solver("math.count_significant_figures")
+    sol = cast(Solution, solver(measurement))
+    assert isinstance(sol.answer, ChoiceAnswer)
+    assert [s.op for s in sol.steps] == ["find_first_significant_digit", "count_significant_digits"]
+    assert sol.answer.correct not in sol.answer.distractors
+
+    sub_question = SubQuestionMR(
+        label="(1)", asked="choice", answer=sol.answer, steps=sol.steps,
+        concept_tags=_effective_concept_tags(ctx), cause_tags=_effective_cause_tags(ctx),
+    )
+    return MR(
+        signature=ctx.spec_level.signature, family=ctx.family, level=ctx.level,
+        purpose=ctx.purpose, seed=0,
+        params={"measurement": measurement, "unit": unit},
+        given={"statement": statement}, sub_questions=[sub_question], visual_plan=None,
+        provenance=Provenance(recipe="math.count_significant_figures"),
+    )
+
+
 __all__ = [
     "compute_letter_expression",
     "compute_substitution",
@@ -929,4 +982,5 @@ __all__ = [
     "represent_opposite_quantity",
     "judge_set_closure",
     "recall_rule",
+    "count_significant_figures",
 ]

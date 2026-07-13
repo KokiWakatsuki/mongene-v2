@@ -276,6 +276,9 @@ concepts:
   - id: approximation.term_recall
     label: "近似値・誤差・有効数字の意味（用語）を想起する"
     unit: g1_l60
+  - id: approximation.judge_significant_figures
+    label: "測定値の有効数字が何けたかを判別する"
+    unit: g1_l60
   - id: scientific_notation.express_basic
     label: "数を a×10ⁿ（1以上10未満）の形で表す"
     unit: g1_l60

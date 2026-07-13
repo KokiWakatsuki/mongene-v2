@@ -675,6 +675,59 @@ def judge_set_closure(number_set: object, operation: object) -> Solution:
     return Solution(answer=answer, steps=steps)
 
 
+# 有効数字の桁数（g1_l60 knowledge Lv2）— 測定値の有効数字が何けたかを判別する。
+# 答えは漢数字の「○けた」（ASCII 数字を含まない）＝G-Q5t 素通り（§7.7・鉄則①）。
+_SIGFIG_KANJI: dict[int, str] = {1: "一", 2: "二", 3: "三", 4: "四", 5: "五"}
+
+
+def _count_significant_figures(measurement: str) -> int:
+    """小数表記の測定値の有効数字の桁数を数える。
+
+    前提: 測定値は小数点を含み、小数部の末尾0も有効（例 "3.50"→3・"0.0280"→3・"4.005"→4）。
+    先頭の0（位取りの0）は有効数字に数えない。
+    """
+    s = measurement.strip().lstrip("+-").replace(".", "")
+    stripped = s.lstrip("0")
+    if not stripped:
+        raise ValueError(f"有効数字が数えられない測定値: {measurement!r}")
+    return len(stripped)
+
+
+@register_solver("math.count_significant_figures")
+def count_significant_figures(measurement: object) -> Solution:
+    """測定値の有効数字が何けたかを判別する（knowledge 判別・g1_l60 Lv2）。
+
+    測定値の表記（小数）だけから有効数字の桁数を数える（double-solve）。答えは ChoiceAnswer
+    （「三けた」など漢数字＝ASCII 数字なし）。誤選択肢は前後の桁数。op 列は用語想起 Lv1 と
+    相異＝level_sep。narration に数字は書かない。
+    """
+    m = str(measurement)
+    count = _count_significant_figures(m)
+    if count not in _SIGFIG_KANJI:
+        raise ValueError(f"対応範囲外の桁数: {count}")
+    correct = f"{_SIGFIG_KANJI[count]}けた"
+    distractor_counts = [c for c in (count - 1, count + 1) if c in _SIGFIG_KANJI]
+    distractors = [f"{_SIGFIG_KANJI[c]}けた" for c in distractor_counts]
+    steps = [
+        Step(
+            op="find_first_significant_digit",
+            args=[],
+            result_srepr=f"sigfig:{count}",
+            result_display="左から最初の0でない数字を見つける",
+            narration="左から見て、最初の0でない数字が有効数字の始まりである（位取りの0は数えない）。",
+        ),
+        Step(
+            op="count_significant_digits",
+            args=[],
+            result_srepr=correct,
+            result_display=correct,
+            narration="そこから末尾までの数字の個数を数える（小数点以下の末尾の0も有効数字に含める）。",
+        ),
+    ]
+    answer = ChoiceAnswer(correct=correct, distractors=distractors, fact_id="approximation.significant_figures")
+    return Solution(answer=answer, steps=steps)
+
+
 @register_solver("math.recall_rule_statement")
 def recall_rule_statement(topic: object, concept: object) -> Solution:
     """規則・約束の正しい記述を選ぶ（knowledge 規則想起・g1_l22 Lv1 ほか）。
