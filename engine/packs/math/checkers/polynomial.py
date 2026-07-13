@@ -126,6 +126,14 @@ def double_solve_expand_product(mr: MR) -> Solution:
     return cast(Solution, solver(p["expr_str"], p["mode"]))
 
 
+@register_checker("math.factor_polynomial.double_solve")
+def double_solve_factor_polynomial(mr: MR) -> Solution:
+    # 与式の文字列 expr_str と mode から独立に sympy.factor で再計算。
+    p = mr.params
+    solver = REGISTRY.solver("math.factor_expression")
+    return cast(Solution, solver(p["expr_str"], p["mode"]))
+
+
 __all__ = [
     "double_solve_combine_like_terms",
     "double_solve_add_or_subtract_polynomials",
@@ -141,4 +149,5 @@ __all__ = [
     "double_solve_judge_like_terms",
     "double_solve_system_term_recall",
     "double_solve_expand_product",
+    "double_solve_factor_polynomial",
 ]

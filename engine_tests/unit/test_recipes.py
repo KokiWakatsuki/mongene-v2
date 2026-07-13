@@ -2502,6 +2502,49 @@ def test_expand_product_double_solve_property(family, level, seed):
 
 
 # ---------------------------------------------------------------------------
+# math.factor_polynomial（C3 g3_l7〜l11.calculation 因数分解）— P2 因数分解コア能力
+# ---------------------------------------------------------------------------
+_FACTOR_CELLS = [
+    ("math.g3_l7.calculation", 1), ("math.g3_l7.calculation", 2),
+    ("math.g3_l8.calculation", 1), ("math.g3_l8.calculation", 2),
+    ("math.g3_l9.calculation", 1),
+    ("math.g3_l10.calculation", 1),
+    ("math.g3_l11.calculation", 2), ("math.g3_l11.calculation", 3),
+]
+
+
+def test_factor_polynomial_lv1_construct():
+    ctx = _make_ctx("math.g3_l8.calculation", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "factor_sum_product"
+    assert set(mr.given.keys()) == {"expression"}
+    sq = mr.sub_questions[0]
+    assert sq.asked == "simplified_expr"
+    assert [s.op for s in sq.steps] == ["find_two_numbers", "write_factors"]
+    # 答えは因数分解形（積または累乗）で、展開すると与式に戻る。
+    factored = sympy.sympify(sq.answer.srepr)
+    assert factored.is_Mul or factored.is_Pow
+    assert sympy.expand(factored) == sympy.expand(sympy.sympify(mr.params["expr_str"]))
+
+
+@pytest.mark.parametrize("family,level", _FACTOR_CELLS)
+@pytest.mark.parametrize("seed", range(100))
+def test_factor_polynomial_double_solve_property(family, level, seed):
+    ctx = _make_ctx(family, level)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    # 独立ソルバの答えが recipe の答えと一致する（double-solve）。
+    solver = REGISTRY.solver("math.factor_expression")
+    sol = solver(mr.params["expr_str"], mr.params["mode"])
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+    factored = sympy.sympify(sol.answer.srepr)
+    # 恒真: 因数分解形は非自明（積または累乗）で、展開すると与式に戻る。
+    assert factored.is_Mul or factored.is_Pow
+    assert sympy.expand(factored) == sympy.expand(sympy.sympify(mr.params["expr_str"]))
+
+
+# ---------------------------------------------------------------------------
 # math.count_significant_figures（C1 g1_l60.knowledge Lv2 有効数字の桁判別）— P2 bespoke
 # ---------------------------------------------------------------------------
 def test_count_significant_figures_lv2_construct():

@@ -1,0 +1,49 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - polynomial.factor_diff_squares
+  provenance:
+    git_commit: ''
+    recipe: math.factor_polynomial
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_factor_v1
+    tier: T1
+  requested:
+    form: calculation
+    level: 1
+    subject: math
+    unit: g3_l10
+  resolved:
+    form: calculation
+    level: 1
+    subject: math
+    unit: g3_l10
+  seed: 1
+  signature: factor_diff_squares
+problem_ref: 06ce695d3ca37c59
+problem_text: '次の式を因数分解せよ。
+
+  16a² - 81'
+sub_questions:
+- answer:
+    display: (4a - 9)(4a + 9)
+    kind: symbolic
+    srepr: Mul(Add(Mul(Integer(4), Symbol('a')), Integer(-9)), Add(Mul(Integer(4), Symbol('a')), Integer(9)))
+  cause_tags: []
+  concept_tags:
+  - polynomial.factor_diff_squares
+  explanation: まず、平方の差を、和と差の積の形になおす。 (4a - 9)(4a + 9)
+  hints:
+  - 問題文の与えられた値をもう一度確認しよう。
+  label: (1)
+  prompt_text: simplified_expr を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 平方の差を、和と差の積の形になおす。
+    op: apply_diff_of_squares_factor
+    result_display: (4a - 9)(4a + 9)
+    result_srepr: Mul(Add(Mul(Integer(4), Symbol('a')), Integer(-9)), Add(Mul(Integer(4), Symbol('a')), Integer(9)))
+visual_svg: null

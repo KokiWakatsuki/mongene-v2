@@ -1,0 +1,60 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - polynomial.factor_various
+  provenance:
+    git_commit: ''
+    recipe: math.factor_polynomial
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_factor_v1
+    tier: T1
+  requested:
+    form: calculation
+    level: 3
+    subject: math
+    unit: g3_l11
+  resolved:
+    form: calculation
+    level: 3
+    subject: math
+    unit: g3_l11
+  seed: 1
+  signature: factor_substitution
+problem_ref: e2153a78fbd2f206
+problem_text: '次の式を因数分解せよ。
+
+  (a + 2)² - 1'
+sub_questions:
+- answer:
+    display: (a + 1)(a + 3)
+    kind: symbolic
+    srepr: Mul(Add(Symbol('a'), Integer(1)), Add(Symbol('a'), Integer(3)))
+  cause_tags: []
+  concept_tags:
+  - polynomial.factor_various
+  explanation: まず、共通する部分を1つの文字に置きかえる。 共通部分を置きかえる次に、置きかえた式を公式の逆で因数分解する。 公式の逆で因数分解する最後に、置きかえをもとにもどして整理する。 (a + 1)(a + 3)
+  hints:
+  - 共通する部分を1つの文字に置きかえる。
+  - 置きかえた式を公式の逆で因数分解する。
+  label: (1)
+  prompt_text: simplified_expr を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 共通する部分を1つの文字に置きかえる。
+    op: substitute_common_part
+    result_display: 共通部分を置きかえる
+    result_srepr: ''
+  - args: []
+    narration: 置きかえた式を公式の逆で因数分解する。
+    op: apply_formula_factor
+    result_display: 公式の逆で因数分解する
+    result_srepr: ''
+  - args: []
+    narration: 置きかえをもとにもどして整理する。
+    op: restore_factors
+    result_display: (a + 1)(a + 3)
+    result_srepr: Mul(Add(Symbol('a'), Integer(1)), Add(Symbol('a'), Integer(3)))
+visual_svg: null

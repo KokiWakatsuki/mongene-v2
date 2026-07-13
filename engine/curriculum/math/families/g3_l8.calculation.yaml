@@ -1,0 +1,43 @@
+family: math.g3_l8.calculation
+form: calculation
+source_desc: |
+  乗法公式を利用した因数分解①（x²+(a+b)x+abの形）
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: 和が中央係数・積が定数となる2数を探して因数分解。
+       example: x²+7x+12 を因数分解せよ。
+  Lv2 desc: 負や大きな定数で2数探索と符号決定が複雑化。
+       example: x²-2x-24 を因数分解せよ。
+  【設計モデル】math.factor_expression が sympy.factor で因数分解。answer-first で
+  (x+a)(x+b) を構成し展開して given にする（a=b・a=-b は l9/l10 の題材なので除外）。
+  level_sep は mode 別 op 列:
+  Lv1（factor_sum_product：正の2数で和と積から2つの1次式にする2手順）／
+  Lv2（factor_sum_product_signed：負の定数を含み符号を決めてから2数を探す3手順）。
+  dup は2数の組と文字種で分散。
+concepts_default: [polynomial.factor_sum_product]
+levels:
+  "1":
+    signature: factor_sum_product
+    recipe: math.factor_polynomial
+    params:
+      mode: factor_sum_product
+    given: [expression]
+    asked: [simplified_expr]
+    visual: none
+    text: {tier: T1, template: lf_factor_v1}
+    hints: [steps_prefix]
+    concept_tags: [polynomial.factor_sum_product]
+    cause_tags: []
+  "2":
+    signature: factor_sum_product_signed
+    recipe: math.factor_polynomial
+    params:
+      mode: factor_sum_product_signed
+    given: [expression]
+    asked: [simplified_expr]
+    visual: none
+    text: {tier: T1, template: lf_factor_v1}
+    hints: [steps_prefix]
+    concept_tags: [polynomial.factor_sum_product]
+    cause_tags: []
+remedial:
+  default_level: 1

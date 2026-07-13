@@ -10,6 +10,8 @@ C2（数と式）クラスタの初セル: g2_l2.calculation（同類項をま�
 """
 from __future__ import annotations
 
+import math
+import re
 from typing import Any, cast
 
 import sympy
@@ -1356,6 +1358,142 @@ def _expand_construct(mode: str, rng: Rng, p: dict[str, Any]) -> tuple[str, str]
     raise ValueError(f"未知の mode: {mode!r}")
 
 
+_FACTOR_CONCEPTS = [
+    "polynomial.factor_common",
+    "polynomial.factor_sum_product",
+    "polynomial.factor_perfect_square",
+    "polynomial.factor_diff_squares",
+    "polynomial.factor_various",
+]
+
+
+_EXPAND_SUP = str.maketrans("0123456789", "⁰¹²³⁴⁵⁶⁷⁸⁹")
+
+
+def _fmt_poly_display_any(expr: sympy.Expr) -> str:
+    """多項式（任意次数）の表示（`**n`→上付き・`*` 除去）。recipe 内の共通整形。"""
+    s = re.sub(r"\*\*(\d+)", lambda m: m.group(1).translate(_EXPAND_SUP), str(sympy.sstr(expr)))
+    return s.replace("*", "")
+
+
+def _expanded_pair(factored_src: str) -> tuple[str, str]:
+    """因数分解形の文字列を展開し、(expr_str[solver用], given_display[展開形の表示]) を返す。"""
+    expanded = sympy.expand(sympy.sympify(factored_src))
+    return str(expanded), _fmt_poly_display_any(expanded)
+
+
+def _factor_construct(mode: str, rng: Rng, p: dict[str, Any]) -> tuple[str, str]:
+    """mode ごとに (expr_str[sympy用], given_display[表示用]) を構成する（因数分解の given は展開形）。"""
+    small_nonzero = {"int_set": [n for n in range(-9, 10) if n != 0]}
+
+    if mode == "factor_common":
+        var = str(draw(_EXPAND_VARS, rng))
+        g = int(draw({"int_set": list(range(2, 10))}, rng))
+        pp = int(draw({"int_set": list(range(2, 7))}, rng))
+        qq = int(draw(small_nonzero, rng))
+        while math.gcd(pp, abs(qq)) != 1:
+            qq = int(draw(small_nonzero, rng))
+        return _expanded_pair(f"{g}*{var}*(({pp})*{var}+({qq}))")
+
+    if mode == "factor_common_multi":
+        v1, v2 = tuple(draw(_EXPAND_VAR_PAIRS, rng))
+        g = int(draw({"int_set": list(range(2, 7))}, rng))
+        c1 = int(draw({"int_set": [n for n in range(-5, 6) if n != 0]}, rng))
+        c2 = int(draw({"int_set": [n for n in range(-5, 6) if n != 0]}, rng))
+        c3 = int(draw({"int_set": [n for n in range(-5, 6) if n != 0]}, rng))
+        while math.gcd(math.gcd(abs(c1), abs(c2)), abs(c3)) != 1:
+            c3 = int(draw({"int_set": [n for n in range(-5, 6) if n != 0]}, rng))
+        return _expanded_pair(
+            f"{g}*{v1}*{v2}*(({c1})*{v1}+({c2})*{v2}+({c3}))"
+        )
+
+    if mode in ("factor_sum_product", "factor_sum_product_signed"):
+        var = str(draw(_EXPAND_VARS, rng))
+        if mode == "factor_sum_product":
+            dom = {"int_set": list(range(1, 13))}
+        else:
+            dom = {"int_set": [n for n in range(-12, 13) if n != 0]}
+        a = int(draw(dom, rng))
+        b = int(draw(dom, rng))
+        # 完全平方（a=b）・平方の差（a=-b）は l9/l10 の題材なので l8 では除外する。
+        while a == b or a == -b:
+            b = int(draw(dom, rng))
+        return _expanded_pair(f"({var}+({a}))*({var}+({b}))")
+
+    if mode == "factor_perfect_square":
+        var = str(draw(_EXPAND_VARS, rng))
+        a = int(draw({"int_set": [n for n in range(-30, 31) if n != 0]}, rng))
+        return _expanded_pair(f"({var}+({a}))**2")
+
+    if mode == "factor_diff_squares":
+        var = str(draw(_EXPAND_VARS, rng))
+        pp = int(draw({"int_set": list(range(1, 6))}, rng))
+        qq = int(draw({"int_set": list(range(1, 16))}, rng))
+        return _expanded_pair(f"(({pp})*{var}+({qq}))*(({pp})*{var}-({qq}))")
+
+    if mode == "factor_common_then_formula":
+        var = str(draw(_EXPAND_VARS, rng))
+        g = int(draw({"int_set": list(range(2, 10))}, rng))
+        a = int(draw({"int_set": list(range(1, 13))}, rng))
+        return _expanded_pair(f"{g}*({var}+({a}))*({var}-({a}))")
+
+    if mode == "factor_substitution":
+        var = str(draw(_EXPAND_VARS, rng))
+        pp = int(draw(small_nonzero, rng))
+        c = int(draw({"int_set": list(range(1, 13))}, rng))
+        csq = c * c
+        expr = f"({var}+({pp}))**2-{csq}"
+        disp = f"({var}{_const_tail(pp)})² - {csq}"
+        return expr, disp
+
+    raise ValueError(f"未知の mode: {mode!r}")
+
+
+@register_recipe("math.factor_polynomial", provides_concepts=_FACTOR_CONCEPTS)
+def factor_polynomial(ctx: CellContext, rng: Rng) -> MR:
+    """展開された多項式を因数分解する MR を組む（C3 g3_l7〜l11.calculation）。
+
+    answer-first: 因数分解形を先に構成し展開して given（＝問題の多項式）にする。独立ソルバ
+    math.factor_expression が sympy.factor で因数分解し直し、答えを刻印する（double-solve）。
+    """
+    mode = cast(str, ctx.spec_level.params["mode"])
+    expr_str, given_disp = _factor_construct(mode, rng, ctx.spec_level.params)
+
+    solver = REGISTRY.solver("math.factor_expression")
+    sol = cast(Solution, solver(expr_str, mode))
+    assert isinstance(sol.answer, SymbolicAnswer)
+    factored = sympy.sympify(sol.answer.srepr)
+    # 恒真: 因数分解形を展開すると与式に一致し、かつ非自明に因数分解されている
+    # （＝積または累乗で、与式そのものではない）。
+    assert sympy.expand(factored) == sympy.expand(sympy.sympify(expr_str)), (
+        f"double-solve 不一致: factor({expr_str}) の展開が与式に戻らない"
+    )
+    assert factored.is_Mul or factored.is_Pow, (
+        f"因数分解が非自明でない（既約）: {expr_str} -> {sol.answer.display}"
+    )
+
+    sub_question = SubQuestionMR(
+        label="(1)",
+        asked="simplified_expr",
+        answer=sol.answer,
+        steps=sol.steps,
+        concept_tags=_effective_concept_tags(ctx),
+        cause_tags=_effective_cause_tags(ctx),
+    )
+    return MR(
+        signature=ctx.spec_level.signature,
+        family=ctx.family,
+        level=ctx.level,
+        purpose=ctx.purpose,
+        seed=0,
+        params={"expr_str": expr_str, "mode": mode},
+        given={"expression": given_disp},
+        sub_questions=[sub_question],
+        visual_plan=None,
+        provenance=Provenance(recipe="math.factor_polynomial"),
+    )
+
+
 @register_recipe("math.expand_product", provides_concepts=_EXPAND_CONCEPTS)
 def expand_product(ctx: CellContext, rng: Rng) -> MR:
     """積・平方・分配の形の式を展開する MR を組む（C3 g3_l1〜l6.calculation）。"""
@@ -1407,4 +1545,5 @@ __all__ = [
     "judge_like_terms",
     "system_term_recall",
     "expand_product",
+    "factor_polynomial",
 ]

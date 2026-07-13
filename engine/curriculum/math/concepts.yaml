@@ -141,6 +141,22 @@ concepts:
   - id: polynomial.expand_various
     label: "複数の乗法公式や置きかえを使って展開し整理する"
     unit: g3_l6
+  # C3 g3 多項式の因数分解
+  - id: polynomial.factor_common
+    label: "共通因数をくくり出して因数分解する"
+    unit: g3_l7
+  - id: polynomial.factor_sum_product
+    label: "和が中央係数・積が定数となる2数を探して因数分解する（x²+(a+b)x+ab）"
+    unit: g3_l8
+  - id: polynomial.factor_perfect_square
+    label: "平方の公式の逆で (x±a)² に因数分解する"
+    unit: g3_l9
+  - id: polynomial.factor_diff_squares
+    label: "平方の差を (x+a)(x-a) に因数分解する"
+    unit: g3_l10
+  - id: polynomial.factor_various
+    label: "共通因数のくくり出しや置きかえを組み合わせて因数分解する"
+    unit: g3_l11
   - id: polynomial.combine_like_terms_basic
     label: "同類項をまとめて式を簡単にする（1種の文字）"
     unit: g2_l2

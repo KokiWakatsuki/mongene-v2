@@ -668,6 +668,87 @@ def expand_expression(expr_str: str, mode: object) -> Solution:
     return Solution(answer=answer, steps=steps)
 
 
+# ---------------------------------------------------------------------------
+# 多項式の因数分解（C3 g3_l7〜l11.calculation）— sympy.factor の1コア能力
+#
+# 与式（展開された多項式または (x+p)²-c² の形の文字列）だけから sympy.factor で
+# 因数分解した形を導く（double-solve）。答えは自由変数を含む式の SymbolicAnswer
+# （G-Q5t は display 全体一致のみ検査＝展開形と因数分解形は構造が違うので漏洩しない）。
+# mode ごとに steps の op 列を変える＝level_sep。narration に数字を書かない。
+# ---------------------------------------------------------------------------
+_FACTOR_STEPS: dict[str, list[str]] = {
+    # g3_l7 共通因数のくくり出し
+    "factor_common": ["factor_out_common"],
+    "factor_common_multi": ["identify_common_factor", "factor_out_common"],
+    # g3_l8 乗法公式の逆①（x²+(a+b)x+ab）
+    "factor_sum_product": ["find_two_numbers", "write_factors"],
+    "factor_sum_product_signed": ["determine_signs", "find_two_numbers", "write_factors"],
+    # g3_l9 平方の公式の逆
+    "factor_perfect_square": ["recognize_perfect_square", "write_square"],
+    # g3_l10 和と差の積の逆
+    "factor_diff_squares": ["apply_diff_of_squares_factor"],
+    # g3_l11 いろいろな因数分解
+    "factor_common_then_formula": ["factor_out_common", "apply_formula"],
+    "factor_substitution": ["substitute_common_part", "apply_formula_factor", "restore_factors"],
+}
+
+_FACTOR_OP_NARRATION: dict[str, str] = {
+    "factor_out_common": "各項に共通する因数をかっこの外にくくり出す。",
+    "identify_common_factor": "各項の係数と文字に共通する因数を見つける。",
+    "find_two_numbers": "たすと1次の係数、かけると定数になる2つの数を見つける。",
+    "determine_signs": "定数の符号から、2つの数の符号を決める。",
+    "write_factors": "見つけた2つの数を使い、2つの1次式の積で表す。",
+    "recognize_perfect_square": "はじめと終わりが平方で、中央が積の2倍になっていることを確かめる。",
+    "write_square": "1次式の平方の形で表す。",
+    "apply_diff_of_squares_factor": "平方の差を、和と差の積の形になおす。",
+    "apply_formula": "くくり出した後のかっこの中を乗法公式の逆で因数分解する。",
+    "substitute_common_part": "共通する部分を1つの文字に置きかえる。",
+    "apply_formula_factor": "置きかえた式を公式の逆で因数分解する。",
+    "restore_factors": "置きかえをもとにもどして整理する。",
+}
+
+_FACTOR_OP_PHRASE: dict[str, str] = {
+    "identify_common_factor": "共通因数を見つける",
+    "find_two_numbers": "2つの数を見つける",
+    "determine_signs": "符号を決める",
+    "recognize_perfect_square": "平方の形を確かめる",
+    "factor_out_common": "共通因数をくくり出す",
+    "substitute_common_part": "共通部分を置きかえる",
+    "apply_formula_factor": "公式の逆で因数分解する",
+}
+
+
+@register_solver("math.factor_expression")
+def factor_expression(expr_str: str, mode: object) -> Solution:
+    """展開された多項式を因数分解する（C3 g3_l7〜l11.calculation）。
+
+    与式の文字列だけから sympy.factor で因数分解した形を導く（recipe の構成内訳は見ない
+    ・double-solve）。答えは因数分解後の式の SymbolicAnswer。mode ごとに steps の op 列を
+    変える＝level_sep。narration には数字を書かない。
+    """
+    mode_s = str(mode)
+    if mode_s not in _FACTOR_STEPS:
+        raise ValueError(f"未知の mode: {mode_s!r}")
+    expr = sympy.sympify(expr_str)
+    factored = sympy.factor(expr)
+    disp = _fmt_monomial_display(factored)
+    srepr = sympy.srepr(factored)
+
+    ops = _FACTOR_STEPS[mode_s]
+    steps = [
+        Step(
+            op=op,
+            args=[],
+            result_srepr=srepr if i == len(ops) - 1 else "",
+            result_display=disp if i == len(ops) - 1 else _FACTOR_OP_PHRASE.get(op, ""),
+            narration=_FACTOR_OP_NARRATION[op],
+        )
+        for i, op in enumerate(ops)
+    ]
+    answer = SymbolicAnswer(srepr=srepr, display=disp)
+    return Solution(answer=answer, steps=steps)
+
+
 __all__ = [
     "simplify_polynomial",
     "add_or_subtract_polynomials",
@@ -683,4 +764,5 @@ __all__ = [
     "judge_like_terms",
     "system_term_definition",
     "expand_expression",
+    "factor_expression",
 ]

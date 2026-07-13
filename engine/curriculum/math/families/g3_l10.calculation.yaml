@@ -1,0 +1,27 @@
+family: math.g3_l10.calculation
+form: calculation
+source_desc: |
+  乗法公式を利用した因数分解③（和と差の積の逆）
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: a^2-b^2を(a+b)(a-b)に直接因数分解（単段）。
+       example: x²-49 を因数分解せよ。
+  【設計モデル】math.factor_expression が sympy.factor で平方の差を (x+a)(x-a) に因数分解。
+  answer-first で (px+q)(px-q) を構成し展開して given にする（単段 factor_diff_squares）。
+  【§10 sanction】example は単項係数の x²-a² だが、dup 確保のため係数つき (px)²-q²（p≥1）まで
+  一般化する（和と差の積の逆の技能は不変）。dup は係数・定数・文字種で分散。
+concepts_default: [polynomial.factor_diff_squares]
+levels:
+  "1":
+    signature: factor_diff_squares
+    recipe: math.factor_polynomial
+    params:
+      mode: factor_diff_squares
+    given: [expression]
+    asked: [simplified_expr]
+    visual: none
+    text: {tier: T1, template: lf_factor_v1}
+    hints: [steps_prefix]
+    concept_tags: [polynomial.factor_diff_squares]
+    cause_tags: []
+remedial:
+  default_level: 1

@@ -1,0 +1,54 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - polynomial.factor_various
+  provenance:
+    git_commit: ''
+    recipe: math.factor_polynomial
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_factor_v1
+    tier: T1
+  requested:
+    form: calculation
+    level: 2
+    subject: math
+    unit: g3_l11
+  resolved:
+    form: calculation
+    level: 2
+    subject: math
+    unit: g3_l11
+  seed: 3
+  signature: factor_common_then_formula
+problem_ref: df37cd0038689d17
+problem_text: '次の式を因数分解せよ。
+
+  7x² - 567'
+sub_questions:
+- answer:
+    display: 7(x - 9)(x + 9)
+    kind: symbolic
+    srepr: Mul(Integer(7), Add(Symbol('x'), Integer(-9)), Add(Symbol('x'), Integer(9)))
+  cause_tags: []
+  concept_tags:
+  - polynomial.factor_various
+  explanation: まず、各項に共通する因数をかっこの外にくくり出す。 共通因数をくくり出す次に、くくり出した後のかっこの中を乗法公式の逆で因数分解する。 7(x - 9)(x + 9)
+  hints:
+  - 各項に共通する因数をかっこの外にくくり出す。
+  label: (1)
+  prompt_text: simplified_expr を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 各項に共通する因数をかっこの外にくくり出す。
+    op: factor_out_common
+    result_display: 共通因数をくくり出す
+    result_srepr: ''
+  - args: []
+    narration: くくり出した後のかっこの中を乗法公式の逆で因数分解する。
+    op: apply_formula
+    result_display: 7(x - 9)(x + 9)
+    result_srepr: Mul(Integer(7), Add(Symbol('x'), Integer(-9)), Add(Symbol('x'), Integer(9)))
+visual_svg: null

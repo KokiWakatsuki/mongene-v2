@@ -45,6 +45,9 @@ LF_LIKE_TERMS_V1 = "2つの項 {{ given.statement }} は、同類項ですか、
 # g3_l1〜l6.calculation: 積・平方・分配の形の式を展開する（C3）
 LF_EXPAND_V1 = "次の式を展開せよ。\n{{ given.expression }}"
 
+# g3_l7〜l11.calculation: 多項式を因数分解する（C3）
+LF_FACTOR_V1 = "次の式を因数分解せよ。\n{{ given.expression }}"
+
 
 def _register_all() -> None:
     REGISTRY.register_template("lf_combine_like_terms_v1", LF_COMBINE_LIKE_TERMS_V1)
@@ -60,6 +63,7 @@ def _register_all() -> None:
     REGISTRY.register_template("lf_poly_classify_v1", LF_POLY_CLASSIFY_V1)
     REGISTRY.register_template("lf_like_terms_v1", LF_LIKE_TERMS_V1)
     REGISTRY.register_template("lf_expand_v1", LF_EXPAND_V1)
+    REGISTRY.register_template("lf_factor_v1", LF_FACTOR_V1)
 
 
 _register_all()
@@ -77,4 +81,5 @@ __all__ = [
     "LF_POLY_CLASSIFY_V1",
     "LF_LIKE_TERMS_V1",
     "LF_EXPAND_V1",
+    "LF_FACTOR_V1",
 ]
