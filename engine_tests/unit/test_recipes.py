@@ -2651,11 +2651,30 @@ def test_recall_rule_term_in_sum_l5_lv1_construct():
     assert mr.params["concept"] == "definition"
 
 
+def test_recall_rule_speed_relation_l15_lv1_construct():
+    ctx = _make_ctx("math.g1_l15.knowledge", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "speed_relation_rule_recall"
+    assert mr.params["concept"] in {"speed", "distance", "time"}
+    assert "÷" in mr.sub_questions[0].answer.correct or "×" in mr.sub_questions[0].answer.correct
+
+
+def test_recall_rule_letter_meaning_l12_lv1_construct():
+    ctx = _make_ctx("math.g1_l12.knowledge", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "letter_meaning_rule_recall"
+    assert mr.params["concept"] == "benefit"
+
+
 _RULE_RECALL_CELLS = [
     ("math.g1_l22.knowledge", 1),
     ("math.g1_l3.knowledge", 1),
     ("math.g1_l4.knowledge", 1),
     ("math.g1_l5.knowledge", 1),
+    ("math.g1_l15.knowledge", 1),
+    ("math.g1_l12.knowledge", 1),
 ]
 
 

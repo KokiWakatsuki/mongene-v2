@@ -1,0 +1,56 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - speed_relation.rule_recall
+  provenance:
+    git_commit: ''
+    recipe: math.recall_rule
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_rule_recall_v1
+    tier: T1
+  requested:
+    form: knowledge
+    level: 1
+    subject: math
+    unit: g1_l15
+  resolved:
+    form: knowledge
+    level: 1
+    subject: math
+    unit: g1_l15
+  seed: 2
+  signature: speed_relation_rule_recall
+problem_ref: ed32406049491dfd
+problem_text: 速さ 53 km/時 で 12 時間進む場面のように、道のり・速さ・時間の関係で「道のり」を求める式。正しく述べているものを1つ選びなさい。
+sub_questions:
+- answer:
+    correct: （道のり）＝（速さ）×（時間）
+    distractors:
+    - （道のり）＝（速さ）÷（時間）
+    - （道のり）＝（時間）÷（速さ）
+    - （道のり）＝（速さ）＋（時間）
+    fact_id: speed_relation.rule.distance
+    kind: choice
+  cause_tags: []
+  concept_tags:
+  - speed_relation.rule_recall
+  explanation: まず、問題で問われている規則や約束が、何についてのものかを読み取る。 問われている規則が何についてかを読み取る次に、その規則の正しい内容を思い出して選ぶ。 （道のり）＝（速さ）×（時間）
+  hints:
+  - 問題で問われている規則や約束が、何についてのものかを読み取る。
+  label: (1)
+  prompt_text: choice を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 問題で問われている規則や約束が、何についてのものかを読み取る。
+    op: read_rule_context
+    result_display: 問われている規則が何についてかを読み取る
+    result_srepr: distance
+  - args: []
+    narration: その規則の正しい内容を思い出して選ぶ。
+    op: recall_correct_rule
+    result_display: （道のり）＝（速さ）×（時間）
+    result_srepr: （道のり）＝（速さ）×（時間）
+visual_svg: null

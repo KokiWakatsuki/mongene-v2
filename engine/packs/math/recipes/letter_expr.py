@@ -608,6 +608,8 @@ _RULE_RECALL_CONCEPTS = [
     "addition_sign.rule_recall",
     "subtraction.rule_recall",
     "term_in_sum.rule_recall",
+    "speed_relation.rule_recall",
+    "letter_meaning.rule_recall",
     "transposition.rule_recall",
 ]
 
@@ -650,6 +652,23 @@ def _draw_rule_statement(topic: str, concept: str, rng: Rng, p: dict[str, object
         tail = "".join(f" {s} {n}" for s, n in pieces[1:])
         ex = head + tail
         return f"式 {ex} を、加法だけの式とみて「項」に分けて考えるとき、項とは何を指すか"
+
+    if topic == "speed_relation":
+        # g1_l15 速さ・道のり・時間。求める量に応じ、残り2量の具体的な場面を surface に
+        # 埋め込む（数値は装飾で dup 分散。求める量そのものの数値は与えない）。
+        d = int(draw(p["number_domain"], rng))
+        t = int(draw(p["number_domain"], rng))
+        v = int(draw(p["number_domain"], rng))
+        if concept == "speed":
+            return f"道のり {d} km を {t} 時間で進む場面のように、道のり・速さ・時間の関係で「速さ」を求める式"
+        if concept == "distance":
+            return f"速さ {v} km/時 で {t} 時間進む場面のように、道のり・速さ・時間の関係で「道のり」を求める式"
+        return f"道のり {d} km を速さ {v} km/時 で進む場面のように、道のり・速さ・時間の関係で「時間」を求める式"  # time
+
+    if topic == "letter_meaning":
+        # g1_l12 文字を使った式。1本 price 円の品物を x 本買う場面を surface に埋め込み dup 分散。
+        price = int(draw(p["number_domain"], rng))
+        return f"1本 {price} 円の品物を x 本買ったときの代金を {price}x 円と表す場面のように、文字を使って数量を表すことの利点"
 
     if topic == "transposition":
         # g1_l22 移項。具体例の一次方程式 a·x + b = c を surface として埋め込み dup 分散。

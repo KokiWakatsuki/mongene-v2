@@ -1,0 +1,33 @@
+family: math.g1_l12.knowledge
+form: knowledge
+source_desc: |
+  文字を使って数量を表すことの意味・利点（Lv1 規則想起）
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: 文字で数量を表す意味・約束を想起する。
+       example: 1個 a 円の品物を b 個買ったときの代金を式で表すと ab 円となる。文字を使って数量を
+                表すことの利点を1つ答えよ。
+  【設計モデル・要検収(Q4)】「文字を使う利点の正しい説明を選ぶ」単一選択に realize（規則想起
+  recall_rule_statement・topic=letter_meaning・単一 concept=benefit）。distractors は「計算せず答えが
+  出る」「図だけで表せる」「文字は整数だけ」など、もっともらしい誤り。具体例（1本 price 円の品物を
+  x 本買う場面）を surface に埋め込み dup 分散。op 列[read_rule_context, recall_correct_rule]。
+  答えは説明の文で ASCII 数字トークンを含まず G-Q5t 素通り（§7.7）。Lv2（式の意味の解釈）は
+  場面生成＋解釈が必要で本コミットでは Lv1 のみ realize（残タスク）。図は無し。
+concepts_default: [letter_meaning.rule_recall]
+levels:
+  "1":
+    signature: letter_meaning_rule_recall
+    recipe: math.recall_rule
+    params:
+      topic: letter_meaning
+      concept_set: [benefit]
+      # 具体例の代金の場面（price 円）を surface に埋め込み dup 分散する。
+      number_domain: {int_range: [10, 990]}
+    given: [statement]
+    asked: [choice]
+    visual: none
+    text: {tier: T1, template: lf_rule_recall_v1}
+    hints: [steps_prefix]
+    concept_tags: [letter_meaning.rule_recall]
+    cause_tags: []
+remedial:
+  default_level: 1
