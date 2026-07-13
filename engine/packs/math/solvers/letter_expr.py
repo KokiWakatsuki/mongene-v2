@@ -224,6 +224,8 @@ _TERM_MAPS: dict[str, dict[str, str]] = {
     # g1_l20 不等号（以上/以下/未満/超 → 記号 ≧ ≦ < >）。用語想起の一種として、
     # 大小の関係（説明された phrase）に対応する不等号（＝名前の代わりに記号）を答える。
     "inequality": {"at_least": "≧", "at_most": "≦", "less_than": "<", "greater_than": ">"},
+    # g1_l10 数の集合（自然数・整数）
+    "number_set": {"natural_number": "自然数", "integer": "整数"},
 }
 
 # domain 別の step テキスト（既定は g1_l17/l19/l21/l2 の現行文＝golden 不変）。

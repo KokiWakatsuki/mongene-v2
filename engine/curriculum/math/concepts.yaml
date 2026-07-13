@@ -240,6 +240,9 @@ concepts:
   - id: term_in_sum.rule_recall
     label: "式を加法だけの式とみたときの『項』の意味を想起する"
     unit: g1_l5
+  - id: number_set.term_recall
+    label: "自然数・整数の集合の用語を想起する"
+    unit: g1_l10
   # --- C1 g1 一次方程式（解法） ---
   - id: equation.solve_by_equality_property
     label: "等式の性質を使って一次方程式を解く（1手）"

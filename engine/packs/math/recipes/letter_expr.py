@@ -409,6 +409,7 @@ _TERM_RECALL_CONCEPTS = [
     "equation.term_recall",
     "number.term_recall",
     "inequality.term_recall",
+    "number_set.term_recall",
 ]
 
 
@@ -445,6 +446,18 @@ def _draw_term_statement(domain: str, concept: str, rng: Rng, p: dict[str, objec
         if concept == "less_than":
             return f"x は {n} 未満である（x は {n} より小さく、{n} は含まない）"
         return f"x は {n} より大きい（{n} を超える。{n} は含まない）"  # greater_than
+
+    if domain == "number_set":
+        # g1_l10 数の集合。相異なる2つの正の整数を例に埋め込み surface を分散する
+        # （2 concept と少数のため、独立2値で variety を確保し dup≤0.20 にする）。
+        cands = _domain_candidates(cast("dict[str, object]", p["number_domain"]))
+        n1 = int(draw({"int_set": cands}, rng))
+        n2 = int(draw({"int_set": [v for v in cands if v != n1]}, rng))
+        if concept == "natural_number":
+            lo, hi = sorted((n1, n2))
+            return f"{lo}, {hi} のように、ものの個数や順番を表すのに使う、1 以上の整数を集めたもの"
+        # integer
+        return f"-{n1} や 0 や +{n2} のように、正の整数・0・負の整数をすべて集めたもの"
 
     cc = [v for v in _domain_candidates(cast("dict[str, object]", p["coeff_domain"])) if v != 0]
     if domain == "letter":
