@@ -1,0 +1,48 @@
+family: math.g1_l17.calculation
+form: calculation
+source_desc: |
+  一次式の加法・減法（項と係数・同類項をまとめる）
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: 同類項をまとめて一次式を整理する1手順。
+       example: 5x-2+3x+7 を計算せよ。
+  Lv2 desc: かっこを含む一次式の加減・多数項の整理を行う複数手順。
+       example: (4x-3)-(x-8) を計算せよ。
+  答えは自由変数 x を含む一次式（SymbolicAnswer）。独立ソルバ
+  evaluate_letter_expression（sympy.expand で厳密に整理）で再計算する（double-solve）。
+  Lv1（同類項をまとめて係数を計算）/ Lv2（かっこを符号に注意して外してから同類項をまとめる）で
+  steps の op 列を変える＝level_sep。式答え（free_symbol 含む）は display 全体一致でのみ
+  漏洩検査されるため G-Q5t は相対安全（x 係数は構成で必ず非零＝定数に退化しない）。図は無し。
+concepts_default: [letter_expr.combine_linear]
+levels:
+  "1":
+    signature: combine_linear
+    recipe: math.compute_letter_expression
+    params:
+      # a1·x + b1 + a2·x + b2（x 項2つ・定数項2つを交互に配置）。x 係数の和≠0 を構成で保証。
+      mode: combine_linear
+      coeff_domain: {int_range: [-9, 9], exclude: [0]}
+      const_domain: {int_range: [-9, 9], exclude: [0]}
+    given: [expression]
+    asked: [simplified_expr]
+    visual: none
+    text: {tier: T1, template: lf_calc_evaluate_v1}
+    hints: [steps_prefix]
+    concept_tags: [letter_expr.combine_linear]
+    cause_tags: []
+  "2":
+    signature: expand_paren_linear
+    recipe: math.compute_letter_expression
+    params:
+      # (a1·x + b1) op (a2·x + b2)（op は + / -）。答えの x 係数≠0 を構成で保証。
+      mode: expand_paren_linear
+      coeff_domain: {int_range: [-9, 9], exclude: [0]}
+      const_domain: {int_range: [-9, 9], exclude: [0]}
+    given: [expression]
+    asked: [simplified_expr]
+    visual: none
+    text: {tier: T1, template: lf_calc_evaluate_v1}
+    hints: [steps_prefix]
+    concept_tags: [letter_expr.add_sub_linear_paren]
+    cause_tags: []
+remedial:
+  default_level: 1

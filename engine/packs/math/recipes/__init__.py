@@ -8,5 +8,6 @@ from __future__ import annotations
 from engine.packs.math.recipes import arithmetic  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.recipes import linear  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.recipes import polynomial  # noqa: F401  (登録の副作用のため import)
+from engine.packs.math.recipes import letter_expr  # noqa: F401,E402  (polynomial のヘルパに依存＝後に import)
 
 __all__: list[str] = []

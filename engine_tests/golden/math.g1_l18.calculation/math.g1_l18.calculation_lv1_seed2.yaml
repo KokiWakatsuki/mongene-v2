@@ -1,0 +1,49 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - letter_expr.distribute_linear
+  provenance:
+    git_commit: ''
+    recipe: math.compute_letter_expression
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_calc_evaluate_v1
+    tier: T1
+  requested:
+    form: calculation
+    level: 1
+    subject: math
+    unit: g1_l18
+  resolved:
+    form: calculation
+    level: 1
+    subject: math
+    unit: g1_l18
+  seed: 2
+  signature: distribute_linear
+problem_ref: 6a12b21f6f8f9dde
+problem_text: '次の計算をせよ。
+
+  -4(5x - 7)'
+sub_questions:
+- answer:
+    display: 28 - 20x
+    kind: symbolic
+    srepr: Add(Integer(28), Mul(Integer(-1), Integer(20), Symbol('x')))
+  cause_tags: []
+  concept_tags:
+  - letter_expr.distribute_linear
+  explanation: まず、かっこの前の数を、かっこの中の各項にかけて計算する。 28 - 20x
+  hints:
+  - 問題文の与えられた値をもう一度確認しよう。
+  label: (1)
+  prompt_text: simplified_expr を求めなさい。
+  solution_steps:
+  - args: []
+    narration: かっこの前の数を、かっこの中の各項にかけて計算する。
+    op: distribute_multiplication
+    result_display: 28 - 20x
+    result_srepr: Add(Integer(28), Mul(Integer(-1), Integer(20), Symbol('x')))
+visual_svg: null

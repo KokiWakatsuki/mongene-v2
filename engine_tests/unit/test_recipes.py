@@ -2295,3 +2295,68 @@ def test_compute_signed_arithmetic_double_solve_property(family, level, seed):
     assert sol.answer.srepr == sympy.srepr(expected)
     # 答えは定数（自由変数を含まない）。
     assert not sympy.sympify(sol.answer.srepr).free_symbols
+
+
+# ---------------------------------------------------------------------------
+# math.compute_letter_expression（C1 g1 文字式・一次式の計算）— P2
+# ---------------------------------------------------------------------------
+def test_letter_combine_linear_lv1_construct():
+    ctx = _make_ctx("math.g1_l17.calculation", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "combine_linear"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "simplified_expr"
+    assert [s.op for s in sq.steps] == ["group_like_terms", "add_coefficients"]
+    # 答えは一次式（x を含む）。
+    assert sympy.Symbol("x") in sympy.sympify(sq.answer.srepr).free_symbols
+
+
+def test_letter_expand_paren_linear_lv2_construct():
+    ctx = _make_ctx("math.g1_l17.calculation", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "expand_paren_linear"
+    assert [s.op for s in mr.sub_questions[0].steps] == ["remove_parentheses", "add_like_terms"]
+    assert "(" in mr.given["expression"]  # かっこを含む
+
+
+def test_letter_distribute_linear_lv1_construct():
+    ctx = _make_ctx("math.g1_l18.calculation", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "distribute_linear"
+    assert [s.op for s in mr.sub_questions[0].steps] == ["distribute_multiplication"]
+
+
+def test_letter_distribute_divide_linear_lv2_construct():
+    ctx = _make_ctx("math.g1_l18.calculation", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "distribute_divide_linear"
+    assert [s.op for s in mr.sub_questions[0].steps] == [
+        "distribute_multiplication", "convert_division_to_multiplication", "add_like_terms",
+    ]
+    assert "÷" in mr.given["expression"]  # 除法を含む
+
+
+_LETTER_EXPR_CELLS = [
+    ("math.g1_l17.calculation", 1), ("math.g1_l17.calculation", 2),
+    ("math.g1_l18.calculation", 1), ("math.g1_l18.calculation", 2),
+]
+
+
+@pytest.mark.parametrize("family,level", _LETTER_EXPR_CELLS)
+@pytest.mark.parametrize("seed", range(100))
+def test_compute_letter_expression_double_solve_property(family, level, seed):
+    ctx = _make_ctx(family, level)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.evaluate_letter_expression")
+    sol = solver(mr.params["expr_str"], mr.params["mode"])
+    # 独立ソルバの答えが recipe の答えと一致し、かつ与式の厳密な整理に等しい。
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+    expected = sympy.expand(sympy.sympify(mr.params["expr_str"]))
+    assert sol.answer.srepr == sympy.srepr(expected)
+    # 答えは一次式（自由変数 x を含む＝定数に退化していない）。
+    assert sympy.Symbol("x") in sympy.sympify(sol.answer.srepr).free_symbols

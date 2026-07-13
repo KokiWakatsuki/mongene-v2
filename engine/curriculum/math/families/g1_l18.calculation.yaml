@@ -1,0 +1,53 @@
+family: math.g1_l18.calculation
+form: calculation
+source_desc: |
+  一次式と数の乗法・除法（分配法則・分数係数の乗除混合）
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: 一次式に数を掛ける/割る1手順。
+       example: 3(2x-5) を計算せよ。
+  Lv2 desc: 分配法則とかっこ・分数係数を含む乗除混合を整理する複数手順。
+       example: 2(3x-4)-(6x-9)÷3 を計算せよ。
+  答えは自由変数 x を含む一次式（SymbolicAnswer）。独立ソルバ
+  evaluate_letter_expression（sympy.expand で厳密に整理）で再計算する（double-solve）。
+  Lv1（かっこの前の数を各項に分配する1手）/ Lv2（分配→÷を逆数のかけ算に直す→同類項整理の
+  複数手）で steps の op 列を変える＝level_sep。÷ は割り切れるよう answer-first で被除数を逆算
+  （rx·m·x + ry·m を ÷m）。x 係数は構成で必ず非零＝定数に退化しない。式答えは display 全体
+  一致でのみ漏洩検査されるため G-Q5t は相対安全。図は無し。
+concepts_default: [letter_expr.distribute_linear]
+levels:
+  "1":
+    signature: distribute_linear
+    recipe: math.compute_letter_expression
+    params:
+      # k(a·x + b)。k は ±1・0 を除く（分配が自明にならない）。負の k も含む。
+      mode: distribute_linear
+      coeff_domain: {int_range: [-9, 9], exclude: [0]}
+      const_domain: {int_range: [-9, 9], exclude: [0]}
+      multiplier_domain: {int_set: [-5, -4, -3, -2, 2, 3, 4, 5]}
+    given: [expression]
+    asked: [simplified_expr]
+    visual: none
+    text: {tier: T1, template: lf_calc_evaluate_v1}
+    hints: [steps_prefix]
+    concept_tags: [letter_expr.distribute_linear]
+    cause_tags: []
+  "2":
+    signature: distribute_divide_linear
+    recipe: math.compute_letter_expression
+    params:
+      # k(a·x + b) op (rx·m·x + ry·m) ÷ m。answer-first で割り切れる被除数を逆算。
+      # 係数域は小さめにして被除数（rx·m 等）の表示が大きくなりすぎないようにする。
+      mode: distribute_divide_linear
+      coeff_domain: {int_range: [-4, 4], exclude: [0]}
+      const_domain: {int_range: [-6, 6], exclude: [0]}
+      multiplier_domain: {int_set: [2, 3, 4]}
+      divisor_domain: {int_set: [2, 3]}
+    given: [expression]
+    asked: [simplified_expr]
+    visual: none
+    text: {tier: T1, template: lf_calc_evaluate_v1}
+    hints: [steps_prefix]
+    concept_tags: [letter_expr.distribute_divide_mixed]
+    cause_tags: []
+remedial:
+  default_level: 1

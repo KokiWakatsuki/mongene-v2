@@ -1,0 +1,85 @@
+"""文字式（一次式の計算）まわりの独立再計算ソルバ（実装設計 §6.2 double-solve）。
+
+solver は**問題パラメータだけ**（与式の文字列 expr_str と mode）から答えと steps を導く
+（recipe の構成値は見ない）。純粋・決定論・SymPy 恒真であること。乱数は引かない。
+
+C1（g1 数と式・文字式）クラスタの計算セル群を1つの汎用ソルバに集約する（arithmetic.py の
+`evaluate_numeric_expression` と同型の設計）:
+  `math.evaluate_letter_expression(expr_str, mode)` が一次式を sympy.expand で厳密に整理し、
+  mode ごとに steps の op 列を変える（＝level_sep）。答えは自由変数 x を含む一次式
+  （SymbolicAnswer）。式答え（free_symbol 含む）は display 全体一致でのみ漏洩検査されるため
+  G-Q5t は相対安全（§引継 13c-2-#1）。narration には数字を書かない。
+"""
+from __future__ import annotations
+
+import sympy
+
+from engine.core.contracts import Solution, Step, SymbolicAnswer
+from engine.core.registry import register_solver
+from engine.packs.math.solvers.polynomial import _fmt_poly_display
+
+# mode -> op 列（steps の骨格）。level_sep はこの op 列の相異で作る（同一 unit の
+# Lv1/Lv2 が異なる mode を持つ）。narration に数字は書かない（G-Q5t 偽陽性の元・§5-#9）。
+_MODE_STEPS: dict[str, list[str]] = {
+    # g1_l17 一次式の加法・減法
+    "combine_linear": ["group_like_terms", "add_coefficients"],
+    "expand_paren_linear": ["remove_parentheses", "add_like_terms"],
+    # g1_l18 一次式と数の乗法・除法
+    "distribute_linear": ["distribute_multiplication"],
+    "distribute_divide_linear": [
+        "distribute_multiplication",
+        "convert_division_to_multiplication",
+        "add_like_terms",
+    ],
+}
+
+# op -> narration（数字を書かない）。
+_OP_NARRATION: dict[str, str] = {
+    "group_like_terms": "文字の部分が同じ項（同類項）どうしをまとめる。",
+    "add_coefficients": "まとめた同類項の係数を計算して、式を簡単にする。",
+    "remove_parentheses": "それぞれのかっこを、前の符号に注意して外す（前が - のときは中の各項の符号を変える）。",
+    "add_like_terms": "同類項をまとめて計算する。",
+    "distribute_multiplication": "かっこの前の数を、かっこの中の各項にかけて計算する。",
+    "convert_division_to_multiplication": "÷ の計算を、その数の逆数をかっこの中の各項にかける計算に直す。",
+}
+
+# op -> 非終端 step の result_display フレーズ（数字を書かない）。
+_OP_PHRASE: dict[str, str] = {
+    "group_like_terms": "同類項どうしをまとめる",
+    "remove_parentheses": "符号に注意してかっこを外す",
+    "distribute_multiplication": "かっこの前の数を各項にかける",
+    "convert_division_to_multiplication": "÷ を逆数のかけ算に直す",
+}
+
+
+@register_solver("math.evaluate_letter_expression")
+def evaluate_letter_expression(expr_str: str, mode: object) -> Solution:
+    """一次式の計算（加減・乗除）を整理して1つの一次式にする（g1 文字式 calculation）。
+
+    与式の文字列だけから sympy.expand で厳密に整理する（double-solve）。答えは自由変数 x を
+    含む一次式（SymbolicAnswer）。mode ごとに steps の op 列を変える＝level_sep。
+    narration には数字を書かない（G-Q5t 偽陽性の元・§5-#9）。
+    """
+    mode_s = str(mode)
+    if mode_s not in _MODE_STEPS:
+        raise ValueError(f"未知の mode: {mode_s!r}")
+    simplified = sympy.expand(sympy.sympify(expr_str))
+    r_srepr = sympy.srepr(simplified)
+    r_disp = _fmt_poly_display(simplified)
+
+    ops = _MODE_STEPS[mode_s]
+    steps = [
+        Step(
+            op=op,
+            args=[],
+            result_srepr=r_srepr,
+            result_display=r_disp if i == len(ops) - 1 else _OP_PHRASE.get(op, ""),
+            narration=_OP_NARRATION[op],
+        )
+        for i, op in enumerate(ops)
+    ]
+    answer = SymbolicAnswer(srepr=r_srepr, display=r_disp)
+    return Solution(answer=answer, steps=steps)
+
+
+__all__ = ["evaluate_letter_expression"]

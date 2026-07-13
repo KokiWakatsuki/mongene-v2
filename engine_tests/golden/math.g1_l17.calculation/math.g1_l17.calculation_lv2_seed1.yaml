@@ -1,0 +1,54 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - letter_expr.add_sub_linear_paren
+  provenance:
+    git_commit: ''
+    recipe: math.compute_letter_expression
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_calc_evaluate_v1
+    tier: T1
+  requested:
+    form: calculation
+    level: 2
+    subject: math
+    unit: g1_l17
+  resolved:
+    form: calculation
+    level: 2
+    subject: math
+    unit: g1_l17
+  seed: 1
+  signature: expand_paren_linear
+problem_ref: 4853310bdfae2b50
+problem_text: '次の計算をせよ。
+
+  (5x - 6) + (-6x - 6)'
+sub_questions:
+- answer:
+    display: -x - 12
+    kind: symbolic
+    srepr: Add(Mul(Integer(-1), Symbol('x')), Integer(-12))
+  cause_tags: []
+  concept_tags:
+  - letter_expr.add_sub_linear_paren
+  explanation: まず、それぞれのかっこを、前の符号に注意して外す（前が - のときは中の各項の符号を変える）。 符号に注意してかっこを外す次に、同類項をまとめて計算する。 -x - 12
+  hints:
+  - それぞれのかっこを、前の符号に注意して外す（前が - のときは中の各項の符号を変える）。
+  label: (1)
+  prompt_text: simplified_expr を求めなさい。
+  solution_steps:
+  - args: []
+    narration: それぞれのかっこを、前の符号に注意して外す（前が - のときは中の各項の符号を変える）。
+    op: remove_parentheses
+    result_display: 符号に注意してかっこを外す
+    result_srepr: Add(Mul(Integer(-1), Symbol('x')), Integer(-12))
+  - args: []
+    narration: 同類項をまとめて計算する。
+    op: add_like_terms
+    result_display: -x - 12
+    result_srepr: Add(Mul(Integer(-1), Symbol('x')), Integer(-12))
+visual_svg: null
