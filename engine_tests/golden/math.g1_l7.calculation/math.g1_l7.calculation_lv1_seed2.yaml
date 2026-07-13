@@ -1,0 +1,54 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - signed_number.power_single
+  provenance:
+    git_commit: ''
+    recipe: math.compute_signed_arithmetic
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_calc_evaluate_v1
+    tier: T1
+  requested:
+    form: calculation
+    level: 1
+    subject: math
+    unit: g1_l7
+  resolved:
+    form: calculation
+    level: 1
+    subject: math
+    unit: g1_l7
+  seed: 2
+  signature: power_single
+problem_ref: 98616a4d7a961e37
+problem_text: '次の計算をせよ。
+
+  (-8)³'
+sub_questions:
+- answer:
+    display: '-512'
+    kind: symbolic
+    srepr: Integer(-512)
+  cause_tags: []
+  concept_tags:
+  - signed_number.power_single
+  explanation: まず、累乗を、同じ数を指数の回数だけかけ合わせる積に書き直す。 累乗を積に書き直す次に、符号に注意して計算し、累乗の値を求める。 -512
+  hints:
+  - 累乗を、同じ数を指数の回数だけかけ合わせる積に書き直す。
+  label: (1)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 累乗を、同じ数を指数の回数だけかけ合わせる積に書き直す。
+    op: rewrite_power_as_product
+    result_display: 累乗を積に書き直す
+    result_srepr: Integer(-512)
+  - args: []
+    narration: 符号に注意して計算し、累乗の値を求める。
+    op: evaluate_power_with_sign
+    result_display: '-512'
+    result_srepr: Integer(-512)
+visual_svg: null

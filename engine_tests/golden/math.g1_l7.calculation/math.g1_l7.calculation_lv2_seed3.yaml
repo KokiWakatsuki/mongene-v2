@@ -1,0 +1,54 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - signed_number.power_sign_contrast
+  provenance:
+    git_commit: ''
+    recipe: math.compute_signed_arithmetic
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_calc_evaluate_v1
+    tier: T1
+  requested:
+    form: calculation
+    level: 2
+    subject: math
+    unit: g1_l7
+  resolved:
+    form: calculation
+    level: 2
+    subject: math
+    unit: g1_l7
+  seed: 3
+  signature: power_sign_contrast
+problem_ref: ee2ebc40b479e7c6
+problem_text: '次の計算をせよ。
+
+  (-7/4)²'
+sub_questions:
+- answer:
+    display: 49/16
+    kind: symbolic
+    srepr: Rational(49, 16)
+  cause_tags: []
+  concept_tags:
+  - signed_number.power_sign_contrast
+  explanation: まず、指数がどの数にかかっているか（かっこの有無）を見分ける。 指数のかかる数を見分ける次に、符号に注意して計算し、累乗の値を求める。 49/16
+  hints:
+  - 指数がどの数にかかっているか（かっこの有無）を見分ける。
+  label: (1)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 指数がどの数にかかっているか（かっこの有無）を見分ける。
+    op: identify_base_scope
+    result_display: 指数のかかる数を見分ける
+    result_srepr: Rational(49, 16)
+  - args: []
+    narration: 符号に注意して計算し、累乗の値を求める。
+    op: evaluate_power_with_sign
+    result_display: 49/16
+    result_srepr: Rational(49, 16)
+visual_svg: null

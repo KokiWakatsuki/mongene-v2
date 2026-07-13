@@ -216,3 +216,9 @@ concepts:
   - id: signed_number.add_sub_terms_rational
     label: "分数小数・多数項の加減混合を正負の項の和で処理する"
     unit: g1_l5
+  - id: signed_number.power_single
+    label: "正負の数の累乗を計算する（(-a)^n）"
+    unit: g1_l7
+  - id: signed_number.power_sign_contrast
+    label: "(-a)^n と -a^n の違い（指数の作用範囲）を区別して計算する"
+    unit: g1_l7

@@ -35,11 +35,34 @@ def _effective_cause_tags(ctx: CellContext) -> list[str]:
     return list(ctx.spec_level.cause_tags)
 
 
+_SUPERSCRIPT = str.maketrans("0123456789", "⁰¹²³⁴⁵⁶⁷⁸⁹")
+
+
+def _superscript(n: int) -> str:
+    """指数を上付き数字にする（例 2 -> "²"）。extract_numbers 非抽出＝次数の漏洩なし。"""
+    return str(n).translate(_SUPERSCRIPT)
+
+
+def _fmt_power_base(value: sympy.Rational, magnitude_disp: str) -> str:
+    """累乗の底の表示（負・非整数はかっこで囲む＝底ごと累乗を明示）。
+
+    例: Integer(2)->"2" / Integer(-3)->"(-3)" / Rational(-1,2)->"(-1/2)" / Rational(2,3)->"(2/3)"。
+    """
+    signed = _fmt_signed(value, magnitude_disp)
+    if value < 0 or not value.is_Integer:
+        return f"({signed})"
+    return signed
+
+
 # 小数として提示する既約分数（終端小数・表示文字列を明示）。負符号は draw で別途決める。
 _DECIMALS: list[tuple[int, int, str]] = [
-    (1, 2, "0.5"), (3, 2, "1.5"), (5, 2, "2.5"), (1, 4, "0.25"), (3, 4, "0.75"),
+    (1, 2, "0.5"), (3, 2, "1.5"), (5, 2, "2.5"), (7, 2, "3.5"), (9, 2, "4.5"),
+    (1, 4, "0.25"), (3, 4, "0.75"), (5, 4, "1.25"), (7, 4, "1.75"),
     (1, 5, "0.2"), (2, 5, "0.4"), (3, 5, "0.6"), (4, 5, "0.8"),
+    (6, 5, "1.2"), (7, 5, "1.4"), (8, 5, "1.6"), (11, 5, "2.2"),
     (1, 10, "0.1"), (3, 10, "0.3"), (7, 10, "0.7"), (9, 10, "0.9"),
+    (11, 10, "1.1"), (13, 10, "1.3"), (17, 10, "1.7"), (19, 10, "1.9"),
+    (1, 8, "0.125"), (3, 8, "0.375"), (5, 8, "0.625"),
 ]
 
 
@@ -134,6 +157,8 @@ _SIGNED_ARITHMETIC_CONCEPTS = [
     "signed_number.divide_chain",
     "signed_number.add_sub_terms_basic",
     "signed_number.add_sub_terms_rational",
+    "signed_number.power_single",
+    "signed_number.power_sign_contrast",
 ]
 
 
@@ -198,6 +223,33 @@ def compute_signed_arithmetic(ctx: CellContext, rng: Rng) -> MR:
             v, m = terms[i + 1]
             disp += opsym + _paren_if_neg(v, _fmt_signed(v, m))
         assert value == sympy.sympify(expr_str, rational=True)
+        return _build(expr_str, disp, mode, ctx)
+
+    if mode == "power_single":
+        # 累乗の計算。底は整数・分数・小数（符号つき）、指数 n。底の種類で dup を分散する。
+        kind = str(draw(p["base_kinds"], rng))
+        bval, bmag = _draw_operand(rng, kind, p)
+        n = int(draw(p["exponent_domain"], rng))
+        expr_str = f"({bval})**{n}"
+        disp = f"{_fmt_power_base(bval, bmag)}{_superscript(n)}"
+        return _build(expr_str, disp, mode, ctx)
+
+    if mode == "power_sign_contrast":
+        # (-a)^n と -a^n の区別。整数底のみ form=neg_inside（-a^n）を出し、指数のかかる範囲を
+        # 見分けさせる。分数・小数底は neg_outside（かっこつき）で dup 分散のみに使う。
+        kind = str(draw(p["base_kinds"], rng))
+        bval, bmag = _draw_operand(rng, kind, p)
+        n = int(draw(p["exponent_domain"], rng))
+        form = str(draw(["neg_outside", "neg_inside"], rng)) if kind == "int" else "neg_outside"
+        if form == "neg_inside":
+            # 指数は数だけにかかり、先頭の - は最後（常に負）。底の絶対値を使う。
+            expr_str = f"-{bmag}**{n}"
+            disp = f"-{bmag}{_superscript(n)}"
+        else:
+            # 底ごと累乗（負の底はかっこで囲む）。分数・小数底もここで扱う。
+            neg_val = -abs(bval)
+            expr_str = f"({neg_val})**{n}"
+            disp = f"(-{bmag}){_superscript(n)}"
         return _build(expr_str, disp, mode, ctx)
 
     if mode == "multiplication_pair":

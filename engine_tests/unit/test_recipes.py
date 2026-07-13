@@ -2177,11 +2177,46 @@ def test_signed_add_sub_terms_rational_lv2_construct():
     ]
 
 
+def test_signed_power_single_lv1_construct():
+    ctx = _make_ctx("math.g1_l7.calculation", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "power_single"
+    assert [s.op for s in mr.sub_questions[0].steps] == [
+        "rewrite_power_as_product", "evaluate_power_with_sign",
+    ]
+
+
+def test_signed_power_sign_contrast_lv2_construct():
+    ctx = _make_ctx("math.g1_l7.calculation", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "power_sign_contrast"
+    assert [s.op for s in mr.sub_questions[0].steps] == [
+        "identify_base_scope", "evaluate_power_with_sign",
+    ]
+
+
+def test_signed_power_neg_inside_is_negative():
+    """Lv2 の -a^n 形（neg_inside）は常に負になる（指数の作用範囲の区別を確認）。"""
+    ctx = _make_ctx("math.g1_l7.calculation", 2)
+    found = False
+    for seed in range(60):
+        rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+        mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+        disp = mr.given["expression"]
+        if disp.startswith("-") and "(" not in disp:
+            found = True
+            assert sympy.sympify(mr.sub_questions[0].answer.srepr) < 0
+    assert found, "neg_inside(-a^n)形が60seed内で1つも出現しなかった"
+
+
 _SIGNED_ARITHMETIC_CELLS = [
     ("math.g1_l3.calculation", 1), ("math.g1_l3.calculation", 2),
     ("math.g1_l4.calculation", 1), ("math.g1_l4.calculation", 2),
     ("math.g1_l5.calculation", 1), ("math.g1_l5.calculation", 2),
     ("math.g1_l6.calculation", 1), ("math.g1_l6.calculation", 2),
+    ("math.g1_l7.calculation", 1), ("math.g1_l7.calculation", 2),
     ("math.g1_l8.calculation", 1), ("math.g1_l8.calculation", 2),
 ]
 
