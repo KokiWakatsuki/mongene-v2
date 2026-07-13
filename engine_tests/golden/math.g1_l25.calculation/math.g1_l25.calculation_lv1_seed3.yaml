@@ -1,0 +1,54 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - equation.solve_word_price
+  provenance:
+    git_commit: ''
+    recipe: math.compute_linear_equation
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_solve_equation_v1
+    tier: T1
+  requested:
+    form: calculation
+    level: 1
+    subject: math
+    unit: g1_l25
+  resolved:
+    form: calculation
+    level: 1
+    subject: math
+    unit: g1_l25
+  seed: 3
+  signature: word_price_equation
+problem_ref: 87875ce90308b7a2
+problem_text: '次の方程式を解け。
+
+  60x + 120(10 - x) = 840'
+sub_questions:
+- answer:
+    display: x = 6
+    kind: symbolic
+    srepr: Integer(6)
+  cause_tags: []
+  concept_tags:
+  - equation.solve_word_price
+  explanation: まず、分配法則を使って、かっこを外す。 かっこを外す次に、文字の項を左辺に、数の項を右辺に移項し、両辺を整理して解く。 x = 6
+  hints:
+  - 分配法則を使って、かっこを外す。
+  label: (1)
+  prompt_text: solution を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 分配法則を使って、かっこを外す。
+    op: expand_parentheses
+    result_display: かっこを外す
+    result_srepr: Integer(6)
+  - args: []
+    narration: 文字の項を左辺に、数の項を右辺に移項し、両辺を整理して解く。
+    op: transpose_and_solve
+    result_display: x = 6
+    result_srepr: Integer(6)
+visual_svg: null

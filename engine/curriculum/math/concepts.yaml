@@ -217,6 +217,18 @@ concepts:
   - id: equation.solve_by_transpose_both_sides
     label: "両辺に文字がある一次方程式を移項して解く（複数回）"
     unit: g1_l22
+  - id: equation.solve_by_expand_parens
+    label: "かっこを展開してから一次方程式を解く"
+    unit: g1_l23
+  - id: equation.solve_word_price
+    label: "代金の利用で得た一次方程式（かっこを含む）を解く"
+    unit: g1_l25
+  - id: equation.solve_shortage
+    label: "過不足の利用で得た一次方程式（両辺に文字）を解く"
+    unit: g1_l26
+  - id: equation.solve_speed_fraction
+    label: "速さの利用で得た一次方程式（分数係数）を解く"
+    unit: g1_l27
   # --- C1 g1 正の数・負の数（四則） ---
   - id: signed_number.add_pair
     label: "2数の加法（符号を決めて絶対値を計算する）"

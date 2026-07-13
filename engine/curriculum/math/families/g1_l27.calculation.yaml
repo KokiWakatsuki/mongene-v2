@@ -1,0 +1,30 @@
+family: math.g1_l27.calculation
+form: calculation
+source_desc: |
+  方程式の利用（速さの問題）＝立式後の方程式（分数係数）を解く
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv2 desc: 速さの利用で得た方程式（分数係数含む）を解く。
+       example: 速さの問題から得た方程式 x/4 + x/6 = 5 を解け。
+  答えは解 x=定数（整数・SymbolicAnswer）。独立ソルバ solve_linear_equation（sympy.solve）で
+  解き直す（double-solve）。answer-first で x0=lcm(p,q)·t を選び r=x0/p+x0/q を整数に構成。
+  op 列＝[clear_denominators, combine_and_solve]。文章題（立式）は C14（T3・M1）で、本セルは
+  「立式後の方程式を解く1動作」。定数答えの G-Q5t は given 数値が whitelist されるため漏洩しない。図は無し。
+concepts_default: [equation.solve_speed_fraction]
+levels:
+  "2":
+    signature: speed_fraction_equation
+    recipe: math.compute_linear_equation
+    params:
+      # x/p + x/q = r（p≠q・x0=lcm(p,q)·t で r を整数に）。
+      mode: clear_denominators_simple
+      denominator_set: [2, 3, 4, 5, 6, 8, 9, 10]
+      scale_domain: {int_range: [1, 5]}
+    given: [equation]
+    asked: [solution]
+    visual: none
+    text: {tier: T1, template: lf_solve_equation_v1}
+    hints: [steps_prefix]
+    concept_tags: [equation.solve_speed_fraction]
+    cause_tags: []
+remedial:
+  default_level: 2

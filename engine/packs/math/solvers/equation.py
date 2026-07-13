@@ -23,9 +23,14 @@ _EQUATION_STEPS: dict[str, list[str]] = {
     # g1_l21 等式の性質
     "equality_add": ["subtract_constant_both_sides", "state_solution"],
     "equality_multi": ["subtract_constant_both_sides", "divide_both_sides"],
-    # g1_l22 移項
+    # g1_l22 移項（+ g1_l26 過不足の解く＝同構造を別 signature で流用）
     "transpose_constant": ["transpose_constant", "state_solution"],
     "transpose_both": ["transpose_terms", "combine_and_divide"],
+    # g1_l23 Lv2 かっこ展開 / g1_l25 利用（代金）＝かっこを外してから解く
+    "expand_parens": ["expand_parentheses", "transpose_and_solve"],
+    "word_linear": ["expand_parentheses", "transpose_and_solve"],
+    # g1_l27 Lv2 速さ（分数係数）＝分母を払ってから解く
+    "clear_denominators_simple": ["clear_denominators", "combine_and_solve"],
 }
 
 _OP_NARRATION: dict[str, str] = {
@@ -35,12 +40,18 @@ _OP_NARRATION: dict[str, str] = {
     "transpose_constant": "数の項を、符号を変えて反対の辺に移項する。",
     "transpose_terms": "文字の項を左辺に、数の項を右辺に、符号を変えて移項する。",
     "combine_and_divide": "両辺をそれぞれ整理し、x の係数で両辺をわって解を求める。",
+    "expand_parentheses": "分配法則を使って、かっこを外す。",
+    "transpose_and_solve": "文字の項を左辺に、数の項を右辺に移項し、両辺を整理して解く。",
+    "clear_denominators": "分母の最小公倍数を両辺にかけて、分母をはらう。",
+    "combine_and_solve": "同類項をまとめ、x の係数で両辺をわって解を求める。",
 }
 
 _OP_PHRASE: dict[str, str] = {
     "subtract_constant_both_sides": "両辺から同じ数をひく",
     "transpose_constant": "数の項を移項する",
     "transpose_terms": "文字は左辺・数は右辺に移項する",
+    "expand_parentheses": "かっこを外す",
+    "clear_denominators": "分母をはらう",
 }
 
 

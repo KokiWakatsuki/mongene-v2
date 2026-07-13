@@ -2492,3 +2492,74 @@ def test_compute_linear_equation_double_solve_property(family, level, seed):
     assert sympy.simplify(lhs_v - rhs_v) == 0
     # 答えは定数（自由変数を含まない）。
     assert not sympy.sympify(sol.answer.srepr).free_symbols
+
+
+# ---------------------------------------------------------------------------
+# math.compute_linear_equation の利用系（C1 g1 一次方程式 l23/l25/l26/l27）— P2
+# ---------------------------------------------------------------------------
+def test_equation_expand_parens_l23_lv2_construct():
+    ctx = _make_ctx("math.g1_l23.calculation", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "expand_parens"
+    assert [s.op for s in mr.sub_questions[0].steps] == [
+        "expand_parentheses", "transpose_and_solve",
+    ]
+    assert "(" in mr.given["equation"]  # かっこを含む
+
+
+def test_equation_word_price_l25_lv1_construct():
+    ctx = _make_ctx("math.g1_l25.calculation", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "word_price_equation"
+    assert [s.op for s in mr.sub_questions[0].steps] == [
+        "expand_parentheses", "transpose_and_solve",
+    ]
+
+
+def test_equation_shortage_l26_lv1_construct():
+    ctx = _make_ctx("math.g1_l26.calculation", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "shortage_equation"
+    # 過不足＝両辺に文字（transpose_both を流用）。
+    assert [s.op for s in mr.sub_questions[0].steps] == ["transpose_terms", "combine_and_divide"]
+    assert "x" in mr.given["equation"].split("=")[1]
+
+
+def test_equation_speed_fraction_l27_lv2_construct():
+    ctx = _make_ctx("math.g1_l27.calculation", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "speed_fraction_equation"
+    assert [s.op for s in mr.sub_questions[0].steps] == ["clear_denominators", "combine_and_solve"]
+    assert "/" in mr.given["equation"]  # 分数係数
+
+
+_EQUATION_WORD_CELLS = [
+    ("math.g1_l23.calculation", 2),
+    ("math.g1_l25.calculation", 1),
+    ("math.g1_l26.calculation", 1),
+    ("math.g1_l27.calculation", 2),
+]
+
+
+@pytest.mark.parametrize("family,level", _EQUATION_WORD_CELLS)
+@pytest.mark.parametrize("seed", range(100))
+def test_compute_linear_equation_word_double_solve_property(family, level, seed):
+    ctx = _make_ctx(family, level)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.solve_linear_equation")
+    sol = solver(mr.params["equation_str"], mr.params["mode"])
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+    # 解が方程式を満たす。
+    lhs_s, rhs_s = mr.params["equation_str"].split("=")
+    x0 = sympy.Rational(sympy.sympify(sol.answer.srepr))
+    lhs_v = sympy.sympify(lhs_s).subs(sympy.Symbol("x"), x0)
+    rhs_v = sympy.sympify(rhs_s).subs(sympy.Symbol("x"), x0)
+    assert sympy.simplify(lhs_v - rhs_v) == 0
+    # 答えは定数（整数）。
+    assert not sympy.sympify(sol.answer.srepr).free_symbols
+    assert sympy.sympify(sol.answer.srepr).is_Integer

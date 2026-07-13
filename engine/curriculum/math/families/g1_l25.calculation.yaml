@@ -1,0 +1,31 @@
+family: math.g1_l25.calculation
+form: calculation
+source_desc: |
+  方程式の利用（代金と個数の問題）＝立式後の方程式を解く
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: 利用場面で得た一次方程式を解く。
+       example: 代金の問題から得た方程式 90x+130(12-x)=1280 を解け。
+  答えは解 x=定数（個数・整数・SymbolicAnswer）。独立ソルバ solve_linear_equation（sympy.solve）
+  で解き直す（double-solve）。answer-first で c=(a-b)·x0+b·k を逆算（a≠b・x0 は 1..k-1 の個数）。
+  op 列＝[expand_parentheses, transpose_and_solve]。文章題そのもの（立式）は C14（T3・M1）で、
+  本セルは「立式後の方程式を解く1動作」（source_desc の物差し）。定数答えの G-Q5t は given 数値が
+  whitelist されるため漏洩しない。図は無し。
+concepts_default: [equation.solve_word_price]
+levels:
+  "1":
+    signature: word_price_equation
+    recipe: math.compute_linear_equation
+    params:
+      # a·x + b(k - x) = c（a,b は代金・k は合計個数・x0 は 1..k-1・a≠b）。
+      mode: word_linear
+      price_domain: {int_set: [40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150]}
+      count_domain: {int_range: [8, 15]}
+    given: [equation]
+    asked: [solution]
+    visual: none
+    text: {tier: T1, template: lf_solve_equation_v1}
+    hints: [steps_prefix]
+    concept_tags: [equation.solve_word_price]
+    cause_tags: []
+remedial:
+  default_level: 1

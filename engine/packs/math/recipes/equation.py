@@ -46,7 +46,16 @@ _EQUATION_CONCEPTS = [
     "equation.solve_by_equality_property_multi",
     "equation.solve_by_transpose",
     "equation.solve_by_transpose_both_sides",
+    "equation.solve_by_expand_parens",
+    "equation.solve_word_price",
+    "equation.solve_shortage",
+    "equation.solve_speed_fraction",
 ]
+
+
+def _fmt_paren_add(inner: str, k: int) -> str:
+    """かっこ内の定数項を "x + k" / "x - |k|" 形にする（k≠0 前提）。"""
+    return f"x + {k}" if k > 0 else f"x - {abs(k)}"
 
 
 def _build(
@@ -55,10 +64,14 @@ def _build(
     mode: str,
     ctx: CellContext,
 ) -> MR:
-    """左辺・右辺の項から方程式 MR を組み立てる（double-solve で解の一致を確認）。"""
+    """左辺・右辺の項（(係数,指数)列）から方程式 MR を組み立てる（多項式表示）。"""
     equation_str = f"{_sympy_poly_x(lhs_terms)}={_sympy_poly_x(rhs_terms)}"
     equation_display = f"{_fmt_poly_x_terms(lhs_terms)} = {_fmt_poly_x_terms(rhs_terms)}"
+    return _build_eq(equation_str, equation_display, mode, ctx)
 
+
+def _build_eq(equation_str: str, equation_display: str, mode: str, ctx: CellContext) -> MR:
+    """方程式の文字列と表示から MR を組み立てる（double-solve で解の一致を確認）。"""
     solver = REGISTRY.solver("math.solve_linear_equation")
     sol = cast(Solution, solver(equation_str, mode))
     assert isinstance(sol.answer, SymbolicAnswer)
@@ -92,7 +105,12 @@ def compute_linear_equation(ctx: CellContext, rng: Rng) -> MR:
     """一次方程式を構成して解く（answer-first・calculation）。"""
     p = ctx.spec_level.params
     mode: str = cast(str, p["mode"])
-    const_cands = [v for v in _domain_candidates(cast("dict[str, object]", p["const_domain"])) if v != 0]
+    # const_domain を使うのは移項・等式・かっこ展開系のみ（利用系 l25/l27 は持たない）。
+    const_cands = (
+        [v for v in _domain_candidates(cast("dict[str, object]", p["const_domain"])) if v != 0]
+        if "const_domain" in p
+        else []
+    )
 
     if mode in ("equality_add", "transpose_constant"):
         # x + b = c（1手で解ける・等式の性質 or 移項）。answer-first: 解 x0 と b から c=x0+b。
@@ -118,6 +136,42 @@ def compute_linear_equation(ctx: CellContext, rng: Rng) -> MR:
         b = int(draw({"int_set": const_cands}, rng))
         d = (a - c) * x0 + b
         return _build([(a, 1), (b, 0)], [(c, 1), (d, 0)], mode, ctx)
+
+    if mode == "expand_parens":
+        # a(x + p) = c·x + q（かっこ展開）。answer-first: q=(a-c)·x0 + a·p（a≠c で非退化）。
+        x0 = int(draw(p["solution_domain"], rng))
+        a = int(draw(p["coeff_domain"], rng))  # |a|≥2
+        pp = int(draw({"int_set": const_cands}, rng))
+        c = int(draw({"int_set": [v for v in _domain_candidates(cast("dict[str, object]", p["rhs_coeff_domain"])) if v != 0 and v != a]}, rng))
+        q = (a - c) * x0 + a * pp
+        lhs_disp = f"{a}({_fmt_paren_add('x', pp)})"
+        rhs_disp = _fmt_poly_x_terms([(c, 1), (q, 0)])
+        eq_str = f"({a})*(x+({pp})) = ({c})*x+({q})"
+        return _build_eq(eq_str, f"{lhs_disp} = {rhs_disp}", mode, ctx)
+
+    if mode == "word_linear":
+        # a·x + b(k - x) = c（代金の利用）。answer-first: c=(a-b)·x0 + b·k（a≠b・x0 は 1..k-1）。
+        a = int(draw(p["price_domain"], rng))
+        b = int(draw({"int_set": [v for v in _domain_candidates(cast("dict[str, object]", p["price_domain"])) if v != a]}, rng))
+        k = int(draw(p["count_domain"], rng))
+        x0 = int(draw({"int_set": list(range(1, k))}, rng))
+        c = (a - b) * x0 + b * k
+        eq_str = f"({a})*x+({b})*(({k})-x) = ({c})"
+        eq_disp = f"{a}x + {b}({k} - x) = {c}"
+        return _build_eq(eq_str, eq_disp, mode, ctx)
+
+    if mode == "clear_denominators_simple":
+        # x/p + x/q = r（分数係数・速さの利用）。answer-first: x0=lcm(p,q)·t で r を整数に。
+        denoms = [int(v) for v in cast("list[int]", p["denominator_set"])]
+        dp = int(draw({"int_set": denoms}, rng))
+        dq = int(draw({"int_set": [d for d in denoms if d != dp]}, rng))
+        big = int(sympy.ilcm(dp, dq))
+        t = int(draw(p["scale_domain"], rng))
+        x0 = big * t
+        r = x0 // dp + x0 // dq
+        eq_str = f"x/({dp}) + x/({dq}) = ({r})"
+        eq_disp = f"x/{dp} + x/{dq} = {r}"
+        return _build_eq(eq_str, eq_disp, mode, ctx)
 
     raise ValueError(f"未知の mode: {mode!r}")
 
