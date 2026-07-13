@@ -1,0 +1,54 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - polynomial.rearrange_product
+  provenance:
+    git_commit: ''
+    recipe: math.solve_for_variable
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_solve_for_variable_v1
+    tier: T1
+  requested:
+    form: calculation
+    level: 3
+    subject: math
+    unit: g2_l9
+  resolved:
+    form: calculation
+    level: 3
+    subject: math
+    unit: g2_l9
+  seed: 3
+  signature: rearrange_product_fraction
+problem_ref: ba4035ac0ba78eaf
+problem_text: '次の等式を r について解け。
+
+  n = pr/4'
+sub_questions:
+- answer:
+    display: r = 4n/p
+    kind: symbolic
+    srepr: Mul(Integer(4), Symbol('n'), Pow(Symbol('p'), Integer(-1)))
+  cause_tags: []
+  concept_tags:
+  - polynomial.rearrange_product
+  explanation: まず、分母をなくすため、両辺に分母をかける。 両辺に分母をかける次に、両辺を、解く文字にかかっている係数でわる。 r = 4n/p
+  hints:
+  - 分母をなくすため、両辺に分母をかける。
+  label: (1)
+  prompt_text: expression を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 分母をなくすため、両辺に分母をかける。
+    op: multiply_both_sides
+    result_display: 両辺に分母をかける
+    result_srepr: Mul(Integer(4), Symbol('n'), Pow(Symbol('p'), Integer(-1)))
+  - args: []
+    narration: 両辺を、解く文字にかかっている係数でわる。
+    op: divide_by_coefficient
+    result_display: r = 4n/p
+    result_srepr: Mul(Integer(4), Symbol('n'), Pow(Symbol('p'), Integer(-1)))
+visual_svg: null

@@ -1,0 +1,54 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - polynomial.rearrange_divide
+  provenance:
+    git_commit: ''
+    recipe: math.solve_for_variable
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_solve_for_variable_v1
+    tier: T1
+  requested:
+    form: calculation
+    level: 2
+    subject: math
+    unit: g2_l9
+  resolved:
+    form: calculation
+    level: 2
+    subject: math
+    unit: g2_l9
+  seed: 3
+  signature: rearrange_divide_coeff
+problem_ref: 368de5f9d248f23b
+problem_text: '次の等式を x について解け。
+
+  -7x + 7y = 0'
+sub_questions:
+- answer:
+    display: x = y
+    kind: symbolic
+    srepr: Symbol('y')
+  cause_tags: []
+  concept_tags:
+  - polynomial.rearrange_divide
+  explanation: まず、解く文字の項だけを片方の辺に残すよう、ほかの項を移項する。 ほかの項を移項する次に、両辺を、解く文字にかかっている係数でわる。 x = y
+  hints:
+  - 解く文字の項だけを片方の辺に残すよう、ほかの項を移項する。
+  label: (1)
+  prompt_text: expression を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 解く文字の項だけを片方の辺に残すよう、ほかの項を移項する。
+    op: isolate_target
+    result_display: ほかの項を移項する
+    result_srepr: Symbol('y')
+  - args: []
+    narration: 両辺を、解く文字にかかっている係数でわる。
+    op: divide_by_coefficient
+    result_display: x = y
+    result_srepr: Symbol('y')
+visual_svg: null

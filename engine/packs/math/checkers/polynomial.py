@@ -69,6 +69,14 @@ def double_solve_degree_of_expression(mr: MR) -> Solution:
     return cast(Solution, solver(p["expr_str"]))
 
 
+@register_checker("math.solve_for_variable.double_solve")
+def double_solve_solve_for_variable(mr: MR) -> Solution:
+    # 与式 equation_str・target・mode から独立に sympy.solve で再計算。
+    p = mr.params
+    solver = REGISTRY.solver("math.solve_for_variable")
+    return cast(Solution, solver(p["equation_str"], p["target"], p["mode"]))
+
+
 __all__ = [
     "double_solve_combine_like_terms",
     "double_solve_add_or_subtract_polynomials",
@@ -76,4 +84,5 @@ __all__ = [
     "double_solve_compute_monomial_expression",
     "double_solve_combine_fractional_expressions",
     "double_solve_degree_of_expression",
+    "double_solve_solve_for_variable",
 ]

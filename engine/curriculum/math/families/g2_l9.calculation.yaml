@@ -1,0 +1,65 @@
+family: math.g2_l9.calculation
+form: calculation
+source_desc: |
+  等式を指定された文字について解く（等式の変形）
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: 移項だけで解ける1手順の変形。
+       example: 次の等式を y について解け。　x + y = 5
+  Lv2 desc: 係数で割る・かっこや分数を含む複数手順の変形。
+       example: 次の等式を x について解け。　3x + 2y = 12
+  Lv3 desc: 解く文字が積・分母にある、複数文字が絡む非自明な変形。
+       example: 次の等式を h について解け。　V = (1/3)πr²h
+  答えは「指定文字 = 解の式」（SymbolicAnswer・自由変数を含む）。独立ソルバ
+  solve_for_variable（sympy.solve）で再計算。Lv1（移項のみ）/ Lv2（移項して係数でわる）/
+  Lv3（分母を払い文字でわる）で op 列を変える＝level_sep。Lv3 は π を含む定型公式の代わりに、
+  分母と積に文字が絡む同型の式（vl = vs·t/k）で faithful に生成する（解く技能は同一）。
+concepts_default: [polynomial.rearrange_move]
+levels:
+  "1":
+    signature: rearrange_move_only
+    recipe: math.solve_for_variable
+    params:
+      # a·x + y = c を y について解く（y の係数 1＝移項のみ）。
+      mode: move_only
+      coeff_domain: {int_range: [-9, 9], exclude: [0]}
+      const_domain: {int_range: [-12, 12]}
+    given: [equation, target_variable]
+    asked: [expression]
+    visual: none
+    text: {tier: T1, template: lf_solve_for_variable_v1}
+    hints: [steps_prefix]
+    concept_tags: [polynomial.rearrange_move]
+    cause_tags: []
+  "2":
+    signature: rearrange_divide_coeff
+    recipe: math.solve_for_variable
+    params:
+      # a·x + b·y = c を x について解く（|a|≥2＝係数でわる）。
+      mode: divide_coeff
+      target_coeff_domain: {int_set: [-9, -8, -7, -6, -5, -4, -3, -2, 2, 3, 4, 5, 6, 7, 8, 9]}
+      coeff_domain: {int_range: [-9, 9], exclude: [0]}
+      const_domain: {int_range: [-12, 12]}
+    given: [equation, target_variable]
+    asked: [expression]
+    visual: none
+    text: {tier: T1, template: lf_solve_for_variable_v1}
+    hints: [steps_prefix]
+    concept_tags: [polynomial.rearrange_divide]
+    cause_tags: []
+  "3":
+    signature: rearrange_product_fraction
+    recipe: math.solve_for_variable
+    params:
+      # vl = vs·vt/k を vt について解く（分母 k を払い、文字 vs でわる）。
+      mode: clear_and_divide
+      denominator_domain: {int_set: [2, 3, 4, 5]}
+      letter_pool: [a, b, c, d, h, m, n, p, r, s, t, u, v, w]
+    given: [equation, target_variable]
+    asked: [expression]
+    visual: none
+    text: {tier: T1, template: lf_solve_for_variable_v1}
+    hints: [steps_prefix]
+    concept_tags: [polynomial.rearrange_product]
+    cause_tags: []
+remedial:
+  default_level: 1

@@ -1898,3 +1898,49 @@ def test_degree_of_expression_double_solve_property(seed):
     # 答えの次数は sympy.degree と一致
     expr = sympy.sympify(mr.params["expr_str"])
     assert sol.answer.srepr == sympy.srepr(sympy.Integer(int(sympy.degree(expr, gen=sympy.Symbol("x")))))
+
+
+# ---------------------------------------------------------------------------
+# math.solve_for_variable（g2_l9.calculation Lv1/Lv2/Lv3）— P1/C2（等式変形）
+# ---------------------------------------------------------------------------
+def test_solve_for_variable_lv1_construct():
+    ctx = _make_ctx("math.g2_l9.calculation", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "rearrange_move_only"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "expression"
+    assert [s.op for s in sq.steps] == ["isolate_target"]
+
+
+def test_solve_for_variable_lv2_construct():
+    ctx = _make_ctx("math.g2_l9.calculation", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "rearrange_divide_coeff"
+    assert [s.op for s in mr.sub_questions[0].steps] == ["isolate_target", "divide_by_coefficient"]
+
+
+def test_solve_for_variable_lv3_construct():
+    ctx = _make_ctx("math.g2_l9.calculation", 3)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "rearrange_product_fraction"
+    assert [s.op for s in mr.sub_questions[0].steps] == ["multiply_both_sides", "divide_by_coefficient"]
+
+
+@pytest.mark.parametrize("level", [1, 2, 3])
+@pytest.mark.parametrize("seed", range(100))
+def test_solve_for_variable_double_solve_property(level, seed):
+    ctx = _make_ctx("math.g2_l9.calculation", level)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.solve_for_variable")
+    sol = solver(mr.params["equation_str"], mr.params["target"], mr.params["mode"])
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+    # solver の解が sympy.solve と一致
+    lhs_s, rhs_s = mr.params["equation_str"].split("=")
+    eq = sympy.Eq(sympy.sympify(lhs_s), sympy.sympify(rhs_s))
+    expected = sympy.solve(eq, sympy.Symbol(mr.params["target"]))[0]
+    assert sol.answer.srepr == sympy.srepr(expected)
+    assert sympy.sympify(sol.answer.srepr).free_symbols

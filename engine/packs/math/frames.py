@@ -95,11 +95,13 @@ CALCULATION_FRAME = Frame(
         "input_value",  # 横展開#6: 代入する x の値（g2_l19 y=ax+b に x を代入）
         "equation_a", "equation_b",  # 横展開#11: 連立方程式2式（g2_l11 加減法）
         "candidate",  # P1/C2: 代入する (x,y) の組（g2_l10 左辺の値を求める）
+        "target_variable",  # P1/C2: 等式を「解く文字」（g2_l9 等式変形）
     }),
     asked_vocab=frozenset({
         "value", "simplified_expr", "solution",
         "coordinate",  # 横展開#7: 代入して通過点の座標を求める（g2_l22）
         "degree",  # P1/C2: 単項式・多項式の次数を答える（g2_l1）
+        "expression",  # P1/C2: 等式を指定文字について解いた式（g2_l9）
     }),
     visual="none",
 )

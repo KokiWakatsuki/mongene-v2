@@ -158,3 +158,12 @@ concepts:
   - id: polynomial.degree_of_expression
     label: "単項式・多項式の次数を答える"
     unit: g2_l1
+  - id: polynomial.rearrange_move
+    label: "等式を移項だけで指定文字について解く"
+    unit: g2_l9
+  - id: polynomial.rearrange_divide
+    label: "等式を移項して係数でわり指定文字について解く"
+    unit: g2_l9
+  - id: polynomial.rearrange_product
+    label: "分母・積にある文字について等式を解く"
+    unit: g2_l9

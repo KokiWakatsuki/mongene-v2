@@ -779,6 +779,90 @@ def degree_of_expression(ctx: CellContext, rng: Rng) -> MR:
     )
 
 
+# ---------------------------------------------------------------------------
+# math.solve_for_variable（g2_l9.calculation Lv1/Lv2/Lv3 用）— C2
+# 等式を指定された文字について解く。answer は自由変数を含む symbolic（display 全体一致で
+# のみ漏洩検査＝G-Q5t 相対安全・§2-#1）。
+#   Lv1 "move_only"       : a·x + t = c（t 係数1）      op[isolate_target]
+#   Lv2 "divide_coeff"    : a·t + b·u = c（|a|≥2）       op[isolate_target, divide_by_coefficient]
+#   Lv3 "clear_and_divide": vl = vs·t/k（分母・積）      op[multiply_both_sides, divide_by_coefficient]
+# ---------------------------------------------------------------------------
+_SOLVE_FOR_VARIABLE_CONCEPTS = [
+    "polynomial.rearrange_move",
+    "polynomial.rearrange_divide",
+    "polynomial.rearrange_product",
+]
+
+
+@register_recipe("math.solve_for_variable", provides_concepts=_SOLVE_FOR_VARIABLE_CONCEPTS)
+def solve_for_variable(ctx: CellContext, rng: Rng) -> MR:
+    """等式を指定された文字について解く（構成的生成・calculation Lv1/2/3）。"""
+    p = ctx.spec_level.params
+    mode: str = p["mode"]
+
+    if mode == "move_only":
+        # a·x + y = c を y について解く（y の係数は 1＝移項のみ）。
+        a = int(draw({"int_set": [v for v in _domain_candidates(p["coeff_domain"]) if v != 0]}, rng))
+        c = int(draw(p["const_domain"], rng))
+        target = "y"
+        equation_str = f"({a})*x + y=({c})"
+        given_equation = f"{_fmt_term(a, 'x', is_first=True)} + y = {c}"
+        steps_ops = ["isolate_target"]
+    elif mode == "divide_coeff":
+        # a·x + b·y = c を x について解く（|a|≥2＝係数でわる）。
+        a = int(draw(p["target_coeff_domain"], rng))  # |a|≥2
+        b = int(draw({"int_set": [v for v in _domain_candidates(p["coeff_domain"]) if v != 0]}, rng))
+        c = int(draw(p["const_domain"], rng))
+        target = "x"
+        equation_str = f"({a})*x + ({b})*y=({c})"
+        given_equation = (
+            f"{_fmt_term(a, 'x', is_first=True)} {_fmt_term(b, 'y', is_first=False)} = {c}"
+        )
+        steps_ops = ["isolate_target", "divide_by_coefficient"]
+    elif mode == "clear_and_divide":
+        # vl = vs·vt/k を vt について解く（分母 k を払い、文字 vs でわる）。
+        k = int(draw(p["denominator_domain"], rng))  # ≥2
+        pool = list(cast("list[str]", p["letter_pool"]))
+        vl = str(draw(pool, rng))
+        vs = str(draw([c for c in pool if c != vl], rng))
+        vt = str(draw([c for c in pool if c not in (vl, vs)], rng))
+        target = vt
+        equation_str = f"{vl}=({vs})*({vt})/({k})"
+        given_equation = f"{vl} = {vs}{vt}/{k}"
+        steps_ops = ["multiply_both_sides", "divide_by_coefficient"]
+    else:
+        raise ValueError(f"未知の mode: {mode!r}")
+
+    solver = REGISTRY.solver("math.solve_for_variable")
+    sol = cast(Solution, solver(equation_str, target, mode))
+    assert isinstance(sol.answer, SymbolicAnswer)
+    assert [s.op for s in sol.steps] == steps_ops
+    # 解の式は自由変数を残す（定数に退化しない）。
+    assert sympy.sympify(sol.answer.srepr).free_symbols, "解が定数に退化した"
+
+    sub_question = SubQuestionMR(
+        label="(1)",
+        asked="expression",
+        answer=sol.answer,
+        steps=sol.steps,
+        concept_tags=_effective_concept_tags(ctx),
+        cause_tags=_effective_cause_tags(ctx),
+    )
+
+    return MR(
+        signature=ctx.spec_level.signature,
+        family=ctx.family,
+        level=ctx.level,
+        purpose=ctx.purpose,
+        seed=0,
+        params={"equation_str": equation_str, "target": target, "mode": mode},
+        given={"equation": given_equation, "target_variable": target},
+        sub_questions=[sub_question],
+        visual_plan=None,
+        provenance=Provenance(recipe="math.solve_for_variable"),
+    )
+
+
 __all__ = [
     "combine_like_terms",
     "add_or_subtract_polynomials",
@@ -786,4 +870,5 @@ __all__ = [
     "compute_monomial_expression",
     "combine_fractional_expressions",
     "degree_of_expression",
+    "solve_for_variable",
 ]

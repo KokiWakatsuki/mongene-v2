@@ -1,0 +1,49 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - polynomial.rearrange_move
+  provenance:
+    git_commit: ''
+    recipe: math.solve_for_variable
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_solve_for_variable_v1
+    tier: T1
+  requested:
+    form: calculation
+    level: 1
+    subject: math
+    unit: g2_l9
+  resolved:
+    form: calculation
+    level: 1
+    subject: math
+    unit: g2_l9
+  seed: 1
+  signature: rearrange_move_only
+problem_ref: 94fb5b3908791b66
+problem_text: '次の等式を y について解け。
+
+  9x + y = 0'
+sub_questions:
+- answer:
+    display: y = -9x
+    kind: symbolic
+    srepr: Mul(Integer(-1), Integer(9), Symbol('x'))
+  cause_tags: []
+  concept_tags:
+  - polynomial.rearrange_move
+  explanation: まず、解く文字の項だけを片方の辺に残すよう、ほかの項を移項する。 y = -9x
+  hints:
+  - 問題文の与えられた値をもう一度確認しよう。
+  label: (1)
+  prompt_text: expression を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 解く文字の項だけを片方の辺に残すよう、ほかの項を移項する。
+    op: isolate_target
+    result_display: y = -9x
+    result_srepr: Mul(Integer(-1), Integer(9), Symbol('x'))
+visual_svg: null

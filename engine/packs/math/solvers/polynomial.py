@@ -308,6 +308,61 @@ def degree_of_expression(expr_str: str) -> Solution:
     return Solution(answer=answer, steps=steps)
 
 
+_SOLVE_FOR_VARIABLE_STEPS: dict[str, list[str]] = {
+    "move_only": ["isolate_target"],
+    "divide_coeff": ["isolate_target", "divide_by_coefficient"],
+    "clear_and_divide": ["multiply_both_sides", "divide_by_coefficient"],
+}
+
+
+@register_solver("math.solve_for_variable")
+def solve_for_variable(equation_str: str, target: object, mode: object) -> Solution:
+    """等式を指定された文字について解く（g2_l9.calculation Lv1/2/3）。
+
+    与式（equation_str="lhs=rhs"）と target だけから sympy.solve で解く（double-solve）。
+    答えは「target = 解の式」（自由変数を含む symbolic）。mode ごとに steps の op 列を変える
+    ＝level_sep:
+      Lv1 "move_only"       : 移項のみ           [isolate_target]
+      Lv2 "divide_coeff"    : 移項して係数でわる  [isolate_target, divide_by_coefficient]
+      Lv3 "clear_and_divide": 分母を払って文字でわる [multiply_both_sides, divide_by_coefficient]
+    narration には数字を書かない（G-Q5t 偽陽性の元・§5-#9）。
+    """
+    tvar = sympy.Symbol(str(target))
+    lhs_s, rhs_s = equation_str.split("=")
+    eq = sympy.Eq(sympy.sympify(lhs_s), sympy.sympify(rhs_s))
+    sol_expr = sympy.solve(eq, tvar)[0]
+    disp = f"{target} = {_fmt_poly_display(sol_expr)}"
+
+    mode_s = str(mode)
+    if mode_s not in _SOLVE_FOR_VARIABLE_STEPS:
+        raise ValueError(f"未知の mode: {mode_s!r}")
+    steps_ops = _SOLVE_FOR_VARIABLE_STEPS[mode_s]
+
+    narrations = {
+        "isolate_target": "解く文字の項だけを片方の辺に残すよう、ほかの項を移項する。",
+        "divide_by_coefficient": "両辺を、解く文字にかかっている係数でわる。",
+        "multiply_both_sides": "分母をなくすため、両辺に分母をかける。",
+    }
+    phrases = {
+        "isolate_target": "ほかの項を移項する",
+        "divide_by_coefficient": "解く文字の係数で両辺をわる",
+        "multiply_both_sides": "両辺に分母をかける",
+    }
+    r_srepr = sympy.srepr(sol_expr)
+    steps = [
+        Step(
+            op=op,
+            args=[],
+            result_srepr=r_srepr,
+            result_display=disp if i == len(steps_ops) - 1 else phrases[op],
+            narration=narrations[op],
+        )
+        for i, op in enumerate(steps_ops)
+    ]
+    answer = SymbolicAnswer(srepr=r_srepr, display=disp)
+    return Solution(answer=answer, steps=steps)
+
+
 __all__ = [
     "simplify_polynomial",
     "add_or_subtract_polynomials",
@@ -315,4 +370,5 @@ __all__ = [
     "compute_monomial_expression",
     "combine_fractional_expressions",
     "degree_of_expression",
+    "solve_for_variable",
 ]
