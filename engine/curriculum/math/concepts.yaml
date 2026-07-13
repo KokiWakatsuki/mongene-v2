@@ -176,6 +176,22 @@ concepts:
   - id: radical.various_calculation
     label: "分配法則・乗法公式・共役の有理化を使う平方根の計算"
     unit: g3_l21
+  # C3 g3 2次方程式
+  - id: quadratic.evaluate_solution
+    label: "2次方程式の左辺に値を代入し解かどうかを確かめる"
+    unit: g3_l24
+  - id: quadratic.solve_by_square_root
+    label: "平方根の考え方・平方完成で2次方程式を解く"
+    unit: g3_l25
+  - id: quadratic.solve_by_formula
+    label: "解の公式を使って2次方程式を解く"
+    unit: g3_l26
+  - id: quadratic.solve_by_factoring
+    label: "因数分解と積が0の性質で2次方程式を解く"
+    unit: g3_l27
+  - id: quadratic.solve_by_choice
+    label: "式を整理し適切な解法を選んで2次方程式を解く"
+    unit: g3_l28
   - id: polynomial.combine_like_terms_basic
     label: "同類項をまとめて式を簡単にする（1種の文字）"
     unit: g2_l2

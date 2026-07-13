@@ -1,0 +1,54 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - quadratic.solve_by_square_root
+  provenance:
+    git_commit: ''
+    recipe: math.solve_quadratic
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_quadratic_solve_v1
+    tier: T1
+  requested:
+    form: calculation
+    level: 1
+    subject: math
+    unit: g3_l25
+  resolved:
+    form: calculation
+    level: 1
+    subject: math
+    unit: g3_l25
+  seed: 2
+  signature: quad_solve_square_form
+problem_ref: 2ee1a904698eb4a6
+problem_text: '次の2次方程式を解け。
+
+  (x + 7)² = 18'
+sub_questions:
+- answer:
+    display: x = -7 - 3√2, x = -7 + 3√2
+    kind: symbolic
+    srepr: Tuple(Add(Integer(-7), Mul(Integer(-1), Integer(3), Pow(Integer(2), Rational(1, 2)))), Add(Integer(-7), Mul(Integer(3), Pow(Integer(2), Rational(1, 2)))))
+  cause_tags: []
+  concept_tags:
+  - quadratic.solve_by_square_root
+  explanation: まず、平方根の考え方で、両辺の平方根をとる。 平方根をとる次に、正の場合と負の場合に分けて x を求める。 x = -7 - 3√2, x = -7 + 3√2
+  hints:
+  - 平方根の考え方で、両辺の平方根をとる。
+  label: (1)
+  prompt_text: solution を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 平方根の考え方で、両辺の平方根をとる。
+    op: take_square_root
+    result_display: 平方根をとる
+    result_srepr: ''
+  - args: []
+    narration: 正の場合と負の場合に分けて x を求める。
+    op: solve_two_cases
+    result_display: x = -7 - 3√2, x = -7 + 3√2
+    result_srepr: Tuple(Add(Integer(-7), Mul(Integer(-1), Integer(3), Pow(Integer(2), Rational(1, 2)))), Add(Integer(-7), Mul(Integer(3), Pow(Integer(2), Rational(1, 2)))))
+visual_svg: null

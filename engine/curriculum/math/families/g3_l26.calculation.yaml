@@ -1,0 +1,36 @@
+family: math.g3_l26.calculation
+form: calculation
+source_desc: |
+  解の公式の導出と利用（units.generated.yaml の desc/example を正）。
+  Lv2 desc: a,b,cを解の公式に代入して解く。 example: 2x²+5x+1=0 を解け。
+  Lv3 desc: 根号の簡約・分数/負の係数で計算が複雑化する求解。 example: 3x²-4x-2=0 を解け。
+  【設計モデル】math.solve_quadratic が sympy.solve で解く（判別式>0非平方＝無理数解で解の公式が要る）。
+  答えは解を昇順に並べた Tuple（分数＋根号は together で単一分数 (-5+√17)/4）。level_sep は mode 別
+  op 列: Lv2（solve_formula：a・b・c読取→公式代入の2手順）／Lv3（solve_formula_hard：判別式計算を
+  挟む3手順・負や大きめの係数）。dup は a・b・c で分散。
+concepts_default: [quadratic.solve_by_formula]
+levels:
+  "2":
+    signature: quad_solve_formula
+    recipe: math.solve_quadratic
+    params: {mode: solve_formula}
+    given: [equation]
+    asked: [solution]
+    visual: none
+    text: {tier: T1, template: lf_quadratic_solve_v1}
+    hints: [steps_prefix]
+    concept_tags: [quadratic.solve_by_formula]
+    cause_tags: []
+  "3":
+    signature: quad_solve_formula_hard
+    recipe: math.solve_quadratic
+    params: {mode: solve_formula_hard}
+    given: [equation]
+    asked: [solution]
+    visual: none
+    text: {tier: T1, template: lf_quadratic_solve_v1}
+    hints: [steps_prefix]
+    concept_tags: [quadratic.solve_by_formula]
+    cause_tags: []
+remedial:
+  default_level: 2

@@ -1,0 +1,54 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - quadratic.solve_by_factoring
+  provenance:
+    git_commit: ''
+    recipe: math.solve_quadratic
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_quadratic_solve_v1
+    tier: T1
+  requested:
+    form: calculation
+    level: 2
+    subject: math
+    unit: g3_l27
+  resolved:
+    form: calculation
+    level: 2
+    subject: math
+    unit: g3_l27
+  seed: 2
+  signature: quad_solve_factoring_common
+problem_ref: b414cff4d187df9b
+problem_text: '次の2次方程式を解け。
+
+  2x² + 29x = 0'
+sub_questions:
+- answer:
+    display: x = -29/2, x = 0
+    kind: symbolic
+    srepr: Tuple(Rational(-29, 2), Integer(0))
+  cause_tags: []
+  concept_tags:
+  - quadratic.solve_by_factoring
+  explanation: まず、左辺の共通因数をくくり出す。 共通因数をくくり出す次に、積が 0 になるのは各因数が 0 のときだから、それぞれを 0 とおいて x を求める。 x = -29/2, x = 0
+  hints:
+  - 左辺の共通因数をくくり出す。
+  label: (1)
+  prompt_text: solution を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 左辺の共通因数をくくり出す。
+    op: factor_out_common
+    result_display: 共通因数をくくり出す
+    result_srepr: ''
+  - args: []
+    narration: 積が 0 になるのは各因数が 0 のときだから、それぞれを 0 とおいて x を求める。
+    op: apply_zero_product
+    result_display: x = -29/2, x = 0
+    result_srepr: Tuple(Rational(-29, 2), Integer(0))
+visual_svg: null

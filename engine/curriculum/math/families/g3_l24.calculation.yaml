@@ -1,0 +1,23 @@
+family: math.g3_l24.calculation
+form: calculation
+source_desc: |
+  2次方程式の意味とその解（units.generated.yaml の desc/example を正）。
+  Lv1 desc: 値を代入し等式成立を確かめる処理。 example: x=3 を x²-5x+6=0 の左辺に代入し確かめよ。
+  【設計モデル】ソルバ math.solve_quadratic(evaluate_quadratic) が左辺に値を代入した値を求める
+  （値0なら解）。答えは値の SymbolicAnswer。単一レベル（substitute_value→evaluate_left_side の2手順）。
+  dup は係数・代入値で分散。
+concepts_default: [quadratic.evaluate_solution]
+levels:
+  "1":
+    signature: quad_evaluate
+    recipe: math.solve_quadratic
+    params: {mode: evaluate_quadratic}
+    given: [equation, input_value]
+    asked: [value]
+    visual: none
+    text: {tier: T1, template: lf_quadratic_evaluate_v1}
+    hints: [steps_prefix]
+    concept_tags: [quadratic.evaluate_solution]
+    cause_tags: []
+remedial:
+  default_level: 1

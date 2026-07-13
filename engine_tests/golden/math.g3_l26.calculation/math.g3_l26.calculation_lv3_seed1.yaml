@@ -1,0 +1,60 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - quadratic.solve_by_formula
+  provenance:
+    git_commit: ''
+    recipe: math.solve_quadratic
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_quadratic_solve_v1
+    tier: T1
+  requested:
+    form: calculation
+    level: 3
+    subject: math
+    unit: g3_l26
+  resolved:
+    form: calculation
+    level: 3
+    subject: math
+    unit: g3_l26
+  seed: 1
+  signature: quad_solve_formula_hard
+problem_ref: 4fd13e13267bd967
+problem_text: '次の2次方程式を解け。
+
+  3x² + 4x - 6 = 0'
+sub_questions:
+- answer:
+    display: x = (-√22 - 2)/3, x = (-2 + √22)/3
+    kind: symbolic
+    srepr: Tuple(Add(Mul(Integer(-1), Rational(1, 3), Pow(Integer(22), Rational(1, 2))), Rational(-2, 3)), Add(Rational(-2, 3), Mul(Rational(1, 3), Pow(Integer(22), Rational(1, 2)))))
+  cause_tags: []
+  concept_tags:
+  - quadratic.solve_by_formula
+  explanation: まず、与式を整理して、それぞれの項の係数 a・b・c を読み取る。 a・b・c を読み取る次に、根号の中の値（判別式）を計算する。 根号の中を計算する最後に、a・b・c を解の公式に代入して x を求める。 x = (-√22 - 2)/3, x = (-2 + √22)/3
+  hints:
+  - 与式を整理して、それぞれの項の係数 a・b・c を読み取る。
+  - 根号の中の値（判別式）を計算する。
+  label: (1)
+  prompt_text: solution を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 与式を整理して、それぞれの項の係数 a・b・c を読み取る。
+    op: identify_coefficients
+    result_display: a・b・c を読み取る
+    result_srepr: ''
+  - args: []
+    narration: 根号の中の値（判別式）を計算する。
+    op: compute_discriminant
+    result_display: 根号の中を計算する
+    result_srepr: ''
+  - args: []
+    narration: a・b・c を解の公式に代入して x を求める。
+    op: apply_quadratic_formula
+    result_display: x = (-√22 - 2)/3, x = (-2 + √22)/3
+    result_srepr: Tuple(Add(Mul(Integer(-1), Rational(1, 3), Pow(Integer(22), Rational(1, 2))), Rational(-2, 3)), Add(Rational(-2, 3), Mul(Rational(1, 3), Pow(Integer(22), Rational(1, 2)))))
+visual_svg: null

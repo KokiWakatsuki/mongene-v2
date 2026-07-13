@@ -1,0 +1,54 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - quadratic.solve_by_choice
+  provenance:
+    git_commit: ''
+    recipe: math.solve_quadratic
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_quadratic_solve_v1
+    tier: T1
+  requested:
+    form: calculation
+    level: 3
+    subject: math
+    unit: g3_l28
+  resolved:
+    form: calculation
+    level: 3
+    subject: math
+    unit: g3_l28
+  seed: 1
+  signature: quad_solve_choose
+problem_ref: 91f7e62191fbf368
+problem_text: '次の2次方程式を解け。
+
+  (x - 8)² = -2(x - 8)'
+sub_questions:
+- answer:
+    display: x = 6, x = 8
+    kind: symbolic
+    srepr: Tuple(Integer(6), Integer(8))
+  cause_tags: []
+  concept_tags:
+  - quadratic.solve_by_choice
+  explanation: まず、両辺を移項し、共通なかっこをくくり出す。 共通なかっこをくくり出す次に、積が 0 になるのは各因数が 0 のときだから、それぞれを 0 とおいて x を求める。 x = 6, x = 8
+  hints:
+  - 両辺を移項し、共通なかっこをくくり出す。
+  label: (1)
+  prompt_text: solution を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 両辺を移項し、共通なかっこをくくり出す。
+    op: factor_out_common_binomial
+    result_display: 共通なかっこをくくり出す
+    result_srepr: ''
+  - args: []
+    narration: 積が 0 になるのは各因数が 0 のときだから、それぞれを 0 とおいて x を求める。
+    op: apply_zero_product
+    result_display: x = 6, x = 8
+    result_srepr: Tuple(Integer(6), Integer(8))
+visual_svg: null

@@ -2587,6 +2587,60 @@ def test_simplify_radical_double_solve_property(family, level, seed):
 
 
 # ---------------------------------------------------------------------------
+# math.solve_quadratic（C3 g3_l24〜l28.calculation 2次方程式）— P2 二次方程式コア能力
+# ---------------------------------------------------------------------------
+_QUADRATIC_CELLS = [
+    ("math.g3_l24.calculation", 1),
+    ("math.g3_l25.calculation", 1), ("math.g3_l25.calculation", 2),
+    ("math.g3_l26.calculation", 2), ("math.g3_l26.calculation", 3),
+    ("math.g3_l27.calculation", 1), ("math.g3_l27.calculation", 2),
+    ("math.g3_l28.calculation", 2), ("math.g3_l28.calculation", 3),
+]
+
+
+def test_solve_quadratic_lv1_construct():
+    ctx = _make_ctx("math.g3_l27.calculation", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "quad_solve_factoring"
+    assert set(mr.given.keys()) == {"equation"}
+    sq = mr.sub_questions[0]
+    assert sq.asked == "solution"
+    assert [s.op for s in sq.steps] == ["factor_left_side", "apply_zero_product"]
+    # 答えは解の Tuple。各解が方程式を満たす。
+    lhs, rhs = mr.params["eq_str"].split("=", 1)
+    eq_expr = sympy.sympify(lhs) - sympy.sympify(rhs)
+    roots = sympy.sympify(sq.answer.srepr)
+    assert len(roots) == 2
+    for r in roots:
+        assert eq_expr.subs(sympy.Symbol("x"), r).equals(0)
+
+
+@pytest.mark.parametrize("family,level", _QUADRATIC_CELLS)
+@pytest.mark.parametrize("seed", range(60))
+def test_solve_quadratic_double_solve_property(family, level, seed):
+    ctx = _make_ctx(family, level)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    # 独立ソルバの答えが recipe の答えと一致する（double-solve）。
+    solver = REGISTRY.solver("math.solve_quadratic")
+    sol = solver(mr.params["eq_str"], mr.params["mode"], mr.params.get("value"))
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+    lhs, rhs = mr.params["eq_str"].split("=", 1)
+    eq_expr = sympy.sympify(lhs) - sympy.sympify(rhs)
+    if mr.params.get("value") is None:
+        # solve 系: 各解が方程式を満たす（恒真）。
+        roots = sympy.sympify(sol.answer.srepr)
+        assert len(roots) >= 1
+        for r in roots:
+            assert eq_expr.subs(sympy.Symbol("x"), r).equals(0)
+    else:
+        # evaluate 系: 答えは左辺に value を代入した値に等しい。
+        expected = sympy.simplify(eq_expr.subs(sympy.Symbol("x"), sympy.nsimplify(sympy.sympify(mr.params["value"]))))
+        assert sympy.sympify(sol.answer.srepr) == expected
+
+
+# ---------------------------------------------------------------------------
 # math.count_significant_figures（C1 g1_l60.knowledge Lv2 有効数字の桁判別）— P2 bespoke
 # ---------------------------------------------------------------------------
 def test_count_significant_figures_lv2_construct():

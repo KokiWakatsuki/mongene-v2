@@ -1,0 +1,60 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - quadratic.solve_by_choice
+  provenance:
+    git_commit: ''
+    recipe: math.solve_quadratic
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_quadratic_solve_v1
+    tier: T1
+  requested:
+    form: calculation
+    level: 2
+    subject: math
+    unit: g3_l28
+  resolved:
+    form: calculation
+    level: 2
+    subject: math
+    unit: g3_l28
+  seed: 2
+  signature: quad_solve_rearrange
+problem_ref: a45346afd58e3770
+problem_text: '次の2次方程式を解け。
+
+  (x - 6)(x + 1) = 21'
+sub_questions:
+- answer:
+    display: x = (5 - √133)/2, x = (5 + √133)/2
+    kind: symbolic
+    srepr: Tuple(Add(Rational(5, 2), Mul(Integer(-1), Rational(1, 2), Pow(Integer(133), Rational(1, 2)))), Add(Rational(5, 2), Mul(Rational(1, 2), Pow(Integer(133), Rational(1, 2)))))
+  cause_tags: []
+  concept_tags:
+  - quadratic.solve_by_choice
+  explanation: まず、かっこを展開し、右辺を左辺に移項して、=0 の形に整理する。 展開して整理する次に、左辺を因数分解する。 左辺を因数分解する最後に、積が 0 になるのは各因数が 0 のときだから、それぞれを 0 とおいて x を求める。 x = (5 - √133)/2, x = (5 + √133)/2
+  hints:
+  - かっこを展開し、右辺を左辺に移項して、=0 の形に整理する。
+  - 左辺を因数分解する。
+  label: (1)
+  prompt_text: solution を求めなさい。
+  solution_steps:
+  - args: []
+    narration: かっこを展開し、右辺を左辺に移項して、=0 の形に整理する。
+    op: expand_and_rearrange
+    result_display: 展開して整理する
+    result_srepr: ''
+  - args: []
+    narration: 左辺を因数分解する。
+    op: factor_left_side
+    result_display: 左辺を因数分解する
+    result_srepr: ''
+  - args: []
+    narration: 積が 0 になるのは各因数が 0 のときだから、それぞれを 0 とおいて x を求める。
+    op: apply_zero_product
+    result_display: x = (5 - √133)/2, x = (5 + √133)/2
+    result_srepr: Tuple(Add(Rational(5, 2), Mul(Integer(-1), Rational(1, 2), Pow(Integer(133), Rational(1, 2)))), Add(Rational(5, 2), Mul(Rational(1, 2), Pow(Integer(133), Rational(1, 2)))))
+visual_svg: null

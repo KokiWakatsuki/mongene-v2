@@ -11,5 +11,6 @@ from engine.packs.math.templates import letter_expr  # noqa: F401  (登録の副
 from engine.packs.math.templates import linear  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.templates import polynomial  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.templates import radical  # noqa: F401  (register_template の副作用のため import)
+from engine.packs.math.templates import quadratic  # noqa: F401  (register_template の副作用のため import)
 
 __all__: list[str] = []

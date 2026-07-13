@@ -1,0 +1,54 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - quadratic.solve_by_choice
+  provenance:
+    git_commit: ''
+    recipe: math.solve_quadratic
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_quadratic_solve_v1
+    tier: T1
+  requested:
+    form: calculation
+    level: 3
+    subject: math
+    unit: g3_l28
+  resolved:
+    form: calculation
+    level: 3
+    subject: math
+    unit: g3_l28
+  seed: 2
+  signature: quad_solve_choose
+problem_ref: 2ea8ed518600c1db
+problem_text: '次の2次方程式を解け。
+
+  (3x + 9)² = 4(3x + 9)'
+sub_questions:
+- answer:
+    display: x = -3, x = -5/3
+    kind: symbolic
+    srepr: Tuple(Integer(-3), Rational(-5, 3))
+  cause_tags: []
+  concept_tags:
+  - quadratic.solve_by_choice
+  explanation: まず、両辺を移項し、共通なかっこをくくり出す。 共通なかっこをくくり出す次に、積が 0 になるのは各因数が 0 のときだから、それぞれを 0 とおいて x を求める。 x = -3, x = -5/3
+  hints:
+  - 両辺を移項し、共通なかっこをくくり出す。
+  label: (1)
+  prompt_text: solution を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 両辺を移項し、共通なかっこをくくり出す。
+    op: factor_out_common_binomial
+    result_display: 共通なかっこをくくり出す
+    result_srepr: ''
+  - args: []
+    narration: 積が 0 になるのは各因数が 0 のときだから、それぞれを 0 とおいて x を求める。
+    op: apply_zero_product
+    result_display: x = -3, x = -5/3
+    result_srepr: Tuple(Integer(-3), Rational(-5, 3))
+visual_svg: null

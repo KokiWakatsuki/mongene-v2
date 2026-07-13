@@ -1,0 +1,54 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - quadratic.solve_by_formula
+  provenance:
+    git_commit: ''
+    recipe: math.solve_quadratic
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_quadratic_solve_v1
+    tier: T1
+  requested:
+    form: calculation
+    level: 2
+    subject: math
+    unit: g3_l26
+  resolved:
+    form: calculation
+    level: 2
+    subject: math
+    unit: g3_l26
+  seed: 1
+  signature: quad_solve_formula
+problem_ref: 16866444c9c9a302
+problem_text: '次の2次方程式を解け。
+
+  2x² - 4x - 7 = 0'
+sub_questions:
+- answer:
+    display: x = (2 - 3√2)/2, x = (2 + 3√2)/2
+    kind: symbolic
+    srepr: Tuple(Add(Integer(1), Mul(Integer(-1), Rational(3, 2), Pow(Integer(2), Rational(1, 2)))), Add(Integer(1), Mul(Rational(3, 2), Pow(Integer(2), Rational(1, 2)))))
+  cause_tags: []
+  concept_tags:
+  - quadratic.solve_by_formula
+  explanation: まず、与式を整理して、それぞれの項の係数 a・b・c を読み取る。 a・b・c を読み取る次に、a・b・c を解の公式に代入して x を求める。 x = (2 - 3√2)/2, x = (2 + 3√2)/2
+  hints:
+  - 与式を整理して、それぞれの項の係数 a・b・c を読み取る。
+  label: (1)
+  prompt_text: solution を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 与式を整理して、それぞれの項の係数 a・b・c を読み取る。
+    op: identify_coefficients
+    result_display: a・b・c を読み取る
+    result_srepr: ''
+  - args: []
+    narration: a・b・c を解の公式に代入して x を求める。
+    op: apply_quadratic_formula
+    result_display: x = (2 - 3√2)/2, x = (2 + 3√2)/2
+    result_srepr: Tuple(Add(Integer(1), Mul(Integer(-1), Rational(3, 2), Pow(Integer(2), Rational(1, 2)))), Add(Integer(1), Mul(Rational(3, 2), Pow(Integer(2), Rational(1, 2)))))
+visual_svg: null

@@ -1,0 +1,60 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - quadratic.solve_by_square_root
+  provenance:
+    git_commit: ''
+    recipe: math.solve_quadratic
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_quadratic_solve_v1
+    tier: T1
+  requested:
+    form: calculation
+    level: 2
+    subject: math
+    unit: g3_l25
+  resolved:
+    form: calculation
+    level: 2
+    subject: math
+    unit: g3_l25
+  seed: 1
+  signature: quad_solve_complete_square
+problem_ref: 7fa0cd3f0c2a0c06
+problem_text: '次の2次方程式を解け。
+
+  x² + 12x - 2 = 0'
+sub_questions:
+- answer:
+    display: x = -√38 - 6, x = -6 + √38
+    kind: symbolic
+    srepr: Tuple(Add(Mul(Integer(-1), Pow(Integer(38), Rational(1, 2))), Integer(-6)), Add(Integer(-6), Pow(Integer(38), Rational(1, 2))))
+  cause_tags: []
+  concept_tags:
+  - quadratic.solve_by_square_root
+  explanation: まず、定数項を移項し、両辺に同じ数を加えて左辺を平方の形にする。 平方完成する次に、平方根の考え方で、両辺の平方根をとる。 平方根をとる最後に、正の場合と負の場合に分けて x を求める。 x = -√38 - 6, x = -6 + √38
+  hints:
+  - 定数項を移項し、両辺に同じ数を加えて左辺を平方の形にする。
+  - 平方根の考え方で、両辺の平方根をとる。
+  label: (1)
+  prompt_text: solution を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 定数項を移項し、両辺に同じ数を加えて左辺を平方の形にする。
+    op: complete_the_square
+    result_display: 平方完成する
+    result_srepr: ''
+  - args: []
+    narration: 平方根の考え方で、両辺の平方根をとる。
+    op: take_square_root
+    result_display: 平方根をとる
+    result_srepr: ''
+  - args: []
+    narration: 正の場合と負の場合に分けて x を求める。
+    op: solve_two_cases
+    result_display: x = -√38 - 6, x = -6 + √38
+    result_srepr: Tuple(Add(Mul(Integer(-1), Pow(Integer(38), Rational(1, 2))), Integer(-6)), Add(Integer(-6), Pow(Integer(38), Rational(1, 2))))
+visual_svg: null

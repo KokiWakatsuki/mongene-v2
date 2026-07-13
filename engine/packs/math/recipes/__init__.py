@@ -11,5 +11,6 @@ from engine.packs.math.recipes import linear  # noqa: F401  (登録の副作用�
 from engine.packs.math.recipes import polynomial  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.recipes import letter_expr  # noqa: F401,E402  (polynomial のヘルパに依存＝後に import)
 from engine.packs.math.recipes import radical  # noqa: F401  (登録の副作用のため import)
+from engine.packs.math.recipes import quadratic  # noqa: F401  (登録の副作用のため import)
 
 __all__: list[str] = []
