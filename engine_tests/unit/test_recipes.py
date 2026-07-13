@@ -2415,6 +2415,51 @@ def test_scientific_notation_double_solve_property(family, level, seed):
 
 
 # ---------------------------------------------------------------------------
+# math.read_number_line_point（C1 g1_l2.graph_table Lv1 数直線の点を読む）— P2 bespoke（図つき初 C1）
+# ---------------------------------------------------------------------------
+def test_read_number_line_point_lv1_construct():
+    ctx = _make_ctx("math.g1_l2.graph_table", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+
+    assert mr.signature == "number_line_read_point"
+    # given は空: 数直線は図で提示され、テキストに接地すべき given は無い。
+    assert mr.given == {}
+    sq = mr.sub_questions[0]
+    assert sq.asked == "read_point"
+    assert [s.op for s in sq.steps] == ["identify_interval", "read_point"]
+    # 答えは分数（非整数）。目盛（整数）と一致しない＝図の目盛ラベルと衝突しない。
+    ans_val = sympy.sympify(sq.answer.srepr)
+    assert not ans_val.is_integer
+    # visual_plan は非 None（frame.visual="required" を満たす）。
+    assert mr.visual_plan is not None
+    assert mr.visual_plan.style == "number_line"
+    # labels は整数目盛の単独数値と点の記号「P」のみ（答えの分数は載せない）。
+    assert "P" in mr.visual_plan.labels
+    for label in mr.visual_plan.labels:
+        assert "/" not in label  # 分数（答え）表記なし
+    # 答えの点マーカー（labeled_answer_point）を elements に含めない（幾何的リーク規則）。
+    assert all(el.kind != "labeled_answer_point" for el in mr.visual_plan.elements)
+
+
+@pytest.mark.parametrize("seed", range(200))
+def test_read_number_line_point_double_solve_property(seed):
+    ctx = _make_ctx("math.g1_l2.graph_table", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+
+    a, k, i = int(mr.params["a"]), int(mr.params["k"]), int(mr.params["i"])
+    # 独立ソルバの答えが recipe の答えと一致する（double-solve）。
+    solver = REGISTRY.solver("math.read_number_line_point")
+    sol = solver(a, k, i)
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+    # 恒真: 答えは a + i/k（既約分数）で、目盛位置 i は 1..k-1 に収まる。
+    assert sympy.sympify(sol.answer.srepr) == sympy.Rational(a * k + i, k)
+    assert 2 <= k <= 5
+    assert 1 <= i <= k - 1
+
+
+# ---------------------------------------------------------------------------
 # math.count_significant_figures（C1 g1_l60.knowledge Lv2 有効数字の桁判別）— P2 bespoke
 # ---------------------------------------------------------------------------
 def test_count_significant_figures_lv2_construct():

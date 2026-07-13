@@ -228,6 +228,9 @@ concepts:
   - id: number.compare_magnitude
     label: "負の数を含む2数の大小を判別する"
     unit: g1_l2
+  - id: number_line.read_point
+    label: "数直線上の点が表す数（分数を含む）を読み取る"
+    unit: g1_l2
   - id: inequality.term_recall
     label: "以上・以下・未満・超に対応する不等号（≧ ≦ < >）を想起する"
     unit: g1_l20

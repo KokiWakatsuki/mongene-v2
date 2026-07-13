@@ -34,6 +34,10 @@ LF_CALC_SCI_SIGFIG_V1 = (
     "a×10ⁿ（a は1以上10未満の数）の形で表せ。\n{{ given.expression }}"
 )
 
+# g1_l2.graph_table Lv1: 数直線上の点 P が表す数を読む（given 空・図のみ提示）
+# 数値は本文に出さない（点の位置・目盛はすべて図で提示する＝漏洩防止）。
+LF_NL_READ_POINT_V1 = "下の数直線で、点Pが表す数を答えよ。"
+
 
 def _register_all() -> None:
     REGISTRY.register_template("lf_calc_evaluate_v1", LF_CALC_EVALUATE_V1)
@@ -43,6 +47,7 @@ def _register_all() -> None:
     REGISTRY.register_template("lf_calc_factorize_v1", LF_CALC_FACTORIZE_V1)
     REGISTRY.register_template("lf_calc_sci_notation_v1", LF_CALC_SCI_NOTATION_V1)
     REGISTRY.register_template("lf_calc_sci_sigfig_v1", LF_CALC_SCI_SIGFIG_V1)
+    REGISTRY.register_template("lf_nl_read_point_v1", LF_NL_READ_POINT_V1)
 
 
 _register_all()
@@ -56,4 +61,5 @@ __all__ = [
     "LF_CALC_FACTORIZE_V1",
     "LF_CALC_SCI_NOTATION_V1",
     "LF_CALC_SCI_SIGFIG_V1",
+    "LF_NL_READ_POINT_V1",
 ]

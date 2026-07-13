@@ -22,9 +22,12 @@ from engine.core.contracts import (
     Solution,
     SubQuestionMR,
     SymbolicAnswer,
+    VisualElement,
+    VisualPlan,
 )
 from engine.core.registry import REGISTRY, register_recipe
 from engine.core.rng import Rng, draw
+from engine.packs.math.visuals.number_line import number_line_labels
 
 
 def _effective_concept_tags(ctx: CellContext) -> list[str]:
@@ -634,4 +637,74 @@ def scientific_notation(ctx: CellContext, rng: Rng) -> MR:
     )
 
 
-__all__ = ["compute_signed_arithmetic", "factorize_integer", "scientific_notation"]
+# ---------------------------------------------------------------------------
+# 数直線上の点が表す数を読む（g1_l2.graph_table Lv1）— C1 bespoke（図つき初 C1）
+#
+# 単位区間 [a, a+1] を k 等分した i 番目の目盛に点 P を置き、P が表す数 a + i/k を答えとする
+# （answer-first）。独立ソルバ math.read_number_line_point で同じ (a,k,i) から再計算し一致を
+# assert（double-solve）。given は空（数直線は図で提示され、テキストに接地すべき given は無い＝
+# graph_read と同じ設計判断・G-GND は given 空なら自明に通過）。
+#
+# dup: params (a, k, i) の3自由度で分散する。a の範囲 × (k,i) の組（k∈{2..5}・1≤i≤k-1 で 10 組）
+# で 400+ の候補を確保する（鉄則②）。答え（分数）は図にも問題文にも出さない（漏洩防止）。
+# 図内テキストは整数目盛ラベルと「P」のみ（number_line_labels）＝ G-Q5v の whitelist に一致。
+# ---------------------------------------------------------------------------
+_NUMBER_LINE_CONCEPTS = [
+    "number_line.read_point",
+]
+
+
+@register_recipe("math.read_number_line_point", provides_concepts=_NUMBER_LINE_CONCEPTS)
+def read_number_line_point(ctx: CellContext, rng: Rng) -> MR:
+    """数直線上の点 P が表す数を読み取る MR を組む（g1_l2.graph_table Lv1）。"""
+    p = ctx.spec_level.params
+    a = int(draw(p["interval_domain"], rng))
+    k = int(draw(p["subdivisions"], rng))
+    i = int(draw({"int_range": [1, k - 1]}, rng))
+
+    solver = REGISTRY.solver("math.read_number_line_point")
+    sol = cast(Solution, solver(a, k, i))
+    assert isinstance(sol.answer, SymbolicAnswer)
+    # 恒真: srepr（"Rational(...)"）を評価すると a + i/k に戻る。
+    assert sympy.sympify(sol.answer.srepr) == sympy.Rational(a * k + i, k), (
+        f"double-solve 不一致: srepr {sol.answer.srepr!r} が a+i/k に戻らない"
+    )
+
+    sub_question = SubQuestionMR(
+        label="(1)",
+        asked="read_point",
+        answer=sol.answer,
+        steps=sol.steps,
+        concept_tags=_effective_concept_tags(ctx),
+        cause_tags=_effective_cause_tags(ctx),
+    )
+
+    visual_plan = VisualPlan(
+        style="number_line",
+        labels=number_line_labels(a),
+        elements=[
+            VisualElement(kind="number_line", attrs={}),
+            VisualElement(kind="point", attrs={}),
+        ],
+    )
+
+    return MR(
+        signature=ctx.spec_level.signature,
+        family=ctx.family,
+        level=ctx.level,
+        purpose=ctx.purpose,
+        seed=0,
+        params={"a": str(a), "k": str(k), "i": str(i)},
+        given={},
+        sub_questions=[sub_question],
+        visual_plan=visual_plan,
+        provenance=Provenance(recipe="math.read_number_line_point"),
+    )
+
+
+__all__ = [
+    "compute_signed_arithmetic",
+    "factorize_integer",
+    "read_number_line_point",
+    "scientific_notation",
+]

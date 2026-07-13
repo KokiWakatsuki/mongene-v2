@@ -381,12 +381,63 @@ def scientific_notation(value: object, mode: object, sig_figs: object = None) ->
     return Solution(answer=answer, steps=steps)
 
 
+# ---------------------------------------------------------------------------
+# 数直線上の点が表す数を読む（g1_l2.graph_table Lv1）— C1 bespoke（図つき初 C1）
+#
+# 単位区間 [a, a+1] を k 等分した i 番目の目盛に点 P がある。P が表す数は a + i/k（分数）。
+# 問題パラメータ（a, k, i）だけから Rational として恒真に構成する（double-solve）。答えは
+# 分数の SymbolicAnswer。narration には数字を書かない（G-Q5t 偽陽性の元）。図の目盛（整数）は
+# 図側の whitelist で守り、答え（分数）は図にも問題文にも出さない（漏洩防止）。
+# ---------------------------------------------------------------------------
+def _read_number_line_point(a: int, k: int, i: int) -> sympy.Rational:
+    """点 P が表す数 a + i/k を既約分数（sympy.Rational）で返す。"""
+    if k < 2:
+        raise ValueError(f"等分数 k は 2 以上: {k!r}")
+    if not (1 <= i <= k - 1):
+        raise ValueError(f"目盛の位置 i は 1..k-1 の範囲: i={i!r}, k={k!r}")
+    return sympy.Rational(a * k + i, k)
+
+
+@register_solver("math.read_number_line_point")
+def read_number_line_point(a: object, k: object, i: object) -> Solution:
+    """数直線上の点 P が表す数を読み取る（g1_l2.graph_table Lv1「読む」）。
+
+    問題パラメータ（区間左端 a・等分数 k・目盛位置 i）だけから P の値 a + i/k を導く。
+    答えは既約分数の SymbolicAnswer。steps は2手（間の目盛を読む → 等分位置から値を出す）で、
+    steps_prefix ヒントが最初の1手の narration（数字なし）を開示できるようにする。
+    """
+    a_i, k_i, i_i = int(str(a)), int(str(k)), int(str(i))
+    value = _read_number_line_point(a_i, k_i, i_i)
+    disp = fmt_number(value)
+    srepr = sympy.srepr(value)
+
+    steps = [
+        Step(
+            op="identify_interval",
+            args=[],
+            result_srepr="",
+            result_display="点Pをはさむ目もりを読む",
+            narration="点Pをはさむ両側の整数の目もりを数直線から読み取る。",
+        ),
+        Step(
+            op="read_point",
+            args=[],
+            result_srepr=srepr,
+            result_display=disp,
+            narration="目もりの間を等分した位置に着目し、点Pが表す数を分数で求める。",
+        ),
+    ]
+    answer = SymbolicAnswer(srepr=srepr, display=disp)
+    return Solution(answer=answer, steps=steps)
+
+
 __all__ = [
     "evaluate_numeric_expression",
     "factorization_forms",
     "factorize_integer",
     "fmt_number",
     "order_signed_numbers",
+    "read_number_line_point",
     "scientific_forms",
     "scientific_notation",
 ]

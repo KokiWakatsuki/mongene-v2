@@ -1,0 +1,32 @@
+family: math.g1_l2.graph_table
+form: graph_table
+source_desc: |
+  数直線上の点が表す数を読む（units.generated.yaml の desc/example を正として転記）。
+  desc: 数直線上の点が表す数を読む／数を数直線に示す。
+  example: 数直線上で点Pが -3 と -2 のちょうど真ん中にある。Pが表す数を答えよ。（答え -5/2）
+  単位区間 [a, a+1] を k 等分した目盛上に点 P を置き、P が表す数 a + i/k（分数）を読み取る。
+  例（真ん中）は a=-3, k=2, i=1 ＝ -5/2 に相当する。§10 sanction: 「数を数直線に示す（かく）」
+  向きは答えの型が GraphAnswer で本「読む」（SymbolicAnswer）と異なるため独立セル化せず、
+  本 Lv1 は spec の example（読む）に絞る。k は真ん中（k=2）を代表に 3〜5 等分へ一般化して
+  「点が表す数を読む」技能と自由度（dup 分散）を確保する。式・数値は生徒に提示せず図のみを
+  与える（数値を与えると読み取り題材が破綻するため。g2_l25.graph_table と同じ設計判断）。
+concepts_default: [number_line.read_point]
+levels:
+  "1":
+    signature: number_line_read_point
+    recipe: math.read_number_line_point
+    params:
+      # a: 点 P が属する単位区間の左端整数。表示は a-1..a+2 の局所窓（4 目盛）なので
+      # |a| が大きくても図は破綻しない。a の範囲 × (k,i) の 10 組で 500 の候補を確保する。
+      interval_domain: {int_range: [-25, 24]}
+      # subdivisions: 単位区間の等分数。k=2（真ん中）を代表に 3〜5 等分まで。
+      subdivisions: [2, 3, 4, 5]
+    given: []
+    asked: [read_point]
+    visual: required
+    text: {tier: T1, template: lf_nl_read_point_v1, visual_builder: math.number_line}
+    hints: [steps_prefix]
+    concept_tags: [number_line.read_point]
+    cause_tags: []
+remedial:
+  default_level: 1

@@ -40,8 +40,17 @@ def double_solve_scientific_notation(mr: MR) -> Solution:
     return cast(Solution, solver(p["value"], p["mode"], p.get("sig_figs")))
 
 
+@register_checker("math.read_number_line_point.double_solve")
+def double_solve_read_number_line_point(mr: MR) -> Solution:
+    # 区間左端 a・等分数 k・目盛位置 i から独立に P の値 a+i/k を再計算する。
+    p = mr.params
+    solver = REGISTRY.solver("math.read_number_line_point")
+    return cast(Solution, solver(p["a"], p["k"], p["i"]))
+
+
 __all__ = [
     "double_solve_compute_signed_arithmetic",
     "double_solve_factorize_integer",
+    "double_solve_read_number_line_point",
     "double_solve_scientific_notation",
 ]
