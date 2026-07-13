@@ -1,0 +1,47 @@
+family: math.g2_l1.knowledge
+form: knowledge
+source_desc: |
+  単項式・多項式・係数・次数の用語（Lv1 想起）と、単項式か多項式かの判別（Lv2）
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: 単項式・多項式・項・係数・次数の定義を想起する。
+       example: 単項式・多項式・係数・次数とは何かを答える。
+  Lv2 desc: 与えられた式が単項式か多項式か・次数はいくつかを判別・適用する。
+       example: 次の式は単項式か多項式か答えよ。
+  【設計モデル・要検収(Q4)】Lv1 は「説明された対象の名称を答える」単一選択に realize
+  （concept で答えが変わる用語想起型・具体例を surface として dup 分散）。Lv2 は式を見て
+  単項式/多項式を判別する verify 型（式で答えが変わる）。Lv1(op=identify_description/
+  name_concept)と Lv2(op=count_terms/classify_type)は op 列が異なり level_sep を満たす。
+  答えはテキストの ChoiceAnswer＝G-Q5t 素通り（§7.7）。#16 の knowledge capability を再利用。
+concepts_default: [polynomial.term_recall]
+levels:
+  "1":
+    signature: poly_term_recall
+    recipe: math.poly_term_recall
+    params:
+      concept_set: [monomial, polynomial, coefficient, degree]
+      coeff_domain: {int_range: [-9, 9]}
+      var_pool: [x, y, a, b, m]
+      power_domain: {int_set: [1, 2, 3]}
+    given: [statement]
+    asked: [choice]
+    visual: none
+    text: {tier: T1, template: lf_poly_term_recall_v1}
+    hints: [steps_prefix]
+    concept_tags: [polynomial.term_recall]
+    cause_tags: []
+  "2":
+    signature: classify_monomial_or_polynomial
+    recipe: math.classify_monomial_or_polynomial
+    params:
+      coeff_domain: {int_range: [-9, 9]}
+      var_pool: [x, y, a, b, m]
+      power_domain: {int_set: [1, 2, 3]}
+    given: [statement]
+    asked: [choice]
+    visual: none
+    text: {tier: T1, template: lf_poly_classify_v1}
+    hints: [steps_prefix]
+    concept_tags: [polynomial.classify_type]
+    cause_tags: []
+remedial:
+  default_level: 1

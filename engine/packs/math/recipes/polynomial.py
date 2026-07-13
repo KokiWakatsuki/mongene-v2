@@ -10,13 +10,14 @@ C2（数と式）クラスタの初セル: g2_l2.calculation（同類項をま�
 """
 from __future__ import annotations
 
-from typing import cast
+from typing import Any, cast
 
 import sympy
 
 from engine.core.contracts import (
     MR,
     CellContext,
+    ChoiceAnswer,
     Provenance,
     Solution,
     Step,
@@ -1006,6 +1007,200 @@ def combine_digit_number(ctx: CellContext, rng: Rng) -> MR:
     )
 
 
+# ---------------------------------------------------------------------------
+# knowledge 系（ChoiceAnswer・用語想起／判別）— C2 の残 knowledge セル。
+# 答えはテキスト＝G-Q5t 素通り（§7.7）。dup は具体例（surface）と concept/式のパラメータ化で分散。
+# ---------------------------------------------------------------------------
+_POLY_TERM_DESC = {
+    "monomial": "数や文字の乗法だけでできている式 {ex}",
+    "polynomial": "いくつかの単項式の和で表された式 {ex}",
+    "coefficient": "単項式 {ex} で、文字にかけられている数の部分",
+    "degree": "単項式 {ex} で、かけ合わされている文字の個数",
+}
+
+
+def _draw_example_monomial_disp(rng: Rng, p: dict[str, Any]) -> str:
+    """具体例の単項式（係数 |c|≥2・指数≥1）の表示を引く（surface・答えに無関係）。"""
+    coef_cands = [v for v in _domain_candidates(p["coeff_domain"]) if v not in (0, 1, -1)]
+    coef = int(draw({"int_set": coef_cands}, rng))
+    var = str(draw(cast("list[str]", p["var_pool"]), rng))
+    power = int(draw(p["power_domain"], rng))
+    return _fmt_monomial_factor(coef, {var: power})
+
+
+def _draw_example_polynomial_disp(rng: Rng, p: dict[str, Any]) -> str:
+    """具体例の多項式（2項）の表示を引く（surface）。"""
+    coef_cands = [v for v in _domain_candidates(p["coeff_domain"]) if v != 0]
+    var = str(draw(cast("list[str]", p["var_pool"]), rng))
+    c1 = int(draw({"int_set": [v for v in coef_cands if v not in (1, -1)]}, rng))
+    power = int(draw(p["power_domain"], rng))
+    c0 = int(draw({"int_set": coef_cands}, rng))
+    head = _fmt_monomial_factor(c1, {var: power})
+    tail = f"+ {c0}" if c0 > 0 else f"- {abs(c0)}"
+    return f"{head} {tail}"
+
+
+@register_recipe("math.poly_term_recall", provides_concepts=["polynomial.term_recall"])
+def poly_term_recall(ctx: CellContext, rng: Rng) -> MR:
+    """多項式まわりの用語（単項式・多項式・係数・次数）の名称を答える（knowledge・g2_l1 Lv1）。"""
+    p = ctx.spec_level.params
+    concept = str(draw(cast("list[str]", p["concept_set"]), rng))
+    if concept == "polynomial":
+        ex = _draw_example_polynomial_disp(rng, p)
+    else:
+        ex = _draw_example_monomial_disp(rng, p)
+    statement = _POLY_TERM_DESC[concept].format(ex=ex)
+
+    solver = REGISTRY.solver("math.poly_term_definition")
+    sol = cast(Solution, solver(concept))
+    assert isinstance(sol.answer, ChoiceAnswer)
+    assert [s.op for s in sol.steps] == ["identify_description", "name_concept"]
+
+    sub_question = SubQuestionMR(
+        label="(1)", asked="choice", answer=sol.answer, steps=sol.steps,
+        concept_tags=_effective_concept_tags(ctx), cause_tags=_effective_cause_tags(ctx),
+    )
+    return MR(
+        signature=ctx.spec_level.signature, family=ctx.family, level=ctx.level,
+        purpose=ctx.purpose, seed=0,
+        params={"concept": concept, "example": ex},
+        given={"statement": statement}, sub_questions=[sub_question], visual_plan=None,
+        provenance=Provenance(recipe="math.poly_term_recall"),
+    )
+
+
+@register_recipe("math.classify_monomial_or_polynomial", provides_concepts=["polynomial.classify_type"])
+def classify_monomial_or_polynomial(ctx: CellContext, rng: Rng) -> MR:
+    """式が単項式か多項式かを判別する（knowledge verify 型・g2_l1 Lv2）。"""
+    p = ctx.spec_level.params
+    coef_cands = [v for v in _domain_candidates(p["coeff_domain"]) if v != 0]
+    var = str(draw(cast("list[str]", p["var_pool"]), rng))
+    form = str(draw(["monomial", "polynomial"], rng))
+    c1 = int(draw({"int_set": [v for v in coef_cands if v not in (1, -1)]}, rng))
+    power = int(draw(p["power_domain"], rng))
+    if form == "monomial":
+        disp = _fmt_monomial_factor(c1, {var: power})
+        expr_str = f"({c1})*{var}**{power}"
+    else:
+        c0 = int(draw({"int_set": coef_cands}, rng))
+        tail = f"+ {c0}" if c0 > 0 else f"- {abs(c0)}"
+        disp = f"{_fmt_monomial_factor(c1, {var: power})} {tail}"
+        expr_str = f"({c1})*{var}**{power}+({c0})"
+
+    solver = REGISTRY.solver("math.classify_monomial_or_polynomial")
+    sol = cast(Solution, solver(expr_str))
+    assert isinstance(sol.answer, ChoiceAnswer)
+    expected = "多項式" if form == "polynomial" else "単項式"
+    assert sol.answer.correct == expected, f"double-solve 不一致: form={form} != {sol.answer.correct}"
+    assert [s.op for s in sol.steps] == ["count_terms", "classify_type"]
+
+    sub_question = SubQuestionMR(
+        label="(1)", asked="choice", answer=sol.answer, steps=sol.steps,
+        concept_tags=_effective_concept_tags(ctx), cause_tags=_effective_cause_tags(ctx),
+    )
+    return MR(
+        signature=ctx.spec_level.signature, family=ctx.family, level=ctx.level,
+        purpose=ctx.purpose, seed=0,
+        params={"expr_str": expr_str, "form": form},
+        given={"statement": disp}, sub_questions=[sub_question], visual_plan=None,
+        provenance=Provenance(recipe="math.classify_monomial_or_polynomial"),
+    )
+
+
+@register_recipe("math.judge_like_terms", provides_concepts=["polynomial.like_terms_judge"])
+def judge_like_terms(ctx: CellContext, rng: Rng) -> MR:
+    """2つの項が同類項かを判別する（knowledge verify 型・g2_l2 Lv1）。"""
+    p = ctx.spec_level.params
+    coef_cands = [v for v in _domain_candidates(p["coeff_domain"]) if v != 0]
+    powers = [int(v) for v in cast("list[int]", p["power_domain"]["int_set"])]
+    var_pool = cast("list[str]", p["var_pool"])
+    same = int(draw({"int_set": [0, 1]}, rng)) == 1
+    var = str(draw(var_pool, rng))
+    power = int(draw({"int_set": powers}, rng))
+    c1 = int(draw({"int_set": coef_cands}, rng))
+    c2 = int(draw({"int_set": [v for v in coef_cands if v != c1]}, rng))
+
+    t1_disp = _fmt_monomial_factor(c1, {var: power})
+    t1_sym = f"({c1})*{var}**{power}"
+    if same:
+        var2, power2 = var, power
+    else:
+        var2 = str(draw(var_pool, rng))
+        if var2 == var:
+            power2 = int(draw({"int_set": [q for q in powers if q != power]}, rng))
+        else:
+            power2 = int(draw({"int_set": powers}, rng))
+    t2_disp = _fmt_monomial_factor(c2, {var2: power2})
+    t2_sym = f"({c2})*{var2}**{power2}"
+    statement = f"{t1_disp} と {t2_disp}"
+
+    solver = REGISTRY.solver("math.judge_like_terms")
+    sol = cast(Solution, solver(t1_sym, t2_sym))
+    assert isinstance(sol.answer, ChoiceAnswer)
+    expected = "同類項である" if same else "同類項ではない"
+    assert sol.answer.correct == expected, f"double-solve 不一致: same={same} != {sol.answer.correct}"
+
+    sub_question = SubQuestionMR(
+        label="(1)", asked="choice", answer=sol.answer, steps=sol.steps,
+        concept_tags=_effective_concept_tags(ctx), cause_tags=_effective_cause_tags(ctx),
+    )
+    return MR(
+        signature=ctx.spec_level.signature, family=ctx.family, level=ctx.level,
+        purpose=ctx.purpose, seed=0,
+        params={"term1": t1_sym, "term2": t2_sym, "same": same},
+        given={"statement": statement}, sub_questions=[sub_question], visual_plan=None,
+        provenance=Provenance(recipe="math.judge_like_terms"),
+    )
+
+
+_SYSTEM_TERM_DESC = {
+    "two_var_eq": "x, y の2つの文字をふくむ1次方程式 {ex}",
+    "simultaneous": "2つの2元1次方程式を1つの組にした {ex}",
+    "solution": "連立方程式 {ex} を、どちらも成り立たせる x, y の値の組",
+}
+
+
+def _fmt_two_var_eq(a: int, b: int, c: int) -> str:
+    return f"{_fmt_term(a, 'x', is_first=True)} {_fmt_term(b, 'y', is_first=False)} = {c}"
+
+
+@register_recipe("math.system_term_recall", provides_concepts=["polynomial.system_term_recall"])
+def system_term_recall(ctx: CellContext, rng: Rng) -> MR:
+    """連立方程式まわりの用語の名称を答える（knowledge・g2_l10 Lv1）。"""
+    p = ctx.spec_level.params
+    concept = str(draw(cast("list[str]", p["concept_set"]), rng))
+    coef_cands = [v for v in _domain_candidates(p["coeff_domain"]) if v != 0]
+
+    def _draw_eq() -> str:
+        a = int(draw({"int_set": coef_cands}, rng))
+        b = int(draw({"int_set": coef_cands}, rng))
+        c = int(draw(p["const_domain"], rng))
+        return _fmt_two_var_eq(a, b, c)
+
+    if concept == "two_var_eq":
+        ex = _draw_eq()
+    else:
+        ex = f"{_draw_eq()}, {_draw_eq()}"
+    statement = _SYSTEM_TERM_DESC[concept].format(ex=ex)
+
+    solver = REGISTRY.solver("math.system_term_definition")
+    sol = cast(Solution, solver(concept))
+    assert isinstance(sol.answer, ChoiceAnswer)
+    assert [s.op for s in sol.steps] == ["identify_description", "name_concept"]
+
+    sub_question = SubQuestionMR(
+        label="(1)", asked="choice", answer=sol.answer, steps=sol.steps,
+        concept_tags=_effective_concept_tags(ctx), cause_tags=_effective_cause_tags(ctx),
+    )
+    return MR(
+        signature=ctx.spec_level.signature, family=ctx.family, level=ctx.level,
+        purpose=ctx.purpose, seed=0,
+        params={"concept": concept, "example": ex},
+        given={"statement": statement}, sub_questions=[sub_question], visual_plan=None,
+        provenance=Provenance(recipe="math.system_term_recall"),
+    )
+
+
 __all__ = [
     "combine_like_terms",
     "add_or_subtract_polynomials",
@@ -1016,4 +1211,8 @@ __all__ = [
     "solve_for_variable",
     "express_number_property",
     "combine_digit_number",
+    "poly_term_recall",
+    "classify_monomial_or_polynomial",
+    "judge_like_terms",
+    "system_term_recall",
 ]

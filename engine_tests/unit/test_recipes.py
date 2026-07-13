@@ -1994,3 +1994,79 @@ def test_combine_digit_number_double_solve_property(seed):
     assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
     assert sol.answer.srepr == sympy.srepr(sympy.expand(sympy.sympify(mr.params["expr_str"])))
     assert sympy.sympify(sol.answer.srepr).free_symbols
+
+
+# ---------------------------------------------------------------------------
+# C2 knowledge（用語想起・判別・ChoiceAnswer）— g2_l1/g2_l2/g2_l10
+# ---------------------------------------------------------------------------
+def test_poly_term_recall_lv1_construct():
+    ctx = _make_ctx("math.g2_l1.knowledge", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "poly_term_recall"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "choice"
+    assert sq.answer.kind == "choice"
+    assert [s.op for s in sq.steps] == ["identify_description", "name_concept"]
+
+
+def test_poly_classify_lv2_construct():
+    ctx = _make_ctx("math.g2_l1.knowledge", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "classify_monomial_or_polynomial"
+    assert [s.op for s in mr.sub_questions[0].steps] == ["count_terms", "classify_type"]
+
+
+@pytest.mark.parametrize("seed", range(80))
+def test_poly_term_recall_double_solve_property(seed):
+    ctx = _make_ctx("math.g2_l1.knowledge", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    sol = REGISTRY.solver("math.poly_term_definition")(mr.params["concept"])
+    assert sol.answer.correct == mr.sub_questions[0].answer.correct
+    assert sol.answer.fact_id == mr.sub_questions[0].answer.fact_id
+
+
+@pytest.mark.parametrize("seed", range(80))
+def test_poly_classify_double_solve_property(seed):
+    ctx = _make_ctx("math.g2_l1.knowledge", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    sol = REGISTRY.solver("math.classify_monomial_or_polynomial")(mr.params["expr_str"])
+    assert sol.answer.correct == mr.sub_questions[0].answer.correct
+
+
+def test_like_terms_judge_lv1_construct():
+    ctx = _make_ctx("math.g2_l2.knowledge", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "like_terms_judge"
+    assert [s.op for s in mr.sub_questions[0].steps] == ["compare_variable_parts", "judge_like_terms"]
+
+
+@pytest.mark.parametrize("seed", range(80))
+def test_like_terms_judge_double_solve_property(seed):
+    ctx = _make_ctx("math.g2_l2.knowledge", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    sol = REGISTRY.solver("math.judge_like_terms")(mr.params["term1"], mr.params["term2"])
+    assert sol.answer.correct == mr.sub_questions[0].answer.correct
+
+
+def test_system_term_recall_lv1_construct():
+    ctx = _make_ctx("math.g2_l10.knowledge", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "system_term_recall"
+    assert [s.op for s in mr.sub_questions[0].steps] == ["identify_description", "name_concept"]
+
+
+@pytest.mark.parametrize("seed", range(80))
+def test_system_term_recall_double_solve_property(seed):
+    ctx = _make_ctx("math.g2_l10.knowledge", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    sol = REGISTRY.solver("math.system_term_definition")(mr.params["concept"])
+    assert sol.answer.correct == mr.sub_questions[0].answer.correct
+    assert sol.answer.fact_id == mr.sub_questions[0].answer.fact_id

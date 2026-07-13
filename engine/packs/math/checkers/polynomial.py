@@ -93,6 +93,31 @@ def double_solve_combine_digit_number(mr: MR) -> Solution:
     return cast(Solution, solver(p["expr_str"], p["operation"]))
 
 
+@register_checker("math.poly_term_recall.double_solve")
+def double_solve_poly_term_recall(mr: MR) -> Solution:
+    solver = REGISTRY.solver("math.poly_term_definition")
+    return cast(Solution, solver(mr.params["concept"]))
+
+
+@register_checker("math.classify_monomial_or_polynomial.double_solve")
+def double_solve_classify_monomial_or_polynomial(mr: MR) -> Solution:
+    solver = REGISTRY.solver("math.classify_monomial_or_polynomial")
+    return cast(Solution, solver(mr.params["expr_str"]))
+
+
+@register_checker("math.judge_like_terms.double_solve")
+def double_solve_judge_like_terms(mr: MR) -> Solution:
+    p = mr.params
+    solver = REGISTRY.solver("math.judge_like_terms")
+    return cast(Solution, solver(p["term1"], p["term2"]))
+
+
+@register_checker("math.system_term_recall.double_solve")
+def double_solve_system_term_recall(mr: MR) -> Solution:
+    solver = REGISTRY.solver("math.system_term_definition")
+    return cast(Solution, solver(mr.params["concept"]))
+
+
 __all__ = [
     "double_solve_combine_like_terms",
     "double_solve_add_or_subtract_polynomials",
@@ -103,4 +128,8 @@ __all__ = [
     "double_solve_solve_for_variable",
     "double_solve_express_number_property",
     "double_solve_combine_digit_number",
+    "double_solve_poly_term_recall",
+    "double_solve_classify_monomial_or_polynomial",
+    "double_solve_judge_like_terms",
+    "double_solve_system_term_recall",
 ]

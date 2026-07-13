@@ -13,7 +13,7 @@ import re
 
 import sympy
 
-from engine.core.contracts import Solution, Step, SymbolicAnswer
+from engine.core.contracts import ChoiceAnswer, Solution, Step, SymbolicAnswer
 from engine.core.registry import register_solver
 
 # 任意桁の指数を上付き数字へ（単項式の乗除は 4 次以上も生じうる）。
@@ -426,6 +426,152 @@ def combine_digit_number(expr_str: str, operation: object) -> Solution:
     return Solution(answer=answer, steps=steps)
 
 
+# ---------------------------------------------------------------------------
+# knowledge 系（ChoiceAnswer・用語想起／判別）— C2 の残 knowledge セル。
+# 答えはテキスト（数値トークンなし）＝G-Q5t 素通り（§7.7）。fact_id は根拠規則の識別子。
+# ---------------------------------------------------------------------------
+_POLY_TERM_NAMES = {
+    "monomial": "単項式",
+    "polynomial": "多項式",
+    "coefficient": "係数",
+    "degree": "次数",
+}
+
+
+@register_solver("math.poly_term_definition")
+def poly_term_definition(concept: object) -> Solution:
+    """多項式まわりの用語（単項式・多項式・係数・次数）の名称を答える（knowledge・g2_l1 Lv1）。
+
+    concept（説明されている対象）だけから名称を判定する（具体例の値は無関係・double-solve）。
+    答えは ChoiceAnswer（concept で correct が変わる用語想起型）。op 列は判別 Lv2 と相異＝level_sep。
+    """
+    c = str(concept)
+    if c not in _POLY_TERM_NAMES:
+        raise ValueError(f"未知の concept: {c!r}")
+    correct = _POLY_TERM_NAMES[c]
+    distractors = [v for k, v in _POLY_TERM_NAMES.items() if k != c]
+    steps = [
+        Step(
+            op="identify_description",
+            args=[],
+            result_srepr=c,
+            result_display="説明されている対象を読み取る",
+            narration="説明されている式や数の部分がどれかを読み取る。",
+        ),
+        Step(
+            op="name_concept",
+            args=[],
+            result_srepr=correct,
+            result_display=correct,
+            narration="その対象を表す用語の名前を思い出す。",
+        ),
+    ]
+    answer = ChoiceAnswer(correct=correct, distractors=distractors, fact_id=f"poly.term.{c}")
+    return Solution(answer=answer, steps=steps)
+
+
+@register_solver("math.classify_monomial_or_polynomial")
+def classify_monomial_or_polynomial(expr_str: str) -> Solution:
+    """式が単項式か多項式かを判別する（knowledge・g2_l1 Lv2）。
+
+    与式の文字列だけから項の個数で判定する（single term＝単項式／和＝多項式・double-solve）。
+    答えは式で変わる verify 型の ChoiceAnswer。op 列は用語想起 Lv1 と相異＝level_sep。
+    """
+    expr = sympy.expand(sympy.sympify(expr_str))
+    is_poly = bool(expr.is_Add)
+    correct = "多項式" if is_poly else "単項式"
+    other = "単項式" if is_poly else "多項式"
+    steps = [
+        Step(
+            op="count_terms",
+            args=[],
+            result_srepr=sympy.srepr(expr),
+            result_display="式がいくつの項からできているかを見る",
+            narration="式が、単独の項か、いくつかの項の和かを見分ける。",
+        ),
+        Step(
+            op="classify_type",
+            args=[],
+            result_srepr=correct,
+            result_display=correct,
+            narration="単独の項なら単項式、いくつかの項の和なら多項式である。",
+        ),
+    ]
+    answer = ChoiceAnswer(correct=correct, distractors=[other], fact_id="poly.classify_type")
+    return Solution(answer=answer, steps=steps)
+
+
+@register_solver("math.judge_like_terms")
+def judge_like_terms(term1: str, term2: str) -> Solution:
+    """2つの項が同類項か（文字の部分が一致するか）を判別する（knowledge・g2_l2 Lv1）。
+
+    2つの項の文字部分（係数を除いた部分）だけを比べて判定する（係数の値は無関係・double-solve）。
+    答えは項の組で変わる verify 型の ChoiceAnswer。
+    """
+    v1 = sympy.sympify(term1).as_coeff_Mul()[1]
+    v2 = sympy.sympify(term2).as_coeff_Mul()[1]
+    same = bool(v1 == v2)
+    correct = "同類項である" if same else "同類項ではない"
+    other = "同類項ではない" if same else "同類項である"
+    steps = [
+        Step(
+            op="compare_variable_parts",
+            args=[],
+            result_srepr=sympy.srepr(v1),
+            result_display="2つの項の文字の部分を比べる",
+            narration="2つの項の、文字の部分（文字と指数）が同じかどうかを比べる。",
+        ),
+        Step(
+            op="judge_like_terms",
+            args=[],
+            result_srepr=correct,
+            result_display=correct,
+            narration="文字の部分が同じなら同類項、ちがえば同類項ではない。",
+        ),
+    ]
+    answer = ChoiceAnswer(correct=correct, distractors=[other], fact_id="poly.like_terms")
+    return Solution(answer=answer, steps=steps)
+
+
+_SYSTEM_TERM_NAMES = {
+    "two_var_eq": "2元1次方程式",
+    "simultaneous": "連立方程式",
+    "solution": "連立方程式の解",
+}
+
+
+@register_solver("math.system_term_definition")
+def system_term_definition(concept: object) -> Solution:
+    """連立方程式まわりの用語の名称を答える（knowledge・g2_l10 Lv1）。
+
+    concept だけから名称を判定する（具体例の値は無関係・double-solve）。答えは ChoiceAnswer
+    （concept で correct が変わる用語想起型）。op 列は既存 Lv2（解の判定 verify）と相異＝level_sep。
+    """
+    c = str(concept)
+    if c not in _SYSTEM_TERM_NAMES:
+        raise ValueError(f"未知の concept: {c!r}")
+    correct = _SYSTEM_TERM_NAMES[c]
+    distractors = [v for k, v in _SYSTEM_TERM_NAMES.items() if k != c]
+    steps = [
+        Step(
+            op="identify_description",
+            args=[],
+            result_srepr=c,
+            result_display="説明されている対象を読み取る",
+            narration="説明されている方程式や値の組がどれかを読み取る。",
+        ),
+        Step(
+            op="name_concept",
+            args=[],
+            result_srepr=correct,
+            result_display=correct,
+            narration="その対象を表す用語の名前を思い出す。",
+        ),
+    ]
+    answer = ChoiceAnswer(correct=correct, distractors=distractors, fact_id=f"system.term.{c}")
+    return Solution(answer=answer, steps=steps)
+
+
 __all__ = [
     "simplify_polynomial",
     "add_or_subtract_polynomials",
@@ -436,4 +582,8 @@ __all__ = [
     "solve_for_variable",
     "express_number_property",
     "combine_digit_number",
+    "poly_term_definition",
+    "classify_monomial_or_polynomial",
+    "judge_like_terms",
+    "system_term_definition",
 ]

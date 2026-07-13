@@ -173,3 +173,15 @@ concepts:
   - id: polynomial.two_digit_number_property
     label: "2けたの自然数と位を入れかえた数の和・差を整理する"
     unit: g2_l8
+  - id: polynomial.term_recall
+    label: "単項式・多項式・係数・次数の用語を想起する"
+    unit: g2_l1
+  - id: polynomial.classify_type
+    label: "式が単項式か多項式かを判別する"
+    unit: g2_l1
+  - id: polynomial.like_terms_judge
+    label: "2つの項が同類項かどうかを判別する"
+    unit: g2_l2
+  - id: polynomial.system_term_recall
+    label: "2元1次方程式・連立方程式・その解の用語を想起する"
+    unit: g2_l10

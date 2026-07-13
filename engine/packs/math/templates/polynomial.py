@@ -34,6 +34,14 @@ LF_NUMBER_PROPERTY_V1 = "{{ given.expressions }} の和を計算し、1つの式
 # g2_l8.calculation Lv1: 2けたの自然数と位を入れかえた数の和・差を整理する
 LF_DIGIT_NUMBER_V1 = "{{ given.expressions }} を計算し、式を簡単にせよ。"
 
+# g2_l1.knowledge Lv1: 多項式まわりの用語想起／ g2_l10.knowledge Lv1: 連立の用語想起
+LF_POLY_TERM_RECALL_V1 = "{{ given.statement }} を何といいますか。"
+LF_SYSTEM_TERM_RECALL_V1 = "{{ given.statement }} を何といいますか。"
+# g2_l1.knowledge Lv2: 単項式か多項式かの判別
+LF_POLY_CLASSIFY_V1 = "次の式 {{ given.statement }} は、単項式と多項式のどちらですか。"
+# g2_l2.knowledge Lv1: 同類項かどうかの判別
+LF_LIKE_TERMS_V1 = "2つの項 {{ given.statement }} は、同類項ですか、同類項ではありませんか。"
+
 
 def _register_all() -> None:
     REGISTRY.register_template("lf_combine_like_terms_v1", LF_COMBINE_LIKE_TERMS_V1)
@@ -44,6 +52,10 @@ def _register_all() -> None:
     REGISTRY.register_template("lf_solve_for_variable_v1", LF_SOLVE_FOR_VARIABLE_V1)
     REGISTRY.register_template("lf_number_property_v1", LF_NUMBER_PROPERTY_V1)
     REGISTRY.register_template("lf_digit_number_v1", LF_DIGIT_NUMBER_V1)
+    REGISTRY.register_template("lf_poly_term_recall_v1", LF_POLY_TERM_RECALL_V1)
+    REGISTRY.register_template("lf_system_term_recall_v1", LF_SYSTEM_TERM_RECALL_V1)
+    REGISTRY.register_template("lf_poly_classify_v1", LF_POLY_CLASSIFY_V1)
+    REGISTRY.register_template("lf_like_terms_v1", LF_LIKE_TERMS_V1)
 
 
 _register_all()
@@ -56,4 +68,8 @@ __all__ = [
     "LF_SOLVE_FOR_VARIABLE_V1",
     "LF_NUMBER_PROPERTY_V1",
     "LF_DIGIT_NUMBER_V1",
+    "LF_POLY_TERM_RECALL_V1",
+    "LF_SYSTEM_TERM_RECALL_V1",
+    "LF_POLY_CLASSIFY_V1",
+    "LF_LIKE_TERMS_V1",
 ]

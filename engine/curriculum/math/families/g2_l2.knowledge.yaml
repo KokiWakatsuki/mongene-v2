@@ -1,0 +1,28 @@
+family: math.g2_l2.knowledge
+form: knowledge
+source_desc: |
+  同類項の判別（同類項の定義を想起し具体例で判別する）
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: 同類項の定義を想起し具体例で判別する。
+       example: 3x と 5x は同類項かどうかを判別する。
+  2つの項の文字の部分（文字と指数）が一致するかで同類項かを判別する verify 型
+  （項の組で答えが変わる）。答えはテキストの ChoiceAnswer＝G-Q5t 素通り（§7.7）。
+  #16 の knowledge capability を再利用。単一レベルのため level_sep は signature 相異のみ。
+concepts_default: [polynomial.like_terms_judge]
+levels:
+  "1":
+    signature: like_terms_judge
+    recipe: math.judge_like_terms
+    params:
+      coeff_domain: {int_range: [-9, 9]}
+      var_pool: [x, y, a, b, m]
+      power_domain: {int_set: [1, 2, 3]}
+    given: [statement]
+    asked: [choice]
+    visual: none
+    text: {tier: T1, template: lf_like_terms_v1}
+    hints: [steps_prefix]
+    concept_tags: [polynomial.like_terms_judge]
+    cause_tags: []
+remedial:
+  default_level: 1

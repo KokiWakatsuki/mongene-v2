@@ -1,0 +1,54 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - polynomial.classify_type
+  provenance:
+    git_commit: ''
+    recipe: math.classify_monomial_or_polynomial
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_poly_classify_v1
+    tier: T1
+  requested:
+    form: knowledge
+    level: 2
+    subject: math
+    unit: g2_l1
+  resolved:
+    form: knowledge
+    level: 2
+    subject: math
+    unit: g2_l1
+  seed: 3
+  signature: classify_monomial_or_polynomial
+problem_ref: a19916e764750757
+problem_text: 次の式 7b + 8 は、単項式と多項式のどちらですか。
+sub_questions:
+- answer:
+    correct: 多項式
+    distractors:
+    - 単項式
+    fact_id: poly.classify_type
+    kind: choice
+  cause_tags: []
+  concept_tags:
+  - polynomial.classify_type
+  explanation: まず、式が、単独の項か、いくつかの項の和かを見分ける。 式がいくつの項からできているかを見る次に、単独の項なら単項式、いくつかの項の和なら多項式である。 多項式
+  hints:
+  - 式が、単独の項か、いくつかの項の和かを見分ける。
+  label: (1)
+  prompt_text: choice を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 式が、単独の項か、いくつかの項の和かを見分ける。
+    op: count_terms
+    result_display: 式がいくつの項からできているかを見る
+    result_srepr: Add(Mul(Integer(7), Symbol('b')), Integer(8))
+  - args: []
+    narration: 単独の項なら単項式、いくつかの項の和なら多項式である。
+    op: classify_type
+    result_display: 多項式
+    result_srepr: 多項式
+visual_svg: null

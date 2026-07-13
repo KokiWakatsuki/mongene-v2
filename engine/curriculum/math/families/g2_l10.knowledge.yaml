@@ -2,15 +2,36 @@ family: math.g2_l10.knowledge
 form: knowledge
 source_desc: |
   2元1次方程式と連立方程式の意味（units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: 2元1次方程式・連立方程式・その解の定義を想起する。
+       example: 2元1次方程式・連立方程式・連立方程式の解とは何かを答える。
   Lv2 desc: 与えられた組が解かどうかを判別・意味を適用する。
        example: 連立方程式 { x + y = 5, 2x − y = 1 } について、x=2, y=3 の組はこの連立方程式の
                 解といえるか、理由とともに答えよ。
+  【Lv1 設計モデル・要検収(Q4)】「説明された対象の名称を答える」単一選択に realize（concept で
+  答えが変わる用語想起型・具体例の方程式/連立を surface として dup 分散）。Lv1(op=identify_
+  description/name_concept)と Lv2(op=代入検証系)は op 列が異なり level_sep を満たす。答えはテキストの
+  ChoiceAnswer＝G-Q5t 素通り（§7.7）。
   【設計モデル・要検収(Q4)】「与えられた組が解か」を単一選択（解である/解でない）で realize。
   両式に代入して両方成り立てば解＝Q1 は代入検証で実質 V1（決定論恒真）。無限性(F-3)は 係数・解・
   候補・真偽ビット のパラメータ化で満たす。#16 で開通した knowledge capability（ChoiceAnswer 経路）を
   小規則 solver verify_system_solution で再利用（l10 の verify セルを開ける）。
 concepts_default: [simultaneous_equations.verify_solution]
 levels:
+  "1":
+    signature: system_term_recall
+    recipe: math.system_term_recall
+    params:
+      # concept（用語）×具体例（方程式/連立）で dup 分散。答えは concept で変わる用語想起型。
+      concept_set: [two_var_eq, simultaneous, solution]
+      coeff_domain: {int_range: [-6, 6]}
+      const_domain: {int_range: [-9, 9]}
+    given: [statement]
+    asked: [choice]
+    visual: none
+    text: {tier: T1, template: lf_system_term_recall_v1}
+    hints: [steps_prefix]
+    concept_tags: [polynomial.system_term_recall]
+    cause_tags: []
   "2":
     signature: knowledge_verify_solution
     recipe: math.knowledge_verify_solution
