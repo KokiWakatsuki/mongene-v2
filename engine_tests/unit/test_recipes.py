@@ -3037,6 +3037,11 @@ _TERM_RECALL_CELLS = [
     ("math.g1_l9.knowledge", 1),
     ("math.g1_l11.knowledge", 1),
     ("math.g1_l60.knowledge", 1),
+    # C3 g3 用語想起
+    ("math.g3_l14.knowledge", 1),
+    ("math.g3_l16.knowledge", 1),
+    ("math.g3_l22.knowledge", 1),
+    ("math.g3_l24.knowledge", 1),
 ]
 
 
@@ -3232,6 +3237,10 @@ _RULE_RECALL_CELLS = [
     ("math.g1_l8.knowledge", 1),
     ("math.g1_l13.knowledge", 1),
     ("math.g1_l14.knowledge", 1),
+    # C3 g3 規則・意味の想起
+    ("math.g3_l2.knowledge", 1),
+    ("math.g3_l7.knowledge", 1),
+    ("math.g3_l15.knowledge", 1),
 ]
 
 

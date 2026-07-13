@@ -192,6 +192,28 @@ concepts:
   - id: quadratic.solve_by_choice
     label: "式を整理し適切な解法を選んで2次方程式を解く"
     unit: g3_l28
+  # C3 g3 knowledge（用語想起・規則想起）
+  - id: expansion_meaning.rule_recall
+    label: "展開が積の形を和の形に直す操作であることを想起する"
+    unit: g3_l2
+  - id: factorization_relation.rule_recall
+    label: "因数分解が展開の逆の操作であることを想起する"
+    unit: g3_l7
+  - id: square_root.term_recall
+    label: "平方根・根号の用語を想起する"
+    unit: g3_l14
+  - id: sqrt_magnitude.rule_recall
+    label: "正の数の平方根の大小と中の数の大小が一致することを想起する"
+    unit: g3_l15
+  - id: real_numbers.term_recall
+    label: "有理数・無理数・循環小数の用語を想起する"
+    unit: g3_l16
+  - id: approximation.term_recall_g3
+    label: "近似値・有効数字の用語を想起する（g3 平方根の利用）"
+    unit: g3_l22
+  - id: quadratic_terms.term_recall
+    label: "2次方程式・その解の用語を想起する"
+    unit: g3_l24
   - id: polynomial.combine_like_terms_basic
     label: "同類項をまとめて式を簡単にする（1種の文字）"
     unit: g2_l2

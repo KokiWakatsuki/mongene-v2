@@ -1,0 +1,56 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - factorization_relation.rule_recall
+  provenance:
+    git_commit: ''
+    recipe: math.recall_rule
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_rule_recall_v1
+    tier: T1
+  requested:
+    form: knowledge
+    level: 1
+    subject: math
+    unit: g3_l7
+  resolved:
+    form: knowledge
+    level: 1
+    subject: math
+    unit: g3_l7
+  seed: 1
+  signature: factorization_relation_rule_recall
+problem_ref: c3953e6a5da981a2
+problem_text: 多項式 x² + 17x + 36 を扱うときの「因数分解」は、どのような操作か。正しく述べているものを1つ選びなさい。
+sub_questions:
+- answer:
+    correct: 多項式を因数の積の形に表すことで、展開のちょうど逆にあたる操作
+    distractors:
+    - 多項式のかっこをはずして和の形にする、展開と同じ操作
+    - 分数の分母と分子に同じ数をかけて、大きさを変えずに表す操作
+    - 式に数を代入して、その式の値を求める操作
+    fact_id: factorization_relation.rule.relation
+    kind: choice
+  cause_tags: []
+  concept_tags:
+  - factorization_relation.rule_recall
+  explanation: まず、問題で問われている規則や約束が、何についてのものかを読み取る。 問われている規則が何についてかを読み取る次に、その規則の正しい内容を思い出して選ぶ。 多項式を因数の積の形に表すことで、展開のちょうど逆にあたる操作
+  hints:
+  - 問題で問われている規則や約束が、何についてのものかを読み取る。
+  label: (1)
+  prompt_text: choice を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 問題で問われている規則や約束が、何についてのものかを読み取る。
+    op: read_rule_context
+    result_display: 問われている規則が何についてかを読み取る
+    result_srepr: relation
+  - args: []
+    narration: その規則の正しい内容を思い出して選ぶ。
+    op: recall_correct_rule
+    result_display: 多項式を因数の積の形に表すことで、展開のちょうど逆にあたる操作
+    result_srepr: 多項式を因数の積の形に表すことで、展開のちょうど逆にあたる操作
+visual_svg: null

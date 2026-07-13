@@ -1,0 +1,26 @@
+family: math.g3_l24.knowledge
+form: knowledge
+source_desc: |
+  2次方程式の意味とその解（units.generated.yaml の desc/example を正）。
+  Lv1 desc: 2次方程式・その解の意味の想起。 example: 2次方程式とは何か、解とは何かを説明せよ。
+  【設計モデル】用語想起（term_recall_definition・domain=quadratic_terms・二次方程式/解）。
+  具体例の x²+bx+c=0 を surface に埋め込み dup 分散。答えは漢数字「二次方程式」で digit-free。
+  Lv2（値が解かの判定）は verify 型で別ソルバが要るため本バッチでは Lv1（用語想起）のみ実装。
+concepts_default: [quadratic_terms.term_recall]
+levels:
+  "1":
+    signature: quadratic_terms_term_recall
+    recipe: math.term_recall
+    params:
+      domain: quadratic_terms
+      concept_set: [quadratic_equation, solution]
+      number_domain: {int_range: [-9, 9]}
+    given: [statement]
+    asked: [choice]
+    visual: none
+    text: {tier: T1, template: lf_term_recall_v1}
+    hints: [steps_prefix]
+    concept_tags: [quadratic_terms.term_recall]
+    cause_tags: []
+remedial:
+  default_level: 1

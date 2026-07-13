@@ -1,0 +1,25 @@
+family: math.g3_l2.knowledge
+form: knowledge
+source_desc: |
+  多項式どうしの乗法（展開の基本）の knowledge（units.generated.yaml の desc/example を正）。
+  Lv1 desc: 展開＝積の形を和の形に直すことの想起。 example: 「式を展開する」とはどのような操作か説明せよ。
+  【設計モデル】規則想起（汎用ソルバ recall_rule_statement・topic=expansion_meaning）。正しい記述を
+  4択から選ぶ。具体例の積 (x+a)(x+b) を surface に埋め込み dup 分散。答えテキストは digit-free。
+concepts_default: [expansion_meaning.rule_recall]
+levels:
+  "1":
+    signature: expansion_meaning_rule_recall
+    recipe: math.recall_rule
+    params:
+      topic: expansion_meaning
+      concept_set: [definition]
+      number_domain: {int_range: [-9, 9]}
+    given: [statement]
+    asked: [choice]
+    visual: none
+    text: {tier: T1, template: lf_rule_recall_v1}
+    hints: [steps_prefix]
+    concept_tags: [expansion_meaning.rule_recall]
+    cause_tags: []
+remedial:
+  default_level: 1

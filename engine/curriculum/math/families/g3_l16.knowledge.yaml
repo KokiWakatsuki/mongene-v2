@@ -1,0 +1,26 @@
+family: math.g3_l16.knowledge
+form: knowledge
+source_desc: |
+  有理数と無理数、循環小数（units.generated.yaml の desc/example を正）。
+  Lv1 desc: 有理数・無理数・循環小数の意味の想起。 example: 有理数・無理数・循環小数とは何かを説明せよ。
+  【設計モデル】用語想起（term_recall_definition・domain=real_numbers・有理数/無理数/循環小数）。
+  具体例（分数・平方数でない数）を説明文に埋め込み surface 分散。答えは漢字 ChoiceAnswer で digit-free。
+  Lv2（有理数/無理数の分類）は classify 型で別ソルバが要るため本バッチでは Lv1（用語想起）のみ実装。
+concepts_default: [real_numbers.term_recall]
+levels:
+  "1":
+    signature: real_numbers_term_recall
+    recipe: math.term_recall
+    params:
+      domain: real_numbers
+      concept_set: [rational, irrational, repeating_decimal]
+      number_domain: {int_range: [2, 99]}
+    given: [statement]
+    asked: [choice]
+    visual: none
+    text: {tier: T1, template: lf_term_recall_v1}
+    hints: [steps_prefix]
+    concept_tags: [real_numbers.term_recall]
+    cause_tags: []
+remedial:
+  default_level: 1

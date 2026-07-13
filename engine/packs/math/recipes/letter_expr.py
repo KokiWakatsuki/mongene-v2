@@ -415,6 +415,11 @@ _TERM_RECALL_CONCEPTS = [
     "laws.term_recall",
     "prime_concepts.term_recall",
     "approximation.term_recall",
+    # C3 g3 knowledge（用語想起）
+    "square_root.term_recall",
+    "real_numbers.term_recall",
+    "quadratic_terms.term_recall",
+    "approximation.term_recall_g3",
 ]
 
 
@@ -493,6 +498,35 @@ def _draw_term_statement(domain: str, concept: str, rng: Rng, p: dict[str, objec
         if concept == "error":
             return f"測定で {n} cm を得たときのように、近似値から真の値をひいた差（真の値とのちがい）"
         return f"近似値 {n} cm のうち、測定して意味があると考えられる位の数字"  # significant_figures
+
+    if domain == "square_root":
+        # g3_l14 平方根の用語。具体例の正の数 n を埋め込み surface を分散する。
+        n = int(draw(p["number_domain"], rng))
+        if concept == "square_root":
+            return f"2乗すると {n * n} になる数のように、2乗するとその数になるもとの数（正と負の2つがある）"
+        return f"√{n} の √ のように、平方根を表すために使う記号"  # radical_sign
+
+    if domain == "real_numbers":
+        # g3_l16 実数の分類。具体例（分数・平方数でない数）を埋め込み surface を分散する。
+        n = int(draw(p["number_domain"], rng))
+        if concept == "rational":
+            b = int(draw(p["number_domain"], rng))
+            return f"{n}/{b + 1} のように、整数を使った分数の形で表すことができる数"
+        if concept == "irrational":
+            nsq = n * n + 1  # 平方数でない数を確実に作る
+            return f"√{nsq} や π のように、分数の形で表すことができない数"
+        return f"0.{n}{n}{n}… のように、小数点以下で同じ数字の並びがくり返し続く小数"  # repeating_decimal
+
+    if domain == "quadratic_terms":
+        # g3_l24 2次方程式の用語。具体例の x²+bx+c=0 を埋め込み surface を分散する。
+        b = int(draw(p["number_domain"], rng))
+        c = int(draw(p["number_domain"], rng))
+        sign_b = f"+ {b}" if b >= 0 else f"- {-b}"
+        sign_c = f"+ {c}" if c >= 0 else f"- {-c}"
+        eqx = f"x² {sign_b}x {sign_c} = 0"
+        if concept == "quadratic_equation":
+            return f"移項して整理すると {eqx} のように、x の2乗をふくむ形になる方程式"
+        return f"方程式 {eqx} を成り立たせる x の値"  # solution
 
     if domain == "prime_concepts":
         # g1_l11 素数まわりの用語。相異なる2つの具体例を埋め込み surface を分散する
@@ -790,6 +824,10 @@ _RULE_RECALL_CONCEPTS = [
     "notation_product_rule.rule_recall",
     "notation_quotient_rule.rule_recall",
     "transposition.rule_recall",
+    # C3 g3 knowledge（規則・意味の想起）
+    "expansion_meaning.rule_recall",
+    "factorization_relation.rule_recall",
+    "sqrt_magnitude.rule_recall",
 ]
 
 
@@ -887,6 +925,30 @@ def _draw_rule_statement(topic: str, concept: str, rng: Rng, p: dict[str, object
         if concept == "definition":
             return f"方程式 {ex} を解くときに使う「移項」とは、どのような操作か"
         return f"方程式 {ex} で、ある項を反対の辺に移すと符号が変わるのはなぜか"  # sign_reason
+
+    if topic == "expansion_meaning":
+        # g3_l2 展開の意味。具体例の積 (x+a)(x+b) を surface として埋め込み dup 分散。
+        a = int(draw(p["number_domain"], rng))
+        b = int(draw(p["number_domain"], rng))
+        sa = f"+ {a}" if a >= 0 else f"- {-a}"
+        sb = f"+ {b}" if b >= 0 else f"- {-b}"
+        return f"(x {sa})(x {sb}) のような積の形の式を計算するときの「展開」とは、どのような操作か"
+
+    if topic == "factorization_relation":
+        # g3_l7 因数分解と展開の関係。具体例の多項式 x²+ax+b を surface として埋め込み dup 分散
+        # （2数を直接係数・定数に使い、distinct な組を多く確保する）。
+        a = int(draw(p["number_domain"], rng))
+        b = int(draw(p["number_domain"], rng))
+        return f"多項式 x² + {a}x + {b} を扱うときの「因数分解」は、どのような操作か"
+
+    if topic == "sqrt_magnitude":
+        # g3_l15 平方根の大小。相異なる2つの正の数を surface として埋め込み dup 分散。
+        a = int(draw(p["number_domain"], rng))
+        b = int(draw(p["number_domain"], rng))
+        while b == a:
+            b = int(draw(p["number_domain"], rng))
+        return f"√{a} と √{b} のような、正の数の平方根の大小について成り立つこと"
+
     raise ValueError(f"未知の topic: {topic!r}")
 
 

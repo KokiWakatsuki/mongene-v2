@@ -1,0 +1,55 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - real_numbers.term_recall
+  provenance:
+    git_commit: ''
+    recipe: math.term_recall
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_term_recall_v1
+    tier: T1
+  requested:
+    form: knowledge
+    level: 1
+    subject: math
+    unit: g3_l16
+  resolved:
+    form: knowledge
+    level: 1
+    subject: math
+    unit: g3_l16
+  seed: 2
+  signature: real_numbers_term_recall
+problem_ref: a73aaae1f2179ade
+problem_text: 0.717171… のように、小数点以下で同じ数字の並びがくり返し続く小数 を何といいますか。
+sub_questions:
+- answer:
+    correct: 循環小数
+    distractors:
+    - 有理数
+    - 無理数
+    fact_id: real_numbers.term.repeating_decimal
+    kind: choice
+  cause_tags: []
+  concept_tags:
+  - real_numbers.term_recall
+  explanation: まず、説明されている式や数の部分がどれかを読み取る。 説明されている対象を読み取る次に、その対象を表す用語の名前を思い出す。 循環小数
+  hints:
+  - 説明されている式や数の部分がどれかを読み取る。
+  label: (1)
+  prompt_text: choice を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 説明されている式や数の部分がどれかを読み取る。
+    op: identify_description
+    result_display: 説明されている対象を読み取る
+    result_srepr: repeating_decimal
+  - args: []
+    narration: その対象を表す用語の名前を思い出す。
+    op: name_concept
+    result_display: 循環小数
+    result_srepr: 循環小数
+visual_svg: null
