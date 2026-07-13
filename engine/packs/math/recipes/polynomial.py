@@ -1201,6 +1201,197 @@ def system_term_recall(ctx: CellContext, rng: Rng) -> MR:
     )
 
 
+# ---------------------------------------------------------------------------
+# 多項式の展開（C3 g3_l1〜l6.calculation）— 積・平方・分配の形を答え先に構成し expand で展開
+#
+# 1つの recipe が mode で構成を切り替える（compute_signed_arithmetic 同型）。given には
+# 展開前の「積の形」を display で出し、答えは展開後の多項式（自由変数を含む式＝G-Q5t は
+# display 全体一致のみ検査＝積の形と展開形は構造が違うので漏洩しない）。level_sep は
+# solver の mode 別 op 列で担保。dup は構成整数と文字種で分散する。
+# ---------------------------------------------------------------------------
+_EXPAND_CONCEPTS = [
+    "polynomial.expand_mono_poly",
+    "polynomial.expand_product",
+    "polynomial.expand_formula_sum_product",
+    "polynomial.expand_formula_square",
+    "polynomial.expand_formula_diff_squares",
+    "polynomial.expand_various",
+]
+
+_EXPAND_VARS = ["x", "a", "y", "m", "t"]
+_EXPAND_VAR_PAIRS = [("a", "b"), ("x", "y"), ("m", "n"), ("p", "q"), ("s", "t")]
+
+
+def _mono(c: int, var: str) -> str:
+    """単項式 c·var の表示（c≠0）。例: (1,"x")->"x" / (-1,"x")->"-x" / (3,"a")->"3a"。"""
+    if c == 1:
+        return var
+    if c == -1:
+        return f"-{var}"
+    return f"{c}{var}"
+
+
+def _const_tail(q: int) -> str:
+    """定数項を符号つきで後置（先頭以外）。例: 2->" + 2" / -5->" - 5"。q≠0。"""
+    return f" + {q}" if q > 0 else f" - {-q}"
+
+
+def _term_tail(coef: int, var: str) -> str:
+    """変数つきの項を符号つきで後置（先頭以外）。例: (4,"t")->" + 4t" / (-1,"t")->" - t"。coef≠0。"""
+    mag = abs(coef)
+    body = var if mag == 1 else f"{mag}{var}"
+    return f" + {body}" if coef > 0 else f" - {body}"
+
+
+def _lin_factor(p: int, q: int, var: str) -> str:
+    """1次式の因数 (p·var + q) の表示（p≥1, q≠0）。例: (2,-3,"x")->"(2x - 3)"。"""
+    return f"({_mono(p, var)}{_const_tail(q)})"
+
+
+def _expand_construct(mode: str, rng: Rng, p: dict[str, Any]) -> tuple[str, str]:
+    """mode ごとに (expr_str[sympy用], given_display[表示用]) を構成する。"""
+    if mode == "distribute_mono":
+        var = str(draw(_EXPAND_VARS, rng))
+        c = int(draw({"int_set": [n for n in range(-6, 7) if abs(n) >= 2]}, rng))
+        a = int(draw({"int_set": list(range(1, 6))}, rng))
+        b = int(draw({"int_set": [n for n in range(-9, 10) if n != 0]}, rng))
+        expr = f"({c})*{var}*(({a})*{var}+({b}))"
+        disp = f"{_mono(c, var)}({_mono(a, var)}{_const_tail(b)})"
+        return expr, disp
+
+    if mode == "distribute_mono_combine":
+        var = str(draw(_EXPAND_VARS, rng))
+        c1 = int(draw({"int_set": [n for n in range(-4, 5) if abs(n) >= 2]}, rng))
+        a1 = int(draw({"int_set": list(range(2, 6))}, rng))
+        b1 = int(draw({"int_set": [n for n in range(-6, 7) if n != 0]}, rng))
+        d1 = int(draw({"int_set": [n for n in range(-6, 7) if n != 0]}, rng))
+        c2 = int(draw({"int_set": [n for n in range(-4, 5) if n != 0]}, rng))
+        a2 = int(draw({"int_set": list(range(2, 6))}, rng))
+        b2 = int(draw({"int_set": [n for n in range(-6, 7) if n != 0]}, rng))
+        expr = (
+            f"({c1})*{var}*(({a1})*{var}**2+({b1})*{var}+({d1}))"
+            f"+({c2})*{var}*(({a2})*{var}**2+({b2})*{var})"
+        )
+        term1 = f"{_mono(c1, var)}({_mono(a1, var)}²{_term_tail(b1, var)}{_const_tail(d1)})"
+        # 第2項は c2 の符号を演算子として前置する。
+        op2 = " + " if c2 > 0 else " - "
+        term2 = f"{_mono(abs(c2), var)}({_mono(a2, var)}²{_term_tail(b2, var)})"
+        disp = f"{term1}{op2}{term2}"
+        return expr, disp
+
+    if mode in ("binomial_product", "formula_sum_product", "formula_sum_product_signed"):
+        var = str(draw(_EXPAND_VARS, rng))
+        if mode == "formula_sum_product":
+            dom = {"int_set": list(range(1, 13))}  # 基礎: 正の定数
+        else:
+            dom = {"int_set": [n for n in range(-12, 13) if n != 0]}
+        a = int(draw(dom, rng))
+        b = int(draw(dom, rng))
+        expr = f"({var}+({a}))*({var}+({b}))"
+        disp = f"({var}{_const_tail(a)})({var}{_const_tail(b)})"
+        return expr, disp
+
+    if mode == "binomial_product_coeff":
+        var = str(draw(_EXPAND_VARS, rng))
+        p1 = int(draw({"int_set": list(range(2, 6))}, rng))
+        q1 = int(draw({"int_set": [n for n in range(-9, 10) if n != 0]}, rng))
+        p2 = int(draw({"int_set": list(range(2, 6))}, rng))
+        q2 = int(draw({"int_set": [n for n in range(-9, 10) if n != 0]}, rng))
+        expr = f"(({p1})*{var}+({q1}))*(({p2})*{var}+({q2}))"
+        disp = f"{_lin_factor(p1, q1, var)}{_lin_factor(p2, q2, var)}"
+        return expr, disp
+
+    if mode == "square_binomial":
+        var = str(draw(_EXPAND_VARS, rng))
+        # (x+a)² は自由度が a と文字種のみで少ない → a を広くとって dup を分散する。
+        a = int(draw({"int_set": [n for n in range(-30, 31) if n != 0]}, rng))
+        expr = f"({var}+({a}))**2"
+        disp = f"({var}{_const_tail(a)})²"
+        return expr, disp
+
+    if mode == "square_binomial_coeff":
+        var = str(draw(_EXPAND_VARS, rng))
+        p1 = int(draw({"int_set": list(range(2, 6))}, rng))
+        q1 = int(draw({"int_set": [n for n in range(-9, 10) if n != 0]}, rng))
+        expr = f"(({p1})*{var}+({q1}))**2"
+        disp = f"({_mono(p1, var)}{_const_tail(q1)})²"
+        return expr, disp
+
+    if mode == "diff_of_squares":
+        var = str(draw(_EXPAND_VARS, rng))
+        p1 = int(draw({"int_set": list(range(1, 6))}, rng))
+        q1 = int(draw({"int_set": list(range(1, 16))}, rng))
+        expr = f"(({p1})*{var}+({q1}))*(({p1})*{var}-({q1}))"
+        lead = _mono(p1, var)
+        disp = f"({lead} + {q1})({lead} - {q1})"
+        return expr, disp
+
+    if mode == "expand_multi":
+        var = str(draw(_EXPAND_VARS, rng))
+        dom = {"int_set": [n for n in range(-9, 10) if n != 0]}
+        a = int(draw(dom, rng))
+        b = int(draw(dom, rng))
+        c = int(draw(dom, rng))
+        # (x+a)²-(x+b)(x+c) は x² が必ず相殺し1次式になる（例題の型）。ただし
+        # 1次の係数 2a-b-c が 0 だと答えが定数に退化する（自由変数が消え問題が
+        # 成立しない）ため、退化しないよう有界リトライで引き直す。
+        while 2 * a - b - c == 0:
+            a = int(draw(dom, rng))
+            b = int(draw(dom, rng))
+            c = int(draw(dom, rng))
+        expr = f"({var}+({a}))**2-(({var}+({b}))*({var}+({c})))"
+        disp = f"({var}{_const_tail(a)})² - ({var}{_const_tail(b)})({var}{_const_tail(c)})"
+        return expr, disp
+
+    if mode == "expand_substitution":
+        v1, v2 = tuple(draw(_EXPAND_VAR_PAIRS, rng))
+        dom = {"int_set": [n for n in range(-9, 10) if n != 0]}
+        a = int(draw(dom, rng))
+        b = int(draw(dom, rng))
+        common = f"({v1}+{v2})"
+        expr = f"({common}+({a}))*({common}+({b}))"
+        disp = f"({v1} + {v2}{_const_tail(a)})({v1} + {v2}{_const_tail(b)})"
+        return expr, disp
+
+    raise ValueError(f"未知の mode: {mode!r}")
+
+
+@register_recipe("math.expand_product", provides_concepts=_EXPAND_CONCEPTS)
+def expand_product(ctx: CellContext, rng: Rng) -> MR:
+    """積・平方・分配の形の式を展開する MR を組む（C3 g3_l1〜l6.calculation）。"""
+    mode = cast(str, ctx.spec_level.params["mode"])
+    expr_str, given_disp = _expand_construct(mode, rng, ctx.spec_level.params)
+
+    solver = REGISTRY.solver("math.expand_expression")
+    sol = cast(Solution, solver(expr_str, mode))
+    assert isinstance(sol.answer, SymbolicAnswer)
+    # 恒真: 与式を展開すると答えに一致する。
+    assert sympy.expand(sympy.sympify(expr_str)) == sympy.sympify(sol.answer.srepr), (
+        f"double-solve 不一致: expand({expr_str}) != {sol.answer.srepr}"
+    )
+
+    sub_question = SubQuestionMR(
+        label="(1)",
+        asked="simplified_expr",
+        answer=sol.answer,
+        steps=sol.steps,
+        concept_tags=_effective_concept_tags(ctx),
+        cause_tags=_effective_cause_tags(ctx),
+    )
+    return MR(
+        signature=ctx.spec_level.signature,
+        family=ctx.family,
+        level=ctx.level,
+        purpose=ctx.purpose,
+        seed=0,
+        params={"expr_str": expr_str, "mode": mode},
+        given={"expression": given_disp},
+        sub_questions=[sub_question],
+        visual_plan=None,
+        provenance=Provenance(recipe="math.expand_product"),
+    )
+
+
 __all__ = [
     "combine_like_terms",
     "add_or_subtract_polynomials",
@@ -1215,4 +1406,5 @@ __all__ = [
     "classify_monomial_or_polynomial",
     "judge_like_terms",
     "system_term_recall",
+    "expand_product",
 ]

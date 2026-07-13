@@ -1,0 +1,27 @@
+family: math.g3_l5.calculation
+form: calculation
+source_desc: |
+  乗法公式③（(x+a)(x-a)の展開）
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: (x+a)(x-a)=x^2-a^2を直接適用（単段のため1段）。
+       example: (x+7)(x-7) を展開せよ。
+  【設計モデル】math.expand_expression が sympy.expand で展開。和と差の積の公式
+  (x+a)(x-a)=x²-a² の直接適用（apply_diff_of_squares の1手順）。単一レベル。
+  【§10 sanction】example は単項係数の (x+a)(x-a) だが、dup 確保のため係数つき
+  (px+q)(px-q)（p≥1）まで一般化する（和と差の積の技能は不変）。dup は係数・定数・文字種で分散。
+concepts_default: [polynomial.expand_formula_diff_squares]
+levels:
+  "1":
+    signature: expand_diff_of_squares
+    recipe: math.expand_product
+    params:
+      mode: diff_of_squares
+    given: [expression]
+    asked: [simplified_expr]
+    visual: none
+    text: {tier: T1, template: lf_expand_v1}
+    hints: [steps_prefix]
+    concept_tags: [polynomial.expand_formula_diff_squares]
+    cause_tags: []
+remedial:
+  default_level: 1

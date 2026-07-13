@@ -1,0 +1,60 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - polynomial.expand_formula_square
+  provenance:
+    git_commit: ''
+    recipe: math.expand_product
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_expand_v1
+    tier: T1
+  requested:
+    form: calculation
+    level: 2
+    subject: math
+    unit: g3_l4
+  resolved:
+    form: calculation
+    level: 2
+    subject: math
+    unit: g3_l4
+  seed: 3
+  signature: expand_square_binomial_coeff
+problem_ref: d5fa61c99fb530fc
+problem_text: '次の式を展開せよ。
+
+  (2m - 1)²'
+sub_questions:
+- answer:
+    display: 4m² - 4m + 1
+    kind: symbolic
+    srepr: Add(Mul(Integer(4), Pow(Symbol('m'), Integer(2))), Mul(Integer(-1), Integer(4), Symbol('m')), Integer(1))
+  cause_tags: []
+  concept_tags:
+  - polynomial.expand_formula_square
+  explanation: まず、係数のついたはじめの項を平方する。 はじめの項を平方する次に、2つの項の積の2倍（中間の項）を求める。 中間の項を求める最後に、乗法公式にあてはめて展開した式を書く。 4m² - 4m + 1
+  hints:
+  - 係数のついたはじめの項を平方する。
+  - 2つの項の積の2倍（中間の項）を求める。
+  label: (1)
+  prompt_text: simplified_expr を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 係数のついたはじめの項を平方する。
+    op: square_leading_term
+    result_display: はじめの項を平方する
+    result_srepr: ''
+  - args: []
+    narration: 2つの項の積の2倍（中間の項）を求める。
+    op: compute_cross_term
+    result_display: 中間の項を求める
+    result_srepr: ''
+  - args: []
+    narration: 乗法公式にあてはめて展開した式を書く。
+    op: write_expansion
+    result_display: 4m² - 4m + 1
+    result_srepr: Add(Mul(Integer(4), Pow(Symbol('m'), Integer(2))), Mul(Integer(-1), Integer(4), Symbol('m')), Integer(1))
+visual_svg: null

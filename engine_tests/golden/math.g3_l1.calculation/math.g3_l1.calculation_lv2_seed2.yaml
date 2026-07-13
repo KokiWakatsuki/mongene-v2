@@ -1,0 +1,54 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - polynomial.expand_mono_poly
+  provenance:
+    git_commit: ''
+    recipe: math.expand_product
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_expand_v1
+    tier: T1
+  requested:
+    form: calculation
+    level: 2
+    subject: math
+    unit: g3_l1
+  resolved:
+    form: calculation
+    level: 2
+    subject: math
+    unit: g3_l1
+  seed: 2
+  signature: expand_distribute_mono_combine
+problem_ref: bbe5f5e832f0a8db
+problem_text: '次の式を展開せよ。
+
+  -3x(2x² - x + 5) - x(4x² + x)'
+sub_questions:
+- answer:
+    display: -10x³ + 2x² - 15x
+    kind: symbolic
+    srepr: Add(Mul(Integer(-1), Integer(10), Pow(Symbol('x'), Integer(3))), Mul(Integer(2), Pow(Symbol('x'), Integer(2))), Mul(Integer(-1), Integer(15), Symbol('x')))
+  cause_tags: []
+  concept_tags:
+  - polynomial.expand_mono_poly
+  explanation: まず、それぞれの単項式を、対応するかっこの中の各項にかける。 各単項式を分配する次に、同類項をまとめて計算する。 -10x³ + 2x² - 15x
+  hints:
+  - それぞれの単項式を、対応するかっこの中の各項にかける。
+  label: (1)
+  prompt_text: simplified_expr を求めなさい。
+  solution_steps:
+  - args: []
+    narration: それぞれの単項式を、対応するかっこの中の各項にかける。
+    op: distribute_each_monomial
+    result_display: 各単項式を分配する
+    result_srepr: ''
+  - args: []
+    narration: 同類項をまとめて計算する。
+    op: combine_like_terms
+    result_display: -10x³ + 2x² - 15x
+    result_srepr: Add(Mul(Integer(-1), Integer(10), Pow(Symbol('x'), Integer(3))), Mul(Integer(2), Pow(Symbol('x'), Integer(2))), Mul(Integer(-1), Integer(15), Symbol('x')))
+visual_svg: null

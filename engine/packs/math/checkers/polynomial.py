@@ -118,6 +118,14 @@ def double_solve_system_term_recall(mr: MR) -> Solution:
     return cast(Solution, solver(mr.params["concept"]))
 
 
+@register_checker("math.expand_product.double_solve")
+def double_solve_expand_product(mr: MR) -> Solution:
+    # 与式の文字列 expr_str と mode（steps op 列の別）から独立に sympy.expand で再計算。
+    p = mr.params
+    solver = REGISTRY.solver("math.expand_expression")
+    return cast(Solution, solver(p["expr_str"], p["mode"]))
+
+
 __all__ = [
     "double_solve_combine_like_terms",
     "double_solve_add_or_subtract_polynomials",
@@ -132,4 +140,5 @@ __all__ = [
     "double_solve_classify_monomial_or_polynomial",
     "double_solve_judge_like_terms",
     "double_solve_system_term_recall",
+    "double_solve_expand_product",
 ]

@@ -2460,6 +2460,48 @@ def test_read_number_line_point_double_solve_property(seed):
 
 
 # ---------------------------------------------------------------------------
+# math.expand_product（C3 g3_l1〜l6.calculation 多項式の展開）— P2 展開コア能力
+# ---------------------------------------------------------------------------
+_EXPAND_CELLS = [
+    ("math.g3_l1.calculation", 1), ("math.g3_l1.calculation", 2),
+    ("math.g3_l2.calculation", 1), ("math.g3_l2.calculation", 2),
+    ("math.g3_l3.calculation", 1), ("math.g3_l3.calculation", 2),
+    ("math.g3_l4.calculation", 1), ("math.g3_l4.calculation", 2),
+    ("math.g3_l5.calculation", 1),
+    ("math.g3_l6.calculation", 2), ("math.g3_l6.calculation", 3),
+]
+
+
+def test_expand_product_lv1_construct():
+    ctx = _make_ctx("math.g3_l2.calculation", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "expand_binomial_product"
+    assert set(mr.given.keys()) == {"expression"}
+    sq = mr.sub_questions[0]
+    assert sq.asked == "simplified_expr"
+    assert [s.op for s in sq.steps] == ["expand_all_products", "combine_like_terms"]
+    # 答えは展開後の多項式（自由変数を含む）で、与式（積の形）とは構造が異なる。
+    assert sympy.sympify(sq.answer.srepr).free_symbols
+
+
+@pytest.mark.parametrize("family,level", _EXPAND_CELLS)
+@pytest.mark.parametrize("seed", range(100))
+def test_expand_product_double_solve_property(family, level, seed):
+    ctx = _make_ctx(family, level)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    # 独立ソルバの答えが recipe の答えと一致する（double-solve）。
+    solver = REGISTRY.solver("math.expand_expression")
+    sol = solver(mr.params["expr_str"], mr.params["mode"])
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+    # 恒真: 答えは与式を sympy.expand した結果に等しい。
+    assert sympy.sympify(sol.answer.srepr) == sympy.expand(sympy.sympify(mr.params["expr_str"]))
+    # 答えは自由変数を含む式（展開後の多項式）。
+    assert sympy.sympify(sol.answer.srepr).free_symbols
+
+
+# ---------------------------------------------------------------------------
 # math.count_significant_figures（C1 g1_l60.knowledge Lv2 有効数字の桁判別）— P2 bespoke
 # ---------------------------------------------------------------------------
 def test_count_significant_figures_lv2_construct():

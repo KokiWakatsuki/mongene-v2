@@ -572,6 +572,102 @@ def system_term_definition(concept: object) -> Solution:
     return Solution(answer=answer, steps=steps)
 
 
+# ---------------------------------------------------------------------------
+# 多項式の展開（C3 g3_l1〜l6.calculation）— sympy.expand の1コア能力
+#
+# 与式（積・平方・分配の形の文字列）だけから sympy.expand で展開後の多項式を導く
+# （double-solve）。答えは自由変数を含む式の SymbolicAnswer（G-Q5t は display 全体一致
+# のみ検査＝積の形と展開形は構造が違うので漏洩しない）。mode ごとに steps の op 列を
+# 変える＝level_sep（同一 family の Lv 間で op 列＝fp を相異させる）。narration に数字を
+# 書かない。
+# ---------------------------------------------------------------------------
+_EXPAND_STEPS: dict[str, list[str]] = {
+    # g3_l1 単項式×多項式・多項式÷単項式
+    "distribute_mono": ["distribute_monomial"],
+    "distribute_mono_combine": ["distribute_each_monomial", "combine_like_terms"],
+    # g3_l2 多項式どうしの乗法
+    "binomial_product": ["expand_all_products", "combine_like_terms"],
+    "binomial_product_coeff": ["expand_all_products", "collect_x_terms", "combine_like_terms"],
+    # g3_l3 乗法公式①（x+a)(x+b)
+    "formula_sum_product": ["compute_sum_and_product", "write_expansion"],
+    "formula_sum_product_signed": [
+        "determine_constant_signs", "compute_sum_and_product", "write_expansion",
+    ],
+    # g3_l4 乗法公式②（x±a)²
+    "square_binomial": ["compute_square_terms", "write_expansion"],
+    "square_binomial_coeff": ["square_leading_term", "compute_cross_term", "write_expansion"],
+    # g3_l5 乗法公式③（x+a)(x-a)
+    "diff_of_squares": ["apply_diff_of_squares"],
+    # g3_l6 いろいろな展開
+    "expand_multi": ["expand_each_part", "combine_like_terms"],
+    "expand_substitution": ["substitute_common_part", "apply_formula", "restore_expansion"],
+}
+
+_EXPAND_OP_NARRATION: dict[str, str] = {
+    "distribute_monomial": "単項式を、かっこの中の各項にそれぞれかける。",
+    "distribute_each_monomial": "それぞれの単項式を、対応するかっこの中の各項にかける。",
+    "expand_all_products": "分配法則で、前のかっこの各項を後ろのかっこの各項にすべてかける。",
+    "collect_x_terms": "文字の1次の項どうしを集める。",
+    "combine_like_terms": "同類項をまとめて計算する。",
+    "compute_sum_and_product": "2つの定数の和と積を求める。",
+    "determine_constant_signs": "それぞれの定数の符号を確かめる。",
+    "write_expansion": "乗法公式にあてはめて展開した式を書く。",
+    "compute_square_terms": "はじめの項の平方・積の2倍・終わりの項の平方を求める。",
+    "square_leading_term": "係数のついたはじめの項を平方する。",
+    "compute_cross_term": "2つの項の積の2倍（中間の項）を求める。",
+    "apply_diff_of_squares": "和と差の積の公式で、はじめの項の平方から終わりの項の平方をひく。",
+    "expand_each_part": "それぞれのかっこを乗法公式で展開する。",
+    "substitute_common_part": "共通する部分を1つの文字に置きかえる。",
+    "apply_formula": "置きかえた式に乗法公式をあてはめる。",
+    "restore_expansion": "置きかえをもとにもどして展開した式を整理する。",
+}
+
+_EXPAND_OP_PHRASE: dict[str, str] = {
+    "distribute_each_monomial": "各単項式を分配する",
+    "expand_all_products": "各項の積をすべて書き出す",
+    "collect_x_terms": "1次の項を集める",
+    "compute_sum_and_product": "和と積を求める",
+    "determine_constant_signs": "定数の符号を確かめる",
+    "compute_square_terms": "平方と積の2倍を求める",
+    "square_leading_term": "はじめの項を平方する",
+    "compute_cross_term": "中間の項を求める",
+    "expand_each_part": "各かっこを展開する",
+    "substitute_common_part": "共通部分を置きかえる",
+    "apply_formula": "公式にあてはめる",
+}
+
+
+@register_solver("math.expand_expression")
+def expand_expression(expr_str: str, mode: object) -> Solution:
+    """積・平方・分配の形の式を展開する（C3 g3_l1〜l6.calculation）。
+
+    与式の文字列だけから sympy.expand で展開後の多項式を導く（recipe の構成内訳は見ない
+    ・double-solve）。答えは展開後の多項式の SymbolicAnswer。mode ごとに steps の op 列を
+    変える＝level_sep。narration には数字を書かない。
+    """
+    mode_s = str(mode)
+    if mode_s not in _EXPAND_STEPS:
+        raise ValueError(f"未知の mode: {mode_s!r}")
+    expr = sympy.sympify(expr_str)
+    expanded = sympy.expand(expr)
+    disp = _fmt_monomial_display(expanded)
+    srepr = sympy.srepr(expanded)
+
+    ops = _EXPAND_STEPS[mode_s]
+    steps = [
+        Step(
+            op=op,
+            args=[],
+            result_srepr=srepr if i == len(ops) - 1 else "",
+            result_display=disp if i == len(ops) - 1 else _EXPAND_OP_PHRASE.get(op, ""),
+            narration=_EXPAND_OP_NARRATION[op],
+        )
+        for i, op in enumerate(ops)
+    ]
+    answer = SymbolicAnswer(srepr=srepr, display=disp)
+    return Solution(answer=answer, steps=steps)
+
+
 __all__ = [
     "simplify_polynomial",
     "add_or_subtract_polynomials",
@@ -586,4 +682,5 @@ __all__ = [
     "classify_monomial_or_polynomial",
     "judge_like_terms",
     "system_term_definition",
+    "expand_expression",
 ]

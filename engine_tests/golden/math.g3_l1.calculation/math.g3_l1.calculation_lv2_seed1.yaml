@@ -1,0 +1,54 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - polynomial.expand_mono_poly
+  provenance:
+    git_commit: ''
+    recipe: math.expand_product
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_expand_v1
+    tier: T1
+  requested:
+    form: calculation
+    level: 2
+    subject: math
+    unit: g3_l1
+  resolved:
+    form: calculation
+    level: 2
+    subject: math
+    unit: g3_l1
+  seed: 1
+  signature: expand_distribute_mono_combine
+problem_ref: 09292009d8291587
+problem_text: '次の式を展開せよ。
+
+  3t(4t² - 4t + 3) - 2t(3t² + 5t)'
+sub_questions:
+- answer:
+    display: 6t³ - 22t² + 9t
+    kind: symbolic
+    srepr: Add(Mul(Integer(6), Pow(Symbol('t'), Integer(3))), Mul(Integer(-1), Integer(22), Pow(Symbol('t'), Integer(2))), Mul(Integer(9), Symbol('t')))
+  cause_tags: []
+  concept_tags:
+  - polynomial.expand_mono_poly
+  explanation: まず、それぞれの単項式を、対応するかっこの中の各項にかける。 各単項式を分配する次に、同類項をまとめて計算する。 6t³ - 22t² + 9t
+  hints:
+  - それぞれの単項式を、対応するかっこの中の各項にかける。
+  label: (1)
+  prompt_text: simplified_expr を求めなさい。
+  solution_steps:
+  - args: []
+    narration: それぞれの単項式を、対応するかっこの中の各項にかける。
+    op: distribute_each_monomial
+    result_display: 各単項式を分配する
+    result_srepr: ''
+  - args: []
+    narration: 同類項をまとめて計算する。
+    op: combine_like_terms
+    result_display: 6t³ - 22t² + 9t
+    result_srepr: Add(Mul(Integer(6), Pow(Symbol('t'), Integer(3))), Mul(Integer(-1), Integer(22), Pow(Symbol('t'), Integer(2))), Mul(Integer(9), Symbol('t')))
+visual_svg: null

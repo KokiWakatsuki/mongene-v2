@@ -1,0 +1,60 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - polynomial.expand_formula_sum_product
+  provenance:
+    git_commit: ''
+    recipe: math.expand_product
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_expand_v1
+    tier: T1
+  requested:
+    form: calculation
+    level: 2
+    subject: math
+    unit: g3_l3
+  resolved:
+    form: calculation
+    level: 2
+    subject: math
+    unit: g3_l3
+  seed: 3
+  signature: expand_formula_sum_product_signed
+problem_ref: 610f815b41a5c8a7
+problem_text: '次の式を展開せよ。
+
+  (m - 8)(m - 1)'
+sub_questions:
+- answer:
+    display: m² - 9m + 8
+    kind: symbolic
+    srepr: Add(Pow(Symbol('m'), Integer(2)), Mul(Integer(-1), Integer(9), Symbol('m')), Integer(8))
+  cause_tags: []
+  concept_tags:
+  - polynomial.expand_formula_sum_product
+  explanation: まず、それぞれの定数の符号を確かめる。 定数の符号を確かめる次に、2つの定数の和と積を求める。 和と積を求める最後に、乗法公式にあてはめて展開した式を書く。 m² - 9m + 8
+  hints:
+  - それぞれの定数の符号を確かめる。
+  - 2つの定数の和と積を求める。
+  label: (1)
+  prompt_text: simplified_expr を求めなさい。
+  solution_steps:
+  - args: []
+    narration: それぞれの定数の符号を確かめる。
+    op: determine_constant_signs
+    result_display: 定数の符号を確かめる
+    result_srepr: ''
+  - args: []
+    narration: 2つの定数の和と積を求める。
+    op: compute_sum_and_product
+    result_display: 和と積を求める
+    result_srepr: ''
+  - args: []
+    narration: 乗法公式にあてはめて展開した式を書く。
+    op: write_expansion
+    result_display: m² - 9m + 8
+    result_srepr: Add(Pow(Symbol('m'), Integer(2)), Mul(Integer(-1), Integer(9), Symbol('m')), Integer(8))
+visual_svg: null

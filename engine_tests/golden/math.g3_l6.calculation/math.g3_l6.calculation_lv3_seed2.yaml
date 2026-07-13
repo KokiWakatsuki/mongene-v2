@@ -1,0 +1,62 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - polynomial.expand_various
+  provenance:
+    git_commit: ''
+    recipe: math.expand_product
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_expand_v1
+    tier: T1
+  requested:
+    form: calculation
+    level: 3
+    subject: math
+    unit: g3_l6
+  resolved:
+    form: calculation
+    level: 3
+    subject: math
+    unit: g3_l6
+  seed: 2
+  signature: expand_substitution
+problem_ref: 6bbb23ba9bf3e15c
+problem_text: '次の式を展開せよ。
+
+  (m + n - 5)(m + n + 1)'
+sub_questions:
+- answer:
+    display: m² + 2mn - 4m + n² - 4n - 5
+    kind: symbolic
+    srepr: Add(Pow(Symbol('m'), Integer(2)), Mul(Integer(2), Symbol('m'), Symbol('n')), Mul(Integer(-1), Integer(4), Symbol('m')), Pow(Symbol('n'), Integer(2)), Mul(Integer(-1), Integer(4), Symbol('n')),
+      Integer(-5))
+  cause_tags: []
+  concept_tags:
+  - polynomial.expand_various
+  explanation: まず、共通する部分を1つの文字に置きかえる。 共通部分を置きかえる次に、置きかえた式に乗法公式をあてはめる。 公式にあてはめる最後に、置きかえをもとにもどして展開した式を整理する。 m² + 2mn - 4m + n² - 4n - 5
+  hints:
+  - 共通する部分を1つの文字に置きかえる。
+  - 置きかえた式に乗法公式をあてはめる。
+  label: (1)
+  prompt_text: simplified_expr を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 共通する部分を1つの文字に置きかえる。
+    op: substitute_common_part
+    result_display: 共通部分を置きかえる
+    result_srepr: ''
+  - args: []
+    narration: 置きかえた式に乗法公式をあてはめる。
+    op: apply_formula
+    result_display: 公式にあてはめる
+    result_srepr: ''
+  - args: []
+    narration: 置きかえをもとにもどして展開した式を整理する。
+    op: restore_expansion
+    result_display: m² + 2mn - 4m + n² - 4n - 5
+    result_srepr: Add(Pow(Symbol('m'), Integer(2)), Mul(Integer(2), Symbol('m'), Symbol('n')), Mul(Integer(-1), Integer(4), Symbol('m')), Pow(Symbol('n'), Integer(2)), Mul(Integer(-1), Integer(4), Symbol('n')),
+      Integer(-5))
+visual_svg: null

@@ -1,0 +1,42 @@
+family: math.g3_l4.calculation
+form: calculation
+source_desc: |
+  乗法公式②（(x+a)²,(x-a)²の展開）
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: (x±a)^2を平方の公式で直接展開。
+       example: (x+5)² を展開せよ。
+  Lv2 desc: 係数付き(ax±b)^2など中間項の処理が複雑化。
+       example: (3x-2)² を展開せよ。
+  【設計モデル】math.expand_expression が sympy.expand で展開。平方の公式
+  (x±a)²=x²±2ax+a² の直接適用。level_sep は mode 別 op 列:
+  Lv1（square_binomial：はじめ・積の2倍・終わりの平方を求めて書く2手順）／
+  Lv2（square_binomial_coeff：係数つき (px+q)² ではじめの項を平方し中間項を求める3手順）。
+  dup は定数・係数・文字種で分散。
+concepts_default: [polynomial.expand_formula_square]
+levels:
+  "1":
+    signature: expand_square_binomial
+    recipe: math.expand_product
+    params:
+      mode: square_binomial
+    given: [expression]
+    asked: [simplified_expr]
+    visual: none
+    text: {tier: T1, template: lf_expand_v1}
+    hints: [steps_prefix]
+    concept_tags: [polynomial.expand_formula_square]
+    cause_tags: []
+  "2":
+    signature: expand_square_binomial_coeff
+    recipe: math.expand_product
+    params:
+      mode: square_binomial_coeff
+    given: [expression]
+    asked: [simplified_expr]
+    visual: none
+    text: {tier: T1, template: lf_expand_v1}
+    hints: [steps_prefix]
+    concept_tags: [polynomial.expand_formula_square]
+    cause_tags: []
+remedial:
+  default_level: 1

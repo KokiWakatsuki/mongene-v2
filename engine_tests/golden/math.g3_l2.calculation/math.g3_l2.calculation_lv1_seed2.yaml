@@ -1,0 +1,54 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - polynomial.expand_product
+  provenance:
+    git_commit: ''
+    recipe: math.expand_product
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_expand_v1
+    tier: T1
+  requested:
+    form: calculation
+    level: 1
+    subject: math
+    unit: g3_l2
+  resolved:
+    form: calculation
+    level: 1
+    subject: math
+    unit: g3_l2
+  seed: 2
+  signature: expand_binomial_product
+problem_ref: 013a9e5e6f11d6cf
+problem_text: '次の式を展開せよ。
+
+  (a - 9)(a - 3)'
+sub_questions:
+- answer:
+    display: a² - 12a + 27
+    kind: symbolic
+    srepr: Add(Pow(Symbol('a'), Integer(2)), Mul(Integer(-1), Integer(12), Symbol('a')), Integer(27))
+  cause_tags: []
+  concept_tags:
+  - polynomial.expand_product
+  explanation: まず、分配法則で、前のかっこの各項を後ろのかっこの各項にすべてかける。 各項の積をすべて書き出す次に、同類項をまとめて計算する。 a² - 12a + 27
+  hints:
+  - 分配法則で、前のかっこの各項を後ろのかっこの各項にすべてかける。
+  label: (1)
+  prompt_text: simplified_expr を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 分配法則で、前のかっこの各項を後ろのかっこの各項にすべてかける。
+    op: expand_all_products
+    result_display: 各項の積をすべて書き出す
+    result_srepr: ''
+  - args: []
+    narration: 同類項をまとめて計算する。
+    op: combine_like_terms
+    result_display: a² - 12a + 27
+    result_srepr: Add(Pow(Symbol('a'), Integer(2)), Mul(Integer(-1), Integer(12), Symbol('a')), Integer(27))
+visual_svg: null
