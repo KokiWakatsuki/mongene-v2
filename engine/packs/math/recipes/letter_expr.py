@@ -414,6 +414,7 @@ _TERM_RECALL_CONCEPTS = [
     "power.term_recall",
     "laws.term_recall",
     "prime_concepts.term_recall",
+    "approximation.term_recall",
 ]
 
 
@@ -483,6 +484,15 @@ def _draw_term_statement(domain: str, concept: str, rng: Rng, p: dict[str, objec
             f"{a} × ({b} + {c}) = {a} × {b} + {a} × {c} のように、"
             f"かっこの中の和にかけ算を分けて計算できるという計算のきまり"
         )  # distributive
+
+    if domain == "approximation":
+        # g1_l60 近似値まわりの用語。具体例の測定値 n を埋め込み surface を分散する。
+        n = int(draw(p["number_domain"], rng))
+        if concept == "approximation":
+            return f"長さや重さなどを測定して得られる、真の値に近いおよその値（たとえば {n} cm など）"
+        if concept == "error":
+            return f"測定で {n} cm を得たときのように、近似値から真の値をひいた差（真の値とのちがい）"
+        return f"近似値 {n} cm のうち、測定して意味があると考えられる位の数字"  # significant_figures
 
     if domain == "prime_concepts":
         # g1_l11 素数まわりの用語。相異なる2つの具体例を埋め込み surface を分散する

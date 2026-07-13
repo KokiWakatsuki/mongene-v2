@@ -232,6 +232,10 @@ _TERM_MAPS: dict[str, dict[str, str]] = {
     "laws": {"commutative": "交換法則", "associative": "結合法則", "distributive": "分配法則"},
     # g1_l11 素数まわりの用語（素数・合成数・素因数）
     "prime_concepts": {"prime": "素数", "composite": "合成数", "prime_factor": "素因数"},
+    # g1_l60 近似値まわりの用語（近似値・誤差・有効数字）
+    "approximation": {
+        "approximation": "近似値", "error": "誤差", "significant_figures": "有効数字",
+    },
 }
 
 # domain 別の step テキスト（既定は g1_l17/l19/l21/l2 の現行文＝golden 不変）。

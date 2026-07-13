@@ -267,6 +267,9 @@ concepts:
   - id: notation_quotient_rule.rule_recall
     label: "除法の記法規則（÷を分数で表す）を想起する"
     unit: g1_l14
+  - id: approximation.term_recall
+    label: "近似値・誤差・有効数字の意味（用語）を想起する"
+    unit: g1_l60
   - id: speed_relation.rule_recall
     label: "速さ・道のり・時間の関係（求める量ごとの式）を想起する"
     unit: g1_l15

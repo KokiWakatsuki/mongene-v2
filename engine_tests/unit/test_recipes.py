@@ -2612,6 +2612,14 @@ def test_prime_concepts_term_recall_l11_lv1_construct():
     assert mr.sub_questions[0].answer.correct in {"素数", "合成数", "素因数"}
 
 
+def test_approximation_term_recall_l60_lv1_construct():
+    ctx = _make_ctx("math.g1_l60.knowledge", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "approximation_term_recall"
+    assert mr.sub_questions[0].answer.correct in {"近似値", "誤差", "有効数字"}
+
+
 _TERM_RECALL_CELLS = [
     ("math.g1_l17.knowledge", 1),
     ("math.g1_l19.knowledge", 1),
@@ -2622,6 +2630,7 @@ _TERM_RECALL_CELLS = [
     ("math.g1_l7.knowledge", 1),
     ("math.g1_l9.knowledge", 1),
     ("math.g1_l11.knowledge", 1),
+    ("math.g1_l60.knowledge", 1),
 ]
 
 

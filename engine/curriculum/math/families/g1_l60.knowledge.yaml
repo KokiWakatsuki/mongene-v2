@@ -1,0 +1,35 @@
+family: math.g1_l60.knowledge
+form: knowledge
+source_desc: |
+  近似値・誤差・有効数字の用語（Lv1 想起）
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: 誤差・近似値・有効数字・a×10ⁿ表現の意味を想起する。
+       example: 測定して得られた、真の値に近いおよその値を何とよぶか答えよ。
+  Lv2 desc: 有効数字がどこまでかを判別する・誤差の意味を適用する。
+  【設計モデル・要検収(Q4)】Lv1 は「意味の説明された対象の名称を答える」用語想起
+  （term_recall_definition・domain=approximation）。concept で correct が変わる（approximation＝
+  近似値／error＝誤差／significant_figures＝有効数字）。distractors は同 domain の他の用語。具体例の
+  測定値 n を説明文に埋め込み surface として dup 分散。op 列[identify_description, name_concept]。
+  答えはテキストの ChoiceAnswer＝数字トークンを含まず G-Q5t 素通り（§7.7）。Lv2（有効数字の桁の判別・
+  誤差の適用）と calc（a×10ⁿ・四捨五入・有効数字）は bespoke ソルバが未整備のため残タスク
+  （HANDOFF 参照）。a×10ⁿ表現の名称は g1 で crisp な単一用語が定まらないため concept から除外し、
+  誤差/近似値/有効数字の3語に絞って realize した（§10 sanction）。図は無し。
+concepts_default: [approximation.term_recall]
+levels:
+  "1":
+    signature: approximation_term_recall
+    recipe: math.term_recall
+    params:
+      domain: approximation
+      concept_set: [approximation, error, significant_figures]
+      # 具体例の測定値を広めにとり dup を下げる（3 concept × surface 数で分散）。
+      number_domain: {int_range: [2, 999]}
+    given: [statement]
+    asked: [choice]
+    visual: none
+    text: {tier: T1, template: lf_term_recall_v1}
+    hints: [steps_prefix]
+    concept_tags: [approximation.term_recall]
+    cause_tags: []
+remedial:
+  default_level: 1
