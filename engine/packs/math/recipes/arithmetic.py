@@ -159,6 +159,8 @@ _SIGNED_ARITHMETIC_CONCEPTS = [
     "signed_number.add_sub_terms_rational",
     "signed_number.power_single",
     "signed_number.power_sign_contrast",
+    "signed_number.four_operations",
+    "signed_number.distributive_trick",
 ]
 
 
@@ -223,6 +225,31 @@ def compute_signed_arithmetic(ctx: CellContext, rng: Rng) -> MR:
             v, m = terms[i + 1]
             disp += opsym + _paren_if_neg(v, _fmt_signed(v, m))
         assert value == sympy.sympify(expr_str, rational=True)
+        return _build(expr_str, disp, mode, ctx)
+
+    if mode == "four_operations":
+        # 四則の混じった計算（累乗・かっこを含む）。骨格 A - (B)²×C + D÷E（D=k·E で割り切れる）。
+        big_a = int(draw(p["lead_domain"], rng))  # 先頭項（正）
+        b = int(draw(p["base_domain"], rng))  # 累乗の底（|b|≥2）
+        c = int(draw(p["multiplier_domain"], rng))  # ≥2
+        e = int(draw(p["divisor_domain"], rng))  # |e|≥2
+        k = int(draw(p["quotient_domain"], rng))  # 商（≠0）
+        dd = k * e  # 割り切れる被除数
+        expr_str = f"({big_a})-({b})**2*({c})+({dd})/({e})"
+        disp = (
+            f"{big_a}-{_paren_if_neg(sympy.Integer(b), str(b))}{_superscript(2)}×{c}"
+            f"+{_paren_if_neg(sympy.Integer(dd), str(dd))}÷{_paren_if_neg(sympy.Integer(e), str(e))}"
+        )
+        return _build(expr_str, disp, mode, ctx)
+
+    if mode == "distributive_trick":
+        # 分配法則で工夫して計算。base=(R+off)、multiplier m。value=base·m=(R·m)+(off·m)。
+        r = int(draw(p["round_domain"], rng))  # きりのよい数（10,100,…）
+        off = int(draw(p["offset_domain"], rng))  # 小さな数（±1..±4, ≠0）
+        mul = int(draw(p["multiplier_domain"], rng))  # かける数（≥2）
+        base = r + off
+        expr_str = f"({base})*({mul})"
+        disp = f"{base}×{mul}"
         return _build(expr_str, disp, mode, ctx)
 
     if mode == "power_single":

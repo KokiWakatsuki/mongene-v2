@@ -2211,6 +2211,26 @@ def test_signed_power_neg_inside_is_negative():
     assert found, "neg_inside(-a^n)形が60seed内で1つも出現しなかった"
 
 
+def test_signed_four_operations_lv2_construct():
+    ctx = _make_ctx("math.g1_l9.calculation", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "four_operations"
+    assert [s.op for s in mr.sub_questions[0].steps] == [
+        "evaluate_powers_and_parentheses", "multiply_and_divide", "add_and_subtract",
+    ]
+
+
+def test_signed_distributive_trick_lv3_construct():
+    ctx = _make_ctx("math.g1_l9.calculation", 3)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "distributive_trick"
+    assert [s.op for s in mr.sub_questions[0].steps] == [
+        "rewrite_as_round_plus_offset", "distribute_over_round", "combine_easy_parts",
+    ]
+
+
 _SIGNED_ARITHMETIC_CELLS = [
     ("math.g1_l3.calculation", 1), ("math.g1_l3.calculation", 2),
     ("math.g1_l4.calculation", 1), ("math.g1_l4.calculation", 2),
@@ -2218,6 +2238,7 @@ _SIGNED_ARITHMETIC_CELLS = [
     ("math.g1_l6.calculation", 1), ("math.g1_l6.calculation", 2),
     ("math.g1_l7.calculation", 1), ("math.g1_l7.calculation", 2),
     ("math.g1_l8.calculation", 1), ("math.g1_l8.calculation", 2),
+    ("math.g1_l9.calculation", 2), ("math.g1_l9.calculation", 3),
 ]
 
 

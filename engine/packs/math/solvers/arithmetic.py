@@ -52,6 +52,7 @@ _MODE_STEPS: dict[str, list[str]] = {
     "divide_chain": ["rewrite_all_as_reciprocal", "determine_product_sign", "multiply_all_magnitudes"],
     # g1_l9 四則混合・分配法則
     "four_operations": ["evaluate_powers_and_parentheses", "multiply_and_divide", "add_and_subtract"],
+    "distributive_trick": ["rewrite_as_round_plus_offset", "distribute_over_round", "combine_easy_parts"],
 }
 
 # op -> (narration, 非終端 step の result_display フレーズ)。数字は書かない。
@@ -79,6 +80,9 @@ _OP_NARRATION: dict[str, str] = {
     "evaluate_powers_and_parentheses": "累乗とかっこの中を先に計算する。",
     "multiply_and_divide": "次に、乗法と除法を計算する。",
     "add_and_subtract": "最後に、加法と減法を計算して答えを求める。",
+    "rewrite_as_round_plus_offset": "計算しやすいように、片方の数をきりのよい数と小さな数の和や差に分ける。",
+    "distribute_over_round": "分配法則を使って、きりのよい数の積と小さな数の積に分けて計算する。",
+    "combine_easy_parts": "2つの積を合わせて、答えを求める。",
 }
 
 _OP_PHRASE: dict[str, str] = {
@@ -97,6 +101,8 @@ _OP_PHRASE: dict[str, str] = {
     "rewrite_all_as_reciprocal": "すべて逆数のかけ算に直す",
     "evaluate_powers_and_parentheses": "累乗とかっこの中を先に計算する",
     "multiply_and_divide": "乗法と除法を計算する",
+    "rewrite_as_round_plus_offset": "きりのよい数と小さな数に分ける",
+    "distribute_over_round": "分配法則で積を2つに分けて計算する",
 }
 
 

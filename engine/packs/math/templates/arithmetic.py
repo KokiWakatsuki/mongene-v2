@@ -11,12 +11,16 @@ from engine.core.registry import REGISTRY
 # g1 正負の数 calculation（加法・減法・乗法・除法・累乗・四則混合）: 数値式を計算する
 LF_CALC_EVALUATE_V1 = "次の計算をせよ。\n{{ given.expression }}"
 
+# g1_l9.calculation Lv3: 分配法則を使って工夫して計算する
+LF_CALC_DISTRIBUTIVE_V1 = "分配法則を利用して、次の計算を工夫してせよ。\n{{ given.expression }}"
+
 
 def _register_all() -> None:
     REGISTRY.register_template("lf_calc_evaluate_v1", LF_CALC_EVALUATE_V1)
+    REGISTRY.register_template("lf_calc_distributive_v1", LF_CALC_DISTRIBUTIVE_V1)
 
 
 _register_all()
 
 
-__all__ = ["LF_CALC_EVALUATE_V1"]
+__all__ = ["LF_CALC_EVALUATE_V1", "LF_CALC_DISTRIBUTIVE_V1"]

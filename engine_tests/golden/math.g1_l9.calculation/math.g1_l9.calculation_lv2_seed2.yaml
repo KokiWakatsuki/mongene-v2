@@ -1,0 +1,60 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - signed_number.four_operations
+  provenance:
+    git_commit: ''
+    recipe: math.compute_signed_arithmetic
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_calc_evaluate_v1
+    tier: T1
+  requested:
+    form: calculation
+    level: 2
+    subject: math
+    unit: g1_l9
+  resolved:
+    form: calculation
+    level: 2
+    subject: math
+    unit: g1_l9
+  seed: 2
+  signature: four_operations
+problem_ref: 66b16b28e793371c
+problem_text: '次の計算をせよ。
+
+  17-(-3)²×6+(-10)÷2'
+sub_questions:
+- answer:
+    display: '-42'
+    kind: symbolic
+    srepr: Integer(-42)
+  cause_tags: []
+  concept_tags:
+  - signed_number.four_operations
+  explanation: まず、累乗とかっこの中を先に計算する。 累乗とかっこの中を先に計算する次に、次に、乗法と除法を計算する。 乗法と除法を計算する最後に、最後に、加法と減法を計算して答えを求める。 -42
+  hints:
+  - 累乗とかっこの中を先に計算する。
+  - 次に、乗法と除法を計算する。
+  label: (1)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 累乗とかっこの中を先に計算する。
+    op: evaluate_powers_and_parentheses
+    result_display: 累乗とかっこの中を先に計算する
+    result_srepr: Integer(-42)
+  - args: []
+    narration: 次に、乗法と除法を計算する。
+    op: multiply_and_divide
+    result_display: 乗法と除法を計算する
+    result_srepr: Integer(-42)
+  - args: []
+    narration: 最後に、加法と減法を計算して答えを求める。
+    op: add_and_subtract
+    result_display: '-42'
+    result_srepr: Integer(-42)
+visual_svg: null

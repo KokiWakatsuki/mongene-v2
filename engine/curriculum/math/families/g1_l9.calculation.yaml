@@ -1,0 +1,51 @@
+family: math.g1_l9.calculation
+form: calculation
+source_desc: |
+  正の数・負の数の四則の混じった計算と分配法則
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv2 desc: 四則の計算順序に従い累乗・かっこを含む式を処理する複数手順。
+       example: 12-(-3)²×2+8÷(-4) を計算せよ。
+  Lv3 desc: 分配法則で計算を工夫する・共通因数でまとめる等の工夫段。
+       example: 分配法則を使って 98×25 を工夫して計算せよ。
+  答えは定数（整数・SymbolicAnswer）。独立ソルバ evaluate_numeric_expression（sympy で
+  厳密評価）で再計算。Lv2（骨格 A-(B)²×C+D÷E・累乗→乗除→加減の順序）/ Lv3（きりのよい数と
+  小さな数に分け分配法則で工夫）で op 列を変える＝level_sep。Lv2 は D=k·E で割り切れる被除数を
+  逆算。定数答えの G-Q5t は問題文の数値がすべて given 由来（whitelist）なので漏洩しない。
+concepts_default: [signed_number.four_operations]
+levels:
+  "2":
+    signature: four_operations
+    recipe: math.compute_signed_arithmetic
+    params:
+      # A-(B)²×C+D÷E（D=k·E で割り切れる）。
+      mode: four_operations
+      lead_domain: {int_range: [2, 20]}
+      base_domain: {int_range: [-6, 6], exclude: [-1, 0, 1]}
+      multiplier_domain: {int_range: [2, 6]}
+      divisor_domain: {int_range: [-6, 6], exclude: [-1, 0, 1]}
+      quotient_domain: {int_range: [-6, 6], exclude: [0]}
+    given: [expression]
+    asked: [value]
+    visual: none
+    text: {tier: T1, template: lf_calc_evaluate_v1}
+    hints: [steps_prefix]
+    concept_tags: [signed_number.four_operations]
+    cause_tags: []
+  "3":
+    signature: distributive_trick
+    recipe: math.compute_signed_arithmetic
+    params:
+      # base=(R+off) をきりのよい数 R と小さな数 off に分けて分配法則で計算。
+      mode: distributive_trick
+      round_domain: {int_set: [20, 30, 40, 50, 60, 70, 80, 100, 200, 300]}
+      offset_domain: {int_range: [-4, 4], exclude: [0]}
+      multiplier_domain: {int_range: [3, 29]}
+    given: [expression]
+    asked: [value]
+    visual: none
+    text: {tier: T1, template: lf_calc_distributive_v1}
+    hints: [steps_prefix]
+    concept_tags: [signed_number.distributive_trick]
+    cause_tags: []
+remedial:
+  default_level: 2

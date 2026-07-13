@@ -222,3 +222,9 @@ concepts:
   - id: signed_number.power_sign_contrast
     label: "(-a)^n と -a^n の違い（指数の作用範囲）を区別して計算する"
     unit: g1_l7
+  - id: signed_number.four_operations
+    label: "四則の計算順序に従い累乗・かっこを含む式を計算する"
+    unit: g1_l9
+  - id: signed_number.distributive_trick
+    label: "分配法則を使って計算を工夫する"
+    unit: g1_l9
