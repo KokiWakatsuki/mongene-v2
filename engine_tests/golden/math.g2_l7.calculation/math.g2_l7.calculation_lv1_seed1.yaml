@@ -1,0 +1,52 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - polynomial.consecutive_number_sum
+  provenance:
+    git_commit: ''
+    recipe: math.express_number_property
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_number_property_v1
+    tier: T1
+  requested:
+    form: calculation
+    level: 1
+    subject: math
+    unit: g2_l7
+  resolved:
+    form: calculation
+    level: 1
+    subject: math
+    unit: g2_l7
+  seed: 1
+  signature: consecutive_number_sum
+problem_ref: 78dc5a99dd1e1002
+problem_text: 整数 n を使って表した、連続する3つの偶数 2n, 2n+2, 2n+4 の和を計算し、1つの式で表せ。
+sub_questions:
+- answer:
+    display: 6n + 6
+    kind: symbolic
+    srepr: Add(Mul(Integer(6), Symbol('n')), Integer(6))
+  cause_tags: []
+  concept_tags:
+  - polynomial.consecutive_number_sum
+  explanation: まず、それぞれの数を表す式の和を、かっこを外して書き出す。 かっこを外して和を書き出す次に、同類項をまとめて、1つの式にする。 6n + 6
+  hints:
+  - それぞれの数を表す式の和を、かっこを外して書き出す。
+  label: (1)
+  prompt_text: simplified_expr を求めなさい。
+  solution_steps:
+  - args: []
+    narration: それぞれの数を表す式の和を、かっこを外して書き出す。
+    op: expand_expression
+    result_display: かっこを外して和を書き出す
+    result_srepr: Add(Mul(Integer(6), Symbol('n')), Integer(6))
+  - args: []
+    narration: 同類項をまとめて、1つの式にする。
+    op: combine_like_terms
+    result_display: 6n + 6
+    result_srepr: Add(Mul(Integer(6), Symbol('n')), Integer(6))
+visual_svg: null

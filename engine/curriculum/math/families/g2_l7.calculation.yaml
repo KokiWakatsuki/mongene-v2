@@ -1,0 +1,33 @@
+family: math.g2_l7.calculation
+form: calculation
+source_desc: |
+  文字式を使った数の性質①（偶数・奇数・連続する整数など）— 式を立てて整理する
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: 2n・2n+1 などの式を立て整理する。
+       example: 整数を n とするとき、連続する2つの偶数 2n と 2n+2 の和を、
+                文字を使った1つの式で表し、簡単にせよ。
+  各インスタンスは変数文字・数の性質（偶数/奇数/整数/3の倍数/5の倍数）・個数（2〜5）を
+  surface として振り、それらの連続数の和を1つの式にまとめる（答え＝自由変数を含む
+  SymbolicAnswer）。独立ソルバ express_number_property（sympy.expand）で再計算。
+  答えの種類は少数（property_type ごとに固定形）なので、dup_rate は変数文字・種類・個数を
+  広くとって分散させる（§7.7 F-3。answer に無関係な surface を広く引く）。単一レベルのため
+  level_sep は signature 相異のみ。
+concepts_default: [polynomial.consecutive_number_sum]
+levels:
+  "1":
+    signature: consecutive_number_sum
+    recipe: math.express_number_property
+    params:
+      # 変数文字（曖昧な e/i/o/l と大文字は避ける）×性質×個数を surface として広くとる。
+      letter_pool: [a, b, c, d, f, g, h, k, m, n, p, q, r, s, t, u, w, z]
+      type_set: [even, odd, int, mult3, mult5]
+      count_domain: {int_set: [2, 3, 4, 5]}
+    given: [expressions]
+    asked: [simplified_expr]
+    visual: none
+    text: {tier: T1, template: lf_number_property_v1}
+    hints: [steps_prefix]
+    concept_tags: [polynomial.consecutive_number_sum]
+    cause_tags: []
+remedial:
+  default_level: 1

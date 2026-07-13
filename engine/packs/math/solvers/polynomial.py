@@ -363,6 +363,37 @@ def solve_for_variable(equation_str: str, target: object, mode: object) -> Solut
     return Solution(answer=answer, steps=steps)
 
 
+@register_solver("math.express_number_property")
+def express_number_property(expr_str: str) -> Solution:
+    """数の性質を表す式の和を1つの式にまとめる（g2_l7.calculation Lv1）。
+
+    与式の文字列（各数を表す式の和）だけから sympy.expand で整理する（double-solve）。
+    steps は「かっこを外して和を書き出す」→「同類項をまとめる」の2手。答えは1つの式
+    （自由変数を含む symbolic）。narration には数字を書かない。
+    """
+    expr = sympy.sympify(expr_str)
+    simplified = sympy.expand(expr)
+    disp = _fmt_poly_display(simplified)
+    steps = [
+        Step(
+            op="expand_expression",
+            args=[],
+            result_srepr=sympy.srepr(expr),
+            result_display="かっこを外して和を書き出す",
+            narration="それぞれの数を表す式の和を、かっこを外して書き出す。",
+        ),
+        Step(
+            op="combine_like_terms",
+            args=[],
+            result_srepr=sympy.srepr(simplified),
+            result_display=disp,
+            narration="同類項をまとめて、1つの式にする。",
+        ),
+    ]
+    answer = SymbolicAnswer(srepr=sympy.srepr(simplified), display=disp)
+    return Solution(answer=answer, steps=steps)
+
+
 __all__ = [
     "simplify_polynomial",
     "add_or_subtract_polynomials",
@@ -371,4 +402,5 @@ __all__ = [
     "combine_fractional_expressions",
     "degree_of_expression",
     "solve_for_variable",
+    "express_number_property",
 ]

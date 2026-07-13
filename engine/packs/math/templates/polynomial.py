@@ -28,6 +28,9 @@ LF_SOLVE_FOR_VARIABLE_V1 = (
     "次の等式を {{ given.target_variable }} について解け。\n{{ given.equation }}"
 )
 
+# g2_l7.calculation Lv1: 数の性質を表す式の和を1つの式にまとめる
+LF_NUMBER_PROPERTY_V1 = "{{ given.expressions }} の和を計算し、1つの式で表せ。"
+
 
 def _register_all() -> None:
     REGISTRY.register_template("lf_combine_like_terms_v1", LF_COMBINE_LIKE_TERMS_V1)
@@ -36,6 +39,7 @@ def _register_all() -> None:
     )
     REGISTRY.register_template("lf_degree_v1", LF_DEGREE_V1)
     REGISTRY.register_template("lf_solve_for_variable_v1", LF_SOLVE_FOR_VARIABLE_V1)
+    REGISTRY.register_template("lf_number_property_v1", LF_NUMBER_PROPERTY_V1)
 
 
 _register_all()
@@ -46,4 +50,5 @@ __all__ = [
     "LF_ADD_SUBTRACT_POLYNOMIALS_V1",
     "LF_DEGREE_V1",
     "LF_SOLVE_FOR_VARIABLE_V1",
+    "LF_NUMBER_PROPERTY_V1",
 ]

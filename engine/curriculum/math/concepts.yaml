@@ -167,3 +167,6 @@ concepts:
   - id: polynomial.rearrange_product
     label: "分母・積にある文字について等式を解く"
     unit: g2_l9
+  - id: polynomial.consecutive_number_sum
+    label: "連続する偶数・奇数・整数などの和を文字式で表し整理する"
+    unit: g2_l7

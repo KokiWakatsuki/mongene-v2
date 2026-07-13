@@ -863,6 +863,88 @@ def solve_for_variable(ctx: CellContext, rng: Rng) -> MR:
     )
 
 
+# ---------------------------------------------------------------------------
+# math.express_number_property（g2_l7.calculation Lv1 用）— C2
+# 文字式で数の性質を表す（連続する偶数・奇数・整数などの和を1つの式にまとめる）。
+# 答えは自由変数を含む symbolic（display 全体一致でのみ漏洩検査＝G-Q5t 相対安全・§2-#1）。
+# dup_rate は property_type が少数のため構造的に高リスク → 変数文字・性質の種類・個数を
+# surface param として広くとる（§7.7 F-3 の定石。答えに無関係な surface を分散させる）。
+# ---------------------------------------------------------------------------
+_NUMBER_PROPERTY_CONCEPTS = ["polynomial.consecutive_number_sum"]
+
+# 性質 -> (係数, 先頭のオフセット, ラベル)。連続の刻みは係数に等しい（偶数=2, 3の倍数=3 …）。
+_PROP_TYPES: dict[str, tuple[int, int, str]] = {
+    "even": (2, 0, "偶数"),
+    "odd": (2, 1, "奇数"),
+    "int": (1, 0, "整数"),
+    "mult3": (3, 0, "3の倍数"),
+    "mult5": (5, 0, "5の倍数"),
+}
+_COUNT_WORD = {2: "2", 3: "3", 4: "4", 5: "5"}
+
+
+def _fmt_consecutive_term(coef: int, var: str, const: int) -> str:
+    """連続数の1項を教材表記に（例 coef=2,var="n",const=2 -> "2n+2" / const=0 -> "2n")。"""
+    head = _fmt_term(coef, var, is_first=True)
+    if const == 0:
+        return head
+    return f"{head}+{const}" if const > 0 else f"{head}-{abs(const)}"
+
+
+@register_recipe("math.express_number_property", provides_concepts=_NUMBER_PROPERTY_CONCEPTS)
+def express_number_property(ctx: CellContext, rng: Rng) -> MR:
+    """連続する偶数・奇数・整数などの和を1つの式で表す（構成的生成・calculation Lv1）。"""
+    p = ctx.spec_level.params
+    var = str(draw(cast("list[str]", p["letter_pool"]), rng))
+    ptype = str(draw(cast("list[str]", p["type_set"]), rng))
+    count = int(draw(p["count_domain"], rng))
+    base_coef, first_off, label = _PROP_TYPES[ptype]
+    step = base_coef
+
+    term_disps: list[str] = []
+    term_syms: list[str] = []
+    for i in range(count):
+        const = first_off + step * i
+        term_disps.append(_fmt_consecutive_term(base_coef, var, const))
+        term_syms.append(f"({base_coef}*{var}+{const})")
+    expr_str = "+".join(term_syms)
+    exprs_joined = ", ".join(term_disps)
+    expressions = (
+        f"整数 {var} を使って表した、連続する{_COUNT_WORD[count]}つの{label} {exprs_joined}"
+    )
+
+    solver = REGISTRY.solver("math.express_number_property")
+    sol = cast(Solution, solver(expr_str))
+    assert isinstance(sol.answer, SymbolicAnswer)
+    assert sol.answer.srepr == sympy.srepr(sympy.expand(sympy.sympify(expr_str))), (
+        "double-solve 不一致"
+    )
+    assert [s.op for s in sol.steps] == ["expand_expression", "combine_like_terms"]
+    assert sympy.sympify(sol.answer.srepr).free_symbols, "和が定数に退化した"
+
+    sub_question = SubQuestionMR(
+        label="(1)",
+        asked="simplified_expr",
+        answer=sol.answer,
+        steps=sol.steps,
+        concept_tags=_effective_concept_tags(ctx),
+        cause_tags=_effective_cause_tags(ctx),
+    )
+
+    return MR(
+        signature=ctx.spec_level.signature,
+        family=ctx.family,
+        level=ctx.level,
+        purpose=ctx.purpose,
+        seed=0,
+        params={"expr_str": expr_str, "var": var, "ptype": ptype, "count": count},
+        given={"expressions": expressions},
+        sub_questions=[sub_question],
+        visual_plan=None,
+        provenance=Provenance(recipe="math.express_number_property"),
+    )
+
+
 __all__ = [
     "combine_like_terms",
     "add_or_subtract_polynomials",
@@ -871,4 +953,5 @@ __all__ = [
     "combine_fractional_expressions",
     "degree_of_expression",
     "solve_for_variable",
+    "express_number_property",
 ]

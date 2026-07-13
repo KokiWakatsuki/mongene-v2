@@ -1944,3 +1944,28 @@ def test_solve_for_variable_double_solve_property(level, seed):
     expected = sympy.solve(eq, sympy.Symbol(mr.params["target"]))[0]
     assert sol.answer.srepr == sympy.srepr(expected)
     assert sympy.sympify(sol.answer.srepr).free_symbols
+
+
+# ---------------------------------------------------------------------------
+# math.express_number_property（g2_l7.calculation Lv1）— P1/C2（数の性質の式）
+# ---------------------------------------------------------------------------
+def test_express_number_property_lv1_construct():
+    ctx = _make_ctx("math.g2_l7.calculation", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "consecutive_number_sum"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "simplified_expr"
+    assert [s.op for s in sq.steps] == ["expand_expression", "combine_like_terms"]
+
+
+@pytest.mark.parametrize("seed", range(100))
+def test_express_number_property_double_solve_property(seed):
+    ctx = _make_ctx("math.g2_l7.calculation", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.express_number_property")
+    sol = solver(mr.params["expr_str"])
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+    assert sol.answer.srepr == sympy.srepr(sympy.expand(sympy.sympify(mr.params["expr_str"])))
+    assert sympy.sympify(sol.answer.srepr).free_symbols
