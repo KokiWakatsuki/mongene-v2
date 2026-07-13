@@ -29,8 +29,22 @@ def double_solve_compute_notation(mr: MR) -> Solution:
     return cast(Solution, solver(mr.params["expr_str"], mr.params["mode"]))
 
 
+@register_checker("math.term_recall.double_solve")
+def double_solve_term_recall(mr: MR) -> Solution:
+    solver = REGISTRY.solver("math.term_recall_definition")
+    return cast(Solution, solver(mr.params["concept"], mr.params["domain"]))
+
+
+@register_checker("math.verify_equation_solution.double_solve")
+def double_solve_verify_equation_solution(mr: MR) -> Solution:
+    solver = REGISTRY.solver("math.verify_equation_solution")
+    return cast(Solution, solver(mr.params["equation_str"], mr.params["value"]))
+
+
 __all__ = [
     "double_solve_compute_letter_expression",
     "double_solve_compute_substitution",
     "double_solve_compute_notation",
+    "double_solve_term_recall",
+    "double_solve_verify_equation_solution",
 ]

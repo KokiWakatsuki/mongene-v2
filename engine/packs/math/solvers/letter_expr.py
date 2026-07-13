@@ -14,7 +14,7 @@ from __future__ import annotations
 
 import sympy
 
-from engine.core.contracts import Solution, Step, SymbolicAnswer
+from engine.core.contracts import ChoiceAnswer, Solution, Step, SymbolicAnswer
 from engine.core.registry import register_solver
 from engine.packs.math.solvers.arithmetic import fmt_number
 from engine.packs.math.solvers.polynomial import _fmt_monomial_display, _fmt_poly_display
@@ -206,4 +206,98 @@ def simplify_notation(expr_str: str, mode: object) -> Solution:
     return Solution(answer=answer, steps=steps)
 
 
-__all__ = ["evaluate_letter_expression", "evaluate_substitution", "simplify_notation"]
+# ---------------------------------------------------------------------------
+# knowledge 系（ChoiceAnswer・用語想起／解の判別）— C1 g1 数と式の残 knowledge セル。
+# 答えはテキスト（数値トークンなし）＝G-Q5t 素通り（§7.7）。fact_id は根拠規則の識別子。
+# 用語想起は「説明された対象の名称を選ぶ」型（concept で correct が変わる）。domain ごとに
+# 用語集合を持ち、distractors は同 domain の他の用語（＝もっともらしい紛らわしい選択肢）。
+# ---------------------------------------------------------------------------
+_TERM_MAPS: dict[str, dict[str, str]] = {
+    # g1_l17 文字式の用語（項・係数・次数・同類項）
+    "letter": {"term": "項", "coefficient": "係数", "degree": "次数", "like_terms": "同類項"},
+    # g1_l19 等式の用語（等式・左辺・右辺・両辺）
+    "equality": {"equality": "等式", "lhs": "左辺", "rhs": "右辺", "both_sides": "両辺"},
+    # g1_l21 方程式の用語（方程式・解）。distractors に紛らわしい文字式の用語を混ぜる。
+    "equation": {"equation": "方程式", "solution": "解", "coefficient": "係数", "term": "項"},
+}
+
+
+@register_solver("math.term_recall_definition")
+def term_recall_definition(concept: object, domain: object) -> Solution:
+    """数と式まわりの用語の名称を答える（knowledge 用語想起・g1_l17/l19/l21 Lv1）。
+
+    domain（用語の分野）と concept（説明されている対象）だけから名称を判定する
+    （具体例の値は無関係・double-solve）。答えは ChoiceAnswer（concept で correct が
+    変わる用語想起型）。distractors は同 domain の他の用語。op 列は判別/verify 型と相異＝level_sep。
+    """
+    d = str(domain)
+    c = str(concept)
+    if d not in _TERM_MAPS:
+        raise ValueError(f"未知の domain: {d!r}")
+    names = _TERM_MAPS[d]
+    if c not in names:
+        raise ValueError(f"未知の concept: {c!r}（domain={d!r}）")
+    correct = names[c]
+    distractors = [v for k, v in names.items() if k != c]
+    steps = [
+        Step(
+            op="identify_description",
+            args=[],
+            result_srepr=c,
+            result_display="説明されている対象を読み取る",
+            narration="説明されている式や数の部分がどれかを読み取る。",
+        ),
+        Step(
+            op="name_concept",
+            args=[],
+            result_srepr=correct,
+            result_display=correct,
+            narration="その対象を表す用語の名前を思い出す。",
+        ),
+    ]
+    answer = ChoiceAnswer(correct=correct, distractors=distractors, fact_id=f"{d}.term.{c}")
+    return Solution(answer=answer, steps=steps)
+
+
+@register_solver("math.verify_equation_solution")
+def verify_equation_solution(equation_str: object, value: object) -> Solution:
+    """ある値が方程式の解かどうかを代入して判別する（knowledge verify・g1_l21 Lv2）。
+
+    方程式（"lhs=rhs"）と候補値だけから、代入して両辺が等しいかで判定する（double-solve）。
+    答えは値で変わる verify 型の ChoiceAnswer。op 列は用語想起 Lv1 と相異＝level_sep。
+    """
+    lhs_s, rhs_s = str(equation_str).split("=")
+    x = sympy.Symbol("x")
+    v = sympy.Rational(sympy.sympify(str(value), rational=True))
+    lhs_v = sympy.sympify(lhs_s, rational=True).subs(x, v)
+    rhs_v = sympy.sympify(rhs_s, rational=True).subs(x, v)
+    is_solution = bool(sympy.simplify(lhs_v - rhs_v) == 0)
+    correct = "解である" if is_solution else "解ではない"
+    other = "解ではない" if is_solution else "解である"
+    steps = [
+        Step(
+            op="substitute_candidate",
+            args=[],
+            result_srepr=sympy.srepr(v),
+            result_display="候補の値を方程式の x に代入する",
+            narration="候補の値を方程式の x にあてはめる。",
+        ),
+        Step(
+            op="judge_solution",
+            args=[],
+            result_srepr=correct,
+            result_display=correct,
+            narration="左辺と右辺の値が等しければ解、等しくなければ解ではない。",
+        ),
+    ]
+    answer = ChoiceAnswer(correct=correct, distractors=[other], fact_id="equation.verify_solution")
+    return Solution(answer=answer, steps=steps)
+
+
+__all__ = [
+    "evaluate_letter_expression",
+    "evaluate_substitution",
+    "simplify_notation",
+    "term_recall_definition",
+    "verify_equation_solution",
+]

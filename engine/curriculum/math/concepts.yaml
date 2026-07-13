@@ -216,6 +216,12 @@ concepts:
   - id: notation.quotient_mixed
     label: "乗除の混じった式を1つの分数の形に表す"
     unit: g1_l14
+  - id: letter_expr.term_recall
+    label: "項・係数・次数・同類項の用語を想起する"
+    unit: g1_l17
+  - id: equality.term_recall
+    label: "等式・左辺・右辺・両辺の用語を想起する"
+    unit: g1_l19
   # --- C1 g1 一次方程式（解法） ---
   - id: equation.solve_by_equality_property
     label: "等式の性質を使って一次方程式を解く（1手）"
@@ -250,6 +256,12 @@ concepts:
   - id: equation.solve_proportion_linear
     label: "文字を含む項のある比例式を展開して解く"
     unit: g1_l24
+  - id: equation.term_recall
+    label: "方程式・解の用語を想起する"
+    unit: g1_l21
+  - id: equation.verify_solution
+    label: "ある値が方程式の解かを代入して判別する"
+    unit: g1_l21
   # --- C1 g1 正の数・負の数（四則） ---
   - id: signed_number.add_pair
     label: "2数の加法（符号を決めて絶対値を計算する）"

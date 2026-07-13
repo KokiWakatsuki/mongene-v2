@@ -1,0 +1,32 @@
+family: math.g1_l17.knowledge
+form: knowledge
+source_desc: |
+  項・係数・次数・同類項の用語（Lv1 想起）
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: 項・係数・次数・同類項の用語を判別する。
+       example: 式 7x-4 の項をすべて答え、x の係数を答えよ。
+  【設計モデル・要検収(Q4)】「説明された対象の名称を答える」単一選択に realize（concept で
+  答えが変わる用語想起型・具体例を surface として dup 分散）。汎用ソルバ term_recall_definition
+  （domain=letter）が概念→名称を写像し、distractors は同 domain の他の用語。op 列
+  [identify_description, name_concept]。答えはテキストの ChoiceAnswer＝G-Q5t 素通り（§7.7）。
+  #16 の knowledge capability（ChoiceAnswer 経路）を再利用。図は無し。
+concepts_default: [letter_expr.term_recall]
+levels:
+  "1":
+    signature: letter_term_recall
+    recipe: math.term_recall
+    params:
+      domain: letter
+      concept_set: [term, coefficient, degree, like_terms]
+      # 域を広めにとり dup_rate を下げる（1変数×少 concept で surface が薄いため）。
+      coeff_domain: {int_range: [-12, 12]}
+      power_domain: {int_set: [1, 2, 3]}
+    given: [statement]
+    asked: [choice]
+    visual: none
+    text: {tier: T1, template: lf_term_recall_v1}
+    hints: [steps_prefix]
+    concept_tags: [letter_expr.term_recall]
+    cause_tags: []
+remedial:
+  default_level: 1

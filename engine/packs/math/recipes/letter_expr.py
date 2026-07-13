@@ -23,6 +23,7 @@ import sympy
 from engine.core.contracts import (
     MR,
     CellContext,
+    ChoiceAnswer,
     Provenance,
     Solution,
     SubQuestionMR,
@@ -397,4 +398,138 @@ def compute_notation(ctx: CellContext, rng: Rng) -> MR:
     raise ValueError(f"非退化・非漏洩の記法問題を構成できず（mode={mode!r}）")
 
 
-__all__ = ["compute_letter_expression", "compute_substitution", "compute_notation"]
+# ---------------------------------------------------------------------------
+# knowledge 系（ChoiceAnswer・用語想起／解の判別）— C1 g1 数と式の残 knowledge セル。
+# 答えはテキスト＝G-Q5t 素通り（§7.7）。dup は具体例（surface）と concept のパラメータ化で分散。
+# ---------------------------------------------------------------------------
+_TERM_RECALL_CONCEPTS = [
+    "letter_expr.term_recall",
+    "equality.term_recall",
+    "equation.term_recall",
+]
+
+
+def _draw_eq_example_disp(rng: Rng, p: dict[str, object]) -> str:
+    """具体例の一次方程式 a·x + b = c の表示を引く（surface・答えに無関係）。"""
+    cc = [v for v in _domain_candidates(cast("dict[str, object]", p["coeff_domain"])) if v != 0]
+    a = int(draw({"int_set": [v for v in cc if v not in (1, -1)]}, rng))
+    b = int(draw({"int_set": cc}, rng))
+    x0 = int(draw({"int_set": [v for v in cc if v != 0]}, rng))
+    c = a * x0 + b
+    return f"{_fmt_poly_x_terms([(a, 1), (b, 0)])} = {c}"
+
+
+def _draw_term_statement(domain: str, concept: str, rng: Rng, p: dict[str, object]) -> str:
+    """(domain, concept) から説明文（具体例つき）を組み立てる。"""
+    cc = [v for v in _domain_candidates(cast("dict[str, object]", p["coeff_domain"])) if v != 0]
+    if domain == "letter":
+        if concept == "term":
+            a = int(draw({"int_set": [v for v in cc if v not in (1, -1)]}, rng))
+            b = int(draw({"int_set": cc}, rng))
+            ex = _fmt_poly_x_terms([(a, 1), (b, 0)])
+            return f"式 {ex} を数や文字のまとまりの和とみたときの、その1つ1つの部分"
+        if concept == "coefficient":
+            a = int(draw({"int_set": [v for v in cc if v not in (1, -1)]}, rng))
+            ex = _fmt_poly_x_terms([(a, 1)])
+            return f"単項式 {ex} で、文字にかけられている数の部分"
+        if concept == "degree":
+            a = int(draw({"int_set": [v for v in cc if v not in (1, -1)]}, rng))
+            pw = int(draw(p["power_domain"], rng))
+            ex = _fmt_poly_x_terms([(a, pw)])
+            return f"単項式 {ex} で、かけ合わされている文字の個数"
+        # like_terms
+        a1 = int(draw({"int_set": [v for v in cc if v not in (1, -1)]}, rng))
+        a2 = int(draw({"int_set": [v for v in cc if v not in (1, -1) and v != a1]}, rng))
+        pw = int(draw(p["power_domain"], rng))
+        e1 = _fmt_poly_x_terms([(a1, pw)])
+        e2 = _fmt_poly_x_terms([(a2, pw)])
+        return f"{e1} と {e2} のように、文字の部分がまったく同じである項どうし"
+
+    ex = _draw_eq_example_disp(rng, p)
+    if domain == "equality":
+        if concept == "equality":
+            return f"{ex} のように、等号 = を使って2つの数量が等しいことを表した式"
+        if concept == "lhs":
+            return f"等式 {ex} で、等号の左側の部分"
+        if concept == "rhs":
+            return f"等式 {ex} で、等号の右側の部分"
+        return f"等式 {ex} で、左辺と右辺を合わせたよび名"  # both_sides
+    # equation
+    if concept == "equation":
+        return f"{ex} のように、文字にあてはめる値によって成り立ったり成り立たなかったりする等式"
+    return f"方程式 {ex} を成り立たせる文字の値"  # solution
+
+
+@register_recipe("math.term_recall", provides_concepts=_TERM_RECALL_CONCEPTS)
+def term_recall(ctx: CellContext, rng: Rng) -> MR:
+    """数と式まわりの用語の名称を答える（knowledge 用語想起・g1_l17/l19/l21 Lv1）。"""
+    p = ctx.spec_level.params
+    domain = cast(str, p["domain"])
+    concept = str(draw(cast("list[str]", p["concept_set"]), rng))
+    statement = _draw_term_statement(domain, concept, rng, cast("dict[str, object]", p))
+
+    solver = REGISTRY.solver("math.term_recall_definition")
+    sol = cast(Solution, solver(concept, domain))
+    assert isinstance(sol.answer, ChoiceAnswer)
+    assert [s.op for s in sol.steps] == ["identify_description", "name_concept"]
+
+    sub_question = SubQuestionMR(
+        label="(1)", asked="choice", answer=sol.answer, steps=sol.steps,
+        concept_tags=_effective_concept_tags(ctx), cause_tags=_effective_cause_tags(ctx),
+    )
+    return MR(
+        signature=ctx.spec_level.signature, family=ctx.family, level=ctx.level,
+        purpose=ctx.purpose, seed=0,
+        # statement（具体例＝surface）を params に含め dup_key を分散させる（§7.7）。
+        params={"concept": concept, "domain": domain, "statement": statement},
+        given={"statement": statement}, sub_questions=[sub_question], visual_plan=None,
+        provenance=Provenance(recipe="math.term_recall"),
+    )
+
+
+@register_recipe("math.verify_equation_solution", provides_concepts=["equation.verify_solution"])
+def verify_equation_solution(ctx: CellContext, rng: Rng) -> MR:
+    """ある値が方程式の解かどうかを代入して判別する（knowledge verify・g1_l21 Lv2）。"""
+    p = ctx.spec_level.params
+    cc = [v for v in _domain_candidates(cast("dict[str, object]", p["coeff_domain"])) if v != 0]
+    a = int(draw({"int_set": [v for v in cc if v not in (1, -1)]}, rng))
+    b = int(draw({"int_set": cc}, rng))
+    x0 = int(draw({"int_set": [v for v in cc if v != 0]}, rng))
+    c = a * x0 + b  # 方程式 a·x + b = c の真の解は x0
+    is_solution = int(draw({"int_set": [0, 1]}, rng)) == 1
+    if is_solution:
+        cand = x0
+    else:
+        delta = int(draw({"int_set": [v for v in cc if v != 0]}, rng))
+        cand = x0 + delta  # x0 とは異なる（delta≠0）＝解ではない
+    eq_str = f"({a})*x+({b})=({c})"
+    eq_disp = f"{_fmt_poly_x_terms([(a, 1), (b, 0)])} = {c}"
+    statement = f"方程式 {eq_disp} について、x = {cand}"
+
+    solver = REGISTRY.solver("math.verify_equation_solution")
+    sol = cast(Solution, solver(eq_str, cand))
+    assert isinstance(sol.answer, ChoiceAnswer)
+    expected = "解である" if is_solution else "解ではない"
+    assert sol.answer.correct == expected, f"double-solve 不一致: {is_solution} != {sol.answer.correct}"
+    assert [s.op for s in sol.steps] == ["substitute_candidate", "judge_solution"]
+
+    sub_question = SubQuestionMR(
+        label="(1)", asked="choice", answer=sol.answer, steps=sol.steps,
+        concept_tags=_effective_concept_tags(ctx), cause_tags=_effective_cause_tags(ctx),
+    )
+    return MR(
+        signature=ctx.spec_level.signature, family=ctx.family, level=ctx.level,
+        purpose=ctx.purpose, seed=0,
+        params={"equation_str": eq_str, "value": str(cand), "is_solution": str(is_solution)},
+        given={"statement": statement}, sub_questions=[sub_question], visual_plan=None,
+        provenance=Provenance(recipe="math.verify_equation_solution"),
+    )
+
+
+__all__ = [
+    "compute_letter_expression",
+    "compute_substitution",
+    "compute_notation",
+    "term_recall",
+    "verify_equation_solution",
+]

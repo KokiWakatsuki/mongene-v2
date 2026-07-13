@@ -1,0 +1,54 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - equation.verify_solution
+  provenance:
+    git_commit: ''
+    recipe: math.verify_equation_solution
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_verify_solution_v1
+    tier: T1
+  requested:
+    form: knowledge
+    level: 2
+    subject: math
+    unit: g1_l21
+  resolved:
+    form: knowledge
+    level: 2
+    subject: math
+    unit: g1_l21
+  seed: 3
+  signature: equation_verify_solution
+problem_ref: c63b60aed8ceb52a
+problem_text: 方程式 -7x + 7 = 0 について、x = 1 は、この方程式の解であるといえますか。
+sub_questions:
+- answer:
+    correct: 解である
+    distractors:
+    - 解ではない
+    fact_id: equation.verify_solution
+    kind: choice
+  cause_tags: []
+  concept_tags:
+  - equation.verify_solution
+  explanation: まず、候補の値を方程式の x にあてはめる。 候補の値を方程式の x に代入する次に、左辺と右辺の値が等しければ解、等しくなければ解ではない。 解である
+  hints:
+  - 候補の値を方程式の x にあてはめる。
+  label: (1)
+  prompt_text: choice を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 候補の値を方程式の x にあてはめる。
+    op: substitute_candidate
+    result_display: 候補の値を方程式の x に代入する
+    result_srepr: Integer(1)
+  - args: []
+    narration: 左辺と右辺の値が等しければ解、等しくなければ解ではない。
+    op: judge_solution
+    result_display: 解である
+    result_srepr: 解である
+visual_svg: null

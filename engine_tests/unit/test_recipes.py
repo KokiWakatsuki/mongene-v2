@@ -2491,6 +2491,71 @@ def test_compute_notation_double_solve_property(family, level, seed):
 
 
 # ---------------------------------------------------------------------------
+# math.term_recall / math.verify_equation_solution（C1 g1 数と式 knowledge）— P2
+# ---------------------------------------------------------------------------
+def test_letter_term_recall_l17_lv1_construct():
+    ctx = _make_ctx("math.g1_l17.knowledge", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "letter_term_recall"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "choice"
+    assert sq.answer.kind == "choice"
+    assert [s.op for s in sq.steps] == ["identify_description", "name_concept"]
+
+
+def test_equation_term_recall_l21_lv1_construct():
+    ctx = _make_ctx("math.g1_l21.knowledge", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "equation_term_recall"
+    assert [s.op for s in mr.sub_questions[0].steps] == ["identify_description", "name_concept"]
+
+
+def test_verify_equation_solution_l21_lv2_construct():
+    ctx = _make_ctx("math.g1_l21.knowledge", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "equation_verify_solution"
+    assert [s.op for s in mr.sub_questions[0].steps] == ["substitute_candidate", "judge_solution"]
+
+
+_TERM_RECALL_CELLS = [
+    ("math.g1_l17.knowledge", 1),
+    ("math.g1_l19.knowledge", 1),
+    ("math.g1_l21.knowledge", 1),
+]
+
+
+@pytest.mark.parametrize("family,level", _TERM_RECALL_CELLS)
+@pytest.mark.parametrize("seed", range(100))
+def test_term_recall_double_solve_property(family, level, seed):
+    ctx = _make_ctx(family, level)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.term_recall_definition")
+    sol = solver(mr.params["concept"], mr.params["domain"])
+    assert sol.answer.correct == mr.sub_questions[0].answer.correct
+    assert sol.answer.fact_id == mr.sub_questions[0].answer.fact_id
+    # 答えはテキスト（数字トークンなし）＝G-Q5t 素通り。
+    assert not any(ch.isdigit() for ch in sol.answer.correct)
+    assert mr.sub_questions[0].answer.correct not in mr.sub_questions[0].answer.distractors
+
+
+@pytest.mark.parametrize("seed", range(100))
+def test_verify_equation_solution_double_solve_property(seed):
+    ctx = _make_ctx("math.g1_l21.knowledge", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.verify_equation_solution")
+    sol = solver(mr.params["equation_str"], mr.params["value"])
+    assert sol.answer.correct == mr.sub_questions[0].answer.correct
+    # 構成の真偽ビットと判定が一致する。
+    expected = "解である" if mr.params["is_solution"] == "True" else "解ではない"
+    assert sol.answer.correct == expected
+
+
+# ---------------------------------------------------------------------------
 # math.compute_linear_equation（C1 g1 一次方程式・解法）— P2
 # ---------------------------------------------------------------------------
 def test_equation_equality_add_lv1_construct():
