@@ -37,9 +37,10 @@
 
 ## 1. 現状サマリ（2026-07-13d・本セッション終了時）
 
-**進捗: capabilities 92/630（14.6%）**（`python -m engine.tools.goal_progress` 実測・exit 0）。最新コミット `13e27bd`（#54）。
-- **C1 g1 数と式: 26/69** ← 本セッション +10セル（文字式 calc 6 + 一次方程式 calc 4）。
+**進捗: capabilities 96/630（15.2%）**（`python -m engine.tools.goal_progress` 実測・exit 0）。最新コミット `da6671e`（#55）。
+- **C1 g1 数と式: 30/69** ← 本セッション +14セル（文字式 calc 6 + 一次方程式 calc 8）。
 - C2 32/32（完成）・C5 34/36（変化なし）。他グループ未着手。
+- ★**property テストを lru_cache で 60 倍高速化**（`f38aece`・§0.5）＝毎セル検証が数分→数秒・FS 26分→3分。
 
 **本セッションの3コミット（#52〜#54）**。すべて1セル群ごとに DoD 緑
 （generate 目視／spec lint0 smoke0／120-seed 拒否0／dup_rate ≤0.20 @100seed 実測／level_sep 相異(fps)／
@@ -50,13 +51,14 @@ golden 承認（golden slice 緑）／property 全緑／eval exit0／mypy strict
 | #52 | g1_l17 一次式加減 Lv1/2・g1_l18 一次式乗除 Lv1/2 | combine_linear / expand_paren_linear / distribute_linear / distribute_divide_linear | **letter_expr パック新設**。単一文字の一次式。答えは式（free_symbol）。漏洩ガード付き |
 | #53 | g1_l16 代入と式の値 Lv1/2 | substitute_positive / substitute_signed | letter_expr に**代入 solver 追加**（sympy.subs）。答えは数値（定数） |
 | #54 | g1_l21 等式の性質 Lv1/2・g1_l22 移項 Lv1/2 | equality_add / equality_multi / transpose_constant / transpose_both | **equation パック新設**（sympy.solve）。答えは解 x=定数。answer-first で逆算 |
+| #55 | g1_l23 かっこ展開 Lv2・g1_l25 代金・g1_l26 過不足・g1_l27 速さ | expand_parens / word_price_equation / shortage_equation / speed_fraction_equation | equation.py に **mode 追加のみ**（capability 償却）。l26 は transpose_both を signature 別で流用＝コード変更なし |
 
 ### 再開時の最初のコマンド
 ```bash
 cd /Users/koki/workspace/mongene-v2
-git log --oneline -6                                        # 最新 13e27bd(#54)
+git log --oneline -6                                        # 最新 da6671e(#55)
 git status --porcelain                                      # 空(clean)
-.venv/bin/python -m engine.tools.goal_progress             # 92/630・C1 26/69・exit0
+.venv/bin/python -m engine.tools.goal_progress             # 96/630・C1 30/69・exit0
 .venv/bin/python -m engine.eval --seeds 5 --dup-seeds 100   # 一式OK・exit0（約1分）
 # フルスイート（pipestatus で exit code 確認）:
 .venv/bin/python -m pytest engine_tests/ -o addopts="" -p no:cacheprovider -n auto -q 2>&1 | tail -3; echo "EXIT=$pipestatus[2]"
@@ -97,15 +99,15 @@ git status --porcelain                                      # 空(clean)
 
 ## 3. 残タスク（優先順）
 
-### 3.1 C1 の残（43/69）
+### 3.1 C1 の残（39/69）
 - **一次方程式 calc の残（equation.py に mode 追加で入る・sympy.solve は分数/かっこ/比例式も解ける）**:
-  - **l23 Lv2**（かっこ展開 `3(x-2)=x+4`）・**Lv3**（分母を払う `(x-1)/2 - (2x-3)/5 = 1`＝分数係数。answer-first で
-    分母の最小公倍数の倍数を選び整数解を保証）。op 列＝`[expand_parentheses, transpose_and_solve]` /
-    `[clear_denominators, expand_and_transpose, solve]`。
-  - **l24 Lv1**（比例式 `3:4=9:x`＝たすきがけ `ad=bc`）・**Lv2**（`(x+1):6=5:3`＝文字を含む項）。
-    新 given=proportion。solve_linear_equation は `a*x_rhs = b*c` の形にして解く（または専用 solver）。
-  - **l25 Lv1**（利用の解く `90x+130(12-x)=1280`＝かっこ展開型）・**l26 Lv1**（過不足 `4x+7=5x-3`＝両辺文字・
-    l22 Lv2 と同構造だが別 unit）・**l27 Lv2**（速さ・分数係数 `x/4+x/6=5`）。各 mode 追加。
+  - **l23 Lv3**（分母を払う `(x-1)/2 - (2x-3)/5 = 1`＝分数係数の式。answer-first で分母倍数を選び整数解を保証。
+    `clear_denominators_simple`（x/p+x/q=r）とは別に、`(x+p)/d1 ±(m·x+s)/d2 = c` 型の新 mode が要る。
+    整数中間値を出すため p≡-x0 mod d1・s≡-m·x0 mod d2 で構成）。op 列例＝`[clear_denominators, expand_and_transpose, solve]`。
+  - **l24 Lv1**（比例式 `3:4=9:x`＝たすきがけ `ad=bc`。構成: a,b,t で c=a·t, x0=b·t）・**Lv2**（`(x+1):6=5:3`）。
+    ★**表示（比例式）と solver 用の式（クロス乗算した線形式）が別**なので、params に equation_str（線形）と
+    display（比例式）を両方持たせ、`_build_eq` を使う（term-list の `_build` は使わない）。新 given=proportion 想定
+    だが calc frame の given_vocab に proportion が無ければ frames.py + test_frames.py 追加（§5-⑦）。
 - **文字式 calc の残**: 記法 **l13/l14**（積・商の表し方＝`3×a×a→3a²`・`a÷b→a/b` の簡約表示 solver。answer は式）。
   ※ l13/l14 は「きまりに従って簡潔に表す」＝簡約表示。knowledge 寄り（用語想起）の level もある。
 - **knowledge 多数**（#16/#45 の **ChoiceAnswer パターン**を流用。polynomial.py の `poly_term_recall` /
@@ -158,18 +160,17 @@ equation を横展開。word_problem 系（l19/l24/l25/l26/l27 の word_problem�
 > **再開の最初**:
 > ```bash
 > cd /Users/koki/workspace/mongene-v2
-> git log --oneline -6                                        # 最新 13e27bd(#54)
+> git log --oneline -6                                        # 最新 da6671e(#55)
 > git status --porcelain                                      # 空(clean)
-> .venv/bin/python -m engine.tools.goal_progress             # 92/630・C1 26/69・exit0
+> .venv/bin/python -m engine.tools.goal_progress             # 96/630・C1 30/69・exit0
 > .venv/bin/python -m engine.eval --seeds 5 --dup-seeds 100   # 一式OK・exit0
 > .venv/bin/python -m pytest engine_tests/ -o addopts="" -p no:cacheprovider -n auto -q 2>&1 | tail -3; echo "EXIT=$pipestatus[2]"
 > ```
 >
 > フルスイートが緑なら **C1 の残（§3.1）** を同じプレイブックで1セルずつ DoD 緑にしてコミット。優先＝
-> ①一次方程式の残 l23/l24/l25/l26/l27 calc（`equation.py` の `compute_linear_equation` に mode を足すだけ＝
-> solve_linear_equation は sympy.solve なので分数・かっこ・比例式も解ける）②文字式 記法 l13/l14 calc
-> ③knowledge 多数（polynomial の poly_term_recall / classify / judge_like_terms を雛形に ChoiceAnswer 流用）
-> ④l11 素因数分解・l60 科学的記数法（bespoke）。C1 完成後 C3 g3 数と式（sympy.expand/factor/sqrt/solve）。
+> ①一次方程式の残 **l23 Lv3（分母払い）・l24（比例式）** calc（`equation.py` に mode 追加。l24 は表示≠solver式に注意）
+> ②文字式 記法 l13/l14 calc ③knowledge 多数（polynomial の poly_term_recall / classify / judge_like_terms を
+> 雛形に ChoiceAnswer 流用）④l11 素因数分解・l60 科学的記数法（bespoke）。C1 完成後 C3 g3 数と式（sympy.expand/factor/sqrt/solve）。
 >
 > **鉄則**: ①level 間は steps の op 列を変える（数値域だけの偽レベルは level_sep が落とす）②narration/ヒントに
 > 数字を書かない（定数答えの唯一の漏洩経路）③式答えは「答え表示が与式に部分文字列で現れない」有界リトライで
