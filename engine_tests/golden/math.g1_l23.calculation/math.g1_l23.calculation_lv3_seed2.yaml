@@ -1,0 +1,60 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - equation.solve_by_clear_denominators
+  provenance:
+    git_commit: ''
+    recipe: math.compute_linear_equation
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_solve_equation_v1
+    tier: T1
+  requested:
+    form: calculation
+    level: 3
+    subject: math
+    unit: g1_l23
+  resolved:
+    form: calculation
+    level: 3
+    subject: math
+    unit: g1_l23
+  seed: 2
+  signature: clear_denominators_two
+problem_ref: 7b5f88d8aca7d2dc
+problem_text: '次の方程式を解け。
+
+  (x - 4)/5 + (2x - 6)/4 = -3'
+sub_questions:
+- answer:
+    display: x = -1
+    kind: symbolic
+    srepr: Integer(-1)
+  cause_tags: []
+  concept_tags:
+  - equation.solve_by_clear_denominators
+  explanation: まず、分母の最小公倍数を両辺にかけて、分母をはらう。 分母をはらう次に、分配法則でかっこを外し、文字の項を左辺・数の項を右辺に移項する。 かっこを外して移項する最後に、同類項をまとめ、x の係数で両辺をわって解を求める。 x = -1
+  hints:
+  - 分母の最小公倍数を両辺にかけて、分母をはらう。
+  - 分配法則でかっこを外し、文字の項を左辺・数の項を右辺に移項する。
+  label: (1)
+  prompt_text: solution を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 分母の最小公倍数を両辺にかけて、分母をはらう。
+    op: clear_denominators
+    result_display: 分母をはらう
+    result_srepr: Integer(-1)
+  - args: []
+    narration: 分配法則でかっこを外し、文字の項を左辺・数の項を右辺に移項する。
+    op: expand_and_transpose
+    result_display: かっこを外して移項する
+    result_srepr: Integer(-1)
+  - args: []
+    narration: 同類項をまとめ、x の係数で両辺をわって解を求める。
+    op: solve
+    result_display: x = -1
+    result_srepr: Integer(-1)
+visual_svg: null

@@ -50,6 +50,9 @@ _EQUATION_CONCEPTS = [
     "equation.solve_word_price",
     "equation.solve_shortage",
     "equation.solve_speed_fraction",
+    "equation.solve_by_clear_denominators",
+    "equation.solve_proportion",
+    "equation.solve_proportion_linear",
 ]
 
 
@@ -172,6 +175,83 @@ def compute_linear_equation(ctx: CellContext, rng: Rng) -> MR:
         eq_str = f"x/({dp}) + x/({dq}) = ({r})"
         eq_disp = f"x/{dp} + x/{dq} = {r}"
         return _build_eq(eq_str, eq_disp, mode, ctx)
+
+    if mode == "clear_denominators_two":
+        # (x + p)/d1 ± (m·x + s)/d2 = c（かっこ＋分数）。answer-first: 各項が x0 で整数値
+        # （term1(x0)=kp・term2(x0)=ks）になるよう小さな p・s を p≡-x0(mod d1)・s≡-m·x0(mod d2)
+        # を満たす候補から引き、c=kp+sgn·ks。分母を払った後の x 係数（d2+sgn·m·d1）≠0 で非退化。
+        denoms = [int(v) for v in cast("list[int]", p["denominator_set"])]
+        const_cands = [v for v in _domain_candidates(cast("dict[str, object]", p["num_const_domain"])) if v != 0]
+        for _ in range(200):
+            x0 = int(draw(p["solution_domain"], rng))
+            d1 = int(draw({"int_set": denoms}, rng))
+            d2 = int(draw({"int_set": [d for d in denoms if d != d1]}, rng))
+            m = int(draw(p["num_coeff_domain"], rng))
+            sgn = int(draw({"int_set": [1, -1]}, rng))
+            if d2 + sgn * m * d1 == 0:  # 分母を払うと x が消える退化を回避
+                continue
+            # 分子の定数は小さく保ちつつ、各項が x0 で整数値になる（＝割り切れる）ものだけ許す。
+            p_cands = [v for v in const_cands if (x0 + v) % d1 == 0]
+            s_cands = [v for v in const_cands if (m * x0 + v) % d2 == 0]
+            if not p_cands or not s_cands:
+                continue
+            p_const = int(draw({"int_set": p_cands}, rng))
+            s_const = int(draw({"int_set": s_cands}, rng))
+            kp = (x0 + p_const) // d1
+            ks = (m * x0 + s_const) // d2
+            c = kp + sgn * ks
+            # 答え x0 が表示中の整数と一致すると（whitelist で gate は素通りだが）教材上の漏洩。
+            shown = {abs(p_const), d1, m, abs(s_const), d2, abs(c)}
+            if abs(x0) in shown:
+                continue
+            num1 = _fmt_poly_x_terms([(1, 1), (p_const, 0)])
+            num2 = _fmt_poly_x_terms([(m, 1), (s_const, 0)])
+            op = "+" if sgn > 0 else "-"
+            eq_str = f"(x+({p_const}))/({d1}) {op} ({m}*x+({s_const}))/({d2}) = ({c})"
+            eq_disp = f"({num1})/{d1} {op} ({num2})/{d2} = {c}"
+            return _build_eq(eq_str, eq_disp, mode, ctx)
+        raise ValueError("clear_denominators_two: 非退化・非漏洩の方程式を構成できず")
+
+    if mode == "cross_multiply":
+        # a : b = c : x（比例式・たすきがけ）。answer-first: a,b,t から c=a·t・x0=b·t。
+        # a≠b で x0≠c、t≥2 で x0≠b。solver へは外項の積＝内項の積の線形式 a·x=b·c を渡す。
+        ratios = [v for v in _domain_candidates(cast("dict[str, object]", p["ratio_domain"])) if v != 0]
+        for _ in range(200):
+            a = int(draw({"int_set": ratios}, rng))
+            b = int(draw({"int_set": [v for v in ratios if v != a]}, rng))
+            t = int(draw(p["scale_domain"], rng))
+            c = a * t
+            x0 = b * t
+            if x0 in {a, b, c}:  # 答えが表示中の数と一致する漏洩を回避
+                continue
+            eq_str = f"({a})*x = ({b})*({c})"
+            eq_disp = f"{a} : {b} = {c} : x"
+            return _build_eq(eq_str, eq_disp, mode, ctx)
+        raise ValueError("cross_multiply: 非漏洩の比例式を構成できず")
+
+    if mode == "cross_multiply_expand":
+        # (x + p) : b = c : d（文字を含む項の比例式）。answer-first: x0 と小さな p を先に決め、
+        # 左辺の分子値 N=x0+p（>0）と左辺分母 b から右比を c:d = 既約(N:b) で得る。
+        # solver へはクロス乗算した線形式 d·(x+p)=b·c を渡す（表示は比例式・式は線形で別物）。
+        const_cands = [v for v in _domain_candidates(cast("dict[str, object]", p["num_const_domain"])) if v != 0]
+        denom_cands = [v for v in _domain_candidates(cast("dict[str, object]", p["denom_domain"])) if v > 0]
+        for _ in range(200):
+            x0 = int(draw(p["solution_domain"], rng))
+            p_const = int(draw({"int_set": const_cands}, rng))
+            n = x0 + p_const
+            if n <= 0:  # 比の左項 N は正（負の比を避ける）
+                continue
+            b = int(draw({"int_set": denom_cands}, rng))
+            g = sympy.igcd(n, b)
+            c = n // g
+            d = b // g
+            if abs(x0) in {abs(p_const), b, c, d}:
+                continue
+            num = _fmt_poly_x_terms([(1, 1), (p_const, 0)])
+            eq_str = f"({d})*(x+({p_const})) = ({b})*({c})"
+            eq_disp = f"({num}) : {b} = {c} : {d}"
+            return _build_eq(eq_str, eq_disp, mode, ctx)
+        raise ValueError("cross_multiply_expand: 非退化・非漏洩の比例式を構成できず")
 
     raise ValueError(f"未知の mode: {mode!r}")
 

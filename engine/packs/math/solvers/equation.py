@@ -31,6 +31,12 @@ _EQUATION_STEPS: dict[str, list[str]] = {
     "word_linear": ["expand_parentheses", "transpose_and_solve"],
     # g1_l27 Lv2 速さ（分数係数）＝分母を払ってから解く
     "clear_denominators_simple": ["clear_denominators", "combine_and_solve"],
+    # g1_l23 Lv3 かっこ＋分数＝分母を払い、かっこを外して移項してから解く
+    "clear_denominators_two": ["clear_denominators", "expand_and_transpose", "solve"],
+    # g1_l24 Lv1 比例式＝たすきがけ（外項の積＝内項の積）1手
+    "cross_multiply": ["cross_multiply", "solve_proportion"],
+    # g1_l24 Lv2 比例式（文字を含む項）＝たすきがけ後にかっこを外して移項して解く
+    "cross_multiply_expand": ["cross_multiply", "expand_parentheses", "transpose_and_solve"],
 }
 
 _OP_NARRATION: dict[str, str] = {
@@ -44,6 +50,10 @@ _OP_NARRATION: dict[str, str] = {
     "transpose_and_solve": "文字の項を左辺に、数の項を右辺に移項し、両辺を整理して解く。",
     "clear_denominators": "分母の最小公倍数を両辺にかけて、分母をはらう。",
     "combine_and_solve": "同類項をまとめ、x の係数で両辺をわって解を求める。",
+    "expand_and_transpose": "分配法則でかっこを外し、文字の項を左辺・数の項を右辺に移項する。",
+    "solve": "同類項をまとめ、x の係数で両辺をわって解を求める。",
+    "cross_multiply": "比例式の性質を使い、外項の積と内項の積が等しい式（たすきがけ）をつくる。",
+    "solve_proportion": "x の係数で両辺をわって、x の値を求める。",
 }
 
 _OP_PHRASE: dict[str, str] = {
@@ -52,6 +62,8 @@ _OP_PHRASE: dict[str, str] = {
     "transpose_terms": "文字は左辺・数は右辺に移項する",
     "expand_parentheses": "かっこを外す",
     "clear_denominators": "分母をはらう",
+    "expand_and_transpose": "かっこを外して移項する",
+    "cross_multiply": "たすきがけの式をつくる",
 }
 
 
