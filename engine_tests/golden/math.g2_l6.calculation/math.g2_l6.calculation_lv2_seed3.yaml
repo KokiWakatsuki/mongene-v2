@@ -1,0 +1,54 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - polynomial.combine_fractions_basic
+  provenance:
+    git_commit: ''
+    recipe: math.combine_fractional_expressions
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_add_subtract_polynomials_v1
+    tier: T1
+  requested:
+    form: calculation
+    level: 2
+    subject: math
+    unit: g2_l6
+  resolved:
+    form: calculation
+    level: 2
+    subject: math
+    unit: g2_l6
+  seed: 3
+  signature: combine_fractions_add
+problem_ref: a8f7be49efbb21b0
+problem_text: '次の計算をせよ。
+
+  (2x - 3y)/3 + (3x - 3y)/4'
+sub_questions:
+- answer:
+    display: (17x - 21y)/12
+    kind: symbolic
+    srepr: Mul(Rational(1, 12), Add(Mul(Integer(17), Symbol('x')), Mul(Integer(-1), Integer(21), Symbol('y'))))
+  cause_tags: []
+  concept_tags:
+  - polynomial.combine_fractions_basic
+  explanation: まず、分母の最小公倍数を求めて通分する。 分母を最小公倍数にそろえる次に、分子どうしを計算し、1つの分数にまとめる。 (17x - 21y)/12
+  hints:
+  - 分母の最小公倍数を求めて通分する。
+  label: (1)
+  prompt_text: simplified_expr を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 分母の最小公倍数を求めて通分する。
+    op: find_common_denominator
+    result_display: 分母を最小公倍数にそろえる
+    result_srepr: Mul(Rational(1, 12), Add(Mul(Integer(17), Symbol('x')), Mul(Integer(-1), Integer(21), Symbol('y'))))
+  - args: []
+    narration: 分子どうしを計算し、1つの分数にまとめる。
+    op: combine_numerators
+    result_display: (17x - 21y)/12
+    result_srepr: Mul(Rational(1, 12), Add(Mul(Integer(17), Symbol('x')), Mul(Integer(-1), Integer(21), Symbol('y'))))
+visual_svg: null

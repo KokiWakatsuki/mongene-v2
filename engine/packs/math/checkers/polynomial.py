@@ -53,9 +53,18 @@ def double_solve_compute_monomial_expression(mr: MR) -> Solution:
     return cast(Solution, solver(p["expr_str"], p["mode"]))
 
 
+@register_checker("math.combine_fractional_expressions.double_solve")
+def double_solve_combine_fractional_expressions(mr: MR) -> Solution:
+    # 与式の文字列 expr_str と mode から独立に sympy.together で再計算。
+    p = mr.params
+    solver = REGISTRY.solver("math.combine_fractional_expressions")
+    return cast(Solution, solver(p["expr_str"], p["mode"]))
+
+
 __all__ = [
     "double_solve_combine_like_terms",
     "double_solve_add_or_subtract_polynomials",
     "double_solve_distribute_or_divide",
     "double_solve_compute_monomial_expression",
+    "double_solve_combine_fractional_expressions",
 ]

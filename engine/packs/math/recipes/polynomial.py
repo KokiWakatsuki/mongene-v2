@@ -579,9 +579,116 @@ def compute_monomial_expression(ctx: CellContext, rng: Rng) -> MR:
     )
 
 
+# ---------------------------------------------------------------------------
+# math.combine_fractional_expressions（g2_l6.calculation Lv2/Lv3 用）— C2
+# 分数式の加減を通分して1つの分数にまとめる。answer は自由変数を含む symbolic
+# （display 全体一致でのみ漏洩検査＝G-Q5t 相対安全・§2-#1）。
+#   Lv2 "two_fractions_add"      : (A)/d1 + (B)/d2            op[find_common_denominator, combine_numerators]
+#   Lv3 "fractions_with_integer" : (A)/d1 − (B)/d2 + k·a      op[find_common_denominator, distribute_signs, add_integer_term]
+#     結果が必ず自由変数を残すよう、後ろの分数のある文字の係数を「相殺する値」から外して引く。
+# ---------------------------------------------------------------------------
+_COMBINE_FRACTION_CONCEPTS = [
+    "polynomial.combine_fractions_basic",
+    "polynomial.combine_fractions_signed",
+]
+
+
+@register_recipe("math.combine_fractional_expressions", provides_concepts=_COMBINE_FRACTION_CONCEPTS)
+def combine_fractional_expressions(ctx: CellContext, rng: Rng) -> MR:
+    """分数式の加減を通分して1つの分数にまとめる（構成的生成・calculation Lv2/Lv3）。"""
+    p = ctx.spec_level.params
+    mode: str = p["mode"]
+    coef_cands = [v for v in _domain_candidates(p["coeff_domain"]) if v != 0]
+    den_cands = [int(v) for v in cast("list[int]", p["denominator_set"])]
+
+    d_a = int(draw({"int_set": den_cands}, rng))
+    d_b = int(draw({"int_set": [d for d in den_cands if d != d_a]}, rng))
+    big_d = int(sympy.ilcm(d_a, d_b))
+    ma = big_d // d_a
+    mb = big_d // d_b
+
+    if mode == "two_fractions_add":
+        # (c1 x + c2 y)/d_a + (c3 x + c4 y)/d_b。結果に必ず x を残す（c3 を相殺値から外す）。
+        c1 = int(draw({"int_set": coef_cands}, rng))
+        bad = sympy.Rational(-c1 * ma, mb)  # c1·ma + c3·mb = 0 になる c3
+        c3_cands = [c for c in coef_cands if sympy.Rational(c) != bad]
+        c3 = int(draw({"int_set": c3_cands}, rng))
+        c2 = int(draw({"int_set": coef_cands}, rng))
+        c4 = int(draw({"int_set": coef_cands}, rng))
+        terms_a = [(c1, "x"), (c2, "y")]
+        terms_b = [(c3, "x"), (c4, "y")]
+        expr_str = (
+            f"({_sympy_str_from_terms(terms_a)})/({d_a})"
+            f" + ({_sympy_str_from_terms(terms_b)})/({d_b})"
+        )
+        given_display = (
+            f"({_fmt_expr_from_terms(terms_a)})/{d_a}"
+            f" + ({_fmt_expr_from_terms(terms_b)})/{d_b}"
+        )
+        steps_ops = ["find_common_denominator", "combine_numerators"]
+    elif mode == "fractions_with_integer":
+        # (c1 a + c2 b)/d_a − (c3 a + c4 b)/d_b + k·a。結果に必ず b を残す（c4 を相殺値から外す）。
+        c1 = int(draw({"int_set": coef_cands}, rng))
+        c2 = int(draw({"int_set": coef_cands}, rng))
+        c3 = int(draw({"int_set": coef_cands}, rng))
+        bad = sympy.Rational(c2 * ma, mb)  # c2·ma − c4·mb = 0 になる c4
+        c4_cands = [c for c in coef_cands if sympy.Rational(c) != bad]
+        c4 = int(draw({"int_set": c4_cands}, rng))
+        k = int(draw({"int_set": coef_cands}, rng))
+        terms_a = [(c1, "a"), (c2, "b")]
+        terms_b = [(c3, "a"), (c4, "b")]
+        expr_str = (
+            f"({_sympy_str_from_terms(terms_a)})/({d_a})"
+            f" - ({_sympy_str_from_terms(terms_b)})/({d_b})"
+            f" + ({k})*a"
+        )
+        given_display = (
+            f"({_fmt_expr_from_terms(terms_a)})/{d_a}"
+            f" - ({_fmt_expr_from_terms(terms_b)})/{d_b}"
+            f" {_fmt_term(k, 'a', is_first=False)}"
+        )
+        steps_ops = ["find_common_denominator", "distribute_signs", "add_integer_term"]
+    else:
+        raise ValueError(f"未知の mode: {mode!r}")
+
+    solver = REGISTRY.solver("math.combine_fractional_expressions")
+    sol = cast(Solution, solver(expr_str, mode))
+    assert isinstance(sol.answer, SymbolicAnswer)
+    expected = sympy.together(sympy.sympify(expr_str))
+    assert sol.answer.srepr == sympy.srepr(expected), (
+        f"double-solve 不一致: 構成 {expected} != solver 再計算 {sol.answer.srepr}"
+    )
+    assert [s.op for s in sol.steps] == steps_ops
+    # 結果が自由変数を残す（定数・0 に退化していない）ことを確認。
+    assert sympy.sympify(sol.answer.srepr).free_symbols, "分数式が定数に退化した"
+
+    sub_question = SubQuestionMR(
+        label="(1)",
+        asked="simplified_expr",
+        answer=sol.answer,
+        steps=sol.steps,
+        concept_tags=_effective_concept_tags(ctx),
+        cause_tags=_effective_cause_tags(ctx),
+    )
+
+    return MR(
+        signature=ctx.spec_level.signature,
+        family=ctx.family,
+        level=ctx.level,
+        purpose=ctx.purpose,
+        seed=0,
+        params={"expr_str": expr_str, "mode": mode},
+        given={"expression": given_display},
+        sub_questions=[sub_question],
+        visual_plan=None,
+        provenance=Provenance(recipe="math.combine_fractional_expressions"),
+    )
+
+
 __all__ = [
     "combine_like_terms",
     "add_or_subtract_polynomials",
     "distribute_or_divide",
     "compute_monomial_expression",
+    "combine_fractional_expressions",
 ]

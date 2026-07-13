@@ -149,3 +149,9 @@ concepts:
   - id: polynomial.monomial_mul_div_chain
     label: "単項式の乗除混在（逆数に直して計算する）"
     unit: g2_l4
+  - id: polynomial.combine_fractions_basic
+    label: "分数式を通分して分子を1回整理する"
+    unit: g2_l6
+  - id: polynomial.combine_fractions_signed
+    label: "符号処理・整数項を含む分数式の通分と整理"
+    unit: g2_l6

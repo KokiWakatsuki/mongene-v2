@@ -1,0 +1,48 @@
+family: math.g2_l6.calculation
+form: calculation
+source_desc: |
+  分数式の加減を通分して1つの分数にまとめる
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv2 desc: 通分して分子の多項式を1回整理する。
+       example: 次の計算をせよ。　(2x + y)/3 + (x − 2y)/4
+  Lv3 desc: 複数分数・かっこ・符号が絡む通分と展開の複合処理。
+       example: 次の計算をせよ。　(3a − 2b)/4 − (a − 5b)/6 + a
+  答えは通分した1つの分数（SymbolicAnswer・自由変数を含む・分母は最小公倍数のまま）。
+  独立ソルバ combine_fractional_expressions（sympy.together＋分子 expand）で再計算。
+  Lv2（2分数の和）/ Lv3（減法の符号処理＋整数項の通分）で op 列を変える＝level_sep。
+  分母が異なる2分数を引き（真の通分が必要）、結果に必ず自由変数が残るよう後ろの分数の
+  ある文字の係数を「相殺する値」から外して構成する。
+concepts_default: [polynomial.combine_fractions_basic]
+levels:
+  "2":
+    signature: combine_fractions_add
+    recipe: math.combine_fractional_expressions
+    params:
+      # (c1 x + c2 y)/d_a + (c3 x + c4 y)/d_b。分母は相異（真の通分）。係数は nonzero。
+      mode: two_fractions_add
+      coeff_domain: {int_range: [-5, 5], exclude: [0]}
+      denominator_set: [2, 3, 4, 6]
+    given: [expression]
+    asked: [simplified_expr]
+    visual: none
+    text: {tier: T1, template: lf_add_subtract_polynomials_v1}
+    hints: [steps_prefix]
+    concept_tags: [polynomial.combine_fractions_basic]
+    cause_tags: []
+  "3":
+    signature: combine_fractions_signed_integer
+    recipe: math.combine_fractional_expressions
+    params:
+      # (c1 a + c2 b)/d_a − (c3 a + c4 b)/d_b + k·a。減法の符号処理＋整数項の通分。
+      mode: fractions_with_integer
+      coeff_domain: {int_range: [-5, 5], exclude: [0]}
+      denominator_set: [2, 3, 4, 6]
+    given: [expression]
+    asked: [simplified_expr]
+    visual: none
+    text: {tier: T1, template: lf_add_subtract_polynomials_v1}
+    hints: [steps_prefix]
+    concept_tags: [polynomial.combine_fractions_signed]
+    cause_tags: []
+remedial:
+  default_level: 2

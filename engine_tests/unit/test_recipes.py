@@ -1836,3 +1836,39 @@ def test_compute_monomial_expression_double_solve_property(level, seed):
     sol = solver(mr.params["expr_str"], mr.params["mode"])
     assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
     assert sol.answer.srepr == sympy.srepr(sympy.simplify(sympy.sympify(mr.params["expr_str"])))
+
+
+# ---------------------------------------------------------------------------
+# math.combine_fractional_expressions（g2_l6.calculation Lv2/Lv3）— P1/C2（通分）
+# ---------------------------------------------------------------------------
+def test_combine_fractions_lv2_construct():
+    ctx = _make_ctx("math.g2_l6.calculation", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "combine_fractions_add"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "simplified_expr"
+    assert [s.op for s in sq.steps] == ["find_common_denominator", "combine_numerators"]
+
+
+def test_combine_fractions_lv3_construct():
+    ctx = _make_ctx("math.g2_l6.calculation", 3)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "combine_fractions_signed_integer"
+    assert [s.op for s in mr.sub_questions[0].steps] == [
+        "find_common_denominator", "distribute_signs", "add_integer_term",
+    ]
+
+
+@pytest.mark.parametrize("level", [2, 3])
+@pytest.mark.parametrize("seed", range(100))
+def test_combine_fractional_expressions_double_solve_property(level, seed):
+    ctx = _make_ctx("math.g2_l6.calculation", level)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.combine_fractional_expressions")
+    sol = solver(mr.params["expr_str"], mr.params["mode"])
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+    assert sol.answer.srepr == sympy.srepr(sympy.together(sympy.sympify(mr.params["expr_str"])))
+    assert sympy.sympify(sol.answer.srepr).free_symbols

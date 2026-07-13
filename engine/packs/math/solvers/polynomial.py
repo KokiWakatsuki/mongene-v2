@@ -210,9 +210,77 @@ def compute_monomial_expression(expr_str: str, mode: object) -> Solution:
     return Solution(answer=answer, steps=steps)
 
 
+def _fmt_fraction_display(num: sympy.Expr, den: sympy.Expr) -> str:
+    """分数式 (多項式分子)/(整数分母) の表示形（分母1なら分子のみ）。
+
+    例: (11x-2y, 12) -> "(11x - 2y)/12" / (5x, 1) -> "5x"。
+    """
+    if den == 1:
+        return _fmt_poly_display(num)
+    return f"({_fmt_poly_display(num)})/{den}"
+
+
+_FRACTION_STEPS: dict[str, list[str]] = {
+    "two_fractions_add": ["find_common_denominator", "combine_numerators"],
+    "fractions_with_integer": ["find_common_denominator", "distribute_signs", "add_integer_term"],
+}
+
+
+@register_solver("math.combine_fractional_expressions")
+def combine_fractional_expressions(expr_str: str, mode: object) -> Solution:
+    """分数式の加減を通分して1つの分数にまとめる（g2_l6.calculation Lv2/Lv3）。
+
+    与式の文字列だけから sympy.together で1つの分数に通分する（double-solve）。分子は
+    expand して整理し、分母は最小公倍数のまま残す（＝通分の答え）。mode ごとに steps の
+    op 列を変える＝level_sep:
+      Lv2 "two_fractions_add"     : 2分数の和   [find_common_denominator, combine_numerators]
+      Lv3 "fractions_with_integer": 減法＋整数項 [find_common_denominator, distribute_signs, add_integer_term]
+    narration には数字を書かない（G-Q5t 偽陽性の元・§5-#9）。
+    """
+    expr = sympy.sympify(expr_str)
+    combined = sympy.together(expr)
+    num, den = sympy.fraction(combined)
+    if den.is_negative:
+        num, den = -num, -den
+    num_e = sympy.expand(num)
+    disp = _fmt_fraction_display(num_e, den)
+
+    mode_s = str(mode)
+    if mode_s not in _FRACTION_STEPS:
+        raise ValueError(f"未知の mode: {mode_s!r}")
+    steps_ops = _FRACTION_STEPS[mode_s]
+
+    narrations = {
+        "find_common_denominator": "分母の最小公倍数を求めて通分する。",
+        "combine_numerators": "分子どうしを計算し、1つの分数にまとめる。",
+        "distribute_signs": "うしろの分数の前が - なので、その分子の各項の符号を変える。",
+        "add_integer_term": "整数をふくむ項も同じ分母にそろえて、分子に加える。",
+    }
+    phrases = {
+        "find_common_denominator": "分母を最小公倍数にそろえる",
+        "combine_numerators": "分子を計算して1つの分数にまとめる",
+        "distribute_signs": "うしろの分子の各項の符号を変える",
+        "add_integer_term": "整数の項も通分して分子に加える",
+    }
+    r_srepr = sympy.srepr(combined)
+    steps = [
+        Step(
+            op=op,
+            args=[],
+            result_srepr=r_srepr,
+            result_display=disp if i == len(steps_ops) - 1 else phrases[op],
+            narration=narrations[op],
+        )
+        for i, op in enumerate(steps_ops)
+    ]
+    answer = SymbolicAnswer(srepr=r_srepr, display=disp)
+    return Solution(answer=answer, steps=steps)
+
+
 __all__ = [
     "simplify_polynomial",
     "add_or_subtract_polynomials",
     "distribute_or_divide",
     "compute_monomial_expression",
+    "combine_fractional_expressions",
 ]
