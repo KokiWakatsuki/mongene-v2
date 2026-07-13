@@ -2615,9 +2615,43 @@ def test_recall_rule_transposition_l22_lv1_construct():
     assert mr.params["concept"] in {"definition", "sign_reason"}
 
 
+def test_recall_rule_addition_sign_l3_lv1_construct():
+    ctx = _make_ctx("math.g1_l3.knowledge", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "addition_sign_rule_recall"
+    assert mr.params["concept"] in {"same_sign", "different_sign"}
+    assert [s.op for s in mr.sub_questions[0].steps] == ["read_rule_context", "recall_correct_rule"]
+
+
+def test_recall_rule_subtraction_l4_lv1_construct():
+    ctx = _make_ctx("math.g1_l4.knowledge", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "subtraction_rule_recall"
+    assert mr.params["concept"] == "to_addition"
+
+
+def test_recall_rule_term_in_sum_l5_lv1_construct():
+    ctx = _make_ctx("math.g1_l5.knowledge", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "term_in_sum_rule_recall"
+    assert mr.params["concept"] == "definition"
+
+
+_RULE_RECALL_CELLS = [
+    ("math.g1_l22.knowledge", 1),
+    ("math.g1_l3.knowledge", 1),
+    ("math.g1_l4.knowledge", 1),
+    ("math.g1_l5.knowledge", 1),
+]
+
+
+@pytest.mark.parametrize("family,level", _RULE_RECALL_CELLS)
 @pytest.mark.parametrize("seed", range(100))
-def test_recall_rule_double_solve_property(seed):
-    ctx = _make_ctx("math.g1_l22.knowledge", 1)
+def test_recall_rule_double_solve_property(family, level, seed):
+    ctx = _make_ctx(family, level)
     rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
     mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
     solver = REGISTRY.solver("math.recall_rule_statement")

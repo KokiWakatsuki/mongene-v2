@@ -1,0 +1,31 @@
+family: math.g1_l4.knowledge
+form: knowledge
+source_desc: |
+  減法をたし算に直す規則（Lv1 規則想起）
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: 減法をたし算に直す規則を判別・説明する。
+       example: ある数をひくことは、その数の符号を変えてたすことと同じである理由を説明せよ。
+  【設計モデル・要検収(Q4)】「減法を加法になおす正しいやり方を選ぶ」単一選択に realize
+  （規則想起 recall_rule_statement・topic=subtraction・単一 concept=to_addition）。distractors は
+  「ひかれる数の符号を変える」「両方の符号を変える」など、もっともらしい誤りのなおし方。
+  具体例の減法を surface に埋め込み dup 分散。op 列[read_rule_context, recall_correct_rule]。
+  答えは規則の文で数字トークンを含まず G-Q5t 素通り（§7.7）。図は無し。
+concepts_default: [subtraction.rule_recall]
+levels:
+  "1":
+    signature: subtraction_rule_recall
+    recipe: math.recall_rule
+    params:
+      topic: subtraction
+      concept_set: [to_addition]
+      # 具体例の減法（符号つき2数）を surface に埋め込み dup 分散する。
+      number_domain: {int_range: [1, 20]}
+    given: [statement]
+    asked: [choice]
+    visual: none
+    text: {tier: T1, template: lf_rule_recall_v1}
+    hints: [steps_prefix]
+    concept_tags: [subtraction.rule_recall]
+    cause_tags: []
+remedial:
+  default_level: 1

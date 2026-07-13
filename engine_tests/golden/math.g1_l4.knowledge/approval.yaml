@@ -1,0 +1,8 @@
+approved_at: '2026-07-13T18:47:09.438937'
+approver: koki
+content_sha256: d8fe2ee8c295667f28392adbb5f62269f1b0b92639d0e62feecb7fe6932e88d3
+family: math.g1_l4.knowledge
+files:
+- engine_tests/golden/math.g1_l4.knowledge/math.g1_l4.knowledge_lv1_seed1.yaml
+- engine_tests/golden/math.g1_l4.knowledge/math.g1_l4.knowledge_lv1_seed2.yaml
+- engine_tests/golden/math.g1_l4.knowledge/math.g1_l4.knowledge_lv1_seed3.yaml

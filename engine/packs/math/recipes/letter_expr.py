@@ -592,12 +592,52 @@ def compare_signed_numbers(ctx: CellContext, rng: Rng) -> MR:
 # 移項(l22)を最初の顧客に、l3/l4/l5/l12/l15 の規則想起へ横展開できる汎用 recipe。
 # ---------------------------------------------------------------------------
 _RULE_RECALL_CONCEPTS = [
+    "addition_sign.rule_recall",
+    "subtraction.rule_recall",
+    "term_in_sum.rule_recall",
     "transposition.rule_recall",
 ]
 
 
+def _signed_paren(sign: str, mag: int) -> str:
+    """符号つき整数を教材の生の書き方（かっこ付き）で表示する（例: (-7) / (+5)）。"""
+    return f"({sign}{mag})"
+
+
 def _draw_rule_statement(topic: str, concept: str, rng: Rng, p: dict[str, object]) -> str:
     """(topic, concept) から surface（具体例つきの文脈文）を組み立てる。"""
+    if topic == "addition_sign":
+        # g1_l3 加法の符号規則。同符号／異符号の2数の和を具体例として埋め込み dup 分散。
+        m1 = int(draw(p["number_domain"], rng))
+        m2 = int(draw(p["number_domain"], rng))
+        if concept == "same_sign":
+            s = str(draw(["+", "-"], rng))
+            ex = f"{_signed_paren(s, m1)} + {_signed_paren(s, m2)}"
+            return f"{ex} のように、同符号の2数をたすときの和の符号と絶対値の決まりについて"
+        ex = f"{_signed_paren('+', m1)} + {_signed_paren('-', m2)}"  # different_sign
+        return f"{ex} のように、異符号の2数をたすときの和の符号と絶対値の決まりについて"
+
+    if topic == "subtraction":
+        # g1_l4 減法→加法。具体例の減法を埋め込み dup 分散。
+        m1 = int(draw(p["number_domain"], rng))
+        m2 = int(draw(p["number_domain"], rng))
+        s1 = str(draw(["+", "-"], rng))
+        s2 = str(draw(["+", "-"], rng))
+        ex = f"{_signed_paren(s1, m1)} - {_signed_paren(s2, m2)}"
+        return f"{ex} のような減法（ひき算）を計算するときのやり方について"
+
+    if topic == "term_in_sum":
+        # g1_l5 項。符号つき3項の和を具体例として埋め込み dup 分散。
+        pieces: list[tuple[str, int]] = []
+        for _ in range(3):
+            s = str(draw(["+", "-"], rng))
+            n = int(draw(p["number_domain"], rng))
+            pieces.append((s, n))
+        head = f"{'-' if pieces[0][0] == '-' else ''}{pieces[0][1]}"
+        tail = "".join(f" {s} {n}" for s, n in pieces[1:])
+        ex = head + tail
+        return f"式 {ex} を、加法だけの式とみて「項」に分けて考えるとき、項とは何を指すか"
+
     if topic == "transposition":
         # g1_l22 移項。具体例の一次方程式 a·x + b = c を surface として埋め込み dup 分散。
         ex = _draw_eq_example_disp(rng, p)

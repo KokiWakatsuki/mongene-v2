@@ -1,0 +1,32 @@
+family: math.g1_l3.knowledge
+form: knowledge
+source_desc: |
+  同符号・異符号の和の符号と絶対値の規則（Lv1 規則想起）
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: 同符号/異符号で和の符号と絶対値がどうなるかの規則を判別する。
+       example: 異符号の2数を加えるとき、和の符号と絶対値はそれぞれどのように決まるか説明せよ。
+  【設計モデル・要検収(Q4)】「和の符号と絶対値の正しい決まりを選ぶ」単一選択に realize
+  （規則想起 recall_rule_statement・topic=addition_sign）。concept で correct が変わる
+  （same_sign＝共通の符号・絶対値の和／different_sign＝大きいほうの符号・絶対値の差）。
+  distractors は同 topic のもっともらしい誤り規則（他方の規則や紛らわしい変形）。具体例の
+  2数の和を surface に埋め込み dup 分散。op 列[read_rule_context, recall_correct_rule]。
+  答えは規則の文で数字トークンを含まず G-Q5t 素通り（§7.7）。図は無し。
+concepts_default: [addition_sign.rule_recall]
+levels:
+  "1":
+    signature: addition_sign_rule_recall
+    recipe: math.recall_rule
+    params:
+      topic: addition_sign
+      concept_set: [same_sign, different_sign]
+      # 具体例の2数の絶対値を surface に埋め込み dup 分散する。
+      number_domain: {int_range: [1, 20]}
+    given: [statement]
+    asked: [choice]
+    visual: none
+    text: {tier: T1, template: lf_rule_recall_v1}
+    hints: [steps_prefix]
+    concept_tags: [addition_sign.rule_recall]
+    cause_tags: []
+remedial:
+  default_level: 1

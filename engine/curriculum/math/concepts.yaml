@@ -231,6 +231,15 @@ concepts:
   - id: inequality.term_recall
     label: "以上・以下・未満・超に対応する不等号（≧ ≦ < >）を想起する"
     unit: g1_l20
+  - id: addition_sign.rule_recall
+    label: "同符号・異符号の2数の和の符号と絶対値の規則を想起する"
+    unit: g1_l3
+  - id: subtraction.rule_recall
+    label: "減法をたし算に直す規則を想起する"
+    unit: g1_l4
+  - id: term_in_sum.rule_recall
+    label: "式を加法だけの式とみたときの『項』の意味を想起する"
+    unit: g1_l5
   # --- C1 g1 一次方程式（解法） ---
   - id: equation.solve_by_equality_property
     label: "等式の性質を使って一次方程式を解く（1手）"

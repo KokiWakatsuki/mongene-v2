@@ -1,0 +1,32 @@
+family: math.g1_l5.knowledge
+form: knowledge
+source_desc: |
+  項（加法だけの式とみたときの1つ1つの数）の意味（Lv1 規則想起）
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: 式を項に分けて捉える(項とは何か)を判別する。
+       example: 式 -6+4-2 において「項」とは何を指すか、この式の項をすべて答えよ。
+  【設計モデル・要検収(Q4)】「項の正しい意味を選ぶ」単一選択に realize（規則想起
+  recall_rule_statement・topic=term_in_sum・単一 concept=definition）。具体例の項の列挙は
+  答えに数値が並び G-Q5t 漏洩の恐れがあるため、意味（定義）の選択に畳んで realize した
+  （§10 sanction）。distractors は「いちばん大きい数」「最後の答え」など、もっともらしい誤り。
+  具体例の符号つき3項の和を surface に埋め込み dup 分散。op 列[read_rule_context,
+  recall_correct_rule]。答えは規則の文で数字トークンを含まず G-Q5t 素通り（§7.7）。図は無し。
+concepts_default: [term_in_sum.rule_recall]
+levels:
+  "1":
+    signature: term_in_sum_rule_recall
+    recipe: math.recall_rule
+    params:
+      topic: term_in_sum
+      concept_set: [definition]
+      # 具体例の符号つき3項の和を surface に埋め込み dup 分散する。
+      number_domain: {int_range: [1, 20]}
+    given: [statement]
+    asked: [choice]
+    visual: none
+    text: {tier: T1, template: lf_rule_recall_v1}
+    hints: [steps_prefix]
+    concept_tags: [term_in_sum.rule_recall]
+    cause_tags: []
+remedial:
+  default_level: 1
