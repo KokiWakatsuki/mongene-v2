@@ -24,4 +24,12 @@ def double_solve_compute_signed_arithmetic(mr: MR) -> Solution:
     return cast(Solution, solver(p["expr_str"], p["mode"]))
 
 
-__all__ = ["double_solve_compute_signed_arithmetic"]
+@register_checker("math.factorize_integer.double_solve")
+def double_solve_factorize_integer(mr: MR) -> Solution:
+    # 対象数 value と mode から独立に素因数分解し直す（srepr の一致で G-Q1 が判定）。
+    p = mr.params
+    solver = REGISTRY.solver("math.factorize_integer")
+    return cast(Solution, solver(p["value"], p["mode"]))
+
+
+__all__ = ["double_solve_compute_signed_arithmetic", "double_solve_factorize_integer"]

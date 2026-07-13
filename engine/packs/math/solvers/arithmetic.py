@@ -187,4 +187,98 @@ def order_signed_numbers(numbers_str: str, ascending: object) -> Solution:
     return Solution(answer=answer, steps=steps)
 
 
-__all__ = ["evaluate_numeric_expression", "fmt_number", "order_signed_numbers"]
+# ---------------------------------------------------------------------------
+# 素因数分解（g1_l11.calculation）— C1 bespoke
+#
+# sympy.factorint で分解し、srepr（"2**3*3**2"・sympify で元の数に戻る恒真識別子）と
+# display（"2³×3²"・教材表記）を返す。level_sep は mode 別 op 列で作る:
+#   factorize_basic    (Lv1): 小さい素数から順にわる 2 手順。
+#   factorize_advanced (Lv2): 大きい素数まで順に試す手順を先頭に足した 3 手順。
+# 答えは定数扱いの SymbolicAnswer。G-Q5t は問題文の数値が対象数 N のみ（given whitelist）で、
+# 答えの素因数・上付き（NFKC 分解後は基数と指数が連結した多桁数になる）はいずれも N と一致しない
+# ため漏洩しない（narration に数字も書かない）。
+# ---------------------------------------------------------------------------
+_SUPERSCRIPT = str.maketrans("0123456789", "⁰¹²³⁴⁵⁶⁷⁸⁹")
+
+
+def _superscript_int(n: int) -> str:
+    """指数を上付き数字にする（例 3 -> "³"）。"""
+    return str(n).translate(_SUPERSCRIPT)
+
+
+def factorization_forms(n: int) -> tuple[str, str]:
+    """n の素因数分解の (srepr, display) を返す。
+
+    srepr は "2**3*3**2" 形（素数昇順・sympify で n に戻る）。double-solve は srepr の
+    一致で判定するため、solver と checker が同じ n から本関数で導けば恒真に一致する。
+    display は "2³×3²" 形（× 区切り・指数は上付き）。
+    """
+    factors = sympy.factorint(n)  # {prime: exponent}
+    items = sorted(factors.items())
+    srepr = "*".join(f"{p}**{e}" if e > 1 else f"{p}" for p, e in items)
+    display = "×".join(f"{p}{_superscript_int(e)}" if e > 1 else f"{p}" for p, e in items)
+    return srepr, display
+
+
+_FACTORIZE_MODE_STEPS: dict[str, list[str]] = {
+    "factorize_basic": ["divide_out_primes_in_order", "write_prime_power_form"],
+    "factorize_advanced": [
+        "test_successive_prime_divisors",
+        "divide_out_primes_in_order",
+        "write_prime_power_form",
+    ],
+}
+
+_FACTORIZE_OP_NARRATION: dict[str, str] = {
+    "divide_out_primes_in_order": "小さい素数から順にわり、商が素数になるまでわり続ける。",
+    "write_prime_power_form": "現れた素数を、同じ素数の個数を指数にして、累乗の積の形に表す。",
+    "test_successive_prime_divisors": (
+        "小さい素数でわり切れなくなったら、次に大きい素数を順に試して、"
+        "わり切れる素数があるか（残った数が素数かどうか）を調べる。"
+    ),
+}
+
+_FACTORIZE_OP_PHRASE: dict[str, str] = {
+    "divide_out_primes_in_order": "小さい素数から順にわる",
+    "test_successive_prime_divisors": "次に大きい素数を順に試す",
+}
+
+
+@register_solver("math.factorize_integer")
+def factorize_integer(value: object, mode: object) -> Solution:
+    """自然数を素因数分解し、累乗の積の形で表す（g1_l11.calculation）。
+
+    問題パラメータ（対象数 value と mode）だけから sympy.factorint で分解する（double-solve）。
+    答えは定数の SymbolicAnswer（srepr="2**3*3**2" / display="2³×3²"）。mode ごとに steps の
+    op 列を変える＝level_sep。narration には数字を書かない（G-Q5t 偽陽性の元）。
+    """
+    mode_s = str(mode)
+    if mode_s not in _FACTORIZE_MODE_STEPS:
+        raise ValueError(f"未知の mode: {mode_s!r}")
+    n = int(str(value))
+    if n < 2:
+        raise ValueError(f"素因数分解の対象は 2 以上の整数: {n!r}")
+    srepr, disp = factorization_forms(n)
+
+    ops = _FACTORIZE_MODE_STEPS[mode_s]
+    steps = [
+        Step(
+            op=op,
+            args=[],
+            result_srepr=srepr,
+            result_display=disp if i == len(ops) - 1 else _FACTORIZE_OP_PHRASE.get(op, ""),
+            narration=_FACTORIZE_OP_NARRATION[op],
+        )
+        for i, op in enumerate(ops)
+    ]
+    answer = SymbolicAnswer(srepr=srepr, display=disp)
+    return Solution(answer=answer, steps=steps)
+
+
+__all__ = [
+    "evaluate_numeric_expression",
+    "factorization_forms",
+    "factorize_integer",
+    "fmt_number",
+    "order_signed_numbers",
+]

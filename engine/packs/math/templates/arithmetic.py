@@ -20,12 +20,16 @@ LF_CALC_ABS_V1 = "次の数の絶対値を求めよ。\n{{ given.expression }}"
 # g1_l2.calculation Lv2: 複数の数を大小の順に並べる（given に順序の別まで含む）
 LF_CALC_ORDER_V1 = "{{ given.expression }}。"
 
+# g1_l11.calculation: 素因数分解して累乗の積で表す
+LF_CALC_FACTORIZE_V1 = "次の数を素因数分解し、累乗を使って表せ。\n{{ given.expression }}"
+
 
 def _register_all() -> None:
     REGISTRY.register_template("lf_calc_evaluate_v1", LF_CALC_EVALUATE_V1)
     REGISTRY.register_template("lf_calc_distributive_v1", LF_CALC_DISTRIBUTIVE_V1)
     REGISTRY.register_template("lf_calc_abs_v1", LF_CALC_ABS_V1)
     REGISTRY.register_template("lf_calc_order_v1", LF_CALC_ORDER_V1)
+    REGISTRY.register_template("lf_calc_factorize_v1", LF_CALC_FACTORIZE_V1)
 
 
 _register_all()
@@ -36,4 +40,5 @@ __all__ = [
     "LF_CALC_DISTRIBUTIVE_V1",
     "LF_CALC_ABS_V1",
     "LF_CALC_ORDER_V1",
+    "LF_CALC_FACTORIZE_V1",
 ]

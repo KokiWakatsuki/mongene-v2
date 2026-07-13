@@ -255,6 +255,12 @@ concepts:
   - id: prime_concepts.term_recall
     label: "素数・合成数・素因数の意味（用語）を想起する"
     unit: g1_l11
+  - id: prime_factorization.execute_basic
+    label: "素因数分解を実行し累乗の積で表す（小さい素数）"
+    unit: g1_l11
+  - id: prime_factorization.execute_advanced
+    label: "大きめの数を素因数分解する（大きい素数まで順に試す）"
+    unit: g1_l11
   - id: product_sign.rule_recall
     label: "負の数の個数で積の符号が決まる規則を想起する"
     unit: g1_l6

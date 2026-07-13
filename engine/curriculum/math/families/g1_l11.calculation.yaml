@@ -1,0 +1,52 @@
+family: math.g1_l11.calculation
+form: calculation
+source_desc: |
+  素因数分解を実行し累乗で表す
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: 素因数分解を実行し指数で表す。
+       example: 72 を素因数分解し、累乗を使って表せ。
+  Lv2 desc: 素数判定・大きめの数の素因数分解。
+       example: 504 を素因数分解せよ。また、91 が素数か合成数か判定せよ。
+  【設計モデル】独立ソルバ math.factorize_integer が sympy.factorint で分解し、
+  srepr="2**3*3**2"（素数昇順・sympify で元の数に戻る恒真識別子）／display="2³×3²"
+  （教材表記・× 区切り・指数は上付き）を返す。level_sep は mode 別 op 列で作る:
+  Lv1（factorize_basic：最大素因数 ≤ 13 の合成数を「小さい素数から順にわる」2手順）／
+  Lv2（factorize_advanced：17 ≤ 最大素因数 ≤ 47 の大きめの数で、
+  「次に大きい素数を順に試す」test_successive_prime_divisors を先頭に足した3手順）。
+  対象数 N は最大素因数のふるいで層別した候補プール（Lv1 C≈334・Lv2 C≈663）から引き、
+  dup_key は N のみで分散するため dup ≤ 0.20 を確保（Lv1 実測 0.135）。
+  答えは SymbolicAnswer（定数扱い）。G-Q5t: 問題文の数値は対象数 N のみ（given whitelist）で、
+  答えの素因数・上付き（NFKC 分解後は基数と指数が連結した多桁数になる）はいずれも N と一致
+  しないため漏洩しない。narration にも数字を書かない。図は無し。
+  【§10 sanction】Lv2 の「素数か合成数かの Yes/No 判定」は答えの型（真偽選択）が分解形
+  （SymbolicAnswer）と異なり、M0 の単一 answer 型・double-solve と相性が悪いため独立セル化せず、
+  素因数分解の過程で大きい素数まで順に試す手順（test_successive_prime_divisors）として realize
+  した。これにより「大きめの数の素因数分解」「素数の判定（試し割り）」の両技能を1セルで扱う。
+concepts_default: [prime_factorization.execute_basic]
+levels:
+  "1":
+    signature: factorize_basic
+    recipe: math.factorize_integer
+    params:
+      mode: factorize_basic
+    given: [expression]
+    asked: [value]
+    visual: none
+    text: {tier: T1, template: lf_calc_factorize_v1}
+    hints: [steps_prefix]
+    concept_tags: [prime_factorization.execute_basic]
+    cause_tags: []
+  "2":
+    signature: factorize_advanced
+    recipe: math.factorize_integer
+    params:
+      mode: factorize_advanced
+    given: [expression]
+    asked: [value]
+    visual: none
+    text: {tier: T1, template: lf_calc_factorize_v1}
+    hints: [steps_prefix]
+    concept_tags: [prime_factorization.execute_advanced]
+    cause_tags: []
+remedial:
+  default_level: 1

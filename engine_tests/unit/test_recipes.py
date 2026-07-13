@@ -2308,8 +2308,57 @@ def test_compute_signed_arithmetic_double_solve_property(family, level, seed):
 
 
 # ---------------------------------------------------------------------------
-# math.compute_letter_expression（C1 g1 文字式・一次式の計算）— P2
+# math.factorize_integer（C1 g1_l11.calculation 素因数分解）— P2 bespoke
 # ---------------------------------------------------------------------------
+def test_factorize_basic_lv1_construct():
+    ctx = _make_ctx("math.g1_l11.calculation", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "factorize_basic"
+    assert set(mr.given.keys()) == {"expression"}
+    sq = mr.sub_questions[0]
+    assert sq.asked == "value"
+    assert [s.op for s in sq.steps] == [
+        "divide_out_primes_in_order", "write_prime_power_form",
+    ]
+
+
+def test_factorize_advanced_lv2_construct():
+    ctx = _make_ctx("math.g1_l11.calculation", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "factorize_advanced"
+    # level_sep: Lv2 は「次の素数を順に試す」手順を先頭に足した3手順。
+    assert [s.op for s in mr.sub_questions[0].steps] == [
+        "test_successive_prime_divisors", "divide_out_primes_in_order", "write_prime_power_form",
+    ]
+
+
+_FACTORIZE_CELLS = [
+    ("math.g1_l11.calculation", 1),
+    ("math.g1_l11.calculation", 2),
+]
+
+
+@pytest.mark.parametrize("family,level", _FACTORIZE_CELLS)
+@pytest.mark.parametrize("seed", range(100))
+def test_factorize_integer_double_solve_property(family, level, seed):
+    ctx = _make_ctx(family, level)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    n = int(mr.params["value"])
+    # 独立ソルバの答えが recipe の答えと一致する（double-solve）。
+    solver = REGISTRY.solver("math.factorize_integer")
+    sol = solver(mr.params["value"], mr.params["mode"])
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+    # 恒真: 分解形（srepr）を評価すると対象数 N に戻り、底はすべて素数。
+    factored = sympy.sympify(sol.answer.srepr)
+    assert factored == n
+    assert not factored.free_symbols
+    assert all(sympy.isprime(p) for p in sympy.factorint(n))
+    # given の対象数は問題文にそのまま出る（G-GND）。
+    assert mr.given["expression"] == str(n)
+
 def test_letter_combine_linear_lv1_construct():
     ctx = _make_ctx("math.g1_l17.calculation", 1)
     rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)

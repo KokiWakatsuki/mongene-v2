@@ -446,4 +446,92 @@ def _draw_add_sub_terms(
     raise ValueError("非退化の加減混合を確保できず")
 
 
-__all__ = ["compute_signed_arithmetic"]
+# ---------------------------------------------------------------------------
+# 素因数分解（g1_l11.calculation）— C1 bespoke
+#
+# 対象数 N を「最大素因数」で層別して mode ごとに引く。候補は最大素因数のふるい
+# （lpf[n]==n ⇔ n は素数）でモジュール読込時に一度だけ算出する（factorint を N 個回さない）。
+#   factorize_basic    : 合成数・最大素因数 ≤ 13・[12, 3000]（C≈409）。
+#   factorize_advanced : 合成数・17 ≤ 最大素因数 ≤ 47・[200, 3000]（大きめ＋大きい素数）。
+# dup_key は params の N のみで分散するため、候補プールを 400+ 取り dup に余裕を持たせる
+# （100-seed 実測は推定よりやや高く出るため、推定 ~0.11 で実測を 0.20 未満に収める）。
+# ---------------------------------------------------------------------------
+_FACTORIZE_SIEVE_LIMIT = 3000
+
+
+def _largest_prime_factor_sieve(limit: int) -> list[int]:
+    """0..limit の各数の最大素因数を返す（素数 n は lpf[n]==n）。O(n log log n)。"""
+    lpf = [0] * (limit + 1)
+    for i in range(2, limit + 1):
+        if lpf[i] == 0:  # i は素数
+            for j in range(i, limit + 1, i):
+                lpf[j] = i  # 昇順に上書き＝最後に残るのが最大素因数
+    return lpf
+
+
+_LPF = _largest_prime_factor_sieve(_FACTORIZE_SIEVE_LIMIT)
+
+_FACTORIZE_BASIC_NUMBERS = [
+    n for n in range(12, _FACTORIZE_SIEVE_LIMIT + 1) if _LPF[n] != n and _LPF[n] <= 13
+]
+_FACTORIZE_ADVANCED_NUMBERS = [
+    n for n in range(200, _FACTORIZE_SIEVE_LIMIT + 1) if _LPF[n] != n and 17 <= _LPF[n] <= 47
+]
+
+_FACTORIZE_CANDIDATES: dict[str, list[int]] = {
+    "factorize_basic": _FACTORIZE_BASIC_NUMBERS,
+    "factorize_advanced": _FACTORIZE_ADVANCED_NUMBERS,
+}
+
+_FACTORIZE_CONCEPTS = [
+    "prime_factorization.execute_basic",
+    "prime_factorization.execute_advanced",
+]
+
+
+@register_recipe("math.factorize_integer", provides_concepts=_FACTORIZE_CONCEPTS)
+def factorize_integer(ctx: CellContext, rng: Rng) -> MR:
+    """自然数を素因数分解する MR を組む（g1_l11.calculation）。
+
+    mode で層別した候補プールから対象数 N を引き、独立ソルバ math.factorize_integer で
+    分解して答えを刻印する（double-solve）。given は対象数のみ（＝問題文の数値も N だけ）で、
+    答えの素因数はいずれも N と一致しないため G-Q5t 漏洩は起きない。
+    """
+    p = ctx.spec_level.params
+    mode = cast(str, p["mode"])
+    candidates = _FACTORIZE_CANDIDATES.get(mode)
+    if candidates is None:
+        raise ValueError(f"未知の mode: {mode!r}")
+    n = int(draw({"int_set": candidates}, rng))
+
+    solver = REGISTRY.solver("math.factorize_integer")
+    sol = cast(Solution, solver(n, mode))
+    assert isinstance(sol.answer, SymbolicAnswer)
+    # 恒真: srepr（"2**3*3**2"）を評価すると元の数 N に戻る。
+    assert sympy.sympify(sol.answer.srepr) == n, (
+        f"double-solve 不一致: srepr {sol.answer.srepr!r} が {n} に戻らない"
+    )
+
+    sub_question = SubQuestionMR(
+        label="(1)",
+        asked="value",
+        answer=sol.answer,
+        steps=sol.steps,
+        concept_tags=_effective_concept_tags(ctx),
+        cause_tags=_effective_cause_tags(ctx),
+    )
+    return MR(
+        signature=ctx.spec_level.signature,
+        family=ctx.family,
+        level=ctx.level,
+        purpose=ctx.purpose,
+        seed=0,
+        params={"value": str(n), "mode": mode},
+        given={"expression": str(n)},
+        sub_questions=[sub_question],
+        visual_plan=None,
+        provenance=Provenance(recipe="math.factorize_integer"),
+    )
+
+
+__all__ = ["compute_signed_arithmetic", "factorize_integer"]
