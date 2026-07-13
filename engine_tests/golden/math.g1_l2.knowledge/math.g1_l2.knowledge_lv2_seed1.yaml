@@ -1,0 +1,54 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - number.compare_magnitude
+  provenance:
+    git_commit: ''
+    recipe: math.compare_signed_numbers
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_compare_numbers_v1
+    tier: T1
+  requested:
+    form: knowledge
+    level: 2
+    subject: math
+    unit: g1_l2
+  resolved:
+    form: knowledge
+    level: 2
+    subject: math
+    unit: g1_l2
+  seed: 1
+  signature: number_compare_magnitude
+problem_ref: 100a984362c2f329
+problem_text: 次の2つの数 -7 と -11 のうち、大きいのはどちらですか。
+sub_questions:
+- answer:
+    correct: '-7'
+    distractors:
+    - '-11'
+    fact_id: number.compare
+    kind: choice
+  cause_tags: []
+  concept_tags:
+  - number.compare_magnitude
+  explanation: まず、2つの数を数直線上に置き、右にあるほうが大きいと考える。 2数を数直線上の位置で比べる次に、負の数どうしでは、絶対値が大きいほど小さいことに注意して大きいほうを選ぶ。 -7
+  hints:
+  - 2つの数を数直線上に置き、右にあるほうが大きいと考える。
+  label: (1)
+  prompt_text: choice を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 2つの数を数直線上に置き、右にあるほうが大きいと考える。
+    op: compare_on_number_line
+    result_display: 2数を数直線上の位置で比べる
+    result_srepr: Integer(-7)
+  - args: []
+    narration: 負の数どうしでは、絶対値が大きいほど小さいことに注意して大きいほうを選ぶ。
+    op: judge_larger
+    result_display: '-7'
+    result_srepr: Integer(-7)
+visual_svg: null

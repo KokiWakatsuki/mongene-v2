@@ -222,6 +222,12 @@ concepts:
   - id: equality.term_recall
     label: "等式・左辺・右辺・両辺の用語を想起する"
     unit: g1_l19
+  - id: number.term_recall
+    label: "絶対値・数直線・原点・符号の用語を想起する"
+    unit: g1_l2
+  - id: number.compare_magnitude
+    label: "負の数を含む2数の大小を判別する"
+    unit: g1_l2
   # --- C1 g1 一次方程式（解法） ---
   - id: equation.solve_by_equality_property
     label: "等式の性質を使って一次方程式を解く（1手）"

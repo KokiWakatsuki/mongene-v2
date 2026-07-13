@@ -219,6 +219,8 @@ _TERM_MAPS: dict[str, dict[str, str]] = {
     "equality": {"equality": "等式", "lhs": "左辺", "rhs": "右辺", "both_sides": "両辺"},
     # g1_l21 方程式の用語（方程式・解）。distractors に紛らわしい文字式の用語を混ぜる。
     "equation": {"equation": "方程式", "solution": "解", "coefficient": "係数", "term": "項"},
+    # g1_l2 正負の数の用語（絶対値・数直線・原点・符号）
+    "number": {"absolute_value": "絶対値", "number_line": "数直線", "origin": "原点", "sign": "符号"},
 }
 
 
@@ -294,10 +296,46 @@ def verify_equation_solution(equation_str: object, value: object) -> Solution:
     return Solution(answer=answer, steps=steps)
 
 
+@register_solver("math.compare_signed_numbers")
+def compare_signed_numbers(a: object, b: object) -> Solution:
+    """負の数を含む2数の大小を判別する（knowledge verify・g1_l2 Lv2）。
+
+    2数（整数/分数/小数）だけから大小を比較する（double-solve）。答えは大きいほうの数
+    （ChoiceAnswer・値で変わる verify 型）。2数は問題文（given）に現れ whitelist されるため
+    G-Q5t は漏洩しない。narration には数字を書かない。
+    """
+    va = sympy.Rational(sympy.sympify(str(a), rational=True))
+    vb = sympy.Rational(sympy.sympify(str(b), rational=True))
+    if va == vb:
+        raise ValueError(f"大小を判別できない（等しい）: {a!r} == {b!r}")
+    larger, smaller = (va, vb) if va > vb else (vb, va)
+    correct = fmt_number(larger)
+    other = fmt_number(smaller)
+    steps = [
+        Step(
+            op="compare_on_number_line",
+            args=[],
+            result_srepr=sympy.srepr(larger),
+            result_display="2数を数直線上の位置で比べる",
+            narration="2つの数を数直線上に置き、右にあるほうが大きいと考える。",
+        ),
+        Step(
+            op="judge_larger",
+            args=[],
+            result_srepr=sympy.srepr(larger),
+            result_display=correct,
+            narration="負の数どうしでは、絶対値が大きいほど小さいことに注意して大きいほうを選ぶ。",
+        ),
+    ]
+    answer = ChoiceAnswer(correct=correct, distractors=[other], fact_id="number.compare")
+    return Solution(answer=answer, steps=steps)
+
+
 __all__ = [
     "evaluate_letter_expression",
     "evaluate_substitution",
     "simplify_notation",
     "term_recall_definition",
     "verify_equation_solution",
+    "compare_signed_numbers",
 ]

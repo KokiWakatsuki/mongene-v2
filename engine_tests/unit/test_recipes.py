@@ -2520,10 +2520,29 @@ def test_verify_equation_solution_l21_lv2_construct():
     assert [s.op for s in mr.sub_questions[0].steps] == ["substitute_candidate", "judge_solution"]
 
 
+def test_number_term_recall_l2_lv1_construct():
+    ctx = _make_ctx("math.g1_l2.knowledge", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "number_term_recall"
+    assert [s.op for s in mr.sub_questions[0].steps] == ["identify_description", "name_concept"]
+
+
+def test_compare_signed_numbers_l2_lv2_construct():
+    ctx = _make_ctx("math.g1_l2.knowledge", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "number_compare_magnitude"
+    assert [s.op for s in mr.sub_questions[0].steps] == ["compare_on_number_line", "judge_larger"]
+    # 少なくとも一方は負（「負の数を含む大小」）。
+    assert min(int(mr.params["a"]), int(mr.params["b"])) < 0
+
+
 _TERM_RECALL_CELLS = [
     ("math.g1_l17.knowledge", 1),
     ("math.g1_l19.knowledge", 1),
     ("math.g1_l21.knowledge", 1),
+    ("math.g1_l2.knowledge", 1),
 ]
 
 
@@ -2553,6 +2572,20 @@ def test_verify_equation_solution_double_solve_property(seed):
     # 構成の真偽ビットと判定が一致する。
     expected = "解である" if mr.params["is_solution"] == "True" else "解ではない"
     assert sol.answer.correct == expected
+
+
+@pytest.mark.parametrize("seed", range(100))
+def test_compare_signed_numbers_double_solve_property(seed):
+    ctx = _make_ctx("math.g1_l2.knowledge", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.compare_signed_numbers")
+    sol = solver(mr.params["a"], mr.params["b"])
+    assert sol.answer.correct == mr.sub_questions[0].answer.correct
+    # 大きいほうが答え（sympy で独立検証）。
+    a, b = sympy.Integer(int(mr.params["a"])), sympy.Integer(int(mr.params["b"]))
+    larger = a if a > b else b
+    assert sympy.sympify(sol.answer.correct) == larger
 
 
 # ---------------------------------------------------------------------------

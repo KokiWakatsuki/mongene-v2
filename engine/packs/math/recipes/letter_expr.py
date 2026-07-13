@@ -40,6 +40,7 @@ from engine.packs.math.recipes.polynomial import (
     _sympy_poly_x,
     _sympy_str_from_terms,
 )
+from engine.packs.math.solvers.arithmetic import fmt_number
 
 
 def _effective_concept_tags(ctx: CellContext) -> list[str]:
@@ -406,6 +407,7 @@ _TERM_RECALL_CONCEPTS = [
     "letter_expr.term_recall",
     "equality.term_recall",
     "equation.term_recall",
+    "number.term_recall",
 ]
 
 
@@ -421,6 +423,17 @@ def _draw_eq_example_disp(rng: Rng, p: dict[str, object]) -> str:
 
 def _draw_term_statement(domain: str, concept: str, rng: Rng, p: dict[str, object]) -> str:
     """(domain, concept) から説明文（具体例つき）を組み立てる。"""
+    if domain == "number":
+        # g1_l2 正負の数の用語。具体例の正の数 n を埋め込み surface を分散する。
+        n = int(draw(p["number_domain"], rng))
+        if concept == "absolute_value":
+            return f"数 {n} について、数直線上でそれに対応する点と原点とのきょり"
+        if concept == "number_line":
+            return f"{n} や -{n} などの数を、点で対応させて表した直線"
+        if concept == "origin":
+            return f"数直線上で、+{n} と -{n} のちょうど真ん中にある、0 を表す点"
+        return f"+{n} や -{n} の前についている、正と負を表す + や - のしるし"  # sign
+
     cc = [v for v in _domain_candidates(cast("dict[str, object]", p["coeff_domain"])) if v != 0]
     if domain == "letter":
         if concept == "term":
@@ -526,10 +539,45 @@ def verify_equation_solution(ctx: CellContext, rng: Rng) -> MR:
     )
 
 
+@register_recipe("math.compare_signed_numbers", provides_concepts=["number.compare_magnitude"])
+def compare_signed_numbers(ctx: CellContext, rng: Rng) -> MR:
+    """負の数を含む2数の大小を判別する（knowledge verify・g1_l2 Lv2）。"""
+    p = ctx.spec_level.params
+    cands = [v for v in _domain_candidates(cast("dict[str, object]", p["number_domain"])) if v != 0]
+    for _ in range(200):
+        a = int(draw({"int_set": cands}, rng))
+        b = int(draw({"int_set": [v for v in cands if v != a]}, rng))
+        if min(a, b) >= 0:  # 少なくとも一方は負（「負の数を含む大小」＝§desc）
+            continue
+        a_disp, b_disp = fmt_number(sympy.Integer(a)), fmt_number(sympy.Integer(b))
+        statement = f"{a_disp} と {b_disp}"
+
+        solver = REGISTRY.solver("math.compare_signed_numbers")
+        sol = cast(Solution, solver(str(a), str(b)))
+        assert isinstance(sol.answer, ChoiceAnswer)
+        expected = fmt_number(sympy.Integer(max(a, b)))
+        assert sol.answer.correct == expected, f"double-solve 不一致: {expected} != {sol.answer.correct}"
+        assert [s.op for s in sol.steps] == ["compare_on_number_line", "judge_larger"]
+
+        sub_question = SubQuestionMR(
+            label="(1)", asked="choice", answer=sol.answer, steps=sol.steps,
+            concept_tags=_effective_concept_tags(ctx), cause_tags=_effective_cause_tags(ctx),
+        )
+        return MR(
+            signature=ctx.spec_level.signature, family=ctx.family, level=ctx.level,
+            purpose=ctx.purpose, seed=0,
+            params={"a": str(a), "b": str(b)},
+            given={"statement": statement}, sub_questions=[sub_question], visual_plan=None,
+            provenance=Provenance(recipe="math.compare_signed_numbers"),
+        )
+    raise ValueError("compare_signed_numbers: 負の数を含む2数を構成できず")
+
+
 __all__ = [
     "compute_letter_expression",
     "compute_substitution",
     "compute_notation",
     "term_recall",
     "verify_equation_solution",
+    "compare_signed_numbers",
 ]

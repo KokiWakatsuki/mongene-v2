@@ -27,6 +27,8 @@ LF_NOTATION_QUOTIENT_V1 = (
 LF_TERM_RECALL_V1 = "{{ given.statement }} を何といいますか。"
 # g1_l21.knowledge Lv2: ある値が方程式の解かを判別する（verify）
 LF_VERIFY_SOLUTION_V1 = "{{ given.statement }} は、この方程式の解であるといえますか。"
+# g1_l2.knowledge Lv2: 2数の大小を判別する（verify）
+LF_COMPARE_NUMBERS_V1 = "次の2つの数 {{ given.statement }} のうち、大きいのはどちらですか。"
 
 
 def _register_all() -> None:
@@ -35,6 +37,7 @@ def _register_all() -> None:
     REGISTRY.register_template("lf_notation_quotient_v1", LF_NOTATION_QUOTIENT_V1)
     REGISTRY.register_template("lf_term_recall_v1", LF_TERM_RECALL_V1)
     REGISTRY.register_template("lf_verify_solution_v1", LF_VERIFY_SOLUTION_V1)
+    REGISTRY.register_template("lf_compare_numbers_v1", LF_COMPARE_NUMBERS_V1)
 
 
 _register_all()
@@ -46,4 +49,5 @@ __all__ = [
     "LF_NOTATION_QUOTIENT_V1",
     "LF_TERM_RECALL_V1",
     "LF_VERIFY_SOLUTION_V1",
+    "LF_COMPARE_NUMBERS_V1",
 ]

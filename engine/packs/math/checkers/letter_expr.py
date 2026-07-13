@@ -41,10 +41,17 @@ def double_solve_verify_equation_solution(mr: MR) -> Solution:
     return cast(Solution, solver(mr.params["equation_str"], mr.params["value"]))
 
 
+@register_checker("math.compare_signed_numbers.double_solve")
+def double_solve_compare_signed_numbers(mr: MR) -> Solution:
+    solver = REGISTRY.solver("math.compare_signed_numbers")
+    return cast(Solution, solver(mr.params["a"], mr.params["b"]))
+
+
 __all__ = [
     "double_solve_compute_letter_expression",
     "double_solve_compute_substitution",
     "double_solve_compute_notation",
     "double_solve_term_recall",
     "double_solve_verify_equation_solution",
+    "double_solve_compare_signed_numbers",
 ]

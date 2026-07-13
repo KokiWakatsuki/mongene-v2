@@ -1,0 +1,56 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - number.term_recall
+  provenance:
+    git_commit: ''
+    recipe: math.term_recall
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_term_recall_v1
+    tier: T1
+  requested:
+    form: knowledge
+    level: 1
+    subject: math
+    unit: g1_l2
+  resolved:
+    form: knowledge
+    level: 1
+    subject: math
+    unit: g1_l2
+  seed: 3
+  signature: number_term_recall
+problem_ref: 5c1d968bb6056778
+problem_text: +87 や -87 の前についている、正と負を表す + や - のしるし を何といいますか。
+sub_questions:
+- answer:
+    correct: 符号
+    distractors:
+    - 絶対値
+    - 数直線
+    - 原点
+    fact_id: number.term.sign
+    kind: choice
+  cause_tags: []
+  concept_tags:
+  - number.term_recall
+  explanation: まず、説明されている式や数の部分がどれかを読み取る。 説明されている対象を読み取る次に、その対象を表す用語の名前を思い出す。 符号
+  hints:
+  - 説明されている式や数の部分がどれかを読み取る。
+  label: (1)
+  prompt_text: choice を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 説明されている式や数の部分がどれかを読み取る。
+    op: identify_description
+    result_display: 説明されている対象を読み取る
+    result_srepr: sign
+  - args: []
+    narration: その対象を表す用語の名前を思い出す。
+    op: name_concept
+    result_display: 符号
+    result_srepr: 符号
+visual_svg: null
