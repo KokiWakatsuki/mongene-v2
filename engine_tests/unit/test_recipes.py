@@ -2453,6 +2453,43 @@ def test_count_significant_figures_double_solve_property(seed):
     kanji = {1: "一", 2: "二", 3: "三", 4: "四", 5: "五"}
     assert sol.answer.correct == f"{kanji[expected_count]}けた"
 
+
+# ---------------------------------------------------------------------------
+# math.interpret_expression（C1 g1_l12.knowledge Lv2 式の意味の解釈）— P2 bespoke
+# ---------------------------------------------------------------------------
+def test_interpret_expression_lv2_construct():
+    ctx = _make_ctx("math.g1_l12.knowledge", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "letter_meaning_interpret"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "choice"
+    # level_sep: Lv1 規則想起とは異なる op 列。
+    assert [s.op for s in sq.steps] == ["read_each_term_meaning", "combine_term_meanings"]
+    # 品名で記述し ASCII 数字を含まない（G-Q5t 素通り）。
+    assert not any(ch.isdigit() for ch in sq.answer.correct)
+    assert len(sq.answer.distractors) == 3
+
+
+@pytest.mark.parametrize("seed", range(200))
+def test_interpret_expression_double_solve_property(seed):
+    ctx = _make_ctx("math.g1_l12.knowledge", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    sq = mr.sub_questions[0]
+    # 独立ソルバで再計算し一致（double-solve）。
+    solver = REGISTRY.solver("math.interpret_expression")
+    sol = solver(mr.params["item_a"], mr.params["item_b"])
+    assert sol.answer.correct == sq.answer.correct
+    assert sol.answer.distractors == sq.answer.distractors
+    # 答え・誤選択肢いずれも ASCII 数字を含まない（G-Q5t 素通り）。
+    assert not any(ch.isdigit() for ch in sol.answer.correct)
+    assert all(not any(ch.isdigit() for ch in d) for d in sol.answer.distractors)
+    # 正解に両方の品名が含まれ、誤選択肢と重複しない。
+    assert mr.params["item_a"] in sol.answer.correct
+    assert mr.params["item_b"] in sol.answer.correct
+    assert sol.answer.correct not in sol.answer.distractors
+
 def test_letter_combine_linear_lv1_construct():
     ctx = _make_ctx("math.g1_l17.calculation", 1)
     rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)

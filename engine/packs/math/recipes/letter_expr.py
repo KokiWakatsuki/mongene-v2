@@ -971,6 +971,51 @@ def count_significant_figures(ctx: CellContext, rng: Rng) -> MR:
     )
 
 
+# 式の意味の解釈（g1_l12 knowledge Lv2）。場面（品名・個数・単価変数）を構成し、式 a·x+b·y が
+# 表す数量の意味を問う。答えは品名で記述する ChoiceAnswer（ASCII 数字なし）＝G-Q5t 素通り。
+# 品名・個数を surface として params に含め dup 分散（§7.7・鉄則④）。
+_INTERPRET_ITEMS = ["りんご", "みかん", "ノート", "えんぴつ", "ペン", "消しゴム", "クッキー", "あめ"]
+
+
+@register_recipe(
+    "math.interpret_expression",
+    provides_concepts=["letter_meaning.interpret_expression"],
+)
+def interpret_expression(ctx: CellContext, rng: Rng) -> MR:
+    """与えられた文字式が表す数量の意味を解釈する（構成的生成・knowledge Lv2）。
+
+    2種類の品物（単価 x 円・y 円）を個数ずつ買う場面と式 a·x+b·y を作り、式の意味を問う。
+    品名だけから独立ソルバで正しい意味を判定し直す（double-solve）。
+    """
+    ia = str(draw(_INTERPRET_ITEMS, rng))
+    ib = str(draw([it for it in _INTERPRET_ITEMS if it != ia], rng))
+    a = int(draw({"int_range": [2, 9]}, rng))
+    b = int(draw({"int_range": [2, 9]}, rng))
+    expr = f"{a}x＋{b}y"
+    statement = (
+        f"1個 x 円の{ia}を {a} 個と、1個 y 円の{ib}を {b} 個買った。"
+        f"このとき、式 {expr}"
+    )
+
+    solver = REGISTRY.solver("math.interpret_expression")
+    sol = cast(Solution, solver(ia, ib))
+    assert isinstance(sol.answer, ChoiceAnswer)
+    assert [s.op for s in sol.steps] == ["read_each_term_meaning", "combine_term_meanings"]
+    assert sol.answer.correct not in sol.answer.distractors
+
+    sub_question = SubQuestionMR(
+        label="(1)", asked="choice", answer=sol.answer, steps=sol.steps,
+        concept_tags=_effective_concept_tags(ctx), cause_tags=_effective_cause_tags(ctx),
+    )
+    return MR(
+        signature=ctx.spec_level.signature, family=ctx.family, level=ctx.level,
+        purpose=ctx.purpose, seed=0,
+        params={"item_a": ia, "item_b": ib, "count_a": str(a), "count_b": str(b)},
+        given={"statement": statement}, sub_questions=[sub_question], visual_plan=None,
+        provenance=Provenance(recipe="math.interpret_expression"),
+    )
+
+
 __all__ = [
     "compute_letter_expression",
     "compute_substitution",
@@ -983,4 +1028,5 @@ __all__ = [
     "judge_set_closure",
     "recall_rule",
     "count_significant_figures",
+    "interpret_expression",
 ]

@@ -80,6 +80,12 @@ def double_solve_count_significant_figures(mr: MR) -> Solution:
     return cast(Solution, solver(mr.params["measurement"]))
 
 
+@register_checker("math.interpret_expression.double_solve")
+def double_solve_interpret_expression(mr: MR) -> Solution:
+    solver = REGISTRY.solver("math.interpret_expression")
+    return cast(Solution, solver(mr.params["item_a"], mr.params["item_b"]))
+
+
 __all__ = [
     "double_solve_compute_letter_expression",
     "double_solve_compute_substitution",
@@ -92,4 +98,5 @@ __all__ = [
     "double_solve_represent_opposite_quantity",
     "double_solve_judge_set_closure",
     "double_solve_count_significant_figures",
+    "double_solve_interpret_expression",
 ]

@@ -291,6 +291,9 @@ concepts:
   - id: letter_meaning.rule_recall
     label: "文字を使って数量を表すことの意味・利点を想起する"
     unit: g1_l12
+  - id: letter_meaning.interpret_expression
+    label: "与えられた文字式が表す数量の意味を解釈する"
+    unit: g1_l12
   - id: number.classify_sign
     label: "符号のついた数を正の数・負の数に分類する"
     unit: g1_l1

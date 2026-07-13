@@ -47,6 +47,8 @@ LF_SIGFIG_JUDGE_V1 = (
     "ある量を測定して {{ given.statement }} と表した。"
     "この測定値の有効数字は何けたか、正しいものを1つ選びなさい。"
 )
+# g1_l12.knowledge Lv2: 与えられた文字式が表す数量の意味を解釈する
+LF_INTERPRET_EXPR_V1 = "{{ given.statement }} は何を表していますか。正しいものを1つ選びなさい。"
 
 
 def _register_all() -> None:
@@ -62,6 +64,7 @@ def _register_all() -> None:
     REGISTRY.register_template("lf_opposite_quantity_v1", LF_OPPOSITE_QUANTITY_V1)
     REGISTRY.register_template("lf_set_closure_v1", LF_SET_CLOSURE_V1)
     REGISTRY.register_template("lf_sigfig_judge_v1", LF_SIGFIG_JUDGE_V1)
+    REGISTRY.register_template("lf_interpret_expr_v1", LF_INTERPRET_EXPR_V1)
 
 
 _register_all()
@@ -80,4 +83,5 @@ __all__ = [
     "LF_OPPOSITE_QUANTITY_V1",
     "LF_SET_CLOSURE_V1",
     "LF_SIGFIG_JUDGE_V1",
+    "LF_INTERPRET_EXPR_V1",
 ]

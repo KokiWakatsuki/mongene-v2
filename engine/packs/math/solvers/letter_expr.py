@@ -728,6 +728,47 @@ def count_significant_figures(measurement: object) -> Solution:
     return Solution(answer=answer, steps=steps)
 
 
+@register_solver("math.interpret_expression")
+def interpret_expression(item_a: object, item_b: object) -> Solution:
+    """与えられた文字式が表す数量の意味を解釈する（knowledge 判別・g1_l12 Lv2）。
+
+    場面は「1個 x 円の item_a を a 個、1個 y 円の item_b を b 個買った」で式は a·x+b·y に固定。
+    品名（item_a, item_b）だけから、式が表す意味の正しい記述を選ぶ（double-solve）。
+    答えは ChoiceAnswer（品名で記述するため ASCII 数字トークンを含まず G-Q5t 素通り）。
+    誤選択肢は「単価の和(x+y)」「個数の和」「代金の差」の混同。
+    """
+    a = str(item_a)
+    b = str(item_b)
+    correct = f"買った{a}全部の代金と、買った{b}全部の代金を合わせた金額"
+    d_unit = f"{a}と{b}をそれぞれひとつずつ買ったときの代金の合計"
+    d_count = f"買った{a}と{b}の個数を合わせた数"
+    d_diff = f"買った{a}全部の代金と、買った{b}全部の代金の差"
+    steps = [
+        Step(
+            op="read_each_term_meaning",
+            args=[],
+            result_srepr="term_meaning",
+            result_display="式の各項が表す数量を読み取る",
+            narration=(
+                "式の各項は、買った個数にひとつあたりの値段をかけた「代金」を表すことを読み取る。"
+            ),
+        ),
+        Step(
+            op="combine_term_meanings",
+            args=[],
+            result_srepr=correct,
+            result_display=correct,
+            narration="項どうしが和で結ばれているので、式全体は代金の合計を表すと判断する。",
+        ),
+    ]
+    answer = ChoiceAnswer(
+        correct=correct,
+        distractors=[d_unit, d_count, d_diff],
+        fact_id="letter_meaning.interpret_expression",
+    )
+    return Solution(answer=answer, steps=steps)
+
+
 @register_solver("math.recall_rule_statement")
 def recall_rule_statement(topic: object, concept: object) -> Solution:
     """規則・約束の正しい記述を選ぶ（knowledge 規則想起・g1_l22 Lv1 ほか）。
