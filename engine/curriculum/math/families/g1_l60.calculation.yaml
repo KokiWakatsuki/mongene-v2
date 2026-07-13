@@ -1,0 +1,50 @@
+family: math.g1_l60.calculation
+form: calculation
+source_desc: |
+  数を a×10ⁿ（a は1以上10未満）の形で表す・有効数字で丸める
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: 数を a×10ⁿ の形で表す・指定桁で四捨五入する1手順。
+       example: 48000 を a×10ⁿ（a は1以上10未満）の形で表せ。
+  Lv2 desc: 有効数字を指定して a×10ⁿ で表す・誤差の範囲を求める複数手順。
+       example: 地球の半径 6378km を、有効数字3桁として a×10ⁿ の形で表せ。
+  【設計モデル】独立ソルバ math.scientific_notation が対象数 N を科学的記数法にする。
+  srepr は "4.8E4" 形（"10" トークンを含まない機械識別子）、display は "4.8×10⁴"
+  （NFKC で "10⁴"→"104" と連結され、"10" 単独トークンは生じない）。level_sep は mode 別 op 列:
+  Lv1（sci_notation_basic：末尾0を除いた有効数字でそのまま表す2手順）／
+  Lv2（sci_notation_sigfig：指定の有効数字桁で四捨五入してから表す3手順・桁は given）。
+  answer は SymbolicAnswer（定数扱い）。dup は N（Lv2 は N と有効数字桁）で分散。
+  G-Q5t: 問題文の数値は N・有効数字桁（いずれも given whitelist、「桁」は counter で除外）と、
+  構造的な 1・10（"1以上10未満"・"10ⁿ"）のみ。答えの mantissa は 1 より大きく
+  （純粋な10の累乗・丸め繰り上がりを構成側で除外）、指数は 2〜6 に収まるため漏洩しない。図は無し。
+  【§10 sanction】Lv2 の「誤差の範囲を求める」は答えの型（区間・不等式）が a×10ⁿ 表現
+  （SymbolicAnswer）と異なり M0 の単一 answer 型・double-solve と相性が悪いため独立セル化せず、
+  Lv2 は「有効数字を指定して a×10ⁿ で表す（四捨五入を伴う）」に絞って realize した。
+  実世界の題材（○○km 等）は word_problem 相当のため、calc では単位なしの数で提示する。
+concepts_default: [scientific_notation.express_basic]
+levels:
+  "1":
+    signature: sci_notation_basic
+    recipe: math.scientific_notation
+    params:
+      mode: sci_notation_basic
+    given: [expression]
+    asked: [value]
+    visual: none
+    text: {tier: T1, template: lf_calc_sci_notation_v1}
+    hints: [steps_prefix]
+    concept_tags: [scientific_notation.express_basic]
+    cause_tags: []
+  "2":
+    signature: sci_notation_sigfig
+    recipe: math.scientific_notation
+    params:
+      mode: sci_notation_sigfig
+    given: [expression, sig_figs]
+    asked: [value]
+    visual: none
+    text: {tier: T1, template: lf_calc_sci_sigfig_v1}
+    hints: [steps_prefix]
+    concept_tags: [scientific_notation.express_sigfig]
+    cause_tags: []
+remedial:
+  default_level: 1

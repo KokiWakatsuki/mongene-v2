@@ -23,6 +23,17 @@ LF_CALC_ORDER_V1 = "{{ given.expression }}。"
 # g1_l11.calculation: 素因数分解して累乗の積で表す
 LF_CALC_FACTORIZE_V1 = "次の数を素因数分解し、累乗を使って表せ。\n{{ given.expression }}"
 
+# g1_l60.calculation Lv1: a×10ⁿ（a は1以上10未満）の形で表す
+LF_CALC_SCI_NOTATION_V1 = (
+    "次の数を、a×10ⁿ（a は1以上10未満の数）の形で表せ。\n{{ given.expression }}"
+)
+
+# g1_l60.calculation Lv2: 有効数字を指定して a×10ⁿ の形で表す
+LF_CALC_SCI_SIGFIG_V1 = (
+    "次の数を、有効数字{{ given.sig_figs }}桁として、"
+    "a×10ⁿ（a は1以上10未満の数）の形で表せ。\n{{ given.expression }}"
+)
+
 
 def _register_all() -> None:
     REGISTRY.register_template("lf_calc_evaluate_v1", LF_CALC_EVALUATE_V1)
@@ -30,6 +41,8 @@ def _register_all() -> None:
     REGISTRY.register_template("lf_calc_abs_v1", LF_CALC_ABS_V1)
     REGISTRY.register_template("lf_calc_order_v1", LF_CALC_ORDER_V1)
     REGISTRY.register_template("lf_calc_factorize_v1", LF_CALC_FACTORIZE_V1)
+    REGISTRY.register_template("lf_calc_sci_notation_v1", LF_CALC_SCI_NOTATION_V1)
+    REGISTRY.register_template("lf_calc_sci_sigfig_v1", LF_CALC_SCI_SIGFIG_V1)
 
 
 _register_all()
@@ -41,4 +54,6 @@ __all__ = [
     "LF_CALC_ABS_V1",
     "LF_CALC_ORDER_V1",
     "LF_CALC_FACTORIZE_V1",
+    "LF_CALC_SCI_NOTATION_V1",
+    "LF_CALC_SCI_SIGFIG_V1",
 ]

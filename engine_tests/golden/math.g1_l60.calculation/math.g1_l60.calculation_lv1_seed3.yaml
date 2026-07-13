@@ -1,0 +1,54 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - scientific_notation.express_basic
+  provenance:
+    git_commit: ''
+    recipe: math.scientific_notation
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_calc_sci_notation_v1
+    tier: T1
+  requested:
+    form: calculation
+    level: 1
+    subject: math
+    unit: g1_l60
+  resolved:
+    form: calculation
+    level: 1
+    subject: math
+    unit: g1_l60
+  seed: 3
+  signature: sci_notation_basic
+problem_ref: 97ba4911bd1226c6
+problem_text: '次の数を、a×10ⁿ（a は1以上10未満の数）の形で表せ。
+
+  1960000'
+sub_questions:
+- answer:
+    display: 1.96×10⁶
+    kind: symbolic
+    srepr: 1.96E6
+  cause_tags: []
+  concept_tags:
+  - scientific_notation.express_basic
+  explanation: まず、小数点を、一の位が1以上10未満になる位置まで動かし、動かした桁数を数える。 小数点の位置を決める次に、1以上10未満の数と、10を動かした桁数だけ累乗した数との積の形に表す。 1.96×10⁶
+  hints:
+  - 小数点を、一の位が1以上10未満になる位置まで動かし、動かした桁数を数える。
+  label: (1)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 小数点を、一の位が1以上10未満になる位置まで動かし、動かした桁数を数える。
+    op: locate_decimal_point
+    result_display: 小数点の位置を決める
+    result_srepr: 1.96E6
+  - args: []
+    narration: 1以上10未満の数と、10を動かした桁数だけ累乗した数との積の形に表す。
+    op: write_scientific_form
+    result_display: 1.96×10⁶
+    result_srepr: 1.96E6
+visual_svg: null

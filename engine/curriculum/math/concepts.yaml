@@ -276,6 +276,12 @@ concepts:
   - id: approximation.term_recall
     label: "近似値・誤差・有効数字の意味（用語）を想起する"
     unit: g1_l60
+  - id: scientific_notation.express_basic
+    label: "数を a×10ⁿ（1以上10未満）の形で表す"
+    unit: g1_l60
+  - id: scientific_notation.express_sigfig
+    label: "有効数字を指定して a×10ⁿ の形で表す（四捨五入）"
+    unit: g1_l60
   - id: speed_relation.rule_recall
     label: "速さ・道のり・時間の関係（求める量ごとの式）を想起する"
     unit: g1_l15

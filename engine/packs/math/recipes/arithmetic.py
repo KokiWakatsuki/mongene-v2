@@ -534,4 +534,104 @@ def factorize_integer(ctx: CellContext, rng: Rng) -> MR:
     )
 
 
-__all__ = ["compute_signed_arithmetic", "factorize_integer"]
+# ---------------------------------------------------------------------------
+# 科学的記数法 a×10ⁿ（g1_l60.calculation）— C1 bespoke
+#
+# 対象数 N を「きれいな有効数字部 × 10 のべき」で構成し、独立ソルバ math.scientific_notation で
+# a×10ⁿ に直す。dup は N（Lv2 は N と有効数字桁数）で分散。答えの mantissa が 1 になる
+# （＝問題文の "1以上" と衝突）ことを避けるため、純粋な 10 の累乗・丸め繰り上がりを構成側で除外する。
+# ---------------------------------------------------------------------------
+# 有効数字部（末尾0を含まない・1桁〜3桁・先頭が「1」単独＝mantissa 1 になる 1 は除く）。
+_SCI_SIG_PARTS = (
+    [k for k in range(2, 10)]
+    + [k for k in range(11, 100) if k % 10 != 0]
+    + [k for k in range(101, 1000) if k % 10 != 0]
+)
+
+
+def _sci_mantissa_is_one(n: int, sig: int | None) -> bool:
+    """科学的記数法にしたとき mantissa が 1（= 1以上 と衝突）になるか。"""
+    from engine.packs.math.solvers.arithmetic import scientific_forms
+
+    srepr, _ = scientific_forms(n, sig)
+    mantissa = srepr.split("E")[0]
+    return bool(sympy.Rational(mantissa) == 1)
+
+
+_SCI_CONCEPTS = [
+    "scientific_notation.express_basic",
+    "scientific_notation.express_sigfig",
+]
+
+
+@register_recipe("math.scientific_notation", provides_concepts=_SCI_CONCEPTS)
+def scientific_notation(ctx: CellContext, rng: Rng) -> MR:
+    """自然数を a×10ⁿ の形で表す MR を組む（g1_l60.calculation）。
+
+    Lv1（sci_notation_basic）: N = 有効数字部 × 10^scale を厳密に a×10ⁿ にする。
+    Lv2（sci_notation_sigfig）: 有効数字より多い桁の N を引き、指定桁で四捨五入して a×10ⁿ にする。
+    mantissa=1（"1以上" と衝突）や指数の範囲外を避けるよう構成する。given は N と（Lv2 は）
+    有効数字桁数で、いずれも whitelist されるため漏洩しない。
+    """
+    p = ctx.spec_level.params
+    mode = cast(str, p["mode"])
+
+    if mode == "sci_notation_basic":
+        # 有効数字部 × 10^scale。scale は 1桁部で 3〜6、2桁部で 2〜5、3桁部で 1〜4 とし
+        # 指数を 3〜6 に収める（指数 1・10 を避ける）。mantissa は必ず 1 より大きい。
+        sig_part = int(draw({"int_set": _SCI_SIG_PARTS}, rng))
+        base_len = len(str(sig_part))
+        scale = int(draw({"int_range": [7 - base_len - 3, 7 - base_len]}, rng))
+        n = sig_part * (10**scale)
+        sig = None
+        given = {"expression": str(n)}
+    elif mode == "sci_notation_sigfig":
+        # 有効数字桁 sig と、それより 1〜2 桁多い N を引き、四捨五入で丸める。
+        sig = int(draw({"int_set": [2, 3]}, rng))
+        n = 0
+        for _ in range(200):
+            extra = int(draw({"int_set": [1, 2]}, rng))
+            total = sig + extra
+            lo, hi = 10 ** (total - 1), 10**total - 1
+            cand = int(draw({"int_range": [lo, hi]}, rng))
+            if _sci_mantissa_is_one(cand, sig):
+                continue  # 丸めが 10 の累乗へ繰り上がる（mantissa 1）ものは除外
+            n = cand
+            break
+        if n == 0:
+            raise ValueError("科学的記数法 Lv2 の N を構成できず")
+        given = {"expression": str(n), "sig_figs": str(sig)}
+    else:
+        raise ValueError(f"未知の mode: {mode!r}")
+
+    solver = REGISTRY.solver("math.scientific_notation")
+    sol = cast(Solution, solver(n, mode, sig))
+    assert isinstance(sol.answer, SymbolicAnswer)
+
+    params: dict[str, object] = {"value": str(n), "mode": mode}
+    if sig is not None:
+        params["sig_figs"] = str(sig)
+
+    sub_question = SubQuestionMR(
+        label="(1)",
+        asked="value",
+        answer=sol.answer,
+        steps=sol.steps,
+        concept_tags=_effective_concept_tags(ctx),
+        cause_tags=_effective_cause_tags(ctx),
+    )
+    return MR(
+        signature=ctx.spec_level.signature,
+        family=ctx.family,
+        level=ctx.level,
+        purpose=ctx.purpose,
+        seed=0,
+        params=params,
+        given=given,
+        sub_questions=[sub_question],
+        visual_plan=None,
+        provenance=Provenance(recipe="math.scientific_notation"),
+    )
+
+
+__all__ = ["compute_signed_arithmetic", "factorize_integer", "scientific_notation"]

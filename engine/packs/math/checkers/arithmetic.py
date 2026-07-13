@@ -32,4 +32,16 @@ def double_solve_factorize_integer(mr: MR) -> Solution:
     return cast(Solution, solver(p["value"], p["mode"]))
 
 
-__all__ = ["double_solve_compute_signed_arithmetic", "double_solve_factorize_integer"]
+@register_checker("math.scientific_notation.double_solve")
+def double_solve_scientific_notation(mr: MR) -> Solution:
+    # 対象数 value・mode・（あれば）有効数字桁 sig_figs から独立に科学的記数法を再構成する。
+    p = mr.params
+    solver = REGISTRY.solver("math.scientific_notation")
+    return cast(Solution, solver(p["value"], p["mode"], p.get("sig_figs")))
+
+
+__all__ = [
+    "double_solve_compute_signed_arithmetic",
+    "double_solve_factorize_integer",
+    "double_solve_scientific_notation",
+]

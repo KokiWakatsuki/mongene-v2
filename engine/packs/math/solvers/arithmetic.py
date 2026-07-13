@@ -275,10 +275,118 @@ def factorize_integer(value: object, mode: object) -> Solution:
     return Solution(answer=answer, steps=steps)
 
 
+# ---------------------------------------------------------------------------
+# 科学的記数法 a×10ⁿ（g1_l60.calculation）— C1 bespoke
+#
+# 正の整数 N を a×10ⁿ（1≤a<10）の形にする。srepr は "4.8E4" 形（"10" トークンを出さない＝
+# 問題文の "a×10ⁿ" の "10" と衝突させない）。display は "4.8×10⁴"（NFKC で "10⁴"→"104" と連結
+# されるため、こちらも "10" 単独トークンは生じない）。level_sep は mode 別 op 列で作る:
+#   sci_notation_basic  (Lv1): 末尾0を除いた有効数字でそのまま a×10ⁿ にする 2 手順。
+#   sci_notation_sigfig (Lv2): 指定された有効数字の桁で四捨五入してから a×10ⁿ にする 3 手順。
+# G-Q5t: 問題文の数値は N と有効数字の桁数（given・whitelist、「桁」は counter で除外）と、
+# 構造的な 1・10（"1以上10未満"・"10ⁿ"）のみ。答えの mantissa は 1 より大きく（純粋な 10 の
+# 累乗を除外）、指数は 2〜9 に収まる（N の桁を制御）ため、いずれも漏洩しない。
+# ---------------------------------------------------------------------------
+_SCI_MODE_STEPS: dict[str, list[str]] = {
+    "sci_notation_basic": ["locate_decimal_point", "write_scientific_form"],
+    "sci_notation_sigfig": [
+        "round_to_significant_figures",
+        "locate_decimal_point",
+        "write_scientific_form",
+    ],
+}
+
+_SCI_OP_NARRATION: dict[str, str] = {
+    "round_to_significant_figures": (
+        "指定された有効数字の桁になるように、その次の位を四捨五入する。"
+    ),
+    "locate_decimal_point": (
+        "小数点を、一の位が1以上10未満になる位置まで動かし、動かした桁数を数える。"
+    ),
+    "write_scientific_form": (
+        "1以上10未満の数と、10を動かした桁数だけ累乗した数との積の形に表す。"
+    ),
+}
+
+_SCI_OP_PHRASE: dict[str, str] = {
+    "round_to_significant_figures": "指定の有効数字で四捨五入する",
+    "locate_decimal_point": "小数点の位置を決める",
+}
+
+
+def scientific_forms(n: int, sig_figs: int | None) -> tuple[str, str]:
+    """正の整数 n を科学的記数法にした (srepr, display) を返す。
+
+    sig_figs=None: 末尾0を除いた有効数字をそのまま用いる（Lv1・厳密表現）。
+    sig_figs=k   : k 桁の有効数字に四捨五入する（末尾の有効数字の0も残す・Lv2）。
+    srepr は "<mantissa>E<exponent>"（"10" を含まない機械識別子）、display は
+    "<mantissa>×10^<exponent>"（指数は上付き）。solver と checker が同じ (n, sig_figs) から
+    本関数で導けば srepr が恒真に一致する（double-solve）。
+    """
+    if n <= 0:
+        raise ValueError(f"科学的記数法の対象は正の整数: {n!r}")
+    if sig_figs is None:
+        exponent = len(str(n)) - 1
+        sig_digits = str(n).rstrip("0") or "0"
+    else:
+        if sig_figs < 1:
+            raise ValueError(f"有効数字は1以上: {sig_figs!r}")
+        exponent = len(str(n)) - 1
+        drop = (exponent + 1) - sig_figs
+        if drop > 0:
+            factor = 10**drop
+            rounded = ((n + factor // 2) // factor) * factor  # 四捨五入（round half up）
+        else:
+            rounded = n
+        exponent = len(str(rounded)) - 1  # 繰り上がり（例 999→1000）を反映
+        sig_digits = str(rounded)[:sig_figs]  # 先頭 sig_figs 桁（有効数字の0も保持）
+
+    if len(sig_digits) == 1:
+        mantissa = sig_digits
+    else:
+        mantissa = f"{sig_digits[0]}.{sig_digits[1:]}"
+
+    srepr = f"{mantissa}E{exponent}"
+    display = f"{mantissa}×10{_superscript_int(exponent)}"
+    return srepr, display
+
+
+@register_solver("math.scientific_notation")
+def scientific_notation(value: object, mode: object, sig_figs: object = None) -> Solution:
+    """正の整数を a×10ⁿ の形で表す（g1_l60.calculation）。
+
+    問題パラメータ（対象数 value・mode・有効数字 sig_figs）だけから科学的記数法を構成する
+    （double-solve）。答えは定数扱いの SymbolicAnswer（srepr="4.8E4" / display="4.8×10⁴"）。
+    mode ごとに steps の op 列を変える＝level_sep。narration には数字を書かない。
+    """
+    mode_s = str(mode)
+    if mode_s not in _SCI_MODE_STEPS:
+        raise ValueError(f"未知の mode: {mode_s!r}")
+    n = int(str(value))
+    sig = None if sig_figs is None else int(str(sig_figs))
+    srepr, disp = scientific_forms(n, sig)
+
+    ops = _SCI_MODE_STEPS[mode_s]
+    steps = [
+        Step(
+            op=op,
+            args=[],
+            result_srepr=srepr,
+            result_display=disp if i == len(ops) - 1 else _SCI_OP_PHRASE.get(op, ""),
+            narration=_SCI_OP_NARRATION[op],
+        )
+        for i, op in enumerate(ops)
+    ]
+    answer = SymbolicAnswer(srepr=srepr, display=disp)
+    return Solution(answer=answer, steps=steps)
+
+
 __all__ = [
     "evaluate_numeric_expression",
     "factorization_forms",
     "factorize_integer",
     "fmt_number",
     "order_signed_numbers",
+    "scientific_forms",
+    "scientific_notation",
 ]

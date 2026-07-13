@@ -2359,6 +2359,60 @@ def test_factorize_integer_double_solve_property(family, level, seed):
     # given の対象数は問題文にそのまま出る（G-GND）。
     assert mr.given["expression"] == str(n)
 
+
+# ---------------------------------------------------------------------------
+# math.scientific_notation（C1 g1_l60.calculation 科学的記数法 a×10ⁿ）— P2 bespoke
+# ---------------------------------------------------------------------------
+def test_sci_notation_basic_lv1_construct():
+    ctx = _make_ctx("math.g1_l60.calculation", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "sci_notation_basic"
+    assert set(mr.given.keys()) == {"expression"}
+    sq = mr.sub_questions[0]
+    assert sq.asked == "value"
+    assert [s.op for s in sq.steps] == ["locate_decimal_point", "write_scientific_form"]
+
+
+def test_sci_notation_sigfig_lv2_construct():
+    ctx = _make_ctx("math.g1_l60.calculation", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "sci_notation_sigfig"
+    # 有効数字の桁数は given に含まれ問題文に出る（whitelist 対象）。
+    assert set(mr.given.keys()) == {"expression", "sig_figs"}
+    # level_sep: Lv2 は四捨五入手順を先頭に足した3手順。
+    assert [s.op for s in mr.sub_questions[0].steps] == [
+        "round_to_significant_figures", "locate_decimal_point", "write_scientific_form",
+    ]
+
+
+_SCI_NOTATION_CELLS = [
+    ("math.g1_l60.calculation", 1),
+    ("math.g1_l60.calculation", 2),
+]
+
+
+@pytest.mark.parametrize("family,level", _SCI_NOTATION_CELLS)
+@pytest.mark.parametrize("seed", range(100))
+def test_scientific_notation_double_solve_property(family, level, seed):
+    ctx = _make_ctx(family, level)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    # 独立ソルバの答えが recipe の答えと一致する（double-solve）。
+    solver = REGISTRY.solver("math.scientific_notation")
+    sol = solver(mr.params["value"], mr.params["mode"], mr.params.get("sig_figs"))
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+    # 答えは a×10ⁿ 形（"<mantissa>E<exponent>"）。mantissa は 1 以上 10 未満、指数は 2〜9。
+    mantissa_str, exp_str = sol.answer.srepr.split("E")
+    mantissa = sympy.Rational(mantissa_str)
+    exponent = int(exp_str)
+    assert 1 <= mantissa < 10
+    assert mantissa != 1  # "1以上" と衝突しないこと（G-Q5t）
+    assert 2 <= exponent <= 9
+    # 定数（自由変数を含まない）。
+    assert not sympy.sympify(sol.answer.srepr).free_symbols
+
 def test_letter_combine_linear_lv1_construct():
     ctx = _make_ctx("math.g1_l17.calculation", 1)
     rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
