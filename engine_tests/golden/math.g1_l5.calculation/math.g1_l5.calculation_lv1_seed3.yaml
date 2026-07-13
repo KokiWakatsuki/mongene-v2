@@ -1,0 +1,60 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - signed_number.add_sub_terms_basic
+  provenance:
+    git_commit: ''
+    recipe: math.compute_signed_arithmetic
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_calc_evaluate_v1
+    tier: T1
+  requested:
+    form: calculation
+    level: 1
+    subject: math
+    unit: g1_l5
+  resolved:
+    form: calculation
+    level: 1
+    subject: math
+    unit: g1_l5
+  seed: 3
+  signature: add_sub_terms
+problem_ref: 5d847b10c7869aa8
+problem_text: '次の計算をせよ。
+
+  6-(-6)+7'
+sub_questions:
+- answer:
+    display: '19'
+    kind: symbolic
+    srepr: Integer(19)
+  cause_tags: []
+  concept_tags:
+  - signed_number.add_sub_terms_basic
+  explanation: まず、かっこを外して、符号のついた項の和とみなす。 かっこを外し項の和とみなす次に、正の項どうし、負の項どうしをそれぞれまとめる。 正の項・負の項をまとめる最後に、正の合計と負の合計を合わせて、答えを求める。 19
+  hints:
+  - かっこを外して、符号のついた項の和とみなす。
+  - 正の項どうし、負の項どうしをそれぞれまとめる。
+  label: (1)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args: []
+    narration: かっこを外して、符号のついた項の和とみなす。
+    op: drop_parentheses_to_terms
+    result_display: かっこを外し項の和とみなす
+    result_srepr: Integer(19)
+  - args: []
+    narration: 正の項どうし、負の項どうしをそれぞれまとめる。
+    op: group_by_sign
+    result_display: 正の項・負の項をまとめる
+    result_srepr: Integer(19)
+  - args: []
+    narration: 正の合計と負の合計を合わせて、答えを求める。
+    op: total_terms
+    result_display: '19'
+    result_srepr: Integer(19)
+visual_svg: null

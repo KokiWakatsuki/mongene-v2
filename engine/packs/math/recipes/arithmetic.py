@@ -132,6 +132,8 @@ _SIGNED_ARITHMETIC_CONCEPTS = [
     "signed_number.multiply_chain",
     "signed_number.divide_pair",
     "signed_number.divide_chain",
+    "signed_number.add_sub_terms_basic",
+    "signed_number.add_sub_terms_rational",
 ]
 
 
@@ -181,6 +183,21 @@ def compute_signed_arithmetic(ctx: CellContext, rng: Rng) -> MR:
             ops[2] = _draw_operand(rng, kinds[2], p)
         expr_str = f"({ops[0][0]})-({ops[1][0]})-({ops[2][0]})"
         disp = "-".join(_paren_if_neg(v, _fmt_signed(v, m)) for v, m in ops)
+        return _build(expr_str, disp, mode, ctx)
+
+    if mode in ("add_sub_terms", "add_sub_terms_rational"):
+        # 加法と減法の混じった計算（項の概念）。各項に + / - の演算子をつけて並べる。
+        # Lv1（add_sub_terms・整数）/ Lv2（add_sub_terms_rational・分数小数を含む）。
+        kinds = list(cast("list[str]", p["term_kinds"]))
+        terms, opsyms, value = _draw_add_sub_terms(rng, kinds, p)
+        expr_str = f"({terms[0][0]})" + "".join(
+            f"{opsyms[i]}({terms[i + 1][0]})" for i in range(len(opsyms))
+        )
+        disp = _paren_if_neg(terms[0][0], _fmt_signed(terms[0][0], terms[0][1]))
+        for i, opsym in enumerate(opsyms):
+            v, m = terms[i + 1]
+            disp += opsym + _paren_if_neg(v, _fmt_signed(v, m))
+        assert value == sympy.sympify(expr_str, rational=True)
         return _build(expr_str, disp, mode, ctx)
 
     if mode == "multiplication_pair":
@@ -249,6 +266,27 @@ def _draw_nonzero_last(
         if (running + v) != 0:
             return v, m
     raise ValueError("nonzero last term を確保できず")
+
+
+def _draw_add_sub_terms(
+    rng: Rng, kinds: list[str], p: dict[str, object]
+) -> tuple[list[tuple[sympy.Rational, str]], list[str], sympy.Rational]:
+    """加減混合の項と演算子（+/-）を引く（結果が 0 に退化しないよう有界リトライ）。
+
+    戻り値: (項の [(value, 絶対値表示)] 列, 各項間の演算子 "+"/"-" 列, 評価値)。
+    """
+    for _ in range(200):
+        terms = [_draw_operand(rng, k, p) for k in kinds]
+        opsyms = [str(draw(["+", "-"], rng)) for _ in range(len(kinds) - 1)]
+        # 加減が「混じる」よう + と - を両方含める（加減混合の忠実性）。
+        if "+" not in opsyms or "-" not in opsyms:
+            continue
+        value = terms[0][0]
+        for opsym, (tv, _) in zip(opsyms, terms[1:]):
+            value = value + tv if opsym == "+" else value - tv
+        if value != 0:
+            return terms, opsyms, value
+    raise ValueError("非退化の加減混合を確保できず")
 
 
 __all__ = ["compute_signed_arithmetic"]

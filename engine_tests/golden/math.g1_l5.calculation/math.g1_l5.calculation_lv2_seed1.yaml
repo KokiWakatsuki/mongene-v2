@@ -1,0 +1,60 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - signed_number.add_sub_terms_rational
+  provenance:
+    git_commit: ''
+    recipe: math.compute_signed_arithmetic
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_calc_evaluate_v1
+    tier: T1
+  requested:
+    form: calculation
+    level: 2
+    subject: math
+    unit: g1_l5
+  resolved:
+    form: calculation
+    level: 2
+    subject: math
+    unit: g1_l5
+  seed: 1
+  signature: add_sub_terms_rational
+problem_ref: e7745c466618ec8b
+problem_text: '次の計算をせよ。
+
+  2/5+(-0.7)+(-2/7)-2.5'
+sub_questions:
+- answer:
+    display: -108/35
+    kind: symbolic
+    srepr: Rational(-108, 35)
+  cause_tags: []
+  concept_tags:
+  - signed_number.add_sub_terms_rational
+  explanation: まず、かっこを外して、符号のついた項の和とみなす。 かっこを外し項の和とみなす次に、分数・小数を通分してそろえる。 分数・小数を通分してそろえる最後に、正の合計と負の合計を合わせて、答えを求める。 -108/35
+  hints:
+  - かっこを外して、符号のついた項の和とみなす。
+  - 分数・小数を通分してそろえる。
+  label: (1)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args: []
+    narration: かっこを外して、符号のついた項の和とみなす。
+    op: drop_parentheses_to_terms
+    result_display: かっこを外し項の和とみなす
+    result_srepr: Rational(-108, 35)
+  - args: []
+    narration: 分数・小数を通分してそろえる。
+    op: align_fractions
+    result_display: 分数・小数を通分してそろえる
+    result_srepr: Rational(-108, 35)
+  - args: []
+    narration: 正の合計と負の合計を合わせて、答えを求める。
+    op: total_terms
+    result_display: -108/35
+    result_srepr: Rational(-108, 35)
+visual_svg: null

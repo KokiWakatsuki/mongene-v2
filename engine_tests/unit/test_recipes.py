@@ -2157,9 +2157,30 @@ def test_signed_divide_chain_lv2_construct():
     ]
 
 
+def test_signed_add_sub_terms_lv1_construct():
+    ctx = _make_ctx("math.g1_l5.calculation", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "add_sub_terms"
+    assert [s.op for s in mr.sub_questions[0].steps] == [
+        "drop_parentheses_to_terms", "group_by_sign", "total_terms",
+    ]
+
+
+def test_signed_add_sub_terms_rational_lv2_construct():
+    ctx = _make_ctx("math.g1_l5.calculation", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "add_sub_terms_rational"
+    assert [s.op for s in mr.sub_questions[0].steps] == [
+        "drop_parentheses_to_terms", "align_fractions", "total_terms",
+    ]
+
+
 _SIGNED_ARITHMETIC_CELLS = [
     ("math.g1_l3.calculation", 1), ("math.g1_l3.calculation", 2),
     ("math.g1_l4.calculation", 1), ("math.g1_l4.calculation", 2),
+    ("math.g1_l5.calculation", 1), ("math.g1_l5.calculation", 2),
     ("math.g1_l6.calculation", 1), ("math.g1_l6.calculation", 2),
     ("math.g1_l8.calculation", 1), ("math.g1_l8.calculation", 2),
 ]

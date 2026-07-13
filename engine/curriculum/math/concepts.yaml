@@ -210,3 +210,9 @@ concepts:
   - id: signed_number.divide_chain
     label: "分数の除法・乗除混合（逆数で処理する）"
     unit: g1_l8
+  - id: signed_number.add_sub_terms_basic
+    label: "かっこを外し項を並べて加減する（整数・項の概念）"
+    unit: g1_l5
+  - id: signed_number.add_sub_terms_rational
+    label: "分数小数・多数項の加減混合を正負の項の和で処理する"
+    unit: g1_l5
