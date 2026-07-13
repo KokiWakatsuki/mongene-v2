@@ -411,7 +411,16 @@ _TERM_RECALL_CONCEPTS = [
     "number.term_recall",
     "inequality.term_recall",
     "number_set.term_recall",
+    "power.term_recall",
+    "laws.term_recall",
+    "prime_concepts.term_recall",
 ]
+
+
+# g1_l11 knowledge の具体例プール（素数／合成数）。例示は「意味」を表す surface であり
+# 答え（用語名）とは無関係だが、教材として正しい例を出すために sympy で分類する。
+_PRIMES = [n for n in range(2, 98) if sympy.isprime(n)]
+_COMPOSITES = [n for n in range(4, 51) if not sympy.isprime(n)]
 
 
 def _draw_eq_example_disp(rng: Rng, p: dict[str, object]) -> str:
@@ -447,6 +456,49 @@ def _draw_term_statement(domain: str, concept: str, rng: Rng, p: dict[str, objec
         if concept == "less_than":
             return f"x は {n} 未満である（x は {n} より小さく、{n} は含まない）"
         return f"x は {n} より大きい（{n} を超える。{n} は含まない）"  # greater_than
+
+    if domain == "power":
+        # g1_l7 累乗の用語。具体例の累乗（底 b・指数 e）を埋め込み surface を分散する。
+        b = int(draw(p["base_domain"], rng))
+        e = int(draw(p["exponent_domain"], rng))
+        if concept == "exponent":
+            return f"{b} を {e} 回かけ合わせた累乗で、かけ合わせる回数 {e} を表す、右上に小さく書く数"
+        if concept == "base":
+            return f"{b} を {e} 回かけ合わせた累乗で、くり返しかけ合わせるもとの数 {b}"
+        return f"同じ数 {b} を {e} 回かけ合わせて、1 つの数の形で表したもの"  # power
+
+    if domain == "laws":
+        # g1_l9 計算法則。具体例（数の等式）を埋め込み surface を分散する。
+        a = int(draw(p["number_domain"], rng))
+        b = int(draw(p["number_domain"], rng))
+        c = int(draw(p["number_domain"], rng))
+        if concept == "commutative":
+            return f"{a} + {b} = {b} + {a} のように、たす順序を変えても和が変わらないという計算のきまり"
+        if concept == "associative":
+            return (
+                f"({a} + {b}) + {c} = {a} + ({b} + {c}) のように、"
+                f"たす組み合わせを変えても和が変わらないという計算のきまり"
+            )
+        return (
+            f"{a} × ({b} + {c}) = {a} × {b} + {a} × {c} のように、"
+            f"かっこの中の和にかけ算を分けて計算できるという計算のきまり"
+        )  # distributive
+
+    if domain == "prime_concepts":
+        # g1_l11 素数まわりの用語。相異なる2つの具体例を埋め込み surface を分散する
+        # （小さいプールを2値で使い variety を確保し dup≤0.20 にする）。
+        if concept == "prime":
+            q1 = int(draw({"int_set": _PRIMES}, rng))
+            q2 = int(draw({"int_set": [v for v in _PRIMES if v != q1]}, rng))
+            return f"{q1} や {q2} のように、1 とその数自身のほかに約数をもたない、1 より大きい整数"
+        if concept == "composite":
+            n1 = int(draw({"int_set": _COMPOSITES}, rng))
+            n2 = int(draw({"int_set": [v for v in _COMPOSITES if v != n1]}, rng))
+            return f"{n1} や {n2} のように、1 とその数自身のほかにも約数をもつ整数"
+        # prime_factor
+        p1 = int(draw({"int_set": _PRIMES}, rng))
+        p2 = int(draw({"int_set": _PRIMES}, rng))
+        return f"整数 {p1 * p2} を {p1} × {p2} のように素数だけの積で表したときの、その1つ1つの素数"
 
     if domain == "number_set":
         # g1_l10 数の集合。相異なる2つの正の整数を例に埋め込み surface を分散する

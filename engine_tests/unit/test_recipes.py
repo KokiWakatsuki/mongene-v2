@@ -2587,6 +2587,31 @@ def test_judge_set_closure_double_solve_property(seed):
     assert not any(ch.isdigit() for ch in sol.answer.correct)
 
 
+def test_power_term_recall_l7_lv1_construct():
+    ctx = _make_ctx("math.g1_l7.knowledge", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "power_term_recall"
+    assert mr.sub_questions[0].answer.correct in {"指数", "底", "累乗"}
+    assert [s.op for s in mr.sub_questions[0].steps] == ["identify_description", "name_concept"]
+
+
+def test_laws_term_recall_l9_lv1_construct():
+    ctx = _make_ctx("math.g1_l9.knowledge", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "laws_term_recall"
+    assert mr.sub_questions[0].answer.correct in {"交換法則", "結合法則", "分配法則"}
+
+
+def test_prime_concepts_term_recall_l11_lv1_construct():
+    ctx = _make_ctx("math.g1_l11.knowledge", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "prime_concepts_term_recall"
+    assert mr.sub_questions[0].answer.correct in {"素数", "合成数", "素因数"}
+
+
 _TERM_RECALL_CELLS = [
     ("math.g1_l17.knowledge", 1),
     ("math.g1_l19.knowledge", 1),
@@ -2594,6 +2619,9 @@ _TERM_RECALL_CELLS = [
     ("math.g1_l2.knowledge", 1),
     ("math.g1_l20.knowledge", 1),
     ("math.g1_l10.knowledge", 1),
+    ("math.g1_l7.knowledge", 1),
+    ("math.g1_l9.knowledge", 1),
+    ("math.g1_l11.knowledge", 1),
 ]
 
 

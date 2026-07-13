@@ -1,0 +1,55 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - laws.term_recall
+  provenance:
+    git_commit: ''
+    recipe: math.term_recall
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_term_recall_v1
+    tier: T1
+  requested:
+    form: knowledge
+    level: 1
+    subject: math
+    unit: g1_l9
+  resolved:
+    form: knowledge
+    level: 1
+    subject: math
+    unit: g1_l9
+  seed: 2
+  signature: laws_term_recall
+problem_ref: 330f014808d2003b
+problem_text: (3 + 28) + 22 = 3 + (28 + 22) のように、たす組み合わせを変えても和が変わらないという計算のきまり を何といいますか。
+sub_questions:
+- answer:
+    correct: 結合法則
+    distractors:
+    - 交換法則
+    - 分配法則
+    fact_id: laws.term.associative
+    kind: choice
+  cause_tags: []
+  concept_tags:
+  - laws.term_recall
+  explanation: まず、説明されている式や数の部分がどれかを読み取る。 説明されている対象を読み取る次に、その対象を表す用語の名前を思い出す。 結合法則
+  hints:
+  - 説明されている式や数の部分がどれかを読み取る。
+  label: (1)
+  prompt_text: choice を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 説明されている式や数の部分がどれかを読み取る。
+    op: identify_description
+    result_display: 説明されている対象を読み取る
+    result_srepr: associative
+  - args: []
+    narration: その対象を表す用語の名前を思い出す。
+    op: name_concept
+    result_display: 結合法則
+    result_srepr: 結合法則
+visual_svg: null

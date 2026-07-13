@@ -226,6 +226,12 @@ _TERM_MAPS: dict[str, dict[str, str]] = {
     "inequality": {"at_least": "≧", "at_most": "≦", "less_than": "<", "greater_than": ">"},
     # g1_l10 数の集合（自然数・整数）
     "number_set": {"natural_number": "自然数", "integer": "整数"},
+    # g1_l7 累乗の用語（指数・底・累乗）
+    "power": {"exponent": "指数", "base": "底", "power": "累乗"},
+    # g1_l9 計算法則（交換・結合・分配法則）
+    "laws": {"commutative": "交換法則", "associative": "結合法則", "distributive": "分配法則"},
+    # g1_l11 素数まわりの用語（素数・合成数・素因数）
+    "prime_concepts": {"prime": "素数", "composite": "合成数", "prime_factor": "素因数"},
 }
 
 # domain 別の step テキスト（既定は g1_l17/l19/l21/l2 の現行文＝golden 不変）。

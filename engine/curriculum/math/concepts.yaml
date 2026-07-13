@@ -246,6 +246,15 @@ concepts:
   - id: number_set.closure
     label: "数の集合が四則について閉じているかを判別する"
     unit: g1_l10
+  - id: power.term_recall
+    label: "指数・底・累乗の用語を想起する"
+    unit: g1_l7
+  - id: laws.term_recall
+    label: "交換法則・結合法則・分配法則の名称を想起する"
+    unit: g1_l9
+  - id: prime_concepts.term_recall
+    label: "素数・合成数・素因数の意味（用語）を想起する"
+    unit: g1_l11
   - id: speed_relation.rule_recall
     label: "速さ・道のり・時間の関係（求める量ごとの式）を想起する"
     unit: g1_l15

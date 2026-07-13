@@ -1,0 +1,34 @@
+family: math.g1_l11.knowledge
+form: knowledge
+source_desc: |
+  素数・合成数・素因数の意味（Lv1 想起）
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: 素数/素因数/合成数の意味と判別。
+       example: 1 とその数自身のほかに約数をもたない、1 より大きい整数を何とよぶか答えよ。
+  【設計モデル・要検収(Q4)】「意味の説明された対象の名称を答える」単一選択に realize（用語想起
+  term_recall_definition・domain=prime_concepts）。concept で correct が変わる（prime＝素数／
+  composite＝合成数／prime_factor＝素因数）。distractors は同 domain の他の用語。素数／合成数の
+  具体例（sympy で分類した正しい数）を説明文に埋め込み surface として dup 分散。
+  op 列[identify_description, name_concept]。答えはテキストの ChoiceAnswer＝数字トークンを含まず
+  G-Q5t 素通り（§7.7）。
+  【方針転換の記録】前セッションは「与えられた数が素数/合成数か」の判別（3値 verify）を検討したが、
+  素数プールが小さく dup≤0.20 を満たせず保留していた（HANDOFF 13f §3.1）。本コミットは desc の
+  「意味」に軸足を置き用語想起として realize することで dup 問題を回避した（判別は Lv2 相当の残タスク）。
+  図は無し。
+concepts_default: [prime_concepts.term_recall]
+levels:
+  "1":
+    signature: prime_concepts_term_recall
+    recipe: math.term_recall
+    params:
+      domain: prime_concepts
+      concept_set: [prime, composite, prime_factor]
+    given: [statement]
+    asked: [choice]
+    visual: none
+    text: {tier: T1, template: lf_term_recall_v1}
+    hints: [steps_prefix]
+    concept_tags: [prime_concepts.term_recall]
+    cause_tags: []
+remedial:
+  default_level: 1

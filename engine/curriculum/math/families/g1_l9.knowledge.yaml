@@ -1,0 +1,31 @@
+family: math.g1_l9.knowledge
+form: knowledge
+source_desc: |
+  交換・結合・分配法則の名称（Lv1 想起）
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: 交換・結合・分配法則の意味を判別する。
+       example: a+b=b+a のように、たす順序を変えても和が変わらないという計算のきまりを何とよぶか。
+  【設計モデル・要検収(Q4)】「説明された計算のきまりの名称を答える」単一選択に realize（用語想起
+  term_recall_definition・domain=laws）。concept で correct が変わる（commutative＝交換法則／
+  associative＝結合法則／distributive＝分配法則）。distractors は同 domain の他の法則名。具体例の
+  数の等式を説明文に埋め込み surface として dup 分散。op 列[identify_description, name_concept]。
+  答えはテキストの ChoiceAnswer＝数字トークンを含まず G-Q5t 素通り（§7.7）。図は無し。
+concepts_default: [laws.term_recall]
+levels:
+  "1":
+    signature: laws_term_recall
+    recipe: math.term_recall
+    params:
+      domain: laws
+      concept_set: [commutative, associative, distributive]
+      # 具体例の数を広めにとり dup を下げる（3 concept × 3 値の surface で分散）。
+      number_domain: {int_range: [2, 40]}
+    given: [statement]
+    asked: [choice]
+    visual: none
+    text: {tier: T1, template: lf_term_recall_v1}
+    hints: [steps_prefix]
+    concept_tags: [laws.term_recall]
+    cause_tags: []
+remedial:
+  default_level: 1
