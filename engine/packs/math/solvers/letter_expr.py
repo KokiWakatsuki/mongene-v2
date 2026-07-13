@@ -221,14 +221,32 @@ _TERM_MAPS: dict[str, dict[str, str]] = {
     "equation": {"equation": "方程式", "solution": "解", "coefficient": "係数", "term": "項"},
     # g1_l2 正負の数の用語（絶対値・数直線・原点・符号）
     "number": {"absolute_value": "絶対値", "number_line": "数直線", "origin": "原点", "sign": "符号"},
+    # g1_l20 不等号（以上/以下/未満/超 → 記号 ≧ ≦ < >）。用語想起の一種として、
+    # 大小の関係（説明された phrase）に対応する不等号（＝名前の代わりに記号）を答える。
+    "inequality": {"at_least": "≧", "at_most": "≦", "less_than": "<", "greater_than": ">"},
+}
+
+# domain 別の step テキスト（既定は g1_l17/l19/l21/l2 の現行文＝golden 不変）。
+# inequality は答えが「用語の名前」でなく「記号」なので narration を専用化する。
+_TERM_RECALL_STEP_TEXT_DEFAULT: dict[str, str] = {
+    "s1_display": "説明されている対象を読み取る",
+    "s1_narration": "説明されている式や数の部分がどれかを読み取る。",
+    "s2_narration": "その対象を表す用語の名前を思い出す。",
+}
+_TERM_RECALL_STEP_TEXT_BY_DOMAIN: dict[str, dict[str, str]] = {
+    "inequality": {
+        "s1_display": "説明されている数量の大小の関係を読み取る",
+        "s1_narration": "説明されている、数量の間の大小の関係を読み取る。",
+        "s2_narration": "その関係を表す不等号の記号を思い出す。",
+    },
 }
 
 
 @register_solver("math.term_recall_definition")
 def term_recall_definition(concept: object, domain: object) -> Solution:
-    """数と式まわりの用語の名称を答える（knowledge 用語想起・g1_l17/l19/l21 Lv1）。
+    """数と式まわりの用語の名称を答える（knowledge 用語想起・g1_l17/l19/l21/l2/l20 Lv1）。
 
-    domain（用語の分野）と concept（説明されている対象）だけから名称を判定する
+    domain（用語の分野）と concept（説明されている対象）だけから名称／記号を判定する
     （具体例の値は無関係・double-solve）。答えは ChoiceAnswer（concept で correct が
     変わる用語想起型）。distractors は同 domain の他の用語。op 列は判別/verify 型と相異＝level_sep。
     """
@@ -241,20 +259,21 @@ def term_recall_definition(concept: object, domain: object) -> Solution:
         raise ValueError(f"未知の concept: {c!r}（domain={d!r}）")
     correct = names[c]
     distractors = [v for k, v in names.items() if k != c]
+    txt = _TERM_RECALL_STEP_TEXT_BY_DOMAIN.get(d, _TERM_RECALL_STEP_TEXT_DEFAULT)
     steps = [
         Step(
             op="identify_description",
             args=[],
             result_srepr=c,
-            result_display="説明されている対象を読み取る",
-            narration="説明されている式や数の部分がどれかを読み取る。",
+            result_display=txt["s1_display"],
+            narration=txt["s1_narration"],
         ),
         Step(
             op="name_concept",
             args=[],
             result_srepr=correct,
             result_display=correct,
-            narration="その対象を表す用語の名前を思い出す。",
+            narration=txt["s2_narration"],
         ),
     ]
     answer = ChoiceAnswer(correct=correct, distractors=distractors, fact_id=f"{d}.term.{c}")

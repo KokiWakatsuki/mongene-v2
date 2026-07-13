@@ -29,6 +29,11 @@ LF_TERM_RECALL_V1 = "{{ given.statement }} を何といいますか。"
 LF_VERIFY_SOLUTION_V1 = "{{ given.statement }} は、この方程式の解であるといえますか。"
 # g1_l2.knowledge Lv2: 2数の大小を判別する（verify）
 LF_COMPARE_NUMBERS_V1 = "次の2つの数 {{ given.statement }} のうち、大きいのはどちらですか。"
+# g1_l20.knowledge Lv1: 数量の大小の関係を表す不等号を選ぶ（記号想起）
+LF_INEQUALITY_SYMBOL_V1 = (
+    "次の数量の大小の関係を不等号で表すとき、あてはまる不等号はどれですか。"
+    "\n{{ given.statement }}"
+)
 
 
 def _register_all() -> None:
@@ -38,6 +43,7 @@ def _register_all() -> None:
     REGISTRY.register_template("lf_term_recall_v1", LF_TERM_RECALL_V1)
     REGISTRY.register_template("lf_verify_solution_v1", LF_VERIFY_SOLUTION_V1)
     REGISTRY.register_template("lf_compare_numbers_v1", LF_COMPARE_NUMBERS_V1)
+    REGISTRY.register_template("lf_inequality_symbol_v1", LF_INEQUALITY_SYMBOL_V1)
 
 
 _register_all()
@@ -50,4 +56,5 @@ __all__ = [
     "LF_TERM_RECALL_V1",
     "LF_VERIFY_SOLUTION_V1",
     "LF_COMPARE_NUMBERS_V1",
+    "LF_INEQUALITY_SYMBOL_V1",
 ]

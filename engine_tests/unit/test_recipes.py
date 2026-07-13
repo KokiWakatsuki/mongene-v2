@@ -2538,11 +2538,26 @@ def test_compare_signed_numbers_l2_lv2_construct():
     assert min(int(mr.params["a"]), int(mr.params["b"])) < 0
 
 
+def test_inequality_symbol_recall_l20_lv1_construct():
+    ctx = _make_ctx("math.g1_l20.knowledge", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "inequality_symbol_recall"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "choice"
+    assert sq.answer.kind == "choice"
+    assert [s.op for s in sq.steps] == ["identify_description", "name_concept"]
+    # 答えは不等号記号（≧ ≦ < >）のいずれか＝数字トークンを含まない。
+    assert sq.answer.correct in {"≧", "≦", "<", ">"}
+    assert not any(ch.isdigit() for ch in sq.answer.correct)
+
+
 _TERM_RECALL_CELLS = [
     ("math.g1_l17.knowledge", 1),
     ("math.g1_l19.knowledge", 1),
     ("math.g1_l21.knowledge", 1),
     ("math.g1_l2.knowledge", 1),
+    ("math.g1_l20.knowledge", 1),
 ]
 
 

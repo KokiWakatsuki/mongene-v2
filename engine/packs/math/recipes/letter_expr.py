@@ -408,6 +408,7 @@ _TERM_RECALL_CONCEPTS = [
     "equality.term_recall",
     "equation.term_recall",
     "number.term_recall",
+    "inequality.term_recall",
 ]
 
 
@@ -433,6 +434,17 @@ def _draw_term_statement(domain: str, concept: str, rng: Rng, p: dict[str, objec
         if concept == "origin":
             return f"数直線上で、+{n} と -{n} のちょうど真ん中にある、0 を表す点"
         return f"+{n} や -{n} の前についている、正と負を表す + や - のしるし"  # sign
+
+    if domain == "inequality":
+        # g1_l20 不等号（以上/以下/未満/超）。具体例の正の数 n を埋め込み surface を分散する。
+        n = int(draw(p["number_domain"], rng))
+        if concept == "at_least":
+            return f"x は {n} 以上である（x は {n} と等しいか、それより大きい）"
+        if concept == "at_most":
+            return f"x は {n} 以下である（x は {n} と等しいか、それより小さい）"
+        if concept == "less_than":
+            return f"x は {n} 未満である（x は {n} より小さく、{n} は含まない）"
+        return f"x は {n} より大きい（{n} を超える。{n} は含まない）"  # greater_than
 
     cc = [v for v in _domain_candidates(cast("dict[str, object]", p["coeff_domain"])) if v != 0]
     if domain == "letter":
