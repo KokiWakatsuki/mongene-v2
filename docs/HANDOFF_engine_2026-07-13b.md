@@ -16,6 +16,29 @@ C2 17/32）の続きにあたる。**本書＝最新**。ブランチ `engine-m0
 
 ---
 
+## 0.5 ★環境の高速化（再開の最初に実施＝大幅な時短・別アカウントで導入する）
+
+現状フルスイートは **シングルコアで約45分**（テスト 11,422 件中 96%＝10,986 件が recipe の property。
+マシンは 8 コアだが 1 コアしか使っていない）。**これが本プロジェクト最大の時間ボトルネック**。
+`pytest-xdist` を導入して全コア並列化する（前セッションはこれを未導入のまま直列で回していたため遅かった）:
+
+```bash
+.venv/bin/pip install pytest-xdist       # dev依存の追加（venv のみ）
+# 以後フルスイートは -n auto で（約45分 → 見込み 8〜10 分）:
+.venv/bin/python -m pytest engine_tests/ -o addopts="" -p no:cacheprovider -n auto -q
+```
+- テストは決定論・seed 独立なので並列で安全な見込み。**初回だけ `-n auto` と直列（`-n0`）の
+  結果を突き合わせ、passed 数一致・失敗ゼロを確認**してから常用する。
+- xdist 導入後は「pytest は1本ずつ（CPU飽和回避）」の制約は不要（1 プロセスが全コアを使う）。
+
+**あわせて効く時短運用**:
+- フルスイートは **セッション終了時に1回**だけ（各セルは eval＋property＋spec check で個別担保）。
+- 各セルの check（generate／120seed 拒否／dup 100seed）は **1スクリプト（bootstrap 1回）に統合**して回す
+  （bootstrap 起動の重複を避ける。ただし1コマンド2分制限に注意し、重いものは run_in_background）。
+- 開発中の property は seed を絞り（例 `range(30)`）、最終スイートのみ 100〜200 で回す。
+
+---
+
 ## 1. 現状サマリ（2026-07-13b・本セッション終了時）
 
 **進捗: capabilities 66/630（10.5%）**（`python -m engine.tools.goal_progress` 実測）。
@@ -45,15 +68,15 @@ git log --oneline -8                 # 最新 8de78e8（#45 C2 knowledge 完成�
 git status --porcelain               # 空（clean）
 .venv/bin/python -m engine.tools.goal_progress          # 66/630・C2 32/32
 .venv/bin/python -m engine.eval --seeds 5 --dup-seeds 100   # 一式OK・exit0（約1分）
-# ★再開直後にフルスイートを1本走らせ緑を最終確認（約45分・他 pytest と競合させない）:
-.venv/bin/python -m pytest engine_tests/ -o addopts="" -p no:cacheprovider -q
+# ★まず §0.5 の pytest-xdist を導入 → 再開直後にフルスイートを1本走らせ緑を最終確認（-n auto で約8〜10分）:
+.venv/bin/python -m pytest engine_tests/ -o addopts="" -p no:cacheprovider -n auto -q
 ```
 > ⚠️ **本セッションの #39〜#45 は各セルを個別 DoD 緑（property 100+seed／eval 一式 exit0／golden／
 > mypy strict／ruff engine/ clean／spec check／dup_rate 100seed／120seed 拒否0／level_sep）で検証してコミット
 > 済みだが、最終フルスイート（全 property を一括・約45分）は別アカウント引き継ぎのため中断（未走）**。
 > セッション開始時（#39 の前）にフルスイートを1本走らせ 9942 passed / exit0 を確認済み。**再開時の最初に
-> 必ずフルスイートを1本走らせて緑を最終確認すること**（`pytest engine_tests/ -o addopts="" -p no:cacheprovider -q`・
-> 約45分・他 pytest と競合させない）。前回引き継ぎ（#20〜#25）と同じ運用。
+> §0.5 の `pytest-xdist` を導入してからフルスイートを1本走らせ緑を最終確認すること**
+> （`-n auto` で約8〜10分）。前回引き継ぎ（#20〜#25）と同じ「FS中断→再開時確認」運用。
 
 ---
 
@@ -159,11 +182,13 @@ find engine -name __pycache__ -type d -exec rm -rf {} +
 > **★再開の最初にやること**:
 > ```bash
 > cd /Users/koki/workspace/mongene-v2
-> git log --oneline -8
+> git log --oneline -9
 > git status --porcelain                                        # 空(clean)
 > .venv/bin/python -m engine.tools.goal_progress               # 66/630・C2 32/32
 > .venv/bin/python -m engine.eval --seeds 5 --dup-seeds 100     # 一式OK・exit0
-> .venv/bin/python -m pytest engine_tests/ -o addopts="" -p no:cacheprovider -q   # フルスイート緑確認(約45分・1本ずつ)
+> # ★まず高速化: pytest-xdist を導入（フルスイート 45分 → 約8〜10分）
+> .venv/bin/pip install pytest-xdist
+> .venv/bin/python -m pytest engine_tests/ -o addopts="" -p no:cacheprovider -n auto -q   # フルスイート緑確認(★#39〜#45はFS未走なので必ず実行)
 > ```
 >
 > フルスイートが緑なら、**P2（C1 g1数と式 → C3 g3数と式）**へ。C2 で作った polynomial.py の calc/knowledge
@@ -174,7 +199,7 @@ find engine -name __pycache__ -type d -exec rm -rf {} +
 > 数字を書かない ③**G-Q5t は答えが自由変数を含む symbolic なら display 全体一致のみ検査**（bare 単項への退化に
 > 注意）／定数答えは given whitelist と助数詞除外で守る ④dup_rate は eval/100seed 実測で ≤0.20（答えに効かない
 > surface param＝変数文字・具体例・演算種別を広くとる）⑤frame 語彙を足したら `test_frames.py` 同時更新（-k で
-> deselect される罠に注意し別途単独実行）⑥フルスイートは1本ずつ・spec check は1 family ずつ（CPU/2分制限）
+> deselect される罠に注意し別途単独実行）⑥★フルスイートは pytest-xdist で -n auto 並列（約8〜10分・§0.5）＝「1本ずつ」制約は xdist 導入後は不要。spec check は1 family ずつ（2分制限）。フルスイートはセッション終了時に1回・開発中の property は seed を絞る
 > ⑦サブエージェント並行（worktree）は不安定なので当面直列。長いフルスイート中は Python を先行実装し spec は
 > 完走後（spec は test_eval_suite に干渉／Python 追記は test_recipes 非干渉）⑧1セルずつ DoD 緑にしてコミット。
 >
