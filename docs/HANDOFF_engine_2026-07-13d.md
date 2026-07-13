@@ -16,7 +16,12 @@
 ---
 
 ## 0.5 環境（pytest-xdist 導入済み・実行の勘所）
-- フルスイートは **`-n auto` で約20分**（本マシン実測）:
+- **★本セッションで property テストを 60 倍高速化**（コミット末尾）。`test_recipes.py` の `_make_ctx` が
+  テスト1件ごとに 58 family の YAML と curriculum を再パースしていた（1回≈313ms・property 1200件で約376秒＝97%が
+  再パース浪費・family 増で悪化）。`lru_cache` で1回に集約。実測 **`-k letter` 128s→2.1s／test_recipes.py 全体
+  単一コア 13613 passed in 35s**。→ **セル毎の property DoD は `-k "letter"` 等で数秒**（背景実行不要）。
+  **フルスイート全体も -n auto で 25:54 → 3:04（8.4倍・14127 passed 同数・緑維持）**。
+- フルスイートは **`-n auto` で約3分**（lru_cache 修正後・本マシン実測。修正前は約20〜26分）:
   ```bash
   .venv/bin/python -m pytest engine_tests/ -o addopts="" -p no:cacheprovider -n auto -q 2>&1 | tail -3; echo "EXIT=$pipestatus[2]"
   ```
@@ -56,7 +61,7 @@ git status --porcelain                                      # 空(clean)
 # フルスイート（pipestatus で exit code 確認）:
 .venv/bin/python -m pytest engine_tests/ -o addopts="" -p no:cacheprovider -n auto -q 2>&1 | tail -3; echo "EXIT=$pipestatus[2]"
 ```
-> 本セッション終了時のフルスイートは緑（**14127 passed / EXIT=0**・約26分）を確認済み。
+> 本セッション終了時のフルスイートは緑（**14127 passed / EXIT=0**）を確認済み（lru_cache 修正後は約3分・§0.5）。
 > **本変更は共有 RNG ヘルパ（arithmetic の `_DECIMALS`・`draw` 経路・共有フォーマッタ）を一切変更していない**
 > （新モジュール追加と polynomial 整形ヘルパの参照のみ）ため、既存 golden の陳腐化はゼロ（§13c-2-#7 の教訓）。
 
@@ -170,8 +175,9 @@ equation を横展開。word_problem 系（l19/l24/l25/l26/l27 の word_problem�
 > 数字を書かない（定数答えの唯一の漏洩経路）③式答えは「答え表示が与式に部分文字列で現れない」有界リトライで
 > 漏洩を防ぐ＋x係数非零を構成保証（§2-#2）④定数答えは given whitelist で安全（§2-#3）⑤dup は check_cell の
 > 100seed 実測 ≤0.20（低 variety セルは域拡大＝§2-#5）⑥mode 名は solver と recipe/yaml で一致・signature は
-> 大域一意 ⑦frame 語彙を足したら test_frames.py 同時更新 ⑧spec check/check_cell/property/golden slice は
-> **背景実行＋通知待ち**（2分制限回避・§0.5）⑨1セル群ずつ DoD 緑にしてコミット。
+> 大域一意 ⑦frame 語彙を足したら test_frames.py 同時更新 ⑧**property は lru_cache 化で数秒**（`-k "<関数名断片>"` で
+> フォアグラウンド可・§0.5）。check_cell（120seed）/golden slice/spec check は数十秒〜2分なので**背景実行＋通知待ち**が安定
+> ⑨1セル群ずつ DoD 緑にしてコミット。
 
 ---
 
