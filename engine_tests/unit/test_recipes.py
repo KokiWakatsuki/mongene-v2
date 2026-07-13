@@ -2360,3 +2360,57 @@ def test_compute_letter_expression_double_solve_property(family, level, seed):
     assert sol.answer.srepr == sympy.srepr(expected)
     # 答えは一次式（自由変数 x を含む＝定数に退化していない）。
     assert sympy.Symbol("x") in sympy.sympify(sol.answer.srepr).free_symbols
+
+
+# ---------------------------------------------------------------------------
+# math.compute_substitution（C1 g1 文字式・代入と式の値）— P2
+# ---------------------------------------------------------------------------
+def test_substitute_positive_lv1_construct():
+    ctx = _make_ctx("math.g1_l16.calculation", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "substitute_positive"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "value"
+    assert [s.op for s in sq.steps] == ["substitute_value", "compute_value"]
+    # 代入する値は正（Lv1）。
+    assert int(mr.params["subs_str"].split("=")[1]) > 0
+    # 答えは定数（自由変数なし）。
+    assert not sympy.sympify(sq.answer.srepr).free_symbols
+
+
+def test_substitute_signed_lv2_construct():
+    ctx = _make_ctx("math.g1_l16.calculation", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "substitute_signed"
+    assert [s.op for s in mr.sub_questions[0].steps] == [
+        "substitute_with_parentheses", "evaluate_powers", "compute_value",
+    ]
+    # 代入する値は負（Lv2）で、式は累乗を含む。
+    assert int(mr.params["subs_str"].split("=")[1]) < 0
+    assert "²" in mr.given["expression"]
+
+
+_SUBSTITUTION_CELLS = [
+    ("math.g1_l16.calculation", 1), ("math.g1_l16.calculation", 2),
+]
+
+
+@pytest.mark.parametrize("family,level", _SUBSTITUTION_CELLS)
+@pytest.mark.parametrize("seed", range(100))
+def test_compute_substitution_double_solve_property(family, level, seed):
+    ctx = _make_ctx(family, level)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.evaluate_substitution")
+    sol = solver(mr.params["expr_str"], mr.params["subs_str"], mr.params["mode"])
+    # 独立ソルバの答えが recipe の答えと一致し、かつ代入評価に等しい。
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+    var_s, val_s = mr.params["subs_str"].split("=")
+    expected = sympy.sympify(mr.params["expr_str"]).subs(
+        sympy.Symbol(var_s.strip()), sympy.Integer(int(val_s))
+    )
+    assert sol.answer.srepr == sympy.srepr(expected)
+    # 答えは定数（自由変数を含まない）。
+    assert not sympy.sympify(sol.answer.srepr).free_symbols

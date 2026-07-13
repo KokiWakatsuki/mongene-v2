@@ -16,6 +16,7 @@ import sympy
 
 from engine.core.contracts import Solution, Step, SymbolicAnswer
 from engine.core.registry import register_solver
+from engine.packs.math.solvers.arithmetic import fmt_number
 from engine.packs.math.solvers.polynomial import _fmt_poly_display
 
 # mode -> op 列（steps の骨格）。level_sep はこの op 列の相異で作る（同一 unit の
@@ -82,4 +83,65 @@ def evaluate_letter_expression(expr_str: str, mode: object) -> Solution:
     return Solution(answer=answer, steps=steps)
 
 
-__all__ = ["evaluate_letter_expression"]
+# ---------------------------------------------------------------------------
+# 代入と式の値（g1_l16.calculation Lv1/Lv2）— 式に数を代入して値（定数）を求める。
+# 答えは数値（Integer/Rational）＝arithmetic 系と同じ定数答え。given の数値はすべて
+# whitelist されるため G-Q5t は漏洩しない（narration に数字を書かない）。
+# ---------------------------------------------------------------------------
+_SUBSTITUTE_STEPS: dict[str, list[str]] = {
+    # g1_l16 Lv1 正の数を代入
+    "substitute_positive": ["substitute_value", "compute_value"],
+    # g1_l16 Lv2 負の数・累乗を代入（符号・かっこに注意）
+    "substitute_signed": ["substitute_with_parentheses", "evaluate_powers", "compute_value"],
+}
+
+_SUBSTITUTE_NARRATION: dict[str, str] = {
+    "substitute_value": "式の文字に、代入する数をあてはめる。",
+    "compute_value": "あてはめた式を計算して、式の値を求める。",
+    "substitute_with_parentheses": "負の数を代入するときは、かっこをつけて文字とおきかえる。",
+    "evaluate_powers": "累乗はかっこの中の数をその回数だけかけ合わせ、符号に注意して計算する。",
+}
+
+_SUBSTITUTE_PHRASE: dict[str, str] = {
+    "substitute_value": "文字に数をあてはめる",
+    "substitute_with_parentheses": "かっこをつけて文字を数におきかえる",
+    "evaluate_powers": "累乗を符号に注意して計算する",
+}
+
+
+@register_solver("math.evaluate_substitution")
+def evaluate_substitution(expr_str: str, subs_str: object, mode: object) -> Solution:
+    """式に数を代入して式の値（定数）を求める（g1_l16.calculation Lv1/Lv2）。
+
+    expr_str（変数を含む式）と subs_str（"x=-3" 形の代入条件・単一変数）だけから
+    sympy で代入・厳密評価する（double-solve）。答えは数値（Integer/Rational）。
+    mode ごとに steps の op 列を変える＝level_sep。narration には数字を書かない。
+    """
+    mode_s = str(mode)
+    if mode_s not in _SUBSTITUTE_STEPS:
+        raise ValueError(f"未知の mode: {mode_s!r}")
+    var_s, val_s = str(subs_str).split("=")
+    var = sympy.Symbol(var_s.strip())
+    val = sympy.Rational(sympy.sympify(val_s.strip(), rational=True))
+    result = sympy.sympify(expr_str).subs(var, val)
+    if not result.is_number:
+        raise ValueError(f"数値に評価されない代入結果: {expr_str!r} [{subs_str!r}] -> {result!r}")
+    r_srepr = sympy.srepr(result)
+    r_disp = fmt_number(result)
+
+    ops = _SUBSTITUTE_STEPS[mode_s]
+    steps = [
+        Step(
+            op=op,
+            args=[],
+            result_srepr=r_srepr,
+            result_display=r_disp if i == len(ops) - 1 else _SUBSTITUTE_PHRASE.get(op, ""),
+            narration=_SUBSTITUTE_NARRATION[op],
+        )
+        for i, op in enumerate(ops)
+    ]
+    answer = SymbolicAnswer(srepr=r_srepr, display=r_disp)
+    return Solution(answer=answer, steps=steps)
+
+
+__all__ = ["evaluate_letter_expression", "evaluate_substitution"]

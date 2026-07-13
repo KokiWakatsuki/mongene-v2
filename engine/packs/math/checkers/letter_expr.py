@@ -17,4 +17,13 @@ def double_solve_compute_letter_expression(mr: MR) -> Solution:
     return cast(Solution, solver(mr.params["expr_str"], mr.params["mode"]))
 
 
-__all__ = ["double_solve_compute_letter_expression"]
+@register_checker("math.compute_substitution.double_solve")
+def double_solve_compute_substitution(mr: MR) -> Solution:
+    solver = REGISTRY.solver("math.evaluate_substitution")
+    return cast(Solution, solver(mr.params["expr_str"], mr.params["subs_str"], mr.params["mode"]))
+
+
+__all__ = [
+    "double_solve_compute_letter_expression",
+    "double_solve_compute_substitution",
+]

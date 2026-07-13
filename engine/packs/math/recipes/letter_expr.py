@@ -35,6 +35,8 @@ from engine.core.rng import Rng, draw
 from engine.packs.math.recipes.polynomial import (
     _domain_candidates,
     _fmt_expr_from_terms,
+    _fmt_poly_x_terms,
+    _sympy_poly_x,
     _sympy_str_from_terms,
 )
 
@@ -182,4 +184,82 @@ def compute_letter_expression(ctx: CellContext, rng: Rng) -> MR:
     raise ValueError(f"非退化・非漏洩の一次式を構成できず（mode={mode!r}）")
 
 
-__all__ = ["compute_letter_expression"]
+# ---------------------------------------------------------------------------
+# math.compute_substitution（g1_l16.calculation Lv1/Lv2 用）— 代入と式の値
+# 式に数を代入して値（定数）を求める。答えは数値なので arithmetic 系と同じく given の数値が
+# すべて whitelist され G-Q5t は漏洩しない（narration に数字を書かない）。
+#   Lv1 "substitute_positive": a·x + b に正の整数を代入        op[substitute_value, compute_value]
+#   Lv2 "substitute_signed"  : c2·x² + c1·x に負の整数を代入   op[substitute_with_parentheses,
+#                              evaluate_powers, compute_value]（負数・累乗の符号処理が構造差）
+# 忠実性: 例は整数代入（Lv1 x=4 で 3x-5／Lv2 x=-3 で -x²+2x）。desc の「分数・複数文字」は
+# 負数×累乗の代表題材に畳んで実装し、本注記を source_desc に明示（§10 の sanction 手順）。
+# ---------------------------------------------------------------------------
+_SUBSTITUTION_CONCEPTS = [
+    "letter_expr.substitute_positive",
+    "letter_expr.substitute_signed",
+]
+
+
+@register_recipe("math.compute_substitution", provides_concepts=_SUBSTITUTION_CONCEPTS)
+def compute_substitution(ctx: CellContext, rng: Rng) -> MR:
+    """式に数を代入して式の値を求める（構成的生成・calculation Lv1/Lv2）。"""
+    p = ctx.spec_level.params
+    mode: str = cast(str, p["mode"])
+    coeff_cands = [v for v in _domain_candidates(cast("dict[str, object]", p["coeff_domain"])) if v != 0]
+    const_cands = [v for v in _domain_candidates(cast("dict[str, object]", p["const_domain"])) if v != 0]
+
+    if mode == "substitute_positive":
+        # a·x + b に正の整数を代入する（1次式・正の値）。
+        a = int(draw({"int_set": coeff_cands}, rng))
+        b = int(draw({"int_set": const_cands}, rng))
+        v = int(draw(p["value_domain"], rng))
+        terms = [(a, 1), (b, 0)]
+        steps_ops = ["substitute_value", "compute_value"]
+    elif mode == "substitute_signed":
+        # c2·x² + c1·x に負の整数を代入する（累乗・符号処理）。
+        c2 = int(draw({"int_set": coeff_cands}, rng))
+        c1 = int(draw({"int_set": const_cands}, rng))
+        v = int(draw(p["value_domain"], rng))
+        terms = [(c2, 2), (c1, 1)]
+        steps_ops = ["substitute_with_parentheses", "evaluate_powers", "compute_value"]
+    else:
+        raise ValueError(f"未知の mode: {mode!r}")
+
+    expr_str = _sympy_poly_x(terms)
+    expr_display = _fmt_poly_x_terms(terms)
+    subs_str = f"x={v}"
+
+    solver = REGISTRY.solver("math.evaluate_substitution")
+    sol = cast(Solution, solver(expr_str, subs_str, mode))
+    assert isinstance(sol.answer, SymbolicAnswer)
+    expected = sympy.sympify(expr_str).subs(sympy.Symbol("x"), sympy.Integer(v))
+    assert sol.answer.srepr == sympy.srepr(expected), (
+        f"double-solve 不一致: 構成 {expected} != solver 再計算 {sol.answer.srepr}"
+    )
+    assert [s.op for s in sol.steps] == steps_ops
+    # 答えは定数（自由変数を含まない）。
+    assert not sympy.sympify(sol.answer.srepr).free_symbols, "代入結果が定数にならなかった"
+
+    sub_question = SubQuestionMR(
+        label="(1)",
+        asked="value",
+        answer=sol.answer,
+        steps=sol.steps,
+        concept_tags=_effective_concept_tags(ctx),
+        cause_tags=_effective_cause_tags(ctx),
+    )
+    return MR(
+        signature=ctx.spec_level.signature,
+        family=ctx.family,
+        level=ctx.level,
+        purpose=ctx.purpose,
+        seed=0,
+        params={"expr_str": expr_str, "subs_str": subs_str, "mode": mode},
+        given={"expression": expr_display, "input_value": str(v)},
+        sub_questions=[sub_question],
+        visual_plan=None,
+        provenance=Provenance(recipe="math.compute_substitution"),
+    )
+
+
+__all__ = ["compute_letter_expression", "compute_substitution"]

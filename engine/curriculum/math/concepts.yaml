@@ -198,6 +198,12 @@ concepts:
   - id: letter_expr.distribute_divide_mixed
     label: "分配法則と分数係数を含む乗除混合の一次式を整理する"
     unit: g1_l18
+  - id: letter_expr.substitute_positive
+    label: "正の数を1文字に代入して式の値を求める"
+    unit: g1_l16
+  - id: letter_expr.substitute_signed
+    label: "負の数・累乗を代入し符号に注意して式の値を求める"
+    unit: g1_l16
   # --- C1 g1 正の数・負の数（四則） ---
   - id: signed_number.add_pair
     label: "2数の加法（符号を決めて絶対値を計算する）"
