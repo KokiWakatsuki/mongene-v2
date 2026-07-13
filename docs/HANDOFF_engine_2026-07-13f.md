@@ -26,28 +26,29 @@ knowledge（用語想起 l17/l19/l21・解の判別 l21Lv2）」まで進めた�
 
 ## 1. 現状サマリ（2026-07-13f・本セッション終了時）
 
-**進捗: capabilities 107/630（17.0%）**（`python -m engine.tools.goal_progress`・exit 0）。最新コミット `61bf36a`（#58）。
-- **C1 g1 数と式: 41/69** ← 本セッション +11セル（#56 分母払い/比例式3 + #57 記法4 + #58 knowledge4）。
+**進捗: capabilities 109/630（17.3%）**（`python -m engine.tools.goal_progress`・exit 0）。最新コミット `3fefbab`（#59）。
+- **C1 g1 数と式: 43/69** ← 本セッション +13セル（#56 分母払い/比例式3 + #57 記法4 + #58 knowledge4 + #59 l2 knowledge2）。
 - C2 32/32（完成）・C5 34/36。他グループ未着手。
 
-**本セッションの3コミット（#56〜#58）**。各1セル群を DoD 全緑でコミット。
+**本セッションの4コミット（#56〜#59）**。各1セル群を DoD 全緑でコミット。
 
 | # | セル | solver / signature | 要点 |
 |---|---|---|---|
 | #56 | g1_l23 Lv3 分母払い・g1_l24 比例式 Lv1/2 | clear_denominators_two / cross_multiply(_expand) | equation.py に mode 追加。比例式は表示≠solver式（13e §2） |
 | #57 | g1_l13 乗法 Lv1/2・g1_l14 除法 Lv1/2 | **math.simplify_notation** | letter_expr に新 solver。与式(× ÷ 明示)を sympy 正準化し `_fmt_monomial_display` で教材表記。式答え |
 | #58 | g1_l17/l19/l21 用語想起・g1_l21Lv2 解の判別 | **math.term_recall_definition** / **math.verify_equation_solution** | ChoiceAnswer。汎用 term_recall を domain で切替し3セル共有。verify は代入判定 |
+| #59 | g1_l2 絶対値用語 Lv1・大小判別 Lv2 | term_recall(domain=number) / **math.compare_signed_numbers** | 用語想起は term_recall に domain=number 追加。Lv2 は2数の大小 verify（答え=大きいほうの数） |
 
 ### 再開時の最初のコマンド
 ```bash
 cd /Users/koki/workspace/mongene-v2
-git log --oneline -6                                        # 最新 61bf36a(#58)
+git log --oneline -6                                        # 最新 3fefbab(#59)
 git status --porcelain                                      # 空(clean)。scratchpad/ は未追跡で無視
-.venv/bin/python -m engine.tools.goal_progress             # 107/630・C1 41/69・exit0
+.venv/bin/python -m engine.tools.goal_progress             # 109/630・C1 43/69・exit0
 .venv/bin/python -m engine.eval --seeds 5 --dup-seeds 100   # 一式OK・exit0
 .venv/bin/python -m pytest engine_tests/ -o addopts="" -p no:cacheprovider -n auto -q 2>&1 | tail -3; echo "EXIT=$pipestatus[2]"
 ```
-> 本セッション終了時のフルスイートは緑（**15686 passed / EXIT=0**）を確認済み（約3.5分）。
+> 本セッション終了時のフルスイートは緑（**15894 passed / EXIT=0**）を確認済み（約3.5分）。
 > 既存 golden の陳腐化ゼロ（共有 RNG ヘルパ未変更・新 solver/family 追加のみ）。
 
 ---
@@ -82,15 +83,18 @@ git status --porcelain                                      # 空(clean)。scrat
 
 ## 3. 残タスク（優先順）
 
-### 3.1 C1 の残（28/69）
-- **knowledge の残**（#58 の term_recall / verify を横展開・**surface を params に必ず入れる**＝§2-#2）:
+### 3.1 C1 の残（26/69）
+- **knowledge の残**（#58/#59 の term_recall / verify を横展開・**surface を params に必ず入れる**＝§2-#2）:
   - **l22 knowledge**（移項とは・なぜ符号が変わるか＝説明選択。単一概念なので選択肢設計に一工夫要）・
-    **l2 knowledge**（絶対値の用語 Lv1 ＋大小判別 verify Lv2）・**l20 knowledge**（不等号 以上/以下/未満/超 の意味）・
+    **l20 knowledge**（不等号 以上/以下/未満/超 の意味＝phrase→記号 mapping・term_recall domain 追加で入る）・
     **l1 knowledge**（正負・符号・0 の用語）・**l3/l4/l5 knowledge**（加法規則/減法規則/項）・
     **l10 knowledge**（自然数・整数の集合）・**l11 knowledge**（素数/合成数の判別）・**l12 knowledge**（文字式の意味）・
     **l15 knowledge**（速さ=距離/時間）。term_recall_definition の `_TERM_MAPS` に domain を足すか verify を新設。
 - **l11 素因数分解 calc**（答え `2³×3²` 形＝因数分解 solver+累乗表示・bespoke）・**l60 科学的記数法 calc**
   （`a×10ⁿ`・四捨五入・有効数字＝新 solver・bespoke）。
+  - ★**l11 knowledge（素数/合成数の判別）は保留**：答えが素数/合成数/どちらでもないの3値で、素数プールが小さく
+    （≤100 で25個）「基礎らしい小さい数」だと dup≤0.20 を満たせない（#59 で検討・見送り）。素因数分解 calc と
+    セットで「大きめの数」を扱うか、term-recall（素数/素因数/合成数の意味・例の数を surface に）に realize すれば入る。
 
 ### 3.2 その先
 C1 完成 → **C3 g3 数と式**（展開/因数分解=sympy.expand/factor・平方根=sqrt/simplify・二次=solve）。
@@ -126,9 +130,9 @@ scratchpad は git 未追跡なので消えていたら本書 §4 / 13e §4 の�
 > **再開の最初**:
 > ```bash
 > cd /Users/koki/workspace/mongene-v2
-> git log --oneline -6                                        # 最新 61bf36a(#58)
+> git log --oneline -6                                        # 最新 3fefbab(#59)
 > git status --porcelain                                      # 空(clean)
-> .venv/bin/python -m engine.tools.goal_progress             # 107/630・C1 41/69・exit0
+> .venv/bin/python -m engine.tools.goal_progress             # 109/630・C1 43/69・exit0
 > .venv/bin/python -m engine.eval --seeds 5 --dup-seeds 100   # 一式OK・exit0
 > .venv/bin/python -m pytest engine_tests/ -o addopts="" -p no:cacheprovider -n auto -q 2>&1 | tail -3; echo "EXIT=$pipestatus[2]"
 > ```
