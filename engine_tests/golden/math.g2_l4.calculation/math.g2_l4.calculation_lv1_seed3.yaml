@@ -1,0 +1,54 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - polynomial.multiply_monomials
+  provenance:
+    git_commit: ''
+    recipe: math.compute_monomial_expression
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_add_subtract_polynomials_v1
+    tier: T1
+  requested:
+    form: calculation
+    level: 1
+    subject: math
+    unit: g2_l4
+  resolved:
+    form: calculation
+    level: 1
+    subject: math
+    unit: g2_l4
+  seed: 3
+  signature: multiply_monomials
+problem_ref: 3e9713186635359d
+problem_text: '次の計算をせよ。
+
+  7x × 6x'
+sub_questions:
+- answer:
+    display: 42x²
+    kind: symbolic
+    srepr: Mul(Integer(42), Pow(Symbol('x'), Integer(2)))
+  cause_tags: []
+  concept_tags:
+  - polynomial.multiply_monomials
+  explanation: まず、係数どうしをかけ算する。 係数どうしをかける次に、同じ文字は指数の和にまとめ、1つの単項式にする。 42x²
+  hints:
+  - 係数どうしをかけ算する。
+  label: (1)
+  prompt_text: simplified_expr を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 係数どうしをかけ算する。
+    op: multiply_coefficients
+    result_display: 係数どうしをかける
+    result_srepr: Mul(Integer(42), Pow(Symbol('x'), Integer(2)))
+  - args: []
+    narration: 同じ文字は指数の和にまとめ、1つの単項式にする。
+    op: combine_powers
+    result_display: 42x²
+    result_srepr: Mul(Integer(42), Pow(Symbol('x'), Integer(2)))
+visual_svg: null

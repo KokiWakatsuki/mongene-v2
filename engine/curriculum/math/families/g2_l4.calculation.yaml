@@ -1,0 +1,67 @@
+family: math.g2_l4.calculation
+form: calculation
+source_desc: |
+  単項式どうしの乗法・除法を計算して1つの単項式にする
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: 係数と1種の文字の単純な乗法。
+       example: 次の計算をせよ。　3x × 4x
+  Lv2 desc: 累乗・複数文字・符号を含む乗法。
+       example: 次の計算をせよ。　(−2a²b) × 3ab²
+  Lv3 desc: 乗除混在・分数係数・逆数変換の連鎖。
+       example: 次の計算をせよ。　6xy² ÷ (−3/2 xy) × 2x
+  答えは整数係数の単項式（SymbolicAnswer・自由変数を含む）。独立ソルバ
+  compute_monomial_expression（sympy.simplify）で再計算。Lv1（単純乗法）/
+  Lv2（符号・累乗つき乗法）/ Lv3（乗除混在＝逆数変換を先頭に足す）で op 列を変える＝level_sep。
+  Lv3 は結果が整数係数になるよう factor-first で構成（A を除数 B の分子の倍数にとり、
+  x を全因子に必ず含めて結果指数を非負・非定数に保つ）。分数係数は p/q 表記で提示。
+concepts_default: [polynomial.multiply_monomials]
+levels:
+  "1":
+    signature: multiply_monomials
+    recipe: math.compute_monomial_expression
+    params:
+      # (c1 x^e1) × (c2 x^e2)。係数は ≠0,±1。指数は 1〜2。積係数 |c1·c2|≥4 で答え≠因子。
+      mode: simple_mul
+      coeff_domain: {int_range: [-9, 9], exclude: [-1, 0, 1]}
+      exp_domain: {int_set: [1, 2]}
+    given: [expression]
+    asked: [simplified_expr]
+    visual: none
+    text: {tier: T1, template: lf_add_subtract_polynomials_v1}
+    hints: [steps_prefix]
+    concept_tags: [polynomial.multiply_monomials]
+    cause_tags: []
+  "2":
+    signature: multiply_monomials_powers
+    recipe: math.compute_monomial_expression
+    params:
+      # (c1 a^p b^q) × (c2 a^r b^s)。a 指数は必ず≥1（因子が非定数）、b 指数は 0〜2。符号あり。
+      mode: power_mul
+      coeff_domain: {int_range: [-9, 9], exclude: [-1, 0, 1]}
+      a_exp_domain: {int_set: [1, 2]}
+      b_exp_domain: {int_set: [0, 1, 2]}
+    given: [expression]
+    asked: [simplified_expr]
+    visual: none
+    text: {tier: T1, template: lf_add_subtract_polynomials_v1}
+    hints: [steps_prefix]
+    concept_tags: [polynomial.multiply_monomials_powers]
+    cause_tags: []
+  "3":
+    signature: monomial_mul_div_chain
+    recipe: math.compute_monomial_expression
+    params:
+      # (A) ÷ (B[分数係数]) × (C)。答えは整数係数（factor-first で保証）。
+      mode: mul_div_chain
+      divisor_frac_domain: {frac_range: {num: [-6, 6], den: [2, 4]}}
+      coeff_domain: {int_range: [-6, 6], exclude: [-1, 0, 1]}
+      multiplier_domain: {int_range: [-4, 4], exclude: [0]}
+    given: [expression]
+    asked: [simplified_expr]
+    visual: none
+    text: {tier: T1, template: lf_add_subtract_polynomials_v1}
+    hints: [steps_prefix]
+    concept_tags: [polynomial.monomial_mul_div_chain]
+    cause_tags: []
+remedial:
+  default_level: 1

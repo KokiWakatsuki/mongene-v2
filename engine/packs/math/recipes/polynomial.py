@@ -391,8 +391,197 @@ def distribute_or_divide(ctx: CellContext, rng: Rng) -> MR:
     )
 
 
+# ---------------------------------------------------------------------------
+# math.compute_monomial_expression（g2_l4.calculation Lv1/Lv2/Lv3 用）— C2
+# 単項式どうしの乗除を計算して1つの単項式にする。answer は自由変数を含む symbolic
+# （係数だけでなく display 全体一致でのみ漏洩検査＝G-Q5t 相対安全・§2-#1）。
+#   Lv1 "simple_mul"    : (c1 x^e1) × (c2 x^e2)              op[multiply_coefficients, combine_powers]
+#   Lv2 "power_mul"     : (c1 a^p b^q) × (c2 a^r b^s)        op[determine_sign, +…]（符号・累乗・複数文字）
+#   Lv3 "mul_div_chain" : (A) ÷ (B[分数係数]) × (C)          op[convert_divisions_to_reciprocal, +…]
+#     Lv3 は結果が整数係数の単項式になるよう factor-first で構成（A を B の分子の倍数に／
+#     各文字は x を全因子に必ず含めて result 指数を非負・非定数に保つ）。
+# ---------------------------------------------------------------------------
+_SUP_DIGITS = str.maketrans("0123456789", "⁰¹²³⁴⁵⁶⁷⁸⁹")
+
+_MONOMIAL_CONCEPTS = [
+    "polynomial.multiply_monomials",
+    "polynomial.multiply_monomials_powers",
+    "polynomial.monomial_mul_div_chain",
+]
+
+
+def _coef_sympy(coef: object) -> str:
+    """係数を sympy.sympify に渡せる文字列にする（整数/既約有理数）。"""
+    if isinstance(coef, sympy.Rational) and coef.q != 1:
+        return f"(Rational({coef.p}, {coef.q}))"
+    return f"({int(cast(int, coef))})"
+
+
+def _mono_sympy_str(coef: object, exps: dict[str, int]) -> str:
+    """(係数, {文字:指数}) を sympy.sympify に渡せる単項式文字列にする（指数0の文字は略）。"""
+    parts = [_coef_sympy(coef)]
+    for v, e in exps.items():
+        if e == 1:
+            parts.append(v)
+        elif e >= 2:
+            parts.append(f"{v}**{e}")
+    return "*".join(parts)
+
+
+def _fmt_monomial_factor(coef: object, exps: dict[str, int]) -> str:
+    """単項式1因子を教材表記に（係数±1省略・指数上付き・分数係数は p/q 表記）。
+
+    例: (-2,{a:2,b:1})->"-2a²b" / (1,{x:1})->"x" / (Rational(-3,2),{x:1,y:1})->"-3/2xy"。
+    """
+    var_part = ""
+    for v, e in exps.items():
+        if e == 1:
+            var_part += v
+        elif e >= 2:
+            var_part += f"{v}{str(e).translate(_SUP_DIGITS)}"
+
+    if isinstance(coef, sympy.Rational) and coef.q != 1:
+        # 分数係数は文字部との間にスペースを置いて曖昧さを避ける（例「-3/2 xy」・source example に一致）。
+        coef_s = f"{coef.p}/{coef.q}"
+        return f"{coef_s} {var_part}" if var_part else coef_s
+
+    c = int(cast(int, coef))
+    if not var_part:
+        return str(c)
+    if c == 1:
+        return var_part
+    if c == -1:
+        return f"-{var_part}"
+    return f"{c}{var_part}"
+
+
+def _fmt_monomial_chain(
+    factors: list[tuple[object, dict[str, int]]], ops: list[str]
+) -> str:
+    """因子列と演算子列（"×"/"÷"）を連結して与式表記にする。
+
+    ÷ の被演算子・負係数・分数係数の因子はかっこで囲む（優先順位と符号の明示）。
+    """
+    def _needs_paren(factor: tuple[object, dict[str, int]], op: str) -> bool:
+        coef = factor[0]
+        if op == "÷":
+            return True
+        if isinstance(coef, sympy.Rational):
+            return bool(coef < 0 or coef.q != 1)
+        return int(cast(int, coef)) < 0
+
+    out = _fmt_monomial_factor(*factors[0])
+    for i, op in enumerate(ops):
+        f = factors[i + 1]
+        fs = _fmt_monomial_factor(*f)
+        if _needs_paren(f, op):
+            fs = f"({fs})"
+        out += f" {op} {fs}"
+    return out
+
+
+@register_recipe("math.compute_monomial_expression", provides_concepts=_MONOMIAL_CONCEPTS)
+def compute_monomial_expression(ctx: CellContext, rng: Rng) -> MR:
+    """単項式どうしの乗除を計算する（answer/factor-first・calculation Lv1/2/3）。"""
+    p = ctx.spec_level.params
+    mode: str = p["mode"]
+
+    factors: list[tuple[object, dict[str, int]]]
+    if mode == "simple_mul":
+        coef_dom = p["coeff_domain"]
+        exp_dom = p["exp_domain"]
+        c1 = int(draw(coef_dom, rng))
+        e1 = int(draw(exp_dom, rng))
+        c2 = int(draw(coef_dom, rng))
+        e2 = int(draw(exp_dom, rng))
+        factors = [(c1, {"x": e1}), (c2, {"x": e2})]
+        ops = ["×"]
+        steps_ops = ["multiply_coefficients", "combine_powers"]
+    elif mode == "power_mul":
+        coef_dom = p["coeff_domain"]
+        a_dom = p["a_exp_domain"]
+        b_dom = p["b_exp_domain"]
+        c1 = int(draw(coef_dom, rng))
+        ea1 = int(draw(a_dom, rng))
+        eb1 = int(draw(b_dom, rng))
+        c2 = int(draw(coef_dom, rng))
+        ea2 = int(draw(a_dom, rng))
+        eb2 = int(draw(b_dom, rng))
+        factors = [(c1, {"a": ea1, "b": eb1}), (c2, {"a": ea2, "b": eb2})]
+        ops = ["×"]
+        steps_ops = ["determine_sign", "multiply_coefficients", "combine_powers"]
+    elif mode == "mul_div_chain":
+        # A ÷ B × C。B のみ分数係数。結果は整数係数の単項式になるよう factor-first。
+        b_coef = draw(p["divisor_frac_domain"], rng)
+        assert isinstance(b_coef, sympy.Rational)
+        c_coef = int(draw(p["coeff_domain"], rng))
+        m = int(draw(p["multiplier_domain"], rng))
+        a_coef = int(b_coef.p) * m  # A を B の分子の倍数に → 結果係数 m·C·q は整数
+        ex_a: dict[str, int] = {}
+        ex_b: dict[str, int] = {}
+        ex_c: dict[str, int] = {}
+        for v in ("x", "y"):
+            if v == "x":
+                # x は全因子・答えに必ず残す（因子が定数化せず答えも非定数）。
+                eb = int(draw({"int_set": [1, 2]}, rng))
+                extra = int(draw({"int_set": [0, 1]}, rng))
+                ec = int(draw({"int_set": [1, 2]}, rng))
+            else:
+                eb = int(draw({"int_set": [0, 1]}, rng))
+                extra = int(draw({"int_set": [0, 1]}, rng))
+                ec = int(draw({"int_set": [0, 1]}, rng))
+            ex_b[v] = eb
+            ex_a[v] = eb + extra  # result 指数 = extra + ec ≥ 0 を保証
+            ex_c[v] = ec
+        factors = [(a_coef, ex_a), (b_coef, ex_b), (c_coef, ex_c)]
+        ops = ["÷", "×"]
+        steps_ops = ["convert_divisions_to_reciprocal", "multiply_coefficients", "combine_powers"]
+    else:
+        raise ValueError(f"未知の mode: {mode!r}")
+
+    factor_strs = [_mono_sympy_str(c, e) for c, e in factors]
+    expr_str = factor_strs[0]
+    sym_ops = {"×": "*", "÷": "/"}
+    for i, op in enumerate(ops):
+        expr_str = f"({expr_str}){sym_ops[op]}({factor_strs[i + 1]})"
+    given_display = _fmt_monomial_chain(factors, ops)
+
+    result = sympy.simplify(sympy.sympify(expr_str))
+
+    solver = REGISTRY.solver("math.compute_monomial_expression")
+    sol = cast(Solution, solver(expr_str, mode))
+    assert isinstance(sol.answer, SymbolicAnswer)
+    assert sol.answer.srepr == sympy.srepr(result), (
+        f"double-solve 不一致: 構成 {result} != solver 再計算 {sol.answer.srepr}"
+    )
+    assert [s.op for s in sol.steps] == steps_ops
+
+    sub_question = SubQuestionMR(
+        label="(1)",
+        asked="simplified_expr",
+        answer=sol.answer,
+        steps=sol.steps,
+        concept_tags=_effective_concept_tags(ctx),
+        cause_tags=_effective_cause_tags(ctx),
+    )
+
+    return MR(
+        signature=ctx.spec_level.signature,
+        family=ctx.family,
+        level=ctx.level,
+        purpose=ctx.purpose,
+        seed=0,
+        params={"expr_str": expr_str, "mode": mode},
+        given={"expression": given_display},
+        sub_questions=[sub_question],
+        visual_plan=None,
+        provenance=Provenance(recipe="math.compute_monomial_expression"),
+    )
+
+
 __all__ = [
     "combine_like_terms",
     "add_or_subtract_polynomials",
     "distribute_or_divide",
+    "compute_monomial_expression",
 ]

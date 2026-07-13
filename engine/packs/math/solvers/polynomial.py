@@ -9,10 +9,15 @@ import は可・編集は不可）。
 """
 from __future__ import annotations
 
+import re
+
 import sympy
 
 from engine.core.contracts import Solution, Step, SymbolicAnswer
 from engine.core.registry import register_solver
+
+# 任意桁の指数を上付き数字へ（単項式の乗除は 4 次以上も生じうる）。
+_SUPERSCRIPT = str.maketrans("0123456789", "⁰¹²³⁴⁵⁶⁷⁸⁹")
 
 
 def _fmt_poly_display(expr: sympy.Expr) -> str:
@@ -24,6 +29,20 @@ def _fmt_poly_display(expr: sympy.Expr) -> str:
     """
     s = str(sympy.sstr(expr))
     s = s.replace("**2", "²").replace("**3", "³")
+    return s.replace("*", "")
+
+
+def _fmt_monomial_display(expr: sympy.Expr) -> str:
+    """単項式の表示形（`**n` を任意桁の上付きに変換し `*` を除去）。
+
+    `_fmt_poly_display` は 2/3 次のみ対応だが、単項式どうしの乗除では 4 次以上も
+    生じうるため、`**<桁>` を正規表現で上付き数字へ一般化する。整数係数の答え
+    （recipe が構成で保証）なので分数バーは出ないが、Rational が sstr で "3/2" と
+    出ても `*` を含まないため副作用はない。
+    例: -8*x*y -> "-8xy" / 2*a**4 -> "2a⁴"。
+    """
+    s = str(sympy.sstr(expr))
+    s = re.sub(r"\*\*(\d+)", lambda m: m.group(1).translate(_SUPERSCRIPT), s)
     return s.replace("*", "")
 
 
@@ -138,8 +157,62 @@ def distribute_or_divide(expr_str: str, is_division: object) -> Solution:
     return Solution(answer=answer, steps=steps)
 
 
+_MONOMIAL_STEPS: dict[str, list[str]] = {
+    "simple_mul": ["multiply_coefficients", "combine_powers"],
+    "power_mul": ["determine_sign", "multiply_coefficients", "combine_powers"],
+    "mul_div_chain": ["convert_divisions_to_reciprocal", "multiply_coefficients", "combine_powers"],
+}
+
+
+@register_solver("math.compute_monomial_expression")
+def compute_monomial_expression(expr_str: str, mode: object) -> Solution:
+    """単項式どうしの乗除を計算して1つの単項式にする（g2_l4.calculation Lv1/2/3）。
+
+    与式の文字列だけから sympy で積・商を評価する（double-solve）。答えは整数係数の
+    単項式（recipe が構成で保証）。mode ごとに steps の op 列を変える＝level_sep:
+      Lv1 "simple_mul"    : 係数と1文字の単純な乗法   [multiply_coefficients, combine_powers]
+      Lv2 "power_mul"     : 符号・累乗・複数文字の乗法 [determine_sign, +…]
+      Lv3 "mul_div_chain" : 乗除混在（逆数変換の連鎖） [convert_divisions_to_reciprocal, +…]
+    narration には数字を書かない（G-Q5t 偽陽性の元・§5-#9）。
+    """
+    expr = sympy.sympify(expr_str)
+    result = sympy.simplify(expr)
+    mode_s = str(mode)
+    if mode_s not in _MONOMIAL_STEPS:
+        raise ValueError(f"未知の mode: {mode_s!r}")
+
+    r_srepr = sympy.srepr(result)
+    r_disp = _fmt_monomial_display(result)
+
+    narrations = {
+        "multiply_coefficients": "係数どうしをかけ算する。",
+        "combine_powers": "同じ文字は指数の和にまとめ、1つの単項式にする。",
+        "determine_sign": "かけ合わせる式の符号から、答えの符号を先に決める。",
+        "convert_divisions_to_reciprocal": "÷ を、その式の逆数をかけるかけ算に直す。",
+    }
+    displays = {
+        "multiply_coefficients": "係数どうしをかける",
+        "combine_powers": r_disp,
+        "determine_sign": "答えの符号を先に決める",
+        "convert_divisions_to_reciprocal": "÷ を逆数のかけ算に直す",
+    }
+    steps = [
+        Step(
+            op=op,
+            args=[],
+            result_srepr=r_srepr,
+            result_display=displays[op],
+            narration=narrations[op],
+        )
+        for op in _MONOMIAL_STEPS[mode_s]
+    ]
+    answer = SymbolicAnswer(srepr=r_srepr, display=r_disp)
+    return Solution(answer=answer, steps=steps)
+
+
 __all__ = [
     "simplify_polynomial",
     "add_or_subtract_polynomials",
     "distribute_or_divide",
+    "compute_monomial_expression",
 ]

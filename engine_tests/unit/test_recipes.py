@@ -1786,3 +1786,53 @@ def test_distribute_or_divide_double_solve_property(level, seed):
     sol = solver(mr.params["expr_str"], mr.params["is_division"])
     assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
     assert sol.answer.srepr == sympy.srepr(sympy.expand(sympy.sympify(mr.params["expr_str"])))
+
+
+# ---------------------------------------------------------------------------
+# math.compute_monomial_expression（g2_l4.calculation Lv1/Lv2/Lv3）— P1/C2（単項式乗除）
+# ---------------------------------------------------------------------------
+def test_multiply_monomials_lv1_construct():
+    ctx = _make_ctx("math.g2_l4.calculation", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "multiply_monomials"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "simplified_expr"
+    assert [s.op for s in sq.steps] == ["multiply_coefficients", "combine_powers"]
+
+
+def test_multiply_monomials_powers_lv2_construct():
+    ctx = _make_ctx("math.g2_l4.calculation", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "multiply_monomials_powers"
+    assert [s.op for s in mr.sub_questions[0].steps] == [
+        "determine_sign", "multiply_coefficients", "combine_powers",
+    ]
+
+
+def test_monomial_mul_div_chain_lv3_construct():
+    ctx = _make_ctx("math.g2_l4.calculation", 3)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "monomial_mul_div_chain"
+    assert [s.op for s in mr.sub_questions[0].steps] == [
+        "convert_divisions_to_reciprocal", "multiply_coefficients", "combine_powers",
+    ]
+    # 答えは整数係数の単項式（factor-first で保証）
+    ans = sympy.sympify(mr.sub_questions[0].answer.srepr)
+    for c in ans.as_coefficients_dict().values():
+        assert c == int(c)
+
+
+@pytest.mark.parametrize("level", [1, 2, 3])
+@pytest.mark.parametrize("seed", range(100))
+def test_compute_monomial_expression_double_solve_property(level, seed):
+    ctx = _make_ctx("math.g2_l4.calculation", level)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+
+    solver = REGISTRY.solver("math.compute_monomial_expression")
+    sol = solver(mr.params["expr_str"], mr.params["mode"])
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+    assert sol.answer.srepr == sympy.srepr(sympy.simplify(sympy.sympify(mr.params["expr_str"])))

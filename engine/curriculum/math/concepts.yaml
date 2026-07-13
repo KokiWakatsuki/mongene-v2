@@ -140,3 +140,12 @@ concepts:
   - id: polynomial.divide_polynomial
     label: "多項式を数で割る（逆数の乗法に直して分配する）"
     unit: g2_l5
+  - id: polynomial.multiply_monomials
+    label: "単項式どうしの乗法（係数の積・指数の和）"
+    unit: g2_l4
+  - id: polynomial.multiply_monomials_powers
+    label: "累乗・複数文字・符号を含む単項式の乗法"
+    unit: g2_l4
+  - id: polynomial.monomial_mul_div_chain
+    label: "単項式の乗除混在（逆数に直して計算する）"
+    unit: g2_l4

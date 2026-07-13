@@ -45,8 +45,17 @@ def double_solve_distribute_or_divide(mr: MR) -> Solution:
     return cast(Solution, solver(p["expr_str"], p["is_division"]))
 
 
+@register_checker("math.compute_monomial_expression.double_solve")
+def double_solve_compute_monomial_expression(mr: MR) -> Solution:
+    # 与式の文字列 expr_str と mode（steps op 列の別）から独立に sympy で再計算。
+    p = mr.params
+    solver = REGISTRY.solver("math.compute_monomial_expression")
+    return cast(Solution, solver(p["expr_str"], p["mode"]))
+
+
 __all__ = [
     "double_solve_combine_like_terms",
     "double_solve_add_or_subtract_polynomials",
     "double_solve_distribute_or_divide",
+    "double_solve_compute_monomial_expression",
 ]

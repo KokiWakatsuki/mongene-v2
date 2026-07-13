@@ -1,0 +1,60 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - polynomial.monomial_mul_div_chain
+  provenance:
+    git_commit: ''
+    recipe: math.compute_monomial_expression
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_add_subtract_polynomials_v1
+    tier: T1
+  requested:
+    form: calculation
+    level: 3
+    subject: math
+    unit: g2_l4
+  resolved:
+    form: calculation
+    level: 3
+    subject: math
+    unit: g2_l4
+  seed: 2
+  signature: monomial_mul_div_chain
+problem_ref: c3c89381ca4353dc
+problem_text: '次の計算をせよ。
+
+  3xy ÷ (-3/2 x) × (-6x²y)'
+sub_questions:
+- answer:
+    display: 12x²y²
+    kind: symbolic
+    srepr: Mul(Integer(12), Pow(Symbol('x'), Integer(2)), Pow(Symbol('y'), Integer(2)))
+  cause_tags: []
+  concept_tags:
+  - polynomial.monomial_mul_div_chain
+  explanation: まず、÷ を、その式の逆数をかけるかけ算に直す。 ÷ を逆数のかけ算に直す次に、係数どうしをかけ算する。 係数どうしをかける最後に、同じ文字は指数の和にまとめ、1つの単項式にする。 12x²y²
+  hints:
+  - ÷ を、その式の逆数をかけるかけ算に直す。
+  - 係数どうしをかけ算する。
+  label: (1)
+  prompt_text: simplified_expr を求めなさい。
+  solution_steps:
+  - args: []
+    narration: ÷ を、その式の逆数をかけるかけ算に直す。
+    op: convert_divisions_to_reciprocal
+    result_display: ÷ を逆数のかけ算に直す
+    result_srepr: Mul(Integer(12), Pow(Symbol('x'), Integer(2)), Pow(Symbol('y'), Integer(2)))
+  - args: []
+    narration: 係数どうしをかけ算する。
+    op: multiply_coefficients
+    result_display: 係数どうしをかける
+    result_srepr: Mul(Integer(12), Pow(Symbol('x'), Integer(2)), Pow(Symbol('y'), Integer(2)))
+  - args: []
+    narration: 同じ文字は指数の和にまとめ、1つの単項式にする。
+    op: combine_powers
+    result_display: 12x²y²
+    result_srepr: Mul(Integer(12), Pow(Symbol('x'), Integer(2)), Pow(Symbol('y'), Integer(2)))
+visual_svg: null
