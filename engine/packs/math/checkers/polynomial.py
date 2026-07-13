@@ -61,10 +61,19 @@ def double_solve_combine_fractional_expressions(mr: MR) -> Solution:
     return cast(Solution, solver(p["expr_str"], p["mode"]))
 
 
+@register_checker("math.degree_of_expression.double_solve")
+def double_solve_degree_of_expression(mr: MR) -> Solution:
+    # 与式の文字列 expr_str から独立に sympy.degree で次数を再計算。
+    p = mr.params
+    solver = REGISTRY.solver("math.degree_of_expression")
+    return cast(Solution, solver(p["expr_str"]))
+
+
 __all__ = [
     "double_solve_combine_like_terms",
     "double_solve_add_or_subtract_polynomials",
     "double_solve_distribute_or_divide",
     "double_solve_compute_monomial_expression",
     "double_solve_combine_fractional_expressions",
+    "double_solve_degree_of_expression",
 ]

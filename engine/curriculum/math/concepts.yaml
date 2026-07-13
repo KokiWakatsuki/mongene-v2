@@ -155,3 +155,6 @@ concepts:
   - id: polynomial.combine_fractions_signed
     label: "符号処理・整数項を含む分数式の通分と整理"
     unit: g2_l6
+  - id: polynomial.degree_of_expression
+    label: "単項式・多項式の次数を答える"
+    unit: g2_l1

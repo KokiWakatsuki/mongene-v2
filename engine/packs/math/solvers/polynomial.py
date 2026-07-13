@@ -277,10 +277,42 @@ def combine_fractional_expressions(expr_str: str, mode: object) -> Solution:
     return Solution(answer=answer, steps=steps)
 
 
+@register_solver("math.degree_of_expression")
+def degree_of_expression(expr_str: str) -> Solution:
+    """1変数の単項式・多項式の次数を答える（g2_l1.calculation Lv1）。
+
+    与式の文字列だけから sympy.degree で x についての次数を求める（double-solve）。
+    答えは次数（小さな整数・定数）。steps は「次数がもっとも高い項を見つける」→
+    「その項の指数の和が次数」の2手。narration には数字を書かない。
+    """
+    expr = sympy.sympify(expr_str)
+    deg = int(sympy.degree(expr, gen=sympy.Symbol("x")))
+    deg_expr = sympy.Integer(deg)
+    steps = [
+        Step(
+            op="find_highest_degree_term",
+            args=[],
+            result_srepr=sympy.srepr(deg_expr),
+            result_display="次数がもっとも高い項を見つける",
+            narration="式の中で、文字の指数がもっとも高い項を見つける。",
+        ),
+        Step(
+            op="read_degree",
+            args=[],
+            result_srepr=sympy.srepr(deg_expr),
+            result_display=str(deg),
+            narration="その項の文字の指数（の和）が、この式の次数になる。",
+        ),
+    ]
+    answer = SymbolicAnswer(srepr=sympy.srepr(deg_expr), display=str(deg))
+    return Solution(answer=answer, steps=steps)
+
+
 __all__ = [
     "simplify_polynomial",
     "add_or_subtract_polynomials",
     "distribute_or_divide",
     "compute_monomial_expression",
     "combine_fractional_expressions",
+    "degree_of_expression",
 ]

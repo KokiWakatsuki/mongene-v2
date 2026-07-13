@@ -72,7 +72,9 @@ def test_calculation_vocab_and_visual():
     assert f.given_vocab == frozenset({
         "expression", "equation", "input_value", "equation_a", "equation_b", "candidate",
     })
-    assert f.asked_vocab == frozenset({"value", "simplified_expr", "solution", "coordinate"})
+    assert f.asked_vocab == frozenset({
+        "value", "simplified_expr", "solution", "coordinate", "degree",
+    })
     assert f.visual == "none"
 
 

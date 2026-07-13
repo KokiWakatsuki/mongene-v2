@@ -99,6 +99,7 @@ CALCULATION_FRAME = Frame(
     asked_vocab=frozenset({
         "value", "simplified_expr", "solution",
         "coordinate",  # 横展開#7: 代入して通過点の座標を求める（g2_l22）
+        "degree",  # P1/C2: 単項式・多項式の次数を答える（g2_l1）
     }),
     visual="none",
 )

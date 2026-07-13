@@ -1872,3 +1872,29 @@ def test_combine_fractional_expressions_double_solve_property(level, seed):
     assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
     assert sol.answer.srepr == sympy.srepr(sympy.together(sympy.sympify(mr.params["expr_str"])))
     assert sympy.sympify(sol.answer.srepr).free_symbols
+
+
+# ---------------------------------------------------------------------------
+# math.degree_of_expression（g2_l1.calculation Lv1）— P1/C2（次数）
+# ---------------------------------------------------------------------------
+def test_degree_of_expression_lv1_construct():
+    ctx = _make_ctx("math.g2_l1.calculation", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "degree_of_expression"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "degree"
+    assert [s.op for s in sq.steps] == ["find_highest_degree_term", "read_degree"]
+
+
+@pytest.mark.parametrize("seed", range(100))
+def test_degree_of_expression_double_solve_property(seed):
+    ctx = _make_ctx("math.g2_l1.calculation", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.degree_of_expression")
+    sol = solver(mr.params["expr_str"])
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+    # 答えの次数は sympy.degree と一致
+    expr = sympy.sympify(mr.params["expr_str"])
+    assert sol.answer.srepr == sympy.srepr(sympy.Integer(int(sympy.degree(expr, gen=sympy.Symbol("x")))))

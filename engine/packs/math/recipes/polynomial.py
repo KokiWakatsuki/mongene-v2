@@ -685,10 +685,105 @@ def combine_fractional_expressions(ctx: CellContext, rng: Rng) -> MR:
     )
 
 
+# ---------------------------------------------------------------------------
+# math.degree_of_expression（g2_l1.calculation Lv1 用）— C2
+# 1変数の単項式・多項式の次数を答える。単一小問に集約し（G-Q1 は sub_questions[0] のみ
+# double-solve・§2-#7）、form（monomial/polynomial）は surface として振る（レベルは1つ）。
+# 答えは次数（小さな整数・定数）。G-Q5t は given の係数が whitelist される＝次数が given の
+# 係数と一致しても許可、given に無ければ本文に現れず、いずれも漏洩しない（§2-#2）。
+# ---------------------------------------------------------------------------
+_DEGREE_CONCEPTS = ["polynomial.degree_of_expression"]
+
+
+def _sympy_poly_x(terms: list[tuple[int, int]]) -> str:
+    """x の項 [(係数, 指数), ...] を sympy.sympify に渡せる文字列にする。"""
+    parts = []
+    for c, e in terms:
+        if e == 0:
+            parts.append(f"({c})")
+        elif e == 1:
+            parts.append(f"({c})*x")
+        else:
+            parts.append(f"({c})*x**{e}")
+    return "+".join(parts)
+
+
+def _fmt_poly_x_terms(terms: list[tuple[int, int]]) -> str:
+    """x の項 [(係数, 指数), ...] を教材表記に（例 [(2,2),(-5,1),(1,0)] -> "2x² - 5x + 1")。"""
+    out = ""
+    for i, (c, e) in enumerate(terms):
+        mag = _fmt_monomial_factor(abs(c), {"x": e})
+        if i == 0:
+            out = ("-" + mag) if c < 0 else mag
+        else:
+            out += (" - " if c < 0 else " + ") + mag
+    return out
+
+
+@register_recipe("math.degree_of_expression", provides_concepts=_DEGREE_CONCEPTS)
+def degree_of_expression(ctx: CellContext, rng: Rng) -> MR:
+    """1変数の単項式・多項式の次数を答える（構成的生成・calculation Lv1）。"""
+    p = ctx.spec_level.params
+    coef_cands = [v for v in _domain_candidates(p["coeff_domain"]) if v != 0]
+    form = str(draw(p["form_set"], rng))
+
+    if form == "monomial":
+        d = int(draw(p["monomial_degree_domain"], rng))
+        c = int(draw({"int_set": coef_cands}, rng))
+        terms = [(c, d)]
+    elif form == "polynomial":
+        d = int(draw(p["polynomial_degree_domain"], rng))
+        lead = int(draw({"int_set": coef_cands}, rng))
+        terms = [(lead, d)]
+        # 中間の次数（d-1 .. 1）は 0 を許して取捨、定数項は必ず nonzero＝常に多項式（2項以上）。
+        for e in range(d - 1, 0, -1):
+            mid = int(draw({"int_set": [*coef_cands, 0]}, rng))
+            if mid != 0:
+                terms.append((mid, e))
+        c0 = int(draw({"int_set": coef_cands}, rng))
+        terms.append((c0, 0))
+    else:
+        raise ValueError(f"未知の form: {form!r}")
+
+    expr_str = _sympy_poly_x(terms)
+    given_display = _fmt_poly_x_terms(terms)
+
+    solver = REGISTRY.solver("math.degree_of_expression")
+    sol = cast(Solution, solver(expr_str))
+    assert isinstance(sol.answer, SymbolicAnswer)
+    assert sol.answer.srepr == sympy.srepr(sympy.Integer(d)), (
+        f"double-solve 不一致: 構成次数 {d} != solver {sol.answer.srepr}"
+    )
+    assert [s.op for s in sol.steps] == ["find_highest_degree_term", "read_degree"]
+
+    sub_question = SubQuestionMR(
+        label="(1)",
+        asked="degree",
+        answer=sol.answer,
+        steps=sol.steps,
+        concept_tags=_effective_concept_tags(ctx),
+        cause_tags=_effective_cause_tags(ctx),
+    )
+
+    return MR(
+        signature=ctx.spec_level.signature,
+        family=ctx.family,
+        level=ctx.level,
+        purpose=ctx.purpose,
+        seed=0,
+        params={"expr_str": expr_str, "form": form},
+        given={"expression": given_display},
+        sub_questions=[sub_question],
+        visual_plan=None,
+        provenance=Provenance(recipe="math.degree_of_expression"),
+    )
+
+
 __all__ = [
     "combine_like_terms",
     "add_or_subtract_polynomials",
     "distribute_or_divide",
     "compute_monomial_expression",
     "combine_fractional_expressions",
+    "degree_of_expression",
 ]
