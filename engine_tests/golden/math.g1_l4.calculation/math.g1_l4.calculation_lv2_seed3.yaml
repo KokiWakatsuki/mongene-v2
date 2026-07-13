@@ -1,0 +1,60 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - signed_number.subtract_terms
+  provenance:
+    git_commit: ''
+    recipe: math.compute_signed_arithmetic
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_calc_evaluate_v1
+    tier: T1
+  requested:
+    form: calculation
+    level: 2
+    subject: math
+    unit: g1_l4
+  resolved:
+    form: calculation
+    level: 2
+    subject: math
+    unit: g1_l4
+  seed: 3
+  signature: subtraction_terms
+problem_ref: 1e76e5fd669b9e54
+problem_text: '次の計算をせよ。
+
+  7/4-0.3-7'
+sub_questions:
+- answer:
+    display: -111/20
+    kind: symbolic
+    srepr: Rational(-111, 20)
+  cause_tags: []
+  concept_tags:
+  - signed_number.subtract_terms
+  explanation: まず、すべてのひき算を、符号を変えてたし算に直す。 すべてたし算に直す次に、正の項どうし、負の項どうしをそれぞれまとめる。 正の項・負の項をまとめる最後に、正の合計と負の合計を合わせて、答えを求める。 -111/20
+  hints:
+  - すべてのひき算を、符号を変えてたし算に直す。
+  - 正の項どうし、負の項どうしをそれぞれまとめる。
+  label: (1)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args: []
+    narration: すべてのひき算を、符号を変えてたし算に直す。
+    op: rewrite_all_as_addition
+    result_display: すべてたし算に直す
+    result_srepr: Rational(-111, 20)
+  - args: []
+    narration: 正の項どうし、負の項どうしをそれぞれまとめる。
+    op: group_by_sign
+    result_display: 正の項・負の項をまとめる
+    result_srepr: Rational(-111, 20)
+  - args: []
+    narration: 正の合計と負の合計を合わせて、答えを求める。
+    op: total_terms
+    result_display: -111/20
+    result_srepr: Rational(-111, 20)
+visual_svg: null

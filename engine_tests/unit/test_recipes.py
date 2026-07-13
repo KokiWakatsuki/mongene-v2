@@ -2095,10 +2095,80 @@ def test_signed_addition_terms_lv2_construct():
     ]
 
 
-@pytest.mark.parametrize("level", [1, 2])
+def test_signed_subtraction_pair_lv1_construct():
+    ctx = _make_ctx("math.g1_l4.calculation", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "subtraction_pair"
+    assert [s.op for s in mr.sub_questions[0].steps] == [
+        "rewrite_subtraction_as_addition", "add_signed",
+    ]
+
+
+def test_signed_subtraction_terms_lv2_construct():
+    ctx = _make_ctx("math.g1_l4.calculation", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "subtraction_terms"
+    assert [s.op for s in mr.sub_questions[0].steps] == [
+        "rewrite_all_as_addition", "group_by_sign", "total_terms",
+    ]
+
+
+def test_signed_multiplication_pair_lv1_construct():
+    ctx = _make_ctx("math.g1_l6.calculation", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "multiplication_pair"
+    assert [s.op for s in mr.sub_questions[0].steps] == [
+        "determine_product_sign", "multiply_magnitudes",
+    ]
+
+
+def test_signed_multiplication_chain_lv2_construct():
+    ctx = _make_ctx("math.g1_l6.calculation", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "multiplication_chain"
+    assert [s.op for s in mr.sub_questions[0].steps] == [
+        "count_negative_factors", "multiply_all_magnitudes",
+    ]
+
+
+def test_signed_divide_pair_lv1_construct():
+    ctx = _make_ctx("math.g1_l8.calculation", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "divide_pair"
+    assert [s.op for s in mr.sub_questions[0].steps] == [
+        "rewrite_division_as_reciprocal", "multiply_signed",
+    ]
+    # 割り切れる（答えは整数）。
+    assert sympy.sympify(mr.sub_questions[0].answer.srepr).is_Integer
+
+
+def test_signed_divide_chain_lv2_construct():
+    ctx = _make_ctx("math.g1_l8.calculation", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "divide_chain"
+    assert [s.op for s in mr.sub_questions[0].steps] == [
+        "rewrite_all_as_reciprocal", "determine_product_sign", "multiply_all_magnitudes",
+    ]
+
+
+_SIGNED_ARITHMETIC_CELLS = [
+    ("math.g1_l3.calculation", 1), ("math.g1_l3.calculation", 2),
+    ("math.g1_l4.calculation", 1), ("math.g1_l4.calculation", 2),
+    ("math.g1_l6.calculation", 1), ("math.g1_l6.calculation", 2),
+    ("math.g1_l8.calculation", 1), ("math.g1_l8.calculation", 2),
+]
+
+
+@pytest.mark.parametrize("family,level", _SIGNED_ARITHMETIC_CELLS)
 @pytest.mark.parametrize("seed", range(100))
-def test_compute_signed_arithmetic_double_solve_property(level, seed):
-    ctx = _make_ctx("math.g1_l3.calculation", level)
+def test_compute_signed_arithmetic_double_solve_property(family, level, seed):
+    ctx = _make_ctx(family, level)
     rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
     mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
     solver = REGISTRY.solver("math.evaluate_numeric_expression")

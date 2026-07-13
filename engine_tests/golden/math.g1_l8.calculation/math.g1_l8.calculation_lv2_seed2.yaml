@@ -1,0 +1,60 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - signed_number.divide_chain
+  provenance:
+    git_commit: ''
+    recipe: math.compute_signed_arithmetic
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_calc_evaluate_v1
+    tier: T1
+  requested:
+    form: calculation
+    level: 2
+    subject: math
+    unit: g1_l8
+  resolved:
+    form: calculation
+    level: 2
+    subject: math
+    unit: g1_l8
+  seed: 2
+  signature: divide_chain
+problem_ref: 45969e9963e098a1
+problem_text: '次の計算をせよ。
+
+  9/7÷1/3×3/7'
+sub_questions:
+- answer:
+    display: 81/49
+    kind: symbolic
+    srepr: Rational(81, 49)
+  cause_tags: []
+  concept_tags:
+  - signed_number.divide_chain
+  explanation: まず、すべてのわり算を、逆数をかけるかけ算に直す。 すべて逆数のかけ算に直す次に、かけ合わせる数の符号から、積の符号を先に決める。 積の符号を先に決める最後に、すべての絶対値をかけ合わせて、積を求める。 81/49
+  hints:
+  - すべてのわり算を、逆数をかけるかけ算に直す。
+  - かけ合わせる数の符号から、積の符号を先に決める。
+  label: (1)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args: []
+    narration: すべてのわり算を、逆数をかけるかけ算に直す。
+    op: rewrite_all_as_reciprocal
+    result_display: すべて逆数のかけ算に直す
+    result_srepr: Rational(81, 49)
+  - args: []
+    narration: かけ合わせる数の符号から、積の符号を先に決める。
+    op: determine_product_sign
+    result_display: 積の符号を先に決める
+    result_srepr: Rational(81, 49)
+  - args: []
+    narration: すべての絶対値をかけ合わせて、積を求める。
+    op: multiply_all_magnitudes
+    result_display: 81/49
+    result_srepr: Rational(81, 49)
+visual_svg: null

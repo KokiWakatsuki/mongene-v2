@@ -1,0 +1,54 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - signed_number.multiply_pair
+  provenance:
+    git_commit: ''
+    recipe: math.compute_signed_arithmetic
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_calc_evaluate_v1
+    tier: T1
+  requested:
+    form: calculation
+    level: 1
+    subject: math
+    unit: g1_l6
+  resolved:
+    form: calculation
+    level: 1
+    subject: math
+    unit: g1_l6
+  seed: 1
+  signature: multiplication_pair
+problem_ref: 032f15f11d9a80f5
+problem_text: '次の計算をせよ。
+
+  (-8)×(-9)'
+sub_questions:
+- answer:
+    display: '72'
+    kind: symbolic
+    srepr: Integer(72)
+  cause_tags: []
+  concept_tags:
+  - signed_number.multiply_pair
+  explanation: まず、かけ合わせる数の符号から、積の符号を先に決める。 積の符号を先に決める次に、絶対値どうしをかけて、積を求める。 72
+  hints:
+  - かけ合わせる数の符号から、積の符号を先に決める。
+  label: (1)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args: []
+    narration: かけ合わせる数の符号から、積の符号を先に決める。
+    op: determine_product_sign
+    result_display: 積の符号を先に決める
+    result_srepr: Integer(72)
+  - args: []
+    narration: 絶対値どうしをかけて、積を求める。
+    op: multiply_magnitudes
+    result_display: '72'
+    result_srepr: Integer(72)
+visual_svg: null

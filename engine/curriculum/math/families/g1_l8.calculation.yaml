@@ -1,0 +1,47 @@
+family: math.g1_l8.calculation
+form: calculation
+source_desc: |
+  正の数・負の数の除法を計算する
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: 逆数をかけて2数の除法を行う（1手順・割り切れる）。
+       example: (-12)÷(-3) を計算せよ。
+  Lv2 desc: 分数の除法・乗除混合を逆数で処理する複数手順。
+       example: (-3/4)÷(-2/9)×(-1/2) を計算せよ。
+  答えは定数（整数または既約分数・SymbolicAnswer）。独立ソルバ
+  evaluate_numeric_expression（sympy で厳密評価）で再計算。Lv1（逆数のかけ算に直す）は
+  answer-first で商・除数を先に引き割り切れる被除数を逆算。Lv2（すべて逆数のかけ算に直し符号を
+  決めて全部かける）で op 列を変える＝level_sep。定数答えの G-Q5t は問題文の数値がすべて
+  given 由来（whitelist）なので漏洩しない。
+concepts_default: [signed_number.divide_pair]
+levels:
+  "1":
+    signature: divide_pair
+    recipe: math.compute_signed_arithmetic
+    params:
+      # 2数の除法（整数・割り切れる）。商 q と除数 d(|d|≥2) を引き被除数 q·d を逆算。
+      mode: divide_pair
+      divisor_domain: {int_range: [-9, 9], exclude: [-1, 0, 1]}
+      quotient_domain: {int_range: [-9, 9], exclude: [0]}
+    given: [expression]
+    asked: [value]
+    visual: none
+    text: {tier: T1, template: lf_calc_evaluate_v1}
+    hints: [steps_prefix]
+    concept_tags: [signed_number.divide_pair]
+    cause_tags: []
+  "2":
+    signature: divide_chain
+    recipe: math.compute_signed_arithmetic
+    params:
+      # 分数の乗除混合（逆数）。op1 ÷ op2 × op3。
+      mode: divide_chain
+      frac_domain: {frac_range: {num: [-9, 9], den: [2, 9]}}
+    given: [expression]
+    asked: [value]
+    visual: none
+    text: {tier: T1, template: lf_calc_evaluate_v1}
+    hints: [steps_prefix]
+    concept_tags: [signed_number.divide_chain]
+    cause_tags: []
+remedial:
+  default_level: 1

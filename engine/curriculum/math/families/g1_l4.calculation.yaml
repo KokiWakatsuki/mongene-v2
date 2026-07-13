@@ -1,0 +1,47 @@
+family: math.g1_l4.calculation
+form: calculation
+source_desc: |
+  正の数・負の数の減法を計算する
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: 2数の減法を加法に直して計算する（1手順）。
+       example: (-8)-(-3) を計算せよ。
+  Lv2 desc: 分数小数・複数項を含む減法を複数手順で計算する。
+       example: (-3/4)-(-1.5)-2/3 を計算せよ。
+  答えは定数（整数または既約分数・SymbolicAnswer）。独立ソルバ
+  evaluate_numeric_expression（sympy で厳密評価）で再計算。Lv1（ひき算をたし算に直す）/
+  Lv2（すべてたし算に直し符号ごとにまとめる）で op 列を変える＝level_sep。
+  定数答えの G-Q5t は問題文の数値がすべて given 由来（whitelist）なので漏洩しない。
+concepts_default: [signed_number.subtract_pair]
+levels:
+  "1":
+    signature: subtraction_pair
+    recipe: math.compute_signed_arithmetic
+    params:
+      # 2数の減法（整数）。差が 0 に退化しないよう構成で保証。
+      mode: subtraction_pair
+      int_domain: {int_range: [-13, 13], exclude: [0]}
+    given: [expression]
+    asked: [value]
+    visual: none
+    text: {tier: T1, template: lf_calc_evaluate_v1}
+    hints: [steps_prefix]
+    concept_tags: [signed_number.subtract_pair]
+    cause_tags: []
+  "2":
+    signature: subtraction_terms
+    recipe: math.compute_signed_arithmetic
+    params:
+      # 3項の減法（分数・小数・整数の混在）。op1 - op2 - op3。答え 0 は再抽選で回避。
+      mode: subtraction_terms
+      term_kinds: [frac, dec, int]
+      int_domain: {int_range: [-9, 9], exclude: [0]}
+      frac_domain: {frac_range: {num: [-9, 9], den: [2, 9]}}
+    given: [expression]
+    asked: [value]
+    visual: none
+    text: {tier: T1, template: lf_calc_evaluate_v1}
+    hints: [steps_prefix]
+    concept_tags: [signed_number.subtract_terms]
+    cause_tags: []
+remedial:
+  default_level: 1

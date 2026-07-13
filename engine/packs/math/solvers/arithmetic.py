@@ -48,8 +48,8 @@ _MODE_STEPS: dict[str, list[str]] = {
     "power_single": ["expand_power", "multiply_magnitudes"],
     "power_sign_contrast": ["identify_base_scope", "evaluate_each_power"],
     # g1_l8 除法
-    "division_pair": ["rewrite_division_as_reciprocal", "multiply_signed"],
-    "division_chain": ["rewrite_all_as_reciprocal", "determine_product_sign", "multiply_all_magnitudes"],
+    "divide_pair": ["rewrite_division_as_reciprocal", "multiply_signed"],
+    "divide_chain": ["rewrite_all_as_reciprocal", "determine_product_sign", "multiply_all_magnitudes"],
     # g1_l9 四則混合・分配法則
     "four_operations": ["evaluate_powers_and_parentheses", "multiply_and_divide", "add_and_subtract"],
 }
