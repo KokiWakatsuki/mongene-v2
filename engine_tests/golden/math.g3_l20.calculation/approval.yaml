@@ -1,0 +1,11 @@
+approved_at: '2026-07-14T06:28:50.724999'
+approver: koki
+content_sha256: 744d6752fab2cb8abfaebf9cbf47f2bedc62d68717b549fba9ce928f10655352
+family: math.g3_l20.calculation
+files:
+- engine_tests/golden/math.g3_l20.calculation/math.g3_l20.calculation_lv1_seed1.yaml
+- engine_tests/golden/math.g3_l20.calculation/math.g3_l20.calculation_lv1_seed2.yaml
+- engine_tests/golden/math.g3_l20.calculation/math.g3_l20.calculation_lv1_seed3.yaml
+- engine_tests/golden/math.g3_l20.calculation/math.g3_l20.calculation_lv2_seed1.yaml
+- engine_tests/golden/math.g3_l20.calculation/math.g3_l20.calculation_lv2_seed2.yaml
+- engine_tests/golden/math.g3_l20.calculation/math.g3_l20.calculation_lv2_seed3.yaml

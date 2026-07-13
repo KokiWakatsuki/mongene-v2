@@ -10,5 +10,6 @@ from engine.packs.math.checkers import equation  # noqa: F401  (登録の副作�
 from engine.packs.math.checkers import letter_expr  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.checkers import linear  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.checkers import polynomial  # noqa: F401  (登録の副作用のため import)
+from engine.packs.math.checkers import radical  # noqa: F401  (登録の副作用のため import)
 
 __all__: list[str] = []

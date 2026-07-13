@@ -1,0 +1,54 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - radical.various_calculation
+  provenance:
+    git_commit: ''
+    recipe: math.simplify_radical
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_radical_calc_v1
+    tier: T1
+  requested:
+    form: calculation
+    level: 3
+    subject: math
+    unit: g3_l21
+  resolved:
+    form: calculation
+    level: 3
+    subject: math
+    unit: g3_l21
+  seed: 1
+  signature: radical_rationalize_conjugate
+problem_ref: 8c8508446d9f5776
+problem_text: '次の式を計算せよ。
+
+  6/(√3 - √13)'
+sub_questions:
+- answer:
+    display: (-3√13 - 3√3)/5
+    kind: symbolic
+    srepr: Mul(Rational(1, 5), Add(Mul(Integer(-1), Integer(3), Pow(Integer(13), Rational(1, 2))), Mul(Integer(-1), Integer(3), Pow(Integer(3), Rational(1, 2)))))
+  cause_tags: []
+  concept_tags:
+  - radical.various_calculation
+  explanation: まず、分母と分子に、分母の共役な式をかける。 共役な式をかける次に、分母を根号のない形にし、約分して簡単にする。 (-3√13 - 3√3)/5
+  hints:
+  - 分母と分子に、分母の共役な式をかける。
+  label: (1)
+  prompt_text: simplified_expr を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 分母と分子に、分母の共役な式をかける。
+    op: multiply_by_conjugate
+    result_display: 共役な式をかける
+    result_srepr: ''
+  - args: []
+    narration: 分母を根号のない形にし、約分して簡単にする。
+    op: simplify_fraction
+    result_display: (-3√13 - 3√3)/5
+    result_srepr: Mul(Rational(1, 5), Add(Mul(Integer(-1), Integer(3), Pow(Integer(13), Rational(1, 2))), Mul(Integer(-1), Integer(3), Pow(Integer(3), Rational(1, 2)))))
+visual_svg: null

@@ -1,0 +1,35 @@
+family: math.g3_l20.calculation
+form: calculation
+source_desc: |
+  平方根の加法と減法（units.generated.yaml の desc/example を正）。
+  Lv1 desc: 同じ根号の項を同類項のようにまとめる加減。 example: 5√2+3√2-√2 を計算せよ。
+  Lv2 desc: a√bに直してから同類項をまとめる前処理を伴う加減。 example: √48-√12+√27 を計算せよ。
+  【設計モデル】math.simplify_radical が sympy.simplify で加減を正準化。level_sep は mode 別 op 列:
+  Lv1（add_roots：同じ根号を同類項のようにまとめる1手順）／Lv2（add_roots_simplify：各根号を
+  a√b に直してからまとめる2手順・同じ squarefree の核をもつ）。dup は根号の中・係数・平方因数で分散。
+concepts_default: [radical.add_subtract]
+levels:
+  "1":
+    signature: radical_add_roots
+    recipe: math.simplify_radical
+    params: {mode: add_roots}
+    given: [expression]
+    asked: [simplified_expr]
+    visual: none
+    text: {tier: T1, template: lf_radical_calc_v1}
+    hints: [steps_prefix]
+    concept_tags: [radical.add_subtract]
+    cause_tags: []
+  "2":
+    signature: radical_add_roots_simplify
+    recipe: math.simplify_radical
+    params: {mode: add_roots_simplify}
+    given: [expression]
+    asked: [simplified_expr]
+    visual: none
+    text: {tier: T1, template: lf_radical_calc_v1}
+    hints: [steps_prefix]
+    concept_tags: [radical.add_subtract]
+    cause_tags: []
+remedial:
+  default_level: 1

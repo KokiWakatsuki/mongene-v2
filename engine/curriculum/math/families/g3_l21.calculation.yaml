@@ -1,0 +1,37 @@
+family: math.g3_l21.calculation
+form: calculation
+source_desc: |
+  平方根のいろいろな計算（分配法則や乗法公式の利用）（units.generated.yaml の desc/example を正）。
+  Lv2 desc: 分配法則・乗法公式で√を含む式を展開して整理。 example: √5(√5-3)+(√5+2)(√5-4) を計算せよ。
+  Lv3 desc: 二項の√分母の共役有理化・複数演算混合の工夫計算。 example: 3/(√5-√2) を計算せよ。
+  【設計モデル】math.simplify_radical が展開は sympy.simplify・共役有理化は sympy.radsimp で
+  正準化。level_sep は mode 別 op 列:
+  Lv2（expand_roots：分配・乗法公式で展開し数と根号をまとめる2手順）／
+  Lv3（rationalize_conjugate：分母の共役をかけて有理化し簡単にする2手順・op 名が相異）。
+  dup は根号の中・定数で分散。
+concepts_default: [radical.various_calculation]
+levels:
+  "2":
+    signature: radical_expand_roots
+    recipe: math.simplify_radical
+    params: {mode: expand_roots}
+    given: [expression]
+    asked: [simplified_expr]
+    visual: none
+    text: {tier: T1, template: lf_radical_calc_v1}
+    hints: [steps_prefix]
+    concept_tags: [radical.various_calculation]
+    cause_tags: []
+  "3":
+    signature: radical_rationalize_conjugate
+    recipe: math.simplify_radical
+    params: {mode: rationalize_conjugate}
+    given: [expression]
+    asked: [simplified_expr]
+    visual: none
+    text: {tier: T1, template: lf_radical_calc_v1}
+    hints: [steps_prefix]
+    concept_tags: [radical.various_calculation]
+    cause_tags: []
+remedial:
+  default_level: 2

@@ -157,6 +157,25 @@ concepts:
   - id: polynomial.factor_various
     label: "共通因数のくくり出しや置きかえを組み合わせて因数分解する"
     unit: g3_l11
+  # C3 g3 平方根の計算
+  - id: radical.square_of_root
+    label: "根号と平方の相互変換（(√a)²=a・√(a²)=a）"
+    unit: g3_l14
+  - id: radical.multiply_divide
+    label: "平方根の乗法・除法（√a×√b=√(ab)）"
+    unit: g3_l17
+  - id: radical.simplify_form
+    label: "根号の中を簡単にして a√b の形にする"
+    unit: g3_l18
+  - id: radical.rationalize_denominator
+    label: "分母を有理化する"
+    unit: g3_l19
+  - id: radical.add_subtract
+    label: "平方根の加法・減法（同類の根号をまとめる）"
+    unit: g3_l20
+  - id: radical.various_calculation
+    label: "分配法則・乗法公式・共役の有理化を使う平方根の計算"
+    unit: g3_l21
   - id: polynomial.combine_like_terms_basic
     label: "同類項をまとめて式を簡単にする（1種の文字）"
     unit: g2_l2

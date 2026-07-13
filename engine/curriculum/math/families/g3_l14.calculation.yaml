@@ -1,0 +1,22 @@
+family: math.g3_l14.calculation
+form: calculation
+source_desc: |
+  平方根の意味と根号（ルート）の表し方（units.generated.yaml の desc/example を正）。
+  Lv1 desc: 根号のついた数と平方の相互変換を1手順で処理。 example: (√7)² の値を求めよ。
+  【設計モデル】ソルバ math.simplify_radical が sympy で (√a)²=a・√(a²)=a を求める。
+  単一レベル（square_of_root）。答えは整数の SymbolicAnswer。dup は数と2形式で分散。
+concepts_default: [radical.square_of_root]
+levels:
+  "1":
+    signature: radical_square_of_root
+    recipe: math.simplify_radical
+    params: {mode: square_of_root}
+    given: [expression]
+    asked: [simplified_expr]
+    visual: none
+    text: {tier: T1, template: lf_radical_calc_v1}
+    hints: [steps_prefix]
+    concept_tags: [radical.square_of_root]
+    cause_tags: []
+remedial:
+  default_level: 1

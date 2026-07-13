@@ -1,0 +1,54 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - radical.add_subtract
+  provenance:
+    git_commit: ''
+    recipe: math.simplify_radical
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_radical_calc_v1
+    tier: T1
+  requested:
+    form: calculation
+    level: 2
+    subject: math
+    unit: g3_l20
+  resolved:
+    form: calculation
+    level: 2
+    subject: math
+    unit: g3_l20
+  seed: 3
+  signature: radical_add_roots_simplify
+problem_ref: 2ac27c65e287d7d4
+problem_text: '次の式を計算せよ。
+
+  √24 - √96 + √294'
+sub_questions:
+- answer:
+    display: 5√6
+    kind: symbolic
+    srepr: Mul(Integer(5), Pow(Integer(6), Rational(1, 2)))
+  cause_tags: []
+  concept_tags:
+  - radical.add_subtract
+  explanation: まず、それぞれの根号を a√b の形に直す。 各根号を a√b にする次に、根号の中が同じ項を、同類項のようにまとめる。 5√6
+  hints:
+  - それぞれの根号を a√b の形に直す。
+  label: (1)
+  prompt_text: simplified_expr を求めなさい。
+  solution_steps:
+  - args: []
+    narration: それぞれの根号を a√b の形に直す。
+    op: simplify_each_root
+    result_display: 各根号を a√b にする
+    result_srepr: ''
+  - args: []
+    narration: 根号の中が同じ項を、同類項のようにまとめる。
+    op: combine_like_radicals
+    result_display: 5√6
+    result_srepr: Mul(Integer(5), Pow(Integer(6), Rational(1, 2)))
+visual_svg: null

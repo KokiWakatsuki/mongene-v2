@@ -1,0 +1,54 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - radical.various_calculation
+  provenance:
+    git_commit: ''
+    recipe: math.simplify_radical
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_radical_calc_v1
+    tier: T1
+  requested:
+    form: calculation
+    level: 2
+    subject: math
+    unit: g3_l21
+  resolved:
+    form: calculation
+    level: 2
+    subject: math
+    unit: g3_l21
+  seed: 2
+  signature: radical_expand_roots
+problem_ref: e5d9bd29423c42b4
+problem_text: '次の式を計算せよ。
+
+  √7(√7 - 1) + (√7 - 2)(√7 - 1)'
+sub_questions:
+- answer:
+    display: 16 - 4√7
+    kind: symbolic
+    srepr: Add(Integer(16), Mul(Integer(-1), Integer(4), Pow(Integer(7), Rational(1, 2))))
+  cause_tags: []
+  concept_tags:
+  - radical.various_calculation
+  explanation: まず、分配法則や乗法公式で根号を含む式を展開する。 展開する次に、数の項どうし・根号の項どうしをまとめる。 16 - 4√7
+  hints:
+  - 分配法則や乗法公式で根号を含む式を展開する。
+  label: (1)
+  prompt_text: simplified_expr を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 分配法則や乗法公式で根号を含む式を展開する。
+    op: expand_with_distribution
+    result_display: 展開する
+    result_srepr: ''
+  - args: []
+    narration: 数の項どうし・根号の項どうしをまとめる。
+    op: combine_like_terms_and_radicals
+    result_display: 16 - 4√7
+    result_srepr: Add(Integer(16), Mul(Integer(-1), Integer(4), Pow(Integer(7), Rational(1, 2))))
+visual_svg: null

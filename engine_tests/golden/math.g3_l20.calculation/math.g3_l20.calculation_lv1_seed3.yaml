@@ -1,0 +1,49 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - radical.add_subtract
+  provenance:
+    git_commit: ''
+    recipe: math.simplify_radical
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_radical_calc_v1
+    tier: T1
+  requested:
+    form: calculation
+    level: 1
+    subject: math
+    unit: g3_l20
+  resolved:
+    form: calculation
+    level: 1
+    subject: math
+    unit: g3_l20
+  seed: 3
+  signature: radical_add_roots
+problem_ref: 1ca5c4e9489af89c
+problem_text: '次の式を計算せよ。
+
+  2√29 + 2√29 - 8√29'
+sub_questions:
+- answer:
+    display: -4√29
+    kind: symbolic
+    srepr: Mul(Integer(-1), Integer(4), Pow(Integer(29), Rational(1, 2)))
+  cause_tags: []
+  concept_tags:
+  - radical.add_subtract
+  explanation: まず、根号の中が同じ項を、同類項のようにまとめる。 -4√29
+  hints:
+  - 問題文の与えられた値をもう一度確認しよう。
+  label: (1)
+  prompt_text: simplified_expr を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 根号の中が同じ項を、同類項のようにまとめる。
+    op: combine_like_radicals
+    result_display: -4√29
+    result_srepr: Mul(Integer(-1), Integer(4), Pow(Integer(29), Rational(1, 2)))
+visual_svg: null

@@ -1,0 +1,60 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - radical.multiply_divide
+  provenance:
+    git_commit: ''
+    recipe: math.simplify_radical
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_radical_calc_v1
+    tier: T1
+  requested:
+    form: calculation
+    level: 2
+    subject: math
+    unit: g3_l17
+  resolved:
+    form: calculation
+    level: 2
+    subject: math
+    unit: g3_l17
+  seed: 1
+  signature: radical_root_mult_div
+problem_ref: 11b61bea55b84e73
+problem_text: '次の式を計算せよ。
+
+  4√12 × √4 ÷ √8'
+sub_questions:
+- answer:
+    display: 4√6
+    kind: symbolic
+    srepr: Mul(Integer(4), Pow(Integer(6), Rational(1, 2)))
+  cause_tags: []
+  concept_tags:
+  - radical.multiply_divide
+  explanation: まず、わり算を、逆数をかけるかけ算に直す。 わり算をかけ算に直す次に、係数どうし・根号の中どうしをそれぞれまとめる。 係数と根号をまとめる最後に、根号の中をできるだけ簡単な形に直す。 4√6
+  hints:
+  - わり算を、逆数をかけるかけ算に直す。
+  - 係数どうし・根号の中どうしをそれぞれまとめる。
+  label: (1)
+  prompt_text: simplified_expr を求めなさい。
+  solution_steps:
+  - args: []
+    narration: わり算を、逆数をかけるかけ算に直す。
+    op: rewrite_division_as_multiplication
+    result_display: わり算をかけ算に直す
+    result_srepr: ''
+  - args: []
+    narration: 係数どうし・根号の中どうしをそれぞれまとめる。
+    op: combine_roots
+    result_display: 係数と根号をまとめる
+    result_srepr: ''
+  - args: []
+    narration: 根号の中をできるだけ簡単な形に直す。
+    op: simplify_result
+    result_display: 4√6
+    result_srepr: Mul(Integer(4), Pow(Integer(6), Rational(1, 2)))
+visual_svg: null

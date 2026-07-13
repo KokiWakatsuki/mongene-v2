@@ -2545,6 +2545,48 @@ def test_factor_polynomial_double_solve_property(family, level, seed):
 
 
 # ---------------------------------------------------------------------------
+# math.simplify_radical（C3 g3_l14/l17〜l21.calculation 平方根の計算）— P2 平方根コア能力
+# ---------------------------------------------------------------------------
+_RADICAL_CELLS = [
+    ("math.g3_l14.calculation", 1),
+    ("math.g3_l17.calculation", 1), ("math.g3_l17.calculation", 2),
+    ("math.g3_l18.calculation", 1), ("math.g3_l18.calculation", 2),
+    ("math.g3_l19.calculation", 1),
+    ("math.g3_l20.calculation", 1), ("math.g3_l20.calculation", 2),
+    ("math.g3_l21.calculation", 2), ("math.g3_l21.calculation", 3),
+]
+
+
+def test_simplify_radical_lv1_construct():
+    ctx = _make_ctx("math.g3_l18.calculation", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "radical_simplify_root"
+    assert set(mr.given.keys()) == {"expression"}
+    sq = mr.sub_questions[0]
+    assert sq.asked == "simplified_expr"
+    assert [s.op for s in sq.steps] == ["factor_out_square", "take_root_outside"]
+    # 答えは与式と数学的に等しい（sympy の堅牢なゼロ判定 .equals を使う。evalf はハングする）。
+    diff = sympy.sympify(mr.params["expr_str"]) - sympy.sympify(sq.answer.srepr)
+    assert diff.equals(0)
+
+
+@pytest.mark.parametrize("family,level", _RADICAL_CELLS)
+@pytest.mark.parametrize("seed", range(60))
+def test_simplify_radical_double_solve_property(family, level, seed):
+    ctx = _make_ctx(family, level)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    # 独立ソルバの答えが recipe の答えと一致する（double-solve）。
+    solver = REGISTRY.solver("math.simplify_radical")
+    sol = solver(mr.params["expr_str"], mr.params["mode"])
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+    # 恒真: 答えは与式と数学的に等しい（.equals で堅牢にゼロ判定・evalf はハングする）。
+    diff = sympy.sympify(mr.params["expr_str"]) - sympy.sympify(sol.answer.srepr)
+    assert diff.equals(0)
+
+
+# ---------------------------------------------------------------------------
 # math.count_significant_figures（C1 g1_l60.knowledge Lv2 有効数字の桁判別）— P2 bespoke
 # ---------------------------------------------------------------------------
 def test_count_significant_figures_lv2_construct():

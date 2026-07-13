@@ -1,0 +1,37 @@
+family: math.g3_l18.calculation
+form: calculation
+source_desc: |
+  根号の中を簡単にする変形（a√bの形）（units.generated.yaml の desc/example を正）。
+  Lv1 desc: √の中を素因数分解し平方因数を外に出しa√bの形に。 example: √12 を a√b の形に直せ。
+  Lv2 desc: 大きな数・分数を含む√の変形で処理が複雑化。 example: √180 を簡単な形に直せ。
+  【設計モデル】math.simplify_radical が sympy.simplify で a√b 化。answer-first で c·√(k²m) を
+  構成する（係数 c で dup 分散・§10 sanction: example は c=1 だが「根号の中を簡単にする」技能は
+  係数つきでも不変）。level_sep は mode 別 op 列:
+  Lv1（simplify_root：平方因数を1つ外に出す2手順・k≤5）／Lv2（simplify_root_large：大きな数を
+  平方の因数に分けて外に出す3手順・k≤9）。dup は係数・平方因数・中の数で分散。
+concepts_default: [radical.simplify_form]
+levels:
+  "1":
+    signature: radical_simplify_root
+    recipe: math.simplify_radical
+    params: {mode: simplify_root}
+    given: [expression]
+    asked: [simplified_expr]
+    visual: none
+    text: {tier: T1, template: lf_radical_calc_v1}
+    hints: [steps_prefix]
+    concept_tags: [radical.simplify_form]
+    cause_tags: []
+  "2":
+    signature: radical_simplify_root_large
+    recipe: math.simplify_radical
+    params: {mode: simplify_root_large}
+    given: [expression]
+    asked: [simplified_expr]
+    visual: none
+    text: {tier: T1, template: lf_radical_calc_v1}
+    hints: [steps_prefix]
+    concept_tags: [radical.simplify_form]
+    cause_tags: []
+remedial:
+  default_level: 1

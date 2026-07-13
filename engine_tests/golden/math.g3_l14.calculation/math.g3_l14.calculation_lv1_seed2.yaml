@@ -1,0 +1,49 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - radical.square_of_root
+  provenance:
+    git_commit: ''
+    recipe: math.simplify_radical
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_radical_calc_v1
+    tier: T1
+  requested:
+    form: calculation
+    level: 1
+    subject: math
+    unit: g3_l14
+  resolved:
+    form: calculation
+    level: 1
+    subject: math
+    unit: g3_l14
+  seed: 2
+  signature: radical_square_of_root
+problem_ref: 7917011c018310a2
+problem_text: '次の式を計算せよ。
+
+  √400'
+sub_questions:
+- answer:
+    display: '20'
+    kind: symbolic
+    srepr: Integer(20)
+  cause_tags: []
+  concept_tags:
+  - radical.square_of_root
+  explanation: まず、根号のついた数を2乗し、根号の中の数にもどす。 20
+  hints:
+  - 問題文の与えられた値をもう一度確認しよう。
+  label: (1)
+  prompt_text: simplified_expr を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 根号のついた数を2乗し、根号の中の数にもどす。
+    op: square_the_root
+    result_display: '20'
+    result_srepr: Integer(20)
+visual_svg: null

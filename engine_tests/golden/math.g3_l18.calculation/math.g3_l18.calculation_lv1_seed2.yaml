@@ -1,0 +1,54 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - radical.simplify_form
+  provenance:
+    git_commit: ''
+    recipe: math.simplify_radical
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_radical_calc_v1
+    tier: T1
+  requested:
+    form: calculation
+    level: 1
+    subject: math
+    unit: g3_l18
+  resolved:
+    form: calculation
+    level: 1
+    subject: math
+    unit: g3_l18
+  seed: 2
+  signature: radical_simplify_root
+problem_ref: 3f990e6c691601d6
+problem_text: '次の式を計算せよ。
+
+  7√124'
+sub_questions:
+- answer:
+    display: 14√31
+    kind: symbolic
+    srepr: Mul(Integer(14), Pow(Integer(31), Rational(1, 2)))
+  cause_tags: []
+  concept_tags:
+  - radical.simplify_form
+  explanation: まず、根号の中を素因数分解し、平方の因数を見つける。 平方の因数を見つける次に、平方の因数を根号の外に出して a√b の形にする。 14√31
+  hints:
+  - 根号の中を素因数分解し、平方の因数を見つける。
+  label: (1)
+  prompt_text: simplified_expr を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 根号の中を素因数分解し、平方の因数を見つける。
+    op: factor_out_square
+    result_display: 平方の因数を見つける
+    result_srepr: ''
+  - args: []
+    narration: 平方の因数を根号の外に出して a√b の形にする。
+    op: take_root_outside
+    result_display: 14√31
+    result_srepr: Mul(Integer(14), Pow(Integer(31), Rational(1, 2)))
+visual_svg: null

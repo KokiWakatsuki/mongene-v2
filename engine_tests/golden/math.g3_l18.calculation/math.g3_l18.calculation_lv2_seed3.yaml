@@ -1,0 +1,60 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - radical.simplify_form
+  provenance:
+    git_commit: ''
+    recipe: math.simplify_radical
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_radical_calc_v1
+    tier: T1
+  requested:
+    form: calculation
+    level: 2
+    subject: math
+    unit: g3_l18
+  resolved:
+    form: calculation
+    level: 2
+    subject: math
+    unit: g3_l18
+  seed: 3
+  signature: radical_simplify_root_large
+problem_ref: 9eb4d661f455e1f1
+problem_text: '次の式を計算せよ。
+
+  6√810'
+sub_questions:
+- answer:
+    display: 54√10
+    kind: symbolic
+    srepr: Mul(Integer(54), Pow(Integer(10), Rational(1, 2)))
+  cause_tags: []
+  concept_tags:
+  - radical.simplify_form
+  explanation: まず、根号の中の大きな数を、平方の因数と残りに分ける。 平方の因数に分ける次に、それぞれの平方の因数を根号の外に出す。 根号の外に出す最後に、根号の中をできるだけ簡単な形に直す。 54√10
+  hints:
+  - 根号の中の大きな数を、平方の因数と残りに分ける。
+  - それぞれの平方の因数を根号の外に出す。
+  label: (1)
+  prompt_text: simplified_expr を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 根号の中の大きな数を、平方の因数と残りに分ける。
+    op: factor_into_squares
+    result_display: 平方の因数に分ける
+    result_srepr: ''
+  - args: []
+    narration: それぞれの平方の因数を根号の外に出す。
+    op: take_roots_outside
+    result_display: 根号の外に出す
+    result_srepr: ''
+  - args: []
+    narration: 根号の中をできるだけ簡単な形に直す。
+    op: simplify_result
+    result_display: 54√10
+    result_srepr: Mul(Integer(54), Pow(Integer(10), Rational(1, 2)))
+visual_svg: null

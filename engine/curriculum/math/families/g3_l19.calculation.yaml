@@ -1,0 +1,22 @@
+family: math.g3_l19.calculation
+form: calculation
+source_desc: |
+  分母の有理化（units.generated.yaml の desc/example を正）。
+  Lv1 desc: 単項の√分母に同じ√を掛けて有理化（単段）。 example: 6/√3 の分母を有理化せよ。
+  【設計モデル】math.simplify_radical が sympy.radsimp で分母を有理化。単一レベル
+  （rationalize_mono：分母と同じ根号をかけて簡単にする2手順）。dup は分子・分母の中の数で分散。
+concepts_default: [radical.rationalize_denominator]
+levels:
+  "1":
+    signature: radical_rationalize_mono
+    recipe: math.simplify_radical
+    params: {mode: rationalize_mono}
+    given: [expression]
+    asked: [simplified_expr]
+    visual: none
+    text: {tier: T1, template: lf_radical_calc_v1}
+    hints: [steps_prefix]
+    concept_tags: [radical.rationalize_denominator]
+    cause_tags: []
+remedial:
+  default_level: 1

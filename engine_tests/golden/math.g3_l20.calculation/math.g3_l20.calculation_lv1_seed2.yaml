@@ -1,0 +1,49 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - radical.add_subtract
+  provenance:
+    git_commit: ''
+    recipe: math.simplify_radical
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_radical_calc_v1
+    tier: T1
+  requested:
+    form: calculation
+    level: 1
+    subject: math
+    unit: g3_l20
+  resolved:
+    form: calculation
+    level: 1
+    subject: math
+    unit: g3_l20
+  seed: 2
+  signature: radical_add_roots
+problem_ref: a469d4690b1d6e11
+problem_text: '次の式を計算せよ。
+
+  6√7 + 8√7 - 8√7'
+sub_questions:
+- answer:
+    display: 6√7
+    kind: symbolic
+    srepr: Mul(Integer(6), Pow(Integer(7), Rational(1, 2)))
+  cause_tags: []
+  concept_tags:
+  - radical.add_subtract
+  explanation: まず、根号の中が同じ項を、同類項のようにまとめる。 6√7
+  hints:
+  - 問題文の与えられた値をもう一度確認しよう。
+  label: (1)
+  prompt_text: simplified_expr を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 根号の中が同じ項を、同類項のようにまとめる。
+    op: combine_like_radicals
+    result_display: 6√7
+    result_srepr: Mul(Integer(6), Pow(Integer(7), Rational(1, 2)))
+visual_svg: null
