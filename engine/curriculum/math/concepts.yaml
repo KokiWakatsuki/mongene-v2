@@ -255,6 +255,18 @@ concepts:
   - id: prime_concepts.term_recall
     label: "素数・合成数・素因数の意味（用語）を想起する"
     unit: g1_l11
+  - id: product_sign.rule_recall
+    label: "負の数の個数で積の符号が決まる規則を想起する"
+    unit: g1_l6
+  - id: reciprocal.rule_recall
+    label: "逆数を使って除法を乗法に直す規則を想起する"
+    unit: g1_l8
+  - id: notation_product_rule.rule_recall
+    label: "乗法の記法規則（×省略・累乗）を想起する"
+    unit: g1_l13
+  - id: notation_quotient_rule.rule_recall
+    label: "除法の記法規則（÷を分数で表す）を想起する"
+    unit: g1_l14
   - id: speed_relation.rule_recall
     label: "速さ・道のり・時間の関係（求める量ごとの式）を想起する"
     unit: g1_l15

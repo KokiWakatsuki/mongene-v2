@@ -775,8 +775,16 @@ _RULE_RECALL_CONCEPTS = [
     "term_in_sum.rule_recall",
     "speed_relation.rule_recall",
     "letter_meaning.rule_recall",
+    "product_sign.rule_recall",
+    "reciprocal.rule_recall",
+    "notation_product_rule.rule_recall",
+    "notation_quotient_rule.rule_recall",
     "transposition.rule_recall",
 ]
+
+
+# 記法規則（l13/l14）の具体例に使う文字（surface の variety 用・答えには無関係）。
+_RULE_EXAMPLE_LETTERS = ["a", "b", "c", "m", "n", "p", "x", "y"]
 
 
 def _signed_paren(sign: str, mag: int) -> str:
@@ -834,6 +842,34 @@ def _draw_rule_statement(topic: str, concept: str, rng: Rng, p: dict[str, object
         # g1_l12 文字を使った式。1本 price 円の品物を x 本買う場面を surface に埋め込み dup 分散。
         price = int(draw(p["number_domain"], rng))
         return f"1本 {price} 円の品物を x 本買ったときの代金を {price}x 円と表す場面のように、文字を使って数量を表すことの利点"
+
+    if topic == "product_sign":
+        # g1_l6 積の符号。負の数を偶数個／奇数個ふくむ積の具体例を埋め込み dup 分散。
+        m1 = int(draw(p["number_domain"], rng))
+        m2 = int(draw(p["number_domain"], rng))
+        if concept == "even_count":
+            return f"(-{m1}) × (-{m2}) のように、負の数を偶数個かけ合わせた積の符号について"
+        return f"(-{m1}) × {m2} のように、負の数を奇数個かけ合わせた積の符号について"  # odd_count
+
+    if topic == "reciprocal":
+        # g1_l8 逆数。具体例の除法を埋め込み dup 分散。
+        a = int(draw(p["number_domain"], rng))
+        b = int(draw(p["number_domain"], rng))
+        return f"{a} ÷ {b} のように、ある数でわる計算をかけ算になおすやり方について"
+
+    if topic == "notation_product_rule":
+        # g1_l13 乗法の記法規則。数と文字を両方振って dup 分散（数のみだと variety 不足）。
+        k = int(draw(p["number_domain"], rng))
+        le = str(draw(_RULE_EXAMPLE_LETTERS, rng))
+        if concept == "omit_times":
+            return f"{k} × {le} のように、数と文字の積を書き表すきまりについて"
+        return f"{k} × {le} × {le} のように、同じ文字をふくむ積を書き表すきまりについて"  # power
+
+    if topic == "notation_quotient_rule":
+        # g1_l14 除法の記法規則。数と文字を両方振って dup 分散。
+        k = int(draw(p["number_domain"], rng))
+        le = str(draw(_RULE_EXAMPLE_LETTERS, rng))
+        return f"{le} ÷ {k} のように、文字をふくむ式のわり算を書き表すきまりについて"
 
     if topic == "transposition":
         # g1_l22 移項。具体例の一次方程式 a·x + b = c を surface として埋め込み dup 分散。

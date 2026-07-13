@@ -1,0 +1,56 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - product_sign.rule_recall
+  provenance:
+    git_commit: ''
+    recipe: math.recall_rule
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_rule_recall_v1
+    tier: T1
+  requested:
+    form: knowledge
+    level: 1
+    subject: math
+    unit: g1_l6
+  resolved:
+    form: knowledge
+    level: 1
+    subject: math
+    unit: g1_l6
+  seed: 3
+  signature: product_sign_rule_recall
+problem_ref: 3acca5d424bcf988
+problem_text: (-19) × (-25) のように、負の数を偶数個かけ合わせた積の符号について。正しく述べているものを1つ選びなさい。
+sub_questions:
+- answer:
+    correct: 負の数が偶数個のとき、積の符号は正になる
+    distractors:
+    - 負の数が偶数個のとき、積の符号は負になる
+    - 負の数が偶数個のときは、積の符号は数によって正にも負にもなる
+    - 負の数が偶数個のとき、積の符号は決められない
+    fact_id: product_sign.rule.even_count
+    kind: choice
+  cause_tags: []
+  concept_tags:
+  - product_sign.rule_recall
+  explanation: まず、問題で問われている規則や約束が、何についてのものかを読み取る。 問われている規則が何についてかを読み取る次に、その規則の正しい内容を思い出して選ぶ。 負の数が偶数個のとき、積の符号は正になる
+  hints:
+  - 問題で問われている規則や約束が、何についてのものかを読み取る。
+  label: (1)
+  prompt_text: choice を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 問題で問われている規則や約束が、何についてのものかを読み取る。
+    op: read_rule_context
+    result_display: 問われている規則が何についてかを読み取る
+    result_srepr: even_count
+  - args: []
+    narration: その規則の正しい内容を思い出して選ぶ。
+    op: recall_correct_rule
+    result_display: 負の数が偶数個のとき、積の符号は正になる
+    result_srepr: 負の数が偶数個のとき、積の符号は正になる
+visual_svg: null

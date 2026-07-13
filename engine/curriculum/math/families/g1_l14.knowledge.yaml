@@ -1,0 +1,31 @@
+family: math.g1_l14.knowledge
+form: knowledge
+source_desc: |
+  除法の記法規則（÷を分数で表す）の判別（Lv1 規則想起）
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: 除法の記法規則(÷を分数で表す)を判別する。
+       example: a÷3 を記号 ÷ を使わずに表すとき、どのような形で書くか答えよ。
+  【設計モデル・要検収(Q4)】「除法の記法規則の正しい記述を選ぶ」単一選択に realize（規則想起
+  recall_rule_statement・topic=notation_quotient_rule・単一 concept=as_fraction）。distractors は
+  「÷を残す」「×にする」「分母分子を逆にする」等のもっともらしい誤り。文字÷数の具体例を surface に
+  埋め込み dup 分散。op 列[read_rule_context, recall_correct_rule]。答えは規則の文で ASCII 数字
+  トークンを含まず G-Q5t 素通り（§7.7）。計算そのもの（分数表示）は l14.calculation で別途。図は無し。
+concepts_default: [notation_quotient_rule.rule_recall]
+levels:
+  "1":
+    signature: notation_quotient_rule_recall
+    recipe: math.recall_rule
+    params:
+      topic: notation_quotient_rule
+      concept_set: [as_fraction]
+      # 具体例の除数を surface に埋め込み dup 分散する。
+      number_domain: {int_range: [2, 40]}
+    given: [statement]
+    asked: [choice]
+    visual: none
+    text: {tier: T1, template: lf_rule_recall_v1}
+    hints: [steps_prefix]
+    concept_tags: [notation_quotient_rule.rule_recall]
+    cause_tags: []
+remedial:
+  default_level: 1

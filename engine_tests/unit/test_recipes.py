@@ -2774,6 +2774,38 @@ def test_recall_rule_letter_meaning_l12_lv1_construct():
     assert mr.params["concept"] == "benefit"
 
 
+def test_recall_rule_product_sign_l6_lv1_construct():
+    ctx = _make_ctx("math.g1_l6.knowledge", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "product_sign_rule_recall"
+    assert mr.params["concept"] in {"even_count", "odd_count"}
+
+
+def test_recall_rule_reciprocal_l8_lv1_construct():
+    ctx = _make_ctx("math.g1_l8.knowledge", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "reciprocal_rule_recall"
+    assert mr.params["concept"] == "division_rule"
+
+
+def test_recall_rule_notation_product_l13_lv1_construct():
+    ctx = _make_ctx("math.g1_l13.knowledge", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "notation_product_rule_recall"
+    assert mr.params["concept"] in {"omit_times", "power"}
+
+
+def test_recall_rule_notation_quotient_l14_lv1_construct():
+    ctx = _make_ctx("math.g1_l14.knowledge", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "notation_quotient_rule_recall"
+    assert mr.params["concept"] == "as_fraction"
+
+
 _RULE_RECALL_CELLS = [
     ("math.g1_l22.knowledge", 1),
     ("math.g1_l3.knowledge", 1),
@@ -2781,6 +2813,10 @@ _RULE_RECALL_CELLS = [
     ("math.g1_l5.knowledge", 1),
     ("math.g1_l15.knowledge", 1),
     ("math.g1_l12.knowledge", 1),
+    ("math.g1_l6.knowledge", 1),
+    ("math.g1_l8.knowledge", 1),
+    ("math.g1_l13.knowledge", 1),
+    ("math.g1_l14.knowledge", 1),
 ]
 
 

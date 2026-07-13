@@ -1,0 +1,33 @@
+family: math.g1_l8.knowledge
+form: knowledge
+source_desc: |
+  逆数を使って除法を乗法に直す規則（Lv1 規則想起）
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: 逆数の意味と除法を乗法に直す規則を判別する。
+       example: ある数でわることは、その数の何をかけることと同じか答えよ。
+  【設計モデル・要検収(Q4)】「除法を乗法になおす正しい規則を選ぶ」単一選択に realize（規則想起
+  recall_rule_statement・topic=reciprocal・単一 concept=division_rule）。distractors は「符号を変えて
+  かける」「そのままかける」等のもっともらしい誤り。逆数の意味は正解記述（『その数の逆数をかける』）に
+  含めて想起させる。具体例の除法を surface に埋め込み dup 分散。op 列[read_rule_context,
+  recall_correct_rule]。答えは規則の文で ASCII 数字トークンを含まず G-Q5t 素通り（§7.7）。
+  【§10 sanction】desc の『逆数の意味』は独立の用語想起にせず、除法→乗法の規則記述に畳んで realize。
+  図は無し。
+concepts_default: [reciprocal.rule_recall]
+levels:
+  "1":
+    signature: reciprocal_rule_recall
+    recipe: math.recall_rule
+    params:
+      topic: reciprocal
+      concept_set: [division_rule]
+      # 具体例の除法（2数）を surface に埋め込み dup 分散する。
+      number_domain: {int_range: [2, 40]}
+    given: [statement]
+    asked: [choice]
+    visual: none
+    text: {tier: T1, template: lf_rule_recall_v1}
+    hints: [steps_prefix]
+    concept_tags: [reciprocal.rule_recall]
+    cause_tags: []
+remedial:
+  default_level: 1
