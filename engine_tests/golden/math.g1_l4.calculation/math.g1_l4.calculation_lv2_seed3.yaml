@@ -26,16 +26,16 @@ meta:
 problem_ref: 1e76e5fd669b9e54
 problem_text: '次の計算をせよ。
 
-  7/4-0.3-7'
+  7/4-0.5-7'
 sub_questions:
 - answer:
-    display: -111/20
+    display: -23/4
     kind: symbolic
-    srepr: Rational(-111, 20)
+    srepr: Rational(-23, 4)
   cause_tags: []
   concept_tags:
   - signed_number.subtract_terms
-  explanation: まず、すべてのひき算を、符号を変えてたし算に直す。 すべてたし算に直す次に、正の項どうし、負の項どうしをそれぞれまとめる。 正の項・負の項をまとめる最後に、正の合計と負の合計を合わせて、答えを求める。 -111/20
+  explanation: まず、すべてのひき算を、符号を変えてたし算に直す。 すべてたし算に直す次に、正の項どうし、負の項どうしをそれぞれまとめる。 正の項・負の項をまとめる最後に、正の合計と負の合計を合わせて、答えを求める。 -23/4
   hints:
   - すべてのひき算を、符号を変えてたし算に直す。
   - 正の項どうし、負の項どうしをそれぞれまとめる。
@@ -46,15 +46,15 @@ sub_questions:
     narration: すべてのひき算を、符号を変えてたし算に直す。
     op: rewrite_all_as_addition
     result_display: すべてたし算に直す
-    result_srepr: Rational(-111, 20)
+    result_srepr: Rational(-23, 4)
   - args: []
     narration: 正の項どうし、負の項どうしをそれぞれまとめる。
     op: group_by_sign
     result_display: 正の項・負の項をまとめる
-    result_srepr: Rational(-111, 20)
+    result_srepr: Rational(-23, 4)
   - args: []
     narration: 正の合計と負の合計を合わせて、答えを求める。
     op: total_terms
-    result_display: -111/20
-    result_srepr: Rational(-111, 20)
+    result_display: -23/4
+    result_srepr: Rational(-23, 4)
 visual_svg: null

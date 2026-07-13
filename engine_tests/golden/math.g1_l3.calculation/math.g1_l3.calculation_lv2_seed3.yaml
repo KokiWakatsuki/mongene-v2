@@ -26,16 +26,16 @@ meta:
 problem_ref: 379610e9c6546de8
 problem_text: '次の計算をせよ。
 
-  (-5/4)+0.7+(-5)'
+  (-5/4)+1.4+(-5)'
 sub_questions:
 - answer:
-    display: -111/20
+    display: -97/20
     kind: symbolic
-    srepr: Rational(-111, 20)
+    srepr: Rational(-97, 20)
   cause_tags: []
   concept_tags:
   - signed_number.add_terms
-  explanation: まず、かっこを外し、それぞれの数を符号のついた項として並べる。 符号のついた項の和に直す次に、正の項どうし、負の項どうしをそれぞれまとめる。 正の項・負の項をまとめる最後に、正の合計と負の合計を合わせて、答えを求める。 -111/20
+  explanation: まず、かっこを外し、それぞれの数を符号のついた項として並べる。 符号のついた項の和に直す次に、正の項どうし、負の項どうしをそれぞれまとめる。 正の項・負の項をまとめる最後に、正の合計と負の合計を合わせて、答えを求める。 -97/20
   hints:
   - かっこを外し、それぞれの数を符号のついた項として並べる。
   - 正の項どうし、負の項どうしをそれぞれまとめる。
@@ -46,15 +46,15 @@ sub_questions:
     narration: かっこを外し、それぞれの数を符号のついた項として並べる。
     op: rewrite_as_term_sum
     result_display: 符号のついた項の和に直す
-    result_srepr: Rational(-111, 20)
+    result_srepr: Rational(-97, 20)
   - args: []
     narration: 正の項どうし、負の項どうしをそれぞれまとめる。
     op: group_by_sign
     result_display: 正の項・負の項をまとめる
-    result_srepr: Rational(-111, 20)
+    result_srepr: Rational(-97, 20)
   - args: []
     narration: 正の合計と負の合計を合わせて、答えを求める。
     op: total_terms
-    result_display: -111/20
-    result_srepr: Rational(-111, 20)
+    result_display: -97/20
+    result_srepr: Rational(-97, 20)
 visual_svg: null

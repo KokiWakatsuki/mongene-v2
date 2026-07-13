@@ -26,16 +26,16 @@ meta:
 problem_ref: c20b237f47089b32
 problem_text: '次の計算をせよ。
 
-  (-3/7)×(-9)×0.25'
+  (-3/7)×(-9)×0.9'
 sub_questions:
 - answer:
-    display: 27/28
+    display: 243/70
     kind: symbolic
-    srepr: Rational(27, 28)
+    srepr: Rational(243, 70)
   cause_tags: []
   concept_tags:
   - signed_number.multiply_chain
-  explanation: まず、負の数の個数を数え、積の符号を決める（偶数個なら正、奇数個なら負）。 負の数の個数から符号を決める次に、すべての絶対値をかけ合わせて、積を求める。 27/28
+  explanation: まず、負の数の個数を数え、積の符号を決める（偶数個なら正、奇数個なら負）。 負の数の個数から符号を決める次に、すべての絶対値をかけ合わせて、積を求める。 243/70
   hints:
   - 負の数の個数を数え、積の符号を決める（偶数個なら正、奇数個なら負）。
   label: (1)
@@ -45,10 +45,10 @@ sub_questions:
     narration: 負の数の個数を数え、積の符号を決める（偶数個なら正、奇数個なら負）。
     op: count_negative_factors
     result_display: 負の数の個数から符号を決める
-    result_srepr: Rational(27, 28)
+    result_srepr: Rational(243, 70)
   - args: []
     narration: すべての絶対値をかけ合わせて、積を求める。
     op: multiply_all_magnitudes
-    result_display: 27/28
-    result_srepr: Rational(27, 28)
+    result_display: 243/70
+    result_srepr: Rational(243, 70)
 visual_svg: null

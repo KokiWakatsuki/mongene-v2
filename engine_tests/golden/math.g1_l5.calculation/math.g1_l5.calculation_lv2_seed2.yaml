@@ -26,16 +26,16 @@ meta:
 problem_ref: cf2c9d54b4ed63e2
 problem_text: '次の計算をせよ。
 
-  (-8/5)+(-0.3)-(-1/8)+(-1.5)'
+  (-8/5)+(-1.3)-(-1/8)+(-4.5)'
 sub_questions:
 - answer:
-    display: -131/40
+    display: -291/40
     kind: symbolic
-    srepr: Rational(-131, 40)
+    srepr: Rational(-291, 40)
   cause_tags: []
   concept_tags:
   - signed_number.add_sub_terms_rational
-  explanation: まず、かっこを外して、符号のついた項の和とみなす。 かっこを外し項の和とみなす次に、分数・小数を通分してそろえる。 分数・小数を通分してそろえる最後に、正の合計と負の合計を合わせて、答えを求める。 -131/40
+  explanation: まず、かっこを外して、符号のついた項の和とみなす。 かっこを外し項の和とみなす次に、分数・小数を通分してそろえる。 分数・小数を通分してそろえる最後に、正の合計と負の合計を合わせて、答えを求める。 -291/40
   hints:
   - かっこを外して、符号のついた項の和とみなす。
   - 分数・小数を通分してそろえる。
@@ -46,15 +46,15 @@ sub_questions:
     narration: かっこを外して、符号のついた項の和とみなす。
     op: drop_parentheses_to_terms
     result_display: かっこを外し項の和とみなす
-    result_srepr: Rational(-131, 40)
+    result_srepr: Rational(-291, 40)
   - args: []
     narration: 分数・小数を通分してそろえる。
     op: align_fractions
     result_display: 分数・小数を通分してそろえる
-    result_srepr: Rational(-131, 40)
+    result_srepr: Rational(-291, 40)
   - args: []
     narration: 正の合計と負の合計を合わせて、答えを求める。
     op: total_terms
-    result_display: -131/40
-    result_srepr: Rational(-131, 40)
+    result_display: -291/40
+    result_srepr: Rational(-291, 40)
 visual_svg: null

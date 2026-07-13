@@ -26,16 +26,16 @@ meta:
 problem_ref: 38a9e5c274e380b1
 problem_text: '次の計算をせよ。
 
-  2/5-(-2.5)+(-1/4)-(-0.4)'
+  2/5-(-0.9)+(-1/4)-(-0.2)'
 sub_questions:
 - answer:
-    display: 61/20
+    display: 5/4
     kind: symbolic
-    srepr: Rational(61, 20)
+    srepr: Rational(5, 4)
   cause_tags: []
   concept_tags:
   - signed_number.add_sub_terms_rational
-  explanation: まず、かっこを外して、符号のついた項の和とみなす。 かっこを外し項の和とみなす次に、分数・小数を通分してそろえる。 分数・小数を通分してそろえる最後に、正の合計と負の合計を合わせて、答えを求める。 61/20
+  explanation: まず、かっこを外して、符号のついた項の和とみなす。 かっこを外し項の和とみなす次に、分数・小数を通分してそろえる。 分数・小数を通分してそろえる最後に、正の合計と負の合計を合わせて、答えを求める。 5/4
   hints:
   - かっこを外して、符号のついた項の和とみなす。
   - 分数・小数を通分してそろえる。
@@ -46,15 +46,15 @@ sub_questions:
     narration: かっこを外して、符号のついた項の和とみなす。
     op: drop_parentheses_to_terms
     result_display: かっこを外し項の和とみなす
-    result_srepr: Rational(61, 20)
+    result_srepr: Rational(5, 4)
   - args: []
     narration: 分数・小数を通分してそろえる。
     op: align_fractions
     result_display: 分数・小数を通分してそろえる
-    result_srepr: Rational(61, 20)
+    result_srepr: Rational(5, 4)
   - args: []
     narration: 正の合計と負の合計を合わせて、答えを求める。
     op: total_terms
-    result_display: 61/20
-    result_srepr: Rational(61, 20)
+    result_display: 5/4
+    result_srepr: Rational(5, 4)
 visual_svg: null

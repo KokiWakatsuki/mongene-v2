@@ -26,16 +26,16 @@ meta:
 problem_ref: da67f5dae9b64ab6
 problem_text: '次の計算をせよ。
 
-  (-4/5)+(-0.25)+6'
+  (-4/5)+(-0.375)+6'
 sub_questions:
 - answer:
-    display: 99/20
+    display: 193/40
     kind: symbolic
-    srepr: Rational(99, 20)
+    srepr: Rational(193, 40)
   cause_tags: []
   concept_tags:
   - signed_number.add_terms
-  explanation: まず、かっこを外し、それぞれの数を符号のついた項として並べる。 符号のついた項の和に直す次に、正の項どうし、負の項どうしをそれぞれまとめる。 正の項・負の項をまとめる最後に、正の合計と負の合計を合わせて、答えを求める。 99/20
+  explanation: まず、かっこを外し、それぞれの数を符号のついた項として並べる。 符号のついた項の和に直す次に、正の項どうし、負の項どうしをそれぞれまとめる。 正の項・負の項をまとめる最後に、正の合計と負の合計を合わせて、答えを求める。 193/40
   hints:
   - かっこを外し、それぞれの数を符号のついた項として並べる。
   - 正の項どうし、負の項どうしをそれぞれまとめる。
@@ -46,15 +46,15 @@ sub_questions:
     narration: かっこを外し、それぞれの数を符号のついた項として並べる。
     op: rewrite_as_term_sum
     result_display: 符号のついた項の和に直す
-    result_srepr: Rational(99, 20)
+    result_srepr: Rational(193, 40)
   - args: []
     narration: 正の項どうし、負の項どうしをそれぞれまとめる。
     op: group_by_sign
     result_display: 正の項・負の項をまとめる
-    result_srepr: Rational(99, 20)
+    result_srepr: Rational(193, 40)
   - args: []
     narration: 正の合計と負の合計を合わせて、答えを求める。
     op: total_terms
-    result_display: 99/20
-    result_srepr: Rational(99, 20)
+    result_display: 193/40
+    result_srepr: Rational(193, 40)
 visual_svg: null
