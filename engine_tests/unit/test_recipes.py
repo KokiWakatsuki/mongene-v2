@@ -8,6 +8,7 @@ CellContext で construct し、MR が正しく組み立てられること・sig
 from __future__ import annotations
 
 import math
+from functools import lru_cache
 from pathlib import Path
 
 import pytest
@@ -23,15 +24,24 @@ from engine.core.spec.loader import load_family_dir
 FAMILIES_DIR = Path("engine/curriculum/math/families")
 
 
+# ★spec / curriculum はテスト実行中は不変（property テストは読み取りのみ）。
+# 以前は _make_ctx が毎回 58 family の YAML と curriculum を再パースしており（1回≈313ms）、
+# property 1200 件で約 376 秒が再パースだけに費やされていた。lru_cache で 1 回に集約する。
+@lru_cache(maxsize=1)
 def _families():
     return load_family_dir(FAMILIES_DIR)
+
+
+@lru_cache(maxsize=1)
+def _curriculum():
+    return load_curriculum()
 
 
 def _make_ctx(family_name: str, level: int) -> CellContext:
     families = _families()
     spec_family = families[family_name]
     spec_level = spec_family.levels[str(level)]
-    curriculum = load_curriculum()
+    curriculum = _curriculum()
     unit = family_name.split(".")[1]
     form = spec_family.form
     return CellContext(
