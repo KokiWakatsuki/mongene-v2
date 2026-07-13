@@ -5,6 +5,7 @@ registry に登録する。
 """
 from __future__ import annotations
 
+from engine.packs.math.checkers import arithmetic  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.checkers import linear  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.checkers import polynomial  # noqa: F401  (登録の副作用のため import)
 

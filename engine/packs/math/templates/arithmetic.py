@@ -1,0 +1,22 @@
+"""正の数・負の数の四則まわりの T1 テンプレート登録（実装設計 §7・§7.2）。
+
+テンプレは TemplateContext の公開変数（given / sub_questions[].{label,asked,narrations}）
+のみ参照できる。answer/params は属性として存在しないため参照不能（Q5 の構造防止）。
+テンプレ名は FamilySpec の `text.template` と一致させる（spec_lint R1 が検査）。
+"""
+from __future__ import annotations
+
+from engine.core.registry import REGISTRY
+
+# g1 正負の数 calculation（加法・減法・乗法・除法・累乗・四則混合）: 数値式を計算する
+LF_CALC_EVALUATE_V1 = "次の計算をせよ。\n{{ given.expression }}"
+
+
+def _register_all() -> None:
+    REGISTRY.register_template("lf_calc_evaluate_v1", LF_CALC_EVALUATE_V1)
+
+
+_register_all()
+
+
+__all__ = ["LF_CALC_EVALUATE_V1"]

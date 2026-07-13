@@ -1,0 +1,54 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - signed_number.add_pair
+  provenance:
+    git_commit: ''
+    recipe: math.compute_signed_arithmetic
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_calc_evaluate_v1
+    tier: T1
+  requested:
+    form: calculation
+    level: 1
+    subject: math
+    unit: g1_l3
+  resolved:
+    form: calculation
+    level: 1
+    subject: math
+    unit: g1_l3
+  seed: 1
+  signature: addition_pair
+problem_ref: 2711ea1abeeb4d71
+problem_text: '次の計算をせよ。
+
+  7+(-6)'
+sub_questions:
+- answer:
+    display: '1'
+    kind: symbolic
+    srepr: Integer(1)
+  cause_tags: []
+  concept_tags:
+  - signed_number.add_pair
+  explanation: まず、たがいの数の符号を見て、和の符号を先に決める（同符号なら絶対値の和、異符号なら絶対値の差）。 和の符号を先に決める次に、決めた符号のもとで絶対値を計算し、和を求める。 1
+  hints:
+  - たがいの数の符号を見て、和の符号を先に決める（同符号なら絶対値の和、異符号なら絶対値の差）。
+  label: (1)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args: []
+    narration: たがいの数の符号を見て、和の符号を先に決める（同符号なら絶対値の和、異符号なら絶対値の差）。
+    op: determine_sum_sign
+    result_display: 和の符号を先に決める
+    result_srepr: Integer(1)
+  - args: []
+    narration: 決めた符号のもとで絶対値を計算し、和を求める。
+    op: add_magnitudes
+    result_display: '1'
+    result_srepr: Integer(1)
+visual_svg: null

@@ -2070,3 +2070,42 @@ def test_system_term_recall_double_solve_property(seed):
     sol = REGISTRY.solver("math.system_term_definition")(mr.params["concept"])
     assert sol.answer.correct == mr.sub_questions[0].answer.correct
     assert sol.answer.fact_id == mr.sub_questions[0].answer.fact_id
+
+
+# ---------------------------------------------------------------------------
+# math.compute_signed_arithmetic（C1 g1 正の数・負の数の四則）— P2
+# ---------------------------------------------------------------------------
+def test_signed_addition_pair_lv1_construct():
+    ctx = _make_ctx("math.g1_l3.calculation", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "addition_pair"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "value"
+    assert [s.op for s in sq.steps] == ["determine_sum_sign", "add_magnitudes"]
+
+
+def test_signed_addition_terms_lv2_construct():
+    ctx = _make_ctx("math.g1_l3.calculation", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "addition_terms"
+    assert [s.op for s in mr.sub_questions[0].steps] == [
+        "rewrite_as_term_sum", "group_by_sign", "total_terms",
+    ]
+
+
+@pytest.mark.parametrize("level", [1, 2])
+@pytest.mark.parametrize("seed", range(100))
+def test_compute_signed_arithmetic_double_solve_property(level, seed):
+    ctx = _make_ctx("math.g1_l3.calculation", level)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.evaluate_numeric_expression")
+    sol = solver(mr.params["expr_str"], mr.params["mode"])
+    # 独立ソルバの答えが recipe の答えと一致し、かつ与式の厳密評価に等しい。
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+    expected = sympy.sympify(mr.params["expr_str"], rational=True)
+    assert sol.answer.srepr == sympy.srepr(expected)
+    # 答えは定数（自由変数を含まない）。
+    assert not sympy.sympify(sol.answer.srepr).free_symbols

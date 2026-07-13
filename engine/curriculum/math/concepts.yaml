@@ -185,3 +185,28 @@ concepts:
   - id: polynomial.system_term_recall
     label: "2元1次方程式・連立方程式・その解の用語を想起する"
     unit: g2_l10
+  # --- C1 g1 正の数・負の数（四則） ---
+  - id: signed_number.add_pair
+    label: "2数の加法（符号を決めて絶対値を計算する）"
+    unit: g1_l3
+  - id: signed_number.add_terms
+    label: "3項以上・分数小数を含む加法（符号ごとにまとめて計算する）"
+    unit: g1_l3
+  - id: signed_number.subtract_pair
+    label: "2数の減法（ひき算をたし算に直して計算する）"
+    unit: g1_l4
+  - id: signed_number.subtract_terms
+    label: "分数小数・複数項を含む減法（すべてたし算に直して計算する）"
+    unit: g1_l4
+  - id: signed_number.multiply_pair
+    label: "2数の乗法（符号を決めて絶対値をかける）"
+    unit: g1_l6
+  - id: signed_number.multiply_chain
+    label: "3数以上・分数小数を含む乗法（負の数の個数で符号を決める）"
+    unit: g1_l6
+  - id: signed_number.divide_pair
+    label: "2数の除法（逆数をかけるかけ算に直して計算する）"
+    unit: g1_l8
+  - id: signed_number.divide_chain
+    label: "分数の除法・乗除混合（逆数で処理する）"
+    unit: g1_l8
