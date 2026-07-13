@@ -14,13 +14,26 @@ LF_CALC_EVALUATE_V1 = "次の計算をせよ。\n{{ given.expression }}"
 # g1_l9.calculation Lv3: 分配法則を使って工夫して計算する
 LF_CALC_DISTRIBUTIVE_V1 = "分配法則を利用して、次の計算を工夫してせよ。\n{{ given.expression }}"
 
+# g1_l2.calculation Lv1: 絶対値を求める
+LF_CALC_ABS_V1 = "次の数の絶対値を求めよ。\n{{ given.expression }}"
+
+# g1_l2.calculation Lv2: 複数の数を大小の順に並べる（given に順序の別まで含む）
+LF_CALC_ORDER_V1 = "{{ given.expression }}。"
+
 
 def _register_all() -> None:
     REGISTRY.register_template("lf_calc_evaluate_v1", LF_CALC_EVALUATE_V1)
     REGISTRY.register_template("lf_calc_distributive_v1", LF_CALC_DISTRIBUTIVE_V1)
+    REGISTRY.register_template("lf_calc_abs_v1", LF_CALC_ABS_V1)
+    REGISTRY.register_template("lf_calc_order_v1", LF_CALC_ORDER_V1)
 
 
 _register_all()
 
 
-__all__ = ["LF_CALC_EVALUATE_V1", "LF_CALC_DISTRIBUTIVE_V1"]
+__all__ = [
+    "LF_CALC_EVALUATE_V1",
+    "LF_CALC_DISTRIBUTIVE_V1",
+    "LF_CALC_ABS_V1",
+    "LF_CALC_ORDER_V1",
+]

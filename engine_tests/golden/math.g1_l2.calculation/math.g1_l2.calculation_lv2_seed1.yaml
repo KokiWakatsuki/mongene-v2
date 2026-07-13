@@ -1,0 +1,58 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - signed_number.order_numbers
+  provenance:
+    git_commit: ''
+    recipe: math.compute_signed_arithmetic
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_calc_order_v1
+    tier: T1
+  requested:
+    form: calculation
+    level: 2
+    subject: math
+    unit: g1_l2
+  resolved:
+    form: calculation
+    level: 2
+    subject: math
+    unit: g1_l2
+  seed: 1
+  signature: order_numbers
+problem_ref: 0a091121e7aca4bb
+problem_text: 7, 5/8, -2.5, 8/7 を小さい順に並べよ。
+sub_questions:
+- answer:
+    display: -2.5, 5/8, 8/7, 7
+    kind: symbolic
+    srepr: Tuple(Rational(-5, 2), Rational(5, 8), Rational(8, 7), Integer(7))
+  cause_tags: []
+  concept_tags:
+  - signed_number.order_numbers
+  explanation: まず、分数と小数がまざっているので、大きさを比べやすい形にそろえる。 分数・小数を比べやすい形にそろえる次に、それぞれの数が数直線上でどの位置にあるかで大小を比べる（負の数は絶対値が大きいほど小さい）。 数直線上での位置で大小を比べる最後に、小さい順（または大きい順）に並べかえて答える。 -2.5, 5/8, 8/7, 7
+  hints:
+  - 分数と小数がまざっているので、大きさを比べやすい形にそろえる。
+  - それぞれの数が数直線上でどの位置にあるかで大小を比べる（負の数は絶対値が大きいほど小さい）。
+  label: (1)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 分数と小数がまざっているので、大きさを比べやすい形にそろえる。
+    op: convert_to_common_form
+    result_display: 分数・小数を比べやすい形にそろえる
+    result_srepr: Tuple(Rational(-5, 2), Rational(5, 8), Rational(8, 7), Integer(7))
+  - args: []
+    narration: それぞれの数が数直線上でどの位置にあるかで大小を比べる（負の数は絶対値が大きいほど小さい）。
+    op: compare_on_number_line
+    result_display: 数直線上での位置で大小を比べる
+    result_srepr: Tuple(Rational(-5, 2), Rational(5, 8), Rational(8, 7), Integer(7))
+  - args: []
+    narration: 小さい順（または大きい順）に並べかえて答える。
+    op: arrange_in_order
+    result_display: -2.5, 5/8, 8/7, 7
+    result_srepr: Tuple(Rational(-5, 2), Rational(5, 8), Rational(8, 7), Integer(7))
+visual_svg: null

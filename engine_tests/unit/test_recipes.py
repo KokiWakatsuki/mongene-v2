@@ -2231,7 +2231,46 @@ def test_signed_distributive_trick_lv3_construct():
     ]
 
 
+def test_signed_absolute_value_lv1_construct():
+    ctx = _make_ctx("math.g1_l2.calculation", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "absolute_value"
+    assert [s.op for s in mr.sub_questions[0].steps] == [
+        "locate_on_number_line", "read_distance_from_zero",
+    ]
+    # 絶対値は 0 以上。
+    assert sympy.sympify(mr.sub_questions[0].answer.srepr) >= 0
+
+
+def test_signed_order_numbers_lv2_construct():
+    ctx = _make_ctx("math.g1_l2.calculation", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "order_numbers"
+    assert [s.op for s in mr.sub_questions[0].steps] == [
+        "convert_to_common_form", "compare_on_number_line", "arrange_in_order",
+    ]
+
+
+@pytest.mark.parametrize("seed", range(100))
+def test_order_signed_numbers_sorted_property(seed):
+    """並べ替えの答えが実際に昇順/降順に整列していることを確認する。"""
+    ctx = _make_ctx("math.g1_l2.calculation", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    ordered = sympy.sympify(mr.sub_questions[0].answer.srepr)  # Tuple
+    vals = [sympy.Rational(x) for x in ordered]
+    asc = mr.params["ascending"]
+    expected = sorted(vals, reverse=not asc)
+    assert vals == expected
+    # 独立ソルバでの再計算と一致（double-solve）。
+    sol = REGISTRY.solver("math.order_signed_numbers")(mr.params["numbers_str"], mr.params["ascending"])
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+
+
 _SIGNED_ARITHMETIC_CELLS = [
+    ("math.g1_l2.calculation", 1),
     ("math.g1_l3.calculation", 1), ("math.g1_l3.calculation", 2),
     ("math.g1_l4.calculation", 1), ("math.g1_l4.calculation", 2),
     ("math.g1_l5.calculation", 1), ("math.g1_l5.calculation", 2),

@@ -13,8 +13,13 @@ from engine.core.registry import REGISTRY, register_checker
 
 @register_checker("math.compute_signed_arithmetic.double_solve")
 def double_solve_compute_signed_arithmetic(mr: MR) -> Solution:
-    # 与式の文字列 expr_str と mode から独立に sympy で再評価する。
+    # mode により独立ソルバを使い分ける。
+    #  order_numbers: numbers_str + ascending を並べ替えソルバで再計算。
+    #  それ以外     : 与式の文字列 expr_str を数値評価ソルバで再計算。
     p = mr.params
+    if p["mode"] == "order_numbers":
+        solver = REGISTRY.solver("math.order_signed_numbers")
+        return cast(Solution, solver(p["numbers_str"], p["ascending"]))
     solver = REGISTRY.solver("math.evaluate_numeric_expression")
     return cast(Solution, solver(p["expr_str"], p["mode"]))
 

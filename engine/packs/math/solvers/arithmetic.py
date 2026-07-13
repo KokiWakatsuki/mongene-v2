@@ -53,6 +53,8 @@ _MODE_STEPS: dict[str, list[str]] = {
     # g1_l9 四則混合・分配法則
     "four_operations": ["evaluate_powers_and_parentheses", "multiply_and_divide", "add_and_subtract"],
     "distributive_trick": ["rewrite_as_round_plus_offset", "distribute_over_round", "combine_easy_parts"],
+    # g1_l2 絶対値
+    "absolute_value": ["locate_on_number_line", "read_distance_from_zero"],
 }
 
 # op -> (narration, 非終端 step の result_display フレーズ)。数字は書かない。
@@ -83,6 +85,8 @@ _OP_NARRATION: dict[str, str] = {
     "rewrite_as_round_plus_offset": "計算しやすいように、片方の数をきりのよい数と小さな数の和や差に分ける。",
     "distribute_over_round": "分配法則を使って、きりのよい数の積と小さな数の積に分けて計算する。",
     "combine_easy_parts": "2つの積を合わせて、答えを求める。",
+    "locate_on_number_line": "その数が数直線上で 0 からどちら側にあるかを見る。",
+    "read_distance_from_zero": "0 からの距離が絶対値なので、符号を取り去った大きさを答える。",
 }
 
 _OP_PHRASE: dict[str, str] = {
@@ -139,4 +143,48 @@ def evaluate_numeric_expression(expr_str: str, mode: object) -> Solution:
     return Solution(answer=answer, steps=steps)
 
 
-__all__ = ["evaluate_numeric_expression", "fmt_number"]
+@register_solver("math.order_signed_numbers")
+def order_signed_numbers(numbers_str: str, ascending: object) -> Solution:
+    """複数の数を小さい／大きい順に並べる（g1_l2.calculation Lv2）。
+
+    numbers_str は元の提示順の数を "," で区切った sympy 評価可能な文字列（分数・小数を含む）。
+    これを厳密値で整列し、順序を SymbolicAnswer（display=整列した表示・srepr=Tuple）で返す。
+    ascending が真なら小さい順、偽なら大きい順。数の表示は元の提示表記を保つため、
+    (値, 表示) のペアを numbers_str と併せて渡さず、ここでは値のみ整列して既約表記で表示する。
+    """
+    tokens = [t.strip() for t in numbers_str.split(",")]
+    pairs = [(t, sympy.Rational(sympy.sympify(t, rational=True))) for t in tokens]
+    asc = bool(ascending)
+    ordered_pairs = sorted(pairs, key=lambda tv: tv[1], reverse=not asc)
+    # 答えの表示は元の提示表記（0.2・-3/4 等）を保ったまま並べかえる。
+    disp = ", ".join(t for t, _ in ordered_pairs)
+    result = sympy.Tuple(*(v for _, v in ordered_pairs))
+    r_srepr = sympy.srepr(result)
+    steps = [
+        Step(
+            op="convert_to_common_form",
+            args=[],
+            result_srepr=r_srepr,
+            result_display="分数・小数を比べやすい形にそろえる",
+            narration="分数と小数がまざっているので、大きさを比べやすい形にそろえる。",
+        ),
+        Step(
+            op="compare_on_number_line",
+            args=[],
+            result_srepr=r_srepr,
+            result_display="数直線上での位置で大小を比べる",
+            narration="それぞれの数が数直線上でどの位置にあるかで大小を比べる（負の数は絶対値が大きいほど小さい）。",
+        ),
+        Step(
+            op="arrange_in_order",
+            args=[],
+            result_srepr=r_srepr,
+            result_display=disp,
+            narration="小さい順（または大きい順）に並べかえて答える。",
+        ),
+    ]
+    answer = SymbolicAnswer(srepr=r_srepr, display=disp)
+    return Solution(answer=answer, steps=steps)
+
+
+__all__ = ["evaluate_numeric_expression", "fmt_number", "order_signed_numbers"]

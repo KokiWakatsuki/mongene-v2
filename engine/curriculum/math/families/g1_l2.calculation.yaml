@@ -1,0 +1,51 @@
+family: math.g1_l2.calculation
+form: calculation
+source_desc: |
+  数直線と絶対値、数の大小関係
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: 1数の絶対値を求める（1手順）。
+       example: |-6| を求めよ。（本エンジンでは絶対値を1問として提示。大小比較は Lv2 の並べ替えで扱う）
+  Lv2 desc: 分数小数を含む複数数を大小順に並べる複数手順。
+       example: -1.5, -3/4, 0.2, -2 を小さい順に並べよ。
+  Lv1 の答えは定数（絶対値・SymbolicAnswer）、Lv2 の答えは並べた順序（SymbolicAnswer・Tuple）。
+  独立ソルバ evaluate_numeric_expression（絶対値）/ order_signed_numbers（並べ替え）で再計算。
+  Lv1（0 からの距離を読む）/ Lv2（分数小数をそろえ数直線上で大小を比べて並べる）で op 列を変える
+  ＝level_sep。定数・順序の答えは問題文の数値がすべて given 由来（whitelist）なので漏洩しない。
+concepts_default: [signed_number.absolute_value]
+levels:
+  "1":
+    signature: absolute_value
+    recipe: math.compute_signed_arithmetic
+    params:
+      # |a|。a は整数・分数（符号つき）。小数入力は答えが分数化して不自然なため除く。
+      # frac を重み付けし dup を分散。
+      mode: absolute_value
+      value_kinds: [int, frac, frac, frac]
+      int_domain: {int_range: [-20, 20], exclude: [0]}
+      frac_domain: {frac_range: {num: [-24, 24], den: [2, 15]}}
+    given: [expression]
+    asked: [value]
+    visual: none
+    text: {tier: T1, template: lf_calc_abs_v1}
+    hints: [steps_prefix]
+    concept_tags: [signed_number.absolute_value]
+    cause_tags: []
+  "2":
+    signature: order_numbers
+    recipe: math.compute_signed_arithmetic
+    params:
+      # 相異する4数（整数・分数・小数の混在）を小さい／大きい順に並べる。
+      mode: order_numbers
+      count_domain: {int_set: [4]}
+      number_kinds: [int, frac, dec, frac]
+      int_domain: {int_range: [-9, 9], exclude: [0]}
+      frac_domain: {frac_range: {num: [-9, 9], den: [2, 9]}}
+    given: [expression]
+    asked: [value]
+    visual: none
+    text: {tier: T1, template: lf_calc_order_v1}
+    hints: [steps_prefix]
+    concept_tags: [signed_number.order_numbers]
+    cause_tags: []
+remedial:
+  default_level: 1

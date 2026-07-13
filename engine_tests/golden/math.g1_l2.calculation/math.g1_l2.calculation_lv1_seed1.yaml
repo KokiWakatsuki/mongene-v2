@@ -1,0 +1,54 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - signed_number.absolute_value
+  provenance:
+    git_commit: ''
+    recipe: math.compute_signed_arithmetic
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_calc_abs_v1
+    tier: T1
+  requested:
+    form: calculation
+    level: 1
+    subject: math
+    unit: g1_l2
+  resolved:
+    form: calculation
+    level: 1
+    subject: math
+    unit: g1_l2
+  seed: 1
+  signature: absolute_value
+problem_ref: 33df54a96aad3b5c
+problem_text: '次の数の絶対値を求めよ。
+
+  |-17/13|'
+sub_questions:
+- answer:
+    display: 17/13
+    kind: symbolic
+    srepr: Rational(17, 13)
+  cause_tags: []
+  concept_tags:
+  - signed_number.absolute_value
+  explanation: まず、その数が数直線上で 0 からどちら側にあるかを見る。 次に、0 からの距離が絶対値なので、符号を取り去った大きさを答える。 17/13
+  hints:
+  - その数が数直線上で 0 からどちら側にあるかを見る。
+  label: (1)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args: []
+    narration: その数が数直線上で 0 からどちら側にあるかを見る。
+    op: locate_on_number_line
+    result_display: ''
+    result_srepr: Rational(17, 13)
+  - args: []
+    narration: 0 からの距離が絶対値なので、符号を取り去った大きさを答える。
+    op: read_distance_from_zero
+    result_display: 17/13
+    result_srepr: Rational(17, 13)
+visual_svg: null

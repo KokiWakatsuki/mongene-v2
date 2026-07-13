@@ -161,6 +161,8 @@ _SIGNED_ARITHMETIC_CONCEPTS = [
     "signed_number.power_sign_contrast",
     "signed_number.four_operations",
     "signed_number.distributive_trick",
+    "signed_number.absolute_value",
+    "signed_number.order_numbers",
 ]
 
 
@@ -226,6 +228,17 @@ def compute_signed_arithmetic(ctx: CellContext, rng: Rng) -> MR:
             disp += opsym + _paren_if_neg(v, _fmt_signed(v, m))
         assert value == sympy.sympify(expr_str, rational=True)
         return _build(expr_str, disp, mode, ctx)
+
+    if mode == "absolute_value":
+        # 絶対値を求める。|a|。a は整数・分数・小数（符号つき）。
+        kind = str(draw(p["value_kinds"], rng))
+        aval, amag = _draw_operand(rng, kind, p)
+        expr_str = f"Abs({aval})"
+        disp = f"|{_fmt_signed(aval, amag)}|"
+        return _build(expr_str, disp, mode, ctx)
+
+    if mode == "order_numbers":
+        return _build_order_numbers(ctx, rng, p)
 
     if mode == "four_operations":
         # 四則の混じった計算（累乗・かっこを含む）。骨格 A - (B)²×C + D÷E（D=k·E で割り切れる）。
@@ -345,6 +358,71 @@ def _draw_nonzero_last(
         if (running + v) != 0:
             return v, m
     raise ValueError("nonzero last term を確保できず")
+
+
+def _build_order_numbers(ctx: CellContext, rng: Rng, p: dict[str, object]) -> MR:
+    """複数の数を小さい／大きい順に並べる MR を組む（g1_l2.calculation Lv2）。
+
+    整数・分数・小数を混ぜて count 個引き、値が相異する集合を作る（同値だと順序が一意でない）。
+    元の提示順（シャッフル）と、小さい／大きい順の別を surface とし、独立ソルバ
+    math.order_signed_numbers で整列を再計算する（double-solve）。
+    """
+    count = int(draw(p["count_domain"], rng))
+    kinds = list(cast("list[str]", p["number_kinds"]))
+    ascending = str(draw(["asc", "desc"], rng)) == "asc"
+
+    # 値が相異する count 個を引く（有界リトライ）。表示トークンと値を保持。
+    tokens: list[str] = []
+    values: list[sympy.Rational] = []
+    for _ in range(400):
+        if len(tokens) >= count:
+            break
+        kind = kinds[len(tokens) % len(kinds)]
+        v, mag = _draw_operand(rng, kind, p)
+        vr = sympy.Rational(v)
+        if any(vr == e for e in values):
+            continue
+        tokens.append(_order_token(v, mag))
+        values.append(vr)
+    if len(tokens) < count:
+        raise ValueError("相異する数を確保できず")
+
+    numbers_str = ", ".join(tokens)
+    order_word = "小さい" if ascending else "大きい"
+    given_display = f"{numbers_str} を{order_word}順に並べよ"
+
+    solver = REGISTRY.solver("math.order_signed_numbers")
+    sol = cast(Solution, solver(numbers_str, ascending))
+    assert isinstance(sol.answer, SymbolicAnswer)
+    assert [s.op for s in sol.steps] == [
+        "convert_to_common_form", "compare_on_number_line", "arrange_in_order",
+    ]
+
+    sub_question = SubQuestionMR(
+        label="(1)",
+        asked="value",
+        answer=sol.answer,
+        steps=sol.steps,
+        concept_tags=_effective_concept_tags(ctx),
+        cause_tags=_effective_cause_tags(ctx),
+    )
+    return MR(
+        signature=ctx.spec_level.signature,
+        family=ctx.family,
+        level=ctx.level,
+        purpose=ctx.purpose,
+        seed=0,
+        params={"numbers_str": numbers_str, "ascending": ascending, "mode": "order_numbers"},
+        given={"expression": given_display},
+        sub_questions=[sub_question],
+        visual_plan=None,
+        provenance=Provenance(recipe="math.compute_signed_arithmetic"),
+    )
+
+
+def _order_token(value: sympy.Rational, magnitude_disp: str) -> str:
+    """並べ替え問題で提示する数の表記（符号つき・そのまま・かっこ無し）。"""
+    return _fmt_signed(value, magnitude_disp)
 
 
 def _draw_add_sub_terms(

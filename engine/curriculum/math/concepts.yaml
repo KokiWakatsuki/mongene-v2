@@ -228,3 +228,9 @@ concepts:
   - id: signed_number.distributive_trick
     label: "分配法則を使って計算を工夫する"
     unit: g1_l9
+  - id: signed_number.absolute_value
+    label: "数の絶対値（0 からの距離）を求める"
+    unit: g1_l2
+  - id: signed_number.order_numbers
+    label: "分数・小数を含む複数の数を大小の順に並べる"
+    unit: g1_l2
