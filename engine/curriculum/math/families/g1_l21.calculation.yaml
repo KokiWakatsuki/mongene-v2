@@ -1,0 +1,50 @@
+family: math.g1_l21.calculation
+form: calculation
+source_desc: |
+  方程式とその解、等式の性質（等式の性質を使って一次方程式を解く）
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: 等式の性質で両辺を同じ数で操作し解く1〜2手順。
+       example: 等式の性質を使って x+7=12 を解け。
+  Lv2 desc: 複数の性質を組合せて解く複数手順。
+       example: 等式の性質を使って 4x-3=13 を解け。
+  答えは解 x=定数（整数・SymbolicAnswer）。独立ソルバ solve_linear_equation（sympy.solve）で
+  解き直す（double-solve）。Lv1（x+b=c を両辺から同じ数をひいて解く2手）/ Lv2（ax+b=c を
+  両辺からひく→両辺を係数でわる2手）で op 列を変える＝level_sep（末尾 op が state_solution vs
+  divide_both_sides）。定数答えの G-Q5t は問題文の数値がすべて given 由来（whitelist・両符号）
+  なので漏洩しない。図は無し。
+concepts_default: [equation.solve_by_equality_property]
+levels:
+  "1":
+    signature: equality_add
+    recipe: math.compute_linear_equation
+    params:
+      # x + b = c（answer-first: 解 x0 と b から c=x0+b）。等式の性質（両辺から同じ数をひく）。
+      # 域を広めにとり dup_rate を下げる（組合せが x0×b の2自由度のみのため）。
+      mode: equality_add
+      solution_domain: {int_range: [-12, 12], exclude: [0]}
+      const_domain: {int_range: [-12, 12], exclude: [0]}
+    given: [equation]
+    asked: [solution]
+    visual: none
+    text: {tier: T1, template: lf_solve_equation_property_v1}
+    hints: [steps_prefix]
+    concept_tags: [equation.solve_by_equality_property]
+    cause_tags: []
+  "2":
+    signature: equality_multi
+    recipe: math.compute_linear_equation
+    params:
+      # a·x + b = c（|a|≥2・answer-first: c=a·x0+b）。等式の性質を2回（ひく→わる）。
+      mode: equality_multi
+      solution_domain: {int_range: [-9, 9], exclude: [0]}
+      coeff_domain: {int_range: [2, 9]}
+      const_domain: {int_range: [-9, 9], exclude: [0]}
+    given: [equation]
+    asked: [solution]
+    visual: none
+    text: {tier: T1, template: lf_solve_equation_property_v1}
+    hints: [steps_prefix]
+    concept_tags: [equation.solve_by_equality_property_multi]
+    cause_tags: []
+remedial:
+  default_level: 1

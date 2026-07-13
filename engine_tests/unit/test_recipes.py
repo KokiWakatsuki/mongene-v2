@@ -2414,3 +2414,71 @@ def test_compute_substitution_double_solve_property(family, level, seed):
     assert sol.answer.srepr == sympy.srepr(expected)
     # 答えは定数（自由変数を含まない）。
     assert not sympy.sympify(sol.answer.srepr).free_symbols
+
+
+# ---------------------------------------------------------------------------
+# math.compute_linear_equation（C1 g1 一次方程式・解法）— P2
+# ---------------------------------------------------------------------------
+def test_equation_equality_add_lv1_construct():
+    ctx = _make_ctx("math.g1_l21.calculation", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "equality_add"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "solution"
+    assert [s.op for s in sq.steps] == ["subtract_constant_both_sides", "state_solution"]
+    assert sq.answer.display.startswith("x = ")
+
+
+def test_equation_equality_multi_lv2_construct():
+    ctx = _make_ctx("math.g1_l21.calculation", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "equality_multi"
+    assert [s.op for s in mr.sub_questions[0].steps] == [
+        "subtract_constant_both_sides", "divide_both_sides",
+    ]
+
+
+def test_equation_transpose_constant_lv1_construct():
+    ctx = _make_ctx("math.g1_l22.calculation", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "transpose_constant"
+    assert [s.op for s in mr.sub_questions[0].steps] == ["transpose_constant", "state_solution"]
+
+
+def test_equation_transpose_both_lv2_construct():
+    ctx = _make_ctx("math.g1_l22.calculation", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "transpose_both"
+    assert [s.op for s in mr.sub_questions[0].steps] == ["transpose_terms", "combine_and_divide"]
+    # 両辺に文字がある（右辺にも x）。
+    assert "x" in mr.given["equation"].split("=")[1]
+
+
+_EQUATION_CELLS = [
+    ("math.g1_l21.calculation", 1), ("math.g1_l21.calculation", 2),
+    ("math.g1_l22.calculation", 1), ("math.g1_l22.calculation", 2),
+]
+
+
+@pytest.mark.parametrize("family,level", _EQUATION_CELLS)
+@pytest.mark.parametrize("seed", range(100))
+def test_compute_linear_equation_double_solve_property(family, level, seed):
+    ctx = _make_ctx(family, level)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.solve_linear_equation")
+    sol = solver(mr.params["equation_str"], mr.params["mode"])
+    # 独立ソルバの答えが recipe の答えと一致する。
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+    # 解が方程式を満たす（sympy で両辺一致）。
+    lhs_s, rhs_s = mr.params["equation_str"].split("=")
+    x0 = sympy.Rational(sympy.sympify(sol.answer.srepr))
+    lhs_v = sympy.sympify(lhs_s).subs(sympy.Symbol("x"), x0)
+    rhs_v = sympy.sympify(rhs_s).subs(sympy.Symbol("x"), x0)
+    assert sympy.simplify(lhs_v - rhs_v) == 0
+    # 答えは定数（自由変数を含まない）。
+    assert not sympy.sympify(sol.answer.srepr).free_symbols

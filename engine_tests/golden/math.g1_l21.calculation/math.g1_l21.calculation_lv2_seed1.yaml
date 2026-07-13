@@ -1,0 +1,54 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - equation.solve_by_equality_property_multi
+  provenance:
+    git_commit: ''
+    recipe: math.compute_linear_equation
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_solve_equation_property_v1
+    tier: T1
+  requested:
+    form: calculation
+    level: 2
+    subject: math
+    unit: g1_l21
+  resolved:
+    form: calculation
+    level: 2
+    subject: math
+    unit: g1_l21
+  seed: 1
+  signature: equality_multi
+problem_ref: b3fec5d3637953c2
+problem_text: '等式の性質を使って、次の方程式を解け。
+
+  8x + 3 = -53'
+sub_questions:
+- answer:
+    display: x = -7
+    kind: symbolic
+    srepr: Integer(-7)
+  cause_tags: []
+  concept_tags:
+  - equation.solve_by_equality_property_multi
+  explanation: まず、等式の性質を使い、両辺から同じ数をひく（または加える）。 両辺から同じ数をひく次に、等式の性質を使い、両辺を x の係数でわる。 x = -7
+  hints:
+  - 等式の性質を使い、両辺から同じ数をひく（または加える）。
+  label: (1)
+  prompt_text: solution を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 等式の性質を使い、両辺から同じ数をひく（または加える）。
+    op: subtract_constant_both_sides
+    result_display: 両辺から同じ数をひく
+    result_srepr: Integer(-7)
+  - args: []
+    narration: 等式の性質を使い、両辺を x の係数でわる。
+    op: divide_both_sides
+    result_display: x = -7
+    result_srepr: Integer(-7)
+visual_svg: null

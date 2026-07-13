@@ -1,0 +1,11 @@
+approved_at: '2026-07-13T14:26:14.490731'
+approver: koki
+content_sha256: ccef273e1d93a4769ed8667dc41822b42897e7e7f8ac5ee84752650032c4c505
+family: math.g1_l21.calculation
+files:
+- engine_tests/golden/math.g1_l21.calculation/math.g1_l21.calculation_lv1_seed1.yaml
+- engine_tests/golden/math.g1_l21.calculation/math.g1_l21.calculation_lv1_seed2.yaml
+- engine_tests/golden/math.g1_l21.calculation/math.g1_l21.calculation_lv1_seed3.yaml
+- engine_tests/golden/math.g1_l21.calculation/math.g1_l21.calculation_lv2_seed1.yaml
+- engine_tests/golden/math.g1_l21.calculation/math.g1_l21.calculation_lv2_seed2.yaml
+- engine_tests/golden/math.g1_l21.calculation/math.g1_l21.calculation_lv2_seed3.yaml
