@@ -945,6 +945,67 @@ def express_number_property(ctx: CellContext, rng: Rng) -> MR:
     )
 
 
+# ---------------------------------------------------------------------------
+# math.combine_digit_number（g2_l8.calculation Lv1 用）— C2
+# 2けたの自然数 10a+b と位を入れかえた数 10b+a の和・差を整理する。数値パラメータが無く
+# 構造が毎回同型のため dup_rate が構造的に困難（§3.1・design_C2）。対策＝2つの位の文字ペア
+# （順序つき）と演算（和/差）を surface として広くとって見かけを分散させる。
+# 答えは自由変数を含む symbolic（display 全体一致でのみ漏洩検査＝G-Q5t 相対安全・§2-#1）。
+# ---------------------------------------------------------------------------
+_DIGIT_NUMBER_CONCEPTS = ["polynomial.two_digit_number_property"]
+
+
+@register_recipe("math.combine_digit_number", provides_concepts=_DIGIT_NUMBER_CONCEPTS)
+def combine_digit_number(ctx: CellContext, rng: Rng) -> MR:
+    """2けたの自然数と位を入れかえた数の和・差を整理する（構成的生成・calculation Lv1）。"""
+    p = ctx.spec_level.params
+    pool = list(cast("list[str]", p["letter_pool"]))
+    tens = str(draw(pool, rng))
+    units = str(draw([c for c in pool if c != tens], rng))
+    operation = str(draw(cast("list[str]", p["operation_set"]), rng))
+
+    op_sym = "+" if operation == "sum" else "-"
+    op_word = "和" if operation == "sum" else "差"
+    expr_str = f"(10*{tens}+{units}){op_sym}(10*{units}+{tens})"
+    original = f"10{tens}+{units}"
+    swapped = f"10{units}+{tens}"
+    expressions = (
+        f"十の位が {tens}、一の位が {units} の2けたの自然数 {original} と、"
+        f"位を入れかえた数 {swapped} の{op_word}"
+    )
+
+    solver = REGISTRY.solver("math.combine_digit_number")
+    sol = cast(Solution, solver(expr_str, operation))
+    assert isinstance(sol.answer, SymbolicAnswer)
+    assert sol.answer.srepr == sympy.srepr(sympy.expand(sympy.sympify(expr_str))), (
+        "double-solve 不一致"
+    )
+    assert [s.op for s in sol.steps] == ["express_swapped_number", "combine_like_terms"]
+    assert sympy.sympify(sol.answer.srepr).free_symbols, "結果が定数に退化した"
+
+    sub_question = SubQuestionMR(
+        label="(1)",
+        asked="simplified_expr",
+        answer=sol.answer,
+        steps=sol.steps,
+        concept_tags=_effective_concept_tags(ctx),
+        cause_tags=_effective_cause_tags(ctx),
+    )
+
+    return MR(
+        signature=ctx.spec_level.signature,
+        family=ctx.family,
+        level=ctx.level,
+        purpose=ctx.purpose,
+        seed=0,
+        params={"expr_str": expr_str, "operation": operation},
+        given={"expressions": expressions},
+        sub_questions=[sub_question],
+        visual_plan=None,
+        provenance=Provenance(recipe="math.combine_digit_number"),
+    )
+
+
 __all__ = [
     "combine_like_terms",
     "add_or_subtract_polynomials",
@@ -954,4 +1015,5 @@ __all__ = [
     "degree_of_expression",
     "solve_for_variable",
     "express_number_property",
+    "combine_digit_number",
 ]

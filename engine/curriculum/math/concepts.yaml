@@ -170,3 +170,6 @@ concepts:
   - id: polynomial.consecutive_number_sum
     label: "連続する偶数・奇数・整数などの和を文字式で表し整理する"
     unit: g2_l7
+  - id: polynomial.two_digit_number_property
+    label: "2けたの自然数と位を入れかえた数の和・差を整理する"
+    unit: g2_l8

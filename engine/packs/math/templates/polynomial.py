@@ -31,6 +31,9 @@ LF_SOLVE_FOR_VARIABLE_V1 = (
 # g2_l7.calculation Lv1: 数の性質を表す式の和を1つの式にまとめる
 LF_NUMBER_PROPERTY_V1 = "{{ given.expressions }} の和を計算し、1つの式で表せ。"
 
+# g2_l8.calculation Lv1: 2けたの自然数と位を入れかえた数の和・差を整理する
+LF_DIGIT_NUMBER_V1 = "{{ given.expressions }} を計算し、式を簡単にせよ。"
+
 
 def _register_all() -> None:
     REGISTRY.register_template("lf_combine_like_terms_v1", LF_COMBINE_LIKE_TERMS_V1)
@@ -40,6 +43,7 @@ def _register_all() -> None:
     REGISTRY.register_template("lf_degree_v1", LF_DEGREE_V1)
     REGISTRY.register_template("lf_solve_for_variable_v1", LF_SOLVE_FOR_VARIABLE_V1)
     REGISTRY.register_template("lf_number_property_v1", LF_NUMBER_PROPERTY_V1)
+    REGISTRY.register_template("lf_digit_number_v1", LF_DIGIT_NUMBER_V1)
 
 
 _register_all()
@@ -51,4 +55,5 @@ __all__ = [
     "LF_DEGREE_V1",
     "LF_SOLVE_FOR_VARIABLE_V1",
     "LF_NUMBER_PROPERTY_V1",
+    "LF_DIGIT_NUMBER_V1",
 ]

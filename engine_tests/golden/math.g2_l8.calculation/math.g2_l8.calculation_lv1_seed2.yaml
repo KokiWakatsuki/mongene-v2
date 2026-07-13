@@ -1,0 +1,52 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - polynomial.two_digit_number_property
+  provenance:
+    git_commit: ''
+    recipe: math.combine_digit_number
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_digit_number_v1
+    tier: T1
+  requested:
+    form: calculation
+    level: 1
+    subject: math
+    unit: g2_l8
+  resolved:
+    form: calculation
+    level: 1
+    subject: math
+    unit: g2_l8
+  seed: 2
+  signature: two_digit_number_property
+problem_ref: 434c8c930fce3ece
+problem_text: 十の位が w、一の位が f の2けたの自然数 10w+f と、位を入れかえた数 10f+w の和 を計算し、式を簡単にせよ。
+sub_questions:
+- answer:
+    display: 11f + 11w
+    kind: symbolic
+    srepr: Add(Mul(Integer(11), Symbol('f')), Mul(Integer(11), Symbol('w')))
+  cause_tags: []
+  concept_tags:
+  - polynomial.two_digit_number_property
+  explanation: まず、もとの数と、位を入れかえた数を、それぞれ文字式で書き出す。 もとの数と入れかえた数を文字式で書き出す次に、2つの数の和を計算し、同類項をまとめて1つの式にする。 11f + 11w
+  hints:
+  - もとの数と、位を入れかえた数を、それぞれ文字式で書き出す。
+  label: (1)
+  prompt_text: simplified_expr を求めなさい。
+  solution_steps:
+  - args: []
+    narration: もとの数と、位を入れかえた数を、それぞれ文字式で書き出す。
+    op: express_swapped_number
+    result_display: もとの数と入れかえた数を文字式で書き出す
+    result_srepr: Add(Mul(Integer(11), Symbol('f')), Mul(Integer(11), Symbol('w')))
+  - args: []
+    narration: 2つの数の和を計算し、同類項をまとめて1つの式にする。
+    op: combine_like_terms
+    result_display: 11f + 11w
+    result_srepr: Add(Mul(Integer(11), Symbol('f')), Mul(Integer(11), Symbol('w')))
+visual_svg: null

@@ -394,6 +394,38 @@ def express_number_property(expr_str: str) -> Solution:
     return Solution(answer=answer, steps=steps)
 
 
+@register_solver("math.combine_digit_number")
+def combine_digit_number(expr_str: str, operation: object) -> Solution:
+    """2けたの自然数とその位を入れかえた数の和・差を整理する（g2_l8.calculation Lv1）。
+
+    与式（(10a+b)±(10b+a) の形）だけから sympy.expand で整理する（double-solve）。
+    operation は steps の narration（和／差の語）に使うだけで、答えは expr_str のみから
+    再計算する。答えは1つの式（自由変数を含む symbolic）。narration には数字を書かない。
+    """
+    expr = sympy.sympify(expr_str)
+    simplified = sympy.expand(expr)
+    disp = _fmt_poly_display(simplified)
+    op_word = "差" if str(operation) == "difference" else "和"
+    steps = [
+        Step(
+            op="express_swapped_number",
+            args=[],
+            result_srepr=sympy.srepr(expr),
+            result_display="もとの数と入れかえた数を文字式で書き出す",
+            narration="もとの数と、位を入れかえた数を、それぞれ文字式で書き出す。",
+        ),
+        Step(
+            op="combine_like_terms",
+            args=[],
+            result_srepr=sympy.srepr(simplified),
+            result_display=disp,
+            narration=f"2つの数の{op_word}を計算し、同類項をまとめて1つの式にする。",
+        ),
+    ]
+    answer = SymbolicAnswer(srepr=sympy.srepr(simplified), display=disp)
+    return Solution(answer=answer, steps=steps)
+
+
 __all__ = [
     "simplify_polynomial",
     "add_or_subtract_polynomials",
@@ -403,4 +435,5 @@ __all__ = [
     "degree_of_expression",
     "solve_for_variable",
     "express_number_property",
+    "combine_digit_number",
 ]

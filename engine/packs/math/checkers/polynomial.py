@@ -85,6 +85,14 @@ def double_solve_express_number_property(mr: MR) -> Solution:
     return cast(Solution, solver(p["expr_str"]))
 
 
+@register_checker("math.combine_digit_number.double_solve")
+def double_solve_combine_digit_number(mr: MR) -> Solution:
+    # 与式 expr_str と operation から独立に sympy.expand で再計算。
+    p = mr.params
+    solver = REGISTRY.solver("math.combine_digit_number")
+    return cast(Solution, solver(p["expr_str"], p["operation"]))
+
+
 __all__ = [
     "double_solve_combine_like_terms",
     "double_solve_add_or_subtract_polynomials",
@@ -94,4 +102,5 @@ __all__ = [
     "double_solve_degree_of_expression",
     "double_solve_solve_for_variable",
     "double_solve_express_number_property",
+    "double_solve_combine_digit_number",
 ]

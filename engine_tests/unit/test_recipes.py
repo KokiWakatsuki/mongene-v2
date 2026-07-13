@@ -1969,3 +1969,28 @@ def test_express_number_property_double_solve_property(seed):
     assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
     assert sol.answer.srepr == sympy.srepr(sympy.expand(sympy.sympify(mr.params["expr_str"])))
     assert sympy.sympify(sol.answer.srepr).free_symbols
+
+
+# ---------------------------------------------------------------------------
+# math.combine_digit_number（g2_l8.calculation Lv1）— P1/C2（2けたの自然数）
+# ---------------------------------------------------------------------------
+def test_combine_digit_number_lv1_construct():
+    ctx = _make_ctx("math.g2_l8.calculation", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "two_digit_number_property"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "simplified_expr"
+    assert [s.op for s in sq.steps] == ["express_swapped_number", "combine_like_terms"]
+
+
+@pytest.mark.parametrize("seed", range(100))
+def test_combine_digit_number_double_solve_property(seed):
+    ctx = _make_ctx("math.g2_l8.calculation", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.combine_digit_number")
+    sol = solver(mr.params["expr_str"], mr.params["operation"])
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+    assert sol.answer.srepr == sympy.srepr(sympy.expand(sympy.sympify(mr.params["expr_str"])))
+    assert sympy.sympify(sol.answer.srepr).free_symbols

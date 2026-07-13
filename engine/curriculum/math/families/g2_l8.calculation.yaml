@@ -1,0 +1,30 @@
+family: math.g2_l8.calculation
+form: calculation
+source_desc: |
+  文字式を使った数の性質②（2けたの自然数など）— 10a+b と 10b+a の和・差を整理する
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: 10a+b と 10b+a の和・差を整理する。
+       example: 十の位が a、一の位が b の2けたの自然数を 10a+b とする。この数と、
+                位を入れかえた数 10b+a の和を求め、式を簡単にせよ。
+  答えは1つの式（SymbolicAnswer・自由変数を含む。和＝11a+11b／差＝9a−9b の形）。独立ソルバ
+  combine_digit_number（sympy.expand）で再計算。数値パラメータが無く構造が毎回同型のため
+  dup_rate が構造的に困難（design_C2）＝2つの位の文字ペア（順序つき）と演算（和/差）を
+  surface として広くとり見かけを分散させる。単一レベルのため level_sep は signature 相異のみ。
+concepts_default: [polynomial.two_digit_number_property]
+levels:
+  "1":
+    signature: two_digit_number_property
+    recipe: math.combine_digit_number
+    params:
+      # 十の位・一の位の文字ペア（相異）×演算（和/差）を surface として振る。
+      letter_pool: [a, b, c, d, f, g, h, k, m, n, p, q, r, s, t, u, w, z]
+      operation_set: [sum, difference]
+    given: [expressions]
+    asked: [simplified_expr]
+    visual: none
+    text: {tier: T1, template: lf_digit_number_v1}
+    hints: [steps_prefix]
+    concept_tags: [polynomial.two_digit_number_property]
+    cause_tags: []
+remedial:
+  default_level: 1
