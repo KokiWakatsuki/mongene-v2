@@ -26,7 +26,8 @@
 
 ## 1. 現状サマリ（2026-07-13c・本セッション終了時）
 
-**進捗: capabilities 82/630（13.0%）**（`python -m engine.tools.goal_progress` 実測）。最新コミット `7ba90c2`。
+**進捗: capabilities 82/630（13.0%）**（`python -m engine.tools.goal_progress` 実測）。最新コミット `f68911a`
+（実装6コミット #46〜#51 + golden 修正 `f68911a` + 本書 `c6b9b6c`）。
 - **C1 g1 数と式: 16/69** ← 本セッション +16セル（正の数・負の数の calculation を網羅）。
 - C2 32/32（完成）・C5 34/36（変化なし）。他グループ未着手。
 
@@ -46,14 +47,16 @@ golden 承認／property 100+seed／eval exit0／mypy strict／ruff clean）で�
 ### 再開時の最初のコマンド
 ```bash
 cd /Users/koki/workspace/mongene-v2
-git log --oneline -6            # 最新 7ba90c2（#51）
+git log --oneline -8            # 最新 f68911a（golden修正）
 git status --porcelain          # 空（clean）
 .venv/bin/python -m engine.tools.goal_progress          # 82/630・C1 16/69
 .venv/bin/python -m engine.eval --seeds 5 --dup-seeds 100   # 一式OK・exit0（約1分）
-.venv/bin/python -m pytest engine_tests/ -o addopts="" -p no:cacheprovider -n auto -q  # FS緑最終確認(約20分)
+# フルスイート（pytest の exit code を必ず pipestatus で確認・§2-#8）:
+.venv/bin/python -m pytest engine_tests/ -o addopts="" -p no:cacheprovider -n auto -q 2>&1 | tail -3; echo "EXIT=${pipestatus[1]}"
 ```
-> ⚠️ 本セッションは各セルを個別 DoD 緑で検証しコミット済。**セッション終了時にフルスイートを1本走らせ緑を確認**
-> （本書執筆時点で走行中→次アカウントは冒頭で結果を確認。前回同様「FS中断→再開時確認」運用）。
+> ⚠️ 本セッション終了時のフルスイートで **golden 陳腐化 11 件を検出→再 approve で修正済み（`f68911a`）**。
+> 修正後 `test_golden_slice` は 246 passed。**修正後のフルスイート緑を再確認するのが再開時の最初のタスク**
+> （§2-#7 の教訓：共有 RNG ヘルパ変更後は golden slice を回す）。
 
 ---
 
@@ -77,6 +80,14 @@ git status --porcelain          # 空（clean）
 6. **★pytest 実行の絞り込み**: `-k "signed"` は全 property（≈1600件）にマッチし約4分。**構文/構成テストだけ**は
    `-k "特定の関数名断片"`（例 `-k "power_single"`）で 1.4 秒。**セル毎の property DoD** は `-k "g1_lN"`
    で当該 200 件（2level×100seed）だけ走らせる（全収集は12000件で重いが実行は200件）。
+7. **★共有 RNG ヘルパの変更は既承認 golden を陳腐化させる**（本セッションで実バグ）。#49 で共有の `_DECIMALS`
+   に小数候補を追加したところ、**先に承認済みだった dec 種を使うセル（l3/l4/l5/l6 の Lv2＝分数小数混在）の
+   抽選列が変わり golden が不一致**になった（フルスイートの `test_golden_slice` で 11 件 failed・fix `f68911a`）。
+   セル自体は正常（dup/拒否/property 全緑）でスナップショットのみ古い→再 approve で解消。
+   **教訓: 乱数に効く共有ヘルパ（`_DECIMALS`・`draw` 経路・フォーマッタ）を変えたら、影響する全既承認 family を
+   再 approve するか `pytest engine_tests/golden/test_golden_slice.py`（約75秒）を回してから次へ進む**。
+8. **★`pytest ... | tail` の exit code は tail のもの**（pytest の失敗が隠れる）。フルスイートは
+   `2>&1 | tail -3; echo "EXIT=${pipestatus[1]}"`（fish は `$pipestatus[2]`）で **pytest 自身の exit code** を見る。
 
 （C2 までの学び＝HANDOFF 13b §2 / 13 §2 も引き続き有効。上付き指数は extract_numbers 非抽出で漏洩なし等。）
 
