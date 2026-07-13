@@ -41,6 +41,7 @@ from engine.packs.math.recipes.polynomial import (
     _sympy_str_from_terms,
 )
 from engine.packs.math.solvers.arithmetic import fmt_number
+from engine.packs.math.solvers.letter_expr import _OPPOSITE_PAIRS
 
 
 def _effective_concept_tags(ctx: CellContext) -> list[str]:
@@ -599,6 +600,73 @@ def compare_signed_numbers(ctx: CellContext, rng: Rng) -> MR:
 
 
 # ---------------------------------------------------------------------------
+# math.classify_number_sign / math.represent_opposite_quantity（g1_l1 knowledge）
+# Lv1: 符号のついた数を正負に分類（ChoiceAnswer）。Lv2: 反対の性質をもつ量を符号つきの数で
+# 表す（数値答え）。Lv2 の答えの絶対値は given の量の大きさに現れ両符号 whitelist されるため
+# G-Q5t 安全（かつ「反対向き＝負」なので答えは given 正数と一致しない）。
+# ---------------------------------------------------------------------------
+@register_recipe("math.classify_number_sign", provides_concepts=["number.classify_sign"])
+def classify_number_sign(ctx: CellContext, rng: Rng) -> MR:
+    """符号のついた数を正の数・負の数に分類する（構成的生成・knowledge Lv1）。"""
+    p = ctx.spec_level.params
+    cands = [v for v in _domain_candidates(cast("dict[str, object]", p["number_domain"])) if v != 0]
+    v = int(draw({"int_set": cands}, rng))
+    statement = f"+{v}" if v > 0 else str(v)  # 符号を明示（正の数も +）
+
+    solver = REGISTRY.solver("math.classify_number_sign")
+    sol = cast(Solution, solver(str(v)))
+    assert isinstance(sol.answer, ChoiceAnswer)
+    expected = "正の数" if v > 0 else "負の数"
+    assert sol.answer.correct == expected
+    assert [s.op for s in sol.steps] == ["read_number_sign", "classify_positive_negative"]
+
+    sub_question = SubQuestionMR(
+        label="(1)", asked="choice", answer=sol.answer, steps=sol.steps,
+        concept_tags=_effective_concept_tags(ctx), cause_tags=_effective_cause_tags(ctx),
+    )
+    return MR(
+        signature=ctx.spec_level.signature, family=ctx.family, level=ctx.level,
+        purpose=ctx.purpose, seed=0,
+        params={"value": str(v)},
+        given={"statement": statement}, sub_questions=[sub_question], visual_plan=None,
+        provenance=Provenance(recipe="math.classify_number_sign"),
+    )
+
+
+@register_recipe("math.represent_opposite_quantity", provides_concepts=["number.opposite_quantity"])
+def represent_opposite_quantity(ctx: CellContext, rng: Rng) -> MR:
+    """反対の性質をもつ量を符号つきの数で表す（構成的生成・knowledge Lv2）。"""
+    p = ctx.spec_level.params
+    idx = int(draw({"int_set": list(range(len(_OPPOSITE_PAIRS)))}, rng))
+    pos_label, neg_label, unit = _OPPOSITE_PAIRS[idx]
+    m0 = int(draw(p["number_domain"], rng))  # 基準の場面（例示）の大きさ
+    m = int(draw(p["number_domain"], rng))   # 問われる量の大きさ
+    # 問われる量は必ず反対の向き（neg_label）＝答えは -m（given の正数 m と一致しない）。
+    statement = (
+        f"「{pos_label} {m0}{unit}」を +{m0}{unit} と表すことにするとき、"
+        f"「{neg_label} {m}{unit}」"
+    )
+
+    solver = REGISTRY.solver("math.represent_opposite_quantity")
+    sol = cast(Solution, solver(pos_label, neg_label, m))
+    assert isinstance(sol.answer, ChoiceAnswer)
+    assert sol.answer.correct == str(-m)  # 反対の向き＝負
+    assert [s.op for s in sol.steps] == ["identify_base_direction", "assign_opposite_sign"]
+
+    sub_question = SubQuestionMR(
+        label="(1)", asked="choice", answer=sol.answer, steps=sol.steps,
+        concept_tags=_effective_concept_tags(ctx), cause_tags=_effective_cause_tags(ctx),
+    )
+    return MR(
+        signature=ctx.spec_level.signature, family=ctx.family, level=ctx.level,
+        purpose=ctx.purpose, seed=0,
+        params={"positive_label": pos_label, "asked_label": neg_label, "magnitude": str(m)},
+        given={"statement": statement}, sub_questions=[sub_question], visual_plan=None,
+        provenance=Provenance(recipe="math.represent_opposite_quantity"),
+    )
+
+
+# ---------------------------------------------------------------------------
 # math.recall_rule（規則想起・ChoiceAnswer）— C1 g1 数と式の残 knowledge セル。
 # 「規則そのもの（正しい記述）」を選ぶ型。答えは規則の文（数字トークンなし）＝G-Q5t 素通り。
 # 具体例（surface）を statement に埋め込み dup を分散する（term_recall と同じ定石・§7.7）。
@@ -714,5 +782,7 @@ __all__ = [
     "term_recall",
     "verify_equation_solution",
     "compare_signed_numbers",
+    "classify_number_sign",
+    "represent_opposite_quantity",
     "recall_rule",
 ]

@@ -1,0 +1,56 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - number.classify_sign
+  provenance:
+    git_commit: ''
+    recipe: math.classify_number_sign
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_classify_sign_v1
+    tier: T1
+  requested:
+    form: knowledge
+    level: 1
+    subject: math
+    unit: g1_l1
+  resolved:
+    form: knowledge
+    level: 1
+    subject: math
+    unit: g1_l1
+  seed: 3
+  signature: number_classify_sign
+problem_ref: 3f774a97b176107a
+problem_text: '次の数は、正の数・負の数のどちらですか。
+
+  -296'
+sub_questions:
+- answer:
+    correct: 負の数
+    distractors:
+    - 正の数
+    fact_id: number.classify_sign
+    kind: choice
+  cause_tags: []
+  concept_tags:
+  - number.classify_sign
+  explanation: まず、数の前についている符号（＋か－か）を読み取る。 数の前についている符号を読み取る次に、符号が＋なら正の数、－なら負の数と分類する。 負の数
+  hints:
+  - 数の前についている符号（＋か－か）を読み取る。
+  label: (1)
+  prompt_text: choice を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 数の前についている符号（＋か－か）を読み取る。
+    op: read_number_sign
+    result_display: 数の前についている符号を読み取る
+    result_srepr: '-'
+  - args: []
+    narration: 符号が＋なら正の数、－なら負の数と分類する。
+    op: classify_positive_negative
+    result_display: 負の数
+    result_srepr: 負の数
+visual_svg: null

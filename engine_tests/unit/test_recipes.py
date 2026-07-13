@@ -2614,6 +2614,59 @@ def test_compare_signed_numbers_double_solve_property(seed):
     assert sympy.sympify(sol.answer.correct) == larger
 
 
+def test_classify_number_sign_l1_lv1_construct():
+    ctx = _make_ctx("math.g1_l1.knowledge", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "number_classify_sign"
+    sq = mr.sub_questions[0]
+    assert sq.answer.kind == "choice"
+    assert sq.answer.correct in {"正の数", "負の数"}
+    assert [s.op for s in sq.steps] == ["read_number_sign", "classify_positive_negative"]
+    assert int(mr.params["value"]) != 0
+
+
+def test_represent_opposite_quantity_l1_lv2_construct():
+    ctx = _make_ctx("math.g1_l1.knowledge", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "number_opposite_quantity"
+    sq = mr.sub_questions[0]
+    assert sq.answer.kind == "choice"
+    assert [s.op for s in sq.steps] == ["identify_base_direction", "assign_opposite_sign"]
+    # 反対の向き＝正しい選択肢は負（given の正数と一致しない）。
+    m = int(mr.params["magnitude"])
+    assert sq.answer.correct == str(-m)
+    assert sq.answer.distractors == [f"+{m}"]
+
+
+@pytest.mark.parametrize("seed", range(100))
+def test_classify_number_sign_double_solve_property(seed):
+    ctx = _make_ctx("math.g1_l1.knowledge", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.classify_number_sign")
+    sol = solver(mr.params["value"])
+    assert sol.answer.correct == mr.sub_questions[0].answer.correct
+    # 符号と分類が sympy で一致。
+    v = sympy.Integer(int(mr.params["value"]))
+    assert sol.answer.correct == ("正の数" if v > 0 else "負の数")
+    assert not any(ch.isdigit() for ch in sol.answer.correct)
+
+
+@pytest.mark.parametrize("seed", range(100))
+def test_represent_opposite_quantity_double_solve_property(seed):
+    ctx = _make_ctx("math.g1_l1.knowledge", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.represent_opposite_quantity")
+    sol = solver(mr.params["positive_label"], mr.params["asked_label"], mr.params["magnitude"])
+    assert sol.answer.correct == mr.sub_questions[0].answer.correct
+    # 反対の向きなので正しい選択肢は負（絶対値＝magnitude）。
+    assert sol.answer.correct == str(-int(mr.params["magnitude"]))
+    assert sol.answer.correct not in sol.answer.distractors
+
+
 def test_recall_rule_transposition_l22_lv1_construct():
     ctx = _make_ctx("math.g1_l22.knowledge", 1)
     rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)

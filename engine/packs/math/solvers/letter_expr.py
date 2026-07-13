@@ -461,6 +461,105 @@ _RULE_MAPS: dict[str, dict[str, tuple[str, list[str]]]] = {
 }
 
 
+# ---------------------------------------------------------------------------
+# 符号のついた数（g1_l1）— 正負の分類（Lv1・ChoiceAnswer）と、反対の性質をもつ量の符号表現
+# （Lv2・数値答え）。分類の答えはテキスト（数字トークンなし）＝G-Q5t 素通り。符号表現の答えは
+# 整数で、その絶対値は given（問題文の量の大きさ）に現れ両符号 whitelist されるため G-Q5t 安全。
+# ---------------------------------------------------------------------------
+@register_solver("math.classify_number_sign")
+def classify_number_sign(value: object) -> Solution:
+    """符号のついた数を正の数・負の数に分類する（knowledge classify・g1_l1 Lv1）。
+
+    数（0 以外）だけからその符号で分類する（double-solve）。答えは ChoiceAnswer
+    （正の数／負の数）。op 列は他の knowledge 型と相異＝level_sep。narration に数字は書かない。
+    """
+    v = sympy.Rational(sympy.sympify(str(value), rational=True))
+    if v == 0:
+        raise ValueError("0 は正の数でも負の数でもない（分類対象外）")
+    correct = "正の数" if v > 0 else "負の数"
+    other = "負の数" if v > 0 else "正の数"
+    steps = [
+        Step(
+            op="read_number_sign",
+            args=[],
+            result_srepr=("+" if v > 0 else "-"),
+            result_display="数の前についている符号を読み取る",
+            narration="数の前についている符号（＋か－か）を読み取る。",
+        ),
+        Step(
+            op="classify_positive_negative",
+            args=[],
+            result_srepr=correct,
+            result_display=correct,
+            narration="符号が＋なら正の数、－なら負の数と分類する。",
+        ),
+    ]
+    answer = ChoiceAnswer(correct=correct, distractors=[other], fact_id="number.classify_sign")
+    return Solution(answer=answer, steps=steps)
+
+
+# 反対の性質をもつ2量（pos は慣用的に正で表す向き・neg はその反対・unit は表示単位）。
+# 一方を正で表すと約束したとき、反対の向きの量は反対の符号で表す（＝規則）。solver が正誤の
+# 根拠を持ち、recipe は表示（単位つき場面文）に流用する。
+_OPPOSITE_PAIRS: list[tuple[str, str, str]] = [
+    ("収入", "支出", "円"),
+    ("得点", "失点", "点"),
+    ("値上がり", "値下がり", "円"),
+    ("増加", "減少", "人"),
+    ("北へ", "南へ", "km"),
+    ("東へ", "西へ", "km"),
+]
+
+
+@register_solver("math.represent_opposite_quantity")
+def represent_opposite_quantity(
+    positive_label: object, asked_label: object, magnitude: object
+) -> Solution:
+    """反対の性質をもつ量を符号つきの数で表す（knowledge apply・g1_l1 Lv2）。
+
+    「正で表す向き（positive_label）」「問われている量の向き（asked_label）」「大きさ（magnitude）」
+    だけから、反対の向きには反対の符号をつける規則で符号つきの数を求める（double-solve）。
+    positive_label と asked_label が同じ向きなら＋、反対の向きなら－。答えは符号つきの数の
+    2択（ChoiceAnswer・＋か－か＝符号の判断が学習点）。誤選択肢は符号を逆にした数。
+    その絶対値は given の量の大きさに現れ両符号 whitelist されるため G-Q5t 安全。
+    """
+    pos = str(positive_label)
+    asked = str(asked_label)
+    mag = int(sympy.Integer(int(str(magnitude))))
+    pair = next((pr for pr in _OPPOSITE_PAIRS if pos in (pr[0], pr[1])), None)
+    if pair is None:
+        raise ValueError(f"未知の向き: {pos!r}")
+    partner = pair[1] if pos == pair[0] else pair[0]
+    if asked == pos:
+        sign = 1
+    elif asked == partner:
+        sign = -1
+    else:
+        raise ValueError(f"asked_label が pair に無い: {asked!r}（pair={pair!r}）")
+    val = sympy.Integer(sign * mag)
+    correct = f"+{val}" if val > 0 else str(val)
+    other_val = -val
+    other = f"+{other_val}" if other_val > 0 else str(other_val)
+    steps = [
+        Step(
+            op="identify_base_direction",
+            args=[],
+            result_srepr=pos,
+            result_display="どちらの向きを正の数で表すことにしたかを読み取る",
+            narration="どちらの向き（性質）を正の数で表すことにしたかを読み取る。",
+        ),
+        Step(
+            op="assign_opposite_sign",
+            args=[],
+            result_srepr=sympy.srepr(val),
+            result_display=correct,
+            narration="正の数で表す向きと反対の向きの量には、反対の符号をつけて表す。",
+        ),
+    ]
+    answer = ChoiceAnswer(correct=correct, distractors=[other], fact_id="number.opposite_quantity")
+    return Solution(answer=answer, steps=steps)
+
+
 @register_solver("math.recall_rule_statement")
 def recall_rule_statement(topic: object, concept: object) -> Solution:
     """規則・約束の正しい記述を選ぶ（knowledge 規則想起・g1_l22 Lv1 ほか）。
@@ -504,5 +603,7 @@ __all__ = [
     "term_recall_definition",
     "verify_equation_solution",
     "compare_signed_numbers",
+    "classify_number_sign",
+    "represent_opposite_quantity",
     "recall_rule_statement",
 ]

@@ -1,0 +1,48 @@
+family: math.g1_l1.knowledge
+form: knowledge
+source_desc: |
+  符号のついた数（正負の分類 Lv1・反対の性質の量の符号表現 Lv2）
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: 正の数・負の数・符号・0の意味を用語として想起する。
+       example: -4 は正の数・負の数のどちらか。またその符号を答えよ。
+  Lv2 desc: 反対の性質をもつ2量のどちらを正としどちらを負とするかを判別・適用する。
+       example: 「500円の収入」を +500円 と表すとき、「300円の支出」を符号を使って表せ。
+  【設計モデル・要検収(Q4)】Lv1 は符号のついた数を「正の数／負の数」に分類する型（classify・
+  ソルバ classify_number_sign）。答えはテキストの ChoiceAnswer＝数字トークンなしで G-Q5t 素通り。
+  0 は分類対象外として構成で除外。Lv2 は「一方の向きを正で表すと約束したとき、反対の向きの量を
+  符号つきの数で表す」apply 型（ソルバ represent_opposite_quantity・反対の向き＝負）。答えは整数で
+  その絶対値は given の量の大きさに現れ両符号 whitelist されるため G-Q5t 安全（かつ反対向き＝負なので
+  答えは given 正数と一致しない）。Lv1(op=read_number_sign/classify_positive_negative)と Lv2(op=
+  identify_base_direction/assign_opposite_sign)は op 列が相異＝level_sep。narration に数字は書かない。
+  【§10 sanction】Lv2 は example と同じく「問われる量は必ず反対の向き（答えは負）」に畳んで realize
+  した（同じ向き＝答えが given 正数と一致し漏洩の実害になるため）。図は無し。word_problem は C14 で別途。
+concepts_default: [number.classify_sign]
+levels:
+  "1":
+    signature: number_classify_sign
+    recipe: math.classify_number_sign
+    params:
+      # 符号のついた整数（0 除外）。域を広くとり dup を下げる（分類は2値のため surface 数で分散）。
+      number_domain: {int_range: [-999, 999]}
+    given: [statement]
+    asked: [choice]
+    visual: none
+    text: {tier: T1, template: lf_classify_sign_v1}
+    hints: [steps_prefix]
+    concept_tags: [number.classify_sign]
+    cause_tags: []
+  "2":
+    signature: number_opposite_quantity
+    recipe: math.represent_opposite_quantity
+    params:
+      # 場面の量の大きさ。反対の向きのペアと2つの大きさで dup 分散。
+      number_domain: {int_range: [2, 500]}
+    given: [statement]
+    asked: [choice]
+    visual: none
+    text: {tier: T1, template: lf_opposite_quantity_v1}
+    hints: [steps_prefix]
+    concept_tags: [number.opposite_quantity]
+    cause_tags: []
+remedial:
+  default_level: 1

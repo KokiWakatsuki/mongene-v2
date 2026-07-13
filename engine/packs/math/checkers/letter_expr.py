@@ -53,6 +53,21 @@ def double_solve_recall_rule(mr: MR) -> Solution:
     return cast(Solution, solver(mr.params["topic"], mr.params["concept"]))
 
 
+@register_checker("math.classify_number_sign.double_solve")
+def double_solve_classify_number_sign(mr: MR) -> Solution:
+    solver = REGISTRY.solver("math.classify_number_sign")
+    return cast(Solution, solver(mr.params["value"]))
+
+
+@register_checker("math.represent_opposite_quantity.double_solve")
+def double_solve_represent_opposite_quantity(mr: MR) -> Solution:
+    solver = REGISTRY.solver("math.represent_opposite_quantity")
+    return cast(
+        Solution,
+        solver(mr.params["positive_label"], mr.params["asked_label"], mr.params["magnitude"]),
+    )
+
+
 __all__ = [
     "double_solve_compute_letter_expression",
     "double_solve_compute_substitution",
@@ -61,4 +76,6 @@ __all__ = [
     "double_solve_verify_equation_solution",
     "double_solve_compare_signed_numbers",
     "double_solve_recall_rule",
+    "double_solve_classify_number_sign",
+    "double_solve_represent_opposite_quantity",
 ]

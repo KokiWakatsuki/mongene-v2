@@ -249,6 +249,12 @@ concepts:
   - id: letter_meaning.rule_recall
     label: "文字を使って数量を表すことの意味・利点を想起する"
     unit: g1_l12
+  - id: number.classify_sign
+    label: "符号のついた数を正の数・負の数に分類する"
+    unit: g1_l1
+  - id: number.opposite_quantity
+    label: "反対の性質をもつ量を符号つきの数で表す"
+    unit: g1_l1
   # --- C1 g1 一次方程式（解法） ---
   - id: equation.solve_by_equality_property
     label: "等式の性質を使って一次方程式を解く（1手）"
