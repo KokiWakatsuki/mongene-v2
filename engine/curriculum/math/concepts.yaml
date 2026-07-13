@@ -204,6 +204,18 @@ concepts:
   - id: letter_expr.substitute_signed
     label: "負の数・累乗を代入し符号に注意して式の値を求める"
     unit: g1_l16
+  - id: notation.product_rule_basic
+    label: "乗法の表し方のきまりで単項の積を簡潔に表す（×省略・数を前に）"
+    unit: g1_l13
+  - id: notation.product_rule_powers
+    label: "累乗・複数文字を含む積を記法規則に従い簡潔に表す"
+    unit: g1_l13
+  - id: notation.quotient_as_fraction
+    label: "除法の表し方のきまりで ÷ を分数の形に表す"
+    unit: g1_l14
+  - id: notation.quotient_mixed
+    label: "乗除の混じった式を1つの分数の形に表す"
+    unit: g1_l14
   # --- C1 g1 一次方程式（解法） ---
   - id: equation.solve_by_equality_property
     label: "等式の性質を使って一次方程式を解く（1手）"

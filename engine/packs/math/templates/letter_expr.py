@@ -15,13 +15,27 @@ from engine.core.registry import REGISTRY
 LF_SUBSTITUTE_VALUE_V1 = (
     "x = {{ given.input_value }} のとき、次の式の値を求めよ。\n{{ given.expression }}"
 )
+# g1_l13.calculation: 乗法の表し方のきまりに従って簡潔に表す
+LF_NOTATION_PRODUCT_V1 = (
+    "次の式を、乗法の表し方のきまりに従って簡潔に表せ。\n{{ given.expression }}"
+)
+# g1_l14.calculation: 除法の表し方のきまりに従って分数の形で表す
+LF_NOTATION_QUOTIENT_V1 = (
+    "次の式を、除法の表し方のきまりに従って分数の形で表せ。\n{{ given.expression }}"
+)
 
 
 def _register_all() -> None:
     REGISTRY.register_template("lf_substitute_value_v1", LF_SUBSTITUTE_VALUE_V1)
+    REGISTRY.register_template("lf_notation_product_v1", LF_NOTATION_PRODUCT_V1)
+    REGISTRY.register_template("lf_notation_quotient_v1", LF_NOTATION_QUOTIENT_V1)
 
 
 _register_all()
 
 
-__all__ = ["LF_SUBSTITUTE_VALUE_V1"]
+__all__ = [
+    "LF_SUBSTITUTE_VALUE_V1",
+    "LF_NOTATION_PRODUCT_V1",
+    "LF_NOTATION_QUOTIENT_V1",
+]

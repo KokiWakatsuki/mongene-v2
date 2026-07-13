@@ -1,0 +1,49 @@
+family: math.g1_l14.calculation
+form: calculation
+source_desc: |
+  除法の表し方のきまり（÷を分数の形に・乗除混合を1つの分数に）
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: ÷を分数の形に直す1手順。
+       example: x÷5 を、除法の表し方のきまりに従って分数の形で表せ。
+  Lv2 desc: 乗除の混じった式を分数形で簡潔に表す複数手順。
+       example: a×3÷b を、乗除の記法のきまりに従って1つの分数の形で表せ。
+  答えは分数形の式（自由変数を含む SymbolicAnswer）。独立ソルバ simplify_notation が与式（÷ を
+  明示）を sympy で正準化し _fmt_monomial_display で分数バー表記にする（double-solve）。Lv1
+  （quotient_basic）は op 列[rewrite_as_fraction]の1手で、文字÷数・数÷文字・文字÷文字の3形で
+  variety を確保。Lv2（quotient_mixed）は乗法部を先にまとめる[collect_numerator,
+  rewrite_as_fraction]の2手＝level_sep。分子＝数×（1〜2文字）・分母＝別の1文字にして分数退化
+  （÷が整数に約分される）を防ぐ。式答えの G-Q5t は display 全体一致でのみ検査され、与式は ÷ を
+  含み答えは分数バーなので部分文字列漏洩は構造上ない（recipe に _leaks 保険も）。図は無し。
+concepts_default: [notation.quotient_as_fraction]
+levels:
+  "1":
+    signature: notation_quotient_basic
+    recipe: math.compute_notation
+    params:
+      # 文字÷数・数÷文字・文字÷文字の3形（÷を分数に）。
+      mode: quotient_basic
+      divisor_domain: {int_range: [2, 12]}
+    given: [expression]
+    asked: [simplified_expr]
+    visual: none
+    text: {tier: T1, template: lf_notation_quotient_v1}
+    hints: [steps_prefix]
+    concept_tags: [notation.quotient_as_fraction]
+    cause_tags: []
+  "2":
+    signature: notation_quotient_mixed
+    recipe: math.compute_notation
+    params:
+      # 数×（1〜2文字）÷別の1文字（乗除混合を1つの分数に）。係数 k≥2。
+      mode: quotient_mixed
+      coeff_domain: {int_range: [2, 9]}
+      num_letter_count_domain: [1, 2]
+    given: [expression]
+    asked: [simplified_expr]
+    visual: none
+    text: {tier: T1, template: lf_notation_quotient_v1}
+    hints: [steps_prefix]
+    concept_tags: [notation.quotient_mixed]
+    cause_tags: []
+remedial:
+  default_level: 1

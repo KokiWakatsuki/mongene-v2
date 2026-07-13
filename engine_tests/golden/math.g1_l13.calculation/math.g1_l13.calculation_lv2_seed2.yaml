@@ -1,0 +1,54 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - notation.product_rule_powers
+  provenance:
+    git_commit: ''
+    recipe: math.compute_notation
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_notation_product_v1
+    tier: T1
+  requested:
+    form: calculation
+    level: 2
+    subject: math
+    unit: g1_l13
+  resolved:
+    form: calculation
+    level: 2
+    subject: math
+    unit: g1_l13
+  seed: 2
+  signature: notation_product_powers
+problem_ref: 7ef4146be0f86eb6
+problem_text: '次の式を、乗法の表し方のきまりに従って簡潔に表せ。
+
+  a × k × k × (-8) × a'
+sub_questions:
+- answer:
+    display: -8a²k²
+    kind: symbolic
+    srepr: Mul(Integer(-1), Integer(8), Pow(Symbol('a'), Integer(2)), Pow(Symbol('k'), Integer(2)))
+  cause_tags: []
+  concept_tags:
+  - notation.product_rule_powers
+  explanation: まず、数を文字の前に書き、乗法の記号 × を省いて表す。 数を前にして × を省く次に、同じ文字の積は、累乗の指数を使ってまとめる。 -8a²k²
+  hints:
+  - 数を文字の前に書き、乗法の記号 × を省いて表す。
+  label: (1)
+  prompt_text: simplified_expr を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 数を文字の前に書き、乗法の記号 × を省いて表す。
+    op: apply_product_rule
+    result_display: 数を前にして × を省く
+    result_srepr: Mul(Integer(-1), Integer(8), Pow(Symbol('a'), Integer(2)), Pow(Symbol('k'), Integer(2)))
+  - args: []
+    narration: 同じ文字の積は、累乗の指数を使ってまとめる。
+    op: combine_powers
+    result_display: -8a²k²
+    result_srepr: Mul(Integer(-1), Integer(8), Pow(Symbol('a'), Integer(2)), Pow(Symbol('k'), Integer(2)))
+visual_svg: null

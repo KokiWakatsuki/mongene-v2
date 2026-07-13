@@ -262,4 +262,139 @@ def compute_substitution(ctx: CellContext, rng: Rng) -> MR:
     )
 
 
-__all__ = ["compute_letter_expression", "compute_substitution"]
+# ---------------------------------------------------------------------------
+# math.compute_notation（g1_l13/l14.calculation）— 乗法・除法の表し方のきまり
+# 単項式の積・商を「× ÷ を明示した未簡約の形」で与え、記法規則に従った簡約形（式答え）を問う。
+# 答えは自由変数を含む式なので display 全体一致で漏洩検査（letter_expr 系の定石）。与式は必ず
+# × か ÷ を含み、答えはそれらを含まない簡約形なので部分文字列漏洩は構造上ない（_leaks で保険）。
+# ---------------------------------------------------------------------------
+_NOTATION_CONCEPTS = [
+    "notation.product_rule_basic",
+    "notation.product_rule_powers",
+    "notation.quotient_as_fraction",
+    "notation.quotient_mixed",
+]
+
+# sympy が特別扱いしない安全な単一小文字（全小文字が Symbol になることは確認済み）。
+_NOTATION_LETTERS = ["a", "b", "c", "d", "k", "m", "n", "p", "x", "y"]
+
+
+def _draw_distinct_letters(k: int, rng: Rng) -> list[str]:
+    """相異なる k 個の文字を引く（draw の int_set で残りから逐次選択＝H8 準拠）。"""
+    pool = list(_NOTATION_LETTERS)
+    out: list[str] = []
+    for _ in range(k):
+        idx = int(draw({"int_set": list(range(len(pool)))}, rng))
+        out.append(pool.pop(idx))
+    return out
+
+
+def _shuffle_pairs(pairs: list[tuple[str, str]], rng: Rng) -> list[tuple[str, str]]:
+    """(sym, disp) の並びを draw で撹拌する（未簡約の見た目＝文字が正準順でない）。"""
+    rest = list(pairs)
+    out: list[tuple[str, str]] = []
+    while rest:
+        idx = int(draw({"int_set": list(range(len(rest)))}, rng))
+        out.append(rest.pop(idx))
+    return out
+
+
+def _num_factor_disp(k: int) -> str:
+    """積の因数として数を表示する（負数はかっこ付き＝教材の生の書き方）。"""
+    return f"({k})" if k < 0 else str(k)
+
+
+def _draw_notation(mode: str, p: dict[str, object], rng: Rng) -> tuple[str, str]:
+    """mode ごとに未簡約の積・商を1つ引き (sympy 文字列, 与式表示) を返す。"""
+    if mode == "product_basic":
+        # 数×文字×文字（×省略・数を前に）。係数は |k|≥2（±1・0 除外）で必ず見える。
+        k = int(draw(p["coeff_domain"], rng))
+        ls = _draw_distinct_letters(2, rng)
+        pairs = [(f"({k})", _num_factor_disp(k))] + [(le, le) for le in ls]
+        order = _shuffle_pairs(pairs, rng)
+        return "*".join(s for s, _ in order), " × ".join(d for _, d in order)
+
+    if mode == "product_powers":
+        # 数×（累乗になる複数文字）。相異なる文字ごとに指数を引き、その回数だけ因数に展開する。
+        k = int(draw(p["coeff_domain"], rng))
+        n_letters = int(draw(p["letter_count_domain"], rng))  # 2 または 3
+        ls = _draw_distinct_letters(n_letters, rng)
+        exps = [int(draw(p["exponent_domain"], rng)) for _ in ls]
+        if max(exps) < 2:  # 少なくとも1文字は累乗（Lv1 との構造差を保証）
+            exps[0] = 2
+        pow_pairs = [(f"({k})", _num_factor_disp(k))]
+        for le, e in zip(ls, exps):
+            pow_pairs.extend([(le, le)] * e)
+        order = _shuffle_pairs(pow_pairs, rng)
+        return "*".join(s for s, _ in order), " × ".join(d for _, d in order)
+
+    if mode == "quotient_basic":
+        # ÷ を分数の形に。文字÷数・数÷文字・文字÷文字の3形で variety を確保。
+        form = str(draw(["letter_over_num", "num_over_letter", "letter_over_letter"], rng))
+        if form == "letter_over_num":
+            le = _draw_distinct_letters(1, rng)[0]
+            n = int(draw(p["divisor_domain"], rng))
+            return f"{le}/({n})", f"{le} ÷ {n}"
+        if form == "num_over_letter":
+            le = _draw_distinct_letters(1, rng)[0]
+            n = int(draw(p["divisor_domain"], rng))
+            return f"({n})/{le}", f"{n} ÷ {le}"
+        l1, l2 = _draw_distinct_letters(2, rng)
+        return f"{l1}/{l2}", f"{l1} ÷ {l2}"
+
+    if mode == "quotient_mixed":
+        # 乗除混合を1つの分数に。分子＝数×（1〜2文字）、分母＝別の1文字（分数退化を防ぐ）。
+        k = int(draw(p["coeff_domain"], rng))  # ≥2（× が自明でない）
+        n_num_letters = int(draw(p["num_letter_count_domain"], rng))  # 1 または 2
+        picks = _draw_distinct_letters(n_num_letters + 1, rng)
+        num_letters, denom = picks[:n_num_letters], picks[n_num_letters]
+        num_pairs = [(str(k), str(k))] + [(le, le) for le in num_letters]
+        order = _shuffle_pairs(num_pairs, rng)
+        num_sym = "*".join(s for s, _ in order)
+        num_disp = " × ".join(d for _, d in order)
+        return f"({num_sym})/({denom})", f"{num_disp} ÷ {denom}"
+
+    raise ValueError(f"未知の mode: {mode!r}")
+
+
+@register_recipe("math.compute_notation", provides_concepts=_NOTATION_CONCEPTS)
+def compute_notation(ctx: CellContext, rng: Rng) -> MR:
+    """単項式の積・商を記法規則に従って簡潔に表す（構成的生成・calculation）。"""
+    p = ctx.spec_level.params
+    mode: str = cast(str, p["mode"])
+    solver = REGISTRY.solver("math.simplify_notation")
+
+    for _ in range(200):
+        expr_str, given_display = _draw_notation(mode, cast("dict[str, object]", p), rng)
+        sol = cast(Solution, solver(expr_str, mode))
+        assert isinstance(sol.answer, SymbolicAnswer)
+        simplified = sympy.sympify(sol.answer.srepr)
+        # 答えは自由変数を残す式（定数退化なし）で、かつ与式に部分文字列として漏れない。
+        if simplified.free_symbols and not _leaks(sol.answer.display, given_display):
+            assert sol.answer.srepr == sympy.srepr(sympy.sympify(expr_str)), (
+                f"double-solve 不一致: {expr_str!r} != {sol.answer.srepr}"
+            )
+            sub_question = SubQuestionMR(
+                label="(1)",
+                asked="simplified_expr",
+                answer=sol.answer,
+                steps=sol.steps,
+                concept_tags=_effective_concept_tags(ctx),
+                cause_tags=_effective_cause_tags(ctx),
+            )
+            return MR(
+                signature=ctx.spec_level.signature,
+                family=ctx.family,
+                level=ctx.level,
+                purpose=ctx.purpose,
+                seed=0,
+                params={"expr_str": expr_str, "mode": mode, "given_disp": given_display},
+                given={"expression": given_display},
+                sub_questions=[sub_question],
+                visual_plan=None,
+                provenance=Provenance(recipe="math.compute_notation"),
+            )
+    raise ValueError(f"非退化・非漏洩の記法問題を構成できず（mode={mode!r}）")
+
+
+__all__ = ["compute_letter_expression", "compute_substitution", "compute_notation"]

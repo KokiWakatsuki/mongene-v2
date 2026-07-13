@@ -17,7 +17,7 @@ import sympy
 from engine.core.contracts import Solution, Step, SymbolicAnswer
 from engine.core.registry import register_solver
 from engine.packs.math.solvers.arithmetic import fmt_number
-from engine.packs.math.solvers.polynomial import _fmt_poly_display
+from engine.packs.math.solvers.polynomial import _fmt_monomial_display, _fmt_poly_display
 
 # mode -> op 列（steps の骨格）。level_sep はこの op 列の相異で作る（同一 unit の
 # Lv1/Lv2 が異なる mode を持つ）。narration に数字は書かない（G-Q5t 偽陽性の元・§5-#9）。
@@ -144,4 +144,66 @@ def evaluate_substitution(expr_str: str, subs_str: object, mode: object) -> Solu
     return Solution(answer=answer, steps=steps)
 
 
-__all__ = ["evaluate_letter_expression", "evaluate_substitution"]
+# ---------------------------------------------------------------------------
+# 乗法・除法の表し方のきまり（g1_l13/l14.calculation）— 単項式の積・商を記法規則に
+# 従って簡潔に表す（簡約表示）。答えは式（自由変数を含む SymbolicAnswer）。与式（× ÷ を
+# 明示した未簡約の積・商）と答え（記号を省いた簡約形）は別表記なので display 全体一致でのみ
+# 漏洩検査され G-Q5t は相対安全（記号 × ÷ を含む与式に、それらを含まない答えが部分文字列で
+# 現れることは構造上ない）。narration には数字を書かない。
+# ---------------------------------------------------------------------------
+_NOTATION_STEPS: dict[str, list[str]] = {
+    # g1_l13 Lv1 乗法の表し方（×省略・数を前に）
+    "product_basic": ["apply_product_rule"],
+    # g1_l13 Lv2 累乗・複数文字（同じ文字の積を累乗にまとめる手が増える）
+    "product_powers": ["apply_product_rule", "combine_powers"],
+    # g1_l14 Lv1 除法の表し方（÷を分数の形に）
+    "quotient_basic": ["rewrite_as_fraction"],
+    # g1_l14 Lv2 乗除混合（乗法部を先にまとめてから1つの分数に）
+    "quotient_mixed": ["collect_numerator", "rewrite_as_fraction"],
+}
+
+_NOTATION_NARRATION: dict[str, str] = {
+    "apply_product_rule": "数を文字の前に書き、乗法の記号 × を省いて表す。",
+    "combine_powers": "同じ文字の積は、累乗の指数を使ってまとめる。",
+    "rewrite_as_fraction": "除法の記号 ÷ を使わず、分数の形で表す。",
+    "collect_numerator": "乗法の部分を先にまとめてから、分数の形に表す。",
+}
+
+_NOTATION_PHRASE: dict[str, str] = {
+    "apply_product_rule": "数を前にして × を省く",
+    "collect_numerator": "乗法の部分をまとめる",
+}
+
+
+@register_solver("math.simplify_notation")
+def simplify_notation(expr_str: str, mode: object) -> Solution:
+    """単項式の積・商を記法規則に従って簡潔に表す（g1_l13/l14.calculation）。
+
+    与式の文字列（× を `*`・÷ を `/` にした未簡約の積・商）だけから sympy が正準化した
+    単項式／分数を得る（double-solve）。答えの表示は `_fmt_monomial_display`（数を前・
+    アルファベット順・累乗の上付き・÷は分数バー）で教材表記にする。mode ごとに steps の
+    op 列を変える＝level_sep。narration には数字を書かない。
+    """
+    mode_s = str(mode)
+    if mode_s not in _NOTATION_STEPS:
+        raise ValueError(f"未知の mode: {mode_s!r}")
+    expr = sympy.sympify(expr_str)
+    r_srepr = sympy.srepr(expr)
+    r_disp = _fmt_monomial_display(expr)
+
+    ops = _NOTATION_STEPS[mode_s]
+    steps = [
+        Step(
+            op=op,
+            args=[],
+            result_srepr=r_srepr,
+            result_display=r_disp if i == len(ops) - 1 else _NOTATION_PHRASE.get(op, ""),
+            narration=_NOTATION_NARRATION[op],
+        )
+        for i, op in enumerate(ops)
+    ]
+    answer = SymbolicAnswer(srepr=r_srepr, display=r_disp)
+    return Solution(answer=answer, steps=steps)
+
+
+__all__ = ["evaluate_letter_expression", "evaluate_substitution", "simplify_notation"]

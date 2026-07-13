@@ -1,0 +1,49 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - notation.quotient_as_fraction
+  provenance:
+    git_commit: ''
+    recipe: math.compute_notation
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_notation_quotient_v1
+    tier: T1
+  requested:
+    form: calculation
+    level: 1
+    subject: math
+    unit: g1_l14
+  resolved:
+    form: calculation
+    level: 1
+    subject: math
+    unit: g1_l14
+  seed: 3
+  signature: notation_quotient_basic
+problem_ref: e5db377d6dc39b00
+problem_text: '次の式を、除法の表し方のきまりに従って分数の形で表せ。
+
+  m ÷ y'
+sub_questions:
+- answer:
+    display: m/y
+    kind: symbolic
+    srepr: Mul(Symbol('m'), Pow(Symbol('y'), Integer(-1)))
+  cause_tags: []
+  concept_tags:
+  - notation.quotient_as_fraction
+  explanation: まず、除法の記号 ÷ を使わず、分数の形で表す。 m/y
+  hints:
+  - 問題文の与えられた値をもう一度確認しよう。
+  label: (1)
+  prompt_text: simplified_expr を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 除法の記号 ÷ を使わず、分数の形で表す。
+    op: rewrite_as_fraction
+    result_display: m/y
+    result_srepr: Mul(Symbol('m'), Pow(Symbol('y'), Integer(-1)))
+visual_svg: null

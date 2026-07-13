@@ -1,0 +1,49 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - notation.product_rule_basic
+  provenance:
+    git_commit: ''
+    recipe: math.compute_notation
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_notation_product_v1
+    tier: T1
+  requested:
+    form: calculation
+    level: 1
+    subject: math
+    unit: g1_l13
+  resolved:
+    form: calculation
+    level: 1
+    subject: math
+    unit: g1_l13
+  seed: 2
+  signature: notation_product_basic
+problem_ref: 2ff8d04716339c3a
+problem_text: '次の式を、乗法の表し方のきまりに従って簡潔に表せ。
+
+  k × 8 × x'
+sub_questions:
+- answer:
+    display: 8kx
+    kind: symbolic
+    srepr: Mul(Integer(8), Symbol('k'), Symbol('x'))
+  cause_tags: []
+  concept_tags:
+  - notation.product_rule_basic
+  explanation: まず、数を文字の前に書き、乗法の記号 × を省いて表す。 8kx
+  hints:
+  - 問題文の与えられた値をもう一度確認しよう。
+  label: (1)
+  prompt_text: simplified_expr を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 数を文字の前に書き、乗法の記号 × を省いて表す。
+    op: apply_product_rule
+    result_display: 8kx
+    result_srepr: Mul(Integer(8), Symbol('k'), Symbol('x'))
+visual_svg: null

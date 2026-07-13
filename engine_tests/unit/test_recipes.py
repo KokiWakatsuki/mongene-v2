@@ -2427,6 +2427,70 @@ def test_compute_substitution_double_solve_property(family, level, seed):
 
 
 # ---------------------------------------------------------------------------
+# math.compute_notation（C1 g1 文字式・乗法/除法の表し方のきまり）— P2
+# ---------------------------------------------------------------------------
+def test_notation_product_basic_l13_lv1_construct():
+    ctx = _make_ctx("math.g1_l13.calculation", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "notation_product_basic"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "simplified_expr"
+    assert [s.op for s in sq.steps] == ["apply_product_rule"]
+    assert "×" in mr.given["expression"]  # 未簡約（× を明示）
+    assert sympy.sympify(sq.answer.srepr).free_symbols  # 答えは式（文字を含む）
+
+
+def test_notation_product_powers_l13_lv2_construct():
+    ctx = _make_ctx("math.g1_l13.calculation", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "notation_product_powers"
+    assert [s.op for s in mr.sub_questions[0].steps] == ["apply_product_rule", "combine_powers"]
+
+
+def test_notation_quotient_basic_l14_lv1_construct():
+    ctx = _make_ctx("math.g1_l14.calculation", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "notation_quotient_basic"
+    assert [s.op for s in mr.sub_questions[0].steps] == ["rewrite_as_fraction"]
+    assert "÷" in mr.given["expression"]  # 除法を明示
+
+
+def test_notation_quotient_mixed_l14_lv2_construct():
+    ctx = _make_ctx("math.g1_l14.calculation", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "notation_quotient_mixed"
+    assert [s.op for s in mr.sub_questions[0].steps] == ["collect_numerator", "rewrite_as_fraction"]
+    assert "×" in mr.given["expression"] and "÷" in mr.given["expression"]  # 乗除混合
+
+
+_NOTATION_CELLS = [
+    ("math.g1_l13.calculation", 1), ("math.g1_l13.calculation", 2),
+    ("math.g1_l14.calculation", 1), ("math.g1_l14.calculation", 2),
+]
+
+
+@pytest.mark.parametrize("family,level", _NOTATION_CELLS)
+@pytest.mark.parametrize("seed", range(100))
+def test_compute_notation_double_solve_property(family, level, seed):
+    ctx = _make_ctx(family, level)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.simplify_notation")
+    sol = solver(mr.params["expr_str"], mr.params["mode"])
+    # 独立ソルバの答えが recipe の答えと一致し、かつ与式の正準化に等しい。
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+    assert sol.answer.srepr == sympy.srepr(sympy.sympify(mr.params["expr_str"]))
+    # 答えは式（自由変数を含む＝定数に退化していない）。
+    assert sympy.sympify(sol.answer.srepr).free_symbols
+    # 答えの表示が与式に部分文字列として漏れない（記号 × ÷ の有無で構造的に非漏洩）。
+    assert sol.answer.display.replace(" ", "") not in mr.given["expression"].replace(" ", "")
+
+
+# ---------------------------------------------------------------------------
 # math.compute_linear_equation（C1 g1 一次方程式・解法）— P2
 # ---------------------------------------------------------------------------
 def test_equation_equality_add_lv1_construct():
@@ -2537,8 +2601,44 @@ def test_equation_speed_fraction_l27_lv2_construct():
     assert "/" in mr.given["equation"]  # 分数係数
 
 
+def test_equation_clear_denominators_two_l23_lv3_construct():
+    ctx = _make_ctx("math.g1_l23.calculation", 3)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "clear_denominators_two"
+    assert [s.op for s in mr.sub_questions[0].steps] == [
+        "clear_denominators", "expand_and_transpose", "solve",
+    ]
+    assert "/" in mr.given["equation"]  # かっこ＋分数
+
+
+def test_equation_proportion_l24_lv1_construct():
+    ctx = _make_ctx("math.g1_l24.calculation", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "proportion_cross_multiply"
+    assert [s.op for s in mr.sub_questions[0].steps] == ["cross_multiply", "solve_proportion"]
+    assert ":" in mr.given["equation"]  # 表示は比例式
+    # 表示（比例式）と solver 用の式（クロス乗算した線形式）は別物。
+    assert ":" not in mr.params["equation_str"]
+
+
+def test_equation_proportion_expand_l24_lv2_construct():
+    ctx = _make_ctx("math.g1_l24.calculation", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "proportion_cross_multiply_expand"
+    assert [s.op for s in mr.sub_questions[0].steps] == [
+        "cross_multiply", "expand_parentheses", "transpose_and_solve",
+    ]
+    assert ":" in mr.given["equation"] and "(" in mr.given["equation"]  # (x+p):b=c:d
+
+
 _EQUATION_WORD_CELLS = [
     ("math.g1_l23.calculation", 2),
+    ("math.g1_l23.calculation", 3),
+    ("math.g1_l24.calculation", 1),
+    ("math.g1_l24.calculation", 2),
     ("math.g1_l25.calculation", 1),
     ("math.g1_l26.calculation", 1),
     ("math.g1_l27.calculation", 2),

@@ -1,0 +1,11 @@
+approved_at: '2026-07-13T17:07:25.486115'
+approver: koki
+content_sha256: 4a97e341d455293b22ffbd911f474b3b853fa0c21e6dc9c781bb96a1259e7600
+family: math.g1_l13.calculation
+files:
+- engine_tests/golden/math.g1_l13.calculation/math.g1_l13.calculation_lv1_seed1.yaml
+- engine_tests/golden/math.g1_l13.calculation/math.g1_l13.calculation_lv1_seed2.yaml
+- engine_tests/golden/math.g1_l13.calculation/math.g1_l13.calculation_lv1_seed3.yaml
+- engine_tests/golden/math.g1_l13.calculation/math.g1_l13.calculation_lv2_seed1.yaml
+- engine_tests/golden/math.g1_l13.calculation/math.g1_l13.calculation_lv2_seed2.yaml
+- engine_tests/golden/math.g1_l13.calculation/math.g1_l13.calculation_lv2_seed3.yaml
