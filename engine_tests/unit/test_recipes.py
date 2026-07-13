@@ -2562,6 +2562,31 @@ def test_number_set_term_recall_l10_lv1_construct():
     assert [s.op for s in mr.sub_questions[0].steps] == ["identify_description", "name_concept"]
 
 
+def test_judge_set_closure_l10_lv2_construct():
+    ctx = _make_ctx("math.g1_l10.knowledge", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "number_set_closure"
+    sq = mr.sub_questions[0]
+    assert sq.answer.correct in {"閉じている", "閉じていない"}
+    assert [s.op for s in sq.steps] == ["check_operation_result", "judge_closure"]
+
+
+@pytest.mark.parametrize("seed", range(100))
+def test_judge_set_closure_double_solve_property(seed):
+    ctx = _make_ctx("math.g1_l10.knowledge", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.judge_set_closure")
+    sol = solver(mr.params["number_set"], mr.params["operation"])
+    assert sol.answer.correct == mr.sub_questions[0].answer.correct
+    # 自然数の減法・除法／整数の除法は閉じていない。それ以外は閉じている。
+    s, o = mr.params["number_set"], mr.params["operation"]
+    not_closed = (s == "natural" and o in {"sub", "div"}) or (s == "integer" and o == "div")
+    assert sol.answer.correct == ("閉じていない" if not_closed else "閉じている")
+    assert not any(ch.isdigit() for ch in sol.answer.correct)
+
+
 _TERM_RECALL_CELLS = [
     ("math.g1_l17.knowledge", 1),
     ("math.g1_l19.knowledge", 1),

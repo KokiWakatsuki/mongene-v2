@@ -243,6 +243,9 @@ concepts:
   - id: number_set.term_recall
     label: "自然数・整数の集合の用語を想起する"
     unit: g1_l10
+  - id: number_set.closure
+    label: "数の集合が四則について閉じているかを判別する"
+    unit: g1_l10
   - id: speed_relation.rule_recall
     label: "速さ・道のり・時間の関係（求める量ごとの式）を想起する"
     unit: g1_l15

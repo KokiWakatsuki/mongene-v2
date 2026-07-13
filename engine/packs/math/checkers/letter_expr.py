@@ -68,6 +68,12 @@ def double_solve_represent_opposite_quantity(mr: MR) -> Solution:
     )
 
 
+@register_checker("math.judge_set_closure.double_solve")
+def double_solve_judge_set_closure(mr: MR) -> Solution:
+    solver = REGISTRY.solver("math.judge_set_closure")
+    return cast(Solution, solver(mr.params["number_set"], mr.params["operation"]))
+
+
 __all__ = [
     "double_solve_compute_letter_expression",
     "double_solve_compute_substitution",
@@ -78,4 +84,5 @@ __all__ = [
     "double_solve_recall_rule",
     "double_solve_classify_number_sign",
     "double_solve_represent_opposite_quantity",
+    "double_solve_judge_set_closure",
 ]

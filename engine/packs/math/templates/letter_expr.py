@@ -40,6 +40,8 @@ LF_RULE_RECALL_V1 = "{{ given.statement }}。正しく述べているものを1�
 LF_CLASSIFY_SIGN_V1 = "次の数は、正の数・負の数のどちらですか。\n{{ given.statement }}"
 # g1_l1.knowledge Lv2: 反対の性質をもつ量を符号を使って表す
 LF_OPPOSITE_QUANTITY_V1 = "{{ given.statement }} を、符号を使って表しなさい。"
+# g1_l10.knowledge Lv2: 数の集合が四則について閉じているかを判別する
+LF_SET_CLOSURE_V1 = "{{ given.statement }}。あてはまるものを選びなさい。"
 
 
 def _register_all() -> None:
@@ -53,6 +55,7 @@ def _register_all() -> None:
     REGISTRY.register_template("lf_rule_recall_v1", LF_RULE_RECALL_V1)
     REGISTRY.register_template("lf_classify_sign_v1", LF_CLASSIFY_SIGN_V1)
     REGISTRY.register_template("lf_opposite_quantity_v1", LF_OPPOSITE_QUANTITY_V1)
+    REGISTRY.register_template("lf_set_closure_v1", LF_SET_CLOSURE_V1)
 
 
 _register_all()
@@ -69,4 +72,5 @@ __all__ = [
     "LF_RULE_RECALL_V1",
     "LF_CLASSIFY_SIGN_V1",
     "LF_OPPOSITE_QUANTITY_V1",
+    "LF_SET_CLOSURE_V1",
 ]

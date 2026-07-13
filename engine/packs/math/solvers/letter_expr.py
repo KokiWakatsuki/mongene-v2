@@ -560,6 +560,51 @@ def represent_opposite_quantity(
     return Solution(answer=answer, steps=steps)
 
 
+# 数の集合が四則で閉じているか（g1_l10 Lv2）。set×operation の真偽表（自然数は減法・除法で
+# 閉じておらず、整数は除法で閉じていない）。答えはテキスト（数字トークンなし）＝G-Q5t 素通り。
+_SET_CLOSURE: dict[tuple[str, str], bool] = {
+    ("natural", "add"): True, ("natural", "sub"): False,
+    ("natural", "mul"): True, ("natural", "div"): False,
+    ("integer", "add"): True, ("integer", "sub"): True,
+    ("integer", "mul"): True, ("integer", "div"): False,
+}
+
+
+@register_solver("math.judge_set_closure")
+def judge_set_closure(number_set: object, operation: object) -> Solution:
+    """数の集合が四則演算について閉じているかを判別する（knowledge verify・g1_l10 Lv2）。
+
+    集合（natural/integer）と演算（add/sub/mul/div）だけから、結果が必ずその集合に入るか
+    （閉じているか）を真偽表で判定する（double-solve）。答えは ChoiceAnswer（閉じている／
+    閉じていない）。op 列は用語想起 Lv1 と相異＝level_sep。narration に数字は書かない。
+    """
+    s = str(number_set)
+    o = str(operation)
+    if (s, o) not in _SET_CLOSURE:
+        raise ValueError(f"未知の (集合, 演算): {(s, o)!r}")
+    closed = _SET_CLOSURE[(s, o)]
+    correct = "閉じている" if closed else "閉じていない"
+    other = "閉じていない" if closed else "閉じている"
+    steps = [
+        Step(
+            op="check_operation_result",
+            args=[],
+            result_srepr=f"{s}.{o}",
+            result_display="その演算の結果が必ずその集合に入るかを調べる",
+            narration="その集合の数どうしでその演算をした結果が、いつでもその集合に入るかを調べる。",
+        ),
+        Step(
+            op="judge_closure",
+            args=[],
+            result_srepr=correct,
+            result_display=correct,
+            narration="結果がいつでもその集合に入るなら閉じている、そうでなければ閉じていないと判断する。",
+        ),
+    ]
+    answer = ChoiceAnswer(correct=correct, distractors=[other], fact_id=f"number_set.closure.{s}.{o}")
+    return Solution(answer=answer, steps=steps)
+
+
 @register_solver("math.recall_rule_statement")
 def recall_rule_statement(topic: object, concept: object) -> Solution:
     """規則・約束の正しい記述を選ぶ（knowledge 規則想起・g1_l22 Lv1 ほか）。
@@ -605,5 +650,6 @@ __all__ = [
     "compare_signed_numbers",
     "classify_number_sign",
     "represent_opposite_quantity",
+    "judge_set_closure",
     "recall_rule_statement",
 ]

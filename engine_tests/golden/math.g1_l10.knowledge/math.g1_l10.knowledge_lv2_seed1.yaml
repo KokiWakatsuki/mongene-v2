@@ -1,0 +1,54 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - number_set.closure
+  provenance:
+    git_commit: ''
+    recipe: math.judge_set_closure
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_set_closure_v1
+    tier: T1
+  requested:
+    form: knowledge
+    level: 2
+    subject: math
+    unit: g1_l10
+  resolved:
+    form: knowledge
+    level: 2
+    subject: math
+    unit: g1_l10
+  seed: 1
+  signature: number_set_closure
+problem_ref: a6834aedf99fc308
+problem_text: 自然数（たとえば 34, 82 など）の集合は、減法について閉じているといえますか。あてはまるものを選びなさい。
+sub_questions:
+- answer:
+    correct: 閉じていない
+    distractors:
+    - 閉じている
+    fact_id: number_set.closure.natural.sub
+    kind: choice
+  cause_tags: []
+  concept_tags:
+  - number_set.closure
+  explanation: まず、その集合の数どうしでその演算をした結果が、いつでもその集合に入るかを調べる。 その演算の結果が必ずその集合に入るかを調べる次に、結果がいつでもその集合に入るなら閉じている、そうでなければ閉じていないと判断する。 閉じていない
+  hints:
+  - その集合の数どうしでその演算をした結果が、いつでもその集合に入るかを調べる。
+  label: (1)
+  prompt_text: choice を求めなさい。
+  solution_steps:
+  - args: []
+    narration: その集合の数どうしでその演算をした結果が、いつでもその集合に入るかを調べる。
+    op: check_operation_result
+    result_display: その演算の結果が必ずその集合に入るかを調べる
+    result_srepr: natural.sub
+  - args: []
+    narration: 結果がいつでもその集合に入るなら閉じている、そうでなければ閉じていないと判断する。
+    op: judge_closure
+    result_display: 閉じていない
+    result_srepr: 閉じていない
+visual_svg: null

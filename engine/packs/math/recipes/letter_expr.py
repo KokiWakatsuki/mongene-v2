@@ -667,6 +667,51 @@ def represent_opposite_quantity(ctx: CellContext, rng: Rng) -> MR:
 
 
 # ---------------------------------------------------------------------------
+# math.judge_set_closure（g1_l10 Lv2）— 数の集合が四則で閉じているかの判別（verify）。
+# 答えはテキスト（閉じている／閉じていない）＝G-Q5t 素通り。集合の要素例（数）を surface に
+# 埋め込み dup 分散（例は集合の要素であって、誤解を招く特定の演算例は出さない）。
+# ---------------------------------------------------------------------------
+_SET_LABELS = {"natural": "自然数", "integer": "整数"}
+_OP_LABELS = {"add": "加法", "sub": "減法", "mul": "乗法", "div": "除法"}
+
+
+@register_recipe("math.judge_set_closure", provides_concepts=["number_set.closure"])
+def judge_set_closure(ctx: CellContext, rng: Rng) -> MR:
+    """数の集合が四則について閉じているかを判別する（構成的生成・knowledge Lv2）。"""
+    p = ctx.spec_level.params
+    number_set = str(draw(cast("list[str]", p["set_domain"]), rng))
+    operation = str(draw(cast("list[str]", p["op_domain"]), rng))
+    cands = [v for v in _domain_candidates(cast("dict[str, object]", p["number_domain"])) if v > 0]
+    a = int(draw({"int_set": cands}, rng))
+    b = int(draw({"int_set": [v for v in cands if v != a]}, rng))
+    set_label, op_label = _SET_LABELS[number_set], _OP_LABELS[operation]
+    # 例は集合の要素の列挙（誤解を招く特定の演算例は避ける）。整数は負・0 も含めて例示。
+    if number_set == "integer":
+        elems = f"-{a}, 0, {b}"
+    else:
+        lo, hi = sorted((a, b))
+        elems = f"{lo}, {hi}"
+    statement = f"{set_label}（たとえば {elems} など）の集合は、{op_label}について閉じているといえますか"
+
+    solver = REGISTRY.solver("math.judge_set_closure")
+    sol = cast(Solution, solver(number_set, operation))
+    assert isinstance(sol.answer, ChoiceAnswer)
+    assert [s.op for s in sol.steps] == ["check_operation_result", "judge_closure"]
+
+    sub_question = SubQuestionMR(
+        label="(1)", asked="choice", answer=sol.answer, steps=sol.steps,
+        concept_tags=_effective_concept_tags(ctx), cause_tags=_effective_cause_tags(ctx),
+    )
+    return MR(
+        signature=ctx.spec_level.signature, family=ctx.family, level=ctx.level,
+        purpose=ctx.purpose, seed=0,
+        params={"number_set": number_set, "operation": operation, "statement": statement},
+        given={"statement": statement}, sub_questions=[sub_question], visual_plan=None,
+        provenance=Provenance(recipe="math.judge_set_closure"),
+    )
+
+
+# ---------------------------------------------------------------------------
 # math.recall_rule（規則想起・ChoiceAnswer）— C1 g1 数と式の残 knowledge セル。
 # 「規則そのもの（正しい記述）」を選ぶ型。答えは規則の文（数字トークンなし）＝G-Q5t 素通り。
 # 具体例（surface）を statement に埋め込み dup を分散する（term_recall と同じ定石・§7.7）。
@@ -784,5 +829,6 @@ __all__ = [
     "compare_signed_numbers",
     "classify_number_sign",
     "represent_opposite_quantity",
+    "judge_set_closure",
     "recall_rule",
 ]
