@@ -47,6 +47,12 @@ def double_solve_compare_signed_numbers(mr: MR) -> Solution:
     return cast(Solution, solver(mr.params["a"], mr.params["b"]))
 
 
+@register_checker("math.recall_rule.double_solve")
+def double_solve_recall_rule(mr: MR) -> Solution:
+    solver = REGISTRY.solver("math.recall_rule_statement")
+    return cast(Solution, solver(mr.params["topic"], mr.params["concept"]))
+
+
 __all__ = [
     "double_solve_compute_letter_expression",
     "double_solve_compute_substitution",
@@ -54,4 +60,5 @@ __all__ = [
     "double_solve_term_recall",
     "double_solve_verify_equation_solution",
     "double_solve_compare_signed_numbers",
+    "double_solve_recall_rule",
 ]

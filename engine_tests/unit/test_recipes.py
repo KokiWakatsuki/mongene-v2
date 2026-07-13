@@ -2603,6 +2603,32 @@ def test_compare_signed_numbers_double_solve_property(seed):
     assert sympy.sympify(sol.answer.correct) == larger
 
 
+def test_recall_rule_transposition_l22_lv1_construct():
+    ctx = _make_ctx("math.g1_l22.knowledge", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "transposition_rule_recall"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "choice"
+    assert sq.answer.kind == "choice"
+    assert [s.op for s in sq.steps] == ["read_rule_context", "recall_correct_rule"]
+    assert mr.params["concept"] in {"definition", "sign_reason"}
+
+
+@pytest.mark.parametrize("seed", range(100))
+def test_recall_rule_double_solve_property(seed):
+    ctx = _make_ctx("math.g1_l22.knowledge", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.recall_rule_statement")
+    sol = solver(mr.params["topic"], mr.params["concept"])
+    assert sol.answer.correct == mr.sub_questions[0].answer.correct
+    assert sol.answer.fact_id == mr.sub_questions[0].answer.fact_id
+    # 答えは規則の文（数字トークンなし）＝G-Q5t 素通り。
+    assert not any(ch.isdigit() for ch in sol.answer.correct)
+    assert sol.answer.correct not in sol.answer.distractors
+
+
 # ---------------------------------------------------------------------------
 # math.compute_linear_equation（C1 g1 一次方程式・解法）— P2
 # ---------------------------------------------------------------------------

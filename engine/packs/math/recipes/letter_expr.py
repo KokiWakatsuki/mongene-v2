@@ -585,6 +585,56 @@ def compare_signed_numbers(ctx: CellContext, rng: Rng) -> MR:
     raise ValueError("compare_signed_numbers: 負の数を含む2数を構成できず")
 
 
+# ---------------------------------------------------------------------------
+# math.recall_rule（規則想起・ChoiceAnswer）— C1 g1 数と式の残 knowledge セル。
+# 「規則そのもの（正しい記述）」を選ぶ型。答えは規則の文（数字トークンなし）＝G-Q5t 素通り。
+# 具体例（surface）を statement に埋め込み dup を分散する（term_recall と同じ定石・§7.7）。
+# 移項(l22)を最初の顧客に、l3/l4/l5/l12/l15 の規則想起へ横展開できる汎用 recipe。
+# ---------------------------------------------------------------------------
+_RULE_RECALL_CONCEPTS = [
+    "transposition.rule_recall",
+]
+
+
+def _draw_rule_statement(topic: str, concept: str, rng: Rng, p: dict[str, object]) -> str:
+    """(topic, concept) から surface（具体例つきの文脈文）を組み立てる。"""
+    if topic == "transposition":
+        # g1_l22 移項。具体例の一次方程式 a·x + b = c を surface として埋め込み dup 分散。
+        ex = _draw_eq_example_disp(rng, p)
+        if concept == "definition":
+            return f"方程式 {ex} を解くときに使う「移項」とは、どのような操作か"
+        return f"方程式 {ex} で、ある項を反対の辺に移すと符号が変わるのはなぜか"  # sign_reason
+    raise ValueError(f"未知の topic: {topic!r}")
+
+
+@register_recipe("math.recall_rule", provides_concepts=_RULE_RECALL_CONCEPTS)
+def recall_rule(ctx: CellContext, rng: Rng) -> MR:
+    """規則・約束の正しい記述を選ぶ（knowledge 規則想起・g1_l22 Lv1 ほか）。"""
+    p = ctx.spec_level.params
+    topic = cast(str, p["topic"])
+    concept = str(draw(cast("list[str]", p["concept_set"]), rng))
+    statement = _draw_rule_statement(topic, concept, rng, cast("dict[str, object]", p))
+
+    solver = REGISTRY.solver("math.recall_rule_statement")
+    sol = cast(Solution, solver(topic, concept))
+    assert isinstance(sol.answer, ChoiceAnswer)
+    assert [s.op for s in sol.steps] == ["read_rule_context", "recall_correct_rule"]
+    assert sol.answer.correct not in sol.answer.distractors
+
+    sub_question = SubQuestionMR(
+        label="(1)", asked="choice", answer=sol.answer, steps=sol.steps,
+        concept_tags=_effective_concept_tags(ctx), cause_tags=_effective_cause_tags(ctx),
+    )
+    return MR(
+        signature=ctx.spec_level.signature, family=ctx.family, level=ctx.level,
+        purpose=ctx.purpose, seed=0,
+        # statement（具体例＝surface）を params に含め dup_key を分散させる（§7.7）。
+        params={"topic": topic, "concept": concept, "statement": statement},
+        given={"statement": statement}, sub_questions=[sub_question], visual_plan=None,
+        provenance=Provenance(recipe="math.recall_rule"),
+    )
+
+
 __all__ = [
     "compute_letter_expression",
     "compute_substitution",
@@ -592,4 +642,5 @@ __all__ = [
     "term_recall",
     "verify_equation_solution",
     "compare_signed_numbers",
+    "recall_rule",
 ]

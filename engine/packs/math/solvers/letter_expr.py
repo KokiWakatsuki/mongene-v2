@@ -350,6 +350,72 @@ def compare_signed_numbers(a: object, b: object) -> Solution:
     return Solution(answer=answer, steps=steps)
 
 
+# ---------------------------------------------------------------------------
+# 規則・約束の想起（knowledge・ChoiceAnswer）— C1 g1 数と式の残 knowledge セル。
+# 「説明ではなく規則そのもの（正しい記述）」を選ぶ型。term_recall（名称想起）と違い correct が
+# 短い名称でなく規則の文（数字トークンを含まない）＝G-Q5t 素通り。distractors は同 topic の
+# もっともらしい誤り記述。topic ごとに (concept -> (正しい記述, 誤り記述リスト)) を持つ。
+# 移項(l22)を最初の顧客として、l3/l4/l5/l12/l15 の規則想起へ横展開できる汎用ソルバ。
+# ---------------------------------------------------------------------------
+_RULE_MAPS: dict[str, dict[str, tuple[str, list[str]]]] = {
+    # g1_l22 移項（定義・符号が変わる理由）
+    "transposition": {
+        "definition": (
+            "等式の一方の辺の項を、符号を変えて他方の辺に移すこと",
+            [
+                "等式の左辺と右辺を、そっくりそのまま入れかえること",
+                "等式の両辺に同じ数をかけて、係数をそろえること",
+                "かっこの前の数を、かっこの中の各項にかけてかっこを外すこと",
+            ],
+        ),
+        "sign_reason": (
+            "両辺に同じ数をたす・ひくという等式の性質を使っているから",
+            [
+                "移項するときは、必ず係数で両辺をわるから",
+                "左辺と右辺は、いつでも反対の符号になる決まりだから",
+                "移項では符号は変わらず、位置だけが入れかわるから",
+            ],
+        ),
+    },
+}
+
+
+@register_solver("math.recall_rule_statement")
+def recall_rule_statement(topic: object, concept: object) -> Solution:
+    """規則・約束の正しい記述を選ぶ（knowledge 規則想起・g1_l22 Lv1 ほか）。
+
+    topic（規則の分野）と concept（問われている規則）だけから正しい記述を判定する
+    （具体例の値は無関係・double-solve）。答えは ChoiceAnswer（concept で correct が変わる）。
+    distractors は同 topic のもっともらしい誤り記述。op 列は用語想起／verify 型と相異＝level_sep。
+    """
+    t = str(topic)
+    c = str(concept)
+    if t not in _RULE_MAPS:
+        raise ValueError(f"未知の topic: {t!r}")
+    rules = _RULE_MAPS[t]
+    if c not in rules:
+        raise ValueError(f"未知の concept: {c!r}（topic={t!r}）")
+    correct, distractors = rules[c]
+    steps = [
+        Step(
+            op="read_rule_context",
+            args=[],
+            result_srepr=c,
+            result_display="問われている規則が何についてかを読み取る",
+            narration="問題で問われている規則や約束が、何についてのものかを読み取る。",
+        ),
+        Step(
+            op="recall_correct_rule",
+            args=[],
+            result_srepr=correct,
+            result_display=correct,
+            narration="その規則の正しい内容を思い出して選ぶ。",
+        ),
+    ]
+    answer = ChoiceAnswer(correct=correct, distractors=list(distractors), fact_id=f"{t}.rule.{c}")
+    return Solution(answer=answer, steps=steps)
+
+
 __all__ = [
     "evaluate_letter_expression",
     "evaluate_substitution",
@@ -357,4 +423,5 @@ __all__ = [
     "term_recall_definition",
     "verify_equation_solution",
     "compare_signed_numbers",
+    "recall_rule_statement",
 ]

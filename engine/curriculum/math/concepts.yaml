@@ -238,6 +238,9 @@ concepts:
   - id: equation.solve_by_equality_property_multi
     label: "等式の性質を組合せて一次方程式を解く（複数手）"
     unit: g1_l21
+  - id: transposition.rule_recall
+    label: "移項の定義・符号が変わる理由を規則として想起する"
+    unit: g1_l22
   - id: equation.solve_by_transpose
     label: "移項を使って一次方程式を解く（1回の移項）"
     unit: g1_l22

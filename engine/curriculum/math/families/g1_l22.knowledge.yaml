@@ -1,0 +1,35 @@
+family: math.g1_l22.knowledge
+form: knowledge
+source_desc: |
+  移項とは何か・なぜ符号が変わるか（Lv1 規則想起）
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: 移項とは何か・なぜ符号が変わるかを判別する。
+       example: 方程式を解くときの「移項」とは何をすることか説明し、移項すると符号が変わる理由を
+                等式の性質にもとづいて述べよ。
+  【設計モデル・要検収(Q4)】「規則そのものの正しい記述を選ぶ」単一選択に realize（用語の名称
+  想起ではなく規則の記述選択＝汎用ソルバ recall_rule_statement・topic=transposition）。concept で
+  correct が変わる（definition＝符号を変えて他辺に移す／sign_reason＝両辺に同数を加減する等式の
+  性質）。distractors は同 topic のもっともらしい誤り記述。具体例の一次方程式を surface に埋め込み
+  dup 分散。op 列[read_rule_context, recall_correct_rule]（用語想起 identify_description/name_concept
+  や verify とは相異）。答えは規則の文で数字トークンを含まず G-Q5t 素通り（§7.7）。図は無し。
+  【§10 sanction】example は「定義の説明＋理由の説明」の2部だが、単一選択の各インスタンスでは
+  concept ごとに一方を問う（definition か sign_reason を毎回 1 つ引く）形に畳んで realize した。
+concepts_default: [transposition.rule_recall]
+levels:
+  "1":
+    signature: transposition_rule_recall
+    recipe: math.recall_rule
+    params:
+      topic: transposition
+      concept_set: [definition, sign_reason]
+      # 具体例の一次方程式 a·x + b = c を surface に埋め込み dup 分散する。
+      coeff_domain: {int_range: [-9, 9]}
+    given: [statement]
+    asked: [choice]
+    visual: none
+    text: {tier: T1, template: lf_rule_recall_v1}
+    hints: [steps_prefix]
+    concept_tags: [transposition.rule_recall]
+    cause_tags: []
+remedial:
+  default_level: 1

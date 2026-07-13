@@ -34,6 +34,8 @@ LF_INEQUALITY_SYMBOL_V1 = (
     "次の数量の大小の関係を不等号で表すとき、あてはまる不等号はどれですか。"
     "\n{{ given.statement }}"
 )
+# g1_l22.knowledge Lv1: 規則（移項の定義・理由）の正しい記述を選ぶ（規則想起）
+LF_RULE_RECALL_V1 = "{{ given.statement }}。正しく述べているものを1つ選びなさい。"
 
 
 def _register_all() -> None:
@@ -44,6 +46,7 @@ def _register_all() -> None:
     REGISTRY.register_template("lf_verify_solution_v1", LF_VERIFY_SOLUTION_V1)
     REGISTRY.register_template("lf_compare_numbers_v1", LF_COMPARE_NUMBERS_V1)
     REGISTRY.register_template("lf_inequality_symbol_v1", LF_INEQUALITY_SYMBOL_V1)
+    REGISTRY.register_template("lf_rule_recall_v1", LF_RULE_RECALL_V1)
 
 
 _register_all()
@@ -57,4 +60,5 @@ __all__ = [
     "LF_VERIFY_SOLUTION_V1",
     "LF_COMPARE_NUMBERS_V1",
     "LF_INEQUALITY_SYMBOL_V1",
+    "LF_RULE_RECALL_V1",
 ]
