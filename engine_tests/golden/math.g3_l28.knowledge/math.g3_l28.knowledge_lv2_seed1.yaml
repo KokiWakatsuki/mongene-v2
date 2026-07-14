@@ -1,0 +1,56 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - quadratic_solving_method_choice.rule_recall
+  provenance:
+    git_commit: ''
+    recipe: math.recall_rule
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_rule_recall_v1
+    tier: T1
+  requested:
+    form: knowledge
+    level: 2
+    subject: math
+    unit: g3_l28
+  resolved:
+    form: knowledge
+    level: 2
+    subject: math
+    unit: g3_l28
+  seed: 1
+  signature: quadratic_solving_method_rule_recall
+problem_ref: 985271ecc341b4b4
+problem_text: 2次方程式 x² - x - 30 = 0 を解くときについて。正しく述べているものを1つ選びなさい。
+sub_questions:
+- answer:
+    correct: 左辺が整数の範囲でそのまま因数分解できる形だから、因数分解を使う方がよい
+    distractors:
+    - 左辺が整数の範囲では因数分解できない形だから、解の公式を使う方がよい
+    - つねに解の公式を使うのがよく、因数分解を考える必要はない
+    - 係数に文字が含まれているから、まず移項してから考える必要がある
+    fact_id: quadratic_solving_method_choice.rule.factoring_suitable
+    kind: choice
+  cause_tags: []
+  concept_tags:
+  - quadratic_solving_method_choice.rule_recall
+  explanation: まず、問題で問われている規則や約束が、何についてのものかを読み取る。 問われている規則が何についてかを読み取る次に、その規則の正しい内容を思い出して選ぶ。 左辺が整数の範囲でそのまま因数分解できる形だから、因数分解を使う方がよい
+  hints:
+  - 問題で問われている規則や約束が、何についてのものかを読み取る。
+  label: (1)
+  prompt_text: choice を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 問題で問われている規則や約束が、何についてのものかを読み取る。
+    op: read_rule_context
+    result_display: 問われている規則が何についてかを読み取る
+    result_srepr: factoring_suitable
+  - args: []
+    narration: その規則の正しい内容を思い出して選ぶ。
+    op: recall_correct_rule
+    result_display: 左辺が整数の範囲でそのまま因数分解できる形だから、因数分解を使う方がよい
+    result_srepr: 左辺が整数の範囲でそのまま因数分解できる形だから、因数分解を使う方がよい
+visual_svg: null

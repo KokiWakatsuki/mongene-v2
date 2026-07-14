@@ -420,6 +420,7 @@ _TERM_RECALL_CONCEPTS = [
     "real_numbers.term_recall",
     "quadratic_terms.term_recall",
     "approximation.term_recall_g3",
+    "quadratic_coefficient.term_recall",
 ]
 
 
@@ -527,6 +528,21 @@ def _draw_term_statement(domain: str, concept: str, rng: Rng, p: dict[str, objec
         if concept == "quadratic_equation":
             return f"移項して整理すると {eqx} のように、x の2乗をふくむ形になる方程式"
         return f"方程式 {eqx} を成り立たせる x の値"  # solution
+
+    if domain == "quadratic_coefficient":
+        # g3_l26 2次方程式 ax²+bx+c=0 の係数の対応。具体例を埋め込み surface を分散する。
+        # b・c は 0 だと項が式から消えて表示できないため非0 に限定する。
+        a_cands = [v for v in _domain_candidates(cast("dict[str, object]", p["a_domain"])) if v != 0]
+        bc_cands = [v for v in _domain_candidates(cast("dict[str, object]", p["number_domain"])) if v != 0]
+        a = int(draw({"int_set": a_cands}, rng))
+        b = int(draw({"int_set": bc_cands}, rng))
+        c = int(draw({"int_set": bc_cands}, rng))
+        eqx = f"{_fmt_poly_x_terms([(a, 2), (b, 1), (c, 0)])} = 0"
+        if concept == "coeff_a":
+            return f"2次方程式 {eqx} において、x² の項の係数"
+        if concept == "coeff_b":
+            return f"2次方程式 {eqx} において、x の項の係数"
+        return f"2次方程式 {eqx} において、定数項"  # coeff_c
 
     if domain == "prime_concepts":
         # g1_l11 素数まわりの用語。相異なる2つの具体例を埋め込み surface を分散する
@@ -828,6 +844,9 @@ _RULE_RECALL_CONCEPTS = [
     "expansion_meaning.rule_recall",
     "factorization_relation.rule_recall",
     "sqrt_magnitude.rule_recall",
+    "multiplication_formula_choice.rule_recall",
+    "sqrt_square_meaning.rule_recall",
+    "quadratic_solving_method_choice.rule_recall",
 ]
 
 
@@ -949,7 +968,57 @@ def _draw_rule_statement(topic: str, concept: str, rng: Rng, p: dict[str, object
             b = int(draw(p["number_domain"], rng))
         return f"√{a} と √{b} のような、正の数の平方根の大小について成り立つこと"
 
+    if topic == "sqrt_square_meaning":
+        # g3_l14 √(a²)=|a| の意味。負の数を含む具体例を surface として埋め込み dup 分散。
+        cands = [v for v in _domain_candidates(cast("dict[str, object]", p["number_domain"])) if v != 0]
+        n = int(draw({"int_set": cands}, rng))
+        return f"√(({n})²) の値について"
+
+    if topic == "multiplication_formula_choice":
+        # g3_l3 乗法公式の識別。concept に応じて (x+a)(x+b) の a,b の関係を構成する
+        # （一般形: a≠b かつ a≠-b／平方の形: a=b／和と差の積の形: b=-a）。
+        cands = [v for v in _domain_candidates(cast("dict[str, object]", p["number_domain"])) if v != 0]
+        a = int(draw({"int_set": cands}, rng))
+        if concept == "perfect_square_form":
+            b = a
+        elif concept == "diff_of_squares_form":
+            b = -a
+        else:  # general_form: a と異なり、かつ a の反対の符号(-a)でもない
+            b_cands = [v for v in cands if v != a and v != -a]
+            b = int(draw({"int_set": b_cands}, rng))
+        sa = f"+ {a}" if a >= 0 else f"- {-a}"
+        sb = f"+ {b}" if b >= 0 else f"- {-b}"
+        return f"(x {sa})(x {sb}) を乗法公式を使って展開するときについて"
+
+    if topic == "quadratic_solving_method_choice":
+        # g3_l28 2次方程式の解き方の選択。concept に応じて因数分解しやすい形／
+        # しにくい形（判別式が平方数でない）を構成する。
+        if concept == "factoring_suitable":
+            small = {"int_set": [n for n in range(-9, 10) if n != 0]}
+            r1 = int(draw(small, rng))
+            r2 = int(draw(small, rng))
+            while r2 == r1:
+                r2 = int(draw(small, rng))
+            b, c = -(r1 + r2), r1 * r2
+        else:  # formula_suitable: 判別式が平方数でない a=1 の2次式を構成する
+            small = {"int_set": [n for n in range(-9, 10) if n != 0]}
+            b = int(draw(small, rng))
+            c = int(draw(small, rng))
+            while _is_perfect_square(b * b - 4 * c):
+                b = int(draw(small, rng))
+                c = int(draw(small, rng))
+        eqx = f"{_fmt_poly_x_terms([(1, 2), (b, 1), (c, 0)])} = 0"
+        return f"2次方程式 {eqx} を解くときについて"
+
     raise ValueError(f"未知の topic: {topic!r}")
+
+
+def _is_perfect_square(n: int) -> bool:
+    """判別式などの整数が平方数か（負・0 は非平方扱い）。"""
+    if n < 0:
+        return False
+    r = int(n**0.5)
+    return r * r == n or (r + 1) * (r + 1) == n
 
 
 @register_recipe("math.recall_rule", provides_concepts=_RULE_RECALL_CONCEPTS)
@@ -1078,6 +1147,111 @@ def interpret_expression(ctx: CellContext, rng: Rng) -> MR:
     )
 
 
+# 無理数の根号の中身（平方数でない・小さめの値でdup分散）。
+_NONSQUARE_RADICANDS = [n for n in range(2, 300) if int(n**0.5) ** 2 != n]
+
+
+@register_recipe(
+    "math.classify_rational_irrational", provides_concepts=["real_numbers.classify_instance"]
+)
+def classify_rational_irrational_recipe(ctx: CellContext, rng: Rng) -> MR:
+    """具体的な数を有理数・無理数に分類する MR を組む（C3 g3_l16.knowledge Lv2）。
+
+    answer-first: 先に kind（有理数／無理数）を決め、その kind に属する具体的な数の
+    形（分数／小数／平方数の根号 or 非平方数の根号）を1つ構成する。独立ソルバ
+    math.classify_rational_irrational が値の文字列だけから再判定する（double-solve）。
+    π は固定値で dup が必ず衝突する（自由度0）ため構成対象から除く（鉄則②）。
+    """
+    p = ctx.spec_level.params
+    kind = str(draw(cast("list[str]", p["kind_set"]), rng))
+    cands = _domain_candidates(cast("dict[str, object]", p["number_domain"]))
+
+    if kind == "rational":
+        shape = str(draw(["fraction", "decimal", "perfect_square_root"], rng))
+        if shape == "fraction":
+            num = int(draw({"int_set": cands}, rng))
+            den_cands = [v for v in cands if v not in (0, num, -num)]
+            den = int(draw({"int_set": den_cands}, rng))
+            value_str, disp = f"{num}/{den}", f"{num}/{den}"
+        elif shape == "decimal":
+            d1 = int(draw({"int_range": [0, 9]}, rng))
+            d2 = int(draw({"int_range": [1, 9]}, rng))
+            value_str = disp = f"0.{d1}{d2}"
+        else:  # perfect_square_root
+            k = int(draw({"int_range": [2, 40]}, rng))
+            value_str, disp = f"sqrt({k * k})", f"√{k * k}"
+    else:  # irrational
+        n = int(draw({"int_set": _NONSQUARE_RADICANDS}, rng))
+        value_str, disp = f"sqrt({n})", f"√{n}"
+
+    solver = REGISTRY.solver("math.classify_rational_irrational")
+    sol = cast(Solution, solver(value_str))
+    assert isinstance(sol.answer, ChoiceAnswer)
+    expected = "有理数" if kind == "rational" else "無理数"
+    assert sol.answer.correct == expected, f"double-solve 不一致: {kind} != {sol.answer.correct}"
+    assert [s.op for s in sol.steps] == [
+        "evaluate_representability", "classify_rational_irrational",
+    ]
+
+    sub_question = SubQuestionMR(
+        label="(1)", asked="choice", answer=sol.answer, steps=sol.steps,
+        concept_tags=_effective_concept_tags(ctx), cause_tags=_effective_cause_tags(ctx),
+    )
+    return MR(
+        signature=ctx.spec_level.signature, family=ctx.family, level=ctx.level,
+        purpose=ctx.purpose, seed=0,
+        params={"value_str": value_str, "kind": kind},
+        given={"statement": disp}, sub_questions=[sub_question], visual_plan=None,
+        provenance=Provenance(recipe="math.classify_rational_irrational"),
+    )
+
+
+@register_recipe(
+    "math.verify_quadratic_solution", provides_concepts=["quadratic.verify_solution"]
+)
+def verify_quadratic_solution_recipe(ctx: CellContext, rng: Rng) -> MR:
+    """ある値が2次方程式の解かどうかを代入して判別する MR を組む（C3 g3_l24.knowledge Lv2）。
+
+    answer-first: 整数解 r1,r2 から x²+bx+c=0 を構成し、候補値が解かどうか（is_solution）
+    を先に決める。独立ソルバ math.verify_quadratic_solution が方程式と候補値だけから
+    再判定する（double-solve）。r2=-r1 だと b=0 になり "x² + 0x + c" のような不自然な
+    表示になるため、r1 と反対の符号（-r1）も避けて引く（鉄則⑤: 構成時に排除）。
+    """
+    small = {"int_set": [n for n in range(-9, 10) if n != 0]}
+    r1 = int(draw(small, rng))
+    r2 = int(draw({"int_set": [n for n in range(-9, 10) if n != 0 and n != r1 and n != -r1]}, rng))
+    b, c = -(r1 + r2), r1 * r2
+    eq_str = f"x**2+({b})*x+({c})=0"
+    eq_disp = f"{_fmt_poly_x_terms([(1, 2), (b, 1), (c, 0)])} = 0"
+
+    is_solution = bool(int(draw({"int_set": [0, 1]}, rng)))
+    if is_solution:
+        cand = int(draw({"int_set": [r1, r2]}, rng))
+    else:
+        non_root_cands = [n for n in range(-9, 10) if n != 0 and n != r1 and n != r2]
+        cand = int(draw({"int_set": non_root_cands}, rng))
+    statement = f"2次方程式 {eq_disp} について、x = {cand}"
+
+    solver = REGISTRY.solver("math.verify_quadratic_solution")
+    sol = cast(Solution, solver(eq_str, cand))
+    assert isinstance(sol.answer, ChoiceAnswer)
+    expected = "解である" if is_solution else "解ではない"
+    assert sol.answer.correct == expected, f"double-solve 不一致: {is_solution} != {sol.answer.correct}"
+    assert [s.op for s in sol.steps] == ["substitute_candidate", "judge_solution"]
+
+    sub_question = SubQuestionMR(
+        label="(1)", asked="choice", answer=sol.answer, steps=sol.steps,
+        concept_tags=_effective_concept_tags(ctx), cause_tags=_effective_cause_tags(ctx),
+    )
+    return MR(
+        signature=ctx.spec_level.signature, family=ctx.family, level=ctx.level,
+        purpose=ctx.purpose, seed=0,
+        params={"eq_str": eq_str, "value": str(cand)},
+        given={"statement": statement}, sub_questions=[sub_question], visual_plan=None,
+        provenance=Provenance(recipe="math.verify_quadratic_solution"),
+    )
+
+
 __all__ = [
     "compute_letter_expression",
     "compute_substitution",
@@ -1091,4 +1265,6 @@ __all__ = [
     "recall_rule",
     "count_significant_figures",
     "interpret_expression",
+    "classify_rational_irrational_recipe",
+    "verify_quadratic_solution_recipe",
 ]

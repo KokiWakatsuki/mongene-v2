@@ -1,0 +1,54 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - quadratic.verify_solution
+  provenance:
+    git_commit: ''
+    recipe: math.verify_quadratic_solution
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_verify_solution_v1
+    tier: T1
+  requested:
+    form: knowledge
+    level: 2
+    subject: math
+    unit: g3_l24
+  resolved:
+    form: knowledge
+    level: 2
+    subject: math
+    unit: g3_l24
+  seed: 3
+  signature: verify_quadratic_solution
+problem_ref: 1ca6a16ea0fe9dbc
+problem_text: 2次方程式 x² + 13x + 42 = 0 について、x = -2 は、この方程式の解であるといえますか。
+sub_questions:
+- answer:
+    correct: 解ではない
+    distractors:
+    - 解である
+    fact_id: quadratic.verify_solution
+    kind: choice
+  cause_tags: []
+  concept_tags:
+  - quadratic.verify_solution
+  explanation: まず、候補の値を2次方程式の x にあてはめる。 候補の値を方程式の x に代入する次に、左辺の値が0になれば解、0にならなければ解ではない。 解ではない
+  hints:
+  - 候補の値を2次方程式の x にあてはめる。
+  label: (1)
+  prompt_text: choice を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 候補の値を2次方程式の x にあてはめる。
+    op: substitute_candidate
+    result_display: 候補の値を方程式の x に代入する
+    result_srepr: Integer(-2)
+  - args: []
+    narration: 左辺の値が0になれば解、0にならなければ解ではない。
+    op: judge_solution
+    result_display: 解ではない
+    result_srepr: 解ではない
+visual_svg: null

@@ -86,6 +86,18 @@ def double_solve_interpret_expression(mr: MR) -> Solution:
     return cast(Solution, solver(mr.params["item_a"], mr.params["item_b"]))
 
 
+@register_checker("math.classify_rational_irrational.double_solve")
+def double_solve_classify_rational_irrational(mr: MR) -> Solution:
+    solver = REGISTRY.solver("math.classify_rational_irrational")
+    return cast(Solution, solver(mr.params["value_str"]))
+
+
+@register_checker("math.verify_quadratic_solution.double_solve")
+def double_solve_verify_quadratic_solution(mr: MR) -> Solution:
+    solver = REGISTRY.solver("math.verify_quadratic_solution")
+    return cast(Solution, solver(mr.params["eq_str"], mr.params["value"]))
+
+
 __all__ = [
     "double_solve_compute_letter_expression",
     "double_solve_compute_substitution",
@@ -99,4 +111,6 @@ __all__ = [
     "double_solve_judge_set_closure",
     "double_solve_count_significant_figures",
     "double_solve_interpret_expression",
+    "double_solve_classify_rational_irrational",
+    "double_solve_verify_quadratic_solution",
 ]

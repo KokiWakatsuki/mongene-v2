@@ -1,0 +1,56 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - real_numbers.classify_instance
+  provenance:
+    git_commit: ''
+    recipe: math.classify_rational_irrational
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_classify_rational_v1
+    tier: T1
+  requested:
+    form: knowledge
+    level: 2
+    subject: math
+    unit: g3_l16
+  resolved:
+    form: knowledge
+    level: 2
+    subject: math
+    unit: g3_l16
+  seed: 3
+  signature: classify_rational_irrational
+problem_ref: 989282f4cab023a1
+problem_text: '次の数は、有理数・無理数のどちらですか。
+
+  √119'
+sub_questions:
+- answer:
+    correct: 無理数
+    distractors:
+    - 有理数
+    fact_id: real_numbers.classify
+    kind: choice
+  cause_tags: []
+  concept_tags:
+  - real_numbers.classify_instance
+  explanation: まず、その数が、整数を使った分数（p/q）の形で表せるかどうかを調べる。 整数を使った分数の形で表せるかを調べる次に、分数の形で表せれば有理数、表せなければ無理数と分類する。 無理数
+  hints:
+  - その数が、整数を使った分数（p/q）の形で表せるかどうかを調べる。
+  label: (1)
+  prompt_text: choice を求めなさい。
+  solution_steps:
+  - args: []
+    narration: その数が、整数を使った分数（p/q）の形で表せるかどうかを調べる。
+    op: evaluate_representability
+    result_display: 整数を使った分数の形で表せるかを調べる
+    result_srepr: irrational
+  - args: []
+    narration: 分数の形で表せれば有理数、表せなければ無理数と分類する。
+    op: classify_rational_irrational
+    result_display: 無理数
+    result_srepr: 無理数
+visual_svg: null

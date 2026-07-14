@@ -244,6 +244,10 @@ _TERM_MAPS: dict[str, dict[str, str]] = {
     },
     # g3_l24 2次方程式の用語（2次方程式・解）。答えは漢数字「二次方程式」で digit-free。
     "quadratic_terms": {"quadratic_equation": "二次方程式", "solution": "解"},
+    # g3_l26 2次方程式 ax²+bx+c=0 の係数の対応（a・b・c）。答えは単一の文字＝digit-free。
+    "quadratic_coefficient": {
+        "coeff_a": "a", "coeff_b": "b", "coeff_c": "c",
+    },
 }
 
 # domain 別の step テキスト（既定は g1_l17/l19/l21/l2 の現行文＝golden 不変）。
@@ -258,6 +262,11 @@ _TERM_RECALL_STEP_TEXT_BY_DOMAIN: dict[str, dict[str, str]] = {
         "s1_display": "説明されている数量の大小の関係を読み取る",
         "s1_narration": "説明されている、数量の間の大小の関係を読み取る。",
         "s2_narration": "その関係を表す不等号の記号を思い出す。",
+    },
+    "quadratic_coefficient": {
+        "s1_display": "説明されている項が式のどの位置にあるかを読み取る",
+        "s1_narration": "説明されている項が、2次方程式のどの位置（x²・x・定数項）にあるかを読み取る。",
+        "s2_narration": "ax²+bx+c=0 の形と見比べて、その位置に対応する文字を思い出す。",
     },
 }
 
@@ -569,6 +578,64 @@ _RULE_MAPS: dict[str, dict[str, tuple[str, list[str]]]] = {
             ],
         ),
     },
+    # g3_l3 乗法公式の識別（一般形・平方の公式・和と差の積のどれがそのまま使えるか）
+    "multiplication_formula_choice": {
+        "general_form": (
+            "(x+a)(x+b) の一般の乗法公式がそのまま使える"
+            "（かっこの中の数が異なり、たがいに反対の符号でもない）",
+            [
+                "自乗の公式（かっこの中の数が同じ形）を使う方が適している",
+                "和と差の積の公式（かっこの中の数がたがいに反対の符号の形）を使う方が適している",
+                "分配法則で項ごとにかけて整理するしかなく、公式は使えない",
+            ],
+        ),
+        "perfect_square_form": (
+            "自乗の公式（かっこの中の数が同じ形）を使う方が適している",
+            [
+                "(x+a)(x+b) の一般の乗法公式がそのまま使える",
+                "和と差の積の公式（かっこの中の数がたがいに反対の符号の形）を使う方が適している",
+                "分配法則で項ごとにかけて整理するしかなく、公式は使えない",
+            ],
+        ),
+        "diff_of_squares_form": (
+            "和と差の積の公式（かっこの中の数がたがいに反対の符号の形）を使う方が適している",
+            [
+                "(x+a)(x+b) の一般の乗法公式がそのまま使える",
+                "自乗の公式（かっこの中の数が同じ形）を使う方が適している",
+                "分配法則で項ごとにかけて整理するしかなく、公式は使えない",
+            ],
+        ),
+    },
+    # g3_l14 √(a²)=|a| の意味（a が負のときは -a になることに注意）
+    "sqrt_square_meaning": {
+        "abs_value_rule": (
+            "a を自乗した数の平方根は、a の絶対値 |a| に等しい（a が負の数のときは -a になる）",
+            [
+                "a を自乗した数の平方根は、a にそのまま等しい（a が負の数のときも a のまま）",
+                "a を自乗した数の平方根は、a を自乗した数そのものに等しい",
+                "a を自乗した数の平方根は、a が負の数のときは求められない",
+            ],
+        ),
+    },
+    # g3_l28 2次方程式の解き方の選択（因数分解が適する形か、解の公式が適する形か）
+    "quadratic_solving_method_choice": {
+        "factoring_suitable": (
+            "左辺が整数の範囲でそのまま因数分解できる形だから、因数分解を使う方がよい",
+            [
+                "左辺が整数の範囲では因数分解できない形だから、解の公式を使う方がよい",
+                "つねに解の公式を使うのがよく、因数分解を考える必要はない",
+                "係数に文字が含まれているから、まず移項してから考える必要がある",
+            ],
+        ),
+        "formula_suitable": (
+            "左辺が整数の範囲では因数分解できない形だから、解の公式を使う方がよい",
+            [
+                "左辺が整数の範囲でそのまま因数分解できる形だから、因数分解を使う方がよい",
+                "つねに因数分解を使うのがよく、解の公式を考える必要はない",
+                "係数に文字が含まれているから、まず移項してから考える必要がある",
+            ],
+        ),
+    },
 }
 
 
@@ -846,6 +913,82 @@ def recall_rule_statement(topic: object, concept: object) -> Solution:
     return Solution(answer=answer, steps=steps)
 
 
+# ---------------------------------------------------------------------------
+# math.classify_rational_irrational（g3_l16.knowledge Lv2）— 具体的な数が有理数か
+# 無理数かを分類する（knowledge classify）。答えは ChoiceAnswer（数字トークンなし）。
+# ---------------------------------------------------------------------------
+@register_solver("math.classify_rational_irrational")
+def classify_rational_irrational(value_str: object) -> Solution:
+    """具体的な数（分数・小数・平方根・π など）を有理数・無理数に分類する（double-solve）。
+
+    値の文字列だけから sympy の厳密判定（is_rational）で分類する。小数リテラルは
+    `rational=True` で厳密な Rational として解析する（Float は is_rational が
+    None になり誤判定するため）。答えは ChoiceAnswer（有理数／無理数）。narration に
+    数字は書かない。
+    """
+    expr = sympy.sympify(str(value_str), rational=True)
+    is_rational = bool(expr.is_rational)
+    correct = "有理数" if is_rational else "無理数"
+    other = "無理数" if is_rational else "有理数"
+    steps = [
+        Step(
+            op="evaluate_representability",
+            args=[],
+            result_srepr=("rational" if is_rational else "irrational"),
+            result_display="整数を使った分数の形で表せるかを調べる",
+            narration="その数が、整数を使った分数（p/q）の形で表せるかどうかを調べる。",
+        ),
+        Step(
+            op="classify_rational_irrational",
+            args=[],
+            result_srepr=correct,
+            result_display=correct,
+            narration="分数の形で表せれば有理数、表せなければ無理数と分類する。",
+        ),
+    ]
+    answer = ChoiceAnswer(correct=correct, distractors=[other], fact_id="real_numbers.classify")
+    return Solution(answer=answer, steps=steps)
+
+
+# ---------------------------------------------------------------------------
+# math.verify_quadratic_solution（g3_l24.knowledge Lv2）— ある値が2次方程式の解かどうかを
+# 代入して判別する（knowledge verify）。答えは ChoiceAnswer（数字トークンなし）。
+# ---------------------------------------------------------------------------
+@register_solver("math.verify_quadratic_solution")
+def verify_quadratic_solution(eq_str: object, value: object) -> Solution:
+    """ある値が2次方程式の解かどうかを代入して判別する（double-solve）。
+
+    方程式（"lhs=0"）と候補値だけから、代入して左辺が0になるかで判定する。答えは値で
+    変わる verify 型の ChoiceAnswer。narration に数字は書かない。
+    """
+    lhs_s, rhs_s = str(eq_str).split("=")
+    x = sympy.Symbol("x")
+    v = sympy.Rational(sympy.sympify(str(value), rational=True))
+    lhs_v = sympy.sympify(lhs_s, rational=True).subs(x, v)
+    rhs_v = sympy.sympify(rhs_s, rational=True).subs(x, v)
+    is_solution = bool(sympy.simplify(lhs_v - rhs_v) == 0)
+    correct = "解である" if is_solution else "解ではない"
+    other = "解ではない" if is_solution else "解である"
+    steps = [
+        Step(
+            op="substitute_candidate",
+            args=[],
+            result_srepr=sympy.srepr(v),
+            result_display="候補の値を方程式の x に代入する",
+            narration="候補の値を2次方程式の x にあてはめる。",
+        ),
+        Step(
+            op="judge_solution",
+            args=[],
+            result_srepr=correct,
+            result_display=correct,
+            narration="左辺の値が0になれば解、0にならなければ解ではない。",
+        ),
+    ]
+    answer = ChoiceAnswer(correct=correct, distractors=[other], fact_id="quadratic.verify_solution")
+    return Solution(answer=answer, steps=steps)
+
+
 __all__ = [
     "evaluate_letter_expression",
     "evaluate_substitution",
@@ -857,4 +1000,6 @@ __all__ = [
     "represent_opposite_quantity",
     "judge_set_closure",
     "recall_rule_statement",
+    "classify_rational_irrational",
+    "verify_quadratic_solution",
 ]

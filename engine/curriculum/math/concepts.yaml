@@ -243,6 +243,24 @@ concepts:
   - id: quadratic_terms.term_recall
     label: "2次方程式・その解の用語を想起する"
     unit: g3_l24
+  - id: multiplication_formula_choice.rule_recall
+    label: "式の形からそのまま使える乗法公式を識別する"
+    unit: g3_l3
+  - id: sqrt_square_meaning.rule_recall
+    label: "√(a²)=|a|の意味を理解し具体例に適用する"
+    unit: g3_l14
+  - id: real_numbers.classify_instance
+    label: "具体的な数を有理数・無理数に分類する"
+    unit: g3_l16
+  - id: quadratic.verify_solution
+    label: "与えられた値が2次方程式の解かどうかを代入して判定する"
+    unit: g3_l24
+  - id: quadratic_coefficient.term_recall
+    label: "2次方程式ax²+bx+c=0とa・b・cの対応を識別する"
+    unit: g3_l26
+  - id: quadratic_solving_method_choice.rule_recall
+    label: "式の形から因数分解と解の公式のどちらが適するかを判断する"
+    unit: g3_l28
   - id: polynomial.combine_like_terms_basic
     label: "同類項をまとめて式を簡単にする（1種の文字）"
     unit: g2_l2

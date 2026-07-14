@@ -1,0 +1,56 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - sqrt_square_meaning.rule_recall
+  provenance:
+    git_commit: ''
+    recipe: math.recall_rule
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_rule_recall_v1
+    tier: T1
+  requested:
+    form: knowledge
+    level: 2
+    subject: math
+    unit: g3_l14
+  resolved:
+    form: knowledge
+    level: 2
+    subject: math
+    unit: g3_l14
+  seed: 1
+  signature: sqrt_square_meaning_rule_recall
+problem_ref: 88e34f717bf5b83b
+problem_text: √((96)²) の値について。正しく述べているものを1つ選びなさい。
+sub_questions:
+- answer:
+    correct: a を自乗した数の平方根は、a の絶対値 |a| に等しい（a が負の数のときは -a になる）
+    distractors:
+    - a を自乗した数の平方根は、a にそのまま等しい（a が負の数のときも a のまま）
+    - a を自乗した数の平方根は、a を自乗した数そのものに等しい
+    - a を自乗した数の平方根は、a が負の数のときは求められない
+    fact_id: sqrt_square_meaning.rule.abs_value_rule
+    kind: choice
+  cause_tags: []
+  concept_tags:
+  - sqrt_square_meaning.rule_recall
+  explanation: まず、問題で問われている規則や約束が、何についてのものかを読み取る。 問われている規則が何についてかを読み取る次に、その規則の正しい内容を思い出して選ぶ。 a を自乗した数の平方根は、a の絶対値 |a| に等しい（a が負の数のときは -a になる）
+  hints:
+  - 問題で問われている規則や約束が、何についてのものかを読み取る。
+  label: (1)
+  prompt_text: choice を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 問題で問われている規則や約束が、何についてのものかを読み取る。
+    op: read_rule_context
+    result_display: 問われている規則が何についてかを読み取る
+    result_srepr: abs_value_rule
+  - args: []
+    narration: その規則の正しい内容を思い出して選ぶ。
+    op: recall_correct_rule
+    result_display: a を自乗した数の平方根は、a の絶対値 |a| に等しい（a が負の数のときは -a になる）
+    result_srepr: a を自乗した数の平方根は、a の絶対値 |a| に等しい（a が負の数のときは -a になる）
+visual_svg: null

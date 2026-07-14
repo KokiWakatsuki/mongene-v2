@@ -3276,6 +3276,7 @@ _TERM_RECALL_CELLS = [
     ("math.g3_l16.knowledge", 1),
     ("math.g3_l22.knowledge", 1),
     ("math.g3_l24.knowledge", 1),
+    ("math.g3_l26.knowledge", 1),
 ]
 
 
@@ -3460,6 +3461,42 @@ def test_recall_rule_notation_quotient_l14_lv1_construct():
     assert mr.params["concept"] == "as_fraction"
 
 
+def test_term_recall_quadratic_coefficient_l26_lv1_construct():
+    ctx = _make_ctx("math.g3_l26.knowledge", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "quadratic_coefficient_term_recall"
+    sq = mr.sub_questions[0]
+    assert sq.answer.correct in {"a", "b", "c"}
+    assert not any(ch.isdigit() for ch in sq.answer.correct)
+
+
+def test_recall_rule_multiplication_formula_l3_lv1_construct():
+    ctx = _make_ctx("math.g3_l3.knowledge", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "multiplication_formula_rule_recall"
+    assert mr.params["concept"] in {
+        "general_form", "perfect_square_form", "diff_of_squares_form",
+    }
+
+
+def test_recall_rule_sqrt_square_meaning_l14_lv2_construct():
+    ctx = _make_ctx("math.g3_l14.knowledge", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "sqrt_square_meaning_rule_recall"
+    assert mr.params["concept"] == "abs_value_rule"
+
+
+def test_recall_rule_quadratic_solving_method_l28_lv2_construct():
+    ctx = _make_ctx("math.g3_l28.knowledge", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "quadratic_solving_method_rule_recall"
+    assert mr.params["concept"] in {"factoring_suitable", "formula_suitable"}
+
+
 _RULE_RECALL_CELLS = [
     ("math.g1_l22.knowledge", 1),
     ("math.g1_l3.knowledge", 1),
@@ -3475,6 +3512,9 @@ _RULE_RECALL_CELLS = [
     ("math.g3_l2.knowledge", 1),
     ("math.g3_l7.knowledge", 1),
     ("math.g3_l15.knowledge", 1),
+    ("math.g3_l3.knowledge", 1),
+    ("math.g3_l14.knowledge", 2),
+    ("math.g3_l28.knowledge", 2),
 ]
 
 
@@ -3491,6 +3531,62 @@ def test_recall_rule_double_solve_property(family, level, seed):
     # 答えは規則の文（数字トークンなし）＝G-Q5t 素通り。
     assert not any(ch.isdigit() for ch in sol.answer.correct)
     assert sol.answer.correct not in sol.answer.distractors
+
+
+# ---------------------------------------------------------------------------
+# math.classify_rational_irrational（C3 g3_l16.knowledge Lv2 有理数/無理数の分類）
+# ---------------------------------------------------------------------------
+def test_classify_rational_irrational_lv2_construct():
+    ctx = _make_ctx("math.g3_l16.knowledge", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "classify_rational_irrational"
+    sq = mr.sub_questions[0]
+    assert sq.answer.correct in {"有理数", "無理数"}
+    assert not any(ch.isdigit() for ch in sq.answer.correct)
+    assert mr.params["kind"] in {"rational", "irrational"}
+
+
+@pytest.mark.parametrize("seed", range(100))
+def test_classify_rational_irrational_double_solve_property(seed):
+    ctx = _make_ctx("math.g3_l16.knowledge", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.classify_rational_irrational")
+    sol = solver(mr.params["value_str"])
+    assert sol.answer.correct == mr.sub_questions[0].answer.correct
+    expected = "有理数" if mr.params["kind"] == "rational" else "無理数"
+    assert sol.answer.correct == expected
+
+
+# ---------------------------------------------------------------------------
+# math.verify_quadratic_solution（C3 g3_l24.knowledge Lv2 解の判定）
+# ---------------------------------------------------------------------------
+def test_verify_quadratic_solution_lv2_construct():
+    ctx = _make_ctx("math.g3_l24.knowledge", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "verify_quadratic_solution"
+    sq = mr.sub_questions[0]
+    assert sq.answer.correct in {"解である", "解ではない"}
+    assert [s.op for s in sq.steps] == ["substitute_candidate", "judge_solution"]
+
+
+@pytest.mark.parametrize("seed", range(100))
+def test_verify_quadratic_solution_double_solve_property(seed):
+    ctx = _make_ctx("math.g3_l24.knowledge", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.verify_quadratic_solution")
+    sol = solver(mr.params["eq_str"], mr.params["value"])
+    assert sol.answer.correct == mr.sub_questions[0].answer.correct
+    # 恒真: 候補値を左辺に代入した値が0かどうかで判定と一致する。
+    lhs_s, rhs_s = mr.params["eq_str"].split("=")
+    v = sympy.Rational(int(mr.params["value"]))
+    lhs_v = sympy.sympify(lhs_s).subs(sympy.Symbol("x"), v)
+    rhs_v = sympy.sympify(rhs_s).subs(sympy.Symbol("x"), v)
+    expected = "解である" if sympy.simplify(lhs_v - rhs_v) == 0 else "解ではない"
+    assert sol.answer.correct == expected
 
 
 # ---------------------------------------------------------------------------

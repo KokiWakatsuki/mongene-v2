@@ -55,6 +55,8 @@ LF_SIGFIG_JUDGE_V1 = (
 )
 # g1_l12.knowledge Lv2: 与えられた文字式が表す数量の意味を解釈する
 LF_INTERPRET_EXPR_V1 = "{{ given.statement }} は何を表していますか。正しいものを1つ選びなさい。"
+# g3_l16.knowledge Lv2: 具体的な数を有理数・無理数に分類する
+LF_CLASSIFY_RATIONAL_V1 = "次の数は、有理数・無理数のどちらですか。\n{{ given.statement }}"
 
 
 def _register_all() -> None:
@@ -72,6 +74,7 @@ def _register_all() -> None:
     REGISTRY.register_template("lf_set_closure_v1", LF_SET_CLOSURE_V1)
     REGISTRY.register_template("lf_sigfig_judge_v1", LF_SIGFIG_JUDGE_V1)
     REGISTRY.register_template("lf_interpret_expr_v1", LF_INTERPRET_EXPR_V1)
+    REGISTRY.register_template("lf_classify_rational_v1", LF_CLASSIFY_RATIONAL_V1)
 
 
 _register_all()
@@ -92,4 +95,5 @@ __all__ = [
     "LF_SET_CLOSURE_V1",
     "LF_SIGFIG_JUDGE_V1",
     "LF_INTERPRET_EXPR_V1",
+    "LF_CLASSIFY_RATIONAL_V1",
 ]
