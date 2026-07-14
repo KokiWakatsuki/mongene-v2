@@ -1,0 +1,44 @@
+family: math.g2_l54.find_value
+form: find_value
+source_desc: |
+  起こらない確率=1-pを使って求める／少なくとも1つ起こる確率を余事象で工夫して求める
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv2 desc: 起こらない確率=1-pを使って求める。
+       example: 大小2個のさいころを同時に投げるとき、出た目の和が5になる確率が9分の1で
+                ある。出た目の和が5にならない確率を求めよ。
+  Lv3 desc: 少なくとも1つ起こる確率を余事象で工夫して求める。
+       example: 3枚の硬貨を同時に投げるとき、少なくとも1枚は表が出る確率を、余事象を
+                利用して求めよ。
+  【設計モデル】Lv2=新設 solver math.probability_complement（確率の値だけから1-pを計算。
+  answer-first で2個のさいころの和条件から確率を構成しその余事象を問う）。Lv3=新設
+  solver math.probability_at_least_one（独立試行の「一度も起こらない」場合を itertools
+  で列挙し直し余事象で計算）。op列（Lv2: 1手順の引き算、Lv3: 列挙+余事象の2手順）が
+  相異＝level_sep。
+concepts_default: [probability.complement]
+levels:
+  "2":
+    signature: probability_complement
+    recipe: math.probability_complement
+    params:
+      faces_domain: {int_range: [4, 30]}
+    given: [condition]
+    asked: [value]
+    visual: none
+    text: {tier: T1, template: lf_probability_complement_v1}
+    hints: [steps_prefix]
+    concept_tags: [probability.complement]
+    cause_tags: []
+  "3":
+    signature: probability_at_least_one
+    recipe: math.probability_at_least_one
+    params:
+      trials_domain: {int_range: [3, 12]}
+    given: [condition]
+    asked: [value]
+    visual: none
+    text: {tier: T1, template: lf_probability_complement_v1}
+    hints: [steps_prefix]
+    concept_tags: [probability.at_least_one_via_complement]
+    cause_tags: []
+remedial:
+  default_level: 2

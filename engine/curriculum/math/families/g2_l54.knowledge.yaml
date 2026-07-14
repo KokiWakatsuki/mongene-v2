@@ -1,0 +1,28 @@
+family: math.g2_l54.knowledge
+form: knowledge
+source_desc: |
+  起こらない確率=1-p、余事象の意味を想起する
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: 起こらない確率=1-p、余事象の意味を想起する。
+       example: あることがらの起こる確率がpのとき、そのことがらが起こらない確率をpを
+                用いて表せ。また「余事象」とはどういうものか説明せよ。
+  【設計モデル】規則想起ハブ（既存 math.recall_rule・_RULE_MAPS に topic
+  "complementary_event" を追加。具体例の確率 p=分数を surface に埋め込み dup 分散）。
+concepts_default: [complementary_event.rule_recall]
+levels:
+  "1":
+    signature: complementary_event_rule_recall
+    recipe: math.recall_rule
+    params:
+      topic: complementary_event
+      concept_set: [definition]
+      number_domain: {int_range: [3, 300]}
+    given: [statement]
+    asked: [choice]
+    visual: none
+    text: {tier: T1, template: lf_rule_recall_v1}
+    hints: [steps_prefix]
+    concept_tags: [complementary_event.rule_recall]
+    cause_tags: []
+remedial:
+  default_level: 1

@@ -1,0 +1,46 @@
+family: math.g2_l53.find_value
+form: find_value
+source_desc: |
+  区別あり/順に取る場合を樹形図で数え確率を出す／同時に取る・戻す/戻さないの違いを
+  区別して数える（units.generated.yaml の desc/example を正として転記）。
+  Lv2 desc: 区別あり/順に取る場合を樹形図で数え確率を出す。
+       example: A、B、C、Dの4人から、委員長と副委員長を1人ずつ選ぶ。選び方は全部で
+                何通りあるか樹形図で数え、Aが委員長に選ばれる確率を求めよ。
+  Lv3 desc: 同時に取る・戻す/戻さないの違いを区別して数える。
+       example: 赤玉2個、白玉2個が入った袋から玉を2個同時に取り出す。取り出した2個が
+                ともに赤玉である確率を求めよ。
+  【設計モデル】Lv2=新設 solver math.probability_ordered_selection（n人からr人を順に選ぶ
+  順列を itertools.permutations で列挙し直し、特定の1人が特定の役職に選ばれる場合の数÷
+  全体数を計算）。Lv3=新設 solver math.probability_combination_selection（色ごとの個数から
+  区別した玉を itertools.combinations で列挙し直し、該当数÷全体数を計算）。op列（Lv2:
+  順列列挙、Lv3: 組合せ列挙）が相異＝level_sep。
+concepts_default: [probability.count_ordered_selection]
+levels:
+  "2":
+    signature: probability_ordered_selection
+    recipe: math.probability_ordered_selection
+    params:
+      n_domain: {int_range: [4, 60]}
+    given: [condition]
+    asked: [value]
+    visual: none
+    text: {tier: T1, template: lf_probability_ordered_selection_v1}
+    hints: [steps_prefix]
+    concept_tags: [probability.count_ordered_selection]
+    cause_tags: []
+  "3":
+    signature: probability_combination_selection
+    recipe: math.probability_combination_selection
+    params:
+      count_target_domain: {int_range: [2, 10]}
+      count_other_domain: {int_range: [1, 10]}
+      color_pairs: [[赤, 白], [赤, 青], [白, 青], [赤, 黒], [白, 黒], [青, 黒]]
+    given: [condition]
+    asked: [value]
+    visual: none
+    text: {tier: T1, template: lf_probability_combination_selection_v1}
+    hints: [steps_prefix]
+    concept_tags: [probability.count_combination_selection]
+    cause_tags: []
+remedial:
+  default_level: 2

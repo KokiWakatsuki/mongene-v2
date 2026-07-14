@@ -1,0 +1,48 @@
+family: math.g2_l52.find_value
+form: find_value
+source_desc: |
+  硬貨や1個のさいころで全場合と該当を数え確率を出す／2個のさいころ等で表を作り、和/積の
+  条件の場合を数える（units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: 硬貨や1個のさいころで全場合と該当を数え確率を出す。
+       example: 10円硬貨を1枚投げるとき、表が出る確率を求めよ。また1個のさいころを投げる
+                とき、3以上の目が出る確率を求めよ。
+  Lv3 desc: 2個のさいころ等で表を作り、和/積の条件の場合を数える。
+       example: 大小2個のさいころを同時に投げるとき、出た目の和が7になる確率を、表を
+                作って求めよ。
+  【設計モデル】Lv1=math.probability_single_die（g2_l51.find_value Lv1 と同じ solver・
+  space_choices=[die6,coin2,cards_n]で硬貨も含める点だけが相異。cards_nはdup_rate
+  確保のための一般化＝鉄則②）。Lv3=新設 solver math.probability_two_dice（2個のさいころ
+  36通りを itertools で列挙し直し、和/積条件の該当数÷36を計算）。op列（Lv1: 3手順・
+  単一空間、Lv3: 3手順・2さいころ）の中身が相異＝level_sep（両方とも列挙ベースだが対象
+  空間が異なる別 solver）。
+concepts_default: [probability.count_single_space]
+levels:
+  "1":
+    signature: probability_coin_or_die_count
+    recipe: math.probability_single_die
+    params:
+      # die6/coin2 は条件の組合せが少なく単独では dup_rate が閾値を超えるため、cards_n の
+      # 比重を高くして自由度を確保する（鉄則②。リストの重複要素で一様抽選の重みを付ける）。
+      space_choices: [die6, coin2, cards_n, cards_n, cards_n, cards_n, cards_n, cards_n, cards_n, cards_n, cards_n, cards_n, cards_n, cards_n, cards_n, cards_n]
+      n_domain: {int_range: [6, 80]}
+    given: [condition]
+    asked: [value]
+    visual: none
+    text: {tier: T1, template: lf_probability_single_die_v1}
+    hints: [steps_prefix]
+    concept_tags: [probability.count_single_space]
+    cause_tags: []
+  "3":
+    signature: probability_two_dice_count
+    recipe: math.probability_two_dice
+    params:
+      faces_domain: {int_range: [4, 9]}
+    given: [condition]
+    asked: [value]
+    visual: none
+    text: {tier: T1, template: lf_probability_two_dice_v1}
+    hints: [steps_prefix]
+    concept_tags: [probability.count_two_dice]
+    cause_tags: []
+remedial:
+  default_level: 1

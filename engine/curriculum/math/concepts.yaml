@@ -603,3 +603,40 @@ concepts:
   - id: inverse_proportion.judge_table
     label: "表のx,yの対応が反比例か(積xyが一定か)を判別する"
     unit: g1_l33
+  # --- C12 確率 ---
+  - id: probability.relative_frequency_basic
+    label: "起こった回数÷試行回数で相対度数(確率)を計算する"
+    unit: g1_l59
+  - id: probability_terms.term_recall
+    label: "試行・確率・同様に確からしいの用語を想起する"
+    unit: g1_l59
+  - id: probability.interpret_relative_frequency_limit
+    label: "試行回数を増やすと相対度数が近づく値が確率を表すことを解釈する"
+    unit: g1_l59
+  - id: probability.count_single_space
+    label: "硬貨や1個のさいころの全事象を数え上げて確率を求める"
+    unit: g2_l51
+  - id: probability.relative_frequency_estimate
+    label: "相対度数から確率を推定し分数で整理する"
+    unit: g2_l51
+  - id: probability.judge_equally_likely
+    label: "場面が同様に確からしいかを判別し確率の意味を適用する"
+    unit: g2_l51
+  - id: probability.count_two_dice
+    label: "2個のさいころの目の和・積の条件を満たす場合を数えて確率を求める"
+    unit: g2_l52
+  - id: probability.count_ordered_selection
+    label: "n人から役職を順に選ぶ場合を数えて特定の人が選ばれる確率を求める"
+    unit: g2_l53
+  - id: probability.count_combination_selection
+    label: "玉を同時に取り出す場合を数えて特定の色の組合せになる確率を求める"
+    unit: g2_l53
+  - id: probability.complement
+    label: "余事象を利用してあることがらが起こらない確率を求める"
+    unit: g2_l54
+  - id: probability.at_least_one_via_complement
+    label: "余事象を利用して少なくとも1つ起こる確率を求める"
+    unit: g2_l54
+  - id: complementary_event.rule_recall
+    label: "余事象の意味(起こらない確率=1-p)を想起する"
+    unit: g2_l54

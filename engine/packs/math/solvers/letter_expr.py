@@ -262,6 +262,10 @@ _TERM_MAPS: dict[str, dict[str, str]] = {
     "inverse_proportion": {
         "inverse_proportion": "反比例", "proportionality_constant": "比例定数",
     },
+    # g1_l59/g2_l51 確率まわりの用語（試行・確率・同様に確からしい）。答えは漢字＝digit-free。
+    "probability_terms": {
+        "trial": "試行", "probability": "確率", "equally_likely": "同様に確からしい",
+    },
 }
 
 # domain 別の step テキスト（既定は g1_l17/l19/l21/l2 の現行文＝golden 不変）。
@@ -669,6 +673,17 @@ _RULE_MAPS: dict[str, dict[str, tuple[str, list[str]]]] = {
                 "一次関数と同じように、区間によらず変化の割合はつねに一定である",
                 "変化の割合は、比例定数の符号によらずつねに正になる",
                 "変化の割合は、x の変域の位置によらず、つねに比例定数と等しくなる",
+            ],
+        ),
+    },
+    # g2_l54 余事象（あることがらが起こらない確率）の意味
+    "complementary_event": {
+        "definition": (
+            "全体を表す確率から、あることがらの起こる確率をひいた値に等しい",
+            [
+                "あることがらの起こる確率に等しい",
+                "あることがらの起こる確率と、全体を表す確率とをたした値に等しい",
+                "あることがらの起こりやすさとは関係なく、つねに一定である",
             ],
         ),
     },

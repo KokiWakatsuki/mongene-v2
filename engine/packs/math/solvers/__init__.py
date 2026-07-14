@@ -15,6 +15,7 @@ from engine.packs.math.solvers import quadratic  # noqa: F401  (登録の副作�
 from engine.packs.math.solvers import rational_form  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.solvers import motion  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.solvers import quadratic_function  # noqa: F401  (登録の副作用のため import)
+from engine.packs.math.solvers import probability  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.solvers import proportion  # noqa: F401  (登録の副作用のため import)
 
 __all__: list[str] = []

@@ -3455,6 +3455,9 @@ _TERM_RECALL_CELLS = [
     ("math.g1_l28.knowledge", 1),
     ("math.g1_l29.knowledge", 1),
     ("math.g1_l33.knowledge", 1),
+    # C12 確率（用語想起）
+    ("math.g1_l59.knowledge", 1),
+    ("math.g2_l51.knowledge", 1),
 ]
 
 
@@ -3693,6 +3696,8 @@ _RULE_RECALL_CELLS = [
     ("math.g3_l3.knowledge", 1),
     ("math.g3_l14.knowledge", 2),
     ("math.g3_l28.knowledge", 2),
+    # C12 確率（規則・意味の想起）
+    ("math.g2_l54.knowledge", 1),
 ]
 
 
@@ -4342,3 +4347,207 @@ def test_judge_inverse_proportion_table_double_solve_property(seed):
     products = [xs[i] * ys[i] for i in range(len(xs))]
     expected_inverse = all(p == products[0] for p in products)
     assert expected_inverse == (mr.params["is_inverse"] == "True")
+
+
+# ---------------------------------------------------------------------------
+# C12 確率（非visual14セル）
+# ---------------------------------------------------------------------------
+def test_relative_frequency_g1_lv1_construct():
+    ctx = _make_ctx("math.g1_l59.calculation", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "relative_frequency_basic"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "value"
+    assert [s.op for s in sq.steps] == ["divide_occurred_by_total"]
+    o, t = mr.params["occurred"], mr.params["total"]
+    assert 0 < o < t
+    assert sympy.sympify(sq.answer.srepr) == sympy.Rational(o, t)
+
+
+_RELATIVE_FREQUENCY_CELLS = [
+    ("math.g1_l59.calculation", 1), ("math.g2_l51.find_value", 2),
+]
+
+
+@pytest.mark.parametrize("family,level", _RELATIVE_FREQUENCY_CELLS)
+@pytest.mark.parametrize("seed", range(100))
+def test_relative_frequency_double_solve_property(family, level, seed):
+    ctx = _make_ctx(family, level)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.relative_frequency")
+    sol = solver(mr.params["occurred"], mr.params["total"])
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+
+
+def test_interpret_relative_frequency_limit_construct():
+    ctx = _make_ctx("math.g1_l59.knowledge", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "interpret_relative_frequency_limit"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "choice"
+    assert sq.answer.correct == "その事象の起こる確率"
+    assert not any(ch.isdigit() for ch in sq.answer.correct)
+
+
+def test_probability_single_die_lv1_construct():
+    ctx = _make_ctx("math.g2_l51.find_value", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "probability_single_die_count"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "value"
+    assert [s.op for s in sq.steps] == [
+        "enumerate_all_outcomes", "count_favorable", "compute_probability",
+    ]
+    p_val = sympy.sympify(sq.answer.srepr)
+    assert 0 <= p_val <= 1
+
+
+_PROBABILITY_SINGLE_DIE_CELLS = [
+    ("math.g2_l51.find_value", 1), ("math.g2_l52.find_value", 1),
+]
+
+
+@pytest.mark.parametrize("family,level", _PROBABILITY_SINGLE_DIE_CELLS)
+@pytest.mark.parametrize("seed", range(100))
+def test_probability_single_die_double_solve_property(family, level, seed):
+    ctx = _make_ctx(family, level)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.probability_single_die")
+    sol = solver(mr.params["space_name"], mr.params["condition"], mr.params["target"], mr.params["size"])
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+
+
+def test_probability_two_dice_lv3_construct():
+    ctx = _make_ctx("math.g2_l52.find_value", 3)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "probability_two_dice_count"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "value"
+    assert [s.op for s in sq.steps] == [
+        "enumerate_all_pairs", "count_favorable_pairs", "compute_probability",
+    ]
+
+
+@pytest.mark.parametrize("seed", range(100))
+def test_probability_two_dice_double_solve_property(seed):
+    ctx = _make_ctx("math.g2_l52.find_value", 3)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.probability_two_dice")
+    sol = solver(mr.params["faces"], mr.params["condition"], mr.params["target"])
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+
+
+def test_probability_ordered_selection_construct():
+    ctx = _make_ctx("math.g2_l53.find_value", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "probability_ordered_selection"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "value"
+    assert sympy.sympify(sq.answer.srepr) == sympy.Rational(1, mr.params["n"])
+
+
+@pytest.mark.parametrize("seed", range(100))
+def test_probability_ordered_selection_double_solve_property(seed):
+    ctx = _make_ctx("math.g2_l53.find_value", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.probability_ordered_selection")
+    sol = solver(mr.params["n"], mr.params["r"], mr.params["target_index"])
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+
+
+def test_probability_combination_selection_construct():
+    ctx = _make_ctx("math.g2_l53.find_value", 3)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "probability_combination_selection"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "value"
+    p_val = sympy.sympify(sq.answer.srepr)
+    assert 0 <= p_val <= 1
+
+
+@pytest.mark.parametrize("seed", range(100))
+def test_probability_combination_selection_double_solve_property(seed):
+    ctx = _make_ctx("math.g2_l53.find_value", 3)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.probability_combination_selection")
+    sol = solver(mr.params["counts"], mr.params["r"], mr.params["target_color"])
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+
+
+def test_probability_complement_construct():
+    ctx = _make_ctx("math.g2_l54.find_value", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "probability_complement"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "value"
+    assert [s.op for s in sq.steps] == ["subtract_from_one"]
+    p_num, p_den = mr.params["p_num"], mr.params["p_den"]
+    assert (sympy.Rational(p_num, p_den) + sympy.sympify(sq.answer.srepr) - 1).equals(0)
+
+
+@pytest.mark.parametrize("seed", range(100))
+def test_probability_complement_double_solve_property(seed):
+    ctx = _make_ctx("math.g2_l54.find_value", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.probability_complement")
+    sol = solver(mr.params["p_num"], mr.params["p_den"])
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+
+
+def test_probability_at_least_one_construct():
+    ctx = _make_ctx("math.g2_l54.find_value", 3)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "probability_at_least_one"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "value"
+    # level_sep: Lv2（引き算1手順）とは異なる op 列。
+    assert [s.op for s in sq.steps] == [
+        "compute_single_trial_complement", "compute_complement_probability", "subtract_from_one",
+    ]
+    p_val = sympy.sympify(sq.answer.srepr)
+    assert 0 <= p_val <= 1
+
+
+@pytest.mark.parametrize("seed", range(100))
+def test_probability_at_least_one_double_solve_property(seed):
+    ctx = _make_ctx("math.g2_l54.find_value", 3)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.probability_at_least_one")
+    sol = solver(mr.params["space_size"], mr.params["favorable_size"], mr.params["trials"])
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+
+
+def test_judge_equally_likely_construct():
+    ctx = _make_ctx("math.g2_l51.knowledge", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "judge_equally_likely"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "choice"
+    assert not any(ch.isdigit() for ch in sq.answer.correct)
+    assert sq.answer.correct not in sq.answer.distractors
+
+
+@pytest.mark.parametrize("seed", range(100))
+def test_judge_equally_likely_double_solve_property(seed):
+    ctx = _make_ctx("math.g2_l51.knowledge", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.judge_equally_likely")
+    sol = solver(mr.params["is_equally_likely"])
+    assert sol.answer.correct == mr.sub_questions[0].answer.correct

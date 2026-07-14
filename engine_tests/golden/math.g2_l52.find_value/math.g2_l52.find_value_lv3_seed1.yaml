@@ -1,0 +1,58 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - probability.count_two_dice
+  provenance:
+    git_commit: ''
+    recipe: math.probability_two_dice
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_probability_two_dice_v1
+    tier: T1
+  requested:
+    form: find_value
+    level: 3
+    subject: math
+    unit: g2_l52
+  resolved:
+    form: find_value
+    level: 3
+    subject: math
+    unit: g2_l52
+  seed: 1
+  signature: probability_two_dice_count
+problem_ref: 5ab96a249444828c
+problem_text: 1から9までの目が出る大小2個のさいころを同時に投げるとき、出た目の和が2以上になる確率を、表を作って求めよ。
+sub_questions:
+- answer:
+    display: '1'
+    kind: symbolic
+    srepr: Integer(1)
+  cause_tags: []
+  concept_tags:
+  - probability.count_two_dice
+  explanation: まず、大小2個のさいころの目の組合せを、表などを使ってすべて数え上げる。 すべての目の組合せを数え上げる次に、そのうち、求める条件にあてはまる組合せの数を数える。 条件にあてはまる組合せを数える最後に、条件にあてはまる組合せの数を、すべての組合せの数でわる。 1
+  hints:
+  - 大小2個のさいころの目の組合せを、表などを使ってすべて数え上げる。
+  - そのうち、求める条件にあてはまる組合せの数を数える。
+  label: (1)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 大小2個のさいころの目の組合せを、表などを使ってすべて数え上げる。
+    op: enumerate_all_pairs
+    result_display: すべての目の組合せを数え上げる
+    result_srepr: ''
+  - args: []
+    narration: そのうち、求める条件にあてはまる組合せの数を数える。
+    op: count_favorable_pairs
+    result_display: 条件にあてはまる組合せを数える
+    result_srepr: ''
+  - args: []
+    narration: 条件にあてはまる組合せの数を、すべての組合せの数でわる。
+    op: compute_probability
+    result_display: '1'
+    result_srepr: Integer(1)
+visual_svg: null

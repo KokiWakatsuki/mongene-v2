@@ -1,0 +1,47 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - probability.relative_frequency_basic
+  provenance:
+    git_commit: ''
+    recipe: math.relative_frequency_g1
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_probability_relative_freq_g1_v1
+    tier: T1
+  requested:
+    form: calculation
+    level: 1
+    subject: math
+    unit: g1_l59
+  resolved:
+    form: calculation
+    level: 1
+    subject: math
+    unit: g1_l59
+  seed: 2
+  signature: relative_frequency_basic
+problem_ref: 6a40662fe4c58752
+problem_text: さいころを89回投げたところ、1の目が57回出た。1の目が出た相対度数を求めよ。
+sub_questions:
+- answer:
+    display: 57/89
+    kind: symbolic
+    srepr: Rational(57, 89)
+  cause_tags: []
+  concept_tags:
+  - probability.relative_frequency_basic
+  explanation: まず、ことがらが起こった回数を、試行の総回数でわる。 57/89
+  hints:
+  - 問題文の与えられた値をもう一度確認しよう。
+  label: (1)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args: []
+    narration: ことがらが起こった回数を、試行の総回数でわる。
+    op: divide_occurred_by_total
+    result_display: 57/89
+    result_srepr: Rational(57, 89)
+visual_svg: null

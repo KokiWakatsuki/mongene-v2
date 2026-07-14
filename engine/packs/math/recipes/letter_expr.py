@@ -427,6 +427,8 @@ _TERM_RECALL_CONCEPTS = [
     "function_terms.term_recall",
     "direct_proportion.term_recall",
     "inverse_proportion.term_recall",
+    # C12 確率（用語想起）
+    "probability_terms.term_recall",
 ]
 
 
@@ -549,6 +551,16 @@ def _draw_term_statement(domain: str, concept: str, rng: Rng, p: dict[str, objec
         if concept == "coeff_b":
             return f"2次方程式 {eqx} において、x の項の係数"
         return f"2次方程式 {eqx} において、定数項"  # coeff_c
+
+    if domain == "probability_terms":
+        # g1_l59/g2_l51 確率まわりの用語。具体例（さいころをn回投げる等）を埋め込み
+        # surface を分散する。
+        n = int(draw(p["number_domain"], rng))
+        if concept == "trial":
+            return f"さいころを{n}回投げる実験のように、同じ条件のもとで何回もくり返すことができる実験や観察のこと"
+        if concept == "probability":
+            return f"{n}回中の一部で起こることがらのように、あることがらの起こりやすさの程度を表す数のこと"
+        return f"1から{n}までの番号のカードのように、起こりうるどの結果も同じ程度に起こると考えられるようす"  # equally_likely
 
     if domain == "quadratic_function_terms":
         # g3_l32 y=ax² まわりの用語。具体例の比例定数 a(≠0) を埋め込み surface を分散する。
@@ -912,6 +924,8 @@ _RULE_RECALL_CONCEPTS = [
     # C6 g3 knowledge（規則・意味の想起）
     "quadratic_function_form.rule_recall",
     "quadratic_roc_property.rule_recall",
+    # C12 確率（規則・意味の想起）
+    "complementary_event.rule_recall",
 ]
 
 
@@ -1086,6 +1100,12 @@ def _draw_rule_statement(topic: str, concept: str, rng: Rng, p: dict[str, object
         cands = [v for v in _domain_candidates(cast("dict[str, object]", p["number_domain"])) if v != 0]
         a = int(draw({"int_set": cands}, rng))
         return f"関数 y = {a}x² について、x の変域を変えたときの変化の割合の性質"
+
+    if topic == "complementary_event":
+        # g2_l54 余事象の意味。具体例の確率 p=分数 を surface に埋め込み dup 分散。
+        den = int(draw(p["number_domain"], rng))
+        num = int(draw({"int_range": [1, den - 1]}, rng))
+        return f"あることがらの起こる確率が {num}/{den} であるとき、その「余事象」（そのことがらが起こらないという事象）の確率"
 
     raise ValueError(f"未知の topic: {topic!r}")
 

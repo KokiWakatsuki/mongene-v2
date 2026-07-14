@@ -1,0 +1,58 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - probability.count_single_space
+  provenance:
+    git_commit: ''
+    recipe: math.probability_single_die
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_probability_single_die_v1
+    tier: T1
+  requested:
+    form: find_value
+    level: 1
+    subject: math
+    unit: g2_l52
+  resolved:
+    form: find_value
+    level: 1
+    subject: math
+    unit: g2_l52
+  seed: 2
+  signature: probability_coin_or_die_count
+problem_ref: 94d19c4f8d85ec1f
+problem_text: 1から65までの番号が1つずつ書かれた65枚のカードから1枚を引く。引いたカードの番号が52以上である確率を求めよ。
+sub_questions:
+- answer:
+    display: 14/65
+    kind: symbolic
+    srepr: Rational(14, 65)
+  cause_tags: []
+  concept_tags:
+  - probability.count_single_space
+  explanation: まず、起こりうるすべての場合を数え上げる。 すべての場合を数え上げる次に、そのうち、求める条件にあてはまる場合の数を数える。 条件にあてはまる場合を数える最後に、条件にあてはまる場合の数を、すべての場合の数でわる。 14/65
+  hints:
+  - 起こりうるすべての場合を数え上げる。
+  - そのうち、求める条件にあてはまる場合の数を数える。
+  label: (1)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 起こりうるすべての場合を数え上げる。
+    op: enumerate_all_outcomes
+    result_display: すべての場合を数え上げる
+    result_srepr: ''
+  - args: []
+    narration: そのうち、求める条件にあてはまる場合の数を数える。
+    op: count_favorable
+    result_display: 条件にあてはまる場合を数える
+    result_srepr: ''
+  - args: []
+    narration: 条件にあてはまる場合の数を、すべての場合の数でわる。
+    op: compute_probability
+    result_display: 14/65
+    result_srepr: Rational(14, 65)
+visual_svg: null

@@ -1,0 +1,58 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - probability.at_least_one_via_complement
+  provenance:
+    git_commit: ''
+    recipe: math.probability_at_least_one
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_probability_complement_v1
+    tier: T1
+  requested:
+    form: find_value
+    level: 3
+    subject: math
+    unit: g2_l54
+  resolved:
+    form: find_value
+    level: 3
+    subject: math
+    unit: g2_l54
+  seed: 2
+  signature: probability_at_least_one
+problem_ref: 351392a1a75f7985
+problem_text: 1個のさいころ（1から10までの目が出る）を5回投げるとき、少なくとも1回は1の目が出る確率を、余事象を利用して求めよ。
+sub_questions:
+- answer:
+    display: 40951/100000
+    kind: symbolic
+    srepr: Rational(40951, 100000)
+  cause_tags: []
+  concept_tags:
+  - probability.at_least_one_via_complement
+  explanation: まず、1回の試行で条件が起こらない場合の数を数え、その確率を求める。 1回分の余事象の確率を求める次に、独立な試行をくり返すので、すべての回で条件が起こらない確率は1回分の確率を試行回数だけかけ合わせたものになる。 余事象の確率を求める最後に、1から、その余事象の確率をひいて、少なくとも1回起こる確率を求める。 40951/100000
+  hints:
+  - 1回の試行で条件が起こらない場合の数を数え、その確率を求める。
+  - 独立な試行をくり返すので、すべての回で条件が起こらない確率は1回分の確率を試行回数だけかけ合わせたものになる。
+  label: (1)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 1回の試行で条件が起こらない場合の数を数え、その確率を求める。
+    op: compute_single_trial_complement
+    result_display: 1回分の余事象の確率を求める
+    result_srepr: ''
+  - args: []
+    narration: 独立な試行をくり返すので、すべての回で条件が起こらない確率は1回分の確率を試行回数だけかけ合わせたものになる。
+    op: compute_complement_probability
+    result_display: 余事象の確率を求める
+    result_srepr: ''
+  - args: []
+    narration: 1から、その余事象の確率をひいて、少なくとも1回起こる確率を求める。
+    op: subtract_from_one
+    result_display: 40951/100000
+    result_srepr: Rational(40951, 100000)
+visual_svg: null

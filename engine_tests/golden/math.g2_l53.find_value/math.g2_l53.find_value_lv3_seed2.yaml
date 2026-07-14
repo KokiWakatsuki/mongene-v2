@@ -1,0 +1,58 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - probability.count_combination_selection
+  provenance:
+    git_commit: ''
+    recipe: math.probability_combination_selection
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_probability_combination_selection_v1
+    tier: T1
+  requested:
+    form: find_value
+    level: 3
+    subject: math
+    unit: g2_l53
+  resolved:
+    form: find_value
+    level: 3
+    subject: math
+    unit: g2_l53
+  seed: 2
+  signature: probability_combination_selection
+problem_ref: 98f966cb43a58381
+problem_text: 青玉8個、黒玉9個が入った袋から玉を2個同時に取り出す。取り出した2個がともに青玉である確率を求めよ。
+sub_questions:
+- answer:
+    display: 7/34
+    kind: symbolic
+    srepr: Rational(7, 34)
+  cause_tags: []
+  concept_tags:
+  - probability.count_combination_selection
+  explanation: まず、玉を区別して、取り出し方をすべて数え上げる。 すべての取り出し方を数え上げる次に、そのうち、求める条件にあてはまる取り出し方の数を数える。 条件にあてはまる取り出し方を数える最後に、条件にあてはまる取り出し方の数を、すべての取り出し方の数でわる。 7/34
+  hints:
+  - 玉を区別して、取り出し方をすべて数え上げる。
+  - そのうち、求める条件にあてはまる取り出し方の数を数える。
+  label: (1)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 玉を区別して、取り出し方をすべて数え上げる。
+    op: enumerate_all_combinations
+    result_display: すべての取り出し方を数え上げる
+    result_srepr: ''
+  - args: []
+    narration: そのうち、求める条件にあてはまる取り出し方の数を数える。
+    op: count_favorable_combinations
+    result_display: 条件にあてはまる取り出し方を数える
+    result_srepr: ''
+  - args: []
+    narration: 条件にあてはまる取り出し方の数を、すべての取り出し方の数でわる。
+    op: compute_probability
+    result_display: 7/34
+    result_srepr: Rational(7, 34)
+visual_svg: null

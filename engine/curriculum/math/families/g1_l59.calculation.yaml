@@ -1,0 +1,25 @@
+family: math.g1_l59.calculation
+form: calculation
+source_desc: |
+  起こった回数÷試行回数で相対度数(確率)を計算する
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: 起こった回数÷試行回数で相対度数(確率)を計算する。
+       example: さいころを300回投げたところ、1の目が48回出た。1の目が出た相対度数を求めよ。
+  【設計モデル】新設 solver math.relative_frequency（起こった回数÷試行回数の既約分数）。
+  answer-first: total(試行回数)・occurred(起こった回数、0<occurred<total)を選ぶ。
+concepts_default: [probability.relative_frequency_basic]
+levels:
+  "1":
+    signature: relative_frequency_basic
+    recipe: math.relative_frequency_g1
+    params:
+      total_domain: {int_range: [50, 500]}
+    given: [expressions]
+    asked: [value]
+    visual: none
+    text: {tier: T1, template: lf_probability_relative_freq_g1_v1}
+    hints: [steps_prefix]
+    concept_tags: [probability.relative_frequency_basic]
+    cause_tags: []
+remedial:
+  default_level: 1

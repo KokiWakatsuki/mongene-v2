@@ -1,0 +1,47 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - probability.complement
+  provenance:
+    git_commit: ''
+    recipe: math.probability_complement
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_probability_complement_v1
+    tier: T1
+  requested:
+    form: find_value
+    level: 2
+    subject: math
+    unit: g2_l54
+  resolved:
+    form: find_value
+    level: 2
+    subject: math
+    unit: g2_l54
+  seed: 3
+  signature: probability_complement
+problem_ref: 11211504bffeda94
+problem_text: 1から16までの目が出る大小2個のさいころを同時に投げるとき、出た目の和が27になる確率が6/256である。出た目の和が27にならない確率を求めよ。
+sub_questions:
+- answer:
+    display: 125/128
+    kind: symbolic
+    srepr: Rational(125, 128)
+  cause_tags: []
+  concept_tags:
+  - probability.complement
+  explanation: まず、1から、もとのことがらの起こる確率をひく。 125/128
+  hints:
+  - 問題文の与えられた値をもう一度確認しよう。
+  label: (1)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 1から、もとのことがらの起こる確率をひく。
+    op: subtract_from_one
+    result_display: 125/128
+    result_srepr: Rational(125, 128)
+visual_svg: null

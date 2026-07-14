@@ -1,0 +1,8 @@
+approved_at: '2026-07-15T00:56:55.756786'
+approver: koki
+content_sha256: 53ebb553c9197f936b38ea13958d7c4d2e755356e7d557ac4f1464da719b2642
+family: math.g1_l59.calculation
+files:
+- engine_tests/golden/math.g1_l59.calculation/math.g1_l59.calculation_lv1_seed1.yaml
+- engine_tests/golden/math.g1_l59.calculation/math.g1_l59.calculation_lv1_seed2.yaml
+- engine_tests/golden/math.g1_l59.calculation/math.g1_l59.calculation_lv1_seed3.yaml

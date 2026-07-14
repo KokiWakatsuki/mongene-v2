@@ -1,0 +1,51 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - probability.interpret_relative_frequency_limit
+  provenance:
+    git_commit: ''
+    recipe: math.interpret_relative_frequency_limit
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_probability_judge_v1
+    tier: T1
+  requested:
+    form: knowledge
+    level: 2
+    subject: math
+    unit: g1_l59
+  resolved:
+    form: knowledge
+    level: 2
+    subject: math
+    unit: g1_l59
+  seed: 2
+  signature: interpret_relative_frequency_limit
+problem_ref: 3ff04031ae7157da
+problem_text: びんのふたを116回より多く投げて表が出た相対度数を調べたところ、投げる回数を増やすにつれてその値がしだいに一定の値に近づいた。この一定の値は何を表していると考えられるか。
+sub_questions:
+- answer:
+    correct: その事象の起こる確率
+    distractors:
+    - 起こった回数の合計
+    - 試行回数そのもの
+    - 起こらなかった回数の割合
+    fact_id: probability.relative_frequency_limit
+    kind: choice
+  cause_tags: []
+  concept_tags:
+  - probability.interpret_relative_frequency_limit
+  explanation: まず、試行回数を増やしたときに相対度数が近づく値が、何を表すかを思い出す。 その事象の起こる確率
+  hints:
+  - 問題文の与えられた値をもう一度確認しよう。
+  label: (1)
+  prompt_text: choice を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 試行回数を増やしたときに相対度数が近づく値が、何を表すかを思い出す。
+    op: recall_relative_frequency_limit
+    result_display: その事象の起こる確率
+    result_srepr: その事象の起こる確率
+visual_svg: null
