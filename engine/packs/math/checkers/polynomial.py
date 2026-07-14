@@ -134,6 +134,14 @@ def double_solve_factor_polynomial(mr: MR) -> Solution:
     return cast(Solution, solver(p["expr_str"], p["mode"]))
 
 
+@register_checker("math.evaluate_arithmetic_via_identity.double_solve")
+def double_solve_evaluate_arithmetic_via_identity(mr: MR) -> Solution:
+    # mode と value1/value2（Lv2: a,b／Lv3: s,p）から独立に恒等式の右辺を再計算。
+    p = mr.params
+    solver = REGISTRY.solver("math.evaluate_arithmetic_via_identity")
+    return cast(Solution, solver(p["mode"], p["value1"], p["value2"]))
+
+
 __all__ = [
     "double_solve_combine_like_terms",
     "double_solve_add_or_subtract_polynomials",
@@ -150,4 +158,5 @@ __all__ = [
     "double_solve_system_term_recall",
     "double_solve_expand_product",
     "double_solve_factor_polynomial",
+    "double_solve_evaluate_arithmetic_via_identity",
 ]

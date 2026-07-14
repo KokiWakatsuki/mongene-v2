@@ -2469,6 +2469,7 @@ _EXPAND_CELLS = [
     ("math.g3_l4.calculation", 1), ("math.g3_l4.calculation", 2),
     ("math.g3_l5.calculation", 1),
     ("math.g3_l6.calculation", 2), ("math.g3_l6.calculation", 3),
+    ("math.g3_l13.calculation", 2),
 ]
 
 
@@ -2542,6 +2543,55 @@ def test_factor_polynomial_double_solve_property(family, level, seed):
     # 恒真: 因数分解形は非自明（積または累乗）で、展開すると与式に戻る。
     assert factored.is_Mul or factored.is_Pow
     assert sympy.expand(factored) == sympy.expand(sympy.sympify(mr.params["expr_str"]))
+
+
+# ---------------------------------------------------------------------------
+# math.evaluate_arithmetic_via_identity（C3 g3_l12.calculation 式の計算の利用）
+# ---------------------------------------------------------------------------
+_ARITHMETIC_IDENTITY_CELLS = [
+    ("math.g3_l12.calculation", 2), ("math.g3_l12.calculation", 3),
+]
+
+
+def test_evaluate_arithmetic_via_identity_lv2_construct():
+    ctx = _make_ctx("math.g3_l12.calculation", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "evaluate_diff_of_squares_arithmetic"
+    assert set(mr.given.keys()) == {"expression"}
+    sq = mr.sub_questions[0]
+    assert sq.asked == "value"
+    assert [s.op for s in sq.steps] == ["factor_difference_of_squares", "multiply_factors"]
+    # 答えは自由変数を含まない整数。
+    assert not sympy.sympify(sq.answer.srepr).free_symbols
+
+
+def test_evaluate_arithmetic_via_identity_lv3_construct():
+    ctx = _make_ctx("math.g3_l12.calculation", 3)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "evaluate_symmetric_sum_of_squares"
+    assert set(mr.given.keys()) == {"equation_a", "equation_b", "expression"}
+    sq = mr.sub_questions[0]
+    assert sq.asked == "value"
+    assert [s.op for s in sq.steps] == [
+        "express_via_elementary_symmetric", "substitute_and_compute",
+    ]
+    assert not sympy.sympify(sq.answer.srepr).free_symbols
+
+
+@pytest.mark.parametrize("family,level", _ARITHMETIC_IDENTITY_CELLS)
+@pytest.mark.parametrize("seed", range(100))
+def test_evaluate_arithmetic_via_identity_double_solve_property(family, level, seed):
+    ctx = _make_ctx(family, level)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    # 独立ソルバの答えが recipe の答えと一致する（double-solve）。
+    solver = REGISTRY.solver("math.evaluate_arithmetic_via_identity")
+    sol = solver(mr.params["mode"], mr.params["value1"], mr.params["value2"])
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+    # 答えは自由変数を含まない整数（工夫計算の最終値）。
+    assert not sympy.sympify(sol.answer.srepr).free_symbols
 
 
 # ---------------------------------------------------------------------------

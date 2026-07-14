@@ -1,0 +1,46 @@
+family: math.g3_l12.calculation
+form: calculation
+source_desc: |
+  式の計算の利用（数の計算への応用・式の値）
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv2 desc: 因数分解や公式で工夫し数値計算・式の値を直接求める。
+       example: 因数分解を利用して 98²-2² を計算せよ。
+  Lv3 desc: 対称式・条件式を変形してから代入する非自明な工夫。
+       example: x+y=5、xy=3 のとき、x²+y² の値を求めよ。
+  【設計モデル】独立ソルバ math.evaluate_arithmetic_via_identity が構成内訳（Lv2: a,b／
+  Lv3: s,p）だけから恒等式の右辺を再計算する（double-solve）。level_sep は mode 別 op 列:
+  Lv2（diff_of_squares_arithmetic：a²-b²=(a+b)(a-b) の2手順）／Lv3（symmetric_sum_of_squares：
+  x+y=s, xy=p のとき x²+y²=s²-2p を導く2手順・x,y の実数解の有無は問わない純粋な恒等式）。
+  dup は Lv2 が a,b の組（a≠b で除外）、Lv3 が s,p の組で分散。
+concepts_default: [polynomial.arithmetic_via_diff_of_squares]
+levels:
+  "2":
+    signature: evaluate_diff_of_squares_arithmetic
+    recipe: math.evaluate_arithmetic_via_identity
+    params:
+      mode: diff_of_squares_arithmetic
+      a_domain: {int_range: [10, 99]}
+      b_domain: {int_range: [1, 9]}
+    given: [expression]
+    asked: [value]
+    visual: none
+    text: {tier: T1, template: lf_arithmetic_identity_v1}
+    hints: [steps_prefix]
+    concept_tags: [polynomial.arithmetic_via_diff_of_squares]
+    cause_tags: []
+  "3":
+    signature: evaluate_symmetric_sum_of_squares
+    recipe: math.evaluate_arithmetic_via_identity
+    params:
+      mode: symmetric_sum_of_squares
+      sum_domain: {int_range: [-9, 9]}
+      product_domain: {int_range: [-9, 9]}
+    given: [equation_a, equation_b, expression]
+    asked: [value]
+    visual: none
+    text: {tier: T1, template: lf_symmetric_expression_v1}
+    hints: [steps_prefix]
+    concept_tags: [polynomial.symmetric_expression_from_sum_product]
+    cause_tags: []
+remedial:
+  default_level: 2

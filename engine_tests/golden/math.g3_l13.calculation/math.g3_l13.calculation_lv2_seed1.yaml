@@ -1,0 +1,54 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - polynomial.proof_diff_squares_linear
+  provenance:
+    git_commit: ''
+    recipe: math.expand_product
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_expand_v1
+    tier: T1
+  requested:
+    form: calculation
+    level: 2
+    subject: math
+    unit: g3_l13
+  resolved:
+    form: calculation
+    level: 2
+    subject: math
+    unit: g3_l13
+  seed: 1
+  signature: expand_proof_diff_squares_linear
+problem_ref: e44c2af75a279525
+problem_text: '次の式を展開せよ。
+
+  (5n - 7)² - (5n + 6)²'
+sub_questions:
+- answer:
+    display: 13 - 130n
+    kind: symbolic
+    srepr: Add(Integer(13), Mul(Integer(-1), Integer(130), Symbol('n')))
+  cause_tags: []
+  concept_tags:
+  - polynomial.proof_diff_squares_linear
+  explanation: まず、2つの平方の差を、和と差の積の形になおす。 和と差の積の形になおす次に、積の形を計算し、式を簡単にする。 13 - 130n
+  hints:
+  - 2つの平方の差を、和と差の積の形になおす。
+  label: (1)
+  prompt_text: simplified_expr を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 2つの平方の差を、和と差の積の形になおす。
+    op: apply_diff_of_squares_formula
+    result_display: 和と差の積の形になおす
+    result_srepr: ''
+  - args: []
+    narration: 積の形を計算し、式を簡単にする。
+    op: simplify_result
+    result_display: 13 - 130n
+    result_srepr: Add(Integer(13), Mul(Integer(-1), Integer(130), Symbol('n')))
+visual_svg: null

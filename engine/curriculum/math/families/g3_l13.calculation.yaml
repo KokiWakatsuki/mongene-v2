@@ -1,0 +1,27 @@
+family: math.g3_l13.calculation
+form: calculation
+source_desc: |
+  式の計算の利用（図形の性質の証明への応用）— 証明で用いる展開・因数分解の式変形処理
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv2 desc: 証明で用いる展開・因数分解の式変形処理。
+       example: n を整数とするとき、(2n+1)²-(2n-1)² を展開して簡単にせよ。
+  【設計モデル】既存 math.expand_product / math.expand_expression を再利用（g3_l1〜l6 と
+  同型）。mode "proof_diff_squares_linear"：(an+b)²-(an+d)² は n² の項が常に相殺し
+  1次式 2a(b-d)n+(b-d)(b+d) になる（証明の定番の式変形）。b,d は段階的に相異させて
+  引く（b=d だと恒等的に0へ退化するため構成時に排除・鉄則⑤）。
+concepts_default: [polynomial.proof_diff_squares_linear]
+levels:
+  "2":
+    signature: expand_proof_diff_squares_linear
+    recipe: math.expand_product
+    params:
+      mode: proof_diff_squares_linear
+    given: [expression]
+    asked: [simplified_expr]
+    visual: none
+    text: {tier: T1, template: lf_expand_v1}
+    hints: [steps_prefix]
+    concept_tags: [polynomial.proof_diff_squares_linear]
+    cause_tags: []
+remedial:
+  default_level: 2

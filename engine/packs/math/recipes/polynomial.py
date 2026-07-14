@@ -1218,6 +1218,7 @@ _EXPAND_CONCEPTS = [
     "polynomial.expand_formula_square",
     "polynomial.expand_formula_diff_squares",
     "polynomial.expand_various",
+    "polynomial.proof_diff_squares_linear",
 ]
 
 _EXPAND_VARS = ["x", "a", "y", "m", "t"]
@@ -1353,6 +1354,19 @@ def _expand_construct(mode: str, rng: Rng, p: dict[str, Any]) -> tuple[str, str]
         common = f"({v1}+{v2})"
         expr = f"({common}+({a}))*({common}+({b}))"
         disp = f"({v1} + {v2}{_const_tail(a)})({v1} + {v2}{_const_tail(b)})"
+        return expr, disp
+
+    if mode == "proof_diff_squares_linear":
+        # (a·n+b)² - (a·n+d)² は n² の項が常に相殺し、1次式 2a(b-d)n + (b-d)(b+d)
+        # になる（証明の式変形で定番の型・g3_l13 例題 (2n+1)²-(2n-1)²=8n と同型）。
+        # b と d が段階的に相異する（b=d だと恒等的に 0 に退化する）よう前の値を
+        # 除外して引く（鉄則⑤: 一括判定の while だと衝突時に無限ループしうる）。
+        a = int(draw({"int_set": list(range(1, 6))}, rng))
+        bd_candidates = [n for n in range(-9, 10) if n != 0]
+        b = int(draw({"int_set": bd_candidates}, rng))
+        d = int(draw({"int_set": [n for n in bd_candidates if n != b]}, rng))
+        expr = f"(({a})*n+({b}))**2-(({a})*n+({d}))**2"
+        disp = f"({_mono(a, 'n')}{_const_tail(b)})² - ({_mono(a, 'n')}{_const_tail(d)})²"
         return expr, disp
 
     raise ValueError(f"未知の mode: {mode!r}")
@@ -1530,6 +1544,122 @@ def expand_product(ctx: CellContext, rng: Rng) -> MR:
     )
 
 
+# ---------------------------------------------------------------------------
+# math.evaluate_arithmetic_via_identity（g3_l12.calculation Lv2/Lv3 用）— C3
+# 恒等式を利用して数値計算・式の値を直接求める。answer-first: 恒等式の右辺に使う
+# 値（Lv2: a,b／Lv3: s,p）を先に決め、独立ソルバで恒等式の右辺（＝答え）を再計算する。
+#   Lv2 "diff_of_squares_arithmetic": a²-b² を (a+b)(a-b) の工夫で計算する。
+#     a,b は非負整数・a≠b（a=b だと答えが0になり工夫の意味が薄れるため除外）。
+#   Lv3 "symmetric_sum_of_squares"  : x+y=s, xy=p のとき x²+y²=(x+y)²-2xy=s²-2p。
+#     x,y の実数解の有無を問わない純粋な恒等式（対称式の変形）。s,p は広い整数範囲。
+# ---------------------------------------------------------------------------
+_ARITHMETIC_IDENTITY_CONCEPTS = [
+    "polynomial.arithmetic_via_diff_of_squares",
+    "polynomial.symmetric_expression_from_sum_product",
+]
+
+
+@register_recipe(
+    "math.evaluate_arithmetic_via_identity", provides_concepts=_ARITHMETIC_IDENTITY_CONCEPTS
+)
+def evaluate_arithmetic_via_identity(ctx: CellContext, rng: Rng) -> MR:
+    """恒等式を利用して数値計算・式の値を直接求める（answer-first・calculation Lv2/Lv3）。"""
+    mode = cast(str, ctx.spec_level.params["mode"])
+    if mode == "diff_of_squares_arithmetic":
+        return _evaluate_diff_of_squares_arithmetic(ctx, rng, mode)
+    if mode == "symmetric_sum_of_squares":
+        return _evaluate_symmetric_sum_of_squares(ctx, rng, mode)
+    raise ValueError(f"未知の mode: {mode!r}")
+
+
+def _evaluate_diff_of_squares_arithmetic(ctx: CellContext, rng: Rng, mode: str) -> MR:
+    p = ctx.spec_level.params
+    a = int(draw(p["a_domain"], rng))
+    b_cands = [v for v in _domain_candidates(p["b_domain"]) if v != a]
+    b = int(draw({"int_set": b_cands}, rng))
+
+    expression = f"{a}² - {b}²"
+
+    solver = REGISTRY.solver("math.evaluate_arithmetic_via_identity")
+    sol = cast(Solution, solver(mode, a, b))
+    assert isinstance(sol.answer, SymbolicAnswer)
+    expected = sympy.expand((sympy.Integer(a) + sympy.Integer(b)) * (sympy.Integer(a) - sympy.Integer(b)))
+    diff = expected - sympy.sympify(sol.answer.srepr)
+    assert diff.equals(0), (
+        f"double-solve 不一致: 構成 a={a},b={b} の a²-b²={expected} != solver 再計算 {sol.answer.srepr}"
+    )
+    assert [s.op for s in sol.steps] == [
+        "factor_difference_of_squares", "multiply_factors",
+    ]
+    assert not sympy.sympify(sol.answer.srepr).free_symbols
+
+    sub_question = SubQuestionMR(
+        label="(1)",
+        asked="value",
+        answer=sol.answer,
+        steps=sol.steps,
+        concept_tags=_effective_concept_tags(ctx),
+        cause_tags=_effective_cause_tags(ctx),
+    )
+    return MR(
+        signature=ctx.spec_level.signature,
+        family=ctx.family,
+        level=ctx.level,
+        purpose=ctx.purpose,
+        seed=0,
+        params={"mode": mode, "value1": a, "value2": b},
+        given={"expression": expression},
+        sub_questions=[sub_question],
+        visual_plan=None,
+        provenance=Provenance(recipe="math.evaluate_arithmetic_via_identity"),
+    )
+
+
+def _evaluate_symmetric_sum_of_squares(ctx: CellContext, rng: Rng, mode: str) -> MR:
+    p = ctx.spec_level.params
+    s = int(draw(p["sum_domain"], rng))
+    prod_cands = _domain_candidates(p["product_domain"])
+    prod = int(draw({"int_set": prod_cands}, rng))
+
+    equation_a = f"x + y = {s}"
+    equation_b = f"xy = {prod}"
+    expression = "x² + y²"
+
+    solver = REGISTRY.solver("math.evaluate_arithmetic_via_identity")
+    sol = cast(Solution, solver(mode, s, prod))
+    assert isinstance(sol.answer, SymbolicAnswer)
+    expected = sympy.expand(sympy.Integer(s) ** 2 - 2 * sympy.Integer(prod))
+    diff = expected - sympy.sympify(sol.answer.srepr)
+    assert diff.equals(0), (
+        f"double-solve 不一致: 構成 s={s},p={prod} の s²-2p={expected} != solver 再計算 {sol.answer.srepr}"
+    )
+    assert [s_.op for s_ in sol.steps] == [
+        "express_via_elementary_symmetric", "substitute_and_compute",
+    ]
+    assert not sympy.sympify(sol.answer.srepr).free_symbols
+
+    sub_question = SubQuestionMR(
+        label="(1)",
+        asked="value",
+        answer=sol.answer,
+        steps=sol.steps,
+        concept_tags=_effective_concept_tags(ctx),
+        cause_tags=_effective_cause_tags(ctx),
+    )
+    return MR(
+        signature=ctx.spec_level.signature,
+        family=ctx.family,
+        level=ctx.level,
+        purpose=ctx.purpose,
+        seed=0,
+        params={"mode": mode, "value1": s, "value2": prod},
+        given={"equation_a": equation_a, "equation_b": equation_b, "expression": expression},
+        sub_questions=[sub_question],
+        visual_plan=None,
+        provenance=Provenance(recipe="math.evaluate_arithmetic_via_identity"),
+    )
+
+
 __all__ = [
     "combine_like_terms",
     "add_or_subtract_polynomials",
@@ -1546,4 +1676,5 @@ __all__ = [
     "system_term_recall",
     "expand_product",
     "factor_polynomial",
+    "evaluate_arithmetic_via_identity",
 ]

@@ -157,6 +157,16 @@ concepts:
   - id: polynomial.factor_various
     label: "共通因数のくくり出しや置きかえを組み合わせて因数分解する"
     unit: g3_l11
+  # C3 g3 式の計算の利用（数の計算への応用・式の値／証明の式変形）
+  - id: polynomial.arithmetic_via_diff_of_squares
+    label: "和と差の積の公式を利用して数値計算を工夫する（98²-2²など）"
+    unit: g3_l12
+  - id: polynomial.symmetric_expression_from_sum_product
+    label: "和と積の値から対称式（x²+y²など）の値を求める"
+    unit: g3_l12
+  - id: polynomial.proof_diff_squares_linear
+    label: "証明で用いる展開・因数分解の式変形（(an+b)²-(an+d)²の展開など）"
+    unit: g3_l13
   # C3 g3 平方根の計算
   - id: radical.square_of_root
     label: "根号と平方の相互変換（(√a)²=a・√(a²)=a）"

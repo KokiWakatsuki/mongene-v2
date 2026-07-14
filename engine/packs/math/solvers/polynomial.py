@@ -601,6 +601,8 @@ _EXPAND_STEPS: dict[str, list[str]] = {
     # g3_l6 いろいろな展開
     "expand_multi": ["expand_each_part", "combine_like_terms"],
     "expand_substitution": ["substitute_common_part", "apply_formula", "restore_expansion"],
+    # g3_l13 証明で用いる式変形（(an+b)²-(cn+d)² 形・n² が相殺し1次式になる）
+    "proof_diff_squares_linear": ["apply_diff_of_squares_formula", "simplify_result"],
 }
 
 _EXPAND_OP_NARRATION: dict[str, str] = {
@@ -620,6 +622,8 @@ _EXPAND_OP_NARRATION: dict[str, str] = {
     "substitute_common_part": "共通する部分を1つの文字に置きかえる。",
     "apply_formula": "置きかえた式に乗法公式をあてはめる。",
     "restore_expansion": "置きかえをもとにもどして展開した式を整理する。",
+    "apply_diff_of_squares_formula": "2つの平方の差を、和と差の積の形になおす。",
+    "simplify_result": "積の形を計算し、式を簡単にする。",
 }
 
 _EXPAND_OP_PHRASE: dict[str, str] = {
@@ -634,6 +638,7 @@ _EXPAND_OP_PHRASE: dict[str, str] = {
     "expand_each_part": "各かっこを展開する",
     "substitute_common_part": "共通部分を置きかえる",
     "apply_formula": "公式にあてはめる",
+    "apply_diff_of_squares_formula": "和と差の積の形になおす",
 }
 
 
@@ -749,6 +754,75 @@ def factor_expression(expr_str: str, mode: object) -> Solution:
     return Solution(answer=answer, steps=steps)
 
 
+# ---------------------------------------------------------------------------
+# 数値計算・式の値への工夫（C3 g3_l12.calculation）— 恒等式を使って直接値を求める
+#
+# 与えられた数値（Lv2: a,b／Lv3: s,p）だけから、恒等式を経由して答えの整数を導く
+# （double-solve は独立に a²-b²／s²-2p を直接計算し .equals(0) で一致確認）。
+# mode ごとに steps の op 列を変える＝level_sep。narration に数字を書かない。
+#   Lv2 "diff_of_squares_arithmetic": a²-b² = (a+b)(a-b) を利用して工夫計算する。
+#   Lv3 "symmetric_sum_of_squares"  : x+y=s, xy=p のとき x²+y²=(x+y)²-2xy=s²-2p。
+#     x,y の実数解の有無は問わない（s,p という基本対称式の値のみから恒等式で導く）。
+# ---------------------------------------------------------------------------
+_ARITHMETIC_IDENTITY_STEPS: dict[str, list[str]] = {
+    "diff_of_squares_arithmetic": ["factor_difference_of_squares", "multiply_factors"],
+    "symmetric_sum_of_squares": [
+        "express_via_elementary_symmetric", "substitute_and_compute",
+    ],
+}
+
+_ARITHMETIC_IDENTITY_NARRATION: dict[str, str] = {
+    "factor_difference_of_squares": "2つの数の平方の差を、和と差の積の形になおす。",
+    "multiply_factors": "和と差の積を計算し、値を求める。",
+    "express_via_elementary_symmetric": "求める式を、和と積だけで表せる形に変形する。",
+    "substitute_and_compute": "和と積の値をあてはめて計算する。",
+}
+
+_ARITHMETIC_IDENTITY_PHRASE: dict[str, str] = {
+    "factor_difference_of_squares": "和と差の積の形になおす",
+    "express_via_elementary_symmetric": "和と積だけの形に変形する",
+}
+
+
+@register_solver("math.evaluate_arithmetic_via_identity")
+def evaluate_arithmetic_via_identity(mode: object, value1: object, value2: object) -> Solution:
+    """恒等式を利用して数値計算・式の値を直接求める（C3 g3_l12.calculation Lv2/Lv3）。
+
+    recipe の構成内訳（a,b または s,p）だけから、独立に恒等式の右辺を計算する
+    （double-solve）。mode ごとに steps の op 列を変える＝level_sep:
+      Lv2 "diff_of_squares_arithmetic": value1=a, value2=b -> a²-b²=(a+b)(a-b)。
+      Lv3 "symmetric_sum_of_squares"  : value1=s, value2=p -> x²+y²=s²-2p。
+    答えは整数の SymbolicAnswer（鉄則①: 数値の calc 答えは digit 可）。narration に
+    数字を書かない。
+    """
+    mode_s = str(mode)
+    if mode_s not in _ARITHMETIC_IDENTITY_STEPS:
+        raise ValueError(f"未知の mode: {mode_s!r}")
+    v1 = sympy.sympify(value1)
+    v2 = sympy.sympify(value2)
+    if mode_s == "diff_of_squares_arithmetic":
+        result = sympy.expand((v1 + v2) * (v1 - v2))
+    else:  # symmetric_sum_of_squares
+        result = sympy.expand(v1**2 - 2 * v2)
+
+    disp = str(sympy.sstr(result))
+    srepr = sympy.srepr(result)
+
+    ops = _ARITHMETIC_IDENTITY_STEPS[mode_s]
+    steps = [
+        Step(
+            op=op,
+            args=[],
+            result_srepr=srepr if i == len(ops) - 1 else "",
+            result_display=disp if i == len(ops) - 1 else _ARITHMETIC_IDENTITY_PHRASE.get(op, ""),
+            narration=_ARITHMETIC_IDENTITY_NARRATION[op],
+        )
+        for i, op in enumerate(ops)
+    ]
+    answer = SymbolicAnswer(srepr=srepr, display=disp)
+    return Solution(answer=answer, steps=steps)
+
+
 __all__ = [
     "simplify_polynomial",
     "add_or_subtract_polynomials",
@@ -765,4 +839,5 @@ __all__ = [
     "system_term_definition",
     "expand_expression",
     "factor_expression",
+    "evaluate_arithmetic_via_identity",
 ]

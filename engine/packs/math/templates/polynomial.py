@@ -48,6 +48,15 @@ LF_EXPAND_V1 = "次の式を展開せよ。\n{{ given.expression }}"
 # g3_l7〜l11.calculation: 多項式を因数分解する（C3）
 LF_FACTOR_V1 = "次の式を因数分解せよ。\n{{ given.expression }}"
 
+# g3_l12.calculation Lv2: 恒等式を利用して式の値・数値計算を工夫して求める（C3）
+LF_ARITHMETIC_IDENTITY_V1 = "工夫して、次の式の値を求めよ。\n{{ given.expression }}"
+
+# g3_l12.calculation Lv3: 対称式の条件（和と積）から式の値を求める（C3）
+LF_SYMMETRIC_EXPRESSION_V1 = (
+    "{{ given.equation_a }}, {{ given.equation_b }} のとき、"
+    "{{ given.expression }} の値を求めよ。"
+)
+
 
 def _register_all() -> None:
     REGISTRY.register_template("lf_combine_like_terms_v1", LF_COMBINE_LIKE_TERMS_V1)
@@ -64,6 +73,8 @@ def _register_all() -> None:
     REGISTRY.register_template("lf_like_terms_v1", LF_LIKE_TERMS_V1)
     REGISTRY.register_template("lf_expand_v1", LF_EXPAND_V1)
     REGISTRY.register_template("lf_factor_v1", LF_FACTOR_V1)
+    REGISTRY.register_template("lf_arithmetic_identity_v1", LF_ARITHMETIC_IDENTITY_V1)
+    REGISTRY.register_template("lf_symmetric_expression_v1", LF_SYMMETRIC_EXPRESSION_V1)
 
 
 _register_all()
