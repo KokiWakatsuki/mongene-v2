@@ -1,0 +1,56 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - quadratic_roc_property.rule_recall
+  provenance:
+    git_commit: ''
+    recipe: math.recall_rule
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_rule_recall_v1
+    tier: T1
+  requested:
+    form: knowledge
+    level: 1
+    subject: math
+    unit: g3_l35
+  resolved:
+    form: knowledge
+    level: 1
+    subject: math
+    unit: g3_l35
+  seed: 1
+  signature: quadratic_roc_property_rule_recall
+problem_ref: f8eb6e29e5360942
+problem_text: 関数 y = 411x² について、x の変域を変えたときの変化の割合の性質。正しく述べているものを1つ選びなさい。
+sub_questions:
+- answer:
+    correct: 一次関数とちがい、区間によって変化の割合が変わり、一定にならない
+    distractors:
+    - 一次関数と同じように、区間によらず変化の割合はつねに一定である
+    - 変化の割合は、比例定数の符号によらずつねに正になる
+    - 変化の割合は、x の変域の位置によらず、つねに比例定数と等しくなる
+    fact_id: quadratic_roc_property.rule.variability
+    kind: choice
+  cause_tags: []
+  concept_tags:
+  - quadratic_roc_property.rule_recall
+  explanation: まず、問題で問われている規則や約束が、何についてのものかを読み取る。 問われている規則が何についてかを読み取る次に、その規則の正しい内容を思い出して選ぶ。 一次関数とちがい、区間によって変化の割合が変わり、一定にならない
+  hints:
+  - 問題で問われている規則や約束が、何についてのものかを読み取る。
+  label: (1)
+  prompt_text: choice を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 問題で問われている規則や約束が、何についてのものかを読み取る。
+    op: read_rule_context
+    result_display: 問われている規則が何についてかを読み取る
+    result_srepr: variability
+  - args: []
+    narration: その規則の正しい内容を思い出して選ぶ。
+    op: recall_correct_rule
+    result_display: 一次関数とちがい、区間によって変化の割合が変わり、一定にならない
+    result_srepr: 一次関数とちがい、区間によって変化の割合が変わり、一定にならない
+visual_svg: null

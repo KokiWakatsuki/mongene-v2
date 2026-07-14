@@ -1,0 +1,61 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - direct_proportion.evaluate_at_x
+  provenance:
+    git_commit: ''
+    recipe: math.evaluate_direct_proportion
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: prop_evaluate_direct_v1
+    tier: T1
+  requested:
+    form: calculation
+    level: 2
+    subject: math
+    unit: g1_l29
+  resolved:
+    form: calculation
+    level: 2
+    subject: math
+    unit: g1_l29
+  seed: 2
+  signature: direct_proportion_evaluate_signed
+problem_ref: d033d1e5bb05a0f2
+problem_text: 比例の式 y = 1/4x について、x = 1 のときの y の値を求めよ。
+sub_questions:
+- answer:
+    display: 1/4
+    kind: symbolic
+    srepr: Rational(1, 4)
+  cause_tags: []
+  concept_tags:
+  - direct_proportion.evaluate_at_x
+  explanation: まず、比例定数とxの値、それぞれの符号（正か負か）を確認する。 比例定数とxの値の符号を確認する次に、比例定数と x の値を、比例の式 y=ax の x にあてはめる。 y = 1/4 × 1最後に、かけ算を計算して y の値を求める。 y = 1/4
+  hints:
+  - 比例定数とxの値、それぞれの符号（正か負か）を確認する。
+  - 比例定数と x の値を、比例の式 y=ax の x にあてはめる。
+  label: (1)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 比例定数とxの値、それぞれの符号（正か負か）を確認する。
+    op: check_signs
+    result_display: 比例定数とxの値の符号を確認する
+    result_srepr: Rational(1, 4)
+  - args:
+    - 1/4
+    - '1'
+    narration: 比例定数と x の値を、比例の式 y=ax の x にあてはめる。
+    op: substitute_x
+    result_display: y = 1/4 × 1
+    result_srepr: Rational(1, 4)
+  - args:
+    - y = 1/4 × 1
+    narration: かけ算を計算して y の値を求める。
+    op: evaluate
+    result_display: y = 1/4
+    result_srepr: Rational(1, 4)
+visual_svg: null

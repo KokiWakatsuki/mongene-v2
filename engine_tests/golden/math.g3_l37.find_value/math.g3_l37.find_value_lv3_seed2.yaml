@@ -1,0 +1,71 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - quadratic_function.intersection_with_line
+  provenance:
+    git_commit: ''
+    recipe: math.intersection_parabola_line
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_quadratic_intersection_v1
+    tier: T1
+  requested:
+    form: find_value
+    level: 3
+    subject: math
+    unit: g3_l37
+  resolved:
+    form: find_value
+    level: 3
+    subject: math
+    unit: g3_l37
+  seed: 2
+  signature: quadratic_intersection_segment_area
+problem_ref: 07c3afea90a6d681
+problem_text: 放物線 y = x² と直線 y = -x + 12 が2点 A, B で交わっている。線分 AB の長さと、原点 O と2点 A, B を結んでできる三角形 OAB の面積を求めよ。
+sub_questions:
+- answer:
+    display: AB = 7√2, △OAB = 42
+    kind: symbolic
+    srepr: Tuple(Mul(Integer(7), Pow(Integer(2), Rational(1, 2))), Integer(42))
+  cause_tags: []
+  concept_tags:
+  - quadratic_function.intersection_with_line
+  explanation: まず、放物線の式と直線の式の右辺どうしを等しいとおき、方程式を立てる。 放物線と直線の式を等しいとおく次に、その方程式を解いて、交点の x 座標を求める。 交点の x 座標を求める最後に、求めた x の値を式に代入して、交点の y 座標を求める。 交点の y 座標を求めるさらに、2点の座標の差から、線分の長さを求める。 線分の長さを求めるさらに、頂点の座標から、三角形の面積を求める公式で面積を計算する。
+    AB = 7√2, △OAB = 42
+  hints:
+  - 放物線の式と直線の式の右辺どうしを等しいとおき、方程式を立てる。
+  - その方程式を解いて、交点の x 座標を求める。
+  - 求めた x の値を式に代入して、交点の y 座標を求める。
+  - 2点の座標の差から、線分の長さを求める。
+  label: (1)
+  prompt_text: area を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 放物線の式と直線の式の右辺どうしを等しいとおき、方程式を立てる。
+    op: set_up_equation
+    result_display: 放物線と直線の式を等しいとおく
+    result_srepr: ''
+  - args: []
+    narration: その方程式を解いて、交点の x 座標を求める。
+    op: solve_for_x
+    result_display: 交点の x 座標を求める
+    result_srepr: ''
+  - args: []
+    narration: 求めた x の値を式に代入して、交点の y 座標を求める。
+    op: compute_y
+    result_display: 交点の y 座標を求める
+    result_srepr: ''
+  - args: []
+    narration: 2点の座標の差から、線分の長さを求める。
+    op: compute_segment_length
+    result_display: 線分の長さを求める
+    result_srepr: ''
+  - args: []
+    narration: 頂点の座標から、三角形の面積を求める公式で面積を計算する。
+    op: compute_triangle_area
+    result_display: AB = 7√2, △OAB = 42
+    result_srepr: Tuple(Mul(Integer(7), Pow(Integer(2), Rational(1, 2))), Integer(42))
+visual_svg: null

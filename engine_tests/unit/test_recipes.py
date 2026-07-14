@@ -3451,6 +3451,10 @@ _TERM_RECALL_CELLS = [
     ("math.g3_l22.knowledge", 1),
     ("math.g3_l24.knowledge", 1),
     ("math.g3_l26.knowledge", 1),
+    # C4 g1 比例・反比例（用語想起）
+    ("math.g1_l28.knowledge", 1),
+    ("math.g1_l29.knowledge", 1),
+    ("math.g1_l33.knowledge", 1),
 ]
 
 
@@ -3936,3 +3940,405 @@ def test_compute_linear_equation_word_double_solve_property(family, level, seed)
     # 答えは定数（整数）。
     assert not sympy.sympify(sol.answer.srepr).free_symbols
     assert sympy.sympify(sol.answer.srepr).is_Integer
+
+
+# ---------------------------------------------------------------------------
+# C6 g3 二次関数 y=ax²（非visual13セル）
+# ---------------------------------------------------------------------------
+def test_evaluate_quadratic_function_lv1_construct():
+    ctx = _make_ctx("math.g3_l32.calculation", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "quadratic_function_evaluate"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "value"
+    assert [s.op for s in sq.steps] == ["substitute_x", "compute_y"]
+    assert mr.params["a"] != 0 and mr.params["x"] != 0
+    expected = sympy.Integer(mr.params["a"]) * sympy.Integer(mr.params["x"]) ** 2
+    assert (expected - sympy.sympify(sq.answer.srepr)).equals(0)
+
+
+@pytest.mark.parametrize("seed", range(100))
+def test_evaluate_quadratic_function_double_solve_property(seed):
+    ctx = _make_ctx("math.g3_l32.calculation", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.evaluate_quadratic_function")
+    sol = solver(mr.params["a"], mr.params["x"])
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+
+
+def test_quadratic_function_terms_knowledge_lv1_construct():
+    ctx = _make_ctx("math.g3_l32.knowledge", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "quadratic_function_terms_term_recall"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "choice"
+    assert sq.answer.correct == "比例定数"
+    assert not any(ch.isdigit() for ch in sq.answer.correct)
+
+
+def test_quadratic_function_form_knowledge_lv2_construct():
+    ctx = _make_ctx("math.g3_l32.knowledge", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "quadratic_function_form_rule_recall"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "choice"
+    # level_sep: Lv1 用語想起（identify_description/name_concept）とは異なる op 列。
+    assert [s.op for s in sq.steps] == ["read_rule_context", "recall_correct_rule"]
+    assert not any(ch.isdigit() for ch in sq.answer.correct)
+    assert sq.answer.correct not in sq.answer.distractors
+
+
+def test_y_range_over_quadratic_domain_lv2_construct():
+    ctx = _make_ctx("math.g3_l34.find_value", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "quadratic_y_range_one_sided"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "domain_range"
+    assert [s.op for s in sq.steps] == ["evaluate_endpoints", "order_by_magnitude"]
+    assert mr.params["x_lo"] * mr.params["x_hi"] >= 0  # 0の片側（またがない）
+
+
+def test_y_range_over_quadratic_domain_lv3_construct():
+    ctx = _make_ctx("math.g3_l34.find_value", 3)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "quadratic_y_range_straddles_zero"
+    sq = mr.sub_questions[0]
+    # level_sep: Lv2 とは異なる op 列（頂点を含むかの吟味が追加）。
+    assert [s.op for s in sq.steps] == [
+        "check_domain_contains_vertex", "evaluate_endpoints", "combine_with_vertex",
+    ]
+    assert mr.params["x_lo"] < 0 < mr.params["x_hi"]
+
+
+_QUADRATIC_Y_RANGE_CELLS = [
+    ("math.g3_l34.find_value", 2), ("math.g3_l34.find_value", 3),
+]
+
+
+@pytest.mark.parametrize("family,level", _QUADRATIC_Y_RANGE_CELLS)
+@pytest.mark.parametrize("seed", range(100))
+def test_y_range_over_quadratic_domain_double_solve_property(family, level, seed):
+    ctx = _make_ctx(family, level)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.y_range_over_quadratic_domain")
+    sol = solver(mr.params["a"], mr.params["x_lo"], mr.params["x_hi"], mr.params["mode"])
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+
+
+def test_rate_of_change_quadratic_lv2_construct():
+    ctx = _make_ctx("math.g3_l35.find_value", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "quadratic_roc_forward"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "rate_of_change"
+    assert [s.op for s in sq.steps] == ["evaluate_endpoints_roc", "compute_rate_of_change"]
+    a, x1, x2 = mr.params["a"], mr.params["x1"], mr.params["x2"]
+    expected = sympy.Integer(a) * (x1 + x2)  # y=ax² の変化の割合 = a(x1+x2)
+    assert (expected - sympy.sympify(sq.answer.srepr)).equals(0)
+
+
+def test_rate_of_change_quadratic_lv3_construct():
+    ctx = _make_ctx("math.g3_l35.find_value", 3)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "quadratic_roc_solve_for_a"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "value"
+    # level_sep: Lv2（順算）とは異なる op 列（逆算）。
+    assert [s.op for s in sq.steps] == ["set_up_rate_equation", "solve_for_coefficient"]
+    assert mr.params["x1"] + mr.params["x2"] != 0
+
+
+_QUADRATIC_ROC_CELLS = [
+    ("math.g3_l35.find_value", 2), ("math.g3_l35.find_value", 3),
+]
+
+
+@pytest.mark.parametrize("family,level", _QUADRATIC_ROC_CELLS)
+@pytest.mark.parametrize("seed", range(100))
+def test_rate_of_change_quadratic_double_solve_property(family, level, seed):
+    ctx = _make_ctx(family, level)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.rate_of_change_quadratic")
+    sol = solver(mr.params["a"], mr.params["x1"], mr.params["x2"], mr.params["mode"])
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+
+
+def test_quadratic_roc_property_knowledge_lv1_construct():
+    ctx = _make_ctx("math.g3_l35.knowledge", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "quadratic_roc_property_rule_recall"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "choice"
+    assert not any(ch.isdigit() for ch in sq.answer.correct)
+    assert sq.answer.correct not in sq.answer.distractors
+
+
+def test_intersection_parabola_line_lv2_construct():
+    ctx = _make_ctx("math.g3_l37.find_value", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "quadratic_intersection_find"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "intersection"
+    assert [s.op for s in sq.steps] == ["set_up_equation", "solve_for_x", "compute_y"]
+    assert mr.params["b"] != 0  # O,A,B が同一直線上にならない（構成的に保証）
+
+
+def test_intersection_parabola_line_lv3_construct():
+    ctx = _make_ctx("math.g3_l37.find_value", 3)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "quadratic_intersection_segment_area"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "area"
+    assert [s.op for s in sq.steps] == [
+        "set_up_equation", "solve_for_x", "compute_y",
+        "compute_segment_length", "compute_triangle_area",
+    ]
+
+
+def test_intersection_parabola_line_lv4_construct():
+    ctx = _make_ctx("math.g3_l37.find_value", 4)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "quadratic_intersection_bisecting_point"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "coordinate"
+    assert [s.op for s in sq.steps] == [
+        "set_up_equation", "solve_for_x", "compute_y",
+        "compute_triangle_area", "solve_for_bisecting_point",
+    ]
+
+
+_QUADRATIC_INTERSECTION_CELLS = [
+    ("math.g3_l37.find_value", 2), ("math.g3_l37.find_value", 3), ("math.g3_l37.find_value", 4),
+]
+
+
+@pytest.mark.parametrize("family,level", _QUADRATIC_INTERSECTION_CELLS)
+@pytest.mark.parametrize("seed", range(100))
+def test_intersection_parabola_line_double_solve_property(family, level, seed):
+    ctx = _make_ctx(family, level)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.intersection_parabola_line")
+    sol = solver(mr.params["a"], mr.params["m"], mr.params["b"], mr.params["mode"])
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+
+
+def test_solve_quadratic_motion_area_lv2_construct():
+    ctx = _make_ctx("math.g3_l38.find_value", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "quadratic_motion_area_single_segment"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "area"
+    assert [s.op for s in sq.steps] == ["locate_point_p", "compute_triangle_area"]
+    s, d = mr.params["s"], mr.params["d"]
+    assert 0 < d < s
+    # 三角形ABPの面積 = s・d÷2（P=(s,d)・底辺AB=s・高さ=d）。
+    assert sympy.sympify(sq.answer.srepr) == sympy.Rational(s * d, 2)
+
+
+def test_solve_quadratic_motion_area_lv3_construct():
+    ctx = _make_ctx("math.g3_l38.find_value", 3)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "quadratic_motion_area_case_split"
+    sq = mr.sub_questions[0]
+    # level_sep: Lv2 とは異なる op 列（どの辺の上にいるかの判断が追加）。
+    assert [s.op for s in sq.steps] == [
+        "determine_which_segment", "locate_point_p", "compute_triangle_area",
+    ]
+    s, d = mr.params["s"], mr.params["d"]
+    assert 0 < d < 2 * s
+
+
+_QUADRATIC_MOTION_CELLS = [
+    ("math.g3_l38.find_value", 2), ("math.g3_l38.find_value", 3),
+]
+
+
+@pytest.mark.parametrize("family,level", _QUADRATIC_MOTION_CELLS)
+@pytest.mark.parametrize("seed", range(100))
+def test_solve_quadratic_motion_area_double_solve_property(family, level, seed):
+    ctx = _make_ctx(family, level)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.solve_quadratic_motion_area")
+    sol = solver(mr.params["s"], mr.params["d"], mr.params["mode"])
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+    val = sympy.sympify(sol.answer.srepr)
+    assert not val.free_symbols
+    assert val >= 0
+
+
+# ---------------------------------------------------------------------------
+# C4（P3・g1 比例・反比例）— 非 visual 10 セル
+# ---------------------------------------------------------------------------
+_DIRECT_PROPORTION_EVALUATE_CELLS = [
+    ("math.g1_l29.calculation", 1),
+    ("math.g1_l29.calculation", 2),
+]
+
+
+def test_direct_proportion_evaluate_lv1_construct():
+    ctx = _make_ctx("math.g1_l29.calculation", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "direct_proportion_evaluate_basic"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "value"
+    assert [s.op for s in sq.steps] == ["substitute_x", "evaluate"]
+
+
+def test_direct_proportion_evaluate_lv2_different_ops():
+    ctx = _make_ctx("math.g1_l29.calculation", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "direct_proportion_evaluate_signed"
+    # level_sep: Lv2 は符号確認の1手順が増え op 列が Lv1 と相異する。
+    assert [s.op for s in mr.sub_questions[0].steps] == ["check_signs", "substitute_x", "evaluate"]
+
+
+@pytest.mark.parametrize("family,level", _DIRECT_PROPORTION_EVALUATE_CELLS)
+@pytest.mark.parametrize("seed", range(100))
+def test_direct_proportion_evaluate_double_solve_property(family, level, seed):
+    ctx = _make_ctx(family, level)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.evaluate_direct_proportion")
+    sol = solver(mr.params["a"], mr.params["x0"], mr.params["mode"])
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+    # 恒真: y = a * x0
+    a = sympy.sympify(mr.params["a"])
+    x0 = sympy.sympify(mr.params["x0"])
+    assert sympy.sympify(sol.answer.srepr) == a * x0
+
+
+_INVERSE_PROPORTION_EVALUATE_CELLS = [
+    ("math.g1_l33.calculation", 1),
+    ("math.g1_l33.calculation", 2),
+]
+
+
+def test_inverse_proportion_evaluate_lv1_construct():
+    ctx = _make_ctx("math.g1_l33.calculation", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "inverse_proportion_evaluate_forward"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "value"
+    assert [s.op for s in sq.steps] == ["substitute_x", "evaluate"]
+
+
+def test_inverse_proportion_evaluate_lv2_different_ops():
+    ctx = _make_ctx("math.g1_l33.calculation", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "inverse_proportion_evaluate_backward"
+    # level_sep: Lv2 は y から x を逆算するため op 列が Lv1 と相異する。
+    assert [s.op for s in mr.sub_questions[0].steps] == ["substitute_y", "solve_for_x"]
+
+
+@pytest.mark.parametrize("family,level", _INVERSE_PROPORTION_EVALUATE_CELLS)
+@pytest.mark.parametrize("seed", range(100))
+def test_inverse_proportion_evaluate_double_solve_property(family, level, seed):
+    ctx = _make_ctx(family, level)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.evaluate_inverse_proportion")
+    sol = solver(mr.params["a"], mr.params["known"], mr.params["mode"])
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+    # 恒真: forward は y=a/known、backward は x=a/known（どちらも a/known で表せる）。
+    a = sympy.sympify(mr.params["a"])
+    known = sympy.sympify(mr.params["known"])
+    assert sympy.sympify(sol.answer.srepr) == a / known
+
+
+def test_judge_functional_relation_lv2_construct():
+    ctx = _make_ctx("math.g1_l28.knowledge", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "judge_functional_relation"
+    sq = mr.sub_questions[0]
+    assert sq.answer.correct in {"yはxの関数であるといえる", "yはxの関数であるとはいえない"}
+    assert not any(ch.isdigit() for ch in sq.answer.correct)
+
+
+@pytest.mark.parametrize("seed", range(100))
+def test_judge_functional_relation_double_solve_property(seed):
+    ctx = _make_ctx("math.g1_l28.knowledge", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.judge_functional_relation")
+    sol = solver(mr.params["is_functional"])
+    assert sol.answer.correct == mr.sub_questions[0].answer.correct
+    expected = (
+        "yはxの関数であるといえる" if mr.params["is_functional"] == "True"
+        else "yはxの関数であるとはいえない"
+    )
+    assert sol.answer.correct == expected
+
+
+def test_judge_direct_proportion_table_lv2_construct():
+    ctx = _make_ctx("math.g1_l29.knowledge", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "judge_direct_proportion_table"
+    sq = mr.sub_questions[0]
+    assert sq.answer.correct in {"比例するといえる", "比例するとはいえない"}
+    assert not any(ch.isdigit() for ch in sq.answer.correct)
+
+
+@pytest.mark.parametrize("seed", range(100))
+def test_judge_direct_proportion_table_double_solve_property(seed):
+    ctx = _make_ctx("math.g1_l29.knowledge", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.judge_direct_proportion_table")
+    sol = solver(mr.params["xs"], mr.params["ys"])
+    assert sol.answer.correct == mr.sub_questions[0].answer.correct
+    # 恒真: 商 y/x の一定性と is_proportional が一致する。
+    xs = [sympy.sympify(v) for v in mr.params["xs"]]
+    ys = [sympy.sympify(v) for v in mr.params["ys"]]
+    ratios = [ys[i] / xs[i] for i in range(len(xs))]
+    expected_proportional = all(r == ratios[0] for r in ratios)
+    assert expected_proportional == (mr.params["is_proportional"] == "True")
+
+
+def test_judge_inverse_proportion_table_lv2_construct():
+    ctx = _make_ctx("math.g1_l33.knowledge", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "judge_inverse_proportion_table"
+    sq = mr.sub_questions[0]
+    assert sq.answer.correct in {"反比例するといえる", "反比例するとはいえない"}
+    assert not any(ch.isdigit() for ch in sq.answer.correct)
+
+
+@pytest.mark.parametrize("seed", range(100))
+def test_judge_inverse_proportion_table_double_solve_property(seed):
+    ctx = _make_ctx("math.g1_l33.knowledge", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.judge_inverse_proportion_table")
+    sol = solver(mr.params["xs"], mr.params["ys"])
+    assert sol.answer.correct == mr.sub_questions[0].answer.correct
+    # 恒真: 積 xy の一定性と is_inverse が一致する。
+    xs = [sympy.sympify(v) for v in mr.params["xs"]]
+    ys = [sympy.sympify(v) for v in mr.params["ys"]]
+    products = [xs[i] * ys[i] for i in range(len(xs))]
+    expected_inverse = all(p == products[0] for p in products)
+    assert expected_inverse == (mr.params["is_inverse"] == "True")

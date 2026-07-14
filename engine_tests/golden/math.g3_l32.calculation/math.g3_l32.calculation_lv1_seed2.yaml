@@ -1,0 +1,52 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - quadratic_function.evaluate
+  provenance:
+    git_commit: ''
+    recipe: math.evaluate_quadratic_function
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_quadratic_function_evaluate_v1
+    tier: T1
+  requested:
+    form: calculation
+    level: 1
+    subject: math
+    unit: g3_l32
+  resolved:
+    form: calculation
+    level: 1
+    subject: math
+    unit: g3_l32
+  seed: 2
+  signature: quadratic_function_evaluate
+problem_ref: b20bc148429f56e3
+problem_text: 関数 y = -6x² について、x = 8 のときの y の値を求めよ。
+sub_questions:
+- answer:
+    display: '-384'
+    kind: symbolic
+    srepr: Integer(-384)
+  cause_tags: []
+  concept_tags:
+  - quadratic_function.evaluate
+  explanation: まず、式の x に、与えられた値をあてはめる。 x に代入する次に、2乗を計算してから比例定数をかけ、y の値を求める。 -384
+  hints:
+  - 式の x に、与えられた値をあてはめる。
+  label: (1)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 式の x に、与えられた値をあてはめる。
+    op: substitute_x
+    result_display: x に代入する
+    result_srepr: ''
+  - args: []
+    narration: 2乗を計算してから比例定数をかけ、y の値を求める。
+    op: compute_y
+    result_display: '-384'
+    result_srepr: Integer(-384)
+visual_svg: null

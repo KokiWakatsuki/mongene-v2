@@ -1,0 +1,45 @@
+family: math.g3_l35.find_value
+form: find_value
+source_desc: |
+  2点/区間から変化の割合を立式して求める／変化の割合から区間や係数aを逆算する・2区間の
+  変化の割合を比較する（units.generated.yaml の desc/example を正として転記）。
+  Lv2 desc: 2点/区間から変化の割合を立式して求める。
+       example: 関数 y=x^2 について、x の値が 1 から 4 まで増加するときの変化の割合を求めよ。
+  Lv3 desc: 変化の割合から区間や係数aを逆算する/2区間の変化の割合を比較する。
+       example: 関数 y=ax^2 について、x の値が 2 から 5 まで増加するときの変化の割合が
+                14 であった。このとき a の値を求めよ。
+  【設計モデル】新設 solver math.rate_of_change_quadratic。Lv2 は mode="forward"（順算）、
+  Lv3 は mode="solve_for_a"（逆算。exampleに一致する数値逆算の求値）。x1+x2≠0 は x1,x2 を
+  正の範囲から選ぶことで構成的に保証（鉄則⑤）。「2区間比較」は答えが数値でなく定性的な
+  比較結果になり SymbolicAnswer.srepr（sympy srepr が前提）になじまないため、本セルでは
+  数値逆算の求値に一本化した（§10 sanction）。
+concepts_default: [quadratic_function.rate_of_change]
+levels:
+  "2":
+    signature: quadratic_roc_forward
+    recipe: math.rate_of_change_quadratic
+    params:
+      mode_set: [forward]
+      a_domain: {int_range: [-6, 6]}
+    given: [condition]
+    asked: [rate_of_change]
+    visual: none
+    text: {tier: T1, template: lf_quadratic_roc_v1}
+    hints: [steps_prefix]
+    concept_tags: [quadratic_function.rate_of_change]
+    cause_tags: []
+  "3":
+    signature: quadratic_roc_solve_for_a
+    recipe: math.rate_of_change_quadratic
+    params:
+      mode_set: [solve_for_a]
+      a_domain: {int_range: [-6, 6]}
+    given: [condition]
+    asked: [value]
+    visual: none
+    text: {tier: T1, template: lf_quadratic_roc_v1}
+    hints: [steps_prefix]
+    concept_tags: [quadratic_function.rate_of_change]
+    cause_tags: []
+remedial:
+  default_level: 2

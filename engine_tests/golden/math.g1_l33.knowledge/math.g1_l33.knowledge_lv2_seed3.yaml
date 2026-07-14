@@ -1,0 +1,58 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - inverse_proportion.judge_table
+  provenance:
+    git_commit: ''
+    recipe: math.judge_inverse_proportion_table
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: prop_judge_inverse_table_v1
+    tier: T1
+  requested:
+    form: knowledge
+    level: 2
+    subject: math
+    unit: g1_l33
+  resolved:
+    form: knowledge
+    level: 2
+    subject: math
+    unit: g1_l33
+  seed: 3
+  signature: judge_inverse_proportion_table
+problem_ref: 53a00bd89f51a731
+problem_text: '次の表は x と y の対応を表している。y は x に反比例するといえるか答えよ。
+
+  x：1　7　8　9
+
+  y：1008　144　126　113'
+sub_questions:
+- answer:
+    correct: 反比例するとはいえない
+    distractors:
+    - 反比例するといえる
+    fact_id: proportion.judge_inverse_table
+    kind: choice
+  cause_tags: []
+  concept_tags:
+  - inverse_proportion.judge_table
+  explanation: まず、表の対応するxとyについて、積xyをそれぞれ計算する。 対応するxとyの積 xy を、それぞれ計算する次に、積xyがすべて等しければ反比例するといえる。等しくなければ反比例するとはいえない。 反比例するとはいえない
+  hints:
+  - 表の対応するxとyについて、積xyをそれぞれ計算する。
+  label: (1)
+  prompt_text: choice を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 表の対応するxとyについて、積xyをそれぞれ計算する。
+    op: compute_product_xy
+    result_display: 対応するxとyの積 xy を、それぞれ計算する
+    result_srepr: '[''Integer(1008)'', ''Integer(1008)'', ''Integer(1008)'', ''Integer(1017)'']'
+  - args: []
+    narration: 積xyがすべて等しければ反比例するといえる。等しくなければ反比例するとはいえない。
+    op: judge_constant_product
+    result_display: 反比例するとはいえない
+    result_srepr: 反比例するとはいえない
+visual_svg: null

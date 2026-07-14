@@ -14,5 +14,7 @@ from engine.packs.math.recipes import radical  # noqa: F401  (登録の副作用
 from engine.packs.math.recipes import quadratic  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.recipes import rational_form  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.recipes import motion  # noqa: F401  (登録の副作用のため import)
+from engine.packs.math.recipes import quadratic_function  # noqa: F401  (登録の副作用のため import)
+from engine.packs.math.recipes import proportion  # noqa: F401  (登録の副作用のため import)
 
 __all__: list[str] = []

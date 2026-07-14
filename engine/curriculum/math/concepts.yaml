@@ -550,3 +550,56 @@ concepts:
   - id: signed_number.order_numbers
     label: "分数・小数を含む複数の数を大小の順に並べる"
     unit: g1_l2
+  # C6 g3 二次関数 y=ax²（非visual13セル）
+  - id: quadratic_function.evaluate
+    label: "y=ax²にxの値を代入してyの値を求める"
+    unit: g3_l32
+  - id: quadratic_function_terms.term_recall
+    label: "y=ax²まわりの用語（比例定数・頂点・軸）を想起する"
+    unit: g3_l32
+  - id: quadratic_function_form.rule_recall
+    label: "式や対応表からyがxの2乗に比例する関係かどうかを判別する"
+    unit: g3_l32
+  - id: quadratic_function.y_range
+    label: "xの変域からy=ax²のyの変域を、頂点を含むか吟味して求める"
+    unit: g3_l34
+  - id: quadratic_function.rate_of_change
+    label: "y=ax²の変化の割合を求める・逆算する・区間ごとに比較する"
+    unit: g3_l35
+  - id: quadratic_roc_property.rule_recall
+    label: "y=ax²の変化の割合が区間によって変わることを理解する"
+    unit: g3_l35
+  - id: quadratic_function.intersection_with_line
+    label: "放物線と直線の交点・線分長・三角形の面積・面積を等分する点を求める"
+    unit: g3_l37
+  - id: quadratic_function.motion_area
+    label: "正方形の周上を動く点による三角形の面積を、区間の場合分けをふまえて求める"
+    unit: g3_l38
+  # --- C4 g1 比例・反比例 ---
+  - id: function_terms.term_recall
+    label: "変数・関数・変域の用語を想起する"
+    unit: g1_l28
+  - id: function.judge_functional_relation
+    label: "2量の関係がyはxの関数といえるかを判別する"
+    unit: g1_l28
+  - id: direct_proportion.term_recall
+    label: "比例・比例定数の用語を想起する"
+    unit: g1_l29
+  - id: direct_proportion.evaluate_at_x
+    label: "比例 y=ax にxを代入してyを求める"
+    unit: g1_l29
+  - id: direct_proportion.judge_table
+    label: "表のx,yの対応が比例か(商y/xが一定か)を判別する"
+    unit: g1_l29
+  - id: inverse_proportion.term_recall
+    label: "反比例・比例定数の用語を想起する"
+    unit: g1_l33
+  - id: inverse_proportion.evaluate_at_x
+    label: "反比例 y=a/x にxを代入してyを求める"
+    unit: g1_l33
+  - id: inverse_proportion.solve_for_x
+    label: "反比例 y=a/x でyの値からxを逆算して求める"
+    unit: g1_l33
+  - id: inverse_proportion.judge_table
+    label: "表のx,yの対応が反比例か(積xyが一定か)を判別する"
+    unit: g1_l33

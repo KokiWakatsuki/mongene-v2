@@ -1,0 +1,43 @@
+family: math.g3_l34.find_value
+form: find_value
+source_desc: |
+  xの変域が0の片側:単調区間でyの変域を端点から求める／xの変域が0をまたぐ:頂点0を含むか
+  吟味しyの変域を構成する（units.generated.yaml の desc/example を正として転記）。
+  Lv2 desc: xの変域が0の片側:単調区間でyの変域を端点から求める。
+       example: 関数 y=2x^2 について、x の変域が 1≦x≦3 のときの y の変域を求めよ。
+  Lv3 desc: xの変域が0をまたぐ:頂点0を含むか吟味しyの変域を構成する。
+       example: 関数 y=-x^2 について、x の変域が -1≦x≦3 のときの y の変域を求めよ。
+  【設計モデル】新設 solver math.y_range_over_quadratic_domain。mode="one_sided"（Lv2・
+  0の片側の単調区間・端点の値を比較するだけ）／"straddles_zero"（Lv3・0をまたぐ・頂点(0,0)
+  を含むかどうかの吟味が追加で要る）で op 列が相異＝level_sep。Lv3 は構成時に必ず
+  x_lo<0<x_hi となるよう分けて構成し（鉄則⑤）、実行時の場合分け判定に頼らない。
+concepts_default: [quadratic_function.y_range]
+levels:
+  "2":
+    signature: quadratic_y_range_one_sided
+    recipe: math.y_range_over_quadratic_domain
+    params:
+      mode: one_sided
+      a_domain: {int_range: [-6, 6]}
+    given: [condition]
+    asked: [domain_range]
+    visual: none
+    text: {tier: T1, template: lf_quadratic_y_range_v1}
+    hints: [steps_prefix]
+    concept_tags: [quadratic_function.y_range]
+    cause_tags: []
+  "3":
+    signature: quadratic_y_range_straddles_zero
+    recipe: math.y_range_over_quadratic_domain
+    params:
+      mode: straddles_zero
+      a_domain: {int_range: [-6, 6]}
+    given: [condition]
+    asked: [domain_range]
+    visual: none
+    text: {tier: T1, template: lf_quadratic_y_range_v1}
+    hints: [steps_prefix]
+    concept_tags: [quadratic_function.y_range]
+    cause_tags: []
+remedial:
+  default_level: 2

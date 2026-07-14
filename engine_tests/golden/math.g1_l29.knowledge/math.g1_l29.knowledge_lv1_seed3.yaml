@@ -1,0 +1,54 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - direct_proportion.term_recall
+  provenance:
+    git_commit: ''
+    recipe: math.term_recall
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_term_recall_v1
+    tier: T1
+  requested:
+    form: knowledge
+    level: 1
+    subject: math
+    unit: g1_l29
+  resolved:
+    form: knowledge
+    level: 1
+    subject: math
+    unit: g1_l29
+  seed: 3
+  signature: direct_proportion_term_recall
+problem_ref: 40ac8bf5f407a4c2
+problem_text: y = 80x のように、x の値が2倍、3倍になると、それにともなって y の値も2倍、3倍になる関係 を何といいますか。
+sub_questions:
+- answer:
+    correct: 比例
+    distractors:
+    - 比例定数
+    fact_id: direct_proportion.term.proportion
+    kind: choice
+  cause_tags: []
+  concept_tags:
+  - direct_proportion.term_recall
+  explanation: まず、説明されている式や数の部分がどれかを読み取る。 説明されている対象を読み取る次に、その対象を表す用語の名前を思い出す。 比例
+  hints:
+  - 説明されている式や数の部分がどれかを読み取る。
+  label: (1)
+  prompt_text: choice を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 説明されている式や数の部分がどれかを読み取る。
+    op: identify_description
+    result_display: 説明されている対象を読み取る
+    result_srepr: proportion
+  - args: []
+    narration: その対象を表す用語の名前を思い出す。
+    op: name_concept
+    result_display: 比例
+    result_srepr: 比例
+visual_svg: null

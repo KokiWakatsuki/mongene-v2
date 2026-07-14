@@ -1,0 +1,52 @@
+family: math.g1_l33.knowledge
+form: knowledge
+source_desc: |
+  反比例の意味と式（y=a/x）（units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: 反比例・y=a/x・比例定数の用語と意味を想起する。
+       example: 「yはxに反比例する」ことを表す式の形を書き、そのaを何というか答えよ。
+  【設計モデル・Lv1】用語想起（term_recall_definition・domain=inverse_proportion・
+  inverse_proportion/proportionality_constant）。具体例 y=a/x を説明文に埋め込み surface 分散。
+  答えは漢字 ChoiceAnswer で digit-free。
+  Lv2 desc: 表や関係が反比例か(積xyが一定か)を判別する。
+       example: 次の表でx=1,2,3,6に対しy=12,6,4,2である。yはxに反比例するといえるか、積xyに
+                着目して判別し、いえる場合は比例定数を答えよ。
+  【設計モデル・Lv2】新規 recipe math.judge_inverse_proportion_table。answer-first で
+  is_inverse を決める。真の場合は相異な正の整数 x を4つ選び、その最小公倍数の整数倍を
+  比例定数 a として y=a/x の表を作る（構成時にドメインを絞り、割り切れない退化を防ぐ・鉄則⑤）。
+  偽の場合は1箇所の y を改変し積 xy を不一致にする。独立ソルバが x,y の数値列だけから積 xy
+  の一定性で再判定する（double-solve）。答えは「反比例するといえる」／「反比例するとはいえない」
+  の ChoiceAnswer（digit-free・鉄則①）。
+concepts_default: [inverse_proportion.term_recall]
+levels:
+  "1":
+    signature: inverse_proportion_term_recall
+    recipe: math.term_recall
+    params:
+      domain: inverse_proportion
+      concept_set: [inverse_proportion, proportionality_constant]
+      number_domain: {int_range: [2, 250]}
+    given: [statement]
+    asked: [choice]
+    visual: none
+    text: {tier: T1, template: lf_term_recall_v1}
+    hints: [steps_prefix]
+    concept_tags: [inverse_proportion.term_recall]
+    cause_tags: []
+  "2":
+    signature: judge_inverse_proportion_table
+    recipe: math.judge_inverse_proportion_table
+    params:
+      # 4つの相異なる正の整数 x（小さめの値・約数の多様性のため）。整数倍率 m(1〜4)。
+      # 偽の場合の摂動量 perturb_domain(≠0)。
+      x_domain: {int_range: [1, 12]}
+      multiplier_domain: {int_range: [1, 4]}
+      perturb_domain: {int_range: [1, 5]}
+    given: [statement]
+    asked: [choice]
+    visual: none
+    text: {tier: T1, template: prop_judge_inverse_table_v1}
+    hints: [steps_prefix]
+    concept_tags: [inverse_proportion.judge_table]
+    cause_tags: []
+remedial:
+  default_level: 1

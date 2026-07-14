@@ -248,6 +248,20 @@ _TERM_MAPS: dict[str, dict[str, str]] = {
     "quadratic_coefficient": {
         "coeff_a": "a", "coeff_b": "b", "coeff_c": "c",
     },
+    # g3_l32 y=ax² まわりの用語（比例定数・関連する頂点/軸の用語を distractor として持つ）。
+    "quadratic_function_terms": {
+        "proportionality_constant": "比例定数", "vertex": "頂点", "axis_of_symmetry": "軸",
+    },
+    # g1_l28 関数まわりの用語（変数・関数・変域）。C4 g1 比例・反比例クラスタの導入回。
+    "function_terms": {
+        "variable": "変数", "function": "関数", "domain_range": "変域",
+    },
+    # g1_l29 比例の用語（比例・比例定数）。答えは漢字＝digit-free。
+    "direct_proportion": {"proportion": "比例", "proportionality_constant": "比例定数"},
+    # g1_l33 反比例の用語（反比例・比例定数）。答えは漢字＝digit-free。
+    "inverse_proportion": {
+        "inverse_proportion": "反比例", "proportionality_constant": "比例定数",
+    },
 }
 
 # domain 別の step テキスト（既定は g1_l17/l19/l21/l2 の現行文＝golden 不変）。
@@ -633,6 +647,28 @@ _RULE_MAPS: dict[str, dict[str, tuple[str, list[str]]]] = {
                 "左辺が整数の範囲でそのまま因数分解できる形だから、因数分解を使う方がよい",
                 "つねに因数分解を使うのがよく、解の公式を考える必要はない",
                 "係数に文字が含まれているから、まず移項してから考える必要がある",
+            ],
+        ),
+    },
+    # g3_l32 y=ax² の形の判別基準（x を自乗した項だけを比例定数倍した形かどうか）
+    "quadratic_function_form": {
+        "form_criterion": (
+            "x を自乗した項だけがあり、それを比例定数倍した形（他の項をふくまない形）であること",
+            [
+                "x の項だけがあり、それを比例定数倍した形であること",
+                "x を自乗した項に加えて、定数項や x の項をふくんでいてもよい形であること",
+                "比例定数にあたる数が、つねに正の数である形であること",
+            ],
+        ),
+    },
+    # g3_l35 y=ax² の変化の割合の性質（1次関数と異なり区間ごとに変わる）
+    "quadratic_roc_property": {
+        "variability": (
+            "一次関数とちがい、区間によって変化の割合が変わり、一定にならない",
+            [
+                "一次関数と同じように、区間によらず変化の割合はつねに一定である",
+                "変化の割合は、比例定数の符号によらずつねに正になる",
+                "変化の割合は、x の変域の位置によらず、つねに比例定数と等しくなる",
             ],
         ),
     },

@@ -1,0 +1,51 @@
+family: math.g1_l28.knowledge
+form: knowledge
+source_desc: |
+  変数と関数、変域の意味（units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: 変数・関数・変域・yはxの関数の用語を想起する。
+       example: ある正方形の1辺の長さをx cm、周の長さをy cmとする。このとき「yはxの関数である」
+                といえるかどうかを、変数・関数の意味をふまえて答えよ。
+  【設計モデル・Lv1】用語想起（term_recall_definition・domain=function_terms・
+  variable/function/domain_range）。function concept は定義文・具体例文の2通りの
+  言い回しで surface 分散。説明文に具体例（正方形の1辺と周の長さ等）を埋め込む。
+  答えは漢字 ChoiceAnswer で digit-free。
+  Lv2 desc: 2量が関数関係にあるか判別する・変域の表し方を適用する。
+       example: 次のうち、yがxの関数であるといえるものをすべて選べ。(1) 面積が20cm²の長方形の
+                縦x cmと横y cm (2) 身長がx cmの人の体重y kg (3) 1辺x cmの正三角形の周の長さy cm。
+                また(1)でxのとる範囲(変域)が1以上10以下のとき、その変域を不等号を使って書け。
+  【設計モデル・Lv2】原題の複数選択＋変域記述を、1場面ごとの単一選択（yはxの関数といえるか）に
+  realize する（asked=choice のみ使用・鉄則③）。新規 recipe math.judge_functional_relation。
+  answer-first で場面（2量の関係の説明文・is_functional固定の題材ライブラリ）を1つ選び、
+  独立ソルバが is_functional フラグだけから再判定する（double-solve）。変域の表し方
+  （不等号記法）は求値を伴う独立軸のため本セルには含めない（notes 参照・find_value 領域）。
+concepts_default: [function.judge_functional_relation]
+levels:
+  "1":
+    signature: function_terms_recall
+    recipe: math.term_recall
+    params:
+      domain: function_terms
+      concept_set: [variable, function, domain_range]
+      number_domain: {int_range: [2, 200]}
+    given: [statement]
+    asked: [choice]
+    visual: none
+    text: {tier: T1, template: lf_term_recall_v1}
+    hints: [steps_prefix]
+    concept_tags: [function_terms.term_recall]
+    cause_tags: []
+  "2":
+    signature: judge_functional_relation
+    recipe: math.judge_functional_relation
+    params:
+      # 場面テンプレの数量スロット n（surface 分散用・8場面×80通り=640通り）。
+      number_domain: {int_range: [1, 80]}
+    given: [statement]
+    asked: [choice]
+    visual: none
+    text: {tier: T1, template: prop_judge_functional_v1}
+    hints: [steps_prefix]
+    concept_tags: [function.judge_functional_relation]
+    cause_tags: []
+remedial:
+  default_level: 1

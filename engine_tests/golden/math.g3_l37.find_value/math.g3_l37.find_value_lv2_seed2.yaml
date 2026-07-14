@@ -1,0 +1,58 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - quadratic_function.intersection_with_line
+  provenance:
+    git_commit: ''
+    recipe: math.intersection_parabola_line
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_quadratic_intersection_v1
+    tier: T1
+  requested:
+    form: find_value
+    level: 2
+    subject: math
+    unit: g3_l37
+  resolved:
+    form: find_value
+    level: 2
+    subject: math
+    unit: g3_l37
+  seed: 2
+  signature: quadratic_intersection_find
+problem_ref: 330e4a073b6b08e9
+problem_text: 放物線 y = -x² と直線 y = -9x + 18 が2点 A, B で交わっている。この交点 A, B の座標をすべて求めよ。
+sub_questions:
+- answer:
+    display: A(3, -9), B(6, -36)
+    kind: symbolic
+    srepr: Tuple(Tuple(Integer(3), Integer(-9)), Tuple(Integer(6), Integer(-36)))
+  cause_tags: []
+  concept_tags:
+  - quadratic_function.intersection_with_line
+  explanation: まず、放物線の式と直線の式の右辺どうしを等しいとおき、方程式を立てる。 放物線と直線の式を等しいとおく次に、その方程式を解いて、交点の x 座標を求める。 交点の x 座標を求める最後に、求めた x の値を式に代入して、交点の y 座標を求める。 A(3, -9), B(6, -36)
+  hints:
+  - 放物線の式と直線の式の右辺どうしを等しいとおき、方程式を立てる。
+  - その方程式を解いて、交点の x 座標を求める。
+  label: (1)
+  prompt_text: intersection を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 放物線の式と直線の式の右辺どうしを等しいとおき、方程式を立てる。
+    op: set_up_equation
+    result_display: 放物線と直線の式を等しいとおく
+    result_srepr: ''
+  - args: []
+    narration: その方程式を解いて、交点の x 座標を求める。
+    op: solve_for_x
+    result_display: 交点の x 座標を求める
+    result_srepr: ''
+  - args: []
+    narration: 求めた x の値を式に代入して、交点の y 座標を求める。
+    op: compute_y
+    result_display: A(3, -9), B(6, -36)
+    result_srepr: Tuple(Tuple(Integer(3), Integer(-9)), Tuple(Integer(6), Integer(-36)))
+visual_svg: null

@@ -1,0 +1,30 @@
+family: math.g3_l35.knowledge
+form: knowledge
+source_desc: |
+  区間で変化の割合が変わることを理解する
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: 区間で変化の割合が変わることを理解する。
+       example: 1次関数 y=ax+b と関数 y=ax^2 について、変化の割合の性質の違いを、次の( )を
+                埋めて説明せよ。1次関数では変化の割合はつねに( )だが、y=ax^2 では区間に
+                よって変化の割合が( )。
+  【設計モデル】規則想起ハブ（既存 math.recall_rule・_RULE_MAPS に topic
+  "quadratic_roc_property" を追加）。穴埋め2箇所の記述式ではなく、変化の割合の性質を
+  1文でまとめた記述を選ぶ単一選択に realize（鉄則③ asked=choice のみ）。
+concepts_default: [quadratic_roc_property.rule_recall]
+levels:
+  "1":
+    signature: quadratic_roc_property_rule_recall
+    recipe: math.recall_rule
+    params:
+      topic: quadratic_roc_property
+      concept_set: [variability]
+      number_domain: {int_range: [-500, 500]}
+    given: [statement]
+    asked: [choice]
+    visual: none
+    text: {tier: T1, template: lf_rule_recall_v1}
+    hints: [steps_prefix]
+    concept_tags: [quadratic_roc_property.rule_recall]
+    cause_tags: []
+remedial:
+  default_level: 1

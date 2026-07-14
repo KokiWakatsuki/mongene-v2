@@ -1,0 +1,405 @@
+"""関数 y=ax² まわりの独立再計算ソルバ群（実装設計 §6.2 double-solve）。
+
+solver は**問題パラメータだけ**（a・x の値／区間の端点／mode）から答えと steps を導く
+（recipe の構成値は見ない）。純粋・決定論・SymPy 恒真であること。乱数は引かない。
+
+C6（g3 二次関数 y=ax²）クラスタのうち、放物線の描画を必要としない 13 セルを対象にする
+（g3_l32/l34/l35/l37/l38）。各関数を1つのモジュールに集約する:
+  - `math.evaluate_quadratic_function`: g3_l32.calculation Lv1（代入して y を求める）
+  - `math.y_range_over_quadratic_domain`: g3_l34.find_value Lv2/Lv3（変域→変域）
+  - `math.rate_of_change_quadratic`: g3_l35.find_value Lv2/Lv3（変化の割合の順算/逆算）
+  - `math.intersection_parabola_line`: g3_l37.find_value Lv2/Lv3/Lv4（放物線と直線の交点・
+    線分長・面積・逆算）
+  - `math.solve_quadratic_motion_area`: g3_l38.find_value Lv2/Lv3（動点の面積・区間の場合分け）
+
+narration には数字を書かない（"0" は "=0" の whitelist のみ許可）。sympy の恒真判定は
+`.equals(0)` を使い `.evalf()` に頼らない（ハング回避）。
+"""
+from __future__ import annotations
+
+import re
+
+import sympy
+
+from engine.core.contracts import Solution, Step, SymbolicAnswer
+from engine.core.registry import register_solver
+
+_X = sympy.Symbol("x")
+_SQRT_RE = re.compile(r"sqrt\((\d+)\)")
+
+
+def _fmt_scalar(v: sympy.Expr) -> str:
+    """数（整数・分数・根号を含む式）の教材表記。"""
+    s = _SQRT_RE.sub(r"√\1", str(sympy.sstr(sympy.together(v))))
+    return s.replace("*", "")
+
+
+def _fmt_point(pt: tuple[sympy.Expr, sympy.Expr]) -> str:
+    return f"({_fmt_scalar(pt[0])}, {_fmt_scalar(pt[1])})"
+
+
+# ---------------------------------------------------------------------------
+# g3_l32.calculation Lv1: y=ax² に x を代入して y を求める
+# ---------------------------------------------------------------------------
+@register_solver("math.evaluate_quadratic_function")
+def evaluate_quadratic_function(a: object, x: object) -> Solution:
+    """y=ax² に x の値を代入して y の値を求める（g3_l32.calculation Lv1）。
+
+    比例定数 a と代入する x の値だけから y=a·x² を計算する（double-solve）。
+    narration には数字を書かない。
+    """
+    a_s = sympy.nsimplify(a)
+    x_s = sympy.nsimplify(x)
+    y = a_s * x_s**2
+    disp = _fmt_scalar(y)
+    srepr = sympy.srepr(y)
+    steps = [
+        Step(
+            op="substitute_x",
+            args=[],
+            result_srepr="",
+            result_display="x に代入する",
+            narration="式の x に、与えられた値をあてはめる。",
+        ),
+        Step(
+            op="compute_y",
+            args=[],
+            result_srepr=srepr,
+            result_display=disp,
+            narration="2乗を計算してから比例定数をかけ、y の値を求める。",
+        ),
+    ]
+    answer = SymbolicAnswer(srepr=srepr, display=disp)
+    return Solution(answer=answer, steps=steps)
+
+
+# ---------------------------------------------------------------------------
+# g3_l34.find_value Lv2/Lv3: x の変域から y の変域を求める
+# ---------------------------------------------------------------------------
+_RANGE_STEPS: dict[str, list[str]] = {
+    # Lv2: x の変域が0の片側（単調区間）— 端点の値をそのまま比較するだけでよい
+    "one_sided": ["evaluate_endpoints", "order_by_magnitude"],
+    # Lv3: x の変域が0をまたぐ — 頂点(0,0)を含むかどうかの吟味が追加で要る
+    "straddles_zero": ["check_domain_contains_vertex", "evaluate_endpoints", "combine_with_vertex"],
+}
+
+_RANGE_NARRATION: dict[str, str] = {
+    "evaluate_endpoints": "x の変域の両端の値を、それぞれ式に代入して y の値を求める。",
+    "order_by_magnitude": "a の符号に注意して、2つの端点の y の値を大小の順に並べる。",
+    "check_domain_contains_vertex": "x の変域が、頂点である原点をまたいでいるかどうかを確かめる。",
+    "combine_with_vertex": "頂点の y の値と両端の y の値を合わせて、変域の両端を決める。",
+}
+
+_RANGE_PHRASE: dict[str, str] = {
+    "evaluate_endpoints": "両端の y の値を求める",
+    "check_domain_contains_vertex": "変域が頂点をまたぐか確かめる",
+}
+
+
+@register_solver("math.y_range_over_quadratic_domain")
+def y_range_over_quadratic_domain(a: object, x_lo: object, x_hi: object, mode: object) -> Solution:
+    """y=ax² の x の変域 [x_lo, x_hi] に対する y の変域を求める（g3_l34.find_value）。
+
+    mode="one_sided"（Lv2・0の片側の単調区間）／"straddles_zero"（Lv3・0をまたぐ・
+    頂点(0,0)を含むかどうかを吟味する）。mode ごとに steps の op 列を変える＝level_sep。
+    問題パラメータ（a・x_lo・x_hi・mode）だけから独立に再計算する（double-solve）。
+    """
+    mode_s = str(mode)
+    if mode_s not in _RANGE_STEPS:
+        raise ValueError(f"未知の mode: {mode_s!r}")
+    a_s = sympy.nsimplify(a)
+    x1, x2 = sympy.nsimplify(x_lo), sympy.nsimplify(x_hi)
+    if x1 >= x2:
+        raise ValueError("x の変域は x_lo < x_hi であること")
+    if mode_s == "one_sided" and x1 * x2 < 0:
+        raise ValueError("one_sided は 0 をまたがない変域であること")
+    if mode_s == "straddles_zero" and not (x1 < 0 < x2):
+        raise ValueError("straddles_zero は 0 を内部に含む変域であること")
+
+    y1, y2 = a_s * x1**2, a_s * x2**2
+    candidates = [y1, y2]
+    if mode_s == "straddles_zero":
+        candidates.append(sympy.Integer(0))  # 頂点 (0,0) の y 値
+    y_lo, y_hi = sympy.Min(*candidates), sympy.Max(*candidates)
+
+    disp = f"{_fmt_scalar(y_lo)} ≦ y ≦ {_fmt_scalar(y_hi)}"
+    srepr = sympy.srepr(sympy.Tuple(y_lo, y_hi))
+
+    ops = _RANGE_STEPS[mode_s]
+    steps = [
+        Step(
+            op=op,
+            args=[],
+            result_srepr=srepr if i == len(ops) - 1 else "",
+            result_display=disp if i == len(ops) - 1 else _RANGE_PHRASE.get(op, ""),
+            narration=_RANGE_NARRATION[op],
+        )
+        for i, op in enumerate(ops)
+    ]
+    answer = SymbolicAnswer(srepr=srepr, display=disp)
+    return Solution(answer=answer, steps=steps)
+
+
+# ---------------------------------------------------------------------------
+# g3_l35.find_value Lv2/Lv3: 変化の割合の順算・逆算
+# ---------------------------------------------------------------------------
+_ROC_STEPS: dict[str, list[str]] = {
+    # Lv2: 2点/区間から変化の割合を求める（順算）
+    "forward": ["evaluate_endpoints_roc", "compute_rate_of_change"],
+    # Lv3: 変化の割合から係数 a を逆算する
+    "solve_for_a": ["set_up_rate_equation", "solve_for_coefficient"],
+}
+
+_ROC_NARRATION: dict[str, str] = {
+    "evaluate_endpoints_roc": "x の変域の両端の値を、それぞれ式に代入して y の値を求める。",
+    "compute_rate_of_change": "y の増加量を x の増加量で割り、変化の割合を求める。",
+    "set_up_rate_equation": "y=ax² の変化の割合を a を使った式で表し、与えられた値と等しいとおく。",
+    "solve_for_coefficient": "その方程式を解いて、比例定数 a の値を求める。",
+}
+
+_ROC_PHRASE: dict[str, str] = {
+    "evaluate_endpoints_roc": "両端の y の値を求める",
+    "set_up_rate_equation": "変化の割合を a の式で表す",
+}
+
+
+@register_solver("math.rate_of_change_quadratic")
+def rate_of_change_quadratic(a: object, x1: object, x2: object, mode: object) -> Solution:
+    """y=ax² の変化の割合の順算・逆算を行う（g3_l35.find_value）。
+
+    mode="forward"（Lv2・a と区間 [x1,x2] から変化の割合そのものを求める）／
+    "solve_for_a"（Lv3・区間 [x1,x2] と変化の割合の値が既知のとき a を逆算。このとき
+    引数 a は「変化の割合の値」を意味する＝rate=a·(x1+x2) を a について解く）。
+    mode ごとに steps の op 列を変える＝level_sep。
+    """
+    mode_s = str(mode)
+    if mode_s not in _ROC_STEPS:
+        raise ValueError(f"未知の mode: {mode_s!r}")
+    x1_s, x2_s = sympy.nsimplify(x1), sympy.nsimplify(x2)
+    if x1_s == x2_s:
+        raise ValueError("x1 と x2 が等しく変化の割合が定まらない")
+
+    if mode_s == "forward":
+        a_s = sympy.nsimplify(a)
+        y1, y2 = a_s * x1_s**2, a_s * x2_s**2
+        rate = (y2 - y1) / (x2_s - x1_s)
+        disp = _fmt_scalar(rate)
+        srepr = sympy.srepr(rate)
+    else:  # solve_for_a
+        rate_s = sympy.nsimplify(a)  # 「変化の割合の値」として渡される
+        # rate = a(x1+x2) より a = rate/(x1+x2)
+        denom = x1_s + x2_s
+        if denom == 0:
+            raise ValueError("x1+x2=0 では a が一意に定まらない")
+        a_val = rate_s / denom
+        disp = _fmt_scalar(a_val)
+        srepr = sympy.srepr(a_val)
+
+    ops = _ROC_STEPS[mode_s]
+    steps = [
+        Step(
+            op=op,
+            args=[],
+            result_srepr=srepr if i == len(ops) - 1 else "",
+            result_display=disp if i == len(ops) - 1 else _ROC_PHRASE.get(op, ""),
+            narration=_ROC_NARRATION[op],
+        )
+        for i, op in enumerate(ops)
+    ]
+    answer = SymbolicAnswer(srepr=srepr, display=disp)
+    return Solution(answer=answer, steps=steps)
+
+
+# ---------------------------------------------------------------------------
+# g3_l37.find_value Lv2/Lv3/Lv4: 放物線と直線の交点・線分長・面積・逆算
+# ---------------------------------------------------------------------------
+def _parabola_line_intersections(a: sympy.Expr, m: sympy.Expr, b: sympy.Expr) -> list[sympy.Expr]:
+    """y=ax² と y=mx+b の交点の x 座標（昇順）を求める。ax²-mx-b=0 を解く。"""
+    roots = sympy.solve(sympy.Eq(a * _X**2, m * _X + b), _X)
+    return sorted(roots, key=lambda r: float(r.evalf()))
+
+
+def _shoelace_area(pts: list[tuple[sympy.Expr, sympy.Expr]]) -> sympy.Expr:
+    """3点の shoelace 公式による三角形面積（符号なし・厳密値）。"""
+    (x1, y1), (x2, y2), (x3, y3) = pts
+    return sympy.Rational(1, 2) * sympy.Abs(
+        x1 * (y2 - y3) + x2 * (y3 - y1) + x3 * (y1 - y2)
+    )
+
+
+_INTERSECTION_STEPS: dict[str, list[str]] = {
+    # Lv2: 放物線と直線を連立して交点を求める
+    "find_intersection": ["set_up_equation", "solve_for_x", "compute_y"],
+    # Lv3: 交点から線分長・三角形の面積を多段で求める
+    "segment_and_area": [
+        "set_up_equation", "solve_for_x", "compute_y",
+        "compute_segment_length", "compute_triangle_area",
+    ],
+    # Lv4: 面積を等分する点を逆算する
+    "bisecting_point": [
+        "set_up_equation", "solve_for_x", "compute_y",
+        "compute_triangle_area", "solve_for_bisecting_point",
+    ],
+}
+
+_INTERSECTION_NARRATION: dict[str, str] = {
+    "set_up_equation": "放物線の式と直線の式の右辺どうしを等しいとおき、方程式を立てる。",
+    "solve_for_x": "その方程式を解いて、交点の x 座標を求める。",
+    "compute_y": "求めた x の値を式に代入して、交点の y 座標を求める。",
+    "compute_segment_length": "2点の座標の差から、線分の長さを求める。",
+    "compute_triangle_area": "頂点の座標から、三角形の面積を求める公式で面積を計算する。",
+    "solve_for_bisecting_point": "面積を等しく分ける条件から方程式を立て、求める点の座標を決める。",
+}
+
+_INTERSECTION_PHRASE: dict[str, str] = {
+    "set_up_equation": "放物線と直線の式を等しいとおく",
+    "solve_for_x": "交点の x 座標を求める",
+    "compute_y": "交点の y 座標を求める",
+    "compute_segment_length": "線分の長さを求める",
+    "compute_triangle_area": "三角形の面積を求める",
+}
+
+
+@register_solver("math.intersection_parabola_line")
+def intersection_parabola_line(
+    a: object, m: object, b: object, mode: object,
+) -> Solution:
+    """放物線 y=ax² と直線 y=mx+b の交点・線分長・面積を求める（g3_l37.find_value）。
+
+    mode="find_intersection"（Lv2・交点座標のみ）／"segment_and_area"（Lv3・線分 AB の
+    長さと三角形 OAB の面積）／"bisecting_point"（Lv4・y 軸上の点 P で三角形 OAB の面積を
+    三角形 PAB の面積が2等分するときの P の座標。O 以外の解を採用する）。mode ごとに
+    steps の op 列を変える＝level_sep。問題パラメータ（a・m・b・mode）だけから
+    独立に再計算する（double-solve）。
+    """
+    mode_s = str(mode)
+    if mode_s not in _INTERSECTION_STEPS:
+        raise ValueError(f"未知の mode: {mode_s!r}")
+    a_s, m_s, b_s = sympy.nsimplify(a), sympy.nsimplify(m), sympy.nsimplify(b)
+    roots = _parabola_line_intersections(a_s, m_s, b_s)
+    if len(roots) != 2:
+        raise ValueError(f"交点がちょうど2つでない: {roots}")
+    xA, xB = roots[0], roots[1]
+    yA, yB = a_s * xA**2, a_s * xB**2
+    ptA, ptB = (xA, yA), (xB, yB)
+
+    if mode_s == "find_intersection":
+        disp = f"A{_fmt_point(ptA)}, B{_fmt_point(ptB)}"
+        srepr = sympy.srepr(sympy.Tuple(sympy.Tuple(*ptA), sympy.Tuple(*ptB)))
+    elif mode_s == "segment_and_area":
+        seg_len = sympy.sqrt((xB - xA) ** 2 + (yB - yA) ** 2)
+        area = _shoelace_area([(sympy.Integer(0), sympy.Integer(0)), ptA, ptB])
+        disp = f"AB = {_fmt_scalar(seg_len)}, △OAB = {_fmt_scalar(area)}"
+        srepr = sympy.srepr(sympy.Tuple(seg_len, area))
+    else:  # bisecting_point
+        area_oab = _shoelace_area([(sympy.Integer(0), sympy.Integer(0)), ptA, ptB])
+        # P=(0,p) は y 軸上。△PAB の面積が △OAB と等しくなる p を解く（p=0 以外の解）。
+        p_sym = sympy.Symbol("p", real=True)
+        area_pab = _shoelace_area([(sympy.Integer(0), p_sym), ptA, ptB])
+        p_solutions = sympy.solve(sympy.Eq(area_pab, area_oab), p_sym)
+        p_candidates = sorted(
+            {sympy.simplify(s) for s in p_solutions if sympy.simplify(s) != 0},
+            key=lambda v: float(v.evalf()),
+        )
+        if not p_candidates:
+            raise ValueError("O 以外に面積を2等分する y 軸上の点が求まらない")
+        p_val = p_candidates[0]
+        disp = f"P(0, {_fmt_scalar(p_val)})"
+        srepr = sympy.srepr(sympy.Tuple(sympy.Integer(0), p_val))
+
+    ops = _INTERSECTION_STEPS[mode_s]
+    steps = [
+        Step(
+            op=op,
+            args=[],
+            result_srepr=srepr if i == len(ops) - 1 else "",
+            result_display=disp if i == len(ops) - 1 else _INTERSECTION_PHRASE.get(op, ""),
+            narration=_INTERSECTION_NARRATION[op],
+        )
+        for i, op in enumerate(ops)
+    ]
+    answer = SymbolicAnswer(srepr=srepr, display=disp)
+    return Solution(answer=answer, steps=steps)
+
+
+# ---------------------------------------------------------------------------
+# g3_l38.find_value Lv2/Lv3: 動点の面積（区間ごとの立式・場合分け）
+# 正方形 ABCD（A=(0,0), B=(s,0), C=(s,s), D=(0,s)）の周上を、点 P が B を出発して
+# B→C→D の順に動く。三角形 ABP の面積を shoelace 公式で求める（units.generated.yaml
+# の例に一致：「BP=4cmのときの三角形ABPの面積」「BからB→C→Dの順に...三角形ABPの面積」）。
+# ---------------------------------------------------------------------------
+_QMOTION_STEPS: dict[str, list[str]] = {
+    # Lv2: 指定区間で動点位置から面積を立式して求める（1区間のみ・辺BC上）
+    "single_segment": ["locate_point_p", "compute_triangle_area"],
+    # Lv3: 区間の境界での場合分けを要する面積を構成して求める（B→C→D）
+    "case_split": ["determine_which_segment", "locate_point_p", "compute_triangle_area"],
+}
+
+_QMOTION_NARRATION: dict[str, str] = {
+    "locate_point_p": "動いた道のりから、点 P の位置の座標を決める。",
+    "compute_triangle_area": "3点の座標から、三角形の面積を求める公式で面積を計算する。",
+    "determine_which_segment": "点 P が動いた道のりから、周上のどの辺の上にいるかを判断する。",
+}
+
+_QMOTION_PHRASE: dict[str, str] = {
+    "locate_point_p": "点 P の座標を決める",
+    "determine_which_segment": "どの辺の上にいるかを判断する",
+}
+
+
+@register_solver("math.solve_quadratic_motion_area")
+def solve_quadratic_motion_area(s: object, d: object, mode: object) -> Solution:
+    """正方形の周上を動く点 P による三角形 ABP の面積を求める（g3_l38.find_value）。
+
+    正方形を A=(0,0), B=(s,0), C=(s,s), D=(0,s) に固定し、点 P が B を出発して
+    B→C→D の順に動いた道のり d だけから位置を決める（Lv2 は BP=d をそのまま距離として
+    与えられる想定・Lv3 は速さ×時間で d を求めた上で渡す想定。solver 自身は道のり d
+    のみを受け取り速さ・時間の区別はしない）。mode="single_segment"（Lv2・P が辺 BC 上・
+    1区間のみ）／"case_split"（Lv3・P が B→C→D で区間をまたぎうる・d の区間で場合分け）。
+    三角形 ABP の面積を shoelace 公式で求める。mode ごとに steps の op 列を変える＝
+    level_sep。問題パラメータ（s・d・mode）だけから独立に再計算する（double-solve）。
+    """
+    mode_s = str(mode)
+    if mode_s not in _QMOTION_STEPS:
+        raise ValueError(f"未知の mode: {mode_s!r}")
+    s_v = sympy.nsimplify(s)
+    d_v = sympy.nsimplify(d)
+
+    if mode_s == "single_segment":
+        if not (0 < d_v < s_v):
+            raise ValueError("single_segment は P が辺 BC 上（0<d<s）にあること")
+        px, py = s_v, d_v  # 辺 BC 上（B=(s,0)→C=(s,s)）
+    else:  # case_split: B→C→D。0<d<s: BC上。s<d<2s: CD上。
+        if not (0 < d_v < 2 * s_v):
+            raise ValueError("case_split は 0<d<2s の範囲であること")
+        if d_v < s_v:
+            px, py = s_v, d_v
+        else:  # CD 上（C=(s,s)→D=(0,s)）
+            px, py = s_v - (d_v - s_v), s_v
+
+    area = _shoelace_area([(sympy.Integer(0), sympy.Integer(0)), (s_v, sympy.Integer(0)), (px, py)])
+    disp = _fmt_scalar(area)
+    srepr = sympy.srepr(area)
+
+    ops = _QMOTION_STEPS[mode_s]
+    steps = [
+        Step(
+            op=op,
+            args=[],
+            result_srepr=srepr if i == len(ops) - 1 else "",
+            result_display=disp if i == len(ops) - 1 else _QMOTION_PHRASE.get(op, ""),
+            narration=_QMOTION_NARRATION[op],
+        )
+        for i, op in enumerate(ops)
+    ]
+    answer = SymbolicAnswer(srepr=srepr, display=disp)
+    return Solution(answer=answer, steps=steps)
+
+
+__all__ = [
+    "evaluate_quadratic_function",
+    "y_range_over_quadratic_domain",
+    "rate_of_change_quadratic",
+    "intersection_parabola_line",
+    "solve_quadratic_motion_area",
+]

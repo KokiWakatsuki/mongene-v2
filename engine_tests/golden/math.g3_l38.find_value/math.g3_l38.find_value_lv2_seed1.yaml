@@ -1,0 +1,52 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - quadratic_function.motion_area
+  provenance:
+    git_commit: ''
+    recipe: math.solve_quadratic_motion_area
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_quadratic_motion_area_v1
+    tier: T1
+  requested:
+    form: find_value
+    level: 2
+    subject: math
+    unit: g3_l38
+  resolved:
+    form: find_value
+    level: 2
+    subject: math
+    unit: g3_l38
+  seed: 1
+  signature: quadratic_motion_area_single_segment
+problem_ref: a418f0fa78743c4d
+problem_text: 1辺 18cm の正方形 ABCD の辺 BC 上を点 P が B から C に向かって動く。BP=8cm のときの三角形 ABP の面積を求めよ。
+sub_questions:
+- answer:
+    display: '72'
+    kind: symbolic
+    srepr: Integer(72)
+  cause_tags: []
+  concept_tags:
+  - quadratic_function.motion_area
+  explanation: まず、動いた道のりから、点 P の位置の座標を決める。 点 P の座標を決める次に、3点の座標から、三角形の面積を求める公式で面積を計算する。 72
+  hints:
+  - 動いた道のりから、点 P の位置の座標を決める。
+  label: (1)
+  prompt_text: area を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 動いた道のりから、点 P の位置の座標を決める。
+    op: locate_point_p
+    result_display: 点 P の座標を決める
+    result_srepr: ''
+  - args: []
+    narration: 3点の座標から、三角形の面積を求める公式で面積を計算する。
+    op: compute_triangle_area
+    result_display: '72'
+    result_srepr: Integer(72)
+visual_svg: null

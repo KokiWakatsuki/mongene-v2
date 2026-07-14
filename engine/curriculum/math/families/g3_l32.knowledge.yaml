@@ -1,0 +1,48 @@
+family: math.g3_l32.knowledge
+form: knowledge
+source_desc: |
+  y=ax^2・2乗に比例の意味の想起／対応表や具体例からy=ax^2の関係を判別し比例定数を捉える
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: y=ax^2・2乗に比例の意味の想起。
+       example: yがxの2乗に比例するとき、y=ax^2 の a を何というか答えよ。
+  Lv2 desc: 対応表や具体例からy=ax^2の関係を判別し比例定数を捉える。
+       example: 次のうち、yがxの2乗に比例するものをすべて選び、それぞれの比例定数を答えよ。
+                ア y=3x  イ y=2x^2  ウ y=x^2+1  エ y=-4x^2
+  【設計モデル】Lv1=用語想起ハブ（既存 math.term_recall・_TERM_MAPS に domain
+  "quadratic_function_terms" を追加。比例定数・頂点・軸の3用語で distractor を確保）。
+  Lv2=規則想起ハブ（既存 math.recall_rule・_RULE_MAPS に topic "quadratic_function_form" を
+  追加。「すべて選ぶ」列挙形式ではなく、y=ax² の形の判別基準そのものを問う単一選択に
+  realize＝鉄則③ asked=choice のみ）。op列（Lv1: identify_description/name_concept、
+  Lv2: read_rule_context/recall_correct_rule）が相異＝level_sep。
+concepts_default: [quadratic_function_terms.term_recall]
+levels:
+  "1":
+    signature: quadratic_function_terms_term_recall
+    recipe: math.term_recall
+    params:
+      domain: quadratic_function_terms
+      concept_set: [proportionality_constant]
+      number_domain: {int_range: [-500, 500]}
+    given: [statement]
+    asked: [choice]
+    visual: none
+    text: {tier: T1, template: lf_term_recall_v1}
+    hints: [steps_prefix]
+    concept_tags: [quadratic_function_terms.term_recall]
+    cause_tags: []
+  "2":
+    signature: quadratic_function_form_rule_recall
+    recipe: math.recall_rule
+    params:
+      topic: quadratic_function_form
+      concept_set: [form_criterion]
+      number_domain: {int_range: [-500, 500]}
+    given: [statement]
+    asked: [choice]
+    visual: none
+    text: {tier: T1, template: lf_rule_recall_v1}
+    hints: [steps_prefix]
+    concept_tags: [quadratic_function_form.rule_recall]
+    cause_tags: []
+remedial:
+  default_level: 1

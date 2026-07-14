@@ -14,5 +14,7 @@ from engine.packs.math.templates import radical  # noqa: F401  (register_templat
 from engine.packs.math.templates import quadratic  # noqa: F401  (register_template の副作用のため import)
 from engine.packs.math.templates import rational_form  # noqa: F401  (register_template の副作用のため import)
 from engine.packs.math.templates import motion  # noqa: F401  (register_template の副作用のため import)
+from engine.packs.math.templates import quadratic_function  # noqa: F401  (登録の副作用のため import)
+from engine.packs.math.templates import proportion  # noqa: F401  (登録の副作用のため import)
 
 __all__: list[str] = []

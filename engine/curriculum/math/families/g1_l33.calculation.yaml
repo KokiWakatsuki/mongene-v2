@@ -1,0 +1,47 @@
+family: math.g1_l33.calculation
+form: calculation
+source_desc: |
+  反比例の意味と式（y=a/x）（units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: y=a/xにxを代入しyを求める1手順。
+       example: y=12/x について、x=3のときのyの値を求めよ。
+  Lv2 desc: 負・分数の定数や逆に解いて対応する値を求める複数手順。
+       example: y=-18/x について、y=6のときのxの値を求めよ。
+  【設計モデル】新規 solver math.evaluate_inverse_proportion(a, known, mode)。
+  mode="forward"（Lv1）はxを代入してyを求める2手順、mode="backward"（Lv2）はyから
+  xを逆に解く2手順だが式変形の向きが異なり op 列が相異する（level_sep・鉄則④）。
+  Lv1のaは正の整数の約数関係、Lv2のaは負・分数を含め逆算の複数手順を要する構成にする。
+concepts_default: [inverse_proportion.evaluate_at_x]
+levels:
+  "1":
+    signature: inverse_proportion_evaluate_forward
+    recipe: math.evaluate_inverse_proportion
+    params:
+      # 比例定数 a(≠0・正の整数、多くの約数を持つよう12の倍数中心に広くとる)・
+      # xの値(≠0)。組合せ 24*20=480 通り。
+      mode: forward
+      slope_domain: {int_set: [12, 18, 24, 30, 36, 40, 48, 60, 72, 84, 90, 96, 108, 120, 132, 144, 150, 168, 180, 192, 210, 216, 240, 252]}
+      known_domain: {int_range: [-10, 10], exclude: [0]}
+    given: [expression, input_value]
+    asked: [value]
+    visual: none
+    text: {tier: T1, template: prop_evaluate_inverse_v1}
+    hints: [steps_prefix]
+    concept_tags: [inverse_proportion.evaluate_at_x]
+    cause_tags: []
+  "2":
+    signature: inverse_proportion_evaluate_backward
+    recipe: math.evaluate_inverse_proportion
+    params:
+      # 比例定数 a(≠0・負を含む)・既知の y0(≠0) から x=a/y0 を逆算する。組合せ 30*20=600 通り。
+      mode: backward
+      slope_domain: {frac_range: {num: [-96, 96], den: [2, 6]}, exclude: [0]}
+      known_domain: {int_range: [-10, 10], exclude: [0]}
+    given: [expression, input_value]
+    asked: [value]
+    visual: none
+    text: {tier: T1, template: prop_evaluate_inverse_v1}
+    hints: [steps_prefix]
+    concept_tags: [inverse_proportion.solve_for_x]
+    cause_tags: []
+remedial:
+  default_level: 1

@@ -1,0 +1,55 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - inverse_proportion.solve_for_x
+  provenance:
+    git_commit: ''
+    recipe: math.evaluate_inverse_proportion
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: prop_evaluate_inverse_v1
+    tier: T1
+  requested:
+    form: calculation
+    level: 2
+    subject: math
+    unit: g1_l33
+  resolved:
+    form: calculation
+    level: 2
+    subject: math
+    unit: g1_l33
+  seed: 2
+  signature: inverse_proportion_evaluate_backward
+problem_ref: bf38ff5ea2f7fb01
+problem_text: 反比例の式 y = -86/5/x について、y = 5 のときの、もう一方の値を求めよ。
+sub_questions:
+- answer:
+    display: -86/25
+    kind: symbolic
+    srepr: Rational(-86, 25)
+  cause_tags: []
+  concept_tags:
+  - inverse_proportion.solve_for_x
+  explanation: まず、比例定数と y の値を、反比例の式 y=a/x の y にあてはめる。 5 = -86/5 / x次に、式を x について整理し直して、x の値を求める。 x = -86/25
+  hints:
+  - 比例定数と y の値を、反比例の式 y=a/x の y にあてはめる。
+  label: (1)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args:
+    - -86/5
+    - '5'
+    narration: 比例定数と y の値を、反比例の式 y=a/x の y にあてはめる。
+    op: substitute_y
+    result_display: 5 = -86/5 / x
+    result_srepr: Rational(-86, 25)
+  - args:
+    - 5 = -86/5 / x
+    narration: 式を x について整理し直して、x の値を求める。
+    op: solve_for_x
+    result_display: x = -86/25
+    result_srepr: Rational(-86, 25)
+visual_svg: null

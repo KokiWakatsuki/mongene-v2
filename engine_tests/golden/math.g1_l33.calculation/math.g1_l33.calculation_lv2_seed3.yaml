@@ -1,0 +1,55 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - inverse_proportion.solve_for_x
+  provenance:
+    git_commit: ''
+    recipe: math.evaluate_inverse_proportion
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: prop_evaluate_inverse_v1
+    tier: T1
+  requested:
+    form: calculation
+    level: 2
+    subject: math
+    unit: g1_l33
+  resolved:
+    form: calculation
+    level: 2
+    subject: math
+    unit: g1_l33
+  seed: 3
+  signature: inverse_proportion_evaluate_backward
+problem_ref: 11cb9e390c700534
+problem_text: 反比例の式 y = -3/4/x について、y = 5 のときの、もう一方の値を求めよ。
+sub_questions:
+- answer:
+    display: -3/20
+    kind: symbolic
+    srepr: Rational(-3, 20)
+  cause_tags: []
+  concept_tags:
+  - inverse_proportion.solve_for_x
+  explanation: まず、比例定数と y の値を、反比例の式 y=a/x の y にあてはめる。 5 = -3/4 / x次に、式を x について整理し直して、x の値を求める。 x = -3/20
+  hints:
+  - 比例定数と y の値を、反比例の式 y=a/x の y にあてはめる。
+  label: (1)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args:
+    - -3/4
+    - '5'
+    narration: 比例定数と y の値を、反比例の式 y=a/x の y にあてはめる。
+    op: substitute_y
+    result_display: 5 = -3/4 / x
+    result_srepr: Rational(-3, 20)
+  - args:
+    - 5 = -3/4 / x
+    narration: 式を x について整理し直して、x の値を求める。
+    op: solve_for_x
+    result_display: x = -3/20
+    result_srepr: Rational(-3, 20)
+visual_svg: null

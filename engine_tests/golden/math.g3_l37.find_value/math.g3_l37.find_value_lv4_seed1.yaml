@@ -1,0 +1,71 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - quadratic_function.intersection_with_line
+  provenance:
+    git_commit: ''
+    recipe: math.intersection_parabola_line
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_quadratic_intersection_v1
+    tier: T1
+  requested:
+    form: find_value
+    level: 4
+    subject: math
+    unit: g3_l37
+  resolved:
+    form: find_value
+    level: 4
+    subject: math
+    unit: g3_l37
+  seed: 1
+  signature: quadratic_intersection_bisecting_point
+problem_ref: 0c95f8eb7b0d28de
+problem_text: 放物線 y = 3x² と直線 y = 12x - 9 が2点 A, B で交わっている。原点を O とするとき、y 軸上に点 P をとり、三角形 OAB の面積を三角形 PAB の面積が2等分するような点 P の座標を求めよ。
+sub_questions:
+- answer:
+    display: P(0, -18)
+    kind: symbolic
+    srepr: Tuple(Integer(0), Integer(-18))
+  cause_tags: []
+  concept_tags:
+  - quadratic_function.intersection_with_line
+  explanation: まず、放物線の式と直線の式の右辺どうしを等しいとおき、方程式を立てる。 放物線と直線の式を等しいとおく次に、その方程式を解いて、交点の x 座標を求める。 交点の x 座標を求める最後に、求めた x の値を式に代入して、交点の y 座標を求める。 交点の y 座標を求めるさらに、頂点の座標から、三角形の面積を求める公式で面積を計算する。 三角形の面積を求めるさらに、面積を等しく分ける条件から方程式を立て、求める点の座標を決める。
+    P(0, -18)
+  hints:
+  - 放物線の式と直線の式の右辺どうしを等しいとおき、方程式を立てる。
+  - その方程式を解いて、交点の x 座標を求める。
+  - 求めた x の値を式に代入して、交点の y 座標を求める。
+  - 頂点の座標から、三角形の面積を求める公式で面積を計算する。
+  label: (1)
+  prompt_text: coordinate を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 放物線の式と直線の式の右辺どうしを等しいとおき、方程式を立てる。
+    op: set_up_equation
+    result_display: 放物線と直線の式を等しいとおく
+    result_srepr: ''
+  - args: []
+    narration: その方程式を解いて、交点の x 座標を求める。
+    op: solve_for_x
+    result_display: 交点の x 座標を求める
+    result_srepr: ''
+  - args: []
+    narration: 求めた x の値を式に代入して、交点の y 座標を求める。
+    op: compute_y
+    result_display: 交点の y 座標を求める
+    result_srepr: ''
+  - args: []
+    narration: 頂点の座標から、三角形の面積を求める公式で面積を計算する。
+    op: compute_triangle_area
+    result_display: 三角形の面積を求める
+    result_srepr: ''
+  - args: []
+    narration: 面積を等しく分ける条件から方程式を立て、求める点の座標を決める。
+    op: solve_for_bisecting_point
+    result_display: P(0, -18)
+    result_srepr: Tuple(Integer(0), Integer(-18))
+visual_svg: null

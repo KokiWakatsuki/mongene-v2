@@ -421,6 +421,12 @@ _TERM_RECALL_CONCEPTS = [
     "quadratic_terms.term_recall",
     "approximation.term_recall_g3",
     "quadratic_coefficient.term_recall",
+    # C6 g3 knowledge（用語想起）
+    "quadratic_function_terms.term_recall",
+    # C4 g1 比例・反比例（用語想起）
+    "function_terms.term_recall",
+    "direct_proportion.term_recall",
+    "inverse_proportion.term_recall",
 ]
 
 
@@ -543,6 +549,62 @@ def _draw_term_statement(domain: str, concept: str, rng: Rng, p: dict[str, objec
         if concept == "coeff_b":
             return f"2次方程式 {eqx} において、x の項の係数"
         return f"2次方程式 {eqx} において、定数項"  # coeff_c
+
+    if domain == "quadratic_function_terms":
+        # g3_l32 y=ax² まわりの用語。具体例の比例定数 a(≠0) を埋め込み surface を分散する。
+        a = int(draw({"int_set": [
+            v for v in _domain_candidates(cast("dict[str, object]", p["number_domain"])) if v != 0
+        ]}, rng))
+        if concept == "proportionality_constant":
+            return f"y = {a}x² の式で、x² にかけられている数（a にあたる部分）を何というか"
+        if concept == "vertex":
+            return "関数 y=ax² のグラフ（放物線）が、対称の中心として通る点を何というか"
+        return "関数 y=ax² のグラフ（放物線）が、左右対称になるもとになる直線を何というか"  # axis_of_symmetry
+
+    if domain == "function_terms":
+        # g1_l28 関数まわりの用語（変数・関数・変域）。具体例（正方形の1辺と周の長さ）を
+        # 埋め込み surface を分散する（C4 g1 比例・反比例クラスタの導入回）。各 concept で
+        # 必ず number_domain から1つ以上引き、無駄引き（未使用の draw）を作らない。
+        if concept == "variable":
+            m = int(draw(p["number_domain"], rng))
+            return (
+                f"1辺の長さが{m}cmより大きい正方形の1辺の長さを x cm とするときの x のように、"
+                "いろいろな値をとることができる文字"
+            )
+        if concept == "function":
+            # 2通りの言い回し（定義そのもの／具体例つき）を surface として分散する。
+            # どちらの言い回しにも number_domain の値を埋め込み variety を確保する。
+            variant = int(draw({"int_set": [0, 1]}, rng))
+            n = int(draw(p["number_domain"], rng))
+            if variant == 0:
+                return (
+                    f"ある値を1つ決める（例えば{n}のように）と、それに対応してもう一方の値が"
+                    "ただ1つに決まるときの、2つの数量の関係"
+                )
+            return (
+                f"1辺の長さが{n}cmより長い正方形の1辺の長さを x cm、"
+                "周の長さを y cm とするときの、この y と x のような関係"
+            )
+        n = int(draw(p["number_domain"], rng))
+        return f"x の値が {n} 以上のように限られているときの、その x のとる値の範囲"  # domain_range
+
+    if domain == "direct_proportion":
+        # g1_l29 比例の用語（比例・比例定数）。具体例 y=ax を埋め込み surface を分散する。
+        cands = [v for v in _domain_candidates(cast("dict[str, object]", p["number_domain"])) if v != 0]
+        a = int(draw({"int_set": cands}, rng))
+        eqx = f"y = {a}x" if a != 1 else "y = x"
+        if concept == "proportion":
+            return f"{eqx} のように、x の値が2倍、3倍になると、それにともなって y の値も2倍、3倍になる関係"
+        return f"{eqx} で、x にかけられている決まった数 {a} のような、比例の関係を決める定数"  # proportionality_constant
+
+    if domain == "inverse_proportion":
+        # g1_l33 反比例の用語（反比例・比例定数）。具体例 y=a/x を埋め込み surface を分散する。
+        cands = [v for v in _domain_candidates(cast("dict[str, object]", p["number_domain"])) if v != 0]
+        a = int(draw({"int_set": cands}, rng))
+        eqx = f"y = {a}/x"
+        if concept == "inverse_proportion":
+            return f"{eqx} のように、x の値が2倍、3倍になると、それにともなって y の値が1/2倍、1/3倍になる関係"
+        return f"{eqx} で、積 xy がつねに等しくなる決まった数 {a} のような、反比例の関係を決める定数"  # proportionality_constant
 
     if domain == "prime_concepts":
         # g1_l11 素数まわりの用語。相異なる2つの具体例を埋め込み surface を分散する
@@ -847,6 +909,9 @@ _RULE_RECALL_CONCEPTS = [
     "multiplication_formula_choice.rule_recall",
     "sqrt_square_meaning.rule_recall",
     "quadratic_solving_method_choice.rule_recall",
+    # C6 g3 knowledge（規則・意味の想起）
+    "quadratic_function_form.rule_recall",
+    "quadratic_roc_property.rule_recall",
 ]
 
 
@@ -1009,6 +1074,18 @@ def _draw_rule_statement(topic: str, concept: str, rng: Rng, p: dict[str, object
                 c = int(draw(small, rng))
         eqx = f"{_fmt_poly_x_terms([(1, 2), (b, 1), (c, 0)])} = 0"
         return f"2次方程式 {eqx} を解くときについて"
+
+    if topic == "quadratic_function_form":
+        # g3_l32 y=ax² の形の判別基準。具体例の比例定数 a(≠0) を surface に埋め込み dup 分散。
+        cands = [v for v in _domain_candidates(cast("dict[str, object]", p["number_domain"])) if v != 0]
+        a = int(draw({"int_set": cands}, rng))
+        return f"y = {a}x² のような式が「y は x の2乗に比例する」といえるための条件"
+
+    if topic == "quadratic_roc_property":
+        # g3_l35 変化の割合の性質。具体例の比例定数 a(≠0) を surface に埋め込み dup 分散。
+        cands = [v for v in _domain_candidates(cast("dict[str, object]", p["number_domain"])) if v != 0]
+        a = int(draw({"int_set": cands}, rng))
+        return f"関数 y = {a}x² について、x の変域を変えたときの変化の割合の性質"
 
     raise ValueError(f"未知の topic: {topic!r}")
 

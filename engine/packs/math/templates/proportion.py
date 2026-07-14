@@ -1,0 +1,67 @@
+"""比例・反比例まわりの T1 テンプレート登録（実装設計 §7・§7.2）。
+
+Jinja2 文字列を `registry.register_template(name, src)` で登録する。テンプレは
+TemplateContext の公開変数（given / context_slots / sub_questions[].label / .asked /
+.narrations）のみ参照できる。
+
+テンプレ名は FamilySpec の `text.template` と一致させる（spec_lint R1 が検査）。
+"""
+from __future__ import annotations
+
+from engine.core.registry import REGISTRY
+
+# ---------------------------------------------------------------------------
+# g1_l29.calculation: 比例 y=ax に x を代入して y を求める
+# ---------------------------------------------------------------------------
+PROP_EVALUATE_DIRECT_V1 = (
+    "比例の式 {{ given.expression }} について、{{ given.input_value }} のときの y の値を求めよ。"
+)
+
+# ---------------------------------------------------------------------------
+# g1_l33.calculation: 反比例 y=a/x に x を代入して y を求める（またはその逆）
+# ---------------------------------------------------------------------------
+PROP_EVALUATE_INVERSE_V1 = (
+    "反比例の式 {{ given.expression }} について、{{ given.input_value }} のときの、"
+    "もう一方の値を求めよ。"
+)
+
+# ---------------------------------------------------------------------------
+# g1_l28.knowledge Lv2: 2量の関係が関数関係かを判別する
+# ---------------------------------------------------------------------------
+PROP_JUDGE_FUNCTIONAL_V1 = (
+    "{{ given.statement }} について、y は x の関数であるといえるか答えよ。"
+)
+
+# ---------------------------------------------------------------------------
+# g1_l29.knowledge Lv2: 表のx,yの対応が比例かを判別する
+# ---------------------------------------------------------------------------
+PROP_JUDGE_DIRECT_TABLE_V1 = (
+    "次の表は x と y の対応を表している。y は x に比例するといえるか答えよ。\n{{ given.statement }}"
+)
+
+# ---------------------------------------------------------------------------
+# g1_l33.knowledge Lv2: 表のx,yの対応が反比例かを判別する
+# ---------------------------------------------------------------------------
+PROP_JUDGE_INVERSE_TABLE_V1 = (
+    "次の表は x と y の対応を表している。y は x に反比例するといえるか答えよ。\n{{ given.statement }}"
+)
+
+
+def _register_all() -> None:
+    REGISTRY.register_template("prop_evaluate_direct_v1", PROP_EVALUATE_DIRECT_V1)
+    REGISTRY.register_template("prop_evaluate_inverse_v1", PROP_EVALUATE_INVERSE_V1)
+    REGISTRY.register_template("prop_judge_functional_v1", PROP_JUDGE_FUNCTIONAL_V1)
+    REGISTRY.register_template("prop_judge_direct_table_v1", PROP_JUDGE_DIRECT_TABLE_V1)
+    REGISTRY.register_template("prop_judge_inverse_table_v1", PROP_JUDGE_INVERSE_TABLE_V1)
+
+
+_register_all()
+
+
+__all__ = [
+    "PROP_EVALUATE_DIRECT_V1",
+    "PROP_EVALUATE_INVERSE_V1",
+    "PROP_JUDGE_FUNCTIONAL_V1",
+    "PROP_JUDGE_DIRECT_TABLE_V1",
+    "PROP_JUDGE_INVERSE_TABLE_V1",
+]

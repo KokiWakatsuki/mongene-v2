@@ -1,0 +1,52 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - quadratic_function.rate_of_change
+  provenance:
+    git_commit: ''
+    recipe: math.rate_of_change_quadratic
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_quadratic_roc_v1
+    tier: T1
+  requested:
+    form: find_value
+    level: 3
+    subject: math
+    unit: g3_l35
+  resolved:
+    form: find_value
+    level: 3
+    subject: math
+    unit: g3_l35
+  seed: 3
+  signature: quadratic_roc_solve_for_a
+problem_ref: 955f2975a18a7fab
+problem_text: 関数 y = ax² について、x の値が 5 から 9 まで増加するときの変化の割合が 70 であった。このとき a の値を求めよ。
+sub_questions:
+- answer:
+    display: '5'
+    kind: symbolic
+    srepr: Integer(5)
+  cause_tags: []
+  concept_tags:
+  - quadratic_function.rate_of_change
+  explanation: まず、y=ax² の変化の割合を a を使った式で表し、与えられた値と等しいとおく。 変化の割合を a の式で表す次に、その方程式を解いて、比例定数 a の値を求める。 5
+  hints:
+  - y=ax² の変化の割合を a を使った式で表し、与えられた値と等しいとおく。
+  label: (1)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args: []
+    narration: y=ax² の変化の割合を a を使った式で表し、与えられた値と等しいとおく。
+    op: set_up_rate_equation
+    result_display: 変化の割合を a の式で表す
+    result_srepr: ''
+  - args: []
+    narration: その方程式を解いて、比例定数 a の値を求める。
+    op: solve_for_coefficient
+    result_display: '5'
+    result_srepr: Integer(5)
+visual_svg: null

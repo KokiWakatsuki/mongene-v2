@@ -1,0 +1,54 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - function.judge_functional_relation
+  provenance:
+    git_commit: ''
+    recipe: math.judge_functional_relation
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: prop_judge_functional_v1
+    tier: T1
+  requested:
+    form: knowledge
+    level: 2
+    subject: math
+    unit: g1_l28
+  resolved:
+    form: knowledge
+    level: 2
+    subject: math
+    unit: g1_l28
+  seed: 1
+  signature: judge_functional_relation
+problem_ref: 6def274ad11776f6
+problem_text: 底辺の長さが74cmより長く高さが決まった三角形の底辺の長さをx cmとするときの、面積y cm² について、y は x の関数であるといえるか答えよ。
+sub_questions:
+- answer:
+    correct: yはxの関数であるといえる
+    distractors:
+    - yはxの関数であるとはいえない
+    fact_id: function.judge_functional_relation
+    kind: choice
+  cause_tags: []
+  concept_tags:
+  - function.judge_functional_relation
+  explanation: まず、xの値を1つ決めたとき、それに対応するyの値がただ1つに決まるかどうかを調べる。 xの値を1つ決めたとき、yの値がただ1つに決まるかを調べる次に、yの値がただ1つに決まるなら関数であるといえ、決まらなければ関数であるとはいえない。 yはxの関数であるといえる
+  hints:
+  - xの値を1つ決めたとき、それに対応するyの値がただ1つに決まるかどうかを調べる。
+  label: (1)
+  prompt_text: choice を求めなさい。
+  solution_steps:
+  - args: []
+    narration: xの値を1つ決めたとき、それに対応するyの値がただ1つに決まるかどうかを調べる。
+    op: check_unique_determination
+    result_display: xの値を1つ決めたとき、yの値がただ1つに決まるかを調べる
+    result_srepr: functional
+  - args: []
+    narration: yの値がただ1つに決まるなら関数であるといえ、決まらなければ関数であるとはいえない。
+    op: judge_functional
+    result_display: yはxの関数であるといえる
+    result_srepr: yはxの関数であるといえる
+visual_svg: null
