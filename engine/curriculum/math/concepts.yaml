@@ -62,6 +62,9 @@ concepts:
   - id: linear_function.diagram_intersection
     label: "ダイヤグラム(時間-道のり)の2直線の交点(出会い/追いつき)をグラフから読み取る"
     unit: g2_l30
+  - id: linear_function.meeting_time_two_segment
+    label: "速さの変化・複数区間を含む2人の出会いの時刻を式を連立して求める"
+    unit: g2_l30
   - id: linear_function.draw_from_table
     label: "x-y の対応表からグラフ（直線）をかく"
     unit: g2_l28

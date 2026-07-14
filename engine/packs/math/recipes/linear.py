@@ -3257,6 +3257,76 @@ def expr_from_range(ctx: CellContext, rng: Rng) -> MR:
     )
 
 
+# ---------------------------------------------------------------------------
+# math.solve_meeting_time_two_segment（g2_l30.find_value Lv3 用）— C5 速さの変化・複数区間
+# ---------------------------------------------------------------------------
+_MEETING_TIME_TWO_SEGMENT_CONCEPTS = [
+    "linear_function.meeting_time_two_segment",
+]
+
+
+@register_recipe(
+    "math.solve_meeting_time_two_segment", provides_concepts=_MEETING_TIME_TWO_SEGMENT_CONCEPTS
+)
+def solve_meeting_time_two_segment(ctx: CellContext, rng: Rng) -> MR:
+    """速さの変化・複数区間を含む2人の出会いの時刻を求める MR を組む（C5 g2_l30.find_value Lv3）。
+
+    answer-first: A の速さ va・B の出発の遅れ delay・B の第1区間の速さ v1・継続時間 p1・
+    第2区間の速さ v2・出会う時刻 t_meet（delay+p1 より後＝確実に第2区間）を先に決め、
+    PQ間の距離 d = va·t_meet + v1·p1 + v2·(t_meet-delay-p1) を逆算する（構成時に
+    第2区間で出会うことを保証・鉄則⑤: 実行時の場合分け判定は不要）。独立ソルバ
+    math.solve_meeting_time_two_segment が第2区間の式だけから時刻を再計算する
+    （double-solve）。
+    """
+    p = ctx.spec_level.params
+    va = int(draw(p["va_domain"], rng))
+    delay = int(draw(p["delay_domain"], rng))
+    v1 = int(draw(p["v1_domain"], rng))
+    p1 = int(draw(p["p1_domain"], rng))
+    v2 = int(draw(p["v2_domain"], rng))
+    extra = int(draw(p["extra_domain"], rng))  # t_meet は (delay+p1) から extra 分後
+    t_meet = delay + p1 + extra
+
+    d = va * t_meet + v1 * p1 + v2 * (t_meet - delay - p1)
+
+    solver = REGISTRY.solver("math.solve_meeting_time_two_segment")
+    sol = cast(Solution, solver(va, d, delay, v1, p1, v2))
+    assert isinstance(sol.answer, SymbolicAnswer)
+    assert sol.answer.srepr == sympy.srepr(sympy.Integer(t_meet)), (
+        f"double-solve 不一致: 構成した出会う時刻 {t_meet} != solver 再計算 {sol.answer.srepr}"
+    )
+
+    sub_question = SubQuestionMR(
+        label="(1)",
+        asked="value",
+        answer=sol.answer,
+        steps=sol.steps,
+        concept_tags=_effective_concept_tags(ctx),
+        cause_tags=_effective_cause_tags(ctx),
+    )
+    condition = (
+        f"AさんはP地点を出発しQ地点へ毎分{va}mで進む。"
+        f"BさんはAさんより{delay}分おくれてQ地点を出発し、"
+        f"はじめの{p1}分は毎分{v1}mで、その後は毎分{v2}mでP地点へ向かう。"
+        f"PQ間の道のりを{d}mとするとき、2人が出会う時刻を求めよ"
+    )
+    return MR(
+        signature=ctx.spec_level.signature,
+        family=ctx.family,
+        level=ctx.level,
+        purpose=ctx.purpose,
+        seed=0,
+        params={
+            "va": str(va), "d": str(d), "delay": str(delay),
+            "v1": str(v1), "p1": str(p1), "v2": str(v2),
+        },
+        given={"condition": condition},
+        sub_questions=[sub_question],
+        visual_plan=None,
+        provenance=Provenance(recipe="math.solve_meeting_time_two_segment"),
+    )
+
+
 __all__ = [
     "linear_from_two_points",
     "linear_from_slope_point",
@@ -3287,4 +3357,5 @@ __all__ = [
     "intersection",
     "y_range_from_domain",
     "expr_from_range",
+    "solve_meeting_time_two_segment",
 ]

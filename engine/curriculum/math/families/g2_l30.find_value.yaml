@@ -10,8 +10,16 @@ source_desc: |
   solver を再利用（g2_l27 と共有・新 solver ゼロ）。
   ★設計モデル（preview 検収 Q4）: 本セルは「2人の進むようすの式は既知として与え、連立して交点を
   計算する」T1 セル（場面→立式は word_problem g2_l30）。交点は第1象限（時刻・道のり>0）に限定し
-  motion 文脈で提示する。Lv3（速さの変化・複数区間）は場面からの立式を要し word_problem 寄りのため
-  本ファイルでは未実装（M1 の T3 翻訳で対応）。
+  motion 文脈で提示する。
+  Lv3 desc: 速さの変化・複数区間を含む交点を求める。
+       example: AさんはP地点を出発しQ地点へ毎分80mで進む。BさんはAさんより10分おくれてQ地点を
+                出発し、はじめの5分は毎分100m、その後は毎分60mでP地点へ向かう。PQ間の道のりを
+                1200mとするとき、2人が出会う時刻を求めよ。
+  【設計モデル・Lv3】新規 solver/recipe math.solve_meeting_time_two_segment。answer-first で
+  A の速さ va・B の遅れ delay・B の第1区間の速さ v1・継続時間 p1・第2区間の速さ v2・出会う
+  時刻 t_meet（delay+p1 より後＝確実に第2区間）を先に決め、PQ間の距離 d を逆算する（構成時に
+  第2区間で出会うことを保証・鉄則⑤）。frame は既存 find_value の condition/value を流用
+  （frame 変更なし）。
 concepts_default: [linear_function.diagram_intersection]
 levels:
   "2":
@@ -29,6 +37,23 @@ levels:
     text: {tier: T1, template: lf_intersection_diagram_v1}
     hints: [steps_prefix]
     concept_tags: [linear_function.diagram_intersection]
+    cause_tags: []
+  "3":
+    signature: meeting_time_two_segment
+    recipe: math.solve_meeting_time_two_segment
+    params:
+      va_domain: {int_range: [50, 90]}
+      delay_domain: {int_range: [5, 15]}
+      v1_domain: {int_range: [70, 110]}
+      p1_domain: {int_range: [3, 8]}
+      v2_domain: {int_range: [40, 80]}
+      extra_domain: {int_range: [1, 10]}
+    given: [condition]
+    asked: [value]
+    visual: none
+    text: {tier: T1, template: lf_meeting_time_two_segment_v1}
+    hints: [steps_prefix]
+    concept_tags: [linear_function.meeting_time_two_segment]
     cause_tags: []
 remedial:
   default_level: 2

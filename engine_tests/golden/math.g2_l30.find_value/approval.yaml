@@ -1,8 +1,11 @@
-approved_at: '2026-07-13T06:33:56.728979'
+approved_at: '2026-07-14T17:22:59.047951'
 approver: koki
-content_sha256: 15dc4d1ab5f024b19a7682b9f221ce8588c534083599aa92af30e5676b8c4f13
+content_sha256: 226be31b5d0da92c538a5ae6be25ab2eb2603914f241327b09739a491b9cab6e
 family: math.g2_l30.find_value
 files:
 - engine_tests/golden/math.g2_l30.find_value/math.g2_l30.find_value_lv2_seed1.yaml
 - engine_tests/golden/math.g2_l30.find_value/math.g2_l30.find_value_lv2_seed2.yaml
 - engine_tests/golden/math.g2_l30.find_value/math.g2_l30.find_value_lv2_seed3.yaml
+- engine_tests/golden/math.g2_l30.find_value/math.g2_l30.find_value_lv3_seed1.yaml
+- engine_tests/golden/math.g2_l30.find_value/math.g2_l30.find_value_lv3_seed2.yaml
+- engine_tests/golden/math.g2_l30.find_value/math.g2_l30.find_value_lv3_seed3.yaml

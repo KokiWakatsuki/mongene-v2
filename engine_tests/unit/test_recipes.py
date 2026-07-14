@@ -1462,6 +1462,49 @@ def test_intersection_double_solve_property(level, seed):
 
 
 # ---------------------------------------------------------------------------
+# math.solve_meeting_time_two_segment（C5 g2_l30.find_value Lv3 速さの変化・複数区間）
+# ---------------------------------------------------------------------------
+def test_solve_meeting_time_two_segment_lv3_construct():
+    ctx = _make_ctx("math.g2_l30.find_value", 3)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "meeting_time_two_segment"
+    assert set(mr.given.keys()) == {"condition"}
+    sq = mr.sub_questions[0]
+    assert sq.asked == "value"
+    assert [s.op for s in sq.steps] == ["set_up_second_segment_equation", "solve_for_x"]
+    # 答えは自由変数を含まない正の値。
+    val = sympy.sympify(sq.answer.srepr)
+    assert not val.free_symbols
+    assert val > 0
+
+
+@pytest.mark.parametrize("seed", range(100))
+def test_solve_meeting_time_two_segment_double_solve_property(seed):
+    ctx = _make_ctx("math.g2_l30.find_value", 3)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.solve_meeting_time_two_segment")
+    sol = solver(
+        mr.params["va"], mr.params["d"], mr.params["delay"],
+        mr.params["v1"], mr.params["p1"], mr.params["v2"],
+    )
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+    # 恒真: 出会う時刻 t は確実に第2区間（delay+p1 より後）にある。
+    va, d = sympy.Integer(mr.params["va"]), sympy.Integer(mr.params["d"])
+    delay, v1, p1, v2 = (
+        sympy.Integer(mr.params["delay"]), sympy.Integer(mr.params["v1"]),
+        sympy.Integer(mr.params["p1"]), sympy.Integer(mr.params["v2"]),
+    )
+    t = sympy.sympify(sol.answer.srepr)
+    assert t > delay + p1
+    # 恒真: Aの位置とBの位置(第2区間の式)が時刻tで一致する。
+    y_a = va * t
+    y_b = d - v1 * p1 - v2 * (t - delay - p1)
+    assert sympy.simplify(y_a - y_b) == 0
+
+
+# ---------------------------------------------------------------------------
 # math.y_range_from_domain / math.expr_from_range（g2_l23.find_value）— 横展開#3 変域
 # ---------------------------------------------------------------------------
 def test_y_range_lv2_forward_construct():

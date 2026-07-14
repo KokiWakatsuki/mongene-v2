@@ -294,6 +294,9 @@ LF_EXPR_FROM_RANGE_V1 = (
     "y の変域が {{ given.y_range }} であった。{{ given.condition }}、この1次関数の式を求めよ。"
 )
 
+# g2_l30.find_value Lv3: 速さの変化・複数区間を含む出会いの時刻を求める（C5）
+LF_MEETING_TIME_TWO_SEGMENT_V1 = "{{ given.condition }}。"
+
 
 def _register_all() -> None:
     REGISTRY.register_template("lf_expr_two_points_v1", LF_EXPR_TWO_POINTS_V1)
@@ -357,6 +360,9 @@ def _register_all() -> None:
     REGISTRY.register_template("lf_intersection_diagram_v1", LF_INTERSECTION_DIAGRAM_V1)
     REGISTRY.register_template("lf_y_range_v1", LF_Y_RANGE_V1)
     REGISTRY.register_template("lf_expr_from_range_v1", LF_EXPR_FROM_RANGE_V1)
+    REGISTRY.register_template(
+        "lf_meeting_time_two_segment_v1", LF_MEETING_TIME_TWO_SEGMENT_V1
+    )
 
 
 _register_all()
@@ -400,4 +406,5 @@ __all__ = [
     "LF_INTERSECTION_DIAGRAM_V1",
     "LF_Y_RANGE_V1",
     "LF_EXPR_FROM_RANGE_V1",
+    "LF_MEETING_TIME_TWO_SEGMENT_V1",
 ]

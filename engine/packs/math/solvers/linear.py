@@ -1304,6 +1304,52 @@ def linear_coefficient_role(which: object) -> Solution:
     return Solution(answer=answer, steps=steps)
 
 
+@register_solver("math.solve_meeting_time_two_segment")
+def solve_meeting_time_two_segment(
+    va: object, d: object, delay: object, v1: object, p1: object, v2: object,
+) -> Solution:
+    """速さが変化する2区間を含む2人の出会いの時刻を求める（g2_l30.find_value Lv3）。
+
+    A は原点（地点P）から一定の速さ va で出発する（y_A=va·x）。B は距離 d 離れた
+    地点Qから、A の出発より delay 分おくれて出発し、最初の p1 分は速さ v1、その後は
+    速さ v2 で地点Pへ向かう（B は地点Pからの道のり y で測ると
+    y_B = d - v1·(x-delay) （最初の区間）／d - v1·p1 - v2·(x-delay-p1) （2区間目）
+    と表せる）。パラメータだけから2区間目の式 va·x = d-v1·p1-v2·(x-delay-p1) を x
+    について解く（構成側が2区間目で出会うことを保証している前提・recipe の構成内訳は
+    見ない・double-solve）。答えは出会う時刻 x（SymbolicAnswer）。narration に数字は
+    書かない。
+    """
+    # sympy.nsimplify は数値文字列に対し稀に無関係な無理数近似を返す既知の落とし穴が
+    # あるため（例: nsimplify("1455") が 2**(18/175)*... のような式になる）、厳密な
+    # 整数/分数値の解析には sympy.sympify を使う（鉄則④相当の実バグ回避）。
+    va_s, d_s = sympy.sympify(str(va)), sympy.sympify(str(d))
+    delay_s, v1_s, p1_s, v2_s = (
+        sympy.sympify(str(delay)), sympy.sympify(str(v1)),
+        sympy.sympify(str(p1)), sympy.sympify(str(v2)),
+    )
+    # va·x + v2·x = d - v1·p1 + v2·(delay+p1)
+    rhs = d_s - v1_s * p1_s + v2_s * (delay_s + p1_s)
+    x = rhs / (va_s + v2_s)
+    steps = [
+        Step(
+            op="set_up_second_segment_equation",
+            args=[],
+            result_srepr=sympy.srepr(x),
+            result_display="2区間目の式どうしを等号でつなぐ",
+            narration="Bが速さを変えた後の式と、Aの式が等しくなる方程式をつくる。",
+        ),
+        Step(
+            op="solve_for_x",
+            args=[],
+            result_srepr=sympy.srepr(x),
+            result_display=f"x = {_format_number(x)}",
+            narration="方程式を整理して、出会う時刻 x を求める。",
+        ),
+    ]
+    answer = SymbolicAnswer(srepr=sympy.srepr(x), display=f"{_format_number(x)}")
+    return Solution(answer=answer, steps=steps)
+
+
 __all__ = [
     "linear_expr_from_two_points",
     "linear_expr_from_slope_point",
@@ -1327,4 +1373,5 @@ __all__ = [
     "rate_of_change_is_constant",
     "equation_solution_set_shape",
     "system_solution_is_intersection",
+    "solve_meeting_time_two_segment",
 ]

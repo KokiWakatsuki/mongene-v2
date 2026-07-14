@@ -371,6 +371,15 @@ def double_solve_expr_from_range(mr: MR) -> Solution:
     return cast(Solution, solver(p1, p2, p["method"]))
 
 
+@register_checker("math.solve_meeting_time_two_segment.double_solve")
+def double_solve_solve_meeting_time_two_segment(mr: MR) -> Solution:
+    p = mr.params
+    solver = REGISTRY.solver("math.solve_meeting_time_two_segment")
+    return cast(
+        Solution, solver(p["va"], p["d"], p["delay"], p["v1"], p["p1"], p["v2"])
+    )
+
+
 __all__ = [
     "double_solve_two_points",
     "double_solve_slope_point",
@@ -411,4 +420,5 @@ __all__ = [
     "double_solve_solve_time_from_area",
     "double_solve_y_range",
     "double_solve_expr_from_range",
+    "double_solve_solve_meeting_time_two_segment",
 ]
