@@ -2995,6 +2995,60 @@ def test_quadratic_rectangle_area_value_double_solve_property(seed):
 
 
 # ---------------------------------------------------------------------------
+# math.solve_moving_point_area（C3 g3_l31.find_value 2次方程式の利用「動点」）
+# ---------------------------------------------------------------------------
+_MOTION_CELLS = [
+    ("math.g3_l31.find_value", 2), ("math.g3_l31.find_value", 3),
+]
+
+
+def test_solve_moving_point_area_lv2_construct():
+    ctx = _make_ctx("math.g3_l31.find_value", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "motion_area_single_segment"
+    assert set(mr.given.keys()) == {"condition"}
+    sq = mr.sub_questions[0]
+    assert sq.asked == "value"
+    assert [s.op for s in sq.steps] == ["locate_point_p", "compute_triangle_area"]
+    # 面積は AP長×s÷2（点PがAB上・0<AP<s）に一致する。
+    p, s = mr.params["v"] * mr.params["t"], mr.params["s"]
+    assert 0 < p < s
+    assert sympy.sympify(sq.answer.srepr) == sympy.Rational(p * s, 2)
+
+
+def test_solve_moving_point_area_lv3_construct():
+    ctx = _make_ctx("math.g3_l31.find_value", 3)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "motion_area_two_segment"
+    sq = mr.sub_questions[0]
+    assert [s.op for s in sq.steps] == [
+        "determine_which_segment", "locate_point_p", "compute_triangle_area",
+    ]
+    # 点PはA→B→Cの2区間目（辺BC上）: s < v*t < 2s が確実に成り立つ。
+    s, v, t = mr.params["s"], mr.params["v"], mr.params["t"]
+    assert s < v * t < 2 * s
+    # この区間では面積は s²/2 で一定になる。
+    assert sympy.sympify(sq.answer.srepr) == sympy.Rational(s * s, 2)
+
+
+@pytest.mark.parametrize("family,level", _MOTION_CELLS)
+@pytest.mark.parametrize("seed", range(100))
+def test_solve_moving_point_area_double_solve_property(family, level, seed):
+    ctx = _make_ctx(family, level)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.solve_moving_point_area")
+    sol = solver(mr.params["s"], mr.params["v"], mr.params["t"], mr.params["mode"])
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+    # 答えは自由変数を含まない非負の有理数。
+    val = sympy.sympify(sol.answer.srepr)
+    assert not val.free_symbols
+    assert val >= 0
+
+
+# ---------------------------------------------------------------------------
 # math.count_significant_figures（C1 g1_l60.knowledge Lv2 有効数字の桁判別）— P2 bespoke
 # ---------------------------------------------------------------------------
 def test_count_significant_figures_lv2_construct():

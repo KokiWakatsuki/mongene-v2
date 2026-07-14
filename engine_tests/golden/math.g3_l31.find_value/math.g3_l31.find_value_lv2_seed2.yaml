@@ -1,0 +1,52 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - motion.area_single_segment
+  provenance:
+    git_commit: ''
+    recipe: math.solve_moving_point_area
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_motion_area_v1
+    tier: T1
+  requested:
+    form: find_value
+    level: 2
+    subject: math
+    unit: g3_l31
+  resolved:
+    form: find_value
+    level: 2
+    subject: math
+    unit: g3_l31
+  seed: 2
+  signature: motion_area_single_segment
+problem_ref: 4337306972e0b698
+problem_text: 1辺が 26cm の正方形ABCDで、点PはAを出発し辺AB上を毎秒3cmで動く。出発してから2秒後の三角形APDの面積を求めよ。
+sub_questions:
+- answer:
+    display: '78'
+    kind: symbolic
+    srepr: Integer(78)
+  cause_tags: []
+  concept_tags:
+  - motion.area_single_segment
+  explanation: まず、経過した時間と速さから、点 P が動いた道のりを求め、その位置の座標を決める。 点 P の座標を決める次に、3点の座標から、三角形の面積を求める公式で面積を計算する。 78
+  hints:
+  - 経過した時間と速さから、点 P が動いた道のりを求め、その位置の座標を決める。
+  label: (1)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 経過した時間と速さから、点 P が動いた道のりを求め、その位置の座標を決める。
+    op: locate_point_p
+    result_display: 点 P の座標を決める
+    result_srepr: ''
+  - args: []
+    narration: 3点の座標から、三角形の面積を求める公式で面積を計算する。
+    op: compute_triangle_area
+    result_display: '78'
+    result_srepr: Integer(78)
+visual_svg: null

@@ -13,5 +13,6 @@ from engine.packs.math.recipes import letter_expr  # noqa: F401,E402  (polynomia
 from engine.packs.math.recipes import radical  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.recipes import quadratic  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.recipes import rational_form  # noqa: F401  (登録の副作用のため import)
+from engine.packs.math.recipes import motion  # noqa: F401  (登録の副作用のため import)
 
 __all__: list[str] = []
