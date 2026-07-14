@@ -15,4 +15,15 @@ def double_solve_simplify_radical(mr: MR) -> Solution:
     return cast(Solution, solver(p["expr_str"], p["mode"]))
 
 
-__all__ = ["double_solve_simplify_radical"]
+@register_checker("math.evaluate_radical_substitution.double_solve")
+def double_solve_evaluate_radical_substitution(mr: MR) -> Solution:
+    # 与式 expr_str・代入値 value_str(_y)・mode から独立に sympy.expand で代入し直す。
+    # value_str_y は Lv3（2変数の対称式）のみ params に存在する。
+    p = mr.params
+    solver = REGISTRY.solver("math.evaluate_radical_substitution")
+    return cast(
+        Solution, solver(p["expr_str"], p["value_str"], p["mode"], p.get("value_str_y"))
+    )
+
+
+__all__ = ["double_solve_simplify_radical", "double_solve_evaluate_radical_substitution"]

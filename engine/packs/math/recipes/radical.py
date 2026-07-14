@@ -198,4 +198,141 @@ def simplify_radical(ctx: CellContext, rng: Rng) -> MR:
     )
 
 
-__all__ = ["simplify_radical", "_SQUAREFREE"]
+def _p_term_x(p: int) -> str:
+    """-2px の表示（x² のうしろに続く1次項・符号込み）。例: 1->" - 2x" / -3->" + 6x"。p≠0。"""
+    coef = -2 * p
+    mag = abs(coef)
+    body = "x" if mag == 1 else f"{mag}x"
+    return f" + {body}" if coef > 0 else f" - {body}"
+
+
+def _root_plus_int_disp(a: int, p: int) -> str:
+    """√a+p / √a-p の表示（p≠0）。例: (3,1)->"√3 + 1" / (3,-1)->"√3 - 1"。"""
+    return f"√{a} + {p}" if p > 0 else f"√{a} - {-p}"
+
+
+@register_recipe(
+    "math.evaluate_radical_substitution",
+    provides_concepts=["radical.evaluate_expression_value", "radical.evaluate_symmetric_pair_value"],
+)
+def evaluate_radical_substitution(ctx: CellContext, rng: Rng) -> MR:
+    """√を含む値を式に代入して式の値を求める MR を組む（C3 g3_l22.calculation Lv2/Lv3）。
+
+    Lv2 (substitute_root_quadratic): x = p+√a（p は 0 でない整数・a は非平方の
+    squarefree）を x²-2px に代入すると x²-2px = a-p² となり根号が恒等的に消える
+    （構成側で1次係数を -2p に固定することで保証・a が非平方だから a-p²=0 に
+    退化する余地もない＝有界リトライ不要）。
+
+    Lv3 (substitute_conjugate_pair_sum_squares): 共役な組 x=√a+p, y=√a-p を
+    x²+y² に代入すると x²+y² = 2a+2p² となり根号が恒等的に消える（p,a の符号に
+    関わらず常に成立・a≥2 なので 2a+2p²=0 に退化する余地もない＝有界リトライ不要）。
+    """
+    mode = cast(str, ctx.spec_level.params["mode"])
+    if mode == "substitute_root_quadratic":
+        return _evaluate_substitute_root_quadratic(ctx, rng, mode)
+    if mode == "substitute_conjugate_pair_sum_squares":
+        return _evaluate_substitute_conjugate_pair(ctx, rng, mode)
+    raise ValueError(f"未知の mode: {mode!r}")
+
+
+def _evaluate_substitute_root_quadratic(ctx: CellContext, rng: Rng, mode: str) -> MR:
+    p = int(draw({"int_set": [n for n in range(-12, 13) if n != 0]}, rng))
+    a = int(draw({"int_set": _SQUAREFREE}, rng))
+
+    value_str = f"sqrt({a})+({p})"
+    expr_str = f"x**2-2*({p})*x"
+    given_expr_disp = f"x²{_p_term_x(p)}"
+    given_value_disp = _root_plus_int_disp(a, p)
+
+    solver = REGISTRY.solver("math.evaluate_radical_substitution")
+    sol = cast(Solution, solver(expr_str, value_str, mode))
+    assert isinstance(sol.answer, SymbolicAnswer)
+    # 恒真: 独立に構成値から再計算した値と、solver の答えが一致する（.equals で堅牢に
+    # ゼロ判定・evalf はハングするため使わない）。
+    x = sympy.Symbol("x")
+    expected = sympy.expand(sympy.sympify(expr_str).subs(x, sympy.sympify(value_str)))
+    diff = expected - sympy.sympify(sol.answer.srepr)
+    assert diff.equals(0), (
+        f"double-solve 不一致: 構成値 {expected} と solver 再計算 {sol.answer.display} が等しくない"
+    )
+    # 答えは根号を含まない定数（自由変数なし）。a が非平方ゆえ a-p²=0 に退化しない。
+    assert not sympy.sympify(sol.answer.srepr).free_symbols
+
+    sub_question = SubQuestionMR(
+        label="(1)",
+        asked="value",
+        answer=sol.answer,
+        steps=sol.steps,
+        concept_tags=_effective_concept_tags(ctx),
+        cause_tags=_effective_cause_tags(ctx),
+    )
+    return MR(
+        signature=ctx.spec_level.signature,
+        family=ctx.family,
+        level=ctx.level,
+        purpose=ctx.purpose,
+        seed=0,
+        params={"expr_str": expr_str, "value_str": value_str, "mode": mode},
+        given={"expression": given_expr_disp, "input_value": given_value_disp},
+        sub_questions=[sub_question],
+        visual_plan=None,
+        provenance=Provenance(recipe="math.evaluate_radical_substitution"),
+    )
+
+
+def _evaluate_substitute_conjugate_pair(ctx: CellContext, rng: Rng, mode: str) -> MR:
+    p = int(draw({"int_set": [n for n in range(-12, 13) if n != 0]}, rng))
+    a = int(draw({"int_set": _SQUAREFREE}, rng))
+
+    value_str_x = f"sqrt({a})+({p})"
+    value_str_y = f"sqrt({a})-({p})"
+    expr_str = "x**2+y**2"
+    given_expr_disp = "x² + y²"
+    given_value_disp = (
+        f"x = {_root_plus_int_disp(a, p)}、y = {_root_plus_int_disp(a, -p)}"
+    )
+
+    solver = REGISTRY.solver("math.evaluate_radical_substitution")
+    sol = cast(Solution, solver(expr_str, value_str_x, mode, value_str_y))
+    assert isinstance(sol.answer, SymbolicAnswer)
+    # 恒真: 独立に構成値から再計算した値と、solver の答えが一致する（.equals で堅牢に
+    # ゼロ判定・evalf はハングするため使わない）。
+    x, y = sympy.symbols("x y")
+    expected = sympy.expand(
+        sympy.sympify(expr_str).subs({x: sympy.sympify(value_str_x), y: sympy.sympify(value_str_y)})
+    )
+    diff = expected - sympy.sympify(sol.answer.srepr)
+    assert diff.equals(0), (
+        f"double-solve 不一致: 構成値 {expected} と solver 再計算 {sol.answer.display} が等しくない"
+    )
+    # 答えは根号を含まない定数（自由変数なし）。a≥2 かつ x²+y²=2a+2p²>0 ゆえ退化しない。
+    assert not sympy.sympify(sol.answer.srepr).free_symbols
+
+    sub_question = SubQuestionMR(
+        label="(1)",
+        asked="value",
+        answer=sol.answer,
+        steps=sol.steps,
+        concept_tags=_effective_concept_tags(ctx),
+        cause_tags=_effective_cause_tags(ctx),
+    )
+    return MR(
+        signature=ctx.spec_level.signature,
+        family=ctx.family,
+        level=ctx.level,
+        purpose=ctx.purpose,
+        seed=0,
+        params={
+            "expr_str": expr_str,
+            "value_str": value_str_x,
+            "value_str_y": value_str_y,
+            "mode": mode,
+        },
+        given={"expression": given_expr_disp, "input_value": given_value_disp},
+        sub_questions=[sub_question],
+        visual_plan=None,
+        provenance=Provenance(recipe="math.evaluate_radical_substitution"),
+    )
+
+
+__all__ = ["simplify_radical", "_SQUAREFREE", "evaluate_radical_substitution"]

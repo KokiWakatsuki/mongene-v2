@@ -176,6 +176,12 @@ concepts:
   - id: radical.various_calculation
     label: "分配法則・乗法公式・共役の有理化を使う平方根の計算"
     unit: g3_l21
+  - id: radical.evaluate_expression_value
+    label: "√を含む値を式に代入し展開して式の値を求める"
+    unit: g3_l22
+  - id: radical.evaluate_symmetric_pair_value
+    label: "共役な√を含む値の組を対称式に代入し展開して式の値を求める"
+    unit: g3_l22
   # C3 g3 2次方程式
   - id: quadratic.evaluate_solution
     label: "2次方程式の左辺に値を代入し解かどうかを確かめる"

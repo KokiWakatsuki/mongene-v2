@@ -130,4 +130,76 @@ def simplify_radical(expr_str: str, mode: object) -> Solution:
     return Solution(answer=answer, steps=steps)
 
 
-__all__ = ["simplify_radical", "fmt_radical"]
+# ---------------------------------------------------------------------------
+# 式の値（C3 g3_l22.calculation）— 根号を含む値を式に代入して式の値を求める。
+#
+# x = p+√a（p は 0 でない整数、a は非平方の squarefree）を expr_str（x の式）に
+# 代入し、sympy.expand で厳密評価する（double-solve）。recipe 側で 1次の係数を
+# -2p に固定して構成する（x²-2px = (p+√a)²-2p(p+√a) = a-p² と根号が恒等的に
+# 消える・a が非平方なので a-p²=0 に退化しない＝構成のみで退化ガードが効く）。
+# 答えは根号を含まない定数（Integer）の SymbolicAnswer。mode ごとに steps の
+# op 列を変える＝level_sep。narration には数字を書かない。
+# ---------------------------------------------------------------------------
+_SUBSTITUTE_ROOT_STEPS: dict[str, list[str]] = {
+    # g3_l22 Lv2 √を含む値を代入し展開して式の値を求める
+    "substitute_root_quadratic": ["substitute_root_value", "expand_and_simplify"],
+    # g3_l22 Lv3 共役な√を含む値の組(x,y)を対称式に代入し展開して式の値を求める
+    "substitute_conjugate_pair_sum_squares": ["substitute_conjugate_pair_values", "expand_and_simplify"],
+}
+
+_SUBSTITUTE_ROOT_NARRATION: dict[str, str] = {
+    "substitute_root_value": "式の文字に、根号を含む値をそのままあてはめる。",
+    "substitute_conjugate_pair_values": "式の2つの文字に、根号を含む共役な値の組をそれぞれあてはめる。",
+    "expand_and_simplify": "かっこを展開し、根号を含む項どうしを整理して式の値を求める。",
+}
+
+_SUBSTITUTE_ROOT_PHRASE: dict[str, str] = {
+    "substitute_root_value": "根号を含む値をあてはめる",
+    "substitute_conjugate_pair_values": "根号を含む値の組をあてはめる",
+}
+
+
+@register_solver("math.evaluate_radical_substitution")
+def evaluate_radical_substitution(
+    expr_str: str, value_str: str, mode: object, value_str_y: str | None = None
+) -> Solution:
+    """根号を含む値を式に代入して式の値を求める（C3 g3_l22.calculation）。
+
+    expr_str（x の式、Lv3 は x,y の式）と value_str（"sqrt(a)+p" 形の x への代入値）
+    だけから sympy.expand で代入・厳密評価する（recipe の構成内訳は見ない・double-solve）。
+    value_str_y が与えられれば（Lv3）y にもその値を代入する（2変数の対称式）。
+    答えは根号を含まない定数（Integer）の SymbolicAnswer。mode ごとに steps の
+    op 列を変える＝level_sep。narration には数字を書かない。
+    """
+    mode_s = str(mode)
+    if mode_s not in _SUBSTITUTE_ROOT_STEPS:
+        raise ValueError(f"未知の mode: {mode_s!r}")
+    x = sympy.Symbol("x")
+    subs_map: dict[sympy.Symbol, sympy.Expr] = {x: sympy.sympify(value_str)}
+    if value_str_y is not None:
+        y = sympy.Symbol("y")
+        subs_map[y] = sympy.sympify(value_str_y)
+    result = sympy.expand(sympy.sympify(expr_str).subs(subs_map))
+    if result.free_symbols:
+        raise ValueError(
+            f"代入結果が定数にならない: {expr_str!r} [x={value_str!r}, y={value_str_y!r}] -> {result!r}"
+        )
+    disp = fmt_radical(result)
+    srepr = sympy.srepr(result)
+
+    ops = _SUBSTITUTE_ROOT_STEPS[mode_s]
+    steps = [
+        Step(
+            op=op,
+            args=[],
+            result_srepr=srepr if i == len(ops) - 1 else "",
+            result_display=disp if i == len(ops) - 1 else _SUBSTITUTE_ROOT_PHRASE.get(op, ""),
+            narration=_SUBSTITUTE_ROOT_NARRATION[op],
+        )
+        for i, op in enumerate(ops)
+    ]
+    answer = SymbolicAnswer(srepr=srepr, display=disp)
+    return Solution(answer=answer, steps=steps)
+
+
+__all__ = ["simplify_radical", "fmt_radical", "evaluate_radical_substitution"]

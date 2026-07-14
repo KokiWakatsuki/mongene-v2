@@ -2587,6 +2587,85 @@ def test_simplify_radical_double_solve_property(family, level, seed):
 
 
 # ---------------------------------------------------------------------------
+# math.evaluate_radical_substitution（C3 g3_l22.calculation 式の値）— √を含む値の代入
+# ---------------------------------------------------------------------------
+_RADICAL_SUBSTITUTION_CELLS = [
+    ("math.g3_l22.calculation", 2),
+    ("math.g3_l22.calculation", 3),
+]
+
+
+def _expand_radical_substitution_expected(params: dict) -> sympy.Expr:
+    """params から独立に代入・展開した期待値（Lv2=x単独／Lv3=x,y共役組の両対応）。"""
+    x = sympy.Symbol("x")
+    subs_map: dict[sympy.Symbol, sympy.Expr] = {x: sympy.sympify(params["value_str"])}
+    if "value_str_y" in params:
+        y = sympy.Symbol("y")
+        subs_map[y] = sympy.sympify(params["value_str_y"])
+    return sympy.expand(sympy.sympify(params["expr_str"]).subs(subs_map))
+
+
+def test_evaluate_radical_substitution_lv2_construct():
+    ctx = _make_ctx("math.g3_l22.calculation", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "radical_evaluate_expression_value"
+    assert set(mr.given.keys()) == {"expression", "input_value"}
+    sq = mr.sub_questions[0]
+    assert sq.asked == "value"
+    assert [s.op for s in sq.steps] == ["substitute_root_value", "expand_and_simplify"]
+    # 答えは根号を含まない定数（自由変数なし）。
+    result = sympy.sympify(sq.answer.srepr)
+    assert not result.free_symbols
+    # 恒真: 独立に構成値を代入・展開した結果と answer が一致する（.equals で堅牢にゼロ判定）。
+    expected = _expand_radical_substitution_expected(mr.params)
+    diff = expected - result
+    assert diff.equals(0)
+
+
+def test_evaluate_radical_substitution_lv3_construct():
+    ctx = _make_ctx("math.g3_l22.calculation", 3)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "radical_evaluate_symmetric_pair_value"
+    assert set(mr.given.keys()) == {"expression", "input_value"}
+    sq = mr.sub_questions[0]
+    assert sq.asked == "value"
+    assert [s.op for s in sq.steps] == ["substitute_conjugate_pair_values", "expand_and_simplify"]
+    # level_sep: Lv2 とは op 列が異なる（先頭 op 名が別）。
+    assert sq.steps[0].op != "substitute_root_value"
+    # 答えは根号を含まない定数（自由変数なし）。
+    result = sympy.sympify(sq.answer.srepr)
+    assert not result.free_symbols
+    # 恒真: 独立に構成値の組(x,y)を代入・展開した結果と answer が一致する（.equals で堅牢にゼロ判定）。
+    expected = _expand_radical_substitution_expected(mr.params)
+    diff = expected - result
+    assert diff.equals(0)
+
+
+@pytest.mark.parametrize("family,level", _RADICAL_SUBSTITUTION_CELLS)
+@pytest.mark.parametrize("seed", range(100))
+def test_evaluate_radical_substitution_double_solve_property(family, level, seed):
+    ctx = _make_ctx(family, level)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    # 独立ソルバの答えが recipe の答えと一致する（double-solve）。value_str_y は
+    # Lv3（2変数の対称式）のみ params に存在する。
+    solver = REGISTRY.solver("math.evaluate_radical_substitution")
+    sol = solver(
+        mr.params["expr_str"], mr.params["value_str"], mr.params["mode"],
+        mr.params.get("value_str_y"),
+    )
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+    # 恒真: 答えは構成値を代入・展開した結果に等しい（.equals で堅牢にゼロ判定・evalf はハングする）。
+    expected = _expand_radical_substitution_expected(mr.params)
+    diff = expected - sympy.sympify(sol.answer.srepr)
+    assert diff.equals(0)
+    # 答えは根号を含まない定数（自由変数なし）。
+    assert not sympy.sympify(sol.answer.srepr).free_symbols
+
+
+# ---------------------------------------------------------------------------
 # math.solve_quadratic（C3 g3_l24〜l28.calculation 2次方程式）— P2 二次方程式コア能力
 # ---------------------------------------------------------------------------
 _QUADRATIC_CELLS = [
