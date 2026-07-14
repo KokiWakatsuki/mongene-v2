@@ -14,6 +14,7 @@ sympy.simplify（乗除・簡単化・加減・展開の正準化）で分ける
 from __future__ import annotations
 
 import re
+from typing import cast
 
 import sympy
 
@@ -47,6 +48,10 @@ _RADICAL_STEPS: dict[str, list[str]] = {
     # g3_l21 いろいろな計算（分配・共役有理化）
     "expand_roots": ["expand_with_distribution", "combine_like_terms_and_radicals"],
     "rationalize_conjugate": ["multiply_by_conjugate", "simplify_fraction"],
+    # g3_l23 平方根の利用（乗除と加減が混在する立式後の計算）
+    "calculate_and_combine": ["multiply_and_simplify_roots", "combine_like_radicals_final"],
+    # g3_l23.find_value 面積から1辺の長さを求める（√a² の簡約と同型）
+    "find_side_from_area": ["factor_out_square", "take_root_outside"],
 }
 
 _RADICAL_OP_NARRATION: dict[str, str] = {
@@ -67,6 +72,8 @@ _RADICAL_OP_NARRATION: dict[str, str] = {
     "expand_with_distribution": "分配法則や乗法公式で根号を含む式を展開する。",
     "combine_like_terms_and_radicals": "数の項どうし・根号の項どうしをまとめる。",
     "multiply_by_conjugate": "分母と分子に、分母の共役な式をかける。",
+    "multiply_and_simplify_roots": "根号どうしの乗除を先に計算し、それぞれ a√b の形に簡単にする。",
+    "combine_like_radicals_final": "根号の中が同じ項をまとめて、式全体を簡単にする。",
 }
 
 _RADICAL_OP_PHRASE: dict[str, str] = {
@@ -80,6 +87,7 @@ _RADICAL_OP_PHRASE: dict[str, str] = {
     "simplify_each_root": "各根号を a√b にする",
     "expand_with_distribution": "展開する",
     "multiply_by_conjugate": "共役な式をかける",
+    "multiply_and_simplify_roots": "乗除を計算し a√b の形にする",
 }
 
 # 分母の有理化を確実に行う mode（sympy.radsimp を使う）。
@@ -202,4 +210,61 @@ def evaluate_radical_substitution(
     return Solution(answer=answer, steps=steps)
 
 
-__all__ = ["simplify_radical", "fmt_radical", "evaluate_radical_substitution"]
+# ---------------------------------------------------------------------------
+# math.compare_radical_values（g3_l15.calculation Lv1/Lv2）— 根号を含む数の大小比較・並べ替え
+#
+# 平方根は正の実数の範囲では2乗の大小と一致する（sympy の厳密な代数比較で判定・evalf 不使用）。
+# 答えは昇順に並べた Tuple の SymbolicAnswer（display は "<" でつないだ不等号チェーン）。
+# ---------------------------------------------------------------------------
+_COMPARE_STEPS: dict[str, list[str]] = {
+    "compare_pair": ["square_each_value", "compare_squares"],
+    "compare_triplet": ["convert_to_squared_form", "compare_and_order"],
+}
+
+_COMPARE_OP_NARRATION: dict[str, str] = {
+    "square_each_value": "根号を含む数はそれぞれ2乗し、根号のない数どうしで比べられるようにする。",
+    "compare_squares": "2乗した値どうしを比べ、値が大きいほうがもとの数も大きいと判断する。",
+    "convert_to_squared_form": "整数や係数つきの根号もふくめ、すべての数を2乗した値に直す。",
+    "compare_and_order": "2乗した値の大小の順に、もとの数を並べる。",
+}
+
+_COMPARE_OP_PHRASE: dict[str, str] = {
+    "square_each_value": "それぞれ2乗する",
+    "convert_to_squared_form": "2乗した値に直す",
+}
+
+
+@register_solver("math.compare_radical_values")
+def compare_radical_values(exprs: object, mode: object) -> Solution:
+    """根号を含む数の大小を比較・並べ替える（C3 g3_l15.calculation Lv1/Lv2）。
+
+    式の文字列のリスト（各要素は整数または根号を含む式）だけから、sympy の厳密な
+    代数比較（evalf を使わない正確な大小判定）で昇順に並べる（double-solve）。答えは
+    昇順の Tuple の SymbolicAnswer（display は "<" でつないだ不等号チェーン）。
+    """
+    mode_s = str(mode)
+    if mode_s not in _COMPARE_STEPS:
+        raise ValueError(f"未知の mode: {mode_s!r}")
+    vals = [sympy.sympify(e) for e in cast("list[str]", exprs)]
+    ordered = sorted(vals)
+    disp = " < ".join(fmt_radical(v) for v in ordered)
+    srepr = sympy.srepr(sympy.Tuple(*ordered))
+
+    ops = _COMPARE_STEPS[mode_s]
+    steps = [
+        Step(
+            op=op,
+            args=[],
+            result_srepr=srepr if i == len(ops) - 1 else "",
+            result_display=disp if i == len(ops) - 1 else _COMPARE_OP_PHRASE.get(op, ""),
+            narration=_COMPARE_OP_NARRATION[op],
+        )
+        for i, op in enumerate(ops)
+    ]
+    answer = SymbolicAnswer(srepr=srepr, display=disp)
+    return Solution(answer=answer, steps=steps)
+
+
+__all__ = [
+    "simplify_radical", "fmt_radical", "evaluate_radical_substitution", "compare_radical_values",
+]

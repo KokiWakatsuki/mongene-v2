@@ -1,0 +1,26 @@
+family: math.g3_l23.calculation
+form: calculation
+source_desc: |
+  平方根の利用（図形や実生活への応用）— 立式後の根号の四則・簡約処理
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv2 desc: 立式後の根号の四則・簡約処理。
+       example: √2×√18 + √50 を計算せよ。
+  【設計モデル】既存 math.simplify_radical を再利用（g3_l14/l17〜l21 と同型）。mode
+  "calculate_and_combine"（新設）: √a×√(a·m1²)=a·m1（乗法で有理数になる）と
+  √(a·m2²)=m2√a（同類の根号）が混在する式を構成する。
+concepts_default: [radical.various_calculation]
+levels:
+  "2":
+    signature: radical_calculate_and_combine
+    recipe: math.simplify_radical
+    params:
+      mode: calculate_and_combine
+    given: [expression]
+    asked: [simplified_expr]
+    visual: none
+    text: {tier: T1, template: lf_radical_calc_v1}
+    hints: [steps_prefix]
+    concept_tags: [radical.various_calculation]
+    cause_tags: []
+remedial:
+  default_level: 2

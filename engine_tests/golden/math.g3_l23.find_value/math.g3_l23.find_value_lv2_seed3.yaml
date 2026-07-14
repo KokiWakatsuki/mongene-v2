@@ -1,0 +1,52 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - radical.find_side_from_area
+  provenance:
+    git_commit: ''
+    recipe: math.find_side_from_area
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_radical_find_value_v1
+    tier: T1
+  requested:
+    form: find_value
+    level: 2
+    subject: math
+    unit: g3_l23
+  resolved:
+    form: find_value
+    level: 2
+    subject: math
+    unit: g3_l23
+  seed: 3
+  signature: radical_find_side_from_area
+problem_ref: 4f840b4e0f78d5c7
+problem_text: 面積が 19133cm² の正方形の1辺の長さを、根号を使って表せ。
+sub_questions:
+- answer:
+    display: 19√53
+    kind: symbolic
+    srepr: Mul(Integer(19), Pow(Integer(53), Rational(1, 2)))
+  cause_tags: []
+  concept_tags:
+  - radical.find_side_from_area
+  explanation: まず、根号の中を素因数分解し、平方の因数を見つける。 平方の因数を見つける次に、平方の因数を根号の外に出して a√b の形にする。 19√53
+  hints:
+  - 根号の中を素因数分解し、平方の因数を見つける。
+  label: (1)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 根号の中を素因数分解し、平方の因数を見つける。
+    op: factor_out_square
+    result_display: 平方の因数を見つける
+    result_srepr: ''
+  - args: []
+    narration: 平方の因数を根号の外に出して a√b の形にする。
+    op: take_root_outside
+    result_display: 19√53
+    result_srepr: Mul(Integer(19), Pow(Integer(53), Rational(1, 2)))
+visual_svg: null

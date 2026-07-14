@@ -1,0 +1,54 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - radical.various_calculation
+  provenance:
+    git_commit: ''
+    recipe: math.simplify_radical
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_radical_calc_v1
+    tier: T1
+  requested:
+    form: calculation
+    level: 2
+    subject: math
+    unit: g3_l23
+  resolved:
+    form: calculation
+    level: 2
+    subject: math
+    unit: g3_l23
+  seed: 3
+  signature: radical_calculate_and_combine
+problem_ref: b5d14340fa6a66e2
+problem_text: '次の式を計算せよ。
+
+  √10 × √160 + √40'
+sub_questions:
+- answer:
+    display: 2√10 + 40
+    kind: symbolic
+    srepr: Add(Mul(Integer(2), Pow(Integer(10), Rational(1, 2))), Integer(40))
+  cause_tags: []
+  concept_tags:
+  - radical.various_calculation
+  explanation: まず、根号どうしの乗除を先に計算し、それぞれ a√b の形に簡単にする。 乗除を計算し a√b の形にする次に、根号の中が同じ項をまとめて、式全体を簡単にする。 2√10 + 40
+  hints:
+  - 根号どうしの乗除を先に計算し、それぞれ a√b の形に簡単にする。
+  label: (1)
+  prompt_text: simplified_expr を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 根号どうしの乗除を先に計算し、それぞれ a√b の形に簡単にする。
+    op: multiply_and_simplify_roots
+    result_display: 乗除を計算し a√b の形にする
+    result_srepr: ''
+  - args: []
+    narration: 根号の中が同じ項をまとめて、式全体を簡単にする。
+    op: combine_like_radicals_final
+    result_display: 2√10 + 40
+    result_srepr: Add(Mul(Integer(2), Pow(Integer(10), Rational(1, 2))), Integer(40))
+visual_svg: null

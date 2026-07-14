@@ -26,4 +26,23 @@ def double_solve_evaluate_radical_substitution(mr: MR) -> Solution:
     )
 
 
-__all__ = ["double_solve_simplify_radical", "double_solve_evaluate_radical_substitution"]
+@register_checker("math.find_side_from_area.double_solve")
+def double_solve_find_side_from_area(mr: MR) -> Solution:
+    # 面積の式 expr_str だけから独立に √ を簡約し直す。
+    p = mr.params
+    solver = REGISTRY.solver("math.simplify_radical")
+    return cast(Solution, solver(p["expr_str"], "find_side_from_area"))
+
+
+@register_checker("math.compare_radical_values.double_solve")
+def double_solve_compare_radical_values(mr: MR) -> Solution:
+    # 構成した値のリスト exprs・mode だけから独立に大小を比較し直す。
+    p = mr.params
+    solver = REGISTRY.solver("math.compare_radical_values")
+    return cast(Solution, solver(p["exprs"], p["mode"]))
+
+
+__all__ = [
+    "double_solve_simplify_radical", "double_solve_evaluate_radical_substitution",
+    "double_solve_find_side_from_area", "double_solve_compare_radical_values",
+]

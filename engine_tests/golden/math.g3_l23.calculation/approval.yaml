@@ -1,0 +1,8 @@
+approved_at: '2026-07-14T16:34:35.366997'
+approver: koki
+content_sha256: 27d22b687362a70defa0354bb29a8de47cfe135919eebaa36e68b8a73c8e228a
+family: math.g3_l23.calculation
+files:
+- engine_tests/golden/math.g3_l23.calculation/math.g3_l23.calculation_lv2_seed1.yaml
+- engine_tests/golden/math.g3_l23.calculation/math.g3_l23.calculation_lv2_seed2.yaml
+- engine_tests/golden/math.g3_l23.calculation/math.g3_l23.calculation_lv2_seed3.yaml

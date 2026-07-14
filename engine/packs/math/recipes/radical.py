@@ -146,6 +146,19 @@ def _radical_construct(mode: str, rng: Rng) -> tuple[str, str]:
         disp = f"√{a}({st}) + ({pt})({qt})"
         return expr, disp
 
+    if mode == "calculate_and_combine":
+        # g3_l23 立式後の√計算（例: √2×√18+√50）。√a×√(a·m1²)=a·m1 の乗法と
+        # √(a·m2²)=m2√a の加減が混在する形を構成する。
+        a = int(draw({"int_set": [s for s in _SQUAREFREE if s <= 10]}, rng))
+        m1 = int(draw({"int_set": list(range(2, 10))}, rng))
+        m2_cands = [v for v in range(2, 10) if v != m1]
+        m2 = int(draw({"int_set": m2_cands}, rng))
+        sign = str(draw(["+", "-"], rng))
+        n1, n2 = a * m1 * m1, a * m2 * m2
+        expr = f"sqrt({a})*sqrt({n1}){sign}sqrt({n2})"
+        disp = f"√{a} × √{n1} {sign} √{n2}"
+        return expr, disp
+
     if mode == "rationalize_conjugate":
         a = int(draw({"int_set": [s for s in _SQUAREFREE if s <= 15]}, rng))
         b = int(draw({"int_set": [s for s in _SQUAREFREE if s <= 15]}, rng))
@@ -335,4 +348,122 @@ def _evaluate_substitute_conjugate_pair(ctx: CellContext, rng: Rng, mode: str) -
     )
 
 
-__all__ = ["simplify_radical", "_SQUAREFREE", "evaluate_radical_substitution"]
+_SIDE_FROM_AREA_CONCEPTS = ["radical.find_side_from_area"]
+
+
+@register_recipe("math.find_side_from_area", provides_concepts=_SIDE_FROM_AREA_CONCEPTS)
+def find_side_from_area(ctx: CellContext, rng: Rng) -> MR:
+    """正方形の面積から1辺の長さを根号で表す MR を組む（C3 g3_l23.find_value Lv2）。
+
+    answer-first: 平方因数を持たない a（squarefree・a>1）と整数 k から面積
+    area=k²a を決める（1辺は k√a）。独立ソルバ math.simplify_radical
+    （mode=find_side_from_area）が area だけから √area を a·k²/a の平方因数を
+    見つけて簡約し直す（double-solve）。
+    """
+    a = int(draw({"int_set": _SQUAREFREE}, rng))
+    k = int(draw({"int_set": list(range(1, 20))}, rng))
+    area = k * k * a
+    expr_str = f"sqrt({area})"
+    condition = f"面積が {area}cm² の正方形の1辺の長さを、根号を使って表せ"
+
+    solver = REGISTRY.solver("math.simplify_radical")
+    sol = cast(Solution, solver(expr_str, "find_side_from_area"))
+    assert isinstance(sol.answer, SymbolicAnswer)
+    diff = sympy.sympify(expr_str) - sympy.sympify(sol.answer.srepr)
+    assert diff.equals(0), (
+        f"double-solve 不一致: {expr_str} と {sol.answer.display} が等しくない"
+    )
+
+    sub_question = SubQuestionMR(
+        label="(1)",
+        asked="value",
+        answer=sol.answer,
+        steps=sol.steps,
+        concept_tags=_effective_concept_tags(ctx),
+        cause_tags=_effective_cause_tags(ctx),
+    )
+    return MR(
+        signature=ctx.spec_level.signature,
+        family=ctx.family,
+        level=ctx.level,
+        purpose=ctx.purpose,
+        seed=0,
+        params={"expr_str": expr_str},
+        given={"condition": condition},
+        sub_questions=[sub_question],
+        visual_plan=None,
+        provenance=Provenance(recipe="math.find_side_from_area"),
+    )
+
+
+_COMPARE_RADICAL_CONCEPTS = ["radical.compare_magnitude"]
+
+
+def _draw_compare_pair(rng: Rng) -> tuple[list[str], str]:
+    """g3_l15.calculation Lv1: 2つの bare √ の大小比較（例: √5 と √8）。"""
+    a = int(draw({"int_set": list(range(2, 100))}, rng))
+    b_cands = [v for v in range(2, 100) if v != a]
+    b = int(draw({"int_set": b_cands}, rng))
+    exprs = [f"sqrt({a})", f"sqrt({b})"]
+    disp = f"√{a} と √{b}"
+    return exprs, disp
+
+
+def _draw_compare_triplet(rng: Rng) -> tuple[list[str], str]:
+    """g3_l15.calculation Lv2: 整数・bare √・係数つき√ の3値を小さい順に並べる。"""
+    n = int(draw({"int_set": list(range(2, 10))}, rng))
+    a = int(draw({"int_set": [s for s in _SQUAREFREE if s <= 20]}, rng))
+    b = int(draw({"int_set": [s for s in _SQUAREFREE if s <= 20 and s != a]}, rng))
+    c = int(draw({"int_set": list(range(2, 5))}, rng))
+    exprs = [str(n), f"sqrt({a})", f"{c}*sqrt({b})"]
+    disp = f"{n}、√{a}、{c}√{b}"
+    return exprs, disp
+
+
+@register_recipe("math.compare_radical_values", provides_concepts=_COMPARE_RADICAL_CONCEPTS)
+def compare_radical_values(ctx: CellContext, rng: Rng) -> MR:
+    """根号を含む数の大小を比較・並べ替える MR を組む（C3 g3_l15.calculation Lv1/Lv2）。"""
+    mode = cast(str, ctx.spec_level.params["mode"])
+    if mode == "compare_pair":
+        exprs, given_disp = _draw_compare_pair(rng)
+    elif mode == "compare_triplet":
+        exprs, given_disp = _draw_compare_triplet(rng)
+    else:
+        raise ValueError(f"未知の mode: {mode!r}")
+
+    solver = REGISTRY.solver("math.compare_radical_values")
+    sol = cast(Solution, solver(exprs, mode))
+    assert isinstance(sol.answer, SymbolicAnswer)
+    # 恒真: 答え（昇順 Tuple）は構成した値の集合と一致し、実際に昇順になっている。
+    ordered = sympy.sympify(sol.answer.srepr)
+    assert set(sympy.sympify(e) for e in exprs) == set(ordered)
+    assert all(ordered[i] < ordered[i + 1] for i in range(len(ordered) - 1)), (
+        f"double-solve 不一致: {sol.answer.display} が昇順になっていない"
+    )
+
+    sub_question = SubQuestionMR(
+        label="(1)",
+        asked="value",
+        answer=sol.answer,
+        steps=sol.steps,
+        concept_tags=_effective_concept_tags(ctx),
+        cause_tags=_effective_cause_tags(ctx),
+    )
+    return MR(
+        signature=ctx.spec_level.signature,
+        family=ctx.family,
+        level=ctx.level,
+        purpose=ctx.purpose,
+        seed=0,
+        params={"exprs": exprs, "mode": mode},
+        given={"expression": given_disp},
+        sub_questions=[sub_question],
+        visual_plan=None,
+        provenance=Provenance(recipe="math.compare_radical_values"),
+    )
+
+
+__all__ = [
+    "simplify_radical", "_SQUAREFREE", "evaluate_radical_substitution",
+    "find_side_from_area", "compare_radical_values",
+]

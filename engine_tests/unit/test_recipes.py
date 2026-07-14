@@ -2604,6 +2604,7 @@ _RADICAL_CELLS = [
     ("math.g3_l19.calculation", 1),
     ("math.g3_l20.calculation", 1), ("math.g3_l20.calculation", 2),
     ("math.g3_l21.calculation", 2), ("math.g3_l21.calculation", 3),
+    ("math.g3_l23.calculation", 2),
 ]
 
 
@@ -2713,6 +2714,82 @@ def test_evaluate_radical_substitution_double_solve_property(family, level, seed
     assert diff.equals(0)
     # 答えは根号を含まない定数（自由変数なし）。
     assert not sympy.sympify(sol.answer.srepr).free_symbols
+
+
+# ---------------------------------------------------------------------------
+# math.find_side_from_area（C3 g3_l23.find_value 面積から1辺の長さ）
+# ---------------------------------------------------------------------------
+def test_find_side_from_area_lv2_construct():
+    ctx = _make_ctx("math.g3_l23.find_value", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "radical_find_side_from_area"
+    assert set(mr.given.keys()) == {"condition"}
+    sq = mr.sub_questions[0]
+    assert sq.asked == "value"
+    assert [s.op for s in sq.steps] == ["factor_out_square", "take_root_outside"]
+    diff = sympy.sympify(mr.params["expr_str"]) - sympy.sympify(sq.answer.srepr)
+    assert diff.equals(0)
+
+
+@pytest.mark.parametrize("seed", range(100))
+def test_find_side_from_area_double_solve_property(seed):
+    ctx = _make_ctx("math.g3_l23.find_value", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.simplify_radical")
+    sol = solver(mr.params["expr_str"], "find_side_from_area")
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+    diff = sympy.sympify(mr.params["expr_str"]) - sympy.sympify(sol.answer.srepr)
+    assert diff.equals(0)
+
+
+# ---------------------------------------------------------------------------
+# math.compare_radical_values（C3 g3_l15.calculation 平方根の大小関係）
+# ---------------------------------------------------------------------------
+_COMPARE_RADICAL_CELLS = [
+    ("math.g3_l15.calculation", 1), ("math.g3_l15.calculation", 2),
+]
+
+
+def test_compare_radical_values_lv1_construct():
+    ctx = _make_ctx("math.g3_l15.calculation", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "radical_compare_pair"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "value"
+    assert [s.op for s in sq.steps] == ["square_each_value", "compare_squares"]
+    ordered = sympy.sympify(sq.answer.srepr)
+    assert len(ordered) == 2
+    assert ordered[0] < ordered[1]
+
+
+def test_compare_radical_values_lv2_construct():
+    ctx = _make_ctx("math.g3_l15.calculation", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "radical_compare_triplet"
+    sq = mr.sub_questions[0]
+    assert [s.op for s in sq.steps] == ["convert_to_squared_form", "compare_and_order"]
+    ordered = sympy.sympify(sq.answer.srepr)
+    assert len(ordered) == 3
+    assert ordered[0] < ordered[1] < ordered[2]
+
+
+@pytest.mark.parametrize("family,level", _COMPARE_RADICAL_CELLS)
+@pytest.mark.parametrize("seed", range(100))
+def test_compare_radical_values_double_solve_property(family, level, seed):
+    ctx = _make_ctx(family, level)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.compare_radical_values")
+    sol = solver(mr.params["exprs"], mr.params["mode"])
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+    # 恒真: 答えの集合は構成した値の集合と一致し、昇順になっている。
+    ordered = sympy.sympify(sol.answer.srepr)
+    assert set(sympy.sympify(e) for e in mr.params["exprs"]) == set(ordered)
+    assert all(ordered[i] < ordered[i + 1] for i in range(len(ordered) - 1))
 
 
 # ---------------------------------------------------------------------------

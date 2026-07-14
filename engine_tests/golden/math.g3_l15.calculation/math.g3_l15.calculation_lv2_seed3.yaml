@@ -1,0 +1,54 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - radical.compare_magnitude
+  provenance:
+    git_commit: ''
+    recipe: math.compare_radical_values
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_radical_compare_order_v1
+    tier: T1
+  requested:
+    form: calculation
+    level: 2
+    subject: math
+    unit: g3_l15
+  resolved:
+    form: calculation
+    level: 2
+    subject: math
+    unit: g3_l15
+  seed: 3
+  signature: radical_compare_triplet
+problem_ref: 1fecfa499ce67a1d
+problem_text: '次の数を小さい順に並べよ。
+
+  2、√19、2√3'
+sub_questions:
+- answer:
+    display: 2 < 2√3 < √19
+    kind: symbolic
+    srepr: Tuple(Integer(2), Mul(Integer(2), Pow(Integer(3), Rational(1, 2))), Pow(Integer(19), Rational(1, 2)))
+  cause_tags: []
+  concept_tags:
+  - radical.compare_magnitude
+  explanation: まず、整数や係数つきの根号もふくめ、すべての数を2乗した値に直す。 2乗した値に直す次に、2乗した値の大小の順に、もとの数を並べる。 2 < 2√3 < √19
+  hints:
+  - 整数や係数つきの根号もふくめ、すべての数を2乗した値に直す。
+  label: (1)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 整数や係数つきの根号もふくめ、すべての数を2乗した値に直す。
+    op: convert_to_squared_form
+    result_display: 2乗した値に直す
+    result_srepr: ''
+  - args: []
+    narration: 2乗した値の大小の順に、もとの数を並べる。
+    op: compare_and_order
+    result_display: 2 < 2√3 < √19
+    result_srepr: Tuple(Integer(2), Mul(Integer(2), Pow(Integer(3), Rational(1, 2))), Pow(Integer(19), Rational(1, 2)))
+visual_svg: null
