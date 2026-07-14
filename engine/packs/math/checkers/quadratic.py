@@ -15,4 +15,12 @@ def double_solve_solve_quadratic(mr: MR) -> Solution:
     return cast(Solution, solver(p["eq_str"], p["mode"], p.get("value")))
 
 
-__all__ = ["double_solve_solve_quadratic"]
+@register_checker("math.quadratic_rectangle_area_value.double_solve")
+def double_solve_quadratic_rectangle_area_value(mr: MR) -> Solution:
+    # 与式 eq_str・mode から独立に正の解のみを再計算する。
+    p = mr.params
+    solver = REGISTRY.solver("math.solve_quadratic")
+    return cast(Solution, solver(p["eq_str"], p["mode"]))
+
+
+__all__ = ["double_solve_solve_quadratic", "double_solve_quadratic_rectangle_area_value"]

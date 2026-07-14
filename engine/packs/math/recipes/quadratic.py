@@ -32,6 +32,7 @@ _QUADRATIC_CONCEPTS = [
     "quadratic.solve_by_formula",
     "quadratic.solve_by_factoring",
     "quadratic.solve_by_choice",
+    "quadratic.solve_from_word_setup",
 ]
 
 
@@ -180,7 +181,24 @@ def _quadratic_construct(mode: str, rng: Rng) -> tuple[str, str, str | None]:
         disp = f"{_lin_binomial(m, n)}² = {k}{_lin_binomial(m, n)}"
         return eq, disp, None
 
+    if mode == "solve_product_form":
+        _, c, k = _construct_positive_root_product_form(rng)
+        eq = f"(x)*(x+({c}))={k}"
+        disp = f"x(x{_term_tail(c, 0)}) = {k}"
+        return eq, disp, None
+
     raise ValueError(f"未知の mode: {mode!r}")
+
+
+def _construct_positive_root_product_form(rng: Rng) -> tuple[int, int, int]:
+    """x(x+c)=k 型（g3_l29/l30）: 正の整数解 x0 と c から k=x0(x0+c) を構成する
+    （answer-first）。c,k>0 なら2根の積は -k<0 で異符号になるため、常にちょうど1つの
+    正根（=x0）を持つ（鉄則⑤: 場合分け不要な形に構成時から絞る）。
+    """
+    x0 = int(draw({"int_range": [1, 60]}, rng))
+    c = int(draw({"int_range": [1, 20]}, rng))
+    k = x0 * (x0 + c)
+    return x0, c, k
 
 
 @register_recipe("math.solve_quadratic", provides_concepts=_QUADRATIC_CONCEPTS)
@@ -236,4 +254,54 @@ def solve_quadratic(ctx: CellContext, rng: Rng) -> MR:
     )
 
 
-__all__ = ["solve_quadratic"]
+_RECTANGLE_AREA_CONCEPTS = ["quadratic.solve_from_rectangle_area"]
+
+
+@register_recipe("math.quadratic_rectangle_area_value", provides_concepts=_RECTANGLE_AREA_CONCEPTS)
+def quadratic_rectangle_area_value(ctx: CellContext, rng: Rng) -> MR:
+    """縦 x cm・横 (x+c) cm の長方形の面積条件から x の値（正の解のみ）を求める MR を組む
+    （C3 g3_l30.find_value）。answer-first: 正の整数解 x0 と c から面積 k=x0(x0+c) を
+    決め、独立ソルバ math.solve_quadratic（mode=solve_product_form_positive_root）で
+    正の解のみを再計算する（double-solve）。負の解は長さとして不適のため構造的に除外する。
+    """
+    mode = "solve_product_form_positive_root"
+    _, c, k = _construct_positive_root_product_form(rng)
+    eq_str = f"(x)*(x+({c}))={k}"
+
+    solver = REGISTRY.solver("math.solve_quadratic")
+    sol = cast(Solution, solver(eq_str, mode, None))
+    assert isinstance(sol.answer, SymbolicAnswer)
+
+    lhs_s, rhs_s = eq_str.split("=", 1)
+    eq_expr = sympy.sympify(lhs_s) - sympy.sympify(rhs_s)
+    root = sympy.sympify(sol.answer.srepr)
+    assert eq_expr.subs(_X, root).equals(0), (
+        f"double-solve 不一致: {eq_str} に解 {root} を代入して 0 にならない"
+    )
+    assert root > 0, f"find_value の答えが正でない: {root}"
+
+    condition = f"縦が x cm、横が (x{_term_tail(c, 0)}) cm の長方形の面積が {k}cm² であるとき"
+
+    sub_question = SubQuestionMR(
+        label="(1)",
+        asked="value",
+        answer=sol.answer,
+        steps=sol.steps,
+        concept_tags=_effective_concept_tags(ctx),
+        cause_tags=_effective_cause_tags(ctx),
+    )
+    return MR(
+        signature=ctx.spec_level.signature,
+        family=ctx.family,
+        level=ctx.level,
+        purpose=ctx.purpose,
+        seed=0,
+        params={"eq_str": eq_str, "mode": mode},
+        given={"condition": condition},
+        sub_questions=[sub_question],
+        visual_plan=None,
+        provenance=Provenance(recipe="math.quadratic_rectangle_area_value"),
+    )
+
+
+__all__ = ["solve_quadratic", "quadratic_rectangle_area_value"]

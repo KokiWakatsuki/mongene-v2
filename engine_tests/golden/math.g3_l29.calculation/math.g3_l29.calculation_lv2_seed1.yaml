@@ -1,0 +1,60 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - quadratic.solve_from_word_setup
+  provenance:
+    git_commit: ''
+    recipe: math.solve_quadratic
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_quadratic_solve_v1
+    tier: T1
+  requested:
+    form: calculation
+    level: 2
+    subject: math
+    unit: g3_l29
+  resolved:
+    form: calculation
+    level: 2
+    subject: math
+    unit: g3_l29
+  seed: 1
+  signature: quad_solve_product_form
+problem_ref: 35f2e31c667eb7bf
+problem_text: '次の2次方程式を解け。
+
+  x(x + 1) = 2352'
+sub_questions:
+- answer:
+    display: x = -49, x = 48
+    kind: symbolic
+    srepr: Tuple(Integer(-49), Integer(48))
+  cause_tags: []
+  concept_tags:
+  - quadratic.solve_from_word_setup
+  explanation: まず、かっこを展開し、右辺を左辺に移項して、=0 の形に整理する。 展開して整理する次に、左辺を因数分解する。 左辺を因数分解する最後に、積が 0 になるのは各因数が 0 のときだから、それぞれを 0 とおいて x を求める。 x = -49, x = 48
+  hints:
+  - かっこを展開し、右辺を左辺に移項して、=0 の形に整理する。
+  - 左辺を因数分解する。
+  label: (1)
+  prompt_text: solution を求めなさい。
+  solution_steps:
+  - args: []
+    narration: かっこを展開し、右辺を左辺に移項して、=0 の形に整理する。
+    op: expand_and_rearrange
+    result_display: 展開して整理する
+    result_srepr: ''
+  - args: []
+    narration: 左辺を因数分解する。
+    op: factor_left_side
+    result_display: 左辺を因数分解する
+    result_srepr: ''
+  - args: []
+    narration: 積が 0 になるのは各因数が 0 のときだから、それぞれを 0 とおいて x を求める。
+    op: apply_zero_product
+    result_display: x = -49, x = 48
+    result_srepr: Tuple(Integer(-49), Integer(48))
+visual_svg: null

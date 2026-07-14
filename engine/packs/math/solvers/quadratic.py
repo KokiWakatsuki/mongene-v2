@@ -62,6 +62,12 @@ _QUAD_STEPS: dict[str, list[str]] = {
     # g3_l28 解法の選択
     "solve_rearrange": ["expand_and_rearrange", "factor_left_side", "apply_zero_product"],
     "solve_choose": ["factor_out_common_binomial", "apply_zero_product"],
+    # g3_l29/l30 立式した2次方程式の求解（x(x+c)=k 型）
+    "solve_product_form": ["expand_and_rearrange", "factor_left_side", "apply_zero_product"],
+    # g3_l30.find_value 図形条件から立式し、正の解のみを採用する
+    "solve_product_form_positive_root": [
+        "expand_and_rearrange", "factor_left_side", "apply_zero_product", "select_positive_root",
+    ],
 }
 
 _QUAD_OP_NARRATION: dict[str, str] = {
@@ -81,6 +87,7 @@ _QUAD_OP_NARRATION: dict[str, str] = {
     "factor_out_common": "左辺の共通因数をくくり出す。",
     "expand_and_rearrange": "かっこを展開し、右辺を左辺に移項して、=0 の形に整理する。",
     "factor_out_common_binomial": "両辺を移項し、共通なかっこをくくり出す。",
+    "select_positive_root": "求めるものは正の数だから、2つの解のうち条件に合う正の解を選ぶ。",
 }
 
 _QUAD_OP_PHRASE: dict[str, str] = {
@@ -96,6 +103,7 @@ _QUAD_OP_PHRASE: dict[str, str] = {
 }
 
 _EVALUATE_MODES = {"evaluate_quadratic"}
+_POSITIVE_ROOT_MODES = {"solve_product_form_positive_root"}
 
 
 @register_solver("math.solve_quadratic")
@@ -117,6 +125,12 @@ def solve_quadratic(eq_str: str, mode: object, value: object = None) -> Solution
         result = sympy.simplify(expr.subs(_X, val))
         disp = _fmt_scalar(result)
         srepr = sympy.srepr(result)
+    elif mode_s in _POSITIVE_ROOT_MODES:
+        roots = _sorted_roots(eq_str)
+        positive = [r for r in roots if r.is_real and r > 0]
+        assert len(positive) == 1, f"正の解がちょうど1つでない: {eq_str} -> {roots}"
+        disp = _fmt_scalar(positive[0])
+        srepr = sympy.srepr(positive[0])
     else:
         roots = _sorted_roots(eq_str)
         answer_tuple = sympy.Tuple(*roots)

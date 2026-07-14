@@ -1,0 +1,27 @@
+family: math.g3_l30.find_value
+form: find_value
+source_desc: |
+  2次方程式の利用（図形に関する問題）— 図形条件から面積・長さの関係を立式して求める
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv2 desc: 図形条件から面積・長さの関係を立式して求める。
+       example: 縦が x cm、横が (x+3) cm の長方形の面積が 40cm² であるとき、x の値を求めよ。
+  【設計モデル】新設 recipe math.quadratic_rectangle_area_value。answer-first で正の
+  整数解 x0 と c を決め、面積 k=x0(x0+c) の長方形条件文を構成する。独立ソルバ
+  math.solve_quadratic の新 mode "solve_product_form_positive_root" で x(x+c)=k を
+  解き、2つの解のうち正の解のみを答えとする（負の解は長さとして不適のため構成時に
+  構造的に除外・鉄則⑤）。dup は x0・c の組で分散。
+concepts_default: [quadratic.solve_from_rectangle_area]
+levels:
+  "2":
+    signature: quad_rectangle_area_positive_root
+    recipe: math.quadratic_rectangle_area_value
+    params: {}
+    given: [condition]
+    asked: [value]
+    visual: none
+    text: {tier: T1, template: lf_quadratic_rectangle_area_v1}
+    hints: [steps_prefix]
+    concept_tags: [quadratic.solve_from_rectangle_area]
+    cause_tags: []
+remedial:
+  default_level: 2

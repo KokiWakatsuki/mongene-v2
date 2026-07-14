@@ -11,10 +11,16 @@ LF_QUADRATIC_EVALUATE_V1 = (
     "{{ given.input_value }} を、次の方程式の左辺に代入して値を求めよ。\n{{ given.equation }}"
 )
 
+# g3_l30.find_value Lv2: 長方形の面積条件から x の値（正の解）を求める（C3）
+LF_QUADRATIC_RECTANGLE_AREA_V1 = "{{ given.condition }}、x の値を求めよ。"
+
 
 def _register_all() -> None:
     REGISTRY.register_template("lf_quadratic_solve_v1", LF_QUADRATIC_SOLVE_V1)
     REGISTRY.register_template("lf_quadratic_evaluate_v1", LF_QUADRATIC_EVALUATE_V1)
+    REGISTRY.register_template(
+        "lf_quadratic_rectangle_area_v1", LF_QUADRATIC_RECTANGLE_AREA_V1
+    )
 
 
 _register_all()

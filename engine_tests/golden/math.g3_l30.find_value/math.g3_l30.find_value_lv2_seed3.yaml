@@ -1,0 +1,64 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - quadratic.solve_from_rectangle_area
+  provenance:
+    git_commit: ''
+    recipe: math.quadratic_rectangle_area_value
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_quadratic_rectangle_area_v1
+    tier: T1
+  requested:
+    form: find_value
+    level: 2
+    subject: math
+    unit: g3_l30
+  resolved:
+    form: find_value
+    level: 2
+    subject: math
+    unit: g3_l30
+  seed: 3
+  signature: quad_rectangle_area_positive_root
+problem_ref: 1827c06820fb961c
+problem_text: 縦が x cm、横が (x + 5) cm の長方形の面積が 1116cm² であるとき、x の値を求めよ。
+sub_questions:
+- answer:
+    display: '31'
+    kind: symbolic
+    srepr: Integer(31)
+  cause_tags: []
+  concept_tags:
+  - quadratic.solve_from_rectangle_area
+  explanation: まず、かっこを展開し、右辺を左辺に移項して、=0 の形に整理する。 展開して整理する次に、左辺を因数分解する。 左辺を因数分解する最後に、積が 0 になるのは各因数が 0 のときだから、それぞれを 0 とおいて x を求める。 さらに、求めるものは正の数だから、2つの解のうち条件に合う正の解を選ぶ。 31
+  hints:
+  - かっこを展開し、右辺を左辺に移項して、=0 の形に整理する。
+  - 左辺を因数分解する。
+  - 積が 0 になるのは各因数が 0 のときだから、それぞれを 0 とおいて x を求める。
+  label: (1)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args: []
+    narration: かっこを展開し、右辺を左辺に移項して、=0 の形に整理する。
+    op: expand_and_rearrange
+    result_display: 展開して整理する
+    result_srepr: ''
+  - args: []
+    narration: 左辺を因数分解する。
+    op: factor_left_side
+    result_display: 左辺を因数分解する
+    result_srepr: ''
+  - args: []
+    narration: 積が 0 になるのは各因数が 0 のときだから、それぞれを 0 とおいて x を求める。
+    op: apply_zero_product
+    result_display: ''
+    result_srepr: ''
+  - args: []
+    narration: 求めるものは正の数だから、2つの解のうち条件に合う正の解を選ぶ。
+    op: select_positive_root
+    result_display: '31'
+    result_srepr: Integer(31)
+visual_svg: null

@@ -1,0 +1,27 @@
+family: math.g3_l30.calculation
+form: calculation
+source_desc: |
+  2次方程式の利用（図形に関する問題）— 立式した方程式の求解処理
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv2 desc: 立式した方程式の求解処理。
+       example: x(x+3)=40 を解け。
+  【設計モデル】g3_l29.calculation と同一の設計（既存 math.solve_quadratic の
+  mode "solve_product_form" を再利用。x(x+c)=k 型の展開→移項→因数分解→積=0）。
+  図形の場面設定が異なるだけで求解処理そのものは g3_l29 と同型のため実装を共有する。
+  dup は x0・c の組で分散。
+concepts_default: [quadratic.solve_from_word_setup]
+levels:
+  "2":
+    signature: quad_solve_product_form
+    recipe: math.solve_quadratic
+    params:
+      mode: solve_product_form
+    given: [equation]
+    asked: [solution]
+    visual: none
+    text: {tier: T1, template: lf_quadratic_solve_v1}
+    hints: [steps_prefix]
+    concept_tags: [quadratic.solve_from_word_setup]
+    cause_tags: []
+remedial:
+  default_level: 2

@@ -215,6 +215,12 @@ concepts:
   - id: quadratic.solve_by_choice
     label: "式を整理し適切な解法を選んで2次方程式を解く"
     unit: g3_l28
+  - id: quadratic.solve_from_word_setup
+    label: "積の形x(x+c)=kで立式された2次方程式を展開・因数分解して解く"
+    unit: g3_l29
+  - id: quadratic.solve_from_rectangle_area
+    label: "長方形の縦・横と面積の条件から2次方程式を立て、正の解を選んで長さを求める"
+    unit: g3_l30
   # C3 g3 knowledge（用語想起・規則想起）
   - id: expansion_meaning.rule_recall
     label: "展開が積の形を和の形に直す操作であることを想起する"

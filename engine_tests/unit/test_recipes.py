@@ -2778,6 +2778,8 @@ _QUADRATIC_CELLS = [
     ("math.g3_l26.calculation", 2), ("math.g3_l26.calculation", 3),
     ("math.g3_l27.calculation", 1), ("math.g3_l27.calculation", 2),
     ("math.g3_l28.calculation", 2), ("math.g3_l28.calculation", 3),
+    ("math.g3_l29.calculation", 2),
+    ("math.g3_l30.calculation", 2),
 ]
 
 
@@ -2797,6 +2799,21 @@ def test_solve_quadratic_lv1_construct():
     assert len(roots) == 2
     for r in roots:
         assert eq_expr.subs(sympy.Symbol("x"), r).equals(0)
+
+
+def test_solve_quadratic_product_form_construct():
+    ctx = _make_ctx("math.g3_l29.calculation", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "quad_solve_product_form"
+    assert set(mr.given.keys()) == {"equation"}
+    sq = mr.sub_questions[0]
+    assert sq.asked == "solution"
+    assert [s.op for s in sq.steps] == [
+        "expand_and_rearrange", "factor_left_side", "apply_zero_product",
+    ]
+    roots = sympy.sympify(sq.answer.srepr)
+    assert len(roots) == 2
 
 
 @pytest.mark.parametrize("family,level", _QUADRATIC_CELLS)
@@ -2821,6 +2838,40 @@ def test_solve_quadratic_double_solve_property(family, level, seed):
         # evaluate 系: 答えは左辺に value を代入した値に等しい。
         expected = sympy.simplify(eq_expr.subs(sympy.Symbol("x"), sympy.nsimplify(sympy.sympify(mr.params["value"]))))
         assert sympy.sympify(sol.answer.srepr) == expected
+
+
+# ---------------------------------------------------------------------------
+# math.quadratic_rectangle_area_value（C3 g3_l30.find_value 長方形の面積条件）
+# ---------------------------------------------------------------------------
+def test_quadratic_rectangle_area_value_construct():
+    ctx = _make_ctx("math.g3_l30.find_value", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "quad_rectangle_area_positive_root"
+    assert set(mr.given.keys()) == {"condition"}
+    sq = mr.sub_questions[0]
+    assert sq.asked == "value"
+    assert [s.op for s in sq.steps] == [
+        "expand_and_rearrange", "factor_left_side", "apply_zero_product", "select_positive_root",
+    ]
+    # 答えは正の値のみ（負の解は長さとして不適のため除外済み）。
+    assert sympy.sympify(sq.answer.srepr) > 0
+
+
+@pytest.mark.parametrize("seed", range(100))
+def test_quadratic_rectangle_area_value_double_solve_property(seed):
+    ctx = _make_ctx("math.g3_l30.find_value", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    # 独立ソルバの答えが recipe の答えと一致する（double-solve）。
+    solver = REGISTRY.solver("math.solve_quadratic")
+    sol = solver(mr.params["eq_str"], mr.params["mode"])
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+    lhs, rhs = mr.params["eq_str"].split("=", 1)
+    eq_expr = sympy.sympify(lhs) - sympy.sympify(rhs)
+    root = sympy.sympify(sol.answer.srepr)
+    assert eq_expr.subs(sympy.Symbol("x"), root).equals(0)
+    assert root > 0
 
 
 # ---------------------------------------------------------------------------
