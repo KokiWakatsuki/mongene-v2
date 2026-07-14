@@ -192,6 +192,13 @@ concepts:
   - id: radical.evaluate_symmetric_pair_value
     label: "共役な√を含む値の組を対称式に代入し展開して式の値を求める"
     unit: g3_l22
+  # C3 g3 有理数と無理数、循環小数（分数⇔循環小数の相互変換）
+  - id: rational_form.fraction_to_decimal
+    label: "分数を循環小数に直し、循環節の記号で表す"
+    unit: g3_l16
+  - id: rational_form.decimal_to_fraction
+    label: "循環小数を分数に直す"
+    unit: g3_l16
   # C3 g3 2次方程式
   - id: quadratic.evaluate_solution
     label: "2次方程式の左辺に値を代入し解かどうかを確かめる"

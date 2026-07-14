@@ -2716,6 +2716,60 @@ def test_evaluate_radical_substitution_double_solve_property(family, level, seed
 
 
 # ---------------------------------------------------------------------------
+# math.convert_rational_decimal_form（C3 g3_l16.calculation 有理数の形）
+# ---------------------------------------------------------------------------
+_RATIONAL_FORM_CELLS = [
+    ("math.g3_l16.calculation", 1), ("math.g3_l16.calculation", 2),
+]
+
+
+def test_convert_rational_decimal_form_lv1_construct():
+    ctx = _make_ctx("math.g3_l16.calculation", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "fraction_to_repeating_decimal"
+    assert set(mr.given.keys()) == {"expression"}
+    sq = mr.sub_questions[0]
+    assert sq.asked == "value"
+    assert [s.op for s in sq.steps] == [
+        "long_division_track_remainders", "identify_repeating_block",
+    ]
+    # srepr は ASCII-only な正準形 "0.<非循環部>(<循環節>)"。
+    assert sq.answer.srepr.startswith("0.")
+    assert "(" in sq.answer.srepr and sq.answer.srepr.endswith(")")
+
+
+def test_convert_rational_decimal_form_lv2_construct():
+    ctx = _make_ctx("math.g3_l16.calculation", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "repeating_decimal_to_fraction"
+    assert set(mr.given.keys()) == {"expression"}
+    sq = mr.sub_questions[0]
+    assert sq.asked == "value"
+    assert [s.op for s in sq.steps] == ["set_up_algebraic_equation", "solve_for_fraction"]
+    # 答えは既約分数（sympy Rational）で、自由変数を含まない。
+    assert not sympy.sympify(sq.answer.srepr).free_symbols
+
+
+@pytest.mark.parametrize("family,level", _RATIONAL_FORM_CELLS)
+@pytest.mark.parametrize("seed", range(100))
+def test_convert_rational_decimal_form_double_solve_property(family, level, seed):
+    ctx = _make_ctx(family, level)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    mode = mr.params["mode"]
+    if mode == "fraction_to_repeating_decimal":
+        solver = REGISTRY.solver("math.fraction_to_repeating_decimal")
+        sol = solver(mr.params["p"], mr.params["q"])
+    else:
+        solver = REGISTRY.solver("math.repeating_decimal_to_fraction")
+        sol = solver(mr.params["non_repeating"], mr.params["repeating"])
+    # 独立ソルバの答えが recipe の答えと一致する（double-solve）。
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+
+
+# ---------------------------------------------------------------------------
 # math.solve_quadratic（C3 g3_l24〜l28.calculation 2次方程式）— P2 二次方程式コア能力
 # ---------------------------------------------------------------------------
 _QUADRATIC_CELLS = [

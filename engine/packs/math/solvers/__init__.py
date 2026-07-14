@@ -12,5 +12,6 @@ from engine.packs.math.solvers import linear  # noqa: F401  (登録の副作用�
 from engine.packs.math.solvers import polynomial  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.solvers import radical  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.solvers import quadratic  # noqa: F401  (登録の副作用のため import)
+from engine.packs.math.solvers import rational_form  # noqa: F401  (登録の副作用のため import)
 
 __all__: list[str] = []

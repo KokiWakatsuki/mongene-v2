@@ -1,0 +1,54 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - rational_form.fraction_to_decimal
+  provenance:
+    git_commit: ''
+    recipe: math.convert_rational_decimal_form
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_fraction_to_decimal_v1
+    tier: T1
+  requested:
+    form: calculation
+    level: 1
+    subject: math
+    unit: g3_l16
+  resolved:
+    form: calculation
+    level: 1
+    subject: math
+    unit: g3_l16
+  seed: 3
+  signature: fraction_to_repeating_decimal
+problem_ref: 73201eedd5e5b4f5
+problem_text: '次の分数を小数で表し、循環小数の記号を用いて書け。
+
+  48/49'
+sub_questions:
+- answer:
+    display: 0.9̇79591836734693877551020408163265306122448̇
+    kind: symbolic
+    srepr: 0.(979591836734693877551020408163265306122448)
+  cause_tags: []
+  concept_tags:
+  - rational_form.fraction_to_decimal
+  explanation: まず、分子を分母で割り進め、そのつど現れる余りを記録していく。 余りを記録しながら割り進める次に、同じ余りが再び現れた区間の商の並びを、循環節として書き出す。 0.9̇79591836734693877551020408163265306122448̇
+  hints:
+  - 分子を分母で割り進め、そのつど現れる余りを記録していく。
+  label: (1)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 分子を分母で割り進め、そのつど現れる余りを記録していく。
+    op: long_division_track_remainders
+    result_display: 余りを記録しながら割り進める
+    result_srepr: ''
+  - args: []
+    narration: 同じ余りが再び現れた区間の商の並びを、循環節として書き出す。
+    op: identify_repeating_block
+    result_display: 0.9̇79591836734693877551020408163265306122448̇
+    result_srepr: 0.(979591836734693877551020408163265306122448)
+visual_svg: null

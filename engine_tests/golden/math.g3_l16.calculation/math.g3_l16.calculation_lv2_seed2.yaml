@@ -1,0 +1,54 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - rational_form.decimal_to_fraction
+  provenance:
+    git_commit: ''
+    recipe: math.convert_rational_decimal_form
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_decimal_to_fraction_v1
+    tier: T1
+  requested:
+    form: calculation
+    level: 2
+    subject: math
+    unit: g3_l16
+  resolved:
+    form: calculation
+    level: 2
+    subject: math
+    unit: g3_l16
+  seed: 2
+  signature: repeating_decimal_to_fraction
+problem_ref: 21d589bff227c0cc
+problem_text: '次の循環小数を分数で表せ。
+
+  0.1̇13̇'
+sub_questions:
+- answer:
+    display: 113/999
+    kind: symbolic
+    srepr: Rational(113, 999)
+  cause_tags: []
+  concept_tags:
+  - rational_form.decimal_to_fraction
+  explanation: まず、循環小数を文字でおき、桁をずらした式との差を作って循環部分を消す。 桁をずらした式の差を作る次に、できた等式を整理し、分数の形に直して約分する。 113/999
+  hints:
+  - 循環小数を文字でおき、桁をずらした式との差を作って循環部分を消す。
+  label: (1)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 循環小数を文字でおき、桁をずらした式との差を作って循環部分を消す。
+    op: set_up_algebraic_equation
+    result_display: 桁をずらした式の差を作る
+    result_srepr: ''
+  - args: []
+    narration: できた等式を整理し、分数の形に直して約分する。
+    op: solve_for_fraction
+    result_display: 113/999
+    result_srepr: Rational(113, 999)
+visual_svg: null
