@@ -71,7 +71,7 @@ def test_calculation_vocab_and_visual():
     f = REGISTRY.frame("calculation")
     assert f.given_vocab == frozenset({
         "expression", "equation", "input_value", "equation_a", "equation_b", "candidate",
-        "target_variable", "expressions", "sig_figs", "condition",
+        "target_variable", "expressions", "sig_figs",
     })
     assert f.asked_vocab == frozenset({
         "value", "simplified_expr", "solution", "coordinate", "degree", "expression",

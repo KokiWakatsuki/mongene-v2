@@ -98,7 +98,6 @@ CALCULATION_FRAME = Frame(
         "target_variable",  # P1/C2: 等式を「解く文字」（g2_l9 等式変形）
         "expressions",  # P1/C2: 数の性質を表す複数の式と場面（g2_l7 偶数・奇数の式）
         "sig_figs",  # C1: 科学的記数法で丸める有効数字の桁数（g1_l60 a×10ⁿ Lv2）
-        "condition",  # 横展開#90/C11: レシピが整形済み文章を埋め込む（度数分布表・データ列挙。find_value と同一語彙を再利用）
     }),
     asked_vocab=frozenset({
         "value", "simplified_expr", "solution",
