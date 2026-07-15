@@ -3731,6 +3731,8 @@ _RULE_RECALL_CELLS = [
     ("math.g2_l47.knowledge", 1),
     ("math.g2_l49.knowledge", 1),
     ("math.g2_l50.knowledge", 1),
+    ("math.g3_l51.knowledge", 1),
+    ("math.g3_l52.knowledge", 1),
 ]
 
 
@@ -5969,3 +5971,106 @@ def test_equal_area_transform_value_double_solve_property(seed):
     solver = REGISTRY.solver("math.equal_area_transform_value")
     sol = solver(mr.params["area_value"])
     assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+
+
+# ---------------------------------------------------------------------------
+# C10 g3 図形（三平方の定理・その逆）: g3_l51/l52
+# ---------------------------------------------------------------------------
+def test_pythagorean_hypotenuse_construct():
+    ctx = _make_ctx("math.g3_l51.find_value", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "pythagorean_hypotenuse"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "value"
+    a, b = mr.params["leg_a"], mr.params["leg_b"]
+    assert sq.answer.srepr == sympy.srepr(sympy.sqrt(a**2 + b**2))
+
+
+@pytest.mark.parametrize("seed", range(100))
+def test_pythagorean_hypotenuse_double_solve_property(seed):
+    ctx = _make_ctx("math.g3_l51.find_value", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.pythagorean_hypotenuse")
+    sol = solver(mr.params["leg_a"], mr.params["leg_b"])
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+
+
+def test_identify_hypotenuse_construct():
+    ctx = _make_ctx("math.g3_l51.knowledge", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "identify_hypotenuse"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "choice"
+    assert not any(ch.isdigit() for ch in sq.answer.correct)
+    assert sq.answer.correct not in sq.answer.distractors
+    assert len(set(mr.params["labels"])) == 3
+
+
+@pytest.mark.parametrize("seed", range(100))
+def test_identify_hypotenuse_double_solve_property(seed):
+    ctx = _make_ctx("math.g3_l51.knowledge", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.identify_hypotenuse")
+    sol = solver(mr.params["labels"], mr.params["right_angle_index"])
+    assert sol.answer.correct == mr.sub_questions[0].answer.correct
+
+
+def test_verify_right_triangle_from_sides_construct():
+    ctx = _make_ctx("math.g3_l52.find_value", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "verify_right_triangle_from_sides"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "value"
+    assert sq.answer.srepr in (sympy.srepr(sympy.true), sympy.srepr(sympy.false))
+
+
+@pytest.mark.parametrize("seed", range(100))
+def test_verify_right_triangle_from_sides_double_solve_property(seed):
+    ctx = _make_ctx("math.g3_l52.find_value", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.verify_right_triangle_from_sides")
+    sol = solver(mr.params["side_a"], mr.params["side_b"], mr.params["side_c"])
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+
+
+def test_verify_right_triangle_from_sides_both_outcomes_construct():
+    ctx = _make_ctx("math.g3_l52.find_value", 2)
+    found_true = False
+    found_false = False
+    for seed in range(30):
+        rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+        mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+        if mr.sub_questions[0].answer.display == "直角三角形である":
+            found_true = True
+        else:
+            found_false = True
+        if found_true and found_false:
+            break
+    assert found_true and found_false, "30 seed 中に真偽両方が出なかった"
+
+
+def test_judge_right_triangle_from_three_sides_construct():
+    ctx = _make_ctx("math.g3_l52.knowledge", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "judge_right_triangle_from_three_sides"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "choice"
+    assert not any(ch.isdigit() for ch in sq.answer.correct)
+    assert sq.answer.correct not in sq.answer.distractors
+
+
+@pytest.mark.parametrize("seed", range(100))
+def test_judge_right_triangle_from_three_sides_double_solve_property(seed):
+    ctx = _make_ctx("math.g3_l52.knowledge", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.judge_right_triangle_from_three_sides")
+    sol = solver(mr.params["side_a"], mr.params["side_b"], mr.params["side_c"])
+    assert sol.answer.correct == mr.sub_questions[0].answer.correct

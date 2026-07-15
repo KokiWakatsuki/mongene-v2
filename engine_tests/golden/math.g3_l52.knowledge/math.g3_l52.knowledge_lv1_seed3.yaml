@@ -1,0 +1,55 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - pythagorean_converse.rule_recall
+  provenance:
+    git_commit: ''
+    recipe: math.recall_rule
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_rule_recall_v1
+    tier: T1
+  requested:
+    form: knowledge
+    level: 1
+    subject: math
+    unit: g3_l52
+  resolved:
+    form: knowledge
+    level: 1
+    subject: math
+    unit: g3_l52
+  seed: 3
+  signature: pythagorean_converse_rule_recall
+problem_ref: 12e4e678a4d99f69
+problem_text: 三角形CRKの3辺の長さを a, b, c とするとき、a²+b²=c² が成り立つならば、この三角形はどんな三角形であるといえるか。正しく述べているものを1つ選びなさい。
+sub_questions:
+- answer:
+    correct: cを斜辺とする直角三角形である
+    distractors:
+    - aを斜辺とする直角三角形である
+    - cを斜辺とする二等辺三角形である
+    fact_id: pythagorean_converse.rule.statement
+    kind: choice
+  cause_tags: []
+  concept_tags:
+  - pythagorean_converse.rule_recall
+  explanation: まず、問題で問われている規則や約束が、何についてのものかを読み取る。 問われている規則が何についてかを読み取る次に、その規則の正しい内容を思い出して選ぶ。 cを斜辺とする直角三角形である
+  hints:
+  - 問題で問われている規則や約束が、何についてのものかを読み取る。
+  label: (1)
+  prompt_text: choice を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 問題で問われている規則や約束が、何についてのものかを読み取る。
+    op: read_rule_context
+    result_display: 問われている規則が何についてかを読み取る
+    result_srepr: statement
+  - args: []
+    narration: その規則の正しい内容を思い出して選ぶ。
+    op: recall_correct_rule
+    result_display: cを斜辺とする直角三角形である
+    result_srepr: cを斜辺とする直角三角形である
+visual_svg: null

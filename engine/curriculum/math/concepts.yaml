@@ -898,3 +898,21 @@ concepts:
   - id: equal_area_triangles.rule_recall
     label: "共通の底辺・等しい高さの三角形は面積が等しいことを想起する"
     unit: g2_l50
+  - id: pythagorean.hypotenuse_from_legs
+    label: "直角をはさむ2辺から斜辺の長さを求める"
+    unit: g3_l51
+  - id: pythagorean_theorem.rule_recall
+    label: "三平方の定理の意味(斜辺の二乗=他の2辺の二乗の和)を想起する"
+    unit: g3_l51
+  - id: pythagorean.identify_hypotenuse
+    label: "直角の頂点の位置から斜辺がどの辺かを判別する"
+    unit: g3_l51
+  - id: pythagorean.verify_right_triangle
+    label: "3辺の長さから三平方の定理の逆で直角三角形かを確かめる"
+    unit: g3_l52
+  - id: pythagorean_converse.rule_recall
+    label: "三平方の定理の逆(成り立てば直角三角形)を想起する"
+    unit: g3_l52
+  - id: pythagorean.judge_right_triangle
+    label: "3辺の長さから直角三角形かを判別する"
+    unit: g3_l52

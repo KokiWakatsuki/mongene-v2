@@ -1,0 +1,54 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - pythagorean.judge_right_triangle
+  provenance:
+    git_commit: ''
+    recipe: math.judge_right_triangle_from_three_sides
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_pythagorean_statement_v1
+    tier: T1
+  requested:
+    form: knowledge
+    level: 2
+    subject: math
+    unit: g3_l52
+  resolved:
+    form: knowledge
+    level: 2
+    subject: math
+    unit: g3_l52
+  seed: 1
+  signature: judge_right_triangle_from_three_sides
+problem_ref: 9617038a6d4da6ad
+problem_text: 3辺の長さが 55cm, 300cm, 305cm である三角形は直角三角形であるといえるか答えよ。
+sub_questions:
+- answer:
+    correct: 直角三角形である
+    distractors:
+    - 直角三角形ではない
+    fact_id: pythagorean.judge_right_triangle
+    kind: choice
+  cause_tags: []
+  concept_tags:
+  - pythagorean.judge_right_triangle
+  explanation: まず、最も長い辺の長さの二乗と、他の2辺の長さの二乗の和を比べる。 最も長い辺と他の2辺の二乗の関係を調べる次に、三平方の定理の逆から、直角三角形であるかどうかを判別する。 直角三角形である
+  hints:
+  - 最も長い辺の長さの二乗と、他の2辺の長さの二乗の和を比べる。
+  label: (1)
+  prompt_text: choice を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 最も長い辺の長さの二乗と、他の2辺の長さの二乗の和を比べる。
+    op: compute_squares_and_compare
+    result_display: 最も長い辺と他の2辺の二乗の関係を調べる
+    result_srepr: ''
+  - args: []
+    narration: 三平方の定理の逆から、直角三角形であるかどうかを判別する。
+    op: judge_by_pythagorean_converse
+    result_display: 直角三角形である
+    result_srepr: 直角三角形である
+visual_svg: null

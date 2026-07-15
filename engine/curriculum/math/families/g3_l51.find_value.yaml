@@ -1,0 +1,26 @@
+family: math.g3_l51.find_value
+form: find_value
+source_desc: |
+  直角をはさむ2辺から斜辺の長さを求める
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: 直角三角形の2辺から残り1辺を1回で求める。
+       example: 直角をはさむ2辺が 3cm, 4cm の直角三角形の斜辺の長さを求めよ。
+  【設計モデル】新設 solver math.pythagorean_hypotenuse（三平方の定理
+  a²+b²=c² という恒真の性質から、直角をはさむ2辺の長さから斜辺の長さ
+  （整数または根号を含む簡約形）を求める）。
+concepts_default: [pythagorean.hypotenuse_from_legs]
+levels:
+  "1":
+    signature: pythagorean_hypotenuse
+    recipe: math.pythagorean_hypotenuse
+    params:
+      leg_domain: {int_range: [1, 60]}
+    given: [condition]
+    asked: [value]
+    visual: none
+    text: {tier: T1, template: lf_pythagorean_condition_v1}
+    hints: [steps_prefix]
+    concept_tags: [pythagorean.hypotenuse_from_legs]
+    cause_tags: []
+remedial:
+  default_level: 1

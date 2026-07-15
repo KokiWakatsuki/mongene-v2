@@ -1160,6 +1160,8 @@ _RULE_RECALL_CONCEPTS = [
     "parallelogram_conditions.rule_recall",
     "special_parallelogram_diagonal_property.rule_recall",
     "equal_area_triangles.rule_recall",
+    "pythagorean_theorem.rule_recall",
+    "pythagorean_converse.rule_recall",
 ]
 
 
@@ -1415,6 +1417,22 @@ def _draw_rule_statement(topic: str, concept: str, rng: Rng, p: dict[str, object
         return (
             f"三角形{pa}{pb}{pc}と三角形{pd}{pb}{pc}が、共通の底辺{pb}{pc}を持ち、"
             f"頂点{pa}、{pd}が底辺に平行な同じ直線上にあるとき、2つの三角形の面積の関係"
+        )
+
+    if topic == "pythagorean_theorem":
+        # g3_l51 三平方の定理の意味。具体例の三角形の点名を埋め込み surface を分散する。
+        pa, pb, pc = _draw_distinct_points(3, rng)
+        return (
+            f"直角三角形{pa}{pb}{pc}で、∠{pc}=90°のとき、斜辺{pa}{pb}と他の2辺"
+            f"{pb}{pc}、{pc}{pa}の長さについて成り立つ関係"
+        )
+
+    if topic == "pythagorean_converse":
+        # g3_l52 三平方の定理の逆。具体例の三角形の点名を埋め込み surface を分散する。
+        pa, pb, pc = _draw_distinct_points(3, rng)
+        return (
+            f"三角形{pa}{pb}{pc}の3辺の長さを a, b, c とするとき、a²+b²=c² が"
+            "成り立つならば、この三角形はどんな三角形であるといえるか"
         )
 
     raise ValueError(f"未知の topic: {topic!r}")

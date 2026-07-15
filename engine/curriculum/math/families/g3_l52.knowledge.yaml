@@ -1,0 +1,48 @@
+family: math.g3_l52.knowledge
+form: knowledge
+source_desc: |
+  三平方の定理の逆を想起・判別する
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: 三平方の定理の逆の想起。
+       example: 三平方の定理の「逆」はどのような主張か、次の( )を埋めて答えよ。
+                三角形の3辺の長さ a, b, c について a^2+b^2=c^2 が成り立つならば、
+                その三角形は( )を斜辺とする( )である。
+  Lv2 desc: 3辺の関係から直角三角形かを判別。
+       example: 次の3辺の長さをもつ三角形のうち、直角三角形であるものをすべて選べ。
+                ア 3cm, 4cm, 5cm  イ 5cm, 6cm, 7cm  ウ 8cm, 15cm, 17cm
+       【設計モデル簡略化】複数選択肢から「すべて選ぶ」形式ではなく、1組の3辺を
+       提示し「直角三角形といえるか」を判別する二択形式に単純化する（既存の
+       judge_パターンと統一・ChoiceAnswer は単一の正誤判定に統一する設計方針）。
+  【設計モデル】規則想起ハブ（既存 math.recall_rule・_RULE_MAPS に topic
+  "pythagorean_converse" を追加＝Lv1）／新設 solver
+  math.judge_right_triangle_from_three_sides（`math.verify_right_triangle_from_sides`
+  と同じ判定を ChoiceAnswer で答える＝Lv2）。
+levels:
+  "1":
+    signature: pythagorean_converse_rule_recall
+    recipe: math.recall_rule
+    params:
+      topic: pythagorean_converse
+      concept_set: [statement]
+    given: [statement]
+    asked: [choice]
+    visual: none
+    text: {tier: T1, template: lf_rule_recall_v1}
+    hints: [steps_prefix]
+    concept_tags: [pythagorean_converse.rule_recall]
+    cause_tags: []
+  "2":
+    signature: judge_right_triangle_from_three_sides
+    recipe: math.judge_right_triangle_from_three_sides
+    params:
+      scale_domain: {int_range: [1, 20]}
+      delta_domain: {int_set: [-8, -7, -6, -5, -4, -3, -2, -1, 1, 2, 3, 4, 5, 6, 7, 8]}
+    given: [statement]
+    asked: [choice]
+    visual: none
+    text: {tier: T1, template: lf_pythagorean_statement_v1}
+    hints: [steps_prefix]
+    concept_tags: [pythagorean.judge_right_triangle]
+    cause_tags: []
+remedial:
+  default_level: 1

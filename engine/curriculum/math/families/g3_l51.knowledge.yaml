@@ -1,0 +1,42 @@
+family: math.g3_l51.knowledge
+form: knowledge
+source_desc: |
+  三平方の定理の意味・斜辺の判別を想起する
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: 三平方の定理の意味・辺の関係の想起。
+       example: 直角三角形で斜辺をc、他の2辺をa,bとするとき成り立つ関係を式で書け。
+  Lv2 desc: 直角の位置と斜辺の対応を図で判別し関係を適用。
+       example: ∠B=90°の△ABCで斜辺はどの辺か。三平方の定理を辺の記号で書け。
+       【スコープ】「三平方の定理を辺の記号で書け」の部分は式に指数(²)を含み
+       ChoiceAnswer の digit-free 鉄則(鉄則①)と両立しないため、本セルでは
+       「斜辺はどの辺か」の判別部分のみを扱う（次段対応）。
+  【設計モデル】規則想起ハブ（既存 math.recall_rule・_RULE_MAPS に topic
+  "pythagorean_theorem" を追加＝Lv1）／新設 solver math.identify_hypotenuse
+  （直角の頂点に接していない辺が斜辺になるという定義から判別＝Lv2）。
+levels:
+  "1":
+    signature: pythagorean_theorem_rule_recall
+    recipe: math.recall_rule
+    params:
+      topic: pythagorean_theorem
+      concept_set: [statement]
+    given: [statement]
+    asked: [choice]
+    visual: none
+    text: {tier: T1, template: lf_rule_recall_v1}
+    hints: [steps_prefix]
+    concept_tags: [pythagorean_theorem.rule_recall]
+    cause_tags: []
+  "2":
+    signature: identify_hypotenuse
+    recipe: math.identify_hypotenuse
+    params: {}
+    given: [statement]
+    asked: [choice]
+    visual: none
+    text: {tier: T1, template: lf_pythagorean_statement_v1}
+    hints: [steps_prefix]
+    concept_tags: [pythagorean.identify_hypotenuse]
+    cause_tags: []
+remedial:
+  default_level: 1

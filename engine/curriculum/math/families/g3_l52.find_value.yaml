@@ -1,0 +1,30 @@
+family: math.g3_l52.find_value
+form: find_value
+source_desc: |
+  3辺を代入し三平方の定理の逆で直角三角形かを確かめる
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv2 desc: 3辺を代入しa^2+b^2=c^2の成否で直角三角形かを確かめる。
+       example: 3辺の長さが 6cm, 8cm, 10cm である三角形が直角三角形であるかどうかを、
+                三平方の定理の逆を用いて確かめよ。
+  【設計モデル】新設 solver math.verify_right_triangle_from_sides（3辺のうち
+  最も長い辺の二乗と他の2辺の二乗の和を比べる恒真の判定）。答えは真偽値を表す
+  SymbolicAnswer（"直角三角形である"/"直角三角形ではない"）。is_right=True は
+  有名な原始ピタゴラス数を整数倍したもの、False は最大辺をわずかにずらして
+  非退化に構成する。
+concepts_default: [pythagorean.verify_right_triangle]
+levels:
+  "2":
+    signature: verify_right_triangle_from_sides
+    recipe: math.verify_right_triangle_from_sides
+    params:
+      scale_domain: {int_range: [1, 20]}
+      delta_domain: {int_set: [-8, -7, -6, -5, -4, -3, -2, -1, 1, 2, 3, 4, 5, 6, 7, 8]}
+    given: [condition]
+    asked: [value]
+    visual: none
+    text: {tier: T1, template: lf_pythagorean_condition_v1}
+    hints: [steps_prefix]
+    concept_tags: [pythagorean.verify_right_triangle]
+    cause_tags: []
+remedial:
+  default_level: 2

@@ -1,0 +1,52 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - pythagorean.hypotenuse_from_legs
+  provenance:
+    git_commit: ''
+    recipe: math.pythagorean_hypotenuse
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_pythagorean_condition_v1
+    tier: T1
+  requested:
+    form: find_value
+    level: 1
+    subject: math
+    unit: g3_l51
+  resolved:
+    form: find_value
+    level: 1
+    subject: math
+    unit: g3_l51
+  seed: 3
+  signature: pythagorean_hypotenuse
+problem_ref: dafd140b2339b4c0
+problem_text: 直角をはさむ2辺が 27cm, 4cm の直角三角形の斜辺の長さを求めよ。
+sub_questions:
+- answer:
+    display: sqrt(745)
+    kind: symbolic
+    srepr: Pow(Integer(745), Rational(1, 2))
+  cause_tags: []
+  concept_tags:
+  - pythagorean.hypotenuse_from_legs
+  explanation: まず、直角三角形で、直角をはさむ2辺の長さを読み取る。 直角をはさむ2辺の長さを読み取る次に、直角をはさむ2辺の長さの二乗の和が、斜辺の長さの二乗に等しいという三平方の定理から、斜辺の長さを求める。 sqrt(745)
+  hints:
+  - 直角三角形で、直角をはさむ2辺の長さを読み取る。
+  label: (1)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 直角三角形で、直角をはさむ2辺の長さを読み取る。
+    op: identify_two_legs
+    result_display: 直角をはさむ2辺の長さを読み取る
+    result_srepr: ''
+  - args: []
+    narration: 直角をはさむ2辺の長さの二乗の和が、斜辺の長さの二乗に等しいという三平方の定理から、斜辺の長さを求める。
+    op: apply_pythagorean_theorem
+    result_display: sqrt(745)
+    result_srepr: Pow(Integer(745), Rational(1, 2))
+visual_svg: null
