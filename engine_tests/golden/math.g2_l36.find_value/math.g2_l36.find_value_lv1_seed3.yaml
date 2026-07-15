@@ -1,0 +1,52 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - congruence.transfer_values
+  provenance:
+    git_commit: ''
+    recipe: math.congruence_transfer_values
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_congruence_transfer_values_v1
+    tier: T1
+  requested:
+    form: find_value
+    level: 1
+    subject: math
+    unit: g2_l36
+  resolved:
+    form: find_value
+    level: 1
+    subject: math
+    unit: g2_l36
+  seed: 3
+  signature: congruence_transfer_values
+problem_ref: 45d77bc34177ce40
+problem_text: 三角形EQN≡三角形RJBで、辺EQ=191cm、∠Q=38°である。このとき、辺RJの長さと∠Jの大きさを求めよ。
+sub_questions:
+- answer:
+    display: 辺の長さ 191、角の大きさ 38°
+    kind: symbolic
+    srepr: Tuple(Integer(191), Integer(38))
+  cause_tags: []
+  concept_tags:
+  - congruence.transfer_values
+  explanation: まず、合同である2つの図形のうち、わかっている辺の長さと角の大きさが、それぞれどの辺・角に対応するかを読み取る。 対応する辺・角の組を読み取る次に、合同な図形では対応する辺の長さ・角の大きさがそれぞれ等しいことから、求める辺の長さと角の大きさを求める。 辺の長さ 191、角の大きさ 38°
+  hints:
+  - 合同である2つの図形のうち、わかっている辺の長さと角の大きさが、それぞれどの辺・角に対応するかを読み取る。
+  label: (1)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 合同である2つの図形のうち、わかっている辺の長さと角の大きさが、それぞれどの辺・角に対応するかを読み取る。
+    op: identify_given_correspondence
+    result_display: 対応する辺・角の組を読み取る
+    result_srepr: ''
+  - args: []
+    narration: 合同な図形では対応する辺の長さ・角の大きさがそれぞれ等しいことから、求める辺の長さと角の大きさを求める。
+    op: transfer_by_congruence
+    result_display: 辺の長さ 191、角の大きさ 38°
+    result_srepr: Tuple(Integer(191), Integer(38))
+visual_svg: null

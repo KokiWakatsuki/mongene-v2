@@ -1,0 +1,52 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - special_parallelogram.diagonal_value
+  provenance:
+    git_commit: ''
+    recipe: math.special_parallelogram_diagonal_value
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_quadrilateral_condition_v1
+    tier: T1
+  requested:
+    form: find_value
+    level: 1
+    subject: math
+    unit: g2_l49
+  resolved:
+    form: find_value
+    level: 1
+    subject: math
+    unit: g2_l49
+  seed: 2
+  signature: special_parallelogram_diagonal_value
+problem_ref: 021930e4330f065d
+problem_text: ひし形NQFCで対角線NFとQCの交点をOとする。NF=174cm のとき、∠NOQの大きさを求めよ。
+sub_questions:
+- answer:
+    display: 90°
+    kind: symbolic
+    srepr: Integer(90)
+  cause_tags: []
+  concept_tags:
+  - special_parallelogram.diagonal_value
+  explanation: まず、対角線についてわかっている長さや、四角形の種類を読み取る。 わかっている対角線の値を読み取る次に、ひし形の対角線は垂直に交わることから、その交点にできる角の大きさを求める。 90°
+  hints:
+  - 対角線についてわかっている長さや、四角形の種類を読み取る。
+  label: (1)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 対角線についてわかっている長さや、四角形の種類を読み取る。
+    op: identify_given_diagonal_value
+    result_display: わかっている対角線の値を読み取る
+    result_srepr: ''
+  - args: []
+    narration: ひし形の対角線は垂直に交わることから、その交点にできる角の大きさを求める。
+    op: apply_diagonal_property
+    result_display: 90°
+    result_srepr: Integer(90)
+visual_svg: null

@@ -36,3 +36,10 @@ def double_solve_judge_equilateral_from_condition(mr: MR) -> Solution:
     p = mr.params
     solver = REGISTRY.solver("math.judge_equilateral_from_condition")
     return cast(Solution, solver(p["is_equilateral"]))
+
+
+@register_checker("math.judge_right_triangle_congruence.double_solve")
+def double_solve_judge_right_triangle_congruence(mr: MR) -> Solution:
+    p = mr.params
+    solver = REGISTRY.solver("math.judge_right_triangle_congruence")
+    return cast(Solution, solver(p["condition_type"]))

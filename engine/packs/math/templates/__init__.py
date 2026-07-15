@@ -25,5 +25,7 @@ from engine.packs.math.templates import plane_geometry  # noqa: F401  (登録の
 from engine.packs.math.templates import plane_transform  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.templates import angle_tracking  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.templates import triangle_properties  # noqa: F401  (登録の副作用のため import)
+from engine.packs.math.templates import congruence_correspondence  # noqa: F401  (登録の副作用のため import)
+from engine.packs.math.templates import quadrilateral_properties  # noqa: F401  (登録の副作用のため import)
 
 __all__: list[str] = []

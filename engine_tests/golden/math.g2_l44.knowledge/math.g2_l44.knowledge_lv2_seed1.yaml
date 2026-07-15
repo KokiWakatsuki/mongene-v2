@@ -1,0 +1,54 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - right_triangle.judge_congruence
+  provenance:
+    git_commit: ''
+    recipe: math.judge_right_triangle_congruence
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_congruence_statement_v1
+    tier: T1
+  requested:
+    form: knowledge
+    level: 2
+    subject: math
+    unit: g2_l44
+  resolved:
+    form: knowledge
+    level: 2
+    subject: math
+    unit: g2_l44
+  seed: 1
+  signature: judge_right_triangle_congruence
+problem_ref: 8ca2481dc131ad76
+problem_text: 2つの直角三角形PKAとHMJについて、斜辺以外の1辺だけが等しいことが図から読み取れるとき、これらが合同といえるか、根拠とともに答えよ。
+sub_questions:
+- answer:
+    correct: 合同であるとはいえない
+    distractors:
+    - 合同であるといえる
+    fact_id: right_triangle.judge_congruence
+    kind: choice
+  cause_tags: []
+  concept_tags:
+  - right_triangle.judge_congruence
+  explanation: まず、図から読み取れる条件が、直角三角形の合同条件（斜辺と1つの鋭角、または斜辺と他の1辺）を満たしているかを確認する。 読み取れる条件を確認する次に、直角がすでに等しいことと合わせて、直角三角形の合同条件を満たすかどうかを判別する。 合同であるとはいえない
+  hints:
+  - 図から読み取れる条件が、直角三角形の合同条件（斜辺と1つの鋭角、または斜辺と他の1辺）を満たしているかを確認する。
+  label: (1)
+  prompt_text: choice を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 図から読み取れる条件が、直角三角形の合同条件（斜辺と1つの鋭角、または斜辺と他の1辺）を満たしているかを確認する。
+    op: check_right_triangle_condition
+    result_display: 読み取れる条件を確認する
+    result_srepr: 'no'
+  - args: []
+    narration: 直角がすでに等しいことと合わせて、直角三角形の合同条件を満たすかどうかを判別する。
+    op: judge_right_triangle_congruence
+    result_display: 合同であるとはいえない
+    result_srepr: 合同であるとはいえない
+visual_svg: null

@@ -1,0 +1,55 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - equal_area_triangles.rule_recall
+  provenance:
+    git_commit: ''
+    recipe: math.recall_rule
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_rule_recall_v1
+    tier: T1
+  requested:
+    form: knowledge
+    level: 1
+    subject: math
+    unit: g2_l50
+  resolved:
+    form: knowledge
+    level: 1
+    subject: math
+    unit: g2_l50
+  seed: 3
+  signature: equal_area_triangles_rule_recall
+problem_ref: bd40907fae3b912c
+problem_text: 三角形RPBと三角形FPBが、共通の底辺PBを持ち、頂点R、Fが底辺に平行な同じ直線上にあるとき、2つの三角形の面積の関係。正しく述べているものを1つ選びなさい。
+sub_questions:
+- answer:
+    correct: 面積は等しくなる
+    distractors:
+    - 面積は頂点の位置によって変わる
+    - 高さが同じでも底辺が異なれば面積は変わる
+    fact_id: equal_area_triangles.rule.common_base_equal_height
+    kind: choice
+  cause_tags: []
+  concept_tags:
+  - equal_area_triangles.rule_recall
+  explanation: まず、問題で問われている規則や約束が、何についてのものかを読み取る。 問われている規則が何についてかを読み取る次に、その規則の正しい内容を思い出して選ぶ。 面積は等しくなる
+  hints:
+  - 問題で問われている規則や約束が、何についてのものかを読み取る。
+  label: (1)
+  prompt_text: choice を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 問題で問われている規則や約束が、何についてのものかを読み取る。
+    op: read_rule_context
+    result_display: 問われている規則が何についてかを読み取る
+    result_srepr: common_base_equal_height
+  - args: []
+    narration: その規則の正しい内容を思い出して選ぶ。
+    op: recall_correct_rule
+    result_display: 面積は等しくなる
+    result_srepr: 面積は等しくなる
+visual_svg: null

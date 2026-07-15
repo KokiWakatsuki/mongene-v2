@@ -147,3 +147,39 @@ def judge_equilateral_from_condition(is_equilateral: object) -> Solution:
     ]
     answer = ChoiceAnswer(correct=correct, distractors=[other], fact_id="equilateral.judge_from_condition")
     return Solution(answer=answer, steps=steps)
+
+
+_RIGHT_TRIANGLE_VALID_CONDITIONS = frozenset(
+    {"hypotenuse_and_acute_angle", "hypotenuse_and_other_side"}
+)
+
+
+@register_solver("math.judge_right_triangle_congruence")
+def judge_right_triangle_congruence(condition_type: object) -> Solution:
+    """図から読み取れる条件から、直角三角形の合同条件を満たすかを判別する
+
+    （g2_l44.knowledge Lv2）。condition_type だけから判定する（具体的な場面文は
+    recipe が構成する surface であり double-solve）。答えは ChoiceAnswer。
+    """
+    ct = str(condition_type)
+    truthy = ct in _RIGHT_TRIANGLE_VALID_CONDITIONS
+    correct = "合同であるといえる" if truthy else "合同であるとはいえない"
+    other = "合同であるとはいえない" if truthy else "合同であるといえる"
+    steps = [
+        Step(
+            op="check_right_triangle_condition",
+            args=[], result_srepr=("yes" if truthy else "no"),
+            result_display="読み取れる条件を確認する",
+            narration="図から読み取れる条件が、直角三角形の合同条件（斜辺と1つの鋭角、"
+            "または斜辺と他の1辺）を満たしているかを確認する。",
+        ),
+        Step(
+            op="judge_right_triangle_congruence",
+            args=[], result_srepr=correct, result_display=correct,
+            narration="直角がすでに等しいことと合わせて、直角三角形の合同条件を満たすかどうかを判別する。",
+        ),
+    ]
+    answer = ChoiceAnswer(
+        correct=correct, distractors=[other], fact_id="right_triangle.judge_congruence"
+    )
+    return Solution(answer=answer, steps=steps)

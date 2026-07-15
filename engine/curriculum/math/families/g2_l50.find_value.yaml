@@ -1,0 +1,30 @@
+family: math.g2_l50.find_value
+form: find_value
+source_desc: |
+  等積変形で面積を移し値を求める
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv2 desc: 等積変形で面積を移し値を求める。
+       example: 四角形ABCDで、頂点Dを通り対角線ACに平行な直線と、辺BCの延長との
+                交点をEとする。四角形ABCDと面積の等しい三角形ABEをつくったとき、
+                四角形ABCDの面積が20cm²ならば△ABEの面積を求めよ。
+  Lv3（面積を2等分する直線を引くなど逆算・作図的に求める）は作図的な逆算課題で
+  一般化が難しいため本セルでは扱わない（次段対応）。
+  【設計モデル】新設 solver math.equal_area_transform_value（等積変形は面積を
+  変えない、という恒真の性質から、もとの図形の面積をそのまま変形後の三角形の面積
+  として求める）。
+concepts_default: [equal_area.transform_value]
+levels:
+  "2":
+    signature: equal_area_transform_value
+    recipe: math.equal_area_transform_value
+    params:
+      area_domain: {int_range: [1, 500]}
+    given: [condition]
+    asked: [value]
+    visual: none
+    text: {tier: T1, template: lf_quadrilateral_condition_v1}
+    hints: [steps_prefix]
+    concept_tags: [equal_area.transform_value]
+    cause_tags: []
+remedial:
+  default_level: 2

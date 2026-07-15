@@ -1,0 +1,43 @@
+family: math.g2_l44.knowledge
+form: knowledge
+source_desc: |
+  直角三角形の合同条件を想起・判別する
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: 斜辺と1鋭角・斜辺と他1辺の2条件を想起する。
+       example: 直角三角形の合同条件を2つ答えよ。
+  Lv2 desc: 図から直角三角形の合同条件が使えるか判別する。
+       example: 2つの直角三角形について、斜辺と1つの鋭角がそれぞれ等しいことが
+                図から読み取れるとき、これらが合同といえるか、根拠とともに答えよ。
+  graph_table Lv1（斜辺・直角・対応要素を図に示す）は図を伴う独立フォームのため
+  本セルでは扱わない（visual 基盤投資が必要・次段対応）。
+  【設計モデル】規則想起ハブ（既存 math.recall_rule・_RULE_MAPS に topic
+  "right_triangle_congruence_conditions" を追加＝Lv1）／新設 solver
+  math.judge_right_triangle_congruence（条件の種類(斜辺+鋭角/斜辺+他辺=合同・
+  1辺のみ/1鋭角のみ=不十分)から判別＝Lv2）。
+levels:
+  "1":
+    signature: right_triangle_congruence_conditions_rule_recall
+    recipe: math.recall_rule
+    params:
+      topic: right_triangle_congruence_conditions
+      concept_set: [both]
+    given: [statement]
+    asked: [choice]
+    visual: none
+    text: {tier: T1, template: lf_rule_recall_v1}
+    hints: [steps_prefix]
+    concept_tags: [right_triangle_congruence_conditions.rule_recall]
+    cause_tags: []
+  "2":
+    signature: judge_right_triangle_congruence
+    recipe: math.judge_right_triangle_congruence
+    params: {}
+    given: [statement]
+    asked: [choice]
+    visual: none
+    text: {tier: T1, template: lf_congruence_statement_v1}
+    hints: [steps_prefix]
+    concept_tags: [right_triangle.judge_congruence]
+    cause_tags: []
+remedial:
+  default_level: 1

@@ -1155,6 +1155,11 @@ _RULE_RECALL_CONCEPTS = [
     "isosceles_property.rule_recall",
     "isosceles_condition.rule_recall",
     "equilateral_property.rule_recall",
+    "right_triangle_congruence_conditions.rule_recall",
+    "parallelogram_property.rule_recall",
+    "parallelogram_conditions.rule_recall",
+    "special_parallelogram_diagonal_property.rule_recall",
+    "equal_area_triangles.rule_recall",
 ]
 
 
@@ -1379,6 +1384,38 @@ def _draw_rule_statement(topic: str, concept: str, rng: Rng, p: dict[str, object
         # g2_l43 正三角形の性質(3辺/3角が等しい)。具体例の三角形の点名を埋め込み surface を分散する。
         pa, pb, pc = _draw_distinct_points(3, rng)
         return f"三角形{pa}{pb}{pc}が正三角形であるときに成り立つ、辺の長さと内角の大きさの関係"
+
+    if topic == "right_triangle_congruence_conditions":
+        # g2_l44 直角三角形の合同条件(2つとも)。具体例の三角形の点名を埋め込み surface を分散する。
+        pa, pb, pc, pd, pe, pf = _draw_distinct_points(6, rng)
+        return (
+            f"直角三角形{pa}{pb}{pc}と直角三角形{pd}{pe}{pf}が合同であることを示すために"
+            "使える条件"
+        )
+
+    if topic == "parallelogram_property":
+        # g2_l46 平行四辺形の性質。具体例の四角形の点名を埋め込み surface を分散する。
+        pa, pb, pc, pd = _draw_distinct_points(4, rng)
+        return f"平行四辺形{pa}{pb}{pc}{pd}で、対辺・対角・対角線について成り立つこと"
+
+    if topic == "parallelogram_conditions":
+        # g2_l47 平行四辺形になるための条件(5つとも)。具体例の四角形の点名を埋め込み surface を分散する。
+        pa, pb, pc, pd = _draw_distinct_points(4, rng)
+        return f"四角形{pa}{pb}{pc}{pd}が平行四辺形になるといえる条件"
+
+    if topic == "special_parallelogram_diagonal_property":
+        # g2_l49 特別な平行四辺形の対角線の性質。具体例の四角形の点名を埋め込み surface を分散する。
+        pa, pb, pc, pd = _draw_distinct_points(4, rng)
+        shape = {"rectangle": "長方形", "rhombus": "ひし形", "square": "正方形"}[concept]
+        return f"{shape}{pa}{pb}{pc}{pd}の対角線がもつ性質"
+
+    if topic == "equal_area_triangles":
+        # g2_l50 等積変形(共通の底辺・等しい高さの三角形は面積が等しい)。具体例の点名を埋め込み surface を分散する。
+        pa, pb, pc, pd = _draw_distinct_points(4, rng)
+        return (
+            f"三角形{pa}{pb}{pc}と三角形{pd}{pb}{pc}が、共通の底辺{pb}{pc}を持ち、"
+            f"頂点{pa}、{pd}が底辺に平行な同じ直線上にあるとき、2つの三角形の面積の関係"
+        )
 
     raise ValueError(f"未知の topic: {topic!r}")
 

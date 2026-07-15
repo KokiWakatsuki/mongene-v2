@@ -1,0 +1,52 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - congruence.transfer_values
+  provenance:
+    git_commit: ''
+    recipe: math.congruence_transfer_values
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_congruence_transfer_values_v1
+    tier: T1
+  requested:
+    form: find_value
+    level: 1
+    subject: math
+    unit: g2_l36
+  resolved:
+    form: find_value
+    level: 1
+    subject: math
+    unit: g2_l36
+  seed: 2
+  signature: congruence_transfer_values
+problem_ref: 4a683ab95dc7a01a
+problem_text: 三角形FHK≡三角形MNQで、辺FH=32cm、∠H=110°である。このとき、辺MNの長さと∠Nの大きさを求めよ。
+sub_questions:
+- answer:
+    display: 辺の長さ 32、角の大きさ 110°
+    kind: symbolic
+    srepr: Tuple(Integer(32), Integer(110))
+  cause_tags: []
+  concept_tags:
+  - congruence.transfer_values
+  explanation: まず、合同である2つの図形のうち、わかっている辺の長さと角の大きさが、それぞれどの辺・角に対応するかを読み取る。 対応する辺・角の組を読み取る次に、合同な図形では対応する辺の長さ・角の大きさがそれぞれ等しいことから、求める辺の長さと角の大きさを求める。 辺の長さ 32、角の大きさ 110°
+  hints:
+  - 合同である2つの図形のうち、わかっている辺の長さと角の大きさが、それぞれどの辺・角に対応するかを読み取る。
+  label: (1)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 合同である2つの図形のうち、わかっている辺の長さと角の大きさが、それぞれどの辺・角に対応するかを読み取る。
+    op: identify_given_correspondence
+    result_display: 対応する辺・角の組を読み取る
+    result_srepr: ''
+  - args: []
+    narration: 合同な図形では対応する辺の長さ・角の大きさがそれぞれ等しいことから、求める辺の長さと角の大きさを求める。
+    op: transfer_by_congruence
+    result_display: 辺の長さ 32、角の大きさ 110°
+    result_srepr: Tuple(Integer(32), Integer(110))
+visual_svg: null

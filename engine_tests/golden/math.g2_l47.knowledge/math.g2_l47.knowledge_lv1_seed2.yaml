@@ -1,0 +1,55 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - parallelogram_conditions.rule_recall
+  provenance:
+    git_commit: ''
+    recipe: math.recall_rule
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_rule_recall_v1
+    tier: T1
+  requested:
+    form: knowledge
+    level: 1
+    subject: math
+    unit: g2_l47
+  resolved:
+    form: knowledge
+    level: 1
+    subject: math
+    unit: g2_l47
+  seed: 2
+  signature: parallelogram_conditions_rule_recall
+problem_ref: ad0338d0966de4c0
+problem_text: 四角形FHEBが平行四辺形になるといえる条件。正しく述べているものを1つ選びなさい。
+sub_questions:
+- answer:
+    correct: 二組の対辺がそれぞれ平行である、二組の対辺の長さがそれぞれ等しい、二組の対角の大きさがそれぞれ等しい、対角線がそれぞれの中点で交わる、一組の対辺が平行でその長さが等しい、のいずれか
+    distractors:
+    - 対角線の長さが等しいことだけで、平行四辺形であるといえる
+    - 一組の対辺が平行であることだけで、平行四辺形であるといえる
+    fact_id: parallelogram_conditions.rule.all_five
+    kind: choice
+  cause_tags: []
+  concept_tags:
+  - parallelogram_conditions.rule_recall
+  explanation: まず、問題で問われている規則や約束が、何についてのものかを読み取る。 問われている規則が何についてかを読み取る次に、その規則の正しい内容を思い出して選ぶ。 二組の対辺がそれぞれ平行である、二組の対辺の長さがそれぞれ等しい、二組の対角の大きさがそれぞれ等しい、対角線がそれぞれの中点で交わる、一組の対辺が平行でその長さが等しい、のいずれか
+  hints:
+  - 問題で問われている規則や約束が、何についてのものかを読み取る。
+  label: (1)
+  prompt_text: choice を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 問題で問われている規則や約束が、何についてのものかを読み取る。
+    op: read_rule_context
+    result_display: 問われている規則が何についてかを読み取る
+    result_srepr: all_five
+  - args: []
+    narration: その規則の正しい内容を思い出して選ぶ。
+    op: recall_correct_rule
+    result_display: 二組の対辺がそれぞれ平行である、二組の対辺の長さがそれぞれ等しい、二組の対角の大きさがそれぞれ等しい、対角線がそれぞれの中点で交わる、一組の対辺が平行でその長さが等しい、のいずれか
+    result_srepr: 二組の対辺がそれぞれ平行である、二組の対辺の長さがそれぞれ等しい、二組の対角の大きさがそれぞれ等しい、対角線がそれぞれの中点で交わる、一組の対辺が平行でその長さが等しい、のいずれか
+visual_svg: null

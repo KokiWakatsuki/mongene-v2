@@ -1,0 +1,40 @@
+family: math.g2_l47.knowledge
+form: knowledge
+source_desc: |
+  平行四辺形になるための条件を想起・判別する
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: 平行四辺形になるための条件(5つ)を想起する。
+       example: 四角形が平行四辺形になるための条件を、すべて答えよ。
+  Lv2 desc: 図の条件からどの条件で平行四辺形といえるか判別する。
+       example: 四角形ABCDで、AB=DC かつ AB∥DC が成り立っているとき、この四角形が
+                平行四辺形といえるのはどの条件によるか答えよ。
+  【設計モデル】規則想起ハブ（既存 math.recall_rule・_RULE_MAPS に topic
+  "parallelogram_conditions" を追加＝Lv1）／新設 solver
+  math.identify_parallelogram_condition（5条件のうちどれによるかを判別＝Lv2）。
+levels:
+  "1":
+    signature: parallelogram_conditions_rule_recall
+    recipe: math.recall_rule
+    params:
+      topic: parallelogram_conditions
+      concept_set: [all_five]
+    given: [statement]
+    asked: [choice]
+    visual: none
+    text: {tier: T1, template: lf_rule_recall_v1}
+    hints: [steps_prefix]
+    concept_tags: [parallelogram_conditions.rule_recall]
+    cause_tags: []
+  "2":
+    signature: identify_parallelogram_condition
+    recipe: math.identify_parallelogram_condition
+    params: {}
+    given: [statement]
+    asked: [choice]
+    visual: none
+    text: {tier: T1, template: lf_quadrilateral_statement_v1}
+    hints: [steps_prefix]
+    concept_tags: [parallelogram.identify_condition]
+    cause_tags: []
+remedial:
+  default_level: 1

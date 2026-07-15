@@ -1,0 +1,27 @@
+family: math.g2_l49.find_value
+form: find_value
+source_desc: |
+  長方形・ひし形・正方形の対角線の性質から辺・角を求める
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: 対角線が等しい/直交する性質から辺や角を求める。
+       example: 長方形ABCDで対角線ACとBDの交点をOとする。AC=10cm のとき、
+                線分OBの長さを求めよ。
+  【設計モデル】新設 solver math.special_parallelogram_diagonal_value（長方形/
+  正方形は対角線の長さが等しく中点で交わることから交点から頂点までの長さを、ひし形
+  は対角線が垂直に交わることから交点の角度=90°を、それぞれ恒真の性質で計算する）。
+concepts_default: [special_parallelogram.diagonal_value]
+levels:
+  "1":
+    signature: special_parallelogram_diagonal_value
+    recipe: math.special_parallelogram_diagonal_value
+    params:
+      value_domain: {int_range: [1, 500]}
+    given: [condition]
+    asked: [value]
+    visual: none
+    text: {tier: T1, template: lf_quadrilateral_condition_v1}
+    hints: [steps_prefix]
+    concept_tags: [special_parallelogram.diagonal_value]
+    cause_tags: []
+remedial:
+  default_level: 1

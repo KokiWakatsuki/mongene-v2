@@ -1,0 +1,26 @@
+family: math.g2_l50.knowledge
+form: knowledge
+source_desc: |
+  等積変形の根拠（共通の底辺・等しい高さの三角形は面積が等しい）を想起する
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: 底辺が共通で高さが等しい三角形は等積であることを想起する。
+       example: 底辺が共通で、高さが等しい2つの三角形の面積の関係について、
+                正しく述べているものを選べ。
+  【設計モデル】規則想起ハブ（既存 math.recall_rule・_RULE_MAPS に topic
+  "equal_area_triangles" を追加）。
+levels:
+  "1":
+    signature: equal_area_triangles_rule_recall
+    recipe: math.recall_rule
+    params:
+      topic: equal_area_triangles
+      concept_set: [common_base_equal_height]
+    given: [statement]
+    asked: [choice]
+    visual: none
+    text: {tier: T1, template: lf_rule_recall_v1}
+    hints: [steps_prefix]
+    concept_tags: [equal_area_triangles.rule_recall]
+    cause_tags: []
+remedial:
+  default_level: 1

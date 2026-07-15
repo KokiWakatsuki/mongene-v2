@@ -1,0 +1,56 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - quadrilateral.classify_from_diagonal
+  provenance:
+    git_commit: ''
+    recipe: math.classify_quadrilateral_from_diagonal_condition
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_quadrilateral_statement_v1
+    tier: T1
+  requested:
+    form: knowledge
+    level: 2
+    subject: math
+    unit: g2_l49
+  resolved:
+    form: knowledge
+    level: 2
+    subject: math
+    unit: g2_l49
+  seed: 1
+  signature: classify_quadrilateral_from_diagonal_condition
+problem_ref: 5dbb87f266a2d81d
+problem_text: 平行四辺形QJFHで、対角線の長さが等しく、垂直に交わるとき、この四角形はどんな四角形になるか答えよ。
+sub_questions:
+- answer:
+    correct: 正方形
+    distractors:
+    - 長方形
+    - ひし形
+    - 平行四辺形のまま（特別な四角形にはならない）
+    fact_id: quadrilateral.classify_from_diagonal
+    kind: choice
+  cause_tags: []
+  concept_tags:
+  - quadrilateral.classify_from_diagonal
+  explanation: まず、対角線が等しいか、垂直に交わるか、それぞれの条件を確認する。 対角線の条件を確認する次に、対角線の条件の組み合わせから、平行四辺形がどんな四角形になるかを判別する。 正方形
+  hints:
+  - 対角線が等しいか、垂直に交わるか、それぞれの条件を確認する。
+  label: (1)
+  prompt_text: choice を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 対角線が等しいか、垂直に交わるか、それぞれの条件を確認する。
+    op: check_diagonal_conditions
+    result_display: 対角線の条件を確認する
+    result_srepr: yesyes
+  - args: []
+    narration: 対角線の条件の組み合わせから、平行四辺形がどんな四角形になるかを判別する。
+    op: classify_quadrilateral
+    result_display: 正方形
+    result_srepr: 正方形
+visual_svg: null

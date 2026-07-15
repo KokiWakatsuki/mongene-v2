@@ -1,0 +1,28 @@
+family: math.g2_l46.find_value
+form: find_value
+source_desc: |
+  平行四辺形の対辺の長さ・対角の大きさを求める
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: 対辺/対角の性質から辺の長さ・角を求める。
+       example: 平行四辺形ABCDで、AB=5cm、∠B=110° であるとき、辺CDの長さと
+                ∠D の大きさを求めよ。
+  【設計モデル】新設 solver math.parallelogram_opposite_properties（平行四辺形は
+  対辺の長さ・対角の大きさがそれぞれ等しいという恒真の性質から、わかっている辺・角
+  の値をそのまま対辺・対角の値として求める）。答えは Tuple(辺の長さ, 角の大きさ)。
+concepts_default: [parallelogram.opposite_properties]
+levels:
+  "1":
+    signature: parallelogram_opposite_properties
+    recipe: math.parallelogram_opposite_properties
+    params:
+      side_domain: {int_range: [1, 300]}
+      angle_domain: {int_range: [1, 178]}
+    given: [condition]
+    asked: [value]
+    visual: none
+    text: {tier: T1, template: lf_quadrilateral_condition_v1}
+    hints: [steps_prefix]
+    concept_tags: [parallelogram.opposite_properties]
+    cause_tags: []
+remedial:
+  default_level: 1

@@ -1,0 +1,52 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - equal_area.transform_value
+  provenance:
+    git_commit: ''
+    recipe: math.equal_area_transform_value
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_quadrilateral_condition_v1
+    tier: T1
+  requested:
+    form: find_value
+    level: 2
+    subject: math
+    unit: g2_l50
+  resolved:
+    form: find_value
+    level: 2
+    subject: math
+    unit: g2_l50
+  seed: 2
+  signature: equal_area_transform_value
+problem_ref: 9a70e8a0d12b6f13
+problem_text: 四角形ELQMで、頂点Mを通り対角線EQに平行な直線と、辺LQの延長との交点をKとする。四角形ELQMと面積の等しい三角形ELKをつくったとき、四角形ELQMの面積が91cm² ならば三角形ELKの面積を求めよ。
+sub_questions:
+- answer:
+    display: '91'
+    kind: symbolic
+    srepr: Integer(91)
+  cause_tags: []
+  concept_tags:
+  - equal_area.transform_value
+  explanation: まず、等積変形をする前の、もとの図形の面積を読み取る。 もとの図形の面積を読み取る次に、等積変形は面積を変えずに図形の形だけを変える操作であることから、つくった三角形の面積を求める。 91
+  hints:
+  - 等積変形をする前の、もとの図形の面積を読み取る。
+  label: (1)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 等積変形をする前の、もとの図形の面積を読み取る。
+    op: identify_original_area
+    result_display: もとの図形の面積を読み取る
+    result_srepr: ''
+  - args: []
+    narration: 等積変形は面積を変えずに図形の形だけを変える操作であることから、つくった三角形の面積を求める。
+    op: apply_equal_area_transform
+    result_display: '91'
+    result_srepr: Integer(91)
+visual_svg: null

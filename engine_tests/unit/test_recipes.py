@@ -3726,6 +3726,11 @@ _RULE_RECALL_CELLS = [
     ("math.g2_l41.knowledge", 1),
     ("math.g2_l42.knowledge", 1),
     ("math.g2_l43.knowledge", 1),
+    ("math.g2_l44.knowledge", 1),
+    ("math.g2_l46.knowledge", 1),
+    ("math.g2_l47.knowledge", 1),
+    ("math.g2_l49.knowledge", 1),
+    ("math.g2_l50.knowledge", 1),
 ]
 
 
@@ -5745,3 +5750,222 @@ def test_judge_equilateral_from_condition_double_solve_property(seed):
     solver = REGISTRY.solver("math.judge_equilateral_from_condition")
     sol = solver(mr.params["is_equilateral"])
     assert sol.answer.correct == mr.sub_questions[0].answer.correct
+
+
+# ---------------------------------------------------------------------------
+# C9 g2 図形（合同な図形の対応関係）: g2_l36
+# ---------------------------------------------------------------------------
+def test_congruence_transfer_values_construct():
+    ctx = _make_ctx("math.g2_l36.find_value", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "congruence_transfer_values"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "value"
+    expected = sympy.Tuple(sympy.Integer(mr.params["side_value"]), sympy.Integer(mr.params["angle_value"]))
+    assert sq.answer.srepr == sympy.srepr(expected)
+
+
+@pytest.mark.parametrize("seed", range(100))
+def test_congruence_transfer_values_double_solve_property(seed):
+    ctx = _make_ctx("math.g2_l36.find_value", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.congruence_transfer_values")
+    sol = solver(mr.params["side_value"], mr.params["angle_value"])
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+
+
+def test_congruence_symbol_and_side_construct():
+    ctx = _make_ctx("math.g2_l36.knowledge", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "congruence_symbol_and_side"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "choice"
+    assert not any(ch.isdigit() for ch in sq.answer.correct)
+    assert sq.answer.correct not in sq.answer.distractors
+    assert len(set(mr.params["p_labels"]) | set(mr.params["q_labels"])) == 6
+
+
+@pytest.mark.parametrize("seed", range(100))
+def test_congruence_symbol_and_side_double_solve_property(seed):
+    ctx = _make_ctx("math.g2_l36.knowledge", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.congruence_symbol_and_side")
+    sol = solver(mr.params["p_labels"], mr.params["q_labels"], mr.params["i"], mr.params["j"])
+    assert sol.answer.correct == mr.sub_questions[0].answer.correct
+
+
+def test_congruence_corresponding_pair_construct():
+    ctx = _make_ctx("math.g2_l36.knowledge", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "congruence_corresponding_pair"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "choice"
+    assert not any(ch.isdigit() for ch in sq.answer.correct)
+    assert sq.answer.correct not in sq.answer.distractors
+    assert len(set(mr.params["p_labels"]) | set(mr.params["q_labels"])) == 6
+
+
+@pytest.mark.parametrize("seed", range(100))
+def test_congruence_corresponding_pair_double_solve_property(seed):
+    ctx = _make_ctx("math.g2_l36.knowledge", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.congruence_corresponding_pair")
+    sol = solver(
+        mr.params["p_labels"], mr.params["q_labels"],
+        mr.params["angle_i"], mr.params["side_i"], mr.params["side_j"],
+    )
+    assert sol.answer.correct == mr.sub_questions[0].answer.correct
+
+
+# ---------------------------------------------------------------------------
+# C9 g2 図形（直角三角形の合同条件）: g2_l44
+# ---------------------------------------------------------------------------
+def test_judge_right_triangle_congruence_construct():
+    ctx = _make_ctx("math.g2_l44.knowledge", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "judge_right_triangle_congruence"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "choice"
+    assert not any(ch.isdigit() for ch in sq.answer.correct)
+    assert sq.answer.correct not in sq.answer.distractors
+    assert len(set(mr.params["labels"])) == 6
+
+
+@pytest.mark.parametrize("seed", range(100))
+def test_judge_right_triangle_congruence_double_solve_property(seed):
+    ctx = _make_ctx("math.g2_l44.knowledge", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.judge_right_triangle_congruence")
+    sol = solver(mr.params["condition_type"])
+    assert sol.answer.correct == mr.sub_questions[0].answer.correct
+
+
+# ---------------------------------------------------------------------------
+# C9 g2 図形（平行四辺形・特別な平行四辺形・等積変形）: g2_l46/l47/l49/l50
+# ---------------------------------------------------------------------------
+def test_parallelogram_opposite_properties_construct():
+    ctx = _make_ctx("math.g2_l46.find_value", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "parallelogram_opposite_properties"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "value"
+    expected = sympy.Tuple(sympy.Integer(mr.params["side_value"]), sympy.Integer(mr.params["angle_value"]))
+    assert sq.answer.srepr == sympy.srepr(expected)
+
+
+@pytest.mark.parametrize("seed", range(100))
+def test_parallelogram_opposite_properties_double_solve_property(seed):
+    ctx = _make_ctx("math.g2_l46.find_value", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.parallelogram_opposite_properties")
+    sol = solver(mr.params["side_value"], mr.params["angle_value"])
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+
+
+def test_identify_parallelogram_condition_construct():
+    ctx = _make_ctx("math.g2_l47.knowledge", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "identify_parallelogram_condition"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "choice"
+    assert not any(ch.isdigit() for ch in sq.answer.correct)
+    assert sq.answer.correct not in sq.answer.distractors
+    assert len({mr.params["a"], mr.params["b"], mr.params["c"], mr.params["d"]}) == 4
+
+
+@pytest.mark.parametrize("seed", range(100))
+def test_identify_parallelogram_condition_double_solve_property(seed):
+    ctx = _make_ctx("math.g2_l47.knowledge", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.identify_parallelogram_condition")
+    sol = solver(mr.params["condition_key"])
+    assert sol.answer.correct == mr.sub_questions[0].answer.correct
+
+
+def test_special_parallelogram_diagonal_value_construct():
+    ctx = _make_ctx("math.g2_l49.find_value", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "special_parallelogram_diagonal_value"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "value"
+    if mr.params["shape"] == "rhombus":
+        assert sq.answer.srepr == sympy.srepr(sympy.Integer(90))
+    else:
+        assert sq.answer.srepr == sympy.srepr(sympy.Rational(mr.params["value"], 2))
+
+
+@pytest.mark.parametrize("seed", range(100))
+def test_special_parallelogram_diagonal_value_double_solve_property(seed):
+    ctx = _make_ctx("math.g2_l49.find_value", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.special_parallelogram_diagonal_value")
+    sol = solver(mr.params["shape"], mr.params["value"])
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+
+
+def test_special_parallelogram_diagonal_value_rhombus_construct():
+    ctx = _make_ctx("math.g2_l49.find_value", 1)
+    found_rhombus = False
+    for seed in range(20):
+        rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+        mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+        if mr.params["shape"] == "rhombus":
+            found_rhombus = True
+            assert mr.sub_questions[0].answer.srepr == sympy.srepr(sympy.Integer(90))
+            break
+    assert found_rhombus, "20 seed 中に shape=rhombus が1つも出なかった"
+
+
+def test_classify_quadrilateral_from_diagonal_condition_construct():
+    ctx = _make_ctx("math.g2_l49.knowledge", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "classify_quadrilateral_from_diagonal_condition"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "choice"
+    assert not any(ch.isdigit() for ch in sq.answer.correct)
+    assert sq.answer.correct not in sq.answer.distractors
+
+
+@pytest.mark.parametrize("seed", range(100))
+def test_classify_quadrilateral_from_diagonal_condition_double_solve_property(seed):
+    ctx = _make_ctx("math.g2_l49.knowledge", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.classify_quadrilateral_from_diagonal_condition")
+    sol = solver(mr.params["equal"], mr.params["perpendicular"])
+    assert sol.answer.correct == mr.sub_questions[0].answer.correct
+
+
+def test_equal_area_transform_value_construct():
+    ctx = _make_ctx("math.g2_l50.find_value", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "equal_area_transform_value"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "value"
+    assert sq.answer.srepr == sympy.srepr(sympy.Integer(mr.params["area_value"]))
+
+
+@pytest.mark.parametrize("seed", range(100))
+def test_equal_area_transform_value_double_solve_property(seed):
+    ctx = _make_ctx("math.g2_l50.find_value", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.equal_area_transform_value")
+    sol = solver(mr.params["area_value"])
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr

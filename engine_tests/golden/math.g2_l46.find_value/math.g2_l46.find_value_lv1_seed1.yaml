@@ -1,0 +1,52 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - parallelogram.opposite_properties
+  provenance:
+    git_commit: ''
+    recipe: math.parallelogram_opposite_properties
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_quadrilateral_condition_v1
+    tier: T1
+  requested:
+    form: find_value
+    level: 1
+    subject: math
+    unit: g2_l46
+  resolved:
+    form: find_value
+    level: 1
+    subject: math
+    unit: g2_l46
+  seed: 1
+  signature: parallelogram_opposite_properties
+problem_ref: fb1f37c86d993422
+problem_text: 平行四辺形NKRFで、NK=23cm、∠K=157°であるとき、辺RFの長さと∠Fの大きさを求めよ。
+sub_questions:
+- answer:
+    display: 辺の長さ 23、角の大きさ 157°
+    kind: symbolic
+    srepr: Tuple(Integer(23), Integer(157))
+  cause_tags: []
+  concept_tags:
+  - parallelogram.opposite_properties
+  explanation: まず、平行四辺形のうち、わかっている辺の長さと角の大きさを読み取る。 わかっている辺・角を読み取る次に、平行四辺形では対辺の長さ・対角の大きさがそれぞれ等しいことから、求める辺の長さと角の大きさを求める。 辺の長さ 23、角の大きさ 157°
+  hints:
+  - 平行四辺形のうち、わかっている辺の長さと角の大きさを読み取る。
+  label: (1)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 平行四辺形のうち、わかっている辺の長さと角の大きさを読み取る。
+    op: identify_given_side_and_angle
+    result_display: わかっている辺・角を読み取る
+    result_srepr: ''
+  - args: []
+    narration: 平行四辺形では対辺の長さ・対角の大きさがそれぞれ等しいことから、求める辺の長さと角の大きさを求める。
+    op: apply_opposite_side_and_angle_property
+    result_display: 辺の長さ 23、角の大きさ 157°
+    result_srepr: Tuple(Integer(23), Integer(157))
+visual_svg: null

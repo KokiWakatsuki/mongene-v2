@@ -1,0 +1,52 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - equal_area.transform_value
+  provenance:
+    git_commit: ''
+    recipe: math.equal_area_transform_value
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_quadrilateral_condition_v1
+    tier: T1
+  requested:
+    form: find_value
+    level: 2
+    subject: math
+    unit: g2_l50
+  resolved:
+    form: find_value
+    level: 2
+    subject: math
+    unit: g2_l50
+  seed: 1
+  signature: equal_area_transform_value
+problem_ref: 07e0c100112f30f4
+problem_text: 四角形CQLGで、頂点Gを通り対角線CLに平行な直線と、辺QLの延長との交点をRとする。四角形CQLGと面積の等しい三角形CQRをつくったとき、四角形CQLGの面積が219cm² ならば三角形CQRの面積を求めよ。
+sub_questions:
+- answer:
+    display: '219'
+    kind: symbolic
+    srepr: Integer(219)
+  cause_tags: []
+  concept_tags:
+  - equal_area.transform_value
+  explanation: まず、等積変形をする前の、もとの図形の面積を読み取る。 もとの図形の面積を読み取る次に、等積変形は面積を変えずに図形の形だけを変える操作であることから、つくった三角形の面積を求める。 219
+  hints:
+  - 等積変形をする前の、もとの図形の面積を読み取る。
+  label: (1)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 等積変形をする前の、もとの図形の面積を読み取る。
+    op: identify_original_area
+    result_display: もとの図形の面積を読み取る
+    result_srepr: ''
+  - args: []
+    narration: 等積変形は面積を変えずに図形の形だけを変える操作であることから、つくった三角形の面積を求める。
+    op: apply_equal_area_transform
+    result_display: '219'
+    result_srepr: Integer(219)
+visual_svg: null

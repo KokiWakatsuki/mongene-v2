@@ -1,0 +1,26 @@
+family: math.g2_l46.knowledge
+form: knowledge
+source_desc: |
+  平行四辺形の性質（対辺・対角が等しい／対角線が中点で交わる）を想起する
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: 対辺・対角が等しい/対角線が中点で交わるを想起する。
+       example: 平行四辺形の対辺・対角の大きさの関係と、対角線の交わり方について、
+                正しく述べているものを選べ。
+  【設計モデル】規則想起ハブ（既存 math.recall_rule・_RULE_MAPS に topic
+  "parallelogram_property" を追加）。
+levels:
+  "1":
+    signature: parallelogram_property_rule_recall
+    recipe: math.recall_rule
+    params:
+      topic: parallelogram_property
+      concept_set: [all]
+    given: [statement]
+    asked: [choice]
+    visual: none
+    text: {tier: T1, template: lf_rule_recall_v1}
+    hints: [steps_prefix]
+    concept_tags: [parallelogram_property.rule_recall]
+    cause_tags: []
+remedial:
+  default_level: 1

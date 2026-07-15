@@ -1,0 +1,57 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - parallelogram.identify_condition
+  provenance:
+    git_commit: ''
+    recipe: math.identify_parallelogram_condition
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_quadrilateral_statement_v1
+    tier: T1
+  requested:
+    form: knowledge
+    level: 2
+    subject: math
+    unit: g2_l47
+  resolved:
+    form: knowledge
+    level: 2
+    subject: math
+    unit: g2_l47
+  seed: 1
+  signature: identify_parallelogram_condition
+problem_ref: c09ef53596d891ba
+problem_text: 四角形QNJHで、∠Q=∠J かつ ∠N=∠Hが成り立っているとき、この四角形が平行四辺形といえるのはどの条件によるか答えよ。
+sub_questions:
+- answer:
+    correct: 二組の対角の大きさがそれぞれ等しい条件
+    distractors:
+    - 二組の対辺がそれぞれ平行である条件
+    - 二組の対辺の長さがそれぞれ等しい条件
+    - 対角線がそれぞれの中点で交わる条件
+    - 一組の対辺が平行でその長さが等しい条件
+    fact_id: parallelogram.identify_condition
+    kind: choice
+  cause_tags: []
+  concept_tags:
+  - parallelogram.identify_condition
+  explanation: まず、四角形で示されている、等しい・平行である要素が何かを読み取る。 示されている等しい要素を読み取る次に、平行四辺形になるための5条件のうち、示されている要素がどれに当てはまるかを判別する。 二組の対角の大きさがそれぞれ等しい条件
+  hints:
+  - 四角形で示されている、等しい・平行である要素が何かを読み取る。
+  label: (1)
+  prompt_text: choice を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 四角形で示されている、等しい・平行である要素が何かを読み取る。
+    op: identify_given_elements
+    result_display: 示されている等しい要素を読み取る
+    result_srepr: ''
+  - args: []
+    narration: 平行四辺形になるための5条件のうち、示されている要素がどれに当てはまるかを判別する。
+    op: match_parallelogram_condition
+    result_display: 二組の対角の大きさがそれぞれ等しい条件
+    result_srepr: 二組の対角の大きさがそれぞれ等しい条件
+visual_svg: null

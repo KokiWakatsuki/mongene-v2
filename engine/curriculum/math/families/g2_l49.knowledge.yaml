@@ -1,0 +1,44 @@
+family: math.g2_l49.knowledge
+form: knowledge
+source_desc: |
+  長方形・ひし形・正方形の対角線の性質・包含関係を想起・判別する
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: 長方形/ひし形/正方形の対角線などの性質を想起する。
+       example: 長方形・ひし形・正方形それぞれの対角線がもつ性質を答えよ。
+  Lv2 desc: 条件からどの四角形になるか・包含関係を判別する。
+       example: 対角線が長さが等しく、かつ垂直に交わる平行四辺形は、どんな四角形に
+                なるか答えよ。また長方形・ひし形・正方形の包含関係を説明せよ。
+       【スコープ】包含関係の説明は自由記述の複合課題で一般化が難しいため、本セル
+       では「対角線の条件からどの四角形になるかを判別する」部分のみを扱う（次段
+       対応）。
+  【設計モデル】規則想起ハブ（既存 math.recall_rule・_RULE_MAPS に topic
+  "special_parallelogram_diagonal_property" を追加＝Lv1）／新設 solver
+  math.classify_quadrilateral_from_diagonal_condition（対角線が等しいか・垂直に
+  交わるかの組み合わせから四角形の種類を判別＝Lv2）。
+levels:
+  "1":
+    signature: special_parallelogram_diagonal_property_rule_recall
+    recipe: math.recall_rule
+    params:
+      topic: special_parallelogram_diagonal_property
+      concept_set: [rectangle, rhombus, square]
+    given: [statement]
+    asked: [choice]
+    visual: none
+    text: {tier: T1, template: lf_rule_recall_v1}
+    hints: [steps_prefix]
+    concept_tags: [special_parallelogram_diagonal_property.rule_recall]
+    cause_tags: []
+  "2":
+    signature: classify_quadrilateral_from_diagonal_condition
+    recipe: math.classify_quadrilateral_from_diagonal_condition
+    params: {}
+    given: [statement]
+    asked: [choice]
+    visual: none
+    text: {tier: T1, template: lf_quadrilateral_statement_v1}
+    hints: [steps_prefix]
+    concept_tags: [quadrilateral.classify_from_diagonal]
+    cause_tags: []
+remedial:
+  default_level: 1

@@ -204,3 +204,54 @@ def judge_equilateral_from_condition_recipe(ctx: CellContext, rng: Rng) -> MR:
         given={"statement": statement}, sub_questions=[sub_question], visual_plan=None,
         provenance=Provenance(recipe="math.judge_equilateral_from_condition"),
     )
+
+
+# ---------------------------------------------------------------------------
+# g2_l44.knowledge Lv2: 図から読み取れる条件が直角三角形の合同条件を満たすかを判別する
+# ---------------------------------------------------------------------------
+_JUDGE_RIGHT_TRIANGLE_CONCEPTS = ["right_triangle.judge_congruence"]
+
+_RIGHT_TRIANGLE_CONDITION_PHRASES: dict[str, str] = {
+    "hypotenuse_and_acute_angle": "斜辺と1つの鋭角がそれぞれ等しい",
+    "hypotenuse_and_other_side": "斜辺と他の1辺がそれぞれ等しい",
+    "one_side_only": "斜辺以外の1辺だけが等しい",
+    "one_acute_angle_only": "1つの鋭角だけが等しい",
+}
+
+
+@register_recipe(
+    "math.judge_right_triangle_congruence", provides_concepts=_JUDGE_RIGHT_TRIANGLE_CONCEPTS
+)
+def judge_right_triangle_congruence_recipe(ctx: CellContext, rng: Rng) -> MR:
+    """図から読み取れる条件が直角三角形の合同条件を満たすかを判別する
+
+    （g2_l44.knowledge Lv2・answer-first）。
+    """
+    condition_type = str(
+        draw(list(_RIGHT_TRIANGLE_CONDITION_PHRASES.keys()), rng)
+    )
+    phrase = _RIGHT_TRIANGLE_CONDITION_PHRASES[condition_type]
+    pa, pb, pc, pd, pe, pf = _draw_distinct_points(6, rng)
+    statement = (
+        f"2つの直角三角形{pa}{pb}{pc}と{pd}{pe}{pf}について、{phrase}ことが図から読み取れる"
+        "とき、これらが合同といえるか、根拠とともに答えよ"
+    )
+
+    solver = REGISTRY.solver("math.judge_right_triangle_congruence")
+    sol = cast(Solution, solver(condition_type))
+    assert isinstance(sol.answer, ChoiceAnswer)
+
+    sub_question = SubQuestionMR(
+        label="(1)", asked="choice", answer=sol.answer, steps=sol.steps,
+        concept_tags=_effective_concept_tags(ctx), cause_tags=_effective_cause_tags(ctx),
+    )
+    return MR(
+        signature=ctx.spec_level.signature, family=ctx.family, level=ctx.level,
+        purpose=ctx.purpose, seed=0,
+        params={
+            "condition_type": condition_type,
+            "labels": pa + pb + pc + pd + pe + pf,
+        },
+        given={"statement": statement}, sub_questions=[sub_question], visual_plan=None,
+        provenance=Provenance(recipe="math.judge_right_triangle_congruence"),
+    )

@@ -1,0 +1,41 @@
+family: math.g2_l36.knowledge
+form: knowledge
+source_desc: |
+  合同の定義・記号・対応の順序を想起する
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: 合同の定義・≡記号・対応の順序を想起する。
+       example: 2つの図形が合同であることを表す記号を答えよ。また、△ABC≡△DEF
+                と書くとき、辺ABに対応する辺はどれか答えよ。
+  Lv2 desc: 合同な図形で対応する辺/角を判別・適用する。
+       example: △ABC≡△PQR であるとき、∠B に対応する角と、辺CAに対応する辺を
+                それぞれ答えよ。
+  【設計モデル】新設 solver math.congruence_symbol_and_side（合同記号＋指定した辺
+  に対応する辺を1つの ChoiceAnswer にまとめて判別＝Lv1）／
+  math.congruence_corresponding_pair（対応する角・辺をそれぞれ判別し1つの
+  ChoiceAnswer にまとめる＝Lv2、記号は問わず角と辺の2要素に発展）。
+  op 列の長さ(Lv1=3・Lv2=4)で level_sep を担保。
+levels:
+  "1":
+    signature: congruence_symbol_and_side
+    recipe: math.congruence_symbol_and_side
+    params: {}
+    given: [statement]
+    asked: [choice]
+    visual: none
+    text: {tier: T1, template: lf_congruence_statement_v1}
+    hints: [steps_prefix]
+    concept_tags: [congruence.symbol_and_correspondence]
+    cause_tags: []
+  "2":
+    signature: congruence_corresponding_pair
+    recipe: math.congruence_corresponding_pair
+    params: {}
+    given: [statement]
+    asked: [choice]
+    visual: none
+    text: {tier: T1, template: lf_congruence_statement_v1}
+    hints: [steps_prefix]
+    concept_tags: [congruence.identify_corresponding_pair]
+    cause_tags: []
+remedial:
+  default_level: 1

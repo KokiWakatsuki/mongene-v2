@@ -826,6 +826,15 @@ concepts:
   - id: polygon_exterior_sum_property.rule_recall
     label: "多角形の外角の和が辺の数によらず一定であることを想起する"
     unit: g2_l35
+  - id: congruence.transfer_values
+    label: "合同な図形で対応する辺の長さ・角の大きさを求める"
+    unit: g2_l36
+  - id: congruence.symbol_and_correspondence
+    label: "合同記号と対応する辺の判別を想起する"
+    unit: g2_l36
+  - id: congruence.identify_corresponding_pair
+    label: "合同な図形で対応する角・辺をそれぞれ判別する"
+    unit: g2_l36
   - id: congruence_conditions.rule_recall
     label: "三角形の合同条件を3つとも想起する"
     unit: g2_l37
@@ -856,3 +865,36 @@ concepts:
   - id: equilateral.judge_from_condition
     label: "辺と角の条件から正三角形といえるかを判別する"
     unit: g2_l43
+  - id: right_triangle_congruence_conditions.rule_recall
+    label: "直角三角形の合同条件を2つとも想起する"
+    unit: g2_l44
+  - id: right_triangle.judge_congruence
+    label: "図から読み取れる条件が直角三角形の合同条件を満たすかを判別する"
+    unit: g2_l44
+  - id: parallelogram.opposite_properties
+    label: "平行四辺形の対辺の長さ・対角の大きさを求める"
+    unit: g2_l46
+  - id: parallelogram_property.rule_recall
+    label: "平行四辺形の対辺・対角・対角線の性質を想起する"
+    unit: g2_l46
+  - id: parallelogram_conditions.rule_recall
+    label: "平行四辺形になるための5条件を想起する"
+    unit: g2_l47
+  - id: parallelogram.identify_condition
+    label: "条件からどの平行四辺形の条件によるかを判別する"
+    unit: g2_l47
+  - id: special_parallelogram.diagonal_value
+    label: "長方形/ひし形/正方形の対角線の性質から辺・角を求める"
+    unit: g2_l49
+  - id: special_parallelogram_diagonal_property.rule_recall
+    label: "長方形/ひし形/正方形の対角線の性質を想起する"
+    unit: g2_l49
+  - id: quadrilateral.classify_from_diagonal
+    label: "対角線の条件からどの四角形になるかを判別する"
+    unit: g2_l49
+  - id: equal_area.transform_value
+    label: "等積変形でつくった三角形の面積を求める"
+    unit: g2_l50
+  - id: equal_area_triangles.rule_recall
+    label: "共通の底辺・等しい高さの三角形は面積が等しいことを想起する"
+    unit: g2_l50
