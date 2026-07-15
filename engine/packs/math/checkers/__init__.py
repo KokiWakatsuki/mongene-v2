@@ -23,5 +23,6 @@ from engine.packs.math.checkers import sample_survey  # noqa: F401  (登録の�
 from engine.packs.math.checkers import exam_fusion  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.checkers import plane_geometry  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.checkers import plane_transform  # noqa: F401  (登録の副作用のため import)
+from engine.packs.math.checkers import angle_tracking  # noqa: F401  (登録の副作用のため import)
 
 __all__: list[str] = []

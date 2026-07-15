@@ -1,0 +1,41 @@
+family: math.g2_l34.find_value
+form: find_value
+source_desc: |
+  180×(n-2)で内角の和や1つの内角を直接求める・内角の和から辺の数を逆算する
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: 180×(n-2)で内角の和や1つの内角を直接求める。
+       example: 正八角形の内角の和を求めよ。また、正八角形の1つの内角の大きさを
+                求めよ。
+  Lv2 desc: 内角の和を逆算して辺の数を出す・複合図形に適用する。
+       example: 内角の和が1440°である多角形は何角形か求めよ。
+  【設計モデル】新設 solver math.polygon_interior_sum_and_angle（Lv1・辺の数 n だけ
+  から内角の和と1つの内角を計算・Tuple答え）、math.polygon_sides_from_interior_sum
+  （Lv2・内角の和から辺の数を逆算）。
+concepts_default: [polygon_angle.interior_sum_and_angle]
+levels:
+  "1":
+    signature: polygon_interior_sum_and_angle
+    recipe: math.polygon_interior_sum_and_angle
+    params:
+      sides_domain: {int_range: [4, 400]}
+    given: [condition]
+    asked: [value]
+    visual: none
+    text: {tier: T1, template: lf_polygon_interior_sum_and_angle_v1}
+    hints: [steps_prefix]
+    concept_tags: [polygon_angle.interior_sum_and_angle]
+    cause_tags: []
+  "2":
+    signature: polygon_sides_from_interior_sum
+    recipe: math.polygon_sides_from_interior_sum
+    params:
+      sides_domain: {int_range: [4, 400]}
+    given: [condition]
+    asked: [value]
+    visual: none
+    text: {tier: T1, template: lf_polygon_sides_from_interior_sum_v1}
+    hints: [steps_prefix]
+    concept_tags: [polygon_angle.sides_from_interior_sum]
+    cause_tags: []
+remedial:
+  default_level: 1

@@ -1,0 +1,42 @@
+family: math.g2_l35.find_value
+form: find_value
+source_desc: |
+  外角の和360°を使い1つの外角や辺の数を求める
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: 外角の和360°を使い1つの外角や辺の数を求める。
+       example: 正十二角形の1つの外角の大きさを求めよ。
+  Lv2 desc: 内角と外角の関係を組み合わせ逆算して求める。
+       example: 1つの内角が140°である正多角形は正何角形か、外角の和を使って求めよ。
+  【設計モデル】新設 solver math.regular_polygon_exterior_angle（Lv1・辺の数 n だけ
+  から1つの外角=360/nを計算）、math.polygon_sides_from_interior_angle（Lv2・内角
+  から外角(180-内角)を求め、辺の数=360/外角を逆算）。Lv2 は外角の分母が小さい
+  (≤12)組合せだけを有界リトライで採用しあまり煩雑でない値にする（分母=1固定だと
+  採用される辺の数が360の約数のみに偏り dup_rate が悪化するため）。
+concepts_default: [polygon_angle.regular_exterior_angle]
+levels:
+  "1":
+    signature: regular_polygon_exterior_angle
+    recipe: math.regular_polygon_exterior_angle
+    params:
+      sides_domain: {int_range: [3, 400]}
+    given: [condition]
+    asked: [value]
+    visual: none
+    text: {tier: T1, template: lf_regular_polygon_exterior_angle_v1}
+    hints: [steps_prefix]
+    concept_tags: [polygon_angle.regular_exterior_angle]
+    cause_tags: []
+  "2":
+    signature: polygon_sides_from_interior_angle
+    recipe: math.polygon_sides_from_interior_angle
+    params:
+      sides_domain: {int_range: [3, 400]}
+    given: [condition]
+    asked: [value]
+    visual: none
+    text: {tier: T1, template: lf_polygon_sides_from_interior_angle_v1}
+    hints: [steps_prefix]
+    concept_tags: [polygon_angle.sides_from_interior_angle]
+    cause_tags: []
+remedial:
+  default_level: 1

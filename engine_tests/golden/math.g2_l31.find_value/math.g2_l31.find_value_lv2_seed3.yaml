@@ -1,0 +1,52 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - angle_pair.solve_zigzag
+  provenance:
+    git_commit: ''
+    recipe: math.solve_zigzag_angle_sum
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_zigzag_angle_sum_v1
+    tier: T1
+  requested:
+    form: find_value
+    level: 2
+    subject: math
+    unit: g2_l31
+  resolved:
+    form: find_value
+    level: 2
+    subject: math
+    unit: g2_l31
+  seed: 3
+  signature: zigzag_angle_sum_g2_l31
+problem_ref: f57f40480cf8afcf
+problem_text: 2直線ℓ、mが平行である。折れ曲がった線の途中の角がそれぞれ9°、75°であるとき、補助線をひいて∠xの大きさを求めよ。
+sub_questions:
+- answer:
+    display: '84'
+    kind: symbolic
+    srepr: Integer(84)
+  cause_tags: []
+  concept_tags:
+  - angle_pair.solve_zigzag
+  explanation: まず、折れ曲がった点を通り、2直線に平行な補助線をひく。 折れ曲がった点を通り2直線に平行な補助線をひく次に、補助線で分けられた2つの角がそれぞれ錯角として等しいことから、求める角の大きさを合計して決める。 84
+  hints:
+  - 折れ曲がった点を通り、2直線に平行な補助線をひく。
+  label: (1)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 折れ曲がった点を通り、2直線に平行な補助線をひく。
+    op: draw_auxiliary_line
+    result_display: 折れ曲がった点を通り2直線に平行な補助線をひく
+    result_srepr: ''
+  - args: []
+    narration: 補助線で分けられた2つの角がそれぞれ錯角として等しいことから、求める角の大きさを合計して決める。
+    op: sum_alternate_angles
+    result_display: '84'
+    result_srepr: Integer(84)
+visual_svg: null

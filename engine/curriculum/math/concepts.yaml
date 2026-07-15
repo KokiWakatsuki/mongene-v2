@@ -787,3 +787,42 @@ concepts:
   - id: polygon_transform.reflect
     label: "多角形を対称移動した後の頂点座標を求める/かく"
     unit: g1_l40
+  - id: angle_pair.solve_by_equality
+    label: "対頂角/同位角/錯角の関係を1つ使って角を求める"
+    unit: g2_l31
+  - id: angle_pair.solve_zigzag
+    label: "折れ曲がった線の角を補助線で2つに分けて求める"
+    unit: g2_l31
+  - id: angle_pair_terms.term_recall
+    label: "対頂角・同位角・錯角の位置関係を想起する"
+    unit: g2_l31
+  - id: parallel_angle_property.rule_recall
+    label: "平行線の同位角/錯角が等しいこと・その逆を想起する"
+    unit: g2_l32
+  - id: parallel_lines.judge_from_angle
+    label: "同位角/錯角が等しいという条件から2直線が平行かを判別する"
+    unit: g2_l32
+  - id: triangle_angle.third_angle
+    label: "三角形の内角の和180°で第3の角を求める"
+    unit: g2_l33
+  - id: triangle_angle_properties.rule_recall
+    label: "三角形の内角の和・外角の性質を想起する"
+    unit: g2_l33
+  - id: polygon_angle.interior_sum_and_angle
+    label: "正n角形の内角の和と1つの内角を求める"
+    unit: g2_l34
+  - id: polygon_angle.sides_from_interior_sum
+    label: "内角の和から多角形の辺の数を逆算する"
+    unit: g2_l34
+  - id: polygon_interior_sum_reason.rule_recall
+    label: "n角形が(n-2)個の三角形に分かれる理由を想起する"
+    unit: g2_l34
+  - id: polygon_angle.regular_exterior_angle
+    label: "正n角形の1つの外角の大きさを求める"
+    unit: g2_l35
+  - id: polygon_angle.sides_from_interior_angle
+    label: "1つの内角から正多角形の辺の数を逆算する"
+    unit: g2_l35
+  - id: polygon_exterior_sum_property.rule_recall
+    label: "多角形の外角の和が辺の数によらず一定であることを想起する"
+    unit: g2_l35

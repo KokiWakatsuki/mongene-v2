@@ -1,0 +1,55 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - angle_pair_terms.term_recall
+  provenance:
+    git_commit: ''
+    recipe: math.term_recall
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_term_recall_v1
+    tier: T1
+  requested:
+    form: knowledge
+    level: 1
+    subject: math
+    unit: g2_l31
+  resolved:
+    form: knowledge
+    level: 1
+    subject: math
+    unit: g2_l31
+  seed: 2
+  signature: angle_pair_terms_term_recall
+problem_ref: ded902a86a912b88
+problem_text: 平行な2直線q、zに1本の直線pが交わってできる角のうち、直線pをはさんで反対側にある2つの角の関係 を何といいますか。
+sub_questions:
+- answer:
+    correct: 錯角
+    distractors:
+    - 対頂角
+    - 同位角
+    fact_id: angle_pair_terms.term.alternate
+    kind: choice
+  cause_tags: []
+  concept_tags:
+  - angle_pair_terms.term_recall
+  explanation: まず、説明されている式や数の部分がどれかを読み取る。 説明されている対象を読み取る次に、その対象を表す用語の名前を思い出す。 錯角
+  hints:
+  - 説明されている式や数の部分がどれかを読み取る。
+  label: (1)
+  prompt_text: choice を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 説明されている式や数の部分がどれかを読み取る。
+    op: identify_description
+    result_display: 説明されている対象を読み取る
+    result_srepr: alternate
+  - args: []
+    narration: その対象を表す用語の名前を思い出す。
+    op: name_concept
+    result_display: 錯角
+    result_srepr: 錯角
+visual_svg: null

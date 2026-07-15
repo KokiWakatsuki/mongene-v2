@@ -1,0 +1,52 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - polygon_angle.regular_exterior_angle
+  provenance:
+    git_commit: ''
+    recipe: math.regular_polygon_exterior_angle
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_regular_polygon_exterior_angle_v1
+    tier: T1
+  requested:
+    form: find_value
+    level: 1
+    subject: math
+    unit: g2_l35
+  resolved:
+    form: find_value
+    level: 1
+    subject: math
+    unit: g2_l35
+  seed: 1
+  signature: regular_polygon_exterior_angle
+problem_ref: f27d78dc3bc32857
+problem_text: 正348角形の1つの外角の大きさを求めよ。
+sub_questions:
+- answer:
+    display: 30/29
+    kind: symbolic
+    srepr: Rational(30, 29)
+  cause_tags: []
+  concept_tags:
+  - polygon_angle.regular_exterior_angle
+  explanation: まず、多角形の外角の和は、辺の数によらずつねに一定であることを思い出す。 多角形の外角の和がつねに一定であることを思い出す次に、正多角形はすべての外角が等しいことから、外角の和を辺の数でわって1つの外角を求める。 30/29
+  hints:
+  - 多角形の外角の和は、辺の数によらずつねに一定であることを思い出す。
+  label: (1)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 多角形の外角の和は、辺の数によらずつねに一定であることを思い出す。
+    op: recall_exterior_sum_constant
+    result_display: 多角形の外角の和がつねに一定であることを思い出す
+    result_srepr: ''
+  - args: []
+    narration: 正多角形はすべての外角が等しいことから、外角の和を辺の数でわって1つの外角を求める。
+    op: divide_by_sides
+    result_display: 30/29
+    result_srepr: Rational(30, 29)
+visual_svg: null

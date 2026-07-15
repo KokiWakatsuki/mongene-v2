@@ -1,0 +1,27 @@
+family: math.g2_l33.find_value
+form: find_value
+source_desc: |
+  内角の和180°を使い、三角形の残りの角を求める
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: 内角の和/外角=隣り2内角の和を1回使い角を求める。
+       example: 右の三角形ABCで、∠A=50°、∠B=60° のとき、∠C の大きさを求めよ。
+  Lv2（補助線や複数三角形にまたがり多段で角を求める）は具体的な図の構成に強く
+  依存し一般化が難しいため本セルでは扱わない（次段対応）。
+  【設計モデル】新設 solver math.triangle_third_angle（2つの内角だけから
+  c=180-a-b を計算・恒真）。
+concepts_default: [triangle_angle.third_angle]
+levels:
+  "1":
+    signature: triangle_third_angle
+    recipe: math.triangle_third_angle
+    params:
+      angle_domain: {int_range: [1, 178]}
+    given: [condition]
+    asked: [value]
+    visual: none
+    text: {tier: T1, template: lf_triangle_third_angle_v1}
+    hints: [steps_prefix]
+    concept_tags: [triangle_angle.third_angle]
+    cause_tags: []
+remedial:
+  default_level: 1

@@ -3473,6 +3473,8 @@ _TERM_RECALL_CELLS = [
     ("math.g1_l43.knowledge", 1),
     ("math.g1_l44.knowledge", 2),
     ("math.g1_l45.knowledge", 1),
+    # C9 g2 平行と合同（用語想起）
+    ("math.g2_l31.knowledge", 1),
 ]
 
 
@@ -3713,6 +3715,11 @@ _RULE_RECALL_CELLS = [
     ("math.g3_l28.knowledge", 2),
     # C12 確率（規則・意味の想起）
     ("math.g2_l54.knowledge", 1),
+    # C9 g2 平行と合同（規則・意味の想起）
+    ("math.g2_l32.knowledge", 1),
+    ("math.g2_l33.knowledge", 1),
+    ("math.g2_l34.knowledge", 1),
+    ("math.g2_l35.knowledge", 1),
 ]
 
 
@@ -5439,3 +5446,183 @@ def test_reflect_polygon_double_solve_property(family, level, seed):
     else:
         expected = {sympy.srepr(sympy.Tuple(-x, y)) for x, y in orig}
     assert set_recipe == expected
+
+
+# ---------------------------------------------------------------------------
+# C9 g2 図形（角度追跡）: g2_l31〜l35
+# ---------------------------------------------------------------------------
+def test_solve_angle_by_equality_relation_g2_l31_construct():
+    ctx = _make_ctx("math.g2_l31.find_value", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "angle_equality_g2_l31"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "value"
+    assert mr.params["relation"] in ("vertical", "corresponding", "alternate")
+    assert sq.answer.srepr == sympy.srepr(sympy.Integer(mr.params["angle"]))
+
+
+def test_solve_angle_by_equality_relation_g2_l32_construct():
+    ctx = _make_ctx("math.g2_l32.find_value", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "angle_equality_g2_l32"
+    assert mr.params["relation"] in ("corresponding", "alternate")
+
+
+@pytest.mark.parametrize(
+    "family,level", [("math.g2_l31.find_value", 1), ("math.g2_l32.find_value", 1)]
+)
+@pytest.mark.parametrize("seed", range(100))
+def test_solve_angle_by_equality_relation_double_solve_property(family, level, seed):
+    ctx = _make_ctx(family, level)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.solve_angle_by_equality_relation")
+    sol = solver(mr.params["relation"], mr.params["angle"])
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+    assert sol.answer.srepr == sympy.srepr(sympy.Integer(mr.params["angle"]))
+
+
+@pytest.mark.parametrize(
+    "family,level", [("math.g2_l31.find_value", 2), ("math.g2_l32.find_value", 2)]
+)
+@pytest.mark.parametrize("seed", range(100))
+def test_solve_zigzag_angle_sum_double_solve_property(family, level, seed):
+    ctx = _make_ctx(family, level)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.solve_zigzag_angle_sum")
+    sol = solver(mr.params["angle1"], mr.params["angle2"])
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+    assert sol.answer.srepr == sympy.srepr(sympy.Integer(mr.params["angle1"] + mr.params["angle2"]))
+
+
+def test_judge_parallel_from_angle_condition_construct():
+    ctx = _make_ctx("math.g2_l32.knowledge", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "judge_parallel_from_angle_condition"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "choice"
+    assert not any(ch.isdigit() for ch in sq.answer.correct)
+    assert sq.answer.correct not in sq.answer.distractors
+    is_equal = mr.params["is_equal"] == "True"
+    assert is_equal == (mr.params["angle_a"] == mr.params["angle_b"])
+
+
+@pytest.mark.parametrize("seed", range(100))
+def test_judge_parallel_from_angle_condition_double_solve_property(seed):
+    ctx = _make_ctx("math.g2_l32.knowledge", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.judge_parallel_from_angle_condition")
+    sol = solver(mr.params["is_equal"])
+    assert sol.answer.correct == mr.sub_questions[0].answer.correct
+
+
+def test_triangle_third_angle_construct():
+    ctx = _make_ctx("math.g2_l33.find_value", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "triangle_third_angle"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "value"
+    assert mr.params["angle_a"] + mr.params["angle_b"] < 180
+
+
+@pytest.mark.parametrize("seed", range(100))
+def test_triangle_third_angle_double_solve_property(seed):
+    ctx = _make_ctx("math.g2_l33.find_value", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.triangle_third_angle")
+    sol = solver(mr.params["angle_a"], mr.params["angle_b"])
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+    expected = 180 - mr.params["angle_a"] - mr.params["angle_b"]
+    assert sol.answer.srepr == sympy.srepr(sympy.Integer(expected))
+
+
+def test_polygon_interior_sum_and_angle_construct():
+    ctx = _make_ctx("math.g2_l34.find_value", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "polygon_interior_sum_and_angle"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "value"
+    n = mr.params["sides"]
+    expected = sympy.Tuple(180 * (n - 2), sympy.Rational(180 * (n - 2), n))
+    assert sq.answer.srepr == sympy.srepr(expected)
+
+
+@pytest.mark.parametrize("seed", range(100))
+def test_polygon_interior_sum_and_angle_double_solve_property(seed):
+    ctx = _make_ctx("math.g2_l34.find_value", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.polygon_interior_sum_and_angle")
+    sol = solver(mr.params["sides"])
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+
+
+def test_polygon_sides_from_interior_sum_construct():
+    ctx = _make_ctx("math.g2_l34.find_value", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "polygon_sides_from_interior_sum"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "value"
+    assert sq.answer.srepr == sympy.srepr(sympy.Integer(mr.params["sides"]))
+    assert mr.params["interior_sum"] == 180 * (mr.params["sides"] - 2)
+
+
+@pytest.mark.parametrize("seed", range(100))
+def test_polygon_sides_from_interior_sum_double_solve_property(seed):
+    ctx = _make_ctx("math.g2_l34.find_value", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.polygon_sides_from_interior_sum")
+    sol = solver(mr.params["interior_sum"])
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+
+
+def test_regular_polygon_exterior_angle_construct():
+    ctx = _make_ctx("math.g2_l35.find_value", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "regular_polygon_exterior_angle"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "value"
+    n = mr.params["sides"]
+    assert sq.answer.srepr == sympy.srepr(sympy.Rational(360, n))
+
+
+@pytest.mark.parametrize("seed", range(100))
+def test_regular_polygon_exterior_angle_double_solve_property(seed):
+    ctx = _make_ctx("math.g2_l35.find_value", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.regular_polygon_exterior_angle")
+    sol = solver(mr.params["sides"])
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+
+
+def test_polygon_sides_from_interior_angle_construct():
+    ctx = _make_ctx("math.g2_l35.find_value", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "polygon_sides_from_interior_angle"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "value"
+    assert sq.answer.srepr == sympy.srepr(sympy.Integer(mr.params["sides"]))
+
+
+@pytest.mark.parametrize("seed", range(100))
+def test_polygon_sides_from_interior_angle_double_solve_property(seed):
+    ctx = _make_ctx("math.g2_l35.find_value", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.polygon_sides_from_interior_angle")
+    sol = solver(mr.params["interior_angle"])
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+    assert sol.answer.srepr == sympy.srepr(sympy.Integer(mr.params["sides"]))

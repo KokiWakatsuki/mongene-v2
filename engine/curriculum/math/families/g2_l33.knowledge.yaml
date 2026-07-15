@@ -1,0 +1,28 @@
+family: math.g2_l33.knowledge
+form: knowledge
+source_desc: |
+  内角の和180°・外角の性質を想起する
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: 内角の和180°・外角の性質を想起する。
+       example: 三角形の3つの内角の和は何度か答えよ。また、三角形の1つの外角は、
+                それととなり合わない2つの内角についてどのようなことがいえるか答えよ。
+  【設計モデル】規則想起ハブ（既存 math.recall_rule・_RULE_MAPS に topic
+  "triangle_angle_properties"（内角の和/外角の性質の2 concept）を追加）。内角の和は
+  digit-free のため「一直線の角(平角)に等しい」と幾何的に言い換える。
+concepts_default: [triangle_angle_properties.rule_recall]
+levels:
+  "1":
+    signature: triangle_angle_properties_rule_recall
+    recipe: math.recall_rule
+    params:
+      topic: triangle_angle_properties
+      concept_set: [interior_sum, exterior_property]
+    given: [statement]
+    asked: [choice]
+    visual: none
+    text: {tier: T1, template: lf_rule_recall_v1}
+    hints: [steps_prefix]
+    concept_tags: [triangle_angle_properties.rule_recall]
+    cause_tags: []
+remedial:
+  default_level: 1

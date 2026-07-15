@@ -1,0 +1,55 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - angle_pair_terms.term_recall
+  provenance:
+    git_commit: ''
+    recipe: math.term_recall
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_term_recall_v1
+    tier: T1
+  requested:
+    form: knowledge
+    level: 1
+    subject: math
+    unit: g2_l31
+  resolved:
+    form: knowledge
+    level: 1
+    subject: math
+    unit: g2_l31
+  seed: 3
+  signature: angle_pair_terms_term_recall
+problem_ref: b6c5cfcfff5d699d
+problem_text: 2直線v、rが1点で交わってできる4つの角のうち、向かい合う位置にある2つの角の関係 を何といいますか。
+sub_questions:
+- answer:
+    correct: 対頂角
+    distractors:
+    - 同位角
+    - 錯角
+    fact_id: angle_pair_terms.term.vertical
+    kind: choice
+  cause_tags: []
+  concept_tags:
+  - angle_pair_terms.term_recall
+  explanation: まず、説明されている式や数の部分がどれかを読み取る。 説明されている対象を読み取る次に、その対象を表す用語の名前を思い出す。 対頂角
+  hints:
+  - 説明されている式や数の部分がどれかを読み取る。
+  label: (1)
+  prompt_text: choice を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 説明されている式や数の部分がどれかを読み取る。
+    op: identify_description
+    result_display: 説明されている対象を読み取る
+    result_srepr: vertical
+  - args: []
+    narration: その対象を表す用語の名前を思い出す。
+    op: name_concept
+    result_display: 対頂角
+    result_srepr: 対頂角
+visual_svg: null

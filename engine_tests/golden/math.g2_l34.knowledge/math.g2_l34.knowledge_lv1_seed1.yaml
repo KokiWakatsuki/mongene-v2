@@ -1,0 +1,55 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - polygon_interior_sum_reason.rule_recall
+  provenance:
+    git_commit: ''
+    recipe: math.recall_rule
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_rule_recall_v1
+    tier: T1
+  requested:
+    form: knowledge
+    level: 1
+    subject: math
+    unit: g2_l34
+  resolved:
+    form: knowledge
+    level: 1
+    subject: math
+    unit: g2_l34
+  seed: 1
+  signature: polygon_interior_sum_reason_rule_recall
+problem_ref: e642c49dea3fad3f
+problem_text: 218角形の内角の和を求めるとき、1つの頂点から対角線をひいて三角形に分けられる、その個数の求め方。正しく述べているものを1つ選びなさい。
+sub_questions:
+- answer:
+    correct: 一つの頂点からひける対角線によって、三角形に分けられるから
+    distractors:
+    - 各辺の中点を結ぶ線分によって、三角形に分けられるから
+    - 対角線をすべてひくことによって、三角形に分けられるから
+    fact_id: polygon_interior_sum_reason.rule.diagonal_from_vertex
+    kind: choice
+  cause_tags: []
+  concept_tags:
+  - polygon_interior_sum_reason.rule_recall
+  explanation: まず、問題で問われている規則や約束が、何についてのものかを読み取る。 問われている規則が何についてかを読み取る次に、その規則の正しい内容を思い出して選ぶ。 一つの頂点からひける対角線によって、三角形に分けられるから
+  hints:
+  - 問題で問われている規則や約束が、何についてのものかを読み取る。
+  label: (1)
+  prompt_text: choice を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 問題で問われている規則や約束が、何についてのものかを読み取る。
+    op: read_rule_context
+    result_display: 問われている規則が何についてかを読み取る
+    result_srepr: diagonal_from_vertex
+  - args: []
+    narration: その規則の正しい内容を思い出して選ぶ。
+    op: recall_correct_rule
+    result_display: 一つの頂点からひける対角線によって、三角形に分けられるから
+    result_srepr: 一つの頂点からひける対角線によって、三角形に分けられるから
+visual_svg: null

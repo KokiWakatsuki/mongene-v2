@@ -1,0 +1,11 @@
+approved_at: '2026-07-15T15:37:48.444645'
+approver: koki
+content_sha256: 90e3bbc8ba575aa90a1d63d38b5791616989ff858cabe0e7a63f18a6076c9b3b
+family: math.g2_l32.knowledge
+files:
+- engine_tests/golden/math.g2_l32.knowledge/math.g2_l32.knowledge_lv1_seed1.yaml
+- engine_tests/golden/math.g2_l32.knowledge/math.g2_l32.knowledge_lv1_seed2.yaml
+- engine_tests/golden/math.g2_l32.knowledge/math.g2_l32.knowledge_lv1_seed3.yaml
+- engine_tests/golden/math.g2_l32.knowledge/math.g2_l32.knowledge_lv2_seed1.yaml
+- engine_tests/golden/math.g2_l32.knowledge/math.g2_l32.knowledge_lv2_seed2.yaml
+- engine_tests/golden/math.g2_l32.knowledge/math.g2_l32.knowledge_lv2_seed3.yaml

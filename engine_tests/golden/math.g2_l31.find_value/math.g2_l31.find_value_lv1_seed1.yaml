@@ -1,0 +1,52 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - angle_pair.solve_by_equality
+  provenance:
+    git_commit: ''
+    recipe: math.solve_angle_by_equality_relation
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_angle_equality_v1
+    tier: T1
+  requested:
+    form: find_value
+    level: 1
+    subject: math
+    unit: g2_l31
+  resolved:
+    form: find_value
+    level: 1
+    subject: math
+    unit: g2_l31
+  seed: 1
+  signature: angle_equality_g2_l31
+problem_ref: d4a9fbe1ce046e1d
+problem_text: 2直線ℓ、mが1点で交わっている。∠aの大きさは85°である。∠aの対頂角にあたる∠xの大きさを求めよ。
+sub_questions:
+- answer:
+    display: '85'
+    kind: symbolic
+    srepr: Integer(85)
+  cause_tags: []
+  concept_tags:
+  - angle_pair.solve_by_equality
+  explanation: まず、2直線が交わってできる対頂角の関係を確認する。 角の位置関係を読み取る次に、その関係にある角は等しいという性質から、求める角の大きさを決める。 85
+  hints:
+  - 2直線が交わってできる対頂角の関係を確認する。
+  label: (1)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 2直線が交わってできる対頂角の関係を確認する。
+    op: identify_angle_relation
+    result_display: 角の位置関係を読み取る
+    result_srepr: vertical
+  - args: []
+    narration: その関係にある角は等しいという性質から、求める角の大きさを決める。
+    op: apply_angle_equality
+    result_display: '85'
+    result_srepr: Integer(85)
+visual_svg: null

@@ -1,0 +1,45 @@
+family: math.g2_l31.find_value
+form: find_value
+source_desc: |
+  対頂角・同位角・錯角の関係を1つ、または補助線で2つ使い角を求める
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: 1つの関係(対頂角/錯角/同位角)を直接使い角を求める。
+       example: 右の図で、l∥m のとき、錯角の関係を使って ∠x の大きさを求めよ。
+                ただし図に示された角は 65° とする。
+  Lv2 desc: 補助線や複数の関係を組み合わせて角を求める。
+       example: 右の図で、l∥m である。折れ曲がった線の途中の角がそれぞれ 40°、
+                30° であるとき、補助線をひいて ∠x の大きさを求めよ。
+  【設計モデル】新設 solver math.solve_angle_by_equality_relation（Lv1・対頂角/
+  同位角/錯角のいずれも「等しい」という関係を1つ使うだけの恒真計算）、
+  math.solve_zigzag_angle_sum（Lv2・折れ曲がった線の頂点を通る補助線で2つの錯角に
+  分け、x=角1+角2 という閉じた式で求める）。両 solver は g2_l32.find_value と共用
+  する（family をまたぐ再利用は level_sep に影響しない）。
+concepts_default: [angle_pair.solve_by_equality]
+levels:
+  "1":
+    signature: angle_equality_g2_l31
+    recipe: math.solve_angle_by_equality_relation
+    params:
+      relation_set: [vertical, corresponding, alternate]
+      angle_domain: {int_range: [1, 179]}
+    given: [condition]
+    asked: [value]
+    visual: none
+    text: {tier: T1, template: lf_angle_equality_v1}
+    hints: [steps_prefix]
+    concept_tags: [angle_pair.solve_by_equality]
+    cause_tags: []
+  "2":
+    signature: zigzag_angle_sum_g2_l31
+    recipe: math.solve_zigzag_angle_sum
+    params:
+      angle_domain: {int_range: [1, 89]}
+    given: [condition]
+    asked: [value]
+    visual: none
+    text: {tier: T1, template: lf_zigzag_angle_sum_v1}
+    hints: [steps_prefix]
+    concept_tags: [angle_pair.solve_zigzag]
+    cause_tags: []
+remedial:
+  default_level: 1

@@ -297,15 +297,28 @@ _POINT_LETTERS = [
     "A", "B", "C", "D", "E", "F", "G", "H", "J", "K", "L", "M", "N", "P", "Q", "R",
 ]
 
+# 図形の直線を表す小文字（C9 平行と合同クラスタの用語想起・surface の variety 用）。
+_LINE_LABELS = ["ℓ", "m", "n", "p", "q", "r", "s", "t", "u", "v", "w", "z"]
 
-def _draw_distinct_points(k: int, rng: Rng) -> list[str]:
-    """相異なる k 個の点名（大文字）を引く（_draw_distinct_letters と同型）。"""
-    pool = list(_POINT_LETTERS)
+
+def _draw_distinct_from_pool(pool_source: list[str], k: int, rng: Rng) -> list[str]:
+    """pool_source から相異なる k 個を引く（_draw_distinct_points の汎用版）。"""
+    pool = list(pool_source)
     out: list[str] = []
     for _ in range(k):
         idx = int(draw({"int_set": list(range(len(pool)))}, rng))
         out.append(pool.pop(idx))
     return out
+
+
+def _draw_distinct_points(k: int, rng: Rng) -> list[str]:
+    """相異なる k 個の点名（大文字）を引く（_draw_distinct_from_pool の点名版）。"""
+    return _draw_distinct_from_pool(_POINT_LETTERS, k, rng)
+
+
+def _draw_distinct_lines(k: int, rng: Rng) -> list[str]:
+    """相異なる k 個の直線名（小文字）を引く（_draw_distinct_from_pool の直線名版）。"""
+    return _draw_distinct_from_pool(_LINE_LABELS, k, rng)
 
 
 def _shuffle_pairs(pairs: list[tuple[str, str]], rng: Rng) -> list[tuple[str, str]]:
@@ -460,6 +473,8 @@ _TERM_RECALL_CONCEPTS = [
     "perpendicular_terms.term_recall",
     "construction_choice_terms.term_recall",
     "circle_terms.term_recall",
+    # C9 g2 平行と合同（用語想起）
+    "angle_pair_terms.term_recall",
 ]
 
 
@@ -788,6 +803,21 @@ def _draw_term_statement(domain: str, concept: str, rng: Rng, p: dict[str, objec
             return f"円の中心{po}と円周上の2点{pa}、{pb}を通る2つの半径、およびその間の弧で囲まれた図形"
         return f"円の中心{po}と円周上の2点{pa}、{pb}を結ぶ2つの半径がつくる、中心にできる角"  # central_angle
 
+    if domain == "angle_pair_terms":
+        # g2_l31 対頂角・同位角・錯角の用語。具体例の直線名を埋め込み surface を分散する。
+        la, lb, lc = _draw_distinct_lines(3, rng)
+        if concept == "vertical":
+            return f"2直線{la}、{lb}が1点で交わってできる4つの角のうち、向かい合う位置にある2つの角の関係"
+        if concept == "corresponding":
+            return (
+                f"平行な2直線{la}、{lb}に1本の直線{lc}が交わってできる角のうち、"
+                f"直線{lc}に対して同じ側の同じ位置にある2つの角の関係"
+            )
+        return (
+            f"平行な2直線{la}、{lb}に1本の直線{lc}が交わってできる角のうち、"
+            f"直線{lc}をはさんで反対側にある2つの角の関係"
+        )  # alternate
+
     if domain == "prime_concepts":
         # g1_l11 素数まわりの用語。相異なる2つの具体例を埋め込み surface を分散する
         # （小さいプールを2値で使い variety を確保し dup≤0.20 にする）。
@@ -1096,6 +1126,11 @@ _RULE_RECALL_CONCEPTS = [
     "quadratic_roc_property.rule_recall",
     # C12 確率（規則・意味の想起）
     "complementary_event.rule_recall",
+    # C9 g2 平行と合同（規則・意味の想起）
+    "parallel_angle_property.rule_recall",
+    "triangle_angle_properties.rule_recall",
+    "polygon_interior_sum_reason.rule_recall",
+    "polygon_exterior_sum_property.rule_recall",
 ]
 
 
@@ -1276,6 +1311,30 @@ def _draw_rule_statement(topic: str, concept: str, rng: Rng, p: dict[str, object
         den = int(draw(p["number_domain"], rng))
         num = int(draw({"int_range": [1, den - 1]}, rng))
         return f"あることがらの起こる確率が {num}/{den} であるとき、その「余事象」（そのことがらが起こらないという事象）の確率"
+
+    if topic == "parallel_angle_property":
+        # g2_l32 平行線の性質とその逆。具体例の直線名を埋め込み surface を分散する。
+        la, lb, lc = _draw_distinct_lines(3, rng)
+        if concept == "property":
+            return f"2直線{la}、{lb}が平行であるとき、直線{lc}がつくる同位角や錯角について成り立つこと"
+        return f"2直線{la}、{lb}に直線{lc}が交わってできる同位角や錯角が等しいとき、2直線{la}、{lb}についていえること"
+
+    if topic == "triangle_angle_properties":
+        # g2_l33 三角形の内角の和・外角の性質。具体例の三角形の点名を埋め込み surface を分散する。
+        pa, pb, pc = _draw_distinct_points(3, rng)
+        if concept == "interior_sum":
+            return f"三角形{pa}{pb}{pc}の3つの内角をすべてたした大きさ"
+        return f"三角形{pa}{pb}{pc}の頂点{pc}での外角の大きさ"  # exterior_property
+
+    if topic == "polygon_interior_sum_reason":
+        # g2_l34 多角形の内角の和の公式のしくみ。具体例の辺の数 n を surface に埋め込み dup 分散。
+        n = int(draw(p["sides_domain"], rng))
+        return f"{n}角形の内角の和を求めるとき、1つの頂点から対角線をひいて三角形に分けられる、その個数の求め方"
+
+    if topic == "polygon_exterior_sum_property":
+        # g2_l35 多角形の外角の和が辺の数によらず一定であること。具体例の辺の数 n を埋め込み dup 分散。
+        n = int(draw(p["sides_domain"], rng))
+        return f"{n}角形の外角の和は、辺の数を変えた他の多角形の外角の和と比べてどうなるか"
 
     raise ValueError(f"未知の topic: {topic!r}")
 

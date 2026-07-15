@@ -1,0 +1,52 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - triangle_angle.third_angle
+  provenance:
+    git_commit: ''
+    recipe: math.triangle_third_angle
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_triangle_third_angle_v1
+    tier: T1
+  requested:
+    form: find_value
+    level: 1
+    subject: math
+    unit: g2_l33
+  resolved:
+    form: find_value
+    level: 1
+    subject: math
+    unit: g2_l33
+  seed: 1
+  signature: triangle_third_angle
+problem_ref: f86bf332c2b42250
+problem_text: 三角形ABCで、∠A=44°、∠B=11°のとき、∠Cの大きさを求めよ。
+sub_questions:
+- answer:
+    display: '125'
+    kind: symbolic
+    srepr: Integer(125)
+  cause_tags: []
+  concept_tags:
+  - triangle_angle.third_angle
+  explanation: まず、わかっている2つの内角の大きさを読み取る。 わかっている2つの内角を読み取る次に、三角形の内角の和が一直線の角(平角)に等しいことから、残りの内角の大きさを求める。 125
+  hints:
+  - わかっている2つの内角の大きさを読み取る。
+  label: (1)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args: []
+    narration: わかっている2つの内角の大きさを読み取る。
+    op: identify_two_interior_angles
+    result_display: わかっている2つの内角を読み取る
+    result_srepr: ''
+  - args: []
+    narration: 三角形の内角の和が一直線の角(平角)に等しいことから、残りの内角の大きさを求める。
+    op: subtract_from_sum
+    result_display: '125'
+    result_srepr: Integer(125)
+visual_svg: null

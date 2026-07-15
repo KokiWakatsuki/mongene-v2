@@ -1,0 +1,44 @@
+family: math.g2_l32.knowledge
+form: knowledge
+source_desc: |
+  平行なら錯角/同位角が等しい・その逆を想起し、角の条件から平行かどうかを判別する
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: 平行なら錯角/同位角が等しい・その逆を想起する。
+       example: 2直線が平行であるとき、同位角や錯角の大きさについてどのようなことが
+                いえるか答えよ。また、その逆にあたることがらも答えよ。
+  Lv2 desc: 角の条件から平行かどうかを判別・適用する。
+       example: 右の図で、2直線 l、m に1本の直線が交わっている。同位角がともに
+                110° であるとき、l と m は平行であるといえるか、理由とともに答えよ。
+  【設計モデル】Lv1: 規則想起ハブ（既存 math.recall_rule・_RULE_MAPS に topic
+  "parallel_angle_property"（性質/逆の2 concept）を追加）。Lv2: 新設 solver
+  math.judge_parallel_from_angle_condition（同位角が等しいかどうかから平行を判別）。
+concepts_default: [parallel_angle_property.rule_recall]
+levels:
+  "1":
+    signature: parallel_angle_property_rule_recall
+    recipe: math.recall_rule
+    params:
+      topic: parallel_angle_property
+      concept_set: [property, converse]
+    given: [statement]
+    asked: [choice]
+    visual: none
+    text: {tier: T1, template: lf_rule_recall_v1}
+    hints: [steps_prefix]
+    concept_tags: [parallel_angle_property.rule_recall]
+    cause_tags: []
+  "2":
+    signature: judge_parallel_from_angle_condition
+    recipe: math.judge_parallel_from_angle_condition
+    params:
+      angle_domain: {int_range: [1, 179]}
+      diff_domain: {int_range: [1, 30]}
+    given: [statement]
+    asked: [choice]
+    visual: none
+    text: {tier: T1, template: lf_judge_parallel_from_angle_v1}
+    hints: [steps_prefix]
+    concept_tags: [parallel_lines.judge_from_angle]
+    cause_tags: []
+remedial:
+  default_level: 1
