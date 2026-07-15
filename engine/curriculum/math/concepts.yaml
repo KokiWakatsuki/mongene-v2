@@ -778,3 +778,12 @@ concepts:
   - id: sector.solve_central_angle
     label: "おうぎ形の面積から中心角の大きさを逆算する"
     unit: g1_l46
+  - id: polygon_transform.translate
+    label: "多角形を平行移動した後の頂点座標を求める/かく"
+    unit: g1_l38
+  - id: polygon_transform.rotate
+    label: "多角形を回転移動した後の頂点座標を求める/かく"
+    unit: g1_l39
+  - id: polygon_transform.reflect
+    label: "多角形を対称移動した後の頂点座標を求める/かく"
+    unit: g1_l40

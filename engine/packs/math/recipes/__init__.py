@@ -22,5 +22,6 @@ from engine.packs.math.recipes import quartile  # noqa: F401  (登録の副作�
 from engine.packs.math.recipes import sample_survey  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.recipes import exam_fusion  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.recipes import plane_geometry  # noqa: F401  (登録の副作用のため import)
+from engine.packs.math.recipes import plane_transform  # noqa: F401,E402  (letter_expr の _draw_distinct_points に依存＝後に import)
 
 __all__: list[str] = []

@@ -1,0 +1,120 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - polygon_transform.reflect
+  provenance:
+    git_commit: ''
+    recipe: math.reflect_polygon_coordinate
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_polygon_transform_coordinate_v1
+    tier: T1
+  requested:
+    form: graph_table
+    level: 2
+    subject: math
+    unit: g1_l40
+  resolved:
+    form: graph_table
+    level: 2
+    subject: math
+    unit: g1_l40
+  seed: 1
+  signature: reflect_polygon_coordinate
+problem_ref: a79378d607c0d335
+problem_text: 座標平面上に三角形ABCがあり、A(2, 1)、B(-2, 2)、C(-1, -3)である。この三角形を、x軸について対称移動したとき、移動後の各頂点の座標をそれぞれ答え、移動後の三角形を図示せよ。
+sub_questions:
+- answer:
+    features:
+    - display: (2, -1)
+      kind: point
+      srepr: Tuple(Integer(2), Integer(-1))
+    - display: (-2, -2)
+      kind: point
+      srepr: Tuple(Integer(-2), Integer(-2))
+    - display: (-1, 3)
+      kind: point
+      srepr: Tuple(Integer(-1), Integer(3))
+    kind: graph
+    solution_svg_ref: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400"><rect x="0" y="0" width="400" height="400" fill="none" stroke="none"/><line x1="28.00" y1="28.00"
+      x2="28.00" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="52.57" y1="28.00" x2="52.57" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="77.14" y1="28.00" x2="77.14" y2="372.00"
+      stroke="#bbbbbb" stroke-width="0.5"/><line x1="101.71" y1="28.00" x2="101.71" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="126.29" y1="28.00" x2="126.29" y2="372.00" stroke="#bbbbbb"
+      stroke-width="0.5"/><line x1="150.86" y1="28.00" x2="150.86" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="175.43" y1="28.00" x2="175.43" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line
+      x1="200.00" y1="28.00" x2="200.00" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="224.57" y1="28.00" x2="224.57" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="249.14" y1="28.00"
+      x2="249.14" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="273.71" y1="28.00" x2="273.71" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="298.29" y1="28.00" x2="298.29" y2="372.00"
+      stroke="#bbbbbb" stroke-width="0.5"/><line x1="322.86" y1="28.00" x2="322.86" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="347.43" y1="28.00" x2="347.43" y2="372.00" stroke="#bbbbbb"
+      stroke-width="0.5"/><line x1="372.00" y1="28.00" x2="372.00" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="372.00" x2="372.00" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line
+      x1="28.00" y1="347.43" x2="372.00" y2="347.43" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="322.86" x2="372.00" y2="322.86" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="298.29"
+      x2="372.00" y2="298.29" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="273.71" x2="372.00" y2="273.71" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="249.14" x2="372.00" y2="249.14"
+      stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="224.57" x2="372.00" y2="224.57" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="200.00" x2="372.00" y2="200.00" stroke="#bbbbbb"
+      stroke-width="0.5"/><line x1="28.00" y1="175.43" x2="372.00" y2="175.43" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="150.86" x2="372.00" y2="150.86" stroke="#bbbbbb" stroke-width="0.5"/><line
+      x1="28.00" y1="126.29" x2="372.00" y2="126.29" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="101.71" x2="372.00" y2="101.71" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="77.14"
+      x2="372.00" y2="77.14" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="52.57" x2="372.00" y2="52.57" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="28.00" x2="372.00" y2="28.00"
+      stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="200.00" x2="372.00" y2="200.00" stroke="#000000" stroke-width="1.5"/><line x1="200.00" y1="28.00" x2="200.00" y2="372.00" stroke="#000000"
+      stroke-width="1.5"/><path d="M 249.14 175.43 L 150.86 150.86 L 175.43 273.71 Z" fill="none" stroke="#000000" stroke-width="2"/><circle cx="249.14" cy="175.43" r="2.5" fill="#000000"/><text x="255.14"
+      y="169.43" font-size="13" fill="#000000">A</text><circle cx="150.86" cy="150.86" r="2.5" fill="#000000"/><text x="156.86" y="144.86" font-size="13" fill="#000000">B</text><circle cx="175.43" cy="273.71"
+      r="2.5" fill="#000000"/><text x="181.43" y="267.71" font-size="13" fill="#000000">C</text><path d="M 249.14 224.57 L 150.86 249.14 L 175.43 126.29 Z" fill="none" stroke="#000000" stroke-width="2"
+      stroke-dasharray="5 4"/><circle cx="249.14" cy="224.57" r="2.5" fill="#000000"/><text x="255.14" y="218.57" font-size="13" fill="#000000">A'</text><circle cx="150.86" cy="249.14" r="2.5" fill="#000000"/><text
+      x="156.86" y="243.14" font-size="13" fill="#000000">B'</text><circle cx="175.43" cy="126.29" r="2.5" fill="#000000"/><text x="181.43" y="120.29" font-size="13" fill="#000000">C'</text><text x="28.00"
+      y="212.00" font-size="10" text-anchor="middle" fill="#000000">-7</text><text x="52.57" y="212.00" font-size="10" text-anchor="middle" fill="#000000">-6</text><text x="77.14" y="212.00" font-size="10"
+      text-anchor="middle" fill="#000000">-5</text><text x="101.71" y="212.00" font-size="10" text-anchor="middle" fill="#000000">-4</text><text x="126.29" y="212.00" font-size="10" text-anchor="middle"
+      fill="#000000">-3</text><text x="150.86" y="212.00" font-size="10" text-anchor="middle" fill="#000000">-2</text><text x="175.43" y="212.00" font-size="10" text-anchor="middle" fill="#000000">-1</text><text
+      x="224.57" y="212.00" font-size="10" text-anchor="middle" fill="#000000">1</text><text x="249.14" y="212.00" font-size="10" text-anchor="middle" fill="#000000">2</text><text x="273.71" y="212.00"
+      font-size="10" text-anchor="middle" fill="#000000">3</text><text x="298.29" y="212.00" font-size="10" text-anchor="middle" fill="#000000">4</text><text x="322.86" y="212.00" font-size="10" text-anchor="middle"
+      fill="#000000">5</text><text x="347.43" y="212.00" font-size="10" text-anchor="middle" fill="#000000">6</text><text x="372.00" y="212.00" font-size="10" text-anchor="middle" fill="#000000">7</text><text
+      x="192.00" y="375.00" font-size="10" text-anchor="end" fill="#000000">-7</text><text x="192.00" y="350.43" font-size="10" text-anchor="end" fill="#000000">-6</text><text x="192.00" y="325.86" font-size="10"
+      text-anchor="end" fill="#000000">-5</text><text x="192.00" y="301.29" font-size="10" text-anchor="end" fill="#000000">-4</text><text x="192.00" y="276.71" font-size="10" text-anchor="end" fill="#000000">-3</text><text
+      x="192.00" y="252.14" font-size="10" text-anchor="end" fill="#000000">-2</text><text x="192.00" y="227.57" font-size="10" text-anchor="end" fill="#000000">-1</text><text x="192.00" y="203.00" font-size="10"
+      text-anchor="end" fill="#000000">0</text><text x="192.00" y="178.43" font-size="10" text-anchor="end" fill="#000000">1</text><text x="192.00" y="153.86" font-size="10" text-anchor="end" fill="#000000">2</text><text
+      x="192.00" y="129.29" font-size="10" text-anchor="end" fill="#000000">3</text><text x="192.00" y="104.71" font-size="10" text-anchor="end" fill="#000000">4</text><text x="192.00" y="80.14" font-size="10"
+      text-anchor="end" fill="#000000">5</text><text x="192.00" y="55.57" font-size="10" text-anchor="end" fill="#000000">6</text><text x="192.00" y="31.00" font-size="10" text-anchor="end" fill="#000000">7</text></svg>
+  cause_tags: []
+  concept_tags:
+  - polygon_transform.reflect
+  explanation: まず、対称移動の軸がどこにあるかを読み取る。 対称の軸を読み取る次に、もとの図形の各頂点を、軸について反対側の同じ距離の位置に折り返す。 各頂点を軸について折り返す
+  hints:
+  - 対称移動の軸がどこにあるかを読み取る。
+  label: (1)
+  prompt_text: draw_transformed_polygon を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 対称移動の軸がどこにあるかを読み取る。
+    op: identify_axis
+    result_display: 対称の軸を読み取る
+    result_srepr: ''
+  - args: []
+    narration: もとの図形の各頂点を、軸について反対側の同じ距離の位置に折り返す。
+    op: reflect_each_vertex
+    result_display: 各頂点を軸について折り返す
+    result_srepr: ''
+visual_svg: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400"><rect x="0" y="0" width="400" height="400" fill="none" stroke="none"/><line x1="28.00" y1="28.00" x2="28.00"
+  y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="52.57" y1="28.00" x2="52.57" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="77.14" y1="28.00" x2="77.14" y2="372.00" stroke="#bbbbbb"
+  stroke-width="0.5"/><line x1="101.71" y1="28.00" x2="101.71" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="126.29" y1="28.00" x2="126.29" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line
+  x1="150.86" y1="28.00" x2="150.86" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="175.43" y1="28.00" x2="175.43" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="200.00" y1="28.00"
+  x2="200.00" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="224.57" y1="28.00" x2="224.57" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="249.14" y1="28.00" x2="249.14" y2="372.00"
+  stroke="#bbbbbb" stroke-width="0.5"/><line x1="273.71" y1="28.00" x2="273.71" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="298.29" y1="28.00" x2="298.29" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line
+  x1="322.86" y1="28.00" x2="322.86" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="347.43" y1="28.00" x2="347.43" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="372.00" y1="28.00"
+  x2="372.00" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="372.00" x2="372.00" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="347.43" x2="372.00" y2="347.43"
+  stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="322.86" x2="372.00" y2="322.86" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="298.29" x2="372.00" y2="298.29" stroke="#bbbbbb" stroke-width="0.5"/><line
+  x1="28.00" y1="273.71" x2="372.00" y2="273.71" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="249.14" x2="372.00" y2="249.14" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="224.57"
+  x2="372.00" y2="224.57" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="200.00" x2="372.00" y2="200.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="175.43" x2="372.00" y2="175.43"
+  stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="150.86" x2="372.00" y2="150.86" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="126.29" x2="372.00" y2="126.29" stroke="#bbbbbb" stroke-width="0.5"/><line
+  x1="28.00" y1="101.71" x2="372.00" y2="101.71" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="77.14" x2="372.00" y2="77.14" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="52.57"
+  x2="372.00" y2="52.57" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="28.00" x2="372.00" y2="28.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="200.00" x2="372.00" y2="200.00"
+  stroke="#000000" stroke-width="1.5"/><line x1="200.00" y1="28.00" x2="200.00" y2="372.00" stroke="#000000" stroke-width="1.5"/><path d="M 249.14 175.43 L 150.86 150.86 L 175.43 273.71 Z" fill="none" stroke="#000000"
+  stroke-width="2"/><circle cx="249.14" cy="175.43" r="2.5" fill="#000000"/><text x="255.14" y="169.43" font-size="13" fill="#000000">A</text><circle cx="150.86" cy="150.86" r="2.5" fill="#000000"/><text
+  x="156.86" y="144.86" font-size="13" fill="#000000">B</text><circle cx="175.43" cy="273.71" r="2.5" fill="#000000"/><text x="181.43" y="267.71" font-size="13" fill="#000000">C</text><text x="28.00" y="212.00"
+  font-size="10" text-anchor="middle" fill="#000000">-7</text><text x="52.57" y="212.00" font-size="10" text-anchor="middle" fill="#000000">-6</text><text x="77.14" y="212.00" font-size="10" text-anchor="middle"
+  fill="#000000">-5</text><text x="101.71" y="212.00" font-size="10" text-anchor="middle" fill="#000000">-4</text><text x="126.29" y="212.00" font-size="10" text-anchor="middle" fill="#000000">-3</text><text
+  x="150.86" y="212.00" font-size="10" text-anchor="middle" fill="#000000">-2</text><text x="175.43" y="212.00" font-size="10" text-anchor="middle" fill="#000000">-1</text><text x="224.57" y="212.00" font-size="10"
+  text-anchor="middle" fill="#000000">1</text><text x="249.14" y="212.00" font-size="10" text-anchor="middle" fill="#000000">2</text><text x="273.71" y="212.00" font-size="10" text-anchor="middle" fill="#000000">3</text><text
+  x="298.29" y="212.00" font-size="10" text-anchor="middle" fill="#000000">4</text><text x="322.86" y="212.00" font-size="10" text-anchor="middle" fill="#000000">5</text><text x="347.43" y="212.00" font-size="10"
+  text-anchor="middle" fill="#000000">6</text><text x="372.00" y="212.00" font-size="10" text-anchor="middle" fill="#000000">7</text><text x="192.00" y="375.00" font-size="10" text-anchor="end" fill="#000000">-7</text><text
+  x="192.00" y="350.43" font-size="10" text-anchor="end" fill="#000000">-6</text><text x="192.00" y="325.86" font-size="10" text-anchor="end" fill="#000000">-5</text><text x="192.00" y="301.29" font-size="10"
+  text-anchor="end" fill="#000000">-4</text><text x="192.00" y="276.71" font-size="10" text-anchor="end" fill="#000000">-3</text><text x="192.00" y="252.14" font-size="10" text-anchor="end" fill="#000000">-2</text><text
+  x="192.00" y="227.57" font-size="10" text-anchor="end" fill="#000000">-1</text><text x="192.00" y="203.00" font-size="10" text-anchor="end" fill="#000000">0</text><text x="192.00" y="178.43" font-size="10"
+  text-anchor="end" fill="#000000">1</text><text x="192.00" y="153.86" font-size="10" text-anchor="end" fill="#000000">2</text><text x="192.00" y="129.29" font-size="10" text-anchor="end" fill="#000000">3</text><text
+  x="192.00" y="104.71" font-size="10" text-anchor="end" fill="#000000">4</text><text x="192.00" y="80.14" font-size="10" text-anchor="end" fill="#000000">5</text><text x="192.00" y="55.57" font-size="10"
+  text-anchor="end" fill="#000000">6</text><text x="192.00" y="31.00" font-size="10" text-anchor="end" fill="#000000">7</text></svg>

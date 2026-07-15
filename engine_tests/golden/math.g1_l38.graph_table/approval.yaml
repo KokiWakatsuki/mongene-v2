@@ -1,0 +1,11 @@
+approved_at: '2026-07-15T13:44:47.410608'
+approver: koki
+content_sha256: 24bddc285ca3cce7c7e7243c2092ff878b9a90485d2c1d336fcb84a7a0310709
+family: math.g1_l38.graph_table
+files:
+- engine_tests/golden/math.g1_l38.graph_table/math.g1_l38.graph_table_lv1_seed1.yaml
+- engine_tests/golden/math.g1_l38.graph_table/math.g1_l38.graph_table_lv1_seed2.yaml
+- engine_tests/golden/math.g1_l38.graph_table/math.g1_l38.graph_table_lv1_seed3.yaml
+- engine_tests/golden/math.g1_l38.graph_table/math.g1_l38.graph_table_lv2_seed1.yaml
+- engine_tests/golden/math.g1_l38.graph_table/math.g1_l38.graph_table_lv2_seed2.yaml
+- engine_tests/golden/math.g1_l38.graph_table/math.g1_l38.graph_table_lv2_seed3.yaml

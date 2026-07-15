@@ -5297,3 +5297,145 @@ def test_sector_solve_central_angle_double_solve_property(seed):
     sol = solver(mr.params["radius"], mr.params["area_coeff"])
     assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
     assert sol.answer.srepr == sympy.srepr(sympy.Integer(mr.params["angle"]))
+
+
+# ---------------------------------------------------------------------------
+# C7 g1 平面図形（移動の visual 追加）: g1_l38/l39/l40.graph_table
+# ---------------------------------------------------------------------------
+def test_translate_polygon_grid_lv1_construct():
+    ctx = _make_ctx("math.g1_l38.graph_table", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "translate_polygon_grid"
+    assert set(mr.given.keys()) == {"polygon_points", "move_spec"}
+    sq = mr.sub_questions[0]
+    assert sq.asked == "draw_transformed_polygon"
+    assert sq.answer.kind == "graph"
+    assert len(sq.answer.features) == 3
+    assert mr.visual_plan is not None
+    assert mr.params["dx"] != 0 and mr.params["dy"] != 0
+
+
+def test_translate_polygon_coordinate_lv2_construct():
+    ctx = _make_ctx("math.g1_l38.graph_table", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "translate_polygon_coordinate"
+    assert set(mr.given.keys()) == {"polygon_coordinates", "move_spec"}
+    sq = mr.sub_questions[0]
+    assert sq.asked == "draw_transformed_polygon"
+    assert len(sq.answer.features) == 3
+
+
+@pytest.mark.parametrize(
+    "family,level", [("math.g1_l38.graph_table", 1), ("math.g1_l38.graph_table", 2)]
+)
+@pytest.mark.parametrize("seed", range(100))
+def test_translate_polygon_double_solve_property(family, level, seed):
+    ctx = _make_ctx(family, level)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.translate_polygon_features")
+    sol = solver(mr.params["pts"], mr.params["dx"], mr.params["dy"])
+    set_recipe = {f.srepr for f in mr.sub_questions[0].answer.features}
+    set_solver = {f.srepr for f in sol.answer.features}
+    assert set_recipe == set_solver
+    # 独立検算: 各頂点が (dx,dy) だけ平行移動されていることを sympy で確認。
+    orig = [sympy.sympify(s) for s in mr.params["pts"]]
+    expected = {
+        sympy.srepr(sympy.Tuple(x + mr.params["dx"], y + mr.params["dy"])) for x, y in orig
+    }
+    assert set_recipe == expected
+
+
+def test_rotate_polygon_grid_lv1_construct():
+    ctx = _make_ctx("math.g1_l39.graph_table", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "rotate_polygon_grid"
+    assert set(mr.given.keys()) == {"polygon_points", "move_spec"}
+    sq = mr.sub_questions[0]
+    assert sq.asked == "draw_transformed_polygon"
+    assert len(sq.answer.features) == 3
+    assert mr.params["angle"] in (90, 180, 270)
+    assert sympy.sympify(mr.params["center"]) not in [sympy.sympify(s) for s in mr.params["pts"]]
+
+
+def test_rotate_polygon_coordinate_lv2_construct():
+    ctx = _make_ctx("math.g1_l39.graph_table", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "rotate_polygon_coordinate"
+    assert set(mr.given.keys()) == {"polygon_coordinates", "move_spec"}
+    sq = mr.sub_questions[0]
+    assert sq.asked == "draw_transformed_polygon"
+    assert len(sq.answer.features) == 3
+
+
+@pytest.mark.parametrize(
+    "family,level", [("math.g1_l39.graph_table", 1), ("math.g1_l39.graph_table", 2)]
+)
+@pytest.mark.parametrize("seed", range(100))
+def test_rotate_polygon_double_solve_property(family, level, seed):
+    ctx = _make_ctx(family, level)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.rotate_polygon_features")
+    sol = solver(mr.params["pts"], mr.params["center"], mr.params["angle"])
+    set_recipe = {f.srepr for f in mr.sub_questions[0].answer.features}
+    set_solver = {f.srepr for f in sol.answer.features}
+    assert set_recipe == set_solver
+    # 独立検算: 回転前後で中心からの距離が保たれることを sympy で確認（恒真の性質）。
+    cx, cy = sympy.sympify(mr.params["center"])
+    orig = [sympy.sympify(s) for s in mr.params["pts"]]
+    orig_dists = {(x - cx) ** 2 + (y - cy) ** 2 for x, y in orig}
+    new_dists = set()
+    for f in sol.answer.features:
+        x, y = sympy.sympify(f.srepr)
+        new_dists.add((x - cx) ** 2 + (y - cy) ** 2)
+    assert orig_dists == new_dists
+
+
+def test_reflect_polygon_grid_lv1_construct():
+    ctx = _make_ctx("math.g1_l40.graph_table", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "reflect_polygon_grid"
+    assert set(mr.given.keys()) == {"polygon_points", "move_spec"}
+    sq = mr.sub_questions[0]
+    assert sq.asked == "draw_transformed_polygon"
+    assert len(sq.answer.features) == 3
+    assert mr.params["axis"] in ("x_axis", "y_axis")
+
+
+def test_reflect_polygon_coordinate_lv2_construct():
+    ctx = _make_ctx("math.g1_l40.graph_table", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "reflect_polygon_coordinate"
+    assert set(mr.given.keys()) == {"polygon_coordinates", "move_spec"}
+    sq = mr.sub_questions[0]
+    assert sq.asked == "draw_transformed_polygon"
+    assert len(sq.answer.features) == 3
+
+
+@pytest.mark.parametrize(
+    "family,level", [("math.g1_l40.graph_table", 1), ("math.g1_l40.graph_table", 2)]
+)
+@pytest.mark.parametrize("seed", range(100))
+def test_reflect_polygon_double_solve_property(family, level, seed):
+    ctx = _make_ctx(family, level)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.reflect_polygon_features")
+    sol = solver(mr.params["pts"], mr.params["axis"])
+    set_recipe = {f.srepr for f in mr.sub_questions[0].answer.features}
+    set_solver = {f.srepr for f in sol.answer.features}
+    assert set_recipe == set_solver
+    # 独立検算: 対称移動の公式(x軸: y反転／y軸: x反転)で sympy 恒真確認。
+    orig = [sympy.sympify(s) for s in mr.params["pts"]]
+    if mr.params["axis"] == "x_axis":
+        expected = {sympy.srepr(sympy.Tuple(x, -y)) for x, y in orig}
+    else:
+        expected = {sympy.srepr(sympy.Tuple(-x, y)) for x, y in orig}
+    assert set_recipe == expected

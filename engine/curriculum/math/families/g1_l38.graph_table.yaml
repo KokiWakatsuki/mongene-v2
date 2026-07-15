@@ -1,0 +1,48 @@
+family: math.g1_l38.graph_table
+form: graph_table
+source_desc: |
+  平行移動した図形を読む/方向と距離を指定して移動させてかく
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: 平行移動した図形を読む/方向と距離を指定して移動させてかく。
+       example: 方眼上に三角形ABCがかかれている。この三角形を、右へ5目盛り、
+                上へ2目盛りだけ平行移動した三角形A'B'C'をかけ。
+  Lv2 desc: 座標平面で複数点を平行移動し移動先を正確に示す。
+       example: 座標平面上に三角形ABCがあり、A(1,1)、B(4,1)、C(2,3)である。この
+                三角形をx軸方向に3、y軸方向に-4だけ平行移動したとき、移動後の3頂点
+                の座標をそれぞれ答え、移動後の三角形を図示せよ。
+  【設計モデル】新設 solver math.translate_polygon_features（頂点座標＋移動量(dx,dy)
+  だけから移動後の座標を再計算・GraphAnswer）。新設 visual
+  math.polygon_grid_only（Lv1・軸/目盛の数値を見せない方眼のみ）／
+  math.polygon_coordinate（Lv2・座標平面＝既存 graph.py の grid_scaffold を再利用）。
+  Lv1/Lv2 は同じ solver を再利用するため、given のキー名を polygon_points(Lv1)／
+  polygon_coordinates(Lv2) と分けて level_sep(G-FP の fp 相異)を担保する。
+concepts_default: [polygon_transform.translate]
+levels:
+  "1":
+    signature: translate_polygon_grid
+    recipe: math.translate_polygon_grid
+    params:
+      coord_domain: {int_range: [-6, 6]}
+      move_domain: {int_range: [-6, 6], exclude: [0]}
+    given: [polygon_points, move_spec]
+    asked: [draw_transformed_polygon]
+    visual: required
+    text: {tier: T1, template: lf_polygon_transform_grid_v1, visual_builder: math.polygon_grid_only}
+    hints: [steps_prefix]
+    concept_tags: [polygon_transform.translate]
+    cause_tags: []
+  "2":
+    signature: translate_polygon_coordinate
+    recipe: math.translate_polygon_coordinate
+    params:
+      coord_domain: {int_range: [-6, 6]}
+      move_domain: {int_range: [-6, 6], exclude: [0]}
+    given: [polygon_coordinates, move_spec]
+    asked: [draw_transformed_polygon]
+    visual: required
+    text: {tier: T1, template: lf_polygon_transform_coordinate_v1, visual_builder: math.polygon_coordinate}
+    hints: [steps_prefix]
+    concept_tags: [polygon_transform.translate]
+    cause_tags: []
+remedial:
+  default_level: 1

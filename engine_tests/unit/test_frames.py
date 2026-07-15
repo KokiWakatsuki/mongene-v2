@@ -106,10 +106,11 @@ def test_graph_table_vocab_and_visual():
     assert f.given_vocab == frozenset({
         "expression", "data_table", "situation_params", "equation", "equation2",
         "x_domain", "line_a", "line_b",
+        "polygon_points", "polygon_coordinates", "move_spec",
     })
     assert f.asked_vocab == frozenset({
         "draw_graph", "read_point", "read_intersection", "read_table", "complete_table",
-        "read_slope_intercept", "draw_segment",
+        "read_slope_intercept", "draw_segment", "draw_transformed_polygon",
     })
     assert f.visual == "required"
 

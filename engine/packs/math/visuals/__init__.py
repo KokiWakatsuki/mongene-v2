@@ -7,5 +7,6 @@ from __future__ import annotations
 
 from engine.packs.math.visuals import graph  # noqa: F401  (register_visual の副作用のため import)
 from engine.packs.math.visuals import number_line  # noqa: F401  (register_visual の副作用のため import)
+from engine.packs.math.visuals import plane_transform  # noqa: F401  (register_visual の副作用のため import)
 
 __all__: list[str] = []
