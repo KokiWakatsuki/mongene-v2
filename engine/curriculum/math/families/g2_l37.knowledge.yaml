@@ -1,0 +1,46 @@
+family: math.g2_l37.knowledge
+form: knowledge
+source_desc: |
+  3辺相等・2辺夾角・1辺両端角の3条件を想起し、図の等しい要素からどの合同条件が
+  使えるか判別する（units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: 3辺相等・2辺夾角・1辺両端角の3条件を想起する。
+       example: 三角形の合同条件を3つすべて答えよ。
+  Lv2 desc: 図の等しい要素からどの合同条件が使えるか判別する。
+       example: 右の図の2つの三角形で、等しいことがわかっている辺や角に印がつけて
+                ある。この2つの三角形が合同であることを示すには、3つの合同条件の
+                うちどれを使えばよいか答えよ。
+  【設計モデル】Lv1: 規則想起ハブ（既存 math.recall_rule・_RULE_MAPS に topic
+  "congruence_conditions"（3条件すべてを1文で述べる単一concept）を追加）。Lv2:
+  用語想起ハブ（既存 math.term_recall・_TERM_MAPS に domain
+  "congruence_condition_terms"（3辺相等/2辺夾角/1辺両端角の3 concept）を追加。
+  「どの条件が使えるか」を、想定する等しい要素の種類ごとに条件名を答える形で問う）。
+concepts_default: [congruence_conditions.rule_recall]
+levels:
+  "1":
+    signature: congruence_conditions_rule_recall
+    recipe: math.recall_rule
+    params:
+      topic: congruence_conditions
+      concept_set: [all_three]
+    given: [statement]
+    asked: [choice]
+    visual: none
+    text: {tier: T1, template: lf_rule_recall_v1}
+    hints: [steps_prefix]
+    concept_tags: [congruence_conditions.rule_recall]
+    cause_tags: []
+  "2":
+    signature: congruence_condition_terms_term_recall
+    recipe: math.term_recall
+    params:
+      domain: congruence_condition_terms
+      concept_set: [sss, sas, asa]
+    given: [statement]
+    asked: [choice]
+    visual: none
+    text: {tier: T1, template: lf_term_recall_v1}
+    hints: [steps_prefix]
+    concept_tags: [congruence_condition_terms.term_recall]
+    cause_tags: []
+remedial:
+  default_level: 1

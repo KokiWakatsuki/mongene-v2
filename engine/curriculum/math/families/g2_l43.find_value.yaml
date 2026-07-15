@@ -1,0 +1,25 @@
+family: math.g2_l43.find_value
+form: find_value
+source_desc: |
+  60°や辺の等しさを使い角/辺を求める
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: 60°や辺の等しさを使い角/辺を求める。
+       example: 1辺の長さが6cmの正三角形ABCで、辺BCの長さと∠Aの大きさを求めよ。
+  【設計モデル】新設 solver math.equilateral_triangle_properties（1辺の長さだけ
+  から、もう1辺の長さと1つの内角の大きさを計算・Tuple答え・恒真）。
+concepts_default: [equilateral.properties_from_side]
+levels:
+  "1":
+    signature: equilateral_triangle_properties
+    recipe: math.equilateral_triangle_properties
+    params:
+      side_domain: {int_range: [1, 500]}
+    given: [condition]
+    asked: [value]
+    visual: none
+    text: {tier: T1, template: lf_equilateral_triangle_properties_v1}
+    hints: [steps_prefix]
+    concept_tags: [equilateral.properties_from_side]
+    cause_tags: []
+remedial:
+  default_level: 1

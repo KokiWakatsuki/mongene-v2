@@ -1,0 +1,54 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - isosceles.judge_from_angle
+  provenance:
+    git_commit: ''
+    recipe: math.judge_isosceles_from_angle_condition
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_judge_isosceles_from_angle_v1
+    tier: T1
+  requested:
+    form: knowledge
+    level: 2
+    subject: math
+    unit: g2_l42
+  resolved:
+    form: knowledge
+    level: 2
+    subject: math
+    unit: g2_l42
+  seed: 1
+  signature: judge_isosceles_from_angle_condition
+problem_ref: 4451c1a298996c46
+problem_text: 三角形ABCで、∠B=77°、∠C=77°であるとき、この三角形は二等辺三角形であるといえるか、答えよ。
+sub_questions:
+- answer:
+    correct: 二等辺三角形であるといえる
+    distractors:
+    - 二等辺三角形であるとはいえない
+    fact_id: isosceles.judge_from_angle
+    kind: choice
+  cause_tags: []
+  concept_tags:
+  - isosceles.judge_from_angle
+  explanation: まず、示されている2つの角が、等しいといえる条件を満たしているかを確認する。 2つの角が等しいかどうかを確認する次に、2つの角が等しければ、その対辺どうしも等しく二等辺三角形になるという性質から判別する。 二等辺三角形であるといえる
+  hints:
+  - 示されている2つの角が、等しいといえる条件を満たしているかを確認する。
+  label: (1)
+  prompt_text: choice を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 示されている2つの角が、等しいといえる条件を満たしているかを確認する。
+    op: check_two_angles_equal
+    result_display: 2つの角が等しいかどうかを確認する
+    result_srepr: equal
+  - args: []
+    narration: 2つの角が等しければ、その対辺どうしも等しく二等辺三角形になるという性質から判別する。
+    op: judge_isosceles
+    result_display: 二等辺三角形であるといえる
+    result_srepr: 二等辺三角形であるといえる
+visual_svg: null

@@ -475,6 +475,8 @@ _TERM_RECALL_CONCEPTS = [
     "circle_terms.term_recall",
     # C9 g2 平行と合同（用語想起）
     "angle_pair_terms.term_recall",
+    "congruence_condition_terms.term_recall",
+    "proof_logic_terms.term_recall",
 ]
 
 
@@ -818,6 +820,24 @@ def _draw_term_statement(domain: str, concept: str, rng: Rng, p: dict[str, objec
             f"直線{lc}をはさんで反対側にある2つの角の関係"
         )  # alternate
 
+    if domain == "congruence_condition_terms":
+        # g2_l37 三角形の合同条件の用語。具体例の三角形の点名を埋め込み surface を分散する。
+        pa, pb, pc, pd, pe, pf = _draw_distinct_points(6, rng)
+        if concept == "sss":
+            return f"三角形{pa}{pb}{pc}と三角形{pd}{pe}{pf}で、3組の辺の長さがそれぞれ等しいとわかっているとき、合同を示すのに使える条件"
+        if concept == "sas":
+            return f"三角形{pa}{pb}{pc}と三角形{pd}{pe}{pf}で、2組の辺とその間の角がそれぞれ等しいとわかっているとき、合同を示すのに使える条件"
+        return f"三角形{pa}{pb}{pc}と三角形{pd}{pe}{pf}で、1組の辺とその両端の角がそれぞれ等しいとわかっているとき、合同を示すのに使える条件"  # asa
+
+    if domain == "proof_logic_terms":
+        # g2_l38 仮定・結論・反例の用語。具体例の命題(数量の大小関係)を埋め込み surface を分散する。
+        m = int(draw(p["number_domain"], rng))
+        if concept == "assumption":
+            return f"「a、bが{m}より大きい数ならば、a+bも{m}より大きい」という文で、「ならば」の前に書かれている部分"
+        if concept == "conclusion":
+            return f"「a、bが{m}より大きい数ならば、a+bも{m}より大きい」という文で、「ならば」の後に書かれている部分"
+        return f"あることがらが成り立たないことを示すために挙げる、条件に合うが結論には当てはまらない具体例のこと（{m}を使った例が挙げられることがある）"  # counterexample
+
     if domain == "prime_concepts":
         # g1_l11 素数まわりの用語。相異なる2つの具体例を埋め込み surface を分散する
         # （小さいプールを2値で使い variety を確保し dup≤0.20 にする）。
@@ -1131,6 +1151,10 @@ _RULE_RECALL_CONCEPTS = [
     "triangle_angle_properties.rule_recall",
     "polygon_interior_sum_reason.rule_recall",
     "polygon_exterior_sum_property.rule_recall",
+    "congruence_conditions.rule_recall",
+    "isosceles_property.rule_recall",
+    "isosceles_condition.rule_recall",
+    "equilateral_property.rule_recall",
 ]
 
 
@@ -1335,6 +1359,26 @@ def _draw_rule_statement(topic: str, concept: str, rng: Rng, p: dict[str, object
         # g2_l35 多角形の外角の和が辺の数によらず一定であること。具体例の辺の数 n を埋め込み dup 分散。
         n = int(draw(p["sides_domain"], rng))
         return f"{n}角形の外角の和は、辺の数を変えた他の多角形の外角の和と比べてどうなるか"
+
+    if topic == "congruence_conditions":
+        # g2_l37 三角形の合同条件(3つすべて)。具体例の三角形の点名を埋め込み surface を分散する。
+        pa, pb, pc, pd, pe, pf = _draw_distinct_points(6, rng)
+        return f"三角形{pa}{pb}{pc}と三角形{pd}{pe}{pf}が合同であることを示すために使える条件"
+
+    if topic == "isosceles_property":
+        # g2_l41 二等辺三角形の性質(底角が等しい)。具体例の三角形の点名を埋め込み surface を分散する。
+        pa, pb, pc = _draw_distinct_points(3, rng)
+        return f"{pa}{pb}={pa}{pc}の二等辺三角形{pa}{pb}{pc}で、底角どうしの大きさの関係"
+
+    if topic == "isosceles_condition":
+        # g2_l42 二等辺三角形になるための条件。具体例の三角形の点名を埋め込み surface を分散する。
+        pa, pb, pc = _draw_distinct_points(3, rng)
+        return f"三角形{pa}{pb}{pc}が二等辺三角形になるといえる、角に着目した条件"
+
+    if topic == "equilateral_property":
+        # g2_l43 正三角形の性質(3辺/3角が等しい)。具体例の三角形の点名を埋め込み surface を分散する。
+        pa, pb, pc = _draw_distinct_points(3, rng)
+        return f"三角形{pa}{pb}{pc}が正三角形であるときに成り立つ、辺の長さと内角の大きさの関係"
 
     raise ValueError(f"未知の topic: {topic!r}")
 

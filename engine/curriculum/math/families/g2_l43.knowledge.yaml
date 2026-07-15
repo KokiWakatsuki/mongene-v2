@@ -1,0 +1,43 @@
+family: math.g2_l43.knowledge
+form: knowledge
+source_desc: |
+  3辺/3角が等しい・各角60°を想起し、条件から正三角形かどうかを判別する
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: 3辺/3角が等しい・各角60°を想起する。
+       example: 正三角形の3つの内角について、その1つの角の大きさを答えよ。
+  Lv2 desc: 条件から正三角形かどうかを判別・適用する。
+       example: △ABCで AB=AC かつ ∠A=60° であるとき、この三角形が正三角形で
+                あるといえる理由を説明せよ。
+  【設計モデル】Lv1: 規則想起ハブ（既存 math.recall_rule・_RULE_MAPS に topic
+  "equilateral_property"（3辺/3角がすべて等しい・単一concept。60°という具体の値は
+  digit-free のため述べず「すべて等しい」という関係のみ問う）を追加）。Lv2: 新設
+  solver math.judge_equilateral_from_condition（AB=ACかつ∠A=60°という十分条件か、
+  AB=ACのみという不十分条件かで正三角形といえるかを判別）。
+concepts_default: [equilateral_property.rule_recall]
+levels:
+  "1":
+    signature: equilateral_property_rule_recall
+    recipe: math.recall_rule
+    params:
+      topic: equilateral_property
+      concept_set: [all_equal]
+    given: [statement]
+    asked: [choice]
+    visual: none
+    text: {tier: T1, template: lf_rule_recall_v1}
+    hints: [steps_prefix]
+    concept_tags: [equilateral_property.rule_recall]
+    cause_tags: []
+  "2":
+    signature: judge_equilateral_from_condition
+    recipe: math.judge_equilateral_from_condition
+    params: {}
+    given: [statement]
+    asked: [choice]
+    visual: none
+    text: {tier: T1, template: lf_judge_equilateral_from_condition_v1}
+    hints: [steps_prefix]
+    concept_tags: [equilateral.judge_from_condition]
+    cause_tags: []
+remedial:
+  default_level: 1

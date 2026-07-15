@@ -3475,6 +3475,8 @@ _TERM_RECALL_CELLS = [
     ("math.g1_l45.knowledge", 1),
     # C9 g2 平行と合同（用語想起）
     ("math.g2_l31.knowledge", 1),
+    ("math.g2_l37.knowledge", 2),
+    ("math.g2_l38.knowledge", 1),
 ]
 
 
@@ -3720,6 +3722,10 @@ _RULE_RECALL_CELLS = [
     ("math.g2_l33.knowledge", 1),
     ("math.g2_l34.knowledge", 1),
     ("math.g2_l35.knowledge", 1),
+    ("math.g2_l37.knowledge", 1),
+    ("math.g2_l41.knowledge", 1),
+    ("math.g2_l42.knowledge", 1),
+    ("math.g2_l43.knowledge", 1),
 ]
 
 
@@ -5626,3 +5632,116 @@ def test_polygon_sides_from_interior_angle_double_solve_property(seed):
     sol = solver(mr.params["interior_angle"])
     assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
     assert sol.answer.srepr == sympy.srepr(sympy.Integer(mr.params["sides"]))
+
+
+# ---------------------------------------------------------------------------
+# C9 g2 図形（合同条件・二等辺三角形・正三角形）: g2_l37/l38/l41/l42/l43
+# ---------------------------------------------------------------------------
+def test_isosceles_base_angle_apex_to_base_construct():
+    ctx = _make_ctx("math.g2_l41.find_value", 1)
+    found_apex = False
+    for seed in range(20):
+        rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+        mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+        if mr.params["known_type"] == "apex":
+            found_apex = True
+            assert mr.signature == "isosceles_base_angle"
+            sq = mr.sub_questions[0]
+            assert sq.asked == "value"
+            apex = mr.params["known_value"]
+            assert sq.answer.srepr == sympy.srepr(sympy.Rational(180 - apex, 2))
+            break
+    assert found_apex, "20 seed 中に known_type=apex が1つも出なかった"
+
+
+def test_isosceles_base_angle_base_to_apex_construct():
+    ctx = _make_ctx("math.g2_l41.find_value", 1)
+    found_base = False
+    for seed in range(20):
+        rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+        mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+        if mr.params["known_type"] == "base":
+            found_base = True
+            sq = mr.sub_questions[0]
+            base = mr.params["known_value"]
+            assert sq.answer.srepr == sympy.srepr(sympy.Integer(180 - 2 * base))
+            break
+    assert found_base, "20 seed 中に known_type=base が1つも出なかった"
+
+
+@pytest.mark.parametrize("seed", range(100))
+def test_isosceles_base_angle_double_solve_property(seed):
+    ctx = _make_ctx("math.g2_l41.find_value", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.isosceles_base_angle")
+    sol = solver(mr.params["known_type"], mr.params["known_value"])
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+
+
+def test_equilateral_triangle_properties_construct():
+    ctx = _make_ctx("math.g2_l43.find_value", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "equilateral_triangle_properties"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "value"
+    side = mr.params["side"]
+    expected = sympy.Tuple(sympy.Integer(side), sympy.Rational(180, 3))
+    assert sq.answer.srepr == sympy.srepr(expected)
+
+
+@pytest.mark.parametrize("seed", range(100))
+def test_equilateral_triangle_properties_double_solve_property(seed):
+    ctx = _make_ctx("math.g2_l43.find_value", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.equilateral_triangle_properties")
+    sol = solver(mr.params["side"])
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+
+
+def test_judge_isosceles_from_angle_condition_construct():
+    ctx = _make_ctx("math.g2_l42.knowledge", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "judge_isosceles_from_angle_condition"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "choice"
+    assert not any(ch.isdigit() for ch in sq.answer.correct)
+    assert sq.answer.correct not in sq.answer.distractors
+    is_equal = mr.params["is_equal"] == "True"
+    assert is_equal == (mr.params["angle_b"] == mr.params["angle_c"])
+    assert mr.params["angle_b"] + mr.params["angle_c"] < 180
+
+
+@pytest.mark.parametrize("seed", range(100))
+def test_judge_isosceles_from_angle_condition_double_solve_property(seed):
+    ctx = _make_ctx("math.g2_l42.knowledge", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.judge_isosceles_from_angle_condition")
+    sol = solver(mr.params["is_equal"])
+    assert sol.answer.correct == mr.sub_questions[0].answer.correct
+
+
+def test_judge_equilateral_from_condition_construct():
+    ctx = _make_ctx("math.g2_l43.knowledge", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "judge_equilateral_from_condition"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "choice"
+    assert not any(ch.isdigit() for ch in sq.answer.correct)
+    assert sq.answer.correct not in sq.answer.distractors
+    assert len({mr.params["a"], mr.params["b"], mr.params["c"]}) == 3
+
+
+@pytest.mark.parametrize("seed", range(100))
+def test_judge_equilateral_from_condition_double_solve_property(seed):
+    ctx = _make_ctx("math.g2_l43.knowledge", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.judge_equilateral_from_condition")
+    sol = solver(mr.params["is_equilateral"])
+    assert sol.answer.correct == mr.sub_questions[0].answer.correct

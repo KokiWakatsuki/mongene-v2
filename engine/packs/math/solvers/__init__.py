@@ -23,5 +23,6 @@ from engine.packs.math.solvers import sample_survey  # noqa: F401  (登録の副
 from engine.packs.math.solvers import plane_geometry  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.solvers import plane_transform  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.solvers import angle_tracking  # noqa: F401  (登録の副作用のため import)
+from engine.packs.math.solvers import triangle_properties  # noqa: F401  (登録の副作用のため import)
 
 __all__: list[str] = []

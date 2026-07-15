@@ -1,0 +1,52 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - isosceles.base_angle_from_apex
+  provenance:
+    git_commit: ''
+    recipe: math.isosceles_base_angle
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_isosceles_base_angle_v1
+    tier: T1
+  requested:
+    form: find_value
+    level: 1
+    subject: math
+    unit: g2_l41
+  resolved:
+    form: find_value
+    level: 1
+    subject: math
+    unit: g2_l41
+  seed: 2
+  signature: isosceles_base_angle
+problem_ref: 39a96ae79aad7912
+problem_text: AB=ACの二等辺三角形ABCで、底角∠Bの大きさが7°のとき、頂角∠Aの大きさを求めよ。
+sub_questions:
+- answer:
+    display: '166'
+    kind: symbolic
+    srepr: Integer(166)
+  cause_tags: []
+  concept_tags:
+  - isosceles.base_angle_from_apex
+  explanation: まず、二等辺三角形の頂角・底角のうち、わかっているほうの大きさを読み取る。 わかっている角の大きさを読み取る次に、等しい2つの底角の大きさを2つ分合わせてひくと、残りが頂角の大きさになることから頂角を求める。 166
+  hints:
+  - 二等辺三角形の頂角・底角のうち、わかっているほうの大きさを読み取る。
+  label: (1)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 二等辺三角形の頂角・底角のうち、わかっているほうの大きさを読み取る。
+    op: identify_known_angle
+    result_display: わかっている角の大きさを読み取る
+    result_srepr: ''
+  - args: []
+    narration: 等しい2つの底角の大きさを2つ分合わせてひくと、残りが頂角の大きさになることから頂角を求める。
+    op: solve_remaining_angle
+    result_display: '166'
+    result_srepr: Integer(166)
+visual_svg: null

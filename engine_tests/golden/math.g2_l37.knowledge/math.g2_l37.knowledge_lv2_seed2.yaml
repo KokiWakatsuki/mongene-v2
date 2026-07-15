@@ -1,0 +1,55 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - congruence_condition_terms.term_recall
+  provenance:
+    git_commit: ''
+    recipe: math.term_recall
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_term_recall_v1
+    tier: T1
+  requested:
+    form: knowledge
+    level: 2
+    subject: math
+    unit: g2_l37
+  resolved:
+    form: knowledge
+    level: 2
+    subject: math
+    unit: g2_l37
+  seed: 2
+  signature: congruence_condition_terms_term_recall
+problem_ref: 1908c5406e1e9db0
+problem_text: 三角形MRQと三角形EGHで、1組の辺とその両端の角がそれぞれ等しいとわかっているとき、合同を示すのに使える条件 を何といいますか。
+sub_questions:
+- answer:
+    correct: 一辺とその両端の角がそれぞれ等しい
+    distractors:
+    - 三辺がそれぞれ等しい
+    - 二辺とその間の角がそれぞれ等しい
+    fact_id: congruence_condition_terms.term.asa
+    kind: choice
+  cause_tags: []
+  concept_tags:
+  - congruence_condition_terms.term_recall
+  explanation: まず、説明されている式や数の部分がどれかを読み取る。 説明されている対象を読み取る次に、その対象を表す用語の名前を思い出す。 一辺とその両端の角がそれぞれ等しい
+  hints:
+  - 説明されている式や数の部分がどれかを読み取る。
+  label: (1)
+  prompt_text: choice を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 説明されている式や数の部分がどれかを読み取る。
+    op: identify_description
+    result_display: 説明されている対象を読み取る
+    result_srepr: asa
+  - args: []
+    narration: その対象を表す用語の名前を思い出す。
+    op: name_concept
+    result_display: 一辺とその両端の角がそれぞれ等しい
+    result_srepr: 一辺とその両端の角がそれぞれ等しい
+visual_svg: null

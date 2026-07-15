@@ -1,0 +1,54 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - equilateral.judge_from_condition
+  provenance:
+    git_commit: ''
+    recipe: math.judge_equilateral_from_condition
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_judge_equilateral_from_condition_v1
+    tier: T1
+  requested:
+    form: knowledge
+    level: 2
+    subject: math
+    unit: g2_l43
+  resolved:
+    form: knowledge
+    level: 2
+    subject: math
+    unit: g2_l43
+  seed: 1
+  signature: judge_equilateral_from_condition
+problem_ref: a892584492d60ed8
+problem_text: 三角形LCKでLC=LKかつ∠L=60°であるとき、この三角形は正三角形であるといえるか、答えよ。
+sub_questions:
+- answer:
+    correct: 正三角形であるといえる
+    distractors:
+    - 正三角形であるとはいえない
+    fact_id: equilateral.judge_from_condition
+    kind: choice
+  cause_tags: []
+  concept_tags:
+  - equilateral.judge_from_condition
+  explanation: まず、示されている辺と角の条件が、正三角形であるといえる条件を満たしているかを確認する。 辺と角の条件を確認する次に、二等辺三角形の性質を重ね合わせて、正三角形であるといえるかどうかを判別する。 正三角形であるといえる
+  hints:
+  - 示されている辺と角の条件が、正三角形であるといえる条件を満たしているかを確認する。
+  label: (1)
+  prompt_text: choice を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 示されている辺と角の条件が、正三角形であるといえる条件を満たしているかを確認する。
+    op: check_side_and_angle_condition
+    result_display: 辺と角の条件を確認する
+    result_srepr: 'yes'
+  - args: []
+    narration: 二等辺三角形の性質を重ね合わせて、正三角形であるといえるかどうかを判別する。
+    op: judge_equilateral
+    result_display: 正三角形であるといえる
+    result_srepr: 正三角形であるといえる
+visual_svg: null

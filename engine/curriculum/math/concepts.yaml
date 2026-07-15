@@ -826,3 +826,33 @@ concepts:
   - id: polygon_exterior_sum_property.rule_recall
     label: "多角形の外角の和が辺の数によらず一定であることを想起する"
     unit: g2_l35
+  - id: congruence_conditions.rule_recall
+    label: "三角形の合同条件を3つとも想起する"
+    unit: g2_l37
+  - id: congruence_condition_terms.term_recall
+    label: "図の等しい要素からどの合同条件が使えるか判別する"
+    unit: g2_l37
+  - id: proof_logic_terms.term_recall
+    label: "仮定・結論・反例の用語を想起する"
+    unit: g2_l38
+  - id: isosceles.base_angle_from_apex
+    label: "二等辺三角形の頂角から底角を求める"
+    unit: g2_l41
+  - id: isosceles_property.rule_recall
+    label: "二等辺三角形の底角が等しいことを想起する"
+    unit: g2_l41
+  - id: isosceles_condition.rule_recall
+    label: "2角が等しければ二等辺三角形になる条件を想起する"
+    unit: g2_l42
+  - id: isosceles.judge_from_angle
+    label: "2角が等しいという条件から二等辺三角形といえるかを判別する"
+    unit: g2_l42
+  - id: equilateral.properties_from_side
+    label: "正三角形の1辺の長さからもう1辺と1つの内角を求める"
+    unit: g2_l43
+  - id: equilateral_property.rule_recall
+    label: "正三角形は3辺3角がすべて等しいことを想起する"
+    unit: g2_l43
+  - id: equilateral.judge_from_condition
+    label: "辺と角の条件から正三角形といえるかを判別する"
+    unit: g2_l43

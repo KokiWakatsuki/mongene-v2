@@ -1,0 +1,31 @@
+family: math.g2_l38.knowledge
+form: knowledge
+source_desc: |
+  仮定・結論・反例の用語を想起する
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: 仮定・結論・逆・反例の用語を想起する。
+       example: 「2つの角が等しい三角形は二等辺三角形である」という文について、
+                仮定と結論をそれぞれ答えよ。また、あることがらが成り立たないことを
+                示すための具体例を何というか答えよ。
+  Lv2（命題から仮定/結論を取り出し、逆や反例を判別・提示する）は複合的な多段構成
+  （逆の文の生成・反例の構成）で一般化が難しいため本セルでは扱わない（次段対応）。
+  【設計モデル】用語想起ハブ（既存 math.term_recall・_TERM_MAPS に domain
+  "proof_logic_terms"（仮定/結論/反例の3 concept）を追加）。
+concepts_default: [proof_logic_terms.term_recall]
+levels:
+  "1":
+    signature: proof_logic_terms_term_recall
+    recipe: math.term_recall
+    params:
+      domain: proof_logic_terms
+      concept_set: [assumption, conclusion, counterexample]
+      number_domain: {int_range: [1, 500]}
+    given: [statement]
+    asked: [choice]
+    visual: none
+    text: {tier: T1, template: lf_term_recall_v1}
+    hints: [steps_prefix]
+    concept_tags: [proof_logic_terms.term_recall]
+    cause_tags: []
+remedial:
+  default_level: 1

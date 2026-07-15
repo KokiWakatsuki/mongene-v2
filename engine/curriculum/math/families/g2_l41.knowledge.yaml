@@ -1,0 +1,27 @@
+family: math.g2_l41.knowledge
+form: knowledge
+source_desc: |
+  底角/頂角・底角が等しい性質を想起する
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: 底角/頂角・底角が等しい性質を想起する。
+       example: 二等辺三角形の2つの底角の大きさの関係について、正しく述べている
+                ものを選べ。
+  【設計モデル】規則想起ハブ（既存 math.recall_rule・_RULE_MAPS に topic
+  "isosceles_property"（底角が等しい・単一concept）を追加）。
+concepts_default: [isosceles_property.rule_recall]
+levels:
+  "1":
+    signature: isosceles_property_rule_recall
+    recipe: math.recall_rule
+    params:
+      topic: isosceles_property
+      concept_set: [base_angles_equal]
+    given: [statement]
+    asked: [choice]
+    visual: none
+    text: {tier: T1, template: lf_rule_recall_v1}
+    hints: [steps_prefix]
+    concept_tags: [isosceles_property.rule_recall]
+    cause_tags: []
+remedial:
+  default_level: 1

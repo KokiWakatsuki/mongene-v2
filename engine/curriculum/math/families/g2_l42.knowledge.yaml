@@ -1,0 +1,45 @@
+family: math.g2_l42.knowledge
+form: knowledge
+source_desc: |
+  2角が等しければ二等辺という条件を想起し、図の条件から二等辺かどうかを判別する
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: 2角が等しければ二等辺という条件を想起する。
+       example: 三角形がどのような条件を満たすとき二等辺三角形になるといえるか、
+                角に着目した条件を答えよ。
+  Lv2 desc: 図の条件から二等辺かどうかを判別・適用する。
+       example: △ABCで∠B=50°、∠C=50° であるとき、この三角形はどんな三角形と
+                いえるか、根拠となる条件とともに答えよ。
+  【設計モデル】Lv1: 規則想起ハブ（既存 math.recall_rule・_RULE_MAPS に topic
+  "isosceles_condition"（2角が等しい・単一concept）を追加）。Lv2: 新設 solver
+  math.judge_isosceles_from_angle_condition（2つの角が等しいかどうかから二等辺
+  三角形といえるかを判別）。
+concepts_default: [isosceles_condition.rule_recall]
+levels:
+  "1":
+    signature: isosceles_condition_rule_recall
+    recipe: math.recall_rule
+    params:
+      topic: isosceles_condition
+      concept_set: [two_angles_equal]
+    given: [statement]
+    asked: [choice]
+    visual: none
+    text: {tier: T1, template: lf_rule_recall_v1}
+    hints: [steps_prefix]
+    concept_tags: [isosceles_condition.rule_recall]
+    cause_tags: []
+  "2":
+    signature: judge_isosceles_from_angle_condition
+    recipe: math.judge_isosceles_from_angle_condition
+    params:
+      angle_domain: {int_range: [1, 178]}
+      diff_domain: {int_range: [1, 30]}
+    given: [statement]
+    asked: [choice]
+    visual: none
+    text: {tier: T1, template: lf_judge_isosceles_from_angle_v1}
+    hints: [steps_prefix]
+    concept_tags: [isosceles.judge_from_angle]
+    cause_tags: []
+remedial:
+  default_level: 1

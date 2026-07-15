@@ -1,0 +1,52 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - equilateral.properties_from_side
+  provenance:
+    git_commit: ''
+    recipe: math.equilateral_triangle_properties
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_equilateral_triangle_properties_v1
+    tier: T1
+  requested:
+    form: find_value
+    level: 1
+    subject: math
+    unit: g2_l43
+  resolved:
+    form: find_value
+    level: 1
+    subject: math
+    unit: g2_l43
+  seed: 2
+  signature: equilateral_triangle_properties
+problem_ref: 4dfab853ad4e04ec
+problem_text: 1辺の長さが215cmの正三角形ABCで、辺BCの長さと∠Aの大きさを求めよ。
+sub_questions:
+- answer:
+    display: 辺の長さ 215、∠A 60°
+    kind: symbolic
+    srepr: Tuple(Integer(215), Integer(60))
+  cause_tags: []
+  concept_tags:
+  - equilateral.properties_from_side
+  explanation: まず、正三角形の与えられた1辺の長さを読み取る。 与えられた1辺の長さを読み取る次に、正三角形は3辺の長さがすべて等しく、3つの内角もすべて等しく分け合うことから、もう1辺の長さと1つの内角の大きさを求める。 辺の長さ 215、∠A 60°
+  hints:
+  - 正三角形の与えられた1辺の長さを読み取る。
+  label: (1)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 正三角形の与えられた1辺の長さを読み取る。
+    op: identify_given_side
+    result_display: 与えられた1辺の長さを読み取る
+    result_srepr: ''
+  - args: []
+    narration: 正三角形は3辺の長さがすべて等しく、3つの内角もすべて等しく分け合うことから、もう1辺の長さと1つの内角の大きさを求める。
+    op: apply_equilateral_property
+    result_display: 辺の長さ 215、∠A 60°
+    result_srepr: Tuple(Integer(215), Integer(60))
+visual_svg: null

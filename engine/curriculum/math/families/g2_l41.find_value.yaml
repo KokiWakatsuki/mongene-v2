@@ -1,0 +1,29 @@
+family: math.g2_l41.find_value
+form: find_value
+source_desc: |
+  底角が等しい性質を使い角を求める
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: 底角が等しい性質を使い角を求める。
+       example: AB=AC の二等辺三角形ABCで、頂角∠Aの大きさが40°のとき、底角∠Bの
+                大きさを求めよ。
+  【設計モデル】新設 solver math.isosceles_base_angle（頂角→底角=(180-頂角)/2、
+  底角→頂角=180-2×底角のどちらも計算できる恒真の性質）。頂角のみ(1〜178°、178通り)
+  では100 seedのdup_rateを満たす組合せ数が足りず(実測0.23)、底角から頂角を求める
+  向きも半々の確率で出すことで実質267通りに増やし解消(実測)。
+concepts_default: [isosceles.base_angle_from_apex]
+levels:
+  "1":
+    signature: isosceles_base_angle
+    recipe: math.isosceles_base_angle
+    params:
+      apex_domain: {int_range: [1, 178]}
+      base_domain: {int_range: [1, 89]}
+    given: [condition]
+    asked: [value]
+    visual: none
+    text: {tier: T1, template: lf_isosceles_base_angle_v1}
+    hints: [steps_prefix]
+    concept_tags: [isosceles.base_angle_from_apex]
+    cause_tags: []
+remedial:
+  default_level: 1
