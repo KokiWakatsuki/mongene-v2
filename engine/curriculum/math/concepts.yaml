@@ -739,3 +739,42 @@ concepts:
   - id: exam.quartiles_full_summary
     label: "データの第1〜第3四分位数・四分位範囲を求める"
     unit: exam_l7
+  - id: line_angle_terms.term_recall
+    label: "直線・線分・半直線・角の用語を想起する"
+    unit: g1_l37
+  - id: point_line_distance.meaning
+    label: "点と直線との距離が垂線の長さを指すことを判別する"
+    unit: g1_l37
+  - id: perpendicular_terms.term_recall
+    label: "垂線の足・点と直線の距離(垂線の長さ)の用語を想起する"
+    unit: g1_l43
+  - id: transformation_invariant.parallel_translation
+    label: "平行移動で辺の長さ・図形の大きさが変わらないことを判別する"
+    unit: g1_l38
+  - id: transformation_invariant.rotation
+    label: "回転移動で対応する点と中心の距離が等しいことを判別する"
+    unit: g1_l39
+  - id: transformation_invariant.reflection
+    label: "対称移動で対応点を結ぶ線分が軸に垂直二等分されることを判別する"
+    unit: g1_l40
+  - id: construction_property.perpendicular_bisector
+    label: "垂直二等分線上の点が線分の両端から等距離であることを判別する"
+    unit: g1_l41
+  - id: construction_property.angle_bisector
+    label: "角の二等分線上の点が2辺から等距離であることを判別する"
+    unit: g1_l42
+  - id: construction_choice_terms.term_recall
+    label: "等距離の条件に対応する基本作図を判別する"
+    unit: g1_l44
+  - id: circle_terms.term_recall
+    label: "半径・弦・弧・おうぎ形・中心角の用語を想起する"
+    unit: g1_l45
+  - id: circle_property.judge
+    label: "弧と中心角の比例・接線と半径の垂直性を判別する"
+    unit: g1_l45
+  - id: sector.arc_length_or_area
+    label: "半径と中心角からおうぎ形の弧の長さ/面積を求める"
+    unit: g1_l46
+  - id: sector.solve_central_angle
+    label: "おうぎ形の面積から中心角の大きさを逆算する"
+    unit: g1_l46

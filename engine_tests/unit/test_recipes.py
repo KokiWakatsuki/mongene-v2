@@ -3468,6 +3468,11 @@ _TERM_RECALL_CELLS = [
     ("math.g3_l57.knowledge", 1),
     ("math.g3_l58.knowledge", 1),
     ("math.g1_l30.knowledge", 1),
+    # C7 g1 平面図形（用語想起）
+    ("math.g1_l37.knowledge", 1),
+    ("math.g1_l43.knowledge", 1),
+    ("math.g1_l44.knowledge", 2),
+    ("math.g1_l45.knowledge", 1),
 ]
 
 
@@ -5109,3 +5114,186 @@ def test_exam_quartiles_full_summary_double_solve_property(seed):
     solver = REGISTRY.solver("math.quartiles_full_summary")
     sol = solver(mr.params["data"])
     assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+
+
+# ---------------------------------------------------------------------------
+# C7 g1 平面図形（非visual追加）: g1_l38〜l46
+# ---------------------------------------------------------------------------
+def test_judge_point_line_distance_meaning_construct():
+    ctx = _make_ctx("math.g1_l37.knowledge", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "judge_point_line_distance_meaning"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "choice"
+    assert sq.answer.correct == "垂線の長さ"
+    assert not any(ch.isdigit() for ch in sq.answer.correct)
+    assert sq.answer.correct not in sq.answer.distractors
+    assert len({mr.params["pt"], mr.params["a"], mr.params["b"]}) == 3
+
+
+@pytest.mark.parametrize("seed", range(100))
+def test_judge_point_line_distance_meaning_double_solve_property(seed):
+    ctx = _make_ctx("math.g1_l37.knowledge", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.judge_point_line_distance_meaning")
+    sol = solver("_")
+    assert sol.answer.correct == mr.sub_questions[0].answer.correct
+    assert sol.answer.fact_id == mr.sub_questions[0].answer.fact_id
+
+
+def test_judge_transformation_invariant_parallel_construct():
+    ctx = _make_ctx("math.g1_l38.knowledge", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "judge_transformation_invariant_parallel"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "choice"
+    assert mr.params["topic"] == "parallel_translation"
+    assert sq.answer.correct == "変わらない"
+    assert not any(ch.isdigit() for ch in sq.answer.correct)
+    assert sq.answer.correct not in sq.answer.distractors
+
+
+def test_judge_transformation_invariant_rotation_construct():
+    ctx = _make_ctx("math.g1_l39.knowledge", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "judge_transformation_invariant_rotation"
+    sq = mr.sub_questions[0]
+    assert mr.params["topic"] == "rotation"
+    assert sq.answer.correct == "等しい"
+
+
+def test_judge_transformation_invariant_reflection_construct():
+    ctx = _make_ctx("math.g1_l40.knowledge", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "judge_transformation_invariant_reflection"
+    sq = mr.sub_questions[0]
+    assert mr.params["topic"] == "reflection"
+    assert sq.answer.correct == "垂直に二等分される"
+
+
+@pytest.mark.parametrize(
+    "family,level", [("math.g1_l38.knowledge", 1), ("math.g1_l39.knowledge", 1), ("math.g1_l40.knowledge", 1)]
+)
+@pytest.mark.parametrize("seed", range(100))
+def test_judge_transformation_invariant_double_solve_property(family, level, seed):
+    ctx = _make_ctx(family, level)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.judge_transformation_invariant")
+    sol = solver(mr.params["topic"])
+    assert sol.answer.correct == mr.sub_questions[0].answer.correct
+    assert sol.answer.fact_id == mr.sub_questions[0].answer.fact_id
+
+
+def test_judge_construction_property_perpendicular_bisector_construct():
+    ctx = _make_ctx("math.g1_l41.knowledge", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "judge_construction_property_perpendicular_bisector"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "choice"
+    assert mr.params["topic"] == "perpendicular_bisector"
+    assert sq.answer.correct == "等しい"
+    assert len({mr.params["a"], mr.params["b"], mr.params["pt"]}) == 3
+
+
+def test_judge_construction_property_angle_bisector_construct():
+    ctx = _make_ctx("math.g1_l42.knowledge", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "judge_construction_property_angle_bisector"
+    sq = mr.sub_questions[0]
+    assert mr.params["topic"] == "angle_bisector"
+    assert sq.answer.correct == "等しい"
+    assert len({mr.params["o"], mr.params["a"], mr.params["b"], mr.params["pt"]}) == 4
+
+
+@pytest.mark.parametrize(
+    "family,level", [("math.g1_l41.knowledge", 1), ("math.g1_l42.knowledge", 1)]
+)
+@pytest.mark.parametrize("seed", range(100))
+def test_judge_construction_property_double_solve_property(family, level, seed):
+    ctx = _make_ctx(family, level)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.judge_construction_property")
+    sol = solver(mr.params["topic"])
+    assert sol.answer.correct == mr.sub_questions[0].answer.correct
+    assert sol.answer.fact_id == mr.sub_questions[0].answer.fact_id
+
+
+def test_judge_circle_property_construct():
+    ctx = _make_ctx("math.g1_l45.knowledge", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "judge_circle_property"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "choice"
+    assert mr.params["concept"] in {"arc_central_angle_proportional", "tangent_perpendicular"}
+    assert not any(ch.isdigit() for ch in sq.answer.correct)
+    assert sq.answer.correct not in sq.answer.distractors
+
+
+@pytest.mark.parametrize("seed", range(100))
+def test_judge_circle_property_double_solve_property(seed):
+    ctx = _make_ctx("math.g1_l45.knowledge", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.judge_circle_property")
+    sol = solver(mr.params["concept"])
+    assert sol.answer.correct == mr.sub_questions[0].answer.correct
+    assert sol.answer.fact_id == mr.sub_questions[0].answer.fact_id
+
+
+def test_sector_arc_length_or_area_lv1_construct():
+    ctx = _make_ctx("math.g1_l46.find_value", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "sector_arc_length_or_area"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "value"
+    assert mr.params["target"] in {"arc_length", "area"}
+    assert "π" in sq.answer.display
+
+
+@pytest.mark.parametrize("seed", range(100))
+def test_sector_arc_length_or_area_double_solve_property(seed):
+    ctx = _make_ctx("math.g1_l46.find_value", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.sector_arc_length_or_area")
+    sol = solver(mr.params["radius"], mr.params["angle"], mr.params["target"])
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+    # 独立検算: 弧の長さ/面積の公式で sympy 恒真確認。
+    r, a = sympy.Integer(mr.params["radius"]), sympy.Integer(mr.params["angle"])
+    if mr.params["target"] == "arc_length":
+        expected = 2 * sympy.pi * r * a / 360
+    else:
+        expected = sympy.pi * r * r * a / 360
+    assert sympy.srepr(expected) == sol.answer.srepr
+
+
+def test_sector_solve_central_angle_lv2_construct():
+    ctx = _make_ctx("math.g1_l46.find_value", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "sector_solve_central_angle"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "value"
+    assert sympy.Rational(mr.params["area_coeff"]) * 360 == mr.params["angle"] * mr.params["radius"] ** 2
+
+
+@pytest.mark.parametrize("seed", range(100))
+def test_sector_solve_central_angle_double_solve_property(seed):
+    ctx = _make_ctx("math.g1_l46.find_value", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.sector_solve_central_angle")
+    sol = solver(mr.params["radius"], mr.params["area_coeff"])
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+    assert sol.answer.srepr == sympy.srepr(sympy.Integer(mr.params["angle"]))

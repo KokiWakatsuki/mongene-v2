@@ -1,0 +1,300 @@
+"""平面図形まわりの recipe（構成的生成・answer-first。実装設計 §6.1）。
+
+C7（g1 平面図形）クラスタのうち g1_l38〜l46 の非 visual セル群（plane_geometry.py の
+solver 群）に対応する recipe を集約する。乱数は `engine.core.rng.draw` 以外で解釈しない。
+用語想起（g1_l37/l43/l44/l45 Lv1）は既存 `math.term_recall` ハブ（letter_expr.py）に
+domain を追加して対応するため、ここには含まれない。
+"""
+from __future__ import annotations
+
+from typing import cast
+
+import sympy
+
+from engine.core.contracts import (
+    MR,
+    CellContext,
+    Provenance,
+    Solution,
+    SubQuestionMR,
+    SymbolicAnswer,
+)
+from engine.core.registry import REGISTRY, register_recipe
+from engine.core.rng import Rng, draw
+from engine.packs.math.recipes.letter_expr import _draw_distinct_points
+from engine.packs.math.solvers.plane_geometry import _fmt_pi_display
+
+
+def _effective_concept_tags(ctx: CellContext) -> list[str]:
+    return list(ctx.spec_level.concept_tags or ctx.spec_family.concepts_default)
+
+
+def _effective_cause_tags(ctx: CellContext) -> list[str]:
+    return list(ctx.spec_level.cause_tags)
+
+
+# ---------------------------------------------------------------------------
+# g1_l38/l39/l40.knowledge Lv1: 平行移動・回転移動・対称移動の不変性の判別
+# ---------------------------------------------------------------------------
+_TRANSFORMATION_INVARIANT_CONCEPTS = [
+    "transformation_invariant.parallel_translation",
+    "transformation_invariant.rotation",
+    "transformation_invariant.reflection",
+]
+
+
+@register_recipe("math.judge_transformation_invariant", provides_concepts=_TRANSFORMATION_INVARIANT_CONCEPTS)
+def judge_transformation_invariant_recipe(ctx: CellContext, rng: Rng) -> MR:
+    """平行移動/回転移動/対称移動の性質(不変量)を判別する（g1_l38/l39/l40.knowledge Lv1）。"""
+    p = ctx.spec_level.params
+    topic = str(p["topic"])
+    surface: dict[str, object]
+    if topic == "parallel_translation":
+        m = int(draw(p["distance_domain"], rng))
+        n = int(draw(p["distance_domain"], rng))
+        statement = (
+            f"図形を、右へ{m}目盛り、上へ{n}目盛りだけ平行移動した。移動前後で、"
+            "対応する辺の長さと図形の大きさの関係を答えよ"
+        )
+        surface = {"m": m, "n": n}
+    elif topic == "rotation":
+        o = _draw_distinct_points(1, rng)[0]
+        deg = int(draw(p["angle_domain"], rng))
+        statement = (
+            f"図形を、点{o}を中心として{deg}°回転移動した。移動前後で、対応する点と、"
+            f"回転の中心{o}からの距離の関係を答えよ"
+        )
+        surface = {"center": o, "deg": deg}
+    else:  # reflection
+        line = str(draw(cast("list[str]", p["line_domain"]), rng))
+        pa, pb = _draw_distinct_points(2, rng)
+        statement = (
+            f"図形を、直線{line}を対称の軸として対称移動した。移動前後で、対応する2点"
+            f"{pa}、{pb}を結ぶ線分と、対称の軸{line}との関係を答えよ"
+        )
+        surface = {"line": line, "a": pa, "b": pb}
+
+    solver = REGISTRY.solver("math.judge_transformation_invariant")
+    sol = cast(Solution, solver(topic))
+
+    sub_question = SubQuestionMR(
+        label="(1)", asked="choice", answer=sol.answer, steps=sol.steps,
+        concept_tags=_effective_concept_tags(ctx), cause_tags=_effective_cause_tags(ctx),
+    )
+    return MR(
+        signature=ctx.spec_level.signature, family=ctx.family, level=ctx.level,
+        purpose=ctx.purpose, seed=0,
+        params={"topic": topic, **surface},
+        given={"statement": statement}, sub_questions=[sub_question], visual_plan=None,
+        provenance=Provenance(recipe="math.judge_transformation_invariant"),
+    )
+
+
+# ---------------------------------------------------------------------------
+# g1_l41/l42.knowledge Lv1: 垂直二等分線/角の二等分線上の点の等距離性の判別
+# ---------------------------------------------------------------------------
+_CONSTRUCTION_PROPERTY_CONCEPTS = [
+    "construction_property.perpendicular_bisector",
+    "construction_property.angle_bisector",
+]
+
+
+@register_recipe("math.judge_construction_property", provides_concepts=_CONSTRUCTION_PROPERTY_CONCEPTS)
+def judge_construction_property_recipe(ctx: CellContext, rng: Rng) -> MR:
+    """垂直二等分線/角の二等分線上の点が2端(2辺)から等距離という性質を判別する
+
+    （g1_l41/l42.knowledge Lv1）。
+    """
+    p = ctx.spec_level.params
+    topic = str(p["topic"])
+    if topic == "perpendicular_bisector":
+        a, b, pt = _draw_distinct_points(3, rng)
+        statement = (
+            f"線分{a}{b}の垂直二等分線上に点{pt}をとる。このとき、{pt}{a}と{pt}{b}の"
+            "長さの関係を、その理由となる性質の名前とともに答えよ"
+        )
+        surface = {"a": a, "b": b, "pt": pt}
+    else:  # angle_bisector
+        o, a, b, pt = _draw_distinct_points(4, rng)
+        statement = (
+            f"∠{a}{o}{b}の二等分線上に点{pt}をとり、{pt}から2辺{o}{a}、{o}{b}に垂線を"
+            f"引く。このとき、{pt}から2辺までの距離の関係を答えよ"
+        )
+        surface = {"o": o, "a": a, "b": b, "pt": pt}
+
+    solver = REGISTRY.solver("math.judge_construction_property")
+    sol = cast(Solution, solver(topic))
+
+    sub_question = SubQuestionMR(
+        label="(1)", asked="choice", answer=sol.answer, steps=sol.steps,
+        concept_tags=_effective_concept_tags(ctx), cause_tags=_effective_cause_tags(ctx),
+    )
+    return MR(
+        signature=ctx.spec_level.signature, family=ctx.family, level=ctx.level,
+        purpose=ctx.purpose, seed=0,
+        params={"topic": topic, **surface},
+        given={"statement": statement}, sub_questions=[sub_question], visual_plan=None,
+        provenance=Provenance(recipe="math.judge_construction_property"),
+    )
+
+
+# ---------------------------------------------------------------------------
+# g1_l37.knowledge Lv2: 「点と直線との距離」の意味の判別
+# ---------------------------------------------------------------------------
+_POINT_LINE_DISTANCE_MEANING_CONCEPTS = ["point_line_distance.meaning"]
+
+
+@register_recipe(
+    "math.judge_point_line_distance_meaning", provides_concepts=_POINT_LINE_DISTANCE_MEANING_CONCEPTS
+)
+def judge_point_line_distance_meaning_recipe(ctx: CellContext, rng: Rng) -> MR:
+    """「点と直線との距離」がどの線分の長さを指すかを判別する（g1_l37.knowledge Lv2）。"""
+    pt, a, b = _draw_distinct_points(3, rng)
+    statement = (
+        f"点{pt}と直線{a}{b}がある。「点{pt}と直線{a}{b}との距離」とは、どの線分の"
+        "長さのことか、図に即して答えよ"
+    )
+
+    solver = REGISTRY.solver("math.judge_point_line_distance_meaning")
+    sol = cast(Solution, solver("_"))
+
+    sub_question = SubQuestionMR(
+        label="(1)", asked="choice", answer=sol.answer, steps=sol.steps,
+        concept_tags=_effective_concept_tags(ctx), cause_tags=_effective_cause_tags(ctx),
+    )
+    return MR(
+        signature=ctx.spec_level.signature, family=ctx.family, level=ctx.level,
+        purpose=ctx.purpose, seed=0,
+        params={"pt": pt, "a": a, "b": b},
+        given={"statement": statement}, sub_questions=[sub_question], visual_plan=None,
+        provenance=Provenance(recipe="math.judge_point_line_distance_meaning"),
+    )
+
+
+# ---------------------------------------------------------------------------
+# g1_l45.knowledge Lv2: 弧と中心角の比例/接線と半径の垂直性の判別
+# ---------------------------------------------------------------------------
+_CIRCLE_PROPERTY_CONCEPTS = ["circle_property.judge"]
+
+
+@register_recipe("math.judge_circle_property", provides_concepts=_CIRCLE_PROPERTY_CONCEPTS)
+def judge_circle_property_recipe(ctx: CellContext, rng: Rng) -> MR:
+    """弧と中心角の比例/接線と半径の垂直性を判別する（g1_l45.knowledge Lv2）。"""
+    p = ctx.spec_level.params
+    concept = str(draw(cast("list[str]", p["concept_set"]), rng))
+    if concept == "arc_central_angle_proportional":
+        o = _draw_distinct_points(1, rng)[0]
+        r = int(draw(p["number_domain"], rng))
+        statement = (
+            f"中心{o}、半径{r}cmの円で、中心角が2倍になると、それに対する弧の長さは"
+            "どうなるか、答えよ"
+        )
+        surface = {"center": o, "r": r}
+    else:  # tangent_perpendicular
+        o, t = _draw_distinct_points(2, rng)
+        statement = (
+            f"中心{o}の円に、点{t}で接する接線がある。この接線と、点{t}を通る半径"
+            f"{o}{t}がつくる角の大きさの性質を答えよ"
+        )
+        surface = {"center": o, "tangent_point": t}
+
+    solver = REGISTRY.solver("math.judge_circle_property")
+    sol = cast(Solution, solver(concept))
+
+    sub_question = SubQuestionMR(
+        label="(1)", asked="choice", answer=sol.answer, steps=sol.steps,
+        concept_tags=_effective_concept_tags(ctx), cause_tags=_effective_cause_tags(ctx),
+    )
+    return MR(
+        signature=ctx.spec_level.signature, family=ctx.family, level=ctx.level,
+        purpose=ctx.purpose, seed=0,
+        params={"concept": concept, **surface},
+        given={"statement": statement}, sub_questions=[sub_question], visual_plan=None,
+        provenance=Provenance(recipe="math.judge_circle_property"),
+    )
+
+
+# ---------------------------------------------------------------------------
+# g1_l46.find_value Lv1: 半径・中心角からおうぎ形の弧の長さ/面積を求める
+# ---------------------------------------------------------------------------
+_SECTOR_ARC_LENGTH_OR_AREA_CONCEPTS = ["sector.arc_length_or_area"]
+
+
+@register_recipe("math.sector_arc_length_or_area", provides_concepts=_SECTOR_ARC_LENGTH_OR_AREA_CONCEPTS)
+def sector_arc_length_or_area_recipe(ctx: CellContext, rng: Rng) -> MR:
+    """半径・中心角からおうぎ形の弧の長さ/面積を求める（g1_l46.find_value Lv1・answer-first）。"""
+    p = ctx.spec_level.params
+    r = int(draw(p["radius_domain"], rng))
+    angle = int(draw(cast("list[int]", p["angle_domain"]), rng))
+    target = str(draw(cast("list[str]", p["target_set"]), rng))
+
+    solver = REGISTRY.solver("math.sector_arc_length_or_area")
+    sol = cast(Solution, solver(str(r), str(angle), target))
+    assert isinstance(sol.answer, SymbolicAnswer)
+
+    asked_label = "弧の長さ" if target == "arc_length" else "面積"
+    statement = (
+        f"半径{r}cm、中心角{angle}°のおうぎ形がある。このおうぎ形の{asked_label}を"
+        "求めよ。ただし円周率はπとする"
+    )
+
+    sub_question = SubQuestionMR(
+        label="(1)", asked="value", answer=sol.answer, steps=sol.steps,
+        concept_tags=_effective_concept_tags(ctx), cause_tags=_effective_cause_tags(ctx),
+    )
+    return MR(
+        signature=ctx.spec_level.signature, family=ctx.family, level=ctx.level,
+        purpose=ctx.purpose, seed=0,
+        params={"radius": r, "angle": angle, "target": target},
+        given={"condition": statement}, sub_questions=[sub_question], visual_plan=None,
+        provenance=Provenance(recipe="math.sector_arc_length_or_area"),
+    )
+
+
+# ---------------------------------------------------------------------------
+# g1_l46.find_value Lv2: 面積から中心角の大きさを逆算する
+# ---------------------------------------------------------------------------
+_SECTOR_SOLVE_CENTRAL_ANGLE_CONCEPTS = ["sector.solve_central_angle"]
+
+
+@register_recipe("math.sector_solve_central_angle", provides_concepts=_SECTOR_SOLVE_CENTRAL_ANGLE_CONCEPTS)
+def sector_solve_central_angle_recipe(ctx: CellContext, rng: Rng) -> MR:
+    """おうぎ形の面積から中心角の大きさを逆算する（g1_l46.find_value Lv2・answer-first）。
+
+    半径 r と中心角 angle を先に引き、面積の係数 k=r²·angle/360 の分母が小さい(≤12・
+    あまり煩雑でない)組合せだけを採用する（有界リトライ・compare_signed_numbers と同型。
+    分母=1固定にすると採用される半径がごく一部に偏り dup_rate が悪化するため、分母の
+    上限をゆるめて採用の幅を広くとる）。
+    """
+    p = ctx.spec_level.params
+    for _ in range(200):
+        r = int(draw(p["radius_domain"], rng))
+        angle = int(draw(cast("list[int]", p["angle_domain"]), rng))
+        k = sympy.Rational(r * r * angle, 360)
+        if k.q <= 12:
+            break
+    else:
+        raise ValueError("sector_solve_central_angle: 分母が小さい面積を構成できず")
+
+    solver = REGISTRY.solver("math.sector_solve_central_angle")
+    sol = cast(Solution, solver(str(r), str(k)))
+    assert isinstance(sol.answer, SymbolicAnswer)
+    assert sol.answer.srepr == sympy.srepr(sympy.Integer(angle)), "double-solve 不一致: 中心角"
+
+    area_disp = _fmt_pi_display(k * sympy.pi)
+    statement = (
+        f"半径{r}cmのおうぎ形の面積が{area_disp}cm²である。このおうぎ形の中心角の"
+        "大きさを求めよ"
+    )
+
+    sub_question = SubQuestionMR(
+        label="(1)", asked="value", answer=sol.answer, steps=sol.steps,
+        concept_tags=_effective_concept_tags(ctx), cause_tags=_effective_cause_tags(ctx),
+    )
+    return MR(
+        signature=ctx.spec_level.signature, family=ctx.family, level=ctx.level,
+        purpose=ctx.purpose, seed=0,
+        params={"radius": r, "angle": angle, "area_coeff": str(k)},
+        given={"condition": statement}, sub_questions=[sub_question], visual_plan=None,
+        provenance=Provenance(recipe="math.sector_solve_central_angle"),
+    )

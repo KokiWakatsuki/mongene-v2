@@ -1,0 +1,55 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - point_line_distance.meaning
+  provenance:
+    git_commit: ''
+    recipe: math.judge_point_line_distance_meaning
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_judge_point_line_distance_meaning_v1
+    tier: T1
+  requested:
+    form: knowledge
+    level: 2
+    subject: math
+    unit: g1_l37
+  resolved:
+    form: knowledge
+    level: 2
+    subject: math
+    unit: g1_l37
+  seed: 2
+  signature: judge_point_line_distance_meaning
+problem_ref: 4e35589bf8d44c08
+problem_text: 点Dと直線ERがある。「点Dと直線ERとの距離」とは、どの線分の長さのことか、図に即して答えよ。
+sub_questions:
+- answer:
+    correct: 垂線の長さ
+    distractors:
+    - 直線上の適当な点までの線分の長さ
+    - 直線に平行に引いた線分の長さ
+    fact_id: point_line_distance.meaning
+    kind: choice
+  cause_tags: []
+  concept_tags:
+  - point_line_distance.meaning
+  explanation: まず、点と直線の位置関係を読み取る。 点と直線の位置関係を読み取る次に、点と直線との距離が、どの線分の長さを指すかを判別する。 垂線の長さ
+  hints:
+  - 点と直線の位置関係を読み取る。
+  label: (1)
+  prompt_text: choice を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 点と直線の位置関係を読み取る。
+    op: identify_point_and_line
+    result_display: 点と直線の位置関係を読み取る
+    result_srepr: ''
+  - args: []
+    narration: 点と直線との距離が、どの線分の長さを指すかを判別する。
+    op: judge_distance_definition
+    result_display: 垂線の長さ
+    result_srepr: 垂線の長さ
+visual_svg: null

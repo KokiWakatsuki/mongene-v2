@@ -21,5 +21,6 @@ from engine.packs.math.templates import statistics_distribution  # noqa: F401  (
 from engine.packs.math.templates import quartile  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.templates import sample_survey  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.templates import exam_fusion  # noqa: F401  (登録の副作用のため import)
+from engine.packs.math.templates import plane_geometry  # noqa: F401  (登録の副作用のため import)
 
 __all__: list[str] = []

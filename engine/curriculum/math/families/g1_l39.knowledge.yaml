@@ -1,0 +1,29 @@
+family: math.g1_l39.knowledge
+form: knowledge
+source_desc: |
+  回転移動の意味と性質(中心からの距離・回転角一定)を判別する
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: 回転移動の意味と性質(中心からの距離・回転角一定)を判別する。
+       example: 回転移動について、次の文の正誤を答えよ。「対応する点は、回転の
+                中心からの距離がすべて等しい。」また、対応する点と回転の中心を
+                結んでできる角を何というか答えよ。
+  【設計モデル】新設 solver math.judge_transformation_invariant（topic="rotation"固定・
+  回転移動で対応する点と回転の中心との距離は等しいという恒真の性質を判別。具体的な
+  回転の中心・角度は surface で dup 分散、性質そのものには無関係）。
+concepts_default: [transformation_invariant.rotation]
+levels:
+  "1":
+    signature: judge_transformation_invariant_rotation
+    recipe: math.judge_transformation_invariant
+    params:
+      topic: rotation
+      angle_domain: {int_range: [1, 359]}
+    given: [statement]
+    asked: [choice]
+    visual: none
+    text: {tier: T1, template: lf_judge_transformation_invariant_v1}
+    hints: [steps_prefix]
+    concept_tags: [transformation_invariant.rotation]
+    cause_tags: []
+remedial:
+  default_level: 1

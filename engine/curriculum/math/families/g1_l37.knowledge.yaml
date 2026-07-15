@@ -1,0 +1,44 @@
+family: math.g1_l37.knowledge
+form: knowledge
+source_desc: |
+  直線・線分・半直線・角、点と直線の距離の用語と意味を想起・判別する
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: 直線・線分・半直線・角・距離の用語と記号を想起する。
+       example: 2点A、Bを両方向に限りなくのばしたものを何というか答えよ。また、
+                線分ABを記号でどう書くか答えよ。
+  Lv2 desc: 記号の意味を判別し図に対応させる(点と直線の距離の意味等)。
+       example: 点Pと直線ℓがある。「点Pと直線ℓとの距離」とは、どの線分の長さの
+                ことか、図に即して説明せよ。
+  【設計モデル】Lv1: 用語想起ハブ（既存 math.term_recall・_TERM_MAPS に domain
+  "line_angle_terms"（直線/線分/半直線/角）を追加）。Lv2: 新設 solver
+  math.judge_point_line_distance_meaning（「点と直線との距離」＝垂線の長さという
+  恒真の定義判別。math.term_recall を再利用すると Lv1 と op 列が一致し level_sep
+  （G-FP）に反すため専用 solver にする）。
+concepts_default: [line_angle_terms.term_recall]
+levels:
+  "1":
+    signature: line_angle_terms_term_recall
+    recipe: math.term_recall
+    params:
+      domain: line_angle_terms
+      concept_set: [line, segment, ray, angle]
+    given: [statement]
+    asked: [choice]
+    visual: none
+    text: {tier: T1, template: lf_term_recall_v1}
+    hints: [steps_prefix]
+    concept_tags: [line_angle_terms.term_recall]
+    cause_tags: []
+  "2":
+    signature: judge_point_line_distance_meaning
+    recipe: math.judge_point_line_distance_meaning
+    params: {}
+    given: [statement]
+    asked: [choice]
+    visual: none
+    text: {tier: T1, template: lf_judge_point_line_distance_meaning_v1}
+    hints: [steps_prefix]
+    concept_tags: [point_line_distance.meaning]
+    cause_tags: []
+remedial:
+  default_level: 1

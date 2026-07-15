@@ -1,0 +1,28 @@
+family: math.g1_l44.knowledge
+form: knowledge
+source_desc: |
+  条件(等距離・角度)に対しどの作図の性質が対応するか判別する
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv2 desc: 条件(等距離・角度)に対しどの作図の性質が対応するか判別する。
+       example: 次の条件を満たす点を作図するとき、どの基本作図を使えばよいか答えよ。
+                (1) 2点A、Bから等しい距離にある点 (2) 角の2辺から等しい距離にある点。
+  【設計モデル】用語想起ハブ（既存 math.term_recall・_TERM_MAPS に domain
+  "construction_choice_terms"（2点から等距離→垂直二等分線／2辺から等距離→角の
+  二等分線）を追加）。
+concepts_default: [construction_choice_terms.term_recall]
+levels:
+  "2":
+    signature: construction_choice_terms_term_recall
+    recipe: math.term_recall
+    params:
+      domain: construction_choice_terms
+      concept_set: [equidistant_points, equidistant_sides]
+    given: [statement]
+    asked: [choice]
+    visual: none
+    text: {tier: T1, template: lf_term_recall_v1}
+    hints: [steps_prefix]
+    concept_tags: [construction_choice_terms.term_recall]
+    cause_tags: []
+remedial:
+  default_level: 2

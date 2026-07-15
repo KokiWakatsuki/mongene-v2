@@ -1,0 +1,27 @@
+family: math.g1_l41.knowledge
+form: knowledge
+source_desc: |
+  垂直二等分線上の点は2端から等距離という性質を判別する
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: 垂直二等分線上の点は2端から等距離という性質を判別する。
+       example: 線分ABの垂直二等分線上に点Pをとる。このとき、PAとPBの長さの関係を、
+                その理由となる性質の名前とともに答えよ。
+  【設計モデル】新設 solver math.judge_construction_property（topic="perpendicular_bisector"
+  固定・垂直二等分線上の点は線分の両端から等距離という恒真の性質を判別。具体的な
+  点名は surface で dup 分散、性質そのものには無関係）。
+concepts_default: [construction_property.perpendicular_bisector]
+levels:
+  "1":
+    signature: judge_construction_property_perpendicular_bisector
+    recipe: math.judge_construction_property
+    params:
+      topic: perpendicular_bisector
+    given: [statement]
+    asked: [choice]
+    visual: none
+    text: {tier: T1, template: lf_judge_construction_property_v1}
+    hints: [steps_prefix]
+    concept_tags: [construction_property.perpendicular_bisector]
+    cause_tags: []
+remedial:
+  default_level: 1

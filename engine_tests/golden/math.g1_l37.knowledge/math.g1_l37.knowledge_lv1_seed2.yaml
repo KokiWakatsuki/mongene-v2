@@ -1,0 +1,56 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - line_angle_terms.term_recall
+  provenance:
+    git_commit: ''
+    recipe: math.term_recall
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_term_recall_v1
+    tier: T1
+  requested:
+    form: knowledge
+    level: 1
+    subject: math
+    unit: g1_l37
+  resolved:
+    form: knowledge
+    level: 1
+    subject: math
+    unit: g1_l37
+  seed: 2
+  signature: line_angle_terms_term_recall
+problem_ref: 20f9b06af636b434
+problem_text: 2点J、Kを両端とする、まっすぐな線の一部分 を何といいますか。
+sub_questions:
+- answer:
+    correct: 線分
+    distractors:
+    - 直線
+    - 半直線
+    - 角
+    fact_id: line_angle_terms.term.segment
+    kind: choice
+  cause_tags: []
+  concept_tags:
+  - line_angle_terms.term_recall
+  explanation: まず、説明されている式や数の部分がどれかを読み取る。 説明されている対象を読み取る次に、その対象を表す用語の名前を思い出す。 線分
+  hints:
+  - 説明されている式や数の部分がどれかを読み取る。
+  label: (1)
+  prompt_text: choice を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 説明されている式や数の部分がどれかを読み取る。
+    op: identify_description
+    result_display: 説明されている対象を読み取る
+    result_srepr: segment
+  - args: []
+    narration: その対象を表す用語の名前を思い出す。
+    op: name_concept
+    result_display: 線分
+    result_srepr: 線分
+visual_svg: null

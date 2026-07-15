@@ -292,6 +292,22 @@ def _draw_distinct_letters(k: int, rng: Rng) -> list[str]:
     return out
 
 
+# 図形の点を表す大文字（C7 平面図形クラスタの用語想起・surface の variety 用）。
+_POINT_LETTERS = [
+    "A", "B", "C", "D", "E", "F", "G", "H", "J", "K", "L", "M", "N", "P", "Q", "R",
+]
+
+
+def _draw_distinct_points(k: int, rng: Rng) -> list[str]:
+    """相異なる k 個の点名（大文字）を引く（_draw_distinct_letters と同型）。"""
+    pool = list(_POINT_LETTERS)
+    out: list[str] = []
+    for _ in range(k):
+        idx = int(draw({"int_set": list(range(len(pool)))}, rng))
+        out.append(pool.pop(idx))
+    return out
+
+
 def _shuffle_pairs(pairs: list[tuple[str, str]], rng: Rng) -> list[tuple[str, str]]:
     """(sym, disp) の並びを draw で撹拌する（未簡約の見た目＝文字が正準順でない）。"""
     rest = list(pairs)
@@ -439,6 +455,11 @@ _TERM_RECALL_CONCEPTS = [
     "survey_method_terms.term_recall",
     "sampling_terms.term_recall",
     "quadrant_terms.term_recall",
+    # C7 g1 平面図形（用語想起）
+    "line_angle_terms.term_recall",
+    "perpendicular_terms.term_recall",
+    "construction_choice_terms.term_recall",
+    "circle_terms.term_recall",
 ]
 
 
@@ -717,6 +738,55 @@ def _draw_term_statement(domain: str, concept: str, rng: Rng, p: dict[str, objec
         if concept == "quadrant4":
             return f"座標平面上で、x座標が{m}のように正、y座標は-{n}のように負である点が含まれる部分"
         return "座標平面上で、x軸とy軸が交わる点（座標が(0, 0)である点）"  # origin
+
+    if domain == "line_angle_terms":
+        # g1_l37 直線・線分・半直線・角の用語。具体例の点名を埋め込み surface を分散する。
+        pa, pb, po = _draw_distinct_points(3, rng)
+        if concept == "line":
+            return f"2点{pa}、{pb}を両方向に限りなくのばした、まっすぐな図形"
+        if concept == "segment":
+            return f"2点{pa}、{pb}を両端とする、まっすぐな線の一部分"
+        if concept == "ray":
+            return f"点{pa}を端として、{pb}の方向へ一方だけ限りなくのばした図形"
+        return f"点{po}から出る2つの半直線{po}{pa}、{po}{pb}がつくる図形"  # angle
+
+    if domain == "perpendicular_terms":
+        # g1_l37/l43 垂線まわりの用語。具体例の点名・直線名を埋め込み surface を分散する
+        # （foot/distance のどちらの concept でも p_name/h_name/line_name をすべて本文に
+        # 使う＝draw が dup_key の variety に反映されない「無駄引き」を避ける）。
+        p_name, h_name = _draw_distinct_points(2, rng)
+        line_name = str(draw(["ℓ", "m", "n"], rng))
+        if concept == "foot":
+            return f"点{p_name}から直線{line_name}に垂線を引いたときの、直線{line_name}との交点{h_name}"
+        return (
+            f"点{p_name}から直線{line_name}に引いた垂線と、その足{h_name}によってできる"
+            f"線分の長さのことで、点{p_name}と直線{line_name}との距離とよばれる長さ"
+        )  # distance
+
+    if domain == "construction_choice_terms":
+        # g1_l44 条件に対応する基本作図の用語。具体例の点名を埋め込み surface を分散する
+        # （concept ごとに使う点の数が違うため、無駄引きを避け concept 別に draw する）。
+        if concept == "equidistant_points":
+            pa, pb = _draw_distinct_points(2, rng)
+            return f"2点{pa}、{pb}から等しい距離にある点の集まりを作図するときに使う、基本作図の名前"
+        po, pa, pb = _draw_distinct_points(3, rng)
+        return (
+            f"∠{pa}{po}{pb}の2辺{po}{pa}、{po}{pb}から等しい距離にある点の集まりを"
+            "作図するときに使う、基本作図の名前"
+        )  # equidistant_sides
+
+    if domain == "circle_terms":
+        # g1_l45 円まわりの用語。具体例の点名を埋め込み surface を分散する。
+        po, pa, pb = _draw_distinct_points(3, rng)
+        if concept == "radius":
+            return f"円の中心{po}と、円周上の点{pa}を結んだ線分"
+        if concept == "chord":
+            return f"円周上の2点{pa}、{pb}を結んだ線分"
+        if concept == "arc":
+            return f"円周上の2点{pa}、{pb}によって分けられる、円周の一部分"
+        if concept == "sector":
+            return f"円の中心{po}と円周上の2点{pa}、{pb}を通る2つの半径、およびその間の弧で囲まれた図形"
+        return f"円の中心{po}と円周上の2点{pa}、{pb}を結ぶ2つの半径がつくる、中心にできる角"  # central_angle
 
     if domain == "prime_concepts":
         # g1_l11 素数まわりの用語。相異なる2つの具体例を埋め込み surface を分散する

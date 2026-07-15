@@ -1,0 +1,47 @@
+family: math.g1_l46.find_value
+form: find_value
+source_desc: |
+  半径と中心角からおうぎ形の弧の長さ/面積を求める・面積から中心角を逆算する
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: 半径と中心角から弧の長さ/面積を公式で直接求める(1手順)。
+       example: 半径6cm、中心角60°のおうぎ形がある。このおうぎ形の弧の長さを
+                求めよ。ただし円周率はπとする。
+  Lv2 desc: 弧長や面積から中心角・半径を逆算する/周の長さを合成して求める(多段)。
+       example: 半径9cmのおうぎ形の面積が27πcm²である。このおうぎ形の中心角の
+                大きさを求めよ。
+  【設計モデル】新設 solver math.sector_arc_length_or_area（Lv1・半径×中心角の割合から
+  弧の長さ/面積を直接計算）、math.sector_solve_central_angle（Lv2・面積の公式を
+  中心角について逆算）。中心角は360の約数に限定し、Lv2 は面積の係数(πの前の数)の
+  分母が小さい(≤12)組合せだけを有界リトライで採用し、あまり煩雑でない値にする
+  （分母=1固定だと採用される半径がごく一部に偏り dup_rate が悪化するため）。
+concepts_default: [sector.arc_length_or_area]
+levels:
+  "1":
+    signature: sector_arc_length_or_area
+    recipe: math.sector_arc_length_or_area
+    params:
+      radius_domain: {int_range: [2, 20]}
+      angle_domain: [30, 36, 40, 45, 60, 72, 90, 120, 135, 150, 180, 210, 240, 270, 300, 315, 330]
+      target_set: [arc_length, area]
+    given: [condition]
+    asked: [value]
+    visual: none
+    text: {tier: T1, template: lf_sector_arc_length_or_area_v1}
+    hints: [steps_prefix]
+    concept_tags: [sector.arc_length_or_area]
+    cause_tags: []
+  "2":
+    signature: sector_solve_central_angle
+    recipe: math.sector_solve_central_angle
+    params:
+      radius_domain: {int_range: [2, 20]}
+      angle_domain: [30, 36, 40, 45, 60, 72, 90, 120, 135, 150, 180, 210, 240, 270, 300, 315, 330]
+    given: [condition]
+    asked: [value]
+    visual: none
+    text: {tier: T1, template: lf_sector_solve_central_angle_v1}
+    hints: [steps_prefix]
+    concept_tags: [sector.solve_central_angle]
+    cause_tags: []
+remedial:
+  default_level: 1

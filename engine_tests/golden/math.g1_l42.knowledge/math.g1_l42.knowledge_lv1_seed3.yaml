@@ -1,0 +1,54 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - construction_property.angle_bisector
+  provenance:
+    git_commit: ''
+    recipe: math.judge_construction_property
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_judge_construction_property_v1
+    tier: T1
+  requested:
+    form: knowledge
+    level: 1
+    subject: math
+    unit: g1_l42
+  resolved:
+    form: knowledge
+    level: 1
+    subject: math
+    unit: g1_l42
+  seed: 3
+  signature: judge_construction_property_angle_bisector
+problem_ref: 5f6307b660becd28
+problem_text: ∠RJDの二等分線上に点Pをとり、Pから2辺JR、JDに垂線を引く。このとき、Pから2辺までの距離の関係を答えよ。
+sub_questions:
+- answer:
+    correct: 等しい
+    distractors:
+    - 等しくない
+    fact_id: construction_property.angle_bisector
+    kind: choice
+  cause_tags: []
+  concept_tags:
+  - construction_property.angle_bisector
+  explanation: まず、角の二等分線上の点から、角をつくる2辺までの距離を見比べる。 角の二等分線上の点から、角をつくる2辺までの距離を見比べる。次に、その距離どうしの関係を判別する。 等しい
+  hints:
+  - 角の二等分線上の点から、角をつくる2辺までの距離を見比べる。
+  label: (1)
+  prompt_text: choice を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 角の二等分線上の点から、角をつくる2辺までの距離を見比べる。
+    op: identify_construction_property
+    result_display: 角の二等分線上の点から、角をつくる2辺までの距離を見比べる。
+    result_srepr: angle_bisector
+  - args: []
+    narration: その距離どうしの関係を判別する。
+    op: judge_construction_property
+    result_display: 等しい
+    result_srepr: 等しい
+visual_svg: null

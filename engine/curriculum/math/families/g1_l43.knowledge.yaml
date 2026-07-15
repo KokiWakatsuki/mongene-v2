@@ -1,0 +1,27 @@
+family: math.g1_l43.knowledge
+form: knowledge
+source_desc: |
+  垂線・垂線の足・点と直線の距離の意味を判別する
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: 垂線・垂線の足・点と直線の距離の意味を判別する。
+       example: 点Pから直線ℓに垂線を引いたとき、直線ℓとの交点を何というか答えよ。
+                また「点Pと直線ℓとの距離」とはどの線分の長さか答えよ。
+  【設計モデル】用語想起ハブ（既存 math.term_recall・_TERM_MAPS に domain
+  "perpendicular_terms"（垂線の足・垂線の長さ＝点と直線の距離）を追加）。
+concepts_default: [perpendicular_terms.term_recall]
+levels:
+  "1":
+    signature: perpendicular_terms_term_recall_g1_l43
+    recipe: math.term_recall
+    params:
+      domain: perpendicular_terms
+      concept_set: [foot, distance]
+    given: [statement]
+    asked: [choice]
+    visual: none
+    text: {tier: T1, template: lf_term_recall_v1}
+    hints: [steps_prefix]
+    concept_tags: [perpendicular_terms.term_recall]
+    cause_tags: []
+remedial:
+  default_level: 1

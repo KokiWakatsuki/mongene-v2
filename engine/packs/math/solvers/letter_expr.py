@@ -302,6 +302,23 @@ _TERM_MAPS: dict[str, dict[str, str]] = {
         "quadrant1": "第一象限", "quadrant2": "第二象限",
         "quadrant3": "第三象限", "quadrant4": "第四象限", "origin": "原点",
     },
+    # g1_l37 直線・線分・半直線・角の用語（C7 平面図形クラスタの導入回）。
+    "line_angle_terms": {
+        "line": "直線", "segment": "線分", "ray": "半直線", "angle": "角",
+    },
+    # g1_l37/l43 垂線まわりの用語（垂線の足・点と直線の距離＝垂線の長さ）。
+    "perpendicular_terms": {
+        "foot": "垂線の足", "distance": "垂線の長さ",
+    },
+    # g1_l44 条件に対応する基本作図の用語（等距離の条件→使う基本作図）。
+    "construction_choice_terms": {
+        "equidistant_points": "垂直二等分線", "equidistant_sides": "角の二等分線",
+    },
+    # g1_l45 円まわりの用語（半径・弦・弧・おうぎ形・中心角）。
+    "circle_terms": {
+        "radius": "半径", "chord": "弦", "arc": "弧",
+        "sector": "おうぎ形", "central_angle": "中心角",
+    },
 }
 
 # domain 別の step テキスト（既定は g1_l17/l19/l21/l2 の現行文＝golden 不変）。

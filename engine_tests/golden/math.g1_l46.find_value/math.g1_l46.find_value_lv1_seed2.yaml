@@ -1,0 +1,52 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - sector.arc_length_or_area
+  provenance:
+    git_commit: ''
+    recipe: math.sector_arc_length_or_area
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_sector_arc_length_or_area_v1
+    tier: T1
+  requested:
+    form: find_value
+    level: 1
+    subject: math
+    unit: g1_l46
+  resolved:
+    form: find_value
+    level: 1
+    subject: math
+    unit: g1_l46
+  seed: 2
+  signature: sector_arc_length_or_area
+problem_ref: 8e50aa8eafd79701
+problem_text: 半径9cm、中心角60°のおうぎ形がある。このおうぎ形の面積を求めよ。ただし円周率はπとする。
+sub_questions:
+- answer:
+    display: 27π/2
+    kind: symbolic
+    srepr: Mul(Rational(27, 2), pi)
+  cause_tags: []
+  concept_tags:
+  - sector.arc_length_or_area
+  explanation: まず、おうぎ形の半径と中心角の大きさを読み取る。 半径と中心角の大きさを読み取る次に、おうぎ形の面積の公式（半径の2乗×中心角の割合×π）にあてはめて計算する。 27π/2
+  hints:
+  - おうぎ形の半径と中心角の大きさを読み取る。
+  label: (1)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args: []
+    narration: おうぎ形の半径と中心角の大きさを読み取る。
+    op: identify_radius_and_angle
+    result_display: 半径と中心角の大きさを読み取る
+    result_srepr: ''
+  - args: []
+    narration: おうぎ形の面積の公式（半径の2乗×中心角の割合×π）にあてはめて計算する。
+    op: apply_sector_formula
+    result_display: 27π/2
+    result_srepr: Mul(Rational(27, 2), pi)
+visual_svg: null
