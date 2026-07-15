@@ -434,10 +434,201 @@ def judge_inverse_proportion_table(ctx: CellContext, rng: Rng) -> MR:
     )
 
 
+# ---------------------------------------------------------------------------
+# math.solve_direct_proportion_from_point（g1_l32.find_value Lv1/Lv2）
+# 比例が通る1点 (x0,y0) から比例定数 a=y0/x0 を求め、式 y=ax を決める。
+# ---------------------------------------------------------------------------
+_SOLVE_DIRECT_PROPORTION_FROM_POINT_CONCEPTS = ["direct_proportion.solve_from_point"]
+
+
+@register_recipe(
+    "math.solve_direct_proportion_from_point",
+    provides_concepts=_SOLVE_DIRECT_PROPORTION_FROM_POINT_CONCEPTS,
+)
+def solve_direct_proportion_from_point_recipe(ctx: CellContext, rng: Rng) -> MR:
+    """比例が通る1点から比例定数を求め、式 y=ax を決める（answer-first・find_value）。
+
+    mode="integer"（Lv1）: x0(≠0) と整数倍率 k(≠0) を選び y0=k*x0 とする（a=k は整数）。
+    mode="fraction"（Lv2）: x0(≥2) と非0の余り r(0<r<x0) を選び y0=k*x0+r とする
+    （a=y0/x0 は必ず既約分数になり、割り切れる退化を構成的に排除する＝鉄則⑤）。
+    独立ソルバ `math.solve_direct_proportion_from_point` で式を再計算する（double-solve）。
+    答えは式 y=ax（asked=expression）。図は無し。
+    """
+    p = ctx.spec_level.params
+    mode = str(p["mode"])
+    multiplier_cands = _domain_candidates(cast("dict[str, object]", p["multiplier_domain"]))
+    if mode == "integer":
+        x0 = int(draw(p["x_domain"], rng))
+        k = int(draw({"int_set": [v for v in multiplier_cands if v != 0]}, rng))
+        y0 = k * x0
+    else:  # fraction
+        x0 = int(draw(p["x_fraction_domain"], rng))
+        k = int(draw({"int_set": multiplier_cands}, rng))
+        r = int(draw({"int_range": [1, x0 - 1]}, rng))
+        y0 = k * x0 + r
+
+    x0_s, y0_s = sympy.Integer(x0), sympy.Integer(y0)
+    a_expected = y0_s / x0_s
+
+    solver = REGISTRY.solver("math.solve_direct_proportion_from_point")
+    sol = cast(Solution, solver(x0_s, y0_s, mode))
+    assert isinstance(sol.answer, SymbolicAnswer)
+    assert sol.answer.srepr == sympy.srepr(a_expected * sympy.Symbol("x")), (
+        f"double-solve 不一致: 構成 a={a_expected} != solver 再計算 {sol.answer.srepr}"
+    )
+
+    statement = f"yはxに比例し、x={fmt_number(x0_s)}のときy={fmt_number(y0_s)}である。yをxの式で表せ"
+
+    sub_question = SubQuestionMR(
+        label="(1)", asked="expression", answer=sol.answer, steps=sol.steps,
+        concept_tags=_effective_concept_tags(ctx), cause_tags=_effective_cause_tags(ctx),
+    )
+    return MR(
+        signature=ctx.spec_level.signature, family=ctx.family, level=ctx.level,
+        purpose=ctx.purpose, seed=0,
+        params={"x0": str(x0_s), "y0": str(y0_s), "mode": mode},
+        given={"condition": statement}, sub_questions=[sub_question], visual_plan=None,
+        provenance=Provenance(recipe="math.solve_direct_proportion_from_point"),
+    )
+
+
+# ---------------------------------------------------------------------------
+# math.solve_inverse_proportion_from_point（g1_l35.find_value Lv1/Lv2）
+# 反比例が通る1点 (x0,y0) から比例定数 a=x0*y0 を求め、式 y=a/x を決める。
+# ---------------------------------------------------------------------------
+_SOLVE_INVERSE_PROPORTION_FROM_POINT_CONCEPTS = ["inverse_proportion.solve_from_point"]
+
+
+@register_recipe(
+    "math.solve_inverse_proportion_from_point",
+    provides_concepts=_SOLVE_INVERSE_PROPORTION_FROM_POINT_CONCEPTS,
+)
+def solve_inverse_proportion_from_point_recipe(ctx: CellContext, rng: Rng) -> MR:
+    """反比例が通る1点から比例定数を求め、式 y=a/x を決める（answer-first・find_value）。
+
+    mode="basic"（Lv1）: 正の x0・y0(いずれも≠0)を選び a=x0*y0 とする。
+    mode="signed"（Lv2）: x0・y0 の少なくとも一方に負の値を許し、符号確認の1手順を増やす
+    （level_sep）。独立ソルバ `math.solve_inverse_proportion_from_point` で式を再計算する
+    （double-solve）。答えは式 y=a/x（asked=expression）。図は無し。
+    """
+    p = ctx.spec_level.params
+    mode = str(p["mode"])
+    domain_key = "xy_domain" if mode == "basic" else "xy_signed_domain"
+    xy_cands = [v for v in _domain_candidates(cast("dict[str, object]", p[domain_key])) if v != 0]
+    x0 = int(draw({"int_set": xy_cands}, rng))
+    y0 = int(draw({"int_set": xy_cands}, rng))
+
+    x0_s, y0_s = sympy.Integer(x0), sympy.Integer(y0)
+    a_expected = x0_s * y0_s
+
+    solver = REGISTRY.solver("math.solve_inverse_proportion_from_point")
+    sol = cast(Solution, solver(x0_s, y0_s, mode))
+    assert isinstance(sol.answer, SymbolicAnswer)
+    assert sol.answer.srepr == sympy.srepr(a_expected / sympy.Symbol("x")), (
+        f"double-solve 不一致: 構成 a={a_expected} != solver 再計算 {sol.answer.srepr}"
+    )
+
+    statement = f"yはxに反比例し、x={fmt_number(x0_s)}のときy={fmt_number(y0_s)}である。yをxの式で表せ"
+
+    sub_question = SubQuestionMR(
+        label="(1)", asked="expression", answer=sol.answer, steps=sol.steps,
+        concept_tags=_effective_concept_tags(ctx), cause_tags=_effective_cause_tags(ctx),
+    )
+    return MR(
+        signature=ctx.spec_level.signature, family=ctx.family, level=ctx.level,
+        purpose=ctx.purpose, seed=0,
+        params={"x0": str(x0_s), "y0": str(y0_s), "mode": mode},
+        given={"condition": statement}, sub_questions=[sub_question], visual_plan=None,
+        provenance=Provenance(recipe="math.solve_inverse_proportion_from_point"),
+    )
+
+
+# ---------------------------------------------------------------------------
+# math.judge_proportion_graph_direction（g1_l31.knowledge Lv1）
+# ---------------------------------------------------------------------------
+_JUDGE_PROPORTION_GRAPH_DIRECTION_CONCEPTS = ["proportion.judge_graph_direction"]
+
+
+@register_recipe(
+    "math.judge_proportion_graph_direction",
+    provides_concepts=_JUDGE_PROPORTION_GRAPH_DIRECTION_CONCEPTS,
+)
+def judge_proportion_graph_direction_recipe(ctx: CellContext, rng: Rng) -> MR:
+    """比例定数の符号から比例グラフの向きを判別する（answer-first・knowledge判別型）。"""
+    p = ctx.spec_level.params
+    is_a_positive = bool(int(draw({"int_set": [0, 1]}, rng)))
+    a_cands = [v for v in _domain_candidates(cast("dict[str, object]", p["a_domain"])) if v != 0]
+    a = int(draw({"int_set": [v for v in a_cands if (v > 0) == is_a_positive]}, rng))
+
+    solver = REGISTRY.solver("math.judge_proportion_graph_direction")
+    sol = cast(Solution, solver(is_a_positive))
+    assert isinstance(sol.answer, ChoiceAnswer)
+
+    statement = (
+        f"比例y={fmt_number(sympy.Integer(a))}xのグラフについて、次の文の正誤を答えよ。"
+        "「a<0のとき、グラフは右上がりの直線になる。」また、比例のグラフは必ずどんな点を通るか答えよ"
+    )
+
+    sub_question = SubQuestionMR(
+        label="(1)", asked="choice", answer=sol.answer, steps=sol.steps,
+        concept_tags=_effective_concept_tags(ctx), cause_tags=_effective_cause_tags(ctx),
+    )
+    return MR(
+        signature=ctx.spec_level.signature, family=ctx.family, level=ctx.level,
+        purpose=ctx.purpose, seed=0,
+        params={"a": a, "is_a_positive": str(is_a_positive)},
+        given={"statement": statement}, sub_questions=[sub_question], visual_plan=None,
+        provenance=Provenance(recipe="math.judge_proportion_graph_direction"),
+    )
+
+
+# ---------------------------------------------------------------------------
+# math.judge_hyperbola_quadrants（g1_l34.knowledge Lv1）
+# ---------------------------------------------------------------------------
+_JUDGE_HYPERBOLA_QUADRANTS_CONCEPTS = ["inverse_proportion.judge_hyperbola_quadrants"]
+
+
+@register_recipe(
+    "math.judge_hyperbola_quadrants", provides_concepts=_JUDGE_HYPERBOLA_QUADRANTS_CONCEPTS
+)
+def judge_hyperbola_quadrants_recipe(ctx: CellContext, rng: Rng) -> MR:
+    """比例定数の符号から双曲線がどの象限にあるかを判別する（answer-first・knowledge判別型）。"""
+    p = ctx.spec_level.params
+    is_a_positive = bool(int(draw({"int_set": [0, 1]}, rng)))
+    a_cands = [v for v in _domain_candidates(cast("dict[str, object]", p["a_domain"])) if v != 0]
+    a = int(draw({"int_set": [v for v in a_cands if (v > 0) == is_a_positive]}, rng))
+
+    solver = REGISTRY.solver("math.judge_hyperbola_quadrants")
+    sol = cast(Solution, solver(is_a_positive))
+    assert isinstance(sol.answer, ChoiceAnswer)
+
+    statement = (
+        f"反比例y={fmt_number(sympy.Integer(a))}/xのグラフである双曲線について、"
+        "次の文の正誤を答えよ。「a>0のとき、双曲線は第1象限と第3象限にある。」"
+        "また、双曲線はx軸・y軸と交わるかどうか答えよ"
+    )
+
+    sub_question = SubQuestionMR(
+        label="(1)", asked="choice", answer=sol.answer, steps=sol.steps,
+        concept_tags=_effective_concept_tags(ctx), cause_tags=_effective_cause_tags(ctx),
+    )
+    return MR(
+        signature=ctx.spec_level.signature, family=ctx.family, level=ctx.level,
+        purpose=ctx.purpose, seed=0,
+        params={"a": a, "is_a_positive": str(is_a_positive)},
+        given={"statement": statement}, sub_questions=[sub_question], visual_plan=None,
+        provenance=Provenance(recipe="math.judge_hyperbola_quadrants"),
+    )
+
+
 __all__ = [
     "evaluate_direct_proportion",
     "evaluate_inverse_proportion",
     "judge_functional_relation",
     "judge_direct_proportion_table",
     "judge_inverse_proportion_table",
+    "solve_direct_proportion_from_point_recipe",
+    "solve_inverse_proportion_from_point_recipe",
+    "judge_proportion_graph_direction_recipe",
+    "judge_hyperbola_quadrants_recipe",
 ]

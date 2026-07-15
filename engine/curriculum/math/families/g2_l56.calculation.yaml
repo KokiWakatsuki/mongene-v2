@@ -1,0 +1,27 @@
+family: math.g2_l56.calculation
+form: calculation
+source_desc: |
+  最小/最大/四分位数を求める
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: 最小/最大/四分位数を求める。
+       example: 次のデータについて、最小値・最大値・第1四分位数・第3四分位数を求めよ。
+                データ: 5, 8, 10, 12, 15, 18, 20
+  【設計モデル】新設 solver math.five_number_summary（5数要約のうち最小値・最大値・
+  第一/第三四分位数を計算。中央値は g2_l56.graph_table 側の visual セルで扱うため
+  対象外）。
+concepts_default: [quartile.compute_five_number_summary]
+levels:
+  "1":
+    signature: five_number_summary
+    recipe: math.five_number_summary
+    params:
+      value_domain: {int_range: [1, 50]}
+    given: [expressions]
+    asked: [value]
+    visual: none
+    text: {tier: T1, template: lf_five_number_summary_v1}
+    hints: [steps_prefix]
+    concept_tags: [quartile.compute_five_number_summary]
+    cause_tags: []
+remedial:
+  default_level: 1

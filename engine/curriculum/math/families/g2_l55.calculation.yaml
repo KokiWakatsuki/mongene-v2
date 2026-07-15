@@ -1,0 +1,44 @@
+family: math.g2_l55.calculation
+form: calculation
+source_desc: |
+  データを並べ中央値・四分位数を求める／データ数が偶数/奇数で位置が変わる場合や
+  四分位範囲を求める（units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: データを並べ中央値・四分位数を求める。
+       example: 次のデータを小さい順に並べ、中央値(第2四分位数)を求めよ。
+                データ: 8, 3, 5, 9, 6, 2, 7
+  Lv3 desc: データ数が偶数/奇数で位置が変わる場合や四分位範囲を求める。
+       example: 次の10個のデータについて、第1四分位数、第3四分位数、および四分位範囲を
+                求めよ。データ: 12, 15, 18, 20, 22, 25, 27, 30, 33, 38
+  【設計モデル】Lv1=新設 solver math.median_value（奇数個データの中央値）。Lv3=新設
+  solver math.quartiles_iqr（中央値を境に下組/上組へ分け、それぞれの中央値を
+  第一/第三四分位数とする教科書式。データ数の偶奇いずれにも対応）。op列（Lv1:
+  sort_data/compute_median の2段、Lv3: split_into_halves/compute_q1_q3/compute_iqr の
+  3段）が相異＝level_sep。
+concepts_default: [quartile.compute_median]
+levels:
+  "1":
+    signature: median_value
+    recipe: math.median_value
+    params:
+      value_domain: {int_range: [1, 50]}
+    given: [expressions]
+    asked: [value]
+    visual: none
+    text: {tier: T1, template: lf_median_value_v1}
+    hints: [steps_prefix]
+    concept_tags: [quartile.compute_median]
+    cause_tags: []
+  "3":
+    signature: quartiles_iqr
+    recipe: math.quartiles_iqr
+    params:
+      value_domain: {int_range: [1, 50]}
+    given: [expressions]
+    asked: [value]
+    visual: none
+    text: {tier: T1, template: lf_quartiles_iqr_v1}
+    hints: [steps_prefix]
+    concept_tags: [quartile.compute_q1_q3_iqr]
+    cause_tags: []
+remedial:
+  default_level: 1

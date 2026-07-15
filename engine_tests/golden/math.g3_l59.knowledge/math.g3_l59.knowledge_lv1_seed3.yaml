@@ -1,0 +1,50 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - sample_survey.ratio_rationale
+  provenance:
+    git_commit: ''
+    recipe: math.explain_sample_ratio_rationale
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_explain_sample_ratio_rationale_v1
+    tier: T1
+  requested:
+    form: knowledge
+    level: 1
+    subject: math
+    unit: g3_l59
+  resolved:
+    form: knowledge
+    level: 1
+    subject: math
+    unit: g3_l59
+  seed: 3
+  signature: explain_sample_ratio_rationale
+problem_ref: 09ee76014bc57ad3
+problem_text: 標本調査で102個(人)の標本を無作為に抽出したとき、標本の中の割合(標本比率)を母集団全体の割合(母比率)のおよその値とみなしてよいのはなぜか、その考え方を説明せよ。
+sub_questions:
+- answer:
+    correct: 無作為に抽出すれば、標本は母集団の縮図とみなせるから
+    distractors:
+    - 標本の大きさを大きくすれば、必ず母比率と完全に一致するから
+    - 調査する人が経験にもとづいて選べば、母集団の様子を最も正しく表せるから
+    fact_id: sample_survey.ratio_rationale
+    kind: choice
+  cause_tags: []
+  concept_tags:
+  - sample_survey.ratio_rationale
+  explanation: まず、無作為に抽出された標本は、母集団のようすを偏りなく反映した縮図とみなせることを確認する。 無作為に抽出すれば、標本は母集団の縮図とみなせるから
+  hints:
+  - 問題文の与えられた値をもう一度確認しよう。
+  label: (1)
+  prompt_text: choice を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 無作為に抽出された標本は、母集団のようすを偏りなく反映した縮図とみなせることを確認する。
+    op: explain_sample_ratio_rationale
+    result_display: 無作為に抽出すれば、標本は母集団の縮図とみなせるから
+    result_srepr: 無作為に抽出すれば、標本は母集団の縮図とみなせるから
+visual_svg: null

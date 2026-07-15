@@ -1,0 +1,46 @@
+family: math.g1_l32.find_value
+form: find_value
+source_desc: |
+  1点の座標を代入し比例定数aを求め式を決める(1手順)／グラフから点を読み取る・分数の
+  定数など複数手順で式を決める（units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: 1点の座標を代入し比例定数aを求め式を決める(1手順)。
+       example: yはxに比例し、x=4のときy=12である。yをxの式で表せ。
+  Lv2 desc: グラフから点を読み取る・分数の定数など複数手順で式を決める。
+       example: 原点を通る直線のグラフが点(4, -6)を通っている。このグラフの式を求めよ。
+  【設計モデル】新設 solver math.solve_direct_proportion_from_point（通る1点(x0,y0)から
+  比例定数a=y0/x0を求め式y=axを決める）。mode="integer"（Lv1）はy0=k*x0で整数aを保証、
+  mode="fraction"（Lv2）はy0=k*x0+r(0<r<x0)でaが必ず既約分数になるよう構成（鉄則⑤:
+  実行時分岐でなく構成で退化=整数になる場合を排除）。op列（Lv1: substitute_point/
+  form_expressionの2段、Lv2: simplify_fraction 追加の3段）が相異＝level_sep。
+concepts_default: [direct_proportion.solve_from_point]
+levels:
+  "1":
+    signature: solve_direct_proportion_integer
+    recipe: math.solve_direct_proportion_from_point
+    params:
+      mode: integer
+      x_domain: {int_range: [1, 12]}
+      multiplier_domain: {int_range: [-9, 9]}
+    given: [condition]
+    asked: [expression]
+    visual: none
+    text: {tier: T1, template: prop_solve_direct_from_point_v1}
+    hints: [steps_prefix]
+    concept_tags: [direct_proportion.solve_from_point]
+    cause_tags: []
+  "2":
+    signature: solve_direct_proportion_fraction
+    recipe: math.solve_direct_proportion_from_point
+    params:
+      mode: fraction
+      x_fraction_domain: {int_range: [2, 12]}
+      multiplier_domain: {int_range: [-9, 9]}
+    given: [condition]
+    asked: [expression]
+    visual: none
+    text: {tier: T1, template: prop_solve_direct_from_point_v1}
+    hints: [steps_prefix]
+    concept_tags: [direct_proportion.solve_from_point]
+    cause_tags: []
+remedial:
+  default_level: 1

@@ -1,0 +1,48 @@
+family: math.g1_l56.calculation
+form: calculation
+source_desc: |
+  階級を下から積み上げ累積度数を求める1手順／累積相対度数を求める・ある値以上/未満の
+  割合を求める複数手順（units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: 階級を下から積み上げ累積度数を求める1手順。
+       example: 次の度数分布表で、20分以上30分未満の階級までの累積度数を求めよ。
+                〔階級と度数：0〜10分…3人、10〜20分…7人、20〜30分…8人、30〜40分…2人〕
+  Lv2 desc: 累積相対度数を求める・ある値以上/未満の割合を求める複数手順。
+       example: 生徒40人の睡眠時間を調べた度数分布表がある。7時間未満の生徒までの
+                累積相対度数を求めよ。また、睡眠時間が7時間以上の生徒は全体の何％か
+                求めよ。〔6〜7時間の累積度数は16人〕
+  【設計モデル】Lv1=新設 solver math.cumulative_frequency_value（度数列を対象階級まで
+  積み上げる）。Lv2=新設 solver math.cumulative_relative_frequency_and_complement
+  （累積相対度数と、1からひいた補数を百分率で求める。total は100の約数から選び
+  百分率が割り切れることを保証）。op列（Lv1: accumulate_frequency のみ、Lv2:
+  accumulate_relative_frequency→compute_complement_percent の2段）が相異＝level_sep。
+concepts_default: [cumulative_frequency.compute]
+levels:
+  "1":
+    signature: cumulative_frequency_value
+    recipe: math.cumulative_frequency_value
+    params:
+      class_start_domain: {int_range: [0, 20]}
+      class_width_domain: {int_range: [5, 10]}
+      frequency_domain: {int_range: [1, 15]}
+    given: [expressions]
+    asked: [value]
+    visual: none
+    text: {tier: T1, template: lf_cumulative_frequency_value_v1}
+    hints: [steps_prefix]
+    concept_tags: [cumulative_frequency.compute]
+    cause_tags: []
+  "2":
+    signature: cumulative_relative_frequency_and_complement
+    recipe: math.cumulative_relative_frequency_and_complement
+    params:
+      total_domain: {int_set: [20, 25, 40, 50, 100]}
+      boundary_domain: {int_range: [5, 9]}
+    given: [expressions]
+    asked: [value]
+    visual: none
+    text: {tier: T1, template: lf_cumulative_relative_frequency_and_complement_v1}
+    hints: [steps_prefix]
+    concept_tags: [cumulative_frequency.compute_relative_and_complement]
+    cause_tags: []
+remedial:
+  default_level: 1

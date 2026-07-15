@@ -1,0 +1,55 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - representative_value.judge_appropriate
+  provenance:
+    git_commit: ''
+    recipe: math.judge_appropriate_representative_value
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_judge_appropriate_representative_value_v1
+    tier: T1
+  requested:
+    form: knowledge
+    level: 2
+    subject: math
+    unit: g1_l57
+  resolved:
+    form: knowledge
+    level: 2
+    subject: math
+    unit: g1_l57
+  seed: 1
+  signature: judge_appropriate_representative_value
+problem_ref: b0e0fa112d4f1ffe
+problem_text: 1つだけ極端に大きい値が混じっている251人のテストの得点のデータで、集団の「まん中あたり」を表す代表値としては平均値と中央値のどちらが適切か、理由とともに答えよ。
+sub_questions:
+- answer:
+    correct: 中央値
+    distractors:
+    - 平均値
+    - 最頻値
+    fact_id: representative_value.judge_appropriate
+    kind: choice
+  cause_tags: []
+  concept_tags:
+  - representative_value.judge_appropriate
+  explanation: まず、分布の中に、極端に大きい値や小さい値が混じっているかどうかを調べる。 極端に大きい・小さい値が混じっているかを調べる次に、極端な値に影響されにくい代表値ほど、集団の「まん中あたり」を適切に表す。 中央値
+  hints:
+  - 分布の中に、極端に大きい値や小さい値が混じっているかどうかを調べる。
+  label: (1)
+  prompt_text: choice を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 分布の中に、極端に大きい値や小さい値が混じっているかどうかを調べる。
+    op: check_outliers
+    result_display: 極端に大きい・小さい値が混じっているかを調べる
+    result_srepr: has_outliers
+  - args: []
+    narration: 極端な値に影響されにくい代表値ほど、集団の「まん中あたり」を適切に表す。
+    op: judge_appropriate_representative_value
+    result_display: 中央値
+    result_srepr: 中央値
+visual_svg: null

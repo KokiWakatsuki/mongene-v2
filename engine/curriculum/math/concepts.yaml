@@ -640,3 +640,102 @@ concepts:
   - id: complementary_event.rule_recall
     label: "余事象の意味(起こらない確率=1-p)を想起する"
     unit: g2_l54
+  - id: frequency_table.compute_value
+    label: "度数分布表の階級値と度数の合計を計算する"
+    unit: g1_l54
+  - id: frequency_table_terms.term_recall
+    label: "階級・階級値・度数・階級の幅の用語を想起する"
+    unit: g1_l54
+  - id: relative_frequency.compute_single
+    label: "度数分布表の1階級の相対度数を計算する"
+    unit: g1_l55
+  - id: relative_frequency.compare_groups
+    label: "総度数の異なる2集団の相対度数を求め比較する"
+    unit: g1_l55
+  - id: relative_frequency_terms.term_recall
+    label: "相対度数・度数折れ線の用語を想起する"
+    unit: g1_l55
+  - id: cumulative_frequency.compute
+    label: "度数分布表の累積度数を計算する"
+    unit: g1_l56
+  - id: cumulative_frequency.compute_relative_and_complement
+    label: "累積相対度数と、ある値以上の割合(%)を計算する"
+    unit: g1_l56
+  - id: cumulative_frequency_terms.term_recall
+    label: "累積度数・累積相対度数の用語を想起する"
+    unit: g1_l56
+  - id: representative_value.compute_raw
+    label: "生データから平均値・中央値・最頻値を計算する"
+    unit: g1_l57
+  - id: representative_value.compute_grouped_mean
+    label: "度数分布表の階級値を用いて平均値を計算する"
+    unit: g1_l57
+  - id: representative_value_terms.term_recall
+    label: "平均値・中央値・最頻値の用語を想起する"
+    unit: g1_l57
+  - id: representative_value.judge_appropriate
+    label: "分布の特徴(外れ値の有無)に応じて適切な代表値を判別する"
+    unit: g1_l57
+  - id: quartile.compute_median
+    label: "データを並べ中央値(第2四分位数)を求める"
+    unit: g2_l55
+  - id: quartile.compute_q1_q3_iqr
+    label: "第1四分位数・第3四分位数・四分位範囲を求める"
+    unit: g2_l55
+  - id: quartile_terms.term_recall
+    label: "第1/2/3四分位数・四分位範囲の用語を想起する"
+    unit: g2_l55
+  - id: quartile.compute_five_number_summary
+    label: "最小値・最大値・第1/第3四分位数を求める"
+    unit: g2_l56
+  - id: box_plot_terms.term_recall
+    label: "箱ひげ図の箱・ひげ・中央線が表す量を想起する"
+    unit: g2_l56
+  - id: distribution_statistic.classify_role
+    label: "中央値/範囲/四分位範囲が分布の何を表すかを判別する"
+    unit: g2_l57
+  - id: survey_method_terms.term_recall
+    label: "全数調査・標本調査の用語を想起する"
+    unit: g3_l57
+  - id: survey_method.judge_appropriate
+    label: "具体的な場面で全数調査/標本調査のどちらが適切か判別する"
+    unit: g3_l57
+  - id: sampling_terms.term_recall
+    label: "母集団・標本・無作為抽出の用語を想起する"
+    unit: g3_l58
+  - id: sampling.judge_bias
+    label: "抽出方法に偏りが生じるかどうかを判別する"
+    unit: g3_l58
+  - id: sample_survey.ratio_estimate
+    label: "標本比率・比例式による母集団の推定個数を計算する"
+    unit: g3_l59
+  - id: sample_survey.ratio_rationale
+    label: "標本比率が母比率の近似になる考え方を説明する"
+    unit: g3_l59
+  - id: sample_survey.solve_population_size
+    label: "標本比率と推定個数から比例式で母集団の大きさを解く"
+    unit: g3_l60
+  - id: quadrant_terms.term_recall
+    label: "座標平面の象限・原点の用語を想起する"
+    unit: g1_l30
+  - id: proportion.judge_graph_direction
+    label: "比例定数の符号から比例グラフの向きを判別する"
+    unit: g1_l31
+  - id: direct_proportion.solve_from_point
+    label: "比例が通る1点から比例定数を求め式を決める"
+    unit: g1_l32
+  - id: inverse_proportion.judge_hyperbola_quadrants
+    label: "比例定数の符号から双曲線がどの象限にあるかを判別する"
+    unit: g1_l34
+  - id: inverse_proportion.solve_from_point
+    label: "反比例が通る1点から比例定数を求め式を決める"
+    unit: g1_l35
+  - id: exam.probability_from_counts
+    label: "場合の数(全体・該当)から確率を計算する"
+    unit: exam_l5
+  - id: exam.relative_frequency_ratio
+    label: "標本調査の該当数から相対度数(割合)を計算する"
+    unit: exam_l7
+  - id: exam.quartiles_full_summary
+    label: "データの第1〜第3四分位数・四分位範囲を求める"
+    unit: exam_l7

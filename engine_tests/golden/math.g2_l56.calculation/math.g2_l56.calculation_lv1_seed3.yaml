@@ -1,0 +1,52 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - quartile.compute_five_number_summary
+  provenance:
+    git_commit: ''
+    recipe: math.five_number_summary
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_five_number_summary_v1
+    tier: T1
+  requested:
+    form: calculation
+    level: 1
+    subject: math
+    unit: g2_l56
+  resolved:
+    form: calculation
+    level: 1
+    subject: math
+    unit: g2_l56
+  seed: 3
+  signature: five_number_summary
+problem_ref: 768f547cde7a3968
+problem_text: '次のデータについて、最小値・最大値・第1四分位数・第3四分位数を求めよ。データ: 21、49、10、30、2、29、13、31、46、41、10。'
+sub_questions:
+- answer:
+    display: 最小値 2、最大値 49、第1四分位数 10、第3四分位数 41
+    kind: symbolic
+    srepr: Tuple(Integer(2), Integer(49), Integer(10), Integer(41))
+  cause_tags: []
+  concept_tags:
+  - quartile.compute_five_number_summary
+  explanation: まず、データを大きさの順に並べ、いちばん小さい値といちばん大きい値を求める。 データを大きさの順に並べ両端の値を読み取る次に、中央値を境に下組と上組に分け、それぞれの中央値を第一四分位数・第三四分位数とする。 最小値 2、最大値 49、第1四分位数 10、第3四分位数 41
+  hints:
+  - データを大きさの順に並べ、いちばん小さい値といちばん大きい値を求める。
+  label: (1)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args: []
+    narration: データを大きさの順に並べ、いちばん小さい値といちばん大きい値を求める。
+    op: identify_min_max
+    result_display: データを大きさの順に並べ両端の値を読み取る
+    result_srepr: ''
+  - args: []
+    narration: 中央値を境に下組と上組に分け、それぞれの中央値を第一四分位数・第三四分位数とする。
+    op: compute_q1_q3
+    result_display: 最小値 2、最大値 49、第1四分位数 10、第3四分位数 41
+    result_srepr: Tuple(Integer(2), Integer(49), Integer(10), Integer(41))
+visual_svg: null

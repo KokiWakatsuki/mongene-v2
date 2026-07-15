@@ -1,0 +1,28 @@
+family: math.g3_l59.calculation
+form: calculation
+source_desc: |
+  標本比率・比例式による推定値の計算処理
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: 標本比率・比例式による推定値の計算処理。
+       example: 標本の大きさが400で、そのうち当たりが24個であった。母集団6000個の中に
+                含まれる当たりのおよその個数を、比例式を使って求めよ。
+  【設計モデル】新設 solver math.sample_ratio_estimate（標本比率と母集団の大きさから
+  推定個数=population_size×sample_count/sample_size を計算。population_size=
+  sample_size×k で構成し、推定値がつねに整数になることを保証）。
+concepts_default: [sample_survey.ratio_estimate]
+levels:
+  "1":
+    signature: sample_ratio_estimate
+    recipe: math.sample_ratio_estimate
+    params:
+      sample_size_domain: {int_range: [20, 500]}
+      multiplier_domain: {int_range: [3, 50]}
+    given: [expressions]
+    asked: [value]
+    visual: none
+    text: {tier: T1, template: lf_sample_ratio_estimate_v1}
+    hints: [steps_prefix]
+    concept_tags: [sample_survey.ratio_estimate]
+    cause_tags: []
+remedial:
+  default_level: 1

@@ -1,0 +1,54 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - survey_method_terms.term_recall
+  provenance:
+    git_commit: ''
+    recipe: math.term_recall
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_term_recall_v1
+    tier: T1
+  requested:
+    form: knowledge
+    level: 1
+    subject: math
+    unit: g3_l57
+  resolved:
+    form: knowledge
+    level: 1
+    subject: math
+    unit: g3_l57
+  seed: 2
+  signature: survey_method_terms_term_recall
+problem_ref: 0b11a27eb4635853
+problem_text: 276個（人）の対象すべてを、もれなく調べる調査 を何といいますか。
+sub_questions:
+- answer:
+    correct: 全数調査
+    distractors:
+    - 標本調査
+    fact_id: survey_method_terms.term.census
+    kind: choice
+  cause_tags: []
+  concept_tags:
+  - survey_method_terms.term_recall
+  explanation: まず、説明されている式や数の部分がどれかを読み取る。 説明されている対象を読み取る次に、その対象を表す用語の名前を思い出す。 全数調査
+  hints:
+  - 説明されている式や数の部分がどれかを読み取る。
+  label: (1)
+  prompt_text: choice を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 説明されている式や数の部分がどれかを読み取る。
+    op: identify_description
+    result_display: 説明されている対象を読み取る
+    result_srepr: census
+  - args: []
+    narration: その対象を表す用語の名前を思い出す。
+    op: name_concept
+    result_display: 全数調査
+    result_srepr: 全数調査
+visual_svg: null

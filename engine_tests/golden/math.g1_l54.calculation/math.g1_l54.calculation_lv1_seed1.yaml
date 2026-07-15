@@ -1,0 +1,52 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - frequency_table.compute_value
+  provenance:
+    git_commit: ''
+    recipe: math.frequency_table_value
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_frequency_table_value_v1
+    tier: T1
+  requested:
+    form: calculation
+    level: 1
+    subject: math
+    unit: g1_l54
+  resolved:
+    form: calculation
+    level: 1
+    subject: math
+    unit: g1_l54
+  seed: 1
+  signature: frequency_table_value
+problem_ref: 52cb59947a8928e1
+problem_text: 次の度数分布表について、23分以上33分未満の階級の階級値を求めよ。また、度数の合計を求めよ。〔階級と度数：3分以上13分未満…3人、13分以上23分未満…12人、23分以上33分未満…2人、33分以上43分未満…8人〕。
+sub_questions:
+- answer:
+    display: 階級値 28、度数の合計 25
+    kind: symbolic
+    srepr: Tuple(Integer(28), Integer(25))
+  cause_tags: []
+  concept_tags:
+  - frequency_table.compute_value
+  explanation: まず、対象の階級の下端と上端の値の平均を求め、階級値とする。 階級の下端と上端の中央の値を求める次に、すべての階級の度数を足し合わせ、度数の合計を求める。 階級値 28、度数の合計 25
+  hints:
+  - 対象の階級の下端と上端の値の平均を求め、階級値とする。
+  label: (1)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 対象の階級の下端と上端の値の平均を求め、階級値とする。
+    op: compute_class_value
+    result_display: 階級の下端と上端の中央の値を求める
+    result_srepr: Integer(28)
+  - args: []
+    narration: すべての階級の度数を足し合わせ、度数の合計を求める。
+    op: sum_frequencies
+    result_display: 階級値 28、度数の合計 25
+    result_srepr: Tuple(Integer(28), Integer(25))
+visual_svg: null

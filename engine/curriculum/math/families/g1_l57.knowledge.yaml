@@ -1,0 +1,47 @@
+family: math.g1_l57.knowledge
+form: knowledge
+source_desc: |
+  平均値・中央値・最頻値の意味を想起する／分布の特徴に応じてどの代表値が適切か判別する
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: 平均値・中央値・最頻値の意味を想起する。
+       example: データの値の合計を個数でわった値を何というか、また、データを大きさの
+                順に並べたときの中央の値を何というか、それぞれ答えよ。
+  Lv2 desc: 分布の特徴に応じてどの代表値が適切か判別する。
+       example: 少数の非常に高い値が混じっている年収のデータで、集団の「まん中あたり」
+                を表す代表値としては平均値と中央値のどちらが適切か、理由とともに答えよ。
+  【設計モデル】Lv1=用語想起ハブ（既存 math.term_recall・_TERM_MAPS に domain
+  "representative_value_terms" を追加。平均値・中央値・最頻値の3用語）。Lv2=新設 solver
+  math.judge_appropriate_representative_value（has_outliers bool だけから中央値/平均値を
+  判別。recipe が外れ値あり/なしの2シナリオ群から surface を構成）。op列（Lv1:
+  identify_description/name_concept、Lv2: check_outliers/judge_appropriate_representative_value）
+  が相異＝level_sep。
+concepts_default: [representative_value_terms.term_recall]
+levels:
+  "1":
+    signature: representative_value_terms_term_recall
+    recipe: math.term_recall
+    params:
+      domain: representative_value_terms
+      concept_set: [mean, median, mode]
+      number_domain: {int_range: [6, 500]}
+    given: [statement]
+    asked: [choice]
+    visual: none
+    text: {tier: T1, template: lf_term_recall_v1}
+    hints: [steps_prefix]
+    concept_tags: [representative_value_terms.term_recall]
+    cause_tags: []
+  "2":
+    signature: judge_appropriate_representative_value
+    recipe: math.judge_appropriate_representative_value
+    params:
+      n_domain: {int_range: [6, 500]}
+    given: [statement]
+    asked: [choice]
+    visual: none
+    text: {tier: T1, template: lf_judge_appropriate_representative_value_v1}
+    hints: [steps_prefix]
+    concept_tags: [representative_value.judge_appropriate]
+    cause_tags: []
+remedial:
+  default_level: 1

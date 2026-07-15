@@ -1,0 +1,30 @@
+family: math.g3_l60.calculation
+form: calculation
+source_desc: |
+  比例式による推定値の計算処理
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv2 desc: 比例式による推定値の計算処理。
+       example: 無作為に取り出した標本の大きさが250で、そのうち目的のものが35個で
+                あった。母集団の大きさを x として、母集団に含まれる目的のもののおよその
+                個数が700であることから x を、比例式を使って求めよ。
+  【設計モデル】新設 solver math.sample_ratio_solve_population（標本比率と推定個数から
+  母集団の大きさ x=known_estimate×sample_size/sample_count を解く。known_estimate=
+  sample_count×k, x=sample_size×k で構成し、解がつねに整数になることを保証。g3_l59.
+  calculation Lv1 とは「求める対象がxそのもの」である点で構造が異なる＝unit分離）。
+concepts_default: [sample_survey.solve_population_size]
+levels:
+  "2":
+    signature: sample_ratio_solve_population
+    recipe: math.sample_ratio_solve_population
+    params:
+      sample_size_domain: {int_range: [20, 500]}
+      multiplier_domain: {int_range: [3, 50]}
+    given: [expressions]
+    asked: [value]
+    visual: none
+    text: {tier: T1, template: lf_sample_ratio_solve_population_v1}
+    hints: [steps_prefix]
+    concept_tags: [sample_survey.solve_population_size]
+    cause_tags: []
+remedial:
+  default_level: 2

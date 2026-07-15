@@ -3458,6 +3458,16 @@ _TERM_RECALL_CELLS = [
     # C12 確率（用語想起）
     ("math.g1_l59.knowledge", 1),
     ("math.g2_l51.knowledge", 1),
+    # C11 データ・統計（用語想起）
+    ("math.g1_l54.knowledge", 1),
+    ("math.g1_l55.knowledge", 1),
+    ("math.g1_l56.knowledge", 1),
+    ("math.g1_l57.knowledge", 1),
+    ("math.g2_l55.knowledge", 1),
+    ("math.g2_l56.knowledge", 1),
+    ("math.g3_l57.knowledge", 1),
+    ("math.g3_l58.knowledge", 1),
+    ("math.g1_l30.knowledge", 1),
 ]
 
 
@@ -4551,3 +4561,551 @@ def test_judge_equally_likely_double_solve_property(seed):
     solver = REGISTRY.solver("math.judge_equally_likely")
     sol = solver(mr.params["is_equally_likely"])
     assert sol.answer.correct == mr.sub_questions[0].answer.correct
+
+
+# ---------------------------------------------------------------------------
+# C11 データ・統計（度数分布・代表値）: g1_l54〜g1_l57
+# ---------------------------------------------------------------------------
+def test_frequency_table_value_lv1_construct():
+    ctx = _make_ctx("math.g1_l54.calculation", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "frequency_table_value"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "value"
+    assert len(mr.params["frequencies"]) == 4
+
+
+@pytest.mark.parametrize("seed", range(100))
+def test_frequency_table_value_double_solve_property(seed):
+    ctx = _make_ctx("math.g1_l54.calculation", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.frequency_table_value")
+    sol = solver(mr.params["class_start"], mr.params["class_width"], mr.params["frequencies"], mr.params["target_index"])
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+
+
+def test_relative_frequency_stats_single_lv1_construct():
+    ctx = _make_ctx("math.g1_l55.calculation", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "relative_frequency_stats_single"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "value"
+    assert 0 < mr.params["occurred"] < mr.params["total"]
+
+
+@pytest.mark.parametrize("seed", range(100))
+def test_relative_frequency_stats_single_double_solve_property(seed):
+    ctx = _make_ctx("math.g1_l55.calculation", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.relative_frequency")
+    sol = solver(mr.params["occurred"], mr.params["total"])
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+
+
+def test_compare_relative_frequency_lv2_construct():
+    ctx = _make_ctx("math.g1_l55.calculation", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "compare_relative_frequency"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "value"
+    # level_sep: Lv1（1手順）とは異なる op 列（2手順）。
+    assert [s.op for s in sq.steps] == ["compute_relative_frequency_each", "compare_relative_frequency"]
+
+
+@pytest.mark.parametrize("seed", range(100))
+def test_compare_relative_frequency_double_solve_property(seed):
+    ctx = _make_ctx("math.g1_l55.calculation", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.compare_relative_frequency")
+    sol = solver(mr.params["freq_a"], mr.params["total_a"], mr.params["freq_b"], mr.params["total_b"])
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+
+
+def test_cumulative_frequency_value_lv1_construct():
+    ctx = _make_ctx("math.g1_l56.calculation", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "cumulative_frequency_value"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "value"
+    assert [s.op for s in sq.steps] == ["accumulate_frequency"]
+
+
+@pytest.mark.parametrize("seed", range(100))
+def test_cumulative_frequency_value_double_solve_property(seed):
+    ctx = _make_ctx("math.g1_l56.calculation", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.cumulative_frequency_value")
+    sol = solver(mr.params["frequencies"], mr.params["target_index"])
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+
+
+def test_cumulative_relative_frequency_and_complement_lv2_construct():
+    ctx = _make_ctx("math.g1_l56.calculation", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "cumulative_relative_frequency_and_complement"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "value"
+    # level_sep: Lv1（累積のみ）とは異なる op 列（累積相対度数→補数%の2段）。
+    assert [s.op for s in sq.steps] == ["accumulate_relative_frequency", "compute_complement_percent"]
+    assert sum(mr.params["frequencies"]) > 0
+
+
+@pytest.mark.parametrize("seed", range(100))
+def test_cumulative_relative_frequency_and_complement_double_solve_property(seed):
+    ctx = _make_ctx("math.g1_l56.calculation", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.cumulative_relative_frequency_and_complement")
+    sol = solver(mr.params["frequencies"], mr.params["target_index"])
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+
+
+def test_representative_values_raw_lv1_construct():
+    ctx = _make_ctx("math.g1_l57.calculation", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "representative_values_raw"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "value"
+    assert [s.op for s in sq.steps] == ["compute_mean", "compute_median", "compute_mode"]
+
+
+@pytest.mark.parametrize("seed", range(100))
+def test_representative_values_raw_double_solve_property(seed):
+    ctx = _make_ctx("math.g1_l57.calculation", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.representative_values_raw")
+    sol = solver(mr.params["data"])
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+
+
+def test_mean_from_grouped_table_lv2_construct():
+    ctx = _make_ctx("math.g1_l57.calculation", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "mean_from_grouped_table"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "value"
+    # level_sep: Lv1（生データ3値）とは異なる op 列（階級値の重み付け2段）。
+    assert [s.op for s in sq.steps] == ["weight_by_class_value", "divide_by_total"]
+
+
+@pytest.mark.parametrize("seed", range(100))
+def test_mean_from_grouped_table_double_solve_property(seed):
+    ctx = _make_ctx("math.g1_l57.calculation", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.mean_from_grouped_table")
+    sol = solver(mr.params["class_start"], mr.params["class_width"], mr.params["frequencies"])
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+
+
+def test_judge_appropriate_representative_value_construct():
+    ctx = _make_ctx("math.g1_l57.knowledge", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "judge_appropriate_representative_value"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "choice"
+    assert not any(ch.isdigit() for ch in sq.answer.correct)
+    assert sq.answer.correct not in sq.answer.distractors
+
+
+@pytest.mark.parametrize("seed", range(100))
+def test_judge_appropriate_representative_value_double_solve_property(seed):
+    ctx = _make_ctx("math.g1_l57.knowledge", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.judge_appropriate_representative_value")
+    sol = solver(mr.params["has_outliers"])
+    assert sol.answer.correct == mr.sub_questions[0].answer.correct
+
+
+# ---------------------------------------------------------------------------
+# C11 データ・統計（四分位数・箱ひげ図）: g2_l55〜g2_l57
+# ---------------------------------------------------------------------------
+def test_median_value_lv1_construct():
+    ctx = _make_ctx("math.g2_l55.calculation", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "median_value"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "value"
+    assert len(mr.params["data"]) % 2 == 1
+
+
+@pytest.mark.parametrize("seed", range(100))
+def test_median_value_double_solve_property(seed):
+    ctx = _make_ctx("math.g2_l55.calculation", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.median_value")
+    sol = solver(mr.params["data"])
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+
+
+def test_quartiles_iqr_lv3_construct():
+    ctx = _make_ctx("math.g2_l55.calculation", 3)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "quartiles_iqr"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "value"
+    # level_sep: Lv1（sort_data/compute_median の2段）とは異なる op 列（3段）。
+    assert [s.op for s in sq.steps] == ["split_into_halves", "compute_q1_q3", "compute_iqr"]
+
+
+@pytest.mark.parametrize("seed", range(100))
+def test_quartiles_iqr_double_solve_property(seed):
+    ctx = _make_ctx("math.g2_l55.calculation", 3)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.quartiles_iqr")
+    sol = solver(mr.params["data"])
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+
+
+def test_five_number_summary_lv1_construct():
+    ctx = _make_ctx("math.g2_l56.calculation", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "five_number_summary"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "value"
+
+
+@pytest.mark.parametrize("seed", range(100))
+def test_five_number_summary_double_solve_property(seed):
+    ctx = _make_ctx("math.g2_l56.calculation", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.five_number_summary")
+    sol = solver(mr.params["data"])
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+
+
+def test_classify_distribution_statistic_construct():
+    ctx = _make_ctx("math.g2_l57.knowledge", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "classify_distribution_statistic"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "choice"
+    assert not any(ch.isdigit() for ch in sq.answer.correct)
+    assert sq.answer.correct not in sq.answer.distractors
+
+
+@pytest.mark.parametrize("seed", range(100))
+def test_classify_distribution_statistic_double_solve_property(seed):
+    ctx = _make_ctx("math.g2_l57.knowledge", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.classify_distribution_statistic")
+    sol = solver(mr.params["concept"])
+    assert sol.answer.correct == mr.sub_questions[0].answer.correct
+
+
+# ---------------------------------------------------------------------------
+# C11 データ・統計（標本調査）: g3_l57〜g3_l60
+# ---------------------------------------------------------------------------
+def test_sample_ratio_estimate_lv1_construct():
+    ctx = _make_ctx("math.g3_l59.calculation", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "sample_ratio_estimate"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "value"
+    assert mr.params["population_size"] % mr.params["sample_size"] == 0
+
+
+@pytest.mark.parametrize("seed", range(100))
+def test_sample_ratio_estimate_double_solve_property(seed):
+    ctx = _make_ctx("math.g3_l59.calculation", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.sample_ratio_estimate")
+    sol = solver(mr.params["sample_size"], mr.params["sample_count"], mr.params["population_size"])
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+
+
+def test_sample_ratio_solve_population_lv2_construct():
+    ctx = _make_ctx("math.g3_l60.calculation", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "sample_ratio_solve_population"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "value"
+    assert mr.params["known_estimate"] % mr.params["sample_count"] == 0
+
+
+@pytest.mark.parametrize("seed", range(100))
+def test_sample_ratio_solve_population_double_solve_property(seed):
+    ctx = _make_ctx("math.g3_l60.calculation", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.sample_ratio_solve_population")
+    sol = solver(mr.params["sample_size"], mr.params["sample_count"], mr.params["known_estimate"])
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+
+
+def test_judge_appropriate_survey_method_construct():
+    ctx = _make_ctx("math.g3_l57.knowledge", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "judge_appropriate_survey_method"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "choice"
+    assert not any(ch.isdigit() for ch in sq.answer.correct)
+    assert sq.answer.correct not in sq.answer.distractors
+
+
+@pytest.mark.parametrize("seed", range(100))
+def test_judge_appropriate_survey_method_double_solve_property(seed):
+    ctx = _make_ctx("math.g3_l57.knowledge", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.judge_appropriate_survey_method")
+    sol = solver(mr.params["needs_sample"])
+    assert sol.answer.correct == mr.sub_questions[0].answer.correct
+
+
+def test_judge_sampling_bias_construct():
+    ctx = _make_ctx("math.g3_l58.knowledge", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "judge_sampling_bias"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "choice"
+    assert not any(ch.isdigit() for ch in sq.answer.correct)
+    assert sq.answer.correct not in sq.answer.distractors
+
+
+@pytest.mark.parametrize("seed", range(100))
+def test_judge_sampling_bias_double_solve_property(seed):
+    ctx = _make_ctx("math.g3_l58.knowledge", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.judge_sampling_bias")
+    sol = solver(mr.params["is_biased"])
+    assert sol.answer.correct == mr.sub_questions[0].answer.correct
+
+
+def test_explain_sample_ratio_rationale_construct():
+    ctx = _make_ctx("math.g3_l59.knowledge", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "explain_sample_ratio_rationale"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "choice"
+    assert not any(ch.isdigit() for ch in sq.answer.correct)
+    assert sq.answer.correct not in sq.answer.distractors
+
+
+@pytest.mark.parametrize("seed", range(100))
+def test_explain_sample_ratio_rationale_double_solve_property(seed):
+    ctx = _make_ctx("math.g3_l59.knowledge", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.explain_sample_ratio_rationale")
+    sol = solver(mr.params["n"])
+    assert sol.answer.correct == mr.sub_questions[0].answer.correct
+
+
+# ---------------------------------------------------------------------------
+# C4 比例・反比例（非visual追加）: g1_l30/l31/l32/l34/l35
+# ---------------------------------------------------------------------------
+def test_solve_direct_proportion_from_point_lv1_construct():
+    ctx = _make_ctx("math.g1_l32.find_value", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "solve_direct_proportion_integer"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "expression"
+    assert [s.op for s in sq.steps] == ["substitute_point", "form_expression"]
+
+
+@pytest.mark.parametrize("seed", range(100))
+def test_solve_direct_proportion_from_point_lv1_double_solve_property(seed):
+    ctx = _make_ctx("math.g1_l32.find_value", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.solve_direct_proportion_from_point")
+    sol = solver(mr.params["x0"], mr.params["y0"], mr.params["mode"])
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+
+
+def test_solve_direct_proportion_from_point_lv2_construct():
+    ctx = _make_ctx("math.g1_l32.find_value", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "solve_direct_proportion_fraction"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "expression"
+    # level_sep: Lv1（2段）とは異なる op 列（約分の1段が増える3段）。
+    assert [s.op for s in sq.steps] == ["substitute_point", "simplify_fraction", "form_expression"]
+
+
+@pytest.mark.parametrize("seed", range(100))
+def test_solve_direct_proportion_from_point_lv2_double_solve_property(seed):
+    ctx = _make_ctx("math.g1_l32.find_value", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.solve_direct_proportion_from_point")
+    sol = solver(mr.params["x0"], mr.params["y0"], mr.params["mode"])
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+
+
+def test_solve_inverse_proportion_from_point_lv1_construct():
+    ctx = _make_ctx("math.g1_l35.find_value", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "solve_inverse_proportion_basic"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "expression"
+    assert [s.op for s in sq.steps] == ["substitute_point", "form_expression"]
+
+
+@pytest.mark.parametrize("seed", range(100))
+def test_solve_inverse_proportion_from_point_lv1_double_solve_property(seed):
+    ctx = _make_ctx("math.g1_l35.find_value", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.solve_inverse_proportion_from_point")
+    sol = solver(mr.params["x0"], mr.params["y0"], mr.params["mode"])
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+
+
+def test_solve_inverse_proportion_from_point_lv2_construct():
+    ctx = _make_ctx("math.g1_l35.find_value", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "solve_inverse_proportion_signed"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "expression"
+    # level_sep: Lv1（2段）とは異なる op 列（符号確認の1段が増える3段）。
+    assert [s.op for s in sq.steps] == ["check_signs", "substitute_point", "form_expression"]
+
+
+@pytest.mark.parametrize("seed", range(100))
+def test_solve_inverse_proportion_from_point_lv2_double_solve_property(seed):
+    ctx = _make_ctx("math.g1_l35.find_value", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.solve_inverse_proportion_from_point")
+    sol = solver(mr.params["x0"], mr.params["y0"], mr.params["mode"])
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+
+
+def test_judge_proportion_graph_direction_construct():
+    ctx = _make_ctx("math.g1_l31.knowledge", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "judge_proportion_graph_direction"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "choice"
+    assert not any(ch.isdigit() for ch in sq.answer.correct)
+    assert sq.answer.correct not in sq.answer.distractors
+
+
+@pytest.mark.parametrize("seed", range(100))
+def test_judge_proportion_graph_direction_double_solve_property(seed):
+    ctx = _make_ctx("math.g1_l31.knowledge", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.judge_proportion_graph_direction")
+    sol = solver(mr.params["is_a_positive"])
+    assert sol.answer.correct == mr.sub_questions[0].answer.correct
+
+
+def test_judge_hyperbola_quadrants_construct():
+    ctx = _make_ctx("math.g1_l34.knowledge", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "judge_hyperbola_quadrants"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "choice"
+    assert not any(ch.isdigit() for ch in sq.answer.correct)
+    assert sq.answer.correct not in sq.answer.distractors
+
+
+@pytest.mark.parametrize("seed", range(100))
+def test_judge_hyperbola_quadrants_double_solve_property(seed):
+    ctx = _make_ctx("math.g1_l34.knowledge", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.judge_hyperbola_quadrants")
+    sol = solver(mr.params["is_a_positive"])
+    assert sol.answer.correct == mr.sub_questions[0].answer.correct
+
+
+# ---------------------------------------------------------------------------
+# C13 exam融合（既存solver合成セル）: exam_l5/exam_l7
+# ---------------------------------------------------------------------------
+def test_exam_probability_from_counts_construct():
+    ctx = _make_ctx("math.exam_l5.calculation", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "exam_probability_from_counts"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "value"
+    assert 0 < mr.params["occurred"] < mr.params["total"]
+
+
+@pytest.mark.parametrize("seed", range(100))
+def test_exam_probability_from_counts_double_solve_property(seed):
+    ctx = _make_ctx("math.exam_l5.calculation", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.relative_frequency")
+    sol = solver(mr.params["occurred"], mr.params["total"])
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+
+
+def test_exam_relative_frequency_construct():
+    ctx = _make_ctx("math.exam_l7.calculation", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "exam_relative_frequency"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "value"
+    assert 0 < mr.params["occurred"] < mr.params["total"]
+
+
+@pytest.mark.parametrize("seed", range(100))
+def test_exam_relative_frequency_double_solve_property(seed):
+    ctx = _make_ctx("math.exam_l7.calculation", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.relative_frequency")
+    sol = solver(mr.params["occurred"], mr.params["total"])
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+
+
+def test_exam_quartiles_full_summary_construct():
+    ctx = _make_ctx("math.exam_l7.find_value", 3)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "exam_quartiles_full_summary"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "value"
+    assert [s.op for s in sq.steps] == ["compute_median", "split_into_halves", "compute_q1_q3_iqr"]
+
+
+@pytest.mark.parametrize("seed", range(100))
+def test_exam_quartiles_full_summary_double_solve_property(seed):
+    ctx = _make_ctx("math.exam_l7.find_value", 3)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.quartiles_full_summary")
+    sol = solver(mr.params["data"])
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr

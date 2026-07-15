@@ -1,0 +1,47 @@
+family: math.g3_l57.knowledge
+form: knowledge
+source_desc: |
+  全数調査・標本調査の意味の想起／具体的な場面でどちらの調査が適切か判別
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: 全数調査・標本調査の意味の想起。
+       example: 全数調査と標本調査について、それぞれどのような調査であるかを説明せよ。
+  Lv2 desc: 具体的な場面でどちらの調査が適切か判別。
+       example: 次の(ア)〜(エ)のうち、標本調査で行うのが適切なものをすべて選べ。
+                (ア)学校の身体測定 (イ)テレビ番組の視聴率 (ウ)電池の寿命の検査
+                (エ)国勢調査
+  【設計モデル】Lv1=用語想起ハブ（既存 math.term_recall・_TERM_MAPS に domain
+  "survey_method_terms" を追加。全数調査・標本調査の2用語）。Lv2=新設 solver
+  math.judge_appropriate_survey_method（needs_sample bool だけから全数調査/標本調査を
+  判別。recipe が全数調査向き/標本調査向きの6シナリオ群から surface を構成）。op列
+  （Lv1: identify_description/name_concept、Lv2: check_feasibility/
+  judge_appropriate_survey_method）が相異＝level_sep。
+concepts_default: [survey_method_terms.term_recall]
+levels:
+  "1":
+    signature: survey_method_terms_term_recall
+    recipe: math.term_recall
+    params:
+      domain: survey_method_terms
+      concept_set: [census, sample_survey]
+      number_domain: {int_range: [10, 500]}
+    given: [statement]
+    asked: [choice]
+    visual: none
+    text: {tier: T1, template: lf_term_recall_v1}
+    hints: [steps_prefix]
+    concept_tags: [survey_method_terms.term_recall]
+    cause_tags: []
+  "2":
+    signature: judge_appropriate_survey_method
+    recipe: math.judge_appropriate_survey_method
+    params:
+      n_domain: {int_range: [10, 500]}
+    given: [statement]
+    asked: [choice]
+    visual: none
+    text: {tier: T1, template: lf_judge_appropriate_survey_method_v1}
+    hints: [steps_prefix]
+    concept_tags: [survey_method.judge_appropriate]
+    cause_tags: []
+remedial:
+  default_level: 1

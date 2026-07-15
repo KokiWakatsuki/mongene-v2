@@ -1,0 +1,56 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - quartile_terms.term_recall
+  provenance:
+    git_commit: ''
+    recipe: math.term_recall
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_term_recall_v1
+    tier: T1
+  requested:
+    form: knowledge
+    level: 1
+    subject: math
+    unit: g2_l55
+  resolved:
+    form: knowledge
+    level: 1
+    subject: math
+    unit: g2_l55
+  seed: 1
+  signature: quartile_terms_term_recall
+problem_ref: ce9d1003969d178b
+problem_text: 378個のデータを大きさの順に並べたときの中央値のよび名 を何といいますか。
+sub_questions:
+- answer:
+    correct: 第二四分位数
+    distractors:
+    - 第一四分位数
+    - 第三四分位数
+    - 四分位範囲
+    fact_id: quartile_terms.term.q2
+    kind: choice
+  cause_tags: []
+  concept_tags:
+  - quartile_terms.term_recall
+  explanation: まず、説明されている式や数の部分がどれかを読み取る。 説明されている対象を読み取る次に、その対象を表す用語の名前を思い出す。 第二四分位数
+  hints:
+  - 説明されている式や数の部分がどれかを読み取る。
+  label: (1)
+  prompt_text: choice を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 説明されている式や数の部分がどれかを読み取る。
+    op: identify_description
+    result_display: 説明されている対象を読み取る
+    result_srepr: q2
+  - args: []
+    narration: その対象を表す用語の名前を思い出す。
+    op: name_concept
+    result_display: 第二四分位数
+    result_srepr: 第二四分位数
+visual_svg: null

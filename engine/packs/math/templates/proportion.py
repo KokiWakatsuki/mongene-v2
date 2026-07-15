@@ -46,6 +46,26 @@ PROP_JUDGE_INVERSE_TABLE_V1 = (
     "次の表は x と y の対応を表している。y は x に反比例するといえるか答えよ。\n{{ given.statement }}"
 )
 
+# ---------------------------------------------------------------------------
+# g1_l32.find_value: 比例が通る1点から式を決める
+# ---------------------------------------------------------------------------
+PROP_SOLVE_DIRECT_FROM_POINT_V1 = "{{ given.condition }}。"
+
+# ---------------------------------------------------------------------------
+# g1_l35.find_value: 反比例が通る1点から式を決める
+# ---------------------------------------------------------------------------
+PROP_SOLVE_INVERSE_FROM_POINT_V1 = "{{ given.condition }}。"
+
+# ---------------------------------------------------------------------------
+# g1_l31.knowledge Lv1: 比例グラフの向きを判別する
+# ---------------------------------------------------------------------------
+PROP_JUDGE_GRAPH_DIRECTION_V1 = "{{ given.statement }}。"
+
+# ---------------------------------------------------------------------------
+# g1_l34.knowledge Lv1: 双曲線がどの象限にあるかを判別する
+# ---------------------------------------------------------------------------
+PROP_JUDGE_HYPERBOLA_QUADRANTS_V1 = "{{ given.statement }}。"
+
 
 def _register_all() -> None:
     REGISTRY.register_template("prop_evaluate_direct_v1", PROP_EVALUATE_DIRECT_V1)
@@ -53,6 +73,12 @@ def _register_all() -> None:
     REGISTRY.register_template("prop_judge_functional_v1", PROP_JUDGE_FUNCTIONAL_V1)
     REGISTRY.register_template("prop_judge_direct_table_v1", PROP_JUDGE_DIRECT_TABLE_V1)
     REGISTRY.register_template("prop_judge_inverse_table_v1", PROP_JUDGE_INVERSE_TABLE_V1)
+    REGISTRY.register_template("prop_solve_direct_from_point_v1", PROP_SOLVE_DIRECT_FROM_POINT_V1)
+    REGISTRY.register_template("prop_solve_inverse_from_point_v1", PROP_SOLVE_INVERSE_FROM_POINT_V1)
+    REGISTRY.register_template("prop_judge_graph_direction_v1", PROP_JUDGE_GRAPH_DIRECTION_V1)
+    REGISTRY.register_template(
+        "prop_judge_hyperbola_quadrants_v1", PROP_JUDGE_HYPERBOLA_QUADRANTS_V1
+    )
 
 
 _register_all()
@@ -64,4 +90,8 @@ __all__ = [
     "PROP_JUDGE_FUNCTIONAL_V1",
     "PROP_JUDGE_DIRECT_TABLE_V1",
     "PROP_JUDGE_INVERSE_TABLE_V1",
+    "PROP_SOLVE_DIRECT_FROM_POINT_V1",
+    "PROP_SOLVE_INVERSE_FROM_POINT_V1",
+    "PROP_JUDGE_GRAPH_DIRECTION_V1",
+    "PROP_JUDGE_HYPERBOLA_QUADRANTS_V1",
 ]

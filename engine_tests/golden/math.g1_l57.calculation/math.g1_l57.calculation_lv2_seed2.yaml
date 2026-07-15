@@ -1,0 +1,52 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - representative_value.compute_grouped_mean
+  provenance:
+    git_commit: ''
+    recipe: math.mean_from_grouped_table
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_mean_from_grouped_table_v1
+    tier: T1
+  requested:
+    form: calculation
+    level: 2
+    subject: math
+    unit: g1_l57
+  resolved:
+    form: calculation
+    level: 2
+    subject: math
+    unit: g1_l57
+  seed: 2
+  signature: mean_from_grouped_table
+problem_ref: e71a08bf8c122515
+problem_text: 次の度数分布表について、各階級の階級値を用いて平均値を求めよ。〔階級と度数：11点以上21点未満…12人、21点以上31点未満…8人、31点以上41点未満…10人、41点以上51点未満…15人〕。
+sub_questions:
+- answer:
+    display: 290/9
+    kind: symbolic
+    srepr: Rational(290, 9)
+  cause_tags: []
+  concept_tags:
+  - representative_value.compute_grouped_mean
+  explanation: まず、各階級の階級値に、その階級の度数をかける。 各階級の階級値と度数の積を求める次に、それらの積をすべて足し合わせ、度数の合計でわって平均値を求める。 290/9
+  hints:
+  - 各階級の階級値に、その階級の度数をかける。
+  label: (1)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 各階級の階級値に、その階級の度数をかける。
+    op: weight_by_class_value
+    result_display: 各階級の階級値と度数の積を求める
+    result_srepr: ''
+  - args: []
+    narration: それらの積をすべて足し合わせ、度数の合計でわって平均値を求める。
+    op: divide_by_total
+    result_display: 290/9
+    result_srepr: Rational(290, 9)
+visual_svg: null

@@ -1,0 +1,58 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - representative_value.compute_raw
+  provenance:
+    git_commit: ''
+    recipe: math.representative_values_raw
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_representative_values_raw_v1
+    tier: T1
+  requested:
+    form: calculation
+    level: 1
+    subject: math
+    unit: g1_l57
+  resolved:
+    form: calculation
+    level: 1
+    subject: math
+    unit: g1_l57
+  seed: 2
+  signature: representative_values_raw
+problem_ref: 81c57fc30b4d8293
+problem_text: 次の9個のデータの平均値・中央値・最頻値をそれぞれ求めよ。〔1、20、39、20、5、41、7、25、13〕。
+sub_questions:
+- answer:
+    display: 平均値 19、中央値 20、最頻値 20
+    kind: symbolic
+    srepr: Tuple(Integer(19), Integer(20), Integer(20))
+  cause_tags: []
+  concept_tags:
+  - representative_value.compute_raw
+  explanation: まず、データの値をすべて足し合わせ、個数でわって平均値を求める。 データの値の合計を個数でわる次に、データを大きさの順に並べ、中央の値（個数が偶数のときは中央に並ぶ値どうしの平均）を求める。 大きさの順に並べた中央の値を読み取る最後に、もっとも個数が多く現れる値を求める。 平均値 19、中央値 20、最頻値 20
+  hints:
+  - データの値をすべて足し合わせ、個数でわって平均値を求める。
+  - データを大きさの順に並べ、中央の値（個数が偶数のときは中央に並ぶ値どうしの平均）を求める。
+  label: (1)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args: []
+    narration: データの値をすべて足し合わせ、個数でわって平均値を求める。
+    op: compute_mean
+    result_display: データの値の合計を個数でわる
+    result_srepr: ''
+  - args: []
+    narration: データを大きさの順に並べ、中央の値（個数が偶数のときは中央に並ぶ値どうしの平均）を求める。
+    op: compute_median
+    result_display: 大きさの順に並べた中央の値を読み取る
+    result_srepr: ''
+  - args: []
+    narration: もっとも個数が多く現れる値を求める。
+    op: compute_mode
+    result_display: 平均値 19、中央値 20、最頻値 20
+    result_srepr: Tuple(Integer(19), Integer(20), Integer(20))
+visual_svg: null

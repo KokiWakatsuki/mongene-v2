@@ -1,0 +1,27 @@
+family: math.g1_l31.knowledge
+form: knowledge
+source_desc: |
+  比例グラフは原点を通る直線・aの符号で向きが決まる特徴を判別する
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: 比例グラフは原点を通る直線・aの符号で向きが決まる特徴を判別する。
+       example: 比例y=axのグラフについて、次の文の正誤を答えよ。「a<0のとき、グラフは
+                右上がりの直線になる。」また、比例のグラフは必ずどんな点を通るか答えよ。
+  【設計モデル】新設 solver math.judge_proportion_graph_direction（is_a_positive bool
+  だけから、比例グラフの向き（右上がり/右下がり）を判別。原点を通ることは符号に
+  よらない不変の事実として correct 文に含める）。
+concepts_default: [proportion.judge_graph_direction]
+levels:
+  "1":
+    signature: judge_proportion_graph_direction
+    recipe: math.judge_proportion_graph_direction
+    params:
+      a_domain: {int_range: [-500, 500]}
+    given: [statement]
+    asked: [choice]
+    visual: none
+    text: {tier: T1, template: prop_judge_graph_direction_v1}
+    hints: [steps_prefix]
+    concept_tags: [proportion.judge_graph_direction]
+    cause_tags: []
+remedial:
+  default_level: 1

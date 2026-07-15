@@ -1,0 +1,28 @@
+family: math.g1_l30.knowledge
+form: knowledge
+source_desc: |
+  座標・x座標y座標・軸・原点・象限の用語を判別する
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: 座標・x座標y座標・軸・原点・象限の用語を判別する。
+       example: 座標平面について、x座標もy座標も正である部分を第何象限というか答えよ。
+                また原点の座標を書け。
+  【設計モデル】用語想起ハブ（既存 math.term_recall・_TERM_MAPS に domain
+  "quadrant_terms" を追加。第一〜第四象限・原点の5用語。答えは漢数字＝digit-free）。
+concepts_default: [quadrant_terms.term_recall]
+levels:
+  "1":
+    signature: quadrant_terms_term_recall
+    recipe: math.term_recall
+    params:
+      domain: quadrant_terms
+      concept_set: [quadrant1, quadrant2, quadrant3, quadrant4, origin]
+      number_domain: {int_range: [1, 200]}
+    given: [statement]
+    asked: [choice]
+    visual: none
+    text: {tier: T1, template: lf_term_recall_v1}
+    hints: [steps_prefix]
+    concept_tags: [quadrant_terms.term_recall]
+    cause_tags: []
+remedial:
+  default_level: 1

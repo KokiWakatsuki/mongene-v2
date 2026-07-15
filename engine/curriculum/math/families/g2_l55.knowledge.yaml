@@ -1,0 +1,29 @@
+family: math.g2_l55.knowledge
+form: knowledge
+source_desc: |
+  第1/2/3四分位数・四分位範囲の意味を想起する
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: 第1/2/3四分位数・四分位範囲の意味を想起する。
+       example: 第1四分位数、第2四分位数、第3四分位数、および四分位範囲が、それぞれ
+                データの何を表すかを答えよ。
+  【設計モデル】用語想起ハブ（既存 math.term_recall・_TERM_MAPS に domain
+  "quartile_terms" を追加。第一/第二/第三四分位数・四分位範囲の4用語。答えは漢数字＝
+  digit-free）。
+concepts_default: [quartile_terms.term_recall]
+levels:
+  "1":
+    signature: quartile_terms_term_recall
+    recipe: math.term_recall
+    params:
+      domain: quartile_terms
+      concept_set: [q1, q2, q3, iqr]
+      number_domain: {int_range: [5, 500]}
+    given: [statement]
+    asked: [choice]
+    visual: none
+    text: {tier: T1, template: lf_term_recall_v1}
+    hints: [steps_prefix]
+    concept_tags: [quartile_terms.term_recall]
+    cause_tags: []
+remedial:
+  default_level: 1

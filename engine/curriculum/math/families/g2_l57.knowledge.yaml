@@ -1,0 +1,28 @@
+family: math.g2_l57.knowledge
+form: knowledge
+source_desc: |
+  中央値/範囲/四分位範囲が分布の何を表すかを想起する
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: 中央値/範囲/四分位範囲が分布の何を表すかを想起する。
+       example: 箱ひげ図における中央値・範囲・四分位範囲が、それぞれデータの分布の
+                何を表すかを答えよ。
+  【設計モデル】新設 solver math.classify_distribution_statistic（concept（統計量の
+  種類）だけから、データの中心の位置を表すか散らばりの度合いを表すかを判別。中央値=
+  中心、範囲/四分位範囲=散らばり）。
+concepts_default: [distribution_statistic.classify_role]
+levels:
+  "1":
+    signature: classify_distribution_statistic
+    recipe: math.classify_distribution_statistic
+    params:
+      concept_set: [median, range, iqr]
+      number_domain: {int_range: [5, 500]}
+    given: [statement]
+    asked: [choice]
+    visual: none
+    text: {tier: T1, template: lf_classify_distribution_statistic_v1}
+    hints: [steps_prefix]
+    concept_tags: [distribution_statistic.classify_role]
+    cause_tags: []
+remedial:
+  default_level: 1

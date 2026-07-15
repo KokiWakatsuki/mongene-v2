@@ -1,0 +1,28 @@
+family: math.g1_l34.knowledge
+form: knowledge
+source_desc: |
+  双曲線は2つの枝・軸に交わらない・aの符号で象限が決まる特徴を判別する
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: 双曲線は2つの枝・軸に交わらない・aの符号で象限が決まる特徴を判別する。
+       example: 反比例y=a/xのグラフである双曲線について、次の文の正誤を答えよ。
+                「a>0のとき、双曲線は第1象限と第3象限にある。」また、双曲線はx軸・y軸と
+                交わるかどうか答えよ。
+  【設計モデル】新設 solver math.judge_hyperbola_quadrants（is_a_positive bool だけから、
+  双曲線がどの象限にあるかを判別。2つの枝からなり軸に交わらないことは符号によらない
+  不変の事実として correct 文に含める）。
+concepts_default: [inverse_proportion.judge_hyperbola_quadrants]
+levels:
+  "1":
+    signature: judge_hyperbola_quadrants
+    recipe: math.judge_hyperbola_quadrants
+    params:
+      a_domain: {int_range: [-500, 500]}
+    given: [statement]
+    asked: [choice]
+    visual: none
+    text: {tier: T1, template: prop_judge_hyperbola_quadrants_v1}
+    hints: [steps_prefix]
+    concept_tags: [inverse_proportion.judge_hyperbola_quadrants]
+    cause_tags: []
+remedial:
+  default_level: 1

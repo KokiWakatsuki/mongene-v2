@@ -1,0 +1,43 @@
+family: math.g1_l35.find_value
+form: find_value
+source_desc: |
+  1点の座標をy=a/xに代入しaを求め式を決める(1手順)／グラフから点を読む・積で求める等の
+  複数手順で式を決める（units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: 1点の座標をy=a/xに代入しaを求め式を決める(1手順)。
+       example: yはxに反比例し、x=2のときy=9である。yをxの式で表せ。
+  Lv2 desc: グラフから点を読む・積で求める等の複数手順で式を決める。
+       example: 反比例のグラフ(双曲線)が点(3, 4)を通っている。このグラフの式を求めよ。
+  【設計モデル】新設 solver math.solve_inverse_proportion_from_point（通る1点(x0,y0)から
+  比例定数a=x0*y0を求め式y=a/xを決める）。mode="basic"（Lv1）は正の座標のみ、
+  mode="signed"（Lv2）は負の座標を許し符号確認の1手順を増やす。op列（Lv1:
+  substitute_point/form_expressionの2段、Lv2: check_signs 追加の3段）が相異＝level_sep。
+concepts_default: [inverse_proportion.solve_from_point]
+levels:
+  "1":
+    signature: solve_inverse_proportion_basic
+    recipe: math.solve_inverse_proportion_from_point
+    params:
+      mode: basic
+      xy_domain: {int_range: [1, 60]}
+    given: [condition]
+    asked: [expression]
+    visual: none
+    text: {tier: T1, template: prop_solve_inverse_from_point_v1}
+    hints: [steps_prefix]
+    concept_tags: [inverse_proportion.solve_from_point]
+    cause_tags: []
+  "2":
+    signature: solve_inverse_proportion_signed
+    recipe: math.solve_inverse_proportion_from_point
+    params:
+      mode: signed
+      xy_signed_domain: {int_range: [-12, 12]}
+    given: [condition]
+    asked: [expression]
+    visual: none
+    text: {tier: T1, template: prop_solve_inverse_from_point_v1}
+    hints: [steps_prefix]
+    concept_tags: [inverse_proportion.solve_from_point]
+    cause_tags: []
+remedial:
+  default_level: 1

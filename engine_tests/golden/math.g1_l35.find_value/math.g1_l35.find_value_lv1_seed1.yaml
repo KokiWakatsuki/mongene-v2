@@ -1,0 +1,55 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - inverse_proportion.solve_from_point
+  provenance:
+    git_commit: ''
+    recipe: math.solve_inverse_proportion_from_point
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: prop_solve_inverse_from_point_v1
+    tier: T1
+  requested:
+    form: find_value
+    level: 1
+    subject: math
+    unit: g1_l35
+  resolved:
+    form: find_value
+    level: 1
+    subject: math
+    unit: g1_l35
+  seed: 1
+  signature: solve_inverse_proportion_basic
+problem_ref: 55c66b2cdcc727e6
+problem_text: yはxに反比例し、x=8のときy=14である。yをxの式で表せ。
+sub_questions:
+- answer:
+    display: y = 112/x
+    kind: symbolic
+    srepr: Mul(Integer(112), Pow(Symbol('x'), Integer(-1)))
+  cause_tags: []
+  concept_tags:
+  - inverse_proportion.solve_from_point
+  explanation: まず、反比例の式 y=a/x に、通る点の x, y の値をあてはめ、比例定数を求める式をつくる。 a = 8 × 14次に、求めた比例定数を使って、反比例の式を組み立てる。 y = 112/x
+  hints:
+  - 反比例の式 y=a/x に、通る点の x, y の値をあてはめ、比例定数を求める式をつくる。
+  label: (1)
+  prompt_text: expression を求めなさい。
+  solution_steps:
+  - args:
+    - '8'
+    - '14'
+    narration: 反比例の式 y=a/x に、通る点の x, y の値をあてはめ、比例定数を求める式をつくる。
+    op: substitute_point
+    result_display: a = 8 × 14
+    result_srepr: Integer(112)
+  - args:
+    - '112'
+    narration: 求めた比例定数を使って、反比例の式を組み立てる。
+    op: form_expression
+    result_display: y = 112/x
+    result_srepr: Mul(Integer(112), Pow(Symbol('x'), Integer(-1)))
+visual_svg: null

@@ -1,0 +1,58 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - quartile.compute_q1_q3_iqr
+  provenance:
+    git_commit: ''
+    recipe: math.quartiles_iqr
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_quartiles_iqr_v1
+    tier: T1
+  requested:
+    form: calculation
+    level: 3
+    subject: math
+    unit: g2_l55
+  resolved:
+    form: calculation
+    level: 3
+    subject: math
+    unit: g2_l55
+  seed: 2
+  signature: quartiles_iqr
+problem_ref: b6d8e6713d5d6a97
+problem_text: '次の12個のデータについて、第1四分位数、第3四分位数、および四分位範囲を求めよ。データ: 40、11、42、50、16、30、24、1、16、12、49、24。'
+sub_questions:
+- answer:
+    display: 第1四分位数 14、第3四分位数 41、四分位範囲 27
+    kind: symbolic
+    srepr: Tuple(Integer(14), Integer(41), Integer(27))
+  cause_tags: []
+  concept_tags:
+  - quartile.compute_q1_q3_iqr
+  explanation: まず、データを大きさの順に並べ、中央値を境に下組と上組に分ける。 中央値を境に下組と上組に分ける次に、下組の中央値を第一四分位数、上組の中央値を第三四分位数とする。 下組・上組それぞれの中央値を求める最後に、上組の中央値から下組の中央値をひき、四分位範囲を求める。 第1四分位数 14、第3四分位数 41、四分位範囲 27
+  hints:
+  - データを大きさの順に並べ、中央値を境に下組と上組に分ける。
+  - 下組の中央値を第一四分位数、上組の中央値を第三四分位数とする。
+  label: (1)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args: []
+    narration: データを大きさの順に並べ、中央値を境に下組と上組に分ける。
+    op: split_into_halves
+    result_display: 中央値を境に下組と上組に分ける
+    result_srepr: ''
+  - args: []
+    narration: 下組の中央値を第一四分位数、上組の中央値を第三四分位数とする。
+    op: compute_q1_q3
+    result_display: 下組・上組それぞれの中央値を求める
+    result_srepr: ''
+  - args: []
+    narration: 上組の中央値から下組の中央値をひき、四分位範囲を求める。
+    op: compute_iqr
+    result_display: 第1四分位数 14、第3四分位数 41、四分位範囲 27
+    result_srepr: Tuple(Integer(14), Integer(41), Integer(27))
+visual_svg: null

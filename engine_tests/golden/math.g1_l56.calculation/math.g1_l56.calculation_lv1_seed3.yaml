@@ -1,0 +1,47 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - cumulative_frequency.compute
+  provenance:
+    git_commit: ''
+    recipe: math.cumulative_frequency_value
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_cumulative_frequency_value_v1
+    tier: T1
+  requested:
+    form: calculation
+    level: 1
+    subject: math
+    unit: g1_l56
+  resolved:
+    form: calculation
+    level: 1
+    subject: math
+    unit: g1_l56
+  seed: 3
+  signature: cumulative_frequency_value
+problem_ref: 1655e528b88af279
+problem_text: 次の度数分布表で、10分以上34分未満の階級までの累積度数を求めよ。〔階級と度数：10分以上18分未満…8人、18分以上26分未満…14人、26分以上34分未満…14人、34分以上42分未満…8人〕。
+sub_questions:
+- answer:
+    display: '36'
+    kind: symbolic
+    srepr: Integer(36)
+  cause_tags: []
+  concept_tags:
+  - cumulative_frequency.compute
+  explanation: まず、いちばん小さい階級から対象の階級まで、度数を順に足し合わせる。 36
+  hints:
+  - 問題文の与えられた値をもう一度確認しよう。
+  label: (1)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args: []
+    narration: いちばん小さい階級から対象の階級まで、度数を順に足し合わせる。
+    op: accumulate_frequency
+    result_display: '36'
+    result_srepr: Integer(36)
+visual_svg: null

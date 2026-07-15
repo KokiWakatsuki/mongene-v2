@@ -1,0 +1,52 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - relative_frequency.compare_groups
+  provenance:
+    git_commit: ''
+    recipe: math.compare_relative_frequency
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_compare_relative_frequency_v1
+    tier: T1
+  requested:
+    form: calculation
+    level: 2
+    subject: math
+    unit: g1_l55
+  resolved:
+    form: calculation
+    level: 2
+    subject: math
+    unit: g1_l55
+  seed: 1
+  signature: compare_relative_frequency
+problem_ref: 8e0dd662ca5012c0
+problem_text: A中学は生徒40人、B中学は生徒30人で通学時間を調べた。1分以上10分未満の階級の度数がA中学は27人、B中学は7人であった。それぞれの相対度数を求め、この階級の割合が大きいのはどちらの中学か答えよ。
+sub_questions:
+- answer:
+    display: 'A: 27/40、B: 7/30（Aのほうが大きい）'
+    kind: symbolic
+    srepr: Tuple(Rational(27, 40), Rational(7, 30))
+  cause_tags: []
+  concept_tags:
+  - relative_frequency.compare_groups
+  explanation: 'まず、それぞれの集団について、対象の階級の度数を総度数でわり、相対度数を求める。 それぞれの度数を総度数でわる次に、求めた相対度数どうしを比べ、値が大きいほうを答える。 A: 27/40、B: 7/30（Aのほうが大きい）'
+  hints:
+  - それぞれの集団について、対象の階級の度数を総度数でわり、相対度数を求める。
+  label: (1)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args: []
+    narration: それぞれの集団について、対象の階級の度数を総度数でわり、相対度数を求める。
+    op: compute_relative_frequency_each
+    result_display: それぞれの度数を総度数でわる
+    result_srepr: ''
+  - args: []
+    narration: 求めた相対度数どうしを比べ、値が大きいほうを答える。
+    op: compare_relative_frequency
+    result_display: 'A: 27/40、B: 7/30（Aのほうが大きい）'
+    result_srepr: Tuple(Rational(27, 40), Rational(7, 30))
+visual_svg: null

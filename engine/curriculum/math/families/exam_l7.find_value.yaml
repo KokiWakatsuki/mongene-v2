@@ -1,0 +1,29 @@
+family: math.exam_l7.find_value
+form: find_value
+source_desc: |
+  四分位数・範囲・推定値を求める
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv3 desc: 四分位数・範囲・推定値を求める。
+       example: 次の11個のデータについて、第1四分位数・第2四分位数(中央値)・
+                第3四分位数、および四分位範囲を求めよ。データ:12, 15, 18, 20, 22,
+                25, 28, 30, 33, 35, 40
+  【設計モデル】新設 solver math.quartiles_full_summary（quartile.py・中央値を境に
+  下組/上組へ分けそれぞれの中央値を第一/第三四分位数とする教科書式。既存
+  math.quartiles_iqr に第二四分位数(中央値)を加えた合成）。
+concepts_default: [exam.quartiles_full_summary]
+levels:
+  "3":
+    signature: exam_quartiles_full_summary
+    recipe: math.exam_quartiles_full_summary
+    params:
+      n_domain: {int_set: [9, 11, 13]}
+      value_domain: {int_range: [1, 60]}
+    given: [condition]
+    asked: [value]
+    visual: none
+    text: {tier: T1, template: lf_exam_quartiles_full_summary_v1}
+    hints: [steps_prefix]
+    concept_tags: [exam.quartiles_full_summary]
+    cause_tags: []
+remedial:
+  default_level: 3

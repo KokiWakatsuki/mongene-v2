@@ -34,6 +34,20 @@ def _paren_neg(v: sympy.Expr) -> str:
     return f"({s})" if v < 0 else s
 
 
+def _format_direct_proportion_expr(a: sympy.Expr) -> str:
+    """比例の式 y=ax の表示（a=1,-1 の特殊表記を含む）。"""
+    if a == 1:
+        return "y = x"
+    if a == -1:
+        return "y = -x"
+    return f"y = {fmt_number(a)}x"
+
+
+def _format_inverse_proportion_expr(a: sympy.Expr) -> str:
+    """反比例の式 y=a/x の表示。"""
+    return f"y = {fmt_number(a)}/x"
+
+
 # ---------------------------------------------------------------------------
 # math.evaluate_direct_proportion（g1_l29.calculation Lv1/Lv2）
 # 比例 y=ax に x=x0 を代入して y を求める（代入1手順）。
@@ -261,10 +275,196 @@ def judge_inverse_proportion_table(xs: object, ys: object) -> Solution:
     return Solution(answer=answer, steps=steps)
 
 
+# ---------------------------------------------------------------------------
+# math.solve_direct_proportion_from_point（g1_l32.find_value Lv1/Lv2）
+# 比例のグラフ・条件が通る1点 (x0,y0) から比例定数 a=y0/x0 を求め、式 y=ax を決める。
+# ---------------------------------------------------------------------------
+@register_solver("math.solve_direct_proportion_from_point")
+def solve_direct_proportion_from_point(x0: object, y0: object, mode: object) -> Solution:
+    """比例が通る1点から比例定数を求め、式 y=ax を決める（g1_l32.find_value）。
+
+    mode="integer"（Lv1）: 比例定数 a が整数になる1手順。
+    mode="fraction"（Lv2）: 比例定数 a が分数になり、約分の1手順が増える（level_sep）。
+    答えは式 y=ax（asked=expression）。narration には数字を書かない。
+    """
+    m = str(mode)
+    if m not in ("integer", "fraction"):
+        raise ValueError(f"mode は 'integer' か 'fraction' のいずれか（受領: {mode!r}）")
+    x0_s, y0_s = sympy.nsimplify(x0), sympy.nsimplify(y0)
+    a = y0_s / x0_s
+    expr = a * sympy.Symbol("x")
+    disp = _format_direct_proportion_expr(a)
+
+    steps: list[Step] = [
+        Step(
+            op="substitute_point",
+            args=[fmt_number(x0_s), fmt_number(y0_s)],
+            result_srepr=sympy.srepr(a),
+            result_display=f"a = {fmt_number(y0_s)} / {_paren_neg(x0_s)}",
+            narration="比例の式 y=ax に、通る点の x, y の値をあてはめ、比例定数を求める式をつくる。",
+        ),
+    ]
+    if m == "fraction":
+        steps.append(
+            Step(
+                op="simplify_fraction",
+                args=[],
+                result_srepr=sympy.srepr(a),
+                result_display=f"a = {fmt_number(a)}",
+                narration="求めた商を約分し、比例定数を最も簡単な分数の形に整理する。",
+            )
+        )
+    steps.append(
+        Step(
+            op="form_expression",
+            args=[fmt_number(a)],
+            result_srepr=sympy.srepr(expr),
+            result_display=disp,
+            narration="求めた比例定数を使って、比例の式を組み立てる。",
+        )
+    )
+    answer = SymbolicAnswer(srepr=sympy.srepr(expr), display=disp)
+    return Solution(answer=answer, steps=steps)
+
+
+# ---------------------------------------------------------------------------
+# math.solve_inverse_proportion_from_point（g1_l35.find_value Lv1/Lv2）
+# 反比例のグラフ・条件が通る1点 (x0,y0) から比例定数 a=x0*y0 を求め、式 y=a/x を決める。
+# ---------------------------------------------------------------------------
+@register_solver("math.solve_inverse_proportion_from_point")
+def solve_inverse_proportion_from_point(x0: object, y0: object, mode: object) -> Solution:
+    """反比例が通る1点から比例定数を求め、式 y=a/x を決める（g1_l35.find_value）。
+
+    mode="basic"（Lv1）: 正の座標の点から、積 x0*y0 がそのまま比例定数になる1手順。
+    mode="signed"（Lv2）: 負の座標を含む点から求めるため、符号の確認が1手順増える（level_sep）。
+    答えは式 y=a/x（asked=expression）。narration には数字を書かない。
+    """
+    m = str(mode)
+    if m not in ("basic", "signed"):
+        raise ValueError(f"mode は 'basic' か 'signed' のいずれか（受領: {mode!r}）")
+    x0_s, y0_s = sympy.nsimplify(x0), sympy.nsimplify(y0)
+    a = x0_s * y0_s
+    expr = a / sympy.Symbol("x")
+    disp = _format_inverse_proportion_expr(a)
+
+    steps: list[Step] = []
+    if m == "signed":
+        steps.append(
+            Step(
+                op="check_signs",
+                args=[],
+                result_srepr=sympy.srepr(a),
+                result_display="点のx座標とy座標の符号を確認する",
+                narration="通る点のx座標とy座標、それぞれの符号（正か負か）を確認する。",
+            )
+        )
+    steps.append(
+        Step(
+            op="substitute_point",
+            args=[fmt_number(x0_s), fmt_number(y0_s)],
+            result_srepr=sympy.srepr(a),
+            result_display=f"a = {_paren_neg(x0_s)} × {_paren_neg(y0_s)}",
+            narration="反比例の式 y=a/x に、通る点の x, y の値をあてはめ、比例定数を求める式をつくる。",
+        ),
+    )
+    steps.append(
+        Step(
+            op="form_expression",
+            args=[fmt_number(a)],
+            result_srepr=sympy.srepr(expr),
+            result_display=disp,
+            narration="求めた比例定数を使って、反比例の式を組み立てる。",
+        )
+    )
+    answer = SymbolicAnswer(srepr=sympy.srepr(expr), display=disp)
+    return Solution(answer=answer, steps=steps)
+
+
+# ---------------------------------------------------------------------------
+# math.judge_proportion_graph_direction（g1_l31.knowledge Lv1）
+# ---------------------------------------------------------------------------
+@register_solver("math.judge_proportion_graph_direction")
+def judge_proportion_graph_direction(is_a_positive: object) -> Solution:
+    """比例定数 a の符号から比例グラフの向きを判別する（g1_l31.knowledge Lv1）。
+
+    is_a_positive（bool 相当）だけから判定する（double-solve）。答えは ChoiceAnswer
+    （原点を通ることは符号によらない不変の事実として correct 文に含める）。
+    narration に数字は書かない。
+    """
+    truthy = str(is_a_positive).lower() in ("true", "1")
+    correct = "右上がりの直線になる（原点を通る）" if truthy else "右下がりの直線になる（原点を通る）"
+    other = "右下がりの直線になる（原点を通る）" if truthy else "右上がりの直線になる（原点を通る）"
+    steps = [
+        Step(
+            op="check_sign",
+            args=[],
+            result_srepr=("positive" if truthy else "negative"),
+            result_display="比例定数の符号を確認する",
+            narration="比例の式 y=ax の比例定数 a の符号（正か負か）を確認する。",
+        ),
+        Step(
+            op="judge_proportion_graph_direction",
+            args=[],
+            result_srepr=correct,
+            result_display=correct,
+            narration="aが正なら右上がり、負なら右下がりの直線になる。どちらも必ず原点を通る。",
+        ),
+    ]
+    answer = ChoiceAnswer(correct=correct, distractors=[other], fact_id="proportion.judge_graph_direction")
+    return Solution(answer=answer, steps=steps)
+
+
+# ---------------------------------------------------------------------------
+# math.judge_hyperbola_quadrants（g1_l34.knowledge Lv1）
+# ---------------------------------------------------------------------------
+@register_solver("math.judge_hyperbola_quadrants")
+def judge_hyperbola_quadrants(is_a_positive: object) -> Solution:
+    """比例定数 a の符号から双曲線がどの象限にあるかを判別する（g1_l34.knowledge Lv1）。
+
+    is_a_positive（bool 相当）だけから判定する（double-solve）。答えは ChoiceAnswer
+    （二つの枝からなり軸に交わらないことは符号によらない不変の事実として correct 文に
+    含める）。narration に数字は書かない。
+    """
+    truthy = str(is_a_positive).lower() in ("true", "1")
+    correct = (
+        "第一象限と第三象限にある（二つの枝からなり、x軸・y軸と交わらない）"
+        if truthy
+        else "第二象限と第四象限にある（二つの枝からなり、x軸・y軸と交わらない）"
+    )
+    other = (
+        "第二象限と第四象限にある（二つの枝からなり、x軸・y軸と交わらない）"
+        if truthy
+        else "第一象限と第三象限にある（二つの枝からなり、x軸・y軸と交わらない）"
+    )
+    steps = [
+        Step(
+            op="check_sign",
+            args=[],
+            result_srepr=("positive" if truthy else "negative"),
+            result_display="比例定数の符号を確認する",
+            narration="反比例の式 y=a/x の比例定数 a の符号（正か負か）を確認する。",
+        ),
+        Step(
+            op="judge_hyperbola_quadrants",
+            args=[],
+            result_srepr=correct,
+            result_display=correct,
+            narration="aが正なら第一・第三象限、負なら第二・第四象限に双曲線がある。"
+            "どちらも二つの枝からなり、x軸・y軸と交わらない。",
+        ),
+    ]
+    answer = ChoiceAnswer(correct=correct, distractors=[other], fact_id="proportion.judge_hyperbola_quadrants")
+    return Solution(answer=answer, steps=steps)
+
+
 __all__ = [
     "evaluate_direct_proportion",
     "evaluate_inverse_proportion",
     "judge_functional_relation",
     "judge_direct_proportion_table",
     "judge_inverse_proportion_table",
+    "solve_direct_proportion_from_point",
+    "solve_inverse_proportion_from_point",
+    "judge_proportion_graph_direction",
+    "judge_hyperbola_quadrants",
 ]

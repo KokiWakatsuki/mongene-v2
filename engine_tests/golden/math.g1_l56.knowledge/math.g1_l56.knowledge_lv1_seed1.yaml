@@ -1,0 +1,54 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - cumulative_frequency_terms.term_recall
+  provenance:
+    git_commit: ''
+    recipe: math.term_recall
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_term_recall_v1
+    tier: T1
+  requested:
+    form: knowledge
+    level: 1
+    subject: math
+    unit: g1_l56
+  resolved:
+    form: knowledge
+    level: 1
+    subject: math
+    unit: g1_l56
+  seed: 1
+  signature: cumulative_frequency_terms_term_recall
+problem_ref: e1ee0fe90c6feba5
+problem_text: 337個の階級に分けた度数分布表で、いちばん小さい階級から対象の階級までの度数を合計した値 を何といいますか。
+sub_questions:
+- answer:
+    correct: 累積度数
+    distractors:
+    - 累積相対度数
+    fact_id: cumulative_frequency_terms.term.cumulative_frequency
+    kind: choice
+  cause_tags: []
+  concept_tags:
+  - cumulative_frequency_terms.term_recall
+  explanation: まず、説明されている式や数の部分がどれかを読み取る。 説明されている対象を読み取る次に、その対象を表す用語の名前を思い出す。 累積度数
+  hints:
+  - 説明されている式や数の部分がどれかを読み取る。
+  label: (1)
+  prompt_text: choice を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 説明されている式や数の部分がどれかを読み取る。
+    op: identify_description
+    result_display: 説明されている対象を読み取る
+    result_srepr: cumulative_frequency
+  - args: []
+    narration: その対象を表す用語の名前を思い出す。
+    op: name_concept
+    result_display: 累積度数
+    result_srepr: 累積度数
+visual_svg: null

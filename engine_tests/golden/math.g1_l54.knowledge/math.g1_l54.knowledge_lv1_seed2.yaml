@@ -1,0 +1,56 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - frequency_table_terms.term_recall
+  provenance:
+    git_commit: ''
+    recipe: math.term_recall
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_term_recall_v1
+    tier: T1
+  requested:
+    form: knowledge
+    level: 1
+    subject: math
+    unit: g1_l54
+  resolved:
+    form: knowledge
+    level: 1
+    subject: math
+    unit: g1_l54
+  seed: 2
+  signature: frequency_table_terms_term_recall
+problem_ref: b452facf5f7f4baa
+problem_text: 度数分布表で、8以上18未満のように区切った、データを整理するための区間 を何といいますか。
+sub_questions:
+- answer:
+    correct: 階級
+    distractors:
+    - 階級値
+    - 度数
+    - 階級の幅
+    fact_id: frequency_table_terms.term.class
+    kind: choice
+  cause_tags: []
+  concept_tags:
+  - frequency_table_terms.term_recall
+  explanation: まず、説明されている式や数の部分がどれかを読み取る。 説明されている対象を読み取る次に、その対象を表す用語の名前を思い出す。 階級
+  hints:
+  - 説明されている式や数の部分がどれかを読み取る。
+  label: (1)
+  prompt_text: choice を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 説明されている式や数の部分がどれかを読み取る。
+    op: identify_description
+    result_display: 説明されている対象を読み取る
+    result_srepr: class
+  - args: []
+    narration: その対象を表す用語の名前を思い出す。
+    op: name_concept
+    result_display: 階級
+    result_srepr: 階級
+visual_svg: null

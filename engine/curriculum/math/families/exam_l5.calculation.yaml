@@ -1,0 +1,27 @@
+family: math.exam_l5.calculation
+form: calculation
+source_desc: |
+  場合の数から確率を計算処理する
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv2 desc: 場合の数から確率を計算処理する。
+       example: ある試行で起こりうる場合が全部で36通りあり、そのうち条件に当てはまる
+                場合が9通りである。この条件が起こる確率を求めよ。
+  【設計モデル】新規solverは不要。既存 math.relative_frequency（probability.py・
+  起こった回数÷試行回数の既約分数）を新設recipe math.exam_probability_from_counts
+  から再利用する合成セル（C13は「新数学ほぼ不要」の設計方針どおり）。
+concepts_default: [exam.probability_from_counts]
+levels:
+  "2":
+    signature: exam_probability_from_counts
+    recipe: math.exam_probability_from_counts
+    params:
+      total_domain: {int_range: [10, 200]}
+    given: [expressions]
+    asked: [value]
+    visual: none
+    text: {tier: T1, template: lf_exam_probability_from_counts_v1}
+    hints: [steps_prefix]
+    concept_tags: [exam.probability_from_counts]
+    cause_tags: []
+remedial:
+  default_level: 2

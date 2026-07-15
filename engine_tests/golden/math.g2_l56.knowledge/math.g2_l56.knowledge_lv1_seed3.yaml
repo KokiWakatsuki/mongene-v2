@@ -1,0 +1,57 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - box_plot_terms.term_recall
+  provenance:
+    git_commit: ''
+    recipe: math.term_recall
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_term_recall_v1
+    tier: T1
+  requested:
+    form: knowledge
+    level: 1
+    subject: math
+    unit: g2_l56
+  resolved:
+    form: knowledge
+    level: 1
+    subject: math
+    unit: g2_l56
+  seed: 3
+  signature: box_plot_terms_term_recall
+problem_ref: ee89003afc4e9a0f
+problem_text: 122個のデータを表した箱ひげ図で、左側にのびるひげの先端が表す値 を何といいますか。
+sub_questions:
+- answer:
+    correct: 最小値
+    distractors:
+    - 第一四分位数
+    - 中央値
+    - 第三四分位数
+    - 最大値
+    fact_id: box_plot_terms.term.whisker_min
+    kind: choice
+  cause_tags: []
+  concept_tags:
+  - box_plot_terms.term_recall
+  explanation: まず、説明されている式や数の部分がどれかを読み取る。 説明されている対象を読み取る次に、その対象を表す用語の名前を思い出す。 最小値
+  hints:
+  - 説明されている式や数の部分がどれかを読み取る。
+  label: (1)
+  prompt_text: choice を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 説明されている式や数の部分がどれかを読み取る。
+    op: identify_description
+    result_display: 説明されている対象を読み取る
+    result_srepr: whisker_min
+  - args: []
+    narration: その対象を表す用語の名前を思い出す。
+    op: name_concept
+    result_display: 最小値
+    result_srepr: 最小値
+visual_svg: null

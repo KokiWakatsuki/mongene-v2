@@ -429,6 +429,16 @@ _TERM_RECALL_CONCEPTS = [
     "inverse_proportion.term_recall",
     # C12 確率（用語想起）
     "probability_terms.term_recall",
+    # C11 データ・統計（用語想起）
+    "frequency_table_terms.term_recall",
+    "relative_frequency_terms.term_recall",
+    "cumulative_frequency_terms.term_recall",
+    "representative_value_terms.term_recall",
+    "quartile_terms.term_recall",
+    "box_plot_terms.term_recall",
+    "survey_method_terms.term_recall",
+    "sampling_terms.term_recall",
+    "quadrant_terms.term_recall",
 ]
 
 
@@ -617,6 +627,96 @@ def _draw_term_statement(domain: str, concept: str, rng: Rng, p: dict[str, objec
         if concept == "inverse_proportion":
             return f"{eqx} のように、x の値が2倍、3倍になると、それにともなって y の値が1/2倍、1/3倍になる関係"
         return f"{eqx} で、積 xy がつねに等しくなる決まった数 {a} のような、反比例の関係を決める定数"  # proportionality_constant
+
+    if domain == "frequency_table_terms":
+        # g1_l54 度数分布表の用語。具体例の階級の下端・幅を埋め込み surface を分散する。
+        lo = int(draw(p["number_domain"], rng))
+        width = int(draw(p["width_domain"], rng))
+        hi = lo + width
+        if concept == "class":
+            return f"度数分布表で、{lo}以上{hi}未満のように区切った、データを整理するための区間"
+        if concept == "class_value":
+            return f"度数分布表で、{lo}以上{hi}未満の階級の区間の中央の値"
+        if concept == "frequency":
+            return f"度数分布表で、{lo}以上{hi}未満の階級に入るデータの個数"
+        return f"度数分布表で、{lo}以上{hi}未満のように区切ったときの区間の大きさ（{width}）"  # class_width
+
+    if domain == "relative_frequency_terms":
+        # g1_l55 相対度数まわりの用語。具体例の総度数 n を埋め込み surface を分散する。
+        n = int(draw(p["number_domain"], rng))
+        if concept == "relative_frequency":
+            return f"総度数が{n}の度数分布表で、各階級の度数の、総度数に対する割合"
+        return f"総度数{n}の度数分布表の、各階級の相対度数を折れ線でつないで表したグラフ"  # frequency_polygon
+
+    if domain == "cumulative_frequency_terms":
+        # g1_l56 累積度数まわりの用語。具体例の階級数 n を埋め込み surface を分散する。
+        n = int(draw(p["number_domain"], rng))
+        if concept == "cumulative_frequency":
+            return f"{n}個の階級に分けた度数分布表で、いちばん小さい階級から対象の階級までの度数を合計した値"
+        return f"{n}個の階級に分けた度数分布表で、いちばん小さい階級から対象の階級までの相対度数を合計した値"  # cumulative_relative_frequency
+
+    if domain == "representative_value_terms":
+        # g1_l57 代表値の用語。具体例のデータ個数 n を埋め込み surface を分散する。
+        n = int(draw(p["number_domain"], rng))
+        if concept == "mean":
+            return f"{n}個のデータの値をすべて合計し、データの個数でわった値"
+        if concept == "median":
+            return f"{n}個のデータを大きさの順に並べたときの、中央の位置にある値"
+        return f"{n}個のデータの中で、もっとも個数が多く現れる値"  # mode
+
+    if domain == "quartile_terms":
+        # g2_l55 四分位数の用語。具体例のデータ個数 n を埋め込み surface を分散する。
+        n = int(draw(p["number_domain"], rng))
+        if concept == "q1":
+            return f"{n}個のデータを大きさの順に並べて中央値を境に下組・上組に分けたときの、下組の中央値"
+        if concept == "q2":
+            return f"{n}個のデータを大きさの順に並べたときの中央値のよび名"
+        if concept == "q3":
+            return f"{n}個のデータを大きさの順に並べて中央値を境に下組・上組に分けたときの、上組の中央値"
+        return f"{n}個のデータについて、上組の中央値から下組の中央値をひいた差"  # iqr
+
+    if domain == "box_plot_terms":
+        # g2_l56 箱ひげ図の用語。具体例のデータ個数 n を埋め込み surface を分散する。
+        n = int(draw(p["number_domain"], rng))
+        if concept == "box_left":
+            return f"{n}個のデータを表した箱ひげ図で、箱の左端が表す値"
+        if concept == "box_center":
+            return f"{n}個のデータを表した箱ひげ図で、箱の中にひかれた線が表す値"
+        if concept == "box_right":
+            return f"{n}個のデータを表した箱ひげ図で、箱の右端が表す値"
+        if concept == "whisker_min":
+            return f"{n}個のデータを表した箱ひげ図で、左側にのびるひげの先端が表す値"
+        return f"{n}個のデータを表した箱ひげ図で、右側にのびるひげの先端が表す値"  # whisker_max
+
+    if domain == "survey_method_terms":
+        # g3_l57 標本調査の用語。具体例（対象の個数 n）を埋め込み surface を分散する。
+        n = int(draw(p["number_domain"], rng))
+        if concept == "census":
+            return f"{n}個（人）の対象すべてを、もれなく調べる調査"
+        return f"{n}個（人）の対象の集団から一部を取り出して調べ、集団全体のようすを推定する調査"  # sample_survey
+
+    if domain == "sampling_terms":
+        # g3_l58 標本の取り出し方の用語。具体例（対象の個数 n）を埋め込み surface を分散する。
+        n = int(draw(p["number_domain"], rng))
+        if concept == "population":
+            return f"{n}個（人）からなる、調査したい対象全体の集まり"
+        if concept == "sample":
+            return f"{n}個（人）からなる対象全体から、調査のために取り出した一部分"
+        return f"{n}個（人）からなる対象全体から、かたよりが出ないように偶然にまかせて標本を選び出す方法"  # random_sampling
+
+    if domain == "quadrant_terms":
+        # g1_l30 座標平面の用語（象限・原点）。具体例の座標平面上の点を埋め込み surface を分散する。
+        m = int(draw(p["number_domain"], rng))
+        n = int(draw(p["number_domain"], rng))
+        if concept == "quadrant1":
+            return f"座標平面上で、x座標が{m}のように正、y座標も{n}のように正である点が含まれる部分"
+        if concept == "quadrant2":
+            return f"座標平面上で、x座標が-{m}のように負、y座標は{n}のように正である点が含まれる部分"
+        if concept == "quadrant3":
+            return f"座標平面上で、x座標が-{m}のように負、y座標も-{n}のように負である点が含まれる部分"
+        if concept == "quadrant4":
+            return f"座標平面上で、x座標が{m}のように正、y座標は-{n}のように負である点が含まれる部分"
+        return "座標平面上で、x軸とy軸が交わる点（座標が(0, 0)である点）"  # origin
 
     if domain == "prime_concepts":
         # g1_l11 素数まわりの用語。相異なる2つの具体例を埋め込み surface を分散する

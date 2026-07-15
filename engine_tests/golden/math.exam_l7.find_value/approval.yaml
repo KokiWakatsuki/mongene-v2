@@ -1,0 +1,8 @@
+approved_at: '2026-07-15T10:42:48.976066'
+approver: koki
+content_sha256: fa8cfff3b8b9712a4662f072cfa020ad09f9c9a7eea9bb2a32d6a89dde85fbe5
+family: math.exam_l7.find_value
+files:
+- engine_tests/golden/math.exam_l7.find_value/math.exam_l7.find_value_lv3_seed1.yaml
+- engine_tests/golden/math.exam_l7.find_value/math.exam_l7.find_value_lv3_seed2.yaml
+- engine_tests/golden/math.exam_l7.find_value/math.exam_l7.find_value_lv3_seed3.yaml

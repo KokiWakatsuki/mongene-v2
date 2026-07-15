@@ -1,0 +1,52 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - sample_survey.solve_population_size
+  provenance:
+    git_commit: ''
+    recipe: math.sample_ratio_solve_population
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_sample_ratio_solve_population_v1
+    tier: T1
+  requested:
+    form: calculation
+    level: 2
+    subject: math
+    unit: g3_l60
+  resolved:
+    form: calculation
+    level: 2
+    subject: math
+    unit: g3_l60
+  seed: 3
+  signature: sample_ratio_solve_population
+problem_ref: 96d88ee0feb395e3
+problem_text: 無作為に取り出した標本の大きさが495で、そのうち目的のものが177個であった。母集団の大きさを x として、母集団に含まれる目的のもののおよその個数が1770であることから x を、比例式を使って求めよ。
+sub_questions:
+- answer:
+    display: '4950'
+    kind: symbolic
+    srepr: Integer(4950)
+  cause_tags: []
+  concept_tags:
+  - sample_survey.solve_population_size
+  explanation: まず、標本での該当する個数の割合が、母集団全体でもおよそ等しいとみて、母集団の大きさ x を含む比例式をつくる。 標本比率と母集団の比率が等しいとみて x を含む比例式をつくる次に、比例式を解き、母集団の大きさ x を求める。 4950
+  hints:
+  - 標本での該当する個数の割合が、母集団全体でもおよそ等しいとみて、母集団の大きさ x を含む比例式をつくる。
+  label: (1)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 標本での該当する個数の割合が、母集団全体でもおよそ等しいとみて、母集団の大きさ x を含む比例式をつくる。
+    op: form_ratio_equation_for_x
+    result_display: 標本比率と母集団の比率が等しいとみて x を含む比例式をつくる
+    result_srepr: ''
+  - args: []
+    narration: 比例式を解き、母集団の大きさ x を求める。
+    op: solve_for_x
+    result_display: '4950'
+    result_srepr: Integer(4950)
+visual_svg: null

@@ -1,0 +1,47 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - relative_frequency.compute_single
+  provenance:
+    git_commit: ''
+    recipe: math.relative_frequency_stats_single
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_relative_frequency_stats_single_v1
+    tier: T1
+  requested:
+    form: calculation
+    level: 1
+    subject: math
+    unit: g1_l55
+  resolved:
+    form: calculation
+    level: 1
+    subject: math
+    unit: g1_l55
+  seed: 1
+  signature: relative_frequency_stats_single
+problem_ref: f791c9f42e997432
+problem_text: 123人のうち、ある階級の度数が72人であった。この階級の相対度数を求めよ。
+sub_questions:
+- answer:
+    display: 24/41
+    kind: symbolic
+    srepr: Rational(24, 41)
+  cause_tags: []
+  concept_tags:
+  - relative_frequency.compute_single
+  explanation: まず、ことがらが起こった回数を、試行の総回数でわる。 24/41
+  hints:
+  - 問題文の与えられた値をもう一度確認しよう。
+  label: (1)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args: []
+    narration: ことがらが起こった回数を、試行の総回数でわる。
+    op: divide_occurred_by_total
+    result_display: 24/41
+    result_srepr: Rational(24, 41)
+visual_svg: null

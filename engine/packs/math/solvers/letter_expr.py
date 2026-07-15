@@ -266,6 +266,42 @@ _TERM_MAPS: dict[str, dict[str, str]] = {
     "probability_terms": {
         "trial": "試行", "probability": "確率", "equally_likely": "同様に確からしい",
     },
+    # g1_l54 度数分布表の用語（階級・階級値・度数・階級の幅）。C11 データ・統計クラスタの導入回。
+    "frequency_table_terms": {
+        "class": "階級", "class_value": "階級値", "frequency": "度数", "class_width": "階級の幅",
+    },
+    # g1_l55 相対度数まわりの用語（相対度数・度数折れ線）。
+    "relative_frequency_terms": {
+        "relative_frequency": "相対度数", "frequency_polygon": "度数折れ線",
+    },
+    # g1_l56 累積度数まわりの用語（累積度数・累積相対度数）。
+    "cumulative_frequency_terms": {
+        "cumulative_frequency": "累積度数", "cumulative_relative_frequency": "累積相対度数",
+    },
+    # g1_l57 代表値の用語（平均値・中央値・最頻値）。
+    "representative_value_terms": {
+        "mean": "平均値", "median": "中央値", "mode": "最頻値",
+    },
+    # g2_l55 四分位数の用語（第一/第二/第三四分位数・四分位範囲）。答えは漢数字＝digit-free。
+    "quartile_terms": {
+        "q1": "第一四分位数", "q2": "第二四分位数", "q3": "第三四分位数", "iqr": "四分位範囲",
+    },
+    # g2_l56 箱ひげ図の用語（箱の左端・中央の線・右端・両側のひげの先端）。答えは漢数字＝digit-free。
+    "box_plot_terms": {
+        "box_left": "第一四分位数", "box_center": "中央値", "box_right": "第三四分位数",
+        "whisker_min": "最小値", "whisker_max": "最大値",
+    },
+    # g3_l57 標本調査の用語（全数調査・標本調査）。
+    "survey_method_terms": {"census": "全数調査", "sample_survey": "標本調査"},
+    # g3_l58 標本の取り出し方の用語（母集団・標本・無作為抽出）。
+    "sampling_terms": {
+        "population": "母集団", "sample": "標本", "random_sampling": "無作為抽出",
+    },
+    # g1_l30 座標平面の用語（象限・原点）。答えは漢数字＝digit-free。
+    "quadrant_terms": {
+        "quadrant1": "第一象限", "quadrant2": "第二象限",
+        "quadrant3": "第三象限", "quadrant4": "第四象限", "origin": "原点",
+    },
 }
 
 # domain 別の step テキスト（既定は g1_l17/l19/l21/l2 の現行文＝golden 不変）。

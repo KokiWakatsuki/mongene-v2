@@ -1,0 +1,48 @@
+family: math.g3_l58.knowledge
+form: knowledge
+source_desc: |
+  母集団・標本・無作為抽出の意味の想起／偏りの有無を場面で判別し無作為抽出の意味を適用
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: 母集団・標本・無作為抽出の意味の想起。
+       example: 標本調査における「母集団」「標本」「無作為抽出」の意味を、それぞれ
+                説明せよ。
+  Lv2 desc: 偏りの有無を場面で判別し無作為抽出の意味を適用。
+       example: ある中学校の全校生徒の意見を調べるのに、3年1組の生徒だけにアンケートを
+                とった。この方法では母集団の様子を正しく調べられないことがある。その
+                理由を「偏り」の語を用いて説明せよ。
+  【設計モデル】Lv1=用語想起ハブ（既存 math.term_recall・_TERM_MAPS に domain
+  "sampling_terms" を追加。母集団・標本・無作為抽出の3用語）。Lv2=新設 solver
+  math.judge_sampling_bias（is_biased bool だけから偏りの有無を判別。recipe が
+  偏りあり/なしの6シナリオ群から surface を構成）。op列（Lv1:
+  identify_description/name_concept、Lv2: check_random_coverage/judge_sampling_bias）
+  が相異＝level_sep。
+concepts_default: [sampling_terms.term_recall]
+levels:
+  "1":
+    signature: sampling_terms_term_recall
+    recipe: math.term_recall
+    params:
+      domain: sampling_terms
+      concept_set: [population, sample, random_sampling]
+      number_domain: {int_range: [10, 500]}
+    given: [statement]
+    asked: [choice]
+    visual: none
+    text: {tier: T1, template: lf_term_recall_v1}
+    hints: [steps_prefix]
+    concept_tags: [sampling_terms.term_recall]
+    cause_tags: []
+  "2":
+    signature: judge_sampling_bias
+    recipe: math.judge_sampling_bias
+    params:
+      n_domain: {int_range: [10, 500]}
+    given: [statement]
+    asked: [choice]
+    visual: none
+    text: {tier: T1, template: lf_judge_sampling_bias_v1}
+    hints: [steps_prefix]
+    concept_tags: [sampling.judge_bias]
+    cause_tags: []
+remedial:
+  default_level: 1

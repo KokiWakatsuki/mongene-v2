@@ -1,0 +1,55 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - sampling_terms.term_recall
+  provenance:
+    git_commit: ''
+    recipe: math.term_recall
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_term_recall_v1
+    tier: T1
+  requested:
+    form: knowledge
+    level: 1
+    subject: math
+    unit: g3_l58
+  resolved:
+    form: knowledge
+    level: 1
+    subject: math
+    unit: g3_l58
+  seed: 1
+  signature: sampling_terms_term_recall
+problem_ref: a6fe71c918982fa2
+problem_text: 495個（人）からなる対象全体から、かたよりが出ないように偶然にまかせて標本を選び出す方法 を何といいますか。
+sub_questions:
+- answer:
+    correct: 無作為抽出
+    distractors:
+    - 母集団
+    - 標本
+    fact_id: sampling_terms.term.random_sampling
+    kind: choice
+  cause_tags: []
+  concept_tags:
+  - sampling_terms.term_recall
+  explanation: まず、説明されている式や数の部分がどれかを読み取る。 説明されている対象を読み取る次に、その対象を表す用語の名前を思い出す。 無作為抽出
+  hints:
+  - 説明されている式や数の部分がどれかを読み取る。
+  label: (1)
+  prompt_text: choice を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 説明されている式や数の部分がどれかを読み取る。
+    op: identify_description
+    result_display: 説明されている対象を読み取る
+    result_srepr: random_sampling
+  - args: []
+    narration: その対象を表す用語の名前を思い出す。
+    op: name_concept
+    result_display: 無作為抽出
+    result_srepr: 無作為抽出
+visual_svg: null

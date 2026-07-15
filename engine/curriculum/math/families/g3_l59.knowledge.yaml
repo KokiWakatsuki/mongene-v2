@@ -1,0 +1,26 @@
+family: math.g3_l59.knowledge
+form: knowledge
+source_desc: |
+  標本比率が母比率の近似になる考え方の理解
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: 標本比率が母比率の近似になる考え方の理解。
+       example: 標本調査で、標本の中の割合(標本比率)を母集団全体の割合(母比率)の
+                およその値とみなしてよいのはなぜか、その考え方を説明せよ。
+  【設計モデル】新設 solver math.explain_sample_ratio_rationale（説明対象が固定＝
+  恒真の解釈型。ChoiceAnswer。数量は number_domain から引き surface を分散する）。
+concepts_default: [sample_survey.ratio_rationale]
+levels:
+  "1":
+    signature: explain_sample_ratio_rationale
+    recipe: math.explain_sample_ratio_rationale
+    params:
+      number_domain: {int_range: [10, 500]}
+    given: [statement]
+    asked: [choice]
+    visual: none
+    text: {tier: T1, template: lf_explain_sample_ratio_rationale_v1}
+    hints: [steps_prefix]
+    concept_tags: [sample_survey.ratio_rationale]
+    cause_tags: []
+remedial:
+  default_level: 1

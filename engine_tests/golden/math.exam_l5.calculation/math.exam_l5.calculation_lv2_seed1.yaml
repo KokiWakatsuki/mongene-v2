@@ -1,0 +1,47 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - exam.probability_from_counts
+  provenance:
+    git_commit: ''
+    recipe: math.exam_probability_from_counts
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_exam_probability_from_counts_v1
+    tier: T1
+  requested:
+    form: calculation
+    level: 2
+    subject: math
+    unit: exam_l5
+  resolved:
+    form: calculation
+    level: 2
+    subject: math
+    unit: exam_l5
+  seed: 1
+  signature: exam_probability_from_counts
+problem_ref: 4348c249eb26c20c
+problem_text: ある試行で起こりうる場合が全部で164通りあり、そのうち条件に当てはまる場合が160通りである。この条件が起こる確率を求めよ。
+sub_questions:
+- answer:
+    display: 40/41
+    kind: symbolic
+    srepr: Rational(40, 41)
+  cause_tags: []
+  concept_tags:
+  - exam.probability_from_counts
+  explanation: まず、ことがらが起こった回数を、試行の総回数でわる。 40/41
+  hints:
+  - 問題文の与えられた値をもう一度確認しよう。
+  label: (1)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args: []
+    narration: ことがらが起こった回数を、試行の総回数でわる。
+    op: divide_occurred_by_total
+    result_display: 40/41
+    result_srepr: Rational(40, 41)
+visual_svg: null

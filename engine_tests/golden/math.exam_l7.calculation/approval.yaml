@@ -1,0 +1,8 @@
+approved_at: '2026-07-15T10:42:38.471753'
+approver: koki
+content_sha256: e0946d8f5e8de5f61e2afcc9850f9eafb9061f2816b740829bd49098114f429a
+family: math.exam_l7.calculation
+files:
+- engine_tests/golden/math.exam_l7.calculation/math.exam_l7.calculation_lv2_seed1.yaml
+- engine_tests/golden/math.exam_l7.calculation/math.exam_l7.calculation_lv2_seed2.yaml
+- engine_tests/golden/math.exam_l7.calculation/math.exam_l7.calculation_lv2_seed3.yaml

@@ -1,0 +1,54 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - sampling.judge_bias
+  provenance:
+    git_commit: ''
+    recipe: math.judge_sampling_bias
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_judge_sampling_bias_v1
+    tier: T1
+  requested:
+    form: knowledge
+    level: 2
+    subject: math
+    unit: g3_l58
+  resolved:
+    form: knowledge
+    level: 2
+    subject: math
+    unit: g3_l58
+  seed: 3
+  signature: judge_sampling_bias
+problem_ref: 97c3c284988d44e8
+problem_text: 85個の製品から、抽選機を使って無作為に製品を選んで検査した。この標本の選び方は、母集団の様子を調べる方法として適切か、理由とともに答えよ。
+sub_questions:
+- answer:
+    correct: 偏りが生じにくく、適切といえる
+    distractors:
+    - 偏りが生じやすく、適切とはいえない
+    fact_id: sampling.judge_bias
+    kind: choice
+  cause_tags: []
+  concept_tags:
+  - sampling.judge_bias
+  explanation: まず、母集団に含まれるすべての対象が、同じ機会で選ばれる方法になっているかを調べる。 母集団のすべてが同じ機会で選ばれうるかを調べる次に、一部の対象だけが選ばれやすい方法になっていれば偏りが生じ、適切とはいえないと判断する。 偏りが生じにくく、適切といえる
+  hints:
+  - 母集団に含まれるすべての対象が、同じ機会で選ばれる方法になっているかを調べる。
+  label: (1)
+  prompt_text: choice を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 母集団に含まれるすべての対象が、同じ機会で選ばれる方法になっているかを調べる。
+    op: check_random_coverage
+    result_display: 母集団のすべてが同じ機会で選ばれうるかを調べる
+    result_srepr: unbiased
+  - args: []
+    narration: 一部の対象だけが選ばれやすい方法になっていれば偏りが生じ、適切とはいえないと判断する。
+    op: judge_sampling_bias
+    result_display: 偏りが生じにくく、適切といえる
+    result_srepr: 偏りが生じにくく、適切といえる
+visual_svg: null

@@ -17,5 +17,9 @@ from engine.packs.math.recipes import motion  # noqa: F401  (登録の副作用�
 from engine.packs.math.recipes import quadratic_function  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.recipes import probability  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.recipes import proportion  # noqa: F401  (登録の副作用のため import)
+from engine.packs.math.recipes import statistics_distribution  # noqa: F401  (登録の副作用のため import)
+from engine.packs.math.recipes import quartile  # noqa: F401  (登録の副作用のため import)
+from engine.packs.math.recipes import sample_survey  # noqa: F401  (登録の副作用のため import)
+from engine.packs.math.recipes import exam_fusion  # noqa: F401  (登録の副作用のため import)
 
 __all__: list[str] = []

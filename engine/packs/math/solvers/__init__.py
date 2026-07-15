@@ -17,5 +17,8 @@ from engine.packs.math.solvers import motion  # noqa: F401  (登録の副作用�
 from engine.packs.math.solvers import quadratic_function  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.solvers import probability  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.solvers import proportion  # noqa: F401  (登録の副作用のため import)
+from engine.packs.math.solvers import statistics_distribution  # noqa: F401  (登録の副作用のため import)
+from engine.packs.math.solvers import quartile  # noqa: F401  (登録の副作用のため import)
+from engine.packs.math.solvers import sample_survey  # noqa: F401  (登録の副作用のため import)
 
 __all__: list[str] = []

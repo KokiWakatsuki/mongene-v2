@@ -1,0 +1,61 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - inverse_proportion.solve_from_point
+  provenance:
+    git_commit: ''
+    recipe: math.solve_inverse_proportion_from_point
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: prop_solve_inverse_from_point_v1
+    tier: T1
+  requested:
+    form: find_value
+    level: 2
+    subject: math
+    unit: g1_l35
+  resolved:
+    form: find_value
+    level: 2
+    subject: math
+    unit: g1_l35
+  seed: 1
+  signature: solve_inverse_proportion_signed
+problem_ref: 18eb715019a36eb6
+problem_text: yはxに反比例し、x=-3のときy=4である。yをxの式で表せ。
+sub_questions:
+- answer:
+    display: y = -12/x
+    kind: symbolic
+    srepr: Mul(Integer(-1), Integer(12), Pow(Symbol('x'), Integer(-1)))
+  cause_tags: []
+  concept_tags:
+  - inverse_proportion.solve_from_point
+  explanation: まず、通る点のx座標とy座標、それぞれの符号（正か負か）を確認する。 点のx座標とy座標の符号を確認する次に、反比例の式 y=a/x に、通る点の x, y の値をあてはめ、比例定数を求める式をつくる。 a = (-3) × 4最後に、求めた比例定数を使って、反比例の式を組み立てる。 y = -12/x
+  hints:
+  - 通る点のx座標とy座標、それぞれの符号（正か負か）を確認する。
+  - 反比例の式 y=a/x に、通る点の x, y の値をあてはめ、比例定数を求める式をつくる。
+  label: (1)
+  prompt_text: expression を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 通る点のx座標とy座標、それぞれの符号（正か負か）を確認する。
+    op: check_signs
+    result_display: 点のx座標とy座標の符号を確認する
+    result_srepr: Integer(-12)
+  - args:
+    - '-3'
+    - '4'
+    narration: 反比例の式 y=a/x に、通る点の x, y の値をあてはめ、比例定数を求める式をつくる。
+    op: substitute_point
+    result_display: a = (-3) × 4
+    result_srepr: Integer(-12)
+  - args:
+    - '-12'
+    narration: 求めた比例定数を使って、反比例の式を組み立てる。
+    op: form_expression
+    result_display: y = -12/x
+    result_srepr: Mul(Integer(-1), Integer(12), Pow(Symbol('x'), Integer(-1)))
+visual_svg: null

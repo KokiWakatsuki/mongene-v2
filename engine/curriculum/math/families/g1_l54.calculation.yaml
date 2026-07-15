@@ -1,0 +1,30 @@
+family: math.g1_l54.calculation
+form: calculation
+source_desc: |
+  階級値・度数の合計など表の値を計算する
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: 階級値・度数の合計など表の値を計算する。
+       example: 次の度数分布表について、20分以上30分未満の階級の階級値を求めよ。また、
+                度数の合計を求めよ。〔階級と度数：0〜10分…3人、10〜20分…8人、20〜30分…
+                6人、30〜40分…3人〕
+  【設計モデル】新設 solver math.frequency_table_value（階級の下端・幅・度数列・対象階級
+  番号だけから、階級値=中央値と度数の合計を計算）。answer-first: class_start・class_width・
+  frequencies(4階級)・target_index を選ぶ。
+concepts_default: [frequency_table.compute_value]
+levels:
+  "1":
+    signature: frequency_table_value
+    recipe: math.frequency_table_value
+    params:
+      class_start_domain: {int_range: [0, 20]}
+      class_width_domain: {int_range: [5, 10]}
+      frequency_domain: {int_range: [1, 15]}
+    given: [expressions]
+    asked: [value]
+    visual: none
+    text: {tier: T1, template: lf_frequency_table_value_v1}
+    hints: [steps_prefix]
+    concept_tags: [frequency_table.compute_value]
+    cause_tags: []
+remedial:
+  default_level: 1

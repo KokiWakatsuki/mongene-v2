@@ -1,0 +1,8 @@
+approved_at: '2026-07-15T10:42:27.322310'
+approver: koki
+content_sha256: b44162c10ca4977f57ba639788a88bca92bacaa0f33a72d702f241adb4afb22f
+family: math.exam_l5.calculation
+files:
+- engine_tests/golden/math.exam_l5.calculation/math.exam_l5.calculation_lv2_seed1.yaml
+- engine_tests/golden/math.exam_l5.calculation/math.exam_l5.calculation_lv2_seed2.yaml
+- engine_tests/golden/math.exam_l5.calculation/math.exam_l5.calculation_lv2_seed3.yaml

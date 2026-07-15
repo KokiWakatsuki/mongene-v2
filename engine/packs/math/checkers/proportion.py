@@ -39,3 +39,27 @@ def double_solve_judge_direct_proportion_table(mr: MR) -> Solution:
 def double_solve_judge_inverse_proportion_table(mr: MR) -> Solution:
     solver = REGISTRY.solver("math.judge_inverse_proportion_table")
     return cast(Solution, solver(mr.params["xs"], mr.params["ys"]))
+
+
+@register_checker("math.solve_direct_proportion_from_point.double_solve")
+def double_solve_solve_direct_proportion_from_point(mr: MR) -> Solution:
+    solver = REGISTRY.solver("math.solve_direct_proportion_from_point")
+    return cast(Solution, solver(mr.params["x0"], mr.params["y0"], mr.params["mode"]))
+
+
+@register_checker("math.solve_inverse_proportion_from_point.double_solve")
+def double_solve_solve_inverse_proportion_from_point(mr: MR) -> Solution:
+    solver = REGISTRY.solver("math.solve_inverse_proportion_from_point")
+    return cast(Solution, solver(mr.params["x0"], mr.params["y0"], mr.params["mode"]))
+
+
+@register_checker("math.judge_proportion_graph_direction.double_solve")
+def double_solve_judge_proportion_graph_direction(mr: MR) -> Solution:
+    solver = REGISTRY.solver("math.judge_proportion_graph_direction")
+    return cast(Solution, solver(mr.params["is_a_positive"]))
+
+
+@register_checker("math.judge_hyperbola_quadrants.double_solve")
+def double_solve_judge_hyperbola_quadrants(mr: MR) -> Solution:
+    solver = REGISTRY.solver("math.judge_hyperbola_quadrants")
+    return cast(Solution, solver(mr.params["is_a_positive"]))

@@ -1,0 +1,28 @@
+family: math.g1_l56.knowledge
+form: knowledge
+source_desc: |
+  累積度数・累積相対度数の意味を判別する
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: 累積度数・累積相対度数の意味を判別する。
+       example: ある階級までの度数を、いちばん小さい階級から順に加えていった値を何と
+                いうか答えよ。また、累積相対度数とは何を表すか簡単に説明せよ。
+  【設計モデル】用語想起ハブ（既存 math.term_recall・_TERM_MAPS に domain
+  "cumulative_frequency_terms" を追加。累積度数・累積相対度数の2用語）。
+concepts_default: [cumulative_frequency_terms.term_recall]
+levels:
+  "1":
+    signature: cumulative_frequency_terms_term_recall
+    recipe: math.term_recall
+    params:
+      domain: cumulative_frequency_terms
+      concept_set: [cumulative_frequency, cumulative_relative_frequency]
+      number_domain: {int_range: [3, 500]}
+    given: [statement]
+    asked: [choice]
+    visual: none
+    text: {tier: T1, template: lf_term_recall_v1}
+    hints: [steps_prefix]
+    concept_tags: [cumulative_frequency_terms.term_recall]
+    cause_tags: []
+remedial:
+  default_level: 1

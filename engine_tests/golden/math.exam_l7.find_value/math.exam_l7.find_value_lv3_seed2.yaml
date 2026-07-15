@@ -1,0 +1,58 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - exam.quartiles_full_summary
+  provenance:
+    git_commit: ''
+    recipe: math.exam_quartiles_full_summary
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_exam_quartiles_full_summary_v1
+    tier: T1
+  requested:
+    form: find_value
+    level: 3
+    subject: math
+    unit: exam_l7
+  resolved:
+    form: find_value
+    level: 3
+    subject: math
+    unit: exam_l7
+  seed: 2
+  signature: exam_quartiles_full_summary
+problem_ref: e3cd5cd741e4228c
+problem_text: 次の9個のデータについて、第1四分位数・第2四分位数(中央値)・第3四分位数、および四分位範囲を求めよ。データ:35、8、32、13、57、2、59、48、34。
+sub_questions:
+- answer:
+    display: 第1四分位数 21/2、第2四分位数(中央値) 34、第3四分位数 105/2、四分位範囲 42
+    kind: symbolic
+    srepr: Tuple(Rational(21, 2), Integer(34), Rational(105, 2), Integer(42))
+  cause_tags: []
+  concept_tags:
+  - exam.quartiles_full_summary
+  explanation: まず、データを大きさの順に並べ、データ全体の中央値（第二四分位数）を求める。 データ全体の中央値を求める次に、中央値を境に下組と上組に分ける。 中央値を境に下組と上組に分ける最後に、下組・上組それぞれの中央値を第一・第三四分位数とし、その差から四分位範囲を求める。 第1四分位数 21/2、第2四分位数(中央値) 34、第3四分位数 105/2、四分位範囲 42
+  hints:
+  - データを大きさの順に並べ、データ全体の中央値（第二四分位数）を求める。
+  - 中央値を境に下組と上組に分ける。
+  label: (1)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args: []
+    narration: データを大きさの順に並べ、データ全体の中央値（第二四分位数）を求める。
+    op: compute_median
+    result_display: データ全体の中央値を求める
+    result_srepr: ''
+  - args: []
+    narration: 中央値を境に下組と上組に分ける。
+    op: split_into_halves
+    result_display: 中央値を境に下組と上組に分ける
+    result_srepr: ''
+  - args: []
+    narration: 下組・上組それぞれの中央値を第一・第三四分位数とし、その差から四分位範囲を求める。
+    op: compute_q1_q3_iqr
+    result_display: 第1四分位数 21/2、第2四分位数(中央値) 34、第3四分位数 105/2、四分位範囲 42
+    result_srepr: Tuple(Rational(21, 2), Integer(34), Rational(105, 2), Integer(42))
+visual_svg: null
