@@ -1,0 +1,52 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - similarity.area_ratio
+  provenance:
+    git_commit: ''
+    recipe: math.similar_area_ratio
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_similarity_scale_ratio_condition_v1
+    tier: T1
+  requested:
+    form: find_value
+    level: 2
+    subject: math
+    unit: g3_l45
+  resolved:
+    form: find_value
+    level: 2
+    subject: math
+    unit: g3_l45
+  seed: 3
+  signature: similar_area_ratio
+problem_ref: 2e6a0383d7fe7895
+problem_text: 相似比が 4:5 である2つの相似な三角形について、面積比を求めよ。また、小さいほうの面積が 272cm² のとき、大きいほうの面積を求めよ。
+sub_questions:
+- answer:
+    display: 面積比 16:25、大きいほうの面積 425
+    kind: symbolic
+    srepr: Tuple(Integer(16), Integer(25), Integer(425))
+  cause_tags: []
+  concept_tags:
+  - similarity.area_ratio
+  explanation: まず、相似な図形の面積比は相似比の二乗に等しいことから、面積比を求める。 相似比を二乗して面積比を求める次に、求めた面積比と、わかっている一方の面積から、もう一方の面積を求める。 面積比 16:25、大きいほうの面積 425
+  hints:
+  - 相似な図形の面積比は相似比の二乗に等しいことから、面積比を求める。
+  label: (1)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 相似な図形の面積比は相似比の二乗に等しいことから、面積比を求める。
+    op: square_similarity_ratio
+    result_display: 相似比を二乗して面積比を求める
+    result_srepr: ''
+  - args: []
+    narration: 求めた面積比と、わかっている一方の面積から、もう一方の面積を求める。
+    op: apply_area_ratio
+    result_display: 面積比 16:25、大きいほうの面積 425
+    result_srepr: Tuple(Integer(16), Integer(25), Integer(425))
+visual_svg: null

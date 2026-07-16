@@ -1,0 +1,26 @@
+family: math.g3_l44.find_value
+form: find_value
+source_desc: |
+  中点連結定理で中点を結ぶ線分の長さを求める
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv2 desc: 中点連結定理で中点を結ぶ線分の長さを求める。
+       example: 三角形 ABC で、辺 AB, AC の中点をそれぞれ M, N とする。
+                BC=10cm のとき、線分 MN の長さを求めよ。
+  【設計モデル】新設 solver math.midpoint_connector_length（中点連結定理:
+  中点を結ぶ線分の長さは残りの辺の長さの半分に等しいという恒真の性質）。
+concepts_default: [midpoint_connector.length]
+levels:
+  "2":
+    signature: midpoint_connector_length
+    recipe: math.midpoint_connector_length
+    params:
+      side_domain: {int_range: [1, 400]}
+    given: [condition]
+    asked: [value]
+    visual: none
+    text: {tier: T1, template: lf_parallel_line_ratio_condition_v1}
+    hints: [steps_prefix]
+    concept_tags: [midpoint_connector.length]
+    cause_tags: []
+remedial:
+  default_level: 2

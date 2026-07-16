@@ -1,0 +1,26 @@
+family: math.g3_l46.knowledge
+form: knowledge
+source_desc: |
+  体積比が相似比の3乗であることを想起する
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: 体積比が相似比の3乗である理解。
+       example: 相似な2つの立体の相似比が m:n であるとき、体積比はどのように
+                表されるか答えよ。
+  【設計モデル】規則想起ハブ（既存 math.recall_rule・_RULE_MAPS に topic
+  "volume_ratio_theorem" を追加）。
+levels:
+  "1":
+    signature: volume_ratio_theorem_rule_recall
+    recipe: math.recall_rule
+    params:
+      topic: volume_ratio_theorem
+      concept_set: [statement]
+    given: [statement]
+    asked: [choice]
+    visual: none
+    text: {tier: T1, template: lf_rule_recall_v1}
+    hints: [steps_prefix]
+    concept_tags: [volume_ratio_theorem.rule_recall]
+    cause_tags: []
+remedial:
+  default_level: 1

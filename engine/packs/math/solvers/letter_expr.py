@@ -938,6 +938,56 @@ _RULE_MAPS: dict[str, dict[str, tuple[str, list[str]]]] = {
             ],
         ),
     },
+    # g3_l42 平行線と線分の比の定理（AD:AB=AE:AC=DE:BC がすべて等しい）
+    "parallel_segment_ratio_theorem": {
+        "statement": (
+            "ADとABの比、AEとACの比、DEとBCの比が、すべて等しい",
+            [
+                "ADとDBの比、AEとACの比が等しい",
+                "DEの長さは、BCの長さから一定の数をひいた値に等しい",
+            ],
+        ),
+    },
+    # g3_l43 平行線と線分の比の定理の逆（AD:DB=AE:ECが成り立てばDE//BC）
+    "parallel_segment_ratio_converse": {
+        "statement": (
+            "DEとBCが平行である",
+            [
+                "DEとBCが垂直に交わる",
+                "三角形ABCと三角形ADEが合同である",
+            ],
+        ),
+    },
+    # g3_l44 中点連結定理（中点を結ぶ線分は残りの辺に平行でその半分の長さ）
+    "midpoint_connector_theorem": {
+        "statement": (
+            "残りの辺に平行で、その長さは残りの辺の半分に等しい",
+            [
+                "残りの辺に垂直で、その長さは残りの辺に等しい",
+                "残りの辺に平行で、その長さは残りの辺と等しい",
+            ],
+        ),
+    },
+    # g3_l45 相似な平面図形の面積比（相似比の二乗に等しい）
+    "area_ratio_theorem": {
+        "statement": (
+            "相似比を二乗した比に等しい",
+            [
+                "相似比と同じ比に等しい",
+                "相似比を二倍した比に等しい",
+            ],
+        ),
+    },
+    # g3_l46 相似な立体の体積比（相似比の三乗に等しい）
+    "volume_ratio_theorem": {
+        "statement": (
+            "相似比を三乗した比に等しい",
+            [
+                "相似比を二乗した比に等しい",
+                "相似比と同じ比に等しい",
+            ],
+        ),
+    },
 }
 
 

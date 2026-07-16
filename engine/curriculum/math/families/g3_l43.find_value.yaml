@@ -1,0 +1,33 @@
+family: math.g3_l43.find_value
+form: find_value
+source_desc: |
+  比の条件から平行かどうかを判定する
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv2 desc: 比の条件から長さを求める・平行かを比で判定。
+       example: 右の図の三角形 ABC で、辺 AB, AC 上に点 D, E がある。AD=3cm,
+                DB=6cm, AE=4cm, EC=8cm であるとき、DE と BC が平行であるか
+                どうかを、比を調べて答えよ。
+  Lv3（逆と定理を組み合わせ多段で長さ・比を求める）は多段構成で一般化が難しい
+  ため本セルでは扱わない（次段対応）。
+  【設計モデル】新設 solver math.judge_parallel_from_ratio（AD:DBとAE:ECの比を
+  比べ、一致すれば平行線と線分の比の定理の逆によりDE∥BCといえるという恒真の
+  判定）。g3_l52と同型のパターン: find_value formでも判定結果をSymbolicAnswer
+  の真偽値("平行である"/"平行ではない")で表現する。
+concepts_default: [parallel_segment.judge_from_ratio]
+levels:
+  "2":
+    signature: judge_parallel_from_ratio
+    recipe: math.judge_parallel_from_ratio
+    params:
+      length_domain: {int_range: [1, 20]}
+      scale_domain: {int_range: [1, 15]}
+      delta_domain: {int_set: [-8, -7, -6, -5, -4, -3, -2, -1, 1, 2, 3, 4, 5, 6, 7, 8]}
+    given: [condition]
+    asked: [value]
+    visual: none
+    text: {tier: T1, template: lf_parallel_line_ratio_condition_v1}
+    hints: [steps_prefix]
+    concept_tags: [parallel_segment.judge_from_ratio]
+    cause_tags: []
+remedial:
+  default_level: 2

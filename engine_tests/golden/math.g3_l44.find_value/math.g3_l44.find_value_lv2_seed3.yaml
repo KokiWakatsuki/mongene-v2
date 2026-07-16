@@ -1,0 +1,52 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - midpoint_connector.length
+  provenance:
+    git_commit: ''
+    recipe: math.midpoint_connector_length
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_parallel_line_ratio_condition_v1
+    tier: T1
+  requested:
+    form: find_value
+    level: 2
+    subject: math
+    unit: g3_l44
+  resolved:
+    form: find_value
+    level: 2
+    subject: math
+    unit: g3_l44
+  seed: 3
+  signature: midpoint_connector_length
+problem_ref: 14e1f778853c32a7
+problem_text: 三角形PQEで、辺PQ, PEの中点をそれぞれK, Hとする。QE=307cm のとき、線分KHの長さを求めよ。
+sub_questions:
+- answer:
+    display: 307/2
+    kind: symbolic
+    srepr: Rational(307, 2)
+  cause_tags: []
+  concept_tags:
+  - midpoint_connector.length
+  explanation: まず、三角形の2辺の中点を結ぶ線分に対して、残りの辺の長さを読み取る。 残りの辺の長さを読み取る次に、中点を結ぶ線分の長さは、残りの辺の長さの半分に等しいことから、その長さを求める。 307/2
+  hints:
+  - 三角形の2辺の中点を結ぶ線分に対して、残りの辺の長さを読み取る。
+  label: (1)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 三角形の2辺の中点を結ぶ線分に対して、残りの辺の長さを読み取る。
+    op: identify_remaining_side
+    result_display: 残りの辺の長さを読み取る
+    result_srepr: ''
+  - args: []
+    narration: 中点を結ぶ線分の長さは、残りの辺の長さの半分に等しいことから、その長さを求める。
+    op: apply_midpoint_connector_theorem
+    result_display: 307/2
+    result_srepr: Rational(307, 2)
+visual_svg: null

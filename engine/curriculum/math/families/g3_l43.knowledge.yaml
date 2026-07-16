@@ -1,0 +1,27 @@
+family: math.g3_l43.knowledge
+form: knowledge
+source_desc: |
+  平行線と線分の比の定理の逆の内容を想起する
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: 定理の逆の内容理解。
+       example: 平行線と線分の比の定理の「逆」はどのような主張か、次の( )を
+                埋めて答えよ。三角形 ABC の辺 AB, AC 上の点 D, E について、
+                AD:DB=AE:EC が成り立つならば、( )である。
+  【設計モデル】規則想起ハブ（既存 math.recall_rule・_RULE_MAPS に topic
+  "parallel_segment_ratio_converse" を追加）。
+levels:
+  "1":
+    signature: parallel_segment_ratio_converse_rule_recall
+    recipe: math.recall_rule
+    params:
+      topic: parallel_segment_ratio_converse
+      concept_set: [statement]
+    given: [statement]
+    asked: [choice]
+    visual: none
+    text: {tier: T1, template: lf_rule_recall_v1}
+    hints: [steps_prefix]
+    concept_tags: [parallel_segment_ratio_converse.rule_recall]
+    cause_tags: []
+remedial:
+  default_level: 1

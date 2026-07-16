@@ -1,0 +1,30 @@
+family: math.g3_l42.find_value
+form: find_value
+source_desc: |
+  平行線と線分の比の定理を1回使い長さを求める
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv2 desc: 平行線と線分の比の定理を1回使い長さ・比を直接求める。
+       example: 右の図の三角形 ABC で、辺 AB, AC 上に点 D, E があり、DE//BC で
+                ある。AD=4cm, DB=6cm, DE=5cm のとき、辺 BC の長さを求めよ。
+  Lv3（複数の平行線・比の連鎖など多段で長さを求める）は3本の平行線+比の連鎖の
+  多段構成で一般化が難しいため本セルでは扱わない（次段対応）。
+  【設計モデル】新設 solver math.parallel_segment_ratio_length（DE∥BC のとき
+  三角形ADE∽三角形ABCとなりAD:AB=DE:BCが成り立つという恒真の性質から、
+  BC=DE*(AD+DB)/ADを求める）。「右の図」は図なしで分点の配置をテキストで直接
+  指定する（既存の合同対応セル等と同様）。
+concepts_default: [parallel_segment.ratio_length]
+levels:
+  "2":
+    signature: parallel_segment_ratio_length
+    recipe: math.parallel_segment_ratio_length
+    params:
+      length_domain: {int_range: [1, 200]}
+    given: [condition]
+    asked: [value]
+    visual: none
+    text: {tier: T1, template: lf_parallel_line_ratio_condition_v1}
+    hints: [steps_prefix]
+    concept_tags: [parallel_segment.ratio_length]
+    cause_tags: []
+remedial:
+  default_level: 2

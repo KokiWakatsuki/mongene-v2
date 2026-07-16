@@ -937,3 +937,33 @@ concepts:
   - id: similarity.proven_ratio_length
     label: "証明された相似から相似比で対応辺の長さを求める"
     unit: g3_l41
+  - id: parallel_segment.ratio_length
+    label: "DE//BCのときAD,DB,DEから辺BCの長さを求める"
+    unit: g3_l42
+  - id: parallel_segment_ratio_theorem.rule_recall
+    label: "平行線と線分の比の定理の内容を想起する"
+    unit: g3_l42
+  - id: parallel_segment.judge_from_ratio
+    label: "AD:DBとAE:ECの比を比べてDE//BCといえるかを確かめる"
+    unit: g3_l43
+  - id: parallel_segment_ratio_converse.rule_recall
+    label: "平行線と線分の比の定理の逆を想起する"
+    unit: g3_l43
+  - id: midpoint_connector.length
+    label: "中点連結定理で中点を結ぶ線分の長さを求める"
+    unit: g3_l44
+  - id: midpoint_connector_theorem.rule_recall
+    label: "中点連結定理の内容を想起する"
+    unit: g3_l44
+  - id: similarity.area_ratio
+    label: "相似比から面積比を求め対応する面積を求める"
+    unit: g3_l45
+  - id: area_ratio_theorem.rule_recall
+    label: "面積比が相似比の2乗であることを想起する"
+    unit: g3_l45
+  - id: similarity.solid_surface_volume_ratio
+    label: "相似比から表面積比・体積比を直接求める"
+    unit: g3_l46
+  - id: volume_ratio_theorem.rule_recall
+    label: "体積比が相似比の3乗であることを想起する"
+    unit: g3_l46

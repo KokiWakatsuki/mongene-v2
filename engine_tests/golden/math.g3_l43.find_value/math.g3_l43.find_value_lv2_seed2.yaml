@@ -1,0 +1,52 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - parallel_segment.judge_from_ratio
+  provenance:
+    git_commit: ''
+    recipe: math.judge_parallel_from_ratio
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_parallel_line_ratio_condition_v1
+    tier: T1
+  requested:
+    form: find_value
+    level: 2
+    subject: math
+    unit: g3_l43
+  resolved:
+    form: find_value
+    level: 2
+    subject: math
+    unit: g3_l43
+  seed: 2
+  signature: judge_parallel_from_ratio
+problem_ref: 1bf15102f38b95fb
+problem_text: 三角形PBAで、辺PB, PA上に点Q, Dがある。PQ=8cm, QB=15cm, PD=104cm, DA=197cm であるとき、QDとBAが平行であるかどうかを、比を調べて答えよ。
+sub_questions:
+- answer:
+    display: 平行ではない
+    kind: symbolic
+    srepr: 'false'
+  cause_tags: []
+  concept_tags:
+  - parallel_segment.judge_from_ratio
+  explanation: まず、AD:DBとAE:ECの比が等しいかどうかを比べる。 AD:DBとAE:ECの比を比べる次に、平行線と線分の比の定理の逆から、DEとBCが平行であるかどうかを判別する。 平行ではない
+  hints:
+  - AD:DBとAE:ECの比が等しいかどうかを比べる。
+  label: (1)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args: []
+    narration: AD:DBとAE:ECの比が等しいかどうかを比べる。
+    op: compare_division_ratios
+    result_display: AD:DBとAE:ECの比を比べる
+    result_srepr: ''
+  - args: []
+    narration: 平行線と線分の比の定理の逆から、DEとBCが平行であるかどうかを判別する。
+    op: judge_by_parallel_ratio_converse
+    result_display: 平行ではない
+    result_srepr: 'false'
+visual_svg: null

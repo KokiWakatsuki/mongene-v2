@@ -3736,6 +3736,11 @@ _RULE_RECALL_CELLS = [
     ("math.g3_l51.knowledge", 1),
     ("math.g3_l52.knowledge", 1),
     ("math.g3_l40.knowledge", 1),
+    ("math.g3_l42.knowledge", 1),
+    ("math.g3_l43.knowledge", 1),
+    ("math.g3_l44.knowledge", 1),
+    ("math.g3_l45.knowledge", 1),
+    ("math.g3_l46.knowledge", 1),
 ]
 
 
@@ -6195,4 +6200,134 @@ def test_similarity_proven_ratio_length_double_solve_property(seed):
     mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
     solver = REGISTRY.solver("math.similarity_ratio_transfer")
     sol = solver(mr.params["ratio_num"], mr.params["ratio_den"], mr.params["known_side"])
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+
+
+# ---------------------------------------------------------------------------
+# C10 g3 図形（平行線と線分の比の定理・その逆・中点連結定理）: g3_l42/l43/l44
+# ---------------------------------------------------------------------------
+def test_parallel_segment_ratio_length_construct():
+    ctx = _make_ctx("math.g3_l42.find_value", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "parallel_segment_ratio_length"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "value"
+    ad, db, de = mr.params["ad"], mr.params["db"], mr.params["de"]
+    expected = sympy.Rational(de) * (ad + db) / ad
+    assert sq.answer.srepr == sympy.srepr(expected)
+
+
+@pytest.mark.parametrize("seed", range(100))
+def test_parallel_segment_ratio_length_double_solve_property(seed):
+    ctx = _make_ctx("math.g3_l42.find_value", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.parallel_segment_ratio_length")
+    sol = solver(mr.params["ad"], mr.params["db"], mr.params["de"])
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+
+
+def test_judge_parallel_from_ratio_construct():
+    ctx = _make_ctx("math.g3_l43.find_value", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "judge_parallel_from_ratio"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "value"
+    assert sq.answer.srepr in (sympy.srepr(sympy.true), sympy.srepr(sympy.false))
+
+
+@pytest.mark.parametrize("seed", range(100))
+def test_judge_parallel_from_ratio_double_solve_property(seed):
+    ctx = _make_ctx("math.g3_l43.find_value", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.judge_parallel_from_ratio")
+    sol = solver(mr.params["ad"], mr.params["db"], mr.params["ae"], mr.params["ec"])
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+
+
+def test_judge_parallel_from_ratio_both_outcomes_construct():
+    ctx = _make_ctx("math.g3_l43.find_value", 2)
+    found_true = False
+    found_false = False
+    for seed in range(30):
+        rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+        mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+        if mr.sub_questions[0].answer.display == "平行である":
+            found_true = True
+        else:
+            found_false = True
+        if found_true and found_false:
+            break
+    assert found_true and found_false, "30 seed 中に真偽両方が出なかった"
+
+
+def test_midpoint_connector_length_construct():
+    ctx = _make_ctx("math.g3_l44.find_value", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "midpoint_connector_length"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "value"
+    assert sq.answer.srepr == sympy.srepr(sympy.Rational(mr.params["bc"]) / 2)
+
+
+@pytest.mark.parametrize("seed", range(100))
+def test_midpoint_connector_length_double_solve_property(seed):
+    ctx = _make_ctx("math.g3_l44.find_value", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.midpoint_connector_length")
+    sol = solver(mr.params["bc"])
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+
+
+# ---------------------------------------------------------------------------
+# C10 g3 図形（相似比から面積比・表面積比・体積比）: g3_l45/l46
+# ---------------------------------------------------------------------------
+def test_similar_area_ratio_construct():
+    ctx = _make_ctx("math.g3_l45.find_value", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "similar_area_ratio"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "value"
+    m, n, a = mr.params["ratio_num"], mr.params["ratio_den"], mr.params["known_area"]
+    assert math.gcd(m, n) == 1
+    expected = sympy.Tuple(sympy.Integer(m**2), sympy.Integer(n**2), sympy.Rational(a) * n**2 / m**2)
+    assert sq.answer.srepr == sympy.srepr(expected)
+
+
+@pytest.mark.parametrize("seed", range(100))
+def test_similar_area_ratio_double_solve_property(seed):
+    ctx = _make_ctx("math.g3_l45.find_value", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.similar_area_ratio")
+    sol = solver(mr.params["ratio_num"], mr.params["ratio_den"], mr.params["known_area"])
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+
+
+def test_similar_solid_surface_volume_ratio_construct():
+    ctx = _make_ctx("math.g3_l46.find_value", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "similar_solid_surface_volume_ratio"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "value"
+    m, n = mr.params["ratio_num"], mr.params["ratio_den"]
+    assert math.gcd(m, n) == 1
+    expected = sympy.Tuple(sympy.Integer(m**2), sympy.Integer(n**2), sympy.Integer(m**3), sympy.Integer(n**3))
+    assert sq.answer.srepr == sympy.srepr(expected)
+
+
+@pytest.mark.parametrize("seed", range(100))
+def test_similar_solid_surface_volume_ratio_double_solve_property(seed):
+    ctx = _make_ctx("math.g3_l46.find_value", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.similar_solid_surface_volume_ratio")
+    sol = solver(mr.params["ratio_num"], mr.params["ratio_den"])
     assert sol.answer.srepr == mr.sub_questions[0].answer.srepr

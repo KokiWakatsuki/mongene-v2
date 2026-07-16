@@ -1,0 +1,52 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - similarity.solid_surface_volume_ratio
+  provenance:
+    git_commit: ''
+    recipe: math.similar_solid_surface_volume_ratio
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_similarity_scale_ratio_condition_v1
+    tier: T1
+  requested:
+    form: find_value
+    level: 2
+    subject: math
+    unit: g3_l46
+  resolved:
+    form: find_value
+    level: 2
+    subject: math
+    unit: g3_l46
+  seed: 1
+  signature: similar_solid_surface_volume_ratio
+problem_ref: 402ced844c52ca4f
+problem_text: 相似比が 24:41 である2つの相似な立体について、表面積の比と体積の比をそれぞれ求めよ。
+sub_questions:
+- answer:
+    display: 表面積の比 576:1681、体積の比 13824:68921
+    kind: symbolic
+    srepr: Tuple(Integer(576), Integer(1681), Integer(13824), Integer(68921))
+  cause_tags: []
+  concept_tags:
+  - similarity.solid_surface_volume_ratio
+  explanation: まず、相似な立体の表面積の比は相似比の二乗に等しいことから、表面積の比を求める。 相似比を二乗して表面積の比を求める次に、相似な立体の体積の比は相似比の三乗に等しいことから、体積の比を求める。 表面積の比 576:1681、体積の比 13824:68921
+  hints:
+  - 相似な立体の表面積の比は相似比の二乗に等しいことから、表面積の比を求める。
+  label: (1)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 相似な立体の表面積の比は相似比の二乗に等しいことから、表面積の比を求める。
+    op: square_ratio_for_surface_area
+    result_display: 相似比を二乗して表面積の比を求める
+    result_srepr: ''
+  - args: []
+    narration: 相似な立体の体積の比は相似比の三乗に等しいことから、体積の比を求める。
+    op: cube_ratio_for_volume
+    result_display: 表面積の比 576:1681、体積の比 13824:68921
+    result_srepr: Tuple(Integer(576), Integer(1681), Integer(13824), Integer(68921))
+visual_svg: null

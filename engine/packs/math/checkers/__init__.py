@@ -30,5 +30,7 @@ from engine.packs.math.checkers import quadrilateral_properties  # noqa: F401  (
 from engine.packs.math.checkers import pythagorean  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.checkers import similarity  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.checkers import similarity_conditions  # noqa: F401  (登録の副作用のため import)
+from engine.packs.math.checkers import parallel_line_ratio  # noqa: F401  (登録の副作用のため import)
+from engine.packs.math.checkers import similarity_scale_ratio  # noqa: F401  (登録の副作用のため import)
 
 __all__: list[str] = []

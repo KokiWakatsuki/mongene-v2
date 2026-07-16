@@ -1,0 +1,55 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - parallel_segment_ratio_converse.rule_recall
+  provenance:
+    git_commit: ''
+    recipe: math.recall_rule
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_rule_recall_v1
+    tier: T1
+  requested:
+    form: knowledge
+    level: 1
+    subject: math
+    unit: g3_l43
+  resolved:
+    form: knowledge
+    level: 1
+    subject: math
+    unit: g3_l43
+  seed: 1
+  signature: parallel_segment_ratio_converse_rule_recall
+problem_ref: b11afab28a45ea86
+problem_text: 三角形BGCの辺BG, BC上の点L, Pについて、BL:LG=BP:PCが成り立つとき、いえること。正しく述べているものを1つ選びなさい。
+sub_questions:
+- answer:
+    correct: DEとBCが平行である
+    distractors:
+    - DEとBCが垂直に交わる
+    - 三角形ABCと三角形ADEが合同である
+    fact_id: parallel_segment_ratio_converse.rule.statement
+    kind: choice
+  cause_tags: []
+  concept_tags:
+  - parallel_segment_ratio_converse.rule_recall
+  explanation: まず、問題で問われている規則や約束が、何についてのものかを読み取る。 問われている規則が何についてかを読み取る次に、その規則の正しい内容を思い出して選ぶ。 DEとBCが平行である
+  hints:
+  - 問題で問われている規則や約束が、何についてのものかを読み取る。
+  label: (1)
+  prompt_text: choice を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 問題で問われている規則や約束が、何についてのものかを読み取る。
+    op: read_rule_context
+    result_display: 問われている規則が何についてかを読み取る
+    result_srepr: statement
+  - args: []
+    narration: その規則の正しい内容を思い出して選ぶ。
+    op: recall_correct_rule
+    result_display: DEとBCが平行である
+    result_srepr: DEとBCが平行である
+visual_svg: null

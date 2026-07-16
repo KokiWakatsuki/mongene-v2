@@ -1,0 +1,52 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - parallel_segment.ratio_length
+  provenance:
+    git_commit: ''
+    recipe: math.parallel_segment_ratio_length
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_parallel_line_ratio_condition_v1
+    tier: T1
+  requested:
+    form: find_value
+    level: 2
+    subject: math
+    unit: g3_l42
+  resolved:
+    form: find_value
+    level: 2
+    subject: math
+    unit: g3_l42
+  seed: 2
+  signature: parallel_segment_ratio_length
+problem_ref: b87d36425aee4d26
+problem_text: 三角形AJHで、辺AJ, AH上に点Q, Pがあり、QP∥JHである。AQ=32cm, QJ=68cm, QP=159cm のとき、辺JHの長さを求めよ。
+sub_questions:
+- answer:
+    display: 3975/8
+    kind: symbolic
+    srepr: Rational(3975, 8)
+  cause_tags: []
+  concept_tags:
+  - parallel_segment.ratio_length
+  explanation: まず、DE∥BC であることから、三角形ADEと三角形ABCが相似になることを見つける。 平行線がつくる相似な三角形を見つける次に、AD:AB=DE:BC が成り立つことから、辺BCの長さを求める。 3975/8
+  hints:
+  - DE∥BC であることから、三角形ADEと三角形ABCが相似になることを見つける。
+  label: (1)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args: []
+    narration: DE∥BC であることから、三角形ADEと三角形ABCが相似になることを見つける。
+    op: identify_similar_triangles_from_parallel
+    result_display: 平行線がつくる相似な三角形を見つける
+    result_srepr: ''
+  - args: []
+    narration: AD:AB=DE:BC が成り立つことから、辺BCの長さを求める。
+    op: apply_parallel_segment_ratio
+    result_display: 3975/8
+    result_srepr: Rational(3975, 8)
+visual_svg: null

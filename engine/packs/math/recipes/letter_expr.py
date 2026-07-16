@@ -1170,6 +1170,11 @@ _RULE_RECALL_CONCEPTS = [
     "pythagorean_theorem.rule_recall",
     "pythagorean_converse.rule_recall",
     "similarity_conditions.rule_recall",
+    "parallel_segment_ratio_theorem.rule_recall",
+    "parallel_segment_ratio_converse.rule_recall",
+    "midpoint_connector_theorem.rule_recall",
+    "area_ratio_theorem.rule_recall",
+    "volume_ratio_theorem.rule_recall",
 ]
 
 
@@ -1447,6 +1452,40 @@ def _draw_rule_statement(topic: str, concept: str, rng: Rng, p: dict[str, object
         # g3_l40 三角形の相似条件(3つすべて)。具体例の三角形の点名を埋め込み surface を分散する。
         pa, pb, pc, pd, pe, pf = _draw_distinct_points(6, rng)
         return f"三角形{pa}{pb}{pc}と三角形{pd}{pe}{pf}が相似であることを示すために使える条件"
+
+    if topic == "parallel_segment_ratio_theorem":
+        # g3_l42 平行線と線分の比の定理。具体例の三角形と分点の点名を埋め込み surface を分散する。
+        pa, pb, pc, pd, pe = _draw_distinct_points(5, rng)
+        return (
+            f"三角形{pa}{pb}{pc}で、辺{pa}{pb}, {pa}{pc}上に点{pd}, {pe}があり"
+            f"{pd}{pe}∥{pb}{pc}であるとき、線分の比について成り立つ関係"
+        )
+
+    if topic == "parallel_segment_ratio_converse":
+        # g3_l43 平行線と線分の比の定理の逆。具体例の三角形と分点の点名を埋め込み surface を分散する。
+        pa, pb, pc, pd, pe = _draw_distinct_points(5, rng)
+        return (
+            f"三角形{pa}{pb}{pc}の辺{pa}{pb}, {pa}{pc}上の点{pd}, {pe}について、"
+            f"{pa}{pd}:{pd}{pb}={pa}{pe}:{pe}{pc}が成り立つとき、いえること"
+        )
+
+    if topic == "midpoint_connector_theorem":
+        # g3_l44 中点連結定理。具体例の三角形と中点の点名を埋め込み surface を分散する。
+        pa, pb, pc, pm, pn = _draw_distinct_points(5, rng)
+        return (
+            f"三角形{pa}{pb}{pc}で、辺{pa}{pb}, {pa}{pc}の中点をそれぞれ{pm}, {pn}と"
+            f"するとき、線分{pm}{pn}について成り立つこと"
+        )
+
+    if topic == "area_ratio_theorem":
+        # g3_l45 相似な平面図形の面積比。図形名を2文字の複合ラベルにして surface を分散する。
+        pa, pb, pc, pd = _draw_distinct_points(4, rng)
+        return f"相似な図形{pa}{pb}と図形{pc}{pd}の相似比がm:nであるとき、面積比はどのように表されるか"
+
+    if topic == "volume_ratio_theorem":
+        # g3_l46 相似な立体の体積比。立体名を2文字の複合ラベルにして surface を分散する。
+        pa, pb, pc, pd = _draw_distinct_points(4, rng)
+        return f"相似な立体{pa}{pb}と立体{pc}{pd}の相似比がm:nであるとき、体積比はどのように表されるか"
 
     raise ValueError(f"未知の topic: {topic!r}")
 

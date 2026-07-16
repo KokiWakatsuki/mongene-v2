@@ -1,0 +1,8 @@
+approved_at: '2026-07-16T09:17:41.144445'
+approver: koki
+content_sha256: 380d15f3eff2ab1f1abe0f9e7271eef5967c50d10fda5755ae592e4a1f886dbd
+family: math.g3_l42.knowledge
+files:
+- engine_tests/golden/math.g3_l42.knowledge/math.g3_l42.knowledge_lv1_seed1.yaml
+- engine_tests/golden/math.g3_l42.knowledge/math.g3_l42.knowledge_lv1_seed2.yaml
+- engine_tests/golden/math.g3_l42.knowledge/math.g3_l42.knowledge_lv1_seed3.yaml

@@ -1,0 +1,29 @@
+family: math.g3_l46.find_value
+form: find_value
+source_desc: |
+  相似比から表面積比(2乗)・体積比(3乗)を直接求める
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv2 desc: 相似比から表面積比(2乗)・体積比(3乗)を直接求める。
+       example: 相似比が 1:2 である2つの相似な立体について、表面積の比と
+                体積の比をそれぞれ求めよ。
+  Lv3（一部の量から相似比を逆算し他の量を多段で求める）は逆算構成で一般化が
+  難しいため本セルでは扱わない（次段対応）。
+  【設計モデル】新設 solver math.similar_solid_surface_volume_ratio（表面積比が
+  相似比の二乗、体積比が相似比の三乗に等しいという恒真の性質）。答えは
+  Tuple(表面積比の分子, 表面積比の分母, 体積比の分子, 体積比の分母)。
+concepts_default: [similarity.solid_surface_volume_ratio]
+levels:
+  "2":
+    signature: similar_solid_surface_volume_ratio
+    recipe: math.similar_solid_surface_volume_ratio
+    params:
+      ratio_domain: {int_range: [1, 60]}
+    given: [condition]
+    asked: [value]
+    visual: none
+    text: {tier: T1, template: lf_similarity_scale_ratio_condition_v1}
+    hints: [steps_prefix]
+    concept_tags: [similarity.solid_surface_volume_ratio]
+    cause_tags: []
+remedial:
+  default_level: 2

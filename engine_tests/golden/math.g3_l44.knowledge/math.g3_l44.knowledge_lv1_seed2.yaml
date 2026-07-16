@@ -1,0 +1,55 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - midpoint_connector_theorem.rule_recall
+  provenance:
+    git_commit: ''
+    recipe: math.recall_rule
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_rule_recall_v1
+    tier: T1
+  requested:
+    form: knowledge
+    level: 1
+    subject: math
+    unit: g3_l44
+  resolved:
+    form: knowledge
+    level: 1
+    subject: math
+    unit: g3_l44
+  seed: 2
+  signature: midpoint_connector_theorem_rule_recall
+problem_ref: 54c1ce455cb205c7
+problem_text: 三角形MJGで、辺MJ, MGの中点をそれぞれR, Aとするとき、線分RAについて成り立つこと。正しく述べているものを1つ選びなさい。
+sub_questions:
+- answer:
+    correct: 残りの辺に平行で、その長さは残りの辺の半分に等しい
+    distractors:
+    - 残りの辺に垂直で、その長さは残りの辺に等しい
+    - 残りの辺に平行で、その長さは残りの辺と等しい
+    fact_id: midpoint_connector_theorem.rule.statement
+    kind: choice
+  cause_tags: []
+  concept_tags:
+  - midpoint_connector_theorem.rule_recall
+  explanation: まず、問題で問われている規則や約束が、何についてのものかを読み取る。 問われている規則が何についてかを読み取る次に、その規則の正しい内容を思い出して選ぶ。 残りの辺に平行で、その長さは残りの辺の半分に等しい
+  hints:
+  - 問題で問われている規則や約束が、何についてのものかを読み取る。
+  label: (1)
+  prompt_text: choice を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 問題で問われている規則や約束が、何についてのものかを読み取る。
+    op: read_rule_context
+    result_display: 問われている規則が何についてかを読み取る
+    result_srepr: statement
+  - args: []
+    narration: その規則の正しい内容を思い出して選ぶ。
+    op: recall_correct_rule
+    result_display: 残りの辺に平行で、その長さは残りの辺の半分に等しい
+    result_srepr: 残りの辺に平行で、その長さは残りの辺の半分に等しい
+visual_svg: null
