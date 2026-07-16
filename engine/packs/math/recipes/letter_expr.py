@@ -1175,6 +1175,9 @@ _RULE_RECALL_CONCEPTS = [
     "midpoint_connector_theorem.rule_recall",
     "area_ratio_theorem.rule_recall",
     "volume_ratio_theorem.rule_recall",
+    "circle_inscribed_angle_theorem.rule_recall",
+    "circle_inscribed_angle_converse.rule_recall",
+    "arc_angle_proportion.rule_recall",
 ]
 
 
@@ -1486,6 +1489,27 @@ def _draw_rule_statement(topic: str, concept: str, rng: Rng, p: dict[str, object
         # g3_l46 相似な立体の体積比。立体名を2文字の複合ラベルにして surface を分散する。
         pa, pb, pc, pd = _draw_distinct_points(4, rng)
         return f"相似な立体{pa}{pb}と立体{pc}{pd}の相似比がm:nであるとき、体積比はどのように表されるか"
+
+    if topic == "circle_inscribed_angle_theorem":
+        # g3_l47 円周角の定理。具体例の円周上の点名を埋め込み surface を分散する。
+        po, pa, pb, pp = _draw_distinct_points(4, rng)
+        return (
+            f"円{po}で、弧{pa}{pb}に対する中心角と、同じ弧{pa}{pb}に対する円周角"
+            f"∠{pa}{pp}{pb}の大きさの関係"
+        )
+
+    if topic == "circle_inscribed_angle_converse":
+        # g3_l48 円周角の定理の逆。具体例の点名を埋め込み surface を分散する。
+        pa, pb, pc, pd = _draw_distinct_points(4, rng)
+        return (
+            f"直線{pa}{pb}について同じ側にある2点{pc}, {pd}について、"
+            f"∠{pa}{pc}{pb}=∠{pa}{pd}{pb}が成り立つとき、いえること"
+        )
+
+    if topic == "arc_angle_proportion":
+        # g3_l50 円周角と弧の長さの比。具体例の点名を埋め込み surface を分散する。
+        pa, pb, pc, pd = _draw_distinct_points(4, rng)
+        return f"1つの円で、弧{pa}{pb}と弧{pc}{pd}の長さと、それぞれに対する円周角の大きさの関係"
 
     raise ValueError(f"未知の topic: {topic!r}")
 

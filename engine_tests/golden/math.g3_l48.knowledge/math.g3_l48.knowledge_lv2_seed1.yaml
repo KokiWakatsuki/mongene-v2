@@ -1,0 +1,54 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - circle.judge_concyclic
+  provenance:
+    git_commit: ''
+    recipe: math.judge_concyclic_from_angle
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_inscribed_angle_statement_v1
+    tier: T1
+  requested:
+    form: knowledge
+    level: 2
+    subject: math
+    unit: g3_l48
+  resolved:
+    form: knowledge
+    level: 2
+    subject: math
+    unit: g3_l48
+  seed: 1
+  signature: judge_concyclic_from_angle
+problem_ref: 667224c3a643e7ba
+problem_text: 直線DBについて同じ側に点G, Hがある。∠DGB=43°、∠DHB=35° のとき、4点D, B, G, Hが同一円周上にあるといえるかどうかを、理由とともに答えよ。
+sub_questions:
+- answer:
+    correct: 同一円周上にあるとはいえない
+    distractors:
+    - 同一円周上にあるといえる
+    fact_id: circle.judge_concyclic
+    kind: choice
+  cause_tags: []
+  concept_tags:
+  - circle.judge_concyclic
+  explanation: まず、直線ABの同じ側にある2点C, Dでできる角が、等しいかどうかを確認する。 2つの角が等しいかどうかを確認する次に、円周角の定理の逆から、4点が同一円周上にあるといえるかどうかを判別する。 同一円周上にあるとはいえない
+  hints:
+  - 直線ABの同じ側にある2点C, Dでできる角が、等しいかどうかを確認する。
+  label: (1)
+  prompt_text: choice を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 直線ABの同じ側にある2点C, Dでできる角が、等しいかどうかを確認する。
+    op: compare_angles_on_same_side
+    result_display: 2つの角が等しいかどうかを確認する
+    result_srepr: not_equal
+  - args: []
+    narration: 円周角の定理の逆から、4点が同一円周上にあるといえるかどうかを判別する。
+    op: judge_by_inscribed_angle_converse
+    result_display: 同一円周上にあるとはいえない
+    result_srepr: 同一円周上にあるとはいえない
+visual_svg: null

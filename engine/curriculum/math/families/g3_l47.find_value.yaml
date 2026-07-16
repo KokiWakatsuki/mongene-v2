@@ -1,0 +1,31 @@
+family: math.g3_l47.find_value
+form: find_value
+source_desc: |
+  円周角=中心角の半分で角を求める
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: 円周角=中心角の半分/同じ弧の円周角が等しいで1回で角を求める。
+       example: 右の図で、点 O は円の中心である。弧 AB に対する中心角 ∠AOB=100°
+                のとき、同じ弧 AB に対する円周角 ∠APB の大きさを求めよ。
+       【既知の不具合回避】notes欄に「円周角が90°に固定される不具合に注意」と
+       あるため、central_angleを180に偏らせず広い値域[2,178]から一様に引く。
+  Lv3（複数の円周角・二等辺/外角を組み合わせ多段で角を求める）は多段構成で
+  一般化が難しいため本セルでは扱わない（次段対応）。
+  【設計モデル】新設 solver math.inscribed_angle_from_central（円周角=中心角の
+  半分という恒真の性質）。「右の図」は図なしで円・点の配置をテキストで直接
+  指定する（既存の合同対応セル等と同様）。
+concepts_default: [circle.inscribed_angle_from_central]
+levels:
+  "1":
+    signature: inscribed_angle_from_central
+    recipe: math.inscribed_angle_from_central
+    params:
+      central_angle_domain: {int_range: [2, 178]}
+    given: [condition]
+    asked: [value]
+    visual: none
+    text: {tier: T1, template: lf_inscribed_angle_condition_v1}
+    hints: [steps_prefix]
+    concept_tags: [circle.inscribed_angle_from_central]
+    cause_tags: []
+remedial:
+  default_level: 1

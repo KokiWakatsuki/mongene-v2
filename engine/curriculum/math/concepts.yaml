@@ -967,3 +967,27 @@ concepts:
   - id: volume_ratio_theorem.rule_recall
     label: "体積比が相似比の3乗であることを想起する"
     unit: g3_l46
+  - id: circle.inscribed_angle_from_central
+    label: "中心角から同じ弧に対する円周角を求める"
+    unit: g3_l47
+  - id: circle_inscribed_angle_theorem.rule_recall
+    label: "円周角の定理の内容(中心角の半分・同じ弧なら等しい)を想起する"
+    unit: g3_l47
+  - id: circle.inscribed_angle_transfer_same_arc
+    label: "逆で同一円周上と判断し同じ弧の円周角を転写する"
+    unit: g3_l48
+  - id: circle_inscribed_angle_converse.rule_recall
+    label: "円周角の定理の逆を想起する"
+    unit: g3_l48
+  - id: circle.judge_concyclic
+    label: "角の条件から4点が同一円周上にあるかを判別する"
+    unit: g3_l48
+  - id: circle.similar_chord_length
+    label: "円周上の4点でつくられる証明済みの相似から弦の長さを求める"
+    unit: g3_l49
+  - id: circle.arc_proportional_angle
+    label: "弧の長さの倍率から対応する円周角を求める"
+    unit: g3_l50
+  - id: arc_angle_proportion.rule_recall
+    label: "弧の長さが円周角に比例することを想起する"
+    unit: g3_l50

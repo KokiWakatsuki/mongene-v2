@@ -164,3 +164,54 @@ def similarity_proven_ratio_length_recipe(ctx: CellContext, rng: Rng) -> MR:
         given={"condition": statement}, sub_questions=[sub_question], visual_plan=None,
         provenance=Provenance(recipe="math.similarity_proven_ratio_length"),
     )
+
+
+# ---------------------------------------------------------------------------
+# g3_l49.find_value Lv2: 円周上の4点でつくられる証明済みの相似(頂点Pを共有)
+# から辺の長さを求める。既存 solver math.similarity_ratio_transfer を、
+# PA:PD を相似比としてそのまま再利用する（family をまたぐ再利用・l41 と同型）。
+# ---------------------------------------------------------------------------
+_CIRCLE_SIMILAR_CHORD_LENGTH_CONCEPTS = ["circle.similar_chord_length"]
+
+
+@register_recipe(
+    "math.circle_similar_chord_length", provides_concepts=_CIRCLE_SIMILAR_CHORD_LENGTH_CONCEPTS
+)
+def circle_similar_chord_length_recipe(ctx: CellContext, rng: Rng) -> MR:
+    """円周上の4点でつくられる証明済みの相似(頂点Pを共有する△PAB∽△PDC型)から、
+
+    弦の長さを求める（g3_l49.find_value Lv2・answer-first）。PA:PD を相似比として
+    `math.similarity_ratio_transfer` にそのまま渡し、PB から対応する PC を求める。
+    """
+    p = ctx.spec_level.params
+    pp, pa, pb, pc, pd = _draw_distinct_points(5, rng)
+    for _ in range(200):
+        pa_len = int(draw(p["side_domain"], rng))
+        pd_len = int(draw(p["side_domain"], rng))
+        if math.gcd(pa_len, pd_len) == 1:
+            break
+    else:
+        raise ValueError("circle_similar_chord_length_recipe: 既約な比を構成できず")
+    pb_len = int(draw(p["side_domain"], rng))
+
+    solver = REGISTRY.solver("math.similarity_ratio_transfer")
+    sol = cast(Solution, solver(pa_len, pd_len, pb_len))
+    assert isinstance(sol.answer, SymbolicAnswer)
+
+    statement = (
+        f"円周上の4点{pa}, {pb}, {pc}, {pd}について三角形{pp}{pa}{pb}∽三角形{pp}{pd}{pc}"
+        f"が示されている。弦{pa}{pc}と弦{pb}{pd}の交点を{pp}とし、{pp}{pa}={pa_len}cm, "
+        f"{pp}{pb}={pb_len}cm, {pp}{pd}={pd_len}cm のとき、線分{pp}{pc}の長さを求めよ"
+    )
+
+    sub_question = SubQuestionMR(
+        label="(1)", asked="value", answer=sol.answer, steps=sol.steps,
+        concept_tags=_effective_concept_tags(ctx), cause_tags=_effective_cause_tags(ctx),
+    )
+    return MR(
+        signature=ctx.spec_level.signature, family=ctx.family, level=ctx.level,
+        purpose=ctx.purpose, seed=0,
+        params={"ratio_num": pa_len, "ratio_den": pd_len, "known_side": pb_len},
+        given={"condition": statement}, sub_questions=[sub_question], visual_plan=None,
+        provenance=Provenance(recipe="math.circle_similar_chord_length"),
+    )

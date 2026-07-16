@@ -1,0 +1,29 @@
+family: math.g3_l49.find_value
+form: find_value
+source_desc: |
+  証明した相似(円周上の4点)から長さを求める
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv2 desc: 証明した相似等から長さ・角を求める。
+       example: 右の図で、円周上の4点 A, B, C, D について三角形 PAB∽三角形 PDC
+                が示されている。弦 AC と弦 BD の交点を P とし、PA=6cm, PB=4cm,
+                PD=3cm のとき、線分 PC の長さを求めよ。
+  【設計モデル】既存 solver math.similarity_ratio_transfer を再利用する
+  （PA:PD を相似比としてそのまま渡し、PB から対応する PC を求める・family を
+  またぐ recipe/solver 共有は level_sep に無関係）。recipe は
+  math.circle_similar_chord_length（recipes/similarity.py に集約）。
+concepts_default: [circle.similar_chord_length]
+levels:
+  "2":
+    signature: circle_similar_chord_length
+    recipe: math.circle_similar_chord_length
+    params:
+      side_domain: {int_range: [1, 200]}
+    given: [condition]
+    asked: [value]
+    visual: none
+    text: {tier: T1, template: lf_similarity_condition_v1}
+    hints: [steps_prefix]
+    concept_tags: [circle.similar_chord_length]
+    cause_tags: []
+remedial:
+  default_level: 2

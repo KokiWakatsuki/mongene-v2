@@ -3741,6 +3741,9 @@ _RULE_RECALL_CELLS = [
     ("math.g3_l44.knowledge", 1),
     ("math.g3_l45.knowledge", 1),
     ("math.g3_l46.knowledge", 1),
+    ("math.g3_l47.knowledge", 1),
+    ("math.g3_l48.knowledge", 1),
+    ("math.g3_l50.knowledge", 1),
 ]
 
 
@@ -6330,4 +6333,112 @@ def test_similar_solid_surface_volume_ratio_double_solve_property(seed):
     mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
     solver = REGISTRY.solver("math.similar_solid_surface_volume_ratio")
     sol = solver(mr.params["ratio_num"], mr.params["ratio_den"])
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+
+
+# ---------------------------------------------------------------------------
+# C10 g3 図形（円周角の定理・その逆・弧の比例）: g3_l47/l48/l49/l50
+# ---------------------------------------------------------------------------
+def test_inscribed_angle_from_central_construct():
+    ctx = _make_ctx("math.g3_l47.find_value", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "inscribed_angle_from_central"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "value"
+    assert sq.answer.srepr == sympy.srepr(sympy.Rational(mr.params["central_angle"], 2))
+
+
+@pytest.mark.parametrize("seed", range(100))
+def test_inscribed_angle_from_central_double_solve_property(seed):
+    ctx = _make_ctx("math.g3_l47.find_value", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.inscribed_angle_from_central")
+    sol = solver(mr.params["central_angle"])
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+
+
+def test_inscribed_angle_transfer_same_arc_construct():
+    ctx = _make_ctx("math.g3_l48.find_value", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "inscribed_angle_transfer_same_arc"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "value"
+    assert sq.answer.srepr == sympy.srepr(sympy.Integer(mr.params["v2"]))
+
+
+@pytest.mark.parametrize("seed", range(100))
+def test_inscribed_angle_transfer_same_arc_double_solve_property(seed):
+    ctx = _make_ctx("math.g3_l48.find_value", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.inscribed_angle_transfer_same_arc")
+    sol = solver(mr.params["v2"])
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+
+
+def test_judge_concyclic_from_angle_construct():
+    ctx = _make_ctx("math.g3_l48.knowledge", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "judge_concyclic_from_angle"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "choice"
+    assert not any(ch.isdigit() for ch in sq.answer.correct)
+    assert sq.answer.correct not in sq.answer.distractors
+
+
+@pytest.mark.parametrize("seed", range(100))
+def test_judge_concyclic_from_angle_double_solve_property(seed):
+    ctx = _make_ctx("math.g3_l48.knowledge", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.judge_concyclic_from_angle")
+    sol = solver(mr.params["angle_c"], mr.params["angle_d"])
+    assert sol.answer.correct == mr.sub_questions[0].answer.correct
+
+
+def test_circle_similar_chord_length_construct():
+    ctx = _make_ctx("math.g3_l49.find_value", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "circle_similar_chord_length"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "value"
+    m, n, v = mr.params["ratio_num"], mr.params["ratio_den"], mr.params["known_side"]
+    assert math.gcd(m, n) == 1
+    expected = sympy.Rational(v) * n / m
+    assert sq.answer.srepr == sympy.srepr(expected)
+
+
+@pytest.mark.parametrize("seed", range(100))
+def test_circle_similar_chord_length_double_solve_property(seed):
+    ctx = _make_ctx("math.g3_l49.find_value", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.similarity_ratio_transfer")
+    sol = solver(mr.params["ratio_num"], mr.params["ratio_den"], mr.params["known_side"])
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+
+
+def test_arc_proportional_angle_construct():
+    ctx = _make_ctx("math.g3_l50.find_value", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "arc_proportional_angle"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "value"
+    expected = sympy.Integer(mr.params["multiplier"]) * mr.params["known_angle"]
+    assert sq.answer.srepr == sympy.srepr(expected)
+
+
+@pytest.mark.parametrize("seed", range(100))
+def test_arc_proportional_angle_double_solve_property(seed):
+    ctx = _make_ctx("math.g3_l50.find_value", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.arc_proportional_angle")
+    sol = solver(mr.params["multiplier"], mr.params["known_angle"])
     assert sol.answer.srepr == mr.sub_questions[0].answer.srepr

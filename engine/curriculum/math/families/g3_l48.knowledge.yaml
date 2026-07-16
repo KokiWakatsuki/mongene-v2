@@ -1,0 +1,46 @@
+family: math.g3_l48.knowledge
+form: knowledge
+source_desc: |
+  円周角の定理の逆を想起・判別する
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: 円周角の定理の逆の想起。
+       example: 円周角の定理の「逆」はどのような主張か、次の( )を埋めて答えよ。
+                2点 C, D が直線 AB について同じ側にあり、∠ACB=∠ADB ならば、
+                4点 A, B, C, D は( )にある。
+  Lv2 desc: 4点が同一円周上にあるかを角の条件で判別。
+       example: 右の図で、直線 AB について同じ側に点 C, D がある。∠ACB=48°、
+                ∠ADB=48° のとき、4点 A, B, C, D が同一円周上にあるといえるか
+                どうかを、理由とともに答えよ。
+  【設計モデル】規則想起ハブ（既存 math.recall_rule・_RULE_MAPS に topic
+  "circle_inscribed_angle_converse" を追加＝Lv1）／新設 solver
+  math.judge_concyclic_from_angle（∠ACBと∠ADBが等しいかどうかから同一円周上
+  にあるといえるかを判別＝Lv2）。
+levels:
+  "1":
+    signature: circle_inscribed_angle_converse_rule_recall
+    recipe: math.recall_rule
+    params:
+      topic: circle_inscribed_angle_converse
+      concept_set: [statement]
+    given: [statement]
+    asked: [choice]
+    visual: none
+    text: {tier: T1, template: lf_rule_recall_v1}
+    hints: [steps_prefix]
+    concept_tags: [circle_inscribed_angle_converse.rule_recall]
+    cause_tags: []
+  "2":
+    signature: judge_concyclic_from_angle
+    recipe: math.judge_concyclic_from_angle
+    params:
+      angle_domain: {int_range: [1, 89]}
+      delta_domain: {int_set: [-8, -7, -6, -5, -4, -3, -2, -1, 1, 2, 3, 4, 5, 6, 7, 8]}
+    given: [statement]
+    asked: [choice]
+    visual: none
+    text: {tier: T1, template: lf_inscribed_angle_statement_v1}
+    hints: [steps_prefix]
+    concept_tags: [circle.judge_concyclic]
+    cause_tags: []
+remedial:
+  default_level: 1

@@ -32,5 +32,6 @@ from engine.packs.math.templates import similarity  # noqa: F401  (登録の副�
 from engine.packs.math.templates import similarity_conditions  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.templates import parallel_line_ratio  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.templates import similarity_scale_ratio  # noqa: F401  (登録の副作用のため import)
+from engine.packs.math.templates import inscribed_angle  # noqa: F401  (登録の副作用のため import)
 
 __all__: list[str] = []

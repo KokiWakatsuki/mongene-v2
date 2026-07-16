@@ -1,0 +1,8 @@
+approved_at: '2026-07-16T11:13:11.523198'
+approver: koki
+content_sha256: e072357432cfd52bd353ecb7f26e6b3b3ab19711d87f53a45763a6bed97e9bfb
+family: math.g3_l49.find_value
+files:
+- engine_tests/golden/math.g3_l49.find_value/math.g3_l49.find_value_lv2_seed1.yaml
+- engine_tests/golden/math.g3_l49.find_value/math.g3_l49.find_value_lv2_seed2.yaml
+- engine_tests/golden/math.g3_l49.find_value/math.g3_l49.find_value_lv2_seed3.yaml

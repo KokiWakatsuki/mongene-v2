@@ -1,0 +1,52 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - circle.similar_chord_length
+  provenance:
+    git_commit: ''
+    recipe: math.circle_similar_chord_length
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_similarity_condition_v1
+    tier: T1
+  requested:
+    form: find_value
+    level: 2
+    subject: math
+    unit: g3_l49
+  resolved:
+    form: find_value
+    level: 2
+    subject: math
+    unit: g3_l49
+  seed: 3
+  signature: circle_similar_chord_length
+problem_ref: 3f33b8e908ac7aad
+problem_text: 円周上の4点P, J, L, Bについて三角形FPJ∽三角形FBLが示されている。弦PLと弦JBの交点をFとし、FP=81cm, FJ=45cm, FB=194cm のとき、線分FLの長さを求めよ。
+sub_questions:
+- answer:
+    display: 970/9
+    kind: symbolic
+    srepr: Rational(970, 9)
+  cause_tags: []
+  concept_tags:
+  - circle.similar_chord_length
+  explanation: まず、2つの図形の相似比と、わかっている辺の長さを読み取る。 相似比とわかっている辺の長さを読み取る次に、相似な図形では対応する辺の長さの比が相似比に等しいことから、対応する辺の長さを求める。 970/9
+  hints:
+  - 2つの図形の相似比と、わかっている辺の長さを読み取る。
+  label: (1)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 2つの図形の相似比と、わかっている辺の長さを読み取る。
+    op: identify_similarity_ratio
+    result_display: 相似比とわかっている辺の長さを読み取る
+    result_srepr: ''
+  - args: []
+    narration: 相似な図形では対応する辺の長さの比が相似比に等しいことから、対応する辺の長さを求める。
+    op: apply_similarity_ratio
+    result_display: 970/9
+    result_srepr: Rational(970, 9)
+visual_svg: null

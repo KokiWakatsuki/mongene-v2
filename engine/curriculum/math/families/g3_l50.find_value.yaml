@@ -1,0 +1,31 @@
+family: math.g3_l50.find_value
+form: find_value
+source_desc: |
+  弧が円周角に比例する関係で角を求める
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv2 desc: 弧が円周角に比例する関係で角・弧を1手順で求める。
+       example: 1つの円で、弧 AB の長さは弧 CD の長さの2倍である。弧 CD に
+                対する円周角が 25° のとき、弧 AB に対する円周角の大きさを
+                求めよ。
+  Lv3（比の合成・弧の分割など多段で角・弧の長さを求める）は多段構成で
+  一般化が難しいため本セルでは扱わない（次段対応）。
+  【設計モデル】新設 solver math.arc_proportional_angle（弧の長さは円周角の
+  大きさに比例するという恒真の性質。倍率と既知角の積が180°を超えないよう
+  multiplier/angleの値域を調整して非退化を保証する）。
+concepts_default: [circle.arc_proportional_angle]
+levels:
+  "2":
+    signature: arc_proportional_angle
+    recipe: math.arc_proportional_angle
+    params:
+      multiplier_domain: {int_range: [2, 6]}
+      angle_domain: {int_range: [1, 29]}
+    given: [condition]
+    asked: [value]
+    visual: none
+    text: {tier: T1, template: lf_inscribed_angle_condition_v1}
+    hints: [steps_prefix]
+    concept_tags: [circle.arc_proportional_angle]
+    cause_tags: []
+remedial:
+  default_level: 2

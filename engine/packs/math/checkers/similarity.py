@@ -26,3 +26,10 @@ def double_solve_similarity_proven_ratio_length(mr: MR) -> Solution:
     p = mr.params
     solver = REGISTRY.solver("math.similarity_ratio_transfer")
     return cast(Solution, solver(p["ratio_num"], p["ratio_den"], p["known_side"]))
+
+
+@register_checker("math.circle_similar_chord_length.double_solve")
+def double_solve_circle_similar_chord_length(mr: MR) -> Solution:
+    p = mr.params
+    solver = REGISTRY.solver("math.similarity_ratio_transfer")
+    return cast(Solution, solver(p["ratio_num"], p["ratio_den"], p["known_side"]))

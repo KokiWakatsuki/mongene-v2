@@ -32,5 +32,6 @@ from engine.packs.math.recipes import similarity  # noqa: F401,E402  (letter_exp
 from engine.packs.math.recipes import similarity_conditions  # noqa: F401,E402  (letter_expr の _draw_distinct_points に依存＝後に import)
 from engine.packs.math.recipes import parallel_line_ratio  # noqa: F401,E402  (letter_expr の _draw_distinct_points に依存＝後に import)
 from engine.packs.math.recipes import similarity_scale_ratio  # noqa: F401,E402  (letter_expr の draw に依存＝後に import)
+from engine.packs.math.recipes import inscribed_angle  # noqa: F401,E402  (letter_expr の _draw_distinct_points に依存＝後に import)
 
 __all__: list[str] = []

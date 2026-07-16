@@ -1,0 +1,52 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - circle.inscribed_angle_transfer_same_arc
+  provenance:
+    git_commit: ''
+    recipe: math.inscribed_angle_transfer_same_arc
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_inscribed_angle_condition_v1
+    tier: T1
+  requested:
+    form: find_value
+    level: 2
+    subject: math
+    unit: g3_l48
+  resolved:
+    form: find_value
+    level: 2
+    subject: math
+    unit: g3_l48
+  seed: 2
+  signature: inscribed_angle_transfer_same_arc
+problem_ref: 0f338e4334d93dd1
+problem_text: ∠FNJ=∠FMJ=42°であり、4点F, J, N, Mは同一円周上にある。∠MFN=33°のとき、∠MJNの大きさを求めよ。
+sub_questions:
+- answer:
+    display: 33°
+    kind: symbolic
+    srepr: Integer(33)
+  cause_tags: []
+  concept_tags:
+  - circle.inscribed_angle_transfer_same_arc
+  explanation: まず、4点が同一円周上にあることから、同じ弧に対応する角の大きさを読み取る。 同じ弧に対する角の大きさを読み取る次に、同じ弧に対する円周角の大きさはすべて等しいことから、求める角の大きさを求める。 33°
+  hints:
+  - 4点が同一円周上にあることから、同じ弧に対応する角の大きさを読み取る。
+  label: (1)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 4点が同一円周上にあることから、同じ弧に対応する角の大きさを読み取る。
+    op: identify_same_arc_angle
+    result_display: 同じ弧に対する角の大きさを読み取る
+    result_srepr: ''
+  - args: []
+    narration: 同じ弧に対する円周角の大きさはすべて等しいことから、求める角の大きさを求める。
+    op: transfer_by_inscribed_angle_equality
+    result_display: 33°
+    result_srepr: Integer(33)
+visual_svg: null
