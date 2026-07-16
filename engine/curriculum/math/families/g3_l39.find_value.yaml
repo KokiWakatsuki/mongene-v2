@@ -1,0 +1,28 @@
+family: math.g3_l39.find_value
+form: find_value
+source_desc: |
+  相似比を用い対応辺の長さを比例式で求める
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv2 desc: 相似比を用い対応辺の長さを比例式で求める。
+       example: 三角形 ABC と三角形 DEF は相似で、相似比は 2:3 である。AB=8cm
+                のとき、対応する辺 DE の長さを求めよ。
+  【設計モデル】新設 solver math.similarity_ratio_transfer（相似な図形では対応
+  する辺の長さの比が相似比に等しいという恒真の性質から、既知の辺の長さと相似比
+  から対応する辺の長さを求める）。
+concepts_default: [similarity.ratio_transfer]
+levels:
+  "2":
+    signature: similarity_ratio_transfer
+    recipe: math.similarity_ratio_transfer
+    params:
+      ratio_domain: {int_range: [2, 12]}
+      side_domain: {int_range: [1, 200]}
+    given: [condition]
+    asked: [value]
+    visual: none
+    text: {tier: T1, template: lf_similarity_condition_v1}
+    hints: [steps_prefix]
+    concept_tags: [similarity.ratio_transfer]
+    cause_tags: []
+remedial:
+  default_level: 2

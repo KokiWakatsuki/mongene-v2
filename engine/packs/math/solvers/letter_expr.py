@@ -333,6 +333,10 @@ _TERM_MAPS: dict[str, dict[str, str]] = {
     "proof_logic_terms": {
         "assumption": "仮定", "conclusion": "結論", "counterexample": "反例",
     },
+    # g3_l39 相似な図形の用語（対応する辺の長さの比＝相似比）。
+    "similarity_terms": {
+        "similarity_ratio": "相似比",
+    },
 }
 
 # domain 別の step テキスト（既定は g1_l17/l19/l21/l2 の現行文＝golden 不変）。
@@ -920,6 +924,17 @@ _RULE_MAPS: dict[str, dict[str, tuple[str, list[str]]]] = {
             [
                 "aを斜辺とする直角三角形である",
                 "cを斜辺とする二等辺三角形である",
+            ],
+        ),
+    },
+    # g3_l40 三角形の相似条件（3つすべてを想起する）
+    "similarity_conditions": {
+        "all_three": (
+            "二組の角がそれぞれ等しい、二組の辺の比とその間の角がそれぞれ等しい、"
+            "三組の辺の比がすべて等しい、のいずれか",
+            [
+                "三組の角がそれぞれ等しいことだけで、相似であるといえる",
+                "一組の辺の比が等しいことだけで、相似であるといえる",
             ],
         ),
     },

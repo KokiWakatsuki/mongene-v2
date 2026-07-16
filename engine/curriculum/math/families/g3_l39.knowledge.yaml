@@ -1,0 +1,45 @@
+family: math.g3_l39.knowledge
+form: knowledge
+source_desc: |
+  相似・対応する辺角・相似比の意味を想起・判別する
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: 相似・対応する辺角・相似比の意味の想起。
+       example: 2つの図形が相似であるとき、対応する辺の長さの比を何というか答えよ。
+  Lv2 desc: 図で対応を見極め相似比を読み取り具体に適用。
+       example: 四角形 ABCD と四角形 EFGH が相似で、その順に対応しているとき、
+                次の問いに答えよ。(1) 頂点 B に対応する頂点を答えよ。
+                (2) AB=6cm, EF=9cm のとき、この2つの四角形の相似比を求めよ。
+       【スコープ】(2)の相似比の算出は ChoiceAnswer の digit-free 鉄則(鉄則①)
+       と比の数値表現が両立しないため、本セルでは (1) の対応する頂点の判別部分
+       のみを扱う（次段対応）。
+  【設計モデル】用語想起ハブ（既存 math.term_recall・_TERM_MAPS に domain
+  "similarity_terms" を追加＝Lv1）／新設 solver
+  math.identify_similar_corresponding_vertex（対応順に並んだ頂点の定義から機械
+  的に判別＝Lv2）。
+levels:
+  "1":
+    signature: similarity_terms_term_recall
+    recipe: math.term_recall
+    params:
+      domain: similarity_terms
+      concept_set: [similarity_ratio]
+    given: [statement]
+    asked: [choice]
+    visual: none
+    text: {tier: T1, template: lf_term_recall_v1}
+    hints: [steps_prefix]
+    concept_tags: [similarity_terms.term_recall]
+    cause_tags: []
+  "2":
+    signature: identify_similar_corresponding_vertex
+    recipe: math.identify_similar_corresponding_vertex
+    params: {}
+    given: [statement]
+    asked: [choice]
+    visual: none
+    text: {tier: T1, template: lf_similarity_statement_v1}
+    hints: [steps_prefix]
+    concept_tags: [similarity.identify_corresponding_vertex]
+    cause_tags: []
+remedial:
+  default_level: 1

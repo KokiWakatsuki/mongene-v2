@@ -3477,6 +3477,8 @@ _TERM_RECALL_CELLS = [
     ("math.g2_l31.knowledge", 1),
     ("math.g2_l37.knowledge", 2),
     ("math.g2_l38.knowledge", 1),
+    # C10 g3 相似・円・三平方（用語想起）
+    ("math.g3_l39.knowledge", 1),
 ]
 
 
@@ -3733,6 +3735,7 @@ _RULE_RECALL_CELLS = [
     ("math.g2_l50.knowledge", 1),
     ("math.g3_l51.knowledge", 1),
     ("math.g3_l52.knowledge", 1),
+    ("math.g3_l40.knowledge", 1),
 ]
 
 
@@ -6074,3 +6077,122 @@ def test_judge_right_triangle_from_three_sides_double_solve_property(seed):
     solver = REGISTRY.solver("math.judge_right_triangle_from_three_sides")
     sol = solver(mr.params["side_a"], mr.params["side_b"], mr.params["side_c"])
     assert sol.answer.correct == mr.sub_questions[0].answer.correct
+
+
+# ---------------------------------------------------------------------------
+# C10 g3 図形（相似な図形）: g3_l39
+# ---------------------------------------------------------------------------
+def test_similarity_ratio_transfer_construct():
+    ctx = _make_ctx("math.g3_l39.find_value", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "similarity_ratio_transfer"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "value"
+    assert math.gcd(mr.params["ratio_num"], mr.params["ratio_den"]) == 1
+    expected = sympy.Rational(mr.params["known_side"]) * mr.params["ratio_den"] / mr.params["ratio_num"]
+    assert sq.answer.srepr == sympy.srepr(expected)
+
+
+@pytest.mark.parametrize("seed", range(100))
+def test_similarity_ratio_transfer_double_solve_property(seed):
+    ctx = _make_ctx("math.g3_l39.find_value", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.similarity_ratio_transfer")
+    sol = solver(mr.params["ratio_num"], mr.params["ratio_den"], mr.params["known_side"])
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+
+
+def test_identify_similar_corresponding_vertex_construct():
+    ctx = _make_ctx("math.g3_l39.knowledge", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "identify_similar_corresponding_vertex"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "choice"
+    assert not any(ch.isdigit() for ch in sq.answer.correct)
+    assert sq.answer.correct not in sq.answer.distractors
+    assert len(set(mr.params["labels1"])) == 4
+    assert len(set(mr.params["labels2"])) == 4
+
+
+@pytest.mark.parametrize("seed", range(100))
+def test_identify_similar_corresponding_vertex_double_solve_property(seed):
+    ctx = _make_ctx("math.g3_l39.knowledge", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.identify_similar_corresponding_vertex")
+    sol = solver(mr.params["labels1"], mr.params["labels2"], mr.params["index"])
+    assert sol.answer.correct == mr.sub_questions[0].answer.correct
+
+
+# ---------------------------------------------------------------------------
+# C10 g3 図形（三角形の相似条件）: g3_l40
+# ---------------------------------------------------------------------------
+def test_similar_triangle_x_shape_construct():
+    ctx = _make_ctx("math.g3_l40.find_value", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "similar_triangle_x_shape"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "value"
+    oa, ob, oc = mr.params["oa"], mr.params["ob"], mr.params["oc"]
+    expected = sympy.Rational(ob) * oc / oa
+    assert sq.answer.srepr == sympy.srepr(expected)
+
+
+@pytest.mark.parametrize("seed", range(100))
+def test_similar_triangle_x_shape_double_solve_property(seed):
+    ctx = _make_ctx("math.g3_l40.find_value", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.similar_triangle_x_shape")
+    sol = solver(mr.params["oa"], mr.params["ob"], mr.params["oc"])
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+
+
+def test_identify_similarity_condition_construct():
+    ctx = _make_ctx("math.g3_l40.knowledge", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "identify_similarity_condition"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "choice"
+    assert not any(ch.isdigit() for ch in sq.answer.correct)
+    assert sq.answer.correct not in sq.answer.distractors
+
+
+@pytest.mark.parametrize("seed", range(100))
+def test_identify_similarity_condition_double_solve_property(seed):
+    ctx = _make_ctx("math.g3_l40.knowledge", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.identify_similarity_condition")
+    sol = solver(mr.params["condition_key"])
+    assert sol.answer.correct == mr.sub_questions[0].answer.correct
+
+
+# ---------------------------------------------------------------------------
+# C10 g3 図形（証明済み相似からの求値）: g3_l41
+# ---------------------------------------------------------------------------
+def test_similarity_proven_ratio_length_construct():
+    ctx = _make_ctx("math.g3_l41.find_value", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "similarity_proven_ratio_length"
+    sq = mr.sub_questions[0]
+    assert sq.asked == "value"
+    assert math.gcd(mr.params["ratio_num"], mr.params["ratio_den"]) == 1
+    expected = sympy.Rational(mr.params["known_side"]) * mr.params["ratio_den"] / mr.params["ratio_num"]
+    assert sq.answer.srepr == sympy.srepr(expected)
+
+
+@pytest.mark.parametrize("seed", range(100))
+def test_similarity_proven_ratio_length_double_solve_property(seed):
+    ctx = _make_ctx("math.g3_l41.find_value", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    solver = REGISTRY.solver("math.similarity_ratio_transfer")
+    sol = solver(mr.params["ratio_num"], mr.params["ratio_den"], mr.params["known_side"])
+    assert sol.answer.srepr == mr.sub_questions[0].answer.srepr

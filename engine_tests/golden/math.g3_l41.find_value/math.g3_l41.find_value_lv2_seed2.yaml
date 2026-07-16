@@ -1,0 +1,52 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - similarity.proven_ratio_length
+  provenance:
+    git_commit: ''
+    recipe: math.similarity_proven_ratio_length
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_similarity_condition_v1
+    tier: T1
+  requested:
+    form: find_value
+    level: 2
+    subject: math
+    unit: g3_l41
+  resolved:
+    form: find_value
+    level: 2
+    subject: math
+    unit: g3_l41
+  seed: 2
+  signature: similarity_proven_ratio_length
+problem_ref: 41c8caf622aadf87
+problem_text: 三角形AJL∽三角形ADNであることが証明されている。AD=37cm, AJ=191cm, DN=182cm のとき、辺JLの長さを求めよ。
+sub_questions:
+- answer:
+    display: 34762/37
+    kind: symbolic
+    srepr: Rational(34762, 37)
+  cause_tags: []
+  concept_tags:
+  - similarity.proven_ratio_length
+  explanation: まず、2つの図形の相似比と、わかっている辺の長さを読み取る。 相似比とわかっている辺の長さを読み取る次に、相似な図形では対応する辺の長さの比が相似比に等しいことから、対応する辺の長さを求める。 34762/37
+  hints:
+  - 2つの図形の相似比と、わかっている辺の長さを読み取る。
+  label: (1)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 2つの図形の相似比と、わかっている辺の長さを読み取る。
+    op: identify_similarity_ratio
+    result_display: 相似比とわかっている辺の長さを読み取る
+    result_srepr: ''
+  - args: []
+    narration: 相似な図形では対応する辺の長さの比が相似比に等しいことから、対応する辺の長さを求める。
+    op: apply_similarity_ratio
+    result_display: 34762/37
+    result_srepr: Rational(34762, 37)
+visual_svg: null

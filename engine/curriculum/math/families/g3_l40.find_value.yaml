@@ -1,0 +1,28 @@
+family: math.g3_l40.find_value
+form: find_value
+source_desc: |
+  相似な三角形を見つけ対応辺の長さを求める
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv2 desc: 相似な三角形を見つけ対応辺の長さを求める。
+       example: 右の図で、AB と CD が点 O で交わり、AB//CD である。OA=6cm, OB=4cm,
+                OC=9cm のとき、相似な三角形を見つけて OD の長さを求めよ。
+  【設計モデル】新設 solver math.similar_triangle_x_shape（AB∥CD の2線分が点Oで
+  交わってできる三角形OAB・OCDは対頂角＋錯角の等しさから相似になり、
+  OA:OC=OB:ODが成り立つという恒真の性質から対応する辺の長さを求める）。「右の図」
+  は図なしで線分の交わりをテキストで直接指定する（既存の合同対応セル等と同様）。
+concepts_default: [similarity.x_shape_length]
+levels:
+  "2":
+    signature: similar_triangle_x_shape
+    recipe: math.similar_triangle_x_shape
+    params:
+      length_domain: {int_range: [1, 200]}
+    given: [condition]
+    asked: [value]
+    visual: none
+    text: {tier: T1, template: lf_similarity_condition_condition_v1}
+    hints: [steps_prefix]
+    concept_tags: [similarity.x_shape_length]
+    cause_tags: []
+remedial:
+  default_level: 2

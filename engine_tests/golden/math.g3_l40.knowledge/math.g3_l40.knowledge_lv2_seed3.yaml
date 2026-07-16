@@ -1,0 +1,55 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - similarity.identify_condition
+  provenance:
+    git_commit: ''
+    recipe: math.identify_similarity_condition
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_similarity_condition_statement_v1
+    tier: T1
+  requested:
+    form: knowledge
+    level: 2
+    subject: math
+    unit: g3_l40
+  resolved:
+    form: knowledge
+    level: 2
+    subject: math
+    unit: g3_l40
+  seed: 3
+  signature: identify_similarity_condition
+problem_ref: ef033aea718d482a
+problem_text: 三角形LKJと三角形BCDについて、LK:BC=LJ:BD=6:4、∠L=∠Bが成り立っているとき、この2つの三角形が相似であることがいえる。用いた相似条件を答えよ。
+sub_questions:
+- answer:
+    correct: 二組の辺の比とその間の角がそれぞれ等しい条件
+    distractors:
+    - 二組の角がそれぞれ等しい条件
+    - 三組の辺の比がすべて等しい条件
+    fact_id: similarity.identify_condition
+    kind: choice
+  cause_tags: []
+  concept_tags:
+  - similarity.identify_condition
+  explanation: まず、2つの三角形で示されている、等しい角や辺の比が何かを読み取る。 示されている等しい要素を読み取る次に、三角形の相似条件のうち、示されている要素がどれに当てはまるかを判別する。 二組の辺の比とその間の角がそれぞれ等しい条件
+  hints:
+  - 2つの三角形で示されている、等しい角や辺の比が何かを読み取る。
+  label: (1)
+  prompt_text: choice を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 2つの三角形で示されている、等しい角や辺の比が何かを読み取る。
+    op: identify_given_elements
+    result_display: 示されている等しい要素を読み取る
+    result_srepr: ''
+  - args: []
+    narration: 三角形の相似条件のうち、示されている要素がどれに当てはまるかを判別する。
+    op: match_similarity_condition
+    result_display: 二組の辺の比とその間の角がそれぞれ等しい条件
+    result_srepr: 二組の辺の比とその間の角がそれぞれ等しい条件
+visual_svg: null

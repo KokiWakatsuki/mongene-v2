@@ -1,0 +1,52 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - similarity.ratio_transfer
+  provenance:
+    git_commit: ''
+    recipe: math.similarity_ratio_transfer
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_similarity_condition_v1
+    tier: T1
+  requested:
+    form: find_value
+    level: 2
+    subject: math
+    unit: g3_l39
+  resolved:
+    form: find_value
+    level: 2
+    subject: math
+    unit: g3_l39
+  seed: 2
+  signature: similarity_ratio_transfer
+problem_ref: 3a6864f707aba182
+problem_text: 三角形BGEと三角形CDAは相似で、相似比は 9:2 である。BG=100cm のとき、対応する辺CDの長さを求めよ。
+sub_questions:
+- answer:
+    display: 200/9
+    kind: symbolic
+    srepr: Rational(200, 9)
+  cause_tags: []
+  concept_tags:
+  - similarity.ratio_transfer
+  explanation: まず、2つの図形の相似比と、わかっている辺の長さを読み取る。 相似比とわかっている辺の長さを読み取る次に、相似な図形では対応する辺の長さの比が相似比に等しいことから、対応する辺の長さを求める。 200/9
+  hints:
+  - 2つの図形の相似比と、わかっている辺の長さを読み取る。
+  label: (1)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 2つの図形の相似比と、わかっている辺の長さを読み取る。
+    op: identify_similarity_ratio
+    result_display: 相似比とわかっている辺の長さを読み取る
+    result_srepr: ''
+  - args: []
+    narration: 相似な図形では対応する辺の長さの比が相似比に等しいことから、対応する辺の長さを求める。
+    op: apply_similarity_ratio
+    result_display: 200/9
+    result_srepr: Rational(200, 9)
+visual_svg: null

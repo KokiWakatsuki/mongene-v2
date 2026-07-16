@@ -28,5 +28,7 @@ from engine.packs.math.recipes import triangle_properties  # noqa: F401,E402  (l
 from engine.packs.math.recipes import congruence_correspondence  # noqa: F401,E402  (letter_expr の _draw_distinct_points に依存＝後に import)
 from engine.packs.math.recipes import quadrilateral_properties  # noqa: F401,E402  (letter_expr の _draw_distinct_points に依存＝後に import)
 from engine.packs.math.recipes import pythagorean  # noqa: F401,E402  (letter_expr の _draw_distinct_points に依存＝後に import)
+from engine.packs.math.recipes import similarity  # noqa: F401,E402  (letter_expr の _draw_distinct_points に依存＝後に import)
+from engine.packs.math.recipes import similarity_conditions  # noqa: F401,E402  (letter_expr の _draw_distinct_points に依存＝後に import)
 
 __all__: list[str] = []

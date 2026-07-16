@@ -27,5 +27,7 @@ from engine.packs.math.solvers import triangle_properties  # noqa: F401  (登録
 from engine.packs.math.solvers import congruence_correspondence  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.solvers import quadrilateral_properties  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.solvers import pythagorean  # noqa: F401  (登録の副作用のため import)
+from engine.packs.math.solvers import similarity  # noqa: F401  (登録の副作用のため import)
+from engine.packs.math.solvers import similarity_conditions  # noqa: F401  (登録の副作用のため import)
 
 __all__: list[str] = []

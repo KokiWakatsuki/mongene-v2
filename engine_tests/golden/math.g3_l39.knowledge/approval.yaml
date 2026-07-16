@@ -1,0 +1,11 @@
+approved_at: '2026-07-16T01:38:32.068282'
+approver: koki
+content_sha256: 19bcdfc277072188065d730c02d039e6c05cad753f874c9c595ebe7852d4bef5
+family: math.g3_l39.knowledge
+files:
+- engine_tests/golden/math.g3_l39.knowledge/math.g3_l39.knowledge_lv1_seed1.yaml
+- engine_tests/golden/math.g3_l39.knowledge/math.g3_l39.knowledge_lv1_seed2.yaml
+- engine_tests/golden/math.g3_l39.knowledge/math.g3_l39.knowledge_lv1_seed3.yaml
+- engine_tests/golden/math.g3_l39.knowledge/math.g3_l39.knowledge_lv2_seed1.yaml
+- engine_tests/golden/math.g3_l39.knowledge/math.g3_l39.knowledge_lv2_seed2.yaml
+- engine_tests/golden/math.g3_l39.knowledge/math.g3_l39.knowledge_lv2_seed3.yaml

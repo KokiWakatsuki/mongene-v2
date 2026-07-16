@@ -916,3 +916,24 @@ concepts:
   - id: pythagorean.judge_right_triangle
     label: "3辺の長さから直角三角形かを判別する"
     unit: g3_l52
+  - id: similarity.ratio_transfer
+    label: "相似比を用い対応辺の長さを比例式で求める"
+    unit: g3_l39
+  - id: similarity_terms.term_recall
+    label: "相似な図形の対応する辺の比(相似比)の意味を想起する"
+    unit: g3_l39
+  - id: similarity.identify_corresponding_vertex
+    label: "相似な図形で対応する頂点を判別する"
+    unit: g3_l39
+  - id: similarity.x_shape_length
+    label: "AB//CDの交わる線分がつくる相似な三角形から対応辺の長さを求める"
+    unit: g3_l40
+  - id: similarity_conditions.rule_recall
+    label: "三角形の相似条件を3つとも想起する"
+    unit: g3_l40
+  - id: similarity.identify_condition
+    label: "条件からどの相似条件によるかを判別する"
+    unit: g3_l40
+  - id: similarity.proven_ratio_length
+    label: "証明された相似から相似比で対応辺の長さを求める"
+    unit: g3_l41

@@ -477,6 +477,8 @@ _TERM_RECALL_CONCEPTS = [
     "angle_pair_terms.term_recall",
     "congruence_condition_terms.term_recall",
     "proof_logic_terms.term_recall",
+    # C10 g3 相似・円・三平方（用語想起）
+    "similarity_terms.term_recall",
 ]
 
 
@@ -838,6 +840,11 @@ def _draw_term_statement(domain: str, concept: str, rng: Rng, p: dict[str, objec
             return f"「a、bが{m}より大きい数ならば、a+bも{m}より大きい」という文で、「ならば」の後に書かれている部分"
         return f"あることがらが成り立たないことを示すために挙げる、条件に合うが結論には当てはまらない具体例のこと（{m}を使った例が挙げられることがある）"  # counterexample
 
+    if domain == "similarity_terms":
+        # g3_l39 相似な図形の用語。具体例の図形名を埋め込み surface を分散する。
+        pa, pb = _draw_distinct_points(2, rng)
+        return f"図形{pa}と図形{pb}が相似であるとき、対応する辺の長さの比のこと"
+
     if domain == "prime_concepts":
         # g1_l11 素数まわりの用語。相異なる2つの具体例を埋め込み surface を分散する
         # （小さいプールを2値で使い variety を確保し dup≤0.20 にする）。
@@ -1162,6 +1169,7 @@ _RULE_RECALL_CONCEPTS = [
     "equal_area_triangles.rule_recall",
     "pythagorean_theorem.rule_recall",
     "pythagorean_converse.rule_recall",
+    "similarity_conditions.rule_recall",
 ]
 
 
@@ -1434,6 +1442,11 @@ def _draw_rule_statement(topic: str, concept: str, rng: Rng, p: dict[str, object
             f"三角形{pa}{pb}{pc}の3辺の長さを a, b, c とするとき、a²+b²=c² が"
             "成り立つならば、この三角形はどんな三角形であるといえるか"
         )
+
+    if topic == "similarity_conditions":
+        # g3_l40 三角形の相似条件(3つすべて)。具体例の三角形の点名を埋め込み surface を分散する。
+        pa, pb, pc, pd, pe, pf = _draw_distinct_points(6, rng)
+        return f"三角形{pa}{pb}{pc}と三角形{pd}{pe}{pf}が相似であることを示すために使える条件"
 
     raise ValueError(f"未知の topic: {topic!r}")
 
