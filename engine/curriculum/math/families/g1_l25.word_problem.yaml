@@ -1,0 +1,72 @@
+family: math.g1_l25.word_problem
+form: word_problem
+source_desc: |
+  方程式の利用（代金と個数の問題）＝場面を1元1次方程式にして解く
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv2 desc: 個数と代金の関係を1つの文字で立式し解く(誘導あり)。
+       example: 1個90円のみかんと1個130円のりんごを合わせて12個買ったところ、代金は1280円だった。
+                みかんを買った個数を求めよ。
+  Lv3 desc: 複数商品・条件つき代金など複数の関係を組み立てて解く(誘導ゆるい)。
+       example: ある店でノート1冊150円、ペン1本110円を買った。ペンはノートより3本多く買い、
+                代金の合計は1370円だった。ノートを何冊買ったか求めよ。
+  ---
+  【この form の型】g2_l16.word_problem で通した骨格（given.scenario＝場面／
+  given.quantities＝変数の設定／小問文は context_slots）をそのまま使う。数学は既存
+  solver math.solve_linear_equation（sympy.solve）に委ねる＝新 solver ゼロ。
+  recipe は math.word_problem_linear_equation 1つで6セル（g1_l25/l26/l27 × Lv2/Lv3）を
+  賄う（calculation 側の math.compute_linear_equation が mode 1つで l21〜l27 を賄うのと
+  同じ償却）。params の scenario_kind が「場面の抽選」と「立式」の対を選ぶ。
+  【level_sep】Lv2 は誘導あり＝(1)立式→(2)値の2小問・答えの式は a·x+b(k−x)=c（合計個数が
+  与えられる）。Lv3 は誘導なし＝1小問（値のみ）・式は a·x+b(x+d)=c（合計個数が与えられず
+  「B は A より d 多い」を自分で x+d に読み替える）。小問数・given の数・立式の形が
+  すべて違う＝G6 の構造差。
+  【answer-first】買った個数 x0 と単価を先に引き、合計代金 c を逆算する（端数が出ない）。
+  非退化: Lv2 は単価を相異に引く（pa=pb だと (pa−pb)x の係数が 0 になり x が消える）。
+  【検証】G-Q1 が全小問 double-solve。checker は params の「場面文に出ている数値」だけから
+  立式し直し・解き直すので、本文の数値と (1) の式のズレ／(2) の値のズレの両方を検出する。
+  答えは params に入れない。
+concepts_default: [equation.word_problem_price_count]
+levels:
+  "2":
+    signature: word_problem_price_count_one_unknown
+    recipe: math.word_problem_linear_equation
+    params:
+      scenario_kind: price_count
+      guided: true
+      # 合計個数 k（x0 は 2..k-2 を recipe が引く）と単価（相異＝非退化条件）。
+      # 組合せは k 8通り × x0 平均10 × 単価 12P2=132 × 品名 8P2=56 で十分に広い。
+      total_domain: {int_range: [8, 15]}
+      price_domain: {int_set: [40, 50, 60, 70, 80, 90, 110, 120, 130, 140, 150, 160],
+                     distinct: [value]}
+      # 「名前|助数詞」記法（ドメイン記法に対の抽選が無いため1トークンに畳む）。
+      item_candidates: [みかん|個, りんご|個, なし|個, もも|個, かき|個, ぶどう|個,
+                        レモン|個, オレンジ|個]
+    given: [scenario, quantities]
+    asked: [formulation, value]
+    visual: none
+    text: {tier: T1, template: wp_linear_guided_v1}
+    hints: [steps_prefix]
+    concept_tags: [equation.word_problem_price_count]
+    cause_tags: []
+  "3":
+    signature: word_problem_price_count_diff
+    recipe: math.word_problem_linear_equation
+    params:
+      scenario_kind: price_count_diff
+      guided: false
+      # A の個数 x0・B は A より diff 個多い。合計個数は場面に出さない（読替が要る）。
+      count_domain: {int_range: [2, 9]}
+      diff_domain: {int_range: [2, 6]}
+      price_domain: {int_set: [80, 90, 100, 110, 120, 130, 140, 150, 160, 180, 200],
+                     distinct: [value]}
+      item_candidates: [ノート|冊, えん筆|本, ボールペン|本, 消しゴム|個, ファイル|冊,
+                        下じき|枚, 定規|本]
+    given: [scenario]
+    asked: [value]
+    visual: none
+    text: {tier: T1, template: wp_linear_solo_v1}
+    hints: [steps_prefix]
+    concept_tags: [equation.word_problem_price_count_diff]
+    cause_tags: []
+remedial:
+  default_level: 2

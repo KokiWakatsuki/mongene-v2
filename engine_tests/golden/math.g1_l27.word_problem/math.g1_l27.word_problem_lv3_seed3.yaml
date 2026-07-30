@@ -1,0 +1,54 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - equation.word_problem_catch_up
+  provenance:
+    git_commit: ''
+    recipe: math.word_problem_linear_equation
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: wp_linear_solo_v1
+    tier: T1
+  requested:
+    form: word_problem
+    level: 3
+    subject: math
+    unit: g1_l27
+  resolved:
+    form: word_problem
+    level: 3
+    subject: math
+    unit: g1_l27
+  seed: 3
+  signature: word_problem_catch_up_time
+problem_ref: 1e7a24ce284985cf
+problem_text: '兄は分速75mで家を出発し、その6分後に弟が分速165mの自転車で同じ道を追いかけた。
+
+  弟が兄に追いつくのは、弟が出発してから何分後か求めよ。'
+sub_questions:
+- answer:
+    display: 5分
+    kind: symbolic
+    srepr: Integer(5)
+  cause_tags: []
+  concept_tags:
+  - equation.word_problem_catch_up
+  explanation: まず、分配法則を使って、かっこを外す。 かっこを外す次に、文字の項を左辺に、数の項を右辺に移項し、両辺を整理して解く。 x = 5
+  hints:
+  - 分配法則を使って、かっこを外す。
+  label: (1)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 分配法則を使って、かっこを外す。
+    op: expand_parentheses
+    result_display: かっこを外す
+    result_srepr: Integer(5)
+  - args: []
+    narration: 文字の項を左辺に、数の項を右辺に移項し、両辺を整理して解く。
+    op: transpose_and_solve
+    result_display: x = 5
+    result_srepr: Integer(5)
+visual_svg: null

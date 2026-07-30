@@ -492,6 +492,25 @@ concepts:
   - id: equation.solve_speed_fraction
     label: "速さの利用で得た一次方程式（分数係数）を解く"
     unit: g1_l27
+  # 文章題（form=word_problem・1文字）: 場面を方程式にして解くまで
+  - id: equation.word_problem_price_count
+    label: "個数と代金の場面を1つの文字で立式して解く（文章題）"
+    unit: g1_l25
+  - id: equation.word_problem_price_count_diff
+    label: "個数の差が与えられた代金の場面を自分で立式して解く（文章題）"
+    unit: g1_l25
+  - id: equation.word_problem_surplus_shortage
+    label: "同じ総数を2通りに表して過不足の方程式を立て解く（文章題）"
+    unit: g1_l26
+  - id: equation.word_problem_seat_shortage
+    label: "過不足から脚数を求め、問われている人数まで求める（文章題）"
+    unit: g1_l26
+  - id: equation.word_problem_round_trip
+    label: "往復の時間の和から道のりを求める方程式を立て解く（文章題）"
+    unit: g1_l27
+  - id: equation.word_problem_catch_up
+    label: "道のりが等しい関係から追いつく時間を求める（文章題）"
+    unit: g1_l27
   - id: equation.solve_by_clear_denominators
     label: "分母をはらってから一次方程式を解く（かっこ＋分数）"
     unit: g1_l23

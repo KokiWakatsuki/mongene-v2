@@ -1,0 +1,77 @@
+family: math.g1_l27.word_problem
+form: word_problem
+source_desc: |
+  方程式の利用（速さの問題）＝速さ・時間・道のりの関係を方程式にする
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv2 desc: 速さ・時間・距離の1関係を立式し解く(誘導あり)。
+       example: 家から駅まで、行きは時速4kmで歩き、駅で用事を済ませて同じ道を時速4kmで
+                帰ったところ、歩いた時間は合わせて2時間だった。家から駅までの道のりを求めよ。
+       ※台帳の example は行きと帰りが同じ速さで、これだと x/4+x/4=2 と即約されて
+         「往復＝2つの区間の時間の和」という構造が消える。行きと帰りで速さを変える
+         （台帳の calculation Lv2 example が x/4+x/6=5 と分数係数を要求しているのと整合）。
+  Lv3 desc: 往復・出会い・追いつきなど複数区間を場合分けして立式する(誘導ゆるい)。
+       example: 兄は分速80mで家を出発し、その6分後に弟が分速200mの自転車で同じ道を
+                追いかけた。弟が兄に追いつくのは弟が出発してから何分後か求めよ。
+  Lv4 desc: ゴールも自分で設定する融合的な速さの応用(誘導なし)。
+       example: …自分で設定し、問題をつくり、その問題を解け。
+       ※Lv4 は「問題をつくれ」＝採点対象になる答えの型が存在しない（作問そのものを
+         問う設問）。M0 の答え型（SymbolicAnswer/ChoiceAnswer/GraphAnswer）のどれにも
+         落ちないので、このセルは**意図的に未実装のまま残す**（作図・証明と同じ扱い）。
+  ---
+  recipe は共通の math.word_problem_linear_equation（scenario_kind で場面を選ぶ）。
+  【level_sep】Lv2 は誘導あり2小問・式は x/a + x/b = t（分数係数＝mode
+  clear_denominators_simple）。Lv3 は誘導なし1小問・式は vs·(x+d) = vf·x（かっこ＝mode
+  expand_parens）で、しかも「道のりが等しい」という等式を自分で見つける必要がある。
+  op 列・小問数・立式の着眼点が違う＝G6 の構造差。
+  【answer-first と候補列挙】どちらも「答えが整数かつ場面の数値も整数」になる組だけを
+  recipe が列挙してから引く（g3_l31 と同じパターン。構成時に非退化と自然さを保証する）。
+   Lv2: t = d·(a+b)/(a·b) が time_range の整数になる (a<b, d) の組（速さが相異＝往復の
+        2区間が別物になる）。
+   Lv3: vf = vs·(x0+d)/x0 が fast_speed_max 以下の整数で vs < vf になる組
+        （vf ≦ vs だと追いつけず場面が成立しない）。
+  【検証】G-Q1 が全小問 double-solve。checker は params の「場面文に出ている数値」だけから
+  立式し直し・解き直す（答えは params に入れない）。
+concepts_default: [equation.word_problem_round_trip]
+levels:
+  "2":
+    signature: word_problem_round_trip_distance
+    recipe: math.word_problem_linear_equation
+    params:
+      scenario_kind: round_trip
+      guided: true
+      # (行き, 帰り, 道のり) の候補は recipe が列挙する（t が整数になる組だけ）。
+      speed_candidates: [3, 4, 5, 6, 8, 9, 10, 12, 15, 16, 18, 20]
+      distance_max: 40
+      time_range: [2, 12]
+      place_candidates: [家|駅, 学校|図書館, 家|公園, 駅|港, キャンプ場|山頂, 家|海岸,
+                         宿|展望台, 家|工場, 学校|体育館, 駅|美術館]
+    given: [scenario, quantities]
+    asked: [formulation, value]
+    visual: none
+    text: {tier: T1, template: wp_linear_guided_v1}
+    hints: [steps_prefix]
+    concept_tags: [equation.word_problem_round_trip]
+    cause_tags: []
+  "3":
+    signature: word_problem_catch_up_time
+    recipe: math.word_problem_linear_equation
+    params:
+      scenario_kind: catch_up
+      guided: false
+      slow_speed_candidates: [50, 60, 70, 75, 80, 90, 100, 120]
+      head_start_candidates: [3, 4, 5, 6, 8, 9, 10, 12]
+      minutes_candidates: [3, 4, 5, 6, 8, 9, 10, 12, 15, 20]
+      # 自転車として自然な分速の範囲（下限が無いと「分速90mの自転車」が出る）。
+      fast_speed_min: 150
+      fast_speed_max: 320
+      person_pair_candidates: [兄|弟, 姉|妹, Aさん|Bさん, 姉|弟, 兄|妹,
+                               弟|兄, 妹|姉, Bさん|Aさん]
+    given: [scenario]
+    asked: [value]
+    visual: none
+    text: {tier: T1, template: wp_linear_solo_v1}
+    hints: [steps_prefix]
+    concept_tags: [equation.word_problem_catch_up]
+    cause_tags: []
+remedial:
+  default_level: 2

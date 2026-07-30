@@ -25,10 +25,30 @@ WP_SYSTEM_PRICE_COUNT_V1 = (
 )
 
 
+# ---------------------------------------------------------------------------
+# 1元1次方程式の利用（g1_l25/l26/l27）: 誘導あり／誘導なしの2枚で6セルを賄う。
+#
+# 小問文は場面ごとに変わる（「代金の関係を…」「枚数を2通りに表して…」）ので、
+# 文言は recipe が `context_slots.ask_formulation` / `ask_value` に載せる。
+# テンプレは「どこに何を置くか」だけを決める＝場面が増えてもテンプレは増えない。
+# ---------------------------------------------------------------------------
+WP_LINEAR_GUIDED_V1 = (
+    "{{ given.scenario }}\n"
+    "{{ given.quantities }}\n"
+    "(1) {{ context_slots.ask_formulation }}\n"
+    "(2) {{ context_slots.ask_value }}"
+)
+
+# 誘導なし（応用）: 変数の設定も小問の分割も与えず、求める量だけを問う。
+WP_LINEAR_SOLO_V1 = "{{ given.scenario }}\n{{ context_slots.ask_value }}"
+
+
 def _register_all() -> None:
     REGISTRY.register_template("wp_system_price_count_v1", WP_SYSTEM_PRICE_COUNT_V1)
+    REGISTRY.register_template("wp_linear_guided_v1", WP_LINEAR_GUIDED_V1)
+    REGISTRY.register_template("wp_linear_solo_v1", WP_LINEAR_SOLO_V1)
 
 
 _register_all()
 
-__all__ = ["WP_SYSTEM_PRICE_COUNT_V1"]
+__all__ = ["WP_LINEAR_GUIDED_V1", "WP_LINEAR_SOLO_V1", "WP_SYSTEM_PRICE_COUNT_V1"]

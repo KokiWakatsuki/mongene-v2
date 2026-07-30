@@ -6539,3 +6539,104 @@ def test_word_problem_price_count_property(seed):
     # 場面文に総数と合計代金が現れる（誘導の材料が本文にある）
     assert f"{total}個" in mr.given["scenario"]
     assert f"{cost}円" in mr.given["scenario"]
+
+
+# ---------------------------------------------------------------------------
+# 1元1次方程式の利用（g1_l25/l26/l27 × Lv2/Lv3）＝1 recipe で6セル
+# ---------------------------------------------------------------------------
+_LINEAR_WP_CELLS = [
+    ("math.g1_l25.word_problem", 2, "word_problem_price_count_one_unknown", True),
+    ("math.g1_l25.word_problem", 3, "word_problem_price_count_diff", False),
+    ("math.g1_l26.word_problem", 2, "word_problem_surplus_shortage", True),
+    ("math.g1_l26.word_problem", 3, "word_problem_seat_shortage_exact", False),
+    ("math.g1_l27.word_problem", 2, "word_problem_round_trip_distance", True),
+    ("math.g1_l27.word_problem", 3, "word_problem_catch_up_time", False),
+]
+
+
+@pytest.mark.parametrize(("family", "level", "signature", "guided"), _LINEAR_WP_CELLS)
+def test_word_problem_linear_construct(family, level, signature, guided):
+    """誘導ありは (1)立式→(2)値 の2小問、誘導なしは値の1小問（＝level_sep の骨）。"""
+    ctx = _make_ctx(family, level)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == signature
+    if guided:
+        assert [(sq.label, sq.asked) for sq in mr.sub_questions] == [
+            ("(1)", "formulation"),
+            ("(2)", "value"),
+        ]
+        assert set(mr.given) == {"scenario", "quantities"}
+    else:
+        assert [(sq.label, sq.asked) for sq in mr.sub_questions] == [("(1)", "value")]
+        # 誘導なしは変数の設定を与えない（自分で x をおく）
+        assert set(mr.given) == {"scenario"}
+    assert mr.visual_plan is None
+    # 答えは params に入っていない（checker が独立に再計算できるようにするため）
+    assert "answer" not in mr.params
+
+
+@pytest.mark.parametrize(("family", "level", "signature", "guided"), _LINEAR_WP_CELLS)
+@pytest.mark.parametrize("seed", range(30))
+def test_word_problem_linear_double_solve_property(seed, family, level, signature, guided):
+    """全小問が checker の独立再計算と一致し、答えが方程式を実際に満たす。"""
+    ctx = _make_ctx(family, level)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+
+    checker = REGISTRY.checker("math.word_problem_linear_equation.double_solve")
+    solutions = checker(mr)
+    assert len(solutions) == len(mr.sub_questions)
+    for sol, sq in zip(solutions, mr.sub_questions, strict=True):
+        assert sol.answer.srepr == sq.answer.srepr
+
+    # 場面の数値から組んだ方程式に、解 x を戻して恒真を確認する（構成の健全性）
+    from engine.packs.math.recipes.word_problem_linear import FORMULATION_BUILDERS
+
+    numbers = {k: int(sympy.sympify(v)) for k, v in mr.params["numbers"].items()}
+    formulation = FORMULATION_BUILDERS[mr.params["scenario_kind"]](**numbers)
+    answer_value = sympy.sympify(mr.sub_questions[-1].answer.srepr)
+    coeff_m, coeff_n = (int(sympy.sympify(c)) for c in mr.params["answer_coeff"])
+    x_value = sympy.Rational(answer_value - coeff_n, coeff_m)
+    assert x_value.q == 1, "x は整数（answer-first で逆算しているので端数は出ない）"
+    assert x_value > 0, "個数・人数・道のり・時間はすべて正"
+    assert formulation.eq.subs(sympy.Symbol("x"), x_value) is sympy.true
+
+    # 場面文に、立式に使う数値がすべて現れている（G-GND の材料が本文にある）
+    for value in numbers.values():
+        assert str(value) in mr.given["scenario"]
+
+
+@pytest.mark.parametrize("seed", range(30))
+def test_word_problem_linear_non_degenerate(seed):
+    """非退化条件: 代金は単価相異（x が消えない）・過不足は a<b（同上）。"""
+    ctx = _make_ctx("math.g1_l25.word_problem", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    numbers = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng).params["numbers"]
+    assert int(numbers["price_a"]) != int(numbers["price_b"])
+
+    ctx = _make_ctx("math.g1_l26.word_problem", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    numbers = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng).params["numbers"]
+    assert int(numbers["per_a"]) < int(numbers["per_b"])
+    assert int(numbers["shortage"]) >= 1, "「足りない数」は正でないと場面が成立しない"
+
+    # 追いつきは vf > vs（でないと永遠に追いつけない）
+    ctx = _make_ctx("math.g1_l27.word_problem", 3)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    numbers = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng).params["numbers"]
+    assert int(numbers["speed_fast"]) > int(numbers["speed_slow"])
+
+
+def test_word_problem_linear_derived_answer_is_not_x():
+    """g1_l26 Lv3 は「文字＝脚数・答え＝人数」。answer_coeff の合成が効いている。"""
+    ctx = _make_ctx("math.g1_l26.word_problem", 3)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    per_a, left_out = (int(sympy.sympify(mr.params["numbers"][k])) for k in ("per_a", "left_out"))
+    assert [int(sympy.sympify(c)) for c in mr.params["answer_coeff"]] == [per_a, left_out]
+    # 答え（人数）は x（脚数）と一致しない＝合成の最後の一手が入っている
+    students = sympy.sympify(mr.sub_questions[0].answer.srepr)
+    seats = sympy.Rational(students - left_out, per_a)
+    assert students != seats
+    assert mr.sub_questions[0].answer.display.endswith("人")

@@ -1,0 +1,54 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - equation.word_problem_price_count_diff
+  provenance:
+    git_commit: ''
+    recipe: math.word_problem_linear_equation
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: wp_linear_solo_v1
+    tier: T1
+  requested:
+    form: word_problem
+    level: 3
+    subject: math
+    unit: g1_l25
+  resolved:
+    form: word_problem
+    level: 3
+    subject: math
+    unit: g1_l25
+  seed: 1
+  signature: word_problem_price_count_diff
+problem_ref: 9d7c5539729840c7
+problem_text: 'ある店で、1本200円の定規と1本110円のボールペンを買った。ボールペンは定規より2本多く買い、代金の合計は2390円だった。
+
+  定規を買った本数を求めよ。'
+sub_questions:
+- answer:
+    display: 7本
+    kind: symbolic
+    srepr: Integer(7)
+  cause_tags: []
+  concept_tags:
+  - equation.word_problem_price_count_diff
+  explanation: まず、分配法則を使って、かっこを外す。 かっこを外す次に、文字の項を左辺に、数の項を右辺に移項し、両辺を整理して解く。 x = 7
+  hints:
+  - 分配法則を使って、かっこを外す。
+  label: (1)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 分配法則を使って、かっこを外す。
+    op: expand_parentheses
+    result_display: かっこを外す
+    result_srepr: Integer(7)
+  - args: []
+    narration: 文字の項を左辺に、数の項を右辺に移項し、両辺を整理して解く。
+    op: transpose_and_solve
+    result_display: x = 7
+    result_srepr: Integer(7)
+visual_svg: null

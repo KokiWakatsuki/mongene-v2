@@ -1,0 +1,81 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - equation.word_problem_surplus_shortage
+  provenance:
+    git_commit: ''
+    recipe: math.word_problem_linear_equation
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: wp_linear_guided_v1
+    tier: T1
+  requested:
+    form: word_problem
+    level: 2
+    subject: math
+    unit: g1_l26
+  resolved:
+    form: word_problem
+    level: 2
+    subject: math
+    unit: g1_l26
+  seed: 3
+  signature: word_problem_surplus_shortage
+problem_ref: ab5c3592654e49b0
+problem_text: '何人かの部員にシールを配る。1人に3枚ずつ配ると2枚余り、1人に4枚ずつ配ると5枚足りない。
+
+  部員の人数を x 人とする。
+
+  (1) どちらの配り方でもシールの全部の枚数は同じであることから、x についての方程式をつくれ。
+
+  (2) 部員の人数を求めよ。'
+sub_questions:
+- answer:
+    display: 3x + 2 = 4x - 5
+    kind: symbolic
+    srepr: Equality(Add(Mul(Integer(3), Symbol('x')), Integer(2)), Add(Mul(Integer(4), Symbol('x')), Integer(-5)))
+  cause_tags: []
+  concept_tags:
+  - equation.word_problem_surplus_shortage
+  explanation: まず、場面の中で、どちらの見方でも同じになる（等しくなっている）量に着目する。 配るシールの全部の枚数次に、その量を x を使って両辺に表し、方程式をつくる。 3x + 2 = 4x - 5
+  hints:
+  - 場面の中で、どちらの見方でも同じになる（等しくなっている）量に着目する。
+  label: (1)
+  prompt_text: formulation を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 場面の中で、どちらの見方でも同じになる（等しくなっている）量に着目する。
+    op: find_equal_relation
+    result_display: 配るシールの全部の枚数
+    result_srepr: Symbol('x')
+  - args: []
+    narration: その量を x を使って両辺に表し、方程式をつくる。
+    op: formulate_equation
+    result_display: 3x + 2 = 4x - 5
+    result_srepr: Equality(Add(Mul(Integer(3), Symbol('x')), Integer(2)), Add(Mul(Integer(4), Symbol('x')), Integer(-5)))
+- answer:
+    display: 7人
+    kind: symbolic
+    srepr: Integer(7)
+  cause_tags: []
+  concept_tags:
+  - equation.word_problem_surplus_shortage
+  explanation: まず、文字の項を左辺に、数の項を右辺に、符号を変えて移項する。 文字は左辺・数は右辺に移項する次に、両辺をそれぞれ整理し、x の係数で両辺をわって解を求める。 x = 7
+  hints:
+  - 文字の項を左辺に、数の項を右辺に、符号を変えて移項する。
+  label: (2)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 文字の項を左辺に、数の項を右辺に、符号を変えて移項する。
+    op: transpose_terms
+    result_display: 文字は左辺・数は右辺に移項する
+    result_srepr: Integer(7)
+  - args: []
+    narration: 両辺をそれぞれ整理し、x の係数で両辺をわって解を求める。
+    op: combine_and_divide
+    result_display: x = 7
+    result_srepr: Integer(7)
+visual_svg: null

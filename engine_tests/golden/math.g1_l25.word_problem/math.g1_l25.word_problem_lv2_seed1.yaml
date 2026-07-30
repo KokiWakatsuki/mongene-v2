@@ -1,0 +1,81 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - equation.word_problem_price_count
+  provenance:
+    git_commit: ''
+    recipe: math.word_problem_linear_equation
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: wp_linear_guided_v1
+    tier: T1
+  requested:
+    form: word_problem
+    level: 2
+    subject: math
+    unit: g1_l25
+  resolved:
+    form: word_problem
+    level: 2
+    subject: math
+    unit: g1_l25
+  seed: 1
+  signature: word_problem_price_count_one_unknown
+problem_ref: 23d75605164dd173
+problem_text: '1個130円のなしと1個110円のぶどうを合わせて10個買ったところ、代金の合計は1200円だった。
+
+  なしを買った個数を x 個とする。
+
+  (1) 代金の関係を、x を使った方程式で表せ。
+
+  (2) なしを買った個数を求めよ。'
+sub_questions:
+- answer:
+    display: 130x + 110(10 - x) = 1200
+    kind: symbolic
+    srepr: Equality(Add(Mul(Integer(20), Symbol('x')), Integer(1100)), Integer(1200))
+  cause_tags: []
+  concept_tags:
+  - equation.word_problem_price_count
+  explanation: まず、場面の中で、どちらの見方でも同じになる（等しくなっている）量に着目する。 代金の合計次に、その量を x を使って両辺に表し、方程式をつくる。 130x + 110(10 - x) = 1200
+  hints:
+  - 場面の中で、どちらの見方でも同じになる（等しくなっている）量に着目する。
+  label: (1)
+  prompt_text: formulation を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 場面の中で、どちらの見方でも同じになる（等しくなっている）量に着目する。
+    op: find_equal_relation
+    result_display: 代金の合計
+    result_srepr: Symbol('x')
+  - args: []
+    narration: その量を x を使って両辺に表し、方程式をつくる。
+    op: formulate_equation
+    result_display: 130x + 110(10 - x) = 1200
+    result_srepr: Equality(Add(Mul(Integer(20), Symbol('x')), Integer(1100)), Integer(1200))
+- answer:
+    display: 5個
+    kind: symbolic
+    srepr: Integer(5)
+  cause_tags: []
+  concept_tags:
+  - equation.word_problem_price_count
+  explanation: まず、分配法則を使って、かっこを外す。 かっこを外す次に、文字の項を左辺に、数の項を右辺に移項し、両辺を整理して解く。 x = 5
+  hints:
+  - 分配法則を使って、かっこを外す。
+  label: (2)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 分配法則を使って、かっこを外す。
+    op: expand_parentheses
+    result_display: かっこを外す
+    result_srepr: Integer(5)
+  - args: []
+    narration: 文字の項を左辺に、数の項を右辺に移項し、両辺を整理して解く。
+    op: transpose_and_solve
+    result_display: x = 5
+    result_srepr: Integer(5)
+visual_svg: null

@@ -1,0 +1,54 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - equation.word_problem_price_count_diff
+  provenance:
+    git_commit: ''
+    recipe: math.word_problem_linear_equation
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: wp_linear_solo_v1
+    tier: T1
+  requested:
+    form: word_problem
+    level: 3
+    subject: math
+    unit: g1_l25
+  resolved:
+    form: word_problem
+    level: 3
+    subject: math
+    unit: g1_l25
+  seed: 2
+  signature: word_problem_price_count_diff
+problem_ref: 9c08ed36d65dba28
+problem_text: 'ある店で、1個90円の消しゴムと1冊150円のノートを買った。ノートは消しゴムより3冊多く買い、代金の合計は930円だった。
+
+  消しゴムを買った個数を求めよ。'
+sub_questions:
+- answer:
+    display: 2個
+    kind: symbolic
+    srepr: Integer(2)
+  cause_tags: []
+  concept_tags:
+  - equation.word_problem_price_count_diff
+  explanation: まず、分配法則を使って、かっこを外す。 かっこを外す次に、文字の項を左辺に、数の項を右辺に移項し、両辺を整理して解く。 x = 2
+  hints:
+  - 分配法則を使って、かっこを外す。
+  label: (1)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 分配法則を使って、かっこを外す。
+    op: expand_parentheses
+    result_display: かっこを外す
+    result_srepr: Integer(2)
+  - args: []
+    narration: 文字の項を左辺に、数の項を右辺に移項し、両辺を整理して解く。
+    op: transpose_and_solve
+    result_display: x = 2
+    result_srepr: Integer(2)
+visual_svg: null
