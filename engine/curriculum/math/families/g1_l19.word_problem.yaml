@@ -1,0 +1,59 @@
+family: math.g1_l19.word_problem
+form: word_problem
+source_desc: |
+  等式の作り方（左辺と右辺）＝数量関係を等式で表す（units.generated.yaml の
+  desc/example を正として転記）。
+  Lv1 desc: 『AとBが等しい』単純な関係を等式で表す(誘導あり)。
+       example: 1個 x 円のパンを4個買って、500 円出したところちょうど払えた。この関係を等式で表せ。
+  Lv2 desc: 複数量・割合速さを含む関係を等式で立式する。
+       example: ある数 x を3倍して7を加えた数が、x に10を加えた数に等しい。この関係を等式で表せ。
+  ---
+  【この form の型】g1_l25/l26/l27.word_problem（word_problem_linear.py）と違い、
+  ここは「解かずに関係を等式で表す」だけの1小問セル＝ asked=formulation のみ
+  （value を問う小問が無い）。x は場面文の中で直接定義される（「1個 x 円の…」
+  「ある数 x を…」）ので given.quantities は使わない。数学的な仕事は sympy.Eq を
+  組み立てるだけ＝新 solver ゼロ。recipe は math.word_problem_relation 1つで
+  g1_l19/g1_l20 の4セルを賄う（scenario_kind が場面の抽選と立式の対を選ぶ）。
+  【level_sep】Lv1 は片辺が定数（count·x = total）。Lv2 は両辺に文字
+  （mult·x + add_a = x + add_b）。式の項数と構造が変わる（P-1 回帰を避けるため
+  数値域だけを動かさない）。
+  【検証】G-Q1 が唯一の小問を double-solve。checker は params の「場面文に出ている
+  数値」だけから同じ FORMULATION_BUILDERS で関係式を組み直す。答え（式）は自由変数
+  x を含むため、G-Q5t は display 全体の部分文字列一致だけを見る（個々の数値は
+  問わない）。
+concepts_default: [equality.word_problem_equality_simple]
+levels:
+  "1":
+    signature: word_problem_equality_price_count
+    recipe: math.word_problem_relation
+    params:
+      scenario_kind: equality_price_count
+      # 単価(x0・場面文には出ない)は total を answer-first で逆算するためだけに引く。
+      count_domain: {int_range: [2, 9]}
+      price_domain: {int_range: [20, 300]}
+      item_candidates: [パン|個, ノート|冊, りんご|個, ボールペン|本, おにぎり|個,
+                        消しゴム|個, ドーナツ|個, キャンディ|個]
+    given: [scenario]
+    asked: [formulation]
+    visual: none
+    text: {tier: T1, template: wp_linear_solo_v1}
+    hints: [steps_prefix]
+    concept_tags: [equality.word_problem_equality_simple]
+    cause_tags: []
+  "2":
+    signature: word_problem_equality_both_sides
+    recipe: math.word_problem_relation
+    params:
+      scenario_kind: equality_both_sides
+      # mult=1 は「1倍して」が不自然なので除外（2以上）。
+      mult_domain: {int_range: [2, 9]}
+      add_domain: {int_range: [1, 30]}
+    given: [scenario]
+    asked: [formulation]
+    visual: none
+    text: {tier: T1, template: wp_linear_solo_v1}
+    hints: [steps_prefix]
+    concept_tags: [equality.word_problem_equality_both_sides]
+    cause_tags: []
+remedial:
+  default_level: 1

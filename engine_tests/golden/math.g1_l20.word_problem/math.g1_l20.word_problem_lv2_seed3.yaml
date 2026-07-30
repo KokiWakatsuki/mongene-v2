@@ -1,0 +1,56 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - inequality.word_problem_both_sides
+  provenance:
+    git_commit: ''
+    recipe: math.word_problem_relation
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: wp_linear_solo_v1
+    tier: T1
+  requested:
+    form: word_problem
+    level: 2
+    subject: math
+    unit: g1_l20
+  resolved:
+    form: word_problem
+    level: 2
+    subject: math
+    unit: g1_l20
+  seed: 3
+  signature: word_problem_inequality_both_sides
+problem_ref: 29abf51571a9b393
+problem_text: 'ある数 x を5倍して1を引いた数が、19 より大きく、かつ x に29を加えた数未満である。
+
+  この関係を不等式で表せ。'
+sub_questions:
+- answer:
+    display: 19 < 5x - 1 < x + 29
+    kind: symbolic
+    srepr: Tuple(StrictGreaterThan(Add(Mul(Integer(5), Symbol('x')), Integer(-1)), Integer(19)), StrictLessThan(Add(Mul(Integer(5), Symbol('x')), Integer(-1)), Add(Symbol('x'), Integer(29))))
+  cause_tags: []
+  concept_tags:
+  - inequality.word_problem_both_sides
+  explanation: 'まず、場面の中で、比べられている、または等しくなっている数量に着目する。（2通りに表した数の関係）
+
+    次に、その数量を x を使った式で表し、等式または不等式をつくる。（19 < 5x - 1 < x + 29）'
+  hints:
+  - 場面の中で、比べられている、または等しくなっている数量に着目する。
+  label: (1)
+  prompt_text: formulation を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 場面の中で、比べられている、または等しくなっている数量に着目する。
+    op: find_relation
+    result_display: 2通りに表した数の関係
+    result_srepr: Symbol('x')
+  - args: []
+    narration: その数量を x を使った式で表し、等式または不等式をつくる。
+    op: formulate_relation
+    result_display: 19 < 5x - 1 < x + 29
+    result_srepr: Tuple(StrictGreaterThan(Add(Mul(Integer(5), Symbol('x')), Integer(-1)), Integer(19)), StrictLessThan(Add(Mul(Integer(5), Symbol('x')), Integer(-1)), Add(Symbol('x'), Integer(29))))
+visual_svg: null

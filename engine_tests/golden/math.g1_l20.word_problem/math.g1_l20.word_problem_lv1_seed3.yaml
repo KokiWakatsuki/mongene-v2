@@ -1,0 +1,56 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - inequality.word_problem_simple
+  provenance:
+    git_commit: ''
+    recipe: math.word_problem_relation
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: wp_linear_solo_v1
+    tier: T1
+  requested:
+    form: word_problem
+    level: 1
+    subject: math
+    unit: g1_l20
+  resolved:
+    form: word_problem
+    level: 1
+    subject: math
+    unit: g1_l20
+  seed: 3
+  signature: word_problem_inequality_price_count
+problem_ref: cee5d42b72a3e9f1
+problem_text: '1個 x 円の消しゴムを4個買ったときの代金が、2896円以下であった。
+
+  この関係を不等式で表せ。'
+sub_questions:
+- answer:
+    display: 4x ≦ 2896
+    kind: symbolic
+    srepr: LessThan(Mul(Integer(4), Symbol('x')), Integer(2896))
+  cause_tags: []
+  concept_tags:
+  - inequality.word_problem_simple
+  explanation: 'まず、場面の中で、比べられている、または等しくなっている数量に着目する。（代金の合計）
+
+    次に、その数量を x を使った式で表し、等式または不等式をつくる。（4x ≦ 2896）'
+  hints:
+  - 場面の中で、比べられている、または等しくなっている数量に着目する。
+  label: (1)
+  prompt_text: formulation を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 場面の中で、比べられている、または等しくなっている数量に着目する。
+    op: find_relation
+    result_display: 代金の合計
+    result_srepr: Symbol('x')
+  - args: []
+    narration: その数量を x を使った式で表し、等式または不等式をつくる。
+    op: formulate_relation
+    result_display: 4x ≦ 2896
+    result_srepr: LessThan(Mul(Integer(4), Symbol('x')), Integer(2896))
+visual_svg: null

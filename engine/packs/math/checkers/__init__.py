@@ -39,5 +39,6 @@ from engine.packs.math.checkers import word_problem_system  # noqa: F401  (登�
 from engine.packs.math.checkers import word_problem_proportion  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.checkers import word_problem_quadratic  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.checkers import word_problem_sampling  # noqa: F401  (登録の副作用のため import)
+from engine.packs.math.checkers import word_problem_relation  # noqa: F401  (登録の副作用のため import)
 
 __all__: list[str] = []

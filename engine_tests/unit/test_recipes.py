@@ -7270,3 +7270,78 @@ def test_word_problem_proportion_area_vs_worker_days_level_sep():
         "substitute_point",
         "form_expression",
     ]
+
+
+# ---------------------------------------------------------------------------
+# 関係を表す文章題（g1_l19 等式・g1_l20 不等式）＝1 recipe で4セル
+#
+# word_problem_linear/system と違い、値を求める小問が無い＝常に
+# asked="formulation" の1小問（「解かずに関係を式で表す」台帳の型）。
+# ---------------------------------------------------------------------------
+_RELATION_WP_CELLS = [
+    ("math.g1_l19.word_problem", 1, "word_problem_equality_price_count"),
+    ("math.g1_l19.word_problem", 2, "word_problem_equality_both_sides"),
+    ("math.g1_l20.word_problem", 1, "word_problem_inequality_price_count"),
+    ("math.g1_l20.word_problem", 2, "word_problem_inequality_both_sides"),
+]
+
+
+@pytest.mark.parametrize(("family", "level", "signature"), _RELATION_WP_CELLS)
+def test_word_problem_relation_construct(family, level, signature):
+    """常に asked=formulation の1小問（値を求める小問は無い）。"""
+    ctx = _make_ctx(family, level)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == signature
+    assert [(sq.label, sq.asked) for sq in mr.sub_questions] == [("(1)", "formulation")]
+    # x は場面文の中で直接定義される＝ given.quantities は使わない
+    assert set(mr.given) == {"scenario"}
+    assert mr.visual_plan is None
+    # 答えは params に入っていない（checker が独立に再計算できるようにするため）
+    assert "answer" not in mr.params
+
+
+@pytest.mark.parametrize(("family", "level", "signature"), _RELATION_WP_CELLS)
+@pytest.mark.parametrize("seed", range(30))
+def test_word_problem_relation_double_solve_property(seed, family, level, signature):
+    """checker の独立再計算と一致し、params の全数値が given.scenario に現れる。"""
+    ctx = _make_ctx(family, level)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+
+    checker = REGISTRY.checker("math.word_problem_relation.double_solve")
+    solution = checker(mr)
+    assert solution.answer.srepr == mr.sub_questions[0].answer.srepr
+
+    # word_problem のセルの契約: params の全数値が given.scenario に文字列として現れる
+    numbers = {k: int(sympy.sympify(v)) for k, v in mr.params["numbers"].items()}
+    for value in numbers.values():
+        assert str(value) in mr.given["scenario"]
+
+    # 答え（関係式）は必ず x を自由変数として含む式（値ではない）
+    answer = sympy.sympify(mr.sub_questions[0].answer.srepr)
+    assert answer.free_symbols == {sympy.Symbol("x")}
+
+
+@pytest.mark.parametrize("seed", range(30))
+def test_word_problem_relation_non_degenerate(seed):
+    """非退化条件: 両辺に文字のセルは mult=1（「1倍して」は不自然）を除外。"""
+    for family, level in (
+        ("math.g1_l19.word_problem", 2),
+        ("math.g1_l20.word_problem", 2),
+    ):
+        ctx = _make_ctx(family, level)
+        rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+        numbers = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng).params["numbers"]
+        assert int(numbers["mult"]) != 1
+
+
+def test_word_problem_relation_inequality_both_sides_answer_is_tuple():
+    """Lv2 不等式は2条件を本文の記述順 Tuple(Gt, Lt) で機械表現する（And ではない）。"""
+    ctx = _make_ctx("math.g1_l20.word_problem", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    answer = sympy.sympify(mr.sub_questions[0].answer.srepr)
+    assert isinstance(answer, sympy.Tuple)
+    assert isinstance(answer[0], sympy.StrictGreaterThan)
+    assert isinstance(answer[1], sympy.StrictLessThan)

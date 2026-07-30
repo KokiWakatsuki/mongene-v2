@@ -39,5 +39,6 @@ from engine.packs.math.recipes import word_problem_system  # noqa: F401  (word_p
 from engine.packs.math.recipes import word_problem_proportion  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.recipes import word_problem_quadratic  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.recipes import word_problem_sampling  # noqa: F401  (登録の副作用のため import)
+from engine.packs.math.recipes import word_problem_relation  # noqa: F401,E402  (word_problem_linear の _draw_pair_token に依存＝後に import)
 
 __all__: list[str] = []

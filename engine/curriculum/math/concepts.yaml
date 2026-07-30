@@ -1078,3 +1078,16 @@ concepts:
   - id: arc_angle_proportion.rule_recall
     label: "弧の長さが円周角に比例することを想起する"
     unit: g3_l50
+  # --- C14 word_problem 横展開: 関係を表す（g1_l19 等式・g1_l20 不等式） ---
+  - id: equality.word_problem_equality_simple
+    label: "片辺が定数の数量関係を等式で表す（文章題）"
+    unit: g1_l19
+  - id: equality.word_problem_equality_both_sides
+    label: "両辺に文字を含む数量関係を等式で表す（文章題）"
+    unit: g1_l19
+  - id: inequality.word_problem_simple
+    label: "片辺が定数の数量関係を不等式で表す（文章題）"
+    unit: g1_l20
+  - id: inequality.word_problem_both_sides
+    label: "両辺に文字を含む数量関係を2つの不等式で表す（文章題）"
+    unit: g1_l20
