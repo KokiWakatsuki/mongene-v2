@@ -16,7 +16,9 @@ source_desc: |
   Lv2 は切片法（x軸/y軸との交点を求めて結ぶ）＋特殊直線 x=k / y=k を同じ平面にかく。
   Lv1（y= 変形して1本）と op 列（find_x_intercept→find_y_intercept→draw_line→
   draw_special_line）を変える＝level_sep。答えは GraphAnswer（2交点＋特殊直線の特徴集合）を
-  単一小問に集約（G-Q1 は sub_questions[0] のみ検査するため）。式は given（equation/equation2）
+  単一小問に集約（当時の G-Q1 が sub_questions[0] のみ検査したため。G-Q1 はその後
+  全小問 double-solve に拡張済み＝分割し直す余地はあるが、図1枚に対する答えなので現状維持）。
+  式は given（equation/equation2）
   で提示するので、交点の値は given 係数由来で whitelist される。
 concepts_default: [linear_function.draw_graph_from_equation]
 levels:

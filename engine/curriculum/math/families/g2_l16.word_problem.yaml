@@ -1,0 +1,47 @@
+family: math.g2_l16.word_problem
+form: word_problem
+source_desc: |
+  個数と代金の場面を連立方程式に立式して解く（誘導あり・2段小問）
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv2 desc: 誘導あり・2量2式を素直に立式して解く。
+       example: 1個90円のりんごと1個60円のみかんを合わせて10個買ったところ、代金の合計は
+                720円だった。(1) りんごの個数を x 個、みかんの個数を y 個として、個数と
+                代金の関係を表す2つの式をつくれ。(2) りんごとみかんをそれぞれ何個買ったか
+                求めよ。
+  【この family の位置づけ】form=word_problem の**初回縦串**。台帳は word_problem 100 セルを
+  「T3 翻訳基盤（I2）待ち」として凍結していたが、場面文は T1 テンプレートで決定論的に
+  書ける（既存 g3_l31.graph_table の given.condition が既に動点の場面文を出している）。
+  実際の障壁は「誘導つき多段小問を検証できない」ことだけで、G-Q1 を全小問 double-solve
+  に拡張して解消した。以後の word_problem セルは「場面文と小問文を書く」作業に落ちる。
+  【設計モデル】買った個数 (a,b) と単価 (pa,pb) を先に引き、総数 a+b・合計代金 pa·a+pb·b を
+  逆算する answer-first（端数の出ない綺麗な設定になる）。単価は相異に引く: pa=pb だと
+  代金の式が個数の式の定数倍になり解が定まらない（det = pb − pa = 0）。答え (a,b) は既存
+  solver math.intersection_of_two_lines で連立を解き直して一致を確認する＝新 solver ゼロ。
+  【小問と検証】(1) asked=formulation（個数の式と代金の式の組）・(2) asked=value（個数の組）。
+  checker は list[Solution] を返し、G-Q1 が両方を突き合わせる。params に置くのは係数の行
+  （line_count / line_cost = 場面文の数値そのもの）だけで答えは置かないため、
+  「場面文の数値 → 立式 → 解」の連鎖が recipe とは別経路で再現される。
+  【given】scenario（場面）と quantities（変数の設定＝誘導の第一段）に分ける。小問文は
+  テンプレ側が context_slots の品名から組む（core の prompts 自動生成は既存 golden に
+  影響するため変更しない）。
+concepts_default: [simultaneous_equations.word_problem_price_count]
+levels:
+  "2":
+    signature: word_problem_system_price_count
+    recipe: math.word_problem_price_count
+    params:
+      # 個数 a,b（答え）と単価 pa≠pb（10円刻み）。総数・合計代金は逆算する。
+      # 個数 8×8 × 単価の順序対 P(10,2)=90 × 品名の順序対 P(8,2)=56 で
+      # dup_rate 0.0（eval/100seed で実測）。
+      count_domain: {int_range: [2, 9]}
+      price_domain: {int_set: [50, 60, 70, 80, 90, 110, 120, 130, 140, 150], distinct: [value]}
+      item_candidates: [りんご, みかん, なし, もも, かき, ぶどう, レモン, オレンジ]
+    given: [scenario, quantities]
+    asked: [formulation, value]
+    visual: none
+    text: {tier: T1, template: wp_system_price_count_v1}
+    hints: [steps_prefix]
+    concept_tags: [simultaneous_equations.word_problem_price_count]
+    cause_tags: []
+remedial:
+  default_level: 2

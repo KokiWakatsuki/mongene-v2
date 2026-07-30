@@ -23,7 +23,7 @@ from engine.core.registry import REGISTRY, _Registry
 from engine.core.signature import fingerprint_hash
 
 if TYPE_CHECKING:  # pragma: no cover - 型のみ
-    from engine.core.contracts import MR, AnswerPayload, CellContext, Solution
+    from engine.core.contracts import MR, AnswerPayload, CellContext
     from engine.core.verify.gates import TextStageInput, VisualStageInput
 
 
@@ -161,10 +161,11 @@ def _gate_fp(obj: object, ctx: "CellContext") -> tuple[bool, str]:
 # ---------------------------------------------------------------------------
 # G-Q1（mr段）: double-solve。
 #
-# 対応規約: M0 の縦串は1小問構成が前提のため、`checker(mr)` が返す Solution.answer
-# を `mr.sub_questions[0].answer` と比較する（代表小問）。複数小問へ一般化する場合は
-# checker が sub_questions と同数の Solution 相当を返す形へ拡張し、対応する
-# sub_questions[i] と突き合わせる設計にできるが、M0 では [0] 固定でよい。
+# 対応規約: `checker(mr)` は **小問と同数の Solution** を返す。
+#   - 1小問セル: `Solution` 単体を返してよい（要素1の list と同義）。
+#   - 多段小問セル（誘導つき文章題など）: 小問と同じ順序の `list[Solution]`。
+# 数が合わない場合は不合格にする——「(1)だけ独立検証され (2)(3) は素通り」という
+# 無検証の小問を構造的に作れないようにするため（H5 の趣旨: 検証の穴を残さない）。
 # ---------------------------------------------------------------------------
 def _answers_match(a: "AnswerPayload", b: "AnswerPayload") -> tuple[bool, str]:
     from engine.core.contracts import ChoiceAnswer, GraphAnswer, SymbolicAnswer
@@ -195,6 +196,8 @@ def _make_gate_q1(registry: _Registry) -> Any:
     """checker 参照先レジストリを閉じ込めた G-Q1 を作る（隔離テスト用に registry を捕捉）。"""
 
     def gate(obj: object, ctx: "CellContext") -> tuple[bool, str]:
+        from engine.core.contracts import Solution
+
         mr: "MR" = obj  # type: ignore[assignment]
         checker_name = f"{mr.provenance.recipe}.double_solve"
         if not registry.has_checker(checker_name):
@@ -202,10 +205,26 @@ def _make_gate_q1(registry: _Registry) -> Any:
         if not mr.sub_questions:
             return False, "sub_questions が空"
         checker = registry.checker(checker_name)
-        solution: "Solution" = checker(mr)  # type: ignore[assignment]
-        ok, detail = _answers_match(solution.answer, mr.sub_questions[0].answer)
-        if not ok:
-            return False, f"double-solve 不一致: {detail}"
+        returned = checker(mr)
+        raw = returned if isinstance(returned, list) else [returned]
+        solutions: list[Solution] = []
+        for i, item in enumerate(raw):
+            if not isinstance(item, Solution):
+                return False, (
+                    f"double_solve checker の返り値[{i}] が Solution でない: "
+                    f"{type(item).__name__}"
+                )
+            solutions.append(item)
+        if len(solutions) != len(mr.sub_questions):
+            return False, (
+                f"double_solve が返した解 {len(solutions)} 個 ≠ 小問 {len(mr.sub_questions)} 個"
+                "（全小問を独立検証する規約: 1小問なら Solution 単体、"
+                "多段なら小問と同順の list[Solution] を返す）"
+            )
+        for sol, sq in zip(solutions, mr.sub_questions, strict=True):
+            ok, detail = _answers_match(sol.answer, sq.answer)
+            if not ok:
+                return False, f"double-solve 不一致 {sq.label}: {detail}"
         return True, ""
 
     return gate
@@ -338,6 +357,21 @@ def _strip_counter_expressions(text: str) -> str:
     return _COUNTER_EXPR_RE.sub(" ", text)
 
 
+def _strip_sub_question_labels(text: str, mr: "MR") -> str:
+    """小問番号（"(1)" "(2)" …）を除去する。
+
+    誘導つき文章題では小問文が problem_text に載るため、番号の数字が答えの値と
+    偶然一致して漏洩誤検出になる（例: 答えが (8, 2) の連立で "(2) …を求めよ" の
+    "2" が引っかかる）。番号は「問いを数える」構造語であって解答値ではない——
+    助数詞除外（`_COUNTER_EXPR_RE`）と同じ性質の除外規則。推測ではなく MR が
+    持つ `sub_questions[].label` の実値だけを消すので、真の漏洩は素通りしない。
+    """
+    for sq in mr.sub_questions:
+        if sq.label:
+            text = text.replace(sq.label, " ")
+    return text
+
+
 def _gate_q5t(obj: object, ctx: "CellContext") -> tuple[bool, str]:
     stage_input: "TextStageInput" = obj  # type: ignore[assignment]
     mr = stage_input.mr
@@ -350,8 +384,8 @@ def _gate_q5t(obj: object, ctx: "CellContext") -> tuple[bool, str]:
         check_texts.extend(hint_list)
     full_text = "\n".join(check_texts)
     norm_full = normalize_math_text(full_text)
-    # 数値レベル検査用のスキャンテキスト（助数詞表現を除去して偽陽性を防ぐ）
-    scan_text = _strip_counter_expressions(full_text)
+    # 数値レベル検査用のスキャンテキスト（助数詞表現・小問番号を除去して偽陽性を防ぐ）
+    scan_text = _strip_counter_expressions(_strip_sub_question_labels(full_text, mr))
 
     for sq in mr.sub_questions:
         ans = sq.answer

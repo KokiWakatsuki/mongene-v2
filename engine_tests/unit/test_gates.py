@@ -307,6 +307,92 @@ def test_g_q1_fail_when_checker_registered_but_mismatches():
     assert "不一致" in detail
 
 
+# --- 多段小問（誘導つき文章題）: 全小問が double-solve される ------------------
+def _multi_sub_questions(*values: int) -> list[SubQuestionMR]:
+    """(1)(2)(3)… の多段小問。answer は Integer(値)。"""
+    return [
+        SubQuestionMR(
+            label=f"({i})",
+            asked="expression",
+            answer=SymbolicAnswer(srepr=f"Integer({v})", display=str(v)),
+            steps=[],
+            concept_tags=["c1"],
+            cause_tags=[],
+        )
+        for i, v in enumerate(values, start=1)
+    ]
+
+
+def _reg_with_checker(*values: int) -> _Registry:
+    """小問と同順の list[Solution] を返す checker を持つ registry。"""
+    reg = _Registry()
+
+    @reg.register_checker("math.dummy_recipe.double_solve")
+    def _checker(mr: MR) -> list[Solution]:
+        return [
+            Solution(answer=SymbolicAnswer(srepr=f"Integer({v})", display=str(v)), steps=[])
+            for v in values
+        ]
+
+    install_quality_gates(reg)
+    return reg
+
+
+def test_g_q1_pass_when_all_sub_questions_match():
+    reg = _reg_with_checker(3, 7, 12)
+    gate = _gate(reg, "mr", "G-Q1")
+    mr = _mr(recipe="math.dummy_recipe", sub_questions=_multi_sub_questions(3, 7, 12))
+
+    ok, detail = gate(mr, _ctx())
+    assert ok is True, detail
+
+
+def test_g_q1_fail_when_a_later_sub_question_mismatches():
+    """(1) が合っていても (3) がズレたら不合格＝素通りする小問が無い。"""
+    reg = _reg_with_checker(3, 7, 999)
+    gate = _gate(reg, "mr", "G-Q1")
+    mr = _mr(recipe="math.dummy_recipe", sub_questions=_multi_sub_questions(3, 7, 12))
+
+    ok, detail = gate(mr, _ctx())
+    assert ok is False
+    assert "(3)" in detail  # どの小問で落ちたかが分かる
+
+
+def test_g_q1_fail_when_checker_returns_fewer_solutions_than_sub_questions():
+    """1小問ぶんしか返さない checker で多段小問を作れない（無検証の小問の禁止）。"""
+    reg = _Registry()
+
+    @reg.register_checker("math.dummy_recipe.double_solve")
+    def _checker(mr: MR) -> Solution:
+        return Solution(answer=SymbolicAnswer(srepr="Integer(3)", display="3"), steps=[])
+
+    install_quality_gates(reg)
+    gate = _gate(reg, "mr", "G-Q1")
+    mr = _mr(recipe="math.dummy_recipe", sub_questions=_multi_sub_questions(3, 7, 12))
+
+    ok, detail = gate(mr, _ctx())
+    assert ok is False
+    assert "1 個" in detail and "3 個" in detail
+
+
+def test_g_q1_single_sub_question_accepts_bare_solution():
+    """既存セル（1小問）は Solution 単体を返す従来の形のまま通る＝後方互換。"""
+    reg = _reg_with_checker(3)  # list[Solution] 形
+    gate_list = _gate(reg, "mr", "G-Q1")
+    ok_list, _ = gate_list(_mr(recipe="math.dummy_recipe"), _ctx())
+
+    reg_bare = _Registry()
+
+    @reg_bare.register_checker("math.dummy_recipe.double_solve")
+    def _checker(mr: MR) -> Solution:
+        return Solution(answer=SymbolicAnswer(srepr="Integer(3)", display="3"), steps=[])
+
+    install_quality_gates(reg_bare)
+    ok_bare, _ = _gate(reg_bare, "mr", "G-Q1")(_mr(recipe="math.dummy_recipe"), _ctx())
+
+    assert ok_list is True and ok_bare is True
+
+
 # ---------------------------------------------------------------------------
 # G-Q2（frame.check_mr）
 # ---------------------------------------------------------------------------
@@ -488,6 +574,48 @@ def test_g_q5t_fail_when_answer_value_leaks_into_hints():
     stage_input = TextStageInput(mr=mr, text=text)
 
     ok, detail = gate(stage_input, ctx)
+    assert ok is False
+    assert "漏洩" in detail
+
+
+def test_g_q5t_ignores_sub_question_label_numbers():
+    """小問番号 "(2)" の数字は解答値と一致しても漏洩ではない（構造語の除外）。
+
+    誘導つき文章題は小問文が problem_text に載るため、この除外が無いと
+    「答えが 2 を含む2段小問」が全滅する。
+    """
+    reg = _installed_registry()
+    gate = _gate(reg, "text", "G-Q5t")
+    sub_questions = _multi_sub_questions(8, 2)  # (2) の答えが 2
+    mr = _mr(given={"a": "1", "b": "10"}, sub_questions=sub_questions)
+    ctx = _ctx()
+    text = TextResult(
+        problem_text="合わせて10個買った。\n(1) 式をつくれ。\n(2) それぞれ何個か求めよ。",
+        prompts={"(1)": "expression を求めなさい。", "(2)": "expression を求めなさい。"},
+        explanations={},
+        hints={},
+        render_keys={},
+    )
+
+    ok, detail = gate(TextStageInput(mr=mr, text=text), ctx)
+    assert ok is True, detail
+
+
+def test_g_q5t_still_detects_leak_in_multi_sub_question_text():
+    """番号除外は「番号そのもの」だけ。本文に裸で出た解答値は依然として検出する。"""
+    reg = _installed_registry()
+    gate = _gate(reg, "text", "G-Q5t")
+    mr = _mr(given={"a": "1", "b": "10"}, sub_questions=_multi_sub_questions(8, 2))
+    ctx = _ctx()
+    text = TextResult(
+        problem_text="合わせて10個買った。\n(1) 式をつくれ。\n(2) 答えが 8 になることを確かめよ。",
+        prompts={"(1)": "expression を求めなさい。", "(2)": "expression を求めなさい。"},
+        explanations={},
+        hints={},
+        render_keys={},
+    )
+
+    ok, detail = gate(TextStageInput(mr=mr, text=text), ctx)
     assert ok is False
     assert "漏洩" in detail
 

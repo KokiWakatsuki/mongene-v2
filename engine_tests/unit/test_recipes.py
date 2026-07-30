@@ -6493,3 +6493,49 @@ def test_arc_proportional_angle_double_solve_property(seed):
     solver = REGISTRY.solver("math.arc_proportional_angle")
     sol = solver(mr.params["multiplier"], mr.params["known_angle"])
     assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
+
+
+# ---------------------------------------------------------------------------
+# g2_l16.word_problem Lv2（form=word_problem の初回縦串・誘導つき2段小問）
+# ---------------------------------------------------------------------------
+def test_word_problem_price_count_construct():
+    ctx = _make_ctx("math.g2_l16.word_problem", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "word_problem_system_price_count"
+    # 誘導の2段: (1) 立式 → (2) 値
+    assert [(sq.label, sq.asked) for sq in mr.sub_questions] == [
+        ("(1)", "formulation"),
+        ("(2)", "value"),
+    ]
+    # given は場面と変数の設定に分かれ、どちらも本文に出る値を持つ
+    assert set(mr.given) == {"scenario", "quantities"}
+    assert mr.visual_plan is None
+
+
+@pytest.mark.parametrize("seed", range(100))
+def test_word_problem_price_count_property(seed):
+    """全小問が独立に再計算で一致し、場面が退化しない（単価相異＝解が一意）。"""
+    ctx = _make_ctx("math.g2_l16.word_problem", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+
+    _, _, total = (int(c) for c in mr.params["line_count"])
+    price_a, price_b, cost = (int(c) for c in mr.params["line_cost"])
+    assert price_a != price_b, "単価が同じ＝代金の式が個数の式の定数倍で解が定まらない"
+    assert mr.params["item_a"] != mr.params["item_b"]
+
+    # checker（list[Solution]）が両小問に一致する＝G-Q1 が通る形
+    checker = REGISTRY.checker("math.word_problem_price_count.double_solve")
+    solutions = checker(mr)
+    assert len(solutions) == len(mr.sub_questions)
+    for sol, sq in zip(solutions, mr.sub_questions, strict=True):
+        assert sol.answer.srepr == sq.answer.srepr
+
+    # (2) の答え (a, b) は場面の数値を実際に満たす（総数と代金の両方）
+    count_a, count_b = sympy.sympify(mr.sub_questions[1].answer.srepr)
+    assert count_a + count_b == total
+    assert price_a * count_a + price_b * count_b == cost
+    # 場面文に総数と合計代金が現れる（誘導の材料が本文にある）
+    assert f"{total}個" in mr.given["scenario"]
+    assert f"{cost}円" in mr.given["scenario"]

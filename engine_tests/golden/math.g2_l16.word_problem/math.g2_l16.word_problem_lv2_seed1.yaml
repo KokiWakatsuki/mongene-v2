@@ -1,0 +1,93 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - simultaneous_equations.word_problem_price_count
+  provenance:
+    git_commit: ''
+    recipe: math.word_problem_price_count
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: wp_system_price_count_v1
+    tier: T1
+  requested:
+    form: word_problem
+    level: 2
+    subject: math
+    unit: g2_l16
+  resolved:
+    form: word_problem
+    level: 2
+    subject: math
+    unit: g2_l16
+  seed: 1
+  signature: word_problem_system_price_count
+problem_ref: dbc4f5531330036c
+problem_text: '1個140円のかきと1個90円のぶどうを合わせて12個買ったところ、代金の合計は1530円だった。かきの個数を x 個、ぶどうの個数を y 個とする。
+
+  (1) 個数と代金の関係を表す2つの式をつくれ。
+
+  (2) かきとぶどうをそれぞれ何個買ったか求めよ。'
+sub_questions:
+- answer:
+    display: x + y = 12、140x + 90y = 1530
+    kind: symbolic
+    srepr: Tuple(Equality(Add(Symbol('x'), Symbol('y')), Integer(12)), Equality(Add(Mul(Integer(140), Symbol('x')), Mul(Integer(90), Symbol('y'))), Integer(1530)))
+  cause_tags: []
+  concept_tags:
+  - simultaneous_equations.word_problem_price_count
+  explanation: まず、かきの個数を x、ぶどうの個数を y とおく。 x, y次に、個数の関係から、x と y の和が合わせて買った個数に等しいという式をつくる。 x + y = 12最後に、代金の関係から、それぞれの単価と個数の積の和が代金の合計に等しいという式をつくる。 140x + 90y = 1530
+  hints:
+  - かきの個数を x、ぶどうの個数を y とおく。
+  - 個数の関係から、x と y の和が合わせて買った個数に等しいという式をつくる。
+  label: (1)
+  prompt_text: formulation を求めなさい。
+  solution_steps:
+  - args:
+    - かき
+    - ぶどう
+    narration: かきの個数を x、ぶどうの個数を y とおく。
+    op: set_variables
+    result_display: x, y
+    result_srepr: Tuple(Symbol('x'), Symbol('y'))
+  - args: []
+    narration: 個数の関係から、x と y の和が合わせて買った個数に等しいという式をつくる。
+    op: formulate_count
+    result_display: x + y = 12
+    result_srepr: Equality(Add(Symbol('x'), Symbol('y')), Integer(12))
+  - args: []
+    narration: 代金の関係から、それぞれの単価と個数の積の和が代金の合計に等しいという式をつくる。
+    op: formulate_cost
+    result_display: 140x + 90y = 1530
+    result_srepr: Equality(Add(Mul(Integer(140), Symbol('x')), Mul(Integer(90), Symbol('y'))), Integer(1530))
+- answer:
+    display: (9, 3)
+    kind: symbolic
+    srepr: Tuple(Integer(9), Integer(3))
+  cause_tags: []
+  concept_tags:
+  - simultaneous_equations.word_problem_price_count
+  explanation: まず、個数の式の両辺を x の単価だけ倍して、x の係数を代金の式とそろえる。 140x + 140y = 1680次に、辺々を引いて x を消去し、残った y の値を求める。 y = 3最後に、求めた y を個数の式に代入して、x の値を求める。 x = 9
+  hints:
+  - 個数の式の両辺を x の単価だけ倍して、x の係数を代金の式とそろえる。
+  - 辺々を引いて x を消去し、残った y の値を求める。
+  label: (2)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 個数の式の両辺を x の単価だけ倍して、x の係数を代金の式とそろえる。
+    op: scale_count_equation
+    result_display: 140x + 140y = 1680
+    result_srepr: Equality(Add(Mul(Integer(140), Symbol('x')), Mul(Integer(140), Symbol('y'))), Integer(1680))
+  - args: []
+    narration: 辺々を引いて x を消去し、残った y の値を求める。
+    op: eliminate_and_solve
+    result_display: y = 3
+    result_srepr: Equality(Symbol('y'), Integer(3))
+  - args: []
+    narration: 求めた y を個数の式に代入して、x の値を求める。
+    op: back_substitute
+    result_display: x = 9
+    result_srepr: Equality(Symbol('x'), Integer(9))
+visual_svg: null
