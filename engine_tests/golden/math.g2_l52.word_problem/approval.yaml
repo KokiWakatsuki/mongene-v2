@@ -1,0 +1,8 @@
+approved_at: '2026-07-30T21:50:34.012514'
+approver: koki
+content_sha256: f8f641d80f8e6aab0d8e1069bc0e353fa4d364006d100311de0c25bee30d41f1
+family: math.g2_l52.word_problem
+files:
+- engine_tests/golden/math.g2_l52.word_problem/math.g2_l52.word_problem_lv3_seed1.yaml
+- engine_tests/golden/math.g2_l52.word_problem/math.g2_l52.word_problem_lv3_seed2.yaml
+- engine_tests/golden/math.g2_l52.word_problem/math.g2_l52.word_problem_lv3_seed3.yaml

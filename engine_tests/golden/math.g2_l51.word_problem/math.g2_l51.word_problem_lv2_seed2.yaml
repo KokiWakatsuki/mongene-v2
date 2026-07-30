@@ -1,0 +1,84 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - probability.word_problem_bag_one_draw
+  provenance:
+    git_commit: ''
+    recipe: math.word_problem_probability
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: wp_probability_guided_v1
+    tier: T1
+  requested:
+    form: word_problem
+    level: 2
+    subject: math
+    unit: g2_l51
+  resolved:
+    form: word_problem
+    level: 2
+    subject: math
+    unit: g2_l51
+  seed: 2
+  signature: word_problem_bag_one_draw_guided
+problem_ref: b7df121f0b164178
+problem_text: '袋の中に黄玉が7個、青玉が3個入っている。この袋から玉を1個取り出すとき、玉の取り出し方は同様に確からしいものとする。
+
+  (1) 玉の取り出し方は全部で何通りあるか答えよ。
+
+  (2) 取り出した玉が青玉である確率を求めよ。'
+sub_questions:
+- answer:
+    display: 10通り
+    kind: symbolic
+    srepr: Integer(10)
+  cause_tags: []
+  concept_tags:
+  - probability.word_problem_bag_one_draw
+  explanation: まず、袋の中にある玉の個数をすべて数えて、起こりうる場合の数を求める。（10通り）
+  hints:
+  - 問題文の与えられた値をもう一度確認しよう。
+  label: (1)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 袋の中にある玉の個数をすべて数えて、起こりうる場合の数を求める。
+    op: count_all_outcomes
+    result_display: 10通り
+    result_srepr: Integer(10)
+- answer:
+    display: 3/10
+    kind: symbolic
+    srepr: Rational(3, 10)
+  cause_tags: []
+  concept_tags:
+  - probability.word_problem_bag_one_draw
+  explanation: 'まず、玉を区別して、取り出し方をすべて数え上げる。（すべての取り出し方を数え上げる）
+
+    次に、そのうち、求める条件にあてはまる取り出し方の数を数える。（条件にあてはまる取り出し方を数える）
+
+    最後に、条件にあてはまる取り出し方の数を、すべての取り出し方の数でわる。（3/10）'
+  hints:
+  - 玉を区別して、取り出し方をすべて数え上げる。
+  - そのうち、求める条件にあてはまる取り出し方の数を数える。
+  label: (2)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 玉を区別して、取り出し方をすべて数え上げる。
+    op: enumerate_all_combinations
+    result_display: すべての取り出し方を数え上げる
+    result_srepr: ''
+  - args: []
+    narration: そのうち、求める条件にあてはまる取り出し方の数を数える。
+    op: count_favorable_combinations
+    result_display: 条件にあてはまる取り出し方を数える
+    result_srepr: ''
+  - args: []
+    narration: 条件にあてはまる取り出し方の数を、すべての取り出し方の数でわる。
+    op: compute_probability
+    result_display: 3/10
+    result_srepr: Rational(3, 10)
+visual_svg: null

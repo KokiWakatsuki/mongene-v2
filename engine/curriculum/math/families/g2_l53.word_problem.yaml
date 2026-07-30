@@ -1,0 +1,40 @@
+family: math.g2_l53.word_problem
+form: word_problem
+source_desc: |
+  確率の文章題（units.generated.yaml の desc/example を正として転記）。
+  Lv3 desc: 誘導なし・順序/同時の条件を自分で判断し確率を構成する。
+       example: 当たりくじ2本を含む5本のくじから、AさんとBさんがこの順に1本ずつ引く。
+                引いたくじはもとにもどさないとき、少なくとも一方が当たる確率を求めよ。
+  ---
+  Lv2（誘導あり・「できる整数を樹形図ですべて書き出せ」を含む）は樹形図をかく
+  capability が要るため対象外（別セッションで扱う・このファイルは Lv3 のみを持つ）。
+  recipe は math.word_problem_probability（g2_l51/l52/l53/l54 で共有）。
+  「戻さずに2本引いて少なくとも一方が当たる」は「2本ともはずれる」の余事象＝
+  既存 solver math.probability_combination_selection（r=2・target=はずれ）で
+  「両方はずれ」の確率を求め、math.probability_complement で 1-p をとる
+  （新 solver ゼロ・g2_l54.find_value の math.probability_complement をそのまま流用）。
+  【検証】G-Q1 が全小問 double-solve。checker は params の「場面文に出ている数値」だけ
+  から solver を呼び直し、答え（確率）を独立に再計算する（答えは params に入れない）。
+concepts_default: [probability.word_problem_lottery_at_least_one]
+levels:
+  "3":
+    signature: word_problem_lottery_at_least_one
+    recipe: math.word_problem_probability
+    params:
+      scenario_kind: lottery_at_least_one
+      # n(本数)。k(当たり本数)は recipe が [1, n-2] から引く
+      # （はずれ(n-k)>=2 でないと「2本ともはずれる」が起こりえない）。
+      # dup_rate に余裕を持たせるため範囲を広めに取る（鉄則②）。
+      n_domain: {int_range: [4, 14]}
+      person_pair_candidates: [Aさん|Bさん, 太郎さん|花子さん, ゆうとさん|あおいさん,
+                               りくさん|ひなさん, そうたさん|めいさん, はるとさん|ゆいさん,
+                               兄|弟, 姉|妹]
+    given: [scenario]
+    asked: [value]
+    visual: none
+    text: {tier: T1, template: wp_linear_solo_v1}
+    hints: [steps_prefix]
+    concept_tags: [probability.word_problem_lottery_at_least_one]
+    cause_tags: []
+remedial:
+  default_level: 3

@@ -1,0 +1,37 @@
+family: math.g2_l52.word_problem
+form: word_problem
+source_desc: |
+  確率の文章題（units.generated.yaml の desc/example を正として転記）。
+  Lv3 desc: 誘導なし・条件を自分で場合に翻訳し確率を構成する。
+       example: 大小2個のさいころを同時に投げる。出た目の積が12以上になる確率を求めよ。
+  ---
+  Lv2（誘導あり・「表と裏の出方をすべて樹形図に表せ」を含む）は樹形図をかく capability
+  が要るため対象外（別セッションで扱う・このファイルは Lv3 のみを持つ）。
+  recipe は math.word_problem_probability（g2_l51/l52/l53/l54 で共有）。数学は既存
+  solver math.probability_two_dice（condition="product_at_least"）に委ねる＝新 solver
+  ゼロ（`math.probability_two_dice` は g2_l52.find_value Lv3 と全く同じ solver）。
+  面数を6固定にせず広く取る（大小2個のさいころ「等」。6面だけでは積の目標値の組合せが
+  少なすぎ dup_rate が構造的に閾値を超えるため鉄則②で一般化。faces!=6 のときだけ
+  「1からNまでの目が出る」を場面文に足す）。
+  【検証】G-Q1 が全小問 double-solve。checker は params の「場面文に出ている数値」だけ
+  から solver を呼び直し、答え（確率）を独立に再計算する（答えは params に入れない）。
+concepts_default: [probability.word_problem_two_dice_product]
+levels:
+  "3":
+    signature: word_problem_two_dice_product_at_least
+    recipe: math.word_problem_probability
+    params:
+      scenario_kind: two_dice_product_at_least
+      # 面数の候補プールを広く取る（6面だけだと積の目標値が17通りしかなく
+      # dup_rate が構造的に閾値を超えるため鉄則②で一般化。6も含みつつ均等に
+      # 7〜14面も選べるようにする＝(faces,target)の相異な組が400以上）。
+      faces_domain: [6, 7, 8, 9, 10, 11, 12, 13, 14]
+    given: [scenario]
+    asked: [value]
+    visual: none
+    text: {tier: T1, template: wp_linear_solo_v1}
+    hints: [steps_prefix]
+    concept_tags: [probability.word_problem_two_dice_product]
+    cause_tags: []
+remedial:
+  default_level: 3

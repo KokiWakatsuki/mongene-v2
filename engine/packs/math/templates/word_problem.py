@@ -43,12 +43,28 @@ WP_LINEAR_GUIDED_V1 = (
 WP_LINEAR_SOLO_V1 = "{{ given.scenario }}\n{{ context_slots.ask_value }}"
 
 
+# ---------------------------------------------------------------------------
+# 確率の利用（g2_l51/l54 の誘導あり）: 変数の設定（quantities）を使わない場面
+# （文字 x, y を置かない＝数え上げ／確率の小問が2つ並ぶだけ）なので、
+# WP_LINEAR_GUIDED_V1 とは別に「scenario + (1)(2) だけ」の専用テンプレを足す。
+# ---------------------------------------------------------------------------
+WP_PROBABILITY_GUIDED_V1 = (
+    "{{ given.scenario }}\n(1) {{ context_slots.ask_1 }}\n(2) {{ context_slots.ask_2 }}"
+)
+
+
 def _register_all() -> None:
     REGISTRY.register_template("wp_system_price_count_v1", WP_SYSTEM_PRICE_COUNT_V1)
     REGISTRY.register_template("wp_linear_guided_v1", WP_LINEAR_GUIDED_V1)
     REGISTRY.register_template("wp_linear_solo_v1", WP_LINEAR_SOLO_V1)
+    REGISTRY.register_template("wp_probability_guided_v1", WP_PROBABILITY_GUIDED_V1)
 
 
 _register_all()
 
-__all__ = ["WP_LINEAR_GUIDED_V1", "WP_LINEAR_SOLO_V1", "WP_SYSTEM_PRICE_COUNT_V1"]
+__all__ = [
+    "WP_LINEAR_GUIDED_V1",
+    "WP_LINEAR_SOLO_V1",
+    "WP_SYSTEM_PRICE_COUNT_V1",
+    "WP_PROBABILITY_GUIDED_V1",
+]

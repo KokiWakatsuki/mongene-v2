@@ -1,0 +1,59 @@
+family: math.g2_l51.word_problem
+form: word_problem
+source_desc: |
+  確率の文章題（units.generated.yaml の desc/example を正として転記）。
+  Lv2 desc: 誘導あり・場面設定を読み該当確率を求める。
+       example: 袋の中に赤玉が3個、白玉が2個入っている。この袋から玉を1個取り出すとき、
+                玉の取り出し方は同様に確からしいものとする。(1)玉の取り出し方は全部で
+                何通りあるか答えよ。(2)取り出した玉が赤玉である確率を求めよ。
+  Lv3 desc: 誘導なし・条件を読み取り求める確率を自分で構成する。
+       example: 1から30までの番号が1つずつ書かれた30枚のカードから1枚を引く。
+                引いたカードの番号が3の倍数、または5の倍数である確率を求めよ。
+  ---
+  【この form の型】g1_l25-l27 / g2_l16-l18 で通した骨格（given.scenario＝場面）を
+  そのまま使う。誘導ありは (1)(2) とも asked=value（立式を問わない＝連立/1次方程式の
+  word_problem とは違い、変数の設定 given.quantities を持たない）。
+  recipe は math.word_problem_probability 1つで g2_l51/l52/l53/l54 の6セルを賄う
+  （C14 の word_problem 横展開）。数学は既存 solver
+  （math.probability_combination_selection・math.probability_single_die）に委ねる
+  ＝新 solver ゼロ。
+  【level_sep】
+   Lv2: 単一試行（玉を1個取り出す）・場合の数→確率の2小問（誘導あり）。
+   Lv3: 倍数の和事象（P(A)+P(B)-P(A∩B)＝重複を引く包除）で1小問（誘導なし）。
+  手数（1手 vs 包除4手）と概念（数え上げ→包除原理）がどちらも変わる。
+  【検証】G-Q1 が全小問 double-solve。checker は params の「場面文に出ている数値」だけ
+  から solver を呼び直し、答え（確率）を独立に再計算する（答えは params に入れない）。
+concepts_default: [probability.word_problem_bag_one_draw]
+levels:
+  "2":
+    signature: word_problem_bag_one_draw_guided
+    recipe: math.word_problem_probability
+    params:
+      scenario_kind: bag_one_draw
+      color_candidates: [赤, 白, 青, 黄, 黒, 緑, 紫, 橙]
+      count_domain: {int_range: [1, 8]}
+    given: [scenario]
+    asked: [value, value]
+    visual: none
+    text: {tier: T1, template: wp_probability_guided_v1}
+    hints: [steps_prefix]
+    concept_tags: [probability.word_problem_bag_one_draw]
+    cause_tags: []
+  "3":
+    signature: word_problem_multiple_union
+    recipe: math.word_problem_probability
+    params:
+      scenario_kind: multiple_union
+      # a<b・どちらも他方を割り切らない・lcm(a,b)<=N の組だけを recipe が列挙する
+      # （包除の引き算が空振りしない＝重なりが実在する組だけを残す）。
+      divisor_candidates: [2, 3, 4, 5, 6, 7, 8, 9]
+      n_range: [20, 60]
+    given: [scenario]
+    asked: [value]
+    visual: none
+    text: {tier: T1, template: wp_linear_solo_v1}
+    hints: [steps_prefix]
+    concept_tags: [probability.word_problem_multiple_union]
+    cause_tags: []
+remedial:
+  default_level: 2

@@ -1,0 +1,72 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - probability.word_problem_multiple_union
+  provenance:
+    git_commit: ''
+    recipe: math.word_problem_probability
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: wp_linear_solo_v1
+    tier: T1
+  requested:
+    form: word_problem
+    level: 3
+    subject: math
+    unit: g2_l51
+  resolved:
+    form: word_problem
+    level: 3
+    subject: math
+    unit: g2_l51
+  seed: 2
+  signature: word_problem_multiple_union
+problem_ref: 81e52a8cc279b819
+problem_text: '1から41までの番号が1つずつ書かれた41枚のカードから1枚を引く。引いたカードの番号が3の倍数であるか、8の倍数であるかを考える。
+
+  そのどちらかの倍数である確率を求めよ。'
+sub_questions:
+- answer:
+    display: 17/41
+    kind: symbolic
+    srepr: Rational(17, 41)
+  cause_tags: []
+  concept_tags:
+  - probability.word_problem_multiple_union
+  explanation: 'まず、一方の倍数の条件にあてはまる場合の数を数え、その確率を求める。（一方の倍数の場合の数を数える）
+
+    次に、もう一方の倍数の条件にあてはまる場合の数を数え、その確率を求める。（もう一方の倍数の場合の数を数える）
+
+    次に、両方の倍数に共通してあてはまる場合の数を数え、その確率を求める。（両方の倍数に共通する場合の数を数える）
+
+    最後に、重なっている分を引いて、どちらかの倍数である確率を求める。（17/41）'
+  hints:
+  - 一方の倍数の条件にあてはまる場合の数を数え、その確率を求める。
+  - もう一方の倍数の条件にあてはまる場合の数を数え、その確率を求める。
+  - 両方の倍数に共通してあてはまる場合の数を数え、その確率を求める。
+  label: (1)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 一方の倍数の条件にあてはまる場合の数を数え、その確率を求める。
+    op: count_condition_a
+    result_display: 一方の倍数の場合の数を数える
+    result_srepr: ''
+  - args: []
+    narration: もう一方の倍数の条件にあてはまる場合の数を数え、その確率を求める。
+    op: count_condition_b
+    result_display: もう一方の倍数の場合の数を数える
+    result_srepr: ''
+  - args: []
+    narration: 両方の倍数に共通してあてはまる場合の数を数え、その確率を求める。
+    op: count_overlap
+    result_display: 両方の倍数に共通する場合の数を数える
+    result_srepr: ''
+  - args: []
+    narration: 重なっている分を引いて、どちらかの倍数である確率を求める。
+    op: apply_inclusion_exclusion
+    result_display: 17/41
+    result_srepr: Rational(17, 41)
+visual_svg: null

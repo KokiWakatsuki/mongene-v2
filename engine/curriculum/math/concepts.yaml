@@ -1116,3 +1116,22 @@ concepts:
   - id: linear_function.word_problem_meeting_intersection
     label: "1次関数の利用: 2人の進むようすを式に表し交点(出会い)の時刻を求める"
     unit: g2_l30
+  # --- C14 word_problem 横展開: 確率（g2_l51〜l54） ---
+  - id: probability.word_problem_bag_one_draw
+    label: "袋から玉を1個取り出す場面を読み、場合の数と該当色の確率を求める"
+    unit: g2_l51
+  - id: probability.word_problem_multiple_union
+    label: "aの倍数またはbの倍数である確率を、重なりを引く包除で求める"
+    unit: g2_l51
+  - id: probability.word_problem_two_dice_product
+    label: "大小2個のさいころの目の積が条件を満たす確率を場面から構成して求める"
+    unit: g2_l52
+  - id: probability.word_problem_lottery_at_least_one
+    label: "戻さずに引くくじで少なくとも一方が当たる確率を余事象で求める"
+    unit: g2_l53
+  - id: probability.word_problem_two_balls_complement
+    label: "2個とも同色である確率を求め、それを利用して少なくとも1個が他色である確率を余事象で求める"
+    unit: g2_l54
+  - id: probability.word_problem_dice_repeat_at_least_one
+    label: "さいころを繰り返し投げて少なくとも1回特定の目が出る確率を余事象で求める"
+    unit: g2_l54

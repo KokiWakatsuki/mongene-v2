@@ -7517,3 +7517,108 @@ def test_word_problem_linear_function_non_degenerate(seed):
     rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
     numbers = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng).params["numbers"]
     assert int(numbers["va"]) != int(numbers["vb"])
+
+
+# ---------------------------------------------------------------------------
+# 確率の利用（g2_l51/l52/l53/l54 の word_problem）＝1 recipe で6セル
+# ---------------------------------------------------------------------------
+_PROBABILITY_WP_CELLS = [
+    ("math.g2_l51.word_problem", 2, "word_problem_bag_one_draw_guided", True),
+    ("math.g2_l51.word_problem", 3, "word_problem_multiple_union", False),
+    ("math.g2_l52.word_problem", 3, "word_problem_two_dice_product_at_least", False),
+    ("math.g2_l53.word_problem", 3, "word_problem_lottery_at_least_one", False),
+    ("math.g2_l54.word_problem", 2, "word_problem_two_balls_complement_guided", True),
+    ("math.g2_l54.word_problem", 3, "word_problem_dice_repeat_at_least_one", False),
+]
+
+
+@pytest.mark.parametrize(("family", "level", "signature", "guided"), _PROBABILITY_WP_CELLS)
+def test_word_problem_probability_construct(family, level, signature, guided):
+    """誘導ありは value×2小問、誘導なしは value の1小問（＝level_sep の骨）。"""
+    ctx = _make_ctx(family, level)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == signature
+    if guided:
+        assert [(sq.label, sq.asked) for sq in mr.sub_questions] == [
+            ("(1)", "value"),
+            ("(2)", "value"),
+        ]
+    else:
+        assert [(sq.label, sq.asked) for sq in mr.sub_questions] == [("(1)", "value")]
+    # 確率の文章題は変数の設定（quantities）を持たない＝given は scenario のみ。
+    assert set(mr.given) == {"scenario"}
+    assert mr.visual_plan is None
+    # 答え（確率）は params に入っていない（checker が独立に再計算できるようにするため）
+    assert "answer" not in mr.params
+
+
+@pytest.mark.parametrize(("family", "level", "signature", "guided"), _PROBABILITY_WP_CELLS)
+@pytest.mark.parametrize("seed", range(30))
+def test_word_problem_probability_double_solve_property(seed, family, level, signature, guided):
+    """全小問が checker の独立再計算と一致し、params の全数値が given.scenario に現れる。"""
+    ctx = _make_ctx(family, level)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+
+    checker = REGISTRY.checker("math.word_problem_probability.double_solve")
+    solutions = checker(mr)
+    assert len(solutions) == len(mr.sub_questions)
+    for sol, sq in zip(solutions, mr.sub_questions, strict=True):
+        assert sol.answer.srepr == sq.answer.srepr
+
+    # word_problem 共通の property: params の全数値が given.scenario に文字列として
+    # 現れる（本文の数値を読み違えても checker が気づかない、という穴を作らないため）。
+    # ただし faces=6（標準のさいころ）は既存 find_value 側と同じ規約で
+    # 「1からNまでの目が出る」という前置きを省く（＝6という数値そのものは本文に
+    # 出ない）。これは probability.py の probability_two_dice_recipe 等と同じ既存の
+    # 慣習であり、この鍵だけ対象外にする。
+    given_text = "".join(mr.given.values())
+    for key, value in mr.params["numbers"].items():
+        if key == "faces" and int(sympy.sympify(value)) == 6:
+            continue
+        assert str(value) in given_text
+    for value in mr.params["slots"].values():
+        assert str(value) in given_text
+
+    # 答えは確率（0以上1以下の有理数）。ただし bag_one_draw の (1) は「何通りか」
+    # という場合の数であって確率ではないので、その小問だけは対象外にする。
+    for i, sol in enumerate(solutions):
+        if signature == "word_problem_bag_one_draw_guided" and i == 0:
+            continue
+        p = sympy.sympify(sol.answer.srepr)
+        assert p.is_Rational
+        assert 0 <= p <= 1
+
+
+def test_word_problem_probability_non_degenerate(seed=1):
+    """非退化条件: 包除は重なりが実在・くじは「両方はずれ」が起こりうる・積条件は退化しない。"""
+    for level in (2, 3):
+        ctx = _make_ctx("math.g2_l51.word_problem", level)
+        for seed_i in range(10):
+            rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed_i)
+            mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+            if level == 3:
+                numbers = {k: int(sympy.sympify(v)) for k, v in mr.params["numbers"].items()}
+                lcm_ab = numbers["div_a"] * numbers["div_b"] // math.gcd(numbers["div_a"], numbers["div_b"])
+                assert lcm_ab <= numbers["n"], "重なりが実在しないと包除の引き算が空振りする"
+                assert numbers["div_a"] % numbers["div_b"] != 0
+                assert numbers["div_b"] % numbers["div_a"] != 0
+
+    ctx = _make_ctx("math.g2_l53.word_problem", 3)
+    for seed_i in range(10):
+        rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed_i)
+        mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+        numbers = {k: int(sympy.sympify(v)) for k, v in mr.params["numbers"].items()}
+        assert numbers["n"] - numbers["k"] >= 2, "戻さず2本引いて両方はずれる余地が要る"
+        assert numbers["k"] >= 1
+
+
+def test_word_problem_probability_guided_uses_complement_of_first():
+    """g2_l54 Lv2: (2)は(1)の余事象（2色しかないので「白が0個」＝「2個とも赤」）。"""
+    ctx = _make_ctx("math.g2_l54.word_problem", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    p1 = sympy.sympify(mr.sub_questions[0].answer.srepr)
+    p2 = sympy.sympify(mr.sub_questions[1].answer.srepr)
+    assert (p1 + p2).equals(1)
