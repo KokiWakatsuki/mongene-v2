@@ -1,0 +1,64 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - letter_expr.word_problem_discount
+  provenance:
+    git_commit: ''
+    recipe: math.word_problem_expression
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: wp_linear_solo_v1
+    tier: T1
+  requested:
+    form: word_problem
+    level: 2
+    subject: math
+    unit: g1_l12
+  resolved:
+    form: word_problem
+    level: 2
+    subject: math
+    unit: g1_l12
+  seed: 2
+  signature: word_problem_expression_discount
+problem_ref: e058dfe97734835b
+problem_text: '定価a円のスカートを、定価の5割引きで買う。
+
+  代金を、aを使った式で表せ。'
+sub_questions:
+- answer:
+    display: a/2
+    kind: symbolic
+    srepr: Mul(Rational(1, 2), Symbol('a'))
+  cause_tags: []
+  concept_tags:
+  - letter_expr.word_problem_discount
+  explanation: 'まず、定価から、割引きの割合の分だけ差し引いた代金を考える。（定価 − 割引き額 = 代金）
+
+    次に、文字の部分が同じ項（同類項）どうしをまとめる。（同類項どうしをまとめる）
+
+    最後に、まとめた同類項の係数を計算して、式を簡単にする。（a/2）'
+  hints:
+  - 定価から、割引きの割合の分だけ差し引いた代金を考える。
+  - 文字の部分が同じ項（同類項）どうしをまとめる。
+  label: (1)
+  prompt_text: formulation を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 定価から、割引きの割合の分だけ差し引いた代金を考える。
+    op: identify_relation
+    result_display: 定価 − 割引き額 = 代金
+    result_srepr: 定価 − 割引き額 = 代金
+  - args: []
+    narration: 文字の部分が同じ項（同類項）どうしをまとめる。
+    op: group_like_terms
+    result_display: 同類項どうしをまとめる
+    result_srepr: Mul(Rational(1, 2), Symbol('a'))
+  - args: []
+    narration: まとめた同類項の係数を計算して、式を簡単にする。
+    op: add_coefficients
+    result_display: a/2
+    result_srepr: Mul(Rational(1, 2), Symbol('a'))
+visual_svg: null

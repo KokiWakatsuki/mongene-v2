@@ -7345,3 +7345,175 @@ def test_word_problem_relation_inequality_both_sides_answer_is_tuple():
     assert isinstance(answer, sympy.Tuple)
     assert isinstance(answer[0], sympy.StrictGreaterThan)
     assert isinstance(answer[1], sympy.StrictLessThan)
+
+
+# ---------------------------------------------------------------------------
+# 数量を文字式で表す文章題（g1_l12 Lv1/Lv2・g1_l15 Lv1/Lv2/Lv3）＝1 recipe で5セル
+# ---------------------------------------------------------------------------
+_EXPR_WP_CELLS = [
+    ("math.g1_l12.word_problem", 1, "word_problem_expression_price_count"),
+    ("math.g1_l12.word_problem", 2, "word_problem_expression_discount"),
+    ("math.g1_l15.word_problem", 1, "word_problem_expression_distance"),
+    ("math.g1_l15.word_problem", 2, "word_problem_expression_unit_convert"),
+    ("math.g1_l15.word_problem", 3, "word_problem_expression_profit_multi_letter"),
+]
+
+
+@pytest.mark.parametrize(("family", "level", "signature"), _EXPR_WP_CELLS)
+def test_word_problem_expression_construct(family, level, signature):
+    """1小問・誘導なし（asked=formulation・答えは式）＝frame の asked_vocab の骨。"""
+    ctx = _make_ctx(family, level)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == signature
+    assert [(sq.label, sq.asked) for sq in mr.sub_questions] == [("(1)", "formulation")]
+    # 変数の設定は場面文自身が担う（"x本"のように）ので given.quantities は使わない。
+    assert set(mr.given) == {"scenario"}
+    assert mr.visual_plan is None
+    # 答えは params に入っていない（checker が独立に再計算できるようにするため）。
+    assert "answer" not in mr.params
+    # 答えは自由変数を含む式（定数に退化していない）。
+    answer_expr = sympy.sympify(mr.sub_questions[0].answer.srepr)
+    assert answer_expr.free_symbols
+
+
+@pytest.mark.parametrize(("family", "level", "signature"), _EXPR_WP_CELLS)
+@pytest.mark.parametrize("seed", range(30))
+def test_word_problem_expression_double_solve_property(seed, family, level, signature):
+    """checker（Solution単体）が MR の答えと一致し、答え表示が場面文に漏洩しない。"""
+    ctx = _make_ctx(family, level)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+
+    checker = REGISTRY.checker("math.word_problem_expression.double_solve")
+    solution = checker(mr)
+    assert solution.answer.srepr == mr.sub_questions[0].answer.srepr
+
+    # params の全数値/文字は given.scenario に文字列として現れる（誘導の材料が本文にある）。
+    scenario = mr.given["scenario"]
+    for value in mr.params["numbers"].values():
+        assert value in scenario
+
+    # G-Q5t 自衛: 答え表示（空白除去）が場面文+小問文（空白除去）に部分文字列で現れない。
+    from engine.packs.math.recipes.letter_expr import _leaks
+
+    given_full = scenario + mr.context_slots["ask_value"]
+    answer_display = mr.sub_questions[0].answer.display
+    assert not _leaks(answer_display, given_full), (
+        f"答え表示 {answer_display!r} が場面文に部分文字列で現れている: {given_full!r}"
+    )
+
+
+def test_word_problem_expression_level_sep_is_structural():
+    """G6 の骨: level_sep は「式の構造」で作る（単項式→分数係数→多文字の差）。"""
+    from engine.packs.math.recipes.word_problem_expression import FORMULATION_BUILDERS
+
+    # g1_l12 Lv1: 単項式（x 係数が整数）
+    lv1 = _make_ctx("math.g1_l12.word_problem", 1)
+    mr1 = REGISTRY.recipe(lv1.spec_level.recipe)(lv1, derive_rng(lv1.family, lv1.level, lv1.purpose, 1))
+    numbers1 = mr1.params["numbers"]
+    formulation1 = FORMULATION_BUILDERS[mr1.params["scenario_kind"]](**numbers1)
+    poly1 = sympy.Poly(sympy.sympify(formulation1.expr_str), sympy.Symbol("x"))
+    assert poly1.LC().is_Integer
+
+    # g1_l12 Lv2: 割合が係数に入る（分数係数の1項＝同類項を実際にまとめている）
+    lv2 = _make_ctx("math.g1_l12.word_problem", 2)
+    mr2 = REGISTRY.recipe(lv2.spec_level.recipe)(lv2, derive_rng(lv2.family, lv2.level, lv2.purpose, 1))
+    answer2 = sympy.sympify(mr2.sub_questions[0].answer.srepr)
+    coeff2 = answer2.as_coefficients_dict()[sympy.Symbol("a")]
+    assert coeff2.q > 1, "割引き後の係数は分数（同類項をまとめて1項に整理している）"
+
+    # g1_l15 Lv3: 多文字の差（同類項でない2項＝ x*y - z の形が保たれる）
+    lv3 = _make_ctx("math.g1_l15.word_problem", 3)
+    mr3 = REGISTRY.recipe(lv3.spec_level.recipe)(lv3, derive_rng(lv3.family, lv3.level, lv3.purpose, 1))
+    answer3 = sympy.sympify(mr3.sub_questions[0].answer.srepr)
+    assert len(answer3.free_symbols) == 3
+    assert isinstance(answer3, sympy.Add) and len(answer3.args) == 2
+
+
+def test_word_problem_expression_profit_uses_distinct_letters():
+    """g1_l15 Lv3: 3文字は毎回相異なる（重なると式の意味が壊れる）。letter_expr.py の
+    `_NOTATION_LETTERS` プールから引く＝新しい抽選ヘルパを作らない。
+    """
+    ctx = _make_ctx("math.g1_l15.word_problem", 3)
+    for seed in range(20):
+        rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+        mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+        letters = set(mr.params["numbers"].values())
+        assert len(letters) == 3, "count_letter/price_letter/cost_letter は相異なる"
+
+
+# ---------------------------------------------------------------------------
+# 1次関数の利用（g2_l28 Lv2/Lv3・g2_l30 Lv3）＝1 recipe で3セル
+# ---------------------------------------------------------------------------
+_LINEAR_FUNCTION_WP_CELLS = [
+    ("math.g2_l28.word_problem", 2, "word_problem_linear_two_point_eval", "spring_two_point", 2),
+    ("math.g2_l28.word_problem", 3, "word_problem_linear_piecewise_tank", "tank_piecewise", 3),
+    ("math.g2_l30.word_problem", 3, "word_problem_linear_meeting_intersection", "meeting_intersection", 2),
+]
+
+
+@pytest.mark.parametrize(("family", "level", "signature", "kind", "n_sub"), _LINEAR_FUNCTION_WP_CELLS)
+def test_word_problem_linear_function_construct(family, level, signature, kind, n_sub):
+    """scenario_kind ごとに小問数が違う（level_sep の骨: 1直線=2小問／折れ線=3小問）。"""
+    ctx = _make_ctx(family, level)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == signature
+    assert mr.params["scenario_kind"] == kind
+    assert len(mr.sub_questions) == n_sub
+    assert mr.sub_questions[-1].asked == "value"
+    assert all(sq.asked == "formulation" for sq in mr.sub_questions[:-1])
+    assert set(mr.given) == {"scenario", "quantities"}
+    assert mr.visual_plan is None
+    # 答えは params に入っていない（checker が独立に再計算できるようにするため）
+    assert "answer" not in mr.params
+
+
+@pytest.mark.parametrize(("family", "level", "signature", "kind", "n_sub"), _LINEAR_FUNCTION_WP_CELLS)
+@pytest.mark.parametrize("seed", range(30))
+def test_word_problem_linear_function_double_solve_property(seed, family, level, signature, kind, n_sub):
+    """全小問が checker の独立再計算と一致し、params の数値が本文のどこかに現れる。"""
+    ctx = _make_ctx(family, level)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+
+    checker = REGISTRY.checker("math.word_problem_linear_function.double_solve")
+    solutions = checker(mr)
+    assert len(solutions) == len(mr.sub_questions) == n_sub
+    for sol, sq in zip(solutions, mr.sub_questions, strict=True):
+        assert sol.answer.srepr == sq.answer.srepr
+
+    # params の全数値が、この recipe の場面文(given)または小問文(context_slots の
+    # ask_*)のどこかに文字列として現れる（本文の数値を読み違えても checker が
+    # 気づかない経路が無いことの確認。word_problem のセル共通の property）。
+    numbers = {k: int(sympy.sympify(v)) for k, v in mr.params["numbers"].items()}
+    visible_text = "".join(mr.given.values()) + "".join(
+        v for k, v in mr.context_slots.items() if k.startswith("ask_")
+    )
+    for value in numbers.values():
+        assert str(value) in visible_text
+
+
+@pytest.mark.parametrize("seed", range(30))
+def test_word_problem_linear_function_non_degenerate(seed):
+    """非退化条件: ばねは x1≠x2、水そうは r1≠r2 かつ target が第2区間内、出会いは va≠vb。"""
+    ctx = _make_ctx("math.g2_l28.word_problem", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    numbers = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng).params["numbers"]
+    assert int(numbers["x1"]) != int(numbers["x2"])
+
+    ctx = _make_ctx("math.g2_l28.word_problem", 3)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    numbers = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng).params["numbers"]
+    t1, r1, r2, target = (int(numbers[k]) for k in ("t1", "r1", "r2", "target"))
+    assert r1 != r2
+    # target は第2区間 (x>=t1) で実現する: 逆算した x0 が t1 より大きい
+    b2 = r1 * t1 - r2 * t1
+    x0 = sympy.Rational(target - b2, r2)
+    assert x0 > t1
+
+    ctx = _make_ctx("math.g2_l30.word_problem", 3)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    numbers = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng).params["numbers"]
+    assert int(numbers["va"]) != int(numbers["vb"])

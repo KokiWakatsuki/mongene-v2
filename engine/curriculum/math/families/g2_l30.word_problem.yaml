@@ -1,0 +1,58 @@
+family: math.g2_l30.word_problem
+form: word_problem
+source_desc: |
+  速さとダイヤグラム（2人の出会い）＝場面を1次関数として立式し、2直線の交点
+  （出会う時刻）を求める（units.generated.yaml の desc/example を正として転記）。
+  Lv3 desc: 誘導あり:場面→グラフ化→出会い等の小問が連なる。
+       example: AさんとBさんは1500mはなれたP地点とQ地点にいる。AさんはP地点を
+                出発して毎分75mでQ地点へ、BさんはAさんと同時にQ地点を出発して
+                毎分50mでP地点へ進む。(1) Aさんについて、出発してからx分後の
+                P地点からの道のりymを式で表せ。(2) 2人の進むようすを1つのグラフ
+                にかけ。(3) 2人が出会うのは出発してから何分後か求めよ。
+  ---
+  【この form の型】word_problem_linear.py/word_problem_system.py と同じ骨格。
+  recipe は math.word_problem_linear_function（g2_l28 と共有・engine/packs/math/
+  recipes/word_problem_linear_function.py の scenario_kind=meeting_intersection）。
+  数学は既存 solver math.linear_expr_from_slope_point（Aの式）・
+  math.intersection_of_two_lines（g2_l27/g2_l30.find_value と共有）に委ねる＝
+  新 solver ゼロ。
+  【スコープ（設問を2小問に絞った理由）】台帳の market example は
+  (1)Aの式→(2)グラフ→(3)出会う時刻 の3小問だが、本セルは **(2)のグラフ小問を
+  落とし** (1)Aの式→(2)出会う時刻 の2小問にする。理由: word_problem frame の
+  asked_vocab は {formulation, value} のみで "draw"/"graph" 系の語彙を持たない
+  （engine/packs/math/frames.py の WORD_PROBLEM_FRAME）。GraphAnswer の小問を
+  追加するには frame の asked_vocab 拡張が要るが、frame/core の変更は本タスクの
+  スコープ外（「既存の frame は変更しない・必要になったら報告して止まる」）。
+  無検証の小問を作ることは禁止されているため、frame 拡張を要する中間小問は
+  落とす（g3_l31.graph_table が表小問を落とした前例と同型の判断）。
+  設問文も「(1)Aさんについて…式で表せ。(2)2人が出会うのは…何分後か求めよ。」に
+  揃える（小問番号は連番に詰める）。
+  【level_sep】g2_l30.find_value Lv2（既存・2直線を連立して交点を求めるだけの
+  T1 セル）に対し、本セルは「場面文→2直線への翻訳」まで含む word_problem 側
+  （find_value Lv2 の設計メモが「場面→立式は word_problem g2_l30」と明記していた
+  ものに対応）。
+  【answer-first】出会う時刻 meet_time を先に決め、distance = meet_time・(va+vb)
+  を逆算する（端数の出ない綺麗な設定になる・鉄則⑤）。
+  【検証】G-Q1 が全小問 double-solve。checker は params の数値だけから
+  solve_meeting を呼んで解き直す。答えは params に入れない。
+concepts_default: [linear_function.word_problem_meeting_intersection]
+levels:
+  "3":
+    signature: word_problem_linear_meeting_intersection
+    recipe: math.word_problem_linear_function
+    params:
+      scenario_kind: meeting_intersection
+      speed_range: [45, 95]
+      meet_time_range: [5, 20]
+      distance_max: 3000
+      place_pair_candidates: [P地点|Q地点, A地点|B地点, 甲地点|乙地点, X地点|Y地点]
+      person_pair_candidates: [Aさん|Bさん, 太郎さん|花子さん, 兄|弟, 姉|妹]
+    given: [scenario, quantities]
+    asked: [formulation, value]
+    visual: none
+    text: {tier: T1, template: wp_linear_guided_v1}
+    hints: [steps_prefix]
+    concept_tags: [linear_function.word_problem_meeting_intersection]
+    cause_tags: []
+remedial:
+  default_level: 3

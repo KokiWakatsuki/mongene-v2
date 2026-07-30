@@ -1,0 +1,56 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - letter_expr.word_problem_profit_multi_letter
+  provenance:
+    git_commit: ''
+    recipe: math.word_problem_expression
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: wp_linear_solo_v1
+    tier: T1
+  requested:
+    form: word_problem
+    level: 3
+    subject: math
+    unit: g1_l15
+  resolved:
+    form: word_problem
+    level: 3
+    subject: math
+    unit: g1_l15
+  seed: 2
+  signature: word_problem_expression_profit_multi_letter
+problem_ref: fd7c0145d0273679
+problem_text: 'ある文房具をx個仕入れ、1個あたりa円で全部売った。仕入れ総額がp円である。
+
+  全体の利益を、x, a, pを使った式で表せ。'
+sub_questions:
+- answer:
+    display: ax - p
+    kind: symbolic
+    srepr: Add(Mul(Symbol('a'), Symbol('x')), Mul(Integer(-1), Symbol('p')))
+  cause_tags: []
+  concept_tags:
+  - letter_expr.word_problem_profit_multi_letter
+  explanation: 'まず、仕入れた個数と1個あたりの売り値をかけて、売り上げを求める式をつくる。（ax）
+
+    次に、求めた売り上げから、仕入れにかかった総額をひいて、利益を表す式にする。（ax - p）'
+  hints:
+  - 仕入れた個数と1個あたりの売り値をかけて、売り上げを求める式をつくる。
+  label: (1)
+  prompt_text: formulation を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 仕入れた個数と1個あたりの売り値をかけて、売り上げを求める式をつくる。
+    op: compute_revenue
+    result_display: ax
+    result_srepr: ax
+  - args: []
+    narration: 求めた売り上げから、仕入れにかかった総額をひいて、利益を表す式にする。
+    op: derive_expression
+    result_display: ax - p
+    result_srepr: Add(Mul(Symbol('a'), Symbol('x')), Mul(Integer(-1), Symbol('p')))
+visual_svg: null

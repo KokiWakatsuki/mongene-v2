@@ -1,0 +1,56 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - letter_expr.word_problem_distance_letter
+  provenance:
+    git_commit: ''
+    recipe: math.word_problem_expression
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: wp_linear_solo_v1
+    tier: T1
+  requested:
+    form: word_problem
+    level: 1
+    subject: math
+    unit: g1_l15
+  resolved:
+    form: word_problem
+    level: 1
+    subject: math
+    unit: g1_l15
+  seed: 1
+  signature: word_problem_expression_distance
+problem_ref: 02b7b46bfa97139d
+problem_text: '時速9kmでx時間歩く。
+
+  進む道のりを、xを使った式で表せ。'
+sub_questions:
+- answer:
+    display: 9x
+    kind: symbolic
+    srepr: Mul(Integer(9), Symbol('x'))
+  cause_tags: []
+  concept_tags:
+  - letter_expr.word_problem_distance_letter
+  explanation: 'まず、速さに時間をかけると、道のりになる。（速さ × 時間 = 道のり）
+
+    次に、数を文字の前に書き、乗法の記号 × を省いて表す。（9x）'
+  hints:
+  - 速さに時間をかけると、道のりになる。
+  label: (1)
+  prompt_text: formulation を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 速さに時間をかけると、道のりになる。
+    op: identify_relation
+    result_display: 速さ × 時間 = 道のり
+    result_srepr: 速さ × 時間 = 道のり
+  - args: []
+    narration: 数を文字の前に書き、乗法の記号 × を省いて表す。
+    op: apply_product_rule
+    result_display: 9x
+    result_srepr: Mul(Integer(9), Symbol('x'))
+visual_svg: null

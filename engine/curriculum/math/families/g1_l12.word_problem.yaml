@@ -1,0 +1,66 @@
+family: math.g1_l12.word_problem
+form: word_problem
+source_desc: |
+  文字を使った式（文字の導入）＝数量を文字式で表す(units.generated.yaml の desc/example
+  を正として転記)。
+  Lv1 desc: 個数・代金など単純な数量を文字式で表す(誘導あり)。
+       example: 1本80円の鉛筆をx本買ったときの代金を、xを使った式で表せ。
+  Lv2 desc: 割合・単位変換を含む数量を文字式で表す(複数関係)。
+       example: 定価a円の品物を、定価の2割引きで買ったときの代金をaを使った式で表せ。
+  ---
+  【この form の型】1小問・誘導なし（asked=formulation・答えは式）。frame の asked
+  語彙は {formulation, value} のみで `expression` は無いため、「立式」に最も近い
+  formulation を使う（given.quantities は使わない＝文字の意味は場面文自身の中で
+  「x本」「a円」のように直接導入されるので、別立ての変数設定は要らない）。
+  数学は既存 solver（Lv1: math.simplify_notation の product_basic・Lv2:
+  math.evaluate_letter_expression の combine_linear）に委ねる＝新 solver ゼロ。
+  recipe は math.word_problem_expression 1つで g1_l12/l15 の5セルを賄う（scenario_kind
+  が「場面の抽選」と「立式」の対を選ぶ・word_problem_linear.py と同じ償却）。
+  【level_sep】Lv1 は単項式（価格×本数の積が1つ）。Lv2 は割合が係数に入る（定価の項
+  −割引き分の項→分数係数の1項に同類項でまとまる）。
+  【G-Q5t】答えは自由変数を含む式（display 全体一致で検査）。答え表示が場面文に
+  部分文字列で現れないことを有界リトライで確認する（letter_expr.py の `_leaks` を
+  再利用）。
+  【検証】G-Q1 が1小問を double-solve。checker は params の「場面文に出ている数値」
+  だけから式を組み直し・整理し直すので、本文の数値のズレを検出する。答えは params に
+  入れない。
+concepts_default: [letter_expr.word_problem_price_count_letter]
+levels:
+  "1":
+    signature: word_problem_expression_price_count
+    recipe: math.word_problem_expression
+    params:
+      scenario_kind: price_count_letter
+      price_domain: {int_range: [20, 300]}
+      item_candidates: [鉛筆|本, 消しゴム|個, ノート|冊, 下じき|枚, ボールペン|本,
+                        クリップ|個, 色鉛筆|本, 付せん|枚, シール|枚, マーカー|本,
+                        画びょう|個, 輪ゴム|本]
+    given: [scenario]
+    asked: [formulation]
+    visual: none
+    text: {tier: T1, template: wp_linear_solo_v1}
+    hints: [steps_prefix]
+    concept_tags: [letter_expr.word_problem_price_count_letter]
+    cause_tags: []
+  "2":
+    signature: word_problem_expression_discount
+    recipe: math.word_problem_expression
+    params:
+      scenario_kind: discount
+      discount_domain: {int_range: [1, 9]}
+      item_candidates: [シャツ, かばん, くつ, ぼうし, マフラー, 手ぶくろ, セーター,
+                        上着, くつ下, ネクタイ, スカーフ, ベルト, スニーカー, ジーンズ,
+                        スカート, ブラウス, さいふ, うで時計, かさ, リュック, コート,
+                        ワンピース, パーカー, サンダル, イヤリング, ネックレス,
+                        ヘアゴム, キャップ, ハンカチ, 手ぬぐい, マスク, サングラス,
+                        ピアス, ブレスレット, 指輪, スリッパ, エプロン, レインコート,
+                        ジャケット, ワイシャツ]
+    given: [scenario]
+    asked: [formulation]
+    visual: none
+    text: {tier: T1, template: wp_linear_solo_v1}
+    hints: [steps_prefix]
+    concept_tags: [letter_expr.word_problem_discount]
+    cause_tags: []
+remedial:
+  default_level: 1

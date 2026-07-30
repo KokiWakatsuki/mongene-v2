@@ -1,0 +1,103 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - linear_function.word_problem_two_point_eval
+  provenance:
+    git_commit: ''
+    recipe: math.word_problem_linear_function
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: wp_linear_guided_v1
+    tier: T1
+  requested:
+    form: word_problem
+    level: 2
+    subject: math
+    unit: g2_l28
+  resolved:
+    form: word_problem
+    level: 2
+    subject: math
+    unit: g2_l28
+  seed: 2
+  signature: word_problem_linear_two_point_eval
+problem_ref: 029864fad89ce963
+problem_text: 'あるつる巻きばねに125gのおもりをつるすと全体の長さが86cmになり、150gのおもりをつるすと101cmになった。
+
+  つる巻きばねの長さ y cm はおもりの重さ x g の1次関数であるとする。
+
+  (1) y を x の式で表せ。
+
+  (2) 75gのおもりをつるしたときのつる巻きばねの長さを求めよ。'
+sub_questions:
+- answer:
+    display: y = 3/5x + 11
+    kind: symbolic
+    srepr: Add(Mul(Rational(3, 5), Symbol('x')), Integer(11))
+  cause_tags: []
+  concept_tags:
+  - linear_function.word_problem_two_point_eval
+  explanation: 'まず、2点の y 座標の差を x 座標の差で割り、傾きを求める。（傾き a = 3/5）
+
+    次に、傾きと通る1点を y = ax + b に代入し、切片を求める。（切片 b = 11）
+
+    最後に、傾きと切片から一次関数の式を組み立てる。（y = 3/5x + 11）'
+  hints:
+  - 2点の y 座標の差を x 座標の差で割り、傾きを求める。
+  - 傾きと通る1点を y = ax + b に代入し、切片を求める。
+  label: (1)
+  prompt_text: formulation を求めなさい。
+  solution_steps:
+  - args:
+    - (125, 86)
+    - (150, 101)
+    narration: 2点の y 座標の差を x 座標の差で割り、傾きを求める。
+    op: compute_slope
+    result_display: 傾き a = 3/5
+    result_srepr: Rational(3, 5)
+  - args:
+    - 3/5
+    - (125, 86)
+    narration: 傾きと通る1点を y = ax + b に代入し、切片を求める。
+    op: compute_intercept
+    result_display: 切片 b = 11
+    result_srepr: Integer(11)
+  - args:
+    - 3/5
+    - '11'
+    narration: 傾きと切片から一次関数の式を組み立てる。
+    op: form_expression
+    result_display: y = 3/5x + 11
+    result_srepr: Add(Mul(Rational(3, 5), Symbol('x')), Integer(11))
+- answer:
+    display: 56cm
+    kind: symbolic
+    srepr: Integer(56)
+  cause_tags: []
+  concept_tags:
+  - linear_function.word_problem_two_point_eval
+  explanation: 'まず、x の値を式に代入する。（y = 3/5 × 75 + 11）
+
+    次に、計算して y の値を求める。（y = 56）'
+  hints:
+  - x の値を式に代入する。
+  label: (2)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args:
+    - 3/5
+    - '11'
+    - '75'
+    narration: x の値を式に代入する。
+    op: substitute_x
+    result_display: y = 3/5 × 75 + 11
+    result_srepr: Integer(56)
+  - args:
+    - y = 3/5 × 75 + 11
+    narration: 計算して y の値を求める。
+    op: evaluate
+    result_display: y = 56
+    result_srepr: Integer(56)
+visual_svg: null

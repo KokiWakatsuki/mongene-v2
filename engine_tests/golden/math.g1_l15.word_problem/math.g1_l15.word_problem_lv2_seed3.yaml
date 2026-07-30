@@ -1,0 +1,80 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - letter_expr.word_problem_unit_convert
+  provenance:
+    git_commit: ''
+    recipe: math.word_problem_expression
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: wp_linear_solo_v1
+    tier: T1
+  requested:
+    form: word_problem
+    level: 2
+    subject: math
+    unit: g1_l15
+  resolved:
+    form: word_problem
+    level: 2
+    subject: math
+    unit: g1_l15
+  seed: 3
+  signature: word_problem_expression_unit_convert
+problem_ref: bbc89251f6fd6fdb
+problem_text: '分速169mでa分間走る。
+
+  進んだ道のりは何kmか、aを使った式で表せ。'
+sub_questions:
+- answer:
+    display: 169a/1000km
+    kind: symbolic
+    srepr: Mul(Rational(169, 1000), Symbol('a'))
+  cause_tags: []
+  concept_tags:
+  - letter_expr.word_problem_unit_convert
+  explanation: 'まず、速さに時間をかけて、道のりをmで表す式をつくる。（速さ × 時間 = 道のり(m)）
+
+    次に、1kmは1000mなので、mの式を1000でわるとkmの式になる。（道のり(m) ÷ 1000 = 道のり(km)）
+
+    次に、÷ を、その式の逆数をかけるかけ算に直す。（÷ を逆数のかけ算に直す）
+
+    次に、係数どうしをかけ算する。（係数どうしをかける）
+
+    最後に、同じ文字は指数の和にまとめ、1つの単項式にする。（169a/1000）'
+  hints:
+  - 速さに時間をかけて、道のりをmで表す式をつくる。
+  - 1kmは1000mなので、mの式を1000でわるとkmの式になる。
+  - ÷ を、その式の逆数をかけるかけ算に直す。
+  - 係数どうしをかけ算する。
+  label: (1)
+  prompt_text: formulation を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 速さに時間をかけて、道のりをmで表す式をつくる。
+    op: identify_relation
+    result_display: 速さ × 時間 = 道のり(m)
+    result_srepr: 速さ × 時間 = 道のり(m)
+  - args: []
+    narration: 1kmは1000mなので、mの式を1000でわるとkmの式になる。
+    op: note_unit_conversion
+    result_display: 道のり(m) ÷ 1000 = 道のり(km)
+    result_srepr: 道のり(m) ÷ 1000 = 道のり(km)
+  - args: []
+    narration: ÷ を、その式の逆数をかけるかけ算に直す。
+    op: convert_divisions_to_reciprocal
+    result_display: ÷ を逆数のかけ算に直す
+    result_srepr: Mul(Rational(169, 1000), Symbol('a'))
+  - args: []
+    narration: 係数どうしをかけ算する。
+    op: multiply_coefficients
+    result_display: 係数どうしをかける
+    result_srepr: Mul(Rational(169, 1000), Symbol('a'))
+  - args: []
+    narration: 同じ文字は指数の和にまとめ、1つの単項式にする。
+    op: combine_powers
+    result_display: 169a/1000
+    result_srepr: Mul(Rational(169, 1000), Symbol('a'))
+visual_svg: null

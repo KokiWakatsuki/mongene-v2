@@ -1,0 +1,11 @@
+approved_at: '2026-07-30T21:47:51.108310'
+approver: koki
+content_sha256: 3f150b8c22afd1546ce1e7dc9ecc67f36c84647e26e610818b9bbce70d15f08a
+family: math.g1_l12.word_problem
+files:
+- engine_tests/golden/math.g1_l12.word_problem/math.g1_l12.word_problem_lv1_seed1.yaml
+- engine_tests/golden/math.g1_l12.word_problem/math.g1_l12.word_problem_lv1_seed2.yaml
+- engine_tests/golden/math.g1_l12.word_problem/math.g1_l12.word_problem_lv1_seed3.yaml
+- engine_tests/golden/math.g1_l12.word_problem/math.g1_l12.word_problem_lv2_seed1.yaml
+- engine_tests/golden/math.g1_l12.word_problem/math.g1_l12.word_problem_lv2_seed2.yaml
+- engine_tests/golden/math.g1_l12.word_problem/math.g1_l12.word_problem_lv2_seed3.yaml

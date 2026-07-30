@@ -1091,3 +1091,28 @@ concepts:
   - id: inequality.word_problem_both_sides
     label: "両辺に文字を含む数量関係を2つの不等式で表す（文章題）"
     unit: g1_l20
+  # --- C14 g1 文字式の利用（数量を文字式で表す文章題・word_problem） ---
+  - id: letter_expr.word_problem_price_count_letter
+    label: "1つあたりの値段と個数(文字)から代金を文字式で表す"
+    unit: g1_l12
+  - id: letter_expr.word_problem_discount
+    label: "定価(文字)と割引きの割合から代金を文字式で表す"
+    unit: g1_l12
+  - id: letter_expr.word_problem_distance_letter
+    label: "速さと時間(文字)から道のりを文字式で表す"
+    unit: g1_l15
+  - id: letter_expr.word_problem_unit_convert
+    label: "速さと時間(文字)から道のりを求め単位を変換して文字式で表す"
+    unit: g1_l15
+  - id: letter_expr.word_problem_profit_multi_letter
+    label: "仕入れ・売り値・仕入れ総額(3文字)から利益を文字式で表す"
+    unit: g1_l15
+  - id: linear_function.word_problem_two_point_eval
+    label: "1次関数の利用: 2点から式を決定し代入して値を求める(ばね等)"
+    unit: g2_l28
+  - id: linear_function.word_problem_piecewise_tank
+    label: "1次関数の利用: 区間で式が変わる場面を折れ線で表し値を求める(水そう等)"
+    unit: g2_l28
+  - id: linear_function.word_problem_meeting_intersection
+    label: "1次関数の利用: 2人の進むようすを式に表し交点(出会い)の時刻を求める"
+    unit: g2_l30

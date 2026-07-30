@@ -1,0 +1,78 @@
+family: math.g2_l28.word_problem
+form: word_problem
+source_desc: |
+  1次関数の利用（ばね・水そう）＝場面を1次関数として立式し、値や時刻を求める
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv2 desc: 誘導あり・比例的変化から式を立て値を求める。
+       example: あるばねに10gのおもりをつるすと全体の長さが14cm、30gのおもりをつるすと
+                18cmになった。ばねの長さycmはおもりの重さxgの1次関数であるとする。
+                (1) yをxの式で表せ。(2) 50gのおもりをつるしたときのばねの長さを求めよ。
+  Lv3 desc: 区間で式が変わる・複数量を扱うなど複数立式を要する。
+       example: 空の水そうに水を入れ始める。初めの10分間は毎分3Lで入れ、その後は
+                毎分5Lで入れる。水を入れ始めてからx分後の水の量をyLとする。
+                (1) 0≦x≦10のときのyをxの式で表せ。(2) x≧10のときのyをxの式で表せ。
+                (3) 水の量が70Lになるのは水を入れ始めてから何分後か求めよ。
+  ---
+  【この form の型】word_problem_linear.py/word_problem_system.py と同じ骨格
+  （given.scenario＝場面／given.quantities＝変数の設定／小問文は context_slots）。
+  recipe は math.word_problem_linear_function（engine/packs/math/recipes/
+  word_problem_linear_function.py）1つで g2_l28 Lv2/Lv3・g2_l30 Lv3 の3セルを賄う。
+  数学は既存 solver math.linear_expr_from_two_points / math.linear_expr_from_slope_point /
+  math.evaluate_linear_at_x / math.solve_linear_equation に委ねる＝新 solver ゼロ。
+  【level_sep】Lv2（scenario_kind=spring_two_point）は2点から式を1本決めて代入する
+  1直線。Lv3（scenario_kind=tank_piecewise）は区間で式が変わる折れ線で、
+  (1)(2)の2つの式＋(3)目標の量になる時刻、の3小問（小問数・式の本数が変わる＝
+  G6 の構造差）。
+  【answer-first】
+    Lv2: 傾き num/den（既約分数）と重さの単位 k・den・unit(=5g刻み) を先に決め、
+    x=k・den・unit と置くことで y=(num/den)x+b が常に整数になることを構成で保証する
+    （brief §「傾きが整数または扱いやすい分数になるよう重さの差が長さの差を割り切る
+    組を保証」に対応）。答え y0 が given の数値と一致する組は弾く。
+    Lv3: 目標の量になる時刻 x0 を t1（第1区間の長さ）より後（=t1+extra分後）に先に
+    決め、target の量をそこから逆算する。これにより target は必ず第2区間に入る
+    （brief §「70Lが2つ目の区間に入る組だけ許す」に対応、鉄則⑤）。
+  【検証】G-Q1 が全小問 double-solve。checker（engine/packs/math/checkers/
+  word_problem_linear_function.py）は params の「場面文に出ている数値」だけから
+  recipe と同じ solve_spring / solve_tank 関数を呼んで解き直す。答えは params に
+  入れない。
+concepts_default: [linear_function.word_problem_two_point_eval]
+levels:
+  "2":
+    signature: word_problem_linear_two_point_eval
+    recipe: math.word_problem_linear_function
+    params:
+      scenario_kind: spring_two_point
+      # 傾き num/den（既約分数のみ・gcd フィルタは recipe 側）。
+      slope_den_candidates: [1, 2, 4, 5]
+      slope_num_candidates: [1, 2, 3]
+      # x = k・den・weight_unit_gram と置くことで y が常に整数になる。
+      weight_unit_gram: 5
+      weight_k_range: [1, 7]
+      intercept_domain: {int_range: [5, 12]}
+      object_candidates: [ばね, ゴムひも, つる巻きばね]
+    given: [scenario, quantities]
+    asked: [formulation, value]
+    visual: none
+    text: {tier: T1, template: wp_linear_guided_v1}
+    hints: [steps_prefix]
+    concept_tags: [linear_function.word_problem_two_point_eval]
+    cause_tags: []
+  "3":
+    signature: word_problem_linear_piecewise_tank
+    recipe: math.word_problem_linear_function
+    params:
+      scenario_kind: tank_piecewise
+      t1_range: [6, 15]
+      rate_range: [2, 8]
+      extra_minutes_range: [3, 15]
+      # 「容器|液体」の対（容器と液体の組合せが不自然にならないよう対で引く）。
+      container_liquid_candidates: [水そう|水, タンク|水, 浴槽|お湯]
+    given: [scenario, quantities]
+    asked: [formulation, formulation, value]
+    visual: none
+    text: {tier: T1, template: wp_linear_guided3_v1}
+    hints: [steps_prefix]
+    concept_tags: [linear_function.word_problem_piecewise_tank]
+    cause_tags: []
+remedial:
+  default_level: 2

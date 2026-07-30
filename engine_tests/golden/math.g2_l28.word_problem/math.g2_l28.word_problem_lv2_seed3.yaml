@@ -1,0 +1,103 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - linear_function.word_problem_two_point_eval
+  provenance:
+    git_commit: ''
+    recipe: math.word_problem_linear_function
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: wp_linear_guided_v1
+    tier: T1
+  requested:
+    form: word_problem
+    level: 2
+    subject: math
+    unit: g2_l28
+  resolved:
+    form: word_problem
+    level: 2
+    subject: math
+    unit: g2_l28
+  seed: 3
+  signature: word_problem_linear_two_point_eval
+problem_ref: 57a5dd76222c95c7
+problem_text: 'あるゴムひもに10gのおもりをつるすと全体の長さが25cmになり、30gのおもりをつるすと65cmになった。
+
+  ゴムひもの長さ y cm はおもりの重さ x g の1次関数であるとする。
+
+  (1) y を x の式で表せ。
+
+  (2) 5gのおもりをつるしたときのゴムひもの長さを求めよ。'
+sub_questions:
+- answer:
+    display: y = 2x + 5
+    kind: symbolic
+    srepr: Add(Mul(Integer(2), Symbol('x')), Integer(5))
+  cause_tags: []
+  concept_tags:
+  - linear_function.word_problem_two_point_eval
+  explanation: 'まず、2点の y 座標の差を x 座標の差で割り、傾きを求める。（傾き a = 2）
+
+    次に、傾きと通る1点を y = ax + b に代入し、切片を求める。（切片 b = 5）
+
+    最後に、傾きと切片から一次関数の式を組み立てる。（y = 2x + 5）'
+  hints:
+  - 2点の y 座標の差を x 座標の差で割り、傾きを求める。
+  - 傾きと通る1点を y = ax + b に代入し、切片を求める。
+  label: (1)
+  prompt_text: formulation を求めなさい。
+  solution_steps:
+  - args:
+    - (10, 25)
+    - (30, 65)
+    narration: 2点の y 座標の差を x 座標の差で割り、傾きを求める。
+    op: compute_slope
+    result_display: 傾き a = 2
+    result_srepr: Integer(2)
+  - args:
+    - '2'
+    - (10, 25)
+    narration: 傾きと通る1点を y = ax + b に代入し、切片を求める。
+    op: compute_intercept
+    result_display: 切片 b = 5
+    result_srepr: Integer(5)
+  - args:
+    - '2'
+    - '5'
+    narration: 傾きと切片から一次関数の式を組み立てる。
+    op: form_expression
+    result_display: y = 2x + 5
+    result_srepr: Add(Mul(Integer(2), Symbol('x')), Integer(5))
+- answer:
+    display: 15cm
+    kind: symbolic
+    srepr: Integer(15)
+  cause_tags: []
+  concept_tags:
+  - linear_function.word_problem_two_point_eval
+  explanation: 'まず、x の値を式に代入する。（y = 2 × 5 + 5）
+
+    次に、計算して y の値を求める。（y = 15）'
+  hints:
+  - x の値を式に代入する。
+  label: (2)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args:
+    - '2'
+    - '5'
+    - '5'
+    narration: x の値を式に代入する。
+    op: substitute_x
+    result_display: y = 2 × 5 + 5
+    result_srepr: Integer(15)
+  - args:
+    - y = 2 × 5 + 5
+    narration: 計算して y の値を求める。
+    op: evaluate
+    result_display: y = 15
+    result_srepr: Integer(15)
+visual_svg: null
