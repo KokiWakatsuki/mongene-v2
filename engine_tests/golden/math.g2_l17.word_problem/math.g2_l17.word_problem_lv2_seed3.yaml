@@ -1,0 +1,90 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - simultaneous_equations.word_problem_distance_time
+  provenance:
+    git_commit: ''
+    recipe: math.word_problem_system_equations
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: wp_linear_guided_v1
+    tier: T1
+  requested:
+    form: word_problem
+    level: 2
+    subject: math
+    unit: g2_l17
+  resolved:
+    form: word_problem
+    level: 2
+    subject: math
+    unit: g2_l17
+  seed: 3
+  signature: word_problem_distance_time_guided
+problem_ref: 716b795fde9b92b0
+problem_text: '駅から市役所を通って美術館まで行った。駅から市役所までは時速6kmで歩き、市役所から美術館までは時速18kmの自転車で進んだところ、全体で24km進むのに2時間かかった。
+
+  歩いた道のりを x km、自転車で進んだ道のりを y km とする。
+
+  (1) 道のりと時間の関係を表す2つの式をつくれ。
+
+  (2) 歩いた道のりと自転車で進んだ道のりをそれぞれ求めよ。'
+sub_questions:
+- answer:
+    display: x + y = 24、x/6 + y/18 = 2
+    kind: symbolic
+    srepr: Tuple(Equality(Add(Symbol('x'), Symbol('y')), Integer(24)), Equality(Add(Mul(Rational(1, 6), Symbol('x')), Mul(Rational(1, 18), Symbol('y'))), Integer(2)))
+  cause_tags: []
+  concept_tags:
+  - simultaneous_equations.word_problem_distance_time
+  explanation: まず、歩いた道のりを x km、自転車で進んだ道のりを y km とおく。 x, y次に、道のりの関係に着目して、1つめの式をつくる。 x + y = 24最後に、かかった時間の関係に着目して、2つめの式をつくる。 x/6 + y/18 = 2
+  hints:
+  - 歩いた道のりを x km、自転車で進んだ道のりを y km とおく。
+  - 道のりの関係に着目して、1つめの式をつくる。
+  label: (1)
+  prompt_text: formulation を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 歩いた道のりを x km、自転車で進んだ道のりを y km とおく。
+    op: set_variables
+    result_display: x, y
+    result_srepr: Tuple(Symbol('x'), Symbol('y'))
+  - args: []
+    narration: 道のりの関係に着目して、1つめの式をつくる。
+    op: formulate_first
+    result_display: x + y = 24
+    result_srepr: Equality(Add(Symbol('x'), Symbol('y')), Integer(24))
+  - args: []
+    narration: かかった時間の関係に着目して、2つめの式をつくる。
+    op: formulate_second
+    result_display: x/6 + y/18 = 2
+    result_srepr: Equality(Add(Mul(Rational(1, 6), Symbol('x')), Mul(Rational(1, 18), Symbol('y'))), Integer(2))
+- answer:
+    display: 歩いた道のりは6km、自転車で進んだ道のりは18km
+    kind: symbolic
+    srepr: Tuple(Integer(6), Integer(18))
+  cause_tags: []
+  concept_tags:
+  - simultaneous_equations.word_problem_distance_time
+  explanation: まず、係数をそろえて一方の文字を消去し、残った文字を求める。 x = 6次に、求めた値をもとの式に代入し、もう一方の文字を求める。 y = 18
+  hints:
+  - 係数をそろえて一方の文字を消去し、残った文字を求める。
+  label: (2)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args:
+    - Eq(x + y, 24)
+    - Eq(x/6 + y/18, 2)
+    narration: 係数をそろえて一方の文字を消去し、残った文字を求める。
+    op: eliminate_variable
+    result_display: x = 6
+    result_srepr: Equality(Symbol('x'), Integer(6))
+  - args:
+    - '6'
+    narration: 求めた値をもとの式に代入し、もう一方の文字を求める。
+    op: back_substitute
+    result_display: y = 18
+    result_srepr: Integer(18)
+visual_svg: null

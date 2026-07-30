@@ -286,8 +286,12 @@ def intersection_of_two_lines(
     if method not in ("substitute", "elimination"):
         raise ValueError(f"未知の method: {method!r}")
 
-    A1, B1, C1 = (sympy.nsimplify(v) for v in line_a)
-    A2, B2, C2 = (sympy.nsimplify(v) for v in line_b)
+    # nsimplify の前に必ず sympify する: 文字列を直接渡すと近似値として扱われ、
+    # "1615" が 50*2**(314/427)*… という偽の閉形式になることがある（黙って解が
+    # 無理数になる）。sympify を通せば整数・分数は厳密なまま、Float だけが
+    # nsimplify の有理化対象として残る。
+    A1, B1, C1 = (sympy.nsimplify(sympy.sympify(v)) for v in line_a)
+    A2, B2, C2 = (sympy.nsimplify(sympy.sympify(v)) for v in line_b)
     det = A1 * B2 - A2 * B1
     if det == 0:
         raise ValueError("2直線が平行または一致で交点が定まらない")
@@ -1045,9 +1049,13 @@ def verify_system_solution(
     成り立たなければ「解でない」。答えは ChoiceAnswer。Q1 は代入検証＝実質 V1（決定論恒真）。
     solver は与えられた候補と係数だけから判定する（recipe の真偽ビットは見ない・double-solve）。
     """
-    A1, B1, C1 = (sympy.nsimplify(v) for v in line_a)
-    A2, B2, C2 = (sympy.nsimplify(v) for v in line_b)
-    xc, yc = sympy.nsimplify(candidate[0]), sympy.nsimplify(candidate[1])
+    # nsimplify の前に必ず sympify する: 文字列を直接渡すと近似値として扱われ、
+    # "1615" が 50*2**(314/427)*… という偽の閉形式になることがある（黙って解が
+    # 無理数になる）。sympify を通せば整数・分数は厳密なまま、Float だけが
+    # nsimplify の有理化対象として残る。
+    A1, B1, C1 = (sympy.nsimplify(sympy.sympify(v)) for v in line_a)
+    A2, B2, C2 = (sympy.nsimplify(sympy.sympify(v)) for v in line_b)
+    xc, yc = (sympy.nsimplify(sympy.sympify(v)) for v in candidate)
     ok1 = sympy.simplify(A1 * xc + B1 * yc - C1) == 0
     ok2 = sympy.simplify(A2 * xc + B2 * yc - C2) == 0
     is_sol = bool(ok1 and ok2)

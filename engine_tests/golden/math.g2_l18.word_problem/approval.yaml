@@ -1,0 +1,14 @@
+approved_at: '2026-07-30T15:03:22.628830'
+approver: koki
+content_sha256: e3362f9303381aeb29aefd67a57043b25ee57f6c28c8c8edcd7a8429bdd221cd
+family: math.g2_l18.word_problem
+files:
+- engine_tests/golden/math.g2_l18.word_problem/math.g2_l18.word_problem_lv2_seed1.yaml
+- engine_tests/golden/math.g2_l18.word_problem/math.g2_l18.word_problem_lv2_seed2.yaml
+- engine_tests/golden/math.g2_l18.word_problem/math.g2_l18.word_problem_lv2_seed3.yaml
+- engine_tests/golden/math.g2_l18.word_problem/math.g2_l18.word_problem_lv3_seed1.yaml
+- engine_tests/golden/math.g2_l18.word_problem/math.g2_l18.word_problem_lv3_seed2.yaml
+- engine_tests/golden/math.g2_l18.word_problem/math.g2_l18.word_problem_lv3_seed3.yaml
+- engine_tests/golden/math.g2_l18.word_problem/math.g2_l18.word_problem_lv4_seed1.yaml
+- engine_tests/golden/math.g2_l18.word_problem/math.g2_l18.word_problem_lv4_seed2.yaml
+- engine_tests/golden/math.g2_l18.word_problem/math.g2_l18.word_problem_lv4_seed3.yaml

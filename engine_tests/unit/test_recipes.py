@@ -6551,6 +6551,8 @@ _LINEAR_WP_CELLS = [
     ("math.g1_l26.word_problem", 3, "word_problem_seat_shortage_exact", False),
     ("math.g1_l27.word_problem", 2, "word_problem_round_trip_distance", True),
     ("math.g1_l27.word_problem", 3, "word_problem_catch_up_time", False),
+    ("math.g1_l24.word_problem", 2, "word_problem_proportion_pair", True),
+    ("math.g1_l24.word_problem", 3, "word_problem_continued_ratio", False),
 ]
 
 
@@ -6602,9 +6604,14 @@ def test_word_problem_linear_double_solve_property(seed, family, level, signatur
     assert x_value > 0, "個数・人数・道のり・時間はすべて正"
     assert formulation.eq.subs(sympy.Symbol("x"), x_value) is sympy.true
 
-    # 場面文に、立式に使う数値がすべて現れている（G-GND の材料が本文にある）
+    # 立式に使う数値はすべて given のどこかに現れている（＝読者に見えている数だけを
+    # checker に渡している）。given のどこか、であって場面文限定ではない: 誘導ありの
+    # 比例式セルのように「問われている個数」が変数の設定（quantities）側に出る場面が
+    # ある。given → problem_text は G-GND が保証するので、この形で
+    # 「本文の数値を読み違えても checker が気づかない」経路が閉じる。
+    given_text = "".join(mr.given.values())
     for value in numbers.values():
-        assert str(value) in mr.given["scenario"]
+        assert str(value) in given_text
 
 
 @pytest.mark.parametrize("seed", range(30))
@@ -6640,3 +6647,212 @@ def test_word_problem_linear_derived_answer_is_not_x():
     seats = sympy.Rational(students - left_out, per_a)
     assert students != seats
     assert mr.sub_questions[0].answer.display.endswith("人")
+
+
+# ---------------------------------------------------------------------------
+# 連立方程式の利用（g2_l17/g2_l18 × Lv2/Lv3/Lv4）＝1 recipe で6セル
+# ---------------------------------------------------------------------------
+_SYSTEM_WP_CELLS = [
+    ("math.g2_l17.word_problem", 2, "word_problem_distance_time_guided", True),
+    ("math.g2_l17.word_problem", 3, "word_problem_time_split_solo", False),
+    ("math.g2_l17.word_problem", 4, "word_problem_lap_meet_catch_up", False),
+    ("math.g2_l18.word_problem", 2, "word_problem_percent_change_guided", True),
+    ("math.g2_l18.word_problem", 3, "word_problem_salt_mixture_solo", False),
+    ("math.g2_l18.word_problem", 4, "word_problem_two_containers", False),
+]
+
+
+@pytest.mark.parametrize(("family", "level", "signature", "guided"), _SYSTEM_WP_CELLS)
+def test_word_problem_system_construct(family, level, signature, guided):
+    """誘導ありは (1)立式→(2)値 の2小問、誘導なしは値の1小問（＝level_sep の骨）。"""
+    ctx = _make_ctx(family, level)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == signature
+    if guided:
+        assert [(sq.label, sq.asked) for sq in mr.sub_questions] == [
+            ("(1)", "formulation"),
+            ("(2)", "value"),
+        ]
+        assert set(mr.given) == {"scenario", "quantities"}
+    else:
+        assert [(sq.label, sq.asked) for sq in mr.sub_questions] == [("(1)", "value")]
+        # 誘導なしは変数の設定を与えない（自分で x, y をおく）
+        assert set(mr.given) == {"scenario"}
+        # 誘導なしでも模範解答は立式から始まる（解くところから始まらない）
+        assert [s.op for s in mr.sub_questions[0].steps][:3] == [
+            "set_variables",
+            "formulate_first",
+            "formulate_second",
+        ]
+    assert mr.visual_plan is None
+    # 答えは params に入っていない（checker が独立に再計算できるようにするため）
+    assert "answer" not in mr.params
+    # solver の setup_system は落としている（「2つの直線」は文章題の語彙ではない）
+    assert all(
+        s.op != "setup_system" for sq in mr.sub_questions for s in sq.steps
+    )
+
+
+@pytest.mark.parametrize(("family", "level", "signature", "guided"), _SYSTEM_WP_CELLS)
+@pytest.mark.parametrize("seed", range(30))
+def test_word_problem_system_double_solve_property(seed, family, level, signature, guided):
+    """全小問が checker の独立再計算と一致し、答えが連立を実際に満たす。"""
+    from engine.packs.math.recipes.word_problem_system import (
+        FORMULATION_BUILDERS,
+        IDENTITY_ANSWER_MAP,
+    )
+
+    ctx = _make_ctx(family, level)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+
+    checker = REGISTRY.checker("math.word_problem_system_equations.double_solve")
+    solutions = checker(mr)
+    assert len(solutions) == len(mr.sub_questions)
+    for sol, sq in zip(solutions, mr.sub_questions, strict=True):
+        assert sol.answer.srepr == sq.answer.srepr
+
+    # 場面の数値から組んだ連立に、解 (x, y) を戻して恒真を確認する（構成の健全性）
+    numbers = {k: int(sympy.sympify(v)) for k, v in mr.params["numbers"].items()}
+    formulation = FORMULATION_BUILDERS[mr.params["scenario_kind"]](**numbers)
+    asked = sympy.sympify(mr.sub_questions[-1].answer.srepr)
+    answer_map = [[int(sympy.sympify(v)) for v in row] for row in mr.params["answer_map"]]
+    if answer_map == [list(row) for row in IDENTITY_ANSWER_MAP]:
+        x_value, y_value = asked[0], asked[1]
+    else:
+        # 問われている量が m·x（例: 道のり = 速さ×時間）＝逆に割って x, y を復元する
+        x_value = sympy.Rational(asked[0], answer_map[0][0])
+        y_value = sympy.Rational(asked[1], answer_map[1][1])
+    for eq in formulation.eqs:
+        subbed = eq.subs({sympy.Symbol("x"): x_value, sympy.Symbol("y"): y_value})
+        assert subbed is sympy.true, f"{eq} に ({x_value}, {y_value}) を戻すと偽"
+    assert x_value.q == 1 and y_value.q == 1, "answer-first で逆算しているので端数は出ない"
+    assert x_value > 0 and y_value > 0, "個数・人数・道のり・時間・濃度はすべて正"
+
+    # params の数値はすべて given に現れている（＝読者に見えている数だけを持つ）。
+    # これが崩れると「本文の数値を読み違えても checker が気づかない」経路ができる。
+    given_text = "".join(mr.given.values())
+    for value in numbers.values():
+        assert str(value) in given_text
+
+
+@pytest.mark.parametrize("seed", range(30))
+def test_word_problem_system_non_degenerate(seed):
+    """非退化条件: det ≠ 0 を場面ごとの言葉で確認する。"""
+    # 速さ: 歩き ≠ 自転車（det = 1/b − 1/a）
+    ctx = _make_ctx("math.g2_l17.word_problem", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    numbers = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng).params["numbers"]
+    assert int(numbers["speed_walk"]) < int(numbers["speed_bike"])
+
+    # 追いつきは「和で出会う時間 < 差で追いつく時間」（差 < 和）
+    ctx = _make_ctx("math.g2_l17.word_problem", 4)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    numbers = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng).params["numbers"]
+    assert int(numbers["meet_time"]) < int(numbers["catch_up_time"])
+
+    # 食塩水は濃度相異（det = (b − a)/100）かつ混合後は2つのあいだ
+    ctx = _make_ctx("math.g2_l18.word_problem", 3)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    numbers = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng).params["numbers"]
+    lo, hi, mix = (int(numbers[k]) for k in ("percent_a", "percent_b", "percent_mix"))
+    assert lo < mix < hi
+
+    # 2容器は重さ相異（det = (Wa − Wb)/100）
+    ctx = _make_ctx("math.g2_l18.word_problem", 4)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    numbers = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng).params["numbers"]
+    assert int(numbers["weight_a"]) != int(numbers["weight_b"])
+
+
+def test_word_problem_system_derived_answer_is_not_xy():
+    """g2_l17 Lv3 は「文字＝時間・答え＝道のり」。answer_map の合成が効いている。"""
+    ctx = _make_ctx("math.g2_l17.word_problem", 3)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    speed_slow, speed_fast = (
+        int(sympy.sympify(mr.params["numbers"][k])) for k in ("speed_slow", "speed_fast")
+    )
+    assert [[int(sympy.sympify(v)) for v in row] for row in mr.params["answer_map"]] == [
+        [speed_slow, 0, 0],
+        [0, speed_fast, 0],
+    ]
+    # 最後の一手が steps に入っている（x, y をそのまま答えにしていない）
+    assert mr.sub_questions[0].steps[-1].op == "derive_asked_quantities"
+    assert mr.sub_questions[0].answer.display.endswith("m")
+
+
+def test_word_problem_system_level_sep_places_letters_differently():
+    """G6 の骨: 同じ「連立の利用」でも Lv ごとに文字を置く対象が違う。
+
+    Lv2 は道のり（時間の式が分数係数）／Lv3 は時間（道のりの式が整数係数）／
+    Lv4 は速さ（和と差の2式）。立式の係数行がそのまま違うことで確認する。
+    """
+    from engine.packs.math.recipes.word_problem_system import (
+        FORMULATION_BUILDERS,
+    )
+
+    lines = {}
+    for level in (2, 3, 4):
+        ctx = _make_ctx("math.g2_l17.word_problem", level)
+        rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+        mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+        numbers = {k: int(sympy.sympify(v)) for k, v in mr.params["numbers"].items()}
+        lines[level] = FORMULATION_BUILDERS[mr.params["scenario_kind"]](**numbers)
+
+    # Lv2: 2つめの式の x, y の係数が 1/a, 1/b（分数）
+    assert all(sympy.sympify(c).q > 1 for c in lines[2].line_b[:2])
+    # Lv3: 2つめの式の係数は整数（速さそのもの）
+    assert all(sympy.sympify(c).q == 1 for c in lines[3].line_b[:2])
+    # Lv4: 和の式と差の式（y の係数の符号が逆）
+    assert sympy.sympify(lines[4].line_a[1]) > 0
+    assert sympy.sympify(lines[4].line_b[1]) < 0
+
+
+# ---------------------------------------------------------------------------
+# 比例式の利用（g1_l24 × Lv2/Lv3）: 表示は比例式・solver に渡すのは線形式
+# ---------------------------------------------------------------------------
+@pytest.mark.parametrize(("level", "guided"), [(2, True), (3, False)])
+@pytest.mark.parametrize("seed", range(20))
+def test_word_problem_proportion_display_is_a_ratio(seed, level, guided):
+    """(1)/(2) の答えの表示が「a:b = c:x」形で、機械表現は線形式になっている。"""
+    from engine.packs.math.recipes.word_problem_linear import FORMULATION_BUILDERS
+
+    ctx = _make_ctx("math.g1_l24.word_problem", level)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    numbers = {k: int(sympy.sympify(v)) for k, v in mr.params["numbers"].items()}
+    formulation = FORMULATION_BUILDERS[mr.params["scenario_kind"]](**numbers)
+    # 表示は比例式（コロンが2つ）／機械表現はたすきがけ後の一次方程式
+    assert formulation.display.count(":") == 2
+    assert "=" in formulation.display
+    assert formulation.eq.free_symbols == {sympy.Symbol("x")}
+    # 答えは正の整数で、本文に出ている数値とは一致しない（G-Q5t の自衛）
+    answer = sympy.sympify(mr.sub_questions[-1].answer.srepr)
+    assert answer.is_Integer and answer > 0
+    assert answer not in set(numbers.values())
+
+
+def test_word_problem_continued_ratio_needs_an_extra_step():
+    """Lv3 は「連比の和を出す」一手が立式の前に入る＝Lv2 との op 列の差。"""
+    ctx = _make_ctx("math.g1_l24.word_problem", 3)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    lv3 = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    ctx2 = _make_ctx("math.g1_l24.word_problem", 2)
+    rng2 = derive_rng(ctx2.family, ctx2.level, ctx2.purpose, seed=1)
+    lv2 = REGISTRY.recipe(ctx2.spec_level.recipe)(ctx2, rng2)
+
+    assert [s.op for s in lv3.sub_questions[0].steps][:3] == [
+        "sum_ratio_parts",
+        "find_equal_relation",
+        "formulate_equation",
+    ]
+    # Lv2 の立式は2手のまま（prelude_step 既定 None＝既存セルの steps 不変）
+    assert [s.op for s in lv2.sub_questions[0].steps] == [
+        "find_equal_relation",
+        "formulate_equation",
+    ]
+    # params は連比の3項をそのまま持ち、和は立式ビルダー側で導く
+    # （和は本文に出ていない数なので params に置くと検証に穴ができる）
+    assert set(lv3.params["numbers"]) == {"ratio_1", "ratio_2", "ratio_3", "total"}

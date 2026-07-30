@@ -35,5 +35,6 @@ from engine.packs.math.checkers import similarity_scale_ratio  # noqa: F401  (�
 from engine.packs.math.checkers import inscribed_angle  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.checkers import word_problem  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.checkers import word_problem_linear  # noqa: F401  (登録の副作用のため import)
+from engine.packs.math.checkers import word_problem_system  # noqa: F401  (登録の副作用のため import)
 
 __all__: list[str] = []

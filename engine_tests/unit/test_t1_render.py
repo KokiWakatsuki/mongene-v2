@@ -2,13 +2,15 @@
 
 TemplateContext が answer/srepr/params を一切公開しないこと（属性が無い）を
 attribute-level で assert する（§7.2 の「構文的に答えを書けない」の検証）。
-フィルタ num/frac/pt の出力・explanation の決定論結合・hints の steps_prefix
-（steps<2 のフォールバック含む）を検証する。
+フィルタ num/frac/pt の出力・explanation の決定論結合（接続詞列の pin 含む）・
+hints の steps_prefix（steps<2 のフォールバック含む）を検証する。
 """
 from __future__ import annotations
 
+import re
 from typing import Any
 
+import pytest
 import sympy
 
 from engine.core.contracts import (
@@ -200,6 +202,38 @@ def test_explanation_is_deterministic_concatenation_of_narration_and_display():
     # 決定論: 同じ MR から2回呼んでも同じ結果
     result2 = render_text(mr, ctx, registry=registry)
     assert result2.explanations["(1)"] == explanation
+
+
+# ---------------------------------------------------------------------------
+# explanation の接続詞列: 「最後に、」は最終ステップ専用（steps>=3）
+# steps が4個以上でも「最後に、」が途中に出ないことを pin する
+# ---------------------------------------------------------------------------
+@pytest.mark.parametrize(
+    ("steps_count", "expected"),
+    [
+        (1, ["まず、"]),
+        (2, ["まず、", "次に、"]),
+        (3, ["まず、", "次に、", "最後に、"]),
+        (4, ["まず、", "次に、", "次に、", "最後に、"]),
+        (6, ["まず、", "次に、", "次に、", "次に、", "次に、", "最後に、"]),
+    ],
+)
+def test_explanation_connectives_use_last_only_for_final_step(steps_count, expected):
+    registry = _registry_with_template("stem")
+    mr = _mk_mr(steps_count=steps_count)
+    ctx = _mk_ctx()
+
+    explanation = render_text(mr, ctx, registry=registry).explanations["(1)"]
+
+    # narration{i} の直前に付いた接続詞を取り出して列として比較する
+    assert re.findall(r"まず、|次に、|最後に、|さらに、", explanation) == expected
+    # 「さらに、」は使わない・「最後に、」は1回だけ（steps>=3 のとき末尾に1回）
+    assert "さらに、" not in explanation
+    assert explanation.count("最後に、") == (1 if steps_count >= 3 else 0)
+    # 期待する完全一致（narration/result_display の結合形も固定）
+    assert explanation == "".join(
+        f"{conn}narration{i} disp{i}" for i, conn in enumerate(expected)
+    )
 
 
 # ---------------------------------------------------------------------------

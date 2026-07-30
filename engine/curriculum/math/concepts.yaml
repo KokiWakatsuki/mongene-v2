@@ -83,6 +83,25 @@ concepts:
   - id: simultaneous_equations.word_problem_price_count
     label: "個数と代金の場面を連立方程式に立式して解く（文章題）"
     unit: g2_l16
+  # 文章題（form=word_problem・連立）: 何を文字に置くかがレベルで動くクラスタ
+  - id: simultaneous_equations.word_problem_distance_time
+    label: "道のりを文字に置き、道のりと時間の2式を立てて解く（文章題）"
+    unit: g2_l17
+  - id: simultaneous_equations.word_problem_time_split
+    label: "時間を文字に置いて連立を解き、問われている道のりまで求める（文章題）"
+    unit: g2_l17
+  - id: simultaneous_equations.word_problem_lap_meet_catch_up
+    label: "出会いと追いつきから速さの和と差の2式を立てて解く（文章題）"
+    unit: g2_l17
+  - id: simultaneous_equations.word_problem_percent_change
+    label: "増減の割合から人数の2式を立てて解く（文章題）"
+    unit: g2_l18
+  - id: simultaneous_equations.word_problem_salt_mixture
+    label: "食塩水の重さと食塩の重さの2式を立てて混ぜる量を求める（文章題）"
+    unit: g2_l18
+  - id: simultaneous_equations.word_problem_two_containers
+    label: "濃度そのものを文字に置き、混ぜ方の違う2式から濃度を求める（文章題）"
+    unit: g2_l18
   - id: simultaneous_equations.solve_by_substitution
     label: "連立方程式を代入法で解く（そのまま代入／変形して代入）"
     unit: g2_l13
@@ -519,6 +538,12 @@ concepts:
     unit: g1_l24
   - id: equation.solve_proportion_linear
     label: "文字を含む項のある比例式を展開して解く"
+    unit: g1_l24
+  - id: equation.word_problem_proportion_pair
+    label: "対応する量の比から比例式を立てて解く（文章題）"
+    unit: g1_l24
+  - id: equation.word_problem_continued_ratio
+    label: "連比の1つ分と全体の比から比例式を立てて解く（文章題）"
     unit: g1_l24
   - id: equation.term_recall
     label: "方程式・解の用語を想起する"

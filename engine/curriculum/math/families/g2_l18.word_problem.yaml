@@ -1,0 +1,94 @@
+family: math.g2_l18.word_problem
+form: word_problem
+source_desc: |
+  連立方程式の利用：割合の問題（増減・食塩水など）
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv2 desc: 誘導あり・増減や濃度の2式を素直に立てて解く。
+       example: ある中学校の昨年の生徒数は男女合わせて500人だった。今年は昨年に比べて
+                男子が5%増え、女子が3%減ったので、全体で6人増えた。(1) 昨年の男子を x 人、
+                女子を y 人として、人数と増減の関係を表す2つの式をつくれ。
+                (2) 昨年の男子と女子の人数をそれぞれ求めよ。
+       ※台帳の example の数値（500人・5%増・3%減・6人増）は解が x=262.5 で整数にならない。
+         recipe は「増えた人数・減った人数がどちらも整数」になる組だけを列挙して引く。
+  Lv3 desc: もとの量と割合を分けるなど複数立式・条件読替を要する。
+       example: 6%の食塩水と11%の食塩水を混ぜて、9%の食塩水を500gつくりたい。
+                それぞれ何gずつ混ぜればよいか求めよ。
+  Lv4 desc: 誘導なし・混合/変化後の関係を自分で構成し融合的に解く。
+       example: 容器Aには濃度のわからない食塩水が200g、容器Bには別の濃度の食塩水が300g
+                入っている。AとBをすべて混ぜると8%の食塩水になり、Aの食塩水100gと
+                Bの食塩水100gだけを混ぜると7%の食塩水になる。容器A、Bの食塩水の濃度を
+                それぞれ求めよ。
+  ---
+  recipe は g2_l17 と共通の math.word_problem_system_equations（scenario_kind で場面を
+  選ぶ）。テンプレも既存の wp_linear_guided_v1 / wp_linear_solo_v1 を再利用。
+  【level_sep】**割合が式のどこに現れるか**がレベルで動く。
+   Lv2: 割合は「変化した量」に現れる＝もとの量の和と、増減の差の2式
+        （x + y = N, (p/100)x − (q/100)y = r）。誘導あり2小問。
+   Lv3: 割合は「混ぜたあとの濃度」に現れる＝重さの和と、食塩の重さの重みつき和
+        （x + y = W, (a/100)x + (b/100)y = S）。誘導なし1小問。
+   Lv4: **濃度そのものが未知数**になり、重さが係数に回る
+        （(Wa/100)x + (Wb/100)y = S, x + y = 2q）。混ぜ方の違う2つの結果から
+        2式を自分で構成する。誘導なし1小問。
+  【answer-first と候補列挙】どのレベルも「％も g も人数も端数が出ない」組だけを
+  recipe が列挙してから引く（g3_l31 と同じ列挙パターン。構成時に自然さを保証する）。
+   Lv2: 増えた人数 p·x/100 と減った人数 q·y/100 がどちらも整数で、差 r が正の整数。
+   Lv3: 混合後の濃度 c = (a·x + b·y)/(x + y) が整数、食塩の重さ (a·x + b·y)/100 も整数。
+        a < c < b は加重平均だから自動で成り立つ。
+   Lv4: 全部混ぜた濃度と 100g ずつ混ぜた濃度がどちらも整数。Wa ≠ Wb（det = (Wa−Wb)/100）。
+  【検証】G-Q1 が全小問 double-solve。checker は params の「場面文に出ている数値」だけ
+  から立式し直し・解き直す（答えは params に入れない）。
+concepts_default: [simultaneous_equations.word_problem_percent_change]
+levels:
+  "2":
+    signature: word_problem_percent_change_guided
+    recipe: math.word_problem_system_equations
+    params:
+      scenario_kind: percent_change
+      guided: true
+      # (男子, 女子, 増加率, 減少率) の組は recipe が列挙する（人数が端数にならない組だけ）。
+      count_candidates: [100, 125, 150, 175, 200, 225, 250, 275, 300, 325, 350, 400]
+      rate_up_candidates: [4, 5, 6, 8, 10, 12]
+      rate_down_candidates: [2, 4, 5, 6, 8]
+      # 全体の増加が大きすぎると場面が不自然（増減の差なので小さいのが普通）。
+      net_change_max: 30
+    given: [scenario, quantities]
+    asked: [formulation, value]
+    visual: none
+    text: {tier: T1, template: wp_linear_guided_v1}
+    hints: [steps_prefix]
+    concept_tags: [simultaneous_equations.word_problem_percent_change]
+    cause_tags: []
+  "3":
+    signature: word_problem_salt_mixture_solo
+    recipe: math.word_problem_system_equations
+    params:
+      scenario_kind: salt_mixture
+      guided: false
+      percent_candidates: [3, 4, 5, 6, 8, 10, 11, 12, 14, 15, 18, 20]
+      weight_candidates: [100, 150, 200, 250, 300, 350, 400, 450, 500]
+    given: [scenario]
+    asked: [value]
+    visual: none
+    text: {tier: T1, template: wp_linear_solo_v1}
+    hints: [steps_prefix]
+    concept_tags: [simultaneous_equations.word_problem_salt_mixture]
+    cause_tags: []
+  "4":
+    signature: word_problem_two_containers
+    recipe: math.word_problem_system_equations
+    params:
+      scenario_kind: two_containers
+      guided: false
+      # 100g を除くのは「Bの食塩水100gだけを混ぜる」が容器を空にしてしまわないため。
+      weight_candidates: [150, 200, 250, 300, 350, 400, 450, 500, 600]
+      # 濃度の探索範囲（両端を含む整数）。x ≠ y かつ x + y が偶数の組だけ残る。
+      percent_range: [2, 24]
+    given: [scenario]
+    asked: [value]
+    visual: none
+    text: {tier: T1, template: wp_linear_solo_v1}
+    hints: [steps_prefix]
+    concept_tags: [simultaneous_equations.word_problem_two_containers]
+    cause_tags: []
+remedial:
+  default_level: 2

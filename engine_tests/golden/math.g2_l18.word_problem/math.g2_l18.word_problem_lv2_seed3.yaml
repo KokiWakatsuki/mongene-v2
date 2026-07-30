@@ -1,0 +1,90 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - simultaneous_equations.word_problem_percent_change
+  provenance:
+    git_commit: ''
+    recipe: math.word_problem_system_equations
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: wp_linear_guided_v1
+    tier: T1
+  requested:
+    form: word_problem
+    level: 2
+    subject: math
+    unit: g2_l18
+  resolved:
+    form: word_problem
+    level: 2
+    subject: math
+    unit: g2_l18
+  seed: 3
+  signature: word_problem_percent_change_guided
+problem_ref: 38a54a633fa3ad27
+problem_text: 'ある中学校の昨年の生徒数は男女合わせて650人だった。今年は昨年に比べて男子が8%増え、女子が4%減ったので、全体で10人増えた。
+
+  昨年の男子の人数を x 人、女子の人数を y 人とする。
+
+  (1) 人数と増減の関係を表す2つの式をつくれ。
+
+  (2) 昨年の男子と女子の人数をそれぞれ求めよ。'
+sub_questions:
+- answer:
+    display: x + y = 650、8x/100 - 4y/100 = 10
+    kind: symbolic
+    srepr: Tuple(Equality(Add(Symbol('x'), Symbol('y')), Integer(650)), Equality(Add(Mul(Rational(2, 25), Symbol('x')), Mul(Integer(-1), Rational(1, 25), Symbol('y'))), Integer(10)))
+  cause_tags: []
+  concept_tags:
+  - simultaneous_equations.word_problem_percent_change
+  explanation: まず、昨年の男子の人数を x 人、女子の人数を y 人とおく。 x, y次に、昨年の人数の関係に着目して、1つめの式をつくる。 x + y = 650最後に、増減した人数の関係に着目して、2つめの式をつくる。 8x/100 - 4y/100 = 10
+  hints:
+  - 昨年の男子の人数を x 人、女子の人数を y 人とおく。
+  - 昨年の人数の関係に着目して、1つめの式をつくる。
+  label: (1)
+  prompt_text: formulation を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 昨年の男子の人数を x 人、女子の人数を y 人とおく。
+    op: set_variables
+    result_display: x, y
+    result_srepr: Tuple(Symbol('x'), Symbol('y'))
+  - args: []
+    narration: 昨年の人数の関係に着目して、1つめの式をつくる。
+    op: formulate_first
+    result_display: x + y = 650
+    result_srepr: Equality(Add(Symbol('x'), Symbol('y')), Integer(650))
+  - args: []
+    narration: 増減した人数の関係に着目して、2つめの式をつくる。
+    op: formulate_second
+    result_display: 8x/100 - 4y/100 = 10
+    result_srepr: Equality(Add(Mul(Rational(2, 25), Symbol('x')), Mul(Integer(-1), Rational(1, 25), Symbol('y'))), Integer(10))
+- answer:
+    display: 昨年の男子は300人、昨年の女子は350人
+    kind: symbolic
+    srepr: Tuple(Integer(300), Integer(350))
+  cause_tags: []
+  concept_tags:
+  - simultaneous_equations.word_problem_percent_change
+  explanation: まず、係数をそろえて一方の文字を消去し、残った文字を求める。 x = 300次に、求めた値をもとの式に代入し、もう一方の文字を求める。 y = 350
+  hints:
+  - 係数をそろえて一方の文字を消去し、残った文字を求める。
+  label: (2)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args:
+    - Eq(x + y, 650)
+    - Eq(2*x/25 - y/25, 10)
+    narration: 係数をそろえて一方の文字を消去し、残った文字を求める。
+    op: eliminate_variable
+    result_display: x = 300
+    result_srepr: Equality(Symbol('x'), Integer(300))
+  - args:
+    - '300'
+    narration: 求めた値をもとの式に代入し、もう一方の文字を求める。
+    op: back_substitute
+    result_display: y = 350
+    result_srepr: Integer(350)
+visual_svg: null

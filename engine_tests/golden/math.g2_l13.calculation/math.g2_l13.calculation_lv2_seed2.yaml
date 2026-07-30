@@ -35,7 +35,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - simultaneous_equations.solve_by_substitution
-  explanation: まず、はじめの式を x について解く。 x = 3y - 8次に、これをもう一方の式に代入して y だけの方程式にする。 -6y = -24最後に、y の値を求める。 y = 4さらに、求めた y を x = … の式に代入して x を求める。 x = 4
+  explanation: まず、はじめの式を x について解く。 x = 3y - 8次に、これをもう一方の式に代入して y だけの方程式にする。 -6y = -24次に、y の値を求める。 y = 4最後に、求めた y を x = … の式に代入して x を求める。 x = 4
   hints:
   - はじめの式を x について解く。
   - これをもう一方の式に代入して y だけの方程式にする。

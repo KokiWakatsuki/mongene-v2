@@ -1,0 +1,76 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - simultaneous_equations.word_problem_lap_meet_catch_up
+  provenance:
+    git_commit: ''
+    recipe: math.word_problem_system_equations
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: wp_linear_solo_v1
+    tier: T1
+  requested:
+    form: word_problem
+    level: 4
+    subject: math
+    unit: g2_l17
+  resolved:
+    form: word_problem
+    level: 4
+    subject: math
+    unit: g2_l17
+  seed: 2
+  signature: word_problem_lap_meet_catch_up
+problem_ref: 18aa0f9a2ad6e92f
+problem_text: '1周2400mの池のまわりを、兄と弟が同じ地点から同時に出発する。反対向きに進むと12分後に出会い、同じ向きに進むと兄が弟に40分後に追いつく。
+
+  兄と弟の速さはそれぞれ分速何mか求めよ。'
+sub_questions:
+- answer:
+    display: 兄の速さは分速130m、弟の速さは分速70m
+    kind: symbolic
+    srepr: Tuple(Integer(130), Integer(70))
+  cause_tags: []
+  concept_tags:
+  - simultaneous_equations.word_problem_lap_meet_catch_up
+  explanation: まず、兄の速さを分速 x m、弟の速さを分速 y m とおく。 x, y次に、反対向きに進んだときの道のりの関係に着目して、1つめの式をつくる。 12(x + y) = 2400次に、同じ向きに進んだときの道のりの関係に着目して、2つめの式をつくる。 40(x - y) = 2400次に、係数をそろえて一方の文字を消去し、残った文字を求める。 x = 130最後に、求めた値をもとの式に代入し、もう一方の文字を求める。
+    y = 70
+  hints:
+  - 兄の速さを分速 x m、弟の速さを分速 y m とおく。
+  - 反対向きに進んだときの道のりの関係に着目して、1つめの式をつくる。
+  - 同じ向きに進んだときの道のりの関係に着目して、2つめの式をつくる。
+  - 係数をそろえて一方の文字を消去し、残った文字を求める。
+  label: (1)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 兄の速さを分速 x m、弟の速さを分速 y m とおく。
+    op: set_variables
+    result_display: x, y
+    result_srepr: Tuple(Symbol('x'), Symbol('y'))
+  - args: []
+    narration: 反対向きに進んだときの道のりの関係に着目して、1つめの式をつくる。
+    op: formulate_first
+    result_display: 12(x + y) = 2400
+    result_srepr: Equality(Add(Mul(Integer(12), Symbol('x')), Mul(Integer(12), Symbol('y'))), Integer(2400))
+  - args: []
+    narration: 同じ向きに進んだときの道のりの関係に着目して、2つめの式をつくる。
+    op: formulate_second
+    result_display: 40(x - y) = 2400
+    result_srepr: Equality(Add(Mul(Integer(40), Symbol('x')), Mul(Integer(-1), Integer(40), Symbol('y'))), Integer(2400))
+  - args:
+    - Eq(12*x + 12*y, 2400)
+    - Eq(40*x - 40*y, 2400)
+    narration: 係数をそろえて一方の文字を消去し、残った文字を求める。
+    op: eliminate_variable
+    result_display: x = 130
+    result_srepr: Equality(Symbol('x'), Integer(130))
+  - args:
+    - '130'
+    narration: 求めた値をもとの式に代入し、もう一方の文字を求める。
+    op: back_substitute
+    result_display: y = 70
+    result_srepr: Integer(70)
+visual_svg: null

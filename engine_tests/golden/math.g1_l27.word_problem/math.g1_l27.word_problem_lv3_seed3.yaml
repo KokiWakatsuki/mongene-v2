@@ -23,7 +23,7 @@ meta:
     unit: g1_l27
   seed: 3
   signature: word_problem_catch_up_time
-problem_ref: 1e7a24ce284985cf
+problem_ref: 04a8a4c3b5760353
 problem_text: '兄は分速75mで家を出発し、その6分後に弟が分速165mの自転車で同じ道を追いかけた。
 
   弟が兄に追いつくのは、弟が出発してから何分後か求めよ。'
@@ -35,12 +35,24 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - equation.word_problem_catch_up
-  explanation: まず、分配法則を使って、かっこを外す。 かっこを外す次に、文字の項を左辺に、数の項を右辺に移項し、両辺を整理して解く。 x = 5
+  explanation: まず、場面の中で、どちらの見方でも同じになる（等しくなっている）量に着目する。 追いついたときに2人が進んだ道のり次に、その量を x を使って両辺に表し、方程式をつくる。 75(x + 6) = 165x次に、分配法則を使って、かっこを外す。 かっこを外す最後に、文字の項を左辺に、数の項を右辺に移項し、両辺を整理して解く。 x = 5
   hints:
+  - 場面の中で、どちらの見方でも同じになる（等しくなっている）量に着目する。
+  - その量を x を使って両辺に表し、方程式をつくる。
   - 分配法則を使って、かっこを外す。
   label: (1)
   prompt_text: value を求めなさい。
   solution_steps:
+  - args: []
+    narration: 場面の中で、どちらの見方でも同じになる（等しくなっている）量に着目する。
+    op: find_equal_relation
+    result_display: 追いついたときに2人が進んだ道のり
+    result_srepr: Symbol('x')
+  - args: []
+    narration: その量を x を使って両辺に表し、方程式をつくる。
+    op: formulate_equation
+    result_display: 75(x + 6) = 165x
+    result_srepr: Equality(Add(Mul(Integer(75), Symbol('x')), Integer(450)), Mul(Integer(165), Symbol('x')))
   - args: []
     narration: 分配法則を使って、かっこを外す。
     op: expand_parentheses

@@ -6,6 +6,7 @@
 """
 from __future__ import annotations
 
+import pytest
 import sympy
 
 import engine.packs.math  # noqa: F401  (register_solver の副作用のため import)
@@ -157,3 +158,40 @@ def test_read_two_lattice_points_negative_coords():
     solver = REGISTRY.solver("math.read_two_lattice_points")
     sol = solver((-2, -1), (3, 4))
     assert sol.answer.display == "(-2, -1), (3, 4)"
+
+
+# ---------------------------------------------------------------------------
+# math.intersection_of_two_lines / math.verify_system_solution:
+# 係数を文字列で渡しても厳密に解ける（nsimplify の近似探索に落ちない）
+# ---------------------------------------------------------------------------
+def test_nsimplify_of_bare_string_is_a_trap():
+    """前提の記録: 文字列を nsimplify に直接渡すと偽の閉形式になる整数がある。
+
+    solver がこの罠を踏まないよう sympify を挟んでいる（下のテストがそれを守る）。
+    """
+    assert sympy.nsimplify("1615") != 1615
+    assert sympy.nsimplify(sympy.sympify("1615")) == 1615
+
+
+@pytest.mark.parametrize("c", ["1615", "1093", "2071", "17"])
+def test_intersection_of_two_lines_accepts_string_coefficients(c):
+    solver = REGISTRY.solver("math.intersection_of_two_lines")
+    # x + y = 17, 75x + 160y = c 形（c=1615 のとき解は (13, 4)）
+    sol = solver(("1", "1", "17"), ("75", "160", c), "elimination")
+    x0, y0 = sympy.sympify(sol.answer.srepr)
+    assert x0.is_rational and y0.is_rational, "無理数が出たら nsimplify の罠を踏んでいる"
+    assert 75 * x0 + 160 * y0 == int(c)
+    assert x0 + y0 == 17
+
+
+def test_intersection_of_two_lines_accepts_fraction_strings():
+    solver = REGISTRY.solver("math.intersection_of_two_lines")
+    # x + y = 44, x/4 + y/12 = 5 → (8, 36)
+    sol = solver((1, 1, 44), ("1/4", "1/12", 5), "elimination")
+    assert sol.answer.srepr == sympy.srepr(sympy.Tuple(sympy.Integer(8), sympy.Integer(36)))
+
+
+def test_verify_system_solution_accepts_string_coefficients():
+    solver = REGISTRY.solver("math.verify_system_solution")
+    sol = solver(("1", "1", "17"), ("75", "160", "1615"), ("13", "4"))
+    assert sol.answer.correct == "解である"

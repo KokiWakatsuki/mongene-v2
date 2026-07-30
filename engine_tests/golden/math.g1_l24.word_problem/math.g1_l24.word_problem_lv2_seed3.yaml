@@ -1,0 +1,81 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - equation.word_problem_proportion_pair
+  provenance:
+    git_commit: ''
+    recipe: math.word_problem_linear_equation
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: wp_linear_guided_v1
+    tier: T1
+  requested:
+    form: word_problem
+    level: 2
+    subject: math
+    unit: g1_l24
+  resolved:
+    form: word_problem
+    level: 2
+    subject: math
+    unit: g1_l24
+  seed: 3
+  signature: word_problem_proportion_pair
+problem_ref: 7317cffda6b91d0e
+problem_text: '同じ定規を何本か買う。定規3本の値段は270円である。
+
+  定規2本の値段を x 円とする。
+
+  (1) 3本と2本の値段の比例式をつくれ。
+
+  (2) 定規2本の値段を求めよ。'
+sub_questions:
+- answer:
+    display: 3:270 = 2:x
+    kind: symbolic
+    srepr: Equality(Mul(Integer(3), Symbol('x')), Integer(540))
+  cause_tags: []
+  concept_tags:
+  - equation.word_problem_proportion_pair
+  explanation: まず、場面の中で、どちらの見方でも同じになる（等しくなっている）量に着目する。 本数と値段の比次に、その量を x を使って両辺に表し、方程式をつくる。 3:270 = 2:x
+  hints:
+  - 場面の中で、どちらの見方でも同じになる（等しくなっている）量に着目する。
+  label: (1)
+  prompt_text: formulation を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 場面の中で、どちらの見方でも同じになる（等しくなっている）量に着目する。
+    op: find_equal_relation
+    result_display: 本数と値段の比
+    result_srepr: Symbol('x')
+  - args: []
+    narration: その量を x を使って両辺に表し、方程式をつくる。
+    op: formulate_equation
+    result_display: 3:270 = 2:x
+    result_srepr: Equality(Mul(Integer(3), Symbol('x')), Integer(540))
+- answer:
+    display: 180円
+    kind: symbolic
+    srepr: Integer(180)
+  cause_tags: []
+  concept_tags:
+  - equation.word_problem_proportion_pair
+  explanation: まず、比例式の性質を使い、外項の積と内項の積が等しい式（たすきがけ）をつくる。 たすきがけの式をつくる次に、x の係数で両辺をわって、x の値を求める。 x = 180
+  hints:
+  - 比例式の性質を使い、外項の積と内項の積が等しい式（たすきがけ）をつくる。
+  label: (2)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 比例式の性質を使い、外項の積と内項の積が等しい式（たすきがけ）をつくる。
+    op: cross_multiply
+    result_display: たすきがけの式をつくる
+    result_srepr: Integer(180)
+  - args: []
+    narration: x の係数で両辺をわって、x の値を求める。
+    op: solve_proportion
+    result_display: x = 180
+    result_srepr: Integer(180)
+visual_svg: null

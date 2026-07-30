@@ -23,7 +23,7 @@ meta:
     unit: g1_l26
   seed: 2
   signature: word_problem_seat_shortage_exact
-problem_ref: 1781cd4e23a13f6f
+problem_ref: 98b26f31ec0173c8
 problem_text: '長いすに参加者を座らせる。1脚に4人ずつ座ると9人が座れず、1脚に5人ずつ座ると最後の1脚だけ1人になり、いすはちょうど埋まった。
 
   参加者の人数を求めよ。'
@@ -35,13 +35,26 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - equation.word_problem_seat_shortage
-  explanation: まず、分配法則を使って、かっこを外す。 かっこを外す次に、文字の項を左辺に、数の項を右辺に移項し、両辺を整理して解く。 x = 13最後に、求めた x をもとに、問われている量を計算する。 61人
+  explanation: まず、場面の中で、どちらの見方でも同じになる（等しくなっている）量に着目する。 参加者の全体の人数次に、その量を x を使って両辺に表し、方程式をつくる。 4x + 9 = 5(x - 1) + 1次に、分配法則を使って、かっこを外す。 かっこを外す次に、文字の項を左辺に、数の項を右辺に移項し、両辺を整理して解く。 x = 13最後に、求めた x をもとに、問われている量を計算する。
+    61人
   hints:
+  - 場面の中で、どちらの見方でも同じになる（等しくなっている）量に着目する。
+  - その量を x を使って両辺に表し、方程式をつくる。
   - 分配法則を使って、かっこを外す。
   - 文字の項を左辺に、数の項を右辺に移項し、両辺を整理して解く。
   label: (1)
   prompt_text: value を求めなさい。
   solution_steps:
+  - args: []
+    narration: 場面の中で、どちらの見方でも同じになる（等しくなっている）量に着目する。
+    op: find_equal_relation
+    result_display: 参加者の全体の人数
+    result_srepr: Symbol('x')
+  - args: []
+    narration: その量を x を使って両辺に表し、方程式をつくる。
+    op: formulate_equation
+    result_display: 4x + 9 = 5(x - 1) + 1
+    result_srepr: Equality(Add(Mul(Integer(4), Symbol('x')), Integer(9)), Add(Mul(Integer(5), Symbol('x')), Integer(-4)))
   - args: []
     narration: 分配法則を使って、かっこを外す。
     op: expand_parentheses

@@ -1,0 +1,76 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - simultaneous_equations.word_problem_salt_mixture
+  provenance:
+    git_commit: ''
+    recipe: math.word_problem_system_equations
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: wp_linear_solo_v1
+    tier: T1
+  requested:
+    form: word_problem
+    level: 3
+    subject: math
+    unit: g2_l18
+  resolved:
+    form: word_problem
+    level: 3
+    subject: math
+    unit: g2_l18
+  seed: 3
+  signature: word_problem_salt_mixture_solo
+problem_ref: caeed219f306675f
+problem_text: '4%の食塩水と18%の食塩水を混ぜて、11%の食塩水を1000gつくりたい。
+
+  それぞれ何gずつ混ぜればよいか求めよ。'
+sub_questions:
+- answer:
+    display: 4%の食塩水は500g、18%の食塩水は500g
+    kind: symbolic
+    srepr: Tuple(Integer(500), Integer(500))
+  cause_tags: []
+  concept_tags:
+  - simultaneous_equations.word_problem_salt_mixture
+  explanation: まず、4%の食塩水を x g、18%の食塩水を y g とおく。 x, y次に、食塩水の重さの関係に着目して、1つめの式をつくる。 x + y = 1000次に、溶けている食塩の重さの関係に着目して、2つめの式をつくる。 4x/100 + 18y/100 = 110次に、係数をそろえて一方の文字を消去し、残った文字を求める。 x = 500最後に、求めた値をもとの式に代入し、もう一方の文字を求める。
+    y = 500
+  hints:
+  - 4%の食塩水を x g、18%の食塩水を y g とおく。
+  - 食塩水の重さの関係に着目して、1つめの式をつくる。
+  - 溶けている食塩の重さの関係に着目して、2つめの式をつくる。
+  - 係数をそろえて一方の文字を消去し、残った文字を求める。
+  label: (1)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 4%の食塩水を x g、18%の食塩水を y g とおく。
+    op: set_variables
+    result_display: x, y
+    result_srepr: Tuple(Symbol('x'), Symbol('y'))
+  - args: []
+    narration: 食塩水の重さの関係に着目して、1つめの式をつくる。
+    op: formulate_first
+    result_display: x + y = 1000
+    result_srepr: Equality(Add(Symbol('x'), Symbol('y')), Integer(1000))
+  - args: []
+    narration: 溶けている食塩の重さの関係に着目して、2つめの式をつくる。
+    op: formulate_second
+    result_display: 4x/100 + 18y/100 = 110
+    result_srepr: Equality(Add(Mul(Rational(1, 25), Symbol('x')), Mul(Rational(9, 50), Symbol('y'))), Integer(110))
+  - args:
+    - Eq(x + y, 1000)
+    - Eq(x/25 + 9*y/50, 110)
+    narration: 係数をそろえて一方の文字を消去し、残った文字を求める。
+    op: eliminate_variable
+    result_display: x = 500
+    result_srepr: Equality(Symbol('x'), Integer(500))
+  - args:
+    - '500'
+    narration: 求めた値をもとの式に代入し、もう一方の文字を求める。
+    op: back_substitute
+    result_display: y = 500
+    result_srepr: Integer(500)
+visual_svg: null

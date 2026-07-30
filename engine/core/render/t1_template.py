@@ -145,16 +145,33 @@ class TextResult:
 
 # ---------------------------------------------------------------------------
 # explanation（§7.3）: steps の narration + result_display を接続詞テンプレで結合
+# 「最後に、」は最終ステップ専用（steps>=3 のとき）。steps が 4 個以上でも
+# 「最後に、」が途中に出ないよう、中間ステップはすべて「次に、」で繋ぐ。
 # ---------------------------------------------------------------------------
-_CONNECTIVES = ["まず、", "次に、", "最後に、"]
+_CONNECTIVE_FIRST = "まず、"
+_CONNECTIVE_MIDDLE = "次に、"
+_CONNECTIVE_LAST = "最後に、"
+
+
+def _connective(index: int, total: int) -> str:
+    """index 番目（0 始まり）のステップに付ける接続詞を返す。
+
+    steps=1 → 「まず、」／steps=2 → 「まず、次に、」／steps=3 → 「まず、次に、最後に、」
+    steps=4 → 「まず、次に、次に、最後に、」（従来は 3 番目に「最後に、」が出るバグがあった）
+    """
+    if index == 0:
+        return _CONNECTIVE_FIRST
+    if index == total - 1 and total >= 3:
+        return _CONNECTIVE_LAST
+    return _CONNECTIVE_MIDDLE
 
 
 def _build_explanation(mr: "MR", sq_index: int) -> str:
     sq = mr.sub_questions[sq_index]
+    total = len(sq.steps)
     parts: list[str] = []
     for i, step in enumerate(sq.steps):
-        connective = _CONNECTIVES[i] if i < len(_CONNECTIVES) else "さらに、"
-        sentence = f"{connective}{step.narration} {step.result_display}"
+        sentence = f"{_connective(i, total)}{step.narration} {step.result_display}"
         parts.append(sentence)
     return "".join(parts)
 

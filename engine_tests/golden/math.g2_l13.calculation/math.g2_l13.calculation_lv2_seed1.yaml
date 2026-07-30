@@ -35,7 +35,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - simultaneous_equations.solve_by_substitution
-  explanation: まず、はじめの式を x について解く。 x = 9 - 2y次に、これをもう一方の式に代入して y だけの方程式にする。 -4y = -8最後に、y の値を求める。 y = 2さらに、求めた y を x = … の式に代入して x を求める。 x = 5
+  explanation: まず、はじめの式を x について解く。 x = 9 - 2y次に、これをもう一方の式に代入して y だけの方程式にする。 -4y = -8次に、y の値を求める。 y = 2最後に、求めた y を x = … の式に代入して x を求める。 x = 5
   hints:
   - はじめの式を x について解く。
   - これをもう一方の式に代入して y だけの方程式にする。

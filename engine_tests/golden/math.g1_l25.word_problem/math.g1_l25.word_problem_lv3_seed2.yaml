@@ -23,7 +23,7 @@ meta:
     unit: g1_l25
   seed: 2
   signature: word_problem_price_count_diff
-problem_ref: 9c08ed36d65dba28
+problem_ref: 1820c468e770678a
 problem_text: 'ある店で、1個90円の消しゴムと1冊150円のノートを買った。ノートは消しゴムより3冊多く買い、代金の合計は930円だった。
 
   消しゴムを買った個数を求めよ。'
@@ -35,12 +35,24 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - equation.word_problem_price_count_diff
-  explanation: まず、分配法則を使って、かっこを外す。 かっこを外す次に、文字の項を左辺に、数の項を右辺に移項し、両辺を整理して解く。 x = 2
+  explanation: まず、場面の中で、どちらの見方でも同じになる（等しくなっている）量に着目する。 代金の合計次に、その量を x を使って両辺に表し、方程式をつくる。 90x + 150(x + 3) = 930次に、分配法則を使って、かっこを外す。 かっこを外す最後に、文字の項を左辺に、数の項を右辺に移項し、両辺を整理して解く。 x = 2
   hints:
+  - 場面の中で、どちらの見方でも同じになる（等しくなっている）量に着目する。
+  - その量を x を使って両辺に表し、方程式をつくる。
   - 分配法則を使って、かっこを外す。
   label: (1)
   prompt_text: value を求めなさい。
   solution_steps:
+  - args: []
+    narration: 場面の中で、どちらの見方でも同じになる（等しくなっている）量に着目する。
+    op: find_equal_relation
+    result_display: 代金の合計
+    result_srepr: Symbol('x')
+  - args: []
+    narration: その量を x を使って両辺に表し、方程式をつくる。
+    op: formulate_equation
+    result_display: 90x + 150(x + 3) = 930
+    result_srepr: Equality(Add(Mul(Integer(240), Symbol('x')), Integer(450)), Integer(930))
   - args: []
     narration: 分配法則を使って、かっこを外す。
     op: expand_parentheses

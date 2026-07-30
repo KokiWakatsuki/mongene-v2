@@ -1,0 +1,73 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - equation.word_problem_continued_ratio
+  provenance:
+    git_commit: ''
+    recipe: math.word_problem_linear_equation
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: wp_linear_solo_v1
+    tier: T1
+  requested:
+    form: word_problem
+    level: 3
+    subject: math
+    unit: g1_l24
+  resolved:
+    form: word_problem
+    level: 3
+    subject: math
+    unit: g1_l24
+  seed: 1
+  signature: word_problem_continued_ratio
+problem_ref: 6f006972ac765b6f
+problem_text: '白・青・赤のリボンの本数の比は4:8:1で、全部で65本ある。
+
+  青のリボンの本数を求めよ。'
+sub_questions:
+- answer:
+    display: 40本
+    kind: symbolic
+    srepr: Integer(40)
+  cause_tags: []
+  concept_tags:
+  - equation.word_problem_continued_ratio
+  explanation: まず、連比の各項をたして、全体がいくつ分にあたるかを求める。 全体は13次に、場面の中で、どちらの見方でも同じになる（等しくなっている）量に着目する。 青の本数と全体の本数の比次に、その量を x を使って両辺に表し、方程式をつくる。 8:13 = x:65次に、比例式の性質を使い、外項の積と内項の積が等しい式（たすきがけ）をつくる。 たすきがけの式をつくる最後に、x の係数で両辺をわって、x
+    の値を求める。 x = 40
+  hints:
+  - 連比の各項をたして、全体がいくつ分にあたるかを求める。
+  - 場面の中で、どちらの見方でも同じになる（等しくなっている）量に着目する。
+  - その量を x を使って両辺に表し、方程式をつくる。
+  - 比例式の性質を使い、外項の積と内項の積が等しい式（たすきがけ）をつくる。
+  label: (1)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 連比の各項をたして、全体がいくつ分にあたるかを求める。
+    op: sum_ratio_parts
+    result_display: 全体は13
+    result_srepr: Symbol('x')
+  - args: []
+    narration: 場面の中で、どちらの見方でも同じになる（等しくなっている）量に着目する。
+    op: find_equal_relation
+    result_display: 青の本数と全体の本数の比
+    result_srepr: Symbol('x')
+  - args: []
+    narration: その量を x を使って両辺に表し、方程式をつくる。
+    op: formulate_equation
+    result_display: 8:13 = x:65
+    result_srepr: Equality(Mul(Integer(13), Symbol('x')), Integer(520))
+  - args: []
+    narration: 比例式の性質を使い、外項の積と内項の積が等しい式（たすきがけ）をつくる。
+    op: cross_multiply
+    result_display: たすきがけの式をつくる
+    result_srepr: Integer(40)
+  - args: []
+    narration: x の係数で両辺をわって、x の値を求める。
+    op: solve_proportion
+    result_display: x = 40
+    result_srepr: Integer(40)
+visual_svg: null

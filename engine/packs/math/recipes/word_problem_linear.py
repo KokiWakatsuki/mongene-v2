@@ -36,6 +36,7 @@ scene が `answer_coeff=(m, n)` を宣言すると、答えは m·x + n にな�
 """
 from __future__ import annotations
 
+import math
 from collections.abc import Callable, Mapping
 from dataclasses import dataclass
 from typing import Any, cast
@@ -63,6 +64,8 @@ _LINEAR_CONCEPTS = [
     "equation.word_problem_seat_shortage",
     "equation.word_problem_round_trip",
     "equation.word_problem_catch_up",
+    "equation.word_problem_proportion_pair",
+    "equation.word_problem_continued_ratio",
 ]
 
 _X = sympy.Symbol("x")
@@ -163,6 +166,40 @@ def formulate_catch_up(
     )
 
 
+def formulate_proportion_pair(
+    *, count_a: int, price_a: int, count_b: int
+) -> LinearFormulation:
+    """a:p = b:x（対応する量の比）。表示は比例式・solver に渡すのはたすきがけ後の式。
+
+    g1_l24.calculation と同じ「表示と solver 用の式が別物」の型。
+    """
+    return _formulate(
+        f"{count_a}*x",
+        f"{price_a}*{count_b}",
+        f"{count_a}:{price_a} = {count_b}:x",
+        "cross_multiply",
+    )
+
+
+def formulate_continued_ratio(
+    *, ratio_1: int, ratio_2: int, ratio_3: int, total: int
+) -> LinearFormulation:
+    """r2:(r1+r2+r3) = x:N（連比の1つ分と全体の比）。問うのは真ん中の項。
+
+    連比の各項の和は**場面文には出ていない**（読者が自分でたす数）。だから params は
+    3項をそのまま持ち、和はここで導く——こうすると params の数値はすべて場面文に
+    現れ、「本文の比を書き違えたら checker が落ちる」経路になる。
+    ここが Lv2 との差（Lv2 は本文の2量をそのまま比に並べるだけ）。
+    """
+    ratio_total = ratio_1 + ratio_2 + ratio_3
+    return _formulate(
+        f"{ratio_total}*x",
+        f"{ratio_2}*{total}",
+        f"{ratio_2}:{ratio_total} = x:{total}",
+        "cross_multiply",
+    )
+
+
 FORMULATION_BUILDERS: dict[str, Callable[..., LinearFormulation]] = {
     "price_count": formulate_price_count,
     "price_count_diff": formulate_price_count_diff,
@@ -170,6 +207,8 @@ FORMULATION_BUILDERS: dict[str, Callable[..., LinearFormulation]] = {
     "seat_shortage": formulate_seat_shortage,
     "round_trip": formulate_round_trip,
     "catch_up": formulate_catch_up,
+    "proportion_pair": formulate_proportion_pair,
+    "continued_ratio": formulate_continued_ratio,
 }
 
 
@@ -195,6 +234,9 @@ class LinearScene:
     answer_coeff: tuple[int, int]
     answer_unit: str
     slots: dict[str, str]
+    # 立式の前に1手要る場面だけが使う（連比の和を出す等）。(op, 表示, narration)。
+    # None なら立式は従来どおり2手＝既存セルの steps は変わらない。
+    prelude_step: tuple[str, str, str] | None = None
 
 
 def _split_pair(token: str) -> tuple[str, str]:
@@ -428,6 +470,114 @@ def _scene_catch_up(p: Mapping[str, Any], rng: Rng) -> LinearScene:
     )
 
 
+def _proportion_pair_candidates(p: Mapping[str, Any]) -> list[tuple[int, int, int]]:
+    """(1つあたりの値段, 分かっている個数, 問われている個数) の候補列挙。
+
+    answer-first: 単価 u を先に引き、a 個の値段 p = u·a と答え x = u·b を逆算する
+    （割り切れない比例式が出ない）。a ≠ b でないと「同じ数を問う」退化になる。
+    答え x が本文の数値（a, p, b）と一致する組は除く（定数答えセルの定石）。
+    """
+    units = [int(v) for v in p["unit_price_candidates"]]
+    counts = [int(v) for v in p["count_candidates"]]
+    out: list[tuple[int, int, int]] = []
+    for unit in units:
+        for count_a in counts:
+            for count_b in counts:
+                if count_a == count_b:
+                    continue
+                price_a, answer = unit * count_a, unit * count_b
+                if answer in (count_a, price_a, count_b):
+                    continue
+                out.append((unit, count_a, count_b))
+    return out
+
+
+def _scene_proportion_pair(p: Mapping[str, Any], rng: Rng) -> LinearScene:
+    """g1_l24 Lv2: a 個で p 円のとき b 個はいくらか（誘導あり・比例式を立てる）。"""
+    cands = _proportion_pair_candidates(p)
+    unit, count_a, count_b = cands[int(draw({"int_range": [0, len(cands) - 1]}, rng))]
+    item, counter = _draw_pair_token(list(p["item_candidates"]), rng)
+    price_a = unit * count_a
+    return LinearScene(
+        numbers={"count_a": count_a, "price_a": price_a, "count_b": count_b},
+        scenario=(
+            f"同じ{item}を何{counter}か買う。{item}{count_a}{counter}の値段は{price_a}円である。"
+        ),
+        quantities=f"{item}{count_b}{counter}の値段を x 円とする。",
+        ask_formulation=f"{count_a}{counter}と{count_b}{counter}の値段の比例式をつくれ。",
+        ask_value=f"{item}{count_b}{counter}の値段を求めよ。",
+        relation_label=f"{counter}数と値段の比",
+        answer_coeff=(1, 0),
+        answer_unit="円",
+        slots={"item": item, "counter": counter},
+    )
+
+
+def _continued_ratio_candidates(p: Mapping[str, Any]) -> list[tuple[int, int, int, int]]:
+    """(連比の3項, 1つ分の個数) の候補列挙＝(r1, r2, r3, k)。
+
+    問うのは真ん中の項（場面文の色の並び順で2番めのもの）。全体 N = k·(r1+r2+r3)
+    が範囲内で、答え x = k·r2 が本文の数値（r1, r2, r3, N）と一致しない組だけ残す。
+    連比は**既約**に限る（8:2:6 のような約せる比は教材として出さない）。
+    """
+    ratios = [int(v) for v in p["ratio_candidates"]]
+    units = [int(v) for v in p["unit_candidates"]]
+    lo, hi = (int(v) for v in p["total_range"])
+    out: list[tuple[int, int, int, int]] = []
+    for r1 in ratios:
+        for r2 in ratios:
+            for r3 in ratios:
+                # 3項すべて同じだと比が意味を失う（1:1:1＝ただの等分）。
+                if r1 == r2 == r3:
+                    continue
+                if math.gcd(r1, r2, r3) != 1:
+                    continue
+                ratio_total = r1 + r2 + r3
+                for unit in units:
+                    total, answer = unit * ratio_total, unit * r2
+                    if not (lo <= total <= hi):
+                        continue
+                    if answer in (r1, r2, r3, total):
+                        continue
+                    out.append((r1, r2, r3, unit))
+    return out
+
+
+def _scene_continued_ratio(p: Mapping[str, Any], rng: Rng) -> LinearScene:
+    """g1_l24 Lv3: 連比 r1:r2:r3 で全体 N のとき、真ん中の個数を求める（誘導なし）。
+
+    Lv2 と違い、比例式に並べる「全体がいくつ分か」（r1+r2+r3）が本文に無い＝
+    自分でたしてから立式する。立式の手数が1つ増えるのを `prelude_step` で表す。
+    """
+    cands = _continued_ratio_candidates(p)
+    r1, r2, r3, unit = cands[int(draw({"int_range": [0, len(cands) - 1]}, rng))]
+    obj, counter = _draw_pair_token(list(p["object_candidates"]), rng)
+    name_1, name_2, name_3 = str(
+        draw(list(p["label_triple_candidates"]), rng)
+    ).split("|")
+    ratio_total = r1 + r2 + r3
+    total = unit * ratio_total
+    return LinearScene(
+        numbers={"ratio_1": r1, "ratio_2": r2, "ratio_3": r3, "total": total},
+        scenario=(
+            f"{name_1}・{name_2}・{name_3}の{obj}の{counter}数の比は"
+            f"{r1}:{r2}:{r3}で、全部で{total}{counter}ある。"
+        ),
+        quantities="",
+        ask_formulation="",
+        ask_value=f"{name_2}の{obj}の{counter}数を求めよ。",
+        relation_label=f"{name_2}の{counter}数と全体の{counter}数の比",
+        answer_coeff=(1, 0),
+        answer_unit=counter,
+        slots={"object": obj, "counter": counter, "label": name_2},
+        prelude_step=(
+            "sum_ratio_parts",
+            f"全体は{ratio_total}",
+            "連比の各項をたして、全体がいくつ分にあたるかを求める。",
+        ),
+    )
+
+
 _SCENE_DRAWERS: dict[str, Callable[[Mapping[str, Any], Rng], LinearScene]] = {
     "price_count": _scene_price_count,
     "price_count_diff": _scene_price_count_diff,
@@ -435,6 +585,8 @@ _SCENE_DRAWERS: dict[str, Callable[[Mapping[str, Any], Rng], LinearScene]] = {
     "seat_shortage": _scene_seat_shortage,
     "round_trip": _scene_round_trip,
     "catch_up": _scene_catch_up,
+    "proportion_pair": _scene_proportion_pair,
+    "continued_ratio": _scene_continued_ratio,
 }
 
 
@@ -476,6 +628,7 @@ def word_problem_linear_equation(ctx: CellContext, rng: Rng) -> MR:
     concept_tags = list(ctx.spec_level.concept_tags or ctx.spec_family.concepts_default)
     cause_tags = list(ctx.spec_level.cause_tags)
 
+    formulation_steps = _formulation_steps(scene, formulation)
     value_sq = SubQuestionMR(
         label="(2)" if guided else "(1)",
         asked="value",
@@ -483,7 +636,13 @@ def word_problem_linear_equation(ctx: CellContext, rng: Rng) -> MR:
             srepr=sympy.srepr(answer_value),
             display=f"{answer_value}{scene.answer_unit}",
         ),
-        steps=[*sol.steps, *_derive_steps(scene, answer_value)],
+        # 誘導なしのセルは (1) が無いので、立式の手順も value 側の模範解答に入れる
+        # （でないと「解くところから始まる解説」になる）。誘導ありは (1) が持つ。
+        steps=[
+            *([] if guided else formulation_steps),
+            *sol.steps,
+            *_derive_steps(scene, answer_value),
+        ],
         concept_tags=concept_tags,
         cause_tags=cause_tags,
     )
@@ -497,7 +656,7 @@ def word_problem_linear_equation(ctx: CellContext, rng: Rng) -> MR:
                 answer=SymbolicAnswer(
                     srepr=sympy.srepr(formulation.eq), display=formulation.display
                 ),
-                steps=_formulation_steps(scene, formulation),
+                steps=formulation_steps,
                 concept_tags=concept_tags,
                 cause_tags=cause_tags,
             ),
@@ -539,8 +698,25 @@ def word_problem_linear_equation(ctx: CellContext, rng: Rng) -> MR:
 
 
 def _formulation_steps(scene: LinearScene, formulation: LinearFormulation) -> list[Step]:
-    """(1) 立式の手順。narration には数値を書かない（hints に流れるので G-Q5t 対象）。"""
+    """(1) 立式の手順。narration には数値を書かない（hints に流れるので G-Q5t 対象）。
+
+    `scene.prelude_step` がある場面（連比）は「立式の前にひと手」を先頭に足す。
+    既定は None なので、既存の場面の steps は2手のまま変わらない。
+    """
+    prelude: list[Step] = []
+    if scene.prelude_step is not None:
+        op, display, narration = scene.prelude_step
+        prelude.append(
+            Step(
+                op=op,
+                args=[],
+                result_srepr=sympy.srepr(_X),
+                result_display=display,
+                narration=narration,
+            )
+        )
     return [
+        *prelude,
         Step(
             op="find_equal_relation",
             args=[],
