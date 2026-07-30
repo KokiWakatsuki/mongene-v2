@@ -237,6 +237,9 @@ concepts:
   - id: motion.area_two_segment
     label: "動点が区間をまたいだ後の三角形の面積を場合分けして座標で求める（2区間目）"
     unit: g3_l31
+  - id: motion.area_time_graph_segment
+    label: "動点がつくる三角形の面積を時間の1次関数と捉え変域つきのグラフ（線分）にかく"
+    unit: g3_l31
   # C3 g3 knowledge（用語想起・規則想起）
   - id: expansion_meaning.rule_recall
     label: "展開が積の形を和の形に直す操作であることを想起する"

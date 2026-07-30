@@ -149,6 +149,9 @@ GRAPH_TABLE_FRAME = Frame(
         "equation",  # 横展開#9: 2元1次方程式 ax+by=c を変形してかく（g2_l26）
         "equation2",  # P1/C5: 特殊直線 x=k / y=k を追加で与える（g2_l26 Lv2）
         "x_domain",  # P1/C5: 変域つきグラフを線分でかく（g2_l23 Lv2）
+        # C3 g3_l31: 動点の場面（文章で与える状況）から面積の時間変化をグラフにかく。
+        # find_value 側と同じキー名を使う（同じ題材・同じ与え方を form 間で揃える）。
+        "condition",
         "line_a", "line_b",  # 横展開#10: 2直線をかき交点を読む（g2_l27 graph）
         # C7 g1平面図形（横展開#94）: 移動前の多角形（Lv1=方眼上の説明文/Lv2=座標つき説明文）
         # ＋移動の指定。Lv1/Lv2 でキー名を分ける（level_sep・G-FP: 同一 family 内で

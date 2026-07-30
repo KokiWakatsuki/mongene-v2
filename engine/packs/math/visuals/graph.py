@@ -29,6 +29,10 @@ _MARGIN = 28  # px（目盛ラベル用の余白）
 _MIN_HALF_RANGE = 5  # グリッドの最小半幅（点が原点近くでも読みやすい範囲を確保）
 _EXTRA_MARGIN = 2  # 点の外側に確保する整数目盛の余白
 
+# --- 量-量グラフ（grid_mode="quantity"）用 ---
+_QUANTITY_MAX_TICKS = 12  # 1軸に置く目盛の本数の上限（これを超えないよう間隔を粗くする）
+_NICE_MANTISSAS = (1, 2, 5)  # 切りのよい目盛間隔の仮数（×10ⁿ）
+
 
 def _parse_point(s: str) -> tuple[sympy.Expr, sympy.Expr]:
     t = sympy.sympify(s)
@@ -63,18 +67,69 @@ def _linear_scale(
     return scale
 
 
-def compute_grid_bounds_from_params(params: dict[str, Any]) -> tuple[int, int, int, int]:
-    """params（recipe が MR.params に残す a/b/pts）の pts が収まるグリッド範囲
+class _GridSpec(NamedTuple):
+    """グリッドの範囲と目盛間隔（座標平面は間隔 1・量-量グラフは軸ごとに粗い間隔）。"""
 
-    (x_lo, x_hi, y_lo, y_hi) を決める。render_linear_graph と recipe 側
-    （visual_plan.labels 構築）が同じロジックを共有するための公開ヘルパー
-    （labels と実描画の目盛を機械的に一致させる）。縦横の目盛間隔を揃える
-    （傾きを視覚的に歪めない）ため、共通の半幅を採用する。
+    x_lo: int
+    x_hi: int
+    y_lo: int
+    y_hi: int
+    x_step: int
+    y_step: int
+
+
+def _nice_step(v_max: int) -> int:
+    """0〜v_max を `_QUANTITY_MAX_TICKS` 本以内の目盛で覆う、切りのよい間隔（1/2/5×10ⁿ）。"""
+    if v_max <= _QUANTITY_MAX_TICKS:
+        return 1
+    scale = 1
+    for _ in range(10):  # 10¹⁰ まで見れば教材の値域は尽きる
+        for mantissa in _NICE_MANTISSAS:
+            step = mantissa * scale
+            if v_max <= _QUANTITY_MAX_TICKS * step:
+                return step
+        scale *= 10
+    raise ValueError(f"目盛間隔を決められない大きさ: {v_max}")  # pragma: no cover - 非現実な値域
+
+
+def _quantity_grid_spec(xs: list[sympy.Expr], ys: list[sympy.Expr]) -> _GridSpec:
+    """量-量グラフ（x と y で単位が違う）のグリッド範囲＋目盛間隔。
+
+    時間 x 秒と面積 y cm² のように**単位の異なる2量**の関係を表すグラフでは、縦横で
+    縮尺を揃える意味がない（教科書のグラフも軸ごとに目盛を取る）。そこで座標平面
+    （`compute_grid_spec_from_params` の既定経路）と違い、
+    ①第1象限のみ（x,y≧0 の量）②軸ごとに独立な目盛間隔③値の大きい軸は目盛を粗く、
+    の3点で描く。範囲は最大値の1目盛先まで（点が枠に貼りつかない余白）。
+    """
+    x_max, y_max = max(int(v) for v in xs), max(int(v) for v in ys)
+    assert min(int(v) for v in xs) >= 0 and min(int(v) for v in ys) >= 0, (
+        "量-量グラフ（grid_mode=quantity）は第1象限のみを描く（負の値は非対応）"
+    )
+    x_step, y_step = _nice_step(x_max), _nice_step(y_max)
+    return _GridSpec(
+        x_lo=0,
+        x_hi=(x_max // x_step + 1) * x_step,
+        y_lo=0,
+        y_hi=(y_max // y_step + 1) * y_step,
+        x_step=x_step,
+        y_step=y_step,
+    )
+
+
+def compute_grid_spec_from_params(params: dict[str, Any]) -> _GridSpec:
+    """params（recipe が MR.params に残す a/b/pts）の pts が収まるグリッド範囲と目盛間隔。
+
+    既定は**座標平面**（x も y も同じ数直線＝縦横等スケール・目盛は 1 刻み）。
+    `params["grid_mode"] == "quantity"` を宣言したセルのみ量-量グラフの範囲取り
+    （`_quantity_grid_spec`）に切り替わる。宣言しない既存セルは従来と完全に同じ
+    計算を通る（＝出力バイト列不変・既存 golden 不変）。
     """
     pts_raw = params["pts"]
     pts = [_parse_point(s) for s in pts_raw]
     xs = [p[0] for p in pts]
     ys = [p[1] for p in pts]
+    if params.get("grid_mode") == "quantity":
+        return _quantity_grid_spec(xs, ys)
     x_lo, x_hi = _compute_range(xs)
     y_lo, y_hi = _compute_range(ys)
     half = max(x_hi - x_lo, y_hi - y_lo)
@@ -84,7 +139,17 @@ def compute_grid_bounds_from_params(params: dict[str, Any]) -> tuple[int, int, i
     x_hi = int(x_mid + half / 2)
     y_lo = int(y_mid - half / 2)
     y_hi = int(y_mid + half / 2)
-    return x_lo, x_hi, y_lo, y_hi
+    return _GridSpec(x_lo, x_hi, y_lo, y_hi, 1, 1)
+
+
+def compute_grid_bounds_from_params(params: dict[str, Any]) -> tuple[int, int, int, int]:
+    """グリッド範囲 (x_lo, x_hi, y_lo, y_hi) だけを返す（目盛間隔は不要な呼び出し用）。
+
+    render_linear_graph と recipe 側（visual_plan.labels 構築）が同じロジックを
+    共有するための公開ヘルパー（labels と実描画の目盛を機械的に一致させる）。
+    """
+    spec = compute_grid_spec_from_params(params)
+    return spec.x_lo, spec.x_hi, spec.y_lo, spec.y_hi
 
 
 def compute_grid_bounds(mr: "MR") -> tuple[int, int, int, int]:
@@ -98,13 +163,13 @@ def tick_labels_from_params(params: dict[str, Any]) -> list[str]:
     recipe が MR を組み立てる前（params だけがある時点）から呼べるよう、
     dict を直接受け取る形にしてある（`tick_labels` はその MR 版ショートカット）。
     """
-    x_lo, x_hi, y_lo, y_hi = compute_grid_bounds_from_params(params)
+    spec = compute_grid_spec_from_params(params)
     labels: list[str] = []
-    for gx in range(x_lo, x_hi + 1):
+    for gx in range(spec.x_lo, spec.x_hi + 1, spec.x_step):
         if gx == 0:
             continue
         labels.append(_format_tick(sympy.Integer(gx)))
-    for gy in range(y_lo, y_hi + 1):
+    for gy in range(spec.y_lo, spec.y_hi + 1, spec.y_step):
         labels.append(_format_tick(sympy.Integer(gy)))
     return labels
 
@@ -130,11 +195,16 @@ class _GridScaffold(NamedTuple):
     y_hi: int
     plot_lo: float
     plot_hi: float
+    # 目盛間隔（既定 1＝座標平面。量-量グラフのみ粗くなる。既存の呼び出し側が
+    # 9 引数で構築できるよう末尾に既定値つきで置く）
+    x_step: int = 1
+    y_step: int = 1
 
 
 def _grid_scaffold(params: dict[str, Any]) -> _GridScaffold:
     """SVG open+rect+グリッド線+軸までを組む（描画要素・目盛の手前まで・決定論）。"""
-    x_lo, x_hi, y_lo, y_hi = compute_grid_bounds_from_params(params)
+    spec = compute_grid_spec_from_params(params)
+    x_lo, x_hi, y_lo, y_hi = spec.x_lo, spec.x_hi, spec.y_lo, spec.y_hi
 
     plot_lo = _MARGIN
     plot_hi = _SVG_SIZE - _MARGIN
@@ -149,13 +219,13 @@ def _grid_scaffold(params: dict[str, Any]) -> _GridScaffold:
     parts.append(f'<rect x="0" y="0" width="{_SVG_SIZE}" height="{_SVG_SIZE}" fill="none" stroke="none"/>')
 
     # --- グリッド線（細い灰の実線。モノクロ印刷可＝色に情報を載せない） ---
-    for gx in range(x_lo, x_hi + 1):
+    for gx in range(x_lo, x_hi + 1, spec.x_step):
         px = to_px_x(gx)
         parts.append(
             f'<line x1="{px:.2f}" y1="{plot_lo:.2f}" x2="{px:.2f}" y2="{plot_hi:.2f}" '
             f'stroke="#bbbbbb" stroke-width="0.5"/>'
         )
-    for gy in range(y_lo, y_hi + 1):
+    for gy in range(y_lo, y_hi + 1, spec.y_step):
         py = to_px_y(gy)
         parts.append(
             f'<line x1="{plot_lo:.2f}" y1="{py:.2f}" x2="{plot_hi:.2f}" y2="{py:.2f}" '
@@ -176,14 +246,17 @@ def _grid_scaffold(params: dict[str, Any]) -> _GridScaffold:
             f'stroke="#000000" stroke-width="1.5"/>'
         )
 
-    return _GridScaffold(parts, to_px_x, to_px_y, x_lo, x_hi, y_lo, y_hi, plot_lo, plot_hi)
+    return _GridScaffold(
+        parts, to_px_x, to_px_y, x_lo, x_hi, y_lo, y_hi, plot_lo, plot_hi,
+        spec.x_step, spec.y_step,
+    )
 
 
 def _grid_ticks(sc: _GridScaffold) -> list[str]:
     """軸目盛の数値ラベル（<text> はこれのみ。visual_plan.labels と一致させる）。"""
     ticks: list[str] = []
     py0 = sc.to_px_y(0) if sc.y_lo <= 0 <= sc.y_hi else sc.plot_hi
-    for gx in range(sc.x_lo, sc.x_hi + 1):
+    for gx in range(sc.x_lo, sc.x_hi + 1, sc.x_step):
         if gx == 0:
             continue  # 原点の重複表記を避ける（0 は y 軸側で1回だけ出す）
         px = sc.to_px_x(gx)
@@ -192,7 +265,7 @@ def _grid_ticks(sc: _GridScaffold) -> list[str]:
             f'text-anchor="middle" fill="#000000">{_format_tick(sympy.Integer(gx))}</text>'
         )
     px0 = sc.to_px_x(0) if sc.x_lo <= 0 <= sc.x_hi else sc.plot_lo
-    for gy in range(sc.y_lo, sc.y_hi + 1):
+    for gy in range(sc.y_lo, sc.y_hi + 1, sc.y_step):
         py = sc.to_px_y(gy)
         ticks.append(
             f'<text x="{px0 - 8:.2f}" y="{py + 3:.2f}" font-size="10" '
@@ -352,6 +425,7 @@ __all__ = [
     "render_segment_solution_svg",
     "compute_grid_bounds",
     "compute_grid_bounds_from_params",
+    "compute_grid_spec_from_params",
     "tick_labels",
     "tick_labels_from_params",
 ]

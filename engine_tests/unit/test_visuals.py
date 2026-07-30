@@ -6,6 +6,7 @@
 - 答え座標の点マーカー/座標ラベルを描かない（`<text>` に答え座標が現れない）。
 - モノクロ印刷可（彩度のある色で情報を区別していない＝黒・グレースケール・none のみ）。
 - G-Q5v を「わざと壊す」: labels に無い text を含む svg／禁止 kind を含む visual_plan で fail。
+- 量-量グラフ（grid_mode="quantity"）: 第1象限のみ・軸ごとに独立な粗い目盛・既定は従来通り。
 """
 from __future__ import annotations
 
@@ -23,7 +24,12 @@ from engine.core.contracts import (
 from engine.core.registry import _Registry
 from engine.core.verify.gates import VisualStageInput
 from engine.core.verify.quality_gates import install_quality_gates
-from engine.packs.math.visuals.graph import render_linear_graph, tick_labels_from_params
+from engine.packs.math.visuals.graph import (
+    compute_grid_spec_from_params,
+    render_linear_graph,
+    render_segment_solution_svg,
+    tick_labels_from_params,
+)
 
 
 def _mr(params: dict[str, Any], *, visual_plan: VisualPlan | None = None) -> MR:
@@ -92,6 +98,45 @@ def test_monochrome_only() -> None:
             assert r == g == b, f"グレースケールでない色: {c}"
         else:
             assert c.lower() in ("black", "white", "none", "gray", "grey"), f"彩度のある色名: {c}"
+
+
+# ---------------------------------------------------------------------------
+# 量-量グラフ（grid_mode="quantity"・C3 g3_l31.graph_table で開通）
+# ---------------------------------------------------------------------------
+_QUANTITY_PARAMS = {"a": "54", "b": "0", "pts": ["(0, 0)", "(3, 162)"], "grid_mode": "quantity"}
+
+
+def test_quantity_grid_is_first_quadrant_with_coarse_y_step() -> None:
+    """単位の違う2量のグラフ: 第1象限のみ・y は粗い目盛（1刻みなら方眼が潰れる）。"""
+    spec = compute_grid_spec_from_params(_QUANTITY_PARAMS)
+    assert (spec.x_lo, spec.y_lo) == (0, 0)
+    assert spec.x_step == 1  # x（時間 3 秒）は 1 刻みで足りる
+    assert spec.y_step == 20  # y（面積 162）は 20 刻み＝目盛 10 本
+    # 両軸とも値の 1 目盛先まで（点が枠に貼りつかない）。
+    assert spec.x_hi == 4
+    assert spec.y_hi == 180
+    # 目盛の本数は上限以内（軸ラベルが潰れない）。
+    assert len(range(spec.x_lo, spec.x_hi + 1, spec.x_step)) <= 13
+    assert len(range(spec.y_lo, spec.y_hi + 1, spec.y_step)) <= 13
+
+
+def test_quantity_grid_svg_texts_are_subset_of_tick_labels() -> None:
+    svg = render_segment_solution_svg(
+        {**_QUANTITY_PARAMS, "seg_x_lo": "0", "seg_x_hi": "3", "closed_lo": True, "closed_hi": True}
+    )
+    labels = set(tick_labels_from_params(_QUANTITY_PARAMS))
+    for t in _svg_texts(svg):
+        assert t in labels, f"svg text {t!r} が tick_labels({sorted(labels)}) に無い"
+
+
+def test_default_grid_mode_is_unchanged_coordinate_plane() -> None:
+    """grid_mode を宣言しない既存セルは従来の座標平面（縦横等スケール・1刻み）のまま。"""
+    spec = compute_grid_spec_from_params(_PARAMS)
+    assert (spec.x_step, spec.y_step) == (1, 1)
+    assert spec.x_lo < 0 < spec.x_hi and spec.y_lo < 0 < spec.y_hi
+    # 縦横がほぼ同じ幅（共通の半幅を中点から取るため、整数丸めで最大1目盛だけずれる）
+    # ＝縮尺が揃い傾きを視覚的に歪めない。
+    assert abs((spec.x_hi - spec.x_lo) - (spec.y_hi - spec.y_lo)) <= 1
 
 
 def test_g_q5v_fails_when_svg_text_not_in_labels() -> None:

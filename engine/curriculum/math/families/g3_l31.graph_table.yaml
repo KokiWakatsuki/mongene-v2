@@ -1,0 +1,49 @@
+family: math.g3_l31.graph_table
+form: graph_table
+source_desc: |
+  動点がつくる三角形の面積を、時間の関数のグラフ（線分）としてかく
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv2 desc: 時間と面積の対応を表・グラフに整理して読む。
+       example: 1辺が6cmの正方形ABCDで、点PはAを出発し辺AB上を毎秒1cmでBまで動く。
+                出発してからの時間をx秒、三角形APDの面積をy cm²とするとき、xが0から6まで
+                変化するときのxとyの対応を表に整理し、その関係をグラフに表せ。
+  答えはグラフ（GraphAnswer＝両端点の特徴集合）。問題図は空の方眼、模範解答図は両端に
+  ●（ふくむ）をつけた線分。given=condition（動点の場面・find_value 側と同じキー）。
+  【スコープ】台帳の example は「表に整理し、その関係をグラフに表せ」だが、採点対象＝
+  答えとして持つのはグラフ（線分）1本に絞る（表づくりは生徒がグラフをかく前段の作業で、
+  G-Q1 の double-solve は代表小問1つを突き合わせる規約のため、表を第2小問にすると
+  その答えが独立検証を受けられない）。設問文も「xとyの関係を表すグラフをかけ」に揃える。
+  【設計モデル】P が辺 AB 上を動く間、底辺 AD=s は一定・高さ AP=v·x なので面積は
+  y=(s·v/2)x（切片0）の1次関数になり、変域は 0≦x≦t_end（t_end=s/v＝P が B に達する時刻・
+  両端とも到達の瞬間を含む閉区間）。answer-first で v と t_end を引き 1辺 s=v·t_end を
+  逆算する（t_end が整数＝変域の右端が目盛にのることを構成時に保証。s²/2 を整数に保つため
+  v·t_end が偶数の組だけを候補にする）。面積の値は独立ソルバ math.solve_moving_point_area
+  （shoelace 公式・g3_l31.find_value と共有）で再計算して式の値と一致を確認する。
+  端点特徴・描画・checker は g2_l23.graph_table の既存部品をそのまま再利用＝新 solver ゼロ。
+  【図】時間 x 秒と面積 y cm² は単位の違う2量なので、座標平面ではなく量-量グラフとして
+  描く（params の grid_mode="quantity"＝第1象限のみ・軸ごとに独立な切りのよい目盛間隔）。
+  y は最大 s²/2 まで伸びるため、従来の「縦横等スケール・1刻み」では方眼が潰れる。
+concepts_default: [motion.area_time_graph_segment]
+levels:
+  "2":
+    signature: motion_area_time_graph_segment
+    recipe: math.draw_area_time_graph_segment
+    params:
+      # 速さ v・到達時刻 t_end の候補（1辺 s=v·t_end を逆算する）と、1辺の上限。
+      # recipe は「v·t_end が偶数（面積 s²/2 が整数）かつ s≦side_max」を満たす組だけを
+      # 候補に列挙してから引く（構成時に非退化を保証）。組は 37 通り × 点名 P(16,5)
+      # ＝dup_rate 0.0（eval/100seed で実測）。
+      # side_max=44 は面積の上限 s²/2≦968＝グラフの y 軸目盛を3桁に収める上限
+      # （軸ラベルの余白に収まる範囲）。
+      speed_candidates: [1, 2, 3, 4, 5, 6]
+      t_end_candidates: [3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+      side_max: 44
+    given: [condition]
+    asked: [draw_segment]
+    visual: required
+    text: {tier: T1, template: lf_motion_area_v1, visual_builder: math.linear_graph}
+    hints: [steps_prefix]
+    concept_tags: [motion.area_time_graph_segment]
+    cause_tags: []
+remedial:
+  default_level: 2

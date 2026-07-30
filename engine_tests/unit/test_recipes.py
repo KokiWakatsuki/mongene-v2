@@ -3033,6 +3033,57 @@ def test_solve_moving_point_area_lv3_construct():
     assert sympy.sympify(sq.answer.srepr) == sympy.Rational(s * s, 2)
 
 
+def test_draw_area_time_graph_segment_lv2_construct():
+    ctx = _make_ctx("math.g3_l31.graph_table", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+
+    assert mr.signature == "motion_area_time_graph_segment"
+    assert set(mr.given.keys()) == {"condition"}
+    sq = mr.sub_questions[0]
+    assert sq.asked == "draw_segment"
+    assert sq.answer.kind == "graph"
+    # 両端とも「到達の瞬間をふくむ」＝閉区間の端点2つ。
+    assert [f.kind for f in sq.answer.features] == ["endpoint_closed", "endpoint_closed"]
+    assert [s.op for s in sq.steps] == ["plot_endpoint_lo", "plot_endpoint_hi", "draw_segment"]
+    # 時間-面積の量-量グラフ（第1象限・軸ごとに独立な目盛間隔）として描く。
+    assert mr.params["grid_mode"] == "quantity"
+    assert mr.visual_plan is not None
+    assert {e.kind for e in mr.visual_plan.elements} == {"grid", "axis"}
+
+
+@pytest.mark.parametrize("seed", range(100))
+def test_draw_area_time_graph_segment_property(seed):
+    """面積の式 y=(s·v/2)x（切片0）と、変域・端点・目盛が構成不変を満たす。"""
+    ctx = _make_ctx("math.g3_l31.graph_table", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+
+    s, v, t_end = mr.params["side"], mr.params["speed"], mr.params["t_end"]
+    # 1辺 s=v·t_end（P はちょうど t_end 秒で向かいの頂点に達する）・s は偶数。
+    assert s == v * t_end
+    assert s % 2 == 0
+    # 直線は原点を通り傾きは s·v/2（底辺 s・高さ v·x の三角形の面積）。
+    assert sympy.sympify(mr.params["b"]) == 0
+    assert sympy.sympify(mr.params["a"]) == sympy.Rational(s * v, 2)
+    assert sympy.sympify(mr.params["seg_x_lo"]) == 0
+    assert sympy.sympify(mr.params["seg_x_hi"]) == t_end
+
+    # 独立ソルバ（shoelace 公式・find_value と共有）で右端の面積を再計算すると s²/2。
+    area = REGISTRY.solver("math.solve_moving_point_area")(s, v, t_end, "single_segment")
+    assert sympy.sympify(area.answer.srepr) == sympy.Rational(s * s, 2)
+
+    # 答えの端点は (0, 0) と (t_end, s²/2)（両端とも閉）。
+    assert {f.srepr for f in mr.sub_questions[0].answer.features} == {
+        sympy.srepr(sympy.Tuple(sympy.Integer(0), sympy.Integer(0), sympy.Integer(1))),
+        sympy.srepr(sympy.Tuple(
+            sympy.Integer(t_end), sympy.Rational(s * s, 2), sympy.Integer(1)
+        )),
+    }
+    # 点名は正方形4頂点＋動点の5つが相異（surface の自由度＝dup 分散）。
+    assert len(set(mr.params["labels"])) == 5
+
+
 @pytest.mark.parametrize("family,level", _MOTION_CELLS)
 @pytest.mark.parametrize("seed", range(100))
 def test_solve_moving_point_area_double_solve_property(family, level, seed):
