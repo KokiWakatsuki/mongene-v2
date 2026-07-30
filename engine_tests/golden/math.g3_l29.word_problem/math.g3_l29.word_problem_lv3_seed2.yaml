@@ -1,0 +1,88 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - quadratic.word_problem_number_relation
+  provenance:
+    git_commit: ''
+    recipe: math.word_problem_quadratic
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: wp_linear_solo_v1
+    tier: T1
+  requested:
+    form: word_problem
+    level: 3
+    subject: math
+    unit: g3_l29
+  resolved:
+    form: word_problem
+    level: 3
+    subject: math
+    unit: g3_l29
+  seed: 2
+  signature: word_problem_quadratic_number_square_relation
+problem_ref: b6906a8b2db5e40f
+problem_text: 'ある正の整数がある。この数を2乗した数は、もとの数の3倍より340大きい。
+
+  この整数を求めよ。'
+sub_questions:
+- answer:
+    display: '20'
+    kind: symbolic
+    srepr: Tuple(Integer(20))
+  cause_tags: []
+  concept_tags:
+  - quadratic.word_problem_number_relation
+  explanation: 'まず、場面の中で、どちらの見方でも同じになる（等しくなっている）量に着目する。（2乗した数ともとの数をもとにした数）
+
+    次に、その量を x を使って両辺に表し、方程式をつくる。（x² = 3x + 340）
+
+    次に、かっこを展開し、右辺を左辺に移項して、=0 の形に整理する。（展開して整理する）
+
+    次に、左辺を因数分解する。（左辺を因数分解する）
+
+    次に、積が 0 になるのは各因数が 0 のときだから、それぞれを 0 とおいて x を求める。
+
+    最後に、求めるものは正の数だから、2つの解のうち条件に合う正の解を選ぶ。（20）'
+  hints:
+  - 場面の中で、どちらの見方でも同じになる（等しくなっている）量に着目する。
+  - その量を x を使って両辺に表し、方程式をつくる。
+  - かっこを展開し、右辺を左辺に移項して、=0 の形に整理する。
+  - 左辺を因数分解する。
+  - 積が 0 になるのは各因数が 0 のときだから、それぞれを 0 とおいて x を求める。
+  label: (1)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 場面の中で、どちらの見方でも同じになる（等しくなっている）量に着目する。
+    op: find_equal_relation
+    result_display: 2乗した数ともとの数をもとにした数
+    result_srepr: Symbol('x')
+  - args: []
+    narration: その量を x を使って両辺に表し、方程式をつくる。
+    op: formulate_equation
+    result_display: x² = 3x + 340
+    result_srepr: Equality(Pow(Symbol('x'), Integer(2)), Add(Mul(Integer(3), Symbol('x')), Integer(340)))
+  - args: []
+    narration: かっこを展開し、右辺を左辺に移項して、=0 の形に整理する。
+    op: expand_and_rearrange
+    result_display: 展開して整理する
+    result_srepr: ''
+  - args: []
+    narration: 左辺を因数分解する。
+    op: factor_left_side
+    result_display: 左辺を因数分解する
+    result_srepr: ''
+  - args: []
+    narration: 積が 0 になるのは各因数が 0 のときだから、それぞれを 0 とおいて x を求める。
+    op: apply_zero_product
+    result_display: ''
+    result_srepr: ''
+  - args: []
+    narration: 求めるものは正の数だから、2つの解のうち条件に合う正の解を選ぶ。
+    op: select_positive_root
+    result_display: '20'
+    result_srepr: Integer(20)
+visual_svg: null

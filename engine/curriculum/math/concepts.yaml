@@ -252,6 +252,19 @@ concepts:
   - id: quadratic.solve_from_rectangle_area
     label: "長方形の縦・横と面積の条件から2次方程式を立て、正の解を選んで長さを求める"
     unit: g3_l30
+  # C14 g3 2次方程式の利用（word_problem）
+  - id: quadratic.word_problem_consecutive_integers
+    label: "連続する2つの正の整数の積から2次方程式を立て、正の解を選んで2数を求める"
+    unit: g3_l29
+  - id: quadratic.word_problem_number_relation
+    label: "ある数とその2乗の関係から2次方程式を自分で立て、正の解を選んで数を求める"
+    unit: g3_l29
+  - id: quadratic.word_problem_rectangle_area
+    label: "縦横の差と面積の条件から2次方程式を立て、正の解を選んで長さを求める文章題"
+    unit: g3_l30
+  - id: quadratic.word_problem_square_cut
+    label: "正方形の縦横を増減させた面積の条件から2次方程式を自分で立て、正の解を求める"
+    unit: g3_l30
   # C3 g3 2次方程式の利用（動点）
   - id: motion.area_single_segment
     label: "正方形の辺上を動く点の位置から三角形の面積を座標で立式して求める（1区間）"
@@ -641,6 +654,12 @@ concepts:
   - id: direct_proportion.judge_table
     label: "表のx,yの対応が比例か(商y/xが一定か)を判別する"
     unit: g1_l29
+  - id: direct_proportion.word_problem_rate
+    label: "比例する2量の場面(単位量あたりの割合)を式にし、値を求める(誘導あり)"
+    unit: g1_l29
+  - id: direct_proportion.word_problem_unit_convert
+    label: "単位変換を含む比例の場面を自分で立式し、値を求める(誘導なし)"
+    unit: g1_l29
   - id: inverse_proportion.term_recall
     label: "反比例・比例定数の用語を想起する"
     unit: g1_l33
@@ -652,6 +671,12 @@ concepts:
     unit: g1_l33
   - id: inverse_proportion.judge_table
     label: "表のx,yの対応が反比例か(積xyが一定か)を判別する"
+    unit: g1_l33
+  - id: inverse_proportion.word_problem_area
+    label: "反比例する2量の場面(面積一定)を式にし、値を求める(誘導あり)"
+    unit: g1_l33
+  - id: inverse_proportion.word_problem_worker_days
+    label: "複数条件の反比例の場面(人数と日数)を自分で立式し、値を求める(誘導なし)"
     unit: g1_l33
   # --- C12 確率 ---
   - id: probability.relative_frequency_basic
@@ -764,6 +789,18 @@ concepts:
     unit: g3_l59
   - id: sample_survey.solve_population_size
     label: "標本比率と推定個数から比例式で母集団の大きさを解く"
+    unit: g3_l60
+  - id: sample_survey.word_problem_mark_recapture
+    label: "あらかじめ放した印つきの総数と標本比率から母集団を推定する"
+    unit: g3_l59
+  - id: sample_survey.word_problem_defect_estimate
+    label: "母集団の大きさと標本の不良率から母集団中の該当個数を推定する"
+    unit: g3_l59
+  - id: sample_survey.word_problem_capture_recapture
+    label: "捕獲再捕獲法の手順を読み取り比例式で母集団を推定する"
+    unit: g3_l60
+  - id: sample_survey.word_problem_population_modeling
+    label: "既知数の対象を加えるモデル化から母集団を推定し差し引く"
     unit: g3_l60
   - id: quadrant_terms.term_recall
     label: "座標平面の象限・原点の用語を想起する"

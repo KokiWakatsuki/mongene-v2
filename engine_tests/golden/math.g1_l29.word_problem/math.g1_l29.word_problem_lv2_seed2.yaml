@@ -1,0 +1,91 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - direct_proportion.word_problem_rate
+  provenance:
+    git_commit: ''
+    recipe: math.word_problem_proportion
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: wp_linear_guided_v1
+    tier: T1
+  requested:
+    form: word_problem
+    level: 2
+    subject: math
+    unit: g1_l29
+  resolved:
+    form: word_problem
+    level: 2
+    subject: math
+    unit: g1_l29
+  seed: 2
+  signature: word_problem_direct_proportion_rate
+problem_ref: 03ef517054e519c5
+problem_text: '1mの重さが7gの針金がある。
+
+  この針金xmの重さをygとする。
+
+  (1) yをxの式で表せ。
+
+  (2) この針金6mの重さは何gか求めよ。'
+sub_questions:
+- answer:
+    display: y = 7x
+    kind: symbolic
+    srepr: Mul(Integer(7), Symbol('x'))
+  cause_tags: []
+  concept_tags:
+  - direct_proportion.word_problem_rate
+  explanation: 'まず、比例の式 y=ax に、通る点の x, y の値をあてはめ、比例定数を求める式をつくる。（a = 7 / 1）
+
+    次に、求めた比例定数を使って、比例の式を組み立てる。（y = 7x）'
+  hints:
+  - 比例の式 y=ax に、通る点の x, y の値をあてはめ、比例定数を求める式をつくる。
+  label: (1)
+  prompt_text: formulation を求めなさい。
+  solution_steps:
+  - args:
+    - '1'
+    - '7'
+    narration: 比例の式 y=ax に、通る点の x, y の値をあてはめ、比例定数を求める式をつくる。
+    op: substitute_point
+    result_display: a = 7 / 1
+    result_srepr: Integer(7)
+  - args:
+    - '7'
+    narration: 求めた比例定数を使って、比例の式を組み立てる。
+    op: form_expression
+    result_display: y = 7x
+    result_srepr: Mul(Integer(7), Symbol('x'))
+- answer:
+    display: 42g
+    kind: symbolic
+    srepr: Integer(42)
+  cause_tags: []
+  concept_tags:
+  - direct_proportion.word_problem_rate
+  explanation: 'まず、比例定数と x の値を、比例の式 y=ax の x にあてはめる。（y = 7 × 6）
+
+    次に、かけ算を計算して y の値を求める。（y = 42）'
+  hints:
+  - 比例定数と x の値を、比例の式 y=ax の x にあてはめる。
+  label: (2)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args:
+    - '7'
+    - '6'
+    narration: 比例定数と x の値を、比例の式 y=ax の x にあてはめる。
+    op: substitute_x
+    result_display: y = 7 × 6
+    result_srepr: Integer(42)
+  - args:
+    - y = 7 × 6
+    narration: かけ算を計算して y の値を求める。
+    op: evaluate
+    result_display: y = 42
+    result_srepr: Integer(42)
+visual_svg: null

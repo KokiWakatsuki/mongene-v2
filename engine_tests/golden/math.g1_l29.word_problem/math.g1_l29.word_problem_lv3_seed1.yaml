@@ -1,0 +1,86 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - direct_proportion.word_problem_unit_convert
+  provenance:
+    git_commit: ''
+    recipe: math.word_problem_proportion
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: wp_linear_solo_v1
+    tier: T1
+  requested:
+    form: word_problem
+    level: 3
+    subject: math
+    unit: g1_l29
+  resolved:
+    form: word_problem
+    level: 3
+    subject: math
+    unit: g1_l29
+  seed: 1
+  signature: word_problem_direct_proportion_unit_convert
+problem_ref: fa3336e5b9d204c6
+problem_text: '分速120mで歩く生徒がいる。歩いた時間と進んだ道のりは比例する。
+
+  この生徒が25分で歩く道のりは何kmか。式を立てて求めよ。'
+sub_questions:
+- answer:
+    display: 3km
+    kind: symbolic
+    srepr: Integer(3)
+  cause_tags: []
+  concept_tags:
+  - direct_proportion.word_problem_unit_convert
+  explanation: 'まず、比例の式 y=ax に、通る点の x, y の値をあてはめ、比例定数を求める式をつくる。（a = 120 / 1）
+
+    次に、求めた比例定数を使って、比例の式を組み立てる。（y = 120x）
+
+    次に、比例定数と x の値を、比例の式 y=ax の x にあてはめる。（y = 120 × 25）
+
+    次に、かけ算を計算して y の値を求める。（y = 3000）
+
+    最後に、道のりの単位を m から km に直す。（3km）'
+  hints:
+  - 比例の式 y=ax に、通る点の x, y の値をあてはめ、比例定数を求める式をつくる。
+  - 求めた比例定数を使って、比例の式を組み立てる。
+  - 比例定数と x の値を、比例の式 y=ax の x にあてはめる。
+  - かけ算を計算して y の値を求める。
+  label: (1)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args:
+    - '1'
+    - '120'
+    narration: 比例の式 y=ax に、通る点の x, y の値をあてはめ、比例定数を求める式をつくる。
+    op: substitute_point
+    result_display: a = 120 / 1
+    result_srepr: Integer(120)
+  - args:
+    - '120'
+    narration: 求めた比例定数を使って、比例の式を組み立てる。
+    op: form_expression
+    result_display: y = 120x
+    result_srepr: Mul(Integer(120), Symbol('x'))
+  - args:
+    - '120'
+    - '25'
+    narration: 比例定数と x の値を、比例の式 y=ax の x にあてはめる。
+    op: substitute_x
+    result_display: y = 120 × 25
+    result_srepr: Integer(3000)
+  - args:
+    - y = 120 × 25
+    narration: かけ算を計算して y の値を求める。
+    op: evaluate
+    result_display: y = 3000
+    result_srepr: Integer(3000)
+  - args: []
+    narration: 道のりの単位を m から km に直す。
+    op: convert_unit
+    result_display: 3km
+    result_srepr: Integer(3)
+visual_svg: null

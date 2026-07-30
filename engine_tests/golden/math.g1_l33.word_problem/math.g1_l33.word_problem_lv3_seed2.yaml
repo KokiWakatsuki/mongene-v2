@@ -1,0 +1,78 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - inverse_proportion.word_problem_worker_days
+  provenance:
+    git_commit: ''
+    recipe: math.word_problem_proportion
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: wp_linear_solo_v1
+    tier: T1
+  requested:
+    form: word_problem
+    level: 3
+    subject: math
+    unit: g1_l33
+  resolved:
+    form: word_problem
+    level: 3
+    subject: math
+    unit: g1_l33
+  seed: 2
+  signature: word_problem_inverse_proportion_worker_days
+problem_ref: 71811d5739bef977
+problem_text: 'ある資料の印刷を15人ですると10日かかる。この資料の印刷をする人数x人と、かかる日数y日は反比例する。
+
+  この資料の印刷を5人でするとき、何日で終わるか。式を立てて求めよ。'
+sub_questions:
+- answer:
+    display: 30日
+    kind: symbolic
+    srepr: Integer(30)
+  cause_tags: []
+  concept_tags:
+  - inverse_proportion.word_problem_worker_days
+  explanation: 'まず、反比例の式 y=a/x に、通る点の x, y の値をあてはめ、比例定数を求める式をつくる。（a = 15 × 10）
+
+    次に、求めた比例定数を使って、反比例の式を組み立てる。（y = 150/x）
+
+    次に、比例定数と x の値を、反比例の式 y=a/x の x にあてはめる。（y = 150 / 5）
+
+    最後に、わり算を計算して y の値を求める。（y = 30）'
+  hints:
+  - 反比例の式 y=a/x に、通る点の x, y の値をあてはめ、比例定数を求める式をつくる。
+  - 求めた比例定数を使って、反比例の式を組み立てる。
+  - 比例定数と x の値を、反比例の式 y=a/x の x にあてはめる。
+  label: (1)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args:
+    - '15'
+    - '10'
+    narration: 反比例の式 y=a/x に、通る点の x, y の値をあてはめ、比例定数を求める式をつくる。
+    op: substitute_point
+    result_display: a = 15 × 10
+    result_srepr: Integer(150)
+  - args:
+    - '150'
+    narration: 求めた比例定数を使って、反比例の式を組み立てる。
+    op: form_expression
+    result_display: y = 150/x
+    result_srepr: Mul(Integer(150), Pow(Symbol('x'), Integer(-1)))
+  - args:
+    - '150'
+    - '5'
+    narration: 比例定数と x の値を、反比例の式 y=a/x の x にあてはめる。
+    op: substitute_x
+    result_display: y = 150 / 5
+    result_srepr: Integer(30)
+  - args:
+    - y = 150 / 5
+    narration: わり算を計算して y の値を求める。
+    op: evaluate
+    result_display: y = 30
+    result_srepr: Integer(30)
+visual_svg: null

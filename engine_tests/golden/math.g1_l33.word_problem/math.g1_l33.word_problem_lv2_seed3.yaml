@@ -1,0 +1,81 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - inverse_proportion.word_problem_area
+  provenance:
+    git_commit: ''
+    recipe: math.word_problem_proportion
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: wp_linear_guided_v1
+    tier: T1
+  requested:
+    form: word_problem
+    level: 2
+    subject: math
+    unit: g1_l33
+  resolved:
+    form: word_problem
+    level: 2
+    subject: math
+    unit: g1_l33
+  seed: 3
+  signature: word_problem_inverse_proportion_area
+problem_ref: ba479672518032af
+problem_text: '面積が120cm²の長方形がある。
+
+  縦をxcm、横をycmとする。
+
+  (1) yをxの式で表せ。
+
+  (2) 縦が15cmのとき、横は何cmか求めよ。'
+sub_questions:
+- answer:
+    display: y = 120/x
+    kind: symbolic
+    srepr: Mul(Integer(120), Pow(Symbol('x'), Integer(-1)))
+  cause_tags: []
+  concept_tags:
+  - inverse_proportion.word_problem_area
+  explanation: まず、縦と横の積が一定であることから、反比例の式を組み立てる。（y = 120/x）
+  hints:
+  - 問題文の与えられた値をもう一度確認しよう。
+  label: (1)
+  prompt_text: formulation を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 縦と横の積が一定であることから、反比例の式を組み立てる。
+    op: form_expression
+    result_display: y = 120/x
+    result_srepr: Mul(Integer(120), Pow(Symbol('x'), Integer(-1)))
+- answer:
+    display: 8cm
+    kind: symbolic
+    srepr: Integer(8)
+  cause_tags: []
+  concept_tags:
+  - inverse_proportion.word_problem_area
+  explanation: 'まず、比例定数と x の値を、反比例の式 y=a/x の x にあてはめる。（y = 120 / 15）
+
+    次に、わり算を計算して y の値を求める。（y = 8）'
+  hints:
+  - 比例定数と x の値を、反比例の式 y=a/x の x にあてはめる。
+  label: (2)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args:
+    - '120'
+    - '15'
+    narration: 比例定数と x の値を、反比例の式 y=a/x の x にあてはめる。
+    op: substitute_x
+    result_display: y = 120 / 15
+    result_srepr: Integer(8)
+  - args:
+    - y = 120 / 15
+    narration: わり算を計算して y の値を求める。
+    op: evaluate
+    result_display: y = 8
+    result_srepr: Integer(8)
+visual_svg: null

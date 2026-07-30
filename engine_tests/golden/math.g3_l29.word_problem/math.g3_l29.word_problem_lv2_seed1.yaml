@@ -1,0 +1,109 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - quadratic.word_problem_consecutive_integers
+  provenance:
+    git_commit: ''
+    recipe: math.word_problem_quadratic
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: wp_linear_guided_v1
+    tier: T1
+  requested:
+    form: word_problem
+    level: 2
+    subject: math
+    unit: g3_l29
+  resolved:
+    form: word_problem
+    level: 2
+    subject: math
+    unit: g3_l29
+  seed: 1
+  signature: word_problem_quadratic_consecutive_integers
+problem_ref: fc3e3fb1e41e0d66
+problem_text: '連続する2つの正の整数がある。この2数の積は132860である。
+
+  小さい方の整数を x とする。
+
+  (1) 2数の積の関係を、x を使った方程式で表せ。
+
+  (2) この2つの整数を求めよ。'
+sub_questions:
+- answer:
+    display: x(x + 1) = 132860
+    kind: symbolic
+    srepr: Equality(Mul(Symbol('x'), Add(Symbol('x'), Integer(1))), Integer(132860))
+  cause_tags: []
+  concept_tags:
+  - quadratic.word_problem_consecutive_integers
+  explanation: 'まず、場面の中で、どちらの見方でも同じになる（等しくなっている）量に着目する。（2つの整数の積）
+
+    次に、その量を x を使って両辺に表し、方程式をつくる。（x(x + 1) = 132860）'
+  hints:
+  - 場面の中で、どちらの見方でも同じになる（等しくなっている）量に着目する。
+  label: (1)
+  prompt_text: formulation を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 場面の中で、どちらの見方でも同じになる（等しくなっている）量に着目する。
+    op: find_equal_relation
+    result_display: 2つの整数の積
+    result_srepr: Symbol('x')
+  - args: []
+    narration: その量を x を使って両辺に表し、方程式をつくる。
+    op: formulate_equation
+    result_display: x(x + 1) = 132860
+    result_srepr: Equality(Mul(Symbol('x'), Add(Symbol('x'), Integer(1))), Integer(132860))
+- answer:
+    display: 小さい方の整数は364、大きい方の整数は365
+    kind: symbolic
+    srepr: Tuple(Integer(364), Integer(365))
+  cause_tags: []
+  concept_tags:
+  - quadratic.word_problem_consecutive_integers
+  explanation: 'まず、かっこを展開し、右辺を左辺に移項して、=0 の形に整理する。（展開して整理する）
+
+    次に、左辺を因数分解する。（左辺を因数分解する）
+
+    次に、積が 0 になるのは各因数が 0 のときだから、それぞれを 0 とおいて x を求める。
+
+    次に、求めるものは正の数だから、2つの解のうち条件に合う正の解を選ぶ。（364）
+
+    最後に、求めた x をもとに、問われている量を計算する。（小さい方の整数は364、大きい方の整数は365）'
+  hints:
+  - かっこを展開し、右辺を左辺に移項して、=0 の形に整理する。
+  - 左辺を因数分解する。
+  - 積が 0 になるのは各因数が 0 のときだから、それぞれを 0 とおいて x を求める。
+  - 求めるものは正の数だから、2つの解のうち条件に合う正の解を選ぶ。
+  label: (2)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args: []
+    narration: かっこを展開し、右辺を左辺に移項して、=0 の形に整理する。
+    op: expand_and_rearrange
+    result_display: 展開して整理する
+    result_srepr: ''
+  - args: []
+    narration: 左辺を因数分解する。
+    op: factor_left_side
+    result_display: 左辺を因数分解する
+    result_srepr: ''
+  - args: []
+    narration: 積が 0 になるのは各因数が 0 のときだから、それぞれを 0 とおいて x を求める。
+    op: apply_zero_product
+    result_display: ''
+    result_srepr: ''
+  - args: []
+    narration: 求めるものは正の数だから、2つの解のうち条件に合う正の解を選ぶ。
+    op: select_positive_root
+    result_display: '364'
+    result_srepr: Integer(364)
+  - args: []
+    narration: 求めた x をもとに、問われている量を計算する。
+    op: derive_asked_quantity
+    result_display: 小さい方の整数は364、大きい方の整数は365
+    result_srepr: Tuple(Integer(364), Integer(365))
+visual_svg: null

@@ -6856,3 +6856,417 @@ def test_word_problem_continued_ratio_needs_an_extra_step():
     # params は連比の3項をそのまま持ち、和は立式ビルダー側で導く
     # （和は本文に出ていない数なので params に置くと検証に穴ができる）
     assert set(lv3.params["numbers"]) == {"ratio_1", "ratio_2", "ratio_3", "total"}
+
+
+# ---------------------------------------------------------------------------
+# 2次方程式の利用（g3_l29/g3_l30 × Lv2/Lv3）＝1 recipe で4セル
+# ---------------------------------------------------------------------------
+_QUADRATIC_WP_CELLS = [
+    ("math.g3_l29.word_problem", 2, "word_problem_quadratic_consecutive_integers", True),
+    ("math.g3_l29.word_problem", 3, "word_problem_quadratic_number_square_relation", False),
+    ("math.g3_l30.word_problem", 2, "word_problem_quadratic_rectangle_area", True),
+    ("math.g3_l30.word_problem", 3, "word_problem_quadratic_square_cut", False),
+]
+
+
+@pytest.mark.parametrize(("family", "level", "signature", "guided"), _QUADRATIC_WP_CELLS)
+def test_word_problem_quadratic_construct(family, level, signature, guided):
+    """誘導ありは (1)立式→(2)値 の2小問、誘導なしは値の1小問（＝level_sep の骨）。"""
+    ctx = _make_ctx(family, level)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == signature
+    if guided:
+        assert [(sq.label, sq.asked) for sq in mr.sub_questions] == [
+            ("(1)", "formulation"),
+            ("(2)", "value"),
+        ]
+        assert set(mr.given) == {"scenario", "quantities"}
+    else:
+        assert [(sq.label, sq.asked) for sq in mr.sub_questions] == [("(1)", "value")]
+        # 誘導なしは変数の設定を与えない（自分で x をおく）
+        assert set(mr.given) == {"scenario"}
+    assert mr.visual_plan is None
+    # 答えは params に入っていない（checker が独立に再計算できるようにするため）
+    assert "answer" not in mr.params
+    # 解の吟味（不適解の除外）が解説に出る＝このクラスタの核
+    assert any(
+        s.op == "select_positive_root" for sq in mr.sub_questions for s in sq.steps
+    )
+
+
+@pytest.mark.parametrize(("family", "level", "signature", "guided"), _QUADRATIC_WP_CELLS)
+@pytest.mark.parametrize("seed", range(30))
+def test_word_problem_quadratic_double_solve_property(seed, family, level, signature, guided):
+    """全小問が checker の独立再計算と一致し、答え（正の解）が方程式を実際に満たす。"""
+    from engine.packs.math.recipes.word_problem_quadratic import FORMULATION_BUILDERS
+
+    ctx = _make_ctx(family, level)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+
+    checker = REGISTRY.checker("math.word_problem_quadratic.double_solve")
+    solutions = checker(mr)
+    assert len(solutions) == len(mr.sub_questions)
+    for sol, sq in zip(solutions, mr.sub_questions, strict=True):
+        assert sol.answer.srepr == sq.answer.srepr
+
+    # 場面の数値から組んだ方程式に、正の解を戻して恒真を確認する（構成の健全性）
+    numbers = {k: int(sympy.sympify(v)) for k, v in mr.params["numbers"].items()}
+    formulation = FORMULATION_BUILDERS[mr.params["scenario_kind"]](**numbers)
+    answer_values = sympy.sympify(mr.sub_questions[-1].answer.srepr)
+    coeffs = [(int(sympy.sympify(m)), int(sympy.sympify(n))) for m, n in mr.params["answer_coeffs"]]
+    # answer_coeffs[0] は常に (1, 0)（求める量の1つめは必ず x そのもの）
+    assert coeffs[0] == (1, 0)
+    x_value = answer_values[0]
+    assert x_value == sympy.Integer(x_value), "x は整数（answer-first で逆算しているので端数は出ない）"
+    assert x_value > 0, "場面が要求する量（整数・長さ）はすべて正"
+    assert formulation.eq.subs(sympy.Symbol("x"), x_value) is sympy.true
+
+    # 2つめの解（x を負にしたもの）は不適である＝場面の核（正の解しか採用しない理由）
+    other_roots = [
+        r
+        for r in sympy.solve(sympy.Eq(formulation.eq.lhs - formulation.eq.rhs, 0), sympy.Symbol("x"))
+        if r != x_value
+    ]
+    assert len(other_roots) == 1
+    assert other_roots[0] < 0
+
+    # params の数値はすべて given に現れている（＝読者に見えている数だけを持つ）。
+    given_text = "".join(mr.given.values())
+    for value in numbers.values():
+        assert str(value) in given_text
+
+
+@pytest.mark.parametrize("seed", range(30))
+def test_word_problem_quadratic_non_degenerate(seed):
+    """非退化条件: 各場面の構成上の不変量が保たれている。"""
+    # 連続整数: 積は x0(x0+1) 型で常に正
+    ctx = _make_ctx("math.g3_l29.word_problem", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    numbers = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng).params["numbers"]
+    assert int(numbers["product"]) >= 3 * 4
+
+    # 数の関係: multiplier < x0（m>0 を保証する範囲）は diff>0 で確認できる
+    ctx = _make_ctx("math.g3_l29.word_problem", 3)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    numbers = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng).params["numbers"]
+    assert int(numbers["diff"]) > 0
+    assert int(numbers["multiplier"]) >= 2
+
+    # 長方形の面積: 差は正（横が縦より長い）
+    ctx = _make_ctx("math.g3_l30.word_problem", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    numbers = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng).params["numbers"]
+    assert int(numbers["diff"]) > 0
+    assert int(numbers["area"]) > 0
+
+    # 正方形の変形: 面積は1辺の2乗未満（縦の長さが正であることの必要条件）
+    ctx = _make_ctx("math.g3_l30.word_problem", 3)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    numbers = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng).params["numbers"]
+    assert int(numbers["area"]) < int(numbers["side"]) ** 2
+
+
+def test_word_problem_quadratic_derived_answer_is_a_pair():
+    """g3_l29 Lv2 は「文字＝小さい方の整数・答え＝2つの整数」。answer_coeffs の合成が効いている。"""
+    ctx = _make_ctx("math.g3_l29.word_problem", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert [[int(sympy.sympify(v)) for v in row] for row in mr.params["answer_coeffs"]] == [
+        [1, 0],
+        [1, 1],
+    ]
+    small, large = sympy.sympify(mr.sub_questions[-1].answer.srepr)
+    assert large == small + 1
+    assert mr.sub_questions[-1].steps[-1].op == "derive_asked_quantity"
+
+
+def test_word_problem_quadratic_level_sep_places_letters_differently():
+    """G6 の骨: 同じ「2次方程式の利用」でも Lv・unit ごとに立式の見た目が違う。"""
+    from engine.packs.math.recipes.word_problem_quadratic import FORMULATION_BUILDERS
+
+    forms = {}
+    for family, level in (
+        ("math.g3_l29.word_problem", 2),
+        ("math.g3_l29.word_problem", 3),
+        ("math.g3_l30.word_problem", 2),
+        ("math.g3_l30.word_problem", 3),
+    ):
+        ctx = _make_ctx(family, level)
+        rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+        mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+        numbers = {k: int(sympy.sympify(v)) for k, v in mr.params["numbers"].items()}
+        forms[(family, level)] = FORMULATION_BUILDERS[mr.params["scenario_kind"]](**numbers)
+
+    # g3_l29 Lv2: 積の形 x(x+1)（c=1固定）。g3_l29 Lv3: x² = nx + m（積の形ではない）。
+    lv29_2 = forms[("math.g3_l29.word_problem", 2)].eq
+    lv29_3 = forms[("math.g3_l29.word_problem", 3)].eq
+    assert sympy.Poly(lv29_2.lhs - lv29_2.rhs, sympy.Symbol("x")).coeff_monomial(sympy.Symbol("x")) == 1
+    assert lv29_3.lhs == sympy.Symbol("x") ** 2
+    # g3_l30 Lv2: 積の形 x(x+d)。g3_l30 Lv3: 差の平方 (s-x)(s+x)（他の3つと系統が違う）。
+    lv30_2 = forms[("math.g3_l30.word_problem", 2)]
+    lv30_3 = forms[("math.g3_l30.word_problem", 3)]
+    assert "(" in lv30_2.display and lv30_2.display.startswith("x(")
+    assert lv30_3.display.startswith("(") and " - x)" in lv30_3.display
+
+
+# ---------------------------------------------------------------------------
+# 標本調査の利用（g3_l59 Lv2/Lv3・g3_l60 Lv3/Lv4）＝1 recipe で4セル
+# ---------------------------------------------------------------------------
+_SAMPLING_WP_CELLS = [
+    ("math.g3_l59.word_problem", 2, "word_problem_sample_mark_recapture_guided", True),
+    ("math.g3_l59.word_problem", 3, "word_problem_sample_defect_estimate_solo", False),
+    ("math.g3_l60.word_problem", 3, "word_problem_sample_capture_recapture_guided", True),
+    ("math.g3_l60.word_problem", 4, "word_problem_sample_red_ball_model_solo", False),
+]
+
+
+@pytest.mark.parametrize(("family", "level", "signature", "guided"), _SAMPLING_WP_CELLS)
+def test_word_problem_sampling_construct(family, level, signature, guided):
+    """誘導ありは (1)標本比率→(2)母集団 の2小問、誘導なしは値の1小問（＝level_sep の骨）。"""
+    ctx = _make_ctx(family, level)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == signature
+    if guided:
+        assert [(sq.label, sq.asked) for sq in mr.sub_questions] == [
+            ("(1)", "formulation"),
+            ("(2)", "value"),
+        ]
+        assert set(mr.given) == {"scenario", "quantities"}
+    else:
+        assert [(sq.label, sq.asked) for sq in mr.sub_questions] == [("(1)", "value")]
+        # 誘導なしは変数の設定を与えない（自分で何を比率とみるか構成する）
+        assert set(mr.given) == {"scenario"}
+    assert mr.visual_plan is None
+    # 答えは params に入っていない（checker が独立に再計算できるようにするため）
+    assert "answer" not in mr.params
+
+
+@pytest.mark.parametrize(("family", "level", "signature", "guided"), _SAMPLING_WP_CELLS)
+@pytest.mark.parametrize("seed", range(30))
+def test_word_problem_sampling_double_solve_property(seed, family, level, signature, guided):
+    """全小問が checker の独立再計算と一致し、推定値が answer-first の整数構成を満たす。"""
+    from engine.packs.math.recipes.word_problem_sampling import solve_scene
+
+    ctx = _make_ctx(family, level)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+
+    checker = REGISTRY.checker("math.word_problem_sample_survey.double_solve")
+    solutions = checker(mr)
+    assert len(solutions) == len(mr.sub_questions)
+    for sol, sq in zip(solutions, mr.sub_questions, strict=True):
+        assert sol.answer.srepr == sq.answer.srepr
+
+    # 場面の数値から solver を呼び直した結果が、答えの整数性・正値性を満たす
+    # （answer-first で候補列挙時に割り切れる組だけを残しているので端数は出ない）
+    numbers = {k: int(sympy.sympify(v)) for k, v in mr.params["numbers"].items()}
+    offset = int(sympy.sympify(mr.params["answer_offset"]))
+    _sol, answer_value = solve_scene(mr.params["scenario_kind"], numbers, offset)
+    assert answer_value.is_Integer
+    assert answer_value > 0
+    answer_from_mr = sympy.sympify(mr.sub_questions[-1].answer.srepr)
+    assert answer_value == answer_from_mr
+
+    # 標本内の該当個数は標本の大きさより少ない（非退化条件そのもの）
+    assert numbers["sample_count"] < numbers["sample_size"]
+
+    # params の数値はすべて given のどこかに現れている（＝読者に見えている数だけを
+    # checker に渡している）。
+    given_text = "".join(mr.given.values())
+    for value in numbers.values():
+        assert str(value) in given_text
+
+
+@pytest.mark.parametrize("seed", range(20))
+def test_word_problem_sampling_ratio_subquestion_is_a_fraction(seed):
+    """誘導ありの (1) は sample_count/sample_size を約分した分数（母集団の値ではない）。"""
+    for family, level in (
+        ("math.g3_l59.word_problem", 2),
+        ("math.g3_l60.word_problem", 3),
+    ):
+        ctx = _make_ctx(family, level)
+        rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+        mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+        numbers = {k: int(sympy.sympify(v)) for k, v in mr.params["numbers"].items()}
+        expected_ratio = sympy.Rational(numbers["sample_count"], numbers["sample_size"])
+        ratio_answer = sympy.sympify(mr.sub_questions[0].answer.srepr)
+        assert ratio_answer == expected_ratio
+        # (1) の答えは母集団の値 (2) とは別物
+        value_answer = sympy.sympify(mr.sub_questions[1].answer.srepr)
+        assert ratio_answer != value_answer
+
+
+def test_word_problem_sampling_derived_answer_is_not_population():
+    """g3_l60 Lv4 は「solver が解くのは全体・答えは白玉」。answer_offset の合成が効いている。"""
+    ctx = _make_ctx("math.g3_l60.word_problem", 4)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    offset = int(sympy.sympify(mr.params["answer_offset"]))
+    assert offset < 0, "赤玉の個数を引く一手（負のオフセット）"
+    # 最後の一手が steps に入っている（solver の出力をそのまま答えにしていない）
+    assert mr.sub_questions[0].steps[-1].op == "derive_asked_quantity"
+    assert mr.sub_questions[0].answer.display.endswith("個")
+
+    # ほかの3セルは offset=0（solver の出力がそのまま答え）
+    for family, level in (
+        ("math.g3_l59.word_problem", 2),
+        ("math.g3_l59.word_problem", 3),
+        ("math.g3_l60.word_problem", 3),
+    ):
+        ctx2 = _make_ctx(family, level)
+        rng2 = derive_rng(ctx2.family, ctx2.level, ctx2.purpose, seed=1)
+        mr2 = REGISTRY.recipe(ctx2.spec_level.recipe)(ctx2, rng2)
+        assert int(sympy.sympify(mr2.params["answer_offset"])) == 0
+
+
+def test_word_problem_sampling_level_sep_uses_different_solver():
+    """G6 の骨: g3_l59 Lv2/Lv3 は「場面文に出ている量／求める量」が入れ替わり、
+    呼ぶ solver 自体が違う（数値域の違いだけの偽レベルではない）。
+    """
+    from engine.packs.math.recipes.word_problem_sampling import _SAMPLING_SOLVERS
+
+    ctx2 = _make_ctx("math.g3_l59.word_problem", 2)
+    rng2 = derive_rng(ctx2.family, ctx2.level, ctx2.purpose, seed=1)
+    mr2 = REGISTRY.recipe(ctx2.spec_level.recipe)(ctx2, rng2)
+
+    ctx3 = _make_ctx("math.g3_l59.word_problem", 3)
+    rng3 = derive_rng(ctx3.family, ctx3.level, ctx3.purpose, seed=1)
+    mr3 = REGISTRY.recipe(ctx3.spec_level.recipe)(ctx3, rng3)
+
+    assert (
+        _SAMPLING_SOLVERS[mr2.params["scenario_kind"]]
+        != _SAMPLING_SOLVERS[mr3.params["scenario_kind"]]
+    )
+    # Lv2 は params.numbers に known_estimate（既知の印つき総数）を持つ
+    assert "known_estimate" in mr2.params["numbers"]
+    # Lv3 は params.numbers に population_size（既知の母集団）を持つ
+    assert "population_size" in mr3.params["numbers"]
+
+
+# ---------------------------------------------------------------------------
+# 比例・反比例の利用（g1_l29/g1_l33 × Lv2/Lv3）＝1 recipe で4セル
+# ---------------------------------------------------------------------------
+_PROPORTION_WP_CELLS = [
+    ("math.g1_l29.word_problem", 2, "word_problem_direct_proportion_rate", True),
+    ("math.g1_l29.word_problem", 3, "word_problem_direct_proportion_unit_convert", False),
+    ("math.g1_l33.word_problem", 2, "word_problem_inverse_proportion_area", True),
+    ("math.g1_l33.word_problem", 3, "word_problem_inverse_proportion_worker_days", False),
+]
+
+
+@pytest.mark.parametrize(("family", "level", "signature", "guided"), _PROPORTION_WP_CELLS)
+def test_word_problem_proportion_construct(family, level, signature, guided):
+    """誘導ありは (1)式→(2)値 の2小問、誘導なしは値の1小問（＝level_sep の骨）。"""
+    ctx = _make_ctx(family, level)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == signature
+    if guided:
+        assert [(sq.label, sq.asked) for sq in mr.sub_questions] == [
+            ("(1)", "formulation"),
+            ("(2)", "value"),
+        ]
+        assert set(mr.given) == {"scenario", "quantities"}
+    else:
+        assert [(sq.label, sq.asked) for sq in mr.sub_questions] == [("(1)", "value")]
+        # 誘導なしは変数の設定を与えない（自分で x, y をおく）
+        assert set(mr.given) == {"scenario"}
+    assert mr.visual_plan is None
+    # 答えは params に入っていない（checker が独立に再計算できるようにするため）
+    assert "answer" not in mr.params
+
+
+@pytest.mark.parametrize(("family", "level", "signature", "guided"), _PROPORTION_WP_CELLS)
+@pytest.mark.parametrize("seed", range(30))
+def test_word_problem_proportion_double_solve_property(seed, family, level, signature, guided):
+    """全小問が checker の独立再計算と一致し、答えが a=xy(反比例)/y=ax(比例)を実際に満たす。"""
+    ctx = _make_ctx(family, level)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+
+    checker = REGISTRY.checker("math.word_problem_proportion.double_solve")
+    solutions = checker(mr)
+    assert len(solutions) == len(mr.sub_questions)
+    for sol, sq in zip(solutions, mr.sub_questions, strict=True):
+        assert sol.answer.srepr == sq.answer.srepr
+
+    from engine.packs.math.recipes.word_problem_proportion import solve_scene
+
+    numbers = {k: int(sympy.sympify(v)) for k, v in mr.params["numbers"].items()}
+    formulation, value_answer, _ = solve_scene(mr.params["scenario_kind"], numbers)
+    # a は正の整数（answer-first で逆算しているので端数は出ない）
+    assert formulation.a.is_Integer and formulation.a > 0
+    # 値も正の整数（km 変換セルも1000の倍数だけを候補に残しているので端数は出ない）
+    value = sympy.sympify(value_answer.srepr)
+    assert value.is_Integer and value > 0
+
+    # 読者が見ている数値（given か、誘導なし/目標値のみ小問文にある場合は
+    # context_slots の ask_formulation/ask_value）はすべてどこかに現れている
+    # （＝checker に渡す数値を隠していない）。
+    given_text = "".join(mr.given.values())
+    slot_text = "".join(
+        str(v) for k, v in mr.context_slots.items() if k in ("ask_formulation", "ask_value")
+    )
+    readable_text = given_text + slot_text
+    for num in numbers.values():
+        assert str(num) in readable_text
+
+
+@pytest.mark.parametrize("seed", range(30))
+def test_word_problem_proportion_non_degenerate(seed):
+    """非退化条件: g1_l29 Lv2 は長さ≠1（重さそのまま聞き直しにならない）。
+    g1_l33 Lv2 は縦≠横（正方形は「長方形」の題材と矛盾する）。
+    g1_l33 Lv3 は人数を変える（同じ人数を聞き直す退化を避ける）。
+    """
+    ctx = _make_ctx("math.g1_l29.word_problem", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    numbers = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng).params["numbers"]
+    assert int(numbers["length"]) != 1
+
+    ctx = _make_ctx("math.g1_l33.word_problem", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    numbers = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng).params["numbers"]
+    area, side = int(numbers["area"]), int(numbers["side"])
+    assert area % side == 0
+    assert side != area // side
+
+    ctx = _make_ctx("math.g1_l33.word_problem", 3)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    numbers = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng).params["numbers"]
+    assert int(numbers["workers1"]) != int(numbers["workers0"])
+
+
+def test_word_problem_proportion_unit_convert_has_extra_step():
+    """g1_l29 Lv3 は m→km の一手（convert_unit）が Lv2 に無い op として最後に入る。"""
+    ctx = _make_ctx("math.g1_l29.word_problem", 3)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    lv3 = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert lv3.sub_questions[0].steps[-1].op == "convert_unit"
+    assert lv3.sub_questions[0].answer.display.endswith("km")
+
+    ctx2 = _make_ctx("math.g1_l29.word_problem", 2)
+    rng2 = derive_rng(ctx2.family, ctx2.level, ctx2.purpose, seed=1)
+    lv2 = REGISTRY.recipe(ctx2.spec_level.recipe)(ctx2, rng2)
+    assert all(s.op != "convert_unit" for sq in lv2.sub_questions for s in sq.steps)
+
+
+def test_word_problem_proportion_area_vs_worker_days_level_sep():
+    """g1_l33 の G6 の骨: Lv2 は a（面積）が本文に直接与えられ点の代入が要らない
+    （steps は form_expression の1手のみ）。Lv3 は a=x0*y0 を「4人で6日」のような
+    1組の対応から求めるので、substitute_point が余分に入る。
+    """
+    ctx2 = _make_ctx("math.g1_l33.word_problem", 2)
+    rng2 = derive_rng(ctx2.family, ctx2.level, ctx2.purpose, seed=1)
+    lv2 = REGISTRY.recipe(ctx2.spec_level.recipe)(ctx2, rng2)
+    assert [s.op for s in lv2.sub_questions[0].steps] == ["form_expression"]
+
+    ctx3 = _make_ctx("math.g1_l33.word_problem", 3)
+    rng3 = derive_rng(ctx3.family, ctx3.level, ctx3.purpose, seed=1)
+    lv3 = REGISTRY.recipe(ctx3.spec_level.recipe)(ctx3, rng3)
+    assert [s.op for s in lv3.sub_questions[0].steps][:2] == [
+        "substitute_point",
+        "form_expression",
+    ]

@@ -1,0 +1,78 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - inverse_proportion.word_problem_worker_days
+  provenance:
+    git_commit: ''
+    recipe: math.word_problem_proportion
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: wp_linear_solo_v1
+    tier: T1
+  requested:
+    form: word_problem
+    level: 3
+    subject: math
+    unit: g1_l33
+  resolved:
+    form: word_problem
+    level: 3
+    subject: math
+    unit: g1_l33
+  seed: 1
+  signature: word_problem_inverse_proportion_worker_days
+problem_ref: de6e89206bc66e9b
+problem_text: 'ある草むしりを3人ですると24日かかる。この草むしりをする人数x人と、かかる日数y日は反比例する。
+
+  この草むしりを9人でするとき、何日で終わるか。式を立てて求めよ。'
+sub_questions:
+- answer:
+    display: 8日
+    kind: symbolic
+    srepr: Integer(8)
+  cause_tags: []
+  concept_tags:
+  - inverse_proportion.word_problem_worker_days
+  explanation: 'まず、反比例の式 y=a/x に、通る点の x, y の値をあてはめ、比例定数を求める式をつくる。（a = 3 × 24）
+
+    次に、求めた比例定数を使って、反比例の式を組み立てる。（y = 72/x）
+
+    次に、比例定数と x の値を、反比例の式 y=a/x の x にあてはめる。（y = 72 / 9）
+
+    最後に、わり算を計算して y の値を求める。（y = 8）'
+  hints:
+  - 反比例の式 y=a/x に、通る点の x, y の値をあてはめ、比例定数を求める式をつくる。
+  - 求めた比例定数を使って、反比例の式を組み立てる。
+  - 比例定数と x の値を、反比例の式 y=a/x の x にあてはめる。
+  label: (1)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args:
+    - '3'
+    - '24'
+    narration: 反比例の式 y=a/x に、通る点の x, y の値をあてはめ、比例定数を求める式をつくる。
+    op: substitute_point
+    result_display: a = 3 × 24
+    result_srepr: Integer(72)
+  - args:
+    - '72'
+    narration: 求めた比例定数を使って、反比例の式を組み立てる。
+    op: form_expression
+    result_display: y = 72/x
+    result_srepr: Mul(Integer(72), Pow(Symbol('x'), Integer(-1)))
+  - args:
+    - '72'
+    - '9'
+    narration: 比例定数と x の値を、反比例の式 y=a/x の x にあてはめる。
+    op: substitute_x
+    result_display: y = 72 / 9
+    result_srepr: Integer(8)
+  - args:
+    - y = 72 / 9
+    narration: わり算を計算して y の値を求める。
+    op: evaluate
+    result_display: y = 8
+    result_srepr: Integer(8)
+visual_svg: null

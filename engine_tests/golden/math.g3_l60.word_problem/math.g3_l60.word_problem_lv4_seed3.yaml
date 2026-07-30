@@ -1,0 +1,80 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - sample_survey.word_problem_population_modeling
+  provenance:
+    git_commit: ''
+    recipe: math.word_problem_sample_survey
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: wp_linear_solo_v1
+    tier: T1
+  requested:
+    form: word_problem
+    level: 4
+    subject: math
+    unit: g3_l60
+  resolved:
+    form: word_problem
+    level: 4
+    subject: math
+    unit: g3_l60
+  seed: 3
+  signature: word_problem_sample_red_ball_model_solo
+problem_ref: 24600df6361e2336
+problem_text: '袋の中に大量の白玉が入っている。この袋の中の白玉の総数を、玉を数えずに標本調査で推定したい。同じ大きさの赤玉を120個袋に加えてよくかき混ぜ、無作為に100個を取り出したところ、そのうち赤玉が3個だった。
+
+  はじめに入っていた白玉のおよその総数を求めよ。'
+sub_questions:
+- answer:
+    display: 3880個
+    kind: symbolic
+    srepr: Integer(3880)
+  cause_tags: []
+  concept_tags:
+  - sample_survey.word_problem_population_modeling
+  explanation: 'まず、標本の中で、該当するものの個数と標本全体の個数を確認する。（標本の大きさと、そのうち該当するものの個数）
+
+    次に、該当するものの個数を標本の大きさでわり、標本での割合を求める。（3/100）
+
+    次に、標本での該当する個数の割合が、母集団全体でもおよそ等しいとみて、母集団の大きさ x を含む比例式をつくる。（標本比率と母集団の比率が等しいとみて x を含む比例式をつくる）
+
+    次に、比例式を解き、母集団の大きさ x を求める。（4000）
+
+    最後に、求めた全体の個数から、はじめに加えた赤玉の個数を引いて、もとからあった白玉の総数を求める。（3880個）'
+  hints:
+  - 標本の中で、該当するものの個数と標本全体の個数を確認する。
+  - 該当するものの個数を標本の大きさでわり、標本での割合を求める。
+  - 標本での該当する個数の割合が、母集団全体でもおよそ等しいとみて、母集団の大きさ x を含む比例式をつくる。
+  - 比例式を解き、母集団の大きさ x を求める。
+  label: (1)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 標本の中で、該当するものの個数と標本全体の個数を確認する。
+    op: identify_sample_ratio_terms
+    result_display: 標本の大きさと、そのうち該当するものの個数
+    result_srepr: Symbol('r')
+  - args: []
+    narration: 該当するものの個数を標本の大きさでわり、標本での割合を求める。
+    op: compute_sample_ratio
+    result_display: 3/100
+    result_srepr: Rational(3, 100)
+  - args: []
+    narration: 標本での該当する個数の割合が、母集団全体でもおよそ等しいとみて、母集団の大きさ x を含む比例式をつくる。
+    op: form_ratio_equation_for_x
+    result_display: 標本比率と母集団の比率が等しいとみて x を含む比例式をつくる
+    result_srepr: ''
+  - args: []
+    narration: 比例式を解き、母集団の大きさ x を求める。
+    op: solve_for_x
+    result_display: '4000'
+    result_srepr: Integer(4000)
+  - args: []
+    narration: 求めた全体の個数から、はじめに加えた赤玉の個数を引いて、もとからあった白玉の総数を求める。
+    op: derive_asked_quantity
+    result_display: 3880個
+    result_srepr: Integer(3880)
+visual_svg: null

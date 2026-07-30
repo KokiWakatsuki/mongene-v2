@@ -1,0 +1,73 @@
+family: math.g3_l29.word_problem
+form: word_problem
+source_desc: |
+  2次方程式の利用（数に関する問題）
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv2 desc: 誘導あり:数量関係の指示に沿い立式→解を求め吟味
+       example: 連続する2つの正の整数がある。この2数の積が 56 になるとき、次の問いに
+                答えよ。 (1) 小さい方の整数を x として、方程式をつくれ。 (2) この2つの
+                整数を求めよ。
+  Lv3 desc: 誘導なし:何を文字におくか自分で決め立式・不適解を除外
+       example: ある正の整数がある。この数を2乗した数は、もとの数の3倍より40大きい。
+                この整数を求めよ。
+  ---
+  【この form の型】g1_l25-l27 / g2_l17-l18 で通した骨格（given.scenario＝場面／
+  given.quantities＝変数の設定／小問文は context_slots）をそのまま使う。テンプレも
+  既存の wp_linear_guided_v1 / wp_linear_solo_v1 を再利用（この form のテンプレは
+  「どこに何を置くか」だけを決める設計のため、場面が増えてもテンプレは増えない）。
+  recipe は math.word_problem_quadratic 1つで4セル（g3_l29/l30 × Lv2/Lv3）を賄う。
+  数学は既存 solver math.solve_quadratic（mode=solve_product_form_positive_root）に
+  委ねる＝新 solver ゼロ。このモードは g3_l30.find_value と共有（g3_l30.calculation の
+  source_desc に「word_problem のような解の吟味は別セル C14 送り」と明記されており、
+  ここがその受け皿）。
+  【level_sep】Lv2 は誘導あり＝(1)立式→(2)値の2小問・式は x(x+1)=p（連続整数・c=1
+  固定）。答えは (x, x+1) の**2つ**の整数（文字＝答えの一部で、もう一方は x+1 の
+  合成が要る＝ answer_coeffs=((1,0),(1,1))）。Lv3 は誘導なし＝1小問・式は x²=nx+m
+  （積の形ではなく「2乗した数」の関係＝ Lv2 と式の見た目が違う）。文字はその数自身
+  そのものが答え。小問数・立式の形・答えの個数がすべて違う＝G6 の構造差。
+  【answer-first】Lv2 は小さい方の整数 x0 を先に引き、積 p=x0(x0+1) を逆算する
+  （c=1 固定なので x0 だけが自由度）。Lv3 は倍率 n と x0（>n）を先に引き、
+  m=x0²−n·x0（>0）を逆算する（x0>n の範囲に絞ることで m>0 を保証＝非退化）。
+  どちらも2解の積が負（−p<0 / −m<0）になるよう構成しているため、常にちょうど1つの
+  正の解を持つ（負の解は「正の整数」として不適＝場面の核）。
+  【dup 分散】Lv2 は x0 の定義域を広くとる（積 p が本文の唯一の数値のため、
+  自由度は1つしかない）。Lv3 は (倍率, x0) の2軸で分散する。
+  【検証】G-Q1 が全小問 double-solve。checker は params の「場面文に出ている数値」だけ
+  から立式し直し・解き直す（答えは params に入れない）。
+concepts_default: [quadratic.word_problem_consecutive_integers]
+levels:
+  "2":
+    signature: word_problem_quadratic_consecutive_integers
+    recipe: math.word_problem_quadratic
+    params:
+      scenario_kind: consecutive_integers
+      guided: true
+      # 積 p=x0(x0+1) が場面文の唯一の数値なので、自由度を確保するため広めにとる
+      # （x0 が小さい範囲だけだと積のバリエーションが足りず dup_rate が閾を超える。
+      # 実測: [3,300]→dup=0.24 で閾超過。[3,700]→dup=0.11 で通過）。
+      small_domain: {int_range: [3, 700]}
+    given: [scenario, quantities]
+    asked: [formulation, value]
+    visual: none
+    text: {tier: T1, template: wp_linear_guided_v1}
+    hints: [steps_prefix]
+    concept_tags: [quadratic.word_problem_consecutive_integers]
+    cause_tags: []
+  "3":
+    signature: word_problem_quadratic_number_square_relation
+    recipe: math.word_problem_quadratic
+    params:
+      scenario_kind: square_relation
+      guided: false
+      # m = x0² − n·x0（x0 > n で m>0 を保証）。倍率と x0 の2軸で dup を分散。
+      multiplier_candidates: [2, 3, 4, 5, 6, 7, 8, 9]
+      small_max: 60
+    given: [scenario]
+    asked: [value]
+    visual: none
+    text: {tier: T1, template: wp_linear_solo_v1}
+    hints: [steps_prefix]
+    concept_tags: [quadratic.word_problem_number_relation]
+    cause_tags: []
+remedial:
+  default_level: 2

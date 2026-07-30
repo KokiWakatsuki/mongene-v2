@@ -1,0 +1,101 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - quadratic.word_problem_rectangle_area
+  provenance:
+    git_commit: ''
+    recipe: math.word_problem_quadratic
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: wp_linear_guided_v1
+    tier: T1
+  requested:
+    form: word_problem
+    level: 2
+    subject: math
+    unit: g3_l30
+  resolved:
+    form: word_problem
+    level: 2
+    subject: math
+    unit: g3_l30
+  seed: 1
+  signature: word_problem_quadratic_rectangle_area
+problem_ref: b64ef35443ae5d40
+problem_text: '横が縦より15cm長い長方形がある。その面積は1924cm²である。
+
+  縦の長さを x cm とする。
+
+  (1) 面積の関係を、x を使った方程式で表せ。
+
+  (2) 縦の長さを求めよ。'
+sub_questions:
+- answer:
+    display: x(x + 15) = 1924
+    kind: symbolic
+    srepr: Equality(Mul(Symbol('x'), Add(Symbol('x'), Integer(15))), Integer(1924))
+  cause_tags: []
+  concept_tags:
+  - quadratic.word_problem_rectangle_area
+  explanation: 'まず、場面の中で、どちらの見方でも同じになる（等しくなっている）量に着目する。（長方形の面積）
+
+    次に、その量を x を使って両辺に表し、方程式をつくる。（x(x + 15) = 1924）'
+  hints:
+  - 場面の中で、どちらの見方でも同じになる（等しくなっている）量に着目する。
+  label: (1)
+  prompt_text: formulation を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 場面の中で、どちらの見方でも同じになる（等しくなっている）量に着目する。
+    op: find_equal_relation
+    result_display: 長方形の面積
+    result_srepr: Symbol('x')
+  - args: []
+    narration: その量を x を使って両辺に表し、方程式をつくる。
+    op: formulate_equation
+    result_display: x(x + 15) = 1924
+    result_srepr: Equality(Mul(Symbol('x'), Add(Symbol('x'), Integer(15))), Integer(1924))
+- answer:
+    display: 37cm
+    kind: symbolic
+    srepr: Tuple(Integer(37))
+  cause_tags: []
+  concept_tags:
+  - quadratic.word_problem_rectangle_area
+  explanation: 'まず、かっこを展開し、右辺を左辺に移項して、=0 の形に整理する。（展開して整理する）
+
+    次に、左辺を因数分解する。（左辺を因数分解する）
+
+    次に、積が 0 になるのは各因数が 0 のときだから、それぞれを 0 とおいて x を求める。
+
+    最後に、求めるものは正の数だから、2つの解のうち条件に合う正の解を選ぶ。（37）'
+  hints:
+  - かっこを展開し、右辺を左辺に移項して、=0 の形に整理する。
+  - 左辺を因数分解する。
+  - 積が 0 になるのは各因数が 0 のときだから、それぞれを 0 とおいて x を求める。
+  label: (2)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args: []
+    narration: かっこを展開し、右辺を左辺に移項して、=0 の形に整理する。
+    op: expand_and_rearrange
+    result_display: 展開して整理する
+    result_srepr: ''
+  - args: []
+    narration: 左辺を因数分解する。
+    op: factor_left_side
+    result_display: 左辺を因数分解する
+    result_srepr: ''
+  - args: []
+    narration: 積が 0 になるのは各因数が 0 のときだから、それぞれを 0 とおいて x を求める。
+    op: apply_zero_product
+    result_display: ''
+    result_srepr: ''
+  - args: []
+    narration: 求めるものは正の数だから、2つの解のうち条件に合う正の解を選ぶ。
+    op: select_positive_root
+    result_display: '37'
+    result_srepr: Integer(37)
+visual_svg: null
