@@ -35,7 +35,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - letter_expr.combine_linear
-  explanation: まず、文字の部分が同じ項（同類項）どうしをまとめる。 同類項どうしをまとめる次に、まとめた同類項の係数を計算して、式を簡単にする。 11x + 4
+  explanation: 'まず、文字の部分が同じ項（同類項）どうしをまとめる。（同類項どうしをまとめる）
+
+    次に、まとめた同類項の係数を計算して、式を簡単にする。（11x + 4）'
   hints:
   - 文字の部分が同じ項（同類項）どうしをまとめる。
   label: (1)

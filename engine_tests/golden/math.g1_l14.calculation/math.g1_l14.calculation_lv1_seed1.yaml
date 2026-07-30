@@ -35,7 +35,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - notation.quotient_as_fraction
-  explanation: まず、除法の記号 ÷ を使わず、分数の形で表す。 y/a
+  explanation: まず、除法の記号 ÷ を使わず、分数の形で表す。（y/a）
   hints:
   - 問題文の与えられた値をもう一度確認しよう。
   label: (1)

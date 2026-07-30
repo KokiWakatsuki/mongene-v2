@@ -35,7 +35,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - polynomial.combine_like_terms_basic
-  explanation: まず、文字の部分が同じ項（同類項）どうしをまとめる。 文字の部分が同じ項どうしをまとめる次に、まとめた同類項の係数を計算し、式を簡単にする。 -16x
+  explanation: 'まず、文字の部分が同じ項（同類項）どうしをまとめる。（文字の部分が同じ項どうしをまとめる）
+
+    次に、まとめた同類項の係数を計算し、式を簡単にする。（-16x）'
   hints:
   - 文字の部分が同じ項（同類項）どうしをまとめる。
   label: (1)

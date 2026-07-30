@@ -33,7 +33,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - probability.relative_frequency_basic
-  explanation: まず、ことがらが起こった回数を、試行の総回数でわる。 196/201
+  explanation: まず、ことがらが起こった回数を、試行の総回数でわる。（196/201）
   hints:
   - 問題文の与えられた値をもう一度確認しよう。
   label: (1)

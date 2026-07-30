@@ -35,7 +35,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - polynomial.rearrange_product
-  explanation: まず、分母をなくすため、両辺に分母をかける。 両辺に分母をかける次に、両辺を、解く文字にかかっている係数でわる。 h = 4b/s
+  explanation: 'まず、分母をなくすため、両辺に分母をかける。（両辺に分母をかける）
+
+    次に、両辺を、解く文字にかかっている係数でわる。（h = 4b/s）'
   hints:
   - 分母をなくすため、両辺に分母をかける。
   label: (1)

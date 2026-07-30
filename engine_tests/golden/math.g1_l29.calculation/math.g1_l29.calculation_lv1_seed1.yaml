@@ -33,7 +33,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - direct_proportion.evaluate_at_x
-  explanation: まず、比例定数と x の値を、比例の式 y=ax の x にあてはめる。 y = 9 × 8次に、かけ算を計算して y の値を求める。 y = 72
+  explanation: 'まず、比例定数と x の値を、比例の式 y=ax の x にあてはめる。（y = 9 × 8）
+
+    次に、かけ算を計算して y の値を求める。（y = 72）'
   hints:
   - 比例定数と x の値を、比例の式 y=ax の x にあてはめる。
   label: (1)

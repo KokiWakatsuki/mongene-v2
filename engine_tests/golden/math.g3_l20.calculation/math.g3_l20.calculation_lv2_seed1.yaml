@@ -35,7 +35,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - radical.add_subtract
-  explanation: まず、それぞれの根号を a√b の形に直す。 各根号を a√b にする次に、根号の中が同じ項を、同類項のようにまとめる。 4√5
+  explanation: 'まず、それぞれの根号を a√b の形に直す。（各根号を a√b にする）
+
+    次に、根号の中が同じ項を、同類項のようにまとめる。（4√5）'
   hints:
   - それぞれの根号を a√b の形に直す。
   label: (1)

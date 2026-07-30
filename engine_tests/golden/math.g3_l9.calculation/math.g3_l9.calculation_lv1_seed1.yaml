@@ -35,7 +35,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - polynomial.factor_perfect_square
-  explanation: まず、はじめと終わりが平方で、中央が積の2倍になっていることを確かめる。 平方の形を確かめる次に、1次式の平方の形で表す。 (a - 30)²
+  explanation: 'まず、はじめと終わりが平方で、中央が積の2倍になっていることを確かめる。（平方の形を確かめる）
+
+    次に、1次式の平方の形で表す。（(a - 30)²）'
   hints:
   - はじめと終わりが平方で、中央が積の2倍になっていることを確かめる。
   label: (1)

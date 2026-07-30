@@ -35,7 +35,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - signed_number.divide_pair
-  explanation: まず、わる数の逆数をかけるかけ算に直す。 逆数をかけるかけ算に直す次に、符号に注意してかけ算を計算する。 6
+  explanation: 'まず、わる数の逆数をかけるかけ算に直す。（逆数をかけるかけ算に直す）
+
+    次に、符号に注意してかけ算を計算する。（6）'
   hints:
   - わる数の逆数をかけるかけ算に直す。
   label: (1)

@@ -33,7 +33,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - linear_function.evaluate_at_x
-  explanation: まず、x の値を式に代入する。 y = (-3) × (-5) + 8次に、計算して y の値を求める。 y = 23
+  explanation: 'まず、x の値を式に代入する。（y = (-3) × (-5) + 8）
+
+    次に、計算して y の値を求める。（y = 23）'
   hints:
   - x の値を式に代入する。
   label: (1)

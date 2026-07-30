@@ -35,7 +35,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - polynomial.expand_mono_poly
-  explanation: まず、単項式を、かっこの中の各項にそれぞれかける。 16m² + 32m
+  explanation: まず、単項式を、かっこの中の各項にそれぞれかける。（16m² + 32m）
   hints:
   - 問題文の与えられた値をもう一度確認しよう。
   label: (1)

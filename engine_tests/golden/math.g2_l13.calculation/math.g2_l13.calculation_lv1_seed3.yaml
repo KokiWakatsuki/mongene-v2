@@ -35,7 +35,11 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - simultaneous_equations.solve_by_substitution
-  explanation: まず、一方の式の y を、もう一方の式に代入して x だけの方程式にする。 3x = -9次に、x の値を求める。 x = -3最後に、求めた x を y = … の式に代入して y を求める。 y = 5
+  explanation: 'まず、一方の式の y を、もう一方の式に代入して x だけの方程式にする。（3x = -9）
+
+    次に、x の値を求める。（x = -3）
+
+    最後に、求めた x を y = … の式に代入して y を求める。（y = 5）'
   hints:
   - 一方の式の y を、もう一方の式に代入して x だけの方程式にする。
   - x の値を求める。

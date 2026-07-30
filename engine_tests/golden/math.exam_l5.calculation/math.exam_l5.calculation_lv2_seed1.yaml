@@ -33,7 +33,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - exam.probability_from_counts
-  explanation: まず、ことがらが起こった回数を、試行の総回数でわる。 40/41
+  explanation: まず、ことがらが起こった回数を、試行の総回数でわる。（40/41）
   hints:
   - 問題文の与えられた値をもう一度確認しよう。
   label: (1)

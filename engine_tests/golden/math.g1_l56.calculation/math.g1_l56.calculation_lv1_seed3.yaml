@@ -33,7 +33,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - cumulative_frequency.compute
-  explanation: まず、いちばん小さい階級から対象の階級まで、度数を順に足し合わせる。 36
+  explanation: まず、いちばん小さい階級から対象の階級まで、度数を順に足し合わせる。（36）
   hints:
   - 問題文の与えられた値をもう一度確認しよう。
   label: (1)

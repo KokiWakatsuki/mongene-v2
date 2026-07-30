@@ -33,7 +33,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - radical.find_side_from_area
-  explanation: まず、根号の中を素因数分解し、平方の因数を見つける。 平方の因数を見つける次に、平方の因数を根号の外に出して a√b の形にする。 5√6
+  explanation: 'まず、根号の中を素因数分解し、平方の因数を見つける。（平方の因数を見つける）
+
+    次に、平方の因数を根号の外に出して a√b の形にする。（5√6）'
   hints:
   - 根号の中を素因数分解し、平方の因数を見つける。
   label: (1)

@@ -35,7 +35,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - quadratic.verify_solution
-  explanation: まず、候補の値を2次方程式の x にあてはめる。 候補の値を方程式の x に代入する次に、左辺の値が0になれば解、0にならなければ解ではない。 解ではない
+  explanation: 'まず、候補の値を2次方程式の x にあてはめる。（候補の値を方程式の x に代入する）
+
+    次に、左辺の値が0になれば解、0にならなければ解ではない。（解ではない）'
   hints:
   - 候補の値を2次方程式の x にあてはめる。
   label: (1)

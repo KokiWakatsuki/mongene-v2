@@ -35,7 +35,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - quadratic.solve_by_factoring
-  explanation: まず、左辺の共通因数をくくり出す。 共通因数をくくり出す次に、積が 0 になるのは各因数が 0 のときだから、それぞれを 0 とおいて x を求める。 x = -23/4, x = 0
+  explanation: 'まず、左辺の共通因数をくくり出す。（共通因数をくくり出す）
+
+    次に、積が 0 になるのは各因数が 0 のときだから、それぞれを 0 とおいて x を求める。（x = -23/4, x = 0）'
   hints:
   - 左辺の共通因数をくくり出す。
   label: (1)

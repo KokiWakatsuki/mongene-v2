@@ -35,7 +35,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - quadratic.solve_by_factoring
-  explanation: まず、左辺を因数分解する。 左辺を因数分解する次に、積が 0 になるのは各因数が 0 のときだから、それぞれを 0 とおいて x を求める。 x = -11, x = -2
+  explanation: 'まず、左辺を因数分解する。（左辺を因数分解する）
+
+    次に、積が 0 になるのは各因数が 0 のときだから、それぞれを 0 とおいて x を求める。（x = -11, x = -2）'
   hints:
   - 左辺を因数分解する。
   label: (1)

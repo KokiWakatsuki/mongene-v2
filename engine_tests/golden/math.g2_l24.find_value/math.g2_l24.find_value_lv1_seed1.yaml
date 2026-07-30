@@ -39,7 +39,11 @@ sub_questions:
   concept_tags:
   - linear_function.expression_from_slope_point
   - linear_function.intercept_from_point
-  explanation: まず、傾きと通る点の座標を y = ax + b に代入する。 -5 × 1 + b = -2次に、代入した式を b について解き、切片を求める。 切片 b = 3最後に、傾きと切片から一次関数の式を組み立てる。 y = -5x + 3
+  explanation: 'まず、傾きと通る点の座標を y = ax + b に代入する。（-5 × 1 + b = -2）
+
+    次に、代入した式を b について解き、切片を求める。（切片 b = 3）
+
+    最後に、傾きと切片から一次関数の式を組み立てる。（y = -5x + 3）'
   hints:
   - 傾きと通る点の座標を y = ax + b に代入する。
   - 代入した式を b について解き、切片を求める。

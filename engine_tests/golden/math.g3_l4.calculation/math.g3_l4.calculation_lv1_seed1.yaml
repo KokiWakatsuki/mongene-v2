@@ -35,7 +35,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - polynomial.expand_formula_square
-  explanation: まず、はじめの項の平方・積の2倍・終わりの項の平方を求める。 平方と積の2倍を求める次に、乗法公式にあてはめて展開した式を書く。 t² - 56t + 784
+  explanation: 'まず、はじめの項の平方・積の2倍・終わりの項の平方を求める。（平方と積の2倍を求める）
+
+    次に、乗法公式にあてはめて展開した式を書く。（t² - 56t + 784）'
   hints:
   - はじめの項の平方・積の2倍・終わりの項の平方を求める。
   label: (1)

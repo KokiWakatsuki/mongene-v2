@@ -35,7 +35,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - polynomial.multiply_monomials
-  explanation: まず、係数どうしをかけ算する。 係数どうしをかける次に、同じ文字は指数の和にまとめ、1つの単項式にする。 32x³
+  explanation: 'まず、係数どうしをかけ算する。（係数どうしをかける）
+
+    次に、同じ文字は指数の和にまとめ、1つの単項式にする。（32x³）'
   hints:
   - 係数どうしをかけ算する。
   label: (1)

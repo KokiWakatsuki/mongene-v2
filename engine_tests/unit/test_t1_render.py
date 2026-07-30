@@ -231,9 +231,43 @@ def test_explanation_connectives_use_last_only_for_final_step(steps_count, expec
     assert "さらに、" not in explanation
     assert explanation.count("最後に、") == (1 if steps_count >= 3 else 0)
     # 期待する完全一致（narration/result_display の結合形も固定）
-    assert explanation == "".join(
-        f"{conn}narration{i} disp{i}" for i, conn in enumerate(expected)
+    # 1ステップ=1行・result_display は括弧。区切り無し連結だと result_display の末尾に
+    # 次の接続詞が直付けされて「…をつくる。 disp0次に、」と読めない文になる。
+    assert explanation == "\n".join(
+        f"{conn}narration{i}（disp{i}）" for i, conn in enumerate(expected)
     )
+
+
+# ---------------------------------------------------------------------------
+# explanation: 文の切れ目（result_display の直後に次の接続詞が来ない）
+# ---------------------------------------------------------------------------
+@pytest.mark.parametrize("steps_count", [2, 3, 4, 6])
+def test_explanation_never_runs_result_display_into_next_connective(steps_count):
+    """接続詞の直前は必ず文の終わり（句点・閉じ括弧・改行）であること。
+
+    実バグの回帰: 区切り無し連結だと「…残った文字を求める。 x = 125最後に、…」となり、
+    golden 1140 件のうち 1059 件がこの読めない文を持っていた。
+    """
+    registry = _registry_with_template("stem")
+    mr = _mk_mr(steps_count=steps_count)
+    explanation = render_text(mr, _mk_ctx(), registry=registry).explanations["(1)"]
+
+    assert re.search(r"[^。）\n](次に、|最後に、)", explanation) is None, explanation
+
+
+def test_explanation_omits_parentheses_when_result_display_is_empty():
+    """result_display が空のステップは空括弧「（）」を出さない。"""
+    registry = _registry_with_template("stem")
+    mr = _mk_mr(steps_count=2)
+    steps = list(mr.sub_questions[0].steps)
+    steps[0] = steps[0].model_copy(update={"result_display": ""})
+    sq = mr.sub_questions[0].model_copy(update={"steps": steps})
+    mr = mr.model_copy(update={"sub_questions": [sq]})
+
+    explanation = render_text(mr, _mk_ctx(), registry=registry).explanations["(1)"]
+
+    assert "（）" not in explanation
+    assert explanation == "まず、narration0\n次に、narration1（disp1）"
 
 
 # ---------------------------------------------------------------------------

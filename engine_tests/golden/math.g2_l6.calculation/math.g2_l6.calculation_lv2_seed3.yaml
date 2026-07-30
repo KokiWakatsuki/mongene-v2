@@ -35,7 +35,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - polynomial.combine_fractions_basic
-  explanation: まず、分母の最小公倍数を求めて通分する。 分母を最小公倍数にそろえる次に、分子どうしを計算し、1つの分数にまとめる。 (17x - 21y)/12
+  explanation: 'まず、分母の最小公倍数を求めて通分する。（分母を最小公倍数にそろえる）
+
+    次に、分子どうしを計算し、1つの分数にまとめる。（(17x - 21y)/12）'
   hints:
   - 分母の最小公倍数を求めて通分する。
   label: (1)

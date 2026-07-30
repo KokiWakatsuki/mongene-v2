@@ -33,7 +33,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - quartile.compute_median
-  explanation: まず、データを大きさの順に並べかえる。 データを大きさの順に並べる次に、並べたデータの中央にある値（中央値）を求める。 29
+  explanation: 'まず、データを大きさの順に並べかえる。（データを大きさの順に並べる）
+
+    次に、並べたデータの中央にある値（中央値）を求める。（29）'
   hints:
   - データを大きさの順に並べかえる。
   label: (1)

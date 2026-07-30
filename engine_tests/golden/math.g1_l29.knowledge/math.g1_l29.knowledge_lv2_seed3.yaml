@@ -39,7 +39,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - direct_proportion.judge_table
-  explanation: まず、表の対応するxとyについて、商y/xをそれぞれ計算する。 対応するxとyの商 y/x を、それぞれ計算する次に、商y/xがすべて等しければ比例するといえる。等しくなければ比例するとはいえない。 比例するといえる
+  explanation: 'まず、表の対応するxとyについて、商y/xをそれぞれ計算する。（対応するxとyの商 y/x を、それぞれ計算する）
+
+    次に、商y/xがすべて等しければ比例するといえる。等しくなければ比例するとはいえない。（比例するといえる）'
   hints:
   - 表の対応するxとyについて、商y/xをそれぞれ計算する。
   label: (1)

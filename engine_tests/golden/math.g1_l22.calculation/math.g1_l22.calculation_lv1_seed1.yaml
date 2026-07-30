@@ -35,7 +35,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - equation.solve_by_transpose
-  explanation: まず、数の項を、符号を変えて反対の辺に移項する。 数の項を移項する次に、両辺を計算して、解を求める。 x = 12
+  explanation: 'まず、数の項を、符号を変えて反対の辺に移項する。（数の項を移項する）
+
+    次に、両辺を計算して、解を求める。（x = 12）'
   hints:
   - 数の項を、符号を変えて反対の辺に移項する。
   label: (1)

@@ -35,7 +35,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - linear_function.slope_sign_to_direction
-  explanation: まず、傾き a の符号に注目する。 傾きは負次に、傾きが正なら右上がり、傾きが負なら右下がりになる。 右下がり
+  explanation: 'まず、傾き a の符号に注目する。（傾きは負）
+
+    次に、傾きが正なら右上がり、傾きが負なら右下がりになる。（右下がり）'
   hints:
   - 傾き a の符号に注目する。
   label: (1)

@@ -33,7 +33,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - linear_function.slope_as_rate_of_change
-  explanation: まず、x が1増えると y がいくつ増えるかを、式の変化から調べる。 x が1増えたときの y の増加量を式の変化から調べる次に、1次関数では、x が1増えるときの y の増加量は傾きに等しい。 -9
+  explanation: 'まず、x が1増えると y がいくつ増えるかを、式の変化から調べる。（x が1増えたときの y の増加量を式の変化から調べる）
+
+    次に、1次関数では、x が1増えるときの y の増加量は傾きに等しい。（-9）'
   hints:
   - x が1増えると y がいくつ増えるかを、式の変化から調べる。
   label: (1)

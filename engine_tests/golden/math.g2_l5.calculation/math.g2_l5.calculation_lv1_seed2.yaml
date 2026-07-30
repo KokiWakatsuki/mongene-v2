@@ -35,7 +35,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - polynomial.distribute_multiply
-  explanation: まず、かっこの前の数を、かっこの中の各項にかけて計算する。 -12x + 10y
+  explanation: まず、かっこの前の数を、かっこの中の各項にかけて計算する。（-12x + 10y）
   hints:
   - 問題文の与えられた値をもう一度確認しよう。
   label: (1)

@@ -35,7 +35,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - simultaneous_equations.verify_solution
-  explanation: まず、組の x, y の値を2つの式の左辺にそれぞれ代入する。 左辺を計算する次に、両方の式が成り立てば解、片方でも成り立たなければ解でない。 解である
+  explanation: 'まず、組の x, y の値を2つの式の左辺にそれぞれ代入する。（左辺を計算する）
+
+    次に、両方の式が成り立てば解、片方でも成り立たなければ解でない。（解である）'
   hints:
   - 組の x, y の値を2つの式の左辺にそれぞれ代入する。
   label: (1)

@@ -35,7 +35,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - polynomial.expand_mono_poly
-  explanation: まず、それぞれの単項式を、対応するかっこの中の各項にかける。 各単項式を分配する次に、同類項をまとめて計算する。 6t³ - 22t² + 9t
+  explanation: 'まず、それぞれの単項式を、対応するかっこの中の各項にかける。（各単項式を分配する）
+
+    次に、同類項をまとめて計算する。（6t³ - 22t² + 9t）'
   hints:
   - それぞれの単項式を、対応するかっこの中の各項にかける。
   label: (1)

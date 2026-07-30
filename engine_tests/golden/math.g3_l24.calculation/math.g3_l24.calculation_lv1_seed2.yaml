@@ -35,7 +35,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - quadratic.evaluate_solution
-  explanation: まず、指定された値を左辺の文字に代入する。 値を代入する次に、左辺を計算して、その値を求める（値が 0 なら等式が成り立つ）。 -14
+  explanation: 'まず、指定された値を左辺の文字に代入する。（値を代入する）
+
+    次に、左辺を計算して、その値を求める（値が 0 なら等式が成り立つ）。（-14）'
   hints:
   - 指定された値を左辺の文字に代入する。
   label: (1)

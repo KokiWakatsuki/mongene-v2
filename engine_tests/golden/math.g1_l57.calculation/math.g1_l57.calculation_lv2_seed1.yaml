@@ -33,7 +33,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - representative_value.compute_grouped_mean
-  explanation: まず、各階級の階級値に、その階級の度数をかける。 各階級の階級値と度数の積を求める次に、それらの積をすべて足し合わせ、度数の合計でわって平均値を求める。 694/23
+  explanation: 'まず、各階級の階級値に、その階級の度数をかける。（各階級の階級値と度数の積を求める）
+
+    次に、それらの積をすべて足し合わせ、度数の合計でわって平均値を求める。（694/23）'
   hints:
   - 各階級の階級値に、その階級の度数をかける。
   label: (1)

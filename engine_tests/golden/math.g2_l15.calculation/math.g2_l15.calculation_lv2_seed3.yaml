@@ -35,7 +35,11 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - simultaneous_equations.solve_abc_form
-  explanation: まず、A=B=C を A=C と B=C の2つの式に分けて連立方程式にする。 3x - 2y = -1 , -2x + 3y = 4次に、連立方程式を解いて x を求める。 x = 1最後に、求めた x をもとの式に代入して y を求める。 y = 2
+  explanation: 'まず、A=B=C を A=C と B=C の2つの式に分けて連立方程式にする。（3x - 2y = -1 , -2x + 3y = 4）
+
+    次に、連立方程式を解いて x を求める。（x = 1）
+
+    最後に、求めた x をもとの式に代入して y を求める。（y = 2）'
   hints:
   - A=B=C を A=C と B=C の2つの式に分けて連立方程式にする。
   - 連立方程式を解いて x を求める。

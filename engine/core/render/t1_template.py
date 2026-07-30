@@ -21,7 +21,7 @@ from jinja2.sandbox import SandboxedEnvironment
 from engine.core.registry import REGISTRY, _Registry
 
 if TYPE_CHECKING:  # pragma: no cover - 型のみ
-    from engine.core.contracts import CellContext, MR
+    from engine.core.contracts import CellContext, Step, MR
 
 
 # ---------------------------------------------------------------------------
@@ -166,14 +166,27 @@ def _connective(index: int, total: int) -> str:
     return _CONNECTIVE_MIDDLE
 
 
+def _explanation_line(index: int, total: int, step: "Step") -> str:
+    """1ステップ = 1行。`result_display` は括弧に入れて narration と切る。
+
+    以前は `f"{narration} {result_display}"` を区切りなしで連結していたため、
+    result_display の末尾に次の文の接続詞が直付けされて
+    「…に着目する。 冊数と値段の比次に、その量を…」と読めない文になっていた
+    （narration は句点で終わるが result_display は「x = 125」のような裸の断片で
+    終わるため）。括弧で閉じることで、result_display が結果でも言い換えでも文が切れる。
+    """
+    body = f"{_connective(index, total)}{step.narration}"
+    if not step.result_display:
+        return body
+    return f"{body}（{step.result_display}）"
+
+
 def _build_explanation(mr: "MR", sq_index: int) -> str:
     sq = mr.sub_questions[sq_index]
     total = len(sq.steps)
-    parts: list[str] = []
-    for i, step in enumerate(sq.steps):
-        sentence = f"{_connective(i, total)}{step.narration} {step.result_display}"
-        parts.append(sentence)
-    return "".join(parts)
+    return "\n".join(
+        _explanation_line(i, total, step) for i, step in enumerate(sq.steps)
+    )
 
 
 # ---------------------------------------------------------------------------

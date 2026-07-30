@@ -33,7 +33,11 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - linear_function.read_intersection_from_graph
-  explanation: まず、1本目の直線を座標平面にかく。 y = -2x + 6次に、2本目の直線を同じ平面にかく。 y = 3x - 14最後に、2本の直線が交わる点の座標を読み取る。 (4, -2)
+  explanation: 'まず、1本目の直線を座標平面にかく。（y = -2x + 6）
+
+    次に、2本目の直線を同じ平面にかく。（y = 3x - 14）
+
+    最後に、2本の直線が交わる点の座標を読み取る。（(4, -2)）'
   hints:
   - 1本目の直線を座標平面にかく。
   - 2本目の直線を同じ平面にかく。

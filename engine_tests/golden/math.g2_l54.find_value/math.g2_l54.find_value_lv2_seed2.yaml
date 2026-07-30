@@ -33,7 +33,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - probability.complement
-  explanation: まず、1から、もとのことがらの起こる確率をひく。 162/169
+  explanation: まず、1から、もとのことがらの起こる確率をひく。（162/169）
   hints:
   - 問題文の与えられた値をもう一度確認しよう。
   label: (1)

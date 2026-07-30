@@ -35,7 +35,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - quadratic.solve_by_formula
-  explanation: まず、与式を整理して、それぞれの項の係数 a・b・c を読み取る。 a・b・c を読み取る次に、a・b・c を解の公式に代入して x を求める。 x = (2 - 3√2)/2, x = (2 + 3√2)/2
+  explanation: 'まず、与式を整理して、それぞれの項の係数 a・b・c を読み取る。（a・b・c を読み取る）
+
+    次に、a・b・c を解の公式に代入して x を求める。（x = (2 - 3√2)/2, x = (2 + 3√2)/2）'
   hints:
   - 与式を整理して、それぞれの項の係数 a・b・c を読み取る。
   label: (1)

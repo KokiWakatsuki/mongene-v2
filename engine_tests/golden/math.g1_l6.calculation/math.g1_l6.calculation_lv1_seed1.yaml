@@ -35,7 +35,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - signed_number.multiply_pair
-  explanation: まず、かけ合わせる数の符号から、積の符号を先に決める。 積の符号を先に決める次に、絶対値どうしをかけて、積を求める。 72
+  explanation: 'まず、かけ合わせる数の符号から、積の符号を先に決める。（積の符号を先に決める）
+
+    次に、絶対値どうしをかけて、積を求める。（72）'
   hints:
   - かけ合わせる数の符号から、積の符号を先に決める。
   label: (1)

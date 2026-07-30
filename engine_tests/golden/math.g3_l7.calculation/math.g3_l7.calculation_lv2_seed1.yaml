@@ -35,7 +35,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - polynomial.factor_common
-  explanation: まず、各項の係数と文字に共通する因数を見つける。 共通因数を見つける次に、各項に共通する因数をかっこの外にくくり出す。 3pq(4p - 5q + 1)
+  explanation: 'まず、各項の係数と文字に共通する因数を見つける。（共通因数を見つける）
+
+    次に、各項に共通する因数をかっこの外にくくり出す。（3pq(4p - 5q + 1)）'
   hints:
   - 各項の係数と文字に共通する因数を見つける。
   label: (1)

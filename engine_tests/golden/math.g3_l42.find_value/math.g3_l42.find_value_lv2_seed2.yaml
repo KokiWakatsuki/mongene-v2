@@ -33,7 +33,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - parallel_segment.ratio_length
-  explanation: まず、DE∥BC であることから、三角形ADEと三角形ABCが相似になることを見つける。 平行線がつくる相似な三角形を見つける次に、AD:AB=DE:BC が成り立つことから、辺BCの長さを求める。 3975/8
+  explanation: 'まず、DE∥BC であることから、三角形ADEと三角形ABCが相似になることを見つける。（平行線がつくる相似な三角形を見つける）
+
+    次に、AD:AB=DE:BC が成り立つことから、辺BCの長さを求める。（3975/8）'
   hints:
   - DE∥BC であることから、三角形ADEと三角形ABCが相似になることを見つける。
   label: (1)

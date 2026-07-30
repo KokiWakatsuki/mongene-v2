@@ -33,7 +33,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - parallel_segment.judge_from_ratio
-  explanation: まず、AD:DBとAE:ECの比が等しいかどうかを比べる。 AD:DBとAE:ECの比を比べる次に、平行線と線分の比の定理の逆から、DEとBCが平行であるかどうかを判別する。 平行である
+  explanation: 'まず、AD:DBとAE:ECの比が等しいかどうかを比べる。（AD:DBとAE:ECの比を比べる）
+
+    次に、平行線と線分の比の定理の逆から、DEとBCが平行であるかどうかを判別する。（平行である）'
   hints:
   - AD:DBとAE:ECの比が等しいかどうかを比べる。
   label: (1)

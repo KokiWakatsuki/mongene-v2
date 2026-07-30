@@ -39,7 +39,11 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - simultaneous_equations.word_problem_percent_change
-  explanation: まず、昨年の男子の人数を x 人、女子の人数を y 人とおく。 x, y次に、昨年の人数の関係に着目して、1つめの式をつくる。 x + y = 650最後に、増減した人数の関係に着目して、2つめの式をつくる。 8x/100 - 4y/100 = 10
+  explanation: 'まず、昨年の男子の人数を x 人、女子の人数を y 人とおく。（x, y）
+
+    次に、昨年の人数の関係に着目して、1つめの式をつくる。（x + y = 650）
+
+    最後に、増減した人数の関係に着目して、2つめの式をつくる。（8x/100 - 4y/100 = 10）'
   hints:
   - 昨年の男子の人数を x 人、女子の人数を y 人とおく。
   - 昨年の人数の関係に着目して、1つめの式をつくる。
@@ -68,7 +72,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - simultaneous_equations.word_problem_percent_change
-  explanation: まず、係数をそろえて一方の文字を消去し、残った文字を求める。 x = 300次に、求めた値をもとの式に代入し、もう一方の文字を求める。 y = 350
+  explanation: 'まず、係数をそろえて一方の文字を消去し、残った文字を求める。（x = 300）
+
+    次に、求めた値をもとの式に代入し、もう一方の文字を求める。（y = 350）'
   hints:
   - 係数をそろえて一方の文字を消去し、残った文字を求める。
   label: (2)

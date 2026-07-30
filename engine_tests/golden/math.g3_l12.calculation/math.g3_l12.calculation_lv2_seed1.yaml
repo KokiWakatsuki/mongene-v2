@@ -35,7 +35,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - polynomial.arithmetic_via_diff_of_squares
-  explanation: まず、2つの数の平方の差を、和と差の積の形になおす。 和と差の積の形になおす次に、和と差の積を計算し、値を求める。 345
+  explanation: 'まず、2つの数の平方の差を、和と差の積の形になおす。（和と差の積の形になおす）
+
+    次に、和と差の積を計算し、値を求める。（345）'
   hints:
   - 2つの数の平方の差を、和と差の積の形になおす。
   label: (1)

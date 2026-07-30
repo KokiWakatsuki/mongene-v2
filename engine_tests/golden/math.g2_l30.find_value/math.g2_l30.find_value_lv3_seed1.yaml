@@ -33,7 +33,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - linear_function.meeting_time_two_segment
-  explanation: まず、Bが速さを変えた後の式と、Aの式が等しくなる方程式をつくる。 2区間目の式どうしを等号でつなぐ次に、方程式を整理して、出会う時刻 x を求める。 x = 28
+  explanation: 'まず、Bが速さを変えた後の式と、Aの式が等しくなる方程式をつくる。（2区間目の式どうしを等号でつなぐ）
+
+    次に、方程式を整理して、出会う時刻 x を求める。（x = 28）'
   hints:
   - Bが速さを変えた後の式と、Aの式が等しくなる方程式をつくる。
   label: (1)

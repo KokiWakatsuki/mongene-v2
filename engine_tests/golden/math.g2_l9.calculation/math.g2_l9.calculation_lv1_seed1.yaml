@@ -35,7 +35,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - polynomial.rearrange_move
-  explanation: まず、解く文字の項だけを片方の辺に残すよう、ほかの項を移項する。 y = -9x
+  explanation: まず、解く文字の項だけを片方の辺に残すよう、ほかの項を移項する。（y = -9x）
   hints:
   - 問題文の与えられた値をもう一度確認しよう。
   label: (1)

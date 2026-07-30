@@ -35,7 +35,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - radical.multiply_divide
-  explanation: まず、根号の積を、1つの根号の中の積にまとめる。 1つの根号にまとめる次に、根号の中を素因数分解し、平方の因数を根号の外に出す。 5√3
+  explanation: 'まず、根号の積を、1つの根号の中の積にまとめる。（1つの根号にまとめる）
+
+    次に、根号の中を素因数分解し、平方の因数を根号の外に出す。（5√3）'
   hints:
   - 根号の積を、1つの根号の中の積にまとめる。
   label: (1)

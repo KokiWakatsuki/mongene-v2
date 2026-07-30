@@ -33,7 +33,11 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - linear_function.intersection_of_two_lines
-  explanation: まず、2つの直線の y を等しいとおき、x についての方程式を解く。 x = 0次に、x の値を求める。 x = 0最後に、求めた x をどちらかの式に代入し、y を求める。 y = 2
+  explanation: 'まず、2つの直線の y を等しいとおき、x についての方程式を解く。（x = 0）
+
+    次に、x の値を求める。（x = 0）
+
+    最後に、求めた x をどちらかの式に代入し、y を求める。（y = 2）'
   hints:
   - 2つの直線の y を等しいとおき、x についての方程式を解く。
   - x の値を求める。

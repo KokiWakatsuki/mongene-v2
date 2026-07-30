@@ -35,7 +35,11 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - simultaneous_equations.solve_by_elimination_scaled
-  explanation: まず、y の係数をそろえるため、一方の式を何倍かする。 -4x - 2y = 14次に、2式を加減して y を消去し、x を求める。 x = -2最後に、求めた x をもとの式に代入して y を求める。 y = -3
+  explanation: 'まず、y の係数をそろえるため、一方の式を何倍かする。（-4x - 2y = 14）
+
+    次に、2式を加減して y を消去し、x を求める。（x = -2）
+
+    最後に、求めた x をもとの式に代入して y を求める。（y = -3）'
   hints:
   - y の係数をそろえるため、一方の式を何倍かする。
   - 2式を加減して y を消去し、x を求める。

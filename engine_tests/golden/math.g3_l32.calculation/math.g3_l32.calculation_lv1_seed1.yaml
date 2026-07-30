@@ -33,7 +33,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - quadratic_function.evaluate
-  explanation: まず、式の x に、与えられた値をあてはめる。 x に代入する次に、2乗を計算してから比例定数をかけ、y の値を求める。 100
+  explanation: 'まず、式の x に、与えられた値をあてはめる。（x に代入する）
+
+    次に、2乗を計算してから比例定数をかけ、y の値を求める。（100）'
   hints:
   - 式の x に、与えられた値をあてはめる。
   label: (1)

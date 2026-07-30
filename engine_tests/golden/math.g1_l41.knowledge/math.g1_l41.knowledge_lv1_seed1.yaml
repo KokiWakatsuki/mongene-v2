@@ -35,7 +35,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - construction_property.perpendicular_bisector
-  explanation: まず、垂直二等分線上の点から、線分の両端までの距離を見比べる。 垂直二等分線上の点から、線分の両端までの距離を見比べる。次に、その距離どうしの関係を判別する。 等しい
+  explanation: 'まず、垂直二等分線上の点から、線分の両端までの距離を見比べる。（垂直二等分線上の点から、線分の両端までの距離を見比べる。）
+
+    次に、その距離どうしの関係を判別する。（等しい）'
   hints:
   - 垂直二等分線上の点から、線分の両端までの距離を見比べる。
   label: (1)

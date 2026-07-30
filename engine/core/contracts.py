@@ -10,7 +10,7 @@ from __future__ import annotations
 
 from typing import Any, Literal, Protocol, Union, runtime_checkable
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 # ---------------------------------------------------------------------------
 # 語彙（Literal）
@@ -77,6 +77,24 @@ class Step(BaseModel):
     result_srepr: str      # sympy srepr（機械厳密形 = moat）
     result_display: str    # 表示形（例 "x = 3"）
     narration: str         # 「なぜこの計算か」1文（T1/T3・ヒントの素材）
+
+    @field_validator("narration")
+    @classmethod
+    def _narration_owns_no_connective(cls, v: str) -> str:
+        """narration は「文の本体」だけを持つ。接続詞はレンダラの持ち物。
+
+        T1 は解説を組むとき先頭に「まず、／次に、／最後に、」を付ける（`_connective`）。
+        narration 自体が接続詞で始まると「次に、次に、乗法と除法を…」と二重になる
+        （実際に arithmetic の 2 ステップで起きていた）。narration は hints にも
+        そのまま流れるので、位置を語る語は narration に置けない、を契約で閉じる。
+        """
+        for connective in ("まず、", "次に、", "最後に、", "さらに、"):
+            if v.startswith(connective):
+                raise ValueError(
+                    f"narration は接続詞 {connective!r} で始めない"
+                    f"（順序はレンダラが付ける）: {v!r}"
+                )
+        return v
 
 
 class SymbolicAnswer(BaseModel):  # calculation / find_value / word_problem

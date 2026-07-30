@@ -33,7 +33,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - linear_function.solve_equation_for_y
-  explanation: まず、x の項を右辺に移項し、y の項だけを左辺に残す。 3y = 6x + 27次に、両辺を y の係数で割り、y = の形にする。 y = 2x + 9
+  explanation: 'まず、x の項を右辺に移項し、y の項だけを左辺に残す。（3y = 6x + 27）
+
+    次に、両辺を y の係数で割り、y = の形にする。（y = 2x + 9）'
   hints:
   - x の項を右辺に移項し、y の項だけを左辺に残す。
   label: (1)

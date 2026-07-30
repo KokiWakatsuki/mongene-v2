@@ -33,7 +33,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - exam.relative_frequency_ratio
-  explanation: まず、ことがらが起こった回数を、試行の総回数でわる。 103/149
+  explanation: まず、ことがらが起こった回数を、試行の総回数でわる。（103/149）
   hints:
   - 問題文の与えられた値をもう一度確認しよう。
   label: (1)

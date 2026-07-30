@@ -35,7 +35,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - notation.product_rule_basic
-  explanation: まず、数を文字の前に書き、乗法の記号 × を省いて表す。 8kx
+  explanation: まず、数を文字の前に書き、乗法の記号 × を省いて表す。（8kx）
   hints:
   - 問題文の与えられた値をもう一度確認しよう。
   label: (1)

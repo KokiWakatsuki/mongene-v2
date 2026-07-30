@@ -35,7 +35,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - polynomial.factor_diff_squares
-  explanation: まず、平方の差を、和と差の積の形になおす。 (4a - 9)(4a + 9)
+  explanation: まず、平方の差を、和と差の積の形になおす。（(4a - 9)(4a + 9)）
   hints:
   - 問題文の与えられた値をもう一度確認しよう。
   label: (1)

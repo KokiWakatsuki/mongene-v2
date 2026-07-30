@@ -35,7 +35,11 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - simultaneous_equations.solve_by_elimination_scaled
-  explanation: まず、y の係数を最小公倍数にそろえるため、両方の式をそれぞれ何倍かする。 9x - 6y = 75 , -4x - 6y = 10次に、2式を加減して y を消去し、x を求める。 x = 5最後に、求めた x をもとの式に代入して y を求める。 y = -5
+  explanation: 'まず、y の係数を最小公倍数にそろえるため、両方の式をそれぞれ何倍かする。（9x - 6y = 75 , -4x - 6y = 10）
+
+    次に、2式を加減して y を消去し、x を求める。（x = 5）
+
+    最後に、求めた x をもとの式に代入して y を求める。（y = -5）'
   hints:
   - y の係数を最小公倍数にそろえるため、両方の式をそれぞれ何倍かする。
   - 2式を加減して y を消去し、x を求める。

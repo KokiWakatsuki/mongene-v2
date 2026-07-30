@@ -35,7 +35,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - signed_number.subtract_pair
-  explanation: まず、ひく数の符号を変えて、たし算に直す。 ひき算をたし算に直す次に、符号に注意して和を計算する。 -7
+  explanation: 'まず、ひく数の符号を変えて、たし算に直す。（ひき算をたし算に直す）
+
+    次に、符号に注意して和を計算する。（-7）'
   hints:
   - ひく数の符号を変えて、たし算に直す。
   label: (1)

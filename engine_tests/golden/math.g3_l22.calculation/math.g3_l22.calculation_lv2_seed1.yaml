@@ -35,7 +35,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - radical.evaluate_expression_value
-  explanation: まず、式の文字に、根号を含む値をそのままあてはめる。 根号を含む値をあてはめる次に、かっこを展開し、根号を含む項どうしを整理して式の値を求める。 -22
+  explanation: 'まず、式の文字に、根号を含む値をそのままあてはめる。（根号を含む値をあてはめる）
+
+    次に、かっこを展開し、根号を含む項どうしを整理して式の値を求める。（-22）'
   hints:
   - 式の文字に、根号を含む値をそのままあてはめる。
   label: (1)

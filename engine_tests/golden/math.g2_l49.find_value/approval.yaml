@@ -1,6 +1,6 @@
-approved_at: '2026-07-15T18:12:48.216974'
+approved_at: '2026-07-30T16:43:01.655863'
 approver: koki
-content_sha256: 09b174057195bb26820d80d28b4c2c802048021091eb896fdae94bcda9c13bff
+content_sha256: df02b39e4e78b4fefa65f60119618d7951f5f548953286ae9d1d0d0f4ee8940b
 family: math.g2_l49.find_value
 files:
 - engine_tests/golden/math.g2_l49.find_value/math.g2_l49.find_value_lv1_seed1.yaml

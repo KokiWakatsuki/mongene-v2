@@ -36,7 +36,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - pythagorean.identify_hypotenuse
-  explanation: まず、直角三角形で、直角の頂点がどこかを読み取る。 直角の頂点がどこかを読み取る次に、直角の頂点に接していない辺が斜辺になることから、斜辺を答える。 辺PG
+  explanation: 'まず、直角三角形で、直角の頂点がどこかを読み取る。（直角の頂点がどこかを読み取る）
+
+    次に、直角の頂点に接していない辺が斜辺になることから、斜辺を答える。（辺PG）'
   hints:
   - 直角三角形で、直角の頂点がどこかを読み取る。
   label: (1)

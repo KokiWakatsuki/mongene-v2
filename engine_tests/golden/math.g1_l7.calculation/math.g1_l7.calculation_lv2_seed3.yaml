@@ -35,7 +35,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - signed_number.power_sign_contrast
-  explanation: まず、指数がどの数にかかっているか（かっこの有無）を見分ける。 指数のかかる数を見分ける次に、符号に注意して計算し、累乗の値を求める。 49/16
+  explanation: 'まず、指数がどの数にかかっているか（かっこの有無）を見分ける。（指数のかかる数を見分ける）
+
+    次に、符号に注意して計算し、累乗の値を求める。（49/16）'
   hints:
   - 指数がどの数にかかっているか（かっこの有無）を見分ける。
   label: (1)

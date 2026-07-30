@@ -33,7 +33,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - linear_function.evaluate_at_x_fraction
-  explanation: まず、x の値を式に代入する。 y = 3/2 × 8 - 5次に、計算して y の値を求める。 y = 7
+  explanation: 'まず、x の値を式に代入する。（y = 3/2 × 8 - 5）
+
+    次に、計算して y の値を求める。（y = 7）'
   hints:
   - x の値を式に代入する。
   label: (1)

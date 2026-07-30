@@ -33,7 +33,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - polynomial.consecutive_number_sum
-  explanation: まず、それぞれの数を表す式の和を、かっこを外して書き出す。 かっこを外して和を書き出す次に、同類項をまとめて、1つの式にする。 10p + 5
+  explanation: 'まず、それぞれの数を表す式の和を、かっこを外して書き出す。（かっこを外して和を書き出す）
+
+    次に、同類項をまとめて、1つの式にする。（10p + 5）'
   hints:
   - それぞれの数を表す式の和を、かっこを外して書き出す。
   label: (1)

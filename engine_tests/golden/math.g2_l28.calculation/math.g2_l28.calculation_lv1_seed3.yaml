@@ -33,7 +33,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - linear_function.evaluate_at_x_fraction
-  explanation: まず、x の値を式に代入する。 y = (-7/3) × 15 - 3次に、計算して y の値を求める。 y = -38
+  explanation: 'まず、x の値を式に代入する。（y = (-7/3) × 15 - 3）
+
+    次に、計算して y の値を求める。（y = -38）'
   hints:
   - x の値を式に代入する。
   label: (1)

@@ -35,7 +35,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - letter_expr.distribute_linear
-  explanation: まず、かっこの前の数を、かっこの中の各項にかけて計算する。 6 - 21x
+  explanation: まず、かっこの前の数を、かっこの中の各項にかけて計算する。（6 - 21x）
   hints:
   - 問題文の与えられた値をもう一度確認しよう。
   label: (1)

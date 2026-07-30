@@ -35,7 +35,11 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - simultaneous_equations.solve_by_elimination
-  explanation: まず、y の係数が等しいので、辺々を引いて y を消去する。 y の係数はどちらも 1次に、残った式から x の値を求める。 x = -5最後に、求めた x を一方の式に代入して y を求める。 y = -1
+  explanation: 'まず、y の係数が等しいので、辺々を引いて y を消去する。（y の係数はどちらも 1）
+
+    次に、残った式から x の値を求める。（x = -5）
+
+    最後に、求めた x を一方の式に代入して y を求める。（y = -1）'
   hints:
   - y の係数が等しいので、辺々を引いて y を消去する。
   - 残った式から x の値を求める。

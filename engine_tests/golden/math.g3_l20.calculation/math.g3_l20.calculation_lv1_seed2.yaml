@@ -35,7 +35,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - radical.add_subtract
-  explanation: まず、根号の中が同じ項を、同類項のようにまとめる。 6√7
+  explanation: まず、根号の中が同じ項を、同類項のようにまとめる。（6√7）
   hints:
   - 問題文の与えられた値をもう一度確認しよう。
   label: (1)

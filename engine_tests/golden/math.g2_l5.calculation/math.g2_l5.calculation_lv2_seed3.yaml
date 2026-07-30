@@ -35,7 +35,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - polynomial.divide_polynomial
-  explanation: まず、÷ の計算を、その数の逆数をかっこにかける計算に直す。 ÷ を逆数をかける計算に直す次に、逆数をかっこの中の各項にかけて計算する。 -6x - 4y
+  explanation: 'まず、÷ の計算を、その数の逆数をかっこにかける計算に直す。（÷ を逆数をかける計算に直す）
+
+    次に、逆数をかっこの中の各項にかけて計算する。（-6x - 4y）'
   hints:
   - ÷ の計算を、その数の逆数をかっこにかける計算に直す。
   label: (1)

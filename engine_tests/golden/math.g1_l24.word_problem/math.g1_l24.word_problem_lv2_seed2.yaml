@@ -39,7 +39,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - equation.word_problem_proportion_pair
-  explanation: まず、場面の中で、どちらの見方でも同じになる（等しくなっている）量に着目する。 本数と値段の比次に、その量を x を使って両辺に表し、方程式をつくる。 4:240 = 7:x
+  explanation: 'まず、場面の中で、どちらの見方でも同じになる（等しくなっている）量に着目する。（本数と値段の比）
+
+    次に、その量を x を使って両辺に表し、方程式をつくる。（4:240 = 7:x）'
   hints:
   - 場面の中で、どちらの見方でも同じになる（等しくなっている）量に着目する。
   label: (1)
@@ -62,7 +64,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - equation.word_problem_proportion_pair
-  explanation: まず、比例式の性質を使い、外項の積と内項の積が等しい式（たすきがけ）をつくる。 たすきがけの式をつくる次に、x の係数で両辺をわって、x の値を求める。 x = 420
+  explanation: 'まず、比例式の性質を使い、外項の積と内項の積が等しい式（たすきがけ）をつくる。（たすきがけの式をつくる）
+
+    次に、x の係数で両辺をわって、x の値を求める。（x = 420）'
   hints:
   - 比例式の性質を使い、外項の積と内項の積が等しい式（たすきがけ）をつくる。
   label: (2)

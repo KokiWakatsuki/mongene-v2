@@ -33,7 +33,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - linear_function.rate_of_change
-  explanation: まず、2点から y の増加量と x の増加量をそれぞれ求める。 y の増加量 = -12, x の増加量 = 3次に、y の増加量を x の増加量で割り、変化の割合を求める。 変化の割合 = -4
+  explanation: 'まず、2点から y の増加量と x の増加量をそれぞれ求める。（y の増加量 = -12, x の増加量 = 3）
+
+    次に、y の増加量を x の増加量で割り、変化の割合を求める。（変化の割合 = -4）'
   hints:
   - 2点から y の増加量と x の増加量をそれぞれ求める。
   label: (1)

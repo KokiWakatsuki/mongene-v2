@@ -33,7 +33,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - inverse_proportion.solve_from_point
-  explanation: まず、反比例の式 y=a/x に、通る点の x, y の値をあてはめ、比例定数を求める式をつくる。 a = 3 × 56次に、求めた比例定数を使って、反比例の式を組み立てる。 y = 168/x
+  explanation: 'まず、反比例の式 y=a/x に、通る点の x, y の値をあてはめ、比例定数を求める式をつくる。（a = 3 × 56）
+
+    次に、求めた比例定数を使って、反比例の式を組み立てる。（y = 168/x）'
   hints:
   - 反比例の式 y=a/x に、通る点の x, y の値をあてはめ、比例定数を求める式をつくる。
   label: (1)

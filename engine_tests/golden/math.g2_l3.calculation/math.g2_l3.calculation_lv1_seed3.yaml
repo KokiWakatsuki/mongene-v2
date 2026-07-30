@@ -35,7 +35,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - polynomial.add_polynomials
-  explanation: まず、かっこの前が + なので、そのままかっこを外す。 かっこをそのまま外す次に、同類項をまとめて計算する。 -2x - 12y
+  explanation: 'まず、かっこの前が + なので、そのままかっこを外す。（かっこをそのまま外す）
+
+    次に、同類項をまとめて計算する。（-2x - 12y）'
   hints:
   - かっこの前が + なので、そのままかっこを外す。
   label: (1)

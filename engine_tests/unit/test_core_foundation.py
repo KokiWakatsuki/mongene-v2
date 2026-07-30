@@ -46,6 +46,21 @@ def test_answer_payload_discriminated_union():
     assert sq.answer.kind == "symbolic"
 
 
+@pytest.mark.parametrize("connective", ["まず、", "次に、", "最後に、", "さらに、"])
+def test_step_narration_rejects_leading_connective(connective):
+    """narration は文の本体だけ。順序を語る接続詞はレンダラの持ち物。
+
+    実バグの回帰: arithmetic の narration が「次に、乗法と除法を計算する。」だったため
+    T1 の解説が「次に、次に、乗法と除法を計算する。」と二重になっていた。narration は
+    hints にもそのまま流れるので、契約側で閉じる。
+    """
+    with pytest.raises(Exception):
+        Step(op="o", result_srepr="r", result_display="d", narration=f"{connective}計算する。")
+
+    # 文中に出てくるのは許す（禁じるのは先頭のみ）
+    Step(op="o", result_srepr="r", result_display="d", narration=f"順序は{connective}となる。")
+
+
 def _mk_mr(sig="s1", ops=("a", "b"), given=None):
     given = given or {"point_a": "(1, 3)"}
     return MR(

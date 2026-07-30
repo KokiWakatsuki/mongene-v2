@@ -35,7 +35,9 @@ sub_questions:
   - lf.point_reading_error
   concept_tags:
   - graph.read_lattice_points
-  explanation: まず、グラフ上の格子点の座標を読み取る。 (-3, -10)次に、グラフ上の別の格子点の座標を読み取る。 (3, 2)
+  explanation: 'まず、グラフ上の格子点の座標を読み取る。（(-3, -10)）
+
+    次に、グラフ上の別の格子点の座標を読み取る。（(3, 2)）'
   hints:
   - グラフ上の格子点の座標を読み取る。
   label: (1)

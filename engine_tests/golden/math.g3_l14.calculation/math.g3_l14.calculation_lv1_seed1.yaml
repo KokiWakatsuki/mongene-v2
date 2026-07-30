@@ -35,7 +35,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - radical.square_of_root
-  explanation: まず、根号のついた数を2乗し、根号の中の数にもどす。 105
+  explanation: まず、根号のついた数を2乗し、根号の中の数にもどす。（105）
   hints:
   - 問題文の与えられた値をもう一度確認しよう。
   label: (1)

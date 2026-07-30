@@ -35,10 +35,14 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - signed_number.four_operations
-  explanation: まず、累乗とかっこの中を先に計算する。 累乗とかっこの中を先に計算する次に、次に、乗法と除法を計算する。 乗法と除法を計算する最後に、最後に、加法と減法を計算して答えを求める。 -176
+  explanation: 'まず、累乗とかっこの中を先に計算する。（累乗とかっこの中を先に計算する）
+
+    次に、乗法と除法を計算する。（乗法と除法を計算する）
+
+    最後に、加法と減法を計算して答えを求める。（-176）'
   hints:
   - 累乗とかっこの中を先に計算する。
-  - 次に、乗法と除法を計算する。
+  - 乗法と除法を計算する。
   label: (1)
   prompt_text: value を求めなさい。
   solution_steps:
@@ -48,12 +52,12 @@ sub_questions:
     result_display: 累乗とかっこの中を先に計算する
     result_srepr: Integer(-176)
   - args: []
-    narration: 次に、乗法と除法を計算する。
+    narration: 乗法と除法を計算する。
     op: multiply_and_divide
     result_display: 乗法と除法を計算する
     result_srepr: Integer(-176)
   - args: []
-    narration: 最後に、加法と減法を計算して答えを求める。
+    narration: 加法と減法を計算して答えを求める。
     op: add_and_subtract
     result_display: '-176'
     result_srepr: Integer(-176)

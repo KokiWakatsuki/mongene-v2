@@ -35,7 +35,11 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - simultaneous_equations.solve_by_elimination_add
-  explanation: まず、y の係数が絶対値が等しく符号が逆なので、辺々を足して y を消去する。 y の係数は 2 と -2次に、足してできた式から x の値を求める。 x = 2最後に、求めた x を一方の式に代入して y を求める。 y = -1
+  explanation: 'まず、y の係数が絶対値が等しく符号が逆なので、辺々を足して y を消去する。（y の係数は 2 と -2）
+
+    次に、足してできた式から x の値を求める。（x = 2）
+
+    最後に、求めた x を一方の式に代入して y を求める。（y = -1）'
   hints:
   - y の係数が絶対値が等しく符号が逆なので、辺々を足して y を消去する。
   - 足してできた式から x の値を求める。

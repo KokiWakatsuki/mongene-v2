@@ -35,7 +35,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - signed_number.absolute_value
-  explanation: まず、その数が数直線上で 0 からどちら側にあるかを見る。 次に、0 からの距離が絶対値なので、符号を取り去った大きさを答える。 17/13
+  explanation: 'まず、その数が数直線上で 0 からどちら側にあるかを見る。
+
+    次に、0 からの距離が絶対値なので、符号を取り去った大きさを答える。（17/13）'
   hints:
   - その数が数直線上で 0 からどちら側にあるかを見る。
   label: (1)

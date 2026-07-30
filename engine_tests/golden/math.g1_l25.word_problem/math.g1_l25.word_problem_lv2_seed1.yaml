@@ -39,7 +39,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - equation.word_problem_price_count
-  explanation: まず、場面の中で、どちらの見方でも同じになる（等しくなっている）量に着目する。 代金の合計次に、その量を x を使って両辺に表し、方程式をつくる。 130x + 110(10 - x) = 1200
+  explanation: 'まず、場面の中で、どちらの見方でも同じになる（等しくなっている）量に着目する。（代金の合計）
+
+    次に、その量を x を使って両辺に表し、方程式をつくる。（130x + 110(10 - x) = 1200）'
   hints:
   - 場面の中で、どちらの見方でも同じになる（等しくなっている）量に着目する。
   label: (1)
@@ -62,7 +64,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - equation.word_problem_price_count
-  explanation: まず、分配法則を使って、かっこを外す。 かっこを外す次に、文字の項を左辺に、数の項を右辺に移項し、両辺を整理して解く。 x = 5
+  explanation: 'まず、分配法則を使って、かっこを外す。（かっこを外す）
+
+    次に、文字の項を左辺に、数の項を右辺に移項し、両辺を整理して解く。（x = 5）'
   hints:
   - 分配法則を使って、かっこを外す。
   label: (2)

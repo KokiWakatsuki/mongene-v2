@@ -39,7 +39,11 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - simultaneous_equations.word_problem_distance_time
-  explanation: まず、歩いた道のりを x km、自転車で進んだ道のりを y km とおく。 x, y次に、道のりの関係に着目して、1つめの式をつくる。 x + y = 38最後に、かかった時間の関係に着目して、2つめの式をつくる。 x/3 + y/16 = 4
+  explanation: 'まず、歩いた道のりを x km、自転車で進んだ道のりを y km とおく。（x, y）
+
+    次に、道のりの関係に着目して、1つめの式をつくる。（x + y = 38）
+
+    最後に、かかった時間の関係に着目して、2つめの式をつくる。（x/3 + y/16 = 4）'
   hints:
   - 歩いた道のりを x km、自転車で進んだ道のりを y km とおく。
   - 道のりの関係に着目して、1つめの式をつくる。
@@ -68,7 +72,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - simultaneous_equations.word_problem_distance_time
-  explanation: まず、係数をそろえて一方の文字を消去し、残った文字を求める。 x = 6次に、求めた値をもとの式に代入し、もう一方の文字を求める。 y = 32
+  explanation: 'まず、係数をそろえて一方の文字を消去し、残った文字を求める。（x = 6）
+
+    次に、求めた値をもとの式に代入し、もう一方の文字を求める。（y = 32）'
   hints:
   - 係数をそろえて一方の文字を消去し、残った文字を求める。
   label: (2)

@@ -36,7 +36,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - sample_survey.ratio_rationale
-  explanation: まず、無作為に抽出された標本は、母集団のようすを偏りなく反映した縮図とみなせることを確認する。 無作為に抽出すれば、標本は母集団の縮図とみなせるから
+  explanation: まず、無作為に抽出された標本は、母集団のようすを偏りなく反映した縮図とみなせることを確認する。（無作為に抽出すれば、標本は母集団の縮図とみなせるから）
   hints:
   - 問題文の与えられた値をもう一度確認しよう。
   label: (1)

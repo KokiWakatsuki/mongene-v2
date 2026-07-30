@@ -39,7 +39,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - equation.word_problem_surplus_shortage
-  explanation: まず、場面の中で、どちらの見方でも同じになる（等しくなっている）量に着目する。 配る色紙の全部の枚数次に、その量を x を使って両辺に表し、方程式をつくる。 5x + 2 = 6x - 9
+  explanation: 'まず、場面の中で、どちらの見方でも同じになる（等しくなっている）量に着目する。（配る色紙の全部の枚数）
+
+    次に、その量を x を使って両辺に表し、方程式をつくる。（5x + 2 = 6x - 9）'
   hints:
   - 場面の中で、どちらの見方でも同じになる（等しくなっている）量に着目する。
   label: (1)
@@ -62,7 +64,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - equation.word_problem_surplus_shortage
-  explanation: まず、文字の項を左辺に、数の項を右辺に、符号を変えて移項する。 文字は左辺・数は右辺に移項する次に、両辺をそれぞれ整理し、x の係数で両辺をわって解を求める。 x = 11
+  explanation: 'まず、文字の項を左辺に、数の項を右辺に、符号を変えて移項する。（文字は左辺・数は右辺に移項する）
+
+    次に、両辺をそれぞれ整理し、x の係数で両辺をわって解を求める。（x = 11）'
   hints:
   - 文字の項を左辺に、数の項を右辺に、符号を変えて移項する。
   label: (2)

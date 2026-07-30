@@ -35,7 +35,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - notation.quotient_mixed
-  explanation: まず、乗法の部分を先にまとめてから、分数の形に表す。 乗法の部分をまとめる次に、除法の記号 ÷ を使わず、分数の形で表す。 7cx/n
+  explanation: 'まず、乗法の部分を先にまとめてから、分数の形に表す。（乗法の部分をまとめる）
+
+    次に、除法の記号 ÷ を使わず、分数の形で表す。（7cx/n）'
   hints:
   - 乗法の部分を先にまとめてから、分数の形に表す。
   label: (1)

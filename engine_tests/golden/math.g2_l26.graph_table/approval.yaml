@@ -1,6 +1,6 @@
-approved_at: '2026-07-30T14:24:24.164896'
+approved_at: '2026-07-30T16:41:05.678115'
 approver: koki
-content_sha256: e7c11fd845f6f4801b13bba6bbbb6bffa7e7942009e3a1037a33cd369231d6a2
+content_sha256: 6277d956bcf308bf01e71e31ba230c5134ef7a7e91a015bcf97fa7939eb2892b
 family: math.g2_l26.graph_table
 files:
 - engine_tests/golden/math.g2_l26.graph_table/math.g2_l26.graph_table_lv1_seed1.yaml

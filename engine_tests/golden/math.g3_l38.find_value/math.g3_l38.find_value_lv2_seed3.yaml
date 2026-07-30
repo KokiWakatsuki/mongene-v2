@@ -33,7 +33,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - quadratic_function.motion_area
-  explanation: まず、動いた道のりから、点 P の位置の座標を決める。 点 P の座標を決める次に、3点の座標から、三角形の面積を求める公式で面積を計算する。 10
+  explanation: 'まず、動いた道のりから、点 P の位置の座標を決める。（点 P の座標を決める）
+
+    次に、3点の座標から、三角形の面積を求める公式で面積を計算する。（10）'
   hints:
   - 動いた道のりから、点 P の位置の座標を決める。
   label: (1)

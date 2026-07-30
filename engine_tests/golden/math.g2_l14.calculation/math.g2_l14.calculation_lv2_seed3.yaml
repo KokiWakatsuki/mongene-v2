@@ -35,7 +35,11 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - simultaneous_equations.solve_with_preprocessing
-  explanation: まず、かっこを展開して整数の連立方程式に直す。 2x + 3y = -7 , -3x - y = 7次に、整理した連立方程式を加減法で解いて x を求める。 x = -2最後に、求めた x をもとの式に代入して y を求める。 y = -1
+  explanation: 'まず、かっこを展開して整数の連立方程式に直す。（2x + 3y = -7 , -3x - y = 7）
+
+    次に、整理した連立方程式を加減法で解いて x を求める。（x = -2）
+
+    最後に、求めた x をもとの式に代入して y を求める。（y = -1）'
   hints:
   - かっこを展開して整数の連立方程式に直す。
   - 整理した連立方程式を加減法で解いて x を求める。

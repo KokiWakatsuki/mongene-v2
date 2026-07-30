@@ -35,7 +35,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - notation.product_rule_powers
-  explanation: まず、数を文字の前に書き、乗法の記号 × を省いて表す。 数を前にして × を省く次に、同じ文字の積は、累乗の指数を使ってまとめる。 -5cd²
+  explanation: 'まず、数を文字の前に書き、乗法の記号 × を省いて表す。（数を前にして × を省く）
+
+    次に、同じ文字の積は、累乗の指数を使ってまとめる。（-5cd²）'
   hints:
   - 数を文字の前に書き、乗法の記号 × を省いて表す。
   label: (1)

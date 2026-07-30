@@ -35,7 +35,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - equation.solve_by_equality_property
-  explanation: まず、等式の性質を使い、両辺から同じ数をひく（または加える）。 両辺から同じ数をひく次に、両辺を計算して、解を求める。 x = 11
+  explanation: 'まず、等式の性質を使い、両辺から同じ数をひく（または加える）。（両辺から同じ数をひく）
+
+    次に、両辺を計算して、解を求める。（x = 11）'
   hints:
   - 等式の性質を使い、両辺から同じ数をひく（または加える）。
   label: (1)

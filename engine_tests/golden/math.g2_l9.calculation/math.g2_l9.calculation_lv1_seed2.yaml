@@ -35,7 +35,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - polynomial.rearrange_move
-  explanation: まず、解く文字の項だけを片方の辺に残すよう、ほかの項を移項する。 y = -4x - 7
+  explanation: まず、解く文字の項だけを片方の辺に残すよう、ほかの項を移項する。（y = -4x - 7）
   hints:
   - 問題文の与えられた値をもう一度確認しよう。
   label: (1)

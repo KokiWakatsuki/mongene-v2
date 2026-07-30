@@ -35,7 +35,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - polynomial.proof_diff_squares_linear
-  explanation: まず、2つの平方の差を、和と差の積の形になおす。 和と差の積の形になおす次に、積の形を計算し、式を簡単にする。 12n + 28
+  explanation: 'まず、2つの平方の差を、和と差の積の形になおす。（和と差の積の形になおす）
+
+    次に、積の形を計算し、式を簡単にする。（12n + 28）'
   hints:
   - 2つの平方の差を、和と差の積の形になおす。
   label: (1)

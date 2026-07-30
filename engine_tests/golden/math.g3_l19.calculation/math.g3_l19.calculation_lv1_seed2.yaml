@@ -35,7 +35,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - radical.rationalize_denominator
-  explanation: まず、分母と分子に、分母と同じ根号をかける。 同じ根号をかける次に、分母を根号のない形にし、約分して簡単にする。 3√6
+  explanation: 'まず、分母と分子に、分母と同じ根号をかける。（同じ根号をかける）
+
+    次に、分母を根号のない形にし、約分して簡単にする。（3√6）'
   hints:
   - 分母と分子に、分母と同じ根号をかける。
   label: (1)

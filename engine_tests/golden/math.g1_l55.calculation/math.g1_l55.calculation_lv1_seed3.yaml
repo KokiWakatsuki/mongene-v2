@@ -33,7 +33,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - relative_frequency.compute_single
-  explanation: まず、ことがらが起こった回数を、試行の総回数でわる。 75/76
+  explanation: まず、ことがらが起こった回数を、試行の総回数でわる。（75/76）
   hints:
   - 問題文の与えられた値をもう一度確認しよう。
   label: (1)

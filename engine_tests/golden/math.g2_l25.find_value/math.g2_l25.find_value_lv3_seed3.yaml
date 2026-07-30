@@ -41,7 +41,11 @@ sub_questions:
   - linear_function.slope_from_two_points
   - linear_function.intercept_from_point
   - linear_function.expression_from_two_points
-  explanation: まず、2点をそれぞれ y = ax + b に代入し、a, b の連立方程式を立てる。 Eq(b, 7), Eq(4*a + b, 9)次に、連立方程式を解いて a, b を同時に求める。 a = 1/2, b = 7最後に、求めた a, b から一次関数の式を組み立てる。 y = 1/2x + 7
+  explanation: 'まず、2点をそれぞれ y = ax + b に代入し、a, b の連立方程式を立てる。（Eq(b, 7), Eq(4*a + b, 9)）
+
+    次に、連立方程式を解いて a, b を同時に求める。（a = 1/2, b = 7）
+
+    最後に、求めた a, b から一次関数の式を組み立てる。（y = 1/2x + 7）'
   hints:
   - 2点をそれぞれ y = ax + b に代入し、a, b の連立方程式を立てる。
   - 連立方程式を解いて a, b を同時に求める。

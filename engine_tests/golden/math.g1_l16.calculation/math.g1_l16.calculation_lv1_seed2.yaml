@@ -35,7 +35,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - letter_expr.substitute_positive
-  explanation: まず、式の文字に、代入する数をあてはめる。 文字に数をあてはめる次に、あてはめた式を計算して、式の値を求める。 -22
+  explanation: 'まず、式の文字に、代入する数をあてはめる。（文字に数をあてはめる）
+
+    次に、あてはめた式を計算して、式の値を求める。（-22）'
   hints:
   - 式の文字に、代入する数をあてはめる。
   label: (1)

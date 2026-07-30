@@ -35,7 +35,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - equation.verify_solution
-  explanation: まず、候補の値を方程式の x にあてはめる。 候補の値を方程式の x に代入する次に、左辺と右辺の値が等しければ解、等しくなければ解ではない。 解である
+  explanation: 'まず、候補の値を方程式の x にあてはめる。（候補の値を方程式の x に代入する）
+
+    次に、左辺と右辺の値が等しければ解、等しくなければ解ではない。（解である）'
   hints:
   - 候補の値を方程式の x にあてはめる。
   label: (1)

@@ -35,7 +35,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - radical.various_calculation
-  explanation: まず、分配法則や乗法公式で根号を含む式を展開する。 展開する次に、数の項どうし・根号の項どうしをまとめる。 16 - 4√7
+  explanation: 'まず、分配法則や乗法公式で根号を含む式を展開する。（展開する）
+
+    次に、数の項どうし・根号の項どうしをまとめる。（16 - 4√7）'
   hints:
   - 分配法則や乗法公式で根号を含む式を展開する。
   label: (1)

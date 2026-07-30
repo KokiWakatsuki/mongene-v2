@@ -35,7 +35,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - polynomial.factor_common
-  explanation: まず、各項に共通する因数をかっこの外にくくり出す。 9x(6x + 7)
+  explanation: まず、各項に共通する因数をかっこの外にくくり出す。（9x(6x + 7)）
   hints:
   - 問題文の与えられた値をもう一度確認しよう。
   label: (1)

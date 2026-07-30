@@ -35,7 +35,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - equation.solve_by_equality_property_multi
-  explanation: まず、等式の性質を使い、両辺から同じ数をひく（または加える）。 両辺から同じ数をひく次に、等式の性質を使い、両辺を x の係数でわる。 x = -7
+  explanation: 'まず、等式の性質を使い、両辺から同じ数をひく（または加える）。（両辺から同じ数をひく）
+
+    次に、等式の性質を使い、両辺を x の係数でわる。（x = -7）'
   hints:
   - 等式の性質を使い、両辺から同じ数をひく（または加える）。
   label: (1)

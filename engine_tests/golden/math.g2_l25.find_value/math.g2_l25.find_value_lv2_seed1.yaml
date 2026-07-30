@@ -41,7 +41,11 @@ sub_questions:
   - linear_function.slope_from_two_points
   - linear_function.intercept_from_point
   - linear_function.expression_from_two_points
-  explanation: まず、2点の y 座標の差を x 座標の差で割り、傾きを求める。 傾き a = 3次に、傾きと通る1点を y = ax + b に代入し、切片を求める。 切片 b = 3最後に、傾きと切片から一次関数の式を組み立てる。 y = 3x + 3
+  explanation: 'まず、2点の y 座標の差を x 座標の差で割り、傾きを求める。（傾き a = 3）
+
+    次に、傾きと通る1点を y = ax + b に代入し、切片を求める。（切片 b = 3）
+
+    最後に、傾きと切片から一次関数の式を組み立てる。（y = 3x + 3）'
   hints:
   - 2点の y 座標の差を x 座標の差で割り、傾きを求める。
   - 傾きと通る1点を y = ax + b に代入し、切片を求める。
