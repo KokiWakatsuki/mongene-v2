@@ -1,0 +1,83 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - simultaneous_equations.word_problem_price_count_diff
+  provenance:
+    git_commit: ''
+    recipe: math.word_problem_system_equations
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: wp_linear_solo_v1
+    tier: T1
+  requested:
+    form: word_problem
+    level: 3
+    subject: math
+    unit: g2_l16
+  resolved:
+    form: word_problem
+    level: 3
+    subject: math
+    unit: g2_l16
+  seed: 1
+  signature: word_problem_system_price_count_diff
+problem_ref: eb9de69781330def
+problem_text: '画用紙を何枚かと色えん筆を何本か買った。画用紙1枚は80円、色えん筆1本は150円で、買った数は画用紙より色えん筆のほうが2本多く、代金の合計は990円だった。
+
+  画用紙と色えん筆を買った数をそれぞれ求めよ。'
+sub_questions:
+- answer:
+    display: 画用紙は3枚、色えん筆は5本
+    kind: symbolic
+    srepr: Tuple(Integer(3), Integer(5))
+  cause_tags: []
+  concept_tags:
+  - simultaneous_equations.word_problem_price_count_diff
+  explanation: 'まず、画用紙の数を x 枚、色えん筆の数を y 本とおく。（x, y）
+
+    次に、買った数の関係に着目して、1つめの式をつくる。（y = x + 2）
+
+    次に、代金の合計の関係に着目して、2つめの式をつくる。（80x + 150y = 990）
+
+    次に、係数をそろえて一方の文字を消去し、残った文字を求める。（x = 3）
+
+    最後に、求めた値をもとの式に代入し、もう一方の文字を求める。（y = 5）'
+  hints:
+  - 画用紙の数を x 枚、色えん筆の数を y 本とおく。
+  - 買った数の関係に着目して、1つめの式をつくる。
+  - 代金の合計の関係に着目して、2つめの式をつくる。
+  - 係数をそろえて一方の文字を消去し、残った文字を求める。
+  label: (1)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 画用紙の数を x 枚、色えん筆の数を y 本とおく。
+    op: set_variables
+    result_display: x, y
+    result_srepr: Tuple(Symbol('x'), Symbol('y'))
+  - args: []
+    narration: 買った数の関係に着目して、1つめの式をつくる。
+    op: formulate_first
+    result_display: y = x + 2
+    result_srepr: Equality(Add(Mul(Integer(-1), Symbol('x')), Symbol('y')), Integer(2))
+  - args: []
+    narration: 代金の合計の関係に着目して、2つめの式をつくる。
+    op: formulate_second
+    result_display: 80x + 150y = 990
+    result_srepr: Equality(Add(Mul(Integer(80), Symbol('x')), Mul(Integer(150), Symbol('y'))), Integer(990))
+  - args:
+    - Eq(-x + y, 2)
+    - Eq(80*x + 150*y, 990)
+    narration: 係数をそろえて一方の文字を消去し、残った文字を求める。
+    op: eliminate_variable
+    result_display: x = 3
+    result_srepr: Equality(Symbol('x'), Integer(3))
+  - args:
+    - '3'
+    narration: 求めた値をもとの式に代入し、もう一方の文字を求める。
+    op: back_substitute
+    result_display: y = 5
+    result_srepr: Integer(5)
+visual_svg: null

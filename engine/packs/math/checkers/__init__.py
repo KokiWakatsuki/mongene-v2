@@ -44,5 +44,6 @@ from engine.packs.math.checkers import word_problem_expression  # noqa: F401  (�
 from engine.packs.math.checkers import word_problem_linear_function  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.checkers import word_problem_probability  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.checkers import word_problem_proportion_frequency  # noqa: F401  (登録の副作用のため import)
+from engine.packs.math.checkers import word_problem_sqrt_misc  # noqa: F401  (登録の副作用のため import)
 
 __all__: list[str] = []

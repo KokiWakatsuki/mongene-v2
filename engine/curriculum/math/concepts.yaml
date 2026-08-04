@@ -1148,3 +1148,19 @@ concepts:
   - id: probability.word_problem_defect_rate_estimate
     label: "抜き取り検査の結果から割合を見積もり、不良品の個数を予測する"
     unit: g1_l59
+  # --- C14 word_problem 横展開: 平方根の利用＋取りこぼし（g3_l23 / g2_l16 / g1_l1 / g1_l11） ---
+  - id: radical.word_problem_square_plot_approx
+    label: "正方形の面積から1辺の長さを根号で表し、近似値を使って小数第1位まで求める"
+    unit: g3_l23
+  - id: radical.word_problem_rectangle_ratio_side
+    label: "縦横の比と面積から長方形の縦の長さを根号で表す"
+    unit: g3_l23
+  - id: simultaneous_equations.word_problem_price_count_diff
+    label: "個数の差と代金の合計から2種類の品物の個数を連立方程式で求める"
+    unit: g2_l16
+  - id: number.word_problem_signed_reference
+    label: "基準を決めた場面で反対の性質をもつ2量を正負の符号で表す"
+    unit: g1_l1
+  - id: prime_factorization.word_problem_square_multiplier
+    label: "素因数分解を利用して平方数にするためにかける最小の自然数を求める"
+    unit: g1_l11

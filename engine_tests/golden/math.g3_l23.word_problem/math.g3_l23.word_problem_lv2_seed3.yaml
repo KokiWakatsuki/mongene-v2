@@ -1,0 +1,91 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - radical.word_problem_square_plot_approx
+  provenance:
+    git_commit: ''
+    recipe: math.word_problem_sqrt_misc
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: wp_probability_guided_v1
+    tier: T1
+  requested:
+    form: word_problem
+    level: 2
+    subject: math
+    unit: g3_l23
+  resolved:
+    form: word_problem
+    level: 2
+    subject: math
+    unit: g3_l23
+  seed: 3
+  signature: word_problem_square_plot_approx
+problem_ref: 2894cb26962b6f15
+problem_text: '面積が448cm²の正方形の画用紙をつくる。ただし、√7=2.65として計算してよいものとする。
+
+  (1) この正方形の画用紙の1辺の長さを、根号を使って表せ。
+
+  (2) その長さを、小数第一位まで求めよ。'
+sub_questions:
+- answer:
+    display: 8√7
+    kind: symbolic
+    srepr: Mul(Integer(8), Pow(Integer(7), Rational(1, 2)))
+  cause_tags: []
+  concept_tags:
+  - radical.word_problem_square_plot_approx
+  explanation: 'まず、正方形の面積は1辺の長さを2乗した値だから、1辺の長さは面積の正の平方根で表せる。（√448）
+
+    次に、根号の中を素因数分解し、平方の因数を見つける。（平方の因数を見つける）
+
+    最後に、平方の因数を根号の外に出して a√b の形にする。（8√7）'
+  hints:
+  - 正方形の面積は1辺の長さを2乗した値だから、1辺の長さは面積の正の平方根で表せる。
+  - 根号の中を素因数分解し、平方の因数を見つける。
+  label: (1)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 正方形の面積は1辺の長さを2乗した値だから、1辺の長さは面積の正の平方根で表せる。
+    op: express_side_as_square_root
+    result_display: √448
+    result_srepr: ''
+  - args: []
+    narration: 根号の中を素因数分解し、平方の因数を見つける。
+    op: factor_out_square
+    result_display: 平方の因数を見つける
+    result_srepr: ''
+  - args: []
+    narration: 平方の因数を根号の外に出して a√b の形にする。
+    op: take_root_outside
+    result_display: 8√7
+    result_srepr: Mul(Integer(8), Pow(Integer(7), Rational(1, 2)))
+- answer:
+    display: '21.2'
+    kind: symbolic
+    srepr: Rational(106, 5)
+  cause_tags: []
+  concept_tags:
+  - radical.word_problem_square_plot_approx
+  explanation: 'まず、根号のついた数を、与えられた近似の値におきかえてかけ算をする。（21.2）
+
+    次に、小数第2位を四捨五入して、小数第1位までの値にする。（21.2）'
+  hints:
+  - 根号のついた数を、与えられた近似の値におきかえてかけ算をする。
+  label: (2)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 根号のついた数を、与えられた近似の値におきかえてかけ算をする。
+    op: substitute_root_approximation
+    result_display: '21.2'
+    result_srepr: ''
+  - args: []
+    narration: 小数第2位を四捨五入して、小数第1位までの値にする。
+    op: round_to_first_decimal
+    result_display: '21.2'
+    result_srepr: Rational(106, 5)
+visual_svg: null

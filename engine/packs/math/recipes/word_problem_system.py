@@ -15,10 +15,11 @@ module。数学そのものは既存 solver `math.intersection_of_two_lines` に
 
 ## g2_l16 の `math.word_problem_price_count` を置き換えない理由
 
-g2_l16 は同じ形をした専用 recipe を持っている（この form の初回縦串）。あちらを
-こちらへ寄せると RNG 消費順が変わって golden の再承認が要る＝既存セルの挙動を
-触ることになるので、Open-Closed に倣って**別 recipe として足す**。新しい場面は
-今後こちらに集める。
+g2_l16 **Lv2** は同じ形をした専用 recipe を持っている（この form の初回縦串）。
+あちらをこちらへ寄せると RNG 消費順が変わって golden の再承認が要る＝既存セルの
+挙動を触ることになるので、Open-Closed に倣って**別 recipe として足す**。新しい
+場面は今後こちらに集める（g2_l16 **Lv3**＝誘導なしの個数と代金は、既存 Lv2 に
+触れずにこちらへ `price_count_diff` として足した）。
 
 ## level_sep（G6 の構造差）
 
@@ -56,12 +57,13 @@ from engine.core.contracts import (
     SymbolicAnswer,
 )
 from engine.core.registry import REGISTRY, register_recipe
-from engine.core.rng import Rng, draw
+from engine.core.rng import Rng, draw, draw_many
 from engine.packs.math.recipes.word_problem_linear import _split_pair
 
 RECIPE_NAME = "math.word_problem_system_equations"
 
 _SYSTEM_CONCEPTS = [
+    "simultaneous_equations.word_problem_price_count_diff",
     "simultaneous_equations.word_problem_distance_time",
     "simultaneous_equations.word_problem_time_split",
     "simultaneous_equations.word_problem_lap_meet_catch_up",
@@ -243,7 +245,26 @@ def formulate_two_containers(
     )
 
 
+def formulate_price_count_diff(
+    *, price_a: int, price_b: int, diff: int, total: int
+) -> SystemFormulation:
+    """g2_l16 Lv3（誘導なし）。文字＝個数。y − x = d（本数の差）と pa·x + pb·y = T（代金）。
+
+    g2_l16 Lv2（`math.word_problem_price_count`）は「合計個数」が与えられる場面で
+    x + y = N と立つのに対し、こちらは合計個数が与えられず「一方が d 個多い」という
+    **差**の読替を経て y − x = d を自分で立てる（＝台帳 Lv3 desc「単位や条件の読替を
+    経て自分で立式する」）。非退化: det = −(pa + pb) ≠ 0（単価は正）。
+    """
+    return _system(
+        (-1, 1, diff),
+        (price_a, price_b, total),
+        f"y = x + {diff}",
+        f"{price_a}x + {price_b}y = {total}",
+    )
+
+
 FORMULATION_BUILDERS: dict[str, Callable[..., SystemFormulation]] = {
+    "price_count_diff": formulate_price_count_diff,
     "distance_time": formulate_distance_time,
     "time_split": formulate_time_split,
     "lap_meet_catch_up": formulate_lap_meet_catch_up,
@@ -283,6 +304,49 @@ class SystemScene:
 
 def _draw_index(candidates: Sequence[Any], rng: Rng) -> Any:
     return candidates[int(draw({"int_range": [0, len(candidates) - 1]}, rng))]
+
+
+def _scene_price_count_diff(p: Mapping[str, Any], rng: Rng) -> SystemScene:
+    """g2_l16 Lv3: 個数と代金（合計個数は与えず「一方が d 個多い」で与える・誘導なし）。
+
+    answer-first: 少ないほうの個数 a と差 d を先に引き、多いほうを a+d、合計代金を
+    逆算する（端数の出ない綺麗な設定になる）。単価は相異に引く（同じでも det は
+    0 にならないが、「2種類の品物」の場面として不自然なため）。
+    """
+    item_a, counter_a, item_b, counter_b = str(
+        _draw_index(list(p["item_pair_candidates"]), rng)
+    ).split("|")
+    price_a, price_b = (
+        int(v) for v in draw_many(p["price_domain"], rng, k=2)
+    )
+    count_a = int(draw(p["count_domain"], rng))
+    diff = int(draw(p["diff_domain"], rng))
+    total = price_a * count_a + price_b * (count_a + diff)
+    return SystemScene(
+        numbers={
+            "price_a": price_a,
+            "price_b": price_b,
+            "diff": diff,
+            "total": total,
+        },
+        scenario=(
+            f"{item_a}を何{counter_a}かと{item_b}を何{counter_b}か買った。"
+            f"{item_a}1{counter_a}は{price_a}円、{item_b}1{counter_b}は{price_b}円で、"
+            f"買った数は{item_a}より{item_b}のほうが{diff}{counter_b}多く、"
+            f"代金の合計は{total}円だった。"
+        ),
+        quantities="",
+        variables_narration=(
+            f"{item_a}の数を x {counter_a}、{item_b}の数を y {counter_b}とおく。"
+        ),
+        ask_formulation="",
+        ask_value=f"{item_a}と{item_b}を買った数をそれぞれ求めよ。",
+        relation_labels=("買った数の関係", "代金の合計の関係"),
+        answer_map=IDENTITY_ANSWER_MAP,
+        answer_labels=(f"{item_a}は", f"{item_b}は"),
+        answer_units=(counter_a, counter_b),
+        slots={"item_a": item_a, "item_b": item_b},
+    )
 
 
 def _distance_time_candidates(p: Mapping[str, Any]) -> list[tuple[int, int, int, int]]:
@@ -614,6 +678,7 @@ def _scene_two_containers(p: Mapping[str, Any], rng: Rng) -> SystemScene:
 
 
 _SCENE_DRAWERS: dict[str, Callable[[Mapping[str, Any], Rng], SystemScene]] = {
+    "price_count_diff": _scene_price_count_diff,
     "distance_time": _scene_distance_time,
     "time_split": _scene_time_split,
     "lap_meet_catch_up": _scene_lap_meet_catch_up,

@@ -1,0 +1,46 @@
+family: math.g1_l11.word_problem
+form: word_problem
+source_desc: |
+  素数と素因数分解の利用（平方数化）
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv2 desc: 平方数にする最小の数・約数の個数などを構成して求める。
+       example: 540 にできるだけ小さい自然数をかけて、ある自然数の2乗（平方数）に
+                したい。かける数を求めよ。
+       market_ref: 公立入試 大問1の頻出小問。素因数分解を平方数条件に応用する定番の良問。
+  ---
+  【この form の型】g2_l51〜l54（確率）と同じ骨格（given.scenario＝場面のみ）。
+  誘導ありで (1) 素因数分解 (2) かける数 の2小問（どちらも asked=value）。台帳の
+  example は誘導が省かれた形だが、標準問題集での定型は「素因数分解 →
+  指数が奇数の素因数を集める」の2段であり、この2段を小問に開いたのが (1)(2)。
+  recipe は math.word_problem_sqrt_misc（C14 の「平方根の利用＋取りこぼし」クラスタ）
+  が賄う。数学は既存 solver math.factorize_integer（mode=factorize_basic・
+  g1_l11.calculation Lv1 と同じ）に委ねる＝新 solver ゼロ。
+  【level_sep】台帳どおり1段のみ（notes:「中1配当で公倍数融合の誘導なし総合問題は過大」
+  としてレビューで1段に縮小済み）。
+  【構成の制約】対象数 N は「素因数が2種類以上・最大素因数が13以下・平方因数を持つ・
+  平方数でない」ものだけを残す。平方因数を持たない N はかける数が N 自身になり
+  答えが問題文の数と一致する（G-Q5t の実害）。平方数だとかける数が1に退化する。
+  【検証】G-Q1 が両小問 double-solve。checker は params の「場面文に出ている数値」
+  （N）だけから solver を呼び直し、指数が奇数の素因数の積を再計算する
+  （素因数分解の結果も答えも params に入れない）。
+concepts_default: [prime_factorization.word_problem_square_multiplier]
+levels:
+  "2":
+    signature: word_problem_square_multiplier
+    recipe: math.word_problem_sqrt_misc
+    params:
+      scenario_kind: square_multiplier
+      # 場面に題材スロットが無く、振れる自由度は N ひとつだけ。[100,1999] は候補226で
+      # 実測 dup_rate 0.16（閾値 0.20 の直下）だったので上限を広げた（候補345・実測 0.12）。
+      n_range: [100, 3999]
+      # 中1配当の試し割りで届く範囲（g1_l11.calculation Lv1 の factorize_basic と同じ層）。
+      max_prime: 13
+    given: [scenario]
+    asked: [value, value]
+    visual: none
+    text: {tier: T1, template: wp_probability_guided_v1}
+    hints: [steps_prefix]
+    concept_tags: [prime_factorization.word_problem_square_multiplier]
+    cause_tags: []
+remedial:
+  default_level: 2

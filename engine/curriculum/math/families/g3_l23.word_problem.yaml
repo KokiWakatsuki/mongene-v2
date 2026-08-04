@@ -1,0 +1,77 @@
+family: math.g3_l23.word_problem
+form: word_problem
+source_desc: |
+  平方根の利用（図形や実生活への応用）の文章題
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv2 desc: 誘導あり:面積等の場面設定→小問が√を用いた求値で連なる。
+       example: 面積が 50cm² の正方形の花だんをつくる。(1) この正方形の1辺の長さを、
+                根号を使って表せ。 (2) (1) の長さを、√2=1.41 として小数第1位まで求めよ。
+  Lv3 desc: 誘導なし:何を√で表すか自分で立式し値を評価する構成。
+       example: 縦と横の長さの比が 1：2 の長方形の土地があり、その面積は 72m² である。
+                この長方形の縦の長さを、根号を使って表せ。
+  ---
+  【この form の型】g2_l51〜l54（確率）と同じ骨格（given.scenario＝場面のみ・
+  given.quantities は持たない）。誘導ありは (1)(2) とも asked=value。
+  recipe は math.word_problem_sqrt_misc 1つで g3_l23 の2セルと、既存クラスタの
+  取りこぼし（g1_l1 Lv1・g1_l11 Lv2）の計4セルを賄う。数学は既存 solver
+  math.simplify_radical（mode=find_side_from_area）に委ねる＝新 solver ゼロ
+  （g3_l23.find_value Lv2 と同じ solver・同じ mode）。
+  【level_sep】
+   Lv2: 何を√に置くかは場面が与える（面積→1辺）。手数は「平方根で表す」→
+        「与えられた近似値で小数第1位まで評価する」の2段で、後半は根号の**評価**
+        （四捨五入）という別概念が入る（誘導あり2小問）。
+   Lv3: 場面は面積しか与えず、**縦を x と置く**ところから自分で立てる
+        （x·(比)x = 面積 → x² → √）。誘導なし1小問で、立式・約分・簡約が1本に
+        つながる。Lv2 が「与えられた量を根号で表して評価する」のに対し、Lv3 は
+        「何を文字に置くか」が動く＝手数と概念がどちらも変わる。
+  【台帳からの逸脱と理由】
+   ・Lv3 の example は 1：2・72m²（縦=6 で根号が消える整数解）だが、この form の
+     ねらいは「根号を使って表す」ことなので、x²=面積/比 が平方数にならない組
+     （答えが必ず a√b になる）だけを構成時に残した。
+   ・Lv2 の近似値（√2=1.41 等）は ask ではなく given.scenario に置く。G-Q5t の
+     whitelist は mr.given の値だけを走査するため、ask にしか出ない数値は
+     whitelist されず偽陽性になる（既知の罠）。
+  【検証】G-Q1 が全小問 double-solve。checker は params の「場面文に出ている数値」
+  （面積・比）だけから solver を呼び直す。近似値は params に持たず、面積の平方因数を
+  外に出して得た a から定数表で引き直す＝「面積を読み違えたら近似値も違う」経路で
+  再計算される（答え・導出値は params に入れない）。
+concepts_default: [radical.word_problem_square_plot_approx]
+levels:
+  "2":
+    signature: word_problem_square_plot_approx
+    recipe: math.word_problem_sqrt_misc
+    params:
+      scenario_kind: square_plot_approx
+      # 面積 S=k²a（k≥2・a は近似値表 {2,3,5,6,7,10}）。四捨五入が引き分けになる組と、
+      # 近似値からの四捨五入が真の値の四捨五入とずれる組は recipe が除く。
+      # dup_rate は |面積候補|×|題材| でほぼ決まる。area_max=500・題材8で実測 0.18
+      # ＝閾値 0.20 の直下だったので、候補 36→49・題材 8→12 に広げた（実測 0.08）。
+      area_max: 1000
+      subject_candidates:
+        [花だん|m, 畑|m, 広場|m, 土地|m, 中庭|m, 池|m,
+         タイル|cm, 画用紙|cm, 板|cm, 花だんの囲い|cm, 布|cm, 鏡|cm]
+    given: [scenario]
+    asked: [value, value]
+    visual: none
+    text: {tier: T1, template: wp_probability_guided_v1}
+    hints: [steps_prefix]
+    concept_tags: [radical.word_problem_square_plot_approx]
+    cause_tags: []
+  "3":
+    signature: word_problem_rectangle_ratio_side
+    recipe: math.word_problem_sqrt_misc
+    params:
+      scenario_kind: rectangle_ratio_side
+      # 面積 S=r·k²a（a は squarefree>1）。x²=S/r が平方数にならない＝答えは必ず根号を含む。
+      ratio_candidates: [2, 3, 4, 5]
+      area_max: 400
+      subject_candidates: [土地, 花だん, 広場, 畑, 庭, 敷地, 空き地, 芝生]
+    given: [scenario]
+    asked: [value]
+    visual: none
+    text: {tier: T1, template: wp_linear_solo_v1}
+    hints: [steps_prefix]
+    concept_tags: [radical.word_problem_rectangle_ratio_side]
+    cause_tags: []
+remedial:
+  default_level: 2

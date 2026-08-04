@@ -1,0 +1,83 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - simultaneous_equations.word_problem_price_count_diff
+  provenance:
+    git_commit: ''
+    recipe: math.word_problem_system_equations
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: wp_linear_solo_v1
+    tier: T1
+  requested:
+    form: word_problem
+    level: 3
+    subject: math
+    unit: g2_l16
+  resolved:
+    form: word_problem
+    level: 3
+    subject: math
+    unit: g2_l16
+  seed: 2
+  signature: word_problem_system_price_count_diff
+problem_ref: c262661f4b5f0e2e
+problem_text: 'ボールペンを何本かとクリアファイルを何枚か買った。ボールペン1本は70円、クリアファイル1枚は80円で、買った数はボールペンよりクリアファイルのほうが2枚多く、代金の合計は610円だった。
+
+  ボールペンとクリアファイルを買った数をそれぞれ求めよ。'
+sub_questions:
+- answer:
+    display: ボールペンは3本、クリアファイルは5枚
+    kind: symbolic
+    srepr: Tuple(Integer(3), Integer(5))
+  cause_tags: []
+  concept_tags:
+  - simultaneous_equations.word_problem_price_count_diff
+  explanation: 'まず、ボールペンの数を x 本、クリアファイルの数を y 枚とおく。（x, y）
+
+    次に、買った数の関係に着目して、1つめの式をつくる。（y = x + 2）
+
+    次に、代金の合計の関係に着目して、2つめの式をつくる。（70x + 80y = 610）
+
+    次に、係数をそろえて一方の文字を消去し、残った文字を求める。（x = 3）
+
+    最後に、求めた値をもとの式に代入し、もう一方の文字を求める。（y = 5）'
+  hints:
+  - ボールペンの数を x 本、クリアファイルの数を y 枚とおく。
+  - 買った数の関係に着目して、1つめの式をつくる。
+  - 代金の合計の関係に着目して、2つめの式をつくる。
+  - 係数をそろえて一方の文字を消去し、残った文字を求める。
+  label: (1)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args: []
+    narration: ボールペンの数を x 本、クリアファイルの数を y 枚とおく。
+    op: set_variables
+    result_display: x, y
+    result_srepr: Tuple(Symbol('x'), Symbol('y'))
+  - args: []
+    narration: 買った数の関係に着目して、1つめの式をつくる。
+    op: formulate_first
+    result_display: y = x + 2
+    result_srepr: Equality(Add(Mul(Integer(-1), Symbol('x')), Symbol('y')), Integer(2))
+  - args: []
+    narration: 代金の合計の関係に着目して、2つめの式をつくる。
+    op: formulate_second
+    result_display: 70x + 80y = 610
+    result_srepr: Equality(Add(Mul(Integer(70), Symbol('x')), Mul(Integer(80), Symbol('y'))), Integer(610))
+  - args:
+    - Eq(-x + y, 2)
+    - Eq(70*x + 80*y, 610)
+    narration: 係数をそろえて一方の文字を消去し、残った文字を求める。
+    op: eliminate_variable
+    result_display: x = 3
+    result_srepr: Equality(Symbol('x'), Integer(3))
+  - args:
+    - '3'
+    narration: 求めた値をもとの式に代入し、もう一方の文字を求める。
+    op: back_substitute
+    result_display: y = 5
+    result_srepr: Integer(5)
+visual_svg: null

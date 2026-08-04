@@ -1,0 +1,8 @@
+approved_at: '2026-08-04T10:36:40.644649'
+approver: koki
+content_sha256: 6815421de9b8c22ab0311e68fdc304dac1dcef7128ef25fafd22874c98ab5224
+family: math.g1_l1.word_problem
+files:
+- engine_tests/golden/math.g1_l1.word_problem/math.g1_l1.word_problem_lv1_seed1.yaml
+- engine_tests/golden/math.g1_l1.word_problem/math.g1_l1.word_problem_lv1_seed2.yaml
+- engine_tests/golden/math.g1_l1.word_problem/math.g1_l1.word_problem_lv1_seed3.yaml

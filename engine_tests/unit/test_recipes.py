@@ -6653,6 +6653,7 @@ def test_word_problem_linear_derived_answer_is_not_x():
 # 連立方程式の利用（g2_l17/g2_l18 × Lv2/Lv3/Lv4）＝1 recipe で6セル
 # ---------------------------------------------------------------------------
 _SYSTEM_WP_CELLS = [
+    ("math.g2_l16.word_problem", 3, "word_problem_system_price_count_diff", False),
     ("math.g2_l17.word_problem", 2, "word_problem_distance_time_guided", True),
     ("math.g2_l17.word_problem", 3, "word_problem_time_split_solo", False),
     ("math.g2_l17.word_problem", 4, "word_problem_lap_meet_catch_up", False),
@@ -7693,3 +7694,69 @@ def test_word_problem_proportion_frequency_non_degenerate(seed):
         assert 0 < occurred < total, "相対度数が 0 や 1 だと見積もりが退化する"
         # 予測（最後の小問）は整数個／整数回に収まる＝丸めの指示なしで一意に定まる。
         assert sympy.sympify(mr.sub_questions[-1].answer.srepr).is_Integer
+
+
+# ---------------------------------------------------------------------------
+# 平方根の利用＋既存クラスタの取りこぼし（g3_l23 / g1_l1 / g1_l11 の word_problem）
+# ＝1 recipe で4セル
+# ---------------------------------------------------------------------------
+_SQRT_MISC_WP_CELLS = [
+    ("math.g3_l23.word_problem", 2, "word_problem_square_plot_approx", 2),
+    ("math.g3_l23.word_problem", 3, "word_problem_rectangle_ratio_side", 1),
+    ("math.g1_l1.word_problem", 1, "word_problem_signed_reference", 2),
+    ("math.g1_l11.word_problem", 2, "word_problem_square_multiplier", 2),
+]
+
+
+@pytest.mark.parametrize(("family", "level", "signature", "n_sub"), _SQRT_MISC_WP_CELLS)
+def test_word_problem_sqrt_misc_construct(family, level, signature, n_sub):
+    """小問数が spec の asked と一致し、答えは params に入らない。"""
+    ctx = _make_ctx(family, level)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == signature
+    assert [sq.label for sq in mr.sub_questions] == [f"({i + 1})" for i in range(n_sub)]
+    assert [sq.asked for sq in mr.sub_questions] == list(ctx.spec_level.asked)
+    assert set(mr.given) == {"scenario"}
+    assert mr.visual_plan is None
+    assert "answer" not in mr.params
+
+
+@pytest.mark.parametrize(("family", "level", "signature", "n_sub"), _SQRT_MISC_WP_CELLS)
+@pytest.mark.parametrize("seed", range(30))
+def test_word_problem_sqrt_misc_double_solve_property(seed, family, level, signature, n_sub):
+    """全小問が checker の独立再計算と一致し、params の全数値が場面文に現れる。"""
+    ctx = _make_ctx(family, level)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+
+    checker = REGISTRY.checker("math.word_problem_sqrt_misc.double_solve")
+    solutions = checker(mr)
+    assert len(solutions) == len(mr.sub_questions) == n_sub
+    for sol, sq in zip(solutions, mr.sub_questions, strict=True):
+        assert sol.answer.srepr == sq.answer.srepr
+
+    # word_problem 共通の property: params の全数値が場面文に現れる。
+    for value in mr.params["numbers"].values():
+        assert str(value) in mr.given["scenario"]
+
+
+@pytest.mark.parametrize("seed", range(20))
+def test_word_problem_sqrt_misc_non_degenerate(seed):
+    """非退化条件: 平方根セルは答えが必ず根号を含み、平方数化はかける数が1にならない。"""
+    for level in (2, 3):
+        ctx = _make_ctx("math.g3_l23.word_problem", level)
+        rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+        mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+        # 根号を使って表す小問（両レベルとも(1)）の答えは無理数＝a√b の形。
+        side = sympy.sympify(mr.sub_questions[0].answer.srepr)
+        assert not side.is_Rational, "根号が消えると『根号を使って表せ』が成り立たない"
+
+    ctx = _make_ctx("math.g1_l11.word_problem", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    n = int(sympy.sympify(mr.params["numbers"]["n"]))
+    multiplier = int(sympy.sympify(mr.sub_questions[1].answer.srepr))
+    assert multiplier > 1, "かける数が1だと元の数がすでに平方数＝設問が退化する"
+    assert multiplier != n, "かける数が元の数と一致すると問題文の数が答えになる（G-Q5t の実害）"
+    assert sympy.sqrt(n * multiplier).is_Integer, "かけたあとが平方数になっていない"
