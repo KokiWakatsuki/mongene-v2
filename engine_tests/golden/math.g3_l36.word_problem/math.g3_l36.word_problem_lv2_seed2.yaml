@@ -1,0 +1,93 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - quadratic_function.word_problem_determine_then_evaluate
+  provenance:
+    git_commit: ''
+    recipe: math.word_problem_quadratic_function
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: wp_quadratic_function_guided_v1
+    tier: T1
+  requested:
+    form: word_problem
+    level: 2
+    subject: math
+    unit: g3_l36
+  resolved:
+    form: word_problem
+    level: 2
+    subject: math
+    unit: g3_l36
+  seed: 2
+  signature: word_problem_quadratic_determine_then_evaluate
+problem_ref: 69a213746f09e51d
+problem_text: '車がブレーキをかけてから止まるまでに進む距離を停止距離という。あるワゴン車は、速さが40km/hのとき停止距離が8mであった。
+
+  停止距離 y m は、ブレーキをかけたときの速さ x km/h の2乗に比例するものとする。
+
+  (1) y を x の式で表せ。
+
+  (2) 速さが120km/hのときの停止距離を求めよ。'
+sub_questions:
+- answer:
+    display: y = (1/200)x²
+    kind: symbolic
+    srepr: Mul(Rational(1, 200), Pow(Symbol('x'), Integer(2)))
+  cause_tags: []
+  concept_tags:
+  - quadratic_function.word_problem_determine_then_evaluate
+  explanation: 'まず、y は x の2乗に比例するから、比例定数を a とおいて y=ax² と表し、与えられている x と y の値を代入する。（y=ax² に与えられた値を代入する）
+
+    次に、代入してできた式を a について解いて、比例定数を求める。（a = 1/200）
+
+    最後に、求めた比例定数を y=ax² にもどして、y を x の式で表す。（y = (1/200)x²）'
+  hints:
+  - y は x の2乗に比例するから、比例定数を a とおいて y=ax² と表し、与えられている x と y の値を代入する。
+  - 代入してできた式を a について解いて、比例定数を求める。
+  label: (1)
+  prompt_text: formulation を求めなさい。
+  solution_steps:
+  - args: []
+    narration: y は x の2乗に比例するから、比例定数を a とおいて y=ax² と表し、与えられている x と y の値を代入する。
+    op: set_up_proportion_equation
+    result_display: y=ax² に与えられた値を代入する
+    result_srepr: ''
+  - args: []
+    narration: 代入してできた式を a について解いて、比例定数を求める。
+    op: solve_for_coefficient
+    result_display: a = 1/200
+    result_srepr: Rational(1, 200)
+  - args: []
+    narration: 求めた比例定数を y=ax² にもどして、y を x の式で表す。
+    op: form_expression
+    result_display: y = (1/200)x²
+    result_srepr: Mul(Rational(1, 200), Pow(Symbol('x'), Integer(2)))
+- answer:
+    display: 72m
+    kind: symbolic
+    srepr: Integer(72)
+  cause_tags: []
+  concept_tags:
+  - quadratic_function.word_problem_determine_then_evaluate
+  explanation: 'まず、式の x に、与えられた値をあてはめる。（x に代入する）
+
+    次に、2乗を計算してから比例定数をかけ、y の値を求める。（72）'
+  hints:
+  - 式の x に、与えられた値をあてはめる。
+  label: (2)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 式の x に、与えられた値をあてはめる。
+    op: substitute_x
+    result_display: x に代入する
+    result_srepr: ''
+  - args: []
+    narration: 2乗を計算してから比例定数をかけ、y の値を求める。
+    op: compute_y
+    result_display: '72'
+    result_srepr: Integer(72)
+visual_svg: null

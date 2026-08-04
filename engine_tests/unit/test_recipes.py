@@ -7760,3 +7760,76 @@ def test_word_problem_sqrt_misc_non_degenerate(seed):
     assert multiplier > 1, "かける数が1だと元の数がすでに平方数＝設問が退化する"
     assert multiplier != n, "かける数が元の数と一致すると問題文の数が答えになる（G-Q5t の実害）"
     assert sympy.sqrt(n * multiplier).is_Integer, "かけたあとが平方数になっていない"
+
+
+# ---------------------------------------------------------------------------
+# 関数 y=ax² の利用（g3_l32 / g3_l36 / g3_l38 の word_problem）＝1 recipe で4セル
+# ---------------------------------------------------------------------------
+_QUADRATIC_FUNCTION_WP_CELLS = [
+    ("math.g3_l32.word_problem", 2, "word_problem_quadratic_given_equation"),
+    ("math.g3_l36.word_problem", 2, "word_problem_quadratic_determine_then_evaluate"),
+    ("math.g3_l36.word_problem", 3, "word_problem_quadratic_determine_then_inverse"),
+    ("math.g3_l38.word_problem", 3, "word_problem_quadratic_moving_point_area"),
+]
+
+
+@pytest.mark.parametrize(("family", "level", "signature"), _QUADRATIC_FUNCTION_WP_CELLS)
+def test_word_problem_quadratic_function_construct(family, level, signature):
+    """小問の asked が spec と一致し、導出値（比例定数）も答えも params に入らない。"""
+    from engine.packs.math.recipes.word_problem_quadratic_function import ASKED_KINDS
+
+    ctx = _make_ctx(family, level)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == signature
+    kind = str(mr.params["scenario_kind"])
+    assert [sq.asked for sq in mr.sub_questions] == list(ASKED_KINDS[kind])
+    assert [sq.asked for sq in mr.sub_questions] == list(ctx.spec_level.asked)
+    assert mr.visual_plan is None
+    assert "answer" not in mr.params
+    # 比例定数 a は本文に出ていない導出値なので params に置かない（置くと本文の数値を
+    # 書き間違えても checker が通ってしまう）。
+    assert "a" not in mr.params["numbers"] or kind == "given_equation"
+
+
+@pytest.mark.parametrize(("family", "level", "signature"), _QUADRATIC_FUNCTION_WP_CELLS)
+@pytest.mark.parametrize("seed", range(30))
+def test_word_problem_quadratic_function_double_solve_property(seed, family, level, signature):
+    """全小問が checker の独立再計算と一致し、params の全数値が本文に現れる。"""
+    ctx = _make_ctx(family, level)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+
+    checker = REGISTRY.checker("math.word_problem_quadratic_function.double_solve")
+    solutions = checker(mr)
+    assert len(solutions) == len(mr.sub_questions)
+    for sol, sq in zip(solutions, mr.sub_questions, strict=True):
+        assert sol.answer.srepr == sq.answer.srepr
+
+    # word_problem 共通の property: params の全数値が場面文（given＋小問文）に現れる。
+    shown = "".join(mr.given.values()) + "".join(str(v) for v in mr.context_slots.values())
+    for value in mr.params["numbers"].values():
+        assert str(value) in shown
+    for value in mr.params["slots"].values():
+        assert str(value) in shown
+
+
+@pytest.mark.parametrize("seed", range(20))
+def test_word_problem_quadratic_function_non_degenerate(seed):
+    """非退化条件: 落下は比例定数が自然な帯・動点は区間ごとに式の型が変わる。"""
+    ctx = _make_ctx("math.g3_l36.word_problem", 3)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    x0, y0 = (int(mr.params["numbers"][k]) for k in ("x0", "y0"))
+    assert sympy.Rational(y0, x0 * x0) in (4, 5, 6), "落下運動の比例定数は現実に近い帯に保つ"
+
+    ctx = _make_ctx("math.g3_l38.word_problem", 3)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    first = sympy.sympify(mr.sub_questions[0].answer.srepr)
+    second = sympy.sympify(mr.sub_questions[1].answer.srepr)
+    assert first.has(sympy.Symbol("x")), "第1区間は x に比例する式でなければならない"
+    assert not second.has(sympy.Symbol("x")), "第2区間は一定の面積でなければならない"
+    # 点名は答えに影響しない surface だが、dup_key に効かせるため params に入れる。
+    assert len(set(str(mr.params["slots"]["vertices"]))) == 4
+    assert str(mr.params["slots"]["moving_point"]) not in str(mr.params["slots"]["vertices"])

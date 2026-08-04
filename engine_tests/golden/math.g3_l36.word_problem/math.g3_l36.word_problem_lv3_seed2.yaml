@@ -1,0 +1,88 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - quadratic_function.word_problem_determine_then_inverse
+  provenance:
+    git_commit: ''
+    recipe: math.word_problem_quadratic_function
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: wp_linear_solo_v1
+    tier: T1
+  requested:
+    form: word_problem
+    level: 3
+    subject: math
+    unit: g3_l36
+  resolved:
+    form: word_problem
+    level: 3
+    subject: math
+    unit: g3_l36
+  seed: 2
+  signature: word_problem_quadratic_determine_then_inverse
+problem_ref: 927fda7df5f39982
+problem_text: '高いところから鉄球を静かに落とすとき、落ち始めてから x 秒間に落下する距離 y m は、x の2乗に比例する。この鉄球は1秒間に5m落下した。
+
+  落下距離が980mになるのは、落ち始めてから何秒後か求めよ。'
+sub_questions:
+- answer:
+    display: 14秒後
+    kind: symbolic
+    srepr: Integer(14)
+  cause_tags: []
+  concept_tags:
+  - quadratic_function.word_problem_determine_then_inverse
+  explanation: 'まず、y は x の2乗に比例するから、比例定数を a とおいて y=ax² と表し、与えられている x と y の値を代入する。（y=ax² に与えられた値を代入する）
+
+    次に、代入してできた式を a について解いて、比例定数を求める。（a = 5）
+
+    次に、求めた比例定数を y=ax² にもどして、y を x の式で表す。（y = 5x²）
+
+    次に、求める時刻を x とみて、距離を表す式に、与えられている距離をあてはめて方程式をつくる。（距離の式に、与えられた距離をあてはめる）
+
+    次に、両辺を x の2乗にかかっている数でわり、平方根の考え方で x を求める。（平方根の考え方で x を求める）
+
+    最後に、時刻は正の数だから、求めた解のうち正の解を選ぶ。（14秒後）'
+  hints:
+  - y は x の2乗に比例するから、比例定数を a とおいて y=ax² と表し、与えられている x と y の値を代入する。
+  - 代入してできた式を a について解いて、比例定数を求める。
+  - 求めた比例定数を y=ax² にもどして、y を x の式で表す。
+  - 求める時刻を x とみて、距離を表す式に、与えられている距離をあてはめて方程式をつくる。
+  - 両辺を x の2乗にかかっている数でわり、平方根の考え方で x を求める。
+  label: (1)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args: []
+    narration: y は x の2乗に比例するから、比例定数を a とおいて y=ax² と表し、与えられている x と y の値を代入する。
+    op: set_up_proportion_equation
+    result_display: y=ax² に与えられた値を代入する
+    result_srepr: ''
+  - args: []
+    narration: 代入してできた式を a について解いて、比例定数を求める。
+    op: solve_for_coefficient
+    result_display: a = 5
+    result_srepr: Integer(5)
+  - args: []
+    narration: 求めた比例定数を y=ax² にもどして、y を x の式で表す。
+    op: form_expression
+    result_display: y = 5x²
+    result_srepr: Mul(Integer(5), Pow(Symbol('x'), Integer(2)))
+  - args: []
+    narration: 求める時刻を x とみて、距離を表す式に、与えられている距離をあてはめて方程式をつくる。
+    op: set_up_equation
+    result_display: 距離の式に、与えられた距離をあてはめる
+    result_srepr: ''
+  - args: []
+    narration: 両辺を x の2乗にかかっている数でわり、平方根の考え方で x を求める。
+    op: solve_for_x
+    result_display: 平方根の考え方で x を求める
+    result_srepr: ''
+  - args: []
+    narration: 時刻は正の数だから、求めた解のうち正の解を選ぶ。
+    op: select_positive_root
+    result_display: 14秒後
+    result_srepr: Integer(14)
+visual_svg: null

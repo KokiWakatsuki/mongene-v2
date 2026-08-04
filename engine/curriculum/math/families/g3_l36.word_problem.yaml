@@ -1,0 +1,80 @@
+family: math.g3_l36.word_problem
+form: word_problem
+source_desc: |
+  身のまわりの事象への利用（落下運動や制動距離など）の文章題
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv2 desc: 誘導あり:比例定数を求める→値を代入し量を求める連なり
+       example: ある自動車がブレーキをかけてから止まるまでに進む距離 y m は、
+                ブレーキをかけたときの速さ x km/h の2乗に比例する。速さが 20km/h のとき
+                停止距離は 4m であった。次の問いに答えよ。(1) y を x の式で表せ。
+                (2) 速さが 60km/h のときの停止距離を求めよ。
+  Lv3 desc: 誘導なし:場面から自分で式を立て予測・逆算する構成
+       example: 高いところから物を落とすとき、落ち始めてから x 秒間に落下する距離 y m は
+                2乗に比例する。1秒間に 5m 落下するとき、落下距離が 80m になるのは
+                落ち始めてから何秒後か求めよ。
+  ---
+  【この form の型】Lv2 は given.scenario + given.quantities + (1)(2) で
+  asked=[formulation, value]（台帳 example の (1)立式→(2)代入 に一致）。
+  Lv3 は誘導なし＝given.scenario + 1小問で asked=[value]（立式は解答の中で行う）。
+  recipe は math.word_problem_quadratic_function 1つで g3_l32/l36/l38 の4セルを賄う。
+  数学は既存 solver（math.solve_direct_proportion_from_point で比例定数、
+  math.evaluate_quadratic_function で代入、math.solve_quadratic で ax²=k の求解）に
+  委ねる＝新 solver ゼロ。比例定数は t=x² とみた比例の1点決定に等しいので、
+  既存の比例 solver をそのまま流用する。
+  【level_sep】
+   Lv2: 誘導あり2小問。(1) 1点から比例定数を決めて y を x の式で表す（立式そのものが
+        答え＝asked=formulation） (2) その式に代入して値を求める（順算）。
+   Lv3: 誘導なし1小問。立式（比例定数の決定）に加えて、逆に「距離→時刻」を
+        ax²=k の求解で逆算し、正の解の吟味まで自分で構成する。
+  小問による分割の有無・順算/逆算・解の吟味の有無が変わる（数値の大小差ではない）。
+  【検証】G-Q1 が全小問 double-solve。checker は params の「本文に出ている数値」
+  （基準の速さ/秒数・そのときの距離・予測する速さ/目標の距離）だけから solver を
+  呼び直す。比例定数 a は本文に出ていない導出値なので params に置かない
+  （置くと「本文の数値を書き間違えても checker が通る」穴になる）。
+  候補は answer-first で列挙し、答えが小問文中の数値と一致する組は除く
+  （G-Q5t の whitelist は mr.given だけを見るため、ask 文にしか出ない数値と
+  答えが一致すると偽陽性になる）。
+concepts_default: [quadratic_function.word_problem_determine_then_evaluate]
+levels:
+  "2":
+    signature: word_problem_quadratic_determine_then_evaluate
+    recipe: math.word_problem_quadratic_function
+    params:
+      scenario_kind: braking_distance
+      # 比例定数が単位分数 1/den になるよう y0 = x0²/den から逆算する（recipe が列挙）。
+      # 初稿の候補23×車種3＝69通りでは実測 dup_rate 0.47（閾値 0.20 の2倍超）だった
+      # ため、速さ・分母・停止距離の域と車種を広げた（候補44×車種8＝352・実測 0.06）。
+      speed_candidates: [10, 15, 20, 25, 30, 35, 40, 45, 50, 60]
+      denominator_candidates: [20, 25, 40, 50, 80, 100, 125, 200, 250]
+      ratio_candidates: [2, 3]
+      stop_distance_range: [1, 40]
+      max_speed: 120
+      vehicle_candidates: [自動車, バス, トラック, 乗用車, ワゴン車, タクシー, 郵便車, 消防車]
+    given: [scenario, quantities]
+    asked: [formulation, value]
+    visual: none
+    text: {tier: T1, template: wp_quadratic_function_guided_v1}
+    hints: [steps_prefix]
+    concept_tags: [quadratic_function.word_problem_determine_then_evaluate]
+    cause_tags: []
+  "3":
+    signature: word_problem_quadratic_determine_then_inverse
+    recipe: math.word_problem_quadratic_function
+    params:
+      scenario_kind: free_fall_inverse
+      # 比例定数 a は落下運動として自然な帯（現実はおよそ5）に限り、y0 = a·x0² から
+      # 逆算する。初稿は y0 を単独範囲 [4,9] で振っており、x0=2 だと a=1〜2.25＝
+      # 「1秒で1mしか落ちない」不自然な場面が混ざるうえ dup_rate 0.53 だった。
+      x0_candidates: [1, 2, 3]
+      coefficient_candidates: [4, 5, 6]
+      root_range: [3, 14]
+      object_candidates: [ボール, 小石, 鉄球, おもり, ビー玉, くり, りんご, 木の実]
+    given: [scenario]
+    asked: [value]
+    visual: none
+    text: {tier: T1, template: wp_linear_solo_v1}
+    hints: [steps_prefix]
+    concept_tags: [quadratic_function.word_problem_determine_then_inverse]
+    cause_tags: []
+remedial:
+  default_level: 2

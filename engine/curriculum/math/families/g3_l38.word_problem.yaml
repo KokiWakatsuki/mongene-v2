@@ -1,0 +1,52 @@
+family: math.g3_l38.word_problem
+form: word_problem
+source_desc: |
+  動点と面積の変化（2次関数）の文章題（units.generated.yaml の desc/example を正として転記）。
+  Lv3 desc: 誘導あり:区間ごとの面積を立式する小問が連なる
+       example: 1辺 6cm の正方形 ABCD の頂点 B を出発し、点 P が辺 BC, CD 上を毎秒 1cm の
+                速さで D まで動く。出発してから x 秒後の三角形 ABP の面積を y cm^2 とする。
+                次の問いに答えよ。(1) 0≦x≦6 のとき y を x の式で表せ。
+                (2) 6≦x≦12 のとき y を x の式で表せ。
+  ---
+  【この form の型】given.scenario（正方形と動点の場面）+ given.quantities（x と y の
+  設定）+ (1)(2)。台帳 example どおり (1)(2) とも asked=formulation（区間ごとの式
+  そのものが答え）。recipe は math.word_problem_quadratic_function 1つで
+  g3_l32/l36/l38 の4セルを賄う。面積は既存 solver math.solve_quadratic_motion_area
+  （g3_l38.find_value と同じ A=(0,0), B=(s,0), C=(s,s), D=(0,s) の配置）に、式の
+  組み立ては math.linear_expr_from_slope_point に委ねる＝新 solver ゼロ。
+  【図の扱い】台帳の題材は図つきで出題されることが多いが、本セルは visual を持たない。
+  word_problem frame の asked_vocab は {formulation, value} のみで作図系の小問語彙を
+  持たず（g2_l30 Lv3・g3_l31 で作図小問を落とした前例と同型）、また Lv3 の example
+  自体には作図の小問が無い。図が無くても場面が一意に定まるよう、頂点の並び（ABCD の順）
+  と点 P の通る辺の順（BC→CD）・出発点・向き（D まで）を本文で言い切る。
+  台帳 Lv4（誘導なし・グラフに表す）は作図小問を含むため本タスクの対象外（未実装のまま）。
+  【題材の注記】三角形 ABP は底辺 AB が正方形の1辺で固定なので、面積は辺BC上では
+  経過時間の1次式、辺CD上では一定になる（台帳 example の答えも y=3x と y=18）。
+  レッスン名は「2次関数」だが、この example の構成では面積の式そのものは2次にならない。
+  台帳の example を正として、この構成をそのまま実装する。
+  【level_sep】このレッスンは Lv3 のみ。クラスタ内では「区間で式が変わる（場合分け）」
+  唯一のセルで、問われるものが値ではなく関数そのもの（asked=formulation×2）＝
+  g3_l32/l36 の3セルとは何を文字に置くか（経過時間）も答えの型も違う。
+  【検証】G-Q1 が全小問 double-solve。checker は params の「本文に出ている数値」
+  （正方形の1辺・速さ）だけから solver を呼び直す。区間の境界 t1=s/v・t2=2s/v も
+  第1区間の傾きも本文に出ていない導出値なので params に置かず、checker 側で
+  solver（面積）を呼び直して再計算する。
+concepts_default: [quadratic_function.word_problem_moving_point_area]
+levels:
+  "3":
+    signature: word_problem_quadratic_moving_point_area
+    recipe: math.word_problem_quadratic_function
+    params:
+      scenario_kind: moving_point_area
+      # 1辺は偶数（辺CD上の一定面積 s²/2 が整数）。速さは s の約数（区間の境界が整数）。
+      side_candidates: [6, 8, 10, 12, 14, 16, 18, 20, 22, 24]
+      min_first_interval: 3
+    given: [scenario, quantities]
+    asked: [formulation, formulation]
+    visual: none
+    text: {tier: T1, template: wp_quadratic_function_guided_v1}
+    hints: [steps_prefix]
+    concept_tags: [quadratic_function.word_problem_moving_point_area]
+    cause_tags: []
+remedial:
+  default_level: 3

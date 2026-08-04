@@ -1,0 +1,85 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - quadratic_function.word_problem_moving_point_area
+  provenance:
+    git_commit: ''
+    recipe: math.word_problem_quadratic_function
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: wp_quadratic_function_guided_v1
+    tier: T1
+  requested:
+    form: word_problem
+    level: 3
+    subject: math
+    unit: g3_l38
+  resolved:
+    form: word_problem
+    level: 3
+    subject: math
+    unit: g3_l38
+  seed: 3
+  signature: word_problem_quadratic_moving_point_area
+problem_ref: 11392bed8e5f2910
+problem_text: '1辺が24cmの正方形FBEKがある。点Cは頂点Bを出発し、辺BE、辺EKの上を毎秒1cmの速さでKまで動く。
+
+  出発してから x 秒後の三角形FBCの面積を y cm²とする。
+
+  (1) 0≦x≦24 のとき、y を x の式で表せ。
+
+  (2) 24≦x≦48 のとき、y を x の式で表せ。'
+sub_questions:
+- answer:
+    display: y = 12x
+    kind: symbolic
+    srepr: Mul(Integer(12), Symbol('x'))
+  cause_tags: []
+  concept_tags:
+  - quadratic_function.word_problem_moving_point_area
+  explanation: 'まず、点が最初の辺の上にある間は、速さと経過時間から、動いた道のりを x を使って表す。（動いた道のりを x で表す）
+
+    次に、三角形の底辺を正方形の1つの辺とみると、高さは動いた道のりに等しいから、面積を x の式で表す。（y = 12x）'
+  hints:
+  - 点が最初の辺の上にある間は、速さと経過時間から、動いた道のりを x を使って表す。
+  label: (1)
+  prompt_text: formulation を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 点が最初の辺の上にある間は、速さと経過時間から、動いた道のりを x を使って表す。
+    op: locate_point_p
+    result_display: 動いた道のりを x で表す
+    result_srepr: ''
+  - args: []
+    narration: 三角形の底辺を正方形の1つの辺とみると、高さは動いた道のりに等しいから、面積を x の式で表す。
+    op: express_area_on_first_side
+    result_display: y = 12x
+    result_srepr: Mul(Integer(12), Symbol('x'))
+- answer:
+    display: y = 288
+    kind: symbolic
+    srepr: Integer(288)
+  cause_tags: []
+  concept_tags:
+  - quadratic_function.word_problem_moving_point_area
+  explanation: 'まず、点が次の辺の上に移ったあと、三角形の底辺と高さがどうなるかを確かめる。（点が次の辺の上にあることを確かめる）
+
+    次に、この区間では高さが正方形の1つの辺の長さのまま変わらないので、面積は x によらず一定の値になる。（y = 288）'
+  hints:
+  - 点が次の辺の上に移ったあと、三角形の底辺と高さがどうなるかを確かめる。
+  label: (2)
+  prompt_text: formulation を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 点が次の辺の上に移ったあと、三角形の底辺と高さがどうなるかを確かめる。
+    op: determine_which_segment
+    result_display: 点が次の辺の上にあることを確かめる
+    result_srepr: ''
+  - args: []
+    narration: この区間では高さが正方形の1つの辺の長さのまま変わらないので、面積は x によらず一定の値になる。
+    op: express_constant_area
+    result_display: y = 288
+    result_srepr: Integer(288)
+visual_svg: null

@@ -1,0 +1,44 @@
+family: math.g3_l32.word_problem
+form: word_problem
+source_desc: |
+  関数 y=ax² の意味と式の文章題（units.generated.yaml の desc/example を正として転記）。
+  Lv2 desc: 身近な事象が2乗比例で表せるか読み取る
+       example: ある斜面でボールを転がすと、転がり始めてから x 秒間に進む距離 y m が
+                y=2x^2 で表されるという。次の問いに答えよ。(1) 3秒間に進む距離を求めよ。
+                (2) 進んだ距離が 32m になるのは転がり始めてから何秒後か求めよ。
+  ---
+  【この form の型】given.scenario（場面）+ given.quantities（変数の設定と式）+ (1)(2)。
+  台帳の example どおり (1)(2) とも asked=value（式は本文で与えられるので立式は問わない）。
+  recipe は math.word_problem_quadratic_function 1つで g3_l32/l36/l38 の4セルを賄う
+  （C14 の word_problem 横展開）。数学は既存 solver
+  （math.evaluate_quadratic_function・math.solve_quadratic）に委ねる＝新 solver ゼロ。
+  【level_sep】このレッスンは Lv2 のみ。クラスタ内では
+   「式が本文で与えられる」唯一のセル＝立式の段が無く、代入（順算）と ax²=k の求解
+   （逆算）の2手だけで完結する。g3_l36 Lv2 はここに「1点から比例定数を決めて立式する」
+   段が増え、g3_l36 Lv3 はその立式を誘導なしで自分で構成する（手数と概念が増える）。
+  【検証】G-Q1 が全小問 double-solve。checker は params の「本文に出ている数値」
+  （比例定数 a・代入する秒数・目標の距離）だけから solver を呼び直し、
+  距離と時刻を独立に再計算する（答えは params に入れない）。
+  目標の距離は答えの時刻 t から target=a·t² と逆算して構成し（answer-first）、
+  答えが小問文中の数値と一致する組は除く（G-Q5t の whitelist は mr.given だけを
+  見るため、ask 文にしか出ない数値と答えが一致すると偽陽性になる）。
+concepts_default: [quadratic_function.word_problem_given_equation]
+levels:
+  "2":
+    signature: word_problem_quadratic_given_equation
+    recipe: math.word_problem_quadratic_function
+    params:
+      scenario_kind: given_equation
+      a_candidates: [2, 3, 4, 5]
+      x0_range: [2, 6]
+      root_range: [2, 9]
+      object_candidates: [ボール, 台車, 鉄球]
+    given: [scenario, quantities]
+    asked: [value, value]
+    visual: none
+    text: {tier: T1, template: wp_quadratic_function_guided_v1}
+    hints: [steps_prefix]
+    concept_tags: [quadratic_function.word_problem_given_equation]
+    cause_tags: []
+remedial:
+  default_level: 2

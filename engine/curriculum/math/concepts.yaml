@@ -1164,3 +1164,16 @@ concepts:
   - id: prime_factorization.word_problem_square_multiplier
     label: "素因数分解を利用して平方数にするためにかける最小の自然数を求める"
     unit: g1_l11
+  # --- C14 word_problem 横展開: 関数 y=ax² の利用（g3_l32/l36/l38） ---
+  - id: quadratic_function.word_problem_given_equation
+    label: "y=ax² が与えられた場面で、代入して量を求め、逆に量から時刻を求める"
+    unit: g3_l32
+  - id: quadratic_function.word_problem_determine_then_evaluate
+    label: "2乗に比例する場面で1点から式 y=ax² を決め、その式に代入して量を求める"
+    unit: g3_l36
+  - id: quadratic_function.word_problem_determine_then_inverse
+    label: "2乗に比例する場面から自分で式を立て、量から時刻を逆算する"
+    unit: g3_l36
+  - id: quadratic_function.word_problem_moving_point_area
+    label: "動点がつくる三角形の面積を、区間ごとに経過時間の式で表す"
+    unit: g3_l38
