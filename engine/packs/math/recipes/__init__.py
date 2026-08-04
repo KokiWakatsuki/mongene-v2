@@ -46,5 +46,6 @@ from engine.packs.math.recipes import word_problem_probability  # noqa: F401  (�
 from engine.packs.math.recipes import word_problem_proportion_frequency  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.recipes import word_problem_sqrt_misc  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.recipes import word_problem_quadratic_function  # noqa: F401,E402  (letter_expr の _draw_distinct_points に依存＝後に import)
+from engine.packs.math.recipes import word_problem_pythagorean  # noqa: F401  (登録の副作用のため import)
 
 __all__: list[str] = []

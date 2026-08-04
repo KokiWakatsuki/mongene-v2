@@ -1177,3 +1177,13 @@ concepts:
   - id: quadratic_function.word_problem_moving_point_area
     label: "動点がつくる三角形の面積を、区間ごとに経過時間の式で表す"
     unit: g3_l38
+  # --- C14 word_problem 横展開: 三平方の定理の利用（g3_l53/l55/l56） ---
+  - id: pythagorean.word_problem_rhombus_diagonal_area
+    label: "ひし形の1辺と対角線の一方から、もう一方の対角線と面積を三平方の定理で求める"
+    unit: g3_l53
+  - id: pythagorean.word_problem_square_pyramid_volume
+    label: "正四角錐の底面の1辺と側辺から、高さと体積を三平方の定理で求める"
+    unit: g3_l55
+  - id: pythagorean.word_problem_box_shortest_path
+    label: "直方体の側面を展開して、表面上の最短の道のりと通る側面の面積を求める"
+    unit: g3_l56

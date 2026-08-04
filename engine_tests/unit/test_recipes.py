@@ -7833,3 +7833,75 @@ def test_word_problem_quadratic_function_non_degenerate(seed):
     # 点名は答えに影響しない surface だが、dup_key に効かせるため params に入れる。
     assert len(set(str(mr.params["slots"]["vertices"]))) == 4
     assert str(mr.params["slots"]["moving_point"]) not in str(mr.params["slots"]["vertices"])
+
+
+# ---------------------------------------------------------------------------
+# 三平方の定理の利用（g3_l53 / g3_l55 / g3_l56 の word_problem）＝1 recipe で3セル
+# ---------------------------------------------------------------------------
+_PYTHAGOREAN_WP_CELLS = [
+    ("math.g3_l53.word_problem", 3, "word_problem_rhombus_diagonal_area_guided"),
+    ("math.g3_l55.word_problem", 3, "word_problem_square_pyramid_height_volume_guided"),
+    ("math.g3_l56.word_problem", 3, "word_problem_box_surface_shortest_path_guided"),
+]
+
+
+@pytest.mark.parametrize(("family", "level", "signature"), _PYTHAGOREAN_WP_CELLS)
+def test_word_problem_pythagorean_construct(family, level, signature):
+    """誘導あり2小問（どちらも value）で、答えは params に入らない。"""
+    ctx = _make_ctx(family, level)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == signature
+    assert [(sq.label, sq.asked) for sq in mr.sub_questions] == [
+        ("(1)", "value"),
+        ("(2)", "value"),
+    ]
+    assert set(mr.given) == {"scenario"}
+    assert mr.visual_plan is None
+    assert "answer" not in mr.params
+
+
+@pytest.mark.parametrize(("family", "level", "signature"), _PYTHAGOREAN_WP_CELLS)
+@pytest.mark.parametrize("seed", range(30))
+def test_word_problem_pythagorean_double_solve_property(seed, family, level, signature):
+    """全小問が checker の独立再計算と一致し、params の全数値が場面文に現れる。"""
+    ctx = _make_ctx(family, level)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+
+    checker = REGISTRY.checker("math.word_problem_pythagorean.double_solve")
+    solutions = checker(mr)
+    assert len(solutions) == len(mr.sub_questions)
+    for sol, sq in zip(solutions, mr.sub_questions, strict=True):
+        assert sol.answer.srepr == sq.answer.srepr
+
+    # word_problem 共通の property: params の全数値が場面文（given＋小問文）に現れる。
+    shown = "".join(mr.given.values()) + "".join(str(v) for v in mr.context_slots.values())
+    for value in mr.params["numbers"].values():
+        assert str(value) in shown
+    # 点名は答えに影響しない surface だが、dup_key に効かせるため params に入れる。
+    for value in mr.params["slots"].values():
+        assert str(value) in shown
+
+
+@pytest.mark.parametrize("seed", range(20))
+def test_word_problem_pythagorean_non_degenerate(seed):
+    """非退化条件: 三平方が実際に使える（斜辺が他の辺より長い）形だけを構成する。"""
+    ctx = _make_ctx("math.g3_l53.word_problem", 3)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    side, diagonal = (int(mr.params["numbers"][k]) for k in ("side", "diagonal"))
+    assert diagonal < 2 * side, "対角線が辺の2倍以上だとひし形が閉じない"
+
+    ctx = _make_ctx("math.g3_l55.word_problem", 3)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    base, lateral = (int(mr.params["numbers"][k]) for k in ("base_edge", "lateral_edge"))
+    # 側辺は底面の対角線の半分より長い＝高さが正の実数になる（錐体が立つ）。
+    assert 2 * lateral**2 > base**2
+
+    ctx = _make_ctx("math.g3_l56.word_problem", 3)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    for key in ("edge_a", "edge_b", "height"):
+        assert int(mr.params["numbers"][key]) > 0

@@ -1,0 +1,91 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - pythagorean.word_problem_box_shortest_path
+  provenance:
+    git_commit: ''
+    recipe: math.word_problem_pythagorean
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: wp_probability_guided_v1
+    tier: T1
+  requested:
+    form: word_problem
+    level: 3
+    subject: math
+    unit: g3_l56
+  resolved:
+    form: word_problem
+    level: 3
+    subject: math
+    unit: g3_l56
+  seed: 1
+  signature: word_problem_box_surface_shortest_path_guided
+problem_ref: 5254b759e83945b9
+problem_text: '辺EFの長さが6cm、辺FGの長さが6cm、高さが15cmの直方体EFGH-IJKLの形をした箱がある。ここでEFGHは底面、IJKLは上面で、辺EIが高さにあたる。この箱の表面上を、頂点Eから、側面EFJIと側面FGKJを通って、頂点Kまで進む。
+
+  (1) 進む道のりが最も短くなるときの、その道のりの長さを求めよ。
+
+  (2) この二つの側面の面積の和を求めよ。'
+sub_questions:
+- answer:
+    display: 3√41 cm
+    kind: symbolic
+    srepr: Mul(Integer(3), Pow(Integer(41), Rational(1, 2)))
+  cause_tags: []
+  concept_tags:
+  - pythagorean.word_problem_box_shortest_path
+  explanation: 'まず、表面上の最短の道のりを考えるために、通る二つの側面を一つの平面に開いた展開図をかく。
+
+    次に、開いた図では二つの側面が横に並んだ長方形になり、道のりが最も短くなるのは出発点と到着点を結ぶ線分のときだから、その線分を斜辺とする直角三角形をとらえる。（12 cm）
+
+    最後に、直角をはさむ2辺は、底面の二つの辺の長さの和と、直方体の高さだから、三平方の定理から最短の道のりを求める。（3√41 cm）'
+  hints:
+  - 表面上の最短の道のりを考えるために、通る二つの側面を一つの平面に開いた展開図をかく。
+  - 開いた図では二つの側面が横に並んだ長方形になり、道のりが最も短くなるのは出発点と到着点を結ぶ線分のときだから、その線分を斜辺とする直角三角形をとらえる。
+  label: (1)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 表面上の最短の道のりを考えるために、通る二つの側面を一つの平面に開いた展開図をかく。
+    op: unfold_two_side_faces
+    result_display: ''
+    result_srepr: ''
+  - args: []
+    narration: 開いた図では二つの側面が横に並んだ長方形になり、道のりが最も短くなるのは出発点と到着点を結ぶ線分のときだから、その線分を斜辺とする直角三角形をとらえる。
+    op: identify_right_triangle
+    result_display: 12 cm
+    result_srepr: Integer(12)
+  - args: []
+    narration: 直角をはさむ2辺は、底面の二つの辺の長さの和と、直方体の高さだから、三平方の定理から最短の道のりを求める。
+    op: apply_pythagorean_theorem
+    result_display: 3√41 cm
+    result_srepr: Mul(Integer(3), Pow(Integer(41), Rational(1, 2)))
+- answer:
+    display: 180 cm²
+    kind: symbolic
+    srepr: Integer(180)
+  cause_tags: []
+  concept_tags:
+  - pythagorean.word_problem_box_shortest_path
+  explanation: 'まず、開いた二つの側面は、あわせて横が底面の二つの辺の長さの和、縦が直方体の高さである一つの長方形になる。（12 cm）
+
+    次に、その長方形の縦と横の長さをかけて、通る側面の面積の和を求める。（180 cm²）'
+  hints:
+  - 開いた二つの側面は、あわせて横が底面の二つの辺の長さの和、縦が直方体の高さである一つの長方形になる。
+  label: (2)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 開いた二つの側面は、あわせて横が底面の二つの辺の長さの和、縦が直方体の高さである一つの長方形になる。
+    op: combine_two_side_faces
+    result_display: 12 cm
+    result_srepr: Integer(12)
+  - args: []
+    narration: その長方形の縦と横の長さをかけて、通る側面の面積の和を求める。
+    op: compute_rectangle_area
+    result_display: 180 cm²
+    result_srepr: Integer(180)
+visual_svg: null

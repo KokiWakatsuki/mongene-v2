@@ -1,0 +1,59 @@
+family: math.g3_l56.word_problem
+form: word_problem
+source_desc: |
+  立体の表面上の最短距離（展開図の利用）の文章題（units.generated.yaml の desc/example
+  を正として転記）。
+  Lv3 desc: 誘導あり:設定→展開→最短/面積の小問が連なる。
+       example: 縦 4cm、横 6cm、高さ 8cm の直方体の容器がある。次の問いに答えよ。
+                (1) 底面の1つの頂点から、側面を通って上面の反対側の頂点までの
+                表面上の最短の道のりを求めよ。(2) その最短経路が通る側面の面積を求めよ。
+  （Lv4「誘導なし:開き方・方針を自分で構成」は本コミットの担当外。）
+  ---
+  【この form の型】g2_l51〜l54 の確率クラスタで通した骨格（given.scenario＝場面／
+  小問文は context_slots／(1)(2) とも asked=value）をそのまま使う。recipe は
+  math.word_problem_pythagorean 1つで g3_l53/l55/l56 の3セルを賄う。
+  【新 solver ゼロ】となり合う2つの側面を1つの平面に開くと「横＝底面の2辺の長さの和、
+  縦＝高さ」の長方形になり、最短の道のりはその対角線＝既存
+  math.pythagorean_hypotenuse そのもの。(2) の面積の和はその長方形の面積で、
+  sympy でそのまま合成する。
+  【台帳から落とした要素と理由】word_problem の frame の asked_vocab は
+  {formulation, value} だけで「展開図をかけ」という作図小問を構造的に持てない
+  （その作図は台帳でも g3_l56.graph_table Lv2 が担当する）。そこで展開は
+  **解説（steps の narration）側で行う手順**として持ち、小問は台帳どおり
+  「最短の道のり」と「通る側面の面積」の2つの求値にした。図が無くても場面が一意に
+  決まるよう、直方体の3辺の長さに加えて、通る2つの側面を頂点名で明示している
+  （どちらの向きに開いても展開後の長方形は同じなので最短の道のりは一意）。
+  台帳 example の「縦/横」表記は、どちらの辺かが図に依存せず読めるよう
+  「辺 AB の長さ／辺 BC の長さ」という辺名での提示に置き換えた（最短の道のりも面積の
+  和も 2 辺について対称なので、値は台帳の題材と同一）。頂点名は連続8文字を引いて
+  場面を分散する。
+  【level_sep】本セルは Lv3 単独（Lv4 は未実装）。Lv3 は誘導あり＝どの2側面を通るかを
+  与えたうえで (1)最短の道のり→(2)その2側面の面積の和の2小問。Lv4 の「開き方を自分で
+  選ぶ」（3通りの展開を比べて最小を選ぶ）とは、開き方が与えられている点で分離する。
+  【answer-first】3辺の長さを独立に引くだけで退化しない（どの組でも直方体になる）。
+  答えは無理数になってよい（台帳 example の 4/6/8cm も 2√41cm）。
+  【検証】G-Q1 が全小問 double-solve。checker は params の「場面文に出ている長さ」
+  （底面の2辺・高さ）だけから solver を呼び直し、答えを独立に再計算する
+  （答えは params に入れない。頂点名・題材語は params.slots 側＝numbers は数値専用）。
+concepts_default: [pythagorean.word_problem_box_shortest_path]
+levels:
+  "3":
+    signature: word_problem_box_surface_shortest_path_guided
+    recipe: math.word_problem_pythagorean
+    params:
+      scenario_kind: box_surface_shortest_path
+      # 底面の2辺の長さ。
+      edge_domain: {int_range: [2, 12]}
+      # 高さ。
+      height_domain: {int_range: [3, 15]}
+      # 題材語（場面の分散のみ。数学には効かない）。
+      item_candidates: [箱, 容器, 水そう, ケース, ブロック]
+    given: [scenario]
+    asked: [value, value]
+    visual: none
+    text: {tier: T1, template: wp_probability_guided_v1}
+    hints: [steps_prefix]
+    concept_tags: [pythagorean.word_problem_box_shortest_path]
+    cause_tags: []
+remedial:
+  default_level: 3

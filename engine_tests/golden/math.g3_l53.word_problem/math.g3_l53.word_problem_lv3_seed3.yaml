@@ -1,0 +1,91 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - pythagorean.word_problem_rhombus_diagonal_area
+  provenance:
+    git_commit: ''
+    recipe: math.word_problem_pythagorean
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: wp_probability_guided_v1
+    tier: T1
+  requested:
+    form: word_problem
+    level: 3
+    subject: math
+    unit: g3_l53
+  resolved:
+    form: word_problem
+    level: 3
+    subject: math
+    unit: g3_l53
+  seed: 3
+  signature: word_problem_rhombus_diagonal_area_guided
+problem_ref: e1559d883f0e7ab9
+problem_text: '1辺の長さが11cmのひし形STUVがあり、対角線SUの長さは10cmである。
+
+  (1) 対角線TVの長さを求めよ。
+
+  (2) このひし形の面積を求めよ。'
+sub_questions:
+- answer:
+    display: 8√6 cm
+    kind: symbolic
+    srepr: Mul(Integer(8), Pow(Integer(6), Rational(1, 2)))
+  cause_tags: []
+  concept_tags:
+  - pythagorean.word_problem_rhombus_diagonal_area
+  explanation: 'まず、ひし形の対角線は、それぞれの中点で垂直に交わるから、与えられた対角線の長さの半分をとって、直角三角形の直角をはさむ辺の長さを求める。（5 cm）
+
+    次に、ひし形の辺を斜辺、いま求めた長さを直角をはさむ一方の辺とする直角三角形で、三平方の定理からもう一方の辺の長さを求める。（4√6 cm）
+
+    最後に、求めた長さは対角線の半分だから、これをもとにもどして、対角線全体の長さを求める。（8√6 cm）'
+  hints:
+  - ひし形の対角線は、それぞれの中点で垂直に交わるから、与えられた対角線の長さの半分をとって、直角三角形の直角をはさむ辺の長さを求める。
+  - ひし形の辺を斜辺、いま求めた長さを直角をはさむ一方の辺とする直角三角形で、三平方の定理からもう一方の辺の長さを求める。
+  label: (1)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args: []
+    narration: ひし形の対角線は、それぞれの中点で垂直に交わるから、与えられた対角線の長さの半分をとって、直角三角形の直角をはさむ辺の長さを求める。
+    op: halve_given_diagonal
+    result_display: 5 cm
+    result_srepr: Integer(5)
+  - args: []
+    narration: ひし形の辺を斜辺、いま求めた長さを直角をはさむ一方の辺とする直角三角形で、三平方の定理からもう一方の辺の長さを求める。
+    op: apply_pythagorean_theorem
+    result_display: 4√6 cm
+    result_srepr: Mul(Integer(4), Pow(Integer(6), Rational(1, 2)))
+  - args: []
+    narration: 求めた長さは対角線の半分だから、これをもとにもどして、対角線全体の長さを求める。
+    op: restore_full_diagonal
+    result_display: 8√6 cm
+    result_srepr: Mul(Integer(8), Pow(Integer(6), Rational(1, 2)))
+- answer:
+    display: 40√6 cm²
+    kind: symbolic
+    srepr: Mul(Integer(40), Pow(Integer(6), Rational(1, 2)))
+  cause_tags: []
+  concept_tags:
+  - pythagorean.word_problem_rhombus_diagonal_area
+  explanation: 'まず、ひし形の面積は、対角線どうしの積の半分で求められることを使う。
+
+    次に、与えられた対角線の長さと、いま求めた対角線の長さをかけ、その半分をとってひし形の面積を求める。（40√6 cm²）'
+  hints:
+  - ひし形の面積は、対角線どうしの積の半分で求められることを使う。
+  label: (2)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args: []
+    narration: ひし形の面積は、対角線どうしの積の半分で求められることを使う。
+    op: recall_rhombus_area_rule
+    result_display: ''
+    result_srepr: ''
+  - args: []
+    narration: 与えられた対角線の長さと、いま求めた対角線の長さをかけ、その半分をとってひし形の面積を求める。
+    op: compute_rhombus_area
+    result_display: 40√6 cm²
+    result_srepr: Mul(Integer(40), Pow(Integer(6), Rational(1, 2)))
+visual_svg: null

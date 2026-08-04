@@ -1,0 +1,91 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - pythagorean.word_problem_square_pyramid_volume
+  provenance:
+    git_commit: ''
+    recipe: math.word_problem_pythagorean
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: wp_probability_guided_v1
+    tier: T1
+  requested:
+    form: word_problem
+    level: 3
+    subject: math
+    unit: g3_l55
+  resolved:
+    form: word_problem
+    level: 3
+    subject: math
+    unit: g3_l55
+  seed: 3
+  signature: word_problem_square_pyramid_height_volume_guided
+problem_ref: 01eddb00db6a2c2f
+problem_text: '底面が1辺16cmの正方形STUVで、底面以外の辺の長さがすべて14cmである正四角錐W-STUVがある。
+
+  (1) この正四角錐の高さを求めよ。
+
+  (2) この正四角錐の体積を求めよ。'
+sub_questions:
+- answer:
+    display: 2√17 cm
+    kind: symbolic
+    srepr: Mul(Integer(2), Pow(Integer(17), Rational(1, 2)))
+  cause_tags: []
+  concept_tags:
+  - pythagorean.word_problem_square_pyramid_volume
+  explanation: 'まず、底面は正方形だから、となり合う辺を直角をはさむ2辺とみて、三平方の定理から底面の対角線の長さを求める。（16√2 cm）
+
+    次に、頂点から底面に下ろした垂線の足は底面の対角線の交点だから、対角線の長さの半分が、直角三角形の直角をはさむ一方の辺になる。（8√2 cm）
+
+    最後に、側面の辺を斜辺、いま求めた長さを直角をはさむ一方の辺とする直角三角形で、三平方の定理から高さを求める。（2√17 cm）'
+  hints:
+  - 底面は正方形だから、となり合う辺を直角をはさむ2辺とみて、三平方の定理から底面の対角線の長さを求める。
+  - 頂点から底面に下ろした垂線の足は底面の対角線の交点だから、対角線の長さの半分が、直角三角形の直角をはさむ一方の辺になる。
+  label: (1)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 底面は正方形だから、となり合う辺を直角をはさむ2辺とみて、三平方の定理から底面の対角線の長さを求める。
+    op: compute_base_diagonal
+    result_display: 16√2 cm
+    result_srepr: Mul(Integer(16), Pow(Integer(2), Rational(1, 2)))
+  - args: []
+    narration: 頂点から底面に下ろした垂線の足は底面の対角線の交点だから、対角線の長さの半分が、直角三角形の直角をはさむ一方の辺になる。
+    op: halve_base_diagonal
+    result_display: 8√2 cm
+    result_srepr: Mul(Integer(8), Pow(Integer(2), Rational(1, 2)))
+  - args: []
+    narration: 側面の辺を斜辺、いま求めた長さを直角をはさむ一方の辺とする直角三角形で、三平方の定理から高さを求める。
+    op: apply_pythagorean_theorem
+    result_display: 2√17 cm
+    result_srepr: Mul(Integer(2), Pow(Integer(17), Rational(1, 2)))
+- answer:
+    display: 512√17/3 cm³
+    kind: symbolic
+    srepr: Mul(Rational(512, 3), Pow(Integer(17), Rational(1, 2)))
+  cause_tags: []
+  concept_tags:
+  - pythagorean.word_problem_square_pyramid_volume
+  explanation: 'まず、底面は正方形だから、その1辺の長さから底面積を求める。（256 cm²）
+
+    次に、角錐の体積は、底面積と高さの積の三分の一で求められることを使って、体積を求める。（512√17/3 cm³）'
+  hints:
+  - 底面は正方形だから、その1辺の長さから底面積を求める。
+  label: (2)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 底面は正方形だから、その1辺の長さから底面積を求める。
+    op: compute_base_area
+    result_display: 256 cm²
+    result_srepr: Integer(256)
+  - args: []
+    narration: 角錐の体積は、底面積と高さの積の三分の一で求められることを使って、体積を求める。
+    op: apply_pyramid_volume_rule
+    result_display: 512√17/3 cm³
+    result_srepr: Mul(Rational(512, 3), Pow(Integer(17), Rational(1, 2)))
+visual_svg: null
