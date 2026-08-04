@@ -1,0 +1,11 @@
+approved_at: '2026-07-31T00:23:26.940176'
+approver: koki
+content_sha256: 055b5f13ba6f800e04d5a41c1c4f507f853d27aaee3cef4fa4ebc01f502e739a
+family: math.g1_l59.word_problem
+files:
+- engine_tests/golden/math.g1_l59.word_problem/math.g1_l59.word_problem_lv2_seed1.yaml
+- engine_tests/golden/math.g1_l59.word_problem/math.g1_l59.word_problem_lv2_seed2.yaml
+- engine_tests/golden/math.g1_l59.word_problem/math.g1_l59.word_problem_lv2_seed3.yaml
+- engine_tests/golden/math.g1_l59.word_problem/math.g1_l59.word_problem_lv3_seed1.yaml
+- engine_tests/golden/math.g1_l59.word_problem/math.g1_l59.word_problem_lv3_seed2.yaml
+- engine_tests/golden/math.g1_l59.word_problem/math.g1_l59.word_problem_lv3_seed3.yaml

@@ -7622,3 +7622,74 @@ def test_word_problem_probability_guided_uses_complement_of_first():
     p1 = sympy.sympify(mr.sub_questions[0].answer.srepr)
     p2 = sympy.sympify(mr.sub_questions[1].answer.srepr)
     assert (p1 + p2).equals(1)
+
+
+# ---------------------------------------------------------------------------
+# 比例・反比例の利用＋相対度数としての確率（g1_l36 / g1_l59 の word_problem）
+# ＝1 recipe で4セル
+# ---------------------------------------------------------------------------
+_PROPORTION_FREQUENCY_WP_CELLS = [
+    ("math.g1_l36.word_problem", 2, "word_problem_proportion_judge_and_use", 2),
+    ("math.g1_l36.word_problem", 3, "word_problem_proportion_meet_two_motions", 1),
+    ("math.g1_l59.word_problem", 2, "word_problem_relative_frequency_predict", 2),
+    ("math.g1_l59.word_problem", 3, "word_problem_defect_rate_estimate", 1),
+]
+
+
+@pytest.mark.parametrize(("family", "level", "signature", "n_sub"), _PROPORTION_FREQUENCY_WP_CELLS)
+def test_word_problem_proportion_frequency_construct(family, level, signature, n_sub):
+    """小問数が spec の asked と一致し、答えは params に入らない。"""
+    ctx = _make_ctx(family, level)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == signature
+    assert [sq.label for sq in mr.sub_questions] == [f"({i + 1})" for i in range(n_sub)]
+    assert [sq.asked for sq in mr.sub_questions] == list(ctx.spec_level.asked)
+    assert mr.visual_plan is None
+    assert "answer" not in mr.params
+
+
+@pytest.mark.parametrize(("family", "level", "signature", "n_sub"), _PROPORTION_FREQUENCY_WP_CELLS)
+@pytest.mark.parametrize("seed", range(30))
+def test_word_problem_proportion_frequency_double_solve_property(seed, family, level, signature, n_sub):
+    """全小問が checker の独立再計算と一致し、params の全数値が場面文に現れる。"""
+    ctx = _make_ctx(family, level)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+
+    checker = REGISTRY.checker("math.word_problem_proportion_frequency.double_solve")
+    solutions = checker(mr)
+    assert len(solutions) == len(mr.sub_questions) == n_sub
+    for sol, sq in zip(solutions, mr.sub_questions, strict=True):
+        assert sol.answer.srepr == sq.answer.srepr
+
+    # word_problem 共通の property: params の全数値が場面文（given＋小問文）に
+    # 文字列として現れる＝本文の数値を取り違えても checker が気づかない穴を塞ぐ。
+    shown = "".join(mr.given.values()) + "".join(str(v) for v in mr.context_slots.values())
+    for value in mr.params["numbers"].values():
+        assert str(value) in shown
+    for value in mr.params["slots"].values():
+        assert str(value) in shown
+
+
+@pytest.mark.parametrize("seed", range(20))
+def test_word_problem_proportion_frequency_non_degenerate(seed):
+    """非退化条件: 追いつきは後発が速い・実験の相対度数は 0<p<1・予測は整数。"""
+    ctx = _make_ctx("math.g1_l36.word_problem", 3)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    numbers = {k: int(sympy.sympify(v)) for k, v in mr.params["numbers"].items()}
+    assert numbers["speed_fast"] > numbers["speed_slow"], "後発が遅いと追いつけない"
+    assert numbers["head_start"] > 0, "先発の出発が同時だと追いつく場面にならない"
+    assert sympy.sympify(mr.sub_questions[0].answer.srepr) > 0
+
+    for family, level in (("math.g1_l59.word_problem", 2), ("math.g1_l59.word_problem", 3)):
+        ctx = _make_ctx(family, level)
+        rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+        mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+        numbers = {k: int(sympy.sympify(v)) for k, v in mr.params["numbers"].items()}
+        occurred = numbers.get("occurred", numbers.get("defects"))
+        total = numbers.get("total", numbers.get("sample"))
+        assert 0 < occurred < total, "相対度数が 0 や 1 だと見積もりが退化する"
+        # 予測（最後の小問）は整数個／整数回に収まる＝丸めの指示なしで一意に定まる。
+        assert sympy.sympify(mr.sub_questions[-1].answer.srepr).is_Integer

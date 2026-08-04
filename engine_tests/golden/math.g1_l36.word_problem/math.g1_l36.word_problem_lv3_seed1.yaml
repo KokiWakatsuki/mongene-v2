@@ -1,0 +1,64 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - proportion.word_problem_meet_two_motions
+  provenance:
+    git_commit: ''
+    recipe: math.word_problem_proportion_frequency
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: wp_linear_solo_v1
+    tier: T1
+  requested:
+    form: word_problem
+    level: 3
+    subject: math
+    unit: g1_l36
+  resolved:
+    form: word_problem
+    level: 3
+    subject: math
+    unit: g1_l36
+  seed: 1
+  signature: word_problem_proportion_meet_two_motions
+problem_ref: a1222fe58e6ba7b5
+problem_text: '兄は分速50mで家を出発した。その12分後、弟が分速150mで同じ道を追いかけた。弟が出発してからx分後の、兄と弟それぞれの家からの道のりを考える。
+
+  2人の関係をそれぞれ式に表して同じ座標平面上のグラフとみたとき、弟が兄に追いつくのは、弟が出発してから何分後か求めよ。'
+sub_questions:
+- answer:
+    display: 6分後
+    kind: symbolic
+    srepr: Integer(6)
+  cause_tags: []
+  concept_tags:
+  - proportion.word_problem_meet_two_motions
+  explanation: 'まず、追いかけた側が出発してからの時間をxとおき、2人それぞれの家からの道のりyを、xの式で表す。（2人それぞれについて、時間と道のりの関係を式に表す）
+
+    次に、2つの関係を同じ座標平面上のグラフとみて、道のりが等しくなる点、つまり交点を求める。（2つの関係のグラフの交点を求める）
+
+    最後に、交点のx座標が、追いついたときの時間を表している。（6分後）'
+  hints:
+  - 追いかけた側が出発してからの時間をxとおき、2人それぞれの家からの道のりyを、xの式で表す。
+  - 2つの関係を同じ座標平面上のグラフとみて、道のりが等しくなる点、つまり交点を求める。
+  label: (1)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 追いかけた側が出発してからの時間をxとおき、2人それぞれの家からの道のりyを、xの式で表す。
+    op: form_expression
+    result_display: 2人それぞれについて、時間と道のりの関係を式に表す
+    result_srepr: ''
+  - args: []
+    narration: 2つの関係を同じ座標平面上のグラフとみて、道のりが等しくなる点、つまり交点を求める。
+    op: equate_expressions
+    result_display: 2つの関係のグラフの交点を求める
+    result_srepr: ''
+  - args: []
+    narration: 交点のx座標が、追いついたときの時間を表している。
+    op: read_x_coordinate
+    result_display: 6分後
+    result_srepr: Integer(6)
+visual_svg: null

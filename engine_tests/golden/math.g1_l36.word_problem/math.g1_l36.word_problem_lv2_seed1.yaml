@@ -1,0 +1,91 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - proportion.word_problem_judge_and_use
+  provenance:
+    git_commit: ''
+    recipe: math.word_problem_proportion_frequency
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: wp_linear_guided_v1
+    tier: T1
+  requested:
+    form: word_problem
+    level: 2
+    subject: math
+    unit: g1_l36
+  resolved:
+    form: word_problem
+    level: 2
+    subject: math
+    unit: g1_l36
+  seed: 1
+  signature: word_problem_proportion_judge_and_use
+problem_ref: fa36f5ffd6fcce71
+problem_text: '空の水そうに、毎分9Lの割合で水を入れる。
+
+  水を入れ始めてからx分後の、水そうの中の水の量をyLとする。
+
+  (1) yはxに比例するか、反比例するかを答え、yをxの式で表せ。
+
+  (2) 水を入れ始めてから12分後の水の量は何Lか求めよ。'
+sub_questions:
+- answer:
+    display: 比例する、y = 9x
+    kind: symbolic
+    srepr: Mul(Integer(9), Symbol('x'))
+  cause_tags: []
+  concept_tags:
+  - proportion.word_problem_judge_and_use
+  explanation: 'まず、比例の式 y=ax に、通る点の x, y の値をあてはめ、比例定数を求める式をつくる。（a = 9 / 1）
+
+    次に、求めた比例定数を使って、比例の式を組み立てる。（y = 9x）'
+  hints:
+  - 比例の式 y=ax に、通る点の x, y の値をあてはめ、比例定数を求める式をつくる。
+  label: (1)
+  prompt_text: formulation を求めなさい。
+  solution_steps:
+  - args:
+    - '1'
+    - '9'
+    narration: 比例の式 y=ax に、通る点の x, y の値をあてはめ、比例定数を求める式をつくる。
+    op: substitute_point
+    result_display: a = 9 / 1
+    result_srepr: Integer(9)
+  - args:
+    - '9'
+    narration: 求めた比例定数を使って、比例の式を組み立てる。
+    op: form_expression
+    result_display: y = 9x
+    result_srepr: Mul(Integer(9), Symbol('x'))
+- answer:
+    display: 108L
+    kind: symbolic
+    srepr: Integer(108)
+  cause_tags: []
+  concept_tags:
+  - proportion.word_problem_judge_and_use
+  explanation: 'まず、比例定数と x の値を、比例の式 y=ax の x にあてはめる。（y = 9 × 12）
+
+    次に、かけ算を計算して y の値を求める。（y = 108）'
+  hints:
+  - 比例定数と x の値を、比例の式 y=ax の x にあてはめる。
+  label: (2)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args:
+    - '9'
+    - '12'
+    narration: 比例定数と x の値を、比例の式 y=ax の x にあてはめる。
+    op: substitute_x
+    result_display: y = 9 × 12
+    result_srepr: Integer(108)
+  - args:
+    - y = 9 × 12
+    narration: かけ算を計算して y の値を求める。
+    op: evaluate
+    result_display: y = 108
+    result_srepr: Integer(108)
+visual_svg: null

@@ -43,5 +43,6 @@ from engine.packs.math.recipes import word_problem_relation  # noqa: F401,E402  
 from engine.packs.math.recipes import word_problem_expression  # noqa: F401,E402  (letter_expr/word_problem_linear の draw ヘルパに依存＝後に import)
 from engine.packs.math.recipes import word_problem_linear_function  # noqa: F401,E402  (word_problem_linear の _split_pair に依存＝後に import)
 from engine.packs.math.recipes import word_problem_probability  # noqa: F401  (登録の副作用のため import)
+from engine.packs.math.recipes import word_problem_proportion_frequency  # noqa: F401  (登録の副作用のため import)
 
 __all__: list[str] = []

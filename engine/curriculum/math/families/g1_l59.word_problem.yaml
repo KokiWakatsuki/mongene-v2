@@ -1,0 +1,92 @@
+family: math.g1_l59.word_problem
+form: word_problem
+source_desc: |
+  多数の観察や多数回の試行によって得られる確率の意味（units.generated.yaml の
+  desc/example を正として転記）。
+  Lv2 desc: 実験の相対度数から確率を見積もり予測する(誘導あり)。
+       example: あるペットボトルのキャップを500回投げたところ、表が出た回数は300回
+                であった。(1) 表が出た相対度数を求めよ。(2) この結果から、表が出る
+                確率はおよそいくつと見積もられるか。(3) このキャップをさらに1000回
+                投げるとき、表はおよそ何回出ると予測されるか答えよ。
+  Lv3 desc: データから確率を見積もり回数の予測・妥当性を自分で構成して判断する
+            (誘導ゆるい)。
+       example: ある工場で作られた製品を無作為に800個検査したところ、不良品が12個
+                あった。この工場でさらに10000個作るとき、およそ何個の不良品が出ると
+                予測されるか。見積もりの方針と考え方を説明したうえで答えよ。
+  ---
+  【この form の型】given.scenario＝実験の場面（試行回数と起こった回数）だけを置き、
+  小問文は context_slots に置く（word_problem_probability と同じ3ブロック構成で、
+  変数の設定 quantities は使わない）。recipe は
+  math.word_problem_proportion_frequency 1つで g1_l36・g1_l59 の4セルを賄う。
+  数学は既存 solver（math.relative_frequency・math.evaluate_direct_proportion）に
+  委ねる＝新 solver ゼロ。
+  【理論確率を使わない】この単元は「多数回の試行によって得られる確率＝相対度数」の
+  意味を問うので、場面は必ず**実験データ（試行回数と起こった回数）**として与え、
+  1/2 等の理論確率は一切使わない。予測回数は「相対度数を比例定数とする比例
+  y=p·x の評価」なので math.evaluate_direct_proportion をそのまま使う
+  （g1_l36 と同じ recipe に入るのはこの構造の共有による）。
+  【答えの一意性】丸めの解釈ゆれが起きないよう、候補列挙の時点で
+   Lv2: 相対度数が小数で正確に表せる（p·1000 が整数）・予測回数 p·future が整数
+   Lv3: 予測個数 defects·future/sample が整数
+  になる組だけを残す。したがって「四捨五入して…位まで」という指示を本文に置かずに
+  答えが一意に定まる（丸めの桁を書く代わりに、丸めが不要な場面だけを構成する）。
+  【level_sep】
+   Lv2: 誘導あり2小問。相対度数そのものが答えとして問われ（(1)）、それを確率の
+        見積もりとみなす段が本文で明示される。相対度数は 0.5 前後で小数に直せる。
+   Lv3: 誘導なし1小問。相対度数（不良率）は答えに現れない**中間量**になり、
+        「割合を求める → これから作る個数にかける」を自分で構成する必要がある。
+        割合は数%以下の小さい値で、小数に直しにくく分数（割合）のまま比例させる。
+  手数（2小問の誘導 ↔ 中間量を自分で立てる1小問）と概念（相対度数を求める ↔
+  相対度数を確率の見積もりとして「使う」）がどちらも変わる。
+  【台帳から外した点】
+   ・Lv2 の台帳 (1)(2)（相対度数／確率の見積もり）は**値が同一**なので、
+     小問として分けると (2) が (1) の書き写しになる。1つの小問
+     「相対度数を小数で求め、この結果から確率はおよそいくつと見積もられるか」に
+     まとめ、台帳 (3)（予測回数）を (2) にした（2小問）。
+   ・Lv3 の「見積もりの方針と考え方を**説明**せよ」は、word_problem の
+     asked_vocab が {formulation, value} のみで記述解答を小問として持てないため
+     落とし、方針は解説（steps: 割合を求める→確率の見積もりとして使う→かける）が
+     担う。問い文には「見積もりの方針を自分で決めて求めよ」を残した。
+  【検証】G-Q1 が全小問 double-solve。checker は params の「本文に出ている数値」
+  （試行回数・起こった回数・これからの回数）だけから solver を呼び直し、相対度数と
+  予測値を独立に再計算する（答えは params に入れない）。
+concepts_default: [probability.word_problem_relative_frequency_predict]
+levels:
+  "2":
+    signature: word_problem_relative_frequency_predict
+    recipe: math.word_problem_proportion_frequency
+    params:
+      scenario_kind: experiment_frequency_predict
+      # 相対度数が小数で正確に表せて、予測回数が整数になる組だけを recipe が残す。
+      total_candidates: [200, 250, 400, 500, 600, 800, 1000]
+      future_candidates: [600, 800, 1000, 1200, 1500, 2000]
+      # 実験の「表が出る割合」として自然な範囲（極端な偏りを避ける）。
+      ratio_range: ["1/4", "3/4"]
+      item_candidates: [ペットボトルのキャップ, びんのふた, 空きかん, 画びょう, 十円硬貨]
+    given: [scenario]
+    asked: [value, value]
+    visual: none
+    text: {tier: T1, template: wp_probability_guided_v1}
+    hints: [steps_prefix]
+    concept_tags: [probability.word_problem_relative_frequency_predict]
+    cause_tags: []
+  "3":
+    signature: word_problem_defect_rate_estimate
+    recipe: math.word_problem_proportion_frequency
+    params:
+      scenario_kind: defect_rate_estimate
+      # 予測個数が整数になり、本文の数値と一致しない組だけを recipe が残す。
+      sample_candidates: [200, 250, 300, 400, 500, 600, 800, 1000]
+      future_candidates: [5000, 6000, 8000, 10000, 12000, 15000, 20000]
+      defect_range: [3, 24]
+      max_defect_rate: "1/20"
+      product_candidates: [製品, 部品, ねじ, 電球, 缶づめ]
+    given: [scenario]
+    asked: [value]
+    visual: none
+    text: {tier: T1, template: wp_linear_solo_v1}
+    hints: [steps_prefix]
+    concept_tags: [probability.word_problem_defect_rate_estimate]
+    cause_tags: []
+remedial:
+  default_level: 2

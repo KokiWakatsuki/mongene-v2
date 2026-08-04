@@ -1135,3 +1135,16 @@ concepts:
   - id: probability.word_problem_dice_repeat_at_least_one
     label: "さいころを繰り返し投げて少なくとも1回特定の目が出る確率を余事象で求める"
     unit: g2_l54
+  # --- C14 word_problem 横展開: 比例・反比例の利用＋相対度数としての確率（g1_l36 / g1_l59） ---
+  - id: proportion.word_problem_judge_and_use
+    label: "場面が比例か反比例かを見ぬいて式を立て、値を求める"
+    unit: g1_l36
+  - id: proportion.word_problem_meet_two_motions
+    label: "2人の時間と道のりの関係を式にし、グラフの交点から追いつく時間を求める"
+    unit: g1_l36
+  - id: probability.word_problem_relative_frequency_predict
+    label: "実験の相対度数から確率を見積もり、これからの回数を予測する"
+    unit: g1_l59
+  - id: probability.word_problem_defect_rate_estimate
+    label: "抜き取り検査の結果から割合を見積もり、不良品の個数を予測する"
+    unit: g1_l59
