@@ -17,6 +17,10 @@ C12（確率）クラスタの非 visual セル群（g1_l59・g2_l51〜54）:
   - `math.probability_complement`: 余事象 1-p（g2_l54.find_value Lv2）
   - `math.probability_at_least_one`: 独立試行で少なくとも1回起こる確率（g2_l54.find_value
     Lv3）
+  - `math.probability_coin_toss` / `math.count_coin_toss_outcomes`: 硬貨 n 枚同時
+    （g2_l52.word_problem Lv2）
+  - `math.probability_two_digit_from_cards` / `math.count_two_digit_from_cards`:
+    数字カードを並べて2けたの整数（g2_l53.word_problem Lv2）
 
 narration には数字を書かない（"0"は"=0"の whitelist のみ許可）。
 """
@@ -427,6 +431,184 @@ def interpret_relative_frequency_limit(dummy: object) -> Solution:
     return Solution(answer=answer, steps=steps)
 
 
+# ---------------------------------------------------------------------------
+# g2_l52.word_problem Lv2: 硬貨を n 枚同時に投げて表がちょうど k 枚
+# ---------------------------------------------------------------------------
+_COIN_STEPS = ["enumerate_all_outcomes", "count_favorable_outcomes", "compute_probability"]
+
+_COIN_NARRATION: dict[str, str] = {
+    "enumerate_all_outcomes": "硬貨を区別して、表と裏の出方をすべて書き出す。",
+    "count_favorable_outcomes": "書き出した出方のうち、条件にあてはまるものの数を数える。",
+    "compute_probability": "条件にあてはまる出方の数を、すべての出方の数でわる。",
+}
+
+_COIN_PHRASE: dict[str, str] = {
+    "enumerate_all_outcomes": "すべての出方を書き出す",
+    "count_favorable_outcomes": "条件にあてはまる出方を数える",
+}
+
+
+@register_solver("math.probability_coin_toss")
+def probability_coin_toss(coins: object, count: object, face: object) -> Solution:
+    """硬貨を coins 枚同時に投げて、face（表／裏）がちょうど count 枚出る確率を求める。
+
+    硬貨を区別した 2^coins 通りの出方を itertools で列挙し直し、指定された面の枚数が
+    count に等しいものを数える（recipe が数え上げた値は見ない＝真の double-solve）。
+    「同時に投げる」場合も硬貨は区別して数えるのが確率の規約で、区別しないと
+    同様に確からしくなくなる。
+    """
+    n_v, k_v, face_v = int(str(coins)), int(str(count)), str(face)
+    if n_v <= 0:
+        raise ValueError("硬貨の枚数は1以上であること")
+    if not (0 <= k_v <= n_v):
+        raise ValueError("指定した面の枚数は0以上、硬貨の枚数以下であること")
+    if face_v not in ("表", "裏"):
+        raise ValueError("face は 表 か 裏 であること")
+    outcomes = list(itertools.product(("表", "裏"), repeat=n_v))
+    favorable = [o for o in outcomes if o.count(face_v) == k_v]
+    p = sympy.Rational(len(favorable), len(outcomes))
+    steps = [
+        Step(
+            op=op, args=[],
+            result_srepr=sympy.srepr(p) if i == len(_COIN_STEPS) - 1 else "",
+            result_display=(
+                _fmt_ratio(p) if i == len(_COIN_STEPS) - 1 else _COIN_PHRASE.get(op, "")
+            ),
+            narration=_COIN_NARRATION[op],
+        )
+        for i, op in enumerate(_COIN_STEPS)
+    ]
+    answer = SymbolicAnswer(srepr=sympy.srepr(p), display=_fmt_ratio(p))
+    return Solution(answer=answer, steps=steps)
+
+
+@register_solver("math.count_coin_toss_outcomes")
+def count_coin_toss_outcomes(coins: object) -> Solution:
+    """硬貨を coins 枚同時に投げるときの、表と裏の出方の総数を求める（場合の数）。
+
+    `probability_coin_toss` と同じ列挙を使うが、答えは確率ではなく通り数。
+    台帳の「樹形図にすべて表せ」は frame が作図小問を持てないので「全部で何通りか」に
+    置き換えて出題する（理由は family の source_desc に明記）。
+    """
+    n_v = int(str(coins))
+    if n_v <= 0:
+        raise ValueError("硬貨の枚数は1以上であること")
+    total = len(list(itertools.product(("表", "裏"), repeat=n_v)))
+    steps = [
+        Step(
+            op="enumerate_all_outcomes",
+            args=[],
+            result_srepr=sympy.srepr(sympy.Integer(total)),
+            result_display=f"{total}通り",
+            narration=(
+                "硬貨を区別して、1枚ごとに表と裏の2通りがあることを枝分かれで書き出し、"
+                "出方の総数を数える。"
+            ),
+        ),
+    ]
+    answer = SymbolicAnswer(
+        srepr=sympy.srepr(sympy.Integer(total)), display=f"{total}通り"
+    )
+    return Solution(answer=answer, steps=steps)
+
+
+# ---------------------------------------------------------------------------
+# g2_l53.word_problem Lv2: 数字カードを並べて2けたの整数をつくる
+# ---------------------------------------------------------------------------
+# 条件は**小問文に出る日本語のまま**を鍵にする。recipe は params["numbers"] に置いた
+# 値がそのまま問題文に現れることを契約にしており（word_problem の不変条件）、
+# "even" のような内部名を置くとその契約を破るため。
+# 「3の倍数」のような数字を含む条件語は入れない: 条件語は小問文（ask）側にしか
+# 出ず、G-Q5t の whitelist は given しか見ないので、答えの分母・分子と衝突して
+# 偽陽性になる（既知の罠）。
+_TWO_DIGIT_CONDITIONS: dict[str, str] = {
+    # 条件語（小問文にそのまま出る） → narration に使う言い回し
+    "偶数": "一の位が偶数になっているもの",
+    "奇数": "一の位が奇数になっているもの",
+}
+
+
+def _two_digit_numbers(digits: list[int]) -> list[int]:
+    """カードから2枚を順に引いて並べてできる2けたの整数をすべて列挙する。"""
+    return [10 * a + b for a, b in itertools.permutations(digits, 2)]
+
+
+def _satisfies_two_digit_condition(value: int, condition: str) -> bool:
+    if condition == "偶数":
+        return value % 2 == 0
+    if condition == "奇数":
+        return value % 2 == 1
+    raise ValueError(f"未知の条件: {condition!r}")
+
+
+@register_solver("math.probability_two_digit_from_cards")
+def probability_two_digit_from_cards(digits: object, condition: object) -> Solution:
+    """数字カードから2枚を続けて引いて並べた2けたの整数が、条件を満たす確率を求める。
+
+    カードの数字の並べ方（順列）を itertools で列挙し直して2けたの整数をつくり、
+    条件にあてはまる個数を数える（double-solve）。カードは1枚ずつ数字が異なる前提で、
+    どのカードも同じ確からしさで引かれる。
+    """
+    ds = [int(str(d)) for d in cast("list[object]", digits)]
+    cond = str(condition)
+    numbers = _two_digit_numbers(ds)
+    favorable = [v for v in numbers if _satisfies_two_digit_condition(v, cond)]
+    p = sympy.Rational(len(favorable), len(numbers))
+    phrase = _TWO_DIGIT_CONDITIONS[cond]
+    steps = [
+        Step(
+            op="enumerate_all_two_digit_numbers",
+            args=[],
+            result_srepr="",
+            result_display="できる整数をすべて書き出す",
+            narration="十の位と一の位に置くカードの選び方を枝分かれで書き出し、できる整数をすべて数え上げる。",
+        ),
+        Step(
+            op="count_favorable_numbers",
+            args=[],
+            result_srepr="",
+            result_display="条件にあてはまる整数を数える",
+            narration=f"書き出した整数のうち、{phrase}の個数を数える。",
+        ),
+        Step(
+            op="compute_probability",
+            args=[],
+            result_srepr=sympy.srepr(p),
+            result_display=_fmt_ratio(p),
+            narration="条件にあてはまる整数の個数を、できる整数の総数でわる。",
+        ),
+    ]
+    answer = SymbolicAnswer(srepr=sympy.srepr(p), display=_fmt_ratio(p))
+    return Solution(answer=answer, steps=steps)
+
+
+@register_solver("math.count_two_digit_from_cards")
+def count_two_digit_from_cards(digits: object) -> Solution:
+    """数字カードから2枚を続けて引いて並べてできる2けたの整数の総数を求める（場合の数）。
+
+    台帳の「樹形図にすべて書き出せ」は frame が作図小問を持てないので「全部で何通りか」
+    に置き換えて出題する（理由は family の source_desc に明記）。
+    """
+    ds = [int(str(d)) for d in cast("list[object]", digits)]
+    total = len(_two_digit_numbers(ds))
+    steps = [
+        Step(
+            op="enumerate_all_two_digit_numbers",
+            args=[],
+            result_srepr=sympy.srepr(sympy.Integer(total)),
+            result_display=f"{total}通り",
+            narration=(
+                "十の位に置くカードの選び方それぞれについて、"
+                "残ったカードから一の位を選ぶ選び方を枝分かれで書き出し、総数を数える。"
+            ),
+        ),
+    ]
+    answer = SymbolicAnswer(
+        srepr=sympy.srepr(sympy.Integer(total)), display=f"{total}通り"
+    )
+    return Solution(answer=answer, steps=steps)
+
+
 __all__ = [
     "relative_frequency",
     "probability_single_die",
@@ -435,6 +617,10 @@ __all__ = [
     "probability_combination_selection",
     "probability_complement",
     "probability_at_least_one",
+    "probability_coin_toss",
+    "count_coin_toss_outcomes",
+    "probability_two_digit_from_cards",
+    "count_two_digit_from_cards",
     "judge_equally_likely",
     "interpret_relative_frequency_limit",
 ]

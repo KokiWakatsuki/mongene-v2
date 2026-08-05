@@ -75,10 +75,14 @@ class RelationFormulation:
       `sympy.Le` は1本の関係、Lv2 の不等式（両辺に文字＋2条件）だけ
       `sympy.Tuple(Gt, Lt)`（本文の記述順）を使う。
     - `display`: 生徒に見せる表示形（未整理・本文の言葉の順）。
+    - `sides`: Lv2（両辺に文字）だけが持つ「先に別々に表す2つの数量」の表示。
+      Lv1 は片辺が定数なので分けて表す段が無く `None`。これが `_formulation_steps` の
+      分岐＝**op 列の相異**になる（fp が Lv 間で分かれる＝level_sep の構造差）。
     """
 
     relation: sympy.Basic
     display: str
+    sides: tuple[str, str] | None = None
 
 
 def formulate_equality_simple(*, count: int, total: int) -> RelationFormulation:
@@ -96,6 +100,7 @@ def formulate_equality_both_sides(*, mult: int, add_a: int, add_b: int) -> Relat
             sympy.Integer(mult) * _X + sympy.Integer(add_a), _X + sympy.Integer(add_b)
         ),
         display=f"{mult}x + {add_a} = x + {add_b}",
+        sides=(f"{mult}x + {add_a}", f"x + {add_b}"),
     )
 
 
@@ -121,6 +126,7 @@ def formulate_inequality_both_sides(
     return RelationFormulation(
         relation=sympy.Tuple(sympy.Gt(lhs, sympy.Integer(bound)), sympy.Lt(lhs, rhs)),
         display=f"{bound} < {mult}x - {sub} < x + {add}",
+        sides=(f"{mult}x - {sub}", f"x + {add}"),
     )
 
 
@@ -276,23 +282,54 @@ def word_problem_relation(ctx: CellContext, rng: Rng) -> MR:
 
 
 def _formulation_steps(scene: RelationScene, formulation: RelationFormulation) -> list[Step]:
-    """立式の手順（2手）。narration には数値を書かない（hints は steps[:-1] の
-    narration だけを使うので、最後の1手の result_display に答えの式を置ける）。
+    """立式の手順。narration には数値を書かない（hints は steps[:-1] の narration
+    だけを使うので、最後の1手の result_display に答えの式を置ける）。
+
+    Lv1（片辺が定数）は「関係に着目する → 式にする」の2手。Lv2（両辺に文字）は
+    比べる数量が両方とも x の式になるので、**それぞれを別々に式で表してから結ぶ**
+    3手になる。これは学習内容そのものの差（Lv2 の難しさは「両辺を別々に立てて
+    から結ぶ」ところにある）であると同時に、fp（op 列）を Lv 間で分ける役目も持つ
+    ＝レベルが構造を変えていることの機械的な保証（P-1 回帰の防止）。
     """
+    if formulation.sides is None:
+        return [
+            Step(
+                op="find_relation",
+                args=[],
+                result_srepr=sympy.srepr(_X),
+                result_display=scene.relation_label,
+                narration="場面の中で、比べられている、または等しくなっている数量に着目する。",
+            ),
+            Step(
+                op="formulate_relation",
+                args=[],
+                result_srepr=sympy.srepr(formulation.relation),
+                result_display=formulation.display,
+                narration="その数量を x を使った式で表し、等式または不等式をつくる。",
+            ),
+        ]
+    first, second = formulation.sides
     return [
         Step(
-            op="find_relation",
+            op="express_first_quantity",
             args=[],
-            result_srepr=sympy.srepr(_X),
-            result_display=scene.relation_label,
-            narration="場面の中で、比べられている、または等しくなっている数量に着目する。",
+            result_srepr="",
+            result_display=first,
+            narration="比べられている数量のうち、一方を x を使った式で表す。",
+        ),
+        Step(
+            op="express_second_quantity",
+            args=[],
+            result_srepr="",
+            result_display=second,
+            narration="もう一方の数量も、同じように x を使った式で表す。",
         ),
         Step(
             op="formulate_relation",
             args=[],
             result_srepr=sympy.srepr(formulation.relation),
             result_display=formulation.display,
-            narration="その数量を x を使った式で表し、等式または不等式をつくる。",
+            narration="表した式どうしを、場面が示す大小や等しさのとおりに等号・不等号で結ぶ。",
         ),
     ]
 

@@ -5,9 +5,21 @@ source_desc: |
   Lv3 desc: 誘導なし・順序/同時の条件を自分で判断し確率を構成する。
        example: 当たりくじ2本を含む5本のくじから、AさんとBさんがこの順に1本ずつ引く。
                 引いたくじはもとにもどさないとき、少なくとも一方が当たる確率を求めよ。
+  Lv2 desc: 誘導あり・取り出し方を整理し確率を求める
+       example: 1、2、3、4の数字が1つずつ書かれた4枚のカードから2枚を続けて引き、
+                引いた順に並べて2けたの整数をつくる。(1)できる整数を樹形図ですべて
+                書き出せ。(2)できた整数が偶数になる確率を求めよ。
   ---
-  Lv2（誘導あり・「できる整数を樹形図ですべて書き出せ」を含む）は樹形図をかく
-  capability が要るため対象外（別セッションで扱う・このファイルは Lv3 のみを持つ）。
+  【台帳からの逸脱と理由】Lv2 の (1) は台帳では「樹形図ですべて書き出せ」だが、frame の
+  asked_vocab は {formulation, value} のみで作図を答えにできない。(1) を「できる整数は
+  全部で何通りあるか」に置き換え、solver（math.count_two_digit_from_cards）の narration
+  で枝分かれ＝樹形図の数え方を説明する。(2) は台帳どおり確率。
+  条件語（偶数／奇数）は given.scenario 側に置き、ask には「その条件」とだけ書く
+  （G-Q5t の whitelist は mr.given しか見ないので、ask にしか出ない語や数値は
+  whitelist されず偽陽性になる＝既知の罠）。「3の倍数」のような数字を含む条件語は
+  同じ理由で候補に入れない。
+  【level_sep】Lv2 は誘導あり2小問（数え上げ→確率）。Lv3 は誘導なし1小問で、
+  「戻さない」条件と余事象の選択を自分で行う。
   recipe は math.word_problem_probability（g2_l51/l52/l53/l54 で共有）。
   「戻さずに2本引いて少なくとも一方が当たる」は「2本ともはずれる」の余事象＝
   既存 solver math.probability_combination_selection（r=2・target=はずれ）で
@@ -17,6 +29,22 @@ source_desc: |
   から solver を呼び直し、答え（確率）を独立に再計算する（答えは params に入れない）。
 concepts_default: [probability.word_problem_lottery_at_least_one]
 levels:
+  "2":
+    signature: word_problem_two_digit_cards
+    recipe: math.word_problem_probability
+    params:
+      scenario_kind: two_digit_cards_guided
+      # カードの枚数と数字の組で dup を分散させる（条件は2種しかないため）。
+      card_count_domain: {int_range: [4, 5]}
+      digit_domain: {int_range: [1, 9], distinct: [value]}
+      condition_candidates: [偶数, 奇数]
+    given: [scenario]
+    asked: [value, value]
+    visual: none
+    text: {tier: T1, template: wp_probability_guided_v1}
+    hints: [steps_prefix]
+    concept_tags: [probability.word_problem_two_digit_cards]
+    cause_tags: []
   "3":
     signature: word_problem_lottery_at_least_one
     recipe: math.word_problem_probability

@@ -19,8 +19,17 @@ source_desc: |
         other色である確率（math.probability_complement）。誘導あり2小問。
    Lv3: 余事象を自力で選ぶ。さいころを2回投げて少なくとも1回は特定の目
         （math.probability_at_least_one・trials=2＝36通りの空間）。誘導なし1小問。
-  「余事象を使うと示されるか、自分で判断するか」で level_sep（同じ余事象の型でも
-  誘導の有無と試行構造が変わる）。
+   Lv4: 色が三種類あり、余事象が**1つの事象ではなく色ごとの和**になる。
+        「少なくとも2色ふくまれる」の余事象は「全部同じ色」で、色ごとに
+        math.probability_combination_selection で「r 個ともその色」を求めて
+        たし合わせ、math.probability_complement で 1-p をとる（新 solver ゼロ）。
+        Lv3 までは余事象が1本の式で書けたが、ここは**場合分けをしてから和をとる**段が
+        増える＝手数と構造がどちらも変わる。誘導なし1小問。
+  「余事象を使うと示されるか、自分で判断するか」「余事象が1本か色ごとの和か」で
+  level_sep（同じ余事象の型でも誘導の有無・試行構造・場合分けの有無が変わる）。
+  Lv4 desc（台帳）: 複数条件が絡み場合分けと余事象を融合して構成する。
+       example: 袋の中に赤玉3個、白玉2個、青玉1個が入っている。この袋から玉を3個
+                同時に取り出すとき、少なくとも2色の玉がふくまれる確率を求めよ。
   【検証】G-Q1 が全小問 double-solve。checker は params の「場面文に出ている数値」だけ
   から solver を呼び直し、答え（確率）を独立に再計算する（答えは params に入れない）。
 concepts_default: [probability.word_problem_two_balls_complement]
@@ -57,6 +66,24 @@ levels:
     text: {tier: T1, template: wp_linear_solo_v1}
     hints: [steps_prefix]
     concept_tags: [probability.word_problem_dice_repeat_at_least_one]
+    cause_tags: []
+  "4":
+    signature: word_problem_at_least_two_colors
+    recipe: math.word_problem_probability
+    params:
+      scenario_kind: at_least_two_colors
+      color_candidates: [赤, 白, 青, 黄, 黒, 緑, 紫, 橙]
+      # 同時に取り出す個数。3個までにしておく（中2の数え上げで扱える範囲）。
+      draws_domain: {int_range: [2, 3]}
+      # 各色の個数。少なくとも1色は draws 個以上あることを recipe が構成で保証する
+      # （全色が draws 未満だと余事象「全部同じ色」が起こりえず答えが常に1に退化する）。
+      count_domain: {int_range: [1, 6]}
+    given: [scenario]
+    asked: [value]
+    visual: none
+    text: {tier: T1, template: wp_linear_solo_v1}
+    hints: [steps_prefix]
+    concept_tags: [probability.word_problem_at_least_two_colors]
     cause_tags: []
 remedial:
   default_level: 2

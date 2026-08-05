@@ -86,6 +86,9 @@ _PROBABILITY_WP_CONCEPTS = [
     "probability.word_problem_lottery_at_least_one",
     "probability.word_problem_two_balls_complement",
     "probability.word_problem_dice_repeat_at_least_one",
+    "probability.word_problem_coin_toss_count_and_probability",
+    "probability.word_problem_two_digit_cards",
+    "probability.word_problem_at_least_two_colors",
 ]
 
 
@@ -120,6 +123,10 @@ def _draw_distinct_tokens(candidates: list[Any], rng: Rng, k: int) -> list[Any]:
 
 def _draw_index(candidates: list[Any], rng: Rng) -> Any:
     return candidates[int(draw({"int_range": [0, len(candidates) - 1]}, rng))]
+
+
+# 構成条件を満たすまでの有界リトライ回数（無限ループを作らないための上限）。
+_MAX_DRAW_RETRIES = 40
 
 
 # ---------------------------------------------------------------------------
@@ -266,8 +273,100 @@ def solve_dice_repeat_at_least_one(numbers: Mapping[str, Any]) -> list[Solution]
     return [sol]
 
 
+def solve_coin_toss_guided(numbers: Mapping[str, Any]) -> list[Solution]:
+    """g2_l52 Lv2: 硬貨を同時に投げる。(1)出方は全部で何通りか (2)表がちょうど k 枚。
+
+    新 solver は `math.count_coin_toss_outcomes` / `math.probability_coin_toss` の
+    2本（どちらも 2^n 通りを itertools で列挙し直す）。台帳の「樹形図に表せ」は
+    frame が作図小問を持てないので「全部で何通りか」に置き換えている
+    （理由は family の source_desc に明記）。
+    """
+    coins, count = int(numbers["coins"]), int(numbers["face_count"])
+    face = str(numbers["face"])
+    count_solver = REGISTRY.solver("math.count_coin_toss_outcomes")
+    prob_solver = REGISTRY.solver("math.probability_coin_toss")
+    return [
+        cast(Solution, count_solver(coins)),
+        cast(Solution, prob_solver(coins, count, face)),
+    ]
+
+
+def solve_two_digit_cards_guided(numbers: Mapping[str, Any]) -> list[Solution]:
+    """g2_l53 Lv2: 数字カードを2枚並べて2けたの整数。(1)何通りか (2)条件を満たす確率。
+
+    カードの数字は `digit_1`, `digit_2`, … と1枚ずつ params に置く（本文に出ている
+    数がそのまま params に載る、という word_problem の不変条件を守るため。リストを
+    1つのキーに詰めると文字列としては本文に現れない）。
+    """
+    digits = [int(v) for k, v in sorted(numbers.items()) if k.startswith("digit_")]
+    condition = str(numbers["condition"])
+    count_solver = REGISTRY.solver("math.count_two_digit_from_cards")
+    prob_solver = REGISTRY.solver("math.probability_two_digit_from_cards")
+    return [
+        cast(Solution, count_solver(digits)),
+        cast(Solution, prob_solver(digits, condition)),
+    ]
+
+
+def solve_at_least_two_colors(numbers: Mapping[str, Any]) -> list[Solution]:
+    """g2_l54 Lv4: 3色の玉から同時に取り出して「少なくとも2色ふくまれる」確率。
+
+    新 solver ゼロ＝既存 solver の合成。「少なくとも2色」の余事象は「全部同じ色」で、
+    これは色ごとの `math.probability_combination_selection`（r 個すべてがその色）の
+    和になる。その和を `math.probability_complement` に渡して 1−p を得る。
+    steps は合成後の意味（余事象のとらえ方）に沿ってここで組み直す。
+    """
+    draws = int(numbers["draws"])
+    counts = {
+        str(numbers[f"color_{s}"]): int(numbers[f"count_{s}"]) for s in ("a", "b", "c")
+    }
+    combo_solver = REGISTRY.solver("math.probability_combination_selection")
+    p_same = sympy.Integer(0)
+    for color in counts:
+        sol = cast(Solution, combo_solver(counts, draws, color))
+        assert isinstance(sol.answer, SymbolicAnswer)
+        p_same += sympy.sympify(sol.answer.srepr)
+    p_same = sympy.Rational(p_same)
+    complement_solver = REGISTRY.solver("math.probability_complement")
+    sol_final = cast(Solution, complement_solver(p_same.p, p_same.q))
+    assert isinstance(sol_final.answer, SymbolicAnswer)
+    steps = [
+        Step(
+            op="take_complement_event",
+            args=[],
+            result_srepr="",
+            result_display="余事象は「取り出した玉が全部同じ色」",
+            narration=(
+                "求める事象の余事象を考える。色が一種類しかふくまれない場合、"
+                "つまり取り出した玉が全部同じ色である場合が、それにあたる。"
+            ),
+        ),
+        Step(
+            op="sum_same_color_probabilities",
+            args=[],
+            result_srepr=sympy.srepr(p_same),
+            result_display=str(p_same),
+            narration=(
+                "色ごとに、取り出した玉がすべてその色になる確率を求め、"
+                "それらをたして、全部同じ色になる確率を求める。"
+            ),
+        ),
+        Step(
+            op="compute_complement_probability",
+            args=[],
+            result_srepr=sol_final.answer.srepr,
+            result_display=sol_final.answer.display,
+            narration="全体の確率から、いま求めた確率をひいて、求める確率とする。",
+        ),
+    ]
+    return [Solution(answer=sol_final.answer, steps=steps)]
+
+
 SOLVE_BUILDERS: dict[str, Callable[[Mapping[str, Any]], list[Solution]]] = {
     "bag_one_draw": solve_bag_one_draw,
+    "coin_toss_guided": solve_coin_toss_guided,
+    "two_digit_cards_guided": solve_two_digit_cards_guided,
+    "at_least_two_colors": solve_at_least_two_colors,
     "multiple_union": solve_multiple_union,
     "two_dice_product_at_least": solve_two_dice_product_at_least,
     "lottery_at_least_one": solve_lottery_at_least_one,
@@ -424,8 +523,134 @@ def _scene_dice_repeat_at_least_one(p: Mapping[str, Any], rng: Rng) -> Probabili
     return ProbabilityScene(numbers=numbers, scenario=scenario, ask_texts=ask_texts, slots={})
 
 
+def _scene_coin_toss_guided(p: Mapping[str, Any], rng: Rng) -> ProbabilityScene:
+    """g2_l52 Lv2: 硬貨を同時に投げる（誘導あり2小問）。
+
+    注目する面の枚数 k は 0 と n を避ける（0枚・全部同じ面は「樹形図で数える」意味が
+    薄く、場合の数を数える練習にならない）。
+
+    場面の枠組みは2通りを引く。どちらも教科書に出る言い方で、しかも
+    **「同時に投げても硬貨は区別して数える」という単元の要点**を、金種違いの側が
+    目に見える形で示す:
+      - same_kind: 「10円硬貨を4枚同時に投げる」
+      - mixed:     「10円硬貨、50円硬貨、100円硬貨の3枚を同時に投げる」
+    この2枠組み＋金種の組合せが dup の主な自由度になる（枚数と枚数条件だけだと
+    9通りしかなく、実測 dup_rate 0.55＝閾値の2倍超だった）。
+
+    注目する面と枚数は **given.scenario 側に置く**。ask にしか出ない数値は G-Q5t の
+    whitelist（mr.given だけを見る）に載らず、答え（確率）の分子・分母と衝突して
+    偽陽性になる（既知の罠。dice_repeat_at_least_one と同じ扱い）。
+    """
+    candidates = [str(v) for v in p["coin_candidates"]]
+    coins = int(draw(p["coins_domain"], rng))
+    face_count = int(draw({"int_range": [1, coins - 1]}, rng))
+    face = str(_draw_index(list(p["face_candidates"]), rng))
+    mixed = int(draw({"int_range": [0, 1]}, rng)) == 1 and coins <= len(candidates)
+    if mixed:
+        kinds = [str(v) for v in _draw_distinct_tokens(candidates, rng, coins)]
+        subject = "、".join(kinds) + f"の{coins}枚を"
+    else:
+        kinds = [str(_draw_index(candidates, rng))]
+        subject = f"{kinds[0]}を{coins}枚"
+    # slots は1金種につき1キー（値がそのまま場面文に現れる、という word_problem の
+    # 不変条件を満たすため。連結した1文字列にすると本文に出ない文字列になる）。
+    coin_slots = {f"coin_{i + 1}": kind for i, kind in enumerate(kinds)}
+    scenario = (
+        f"{subject}同時に投げる。どの硬貨も表と裏の出方は同様に確からしいものとする。"
+        f"ちょうど{face_count}枚が{face}になる場合に注目する。"
+    )
+    ask_texts = (
+        "表と裏の出方は全部で何通りあるか答えよ。",
+        "注目している場合が起こる確率を求めよ。",
+    )
+    return ProbabilityScene(
+        numbers={"coins": coins, "face_count": face_count, "face": face},
+        scenario=scenario,
+        ask_texts=ask_texts,
+        slots=coin_slots,
+    )
+
+
+def _scene_two_digit_cards_guided(p: Mapping[str, Any], rng: Rng) -> ProbabilityScene:
+    """g2_l53 Lv2: 数字カードを並べて2けたの整数をつくる（誘導あり2小問）。
+
+    条件語（偶数／奇数）は **given.scenario 側に置く**。ask にしか出ない語や数値は
+    G-Q5t の whitelist（mr.given だけを見る）に載らないため（既知の罠）。
+    """
+    card_count = int(draw(p["card_count_domain"], rng))
+    # カードに偶数と奇数がどちらも含まれるまで有界リトライする。全部奇数（1,3,5,7 等・
+    # 1〜9 から4枚引くと約5%で起こる）だと「偶数になる確率」が 0 に潰れ、確率の問題
+    # として退化する（ゲートは 0 を不正とはみなさないので構成側で防ぐしかない）。
+    digits: list[int] = []
+    for _ in range(_MAX_DRAW_RETRIES):
+        digits = sorted(int(v) for v in draw_many(p["digit_domain"], rng, k=card_count))
+        if any(d % 2 == 0 for d in digits) and any(d % 2 == 1 for d in digits):
+            break
+    else:  # pragma: no cover - 有界リトライを使い切る確率は 0.05^N で無視できる
+        raise RuntimeError("偶数と奇数を両方含むカードの組を引けなかった")
+    condition = str(_draw_index(list(p["condition_candidates"]), rng))
+    digits_text = "、".join(str(d) for d in digits)
+    scenario = (
+        f"{digits_text}の数字が1つずつ書かれた{card_count}枚のカードがある。"
+        f"この中から2枚を続けて引き、引いた順に並べて2けたの整数をつくる。"
+        f"できた整数が{condition}になるかどうかを考える。"
+    )
+    ask_texts = (
+        "できる2けたの整数は全部で何通りあるか答えよ。",
+        "できた整数がその条件にあてはまる確率を求めよ。",
+    )
+    numbers: dict[str, Any] = {f"digit_{i + 1}": d for i, d in enumerate(digits)}
+    numbers["card_count"] = card_count
+    numbers["condition"] = condition
+    return ProbabilityScene(
+        numbers=numbers,
+        scenario=scenario,
+        ask_texts=ask_texts,
+        slots={},
+    )
+
+
+def _scene_at_least_two_colors(p: Mapping[str, Any], rng: Rng) -> ProbabilityScene:
+    """g2_l54 Lv4: 3色の玉から同時に取り出し「少なくとも2色」（誘導なし1小問）。
+
+    非退化: どの色も `draws` 個以上ある色が少なくとも1つは要る（全色が draws 未満だと
+    余事象「全部同じ色」が起こりえず、答えが常に 1 になって場合分けが空振りする）。
+    """
+    colors = [str(v) for v in _draw_distinct_tokens(list(p["color_candidates"]), rng, 3)]
+    draws = int(draw(p["draws_domain"], rng))
+    counts: list[int] = []
+    for _ in range(3):
+        counts.append(int(draw(p["count_domain"], rng)))
+    # 少なくとも1色は draws 個以上（余事象が起こりうる）ことを構成で保証する。
+    if max(counts) < draws:
+        counts[0] = draws
+    scenario = (
+        f"袋の中に{colors[0]}玉が{counts[0]}個、{colors[1]}玉が{counts[1]}個、"
+        f"{colors[2]}玉が{counts[2]}個入っている。"
+        f"この袋から玉を{draws}個同時に取り出すとき、取り出し方は同様に確からしいものとする。"
+    )
+    ask_texts = ("取り出した玉に少なくとも2色がふくまれる確率を求めよ。",)
+    numbers = {
+        "color_a": colors[0], "count_a": counts[0],
+        "color_b": colors[1], "count_b": counts[1],
+        "color_c": colors[2], "count_c": counts[2],
+        "draws": draws,
+    }
+    return ProbabilityScene(
+        numbers=numbers,
+        scenario=scenario,
+        ask_texts=ask_texts,
+        # 色名は numbers 側にすでに1色ずつ入っている（dup_key は params 全体を見るので
+        # slots に重ねる必要はない）。
+        slots={},
+    )
+
+
 _SCENE_BUILDERS: dict[str, Callable[[Mapping[str, Any], Rng], ProbabilityScene]] = {
     "bag_one_draw": _scene_bag_one_draw,
+    "coin_toss_guided": _scene_coin_toss_guided,
+    "two_digit_cards_guided": _scene_two_digit_cards_guided,
+    "at_least_two_colors": _scene_at_least_two_colors,
     "multiple_union": _scene_multiple_union,
     "two_dice_product_at_least": _scene_two_dice_product_at_least,
     "lottery_at_least_one": _scene_lottery_at_least_one,

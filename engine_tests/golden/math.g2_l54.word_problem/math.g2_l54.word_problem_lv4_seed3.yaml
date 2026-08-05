@@ -1,0 +1,64 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - probability.word_problem_at_least_two_colors
+  provenance:
+    git_commit: ''
+    recipe: math.word_problem_probability
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: wp_linear_solo_v1
+    tier: T1
+  requested:
+    form: word_problem
+    level: 4
+    subject: math
+    unit: g2_l54
+  resolved:
+    form: word_problem
+    level: 4
+    subject: math
+    unit: g2_l54
+  seed: 3
+  signature: word_problem_at_least_two_colors
+problem_ref: 1852d02dfc5aaba5
+problem_text: '袋の中に緑玉が6個、紫玉が4個、黄玉が4個入っている。この袋から玉を3個同時に取り出すとき、取り出し方は同様に確からしいものとする。
+
+  取り出した玉に少なくとも2色がふくまれる確率を求めよ。'
+sub_questions:
+- answer:
+    display: 12/13
+    kind: symbolic
+    srepr: Rational(12, 13)
+  cause_tags: []
+  concept_tags:
+  - probability.word_problem_at_least_two_colors
+  explanation: 'まず、求める事象の余事象を考える。色が一種類しかふくまれない場合、つまり取り出した玉が全部同じ色である場合が、それにあたる。（余事象は「取り出した玉が全部同じ色」）
+
+    次に、色ごとに、取り出した玉がすべてその色になる確率を求め、それらをたして、全部同じ色になる確率を求める。（1/13）
+
+    最後に、全体の確率から、いま求めた確率をひいて、求める確率とする。（12/13）'
+  hints:
+  - 求める事象の余事象を考える。色が一種類しかふくまれない場合、つまり取り出した玉が全部同じ色である場合が、それにあたる。
+  - 色ごとに、取り出した玉がすべてその色になる確率を求め、それらをたして、全部同じ色になる確率を求める。
+  label: (1)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 求める事象の余事象を考える。色が一種類しかふくまれない場合、つまり取り出した玉が全部同じ色である場合が、それにあたる。
+    op: take_complement_event
+    result_display: 余事象は「取り出した玉が全部同じ色」
+    result_srepr: ''
+  - args: []
+    narration: 色ごとに、取り出した玉がすべてその色になる確率を求め、それらをたして、全部同じ色になる確率を求める。
+    op: sum_same_color_probabilities
+    result_display: 1/13
+    result_srepr: Rational(1, 13)
+  - args: []
+    narration: 全体の確率から、いま求めた確率をひいて、求める確率とする。
+    op: compute_complement_probability
+    result_display: 12/13
+    result_srepr: Rational(12, 13)
+visual_svg: null

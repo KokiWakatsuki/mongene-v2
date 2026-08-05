@@ -23,7 +23,7 @@ meta:
     unit: g1_l20
   seed: 3
   signature: word_problem_inequality_both_sides
-problem_ref: 29abf51571a9b393
+problem_ref: 042b09122718f042
 problem_text: 'ある数 x を5倍して1を引いた数が、19 より大きく、かつ x に29を加えた数未満である。
 
   この関係を不等式で表せ。'
@@ -35,21 +35,29 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - inequality.word_problem_both_sides
-  explanation: 'まず、場面の中で、比べられている、または等しくなっている数量に着目する。（2通りに表した数の関係）
+  explanation: 'まず、比べられている数量のうち、一方を x を使った式で表す。（5x - 1）
 
-    次に、その数量を x を使った式で表し、等式または不等式をつくる。（19 < 5x - 1 < x + 29）'
+    次に、もう一方の数量も、同じように x を使った式で表す。（x + 29）
+
+    最後に、表した式どうしを、場面が示す大小や等しさのとおりに等号・不等号で結ぶ。（19 < 5x - 1 < x + 29）'
   hints:
-  - 場面の中で、比べられている、または等しくなっている数量に着目する。
+  - 比べられている数量のうち、一方を x を使った式で表す。
+  - もう一方の数量も、同じように x を使った式で表す。
   label: (1)
   prompt_text: formulation を求めなさい。
   solution_steps:
   - args: []
-    narration: 場面の中で、比べられている、または等しくなっている数量に着目する。
-    op: find_relation
-    result_display: 2通りに表した数の関係
-    result_srepr: Symbol('x')
+    narration: 比べられている数量のうち、一方を x を使った式で表す。
+    op: express_first_quantity
+    result_display: 5x - 1
+    result_srepr: ''
   - args: []
-    narration: その数量を x を使った式で表し、等式または不等式をつくる。
+    narration: もう一方の数量も、同じように x を使った式で表す。
+    op: express_second_quantity
+    result_display: x + 29
+    result_srepr: ''
+  - args: []
+    narration: 表した式どうしを、場面が示す大小や等しさのとおりに等号・不等号で結ぶ。
     op: formulate_relation
     result_display: 19 < 5x - 1 < x + 29
     result_srepr: Tuple(StrictGreaterThan(Add(Mul(Integer(5), Symbol('x')), Integer(-1)), Integer(19)), StrictLessThan(Add(Mul(Integer(5), Symbol('x')), Integer(-1)), Add(Symbol('x'), Integer(29))))

@@ -1187,3 +1187,13 @@ concepts:
   - id: pythagorean.word_problem_box_shortest_path
     label: "直方体の側面を展開して、表面上の最短の道のりと通る側面の面積を求める"
     unit: g3_l56
+  # --- C14 word_problem 横展開: 確率クラスタの残り（g2_l52 / g2_l53 / g2_l54 Lv4） ---
+  - id: probability.word_problem_coin_toss_count_and_probability
+    label: "硬貨を同時に投げるときの出方の総数と、表がちょうど何枚出るかの確率を求める"
+    unit: g2_l52
+  - id: probability.word_problem_two_digit_cards
+    label: "数字カードを並べてできる2けたの整数の総数と、条件を満たす確率を求める"
+    unit: g2_l53
+  - id: probability.word_problem_at_least_two_colors
+    label: "色ごとの「全部同じ色」の和を余事象として、少なくとも2色ふくまれる確率を求める"
+    unit: g2_l54

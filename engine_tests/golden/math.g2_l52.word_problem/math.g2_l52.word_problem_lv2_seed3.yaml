@@ -1,0 +1,84 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - probability.word_problem_coin_toss_count_and_probability
+  provenance:
+    git_commit: ''
+    recipe: math.word_problem_probability
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: wp_probability_guided_v1
+    tier: T1
+  requested:
+    form: word_problem
+    level: 2
+    subject: math
+    unit: g2_l52
+  resolved:
+    form: word_problem
+    level: 2
+    subject: math
+    unit: g2_l52
+  seed: 3
+  signature: word_problem_coin_toss_count_and_probability
+problem_ref: c2118d44c6fb141b
+problem_text: '5円硬貨、100円硬貨、1円硬貨、10円硬貨、500円硬貨の5枚を同時に投げる。どの硬貨も表と裏の出方は同様に確からしいものとする。ちょうど3枚が裏になる場合に注目する。
+
+  (1) 表と裏の出方は全部で何通りあるか答えよ。
+
+  (2) 注目している場合が起こる確率を求めよ。'
+sub_questions:
+- answer:
+    display: 32通り
+    kind: symbolic
+    srepr: Integer(32)
+  cause_tags: []
+  concept_tags:
+  - probability.word_problem_coin_toss_count_and_probability
+  explanation: まず、硬貨を区別して、1枚ごとに表と裏の2通りがあることを枝分かれで書き出し、出方の総数を数える。（32通り）
+  hints:
+  - 問題文の与えられた値をもう一度確認しよう。
+  label: (1)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 硬貨を区別して、1枚ごとに表と裏の2通りがあることを枝分かれで書き出し、出方の総数を数える。
+    op: enumerate_all_outcomes
+    result_display: 32通り
+    result_srepr: Integer(32)
+- answer:
+    display: 5/16
+    kind: symbolic
+    srepr: Rational(5, 16)
+  cause_tags: []
+  concept_tags:
+  - probability.word_problem_coin_toss_count_and_probability
+  explanation: 'まず、硬貨を区別して、表と裏の出方をすべて書き出す。（すべての出方を書き出す）
+
+    次に、書き出した出方のうち、条件にあてはまるものの数を数える。（条件にあてはまる出方を数える）
+
+    最後に、条件にあてはまる出方の数を、すべての出方の数でわる。（5/16）'
+  hints:
+  - 硬貨を区別して、表と裏の出方をすべて書き出す。
+  - 書き出した出方のうち、条件にあてはまるものの数を数える。
+  label: (2)
+  prompt_text: value を求めなさい。
+  solution_steps:
+  - args: []
+    narration: 硬貨を区別して、表と裏の出方をすべて書き出す。
+    op: enumerate_all_outcomes
+    result_display: すべての出方を書き出す
+    result_srepr: ''
+  - args: []
+    narration: 書き出した出方のうち、条件にあてはまるものの数を数える。
+    op: count_favorable_outcomes
+    result_display: 条件にあてはまる出方を数える
+    result_srepr: ''
+  - args: []
+    narration: 条件にあてはまる出方の数を、すべての出方の数でわる。
+    op: compute_probability
+    result_display: 5/16
+    result_srepr: Rational(5, 16)
+visual_svg: null

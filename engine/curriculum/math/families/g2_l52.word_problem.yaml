@@ -2,11 +2,19 @@ family: math.g2_l52.word_problem
 form: word_problem
 source_desc: |
   確率の文章題（units.generated.yaml の desc/example を正として転記）。
+  Lv2 desc: 誘導あり・場面を樹形図/表に整理し確率を求める
+       example: 10円硬貨を3枚同時に投げる。(1)表と裏の出方をすべて樹形図に表せ。
+                (2)表が2枚、裏が1枚出る確率を求めよ。
   Lv3 desc: 誘導なし・条件を自分で場合に翻訳し確率を構成する。
        example: 大小2個のさいころを同時に投げる。出た目の積が12以上になる確率を求めよ。
   ---
-  Lv2（誘導あり・「表と裏の出方をすべて樹形図に表せ」を含む）は樹形図をかく capability
-  が要るため対象外（別セッションで扱う・このファイルは Lv3 のみを持つ）。
+  【台帳からの逸脱と理由】Lv2 の (1) は台帳では「樹形図に表せ」だが、frame の
+  asked_vocab は {formulation, value} のみで作図を答えにできない。数え上げの学習点は
+  「もれなく重複なく数える」ことなので、(1) を「出方は全部で何通りあるか」に置き換え、
+  solver 側（math.count_coin_toss_outcomes）の narration で枝分かれ＝樹形図の
+  数え方を説明する。(2) は台帳どおり確率。
+  【level_sep】Lv2 は誘導あり2小問で、場合の数を数える段と確率を求める段に分かれる。
+  Lv3 は誘導なし1小問で、条件（積が k 以上）を自分で場合に翻訳する。
   recipe は math.word_problem_probability（g2_l51/l52/l53/l54 で共有）。数学は既存
   solver math.probability_two_dice（condition="product_at_least"）に委ねる＝新 solver
   ゼロ（`math.probability_two_dice` は g2_l52.find_value Lv3 と全く同じ solver）。
@@ -17,6 +25,24 @@ source_desc: |
   から solver を呼び直し、答え（確率）を独立に再計算する（答えは params に入れない）。
 concepts_default: [probability.word_problem_two_dice_product]
 levels:
+  "2":
+    signature: word_problem_coin_toss_count_and_probability
+    recipe: math.word_problem_probability
+    params:
+      scenario_kind: coin_toss_guided
+      # 枚数は3〜5（樹形図で書き出せる範囲。2枚だと出方4通りで数え上げの練習にならない）。
+      coins_domain: {int_range: [3, 5]}
+      # 金種は実在する6種。recipe は「同じ金種を n 枚」と「異なる金種 n 枚」の2枠組みを
+      # 引く（枚数と枚数条件だけでは9通りしかなく実測 dup_rate 0.55 だったため）。
+      coin_candidates: [1円硬貨, 5円硬貨, 10円硬貨, 50円硬貨, 100円硬貨, 500円硬貨]
+      face_candidates: [表, 裏]
+    given: [scenario]
+    asked: [value, value]
+    visual: none
+    text: {tier: T1, template: wp_probability_guided_v1}
+    hints: [steps_prefix]
+    concept_tags: [probability.word_problem_coin_toss_count_and_probability]
+    cause_tags: []
   "3":
     signature: word_problem_two_dice_product_at_least
     recipe: math.word_problem_probability

@@ -7337,6 +7337,30 @@ def test_word_problem_relation_non_degenerate(seed):
         assert int(numbers["mult"]) != 1
 
 
+@pytest.mark.parametrize("family", ["math.g1_l19.word_problem", "math.g1_l20.word_problem"])
+def test_word_problem_relation_level_sep_is_structural(family):
+    """Lv1 と Lv2 で steps の op 列が相異する（＝fp が分かれる・P-1 回帰の防止）。
+
+    由来: 初稿は両レベルとも (find_relation, formulate_relation) の2手で、given/asked/
+    小問数も同じだったため **fp が完全に一致**していた（eval の dup_rate が
+    「同一 family 内で署名跨ぎ fp 衝突」として検出）。Lv2 は比べる数量が両方とも x の
+    式になるので、それぞれを別々に表してから結ぶ3手にした。
+    """
+    ops = {}
+    for level in (1, 2):
+        ctx = _make_ctx(family, level)
+        rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+        mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+        ops[level] = [s.op for s in mr.sub_questions[0].steps]
+    assert ops[1] == ["find_relation", "formulate_relation"]
+    assert ops[2] == [
+        "express_first_quantity",
+        "express_second_quantity",
+        "formulate_relation",
+    ]
+    assert ops[1] != ops[2]
+
+
 def test_word_problem_relation_inequality_both_sides_answer_is_tuple():
     """Lv2 不等式は2条件を本文の記述順 Tuple(Gt, Lt) で機械表現する（And ではない）。"""
     ctx = _make_ctx("math.g1_l20.word_problem", 2)
@@ -7530,7 +7554,18 @@ _PROBABILITY_WP_CELLS = [
     ("math.g2_l53.word_problem", 3, "word_problem_lottery_at_least_one", False),
     ("math.g2_l54.word_problem", 2, "word_problem_two_balls_complement_guided", True),
     ("math.g2_l54.word_problem", 3, "word_problem_dice_repeat_at_least_one", False),
+    ("math.g2_l52.word_problem", 2, "word_problem_coin_toss_count_and_probability", True),
+    ("math.g2_l53.word_problem", 2, "word_problem_two_digit_cards", True),
+    ("math.g2_l54.word_problem", 4, "word_problem_at_least_two_colors", False),
 ]
+
+# 誘導ありセルのうち (1) が「全部で何通りか」＝場合の数（確率ではない）のもの。
+# 確率の値域チェックの対象外にする（暗黙のすり抜けを作らないため明示列挙する）。
+_COUNT_FIRST_SUB_QUESTION_SIGNATURES = frozenset({
+    "word_problem_bag_one_draw_guided",
+    "word_problem_coin_toss_count_and_probability",
+    "word_problem_two_digit_cards",
+})
 
 
 @pytest.mark.parametrize(("family", "level", "signature", "guided"), _PROBABILITY_WP_CELLS)
@@ -7585,7 +7620,7 @@ def test_word_problem_probability_double_solve_property(seed, family, level, sig
     # 答えは確率（0以上1以下の有理数）。ただし bag_one_draw の (1) は「何通りか」
     # という場合の数であって確率ではないので、その小問だけは対象外にする。
     for i, sol in enumerate(solutions):
-        if signature == "word_problem_bag_one_draw_guided" and i == 0:
+        if signature in _COUNT_FIRST_SUB_QUESTION_SIGNATURES and i == 0:
             continue
         p = sympy.sympify(sol.answer.srepr)
         assert p.is_Rational
@@ -7613,6 +7648,38 @@ def test_word_problem_probability_non_degenerate(seed=1):
         numbers = {k: int(sympy.sympify(v)) for k, v in mr.params["numbers"].items()}
         assert numbers["n"] - numbers["k"] >= 2, "戻さず2本引いて両方はずれる余地が要る"
         assert numbers["k"] >= 1
+
+
+@pytest.mark.parametrize("seed", range(20))
+def test_word_problem_probability_counting_cells_non_degenerate(seed):
+    """数え上げ系3セルの非退化: 答えが 0 や 1 に潰れる構成を作らない。"""
+    # g2_l52 Lv2: 注目する枚数は 0 でも全部でもない（確率が 1/2^n に退化しない）。
+    ctx = _make_ctx("math.g2_l52.word_problem", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    coins = int(mr.params["numbers"]["coins"])
+    face_count = int(mr.params["numbers"]["face_count"])
+    assert 0 < face_count < coins
+    assert str(mr.params["numbers"]["face"]) in ("表", "裏")
+    assert int(sympy.sympify(mr.sub_questions[0].answer.srepr)) == 2**coins
+
+    # g2_l53 Lv2: 条件を満たす整数が「全部」でも「ゼロ」でもない（偶数・奇数の両方が
+    # できるように、カードに偶数と奇数がどちらも含まれている必要がある）。
+    ctx = _make_ctx("math.g2_l53.word_problem", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    p = sympy.sympify(mr.sub_questions[1].answer.srepr)
+    assert 0 < p < 1, "条件を満たす整数が全部またはゼロだと確率の問題として退化する"
+
+    # g2_l54 Lv4: 余事象「全部同じ色」が起こりうる（＝答えが常に 1 にならない）。
+    ctx = _make_ctx("math.g2_l54.word_problem", 4)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    numbers = mr.params["numbers"]
+    draws = int(numbers["draws"])
+    counts = [int(numbers[f"count_{s}"]) for s in ("a", "b", "c")]
+    assert max(counts) >= draws, "どの色も draws 個未満だと余事象が起こりえず答えが 1 に退化する"
+    assert sympy.sympify(mr.sub_questions[0].answer.srepr) < 1
 
 
 def test_word_problem_probability_guided_uses_complement_of_first():
