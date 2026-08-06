@@ -8,11 +8,20 @@ source_desc: |
                 のとき、同じ弧 AB に対する円周角 ∠APB の大きさを求めよ。
        【既知の不具合回避】notes欄に「円周角が90°に固定される不具合に注意」と
        あるため、central_angleを180に偏らせず広い値域[2,178]から一様に引く。
-  Lv3（複数の円周角・二等辺/外角を組み合わせ多段で角を求める）は多段構成で
-  一般化が難しいため本セルでは扱わない（次段対応）。
+  Lv3 desc: 複数の円周角・二等辺/外角を組み合わせ多段で角を求める。
+       example: 右の図で、4点 A, B, C, D は円周上にある。∠BAC=35°、∠ACD=50°
+                であるとき、2本の弦 AD, BC の交点を P として、∠APB の大きさを
+                求めよ。
   【設計モデル】新設 solver math.inscribed_angle_from_central（円周角=中心角の
   半分という恒真の性質）。「右の図」は図なしで円・点の配置をテキストで直接
   指定する（既存の合同対応セル等と同様）。
+  【Lv3設計モデル】台帳例のとおり、2つの円周角∠BAC・∠ACDから弦AD,BCの交点P
+  にできる∠APBを求める。円周角の定理で対応する弧の大きさを求め、円周の全体
+  360°から2つの弧を除いた残りが2倍される関係(∠APB=180°-∠BAC-∠ACD)を使う
+  新設 solver math.inscribed_angle_two_chords_intersection。Lv1(中心角→円周角
+  を1回)とはop列が異なり、複数の円周角を組み合わせる多段構成になる。
+  central_angleが180に偏ると円周角が90°に固定される既知の不具合と同種の
+  退化(∠BAC+∠ACD=90)を明示的に除外する。
 concepts_default: [circle.inscribed_angle_from_central]
 levels:
   "1":
@@ -26,6 +35,18 @@ levels:
     text: {tier: T1, template: lf_inscribed_angle_condition_v1}
     hints: [steps_prefix]
     concept_tags: [circle.inscribed_angle_from_central]
+    cause_tags: []
+  "3":
+    signature: inscribed_angle_two_chords_intersection
+    recipe: math.inscribed_angle_two_chords_intersection
+    params:
+      angle_domain: {int_range: [5, 75]}
+    given: [condition]
+    asked: [value]
+    visual: none
+    text: {tier: T1, template: lf_inscribed_angle_condition_v1}
+    hints: [steps_prefix]
+    concept_tags: [circle.two_chords_intersection_angle]
     cause_tags: []
 remedial:
   default_level: 1

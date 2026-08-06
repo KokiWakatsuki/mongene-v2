@@ -6,11 +6,17 @@ source_desc: |
   Lv2 desc: 相似比から面積比(2乗)を求める・面積を1手順で求める。
        example: 相似比が 2:3 である2つの相似な三角形について、面積比を求めよ。
                 また、小さいほうの面積が 12cm^2 のとき、大きいほうの面積を求めよ。
-  Lv3（一部の面積・比の合成など多段で面積を求める）は多段構成で一般化が難しい
-  ため本セルでは扱わない（次段対応）。
+  Lv3 desc: 一部の面積・比の合成など多段で面積を求める。
+       example: 三角形 ABC で、辺 AB, AC 上に点 D, E があり DE//BC、AD:DB=2:1
+                である。三角形 ADE の面積と、台形 DBCE の面積の比を求めよ。
   【設計モデル】新設 solver math.similar_area_ratio（面積比が相似比の二乗に
   等しいという恒真の性質から、面積比と、既知の面積から対応する面積を求める）。
   答えは Tuple(面積比の分子, 面積比の分母, もう一方の面積)。
+  【Lv3設計モデル】台帳例のとおり、AD:DBから三角形ADEと三角形ABC全体の面積比
+  (相似比の二乗、Lv2と同じ性質)を求めたうえで、三角形ABC全体から三角形ADEを
+  除いた残りが台形DBCEの面積になるという合成を加える。新設 solver
+  math.similar_triangle_trapezoid_area_ratio。答えは Tuple(三角形ADEの面積比の
+  分子, 台形DBCEの面積比の分母)（既約）。
 concepts_default: [similarity.area_ratio]
 levels:
   "2":
@@ -25,6 +31,18 @@ levels:
     text: {tier: T1, template: lf_similarity_scale_ratio_condition_v1}
     hints: [steps_prefix]
     concept_tags: [similarity.area_ratio]
+    cause_tags: []
+  "3":
+    signature: similar_triangle_trapezoid_area_ratio
+    recipe: math.similar_triangle_trapezoid_area_ratio
+    params:
+      ratio_domain: {int_range: [1, 10]}
+    given: [condition]
+    asked: [value]
+    visual: none
+    text: {tier: T1, template: lf_similarity_scale_ratio_condition_v1}
+    hints: [steps_prefix]
+    concept_tags: [similarity.trapezoid_area_ratio]
     cause_tags: []
 remedial:
   default_level: 2

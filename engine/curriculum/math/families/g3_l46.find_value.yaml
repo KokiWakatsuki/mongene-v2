@@ -6,11 +6,17 @@ source_desc: |
   Lv2 desc: 相似比から表面積比(2乗)・体積比(3乗)を直接求める。
        example: 相似比が 1:2 である2つの相似な立体について、表面積の比と
                 体積の比をそれぞれ求めよ。
-  Lv3（一部の量から相似比を逆算し他の量を多段で求める）は逆算構成で一般化が
-  難しいため本セルでは扱わない（次段対応）。
+  Lv3 desc: 一部の量から相似比を逆算し他の量を多段で求める。
+       example: 相似な2つの円錐 P, Q があり、P の体積は 54cm^3、Q の体積は
+                128cm^3 である。P と Q の表面積の比を求めよ。
   【設計モデル】新設 solver math.similar_solid_surface_volume_ratio（表面積比が
   相似比の二乗、体積比が相似比の三乗に等しいという恒真の性質）。答えは
   Tuple(表面積比の分子, 表面積比の分母, 体積比の分子, 体積比の分母)。
+  【Lv3設計モデル】台帳例のとおり、体積比(絶対値)を最も簡単な整数の比に直し、
+  体積比が相似比の三乗に等しいことから相似比を逆算したうえで、表面積比が
+  相似比の二乗に等しいという既存の性質(Lv2と同じ関係)を使って表面積比を
+  求める。新設 solver math.similar_solid_ratio_from_volume。答えは
+  Tuple(表面積比の分子, 表面積比の分母)。
 concepts_default: [similarity.solid_surface_volume_ratio]
 levels:
   "2":
@@ -24,6 +30,23 @@ levels:
     text: {tier: T1, template: lf_similarity_scale_ratio_condition_v1}
     hints: [steps_prefix]
     concept_tags: [similarity.solid_surface_volume_ratio]
+    cause_tags: []
+  "3":
+    signature: similar_solid_ratio_from_volume
+    recipe: math.similar_solid_ratio_from_volume
+    params:
+      # dup は (m, n, k) の3軸だけで決まる（params は vol_p/vol_q の2値のみ）。
+      # [1,5]×[1,5] は既約ペア18×k5=90通りしかなく dup=0.40 で閾超過だった（100seed 実測）。
+      # [1,6]×[1,30] で既約ペア22×30=660通り → dup=0.05。体積は最大 6³×30=6480cm³ で、
+      # 「体積比を最も簡単な整数の比に直す」Lv3 の狙いに沿う大きさに収まる。
+      ratio_domain: {int_range: [1, 6]}
+      scale_domain: {int_range: [1, 30]}
+    given: [condition]
+    asked: [value]
+    visual: none
+    text: {tier: T1, template: lf_similarity_scale_ratio_condition_v1}
+    hints: [steps_prefix]
+    concept_tags: [similarity.solid_ratio_from_volume]
     cause_tags: []
 remedial:
   default_level: 2

@@ -1197,3 +1197,22 @@ concepts:
   - id: probability.word_problem_at_least_two_colors
     label: "色ごとの「全部同じ色」の和を余事象として、少なくとも2色ふくまれる確率を求める"
     unit: g2_l54
+  # --- C10 g3 図形（find_value Lv3・相似・円）横展開 ---
+  - id: parallel_segment.transversal_ratio
+    label: "3本の平行線が2直線を切る線分の比から辺の長さを求める"
+    unit: g3_l42
+  - id: parallel_segment.judge_then_length
+    label: "逆でDE//BCを確かめたうえでDEの長さから辺BCの長さを求める"
+    unit: g3_l43
+  - id: similarity.trapezoid_area_ratio
+    label: "AD:DBの比から三角形ADEと台形DBCEの面積比を求める"
+    unit: g3_l45
+  - id: similarity.solid_ratio_from_volume
+    label: "体積比から相似比を逆算し表面積比を求める"
+    unit: g3_l46
+  - id: circle.two_chords_intersection_angle
+    label: "2つの円周角から2本の弦の交点にできる角の大きさを求める"
+    unit: g3_l47
+  - id: circle.equal_arc_inscribed_angle
+    label: "円をn等分してできる多角形で頂点をふくまない弧に対する円周角を求める"
+    unit: g3_l50

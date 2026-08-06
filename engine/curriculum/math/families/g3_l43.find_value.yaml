@@ -7,12 +7,22 @@ source_desc: |
        example: 右の図の三角形 ABC で、辺 AB, AC 上に点 D, E がある。AD=3cm,
                 DB=6cm, AE=4cm, EC=8cm であるとき、DE と BC が平行であるか
                 どうかを、比を調べて答えよ。
-  Lv3（逆と定理を組み合わせ多段で長さ・比を求める）は多段構成で一般化が難しい
-  ため本セルでは扱わない（次段対応）。
+  Lv3 desc: 逆と定理を組み合わせ多段で長さ・比を求める。
+       example: 三角形 ABC の辺 AB を 2:1 に分ける点を D、辺 AC 上に点 E をとる。
+                DE//BC となるように E をとったうえで、さらに DE 上の点から辺への
+                平行線を引いて、線分 BC 上の対応する長さを多段で求めよ。BC=12cm
+                とする。
   【設計モデル】新設 solver math.judge_parallel_from_ratio（AD:DBとAE:ECの比を
   比べ、一致すれば平行線と線分の比の定理の逆によりDE∥BCといえるという恒真の
   判定）。g3_l52と同型のパターン: find_value formでも判定結果をSymbolicAnswer
   の真偽値("平行である"/"平行ではない")で表現する。
+  【Lv3設計判断】台帳例の「DE上の点からさらに平行線を引いてBC上の対応する
+  長さを求める」corollaryは一般化が難しいため、同じ「逆＋定理の組合せ」という
+  骨格を保ったまま構成を単純化する: AD:DBとAE:ECの比が一致する(＝逆によって
+  DE∥BCが確かめられる)ことを示したうえで、DEの長さから辺BCの長さを求める。
+  新設 solver math.parallel_ratio_judge_then_length は既存の
+  math.judge_parallel_from_ratio（逆の判定）と math.parallel_segment_ratio_length
+  （長さの計算）をそのまま合成し、新しい数学的計算は増やさない。
 concepts_default: [parallel_segment.judge_from_ratio]
 levels:
   "2":
@@ -28,6 +38,20 @@ levels:
     text: {tier: T1, template: lf_parallel_line_ratio_condition_v1}
     hints: [steps_prefix]
     concept_tags: [parallel_segment.judge_from_ratio]
+    cause_tags: []
+  "3":
+    signature: parallel_ratio_judge_then_length
+    recipe: math.parallel_ratio_judge_then_length
+    params:
+      length_domain: {int_range: [1, 15]}
+      scale_domain: {int_range: [1, 8]}
+      de_domain: {int_range: [1, 15]}
+    given: [condition]
+    asked: [value]
+    visual: none
+    text: {tier: T1, template: lf_parallel_line_ratio_condition_v1}
+    hints: [steps_prefix]
+    concept_tags: [parallel_segment.judge_then_length]
     cause_tags: []
 remedial:
   default_level: 2

@@ -7,11 +7,18 @@ source_desc: |
        example: 1つの円で、弧 AB の長さは弧 CD の長さの2倍である。弧 CD に
                 対する円周角が 25° のとき、弧 AB に対する円周角の大きさを
                 求めよ。
-  Lv3（比の合成・弧の分割など多段で角・弧の長さを求める）は多段構成で
-  一般化が難しいため本セルでは扱わない（次段対応）。
+  Lv3 desc: 比の合成・弧の分割など多段で角・弧の長さを求める。
+       example: 円周を5等分する点を順に A, B, C, D, E とする。これらの点を
+                頂点とする五角形について、∠ABD の大きさを求めよ。
   【設計モデル】新設 solver math.arc_proportional_angle（弧の長さは円周角の
   大きさに比例するという恒真の性質。倍率と既知角の積が180°を超えないよう
   multiplier/angleの値域を調整して非退化を保証する）。
+  【Lv3設計モデル】台帳例を一般化: 円周をn等分する点を頂点とするn角形で、
+  ある頂点がつくる角の大きさを求める。既存の math.inscribed_angle_from_central
+  （単位弧の中心角→円周角）と math.arc_proportional_angle（弧の倍率→円周角）
+  を合成した新設 solver math.equal_arc_inscribed_angle（頂点をふくまない側の
+  弧が単位弧の何個分かを求めてから円周角を求める多段構成）。新しい数学的計算
+  は増やさず、既存2つのsolverの合成＋弧の個数を数える処理のみを追加する。
 concepts_default: [circle.arc_proportional_angle]
 levels:
   "2":
@@ -26,6 +33,18 @@ levels:
     text: {tier: T1, template: lf_inscribed_angle_condition_v1}
     hints: [steps_prefix]
     concept_tags: [circle.arc_proportional_angle]
+    cause_tags: []
+  "3":
+    signature: equal_arc_inscribed_angle
+    recipe: math.equal_arc_inscribed_angle
+    params:
+      n_domain: {int_range: [5, 9]}
+    given: [condition]
+    asked: [value]
+    visual: none
+    text: {tier: T1, template: lf_inscribed_angle_condition_v1}
+    hints: [steps_prefix]
+    concept_tags: [circle.equal_arc_inscribed_angle]
     cause_tags: []
 remedial:
   default_level: 2

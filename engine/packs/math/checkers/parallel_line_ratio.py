@@ -29,3 +29,17 @@ def double_solve_midpoint_connector_length(mr: MR) -> Solution:
     p = mr.params
     solver = REGISTRY.solver("math.midpoint_connector_length")
     return cast(Solution, solver(p["bc"]))
+
+
+@register_checker("math.parallel_lines_transversal_ratio.double_solve")
+def double_solve_parallel_lines_transversal_ratio(mr: MR) -> Solution:
+    p = mr.params
+    solver = REGISTRY.solver("math.parallel_lines_transversal_ratio")
+    return cast(Solution, solver(p["ab"], p["de"], p["ef"]))
+
+
+@register_checker("math.parallel_ratio_judge_then_length.double_solve")
+def double_solve_parallel_ratio_judge_then_length(mr: MR) -> Solution:
+    p = mr.params
+    solver = REGISTRY.solver("math.parallel_ratio_judge_then_length")
+    return cast(Solution, solver(p["ad"], p["db"], p["ae"], p["ec"], p["de"]))

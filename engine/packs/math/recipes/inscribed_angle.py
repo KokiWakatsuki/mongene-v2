@@ -73,6 +73,57 @@ def inscribed_angle_from_central_recipe(ctx: CellContext, rng: Rng) -> MR:
 
 
 # ---------------------------------------------------------------------------
+# g3_l47.find_value Lv3: 2本の弦の交点にできる角を、2つの円周角の組合せで求める
+# ---------------------------------------------------------------------------
+_INSCRIBED_ANGLE_TWO_CHORDS_CONCEPTS = ["circle.two_chords_intersection_angle"]
+
+
+@register_recipe(
+    "math.inscribed_angle_two_chords_intersection",
+    provides_concepts=_INSCRIBED_ANGLE_TWO_CHORDS_CONCEPTS,
+)
+def inscribed_angle_two_chords_intersection_recipe(ctx: CellContext, rng: Rng) -> MR:
+    """円周上の4点A,B,C,Dで、弦AD,BCの交点をPとするとき、∠BAC,∠ACDから
+
+    ∠APBの大きさを求める（g3_l47.find_value Lv3・answer-first）。複数の
+    円周角を組み合わせる多段構成。central_angleを1回使うLv1とは異なり、
+    2つの円周角から対応する弧を求めたうえで交点の角を求める新規solverを使う。
+    """
+    p = ctx.spec_level.params
+    pa, pb, pc, pd, pp = _draw_distinct_points(5, rng)
+    for _ in range(200):
+        bac = int(draw(p["angle_domain"], rng))
+        acd = int(draw(p["angle_domain"], rng))
+        total = bac + acd
+        if total != 90 and total <= 150:
+            break
+    else:
+        raise ValueError("inscribed_angle_two_chords_intersection_recipe: 有効な角の組を構成できず")
+
+    solver = REGISTRY.solver("math.inscribed_angle_two_chords_intersection")
+    sol = cast(Solution, solver(bac, acd))
+    assert isinstance(sol.answer, SymbolicAnswer)
+
+    statement = (
+        f"右の図で、4点{pa}, {pb}, {pc}, {pd}は円周上にある。∠{pb}{pa}{pc}={bac}°、"
+        f"∠{pa}{pc}{pd}={acd}° であるとき、2本の弦{pa}{pd}, {pb}{pc}の交点を{pp}として、"
+        f"∠{pa}{pp}{pb}の大きさを求めよ"
+    )
+
+    sub_question = SubQuestionMR(
+        label="(1)", asked="value", answer=sol.answer, steps=sol.steps,
+        concept_tags=_effective_concept_tags(ctx), cause_tags=_effective_cause_tags(ctx),
+    )
+    return MR(
+        signature=ctx.spec_level.signature, family=ctx.family, level=ctx.level,
+        purpose=ctx.purpose, seed=0,
+        params={"bac": bac, "acd": acd, "labels": pa + pb + pc + pd + pp},
+        given={"condition": statement}, sub_questions=[sub_question], visual_plan=None,
+        provenance=Provenance(recipe="math.inscribed_angle_two_chords_intersection"),
+    )
+
+
+# ---------------------------------------------------------------------------
 # g3_l48.find_value Lv2: 逆で同一円周上と判断し、同じ弧の円周角を転写する
 # ---------------------------------------------------------------------------
 _INSCRIBED_ANGLE_TRANSFER_CONCEPTS = ["circle.inscribed_angle_transfer_same_arc"]
@@ -197,4 +248,64 @@ def arc_proportional_angle_recipe(ctx: CellContext, rng: Rng) -> MR:
         params={"multiplier": multiplier, "known_angle": known_angle, "labels": pa + pb + pc + pd},
         given={"condition": statement}, sub_questions=[sub_question], visual_plan=None,
         provenance=Provenance(recipe="math.arc_proportional_angle"),
+    )
+
+
+# ---------------------------------------------------------------------------
+# g3_l50.find_value Lv3: 円をn等分してできる多角形で頂点を挟まない弧の円周角
+# ---------------------------------------------------------------------------
+_EQUAL_ARC_INSCRIBED_ANGLE_CONCEPTS = ["circle.equal_arc_inscribed_angle"]
+
+_POLYGON_NAMES = {
+    5: "五角形", 6: "六角形", 7: "七角形", 8: "八角形", 9: "九角形",
+}
+
+
+@register_recipe(
+    "math.equal_arc_inscribed_angle", provides_concepts=_EQUAL_ARC_INSCRIBED_ANGLE_CONCEPTS
+)
+def equal_arc_inscribed_angle_recipe(ctx: CellContext, rng: Rng) -> MR:
+    """円周をn等分する点を頂点とするn角形で、ある頂点がつくる角の大きさを求める
+
+    （g3_l50.find_value Lv3・answer-first）。台帳の「円周を5等分する点でできる
+    五角形で∠ABDを求める」を一般化した、弧の分割と比の合成の多段構成。
+    """
+    p = ctx.spec_level.params
+    n = int(draw(p["n_domain"], rng))
+    points = _draw_distinct_points(n, rng)
+    labels = "".join(points)
+    for _ in range(200):
+        span = int(draw({"int_range": [1, n - 2]}, rng))
+        remain = n - span
+        x = int(draw({"int_range": [1, remain - 1]}, rng))
+        y = remain - x
+        if span * 180 != 90 * n:  # 円周角が90°に固定される退化を避ける
+            break
+    else:
+        raise ValueError("equal_arc_inscribed_angle_recipe: 有効な分割を構成できず")
+
+    vertex = points[0]
+    pa = points[(0 - x) % n]
+    pc = points[(0 + y) % n]
+
+    solver = REGISTRY.solver("math.equal_arc_inscribed_angle")
+    sol = cast(Solution, solver(n, labels, vertex, pa, pc))
+    assert isinstance(sol.answer, SymbolicAnswer)
+
+    polygon_name = _POLYGON_NAMES.get(n, f"{n}角形")
+    statement = (
+        f"円周を{n}等分する点を順に{labels}とする。これらの点を頂点とする{polygon_name}"
+        f"について、∠{pa}{vertex}{pc}の大きさを求めよ"
+    )
+
+    sub_question = SubQuestionMR(
+        label="(1)", asked="value", answer=sol.answer, steps=sol.steps,
+        concept_tags=_effective_concept_tags(ctx), cause_tags=_effective_cause_tags(ctx),
+    )
+    return MR(
+        signature=ctx.spec_level.signature, family=ctx.family, level=ctx.level,
+        purpose=ctx.purpose, seed=0,
+        params={"n": n, "labels": labels, "vertex": vertex, "a": pa, "c": pc},
+        given={"condition": statement}, sub_questions=[sub_question], visual_plan=None,
+        provenance=Provenance(recipe="math.equal_arc_inscribed_angle"),
     )

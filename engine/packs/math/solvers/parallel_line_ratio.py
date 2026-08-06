@@ -82,6 +82,54 @@ def judge_parallel_from_ratio(ad: object, db: object, ae: object, ec: object) ->
     return Solution(answer=SymbolicAnswer(srepr=srepr, display=disp), steps=steps)
 
 
+@register_solver("math.parallel_lines_transversal_ratio")
+def parallel_lines_transversal_ratio(ab: object, de: object, ef: object) -> Solution:
+    """3本の平行線が2直線と交わってできる線分の比から、辺の長さを求める
+
+    （g3_l42.find_value Lv3）。ab/de/ef だけから、3本の平行な直線が2本の直線と
+    交わるとき対応する線分の比は等しいという恒真の性質 AB:BC=DE:EF から
+    BC=AB*EF/DE を求める（double-solve）。
+    """
+    a = sympy.sympify(str(ab))
+    d = sympy.sympify(str(de))
+    e = sympy.sympify(str(ef))
+    result = a * e / d
+    disp = sympy.sstr(result)
+    srepr = sympy.srepr(result)
+    steps = [
+        Step(
+            op="identify_parallel_lines_cut_transversals",
+            args=[], result_srepr="", result_display="3本の平行線が2直線を切る比例関係を見つける",
+            narration="3本の平行な直線が2本の直線と交わるとき、対応する線分の比が等しくなることを見つける。",
+        ),
+        Step(
+            op="apply_transversal_ratio",
+            args=[], result_srepr=srepr, result_display=disp,
+            narration="対応する線分の比が等しいことから、比例式を立てて長さを求める。",
+        ),
+    ]
+    return Solution(answer=SymbolicAnswer(srepr=srepr, display=disp), steps=steps)
+
+
+@register_solver("math.parallel_ratio_judge_then_length")
+def parallel_ratio_judge_then_length(
+    ad: object, db: object, ae: object, ec: object, de: object
+) -> Solution:
+    """AD:DBとAE:ECの比が等しいことからDE∥BCを確かめたうえで、DEの長さから
+
+    辺BCの長さを求める（g3_l43.find_value Lv3）。既存の
+    math.judge_parallel_from_ratio（逆による判定）と
+    math.parallel_segment_ratio_length（DE∥BCからの長さ計算）をそのまま
+    合成した double-solve。ad/db/ae/ec/de だけから計算する（新しい数学的
+    計算は増やさない）。
+    """
+    judge_sol = judge_parallel_from_ratio(ad, db, ae, ec)
+    length_sol = parallel_segment_ratio_length(ad, db, de)
+    assert isinstance(length_sol.answer, SymbolicAnswer)
+    steps = list(judge_sol.steps) + list(length_sol.steps)
+    return Solution(answer=length_sol.answer, steps=steps)
+
+
 @register_solver("math.midpoint_connector_length")
 def midpoint_connector_length(bc: object) -> Solution:
     """中点連結定理で、中点を結ぶ線分の長さを求める（g3_l44.find_value Lv2）。

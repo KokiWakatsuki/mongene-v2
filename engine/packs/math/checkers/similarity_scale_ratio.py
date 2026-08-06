@@ -22,3 +22,17 @@ def double_solve_similar_solid_surface_volume_ratio(mr: MR) -> Solution:
     p = mr.params
     solver = REGISTRY.solver("math.similar_solid_surface_volume_ratio")
     return cast(Solution, solver(p["ratio_num"], p["ratio_den"]))
+
+
+@register_checker("math.similar_triangle_trapezoid_area_ratio.double_solve")
+def double_solve_similar_triangle_trapezoid_area_ratio(mr: MR) -> Solution:
+    p = mr.params
+    solver = REGISTRY.solver("math.similar_triangle_trapezoid_area_ratio")
+    return cast(Solution, solver(p["ad"], p["db"]))
+
+
+@register_checker("math.similar_solid_ratio_from_volume.double_solve")
+def double_solve_similar_solid_ratio_from_volume(mr: MR) -> Solution:
+    p = mr.params
+    solver = REGISTRY.solver("math.similar_solid_ratio_from_volume")
+    return cast(Solution, solver(p["vol_p"], p["vol_q"]))

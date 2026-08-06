@@ -36,3 +36,19 @@ def double_solve_arc_proportional_angle(mr: MR) -> Solution:
     p = mr.params
     solver = REGISTRY.solver("math.arc_proportional_angle")
     return cast(Solution, solver(p["multiplier"], p["known_angle"]))
+
+
+@register_checker("math.inscribed_angle_two_chords_intersection.double_solve")
+def double_solve_inscribed_angle_two_chords_intersection(mr: MR) -> Solution:
+    p = mr.params
+    solver = REGISTRY.solver("math.inscribed_angle_two_chords_intersection")
+    return cast(Solution, solver(p["bac"], p["acd"]))
+
+
+@register_checker("math.equal_arc_inscribed_angle.double_solve")
+def double_solve_equal_arc_inscribed_angle(mr: MR) -> Solution:
+    p = mr.params
+    solver = REGISTRY.solver("math.equal_arc_inscribed_angle")
+    return cast(
+        Solution, solver(p["n"], p["labels"], p["vertex"], p["a"], p["c"])
+    )

@@ -113,6 +113,83 @@ def judge_concyclic_from_angle(angle_c: object, angle_d: object) -> Solution:
     return Solution(answer=answer, steps=steps)
 
 
+@register_solver("math.inscribed_angle_two_chords_intersection")
+def inscribed_angle_two_chords_intersection(bac: object, acd: object) -> Solution:
+    """円周上の4点A,B,C,Dで、弦AD,BCの交点をPとするとき、∠BAC,∠ACDから
+
+    ∠APBの大きさを求める（g3_l47.find_value Lv3）。bac/acd だけから、円周角の
+    定理で対応する弧の大きさを求め、円周角と弧の関係を組み合わせた恒真の関係
+    ∠APB=180°-∠BAC-∠ACD で計算する（double-solve）。
+    """
+    a = sympy.sympify(str(bac))
+    c = sympy.sympify(str(acd))
+    result = 180 - a - c
+    disp = f"{sympy.sstr(result)}°"
+    srepr = sympy.srepr(result)
+    steps = [
+        Step(
+            op="identify_arcs_from_inscribed_angles",
+            args=[], result_srepr="", result_display="2つの円周角に対応する弧の大きさを求める",
+            narration="円周角の定理から、それぞれの円周角に対応する弧の大きさを求める。",
+        ),
+        Step(
+            op="apply_intersecting_chords_angle",
+            args=[], result_srepr=srepr, result_display=disp,
+            narration="円周の全体と2つの弧の大きさの関係から、2本の弦の交点にできる角の大きさを求める。",
+        ),
+    ]
+    return Solution(answer=SymbolicAnswer(srepr=srepr, display=disp), steps=steps)
+
+
+@register_solver("math.equal_arc_inscribed_angle")
+def equal_arc_inscribed_angle(
+    n: object, labels: object, vertex: object, a: object, c: object
+) -> Solution:
+    """円周をn等分する点でできる多角形で、頂点をふくまない側の弧に対する
+
+    円周角を求める（g3_l50.find_value Lv3）。n/labels/vertex/a/c だけから
+    （文中に現れる点の並び順から独立に構成を復元する）、既存の
+    math.inscribed_angle_from_central（単位弧の中心角から円周角を求める）と
+    math.arc_proportional_angle（弧の長さの倍率から円周角を求める）を合成した
+    double-solve。頂点をふくまない側の弧は単位弧の何個分かを、点の並び順の
+    差から求める。
+    """
+    n_i = int(str(n))
+    seq = str(labels)
+    idx_v = seq.index(str(vertex))
+    idx_a = seq.index(str(a))
+    idx_c = seq.index(str(c))
+    x = (idx_v - idx_a) % n_i
+    y = (idx_c - idx_v) % n_i
+    span = n_i - x - y
+
+    unit_sol = inscribed_angle_from_central(sympy.Rational(360, n_i))
+    assert isinstance(unit_sol.answer, SymbolicAnswer)
+    unit_angle = sympy.sympify(unit_sol.answer.srepr)
+    span_sol = arc_proportional_angle(span, unit_angle)
+    assert isinstance(span_sol.answer, SymbolicAnswer)
+
+    steps = [
+        Step(
+            op="identify_unit_arc_from_equal_division",
+            args=[], result_srepr="", result_display="円をn等分した1つの弧に対する円周角を求める",
+            narration="円周をn等分してできる1つの弧に対する中心角から、その弧に対する円周角を求める。",
+        ),
+        Step(
+            op="identify_arc_span_excluding_vertex",
+            args=[], result_srepr="",
+            result_display="角の頂点をふくまない側の弧が単位弧の何個分かを数える",
+            narration="角の頂点をふくまない側の弧が、等分した弧の何個分にあたるかを数える。",
+        ),
+        Step(
+            op="apply_inscribed_angle_theorem",
+            args=[], result_srepr=span_sol.answer.srepr, result_display=span_sol.answer.display,
+            narration="弧の長さは円周角の大きさに比例することから、求める角の大きさを求める。",
+        ),
+    ]
+    return Solution(answer=span_sol.answer, steps=steps)
+
+
 @register_solver("math.arc_proportional_angle")
 def arc_proportional_angle(multiplier: object, known_angle: object) -> Solution:
     """弧の長さの倍率から、対応する円周角の大きさを求める（g3_l50.find_value Lv2）。
