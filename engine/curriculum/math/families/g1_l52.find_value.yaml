@@ -1,0 +1,86 @@
+family: math.g1_l52.find_value
+form: find_value
+source_desc: |
+  柱体・錐体の体積を、底面積と高さから立式して求める
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: 底面積×高さ・錐体は1/3で体積を直接求める。
+       example: 底面が1辺4cmの正方形、高さ6cmの正四角錐の体積を求めよ。
+  Lv2 desc: 高さや底面の辺を先に求める等の多段で体積を求める。
+       example: 底面が直角をはさむ2辺6cm,8cmの直角三角形、高さ10cmの三角柱の体積を
+                求めよ。
+  Lv3 desc: 複合立体・切断や逆算を含む非自明な体積を求める。
+       example: 1辺6cmの立方体の上に、底面が同じ正方形で高さ4cmの正四角錐をのせた
+                立体の体積を求めよ。
+  【設計モデル】共通ソルバ math.solid_figure_measure（solvers/solid_figure.py）に mode
+  で委譲する（g1_l51.find_value と同じ設計。calculation Lv1 との役割分担は
+  g1_l52.calculation.yaml 側に記載）。
+  Lv1（math.solid_prism_pyramid_volume_direct・mode=l52_prism_pyramid_volume_direct）:
+  底面が正方形/長方形の角柱・角錐を等確率で選び、底面積×高さ（角錐は1/3倍）で直接
+  求める（2手: compute_base_area/apply_volume_formula）。
+  Lv2（math.solid_right_triangle_volume_multistep・
+  mode=l52_right_triangle_volume_multistep）: 底面が直角三角形の角柱・角錐で、直角を
+  はさむ2辺から底面積を求める手順を「2辺をかける」「2でわる」の2手に分解し、
+  Lv1より1手多い3手（multiply_the_two_legs/halve_for_triangle_base_area/
+  apply_volume_formula）にする＝「底面の辺から底面積を先に求める」多段。
+  Lv3（math.solid_composite_or_reverse_volume・mode=l52_composite_or_reverse_volume）:
+  立方体+正四角錐（同じ底面）の複合立体。variant=cube_pyramid_composite は2つの部分の
+  体積を求めて合計する（2手: compute_component_volumes/sum_component_volumes）。
+  variant=reverse_pyramid_height は、辺 a・錐の高さ h2 を先に選び体積の合計
+  k=a³+(1/3)a²h2（本文に出す「体積の合計」という与えられた数値そのもの）を組み立て、
+  逆に方程式から錐の高さを解く（2手: form_volume_equation/solve_for_missing_height）。
+  いずれも a²·h2 が3の倍数になる組合せだけを有界リトライで採用し、体積の合計が整数に
+  なるようにする。
+concepts_default: [solid_volume.prism_pyramid_direct]
+levels:
+  "1":
+    signature: solid_prism_pyramid_volume_direct
+    recipe: math.solid_prism_pyramid_volume_direct
+    params:
+      shape_set: [square_prism, rect_prism, square_pyramid, rect_pyramid]
+      edge_domain: {int_range: [3, 14]}
+      rect_domain: {int_range: [3, 12]}
+      height_domain_prism: {int_range: [3, 16]}
+      height_domain_pyramid: [3, 6, 9, 12, 15, 18]
+    given: [condition]
+    asked: [value]
+    visual: none
+    text: {tier: T1, template: lf_solid_prism_pyramid_volume_direct_v1}
+    hints: [steps_prefix]
+    concept_tags: [solid_volume.prism_pyramid_direct]
+    cause_tags: []
+  "2":
+    signature: solid_right_triangle_volume_multistep
+    recipe: math.solid_right_triangle_volume_multistep
+    params:
+      shape_set: [right_triangle_prism, right_triangle_pyramid]
+      leg_domain: {int_range: [3, 14]}
+      height_domain_prism: {int_range: [3, 16]}
+      height_domain_pyramid: [3, 6, 9, 12, 15, 18]
+    given: [condition]
+    asked: [value]
+    visual: none
+    text: {tier: T1, template: lf_solid_right_triangle_volume_multistep_v1}
+    hints: [steps_prefix]
+    concept_tags: [solid_volume.right_triangle_multistep]
+    cause_tags: []
+  "3":
+    signature: solid_composite_or_reverse_volume
+    recipe: math.solid_composite_or_reverse_volume
+    params:
+      # reverse_pyramid_height（体積から錐の高さを逆算）は op 列が複合立体と異なるため、
+      # 同一 signature の中で fingerprint が seed により揺れて G-FP が 120seed 中65件を
+      # 拒否していた（1レベル＝1 signature＝1 op 列の規律）。variant_set から外す。
+      # recipe 側の分岐は将来 逆算を独立セルに切り出すときのために残してある。
+      # 残った1 variant だけでは [3,12]×[2,15] は狭いので定義域も広げる（dup 0.22→実測後述）。
+      variant_set: [cube_pyramid_composite]
+      edge_domain: {int_range: [3, 24]}
+      pyramid_height_domain: {int_range: [2, 30]}
+    given: [condition]
+    asked: [value]
+    visual: none
+    text: {tier: T1, template: lf_solid_composite_or_reverse_volume_v1}
+    hints: [steps_prefix]
+    concept_tags: [solid_volume.composite_or_reverse]
+    cause_tags: []
+remedial:
+  default_level: 1
