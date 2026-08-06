@@ -7972,3 +7972,206 @@ def test_word_problem_pythagorean_non_degenerate(seed):
     mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
     for key in ("edge_a", "edge_b", "height"):
         assert int(mr.params["numbers"][key]) > 0
+
+
+# ---------------------------------------------------------------------------
+# C4 g1 比例・反比例 graph_table 横展開（g1_l30/l31/l32/l34/l35/l36・12セル）
+#
+# 「かく」セル（GraphAnswer）と「読む」セル（SymbolicAnswer）が混在するクラスタ。
+# ゲートが素通りさせる退化（答えが 0 に潰れる／格子点でない／比べる3本が一意に
+# 決まらない／問題図に答えを先出しする）を property で固定する。
+# ---------------------------------------------------------------------------
+_C4_GRAPH_CELLS = [
+    ("math.g1_l30.graph_table", 1, "read_coordinate_from_components", "read_point", 3),
+    ("math.g1_l30.graph_table", 2, "reflect_point_origin_and_x_axis", "read_point", 3),
+    ("math.g1_l31.graph_table", 1, "read_value_on_proportion_graph", "read_point", 2),
+    ("math.g1_l31.graph_table", 2, "draw_proportion_graph_two_points", "draw_graph", 4),
+    ("math.g1_l31.graph_table", 3, "compare_three_proportion_graphs", "read_slope_intercept", 3),
+    ("math.g1_l32.graph_table", 1, "read_lattice_point_on_proportion_graph", "read_point", 2),
+    ("math.g1_l34.graph_table", 1, "read_value_on_hyperbola_graph", "read_point", 2),
+    ("math.g1_l34.graph_table", 2, "draw_hyperbola_from_table", "draw_graph", 4),
+    ("math.g1_l34.graph_table", 3, "compare_three_hyperbolas", "read_slope_intercept", 3),
+    ("math.g1_l35.graph_table", 1, "read_lattice_point_on_hyperbola_graph", "read_point", 2),
+    ("math.g1_l36.graph_table", 2, "graph_situation_proportion_read_value", "read_point", 4),
+    ("math.g1_l36.graph_table", 3, "graph_two_plans_read_crossover", "read_intersection", 4),
+]
+
+# 「かく」セル = 答えの線/曲線を模範解答図だけに描くセル
+_C4_DRAW_CELLS = {("math.g1_l31.graph_table", 2), ("math.g1_l34.graph_table", 2)}
+# 問題図が空の方眼でなければならないセル（読む対象・答えを先出ししない）
+_C4_EMPTY_GRID_CELLS = _C4_DRAW_CELLS | {
+    ("math.g1_l30.graph_table", 1), ("math.g1_l30.graph_table", 2),
+    ("math.g1_l31.graph_table", 3), ("math.g1_l34.graph_table", 3),
+    ("math.g1_l36.graph_table", 2), ("math.g1_l36.graph_table", 3),
+}
+
+
+def _c4_mr(family: str, level: int, seed: int):
+    ctx = _make_ctx(family, level)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    return ctx, REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+
+
+@pytest.mark.parametrize("family,level,signature,asked,n_steps", _C4_GRAPH_CELLS)
+def test_c4_graph_construct(family, level, signature, asked, n_steps):
+    ctx, mr = _c4_mr(family, level, 1)
+    assert mr.signature == signature
+    sq = mr.sub_questions[0]
+    assert sq.asked == asked
+    assert len(sq.steps) == n_steps
+    assert sq.concept_tags  # G-Q7: 非空
+    # 図は required（graph_table）。labels は実描画の軸目盛と機械的に一致する。
+    assert mr.visual_plan is not None
+    kinds = {e.kind for e in mr.visual_plan.elements}
+    assert {"grid", "axis"} <= kinds
+    if (family, level) in _C4_EMPTY_GRID_CELLS:
+        assert kinds == {"grid", "axis"}, "かく/比べるセルの問題図は空の方眼"
+    else:
+        assert kinds & {"line", "curve"}, "読むセルは読む対象そのものを図に描く"
+
+
+@pytest.mark.parametrize("family,level,signature,asked,n_steps", _C4_GRAPH_CELLS)
+@pytest.mark.parametrize("seed", range(30))
+def test_c4_graph_double_solve_property(seed, family, level, signature, asked, n_steps):
+    """全 seed で double_solve checker（G-Q1 が呼ぶ実体）と答えが一致する。"""
+    ctx, mr = _c4_mr(family, level, seed)
+    checker = REGISTRY.checker(f"{mr.provenance.recipe}.double_solve")
+    sol = checker(mr)
+    sq = mr.sub_questions[0]
+    if sq.answer.kind == "graph":
+        assert {f.srepr for f in sol.answer.features} == {f.srepr for f in sq.answer.features}
+    else:
+        assert sol.answer.srepr == sq.answer.srepr
+    assert [s.op for s in sol.steps] == [s.op for s in sq.steps]
+
+
+@pytest.mark.parametrize("family,level,signature,asked,n_steps", _C4_GRAPH_CELLS)
+@pytest.mark.parametrize("seed", range(30))
+def test_c4_graph_svg_texts_are_axis_ticks_only(seed, family, level, signature, asked, n_steps):
+    """G-Q5v: 問題図の <text> は軸目盛だけで、visual_plan.labels に必ず含まれる。"""
+    import re
+
+    from engine.core.render.t1_template import render_visual
+
+    ctx, mr = _c4_mr(family, level, seed)
+    svg = render_visual(mr, ctx)
+    assert svg is not None
+    texts = re.findall(r"<text[^>]*>(.*?)</text>", svg)
+    assert texts, "軸目盛が1つも描かれていない"
+    assert set(texts) <= set(mr.visual_plan.labels)
+
+
+@pytest.mark.parametrize("family,level", sorted(_C4_DRAW_CELLS))
+@pytest.mark.parametrize("seed", range(10))
+def test_c4_draw_cells_have_solution_figure_but_empty_problem_figure(seed, family, level):
+    """「かく」セル: 模範解答図は線/曲線つき・問題図は空の方眼（答えの先出し禁止）。"""
+    import re
+
+    from engine.core.render.t1_template import render_visual
+
+    ctx, mr = _c4_mr(family, level, seed)
+    answer = mr.sub_questions[0].answer
+    assert answer.kind == "graph"
+    assert answer.solution_svg_ref != ""
+    assert 'stroke-width="2.5"' in answer.solution_svg_ref  # 解答図には答えの線/曲線がある
+    problem_svg = render_visual(mr, ctx)
+    assert 'stroke-width="2.5"' not in problem_svg, "問題図に答えの線/曲線が描かれている"
+    # 解答図の <text> も軸目盛のみ（whitelist 外の注記を入れない）
+    for t in re.findall(r"<text[^>]*>(.*?)</text>", answer.solution_svg_ref):
+        assert t in mr.visual_plan.labels
+
+
+@pytest.mark.parametrize("seed", range(50))
+def test_c4_non_degenerate(seed):
+    """ゲートが素通りさせる退化を構成側で塞げていることを固定する。"""
+    # g1_l30 Lv1/Lv2: 軸上の点（座標の一方が 0）にしない
+    for level in (1, 2):
+        _, mr = _c4_mr("math.g1_l30.graph_table", level, seed)
+        assert mr.params["x0"] != 0 and mr.params["y0"] != 0
+
+    # g1_l31 Lv1: 比例定数が 0 でない＝答えが 0 に潰れない。読む点と示された点は相異。
+    _, mr = _c4_mr("math.g1_l31.graph_table", 1, seed)
+    a, x0, p = mr.params["a"], mr.params["x0"], mr.params["p"]
+    assert a != 0 and x0 != 0 and p != x0
+    assert sympy.sympify(mr.sub_questions[0].answer.srepr) == a * x0 != 0
+
+    # g1_l31 Lv2: 明示する2点は相異で、どちらも原点でない（原点だけでは直線が決まらない）
+    _, mr = _c4_mr("math.g1_l31.graph_table", 2, seed)
+    assert mr.params["p"] < mr.params["q"]
+    assert mr.params["p"] != 0 and mr.params["q"] != 0 and mr.params["a"] != 0
+    assert len({f.srepr for f in mr.sub_questions[0].answer.features}) == 3
+
+    # g1_l31 Lv3 / g1_l34 Lv3: 負は1本だけ・絶対値最大は正の1本だけ（答えが一意）
+    for family in ("math.g1_l31.graph_table", "math.g1_l34.graph_table"):
+        _, mr = _c4_mr(family, 3, seed)
+        vals = [mr.params["a1"], mr.params["a2"], mr.params["a3"]]
+        assert len([v for v in vals if v < 0]) == 1
+        biggest = max(vals, key=abs)
+        assert biggest > 0, "最も急/最も離れたグラフが右下がりのものと同じになっている"
+        assert [abs(v) for v in vals].count(abs(biggest)) == 1
+        assert len(set(vals)) == 3
+
+    # g1_l32 Lv1: 読み取る点は原点でない格子点で、直線 y=ax 上にある
+    _, mr = _c4_mr("math.g1_l32.graph_table", 1, seed)
+    pt = sympy.sympify(mr.sub_questions[0].answer.srepr)
+    assert pt[0] != 0 and pt[1] != 0
+    assert pt[0].is_Integer and pt[1].is_Integer
+    assert sympy.Rational(pt[1], pt[0]) == sympy.sympify(mr.params["a"])
+
+    # g1_l34 Lv1 / g1_l35 Lv1: 双曲線上の格子点（x0*y0 = a・どちらも 0 でない）
+    for family, level in (("math.g1_l34.graph_table", 1), ("math.g1_l35.graph_table", 1)):
+        _, mr = _c4_mr(family, level, seed)
+        a, x0 = mr.params["a"], mr.params["x0"]
+        assert a != 0 and x0 != 0
+        assert sympy.Rational(a, x0).q == 1, "読み取る点が格子点になっていない"
+        assert mr.params["curve_kind"] == "hyperbola"
+
+    # g1_l34 Lv2: 表の x は相異な a の約数で、対応する y も方眼に収まる
+    ctx, mr = _c4_mr("math.g1_l34.graph_table", 2, seed)
+    a, xs = mr.params["a"], mr.params["xs"]
+    t_max = int(ctx.spec_level.params["table_abs_max"])
+    assert len(set(xs)) == len(xs) >= 3
+    for x in xs:
+        assert x > 0 and abs(a) % x == 0 and abs(a) // x <= t_max and x <= t_max
+
+    # g1_l36 Lv2: たずねる x は測定値と相異・割合は 2 以上（答えが x_q に潰れない）
+    _, mr = _c4_mr("math.g1_l36.graph_table", 2, seed)
+    assert mr.params["a"] >= 2
+    assert mr.params["x_q"] not in mr.params["xs"]
+    assert len(set(mr.params["xs"])) == len(mr.params["xs"])
+    assert sympy.sympify(mr.sub_questions[0].answer.srepr) == mr.params["a"] * mr.params["x_q"]
+
+    # g1_l36 Lv3: 交点は格子点で、A の単価が高く、固定費は差の倍数（＝グラフで読める）
+    _, mr = _c4_mr("math.g1_l36.graph_table", 3, seed)
+    pa, pb, fixed = mr.params["pa"], mr.params["pb"], mr.params["fixed"]
+    assert pa > pb > 0 and fixed > 0
+    assert fixed % (pa - pb) == 0
+    pt = sympy.sympify(mr.sub_questions[0].answer.srepr)
+    assert pt[0] == fixed // (pa - pb) > 0 and pt[1] == pa * pt[0]
+
+
+@pytest.mark.parametrize("family", ["math.g1_l30.graph_table", "math.g1_l31.graph_table",
+                                    "math.g1_l34.graph_table", "math.g1_l36.graph_table"])
+def test_c4_graph_level_sep_is_structural(family):
+    """level_sep: 同一 family のレベル間で fingerprint（given型・asked・op列）が相異する。"""
+    from engine.core.signature import fingerprint_hash
+
+    levels = [lv for fam, lv, *_ in _C4_GRAPH_CELLS if fam == family]
+    fps = {}
+    for level in levels:
+        _, mr = _c4_mr(family, level, 1)
+        fps[level] = fingerprint_hash(mr)
+    assert len(set(fps.values())) == len(levels), f"fp が衝突: {fps}"
+
+
+def test_c4_graph_recipe_concepts_declared():
+    """R6: recipe が宣言する概念集合が spec の concept_tags を覆う。"""
+    assert REGISTRY.recipe_concepts("math.read_coordinate_on_plane") == frozenset({
+        "coordinate_plane.read_point_coordinate",
+    })
+    assert REGISTRY.recipe_concepts("math.draw_hyperbola_from_table") == frozenset({
+        "inverse_proportion.draw_hyperbola",
+    })
+    assert REGISTRY.recipe_concepts("math.graph_two_plans_crossover") == frozenset({
+        "direct_proportion.compare_two_plans_graph",
+    })

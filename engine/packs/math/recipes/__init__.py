@@ -17,6 +17,7 @@ from engine.packs.math.recipes import motion  # noqa: F401  (登録の副作用�
 from engine.packs.math.recipes import quadratic_function  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.recipes import probability  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.recipes import proportion  # noqa: F401  (登録の副作用のため import)
+from engine.packs.math.recipes import proportion_graph  # noqa: F401,E402  (polynomial の _domain_candidates に依存＝後に import)
 from engine.packs.math.recipes import statistics_distribution  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.recipes import quartile  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.recipes import sample_survey  # noqa: F401  (登録の副作用のため import)

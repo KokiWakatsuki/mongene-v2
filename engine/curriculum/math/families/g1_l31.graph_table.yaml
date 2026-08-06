@@ -1,0 +1,67 @@
+family: math.g1_l31.graph_table
+form: graph_table
+source_desc: |
+  比例のグラフの書き方と特徴（units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: 比例のグラフから傾きや対応する値を読む。
+       example: 原点を通る直線のグラフがある。このグラフは点(1, 2)を通っている。
+                このグラフ上でx=3のときのyの値を、グラフから読み取って答えよ。
+  Lv2 desc: 式y=axから原点と1点をとり直線を正確にかく。
+       example: y=-2x のグラフを座標平面上にかけ。原点と、通る1点を明示すること。
+  Lv3 desc: 複数の比例グラフを比較し傾きの正負大小・条件から特定する。
+       example: 同じ座標平面上に、y=x、y=3x、y=-x/2 の3本の比例のグラフがある。
+                ア〜ウのグラフのうち、最も傾きが急なものと、右下がりのものをそれぞれ選べ。
+  【設計モデル】比例 y=ax は直線なので既存の直線描画経路（math.linear_graph・a=比例定数,
+  b=0）をそのまま使う。Lv1 は「読む」（図に直線を描く・答えは y の値）、Lv2 は「かく」
+  （問題図は空の方眼・答えは GraphAnswer・模範解答図は直線つき）、Lv3 は「比べる」
+  （問題図は空の方眼・答えは比例定数の組）で asked と op 列がどれも相異＝level_sep。
+concepts_default: [direct_proportion.read_value_from_graph]
+levels:
+  "1":
+    signature: read_value_on_proportion_graph
+    recipe: math.read_proportion_graph_value
+    params:
+      # 組合せは (a, x0, p) の3軸。|a*x| <= value_abs_max で方眼の目盛数を有界化する
+      # （可読性）。制約後の総数は約 330 通り（scratchpad/count_domains.py で実測）。
+      a_domain: {int_range: [-6, 6], exclude: [0]}
+      value_abs_max: 16
+      x_abs_max: 9
+      point_abs_max: 4
+    given: [situation_params]
+    asked: [read_point]
+    visual: required
+    text: {tier: T1, template: propg_read_value_v1, visual_builder: math.linear_graph}
+    hints: [steps_prefix]
+    concept_tags: [direct_proportion.read_value_from_graph]
+    cause_tags: []
+  "2":
+    signature: draw_proportion_graph_two_points
+    recipe: math.draw_proportion_graph
+    params:
+      # 組合せ (a, {p,q}) を全列挙して一様に引く（p<q の非順序対）。|a*p| <= value_abs_max
+      # で方眼の目盛数を有界化した上で 470 通り（scratchpad/count_domains.py で数え上げ）。
+      a_abs_max: 8
+      value_abs_max: 20
+      point_abs_max: 5
+    given: [expression, situation_params]
+    asked: [draw_graph]
+    visual: required
+    text: {tier: T1, template: propg_draw_graph_v1, visual_builder: math.linear_graph}
+    hints: [steps_prefix]
+    concept_tags: [direct_proportion.draw_graph]
+    cause_tags: []
+  "3":
+    signature: compare_three_proportion_graphs
+    recipe: math.compare_proportion_graphs
+    params:
+      # 比例定数の大きさの候補。負1本・絶対値最大は正1本、を全列挙して構成する
+      # （退化の排除）。組合せ = 妥当な3つ組 × 提示順6通り。
+      a_domain: {int_set: [2, 3, 4, 5, 6, 7, 8, 9]}
+    given: [expression]
+    asked: [read_slope_intercept]
+    visual: required
+    text: {tier: T1, template: propg_compare_graphs_v1, visual_builder: math.linear_graph}
+    hints: [steps_prefix]
+    concept_tags: [direct_proportion.compare_graphs]
+    cause_tags: []
+remedial:
+  default_level: 1
