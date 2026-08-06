@@ -1,0 +1,30 @@
+family: math.g1_l35.graph_table
+form: graph_table
+source_desc: |
+  グラフや条件から反比例の式を求める（units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: 双曲線上の格子点を読み式決定の材料にする。
+       example: 反比例のグラフ(双曲線)がある。このグラフが通る格子点(x座標もy座標も整数の点)を
+                1つ読み取って座標で答えよ。
+  【設計モデル】given は空（式を与えると積で計算できてしまい「グラフから読む」題材が破綻する）。
+  図には双曲線そのものを描く（curve_kind="hyperbola"・読む対象）。格子点 (x0, y0) を先に選び
+  比例定数 a=x0*y0 を逆算するので、読み取れる点であることが構成で保証される。
+concepts_default: [inverse_proportion.read_lattice_point]
+levels:
+  "1":
+    signature: read_lattice_point_on_hyperbola_graph
+    recipe: math.read_lattice_point_on_hyperbola_graph
+    params:
+      # 組合せは格子点 (x0, y0) の2軸（a = x0*y0）。|a| <= coeff_abs_max で曲線が方眼に
+      # 収まる範囲に絞る。全列挙して一様に引く。制約後の総数は 376 通り。
+      x_abs_max: 12
+      y_abs_max: 12
+      coeff_abs_max: 48
+    given: []
+    asked: [read_point]
+    visual: required
+    text: {tier: T1, template: propg_read_lattice_hyperbola_v1, visual_builder: math.curve_graph}
+    hints: [steps_prefix]
+    concept_tags: [inverse_proportion.read_lattice_point]
+    cause_tags: []
+remedial:
+  default_level: 1

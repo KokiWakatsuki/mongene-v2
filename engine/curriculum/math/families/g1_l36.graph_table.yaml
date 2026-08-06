@@ -1,0 +1,55 @@
+family: math.g1_l36.graph_table
+form: graph_table
+source_desc: |
+  比例・反比例を利用して身のまわりの問題を解く（units.generated.yaml の desc/example を正として転記）。
+  Lv2 desc: 場面の対応をグラフや表で表し読み取る。
+       example: 水そうに一定の割合で水を入れる。入れ始めてからの時間x分と水の深さy cmを測ると、
+                x=2でy=6、x=4でy=12、x=6でy=18であった。この対応を表にまとめ、点をとって
+                グラフに表し、x=5のときの深さを読み取れ。
+  Lv3 desc: 複数の関係を1つのグラフ上で比較し交点等を読む。
+       example: A社はコピー1枚を10円、B社は基本料金なしで1枚8円だが別に固定費40円がかかる。
+                コピー枚数xと料金yの関係を、A社とB社について同じ座標平面上にグラフでかき、
+                2つのグラフの交点からどちらが得になる枚数の境目を読み取れ。
+  【設計モデル】どちらも量-量グラフ（x と y で単位が違う）なので grid_mode="quantity"
+  （第1象限・軸ごとの目盛）で描く。問題図は空の方眼（Lv3 は read_intersection なので
+  両直線入りの図が §6.4 で禁止される）。Lv2 は表→点→直線→読み取りの4手順、Lv3 は
+  2式の立式→両グラフ→交点読みの4手順で op 列が相異＝level_sep（asked も read_point /
+  read_intersection で相異）。
+concepts_default: [direct_proportion.graph_from_situation]
+levels:
+  "2":
+    signature: graph_situation_proportion_read_value
+    recipe: math.graph_situation_proportion
+    params:
+      # 組合せは (割合 a, 測った x の3つ組, たずねる x_q)。a>=2 は「答えが x_q と同じ値に
+      # 潰れる」退化を避けるため。x_q は測定値と相異にする（構成で保証）。
+      rate_domain: {int_range: [2, 9]}
+      x_domain: {int_range: [1, 12], distinct: ["value"]}
+      sample_size: 3
+      query_domain: {int_range: [1, 14]}
+    given: [condition]
+    asked: [read_point]
+    visual: required
+    text: {tier: T1, template: propg_situation_graph_v1, visual_builder: math.linear_graph}
+    hints: [steps_prefix]
+    concept_tags: [direct_proportion.graph_from_situation]
+    cause_tags: []
+  "3":
+    signature: graph_two_plans_read_crossover
+    recipe: math.graph_two_plans_crossover
+    params:
+      # 組合せは (B社の単価 pb, 単価の差 d, 交点の枚数 x0) の3軸で 14*7*20 = 1960 通り。
+      # 固定費 fixed = d*x0 を逆算するので交点は必ず格子点（グラフから読める）。
+      # x0 >= 21 > 単価の上限なので、答えの座標が本文の単価と一致する退化も起きない。
+      unit_price_domain: {int_range: [2, 15]}
+      price_diff_domain: {int_range: [2, 8]}
+      crossover_domain: {int_range: [21, 40]}
+    given: [condition]
+    asked: [read_intersection]
+    visual: required
+    text: {tier: T1, template: propg_two_plans_graph_v1, visual_builder: math.linear_graph}
+    hints: [steps_prefix]
+    concept_tags: [direct_proportion.compare_two_plans_graph]
+    cause_tags: []
+remedial:
+  default_level: 2

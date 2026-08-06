@@ -1,0 +1,34 @@
+family: math.g1_l32.graph_table
+form: graph_table
+source_desc: |
+  グラフや条件から比例の式を求める（units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: グラフ上の格子点を読み式決定の材料にする。
+       example: 原点を通る直線のグラフがある。このグラフが通る格子点(x座標もy座標も整数の点)を、
+                原点以外に1つ読み取って座標で答えよ。
+  【設計モデル】given は空（式を与えるとグラフを見ずに計算で解けてしまい題材が破綻する。
+  g2_l25.graph_table と同じ設計判断）。図には直線そのものを描く（読む対象）。比例定数は
+  既約分数 n/r も許す——分数の比例定数こそ「格子点を読む」技能が要る題材だから。
+  同 unit の find_value（1点から式を決める）の前段にあたるグラフ読解セル。
+concepts_default: [direct_proportion.read_lattice_point]
+levels:
+  "1":
+    signature: read_lattice_point_on_proportion_graph
+    recipe: math.read_lattice_point_on_proportion_graph
+    params:
+      # 組合せ (分母 r, 分子 n, 倍数 m) を全列挙して一様に引く。x0 = r*m, y0 = n*m が
+      # 格子点になる。|y0| <= value_abs_max・|x0| <= x_abs_max で方眼の目盛数を有界化した
+      # 上で 436 通り（scratchpad/count_domains.py で数え上げ）。value_abs_max は方眼の
+      # 目盛が細かくなりすぎない上限（既存の直線セルと同じ 30 目盛前後に収める）。
+      numerator_domain: {int_range: [-11, 11], exclude: [0]}
+      denominator_domain: {int_set: [1, 2, 3, 4, 5]}
+      value_abs_max: 16
+      x_abs_max: 12
+    given: []
+    asked: [read_point]
+    visual: required
+    text: {tier: T1, template: propg_read_lattice_v1, visual_builder: math.linear_graph}
+    hints: [steps_prefix]
+    concept_tags: [direct_proportion.read_lattice_point]
+    cause_tags: []
+remedial:
+  default_level: 1

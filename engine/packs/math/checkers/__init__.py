@@ -49,4 +49,6 @@ from engine.packs.math.checkers import word_problem_quadratic_function  # noqa: 
 from engine.packs.math.checkers import word_problem_pythagorean  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.checkers import solid_figure  # noqa: F401  (登録の副作用のため import)
 
+from engine.packs.math.checkers import proportion_graph  # noqa: F401  (登録の副作用のため import)
+
 __all__: list[str] = []

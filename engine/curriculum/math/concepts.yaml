@@ -1244,3 +1244,40 @@ concepts:
   - id: sphere_measure.hemisphere_or_reverse
     label: "半球の表面積を多段で求める、または表面積から半径を逆算する"
     unit: g1_l53
+  # --- C4 g1 比例・反比例 graph_table 横展開（g1_l30/l31/l32/l34/l35/l36） ---
+  - id: coordinate_plane.read_point_coordinate
+    label: "点のx座標・y座標から座標平面上の点の座標を読み書きする"
+    unit: g1_l30
+  - id: coordinate_plane.reflect_point
+    label: "原点について対称な点・x軸について対称な点の座標を求め座標平面に配置する"
+    unit: g1_l30
+  - id: direct_proportion.read_value_from_graph
+    label: "比例のグラフから対応するyの値を読み取る"
+    unit: g1_l31
+  - id: direct_proportion.draw_graph
+    label: "式y=axから原点と格子点をとり比例のグラフをかく"
+    unit: g1_l31
+  - id: direct_proportion.compare_graphs
+    label: "複数の比例のグラフを比べ傾きの急さと正負から特定する"
+    unit: g1_l31
+  - id: direct_proportion.read_lattice_point
+    label: "比例のグラフ上の格子点を読み取り式決定の材料にする"
+    unit: g1_l32
+  - id: inverse_proportion.read_value_from_graph
+    label: "双曲線から対応するyの値を読み取る"
+    unit: g1_l34
+  - id: inverse_proportion.draw_hyperbola
+    label: "表で対応値を求め点をとり双曲線を2つの枝でかく"
+    unit: g1_l34
+  - id: inverse_proportion.compare_hyperbolas
+    label: "複数の双曲線を比べ象限と原点からの離れ方から特定する"
+    unit: g1_l34
+  - id: inverse_proportion.read_lattice_point
+    label: "双曲線上の格子点を読み取り式決定の材料にする"
+    unit: g1_l35
+  - id: direct_proportion.graph_from_situation
+    label: "場面の対応を表とグラフに表し別の値をグラフから読み取る"
+    unit: g1_l36
+  - id: direct_proportion.compare_two_plans_graph
+    label: "2つの料金の関係を1つの座標平面にグラフでかき交点から分かれ目を読む"
+    unit: g1_l36
