@@ -24,6 +24,12 @@ from engine.core.contracts import (
 from engine.core.registry import _Registry
 from engine.core.verify.gates import VisualStageInput
 from engine.core.verify.quality_gates import install_quality_gates
+from engine.packs.math.visuals.distribution_chart import (
+    box_plot_labels,
+    frequency_chart_labels,
+    render_box_plot_svg,
+    render_frequency_chart_svg,
+)
 from engine.packs.math.visuals.graph import (
     compute_grid_spec_from_params,
     render_linear_graph,
@@ -236,6 +242,114 @@ def test_curve_rendering_is_deterministic() -> None:
     a = render_curve_svg(_HYPERBOLA_PARAMS, draw_curve=True)
     b = render_curve_svg(_HYPERBOLA_PARAMS, draw_curve=True)
     assert a == b
+
+
+# ---------------------------------------------------------------------------
+# 分布のグラフ（ヒストグラム・度数折れ線・累積折れ線・箱ひげ図）— C11 統計の土台
+# ---------------------------------------------------------------------------
+_HIST = {"class_lo": 10, "class_width": 5, "frequencies": [2, 5, 8, 4, 1], "chart_kind": "histogram"}
+_POLY = {"class_lo": 150, "class_width": 5, "frequencies": [2, 6, 9, 3], "chart_kind": "polygon"}
+_CUML = {"class_lo": 0, "class_width": 10, "frequencies": [4, 9, 7, 5], "chart_kind": "cumulative"}
+_CMP = {
+    "class_lo": 0, "class_width": 2,
+    "frequencies": [3, 7, 10, 6, 2], "frequencies_b": [6, 9, 5, 3, 1],
+    "chart_kind": "polygon",
+}
+_BOX = {"five_number": [4, 8, 12, 17, 24], "axis_lo": 0, "axis_hi": 30, "axis_step": 5}
+_BOX2 = {**_BOX, "five_number_b": [6, 11, 15, 19, 27]}
+
+_ALL_FREQ = (_HIST, _POLY, _CUML, _CMP)
+
+
+def test_histogram_bars_are_adjacent_and_one_per_class() -> None:
+    """ヒストグラムの棒は階級数だけあり、隣どうしに隙間がない（棒グラフとの違い）。"""
+    svg = render_frequency_chart_svg(_HIST, draw=True)
+    rects = re.findall(r'<rect x="([\d.]+)" y="[\d.]+" width="([\d.]+)"', svg)
+    bars = rects[1:]  # 先頭は背景の rect
+    assert len(bars) == len(_HIST["frequencies"])
+    for (x1, w1), (x2, _) in zip(bars, bars[1:]):
+        assert abs((float(x1) + float(w1)) - float(x2)) < 0.01
+
+
+def test_frequency_polygon_drops_to_zero_at_both_ends() -> None:
+    """度数折れ線は両端で度数 0 まで下ろす（教科書の作図規約）。"""
+    svg = render_frequency_chart_svg(_POLY, draw=True)
+    pts = re.findall(r'<polyline points="([^"]*)"', svg)[0].split(" ")
+    ys = [float(p.split(",")[1]) for p in pts]
+    assert len(pts) == len(_POLY["frequencies"]) + 2  # 両端の 0 を足した数
+    assert ys[0] == ys[-1] == max(ys)  # y は下向きが正＝0 が最下端
+
+
+def test_cumulative_line_is_monotone_non_decreasing() -> None:
+    """累積の折れ線は必ず単調非減少（描画 y は単調非増加）。"""
+    svg = render_frequency_chart_svg(_CUML, draw=True)
+    pts = re.findall(r'<polyline points="([^"]*)"', svg)[0].split(" ")
+    ys = [float(p.split(",")[1]) for p in pts]
+    assert all(a >= b for a, b in zip(ys, ys[1:]))
+
+
+def test_second_series_is_distinguished_by_dash_not_color() -> None:
+    """2本目の系列は破線で区別する（色に情報を載せない＝モノクロ印刷可）。"""
+    svg = render_frequency_chart_svg(_CMP, draw=True)
+    assert svg.count("stroke-dasharray") >= 1
+    colors = set(re.findall(r'(?:stroke|fill)="([^"]*)"', svg))
+    assert colors <= {"none", "#000000", "#bbbbbb", "#ffffff"}
+
+
+def test_distribution_problem_figure_is_empty_chart() -> None:
+    """「かく」セルの問題図は目盛だけ＝分布を描かない（答えの先出しをしない）。
+
+    土台（軸・補助線・目盛）は解答図と共有されるので座標系は必ず一致する。
+    """
+    for params in _ALL_FREQ:
+        empty = render_frequency_chart_svg(params, draw=False)
+        assert "<polyline" not in empty
+        assert empty.count("<rect") == 1  # 背景の rect だけ＝棒が無い
+        assert _svg_texts(empty) == _svg_texts(render_frequency_chart_svg(params, draw=True))
+
+
+def test_distribution_svg_texts_are_subset_of_labels() -> None:
+    """G-Q5v: 図中の <text> は軸目盛だけで、labels 生成関数と機械的に一致する。
+
+    階級や度数の**値そのもの**は図に書かないので、「読む」セルで答えが先出しされない。
+    """
+    for params in _ALL_FREQ:
+        svg = render_frequency_chart_svg(params, draw=True)
+        assert set(_svg_texts(svg)) <= set(frequency_chart_labels(params))
+    for params in (_BOX, _BOX2):
+        svg = render_box_plot_svg(params, draw=True)
+        assert set(_svg_texts(svg)) <= set(box_plot_labels(params))
+
+
+def test_box_plot_orders_whisker_box_median_left_to_right() -> None:
+    """箱ひげ図: 最小値 ≤ Q1 ≤ 中央値 ≤ Q3 ≤ 最大値 が x 座標の順序として出る。"""
+    svg = render_box_plot_svg(_BOX, draw=True)
+    box = re.search(r'<rect x="([\d.]+)" y="[\d.]+" width="([\d.]+)" height="42', svg)
+    assert box is not None
+    left, width = float(box.group(1)), float(box.group(2))
+    med = float(re.findall(r'<line x1="([\d.]+)"[^>]*stroke-width="2.5"', svg)[-1])
+    assert left < med < left + width
+
+
+def test_box_plot_problem_figure_is_number_line_only() -> None:
+    """「かく」セルの問題図は数直線と目盛だけ（箱ひげを描かない）。"""
+    empty = render_box_plot_svg(_BOX, draw=False)
+    assert empty.count("<rect") == 1  # 背景のみ＝箱が無い
+    assert _svg_texts(empty) == _svg_texts(render_box_plot_svg(_BOX, draw=True))
+
+
+def test_box_plot_rejects_unordered_five_number() -> None:
+    """5数要約が単調でない（＝データとして成立しない）入力は弾く。"""
+    import pytest
+
+    with pytest.raises(ValueError):
+        render_box_plot_svg({**_BOX, "five_number": [4, 12, 8, 17, 24]}, draw=True)
+
+
+def test_distribution_rendering_is_deterministic() -> None:
+    """同じ params からは同じバイト列（決定論）。"""
+    assert render_frequency_chart_svg(_CMP, draw=True) == render_frequency_chart_svg(_CMP, draw=True)
+    assert render_box_plot_svg(_BOX2, draw=True) == render_box_plot_svg(_BOX2, draw=True)
 
 
 class _DummyFrame:
