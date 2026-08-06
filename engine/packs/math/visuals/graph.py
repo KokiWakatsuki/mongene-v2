@@ -460,18 +460,76 @@ def _curve_polylines(kind: str, coeff: sympy.Expr, sc: _GridScaffold) -> list[li
     return runs
 
 
-def render_curve_svg(params: dict[str, Any], *, draw_curve: bool) -> str:
+def _curve_arc_points(
+    kind: str, coeff: sympy.Expr, sc: _GridScaffold, x_lo: sympy.Expr, x_hi: sympy.Expr
+) -> list[tuple[float, float]]:
+    """曲線の [x_lo, x_hi] 部分を画素座標の点列に離散化する（枠内に収まる前提）。"""
+    span = sympy.Rational(x_hi - x_lo, _CURVE_SAMPLES - 1)
+    out: list[tuple[float, float]] = []
+    for i in range(_CURVE_SAMPLES):
+        x = x_lo + span * i
+        y = _curve_y(kind, coeff, x)
+        if y is None:
+            continue
+        out.append((sc.to_px_x(float(x)), sc.to_px_y(float(y))))
+    return out
+
+
+def _hatch_lines_in_region(
+    boundary: list[tuple[float, float]], clip_id: str
+) -> list[str]:
+    """境界 boundary（画素座標の閉多角形）の内側を斜線で塗る SVG 断片。
+
+    clipPath で領域を切り抜き、45°の平行線を等間隔に引く（色に情報を載せない・
+    モノクロ印刷可）。<text> は増えないので G-Q5v に影響しない。
+    """
+    poly = " ".join(f"{px:.2f},{py:.2f}" for px, py in boundary)
+    parts = [
+        f'<defs><clipPath id="{clip_id}"><polygon points="{poly}"/></clipPath></defs>',
+        f'<g clip-path="url(#{clip_id})">',
+    ]
+    # 45°（右下がり）の平行線を、図全体を覆う範囲で等間隔に引く。
+    step = 10
+    for k in range(-_SVG_SIZE // step, 2 * _SVG_SIZE // step + 1):
+        c = k * step
+        parts.append(
+            f'<line x1="{c}" y1="0" x2="{c + _SVG_SIZE}" y2="{_SVG_SIZE}" '
+            f'stroke="#000000" stroke-width="0.7"/>'
+        )
+    parts.append("</g>")
+    return parts
+
+
+def render_curve_svg(
+    params: dict[str, Any],
+    *,
+    draw_curve: bool,
+    second_coeff: Any = None,
+    line: tuple[Any, Any] | None = None,
+    arc_range: tuple[Any, Any] | None = None,
+    hatch_between: bool = False,
+) -> str:
     """params（curve_kind, coeff, pts）から曲線つき／空の座標平面 SVG を組む。
 
     draw_curve=False は「かく」セルの問題図＝空の方眼（生徒が描き込む）。
     render_grid_svg と同じ土台・同じ範囲計算（pts 由来）を使うので、問題図と
     解答図の座標系は必ず一致する。
+
+    keyword-only の追加要素（いずれも既定 None/False＝描かない。既存の呼び出しは
+    出力バイト列が完全に不変＝既存 golden 不変）:
+
+    - second_coeff: 同じ座標軸にもう1本の曲線を重ねる（g3_l33 Lv2「開き方の比較」）。
+      1本目と区別できるよう破線にする（色ではなく線種で区別＝モノクロ印刷可）。
+    - line: (m, b) の直線 y=mx+b を重ねる（g3_l37 Lv2「放物線と直線」）。
+      render_grid_svg の直線描画と同じ書式・同じ太さ（黒の実線 2.5）。
+    - arc_range: (x_lo, x_hi) の区間だけ曲線を太くなぞる（g3_l34 Lv2「変域の部分」）。
+    - hatch_between: line と曲線が囲む部分（交点間）を斜線で示す（g3_l37 Lv2）。
     """
     sc = _grid_scaffold(params)
     parts = sc.parts
+    kind = str(params.get("curve_kind", "parabola"))
 
     if draw_curve:
-        kind = str(params["curve_kind"])
         coeff = sympy.nsimplify(sympy.sympify(params["coeff"]))
         for run in _curve_polylines(kind, coeff, sc):
             pts = " ".join(f"{px:.2f},{py:.2f}" for px, py in run)
@@ -480,9 +538,131 @@ def render_curve_svg(params: dict[str, Any], *, draw_curve: bool) -> str:
                 f'stroke="#000000" stroke-width="2.5"/>'
             )
 
+    # --- 2本目の曲線（破線・線種で区別） ---
+    if second_coeff is not None:
+        coeff2 = sympy.nsimplify(sympy.sympify(second_coeff))
+        for run in _curve_polylines(kind, coeff2, sc):
+            pts = " ".join(f"{px:.2f},{py:.2f}" for px, py in run)
+            parts.append(
+                f'<polyline points="{pts}" fill="none" stroke="#000000" '
+                f'stroke-width="2.5" stroke-dasharray="7 5"/>'
+            )
+
+    # --- 直線 y=mx+b（render_grid_svg の直線と同じ書式・同じ太さ） ---
+    if line is not None:
+        m_s = sympy.nsimplify(sympy.sympify(line[0]))
+        b_s = sympy.nsimplify(sympy.sympify(line[1]))
+        px1, py1 = sc.to_px_x(sc.x_lo), sc.to_px_y(float(m_s * sc.x_lo + b_s))
+        px2, py2 = sc.to_px_x(sc.x_hi), sc.to_px_y(float(m_s * sc.x_hi + b_s))
+        parts.append(
+            f'<line x1="{px1:.2f}" y1="{py1:.2f}" x2="{px2:.2f}" y2="{py2:.2f}" '
+            f'stroke="#000000" stroke-width="2.5"/>'
+        )
+
+    # --- 曲線と直線が囲む部分の斜線（境界＝放物線の弧＋直線） ---
+    if hatch_between and line is not None:
+        coeff = sympy.nsimplify(sympy.sympify(params["coeff"]))
+        m_s = sympy.nsimplify(sympy.sympify(line[0]))
+        b_s = sympy.nsimplify(sympy.sympify(line[1]))
+        xa = sympy.nsimplify(sympy.sympify(params["hatch_x_lo"]))
+        xb = sympy.nsimplify(sympy.sympify(params["hatch_x_hi"]))
+        arc = _curve_arc_points(kind, coeff, sc, xa, xb)
+        chord = [
+            (sc.to_px_x(float(xb)), sc.to_px_y(float(m_s * xb + b_s))),
+            (sc.to_px_x(float(xa)), sc.to_px_y(float(m_s * xa + b_s))),
+        ]
+        parts.extend(_hatch_lines_in_region(arc + chord, "enclosed-region"))
+
+    # --- 変域に対応する部分を太くなぞる ---
+    if arc_range is not None:
+        coeff = sympy.nsimplify(sympy.sympify(params["coeff"]))
+        xa = sympy.nsimplify(sympy.sympify(arc_range[0]))
+        xb = sympy.nsimplify(sympy.sympify(arc_range[1]))
+        arc = _curve_arc_points(kind, coeff, sc, xa, xb)
+        pts = " ".join(f"{px:.2f},{py:.2f}" for px, py in arc)
+        parts.append(
+            f'<polyline points="{pts}" fill="none" '
+            f'stroke="#000000" stroke-width="5"/>'
+        )
+
     parts.extend(_grid_ticks(sc))
     parts.append("</svg>")
     return "".join(parts)
+
+
+def render_polyline_svg(params: dict[str, Any], *, draw_polyline: bool) -> str:
+    """折れ線（区間ごとに式が変わる関数のグラフ）の SVG（g3_l38 Lv3）。
+
+    params["poly_pts"]（"(x, y)" 文字列のリスト）を順に結ぶ。draw_polyline=False は
+    「かく」セルの問題図＝空の方眼。範囲計算（pts 由来）は他の描画と共通なので、
+    問題図と解答図の座標系は必ず一致する。折れ点は塗り●で示す（色に情報を載せない）。
+    """
+    sc = _grid_scaffold(params)
+    parts = sc.parts
+
+    if draw_polyline:
+        pts = [_parse_point(s) for s in params["poly_pts"]]
+        px = [(sc.to_px_x(float(x)), sc.to_px_y(float(y))) for x, y in pts]
+        joined = " ".join(f"{a:.2f},{b:.2f}" for a, b in px)
+        parts.append(
+            f'<polyline points="{joined}" fill="none" '
+            f'stroke="#000000" stroke-width="2.5"/>'
+        )
+        for a, b in px:
+            parts.append(f'<circle cx="{a:.2f}" cy="{b:.2f}" r="4" fill="#000000"/>')
+
+    parts.extend(_grid_ticks(sc))
+    parts.append("</svg>")
+    return "".join(parts)
+
+
+def _draw_polyline_from_plan(mr: "MR") -> bool:
+    """visual_plan.elements に "polyline" 要素が宣言されていれば折れ線を描く。"""
+    if mr.visual_plan is None:
+        return True
+    return any(e.kind == "polyline" for e in mr.visual_plan.elements)
+
+
+def render_polyline_graph(mr: "MR", ctx: "CellContext") -> str:
+    """登録 visual（問題図）。visual_plan の polyline 要素の有無で折れ線描画を切替える。"""
+    return render_polyline_svg(mr.params, draw_polyline=_draw_polyline_from_plan(mr))
+
+
+def render_polyline_solution_svg(params: dict[str, Any]) -> str:
+    """折れ線の模範解答図（g3_l38 Lv3）。GraphAnswer.solution_svg_ref に格納する。"""
+    return render_polyline_svg(params, draw_polyline=True)
+
+
+def render_curve_pair_solution_svg(params: dict[str, Any]) -> str:
+    """2本の放物線を同じ座標軸にかいた模範解答図（g3_l33 Lv2）。
+
+    params に "coeff"（1本目・実線）と "coeff2"（2本目・破線）を持つ。
+    """
+    return render_curve_svg(params, draw_curve=True, second_coeff=params["coeff2"])
+
+
+def render_curve_domain_solution_svg(params: dict[str, Any]) -> str:
+    """変域に対応する部分を太くなぞった模範解答図（g3_l34 Lv2）。
+
+    params に "arc_x_lo"/"arc_x_hi"（変域の両端）を持つ。
+    """
+    return render_curve_svg(
+        params, draw_curve=True, arc_range=(params["arc_x_lo"], params["arc_x_hi"])
+    )
+
+
+def render_curve_line_solution_svg(params: dict[str, Any]) -> str:
+    """放物線と直線をかき、囲まれた部分を斜線で示した模範解答図（g3_l37 Lv2）。
+
+    params に "line_m"/"line_b"（直線 y=mx+b）と "hatch_x_lo"/"hatch_x_hi"（交点の
+    x 座標）を持つ。
+    """
+    return render_curve_svg(
+        params,
+        draw_curve=True,
+        line=(params["line_m"], params["line_b"]),
+        hatch_between=True,
+    )
 
 
 def _draw_curve_from_plan(mr: "MR") -> bool:
@@ -508,6 +688,7 @@ def render_curve_solution_svg(params: dict[str, Any]) -> str:
 
 register_visual("math.linear_graph")(render_linear_graph)
 register_visual("math.curve_graph")(render_curve_graph)
+register_visual("math.polyline_graph")(render_polyline_graph)
 
 
 __all__ = [
@@ -519,6 +700,12 @@ __all__ = [
     "render_curve_graph",
     "render_curve_svg",
     "render_curve_solution_svg",
+    "render_curve_pair_solution_svg",
+    "render_curve_domain_solution_svg",
+    "render_curve_line_solution_svg",
+    "render_polyline_graph",
+    "render_polyline_svg",
+    "render_polyline_solution_svg",
     "compute_grid_bounds",
     "compute_grid_bounds_from_params",
     "compute_grid_spec_from_params",

@@ -1,0 +1,38 @@
+family: math.g3_l37.graph_table
+form: graph_table
+source_desc: |
+  放物線と直線が囲む図形をグラフ上で把握する
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv2 desc: 放物線と直線が囲む図形をグラフ上で把握する。
+       example: 放物線 y=x^2 と直線 y=x+2 を同じ座標軸にかき、この放物線と直線で
+                囲まれた部分を斜線で示せ。
+  【設計モデル】answer-first。交点の x 座標 xA,xB（相異・非0の整数）と比例定数 a（非0）を
+  先に決め、m=a(xA+xB)・b=-a·xA·xB を逆算する（同 unit の find_value と同じ構成。
+  xA≠xB・a≠0 から b≠0 が構成的に保証され、交点が2つ＝囲まれた部分が退化しない）。
+  新設 solver math.draw_parabola_line_features は、交点そのものを find_value 側と共有の
+  `_parabola_line_intersections`（連立方程式を解く）で求める＝新しい数学ロジックは無い。
+  答えは GraphAnswer で、特徴は「囲まれた部分の境界を定める2つの交点」。
+  【図】土台（visuals/graph.py の render_curve_svg）に直線の重ね描き（既存 render_grid_svg
+  と同じ書式・同じ太さ）と、囲まれた部分の斜線（clipPath で領域を切り抜いて45°の平行線）を
+  追加した。問題図は空の方眼（かく）、模範解答図は放物線＋直線＋斜線。
+concepts_default: [parabola_graph.enclosed_region]
+levels:
+  "2":
+    signature: parabola_line_enclosed_region
+    recipe: math.draw_parabola_and_line
+    params:
+      # |a·x²| ≦ 16 を満たす (a, xA, xB) が 96 通り（a: ±1..±6、x: ±1..±4 の相異2つ）。
+      # 交点の点名2つ（16 個から順に選ぶ＝240 通り）を掛けて params 総組合せ 23040 通り
+      # ＝dup_rate ほぼ 0（数え上げ実測）。
+      a_domain: {int_range: [-6, 6], exclude: [0]}
+      x_domain: {int_range: [-4, 4], exclude: [0]}
+      value_bound: 16
+    given: [expression, line_a, situation_params]
+    asked: [draw_graph]
+    visual: required
+    text: {tier: T1, template: lf_parabola_line_region_v1, visual_builder: math.curve_graph}
+    hints: [steps_prefix]
+    concept_tags: [parabola_graph.enclosed_region]
+    cause_tags: []
+remedial:
+  default_level: 2

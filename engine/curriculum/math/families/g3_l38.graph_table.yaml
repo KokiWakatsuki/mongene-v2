@@ -1,0 +1,68 @@
+family: math.g3_l38.graph_table
+form: graph_table
+source_desc: |
+  時間と面積の対応を読む／区間ごとに式が変わる面積のグラフを正確にかく
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv2 desc: 時間と面積の対応を読む。
+       example: 動点 P が三角形の周上を動くとき、経過時間 x 秒と三角形の面積 y cm^2 の
+                関係が右のグラフで表されている。x=3 のときの面積を読み取って答えよ。
+  Lv3 desc: 区間ごとに式が変わる面積のグラフを正確にかく。
+       example: 1辺 6cm の正方形 ABCD の周上を点 P が A→B→C の順に毎秒 1cm で動くとき、
+                経過時間 x 秒と三角形 APD の面積 y cm^2 の関係を、区間ごとに式を求めて
+                グラフにかけ。
+  【設計モデル】どちらの example も、動点が多角形の周を辺から辺へ渡る場面で、面積は
+  区間ごとに式が変わる（増加する1次式 → 一定）＝グラフは**折れ線**になる。
+  Lv2（読む）: 長方形の周上を動く点がつくる三角形の面積-時間グラフを図として与え、
+  2つの時刻の面積を読み取らせる。given に長方形の2辺を出さない（出すと計算で解けて
+  しまう・g2_l25.graph_table と同じ設計判断）。solver は既存 math.read_two_lattice_points
+  をそのまま再利用（新 solver ゼロ）。長方形の2辺は、面積の最大値と全体の時間が
+  量-量グラフの目盛（1刻み）に収まる範囲に絞って引く＝読み取りが格子点で確定する。
+  Lv3（かく）: 台帳 example どおり正方形 ABCD を A→B→C の順に動く点。新設 solver
+  math.draw_piecewise_area_graph_features は、面積を既存の shoelace 公式
+  （solvers/motion.py の `_shoelace_triangle_area`・g3_l31 と共有）で再計算し、
+  区間ごとの式（1次関数 → 一定）と一致することを確かめてから折れ点3つを返す。
+  1辺 s は偶数（面積 s²/2 が整数）、速さ v は s の約数（折れ点の時刻 s/v が整数＝目盛に
+  のる）に構成時に絞る（鉄則⑤）。
+  op 列は Lv2(read_point×2) と Lv3(identify_intervals→express_area_on_first_interval→
+  express_area_on_second_interval→plot_breakpoints→draw_polyline)で相異＝level_sep。
+  【図】時間 x 秒と面積 y cm² は単位の違う2量なので量-量グラフ（grid_mode="quantity"）。
+  Lv2 の問題図は折れ線つき（読む対象）、Lv3 の問題図は空の方眼で模範解答図が折れ線。
+concepts_default: [parabola_graph.read_area_time]
+levels:
+  "2":
+    signature: area_time_graph_read_values
+    recipe: math.read_area_time_graph
+    params:
+      # 長方形の2辺 p（偶数・面積が整数になる）× q に、面積の最大 pq/2 ≦ 12 と
+      # 全体の時間 p+q ≦ 12（どちらも量-量グラフの目盛が1刻みになる上限）を課すと
+      # 23 通り。読み取る時刻の組 (t1,t2) を掛けて 706 通り。さらに点名5つ
+      # （16 個から順に選ぶ）を掛けるので params 総組合せは実質無限（実測 dup=0.0）。
+      side_p_domain: {int_range: [2, 8]}
+      side_q_domain: {int_range: [1, 10]}
+      area_max: 12
+      time_max: 12
+    given: [situation_params]
+    asked: [read_point]
+    visual: required
+    text: {tier: T1, template: lf_parabola_read_points_v1, visual_builder: math.polyline_graph}
+    hints: [steps_prefix]
+    concept_tags: [parabola_graph.read_area_time]
+    cause_tags: []
+  "3":
+    signature: area_time_graph_draw_piecewise
+    recipe: math.draw_piecewise_area_graph
+    params:
+      # 1辺 s は偶数 4..44（g3_l31.graph_table と同じ side_max=44＝面積の目盛が
+      # 3桁に収まる上限）、速さ v は s の約数（1..6）で 71 通り。点名5つを掛けて
+      # params 総組合せは実質無限（実測 dup=0.0）。
+      side_domain: {int_range: [4, 44]}
+      speed_domain: {int_range: [1, 6]}
+    given: [condition]
+    asked: [draw_graph]
+    visual: required
+    text: {tier: T1, template: lf_piecewise_area_graph_v1, visual_builder: math.polyline_graph}
+    hints: [steps_prefix]
+    concept_tags: [parabola_graph.piecewise_area]
+    cause_tags: []
+remedial:
+  default_level: 2

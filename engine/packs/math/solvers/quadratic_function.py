@@ -18,10 +18,11 @@ narration には数字を書かない（"0" は "=0" の whitelist のみ許可�
 from __future__ import annotations
 
 import re
+from typing import cast
 
 import sympy
 
-from engine.core.contracts import Solution, Step, SymbolicAnswer
+from engine.core.contracts import Feature, GraphAnswer, Solution, Step, SymbolicAnswer
 from engine.core.registry import register_solver
 
 _X = sympy.Symbol("x")
@@ -396,10 +397,274 @@ def solve_quadratic_motion_area(s: object, d: object, mode: object) -> Solution:
     return Solution(answer=answer, steps=steps)
 
 
+# ---------------------------------------------------------------------------
+# graph_table「かく」系（答えは GraphAnswer＝特徴集合。§6.2 V1'）
+#
+# 直線の「かく」（math.draw_linear_features ほか）と同じ規約:
+#   - solver は SVG を描かない（検証可能な特徴と手順だけを返す）
+#   - 模範解答図の描画は recipe が visual 層の純ヘルパで行う
+# 特徴の srepr には役割を表す記号（Symbol）を先頭に置き、座標が偶然一致しても
+# 別の特徴として区別できるようにする（_answers_match は srepr 集合で比較するため）。
+# ---------------------------------------------------------------------------
+_ROLE_VERTEX = sympy.Symbol("vertex")
+_ROLE_ON_CURVE = sympy.Symbol("on_curve")
+_ROLE_NARROWER = sympy.Symbol("narrower")
+_ROLE_ENDPOINT = sympy.Symbol("endpoint")
+_ROLE_Y_RANGE = sympy.Symbol("y_range")
+_ROLE_INTERSECTION = sympy.Symbol("intersection")
+
+
+def _vertex_feature() -> "Feature":
+    return Feature(
+        kind="vertex",
+        srepr=sympy.srepr(sympy.Tuple(_ROLE_VERTEX, sympy.Integer(0), sympy.Integer(0))),
+        display="頂点は原点",
+    )
+
+
+def _curve_point_feature(a: sympy.Expr, x: sympy.Expr) -> "Feature":
+    """曲線 y=ax² 上の点（比例定数も srepr に含めるので、どの曲線の点かまで検証できる）。"""
+    y = a * x**2
+    return Feature(
+        kind="curve_point",
+        srepr=sympy.srepr(sympy.Tuple(_ROLE_ON_CURVE, a, x, y)),
+        display=f"({_fmt_scalar(x)}, {_fmt_scalar(y)})",
+    )
+
+
+def _int_range(x_lo: sympy.Expr, x_hi: sympy.Expr) -> list[sympy.Integer]:
+    if x_lo >= x_hi:
+        raise ValueError("表の x の範囲は x_lo < x_hi であること")
+    return [sympy.Integer(v) for v in range(int(x_lo), int(x_hi) + 1)]
+
+
+@register_solver("math.draw_two_parabolas_features")
+def draw_two_parabolas_features(a1: object, a2: object, x_lo: object, x_hi: object) -> Solution:
+    """対応表の点をとって放物線を2本かき、開き方を比べる（g3_l33.graph_table Lv2）。
+
+    比例定数 a1・a2（相異・非0）と対応表の x の範囲 [x_lo, x_hi]（整数）だけから、
+    採点用の特徴（頂点・各曲線の通過点・開き方がせまいほうの比例定数）を導く。
+    「開き方」は |a| が大きいほどせまい（y 軸に近づく）。narration には数字を書かない。
+    """
+    a1_s, a2_s = sympy.nsimplify(a1), sympy.nsimplify(a2)
+    lo, hi = sympy.nsimplify(x_lo), sympy.nsimplify(x_hi)
+    if a1_s == 0 or a2_s == 0:
+        raise ValueError("比例定数は 0 でないこと")
+    if abs(a1_s) == abs(a2_s):
+        # a1=a2 は2本が重なる。a1=-a2 は開く向きが逆なだけで開き方の広さが等しく、
+        # 「どちらの開き方がせまいか」が一意に決まらない（答えが黙って片方に倒れる退化）。
+        raise ValueError("2つの比例定数は絶対値が相異なること（開き方を比べられない）")
+    xs = _int_range(lo, hi)
+
+    narrower = a1_s if abs(a1_s) > abs(a2_s) else a2_s
+    features = [_vertex_feature()]
+    for a in (a1_s, a2_s):
+        features.extend(_curve_point_feature(a, x) for x in xs)
+    features.append(
+        Feature(
+            kind="narrower_curve",
+            srepr=sympy.srepr(sympy.Tuple(_ROLE_NARROWER, narrower)),
+            display=f"開き方がせまいのは比例定数が {_fmt_scalar(narrower)} のほう",
+        )
+    )
+
+    ops = [
+        "build_correspondence_table",
+        "plot_table_points",
+        "draw_first_parabola",
+        "draw_second_parabola",
+        "compare_opening",
+    ]
+    narration = {
+        "build_correspondence_table": "表の x の値を式に代入して、対応する y の値を求める。",
+        "plot_table_points": "求めた x と y の組を座標とみて、方眼上に点をとる。",
+        "draw_first_parabola": "とった点をなめらかな曲線で結び、放物線をかく。",
+        "draw_second_parabola": "もう一方の式についても同じように点をとり、放物線をかく。",
+        "compare_opening": "比例定数の絶対値が大きいほど開き方はせまいことから、2本を比べる。",
+    }
+    phrase = {
+        "build_correspondence_table": "対応表をつくる",
+        "plot_table_points": "点をとる",
+        "draw_first_parabola": "放物線をかく",
+        "draw_second_parabola": "もう1本の放物線をかく",
+    }
+    disp = f"開き方がせまいのは比例定数が {_fmt_scalar(narrower)} のほう"
+    steps = [
+        Step(
+            op=op,
+            args=[],
+            result_srepr=sympy.srepr(sympy.Tuple(_ROLE_NARROWER, narrower)) if i == len(ops) - 1 else "",
+            result_display=disp if i == len(ops) - 1 else phrase[op],
+            narration=narration[op],
+        )
+        for i, op in enumerate(ops)
+    ]
+    return Solution(answer=GraphAnswer(features=features, solution_svg_ref=""), steps=steps)
+
+
+@register_solver("math.draw_parabola_domain_features")
+def draw_parabola_domain_features(a: object, x_lo: object, x_hi: object) -> Solution:
+    """放物線をかき、x の変域に対応する部分と y の変域を示す（g3_l34.graph_table Lv2）。
+
+    比例定数 a（非0）と x の変域 [x_lo, x_hi] だけから、変域の両端に対応する曲線上の点と
+    y の変域を導く。y の変域は、変域が頂点（原点）をまたぐときだけ頂点の y 値 0 を
+    候補に加えて決める（find_value 側 math.y_range_over_quadratic_domain と同じ規則）。
+    """
+    a_s = sympy.nsimplify(a)
+    lo, hi = sympy.nsimplify(x_lo), sympy.nsimplify(x_hi)
+    if a_s == 0:
+        raise ValueError("比例定数は 0 でないこと")
+    if lo >= hi:
+        raise ValueError("x の変域は x_lo < x_hi であること")
+
+    y1, y2 = a_s * lo**2, a_s * hi**2
+    candidates = [y1, y2]
+    if lo < 0 < hi:
+        candidates.append(sympy.Integer(0))  # 頂点 (0,0) の y 値
+    y_min, y_max = sympy.Min(*candidates), sympy.Max(*candidates)
+
+    features = [
+        Feature(
+            kind="arc_endpoint",
+            srepr=sympy.srepr(sympy.Tuple(_ROLE_ENDPOINT, lo, y1)),
+            display=f"変域の左端に対応する点 ({_fmt_scalar(lo)}, {_fmt_scalar(y1)})",
+        ),
+        Feature(
+            kind="arc_endpoint",
+            srepr=sympy.srepr(sympy.Tuple(_ROLE_ENDPOINT, hi, y2)),
+            display=f"変域の右端に対応する点 ({_fmt_scalar(hi)}, {_fmt_scalar(y2)})",
+        ),
+        Feature(
+            kind="y_range",
+            srepr=sympy.srepr(sympy.Tuple(_ROLE_Y_RANGE, y_min, y_max)),
+            display=f"{_fmt_scalar(y_min)} ≦ y ≦ {_fmt_scalar(y_max)}",
+        ),
+    ]
+
+    ops = ["draw_parabola", "mark_domain_endpoints", "trace_domain_part", "read_y_range"]
+    narration = {
+        "draw_parabola": "式にしたがって、放物線を座標平面にかく。",
+        "mark_domain_endpoints": "x の変域の両端に対応する曲線上の点をとる。",
+        "trace_domain_part": "その両端にはさまれた部分の曲線を、太くなぞって示す。",
+        "read_y_range": "なぞった部分の最も低いところと最も高いところから、y の変域を読み取る。",
+    }
+    phrase = {
+        "draw_parabola": "放物線をかく",
+        "mark_domain_endpoints": "変域の両端の点をとる",
+        "trace_domain_part": "変域に対応する部分をなぞる",
+    }
+    disp = f"{_fmt_scalar(y_min)} ≦ y ≦ {_fmt_scalar(y_max)}"
+    srepr = sympy.srepr(sympy.Tuple(_ROLE_Y_RANGE, y_min, y_max))
+    steps = [
+        Step(
+            op=op,
+            args=[],
+            result_srepr=srepr if i == len(ops) - 1 else "",
+            result_display=disp if i == len(ops) - 1 else phrase[op],
+            narration=narration[op],
+        )
+        for i, op in enumerate(ops)
+    ]
+    return Solution(answer=GraphAnswer(features=features, solution_svg_ref=""), steps=steps)
+
+
+@register_solver("math.draw_parabola_line_features")
+def draw_parabola_line_features(a: object, m: object, b: object) -> Solution:
+    """放物線と直線を同じ座標軸にかき、囲まれた部分を示す（g3_l37.graph_table Lv2）。
+
+    囲まれた部分の境界は2つの交点で定まるので、答えは交点2つの特徴集合とする。
+    交点そのものは find_value 側と共有の `_parabola_line_intersections`（連立方程式を
+    解く）で求める＝新しい数学ロジックは足していない。
+    """
+    a_s, m_s, b_s = sympy.nsimplify(a), sympy.nsimplify(m), sympy.nsimplify(b)
+    roots = _parabola_line_intersections(a_s, m_s, b_s)
+    if len(roots) != 2:
+        raise ValueError(f"交点がちょうど2つでない: {roots}")
+    features = [
+        Feature(
+            kind="intersection",
+            srepr=sympy.srepr(sympy.Tuple(_ROLE_INTERSECTION, r, a_s * r**2)),
+            display=f"交点 ({_fmt_scalar(r)}, {_fmt_scalar(a_s * r**2)})",
+        )
+        for r in roots
+    ]
+
+    ops = ["draw_parabola", "draw_line", "mark_intersections", "shade_enclosed_region"]
+    narration = {
+        "draw_parabola": "放物線の式にしたがって、曲線を座標平面にかく。",
+        "draw_line": "直線の式にしたがって、同じ座標軸に直線をかく。",
+        "mark_intersections": "放物線と直線の式を連立させて解き、交点をとる。",
+        "shade_enclosed_region": "2つの交点にはさまれた、曲線と直線で囲まれた部分に斜線をひく。",
+    }
+    phrase = {
+        "draw_parabola": "放物線をかく",
+        "draw_line": "直線をかく",
+        "mark_intersections": "交点をとる",
+    }
+    disp = "、".join(f"({_fmt_scalar(r)}, {_fmt_scalar(a_s * r**2)})" for r in roots)
+    srepr = sympy.srepr(sympy.Tuple(*(sympy.Tuple(r, a_s * r**2) for r in roots)))
+    steps = [
+        Step(
+            op=op,
+            args=[],
+            result_srepr=srepr if i == len(ops) - 1 else "",
+            result_display=f"囲まれた部分の境界は2つの交点 {disp}" if i == len(ops) - 1 else phrase[op],
+            narration=narration[op],
+        )
+        for i, op in enumerate(ops)
+    ]
+    return Solution(answer=GraphAnswer(features=features, solution_svg_ref=""), steps=steps)
+
+
+@register_solver("math.draw_quantity_curve_features")
+def draw_quantity_curve_features(a: object, x_values: object) -> Solution:
+    """表の値を座標にとって、2乗に比例する現象のグラフをかく（g3_l36.graph_table Lv2）。
+
+    比例定数 a（正）と表に載っている x の値の並びだけから、とるべき点を導く。
+    x も y も 0 以上の量（第1象限の量-量グラフ）なので、点は表の各行に対応する。
+    """
+    a_s = sympy.nsimplify(a)
+    if a_s <= 0:
+        raise ValueError("現象の比例定数は正であること（第1象限の量-量グラフ）")
+    xs = [sympy.nsimplify(v) for v in cast("list[object]", x_values)]
+    if len(xs) < 2:
+        raise ValueError("表には 2 行以上の値が必要")
+    if any(v < 0 for v in xs):
+        raise ValueError("x の値は 0 以上であること")
+    if len(set(xs)) != len(xs):
+        raise ValueError("表の x の値は相異なること")
+
+    features = [_curve_point_feature(a_s, x) for x in xs]
+
+    ops = ["read_table_values", "plot_table_points", "draw_smooth_curve"]
+    narration = {
+        "read_table_values": "表に並んだ x の値と、それに対応する y の値の組を読み取る。",
+        "plot_table_points": "読み取った組を座標とみて、方眼上に点をとる。",
+        "draw_smooth_curve": "とった点をなめらかな曲線で結び、変化のようすを表す。",
+    }
+    phrase = {"read_table_values": "表の組を読み取る", "plot_table_points": "点をとる"}
+    last = features[-1]
+    steps = [
+        Step(
+            op=op,
+            args=[],
+            result_srepr=last.srepr if i == len(ops) - 1 else "",
+            result_display="とった点をなめらかに結んだ曲線" if i == len(ops) - 1 else phrase[op],
+            narration=narration[op],
+        )
+        for i, op in enumerate(ops)
+    ]
+    return Solution(answer=GraphAnswer(features=features, solution_svg_ref=""), steps=steps)
+
+
 __all__ = [
     "evaluate_quadratic_function",
     "y_range_over_quadratic_domain",
     "rate_of_change_quadratic",
     "intersection_parabola_line",
     "solve_quadratic_motion_area",
+    "draw_two_parabolas_features",
+    "draw_parabola_domain_features",
+    "draw_parabola_line_features",
+    "draw_quantity_curve_features",
 ]
