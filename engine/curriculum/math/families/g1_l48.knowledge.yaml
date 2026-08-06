@@ -1,0 +1,56 @@
+family: math.g1_l48.knowledge
+form: knowledge
+source_desc: |
+  直線と平面の位置関係（平行・垂直・ねじれの位置）
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: 平行・垂直・ねじれの位置の用語と意味を想起する。
+       example: 空間内の2直線が、平行でなく、交わりもしない位置関係にあるとき、
+                この2直線の位置関係を何というか答えよ。
+  Lv2 desc: 立体上の2直線/直線と平面の位置関係を判別・適用する。
+       example: 直方体ABCD-EFGHがある。(1) 辺ABとねじれの位置にある辺をすべて答えよ。
+                (2) 辺ABと平行な面をすべて答えよ。
+  【設計モデル・Lv1】用語想起ハブ（既存 math.term_recall・_TERM_MAPS の domain
+  "spatial_position_terms"＝平行/垂直/ねじれの位置）。説明文に直線名と平面名を
+  埋め込み surface を分散する。答えは漢字のみの ChoiceAnswer＝digit-free。
+  組合せ数 = 直線名の順列 12×11 = 132 × 平面名 16 = 2,112 通りずつ（3 concept で 6,336 通り）。
+  【設計モデル・Lv2】新設 recipe math.judge_solid_position。原題の「すべて答えよ」は
+  集合解答で asked=choice に載らないため、「この辺とこの辺（この面）の位置関係はどれか」
+  の単一選択に realize した（asked=choice のみ使用・§10 sanction）。2つの mode を同じ
+  op 列 [read_position_query, classify_relation] で持たせる（1レベル＝1 op 列＝G-FP 安定）。
+    - edge_edge: 辺と辺（平行／垂直に交わる／ねじれの位置）。12 辺の順序対 132 通り。
+    - edge_face: 辺と面（平行／面上にある／垂直に交わる）。12 辺 × 6 面 = 72 通り。
+  頂点ラベルは 16 文字の点名プールから相異なる8文字を引き、昇順に並べて
+  「底面4つ－上面4つ」に対応づける（C(16,8) = 12,870 通り）。ラベルは本文に出るので
+  params に必ず含める。よって組合せ数 = 12,870 × 204 = 2,625,480 通り。
+  独立ソルバは標準座標（単位立方体）で方向ベクトル・法線ベクトルを計算し直して判定する
+  （double-solve）。実際の辺の長さは位置関係に影響しないため寸法は与えない。
+  図は knowledge frame が visual=none のため無し（辺・面の名前だけで位置は一意に決まる）。
+concepts_default: [spatial_position_terms.term_recall]
+levels:
+  "1":
+    signature: spatial_position_terms_term_recall
+    recipe: math.term_recall
+    params:
+      domain: spatial_position_terms
+      concept_set: [parallel, perpendicular, skew]
+    given: [statement]
+    asked: [choice]
+    visual: none
+    text: {tier: T1, template: lf_term_recall_v1}
+    hints: [steps_prefix]
+    concept_tags: [spatial_position_terms.term_recall]
+    cause_tags: []
+  "2":
+    signature: judge_solid_position
+    recipe: math.judge_solid_position
+    params:
+      mode_set: [edge_edge, edge_face]
+    given: [statement]
+    asked: [choice]
+    visual: none
+    text: {tier: T1, template: sp_position_relation_v1}
+    hints: [steps_prefix]
+    concept_tags: [spatial_position.judge_relation]
+    cause_tags: []
+remedial:
+  default_level: 1

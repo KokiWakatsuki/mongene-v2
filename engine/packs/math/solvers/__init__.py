@@ -34,5 +34,6 @@ from engine.packs.math.solvers import parallel_line_ratio  # noqa: F401  (登録
 from engine.packs.math.solvers import similarity_scale_ratio  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.solvers import inscribed_angle  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.solvers import solid_figure  # noqa: F401  (登録の副作用のため import)
+from engine.packs.math.solvers import g1_space  # noqa: F401  (登録の副作用のため import)
 
 __all__: list[str] = []

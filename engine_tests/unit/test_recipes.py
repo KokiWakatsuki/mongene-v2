@@ -3535,6 +3535,11 @@ _TERM_RECALL_CELLS = [
     ("math.g2_l38.knowledge", 1),
     # C10 g3 相似・円・三平方（用語想起）
     ("math.g3_l39.knowledge", 1),
+    # C8 g1 空間図形（用語想起）
+    ("math.g1_l47.knowledge", 1),
+    ("math.g1_l48.knowledge", 1),
+    ("math.g1_l49.knowledge", 1),
+    ("math.g1_l50.knowledge", 1),
 ]
 
 
@@ -3800,6 +3805,8 @@ _RULE_RECALL_CELLS = [
     ("math.g3_l47.knowledge", 1),
     ("math.g3_l48.knowledge", 1),
     ("math.g3_l50.knowledge", 1),
+    # C8 g1 空間図形（球の公式の想起）
+    ("math.g1_l53.knowledge", 1),
 ]
 
 
@@ -8429,3 +8436,167 @@ def test_parabola_property_rule_recall_non_degenerate(seed):
     assert len(ans.distractors) >= 2
     assert not re.search(r"\d", ans.correct), "選択肢に数字が出ると G-Q5t が誤検出する"
     assert mr.params["concept"] in {"shape_and_symmetry", "opening_direction", "opening_width"}
+
+
+# ---------------------------------------------------------------------------
+# C8 g1 空間図形（g1_l47/l48.knowledge Lv2 の判別型）
+# ---------------------------------------------------------------------------
+def test_judge_polyhedron_claim_lv2_construct():
+    ctx = _make_ctx("math.g1_l47.knowledge", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "judge_polyhedron_claim"
+    assert [(sq.label, sq.asked) for sq in mr.sub_questions] == [("(1)", "choice")]
+    assert set(mr.given) == {"statement"}
+    assert mr.visual_plan is None
+
+
+@pytest.mark.parametrize("seed", range(120))
+def test_judge_polyhedron_claim_double_solve_property(seed):
+    """全 seed で checker の独立再計算と一致し、答えが digit-free で op 列が不変。"""
+    ctx = _make_ctx("math.g1_l47.knowledge", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+
+    sol = REGISTRY.checker("math.judge_polyhedron_claim.double_solve")(mr)
+    answer = mr.sub_questions[0].answer
+    assert sol.answer.correct == answer.correct
+    assert sol.answer.fact_id == answer.fact_id
+    # 答えは「正しい」「誤り」のテキスト（数字トークンなし）＝G-Q5t 素通り。
+    assert answer.correct in ("正しい", "誤り")
+    assert not any(ch.isdigit() for ch in answer.correct)
+    assert answer.correct not in answer.distractors
+    # 1レベル＝1 op 列（mode が変わっても不変・G-FP 安定）。
+    assert [s.op for s in mr.sub_questions[0].steps] == ["read_claim", "judge_claim"]
+    # surface（statement）も dup_key に効かせるため params に入れ、本文に出す。
+    assert mr.params["statement"] == mr.given["statement"]
+    if mr.params["mode"] == "element_count":
+        # 主張されている個数は本文に出ている（params は「本文に出ている値」だけ）。
+        assert mr.params["candidate"] in mr.given["statement"]
+        assert mr.params["n"] in mr.given["statement"]
+    else:
+        assert mr.params["vertex"] in mr.given["statement"]
+
+
+def test_judge_polyhedron_claim_not_degenerate():
+    """答えが「正しい」「誤り」の一方に潰れず、両 mode が現れる（ゲートは退化を素通りする）。"""
+    ctx = _make_ctx("math.g1_l47.knowledge", 2)
+    corrects, modes = set(), set()
+    for seed in range(120):
+        rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+        mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+        corrects.add(mr.sub_questions[0].answer.correct)
+        modes.add(mr.params["mode"])
+    assert corrects == {"正しい", "誤り"}
+    assert modes == {"element_count", "regular_condition"}
+
+
+@pytest.mark.parametrize(
+    ("n", "solid_type", "quantity", "expected"),
+    [
+        # 教科書の既知値: 五角柱は面7・辺15・頂点10、五角錐は面6・辺10・頂点6。
+        (5, "prism", "faces", 7),
+        (5, "prism", "edges", 15),
+        (5, "prism", "vertices", 10),
+        (5, "pyramid", "faces", 6),
+        (5, "pyramid", "edges", 10),
+        (5, "pyramid", "vertices", 6),
+        # 正六面体（立方体）＝四角柱: 面6・辺12・頂点8。
+        (4, "prism", "faces", 6),
+        (4, "prism", "edges", 12),
+        (4, "prism", "vertices", 8),
+    ],
+)
+def test_polyhedron_element_count_known_values(n, solid_type, quantity, expected):
+    """公式が教科書の既知値と一致する（オイラーの多面体定理も満たす）。"""
+    from engine.packs.math.solvers.g1_space import true_element_count
+
+    assert true_element_count(n, solid_type, quantity) == expected
+    v = true_element_count(n, solid_type, "vertices")
+    e = true_element_count(n, solid_type, "edges")
+    f = true_element_count(n, solid_type, "faces")
+    assert v - e + f == 2
+
+
+@pytest.mark.parametrize(
+    ("m", "k", "can_form"),
+    [
+        (3, 3, True), (3, 4, True), (3, 5, True),  # 正四面体・正八面体・正二十面体
+        (4, 3, True),                              # 正六面体
+        (5, 3, True),                              # 正十二面体
+        (3, 6, False),                             # 角の和がちょうど一まわり＝平面
+        (4, 4, False), (5, 4, False), (6, 3, False), (7, 3, False),
+    ],
+)
+def test_regular_polyhedron_condition_known_values(m, k, can_form):
+    """正多面体が5種類しかない根拠（頂点に集まる角の和 < 360°）を既知値で固定する。"""
+    solver = REGISTRY.solver("math.judge_regular_polyhedron_condition")
+    assert solver(m, k).answer.correct == ("正しい" if can_form else "誤り")
+
+
+def test_judge_solid_position_lv2_construct():
+    ctx = _make_ctx("math.g1_l48.knowledge", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == "judge_solid_position"
+    assert [(sq.label, sq.asked) for sq in mr.sub_questions] == [("(1)", "choice")]
+    assert set(mr.given) == {"statement"}
+    assert mr.visual_plan is None
+
+
+@pytest.mark.parametrize("seed", range(120))
+def test_judge_solid_position_double_solve_property(seed):
+    """全 seed で checker の独立再計算と一致し、引いた頂点ラベルが本文と params にある。"""
+    ctx = _make_ctx("math.g1_l48.knowledge", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+
+    sol = REGISTRY.checker("math.judge_solid_position.double_solve")(mr)
+    answer = mr.sub_questions[0].answer
+    assert sol.answer.correct == answer.correct
+    assert sol.answer.fact_id == answer.fact_id
+    assert not any(ch.isdigit() for ch in answer.correct)
+    assert answer.correct not in answer.distractors
+    assert [s.op for s in mr.sub_questions[0].steps] == [
+        "read_position_query",
+        "classify_relation",
+    ]
+    # draw した点ラベルは params に必ず含め、本文にも出す。
+    labels = mr.params["labels"]
+    assert len(labels) == 8 and len(set(labels)) == 8
+    assert f"{labels[:4]}-{labels[4:]}" in mr.given["statement"]
+    assert mr.params["first"] in mr.given["statement"]
+    assert mr.params["second"] in mr.given["statement"]
+    # 問われている辺・面は、引いたラベルだけで構成されている。
+    assert set(mr.params["first"]) <= set(labels)
+    assert set(mr.params["second"]) <= set(labels)
+
+
+def test_judge_solid_position_not_degenerate():
+    """3つの位置関係がすべて現れ、両 mode が現れる（答えが1つに潰れていない）。"""
+    ctx = _make_ctx("math.g1_l48.knowledge", 2)
+    by_mode: dict[str, set[str]] = {}
+    for seed in range(200):
+        rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+        mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+        by_mode.setdefault(mr.params["mode"], set()).add(mr.sub_questions[0].answer.correct)
+    assert by_mode["edge_edge"] == {"平行", "垂直に交わる", "ねじれの位置"}
+    assert by_mode["edge_face"] == {"平行", "面上にある", "垂直に交わる"}
+
+
+def test_solid_position_known_relations():
+    """標準ラベル ABCD-EFGH での位置関係を、図を手で追える既知値で固定する。"""
+    solver = REGISTRY.solver("math.judge_solid_position_relation")
+    labels = "ABCDEFGH"  # 底面 ABCD／上面 EFGH（E が A の真上）
+    assert solver(labels, "edge_edge", "AB", "CD").answer.correct == "平行"
+    assert solver(labels, "edge_edge", "AB", "EF").answer.correct == "平行"
+    assert solver(labels, "edge_edge", "AB", "BC").answer.correct == "垂直に交わる"
+    assert solver(labels, "edge_edge", "AB", "AE").answer.correct == "垂直に交わる"
+    assert solver(labels, "edge_edge", "AB", "CG").answer.correct == "ねじれの位置"
+    assert solver(labels, "edge_edge", "AB", "FG").answer.correct == "ねじれの位置"
+    assert solver(labels, "edge_edge", "AB", "GH").answer.correct == "平行"
+    assert solver(labels, "edge_face", "AB", "ABCD").answer.correct == "面上にある"
+    assert solver(labels, "edge_face", "AB", "EFGH").answer.correct == "平行"
+    assert solver(labels, "edge_face", "AB", "DCGH").answer.correct == "平行"
+    assert solver(labels, "edge_face", "AE", "ABCD").answer.correct == "垂直に交わる"
+    assert solver(labels, "edge_face", "AB", "ADHE").answer.correct == "垂直に交わる"

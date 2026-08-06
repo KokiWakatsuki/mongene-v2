@@ -1,0 +1,73 @@
+family: math.g1_l47.knowledge
+form: knowledge
+source_desc: |
+  多面体（正多面体など）と角柱・円柱・角錐・円錐
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: 角柱・円柱・角錐・円錐・正多面体の名称と用語を想起する。
+       example: 底面が三角形で、側面がすべて長方形である立体を何というか答えよ。また、
+                すべての面が合同な正三角形でできている正多面体のうち、面が4つのものの
+                名称を答えよ。
+  Lv2 desc: 面・辺・頂点の数や正多面体の条件を判別・適用する。
+       example: 正六面体(立方体)について、面の数、辺の数、頂点の数をそれぞれ答えよ。また、
+                正多面体が5種類しかない理由を「1つの頂点に集まる面」に着目して簡単に説明せよ。
+  【設計モデル・Lv1】用語想起ハブ（既存 math.term_recall・_TERM_MAPS の domain
+  "space_solid_terms"）。example が角柱と正四面体の両方を問うので、一般名（角柱/角錐/
+  円柱/円錐）と正多面体5種を1つの domain にまとめた（1レベル＝1 domain のため）。
+  説明文には底面の形・高さ・1辺の長さなど「その立体を決める寸法」を埋め込み surface を
+  分散する。答えは漢字のみの ChoiceAnswer＝digit-free（G-Q5t 素通り）。
+  組合せ数: 角柱/角錐 = 底面 10 × 高さ 29 = 290 通りずつ、円柱/円錐 = 半径 29 × 高さ 29 =
+  841 通りずつ、正多面体5種 = 1辺の長さ 29 通りずつ（合計 2,407 通り）。正多面体は 29 通りと
+  細いが、9 concept に散るので1 concept あたりの seed 数は約 11 で、実測 dup は 0.20 を
+  下回る（DoD の 100 seed 実測で確認済み）。
+  【設計モデル・Lv2】新設 recipe math.judge_polyhedron_claim。「主張の正誤を判別する」型に
+  realize し（asked=choice のみ・答えは「正しい」「誤り」で digit-free）、2つの mode を
+  同じ op 列 [read_claim, judge_claim] で持たせる（1レベル＝1 signature＝1 op 列＝G-FP 安定）。
+    - element_count: n角柱/n角錐の面・辺・頂点の数についての主張。独立ソルバが公式で
+      計算し直す（double-solve）。組合せ数 = 底面 10 × 立体 2 × 量 3 × 候補 7 = 420 通り。
+    - regular_condition: 1つの頂点に正m角形の面がk個集まって正多面体を組み立てられるか。
+      独立ソルバが内角の和（sympy.Rational で厳密）で判定する。組合せ数 = (m,k) 36 ×
+      頂点名 16 = 576 通り。素直に m,k を引くと真になる組が 36 中 5 しかなく答えが
+      「誤り」に潰れるため、answer-first で先に正誤を引いてから該当する組だけを引く。
+  Lv2 の example 後半「正多面体が5種類しかない理由の説明」は記述解答で asked=choice に
+  載らないため、その判断の中身（頂点に集まる角の和が360°未満か）を正誤判別として
+  realize した（§10 sanction）。図は knowledge frame が visual=none のため無し。
+concepts_default: [space_solid_terms.term_recall]
+levels:
+  "1":
+    signature: space_solid_terms_term_recall
+    recipe: math.term_recall
+    params:
+      domain: space_solid_terms
+      concept_set:
+        [prism, pyramid, cylinder, cone,
+         tetrahedron, hexahedron, octahedron, dodecahedron, icosahedron]
+      # 底面の角の数（n角形）と、長さ（高さ・半径・1辺）の surface。
+      base_sides_domain: {int_range: [3, 12]}
+      length_domain: {int_range: [2, 30]}
+    given: [statement]
+    asked: [choice]
+    visual: none
+    text: {tier: T1, template: lf_term_recall_v1}
+    hints: [steps_prefix]
+    concept_tags: [space_solid_terms.term_recall]
+    cause_tags: []
+  "2":
+    signature: judge_polyhedron_claim
+    recipe: math.judge_polyhedron_claim
+    params:
+      mode_set: [element_count, regular_condition]
+      # element_count: 底面の角の数と、真の値からのずらし幅（0 を含まない＝退化防止）。
+      base_sides_domain: {int_range: [3, 12]}
+      offset_set: [-3, -2, -1, 1, 2, 3]
+      # regular_condition: 面である正多角形の辺の数 m と、1つの頂点に集まる面の数 k。
+      shape_sides_domain: {int_range: [3, 8]}
+      vertex_count_domain: {int_range: [3, 8]}
+    given: [statement]
+    asked: [choice]
+    visual: none
+    text: {tier: T1, template: sp_polyhedron_claim_v1}
+    hints: [steps_prefix]
+    concept_tags: [polyhedron.judge_claim]
+    cause_tags: []
+remedial:
+  default_level: 1
