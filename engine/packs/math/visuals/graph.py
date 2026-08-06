@@ -414,7 +414,100 @@ def render_segment_solution_svg(params: dict[str, Any]) -> str:
     return "".join(parts)
 
 
+# ---------------------------------------------------------------------------
+# 曲線（放物線 y=ax² / 双曲線 y=a/x）
+#
+# 土台（_grid_scaffold / _grid_ticks）は直線に依存していないので、曲線は
+# 「サンプリングした点列を polyline で結ぶ」だけで直線と同じ座標系に乗る。
+# これ1つで C4（比例・反比例のグラフ）と C6（y=ax² のグラフ）の graph_table が
+# 描けるようになる。比例 y=ax は直線なので既存の render_grid_svg 経路をそのまま使う。
+# ---------------------------------------------------------------------------
+_CURVE_SAMPLES = 241  # x 方向のサンプル点数（枠の端で 1/240 目盛以内に収まる細かさ）
+
+
+def _curve_y(kind: str, coeff: sympy.Expr, x: sympy.Expr) -> sympy.Expr | None:
+    """曲線の y 値（描けない点＝双曲線の x=0 では None）。"""
+    if kind == "parabola":
+        return coeff * x**2
+    if kind == "hyperbola":
+        if x == 0:
+            return None
+        return coeff / x
+    raise ValueError(f"未知の curve_kind: {kind!r}（parabola / hyperbola）")
+
+
+def _curve_polylines(kind: str, coeff: sympy.Expr, sc: _GridScaffold) -> list[list[tuple[float, float]]]:
+    """曲線を、枠内に収まる連続区間ごとの画素座標の点列に離散化する。
+
+    枠の外に出た区間で点列を切る（＝双曲線は原点付近で自然に2本の枝に分かれ、
+    放物線は上端で切れる）。線を枠外へはみ出させないための処理であって、
+    分岐そのものを場合分けで書いてはいない。
+    """
+    runs: list[list[tuple[float, float]]] = []
+    current: list[tuple[float, float]] = []
+    span = sympy.Rational(sc.x_hi - sc.x_lo, _CURVE_SAMPLES - 1)
+    for i in range(_CURVE_SAMPLES):
+        x = sympy.Integer(sc.x_lo) + span * i
+        y = _curve_y(kind, coeff, x)
+        if y is None or not (sc.y_lo <= y <= sc.y_hi):
+            if len(current) >= 2:
+                runs.append(current)
+            current = []
+            continue
+        current.append((sc.to_px_x(float(x)), sc.to_px_y(float(y))))
+    if len(current) >= 2:
+        runs.append(current)
+    return runs
+
+
+def render_curve_svg(params: dict[str, Any], *, draw_curve: bool) -> str:
+    """params（curve_kind, coeff, pts）から曲線つき／空の座標平面 SVG を組む。
+
+    draw_curve=False は「かく」セルの問題図＝空の方眼（生徒が描き込む）。
+    render_grid_svg と同じ土台・同じ範囲計算（pts 由来）を使うので、問題図と
+    解答図の座標系は必ず一致する。
+    """
+    sc = _grid_scaffold(params)
+    parts = sc.parts
+
+    if draw_curve:
+        kind = str(params["curve_kind"])
+        coeff = sympy.nsimplify(sympy.sympify(params["coeff"]))
+        for run in _curve_polylines(kind, coeff, sc):
+            pts = " ".join(f"{px:.2f},{py:.2f}" for px, py in run)
+            parts.append(
+                f'<polyline points="{pts}" fill="none" '
+                f'stroke="#000000" stroke-width="2.5"/>'
+            )
+
+    parts.extend(_grid_ticks(sc))
+    parts.append("</svg>")
+    return "".join(parts)
+
+
+def _draw_curve_from_plan(mr: "MR") -> bool:
+    """visual_plan.elements に "curve" 要素が宣言されていれば曲線を描く。
+
+    `_draw_line_from_plan` と同じ規約（「かく」セルの問題図は elements=[grid, axis]
+    のみにして空の方眼を出す）。
+    """
+    if mr.visual_plan is None:
+        return True
+    return any(e.kind == "curve" for e in mr.visual_plan.elements)
+
+
+def render_curve_graph(mr: "MR", ctx: "CellContext") -> str:
+    """登録 visual（問題図）。visual_plan の curve 要素の有無で曲線描画を切替える。"""
+    return render_curve_svg(mr.params, draw_curve=_draw_curve_from_plan(mr))
+
+
+def render_curve_solution_svg(params: dict[str, Any]) -> str:
+    """「かく」セルの模範解答図（曲線つき）。GraphAnswer.solution_svg_ref に格納する。"""
+    return render_curve_svg(params, draw_curve=True)
+
+
 register_visual("math.linear_graph")(render_linear_graph)
+register_visual("math.curve_graph")(render_curve_graph)
 
 
 __all__ = [
@@ -423,6 +516,9 @@ __all__ = [
     "render_line_solution_svg",
     "render_special_lines_solution_svg",
     "render_segment_solution_svg",
+    "render_curve_graph",
+    "render_curve_svg",
+    "render_curve_solution_svg",
     "compute_grid_bounds",
     "compute_grid_bounds_from_params",
     "compute_grid_spec_from_params",

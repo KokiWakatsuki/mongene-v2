@@ -27,6 +27,7 @@ from engine.core.verify.quality_gates import install_quality_gates
 from engine.packs.math.visuals.graph import (
     compute_grid_spec_from_params,
     render_linear_graph,
+    render_curve_svg,
     render_segment_solution_svg,
     tick_labels_from_params,
 )
@@ -170,6 +171,71 @@ def test_g_q5v_fails_when_forbidden_element_present() -> None:
 
     ok, detail = gate(stage, _DummyCtx(forbidden=frozenset({"labeled_answer_point"})))  # type: ignore[arg-type]
     assert ok is False
+
+
+# ---------------------------------------------------------------------------
+# 曲線（放物線 y=ax² / 双曲線 y=a/x）— C4（比例・反比例）と C6（y=ax²）の土台
+# ---------------------------------------------------------------------------
+_PARABOLA_PARAMS = {"curve_kind": "parabola", "coeff": "1/2", "pts": ["(-4, 8)", "(4, 8)", "(0, 0)"]}
+_HYPERBOLA_PARAMS = {"curve_kind": "hyperbola", "coeff": "12", "pts": ["(2, 6)", "(-2, -6)", "(6, 2)"]}
+
+
+def test_parabola_is_one_unbroken_polyline() -> None:
+    """放物線は連続なので枠内で1本に描かれる（枝に割れない）。"""
+    svg = render_curve_svg(_PARABOLA_PARAMS, draw_curve=True)
+    assert svg.startswith("<svg")
+    assert svg.count("<polyline") == 1
+
+
+def test_hyperbola_splits_into_two_branches() -> None:
+    """双曲線は x=0 で不連続なので2本の枝になる。
+
+    枝分けを場合分けで書いているのではなく、「枠外に出た区間で点列を切る」処理の
+    結果として自然に2本になる。ここが崩れると原点をまたぐ直線が引かれてしまう。
+    """
+    svg = render_curve_svg(_HYPERBOLA_PARAMS, draw_curve=True)
+    assert svg.count("<polyline") == 2
+
+
+def test_curve_problem_figure_is_empty_grid() -> None:
+    """「かく」セルの問題図は空の方眼＝曲線を描かない（＝答えの先出しをしない）。"""
+    svg = render_curve_svg(_PARABOLA_PARAMS, draw_curve=False)
+    assert "<polyline" not in svg
+    # 土台（グリッド・軸・目盛）は解答図と共有される＝座標系が一致する
+    assert _svg_texts(svg) == _svg_texts(render_curve_svg(_PARABOLA_PARAMS, draw_curve=True))
+
+
+def test_curve_svg_texts_are_subset_of_tick_labels() -> None:
+    """曲線図の <text> も軸目盛のみ（G-Q5v: SVG 内テキスト ⊆ visual_plan.labels）。"""
+    for params in (_PARABOLA_PARAMS, _HYPERBOLA_PARAMS):
+        svg = render_curve_svg(params, draw_curve=True)
+        allowed = set(tick_labels_from_params(params))
+        assert set(_svg_texts(svg)) <= allowed
+
+
+def test_curve_stays_inside_the_frame() -> None:
+    """曲線の点はすべて描画領域の内側（枠外へはみ出さない）。"""
+    svg = render_curve_svg(_HYPERBOLA_PARAMS, draw_curve=True)
+    coords = re.findall(r'<polyline points="([^"]*)"', svg)
+    assert coords
+    for run in coords:
+        for pair in run.split(" "):
+            px, py = (float(v) for v in pair.split(","))
+            assert 0.0 <= px <= 400.0 and 0.0 <= py <= 400.0
+
+
+def test_curve_is_monochrome() -> None:
+    """モノクロ印刷可（彩度のある色で情報を区別しない）。"""
+    svg = render_curve_svg(_PARABOLA_PARAMS, draw_curve=True)
+    colors = set(re.findall(r'(?:stroke|fill)="([^"]*)"', svg))
+    assert colors <= {"none", "#000000", "#bbbbbb", "#ffffff"}
+
+
+def test_curve_rendering_is_deterministic() -> None:
+    """同じ params からは同じバイト列（決定論）。"""
+    a = render_curve_svg(_HYPERBOLA_PARAMS, draw_curve=True)
+    b = render_curve_svg(_HYPERBOLA_PARAMS, draw_curve=True)
+    assert a == b
 
 
 class _DummyFrame:

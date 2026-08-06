@@ -32,8 +32,10 @@ from engine.tools.goal_progress import _UNITS_PATH, _grade
 
 _DEFAULT_OUT = Path(__file__).resolve().parents[2] / "docs" / "coverage.html"
 
-# T3（word_problem/proof）・M2（construction）送りの形式＝T1 の分母から外して読む
-_DEFERRED_FORMS = frozenset({"word_problem", "proof", "construction"})
+# 未着手の形式（form ごと frame/solver/checker が無い）＝T1 の分母から外して読む。
+# word_problem は当初ここに入れていたが、family が `text: {tier: T1, ...}` で実装され
+# 64/100 まで進んだ時点で「送り」の前提が失効したため T1 側に戻した。
+_DEFERRED_FORMS = frozenset({"proof", "construction"})
 
 # 形式の表示名と、セルチップに使う 1 文字
 _FORM_LABELS: dict[str, tuple[str, str]] = {
@@ -82,8 +84,18 @@ class Unit:
         return sum(1 for c in self.cells if c.covered)
 
     @property
-    def t1_total(self) -> int:
-        return sum(1 for c in self.cells if not c.deferred)
+    def total(self) -> int:
+        """単元の全セル数。
+
+        以前はここが `not c.deferred`（word_problem/proof/construction を除外）だった
+        が、分子 `covered` は全セルを数えているため分子>分母が起き、実測で
+        g3_l29=3/1・g3_l30=4/2 のような分数が出ていた。さらに完成判定を
+        `covered == t1_total` でしていたため、完成済みの単元が「部分実装」、
+        文章題だけ残った単元が「完成」と逆に表示されていた。
+        word_problem は 64/100 まで実装済みで「分母外」の前提自体が失効している。
+        単元行は goal_progress の 429/630 と同じ分母（＝全セル）で読む。
+        """
+        return len(self.cells)
 
     @property
     def chapter(self) -> str:
@@ -172,8 +184,8 @@ def _stat_cards(units: list[Unit]) -> str:
     df_c, df_t = _tally(units, deferred=True)
     cards = [
         ("台帳全体", total_c, total_t, "t1", "630セル＝単元×形式×難易度の疎な有効組み合わせ"),
-        ("T1（自動生成の実装対象）", t1_c, t1_t, "t1", "計算・求値・表グラフ・知識の4形式"),
-        ("文章題・証明・作図", df_c, df_t, "def", "M1／M2 へ意図的に送った160セル"),
+        ("T1（自動生成の実装対象）", t1_c, t1_t, "t1", "計算・求値・表グラフ・知識・文章題の5形式"),
+        ("証明・作図", df_c, df_t, "def", "form ごと未着手（frame/solver/checker が無い）"),
     ]
     out: list[str] = []
     for label, c, t, kind, note in cards:
@@ -209,7 +221,7 @@ def _form_table(units: list[Unit]) -> str:
     for f in _FORM_ORDER:
         c, t = _tally(units, form=f)
         kind = "def" if f in _DEFERRED_FORMS else "t1"
-        tag = "M1／M2 送り" if f in _DEFERRED_FORMS else "T1"
+        tag = "form ごと未着手" if f in _DEFERRED_FORMS else "T1"
         rows.append(
             f'<tr><th scope="row">{_esc(_FORM_LABELS[f][0])}'
             f'<span class="tag {kind}">{_esc(tag)}</span></th>'
@@ -256,7 +268,7 @@ def _unit_sections(units: list[Unit]) -> str:
                 continue
             members = [u for u in units if u.grade == g and u.section == section]
             sc = sum(u.covered for u in members)
-            st = sum(u.t1_total for u in members)
+            st = sum(u.total for u in members)
             head = members[0]
             out.append(
                 f'<div class="chapter"><div class="chapter-hd"><h4>{_esc(head.chapter)}'
@@ -273,12 +285,12 @@ def _unit_sections(units: list[Unit]) -> str:
                         f'title="{_esc(_FORM_LABELS[cell.form][0])} Lv{cell.level}">'
                         f'{_esc(_FORM_LABELS[cell.form][1])}<span class="lv">{cell.level}</span></span>'
                     )
-                mark = "full" if u.t1_total and u.covered == u.t1_total else ("part" if u.covered else "none")
+                mark = "full" if u.total and u.covered == u.total else ("part" if u.covered else "none")
                 out.append(
                     f'<tr class="{mark}"><td class="uid">{_esc(u.unit)}</td>'
                     f'<td class="utitle">{_esc(u.title)}</td>'
                     f'<td class="uchips">{"".join(chips)}</td>'
-                    f'<td class="un">{u.covered}<span class="slash">/</span>{u.t1_total}</td></tr>'
+                    f'<td class="un">{u.covered}<span class="slash">/</span>{u.total}</td></tr>'
                 )
             out.append("</tbody></table></div>")
         out.append("</section>")
@@ -430,7 +442,7 @@ _LEGEND = (
     '<div class="legend">'
     '<span class="item"><span class="chip done">図<span class="lv">2</span></span>実装済み</span>'
     '<span class="item"><span class="chip todo">図<span class="lv">2</span></span>未実装（T1）</span>'
-    '<span class="item"><span class="chip def">文<span class="lv">3</span></span>M1／M2 送り</span>'
+    '<span class="item"><span class="chip def">証<span class="lv">3</span></span>form ごと未着手</span>'
     '<span class="item">チップの文字＝形式（計＝計算／求＝求値／図＝表・グラフ／知＝知識'
     '／文＝文章題／証＝証明／作＝作図）、数字＝難易度</span>'
     "</div>"
