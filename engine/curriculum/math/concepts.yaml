@@ -1216,3 +1216,25 @@ concepts:
   - id: circle.equal_arc_inscribed_angle
     label: "円をn等分してできる多角形で頂点をふくまない弧に対する円周角を求める"
     unit: g3_l50
+  # --- C8 g1 空間図形（knowledge・用語/規則の想起と位置関係の判別） ---
+  - id: space_solid_terms.term_recall
+    label: "角柱・角錐・円柱・円錐・正多面体の名称を想起する"
+    unit: g1_l47
+  - id: polyhedron.judge_claim
+    label: "角柱・角錐の面辺頂点の数や、正多面体を組み立てられる条件についての主張を判別する"
+    unit: g1_l47
+  - id: spatial_position_terms.term_recall
+    label: "空間内の2直線の位置関係（平行・垂直・ねじれの位置）の用語を想起する"
+    unit: g1_l48
+  - id: spatial_position.judge_relation
+    label: "直方体上の辺と辺・辺と面の位置関係を判別する"
+    unit: g1_l48
+  - id: rotation_solid_terms.term_recall
+    label: "回転体・回転の軸・母線の用語を想起する"
+    unit: g1_l49
+  - id: projection_terms.term_recall
+    label: "投影図・立面図・平面図の用語を想起する"
+    unit: g1_l50
+  - id: sphere_formula.rule_recall
+    label: "球の表面積・体積を半径と円周率で表す公式を想起する"
+    unit: g1_l53

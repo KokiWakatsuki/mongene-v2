@@ -479,6 +479,31 @@ _TERM_RECALL_CONCEPTS = [
     "proof_logic_terms.term_recall",
     # C10 g3 相似・円・三平方（用語想起）
     "similarity_terms.term_recall",
+    # C8 g1 空間図形（用語想起）
+    "space_solid_terms.term_recall",
+    "spatial_position_terms.term_recall",
+    "rotation_solid_terms.term_recall",
+    "projection_terms.term_recall",
+]
+
+# C8 g1_l47.knowledge Lv1（正多面体）の説明文を組み立てるための固定の性質。
+# (面の正多角形の名前, 面の数, 1つの頂点に集まる面の数)。数は「立体を一意に決める説明」
+# であって答え（用語名）ではない。答えは漢数字のみの ChoiceAnswer＝digit-free。
+_REGULAR_POLYHEDRON_FACTS: dict[str, tuple[str, int, int]] = {
+    "tetrahedron": ("正三角形", 4, 3),
+    "hexahedron": ("正方形", 6, 3),
+    "octahedron": ("正三角形", 8, 4),
+    "dodecahedron": ("正五角形", 12, 3),
+    "icosahedron": ("正三角形", 20, 5),
+}
+
+# C8 g1_l50.knowledge Lv1（投影図）の具体例に使う立体（{a},{b} に寸法が入る）。
+_PROJECTION_SOLID_TEMPLATES: list[str] = [
+    "底面が1辺{a}cmの正方形で高さが{b}cmの正四角柱",
+    "底面の半径が{a}cmで高さが{b}cmの円柱",
+    "底面の半径が{a}cmで高さが{b}cmの円錐",
+    "底面が1辺{a}cmの正三角形で高さが{b}cmの正三角柱",
+    "底面が1辺{a}cmの正方形で高さが{b}cmの正四角錐",
 ]
 
 
@@ -793,6 +818,97 @@ def _draw_term_statement(domain: str, concept: str, rng: Rng, p: dict[str, objec
             f"∠{pa}{po}{pb}の2辺{po}{pa}、{po}{pb}から等しい距離にある点の集まりを"
             "作図するときに使う、基本作図の名前"
         )  # equidistant_sides
+
+    if domain == "space_solid_terms":
+        # g1_l47 立体の名称。底面の形・高さなどの寸法を埋め込み surface を分散する
+        # （寸法は「どんな立体か」を述べる説明の一部で、答えの用語名とは無関係）。
+        h = int(draw(p["length_domain"], rng))
+        if concept == "prism":
+            n = int(draw(p["base_sides_domain"], rng))
+            return (
+                f"底面が{n}角形で高さが{h}cmの立体のうち、2つの底面が平行で合同であり、"
+                "側面がすべて長方形になっているもの"
+            )
+        if concept == "pyramid":
+            n = int(draw(p["base_sides_domain"], rng))
+            return (
+                f"底面が{n}角形で高さが{h}cmの立体のうち、側面がすべて三角形で、"
+                "1つの頂点に集まっているもの"
+            )
+        if concept == "cylinder":
+            r = int(draw(p["length_domain"], rng))
+            return (
+                f"底面が半径{r}cmの円で高さが{h}cmの立体のうち、2つの底面が平行で合同であり、"
+                "側面が曲面になっているもの"
+            )
+        if concept == "cone":
+            r = int(draw(p["length_domain"], rng))
+            return (
+                f"底面が半径{r}cmの円で高さが{h}cmの立体のうち、側面の曲面が"
+                "1つの頂点に集まっているもの"
+            )
+        shape, face_count, at_vertex = _REGULAR_POLYHEDRON_FACTS[concept]
+        return (
+            f"1辺の長さが{h}cmで、すべての面が合同な{shape}であり、どの頂点にも面が"
+            f"{at_vertex}つ集まっていて、面の数が{face_count}である立体"
+        )
+
+    if domain == "spatial_position_terms":
+        # g1_l48 空間内の2直線の位置関係の用語。直線名・平面名を埋め込み surface を分散する。
+        la, lb = _draw_distinct_lines(2, rng)
+        (pp,) = _draw_distinct_points(1, rng)
+        if concept == "parallel":
+            return (
+                f"空間の中で、平面{pp}上にある2直線{la}と{lb}が、"
+                "どこまでのばしても交わらないときの、この2直線の位置関係"
+            )
+        if concept == "perpendicular":
+            return (
+                f"空間の中で、平面{pp}上にある2直線{la}と{lb}が交わってできる角が"
+                "直角であるときの、この2直線の位置関係"
+            )
+        return (
+            f"空間の中で、平面{pp}上にある直線{la}と、平面{pp}上にない直線{lb}が、"
+            "平行でなく、交わりもしないときの、この2直線の位置関係"
+        )  # skew
+
+    if domain == "rotation_solid_terms":
+        # g1_l49 回転体まわりの用語。回転させる図形の寸法・軸の直線名を埋め込み分散する。
+        a = int(draw(p["length_domain"], rng))
+        b = int(draw(p["length_domain"], rng))
+        if concept == "rotation_solid":
+            (la,) = _draw_distinct_lines(1, rng)
+            return (
+                f"たて{a}cm、よこ{b}cmの長方形を、1つの辺をふくむ直線{la}を軸として"
+                "1回転させてできる立体のように、1つの平面図形を直線を軸として"
+                "1回転させてできる立体"
+            )
+        if concept == "rotation_axis":
+            (la,) = _draw_distinct_lines(1, rng)
+            return (
+                f"たて{a}cm、よこ{b}cmの長方形を1回転させて立体をつくったときに、"
+                f"軸としてもちいた直線{la}"
+            )
+        pa, pb = _draw_distinct_points(2, rng)
+        return (
+            f"底面の半径が{a}cm、高さが{b}cmの円錐で、頂点{pa}と底面の円周上の点{pb}を"
+            "結んでできる線分（側面をえがくために動いた線分）"
+        )  # generatrix
+
+    if domain == "projection_terms":
+        # g1_l50 投影図まわりの用語。具体例の立体と寸法を埋め込み surface を分散する。
+        a = int(draw(p["length_domain"], rng))
+        b = int(draw(p["length_domain"], rng))
+        tmpl = str(draw(_PROJECTION_SOLID_TEMPLATES, rng))
+        solid = tmpl.format(a=a, b=b)
+        if concept == "front_view":
+            return f"{solid}を、真正面から見た形をかいた図"
+        if concept == "top_view":
+            return f"{solid}を、真上から見た形をかいた図"
+        return (
+            f"{solid}について、真正面から見た図と真上から見た図を合わせて、"
+            "その立体の形がわかるようにかいたもの"
+        )  # projection
 
     if domain == "circle_terms":
         # g1_l45 円まわりの用語。具体例の点名を埋め込み surface を分散する。
@@ -1178,6 +1294,8 @@ _RULE_RECALL_CONCEPTS = [
     "circle_inscribed_angle_theorem.rule_recall",
     "circle_inscribed_angle_converse.rule_recall",
     "arc_angle_proportion.rule_recall",
+    # C8 g1 空間図形（公式の想起）
+    "sphere_formula.rule_recall",
 ]
 
 
@@ -1510,6 +1628,16 @@ def _draw_rule_statement(topic: str, concept: str, rng: Rng, p: dict[str, object
         # g3_l50 円周角と弧の長さの比。具体例の点名を埋め込み surface を分散する。
         pa, pb, pc, pd = _draw_distinct_points(4, rng)
         return f"1つの円で、弧{pa}{pb}と弧{pc}{pd}の長さと、それぞれに対する円周角の大きさの関係"
+
+    if topic == "sphere_formula":
+        # g1_l53 球の表面積・体積の公式。具体例の球（中心の点名・半径）を埋め込み分散する。
+        (po,) = _draw_distinct_points(1, rng)
+        n = int(draw(p["length_domain"], rng))
+        target = "表面積" if concept == "surface_area" else "体積"
+        return (
+            f"半径が{n}cmの球の{target}を求めたい。中心が点{po}、半径が r cm の球の"
+            f"{target}を、r と円周率 π を使って表した式"
+        )
 
     raise ValueError(f"未知の topic: {topic!r}")
 

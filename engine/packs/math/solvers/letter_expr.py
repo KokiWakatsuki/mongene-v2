@@ -337,6 +337,26 @@ _TERM_MAPS: dict[str, dict[str, str]] = {
     "similarity_terms": {
         "similarity_ratio": "相似比",
     },
+    # C8 g1 空間図形クラスタ（g1_l47〜l50 の knowledge Lv1 用語想起）。
+    # g1_l47 立体の名称（底面の形を明示しない一般名＋正多面体5種）。1レベル＝1 domain
+    # なので、units の example が両方（角柱と正四面体）を問うのに合わせて1つにまとめる。
+    "space_solid_terms": {
+        "prism": "角柱", "pyramid": "角錐", "cylinder": "円柱", "cone": "円錐",
+        "tetrahedron": "正四面体", "hexahedron": "正六面体", "octahedron": "正八面体",
+        "dodecahedron": "正十二面体", "icosahedron": "正二十面体",
+    },
+    # g1_l48 空間内の2直線の位置関係の用語（平行・垂直・ねじれの位置）。
+    "spatial_position_terms": {
+        "parallel": "平行", "perpendicular": "垂直", "skew": "ねじれの位置",
+    },
+    # g1_l49 回転体まわりの用語（回転体・回転の軸・母線）。
+    "rotation_solid_terms": {
+        "rotation_solid": "回転体", "rotation_axis": "回転の軸", "generatrix": "母線",
+    },
+    # g1_l50 投影図まわりの用語（投影図・立面図・平面図）。
+    "projection_terms": {
+        "projection": "投影図", "front_view": "立面図", "top_view": "平面図",
+    },
 }
 
 # domain 別の step テキスト（既定は g1_l17/l19/l21/l2 の現行文＝golden 不変）。
@@ -356,6 +376,27 @@ _TERM_RECALL_STEP_TEXT_BY_DOMAIN: dict[str, dict[str, str]] = {
         "s1_display": "説明されている項が式のどの位置にあるかを読み取る",
         "s1_narration": "説明されている項が、2次方程式のどの位置（x²・x・定数項）にあるかを読み取る。",
         "s2_narration": "ax²+bx+c=0 の形と見比べて、その位置に対応する文字を思い出す。",
+    },
+    # C8 g1 空間図形: 説明の対象が「式や数の部分」ではなく立体・図なので専用化する。
+    "space_solid_terms": {
+        "s1_display": "説明されている立体がどのようなものかを読み取る",
+        "s1_narration": "底面の形・側面の形・面の数など、説明されている立体の特徴を読み取る。",
+        "s2_narration": "その特徴をもつ立体を表す用語の名前を思い出す。",
+    },
+    "spatial_position_terms": {
+        "s1_display": "説明されている位置関係を読み取る",
+        "s1_narration": "空間の中で、2つの直線がどのように置かれているかを読み取る。",
+        "s2_narration": "その位置関係を表す用語の名前を思い出す。",
+    },
+    "rotation_solid_terms": {
+        "s1_display": "説明されている、回転させてできる立体や線を読み取る",
+        "s1_narration": "平面図形を1回転させて立体をつくる場面のどの部分が説明されているかを読み取る。",
+        "s2_narration": "その部分を表す用語の名前を思い出す。",
+    },
+    "projection_terms": {
+        "s1_display": "説明されている、立体を見た向きと図を読み取る",
+        "s1_narration": "立体をどの向きから見てかいた図かを読み取る。",
+        "s2_narration": "その図を表す用語の名前を思い出す。",
     },
 }
 
@@ -1015,6 +1056,26 @@ _RULE_MAPS: dict[str, dict[str, tuple[str, list[str]]]] = {
             [
                 "弧の長さは、その弧に対する円周角の大きさに反比例する",
                 "弧の長さと円周角の大きさは無関係である",
+            ],
+        ),
+    },
+    # g1_l53 球の表面積・体積の公式（C8 g1 空間図形クラスタ）。答えは公式を言葉で
+    # 述べた記述（漢数字のみ・ASCII 数字なし＝digit-free 鉄則①）。
+    "sphere_formula": {
+        "surface_area": (
+            "半径の二乗に四とπをかけたもの",
+            [
+                "半径の二乗に二とπをかけたもの",
+                "半径の三乗に四とπをかけたもの",
+                "半径に四とπをかけたもの",
+            ],
+        ),
+        "volume": (
+            "半径の三乗に三分の四とπをかけたもの",
+            [
+                "半径の三乗に四とπをかけたもの",
+                "半径の二乗に三分の四とπをかけたもの",
+                "半径の三乗に三分の一とπをかけたもの",
             ],
         ),
     },
