@@ -8600,3 +8600,163 @@ def test_solid_position_known_relations():
     assert solver(labels, "edge_face", "AB", "DCGH").answer.correct == "平行"
     assert solver(labels, "edge_face", "AE", "ABCD").answer.correct == "垂直に交わる"
     assert solver(labels, "edge_face", "AB", "ADHE").answer.correct == "垂直に交わる"
+
+
+# ---------------------------------------------------------------------------
+# 三平方の定理の利用（g3_l53/l54/l55/l56 の find_value ＋ g3_l53.knowledge）
+# ＝ 1 recipe（math.pythagorean_find_value）で 10 セル ＋ 知識セル 1 つ
+# ---------------------------------------------------------------------------
+_PYTHAGOREAN_FV_CELLS = [
+    ("math.g3_l53.find_value", 2, "pythagorean_missing_side_in_right_triangle", "value"),
+    ("math.g3_l53.find_value", 3, "pythagorean_isosceles_height_and_area", "value"),
+    ("math.g3_l53.find_value", 4, "pythagorean_height_from_special_angles", "value"),
+    ("math.g3_l54.find_value", 2, "pythagorean_coordinate_distance", "value"),
+    ("math.g3_l54.find_value", 3, "pythagorean_equidistant_point_on_x_axis", "coordinate"),
+    ("math.g3_l55.find_value", 2, "pythagorean_box_diagonal", "value"),
+    ("math.g3_l55.find_value", 3, "pythagorean_square_pyramid_height_volume", "value"),
+    ("math.g3_l55.find_value", 4, "pythagorean_regular_tetrahedron_height_volume", "value"),
+    ("math.g3_l56.find_value", 2, "pythagorean_box_surface_shortest_path", "value"),
+    ("math.g3_l56.find_value", 4, "pythagorean_cone_surface_shortest_path", "value"),
+]
+
+
+@pytest.mark.parametrize(("family", "level", "signature", "asked"), _PYTHAGOREAN_FV_CELLS)
+def test_pythagorean_find_value_construct(family, level, signature, asked):
+    """find_value は小問1つ・given は condition のみ・答えは params に入らない。"""
+    ctx = _make_ctx(family, level)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    assert mr.signature == signature
+    assert [(sq.label, sq.asked) for sq in mr.sub_questions] == [("(1)", asked)]
+    assert set(mr.given) == {"condition"}
+    assert mr.visual_plan is None
+    assert set(mr.params) == {"scenario_kind", "numbers", "slots"}
+    assert "answer" not in mr.params
+
+
+@pytest.mark.parametrize(("family", "level", "signature", "asked"), _PYTHAGOREAN_FV_CELLS)
+@pytest.mark.parametrize("seed", range(30))
+def test_pythagorean_find_value_double_solve_property(seed, family, level, signature, asked):
+    """checker の独立再計算と一致し、params の全値が本文に現れる（params 忠実性）。"""
+    ctx = _make_ctx(family, level)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+
+    checker = REGISTRY.checker("math.pythagorean_find_value.double_solve")
+    solutions = checker(mr)
+    assert len(solutions) == len(mr.sub_questions) == 1
+    assert solutions[0].answer.srepr == mr.sub_questions[0].answer.srepr
+
+    shown = "".join(mr.given.values())
+    for key, value in mr.params["numbers"].items():
+        if key == "role":  # 問いの型（どの辺を求めるか）は語で本文に出る
+            continue
+        assert str(value) in shown, f"{key}={value} が本文に無い"
+    # 点名は答えに影響しない surface だが、dup_key に効かせるため params に入れる。
+    # 本文では離れた位置に出る（"正四角錐O-PQRS" の O と PQRS など）ので1文字ずつ見る。
+    for value in mr.params["slots"].values():
+        for ch in str(value):
+            assert ch in shown, f"点名 {ch} が本文に無い"
+
+
+@pytest.mark.parametrize(("family", "level", "signature", "asked"), _PYTHAGOREAN_FV_CELLS)
+@pytest.mark.parametrize("seed", range(30))
+def test_pythagorean_find_value_no_digit_in_narration(seed, family, level, signature, asked):
+    """narration に数字を書かない（hints に流れて G-Q5t が漏洩と誤検出するため）。"""
+    ctx = _make_ctx(family, level)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    for sq in mr.sub_questions:
+        for step in sq.steps:
+            assert not any(ch.isdigit() for ch in step.narration), step.narration
+
+
+@pytest.mark.parametrize("seed", range(40))
+def test_pythagorean_find_value_non_degenerate(seed):
+    """答えが 0 や自明値に潰れる退化を構成側で禁じていることを固定する。"""
+    # g3_l53 Lv2: 斜辺を問う枠は2辺とも正、辺を問う枠は 斜辺 > 既知の辺（答えが正）。
+    ctx = _make_ctx("math.g3_l53.find_value", 2)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(
+        ctx, derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    )
+    n = mr.params["numbers"]
+    assert int(n["known_a"]) > 0 and int(n["known_b"]) > 0
+    if n["role"] == "leg":
+        assert int(n["known_a"]) > int(n["known_b"])
+
+    # g3_l53 Lv3: 底辺は偶数・三角形が成り立つ・針のように細くない。
+    ctx = _make_ctx("math.g3_l53.find_value", 3)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(
+        ctx, derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    )
+    equal_side, base = (int(mr.params["numbers"][k]) for k in ("equal_side", "base"))
+    assert base % 2 == 0 and base >= 4
+    assert base < 2 * equal_side and 2 * base >= equal_side
+
+    # g3_l54 Lv2: 座標軸に平行な線分（差の一方が 0）は直角三角形にならないので出さない。
+    ctx = _make_ctx("math.g3_l54.find_value", 2)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(
+        ctx, derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    )
+    n = mr.params["numbers"]
+    assert int(n["x1"]) != int(n["x2"]) and int(n["y1"]) != int(n["y2"])
+
+    # g3_l54 Lv3: y の二乗が等しいと答えが中点に潰れる（三平方を使わずに解ける）。
+    ctx = _make_ctx("math.g3_l54.find_value", 3)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(
+        ctx, derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    )
+    n = mr.params["numbers"]
+    assert int(n["x1"]) != int(n["x2"])
+    assert int(n["y1"]) ** 2 != int(n["y2"]) ** 2
+    x_of_p = sympy.sympify(mr.sub_questions[0].answer.srepr)[0]
+    assert x_of_p.is_Integer
+
+    # g3_l55 Lv3: 側辺が底面の対角線の半分より長い＝高さが正の実数（錐体が立つ）。
+    ctx = _make_ctx("math.g3_l55.find_value", 3)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(
+        ctx, derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    )
+    base_edge, lateral = (int(mr.params["numbers"][k]) for k in ("base_edge", "lateral_edge"))
+    assert base_edge % 2 == 0
+    assert 2 * lateral**2 > base_edge**2
+
+    # g3_l56 Lv4: 中心角が 180°未満（弦が最短経路になる）かつ 60°でない（答えが母線と一致）。
+    ctx = _make_ctx("math.g3_l56.find_value", 4)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(
+        ctx, derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    )
+    radius, slant = (int(mr.params["numbers"][k]) for k in ("radius", "slant"))
+    central_angle = sympy.Rational(360 * radius, slant)
+    assert 0 < central_angle < 180
+    chord = sympy.sympify(mr.sub_questions[0].answer.srepr)
+    assert chord > 0 and chord != slant
+
+
+@pytest.mark.parametrize("seed", range(40))
+def test_special_right_triangle_ratio_property(seed):
+    """g3_l53.knowledge Lv1: 正答が特別な直角三角形の比になり、誤答と重ならない。"""
+    ctx = _make_ctx("math.g3_l53.knowledge", 1)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(
+        ctx, derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    )
+    assert mr.signature == "special_right_triangle_ratio"
+    assert set(mr.given) == {"statement"}
+    assert mr.visual_plan is None
+
+    checker = REGISTRY.checker("math.special_right_triangle_ratio.double_solve")
+    solutions = checker(mr)
+    answer = mr.sub_questions[0].answer
+    assert len(solutions) == 1
+    assert solutions[0].answer.correct == answer.correct
+
+    acute = int(mr.params["numbers"]["acute_angle"])
+    pool = {"1:1", "1:√2", "√2:1"} if acute == 45 else {
+        "1:√3", "1:2", "√3:2", "√3:1", "2:1", "2:√3",
+    }
+    assert answer.correct in pool
+    assert answer.distractors, "妨害選択肢が空"
+    assert answer.correct not in answer.distractors
+    assert len(set(answer.distractors)) == len(answer.distractors)
+    # 比べる2辺は必ず異なる辺（同じ辺どうしの比 1:1 に潰れない形で問う）。
+    assert int(mr.params["numbers"]["first_side"]) != int(mr.params["numbers"]["second_side"])

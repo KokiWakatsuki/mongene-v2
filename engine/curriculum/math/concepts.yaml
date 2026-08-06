@@ -1328,3 +1328,37 @@ concepts:
   - id: sphere_formula.rule_recall
     label: "球の表面積・体積を半径と円周率で表す公式を想起する"
     unit: g1_l53
+  # --- C10 g3 三平方の定理の利用（g3_l53〜l56 find_value / knowledge）横展開 ---
+  - id: pythagorean.missing_side_in_right_triangle
+    label: "直角三角形の2辺から残り1辺の長さを三平方の定理1回で求める"
+    unit: g3_l53
+  - id: pythagorean.isosceles_height_and_area
+    label: "頂点から底辺に垂線を引き、二等辺三角形の高さと面積を多段で求める"
+    unit: g3_l53
+  - id: pythagorean.height_from_special_angles
+    label: "底辺の両端の特別な角の辺の比から方程式を立てて垂線の長さを逆算する"
+    unit: g3_l53
+  - id: pythagorean.special_right_triangle_ratio
+    label: "45-45-90・30-60-90 の特別な直角三角形の辺の長さの比を答える"
+    unit: g3_l53
+  - id: pythagorean.coordinate_distance
+    label: "座標平面上の2点の座標差を直角をはさむ2辺として距離を求める"
+    unit: g3_l54
+  - id: pythagorean.equidistant_point_on_x_axis
+    label: "2点から等しい距離にあるx軸上の点の座標を距離の条件から逆算する"
+    unit: g3_l54
+  - id: pythagorean.box_diagonal
+    label: "底面の対角線を経由して直方体の対角線の長さを求める"
+    unit: g3_l55
+  - id: pythagorean.square_pyramid_height_volume
+    label: "正四角錐の底面の対角線の半分から高さを求め、体積を求める"
+    unit: g3_l55
+  - id: pythagorean.regular_tetrahedron_height_volume
+    label: "正四面体の垂線の足の位置を構想して高さと体積を求める"
+    unit: g3_l55
+  - id: pythagorean.box_surface_shortest_path
+    label: "直方体の2面を1つの平面に開いて表面上の最短の道のりを求める"
+    unit: g3_l56
+  - id: pythagorean.cone_surface_shortest_path
+    label: "円錐の側面の展開図で、ひとまわりして戻る最短の道のりを求める"
+    unit: g3_l56
