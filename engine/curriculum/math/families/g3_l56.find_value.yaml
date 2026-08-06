@@ -1,0 +1,61 @@
+family: math.g3_l56.find_value
+form: find_value
+source_desc: |
+  立体の表面上の最短距離（展開図の利用）
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv2 desc: 1面を開いて2点間の直線距離を三平方で求める。
+       example: 縦 3cm、横 4cm、高さ 5cm の直方体で、頂点 A から、A と辺を共有しない側の
+                面上を通って向かいの頂点 G まで、表面上を進む最短の道のりを求めよ
+                (1面を開いて考えよ)。
+  Lv4 desc: 複数の開き方から最短を選ぶ・付随する面積/体積の逆算。
+       example: 底面の半径 3cm、母線の長さ 9cm の円錐がある。底面の周上の1点 P から
+                側面をひとまわりして P にもどる最短の道のりを、展開図を用いて求めよ。
+  【設計モデル】新 solver ゼロ（recipe math.pythagorean_find_value）。
+    - Lv2: どの2面を通るかを場面文で名指しして開き方を一意にする（台帳の例文は
+      「A と辺を共有しない側の面」という言い方で開き方が読み手にゆだねられており、
+      図が持てない form では答えが一意に定まらないため）。開いた図は横が直方体の横、
+      縦が「縦＋高さ」の長方形になり、求める道のりはその対角線＝
+      math.pythagorean_hypotenuse そのもの（2手）。
+    - Lv4: 台帳の例文どおり円錐。側面の展開図の中心角を弧の長さ＝底面の円周から求め、
+      二本の母線と弦でできる二等辺三角形に垂線を下ろして、
+      math.solve_quadratic の正の解で弦の半分を求める（3手）。
+      母線＝半径×3（中心角120°）と 母線＝半径×4（中心角90°）に限る。
+      ×6（中心角60°）は答えが母線の長さと一致して退化するので入れない。
+      ×2以下は中心角が180°以上になり、弦が最短経路にならないので入れない。
+  【level_sep】Lv2=2手（開く→三平方）、Lv4=3手（展開して中心角→二等辺三角形→三平方）で
+  op 列が異なる。
+concepts_default: [pythagorean.box_surface_shortest_path]
+levels:
+  "2":
+    signature: pythagorean_box_surface_shortest_path
+    recipe: math.pythagorean_find_value
+    params:
+      scenario_kind: box_surface_shortest_path
+      # 縦・横・高さの3軸 × 20 値 ＝ 8000 通り（閾 0.20 に必要な約250通りを大きく超える）。
+      edge_domain: {int_range: [1, 20]}
+    given: [condition]
+    asked: [value]
+    visual: none
+    text: {tier: T1, template: lf_pythagorean_condition_v1}
+    hints: [steps_prefix]
+    concept_tags: [pythagorean.box_surface_shortest_path]
+    cause_tags: []
+  "4":
+    signature: pythagorean_cone_surface_shortest_path
+    recipe: math.pythagorean_find_value
+    params:
+      scenario_kind: cone_surface_shortest_path
+      # 半径 60 × 母線比 2 × 単位 2 ＝ 240 通り（数値だけ）。点の名前（26 通り）も
+      # params に載るので実際は 6240 通り。
+      radius_domain: {int_range: [1, 60]}
+      slant_ratio_domain: {int_set: [3, 4]}
+      unit_domain: [cm, m]
+    given: [condition]
+    asked: [value]
+    visual: none
+    text: {tier: T1, template: lf_pythagorean_condition_v1}
+    hints: [steps_prefix]
+    concept_tags: [pythagorean.cone_surface_shortest_path]
+    cause_tags: []
+remedial:
+  default_level: 2

@@ -33,6 +33,7 @@ from engine.packs.math.recipes import similarity_conditions  # noqa: F401,E402  
 from engine.packs.math.recipes import parallel_line_ratio  # noqa: F401,E402  (letter_expr の _draw_distinct_points に依存＝後に import)
 from engine.packs.math.recipes import similarity_scale_ratio  # noqa: F401,E402  (letter_expr の draw に依存＝後に import)
 from engine.packs.math.recipes import inscribed_angle  # noqa: F401,E402  (letter_expr の _draw_distinct_points に依存＝後に import)
+from engine.packs.math.recipes import pythagorean_find_value  # noqa: F401,E402  (登録の副作用のため import)
 from engine.packs.math.recipes import word_problem  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.recipes import word_problem_linear  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.recipes import word_problem_system  # noqa: F401  (word_problem_linear の _split_pair に依存＝後に import)

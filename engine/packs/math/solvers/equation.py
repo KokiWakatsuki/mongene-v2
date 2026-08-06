@@ -37,6 +37,12 @@ _EQUATION_STEPS: dict[str, list[str]] = {
     "cross_multiply": ["cross_multiply", "solve_proportion"],
     # g1_l24 Lv2 比例式（文字を含む項）＝たすきがけ後にかっこを外して移項して解く
     "cross_multiply_expand": ["cross_multiply", "expand_parentheses", "transpose_and_solve"],
+    # g3_l54.find_value Lv3（C10 三平方 横展開）＝ x 軸上の等距離点。「PA²=PB²」の
+    # 両辺の (x-定数)² を展開すると x² が消えて一次方程式になるので、この汎用ソルバに
+    # そのまま渡せる（既存 op 列を再利用）。呼び出し側の recipe
+    # （math.pythagorean_find_value）は答えの値だけを取り、steps は座標平面の語彙で
+    # 組み直すので、ここの op 列は解説文には出ない（mode を受理させるための登録）。
+    "pythagorean_equidistant_point_x_axis": ["expand_and_transpose", "solve"],
 }
 
 _OP_NARRATION: dict[str, str] = {
