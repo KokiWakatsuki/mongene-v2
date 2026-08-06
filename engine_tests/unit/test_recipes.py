@@ -8,6 +8,7 @@ CellContext で construct し、MR が正しく組み立てられること・sig
 from __future__ import annotations
 
 import math
+import re
 from functools import lru_cache
 from pathlib import Path
 
@@ -20,6 +21,10 @@ from engine.core.curriculum import load_curriculum
 from engine.core.registry import REGISTRY
 from engine.core.rng import derive_rng
 from engine.core.spec.loader import load_family_dir
+from engine.packs.math.visuals.graph import (
+    compute_grid_spec_from_params,
+    tick_labels_from_params,
+)
 
 FAMILIES_DIR = Path("engine/curriculum/math/families")
 
@@ -8175,3 +8180,252 @@ def test_c4_graph_recipe_concepts_declared():
     assert REGISTRY.recipe_concepts("math.graph_two_plans_crossover") == frozenset({
         "direct_proportion.compare_two_plans_graph",
     })
+
+
+# ---------------------------------------------------------------------------
+# C6 g3 二次関数 y=ax² の graph_table（かく／読む）8 セル（横展開#116）
+#
+# ゲート（G-Q1/G-FP/dup）は「答えが 0 や 1 に潰れる退化」を素通りするので、
+# ここでは各セルの**非退化条件**（頂点だけの答えにならない・2本の放物線が相異なる・
+# 変域が潰れない・交点が2つある・折れ線が実際に折れる）を property で固定する。
+# ---------------------------------------------------------------------------
+_C6_GRAPH_CELLS = [
+    ("math.g3_l33.graph_table", 1),
+    ("math.g3_l33.graph_table", 2),
+    ("math.g3_l34.graph_table", 2),
+    ("math.g3_l36.graph_table", 2),
+    ("math.g3_l37.graph_table", 2),
+    ("math.g3_l38.graph_table", 2),
+    ("math.g3_l38.graph_table", 3),
+]
+
+_C6_CHECKER_BY_CELL = {
+    ("math.g3_l33.graph_table", 1): "math.read_two_points_on_parabola.double_solve",
+    ("math.g3_l33.graph_table", 2): "math.draw_two_parabolas.double_solve",
+    ("math.g3_l34.graph_table", 2): "math.draw_parabola_domain.double_solve",
+    ("math.g3_l36.graph_table", 2): "math.draw_phenomenon_curve.double_solve",
+    ("math.g3_l37.graph_table", 2): "math.draw_parabola_and_line.double_solve",
+    ("math.g3_l38.graph_table", 2): "math.read_area_time_graph.double_solve",
+    ("math.g3_l38.graph_table", 3): "math.draw_piecewise_area_graph.double_solve",
+}
+
+_SVG_TEXT_RE = re.compile(r"<text[^>]*>(.*?)</text>")
+
+
+@pytest.mark.parametrize("family,level", _C6_GRAPH_CELLS)
+@pytest.mark.parametrize("seed", range(40))
+def test_c6_graph_table_double_solve_property(family, level, seed):
+    """double-solve が全 seed で一致し、図（問題図/模範解答図）の規約を満たす。"""
+    ctx = _make_ctx(family, level)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+
+    checker = REGISTRY.checker(_C6_CHECKER_BY_CELL[(family, level)])
+    sol = checker(mr)
+    sq = mr.sub_questions[0]
+    if sq.answer.kind == "graph":
+        assert {f.srepr for f in sol.answer.features} == {f.srepr for f in sq.answer.features}
+    else:
+        assert sol.answer.srepr == sq.answer.srepr
+
+    # G-Q5v: 図の <text> は軸目盛だけ＝labels は tick_labels_from_params と機械的に一致。
+    assert mr.visual_plan is not None
+    assert mr.visual_plan.labels == tick_labels_from_params(mr.params)
+
+    if sq.asked == "draw_graph":
+        # 「かく」セル: 問題図は空の方眼（描画対象を宣言しない）／模範解答図は非空。
+        assert {e.kind for e in mr.visual_plan.elements} == {"grid", "axis"}
+        assert sq.answer.solution_svg_ref.startswith("<svg")
+        # 模範解答図の <text> も軸目盛だけ（labels の集合に含まれる）。
+        texts = _SVG_TEXT_RE.findall(sq.answer.solution_svg_ref)
+        assert set(texts) <= set(mr.visual_plan.labels)
+    else:
+        # 「読む」セル: 読む対象が問題図に描かれている／given に式を出さない。
+        assert {"curve", "polyline"} & {e.kind for e in mr.visual_plan.elements}
+        assert "expression" not in mr.given
+
+
+@pytest.mark.parametrize("seed", range(40))
+def test_read_two_points_on_parabola_non_degenerate(seed):
+    """g3_l33 Lv1: 読む2点が相異・非0の x で、頂点（原点）に潰れない。"""
+    ctx = _make_ctx("math.g3_l33.graph_table", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+
+    a = sympy.sympify(mr.params["coeff"])
+    x1, x2 = int(mr.params["x1"]), int(mr.params["x2"])
+    assert a != 0
+    assert x1 != 0 and x2 != 0 and x1 != x2
+    # 答えは (x1, a·x1²), (x2, a·x2²)＝どちらも原点ではない。
+    pts = sympy.sympify(mr.sub_questions[0].answer.srepr)
+    assert pts == sympy.Tuple(
+        sympy.Tuple(sympy.Integer(x1), a * x1**2), sympy.Tuple(sympy.Integer(x2), a * x2**2)
+    )
+    assert all(p != sympy.Tuple(sympy.Integer(0), sympy.Integer(0)) for p in pts)
+    # 方眼に収まる（|a·x²| ≦ value_bound）＝図から座標が読める。
+    bound = int(ctx.spec_level.params["value_bound"])
+    assert max(abs(a * x1**2), abs(a * x2**2)) <= bound
+    # 点名2つは相異（surface の自由度＝dup 分散）。
+    assert len(set(mr.params["labels"])) == 2
+
+
+@pytest.mark.parametrize("seed", range(40))
+def test_draw_two_parabolas_non_degenerate(seed):
+    """g3_l33 Lv2: 2本の放物線が相異なり、開き方の比較が一意に決まる。"""
+    ctx = _make_ctx("math.g3_l33.graph_table", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+
+    a1, a2 = sympy.sympify(mr.params["coeff"]), sympy.sympify(mr.params["coeff2"])
+    assert a1 != 0 and a2 != 0
+    assert a1 != a2, "同じ比例定数だと2本が重なり『開き方を比べる』が成立しない"
+    assert abs(a1) != abs(a2), "絶対値が同じだと開き方の広さが等しく、比較が一意に決まらない"
+
+    lo, hi = int(mr.params["table_lo"]), int(mr.params["table_hi"])
+    assert lo < 0 < hi, "対応表は原点をまたぐ（頂点まわりの対称性が見える）"
+    features = mr.sub_questions[0].answer.features
+    # 頂点1つ＋各曲線の表の点＋開き方の比較1つ。
+    assert [f.kind for f in features].count("vertex") == 1
+    assert [f.kind for f in features].count("curve_point") == 2 * (hi - lo + 1)
+    narrower = [f for f in features if f.kind == "narrower_curve"]
+    assert len(narrower) == 1
+    expected = a1 if abs(a1) > abs(a2) else a2
+    assert sympy.srepr(sympy.Tuple(sympy.Symbol("narrower"), expected)) == narrower[0].srepr
+
+
+@pytest.mark.parametrize("seed", range(40))
+def test_draw_parabola_domain_non_degenerate(seed):
+    """g3_l34 Lv2: 変域が潰れず、y の変域が頂点を含むかどうかで正しく決まる。"""
+    ctx = _make_ctx("math.g3_l34.graph_table", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+
+    a = sympy.sympify(mr.params["coeff"])
+    lo, hi = int(mr.params["arc_x_lo"]), int(mr.params["arc_x_hi"])
+    assert a != 0
+    assert lo < hi, "x の変域が1点に潰れると『区間として把握』が成立しない"
+
+    y_lo, y_hi = a * lo**2, a * hi**2
+    candidates = [y_lo, y_hi] + ([sympy.Integer(0)] if lo < 0 < hi else [])
+    expected = sympy.Tuple(sympy.Symbol("y_range"), min(candidates), max(candidates))
+    y_range = [f for f in mr.sub_questions[0].answer.features if f.kind == "y_range"]
+    assert len(y_range) == 1
+    assert y_range[0].srepr == sympy.srepr(expected)
+    # y の変域も1点に潰れない（a≠0 かつ lo<hi なら両端の y か頂点かで必ず幅が出る）。
+    assert min(candidates) != max(candidates)
+
+
+@pytest.mark.parametrize("seed", range(40))
+def test_draw_phenomenon_curve_non_degenerate(seed):
+    """g3_l36 Lv2: 現象のグラフが第1象限で単調に増加し、表が3行以上ある。"""
+    ctx = _make_ctx("math.g3_l36.graph_table", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+
+    a = sympy.sympify(mr.params["coeff"])
+    rows, step = int(mr.params["rows"]), int(mr.params["step"])
+    assert a > 0, "現象（距離）の比例定数は正＝第1象限の量-量グラフになる"
+    assert rows >= 3 and step >= 1
+    assert mr.params["grid_mode"] == "quantity"
+
+    features = mr.sub_questions[0].answer.features
+    assert len(features) == rows + 1
+    ys = [a * (step * i) ** 2 for i in range(rows + 1)]
+    assert ys == sorted(ys) and ys[0] == 0 and ys[-1] > 0, "0 から単調増加（値が潰れない）"
+    assert ys[-1] <= int(ctx.spec_level.params["value_bound"])
+
+
+@pytest.mark.parametrize("seed", range(40))
+def test_draw_parabola_and_line_non_degenerate(seed):
+    """g3_l37 Lv2: 放物線と直線が相異なる2点で交わり、囲まれた部分が潰れない。"""
+    ctx = _make_ctx("math.g3_l37.graph_table", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+
+    a = sympy.sympify(mr.params["coeff"])
+    m, b = sympy.sympify(mr.params["line_m"]), sympy.sympify(mr.params["line_b"])
+    xa, xb = int(mr.params["hatch_x_lo"]), int(mr.params["hatch_x_hi"])
+    assert a != 0
+    assert b != 0, "直線が原点を通ると交点の一方が原点になり、囲まれた部分が退化しうる"
+    assert xa < xb, "交点が1点に重なると囲まれた部分が消える"
+    # 交点は ax²=mx+b の解そのもの（判別式が正＝2交点）。
+    assert (m**2 + 4 * a * b) > 0
+    x = sympy.Symbol("x")
+    assert sorted(sympy.solve(sympy.Eq(a * x**2, m * x + b), x)) == [xa, xb]
+    # 答えの特徴は交点2つだけ（答えを図に先出ししていない＝問題図は空の方眼）。
+    assert [f.kind for f in mr.sub_questions[0].answer.features] == ["intersection"] * 2
+    assert len(set(mr.params["labels"])) == 2
+
+
+@pytest.mark.parametrize("seed", range(40))
+def test_read_area_time_graph_non_degenerate(seed):
+    """g3_l38 Lv2: 読み取りが格子点で確定し、面積-時間グラフが実際に折れる。"""
+    ctx = _make_ctx("math.g3_l38.graph_table", 2)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+
+    p_side, q_side = int(mr.params["side_p"]), int(mr.params["side_q"])
+    t1, t2 = int(mr.params["t1"]), int(mr.params["t2"])
+    assert p_side > 0 and q_side > 0 and p_side % 2 == 0
+    assert t1 < t2 and 1 <= t1 and t2 <= p_side + q_side
+    # 量-量グラフの目盛が 1 刻み＝読み取る値が必ず格子点にのる。
+    spec = compute_grid_spec_from_params(mr.params)
+    assert spec.x_step == 1 and spec.y_step == 1
+
+    # 折れ線は「増加する1次式 → 一定」の2区間（0 に潰れず、実際に折れる）。
+    y_top = sympy.Rational(p_side * q_side, 2)
+    assert y_top > 0
+    assert mr.params["poly_pts"] == [
+        str((sympy.Integer(0), sympy.Integer(0))),
+        str((sympy.Integer(q_side), y_top)),
+        str((sympy.Integer(p_side + q_side), y_top)),
+    ]
+    pts = sympy.sympify(mr.sub_questions[0].answer.srepr)
+    for t, pt in ((t1, pts[0]), (t2, pts[1])):
+        expected_y = sympy.Rational(p_side * t, 2) if t <= q_side else y_top
+        assert pt == sympy.Tuple(sympy.Integer(t), expected_y)
+    assert len(set(mr.params["labels"])) == 5
+
+
+@pytest.mark.parametrize("seed", range(40))
+def test_draw_piecewise_area_graph_non_degenerate(seed):
+    """g3_l38 Lv3: 折れ点が目盛にのり、2区間の式（1次関数→一定）が実際に変わる。"""
+    ctx = _make_ctx("math.g3_l38.graph_table", 3)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+
+    s, v = int(mr.params["side"]), int(mr.params["speed"])
+    assert s % 2 == 0, "1辺が偶数＝面積 s²/2 が整数（折れ点が目盛にのる）"
+    assert s % v == 0, "速さが1辺の約数＝折れ点の時刻 s/v が整数"
+    t1, area = s // v, sympy.Rational(s * s, 2)
+    assert area > 0
+
+    features = mr.sub_questions[0].answer.features
+    assert {f.srepr for f in features} == {
+        sympy.srepr(sympy.Tuple(sympy.Integer(0), sympy.Integer(0))),
+        sympy.srepr(sympy.Tuple(sympy.Integer(t1), area)),
+        sympy.srepr(sympy.Tuple(sympy.Integer(2 * t1), area)),
+    }
+    # 第1区間は傾き s·v/2 で増加し、第2区間は一定＝「区間ごとに式が変わる」。
+    assert sympy.Rational(s * v, 2) * t1 == area
+    assert sympy.Rational(s * v, 2) > 0
+    # 面積は独立ソルバ（shoelace 公式・g3_l31 と共有）でも同じ値になる。
+    for t, mode in ((t1, "single_segment"), (2 * t1, "two_segment")):
+        sol = REGISTRY.solver("math.solve_moving_point_area")(s, v, t, mode)
+        assert sympy.sympify(sol.answer.srepr) == area
+    assert len(set(mr.params["labels"])) == 5
+
+
+@pytest.mark.parametrize("seed", range(40))
+def test_parabola_property_rule_recall_non_degenerate(seed):
+    """g3_l33 knowledge Lv1: 正解が distractor と重ならず、答えに数字が出ない。"""
+    ctx = _make_ctx("math.g3_l33.knowledge", 1)
+    rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+
+    ans = mr.sub_questions[0].answer
+    assert ans.kind == "choice"
+    assert ans.correct not in ans.distractors
+    assert len(ans.distractors) >= 2
+    assert not re.search(r"\d", ans.correct), "選択肢に数字が出ると G-Q5t が誤検出する"
+    assert mr.params["concept"] in {"shape_and_symmetry", "opening_direction", "opening_width"}

@@ -638,6 +638,31 @@ concepts:
   - id: quadratic_function.motion_area
     label: "正方形の周上を動く点による三角形の面積を、区間の場合分けをふまえて求める"
     unit: g3_l38
+  # --- C6 g3 二次関数 graph_table（かく／読む）＋ 放物線の性質 ---
+  - id: parabola_property.rule_recall
+    label: "放物線の形・対称性・頂点・開く向き・開き方の広さの性質を理解する"
+    unit: g3_l33
+  - id: parabola_graph.read_points
+    label: "放物線のグラフ上の点の座標を読み取る"
+    unit: g3_l33
+  - id: parabola_graph.draw_from_table
+    label: "対応表から座標をとって放物線をかき、比例定数による開き方のちがいを比べる"
+    unit: g3_l33
+  - id: parabola_graph.domain_on_graph
+    label: "放物線をかき、xの変域に対応する部分をなぞってyの変域をグラフから読み取る"
+    unit: g3_l34
+  - id: parabola_graph.phenomenon_table
+    label: "2乗に比例する身のまわりの現象の対応表から、グラフをかいて変化のようすを表す"
+    unit: g3_l36
+  - id: parabola_graph.enclosed_region
+    label: "放物線と直線を同じ座標軸にかき、囲まれた部分を交点で捉えて示す"
+    unit: g3_l37
+  - id: parabola_graph.read_area_time
+    label: "動点がつくる面積と時間の関係のグラフから、指定した時刻の面積を読み取る"
+    unit: g3_l38
+  - id: parabola_graph.piecewise_area
+    label: "動点がつくる面積を区間ごとの式で表し、折れ線のグラフとしてかく"
+    unit: g3_l38
   # --- C4 g1 比例・反比例 ---
   - id: function_terms.term_recall
     label: "変数・関数・変域の用語を想起する"

@@ -1,0 +1,36 @@
+family: math.g3_l33.knowledge
+form: knowledge
+source_desc: |
+  放物線・軸・頂点・開き方の性質の理解
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: 放物線・軸・頂点・開き方の性質の理解。
+       example: 関数 y=ax^2 のグラフについて、次の( )にあてはまる語を答えよ。このグラフは
+                ( )とよばれる曲線で、( )軸について対称であり、原点が( )となる。
+  【設計モデル】規則想起ハブ（既存 math.recall_rule・_RULE_MAPS に topic
+  "parabola_property" を追加）。台帳 example の穴埋め3箇所（曲線の名前・対称の軸・原点の
+  よび名）は、そのまま記述式にすると答えが3つに分かれて G-Q1 の単一小問規約に合わない
+  ため、「形と対称性」を1文にまとめた記述を選ぶ単一選択に realize する（鉄則③
+  asked=choice のみ）。concept_set にはさらに「開く向き」「開き方の広さ」を置き、
+  同 unit の graph_table Lv2（開き方の比較）と概念を揃える。
+  surface（具体例の比例定数 a）を params に含め dup_key を分散させる（§7.7）。
+concepts_default: [parabola_property.rule_recall]
+levels:
+  "1":
+    signature: parabola_property_rule_recall
+    recipe: math.recall_rule
+    params:
+      # concept_set 3種 × number_domain（a≠0 の 1000 通り）＝3000 通り。
+      # dup_key = signature + params（topic/concept/statement）なので、statement に
+      # 埋め込む a が実効の分散軸になる。
+      topic: parabola_property
+      concept_set: [shape_and_symmetry, opening_direction, opening_width]
+      number_domain: {int_range: [-500, 500]}
+    given: [statement]
+    asked: [choice]
+    visual: none
+    text: {tier: T1, template: lf_rule_recall_v1}
+    hints: [steps_prefix]
+    concept_tags: [parabola_property.rule_recall]
+    cause_tags: []
+remedial:
+  default_level: 1

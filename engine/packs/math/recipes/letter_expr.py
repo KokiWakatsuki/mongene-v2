@@ -1151,6 +1151,9 @@ _RULE_RECALL_CONCEPTS = [
     # C6 g3 knowledge（規則・意味の想起）
     "quadratic_function_form.rule_recall",
     "quadratic_roc_property.rule_recall",
+    # solver 側（_RULE_MAPS）に topic を足しただけでは lint R6 が通らず、セルが
+    # capabilities() に載らない（＝台帳上「未実装」のまま）。ここへの追加が対）。
+    "parabola_property.rule_recall",
     # C12 確率（規則・意味の想起）
     "complementary_event.rule_recall",
     # C9 g2 平行と合同（規則・意味の想起）
@@ -1346,6 +1349,17 @@ def _draw_rule_statement(topic: str, concept: str, rng: Rng, p: dict[str, object
         cands = [v for v in _domain_candidates(cast("dict[str, object]", p["number_domain"])) if v != 0]
         a = int(draw({"int_set": cands}, rng))
         return f"y = {a}x² のような式が「y は x の2乗に比例する」といえるための条件"
+
+    if topic == "parabola_property":
+        # g3_l33 放物線の性質。具体例の比例定数 a(≠0) を surface に埋め込み dup 分散。
+        # concept ごとに、問う性質（形と対称性／開く向き／開き方の広さ）を言い分ける。
+        cands = [v for v in _domain_candidates(cast("dict[str, object]", p["number_domain"])) if v != 0]
+        a = int(draw({"int_set": cands}, rng))
+        if concept == "shape_and_symmetry":
+            return f"関数 y = {a}x² のグラフがどのような曲線になるか、その形と対称性について"
+        if concept == "opening_direction":
+            return f"関数 y = {a}x² のグラフが、上と下のどちらに開くかの決まりについて"
+        return f"関数 y = {a}x² のグラフと、比例定数だけがちがう別の放物線とを比べたときの開き方の広さについて"
 
     if topic == "quadratic_roc_property":
         # g3_l35 変化の割合の性質。具体例の比例定数 a(≠0) を surface に埋め込み dup 分散。

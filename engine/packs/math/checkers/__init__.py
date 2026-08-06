@@ -50,5 +50,6 @@ from engine.packs.math.checkers import word_problem_pythagorean  # noqa: F401  (
 from engine.packs.math.checkers import solid_figure  # noqa: F401  (登録の副作用のため import)
 
 from engine.packs.math.checkers import proportion_graph  # noqa: F401  (登録の副作用のため import)
+from engine.packs.math.checkers import quadratic_function_graph  # noqa: F401,E402  (letter_expr/polynomial のヘルパに依存＝後に import)
 
 __all__: list[str] = []
