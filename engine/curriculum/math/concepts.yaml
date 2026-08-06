@@ -1216,3 +1216,31 @@ concepts:
   - id: circle.equal_arc_inscribed_angle
     label: "円をn等分してできる多角形で頂点をふくまない弧に対する円周角を求める"
     unit: g3_l50
+  # --- C8 横展開: g1 空間図形の計量（柱体・錐体の表面積/体積・球の表面積と体積） ---
+  - id: solid_surface.direct
+    label: "角柱・円柱の側面と底面の面積を合成して表面積を求める"
+    unit: g1_l51
+  - id: solid_surface.cone_central_angle
+    label: "円錐の側面(おうぎ形)の中心角を求めて表面積を求める"
+    unit: g1_l51
+  - id: solid_surface.composite_or_reverse
+    label: "複合立体の表面積を重なる面を除いて求める、または表面積から半径を逆算する"
+    unit: g1_l51
+  - id: solid_volume.cylinder_substitution
+    label: "円柱の体積の公式に数値を代入して計算する"
+    unit: g1_l52
+  - id: solid_volume.prism_pyramid_direct
+    label: "底面積×高さ(錐体は1/3)で角柱・角錐の体積を直接求める"
+    unit: g1_l52
+  - id: solid_volume.right_triangle_multistep
+    label: "直角三角形の底面積を先に求める多段で角柱・角錐の体積を求める"
+    unit: g1_l52
+  - id: solid_volume.composite_or_reverse
+    label: "立方体+正四角錐の複合立体の体積を求める、または体積から錐の高さを逆算する"
+    unit: g1_l52
+  - id: sphere_measure.direct
+    label: "半径から球の表面積・体積をそれぞれ直接求める"
+    unit: g1_l53
+  - id: sphere_measure.hemisphere_or_reverse
+    label: "半球の表面積を多段で求める、または表面積から半径を逆算する"
+    unit: g1_l53
