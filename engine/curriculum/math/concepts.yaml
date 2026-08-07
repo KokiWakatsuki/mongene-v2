@@ -821,8 +821,30 @@ concepts:
   - id: box_plot_terms.term_recall
     label: "箱ひげ図の箱・ひげ・中央線が表す量を想起する"
     unit: g2_l56
+  # --- C11 箱ひげ図の graph_table（読む／かく・g2_l56 / g2_l57） ---
+  - id: box_plot.read_values
+    label: "箱ひげ図の目もりから中央値・四分位数などの値を読み取る"
+    unit: g2_l56
+  - id: box_plot.draw_from_data
+    label: "データから5数要約を求め箱ひげ図をかく"
+    unit: g2_l56
   - id: distribution_statistic.classify_role
     label: "中央値/範囲/四分位範囲が分布の何を表すかを判別する"
+    unit: g2_l57
+  - id: box_plot.compare_center_spread
+    label: "2本の箱ひげ図から中央値と範囲を読み比べる"
+    unit: g2_l57
+  - id: box_plot.compare_iqr
+    label: "2本の箱ひげ図の四分位範囲を比べ散らばりの違いを読み取る"
+    unit: g2_l57
+  - id: box_plot.word_problem_compare_guided
+    label: "誘導にそって2群の箱ひげ図の中央値と範囲を比べ違いを述べる"
+    unit: g2_l57
+  - id: box_plot.word_problem_judge_trend
+    label: "複数の観点を選び分布の傾向の主張の当否を根拠つきで判断する"
+    unit: g2_l57
+  - id: box_plot.word_problem_judge_stability
+    label: "主張を支持する根拠と反論を構成し妥当性を批判的に判断する"
     unit: g2_l57
   - id: survey_method_terms.term_recall
     label: "全数調査・標本調査の用語を想起する"

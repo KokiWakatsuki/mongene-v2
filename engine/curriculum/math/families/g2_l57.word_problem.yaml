@@ -1,0 +1,127 @@
+family: math.g2_l57.word_problem
+form: word_problem
+source_desc: |
+  箱ひげ図の読み取りと傾向の説明（units.generated.yaml の desc/example を正として転記）。
+  Lv2 desc: 誘導あり・2群の箱ひげ図を比較し中央値/範囲の違いを述べる。
+       example: A組とB組の数学のテストの得点を表した2つの箱ひげ図がある。(1)中央値が
+                大きいのはどちらの組か答えよ。(2)範囲が大きいのはどちらの組か答え、
+                その違いを説明せよ。
+  Lv3 desc: 複数の観点を選び分布の傾向を根拠つきで判断・記述する。
+       example: 1年生と3年生の通学時間を表した箱ひげ図がある。「3年生のほうが通学時間が
+                長い傾向がある」といえるかどうかを、中央値・四分位範囲など複数の観点を
+                選んで根拠とともに判断・記述せよ。
+  Lv4 desc: 誘導なし・妥当な主張と反論を自分で構成し批判的に判断する。
+       example: ある商品の1週間あたりの売上個数を、2つの店舗について1年分集計した
+                箱ひげ図がある。「A店のほうが安定して多く売れている」という主張が妥当か
+                どうか、この主張を支持する根拠と反論となる根拠の両方を自分で挙げ、
+                批判的に判断して述べよ。
+  ---
+  図は既存の visual `math.box_plot` に委ねる（2本の箱ひげ図・上がA/下がBで、Bは破線）。
+  form=word_problem の frame は visual=optional なので、visual_plan を付けて図を出す。
+
+  【記述をどう採点可能にしたか】「説明せよ」「述べよ」を engine がそのまま採点する
+  ことはできないので、記述の**結論**を選択（ChoiceAnswer）として答えさせ、根拠の
+  組み立てを solution_steps（＝解説とヒント）が担う形にした。判定規準はいずれも
+  決定論で、教科書が根拠に使う量だけで書ける:
+    Lv2 中央値が大きいのはどちらか／範囲が大きいのはどちらか（引き分けは構成で排除）
+    Lv3 「Bのほうが大きい傾向がある」＝第一四分位数・中央値・第三四分位数の三つとも
+        B が上回るとき「いえる」。一つでも下回れば観点により結論が変わるので「いえない」
+    Lv4 「Aのほうが安定して多い」＝中央値が大きい（多い）かつ四分位範囲が小さい
+        （安定）。両方そろって初めて妥当。片方だけなら支持する根拠と反論が同居する
+
+  【退化の防止】ゲートは答えが片方に潰れる退化を素通りするので、構成で固定する:
+    - Lv2 は中央値も範囲も引き分けにならない組だけを引く
+    - Lv3 は中央値では必ず B が上（＝主張に一応の根拠がある）としたうえで、
+      「いえる／いえない」を rng で半々に狙って構成する
+    - Lv4 は中央値では必ず A が上（＝支持する根拠を必ず1本残す）としたうえで、
+      「妥当である／妥当でない」を rng で半々に狙って構成する
+    - box_ticks は狭義単調増加の組合せのみを列挙して引く（箱の潰れ・ひげ無しが無い）
+    - ticks_a == ticks_b（2本が同じ分布）は必ず除外する
+
+  【params に何を置いたか】g2_l56/g2_l57 の graph_table と同じ規約。図に描かれている
+  もの（axis_lo/axis_hi/axis_step・box_ticks_a/box_ticks_b）と、visual が要求する
+  描画座標 five_number/five_number_b（tick から一意に決まる）だけ。**構成時に狙った
+  結論（supported/valid）は params に置かない**——置くと答えを params から読めてしまう。
+  solver は tick だけから結論を出し、checker も同じ経路で解き直す。
+  given は算用数字を含まない（序数は漢数字）。答えは ChoiceAnswer で数値トークンを
+  持たないため、G-Q5t は構造的に素通りする。
+
+  【level_sep】
+    Lv2 = 2小問（(1) read_median_both→compare_median、(2) read_range_both→compare_range）
+    Lv3 = 1小問4手（read_quartiles_both→compare_center→compare_quartile_positions→
+          judge_trend_claim）
+    Lv4 = 1小問4手（read_medians_both→read_iqr_both→weigh_support_and_counter→
+          judge_claim_validity）
+  小問数・op 列がすべて相異する。誘導の有無（Lv2 ⇔ Lv3/Lv4）と、見る量が「位置だけ」か
+  「位置と散らばりの両方」か（Lv3 ⇔ Lv4）が構造差。
+
+  【dup（数え上げ）】箱ひげの目もり位置は C(9,5)=126 通り。2群ぶんで 126²=15876、
+  場面がもつ相異な目もり間隔が5種で 79380 通り（≫ 250）。条件で捨てるのはこのうち
+  一部（Lv3/Lv4 でおよそ4分の1〜2分の1）なので、実効でも1万通りを超える。
+concepts_default: [box_plot.word_problem_compare_guided]
+levels:
+  "2":
+    signature: word_problem_box_plot_compare_guided
+    recipe: math.word_problem_box_plot_compare
+    params:
+      # 場面 = "集団A|集団B|量|単位|形容詞|数直線の目もり間隔"。量は主張文にそのまま
+      # 埋めるので単位を分け、量ごとに自然な形容詞（長い/多い/高い）も持たせる。
+      # 語に算用数字を書かない。
+      scene_set:
+        - "一組の生徒|二組の生徒|数学のテストの得点|点|高い|10"
+        - "一年生|三年生|通学にかかる時間|分|長い|5"
+        - "男子|女子|一か月に読んだ本の冊数|冊|多い|2"
+        - "バスケットボール部|サッカー部|一日の練習時間|時間|長い|1"
+        - "東町の中学校の生徒|西町の中学校の生徒|ハンドボール投げの記録|メートル|大きい|4"
+        - "去年の三年生|今年の三年生|英語のテストの得点|点|高い|10"
+        - "東店|西店|一週間あたりの売り上げ個数|十個|多い|5"
+        - "北市|南市|月ごとの最高気温|度|高い|4"
+    given: [scenario]
+    asked: [value, value]
+    visual: optional
+    text: {tier: T1, template: wp_box_plot_compare_v1, visual_builder: math.box_plot}
+    hints: [steps_prefix]
+    concept_tags: [box_plot.word_problem_compare_guided]
+    cause_tags: []
+  "3":
+    signature: word_problem_box_plot_judge_trend
+    recipe: math.word_problem_box_plot_trend
+    params:
+      scene_set:
+        - "一組の生徒|二組の生徒|数学のテストの得点|点|高い|10"
+        - "一年生|三年生|通学にかかる時間|分|長い|5"
+        - "男子|女子|一か月に読んだ本の冊数|冊|多い|2"
+        - "バスケットボール部|サッカー部|一日の練習時間|時間|長い|1"
+        - "東町の中学校の生徒|西町の中学校の生徒|ハンドボール投げの記録|メートル|大きい|4"
+        - "去年の三年生|今年の三年生|英語のテストの得点|点|高い|10"
+        - "東店|西店|一週間あたりの売り上げ個数|十個|多い|5"
+        - "北市|南市|月ごとの最高気温|度|高い|4"
+    given: [scenario, quantities]
+    asked: [value]
+    visual: optional
+    text: {tier: T1, template: wp_box_plot_trend_v1, visual_builder: math.box_plot}
+    hints: [steps_prefix]
+    concept_tags: [box_plot.word_problem_judge_trend]
+    cause_tags: []
+  "4":
+    signature: word_problem_box_plot_judge_stability
+    recipe: math.word_problem_box_plot_stability
+    params:
+      scene_set:
+        - "東店|西店|一週間あたりの売り上げ個数|十個|多い|5"
+        - "この工場の午前の便|この工場の午後の便|一日あたりの出荷個数|十個|多い|5"
+        - "去年の三年生|今年の三年生|英語のテストの得点|点|高い|10"
+        - "一組の生徒|二組の生徒|数学のテストの得点|点|高い|10"
+        - "バスケットボール部|サッカー部|一日の練習時間|時間|長い|1"
+        - "男子|女子|一か月に読んだ本の冊数|冊|多い|2"
+        - "北市|南市|月ごとの最高気温|度|高い|4"
+        - "東町の中学校の生徒|西町の中学校の生徒|ハンドボール投げの記録|メートル|大きい|4"
+    given: [scenario, quantities]
+    asked: [value]
+    visual: optional
+    text: {tier: T1, template: wp_box_plot_stability_v1, visual_builder: math.box_plot}
+    hints: [steps_prefix]
+    concept_tags: [box_plot.word_problem_judge_stability]
+    cause_tags: []
+remedial:
+  default_level: 2

@@ -1,0 +1,93 @@
+family: math.g2_l56.graph_table
+form: graph_table
+source_desc: |
+  箱ひげ図をかく/読む（units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: 5数要約から箱ひげ図を読む。
+       example: あるクラスのテストの得点を表した箱ひげ図から、中央値と第3四分位数の
+                値を読み取れ。
+  Lv3 desc: データから5数要約を求め箱ひげ図を正確にかく。
+       example: 次の12個のデータについて、最小値・第1四分位数・中央値・第3四分位数・
+                最大値を求め、それをもとに箱ひげ図を正確にかけ。
+                データ: 4, 6, 7, 9, 10, 12, 13, 15, 16, 18, 20, 24
+  ---
+  図は既存の visual `math.box_plot`（engine/packs/math/visuals/distribution_chart.py）
+  に委ねる。図の <text> は数直線の目もりだけで、5数要約の値は図中に書かれない
+  （生徒は目もりと箱の位置から読む）＝G-Q5v は `box_plot_labels(params)` で機械的に満たす。
+
+  【params に何を置いたか・G-Q5t 漏洩の判断】
+  置いたのは「図に描かれているもの」だけ:
+    axis_lo / axis_hi / axis_step … 数直線の範囲と目もり（図に数値として出る）
+    box_ticks                     … 箱ひげの5か所が左から何目もり目か（図の位置）
+    five_number                   … 上の tick から一意に決まる**描画座標**。
+        visual が要求するため置かざるを得ない（=図に描かれている）。
+    read_target / data            … 本文に出る（何を読むか／データ列そのもの）
+  Lv1 は「答えが図の中にある」セルなので、five_number を params に置くと
+  「答えを params に置いた」に近くなる。そこで **solver には five_number を渡さない**。
+  solver が受け取るのは axis_lo / axis_step / box_ticks だけで、値をそこから復元する
+  （math.read_number_line_point が「区間左端・等分数・目もり位置」から復元するのと同型）。
+  double-solve が params の答えを読み直すだけにならないので検証に穴があかない。
+  G-Q5t の whitelist は mr.given から作られるため、Lv1 の given は**算用数字を一切
+  含めない**（場面文だけ・序数は漢数字「第三四分位数」。"第3四分位数" と書くと答えの
+  値 3 と衝突して誤検出する）。Lv3 の given はデータ列そのもので、答えの最小値/最大値は
+  必ず whitelist に乗り、中間の四分位数は本文に現れない。
+
+  【level_sep】Lv1 は図から読む2手（read_axis_step → read_box_plot_values）、
+  Lv3 はデータから求めてかく3手（sort_data → compute_five_number → draw_box_plot）。
+  given（situation_params+condition ⇔ data_table）も asked（read_box_plot ⇔
+  draw_box_plot）も相異＝fp の3成分すべてが変わる。
+
+  【dup（数え上げ）】
+  Lv1: 目もり位置 C(9,5)=126 × 場面がもつ相異な目もり間隔 5 種 × 読み取り対象 3
+       = 1890 通り（≫ 250）。
+  Lv3: データ列そのもの。最小の (目もり間隔2＝軸0..20, データ8個) でも
+       C(19,8)=75582 通り。
+
+  【退化の防止】box_ticks は狭義単調増加の組合せのみを列挙して引くので、箱が潰れる
+  （Q1=Q3）・ひげが無い（最小値=Q1）が構造的に起こらない。Lv3 はデータを相異値で
+  引くため5数要約が必ず狭義単調増加になる（solver 側でも再確認して弾く）。
+concepts_default: [box_plot.read_values]
+levels:
+  "1":
+    signature: box_plot_read_values
+    recipe: math.read_box_plot
+    params:
+      # 場面 = "集団|量|数直線の目もり間隔"。量と目もり間隔を独立に引くと
+      # 「得点なのに軸が 0〜20」の不整合が出るため1本の文字列に束ねて1回で引く
+      # （ドメイン記法は list の要素に dict を許さない）。語に算用数字を書かない。
+      scene_set:
+        - "あるクラスの生徒|数学のテストの得点|10"
+        - "ある中学校の生徒|通学にかかる時間（分）|5"
+        - "あるクラスの生徒|一か月に読んだ本の冊数|2"
+        - "陸上部の部員|ハンドボール投げの記録（メートル）|4"
+        - "ある中学校の生徒|一日の睡眠時間（時間）|1"
+        - "あるクラスの生徒|漢字テストの得点|10"
+        - "ある工場で作った製品|一個あたりの重さ（グラム）|10"
+        - "あるクラスの生徒|一週間の家庭学習の時間（時間）|2"
+        - "ある中学校の生徒|一日に歩いた歩数（百歩）|5"
+        - "水泳部の部員|自由形の記録（秒）|4"
+        - "ある中学校の生徒|一日のテレビの視聴時間（十分）|1"
+      read_target_set: [median_q3, q1_median, min_max]
+    given: [situation_params, condition]
+    asked: [read_box_plot]
+    visual: required
+    text: {tier: T1, template: bp_read_box_plot_v1, visual_builder: math.box_plot}
+    hints: [steps_prefix]
+    concept_tags: [box_plot.read_values]
+    cause_tags: []
+  "3":
+    signature: box_plot_draw_from_data
+    recipe: math.draw_box_plot_from_data
+    params:
+      # 数直線の目もり間隔（軸の右端 = 間隔 × 10）。データはこの軸の内側から引く。
+      axis_step_set: [2, 5, 10]
+      # データの個数。8個以上でないと下組/上組がそれぞれ4個未満になり四分位数が粗くなる。
+      size_set: [8, 9, 10, 11, 12]
+    given: [data_table]
+    asked: [draw_box_plot]
+    visual: required
+    text: {tier: T1, template: bp_draw_box_plot_v1, visual_builder: math.box_plot}
+    hints: [steps_prefix]
+    concept_tags: [box_plot.draw_from_data]
+    cause_tags: []
+remedial:
+  default_level: 1

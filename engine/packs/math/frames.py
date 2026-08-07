@@ -34,6 +34,12 @@ _FORBIDDEN_BY_ASKED: dict[str, frozenset[str]] = {
     # 平行移動/回転移動/対称移動（かく・g1_l38〜l40）: 問題図は移動前の多角形のみ、
     # 移動後の多角形（答え）を先出ししてはならない
     "draw_transformed_polygon": frozenset({"transformed_polygon"}),
+    # 箱ひげ図（C11 g2_l56/g2_l57）:
+    #   read_box_plot … 読む対象＝箱ひげ図そのものなので図に描いてよい。ただし
+    #     5数要約の「値」を図中に注記してはならない（数直線の目もりから読ませる）。
+    #   draw_box_plot … 問題図は数直線と目もりだけ。箱ひげ（＝答え）の先出し禁止。
+    "read_box_plot": frozenset({"labeled_box_plot_value"}),
+    "draw_box_plot": frozenset({"box_plot"}),
 }
 
 
@@ -163,6 +169,8 @@ GRAPH_TABLE_FRAME = Frame(
         "read_slope_intercept",  # 横展開#4: グラフから傾き・切片を読む（g2_l21）
         "draw_segment",  # P1/C5: 端点の開閉を区別して線分をかく（g2_l23 Lv2）
         "draw_transformed_polygon",  # C7 g1平面図形: 平行移動/回転移動/対称移動をかく
+        # C11 箱ひげ図（g2_l56/g2_l57）: 箱ひげ図を読む／データから求めてかく
+        "read_box_plot", "draw_box_plot",
     }),
     visual="required",
     _forbidden_by_asked={
@@ -173,6 +181,8 @@ GRAPH_TABLE_FRAME = Frame(
         "complete_table": _FORBIDDEN_BY_ASKED["complete_table"],
         "draw_segment": _FORBIDDEN_BY_ASKED["draw_segment"],
         "draw_transformed_polygon": _FORBIDDEN_BY_ASKED["draw_transformed_polygon"],
+        "read_box_plot": _FORBIDDEN_BY_ASKED["read_box_plot"],
+        "draw_box_plot": _FORBIDDEN_BY_ASKED["draw_box_plot"],
     },
 )
 
