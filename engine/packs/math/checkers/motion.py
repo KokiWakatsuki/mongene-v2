@@ -78,9 +78,65 @@ def double_solve_word_problem_area_graph_and_times(mr: MR) -> list[Solution]:
     ]
 
 
+@register_checker("math.word_problem_single_interval_area.double_solve")
+def double_solve_word_problem_single_interval_area(mr: MR) -> list[Solution]:
+    """(1)=面積の式・(2)=時刻。渡すのは本文に出ている 1辺・速さ・面積だけ。"""
+    n = mr.params["numbers"]
+    side, speed = sympy.Integer(int(n["side"])), sympy.Integer(int(n["speed"]))
+    return [
+        cast(Solution, REGISTRY.solver("math.express_single_interval_area")(side, speed)),
+        cast(
+            Solution,
+            REGISTRY.solver("math.solve_time_from_area")(
+                sympy.Rational(side * speed, 2), n["area"]
+            ),
+        ),
+    ]
+
+
+@register_checker("math.word_problem_interval_exprs_and_graph.double_solve")
+def double_solve_word_problem_interval_exprs_and_graph(mr: MR) -> list[Solution]:
+    """(1)=区間ごとの式・(2)=グラフの折れ点。"""
+    n = mr.params["numbers"]
+    return [
+        cast(
+            Solution,
+            REGISTRY.solver("math.express_three_interval_area_exprs")(n["side"], n["speed"]),
+        ),
+        cast(
+            Solution,
+            REGISTRY.solver("math.draw_three_interval_area_graph_features")(
+                n["side"], n["speed"]
+            ),
+        ),
+    ]
+
+
+@register_checker("math.word_problem_max_area_and_times.double_solve")
+def double_solve_word_problem_max_area_and_times(mr: MR) -> Solution:
+    n = mr.params["numbers"]
+    return cast(
+        Solution,
+        REGISTRY.solver("math.max_area_and_times")(n["side"], n["speed"], n["area"]),
+    )
+
+
+@register_checker("math.draw_three_interval_area_graph.double_solve")
+def double_solve_draw_three_interval_area_graph(mr: MR) -> Solution:
+    p = mr.params
+    return cast(
+        Solution,
+        REGISTRY.solver("math.draw_three_interval_area_graph_features")(p["side"], p["speed"]),
+    )
+
+
 __all__ = [
     "double_solve_solve_moving_point_area",
     "double_solve_word_problem_area_graph_and_times",
+    "double_solve_word_problem_single_interval_area",
+    "double_solve_word_problem_interval_exprs_and_graph",
+    "double_solve_word_problem_max_area_and_times",
+    "double_solve_draw_three_interval_area_graph",
     "double_solve_draw_area_time_graph_segment",
     "double_solve_word_problem_moving_points_area",
     "double_solve_word_problem_moving_point_all_times",

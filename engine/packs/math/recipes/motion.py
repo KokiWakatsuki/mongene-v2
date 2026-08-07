@@ -27,7 +27,11 @@ from engine.core.contracts import (
 from engine.core.registry import REGISTRY, register_recipe
 from engine.core.rng import Rng, draw
 from engine.packs.math.recipes.letter_expr import _draw_distinct_points
-from engine.packs.math.visuals.graph import render_segment_solution_svg, tick_labels_from_params
+from engine.packs.math.visuals.graph import (
+    render_polyline_solution_svg,
+    render_segment_solution_svg,
+    tick_labels_from_params,
+)
 
 _MOTION_CONCEPTS = [
     "motion.area_single_segment",
@@ -595,10 +599,297 @@ def _construct_graph_and_times(
     return s, v, area, labels_txt, scenario, ask
 
 
+# ---------------------------------------------------------------------------
+# g2_l29（動点と面積の変化・1次関数）と g1_l36 Lv4（比例反比例の利用・融合）
+#
+# 面積が時間の1次式になる題材。g3_l31/g3_l38 と同じ正方形の動点だが、問うものが違う:
+#   g2_l29 wp Lv3  誘導あり2小問（1区間の式 → その面積になる時刻）
+#   g2_l29 wp Lv4  誘導なし（区間ごとの式 ＋ グラフ）
+#   g2_l29 gt Lv3  折れ線のグラフをかく（graph_table＝図が必須）
+#   g1_l36 wp Lv4  最大になるところ ＋ 指定の面積になる時刻をすべて
+# ---------------------------------------------------------------------------
+_G2L29_GUIDED_CONCEPTS = ["motion.word_problem_single_interval_area"]
+_G2L29_SOLO_CONCEPTS = ["motion.word_problem_interval_exprs_and_graph"]
+_G2L29_GRAPH_CONCEPTS = ["motion.piecewise_area_graph"]
+_G1L36_CONCEPTS = ["proportion.word_problem_max_area_and_times"]
+
+
+def _single_interval_scene(p: dict[str, Any], rng: Rng) -> tuple[int, int, int, str, str, str, str]:
+    """(1辺, 速さ, 面積, 点名, 場面文, 変数設定文, 小問2文)。
+
+    【組合せ数】(速さ, 答えの時刻) の組 × 1辺。面積 (s·v/2)·t0 が整数になり、
+    答えの時刻が区間の内側（v·t0 < s）に入る組を列挙してから引く。点名5文字が乗る。
+
+    【退化・漏洩の封じ方】答えの時刻・面積の係数が本文の数値（1辺・速さ・面積）や
+    本文の "cm²" 由来の 2 と一致する組は外す。
+    """
+    cands: list[tuple[int, int, int]] = []
+    for side in p["side_candidates"]:
+        s_i = int(side)
+        for speed in p["speed_candidates"]:
+            v_i = int(speed)
+            if (s_i * v_i) % 2:
+                continue  # 面積の係数 s·v/2 を整数にする
+            coeff = s_i * v_i // 2
+            for t0 in range(1, s_i // v_i + 1):
+                area_i = coeff * t0
+                if {t0, coeff} & {s_i, v_i, area_i, _AREA_UNIT_TOKEN}:
+                    continue
+                cands.append((s_i, v_i, area_i))
+    idx = int(draw({"int_set": list(range(len(cands)))}, rng))
+    s, v, area = cands[idx]
+    la, lb, lc, ld, lp = _draw_distinct_points(5, rng)
+    scenario = (
+        f"1辺が{s}cmの正方形{la}{lb}{lc}{ld}で、点{lp}は{lb}を出発して"
+        f"{lb}から{lc}まで辺{lb}{lc}上を毎秒{v}cmの速さで動く。"
+    )
+    quantities = (
+        f"点{lp}が{lb}を出発してからx秒後の三角形{la}{lb}{lp}の面積をy cm²とする。"
+    )
+    ask_f = "yをxの式で表せ。"
+    ask_v = f"三角形{la}{lb}{lp}の面積が{area}cm²になるのは何秒後か求めよ。"
+    return s, v, area, la + lb + lc + ld + lp, scenario, quantities, ask_f, ask_v  # type: ignore[return-value]
+
+
+@register_recipe(
+    "math.word_problem_single_interval_area", provides_concepts=_G2L29_GUIDED_CONCEPTS
+)
+def word_problem_single_interval_area_recipe(ctx: CellContext, rng: Rng) -> MR:
+    """1区間で面積を x の式に表し、その面積になる時刻を求める（g2_l29.word_problem Lv3）。"""
+    p = cast("dict[str, Any]", ctx.spec_level.params)
+    s, v, area, labels_txt, scenario, quantities, ask_f, ask_v = _single_interval_scene(p, rng)
+
+    expr_sol = cast(Solution, REGISTRY.solver("math.express_single_interval_area")(s, v))
+    assert isinstance(expr_sol.answer, SymbolicAnswer)
+    coeff = sympy.Rational(s * v, 2)
+    # 時刻の逆算は既存 solver（g2_l29.find_value Lv3 と共有）に委ねる。
+    time_sol = cast(Solution, REGISTRY.solver("math.solve_time_from_area")(coeff, area))
+    assert isinstance(time_sol.answer, SymbolicAnswer)
+    x = sympy.Symbol("x")
+    expr = sympy.sympify(expr_sol.answer.srepr)
+    t0 = sympy.sympify(time_sol.answer.srepr)
+    assert (expr.subs(x, t0) - area).equals(0), "(1) の式と (2) の時刻が整合しない"
+    assert 0 < v * t0 <= s, "答えの時刻に動点が辺の上にいない"
+
+    return MR(
+        signature=ctx.spec_level.signature,
+        family=ctx.family,
+        level=ctx.level,
+        purpose=ctx.purpose,
+        seed=0,
+        params={"numbers": _wp_numbers(s, v, area), "labels": labels_txt},
+        given={"scenario": scenario, "quantities": quantities},
+        context_slots={"ask_formulation": ask_f, "ask_value": ask_v},
+        sub_questions=[
+            _wp_sub(ctx, label="(1)", asked="formulation", sol=expr_sol),
+            _wp_sub(ctx, label="(2)", asked="value", sol=time_sol),
+        ],
+        visual_plan=None,
+        provenance=Provenance(recipe="math.word_problem_single_interval_area"),
+    )
+
+
+def _three_interval_scene(
+    p: dict[str, Any], rng: Rng, *, with_area: bool
+) -> tuple[int, int, int, str, str]:
+    """(1辺, 速さ, 面積, 点名, 場面文)。A→B→C→D の経路。
+
+    `with_area=False` は面積を問わないセル（区間ごとの式とグラフだけ）。その場合も
+    候補列挙は同じにして、面積は 0 を返す。
+
+    【漏洩の封じ方】答えになる値（区間の境目 s/v・2s/v・3s/v、最大の面積 s²/2、
+    区間ごとの式の係数 s·v/2、面積になる時刻）が本文の数値と一致する組を外す。
+    G-Q5t の whitelist は given 由来なので 1辺・速さは許可されるが、面積は問い
+    （context_slots）にあるため許可されない。
+    """
+    cands: list[tuple[int, int, int]] = []
+    for side in p["side_candidates"]:
+        s_i = int(side)
+        for speed in p["speed_candidates"]:
+            v_i = int(speed)
+            if s_i % v_i or (s_i * v_i) % 2:
+                continue
+            coeff = s_i * v_i // 2
+            peak = s_i**2 // 2
+            marks = {0, s_i // v_i, 2 * s_i // v_i, 3 * s_i // v_i, peak, coeff}
+            if not with_area:
+                if _AREA_UNIT_TOKEN in marks:
+                    continue
+                cands.append((s_i, v_i, 0))
+                continue
+            for t1 in range(1, s_i // v_i):
+                if (coeff * t1) % 1:
+                    continue
+                area_i = coeff * t1
+                if area_i >= peak:
+                    continue
+                t3 = 3 * s_i // v_i - t1
+                if (marks | {t1, t3}) & {area_i, _AREA_UNIT_TOKEN}:
+                    continue
+                cands.append((s_i, v_i, area_i))
+    idx = int(draw({"int_set": list(range(len(cands)))}, rng))
+    s, v, area = cands[idx]
+    la, lb, lc, ld, lp = _draw_distinct_points(5, rng)
+    scenario = (
+        f"1辺が{s}cmの正方形{la}{lb}{lc}{ld}の周上を、点{lp}が{la}を出発して"
+        f"{la}→{lb}→{lc}→{ld}の順に毎秒{v}cmの速さで{ld}まで動く。"
+        f"点{lp}が{la}を出発してからx秒後の三角形{la}{lp}{ld}の面積をy cm²とする。"
+    )
+    return s, v, area, la + lb + lc + ld + lp, scenario
+
+
+@register_recipe(
+    "math.word_problem_interval_exprs_and_graph", provides_concepts=_G2L29_SOLO_CONCEPTS
+)
+def word_problem_interval_exprs_and_graph_recipe(ctx: CellContext, rng: Rng) -> MR:
+    """区間ごとの式とグラフを自分で構成する（g2_l29.word_problem Lv4・誘導なし）。"""
+    p = cast("dict[str, Any]", ctx.spec_level.params)
+    s, v, _area, labels_txt, scenario = _three_interval_scene(p, rng, with_area=False)
+
+    exprs_sol = cast(
+        Solution, REGISTRY.solver("math.express_three_interval_area_exprs")(s, v)
+    )
+    graph_sol = cast(
+        Solution, REGISTRY.solver("math.draw_three_interval_area_graph_features")(s, v)
+    )
+    assert isinstance(exprs_sol.answer, SymbolicAnswer)
+    assert isinstance(graph_sol.answer, GraphAnswer)
+    # 恒真: 区間ごとの式に折れ点の x を入れると、グラフの折れ点の y に一致する。
+    x = sympy.Symbol("x")
+    rise, flat, fall = sympy.sympify(exprs_sol.answer.srepr)
+    pts = [sympy.sympify(f.srepr) for f in graph_sol.answer.features]
+    assert (rise.subs(x, pts[1][0]) - pts[1][1]).equals(0)
+    assert (flat - pts[2][1]).equals(0)
+    assert (fall.subs(x, pts[3][0]) - pts[3][1]).equals(0)
+
+    return MR(
+        signature=ctx.spec_level.signature,
+        family=ctx.family,
+        level=ctx.level,
+        purpose=ctx.purpose,
+        seed=0,
+        params={"numbers": {"side": str(s), "speed": str(v)}, "labels": labels_txt},
+        given={"scenario": scenario},
+        context_slots={
+            "ask_value": (
+                f"点が{labels_txt[3]}に着くまでのyとxの関係を、区間ごとに式で表し、"
+                "そのグラフをかけ。"
+            )
+        },
+        sub_questions=[
+            _wp_sub(ctx, label="(1)", asked="formulation", sol=exprs_sol),
+            _wp_sub(ctx, label="(2)", asked="draw_graph", sol=graph_sol),
+        ],
+        visual_plan=None,
+        provenance=Provenance(recipe="math.word_problem_interval_exprs_and_graph"),
+    )
+
+
+@register_recipe(
+    "math.word_problem_max_area_and_times", provides_concepts=_G1L36_CONCEPTS
+)
+def word_problem_max_area_and_times_recipe(ctx: CellContext, rng: Rng) -> MR:
+    """面積が最大になるところと、指定の面積になる時刻をすべて求める（g1_l36.word_problem Lv4）。"""
+    p = cast("dict[str, Any]", ctx.spec_level.params)
+    s, v, area, labels_txt, scenario = _three_interval_scene(p, rng, with_area=True)
+
+    sol = cast(Solution, REGISTRY.solver("math.max_area_and_times")(s, v, area))
+    assert isinstance(sol.answer, SymbolicAnswer)
+    peak, t_lo, t_hi, t_a, t_b = sympy.sympify(sol.answer.srepr)
+    assert t_lo < t_hi and 0 < t_a < t_lo and t_hi < t_b, "区間と解の位置関係が壊れている"
+    assert area < peak
+
+    return MR(
+        signature=ctx.spec_level.signature,
+        family=ctx.family,
+        level=ctx.level,
+        purpose=ctx.purpose,
+        seed=0,
+        params={"numbers": _wp_numbers(s, v, area), "labels": labels_txt},
+        given={"scenario": scenario},
+        context_slots={
+            "ask_value": (
+                f"面積が最大になるのはxがどの範囲にあるときかとそのときの面積、"
+                f"および面積が{area}cm²になるときのxの値をすべて求めよ。"
+            )
+        },
+        sub_questions=[_wp_sub(ctx, label="(1)", asked="value", sol=sol)],
+        visual_plan=None,
+        provenance=Provenance(recipe="math.word_problem_max_area_and_times"),
+    )
+
+
+@register_recipe(
+    "math.draw_three_interval_area_graph", provides_concepts=_G2L29_GRAPH_CONCEPTS
+)
+def draw_three_interval_area_graph_recipe(ctx: CellContext, rng: Rng) -> MR:
+    """区間ごとに折れ線となる面積のグラフをかく（g2_l29.graph_table Lv3）。
+
+    g3_l38.graph_table Lv3（`math.draw_piecewise_area_graph`・A→B→C の2区間）の
+    3区間版。経路を D まで延ばすと面積が減少に転じ、折れ線が台形の形になる
+    ＝「区間ごとに直線となる折れ線」（台帳 desc）がはっきり出る。
+    問題図は空の方眼（生徒が描き込む・答えの折れ線を先出ししない）。
+    """
+    p = cast("dict[str, Any]", ctx.spec_level.params)
+    s, v, _area, labels_txt, _scenario = _three_interval_scene(p, rng, with_area=False)
+
+    sol = cast(
+        Solution, REGISTRY.solver("math.draw_three_interval_area_graph_features")(s, v)
+    )
+    assert isinstance(sol.answer, GraphAnswer)
+    t1 = sympy.Integer(s // v)
+    peak = sympy.Rational(s * s, 2)
+    poly_pts = [
+        str((sympy.Integer(0), sympy.Integer(0))),
+        str((t1, peak)),
+        str((2 * t1, peak)),
+        str((3 * t1, sympy.Integer(0))),
+    ]
+    params: dict[str, Any] = {
+        "side": s,
+        "speed": v,
+        "labels": labels_txt,
+        # 時間 x 秒と面積 y cm² は単位の違う2量なので、座標平面ではなく量-量グラフ。
+        "grid_mode": "quantity",
+        "poly_pts": poly_pts,
+        "pts": poly_pts,
+    }
+    answer = GraphAnswer(
+        features=sol.answer.features, solution_svg_ref=render_polyline_solution_svg(params)
+    )
+    la, lb, lc, ld, lp = (labels_txt[i] for i in range(5))
+    condition = (
+        f"1辺が{s}cmの正方形{la}{lb}{lc}{ld}の周上を、点{lp}が{la}を出発して"
+        f"{la}→{lb}→{lc}→{ld}の順に毎秒{v}cmの速さで{ld}まで動く。"
+        f"出発してからの時間をx秒、三角形{la}{lp}{ld}の面積をy cm²とするとき、"
+        f"xとyの関係を区間ごとに考えてグラフにかけ"
+    )
+    return MR(
+        signature=ctx.spec_level.signature,
+        family=ctx.family,
+        level=ctx.level,
+        purpose=ctx.purpose,
+        seed=0,
+        params=params,
+        given={"condition": condition},
+        sub_questions=[_wp_sub(ctx, label="(1)", asked="draw_graph", sol=Solution(answer=answer, steps=sol.steps))],
+        visual_plan=VisualPlan(
+            style="grid",
+            labels=tick_labels_from_params(params),
+            elements=[VisualElement(kind="grid", attrs={}), VisualElement(kind="axis", attrs={})],
+        ),
+        provenance=Provenance(recipe="math.draw_three_interval_area_graph"),
+    )
+
+
 __all__ = [
     "solve_moving_point_area_recipe",
     "draw_area_time_graph_segment",
     "word_problem_moving_points_area_recipe",
     "word_problem_moving_point_all_times_recipe",
     "word_problem_area_graph_and_times_recipe",
+    "word_problem_single_interval_area_recipe",
+    "word_problem_interval_exprs_and_graph_recipe",
+    "word_problem_max_area_and_times_recipe",
+    "draw_three_interval_area_graph_recipe",
 ]

@@ -60,6 +60,11 @@ _LINEAR_FUNCTION_CONCEPTS = [
     "linear_function.word_problem_two_point_eval",
     "linear_function.word_problem_piecewise_tank",
     "linear_function.word_problem_meeting_intersection",
+    # scenario_kind を足したら必ずここにも足す（recipe の provides_concepts に無いと
+    # lint R6「レベルの概念集合が recipe 宣言の部分集合でない」で落ちる。
+    # check_cell は通るので pytest まで回さないと気づかない）。
+    "linear_function.word_problem_tank_race",
+    "linear_function.word_problem_second_meeting",
 ]
 
 _X = sympy.Symbol("x")
@@ -412,11 +417,253 @@ def _build_meeting_mr(ctx: CellContext, rng: Rng) -> MR:
 
 # ---------------------------------------------------------------------------
 # recipe（3セル共通。scenario_kind が level_sep を作る）
+
+# ---------------------------------------------------------------------------
+# tank_race（g2_l28.word_problem Lv4）: 減る水そうと増える水そうが等しくなるとき
+#
+# 台帳 example: 満水 C L の水そうを A さんが一定の割合で m 分後に空にし、同時に
+# 別の空の水そうへ B さんが毎分 r L 入れる。2つの量が等しくなる時刻とそのときの量。
+# 減る側は y = C − (C/m)x、増える側は y = r·x の2直線なので、既存 solver
+# `math.intersection_of_two_lines` の交点そのもの＝新しい数学は要らない。
+# 誘導なし1小問で、時刻と量の2つを自分で順に出す。
+# ---------------------------------------------------------------------------
+def solve_tank_race(capacity: int, empty_minutes: int, fill_rate: int) -> list[Solution]:
+    """(等しくなる時刻, そのときの量) を1つの Solution で返す（recipe/checker 共有）。"""
+    if capacity <= 0 or empty_minutes <= 0 or fill_rate <= 0:
+        raise ValueError("容量・時間・割合は正であること")
+    if capacity % empty_minutes:
+        raise ValueError("抜く割合が整数にならない")
+    drain = capacity // empty_minutes
+    intersection = REGISTRY.solver("math.intersection_of_two_lines")
+    # 減る側: drain·x + y = capacity ／ 増える側: −fill_rate·x + y = 0
+    sol = cast(
+        Solution,
+        intersection((drain, 1, capacity), (-fill_rate, 1, 0), "elimination"),
+    )
+    assert isinstance(sol.answer, SymbolicAnswer)
+    point = sympy.sympify(sol.answer.srepr)
+    t, amount = cast(sympy.Expr, point[0]), cast(sympy.Expr, point[1])
+    if t <= 0 or amount <= 0 or t >= empty_minutes:
+        raise ValueError(f"等しくなる時刻が場面の中に無い: {t}")
+    # 恒真: その時刻に両方の量が一致する。
+    if not sympy.simplify((capacity - drain * t) - amount) == 0:
+        raise ValueError("2つの水そうの量が一致しない")
+
+    drain_step = Step(
+        op="find_drain_rate",
+        args=[],
+        result_srepr=sympy.srepr(sympy.Integer(drain)),
+        result_display=f"毎分{drain}L",
+        narration="満水の量を空になるまでの時間でわって、水を抜く割合を求める。",
+    )
+    formulate_step = Step(
+        op="formulate_two_lines",
+        args=[],
+        result_srepr="",
+        result_display="二つの水そうの量を x の式で表す",
+        narration="減っていく水そうと増えていく水そうの量を、それぞれ経過した時間の式で表す。",
+    )
+    answer = SymbolicAnswer(
+        srepr=sympy.srepr(sympy.Tuple(t, amount)),
+        display=f"{t}分後、そのときの水の量は{amount}L",
+    )
+    return [Solution(answer=answer, steps=[drain_step, formulate_step, *sol.steps])]
+
+
+def _draw_tank_race(p: dict[str, Any], rng: Rng) -> tuple[dict[str, int], str, str]:
+    """(numbers, A の名前, B の名前)。
+
+    【組合せ数】(容量, 空になるまでの分, 入れる割合) を列挙してから引く。等しくなる
+    時刻と量がともに整数になる組だけを残す。名前の組が乗る。
+
+    【退化・漏洩の封じ方】答え（時刻・量）が本文の数値（容量・分・割合）と一致する組は
+    外す。抜く割合と入れる割合が同じだと「ちょうど半分で出会う」自明な場面になるので
+    これも外す。
+    """
+    cands: list[tuple[int, int, int]] = []
+    for cap in p["capacity_candidates"]:
+        c = int(cap)
+        for minutes in p["minutes_candidates"]:
+            m = int(minutes)
+            if m >= c or c % m:
+                continue
+            drain = c // m
+            for rate in p["rate_candidates"]:
+                r = int(rate)
+                if r == drain:
+                    continue  # 半分で出会う自明な場面
+                if (c % (drain + r)) or ((c * r) % (drain + r)):
+                    continue  # 時刻・量がともに整数になる組だけ
+                t = c // (drain + r)
+                amount = c * r // (drain + r)
+                if {t, amount} & {c, m, r, drain}:
+                    continue
+                cands.append((c, m, r))
+    idx = int(draw({"int_set": list(range(len(cands)))}, rng))
+    capacity, minutes, rate = cands[idx]
+    name_a, name_b = _split_pair(str(draw(list(p["person_pair_candidates"]), rng)))
+    return (
+        {"capacity": capacity, "empty_minutes": minutes, "fill_rate": rate},
+        name_a,
+        name_b,
+    )
+
+
+def _build_tank_race_mr(ctx: CellContext, rng: Rng) -> MR:
+    p = ctx.spec_level.params
+    numbers, name_a, name_b = _draw_tank_race(p, rng)
+    (sol,) = solve_tank_race(**numbers)
+    cap, minutes, rate = (
+        numbers["capacity"], numbers["empty_minutes"], numbers["fill_rate"]
+    )
+    scenario = (
+        f"満水で{cap}Lの水そうがある。{name_a}さんは一定の割合で水を抜き、"
+        f"{minutes}分後に空にした。同時に、別の空の水そうに{name_b}さんが"
+        f"毎分{rate}Lの割合で水を入れ始めた。"
+    )
+    return MR(
+        signature=ctx.spec_level.signature, family=ctx.family, level=ctx.level,
+        purpose=ctx.purpose, seed=0,
+        params={
+            "scenario_kind": "tank_race",
+            "numbers": {k: str(v) for k, v in numbers.items()},
+            "slots": {"name_a": name_a, "name_b": name_b},
+        },
+        given={"scenario": scenario},
+        context_slots={
+            "name_a": name_a, "name_b": name_b,
+            "ask_value": (
+                "2つの水そうの水の量が等しくなるのは水を入れ始めてから何分後か、"
+                "また、そのときの水の量を求めよ。"
+            ),
+        },
+        sub_questions=[
+            SubQuestionMR(
+                label="(1)", asked="value", answer=sol.answer, steps=sol.steps,
+                concept_tags=list(
+                    ctx.spec_level.concept_tags or ctx.spec_family.concepts_default
+                ),
+                cause_tags=list(ctx.spec_level.cause_tags),
+            )
+        ],
+        visual_plan=None,
+        provenance=Provenance(recipe=RECIPE_NAME),
+    )
+
+
+# ---------------------------------------------------------------------------
+# second_meeting（g2_l30.word_problem Lv4）: 折り返す人と2回目に出会う時刻
+#
+# 台帳 example の数値（1800m・毎分90m・毎分60m・6分後）は、2回目の出会いの時刻が
+# 48分になる一方で相手が36分で着いてしまい、場面として成立しない。ここでは
+# 「1回目が往路に収まり、2回目が復路で、しかも相手が着く前に起きる」組だけを
+# 構成の段階で列挙して引く（solver 側でも同じ条件を検算する）。
+# ---------------------------------------------------------------------------
+def solve_second_meeting(
+    distance: int, speed_a: int, speed_b: int, head_start: int
+) -> list[Solution]:
+    """2回目に出会う時刻（recipe/checker 共有）。"""
+    solver = REGISTRY.solver("math.solve_second_meeting_time")
+    return [cast(Solution, solver(distance, speed_a, speed_b, head_start))]
+
+
+def _draw_second_meeting(p: dict[str, Any], rng: Rng) -> tuple[dict[str, int], str, str, str, str]:
+    """(numbers, 地点A, 地点B, 人物A, 人物B)。
+
+    【組合せ数】(距離, 速い側, 遅い側, 出発の差) を列挙してから引く。2回目の時刻が
+    整数になり、場面として成立する組だけを残す（既定で千通りを超える）。
+    地点と人物の組がさらに乗る。
+    """
+    solver = REGISTRY.solver("math.solve_second_meeting_time")
+    cands: list[tuple[int, int, int, int]] = []
+    for dist in p["distance_candidates"]:
+        d = int(dist)
+        for va in p["fast_speed_candidates"]:
+            a = int(va)
+            for vb in p["slow_speed_candidates"]:
+                b = int(vb)
+                if b >= a:
+                    continue
+                for h in p["head_start_candidates"]:
+                    hs = int(h)
+                    try:
+                        sol = cast(Solution, solver(d, a, b, hs))
+                    except ValueError:
+                        continue
+                    assert isinstance(sol.answer, SymbolicAnswer)
+                    t = sympy.sympify(sol.answer.srepr)
+                    if t.q != 1:
+                        continue  # 時刻が整数になる組だけ
+                    if int(t) in (d, a, b, hs):
+                        continue  # 答えが本文の数値と一致する組は外す
+                    cands.append((d, a, b, hs))
+    idx = int(draw({"int_set": list(range(len(cands)))}, rng))
+    distance, speed_a, speed_b, head_start = cands[idx]
+    place_a, place_b = _split_pair(str(draw(list(p["place_pair_candidates"]), rng)))
+    name_a, name_b = _split_pair(str(draw(list(p["person_pair_candidates"]), rng)))
+    return (
+        {
+            "distance": distance, "speed_a": speed_a,
+            "speed_b": speed_b, "head_start": head_start,
+        },
+        place_a, place_b, name_a, name_b,
+    )
+
+
+def _build_second_meeting_mr(ctx: CellContext, rng: Rng) -> MR:
+    p = ctx.spec_level.params
+    numbers, place_a, place_b, name_a, name_b = _draw_second_meeting(p, rng)
+    (sol,) = solve_second_meeting(**numbers)
+    d, va, vb, h = (
+        numbers["distance"], numbers["speed_a"], numbers["speed_b"], numbers["head_start"]
+    )
+    scenario = (
+        f"{place_a}と{place_b}は{d}mはなれている。"
+        f"{name_a}さんは{place_a}を出発して{place_b}へ毎分{va}mで進み、"
+        f"{place_b}に着くとすぐ折り返して同じ速さで{place_a}へもどる。"
+        f"{name_b}さんは{name_a}さんが出発してから{h}分後に{place_b}を出発し、"
+        f"毎分{vb}mで{place_a}へ進む。"
+    )
+    return MR(
+        signature=ctx.spec_level.signature, family=ctx.family, level=ctx.level,
+        purpose=ctx.purpose, seed=0,
+        params={
+            "scenario_kind": "second_meeting",
+            "numbers": {k: str(v) for k, v in numbers.items()},
+            "slots": {
+                "place_a": place_a, "place_b": place_b,
+                "name_a": name_a, "name_b": name_b,
+            },
+        },
+        given={"scenario": scenario},
+        context_slots={
+            "place_a": place_a, "place_b": place_b,
+            "name_a": name_a, "name_b": name_b,
+            "ask_value": (
+                f"2人が2回目に出会うのは{name_a}さんが出発してから何分後か求めよ。"
+            ),
+        },
+        sub_questions=[
+            SubQuestionMR(
+                label="(1)", asked="value", answer=sol.answer, steps=sol.steps,
+                concept_tags=list(
+                    ctx.spec_level.concept_tags or ctx.spec_family.concepts_default
+                ),
+                cause_tags=list(ctx.spec_level.cause_tags),
+            )
+        ],
+        visual_plan=None,
+        provenance=Provenance(recipe=RECIPE_NAME),
+    )
+
+
 # ---------------------------------------------------------------------------
 _BUILDERS = {
     "spring_two_point": _build_spring_mr,
     "tank_piecewise": _build_tank_mr,
     "meeting_intersection": _build_meeting_mr,
+    "tank_race": _build_tank_race_mr,
+    "second_meeting": _build_second_meeting_mr,
 }
 
 
@@ -434,5 +681,7 @@ __all__ = [
     "solve_meeting",
     "solve_spring",
     "solve_tank",
+    "solve_tank_race",
+    "solve_second_meeting",
     "word_problem_linear_function",
 ]

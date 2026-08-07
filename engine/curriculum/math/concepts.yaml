@@ -281,6 +281,18 @@ concepts:
   - id: motion.word_problem_area_all_times
     label: "辺をまたいで動く点の面積が指定の値になる時刻を、区間ごとに場合分けしてすべて求める"
     unit: g3_l31
+  - id: motion.word_problem_single_interval_area
+    label: "1区間の動点の面積を時間の1次式で表し、その面積になる時刻を逆算する"
+    unit: g2_l29
+  - id: motion.word_problem_interval_exprs_and_graph
+    label: "辺ごとに場合分けして面積の式を区間別に表し、そのグラフを構成する"
+    unit: g2_l29
+  - id: motion.piecewise_area_graph
+    label: "3区間にわたる動点の面積の変化を、折れ線のグラフにかく"
+    unit: g2_l29
+  - id: proportion.word_problem_max_area_and_times
+    label: "動点の面積が最大になる範囲を調べ、指定の面積になる時刻をすべて求める"
+    unit: g1_l36
   # C3 g3 knowledge（用語想起・規則想起）
   - id: expansion_meaning.rule_recall
     label: "展開が積の形を和の形に直す操作であることを想起する"
@@ -1199,6 +1211,12 @@ concepts:
   - id: linear_function.word_problem_piecewise_tank
     label: "1次関数の利用: 区間で式が変わる場面を折れ線で表し値を求める(水そう等)"
     unit: g2_l28
+  - id: linear_function.word_problem_tank_race
+    label: "減る量と増える量を2つの1次関数とみて、等しくなる時刻とそのときの量を求める"
+    unit: g2_l28
+  - id: linear_function.word_problem_second_meeting
+    label: "折り返す人と向かってくる人が2回目に出会う時刻を、区間ごとに立式して求める"
+    unit: g2_l30
   - id: linear_function.word_problem_meeting_intersection
     label: "1次関数の利用: 2人の進むようすを式に表し交点(出会い)の時刻を求める"
     unit: g2_l30
@@ -1263,6 +1281,12 @@ concepts:
   - id: quadratic_function.word_problem_moving_point_area
     label: "動点がつくる三角形の面積を、区間ごとに経過時間の式で表す"
     unit: g3_l38
+  - id: quadratic_function.word_problem_parabola_line_guided
+    label: "放物線と直線の交点から直線の式・三角形の面積・等積になる点を順に求める"
+    unit: g3_l37
+  - id: quadratic_function.word_problem_parabola_area_ratio
+    label: "放物線と直線がつくる2つの三角形の面積比を、自分で構成して求める"
+    unit: g3_l37
   - id: quadratic_function.word_problem_area_graph_and_times
     label: "動点の面積の変化を区間ごとに構成してグラフに表し、指定の面積になる時刻をすべて求める"
     unit: g3_l38

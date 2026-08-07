@@ -16,8 +16,10 @@ from engine.core.registry import register_checker
 from engine.packs.math.recipes.word_problem_linear_function import (
     RECIPE_NAME,
     solve_meeting,
+    solve_second_meeting,
     solve_spring,
     solve_tank,
+    solve_tank_race,
 )
 
 
@@ -32,6 +34,10 @@ def double_solve_word_problem_linear_function(mr: MR) -> list[Solution]:
         return solve_tank(**numbers)
     if kind == "meeting_intersection":
         return solve_meeting(**numbers)
+    if kind == "tank_race":
+        return solve_tank_race(**numbers)
+    if kind == "second_meeting":
+        return solve_second_meeting(**numbers)
     raise ValueError(f"未知の scenario_kind: {kind!r}")
 
 

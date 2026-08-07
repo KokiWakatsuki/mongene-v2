@@ -9629,3 +9629,186 @@ def test_word_problem_g3_l38_level_sep():
     assert len(set(shapes)) == 2
     assert shapes[0][1] == ("formulation", "formulation")
     assert shapes[1][1] == ("draw_graph", "value")
+
+
+# ---------------------------------------------------------------------------
+# Phase A 残り8セル（動点4・放物線2・1次関数の利用2）
+#
+# ゲートが素通りする退化をここで固定する。共通して見るのは
+#   - 答えが本文の数値と一致しない（本文を読むだけで当たらない）
+#   - 区間・場面の成立条件（動点が辺の上にいる／出会いが起きる）
+#   - 答えが1つ・1:1 などに潰れない
+# ---------------------------------------------------------------------------
+def _cell_mr(family_name: str, level: int, seed: int):
+    ctx = _make_ctx(family_name, level)
+    return ctx, REGISTRY.recipe(ctx.spec_level.recipe)(
+        ctx, derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    )
+
+
+@pytest.mark.parametrize("seed", range(30))
+def test_g2_l29_single_interval_area_property(seed):
+    """g2_l29.word_problem Lv3: 面積が x の1次式で、答えの時刻に動点が辺の上にいる。"""
+    _ctx, mr = _cell_mr("math.g2_l29.word_problem", 3, seed)
+    n = mr.params["numbers"]
+    side, speed, area = int(n["side"]), int(n["speed"]), int(n["area"])
+    x = sympy.Symbol("x")
+    expr_sq, time_sq = mr.sub_questions
+    assert (expr_sq.asked, time_sq.asked) == ("formulation", "value")
+    expr = sympy.sympify(expr_sq.answer.srepr)
+    assert sympy.degree(expr, x) == 1
+    assert expr == sympy.Rational(side * speed, 2) * x
+    t0 = sympy.sympify(time_sq.answer.srepr)
+    assert sympy.simplify(expr.subs(x, t0) - area) == 0
+    # 答えの時刻に動点はまだ辺の上（場面が成立している）。
+    assert 0 < speed * t0 <= side
+    assert int(t0) not in {side, speed, area}
+    checker = REGISTRY.checker("math.word_problem_single_interval_area.double_solve")
+    assert [s.answer.srepr for s in checker(mr)] == [
+        expr_sq.answer.srepr, time_sq.answer.srepr
+    ]
+
+
+@pytest.mark.parametrize("seed", range(30))
+def test_g2_l29_interval_exprs_and_graph_property(seed):
+    """g2_l29.word_problem Lv4: 3本の式が折れ点でつながり、増加・一定・減少が揃う。"""
+    _ctx, mr = _cell_mr("math.g2_l29.word_problem", 4, seed)
+    n = mr.params["numbers"]
+    side, speed = int(n["side"]), int(n["speed"])
+    exprs_sq, graph_sq = mr.sub_questions
+    assert (exprs_sq.asked, graph_sq.asked) == ("formulation", "draw_graph")
+    x = sympy.Symbol("x")
+    rise, flat, fall = sympy.sympify(exprs_sq.answer.srepr)
+    pts = [sympy.sympify(f.srepr) for f in graph_sq.answer.features]
+    assert len(pts) == 4
+    # 式と折れ線が同じものを指す（境目でつながる）。
+    assert sympy.simplify(rise.subs(x, pts[1][0]) - pts[1][1]) == 0
+    assert sympy.simplify(flat - pts[2][1]) == 0
+    assert sympy.simplify(fall.subs(x, pts[3][0]) - pts[3][1]) == 0
+    # ★退化の封じ: 増える区間と減る区間が本当にある（全区間一定に潰れない）。
+    assert sympy.degree(rise, x) == 1 and sympy.degree(fall, x) == 1
+    assert rise.coeff(x) > 0 > fall.coeff(x)
+    assert flat == sympy.Rational(side**2, 2)
+    assert speed > 0
+    checker = REGISTRY.checker("math.word_problem_interval_exprs_and_graph.double_solve")
+    got = checker(mr)
+    assert got[0].answer.srepr == exprs_sq.answer.srepr
+    assert [f.srepr for f in got[1].answer.features] == [
+        f.srepr for f in graph_sq.answer.features
+    ]
+
+
+@pytest.mark.parametrize("seed", range(30))
+def test_g2_l29_piecewise_area_graph_property(seed):
+    """g2_l29.graph_table Lv3: 折れ点4つ・問題図は空の方眼（答えを先出ししない）。"""
+    _ctx, mr = _cell_mr("math.g2_l29.graph_table", 3, seed)
+    sq = mr.sub_questions[0]
+    assert sq.asked == "draw_graph"
+    assert [f.kind for f in sq.answer.features] == ["breakpoint"] * 4
+    assert mr.params["grid_mode"] == "quantity"
+    # 問題図は方眼と軸だけ＝答えの折れ線を宣言しない。
+    assert {e.kind for e in mr.visual_plan.elements} == {"grid", "axis"}
+    assert sq.answer.solution_svg_ref.startswith("<svg")
+    checker = REGISTRY.checker("math.draw_three_interval_area_graph.double_solve")
+    assert [f.srepr for f in checker(mr).answer.features] == [
+        f.srepr for f in sq.answer.features
+    ]
+
+
+@pytest.mark.parametrize("seed", range(30))
+def test_g1_l36_max_area_and_times_property(seed):
+    """g1_l36.word_problem Lv4: 最大の区間と、指定の面積になる時刻2つが揃う。"""
+    _ctx, mr = _cell_mr("math.g1_l36.word_problem", 4, seed)
+    n = mr.params["numbers"]
+    side, speed, area = int(n["side"]), int(n["speed"]), int(n["area"])
+    sq = mr.sub_questions[0]
+    peak, t_lo, t_hi, t_a, t_b = sympy.sympify(sq.answer.srepr)
+    assert peak == sympy.Rational(side**2, 2)
+    assert t_lo == sympy.Rational(side, speed) and t_hi == 2 * t_lo
+    # ★退化の封じ: 最大の区間に幅があり、指定の面積になる時刻が両側に1つずつある。
+    assert t_lo < t_hi
+    assert 0 < t_a < t_lo < t_hi < t_b
+    assert area < peak
+    assert not {int(t_a), int(t_b)} & {side, speed, area}
+    checker = REGISTRY.checker("math.word_problem_max_area_and_times.double_solve")
+    assert checker(mr).answer.srepr == sq.answer.srepr
+
+
+@pytest.mark.parametrize("seed", range(30))
+def test_g3_l37_parabola_line_guided_property(seed):
+    """g3_l37.word_problem Lv3: 直線・面積・等積の点が互いに整合する。"""
+    _ctx, mr = _cell_mr("math.g3_l37.word_problem", 3, seed)
+    n = mr.params["numbers"]
+    a, xA, xB = int(n["a"]), int(n["x_a"]), int(n["x_b"])
+    # a=±1 だと係数が本文に出ない（params 忠実性契約）。
+    assert abs(a) > 1 and xA != xB and xA != 0 and xB != 0
+    x = sympy.Symbol("x")
+    line_sq, area_sq, point_sq = mr.sub_questions
+    assert [s.asked for s in mr.sub_questions] == ["formulation", "value", "value"]
+    m, b = a * (xA + xB), -a * xA * xB
+    assert sympy.simplify(sympy.sympify(line_sq.answer.srepr) - (m * x + b)) == 0
+    # ★退化の封じ: 三角形 OAB がつぶれない（b≠0）。
+    assert b != 0
+    area = sympy.sympify(area_sq.answer.srepr)
+    assert area > 0
+    xP = sympy.sympify(point_sq.answer.srepr)
+    # 等積の点は原点・A・B と重ならない。
+    assert xP not in (0, xA, xB)
+    assert xP == sympy.Rational(m, a)
+    checker = REGISTRY.checker("math.word_problem_parabola_line_guided.double_solve")
+    assert [s.answer.srepr for s in checker(mr)] == [
+        line_sq.answer.srepr, area_sq.answer.srepr, point_sq.answer.srepr
+    ]
+
+
+@pytest.mark.parametrize("seed", range(30))
+def test_g3_l37_parabola_area_ratio_property(seed):
+    """g3_l37.word_problem Lv4: 面積比が 1:1 に潰れず、既約な整数比になる。"""
+    _ctx, mr = _cell_mr("math.g3_l37.word_problem", 4, seed)
+    sq = mr.sub_questions[0]
+    p_, q_ = sympy.sympify(sq.answer.srepr)
+    assert p_ > 0 and q_ > 0
+    # ★退化の封じ: 比が 1:1 に潰れない（潰れると比を問う意味がない）。
+    assert p_ != q_
+    assert sympy.gcd(p_, q_) == 1
+    checker = REGISTRY.checker("math.word_problem_parabola_area_ratio.double_solve")
+    assert checker(mr).answer.srepr == sq.answer.srepr
+
+
+@pytest.mark.parametrize("seed", range(30))
+def test_g2_l28_tank_race_property(seed):
+    """g2_l28.word_problem Lv4: 等しくなる時刻が場面の中にあり、量が一致する。"""
+    _ctx, mr = _cell_mr("math.g2_l28.word_problem", 4, seed)
+    n = {k: int(sympy.sympify(v)) for k, v in mr.params["numbers"].items()}
+    cap, minutes, rate = n["capacity"], n["empty_minutes"], n["fill_rate"]
+    drain = cap // minutes
+    # ★退化の封じ: 抜く割合と入れる割合が同じ（ちょうど半分で出会う自明な場面）を排除。
+    assert drain != rate
+    t, amount = sympy.sympify(mr.sub_questions[0].answer.srepr)
+    assert 0 < t < minutes
+    assert cap - drain * t == amount == rate * t
+    assert not {int(t), int(amount)} & {cap, minutes, rate, drain}
+    checker = REGISTRY.checker("math.word_problem_linear_function.double_solve")
+    assert [s.answer.srepr for s in checker(mr)] == [mr.sub_questions[0].answer.srepr]
+
+
+@pytest.mark.parametrize("seed", range(30))
+def test_g2_l30_second_meeting_property(seed):
+    """g2_l30.word_problem Lv4: 1回目が往路・2回目が復路で、相手が着く前に起こる。"""
+    _ctx, mr = _cell_mr("math.g2_l30.word_problem", 4, seed)
+    n = {k: int(sympy.sympify(v)) for k, v in mr.params["numbers"].items()}
+    d, va, vb, h = n["distance"], n["speed_a"], n["speed_b"], n["head_start"]
+    # 折り返す側が速くないと追いつけない。
+    assert va > vb > 0 and d > 0 and h > 0
+    t2 = sympy.sympify(mr.sub_questions[0].answer.srepr)
+    t_turn = sympy.Rational(d, va)
+    t_first = sympy.Rational(d + vb * h, va + vb)
+    # ★退化の封じ: 1回目が往路に収まり、2回目が復路で、相手が着く前に起きる。
+    assert h <= t_first <= t_turn
+    assert t_turn < t2 <= 2 * t_turn
+    assert t2 <= h + sympy.Rational(d, vb)
+    # その時刻に2人の位置が一致する。
+    assert sympy.simplify((2 * d - va * t2) - (d - vb * (t2 - h))) == 0
+    assert int(t2) not in {d, va, vb, h}
+    checker = REGISTRY.checker("math.word_problem_linear_function.double_solve")
+    assert [s.answer.srepr for s in checker(mr)] == [mr.sub_questions[0].answer.srepr]

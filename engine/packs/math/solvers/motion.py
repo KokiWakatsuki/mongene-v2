@@ -428,6 +428,199 @@ def draw_three_interval_area_graph_features(s: object, v: object) -> Solution:
     return Solution(answer=GraphAnswer(features=features, solution_svg_ref=""), steps=steps)
 
 
+# ---------------------------------------------------------------------------
+# 面積を時間の式で表す（g2_l29.word_problem Lv3/Lv4・g1_l36.word_problem Lv4）
+#
+# 底辺が正方形の1辺で固定・高さが v·x で伸びる区間では、面積は x の1次式 y=(s·v/2)x。
+# 3辺を渡る場合は 増加 → 一定 → 減少 の3本に分かれる。値はいずれも既存の
+# shoelace 公式（`_shoelace_triangle_area`）で裏取りする＝新しい幾何ロジックは足さない。
+# ---------------------------------------------------------------------------
+def _coeff_display(coeff: sympy.Rational) -> str:
+    """x の係数の表示（分数はかっこでくくって係数の範囲を確定させる）。"""
+    if coeff == 1:
+        return ""
+    if coeff == -1:
+        return "-"
+    return f"{coeff}" if coeff.q == 1 else f"({coeff})"
+
+
+def _linear_area_display(coeff: sympy.Rational, const: sympy.Rational | None = None) -> str:
+    """y = ax + b の表示（`*` を書かない教科書表記に揃える）。"""
+    term = f"{_coeff_display(coeff)}x" if coeff != 0 else ""
+    c = sympy.Integer(0) if const is None else const
+    if coeff == 0:
+        return f"y = {c}"
+    if c == 0:
+        return f"y = {term}"
+    sign = "+" if c > 0 else "-"
+    return f"y = {term} {sign} {abs(c)}"
+
+
+@register_solver("math.express_single_interval_area")
+def express_single_interval_area(s: object, v: object) -> Solution:
+    """動点がつくる三角形の面積を、1区間ぶんの x の式で表す（g2_l29.word_problem Lv3）。
+
+    底辺は正方形の1辺 s で固定、高さは v·x なので y=(s·v/2)x。
+    """
+    s_v = sympy.Rational(str(s))
+    v_v = sympy.Rational(str(v))
+    if s_v <= 0 or v_v <= 0:
+        raise ValueError("1辺・速さは正であること")
+    coeff = sympy.Rational(s_v * v_v, 2)
+    expr = coeff * _X
+    # 恒真: 区間の右端（P が向かいの頂点に着く時刻）で shoelace 再計算と一致する。
+    t_end = s_v / v_v
+    geom = _shoelace_triangle_area(
+        sympy.Integer(0), sympy.Integer(0), v_v * t_end, sympy.Integer(0),
+        sympy.Integer(0), s_v,
+    )
+    if not (expr.subs(_X, t_end) - geom).equals(0):
+        raise ValueError("面積の式と shoelace 再計算が一致しない")
+
+    ops = ["locate_point_p", "express_area_in_x"]
+    narration = {
+        "locate_point_p": "経過した時間と速さから、動く点が進んだ道のりを x を使って表す。",
+        "express_area_in_x": "底辺は正方形の一辺で変わらず、高さが進んだ道のりなので、面積を x の式で表す。",
+    }
+    srepr = sympy.srepr(expr)
+    disp = _linear_area_display(coeff)
+    steps = [
+        Step(
+            op=op, args=[],
+            result_srepr=srepr if i == len(ops) - 1 else "",
+            result_display=disp if i == len(ops) - 1 else "動く点の位置を x で表す",
+            narration=narration[op],
+        )
+        for i, op in enumerate(ops)
+    ]
+    return Solution(answer=SymbolicAnswer(srepr=srepr, display=disp), steps=steps)
+
+
+@register_solver("math.express_three_interval_area_exprs")
+def express_three_interval_area_exprs(s: object, v: object) -> Solution:
+    """3辺を渡る動点の面積を、区間ごとの式で表す（g2_l29.word_problem Lv4）。
+
+    A→B→C→D の経路で、面積は
+      0≦x≦s/v   … y=(s·v/2)x（増加）
+      s/v≦x≦2s/v … y=s²/2（一定）
+      2s/v≦x≦3s/v … y=(s/2)(3s−v·x)（減少）
+    の3本。答えは3本の式の組で、区間の境目も含めて再計算で裏取りする。
+    """
+    s_v = sympy.Rational(str(s))
+    v_v = sympy.Rational(str(v))
+    if s_v <= 0 or v_v <= 0:
+        raise ValueError("1辺・速さは正であること")
+    t1 = s_v / v_v
+    rise = sympy.Rational(s_v * v_v, 2) * _X
+    flat = sympy.Rational(s_v**2, 2)
+    fall = sympy.expand(sympy.Rational(s_v, 2) * (3 * s_v - v_v * _X))
+    # 恒真: 区間の境目で隣り合う式の値が一致する（折れ線がつながる）。
+    if not (rise.subs(_X, t1) - flat).equals(0) or not (fall.subs(_X, 2 * t1) - flat).equals(0):
+        raise ValueError("区間の境目で式の値がつながらない")
+    if not (fall.subs(_X, 3 * t1)).equals(0):
+        raise ValueError("最後の区間の終わりで面積がゼロにならない")
+
+    exprs = sympy.Tuple(rise, flat, fall)
+    ops = [
+        "identify_intervals",
+        "express_area_on_increasing_interval",
+        "express_area_on_constant_interval",
+        "express_area_on_decreasing_interval",
+    ]
+    narration = {
+        "identify_intervals": "動く点がどの辺の上にあるかで、時間を区間に分ける。",
+        "express_area_on_increasing_interval": "はじめの区間では高さが時間に比例するので、面積を x の1次式で表す。",
+        "express_area_on_constant_interval": "次の区間では底辺も高さも変わらないので、面積が一定になることを確かめる。",
+        "express_area_on_decreasing_interval": "最後の区間では高さが減っていくので、面積を x の1次式で表す。",
+    }
+    phrase = {
+        "identify_intervals": "時間を区間に分ける",
+        "express_area_on_increasing_interval": "増えていく区間の式をつくる",
+        "express_area_on_constant_interval": "一定の区間であることを確かめる",
+    }
+    srepr = sympy.srepr(exprs)
+    disp = "、".join(
+        [
+            f"0≦x≦{sympy.sstr(t1)} のとき {_linear_area_display(sympy.Rational(s_v * v_v, 2))}",
+            f"{sympy.sstr(t1)}≦x≦{sympy.sstr(2 * t1)} のとき y = {sympy.sstr(flat)}",
+            f"{sympy.sstr(2 * t1)}≦x≦{sympy.sstr(3 * t1)} のとき "
+            f"{_linear_area_display(-sympy.Rational(s_v * v_v, 2), sympy.Rational(3 * s_v**2, 2))}",
+        ]
+    )
+    steps = [
+        Step(
+            op=op, args=[],
+            result_srepr=srepr if i == len(ops) - 1 else "",
+            result_display=disp if i == len(ops) - 1 else phrase[op],
+            narration=narration[op],
+        )
+        for i, op in enumerate(ops)
+    ]
+    return Solution(answer=SymbolicAnswer(srepr=srepr, display=disp), steps=steps)
+
+
+@register_solver("math.max_area_and_times")
+def max_area_and_times(s: object, v: object, area: object) -> Solution:
+    """面積が最大になる時間の範囲と、指定の面積になる時刻を求める（g1_l36.word_problem Lv4）。
+
+    A→B→C→D の経路では面積は 増加 → 一定 → 減少 と変わるので、最大になるのは
+    一定の区間（x が s/v から 2s/v まで）で、そのときの面積は s²/2。
+    指定の面積になる時刻は増加区間と減少区間に1つずつある。
+    答えは (最大の面積, 最大になる区間の始まり, 終わり, 指定の面積になる時刻2つ)。
+    """
+    s_v = sympy.Rational(str(s))
+    v_v = sympy.Rational(str(v))
+    area_v = sympy.Rational(str(area))
+    if s_v <= 0 or v_v <= 0 or area_v <= 0:
+        raise ValueError("1辺・速さ・面積は正であること")
+    peak = sympy.Rational(s_v**2, 2)
+    if area_v >= peak:
+        raise ValueError("指定の面積が最大の面積以上だと、増減する区間に解が立たない")
+    t1 = s_v / v_v
+    t_a = 2 * area_v / (s_v * v_v)
+    t_b = 3 * t1 - t_a
+    if not (0 < t_a < t1 and 2 * t1 < t_b < 3 * t1):
+        raise ValueError(f"解が増加区間・減少区間の内側にない: {t_a}, {t_b}")
+
+    vals = sympy.Tuple(peak, t1, 2 * t1, sympy.nsimplify(t_a), sympy.nsimplify(t_b))
+    ops = [
+        "identify_intervals",
+        "find_maximum_area",
+        "solve_on_increasing_interval",
+        "solve_on_decreasing_interval",
+        "collect_answers",
+    ]
+    narration = {
+        "identify_intervals": "動く点がどの辺の上にあるかで時間を区間に分け、面積が増える区間・変わらない区間・減る区間を見つける。",
+        "find_maximum_area": "面積が変わらない区間で最大になるので、その面積の値と、区間の始まりと終わりの時刻を求める。",
+        "solve_on_increasing_interval": "増えていく区間の式を方程式とみて、指定された面積になる時刻を求める。",
+        "solve_on_decreasing_interval": "減っていく区間の式を方程式とみて、指定された面積になる時刻を求める。",
+        "collect_answers": "求めた時刻がそれぞれの区間の中にあることを確かめ、答えを並べる。",
+    }
+    phrase = {
+        "identify_intervals": "時間を区間に分ける",
+        "find_maximum_area": "面積が最大になるところを見つける",
+        "solve_on_increasing_interval": "増えていく区間で解く",
+        "solve_on_decreasing_interval": "減っていく区間で解く",
+    }
+    srepr = sympy.srepr(vals)
+    disp = (
+        f"面積が最大になるのは x が {sympy.sstr(t1)} から {sympy.sstr(2 * t1)} までのときで、"
+        f"そのときの面積は {sympy.sstr(peak)}cm²。"
+        f"指定された面積になるのは {sympy.sstr(t_a)}秒後と{sympy.sstr(t_b)}秒後"
+    )
+    steps = [
+        Step(
+            op=op, args=[],
+            result_srepr=srepr if i == len(ops) - 1 else "",
+            result_display=disp if i == len(ops) - 1 else phrase[op],
+            narration=narration[op],
+        )
+        for i, op in enumerate(ops)
+    ]
+    return Solution(answer=SymbolicAnswer(srepr=srepr, display=disp), steps=steps)
+
+
 __all__ = [
     "solve_moving_point_area",
     "draw_piecewise_area_graph_features",
@@ -435,4 +628,7 @@ __all__ = [
     "express_moving_points_area",
     "solve_moving_points_area_time",
     "solve_moving_point_area_all_times",
+    "express_single_interval_area",
+    "express_three_interval_area_exprs",
+    "max_area_and_times",
 ]

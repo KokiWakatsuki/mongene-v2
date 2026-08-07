@@ -78,5 +78,23 @@ levels:
     hints: [steps_prefix]
     concept_tags: [proportion.word_problem_meet_two_motions]
     cause_tags: []
+  "4":
+    # 台帳 Lv4 example は「1辺12cmの正方形の周上を点Pが動く…面積が最大になるときと、
+    # 面積が18cm²になるときのxの値をすべて求めよ」＝動点の題材。この単元の Lv2/Lv3
+    # （比例・反比例の利用）とは題材が違うが、台帳を正として実装する。
+    # 面積の計算は g3_l31/g3_l38/g2_l29 と同じ shoelace 公式の資産を共有し、
+    # 問うもの（最大になる範囲＋指定の面積になる時刻）でこれらと区別する。
+    signature: word_problem_max_area_and_times
+    recipe: math.word_problem_max_area_and_times
+    params:
+      side_candidates: [6, 8, 10, 12, 14, 16, 18, 20, 22, 24]
+      speed_candidates: [1, 2, 3, 4]
+    given: [scenario]
+    asked: [value]
+    visual: none
+    text: {tier: T1, template: wp_linear_solo_v1}
+    hints: [steps_prefix]
+    concept_tags: [proportion.word_problem_max_area_and_times]
+    cause_tags: []
 remedial:
   default_level: 2

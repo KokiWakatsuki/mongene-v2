@@ -251,6 +251,146 @@ def intersection_parabola_line_recipe(ctx: CellContext, rng: Rng) -> MR:
 
 
 # ---------------------------------------------------------------------------
+# g3_l37.word_problem Lv3/Lv4: 放物線と直線が交わる図形の融合
+#
+# 構成は find_value と同じ answer-first（交点の x 座標 xA,xB と比例定数 a を先に決め、
+# m=a(xA+xB), b=-a·xA·xB を逆算する）。違うのは**何を問うか**:
+#   Lv3 = 誘導あり3小問（直線ABの式 → 三角形OABの面積 → 等積になる放物線上の点）
+#   Lv4 = 誘導なし1小問（直線ABとx軸の交点をCとして、三角形OABと三角形OBCの面積比）
+# ---------------------------------------------------------------------------
+_WP_PARABOLA_GUIDED_CONCEPTS = ["quadratic_function.word_problem_parabola_line_guided"]
+_WP_PARABOLA_RATIO_CONCEPTS = ["quadratic_function.word_problem_parabola_area_ratio"]
+
+
+def _parabola_scene(p: Any, rng: Rng) -> tuple[int, int, int, int, int, str]:
+    """(a, xA, xB, m, b, 放物線と2点を述べた場面文)。
+
+    【組合せ数】a の候補 × xA,xB の相異な組。既定（a が 6 通り・x が 12 通りから2つ）で
+    6 × 12 × 11 = 792 通り（≫250）。
+
+    【退化の封じ方】a≠0・xA≠xB により b≠0 が構成的に保証される（O・A・B が同一直線上に
+    ならない＝三角形 OAB がつぶれない）。さらに、等積の点 P の x 座標 m/a = xA+xB が
+    0 や xA・xB と一致する組（P が原点や A・B と重なる）を外す。
+    """
+    # a = ±1 は表示が "y = x²" / "y = -x²" となり係数が本文に現れない。word_problem の
+    # params 忠実性契約（numbers の値はすべて本文に現れる）を満たせないので外す。
+    a_cands = [v for v in _domain_candidates(p["a_domain"]) if abs(v) > 1]
+    x_cands = [v for v in _domain_candidates(p["x_domain"]) if v != 0]
+    while True:
+        a = int(draw({"int_set": a_cands}, rng))
+        xA, xB = (int(v) for v in draw_many({"int_set": x_cands, "distinct": ["value"]}, rng, k=2))
+        if xA > xB:
+            xA, xB = xB, xA
+        if xA + xB in (0, xA, xB):
+            continue  # P が原点・A・B と重なる組は使わない
+        break
+    m, b = a * (xA + xB), -a * xA * xB
+    expr_qf = _fmt_poly_x_terms([(a, 2)])
+    scenario = (
+        f"放物線 y = {expr_qf} 上に2点 A, B があり、A の x 座標は {xA}、"
+        f"B の x 座標は {xB} である。原点を O とする。"
+    )
+    return a, xA, xB, m, b, scenario
+
+
+@register_recipe(
+    "math.word_problem_parabola_line_guided", provides_concepts=_WP_PARABOLA_GUIDED_CONCEPTS
+)
+def word_problem_parabola_line_guided_recipe(ctx: CellContext, rng: Rng) -> MR:
+    """誘導あり3小問の放物線×直線の融合（g3_l37.word_problem Lv3）。"""
+    p = ctx.spec_level.params
+    a, xA, xB, m, b, scenario = _parabola_scene(p, rng)
+    yA, yB = a * xA**2, a * xB**2
+
+    line_sol = cast(
+        Solution,
+        REGISTRY.solver("math.linear_expr_from_two_points")((xA, yA), (xB, yB), "slope_then_intercept"),
+    )
+    area_sol = cast(
+        Solution, REGISTRY.solver("math.intersection_parabola_line")(a, m, b, "triangle_area")
+    )
+    point_sol = cast(Solution, REGISTRY.solver("math.parabola_equal_area_point")(a, m, b))
+    for sol in (line_sol, area_sol, point_sol):
+        assert isinstance(sol.answer, SymbolicAnswer)
+    # 恒真: 逆算した直線 y=mx+b が、2点から求めた直線の式と一致する。
+    x = sympy.Symbol("x")
+    assert (sympy.sympify(line_sol.answer.srepr) - (m * x + b)).equals(0), (
+        f"直線の式が逆算した m,b と一致しない: {line_sol.answer.display}"
+    )
+
+    tags = dict(
+        concept_tags=_effective_concept_tags(ctx), cause_tags=_effective_cause_tags(ctx)
+    )
+    return MR(
+        signature=ctx.spec_level.signature, family=ctx.family, level=ctx.level,
+        purpose=ctx.purpose, seed=0,
+        # 本文に出ている数だけ（傾き m・切片 b・面積・答えの点は導出値なので置かない）。
+        params={"numbers": {"a": str(a), "x_a": str(xA), "x_b": str(xB)}},
+        given={"scenario": scenario},
+        context_slots={
+            "ask_1": "直線 AB の式を求めよ。",
+            "ask_2": "三角形 OAB の面積を求めよ。",
+            "ask_3": (
+                "この放物線上に、直線 AB について原点と同じ側に、原点と異なる点 P をとる。"
+                "三角形 PAB の面積が三角形 OAB の面積と等しくなるとき、点 P の x 座標を求めよ。"
+            ),
+        },
+        sub_questions=[
+            SubQuestionMR(label="(1)", asked="formulation", answer=line_sol.answer, steps=line_sol.steps, **tags),
+            SubQuestionMR(label="(2)", asked="value", answer=area_sol.answer, steps=area_sol.steps, **tags),
+            SubQuestionMR(label="(3)", asked="value", answer=point_sol.answer, steps=point_sol.steps, **tags),
+        ],
+        visual_plan=None,
+        provenance=Provenance(recipe="math.word_problem_parabola_line_guided"),
+    )
+
+
+@register_recipe(
+    "math.word_problem_parabola_area_ratio", provides_concepts=_WP_PARABOLA_RATIO_CONCEPTS
+)
+def word_problem_parabola_area_ratio_recipe(ctx: CellContext, rng: Rng) -> MR:
+    """誘導なし・面積比を自分で構成する（g3_l37.word_problem Lv4）。"""
+    p = ctx.spec_level.params
+    while True:
+        a, xA, xB, m, b, scenario = _parabola_scene(p, rng)
+        if m == 0:
+            continue  # 直線が x 軸と交わらない
+        area_a = abs(a * (xA * xB) * (xB - xA)) / 2
+        if area_a == 0:
+            continue
+        try:
+            sol = cast(Solution, REGISTRY.solver("math.parabola_line_area_ratio")(a, m, b))
+        except ValueError:
+            continue  # 比が 1:1 に潰れる等の退化は引き直す
+        break
+    assert isinstance(sol.answer, SymbolicAnswer)
+    ratio_p, ratio_q = sympy.sympify(sol.answer.srepr)
+    assert ratio_p != ratio_q, "比が 1:1 に潰れている"
+
+    return MR(
+        signature=ctx.spec_level.signature, family=ctx.family, level=ctx.level,
+        purpose=ctx.purpose, seed=0,
+        params={"numbers": {"a": str(a), "x_a": str(xA), "x_b": str(xB)}},
+        given={"scenario": scenario},
+        context_slots={
+            "ask_value": (
+                "直線 AB と x 軸との交点を C とするとき、三角形 OAB の面積と"
+                "三角形 OBC の面積の比を、できるだけ簡単な整数の比で求めよ。"
+            )
+        },
+        sub_questions=[
+            SubQuestionMR(
+                label="(1)", asked="value", answer=sol.answer, steps=sol.steps,
+                concept_tags=_effective_concept_tags(ctx),
+                cause_tags=_effective_cause_tags(ctx),
+            )
+        ],
+        visual_plan=None,
+        provenance=Provenance(recipe="math.word_problem_parabola_area_ratio"),
+    )
+
+
+# ---------------------------------------------------------------------------
 # math.solve_quadratic_motion_area（g3_l38.find_value Lv2/Lv3）
 # 正方形 ABCD（1辺 s）の周上を B から B→C→D の順に動く点 P。道のり d だけを扱う
 # （Lv2 は「BP=d cm のとき」と道のりを直接与える。Lv3 は速さ v・時間 t を明示し d=v・t を提示）。
@@ -308,5 +448,7 @@ __all__ = [
     "y_range_over_quadratic_domain_recipe",
     "rate_of_change_quadratic_recipe",
     "intersection_parabola_line_recipe",
+    "word_problem_parabola_line_guided_recipe",
+    "word_problem_parabola_area_ratio_recipe",
     "solve_quadratic_motion_area_recipe",
 ]

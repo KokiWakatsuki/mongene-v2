@@ -74,5 +74,28 @@ levels:
     hints: [steps_prefix]
     concept_tags: [linear_function.word_problem_piecewise_tank]
     cause_tags: []
+  "4":
+    # 台帳 Lv4 example（満水 40L を 8 分で空にする水そうと、毎分 3L 入れる水そう）を
+    # そのまま実装。減る側 y=C−(C/m)x と増える側 y=r·x の2直線の交点なので、
+    # 既存の `math.intersection_of_two_lines` に乗る＝新しい数学は要らない。
+    # 誘導なし1小問で、等しくなる時刻とそのときの量の2つを自分で順に出す。
+    signature: word_problem_tank_race
+    recipe: math.word_problem_linear_function
+    params:
+      scenario_kind: tank_race
+      # (容量, 空になるまでの分, 入れる割合) は recipe が列挙する
+      # （時刻と量がともに整数・答えが本文の数値と一致しない組だけ）。
+      capacity_candidates: [24, 30, 36, 40, 45, 48, 54, 60, 72, 80, 90, 96, 108, 120]
+      minutes_candidates: [4, 5, 6, 8, 9, 10, 12, 15, 18, 20]
+      rate_candidates: [2, 3, 4, 5, 6, 7, 8, 9, 10, 12]
+      person_pair_candidates: [A|B, あきら|ゆうこ, けんた|みさき, たかし|なおみ,
+                               ひろし|さくら, まさと|あやか, りく|ひなた, そうた|めい]
+    given: [scenario]
+    asked: [value]
+    visual: none
+    text: {tier: T1, template: wp_linear_solo_v1}
+    hints: [steps_prefix]
+    concept_tags: [linear_function.word_problem_tank_race]
+    cause_tags: []
 remedial:
   default_level: 2

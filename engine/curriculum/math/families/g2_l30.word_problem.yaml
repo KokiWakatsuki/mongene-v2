@@ -54,5 +54,29 @@ levels:
     hints: [steps_prefix]
     concept_tags: [linear_function.word_problem_meeting_intersection]
     cause_tags: []
+  "4":
+    # 台帳 Lv4 example の数値（1800m・毎分90m・毎分60m・6分後）は、2回目の出会いが
+    # 48分後になる一方で相手が36分で着いてしまい、場面として成立しない。
+    # 「1回目が往路に収まり、2回目が復路で、しかも相手が着く前に起きる」組だけを
+    # recipe が列挙して引く（solver 側でも同じ条件を検算する）。
+    signature: word_problem_second_meeting
+    recipe: math.word_problem_linear_function
+    params:
+      scenario_kind: second_meeting
+      distance_candidates: [600, 800, 900, 1000, 1200, 1400, 1500, 1600, 1800, 2000, 2400]
+      fast_speed_candidates: [60, 70, 75, 80, 90, 100, 120, 150]
+      slow_speed_candidates: [40, 50, 60, 70, 75, 80, 90]
+      head_start_candidates: [2, 3, 4, 5, 6, 8, 9, 10, 12]
+      place_pair_candidates: [P地点|Q地点, A地点|B地点, 学校|公園, 駅|港,
+                              家|図書館, 東町|西町, 山のふもと|山頂, 港|灯台]
+      person_pair_candidates: [A|B, あきら|ゆうこ, けんた|みさき, たかし|なおみ,
+                               ひろし|さくら, まさと|あやか]
+    given: [scenario]
+    asked: [value]
+    visual: none
+    text: {tier: T1, template: wp_linear_solo_v1}
+    hints: [steps_prefix]
+    concept_tags: [linear_function.word_problem_second_meeting]
+    cause_tags: []
 remedial:
   default_level: 3

@@ -1358,6 +1358,85 @@ def solve_meeting_time_two_segment(
     return Solution(answer=answer, steps=steps)
 
 
+# ---------------------------------------------------------------------------
+# g2_l30.word_problem Lv4: 往復する人と向かってくる人が2回目に出会う時刻
+#
+# P地点とQ地点が distance だけ離れている。A は P を出発して Q へ speed_a で進み、
+# Q に着くとすぐ折り返して同じ速さで P へもどる。B は A の head_start 分後に Q を
+# 出発して speed_b で P へ進む。
+#   A の位置（P からの距離）: 往路 speed_a·t ／ 復路 2·distance − speed_a·t
+#   B の位置: distance − speed_b·(t − head_start)
+# 1回目は A の往路と B が向かい合って出会う。2回目は折り返した A が B に追いつく。
+# 「2回目」が実際に起こるには、その時刻に A がまだ復路にいて、B もまだ P に
+# 着いていないことが要る（recipe が構成の段階で保証し、ここでも検算する）。
+# ---------------------------------------------------------------------------
+_SECOND_MEETING_OPS = [
+    "express_positions_in_time",
+    "find_first_meeting",
+    "express_position_after_turn",
+    "solve_for_second_meeting",
+]
+
+_SECOND_MEETING_NARRATION: dict[str, str] = {
+    "express_positions_in_time": "二人の位置を、出発してからの時間を使ってそれぞれ式で表す。",
+    "find_first_meeting": "向かい合って進む間に位置が等しくなる時刻を求め、これが一回目の出会いであることを確かめる。",
+    "express_position_after_turn": "折り返したあとの位置は、折り返す地点までの道のりから、折り返してから進んだ道のりを引いて表す。",
+    "solve_for_second_meeting": "折り返したあとの位置と、向かってくる相手の位置が等しいとおいて方程式を解く。",
+}
+
+_SECOND_MEETING_PHRASE: dict[str, str] = {
+    "express_positions_in_time": "二人の位置を時間の式で表す",
+    "find_first_meeting": "一回目に出会う時刻を求める",
+    "express_position_after_turn": "折り返したあとの位置を式で表す",
+}
+
+
+@register_solver("math.solve_second_meeting_time")
+def solve_second_meeting_time(
+    distance: object, speed_a: object, speed_b: object, head_start: object
+) -> Solution:
+    """2人が2回目に出会う時刻を求める（g2_l30.word_problem Lv4）。
+
+    問題パラメータ（2地点の距離・2人の速さ・出発の差）だけから導く。
+    """
+    d = sympy.nsimplify(sympy.sympify(distance))
+    va = sympy.nsimplify(sympy.sympify(speed_a))
+    vb = sympy.nsimplify(sympy.sympify(speed_b))
+    h = sympy.nsimplify(sympy.sympify(head_start))
+    if d <= 0 or va <= 0 or vb <= 0 or h < 0:
+        raise ValueError("距離・速さは正、出発の差は非負であること")
+    if va <= vb:
+        raise ValueError("折り返した側が速くないと追いつけない")
+
+    t_turn = d / va  # A が Q に着いて折り返す時刻
+    t_first = (d + vb * h) / (va + vb)
+    t_second = (d - vb * h) / (va - vb)
+    if not (h <= t_first <= t_turn):
+        raise ValueError(f"1回目の出会いが往路に収まらない: {t_first}")
+    if not (t_turn < t_second <= 2 * t_turn):
+        raise ValueError(f"2回目の出会いが復路に収まらない: {t_second}")
+    if not (t_second <= h + d / vb):
+        raise ValueError(f"2回目の出会いの前に相手が着いてしまう: {t_second}")
+    # 恒真: その時刻で2人の位置が一致する。
+    pos_a = 2 * d - va * t_second
+    pos_b = d - vb * (t_second - h)
+    if not sympy.simplify(pos_a - pos_b) == 0:
+        raise ValueError(f"2回目の位置が一致しない: {pos_a} != {pos_b}")
+
+    srepr = sympy.srepr(sympy.nsimplify(t_second))
+    disp = f"{_format_number(t_second)}分後"
+    steps = [
+        Step(
+            op=op, args=[],
+            result_srepr=srepr if i == len(_SECOND_MEETING_OPS) - 1 else "",
+            result_display=disp if i == len(_SECOND_MEETING_OPS) - 1 else _SECOND_MEETING_PHRASE[op],
+            narration=_SECOND_MEETING_NARRATION[op],
+        )
+        for i, op in enumerate(_SECOND_MEETING_OPS)
+    ]
+    return Solution(answer=SymbolicAnswer(srepr=srepr, display=disp), steps=steps)
+
+
 __all__ = [
     "linear_expr_from_two_points",
     "linear_expr_from_slope_point",
@@ -1382,4 +1461,5 @@ __all__ = [
     "equation_solution_set_shape",
     "system_solution_is_intersection",
     "solve_meeting_time_two_segment",
+    "solve_second_meeting_time",
 ]

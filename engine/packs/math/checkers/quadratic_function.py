@@ -42,10 +42,50 @@ def double_solve_solve_quadratic_motion_area(mr: MR) -> Solution:
     return cast(Solution, solver(p["s"], p["d"], p["mode"]))
 
 
+def _parabola_line_from_numbers(mr: MR) -> tuple[int, int, int]:
+    """本文に出ている数値（比例定数 a・2点の x 座標）から m, b を導き直す。
+
+    傾き m と切片 b は本文に出ていない導出値なので params には無い。checker 側で
+    m=a(xA+xB), b=-a·xA·xB を組み直す＝recipe とは別経路で立式し直す。
+    """
+    n = mr.params["numbers"]
+    a, xA, xB = int(n["a"]), int(n["x_a"]), int(n["x_b"])
+    return a, a * (xA + xB), -a * xA * xB
+
+
+@register_checker("math.word_problem_parabola_line_guided.double_solve")
+def double_solve_word_problem_parabola_line_guided(mr: MR) -> list[Solution]:
+    """(1)=直線ABの式・(2)=三角形OABの面積・(3)=等積になる点のx座標。"""
+    n = mr.params["numbers"]
+    a, xA, xB = int(n["a"]), int(n["x_a"]), int(n["x_b"])
+    _a, m, b = _parabola_line_from_numbers(mr)
+    return [
+        cast(
+            Solution,
+            REGISTRY.solver("math.linear_expr_from_two_points")(
+                (xA, a * xA**2), (xB, a * xB**2), "slope_then_intercept"
+            ),
+        ),
+        cast(
+            Solution,
+            REGISTRY.solver("math.intersection_parabola_line")(a, m, b, "triangle_area"),
+        ),
+        cast(Solution, REGISTRY.solver("math.parabola_equal_area_point")(a, m, b)),
+    ]
+
+
+@register_checker("math.word_problem_parabola_area_ratio.double_solve")
+def double_solve_word_problem_parabola_area_ratio(mr: MR) -> Solution:
+    a, m, b = _parabola_line_from_numbers(mr)
+    return cast(Solution, REGISTRY.solver("math.parabola_line_area_ratio")(a, m, b))
+
+
 __all__ = [
     "double_solve_evaluate_quadratic_function",
     "double_solve_y_range_over_quadratic_domain",
     "double_solve_rate_of_change_quadratic",
     "double_solve_intersection_parabola_line",
     "double_solve_solve_quadratic_motion_area",
+    "double_solve_word_problem_parabola_line_guided",
+    "double_solve_word_problem_parabola_area_ratio",
 ]

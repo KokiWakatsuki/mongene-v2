@@ -1,0 +1,70 @@
+family: math.g2_l29.word_problem
+form: word_problem
+source_desc: |
+  動点と面積の変化（1次関数）— 文章題
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv3 desc: 誘導あり・1区間で面積をxの式に表す。
+       example: 1辺が6cmの正方形ABCDで、点PはBをスタートしてBからCまで辺BC上を毎秒1cmで
+                動く。点PがBを出発してから x 秒後の三角形ABPの面積を y cm² とする。
+                （1）y を x の式で表せ。（2）三角形ABPの面積が9cm²になるのは何秒後か求めよ。
+  Lv4 desc: 誘導なし・辺ごとに場合分けし区間別の式とグラフを自分で構成する。
+       example: 1辺が8cmの正方形ABCDの周上を、点PがAを出発してA→B→C→Dの順に毎秒2cmで
+                動く。点PがAを出発してから x 秒後の三角形APDの面積を y cm² とするとき、
+                点PがDに着くまでの y と x の関係を、区間ごとに式で表し、そのグラフをかけ。
+  ---
+  【資産の再利用】面積は既存の shoelace 公式（solvers/motion.py）で求める。Lv3 の
+  (2)（面積から時刻を逆算）は g2_l29.find_value Lv3 と同じ solver
+  `math.solve_time_from_area` をそのまま呼ぶ。Lv4 のグラフは g3_l38.word_problem Lv4
+  で起こした `math.draw_three_interval_area_graph_features`（折れ点4つ）を共有する。
+  新しい幾何ロジックは足していない。
+
+  【Lv4 が word_problem で作図を持てる理由】word_problem の frame の asked に
+  `draw_graph` を入れてある（frames.py の当該コメント参照）。台帳 example が
+  「区間ごとに式で表し、そのグラフをかけ」＝式と作図が一続きの問いなので、
+  graph_table 側には置けない（場面文が使えない）。
+
+  【level_sep】
+    Lv3 = 誘導あり2小問。given は scenario＋quantities（変数の設定を与える）。
+          asked=(formulation, value)。op 列は
+          locate_point_p → express_area_in_x ／ set_up_equation → solve_for_x。
+    Lv4 = 誘導なし2小問。given は scenario だけ。asked=(formulation, draw_graph)。
+          op 列は identify_intervals → 区間3本の式 ／ 折れ点をとって折れ線をかく。
+    given・asked・op 列がすべて相異する。
+
+  【params】`numbers` は本文に出ている数だけ（1辺・速さ・面積）。Lv4 は面積を問わない
+  ので 1辺・速さのみ。答え（式の係数・時刻・折れ点）は置かない。
+
+  【退化と漏洩の封じ方】答えになる値（面積の式の係数 s·v/2、区間の境目 s/v・2s/v・
+  3s/v、最大の面積 s²/2、答えの時刻）が本文の数値や "cm²" 由来の 2 と一致する組は
+  構成の段階で外す（G-Q5t の whitelist は given 由来なので、問いに置いた面積は
+  許可されない）。
+concepts_default: [motion.word_problem_single_interval_area]
+levels:
+  "3":
+    signature: word_problem_single_interval_area
+    recipe: math.word_problem_single_interval_area
+    params:
+      side_candidates: [6, 8, 10, 12, 14, 16, 18, 20]
+      speed_candidates: [1, 2, 3, 4]
+    given: [scenario, quantities]
+    asked: [formulation, value]
+    visual: none
+    text: {tier: T1, template: wp_linear_guided_v1}
+    hints: [steps_prefix]
+    concept_tags: [motion.word_problem_single_interval_area]
+    cause_tags: []
+  "4":
+    signature: word_problem_interval_exprs_and_graph
+    recipe: math.word_problem_interval_exprs_and_graph
+    params:
+      side_candidates: [6, 8, 10, 12, 14, 16, 18, 20, 22, 24]
+      speed_candidates: [1, 2, 3, 4]
+    given: [scenario]
+    asked: [formulation, draw_graph]
+    visual: none
+    text: {tier: T1, template: wp_linear_solo_v1}
+    hints: [steps_prefix]
+    concept_tags: [motion.word_problem_interval_exprs_and_graph]
+    cause_tags: []
+remedial:
+  default_level: 3

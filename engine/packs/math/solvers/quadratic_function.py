@@ -241,6 +241,11 @@ _INTERSECTION_STEPS: dict[str, list[str]] = {
         "set_up_equation", "solve_for_x", "compute_y",
         "compute_triangle_area", "solve_for_bisecting_point",
     ],
+    # g3_l37.word_problem Lv3 の小問: 三角形 OAB の面積だけを答える
+    # （segment_and_area は線分長も一緒に答えるので、面積だけを問う小問には使えない）
+    "triangle_area": [
+        "set_up_equation", "solve_for_x", "compute_y", "compute_triangle_area",
+    ],
 }
 
 _INTERSECTION_NARRATION: dict[str, str] = {
@@ -287,6 +292,10 @@ def intersection_parabola_line(
     if mode_s == "find_intersection":
         disp = f"A{_fmt_point(ptA)}, B{_fmt_point(ptB)}"
         srepr = sympy.srepr(sympy.Tuple(sympy.Tuple(*ptA), sympy.Tuple(*ptB)))
+    elif mode_s == "triangle_area":
+        area = _shoelace_area([(sympy.Integer(0), sympy.Integer(0)), ptA, ptB])
+        disp = f"△OAB = {_fmt_scalar(area)}"
+        srepr = sympy.srepr(area)
     elif mode_s == "segment_and_area":
         seg_len = sympy.sqrt((xB - xA) ** 2 + (yB - yA) ** 2)
         area = _shoelace_area([(sympy.Integer(0), sympy.Integer(0)), ptA, ptB])
@@ -321,6 +330,136 @@ def intersection_parabola_line(
     ]
     answer = SymbolicAnswer(srepr=srepr, display=disp)
     return Solution(answer=answer, steps=steps)
+
+
+# ---------------------------------------------------------------------------
+# g3_l37.word_problem Lv3/Lv4: 放物線と直線が交わる図形の融合
+#
+# いずれも既存の交点計算（`_parabola_line_intersections`）と shoelace 公式
+# （`_shoelace_area`）の上に乗せる＝新しい幾何ロジックは足さない。
+# ---------------------------------------------------------------------------
+_EQUAL_AREA_OPS = [
+    "set_up_equation",
+    "solve_for_x",
+    "find_parallel_line_through_origin",
+    "solve_for_equal_area_point",
+]
+
+_EQUAL_AREA_NARRATION: dict[str, str] = {
+    "set_up_equation": "放物線の式と直線の式の右辺どうしを等しいとおき、方程式を立てる。",
+    "solve_for_x": "その方程式を解いて、二つの交点の x 座標を求める。",
+    "find_parallel_line_through_origin": "底辺を共通の線分とみると、高さが等しければ面積も等しい。原点を通り、その線分に平行な直線を考える。",
+    "solve_for_equal_area_point": "その平行な直線と放物線が交わる点のうち、原点でないほうを求める。",
+}
+
+_EQUAL_AREA_PHRASE: dict[str, str] = {
+    "set_up_equation": "放物線と直線の式を等しいとおく",
+    "solve_for_x": "交点の x 座標を求める",
+    "find_parallel_line_through_origin": "原点を通る平行な直線を考える",
+}
+
+
+@register_solver("math.parabola_equal_area_point")
+def parabola_equal_area_point(a: object, m: object, b: object) -> Solution:
+    """三角形 PAB の面積が三角形 OAB と等しくなる放物線上の点 P の x 座標。
+
+    A・B は放物線 y=ax² と直線 y=mx+b の交点。線分 AB を共通の底辺とみると、
+    面積が等しい ⇔ AB からの距離が等しい。原点 O と同じ側でその条件を満たすのは
+    「O を通り AB に平行な直線」の上の点なので、その直線 y=mx と放物線の交点のうち
+    原点でないほう＝ x = m/a が答え（＝2交点の x 座標の和）。
+    P が A・B と一致すると三角形がつぶれるので、その場合は例外にする。
+    """
+    a_s, m_s, b_s = sympy.nsimplify(a), sympy.nsimplify(m), sympy.nsimplify(b)
+    roots = _parabola_line_intersections(a_s, m_s, b_s)
+    if len(roots) != 2:
+        raise ValueError(f"交点がちょうど2つでない: {roots}")
+    xA, xB = roots
+    xP = sympy.simplify(m_s / a_s)
+    if xP == 0 or xP in (xA, xB):
+        raise ValueError(f"P が原点または A・B と一致する: {xP}")
+    # 恒真: 求めた P で三角形の面積が実際に一致する。
+    ptA, ptB = (xA, a_s * xA**2), (xB, a_s * xB**2)
+    ptP = (xP, a_s * xP**2)
+    area_oab = _shoelace_area([(sympy.Integer(0), sympy.Integer(0)), ptA, ptB])
+    area_pab = _shoelace_area([ptP, ptA, ptB])
+    if not sympy.simplify(area_pab - area_oab) == 0:
+        raise ValueError(f"面積が一致しない: {area_pab} != {area_oab}")
+    if area_oab == 0:
+        raise ValueError("三角形 OAB がつぶれている")
+
+    srepr = sympy.srepr(xP)
+    disp = f"x = {_fmt_scalar(xP)}"
+    steps = [
+        Step(
+            op=op, args=[],
+            result_srepr=srepr if i == len(_EQUAL_AREA_OPS) - 1 else "",
+            result_display=disp if i == len(_EQUAL_AREA_OPS) - 1 else _EQUAL_AREA_PHRASE[op],
+            narration=_EQUAL_AREA_NARRATION[op],
+        )
+        for i, op in enumerate(_EQUAL_AREA_OPS)
+    ]
+    return Solution(answer=SymbolicAnswer(srepr=srepr, display=disp), steps=steps)
+
+
+_AREA_RATIO_OPS = [
+    "set_up_equation",
+    "solve_for_x",
+    "find_x_axis_intersection",
+    "compute_two_triangle_areas",
+    "reduce_area_ratio",
+]
+
+_AREA_RATIO_NARRATION: dict[str, str] = {
+    "set_up_equation": "放物線の式と直線の式の右辺どうしを等しいとおき、方程式を立てる。",
+    "solve_for_x": "その方程式を解いて、二つの交点の x 座標を求め、y 座標も出す。",
+    "find_x_axis_intersection": "直線の式で y を零とおいて、x 軸との交点の座標を求める。",
+    "compute_two_triangle_areas": "頂点の座標から、二つの三角形の面積をそれぞれ求める。",
+    "reduce_area_ratio": "求めた二つの面積の比を、できるだけ簡単な整数の比に直す。",
+}
+
+_AREA_RATIO_PHRASE: dict[str, str] = {
+    "set_up_equation": "放物線と直線の式を等しいとおく",
+    "solve_for_x": "交点の座標を求める",
+    "find_x_axis_intersection": "x 軸との交点を求める",
+    "compute_two_triangle_areas": "二つの三角形の面積を求める",
+}
+
+
+@register_solver("math.parabola_line_area_ratio")
+def parabola_line_area_ratio(a: object, m: object, b: object) -> Solution:
+    """三角形 OAB と三角形 OBC の面積の比（C は直線 AB と x 軸の交点・g3_l37 Lv4）。"""
+    a_s, m_s, b_s = sympy.nsimplify(a), sympy.nsimplify(m), sympy.nsimplify(b)
+    if m_s == 0:
+        raise ValueError("直線が x 軸と交わらない（傾きが零）")
+    roots = _parabola_line_intersections(a_s, m_s, b_s)
+    if len(roots) != 2:
+        raise ValueError(f"交点がちょうど2つでない: {roots}")
+    xA, xB = roots
+    ptA, ptB = (xA, a_s * xA**2), (xB, a_s * xB**2)
+    xC = sympy.simplify(-b_s / m_s)
+    ptC = (xC, sympy.Integer(0))
+    origin = (sympy.Integer(0), sympy.Integer(0))
+    area_oab = _shoelace_area([origin, ptA, ptB])
+    area_obc = _shoelace_area([origin, ptB, ptC])
+    if area_oab == 0 or area_obc == 0:
+        raise ValueError("三角形がつぶれている")
+    ratio = sympy.Rational(area_oab, area_obc)
+    if area_oab == area_obc:
+        raise ValueError("比が 1:1 に潰れている（比を問う意味がない）")
+
+    pair = sympy.Tuple(ratio.p, ratio.q)
+    srepr = sympy.srepr(pair)
+    disp = f"△OAB : △OBC = {ratio.p} : {ratio.q}"
+    steps = [
+        Step(
+            op=op, args=[],
+            result_srepr=srepr if i == len(_AREA_RATIO_OPS) - 1 else "",
+            result_display=disp if i == len(_AREA_RATIO_OPS) - 1 else _AREA_RATIO_PHRASE[op],
+            narration=_AREA_RATIO_NARRATION[op],
+        )
+        for i, op in enumerate(_AREA_RATIO_OPS)
+    ]
+    return Solution(answer=SymbolicAnswer(srepr=srepr, display=disp), steps=steps)
 
 
 # ---------------------------------------------------------------------------

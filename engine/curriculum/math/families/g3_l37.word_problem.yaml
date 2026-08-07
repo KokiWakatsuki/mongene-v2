@@ -1,0 +1,73 @@
+family: math.g3_l37.word_problem
+form: word_problem
+source_desc: |
+  放物線と直線が交わる図形の問題 — 文章題
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv3 desc: 誘導あり:交点→面積/線分比の小問が連なる融合。
+       example: 放物線 y=(1/2)x^2 上に2点 A(-2, 2), B(4, 8) がある。次の問いに答えよ。
+                (1) 直線 AB の式を求めよ。(2) 三角形 OAB の面積を求めよ。
+                (3) この放物線上に点 P をとり、三角形 PAB の面積が三角形 OAB の面積と
+                等しくなるようにするとき、点 P の x 座標を求めよ。
+  Lv4 desc: 誘導なし:面積比・等積変形などゴールを自分で構成する融合。
+       example: 放物線 y=x^2 上に2点 A, B があり、A の x 座標は -1、B の x 座標は 2 である。
+                直線 AB と x 軸の交点を C とする。三角形 OAB の面積と三角形 OBC の面積の
+                比を求めよ。
+  ---
+  【資産の再利用】構成は g3_l37.find_value と同じ answer-first（交点の x 座標 xA,xB と
+  比例定数 a を先に決め、m=a(xA+xB), b=-a·xA·xB を逆算する）。交点計算も面積も既存の
+  `_parabola_line_intersections` / `_shoelace_area` に乗せる。小問(1) の直線の式は
+  g2_l19 等と同じ `math.linear_expr_from_two_points` をそのまま呼ぶ。
+  小問(2) 用に `math.intersection_parabola_line` へ mode "triangle_area" を足した
+  （既存の "segment_and_area" は線分長も一緒に答えるので、面積だけを問う小問に使えない）。
+
+  【Lv3 (3) の条件を「原点と同じ側」に限った理由】三角形 PAB の面積が三角形 OAB と
+  等しくなる放物線上の点は、AB に平行な2本の直線それぞれとの交点にあり、一般に
+  複数ある。原点と同じ側に限ると「O を通り AB に平行な直線」との交点だけになり、
+  原点を除いて x = xA + xB の1つに定まる。答えが一意に決まらない設問にしないための
+  条件で、等積変形の考え方（底辺が共通なら高さが等しい）はそのまま問える。
+
+  【level_sep】
+    Lv3 = 誘導あり3小問。asked=(formulation, value, value)。
+          op 列は 直線の式（傾き→切片）／連立して面積／平行な直線で等積の点。
+    Lv4 = 誘導なし1小問。asked=(value)。op 列は
+          set_up_equation → solve_for_x → find_x_axis_intersection →
+          compute_two_triangle_areas → reduce_area_ratio。
+    小問数・asked・op 列がすべて相異する。
+
+  【params】`numbers` は本文に出ている数だけ（比例定数 a・2点の x 座標）。
+  傾き m・切片 b・面積・答えの点は本文に出ていない導出値なので置かない。
+  checker は a, xA, xB から m, b を組み直して解き直す＝別経路で立式し直す。
+
+  【退化の封じ方】a≠0・xA≠xB により b≠0 が構成的に保証される（O・A・B が同一直線上に
+  ならない＝三角形 OAB がつぶれない）。さらに xA+xB が 0・xA・xB と一致する組
+  （等積の点 P が原点や A・B と重なる）と、Lv4 では面積比が 1:1 に潰れる組を外す。
+concepts_default: [quadratic_function.word_problem_parabola_line_guided]
+levels:
+  "3":
+    signature: word_problem_parabola_line_guided
+    recipe: math.word_problem_parabola_line_guided
+    params:
+      a_domain: {int_range: [-4, 4], exclude: [0]}
+      x_domain: {int_range: [-6, 6], exclude: [0]}
+    given: [scenario]
+    asked: [formulation, value, value]
+    visual: none
+    text: {tier: T1, template: wp_guided_three_v1}
+    hints: [steps_prefix]
+    concept_tags: [quadratic_function.word_problem_parabola_line_guided]
+    cause_tags: []
+  "4":
+    signature: word_problem_parabola_area_ratio
+    recipe: math.word_problem_parabola_area_ratio
+    params:
+      a_domain: {int_range: [-4, 4], exclude: [0]}
+      x_domain: {int_range: [-6, 6], exclude: [0]}
+    given: [scenario]
+    asked: [value]
+    visual: none
+    text: {tier: T1, template: wp_linear_solo_v1}
+    hints: [steps_prefix]
+    concept_tags: [quadratic_function.word_problem_parabola_area_ratio]
+    cause_tags: []
+remedial:
+  default_level: 3

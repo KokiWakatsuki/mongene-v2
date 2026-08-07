@@ -53,11 +53,22 @@ WP_PROBABILITY_GUIDED_V1 = (
 )
 
 
+# 誘導あり3小問（g3_l37.word_problem Lv3: 交点 → 面積 → 等積の点、と段が3つ続く）。
+# WP_LINEAR_GUIDED_V1 の3スロット版。文言は recipe が context_slots に載せる。
+WP_GUIDED_THREE_V1 = (
+    "{{ given.scenario }}\n"
+    "(1) {{ context_slots.ask_1 }}\n"
+    "(2) {{ context_slots.ask_2 }}\n"
+    "(3) {{ context_slots.ask_3 }}"
+)
+
+
 def _register_all() -> None:
     REGISTRY.register_template("wp_system_price_count_v1", WP_SYSTEM_PRICE_COUNT_V1)
     REGISTRY.register_template("wp_linear_guided_v1", WP_LINEAR_GUIDED_V1)
     REGISTRY.register_template("wp_linear_solo_v1", WP_LINEAR_SOLO_V1)
     REGISTRY.register_template("wp_probability_guided_v1", WP_PROBABILITY_GUIDED_V1)
+    REGISTRY.register_template("wp_guided_three_v1", WP_GUIDED_THREE_V1)
 
 
 _register_all()
@@ -67,4 +78,5 @@ __all__ = [
     "WP_LINEAR_SOLO_V1",
     "WP_SYSTEM_PRICE_COUNT_V1",
     "WP_PROBABILITY_GUIDED_V1",
+    "WP_GUIDED_THREE_V1",
 ]
