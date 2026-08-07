@@ -19,6 +19,7 @@ from engine.packs.math.recipes import probability  # noqa: F401  (登録の副�
 from engine.packs.math.recipes import proportion  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.recipes import proportion_graph  # noqa: F401,E402  (polynomial の _domain_candidates に依存＝後に import)
 from engine.packs.math.recipes import statistics_distribution  # noqa: F401  (登録の副作用のため import)
+from engine.packs.math.recipes import distribution_chart  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.recipes import quartile  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.recipes import sample_survey  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.recipes import exam_fusion  # noqa: F401  (登録の副作用のため import)

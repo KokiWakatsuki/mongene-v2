@@ -1,0 +1,65 @@
+family: math.g1_l56.graph_table
+form: graph_table
+source_desc: |
+  累積度数と累積相対度数（units.generated.yaml の desc/example を正として転記）。
+  Lv2 desc: 累積度数の表や折れ線を読む/かく。
+       example: 次の度数分布表の累積度数の欄を計算して完成させ、その累積度数を表す折れ線
+                グラフをかけ。〔0〜10分…4人、10〜20分…9人、20〜30分…7人、30〜40分…5人〕
+  Lv3 desc: 累積分布から中央値付近の階級・条件を読み解く。
+       example: あるテストの得点を表した累積相対度数の折れ線グラフがある。累積相対度数が0.5と
+                なるのはどの階級か読み取り、この分布の中央値が含まれる階級を答えよ。
+  【設計モデル】描画は土台 distribution_chart.py（chart_kind="cumulative"）に委ねる。
+  累積は土台と solver の双方が**度数列から計算する**ので、params には本文に出ている
+  度数だけを置き、累積度数という導出値は置かない。
+  Lv3 は「累積相対度数 0.5」ではなく「累積度数が総度数のちょうど半分に達する位置」で
+  問う（縦軸が度数の目盛なので、0〜1 の累積相対度数を土台の縦軸に載せると目盛が
+  3本しか立たず読めない）。中央値のふくまれる階級を答える点は example と同じ。
+  【level_sep】op 列が相異する:
+    Lv2 かく given=[data_table]       asked=[draw_graph]
+             op=(accumulate_frequency_table, plot_cumulative_points, connect_cumulative_polyline)
+    Lv3 読む given=[situation_params] asked=[read_table]
+             op=(read_half_of_total, locate_median_class)
+  【退化の封じ方】Lv2 は各階級の度数を 1 以上にして累積度数を真に増加させ、度数が
+  全部同じ（累積の折れ線が直線に潰れて「累積を計算した」ことが見えない）ことも避ける。
+  Lv3 は 5 階級・各度数 3 以上とするので、どの1階級の度数も残り4階級の合計を超えられず
+  中央値の階級は必ず内側（端に寄って読まずに分かる退化が起きない）。さらに総度数を
+  奇数に整え「ちょうど半分」の同点で階級が一意に決まらない事態を封じる（solver も
+  総度数が偶数なら例外にして二重化）。
+concepts_default: [cumulative_chart.draw_polyline]
+levels:
+  "2":
+    signature: cumulative_frequency_table_and_polyline
+    recipe: math.cumulative_frequency_chart
+    params:
+      # 【組合せ数】params = (class_lo, class_width, frequencies, unit, chart_kind)。
+      #   (class_lo, class_width, unit) 24通り × frequencies（5階級 × 2..12 の11通り = 11^5
+      #   = 161051）⇒ 約 3.5×10^6 通り。
+      n_classes: 5
+      frequency_domain: {int_range: [2, 12]}
+      chart_kind: cumulative
+    given: [data_table]
+    asked: [draw_graph]
+    visual: required
+    text: {tier: T1, template: df_data_table_v1, visual_builder: math.frequency_chart}
+    hints: [steps_prefix]
+    concept_tags: [cumulative_chart.draw_polyline]
+    cause_tags: []
+  "3":
+    signature: median_class_from_cumulative_chart
+    recipe: math.median_class_from_cumulative
+    params:
+      # 【組合せ数】params = (class_lo, class_width, frequencies, unit, chart_kind)。
+      #   (class_lo, class_width, unit) 24通り × frequencies（5階級 × 3..9 の7通り = 7^5
+      #   = 16807。総度数を奇数にそろえる +1 の位置5も加わる）⇒ 約 3.7×10^5 通り。
+      n_classes: 5
+      frequency_domain: {int_range: [3, 9]}
+      chart_kind: cumulative
+    given: [situation_params]
+    asked: [read_table]
+    visual: required
+    text: {tier: T1, template: df_situation_v1, visual_builder: math.frequency_chart}
+    hints: [steps_prefix]
+    concept_tags: [cumulative_chart.read_median_class]
+    cause_tags: []
+remedial:
+  default_level: 2

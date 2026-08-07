@@ -19,6 +19,7 @@ from engine.packs.math.solvers import probability  # noqa: F401  (登録の副�
 from engine.packs.math.solvers import proportion  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.solvers import proportion_graph  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.solvers import statistics_distribution  # noqa: F401  (登録の副作用のため import)
+from engine.packs.math.solvers import distribution_chart  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.solvers import quartile  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.solvers import sample_survey  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.solvers import plane_geometry  # noqa: F401  (登録の副作用のため import)

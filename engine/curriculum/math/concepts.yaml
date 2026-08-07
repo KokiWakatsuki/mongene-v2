@@ -776,6 +776,36 @@ concepts:
   - id: representative_value.judge_appropriate
     label: "分布の特徴(外れ値の有無)に応じて適切な代表値を判別する"
     unit: g1_l57
+  - id: frequency_chart.read_histogram
+    label: "ヒストグラムから階級の度数と最頻の階級を読み取る"
+    unit: g1_l54
+  - id: frequency_chart.draw_histogram_from_raw_data
+    label: "生データを階級に分けて度数分布表を作りヒストグラムをかく"
+    unit: g1_l54
+  - id: frequency_chart.compare_histogram_shapes
+    label: "2つのヒストグラムの形から散らばりと偏りを比べる"
+    unit: g1_l54
+  - id: frequency_polygon.read_chart
+    label: "度数折れ線から階級の度数と最頻の階級を読み取る"
+    unit: g1_l55
+  - id: frequency_polygon.draw_relative_frequency
+    label: "相対度数を求めて表を完成させ度数折れ線をかく"
+    unit: g1_l55
+  - id: frequency_polygon.compare_groups_by_relative_frequency
+    label: "総度数の異なる2つの分布を相対度数で比べる"
+    unit: g1_l55
+  - id: cumulative_chart.draw_polyline
+    label: "累積度数の表を完成させ累積度数の折れ線をかく"
+    unit: g1_l56
+  - id: cumulative_chart.read_median_class
+    label: "累積度数の折れ線から中央値がふくまれる階級を読み取る"
+    unit: g1_l56
+  - id: distribution_comparison.read_overlaid_charts
+    label: "重ねてかかれた2つの分布のグラフから傾向のちがいを読み取る"
+    unit: g1_l58
+  - id: distribution_comparison.construct_overlaid_charts
+    label: "2つの分布のちがいが伝わるようグラフを重ねて構成する"
+    unit: g1_l58
   - id: quartile.compute_median
     label: "データを並べ中央値(第2四分位数)を求める"
     unit: g2_l55

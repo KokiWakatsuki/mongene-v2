@@ -18,6 +18,7 @@ from engine.packs.math.checkers import quadratic_function  # noqa: F401  (登録
 from engine.packs.math.checkers import probability  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.checkers import proportion  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.checkers import statistics_distribution  # noqa: F401  (登録の副作用のため import)
+from engine.packs.math.checkers import distribution_chart  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.checkers import quartile  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.checkers import sample_survey  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.checkers import exam_fusion  # noqa: F401  (登録の副作用のため import)

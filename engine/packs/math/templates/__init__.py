@@ -18,6 +18,7 @@ from engine.packs.math.templates import quadratic_function  # noqa: F401  (登�
 from engine.packs.math.templates import probability  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.templates import proportion  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.templates import statistics_distribution  # noqa: F401  (登録の副作用のため import)
+from engine.packs.math.templates import distribution_chart  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.templates import quartile  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.templates import sample_survey  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.templates import exam_fusion  # noqa: F401  (登録の副作用のため import)

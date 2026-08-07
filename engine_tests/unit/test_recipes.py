@@ -8760,3 +8760,275 @@ def test_special_right_triangle_ratio_property(seed):
     assert len(set(answer.distractors)) == len(answer.distractors)
     # 比べる2辺は必ず異なる辺（同じ辺どうしの比 1:1 に潰れない形で問う）。
     assert int(mr.params["numbers"]["first_side"]) != int(mr.params["numbers"]["second_side"])
+
+
+# ---------------------------------------------------------------------------
+# C11 g1 度数分布 graph_table（横展開: g1_l54/l55/l56/l58 の「読む」「かく」10セル）
+#
+# ゲートは「答えが潰れる退化」を素通りするので、分布の形が読めない／答えが一意に
+# 決まらない／2つの分布が比較にならない、を property で固定する。
+# ---------------------------------------------------------------------------
+def _dist_mr(family_name: str, level: int, seed: int):
+    ctx = _make_ctx(family_name, level)
+    return ctx, REGISTRY.recipe(ctx.spec_level.recipe)(
+        ctx, derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    )
+
+
+def _svg_text_nodes(svg: str) -> list[str]:
+    return [m.strip() for m in re.findall(r"<text[^>]*>(.*?)</text>", svg, re.DOTALL)]
+
+
+def _assert_chart_labels_cover_svg(mr) -> None:
+    """図に出る数値ラベルが visual_plan.labels に収まる（G-Q5v を recipe 側で先取り）。"""
+    from engine.packs.math.visuals.distribution_chart import render_frequency_chart_svg
+
+    allowed = set(mr.visual_plan.labels)
+    for drawn in (True, False):
+        svg = render_frequency_chart_svg(mr.params, draw=drawn)
+        assert set(_svg_text_nodes(svg)) <= allowed, f"図内テキストが labels 外: {mr.params}"
+
+
+@pytest.mark.parametrize("seed", range(40))
+@pytest.mark.parametrize(
+    "family,level,chart_kind",
+    [
+        ("math.g1_l54.graph_table", 1, "histogram"),
+        ("math.g1_l55.graph_table", 1, "polygon"),
+    ],
+)
+def test_read_distribution_chart_property(seed, family, level, chart_kind):
+    """「読む」Lv1: 最頻の階級が一意で、問う階級はそれと別（2つの問いが潰れない）。"""
+    _ctx, mr = _dist_mr(family, level, seed)
+    freqs = [int(f) for f in mr.params["frequencies"]]
+    target = int(mr.params["target_index"])
+
+    assert mr.params["chart_kind"] == chart_kind
+    assert len(set(freqs)) > 1, "度数が全部同じ（分布の形が読めない）"
+    assert freqs.count(max(freqs)) == 1, "度数が最大の階級が一意でない"
+    assert freqs[target] != max(freqs), "問う階級が最頻の階級と同じで答えが重複する"
+    assert all(f >= 1 for f in freqs)
+
+    # 「読む」ので図には分布が描かれていること（空のグラフ用紙では答えられない）。
+    assert {e.kind for e in mr.visual_plan.elements} >= {"distribution"}
+    _assert_chart_labels_cover_svg(mr)
+
+    lo, width = int(mr.params["class_lo"]), int(mr.params["class_width"])
+    expected = sympy.Tuple(
+        sympy.Integer(freqs[target]), sympy.Integer(lo + width * freqs.index(max(freqs)))
+    )
+    assert mr.sub_questions[0].answer.srepr == sympy.srepr(expected)
+
+    checker = REGISTRY.checker(f"{mr.provenance.recipe}.double_solve")
+    assert checker(mr).answer.srepr == mr.sub_questions[0].answer.srepr
+
+
+@pytest.mark.parametrize("seed", range(40))
+def test_tabulate_and_draw_histogram_property(seed):
+    """g1_l54.graph_table Lv2: 生データを数え直すと構成した度数に一致し、山が一意。"""
+    _ctx, mr = _dist_mr("math.g1_l54.graph_table", 2, seed)
+    lo, width = int(mr.params["class_lo"]), int(mr.params["class_width"])
+    freqs = [int(f) for f in mr.params["frequencies"]]
+    data = [int(v) for v in mr.params["data"]]
+
+    assert len(data) == sum(freqs)
+    assert all(lo <= v < lo + width * len(freqs) for v in data), "階級の範囲外のデータ"
+    recount = [0] * len(freqs)
+    for v in data:
+        recount[(v - lo) // width] += 1
+    assert recount == freqs
+    assert len(set(freqs)) > 1, "度数が全部同じ（ヒストグラムが平ら）"
+    assert freqs.count(max(freqs)) == 1, "度数が最大の階級が一意でない"
+
+    # 「かく」ので問題図は空のグラフ用紙（分布を先出ししない）。
+    assert "distribution" not in {e.kind for e in mr.visual_plan.elements}
+    _assert_chart_labels_cover_svg(mr)
+
+    answer = mr.sub_questions[0].answer
+    assert answer.kind == "graph" and answer.solution_svg_ref.startswith("<svg")
+    assert [int(sympy.sympify(f.srepr)[1]) for f in answer.features] == freqs
+
+    checker = REGISTRY.checker(f"{mr.provenance.recipe}.double_solve")
+    assert {f.srepr for f in checker(mr).answer.features} == {f.srepr for f in answer.features}
+
+
+@pytest.mark.parametrize("seed", range(40))
+@pytest.mark.parametrize(
+    "family,level,chart_kind",
+    [
+        ("math.g1_l54.graph_table", 3, "histogram"),
+        ("math.g1_l58.graph_table", 2, "polygon"),
+    ],
+)
+def test_compare_distribution_shape_property(seed, family, level, chart_kind):
+    """2分布の比較: 散らばりも山の位置も必ず相異なる（同点で比較にならない退化を封じる）。"""
+    _ctx, mr = _dist_mr(family, level, seed)
+    fa = [int(f) for f in mr.params["frequencies"]]
+    fb = [int(f) for f in mr.params["frequencies_b"]]
+
+    assert mr.params["chart_kind"] == chart_kind
+    assert len(fa) == len(fb)
+    assert sum(fa) == sum(fb), "総度数がそろっていないと度数のまま重ねて比べられない"
+
+    def span(fs):
+        hits = [i for i, f in enumerate(fs) if f > 0]
+        return hits[-1] - hits[0] + 1
+
+    assert span(fa) != span(fb), "散らばりが同じで比較にならない"
+    assert fa.count(max(fa)) == 1 and fb.count(max(fb)) == 1, "山が一意でない"
+    assert fa.index(max(fa)) != fb.index(max(fb)), "山の位置が同じで偏りを比べられない"
+
+    assert {e.kind for e in mr.visual_plan.elements} >= {"distribution"}
+    _assert_chart_labels_cover_svg(mr)
+
+    answer = mr.sub_questions[0].answer
+    assert answer.kind == "choice"
+    wider = "A組" if span(fa) > span(fb) else "B組"
+    higher = "A組" if fa.index(max(fa)) > fb.index(max(fb)) else "B組"
+    assert answer.correct == (
+        f"散らばりが大きいのは{wider}、値の大きいほうの階級に偏っているのは{higher}"
+    )
+    assert len(answer.distractors) == 3
+    assert answer.correct not in answer.distractors
+    assert len(set(answer.distractors)) == 3
+
+    checker = REGISTRY.checker(f"{mr.provenance.recipe}.double_solve")
+    assert checker(mr).answer.correct == answer.correct
+
+
+@pytest.mark.parametrize("seed", range(40))
+def test_relative_frequency_polygon_property(seed):
+    """g1_l55.graph_table Lv2: どの階級の相対度数も 0 や 1 に潰れず、分布が平らでない。"""
+    _ctx, mr = _dist_mr("math.g1_l55.graph_table", 2, seed)
+    freqs = [int(f) for f in mr.params["frequencies"]]
+    total = sum(freqs)
+
+    assert len(set(freqs)) > 1, "度数が全部同じ（折れ線が水平に潰れる）"
+    for f in freqs:
+        assert 0 < sympy.Rational(f, total) < 1, "相対度数が 0 または 1 に潰れている"
+
+    assert "distribution" not in {e.kind for e in mr.visual_plan.elements}
+    _assert_chart_labels_cover_svg(mr)
+
+    answer = mr.sub_questions[0].answer
+    assert answer.kind == "graph" and answer.solution_svg_ref.startswith("<svg")
+    rel = [f for f in answer.features if f.kind == "relative_frequency"]
+    vertices = [f for f in answer.features if f.kind == "polygon_vertex"]
+    assert len(rel) == len(freqs) and len(vertices) == len(freqs)
+    assert [sympy.sympify(f.srepr)[1] for f in rel] == [
+        sympy.Rational(f, total) for f in freqs
+    ]
+
+    checker = REGISTRY.checker(f"{mr.provenance.recipe}.double_solve")
+    assert {f.srepr for f in checker(mr).answer.features} == {f.srepr for f in answer.features}
+
+
+@pytest.mark.parametrize("seed", range(40))
+def test_compare_relative_frequency_chart_property(seed):
+    """g1_l55.graph_table Lv3: 総度数も対象階級の相対度数も相異なる（比較が成立する）。"""
+    _ctx, mr = _dist_mr("math.g1_l55.graph_table", 3, seed)
+    fa = [int(f) for f in mr.params["frequencies"]]
+    fb = [int(f) for f in mr.params["frequencies_b"]]
+    idx = int(mr.params["target_index"])
+    ta, tb = sum(fa), sum(fb)
+
+    assert ta != tb, "総度数が同じでは「相対度数でそろえて比べる」意味が立たない"
+    rel_a, rel_b = sympy.Rational(fa[idx], ta), sympy.Rational(fb[idx], tb)
+    assert rel_a != rel_b, "相対度数が同じでどちらが大きいか決まらない"
+    assert 0 < rel_a < 1 and 0 < rel_b < 1
+
+    assert {e.kind for e in mr.visual_plan.elements} >= {"distribution"}
+    _assert_chart_labels_cover_svg(mr)
+
+    answer = mr.sub_questions[0].answer
+    assert answer.srepr == sympy.srepr(sympy.Tuple(rel_a, rel_b))
+    assert ("Aのほうが大きい" if rel_a > rel_b else "Bのほうが大きい") in answer.display
+
+    checker = REGISTRY.checker(f"{mr.provenance.recipe}.double_solve")
+    assert checker(mr).answer.srepr == answer.srepr
+
+
+@pytest.mark.parametrize("seed", range(40))
+def test_cumulative_frequency_chart_property(seed):
+    """g1_l56.graph_table Lv2: 累積度数が真に増加し、度数が全部同じ（直線）でない。"""
+    _ctx, mr = _dist_mr("math.g1_l56.graph_table", 2, seed)
+    freqs = [int(f) for f in mr.params["frequencies"]]
+
+    assert mr.params["chart_kind"] == "cumulative"
+    assert all(f >= 1 for f in freqs)
+    assert len(set(freqs)) > 1, "度数が全部同じで累積の折れ線が直線に潰れる"
+    # 導出値（累積度数）を params に置かない＝検証に穴をあけない。
+    assert set(mr.params) == {"class_lo", "class_width", "frequencies", "unit", "chart_kind"}
+
+    cums = []
+    running = 0
+    for f in freqs:
+        running += f
+        cums.append(running)
+    assert all(cums[i] < cums[i + 1] for i in range(len(cums) - 1))
+
+    assert "distribution" not in {e.kind for e in mr.visual_plan.elements}
+    _assert_chart_labels_cover_svg(mr)
+
+    answer = mr.sub_questions[0].answer
+    assert answer.kind == "graph" and answer.solution_svg_ref.startswith("<svg")
+    assert [int(sympy.sympify(f.srepr)[1]) for f in answer.features] == cums
+
+    checker = REGISTRY.checker(f"{mr.provenance.recipe}.double_solve")
+    assert {f.srepr for f in checker(mr).answer.features} == {f.srepr for f in answer.features}
+
+
+@pytest.mark.parametrize("seed", range(40))
+def test_median_class_from_cumulative_property(seed):
+    """g1_l56.graph_table Lv3: 総度数が奇数で、中央値の階級は内側（端に寄らない）。"""
+    _ctx, mr = _dist_mr("math.g1_l56.graph_table", 3, seed)
+    freqs = [int(f) for f in mr.params["frequencies"]]
+    lo, width = int(mr.params["class_lo"]), int(mr.params["class_width"])
+    total = sum(freqs)
+
+    assert total % 2 == 1, "総度数が偶数だと「ちょうど半分」で階級が一意に決まらない"
+    assert len(set(freqs)) > 1
+
+    cums = []
+    running = 0
+    for f in freqs:
+        running += f
+        cums.append(running)
+    idx = [i for i, c in enumerate(cums) if 2 * c > total][0]
+    assert 0 < idx < len(freqs) - 1, "中央値の階級が端に寄っていて読まずに分かる"
+
+    assert {e.kind for e in mr.visual_plan.elements} >= {"distribution"}
+    _assert_chart_labels_cover_svg(mr)
+
+    expected = sympy.Tuple(
+        sympy.Integer(lo + width * idx), sympy.Integer(lo + width * (idx + 1))
+    )
+    assert mr.sub_questions[0].answer.srepr == sympy.srepr(expected)
+
+    checker = REGISTRY.checker(f"{mr.provenance.recipe}.double_solve")
+    assert checker(mr).answer.srepr == mr.sub_questions[0].answer.srepr
+
+
+@pytest.mark.parametrize("seed", range(40))
+def test_overlay_frequency_polygons_property(seed):
+    """g1_l58.graph_table Lv3: 2本が一致せず、総度数がそろい、山の位置がずれている。"""
+    _ctx, mr = _dist_mr("math.g1_l58.graph_table", 3, seed)
+    fa = [int(f) for f in mr.params["frequencies"]]
+    fb = [int(f) for f in mr.params["frequencies_b"]]
+
+    assert fa != fb, "2本が同一で重ねて比べる意味がない"
+    assert sum(fa) == sum(fb), "総度数がそろっていないと度数のまま重ねられない"
+    assert fa.count(max(fa)) == 1 and fb.count(max(fb)) == 1
+    assert fa.index(max(fa)) != fb.index(max(fb)), "山の位置が同じで傾向のちがいが出ない"
+
+    assert "distribution" not in {e.kind for e in mr.visual_plan.elements}
+    _assert_chart_labels_cover_svg(mr)
+
+    answer = mr.sub_questions[0].answer
+    assert answer.kind == "graph" and answer.solution_svg_ref.startswith("<svg")
+    kinds = [f.kind for f in answer.features]
+    assert kinds.count("polygon_vertex_a") == len(fa)
+    assert kinds.count("polygon_vertex_b") == len(fb)
+
+    checker = REGISTRY.checker(f"{mr.provenance.recipe}.double_solve")
+    assert {f.srepr for f in checker(mr).answer.features} == {f.srepr for f in answer.features}

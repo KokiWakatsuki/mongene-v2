@@ -1,0 +1,67 @@
+family: math.g1_l58.graph_table
+form: graph_table
+source_desc: |
+  データの比較と統計的探究プロセス（units.generated.yaml の desc/example を正として転記）。
+  Lv2 desc: 比較に適したグラフ・表を読む。
+       example: 2つのクラスのハンドボール投げの記録を重ねてかいた度数折れ線がある。分布の山の
+                位置や広がりを読み取り、2つのクラスの記録の傾向のちがいを答えよ。
+  Lv3 desc: 複数分布を重ねて比較し傾向を示すグラフを構成する。
+       example: 1年生と2年生の通学時間のデータが度数分布表で与えられている。2つの学年の分布の
+                ちがいが最もはっきり伝わるように、相対度数の度数折れ線を1つのグラフに重ねて
+                かき、読み取れる傾向を書け。
+  【設計モデル】描画は土台 distribution_chart.py（chart_kind="polygon"・2本目は破線）
+  に委ねる。Lv2 は分布つきの図（読む）、Lv3 は目盛だけの空のグラフ用紙（かく）。
+  【台帳から落とした要素と理由】Lv3 の example の「相対度数の」度数折れ線は落とし、
+  **総度数のそろった2組**の度数折れ線を重ねる形にした。desc 本文は「複数分布を重ねて
+  比較し傾向を示すグラフを構成する」であって相対度数を要求していない。総度数がそろって
+  いれば度数のまま重ねてよく、土台の縦軸（度数の整数目盛）にそのまま載る。相対度数で
+  そろえて比べる学習点は同クラスタの g1_l55.graph_table Lv3 が担当する。
+  【level_sep】op 列が相異する:
+    Lv2 読む given=[condition]  asked=[read_table]
+             op=(compare_distribution_spread, compare_distribution_skew)
+    Lv3 かく given=[data_table] asked=[draw_graph]
+             op=(plot_first_polygon, plot_second_polygon, overlay_for_comparison)
+  【退化の封じ方】Lv2 は散らばり（度数が入る階級の幅）と山の位置を**先に相異なるように**
+  選んでから度数を配るので、2分布の傾向が同じで比較にならない事態が構成の段階で起きない。
+  Lv3 は一方の分布を階級方向にずらしてもう一方にする。階級数が素数（5）なので、
+  山が一意に立っている限りずらした列が元と一致することはなく、山の位置も必ずずれる。
+concepts_default: [distribution_comparison.read_overlaid_charts]
+levels:
+  "2":
+    signature: read_overlaid_frequency_polygons
+    recipe: math.compare_distribution_shape
+    params:
+      # 【組合せ数】params = (class_lo, class_width, frequencies, frequencies_b, unit, chart_kind)。
+      #   (class_lo, class_width, unit) 24 × 散らばりの幅の順序対 4×3=12 × 位置(≤4)^2=16
+      #   × 山の位置(≤6)^2≈30 × 総度数5 × 配り始めの位置(≤6)^2≈24
+      # ⇒ 約 1.5×10^7 通り（閾の 250 通りを大きく超える）。
+      n_classes: 6
+      total_domain: {int_set: [24, 28, 30, 32, 36]}
+      chart_kind: polygon
+    given: [condition]
+    asked: [read_table]
+    visual: required
+    text: {tier: T1, template: df_condition_v1, visual_builder: math.frequency_chart}
+    hints: [steps_prefix]
+    concept_tags: [distribution_comparison.read_overlaid_charts]
+    cause_tags: []
+  "3":
+    signature: construct_overlaid_frequency_polygons
+    recipe: math.overlay_frequency_polygons
+    params:
+      # 【組合せ数】params = (class_lo, class_width, frequencies, frequencies_b, unit, chart_kind)。
+      #   (class_lo, class_width, unit) 24通り × frequencies（山以外4階級が 2..8 の 7^4=2401）
+      #   × 山の位置5 × 持ち上げ幅3 × ずらし幅4 ⇒ 約 3.2×10^6 通り。
+      n_classes: 5
+      frequency_domain: {int_range: [2, 8]}
+      peak_bonus_domain: {int_range: [1, 3]}
+      chart_kind: polygon
+    given: [data_table]
+    asked: [draw_graph]
+    visual: required
+    text: {tier: T1, template: df_data_table_v1, visual_builder: math.frequency_chart}
+    hints: [steps_prefix]
+    concept_tags: [distribution_comparison.construct_overlaid_charts]
+    cause_tags: []
+remedial:
+  default_level: 2

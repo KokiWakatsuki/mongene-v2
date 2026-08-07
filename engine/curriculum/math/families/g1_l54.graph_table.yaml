@@ -1,0 +1,88 @@
+family: math.g1_l54.graph_table
+form: graph_table
+source_desc: |
+  度数分布表とヒストグラム（units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: 度数分布表やヒストグラムから度数・階級を読む。
+       example: あるクラス30人の通学時間を表したヒストグラムがある。10分以上15分未満の階級の
+                度数を答えよ。また、度数が最も大きい階級を答えよ。
+  Lv2 desc: 生データから度数分布表を作りヒストグラムを正確にかく。
+       example: 次の20人の握力の記録（単位kg）を、10kg以上15kg未満から5kgずつの階級に分けて
+                度数分布表を作り、そのヒストグラムをかけ。〔28, 31, 22, ...〕
+  Lv3 desc: 複数の分布を比較し形状・傾向を条件から読み解く。
+       example: 1組と2組の反復横とびの記録を表した2つのヒストグラムがある。散らばりが大きいのは
+                どちらの組か、また記録の高い方に人数が偏っているのはどちらの組か、ヒストグラムの
+                形をもとに読み取って答えよ。
+  【設計モデル】描画はすべて土台 engine/packs/math/visuals/distribution_chart.py
+  （register_visual("math.frequency_chart")）に委ね、新しい描画コードは書かない。
+  問題図は visual_plan.elements に kind="distribution" があれば分布つき（＝読む）、
+  無ければ目盛だけの空のグラフ用紙（＝かく）。labels は frequency_chart_labels で機械生成。
+  【level_sep】問う行為そのものを変える＝ op 列が相異する:
+    Lv1 読む   given=[situation_params] asked=[read_table]
+               op=(read_class_frequency, find_modal_class)
+    Lv2 かく   given=[data_table]       asked=[draw_graph]
+               op=(tally_into_classes, build_frequency_table, draw_histogram)
+    Lv3 比べる given=[condition]        asked=[read_table]
+               op=(compare_distribution_spread, compare_distribution_skew)
+  【退化の封じ方】度数が全部同じ／最頻の階級が一意に決まらない／2分布の散らばりと
+  偏りが同点、をいずれも**構成の段階で**起こさない（solver 側でも例外にして二重化）。
+concepts_default: [frequency_chart.read_histogram]
+levels:
+  "1":
+    signature: read_histogram_frequency_and_modal_class
+    recipe: math.read_distribution_chart
+    params:
+      # 【組合せ数】params = (class_lo, class_width, frequencies, target_index, unit, chart_kind)。
+      #   (class_lo, class_width, unit): 題材8種×各3候補＝24通り（すべて相異）
+      #   frequencies: 山以外の4階級が 1..9（9^4=6561通り）×山の位置5×持ち上げ幅3
+      #   target_index: 山以外の4通り
+      # ⇒ 24 × 6561 × 5 × 3 × 4 ≈ 8.7×10^6 通り（閾の 250 通りを大きく超える）。
+      n_classes: 5
+      frequency_domain: {int_range: [1, 9]}
+      peak_bonus_domain: {int_range: [1, 3]}
+      chart_kind: histogram
+    given: [situation_params]
+    asked: [read_table]
+    visual: required
+    text: {tier: T1, template: df_situation_v1, visual_builder: math.frequency_chart}
+    hints: [steps_prefix]
+    concept_tags: [frequency_chart.read_histogram]
+    cause_tags: []
+  "2":
+    signature: tabulate_raw_data_and_draw_histogram
+    recipe: math.tabulate_and_draw_histogram
+    params:
+      # 【組合せ数】params = (class_lo, class_width, frequencies, data, unit, chart_kind)。
+      #   (class_lo, class_width, unit) 24通り × frequencies（2..6 の4階級 5^4=625 ×山5×幅2）
+      #   × data（各階級の度数ぶんの値を階級の幅 4〜200 の範囲から引く＝1つの度数分布表
+      #     あたり少なくとも 4^11 通り）。⇒ 10^10 通り超。
+      n_classes: 5
+      frequency_domain: {int_range: [2, 6]}
+      peak_bonus_domain: {int_range: [1, 2]}
+      chart_kind: histogram
+    given: [data_table]
+    asked: [draw_graph]
+    visual: required
+    text: {tier: T1, template: df_data_table_v1, visual_builder: math.frequency_chart}
+    hints: [steps_prefix]
+    concept_tags: [frequency_chart.draw_histogram_from_raw_data]
+    cause_tags: []
+  "3":
+    signature: compare_two_histogram_shapes
+    recipe: math.compare_distribution_shape
+    params:
+      # 【組合せ数】params = (class_lo, class_width, frequencies, frequencies_b, unit, chart_kind)。
+      #   (class_lo, class_width, unit) 24 × 散らばりの幅の順序対 4×3=12 × 位置(≤4)^2=16
+      #   × 山の位置(≤6)^2≈30 × 総度数5 × 配り始めの位置(≤6)^2≈24
+      # ⇒ 24 × 12 × 16 × 30 × 5 × 24 ≈ 1.5×10^7 通り。
+      n_classes: 6
+      total_domain: {int_set: [24, 28, 30, 32, 36]}
+      chart_kind: histogram
+    given: [condition]
+    asked: [read_table]
+    visual: required
+    text: {tier: T1, template: df_condition_v1, visual_builder: math.frequency_chart}
+    hints: [steps_prefix]
+    concept_tags: [frequency_chart.compare_histogram_shapes]
+    cause_tags: []
+remedial:
+  default_level: 1
