@@ -1360,6 +1360,15 @@ concepts:
   - id: solid_revolution.section
     label: "回転体を回転の軸をふくむ平面で切った切り口の形と寸法を構成する"
     unit: g1_l49
+  - id: solid_projection.read
+    label: "投影図の立面図と平面図の組から、もとの立体が何かを判断する"
+    unit: g1_l50
+  - id: solid_projection.draw
+    label: "立体を真正面と真上から見た形を決め、投影図として並べてかく"
+    unit: g1_l50
+  - id: solid_projection.complete
+    label: "投影図の片方と条件から立体を一つに特定し、もう一方の図を構成する"
+    unit: g1_l50
   - id: sphere_measure.direct
     label: "半径から球の表面積・体積をそれぞれ直接求める"
     unit: g1_l53

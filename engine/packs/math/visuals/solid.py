@@ -135,6 +135,14 @@ def solid_labels(params: dict[str, Any]) -> list[str]:
         out.append(str(v))
     for d in params.get("dim_labels") or []:
         out.append(str(d))
+    # 投影図は「立面図」「平面図」の見出しを図に書く（教科書の並べ方）。見出しは
+    # 寸法でも答えでもないが、svg の <text> に出るので whitelist に載せる必要がある。
+    if str(params.get("view")) == "projection":
+        shown = str(params.get("shown_view", "none"))
+        if shown in ("both", "elevation"):
+            out.append("立面図")
+        if shown in ("both", "plan"):
+            out.append("平面図")
     return out
 
 
@@ -307,17 +315,22 @@ _SKETCH_BY_KIND = {
 # ---------------------------------------------------------------------------
 # 投影図（projection）: 立面図（上）と平面図（下）
 # ---------------------------------------------------------------------------
-_PROJECTION_SHAPES: dict[str, tuple[str, str]] = {
-    # solid_kind -> (立面図の形, 平面図の形)
+# solid_kind -> (立面図の形, 平面図の形)。**対応表の出典は solver 側**
+# （`solvers/solid_view.projection_shapes`）で、ここでは描画のためにそれを引くだけ。
+# 表を2か所に持つと、片方だけ直したときに図と答えが食い違う（実際に一度ずれた）。
+# 直方体だけは投影図のセルに出さない（立面図・平面図がともに長方形で、
+# 見取図のセルでしか使わない）ので、描画専用の追加として持つ。
+_PROJECTION_DRAW_ONLY: dict[str, tuple[str, str]] = {
     "rectangular_prism": ("rect", "rect"),
-    "square_prism": ("rect", "square"),
-    "cube": ("square", "square"),
-    "cylinder": ("rect", "circle"),
-    "cone": ("triangle", "circle"),
-    "sphere": ("circle", "circle"),
-    "square_pyramid": ("triangle", "square_with_diagonals"),
-    "triangular_prism": ("rect", "triangle"),
 }
+
+
+def _projection_shapes(kind: str) -> tuple[str, str]:
+    from engine.packs.math.solvers.solid_view import projection_shapes
+
+    if kind in _PROJECTION_DRAW_ONLY:
+        return _PROJECTION_DRAW_ONLY[kind]
+    return projection_shapes(kind)
 
 
 def _shape_parts(shape: str, cx: float, cy: float, w: float, h: float) -> list[str]:
@@ -346,7 +359,7 @@ def _projection_parts(params: dict[str, Any], *, draw: bool) -> list[str]:
     （`params["shown_view"]` ∈ {"elevation", "plan", "none"}）。
     """
     kind = str(params["solid_kind"])
-    elev, plan = _PROJECTION_SHAPES[kind]
+    elev, plan = _projection_shapes(kind)
     w = float(params["width_px"])
     h = float(params["height_px"])
     cx = _W / 2
@@ -367,6 +380,13 @@ def _projection_parts(params: dict[str, Any], *, draw: bool) -> list[str]:
             parts.append(
                 _line(cx + dx, cy_elev + h / 2, cx + dx, cy_plan - w / 2, dashed=True)
             )
+        # 「長さがわかるようにかけ」に答えるため、高さ（立面図の縦）と底面（平面図の横）を
+        # 書き入れる。`dim_labels` = [底面, 高さ] の順（solid_labels が whitelist に載せる）。
+        parts += _dimension_labels(
+            params,
+            radius_at=(cx, cy_plan + w / 2 + 14),
+            height_at=(cx + w / 2 + 30, cy_elev),
+        )
     return parts
 
 

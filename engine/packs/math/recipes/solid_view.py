@@ -121,7 +121,7 @@ def _statement(shape: str, axis_len: int, other_len: int, names: list[str], unit
 
 def _mr(
     ctx: CellContext, *, params: dict[str, Any], statement: str, asked: str, sol: Solution,
-    recipe: str,
+    recipe: str, element_kind: str = "rotation_source",
 ) -> MR:
     return MR(
         signature=ctx.spec_level.signature,
@@ -141,8 +141,9 @@ def _mr(
         visual_plan=VisualPlan(
             style="solid",
             labels=solid_labels(params),
-            # "solid"（答えの立体）ではなく "rotation_source"（元図）を宣言する。
-            elements=[VisualElement(kind="rotation_source", attrs={})],
+            # "solid"（答えの立体）ではなく、問題図として出してよいビューを宣言する
+            # （回転体の元図／投影図）。"solid" は frame の禁止要素。
+            elements=[VisualElement(kind=element_kind, attrs={})],
         ),
         provenance=Provenance(recipe=recipe),
     )
@@ -228,4 +229,135 @@ def solid_of_revolution_recipe(ctx: CellContext, rng: Rng) -> MR:
     raise ValueError(f"未知の mode: {mode!r}")
 
 
-__all__ = ["solid_of_revolution_recipe"]
+# ---------------------------------------------------------------------------
+# g1_l50.graph_table Lv1/Lv2/Lv3: 投影図
+#
+# 立体 -> (立面図, 平面図) の対応表は solver 側が持つ（`projection_shapes`）。
+# recipe は「どの立体をどの寸法で出すか」と、問題図にどちらのビューを見せるかを決める。
+# ---------------------------------------------------------------------------
+_PROJECTION_CONCEPTS = [
+    "solid_projection.read",
+    "solid_projection.draw",
+    "solid_projection.complete",
+]
+
+# 立体の言い方（本文用）。底面の1辺と高さの与え方が立体ごとに違う。
+_PROJECTION_PHRASE = {
+    "square_prism": "底面が1辺{b}{u}の正方形、高さ{h}{u}の正四角柱",
+    "cube": "1辺が{b}{u}の立方体",
+    "cylinder": "底面の半径が{b}{u}、高さ{h}{u}の円柱",
+    "cone": "底面の半径が{b}{u}、高さ{h}{u}の円錐",
+    "sphere": "半径が{b}{u}の球",
+    "square_pyramid": "底面が1辺{b}{u}の正方形、高さ{h}{u}の正四角錐",
+    "triangular_prism": "底面が1辺{b}{u}の正三角形、高さ{h}{u}の正三角柱",
+}
+
+
+def _projection_scene(p: dict[str, Any], rng: Rng) -> tuple[str, int, int]:
+    """(立体, 底面の長さ, 高さ)。
+
+    【組合せ数】立体7種 × 底面 × 高さ（相異）。既定（2〜15）で 7×14×13=1274 通り。
+
+    【退化の封じ方】底面と高さを相異にする（等しいと正四角柱と立方体の区別が
+    figure の上でつかなくなる）。
+    """
+    kind = str(draw(list(p["solid_set"]), rng))
+    lo, hi = (int(v) for v in p["length_range"])
+    base = int(draw({"int_range": [lo, hi]}, rng))
+    height = int(draw({"int_set": [v for v in range(lo, hi + 1) if v != base]}, rng))
+    return kind, base, height
+
+
+def _projection_params(
+    kind: str, base: int, height: int, p: dict[str, Any], shown: str
+) -> dict[str, Any]:
+    lo, hi = (int(v) for v in p["length_range"])
+    return {
+        "view": "projection",
+        "solid_kind": kind,
+        "width_px": _to_px(base, lo, hi),
+        "height_px": _to_px(height, lo, hi),
+        "shown_view": shown,
+        "base_len": base,
+        "solid_height": height,
+    }
+
+
+@register_recipe("math.solid_projection", provides_concepts=_PROJECTION_CONCEPTS)
+def solid_projection_recipe(ctx: CellContext, rng: Rng) -> MR:
+    """投影図を読む／かく／片方から他方を構成する（g1_l50.graph_table Lv1/Lv2/Lv3）。"""
+    from engine.packs.math.solvers.solid_view import projection_shapes, solid_name_jp
+
+    p = cast("dict[str, Any]", ctx.spec_level.params)
+    mode = str(p["mode"])
+    unit = str(p.get("unit", "cm"))
+    kind, base, height = _projection_scene(p, rng)
+    elev, plan = projection_shapes(kind)
+    shape_jp = {
+        "rect": "長方形", "square": "正方形", "circle": "円",
+        "triangle": "三角形", "square_with_diagonals": "対角線のひかれた正方形",
+    }
+
+    if mode == "read":
+        # 問題図に投影図の両方を出し、立体を選ばせる。
+        params = _projection_params(kind, base, height, p, "both")
+        sol = cast(Solution, REGISTRY.solver("math.solid_from_projection")(elev, plan))
+        return _mr(
+            ctx, params=params,
+            statement="ある立体の投影図が右のようになっている。この立体はどれか、選べ",
+            asked="read_solid", sol=sol, recipe="math.solid_projection",
+            element_kind="projection",
+        )
+
+    if mode == "draw":
+        # 立体は本文で与える。問題図は投影図を出さない（＝答えの先出しになる）。
+        params = _projection_params(kind, base, height, p, "none")
+        sol = cast(
+            Solution, REGISTRY.solver("math.projection_views_of_solid")(kind, base, height)
+        )
+        assert isinstance(sol.answer, GraphAnswer)
+        answer_params = dict(params)
+        answer_params["shown_view"] = "both"
+        # 設問が「長さがわかるようにかけ」なので、模範解答図に寸法を書く。
+        answer_params["dim_labels"] = [f"{base}{unit}", f"{height}{unit}"]
+        answer = GraphAnswer(
+            features=sol.answer.features,
+            solution_svg_ref=render_solid_solution_svg(answer_params),
+        )
+        phrase = _PROJECTION_PHRASE[kind].format(b=base, h=height, u=unit)
+        return _mr(
+            ctx, params=params,
+            statement=(
+                f"{phrase}がある。この立体の投影図（立面図と平面図）を、"
+                "長さがわかるようにかけ"
+            ),
+            asked="draw_solid", sol=Solution(answer=answer, steps=sol.steps),
+            recipe="math.solid_projection", element_kind="projection",
+        )
+
+    if mode == "complete":
+        # 平面図だけを見せ、立面図の形を条件として本文で与えて立体を特定させる。
+        params = _projection_params(kind, base, height, p, "plan")
+        sol = cast(Solution, REGISTRY.solver("math.complete_projection")(plan, elev))
+        assert isinstance(sol.answer, GraphAnswer)
+        answer_params = dict(params)
+        answer_params["shown_view"] = "both"
+        answer = GraphAnswer(
+            features=sol.answer.features,
+            solution_svg_ref=render_solid_solution_svg(answer_params),
+        )
+        return _mr(
+            ctx, params=params,
+            statement=(
+                f"ある立体の投影図のうち、平面図が{shape_jp[plan]}であることだけが"
+                f"右の図でわかっている。立面図が{shape_jp[elev]}になる立体は何か特定し、"
+                "その立面図をかいて示せ"
+            ),
+            asked="draw_solid", sol=Solution(answer=answer, steps=sol.steps),
+            recipe="math.solid_projection", element_kind="projection",
+        )
+
+    raise ValueError(f"未知の mode: {mode!r}")
+
+
+__all__ = ["solid_of_revolution_recipe", "solid_projection_recipe"]

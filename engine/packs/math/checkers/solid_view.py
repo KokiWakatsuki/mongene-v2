@@ -44,4 +44,29 @@ def double_solve_solid_of_revolution(mr: MR) -> Solution:
     )
 
 
-__all__ = ["double_solve_solid_of_revolution"]
+@register_checker("math.solid_projection.double_solve")
+def double_solve_solid_projection(mr: MR) -> Solution:
+    """投影図の3セル。params が持つのは立体の種類と寸法だけで、答え（立体の名前・
+    立面図/平面図の形）は入っていない。checker は対応表を引き直して解き直す。
+    """
+    from engine.packs.math.solvers.solid_view import projection_shapes
+
+    p = mr.params
+    kind = str(p["solid_kind"])
+    elev, plan = projection_shapes(kind)
+    sq = mr.sub_questions[0]
+    if sq.asked == "read_solid":
+        return cast(Solution, REGISTRY.solver("math.solid_from_projection")(elev, plan))
+    answer = sq.answer
+    assert isinstance(answer, GraphAnswer)
+    if "solid_name" in [f.kind for f in answer.features]:
+        return cast(Solution, REGISTRY.solver("math.complete_projection")(plan, elev))
+    return cast(
+        Solution,
+        REGISTRY.solver("math.projection_views_of_solid")(
+            kind, p["base_len"], p["solid_height"]
+        ),
+    )
+
+
+__all__ = ["double_solve_solid_of_revolution", "double_solve_solid_projection"]

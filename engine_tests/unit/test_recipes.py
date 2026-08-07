@@ -9948,3 +9948,93 @@ def test_g1_l49_level_sep():
         shapes.append((sq.asked, sq.answer.kind, tuple(s.op for s in sq.steps)))
     assert len(set(shapes)) == 3
     assert shapes[0][1] == "choice" and shapes[1][1] == "graph"
+
+
+# ---------------------------------------------------------------------------
+# C8 g1_l50.graph_table（投影図）
+#
+# この単元の要点は「(立面図, 平面図) の組で立体が一意に決まる」こと。
+# 対応表は solver 側が唯一の出典で、描画側はそれを引く（表を2か所に持つと
+# 片方だけ直したときに図と答えが食い違う——実装中に一度ずれた）。
+# ---------------------------------------------------------------------------
+def test_g1_l50_projection_pairs_are_unique_and_shared():
+    """★(立面図, 平面図) の組は7種の立体で相異＝立体が一意に決まる。
+
+    かつ、描画側が solver 側と同じ表を引いている。
+    """
+    from engine.packs.math.solvers.solid_view import _PROJECTION, solid_from_views
+    from engine.packs.math.visuals.solid import _projection_shapes
+
+    assert len(set(_PROJECTION.values())) == len(_PROJECTION)
+    for kind, (elev, plan) in _PROJECTION.items():
+        assert solid_from_views(elev, plan) == kind
+        assert _projection_shapes(kind) == (elev, plan)
+
+
+@pytest.mark.parametrize("seed", range(30))
+def test_g1_l50_projection_read_property(seed):
+    _ctx, mr = _cell_mr("math.g1_l50.graph_table", 1, seed)
+    from engine.packs.math.solvers.solid_view import projection_shapes, solid_name_jp
+
+    sq = mr.sub_questions[0]
+    assert sq.asked == "read_solid"
+    assert [s.op for s in sq.steps] == [
+        "read_elevation_and_plan", "identify_solid_from_projection",
+    ]
+    assert sq.answer.correct == solid_name_jp(mr.params["solid_kind"])
+    # 問題図は投影図の両方（読む対象そのもの）。
+    assert mr.params["shown_view"] == "both"
+    assert {e.kind for e in mr.visual_plan.elements} == {"projection"}
+    projection_shapes(mr.params["solid_kind"])  # 表に載っている立体だけを出す
+
+
+@pytest.mark.parametrize("seed", range(30))
+def test_g1_l50_projection_draw_property(seed):
+    _ctx, mr = _cell_mr("math.g1_l50.graph_table", 2, seed)
+    sq = mr.sub_questions[0]
+    assert sq.asked == "draw_solid"
+    assert [s.op for s in sq.steps] == [
+        "determine_elevation", "determine_plan", "draw_projection",
+    ]
+    # ★答えの先出し防止: 立体は本文で与え、問題図には投影図を出さない。
+    assert mr.params["shown_view"] == "none"
+    assert "立面図" not in (mr.given["condition"].split("。")[0])
+    base, height = int(mr.params["base_len"]), int(mr.params["solid_height"])
+    # ★退化の封じ: 底面と高さが同じだと正四角柱と立方体が図で区別できない。
+    assert base != height
+    # 模範解答図に寸法が書かれている（設問が「長さがわかるようにかけ」）。
+    svg = sq.answer.solution_svg_ref
+    assert f"{base}cm" in svg and f"{height}cm" in svg
+    assert "立面図" in svg and "平面図" in svg
+
+
+@pytest.mark.parametrize("seed", range(30))
+def test_g1_l50_projection_complete_property(seed):
+    _ctx, mr = _cell_mr("math.g1_l50.graph_table", 3, seed)
+    from engine.packs.math.solvers.solid_view import projection_shapes, solid_name_jp
+
+    sq = mr.sub_questions[0]
+    assert sq.asked == "draw_solid"
+    assert [s.op for s in sq.steps] == [
+        "read_given_view", "identify_solid_from_partial", "draw_missing_view",
+    ]
+    # 問題図は平面図だけ（立面図は答え）。
+    assert mr.params["shown_view"] == "plan"
+    kinds = [f.kind for f in sq.answer.features]
+    assert kinds == ["solid_name", "elevation_shape"]
+    assert sq.answer.features[0].display == solid_name_jp(mr.params["solid_kind"])
+    elev, _plan = projection_shapes(mr.params["solid_kind"])
+    assert elev in sq.answer.features[1].srepr
+
+
+def test_g1_l50_level_sep():
+    """Lv1/Lv2/Lv3 は問う行為・答えの型・op 列・見せるビューがすべて相異する。"""
+    shapes = []
+    for level in (1, 2, 3):
+        _ctx, mr = _cell_mr("math.g1_l50.graph_table", level, 1)
+        sq = mr.sub_questions[0]
+        shapes.append(
+            (sq.asked, sq.answer.kind, mr.params["shown_view"], tuple(s.op for s in sq.steps))
+        )
+    assert len(set(shapes)) == 3
+    assert len({s[2] for s in shapes}) == 3  # both / none / plan
