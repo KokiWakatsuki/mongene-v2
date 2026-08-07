@@ -178,6 +178,23 @@ def _prism_sketch(params: dict[str, Any]) -> list[str]:
     return parts + _vertex_labels(params, pts)
 
 
+def _dimension_labels(
+    params: dict[str, Any], *, radius_at: tuple[float, float], height_at: tuple[float, float]
+) -> list[str]:
+    """底面の半径・高さを図に書き入れる（`dim_labels` = [半径, 高さ] の順）。
+
+    「見取図をかき、底面の半径と高さを図中に書き入れよ」という設問に、模範解答図が
+    答えきるために要る（features に値があっても、図に無ければ設問に答えていない）。
+    """
+    labels = list(params.get("dim_labels") or [])
+    out: list[str] = []
+    if len(labels) >= 1:
+        out.append(_text(radius_at[0], radius_at[1], str(labels[0])))
+    if len(labels) >= 2:
+        out.append(_text(height_at[0], height_at[1], str(labels[1]), anchor="end"))
+    return out
+
+
 def _cylinder_sketch(params: dict[str, Any]) -> list[str]:
     """円柱の見取図。上面は楕円まるごと、下面は手前半分だけ実線・奥半分を破線。"""
     r = float(params["radius_px"])
@@ -192,7 +209,13 @@ def _cylinder_sketch(params: dict[str, Any]) -> list[str]:
         _line(cx + r, cy_top, cx + r, cy_bottom),
         _arc_half(cx, cy_bottom, r, ry, lower=True),
         _arc_half(cx, cy_bottom, r, ry, lower=False),
-    ]
+        # 底面の半径を示す線分（中心から右へ）と高さを示す線分（左の母線に沿って）
+        _line(cx, cy_bottom, cx + r, cy_bottom, dashed=True),
+    ] + _dimension_labels(
+        params,
+        radius_at=(cx + r / 2, cy_bottom - 6),
+        height_at=(cx - r - 6, (cy_top + cy_bottom) / 2),
+    )
 
 
 def _cone_sketch(params: dict[str, Any]) -> list[str]:
@@ -208,7 +231,14 @@ def _cone_sketch(params: dict[str, Any]) -> list[str]:
         _line(cx + r, cy_bottom, cx, apex_y),
         _arc_half(cx, cy_bottom, r, ry, lower=True),
         _arc_half(cx, cy_bottom, r, ry, lower=False),
-    ]
+        # 底面の半径（中心から右へ）と高さ（頂点から底面の中心へ）を示す補助線
+        _line(cx, cy_bottom, cx + r, cy_bottom, dashed=True),
+        _line(cx, apex_y, cx, cy_bottom, dashed=True),
+    ] + _dimension_labels(
+        params,
+        radius_at=(cx + r / 2, cy_bottom - 6),
+        height_at=(cx - 6, (apex_y + cy_bottom) / 2),
+    )
 
 
 def _sphere_sketch(params: dict[str, Any]) -> list[str]:
@@ -409,7 +439,12 @@ def _net_base_parts(
 # 断面（section）と回転体の元図（rotation_source）
 # ---------------------------------------------------------------------------
 def _section_parts(params: dict[str, Any]) -> list[str]:
-    """頂点名つきの多角形1枚（見取図から抜き出した断面）。"""
+    """頂点名つきの多角形1枚（見取図から抜き出した断面／回転体の切り口）。
+
+    形は `section_shape` で切り替える。円柱を軸をふくむ平面で切ると長方形、
+    円錐なら二等辺三角形になる——ここを一律に長方形で描くと図が答えと食い違う。
+    """
+    shape = str(params.get("section_shape", "rectangle"))
     w = float(params["width_px"])
     h = float(params["height_px"])
     cx, cy = _W / 2, _H / 2
@@ -417,6 +452,10 @@ def _section_parts(params: dict[str, Any]) -> list[str]:
     b = (cx + w / 2, cy + h / 2)
     c = (cx + w / 2, cy - h / 2)
     d = (cx - w / 2, cy - h / 2)
+    if shape == "isosceles_triangle":
+        apex = (cx, cy - h / 2)
+        parts = [_polygon([a, b, apex])]
+        return parts + _vertex_labels(params, {"A": a, "B": b, "C": apex})
     parts = [_polygon([a, b, c, d])]
     if params.get("draw_diagonal"):
         parts.append(_line(*a, *c))
@@ -435,12 +474,24 @@ def _rotation_source_parts(params: dict[str, Any]) -> list[str]:
     x0 = cx - w / 2
     y_top = cy - h / 2
     y_bot = cy + h / 2
-    if shape == "right_triangle":
-        pts = [(x0, y_bot), (x0 + w, y_bot), (x0, y_top)]
+    if shape == "semicircle":
+        # 半円を直径（＝回転の軸）が縦になる向きに置く。直径の両端と弧の頂点に
+        # 名前を振れるよう、頂点の位置は3つ返す。
+        r = h / 2
+        parts = [
+            f'<path d="M {x0:.2f} {y_top:.2f} A {r:.2f} {r:.2f} 0 0 1 '
+            f'{x0:.2f} {y_bot:.2f} Z" fill="none" stroke="{_STROKE}" '
+            f'stroke-width="{_THIN}"/>',
+            _chain_line(x0, y_top - 30, x0, y_bot + 30),
+        ]
+        pts = [(x0, y_bot), (x0 + r, cy), (x0, y_top)]
     else:
-        pts = [(x0, y_bot), (x0 + w, y_bot), (x0 + w, y_top), (x0, y_top)]
-    parts = [_polygon(pts), _chain_line(x0, y_top - 30, x0, y_bot + 30)]
-    slots = {chr(ord("A") + i): p for i, p in enumerate(pts)}
+        if shape == "right_triangle":
+            pts = [(x0, y_bot), (x0 + w, y_bot), (x0, y_top)]
+        else:
+            pts = [(x0, y_bot), (x0 + w, y_bot), (x0 + w, y_top), (x0, y_top)]
+        parts = [_polygon(pts), _chain_line(x0, y_top - 30, x0, y_bot + 30)]
+    slots = {chr(ord("A") + i): q for i, q in enumerate(pts)}
     return parts + _vertex_labels(params, slots)
 
 

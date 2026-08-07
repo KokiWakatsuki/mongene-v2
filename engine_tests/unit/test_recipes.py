@@ -9867,3 +9867,84 @@ def test_g1_l53_level_sep():
         shapes.append(tuple(s.op for s in mr.sub_questions[0].steps))
     assert shapes[0] != shapes[1]
     assert len(shapes[0]) != len(shapes[1])
+
+
+# ---------------------------------------------------------------------------
+# C8 g1_l49.graph_table（回転体）
+#
+# ゲートが素通りする退化・図の誤りをここで固定する:
+#   - 底面の半径と高さが同じ（どちらがどちらから決まるかを問えない）
+#   - 断面の横を半径のままにする（軸の両側に現れるので2倍が正しい・この単元の典型誤り）
+#   - 問題図に答えの立体を先出しする
+#   - 見取図に寸法が書かれていない（設問が「図中に書き入れよ」なのに答えていない）
+# ---------------------------------------------------------------------------
+@pytest.mark.parametrize("seed", range(30))
+def test_g1_l49_revolution_name_property(seed):
+    _ctx, mr = _cell_mr("math.g1_l49.graph_table", 1, seed)
+    sq = mr.sub_questions[0]
+    assert sq.asked == "read_solid"
+    assert [s.op for s in sq.steps] == [
+        "identify_rotation_axis", "name_solid_of_revolution",
+    ]
+    expected = {"rectangle": "円柱", "right_triangle": "円錐", "semicircle": "球"}
+    assert sq.answer.correct == expected[mr.params["shape"]]
+    assert sq.answer.correct not in sq.answer.distractors
+    # 問題図は回転させる元の平面図形＋軸だけ（答えの立体を先出ししない）。
+    assert {e.kind for e in mr.visual_plan.elements} == {"rotation_source"}
+    assert mr.params["view"] == "rotation_source"
+
+
+@pytest.mark.parametrize("seed", range(30))
+def test_g1_l49_revolution_sketch_property(seed):
+    _ctx, mr = _cell_mr("math.g1_l49.graph_table", 2, seed)
+    sq = mr.sub_questions[0]
+    assert sq.asked == "draw_solid"
+    assert [s.op for s in sq.steps] == [
+        "identify_rotation_axis", "determine_radius_and_height", "draw_solid_sketch",
+    ]
+    axis_len, other_len = int(mr.params["axis_len"]), int(mr.params["other_len"])
+    # ★退化の封じ: 半径と高さが同じだと、どちらがどちらから決まるかを問えない。
+    assert axis_len != other_len
+    kinds = [f.kind for f in sq.answer.features]
+    assert kinds == ["solid_name", "base_radius", "height"]
+    # 底面の半径は軸に垂直な辺・高さは軸の辺。
+    assert sq.answer.features[1].display.endswith(str(other_len))
+    assert sq.answer.features[2].display.endswith(str(axis_len))
+    # 半円（球）は Lv2 に出ない（高さが無く「書き入れよ」が成り立たない）。
+    assert mr.params["shape"] in ("rectangle", "right_triangle")
+    # 模範解答図に寸法が書かれている（設問が「図中に書き入れよ」）。
+    svg = sq.answer.solution_svg_ref
+    assert f"{other_len}cm" in svg and f"{axis_len}cm" in svg
+
+
+@pytest.mark.parametrize("seed", range(30))
+def test_g1_l49_revolution_section_property(seed):
+    _ctx, mr = _cell_mr("math.g1_l49.graph_table", 3, seed)
+    sq = mr.sub_questions[0]
+    assert sq.asked == "draw_solid"
+    assert [s.op for s in sq.steps] == [
+        "identify_section_plane", "determine_section_shape", "draw_section",
+    ]
+    axis_len, other_len = int(mr.params["axis_len"]), int(mr.params["other_len"])
+    shape_of = {"rectangle": "長方形", "right_triangle": "二等辺三角形"}
+    kinds = [f.kind for f in sq.answer.features]
+    assert kinds == ["section_shape", "section_width", "section_height"]
+    assert sq.answer.features[0].display == shape_of[mr.params["shape"]]
+    # ★この単元の典型誤り: 切り口の横は軸の両側に現れるので半径の2倍。
+    assert sq.answer.features[1].display.endswith(str(2 * other_len))
+    assert sq.answer.features[2].display.endswith(str(axis_len))
+    # 図の形も答えと一致する（円錐なら三角形・円柱なら四角形）。
+    svg = sq.answer.solution_svg_ref
+    n_pts = len(re.findall(r'<polygon points="([^"]+)"', svg)[0].split(" "))
+    assert n_pts == (3 if mr.params["shape"] == "right_triangle" else 4)
+
+
+def test_g1_l49_level_sep():
+    """Lv1/Lv2/Lv3 は問う行為・答えの型・op 列がすべて相異する。"""
+    shapes = []
+    for level in (1, 2, 3):
+        _ctx, mr = _cell_mr("math.g1_l49.graph_table", level, 1)
+        sq = mr.sub_questions[0]
+        shapes.append((sq.asked, sq.answer.kind, tuple(s.op for s in sq.steps)))
+    assert len(set(shapes)) == 3
+    assert shapes[0][1] == "choice" and shapes[1][1] == "graph"

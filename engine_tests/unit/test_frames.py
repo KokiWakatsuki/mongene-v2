@@ -112,6 +112,8 @@ def test_graph_table_vocab_and_visual():
         "draw_graph", "read_point", "read_intersection", "read_table", "complete_table",
         "read_slope_intercept", "draw_segment", "draw_transformed_polygon",
         "read_box_plot", "draw_box_plot",
+        # C8/C10 空間図形: 立体を読む／見取図・投影図・展開図・断面をかく
+        "read_solid", "draw_solid",
     })
     assert f.visual == "required"
 

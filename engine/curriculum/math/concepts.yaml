@@ -1351,6 +1351,15 @@ concepts:
   - id: solid_volume.composite_or_reverse
     label: "立方体+正四角錐の複合立体の体積を求める、または体積から錐の高さを逆算する"
     unit: g1_l52
+  - id: solid_revolution.name
+    label: "平面図形を1辺のまわりに1回転させてできる立体が何かを判断する"
+    unit: g1_l49
+  - id: solid_revolution.sketch
+    label: "回転体の見取図をかき、底面の半径と高さがどの辺から決まるかを示す"
+    unit: g1_l49
+  - id: solid_revolution.section
+    label: "回転体を回転の軸をふくむ平面で切った切り口の形と寸法を構成する"
+    unit: g1_l49
   - id: sphere_measure.direct
     label: "半径から球の表面積・体積をそれぞれ直接求める"
     unit: g1_l53

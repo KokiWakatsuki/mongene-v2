@@ -44,6 +44,13 @@ _FORBIDDEN_BY_ASKED: dict[str, frozenset[str]] = {
     #   draw_box_plot … 問題図は数直線と目もりだけ。箱ひげ（＝答え）の先出し禁止。
     "read_box_plot": frozenset({"labeled_box_plot_value"}),
     "draw_box_plot": frozenset({"box_plot"}),
+    # C8 空間図形（g1_l49〜l51）・C10 の空間セル（g3_l55/l56）:
+    #   read_solid … 図（回転体の元図・投影図の片方）から立体を読む・選ぶ。答えの
+    #     立体そのものを図に出してはならない。
+    #   draw_solid … 見取図・投影図・展開図・断面をかく。問題図は元図や別のビューだけで、
+    #     答えの図（visuals/solid.py の "solid" 要素）を先出ししない。
+    "read_solid": frozenset({"solid"}),
+    "draw_solid": frozenset({"solid"}),
 }
 
 
@@ -175,6 +182,8 @@ GRAPH_TABLE_FRAME = Frame(
         "draw_transformed_polygon",  # C7 g1平面図形: 平行移動/回転移動/対称移動をかく
         # C11 箱ひげ図（g2_l56/g2_l57）: 箱ひげ図を読む／データから求めてかく
         "read_box_plot", "draw_box_plot",
+        # C8/C10 空間図形: 立体を読む／見取図・投影図・展開図・断面をかく
+        "read_solid", "draw_solid",
     }),
     visual="required",
     _forbidden_by_asked={
@@ -187,6 +196,8 @@ GRAPH_TABLE_FRAME = Frame(
         "draw_transformed_polygon": _FORBIDDEN_BY_ASKED["draw_transformed_polygon"],
         "read_box_plot": _FORBIDDEN_BY_ASKED["read_box_plot"],
         "draw_box_plot": _FORBIDDEN_BY_ASKED["draw_box_plot"],
+        "read_solid": _FORBIDDEN_BY_ASKED["read_solid"],
+        "draw_solid": _FORBIDDEN_BY_ASKED["draw_solid"],
     },
 )
 
