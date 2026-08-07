@@ -372,3 +372,128 @@ class _DummyCtx:
 
     def __init__(self, forbidden: frozenset[str] = frozenset()) -> None:
         self.frame = _DummyFrame(forbidden)
+
+
+# ---------------------------------------------------------------------------
+# 立体（visuals/solid.py）: 見取図・投影図・展開図・断面・回転体の元図
+#
+# 検査項目:
+#   - 5つの view がすべて <svg> を返し、モノクロ（黒のみ）である
+#   - 見取図に「見えない稜線（破線）」がある＝立体として読める
+#   - 「かく」セルの問題図（draw=False）は答えの図を先出ししない
+#   - 展開図の底面の形が側面の枚数で決まる（三角柱の底面が長方形にならない）
+#   - svg 内の <text> はすべて solid_labels() に含まれる（G-Q5v の whitelist 整合）
+# ---------------------------------------------------------------------------
+from engine.packs.math.visuals.solid import (  # noqa: E402
+    render_solid_svg,
+    solid_labels,
+)
+
+_SOLID_CASES: dict[str, dict[str, Any]] = {
+    "sketch_prism": {
+        "view": "sketch", "solid_kind": "rectangular_prism",
+        "width_px": 160, "height_px": 110, "depth_px": 90,
+        "vertices": ["A", "B", "C", "D", "E", "F", "G", "H"],
+    },
+    "sketch_cylinder": {
+        "view": "sketch", "solid_kind": "cylinder", "radius_px": 80, "height_px": 150,
+    },
+    "sketch_cone": {
+        "view": "sketch", "solid_kind": "cone", "radius_px": 80, "height_px": 170,
+    },
+    "sketch_pyramid": {
+        "view": "sketch", "solid_kind": "square_pyramid",
+        "width_px": 150, "height_px": 150, "depth_px": 90,
+        "vertices": ["A", "B", "C", "D", "E"],
+    },
+    "projection": {
+        "view": "projection", "solid_kind": "cylinder",
+        "width_px": 140, "height_px": 120, "shown_view": "both",
+    },
+    "net_cylinder": {
+        "view": "net", "solid_kind": "cylinder", "radius_px": 45,
+        "height_px": 130, "band_width_px": 280, "width_px": 0,
+    },
+    "net_cone": {
+        "view": "net", "solid_kind": "cone", "radius_px": 40, "slant_px": 120,
+        "sector_angle_deg": 120, "width_px": 0, "height_px": 0,
+    },
+    "net_prism": {
+        "view": "net", "solid_kind": "triangular_prism", "width_px": 70,
+        "height_px": 140, "face_count": 3, "base_px": 70,
+    },
+    "section": {
+        "view": "section", "width_px": 200, "height_px": 130,
+        "draw_diagonal": True, "vertices": ["A", "E", "G", "C"],
+    },
+    "rotation_source": {
+        "view": "rotation_source", "shape": "right_triangle",
+        "width_px": 110, "height_px": 150, "vertices": ["B", "C", "A"],
+    },
+}
+
+
+def test_solid_all_views_render_monochrome_svg():
+    for name, params in _SOLID_CASES.items():
+        svg = render_solid_svg(params, draw=True)
+        assert svg.startswith("<svg"), name
+        assert svg.endswith("</svg>"), name
+        # モノクロ印刷可: 色は黒か none のみ（彩度で情報を区別しない）。
+        colors = set(re.findall(r'(?:stroke|fill)="(#[0-9a-fA-F]{6})"', svg))
+        assert colors <= {"#000000"}, (name, colors)
+
+
+def test_solid_sketch_has_hidden_edges():
+    """見取図には見えない稜線（破線）がある＝立体として読める。"""
+    for name in ("sketch_prism", "sketch_cylinder", "sketch_cone", "sketch_pyramid"):
+        svg = render_solid_svg(_SOLID_CASES[name], draw=True)
+        assert "stroke-dasharray" in svg, name
+
+
+def test_solid_problem_figure_does_not_leak_answer():
+    """「かく」セルの問題図（draw=False）は答えの図を描かない。"""
+    for name in ("sketch_prism", "net_cylinder", "net_cone", "net_prism", "section"):
+        svg = render_solid_svg(_SOLID_CASES[name], draw=False)
+        # 外枠の透明な rect だけ（描画要素なし）。
+        assert "<polygon" not in svg and "<ellipse" not in svg, name
+        assert "<circle" not in svg and "<path" not in svg, name
+    # 回転体の元図は答えではないので、常に描かれる。
+    src = render_solid_svg(_SOLID_CASES["rotation_source"], draw=False)
+    assert "<polygon" in src
+
+
+def test_solid_projection_shows_only_the_given_view():
+    """投影図の問題図は「示されている側」だけを描く（もう一方が答え）。"""
+    params = dict(_SOLID_CASES["projection"])
+    params["shown_view"] = "plan"
+    svg = render_solid_svg(params, draw=False)
+    assert "平面図" in svg and "立面図" not in svg
+
+
+def test_solid_net_base_shape_follows_face_count():
+    """★展開図の底面の形は側面の枚数で決まる（三角柱の底面が長方形にならない）。"""
+    tri = render_solid_svg(_SOLID_CASES["net_prism"], draw=True)
+    # 三角柱: 側面3枚（4点の polygon）＋底面2枚（3点の polygon）
+    polys = re.findall(r'<polygon points="([^"]+)"', tri)
+    sizes = sorted(len(p.split(" ")) for p in polys)
+    assert sizes == [3, 3, 4, 4, 4], sizes
+
+    square = dict(_SOLID_CASES["net_prism"])
+    square.update({"solid_kind": "square_prism", "face_count": 4})
+    polys4 = re.findall(r'<polygon points="([^"]+)"', render_solid_svg(square, draw=True))
+    assert sorted(len(p.split(" ")) for p in polys4) == [4] * 6
+
+
+def test_solid_text_nodes_are_covered_by_labels():
+    """svg 内の <text> はすべて solid_labels() に含まれる（G-Q5v の whitelist 整合）。
+
+    投影図の「立面図」「平面図」は図の見出しであって寸法ではないので、
+    labels に載せる必要があるかは呼び出し側（recipe）が決める＝ここでは除いて検査する。
+    """
+    for name, params in _SOLID_CASES.items():
+        if params["view"] == "projection":
+            continue
+        svg = render_solid_svg(params, draw=True)
+        texts = re.findall(r"<text[^>]*>([^<]*)</text>", svg)
+        allowed = set(solid_labels(params))
+        assert set(texts) <= allowed, (name, set(texts) - allowed)
