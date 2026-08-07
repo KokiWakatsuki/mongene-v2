@@ -19,7 +19,21 @@ source_desc: |
   持たず（g2_l30 Lv3・g3_l31 で作図小問を落とした前例と同型）、また Lv3 の example
   自体には作図の小問が無い。図が無くても場面が一意に定まるよう、頂点の並び（ABCD の順）
   と点 P の通る辺の順（BC→CD）・出発点・向き（D まで）を本文で言い切る。
-  台帳 Lv4（誘導なし・グラフに表す）は作図小問を含むため本タスクの対象外（未実装のまま）。
+  台帳 Lv4（誘導なし・グラフに表す）は当初「作図小問を含むため対象外」としていたが、
+  word_problem の frame の asked に `draw_graph` を足して実装した（2026-08-07）。
+  frame の分担は「文章題か図の問題か」であって「図をかかせるか否か」ではない、という
+  判断（frames.py の当該コメント参照）。同じ手は g2_l29.word_problem Lv4 にも効く。
+  Lv4 desc: 誘導なし:場合分けとグラフ構成を自分で行う融合。
+       example: 1辺 8cm の正方形 ABCD の周上を、点 P が A を出発して A→B→C の順に
+                毎秒 2cm で動く。P が動き始めてから x 秒後の三角形 APD の面積を y cm²
+                とするとき、x と y の関係をグラフに表し、面積が 24cm² になる時刻を
+                すべて求めよ。
+       ※経路を A→B→C から A→B→C→D に延ばした。2区間だと面積が「増加→一定」に
+         しかならず、指定の面積になる時刻が必ず1つに潰れる＝場合分けをしてもしなくても
+         答えが変わらない（ゲートが素通りする退化）。3区間にすると減少区間ができ、
+         答えが2つになって「すべて求めよ」が意味を持つ。
+       ※g3_l31.word_problem Lv4 と数の核（時刻）は共有するが、こちらは**グラフの
+         構成そのものが採点対象**（折れ点4つ）で asked も op 列も違う。
   【題材の注記】三角形 ABP は底辺 AB が正方形の1辺で固定なので、面積は辺BC上では
   経過時間の1次式、辺CD上では一定になる（台帳 example の答えも y=3x と y=18）。
   レッスン名は「2次関数」だが、この example の構成では面積の式そのものは2次にならない。
@@ -47,6 +61,19 @@ levels:
     text: {tier: T1, template: wp_quadratic_function_guided_v1}
     hints: [steps_prefix]
     concept_tags: [quadratic_function.word_problem_moving_point_area]
+    cause_tags: []
+  "4":
+    signature: word_problem_area_graph_and_times
+    recipe: math.word_problem_area_graph_and_times
+    params:
+      side_candidates: [6, 8, 10, 12, 14, 16, 18, 20, 22, 24]
+      speed_candidates: [1, 2, 3, 4]
+    given: [scenario]
+    asked: [draw_graph, value]
+    visual: none
+    text: {tier: T1, template: wp_linear_solo_v1}
+    hints: [steps_prefix]
+    concept_tags: [quadratic_function.word_problem_area_graph_and_times]
     cause_tags: []
 remedial:
   default_level: 3

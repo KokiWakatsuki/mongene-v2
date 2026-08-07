@@ -109,4 +109,88 @@ def solve_linear_equation(equation_str: str, mode: object) -> Solution:
     return Solution(answer=answer, steps=steps)
 
 
-__all__ = ["solve_linear_equation"]
+# ---------------------------------------------------------------------------
+# g1_l27.word_problem Lv4: 往復の道のりと平均の速さ（一次方程式の融合）
+#
+# 【台帳 example から離れた点と、その理由】台帳の Lv4 は「行きと帰りで速さの異なる
+# 移動を自分で設定し、往復にかかった時間と平均の速さの関係が一次方程式で表せるような
+# **問題をつくり**、その問題を解け」＝作問そのものを問う設問で、M0 の答えの型
+# （SymbolicAnswer / ChoiceAnswer / GraphAnswer）のどれにも落ちない。
+# そこで「設定を自分で置く」部分は engine が固定し、**誘導なしで2つの量を自分で順に
+# 出す**形に落とす（箱ひげ図の記述セルで「説明せよ」の結論だけを答えさせたのと同じ手）。
+#   往復の時間 T から片道の道のり d を一次方程式 d/a + d/b = T で求め、
+#   さらに往復の平均の速さ 2d/T を求める。
+# desc の「往復にかかった時間と平均の速さの関係が一次方程式で表せる」はこの形で満たす。
+#
+# 【平均の速さを問うだけにしない理由】平均の速さは 2ab/(a+b)（調和平均）で
+# **道のりに依らない**。平均の速さだけを問うと、一次方程式を立てずに速さ2つだけで
+# 答えが出てしまう（ゲートが素通りする退化）。道のりと組で問うことで、
+# 一次方程式を解く段が必ず要る形になる。
+# ---------------------------------------------------------------------------
+_ROUND_TRIP_AVG_OPS = [
+    "set_up_round_trip_equation",
+    "clear_denominators",
+    "solve_for_one_way_distance",
+    "compute_round_trip_distance",
+    "compute_average_speed",
+]
+
+_ROUND_TRIP_AVG_NARRATION: dict[str, str] = {
+    "set_up_round_trip_equation": "片道の道のりを x とおき、行きにかかる時間と帰りにかかる時間の和が往復の時間に等しいという方程式をつくる。",
+    "clear_denominators": "両辺に分母の最小公倍数をかけて、分数のない形に直す。",
+    "solve_for_one_way_distance": "方程式を解いて片道の道のりを求める。",
+    "compute_round_trip_distance": "片道の道のりを二倍して、往復の道のり全体を求める。",
+    "compute_average_speed": "往復の道のりを往復にかかった時間でわって、往復の平均の速さを求める。",
+}
+
+_ROUND_TRIP_AVG_PHRASE: dict[str, str] = {
+    "set_up_round_trip_equation": "時間の和についての方程式をつくる",
+    "clear_denominators": "分母をはらう",
+    "solve_for_one_way_distance": "片道の道のりを求める",
+    "compute_round_trip_distance": "往復の道のりを求める",
+}
+
+
+@register_solver("math.solve_round_trip_average_speed")
+def solve_round_trip_average_speed(
+    speed_go: object, speed_back: object, total_time: object
+) -> Solution:
+    """往復の片道の道のりと平均の速さを求める（g1_l27.word_problem Lv4）。
+
+    問題パラメータ（行きの速さ・帰りの速さ・往復の時間）だけから導く。
+    x/a + x/b = T を既存ソルバ `math.solve_linear_equation` で解いて片道の道のり x を
+    得たうえで、往復の平均の速さ 2x/T を合成する（方程式を解く段は再実装しない）。
+    """
+    a = sympy.Rational(str(speed_go))
+    b = sympy.Rational(str(speed_back))
+    t = sympy.Rational(str(total_time))
+    if a <= 0 or b <= 0 or t <= 0:
+        raise ValueError("速さ・時間は正であること")
+    if a == b:
+        raise ValueError("行きと帰りの速さが同じだと往復が2区間に分かれない")
+
+    inner = solve_linear_equation(f"x/{a} + x/{b} = {t}", "clear_denominators_simple")
+    assert isinstance(inner.answer, SymbolicAnswer)
+    distance = sympy.nsimplify(sympy.sympify(inner.answer.srepr))
+    average = sympy.nsimplify(2 * distance / t)
+    # 恒真: 平均の速さは調和平均 2ab/(a+b) に一致する（道のりに依らない）。
+    if not (average - 2 * a * b / (a + b)).equals(0):
+        raise ValueError(f"平均の速さが調和平均と一致しない: {average}")
+
+    pair = sympy.Tuple(distance, average)
+    srepr = sympy.srepr(pair)
+    disp = f"片道の道のりは{fmt_number(distance)}km、往復の平均の速さは時速{fmt_number(average)}km"
+    steps = [
+        Step(
+            op=op,
+            args=[],
+            result_srepr=srepr if i == len(_ROUND_TRIP_AVG_OPS) - 1 else "",
+            result_display=disp if i == len(_ROUND_TRIP_AVG_OPS) - 1 else _ROUND_TRIP_AVG_PHRASE[op],
+            narration=_ROUND_TRIP_AVG_NARRATION[op],
+        )
+        for i, op in enumerate(_ROUND_TRIP_AVG_OPS)
+    ]
+    return Solution(answer=SymbolicAnswer(srepr=srepr, display=disp), steps=steps)
+
+
+__all__ = ["solve_linear_equation", "solve_round_trip_average_speed"]

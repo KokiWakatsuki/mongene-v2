@@ -546,6 +546,9 @@ concepts:
   - id: equation.word_problem_round_trip
     label: "往復の時間の和から道のりを求める方程式を立て解く（文章題）"
     unit: g1_l27
+  - id: equation.word_problem_round_trip_average_speed
+    label: "往復の時間から片道の道のりを方程式で求め、さらに往復の平均の速さを求める"
+    unit: g1_l27
   - id: equation.word_problem_catch_up
     label: "道のりが等しい関係から追いつく時間を求める（文章題）"
     unit: g1_l27
@@ -1259,6 +1262,9 @@ concepts:
     unit: g3_l36
   - id: quadratic_function.word_problem_moving_point_area
     label: "動点がつくる三角形の面積を、区間ごとに経過時間の式で表す"
+    unit: g3_l38
+  - id: quadratic_function.word_problem_area_graph_and_times
+    label: "動点の面積の変化を区間ごとに構成してグラフに表し、指定の面積になる時刻をすべて求める"
     unit: g3_l38
   # --- C14 word_problem 横展開: 三平方の定理の利用（g3_l53/l55/l56） ---
   - id: pythagorean.word_problem_rhombus_diagonal_area

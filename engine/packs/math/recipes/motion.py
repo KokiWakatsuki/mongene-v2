@@ -477,9 +477,128 @@ def _construct_all_times(p: dict[str, Any], rng: Rng) -> tuple[int, int, int, st
     return s, v, area, la + lb + lc + ld + lp, scenario, ask_v
 
 
+# ---------------------------------------------------------------------------
+# g3_l38.word_problem Lv4: グラフを構成してから時刻をすべて求める（誘導なし・融合）
+#
+# 【なぜ word_problem で作図の小問を持つのか】台帳 example は「x と y の関係を
+# グラフに表し、面積が S cm² になる時刻をすべて求めよ」＝場面文を読んで自分で区間に
+# 分け、グラフを構成してから答えるところまでが一続きの問い。graph_table 側に置くと
+# 場面文（scenario）が使えないので、word_problem の asked に `draw_graph` を足した
+# （frames.py の当該コメント参照）。以前このセルが「作図小問を含むため対象外」と
+# されていたのは、この frame 制約が理由だった。
+#
+# 【g3_l31.word_problem Lv4 との差】数の核（面積が S になる時刻）は共有するが、
+# こちらは**グラフの構成そのものが採点対象**（折れ点4つ）で、asked も op 列も違う。
+# 経路が A→B→C→D なのは両者に共通（2区間だと答えが1つに潰れる＝退化。
+# solvers/motion.py の `solve_moving_point_area_all_times` の docstring 参照）。
+# ---------------------------------------------------------------------------
+_WP_GRAPH_AND_TIMES_CONCEPTS = [
+    "quadratic_function.word_problem_area_graph_and_times",
+]
+
+
+@register_recipe(
+    "math.word_problem_area_graph_and_times",
+    provides_concepts=_WP_GRAPH_AND_TIMES_CONCEPTS,
+)
+def word_problem_area_graph_and_times_recipe(ctx: CellContext, rng: Rng) -> MR:
+    """面積のグラフをかき、指定の面積になる時刻をすべて求める（g3_l38.word_problem Lv4）。"""
+    p = cast("dict[str, Any]", ctx.spec_level.params)
+    s, v, area, labels_txt, scenario, ask = _construct_graph_and_times(p, rng)
+
+    graph_sol = cast(
+        Solution, REGISTRY.solver("math.draw_three_interval_area_graph_features")(s, v)
+    )
+    times_sol = cast(
+        Solution, REGISTRY.solver("math.solve_moving_point_area_all_times")(s, v, area)
+    )
+    assert isinstance(graph_sol.answer, GraphAnswer)
+    assert isinstance(times_sol.answer, SymbolicAnswer)
+    # 恒真: 答えの時刻はどちらもグラフの折れ点の間（増加区間・減少区間）にある。
+    breaks = [sympy.sympify(f.srepr) for f in graph_sol.answer.features]
+    t_lo, t_mid1, t_mid2, t_hi = (b[0] for b in breaks)
+    t1, t3 = sympy.sympify(times_sol.answer.srepr)
+    assert t_lo < t1 < t_mid1 and t_mid2 < t3 < t_hi, (
+        f"答えの時刻が増加区間・減少区間の内側にない: {t1}, {t3}"
+    )
+
+    return MR(
+        signature=ctx.spec_level.signature,
+        family=ctx.family,
+        level=ctx.level,
+        purpose=ctx.purpose,
+        seed=0,
+        params={"numbers": _wp_numbers(s, v, area), "labels": labels_txt},
+        given={"scenario": scenario},
+        context_slots={"ask_value": ask},
+        sub_questions=[
+            _wp_sub(ctx, label="(1)", asked="draw_graph", sol=graph_sol),
+            _wp_sub(ctx, label="(2)", asked="value", sol=times_sol),
+        ],
+        visual_plan=None,
+        provenance=Provenance(recipe="math.word_problem_area_graph_and_times"),
+    )
+
+
+def _construct_graph_and_times(
+    p: dict[str, Any], rng: Rng
+) -> tuple[int, int, int, str, str, str]:
+    """(1辺, 速さ, 面積, 点名, 場面文, 問い)。
+
+    g3_l31 Lv4 と同型の列挙だが、こちらは**グラフの折れ点も答え**なので漏洩の条件が
+    厳しい。折れ点は (0,0)・(s/v, s²/2)・(2s/v, s²/2)・(3s/v, 0) で、この時刻と
+    面積のどれかが本文の数値と一致すると G-Q5t が落ちる。
+    G-Q5t の whitelist は given（＝場面文）由来なので 1辺 s と速さ v は許可されるが、
+    面積は問い（context_slots）にあるため許可されない。したがって
+    「折れ点の値・答えの時刻」が面積と一致する組と、本文の "cm²" 由来の 2 と
+    一致する組（速さが 2 のときを除く）を構成の段階で外す。
+    g3_l31 側の候補列挙（`_construct_all_times`）はこの制約を持たないので共有しない
+    ——共有すると既に検証済みの g3_l31 の出力まで変わってしまう。
+    """
+    triples: list[tuple[int, int, int]] = []
+    for side in p["side_candidates"]:
+        s_i = int(side)
+        for speed in p["speed_candidates"]:
+            v_i = int(speed)
+            if (3 * s_i) % v_i or s_i % v_i:
+                continue
+            for t1 in range(1, s_i // v_i):
+                if (s_i * v_i * t1) % 2:
+                    continue
+                area_i = s_i * v_i * t1 // 2
+                if area_i >= s_i**2 // 2:
+                    continue
+                t3 = 3 * s_i // v_i - t1
+                # 答えとして本文に現れうる値の全体（グラフの折れ点＋答えの時刻）。
+                answer_values = {
+                    0, s_i // v_i, 2 * s_i // v_i, 3 * s_i // v_i,
+                    s_i**2 // 2, t1, t3,
+                }
+                forbidden = {area_i}
+                if v_i != _AREA_UNIT_TOKEN and s_i != _AREA_UNIT_TOKEN:
+                    forbidden.add(_AREA_UNIT_TOKEN)  # 本文の "cm²" 由来の 2
+                if answer_values & forbidden:
+                    continue
+                triples.append((s_i, v_i, area_i))
+    idx = int(draw({"int_set": list(range(len(triples)))}, rng))
+    s, v, area = triples[idx]
+    la, lb, lc, ld, lp = _draw_distinct_points(5, rng)
+    labels_txt = la + lb + lc + ld + lp
+    scenario = (
+        f"1辺が{s}cmの正方形{la}{lb}{lc}{ld}の周上を、点{lp}が{la}を出発して"
+        f"{la}→{lb}→{lc}→{ld}の順に毎秒{v}cmの速さで{ld}まで動く。"
+        f"点{lp}が動き始めてからx秒後の三角形{la}{lp}{ld}の面積をy cm²とする。"
+    )
+    ask = (
+        f"xとyの関係をグラフに表し、面積が{area}cm²になる時刻をすべて求めよ。"
+    )
+    return s, v, area, labels_txt, scenario, ask
+
+
 __all__ = [
     "solve_moving_point_area_recipe",
     "draw_area_time_graph_segment",
     "word_problem_moving_points_area_recipe",
     "word_problem_moving_point_all_times_recipe",
+    "word_problem_area_graph_and_times_recipe",
 ]

@@ -26,6 +26,10 @@ _FORBIDDEN_BY_ASKED: dict[str, frozenset[str]] = {
     "read_intersection": frozenset({"grid_with_both_lines"}),
     # draw_segment（g2_l23 Lv2・かく）: 問題図は空の方眼で禁止要素なし（明示登録）
     "draw_segment": frozenset(),
+    # draw_graph（word_problem の融合セル・g3_l38 Lv4）: 場面文だけを与え、問題図は
+    # 出さない（生徒が座標軸から自分で構成する）。禁止要素なしを明示登録する
+    # ——暗黙に「制約なし」で通すのではなく、意図として書き残すため。
+    "draw_graph": frozenset(),
     "read_point": frozenset({"labeled_answer_point"}),
     # 傾き・切片を読む題材でも、答えの点/注記を図に先出ししない
     "read_slope_intercept": frozenset({"labeled_answer_point"}),
@@ -187,11 +191,22 @@ GRAPH_TABLE_FRAME = Frame(
 )
 
 # word_problem: 場面（T3）・数量を与え、立式/値を問う。図は optional。
+# word_problem に `draw_graph` を入れる理由（2026-08-07）:
+# 中学の文章題には「関係をグラフに表し、そのうえで値を求めよ」という融合問題があり
+# （g3_l38 Lv4・g2_l29 Lv4 の台帳 example がまさにこれ）、場面文を読んで自分で
+# 区間に分け、グラフを構成してから答えるところまでが一続きの問いになっている。
+# これを graph_table 側に置くと場面文（scenario/quantities）が使えず、
+# word_problem 側で asked を封じると台帳の example を実装できない。
+# フレームの分担は「文章題か図の問題か」であって「図をかかせるか否か」ではないので、
+# word_problem（visual=optional）に作図の asked を1つ足す。
+# 問題図に答えのグラフを先出ししないことは _FORBIDDEN_BY_ASKED で graph_table と
+# 同じ規約に揃える。
 WORD_PROBLEM_FRAME = Frame(
     form="word_problem",
     given_vocab=frozenset({"scenario", "quantities"}),
-    asked_vocab=frozenset({"formulation", "value"}),
+    asked_vocab=frozenset({"formulation", "value", "draw_graph"}),
     visual="optional",
+    _forbidden_by_asked={"draw_graph": _FORBIDDEN_BY_ASKED["draw_graph"]},
 )
 
 # proof（M1 対象・M0 は宣言のみ）: 前提・結論を与え、証明文を問う。

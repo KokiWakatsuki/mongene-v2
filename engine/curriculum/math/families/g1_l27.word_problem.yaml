@@ -13,10 +13,21 @@ source_desc: |
        example: 兄は分速80mで家を出発し、その6分後に弟が分速200mの自転車で同じ道を
                 追いかけた。弟が兄に追いつくのは弟が出発してから何分後か求めよ。
   Lv4 desc: ゴールも自分で設定する融合的な速さの応用(誘導なし)。
-       example: …自分で設定し、問題をつくり、その問題を解け。
-       ※Lv4 は「問題をつくれ」＝採点対象になる答えの型が存在しない（作問そのものを
-         問う設問）。M0 の答え型（SymbolicAnswer/ChoiceAnswer/GraphAnswer）のどれにも
-         落ちないので、このセルは**意図的に未実装のまま残す**（作図・証明と同じ扱い）。
+       example: A地点とB地点を往復する場面を考える。行きと帰りで速さの異なる移動を
+                自分で設定し、往復にかかった時間と平均の速さの関係が一次方程式で
+                表せるような問題をつくり、その問題を解け。
+       ※【再定義】Lv4 は「問題をつくれ」＝作問そのものを問う設問で、M0 の答え型
+         （SymbolicAnswer/ChoiceAnswer/GraphAnswer）のどれにも落ちない。以前は
+         **意図的に未実装のまま残していた**が、箱ひげ図の記述セル（g2_l57.word_problem）
+         で採った手——「書かせる」部分は solution_steps が担い、採点対象は決定論で
+         判定できる結論にする——をここにも適用して実装した。
+         「設定を自分で置く」部分は engine が固定し、**誘導なしで2つの量を自分で順に
+         出す**形に落とす（往復の時間 → 片道の道のり → 往復の平均の速さ）。
+         desc の「往復にかかった時間と平均の速さの関係が一次方程式で表せる」は
+         この形で満たす。台帳 example の「問題をつくれ」からは離れる。
+       ※平均の速さだけを問わない理由: 平均の速さ 2ab/(a+b) は調和平均で**道のりに
+         依らない**ため、単独で問うと一次方程式を立てずに速さ2つだけで答えが出る
+         （ゲートが素通りする退化）。道のりと組で問うと立式の段が必ず要る。
   ---
   recipe は共通の math.word_problem_linear_equation（scenario_kind で場面を選ぶ）。
   【level_sep】Lv2 は誘導あり2小問・式は x/a + x/b = t（分数係数＝mode
@@ -72,6 +83,25 @@ levels:
     text: {tier: T1, template: wp_linear_solo_v1}
     hints: [steps_prefix]
     concept_tags: [equation.word_problem_catch_up]
+    cause_tags: []
+  "4":
+    signature: word_problem_round_trip_average_speed
+    # 共通 recipe（math.word_problem_linear_equation）は「x を解いて m·x+n を答える」型で
+    # 答えを1つしか返せない。このセルは答えが (片道の道のり, 平均の速さ) の対なので
+    # 独立 recipe にする（6セル共通の枠組みには手を入れない＝Open-Closed）。
+    recipe: math.word_problem_round_trip_average_speed
+    params:
+      # 平均の速さ 2ab/(a+b) が整数になる (a,b) の組は recipe が列挙する。
+      speed_candidates: [3, 4, 5, 6, 8, 10, 12, 15, 16, 20, 24, 30, 40, 48, 60]
+      time_range: [2, 15]
+      place_candidates: [家|駅, 学校|図書館, 家|公園, 駅|港, キャンプ場|山頂, 家|海岸,
+                         宿|展望台, 家|工場, 学校|体育館, 駅|美術館]
+    given: [scenario]
+    asked: [value]
+    visual: none
+    text: {tier: T1, template: wp_linear_solo_v1}
+    hints: [steps_prefix]
+    concept_tags: [equation.word_problem_round_trip_average_speed]
     cause_tags: []
 remedial:
   default_level: 2

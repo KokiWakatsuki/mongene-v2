@@ -351,9 +351,87 @@ def solve_moving_point_area_all_times(s: object, v: object, area: object) -> Sol
     return Solution(answer=SymbolicAnswer(srepr=srepr, display=disp), steps=steps)
 
 
+@register_solver("math.draw_three_interval_area_graph_features")
+def draw_three_interval_area_graph_features(s: object, v: object) -> Solution:
+    """3辺を渡る動点の面積グラフ（増加→一定→減少の折れ線）をかく（g3_l38.word_problem Lv4）。
+
+    A→B→C→D の経路なので折れ点は4つ:
+      (0, 0) → (s/v, s²/2) → (2s/v, s²/2) → (3s/v, 0)
+    既存の 2 区間版（`draw_piecewise_area_graph_features`・A→B→C）の素直な延長で、
+    面積はいずれも同じ shoelace 公式（`_shoelace_triangle_area`）で求める
+    ＝新しい幾何ロジックは足さない。問題パラメータ（s・v）だけから再計算する。
+    """
+    s_v = sympy.Rational(str(s))
+    v_v = sympy.Rational(str(v))
+    if s_v <= 0 or v_v <= 0:
+        raise ValueError("1辺・速さは正であること")
+    t1 = s_v / v_v
+    times = [sympy.Integer(0), t1, 2 * t1, 3 * t1]
+
+    def _area_at(t: sympy.Rational) -> sympy.Rational:
+        d = v_v * t
+        if d <= s_v:
+            px, py = d, sympy.Integer(0)
+        elif d <= 2 * s_v:
+            px, py = s_v, d - s_v
+        else:
+            px, py = 3 * s_v - d, s_v
+        return _shoelace_triangle_area(
+            sympy.Integer(0), sympy.Integer(0), px, py, sympy.Integer(0), s_v
+        )
+
+    breakpoints = [(t, _area_at(t)) for t in times]
+    peak = s_v**2 / 2
+    # 区間ごとの式（増加 → 一定 → 減少）と shoelace 再計算が一致することを確かめる。
+    expected = [sympy.Integer(0), peak, peak, sympy.Integer(0)]
+    if any(not (b - e).equals(0) for (_t, b), e in zip(breakpoints, expected, strict=True)):
+        raise ValueError("区間ごとの式と shoelace 再計算が一致しない")
+
+    features = [
+        Feature(kind="breakpoint", srepr=sympy.srepr(sympy.Tuple(x, y)), display=f"({x}, {y})")
+        for x, y in breakpoints
+    ]
+    ops = [
+        "identify_intervals",
+        "express_area_on_increasing_interval",
+        "express_area_on_constant_interval",
+        "express_area_on_decreasing_interval",
+        "plot_breakpoints",
+        "draw_polyline",
+    ]
+    narration = {
+        "identify_intervals": "動く点がどの辺の上にあるかで、時間を区間に分ける。",
+        "express_area_on_increasing_interval": "はじめの区間では高さが時間に比例するので、面積を時間の1次式で表す。",
+        "express_area_on_constant_interval": "次の区間では底辺も高さも変わらないので、面積が一定になることを確かめる。",
+        "express_area_on_decreasing_interval": "最後の区間では高さが減っていくので、面積を時間の1次式で表す。",
+        "plot_breakpoints": "区間の境目と両端で面積を求め、その組を座標とみて点をとる。",
+        "draw_polyline": "とった点を順に線分で結び、区間ごとに式が変わるグラフをかく。",
+    }
+    phrase = {
+        "identify_intervals": "時間を区間に分ける",
+        "express_area_on_increasing_interval": "増えていく区間の式をつくる",
+        "express_area_on_constant_interval": "一定の区間であることを確かめる",
+        "express_area_on_decreasing_interval": "減っていく区間の式をつくる",
+        "plot_breakpoints": "区間の境目の点をとる",
+    }
+    srepr = sympy.srepr(sympy.Tuple(*(sympy.Tuple(x, y) for x, y in breakpoints)))
+    steps = [
+        Step(
+            op=op,
+            args=[],
+            result_srepr=srepr if i == len(ops) - 1 else "",
+            result_display="区間の境目を折れ点とする折れ線" if i == len(ops) - 1 else phrase[op],
+            narration=narration[op],
+        )
+        for i, op in enumerate(ops)
+    ]
+    return Solution(answer=GraphAnswer(features=features, solution_svg_ref=""), steps=steps)
+
+
 __all__ = [
     "solve_moving_point_area",
     "draw_piecewise_area_graph_features",
+    "draw_three_interval_area_graph_features",
     "express_moving_points_area",
     "solve_moving_points_area_time",
     "solve_moving_point_area_all_times",

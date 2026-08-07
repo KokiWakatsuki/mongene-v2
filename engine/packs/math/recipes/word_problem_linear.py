@@ -749,6 +749,120 @@ def _derive_steps(scene: LinearScene, answer_value: sympy.Expr) -> list[Step]:
     ]
 
 
+# ---------------------------------------------------------------------------
+# g1_l27.word_problem Lv4: 往復の道のりと平均の速さ（誘導なし・融合）
+#
+# 台帳 Lv4 は「問題をつくれ」＝作問そのものを問う設問で、M0 の答えの型に落ちない。
+# 設定は engine が固定し、**誘導なしで2つの量を自分で順に出す**形に落とす。
+# 逸脱の理由と「平均の速さだけを問わない理由」は
+# solvers/equation.py の `solve_round_trip_average_speed` の docstring を参照。
+#
+# 共通 recipe（`word_problem_linear_equation`）は「x を解いて m·x+n を答える」型で
+# 答えが1つしか返せないため、答えが (道のり, 平均の速さ) の対になるこのセルは
+# 独立した recipe にする（6セル共通の枠組みには手を入れない＝Open-Closed）。
+# ---------------------------------------------------------------------------
+_ROUND_TRIP_AVG_RECIPE = "math.word_problem_round_trip_average_speed"
+_ROUND_TRIP_AVG_CONCEPTS = ["equation.word_problem_round_trip_average_speed"]
+
+
+@register_recipe(_ROUND_TRIP_AVG_RECIPE, provides_concepts=_ROUND_TRIP_AVG_CONCEPTS)
+def word_problem_round_trip_average_speed(ctx: CellContext, rng: Rng) -> MR:
+    """往復の片道の道のりと平均の速さを求める（g1_l27.word_problem Lv4・誘導なし1小問）。"""
+    p = ctx.spec_level.params
+    speed_go, speed_back, total_time, start, goal = _draw_round_trip_average_scene(p, rng)
+
+    solver = REGISTRY.solver("math.solve_round_trip_average_speed")
+    sol = cast(Solution, solver(speed_go, speed_back, total_time))
+    assert isinstance(sol.answer, SymbolicAnswer)
+    distance, average = sympy.sympify(sol.answer.srepr)
+    # 恒真: 行き・帰りにかかる時間の和が、本文の往復の時間に戻る。
+    assert (
+        sympy.Rational(distance, speed_go) + sympy.Rational(distance, speed_back) - total_time
+    ).equals(0), "往復の時間が本文の値に戻らない"
+
+    return MR(
+        signature=ctx.spec_level.signature,
+        family=ctx.family,
+        level=ctx.level,
+        purpose=ctx.purpose,
+        seed=0,
+        params={
+            # 本文に出ている数値だけ（答えの道のり・平均の速さは置かない）。
+            "numbers": {
+                "speed_go": str(speed_go),
+                "speed_back": str(speed_back),
+                "total_time": str(total_time),
+            },
+            "slots": {"start": start, "goal": goal},
+        },
+        given={
+            "scenario": (
+                f"{start}から{goal}まで、行きは時速{speed_go}km、帰りは同じ道を"
+                f"時速{speed_back}kmの速さで進んだところ、往復にかかった時間は"
+                f"{total_time}時間だった。"
+            )
+        },
+        context_slots={
+            "start": start,
+            "goal": goal,
+            "ask_value": (
+                f"{start}から{goal}までの片道の道のりと、往復の平均の速さを求めよ。"
+            ),
+        },
+        sub_questions=[
+            SubQuestionMR(
+                label="(1)",
+                asked="value",
+                answer=sol.answer,
+                steps=sol.steps,
+                concept_tags=list(
+                    ctx.spec_level.concept_tags or ctx.spec_family.concepts_default
+                ),
+                cause_tags=list(ctx.spec_level.cause_tags),
+            )
+        ],
+        visual_plan=None,
+        provenance=Provenance(recipe=_ROUND_TRIP_AVG_RECIPE),
+    )
+
+
+def _draw_round_trip_average_scene(
+    p: Mapping[str, Any], rng: Rng
+) -> tuple[int, int, int, str, str]:
+    """(行きの速さ, 帰りの速さ, 往復の時間, 出発地, 目的地)。
+
+    【組合せ数】(a, b) は平均の速さ 2ab/(a+b) が整数になる組だけ、往復の時間 t は
+    片道の道のりが整数になるものだけを列挙してから引く。地名10通りが乗る。
+
+    【退化と漏洩の封じ方】
+      - a == b だと往復が2区間に分かれない（時間の和が x/a + x/a に潰れる）ので除く
+      - 答え（片道の道のり・平均の速さ）が本文の数値（速さ2つ・往復の時間）と
+        一致する組は外す（本文を読むだけで答えが当たってしまう／G-Q5t の漏洩）
+    """
+    speeds = [int(v) for v in p["speed_candidates"]]
+    t_lo, t_hi = (int(v) for v in p["time_range"])
+    cands: list[tuple[int, int, int]] = []
+    for a in speeds:
+        for b in speeds:
+            if a >= b:
+                continue
+            avg = sympy.Rational(2 * a * b, a + b)
+            if avg.q != 1:
+                continue  # 平均の速さが整数になる組だけ（場面として自然）
+            for t in range(t_lo, t_hi + 1):
+                # 片道の道のり d は d/a + d/b = t の解＝t·a·b/(a+b)
+                d = sympy.Rational(t * a * b, a + b)
+                if d.q != 1:
+                    continue
+                if {int(d), int(avg)} & {a, b, t}:
+                    continue  # 答えが本文の数値と一致する組は外す
+                cands.append((a, b, t))
+    idx = int(draw({"int_set": list(range(len(cands)))}, rng))
+    a, b, t = cands[idx]
+    start, goal = _split_pair(str(draw(list(p["place_candidates"]), rng)))
+    return a, b, t, start, goal
+
+
 __all__ = [
     "FORMULATION_BUILDERS",
     "LinearFormulation",
@@ -757,4 +871,5 @@ __all__ = [
     "apply_answer_coeff",
     "solve_scene",
     "word_problem_linear_equation",
+    "word_problem_round_trip_average_speed",
 ]

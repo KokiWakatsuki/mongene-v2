@@ -54,8 +54,33 @@ def double_solve_word_problem_moving_point_all_times(mr: MR) -> Solution:
     return cast(Solution, solver(n["side"], n["speed"], n["area"]))
 
 
+@register_checker("math.word_problem_area_graph_and_times.double_solve")
+def double_solve_word_problem_area_graph_and_times(mr: MR) -> list[Solution]:
+    """小問と同順の list[Solution]（(1)=グラフの折れ点・(2)=時刻）を返す。
+
+    渡すのは `numbers`＝本文に出ている数値（1辺・速さ・面積）だけ。折れ点の座標も
+    答えの時刻も params に無いので、解き直しが答えの読み直しにならない。
+    """
+    n = mr.params["numbers"]
+    return [
+        cast(
+            Solution,
+            REGISTRY.solver("math.draw_three_interval_area_graph_features")(
+                n["side"], n["speed"]
+            ),
+        ),
+        cast(
+            Solution,
+            REGISTRY.solver("math.solve_moving_point_area_all_times")(
+                n["side"], n["speed"], n["area"]
+            ),
+        ),
+    ]
+
+
 __all__ = [
     "double_solve_solve_moving_point_area",
+    "double_solve_word_problem_area_graph_and_times",
     "double_solve_draw_area_time_graph_segment",
     "double_solve_word_problem_moving_points_area",
     "double_solve_word_problem_moving_point_all_times",

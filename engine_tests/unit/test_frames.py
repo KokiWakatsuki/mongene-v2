@@ -119,7 +119,10 @@ def test_graph_table_vocab_and_visual():
 def test_word_problem_vocab_and_visual():
     f = REGISTRY.frame("word_problem")
     assert f.given_vocab == frozenset({"scenario", "quantities"})
-    assert f.asked_vocab == frozenset({"formulation", "value"})
+    # draw_graph は「関係をグラフに表してから値を求めよ」という融合の文章題
+    # （g3_l38 Lv4・g2_l29 Lv4）のために足した。frame の分担は「文章題か図の問題か」
+    # であって「図をかかせるか否か」ではない（frames.py の当該コメント参照）。
+    assert f.asked_vocab == frozenset({"formulation", "value", "draw_graph"})
     assert f.visual == "optional"
 
 

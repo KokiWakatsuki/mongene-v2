@@ -9474,3 +9474,158 @@ def test_word_problem_moving_point_level_sep():
     assert shapes[0][0] != shapes[1][0]
     assert shapes[0][1] != shapes[1][1]
     assert shapes[0][2] != shapes[1][2]
+
+
+# ---------------------------------------------------------------------------
+# C1 g1_l27.word_problem Lv4（往復の道のりと平均の速さ・作問セルの再定義）
+#
+# ゲートが素通りする退化をここで固定する:
+#   - 行きと帰りの速さが同じ（往復が2区間に分かれず x/a + x/a に潰れる）
+#   - 答えが本文の数値と一致する（本文を読むだけで当たる）
+#   - 平均の速さが調和平均（＝道のりに依らない）から外れる
+# ---------------------------------------------------------------------------
+@pytest.mark.parametrize("seed", range(40))
+def test_word_problem_round_trip_average_speed_property(seed):
+    ctx = _make_ctx("math.g1_l27.word_problem", 4)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(
+        ctx, derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    )
+    assert mr.signature == "word_problem_round_trip_average_speed"
+    # 誘導なし＝変数の設定を与えない（Lv2 は scenario+quantities の2つ）。
+    assert set(mr.given.keys()) == {"scenario"}
+
+    n = mr.params["numbers"]
+    a, b, t = (int(n["speed_go"]), int(n["speed_back"]), int(n["total_time"]))
+    assert set(n) == {"speed_go", "speed_back", "total_time"}
+    # 行きと帰りの速さが相異＝往復が2区間に分かれる（x/a + x/a に潰れない）。
+    assert a != b and a > 0 and b > 0 and t > 0
+
+    sq = mr.sub_questions[0]
+    assert len(mr.sub_questions) == 1
+    assert sq.asked == "value"
+    assert [s.op for s in sq.steps] == [
+        "set_up_round_trip_equation",
+        "clear_denominators",
+        "solve_for_one_way_distance",
+        "compute_round_trip_distance",
+        "compute_average_speed",
+    ]
+
+    distance, average = sympy.sympify(sq.answer.srepr)
+    assert distance > 0 and average > 0
+    # 片道の道のりは x/a + x/b = t の解である。
+    assert sympy.simplify(distance / a + distance / b - t) == 0
+    # 平均の速さは往復の道のり ÷ 往復の時間 ＝ 調和平均 2ab/(a+b)。
+    assert sympy.simplify(average - 2 * distance / t) == 0
+    assert sympy.simplify(average - sympy.Rational(2 * a * b, a + b)) == 0
+    # 答えが本文の数値と一致しない（本文を読むだけで当たらない）。
+    assert not {int(distance), int(average)} & {a, b, t}
+
+    checker = REGISTRY.checker(
+        "math.word_problem_round_trip_average_speed.double_solve"
+    )
+    assert checker(mr).answer.srepr == sq.answer.srepr
+
+
+def test_word_problem_g1_l27_level_sep():
+    """g1_l27 の Lv2/Lv3/Lv4 は given・小問数・op 列が相異する。"""
+    shapes = []
+    for level in (2, 3, 4):
+        ctx = _make_ctx("math.g1_l27.word_problem", level)
+        mr = REGISTRY.recipe(ctx.spec_level.recipe)(
+            ctx, derive_rng(ctx.family, ctx.level, ctx.purpose, 1)
+        )
+        shapes.append(
+            (
+                tuple(sorted(mr.given)),
+                len(mr.sub_questions),
+                tuple(s.op for sq in mr.sub_questions for s in sq.steps),
+            )
+        )
+    assert len(set(shapes)) == 3
+    # Lv4 は Lv3 と同じ「誘導なし1小問」だが op 列が違う（平均の速さまで出す）。
+    assert shapes[1][0] == shapes[2][0] and shapes[1][1] == shapes[2][1]
+    assert shapes[1][2] != shapes[2][2]
+
+
+# ---------------------------------------------------------------------------
+# C6 g3_l38.word_problem Lv4（グラフを構成してから時刻をすべて求める・融合）
+#
+# ゲートが素通りする退化をここで固定する:
+#   - 折れ線が潰れる（増加区間・減少区間が無い＝全区間で一定）
+#   - 答えの時刻が1つに潰れる（場合分けをしなくても正解できる）
+#   - 答えの時刻が折れ点の外にある
+# ---------------------------------------------------------------------------
+@pytest.mark.parametrize("seed", range(40))
+def test_word_problem_area_graph_and_times_property(seed):
+    ctx = _make_ctx("math.g3_l38.word_problem", 4)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(
+        ctx, derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    )
+    assert mr.signature == "word_problem_area_graph_and_times"
+    # 誘導なし＝変数の設定も区間の分割も与えない（Lv3 は区間を小問で与える）。
+    assert set(mr.given.keys()) == {"scenario"}
+
+    n = mr.params["numbers"]
+    side, speed, area = int(n["side"]), int(n["speed"]), int(n["area"])
+    assert set(n) == {"side", "speed", "area"}
+
+    graph_sq, value_sq = mr.sub_questions
+    assert (graph_sq.asked, value_sq.asked) == ("draw_graph", "value")
+    assert graph_sq.answer.kind == "graph"
+    assert [f.kind for f in graph_sq.answer.features] == ["breakpoint"] * 4
+    assert [s.op for s in graph_sq.steps] == [
+        "identify_intervals",
+        "express_area_on_increasing_interval",
+        "express_area_on_constant_interval",
+        "express_area_on_decreasing_interval",
+        "plot_breakpoints",
+        "draw_polyline",
+    ]
+
+    pts = [sympy.sympify(f.srepr) for f in graph_sq.answer.features]
+    xs = [pt[0] for pt in pts]
+    ys = [pt[1] for pt in pts]
+    peak = sympy.Rational(side**2, 2)
+    # 折れ点は (0,0) → (s/v, s²/2) → (2s/v, s²/2) → (3s/v, 0)。
+    assert xs == [0, sympy.Rational(side, speed), 2 * sympy.Rational(side, speed),
+                  3 * sympy.Rational(side, speed)]
+    assert ys == [0, peak, peak, 0]
+    # ★退化の封じ: 増加区間と減少区間が本当にある（全区間一定に潰れない）。
+    assert ys[0] < ys[1] and ys[2] > ys[3]
+
+    times = sympy.sympify(value_sq.answer.srepr)
+    # ★退化の封じ: 答えは必ず2つ。
+    assert len(times) == 2
+    t_a, t_b = times
+    # それぞれが増加区間・減少区間の内側にある（折れ点の間）。
+    assert xs[0] < t_a < xs[1]
+    assert xs[2] < t_b < xs[3]
+    assert area < peak
+
+    checker = REGISTRY.checker("math.word_problem_area_graph_and_times.double_solve")
+    got = checker(mr)
+    assert [f.srepr for f in got[0].answer.features] == [
+        f.srepr for f in graph_sq.answer.features
+    ]
+    assert got[1].answer.srepr == value_sq.answer.srepr
+
+
+def test_word_problem_g3_l38_level_sep():
+    """g3_l38 の Lv3（誘導あり・式2つ）と Lv4（誘導なし・グラフ＋時刻）は相異する。"""
+    shapes = []
+    for level in (3, 4):
+        ctx = _make_ctx("math.g3_l38.word_problem", level)
+        mr = REGISTRY.recipe(ctx.spec_level.recipe)(
+            ctx, derive_rng(ctx.family, ctx.level, ctx.purpose, 1)
+        )
+        shapes.append(
+            (
+                tuple(sorted(mr.given)),
+                tuple(sq.asked for sq in mr.sub_questions),
+                tuple(s.op for sq in mr.sub_questions for s in sq.steps),
+            )
+        )
+    assert len(set(shapes)) == 2
+    assert shapes[0][1] == ("formulation", "formulation")
+    assert shapes[1][1] == ("draw_graph", "value")

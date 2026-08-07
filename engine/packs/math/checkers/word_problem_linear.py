@@ -16,10 +16,12 @@ checker 名（`{recipe}.double_solve`）も1つで足りる。
 """
 from __future__ import annotations
 
+from typing import cast
+
 import sympy
 
 from engine.core.contracts import MR, Solution, SymbolicAnswer
-from engine.core.registry import register_checker
+from engine.core.registry import REGISTRY, register_checker
 from engine.packs.math.recipes.word_problem_linear import RECIPE_NAME, solve_scene
 
 
@@ -49,4 +51,20 @@ def double_solve_word_problem_linear(mr: MR) -> list[Solution]:
     return [formulation_solution, value]
 
 
-__all__ = ["double_solve_word_problem_linear"]
+@register_checker("math.word_problem_round_trip_average_speed.double_solve")
+def double_solve_word_problem_round_trip_average_speed(mr: MR) -> Solution:
+    """g1_l27.word_problem Lv4。渡すのは本文に出ている速さ2つと往復の時間だけ。
+
+    片道の道のりも平均の速さも params に無いので、解き直しが答えの読み直しにならない。
+    """
+    n = mr.params["numbers"]
+    solver = REGISTRY.solver("math.solve_round_trip_average_speed")
+    return cast(
+        Solution, solver(n["speed_go"], n["speed_back"], n["total_time"])
+    )
+
+
+__all__ = [
+    "double_solve_word_problem_linear",
+    "double_solve_word_problem_round_trip_average_speed",
+]
