@@ -29,4 +29,34 @@ def double_solve_draw_area_time_graph_segment(mr: MR) -> Solution:
     ))
 
 
-__all__ = ["double_solve_solve_moving_point_area", "double_solve_draw_area_time_graph_segment"]
+@register_checker("math.word_problem_moving_points_area.double_solve")
+def double_solve_word_problem_moving_points_area(mr: MR) -> list[Solution]:
+    """小問と同順の list[Solution]（(1)=面積の式・(2)=時刻）を返す（G-Q1 の多段規約）。
+
+    渡すのは `numbers`＝**本文に出ている数値だけ**（速さ・与えられた面積）。
+    答えの時刻も面積の式も params に無いので、解き直しが答えの読み直しにならない。
+    1辺は面積の式にも時刻にも効かない（P・Q が辺の上にいる間の話）ので渡さない。
+    """
+    n = mr.params["numbers"]
+    return [
+        cast(Solution, REGISTRY.solver("math.express_moving_points_area")(n["speed"])),
+        cast(
+            Solution,
+            REGISTRY.solver("math.solve_moving_points_area_time")(n["speed"], n["area"]),
+        ),
+    ]
+
+
+@register_checker("math.word_problem_moving_point_all_times.double_solve")
+def double_solve_word_problem_moving_point_all_times(mr: MR) -> Solution:
+    n = mr.params["numbers"]
+    solver = REGISTRY.solver("math.solve_moving_point_area_all_times")
+    return cast(Solution, solver(n["side"], n["speed"], n["area"]))
+
+
+__all__ = [
+    "double_solve_solve_moving_point_area",
+    "double_solve_draw_area_time_graph_segment",
+    "double_solve_word_problem_moving_points_area",
+    "double_solve_word_problem_moving_point_all_times",
+]

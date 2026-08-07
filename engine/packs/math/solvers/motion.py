@@ -166,4 +166,195 @@ def draw_piecewise_area_graph_features(s: object, v: object) -> Solution:
     return Solution(answer=GraphAnswer(features=features, solution_svg_ref=""), steps=steps)
 
 
-__all__ = ["solve_moving_point_area", "draw_piecewise_area_graph_features"]
+# ---------------------------------------------------------------------------
+# g3_l31.word_problem Lv3: 2点 P・Q が直交する2辺を同時に動く（面積が x の2次式）
+#
+# 三角形 APD（P だけが動く）は面積が時間の**1次式**にしかならない。2次方程式の利用
+# として成立させるには、底辺と高さの**両方**が時間とともに伸びる形が要る。そこで
+# 台帳 example どおり P は辺 AB 上、Q は辺 AD 上を同時に動かし、直角をはさむ2辺が
+# ともに v·x になる三角形 APQ を使う（面積 = (v²/2)x²）。
+# ---------------------------------------------------------------------------
+_X = sympy.Symbol("x")
+
+
+def _pq_area_expr(v: sympy.Rational) -> sympy.Expr:
+    """三角形 APQ の面積を x の式で表す。AP=AQ=v·x・その間の角が直角。"""
+    return sympy.Rational(1, 2) * (v * _X) * (v * _X)
+
+
+@register_solver("math.express_moving_points_area")
+def express_moving_points_area(v: object) -> Solution:
+    """点 P・Q が直交2辺を速さ v で動くときの三角形 APQ の面積を x の式で表す。
+
+    問題パラメータ（速さ v）だけから導く。正方形の1辺 s は**式に現れない**
+    （P・Q が辺の上にある間の話なので、面積は s に依存しない）ため受け取らない。
+    """
+    v_v = sympy.Rational(str(v))
+    if v_v <= 0:
+        raise ValueError("速さは正であること")
+    expr = sympy.expand(_pq_area_expr(v_v))
+    # 表示は既存の y=ax² セル（word_problem_quadratic_function._quadratic_display）と
+    # 同じ規約: 分数の係数はかっこでくくって係数の範囲を確定させる。
+    a = sympy.Rational(v_v**2, 2)
+    a_disp = f"{a}" if a.q == 1 else f"({a})"
+
+    ops = ["locate_points_pq", "express_area_in_x"]
+    narration = {
+        "locate_points_pq": "経過した時間と速さから、点 P と点 Q が動いた道のりを、それぞれ x を使って表す。",
+        "express_area_in_x": "直角をはさむ二辺の長さがわかったので、三角形の面積を x の式で表す。",
+    }
+    srepr = sympy.srepr(expr)
+    disp = "y = x²" if a == 1 else f"y = {a_disp}x²"
+    steps = [
+        Step(
+            op=op,
+            args=[],
+            result_srepr=srepr if i == len(ops) - 1 else "",
+            result_display=disp if i == len(ops) - 1 else "点 P と点 Q の位置を x で表す",
+            narration=narration[op],
+        )
+        for i, op in enumerate(ops)
+    ]
+    return Solution(answer=SymbolicAnswer(srepr=srepr, display=disp), steps=steps)
+
+
+@register_solver("math.solve_moving_points_area_time")
+def solve_moving_points_area_time(v: object, area: object) -> Solution:
+    """三角形 APQ の面積が与えられた値になる時刻を、2次方程式を解いて求める。
+
+    (v²/2)x² = area を解く。負の解は時間として意味を持たないので捨てる
+    ＝「解いてから場面に照らして吟味する」ところまでが答え。
+    """
+    v_v = sympy.Rational(str(v))
+    area_v = sympy.Rational(str(area))
+    if v_v <= 0 or area_v <= 0:
+        raise ValueError("速さ・面積は正であること")
+    roots = sympy.solve(sympy.Eq(_pq_area_expr(v_v), area_v), _X)
+    positive = [r for r in roots if r.is_positive]
+    if len(positive) != 1:
+        raise ValueError(f"正の解がちょうど1つにならない: {roots}")
+    t = sympy.nsimplify(positive[0])
+
+    ops = ["set_up_quadratic_equation", "solve_quadratic_equation"]
+    narration = {
+        "set_up_quadratic_equation": "面積を x で表した式が、与えられた面積に等しいとおいて方程式をつくる。",
+        "solve_quadratic_equation": "方程式を解き、負の解は時間として意味を持たないので捨てる。",
+    }
+    srepr = sympy.srepr(t)
+    disp = f"{sympy.sstr(t)}秒後"
+    steps = [
+        Step(
+            op=op,
+            args=[],
+            result_srepr=srepr if i == len(ops) - 1 else "",
+            result_display=disp if i == len(ops) - 1 else "面積についての方程式をつくる",
+            narration=narration[op],
+        )
+        for i, op in enumerate(ops)
+    ]
+    return Solution(answer=SymbolicAnswer(srepr=srepr, display=disp), steps=steps)
+
+
+# ---------------------------------------------------------------------------
+# g3_l31.word_problem Lv4: 3辺を渡る動点・面積が与えられた値になる時刻をすべて求める
+#
+# 【台帳 example との差と、その判断】example は「A→B→C の順に動く」だが、この経路だと
+# 三角形 APD の面積は 辺AB上で増加 → 辺BC上で一定 の2区間しかなく、与えられた面積に
+# なる時刻は**必ず1つ**になる。つまり「場合分けをしてもしなくても答えが変わらない」＝
+# ゲートが素通りする退化そのもの（BRIEF「ゲートは答えが潰れる退化を素通りする」）。
+# そこで経路を A→B→C→D に延ばす。辺CD上では面積が減少に転じるので、同じ面積になる
+# 時刻が**2つ**あり、「すべて求めよ」が意味を持ち、第3区間を見落とすと答えを落とす。
+# desc の「場合分け(位置による式変化)を含め方針を構成」はこの形で満たす。
+# なお g2_l29.word_problem Lv4 の台帳 example も A→B→C→D の経路である。
+# ---------------------------------------------------------------------------
+_ALL_TIMES_OPS = [
+    "identify_intervals",
+    "solve_on_increasing_interval",
+    "check_constant_interval",
+    "solve_on_decreasing_interval",
+    "collect_all_times",
+]
+
+_ALL_TIMES_NARRATION: dict[str, str] = {
+    "identify_intervals": "点 P がどの辺の上にあるかで時間を区間に分け、区間ごとに面積の式が変わることを確かめる。",
+    "solve_on_increasing_interval": "はじめの辺の上では高さが時間に比例するので、面積の式を方程式とみて解く。",
+    "check_constant_interval": "次の辺の上では底辺も高さも変わらず面積が一定なので、その値と比べて解があるかを調べる。",
+    "solve_on_decreasing_interval": "最後の辺の上では高さが減っていくので、その区間の式を方程式とみて解く。",
+    "collect_all_times": "求めた時刻がそれぞれの区間の中にあることを確かめ、答えをすべて並べる。",
+}
+
+_ALL_TIMES_PHRASE: dict[str, str] = {
+    "identify_intervals": "時間を区間に分ける",
+    "solve_on_increasing_interval": "増えていく区間で解く",
+    "check_constant_interval": "一定の区間に解が無いことを確かめる",
+    "solve_on_decreasing_interval": "減っていく区間で解く",
+}
+
+
+@register_solver("math.solve_moving_point_area_all_times")
+def solve_moving_point_area_all_times(s: object, v: object, area: object) -> Solution:
+    """三角形 APD の面積が与えられた値になる時刻をすべて求める（g3_l31.word_problem Lv4）。
+
+    正方形 A=(0,0), B=(s,0), C=(s,s), D=(0,s) の周上を、点 P が A を出発して
+    A→B→C→D の順に速さ v で動く。区間ごとに P の座標を決め、面積は既存の
+    shoelace 公式（`_shoelace_triangle_area`）で求める＝新しい幾何ロジックは足さない。
+    問題パラメータ（s・v・面積）だけから独立に再計算する（double-solve）。
+    """
+    s_v = sympy.Rational(str(s))
+    v_v = sympy.Rational(str(v))
+    area_v = sympy.Rational(str(area))
+    if s_v <= 0 or v_v <= 0 or area_v <= 0:
+        raise ValueError("1辺・速さ・面積は正であること")
+
+    def _p_at(t: sympy.Rational) -> tuple[sympy.Rational, sympy.Rational]:
+        """時刻 t における点 P の座標（辺 AB → BC → CD の順に渡る）。"""
+        d = v_v * t
+        if d <= s_v:
+            return d, sympy.Integer(0)
+        if d <= 2 * s_v:
+            return s_v, d - s_v
+        return 3 * s_v - d, s_v
+
+    def _area_at(t: sympy.Rational) -> sympy.Rational:
+        px, py = _p_at(t)
+        return _shoelace_triangle_area(
+            sympy.Integer(0), sympy.Integer(0), px, py, sympy.Integer(0), s_v
+        )
+
+    # 辺AB上: y = (s·v/2)t（増加）／辺BC上: y = s²/2（一定）／辺CD上: y = (s/2)(3s - v·t)（減少）
+    t_first = 2 * area_v / (s_v * v_v)
+    t_third = (3 * s_v - 2 * area_v / s_v) / v_v
+    if not (0 < t_first < s_v / v_v):
+        raise ValueError(f"はじめの区間に解が無い: t={t_first}")
+    if not (2 * s_v / v_v < t_third <= 3 * s_v / v_v):
+        raise ValueError(f"最後の区間に解が無い: t={t_third}")
+    if area_v >= s_v**2 / 2:
+        raise ValueError("一定区間の面積以上なので、増減する区間に解が立たない")
+    # 恒真: 求めた時刻を shoelace 公式に戻すと与えられた面積に一致する。
+    for t in (t_first, t_third):
+        if not (_area_at(t) - area_v).equals(0):
+            raise ValueError(f"再計算が一致しない: t={t}")
+
+    times = sympy.Tuple(sympy.nsimplify(t_first), sympy.nsimplify(t_third))
+    srepr = sympy.srepr(times)
+    disp = "、".join(f"{sympy.sstr(t)}秒後" for t in times)
+    steps = [
+        Step(
+            op=op,
+            args=[],
+            result_srepr=srepr if i == len(_ALL_TIMES_OPS) - 1 else "",
+            result_display=disp if i == len(_ALL_TIMES_OPS) - 1 else _ALL_TIMES_PHRASE[op],
+            narration=_ALL_TIMES_NARRATION[op],
+        )
+        for i, op in enumerate(_ALL_TIMES_OPS)
+    ]
+    return Solution(answer=SymbolicAnswer(srepr=srepr, display=disp), steps=steps)
+
+
+__all__ = [
+    "solve_moving_point_area",
+    "draw_piecewise_area_graph_features",
+    "express_moving_points_area",
+    "solve_moving_points_area_time",
+    "solve_moving_point_area_all_times",
+]

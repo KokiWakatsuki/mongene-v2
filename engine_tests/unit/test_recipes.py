@@ -9357,3 +9357,120 @@ def test_word_problem_box_plot_level_sep_op_sequences():
         ),
     )
     assert len(set(shapes)) == 3
+
+
+# ---------------------------------------------------------------------------
+# C3 g3_l31.word_problem（2次方程式の利用・動点）
+#
+# ゲートが素通りする退化をここで固定する:
+#   - Lv3: 面積が x の1次式に潰れる（＝2次方程式にならない）／答えの時刻に P・Q が
+#          もう辺の上にいない（場面が成立しない）
+#   - Lv4: 答えが1つに潰れる（＝場合分けをしなくても正解できる）／求めた時刻が
+#          その区間の外にある
+# あわせて params 忠実性（numbers は本文に出ている数だけ）も固定する。
+# ---------------------------------------------------------------------------
+def _motion_wp_mr(level: int, seed: int):
+    ctx = _make_ctx("math.g3_l31.word_problem", level)
+    return ctx, REGISTRY.recipe(ctx.spec_level.recipe)(
+        ctx, derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    )
+
+
+@pytest.mark.parametrize("seed", range(40))
+def test_word_problem_moving_points_area_property(seed):
+    """g3_l31.word_problem Lv3: 面積が x の2次式になり、答えの時刻で場面が成立する。"""
+    _ctx, mr = _motion_wp_mr(3, seed)
+    assert mr.signature == "word_problem_moving_points_area_guided"
+    assert set(mr.given.keys()) == {"scenario", "quantities"}
+
+    n = mr.params["numbers"]
+    side, speed, area = int(n["side"]), int(n["speed"]), int(n["area"])
+    assert side > 0 and speed > 0 and area > 0
+    # params に置くのは本文に出ている数だけ（導出値・答えを置かない）。
+    assert set(n) == {"side", "speed", "area"}
+
+    x = sympy.Symbol("x")
+    (sq_f, sq_v) = mr.sub_questions
+    assert (sq_f.asked, sq_v.asked) == ("formulation", "value")
+    assert [s.op for s in sq_f.steps] == ["locate_points_pq", "express_area_in_x"]
+    assert [s.op for s in sq_v.steps] == [
+        "set_up_quadratic_equation", "solve_quadratic_equation",
+    ]
+
+    expr = sympy.sympify(sq_f.answer.srepr)
+    # 2次式であること（1次に潰れない＝「2次方程式の利用」として成立する）。
+    assert sympy.degree(expr, x) == 2
+    assert expr == sympy.Rational(speed**2, 2) * x**2
+
+    t0 = sympy.sympify(sq_v.answer.srepr)
+    assert t0.is_positive
+    # (1) の式に (2) の時刻を入れると本文の面積に戻る。
+    assert sympy.simplify(expr.subs(x, t0) - area) == 0
+    # 答えの時刻で P・Q はまだ辺の上にいる（場面が成立している）。
+    assert speed * t0 < side
+    # 答えが本文の数値と一致しない（図を見ずに当てられない）。
+    assert int(t0) not in {side, speed, area}
+
+    checker = REGISTRY.checker("math.word_problem_moving_points_area.double_solve")
+    assert [s.answer.srepr for s in checker(mr)] == [
+        sq_f.answer.srepr, sq_v.answer.srepr,
+    ]
+
+
+@pytest.mark.parametrize("seed", range(40))
+def test_word_problem_moving_point_all_times_property(seed):
+    """g3_l31.word_problem Lv4: 答えが必ず2つ＝場合分けが答えに効く。"""
+    _ctx, mr = _motion_wp_mr(4, seed)
+    assert mr.signature == "word_problem_moving_point_area_all_times"
+    assert set(mr.given.keys()) == {"scenario"}
+
+    n = mr.params["numbers"]
+    side, speed, area = int(n["side"]), int(n["speed"]), int(n["area"])
+    assert set(n) == {"side", "speed", "area"}
+
+    sq = mr.sub_questions[0]
+    assert sq.asked == "value"
+    assert [s.op for s in sq.steps] == [
+        "identify_intervals",
+        "solve_on_increasing_interval",
+        "check_constant_interval",
+        "solve_on_decreasing_interval",
+        "collect_all_times",
+    ]
+
+    times = sympy.sympify(sq.answer.srepr)
+    # ★退化の封じ: 答えは必ず2つ（1つに潰れると場合分けをしなくても正解できる）。
+    assert len(times) == 2
+    t1, t3 = times
+    assert t1 < t3
+    # それぞれが「増えていく区間」「減っていく区間」の内側にある。
+    assert 0 < t1 < sympy.Rational(side, speed)
+    assert 2 * sympy.Rational(side, speed) < t3 <= 3 * sympy.Rational(side, speed)
+    # 一定区間の面積より小さい（＝増減する2区間に必ず解が立つ）。
+    assert area < sympy.Rational(side**2, 2)
+    # どちらの時刻でも三角形の面積が本文の値に戻る（区間ごとの式で再計算）。
+    assert sympy.Rational(side * speed, 2) * t1 == area
+    assert sympy.Rational(side, 2) * (3 * side - speed * t3) == area
+    # 答えが本文の数値と一致しない。
+    assert not {int(t1), int(t3)} & {side, speed, area}
+
+    checker = REGISTRY.checker("math.word_problem_moving_point_all_times.double_solve")
+    assert checker(mr).answer.srepr == sq.answer.srepr
+
+
+def test_word_problem_moving_point_level_sep():
+    """Lv3 と Lv4 は given・小問数・op 列がすべて相異する（G6 の構造差）。"""
+    shapes = []
+    for level in (3, 4):
+        _ctx, mr = _motion_wp_mr(level, 1)
+        shapes.append(
+            (
+                tuple(sorted(mr.given)),
+                len(mr.sub_questions),
+                tuple(s.op for sq in mr.sub_questions for s in sq.steps),
+            )
+        )
+    assert len(set(shapes)) == 2
+    assert shapes[0][0] != shapes[1][0]
+    assert shapes[0][1] != shapes[1][1]
+    assert shapes[0][2] != shapes[1][2]

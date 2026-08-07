@@ -38,6 +38,14 @@ _AREA_TIME_GRAPH_CONCEPTS = [
     "motion.area_time_graph_segment",
 ]
 
+_WP_TWO_POINTS_CONCEPTS = [
+    "motion.word_problem_two_points_area",
+]
+
+_WP_ALL_TIMES_CONCEPTS = [
+    "motion.word_problem_area_all_times",
+]
+
 
 def _effective_concept_tags(ctx: CellContext) -> list[str]:
     return list(ctx.spec_level.concept_tags or ctx.spec_family.concepts_default)
@@ -256,4 +264,222 @@ def _construct_graph_segment(
     return s, v, t_end, la + lb + lc + ld + lp, condition
 
 
-__all__ = ["solve_moving_point_area_recipe", "draw_area_time_graph_segment"]
+# ---------------------------------------------------------------------------
+# g3_l31.word_problem Lv3 / Lv4（2次方程式の利用・動点）
+#
+# form=word_problem の frame は given ∈ {scenario, quantities}・asked ∈ {formulation,
+# value}。テンプレは既存の wp_linear_guided_v1（誘導あり2小問）/ wp_linear_solo_v1
+# （誘導なし1小問）をそのまま使う（場面文と小問文は context_slots から差し込む規約）。
+#
+# 【params に何を置いたか】word_problem の params 忠実性契約
+# （engine_tests/contract/test_word_problem_params_faithfulness.py）に従い、
+# `numbers` には**本文に現れる数**（正方形の1辺・速さ・与えられた面積）だけを置く。
+# 答え（時刻・面積の式）と導出値（区間の境界 s/v など）は params に置かず、
+# checker は numbers だけから solver を呼び直して解き直す。
+# 点名は dup の自由度なので params に残す（session29 の教訓）。
+# ---------------------------------------------------------------------------
+# 面積の単位 "cm²" の右肩の 2 は、G-Q5t の数値トークン抽出では本文の数値 `2` として
+# 読まれる（BRIEF の失敗パターン#2 と同じ構造）。したがって答えが 2 になる構成は
+# 必ず漏洩と判定されるので、構成の段階で外す。
+_AREA_UNIT_TOKEN = 2
+
+
+def _wp_numbers(side: int, speed: int, area: int) -> dict[str, str]:
+    return {"side": str(side), "speed": str(speed), "area": str(area)}
+
+
+def _wp_sub(
+    ctx: CellContext, *, label: str, asked: str, sol: Solution
+) -> SubQuestionMR:
+    return SubQuestionMR(
+        label=label,
+        asked=asked,
+        answer=sol.answer,
+        steps=sol.steps,
+        concept_tags=_effective_concept_tags(ctx),
+        cause_tags=_effective_cause_tags(ctx),
+    )
+
+
+@register_recipe(
+    "math.word_problem_moving_points_area", provides_concepts=_WP_TWO_POINTS_CONCEPTS
+)
+def word_problem_moving_points_area_recipe(ctx: CellContext, rng: Rng) -> MR:
+    """2点が直交2辺を同時に動く動点の文章題（g3_l31.word_problem Lv3・誘導あり2小問）。
+
+    台帳 example どおり、点 P は辺 AB 上・点 Q は辺 AD 上を同じ速さで同時に動く。
+    直角をはさむ2辺がともに v·x になるので、三角形 APQ の面積は x の**2次式**
+    （＝2次方程式の利用として成立する。P だけが動く三角形 APD は1次式にしかならない）。
+      (1) 面積を x の式で表せ（asked=formulation）
+      (2) 面積が与えられた値になるのは何秒後か（asked=value・2次方程式を解く）
+
+    answer-first: 先に「答えになる時刻 t0」と速さ v を引いて面積 area=(v²/2)t0² を
+    決め、正方形の1辺 s は v·t0 より大きい値から引く（＝t0 の時点で P・Q が
+    まだ辺の上にいることを構成時に保証する。実行時の場合分け判定にしない）。
+    """
+    p = cast("dict[str, Any]", ctx.spec_level.params)
+    s, v, area, labels_txt, scenario, quantities, ask_f, ask_v = _construct_two_points(p, rng)
+
+    expr_sol = cast(Solution, REGISTRY.solver("math.express_moving_points_area")(v))
+    time_sol = cast(Solution, REGISTRY.solver("math.solve_moving_points_area_time")(v, area))
+    assert isinstance(expr_sol.answer, SymbolicAnswer)
+    assert isinstance(time_sol.answer, SymbolicAnswer)
+    # 恒真: (1) の式に (2) の時刻を代入すると、本文で与えた面積に戻る。
+    x = sympy.Symbol("x")
+    expr = sympy.sympify(expr_sol.answer.srepr)
+    t0 = sympy.sympify(time_sol.answer.srepr)
+    assert (expr.subs(x, t0) - sympy.Integer(area)).equals(0), (
+        f"(1) の式と (2) の時刻が整合しない: {expr} at {t0} != {area}"
+    )
+
+    return MR(
+        signature=ctx.spec_level.signature,
+        family=ctx.family,
+        level=ctx.level,
+        purpose=ctx.purpose,
+        seed=0,
+        params={"numbers": _wp_numbers(s, v, area), "labels": labels_txt},
+        given={"scenario": scenario, "quantities": quantities},
+        context_slots={"ask_formulation": ask_f, "ask_value": ask_v},
+        sub_questions=[
+            _wp_sub(ctx, label="(1)", asked="formulation", sol=expr_sol),
+            _wp_sub(ctx, label="(2)", asked="value", sol=time_sol),
+        ],
+        visual_plan=None,
+        provenance=Provenance(recipe="math.word_problem_moving_points_area"),
+    )
+
+
+def _construct_two_points(
+    p: dict[str, Any], rng: Rng
+) -> tuple[int, int, int, str, str, str, str, str]:
+    """(1辺, 速さ, 面積, 点名, 場面文, 変数設定文, 小問1文, 小問2文)。
+
+    【組合せ数】(速さ, 答えの時刻) の組を列挙してから 1辺を引く。速さ4通り×時刻9通りの
+    うち v·t0 が偶数になる組（面積が整数）が約26通り、1辺は v·t0 より大きい偶数を20通り
+    ⇒ 約520通り（閾の250通りを超える）。点名は dup_key に効くのでさらに広い。
+    """
+    pairs = [
+        (int(v), int(t))
+        for v in p["speed_candidates"]
+        for t in p["answer_time_candidates"]
+        # 面積 (v²/2)t² が整数になる組だけ（構成時に整数を保証する＝鉄則⑤）
+        if (int(v) * int(t)) % 2 == 0
+        # 答えの時刻が本文の数値と一致すると「答えが本文に出ている」状態になる。
+        # 特に 2 は本文の "cm²" から数値トークンとして抽出されるので必ず外す
+        # （BRIEF の失敗パターン#2 と同じ構造）。
+        and int(t) not in (_AREA_UNIT_TOKEN, int(v))
+    ]
+    idx = int(draw({"int_set": list(range(len(pairs)))}, rng))
+    v, t0 = pairs[idx]
+    area = (v * t0) ** 2 // 2
+    reach = v * t0
+    # 1辺は v·t0 より大きい偶数（＝t0 の時点で P・Q がまだ辺の上にいる）。
+    s_cands = [
+        x
+        for x in range(reach + 2, reach + 2 + 2 * int(p["side_choices"]), 2)
+        if x != t0
+    ]
+    s = int(draw({"int_set": s_cands}, rng))
+    assert t0 != area, "答えの時刻が本文の面積と一致している"
+
+    la, lb, lc, ld, lp, lq = _draw_distinct_points(6, rng)
+    scenario = (
+        f"1辺が{s}cmの正方形{la}{lb}{lc}{ld}で、点{lp}は{la}を出発して辺{la}{lb}上を"
+        f"{lb}まで毎秒{v}cmの速さで動き、点{lq}は同時に{la}を出発して辺{la}{ld}上を"
+        f"{ld}まで毎秒{v}cmの速さで動く。"
+    )
+    quantities = (
+        f"点{lp}、点{lq}が出発してからx秒後について、次の問いに答えよ。"
+    )
+    ask_f = f"三角形{la}{lp}{lq}の面積をy cm²として、yをxの式で表せ。"
+    ask_v = f"三角形{la}{lp}{lq}の面積が{area}cm²になるのは何秒後か求めよ。"
+    return s, v, area, la + lb + lc + ld + lp + lq, scenario, quantities, ask_f, ask_v
+
+
+@register_recipe(
+    "math.word_problem_moving_point_all_times", provides_concepts=_WP_ALL_TIMES_CONCEPTS
+)
+def word_problem_moving_point_all_times_recipe(ctx: CellContext, rng: Rng) -> MR:
+    """3辺を渡る動点・面積が与えられた値になる時刻をすべて求める（g3_l31.word_problem Lv4）。
+
+    誘導なし1小問。区間ごとに面積の式が変わる（増加 → 一定 → 減少）ので、
+    答えは2つあり、第3区間を見落とすと落とす＝場合分けが答えに効く。
+    経路を台帳 example の A→B→C から A→B→C→D に延ばした理由は
+    solvers/motion.py の当該ソルバの docstring を参照。
+    """
+    p = cast("dict[str, Any]", ctx.spec_level.params)
+    s, v, area, labels_txt, scenario, ask_v = _construct_all_times(p, rng)
+
+    sol = cast(
+        Solution, REGISTRY.solver("math.solve_moving_point_area_all_times")(s, v, area)
+    )
+    assert isinstance(sol.answer, SymbolicAnswer)
+    times = sympy.sympify(sol.answer.srepr)
+    assert len(times) == 2 and times[0] < times[1], f"答えが2つにならない: {times}"
+
+    return MR(
+        signature=ctx.spec_level.signature,
+        family=ctx.family,
+        level=ctx.level,
+        purpose=ctx.purpose,
+        seed=0,
+        params={"numbers": _wp_numbers(s, v, area), "labels": labels_txt},
+        given={"scenario": scenario},
+        context_slots={"ask_value": ask_v},
+        sub_questions=[_wp_sub(ctx, label="(1)", asked="value", sol=sol)],
+        visual_plan=None,
+        provenance=Provenance(recipe="math.word_problem_moving_point_all_times"),
+    )
+
+
+def _construct_all_times(p: dict[str, Any], rng: Rng) -> tuple[int, int, int, str, str, str]:
+    """(1辺, 速さ, 面積, 点名, 場面文, 小問文)。
+
+    【組合せ数】1辺は偶数10通り、速さは 3s が割り切れる約数（区間の境界と答えが
+    整数になる）、答えの時刻 t1 は第1区間の内側から。組は列挙してから引くので
+    実効で数百通り。点名 6 文字ぶんの自由度がさらに乗る。
+
+    答えは t1 と t3 = 3s/v − t1 の2つ。t1 を第1区間 (0, s/v) の内側に取れば
+    t3 は必ず第3区間 (2s/v, 3s/v) の内側に入る（対称性）。
+    """
+    triples: list[tuple[int, int, int]] = []
+    for s in p["side_candidates"]:
+        s_i = int(s)
+        for v in p["speed_candidates"]:
+            v_i = int(v)
+            if (3 * s_i) % v_i or s_i % v_i:
+                continue  # 区間の境界 s/v・2s/v・3s/v を整数にする
+            for t1 in range(1, s_i // v_i):
+                if (s_i * v_i * t1) % 2:
+                    continue  # 面積を整数にする
+                area = s_i * v_i * t1 // 2
+                if area >= s_i**2 // 2:
+                    continue  # 一定区間の面積以上だと増減する区間に解が立たない
+                t3 = 3 * s_i // v_i - t1
+                # 答えの時刻が本文の数値（1辺・速さ・面積）や "cm²" 由来の 2 と
+                # 一致すると G-Q5t が漏洩と判定する。構成の段階で外す。
+                if {t1, t3} & {s_i, v_i, area, _AREA_UNIT_TOKEN}:
+                    continue
+                triples.append((s_i, v_i, area))
+    idx = int(draw({"int_set": list(range(len(triples)))}, rng))
+    s, v, area = triples[idx]
+
+    la, lb, lc, ld, lp = _draw_distinct_points(5, rng)
+    scenario = (
+        f"1辺が{s}cmの正方形{la}{lb}{lc}{ld}の周上を、点{lp}が{la}を出発して"
+        f"{la}→{lb}→{lc}→{ld}の順に毎秒{v}cmの速さで{ld}まで動く。"
+    )
+    ask_v = (
+        f"点{lp}が出発してからx秒後の三角形{la}{lp}{ld}の面積が{area}cm²になるのは"
+        f"何秒後か、すべて求めよ。"
+    )
+    return s, v, area, la + lb + lc + ld + lp, scenario, ask_v
+
+
+__all__ = [
+    "solve_moving_point_area_recipe",
+    "draw_area_time_graph_segment",
+    "word_problem_moving_points_area_recipe",
+    "word_problem_moving_point_all_times_recipe",
+]
