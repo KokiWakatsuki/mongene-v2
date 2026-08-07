@@ -19,6 +19,7 @@ from engine.packs.math.checkers import probability  # noqa: F401  (登録の副�
 from engine.packs.math.checkers import proportion  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.checkers import statistics_distribution  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.checkers import quartile  # noqa: F401  (登録の副作用のため import)
+from engine.packs.math.checkers import box_plot  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.checkers import sample_survey  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.checkers import exam_fusion  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.checkers import plane_geometry  # noqa: F401  (登録の副作用のため import)

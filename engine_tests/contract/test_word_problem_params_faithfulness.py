@@ -11,8 +11,14 @@ builder 側で行う、というのが文章題セルの設計契約である。
 機械的に**検査する＝新セルを追加すると自動で被覆される。
 
 例外は `_NO_NUMBERS_KEY_CELLS` に明示列挙する（暗黙のすり抜けを作らないため）。
+
+`numbers` が**空**のセル（数値をすべて図が与える＝本文に算用数字が無い文章題。
+C11 g2_l57 の箱ひげ図がこれ）は、本文に算用数字が 1 つも無いことを併せて検査する。
+そうしないと「numbers を空にすれば本文の数値が検査されない」抜け道になる。
 """
 from __future__ import annotations
+
+import re
 
 import sympy
 
@@ -72,6 +78,19 @@ def test_word_problem_params_numbers_all_appear_in_problem_text() -> None:
             text = result.problem_text + " " + " ".join(
                 sq.prompt_text for sq in result.sub_questions
             )
+            if not numbers:
+                # 数値をすべて図が与えるセル。本文に算用数字があれば「numbers を空に
+                # して検査を素通りさせた」ことになるので違反として落とす。
+                # "(1)" "(2)" は小問の通し番号（場面の数値ではない）なので除く。
+                digits = sorted(set(re.findall(r"\d", re.sub(r"\(\d+\)", "", text))))
+                if digits:
+                    violations.append(
+                        f"{cell.unit}.Lv{cell.level} seed{seed}: params['numbers'] が空なのに "
+                        f"本文に算用数字 {digits} がある"
+                        f"（本文に出る数は必ず numbers に置くこと）"
+                    )
+                    break
+                continue
             missing = [
                 f"{name}={sympy.sympify(value)}"
                 for name, value in numbers.items()

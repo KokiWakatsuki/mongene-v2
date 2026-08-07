@@ -8760,3 +8760,328 @@ def test_special_right_triangle_ratio_property(seed):
     assert len(set(answer.distractors)) == len(answer.distractors)
     # 比べる2辺は必ず異なる辺（同じ辺どうしの比 1:1 に潰れない形で問う）。
     assert int(mr.params["numbers"]["first_side"]) != int(mr.params["numbers"]["second_side"])
+
+
+# ---------------------------------------------------------------------------
+# C11 箱ひげ図の graph_table（g2_l56 / g2_l57）
+#
+# ゲートが素通りする退化をここで固定する:
+#   - 箱が潰れる（Q1=Q3）・ひげが無い（最小値=Q1／Q3=最大値）
+#   - 2本比較で A と B が同じ分布／比べる統計量が一致して「違い」が消える
+#   - 「かく」セルの問題図に答え（箱ひげ）が先出しされる
+# あわせて G-Q5t 漏洩の設計（「読む」セルの given に算用数字を書かない）も固定する。
+# ---------------------------------------------------------------------------
+_BOX_PLOT_ASCII_DIGIT_RE = re.compile(r"[0-9]")
+
+
+def _box_plot_mr(family: str, level: int, seed: int):
+    ctx = _make_ctx(family, level)
+    mr = REGISTRY.recipe(ctx.spec_level.recipe)(
+        ctx, derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+    )
+    return ctx, mr
+
+
+def _assert_box_plot_axis(mr) -> tuple[int, int]:
+    """軸の整合（左端0・右端=間隔×目もり本数）を確かめ、(axis_lo, axis_step) を返す。"""
+    from engine.packs.math.visuals.distribution_chart import box_plot_labels
+
+    axis_lo = int(mr.params["axis_lo"])
+    axis_hi = int(mr.params["axis_hi"])
+    axis_step = int(mr.params["axis_step"])
+    assert axis_step > 0
+    assert (axis_hi - axis_lo) % axis_step == 0
+    # 図に描かれる <text> は軸目盛だけ。labels はヘルパから機械的に作られている（G-Q5v）。
+    assert mr.visual_plan is not None
+    assert mr.visual_plan.labels == box_plot_labels(mr.params)
+    return axis_lo, axis_step
+
+
+def _assert_non_degenerate_ticks(ticks: list[int]) -> None:
+    """箱ひげが潰れていない（狭義単調増加）ことを固定する。"""
+    assert len(ticks) == 5
+    assert all(ticks[i] < ticks[i + 1] for i in range(4)), f"箱ひげが潰れている: {ticks}"
+
+
+@pytest.mark.parametrize("seed", range(40))
+def test_box_plot_read_values_property(seed):
+    """g2_l56.graph_table Lv1: 箱ひげ図から二つの値を読む。"""
+    ctx, mr = _box_plot_mr("math.g2_l56.graph_table", 1, seed)
+    assert mr.signature == "box_plot_read_values"
+    assert set(mr.given) == {"situation_params", "condition"}
+    assert [sq.asked for sq in mr.sub_questions] == ["read_box_plot"]
+
+    axis_lo, axis_step = _assert_box_plot_axis(mr)
+    ticks = [int(t) for t in mr.params["box_ticks"]]
+    _assert_non_degenerate_ticks(ticks)
+
+    # five_number は tick から一意に決まる描画座標（＝図に描かれている位置）。
+    five = [int(v) for v in mr.params["five_number"]]
+    assert five == [axis_lo + axis_step * t for t in ticks]
+    assert min(five) >= axis_lo and max(five) <= int(mr.params["axis_hi"])
+
+    # 「読む」セルの given には算用数字を書かない（whitelist は given から作られるため、
+    # ここに数字を混ぜると漏洩検査が甘くなる/誤検出する）。
+    for v in mr.given.values():
+        assert not _BOX_PLOT_ASCII_DIGIT_RE.search(v), f"given に算用数字: {v!r}"
+
+    # 読む対象そのもの（箱ひげ）は図に描く。値の注記は描かない。
+    kinds = [e.kind for e in mr.visual_plan.elements]
+    assert "box_plot" in kinds and "number_line" in kinds
+    assert "labeled_box_plot_value" not in kinds
+
+    # 答えは5数要約のうちの二つ。
+    answer = mr.sub_questions[0].answer
+    values = list(sympy.sympify(answer.srepr))
+    assert len(values) == 2
+    assert all(int(v) in five for v in values)
+    assert values[0] < values[1]
+
+    checker = REGISTRY.checker("math.read_box_plot.double_solve")
+    assert checker(mr).answer.srepr == answer.srepr
+
+
+@pytest.mark.parametrize("seed", range(40))
+def test_box_plot_draw_from_data_property(seed):
+    """g2_l56.graph_table Lv3: データから5数要約を求め箱ひげ図をかく。"""
+    from engine.packs.math.visuals.distribution_chart import render_box_plot_svg
+
+    ctx, mr = _box_plot_mr("math.g2_l56.graph_table", 3, seed)
+    assert mr.signature == "box_plot_draw_from_data"
+    assert set(mr.given) == {"data_table"}
+    assert [sq.asked for sq in mr.sub_questions] == ["draw_box_plot"]
+
+    axis_lo, axis_step = _assert_box_plot_axis(mr)
+    axis_hi = int(mr.params["axis_hi"])
+    data = [int(v) for v in mr.params["data"]]
+    assert len(data) >= 8
+    assert len(set(data)) == len(data), "データに同値がある（5数要約が潰れうる）"
+    assert all(axis_lo < v < axis_hi for v in data), "データが数直線の内側に収まっていない"
+
+    # 5数要約は狭義単調増加（箱もひげも潰れない）。
+    five = [sympy.sympify(str(v)) for v in mr.params["five_number"]]
+    assert len(five) == 5
+    assert all(five[i] < five[i + 1] for i in range(4)), f"5数要約が潰れている: {five}"
+
+    answer = mr.sub_questions[0].answer
+    assert answer.kind == "graph"
+    assert [f.kind for f in answer.features] == ["min", "q1", "median", "q3", "max"]
+    assert [sympy.sympify(f.srepr) for f in answer.features] == five
+
+    # 問題図は数直線と目もりだけ（答えの箱ひげを先出ししない）。模範解答図は箱ひげつき。
+    assert [e.kind for e in mr.visual_plan.elements] == ["number_line"]
+    problem_svg = render_box_plot_svg(mr.params, draw=False)
+    assert problem_svg.count("<rect") == 1  # 背景だけ＝箱が無い
+    assert answer.solution_svg_ref.count("<rect") > 1  # 背景＋箱
+
+    checker = REGISTRY.checker("math.draw_box_plot_from_data.double_solve")
+    got = checker(mr).answer
+    assert {f.srepr for f in got.features} == {f.srepr for f in answer.features}
+
+
+@pytest.mark.parametrize("seed", range(40))
+def test_two_box_plots_compare_property(seed):
+    """g2_l57.graph_table Lv1/Lv3: 2本の箱ひげ図を読む／比べる。"""
+    specs = [
+        (1, "box_plot_compare_center_spread", "math.read_two_box_plots.double_solve", (0, 4)),
+        (3, "box_plot_compare_iqr", "math.compare_two_box_plots_iqr.double_solve", (1, 3)),
+    ]
+    op_seqs = []
+    for level, signature, checker_name, (lo_i, hi_i) in specs:
+        ctx, mr = _box_plot_mr("math.g2_l57.graph_table", level, seed)
+        assert mr.signature == signature
+        assert set(mr.given) == {"situation_params"}
+        assert [sq.asked for sq in mr.sub_questions] == ["read_box_plot"]
+
+        axis_lo, axis_step = _assert_box_plot_axis(mr)
+        ticks_a = [int(t) for t in mr.params["box_ticks_a"]]
+        ticks_b = [int(t) for t in mr.params["box_ticks_b"]]
+        _assert_non_degenerate_ticks(ticks_a)
+        _assert_non_degenerate_ticks(ticks_b)
+
+        # 2本が同じ分布だと「比べる」が成立しない。比べる統計量も相異であること。
+        assert ticks_a != ticks_b, "2本の箱ひげ図が同一（比較が成り立たない）"
+        stat_a = ticks_a[hi_i] - ticks_a[lo_i]
+        stat_b = ticks_b[hi_i] - ticks_b[lo_i]
+        assert stat_a != stat_b, f"比べる統計量が一致している: {stat_a}"
+
+        assert [int(v) for v in mr.params["five_number"]] == [
+            axis_lo + axis_step * t for t in ticks_a
+        ]
+        assert [int(v) for v in mr.params["five_number_b"]] == [
+            axis_lo + axis_step * t for t in ticks_b
+        ]
+
+        for v in mr.given.values():
+            assert not _BOX_PLOT_ASCII_DIGIT_RE.search(v), f"given に算用数字: {v!r}"
+
+        kinds = [e.kind for e in mr.visual_plan.elements]
+        assert "box_plot" in kinds and "number_line" in kinds
+
+        answer = mr.sub_questions[0].answer
+        checker = REGISTRY.checker(checker_name)
+        assert checker(mr).answer.srepr == answer.srepr
+
+        # 差（最後の成分）は正＝「違い」が読み取れる（Lv3）。
+        values = list(sympy.sympify(answer.srepr))
+        if level == 3:
+            assert values[-1] > 0
+            assert values[-1] == abs(values[0] - values[1])
+        op_seqs.append(tuple(s.op for s in mr.sub_questions[0].steps))
+
+    # level_sep: Lv1 と Lv3 で op 列（＝fp の中身）が相異する。
+    assert op_seqs[0] != op_seqs[1]
+
+
+@pytest.mark.parametrize("seed", range(20))
+def test_box_plot_level_sep_op_sequences(seed):
+    """g2_l56.graph_table: Lv1（読む2手）と Lv3（求めてかく3手）で op 列が相異する。"""
+    _, mr1 = _box_plot_mr("math.g2_l56.graph_table", 1, seed)
+    _, mr3 = _box_plot_mr("math.g2_l56.graph_table", 3, seed)
+    ops1 = tuple(s.op for s in mr1.sub_questions[0].steps)
+    ops3 = tuple(s.op for s in mr3.sub_questions[0].steps)
+    assert ops1 == ("read_axis_step", "read_box_plot_values")
+    assert ops3 == ("sort_data", "compute_five_number", "draw_box_plot")
+    assert set(mr1.given) != set(mr3.given)
+
+
+@pytest.mark.parametrize("seed", range(40))
+def test_word_problem_box_plot_compare_property(seed):
+    """g2_l57.word_problem Lv2: 誘導あり2小問。どちらの比較も引き分けにならない。"""
+    ctx, mr = _box_plot_mr("math.g2_l57.word_problem", 2, seed)
+    assert mr.signature == "word_problem_box_plot_compare_guided"
+    assert set(mr.given) == {"scenario"}
+    assert [sq.label for sq in mr.sub_questions] == ["(1)", "(2)"]
+    assert [sq.asked for sq in mr.sub_questions] == ["value", "value"]
+
+    axis_lo, axis_step = _assert_box_plot_axis(mr)
+    ticks_a = [int(t) for t in mr.params["box_ticks_a"]]
+    ticks_b = [int(t) for t in mr.params["box_ticks_b"]]
+    _assert_non_degenerate_ticks(ticks_a)
+    _assert_non_degenerate_ticks(ticks_b)
+    assert ticks_a != ticks_b
+    # (1) 中央値 (2) 範囲 — どちらも引き分けだと「どちらが大きいか」に答えが定まらない。
+    assert ticks_a[2] != ticks_b[2]
+    assert (ticks_a[4] - ticks_a[0]) != (ticks_b[4] - ticks_b[0])
+
+    for v in mr.given.values():
+        assert not _BOX_PLOT_ASCII_DIGIT_RE.search(v), f"given に算用数字: {v!r}"
+
+    answers = [sq.answer for sq in mr.sub_questions]
+    assert all(a.kind == "choice" for a in answers)
+    assert answers[0].correct == ("A" if ticks_a[2] > ticks_b[2] else "B")
+    assert answers[1].correct == (
+        "A" if (ticks_a[4] - ticks_a[0]) > (ticks_b[4] - ticks_b[0]) else "B"
+    )
+    for a in answers:
+        assert a.distractors == [("B" if a.correct == "A" else "A")]
+
+    checker = REGISTRY.checker("math.word_problem_box_plot_compare.double_solve")
+    got = checker(mr)
+    assert len(got) == 2
+    assert [s.answer.correct for s in got] == [a.correct for a in answers]
+
+
+@pytest.mark.parametrize("seed", range(40))
+def test_word_problem_box_plot_trend_property(seed):
+    """g2_l57.word_problem Lv3: 傾向の主張の当否。中央値は必ずBが上（主張に根拠がある）。"""
+    ctx, mr = _box_plot_mr("math.g2_l57.word_problem", 3, seed)
+    assert mr.signature == "word_problem_box_plot_judge_trend"
+    assert set(mr.given) == {"scenario", "quantities"}
+    assert [sq.asked for sq in mr.sub_questions] == ["value"]
+
+    _assert_box_plot_axis(mr)
+    ticks_a = [int(t) for t in mr.params["box_ticks_a"]]
+    ticks_b = [int(t) for t in mr.params["box_ticks_b"]]
+    _assert_non_degenerate_ticks(ticks_a)
+    _assert_non_degenerate_ticks(ticks_b)
+    assert ticks_a != ticks_b
+    # 中央値では必ず B が上＝「Bのほうが大きい傾向がある」に一応の根拠が常にある
+    # （常に "いえない" が正解になる退化を防ぐ）。
+    assert ticks_b[2] > ticks_a[2]
+    # 構成が狙った結論と solver の判定が一致していること。
+    expected = "いえる" if (ticks_b[1] > ticks_a[1] and ticks_b[3] > ticks_a[3]) else "いえない"
+
+    for v in mr.given.values():
+        assert not _BOX_PLOT_ASCII_DIGIT_RE.search(v), f"given に算用数字: {v!r}"
+
+    answer = mr.sub_questions[0].answer
+    assert answer.kind == "choice"
+    assert answer.correct == expected
+    assert answer.distractors == [("いえない" if expected == "いえる" else "いえる")]
+    # 答えが params から直に読めないこと（構成時に狙った結論は params に置かない）。
+    assert "supported" not in mr.params and "verdict" not in mr.params
+
+    checker = REGISTRY.checker("math.word_problem_box_plot_trend.double_solve")
+    assert checker(mr).answer.correct == answer.correct
+
+
+@pytest.mark.parametrize("seed", range(40))
+def test_word_problem_box_plot_stability_property(seed):
+    """g2_l57.word_problem Lv4: 妥当性の批判的判断。支持する根拠は常に1本残す。"""
+    ctx, mr = _box_plot_mr("math.g2_l57.word_problem", 4, seed)
+    assert mr.signature == "word_problem_box_plot_judge_stability"
+    assert set(mr.given) == {"scenario", "quantities"}
+
+    _assert_box_plot_axis(mr)
+    ticks_a = [int(t) for t in mr.params["box_ticks_a"]]
+    ticks_b = [int(t) for t in mr.params["box_ticks_b"]]
+    _assert_non_degenerate_ticks(ticks_a)
+    _assert_non_degenerate_ticks(ticks_b)
+    assert ticks_a != ticks_b
+    # 「多い」＝中央値が大きいは常に成立（支持する根拠が必ず1本ある）。
+    assert ticks_a[2] > ticks_b[2]
+    iqr_a, iqr_b = ticks_a[3] - ticks_a[1], ticks_b[3] - ticks_b[1]
+    # 「安定している」の判定が引き分けにならない。
+    assert iqr_a != iqr_b
+    expected = "妥当である" if iqr_a < iqr_b else "妥当でない"
+
+    for v in mr.given.values():
+        assert not _BOX_PLOT_ASCII_DIGIT_RE.search(v), f"given に算用数字: {v!r}"
+
+    answer = mr.sub_questions[0].answer
+    assert answer.kind == "choice"
+    assert answer.correct == expected
+    assert "valid" not in mr.params and "verdict" not in mr.params
+
+    checker = REGISTRY.checker("math.word_problem_box_plot_stability.double_solve")
+    assert checker(mr).answer.correct == answer.correct
+
+
+def test_word_problem_box_plot_answers_are_not_degenerate():
+    """Lv3/Lv4 の結論が片方に潰れていない（ゲートは潰れを素通りする）。"""
+    for level, pool in ((3, {"いえる", "いえない"}), (4, {"妥当である", "妥当でない"})):
+        seen = set()
+        for seed in range(1, 61):
+            _, mr = _box_plot_mr("math.g2_l57.word_problem", level, seed)
+            seen.add(mr.sub_questions[0].answer.correct)
+        assert seen == pool, f"Lv{level} の結論が偏っている: {seen}"
+
+
+def test_word_problem_box_plot_level_sep_op_sequences():
+    """g2_l57.word_problem: Lv2/Lv3/Lv4 で小問数と op 列が相異する（fp 相異の実体）。"""
+    shapes = []
+    for level in (2, 3, 4):
+        _, mr = _box_plot_mr("math.g2_l57.word_problem", level, 7)
+        shapes.append(tuple(tuple(s.op for s in sq.steps) for sq in mr.sub_questions))
+    assert shapes[0] == (
+        ("read_median_both", "compare_median"),
+        ("read_range_both", "compare_range"),
+    )
+    assert shapes[1] == (
+        (
+            "read_quartiles_both",
+            "compare_center",
+            "compare_quartile_positions",
+            "judge_trend_claim",
+        ),
+    )
+    assert shapes[2] == (
+        (
+            "read_medians_both",
+            "read_iqr_both",
+            "weigh_support_and_counter",
+            "judge_claim_validity",
+        ),
+    )
+    assert len(set(shapes)) == 3

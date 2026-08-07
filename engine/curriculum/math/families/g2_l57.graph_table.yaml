@@ -1,0 +1,84 @@
+family: math.g2_l57.graph_table
+form: graph_table
+source_desc: |
+  複数の箱ひげ図を読む（units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: 複数の箱ひげ図から5数要約や散らばりを読み取る。
+       example: 3つのクラスの記録を並べて表した箱ひげ図から、それぞれの中央値と、
+                散らばりが最も大きいクラスを読み取れ。
+  Lv3 desc: 複数群を並べて比較し違いを読み取る。
+       example: 4つの都市の月ごとの最高気温を並べて表した箱ひげ図から、中央値・
+                四分位範囲を比較し、気温の散らばりが最も小さい都市とその違いを読み取れ。
+  ---
+  【example との差と、その判断】図（visual `math.box_plot`）が並べられるのは2本まで
+  なので、群の数は2（A・B）にした。desc の「複数群を並べて比較」は満たす。また
+  「最も大きい/小さいのはどれか」という**選択**ではなく、比べる統計量の**値**と
+  その差を答えさせる形にした。選択肢の答えは2群だと当てずっぽうで1/2当たるうえ、
+  「散らばりを読み取れた」ことの証拠にならない。値まで求めさせれば選択は自明に従う。
+  図は上がA・下がB（Bは破線）で、どちらがどちらかは本文で明示する
+  （図中に文字を書かない土台なので、図だけでは区別がつかないため）。
+
+  【params に何を置いたか・G-Q5t 漏洩の判断】g2_l56.graph_table と同じ規約。
+  置いたのは図に描かれているもの（axis_lo/axis_hi/axis_step と、箱ひげの位置
+  box_ticks_a/box_ticks_b）と、visual が要求する描画座標 five_number/five_number_b
+  （tick から一意に決まる）。**solver には five_number を渡さない**——渡すのは
+  axis_lo/axis_step/box_ticks_a/box_ticks_b だけで、値も中央値も範囲も四分位範囲も
+  そこから復元する。given は算用数字を一切含まない場面文だけにしてあるので、
+  答えの値が本文に現れることがない（序数は漢数字で書く）。
+
+  【level_sep】Lv1 = 中央値と範囲を読む3手（read_axis_step → read_medians →
+  read_ranges）。Lv3 = 四分位範囲を比べる4手（read_axis_step → read_quartiles_both →
+  compute_iqr_both → compare_iqr_difference）。「箱の外側（ひげの端＝範囲）を見るか、
+  箱そのもの（四分位範囲）を見るか」で読む対象と手数の両方が変わる。
+
+  【dup（数え上げ）】箱ひげの目もり位置は C(9,5)=126 通り。2群ぶんで 126²=15876、
+  場面がもつ相異な目もり間隔が5種で 79380 通り（≫ 250）。うち比較する統計量が
+  A=B になる組だけを構成で捨てる。
+
+  【退化の防止】box_ticks は狭義単調増加の組合せのみを列挙して引く（箱の潰れ・
+  ひげ無しが起こらない）。さらに ticks_a == ticks_b（2本が同じ分布）と、
+  比べる統計量が A と B で一致する組（Lv1=範囲・Lv3=四分位範囲）を構成で除外する。
+concepts_default: [box_plot.compare_center_spread]
+levels:
+  "1":
+    signature: box_plot_compare_center_spread
+    recipe: math.read_two_box_plots
+    params:
+      # 場面 = "集団A|集団B|量|数直線の目もり間隔"。語に算用数字を書かない。
+      scene_set:
+        - "一組の生徒|二組の生徒|数学のテストの得点|10"
+        - "一年生|三年生|通学にかかる時間（分）|5"
+        - "男子|女子|一か月に読んだ本の冊数|2"
+        - "バスケットボール部|サッカー部|一日の練習時間（時間）|1"
+        - "東町の中学校|西町の中学校|ハンドボール投げの記録（メートル）|4"
+        - "去年の三年生|今年の三年生|英語のテストの得点|10"
+        - "北市|南市|月ごとの最高気温（度）|4"
+        - "東店|西店|一日あたりの来客数（十人）|5"
+    given: [situation_params]
+    asked: [read_box_plot]
+    visual: required
+    text: {tier: T1, template: bp_read_two_box_plots_v1, visual_builder: math.box_plot}
+    hints: [steps_prefix]
+    concept_tags: [box_plot.compare_center_spread]
+    cause_tags: []
+  "3":
+    signature: box_plot_compare_iqr
+    recipe: math.compare_two_box_plots_iqr
+    params:
+      scene_set:
+        - "一組の生徒|二組の生徒|数学のテストの得点|10"
+        - "一年生|三年生|通学にかかる時間（分）|5"
+        - "男子|女子|一か月に読んだ本の冊数|2"
+        - "バスケットボール部|サッカー部|一日の練習時間（時間）|1"
+        - "東町の中学校|西町の中学校|ハンドボール投げの記録（メートル）|4"
+        - "去年の三年生|今年の三年生|英語のテストの得点|10"
+        - "北市|南市|月ごとの最高気温（度）|4"
+        - "東店|西店|一日あたりの来客数（十人）|5"
+    given: [situation_params]
+    asked: [read_box_plot]
+    visual: required
+    text: {tier: T1, template: bp_compare_two_box_plots_iqr_v1, visual_builder: math.box_plot}
+    hints: [steps_prefix]
+    concept_tags: [box_plot.compare_iqr]
+    cause_tags: []
+remedial:
+  default_level: 1
