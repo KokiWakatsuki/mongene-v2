@@ -9812,3 +9812,58 @@ def test_g2_l30_second_meeting_property(seed):
     assert int(t2) not in {d, va, vb, h}
     checker = REGISTRY.checker("math.word_problem_linear_function.double_solve")
     assert [s.answer.srepr for s in checker(mr)] == [mr.sub_questions[0].answer.srepr]
+
+
+# ---------------------------------------------------------------------------
+# C8 g1_l53.find_value（球の表面積・体積）
+#
+# ★このセルは「params が半径ひとつだと dup が原理的に通らない」典型。軸を3つに
+# したうえで、**与え方を足しても op 列が変わらない**（G-FP が安定する）ことを固定する。
+# ---------------------------------------------------------------------------
+@pytest.mark.parametrize("seed", range(30))
+def test_g1_l53_sphere_direct_property(seed):
+    _ctx, mr = _cell_mr("math.g1_l53.find_value", 1, seed)
+    p = mr.params
+    r = int(p["radius"])
+    assert r >= 2
+    assert p["given_as"] in ("radius", "diameter")
+    assert p["unit"] in ("cm", "m", "mm")
+    # 与え方に関わらず op 列は同じ（第1手が variant 中立）。
+    assert [s.op for s in mr.sub_questions[0].steps] == [
+        "read_radius_from_statement",
+        "apply_sphere_surface_formula",
+        "apply_sphere_volume_formula",
+    ]
+    surface, volume = sympy.sympify(mr.sub_questions[0].answer.srepr)
+    assert surface == 4 * sympy.pi * r**2
+    assert volume == sympy.Rational(4, 3) * sympy.pi * r**3
+    # 本文の長さは与え方どおり（直径なら半径の2倍）。
+    size = 2 * r if p["given_as"] == "diameter" else r
+    assert f"{size}{p['unit']}" in mr.given["condition"]
+
+
+@pytest.mark.parametrize("seed", range(30))
+def test_g1_l53_hemisphere_property(seed):
+    _ctx, mr = _cell_mr("math.g1_l53.find_value", 2, seed)
+    p = mr.params
+    r = int(p["radius"])
+    # ★1レベル＝1 op 列。逆算 variant（2手）を混ぜていないこと。
+    assert p["variant"] == "hemisphere_surface"
+    assert [s.op for s in mr.sub_questions[0].steps] == [
+        "read_radius_from_statement",
+        "identify_hemisphere_faces",
+        "compute_curved_and_flat_area",
+        "sum_hemisphere_surface_area",
+    ]
+    # 半球の表面積 = 曲面 2πr² + 切り口の円 πr² = 3πr²
+    assert sympy.sympify(mr.sub_questions[0].answer.srepr) == 3 * sympy.pi * r**2
+
+
+def test_g1_l53_level_sep():
+    """Lv1（表面積と体積の組・3手）と Lv2（表面積だけ・4手）は相異する。"""
+    shapes = []
+    for level in (1, 2):
+        _ctx, mr = _cell_mr("math.g1_l53.find_value", level, 1)
+        shapes.append(tuple(s.op for s in mr.sub_questions[0].steps))
+    assert shapes[0] != shapes[1]
+    assert len(shapes[0]) != len(shapes[1])

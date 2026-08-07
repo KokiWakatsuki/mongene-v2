@@ -424,11 +424,20 @@ def _handle_l52_composite_or_reverse_volume(values: Mapping[str, object]) -> Sol
 # ---------------------------------------------------------------------------
 def _handle_l53_sphere_direct(values: Mapping[str, object]) -> Solution:
     r = _i(values["radius"])
+    unit = str(values.get("unit", "cm"))
     surface = 4 * sympy.pi * r**2
     volume = sympy.Rational(4, 3) * sympy.pi * r**3
-    disp = f"表面積 {_fmt_pi(surface, 'cm²')}、体積 {_fmt_pi(volume, 'cm³')}"
+    disp = f"表面積 {_fmt_pi(surface, unit + '²')}、体積 {_fmt_pi(volume, unit + '³')}"
     srepr = sympy.srepr(sympy.Tuple(surface, volume))
     steps = [
+        # 第1手は variant 中立（半径で与えられても直径で与えられても同じ手）。
+        # これを置くことで「与え方」を dup の第2の軸にしても op 列が変わらない
+        # ＝G-FP が安定する（BRIEF「★単一パラメータのセルは原理的に通らない」）。
+        Step(
+            op="read_radius_from_statement",
+            args=[], result_srepr="", result_display="球の半径を読み取る",
+            narration="問題文から球の半径を読み取る（直径で与えられているときは半分にする）。",
+        ),
         Step(
             op="apply_sphere_surface_formula",
             args=[], result_srepr=sympy.srepr(surface), result_display=_fmt_pi(surface, "cm²"),
@@ -442,6 +451,10 @@ def _handle_l53_sphere_direct(values: Mapping[str, object]) -> Solution:
             narration="球の体積の公式に半径の値をあてはめて計算する（半径の立方に比例する）。",
         ),
     ]
+    steps[1] = Step(
+        op=steps[1].op, args=[], result_srepr=steps[1].result_srepr,
+        result_display=_fmt_pi(surface, unit + "²"), narration=steps[1].narration,
+    )
     return Solution(answer=SymbolicAnswer(srepr=srepr, display=disp), steps=steps)
 
 
@@ -452,12 +465,19 @@ def _handle_l53_hemisphere_or_reverse(values: Mapping[str, object]) -> Solution:
     variant = str(values["variant"])
     if variant == "hemisphere_surface":
         r = _i(values["radius"])
+        unit = str(values.get("unit", "cm"))
         curved = 2 * sympy.pi * r**2
         flat = sympy.pi * r**2
         total = curved + flat
-        disp = _fmt_pi(total, "cm²")
+        disp = _fmt_pi(total, unit + "²")
         srepr = sympy.srepr(total)
         steps = [
+            # Lv1 と同じ variant 中立の第1手（与え方を dup の軸にするため）。
+            Step(
+                op="read_radius_from_statement",
+                args=[], result_srepr="", result_display="球の半径を読み取る",
+                narration="問題文から球の半径を読み取る（直径で与えられているときは半分にする）。",
+            ),
             Step(
                 op="identify_hemisphere_faces",
                 args=[], result_srepr="", result_display="曲面と切り口の円の2つの面からなる",
@@ -466,7 +486,7 @@ def _handle_l53_hemisphere_or_reverse(values: Mapping[str, object]) -> Solution:
             Step(
                 op="compute_curved_and_flat_area",
                 args=[], result_srepr=sympy.srepr(sympy.Tuple(curved, flat)),
-                result_display=_fmt_pi(curved, "cm²") + " と " + _fmt_pi(flat, "cm²"),
+                result_display=_fmt_pi(curved, unit + "²") + " と " + _fmt_pi(flat, unit + "²"),
                 narration="球の表面積の公式の半分から曲面の面積を、円の面積の公式から切り口の面積を求める。",
             ),
             Step(
