@@ -10192,3 +10192,109 @@ def test_g3_l56_shortest_path_choose_property(seed):
     # 小さい2辺を足す開き方が最短。
     s1, s2, s3 = sorted([a, b, c])
     assert sympy.simplify(got - sympy.sqrt((s1 + s2) ** 2 + s3**2)) == 0
+
+
+# ---------------------------------------------------------------------------
+# C11 統計的な探究（g1_l58 / g3_l57 / g3_l58 の word_problem・Phase C）
+#
+# ゲートが素通りする退化をここで固定する:
+#   - Lv2: 平均が等しく範囲が相異（「平均は同じなのに散らばりが違う」が見せ場）
+#   - Lv3: 平均値・中央値・最頻値のすべてが同じ側を指す（＝指標を自分で選んでよい）
+#   - 判断セル: 正解の選択肢がちょうど1つ／答えが片方に固定されない
+# ---------------------------------------------------------------------------
+@pytest.mark.parametrize("seed", range(25))
+def test_g1_l58_compare_mean_range_property(seed):
+    _ctx, mr = _cell_mr("math.g1_l58.word_problem", 2, seed)
+    from engine.packs.math.recipes.statistics_inquiry import lists_from_numbers
+
+    # データ列は numbers（本文に出ている数）から組み直す＝二重管理にしない。
+    a, b = lists_from_numbers(mr.params["numbers"])
+    assert len(a) == len(b) >= 8
+    mean_sq, range_sq, judge_sq = mr.sub_questions
+    ma, mb = sympy.sympify(mean_sq.answer.srepr)
+    ra, rb = sympy.sympify(range_sq.answer.srepr)
+    # ★見せ場: 平均は等しく、範囲は相異（範囲が等しいと安定なほうを決められない）。
+    assert ma == mb
+    assert ra != rb
+    assert ma == sympy.Rational(sum(a), len(a))
+    assert ra == max(a) - min(a) and rb == max(b) - min(b)
+    # 安定しているのは範囲が小さいほう。
+    assert judge_sq.answer.correct == ("A" if ra < rb else "B")
+    checker = REGISTRY.checker("math.statistics_inquiry.double_solve")
+    got = checker(mr)
+    assert len(got) == 3
+
+
+@pytest.mark.parametrize("seed", range(25))
+def test_g1_l58_choose_statistic_property(seed):
+    """★どの代表値で比べても同じ側＝「指標を自分で選んでよい」が成り立つ。"""
+    _ctx, mr = _cell_mr("math.g1_l58.word_problem", 3, seed)
+    from engine.packs.math.recipes.statistics_inquiry import lists_from_numbers
+
+    a, b = lists_from_numbers(mr.params["numbers"])
+
+    def mean(v):
+        return sympy.Rational(sum(v), len(v))
+
+    def median(v):
+        o = sorted(v)
+        n = len(o)
+        return sympy.Integer(o[n // 2]) if n % 2 else sympy.Rational(o[n // 2 - 1] + o[n // 2], 2)
+
+    def mode(v):
+        c = {}
+        for x in v:
+            c[x] = c.get(x, 0) + 1
+        top = max(c.values())
+        winners = [k for k, n in c.items() if n == top]
+        assert len(winners) == 1, winners  # 最頻値が一意
+        return winners[0]
+
+    smaller = bool(mr.params["smaller_is_better"])
+    sides = set()
+    for fa, fb in ((mean(a), mean(b)), (median(a), median(b)), (mode(a), mode(b))):
+        assert fa != fb
+        sides.add("A" if ((fa < fb) if smaller else (fa > fb)) else "B")
+    assert len(sides) == 1
+    assert mr.sub_questions[0].answer.correct == sides.pop()
+
+
+@pytest.mark.parametrize("seed", range(25))
+def test_g3_l57_judge_survey_method_property(seed):
+    _ctx, mr = _cell_mr("math.g3_l57.word_problem", 2, seed)
+    sq = mr.sub_questions[0]
+    needs_sample = str(mr.params["needs_sample"]).lower() in ("true", "1")
+    expected = "標本調査で行うのが適切" if needs_sample else "全数調査で行うのが適切"
+    assert sq.answer.correct == expected
+    assert sq.answer.correct not in sq.answer.distractors
+    # 母集団の大きさは本文に出る数なので numbers に載っている（params 忠実性契約）。
+    assert set(mr.params["numbers"]) == {"population"}
+    assert mr.params["numbers"]["population"] in mr.given["scenario"]
+
+
+def test_g3_l57_both_answers_occur():
+    """★答えが片方に固定されない（場面を読まずに当てられない）。"""
+    answers = set()
+    for seed in range(40):
+        _ctx, mr = _cell_mr("math.g3_l57.word_problem", 2, seed)
+        answers.add(mr.sub_questions[0].answer.correct)
+    assert len(answers) == 2, answers
+
+
+@pytest.mark.parametrize("seed", range(25))
+def test_choice_cells_have_exactly_one_correct(seed):
+    """g3_l58 Lv2 と g1_l58 Lv4: 条件を満たす選択肢がちょうど1つ。"""
+    for family, level in (("math.g3_l58.word_problem", 2), ("math.g1_l58.word_problem", 4)):
+        _ctx, mr = _cell_mr(family, level, seed)
+        flags = [int(v) for v in mr.params["flags"]]
+        labels = [str(v) for v in mr.params["labels"]]
+        assert sum(flags) == 1, (family, flags)
+        assert len(labels) == 3
+        sq = mr.sub_questions[0]
+        assert sq.answer.correct == labels[flags.index(1)]
+        assert sorted(sq.answer.distractors) == sorted(
+            l for i, l in enumerate(labels) if not flags[i]
+        )
+        # 選択肢はすべて本文に出ている。
+        for lab in labels:
+            assert lab in mr.given["scenario"] or lab in "".join(mr.context_slots.values())

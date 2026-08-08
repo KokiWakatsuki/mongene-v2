@@ -1381,6 +1381,21 @@ concepts:
   - id: pythagorean.word_problem_box_shortest_path_choose
     label: "直方体の表面上の最短距離を、3通りの開き方を比べて自分で選んで求める"
     unit: g3_l56
+  - id: data_inquiry.compare_mean_and_range
+    label: "2つのデータの平均値と範囲を求め、散らばりから安定しているほうを判断する"
+    unit: g1_l58
+  - id: data_inquiry.choose_statistic
+    label: "着目する代表値を自分で選び、その値を根拠に2つの集団を比べて結論を述べる"
+    unit: g1_l58
+  - id: data_inquiry.design_plan
+    label: "問いに答えられる調べ方を、比べる相手がそろうか・偏りが無いかで選ぶ"
+    unit: g1_l58
+  - id: sample_survey.judge_method_word_problem
+    label: "現実の場面を読み、全数調査と標本調査のどちらが適切かを理由とともに判断する"
+    unit: g3_l57
+  - id: sample_survey.choose_unbiased_word_problem
+    label: "場面に示された抽出方法から、偏りが生じにくいものを理由とともに選ぶ"
+    unit: g3_l58
   - id: box_view.section
     label: "直方体の対角線をふくむ断面を平面に抜き出し、対角線を求める直角三角形を示す"
     unit: g3_l55
