@@ -1,0 +1,84 @@
+family: math.g3_l49.proof
+form: proof
+source_desc: |
+  円周角の定理を利用した証明
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv2 desc: 誘導あり・同じ弧の円周角が等しいを根拠に直接証明。
+  Lv3 desc: 補助線・複数の等角を用いた相似/合同の2段階証明。
+  Lv4 desc: 誘導なし・着目する円周角・三角形を自分で構成する証明。
+  ---
+  【設計モデル】g2_l39.proof と同じ推論器。円周角の定理・半円の弧に対する円周角・
+  半径が等しいことは `rules_circle.py` にある。
+
+  【★同じ弧の上にあることは手順が決めている】円周角の定理は「同じ弧に対する」という
+  条件つきの定理なので、どちらの弧の上にあるかが**座標を測った結果**では機械的に
+  使えない。構成の `points_on_circle` が角度で点を置き、そこから弧の同じ側という
+  事実を出している（`construct.py`）。
+
+  【循環していないか】示すのは「2つの三角形が相似であること」や線分の関係であって、
+  円周角の定理そのものではない。だから `exclude_rules` は要らない。
+
+  【深さ】Lv2 は弦2本の交点の図で、円周角と対頂角 → 2組の角がそれぞれ等しい
+  （深さ2）。Lv3 はそこから対応する辺の比（深さ3）。Lv4 は直径をふくむ図で、
+  半径が等しいこと・半円の弧に対する円周角を自分で拾って二等辺にたどりつく（深さ4）。
+concepts_default: [circle_proof.inscribed_direct]
+levels:
+  "2":
+    signature: geometry_proof_circle_inscribed_similar
+    recipe: math.geometry_proof
+    params:
+      construction: circle_two_chords
+      topic_set: circle
+      proof_depth: 2
+      prefer: tri_sim
+      base_domain: {int_range: [24, 48]}
+      angle_domain: {int_range: [78, 90]}
+      offset_domain: {int_range: [6, 12]}
+    given: [premises, conclusion]
+    asked: [proof_text]
+    visual: optional
+    text: {tier: T1, template: pf_geometry_proof_v1, visual_builder: math.geometry_construction}
+    hints: [steps_prefix]
+    concept_tags: [circle_proof.inscribed_direct]
+    cause_tags: []
+  "3":
+    signature: geometry_proof_circle_ratio
+    recipe: math.geometry_proof
+    params:
+      construction: circle_diameter_chords
+      topic_set: circle
+      proof_depth: 3
+      prefer: ratio_eq
+      # 実測（fit_domain）でこの箱は合格率 100%・8125 通り。
+      base_domain: {int_range: [24, 48]}
+      angle_domain: {int_range: [66, 78]}
+      offset_domain: {int_range: [6, 30]}
+    given: [premises, conclusion]
+    asked: [proof_text]
+    visual: optional
+    text: {tier: T1, template: pf_geometry_proof_v1, visual_builder: math.geometry_construction}
+    hints: [steps_prefix]
+    concept_tags: [circle_proof.two_step]
+    cause_tags: []
+  "4":
+    signature: geometry_proof_circle_construct
+    recipe: math.geometry_proof
+    params:
+      # 直径ABの両側に AC ＝ AD をとった図。半円の弧に対する円周角が 90°である
+      # ことを2回使い、直角三角形の合同（斜辺と他の1辺）を経由して相似にたどりつく。
+      construction: circle_thales_isosceles
+      topic_set: circle
+      proof_depth: 4
+      prefer: tri_sim
+      base_domain: {int_range: [24, 48]}
+      angle_domain: {int_range: [78, 90]}
+      offset_domain: {int_range: [6, 30]}
+    given: [premises, conclusion]
+    asked: [proof_text]
+    visual: optional
+    text: {tier: T1, template: pf_geometry_proof_v1, visual_builder: math.geometry_construction}
+    hints: [steps_prefix]
+    concept_tags: [circle_proof.construct]
+    cause_tags: []
+remedial:
+  default_level: 2
