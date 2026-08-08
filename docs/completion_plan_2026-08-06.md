@@ -4,6 +4,15 @@
 > Phase A（動点・速さ）・Phase B（立体）が完了。次は Phase C（統計の word_problem 5セル）。
 > 台帳は `PYTHONPATH=. .venv/bin/python -m engine.tools.coverage_page` で再生成（docs/coverage.html）。
 > 未実装セル一覧は `PYTHONPATH=. .venv/bin/python scratchpad/list_gaps.py <unit接頭辞>`。
+>
+> **★進捗を更新する前に必ず `scratchpad/audit_progress.py` を回すこと**（exit 0 が条件）。
+> 進捗更新では2方向のミスが繰り返し起きた。原因が違うので検査も別に要る:
+> - **できていないのにできている**: Phase 1 が「完了」とされたが3束目は投入されて
+>   いなかった → 完了と書いた Phase の対象セルを capabilities と突き合わせる
+> - **できているのにできていない**: g1_l53 は solver も recipe もあるのに family が無く
+>   台帳に載っていなかった／g1_l27 Lv4 の意図的除外が YAML に埋もれていた／
+>   g3_l55・g3_l56 Lv4 は実装したのに「担当外」の記述が残っていた
+>   → 未使用 recipe/solver・除外記述と gaps の突き合わせ を機械で検出する
 
 ## 0. いまの実測（2026-08-07）
 
