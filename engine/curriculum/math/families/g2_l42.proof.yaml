@@ -1,0 +1,42 @@
+family: math.g2_l42.proof
+form: proof
+source_desc: |
+  二等辺三角形になるための条件
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv2 desc: 誘導あり・2角が等しいことを示し二等辺と結論する。
+  ---
+  【設計モデル】g2_l39.proof と同じ推論器。図は「∠Aの二等分線が底辺BCと垂直に
+  交わる」もので、**二等辺であることは仮定しない**（仮定に入れたら示すことが無い）。
+  二等分された角・共通の辺・直角から ASA で合同を示し、対応する辺が等しいこと
+  （AB ＝ AC）を結論にする。
+
+  【循環していないか】示すのは「AB ＝ AC」＝二等辺三角形であること。二等辺三角形の
+  性質（底角が等しい）を使う場面が無いので `exclude_rules` は要らない。
+
+  【深さ】合同（深さ1）→ 対応する辺が等しい（深さ2）。
+
+  【Lv3 は未実装】台帳 Lv3「誘導なし・角の等しさを補助線/合同で導き二等辺を構成する」
+  には、**角の等しさが導出の途中に出てくる図**が要る（いまの構成カタログはどれも、
+  角の等しさを仮定として与えてしまう）。図を1つ足せば開く。
+concepts_default: [isosceles_proof.condition_two_angles]
+levels:
+  "2":
+    signature: geometry_proof_isosceles_condition
+    recipe: math.geometry_proof
+    params:
+      construction: bisector_perp_base
+      topic_set: right_triangle
+      proof_depth: 2
+      prefer: seg_eq
+      base_domain: {int_range: [24, 48]}
+      angle_domain: {int_range: [66, 84]}
+      offset_domain: {int_range: [6, 30]}
+    given: [premises, conclusion]
+    asked: [proof_text]
+    visual: optional
+    text: {tier: T1, template: pf_geometry_proof_v1, visual_builder: math.geometry_construction}
+    hints: [steps_prefix]
+    concept_tags: [isosceles_proof.condition_two_angles]
+    cause_tags: []
+remedial:
+  default_level: 2

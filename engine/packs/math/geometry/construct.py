@@ -317,10 +317,17 @@ def figure_quality_problems(con: Construction) -> list[str]:
 
     **一直線上にあると分かっている3点は対象外**（X字型のように、まっすぐ並べたことが
     構成の意図である場合まで「つぶれている」と弾いてしまった）。
+
+    **角の検査は「2辺とも図に描かれている角」だけを見る。** はじめは3点の組をすべて
+    見ていたが、それだと平行四辺形の辺の中点Mについて ∠ACM のような**誰も見ない角**
+    （CM は線として描かれていない）で図が落ちた。実際、中点連結定理の図・ピラミッド型・
+    平行四辺形の応用など、教科書の定番の図がことごとく落ちていた。描かれていない角は
+    つぶれて見えようがないので、読めるかどうかの検査の対象ではない。
     """
     collinear_triples = {
         frozenset(f.args) for f in con.facts if f.kind == "collinear"
     }
+    drawn = {frozenset(s) for s in con.segments}
     problems: list[str] = []
     names = con.points
     for i, p in enumerate(names):
@@ -332,6 +339,8 @@ def figure_quality_problems(con: Construction) -> list[str]:
         for j, b in enumerate(names):
             for c in names[j + 1:]:
                 if len({a, b, c}) != 3 or frozenset({a, b, c}) in collinear_triples:
+                    continue
+                if frozenset({a, b}) not in drawn or frozenset({a, c}) not in drawn:
                     continue
                 angle = _angle_deg(con.coords[b], con.coords[a], con.coords[c])
                 if angle < _MIN_ANGLE_DEG:

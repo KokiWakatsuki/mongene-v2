@@ -1,0 +1,62 @@
+family: math.g2_l47.proof
+form: proof
+source_desc: |
+  平行四辺形になるための条件
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv2 desc: 誘導あり・1つの条件を満たすことを示し結論する。
+  Lv3 desc: 誘導なし・満たす条件を自分で選び根拠を構成して示す。
+  ---
+  【設計モデル】g2_l39.proof と同じ推論器。**構成は平行四辺形であることを持たない**
+  （持たせたら示すことが無くなる）。四角形に条件だけを与え、「平行四辺形である」を
+  結論に取る。
+
+  【深さ】Lv2 は与えられた条件がそのまま1つの条件になっている（対角線がそれぞれの
+  中点で交わる → 平行四辺形・深さ1）。Lv3 は「AB∥DC と ∠ADB ＝ ∠CBD」だけが
+  与えられていて、錯角 → ASA で合同 → 対応する辺 → 2組の対辺が等しい、と
+  **どの条件を使うかを自分で決めてから根拠を組む**（深さ4）。台帳の
+  「満たす条件を自分で選び根拠を構成して示す」がこの形にあたる。
+
+  【定義域】`scratchpad/fit_domain.py` の実測（Lv2 88%・Lv3 94%）。
+concepts_default: [parallelogram_proof.condition_given]
+levels:
+  "2":
+    signature: geometry_proof_pgram_condition_diagonals
+    recipe: math.geometry_proof
+    params:
+      construction: quad_bisecting_diagonals
+      topic_set: parallelogram
+      proof_depth: 1
+      prefer: parallelogram
+      # 狭い箱（112通り）だと dup_rate 0.37 で落ちた。**合格率より変種の数が効く**
+      # ——recipe は 24 回引き直すので合格率 6 割でも rejects は 0 になるが、
+      # dup は箱の広さでしか下がらない。
+      base_domain: {int_range: [33, 48]}
+      angle_domain: {int_range: [45, 66]}
+      offset_domain: {int_range: [21, 32]}
+    given: [premises, conclusion]
+    asked: [proof_text]
+    visual: optional
+    text: {tier: T1, template: pf_geometry_proof_v1, visual_builder: math.geometry_construction}
+    hints: [steps_prefix]
+    concept_tags: [parallelogram_proof.condition_given]
+    cause_tags: []
+  "3":
+    signature: geometry_proof_pgram_condition_choose
+    recipe: math.geometry_proof
+    params:
+      construction: quad_one_parallel_and_angle
+      topic_set: parallelogram
+      proof_depth: 4
+      prefer: parallelogram
+      base_domain: {int_range: [39, 45]}
+      angle_domain: {int_range: [78, 84]}
+      offset_domain: {int_range: [24, 30]}
+    given: [premises, conclusion]
+    asked: [proof_text]
+    visual: optional
+    text: {tier: T1, template: pf_geometry_proof_v1, visual_builder: math.geometry_construction}
+    hints: [steps_prefix]
+    concept_tags: [parallelogram_proof.condition_choose]
+    cause_tags: []
+remedial:
+  default_level: 2

@@ -31,6 +31,7 @@ from engine.packs.math.geometry.facts import (
 from engine.packs.math.geometry.rule_base import (
     Derivation,
     Rule,
+    collinear_triples,
     pairs_of_triangles,
 )
 
@@ -98,7 +99,10 @@ def _apply_cong_parts(points: list[Point], facts: frozenset[Fact]) -> Iterable[D
 def _apply_isosceles_base_angles(
     points: list[Point], facts: frozenset[Fact]
 ) -> Iterable[Derivation]:
+    degenerate = collinear_triples(facts)
     for a, b, c in itertools.permutations(points, 3):
+        if frozenset({a, b, c}) in degenerate:
+            continue  # 一直線上の3点は三角形にならない
         premise = seg_eq(seg(a, b), seg(a, c))
         if premise in facts:
             concl = ang_eq(ang(b, a, c), ang(c, a, b))
@@ -109,7 +113,10 @@ def _apply_isosceles_base_angles(
 def _apply_isosceles_from_angles(
     points: list[Point], facts: frozenset[Fact]
 ) -> Iterable[Derivation]:
+    degenerate = collinear_triples(facts)
     for a, b, c in itertools.permutations(points, 3):
+        if frozenset({a, b, c}) in degenerate:
+            continue
         premise = ang_eq(ang(b, a, c), ang(c, a, b))
         if premise in facts and premise.args[0] != premise.args[1]:
             yield seg_eq(seg(a, b), seg(a, c)), (premise,)
