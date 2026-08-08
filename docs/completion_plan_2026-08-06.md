@@ -1,9 +1,11 @@
-# エンジン完成計画（2026-08-06 起点・429/630 → **2026-08-08 現在 559/630**）
+# エンジン完成計画（2026-08-06 起点・429/630 → **2026-08-08 現在 561/630**）
 
 > 進捗更新: 2026-08-08。Phase 0（回収）・Phase 1（曲線グラフ基盤）・Phase 4（C11 統計）が完了、
 > Phase A（動点・速さ）・B（立体）・C（統計の word_problem）が完了。
 > **Phase D（exam 融合）完了**（exam_l1〜l7 の 31セル）。exam の残りは exam_l6.proof Lv3 だけで、
-> これは proof form ごと未実装なので Phase F に属する。次は Phase E（端物 11セル）。
+> これは proof form ごと未実装なので Phase F に属する。
+> **Phase E（端物）は 2/11 着地**（g3_l53.word_problem Lv4・g2_l33.find_value Lv2）。
+> **word_problem は残り0**。残る端物9は graph_table 7・find_value 1・knowledge 1。
 > 台帳は `PYTHONPATH=. .venv/bin/python -m engine.tools.coverage_page` で再生成（docs/coverage.html）。
 > 未実装セル一覧は `PYTHONPATH=. .venv/bin/python scratchpad/list_gaps.py <unit接頭辞>`。
 >
@@ -19,15 +21,15 @@
 ## 0. いまの実測（2026-08-08・Phase D 完了時点）
 
 ```
-合計 559/630 (88.7%)  ※章（台帳の chapter）別の実測。C1〜C16 のクラスタ別集計は
+合計 561/630 (89.0%)  ※章（台帳の chapter）別の実測。C1〜C16 のクラスタ別集計は
                       振り分け規則を再現できなかったため、章別の実測に置き換えた。
 g1 正の数・負の数    39/39   g2 式の計算          20/24   g3 多項式          25/27
 g1 文字の式          27/27   g2 連立方程式        20/20   g3 平方根          26/26
 g1 一次方程式        23/23   g2 1次関数           43/43   g3 2次方程式       25/25
-g1 比例と反比例      36/36   g2 平行と合同        21/33   g3 関数 y=ax^2     28/28
+g1 比例と反比例      36/36   g2 平行と合同        22/33   g3 関数 y=ax^2     28/28
 g1 平面図形          19/30   g2 三角形と四角形    18/42   g3 相似な図形      21/28
 g1 空間図形          24/24   g2 データの分布の比較 13/13  g3 円              10/13
-g1 データの分布…    25/25   g2 確率              20/22   g3 三平方の定理    24/29
+g1 データの分布…    25/25   g2 確率              20/22   g3 三平方の定理    25/29
 g1 ことがら…         5/5                                 g3 標本調査        13/13
                                                           exam 入試対策      34/35
 ```
@@ -35,22 +37,22 @@ g1 ことがら…         5/5                                 g3 標本調査  
 **一次方程式・二次方程式は完成**（`g1_l21〜l27` / `g3_l24〜l31` がすべて 0 gaps。
 最後まで残っていた g1_l27 Lv4・g3_l31 Lv3/Lv4 は Phase A で回収済み）。
 
-## 1. 残り71セルの実態（2026-08-08 実測）
+## 1. 残り69セルの実態（2026-08-08 実測）
 
 | form | 残り | 起点(201) | 性質 |
 |---|---|---|---|
 | proof | 51 | 51 | **form ごと未実装**（frame も solver も checker もゼロ）。手つかず |
 | construction | 9 | 9 | **form ごと未実装**。M2 送り |
 | graph_table | 7 | 58 | すべて端物 |
-| find_value | 2 | 36 | g2_l33 Lv2・g2_l50 Lv3 |
-| word_problem | 1 | 36 | g3_l53 Lv4 |
+| find_value | 1 | 36 | g2_l50 Lv3（面積を2等分する直線） |
+| word_problem | 0 | 36 | **完了** |
 | knowledge | 1 | 10 | g2_l38 Lv2 のみ |
 
 **exam は 34/35。残りは exam_l6.proof Lv3 の1セルだけで、これは proof form ごと
 未実装なので Phase F に属する**。かつて「単元横断で32セルあり form 内訳に散っていて
 見えない」と書いた塊は、Phase D で解消した。
-**proof と construction を除くと、残りは端物10セルだけ**（graph_table 7・
-find_value 2・word_problem 1・knowledge 1）。
+**proof と construction を除くと、残りは端物9セルだけ**（graph_table 7・
+find_value 1・knowledge 1）。
 
 ### 効いた手・尽きた手
 
@@ -243,15 +245,32 @@ scenario_kind を3つ足しただけで、find_value/word_problem の4セルが�
 **Phase A・B が終わっているほど安くなる**（exam_l3 は動点、exam_l4 は空間図形、
 exam_l7 は箱ひげ図＝Phase 4 で済）。だから A・B の後に置く。
 
-## Phase E：端物（11セル）
+## Phase E：端物（11セル）— **2/11 着地（2026-08-08）**
 
 単発で束ねようがないもの。並列体の余りに配る。
 
+**着地済み（新 solver 1本だけ）**
+- `g3_l53.word_problem Lv4`: 3辺のわかる三角形で補助線を自分で引き高さと面積。
+  既存 `word_problem_pythagorean.py` に scenario_kind を足しただけ（新 solver ゼロ）。
+  高さが整数に落ちる組（3〜30 で16通り）だけを候補にした。
+- `g2_l33.find_value Lv2`: ブーメラン型（三角形の内部の点がつくる角）。
+  新設 solver `math.arrowhead_angle`。**図を使わずに成立させた**——どの点をどう
+  結ぶかを文で述べれば図が一意に決まるため。
+
+**残り9セル**
 - graph_table 7: g1_l37 Lv1・g1_l39 Lv3・g2_l32 Lv1・g2_l44 Lv1・g2_l52 Lv1・
-  g2_l53 Lv1・g3_l54 Lv2（座標平面上の2点間の距離＝Phase 1 の資産が効く）
-- find_value 2: g2_l33 Lv2・g2_l50 Lv3
-- word_problem 1: g3_l53 Lv4（平面図形への三平方）
-- knowledge 1: g2_l38 Lv2
+  g2_l53 Lv1・g3_l54 Lv2
+  - **図の資産がそのまま無いものが多い**のがこの7セルの本質。
+    `g2_l52/l53 Lv1` は**樹形図**を描く新資産が要る（2セルで1投資）。
+    `g1_l39 Lv3`（回転の中心を作図で求める）は実質 construction 相当で、
+    Phase G の作図資産と一緒に見るのが筋。
+    `g3_l54 Lv2`（座標平面上の2点間の距離）は Phase 1 のグラフ資産が効く。
+    `g1_l37 Lv1`・`g2_l32 Lv1`・`g2_l44 Lv1` は 2D 幾何の既存描画に載る見込み。
+- find_value 1: g2_l50 Lv3（四角形の面積を2等分する直線と辺 BC の交点）
+- knowledge 1: g2_l38 Lv2（逆の判別と反例の提示）
+  - **命題のカタログだけでは dup が通らない**（数個の命題では組合せ数が足りない）。
+    数値をパラメータに持つ命題テンプレート（「n が 2k の倍数ならば k の倍数」等）に
+    して変種を作る必要がある。
 
 ## Phase F：C15 proof（51セル）★最大の投資
 
