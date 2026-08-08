@@ -103,6 +103,21 @@ def build_proof_lines(
     return lines
 
 
+def compared_triangles(ded: Deduction, goal: Fact) -> tuple[tuple[str, ...], ...]:
+    """証明の冒頭に書く「△… と △… において」の2三角形を、導出から決める。
+
+    目標が合同そのものでなくても（「∠BAC＝∠CAD を示せ」でも）、証明は三角形を
+    比べるところから始まる。**証明の中で最初に出てくる合同**の2三角形を見出しにする
+    ——教科書がそう書いている。合同を経由しない証明なら見出しは付けない。
+    """
+    for f in ded.proof_chain(goal):
+        if f.kind == "tri_cong":
+            return f.args
+    if goal.kind == "tri_cong":
+        return goal.args
+    return ()
+
+
 def render_proof(lines: list[ProofLine], *, targets: tuple[tuple[str, ...], ...] = ()) -> str:
     """行の並びを証明文にする。`targets` は冒頭の「△ABC と △ADC において」の2三角形。"""
     out: list[str] = []
@@ -123,4 +138,4 @@ def render_proof(lines: list[ProofLine], *, targets: tuple[tuple[str, ...], ...]
     return "\n".join(out)
 
 
-__all__ = ["ProofLine", "build_proof_lines", "render_proof"]
+__all__ = ["ProofLine", "build_proof_lines", "compared_triangles", "render_proof"]

@@ -157,3 +157,116 @@ def test_proof_chain_rejects_unreachable_goal():
     ded = saturate(points, given)
     with pytest.raises(KeyError):
         ded.proof_chain(seg_eq(seg("A", "B"), seg("B", "C")))
+
+
+# ---------------------------------------------------------------------------
+# 4. 構成生成器と質のフィルタ
+# ---------------------------------------------------------------------------
+from engine.packs.math.geometry.construct import (  # noqa: E402
+    Construction,
+    figure_quality_problems,
+)
+from engine.packs.math.geometry.naturalness import (  # noqa: E402
+    DEPTH_BY_LEVEL,
+    goal_candidates,
+    misleading_coincidences,
+    select_goal,
+)
+from engine.packs.math.geometry.render_text import compared_triangles  # noqa: E402
+
+_CONGRUENCE_TOPICS = frozenset(
+    {"congruence", "congruence_property", "isosceles", "midpoint", "angle"}
+)
+
+
+def _kite_construction(*, angle: float = 75.0, offset: float = -3.4) -> Construction:
+    """たこ形（AB=AD・CB=CD）に対角線 AC を引いた構成。"""
+    c = Construction()
+    c.free_point("A", 0.0, 0.0)
+    c.free_point("B", 3.0, 0.0)
+    c.point_on_circle("D", "A", "B", angle_deg=angle)
+    c.point_on_perpendicular_bisector("C", "B", "D", offset=offset)
+    for p, q in (("A", "B"), ("A", "D"), ("B", "C"), ("D", "C")):
+        c.connect(p, q)
+    c.connect("A", "C", shared=True)
+    return c
+
+
+def test_construction_emits_facts_from_steps_not_coordinates():
+    """事実は手順が持つ（円の上にとった＝距離が等しい）。座標を測って作らない。"""
+    c = _kite_construction()
+    assert seg_eq(seg("A", "B"), seg("A", "D")) in c.facts   # 円の上にとった
+    assert seg_eq(seg("C", "B"), seg("C", "D")) in c.facts   # 垂直二等分線の上にとった
+    assert seg_eq(seg("A", "C"), seg("A", "C")) in c.facts   # 対角線は共通
+    # 与えられた条件として問題文に書くのは、この2つだけ（共通は証明の中で書く）。
+    assert c.givens == [
+        seg_eq(seg("A", "B"), seg("A", "D")),
+        seg_eq(seg("C", "B"), seg("C", "D")),
+    ]
+
+
+def test_figure_quality_rejects_degenerate_shapes():
+    """つぶれた三角形・近すぎる点を弾く。"""
+    assert figure_quality_problems(_kite_construction()) == []
+    flat = Construction()
+    flat.free_point("A", 0.0, 0.0)
+    flat.free_point("B", 3.0, 0.0)
+    flat.free_point("C", 6.0, 0.05)  # ほぼ一直線
+    assert figure_quality_problems(flat)
+
+
+def test_misleading_coincidence_is_detected():
+    """図が「証明できない性質」を見せていたら弾く（たこ形がひし形に見える等）。
+
+    これは実際に最初の生成で踏んだ。数学的には嘘ではないが、生徒は図から条件を読むので
+    教材として成立しない。
+    """
+    bad = _kite_construction(angle=58.0, offset=-2.6)
+    ded_bad = saturate(bad.points, frozenset(bad.facts))
+    assert any("等しく見える" in m for m in misleading_coincidences(bad, ded_bad))
+
+    good = _kite_construction()
+    ded_good = saturate(good.points, frozenset(good.facts))
+    assert misleading_coincidences(good, ded_good) == []
+
+
+def test_goal_selection_is_deterministic_and_level_aware():
+    """同じ構成から、Lv ごとに別の結論が選ばれる（＝同じ図で解き方が変わる）。"""
+    c = _kite_construction()
+    ded = saturate(c.points, frozenset(c.facts))
+    lv2 = select_goal(ded, level=2, allowed_topics=_CONGRUENCE_TOPICS, prefer="tri_cong")
+    lv3 = select_goal(ded, level=3, allowed_topics=_CONGRUENCE_TOPICS)
+    assert lv2 is not None and lv3 is not None
+    assert lv2.fact != lv3.fact
+    assert lv2.depth == DEPTH_BY_LEVEL[2] and lv3.depth == DEPTH_BY_LEVEL[3]
+    assert lv2.fact.kind == "tri_cong"
+    # 何度呼んでも同じ（生成が決定論であるため）。
+    assert select_goal(ded, level=2, allowed_topics=_CONGRUENCE_TOPICS, prefer="tri_cong") == lv2
+
+
+def test_goal_candidates_exclude_trivia():
+    """仮定そのまま・「AC は共通」は結論にしない。"""
+    c = _kite_construction()
+    ded = saturate(c.points, frozenset(c.facts))
+    goals = {g.fact for g in goal_candidates(ded)}
+    assert seg_eq(seg("A", "B"), seg("A", "D")) not in goals   # 仮定そのまま
+    assert seg_eq(seg("A", "C"), seg("A", "C")) not in goals   # 同じ線分どうし
+
+
+def test_goal_is_rejected_when_topic_is_out_of_unit():
+    """単元に合わない定理を使う証明は選ばれない。"""
+    c = _kite_construction()
+    ded = saturate(c.points, frozenset(c.facts))
+    assert select_goal(ded, level=2, allowed_topics=frozenset({"circle"})) is None
+
+
+def test_proof_header_uses_the_compared_triangles_even_for_angle_goals():
+    """目標が角でも、冒頭は「△… と △… において」になる（教科書の書き方）。"""
+    c = _kite_construction()
+    ded = saturate(c.points, frozenset(c.facts))
+    goal = select_goal(ded, level=3, allowed_topics=_CONGRUENCE_TOPICS)
+    assert goal is not None and goal.fact.kind != "tri_cong"
+    targets = compared_triangles(ded, goal.fact)
+    assert targets == (("A", "B", "C"), ("A", "D", "C"))
+    text = render_proof(build_proof_lines(ded, goal.fact), targets=targets)
+    assert text.splitlines()[0] == "（証明）△ABC と △ADC において"
