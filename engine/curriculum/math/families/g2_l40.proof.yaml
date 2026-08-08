@@ -4,6 +4,7 @@ source_desc: |
   合同な図形の性質を利用した辺や角の証明
   （units.generated.yaml の desc/example を正として転記）。
   Lv2 desc: 誘導あり・合同を示し対応辺/角が等しいと1段で結論する。
+  Lv3 desc: 補助線や2段階(合同→性質)を要する証明。
   ---
   【設計モデル】g2_l39.proof と同じ推論器（docs/proof_engine_design_2026-08-08.md）。
   違うのは**結論の深さ**だけで、ここは「合同を示す」の先にある「対応する辺・角が
@@ -28,7 +29,29 @@ levels:
     given: [premises, conclusion]
     asked: [proof_text]
     visual: optional
-    text: {tier: T1, template: pf_geometry_proof_v1}
+    text: {tier: T1, template: pf_geometry_proof_v1, visual_builder: math.geometry_construction}
+    hints: [steps_prefix]
+    concept_tags: [congruence_proof.corresponding_parts]
+    cause_tags: []
+  "3":
+    signature: geometry_proof_parts_two_step
+    recipe: math.geometry_proof
+    params:
+      # X字型。中点の展開 → 対頂角 → SAS で合同を示し、**その先の**対応する辺に
+      # 進む（深さ3）。Lv2 のたこ形が「合同→性質」の1段だったのに対し、ここは
+      # 合同を示すまでに2手かかるので、示す順序を自分で組み立てることになる。
+      construction: x_shape
+      proof_depth: 3
+      # 結論を辺の等式に固定する（角の等式も深さ3で出るが、辺のほうが
+      # 「合同→対応する辺」の型がはっきりする）。
+      prefer: seg_eq
+      base_domain: {int_range: [22, 34]}
+      angle_domain: {int_range: [48, 84]}
+      offset_domain: {int_range: [22, 36]}
+    given: [premises, conclusion]
+    asked: [proof_text]
+    visual: optional
+    text: {tier: T1, template: pf_geometry_proof_v1, visual_builder: math.geometry_construction}
     hints: [steps_prefix]
     concept_tags: [congruence_proof.corresponding_parts]
     cause_tags: []

@@ -47,7 +47,7 @@ levels:
     given: [premises, conclusion]
     asked: [proof_text]
     visual: optional
-    text: {tier: T1, template: pf_geometry_proof_v1}
+    text: {tier: T1, template: pf_geometry_proof_v1, visual_builder: math.geometry_construction}
     hints: [steps_prefix]
     concept_tags: [congruence_proof.triangle_congruence]
     cause_tags: []
@@ -66,7 +66,7 @@ levels:
     given: [premises, conclusion]
     asked: [proof_text]
     visual: optional
-    text: {tier: T1, template: pf_geometry_proof_v1}
+    text: {tier: T1, template: pf_geometry_proof_v1, visual_builder: math.geometry_construction}
     hints: [steps_prefix]
     concept_tags: [congruence_proof.choose_condition]
     cause_tags: []

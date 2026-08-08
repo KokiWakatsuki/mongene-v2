@@ -9,6 +9,7 @@ from typing import Any
 
 from engine.packs.math.geometry.catalog import register_construction
 from engine.packs.math.geometry.construct import Construction
+from engine.packs.math.geometry.facts import ang, ang_eq, collinear
 
 
 @register_construction("kite")
@@ -36,6 +37,9 @@ def x_shape(p: dict[str, Any]) -> Construction:
     c.reflected_point("C", "B", "O")
     for x, y in (("A", "D"), ("B", "C"), ("A", "B"), ("C", "D")):
         c.connect(x, y)
+    # 条件を並べるだけだと「O は AD の中点、O は BC の中点 である」になって読めない。
+    # 同じ点についての条件は、教科書のように1つの文にまとめる。
+    c.description = "右の図で、線分ADとBCは点Oで交わっていて、点Oはそれぞれの中点である"
     return c
 
 
@@ -67,11 +71,50 @@ def isosceles_with_median(p: dict[str, Any]) -> Construction:
     外して探索する（外さないと1手で終わってしまう）。
     """
     c = Construction()
+    # **頂角 A を上に置く。** 図に起こして初めて気づいたが、offset の符号を負にすると
+    # 二等辺三角形が上下逆さまに描かれる。教科書の図は例外なく頂角が上なので、
+    # 逆さまの図はそれだけで「見たことのない図」になる。
     c.free_point("B", 0.0, 0.0)
     c.free_point("C", float(p["base"]), 0.0)
-    c.point_on_perpendicular_bisector("A", "B", "C", offset=-float(p["offset"]) - 1.0)
+    c.point_on_perpendicular_bisector("A", "B", "C", offset=float(p["offset"]) + 1.0)
     c.midpoint_of("M", "B", "C")
     for x, y in (("A", "B"), ("A", "C"), ("B", "C"), ("A", "M")):
         c.connect(x, y)
     c.connect("A", "M", shared=True)
+    c.description = "AB ＝ AC である二等辺三角形ABCで、辺BCの中点をMとし、点Aと点Mを結んだ"
+    return c
+
+
+@register_construction("isosceles_bisector")
+def isosceles_with_apex_bisector(p: dict[str, Any]) -> Construction:
+    """二等辺三角形 ABC（AB=AC）に、頂角 A の二等分線を引いて底辺との交点を M とした図。
+
+    `isosceles_median` と点の位置は同じだが、**与える条件が違う**——あちらは「M は
+    BC の中点」、こちらは「AM は ∠A の二等分線」。だから証明の筋道も変わり
+    （SSS ではなく SAS になる）、示せることも変わる（中点であること・垂直であること）。
+    **図が同じでも条件が違えば別の問題である**というのは、市販の問題集がまさに
+    そうやって問題を作り分けているところである。
+
+    二等分線であることは**作図の手順が保証する**（角を測って一致を見たのではない）。
+    二等辺三角形の頂角の二等分線は底辺の垂直二等分線と重なるので、その上に M をとれば
+    ∠BAM ＝ ∠CAM は手順から言える。
+    """
+    c = Construction()
+    c.free_point("B", 0.0, 0.0)
+    c.free_point("C", float(p["base"]), 0.0)
+    c.point_on_perpendicular_bisector("A", "B", "C", offset=float(p["offset"]) + 1.0)
+    bx, _ = c.coords["B"]
+    cx, _ = c.coords["C"]
+    c.coords["M"] = ((bx + cx) / 2, 0.0)
+    c.steps.append("∠Aの二等分線と辺BCとの交点をMとする")
+    # M は辺 BC 上にある。図の質の検査が「∠BCM がつぶれている」と誤って弾かないよう、
+    # **一直線に並べたのが構成の意図である**ことを事実として持たせる。
+    c.facts.add(collinear("B", "M", "C"))
+    bisect = ang_eq(ang("A", "B", "M"), ang("A", "C", "M"))
+    c.facts.add(bisect)
+    c.givens.append(bisect)
+    for x, y in (("A", "B"), ("A", "C"), ("B", "C"), ("A", "M")):
+        c.connect(x, y)
+    c.connect("A", "M", shared=True)
+    c.description = "AB ＝ AC である二等辺三角形ABCで、∠Aの二等分線と辺BCとの交点をMとした"
     return c

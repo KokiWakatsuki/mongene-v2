@@ -10,7 +10,12 @@
 from __future__ import annotations
 
 import math
-from typing import Any
+from typing import TYPE_CHECKING, Any
+
+from engine.core.registry import register_visual
+
+if TYPE_CHECKING:  # pragma: no cover - 型のみ
+    from engine.core.contracts import MR, CellContext
 
 _W, _H = 420, 340
 _MARGIN = 46
@@ -50,13 +55,43 @@ def _tick_marks(p1: tuple[float, float], p2: tuple[float, float], count: int) ->
     return parts
 
 
+def _on_segment(
+    pt: tuple[float, float], a: tuple[float, float], b: tuple[float, float]
+) -> bool:
+    """点が線分の途中（端点を除く）に乗っているか。ラベルの向きを決めるためだけに使う。"""
+    dx, dy = b[0] - a[0], b[1] - a[1]
+    n2 = dx * dx + dy * dy
+    if n2 < 1e-9:
+        return False
+    t = ((pt[0] - a[0]) * dx + (pt[1] - a[1]) * dy) / n2
+    if not 0.02 < t < 0.98:
+        return False
+    return math.hypot(a[0] + t * dx - pt[0], a[1] + t * dy - pt[1]) < 1.5
+
+
 def _label_offset(
-    name: str, pt: tuple[float, float], centroid: tuple[float, float]
+    pt: tuple[float, float],
+    centroid: tuple[float, float],
+    incident: list[tuple[float, float]],
 ) -> tuple[float, float]:
-    """点名は図の重心と反対側に置く（線分の上に文字が乗らないように）。"""
-    dx, dy = pt[0] - centroid[0], pt[1] - centroid[1]
-    n = math.hypot(dx, dy) or 1.0
-    return pt[0] + dx / n * 15.0, pt[1] + dy / n * 15.0 + 4.0
+    """点名を、その点から出ている線分の**すきまが最も広い向き**に置く。
+
+    最初は「図の重心と反対側」に置いていたが、それだと**交点のラベルが読めない**
+    （X字型の交点 O は重心そのものなので向きが定まらず、文字が線の上に乗った）。
+    図に起こして初めて分かった——ゲートは図の中身を見ないので、ここは目で見て直すしかない。
+
+    `incident` はその点から出ている線分の向き（単位ベクトル）。すきまの二等分方向に
+    置けば、交点でも端点でも線を避けられる。線が1本も無いときだけ重心の反対側に置く。
+    """
+    if not incident:
+        dx, dy = pt[0] - centroid[0], pt[1] - centroid[1]
+        n = math.hypot(dx, dy) or 1.0
+        return pt[0] + dx / n * 15.0, pt[1] + dy / n * 15.0 + 4.0
+    angles = sorted(math.atan2(dy, dx) for dx, dy in incident)
+    gaps = [(angles[(i + 1) % len(angles)] - a) % (2 * math.pi) for i, a in enumerate(angles)]
+    best = max(range(len(gaps)), key=lambda i: gaps[i])
+    theta = angles[best] + gaps[best] / 2
+    return pt[0] + math.cos(theta) * 15.0, pt[1] + math.sin(theta) * 15.0 + 4.0
 
 
 def render_construction_svg(params: dict[str, Any]) -> str:
@@ -84,9 +119,24 @@ def render_construction_svg(params: dict[str, Any]) -> str:
     for i, group in enumerate(params.get("equal_groups", [])):
         for a, b in group:
             parts.extend(_tick_marks(px[str(a)], px[str(b)], i + 1))
+    # 各点から線が出ていく向き。端点だけでなく、**線分の途中にある点**も拾う
+    # （X字型の交点 O は、どの線分の端点でもないが4方向に線が出ている）。
+    # ここは見た目の話なので、座標を見て判定してよい（事実を作っているのではない）。
+    incident: dict[str, list[tuple[float, float]]] = {name: [] for name in px}
+    for a, b in params["segments"]:
+        pa, pb = px[str(a)], px[str(b)]
+        for name, pt in px.items():
+            if name == str(a) or name == str(b):
+                other = pb if name == str(a) else pa
+                n = math.hypot(other[0] - pt[0], other[1] - pt[1]) or 1.0
+                incident[name].append(((other[0] - pt[0]) / n, (other[1] - pt[1]) / n))
+            elif _on_segment(pt, pa, pb):
+                for other in (pa, pb):
+                    n = math.hypot(other[0] - pt[0], other[1] - pt[1]) or 1.0
+                    incident[name].append(((other[0] - pt[0]) / n, (other[1] - pt[1]) / n))
     for name, pt in px.items():
         parts.append(f'<circle cx="{pt[0]:.2f}" cy="{pt[1]:.2f}" r="3.2" fill="#000000"/>')
-        lx, ly = _label_offset(name, pt, (cx, cy))
+        lx, ly = _label_offset(pt, (cx, cy), incident[name])
         parts.append(
             f'<text x="{lx:.2f}" y="{ly:.2f}" font-size="14" text-anchor="middle" '
             f'fill="#000000">{name}</text>'
@@ -95,4 +145,17 @@ def render_construction_svg(params: dict[str, Any]) -> str:
     return "".join(parts)
 
 
-__all__ = ["render_construction_svg"]
+def render_construction(mr: "MR", ctx: "CellContext") -> str:
+    """図ビルダとしての入口（family の `visual_builder` から呼ばれる）。
+
+    証明セルの図は**構成そのもの**なので、recipe が図を組んだときに
+    `context_slots["figure_svg"]` に入れてある。ここは取り出すだけでよい
+    （もう一度組み直すと、recipe が引いたパラメータと食い違う恐れがある）。
+    """
+    return str(mr.context_slots["figure_svg"])
+
+
+register_visual("math.geometry_construction")(render_construction)
+
+
+__all__ = ["render_construction", "render_construction_svg"]

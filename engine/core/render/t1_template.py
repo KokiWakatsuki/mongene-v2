@@ -210,6 +210,14 @@ def _build_hints(mr: "MR", ctx: "CellContext", sq_index: int) -> list[str]:
     return [_DEFAULT_MINIMAL_HINT]
 
 
+# 小問の問いかけは既定で「{asked} を求めなさい。」だが、**求値でない問い**はそれでは
+# 日本語にならない（「proof_text を求めなさい。」）。asked ごとの言い方をここに置く。
+# 求値の小問は既定のままでよいので、**言い方が違うものだけ**を書く。
+_ASKED_PROMPTS: dict[str, str] = {
+    "proof_text": "証明しなさい。",
+}
+
+
 # ---------------------------------------------------------------------------
 # render_text
 # ---------------------------------------------------------------------------
@@ -242,7 +250,8 @@ def render_text(mr: "MR", ctx: "CellContext", *, registry: _Registry = REGISTRY)
     explanations: dict[str, str] = {}
     hints: dict[str, list[str]] = {}
     for i, sq in enumerate(mr.sub_questions):
-        prompts[sq.label] = f"{tctx.sub_questions[i].asked} を求めなさい。"
+        asked = tctx.sub_questions[i].asked
+        prompts[sq.label] = _ASKED_PROMPTS.get(asked, f"{asked} を求めなさい。")
         explanations[sq.label] = _build_explanation(mr, i)
         hints[sq.label] = _build_hints(mr, ctx, i)
 

@@ -4,6 +4,7 @@ source_desc: |
   二等辺三角形の性質とその証明
   （units.generated.yaml の desc/example を正として転記）。
   Lv2 desc: 誘導あり・底角が等しい等の性質を合同で1段で証明する。
+  Lv3 desc: 頂角の二等分線など補助線を引く2段階の証明。
   ---
   【設計モデル】g2_l39.proof と同じ推論器。図は二等辺三角形に底辺の中点を結んだもの。
 
@@ -29,7 +30,28 @@ levels:
     given: [premises, conclusion]
     asked: [proof_text]
     visual: optional
-    text: {tier: T1, template: pf_geometry_proof_v1}
+    text: {tier: T1, template: pf_geometry_proof_v1, visual_builder: math.geometry_construction}
+    hints: [steps_prefix]
+    concept_tags: [isosceles_proof.property_by_congruence]
+    cause_tags: []
+  "3":
+    signature: geometry_proof_isosceles_bisector
+    recipe: math.geometry_proof
+    params:
+      # 頂角の二等分線を引いた図。Lv2 の「中点を結んだ図」と点の位置は同じだが、
+      # **与える条件が違う**ので筋道が変わる（SSS ではなく SAS）。結論は
+      # 「二等分線が底辺を2等分する」——補助線を引いてから合同を経由する2段階。
+      construction: isosceles_bisector
+      proof_depth: 2
+      prefer: seg_eq
+      exclude_rules: [use_isosceles_base_angles]
+      base_domain: {int_range: [30, 44]}
+      angle_domain: {int_range: [55, 88]}
+      offset_domain: {int_range: [18, 34]}
+    given: [premises, conclusion]
+    asked: [proof_text]
+    visual: optional
+    text: {tier: T1, template: pf_geometry_proof_v1, visual_builder: math.geometry_construction}
     hints: [steps_prefix]
     concept_tags: [isosceles_proof.property_by_congruence]
     cause_tags: []
