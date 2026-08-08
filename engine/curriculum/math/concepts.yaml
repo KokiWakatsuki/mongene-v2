@@ -1083,6 +1083,15 @@ concepts:
   - id: congruence_proof.triangle_congruence
     label: "与えられた条件から合同条件を選び、三角形の合同を証明する"
     unit: g2_l39
+  - id: congruence_proof.choose_condition
+    label: "使う要素と合同条件を自分で選び、三角形の合同を証明する"
+    unit: g2_l39
+  - id: congruence_proof.corresponding_parts
+    label: "合同を示し、対応する辺や角が等しいことを結論する"
+    unit: g2_l40
+  - id: isosceles_proof.property_by_congruence
+    label: "二等辺三角形の性質を、合同を使って証明する"
+    unit: g2_l41
   - id: triangle_angle.arrowhead_multi_step
     label: "補助線を引いて2つの三角形に分け、外角の性質を2回使って角を求める"
     unit: g2_l33

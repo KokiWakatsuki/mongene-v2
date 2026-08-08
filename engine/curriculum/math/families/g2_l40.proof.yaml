@@ -1,0 +1,36 @@
+family: math.g2_l40.proof
+form: proof
+source_desc: |
+  合同な図形の性質を利用した辺や角の証明
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv2 desc: 誘導あり・合同を示し対応辺/角が等しいと1段で結論する。
+  ---
+  【設計モデル】g2_l39.proof と同じ推論器（docs/proof_engine_design_2026-08-08.md）。
+  違うのは**結論の深さ**だけで、ここは「合同を示す」の先にある「対応する辺・角が
+  等しい」を結論にする（深さ2）。
+
+  **Lv と深さの対応は単元ごとに違う**——「合同を直接示す」g2_l39 の Lv2 は深さ1だが、
+  「合同を示してから対応する辺が等しいと結論する」この単元の Lv2 は最初から深さ2に
+  なる。だから family が `proof_depth` で明示する。
+
+  【dup】たこ形の長さ・角のパラメータで変わる。結論は同じ筋道でも、図が変わる。
+concepts_default: [congruence_proof.corresponding_parts]
+levels:
+  "2":
+    signature: geometry_proof_corresponding_parts
+    recipe: math.geometry_proof
+    params:
+      construction: kite
+      proof_depth: 2
+      base_domain: {int_range: [24, 38]}
+      angle_domain: {int_range: [62, 96]}
+      offset_domain: {int_range: [28, 46]}
+    given: [premises, conclusion]
+    asked: [proof_text]
+    visual: optional
+    text: {tier: T1, template: pf_geometry_proof_v1}
+    hints: [steps_prefix]
+    concept_tags: [congruence_proof.corresponding_parts]
+    cause_tags: []
+remedial:
+  default_level: 2

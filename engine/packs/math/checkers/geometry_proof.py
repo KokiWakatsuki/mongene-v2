@@ -17,7 +17,12 @@ from engine.packs.math.geometry.render_text import compared_triangles, render_pr
 def double_solve_geometry_proof(mr: MR) -> Solution:
     kind = str(mr.params["construction"])
     params = {k: float(v) for k, v in mr.params["numbers"].items()}
-    built = build_problem(kind, params, level=int(mr.level), topics=TOPICS_CONGRUENCE)
+    built = build_problem(
+        kind, params, level=int(mr.level), topics=TOPICS_CONGRUENCE,
+        exclude_rules=tuple(mr.params.get("exclude_rules", ())),
+        depth=mr.params.get("proof_depth"),
+        prefer=mr.params.get("prefer") or None,
+    )
     if built is None:
         raise ValueError("checker: 同じ構成から問題を組み直せなかった")
     _con, ded, goal, lines = built

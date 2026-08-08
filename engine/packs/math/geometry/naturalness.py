@@ -71,15 +71,24 @@ def _is_worth_asking(f: Fact, ded: Deduction) -> bool:
 
 
 def select_goal(
-    ded: Deduction, *, level: int, allowed_topics: frozenset[str], prefer: str | None = None
+    ded: Deduction,
+    *,
+    level: int,
+    allowed_topics: frozenset[str],
+    prefer: str | None = None,
+    depth: int | None = None,
 ) -> GoalCandidate | None:
     """Lv と単元に合う結論を1つ選ぶ。無ければ None（＝この構成では問題を作らない）。
+
+    `depth` を渡すと Lv からの既定の深さを上書きする。**Lv と深さの対応は単元ごとに
+    違う**からである——「合同を直接示す」単元の Lv2 は深さ1だが、「合同を示してから
+    対応する辺が等しいと結論する」単元の Lv2 は最初から深さ2になる。
 
     `prefer` に述語の種類（"tri_cong" など）を渡すと、それを優先する。
     同じ深さの候補が複数あるときは、**証明の手数が少なく、事実の並びが安定する順**で
     決める（同じ構成から毎回同じ問題が出るように＝生成が決定論であるため）。
     """
-    want_depth = DEPTH_BY_LEVEL.get(level)
+    want_depth = depth if depth is not None else DEPTH_BY_LEVEL.get(level)
     if want_depth is None:
         return None
     cands = [
