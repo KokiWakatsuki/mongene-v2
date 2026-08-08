@@ -169,7 +169,7 @@ from engine.packs.math.geometry.construct import (  # noqa: E402
 from engine.packs.math.geometry.naturalness import (  # noqa: E402
     DEPTH_BY_LEVEL,
     goal_candidates,
-    misleading_coincidences,
+    accidental_coincidences,
     select_goal,
 )
 from engine.packs.math.geometry.render_text import compared_triangles  # noqa: E402
@@ -179,11 +179,11 @@ _CONGRUENCE_TOPICS = frozenset(
 )
 
 
-def _kite_construction(*, angle: float = 75.0, offset: float = -3.4) -> Construction:
+def _kite_construction(*, angle: float = 75.0, offset: float = -3.4, b: float = 3.0) -> Construction:
     """たこ形（AB=AD・CB=CD）に対角線 AC を引いた構成。"""
     c = Construction()
     c.free_point("A", 0.0, 0.0)
-    c.free_point("B", 3.0, 0.0)
+    c.free_point("B", b, 0.0)
     c.point_on_circle("D", "A", "B", angle_deg=angle)
     c.point_on_perpendicular_bisector("C", "B", "D", offset=offset)
     for p, q in (("A", "B"), ("A", "D"), ("B", "C"), ("D", "C")):
@@ -215,19 +215,56 @@ def test_figure_quality_rejects_degenerate_shapes():
     assert figure_quality_problems(flat)
 
 
-def test_misleading_coincidence_is_detected():
-    """図が「証明できない性質」を見せていたら弾く（たこ形がひし形に見える等）。
+def test_collinear_points_are_not_called_degenerate():
+    """一直線に並べたことが構成の意図なら、つぶれた三角形とは呼ばない（X字型で踏んだ）。"""
+    c = Construction()
+    c.free_point("O", 0.0, 0.0)
+    c.free_point("A", -2.6, 1.5)
+    c.free_point("B", -1.4, -2.0)
+    c.reflected_point("D", "A", "O")
+    c.reflected_point("C", "B", "O")
+    assert figure_quality_problems(c) == []
 
-    これは実際に最初の生成で踏んだ。数学的には嘘ではないが、生徒は図から条件を読むので
-    教材として成立しない。
+
+def test_midpoint_line_is_folded_into_one_textbook_line():
+    """「Oは中点だから AO＝DO」を1行で書く（2行に分けると教科書と違う）。"""
+    c = Construction()
+    c.free_point("O", 0.0, 0.0)
+    c.free_point("A", -2.6, 1.5)
+    c.free_point("B", -1.4, -2.0)
+    c.reflected_point("D", "A", "O")
+    c.reflected_point("C", "B", "O")
+    ded = saturate(c.points, frozenset(c.facts))
+    goal = select_goal(ded, level=3, allowed_topics=_CONGRUENCE_TOPICS, prefer="tri_cong")
+    assert goal is not None and goal.fact.kind == "tri_cong"
+    text = render_proof(
+        build_proof_lines(ded, goal.fact), targets=compared_triangles(ded, goal.fact)
+    )
+    assert "O は AD の中点だから　　AO ＝ DO　…①" in text
+    assert "対頂角は等しいから　　∠AOB ＝ ∠COD" in text
+    # 「一直線上にある」は仮定の行として書かない（図を見れば分かる）。
+    assert "一直線上" not in text
+    # 2組の辺とその間の角＝SAS で結ぶ（たこ形の SSS とは別の解き方になっている）。
+    assert "2組の辺とその間の角がそれぞれ等しいので" in text
+
+
+def test_accidental_coincidence_is_detected_by_perturbation():
+    """図が**たまたま**見せている性質を、構成をゆらして弾く。
+
+    最初は「図に見えるのに導けない性質」を全部弾いたが、それは厳しすぎた——平行四辺形の
+    対角が等しいのは真で、対角線をもう1本引けば証明できる。問題なのは
+    **その instance でしか成り立たない**ことを見せる場合（たこ形がたまたま AB≈BC で
+    ひし形に見える）なので、パラメータを変えて組み直し、残るかどうかで判定する。
     """
     bad = _kite_construction(angle=58.0, offset=-2.6)
+    other = _kite_construction(angle=58.0, offset=-2.6, b=2.2)
     ded_bad = saturate(bad.points, frozenset(bad.facts))
-    assert any("等しく見える" in m for m in misleading_coincidences(bad, ded_bad))
+    assert any("たまたま" in m for m in accidental_coincidences([bad, other], ded_bad))
 
     good = _kite_construction()
+    good2 = _kite_construction(angle=64.0, offset=-4.1, b=2.4)
     ded_good = saturate(good.points, frozenset(good.facts))
-    assert misleading_coincidences(good, ded_good) == []
+    assert accidental_coincidences([good, good2], ded_good) == []
 
 
 def test_goal_selection_is_deterministic_and_level_aware():

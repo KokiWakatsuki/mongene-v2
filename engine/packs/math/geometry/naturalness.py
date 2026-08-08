@@ -100,43 +100,57 @@ _LENGTH_TOL = 0.04   # 長さの相対差
 _ANGLE_TOL = 2.0     # 角の差（度）
 
 
-def misleading_coincidences(con: Construction, ded: Deduction) -> list[str]:
-    """**図が、証明できない性質を見せてしまっていないか**を検査する。
+def accidental_coincidences(
+    instances: list[Construction], ded: Deduction
+) -> list[str]:
+    """図が**たまたま**見せている性質を弾く（構成をゆらして確かめる）。
 
-    探索で作った図は、座標のめぐり合わせで「与えてもいないのに辺の長さが等しく見える」
-    「偶然直角に見える」ことがある。数学的には嘘ではないが、**生徒は図から条件を読む**
-    ので、図が示す性質と証明できる事実がズレていると教材として成立しない。
-    たこ形が偶然ひし形に見えてしまう、がその典型（最初に生成した図がそうだった）。
+    最初は「図に見えるのに導けない性質」を全部弾いていたが、それは厳しすぎた——
+    平行四辺形の対角が等しいことは真で、対角線をもう1本引けば証明できる。図が
+    「導けないが真であること」を見せるのは普通のことで、問題なのは
+    **その instance でしか成り立たないこと**を見せてしまう場合である
+    （たこ形がたまたま AB≈BC でひし形に見える、など）。
 
-    座標を測って判定するのはここだけである（事実は構成が持つ、という原則は保つ。
-    これは「事実を作る」のではなく「**図の見え方を検査する**」ため）。
+    そこで、**同じ作図手順を別のパラメータで組み直して**（＝ゆらして）、性質が
+    残るかどうかで判定する。ゆらしても残るなら構成が強制している性質なので図に
+    出てよい。1つの instance でしか成り立たないなら、それは偶然であり、生徒が
+    図から読み取ると誤る。
+
+    `instances` は同じ手順・違うパラメータで作った構成の並び（先頭が本番の図）。
     """
+    if len(instances) < 2:
+        raise ValueError("ゆらすには2つ以上の instance が要る")
+    base = instances[0]
     problems: list[str] = []
-    names = con.points
-    lengths = {}
-    for p, q in itertools.combinations(names, 2):
-        (x1, y1), (x2, y2) = con.coords[p], con.coords[q]
-        lengths[seg(p, q)] = math.hypot(x2 - x1, y2 - y1)
 
-    for s1, s2 in itertools.combinations(sorted(lengths), 2):
-        l1, l2 = lengths[s1], lengths[s2]
-        if abs(l1 - l2) / max(l1, l2) > _LENGTH_TOL:
-            continue
-        if seg_eq(s1, s2) in ded.facts:
-            continue
-        problems.append(f"{s1[0]}{s1[1]} と {s2[0]}{s2[1]} が等しく見えるが、そうとは限らない")
+    def equal_pairs(con: Construction) -> set:
+        out = set()
+        lengths = {}
+        for p, q in itertools.combinations(con.points, 2):
+            (x1, y1), (x2, y2) = con.coords[p], con.coords[q]
+            lengths[seg(p, q)] = math.hypot(x2 - x1, y2 - y1)
+        for s1, s2 in itertools.combinations(sorted(lengths), 2):
+            l1, l2 = lengths[s1], lengths[s2]
+            if abs(l1 - l2) / max(l1, l2) <= _LENGTH_TOL:
+                out.add(("seg", s1, s2))
+        angles = {}
+        for v in con.points:
+            for p, q in itertools.combinations([x for x in con.points if x != v], 2):
+                angles[ang(v, p, q)] = _angle_between(con.coords[p], con.coords[v], con.coords[q])
+        for a1, a2 in itertools.combinations(sorted(angles), 2):
+            if abs(angles[a1] - angles[a2]) <= _ANGLE_TOL:
+                out.add(("ang", a1, a2))
+        return out
 
-    angles = {}
-    for v in names:
-        for p, q in itertools.combinations([x for x in names if x != v], 2):
-            angles[ang(v, p, q)] = _angle_between(con.coords[p], con.coords[v], con.coords[q])
-    for a1, a2 in itertools.combinations(sorted(angles), 2):
-        if abs(angles[a1] - angles[a2]) > _ANGLE_TOL:
-            continue
-        if ang_eq(a1, a2) in ded.facts:
-            continue
-        problems.append(f"∠{a1[1]}{a1[0]}{a1[2]} と ∠{a2[1]}{a2[0]}{a2[2]} が等しく見えるが、そうとは限らない")
-    return sorted(set(problems))
+    persistent = equal_pairs(base)
+    for other in instances[1:]:
+        persistent &= equal_pairs(other)
+    for kind, x, y in sorted(equal_pairs(base) - persistent):
+        if kind == "seg":
+            problems.append(f"{x[0]}{x[1]} と {y[0]}{y[1]} がたまたま等しく見えている")
+        else:
+            problems.append(f"∠{x[1]}{x[0]}{x[2]} と ∠{y[1]}{y[0]}{y[2]} がたまたま等しく見えている")
+    return problems
 
 
 def _angle_between(p, vertex, q) -> float:
@@ -153,6 +167,6 @@ __all__ = [
     "DEPTH_BY_LEVEL",
     "GoalCandidate",
     "goal_candidates",
-    "misleading_coincidences",
+    "accidental_coincidences",
     "select_goal",
 ]

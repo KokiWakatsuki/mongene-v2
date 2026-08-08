@@ -27,6 +27,7 @@ from engine.packs.math.geometry.facts import (
     Point,
     collinear,
     midpoint,
+    parallel_dir,
     seg,
     seg_eq,
 )
@@ -49,6 +50,9 @@ class Construction:
     givens: list[Fact] = field(default_factory=list)
     # 図に線として描く線分。
     segments: list[tuple[Point, Point]] = field(default_factory=list)
+    # 問題文の書き出し（「平行四辺形ABCDで」のように、条件を並べるより自然な言い方が
+    # あるときに使う。空なら givens を並べて書く）。
+    description: str = ""
 
     @property
     def points(self) -> list[Point]:
@@ -90,6 +94,36 @@ class Construction:
         self.facts.add(fact)
         self.givens.append(fact)
         self.steps.append(f"線分{p}{q}の垂直二等分線上に点{name}をとる")
+
+    def reflected_point(self, name: Point, p: Point, center: Point) -> None:
+        """点 p を点 center について対称移動した点（＝center が p と name の中点）。
+
+        X 字型（2本の線分が中点で交わる図）を作るための操作。対頂角の規則が効くように
+        「一直線上にある」ことも同時に出す。
+        """
+        px, py = self.coords[p]
+        cx, cy = self.coords[center]
+        self._add(name, (2 * cx - px, 2 * cy - py))
+        fact = midpoint(center, seg(p, name))
+        self.facts.add(fact)
+        self.facts.add(collinear(p, center, name))
+        self.givens.append(fact)
+        self.steps.append(f"点{p}を点{center}について対称移動した点を{name}とする")
+
+    def translated_point(self, name: Point, base: Point, frm: Point, to: Point) -> None:
+        """点 base を、ベクトル frm→to だけ平行移動した点。
+
+        平行四辺形を作る操作。**向きつきの平行**が出るので、錯角の規則がそのまま効く
+        （向きの分からない平行だけでは、錯角か同位角かを座標なしに決められない）。
+        """
+        bx, by = self.coords[base]
+        fx, fy = self.coords[frm]
+        tx, ty = self.coords[to]
+        self._add(name, (bx + tx - fx, by + ty - fy))
+        for u_, v_ in (((base, name), (frm, to)), ((base, frm), (name, to))):
+            self.facts.add(parallel_dir(u_, v_))
+            self.facts.add(seg_eq(seg(*u_), seg(*v_)))
+        self.steps.append(f"点{base}をベクトル{frm}{to}だけ平行移動した点を{name}とする")
 
     def midpoint_of(self, name: Point, p: Point, q: Point) -> None:
         px, py = self.coords[p]
@@ -139,7 +173,13 @@ def figure_quality_problems(con: Construction) -> list[str]:
 
     ここは「事実が正しいか」ではなく「**人が読める図か**」の検査である。
     つぶれた三角形や重なった点は、数学的には正しくても問題集の図にならない。
+
+    **一直線上にあると分かっている3点は対象外**（X字型のように、まっすぐ並べたことが
+    構成の意図である場合まで「つぶれている」と弾いてしまった）。
     """
+    collinear_triples = {
+        frozenset(f.args) for f in con.facts if f.kind == "collinear"
+    }
     problems: list[str] = []
     names = con.points
     for i, p in enumerate(names):
@@ -150,7 +190,7 @@ def figure_quality_problems(con: Construction) -> list[str]:
     for i, a in enumerate(names):
         for j, b in enumerate(names):
             for c in names[j + 1:]:
-                if len({a, b, c}) != 3:
+                if len({a, b, c}) != 3 or frozenset({a, b, c}) in collinear_triples:
                     continue
                 angle = _angle_deg(con.coords[b], con.coords[a], con.coords[c])
                 if angle < _MIN_ANGLE_DEG:

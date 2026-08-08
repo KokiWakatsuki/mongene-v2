@@ -46,7 +46,8 @@ FactKind = Literal[
     "ang_eq",      # 2つの角の大きさが等しい
     "tri_cong",    # 2つの三角形が合同（対応つき）
     "tri_sim",     # 2つの三角形が相似（対応つき）
-    "parallel",    # 2直線が平行
+    "parallel",    # 2直線が平行（向きは問わない）
+    "parallel_dir",  # 2つの**向きつき**の線分が同じ向きに平行
     "perp",        # 2直線が垂直
     "midpoint",    # ある点が線分の中点
     "collinear",   # 3点が一直線上
@@ -127,6 +128,21 @@ def parallel(s1: tuple[Point, Point], s2: tuple[Point, Point]) -> Fact:
     return Fact("parallel", (a, b))
 
 
+def parallel_dir(
+    u: tuple[Point, Point], v: tuple[Point, Point]
+) -> Fact:
+    """向きつきの平行（ベクトル PQ とベクトル RS が**同じ向き**に平行）。
+
+    錯角・同位角のどちらになるかは**向き**で決まるので、向きを持たない平行だけでは
+    角の等式を機械的に出せない（座標を見て判定するのは原則に反する）。平行移動で
+    作った点は向きまで分かっているので、そこから向きつきの事実を出す。
+
+    正規形: 2つの組の入れかえと、**両方を同時に逆向きにする**操作で不変。
+    """
+    cands = [(u, v), (v, u), ((u[1], u[0]), (v[1], v[0])), ((v[1], v[0]), (u[1], u[0]))]
+    return Fact("parallel_dir", min(cands))
+
+
 def perp(s1: tuple[Point, Point], s2: tuple[Point, Point]) -> Fact:
     a, b = (s1, s2) if s1 <= s2 else (s2, s1)
     return Fact("perp", (a, b))
@@ -172,7 +188,7 @@ def fact_text(f: Fact) -> str:
         return f"{tri_text(f.args[0])} ≡ {tri_text(f.args[1])}"
     if f.kind == "tri_sim":
         return f"{tri_text(f.args[0])} ∽ {tri_text(f.args[1])}"
-    if f.kind == "parallel":
+    if f.kind in ("parallel", "parallel_dir"):
         return f"{seg_text(f.args[0])} ∥ {seg_text(f.args[1])}"
     if f.kind == "perp":
         return f"{seg_text(f.args[0])} ⊥ {seg_text(f.args[1])}"
@@ -195,6 +211,7 @@ __all__ = [
     "is_common_segment",
     "midpoint",
     "parallel",
+    "parallel_dir",
     "perp",
     "seg",
     "seg_eq",

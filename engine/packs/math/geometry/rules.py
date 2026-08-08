@@ -42,6 +42,9 @@ class Rule:
     apply: Callable[[list[Point], frozenset[Fact]], Iterable[Derivation]]
     # この規則がどの単元の道具か（質のフィルタが「単元に合った定理か」を見るのに使う）
     topics: tuple[str, ...] = ()
+    # 定義を開くだけの規則か（「Oは中点だから AO＝DO」のように、証明文では前提と結論を
+    # **1行にまとめて書く**。教科書が2行に分けないので、分けると冗長に見える）。
+    definitional: bool = False
 
 
 def _triangles(points: list[Point]) -> list[tuple[Point, Point, Point]]:
@@ -175,6 +178,26 @@ def _apply_vertical_angles(points: list[Point], facts: frozenset[Fact]) -> Itera
             yield concl2, (f1, f2)
 
 
+def _apply_alternate_angles(points: list[Point], facts: frozenset[Fact]) -> Iterable[Derivation]:
+    """平行線の錯角は等しい。
+
+    向きつきの平行 PQ ∥ RS（同じ向き）に対し、**第1の線の始点 P と第2の線の終点 S**を
+    結ぶ直線を横断線とみると、∠QPS と ∠RSP が錯角になる。向きが分かっているから
+    「錯角か同位角か」を座標を見ずに決められる（平行四辺形 ABCD で AD∥BC、対角線 AC を
+    引いたときの ∠DAC ＝ ∠BCA がこれ）。
+    """
+    for f in facts:
+        if f.kind != "parallel_dir":
+            continue
+        (p, q), (r, s) = f.args
+        for (t1, h1), (t2, h2) in (((p, q), (r, s)), ((r, s), (p, q))):
+            if len({t1, h1, t2, h2}) != 4:
+                continue
+            concl = ang_eq(ang(t1, h1, h2), ang(h2, t2, t1))
+            if concl.args[0] != concl.args[1]:
+                yield concl, (f,)
+
+
 RULES: tuple[Rule, ...] = (
     Rule("apply_sss", "3組の辺がそれぞれ等しい", _apply_sss, ("congruence",)),
     Rule("apply_sas", "2組の辺とその間の角がそれぞれ等しい", _apply_sas, ("congruence",)),
@@ -197,8 +220,14 @@ RULES: tuple[Rule, ...] = (
         _apply_isosceles_from_angles,
         ("isosceles",),
     ),
-    Rule("use_midpoint", "中点だから", _apply_midpoint, ("midpoint",)),
+    Rule("use_midpoint", "", _apply_midpoint, ("midpoint",), definitional=True),
     Rule("use_vertical_angles", "対頂角は等しい", _apply_vertical_angles, ("angle",)),
+    Rule(
+        "use_alternate_angles",
+        "平行線の錯角は等しい",
+        _apply_alternate_angles,
+        ("parallel", "angle"),
+    ),
 )
 
 RULES_BY_NAME = {r.name: r for r in RULES}

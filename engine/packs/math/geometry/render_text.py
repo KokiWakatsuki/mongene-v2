@@ -25,6 +25,10 @@ from engine.packs.math.geometry.facts import (
     tri_text,
 )
 
+# 図の構造そのもの（点が一直線に並んでいる等）は、教科書では仮定の行に書かない。
+# 図を見れば分かることなので、番号を振って引用すると証明が冗長になる。
+_STRUCTURAL_KINDS = frozenset({"collinear", "parallel_dir"})
+
 
 @dataclass(frozen=True)
 class ProofLine:
@@ -60,10 +64,23 @@ def build_proof_lines(
     「仮定より」になるので、根拠の言い方をここで分ける——教科書がそう書き分けている。
     """
     chain = ded.proof_chain(goal)
+    # 「定義を開くだけ」の行は、その前提（仮定）と1行にまとめる。
+    folded: dict[Fact, Fact] = {}
+    for f in chain:
+        rule = ded.rule_of(f)
+        if rule is not None and rule.definitional and len(ded.premises_of(f)) == 1:
+            premise = ded.premises_of(f)[0]
+            if ded.rule_of(premise) is None:
+                folded[f] = premise
+
     used_given: list[Fact] = []
     for f in chain:
         for p in ded.premises_of(f):
-            if ded.rule_of(p) is None and p not in used_given:
+            if ded.rule_of(p) is not None or p.kind in _STRUCTURAL_KINDS:
+                continue
+            if p in folded.values():
+                continue  # 畳んだ行の中に書くので、単独の仮定の行にはしない
+            if p not in used_given:
                 used_given.append(p)
 
     lines: list[ProofLine] = []
@@ -91,12 +108,14 @@ def build_proof_lines(
         if not is_goal:
             n += 1
             number_of[f] = n
+        # 定義を開く行は「（仮定）だから　（結論）」の1行にする。
+        reason = f"{fact_text(folded[f])}だから" if f in folded else rule.reason
         lines.append(
             ProofLine(
                 claim=fact_text(f),
-                reason=rule.reason,
+                reason=reason,
                 number=None if is_goal else n,
-                refs=refs,
+                refs=() if f in folded else refs,
                 op=rule.name,
             )
         )
@@ -132,7 +151,12 @@ def render_proof(lines: list[ProofLine], *, targets: tuple[tuple[str, ...], ...]
             out.append(f"　　{refs}より、{line.reason}ので")
             out.append(f"　　　{line.claim}{tail}")
         elif line.reason:
-            out.append(f"　　{line.reason}　　{line.claim}{tail}")
+            # 番号を引かない行は「〜から　主張」と書く（「対頂角は等しい　∠…」だと
+            # 文がつながらない）。「仮定より」「〜だから」は既に接続の形になっている。
+            reason = line.reason
+            if reason != "仮定より" and not reason.endswith("だから"):
+                reason += "から"
+            out.append(f"　　{reason}　　{line.claim}{tail}")
         else:
             out.append(f"　　{line.claim}{tail}")
     return "\n".join(out)
