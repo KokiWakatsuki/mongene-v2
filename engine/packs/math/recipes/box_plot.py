@@ -601,3 +601,140 @@ __all__ = [
     "word_problem_box_plot_trend_recipe",
     "word_problem_box_plot_stability_recipe",
 ]
+
+
+# ===========================================================================
+# exam_l7（入試融合・データの活用）— C13
+#
+# graph_table Lv2/Lv3 は台帳 example の内容が g2_l56 の「読む」「かく」と同一なので
+# family から既存 recipe を共有する。ここに足すのは word_problem の2セル。
+# ===========================================================================
+_EXAM_L7_GUIDED_CONCEPTS = ["exam.box_plot_guided_three"]
+_EXAM_L7_SPREAD_CLAIM_CONCEPTS = ["exam.box_plot_spread_claim"]
+
+
+@register_recipe(
+    "math.exam_word_problem_box_plot_guided", provides_concepts=_EXAM_L7_GUIDED_CONCEPTS
+)
+def exam_word_problem_box_plot_guided_recipe(ctx: CellContext, rng: Rng) -> MR:
+    """誘導あり3小問（中央値を読む → 四分位範囲が大きいのはどちら → 傾向の判断）。
+
+    exam_l7.word_problem Lv3。段が上がるにつれて「読む」→「比べる」→「判断する」と
+    問いの質が変わる。(3) は複数の観点（第一四分位数・中央値・第三四分位数）が
+    そろって上回るかどうかで決まるので、中央値だけを見ると落とす。
+    """
+    p = cast("dict[str, Any]", ctx.spec_level.params)
+    group_a, group_b, quantity, unit, _adj, step = _wp_scene(p, rng)
+
+    def _decidable(ta: list[int], tb: list[int]) -> bool:
+        # (2) の四分位範囲の比較が引き分けにならず、(3) の判定も「いえる／いえない」
+        # のどちらかに定まる（中央値は必ず B が上＝主張に一応の根拠がある）。
+        return (ta[3] - ta[1]) != (tb[3] - tb[1]) and tb[2] > ta[2]
+
+    axis_lo, axis_hi, axis_step, ticks_a, ticks_b = _two_series_where(step, rng, _decidable)
+
+    read_sol = cast(
+        Solution,
+        REGISTRY.solver("math.read_box_plot_single_statistic")(
+            axis_lo, axis_step, ticks_a, "median"
+        ),
+    )
+    iqr_sol = cast(
+        Solution,
+        REGISTRY.solver("math.compare_box_plot_statistic")(
+            axis_lo, axis_step, ticks_a, ticks_b, "iqr"
+        ),
+    )
+    trend_sol = cast(
+        Solution,
+        REGISTRY.solver("math.judge_box_plot_trend_claim")(
+            axis_lo, axis_step, ticks_a, ticks_b
+        ),
+    )
+
+    params = _wp_params(axis_lo, axis_hi, axis_step, ticks_a, ticks_b)
+    given = {"scenario": _wp_scenario(group_a, group_b, quantity, unit)}
+    subs = [
+        _sub_question(ctx, asked="value", answer=s.answer, steps=s.steps, label=lab)
+        for lab, s in (("(1)", read_sol), ("(2)", iqr_sol), ("(3)", trend_sol))
+    ]
+    return _mr(
+        ctx,
+        params=params,
+        given=given,
+        context_slots={
+            "group_a": group_a, "group_b": group_b, "quantity": quantity, "unit": unit,
+            "ask_1": f"Aの{quantity}の中央値を読み取れ。",
+            "ask_2": "四分位範囲が大きいのはAとBのどちらか答えよ。",
+            "ask_3": (
+                f"Bのほうが{quantity}が大きい傾向があるといえるかどうか、"
+                "箱ひげ図をもとに判断して答えよ。"
+            ),
+        },
+        sub_questions=subs,
+        visual_plan=_plan(params, draw_box=True),
+        recipe="math.exam_word_problem_box_plot_guided",
+    )
+
+
+@register_recipe(
+    "math.exam_word_problem_box_plot_spread_claim",
+    provides_concepts=_EXAM_L7_SPREAD_CLAIM_CONCEPTS,
+)
+def exam_word_problem_box_plot_spread_claim_recipe(ctx: CellContext, rng: Rng) -> MR:
+    """誘導なし・ばらつきの主張の妥当性を2つの指標から判断する（exam_l7.word_problem Lv4）。
+
+    台帳 example の前提「中央値はほぼ等しい」を、中央値が**等しい**構成にして満たす
+    （ばらつきだけが論点になる）。四分位範囲と範囲が同じ側を指すかどうかで
+    「正しいといえる／正しいとはいえない」が分かれ、どちらも同じくらい出るようにする
+    ——片方に潰れると図を見ずに答えられてしまう。
+    """
+    p = cast("dict[str, Any]", ctx.spec_level.params)
+    group_a, group_b, quantity, unit, _adj, step = _wp_scene(p, rng)
+    want_valid = str(draw(["valid", "invalid"], rng)) == "valid"
+
+    def _decidable(ta: list[int], tb: list[int]) -> bool:
+        if ta[2] != tb[2]:
+            return False  # 中央値は等しい（ばらつきだけが論点）
+        iqr_a, iqr_b = ta[3] - ta[1], tb[3] - tb[1]
+        rng_a, rng_b = ta[4] - ta[0], tb[4] - tb[0]
+        if iqr_a == iqr_b or rng_a == rng_b:
+            return False
+        valid = iqr_a > iqr_b and rng_a > rng_b
+        # 「正しいとはいえない」側は、四分位範囲では A が大きいのに範囲では B が大きい
+        # ＝主張に一応の根拠がありつつ反論も立つ組に限る（ただの外れではない）。
+        if not want_valid:
+            return iqr_a > iqr_b and rng_a < rng_b
+        return valid
+
+    axis_lo, axis_hi, axis_step, ticks_a, ticks_b = _two_series_where(step, rng, _decidable)
+
+    sol = cast(
+        Solution,
+        REGISTRY.solver("math.judge_spread_claim_by_two_measures")(
+            axis_lo, axis_step, ticks_a, ticks_b
+        ),
+    )
+    params = _wp_params(axis_lo, axis_hi, axis_step, ticks_a, ticks_b)
+    given = {
+        "scenario": _wp_scenario(group_a, group_b, quantity, unit),
+        "quantities": (
+            f"箱ひげ図を見ると、AとBの{quantity}の中央値はほぼ等しいが、"
+            f"Aのほうが四分位範囲が大きかった。"
+        ),
+    }
+    return _mr(
+        ctx,
+        params=params,
+        given=given,
+        context_slots={
+            "group_a": group_a, "group_b": group_b, "quantity": quantity, "unit": unit,
+            "ask_value": (
+                f"「Aのほうが{quantity}のばらつきが大きい」という主張が正しいといえるか"
+                "どうか、箱ひげ図から読み取れることをもとに理由をつけて答えよ。"
+            ),
+        },
+        sub_question=_sub_question(ctx, asked="value", answer=sol.answer, steps=sol.steps),
+        visual_plan=_plan(params, draw_box=True),
+        recipe="math.exam_word_problem_box_plot_spread_claim",
+    )

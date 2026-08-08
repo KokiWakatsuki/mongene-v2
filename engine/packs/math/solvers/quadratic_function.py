@@ -359,6 +359,78 @@ _EQUAL_AREA_PHRASE: dict[str, str] = {
 }
 
 
+# ---------------------------------------------------------------------------
+# exam_l2.find_value Lv4: 交点の x 座標から放物線の係数を逆算し、面積まで進む
+# ---------------------------------------------------------------------------
+_COEFF_FROM_INTERSECTION_OPS = [
+    "compute_point_on_line",
+    "solve_for_coefficient",
+    "find_other_intersection",
+    "compute_triangle_area",
+]
+
+_COEFF_FROM_INTERSECTION_NARRATION: dict[str, str] = {
+    "compute_point_on_line": "交点は直線の上にもあるので、与えられた x 座標を直線の式に代入して y 座標を求める。",
+    "solve_for_coefficient": "その点が放物線 y=ax² の上にもあることから、a についての方程式を立てて解く。",
+    "find_other_intersection": "a が決まったので、放物線の式と直線の式を連立して、もう一方の交点を求める。",
+    "compute_triangle_area": "2つの交点と原点の座標がそろったので、三角形の面積を求める公式で面積を計算する。",
+}
+
+_COEFF_FROM_INTERSECTION_PHRASE: dict[str, str] = {
+    "compute_point_on_line": "交点の y 座標を求める",
+    "solve_for_coefficient": "a の値を求める",
+    "find_other_intersection": "もう一方の交点を求める",
+}
+
+
+@register_solver("math.parabola_coefficient_from_intersection")
+def parabola_coefficient_from_intersection(m: object, b: object, x_a: object) -> Solution:
+    """交点 A の x 座標から放物線 y=ax² の係数 a を逆算し、三角形 OAB の面積も求める。
+
+    A は直線 y=mx+b の上にあるので yA=m·xA+b、放物線の上にもあるので a=yA/xA²。
+    B は残りの交点。面積は既存の shoelace 公式（`_shoelace_area`）で求める
+    ＝新しい幾何ロジックは足さない。答えは (a, 三角形 OAB の面積) の組。
+    """
+    m_s, b_s = sympy.nsimplify(sympy.sympify(m)), sympy.nsimplify(sympy.sympify(b))
+    xa_s = sympy.nsimplify(sympy.sympify(x_a))
+    if xa_s == 0:
+        raise ValueError("交点の x 座標が 0 だと a が決まらない")
+    ya = m_s * xa_s + b_s
+    a_val = sympy.nsimplify(ya / xa_s**2)
+    if a_val == 0:
+        raise ValueError("a が 0 になり放物線にならない")
+    roots = _parabola_line_intersections(a_val, m_s, b_s)
+    if len(roots) != 2:
+        raise ValueError(f"交点がちょうど2つでない: {roots}")
+    if xa_s not in roots:
+        raise ValueError(f"逆算した a のもとで A が交点にならない: {roots}")
+    xb_s = roots[0] if roots[1] == xa_s else roots[1]
+    ptA, ptB = (xa_s, a_val * xa_s**2), (xb_s, a_val * xb_s**2)
+    area = sympy.nsimplify(
+        _shoelace_area([(sympy.Integer(0), sympy.Integer(0)), ptA, ptB])
+    )
+    if area == 0:
+        raise ValueError("原点と2交点が一直線上にあり三角形にならない")
+
+    answer = sympy.Tuple(a_val, area)
+    srepr = sympy.srepr(answer)
+    disp = f"a = {_fmt_scalar(a_val)}、△OAB = {_fmt_scalar(area)}"
+    steps = [
+        Step(
+            op=op,
+            args=[],
+            result_srepr=srepr if i == len(_COEFF_FROM_INTERSECTION_OPS) - 1 else "",
+            result_display=(
+                disp if i == len(_COEFF_FROM_INTERSECTION_OPS) - 1
+                else _COEFF_FROM_INTERSECTION_PHRASE[op]
+            ),
+            narration=_COEFF_FROM_INTERSECTION_NARRATION[op],
+        )
+        for i, op in enumerate(_COEFF_FROM_INTERSECTION_OPS)
+    ]
+    return Solution(answer=SymbolicAnswer(srepr=srepr, display=disp), steps=steps)
+
+
 @register_solver("math.parabola_equal_area_point")
 def parabola_equal_area_point(a: object, m: object, b: object) -> Solution:
     """三角形 PAB の面積が三角形 OAB と等しくなる放物線上の点 P の x 座標。
@@ -801,6 +873,9 @@ __all__ = [
     "y_range_over_quadratic_domain",
     "rate_of_change_quadratic",
     "intersection_parabola_line",
+    "parabola_coefficient_from_intersection",
+    "parabola_equal_area_point",
+    "parabola_line_area_ratio",
     "solve_quadratic_motion_area",
     "draw_two_parabolas_features",
     "draw_parabola_domain_features",

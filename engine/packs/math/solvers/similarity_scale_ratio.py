@@ -171,3 +171,53 @@ def similar_solid_ratio_from_volume(vol_p: object, vol_q: object) -> Solution:
         ),
     ]
     return Solution(answer=SymbolicAnswer(srepr=srepr, display=disp), steps=steps)
+
+
+@register_solver("math.trapezoid_diagonal_area_ratios")
+def trapezoid_diagonal_area_ratios(ad: object, bc: object) -> Solution:
+    """台形の対角線の交点まわりの面積比を求める（exam_l6.word_problem Lv4）。
+
+    AD∥BC の台形 ABCD で対角線 AC・BD の交点を P とすると、AD∥BC から
+    △APD∽△CPB（X字型の相似）で相似比は AD:BC。したがって
+      ・△APD:△CPB は相似比の二乗（既存 math.similar_area_ratio と同じ性質）
+      ・AP:PC = AD:BC で、△APD と △APB は BD 上の PD・PB を底辺とし頂点 A を
+        共有するので、面積の比は PD:PB = AD:BC
+    という**二つの異なる比の使い方**を合成する。答えは
+    Tuple(△APD:△CPB の分子, 同分母, △APD が △APB の何倍か)。
+    ad/bc だけから計算する（double-solve）。
+    """
+    a = sympy.Integer(int(str(ad)))
+    b = sympy.Integer(int(str(bc)))
+    if a <= 0 or b <= 0 or a == b:
+        raise ValueError("AD と BC は正で、互いに異なること（等しいと平行四辺形になる）")
+    g = sympy.gcd(a**2, b**2)
+    ratio_num, ratio_den = a**2 // g, b**2 // g
+    times = sympy.Rational(a, b)
+    result = sympy.Tuple(ratio_num, ratio_den, times)
+    disp = (
+        f"三角形APD:三角形BPC = {ratio_num}:{ratio_den}、"
+        f"三角形APDは三角形APBの{sympy.sstr(times)}倍"
+    )
+    srepr = sympy.srepr(result)
+    steps = [
+        Step(
+            op="identify_x_shape_similarity",
+            args=[], result_srepr="", result_display="対頂角と錯角から相似な三角形を見つける",
+            narration="AD と BC が平行であることから、対頂角と錯角が等しく、"
+            "対角線の交点をはさむ2つの三角形が相似であることがわかる。",
+        ),
+        Step(
+            op="square_similarity_ratio",
+            args=[], result_srepr="", result_display="相似比を二乗して面積比を求める",
+            narration="相似な図形の面積比は相似比の二乗に等しいことから、"
+            "2つの三角形の面積の比を求める。",
+        ),
+        Step(
+            op="compare_triangles_sharing_apex",
+            args=[], result_srepr=srepr, result_display=disp,
+            narration="対角線上の2つの線分の比が相似比と同じであることを使う。"
+            "頂点を共有する2つの三角形の面積の比は、その底辺の比に等しいので、"
+            "一方が他方の何倍かが求まる。",
+        ),
+    ]
+    return Solution(answer=SymbolicAnswer(srepr=srepr, display=disp), steps=steps)

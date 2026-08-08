@@ -13,7 +13,9 @@ import sympy
 from engine.core.contracts import MR, CellContext, Provenance, Solution, SubQuestionMR, SymbolicAnswer
 from engine.core.registry import REGISTRY, register_recipe
 from engine.core.rng import Rng, draw, draw_many
+from engine.packs.math.recipes.letter_expr import _draw_distinct_points
 from engine.packs.math.recipes.polynomial import _domain_candidates, _fmt_poly_x_terms
+from engine.packs.math.solvers.quadratic_function import _shoelace_area
 
 
 def _effective_concept_tags(ctx: CellContext) -> list[str]:
@@ -452,3 +454,143 @@ __all__ = [
     "word_problem_parabola_area_ratio_recipe",
     "solve_quadratic_motion_area_recipe",
 ]
+
+
+# ===========================================================================
+# exam_l2（入試融合・放物線と直線の融合）— C13
+#
+# 5セルのうち3つ（find_value Lv3・graph_table Lv2・word_problem Lv3）は台帳 example の
+# 内容が g3_l37 と実質同じなので、同じ recipe を family から共有する（同じ問題を
+# 二重に書き起こして食い違いを作らない）。ここに足すのは残る2つ——
+#   ・find_value Lv4: 交点の x 座標から係数 a を逆算し、面積まで進む
+#   ・word_problem Lv4: 等積の点を誘導なしで構成する
+# ===========================================================================
+_EXAM_L2_COEFFICIENT_CONCEPTS = ["exam.parabola_coefficient_from_intersection"]
+_EXAM_L2_EQUAL_AREA_CONCEPTS = ["exam.parabola_equal_area_point_solo"]
+
+
+@register_recipe(
+    "math.exam_parabola_coefficient_from_intersection",
+    provides_concepts=_EXAM_L2_COEFFICIENT_CONCEPTS,
+)
+def exam_parabola_coefficient_from_intersection_recipe(ctx: CellContext, rng: Rng) -> MR:
+    """交点の x 座標から放物線の係数を逆算し、三角形の面積まで求める（exam_l2.find_value Lv4）。
+
+    answer-first: 先に答えの a と2つの交点 xA・xB を決め、直線 y=mx+b を
+    m=a(xA+xB)、b=−a·xA·xB で逆算する（実行時の判定ではなく構成時に整数を保証する）。
+    本文に出るのは直線の式と A の x 座標だけで、a と面積は出さない。
+    """
+    p = ctx.spec_level.params
+    a_cands = [v for v in _domain_candidates(p["a_domain"]) if v != 0]
+    x_cands = [v for v in _domain_candidates(p["x_domain"]) if v != 0]
+    cands: list[tuple[int, int, int]] = []
+    for a in a_cands:
+        for xa in x_cands:
+            for xb in x_cands:
+                a_i, xa_i, xb_i = int(a), int(xa), int(xb)
+                if xa_i >= xb_i:
+                    continue
+                m, b = a_i * (xa_i + xb_i), -a_i * xa_i * xb_i
+                if b == 0:
+                    continue  # 直線が原点を通ると三角形 OAB がつぶれる
+                area2 = abs(a_i * xa_i * xb_i * (xb_i - xa_i))  # 面積の2倍
+                if area2 % 2:
+                    continue  # 面積を整数にする
+                area = area2 // 2
+                # 答え（a・面積）が本文の数値（m・b・xA）と一致する組は外す（G-Q5t）。
+                text_nums = {abs(m), abs(b), abs(xa_i)}
+                if {abs(a_i), area} & text_nums:
+                    continue
+                cands.append((a_i, xa_i, xb_i))
+    idx = int(draw({"int_set": list(range(len(cands)))}, rng))
+    a, xa, xb = cands[idx]
+    m, b = a * (xa + xb), -a * xa * xb
+    la, lb = _draw_distinct_points(2, rng)
+
+    sol = cast(
+        Solution, REGISTRY.solver("math.parabola_coefficient_from_intersection")(m, b, xa)
+    )
+    assert isinstance(sol.answer, SymbolicAnswer)
+    a_val, area = sympy.sympify(sol.answer.srepr)
+    assert a_val == sympy.Integer(a), f"逆算した a が構成と一致しない: {a_val} != {a}"
+    assert area > 0
+
+    line_txt = _fmt_line_mx_plus_b(m, b)
+    condition = (
+        f"放物線 y=ax² と直線 {line_txt} が2点{la}、{lb}で交わり、"
+        f"{la}の x座標が{xa}である。このとき a の値を求め、"
+        f"さらに三角形O{la}{lb}の面積を求めよ。ただしOは原点とする"
+    )
+    return MR(
+        signature=ctx.spec_level.signature, family=ctx.family, level=ctx.level,
+        purpose=ctx.purpose, seed=0,
+        params={"m": m, "b": b, "x_a": xa, "labels": la + lb},
+        given={"condition": condition},
+        sub_questions=[
+            SubQuestionMR(
+                label="(1)", asked="value", answer=sol.answer, steps=sol.steps,
+                concept_tags=_effective_concept_tags(ctx),
+                cause_tags=_effective_cause_tags(ctx),
+            )
+        ],
+        visual_plan=None,
+        provenance=Provenance(recipe="math.exam_parabola_coefficient_from_intersection"),
+    )
+
+
+def _fmt_line_mx_plus_b(m: int, b: int) -> str:
+    """直線 y=mx+b を教科書表記で書く（係数 ±1 と 0 の扱いをそろえる）。"""
+    if m == 0:
+        return f"y={b}"
+    term = "x" if m == 1 else ("-x" if m == -1 else f"{m}x")
+    if b == 0:
+        return f"y={term}"
+    return f"y={term}{'+' if b > 0 else '-'}{abs(b)}"
+
+
+@register_recipe(
+    "math.exam_parabola_equal_area_solo", provides_concepts=_EXAM_L2_EQUAL_AREA_CONCEPTS
+)
+def exam_parabola_equal_area_solo_recipe(ctx: CellContext, rng: Rng) -> MR:
+    """等積の点を誘導なしで構成する（exam_l2.word_problem Lv4）。
+
+    g3_l37.word_problem Lv3 では同じ問いが3つめの小問（＝直線 AB の式と面積を
+    先に出させたあと）だったが、ここは誘導なしなので「線分 AB を共通の底辺とみる」
+    ところから自分で構成する。答えが一意に決まるよう、点を**直線 AB について原点と
+    同じ側**に限る（反対側の平行線と放物線の交点は構成によって 0〜2 個と揺れるため、
+    そこまで含めると「すべて求めよ」が安定した問いにならない）。
+    """
+    p = ctx.spec_level.params
+    a, xA, xB, m, b, scenario = _parabola_scene(p, rng)
+    sol = cast(Solution, REGISTRY.solver("math.parabola_equal_area_point")(a, m, b))
+    assert isinstance(sol.answer, SymbolicAnswer)
+    xP = sympy.sympify(sol.answer.srepr)
+    assert xP not in (0, xA, xB), f"P が原点や A・B と重なる: {xP}"
+    # 恒真: 求めた P で三角形 PAB の面積が三角形 OAB と等しい。
+    yA, yB, yP = a * xA**2, a * xB**2, a * xP**2
+    area_oab = _shoelace_area([(sympy.Integer(0), sympy.Integer(0)), (xA, yA), (xB, yB)])
+    area_pab = _shoelace_area([(xP, yP), (xA, yA), (xB, yB)])
+    assert (area_pab - area_oab).equals(0), f"面積が等しくならない: {area_pab} != {area_oab}"
+
+    return MR(
+        signature=ctx.spec_level.signature, family=ctx.family, level=ctx.level,
+        purpose=ctx.purpose, seed=0,
+        params={"numbers": {"a": str(a), "x_a": str(xA), "x_b": str(xB)}},
+        given={"scenario": scenario},
+        context_slots={
+            "ask_value": (
+                "この放物線上に、直線 AB について原点と同じ側に、原点と異なる点 P を"
+                "とりたい。三角形 OAB と三角形 PAB の面積が等しくなるとき、"
+                "点 P の x 座標を求めよ。"
+            )
+        },
+        sub_questions=[
+            SubQuestionMR(
+                label="(1)", asked="value", answer=sol.answer, steps=sol.steps,
+                concept_tags=_effective_concept_tags(ctx),
+                cause_tags=_effective_cause_tags(ctx),
+            )
+        ],
+        visual_plan=None,
+        provenance=Provenance(recipe="math.exam_parabola_equal_area_solo"),
+    )

@@ -1,0 +1,63 @@
+family: math.exam_l2.word_problem
+form: word_problem
+source_desc: |
+  放物線と直線の融合（二次関数×一次関数）— 文章題
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv3 desc: 誘導あり:交点→面積/線分比の小問が段階的に連なる融合。
+       example: 放物線 y=x² と直線 y=x+2 が2点A、Bで交わっている。ただしAの x座標は
+                負とする。(1)2点A、Bの座標を求めよ。(2)直線と y軸との交点をCとするとき、
+                三角形OABの面積を求めよ。
+  Lv4 desc: 誘導なし:等積変形・面積比などゴールを自分で構成。
+       example: 放物線 y=x² 上に2点A(-1,1)、B(2,4)がある。この放物線上の点Pを、
+                三角形OABと三角形PABの面積が等しくなるようにとりたい。
+                原点Oと異なる点Pの座標をすべて求めよ。
+  ---
+  【Lv3 は既存 recipe の共有】g3_l37.word_problem Lv3
+  （`math.word_problem_parabola_line_guided`＝直線 AB の式 → 三角形 OAB の面積 →
+  等積の点、の3小問）と実質同じ内容なので、同じ資産を共有する。
+
+  【Lv4 で「すべて」をどう扱ったか】台帳 example は「原点Oと異なる点Pの座標をすべて
+  求めよ」だが、三角形 PAB の面積が三角形 OAB と等しくなる点の集合は、直線 AB から
+  等距離にある2本の平行線上にある。原点を通るほうの平行線と放物線の交点は
+  「原点」と「もう1点」の必ず2つだが、**反対側の平行線**と放物線の交点は構成によって
+  0個・1個・2個と揺れる。そこまで含めると答えの個数が seed ごとに変わり、
+  「すべて求めよ」が安定した問いにならない（＝退化と過剰生成を同時に招く）。
+  そこで台帳の g3_l37 Lv3 と同じ言い回しで**直線 AB について原点と同じ側**に限る。
+  この制限のもとでは答えはちょうど1つに決まる。
+
+  【Lv3 との違い（level_sep）】同じ「等積の点」でも、Lv3 ではそれが3つめの小問
+  （直線 AB の式と面積を先に出させたあと）なのに対し、Lv4 は誘導がなく、
+  「線分 AB を共通の底辺とみる」ところから自分で構成する。
+  小問数（3 対 1）と given/asked が相異する。
+
+  【params】本文に出ている数だけ（a・2点の x 座標）。答え（P の x 座標）は置かない。
+concepts_default: [quadratic_function.word_problem_parabola_line_guided]
+levels:
+  "3":
+    signature: exam_parabola_line_guided
+    recipe: math.word_problem_parabola_line_guided
+    params:
+      a_domain: {int_range: [-4, 4], exclude: [0]}
+      x_domain: {int_range: [-6, 6], exclude: [0]}
+    given: [scenario]
+    asked: [formulation, value, value]
+    visual: none
+    text: {tier: T1, template: wp_guided_three_v1}
+    hints: [steps_prefix]
+    concept_tags: [quadratic_function.word_problem_parabola_line_guided]
+    cause_tags: []
+  "4":
+    signature: exam_parabola_equal_area_solo
+    recipe: math.exam_parabola_equal_area_solo
+    params:
+      a_domain: {int_range: [-4, 4], exclude: [0]}
+      x_domain: {int_range: [-6, 6], exclude: [0]}
+    given: [scenario]
+    asked: [value]
+    visual: none
+    text: {tier: T1, template: wp_linear_solo_v1}
+    hints: [steps_prefix]
+    concept_tags: [exam.parabola_equal_area_point_solo]
+    cause_tags: []
+remedial:
+  default_level: 3

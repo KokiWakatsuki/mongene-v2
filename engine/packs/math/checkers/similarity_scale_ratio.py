@@ -36,3 +36,36 @@ def double_solve_similar_solid_ratio_from_volume(mr: MR) -> Solution:
     p = mr.params
     solver = REGISTRY.solver("math.similar_solid_ratio_from_volume")
     return cast(Solution, solver(p["vol_p"], p["vol_q"]))
+
+
+# ---------------------------------------------------------------------------
+# exam_l6（入試融合・相似と面積比／体積比）— C13
+#
+# 独立性: params が持つのは**場面文に出ている数値**（相似比・体積・辺の長さ）だけで、
+# 答え（比・面積）は入っていない。checker は recipe と共有する EXAM_L6_SOLVERS で
+# その数値から解き直す（word_problem_probability.py の double_solve と同じ設計）。
+# ---------------------------------------------------------------------------
+def _double_solve_exam_l6(mr: MR) -> list[Solution]:
+    from engine.packs.math.recipes.similarity_scale_ratio import EXAM_L6_SOLVERS
+
+    return EXAM_L6_SOLVERS[str(mr.params["kind"])](dict(mr.params["numbers"]))
+
+
+@register_checker("math.exam_similar_solid_volume.double_solve")
+def double_solve_exam_similar_solid_volume(mr: MR) -> list[Solution]:
+    return _double_solve_exam_l6(mr)
+
+
+@register_checker("math.exam_cone_split_volume_ratio.double_solve")
+def double_solve_exam_cone_split_volume_ratio(mr: MR) -> list[Solution]:
+    return _double_solve_exam_l6(mr)
+
+
+@register_checker("math.exam_parallel_line_area_guided.double_solve")
+def double_solve_exam_parallel_line_area_guided(mr: MR) -> list[Solution]:
+    return _double_solve_exam_l6(mr)
+
+
+@register_checker("math.exam_trapezoid_diagonal_ratios.double_solve")
+def double_solve_exam_trapezoid_diagonal_ratios(mr: MR) -> list[Solution]:
+    return _double_solve_exam_l6(mr)

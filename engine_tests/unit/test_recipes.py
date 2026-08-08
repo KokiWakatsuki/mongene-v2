@@ -7559,16 +7559,20 @@ def test_word_problem_linear_function_non_degenerate(seed):
 # ---------------------------------------------------------------------------
 # 確率の利用（g2_l51/l52/l53/l54 の word_problem）＝1 recipe で6セル
 # ---------------------------------------------------------------------------
+#   (family, level, signature, 小問数)
+# 小問数は level_sep の骨（誘導あり＝2ないし3小問・誘導なし＝1小問）。
 _PROBABILITY_WP_CELLS = [
-    ("math.g2_l51.word_problem", 2, "word_problem_bag_one_draw_guided", True),
-    ("math.g2_l51.word_problem", 3, "word_problem_multiple_union", False),
-    ("math.g2_l52.word_problem", 3, "word_problem_two_dice_product_at_least", False),
-    ("math.g2_l53.word_problem", 3, "word_problem_lottery_at_least_one", False),
-    ("math.g2_l54.word_problem", 2, "word_problem_two_balls_complement_guided", True),
-    ("math.g2_l54.word_problem", 3, "word_problem_dice_repeat_at_least_one", False),
-    ("math.g2_l52.word_problem", 2, "word_problem_coin_toss_count_and_probability", True),
-    ("math.g2_l53.word_problem", 2, "word_problem_two_digit_cards", True),
-    ("math.g2_l54.word_problem", 4, "word_problem_at_least_two_colors", False),
+    ("math.g2_l51.word_problem", 2, "word_problem_bag_one_draw_guided", 2),
+    ("math.g2_l51.word_problem", 3, "word_problem_multiple_union", 1),
+    ("math.g2_l52.word_problem", 3, "word_problem_two_dice_product_at_least", 1),
+    ("math.g2_l53.word_problem", 3, "word_problem_lottery_at_least_one", 1),
+    ("math.g2_l54.word_problem", 2, "word_problem_two_balls_complement_guided", 2),
+    ("math.g2_l54.word_problem", 3, "word_problem_dice_repeat_at_least_one", 1),
+    ("math.g2_l52.word_problem", 2, "word_problem_coin_toss_count_and_probability", 2),
+    ("math.g2_l53.word_problem", 2, "word_problem_two_digit_cards", 2),
+    ("math.g2_l54.word_problem", 4, "word_problem_at_least_two_colors", 1),
+    ("math.exam_l5.word_problem", 3, "exam_word_problem_dice_guided_three", 3),
+    ("math.exam_l5.word_problem", 4, "exam_word_problem_at_least_one_complement", 1),
 ]
 
 # 誘導ありセルのうち (1) が「全部で何通りか」＝場合の数（確率ではない）のもの。
@@ -7577,23 +7581,20 @@ _COUNT_FIRST_SUB_QUESTION_SIGNATURES = frozenset({
     "word_problem_bag_one_draw_guided",
     "word_problem_coin_toss_count_and_probability",
     "word_problem_two_digit_cards",
+    "exam_word_problem_dice_guided_three",
 })
 
 
-@pytest.mark.parametrize(("family", "level", "signature", "guided"), _PROBABILITY_WP_CELLS)
-def test_word_problem_probability_construct(family, level, signature, guided):
-    """誘導ありは value×2小問、誘導なしは value の1小問（＝level_sep の骨）。"""
+@pytest.mark.parametrize(("family", "level", "signature", "n_subs"), _PROBABILITY_WP_CELLS)
+def test_word_problem_probability_construct(family, level, signature, n_subs):
+    """小問はすべて value で、数は誘導の有無で決まる（＝level_sep の骨）。"""
     ctx = _make_ctx(family, level)
     rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
     mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
     assert mr.signature == signature
-    if guided:
-        assert [(sq.label, sq.asked) for sq in mr.sub_questions] == [
-            ("(1)", "value"),
-            ("(2)", "value"),
-        ]
-    else:
-        assert [(sq.label, sq.asked) for sq in mr.sub_questions] == [("(1)", "value")]
+    assert [(sq.label, sq.asked) for sq in mr.sub_questions] == [
+        (f"({i + 1})", "value") for i in range(n_subs)
+    ]
     # 確率の文章題は変数の設定（quantities）を持たない＝given は scenario のみ。
     assert set(mr.given) == {"scenario"}
     assert mr.visual_plan is None
@@ -7601,9 +7602,9 @@ def test_word_problem_probability_construct(family, level, signature, guided):
     assert "answer" not in mr.params
 
 
-@pytest.mark.parametrize(("family", "level", "signature", "guided"), _PROBABILITY_WP_CELLS)
+@pytest.mark.parametrize(("family", "level", "signature", "n_subs"), _PROBABILITY_WP_CELLS)
 @pytest.mark.parametrize("seed", range(30))
-def test_word_problem_probability_double_solve_property(seed, family, level, signature, guided):
+def test_word_problem_probability_double_solve_property(seed, family, level, signature, n_subs):
     """全小問が checker の独立再計算と一致し、params の全数値が given.scenario に現れる。"""
     ctx = _make_ctx(family, level)
     rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
@@ -10298,3 +10299,272 @@ def test_choice_cells_have_exactly_one_correct(seed):
         # 選択肢はすべて本文に出ている。
         for lab in labels:
             assert lab in mr.given["scenario"] or lab in "".join(mr.context_slots.values())
+
+
+# ---------------------------------------------------------------------------
+# C13 exam_l3（動点と面積変化）・exam_l1（一次関数と図形の融合）
+# ---------------------------------------------------------------------------
+@pytest.mark.parametrize("seed", range(25))
+def test_exam_l3_interval_area_uses_decreasing_interval(seed):
+    """指定区間の式が x を含む（辺BC上＝一定になる退化に落ちていない）。"""
+    _ctx, mr = _cell_mr("math.exam_l3.find_value", 3, seed)
+    x = sympy.Symbol("x")
+    expr, value = sympy.sympify(mr.sub_questions[0].answer.srepr)
+    assert expr.has(x), expr
+    n = mr.params["numbers"]
+    s, v, x0 = int(n["side"]), int(n["speed"]), int(n["time"])
+    # 指定の時刻は第3区間（面積が減っていく区間）の内側にある。
+    assert 2 * s / v < x0 < 3 * s / v
+    assert (expr.subs(x, x0) - value).equals(0)
+
+
+@pytest.mark.parametrize("seed", range(25))
+def test_exam_l3_all_times_has_two_answers(seed):
+    """場合分けが答えに効く（時刻が2つ立つ）。区間を1つ見落とすと落とす構成。"""
+    for family, level in (("math.exam_l3.find_value", 4), ("math.exam_l3.word_problem", 4)):
+        _ctx, mr = _cell_mr(family, level, seed)
+        times = sympy.sympify(mr.sub_questions[-1].answer.srepr)
+        assert len(times) == 2 and times[0] < times[1], (family, times)
+        n = mr.params["numbers"]
+        s, v = int(n["side"]), int(n["speed"])
+        assert 0 < times[0] < s / v, times      # 増えていく区間
+        assert 2 * s / v < times[1] <= 3 * s / v  # 減っていく区間
+
+
+@pytest.mark.parametrize("seed", range(25))
+def test_exam_l3_read_graph_values_are_on_grid(seed):
+    """読み取らせる値が方眼の目盛にのっている（目盛の間だと図から読めない）。"""
+    from engine.packs.math.recipes.motion import _quantity_grid_steps
+
+    _ctx, mr = _cell_mr("math.exam_l3.graph_table", 2, seed)
+    s, v, x0 = int(mr.params["side"]), int(mr.params["speed"]), int(mr.params["read_time"])
+    x_step, y_step = _quantity_grid_steps(s, v)
+    y0, t_lo, t_hi = sympy.sympify(mr.sub_questions[0].answer.srepr)
+    assert x0 % x_step == 0 and y0 % y_step == 0, (x0, y0, x_step, y_step)
+    assert t_lo % x_step == 0 and t_hi % x_step == 0, (t_lo, t_hi, x_step)
+    assert t_lo == sympy.Rational(s, v) and t_hi == sympy.Rational(2 * s, v)
+
+
+@pytest.mark.parametrize("seed", range(25))
+def test_exam_l3_guided_middle_interval_is_constant(seed):
+    """(2) の答えは x を含まない定数（辺BC上では面積が変わらない）。"""
+    _ctx, mr = _cell_mr("math.exam_l3.word_problem", 3, seed)
+    x = sympy.Symbol("x")
+    first = sympy.sympify(mr.sub_questions[0].answer.srepr)
+    flat = sympy.sympify(mr.sub_questions[1].answer.srepr)
+    assert first.has(x) and not flat.has(x), (first, flat)
+    s = int(mr.params["numbers"]["side"])
+    assert flat == sympy.Rational(s * s, 2)
+
+
+@pytest.mark.parametrize("seed", range(25))
+def test_exam_l1_intersection_area_is_consistent(seed):
+    """交点は2直線の両方の式を満たし、面積は底辺×高さ÷2 と一致する。"""
+    _ctx, mr = _cell_mr("math.exam_l1.find_value", 3, seed)
+    p = mr.params
+    m1, b1, m2, b2 = p["m1"], p["b1"], p["m2"], p["b2"]
+    pt, area = sympy.sympify(mr.sub_questions[0].answer.srepr)
+    px, py = pt
+    assert py == m1 * px + b1 and py == m2 * px + b2
+    qx = sympy.Rational(-b2, m2)
+    assert (area - sympy.Rational(1, 2) * abs(qx) * abs(py)).equals(0)
+
+
+@pytest.mark.parametrize("seed", range(25))
+def test_exam_l1_coefficient_returns_to_given_area(seed):
+    """逆算した傾きで三角形を組み直すと、問いで与えた面積に戻る。"""
+    _ctx, mr = _cell_mr("math.exam_l1.find_value", 4, seed)
+    b, area = sympy.Integer(mr.params["intercept"]), sympy.Integer(mr.params["area"])
+    a = sympy.sympify(mr.sub_questions[0].answer.srepr)
+    assert a > 0
+    assert (sympy.Rational(1, 2) * abs(sympy.Rational(-b, a)) * b - area).equals(0)
+
+
+def test_exam_l1_line_through_triangle_both_answers_occur():
+    """★答えが片方に固定されない（図を見ずに当てられない）。"""
+    answers = set()
+    for seed in range(40):
+        _ctx, mr = _cell_mr("math.exam_l1.graph_table", 2, seed)
+        answers.add(mr.sub_questions[0].answer.correct)
+    assert len(answers) == 2, answers
+
+
+@pytest.mark.parametrize("seed", range(25))
+def test_exam_l1_guided_three_subquestions_agree(seed):
+    """(3) の面積が、(1) の交点と (2) の切片から底辺×高さ÷2 でも出る。"""
+    _ctx, mr = _cell_mr("math.exam_l1.word_problem", 3, seed)
+    assert len(mr.sub_questions) == 3
+    pt = sympy.sympify(mr.sub_questions[0].answer.srepr)
+    q1, q2 = sympy.sympify(mr.sub_questions[1].answer.srepr)
+    area = sympy.sympify(mr.sub_questions[2].answer.srepr)
+    assert q1[1] == 0 and q2[1] == 0
+    assert (area - sympy.Rational(1, 2) * abs(q1[0] - q2[0]) * abs(pt[1])).equals(0)
+
+
+@pytest.mark.parametrize("seed", range(25))
+def test_exam_l1_area_multiple_point_is_on_positive_x_axis(seed):
+    """求めた点は x 軸の正の部分にあり、面積が指定の倍になる。"""
+    _ctx, mr = _cell_mr("math.exam_l1.word_problem", 4, seed)
+    numbers = mr.params["numbers"]
+    m, b, k = (sympy.Integer(numbers[key]) for key in ("slope", "intercept", "multiple"))
+    cx, cy = sympy.sympify(mr.sub_questions[0].answer.srepr)
+    assert cx > 0 and cy == 0
+    ax = sympy.Rational(-b, m)
+    area_oab = sympy.Rational(1, 2) * abs(ax) * b
+    area_abc = sympy.Rational(1, 2) * abs(cx - ax) * b
+    assert (area_abc - k * area_oab).equals(0)
+
+
+@pytest.mark.parametrize("seed", range(25))
+def test_exam_l2_coefficient_from_intersection(seed):
+    """逆算した a のもとで A は本当に交点になり、面積は shoelace と一致する。"""
+    _ctx, mr = _cell_mr("math.exam_l2.find_value", 4, seed)
+    m, b, xa = (sympy.Integer(mr.params[k]) for k in ("m", "b", "x_a"))
+    a, area = sympy.sympify(mr.sub_questions[0].answer.srepr)
+    assert a != 0 and area > 0
+    assert a * xa**2 == m * xa + b          # A は放物線と直線の両方の上にある
+    roots = sympy.solve(sympy.Eq(a * sympy.Symbol("x") ** 2, m * sympy.Symbol("x") + b))
+    assert len(roots) == 2 and xa in roots
+    xb = roots[0] if roots[1] == xa else roots[1]
+    expected = sympy.Rational(1, 2) * abs(xa * (a * xb**2) - xb * (a * xa**2))
+    assert (area - expected).equals(0)
+
+
+@pytest.mark.parametrize("seed", range(25))
+def test_exam_l2_equal_area_point_is_valid(seed):
+    """求めた P で三角形 PAB の面積が三角形 OAB と等しく、P は O・A・B と重ならない。"""
+    _ctx, mr = _cell_mr("math.exam_l2.word_problem", 4, seed)
+    n = mr.params["numbers"]
+    a, xa, xb = (sympy.Integer(int(n[k])) for k in ("a", "x_a", "x_b"))
+    xp = sympy.sympify(mr.sub_questions[0].answer.srepr)
+    assert xp not in (0, xa, xb)
+
+    def area(p, q, r):
+        return sympy.Rational(1, 2) * abs(
+            p[0] * (q[1] - r[1]) + q[0] * (r[1] - p[1]) + r[0] * (p[1] - q[1])
+        )
+
+    ptA, ptB = (xa, a * xa**2), (xb, a * xb**2)
+    ptO, ptP = (sympy.Integer(0), sympy.Integer(0)), (xp, a * xp**2)
+    assert (area(ptO, ptA, ptB) - area(ptP, ptA, ptB)).equals(0)
+
+
+# ---------------------------------------------------------------------------
+# C13 exam_l5（確率・複合事象／余事象）
+# ---------------------------------------------------------------------------
+@pytest.mark.parametrize("seed", range(25))
+def test_exam_l5_dice_guided_three_non_degenerate(seed):
+    """Lv3: (1)は総数36通り、(2)(3)は 0 にも 1 にも潰れない（0/1 はゲートが弾かない）。"""
+    _ctx, mr = _cell_mr("math.exam_l5.word_problem", 3, seed)
+    faces = int(sympy.sympify(mr.params["numbers"]["faces"]))
+    total = sympy.sympify(mr.sub_questions[0].answer.srepr)
+    assert total == faces**2
+    for sq in mr.sub_questions[1:]:
+        p = sympy.sympify(sq.answer.srepr)
+        assert 0 < p < 1, (sq.label, p)
+    # (2) が和なら (3) は積、(2) が積なら (3) は和（同じ量を2回問わない）。
+    numbers = mr.params["numbers"]
+    assert {str(numbers["target_quantity"]), str(numbers["parity_quantity"])} == {"和", "積"}
+    assert str(numbers["parity_word"]) in ("偶数", "奇数")
+
+
+@pytest.mark.parametrize("seed", range(25))
+def test_exam_l5_at_least_one_complement_is_consistent(seed):
+    """Lv4: 答えは 1 −(対象が1個も入らない確率) と一致し、1 に潰れていない。"""
+    _ctx, mr = _cell_mr("math.exam_l5.word_problem", 4, seed)
+    numbers = mr.params["numbers"]
+    a = int(sympy.sympify(numbers["count_target"]))
+    b = int(sympy.sympify(numbers["count_other"]))
+    k = int(sympy.sympify(numbers["draws"]))
+    # 取り出す個数が対象でない色の個数以下＝余事象が起こりうる（1 への退化を防ぐ）。
+    assert 1 <= k <= b
+    expected = 1 - sympy.Rational(math.comb(b, k), math.comb(a + b, k))
+    assert sympy.sympify(mr.sub_questions[0].answer.srepr) == expected
+    assert 0 < expected < 1
+
+
+# ---------------------------------------------------------------------------
+# C13 exam_l6（相似と面積比・体積比の融合）
+# ---------------------------------------------------------------------------
+_EXAM_L6_CELLS = [
+    ("math.exam_l6.find_value", 3, "exam_similar_solid_volume", 1),
+    ("math.exam_l6.find_value", 4, "exam_cone_split_volume_ratio", 1),
+    ("math.exam_l6.word_problem", 3, "exam_parallel_line_area_guided", 3),
+    ("math.exam_l6.word_problem", 4, "exam_trapezoid_diagonal_ratios", 1),
+]
+
+
+@pytest.mark.parametrize(("family", "level", "signature", "n_subs"), _EXAM_L6_CELLS)
+@pytest.mark.parametrize("seed", range(20))
+def test_exam_l6_double_solve_property(seed, family, level, signature, n_subs):
+    """全小問が checker の独立再計算と一致し、答えは params に入っていない。"""
+    _ctx, mr = _cell_mr(family, level, seed)
+    assert mr.signature == signature
+    assert len(mr.sub_questions) == n_subs
+    checker = REGISTRY.checker(f"{mr.provenance.recipe}.double_solve")
+    solutions = checker(mr)
+    assert len(solutions) == len(mr.sub_questions)
+    for sol, sq in zip(solutions, mr.sub_questions, strict=True):
+        assert sol.answer.srepr == sq.answer.srepr
+    assert "answer" not in mr.params
+    # params の数値はすべて場面文（given）に現れる。
+    given_text = "".join(mr.given.values()) + "".join(mr.context_slots.values())
+    for value in mr.params["numbers"].values():
+        assert str(value) in given_text, (family, level, value)
+
+
+@pytest.mark.parametrize("seed", range(20))
+def test_exam_l6_similar_solid_volume_is_integer_multiple(seed):
+    """Lv3: 体積比は相似比の三乗で、大きいほうの体積は整数になる。"""
+    _ctx, mr = _cell_mr("math.exam_l6.find_value", 3, seed)
+    n = mr.params["numbers"]
+    m, k, known = int(n["ratio_num"]), int(n["ratio_den"]), int(n["known_volume"])
+    assert m < k and math.gcd(m, k) == 1
+    other = sympy.sympify(mr.sub_questions[0].answer.srepr)
+    assert other == sympy.Integer(known) * k**3 / m**3
+    assert other.is_Integer
+
+
+@pytest.mark.parametrize("seed", range(20))
+def test_exam_l6_cone_split_is_frustum_remainder(seed):
+    """Lv4: 小円錐:円錐台 = k³:((k+l)³−k³)（引き算の合成が効いている）。"""
+    _ctx, mr = _cell_mr("math.exam_l6.find_value", 4, seed)
+    n = mr.params["numbers"]
+    upper, lower = int(n["upper_part"]), int(n["lower_part"])
+    small, frustum = sympy.sympify(mr.sub_questions[0].answer.srepr)
+    expected_small = sympy.Integer(upper**3)
+    expected_frustum = sympy.Integer((upper + lower) ** 3 - upper**3)
+    g = sympy.gcd(expected_small, expected_frustum)
+    assert (small, frustum) == (expected_small // g, expected_frustum // g)
+    # 高さは分けた比で割り切れる（切り口の高さが整数になる場面にしてある）。
+    assert int(n["height"]) % (upper + lower) == 0
+
+
+@pytest.mark.parametrize("seed", range(20))
+def test_exam_l6_parallel_line_area_guided_is_consistent(seed):
+    """word_problem Lv3: 相似比 →面積比 →四角形の面積、が同じ比で貫かれている。"""
+    _ctx, mr = _cell_mr("math.exam_l6.word_problem", 3, seed)
+    n = mr.params["numbers"]
+    ad, db, area_ade = int(n["ad"]), int(n["db"]), int(n["area_ade"])
+    whole = ad + db
+    r_num, r_den = sympy.sympify(mr.sub_questions[0].answer.srepr)
+    a_num, a_den = sympy.sympify(mr.sub_questions[1].answer.srepr)
+    quad = sympy.sympify(mr.sub_questions[2].answer.srepr)
+    assert (r_num, r_den) == (sympy.Rational(ad, whole).p, sympy.Rational(ad, whole).q)
+    assert (a_num, a_den) == (ad**2, whole**2)
+    # 四角形DBCE = 三角形ABC − 三角形ADE（整数になるよう構成されている）。
+    assert quad == sympy.Integer(area_ade) * (whole**2 - ad**2) / ad**2
+    assert quad.is_Integer and quad > 0
+
+
+@pytest.mark.parametrize("seed", range(20))
+def test_exam_l6_trapezoid_uses_ratio_twice(seed):
+    """word_problem Lv4: 面積比は相似比の二乗、倍率は相似比そのもの（使い分けが眼目）。"""
+    _ctx, mr = _cell_mr("math.exam_l6.word_problem", 4, seed)
+    n = mr.params["numbers"]
+    ad, bc = int(n["ad"]), int(n["bc"])
+    ratio_num, ratio_den, times = sympy.sympify(mr.sub_questions[0].answer.srepr)
+    g = math.gcd(ad**2, bc**2)
+    assert (ratio_num, ratio_den) == (ad**2 // g, bc**2 // g)
+    assert times == sympy.Rational(ad, bc)
+    assert ad != bc, "AD=BC だと平行四辺形になり、相似比が 1 に潰れる"

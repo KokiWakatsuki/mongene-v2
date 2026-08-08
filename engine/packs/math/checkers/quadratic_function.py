@@ -89,3 +89,27 @@ __all__ = [
     "double_solve_word_problem_parabola_line_guided",
     "double_solve_word_problem_parabola_area_ratio",
 ]
+
+
+# ---------------------------------------------------------------------------
+# exam_l2（入試融合・放物線と直線の融合）— C13
+# ---------------------------------------------------------------------------
+@register_checker("math.exam_parabola_coefficient_from_intersection.double_solve")
+def double_solve_exam_parabola_coefficient_from_intersection(mr: MR) -> Solution:
+    """本文に出ている直線の式と A の x 座標だけから、係数と面積を解き直す。"""
+    p = mr.params
+    return cast(
+        Solution,
+        REGISTRY.solver("math.parabola_coefficient_from_intersection")(
+            p["m"], p["b"], p["x_a"]
+        ),
+    )
+
+
+@register_checker("math.exam_parabola_equal_area_solo.double_solve")
+def double_solve_exam_parabola_equal_area_solo(mr: MR) -> Solution:
+    """本文に出ている a と2点の x 座標から、直線 AB を組み直して解き直す。"""
+    n = mr.params["numbers"]
+    a, xa, xb = int(n["a"]), int(n["x_a"]), int(n["x_b"])
+    m, b = a * (xa + xb), -a * xa * xb
+    return cast(Solution, REGISTRY.solver("math.parabola_equal_area_point")(a, m, b))

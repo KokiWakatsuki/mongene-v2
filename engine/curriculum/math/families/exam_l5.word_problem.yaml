@@ -1,0 +1,106 @@
+family: math.exam_l5.word_problem
+form: word_problem
+source_desc: |
+  確率（複合事象・余事象）— 文章題
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv3 desc: 誘導あり:樹形図/表で全場合を整理し複合事象の確率を求める。
+       example: 大小2つのさいころを同時に投げる。(1)出る目のすべての場合を樹形図
+                または表で整理せよ。(2)出る目の和が7になる確率を求めよ。
+                (3)出る目の積が偶数になる確率を求めよ。
+  Lv4 desc: 誘導なし:余事象・条件付きなど数え方の方針を自分で構成。
+       example: 袋の中に赤玉3個、白玉2個が入っている。この袋から同時に2個の玉を
+                取り出すとき、少なくとも1個が赤玉である確率を求めよ。
+  ---
+  【所在】recipe は `recipes/word_problem_probability.py`（既存の確率クラスタと同じ
+  `math.word_problem_probability` に scenario_kind を2つ足すだけ）。中身が既存の確率
+  資産の再利用そのものなので exam_fusion.py には置かない——exam_l3 を motion.py、
+  exam_l7 を box_plot.py に置いたのと同じ判断。checker も既存の
+  `math.word_problem_probability.double_solve` がそのまま賄う（params の場面数値から
+  SOLVE_BUILDERS で solver を呼び直す）。
+
+  【Lv3 (1) をどう採点可能にしたか】「樹形図または表で整理せよ」は作図そのものを
+  engine が採点できないので、**整理した結果である総数**を答えさせる（新 solver
+  `math.count_two_dice_outcomes` が全組合せを列挙して数え直す）。g2_l52 Lv2 の
+  「樹形図に表せ」→「全部で何通りか」と同じ手。
+
+  【Lv3 の段の作り】(1)整理する →(2)特定の値になる確率 →(3)偶奇という「まとまった
+  事象」の確率、と数え方の粒度が上がる。(2) が和なら (3) は積、(2) が積なら (3) は和
+  にして、同じ量を2回問わない。
+
+  【Lv4 の眼目（新設 solver）】既存の `math.probability_at_least_one` は**もとに戻す
+  独立試行**の「少なくとも1回」なので、同時に取り出す（もとに戻さない）場面には
+  使えない。`math.probability_at_least_one_by_complement` は玉を区別したラベルから
+  全組合せを列挙し、余事象（対象の色が1個も入らない）を数えて 1 からひく。
+
+  【退化の封じ方】確率が 0 や 1 に潰れる構成はどのゲートも弾かない（既知の罠）。
+  Lv3 は「起こりえない値」（積が7など）を候補から外し、Lv4 は取り出す個数を対象外の
+  色の個数以下に抑える（余事象が起こりうる）。solver 側でも 0 < p < 1 を検査する。
+
+  【G-Q5t】注目する値は必ず given.scenario に置く。ask にしか出ない数値は whitelist
+  （mr.given だけを見る）に載らず、答えの srepr Rational(p, q) の p・q と衝突して
+  偽陽性になる（既知の罠）。scenario に出したうえで ask で言い直すのは安全。
+
+  【level_sep】
+    Lv3 = 誘導あり3小問。op 列は 総数を数える → 全組合せの数え上げ → 同上（偶奇）。
+    Lv4 = 誘導なし1小問。op 列は identify_complement_event → count_complement_combinations
+          → compute_complement_probability → subtract_from_one。
+    小問数（3 対 1）と op 列がともに相異する。
+
+  【dup】Lv3 = 場面の言い方(8) × 注目する値(和11 + 積18) × 偶奇(2) ≒ 464 通り。
+        Lv4 = 入れ物(8) × 色の順序対(20) × 個数(5×5) × 取り出す個数(2) ≒ 8000 通り。
+concepts_default: [exam.dice_guided_total_and_events]
+levels:
+  "3":
+    signature: exam_word_problem_dice_guided_three
+    recipe: math.word_problem_probability
+    params:
+      scenario_kind: exam_dice_guided_three
+      faces_domain: {int_set: [6]}
+      # 「大小2個」に相当する、2個を区別して数える場面の言い方。算用数字を含んでも
+      # scenario 側に出るので whitelist される。
+      # solver の narration が「大小2個のさいころ」と言うので、**2個を同時に投げて
+      # 区別する**場面だけを並べる（「1個を続けて2回」等を混ぜると解説の語彙とズレる）。
+      dice_scene_set:
+        - "大小2個のさいころを同時に投げる"
+        - "赤いさいころと白いさいころを同時に投げる"
+        - "AとBの2個のさいころを同時に投げる"
+        - "大きいさいころと小さいさいころを同時に投げる"
+        - "青いさいころと黄色いさいころを同時に投げる"
+        - "白いさいころと黒いさいころを同時に投げる"
+        - "PとQの2個のさいころを同時に投げる"
+        - "1と2の番号をつけた2個のさいころを同時に投げる"
+    given: [scenario]
+    asked: [value]
+    visual: none
+    text: {tier: T1, template: wp_guided_three_v1}
+    hints: [steps_prefix]
+    concept_tags: [exam.dice_guided_total_and_events]
+    cause_tags: []
+  "4":
+    signature: exam_word_problem_at_least_one_complement
+    recipe: math.word_problem_probability
+    params:
+      scenario_kind: exam_at_least_one_by_complement
+      # 入れ物|品物|助数詞。色は「赤い◯◯」の形にするので、い形容詞になる色だけを引く。
+      container_set:
+        - "袋|玉|個"
+        - "箱|カード|枚"
+        - "袋|ビー玉|個"
+        - "箱|ボール|個"
+        - "袋|おはじき|個"
+        - "箱|えんぴつ|本"
+        - "箱|リボン|本"
+        - "かご|ボール|個"
+      color_candidates: [赤, 白, 青, 黒, 黄色]
+      count_target_domain: {int_range: [2, 6]}
+      count_other_domain: {int_range: [2, 6]}
+      draws_domain: {int_range: [2, 3]}
+    given: [scenario]
+    asked: [value]
+    visual: none
+    text: {tier: T1, template: wp_linear_solo_v1}
+    hints: [steps_prefix]
+    concept_tags: [exam.at_least_one_by_complement]
+    cause_tags: []
+remedial:
+  default_level: 3

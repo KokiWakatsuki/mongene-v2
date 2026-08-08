@@ -924,6 +924,66 @@ concepts:
   - id: exam.quartiles_full_summary
     label: "データの第1〜第3四分位数・四分位範囲を求める"
     unit: exam_l7
+  - id: exam.motion_interval_area_and_value
+    label: "動点が指定の辺上にある区間で面積を立式し、その時刻の面積を求める"
+    unit: exam_l3
+  - id: exam.motion_area_all_times
+    label: "動点のつくる面積が与えられた値になる時刻を、辺ごとに場合分けしてすべて求める"
+    unit: exam_l3
+  - id: exam.motion_read_area_graph
+    label: "時間と面積の関係のグラフから、指定の時刻の面積と最大になる範囲を読む"
+    unit: exam_l3
+  - id: exam.motion_guided_three_intervals
+    label: "動点の面積を区間ごとに立式し、与えられた面積になる時刻をすべて求める"
+    unit: exam_l3
+  - id: exam.motion_quarter_area_times
+    label: "動点のつくる面積が正方形の面積の4分の1になる時刻をすべて求める"
+    unit: exam_l3
+  - id: exam.linear_intersection_triangle_area
+    label: "2直線の交点とx切片から、三角形の面積を多段で求める"
+    unit: exam_l1
+  - id: exam.linear_coefficient_from_area
+    label: "両軸と切り取る三角形の面積の条件から、直線の傾きを逆算する"
+    unit: exam_l1
+  - id: exam.linear_line_through_triangle
+    label: "直線が三角形の内部を通るかどうかをグラフから読む"
+    unit: exam_l1
+  - id: exam.linear_guided_intersection_area
+    label: "交点・x切片を順に求め、それらがつくる三角形の面積を求める"
+    unit: exam_l1
+  - id: exam.linear_area_multiple_point
+    label: "三角形の面積が指定の倍になるx軸上の点を、底辺の比から構成する"
+    unit: exam_l1
+  - id: exam.parabola_coefficient_from_intersection
+    label: "交点のx座標から放物線の係数を逆算し、三角形の面積まで求める"
+    unit: exam_l2
+  - id: exam.parabola_equal_area_point_solo
+    label: "三角形の面積が等しくなる放物線上の点を、誘導なしで構成する"
+    unit: exam_l2
+  - id: exam.box_plot_guided_three
+    label: "箱ひげ図を読む・比べる・傾向を判断する、を段階的に行う"
+    unit: exam_l7
+  - id: exam.box_plot_spread_claim
+    label: "ばらつきの主張の当否を、四分位範囲と範囲の二つの指標から判断する"
+    unit: exam_l7
+  - id: exam.dice_guided_total_and_events
+    label: "2個のさいころの全場合を整理し、和・積の条件を満たす確率を続けて求める"
+    unit: exam_l5
+  - id: exam.at_least_one_by_complement
+    label: "同時に取り出したとき少なくとも1個が対象である確率を、余事象で求める"
+    unit: exam_l5
+  - id: exam.similar_solid_volume_from_ratio
+    label: "相似比から体積比を求め、既知の体積からもう一方の立体の体積を求める"
+    unit: exam_l6
+  - id: exam.cone_split_volume_ratio
+    label: "円錐を平行な平面で切ったときの、小さい円錐と円錐台の体積の比を求める"
+    unit: exam_l6
+  - id: exam.parallel_line_similar_area_guided
+    label: "平行線がつくる相似から、相似比・面積比・残りの四角形の面積を順に求める"
+    unit: exam_l6
+  - id: exam.trapezoid_diagonal_area_ratios
+    label: "台形の対角線の交点まわりの三角形の面積比を、相似比と底辺の比から構成する"
+    unit: exam_l6
   - id: line_angle_terms.term_recall
     label: "直線・線分・半直線・角の用語を想起する"
     unit: g1_l37

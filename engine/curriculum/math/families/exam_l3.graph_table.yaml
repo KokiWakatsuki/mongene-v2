@@ -1,0 +1,58 @@
+family: math.exam_l3.graph_table
+form: graph_table
+source_desc: |
+  動点と面積変化（一次関数・二次関数の利用）— グラフ
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv2 desc: 時間と面積の対応を読む。
+       example: 動点Pが図形の辺上を動くときの、経過時間 x(秒)と三角形の面積 y(cm²)の
+                関係を表すグラフが与えられている。このグラフから、x=4 のときの面積と、
+                面積が最大になる時刻を読み取って答えよ。
+  Lv3 desc: 区間ごとに式が変わる面積のグラフを正確にかく。
+       example: 1辺6cmの正方形の辺上を点Pが毎秒2cmで動くとき、x秒後の三角形の面積 y を
+                各区間で立式し、0≦x≦9 の範囲で x と y の関係を表すグラフをかけ。
+  ---
+  【Lv2】問題図に折れ線そのものを描く——読む対象なので「答えの先出し」ではない
+  （read_box_plot が箱ひげ図を描いてよいのと同じ理屈）。ただし読み取る値を図中に
+  注記はしない（`labeled_answer_point` が read_point の禁止要素）。
+  読み取りの正解は図からではなく、場面のパラメータ（1辺・速さ）から shoelace 公式で
+  独立に再計算する＝図が間違っていれば double-solve が一致しない。
+  「面積が最大になる時刻」は一定区間なので**範囲**で答える（1点には決まらない）。
+
+  【Lv3】g2_l29.graph_table Lv3 と同じ recipe（`math.draw_three_interval_area_graph`）を
+  そのまま使う。台帳 example の内容（正方形・毎秒一定・3区間の折れ線・0≦x≦3s/v の
+  範囲）が g2_l29 Lv3 と実質同じであり、単元が違う（あちらは一次関数の利用、こちらは
+  入試融合）だけで数学も図も同一だからである。同じ問題を二重に書き起こすより、
+  同じ資産を共有して食い違いを作らないほうがよいと判断した。
+
+  【params】Lv2 は図の描画に要る値（1辺・速さ・折れ点 poly_pts・読み取る時刻）と点名。
+  答えの面積・最大の範囲は置かない。
+concepts_default: [exam.motion_read_area_graph]
+levels:
+  "2":
+    signature: exam_read_area_graph
+    recipe: math.exam_read_area_graph
+    params:
+      side_candidates: [6, 8, 10, 12, 14, 16, 18, 20]
+      speed_candidates: [1, 2, 3, 4]
+    given: [condition]
+    asked: [read_point]
+    visual: required
+    text: {tier: T1, template: lf_motion_area_v1, visual_builder: math.polyline_graph}
+    hints: [steps_prefix]
+    concept_tags: [exam.motion_read_area_graph]
+    cause_tags: []
+  "3":
+    signature: exam_piecewise_area_graph
+    recipe: math.draw_three_interval_area_graph
+    params:
+      side_candidates: [6, 8, 10, 12, 14, 16, 18, 20, 22, 24]
+      speed_candidates: [1, 2, 3, 4]
+    given: [condition]
+    asked: [draw_graph]
+    visual: required
+    text: {tier: T1, template: lf_motion_area_v1, visual_builder: math.polyline_graph}
+    hints: [steps_prefix]
+    concept_tags: [motion.piecewise_area_graph]
+    cause_tags: []
+remedial:
+  default_level: 2

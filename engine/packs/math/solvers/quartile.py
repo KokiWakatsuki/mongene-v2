@@ -655,3 +655,97 @@ def judge_box_plot_stability_claim(
         correct=correct, distractors=[other], fact_id="box_plot.judge_stability_claim"
     )
     return Solution(answer=answer, steps=steps)
+
+
+# ---------------------------------------------------------------------------
+# exam_l7（入試融合・データの活用）— C13
+# ---------------------------------------------------------------------------
+@register_solver("math.read_box_plot_single_statistic")
+def read_box_plot_single_statistic(
+    axis_lo: object, axis_step: object, box_ticks: object, statistic: object
+) -> Solution:
+    """箱ひげ図から統計量を1つだけ読み取る（exam_l7.word_problem Lv3 の (1)）。
+
+    `math.read_box_plot_values` が2つ組で読むのに対し、こちらは中央値なら中央値だけを
+    答える。指定できるのは `_BOX_STATISTIC` の鍵（中央値・範囲・四分位範囲）で、
+    範囲・四分位範囲は差として求める。
+    """
+    s = str(statistic)
+    if s not in _BOX_STATISTIC:
+        raise ValueError(f"未知の statistic: {s!r}")
+    name = _BOX_STATISTIC[s][1]
+    five = _restore_five(axis_lo, axis_step, box_ticks)
+    value = _statistic_value(five, s)
+    srepr = sympy.srepr(value)
+    disp = f"{name} {value}"
+    steps = [
+        Step(
+            op="read_axis_step", args=[], result_srepr="",
+            result_display="数直線の目もり一つぶんの大きさを読む",
+            narration="数直線の目もりを見て、目もり一つぶんがどれだけの大きさを表すかを読み取る。",
+        ),
+        Step(
+            op=f"read_{s}_value", args=[], result_srepr=srepr, result_display=disp,
+            narration=f"箱ひげ図の{name}にあたる位置が数直線のどこかを数えて、値にする。",
+        ),
+    ]
+    return Solution(answer=SymbolicAnswer(srepr=srepr, display=disp), steps=steps)
+
+
+_SPREAD_CLAIM_YES = "正しいといえる"
+_SPREAD_CLAIM_NO = "正しいとはいえない"
+
+
+@register_solver("math.judge_spread_claim_by_two_measures")
+def judge_spread_claim_by_two_measures(
+    axis_lo: object, axis_step: object, box_ticks_a: object, box_ticks_b: object
+) -> Solution:
+    """「Aのほうがばらつきが大きい」という主張の当否を、2つの指標から判断する。
+
+    exam_l7.word_problem Lv4。ばらつきの指標は**四分位範囲と範囲の2つ**あり、
+    どちらでも A が大きければ主張は正しいといえる。片方でしか A が大きくないときは
+    指標の取り方で結論が変わるので「正しいとはいえない」——これが入試で問われる
+    「主張の妥当性」の中身で、四分位範囲だけを見て即断すると落とす。
+
+    中央値が等しい構成（＝ばらつきだけが論点になる）を前提にする。等しくない場合や
+    どちらかの指標が引き分けになる場合は判断が定まらないので例外にする。
+    """
+    a = _restore_five(axis_lo, axis_step, box_ticks_a)
+    b = _restore_five(axis_lo, axis_step, box_ticks_b)
+    if _statistic_value(a, "median") != _statistic_value(b, "median"):
+        raise ValueError("中央値が等しくない（ばらつきだけの主張にならない）")
+    iqr_a, iqr_b = _statistic_value(a, "iqr"), _statistic_value(b, "iqr")
+    rng_a, rng_b = _statistic_value(a, "range"), _statistic_value(b, "range")
+    if iqr_a == iqr_b or rng_a == rng_b:
+        raise ValueError("四分位範囲または範囲が等しく、主張の当否が定まらない")
+    valid = bool(iqr_a > iqr_b and rng_a > rng_b)
+    correct = _SPREAD_CLAIM_YES if valid else _SPREAD_CLAIM_NO
+    other = _SPREAD_CLAIM_NO if valid else _SPREAD_CLAIM_YES
+    steps = [
+        Step(
+            op="read_iqr_both", args=[], result_srepr="",
+            result_display="AとBの四分位範囲を求める",
+            narration="箱の幅にあたる四分位範囲を、AとBそれぞれについて求める。",
+        ),
+        Step(
+            op="read_range_both", args=[], result_srepr="",
+            result_display="AとBの範囲を求める",
+            narration="ひげの先から先までの幅にあたる範囲も、AとBそれぞれについて求める。",
+        ),
+        Step(
+            op="check_measures_agree", args=[], result_srepr="",
+            result_display="二つの指標が同じ側を指すかを確かめる",
+            narration="ばらつきの指標は一つではないので、四分位範囲と範囲が同じ側を指しているかを確かめる。",
+        ),
+        Step(
+            op="judge_spread_claim", args=[], result_srepr=correct, result_display=correct,
+            narration="二つの指標がそろって主張を支えていれば正しいといえ、"
+                      "食い違えば指標の取り方で結論が変わるので正しいとはいえない。",
+        ),
+    ]
+    return Solution(
+        answer=ChoiceAnswer(
+            correct=correct, distractors=[other], fact_id="box_plot.judge_spread_claim"
+        ),
+        steps=steps,
+    )

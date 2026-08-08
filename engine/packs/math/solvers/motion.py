@@ -621,6 +621,181 @@ def max_area_and_times(s: object, v: object, area: object) -> Solution:
     return Solution(answer=SymbolicAnswer(srepr=srepr, display=disp), steps=steps)
 
 
+# ---------------------------------------------------------------------------
+# exam_l3（入試融合・動点と面積変化）で足りなかった3つ
+#
+# 既存 solver は「はじめの区間の式」「区間3本の式」「時刻をすべて求める」までは
+# そろっていたが、入試融合の台帳が要求する
+#   ・指定された区間の式と、その区間の1点での値（find_value Lv3）
+#   ・一定になる区間の式そのもの（word_problem Lv3 の (2)）
+#   ・与えられたグラフから値を読む（graph_table Lv2）
+# の3つが無かった。いずれも面積は既存の shoelace 公式で裏取りする
+# ＝新しい幾何ロジックは足さない。
+# ---------------------------------------------------------------------------
+def _area_at_time(s_v: sympy.Rational, v_v: sympy.Rational, t: sympy.Rational) -> sympy.Rational:
+    """A→B→C→D の経路上、時刻 t における三角形 APD の面積（shoelace 公式）。"""
+    d = v_v * t
+    if d <= s_v:
+        px, py = d, sympy.Integer(0)
+    elif d <= 2 * s_v:
+        px, py = s_v, d - s_v
+    else:
+        px, py = 3 * s_v - d, s_v
+    return _shoelace_triangle_area(
+        sympy.Integer(0), sympy.Integer(0), px, py, sympy.Integer(0), s_v
+    )
+
+
+def _interval_expr(
+    s_v: sympy.Rational, v_v: sympy.Rational, index: int
+) -> tuple[sympy.Expr, sympy.Rational, sympy.Rational]:
+    """区間 index（0=増加 / 1=一定 / 2=減少）の面積の式と、その区間の両端の時刻。"""
+    t1 = s_v / v_v
+    if index == 0:
+        return sympy.Rational(s_v * v_v, 2) * _X, sympy.Integer(0), t1
+    if index == 1:
+        return sympy.Rational(s_v**2, 2) + 0 * _X, t1, 2 * t1
+    return sympy.expand(sympy.Rational(s_v, 2) * (3 * s_v - v_v * _X)), 2 * t1, 3 * t1
+
+
+@register_solver("math.express_interval_area_and_value")
+def express_interval_area_and_value(s: object, v: object, x0: object) -> Solution:
+    """指定された時刻をふくむ区間の面積の式と、その時刻での面積を求める（exam_l3.find_value Lv3）。
+
+    どの区間かは時刻 x0 から決まる（＝「動点がどの辺の上にいるか」の判断が答えの一部）。
+    式に x0 を代入した値が shoelace 公式による再計算と一致することを確かめる。
+    """
+    s_v = sympy.Rational(str(s))
+    v_v = sympy.Rational(str(v))
+    x_v = sympy.Rational(str(x0))
+    if s_v <= 0 or v_v <= 0 or x_v <= 0:
+        raise ValueError("1辺・速さ・時刻は正であること")
+    t1 = s_v / v_v
+    if x_v > 3 * t1:
+        raise ValueError("点がすでに終点に着いている時刻")
+    index = 0 if x_v <= t1 else (1 if x_v <= 2 * t1 else 2)
+    expr, lo, hi = _interval_expr(s_v, v_v, index)
+    value = sympy.nsimplify(expr.subs(_X, x_v))
+    geom = _area_at_time(s_v, v_v, x_v)
+    if not (value - geom).equals(0):
+        raise ValueError(f"区間の式と shoelace 再計算が一致しない: {value} != {geom}")
+
+    coeff = sympy.Poly(expr, _X).coeff_monomial(_X) if index != 1 else sympy.Integer(0)
+    const = sympy.Poly(expr, _X).coeff_monomial(1)
+    expr_disp = _linear_area_display(sympy.Rational(coeff), sympy.Rational(const))
+    ops = ["determine_which_segment", "express_area_in_x", "substitute_time"]
+    narration = {
+        "determine_which_segment": "与えられた時刻に動く点がどの辺の上にいるかを、進んだ道のりから判断する。",
+        "express_area_in_x": "その辺の上にいる間の底辺と高さを x で表し、面積を x の式で表す。",
+        "substitute_time": "求めた式に与えられた時刻を代入して、そのときの面積を求める。",
+    }
+    phrase = {
+        "determine_which_segment": "どの辺の上にいるかを判断する",
+        "express_area_in_x": expr_disp,
+    }
+    answer = sympy.Tuple(expr, value)
+    srepr = sympy.srepr(answer)
+    disp = (
+        f"{sympy.sstr(lo)}≦x≦{sympy.sstr(hi)} のとき {expr_disp}、"
+        f"x = {sympy.sstr(x_v)} のときの面積は {sympy.sstr(value)}cm²"
+    )
+    steps = [
+        Step(
+            op=op, args=[],
+            result_srepr=srepr if i == len(ops) - 1 else "",
+            result_display=disp if i == len(ops) - 1 else phrase[op],
+            narration=narration[op],
+        )
+        for i, op in enumerate(ops)
+    ]
+    return Solution(answer=SymbolicAnswer(srepr=srepr, display=disp), steps=steps)
+
+
+@register_solver("math.express_constant_interval_area")
+def express_constant_interval_area(s: object, v: object) -> Solution:
+    """面積が一定になる区間の式を求める（exam_l3.word_problem Lv3 の (2)）。
+
+    底辺も高さも変わらないので y は定数 s²/2。「x の式で表せ」に対して
+    **x を含まない式**になることを見抜けるかどうかが、この小問の眼目。
+    """
+    s_v = sympy.Rational(str(s))
+    v_v = sympy.Rational(str(v))
+    if s_v <= 0 or v_v <= 0:
+        raise ValueError("1辺・速さは正であること")
+    expr, lo, hi = _interval_expr(s_v, v_v, 1)
+    value = sympy.Rational(s_v**2, 2)
+    # 恒真: 区間の内側のどこで測っても shoelace 再計算が同じ値になる（＝一定）。
+    for t in (lo, (lo + hi) / 2, hi):
+        if not (_area_at_time(s_v, v_v, t) - value).equals(0):
+            raise ValueError(f"一定であるはずの区間で面積が変わる: t={t}")
+
+    ops = ["locate_point_on_far_side", "express_constant_area"]
+    narration = {
+        "locate_point_on_far_side": "この区間では動く点が向かい合う辺の上にあり、底辺からの距離が変わらないことを確かめる。",
+        "express_constant_area": "底辺も高さも変わらないので、面積は時間によらず一定になる。",
+    }
+    srepr = sympy.srepr(expr)
+    disp = _linear_area_display(sympy.Integer(0), value)
+    steps = [
+        Step(
+            op=op, args=[],
+            result_srepr=srepr if i == len(ops) - 1 else "",
+            result_display=disp if i == len(ops) - 1 else "底辺からの距離が変わらないことを確かめる",
+            narration=narration[op],
+        )
+        for i, op in enumerate(ops)
+    ]
+    return Solution(answer=SymbolicAnswer(srepr=srepr, display=disp), steps=steps)
+
+
+@register_solver("math.read_area_graph_values")
+def read_area_graph_values(s: object, v: object, x0: object) -> Solution:
+    """面積のグラフから、指定の時刻での面積と、面積が最大になる時間の範囲を読む（exam_l3.graph_table Lv2）。
+
+    読み取りの正解も、グラフの形ではなく場面のパラメータ（s・v）から shoelace 公式で
+    独立に再計算する＝図が間違っていれば一致しない。
+    """
+    s_v = sympy.Rational(str(s))
+    v_v = sympy.Rational(str(v))
+    x_v = sympy.Rational(str(x0))
+    if s_v <= 0 or v_v <= 0 or x_v <= 0:
+        raise ValueError("1辺・速さ・時刻は正であること")
+    t1 = s_v / v_v
+    if not (0 < x_v < t1):
+        raise ValueError("読み取る時刻は、面積が増えていく区間の内側であること")
+    y0 = _area_at_time(s_v, v_v, x_v)
+    peak = sympy.Rational(s_v**2, 2)
+    if not (_area_at_time(s_v, v_v, (t1 + 2 * t1) / 2) - peak).equals(0):
+        raise ValueError("最大の区間で面積が s²/2 にならない")
+
+    vals = sympy.Tuple(sympy.nsimplify(y0), sympy.nsimplify(t1), sympy.nsimplify(2 * t1))
+    ops = ["read_value_at_time", "find_flat_part", "read_range_of_maximum"]
+    narration = {
+        "read_value_at_time": "横軸の与えられた時刻のところで縦軸の目もりを読み、そのときの面積を求める。",
+        "find_flat_part": "グラフのうち高さが変わらない平らな部分を見つけ、そこが面積の最大であることを確かめる。",
+        "read_range_of_maximum": "平らな部分の左端と右端の横軸の値を読み、面積が最大になる時間の範囲を答える。",
+    }
+    phrase = {
+        "read_value_at_time": "与えられた時刻の面積を読む",
+        "find_flat_part": "平らな部分を見つける",
+    }
+    srepr = sympy.srepr(vals)
+    disp = (
+        f"x = {sympy.sstr(x_v)} のときの面積は {sympy.sstr(y0)}cm²、"
+        f"面積が最大になるのは x が {sympy.sstr(t1)} から {sympy.sstr(2 * t1)} までのとき"
+    )
+    steps = [
+        Step(
+            op=op, args=[],
+            result_srepr=srepr if i == len(ops) - 1 else "",
+            result_display=disp if i == len(ops) - 1 else phrase[op],
+            narration=narration[op],
+        )
+        for i, op in enumerate(ops)
+    ]
+    return Solution(answer=SymbolicAnswer(srepr=srepr, display=disp), steps=steps)
+
+
 __all__ = [
     "solve_moving_point_area",
     "draw_piecewise_area_graph_features",
@@ -631,4 +806,7 @@ __all__ = [
     "express_single_interval_area",
     "express_three_interval_area_exprs",
     "max_area_and_times",
+    "express_interval_area_and_value",
+    "express_constant_interval_area",
+    "read_area_graph_values",
 ]

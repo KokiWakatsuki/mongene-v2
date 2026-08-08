@@ -85,3 +85,35 @@ __all__ = [
     "double_solve_read_two_box_plots",
     "double_solve_compare_two_box_plots_iqr",
 ]
+
+
+# ---------------------------------------------------------------------------
+# exam_l7（入試融合・データの活用）— C13
+# ---------------------------------------------------------------------------
+@register_checker("math.exam_word_problem_box_plot_guided.double_solve")
+def double_solve_exam_word_problem_box_plot_guided(mr: MR) -> list[Solution]:
+    """(1)=Aの中央値・(2)=四分位範囲が大きいほう・(3)=傾向の判断。図の目もりから解き直す。"""
+    p = mr.params
+    lo, step, ta, tb = p["axis_lo"], p["axis_step"], p["box_ticks_a"], p["box_ticks_b"]
+    return [
+        cast(
+            Solution,
+            REGISTRY.solver("math.read_box_plot_single_statistic")(lo, step, ta, "median"),
+        ),
+        cast(
+            Solution,
+            REGISTRY.solver("math.compare_box_plot_statistic")(lo, step, ta, tb, "iqr"),
+        ),
+        cast(Solution, REGISTRY.solver("math.judge_box_plot_trend_claim")(lo, step, ta, tb)),
+    ]
+
+
+@register_checker("math.exam_word_problem_box_plot_spread_claim.double_solve")
+def double_solve_exam_word_problem_box_plot_spread_claim(mr: MR) -> Solution:
+    p = mr.params
+    return cast(
+        Solution,
+        REGISTRY.solver("math.judge_spread_claim_by_two_measures")(
+            p["axis_lo"], p["axis_step"], p["box_ticks_a"], p["box_ticks_b"]
+        ),
+    )

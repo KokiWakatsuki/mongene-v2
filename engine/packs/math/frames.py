@@ -55,6 +55,10 @@ _FORBIDDEN_BY_ASKED: dict[str, frozenset[str]] = {
     #   （read_box_plot が読む対象の箱ひげ図を描いてよいのと同じ理屈）。
     "read_solid": frozenset({"solid"}),
     "draw_solid": frozenset({"solid"}),
+    # C13 exam_l1: 直線が三角形の内部を通るかを図から読む。読む対象＝直線と三角形
+    # そのものなので図に描いてよい（read_box_plot と同じ理屈）。禁じるのは答えを
+    # 図中に書いてしまうこと——交わる点に印や注記を先出ししない。
+    "read_position": frozenset({"labeled_answer_point"}),
 }
 
 
@@ -188,6 +192,8 @@ GRAPH_TABLE_FRAME = Frame(
         "read_box_plot", "draw_box_plot",
         # C8/C10 空間図形: 立体を読む／見取図・投影図・展開図・断面をかく
         "read_solid", "draw_solid",
+        # C13 exam_l1: 直線と図形の位置関係を図から読む（内部を通るか）
+        "read_position",
     }),
     visual="required",
     _forbidden_by_asked={
@@ -202,6 +208,7 @@ GRAPH_TABLE_FRAME = Frame(
         "draw_box_plot": _FORBIDDEN_BY_ASKED["draw_box_plot"],
         "read_solid": _FORBIDDEN_BY_ASKED["read_solid"],
         "draw_solid": _FORBIDDEN_BY_ASKED["draw_solid"],
+        "read_position": _FORBIDDEN_BY_ASKED["read_position"],
     },
 )
 

@@ -1,0 +1,30 @@
+family: math.exam_l2.graph_table
+form: graph_table
+source_desc: |
+  放物線と直線の融合（二次関数×一次関数）— グラフ
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv2 desc: 放物線と直線が囲む図形をグラフ上で把握する。
+       example: 放物線 y=x² と直線 y=x+6 が2点で交わっている。この放物線と直線を
+                グラフにかき、放物線と直線が囲む部分をグラフ上で示せ。
+  ---
+  【既存 recipe の共有】台帳 example の内容が g3_l37.graph_table Lv2
+  （`math.draw_parabola_and_line`＝放物線と直線をかき、囲まれた部分を斜線で示す）と
+  同一である。同じ図を別々に書き起こすと必ず食い違うので、同じ資産を共有する。
+concepts_default: [parabola_graph.enclosed_region]
+levels:
+  "2":
+    signature: exam_parabola_line_enclosed_region
+    recipe: math.draw_parabola_and_line
+    params:
+      a_domain: {int_range: [-6, 6], exclude: [0]}
+      x_domain: {int_range: [-4, 4], exclude: [0]}
+      value_bound: 16
+    given: [expression, line_a, situation_params]
+    asked: [draw_graph]
+    visual: required
+    text: {tier: T1, template: lf_parabola_line_region_v1, visual_builder: math.curve_graph}
+    hints: [steps_prefix]
+    concept_tags: [parabola_graph.enclosed_region]
+    cause_tags: []
+remedial:
+  default_level: 2

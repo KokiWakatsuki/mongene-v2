@@ -55,10 +55,27 @@ WP_BOX_PLOT_STABILITY_V1 = (
 )
 
 
+# exam_l7.word_problem Lv3: 誘導あり3小問（読む → 比べる → 判断する）
+WP_EXAM_BOX_PLOT_GUIDED_V1 = (
+    "{{ given.scenario }}がある。"
+    "(1) {{ context_slots.ask_1 }}"
+    "(2) {{ context_slots.ask_2 }}"
+    "(3) {{ context_slots.ask_3 }}"
+)
+
+# exam_l7.word_problem Lv4: 誘導なし・ばらつきの主張の当否を複数の指標から判断する
+WP_EXAM_BOX_PLOT_SPREAD_V1 = (
+    "{{ given.scenario }}がある。{{ given.quantities }}"
+    "{{ context_slots.ask_value }}"
+)
+
+
 def _register_all() -> None:
     REGISTRY.register_template("wp_box_plot_compare_v1", WP_BOX_PLOT_COMPARE_V1)
     REGISTRY.register_template("wp_box_plot_trend_v1", WP_BOX_PLOT_TREND_V1)
     REGISTRY.register_template("wp_box_plot_stability_v1", WP_BOX_PLOT_STABILITY_V1)
+    REGISTRY.register_template("wp_exam_box_plot_guided_v1", WP_EXAM_BOX_PLOT_GUIDED_V1)
+    REGISTRY.register_template("wp_exam_box_plot_spread_v1", WP_EXAM_BOX_PLOT_SPREAD_V1)
     REGISTRY.register_template("bp_read_box_plot_v1", BP_READ_BOX_PLOT_V1)
     REGISTRY.register_template("bp_draw_box_plot_v1", BP_DRAW_BOX_PLOT_V1)
     REGISTRY.register_template("bp_read_two_box_plots_v1", BP_READ_TWO_BOX_PLOTS_V1)
@@ -78,4 +95,6 @@ __all__ = [
     "WP_BOX_PLOT_COMPARE_V1",
     "WP_BOX_PLOT_TREND_V1",
     "WP_BOX_PLOT_STABILITY_V1",
+    "WP_EXAM_BOX_PLOT_GUIDED_V1",
+    "WP_EXAM_BOX_PLOT_SPREAD_V1",
 ]

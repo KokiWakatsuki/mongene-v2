@@ -183,6 +183,11 @@ def probability_two_dice(faces: object, condition: object, target: object) -> So
         favorable = [(a, b) for a, b in pairs if a * b == t]
     elif cond == "sum_at_least":
         favorable = [(a, b) for a, b in pairs if a + b >= t]
+    elif cond == "product_parity":
+        # target は 0=偶数 / 1=奇数（exam_l5.word_problem Lv3 の「積が偶数」）。
+        favorable = [(a, b) for a, b in pairs if (a * b) % 2 == t]
+    elif cond == "sum_parity":
+        favorable = [(a, b) for a, b in pairs if (a + b) % 2 == t]
     else:
         raise ValueError(f"未知の condition: {cond!r}")
     p = sympy.Rational(len(favorable), len(pairs))
@@ -624,3 +629,108 @@ __all__ = [
     "judge_equally_likely",
     "interpret_relative_frequency_limit",
 ]
+
+
+# ---------------------------------------------------------------------------
+# exam_l5（入試融合・確率）— C13
+# ---------------------------------------------------------------------------
+_COUNT_PAIRS_STEPS = ["count_outcomes_of_each_die", "multiply_outcome_counts"]
+
+_COUNT_PAIRS_NARRATION: dict[str, str] = {
+    "count_outcomes_of_each_die": "一つのさいころで出る目が何通りあるかを数える。",
+    "multiply_outcome_counts": "大小どちらの目も同じだけあるので、樹形図や表で整理すると、"
+                               "組合せの総数はその積になる。",
+}
+
+
+@register_solver("math.count_two_dice_outcomes")
+def count_two_dice_outcomes(faces: object) -> Solution:
+    """大小2個のさいころで出る目の組合せの総数を求める（exam_l5.word_problem Lv3 の (1)）。
+
+    「樹形図または表で整理せよ」という設問を採点可能にするため、**整理した結果である
+    総数**を答えさせる（図そのものは engine が採点できない。組み立ては
+    solution_steps が担う——記述型を選択・数値に落とす既存の手と同じ）。
+    総数は列挙して数え直す（掛け算の結果を主張せず数える）。
+    """
+    f = int(str(faces))
+    if f < 2:
+        raise ValueError("さいころの面数は 2 以上であること")
+    total = len(list(itertools.product(range(1, f + 1), range(1, f + 1))))
+    if total != f * f:
+        raise ValueError("列挙した総数が面数の積に一致しない")
+    srepr = sympy.srepr(sympy.Integer(total))
+    disp = f"{total}通り"
+    steps = [
+        Step(
+            op=op, args=[],
+            result_srepr=srepr if i == len(_COUNT_PAIRS_STEPS) - 1 else "",
+            result_display=disp if i == len(_COUNT_PAIRS_STEPS) - 1 else "一つぶんの目を数える",
+            narration=_COUNT_PAIRS_NARRATION[op],
+        )
+        for i, op in enumerate(_COUNT_PAIRS_STEPS)
+    ]
+    return Solution(answer=SymbolicAnswer(srepr=srepr, display=disp), steps=steps)
+
+
+_AT_LEAST_ONE_DRAW_STEPS = [
+    "identify_complement_event",
+    "count_complement_combinations",
+    "compute_complement_probability",
+    "subtract_from_one",
+]
+
+_AT_LEAST_ONE_DRAW_NARRATION: dict[str, str] = {
+    "identify_complement_event": "「少なくとも一つ」を直接数えると場合分けが増えるので、"
+                                 "その反対の「一つも入らない」場合を考える。",
+    # 題材は玉に限らない（カード・おはじき等）ので、narration は品名に触れない。
+    "count_complement_combinations": "対象でないものだけを取り出す組合せが何通りあるかを数える。",
+    "compute_complement_probability": "その数を、すべての取り出し方の数でわって、"
+                                      "反対の場合の確率を求める。",
+    "subtract_from_one": "全体の確率から反対の場合の確率をひいて、求める確率とする。",
+}
+
+_AT_LEAST_ONE_DRAW_PHRASE: dict[str, str] = {
+    "identify_complement_event": "反対の場合を考える",
+    "count_complement_combinations": "反対の場合の数を数える",
+    "compute_complement_probability": "反対の場合の確率を求める",
+}
+
+
+@register_solver("math.probability_at_least_one_by_complement")
+def probability_at_least_one_by_complement(
+    n_target: object, n_other: object, take: object
+) -> Solution:
+    """袋から同時に取り出したとき、少なくとも1個が対象の色である確率（exam_l5.word_problem Lv4）。
+
+    既存の `math.probability_at_least_one` は**独立な試行を繰り返す**場面（もとに戻す）の
+    ものなので、同時に取り出す場面（もとに戻さない）には使えない。ここは玉を区別した
+    ラベルから全組合せを itertools で列挙し直し、余事象（対象の色が1個も入らない）の
+    数を数えて 1 から引く（double-solve）。
+    """
+    a, b, k = int(str(n_target)), int(str(n_other)), int(str(take))
+    if a < 1 or b < 1 or not (1 <= k <= a + b):
+        raise ValueError("対象・それ以外は1個以上、取り出す個数は総数以下であること")
+    if k > b:
+        raise ValueError("余事象が空になり「少なくとも一つ」が必ず起こる（問いにならない）")
+    balls = [f"t{i}" for i in range(a)] + [f"o{i}" for i in range(b)]
+    combos = list(itertools.combinations(balls, k))
+    none_target = [c for c in combos if all(x.startswith("o") for x in c)]
+    q = sympy.Rational(len(none_target), len(combos))
+    p = 1 - q
+    if not (0 < p < 1):
+        raise ValueError(f"確率が 0 または 1 に潰れている: {p}")
+    srepr = sympy.srepr(p)
+    disp = _fmt_ratio(p)
+    steps = [
+        Step(
+            op=op, args=[],
+            result_srepr=srepr if i == len(_AT_LEAST_ONE_DRAW_STEPS) - 1 else "",
+            result_display=(
+                disp if i == len(_AT_LEAST_ONE_DRAW_STEPS) - 1
+                else _AT_LEAST_ONE_DRAW_PHRASE[op]
+            ),
+            narration=_AT_LEAST_ONE_DRAW_NARRATION[op],
+        )
+        for i, op in enumerate(_AT_LEAST_ONE_DRAW_STEPS)
+    ]
+    return Solution(answer=SymbolicAnswer(srepr=srepr, display=disp), steps=steps)

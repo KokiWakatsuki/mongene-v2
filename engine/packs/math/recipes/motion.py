@@ -28,6 +28,7 @@ from engine.core.registry import REGISTRY, register_recipe
 from engine.core.rng import Rng, draw
 from engine.packs.math.recipes.letter_expr import _draw_distinct_points
 from engine.packs.math.visuals.graph import (
+    compute_grid_spec_from_params,
     render_polyline_solution_svg,
     render_segment_solution_svg,
     tick_labels_from_params,
@@ -882,6 +883,349 @@ def draw_three_interval_area_graph_recipe(ctx: CellContext, rng: Rng) -> MR:
     )
 
 
+# ===========================================================================
+# exam_l3（入試融合・動点と面積変化）— C13
+#
+# 中身は既存の動点資産の再利用なので、ここ（動点の recipe モジュール）に置く。
+# exam の recipe モジュール（recipes/exam_fusion.py）には所在だけ書き残す。
+#
+# 【経路について】台帳 example は A→B→C（2区間）だが、三角形 APD の面積はこの経路だと
+# 「増加 → 一定」しかなく、指定区間で立式させても一定（y=s²/2）になるか、時刻を
+# すべて求めさせても答えが1つしか立たない＝場合分けが答えに効かない退化になる。
+# そこで既存セル（g3_l31.word_problem Lv4）と同じく経路を A→B→C→D に延ばす。
+# 面積が減少に転じるので、指定区間の立式が意味を持ち、時刻も2つ立つ。
+# ===========================================================================
+_EXAM_L3_INTERVAL_CONCEPTS = ["exam.motion_interval_area_and_value"]
+_EXAM_L3_ALL_TIMES_CONCEPTS = ["exam.motion_area_all_times"]
+_EXAM_L3_READ_GRAPH_CONCEPTS = ["exam.motion_read_area_graph"]
+_EXAM_L3_GUIDED_CONCEPTS = ["exam.motion_guided_three_intervals"]
+_EXAM_L3_QUARTER_CONCEPTS = ["exam.motion_quarter_area_times"]
+
+
+def _quantity_grid_steps(s: int, v: int) -> tuple[int, int]:
+    """折れ線グラフを描いたときの目盛の刻み（x 方向・y 方向）。
+
+    読み取りセルで「方眼の交点にのる時刻」だけを引くために使う。刻みは図を描くのと
+    同じ `compute_grid_spec_from_params` から取る＝図と問いが別々の根拠を持たない。
+    """
+    t1 = s // v
+    peak = sympy.Rational(s * s, 2)
+    pts = [
+        str((sympy.Integer(0), sympy.Integer(0))),
+        str((sympy.Integer(t1), peak)),
+        str((sympy.Integer(2 * t1), peak)),
+        str((sympy.Integer(3 * t1), sympy.Integer(0))),
+    ]
+    spec = compute_grid_spec_from_params({"pts": pts, "grid_mode": "quantity"})
+    return int(spec.x_step), int(spec.y_step)
+
+
+@register_recipe(
+    "math.exam_interval_area_and_value", provides_concepts=_EXAM_L3_INTERVAL_CONCEPTS
+)
+def exam_interval_area_and_value_recipe(ctx: CellContext, rng: Rng) -> MR:
+    """指定区間で面積を立式し、その区間の1点での面積を求める（exam_l3.find_value Lv3）。
+
+    時刻 x0 は**面積が減っていく第3区間の内側**から引く。どの辺の上にいるかの判断が
+    立式の前提になるので、区間の判定 → 立式 → 代入の3段になる（台帳 desc の
+    「指定区間で動点位置の図から面積を立式して求める」）。
+    """
+    p = cast("dict[str, Any]", ctx.spec_level.params)
+    cands: list[tuple[int, int, int]] = []
+    for side in p["side_candidates"]:
+        s_i = int(side)
+        for speed in p["speed_candidates"]:
+            v_i = int(speed)
+            if s_i % v_i or (s_i * v_i) % 2:
+                continue
+            t1 = s_i // v_i
+            for x0 in range(2 * t1 + 1, 3 * t1):
+                area = s_i * (3 * s_i - v_i * x0) // 2
+                if (s_i * (3 * s_i - v_i * x0)) % 2:
+                    continue
+                # 答え（面積・式の係数）が本文の数値や "cm²" 由来の 2 と一致する組を外す。
+                if area in {s_i, v_i, x0, _AREA_UNIT_TOKEN}:
+                    continue
+                if (s_i * v_i // 2) in {area}:
+                    continue
+                cands.append((s_i, v_i, x0))
+    idx = int(draw({"int_set": list(range(len(cands)))}, rng))
+    s, v, x0 = cands[idx]
+    la, lb, lc, ld, lp = _draw_distinct_points(5, rng)
+
+    sol = cast(
+        Solution, REGISTRY.solver("math.express_interval_area_and_value")(s, v, x0)
+    )
+    assert isinstance(sol.answer, SymbolicAnswer)
+    expr, value = sympy.sympify(sol.answer.srepr)
+    x = sympy.Symbol("x")
+    assert expr.has(x), "第3区間の式が x を含まない（区間の取り方が壊れている）"
+    assert (expr.subs(x, x0) - value).equals(0)
+
+    condition = (
+        f"1辺が{s}cmの正方形{la}{lb}{lc}{ld}の周上を、点{lp}が{la}を出発して"
+        f"{la}→{lb}→{lc}→{ld}の順に毎秒{v}cmの速さで{ld}まで動く。"
+        f"点{lp}が{la}を出発してからx秒後の三角形{la}{lp}{ld}の面積をy cm²とする。"
+        f"点{lp}が辺{lc}{ld}上にある区間について、yをxの式で表し、"
+        f"x={x0}のときの面積を求めよ"
+    )
+    return MR(
+        signature=ctx.spec_level.signature,
+        family=ctx.family,
+        level=ctx.level,
+        purpose=ctx.purpose,
+        seed=0,
+        params={
+            "numbers": {"side": str(s), "speed": str(v), "time": str(x0)},
+            "labels": la + lb + lc + ld + lp,
+        },
+        given={"condition": condition},
+        sub_questions=[_wp_sub(ctx, label="(1)", asked="value", sol=sol)],
+        visual_plan=None,
+        provenance=Provenance(recipe="math.exam_interval_area_and_value"),
+    )
+
+
+@register_recipe("math.exam_area_all_times", provides_concepts=_EXAM_L3_ALL_TIMES_CONCEPTS)
+def exam_area_all_times_recipe(ctx: CellContext, rng: Rng) -> MR:
+    """面積が与えられた値になる時刻を、場合分けしてすべて求める（exam_l3.find_value Lv4）。
+
+    g3_l31.word_problem Lv4 と同じ solver を find_value の形（場面文ではなく condition）で
+    使う。答えは第1区間と第3区間の2つで、区間を1つ見落とすと落とす。
+    """
+    p = cast("dict[str, Any]", ctx.spec_level.params)
+    s, v, area, labels_txt, _scenario = _three_interval_scene(p, rng, with_area=True)
+
+    sol = cast(
+        Solution, REGISTRY.solver("math.solve_moving_point_area_all_times")(s, v, area)
+    )
+    assert isinstance(sol.answer, SymbolicAnswer)
+    times = sympy.sympify(sol.answer.srepr)
+    assert len(times) == 2 and times[0] < times[1], f"答えが2つにならない: {times}"
+
+    la, lb, lc, ld, lp = (labels_txt[i] for i in range(5))
+    condition = (
+        f"1辺が{s}cmの正方形{la}{lb}{lc}{ld}の周上を、点{lp}が{la}を出発して"
+        f"{la}→{lb}→{lc}→{ld}の順に毎秒{v}cmの速さで{ld}まで動く。"
+        f"点{lp}が{la}を出発してからx秒後の三角形{la}{lp}{ld}の面積が{area}cm²になるのは"
+        f"いつか、点{lp}がどの辺上にあるかで場合分けして、xの値をすべて求めよ"
+    )
+    return MR(
+        signature=ctx.spec_level.signature,
+        family=ctx.family,
+        level=ctx.level,
+        purpose=ctx.purpose,
+        seed=0,
+        params={"numbers": _wp_numbers(s, v, area), "labels": labels_txt},
+        given={"condition": condition},
+        sub_questions=[_wp_sub(ctx, label="(1)", asked="value", sol=sol)],
+        visual_plan=None,
+        provenance=Provenance(recipe="math.exam_area_all_times"),
+    )
+
+
+@register_recipe("math.exam_read_area_graph", provides_concepts=_EXAM_L3_READ_GRAPH_CONCEPTS)
+def exam_read_area_graph_recipe(ctx: CellContext, rng: Rng) -> MR:
+    """与えられた面積のグラフから、指定時刻の面積と最大になる範囲を読む（exam_l3.graph_table Lv2）。
+
+    問題図には折れ線そのものを描く（読む対象なので先出しではない——read_box_plot が
+    箱ひげ図を描いてよいのと同じ理屈）。答えの値を図中に注記はしない
+    （`labeled_answer_point` が read_point の禁止要素）。読み取りの正解は図からではなく
+    場面のパラメータから shoelace 公式で独立に再計算する。
+    """
+    p = cast("dict[str, Any]", ctx.spec_level.params)
+    cands: list[tuple[int, int, int]] = []
+    for side in p["side_candidates"]:
+        s_i = int(side)
+        for speed in p["speed_candidates"]:
+            v_i = int(speed)
+            if s_i % v_i or (s_i * v_i) % 2:
+                continue
+            t1 = s_i // v_i
+            # 読み取らせる点は**方眼の交点にのっていなければならない**（目盛の間だと
+            # 読めない）。目盛の刻みは図を描くのと同じ関数から取る＝図と問いが
+            # 別々の根拠を持たない。
+            x_step, y_step = _quantity_grid_steps(s_i, v_i)
+            # 答えのもう半分「面積が最大になる x の範囲」は区間の境目 t1・2t1 を読む
+            # ことになるので、境目も目盛にのっていなければならない。
+            if t1 % x_step:
+                continue
+            for x0 in range(1, t1):
+                if (s_i * v_i * x0) % 2:
+                    continue
+                y0 = s_i * v_i * x0 // 2
+                if x0 % x_step or y0 % y_step:
+                    continue
+                cands.append((s_i, v_i, x0))
+    idx = int(draw({"int_set": list(range(len(cands)))}, rng))
+    s, v, x0 = cands[idx]
+    la, lb, lc, ld, lp = _draw_distinct_points(5, rng)
+
+    sol = cast(Solution, REGISTRY.solver("math.read_area_graph_values")(s, v, x0))
+    assert isinstance(sol.answer, SymbolicAnswer)
+    y0, t_lo, t_hi = sympy.sympify(sol.answer.srepr)
+    assert 0 < y0 < sympy.Rational(s * s, 2) and t_lo < t_hi
+
+    t1 = sympy.Integer(s // v)
+    peak = sympy.Rational(s * s, 2)
+    poly_pts = [
+        str((sympy.Integer(0), sympy.Integer(0))),
+        str((t1, peak)),
+        str((2 * t1, peak)),
+        str((3 * t1, sympy.Integer(0))),
+    ]
+    params: dict[str, Any] = {
+        "side": s, "speed": v, "read_time": x0, "labels": la + lb + lc + ld + lp,
+        # 時間 x 秒と面積 y cm² は単位の違う2量なので、座標平面ではなく量-量グラフ。
+        "grid_mode": "quantity",
+        "poly_pts": poly_pts,
+        "pts": poly_pts,
+    }
+    condition = (
+        f"1辺が{s}cmの正方形{la}{lb}{lc}{ld}の周上を、点{lp}が{la}を出発して"
+        f"{la}→{lb}→{lc}→{ld}の順に一定の速さで{ld}まで動くときの、"
+        f"出発してからの時間x秒と三角形{la}{lp}{ld}の面積y cm²の関係を表すグラフである。"
+        f"このグラフから、x={x0}のときの面積と、面積が最大になるxの範囲を読み取って答えよ"
+    )
+    return MR(
+        signature=ctx.spec_level.signature,
+        family=ctx.family,
+        level=ctx.level,
+        purpose=ctx.purpose,
+        seed=0,
+        params=params,
+        given={"condition": condition},
+        sub_questions=[_wp_sub(ctx, label="(1)", asked="read_point", sol=sol)],
+        visual_plan=VisualPlan(
+            style="grid",
+            labels=tick_labels_from_params(params),
+            elements=[
+                VisualElement(kind="grid", attrs={}),
+                VisualElement(kind="axis", attrs={}),
+                VisualElement(kind="polyline", attrs={}),
+            ],
+        ),
+        provenance=Provenance(recipe="math.exam_read_area_graph"),
+    )
+
+
+@register_recipe(
+    "math.exam_word_problem_three_intervals", provides_concepts=_EXAM_L3_GUIDED_CONCEPTS
+)
+def exam_word_problem_three_intervals_recipe(ctx: CellContext, rng: Rng) -> MR:
+    """誘導あり3小問（区間1の式 → 区間2の式 → 面積が与えられた値になる時刻すべて）。
+
+    exam_l3.word_problem Lv3。(2) は「x の式で表せ」に対して**x を含まない式**（一定）に
+    なるのが眼目で、(1) と同じつもりで x の1次式を書くと落とす。
+    """
+    p = cast("dict[str, Any]", ctx.spec_level.params)
+    s, v, area, labels_txt, scenario = _three_interval_scene(p, rng, with_area=True)
+
+    first = cast(Solution, REGISTRY.solver("math.express_single_interval_area")(s, v))
+    flat = cast(Solution, REGISTRY.solver("math.express_constant_interval_area")(s, v))
+    times = cast(
+        Solution, REGISTRY.solver("math.solve_moving_point_area_all_times")(s, v, area)
+    )
+    assert isinstance(first.answer, SymbolicAnswer)
+    assert isinstance(flat.answer, SymbolicAnswer)
+    assert isinstance(times.answer, SymbolicAnswer)
+    # 恒真: (3) の1つめの時刻を (1) の式に入れると、問いで与えた面積に戻る。
+    x = sympy.Symbol("x")
+    t_a, t_b = sympy.sympify(times.answer.srepr)
+    assert (sympy.sympify(first.answer.srepr).subs(x, t_a) - area).equals(0)
+    assert t_a < t_b
+    # 恒真: (2) の一定の面積は、問いで与えた面積より大きい（でなければ (3) の解が立たない）。
+    assert sympy.sympify(flat.answer.srepr) > area
+
+    la, lb, lc, ld, lp = (labels_txt[i] for i in range(5))
+    return MR(
+        signature=ctx.spec_level.signature,
+        family=ctx.family,
+        level=ctx.level,
+        purpose=ctx.purpose,
+        seed=0,
+        params={"numbers": _wp_numbers(s, v, area), "labels": labels_txt},
+        given={"scenario": scenario},
+        context_slots={
+            "ask_1": f"点{lp}が辺{la}{lb}上にあるとき、yをxの式で表せ。",
+            "ask_2": f"点{lp}が辺{lb}{lc}上にあるとき、yをxの式で表せ。",
+            "ask_3": f"y={area}となるxの値をすべて求めよ。",
+        },
+        sub_questions=[
+            _wp_sub(ctx, label="(1)", asked="formulation", sol=first),
+            _wp_sub(ctx, label="(2)", asked="formulation", sol=flat),
+            _wp_sub(ctx, label="(3)", asked="value", sol=times),
+        ],
+        visual_plan=None,
+        provenance=Provenance(recipe="math.exam_word_problem_three_intervals"),
+    )
+
+
+@register_recipe(
+    "math.exam_word_problem_quarter_area", provides_concepts=_EXAM_L3_QUARTER_CONCEPTS
+)
+def exam_word_problem_quarter_area_recipe(ctx: CellContext, rng: Rng) -> MR:
+    """面積が正方形の面積の4分の1になる時刻をすべて求める（exam_l3.word_problem Lv4・誘導なし）。
+
+    誘導なしの肝は「求める面積が本文に数として書かれていない」こと——正方形の面積
+    s² を自分で求め、その4分の1を目標にして、さらに区間で場合分けする。
+    答えの面積が本文に出ないので、G-Q5t の面積漏洩がそもそも起こらない。
+    """
+    p = cast("dict[str, Any]", ctx.spec_level.params)
+    cands: list[tuple[int, int]] = []
+    for side in p["side_candidates"]:
+        s_i = int(side)
+        if (s_i * s_i) % 4:
+            continue
+        for speed in p["speed_candidates"]:
+            v_i = int(speed)
+            if s_i % (2 * v_i):
+                continue  # 区間の境目 s/v と答えの時刻 s/(2v) をともに整数にする
+            t_a = s_i // (2 * v_i)
+            t_b = 3 * s_i // v_i - t_a
+            # 本文に出る数（1辺・速さ・"4分の1" の 4 と 1・"cm²" の 2）と答えが
+            # 一致する組を外す（G-Q5t）。
+            forbidden = {s_i, v_i, 1, 4, _AREA_UNIT_TOKEN}
+            if {t_a, t_b} & forbidden:
+                continue
+            cands.append((s_i, v_i))
+    idx = int(draw({"int_set": list(range(len(cands)))}, rng))
+    s, v = cands[idx]
+    la, lb, lc, ld, lp = _draw_distinct_points(5, rng)
+    area = s * s // 4
+
+    sol = cast(
+        Solution, REGISTRY.solver("math.solve_moving_point_area_all_times")(s, v, area)
+    )
+    assert isinstance(sol.answer, SymbolicAnswer)
+    times = sympy.sympify(sol.answer.srepr)
+    assert len(times) == 2 and times[0] < times[1]
+
+    scenario = (
+        f"1辺が{s}cmの正方形{la}{lb}{lc}{ld}の周上を、点{lp}が{la}を出発して"
+        f"{la}→{lb}→{lc}→{ld}の順に毎秒{v}cmの速さで{ld}まで動く。"
+        f"点{lp}が{la}を出発してからx秒後の三角形{la}{lp}{ld}の面積をy cm²とする。"
+    )
+    return MR(
+        signature=ctx.spec_level.signature,
+        family=ctx.family,
+        level=ctx.level,
+        purpose=ctx.purpose,
+        seed=0,
+        params={"numbers": {"side": str(s), "speed": str(v)}, "labels": la + lb + lc + ld + lp},
+        given={"scenario": scenario},
+        context_slots={
+            "ask_value": (
+                f"三角形{la}{lp}{ld}の面積が正方形{la}{lb}{lc}{ld}の面積の4分の1に"
+                "なるときのxの値をすべて求めよ。"
+            )
+        },
+        sub_questions=[_wp_sub(ctx, label="(1)", asked="value", sol=sol)],
+        visual_plan=None,
+        provenance=Provenance(recipe="math.exam_word_problem_quarter_area"),
+    )
+
+
 __all__ = [
     "solve_moving_point_area_recipe",
     "draw_area_time_graph_segment",
@@ -892,4 +1236,9 @@ __all__ = [
     "word_problem_interval_exprs_and_graph_recipe",
     "word_problem_max_area_and_times_recipe",
     "draw_three_interval_area_graph_recipe",
+    "exam_interval_area_and_value_recipe",
+    "exam_area_all_times_recipe",
+    "exam_read_area_graph_recipe",
+    "exam_word_problem_three_intervals_recipe",
+    "exam_word_problem_quarter_area_recipe",
 ]

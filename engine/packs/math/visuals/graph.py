@@ -331,6 +331,46 @@ def render_grid_svg(
     return "".join(parts)
 
 
+def render_line_and_polygon_svg(params: dict[str, Any], *, draw_line: bool) -> str:
+    """直線1本と多角形を同じ座標平面に描く（exam_l1.graph_table Lv2）。
+
+    直線は `render_grid_svg` と同じ描き方（params の "a"/"b"・太い黒の実線）、多角形は
+    `params["polygon_pts"]` を順に結んだ閉じた折れ線。頂点には既存の折れ線図と同じ
+    黒丸を打つ。色に情報を載せない（モノクロ印刷可・N-4 適合）。
+
+    描画範囲は params["pts"] から決まるので、recipe は直線と多角形の**両方**が
+    収まる点を "pts" に載せる。
+    """
+    sc = _grid_scaffold(params)
+    parts = sc.parts
+
+    if draw_line:
+        a = sympy.nsimplify(sympy.sympify(params["a"]))
+        b = sympy.nsimplify(sympy.sympify(params["b"]))
+        y_start, y_end = a * sc.x_lo + b, a * sc.x_hi + b
+        parts.append(
+            f'<line x1="{sc.to_px_x(sc.x_lo):.2f}" y1="{sc.to_px_y(float(y_start)):.2f}" '
+            f'x2="{sc.to_px_x(sc.x_hi):.2f}" y2="{sc.to_px_y(float(y_end)):.2f}" '
+            f'stroke="#000000" stroke-width="2.5"/>'
+        )
+
+    poly = [_parse_point(s) for s in params["polygon_pts"]]
+    px = [(sc.to_px_x(float(x)), sc.to_px_y(float(y))) for x, y in poly]
+    joined = " ".join(f"{a_:.2f},{b_:.2f}" for a_, b_ in px)
+    parts.append(f'<polygon points="{joined}" fill="none" stroke="#000000" stroke-width="1.5"/>')
+    for a_, b_ in px:
+        parts.append(f'<circle cx="{a_:.2f}" cy="{b_:.2f}" r="4" fill="#000000"/>')
+
+    parts.extend(_grid_ticks(sc))
+    parts.append("</svg>")
+    return "".join(parts)
+
+
+def render_line_polygon_graph(mr: "MR", ctx: "CellContext") -> str:
+    """登録 visual（問題図）。直線と多角形の位置関係を読むセル（exam_l1.graph_table Lv2）。"""
+    return render_line_and_polygon_svg(mr.params, draw_line=_draw_line_from_plan(mr))
+
+
 def _draw_line_from_plan(mr: "MR") -> bool:
     """visual_plan.elements に "line" 要素が宣言されていれば直線を描く。
 
@@ -689,6 +729,7 @@ def render_curve_solution_svg(params: dict[str, Any]) -> str:
 register_visual("math.linear_graph")(render_linear_graph)
 register_visual("math.curve_graph")(render_curve_graph)
 register_visual("math.polyline_graph")(render_polyline_graph)
+register_visual("math.line_polygon_graph")(render_line_polygon_graph)
 
 
 __all__ = [

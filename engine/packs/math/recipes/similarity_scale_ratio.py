@@ -9,13 +9,17 @@ find_value セル群に対応する recipe を集約する。面積比・体積�
 from __future__ import annotations
 
 import math
-from typing import cast
+from collections.abc import Callable, Mapping
+from typing import Any, cast
+
+import sympy
 
 from engine.core.contracts import (
     MR,
     CellContext,
     Provenance,
     Solution,
+    Step,
     SubQuestionMR,
     SymbolicAnswer,
 )
@@ -214,4 +218,333 @@ def similar_solid_ratio_from_volume_recipe(ctx: CellContext, rng: Rng) -> MR:
         params={"vol_p": vol_p, "vol_q": vol_q},
         given={"condition": statement}, sub_questions=[sub_question], visual_plan=None,
         provenance=Provenance(recipe="math.similar_solid_ratio_from_volume"),
+    )
+
+
+# ===========================================================================
+# exam_l6（入試融合・相似と面積比／体積比）— C13
+#
+# 新しい数学は Lv4 の1本（`math.trapezoid_diagonal_area_ratios`）だけで、残りは
+# 既存 solver の合成。recipe と checker が**同じ関数**（`EXAM_L6_SOLVERS`）を呼び、
+# 独立性は「checker は params の場面数値だけから解き直す」ところに置く
+# （word_problem_probability.py の SOLVE_BUILDERS と同じ設計）。
+#
+# proof Lv3（相似の記述証明）は proof form の frame がまだ無いため、ここには無い。
+# ===========================================================================
+def _draw_from(candidates: list[Any], rng: Rng) -> str:
+    return str(candidates[int(draw({"int_range": [0, len(candidates) - 1]}, rng))])
+
+
+def _exam_l6_step(op: str, narration: str, display: str, srepr: str = "") -> Step:
+    return Step(op=op, args=[], result_srepr=srepr, result_display=display, narration=narration)
+
+
+def solve_exam_similar_solid_volume(numbers: Mapping[str, Any]) -> list[Solution]:
+    """exam_l6.find_value Lv3: 相似比と小さいほうの体積から、大きいほうの体積を求める。
+
+    体積比そのものは既存 `math.similar_solid_surface_volume_ratio` が出す
+    （相似比の三乗）。ここはその比と既知の体積から、もう一方の体積を求める合成。
+    """
+    m, n = int(numbers["ratio_num"]), int(numbers["ratio_den"])
+    known = sympy.Integer(int(numbers["known_volume"]))
+    ratio_solver = REGISTRY.solver("math.similar_solid_surface_volume_ratio")
+    sol_ratio = cast(Solution, ratio_solver(m, n))
+    assert isinstance(sol_ratio.answer, SymbolicAnswer)
+    _, _, vol_num, vol_den = sympy.sympify(sol_ratio.answer.srepr)
+    other = known * vol_den / vol_num
+    if not sympy.Integer(other).equals(other):
+        raise ValueError(f"大きいほうの体積が整数にならない: {other}")
+    other = sympy.Integer(other)
+    disp = f"{other}cm³"
+    steps = [
+        _exam_l6_step(
+            "cube_ratio_for_volume",
+            "相似な立体の体積の比は相似比の三乗に等しいことから、体積の比を求める。",
+            "相似比を三乗して体積の比を求める",
+        ),
+        _exam_l6_step(
+            "apply_volume_ratio",
+            "求めた体積の比と、わかっているほうの体積から、もう一方の体積を求める。",
+            disp,
+            sympy.srepr(other),
+        ),
+    ]
+    return [Solution(answer=SymbolicAnswer(srepr=sympy.srepr(other), display=disp), steps=steps)]
+
+
+def solve_exam_cone_split_volume_ratio(numbers: Mapping[str, Any]) -> list[Solution]:
+    """exam_l6.find_value Lv4: 円錐を底面に平行な平面で切ったときの、小円錐と円錐台の体積比。
+
+    切り口から上の小円錐はもとの円錐と相似で、相似比は高さの比（上:全体）。体積比は
+    その三乗（既存 `math.similar_solid_surface_volume_ratio`）で、円錐台はもとの円錐
+    から小円錐を除いた残り——という**引き算の合成**が Lv4 の眼目。
+    """
+    upper, lower = int(numbers["upper_part"]), int(numbers["lower_part"])
+    ratio_solver = REGISTRY.solver("math.similar_solid_surface_volume_ratio")
+    sol_ratio = cast(Solution, ratio_solver(upper, upper + lower))
+    assert isinstance(sol_ratio.answer, SymbolicAnswer)
+    _, _, small, whole = sympy.sympify(sol_ratio.answer.srepr)
+    frustum = whole - small
+    g = sympy.gcd(small, frustum)
+    ratio_num, ratio_den = small // g, frustum // g
+    result = sympy.Tuple(ratio_num, ratio_den)
+    disp = f"小さい円錐:円錐台 = {ratio_num}:{ratio_den}"
+    steps = [
+        _exam_l6_step(
+            "identify_similar_cone",
+            "底面に平行な平面で切ると、切り口から上の小さい円錐はもとの円錐と相似になる。"
+            "その相似比は、高さの比（上の部分ともとの円錐全体の比）に等しい。",
+            "小さい円錐ともとの円錐の相似比を求める",
+        ),
+        _exam_l6_step(
+            "cube_ratio_for_volume",
+            "相似な立体の体積の比は相似比の三乗に等しいことから、"
+            "小さい円錐ともとの円錐全体の体積の比を求める。",
+            "相似比を三乗して体積の比を求める",
+        ),
+        _exam_l6_step(
+            "subtract_for_frustum",
+            "円錐台は、もとの円錐から小さい円錐を除いた残りなので、"
+            "全体から小さい円錐の分をひいて、求める比とする。",
+            disp,
+            sympy.srepr(result),
+        ),
+    ]
+    return [
+        Solution(answer=SymbolicAnswer(srepr=sympy.srepr(result), display=disp), steps=steps)
+    ]
+
+
+def solve_exam_parallel_line_area_guided(numbers: Mapping[str, Any]) -> list[Solution]:
+    """exam_l6.word_problem Lv3: DE∥BC の三角形で (1)相似比 →(2)面積比 →(3)四角形の面積。
+
+    (2)(3) は既存 `math.similar_area_ratio`（面積比＝相似比の二乗と、既知の面積から
+    もう一方の面積）に委ね、(3) の値は既存
+    `math.similar_triangle_trapezoid_area_ratio` が出す 三角形ADE:四角形DBCE の比
+    でも検算する（二つの独立した経路が一致することを構成時に確かめる）。
+    """
+    ad, db = int(numbers["ad"]), int(numbers["db"])
+    area_ade = sympy.Integer(int(numbers["area_ade"]))
+    whole = ad + db
+
+    ratio = sympy.Rational(ad, whole)
+    ratio_num, ratio_den = ratio.p, ratio.q
+    similar_ratio = sympy.Tuple(sympy.Integer(ratio_num), sympy.Integer(ratio_den))
+    disp1 = f"三角形ADE:三角形ABC = {ratio_num}:{ratio_den}"
+    sol1 = Solution(
+        answer=SymbolicAnswer(srepr=sympy.srepr(similar_ratio), display=disp1),
+        steps=[
+            _exam_l6_step(
+                "convert_partial_to_whole_ratio",
+                "DE と BC が平行なので、三角形ADEと三角形ABCは相似である。"
+                "AD と DB の比から、AD と AB 全体の比になおして相似比とする。",
+                disp1,
+                sympy.srepr(similar_ratio),
+            )
+        ],
+    )
+
+    area_solver = REGISTRY.solver("math.similar_area_ratio")
+    sol_area = cast(Solution, area_solver(ad, whole, area_ade))
+    assert isinstance(sol_area.answer, SymbolicAnswer)
+    area_num, area_den, area_abc = sympy.sympify(sol_area.answer.srepr)
+    area_ratio = sympy.Tuple(area_num, area_den)
+    disp2 = f"三角形ADE:三角形ABC = {area_num}:{area_den}"
+    sol2 = Solution(
+        answer=SymbolicAnswer(srepr=sympy.srepr(area_ratio), display=disp2),
+        steps=[
+            _exam_l6_step(
+                "square_similarity_ratio",
+                "相似な図形の面積比は相似比の二乗に等しいことから、面積の比を求める。",
+                disp2,
+                sympy.srepr(area_ratio),
+            )
+        ],
+    )
+
+    quad = sympy.Integer(area_abc - area_ade)
+    # 独立した経路（三角形ADE:四角形DBCE の比）でも同じ値になることを確かめる。
+    trapezoid_solver = REGISTRY.solver("math.similar_triangle_trapezoid_area_ratio")
+    sol_trapezoid = cast(Solution, trapezoid_solver(ad, db))
+    assert isinstance(sol_trapezoid.answer, SymbolicAnswer)
+    t_num, t_den = sympy.sympify(sol_trapezoid.answer.srepr)
+    if quad != area_ade * t_den / t_num:
+        raise ValueError("四角形の面積が2つの経路で一致しない")
+    disp3 = f"{quad}cm²"
+    sol3 = Solution(
+        answer=SymbolicAnswer(srepr=sympy.srepr(quad), display=disp3),
+        steps=[
+            _exam_l6_step(
+                "compute_whole_area",
+                "求めた面積の比と、わかっている三角形ADEの面積から、"
+                "三角形ABC全体の面積を求める。",
+                "三角形ABC全体の面積を求める",
+            ),
+            _exam_l6_step(
+                "subtract_inner_triangle",
+                "四角形DBCEは、三角形ABC全体から三角形ADEを除いた残りなので、"
+                "全体の面積から三角形ADEの面積をひいて求める。",
+                disp3,
+                sympy.srepr(quad),
+            ),
+        ],
+    )
+    return [sol1, sol2, sol3]
+
+
+def solve_exam_trapezoid_diagonal_ratios(numbers: Mapping[str, Any]) -> list[Solution]:
+    """exam_l6.word_problem Lv4: 台形の対角線の交点まわりの面積比（誘導なし）。"""
+    solver = REGISTRY.solver("math.trapezoid_diagonal_area_ratios")
+    return [cast(Solution, solver(int(numbers["ad"]), int(numbers["bc"])))]
+
+
+EXAM_L6_SOLVERS: dict[str, Callable[[Mapping[str, Any]], list[Solution]]] = {
+    "similar_solid_volume": solve_exam_similar_solid_volume,
+    "cone_split_volume_ratio": solve_exam_cone_split_volume_ratio,
+    "parallel_line_area_guided": solve_exam_parallel_line_area_guided,
+    "trapezoid_diagonal_ratios": solve_exam_trapezoid_diagonal_ratios,
+}
+
+
+def _exam_l6_mr(
+    ctx: CellContext,
+    *,
+    kind: str,
+    numbers: dict[str, Any],
+    given: dict[str, str],
+    ask_texts: tuple[str, ...],
+    slots: dict[str, str] | None = None,
+) -> MR:
+    """exam_l6 の4セル共通の MR 組み立て（小問数が level_sep の骨）。"""
+    solutions = EXAM_L6_SOLVERS[kind](numbers)
+    assert len(solutions) == len(ask_texts)
+    context_slots = dict(slots or {})
+    if len(ask_texts) == 1:
+        # find_value（問い文は given.condition が持つ）は空文字を渡す＝スロットを作らない。
+        if ask_texts[0]:
+            context_slots["ask_value"] = ask_texts[0]
+    else:
+        for i, ask_text in enumerate(ask_texts):
+            context_slots[f"ask_{i + 1}"] = ask_text
+    sub_questions = [
+        SubQuestionMR(
+            label=f"({i + 1})", asked="value", answer=sol.answer, steps=sol.steps,
+            concept_tags=_effective_concept_tags(ctx), cause_tags=_effective_cause_tags(ctx),
+        )
+        for i, sol in enumerate(solutions)
+    ]
+    return MR(
+        signature=ctx.spec_level.signature, family=ctx.family, level=ctx.level,
+        purpose=ctx.purpose, seed=0,
+        # 答えは params に入れない（checker が場面の数値だけから解き直せるようにする）。
+        params={"kind": kind, "numbers": {k: str(v) for k, v in numbers.items()},
+                "slots": dict(slots or {})},
+        given=given, context_slots=context_slots, sub_questions=sub_questions,
+        visual_plan=None, provenance=Provenance(recipe=ctx.spec_level.recipe),
+    )
+
+
+_EXAM_L6_SOLID_VOLUME_CONCEPTS = ["exam.similar_solid_volume_from_ratio"]
+
+
+@register_recipe(
+    "math.exam_similar_solid_volume", provides_concepts=_EXAM_L6_SOLID_VOLUME_CONCEPTS
+)
+def exam_similar_solid_volume_recipe(ctx: CellContext, rng: Rng) -> MR:
+    """相似比と小さいほうの体積から大きいほうの体積（exam_l6.find_value Lv3・answer-first）。"""
+    p = ctx.spec_level.params
+    m, n = _draw_coprime_ratio(rng, p["ratio_domain"], 6)
+    # 大きいほうの体積が整数になるよう、小さいほうを m³ の倍数として構成する。
+    known = int(draw(p["scale_domain"], rng)) * m**3
+    solid = _draw_from(list(p["solid_candidates"]), rng)
+    statement = (
+        f"相似比が{m}:{n}である2つの相似な{solid}がある。"
+        f"小さいほうの{solid}の体積が{known}cm³であるとき、"
+        f"大きいほうの{solid}の体積を求めよ"
+    )
+    return _exam_l6_mr(
+        ctx, kind="similar_solid_volume",
+        numbers={"ratio_num": m, "ratio_den": n, "known_volume": known},
+        given={"condition": statement}, ask_texts=("",), slots={"solid": solid},
+    )
+
+
+_EXAM_L6_CONE_SPLIT_CONCEPTS = ["exam.cone_split_volume_ratio"]
+
+
+@register_recipe(
+    "math.exam_cone_split_volume_ratio", provides_concepts=_EXAM_L6_CONE_SPLIT_CONCEPTS
+)
+def exam_cone_split_volume_ratio_recipe(ctx: CellContext, rng: Rng) -> MR:
+    """円錐を平行な平面で切った小円錐と円錐台の体積比（exam_l6.find_value Lv4・answer-first）。"""
+    p = ctx.spec_level.params
+    upper = int(draw(p["upper_domain"], rng))
+    lower = int(draw(p["lower_domain"], rng))
+    # 高さ・底面の半径は答え（体積の比）に効かない surface（場面を具体にし、
+    # 同じ比でも問題文が変わるようにする）。高さは分けた比で割り切れる値にする。
+    height = (upper + lower) * int(draw(p["height_unit_domain"], rng))
+    radius = int(draw(p["radius_domain"], rng))
+    statement = (
+        f"底面の半径が{radius}cm、高さが{height}cmの円錐がある。この円錐を底面に平行な"
+        f"平面で切り、高さを上から{upper}:{lower}に分けた。切り口から上の小さい円錐と、"
+        "下の円錐台の体積の比を求めよ"
+    )
+    return _exam_l6_mr(
+        ctx, kind="cone_split_volume_ratio",
+        numbers={"upper_part": upper, "lower_part": lower, "height": height, "radius": radius},
+        given={"condition": statement}, ask_texts=("",),
+    )
+
+
+_EXAM_L6_PARALLEL_AREA_CONCEPTS = ["exam.parallel_line_similar_area_guided"]
+
+
+@register_recipe(
+    "math.exam_parallel_line_area_guided", provides_concepts=_EXAM_L6_PARALLEL_AREA_CONCEPTS
+)
+def exam_parallel_line_area_guided_recipe(ctx: CellContext, rng: Rng) -> MR:
+    """DE∥BC の相似 →面積比 →四角形の面積（exam_l6.word_problem Lv3・answer-first）。"""
+    p = ctx.spec_level.params
+    ad, db = _draw_coprime_ratio(rng, p["ratio_domain"], 6)
+    # 四角形DBCEの面積が整数になるよう、三角形ADEの面積を AD² の倍数として構成する。
+    area_ade = int(draw(p["scale_domain"], rng)) * ad**2
+    statement = (
+        f"三角形ABCで、辺AB上に点D、辺AC上に点Eをとり、DEとBCが平行になるようにする。"
+        f"AD:DB={ad}:{db}であり、三角形ADEの面積は{area_ade}cm²である。"
+    )
+    ask_texts = (
+        "三角形ADEと三角形ABCの相似比を、最も簡単な整数の比で求めよ。",
+        "三角形ADEと三角形ABCの面積比を求めよ。",
+        "四角形DBCEの面積を求めよ。",
+    )
+    return _exam_l6_mr(
+        ctx, kind="parallel_line_area_guided",
+        numbers={"ad": ad, "db": db, "area_ade": area_ade},
+        given={"scenario": statement}, ask_texts=ask_texts,
+    )
+
+
+_EXAM_L6_TRAPEZOID_CONCEPTS = ["exam.trapezoid_diagonal_area_ratios"]
+
+
+@register_recipe(
+    "math.exam_trapezoid_diagonal_ratios", provides_concepts=_EXAM_L6_TRAPEZOID_CONCEPTS
+)
+def exam_trapezoid_diagonal_ratios_recipe(ctx: CellContext, rng: Rng) -> MR:
+    """台形の対角線の交点まわりの面積比（exam_l6.word_problem Lv4・answer-first）。"""
+    p = ctx.spec_level.params
+    ad, bc = _draw_coprime_ratio(rng, p["length_domain"], 15)
+    height = int(draw(p["height_domain"], rng))
+    statement = (
+        f"ADとBCが平行な台形ABCDがあり、AD={ad}cm、BC={bc}cm、高さは{height}cmである。"
+        "対角線ACとBDの交点をPとする。"
+    )
+    ask_texts = (
+        "三角形APDと三角形BPCの面積比を求め、さらに三角形APDの面積が"
+        "三角形APBの面積の何倍になるかを求めよ。",
+    )
+    return _exam_l6_mr(
+        ctx, kind="trapezoid_diagonal_ratios",
+        numbers={"ad": ad, "bc": bc, "height": height},
+        given={"scenario": statement}, ask_texts=ask_texts,
     )

@@ -44,8 +44,11 @@ _CASES = [
         "level_not_supported",
     ),
     (
-        "not_implemented",  # タクソノミーには在るが FamilySpec 未制作
-        GenerateRequest(subject="math", unit="exam_l1", form="find_value", level=3, seed=1),
+        # タクソノミーには在るが FamilySpec 未制作。ここが実装されたら、まだ未制作の
+        # 別セルに差し替える（exam_l1.find_value Lv3 は C13 で実装済みになった）。
+        # proof form は frame ごと未実装なので、当面いちばん動かない座標である。
+        "not_implemented",
+        GenerateRequest(subject="math", unit="exam_l6", form="proof", level=3, seed=1),
         "not_implemented",
     ),
     (

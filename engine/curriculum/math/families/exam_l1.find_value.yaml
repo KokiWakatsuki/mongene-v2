@@ -1,0 +1,65 @@
+family: math.exam_l1.find_value
+form: find_value
+source_desc: |
+  一次関数と図形の融合（交点・三角形の面積）— 値を求める
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv3 desc: 直線の交点座標・三角形の面積を多段で求める。
+       example: 2直線 y=3x-1 と y=-x+7 の交点をP、y=-x+7 と x軸との交点をQ、原点をO
+                とする。交点Pの座標を求め、三角形OPQの面積を求めよ。
+  Lv4 desc: 面積条件から未知の係数・点を逆算して求める。
+       example: 直線 y=ax+6 が x軸、y軸と交わる点をそれぞれA、Bとする。三角形OABの
+                面積が9であるとき、正の数 a の値を求めよ。
+  ---
+  【構成の向き】どちらも answer-first。Lv3 は先に交点 (px, py) を決め、その点を通る
+  ように2直線の切片を逆算する（実行時に「交点が整数か」を判定するのではなく、
+  構成の段階で保証する＝鉄則⑤）。Lv4 は先に答えの傾き a と切片 b を決め、
+  面積 b²/(2a) を計算して問いに載せる。
+
+  【面積の求め方】新設 solver（solvers/exam_linear_figure.py）だが、面積はいずれも
+  shoelace 公式で求める——動点（solvers/motion.py）・放物線
+  （solvers/quadratic_function.py）と同じ道具立てにそろえてある。さらに
+  「底辺×高さ÷2」でも計算して一致することを solver 内で確かめる（別経路での裏取り）。
+
+  【level_sep】
+    Lv3 = 順方向。op 列は set_up_equation → solve_for_x → compute_y →
+          find_x_intercept → compute_triangle_area。
+    Lv4 = 逆方向（面積から係数を逆算）。op 列は express_intercepts →
+          set_up_area_equation → solve_for_coefficient。
+    op 列が完全に相異する。
+
+  【params】本文に出ている数だけ（Lv3=2直線の傾きと切片／Lv4=切片と面積）。
+  答え（交点・面積・逆算した傾き）は置かない。
+
+  【漏洩の封じ方】答えの値が本文の数値や "cm²" 由来の 2 と一致する組は構成の段階で
+  外す（`_no_leak`）。G-Q5t の whitelist は given 由来。
+concepts_default: [exam.linear_intersection_triangle_area]
+levels:
+  "3":
+    signature: exam_linear_intersection_area
+    recipe: math.exam_linear_intersection_area
+    params:
+      px_candidates: [1, 2, 3, 4, 5, 6]
+      py_candidates: [2, 3, 4, 6, 8, 9, 12]
+      slope_candidates: [-4, -3, -2, -1, 1, 2, 3, 4]
+    given: [condition]
+    asked: [value]
+    visual: none
+    text: {tier: T1, template: lf_exam_linear_figure_v1}
+    hints: [steps_prefix]
+    concept_tags: [exam.linear_intersection_triangle_area]
+    cause_tags: []
+  "4":
+    signature: exam_linear_coefficient_from_area
+    recipe: math.exam_linear_coefficient_from_area
+    params:
+      slope_candidates: [1, 2, 3, 4, 5, 6, 8, 9]
+      intercept_candidates: [2, 3, 4, 5, 6, 7, 8, 9, 10, 12]
+    given: [condition]
+    asked: [value]
+    visual: none
+    text: {tier: T1, template: lf_exam_linear_figure_v1}
+    hints: [steps_prefix]
+    concept_tags: [exam.linear_coefficient_from_area]
+    cause_tags: []
+remedial:
+  default_level: 3

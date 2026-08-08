@@ -89,6 +89,10 @@ _PROBABILITY_WP_CONCEPTS = [
     "probability.word_problem_coin_toss_count_and_probability",
     "probability.word_problem_two_digit_cards",
     "probability.word_problem_at_least_two_colors",
+    # exam_l5.word_problem（入試融合・確率）— C13。既存の確率資産の再利用なので
+    # exam_fusion.py ではなくこのモジュールに置く（exam_l3 を motion.py に置いたのと同じ判断）。
+    "exam.dice_guided_total_and_events",
+    "exam.at_least_one_by_complement",
 ]
 
 
@@ -362,6 +366,48 @@ def solve_at_least_two_colors(numbers: Mapping[str, Any]) -> list[Solution]:
     return [Solution(answer=sol_final.answer, steps=steps)]
 
 
+_DICE_QUANTITY_KIND = {"和": "sum", "積": "product"}
+_PARITY_TARGET = {"偶数": 0, "奇数": 1}
+
+
+def solve_exam_dice_guided_three(numbers: Mapping[str, Any]) -> list[Solution]:
+    """exam_l5 Lv3: 大小2個のさいころ。(1)全場合の総数 (2)和(積)が指定の値 (3)積(和)の偶奇。
+
+    新 solver は `math.count_two_dice_outcomes`（樹形図・表で整理した結果である総数）
+    の1本だけで、(2)(3) は既存 `math.probability_two_dice` に condition を渡すだけ。
+    (2) が和なら (3) は積、(2) が積なら (3) は和——同じ量を2回問わないよう入れ替える。
+    """
+    faces = int(numbers["faces"])
+    # 条件は「和／積」「偶数／奇数」という**場面文に出ている語のまま** params に載せる
+    # （params の値がすべて given.scenario に現れる、という word_problem の不変条件を
+    # 満たすため。"sum"/"product" のような内部表現にすると本文に出ない値になる）。
+    target_kind = _DICE_QUANTITY_KIND[str(numbers["target_quantity"])]
+    target = int(numbers["target"])
+    parity_kind = _DICE_QUANTITY_KIND[str(numbers["parity_quantity"])]
+    parity = _PARITY_TARGET[str(numbers["parity_word"])]
+    count_solver = REGISTRY.solver("math.count_two_dice_outcomes")
+    dice_solver = REGISTRY.solver("math.probability_two_dice")
+    return [
+        cast(Solution, count_solver(faces)),
+        cast(Solution, dice_solver(faces, f"{target_kind}_equals", target)),
+        cast(Solution, dice_solver(faces, f"{parity_kind}_parity", parity)),
+    ]
+
+
+def solve_exam_at_least_one_by_complement(numbers: Mapping[str, Any]) -> list[Solution]:
+    """exam_l5 Lv4: 袋から同時に取り出して少なくとも1個が対象の色（誘導なし・余事象）。
+
+    既存の `math.probability_at_least_one` は**もとに戻す独立試行**のものなので、
+    同時に取り出す場面には使えない（新 solver
+    `math.probability_at_least_one_by_complement` が余事象を組合せで数える）。
+    """
+    count_target = int(numbers["count_target"])
+    count_other = int(numbers["count_other"])
+    draws = int(numbers["draws"])
+    solver = REGISTRY.solver("math.probability_at_least_one_by_complement")
+    return [cast(Solution, solver(count_target, count_other, draws))]
+
+
 SOLVE_BUILDERS: dict[str, Callable[[Mapping[str, Any]], list[Solution]]] = {
     "bag_one_draw": solve_bag_one_draw,
     "coin_toss_guided": solve_coin_toss_guided,
@@ -372,6 +418,8 @@ SOLVE_BUILDERS: dict[str, Callable[[Mapping[str, Any]], list[Solution]]] = {
     "lottery_at_least_one": solve_lottery_at_least_one,
     "two_balls_complement": solve_two_balls_complement,
     "dice_repeat_at_least_one": solve_dice_repeat_at_least_one,
+    "exam_dice_guided_three": solve_exam_dice_guided_three,
+    "exam_at_least_one_by_complement": solve_exam_at_least_one_by_complement,
 }
 
 
@@ -646,6 +694,105 @@ def _scene_at_least_two_colors(p: Mapping[str, Any], rng: Rng) -> ProbabilitySce
     )
 
 
+def _exam_dice_target_candidates(faces: int, kind: str) -> list[int]:
+    """出る目の和(積)としてありうる値のうち、確率が 0 にも 1 にも潰れないもの。
+
+    「ありえない値」（積が7など）を引くと確率が 0 になり、数え上げの練習にならない
+    （0 や 1 に潰れる構成はどのゲートも弾かないので、構成の段階で外す＝既知の罠）。
+    """
+    pairs = list(itertools.product(range(1, faces + 1), range(1, faces + 1)))
+    out: list[int] = []
+    for value in sorted({(a + b if kind == "sum" else a * b) for a, b in pairs}):
+        hit = sum(1 for a, b in pairs if (a + b if kind == "sum" else a * b) == value)
+        if 0 < hit < len(pairs):
+            out.append(value)
+    return out
+
+
+def _scene_exam_dice_guided_three(p: Mapping[str, Any], rng: Rng) -> ProbabilityScene:
+    """exam_l5 Lv3: 大小2個のさいころ（誘導あり3小問・整理 → 和(積)の値 → 偶奇）。
+
+    注目する値 `target` は **given.scenario に置く**。ask にしか出ない数値は G-Q5t の
+    whitelist（mr.given だけを見る）に載らず、答えの分子・分母（srepr が
+    Rational(p, q) なので p・q が別々のトークンになる）と衝突して偽陽性になる
+    （既知の罠）。scenario に出したうえで ask で言い直すのは安全。
+
+    dup の自由度は 場面の言い方(8) × 注目する値(和11+積18) × 偶奇(2) ≈ 464 通り。
+    """
+    faces = int(draw(p["faces_domain"], rng))
+    framing = str(_draw_index(list(p["dice_scene_set"]), rng))
+    quantity = str(_draw_index(["和", "積"], rng))
+    target = int(
+        draw({"int_set": _exam_dice_target_candidates(faces, _DICE_QUANTITY_KIND[quantity])}, rng)
+    )
+    # (2) が和なら (3) は積、(2) が積なら (3) は和（同じ量を2回問わない）。
+    parity_quantity = "積" if quantity == "和" else "和"
+    parity_word = str(_draw_index(["偶数", "奇数"], rng))
+
+    # 面数は標準の6でも省かずに書く（word_problem の不変条件＝params の数値は本文に
+    # 必ず出ている、を満たすため。contract の忠実性検査がこれを機械的に見ている）。
+    scenario = (
+        f"1から{faces}までの目が出る{framing}。どの目が出ることも同様に確からしいものとする。"
+        f"出る目の{quantity}が{target}になる場合と、"
+        f"出る目の{parity_quantity}が{parity_word}になる場合について考える。"
+    )
+    ask_texts = (
+        "出る目の組合せは全部で何通りあるか、樹形図または表に整理して答えよ。",
+        f"出る目の{quantity}が{target}になる確率を求めよ。",
+        f"出る目の{parity_quantity}が{parity_word}になる確率を求めよ。",
+    )
+    numbers = {
+        "faces": faces,
+        "target_quantity": quantity,
+        "target": target,
+        "parity_quantity": parity_quantity,
+        "parity_word": parity_word,
+    }
+    return ProbabilityScene(
+        numbers=numbers, scenario=scenario, ask_texts=ask_texts,
+        slots={"framing": framing},
+    )
+
+
+def _scene_exam_at_least_one_by_complement(p: Mapping[str, Any], rng: Rng) -> ProbabilityScene:
+    """exam_l5 Lv4: 袋から同時に取り出して少なくとも1個が対象の色（誘導なし1小問）。
+
+    非退化: 取り出す個数 `draws` は対象でない側の個数以下にする（そうでないと対象が
+    必ず1個は入ってしまい、確率が 1 に潰れて余事象を考える意味がなくなる）。
+    """
+    container, item, counter = str(_draw_index(list(p["container_set"]), rng)).split("|")
+    color_target, color_other = (
+        str(v) for v in _draw_distinct_tokens(list(p["color_candidates"]), rng, 2)
+    )
+    count_target = int(draw(p["count_target_domain"], rng))
+    count_other = int(draw(p["count_other_domain"], rng))
+    draws = int(draw(p["draws_domain"], rng))
+    if draws > count_other:
+        # 余事象（対象の色が1個も入らない）が起こりうるところまで取り出す個数を戻す。
+        draws = count_other
+    scenario = (
+        f"{container}の中に、{color_target}い{item}が{count_target}{counter}と"
+        f"{color_other}い{item}が{count_other}{counter}入っている。"
+        f"この{container}から同時に{draws}{counter}取り出す。"
+        f"どの{item}が取り出されることも同様に確からしいものとする。"
+    )
+    ask_texts = (
+        f"取り出した{item}のうち、少なくとも1{counter}が{color_target}い{item}である"
+        "確率を求めよ。",
+    )
+    numbers = {
+        "count_target": count_target,
+        "count_other": count_other,
+        "draws": draws,
+        "color_target": color_target,
+        "color_other": color_other,
+    }
+    return ProbabilityScene(
+        numbers=numbers, scenario=scenario, ask_texts=ask_texts,
+        slots={"container": container, "item": item},
+    )
+
+
 _SCENE_BUILDERS: dict[str, Callable[[Mapping[str, Any], Rng], ProbabilityScene]] = {
     "bag_one_draw": _scene_bag_one_draw,
     "coin_toss_guided": _scene_coin_toss_guided,
@@ -656,6 +803,8 @@ _SCENE_BUILDERS: dict[str, Callable[[Mapping[str, Any], Rng], ProbabilityScene]]
     "lottery_at_least_one": _scene_lottery_at_least_one,
     "two_balls_complement": _scene_two_balls_complement,
     "dice_repeat_at_least_one": _scene_dice_repeat_at_least_one,
+    "exam_dice_guided_three": _scene_exam_dice_guided_three,
+    "exam_at_least_one_by_complement": _scene_exam_at_least_one_by_complement,
 }
 
 
@@ -685,13 +834,13 @@ def word_problem_probability(ctx: CellContext, rng: Rng) -> MR:
         for i, sol in enumerate(solutions)
     ]
 
-    guided = len(scene.ask_texts) == 2
     context_slots = dict(scene.slots)
-    if guided:
-        context_slots["ask_1"] = scene.ask_texts[0]
-        context_slots["ask_2"] = scene.ask_texts[1]
-    else:
+    if len(scene.ask_texts) == 1:
         context_slots["ask_value"] = scene.ask_texts[0]
+    else:
+        # 誘導あり（2小問＝wp_probability_guided_v1／3小問＝wp_guided_three_v1）。
+        for i, ask_text in enumerate(scene.ask_texts):
+            context_slots[f"ask_{i + 1}"] = ask_text
 
     return MR(
         signature=ctx.spec_level.signature,
@@ -725,5 +874,7 @@ __all__ = [
     "solve_lottery_at_least_one",
     "solve_two_balls_complement",
     "solve_dice_repeat_at_least_one",
+    "solve_exam_dice_guided_three",
+    "solve_exam_at_least_one_by_complement",
     "word_problem_probability",
 ]

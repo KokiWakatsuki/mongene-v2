@@ -32,7 +32,7 @@ levels:
     given: [condition]
     asked: [draw_graph]
     visual: required
-    text: {tier: T1, template: lf_motion_area_v1}
+    text: {tier: T1, template: lf_motion_area_v1, visual_builder: math.polyline_graph}
     hints: [steps_prefix]
     concept_tags: [motion.piecewise_area_graph]
     cause_tags: []

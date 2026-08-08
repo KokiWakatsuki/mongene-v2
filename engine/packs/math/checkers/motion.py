@@ -130,6 +130,77 @@ def double_solve_draw_three_interval_area_graph(mr: MR) -> Solution:
     )
 
 
+# ---------------------------------------------------------------------------
+# exam_l3（入試融合・動点と面積変化）— C13
+# ---------------------------------------------------------------------------
+@register_checker("math.exam_interval_area_and_value.double_solve")
+def double_solve_exam_interval_area_and_value(mr: MR) -> Solution:
+    """本文に出ている 1辺・速さ・時刻だけから、区間の式と面積を解き直す。"""
+    n = mr.params["numbers"]
+    return cast(
+        Solution,
+        REGISTRY.solver("math.express_interval_area_and_value")(
+            n["side"], n["speed"], n["time"]
+        ),
+    )
+
+
+@register_checker("math.exam_area_all_times.double_solve")
+def double_solve_exam_area_all_times(mr: MR) -> Solution:
+    n = mr.params["numbers"]
+    return cast(
+        Solution,
+        REGISTRY.solver("math.solve_moving_point_area_all_times")(
+            n["side"], n["speed"], n["area"]
+        ),
+    )
+
+
+@register_checker("math.exam_read_area_graph.double_solve")
+def double_solve_exam_read_area_graph(mr: MR) -> Solution:
+    """読み取りの正解を、図ではなく場面のパラメータから解き直す。"""
+    p = mr.params
+    return cast(
+        Solution,
+        REGISTRY.solver("math.read_area_graph_values")(p["side"], p["speed"], p["read_time"]),
+    )
+
+
+@register_checker("math.exam_word_problem_three_intervals.double_solve")
+def double_solve_exam_word_problem_three_intervals(mr: MR) -> list[Solution]:
+    """(1)=はじめの区間の式・(2)=一定の区間の式・(3)=時刻すべて。"""
+    n = mr.params["numbers"]
+    return [
+        cast(
+            Solution,
+            REGISTRY.solver("math.express_single_interval_area")(n["side"], n["speed"]),
+        ),
+        cast(
+            Solution,
+            REGISTRY.solver("math.express_constant_interval_area")(n["side"], n["speed"]),
+        ),
+        cast(
+            Solution,
+            REGISTRY.solver("math.solve_moving_point_area_all_times")(
+                n["side"], n["speed"], n["area"]
+            ),
+        ),
+    ]
+
+
+@register_checker("math.exam_word_problem_quarter_area.double_solve")
+def double_solve_exam_word_problem_quarter_area(mr: MR) -> Solution:
+    """求める面積は本文に無いので、1辺から s²/4 を組み直してから解く。"""
+    n = mr.params["numbers"]
+    side = sympy.Integer(int(n["side"]))
+    return cast(
+        Solution,
+        REGISTRY.solver("math.solve_moving_point_area_all_times")(
+            side, n["speed"], sympy.Rational(side**2, 4)
+        ),
+    )
+
+
 __all__ = [
     "double_solve_solve_moving_point_area",
     "double_solve_word_problem_area_graph_and_times",
@@ -140,4 +211,9 @@ __all__ = [
     "double_solve_draw_area_time_graph_segment",
     "double_solve_word_problem_moving_points_area",
     "double_solve_word_problem_moving_point_all_times",
+    "double_solve_exam_interval_area_and_value",
+    "double_solve_exam_area_all_times",
+    "double_solve_exam_read_area_graph",
+    "double_solve_exam_word_problem_three_intervals",
+    "double_solve_exam_word_problem_quarter_area",
 ]

@@ -12,6 +12,9 @@ LF_EXAM_RELATIVE_FREQUENCY_V1 = "{{ given.expressions }}。"
 # exam_l7.find_value Lv3: 四分位数・範囲
 LF_EXAM_QUARTILES_FULL_SUMMARY_V1 = "{{ given.condition }}。"
 
+# exam_l1 の find_value / graph_table: 場面と問いをまとめて condition で与える
+LF_EXAM_LINEAR_FIGURE_V1 = "{{ given.condition }}。"
+
 
 def _register_all() -> None:
     REGISTRY.register_template(
@@ -21,6 +24,7 @@ def _register_all() -> None:
     REGISTRY.register_template(
         "lf_exam_quartiles_full_summary_v1", LF_EXAM_QUARTILES_FULL_SUMMARY_V1
     )
+    REGISTRY.register_template("lf_exam_linear_figure_v1", LF_EXAM_LINEAR_FIGURE_V1)
 
 
 _register_all()
@@ -30,4 +34,5 @@ __all__ = [
     "LF_EXAM_PROBABILITY_FROM_COUNTS_V1",
     "LF_EXAM_RELATIVE_FREQUENCY_V1",
     "LF_EXAM_QUARTILES_FULL_SUMMARY_V1",
+    "LF_EXAM_LINEAR_FIGURE_V1",
 ]

@@ -1,0 +1,63 @@
+family: math.exam_l7.graph_table
+form: graph_table
+source_desc: |
+  データの活用（箱ひげ図・標本調査）— グラフ
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv2 desc: 箱ひげ図・ヒストグラムを読む。
+       example: あるクラスの生徒の睡眠時間を表した箱ひげ図が与えられている。この
+                箱ひげ図から、中央値・第1四分位数・第3四分位数・最大値を読み取って
+                答えよ。
+  Lv3 desc: データから箱ひげ図をかく・複数分布を比較する。
+       example: 次のデータは10人のテストの得点である。5, 6, 6, 7, 8, 8, 9, 9, 10, 10。
+                このデータの四分位数を求め、箱ひげ図をかけ。
+  ---
+  【既存 recipe の共有】どちらも台帳 example の内容が g2_l56.graph_table
+  （Lv1=箱ひげ図から値を読む／Lv3=データから5数要約を求めてかく）と同一である。
+  単元が違う（あちらは C11 データの活用、こちらは入試融合）だけで数学も図も同じなので、
+  同じ資産を共有する——同じ図を別々に書き起こすと必ず食い違う。
+
+  【台帳 example との差】Lv2 の example は4つの値をまとめて読ませるが、既存 recipe は
+  2つ組（中央値と第三四分位数／第一四分位数と中央値／最小値と最大値）を1組読ませる。
+  どの値を読むかは params の read_target_set から引くので、通しで解けば4つとも
+  読むことになる。図から値を復元する力を測るという点で等価と判断した。
+concepts_default: [box_plot.read_values]
+levels:
+  "2":
+    signature: exam_box_plot_read_values
+    recipe: math.read_box_plot
+    params:
+      scene_set:
+        - "あるクラスの生徒|数学のテストの得点|10"
+        - "ある中学校の生徒|通学にかかる時間（分）|5"
+        - "あるクラスの生徒|一か月に読んだ本の冊数|2"
+        - "陸上部の部員|ハンドボール投げの記録（メートル）|4"
+        - "ある中学校の生徒|一日の睡眠時間（時間）|1"
+        - "あるクラスの生徒|漢字テストの得点|10"
+        - "ある工場で作った製品|一個あたりの重さ（グラム）|10"
+        - "あるクラスの生徒|一週間の家庭学習の時間（時間）|2"
+        - "ある中学校の生徒|一日に歩いた歩数（百歩）|5"
+        - "水泳部の部員|自由形の記録（秒）|4"
+        - "ある中学校の生徒|一日のテレビの視聴時間（十分）|1"
+      read_target_set: [median_q3, q1_median, min_max]
+    given: [situation_params, condition]
+    asked: [read_box_plot]
+    visual: required
+    text: {tier: T1, template: bp_read_box_plot_v1, visual_builder: math.box_plot}
+    hints: [steps_prefix]
+    concept_tags: [box_plot.read_values]
+    cause_tags: []
+  "3":
+    signature: exam_box_plot_draw_from_data
+    recipe: math.draw_box_plot_from_data
+    params:
+      axis_step_set: [2, 5, 10]
+      size_set: [8, 9, 10, 11, 12]
+    given: [data_table]
+    asked: [draw_box_plot]
+    visual: required
+    text: {tier: T1, template: bp_draw_box_plot_v1, visual_builder: math.box_plot}
+    hints: [steps_prefix]
+    concept_tags: [box_plot.draw_from_data]
+    cause_tags: []
+remedial:
+  default_level: 2
