@@ -51,3 +51,13 @@ def double_solve_reflect_polygon_coordinate(mr: MR) -> Solution:
     p = mr.params
     solver = REGISTRY.solver("math.reflect_polygon_features")
     return cast(Solution, solver(p["pts"], p["axis"]))
+
+
+@register_checker("math.find_rotation_center.double_solve")
+def double_solve_find_rotation_center(mr: MR) -> Solution:
+    """移動前後の頂点だけから、垂直二等分線の交点として中心を解き直す。"""
+    p = mr.params
+    return cast(
+        Solution,
+        REGISTRY.solver("math.rotation_center_from_corresponding_points")(p["pts"], p["new_pts"]),
+    )

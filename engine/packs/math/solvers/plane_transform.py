@@ -146,3 +146,78 @@ def reflect_polygon_features(points: object, axis: object) -> Solution:
         ),
     ]
     return Solution(answer=GraphAnswer(features=_features_from_points(new_pts)), steps=steps)
+
+
+_ROTATION_CENTER_OPS = [
+    "draw_perpendicular_bisector_first",
+    "draw_perpendicular_bisector_second",
+    "intersect_bisectors",
+]
+
+_ROTATION_CENTER_NARRATION: dict[str, str] = {
+    "draw_perpendicular_bisector_first": "回転の中心は、対応する2点から同じ距離にある。"
+                                         "だから1組の対応する点を結び、その線分の垂直二等分線を引く。"
+                                         "中心はこの直線上のどこかにある。",
+    "draw_perpendicular_bisector_second": "もう1組の対応する点についても同じように"
+                                          "垂直二等分線を引く。中心はこの直線上にもある。",
+    "intersect_bisectors": "2本の垂直二等分線の交点が、両方の条件を同時に満たす点、"
+                           "つまり回転の中心である。",
+}
+
+_ROTATION_CENTER_PHRASE: dict[str, str] = {
+    "draw_perpendicular_bisector_first": "1組目の垂直二等分線を引く",
+    "draw_perpendicular_bisector_second": "2組目の垂直二等分線を引く",
+}
+
+
+@register_solver("math.rotation_center_from_corresponding_points")
+def rotation_center_from_corresponding_points(pts: object, new_pts: object) -> Solution:
+    """対応する点の組から回転の中心を求める（g1_l39.graph_table Lv3）。
+
+    回転の中心 O は対応する2点 P・P' から等距離にあるので、線分 PP' の垂直二等分線
+    上にある。別の組 QQ' についても同じなので、**2本の垂直二等分線の交点**が O。
+    |X−P|²=|X−P'| を展開すると x² が消えて1次式になるので、2元1次の連立で解ける。
+
+    もとの図形と移動後の図形の頂点（文字列の座標の列）だけから計算する（double-solve）。
+    求めた O について、すべての対応点で |O−P|=|O−P'| が成り立つことを確かめる。
+    """
+    src = [_parse_xy(v) for v in pts]  # type: ignore[union-attr]
+    dst = [_parse_xy(v) for v in new_pts]  # type: ignore[union-attr]
+    if len(src) != len(dst) or len(src) < 2:
+        raise ValueError("対応する点が2組以上必要")
+
+    x, y = sympy.symbols("x y")
+
+    def bisector(p: tuple[sympy.Expr, sympy.Expr], q: tuple[sympy.Expr, sympy.Expr]) -> sympy.Expr:
+        if p == q:
+            raise ValueError("対応する点が重なっていて垂直二等分線が引けない")
+        return sympy.expand(
+            (x - p[0]) ** 2 + (y - p[1]) ** 2 - ((x - q[0]) ** 2 + (y - q[1]) ** 2)
+        )
+
+    eqs = [bisector(src[0], dst[0]), bisector(src[1], dst[1])]
+    sol = sympy.solve(eqs, [x, y], dict=True)
+    if len(sol) != 1:
+        raise ValueError("垂直二等分線が1点で交わらない（中心が定まらない）")
+    ox, oy = sympy.nsimplify(sol[0][x]), sympy.nsimplify(sol[0][y])
+    for p, q in zip(src, dst, strict=True):
+        d1 = (ox - p[0]) ** 2 + (oy - p[1]) ** 2
+        d2 = (ox - q[0]) ** 2 + (oy - q[1]) ** 2
+        if sympy.simplify(d1 - d2) != 0:
+            raise ValueError("求めた中心から対応する2点までの距離が等しくない")
+
+    center = sympy.Tuple(ox, oy)
+    disp = f"({sympy.sstr(ox)}, {sympy.sstr(oy)})"
+    features = [
+        Feature(kind="rotation_center", srepr=sympy.srepr(center), display=f"回転の中心 {disp}")
+    ]
+    steps = [
+        Step(
+            op=op, args=[],
+            result_srepr=sympy.srepr(center) if i == len(_ROTATION_CENTER_OPS) - 1 else "",
+            result_display=disp if i == len(_ROTATION_CENTER_OPS) - 1 else _ROTATION_CENTER_PHRASE[op],
+            narration=_ROTATION_CENTER_NARRATION[op],
+        )
+        for i, op in enumerate(_ROTATION_CENTER_OPS)
+    ]
+    return Solution(answer=GraphAnswer(features=features, solution_svg_ref=""), steps=steps)

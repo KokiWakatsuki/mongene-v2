@@ -9,6 +9,9 @@ from __future__ import annotations
 from engine.core.registry import REGISTRY
 
 LF_POLYGON_TRANSFORM_GRID_V1 = "{{ given.polygon_points }}この三角形を、{{ given.move_spec }}三角形A'B'C'をかけ。"
+# g1_l39 Lv3（回転の中心を特定する）。移動させるのではなく**中心を逆に求める**ので、
+# 「この三角形を…かけ」の枠に入らない。場面と問いを続けて出すだけのテンプレを別に持つ。
+LF_POLYGON_FIND_CENTER_COORDINATE_V1 = "{{ given.polygon_coordinates }}{{ given.move_spec }}。"
 # 「3頂点」と数字で書くと、答えの座標値と偶然一致し G-Q5t が誤検知する
 # （固定テンプレ文中の数字は given 由来でなく whitelist されないため）。「各頂点」で
 # 数字を避ける（鉄則: テンプレ文にも digit-free を徹底する）。
@@ -20,6 +23,9 @@ LF_POLYGON_TRANSFORM_COORDINATE_V1 = (
 
 def _register_all() -> None:
     REGISTRY.register_template("lf_polygon_transform_grid_v1", LF_POLYGON_TRANSFORM_GRID_V1)
+    REGISTRY.register_template(
+        "lf_polygon_find_center_coordinate_v1", LF_POLYGON_FIND_CENTER_COORDINATE_V1
+    )
     REGISTRY.register_template(
         "lf_polygon_transform_coordinate_v1", LF_POLYGON_TRANSFORM_COORDINATE_V1
     )

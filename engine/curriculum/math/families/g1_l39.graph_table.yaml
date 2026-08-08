@@ -46,5 +46,19 @@ levels:
     hints: [steps_prefix]
     concept_tags: [polygon_transform.rotate]
     cause_tags: []
+  "3":
+    signature: find_rotation_center
+    recipe: math.find_rotation_center
+    params:
+      coord_domain: {int_range: [-6, 6]}
+      center_domain: {int_range: [-4, 4]}
+      angle_domain: [90, 180, 270]
+    given: [polygon_coordinates, move_spec]
+    asked: [read_point]
+    visual: required
+    text: {tier: T1, template: lf_polygon_find_center_coordinate_v1, visual_builder: math.polygon_pair_coordinate}
+    hints: [steps_prefix]
+    concept_tags: [polygon_transform.find_rotation_center]
+    cause_tags: []
 remedial:
   default_level: 1

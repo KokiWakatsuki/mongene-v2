@@ -10840,3 +10840,70 @@ def test_g2_l53_draws_do_not_repeat_the_same_item(seed):
             continue
         first, second = f.display.split("、")
         assert first != second
+
+
+# ---------------------------------------------------------------------------
+# Phase E 端物の締め: g2_l50 Lv3（面積2等分）・g2_l38 Lv2（逆と反例）・g1_l39 Lv3（回転の中心）
+# ---------------------------------------------------------------------------
+@pytest.mark.parametrize("seed", range(20))
+def test_g2_l50_lv3_bisects_the_quadrilateral(seed):
+    """点Pは辺BC上にあり、三角形ABPの面積が四角形全体のちょうど半分になる。"""
+    _ctx, mr = _cell_mr("math.g2_l50.find_value", 3, seed)
+    p = mr.params
+    quad = [(int(p["ax"]), int(p["ay"])), (int(p["bx"]), int(p["by"])),
+            (int(p["cx"]), int(p["cy"])), (int(p["dx"]), int(p["dy"]))]
+
+    def area(pts):
+        total = sum(pts[i][0] * pts[(i + 1) % len(pts)][1]
+                    - pts[(i + 1) % len(pts)][0] * pts[i][1] for i in range(len(pts)))
+        return sympy.Rational(abs(total), 2)
+
+    px, py = sympy.sympify(mr.sub_questions[0].answer.srepr)
+    assert py == 0 and 0 < px < quad[2][0], "Pは辺BCの内側にある"
+    assert area([quad[0], quad[1], (px, py)]) == area(quad) / 2
+    checker = REGISTRY.checker("math.area_bisecting_point.double_solve")
+    assert checker(mr).answer.srepr == mr.sub_questions[0].answer.srepr
+
+
+@pytest.mark.parametrize("seed", range(25))
+def test_g2_l38_lv2_converse_and_counterexample(seed):
+    """(1)は逆（仮定と結論の入れかえ）、(2)は逆の仮定を満たし逆の結論を満たさない例。"""
+    _ctx, mr = _cell_mr("math.g2_l38.knowledge", 2, seed)
+    assert [sq.asked for sq in mr.sub_questions] == ["choice", "choice"]
+    converse, counter = (sq.answer for sq in mr.sub_questions)
+    # 否定形が「…であるない」のような壊れた日本語になっていない。
+    for text in [converse.correct, *converse.distractors]:
+        assert "であるない" not in text
+    assert converse.correct not in converse.distractors
+    assert counter.correct not in counter.distractors
+    kind, a, b = str(mr.params["kind"]), int(mr.params["a"]), int(mr.params["b"])
+    if kind == "multiple":
+        # 反例は b の倍数だが a の倍数でない数（逆「bの倍数ならaの倍数」が偽である証拠）。
+        n = int(counter.correct.split("=")[1])
+        assert n % b == 0 and n % a != 0
+        assert a % b == 0, "もとの命題（aの倍数ならbの倍数）が正しい構成になっている"
+    elif kind == "greater":
+        n = int(counter.correct.split("=")[1])
+        assert n > b and not n > a
+        assert a > b
+
+
+@pytest.mark.parametrize("seed", range(20))
+def test_g1_l39_lv3_center_is_equidistant_from_corresponding_points(seed):
+    """回転の中心は、対応するすべての点の組から等距離にある。"""
+    _ctx, mr = _cell_mr("math.g1_l39.graph_table", 3, seed)
+
+    def parse(s):
+        x, y = str(s).strip("() ").split(",")
+        return sympy.Integer(int(x)), sympy.Integer(int(y))
+
+    src = [parse(s) for s in mr.params["pts"]]
+    dst = [parse(s) for s in mr.params["new_pts"]]
+    feats = {f.kind: sympy.sympify(f.srepr) for f in mr.sub_questions[0].answer.features}
+    ox, oy = feats["rotation_center"]
+    for (px, py), (qx, qy) in zip(src, dst, strict=True):
+        assert (ox - px) ** 2 + (oy - py) ** 2 == (ox - qx) ** 2 + (oy - qy) ** 2
+    # 問題図に中心は描かない（描く要素の宣言に "point" が無い）。
+    assert [e.kind for e in mr.visual_plan.elements] == ["grid", "axis", "polygon", "polygon"]
+    checker = REGISTRY.checker("math.find_rotation_center.double_solve")
+    assert checker(mr).answer.features[0].srepr == mr.sub_questions[0].answer.features[0].srepr

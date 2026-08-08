@@ -150,6 +150,15 @@ def _translate_polygon_recipe(ctx: CellContext, rng: Rng, *, style: str) -> MR:
     )
 
 
+def _int_pts(pts_strs: list[str]) -> list[tuple[int, int]]:
+    """"(x, y)" の文字列の列を整数の組に戻す（目盛ラベルの範囲を出すのに使う）。"""
+    out: list[tuple[int, int]] = []
+    for s in pts_strs:
+        x, y = s.strip("() ").split(",")
+        out.append((int(x), int(y)))
+    return out
+
+
 def _tick_labels(pts: list[tuple[int, int]]) -> list[str]:
     """coordinate スタイルの目盛ラベル一覧（graph.py の tick_labels_from_params と同型）。"""
     from engine.packs.math.visuals.graph import tick_labels_from_params
@@ -320,3 +329,104 @@ def reflect_polygon_grid_recipe(ctx: CellContext, rng: Rng) -> MR:
 def reflect_polygon_coordinate_recipe(ctx: CellContext, rng: Rng) -> MR:
     """三角形を座標平面上で対称移動する（g1_l40.graph_table Lv2・answer-first）。"""
     return _reflect_polygon_recipe(ctx, rng, style="coordinate")
+
+
+# ---------------------------------------------------------------------------
+# g1_l39.graph_table Lv3: 回転の中心を対応点から特定する
+#
+# Lv1/Lv2 が「中心と角を与えて動かす」のに対し、Lv3 は**動いた結果から中心を逆に
+# 特定する**。作図（垂直二等分線を2本引いて交点をとる）そのものは engine が採点
+# できないので、**その交点である中心の座標**を答えにする（作図の手順は
+# solution_steps が担う——記述を値に落とす既存の手と同じ）。
+# ---------------------------------------------------------------------------
+_ROTATION_CENTER_CONCEPTS = ["polygon_transform.find_rotation_center"]
+
+
+@register_recipe("math.find_rotation_center", provides_concepts=_ROTATION_CENTER_CONCEPTS)
+def find_rotation_center_recipe(ctx: CellContext, rng: Rng) -> MR:
+    """合同な2つの三角形から回転の中心を求める（g1_l39.graph_table Lv3・answer-first）。
+
+    先に中心と回転角を決めて移動後の三角形を作り（answer-first）、問題文と図には
+    **2つの三角形だけ**を出す。中心が三角形の頂点と重ならないこと、中心と2頂点が
+    一直線に並ばないこと（垂直二等分線が平行になって交点が定まらない）を構成で保証する。
+    """
+    p = ctx.spec_level.params
+    rotate_solver = REGISTRY.solver("math.rotate_polygon_features")
+    for _ in range(200):
+        pts = _draw_triangle(p["coord_domain"], rng)
+        angle = int(draw(cast("list[int]", p["angle_domain"]), rng))
+        center_pt = (int(draw(p["center_domain"], rng)), int(draw(p["center_domain"], rng)))
+        if center_pt in pts:
+            continue
+        # 中心と最初の2頂点が一直線だと、2本の垂直二等分線が平行になって中心が定まらない。
+        (x1, y1), (x2, y2) = pts[0], pts[1]
+        cx, cy = center_pt
+        if (x1 - cx) * (y2 - cy) - (y1 - cy) * (x2 - cx) == 0:
+            continue
+        sol_rot = cast(Solution, rotate_solver(_pts_strs(pts), str(center_pt), str(angle)))
+        assert isinstance(sol_rot.answer, GraphAnswer)
+        new_pts = _new_pts_from_features(sol_rot.answer)
+        break
+    else:  # pragma: no cover - 有界リトライを使い切る確率は無視できる
+        raise ValueError("find_rotation_center_recipe: 中心が定まる構成を引けず")
+
+    sol = cast(
+        Solution,
+        REGISTRY.solver("math.rotation_center_from_corresponding_points")(
+            _pts_strs(pts), new_pts
+        ),
+    )
+    assert isinstance(sol.answer, GraphAnswer)
+
+    center_label = _draw_distinct_points(1, rng)[0]
+    render_params = {
+        "pts": _pts_strs(pts), "vertex_labels": _VERTEX_LABELS,
+        "new_pts": new_pts, "vertex_labels_prime": _VERTEX_LABELS_PRIME,
+        "reflect_axis": None,
+        "center_label": center_label, "center_pt": str(center_pt),
+    }
+    answer = GraphAnswer(
+        features=sol.answer.features,
+        solution_svg_ref=render_polygon_transform_solution_svg(render_params, style="coordinate"),
+    )
+    src_text = "、".join(f"{lb}{pt}" for lb, pt in zip(_VERTEX_LABELS, _pts_strs(pts)))
+    dst_text = "、".join(f"{lb}{pt}" for lb, pt in zip(_VERTEX_LABELS_PRIME, new_pts))
+    given = {
+        # 座標を答えさせるので、図は座標平面（軸と目盛つき）にし、頂点の座標も文で与える。
+        "polygon_coordinates": (
+            f"座標平面上に合同な三角形ABCと三角形A'B'C'があり、{src_text}、{dst_text}である。"
+            "三角形A'B'C'は三角形ABCをある点を中心として回転移動したものである。"
+        ),
+        "move_spec": (
+            f"回転の中心を点{center_label}とするとき、対応する点を結んでできる線分の"
+            f"垂直二等分線を使って点{center_label}の位置を求め、その座標を答えよ"
+        ),
+    }
+    visual_plan = VisualPlan(
+        style="coordinate",
+        labels=_VERTEX_LABELS + _VERTEX_LABELS_PRIME + _tick_labels([*pts, *_int_pts(new_pts)]),
+        elements=[
+            VisualElement(kind="grid", attrs={}),
+            VisualElement(kind="axis", attrs={}),
+            VisualElement(kind="polygon", attrs={"role": "original"}),
+            VisualElement(kind="polygon", attrs={"role": "image"}),
+        ],
+    )
+    return MR(
+        signature=ctx.spec_level.signature, family=ctx.family, level=ctx.level,
+        purpose=ctx.purpose, seed=0,
+        params={
+            "pts": _pts_strs(pts), "vertex_labels": _VERTEX_LABELS,
+            "new_pts": new_pts, "vertex_labels_prime": _VERTEX_LABELS_PRIME,
+            "center_label": center_label,
+        },
+        given=given,
+        sub_questions=[
+            SubQuestionMR(
+                label="(1)", asked="read_point", answer=answer, steps=sol.steps,
+                concept_tags=_effective_concept_tags(ctx), cause_tags=_effective_cause_tags(ctx),
+            )
+        ],
+        visual_plan=visual_plan,
+        provenance=Provenance(recipe="math.find_rotation_center"),
+    )

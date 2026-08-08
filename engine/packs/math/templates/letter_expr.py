@@ -59,12 +59,18 @@ LF_INTERPRET_EXPR_V1 = "{{ given.statement }} は何を表していますか。�
 LF_CLASSIFY_RATIONAL_V1 = "次の数は、有理数・無理数のどちらですか。\n{{ given.statement }}"
 
 
+# 命題そのものが問いを含む knowledge セル（g2_l38 Lv2）。lf_term_recall_v1 は
+# 「…を何といいますか。」を付け足すので、問いを自前で持つ文には使えない。
+LF_STATEMENT_ONLY_V1 = "{{ given.statement }}。"
+
+
 def _register_all() -> None:
     REGISTRY.register_template("lf_substitute_value_v1", LF_SUBSTITUTE_VALUE_V1)
     REGISTRY.register_template("lf_substitute_pair_value_v1", LF_SUBSTITUTE_PAIR_VALUE_V1)
     REGISTRY.register_template("lf_notation_product_v1", LF_NOTATION_PRODUCT_V1)
     REGISTRY.register_template("lf_notation_quotient_v1", LF_NOTATION_QUOTIENT_V1)
     REGISTRY.register_template("lf_term_recall_v1", LF_TERM_RECALL_V1)
+    REGISTRY.register_template("lf_statement_only_v1", LF_STATEMENT_ONLY_V1)
     REGISTRY.register_template("lf_verify_solution_v1", LF_VERIFY_SOLUTION_V1)
     REGISTRY.register_template("lf_compare_numbers_v1", LF_COMPARE_NUMBERS_V1)
     REGISTRY.register_template("lf_inequality_symbol_v1", LF_INEQUALITY_SYMBOL_V1)

@@ -1056,6 +1056,9 @@ concepts:
   - id: polygon_transform.rotate
     label: "多角形を回転移動した後の頂点座標を求める/かく"
     unit: g1_l39
+  - id: polygon_transform.find_rotation_center
+    label: "対応する点を結んだ線分の垂直二等分線から、回転の中心を特定する"
+    unit: g1_l39
   - id: polygon_transform.reflect
     label: "多角形を対称移動した後の頂点座標を求める/かく"
     unit: g1_l40
@@ -1119,6 +1122,9 @@ concepts:
   - id: proof_logic_terms.term_recall
     label: "仮定・結論・反例の用語を想起する"
     unit: g2_l38
+  - id: proof_logic_terms.converse_and_counterexample
+    label: "命題の逆を判別し、その逆が正しくないことを示す反例を選ぶ"
+    unit: g2_l38
   - id: isosceles.base_angle_from_apex
     label: "二等辺三角形の頂角から底角を求める"
     unit: g2_l41
@@ -1169,6 +1175,9 @@ concepts:
     unit: g2_l49
   - id: equal_area.transform_value
     label: "等積変形でつくった三角形の面積を求める"
+    unit: g2_l50
+  - id: equal_area.bisecting_line_point
+    label: "四角形の面積を2等分する直線が辺と交わる点を、面積の関係から逆算する"
     unit: g2_l50
   - id: equal_area_triangles.rule_recall
     label: "共通の底辺・等しい高さの三角形は面積が等しいことを想起する"

@@ -194,7 +194,62 @@ def render_polygon_transform_solution_svg(params: dict[str, Any], *, style: str)
     return "".join(parts)
 
 
+def render_polygon_pair_grid_only(mr: "MR", ctx: "CellContext") -> str:
+    """問題図（g1_l39 Lv3）。方眼＋**移動前と移動後の両方**の多角形。
+
+    このセルは2つの図形が与えられていて、答えは回転の中心なので、
+    **中心の点は描かない**（`_extra_point_parts` を呼ばない）。描画範囲は
+    両方の頂点が収まるように取る。
+    """
+    bounds_params = {**mr.params, "pts": [*mr.params["pts"], *mr.params["new_pts"]]}
+    sc = _plain_grid_scaffold(bounds_params)
+    parts = list(sc.parts)
+    parts.extend(
+        _polygon_parts(sc, _labeled_points_from_params(mr.params, pts_key="pts", labels_key="vertex_labels"))
+    )
+    parts.extend(
+        _polygon_parts(
+            sc,
+            _labeled_points_from_params(
+                mr.params, pts_key="new_pts", labels_key="vertex_labels_prime"
+            ),
+            dashed=True,
+        )
+    )
+    parts.append("</svg>")
+    return "".join(parts)
+
+
 register_visual("math.polygon_grid_only")(render_polygon_grid_only)
+def render_polygon_pair_coordinate(mr: "MR", ctx: "CellContext") -> str:
+    """問題図（g1_l39 Lv3）。座標平面（軸＋目盛）＋移動前と移動後の両方の多角形。
+
+    **座標を答えさせるセルなので、軸と目盛が要る**（方眼だけだと座標が定義されず、
+    図から答えを読み取れない——最初に方眼で作って気づいた）。
+    回転の中心は答えなので描かない。
+    """
+    bounds_params = {**mr.params, "pts": [*mr.params["pts"], *mr.params["new_pts"]]}
+    sc = _grid_scaffold(bounds_params)
+    parts = list(sc.parts)
+    parts.extend(
+        _polygon_parts(sc, _labeled_points_from_params(mr.params, pts_key="pts", labels_key="vertex_labels"))
+    )
+    parts.extend(
+        _polygon_parts(
+            sc,
+            _labeled_points_from_params(
+                mr.params, pts_key="new_pts", labels_key="vertex_labels_prime"
+            ),
+            dashed=True,
+        )
+    )
+    parts.extend(_grid_ticks(sc))
+    parts.append("</svg>")
+    return "".join(parts)
+
+
+register_visual("math.polygon_pair_grid_only")(render_polygon_pair_grid_only)
+register_visual("math.polygon_pair_coordinate")(render_polygon_pair_coordinate)
 register_visual("math.polygon_coordinate")(render_polygon_coordinate)
 
 

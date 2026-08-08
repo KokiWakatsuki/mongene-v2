@@ -283,3 +283,82 @@ def sector_solve_central_angle(radius: object, area_pi_coeff: object) -> Solutio
     ]
     answer = SymbolicAnswer(srepr=srepr, display=disp)
     return Solution(answer=answer, steps=steps)
+
+
+_AREA_BISECT_OPS = [
+    "compute_quadrilateral_area",
+    "set_half_area_condition",
+    "solve_for_point_on_side",
+]
+
+_AREA_BISECT_NARRATION: dict[str, str] = {
+    "compute_quadrilateral_area": "まわりの座標から四角形全体の面積を求める。",
+    "set_half_area_condition": "頂点を通る直線が面積を2等分するのだから、"
+                               "分けられた一方の三角形の面積が全体の半分になる、という式を立てる。",
+    "solve_for_point_on_side": "その三角形は辺の上の点までの長さを底辺とみられるので、"
+                               "面積の式を長さについて解いて、点の位置を求める。",
+}
+
+_AREA_BISECT_PHRASE: dict[str, str] = {
+    "compute_quadrilateral_area": "四角形全体の面積を求める",
+    "set_half_area_condition": "半分になる条件を式にする",
+}
+
+
+def _polygon_area(pts: list[tuple[sympy.Expr, sympy.Expr]]) -> sympy.Expr:
+    """多角形の面積（shoelace 公式・符号なし・厳密値）。"""
+    total = sympy.Integer(0)
+    for i, (x1, y1) in enumerate(pts):
+        x2, y2 = pts[(i + 1) % len(pts)]
+        total += x1 * y2 - x2 * y1
+    return sympy.Rational(1, 2) * abs(sympy.nsimplify(total))
+
+
+@register_solver("math.area_bisecting_point_on_side")
+def area_bisecting_point_on_side(
+    ax: object, ay: object, bx: object, by: object,
+    cx: object, cy: object, dx: object, dy: object,
+) -> Solution:
+    """四角形ABCDの頂点Aを通り面積を2等分する直線が、辺BC と交わる点 P を求める
+
+    （g2_l50.find_value Lv3）。8つの座標だけから計算する（double-solve）。
+
+    P は辺BC 上の点なので P = B + t(C−B) とおける。三角形ABP の面積は
+    三角形ABC の面積の t 倍だから、t = (全体の面積の半分) ÷ (三角形ABC の面積)。
+    答えは Tuple(P の x 座標, P の y 座標)。**求めた P で三角形ABP の面積を組み直し、
+    全体の半分に戻ることを確かめる**（別経路の検算）。
+    """
+    a = (sympy.Integer(int(str(ax))), sympy.Integer(int(str(ay))))
+    b = (sympy.Integer(int(str(bx))), sympy.Integer(int(str(by))))
+    c = (sympy.Integer(int(str(cx))), sympy.Integer(int(str(cy))))
+    d = (sympy.Integer(int(str(dx))), sympy.Integer(int(str(dy))))
+
+    whole = _polygon_area([a, b, c, d])
+    abc = _polygon_area([a, b, c])
+    if abc == 0:
+        raise ValueError("三角形ABCがつぶれている")
+    t = sympy.Rational(whole, 2 * abc)
+    if not (0 < t < 1):
+        raise ValueError(f"点Pが辺BCの内側に来ない（t={t}）")
+    p = (b[0] + t * (c[0] - b[0]), b[1] + t * (c[1] - b[1]))
+    # 恒真: 求めた P で三角形ABP を組み直すと、面積は全体のちょうど半分になる。
+    if sympy.simplify(_polygon_area([a, b, p]) - whole / 2) != 0:
+        raise ValueError("三角形ABPの面積が全体の半分に戻らない")
+
+    result = sympy.Tuple(p[0], p[1])
+    ratio_num, ratio_den = sympy.Rational(t).p, sympy.Rational(t).q - sympy.Rational(t).p
+    disp = (
+        f"P({sympy.sstr(p[0])}, {sympy.sstr(p[1])})"
+        f"（BP:PC = {ratio_num}:{ratio_den}）"
+    )
+    srepr = sympy.srepr(result)
+    steps = [
+        Step(
+            op=op, args=[],
+            result_srepr=srepr if i == len(_AREA_BISECT_OPS) - 1 else "",
+            result_display=disp if i == len(_AREA_BISECT_OPS) - 1 else _AREA_BISECT_PHRASE[op],
+            narration=_AREA_BISECT_NARRATION[op],
+        )
+        for i, op in enumerate(_AREA_BISECT_OPS)
+    ]
+    return Solution(answer=SymbolicAnswer(srepr=srepr, display=disp), steps=steps)

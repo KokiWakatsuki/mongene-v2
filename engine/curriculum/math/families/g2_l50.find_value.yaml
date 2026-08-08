@@ -7,11 +7,23 @@ source_desc: |
        example: 四角形ABCDで、頂点Dを通り対角線ACに平行な直線と、辺BCの延長との
                 交点をEとする。四角形ABCDと面積の等しい三角形ABEをつくったとき、
                 四角形ABCDの面積が20cm²ならば△ABEの面積を求めよ。
-  Lv3（面積を2等分する直線を引くなど逆算・作図的に求める）は作図的な逆算課題で
-  一般化が難しいため本セルでは扱わない（次段対応）。
+  Lv3 desc: 面積を2等分する直線を引くなど逆算・作図的に求める。
+       example: 四角形ABCDの頂点Aを通り、四角形の面積を2等分する直線を1本引くことを
+                考える。その直線が辺BCと交わる点をPとするとき、点Pの位置を面積の
+                関係から求めよ。
   【設計モデル】新設 solver math.equal_area_transform_value（等積変形は面積を
   変えない、という恒真の性質から、もとの図形の面積をそのまま変形後の三角形の面積
   として求める）。
+
+  【Lv3 設計モデル】新設 solver math.area_bisecting_point_on_side。
+  「作図的な逆算」を採点可能にするため、四角形を**座標で与える**。P は辺BC 上の点
+  なので P = B + t(C−B) とおけ、三角形ABP の面積は三角形ABC の t 倍だから
+  t =（全体の面積の半分）÷（三角形ABC の面積）で決まる。求めた P で三角形ABP を
+  組み直すと全体のちょうど半分に戻ることを、構成時に別経路で確かめている。
+
+  【level_sep】Lv2 = 等積変形は面積を変えない、を1手で使う（asked=value）。
+  Lv3 = 面積を求める → 半分になる条件を式にする → 点の位置について解く の3手で、
+  asked も coordinate に変わる。op 列・asked・小問の中身がすべて相異する。
 concepts_default: [equal_area.transform_value]
 levels:
   "2":
@@ -25,6 +37,25 @@ levels:
     text: {tier: T1, template: lf_quadrilateral_condition_v1}
     hints: [steps_prefix]
     concept_tags: [equal_area.transform_value]
+    cause_tags: []
+  "3":
+    signature: area_bisecting_point
+    recipe: math.area_bisecting_point
+    params:
+      # B=(0,0)・C=(c,0) に固定し、A・D の座標を動かす。recipe が
+      # 「凸四角形」「Pのx座標が整数」「0<Px<c」を満たす組だけを列挙して等確率で引く
+      # （既定の上限で 3940 通り＝閾 0.20 に必要な約250通りを大きく超える）。
+      c_max: 12
+      ax_max: 8
+      ay_max: 9
+      dx_max: 14
+      dy_max: 9
+    given: [condition]
+    asked: [coordinate]
+    visual: none
+    text: {tier: T1, template: lf_quadrilateral_condition_v1}
+    hints: [steps_prefix]
+    concept_tags: [equal_area.bisecting_line_point]
     cause_tags: []
 remedial:
   default_level: 2

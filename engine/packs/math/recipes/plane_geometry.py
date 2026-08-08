@@ -7,6 +7,7 @@ domain を追加して対応するため、ここには含まれない。
 """
 from __future__ import annotations
 
+from functools import lru_cache
 from typing import cast
 
 import sympy
@@ -297,4 +298,86 @@ def sector_solve_central_angle_recipe(ctx: CellContext, rng: Rng) -> MR:
         params={"radius": r, "angle": angle, "area_coeff": str(k)},
         given={"condition": statement}, sub_questions=[sub_question], visual_plan=None,
         provenance=Provenance(recipe="math.sector_solve_central_angle"),
+    )
+
+
+# ---------------------------------------------------------------------------
+# g2_l50.find_value Lv3: 四角形の面積を2等分する直線と辺BCの交点
+#
+# 「作図的な逆算」を採点可能にするために、四角形を**座標で与える**。座標があれば
+# 面積も点の位置も一意に決まり、「面積の関係から点の位置を求める」という台帳の
+# 要求（desc: 面積を2等分する直線を引くなど逆算・作図的に求める）をそのまま満たせる。
+# ---------------------------------------------------------------------------
+_AREA_BISECT_CONCEPTS = ["equal_area.bisecting_line_point"]
+
+
+def _convex_in_order(pts: list[tuple[int, int]]) -> bool:
+    """4点がその順に凸四角形をなすか（外積の符号がすべて同じ）。"""
+    def cross(o: tuple[int, int], a: tuple[int, int], b: tuple[int, int]) -> int:
+        return (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0])
+
+    signs = [cross(pts[i], pts[(i + 1) % 4], pts[(i + 2) % 4]) for i in range(4)]
+    return all(s > 0 for s in signs) or all(s < 0 for s in signs)
+
+
+@lru_cache(maxsize=8)
+def _area_bisect_candidates(
+    c_hi: int, ax_hi: int, ay_hi: int, dx_hi: int, dy_hi: int
+) -> tuple[tuple[int, int, int, int, int], ...]:
+    """(c, ax, ay, dx, dy) の候補。B=(0,0)・C=(c,0) に固定して数え上げる。
+
+    P の x 座標は（全体の面積）÷（Aの y 座標）になるので、それが**整数**で
+    かつ 0 < Px < c（辺BC の内側）になる組だけを残す。凸四角形であることも要る
+    （へこんでいると「頂点Aを通る直線が辺BCと交わる」が成り立たない場合がある）。
+    """
+    out: list[tuple[int, int, int, int, int]] = []
+    for c in range(4, c_hi + 1):
+        for ax in range(0, ax_hi + 1):
+            for ay in range(2, ay_hi + 1):
+                for dx in range(ax + 1, dx_hi + 1):
+                    for dy in range(2, dy_hi + 1):
+                        quad = [(ax, ay), (0, 0), (c, 0), (dx, dy)]
+                        if not _convex_in_order(quad):
+                            continue
+                        twice = abs(ax * (0 - dy) + c * dy + dx * ay)
+                        if twice % (2 * ay):
+                            continue
+                        px = twice // (2 * ay)
+                        if 0 < px < c:
+                            out.append((c, ax, ay, dx, dy))
+    return tuple(out)
+
+
+@register_recipe("math.area_bisecting_point", provides_concepts=_AREA_BISECT_CONCEPTS)
+def area_bisecting_point_recipe(ctx: CellContext, rng: Rng) -> MR:
+    """面積を2等分する直線と辺BCの交点を求める（g2_l50.find_value Lv3・answer-first）。"""
+    p = ctx.spec_level.params
+    cands = _area_bisect_candidates(
+        int(p["c_max"]), int(p["ax_max"]), int(p["ay_max"]), int(p["dx_max"]), int(p["dy_max"])
+    )
+    c, ax, ay, dx, dy = cands[int(draw({"int_range": [0, len(cands) - 1]}, rng))]
+
+    sol = cast(
+        Solution,
+        REGISTRY.solver("math.area_bisecting_point_on_side")(ax, ay, 0, 0, c, 0, dx, dy),
+    )
+    statement = (
+        f"座標平面上に四角形ABCDがあり、A({ax}, {ay})、B(0, 0)、C({c}, 0)、D({dx}, {dy})である。"
+        "頂点Aを通り、この四角形の面積を2等分する直線を1本引く。"
+        "その直線が辺BCと交わる点をPとするとき、点Pの座標を面積の関係から求めよ"
+    )
+    return MR(
+        signature=ctx.spec_level.signature, family=ctx.family, level=ctx.level,
+        purpose=ctx.purpose, seed=0,
+        params={"ax": ax, "ay": ay, "bx": 0, "by": 0, "cx": c, "cy": 0, "dx": dx, "dy": dy},
+        given={"condition": statement},
+        sub_questions=[
+            SubQuestionMR(
+                label="(1)", asked="coordinate", answer=sol.answer, steps=sol.steps,
+                concept_tags=list(ctx.spec_level.concept_tags or ctx.spec_family.concepts_default),
+                cause_tags=list(ctx.spec_level.cause_tags),
+            )
+        ],
+        visual_plan=None,
+        provenance=Provenance(recipe="math.area_bisecting_point"),
     )

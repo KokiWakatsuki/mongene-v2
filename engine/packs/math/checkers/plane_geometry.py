@@ -46,3 +46,15 @@ def double_solve_sector_solve_central_angle(mr: MR) -> Solution:
     p = mr.params
     solver = REGISTRY.solver("math.sector_solve_central_angle")
     return cast(Solution, solver(p["radius"], p["area_coeff"]))
+
+
+@register_checker("math.area_bisecting_point.double_solve")
+def double_solve_area_bisecting_point(mr: MR) -> Solution:
+    """params の8つの座標だけから、面積を2等分する点を解き直す。"""
+    p = mr.params
+    return cast(
+        Solution,
+        REGISTRY.solver("math.area_bisecting_point_on_side")(
+            p["ax"], p["ay"], p["bx"], p["by"], p["cx"], p["cy"], p["dx"], p["dy"]
+        ),
+    )
