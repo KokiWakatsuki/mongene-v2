@@ -1,0 +1,70 @@
+family: math.exam_l4.word_problem
+form: word_problem
+source_desc: |
+  三平方の定理と空間図形（対角線・高さ・最短距離）— 文章題
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv3 desc: 誘導あり:設定→対角線/高さ/体積/最短の小問が連なる融合。
+       example: 1辺が6cmの立方体ABCD-EFGHがある。(1)対角線AGの長さを求めよ。
+                (2)三角形AFHの面積を求めよ。(3)頂点Bから辺上を通って頂点Hまで
+                進むときの最短の道のりを、展開図を利用して求めよ。
+  Lv4 desc: 誘導なし:断面の抜き出し・立体分割の方針を自分で構成。
+       example: 1辺が4cmの正四面体ABCDがある。点Aから底面BCDに下ろした垂線の足を
+                Hとするとき、この正四面体の高さAHと体積を求めよ。必要な断面を
+                自分で取り出して考えてよい。
+  ---
+  【所在】recipe は `recipes/word_problem_pythagorean.py`（三平方資産と同じモジュール）。
+  checker も既存の `math.word_problem_pythagorean.double_solve` がそのまま賄う。
+
+  【Lv3 の段の作り】3小問が**それぞれ別の落とし方**を要求するのが誘導ありの眼目。
+  (1) 断面の直角三角形（対角線＝1辺の√3倍）
+  (2) 面の対角線がつくる正三角形（1辺が√2倍なので面積は (√3/2)×1辺²）
+  (3) 2面を開いた展開図（最短＝1辺の√5倍）
+  同じ立方体を3通りの平面に落とし直させる。数値は1辺ひとつだけで、答えは3つとも
+  無理数の係数が違う——「どの平面に落とすか」で答えが変わることが見える。
+
+  【Lv4 の中身】正四面体の高さと体積。垂線の足が底面の正三角形の重心であること、
+  重心が中線を頂点から2:1に分けることを自分で持ち出し、**自分で取り出した断面**の
+  直角三角形に三平方をあてる。答えは Tuple(高さ, 体積) で、誘導なしなので小問に
+  割らない（台帳 example が「高さAHと体積を求めよ」と一度に問うのに合わせる）。
+  恒真の検算として、高さ＝1辺の√6/3 倍・体積＝1辺³の√2/12 倍を構成時に確かめる。
+
+  【level_sep】
+    Lv3 = 誘導あり3小問。op 列は compute_face_diagonal → …（小問ごとに別の op 列）。
+    Lv4 = 誘導なし1小問。op 列は locate_foot_of_perpendicular →
+          take_section_right_triangle → apply_pythagorean_theorem → compute_pyramid_volume。
+    小問数（3 対 1）と op 列がともに相異する。
+
+  【dup】Lv3 = 1辺（2〜30）× 頂点名（連続8文字・19通り）≒ 550 通り。
+        Lv4 = 1辺（2〜30）× 頂点名（連続4文字・23通り）× 垂線の足の名前 ≒ 数千通り。
+concepts_default: [exam.cube_guided_diagonal_area_path]
+levels:
+  "3":
+    signature: exam_cube_guided
+    recipe: math.word_problem_pythagorean
+    params:
+      scenario_kind: exam_cube_guided
+      edge_domain: {int_range: [2, 30]}
+    given: [scenario]
+    asked: [value]
+    visual: none
+    text: {tier: T1, template: wp_guided_three_v1}
+    hints: [steps_prefix]
+    concept_tags: [exam.cube_guided_diagonal_area_path]
+    cause_tags: []
+  "4":
+    signature: exam_regular_tetrahedron
+    recipe: math.word_problem_pythagorean
+    params:
+      scenario_kind: exam_regular_tetrahedron
+      edge_domain: {int_range: [2, 30]}
+      # 垂線の足の名前（頂点名と重ならないものを引く）。
+      foot_candidates: [H, I, K, M, N, P, Q, R, S, T]
+    given: [scenario]
+    asked: [value]
+    visual: none
+    text: {tier: T1, template: wp_linear_solo_v1}
+    hints: [steps_prefix]
+    concept_tags: [exam.regular_tetrahedron_height_volume]
+    cause_tags: []
+remedial:
+  default_level: 3

@@ -92,6 +92,11 @@ _PYTHAGOREAN_WP_CONCEPTS = [
     # check_cell は通るので pytest 全走まで気づかない）。
     "pythagorean.word_problem_cube_vertex_to_plane",
     "pythagorean.word_problem_box_shortest_path_choose",
+    # exam_l4（入試融合・三平方と空間図形）— C13。既存の空間図形資産の再利用なので
+    # exam_fusion.py ではなくこのモジュールに置く（exam_l5/l6 と同じ判断）。
+    "exam.box_space_diagonal",
+    "exam.cube_guided_diagonal_area_path",
+    "exam.regular_tetrahedron_height_volume",
 ]
 
 _ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -418,12 +423,176 @@ def solve_box_shortest_path_choose(numbers: Mapping[str, Any]) -> list[Solution]
     ]
 
 
+def solve_exam_box_space_diagonal(numbers: Mapping[str, Any]) -> list[Solution]:
+    """exam_l4.find_value Lv3: 直方体の対角線を、断面の直角三角形に落として求める。
+
+    新しい数学はゼロ。底面の対角線 √(a²+b²) を出し（既存
+    `math.pythagorean_hypotenuse`）、それを直角をはさむ一方の辺、高さをもう一方と
+    する直角三角形にもう一度あてる——という**2段の適用**そのものがこのセルの中身。
+    """
+    a, b, h = (int(numbers[k]) for k in ("edge_a", "edge_b", "height"))
+    base_diagonal = _hypotenuse(a, b)
+    space_diagonal = _hypotenuse(base_diagonal, h)
+    # 恒真: 立体の対角線の二乗は3辺の二乗の和（別経路での確かめ）。
+    assert sympy.simplify(space_diagonal**2 - (a**2 + b**2 + h**2)) == 0
+    steps = [
+        _step(
+            "compute_base_diagonal",
+            "底面は長方形だから、となり合う2辺を直角をはさむ2辺とみて、"
+            "三平方の定理から底面の対角線の長さを求める。",
+            base_diagonal, "cm",
+        ),
+        _step(
+            "identify_section_right_triangle",
+            "求める対角線は、いま求めた底面の対角線と高さを直角をはさむ2辺とする"
+            "直角三角形の斜辺になる。この直角三角形が立体の断面である。",
+        ),
+        _step(
+            "apply_pythagorean_theorem",
+            "その直角三角形に三平方の定理をあてて、立体の対角線の長さを求める。",
+            space_diagonal, "cm",
+        ),
+    ]
+    return [Solution(answer=_symbolic(space_diagonal, "cm"), steps=steps)]
+
+
+def solve_exam_cube_guided(numbers: Mapping[str, Any]) -> list[Solution]:
+    """exam_l4.word_problem Lv3: 立方体で (1)対角線 (2)正三角形の面積 (3)表面の最短。
+
+    3小問が**それぞれ別の落とし方**を要求するのが誘導ありの眼目:
+      (1) 断面の直角三角形（対角線）
+      (2) 面の対角線がつくる正三角形（面積は正三角形の公式）
+      (3) 2面を開いた展開図（最短の道のり）
+    """
+    a = sympy.Integer(int(numbers["edge"]))
+    face_diagonal = _hypotenuse(a, a)
+    space_diagonal = _hypotenuse(face_diagonal, a)
+    triangle_area = sympy.simplify(sympy.sqrt(3) / 4 * face_diagonal**2)
+    shortest = _hypotenuse(2 * a, a)
+    # 恒真: 対角線は 1辺の √3 倍、最短の道のりは 1辺の √5 倍。
+    assert sympy.simplify(space_diagonal - a * sympy.sqrt(3)) == 0
+    assert sympy.simplify(shortest - a * sympy.sqrt(5)) == 0
+
+    diagonal_solution = Solution(
+        answer=_symbolic(space_diagonal, "cm"),
+        steps=[
+            _step(
+                "compute_face_diagonal",
+                "面の対角線を、となり合う2辺を直角をはさむ2辺とする直角三角形から求める。",
+                face_diagonal, "cm",
+            ),
+            _step(
+                "apply_pythagorean_theorem",
+                "その面の対角線と、それに垂直な辺を直角をはさむ2辺とする断面の"
+                "直角三角形に三平方の定理をあてて、立体の対角線を求める。",
+                space_diagonal, "cm",
+            ),
+        ],
+    )
+    area_solution = Solution(
+        answer=_symbolic(triangle_area, "cm²"),
+        steps=[
+            _step(
+                "identify_equilateral_triangle",
+                "3つの頂点を結ぶ三角形の辺は、どれも立方体の面の対角線だから、"
+                "この三角形は正三角形である。",
+                face_diagonal, "cm",
+            ),
+            _step(
+                "compute_equilateral_area",
+                "正三角形の高さを三平方の定理で求める見方から、"
+                "1辺の長さだけで面積が求められることを使って面積を求める。",
+                triangle_area, "cm²",
+            ),
+        ],
+    )
+    path_solution = Solution(
+        answer=_symbolic(shortest, "cm"),
+        steps=[
+            _step(
+                "unfold_two_side_faces",
+                "表面上を進む最短の道のりを考えるために、通る二つの面を"
+                "一つの平面に開いた展開図をかく。",
+            ),
+            _step(
+                "identify_right_triangle",
+                "開いた図は、横が1辺の2つ分、縦が1辺の長方形になる。"
+                "道のりが最も短くなるのは出発点と到着点を結ぶ線分のときである。",
+                2 * a, "cm",
+            ),
+            _step(
+                "apply_pythagorean_theorem",
+                "その線分を斜辺とする直角三角形に三平方の定理をあてて、"
+                "最短の道のりを求める。",
+                shortest, "cm",
+            ),
+        ],
+    )
+    return [diagonal_solution, area_solution, path_solution]
+
+
+def solve_exam_regular_tetrahedron(numbers: Mapping[str, Any]) -> list[Solution]:
+    """exam_l4.word_problem Lv4: 正四面体の高さと体積（誘導なし・断面を自分で取り出す）。
+
+    垂線の足は底面の正三角形の重心で、頂点から重心までの距離は中線の三分の二。
+    その長さと辺を直角をはさむ辺・斜辺とする**自分で取り出した断面**の直角三角形から
+    高さが出る。体積は底面積（正三角形）と高さから。答えは
+    Tuple(高さ, 体積)＝一度に二つの量を問う（誘導なしなので小問に割らない）。
+    """
+    a = sympy.Integer(int(numbers["edge"]))
+    median = sympy.simplify(sympy.sqrt(3) / 2 * a)          # 底面の中線
+    centroid_distance = sympy.simplify(sympy.Rational(2, 3) * median)
+    height = sympy.simplify(sympy.sqrt(a**2 - centroid_distance**2))
+    base_area = sympy.simplify(sympy.sqrt(3) / 4 * a**2)
+    volume = sympy.simplify(sympy.Rational(1, 3) * base_area * height)
+    # 恒真: 正四面体の高さは 1辺の √6/3 倍、体積は 1辺の三乗の √2/12 倍。
+    assert sympy.simplify(height - sympy.sqrt(6) / 3 * a) == 0
+    assert sympy.simplify(volume - sympy.sqrt(2) / 12 * a**3) == 0
+
+    result = sympy.Tuple(height, volume)
+    display = f"高さ {_fmt(height, 'cm')}、体積 {_fmt(volume, 'cm³')}"
+    steps = [
+        _step(
+            "locate_foot_of_perpendicular",
+            "底面は正三角形だから、頂点から下ろした垂線の足は底面の重心にあたる。"
+            "重心は中線を頂点から三分の二のところで分ける。",
+            centroid_distance, "cm",
+        ),
+        _step(
+            "take_section_right_triangle",
+            "頂点・垂線の足・底面の1つの頂点を通る平面で切り取ると、"
+            "辺を斜辺、いま求めた長さを直角をはさむ一方の辺とする直角三角形が現れる。",
+        ),
+        _step(
+            "apply_pythagorean_theorem",
+            "その直角三角形に三平方の定理をあてて、高さを求める。",
+            height, "cm",
+        ),
+        Step(
+            op="compute_pyramid_volume", args=[], result_srepr=sympy.srepr(result),
+            result_display=display,
+            narration="底面の正三角形の面積と、いま求めた高さから、"
+            "角錐の体積は底面積と高さの積の三分の一であることを使って体積を求める。",
+        ),
+    ]
+    return [
+        Solution(
+            answer=SymbolicAnswer(srepr=sympy.srepr(result), display=display), steps=steps
+        )
+    ]
+
+
 SOLVE_BUILDERS: dict[str, Callable[[Mapping[str, Any]], list[Solution]]] = {
     "rhombus_diagonal_area": solve_rhombus_diagonal_area,
     "square_pyramid_height_volume": solve_square_pyramid_height_volume,
     "box_surface_shortest_path": solve_box_surface_shortest_path,
     "cube_vertex_to_plane": solve_cube_vertex_to_plane,
     "box_shortest_path_choose": solve_box_shortest_path_choose,
+    "exam_box_space_diagonal": solve_exam_box_space_diagonal,
+    # 数学は g3_l56 Lv4 と同じ（問い文の置き場所だけが違う）ので solve は共有する。
+    "exam_box_shortest_path_choose": solve_box_shortest_path_choose,
+    "exam_cube_guided": solve_exam_cube_guided,
+    "exam_regular_tetrahedron": solve_exam_regular_tetrahedron,
 }
 
 
@@ -597,12 +766,111 @@ def _domain_values(spec: Any) -> list[int]:
     return [int(v) for v in spec]
 
 
+def _exam_box_diagonal_candidates(p: Mapping[str, Any]) -> list[tuple[int, int, int]]:
+    """(縦, 横, 高さ) の候補。**対角線が整数になる**組だけを残す。
+
+    立体の対角線は √(a²+b²+h²) で、一般には無理数のまま答えてよいのだが、
+    ここは「断面に落とせば三平方が2回で済む」という筋道を見せるセルなので、
+    答えが整数に落ちる組（3,4,12→13 のような組）に絞って読みやすくする。
+    3辺は相異にする（立方体だと底面の対角線を経由する意味が薄れる）。
+    """
+    lo, hi = (int(v) for v in p["edge_range"])
+    out: list[tuple[int, int, int]] = []
+    for a in range(lo, hi + 1):
+        for b in range(a + 1, hi + 1):
+            for h in range(b + 1, hi + 1):
+                total = a * a + b * b + h * h
+                root = sympy.Integer(total)
+                if sympy.sqrt(root).is_Integer:
+                    out.append((a, b, h))
+    return out
+
+
+def _scene_exam_box_space_diagonal(p: Mapping[str, Any], rng: Rng) -> PythagoreanScene:
+    """exam_l4.find_value Lv3: 直方体の対角線（問い文は given.condition に載せる）。"""
+    a, b, h = _draw_from(_exam_box_diagonal_candidates(p), rng)
+    n = _draw_consecutive_labels(8, rng)
+    solid = f"{n[0]}{n[1]}{n[2]}{n[3]}-{n[4]}{n[5]}{n[6]}{n[7]}"
+    statement = (
+        f"縦{a}cm、横{b}cm、高さ{h}cmの直方体{solid}がある。"
+        f"対角線{n[0]}{n[6]}の長さを、断面の直角三角形に三平方の定理を用いて求めよ"
+    )
+    return PythagoreanScene(
+        numbers={"edge_a": a, "edge_b": b, "height": h},
+        scenario=statement, ask_texts=("",), slots={"solid": solid},
+    )
+
+
+def _scene_exam_box_shortest_choose(p: Mapping[str, Any], rng: Rng) -> PythagoreanScene:
+    """exam_l4.find_value Lv4: 開き方を自分で選ぶ最短距離（問い文は condition に載せる）。
+
+    数学は既存の `box_shortest_path_choose` と同じで、違いは
+    **問い文を given.condition の中に畳む**こと（find_value のテンプレートは
+    context_slots の小問文を描かないので、ask に置くと問いが本文から消える）。
+    """
+    cands = [int(v) for v in _domain_values(p["edge_domain"])]
+    edge_a = int(draw({"int_set": cands}, rng))
+    edge_b = int(draw({"int_set": [v for v in cands if v != edge_a]}, rng))
+    height = int(draw({"int_set": [v for v in cands if v not in (edge_a, edge_b)]}, rng))
+    n = _draw_consecutive_labels(8, rng)
+    base, top = n[:4], n[4:]
+    statement = (
+        f"辺{base[0]}{base[1]}の長さが{edge_a}cm、辺{base[1]}{base[2]}の長さが{edge_b}cm、"
+        f"高さが{height}cmの直方体{base}-{top}がある（{base}が底面、{top}が上面で、"
+        f"辺{base[0]}{top[0]}が高さにあたる）。この直方体の表面上を頂点{base[0]}から"
+        f"頂点{top[2]}まで進むとき、どの面をどのように開くと最短になるかを自分で判断し、"
+        "その最短の道のりを求めよ"
+    )
+    return PythagoreanScene(
+        numbers={"edge_a": edge_a, "edge_b": edge_b, "height": height},
+        scenario=statement, ask_texts=("",), slots={"labels": n},
+    )
+
+
+def _scene_exam_cube_guided(p: Mapping[str, Any], rng: Rng) -> PythagoreanScene:
+    """exam_l4.word_problem Lv3: 立方体の誘導あり3小問。"""
+    edge = int(draw(p["edge_domain"], rng))
+    n = _draw_consecutive_labels(8, rng)
+    solid = f"{n[0]}{n[1]}{n[2]}{n[3]}-{n[4]}{n[5]}{n[6]}{n[7]}"
+    scenario = f"1辺が{edge}cmの立方体{solid}がある。"
+    ask_texts = (
+        f"対角線{n[0]}{n[6]}の長さを求めよ。",
+        f"三角形{n[0]}{n[5]}{n[7]}の面積を求めよ。",
+        f"頂点{n[1]}から表面上を通って頂点{n[7]}まで進むときの最短の道のりを、"
+        "展開図を利用して求めよ。",
+    )
+    return PythagoreanScene(
+        numbers={"edge": edge}, scenario=scenario, ask_texts=ask_texts,
+        slots={"solid": solid},
+    )
+
+
+def _scene_exam_regular_tetrahedron(p: Mapping[str, Any], rng: Rng) -> PythagoreanScene:
+    """exam_l4.word_problem Lv4: 正四面体の高さと体積（誘導なし1小問）。"""
+    edge = int(draw(p["edge_domain"], rng))
+    n = _draw_consecutive_labels(4, rng)
+    foot = str(_draw_from([str(v) for v in p["foot_candidates"] if str(v) not in n], rng))
+    scenario = f"1辺が{edge}cmの正四面体{n}がある。"
+    ask_texts = (
+        f"点{n[0]}から底面{n[1]}{n[2]}{n[3]}に下ろした垂線の足を{foot}とするとき、"
+        f"この正四面体の高さ{n[0]}{foot}と体積を求めよ。必要な断面は自分で取り出してよい。",
+    )
+    return PythagoreanScene(
+        numbers={"edge": edge}, scenario=scenario, ask_texts=ask_texts,
+        slots={"vertices": n, "foot": foot},
+    )
+
+
 _SCENE_BUILDERS: dict[str, Callable[[Mapping[str, Any], Rng], PythagoreanScene]] = {
     "rhombus_diagonal_area": _scene_rhombus_diagonal_area,
     "square_pyramid_height_volume": _scene_square_pyramid_height_volume,
     "box_surface_shortest_path": _scene_box_surface_shortest_path,
     "cube_vertex_to_plane": _scene_cube_vertex_to_plane,
     "box_shortest_path_choose": _scene_box_shortest_path_choose,
+    "exam_box_space_diagonal": _scene_exam_box_space_diagonal,
+    "exam_box_shortest_path_choose": _scene_exam_box_shortest_choose,
+    "exam_cube_guided": _scene_exam_cube_guided,
+    "exam_regular_tetrahedron": _scene_exam_regular_tetrahedron,
 }
 
 
@@ -634,8 +902,9 @@ def word_problem_pythagorean(ctx: CellContext, rng: Rng) -> MR:
 
     context_slots = dict(scene.slots)
     for i, text in enumerate(scene.ask_texts):
-        context_slots[f"ask_{i + 1}"] = text
-    if len(scene.ask_texts) == 1:
+        if text:
+            context_slots[f"ask_{i + 1}"] = text
+    if len(scene.ask_texts) == 1 and scene.ask_texts[0]:
         # 誘導なしのセルは wp_linear_solo_v1（scenario + ask_value）を使う。
         context_slots["ask_value"] = scene.ask_texts[0]
 
@@ -652,7 +921,9 @@ def word_problem_pythagorean(ctx: CellContext, rng: Rng) -> MR:
             "numbers": {k: str(v) for k, v in scene.numbers.items()},
             "slots": dict(scene.slots),
         },
-        given={"scenario": scene.scenario},
+        # find_value の frame は given に "scenario" を許さない（語彙が condition 側）。
+        # 場面文の中身は同じなので、どのキーに載せるかだけを family が決める。
+        given={str(p.get("given_key", "scenario")): scene.scenario},
         context_slots=context_slots,
         sub_questions=sub_questions,
         visual_plan=None,

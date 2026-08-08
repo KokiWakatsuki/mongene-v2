@@ -485,7 +485,13 @@ def solid_net_recipe(ctx: CellContext, rng: Rng) -> MR:
 # "solid_given" で宣言する。答えの図（断面・展開図）は render_solid_solution_svg で
 # 別に描く。
 # ---------------------------------------------------------------------------
-_BOX_VIEW_CONCEPTS = ["box_view.section", "box_view.unfold"]
+_BOX_VIEW_CONCEPTS = [
+    "box_view.section",
+    "box_view.unfold",
+    # exam_l4.graph_table Lv2（入試融合）。立方体の断面に現れる直角三角形を
+    # 平面に落とし、各辺の長さまで示させる（mode="cube_section"）。
+    "exam.cube_section_right_triangle",
+]
 
 
 def _box_scene(p: dict[str, Any], rng: Rng) -> tuple[int, int, int, list[str]]:
@@ -538,7 +544,12 @@ def box_view_recipe(ctx: CellContext, rng: Rng) -> MR:
             "width_px": _to_px(a, *(int(v) for v in p["length_range"])) * 1.4,
             "height_px": params["height_px"],
             "draw_diagonal": True,
-            "vertices": [n[0], n[4], n[6], n[2]],
+            # 横に長く描く辺が底面の対角線、縦が高さになるように並べる。
+            # [n0, n4, n6, n2]（＝A,E,G,C の順）だと、横に並ぶ2点が縦の辺（高さ）に
+            # なってしまい、描かれた長方形の縦横と頂点名が食い違っていた（図を PNG に
+            # 起こして目視で発見）。長方形 AEGC と ACGE は同じ長方形なので、
+            # 問題文（長方形AEGC）はそのままでよい。
+            "vertices": [n[0], n[2], n[6], n[4]],
         }
         answer = GraphAnswer(
             features=sol.answer.features,
@@ -552,6 +563,41 @@ def box_view_recipe(ctx: CellContext, rng: Rng) -> MR:
                 f"見取図が右にある。頂点{n[0]}と、向かい合う頂点{n[6]}をふくむ断面"
                 f"（長方形{n[0]}{n[4]}{n[6]}{n[2]}）を抜き出してかき、対角線{n[0]}{n[6]}を"
                 "求めるのに使う直角三角形を平面上に示せ"
+            ),
+            asked="draw_solid", sol=Solution(answer=answer, steps=sol.steps),
+            recipe="math.box_view", element_kind="solid_given",
+        )
+
+    if mode == "cube_section":
+        # 立方体（3辺が等しい）。断面の長方形は 横 = 1辺の√2倍・縦 = 1辺 なので
+        # 正方形にはならず、「横は底面の対角線」という要点はそのまま見える。
+        edge = int(draw({"int_range": [int(p["length_range"][0]), int(p["length_range"][1])]}, rng))
+        a = b = h = edge
+        params = _box_sketch_params(a, b, h, names, p)
+        sol = cast(Solution, REGISTRY.solver("math.box_section_diagonal")(a, b, h))
+        assert isinstance(sol.answer, GraphAnswer)
+        answer_params = {
+            "view": "section",
+            "section_shape": "rectangle",
+            "width_px": _to_px(a, *(int(v) for v in p["length_range"])) * 1.4,
+            "height_px": params["height_px"],
+            "draw_diagonal": True,
+            # 横に長く描く辺が底面の対角線（1辺の√2倍）、縦が1辺になるように並べる。
+            # [n0, n4, n6, n2]（＝A,E,G,C の順）にすると、横に並ぶ2点が縦の辺
+            # （高さ）になってしまい、描かれた形と頂点名が食い違う。
+            "vertices": [n[0], n[2], n[6], n[4]],
+        }
+        answer = GraphAnswer(
+            features=sol.answer.features,
+            solution_svg_ref=render_solid_solution_svg(answer_params),
+        )
+        return _mr(
+            ctx, params=params,
+            statement=(
+                f"1辺が{edge}{unit}の立方体{n[0]}{n[1]}{n[2]}{n[3]}-{n[4]}{n[5]}{n[6]}{n[7]}の"
+                f"見取図が右にある。頂点{n[0]}と{n[6]}を結ぶ対角線{n[0]}{n[6]}をふくむ断面"
+                f"（長方形{n[0]}{n[4]}{n[6]}{n[2]}）を抜き出して平面上にかき、"
+                f"対角線{n[0]}{n[6]}を求めるのに使う直角三角形の各辺の長さを示せ"
             ),
             asked="draw_solid", sol=Solution(answer=answer, steps=sol.steps),
             recipe="math.box_view", element_kind="solid_given",

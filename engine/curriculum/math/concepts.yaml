@@ -984,6 +984,18 @@ concepts:
   - id: exam.trapezoid_diagonal_area_ratios
     label: "台形の対角線の交点まわりの三角形の面積比を、相似比と底辺の比から構成する"
     unit: exam_l6
+  - id: exam.box_space_diagonal
+    label: "直方体の対角線を、断面の直角三角形に落として三平方の定理で求める"
+    unit: exam_l4
+  - id: exam.cube_guided_diagonal_area_path
+    label: "立方体で対角線・正三角形の面積・表面の最短の道のりを順に求める"
+    unit: exam_l4
+  - id: exam.regular_tetrahedron_height_volume
+    label: "正四面体の高さと体積を、自分で取り出した断面の直角三角形から求める"
+    unit: exam_l4
+  - id: exam.cube_section_right_triangle
+    label: "立方体の見取図から対角線をふくむ断面を抜き出し、直角三角形の各辺の長さを示す"
+    unit: exam_l4
   - id: line_angle_terms.term_recall
     label: "直線・線分・半直線・角の用語を想起する"
     unit: g1_l37

@@ -10568,3 +10568,91 @@ def test_exam_l6_trapezoid_uses_ratio_twice(seed):
     assert (ratio_num, ratio_den) == (ad**2 // g, bc**2 // g)
     assert times == sympy.Rational(ad, bc)
     assert ad != bc, "AD=BC だと平行四辺形になり、相似比が 1 に潰れる"
+
+
+# ---------------------------------------------------------------------------
+# C13 exam_l4（三平方の定理と空間図形）
+# ---------------------------------------------------------------------------
+_EXAM_L4_CELLS = [
+    ("math.exam_l4.find_value", 3, "exam_box_space_diagonal", 1),
+    ("math.exam_l4.find_value", 4, "exam_box_shortest_path_choose", 1),
+    ("math.exam_l4.word_problem", 3, "exam_cube_guided", 3),
+    ("math.exam_l4.word_problem", 4, "exam_regular_tetrahedron", 1),
+]
+
+
+@pytest.mark.parametrize(("family", "level", "signature", "n_subs"), _EXAM_L4_CELLS)
+@pytest.mark.parametrize("seed", range(20))
+def test_exam_l4_double_solve_property(seed, family, level, signature, n_subs):
+    """全小問が checker の独立再計算と一致し、params の数値は本文に現れる。"""
+    _ctx, mr = _cell_mr(family, level, seed)
+    assert mr.signature == signature
+    assert len(mr.sub_questions) == n_subs
+    checker = REGISTRY.checker("math.word_problem_pythagorean.double_solve")
+    solutions = checker(mr)
+    assert len(solutions) == len(mr.sub_questions)
+    for sol, sq in zip(solutions, mr.sub_questions, strict=True):
+        assert sol.answer.srepr == sq.answer.srepr
+    given_text = "".join(mr.given.values())
+    for value in mr.params["numbers"].values():
+        assert str(value) in given_text, (family, level, value)
+
+
+@pytest.mark.parametrize("seed", range(20))
+def test_exam_l4_box_space_diagonal_is_integer(seed):
+    """find_value Lv3: 3辺は相異で、対角線は整数（読みやすさのために構成で保証）。"""
+    _ctx, mr = _cell_mr("math.exam_l4.find_value", 3, seed)
+    n = mr.params["numbers"]
+    a, b, h = (int(n[k]) for k in ("edge_a", "edge_b", "height"))
+    assert a != b and b != h and a != h
+    diagonal = sympy.sympify(mr.sub_questions[0].answer.srepr)
+    assert diagonal.is_Integer
+    assert diagonal**2 == a**2 + b**2 + h**2
+
+
+@pytest.mark.parametrize("seed", range(20))
+def test_exam_l4_cube_guided_three_planes(seed):
+    """word_problem Lv3: 3小問の答えは 1辺の √3 倍・(√3/2)倍の面積・√5 倍。
+
+    同じ立方体を3通りの平面に落とすセルなので、3つの答えが**別々の無理数**に
+    なることが要点（どれか2つが同じ形なら「落とし方が違う」ことが見えていない）。
+    """
+    _ctx, mr = _cell_mr("math.exam_l4.word_problem", 3, seed)
+    a = sympy.Integer(int(mr.params["numbers"]["edge"]))
+    diagonal, area, path = (sympy.sympify(sq.answer.srepr) for sq in mr.sub_questions)
+    assert sympy.simplify(diagonal - a * sympy.sqrt(3)) == 0
+    assert sympy.simplify(area - sympy.sqrt(3) / 2 * a**2) == 0
+    assert sympy.simplify(path - a * sympy.sqrt(5)) == 0
+
+
+@pytest.mark.parametrize("seed", range(20))
+def test_exam_l4_regular_tetrahedron_height_volume(seed):
+    """word_problem Lv4: 高さは 1辺の √6/3 倍、体積は 1辺³の √2/12 倍。"""
+    _ctx, mr = _cell_mr("math.exam_l4.word_problem", 4, seed)
+    a = sympy.Integer(int(mr.params["numbers"]["edge"]))
+    height, volume = sympy.sympify(mr.sub_questions[0].answer.srepr)
+    assert sympy.simplify(height - sympy.sqrt(6) / 3 * a) == 0
+    assert sympy.simplify(volume - sympy.sqrt(2) / 12 * a**3) == 0
+    # 体積 = 底面の正三角形の面積 × 高さ ÷ 3（別経路の確かめ）。
+    base_area = sympy.sqrt(3) / 4 * a**2
+    assert sympy.simplify(volume - base_area * height / 3) == 0
+
+
+@pytest.mark.parametrize("seed", range(20))
+def test_exam_l4_cube_section_figure_matches_labels(seed):
+    """graph_table Lv2: 断面の長方形は、横＝1辺の√2倍・縦＝1辺（正方形に潰れない）。
+
+    描画側の頂点の並びも合わせて固定する。横に並ぶ2点が縦の辺（高さ）になっていると、
+    描かれた長方形の縦横と頂点名が食い違う（g3_l55 で実際に起きていた）。
+    """
+    _ctx, mr = _cell_mr("math.exam_l4.graph_table", 2, seed)
+    a = sympy.Integer(int(mr.params["side_a"]))
+    assert mr.params["side_a"] == mr.params["side_b"] == mr.params["box_height"]
+    features = {f.kind: sympy.sympify(f.srepr) for f in mr.sub_questions[0].answer.features}
+    width, height, diagonal = (
+        features["section_width"], features["section_height"], features["body_diagonal"]
+    )
+    assert sympy.simplify(width - a * sympy.sqrt(2)) == 0
+    assert height == a
+    assert sympy.simplify(diagonal - a * sympy.sqrt(3)) == 0
+    assert width != height, "断面が正方形に潰れていない"
