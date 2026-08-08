@@ -10656,3 +10656,44 @@ def test_exam_l4_cube_section_figure_matches_labels(seed):
     assert height == a
     assert sympy.simplify(diagonal - a * sympy.sqrt(3)) == 0
     assert width != height, "断面が正方形に潰れていない"
+
+
+# ---------------------------------------------------------------------------
+# Phase E 端物: g3_l53.word_problem Lv4（補助線）・g2_l33.find_value Lv2（ブーメラン型）
+# ---------------------------------------------------------------------------
+@pytest.mark.parametrize("seed", range(20))
+def test_g3_l53_lv4_height_and_area_are_consistent(seed):
+    """垂線の足は底辺の内側にあり、高さは2つの直角三角形の両方から同じ値になる。"""
+    _ctx, mr = _cell_mr("math.g3_l53.word_problem", 4, seed)
+    n = mr.params["numbers"]
+    a, b, c = (int(n[k]) for k in ("base", "side_b", "side_c"))
+    assert b != c, "二等辺だと垂線の足が中点に来て「未知数を置く」段が消える"
+    height, area = sympy.sympify(mr.sub_questions[0].answer.srepr)
+    x = sympy.Rational(c**2 - b**2 + a**2, 2 * a)
+    assert 0 < x < a
+    assert sympy.simplify(height**2 - (c**2 - x**2)) == 0
+    assert sympy.simplify(height**2 - (b**2 - (a - x) ** 2)) == 0
+    assert height.is_Integer, "高さが整数に落ちる組だけを候補にしている"
+    assert sympy.simplify(area - sympy.Rational(1, 2) * a * height) == 0
+
+
+@pytest.mark.parametrize("seed", range(20))
+def test_g2_l33_lv2_arrowhead_is_sum_of_three_angles(seed):
+    """内部の点がつくる角は3つの角の和で、平角未満（図が成立する）。"""
+    _ctx, mr = _cell_mr("math.g2_l33.find_value", 2, seed)
+    a, b, c = (int(mr.params[k]) for k in ("angle_a", "angle_b", "angle_c"))
+    answer = sympy.sympify(mr.sub_questions[0].answer.srepr)
+    assert answer == a + b + c
+    assert 0 < answer < 180, "平角以上だと内部に点をとった図として成立しない"
+    checker = REGISTRY.checker("math.arrowhead_angle.double_solve")
+    assert checker(mr).answer.srepr == mr.sub_questions[0].answer.srepr
+
+
+def test_g2_l33_levels_have_distinct_op_columns():
+    """Lv1（2手）と Lv2（補助線を含む4手）で op 列が相異する（level_sep の骨）。"""
+    _ctx1, mr1 = _cell_mr("math.g2_l33.find_value", 1, 1)
+    _ctx2, mr2 = _cell_mr("math.g2_l33.find_value", 2, 1)
+    ops1 = [s.op for s in mr1.sub_questions[0].steps]
+    ops2 = [s.op for s in mr2.sub_questions[0].steps]
+    assert ops1 != ops2
+    assert "draw_auxiliary_line" in ops2

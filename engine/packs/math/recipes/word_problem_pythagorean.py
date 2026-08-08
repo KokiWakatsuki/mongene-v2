@@ -97,6 +97,8 @@ _PYTHAGOREAN_WP_CONCEPTS = [
     "exam.box_space_diagonal",
     "exam.cube_guided_diagonal_area_path",
     "exam.regular_tetrahedron_height_volume",
+    # g3_l53.word_problem Lv4（Phase E の端物）。
+    "pythagorean.word_problem_triangle_height_area_solo",
 ]
 
 _ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -582,12 +584,71 @@ def solve_exam_regular_tetrahedron(numbers: Mapping[str, Any]) -> list[Solution]
     ]
 
 
+def solve_triangle_height_area_solo(numbers: Mapping[str, Any]) -> list[Solution]:
+    """g3_l53.word_problem Lv4: 3辺がわかる三角形の、底辺に対する高さと面積（誘導なし）。
+
+    誘導なしの眼目は**補助線を自分で引く**こと。頂点から底辺に垂線を下ろすと、底辺が
+    2つに分かれて直角三角形が2つできる。分けた一方を x とおくと、2つの直角三角形が
+    同じ高さを共有することから
+        c² − x² = b² − (a − x)²   ⇒   x = (c² − b² + a²) / (2a)
+    が立ち、そこから高さが求まる。**未知数を自分で置く**ところまでが解法の一部なので、
+    steps もその順（補助線 → 文字を置く → 2通りに表す → 高さ → 面積）で組む。
+    """
+    a = sympy.Integer(int(numbers["base"]))          # BC（底辺）
+    b = sympy.Integer(int(numbers["side_b"]))        # CA
+    c = sympy.Integer(int(numbers["side_c"]))        # AB
+    x = sympy.Rational(c**2 - b**2 + a**2, 2 * a)    # B から垂線の足までの長さ
+    if not (0 < x < a):
+        raise ValueError("垂線の足が底辺の内側に来ない（補助線の場面が成立しない）")
+    height = sympy.sqrt(c**2 - x**2)
+    # 恒真: もう一方の直角三角形からも同じ高さが出る（2通りに表した式が一致する）。
+    assert sympy.simplify(height**2 - (b**2 - (a - x) ** 2)) == 0
+    area = sympy.Rational(1, 2) * a * height
+    result = sympy.Tuple(height, area)
+    display = f"高さ {_fmt(height, 'cm')}、面積 {_fmt(area, 'cm²')}"
+    steps = [
+        _step(
+            "draw_auxiliary_perpendicular",
+            "3辺の長さしかわかっていないので、頂点から底辺に垂線を引く補助線を自分で入れる。"
+            "底辺が2つに分かれて、高さを共有する直角三角形が2つできる。",
+        ),
+        _step(
+            "set_unknown_on_base",
+            "分かれた底辺の一方の長さを文字でおくと、もう一方は底辺の長さからその分をひいた"
+            "残りになる。",
+            x, "cm",
+        ),
+        _step(
+            "express_height_two_ways",
+            "2つの直角三角形それぞれで、高さの二乗を三平方の定理で表す。"
+            "高さは共通だから、その2つの式は等しい。この方程式を解いて、"
+            "分けた底辺の長さを求める。",
+        ),
+        _step(
+            "apply_pythagorean_theorem",
+            "求めた長さを一方の直角三角形にあてはめて、三平方の定理から高さを求める。",
+            height, "cm",
+        ),
+        Step(
+            op="compute_triangle_area", args=[], result_srepr=sympy.srepr(result),
+            result_display=display,
+            narration="底辺と、いま求めた高さから、三角形の面積を求める。",
+        ),
+    ]
+    return [
+        Solution(
+            answer=SymbolicAnswer(srepr=sympy.srepr(result), display=display), steps=steps
+        )
+    ]
+
+
 SOLVE_BUILDERS: dict[str, Callable[[Mapping[str, Any]], list[Solution]]] = {
     "rhombus_diagonal_area": solve_rhombus_diagonal_area,
     "square_pyramid_height_volume": solve_square_pyramid_height_volume,
     "box_surface_shortest_path": solve_box_surface_shortest_path,
     "cube_vertex_to_plane": solve_cube_vertex_to_plane,
     "box_shortest_path_choose": solve_box_shortest_path_choose,
+    "triangle_height_area_solo": solve_triangle_height_area_solo,
     "exam_box_space_diagonal": solve_exam_box_space_diagonal,
     # 数学は g3_l56 Lv4 と同じ（問い文の置き場所だけが違う）ので solve は共有する。
     "exam_box_shortest_path_choose": solve_box_shortest_path_choose,
@@ -801,6 +862,55 @@ def _scene_exam_box_space_diagonal(p: Mapping[str, Any], rng: Rng) -> Pythagorea
     )
 
 
+def _triangle_height_area_candidates(p: Mapping[str, Any]) -> list[tuple[int, int, int]]:
+    """(底辺BC, CA, AB) の候補。**高さが整数**に落ちる三角形だけを残す。
+
+    高さが無理数だと面積も無理数になり、「補助線を引いて高さを出す」という筋道より
+    式の処理に目が行ってしまう。二等辺（CA=AB）は垂線の足が中点に来て
+    「未知数を置いて2通りに表す」段が要らなくなるので外す。
+    """
+    lo, hi = (int(v) for v in p["side_range"])
+    out: list[tuple[int, int, int]] = []
+    for base in range(lo, hi + 1):
+        for side_b in range(lo, hi + 1):
+            for side_c in range(lo, hi + 1):
+                if side_b == side_c:
+                    continue
+                if not (base + side_b > side_c and side_b + side_c > base
+                        and side_c + base > side_b):
+                    continue
+                num = side_c**2 - side_b**2 + base**2
+                if num % (2 * base):
+                    continue
+                x = num // (2 * base)
+                if not (0 < x < base):
+                    continue
+                height_squared = side_c**2 - x**2
+                height = sympy.Integer(height_squared)
+                if not sympy.sqrt(height).is_Integer or height_squared == 0:
+                    continue
+                out.append((base, side_b, side_c))
+    return out
+
+
+def _scene_triangle_height_area_solo(p: Mapping[str, Any], rng: Rng) -> PythagoreanScene:
+    """g3_l53.word_problem Lv4: 3辺を与えて高さと面積（誘導なし1小問）。"""
+    base, side_b, side_c = _draw_from(_triangle_height_area_candidates(p), rng)
+    n = _draw_consecutive_labels(3, rng)
+    scenario = (
+        f"{n[0]}{n[1]}が{side_c}cm、{n[1]}{n[2]}が{base}cm、{n[2]}{n[0]}が{side_b}cmの"
+        f"三角形{n}がある。"
+    )
+    ask_texts = (
+        f"必要な補助線を自分で引き、辺{n[1]}{n[2]}を底辺としたときの高さと"
+        f"三角形{n}の面積を求めよ。",
+    )
+    return PythagoreanScene(
+        numbers={"base": base, "side_b": side_b, "side_c": side_c},
+        scenario=scenario, ask_texts=ask_texts, slots={"vertices": n},
+    )
+
+
 def _scene_exam_box_shortest_choose(p: Mapping[str, Any], rng: Rng) -> PythagoreanScene:
     """exam_l4.find_value Lv4: 開き方を自分で選ぶ最短距離（問い文は condition に載せる）。
 
@@ -867,6 +977,7 @@ _SCENE_BUILDERS: dict[str, Callable[[Mapping[str, Any], Rng], PythagoreanScene]]
     "box_surface_shortest_path": _scene_box_surface_shortest_path,
     "cube_vertex_to_plane": _scene_cube_vertex_to_plane,
     "box_shortest_path_choose": _scene_box_shortest_path_choose,
+    "triangle_height_area_solo": _scene_triangle_height_area_solo,
     "exam_box_space_diagonal": _scene_exam_box_space_diagonal,
     "exam_box_shortest_path_choose": _scene_exam_box_shortest_choose,
     "exam_cube_guided": _scene_exam_cube_guided,

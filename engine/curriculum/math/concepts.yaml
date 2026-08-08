@@ -1062,6 +1062,9 @@ concepts:
   - id: triangle_angle.third_angle
     label: "三角形の内角の和180°で第3の角を求める"
     unit: g2_l33
+  - id: triangle_angle.arrowhead_multi_step
+    label: "補助線を引いて2つの三角形に分け、外角の性質を2回使って角を求める"
+    unit: g2_l33
   - id: triangle_angle_properties.rule_recall
     label: "三角形の内角の和・外角の性質を想起する"
     unit: g2_l33
@@ -1453,6 +1456,9 @@ concepts:
   - id: pythagorean.word_problem_box_shortest_path_choose
     label: "直方体の表面上の最短距離を、3通りの開き方を比べて自分で選んで求める"
     unit: g3_l56
+  - id: pythagorean.word_problem_triangle_height_area_solo
+    label: "3辺のわかる三角形で、補助線を自分で引いて高さと面積を求める"
+    unit: g3_l53
   - id: data_inquiry.compare_mean_and_range
     label: "2つのデータの平均値と範囲を求め、散らばりから安定しているほうを判断する"
     unit: g1_l58

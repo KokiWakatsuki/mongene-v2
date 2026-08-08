@@ -163,6 +163,50 @@ def judge_parallel_from_angle_condition_recipe(ctx: CellContext, rng: Rng) -> MR
 _TRIANGLE_THIRD_ANGLE_CONCEPTS = ["triangle_angle.third_angle"]
 
 
+_ARROWHEAD_ANGLE_CONCEPTS = ["triangle_angle.arrowhead_multi_step"]
+
+
+@register_recipe("math.arrowhead_angle", provides_concepts=_ARROWHEAD_ANGLE_CONCEPTS)
+def arrowhead_angle_recipe(ctx: CellContext, rng: Rng) -> MR:
+    """内部の点がつくる角を外角の性質2回で求める（g2_l33.find_value Lv2・answer-first）。
+
+    3つの角の和が平角未満になるまで有界リトライする（和が平角以上だと、内部に点を
+    とった図として成立しない）。図は与えず、どの点をどう結ぶかを文で述べる
+    ——文だけで図が一意に決まる構成なので、visual を使わずに成立する。
+    """
+    p = ctx.spec_level.params
+    for _ in range(200):
+        a = int(draw(p["angle_domain"], rng))
+        b = int(draw(p["angle_domain"], rng))
+        c = int(draw(p["angle_domain"], rng))
+        if a + b + c < 180:
+            break
+    else:
+        raise ValueError("arrowhead_angle_recipe: 和が平角未満の組を構成できず")
+
+    solver = REGISTRY.solver("math.arrowhead_angle")
+    sol = cast(Solution, solver(str(a), str(b), str(c)))
+    assert isinstance(sol.answer, SymbolicAnswer)
+    assert sol.answer.srepr == sympy.srepr(sympy.Integer(a + b + c))
+
+    statement = (
+        f"三角形ABCの内部に点Dがあり、点Bと点D、点Cと点Dをそれぞれ結ぶ。"
+        f"∠BAC={a}°、∠ABD={b}°、∠ACD={c}°のとき、∠BDCの大きさを求めよ"
+    )
+
+    sub_question = SubQuestionMR(
+        label="(1)", asked="value", answer=sol.answer, steps=sol.steps,
+        concept_tags=_effective_concept_tags(ctx), cause_tags=_effective_cause_tags(ctx),
+    )
+    return MR(
+        signature=ctx.spec_level.signature, family=ctx.family, level=ctx.level,
+        purpose=ctx.purpose, seed=0,
+        params={"angle_a": a, "angle_b": b, "angle_c": c},
+        given={"condition": statement}, sub_questions=[sub_question], visual_plan=None,
+        provenance=Provenance(recipe="math.arrowhead_angle"),
+    )
+
+
 @register_recipe("math.triangle_third_angle", provides_concepts=_TRIANGLE_THIRD_ANGLE_CONCEPTS)
 def triangle_third_angle_recipe(ctx: CellContext, rng: Rng) -> MR:
     """三角形の内角の和180°から第3の角を求める（g2_l33.find_value Lv1・answer-first）。

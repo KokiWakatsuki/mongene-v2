@@ -7,10 +7,19 @@ source_desc: |
        example: 1辺の長さが 8cm のひし形 ABCD があり、対角線 AC の長さは 12cm である。
                 次の問いに答えよ。(1) 対角線 BD の長さを求めよ。
                 (2) このひし形の面積を求めよ。
-  （Lv4「誘導なし:必要な補助線・求める順序を自分で構成する大問」は 2026-08-08 現在
-   **未実装のまま**で、平面図形への三平方の残り1セルとして Phase E（端物）にある。
-   実装したらこの行を消すこと。）
+  Lv4 desc: 誘導なし:必要な補助線・求める順序を自分で構成する大問。
+       example: AB=13cm, BC=14cm, CA=15cm の三角形 ABC がある。必要な補助線を自分で
+                引き、辺 BC を底辺としたときの高さと三角形 ABC の面積を求めよ。
   ---
+  【Lv4 設計モデル】新 solver ゼロ。頂点から底辺に垂線を下ろすと直角三角形が2つでき、
+  高さを共有することから c²−x² = b²−(a−x)² が立つ。**未知数を自分で置く**ところまでが
+  解法の一部なので、steps も 補助線 → 文字を置く → 2通りに表す → 高さ → 面積 の順で組む。
+  二等辺（CA=AB）は垂線の足が中点に来て「未知数を置く」段が消えるので候補から外す。
+
+  【level_sep】Lv3 = 誘導あり2小問（ひし形の対角線と面積）。Lv4 = 誘導なし1小問で、
+  op 列は draw_auxiliary_perpendicular → set_unknown_on_base → express_height_two_ways
+  → apply_pythagorean_theorem → compute_triangle_area。小問数と op 列がともに相異する。
+
   【この form の型】g2_l51〜l54 の確率クラスタで通した骨格（given.scenario＝場面／
   小問文は context_slots／変数の設定 given.quantities を持たない＝(1)(2) とも
   asked=value）をそのまま使う。recipe は math.word_problem_pythagorean 1つで
@@ -52,6 +61,21 @@ levels:
     text: {tier: T1, template: wp_probability_guided_v1}
     hints: [steps_prefix]
     concept_tags: [pythagorean.word_problem_rhombus_diagonal_area]
+    cause_tags: []
+  "4":
+    signature: word_problem_triangle_height_area_solo
+    recipe: math.word_problem_pythagorean
+    params:
+      scenario_kind: triangle_height_area_solo
+      # 3辺の範囲。**高さが整数に落ちる**組だけを recipe が残す（3〜30 で16通り）。
+      # 高さが無理数だと、補助線を引く筋道より式の処理に目が行ってしまう。
+      side_range: [3, 30]
+    given: [scenario]
+    asked: [value]
+    visual: none
+    text: {tier: T1, template: wp_linear_solo_v1}
+    hints: [steps_prefix]
+    concept_tags: [pythagorean.word_problem_triangle_height_area_solo]
     cause_tags: []
 remedial:
   default_level: 3

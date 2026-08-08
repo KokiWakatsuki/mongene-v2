@@ -64,3 +64,12 @@ def double_solve_polygon_sides_from_interior_angle(mr: MR) -> Solution:
     p = mr.params
     solver = REGISTRY.solver("math.polygon_sides_from_interior_angle")
     return cast(Solution, solver(p["interior_angle"]))
+
+
+@register_checker("math.arrowhead_angle.double_solve")
+def double_solve_arrowhead_angle(mr: MR) -> Solution:
+    p = mr.params
+    return cast(
+        Solution,
+        REGISTRY.solver("math.arrowhead_angle")(p["angle_a"], p["angle_b"], p["angle_c"]),
+    )

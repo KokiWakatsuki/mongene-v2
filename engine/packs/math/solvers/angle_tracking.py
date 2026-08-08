@@ -246,3 +246,61 @@ def judge_parallel_from_angle_condition(is_equal: object) -> Solution:
     ]
     answer = ChoiceAnswer(correct=correct, distractors=[other], fact_id="parallel_lines.judge_from_angle")
     return Solution(answer=answer, steps=steps)
+
+
+_ARROWHEAD_OPS = [
+    "draw_auxiliary_line",
+    "apply_exterior_angle_first",
+    "apply_exterior_angle_second",
+    "sum_two_exterior_angles",
+]
+
+_ARROWHEAD_NARRATION: dict[str, str] = {
+    "draw_auxiliary_line": "頂点Aと内部の点Dを結んだ直線を、Dの向こう側までのばす補助線を引く。"
+                           "この1本で、もとの図が2つの三角形に分かれる。",
+    "apply_exterior_angle_first": "一方の三角形について、外角は隣り合わない2つの内角の和に"
+                                  "等しいことを使い、のばした線とDBがつくる角を求める。",
+    "apply_exterior_angle_second": "もう一方の三角形についても同じように、"
+                                   "のばした線とDCがつくる角を求める。",
+    "sum_two_exterior_angles": "求める角は、いま求めた2つの角を合わせたものだから、"
+                               "それらをたして求める。",
+}
+
+_ARROWHEAD_PHRASE: dict[str, str] = {
+    "draw_auxiliary_line": "補助線を引いて2つの三角形に分ける",
+    "apply_exterior_angle_first": "一方の三角形の外角を求める",
+    "apply_exterior_angle_second": "もう一方の三角形の外角を求める",
+}
+
+
+@register_solver("math.arrowhead_angle")
+def arrowhead_angle(angle_a: object, angle_b: object, angle_c: object) -> Solution:
+    """三角形の内部の点がつくる角を、外角の性質を2回使って求める（g2_l33.find_value Lv2）。
+
+    三角形ABCの内部に点Dがあり、BとD、CとDを結んだとき、
+        ∠BDC = ∠BAC + ∠ABD + ∠ACD
+    （AD をのばす補助線を引くと、2つの三角形の外角の和になる）。いわゆるブーメラン型で、
+    「補助線を引いて複数の三角形にまたがる」多段の角の追跡そのもの。
+    3つの角の値だけから計算する（double-solve）。
+    """
+    a = sympy.sympify(str(angle_a))
+    b = sympy.sympify(str(angle_b))
+    c = sympy.sympify(str(angle_c))
+    for value in (a, b, c):
+        if value <= 0:
+            raise ValueError("角の大きさは正であること")
+    total = a + b + c
+    if total >= 180:
+        raise ValueError("内部の点がつくる角が平角以上になり、図が成立しない")
+    srepr = sympy.srepr(total)
+    disp = sympy.sstr(total)
+    steps = [
+        Step(
+            op=op, args=[],
+            result_srepr=srepr if i == len(_ARROWHEAD_OPS) - 1 else "",
+            result_display=disp if i == len(_ARROWHEAD_OPS) - 1 else _ARROWHEAD_PHRASE[op],
+            narration=_ARROWHEAD_NARRATION[op],
+        )
+        for i, op in enumerate(_ARROWHEAD_OPS)
+    ]
+    return Solution(answer=SymbolicAnswer(srepr=srepr, display=disp), steps=steps)
