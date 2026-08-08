@@ -60,6 +60,7 @@ FactKind = Literal[
     "ratio_eq",    # 2つの線分の比が、別の2つの線分の比に等しい
     "on_circle",   # ある点が、ある中心の円周上にある
     "same_arc",    # 2点が、ある弦について同じ側の弧の上にある
+    "tri_area_eq",  # 2つの三角形の面積が等しい（形は違ってよい）
 ]
 
 
@@ -241,6 +242,21 @@ def on_circle(p: Point, center: Point) -> Fact:
     return Fact("on_circle", (p, center))
 
 
+def tri_area_eq(
+    t1: tuple[Point, Point, Point], t2: tuple[Point, Point, Point]
+) -> Fact:
+    """2つの三角形の**面積**が等しい（合同とは違い、形は違ってよい）。
+
+    面積の等しさには「対応」が無い（△ABC と △ACB は同じ三角形）ので、合同・相似と
+    違って頂点を並べ替えてよい。並べ替えないと、同じ主張が 6 通りの事実になって
+    推論が膨らむ。
+    """
+    a, b = tuple(sorted(t1)), tuple(sorted(t2))
+    if a == b:
+        raise ValueError("同じ三角形どうしの面積の等式にはならない")
+    return Fact("tri_area_eq", tuple(sorted((a, b))))
+
+
 def same_arc(chord: tuple[Point, Point], p: Point, q: Point) -> Fact:
     """点 p と点 q が、弦 `chord` について**同じ側の弧**の上にある。
 
@@ -310,6 +326,9 @@ def fact_text(f: Fact) -> str:
         return f"{seg_text(a)}：{seg_text(b)} ＝ {seg_text(c)}：{seg_text(d)}"
     if f.kind == "on_circle":
         return f"点{f.args[0]} は点{f.args[1]}を中心とする円の周上にある"
+    if f.kind == "tri_area_eq":
+        # 教科書は面積の等しさも「△ABC ＝ △DBC」と書く（≡ ではない）。
+        return f"{tri_text(f.args[0])} ＝ {tri_text(f.args[1])}"
     if f.kind == "same_arc":
         (a, b), (p, q) = f.args
         return f"点{p} と点{q} は弦{a}{b}について同じ側の弧の上にある"
@@ -337,6 +356,7 @@ __all__ = [
     "seg_text",
     "tri",
     "tri_cong",
+    "tri_area_eq",
     "tri_sim",
     "tri_text",
 ]

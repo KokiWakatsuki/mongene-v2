@@ -1168,6 +1168,12 @@ concepts:
   - id: circle_proof.construct
     label: "着目する円周角と三角形を自分で選び、証明を構成する"
     unit: g3_l49
+  - id: equal_area_proof.parallel_direct
+    label: "平行線を根拠に、2つの三角形の面積が等しいことを示す"
+    unit: g2_l50
+  - id: equal_area_proof.chain
+    label: "等積変形をつなぎ、図形の面積が等しいことを構成して示す"
+    unit: g2_l50
   - id: midline_proof.direct
     label: "中点連結定理を根拠に、平行や長さの関係を直接証明する"
     unit: g3_l44

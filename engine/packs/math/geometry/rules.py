@@ -10,6 +10,7 @@
   rules_right_triangle  直角三角形の合同条件・正三角形・二等辺になるための条件
   rules_similarity      相似条件・平行線と線分の比・中点連結定理
   rules_circle          円周角の定理・半円の弧に対する円周角・半径
+  rules_area            平行線と面積（等積変形）
 
 規則の**探索順は結果に影響しない**（前向き推論は飽和させるので）。ただし同じ深さの
 事実が複数の規則から出る場合、先に入ったほうの導出が残る（`deduce.saturate`）ので、
@@ -18,6 +19,7 @@
 from __future__ import annotations
 
 from engine.packs.math.geometry.rule_base import Derivation, Rule
+from engine.packs.math.geometry.rules_area import AREA_RULES
 from engine.packs.math.geometry.rules_circle import CIRCLE_RULES
 from engine.packs.math.geometry.rules_congruence import CONGRUENCE_RULES
 from engine.packs.math.geometry.rules_parallelogram import PARALLELOGRAM_RULES
@@ -30,6 +32,7 @@ RULES: tuple[Rule, ...] = (
     *RIGHT_TRIANGLE_RULES,
     *SIMILARITY_RULES,
     *CIRCLE_RULES,
+    *AREA_RULES,
 )
 
 RULES_BY_NAME = {r.name: r for r in RULES}

@@ -30,6 +30,7 @@ from engine.core.contracts import (
 from engine.core.registry import register_recipe
 from engine.core.rng import Rng, draw
 from engine.packs.math.geometry import (  # noqa: F401  登録の副作用で構成が入る
+    constructions_area,
     constructions_circle,
     constructions_congruence,
     constructions_parallelogram,
@@ -136,6 +137,8 @@ _PROOF_CONCEPTS = [
     "circle_proof.inscribed_direct",
     "circle_proof.two_step",
     "circle_proof.construct",
+    "equal_area_proof.parallel_direct",
+    "equal_area_proof.chain",
 ]
 
 

@@ -53,6 +53,8 @@ TOPIC_SETS: dict[str, frozenset[str]] = {
     # g3_l41〜l44（相似）。3年なので2年で習った定理はすべて使える。
     "similarity": _BASIC
     | {"right_triangle", "equilateral", "parallelogram", "special_quad", "similarity", "ratio"},
+    # g2_l50（平行線と面積）。等積変形は合同の性質も使う。
+    "area": _BASIC | {"parallelogram", "area"},
     # g3_l49（円周角）。相似のあとの単元なので相似の定理も使える。
     "circle": _BASIC
     | {

@@ -65,7 +65,10 @@ def _is_worth_asking(f: Fact, ded: Deduction) -> bool:
         return False
     if is_common_segment(f):
         return False
-    if f.kind in ("seg_eq", "ang_eq", "tri_cong", "tri_sim") and f.args[0] == f.args[1]:
+    if (
+        f.kind in ("seg_eq", "ang_eq", "tri_cong", "tri_sim", "tri_area_eq")
+        and f.args[0] == f.args[1]
+    ):
         return False
     return True
 

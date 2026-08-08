@@ -38,10 +38,22 @@ def triangles(points: list[Point]) -> list[tuple[Point, Point, Point]]:
     return [tri(*p) for p in itertools.permutations(points, 3)]
 
 
+def collinear_triples(facts: frozenset[Fact]) -> set[frozenset[Point]]:
+    """一直線上にあると分かっている3点の組。
+
+    **一直線上の3点は三角形にならない。** 中点をとれば「MB ＝ MC」が出るが、
+    B・M・C は一直線上なので △MBC は三角形ではなく、そこに二等辺三角形の定理を
+    当てると「∠MBC ＝ ∠MCB」というつぶれた角の等式が出てしまう（教科書には
+    決して出てこない主張で、結論に選ばれると問題が意味をなさない）。規則の側で
+    ここを弾く。
+    """
+    return {frozenset(f.args) for f in facts if f.kind == "collinear"}
+
+
 def pairs_of_triangles(points: list[Point]) -> Iterable[tuple[tuple, tuple]]:
     """異なる2つの三角形の組（対応つき）。同じ頂点集合の別の対応も含む。"""
     for t1, t2 in itertools.combinations(triangles(points), 2):
         yield t1, t2
 
 
-__all__ = ["Derivation", "Rule", "pairs_of_triangles", "triangles"]
+__all__ = ["Derivation", "Rule", "collinear_triples", "pairs_of_triangles", "triangles"]
