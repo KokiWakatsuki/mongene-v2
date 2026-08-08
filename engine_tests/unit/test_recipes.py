@@ -10107,3 +10107,88 @@ def test_g1_l51_level_sep():
         shapes.append((len(sq.answer.features), tuple(s.op for s in sq.steps)))
     assert len(set(shapes)) == 2
     assert shapes[0][0] != shapes[1][0]
+
+
+# ---------------------------------------------------------------------------
+# C10 g3_l55 / g3_l56（空間図形への三平方の利用・Phase B の残り4セル）
+# ---------------------------------------------------------------------------
+@pytest.mark.parametrize("seed", range(25))
+def test_g3_l55_box_section_property(seed):
+    """g3_l55.graph_table Lv2: 断面の横は底面の対角線・対角線は立体の対角線。"""
+    _ctx, mr = _cell_mr("math.g3_l55.graph_table", 2, seed)
+    a, b, h = (int(mr.params[k]) for k in ("side_a", "side_b", "box_height"))
+    # ★退化の封じ: 3辺が相異（立方体だと断面が正方形になり要点が消える）。
+    assert len({a, b, h}) == 3
+    sq = mr.sub_questions[0]
+    assert [s.op for s in sq.steps] == [
+        "identify_section_plane", "compute_base_diagonal", "draw_section_with_diagonal",
+    ]
+    w_f, h_f, d_f = sq.answer.features
+    assert sympy.sympify(w_f.srepr) == sympy.sqrt(a**2 + b**2)
+    assert sympy.sympify(h_f.srepr) == h
+    assert sympy.sympify(d_f.srepr) == sympy.sqrt(a**2 + b**2 + h**2)
+    # 与えられた見取図は答えではないので "solid_given" で宣言する。
+    assert {e.kind for e in mr.visual_plan.elements} == {"solid_given"}
+
+
+@pytest.mark.parametrize("seed", range(25))
+def test_g3_l56_box_unfold_property(seed):
+    """g3_l56.graph_table Lv2: 開いた長方形は横 a+b・縦 h、経路はその対角線。"""
+    _ctx, mr = _cell_mr("math.g3_l56.graph_table", 2, seed)
+    a, b, h = (int(mr.params[k]) for k in ("side_a", "side_b", "box_height"))
+    sq = mr.sub_questions[0]
+    assert [s.op for s in sq.steps] == [
+        "choose_two_faces", "unfold_to_plane", "draw_straight_path",
+    ]
+    w_f, h_f, p_f = sq.answer.features
+    assert sympy.sympify(w_f.srepr) == a + b
+    assert sympy.sympify(h_f.srepr) == h
+    assert sympy.sympify(p_f.srepr) == sympy.sqrt((a + b) ** 2 + h**2)
+
+
+@pytest.mark.parametrize("seed", range(25))
+def test_g3_l55_cube_vertex_to_plane_property(seed):
+    """g3_l55.word_problem Lv4: 垂線の長さは (√3/3)×1辺。体積が2通りで一致する。"""
+    _ctx, mr = _cell_mr("math.g3_l55.word_problem", 4, seed)
+    edge = int(sympy.sympify(mr.params["numbers"]["edge"]))
+    sq = mr.sub_questions[0]
+    assert len(mr.sub_questions) == 1  # 誘導なし
+    assert [s.op for s in sq.steps] == [
+        "express_volume_two_ways", "compute_equilateral_face_area", "solve_for_perpendicular",
+    ]
+    h = sympy.sympify(sq.answer.srepr)
+    assert sympy.simplify(h - sympy.sqrt(3) * edge / 3) == 0
+    # 恒真: 三角錐の体積が2通りの表し方で一致する。
+    volume = sympy.Integer(edge) ** 3 / 6
+    face = sympy.sqrt(3) / 2 * sympy.Integer(edge) ** 2
+    assert sympy.simplify(face * h / 3 - volume) == 0
+
+
+@pytest.mark.parametrize("seed", range(25))
+def test_g3_l56_shortest_path_choose_property(seed):
+    """g3_l56.word_problem Lv4: 最短は「小さい2辺を足す」開き方で、一意に決まる。"""
+    _ctx, mr = _cell_mr("math.g3_l56.word_problem", 4, seed)
+    n = {k: int(sympy.sympify(v)) for k, v in mr.params["numbers"].items()}
+    a, b, c = n["edge_a"], n["edge_b"], n["height"]
+    # ★退化の封じ: 3辺が相異（立方体だと3通りの開き方が同じ長さになる）。
+    assert len({a, b, c}) == 3
+    sq = mr.sub_questions[0]
+    assert len(mr.sub_questions) == 1
+    assert [s.op for s in sq.steps] == [
+        "enumerate_unfoldings", "compare_three_paths", "compute_shortest_path",
+    ]
+    cands = sorted(
+        [
+            sympy.sqrt((a + b) ** 2 + c**2),
+            sympy.sqrt((b + c) ** 2 + a**2),
+            sympy.sqrt((c + a) ** 2 + b**2),
+        ],
+        key=lambda v: float(v.evalf()),
+    )
+    got = sympy.sympify(sq.answer.srepr)
+    assert sympy.simplify(got - cands[0]) == 0
+    # 最小は一意（2番目より真に小さい）。
+    assert float(cands[0].evalf()) < float(cands[1].evalf())
+    # 小さい2辺を足す開き方が最短。
+    s1, s2, s3 = sorted([a, b, c])
+    assert sympy.simplify(got - sympy.sqrt((s1 + s2) ** 2 + s3**2)) == 0

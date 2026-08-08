@@ -49,6 +49,10 @@ _FORBIDDEN_BY_ASKED: dict[str, frozenset[str]] = {
     #     立体そのものを図に出してはならない。
     #   draw_solid … 見取図・投影図・展開図・断面をかく。問題図は元図や別のビューだけで、
     #     答えの図（visuals/solid.py の "solid" 要素）を先出ししない。
+    #   なお g3_l55/l56 のように「与えられた見取図を見て、断面や展開図をかく」セルでは
+    #   問題図そのものが立体になる。そこは "solid_given"（＝答えではない、与えられた図）
+    #   として宣言する——禁止しているのは**答えの図**であって、立体を描くこと自体ではない
+    #   （read_box_plot が読む対象の箱ひげ図を描いてよいのと同じ理屈）。
     "read_solid": frozenset({"solid"}),
     "draw_solid": frozenset({"solid"}),
 }

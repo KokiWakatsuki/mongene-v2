@@ -56,5 +56,22 @@ levels:
     hints: [steps_prefix]
     concept_tags: [pythagorean.word_problem_square_pyramid_volume]
     cause_tags: []
+  "4":
+    # 誘導なし。台帳 example「立方体の頂点Bから平面ACFに下ろした垂線の長さを、
+    # 立体の体積を2通りに表す方針を自分で立てて求めよ」をそのまま実装する。
+    # 三角錐 B-ACF の体積を「直角をはさむ3辺で見る」式と「求める垂線を高さとみる」式の
+    # 二通りに表して等しいとおく。答えは (√3/3)×1辺。
+    signature: word_problem_cube_vertex_to_plane
+    recipe: math.word_problem_pythagorean
+    params:
+      scenario_kind: cube_vertex_to_plane
+      edge_domain: {int_range: [2, 30]}
+    given: [scenario]
+    asked: [value]
+    visual: none
+    text: {tier: T1, template: wp_linear_solo_v1}
+    hints: [steps_prefix]
+    concept_tags: [pythagorean.word_problem_cube_vertex_to_plane]
+    cause_tags: []
 remedial:
   default_level: 3

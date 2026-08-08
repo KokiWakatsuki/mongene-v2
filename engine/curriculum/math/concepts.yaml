@@ -1375,6 +1375,18 @@ concepts:
   - id: solid_net.composite
     label: "円柱と円錐を貼り合わせた立体の側面を、長方形とおうぎ形に分けて展開する"
     unit: g1_l51
+  - id: pythagorean.word_problem_cube_vertex_to_plane
+    label: "立方体の頂点から向かいの3頂点がつくる平面までの距離を、体積を2通りに表して求める"
+    unit: g3_l55
+  - id: pythagorean.word_problem_box_shortest_path_choose
+    label: "直方体の表面上の最短距離を、3通りの開き方を比べて自分で選んで求める"
+    unit: g3_l56
+  - id: box_view.section
+    label: "直方体の対角線をふくむ断面を平面に抜き出し、対角線を求める直角三角形を示す"
+    unit: g3_l55
+  - id: box_view.unfold
+    label: "直方体のとなり合う2面を1つの平面に開き、表面上の経路を直線に直す"
+    unit: g3_l56
   - id: sphere_measure.direct
     label: "半径から球の表面積・体積をそれぞれ直接求める"
     unit: g1_l53

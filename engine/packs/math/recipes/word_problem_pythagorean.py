@@ -88,6 +88,10 @@ _PYTHAGOREAN_WP_CONCEPTS = [
     "pythagorean.word_problem_rhombus_diagonal_area",
     "pythagorean.word_problem_square_pyramid_volume",
     "pythagorean.word_problem_box_shortest_path",
+    # scenario_kind を足したら必ずここにも足す（無いと lint R6 が落ちる。
+    # check_cell は通るので pytest 全走まで気づかない）。
+    "pythagorean.word_problem_cube_vertex_to_plane",
+    "pythagorean.word_problem_box_shortest_path_choose",
 ]
 
 _ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -159,7 +163,9 @@ class PythagoreanScene:
 
     numbers: dict[str, Any]
     scenario: str
-    ask_texts: tuple[str, str]
+    # 小問文。誘導ありは2つ、誘導なし（Lv4）は1つ。長さは solve 側が返す
+    # Solution の数と一致していなければならない（recipe が assert する）。
+    ask_texts: tuple[str, ...]
     slots: dict[str, str]
 
 
@@ -322,10 +328,102 @@ def solve_box_surface_shortest_path(numbers: Mapping[str, Any]) -> list[Solution
     return [path_solution, area_solution]
 
 
+
+def solve_cube_vertex_to_plane(numbers: Mapping[str, Any]) -> list[Solution]:
+    """g3_l55 Lv4: 立方体の1つの頂点から、向かい合う3頂点がつくる平面までの距離。
+
+    立方体 ABCD-EFGH の頂点 B から平面 ACF に下ろした垂線の長さを、三角錐 B-ACF の
+    体積を2通りに表して求める（誘導なしで方針を自分で立てるセル）。
+      体積 = (1/3)·(1辺)²·(1辺)/2 = a³/6
+      三角形 ACF は1辺 a√2 の正三角形 → 面積 = (√3/4)(a√2)² = (√3/2)a²
+      よって (1/3)·(√3/2)a²·h = a³/6 ⇒ h = (√3/3)a
+    """
+    a = sympy.Integer(int(numbers["edge"]))
+    volume = a**3 / 6
+    face_area = sympy.sqrt(3) / 2 * a**2
+    height = sympy.simplify(3 * volume / face_area)
+    # 恒真: 求めた高さを体積の式に戻すと、もとの体積に一致する。
+    assert sympy.simplify(face_area * height / 3 - volume) == 0
+    steps = [
+        Step(
+            op="express_volume_two_ways", args=[], result_srepr=sympy.srepr(volume),
+            result_display=_fmt(volume, "cm³"),
+            narration=(
+                "三角錐の体積を、直角をはさむ三つの辺を使う見方と、"
+                "求める垂線を高さとみる見方の二通りで表すことにする。"
+            ),
+        ),
+        Step(
+            op="compute_equilateral_face_area", args=[], result_srepr=sympy.srepr(face_area),
+            result_display=_fmt(face_area, "cm²"),
+            narration="底面とみる三角形は正三角形なので、その一辺の長さから面積を求める。",
+        ),
+        Step(
+            op="solve_for_perpendicular", args=[], result_srepr=sympy.srepr(height),
+            result_display=_fmt(height, "cm"),
+            narration="二通りに表した体積が等しいとおいて、垂線の長さについて解く。",
+        ),
+    ]
+    return [
+        Solution(
+            answer=SymbolicAnswer(srepr=sympy.srepr(height), display=_fmt(height, "cm")),
+            steps=steps,
+        )
+    ]
+
+
+def solve_box_shortest_path_choose(numbers: Mapping[str, Any]) -> list[Solution]:
+    """g3_l56 Lv4: 直方体の表面上の最短距離を、開き方を自分で選んで求める。
+
+    となり合う2面の開き方は3通りあり、開いた長方形の対角線はそれぞれ
+      √((a+b)²+c²) ／ √((b+c)²+a²) ／ √((c+a)²+b²)
+    最短になるのは**小さい2辺を足す**開き方。3辺が相異なら最小は一意に決まる
+    （recipe が3辺を相異に構成する）。
+    """
+    a, b, c = (sympy.Integer(int(numbers[k])) for k in ("edge_a", "edge_b", "height"))
+    cands = [
+        sympy.sqrt((a + b) ** 2 + c**2),
+        sympy.sqrt((b + c) ** 2 + a**2),
+        sympy.sqrt((c + a) ** 2 + b**2),
+    ]
+    values = sorted(cands, key=lambda v: float(v.evalf()))
+    shortest = values[0]
+    if float(values[0].evalf()) >= float(values[1].evalf()):
+        raise ValueError("最短の開き方が一意に決まらない")
+    # 恒真: 最短は「小さい2辺を足す」開き方（3辺を並べ替えて確かめる）。
+    s1, s2, s3 = sorted([a, b, c], key=lambda v: float(v.evalf()))
+    assert sympy.simplify(shortest - sympy.sqrt((s1 + s2) ** 2 + s3**2)) == 0
+    steps = [
+        Step(
+            op="enumerate_unfoldings", args=[], result_srepr="",
+            result_display="三通りの開き方を書き出す",
+            narration="となり合う二つの面の開き方が三通りあることを確かめ、それぞれで開いた長方形の縦と横を書き出す。",
+        ),
+        Step(
+            op="compare_three_paths", args=[], result_srepr="",
+            result_display="どの開き方が最も短いかを比べる",
+            narration="開いた長方形の対角線の長さを三通りとも式にして比べ、最も短くなるのがどれかを決める。",
+        ),
+        Step(
+            op="compute_shortest_path", args=[], result_srepr=sympy.srepr(shortest),
+            result_display=_fmt(shortest, "cm"),
+            narration="選んだ開き方の長方形について、対角線の長さを三平方の定理で求める。",
+        ),
+    ]
+    return [
+        Solution(
+            answer=SymbolicAnswer(srepr=sympy.srepr(shortest), display=_fmt(shortest, "cm")),
+            steps=steps,
+        )
+    ]
+
+
 SOLVE_BUILDERS: dict[str, Callable[[Mapping[str, Any]], list[Solution]]] = {
     "rhombus_diagonal_area": solve_rhombus_diagonal_area,
     "square_pyramid_height_volume": solve_square_pyramid_height_volume,
     "box_surface_shortest_path": solve_box_surface_shortest_path,
+    "cube_vertex_to_plane": solve_cube_vertex_to_plane,
+    "box_shortest_path_choose": solve_box_shortest_path_choose,
 }
 
 
@@ -442,10 +540,69 @@ def _scene_box_surface_shortest_path(p: Mapping[str, Any], rng: Rng) -> Pythagor
     )
 
 
+
+def _scene_cube_vertex_to_plane(p: Mapping[str, Any], rng: Rng) -> PythagoreanScene:
+    edge = int(draw(p["edge_domain"], rng))
+    labels = _draw_consecutive_labels(8, rng)
+    base, top = labels[:4], labels[4:]
+    scenario = (
+        f"1辺が{edge}cmの立方体{base}-{top}がある。"
+        f"ここで{base}は底面、{top}は上面で、辺{base[0]}{top[0]}が高さにあたる。"
+    )
+    ask = (
+        f"頂点{base[1]}から平面{base[0]}{base[2]}{top[1]}に下ろした垂線の長さを、"
+        "立体の体積を二通りに表す方針を自分で立てて求めよ。"
+    )
+    return PythagoreanScene(
+        numbers={"edge": edge},
+        scenario=scenario,
+        ask_texts=(ask,),
+        slots={"labels": labels},
+    )
+
+
+def _scene_box_shortest_path_choose(p: Mapping[str, Any], rng: Rng) -> PythagoreanScene:
+    """3辺を相異に引く（最短の開き方が一意に決まるようにする）。"""
+    cands = [int(v) for v in _domain_values(p["edge_domain"])]
+    edge_a = int(draw({"int_set": cands}, rng))
+    edge_b = int(draw({"int_set": [v for v in cands if v != edge_a]}, rng))
+    height = int(draw({"int_set": [v for v in cands if v not in (edge_a, edge_b)]}, rng))
+    labels = _draw_consecutive_labels(8, rng)
+    base, top = labels[:4], labels[4:]
+    item = str(_draw_from([str(v) for v in p["item_candidates"]], rng))
+    scenario = (
+        f"辺{base[0]}{base[1]}の長さが{edge_a}cm、辺{base[1]}{base[2]}の長さが{edge_b}cm、"
+        f"高さが{height}cmの直方体{base}-{top}の形をした{item}がある。"
+        f"ここで{base}は底面、{top}は上面で、辺{base[0]}{top[0]}が高さにあたる。"
+    )
+    ask = (
+        f"この{item}の表面上を頂点{base[0]}から頂点{top[2]}まで進むとき、"
+        "どの面をどのように開くと最短になるかを自分で判断し、その最短の道のりを求めよ。"
+    )
+    return PythagoreanScene(
+        numbers={"edge_a": edge_a, "edge_b": edge_b, "height": height},
+        scenario=scenario,
+        ask_texts=(ask,),
+        slots={"labels": labels, "item": item},
+    )
+
+
+def _domain_values(spec: Any) -> list[int]:
+    """int_range / int_set のどちらでも候補の実値を返す（3辺を相異に引くため）。"""
+    if isinstance(spec, Mapping) and "int_range" in spec:
+        lo, hi = (int(v) for v in spec["int_range"])
+        return list(range(lo, hi + 1))
+    if isinstance(spec, Mapping) and "int_set" in spec:
+        return [int(v) for v in spec["int_set"]]
+    return [int(v) for v in spec]
+
+
 _SCENE_BUILDERS: dict[str, Callable[[Mapping[str, Any], Rng], PythagoreanScene]] = {
     "rhombus_diagonal_area": _scene_rhombus_diagonal_area,
     "square_pyramid_height_volume": _scene_square_pyramid_height_volume,
     "box_surface_shortest_path": _scene_box_surface_shortest_path,
+    "cube_vertex_to_plane": _scene_cube_vertex_to_plane,
+    "box_shortest_path_choose": _scene_box_shortest_path_choose,
 }
 
 
@@ -476,8 +633,11 @@ def word_problem_pythagorean(ctx: CellContext, rng: Rng) -> MR:
     ]
 
     context_slots = dict(scene.slots)
-    context_slots["ask_1"] = scene.ask_texts[0]
-    context_slots["ask_2"] = scene.ask_texts[1]
+    for i, text in enumerate(scene.ask_texts):
+        context_slots[f"ask_{i + 1}"] = text
+    if len(scene.ask_texts) == 1:
+        # 誘導なしのセルは wp_linear_solo_v1（scenario + ask_value）を使う。
+        context_slots["ask_value"] = scene.ask_texts[0]
 
     return MR(
         signature=ctx.spec_level.signature,

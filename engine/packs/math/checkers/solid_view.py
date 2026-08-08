@@ -90,7 +90,19 @@ def double_solve_solid_net(mr: MR) -> Solution:
     )
 
 
+@register_checker("math.box_view.double_solve")
+def double_solve_box_view(mr: MR) -> Solution:
+    """直方体の断面／展開図。params が持つのは3辺の長さだけ（答えは入っていない）。"""
+    p = mr.params
+    a, b, h = int(p["side_a"]), int(p["side_b"]), int(p["box_height"])
+    kinds = [f.kind for f in mr.sub_questions[0].answer.features]
+    if "body_diagonal" in kinds:
+        return cast(Solution, REGISTRY.solver("math.box_section_diagonal")(a, b, h))
+    return cast(Solution, REGISTRY.solver("math.box_unfold_shortest_path")(a, b, h))
+
+
 __all__ = [
+    "double_solve_box_view",
     "double_solve_solid_of_revolution",
     "double_solve_solid_projection",
     "double_solve_solid_net",

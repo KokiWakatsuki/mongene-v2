@@ -605,11 +605,15 @@ def render_solid_svg(params: dict[str, Any], *, draw: bool) -> str:
 
 
 def _draw_from_plan(mr: "MR") -> bool:
-    """visual_plan.elements に "solid" 要素が宣言されていれば図を描く。"""
+    """visual_plan.elements に立体の要素が宣言されていれば図を描く。
+
+    "solid" は答えの立体（frame が禁止する）、"solid_given" は与えられた見取図
+    （答えではないので問題図に出してよい）。どちらでも描画は同じ。
+    """
     plan = mr.visual_plan
     if plan is None:
         return False
-    return any(e.kind == "solid" for e in plan.elements)
+    return any(e.kind in ("solid", "solid_given") for e in plan.elements)
 
 
 def render_solid(mr: "MR", ctx: "CellContext") -> str:

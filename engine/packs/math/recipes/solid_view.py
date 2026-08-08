@@ -478,8 +478,120 @@ def solid_net_recipe(ctx: CellContext, rng: Rng) -> MR:
     raise ValueError(f"未知の mode: {mode!r}")
 
 
+# ---------------------------------------------------------------------------
+# g3_l55/g3_l56.graph_table Lv2: 直方体の断面／表面上の最短経路の展開図
+#
+# 問題図は**与えられた見取図**（答えではない）なので、visual_plan の element は
+# "solid_given" で宣言する。答えの図（断面・展開図）は render_solid_solution_svg で
+# 別に描く。
+# ---------------------------------------------------------------------------
+_BOX_VIEW_CONCEPTS = ["box_view.section", "box_view.unfold"]
+
+
+def _box_scene(p: dict[str, Any], rng: Rng) -> tuple[int, int, int, list[str]]:
+    """(底面の辺a, 底面の辺b, 高さ, 頂点名8つ)。
+
+    【組合せ数】3辺（相異）× 頂点名。既定（2〜15）で 14×13×12=2184 通り。
+
+    【退化の封じ方】3辺を相異にする（立方体になると断面が正方形に、最短経路の
+    開き方が3通りとも同じ長さになり、「どの2辺を使うか」を問えない）。
+    """
+    lo, hi = (int(v) for v in p["length_range"])
+    a = int(draw({"int_range": [lo, hi]}, rng))
+    b = int(draw({"int_set": [v for v in range(lo, hi + 1) if v != a]}, rng))
+    h = int(draw({"int_set": [v for v in range(lo, hi + 1) if v not in (a, b)]}, rng))
+    names = _draw_distinct_points(8, rng)
+    return a, b, h, names
+
+
+def _box_sketch_params(a: int, b: int, h: int, names: list[str], p: dict[str, Any]) -> dict[str, Any]:
+    lo, hi = (int(v) for v in p["length_range"])
+    return {
+        "view": "sketch",
+        "solid_kind": "rectangular_prism",
+        "width_px": _to_px(a, lo, hi),
+        "depth_px": _to_px(b, lo, hi) * 0.7,
+        "height_px": _to_px(h, lo, hi),
+        "vertices": list(names),
+        "side_a": a,
+        "side_b": b,
+        "box_height": h,
+    }
+
+
+@register_recipe("math.box_view", provides_concepts=_BOX_VIEW_CONCEPTS)
+def box_view_recipe(ctx: CellContext, rng: Rng) -> MR:
+    """直方体の断面をかく／表面上の最短経路を展開図でかく（g3_l55/l56.graph_table Lv2）。"""
+    p = cast("dict[str, Any]", ctx.spec_level.params)
+    mode = str(p["mode"])
+    unit = str(p.get("unit", "cm"))
+    a, b, h, names = _box_scene(p, rng)
+    params = _box_sketch_params(a, b, h, names, p)
+    n = names  # A B C D E F G H の位置に対応（底面 ABCD・上面 EFGH）
+
+    if mode == "section":
+        sol = cast(Solution, REGISTRY.solver("math.box_section_diagonal")(a, b, h))
+        assert isinstance(sol.answer, GraphAnswer)
+        answer_params = {
+            "view": "section",
+            "section_shape": "rectangle",
+            "width_px": _to_px(a, *(int(v) for v in p["length_range"])) * 1.4,
+            "height_px": params["height_px"],
+            "draw_diagonal": True,
+            "vertices": [n[0], n[4], n[6], n[2]],
+        }
+        answer = GraphAnswer(
+            features=sol.answer.features,
+            solution_svg_ref=render_solid_solution_svg(answer_params),
+        )
+        return _mr(
+            ctx, params=params,
+            statement=(
+                f"辺{n[0]}{n[1]}が{a}{unit}、辺{n[1]}{n[2]}が{b}{unit}、"
+                f"高さが{h}{unit}の直方体{n[0]}{n[1]}{n[2]}{n[3]}-{n[4]}{n[5]}{n[6]}{n[7]}の"
+                f"見取図が右にある。頂点{n[0]}と、向かい合う頂点{n[6]}をふくむ断面"
+                f"（長方形{n[0]}{n[4]}{n[6]}{n[2]}）を抜き出してかき、対角線{n[0]}{n[6]}を"
+                "求めるのに使う直角三角形を平面上に示せ"
+            ),
+            asked="draw_solid", sol=Solution(answer=answer, steps=sol.steps),
+            recipe="math.box_view", element_kind="solid_given",
+        )
+
+    if mode == "unfold":
+        sol = cast(Solution, REGISTRY.solver("math.box_unfold_shortest_path")(a, b, h))
+        assert isinstance(sol.answer, GraphAnswer)
+        lo, hi = (int(v) for v in p["length_range"])
+        answer_params = {
+            "view": "section",
+            "section_shape": "rectangle",
+            "width_px": _to_px(a + b, lo, 2 * hi) * 1.4,
+            "height_px": params["height_px"],
+            "draw_diagonal": True,
+            "vertices": [],
+        }
+        answer = GraphAnswer(
+            features=sol.answer.features,
+            solution_svg_ref=render_solid_solution_svg(answer_params),
+        )
+        return _mr(
+            ctx, params=params,
+            statement=(
+                f"辺{n[0]}{n[1]}が{a}{unit}、辺{n[1]}{n[2]}が{b}{unit}、"
+                f"高さが{h}{unit}の直方体{n[0]}{n[1]}{n[2]}{n[3]}-{n[4]}{n[5]}{n[6]}{n[7]}の"
+                f"見取図が右にある。頂点{n[0]}から側面{n[0]}{n[1]}{n[5]}{n[4]}と"
+                f"側面{n[1]}{n[2]}{n[6]}{n[5]}を通って頂点{n[6]}まで進む経路について、"
+                "この2つの面を1つの平面に開いた展開図をかき、経路を直線で結べ"
+            ),
+            asked="draw_solid", sol=Solution(answer=answer, steps=sol.steps),
+            recipe="math.box_view", element_kind="solid_given",
+        )
+
+    raise ValueError(f"未知の mode: {mode!r}")
+
+
 __all__ = [
     "solid_of_revolution_recipe",
     "solid_projection_recipe",
     "solid_net_recipe",
+    "box_view_recipe",
 ]

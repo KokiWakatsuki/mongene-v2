@@ -55,5 +55,21 @@ levels:
     hints: [steps_prefix]
     concept_tags: [pythagorean.word_problem_box_shortest_path]
     cause_tags: []
+  "4":
+    # 誘導なし。となり合う2面の開き方は3通りあり、最短になるのは**小さい2辺を足す**
+    # 開き方。3辺を相異に構成すると最小が一意に決まる（solver 側でも一意性を検算する）。
+    signature: word_problem_box_shortest_path_choose
+    recipe: math.word_problem_pythagorean
+    params:
+      scenario_kind: box_shortest_path_choose
+      edge_domain: {int_range: [2, 15]}
+      item_candidates: [箱, 水そう, ケース, 荷物, 容器, 直方体の積み木]
+    given: [scenario]
+    asked: [value]
+    visual: none
+    text: {tier: T1, template: wp_linear_solo_v1}
+    hints: [steps_prefix]
+    concept_tags: [pythagorean.word_problem_box_shortest_path_choose]
+    cause_tags: []
 remedial:
   default_level: 3

@@ -19,10 +19,23 @@ C8（g1_l49 面が動いてできる立体・回転体）クラスタ。
 """
 from __future__ import annotations
 
+import re
+
 import sympy
 
 from engine.core.contracts import ChoiceAnswer, Feature, GraphAnswer, Solution, Step
 from engine.core.registry import register_solver
+
+_SQRT_RE = re.compile(r"sqrt\((\d+)\)")
+
+
+def _fmt_len(v: sympy.Expr) -> str:
+    """長さの教材表記（sqrt(n)→√n・`*` を書かない）。
+
+    quadratic_function._fmt_scalar と同じ規約にそろえる（表記が単元で揺れないように）。
+    """
+    return _SQRT_RE.sub(r"√\1", str(sympy.sstr(sympy.together(v)))).replace("*", "")
+
 
 # 元の平面図形 -> (できる立体, 断面の形)
 _REVOLUTION: dict[str, tuple[str, str]] = {
@@ -452,6 +465,110 @@ def composite_side_net(
     )
 
 
+# ---------------------------------------------------------------------------
+# 直方体の断面と、表面上の最短距離（g3_l55/g3_l56.graph_table Lv2）
+#
+# どちらも「立体の問題を平面の直角三角形に落とす」ことが要点で、計算そのものは
+# 三平方の定理。solver は落とした先の**平面図形の寸法**を返す。
+# ---------------------------------------------------------------------------
+_BOX_SECTION_OPS = [
+    "identify_section_plane",
+    "compute_base_diagonal",
+    "draw_section_with_diagonal",
+]
+_BOX_SECTION_NARRATION = {
+    "identify_section_plane": "向かい合う二つの頂点をふくむ平面で切ると、切り口が長方形になることを確かめる。",
+    "compute_base_diagonal": "その長方形の横は底面の対角線なので、底面の二辺から三平方の定理で求める。",
+    "draw_section_with_diagonal": "切り口の長方形を平面にかき出し、対角線をひいて、対角線を求めるのに使う直角三角形を示す。",
+}
+_BOX_SECTION_PHRASE = {
+    "identify_section_plane": "切り口が長方形になることを確かめる",
+    "compute_base_diagonal": "底面の対角線を求める",
+}
+
+
+@register_solver("math.box_section_diagonal")
+def box_section_diagonal(side_a: object, side_b: object, height: object) -> Solution:
+    """直方体の対角線をふくむ断面（長方形）の寸法を答える（g3_l55.graph_table Lv2）。
+
+    横＝底面の対角線 √(a²+b²)、縦＝高さ、対角線＝立体の対角線 √(a²+b²+h²)。
+    """
+    a, b, h = int(side_a), int(side_b), int(height)
+    if a <= 0 or b <= 0 or h <= 0:
+        raise ValueError("辺の長さは正であること")
+    base_diag = sympy.sqrt(sympy.Integer(a) ** 2 + sympy.Integer(b) ** 2)
+    body_diag = sympy.sqrt(base_diag**2 + sympy.Integer(h) ** 2)
+    features = [
+        Feature(
+            kind="section_width", srepr=sympy.srepr(base_diag),
+            display=f"切り口の横（底面の対角線） {_fmt_len(base_diag)}",
+        ),
+        Feature(
+            kind="section_height", srepr=sympy.srepr(sympy.Integer(h)),
+            display=f"切り口の縦（高さ） {h}",
+        ),
+        Feature(
+            kind="body_diagonal", srepr=sympy.srepr(body_diag),
+            display=f"立体の対角線 {_fmt_len(body_diag)}",
+        ),
+    ]
+    disp = (
+        f"切り口は横 {_fmt_len(base_diag)}、縦 {h} の長方形で、"
+        f"対角線は {_fmt_len(body_diag)}"
+    )
+    srepr = sympy.srepr(sympy.Tuple(base_diag, sympy.Integer(h), body_diag))
+    return Solution(
+        answer=GraphAnswer(features=features, solution_svg_ref=""),
+        steps=_steps(_BOX_SECTION_OPS, _BOX_SECTION_NARRATION, _BOX_SECTION_PHRASE, srepr, disp),
+    )
+
+
+_UNFOLD_OPS = ["choose_two_faces", "unfold_to_plane", "draw_straight_path"]
+_UNFOLD_NARRATION = {
+    "choose_two_faces": "出発点と目的地が、どの二つの面をまたいでいるかを確かめる。",
+    "unfold_to_plane": "その二つの面を一つの平面に開くと、横が二辺の長さの和、縦が残りの辺の長さの長方形になることを確かめる。",
+    "draw_straight_path": "開いた図の上で二点を直線で結び、その長さを三平方の定理で求める。",
+}
+_UNFOLD_PHRASE = {
+    "choose_two_faces": "またぐ二つの面を確かめる",
+    "unfold_to_plane": "二つの面を一つの平面に開く",
+}
+
+
+@register_solver("math.box_unfold_shortest_path")
+def box_unfold_shortest_path(side_a: object, side_b: object, height: object) -> Solution:
+    """直方体のとなり合う2面を開いた展開図と、その上の最短経路を答える。
+
+    （g3_l56.graph_table Lv2）。開いた長方形は横 a+b・縦 h で、最短の道のりは
+    その対角線 √((a+b)²+h²)。
+    """
+    a, b, h = int(side_a), int(side_b), int(height)
+    if a <= 0 or b <= 0 or h <= 0:
+        raise ValueError("辺の長さは正であること")
+    width = sympy.Integer(a + b)
+    path = sympy.sqrt(width**2 + sympy.Integer(h) ** 2)
+    features = [
+        Feature(
+            kind="unfolded_width", srepr=sympy.srepr(width),
+            display=f"開いた長方形の横 {width}",
+        ),
+        Feature(
+            kind="unfolded_height", srepr=sympy.srepr(sympy.Integer(h)),
+            display=f"開いた長方形の縦 {h}",
+        ),
+        Feature(
+            kind="shortest_path", srepr=sympy.srepr(path),
+            display=f"最短の道のり {_fmt_len(path)}",
+        ),
+    ]
+    disp = f"開いた長方形は横 {width}、縦 {h} で、最短の道のりは {_fmt_len(path)}"
+    srepr = sympy.srepr(sympy.Tuple(width, sympy.Integer(h), path))
+    return Solution(
+        answer=GraphAnswer(features=features, solution_svg_ref=""),
+        steps=_steps(_UNFOLD_OPS, _UNFOLD_NARRATION, _UNFOLD_PHRASE, srepr, disp),
+    )
+
+
 __all__ = [
     "solid_of_revolution_name",
     "solid_of_revolution_sketch",
@@ -464,4 +581,6 @@ __all__ = [
     "solid_name_jp",
     "prism_net_side_rectangle",
     "composite_side_net",
+    "box_section_diagonal",
+    "box_unfold_shortest_path",
 ]
