@@ -9,7 +9,7 @@ from __future__ import annotations
 
 from engine.core.contracts import MR, ProofAnswer, ProofStep, Solution
 from engine.core.registry import register_checker
-from engine.packs.math.recipes.geometry_proof import TOPICS_CONGRUENCE, build_problem
+from engine.packs.math.recipes.geometry_proof import DEFAULT_TOPIC_SET, build_problem
 from engine.packs.math.geometry.render_text import compared_triangles, render_proof
 
 
@@ -18,7 +18,8 @@ def double_solve_geometry_proof(mr: MR) -> Solution:
     kind = str(mr.params["construction"])
     params = {k: float(v) for k, v in mr.params["numbers"].items()}
     built = build_problem(
-        kind, params, level=int(mr.level), topics=TOPICS_CONGRUENCE,
+        kind, params, level=int(mr.level),
+        topic_set=str(mr.params.get("topic_set") or DEFAULT_TOPIC_SET),
         exclude_rules=tuple(mr.params.get("exclude_rules", ())),
         depth=mr.params.get("proof_depth"),
         prefer=mr.params.get("prefer") or None,

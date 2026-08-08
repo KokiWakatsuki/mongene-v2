@@ -1092,6 +1092,79 @@ concepts:
   - id: isosceles_proof.property_by_congruence
     label: "二等辺三角形の性質を、合同を使って証明する"
     unit: g2_l41
+  # 証明エンジンの横展開（構成カタログ＋規則カタログを増やして開く単元群）
+  - id: isosceles_proof.condition_two_angles
+    label: "2つの角が等しいことを示し、二等辺三角形であると結論する"
+    unit: g2_l42
+  - id: isosceles_proof.condition_construct
+    label: "角の等しさを合同や補助線から導き、二等辺三角形であることを示す"
+    unit: g2_l42
+  - id: equilateral_proof.property_and_condition
+    label: "二等辺三角形の重ね合わせなどから、正三角形であることを示す"
+    unit: g2_l43
+  - id: equilateral_proof.construct
+    label: "合同や角の関係を組み合わせて、正三角形であることを構成して示す"
+    unit: g2_l43
+  - id: right_triangle_proof.hypotenuse_angle
+    label: "直角三角形の斜辺と1つの鋭角がそれぞれ等しいことから合同を証明する"
+    unit: g2_l45
+  - id: right_triangle_proof.hypotenuse_side
+    label: "直角三角形の斜辺と他の1辺がそれぞれ等しいことから合同を証明する"
+    unit: g2_l45
+  - id: right_triangle_proof.construct
+    label: "どの直角三角形を合同とみるかを自分で選び、証明を構成する"
+    unit: g2_l45
+  - id: parallelogram_proof.property_opposite_sides
+    label: "平行四辺形の対辺・対角が等しいことを、合同を使って証明する"
+    unit: g2_l46
+  - id: parallelogram_proof.property_diagonals
+    label: "平行四辺形の対角線がそれぞれの中点で交わることを証明する"
+    unit: g2_l46
+  - id: parallelogram_proof.property_construct
+    label: "平行四辺形の複数の性質を組み合わせ、方針を自分で構成して証明する"
+    unit: g2_l46
+  - id: parallelogram_proof.condition_given
+    label: "平行四辺形になるための条件を1つ示し、平行四辺形であると結論する"
+    unit: g2_l47
+  - id: parallelogram_proof.condition_choose
+    label: "満たす条件を自分で選び、根拠を構成して平行四辺形であることを示す"
+    unit: g2_l47
+  - id: parallelogram_proof.apply_condition
+    label: "与えられた要素から条件を1つ示し、平行四辺形であることを証明する"
+    unit: g2_l48
+  - id: parallelogram_proof.apply_via_congruence
+    label: "合同や補助線で条件を導き、平行四辺形であることを2段階で証明する"
+    unit: g2_l48
+  - id: parallelogram_proof.apply_construct
+    label: "どの条件をどう満たすか、方針全体を自分で構成して証明する"
+    unit: g2_l48
+  - id: special_quad_proof.condition_given
+    label: "対角線などの条件を示し、長方形・ひし形であると結論する"
+    unit: g2_l49
+  - id: special_quad_proof.condition_choose
+    label: "満たす条件を自分で選び、特別な平行四辺形であることを構成して示す"
+    unit: g2_l49
+  - id: similarity_proof.direct_condition
+    label: "示す2つの三角形が明示され、1つの相似条件で相似を直接証明する"
+    unit: g3_l41
+  - id: similarity_proof.two_step
+    label: "共通角・等角の根拠づけを2段階で行い、相似を証明する"
+    unit: g3_l41
+  - id: similarity_proof.construct
+    label: "どの三角形を相似とみるかを自分で構成し、相似を証明する"
+    unit: g3_l41
+  - id: parallel_ratio_proof.ratio_from_similarity
+    label: "相似を根拠に、平行線と線分の比の関係を記述証明する"
+    unit: g3_l42
+  - id: parallel_ratio_proof.converse
+    label: "比の条件から、2直線が平行であることを逆を使って記述証明する"
+    unit: g3_l43
+  - id: midline_proof.direct
+    label: "中点連結定理を根拠に、平行や長さの関係を直接証明する"
+    unit: g3_l44
+  - id: midline_proof.auxiliary
+    label: "中点を結ぶ補助線を引き、2段階の構成で証明する"
+    unit: g3_l44
   - id: triangle_angle.arrowhead_multi_step
     label: "補助線を引いて2つの三角形に分け、外角の性質を2回使って角を求める"
     unit: g2_l33

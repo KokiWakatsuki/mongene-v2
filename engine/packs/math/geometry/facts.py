@@ -51,6 +51,14 @@ FactKind = Literal[
     "perp",        # 2直線が垂直
     "midpoint",    # ある点が線分の中点
     "collinear",   # 3点が一直線上
+    "right_angle",   # ある角が直角
+    "parallelogram",  # 四角形が平行四辺形
+    "rectangle",   # 四角形が長方形
+    "rhombus",     # 四角形がひし形
+    "square",      # 四角形が正方形
+    "seg_half",    # 一方の線分の長さが他方の半分
+    "ratio_eq",    # 2つの線分の比が、別の2つの線分の比に等しい
+    "on_circle",   # ある点が、ある中心の円周上にある
 ]
 
 
@@ -159,6 +167,79 @@ def collinear(a: Point, b: Point, c: Point) -> Fact:
     return Fact("collinear", tuple(sorted((a, b, c))))
 
 
+def right_angle(vertex: Point, arm1: Point, arm2: Point) -> Fact:
+    """ある角が直角（∠ABC ＝ 90°）。
+
+    `perp`（2直線が垂直）と分けてあるのは、**証明文で書き分けるから**である——
+    教科書は「∠ABC ＝ 90°」と書く行と「AB ⊥ CD」と書く行を使い分ける。
+    直角三角形の合同条件は「直角である角がどれか」を要求するので、角の側で持つ。
+    """
+    return Fact("right_angle", (ang(vertex, arm1, arm2),))
+
+
+def _canonical_quad(
+    q: tuple[Point, Point, Point, Point]
+) -> tuple[Point, Point, Point, Point]:
+    """四角形 ABCD の**同じ四角形を表す8通りの書き方**から代表を1つ選ぶ。
+
+    四角形は頂点を周にそって読むので、どこから読み始めても（4通り）、どちら回りに
+    読んでも（2通り）同じ図形である。合同・相似の対応と違い、四角形が
+    平行四辺形であるという主張に「対応」は無いので、8通りを1つにまとめてよい。
+    """
+    if len(set(q)) != 4:
+        raise ValueError(f"四角形の4頂点が相異でない: {q}")
+    rots = [tuple(q[(i + k) % 4] for k in range(4)) for i in range(4)]
+    rots += [tuple(reversed(r)) for r in rots]
+    return min(rots)
+
+
+def parallelogram(a: Point, b: Point, c: Point, d: Point) -> Fact:
+    """四角形 ABCD が平行四辺形（頂点は周にそって並べる）。"""
+    return Fact("parallelogram", (_canonical_quad((a, b, c, d)),))
+
+
+def rectangle(a: Point, b: Point, c: Point, d: Point) -> Fact:
+    return Fact("rectangle", (_canonical_quad((a, b, c, d)),))
+
+
+def rhombus(a: Point, b: Point, c: Point, d: Point) -> Fact:
+    return Fact("rhombus", (_canonical_quad((a, b, c, d)),))
+
+
+def square(a: Point, b: Point, c: Point, d: Point) -> Fact:
+    return Fact("square", (_canonical_quad((a, b, c, d)),))
+
+
+def seg_half(half: tuple[Point, Point], whole: tuple[Point, Point]) -> Fact:
+    """`half` の長さが `whole` の半分（中点連結定理の結論の形）。**並べ替えない。**"""
+    if half == whole:
+        raise ValueError("同じ線分の半分にはならない")
+    return Fact("seg_half", (half, whole))
+
+
+def ratio_eq(
+    s1: tuple[Point, Point],
+    s2: tuple[Point, Point],
+    s3: tuple[Point, Point],
+    s4: tuple[Point, Point],
+) -> Fact:
+    """比の等式 s1 : s2 ＝ s3 : s4（平行線と線分の比の結論の形）。
+
+    正規形: 左右の比の入れかえで不変。**比の中の順序は入れかえない**（2:3 と 3:2 は
+    別の主張）。
+    """
+    left, right = (s1, s2), (s3, s4)
+    a, b = (left, right) if left <= right else (right, left)
+    return Fact("ratio_eq", (a, b))
+
+
+def on_circle(p: Point, center: Point) -> Fact:
+    """点 p が、center を中心とする円の周上にある。"""
+    if p == center:
+        raise ValueError("中心は円周上にない")
+    return Fact("on_circle", (p, center))
+
+
 # ---------------------------------------------------------------------------
 # 表示（証明文にそのまま出る形。ここを1か所に集めておく）
 # ---------------------------------------------------------------------------
@@ -196,6 +277,23 @@ def fact_text(f: Fact) -> str:
         return f"{f.args[0]} は {seg_text(f.args[1])} の中点"
     if f.kind == "collinear":
         return f"{'、'.join(f.args)} は一直線上にある"
+    if f.kind == "right_angle":
+        return f"{ang_text(f.args[0])} ＝ 90°"
+    if f.kind in ("parallelogram", "rectangle", "rhombus", "square"):
+        name = {
+            "parallelogram": "平行四辺形",
+            "rectangle": "長方形",
+            "rhombus": "ひし形",
+            "square": "正方形",
+        }[f.kind]
+        return f"四角形{''.join(f.args[0])} は{name}である"
+    if f.kind == "seg_half":
+        return f"{seg_text(f.args[0])} ＝ ½{seg_text(f.args[1])}"
+    if f.kind == "ratio_eq":
+        (a, b), (c, d) = f.args
+        return f"{seg_text(a)}：{seg_text(b)} ＝ {seg_text(c)}：{seg_text(d)}"
+    if f.kind == "on_circle":
+        return f"点{f.args[0]} は点{f.args[1]}を中心とする円の周上にある"
     raise ValueError(f"未知の述語: {f.kind}")
 
 

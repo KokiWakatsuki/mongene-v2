@@ -5,13 +5,15 @@
 （`geometry/naturalness.py`）証明文を組む（`geometry/render_text.py`）。
 だから「解き方が違う問題」は、**構成カタログと規則カタログを増やすこと**で増える。
 
-構成カタログは params の `construction` で選ぶ。パラメータ（角度・長さ）は rng で
-引き、**同じ手順を別のパラメータでもう一度組んで**、図がたまたま見せている性質が
-無いかを確かめる（`accidental_coincidences`）。
+構成カタログは params の `construction` で選ぶ。図そのものは
+`geometry/constructions_*.py` にあり、`geometry/catalog.py` に名前で登録されている
+——**この recipe に構成を書き足さない**（単元クラスタごとに別ファイルで進められる
+ようにしてある）。パラメータ（角度・長さ）は rng で引き、**同じ手順を別のパラメータで
+もう一度組んで**、図がたまたま見せている性質が無いかを確かめる
+（`accidental_coincidences`）。
 """
 from __future__ import annotations
 
-from collections.abc import Callable
 from typing import Any
 
 from engine.core.contracts import (
@@ -27,7 +29,14 @@ from engine.core.contracts import (
 )
 from engine.core.registry import register_recipe
 from engine.core.rng import Rng, draw
-from engine.packs.math.geometry.construct import Construction, figure_quality_problems
+from engine.packs.math.geometry import (  # noqa: F401  登録の副作用で構成が入る
+    constructions_congruence,
+    constructions_parallelogram,
+    constructions_right_triangle,
+    constructions_similarity,
+)
+from engine.packs.math.geometry.catalog import CONSTRUCTIONS, topics_of
+from engine.packs.math.geometry.construct import figure_quality_problems
 from engine.packs.math.geometry.deduce import saturate
 from engine.packs.math.geometry.facts import fact_text
 from engine.packs.math.geometry.naturalness import accidental_coincidences, select_goal
@@ -39,75 +48,10 @@ from engine.packs.math.geometry.render_text import (
 )
 from engine.packs.math.visuals.geometry_figure import render_construction_svg
 
-# 単元ごとに「使ってよい定理」を宣言する（質のフィルタが単元違いの証明を弾く）。
-TOPICS_CONGRUENCE = frozenset(
-    {"congruence", "congruence_property", "isosceles", "midpoint", "angle", "parallel"}
-)
+# family が topic_set を書かないときの既定（合同の単元群）。
+DEFAULT_TOPIC_SET = "congruence"
+TOPICS_CONGRUENCE = topics_of(DEFAULT_TOPIC_SET)
 
-
-def _kite(p: dict[str, Any]) -> Construction:
-    """たこ形（AB=AD・CB=CD）に対角線 AC を引いた図。SSS の定番。"""
-    c = Construction()
-    c.free_point("A", 0.0, 0.0)
-    c.free_point("B", float(p["base"]), 0.0)
-    c.point_on_circle("D", "A", "B", angle_deg=float(p["angle"]))
-    c.point_on_perpendicular_bisector("C", "B", "D", offset=-float(p["offset"]))
-    for x, y in (("A", "B"), ("A", "D"), ("B", "C"), ("D", "C")):
-        c.connect(x, y)
-    c.connect("A", "C", shared=True)
-    return c
-
-
-def _x_shape(p: dict[str, Any]) -> Construction:
-    """2本の線分が中点で交わる X 字型。中点 → 対頂角 → SAS。"""
-    c = Construction()
-    c.free_point("O", 0.0, 0.0)
-    c.free_point("A", -float(p["base"]), float(p["angle"]) / 40.0)
-    c.free_point("B", -float(p["offset"]) / 2.0, -2.0)
-    c.reflected_point("D", "A", "O")
-    c.reflected_point("C", "B", "O")
-    for x, y in (("A", "D"), ("B", "C"), ("A", "B"), ("C", "D")):
-        c.connect(x, y)
-    return c
-
-
-def _parallelogram(p: dict[str, Any]) -> Construction:
-    """平行四辺形に対角線を引いた図。"""
-    c = Construction()
-    c.free_point("A", 0.0, 0.0)
-    c.free_point("B", float(p["base"]), 0.0)
-    c.free_point("C", float(p["base"]) + float(p["offset"]) / 3.0, float(p["angle"]) / 25.0)
-    c.translated_point("D", "A", "B", "C")
-    for x, y in (("A", "B"), ("B", "C"), ("C", "D"), ("D", "A")):
-        c.connect(x, y)
-    c.connect("A", "C", shared=True)
-    c.description = "平行四辺形ABCDで、対角線ACを引いた"
-    return c
-
-
-def _isosceles_with_median(p: dict[str, Any]) -> Construction:
-    """二等辺三角形 ABC（AB=AC）に、底辺 BC の中点 M を結んだ図。
-
-    「底角が等しい」を**証明する**ための図。だからこのセルでは、その定理を規則から
-    外して探索する（外さないと1手で終わってしまう）。
-    """
-    c = Construction()
-    c.free_point("B", 0.0, 0.0)
-    c.free_point("C", float(p["base"]), 0.0)
-    c.point_on_perpendicular_bisector("A", "B", "C", offset=-float(p["offset"]) - 1.0)
-    c.midpoint_of("M", "B", "C")
-    for x, y in (("A", "B"), ("A", "C"), ("B", "C"), ("A", "M")):
-        c.connect(x, y)
-    c.connect("A", "M", shared=True)
-    return c
-
-
-CONSTRUCTIONS: dict[str, Callable[[dict[str, Any]], Construction]] = {
-    "isosceles_median": _isosceles_with_median,
-    "kite": _kite,
-    "x_shape": _x_shape,
-    "parallelogram": _parallelogram,
-}
 
 # 図をゆらすときのパラメータの動かし方（偶然の一致を見つけるため）。
 _PERTURBATIONS = ({"base": 0.8, "angle": 1.15, "offset": 1.25}, {"base": 1.2, "angle": 0.85, "offset": 0.8})
@@ -120,7 +64,7 @@ def build_problem(
     params: dict[str, Any],
     *,
     level: int,
-    topics: frozenset[str],
+    topic_set: str = DEFAULT_TOPIC_SET,
     exclude_rules: tuple[str, ...] = (),
     depth: int | None = None,
     prefer: str | None = "tri_cong",
@@ -132,13 +76,18 @@ def build_problem(
     使えてしまうと1手で終わってしまい、証明にならない（循環）。単元ごとに、
     その単元で「これから示すこと」を外す。
 
+    `topic_set` は**その単元で習っている定理の範囲**（`catalog.TOPIC_SETS`）。
+    範囲外の定理を使う証明はここで落ちる。
+
     戻り値は (構成, 導出, 選ばれた結論, 証明の行) の組。質のフィルタに落ちたら None。
     """
     builder = CONSTRUCTIONS[kind]
     con = builder(params)
     rules = tuple(r for r in RULES if r.name not in exclude_rules)
     ded = saturate(con.points, frozenset(con.facts), rules=rules)
-    goal = select_goal(ded, level=level, allowed_topics=topics, prefer=prefer, depth=depth)
+    goal = select_goal(
+        ded, level=level, allowed_topics=topics_of(topic_set), prefer=prefer, depth=depth
+    )
     if goal is None:
         return None
     if figure_quality_problems(con):
@@ -156,6 +105,31 @@ _PROOF_CONCEPTS = [
     "congruence_proof.choose_condition",
     "congruence_proof.corresponding_parts",
     "isosceles_proof.property_by_congruence",
+    # 横展開（構成カタログ＋規則カタログを増やして開く単元群）
+    "isosceles_proof.condition_two_angles",
+    "isosceles_proof.condition_construct",
+    "equilateral_proof.property_and_condition",
+    "equilateral_proof.construct",
+    "right_triangle_proof.hypotenuse_angle",
+    "right_triangle_proof.hypotenuse_side",
+    "right_triangle_proof.construct",
+    "parallelogram_proof.property_opposite_sides",
+    "parallelogram_proof.property_diagonals",
+    "parallelogram_proof.property_construct",
+    "parallelogram_proof.condition_given",
+    "parallelogram_proof.condition_choose",
+    "parallelogram_proof.apply_condition",
+    "parallelogram_proof.apply_via_congruence",
+    "parallelogram_proof.apply_construct",
+    "special_quad_proof.condition_given",
+    "special_quad_proof.condition_choose",
+    "similarity_proof.direct_condition",
+    "similarity_proof.two_step",
+    "similarity_proof.construct",
+    "parallel_ratio_proof.ratio_from_similarity",
+    "parallel_ratio_proof.converse",
+    "midline_proof.direct",
+    "midline_proof.auxiliary",
 ]
 
 
@@ -168,6 +142,7 @@ def geometry_proof_recipe(ctx: CellContext, rng: Rng) -> MR:
     """
     p = ctx.spec_level.params
     kind = str(p["construction"])
+    topic_set = str(p.get("topic_set") or DEFAULT_TOPIC_SET)
     level = int(ctx.level)
     for _ in range(_MAX_TRIES):
         params = {
@@ -176,7 +151,7 @@ def geometry_proof_recipe(ctx: CellContext, rng: Rng) -> MR:
             "offset": int(draw(p["offset_domain"], rng)) / 10.0,
         }
         built = build_problem(
-            kind, params, level=level, topics=TOPICS_CONGRUENCE,
+            kind, params, level=level, topic_set=topic_set,
             exclude_rules=tuple(str(x) for x in p.get("exclude_rules", ())),
             depth=int(p["proof_depth"]) if p.get("proof_depth") is not None else None,
             prefer=str(p["prefer"]) if p.get("prefer") else None,
@@ -218,6 +193,7 @@ def geometry_proof_recipe(ctx: CellContext, rng: Rng) -> MR:
             "construction": kind,
             "numbers": {k: str(v) for k, v in params.items()},
             # checker が同じ条件で探索し直せるように、探索の条件も params に置く。
+            "topic_set": topic_set,
             "exclude_rules": [str(x) for x in p.get("exclude_rules", ())],
             "proof_depth": int(p["proof_depth"]) if p.get("proof_depth") is not None else None,
             "prefer": str(p["prefer"]) if p.get("prefer") else None,
