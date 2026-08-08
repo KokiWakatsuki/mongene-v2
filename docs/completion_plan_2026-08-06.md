@@ -1,11 +1,12 @@
-# エンジン完成計画（2026-08-06 起点・429/630 → **2026-08-08 現在 561/630**）
+# エンジン完成計画（2026-08-06 起点・429/630 → **2026-08-08 現在 562/630**）
 
 > 進捗更新: 2026-08-08。Phase 0（回収）・Phase 1（曲線グラフ基盤）・Phase 4（C11 統計）が完了、
 > Phase A（動点・速さ）・B（立体）・C（統計の word_problem）が完了。
 > **Phase D（exam 融合）完了**（exam_l1〜l7 の 31セル）。exam の残りは exam_l6.proof Lv3 だけで、
 > これは proof form ごと未実装なので Phase F に属する。
-> **Phase E（端物）は 2/11 着地**（g3_l53.word_problem Lv4・g2_l33.find_value Lv2）。
-> **word_problem は残り0**。残る端物9は graph_table 7・find_value 1・knowledge 1。
+> **Phase E（端物）は 3/11 着地**（g3_l53.word_problem Lv4・g2_l33.find_value Lv2・
+> g3_l54.graph_table Lv2）。**word_problem は残り0**。残る端物8は graph_table 6・
+> find_value 1・knowledge 1。
 > 台帳は `PYTHONPATH=. .venv/bin/python -m engine.tools.coverage_page` で再生成（docs/coverage.html）。
 > 未実装セル一覧は `PYTHONPATH=. .venv/bin/python scratchpad/list_gaps.py <unit接頭辞>`。
 >
@@ -18,7 +19,7 @@
 >   g3_l55・g3_l56 Lv4 は実装したのに「担当外」の記述が残っていた
 >   → 未使用 recipe/solver・除外記述と gaps の突き合わせ を機械で検出する
 
-## 0. いまの実測（2026-08-08・Phase D 完了 / Phase E 2/11）
+## 0. いまの実測（2026-08-08・Phase D 完了 / Phase E 3/11）
 
 `PYTHONPATH=. .venv/bin/python -m engine.tools.goal_progress` の出力そのまま
 （C1〜C16 の振り分けは `docs/goal_spec_2026-07-12.md` §3 が定義し、このツールが計算する）。
@@ -33,19 +34,19 @@
   C7   g1 平面図形（作図以外）                 19/21  (  90%)
   C8   g1 空間図形                       24/24  ( 100%)
   C9   g2 図形（平行と合同・三角形と四角形）          40/44  (  91%)
-  C10  g3 図形（相似・円・三平方）               50/51  (  98%)
+  C10  g3 図形（相似・円・三平方）               51/51  ( 100%)
   C11  データ・統計（g1 分布＋g2 箱ひげ＋g3 標本）    39/39  ( 100%)
   C12  確率（g1＋g2）                     14/16  (  88%)
   C13  exam 融合の T1 部                 20/20  ( 100%)
   C14  word_problem 全学年（T3）         100/100 ( 100%)
   C15  proof 全学年（T3）                  0/51  (   0%)
   C16  construction（g1 作図・M2）         0/9   (   0%)
-  合計                                561/630 (89.0%)
-  学年別: exam 34/35  g1 198/209  g2 156/197  g3 173/189
+  合計                                562/630 (89.2%)
+  学年別: exam 34/35  g1 198/209  g2 156/197  g3 174/189
 ```
 
-**C13（exam 融合の T1 部）と C14（word_problem 全学年）が 100% になった**。
-残る 69 は C15 proof 51・C16 construction 9 と、C7/C9/C10/C12 に散った端物9セル。
+**C13（exam 融合の T1 部）と C14（word_problem 全学年）と C10（g3 図形）が 100% になった**。
+残る 68 は C15 proof 51・C16 construction 9 と、C7/C9/C12 に散った端物8セル。
 
 ### この数字がまだ保証していないもの（planning の前提として重要）
 
@@ -64,18 +65,18 @@
 ### この数字が何を保証しているか（2026-08-08 に実測で確かめた）
 
 `capabilities()` は「family が宣言していて lint が通る」セルを返すだけで、
-**実際に問題が生成できるかは見ていない**。そこで 561 セル全部を 3 seed ずつ
+**実際に問題が生成できるかは見ていない**。そこで 562 セル全部を 2〜3 seed ずつ
 実際に generate して確かめた（`scratchpad/verify_progress.py`）:
 
 - 例外で落ちたセル **0**／`Unsupported` が返ったセル **0**
-  → **561/561 が実際に生成できる**（宣言だけの「できている」は無い）
+  → **562/562 が実際に生成できる**（宣言だけの「できている」は無い）
 - 台帳・family 宣言・capabilities の三者に食い違い **0**
   （宣言があるのに台帳に無い／lint 落ち／台帳に無いセルを生成、いずれも 0 件）
 
 **一次方程式・二次方程式は完成**（`g1_l21〜l27` / `g3_l24〜l31` がすべて 0 gaps。
 最後まで残っていた g1_l27 Lv4・g3_l31 Lv3/Lv4 は Phase A で回収済み）。
 
-## 1. 残り69セルの実態（2026-08-08 実測）
+## 1. 残り68セルの実態（2026-08-08 実測）
 
 （「起点」列＝2026-08-06 にこの計画を書いた時点の残り 201 セルの内訳）
 
@@ -83,7 +84,7 @@
 |---|---|---|---|
 | proof | 51 | 51 | **form ごと未実装**（frame も solver も checker もゼロ）。手つかず |
 | construction | 9 | 9 | **form ごと未実装**。M2 送り |
-| graph_table | 7 | 58 | すべて端物 |
+| graph_table | 6 | 58 | すべて端物 |
 | find_value | 1 | 36 | g2_l50 Lv3（面積を2等分する直線） |
 | word_problem | 0 | 36 | **完了** |
 | knowledge | 1 | 10 | g2_l38 Lv2 のみ |
@@ -91,7 +92,7 @@
 **exam は 34/35。残りは exam_l6.proof Lv3 の1セルだけで、これは proof form ごと
 未実装なので Phase F に属する**。かつて「単元横断で32セルあり form 内訳に散っていて
 見えない」と書いた塊は、Phase D で解消した。
-**proof と construction を除くと、残りは端物9セルだけ**（graph_table 7・
+**proof と construction を除くと、残りは端物8セルだけ**（graph_table 6・
 find_value 1・knowledge 1）。
 
 ### 効いた手・尽きた手
@@ -285,27 +286,35 @@ scenario_kind を3つ足しただけで、find_value/word_problem の4セルが�
 **Phase A・B が終わっているほど安くなる**（exam_l3 は動点、exam_l4 は空間図形、
 exam_l7 は箱ひげ図＝Phase 4 で済）。だから A・B の後に置く。
 
-## Phase E：端物（11セル）— **2/11 着地（2026-08-08）**
+## Phase E：端物（11セル）— **3/11 着地（2026-08-08）**
 
 単発で束ねようがないもの。並列体の余りに配る。
 
-**着地済み（新 solver 1本だけ）**
+**着地済み（3セル）**
 - `g3_l53.word_problem Lv4`: 3辺のわかる三角形で補助線を自分で引き高さと面積。
   既存 `word_problem_pythagorean.py` に scenario_kind を足しただけ（新 solver ゼロ）。
   高さが整数に落ちる組（3〜30 で16通り）だけを候補にした。
 - `g2_l33.find_value Lv2`: ブーメラン型（三角形の内部の点がつくる角）。
   新設 solver `math.arrowhead_angle`。**図を使わずに成立させた**——どの点をどう
   結ぶかを文で述べれば図が一意に決まるため。
+- `g3_l54.graph_table Lv2`: 座標平面の2点を斜辺とする直角三角形をかき、2辺の長さを
+  答える。新設 solver `math.coordinate_right_triangle_legs` と、方眼に点と三角形を
+  描く renderer（`graph.py` の `render_coordinate_points_svg`）。
+  find_value Lv2（距離を求める）と同じ題材で**問うものが「どの直角三角形に落とすか」**
+  に変わる——g3_l55 の find_value と graph_table の関係と同じ形。これで C10 が 100%。
 
-**残り9セル**
-- graph_table 7: g1_l37 Lv1・g1_l39 Lv3・g2_l32 Lv1・g2_l44 Lv1・g2_l52 Lv1・
-  g2_l53 Lv1・g3_l54 Lv2
-  - **図の資産がそのまま無いものが多い**のがこの7セルの本質。
-    `g2_l52/l53 Lv1` は**樹形図**を描く新資産が要る（2セルで1投資）。
-    `g1_l39 Lv3`（回転の中心を作図で求める）は実質 construction 相当で、
+**残り8セル**
+- graph_table 6: g1_l37 Lv1・g1_l39 Lv3・g2_l32 Lv1・g2_l44 Lv1・g2_l52 Lv1・g2_l53 Lv1
+  - **図の資産がそのまま無いものが多い**のがこの6セルの本質。
+  - **★g1_l37 Lv1・g2_l32 Lv1・g2_l44 Lv1 の3セルは同じ壁を共有する**＝
+    「図の中の要素（線分・直線・辺）を記号で答える」型で、
+    ① `GRAPH_TABLE_FRAME.asked_vocab` に読み取り用の語（例 `read_figure_element`）を
+    足す（`test_frames.py` の台帳 frozenset にも同時に足す——踏んだ罠）、
+    ② 平面図形の renderer を1本起こす（点と直線＋垂線／平行な直線群／直角三角形）。
+    **1投資で3セル**なので、端物の中ではここがいちばん束ねられる。
+  - `g2_l52/l53 Lv1` は**樹形図**を描く新資産が要る（2セルで1投資）。
+  - `g1_l39 Lv3`（回転の中心を作図で求める）は実質 construction 相当なので、
     Phase G の作図資産と一緒に見るのが筋。
-    `g3_l54 Lv2`（座標平面上の2点間の距離）は Phase 1 のグラフ資産が効く。
-    `g1_l37 Lv1`・`g2_l32 Lv1`・`g2_l44 Lv1` は 2D 幾何の既存描画に載る見込み。
 - find_value 1: g2_l50 Lv3（四角形の面積を2等分する直線と辺 BC の交点）
 - knowledge 1: g2_l38 Lv2（逆の判別と反例の提示）
   - **命題のカタログだけでは dup が通らない**（数個の命題では組合せ数が足りない）。
@@ -370,8 +379,8 @@ g1_l41〜l44（垂直二等分線・角の二等分線・垂線・作図の利�
 
 | Phase | 内容 | セル | 累計 |
 |---|---|---|---|
-| — | 現在（2026-08-08 実測・Phase D 完了 / Phase E 2/11） | — | **561** |
-| E | 端物の残り | 9 | 570 |
+| — | 現在（2026-08-08 実測・Phase D 完了 / Phase E 3/11） | — | **562** |
+| E | 端物の残り | 8 | 570 |
 | F | proof（exam_l6.proof Lv3 を含む） | 51 | 621 |
 | G | construction | 9 | **630** |
 

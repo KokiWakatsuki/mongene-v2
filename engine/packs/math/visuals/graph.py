@@ -726,10 +726,76 @@ def render_curve_solution_svg(params: dict[str, Any]) -> str:
     return render_curve_svg(params, draw_curve=True)
 
 
+# ---------------------------------------------------------------------------
+# 座標平面上の2点と、その2点を斜辺とする直角三角形（g3_l54.graph_table Lv2）
+#
+# 問題図は「方眼＋与えられた2点」まで（直角三角形は生徒がかき込む答えなので描かない）。
+# 解答図で三角形と直角の記号を足す。点名（A・B）は図に書く——問題文がその名前で
+# 点を呼ぶので、名前が図に無いとどちらがどちらか決まらない。
+# ---------------------------------------------------------------------------
+def render_coordinate_points_svg(params: dict[str, Any], *, draw_triangle: bool) -> str:
+    """方眼に2点を打ち、必要なら斜辺 AB の直角三角形を描く。
+
+    params: pts（["(x, y)", ...]・描画範囲もここから決まる）／point_labels（点名）。
+    直角の頂点は「一方の x 座標ともう一方の y 座標」の点で、recipe が
+    `right_angle_pt` として渡す（描画側で組み立て直さない＝対応表を2か所に持たない）。
+    """
+    sc = _grid_scaffold(params)
+    parts = sc.parts
+
+    pts = [_parse_point(s) for s in params["pts"]]
+    labels = [str(v) for v in params.get("point_labels", [])]
+
+    if draw_triangle:
+        cx, cy = _parse_point(str(params["right_angle_pt"]))
+        (ax, ay), (bx, by) = pts[0], pts[1]
+        tri = [(ax, ay), (cx, cy), (bx, by)]
+        px_tri = [(sc.to_px_x(float(x)), sc.to_px_y(float(y))) for x, y in tri]
+        joined = " ".join(f"{x:.2f},{y:.2f}" for x, y in px_tri)
+        parts.append(
+            f'<polygon points="{joined}" fill="none" stroke="#000000" stroke-width="2.5"/>'
+        )
+        # 直角の記号（頂点 C の内側に小さな正方形）。向きは2辺の伸びる向きで決める。
+        pcx, pcy = px_tri[1]
+        sx = 1.0 if float(ax) > float(cx) or float(bx) > float(cx) else -1.0
+        sy = 1.0 if float(ay) > float(cy) or float(by) > float(cy) else -1.0
+        m = 10.0
+        parts.append(
+            f'<polyline points="{pcx + sx * m:.2f},{pcy:.2f} '
+            f'{pcx + sx * m:.2f},{pcy - sy * m:.2f} {pcx:.2f},{pcy - sy * m:.2f}" '
+            f'fill="none" stroke="#000000" stroke-width="1.2"/>'
+        )
+
+    # --- 与えられた2点（黒丸＋点名） ---
+    for i, (x, y) in enumerate(pts):
+        px, py = sc.to_px_x(float(x)), sc.to_px_y(float(y))
+        parts.append(f'<circle cx="{px:.2f}" cy="{py:.2f}" r="4" fill="#000000"/>')
+        if i < len(labels):
+            parts.append(
+                f'<text x="{px + 8:.2f}" y="{py - 8:.2f}" font-size="13" '
+                f'text-anchor="middle" fill="#000000">{labels[i]}</text>'
+            )
+
+    parts.extend(_grid_ticks(sc))
+    parts.append("</svg>")
+    return "".join(parts)
+
+
+def render_coordinate_points_graph(mr: "MR", ctx: "CellContext") -> str:
+    """登録 visual（問題図）。方眼と与えられた2点だけを描く（三角形は答えなので描かない）。"""
+    return render_coordinate_points_svg(mr.params, draw_triangle=False)
+
+
+def render_coordinate_triangle_solution_svg(params: dict[str, Any]) -> str:
+    """模範解答図。2点を斜辺とする直角三角形と直角の記号を足す。"""
+    return render_coordinate_points_svg(params, draw_triangle=True)
+
+
 register_visual("math.linear_graph")(render_linear_graph)
 register_visual("math.curve_graph")(render_curve_graph)
 register_visual("math.polyline_graph")(render_polyline_graph)
 register_visual("math.line_polygon_graph")(render_line_polygon_graph)
+register_visual("math.coordinate_points_graph")(render_coordinate_points_graph)
 
 
 __all__ = [
@@ -747,6 +813,9 @@ __all__ = [
     "render_polyline_graph",
     "render_polyline_svg",
     "render_polyline_solution_svg",
+    "render_coordinate_points_graph",
+    "render_coordinate_points_svg",
+    "render_coordinate_triangle_solution_svg",
     "compute_grid_bounds",
     "compute_grid_bounds_from_params",
     "compute_grid_spec_from_params",

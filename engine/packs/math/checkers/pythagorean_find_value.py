@@ -11,10 +11,10 @@ g3_l55.find_value Lv2/Lv3/Lv4・g3_l56.find_value Lv2/Lv4）を2つの checker �
 """
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, cast
 
 from engine.core.contracts import MR, Solution
-from engine.core.registry import register_checker
+from engine.core.registry import REGISTRY, register_checker
 from engine.packs.math.recipes.pythagorean_find_value import (
     KNOWLEDGE_RECIPE_NAME,
     RECIPE_NAME,
@@ -40,3 +40,15 @@ __all__ = [
     "double_solve_pythagorean_find_value",
     "double_solve_special_right_triangle_ratio",
 ]
+
+
+@register_checker("math.coordinate_right_triangle.double_solve")
+def double_solve_coordinate_right_triangle(mr: MR) -> Solution:
+    """params の2点の座標だけから直角三角形の2辺を解き直す（答えは params に無い）。"""
+    p = mr.params
+    return cast(
+        Solution,
+        REGISTRY.solver("math.coordinate_right_triangle_legs")(
+            p["x1"], p["y1"], p["x2"], p["y2"]
+        ),
+    )

@@ -56,14 +56,21 @@ from engine.core.contracts import (
     MR,
     CellContext,
     ChoiceAnswer,
+    GraphAnswer,
     Provenance,
     Solution,
     Step,
     SubQuestionMR,
     SymbolicAnswer,
+    VisualElement,
+    VisualPlan,
 )
 from engine.core.registry import REGISTRY, register_recipe
 from engine.core.rng import Rng, draw
+from engine.packs.math.visuals.graph import (
+    render_coordinate_triangle_solution_svg,
+    tick_labels_from_params,
+)
 
 RECIPE_NAME = "math.pythagorean_find_value"
 KNOWLEDGE_RECIPE_NAME = "math.special_right_triangle_ratio"
@@ -979,3 +986,81 @@ __all__ = [
     "solve_special_right_triangle_ratio",
     "special_right_triangle_ratio_recipe",
 ]
+
+
+# ---------------------------------------------------------------------------
+# g3_l54.graph_table Lv2: 座標平面に2点をとり、直角三角形を把握する
+#
+# find_value Lv2（2点間の距離を求める）と同じ題材で、問うものが「長さ」ではなく
+# **どの直角三角形に落とすか**である点が違う（g3_l55 の断面セルと同じ関係）。
+# 答えの図は生徒が描き込むので、問題図は方眼＋与えられた2点まで。
+# ---------------------------------------------------------------------------
+_COORDINATE_TRIANGLE_CONCEPTS = ["pythagorean.coordinate_right_triangle"]
+
+
+@register_recipe(
+    "math.coordinate_right_triangle", provides_concepts=_COORDINATE_TRIANGLE_CONCEPTS
+)
+def coordinate_right_triangle_recipe(ctx: CellContext, rng: Rng) -> MR:
+    """2点を斜辺とする直角三角形をかき、2辺の長さを答える（answer-first）。
+
+    x・y の差がともに 0 でない2点を引く（軸に平行だと三角形にならない）。
+    点名は連続する2文字（A,B のように呼ぶ慣例）。
+    """
+    p = ctx.spec_level.params
+    for _ in range(200):
+        x1 = int(draw(p["coord_domain"], rng))
+        y1 = int(draw(p["coord_domain"], rng))
+        x2 = int(draw(p["coord_domain"], rng))
+        y2 = int(draw(p["coord_domain"], rng))
+        if x1 != x2 and y1 != y2:
+            break
+    else:  # pragma: no cover - 有界リトライを使い切る確率は無視できる
+        raise ValueError("coordinate_right_triangle_recipe: 軸に平行でない2点を引けず")
+
+    start = int(draw({"int_range": [0, len(_ALPHABET) - 2]}, rng))
+    label_a, label_b = _ALPHABET[start], _ALPHABET[start + 1]
+
+    sol = cast(
+        Solution, REGISTRY.solver("math.coordinate_right_triangle_legs")(x1, y1, x2, y2)
+    )
+    assert isinstance(sol.answer, GraphAnswer)
+
+    params: dict[str, Any] = {
+        "pts": [f"({x1}, {y1})", f"({x2}, {y2})"],
+        "point_labels": [label_a, label_b],
+        # 直角の頂点は solver が決めたものをそのまま渡す（対応表を2か所に持たない）。
+        "right_angle_pt": f"({x2}, {y1})",
+        "x1": x1, "y1": y1, "x2": x2, "y2": y2,
+    }
+    answer = GraphAnswer(
+        features=sol.answer.features,
+        solution_svg_ref=render_coordinate_triangle_solution_svg(params),
+    )
+    statement = (
+        f"座標平面上に2点 {label_a}({x1}, {y1})、{label_b}({x2}, {y2}) をとり、"
+        f"線分 {label_a}{label_b} を斜辺とする直角三角形を、直角をはさむ2辺が座標軸に"
+        "平行になるようにかき込め。また、その2辺の長さを答えよ"
+    )
+    visual_plan = VisualPlan(
+        style="grid",
+        labels=tick_labels_from_params(params) + [label_a, label_b],
+        elements=[
+            VisualElement(kind="grid", attrs={}),
+            VisualElement(kind="axis", attrs={}),
+            # 与えられた2点は問題図に出す（答えは直角三角形のほうなので "point_given"）。
+            VisualElement(kind="point_given", attrs={}),
+        ],
+    )
+    sub_question = SubQuestionMR(
+        label="(1)", asked="draw_graph", answer=answer, steps=sol.steps,
+        concept_tags=_effective_concept_tags(ctx),
+        cause_tags=list(ctx.spec_level.cause_tags),
+    )
+    return MR(
+        signature=ctx.spec_level.signature, family=ctx.family, level=ctx.level,
+        purpose=ctx.purpose, seed=0, params=params,
+        given={"condition": statement}, sub_questions=[sub_question],
+        visual_plan=visual_plan,
+        provenance=Provenance(recipe="math.coordinate_right_triangle"),
+    )

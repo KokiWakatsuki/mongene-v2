@@ -23,7 +23,14 @@ from __future__ import annotations
 
 import sympy
 
-from engine.core.contracts import ChoiceAnswer, Solution, Step, SymbolicAnswer
+from engine.core.contracts import (
+    ChoiceAnswer,
+    Feature,
+    GraphAnswer,
+    Solution,
+    Step,
+    SymbolicAnswer,
+)
 from engine.core.registry import register_solver
 
 
@@ -147,3 +154,67 @@ def judge_right_triangle_from_three_sides(side_a: object, side_b: object, side_c
     ]
     answer = ChoiceAnswer(correct=correct, distractors=[other], fact_id="pythagorean.judge_right_triangle")
     return Solution(answer=answer, steps=steps)
+
+
+_COORD_TRIANGLE_OPS = [
+    "locate_right_angle_vertex",
+    "measure_horizontal_leg",
+    "measure_vertical_leg",
+]
+
+_COORD_TRIANGLE_NARRATION: dict[str, str] = {
+    "locate_right_angle_vertex": "直角をはさむ2辺を座標軸に平行にするので、直角の頂点は"
+                                 "一方の点の x 座標と、もう一方の点の y 座標を組にした点になる。"
+                                 "その点をとって、2点とそれぞれ結ぶ。",
+    "measure_horizontal_leg": "横向きの辺の長さは、2点の x 座標の差の絶対値で求まる。",
+    "measure_vertical_leg": "縦向きの辺の長さは、2点の y 座標の差の絶対値で求まる。",
+}
+
+_COORD_TRIANGLE_PHRASE: dict[str, str] = {
+    "locate_right_angle_vertex": "直角の頂点をとる",
+    "measure_horizontal_leg": "横の辺の長さを求める",
+}
+
+
+@register_solver("math.coordinate_right_triangle_legs")
+def coordinate_right_triangle_legs(
+    x1: object, y1: object, x2: object, y2: object
+) -> Solution:
+    """2点を斜辺とし、直角をはさむ2辺が座標軸に平行な直角三角形（g3_l54.graph_table Lv2）。
+
+    直角の頂点は (x2, y1)（一方の x 座標ともう一方の y 座標）。答えは
+    GraphAnswer で、features は 直角の頂点の座標・横の辺の長さ・縦の辺の長さ の3つ。
+    座標軸に平行な線分（差の一方が 0）は三角形にならないので拒否する。
+    """
+    ax, ay = sympy.Integer(int(str(x1))), sympy.Integer(int(str(y1)))
+    bx, by = sympy.Integer(int(str(x2))), sympy.Integer(int(str(y2)))
+    dx, dy = abs(bx - ax), abs(by - ay)
+    if dx == 0 or dy == 0:
+        raise ValueError("2点が座標軸に平行に並んでいて直角三角形ができない")
+    corner = sympy.Tuple(bx, ay)
+    features = [
+        Feature(
+            kind="right_angle_vertex", srepr=sympy.srepr(corner),
+            display=f"直角の頂点 ({bx}, {ay})",
+        ),
+        Feature(kind="horizontal_leg", srepr=sympy.srepr(dx), display=f"横の辺の長さ {dx}"),
+        Feature(kind="vertical_leg", srepr=sympy.srepr(dy), display=f"縦の辺の長さ {dy}"),
+    ]
+    disp = f"直角の頂点は ({bx}, {ay})、横の辺 {dx}、縦の辺 {dy}"
+    srepr = sympy.srepr(sympy.Tuple(corner, dx, dy))
+    return Solution(
+        answer=GraphAnswer(features=features, solution_svg_ref=""),
+        steps=_steps_coord(srepr, disp),
+    )
+
+
+def _steps_coord(srepr: str, disp: str) -> list[Step]:
+    return [
+        Step(
+            op=op, args=[],
+            result_srepr=srepr if i == len(_COORD_TRIANGLE_OPS) - 1 else "",
+            result_display=disp if i == len(_COORD_TRIANGLE_OPS) - 1 else _COORD_TRIANGLE_PHRASE[op],
+            narration=_COORD_TRIANGLE_NARRATION[op],
+        )
+        for i, op in enumerate(_COORD_TRIANGLE_OPS)
+    ]

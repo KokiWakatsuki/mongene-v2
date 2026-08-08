@@ -10697,3 +10697,23 @@ def test_g2_l33_levels_have_distinct_op_columns():
     ops2 = [s.op for s in mr2.sub_questions[0].steps]
     assert ops1 != ops2
     assert "draw_auxiliary_line" in ops2
+
+
+@pytest.mark.parametrize("seed", range(20))
+def test_g3_l54_graph_table_right_triangle(seed):
+    """g3_l54.graph_table Lv2: 直角の頂点は (x2, y1)、2辺は座標の差の絶対値。
+
+    軸に平行に並ぶ2点（差の一方が 0）は三角形にならないので構成で除いてある。
+    """
+    _ctx, mr = _cell_mr("math.g3_l54.graph_table", 2, seed)
+    x1, y1, x2, y2 = (int(mr.params[k]) for k in ("x1", "y1", "x2", "y2"))
+    assert x1 != x2 and y1 != y2
+    feats = {f.kind: sympy.sympify(f.srepr) for f in mr.sub_questions[0].answer.features}
+    assert feats["right_angle_vertex"] == sympy.Tuple(x2, y1)
+    assert feats["horizontal_leg"] == abs(x2 - x1)
+    assert feats["vertical_leg"] == abs(y2 - y1)
+    # 直角の頂点は描画側でも同じ点を使う（対応表を2か所に持たない）。
+    assert mr.params["right_angle_pt"] == f"({x2}, {y1})"
+    checker = REGISTRY.checker("math.coordinate_right_triangle.double_solve")
+    recomputed = {f.kind: sympy.sympify(f.srepr) for f in checker(mr).answer.features}
+    assert recomputed == feats
