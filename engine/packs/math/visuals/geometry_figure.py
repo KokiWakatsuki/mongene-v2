@@ -21,18 +21,29 @@ _W, _H = 420, 340
 _MARGIN = 46
 
 
-def _project(coords: dict[str, tuple[float, float]]) -> dict[str, tuple[float, float]]:
-    """図の座標を、余白つきで画面いっぱいに収まる画素座標へ移す（縦横比は保つ）。"""
+def _projector(
+    coords: dict[str, tuple[float, float]],
+    circles: list[tuple[tuple[float, float], float]] = (),
+):
+    """図の座標を、余白つきで画面いっぱいに収まる画素座標へ移す（縦横比は保つ）。
+
+    円は点より外へ広がるので、**円の外接する正方形も収まる範囲に入れる**
+    （入れないと円が枠からはみ出して切れる）。戻り値は (写す関数, 倍率)。
+    """
     xs = [p[0] for p in coords.values()]
     ys = [p[1] for p in coords.values()]
+    for (ox, oy), r in circles:
+        xs += [ox - r, ox + r]
+        ys += [oy - r, oy + r]
     w = max(xs) - min(xs) or 1.0
     h = max(ys) - min(ys) or 1.0
     scale = min((_W - 2 * _MARGIN) / w, (_H - 2 * _MARGIN) / h)
     cx, cy = (max(xs) + min(xs)) / 2, (max(ys) + min(ys)) / 2
-    return {
-        name: (_W / 2 + (x - cx) * scale, _H / 2 - (y - cy) * scale)
-        for name, (x, y) in coords.items()
-    }
+
+    def to_px(x: float, y: float) -> tuple[float, float]:
+        return (_W / 2 + (x - cx) * scale, _H / 2 - (y - cy) * scale)
+
+    return to_px, scale
 
 
 def _tick_marks(p1: tuple[float, float], p2: tuple[float, float], count: int) -> list[str]:
@@ -101,7 +112,11 @@ def render_construction_svg(params: dict[str, Any]) -> str:
     グループごとに斜線の本数を変える（1本目のグループは1本、2本目は2本…）。
     """
     coords = {str(k): (float(v[0]), float(v[1])) for k, v in params["coords"].items()}
-    px = _project(coords)
+    circles = [
+        ((float(c[0][0]), float(c[0][1])), float(c[1])) for c in params.get("circles", [])
+    ]
+    to_px, scale = _projector(coords, circles)
+    px = {name: to_px(x, y) for name, (x, y) in coords.items()}
     cx = sum(p[0] for p in px.values()) / len(px)
     cy = sum(p[1] for p in px.values()) / len(px)
 
@@ -110,6 +125,13 @@ def render_construction_svg(params: dict[str, Any]) -> str:
         f'width="{_W}" height="{_H}">',
         f'<rect x="0" y="0" width="{_W}" height="{_H}" fill="none" stroke="none"/>',
     ]
+    # 円は先に描く（線分やラベルの下になるように）。
+    for (ox, oy), r in circles:
+        ox_px, oy_px = to_px(ox, oy)
+        parts.append(
+            f'<circle cx="{ox_px:.2f}" cy="{oy_px:.2f}" r="{r * scale:.2f}" '
+            f'fill="none" stroke="#000000" stroke-width="1.6"/>'
+        )
     for a, b in params["segments"]:
         (x1, y1), (x2, y2) = px[str(a)], px[str(b)]
         parts.append(

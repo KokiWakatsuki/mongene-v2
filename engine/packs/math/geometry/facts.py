@@ -59,6 +59,7 @@ FactKind = Literal[
     "seg_half",    # 一方の線分の長さが他方の半分
     "ratio_eq",    # 2つの線分の比が、別の2つの線分の比に等しい
     "on_circle",   # ある点が、ある中心の円周上にある
+    "same_arc",    # 2点が、ある弦について同じ側の弧の上にある
 ]
 
 
@@ -240,6 +241,21 @@ def on_circle(p: Point, center: Point) -> Fact:
     return Fact("on_circle", (p, center))
 
 
+def same_arc(chord: tuple[Point, Point], p: Point, q: Point) -> Fact:
+    """点 p と点 q が、弦 `chord` について**同じ側の弧**の上にある。
+
+    円周角の定理は「**同じ弧に対する**円周角は等しい」であって、弦を挟んで反対側の
+    弧にある点どうしでは成り立たない（そちらは和が 180°）。どちらの弧にあるかは
+    座標を測って決めるのではなく、**円周上に点をとった手順（角度）が決めている**。
+
+    正規形: 弦は線分として並べ替え、2点も並べ替える（どちらも対称な関係）。
+    """
+    if len({chord[0], chord[1], p, q}) != 4:
+        raise ValueError(f"弦の端点と2点が相異でない: {chord}, {p}, {q}")
+    lo, hi = (p, q) if p <= q else (q, p)
+    return Fact("same_arc", (seg(*chord), (lo, hi)))
+
+
 # ---------------------------------------------------------------------------
 # 表示（証明文にそのまま出る形。ここを1か所に集めておく）
 # ---------------------------------------------------------------------------
@@ -294,6 +310,9 @@ def fact_text(f: Fact) -> str:
         return f"{seg_text(a)}：{seg_text(b)} ＝ {seg_text(c)}：{seg_text(d)}"
     if f.kind == "on_circle":
         return f"点{f.args[0]} は点{f.args[1]}を中心とする円の周上にある"
+    if f.kind == "same_arc":
+        (a, b), (p, q) = f.args
+        return f"点{p} と点{q} は弦{a}{b}について同じ側の弧の上にある"
     raise ValueError(f"未知の述語: {f.kind}")
 
 
@@ -308,9 +327,11 @@ __all__ = [
     "fact_text",
     "is_common_segment",
     "midpoint",
+    "on_circle",
     "parallel",
     "parallel_dir",
     "perp",
+    "same_arc",
     "seg",
     "seg_eq",
     "seg_text",

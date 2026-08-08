@@ -30,6 +30,7 @@ from engine.core.contracts import (
 from engine.core.registry import register_recipe
 from engine.core.rng import Rng, draw
 from engine.packs.math.geometry import (  # noqa: F401  登録の副作用で構成が入る
+    constructions_circle,
     constructions_congruence,
     constructions_parallelogram,
     constructions_right_triangle,
@@ -84,7 +85,9 @@ def build_problem(
     builder = CONSTRUCTIONS[kind]
     con = builder(params)
     rules = tuple(r for r in RULES if r.name not in exclude_rules)
-    ded = saturate(con.points, frozenset(con.facts), rules=rules)
+    ded = saturate(
+        con.points, frozenset(con.facts), rules=rules, ray_classes=con.ray_classes()
+    )
     goal = select_goal(
         ded, level=level, allowed_topics=topics_of(topic_set), prefer=prefer, depth=depth
     )
@@ -130,6 +133,9 @@ _PROOF_CONCEPTS = [
     "parallel_ratio_proof.converse",
     "midline_proof.direct",
     "midline_proof.auxiliary",
+    "circle_proof.inscribed_direct",
+    "circle_proof.two_step",
+    "circle_proof.construct",
 ]
 
 
@@ -168,6 +174,7 @@ def geometry_proof_recipe(ctx: CellContext, rng: Rng) -> MR:
         {
             "coords": con.coords,
             "segments": con.segments,
+            "circles": con.circles,
             "equal_groups": _equal_groups(con),
         }
     )

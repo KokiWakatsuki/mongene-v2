@@ -19,6 +19,7 @@
 """
 from __future__ import annotations
 
+import itertools
 import math
 from dataclasses import dataclass, field
 
@@ -27,7 +28,9 @@ from engine.packs.math.geometry.facts import (
     Point,
     collinear,
     midpoint,
+    on_circle,
     parallel_dir,
+    same_arc,
     seg,
     seg_eq,
 )
@@ -53,6 +56,12 @@ class Construction:
     # 問題文の書き出し（「平行四辺形ABCDで」のように、条件を並べるより自然な言い方が
     # あるときに使う。空なら givens を並べて書く）。
     description: str = ""
+    # 図に描く円（中心の座標と半径）。中心を点として描くかどうかとは別に持つ
+    # ——円周角の図では中心 O を描かないのがふつうだが、円そのものは描く。
+    circles: list[tuple[Coord, float]] = field(default_factory=list)
+    # 「点 m が点 a と点 b の間にある」という手順の記録（a, m, b の順）。
+    # **同じ半直線を別の点で呼んでしまう問題**を解くのに要る（`ray_classes`）。
+    collinear_order: list[tuple[Point, Point, Point]] = field(default_factory=list)
 
     @property
     def points(self) -> list[Point]:
@@ -79,6 +88,50 @@ class Construction:
         self.facts.add(fact)
         self.givens.append(fact)
         self.steps.append(f"点{center}を中心とする半径{center}{radius_to}の円上に点{name}をとる")
+
+    def points_on_circle(
+        self,
+        center: Point,
+        center_xy: Coord,
+        radius: float,
+        placements: dict[Point, float],
+        *,
+        draw_center: bool = False,
+    ) -> None:
+        """1つの円の周上に、指定した角度の位置へ点をまとめてとる。
+
+        **どちらの弧の上にあるかは、手順（角度）が決めている**——座標を測って
+        「同じ側に見える」と判定しているのではない。円周角の定理は「同じ弧に対する」
+        という条件つきの定理なので、ここが手順から出ていないと定理を機械的に使えない。
+
+        `draw_center` が真のときだけ中心を点として図に置き、`on_circle` の事実を出す
+        （＝「半径は等しい」が使えるようになる）。円周角の図では中心を描かないのが
+        ふつうなので既定は偽——描かない中心について「OA ＝ OB」と書く証明は、
+        図に無い線分の話になってしまう。
+
+        直径になっている2点（角度差 180°）には、中心が中点であることと3点が一直線に
+        あることを出す（半円の弧に対する円周角＝90° の規則が、ここを見る）。
+        """
+        self.circles.append((center_xy, radius))
+        cx, cy = center_xy
+        if draw_center:
+            self._add(center, center_xy)
+        for name, deg in placements.items():
+            rad = math.radians(deg)
+            self._add(name, (cx + radius * math.cos(rad), cy + radius * math.sin(rad)))
+            if draw_center:
+                self.facts.add(on_circle(name, center))
+        self.steps.append(
+            f"円{center}の周上に点{'、点'.join(placements)}をとる"
+        )
+        names = list(placements)
+        for a, b in itertools.combinations(names, 2):
+            if draw_center and _is_diameter(placements[a], placements[b]):
+                self.facts.add(midpoint(center, seg(a, b)))
+                self.facts.add(collinear(a, center, b))
+            for p, q in itertools.combinations([n for n in names if n not in (a, b)], 2):
+                if _on_same_arc(placements[a], placements[b], placements[p], placements[q]):
+                    self.facts.add(same_arc((a, b), p, q))
 
     def point_on_perpendicular_bisector(
         self, name: Point, p: Point, q: Point, *, offset: float
@@ -107,6 +160,7 @@ class Construction:
         fact = midpoint(center, seg(p, name))
         self.facts.add(fact)
         self.facts.add(collinear(p, center, name))
+        self.collinear_order.append((p, center, name))
         self.givens.append(fact)
         self.steps.append(f"点{p}を点{center}について対称移動した点を{name}とする")
 
@@ -132,6 +186,7 @@ class Construction:
         fact = midpoint(name, seg(p, q))
         self.facts.add(fact)
         self.facts.add(collinear(p, name, q))
+        self.collinear_order.append((p, name, q))
         self.givens.append(fact)
         self.steps.append(f"線分{p}{q}の中点を{name}とする")
 
@@ -148,9 +203,58 @@ class Construction:
         self._add(name, (x1 + t * (x2 - x1), y1 + t * (y2 - y1)))
         self.facts.add(collinear(line1[0], name, line1[1]))
         self.facts.add(collinear(line2[0], name, line2[1]))
+        # 交点が線分の**内側**に落ちたかは手順の出力（媒介変数）そのもので、
+        # 図を測って一致を見たものではない。内側なら「間にある」を記録する
+        # （同じ半直線を別の点で呼ぶ問題を解くのに要る＝`ray_classes`）。
+        for (u, v), s_ in ((line1, t), (line2, _param_on(self.coords, line2, (x1 + t * (x2 - x1), y1 + t * (y2 - y1))))):
+            if 1e-6 < s_ < 1 - 1e-6:
+                self.collinear_order.append((u, name, v))
         self.steps.append(
             f"直線{line1[0]}{line1[1]}と直線{line2[0]}{line2[1]}の交点を{name}とする"
         )
+
+    def ray_classes(self) -> dict[tuple[Point, Point], tuple[Point, ...]]:
+        """「頂点から見て**同じ半直線の上にある点**」の組を返す。
+
+        弦 AC と BD の交点を P とした図で、△PAB の頂点 A の角は ∠BAP と書くが、
+        円周角の定理が出すのは ∠BAC である。P は線分 AC の上にあるので**この2つは
+        同じ角**なのに、点の名前が違うので別の事実になってしまう。角を作るところで
+        名前をそろえないと、教科書の定番の証明（円周角 → 相似）が1つも出てこない。
+
+        戻り値は (頂点, 腕の点) → その半直線を指す点の並び。並びの先頭が代表で、
+        **頂点から最も遠い点**をとる（教科書が ∠BAP ではなく ∠BAC と書くのに合わせる）。
+
+        どちらが遠いかは座標を測ったのではなく、`collinear_order`（手順が記録した
+        「間にある」の関係）から決まる。
+        """
+        farther: dict[tuple[Point, Point], Point] = {}
+        for a, m, b in self.collinear_order:
+            farther[(a, m)] = b
+            farther[(b, m)] = a
+
+        def rep(v: Point, x: Point) -> Point:
+            seen = {x}
+            while (v, x) in farther:
+                x = farther[(v, x)]
+                if x in seen:  # pragma: no cover - 手順が輪を作ったとき
+                    break
+                seen.add(x)
+            return x
+
+        members: dict[tuple[Point, Point], list[Point]] = {}
+        for v in self.coords:
+            for x in self.coords:
+                if x == v:
+                    continue
+                members.setdefault((v, rep(v, x)), []).append(x)
+        out: dict[tuple[Point, Point], tuple[Point, ...]] = {}
+        for (v, r), xs in members.items():
+            if len(xs) == 1:
+                continue
+            ordered = (r, *sorted(x for x in xs if x != r))
+            for x in xs:
+                out[(v, x)] = ordered
+        return out
 
     def connect(self, p: Point, q: Point, *, shared: bool = False) -> None:
         """線分を引く（図に描く）。`shared=True` なら「共通」として証明に使える。"""
@@ -163,6 +267,43 @@ class Construction:
         if name in self.coords:
             raise ValueError(f"点{name}は既にある")
         self.coords[name] = xy
+
+
+def _param_on(coords: dict[Point, Coord], line: tuple[Point, Point], pt: Coord) -> float:
+    """線分 line 上での位置（端点を 0 と 1 とする媒介変数）。`intersection` が使う。"""
+    (ax, ay), (bx, by) = coords[line[0]], coords[line[1]]
+    dx, dy = bx - ax, by - ay
+    n2 = dx * dx + dy * dy
+    if n2 < 1e-12:  # pragma: no cover - 端点が重なる線分は作らない
+        return -1.0
+    return ((pt[0] - ax) * dx + (pt[1] - ay) * dy) / n2
+
+
+def _is_diameter(deg_a: float, deg_b: float) -> bool:
+    """円周上の2点が直径の両端か（角度が 180° 離れているか）。"""
+    return abs((deg_a - deg_b) % 360.0 - 180.0) < 1e-6
+
+
+def _on_same_arc(deg_a: float, deg_b: float, deg_p: float, deg_q: float) -> bool:
+    """弦 ab について、点 p と点 q が同じ側の弧の上にあるか。
+
+    a から b へ反時計回りに進む弧の内側にあるかどうかで2つの弧に分ける。両方が内側、
+    または両方が外側なら同じ弧である。端点と重なる配置は構成の誤りなので偽を返す。
+    """
+    span = (deg_b - deg_a) % 360.0
+    if span < 1e-6:
+        return False
+
+    def inside(deg: float) -> bool | None:
+        t = (deg - deg_a) % 360.0
+        if t < 1e-6 or abs(t - span) < 1e-6:
+            return None
+        return t < span
+
+    ip, iq = inside(deg_p), inside(deg_q)
+    if ip is None or iq is None:
+        return False
+    return ip == iq
 
 
 # ---------------------------------------------------------------------------

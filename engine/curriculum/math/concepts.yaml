@@ -1159,6 +1159,15 @@ concepts:
   - id: parallel_ratio_proof.converse
     label: "比の条件から、2直線が平行であることを逆を使って記述証明する"
     unit: g3_l43
+  - id: circle_proof.inscribed_direct
+    label: "同じ弧に対する円周角が等しいことを根拠に、相似や合同を直接証明する"
+    unit: g3_l49
+  - id: circle_proof.two_step
+    label: "補助線や複数の等角を用い、円周角を根拠に2段階で証明する"
+    unit: g3_l49
+  - id: circle_proof.construct
+    label: "着目する円周角と三角形を自分で選び、証明を構成する"
+    unit: g3_l49
   - id: midline_proof.direct
     label: "中点連結定理を根拠に、平行や長さの関係を直接証明する"
     unit: g3_l44

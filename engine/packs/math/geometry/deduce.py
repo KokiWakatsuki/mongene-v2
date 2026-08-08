@@ -11,7 +11,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 
-from engine.packs.math.geometry.facts import Fact
+from engine.packs.math.geometry.facts import Fact, ang, ang_eq
 from engine.packs.math.geometry.rules import RULES, Rule
 
 _MAX_ROUNDS = 12  # 飽和しないことは無いが、暴走の歯止め
@@ -32,6 +32,9 @@ class Deduction:
 
     given: frozenset[Fact]
     why: dict[Fact, Justification] = field(default_factory=dict)
+    # 同じ角を別の点の名前で書いただけの控え（`saturate` の docstring を見よ）。
+    # 規則が引き当てるためだけに持つので、**結論の候補にはしない**。
+    aliases: set[Fact] = field(default_factory=set)
 
     @property
     def facts(self) -> frozenset[Fact]:
@@ -40,7 +43,11 @@ class Deduction:
     def derived(self) -> list[Fact]:
         """仮定でない（＝導出された）事実を、深さの浅い順に並べて返す。"""
         return sorted(
-            (f for f, j in self.why.items() if j.rule is not None),
+            (
+                f
+                for f, j in self.why.items()
+                if j.rule is not None and f not in self.aliases
+            ),
             key=lambda f: (self.why[f].depth, f.kind, f.args),
         )
 
@@ -78,15 +85,70 @@ class Deduction:
         return self.why[fact].rule
 
 
-def saturate(points: list[str], given: frozenset[Fact], *, rules=RULES) -> Deduction:
+def _angle_writings(
+    a: tuple[str, str, str], ray_classes: dict[tuple[str, str], tuple[str, ...]]
+) -> list[tuple[str, str, str]]:
+    """1つの角を、同じ半直線を指す別の点の名前で書いた全通り（先頭が代表）。"""
+    v, x, y = a
+    out: list[tuple[str, str, str]] = []
+    for nx in ray_classes.get((v, x), (x,)):
+        for ny in ray_classes.get((v, y), (y,)):
+            if nx == ny:
+                continue
+            out.append(ang(v, nx, ny))
+    return out or [a]
+
+
+def _writings(
+    f: Fact, ray_classes: dict[tuple[str, str], tuple[str, ...]]
+) -> list[Fact]:
+    """事実の書き方の全通り（先頭が代表）。角を含まない述語はそのまま1通り。"""
+    if not ray_classes:
+        return [f]
+    if f.kind == "ang_eq":
+        out = []
+        for a1 in _angle_writings(f.args[0], ray_classes):
+            for a2 in _angle_writings(f.args[1], ray_classes):
+                g = ang_eq(a1, a2)
+                if g.args[0] != g.args[1] and g not in out:
+                    out.append(g)
+        return out or [f]
+    if f.kind == "right_angle":
+        return [Fact("right_angle", (a,)) for a in _angle_writings(f.args[0], ray_classes)]
+    return [f]
+
+
+def saturate(
+    points: list[str],
+    given: frozenset[Fact],
+    *,
+    rules=RULES,
+    ray_classes: dict[tuple[str, str], tuple[str, ...]] | None = None,
+) -> Deduction:
     """仮定から、規則を適用できる限り繰り返して事実を飽和させる。
 
     同じ事実が複数の経路で出ることがあるので、**先に出た（＝深さの浅い）導出を残す**。
     これで `proof_chain` が自動的に最短導出になる（遠回りな模範解答を出さない）。
+
+    `ray_classes` は「頂点から見て同じ半直線の上にある点」の組
+    （`Construction.ray_classes`）。**同じ角を別の点の名前で書いてしまう問題**を
+    ここで吸収する——弦 AC と BD の交点を P とした図で、円周角の定理が出すのは
+    ∠BAC だが、△PAB の頂点 A の角は ∠BAP と書く。同じ角なのに事実としては別物
+    なので、そろえないと教科書の定番の証明（円周角 → 相似）が1つも出てこない。
+
+    そろえ方は「別の書き方も**同じ導出で**登録する」。代表（頂点から最も遠い点で
+    書いたもの）以外は `aliases` に入れて、**結論の候補からは外す**——結論が
+    ∠BAP と ∠BAC の2通り出てくると、同じ問題が2つあることになってしまう。
     """
+    ray_classes = ray_classes or {}
     ded = Deduction(given=given)
     for f in given:
-        ded.why[f] = Justification(rule=None, premises=(), depth=0)
+        for i, g in enumerate(_writings(f, ray_classes)):
+            if g in ded.why:
+                continue
+            ded.why[g] = Justification(rule=None, premises=(), depth=0)
+            if i:
+                ded.aliases.add(g)
 
     for _round in range(_MAX_ROUNDS):
         current = frozenset(ded.why)
@@ -98,7 +160,14 @@ def saturate(points: list[str], given: frozenset[Fact], *, rules=RULES) -> Deduc
                 if any(p not in ded.why for p in premises):
                     continue
                 depth = max((ded.why[p].depth for p in premises), default=0) + 1
-                ded.why[concl] = Justification(rule=rule, premises=tuple(premises), depth=depth)
+                just = Justification(rule=rule, premises=tuple(premises), depth=depth)
+                # 代表は `_writings` の先頭（規則がどの書き方で出したかによらない）。
+                for i, g in enumerate(_writings(concl, ray_classes)):
+                    if g in ded.why:
+                        continue
+                    ded.why[g] = just
+                    if i:
+                        ded.aliases.add(g)
                 added = True
         if not added:
             return ded

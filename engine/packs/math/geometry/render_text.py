@@ -25,9 +25,11 @@ from engine.packs.math.geometry.facts import (
     tri_text,
 )
 
-# 図の構造そのもの（点が一直線に並んでいる等）は、教科書では仮定の行に書かない。
-# 図を見れば分かることなので、番号を振って引用すると証明が冗長になる。
-_STRUCTURAL_KINDS = frozenset({"collinear", "parallel_dir"})
+# 図の構造そのもの（点が一直線に並んでいる・円周上にある等）は、教科書では仮定の行に
+# 書かない。図を見れば分かることなので、番号を振って引用すると証明が冗長になる。
+# （「弧BCに対する円周角は等しいから ∠BAC＝∠BDC」と書くのであって、その前に
+# 「点Aと点Dは弦BCについて同じ側の弧の上にある …①」の行は立てない。）
+_STRUCTURAL_KINDS = frozenset({"collinear", "parallel_dir", "on_circle", "same_arc"})
 
 
 @dataclass(frozen=True)
