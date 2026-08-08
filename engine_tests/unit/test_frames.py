@@ -116,6 +116,8 @@ def test_graph_table_vocab_and_visual():
         "read_solid", "draw_solid",
         # C13 exam_l1: 直線と図形の位置関係を図から読む
         "read_position",
+        # Phase E 端物: 図の中の要素（線分・直線・辺）を記号で答える
+        "read_figure_element",
     })
     assert f.visual == "required"
 

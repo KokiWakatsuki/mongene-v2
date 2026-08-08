@@ -999,6 +999,15 @@ concepts:
   - id: line_angle_terms.term_recall
     label: "直線・線分・半直線・角の用語を想起する"
     unit: g1_l37
+  - id: line_angle_terms.read_point_line_distance
+    label: "図の中で点と直線の距離を表している線分を選ぶ"
+    unit: g1_l37
+  - id: parallel_lines.identify_parallel_from_figure
+    label: "横断線となす角を見比べて、平行な直線を図から選ぶ"
+    unit: g2_l32
+  - id: right_triangle_congruence.read_hypotenuse_and_legs
+    label: "直角三角形の斜辺と直角をはさむ2辺を、図から記号で示す"
+    unit: g2_l44
   - id: point_line_distance.meaning
     label: "点と直線との距離が垂線の長さを指すことを判別する"
     unit: g1_l37

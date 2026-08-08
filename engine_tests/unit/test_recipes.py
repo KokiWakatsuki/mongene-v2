@@ -10717,3 +10717,76 @@ def test_g3_l54_graph_table_right_triangle(seed):
     checker = REGISTRY.checker("math.coordinate_right_triangle.double_solve")
     recomputed = {f.kind: sympy.sympify(f.srepr) for f in checker(mr).answer.features}
     assert recomputed == feats
+
+
+# ---------------------------------------------------------------------------
+# Phase E 端物: 図の要素を記号で答える3セル（g1_l37 / g2_l32 / g2_l44 の graph_table Lv1）
+# ---------------------------------------------------------------------------
+_FIGURE_READING_CELLS = [
+    ("math.g1_l37.graph_table", "identify_distance_segment", "math.identify_distance_segment"),
+    ("math.g2_l32.graph_table", "identify_parallel_line", "math.identify_parallel_line"),
+    ("math.g2_l44.graph_table", "identify_right_triangle_sides",
+     "math.identify_right_triangle_sides"),
+]
+
+
+@pytest.mark.parametrize(("family", "signature", "recipe"), _FIGURE_READING_CELLS)
+@pytest.mark.parametrize("seed", range(20))
+def test_figure_reading_cells_shape(seed, family, signature, recipe):
+    """3セル共通の骨格: read_figure_element の選択肢1問・図つき・答えは params に無い。"""
+    _ctx, mr = _cell_mr(family, 1, seed)
+    assert mr.signature == signature
+    assert [(sq.label, sq.asked) for sq in mr.sub_questions] == [("(1)", "read_figure_element")]
+    answer = mr.sub_questions[0].answer
+    assert answer.kind == "choice"
+    # 選択肢は相異で、正解が妨害に混ざっていない。
+    assert answer.correct not in answer.distractors
+    assert len(set(answer.distractors)) == len(answer.distractors)
+    assert mr.visual_plan is not None and mr.visual_plan.elements
+    assert set(mr.given) == {"condition"}
+    checker = REGISTRY.checker(f"{recipe}.double_solve")
+    assert checker(mr).answer.correct == answer.correct
+
+
+@pytest.mark.parametrize("seed", range(20))
+def test_g1_l37_distance_segment_options_are_all_in_figure(seed):
+    """選択肢はすべて図に描かれている線分（図に無いものを混ぜると消去法で解ける）。"""
+    _ctx, mr = _cell_mr("math.g1_l37.graph_table", 1, seed)
+    p, h = mr.params["point_p"], mr.params["point_foot"]
+    a, b = mr.params["point_left"], mr.params["point_right"]
+    assert len({p, h, a, b}) == 4
+    answer = mr.sub_questions[0].answer
+    assert answer.correct == f"線分{p}{h}", "距離は垂線の長さ＝点と垂線の足を結ぶ線分"
+    assert set(answer.distractors) == {f"線分{p}{a}", f"線分{p}{b}", f"線分{a}{b}"}
+
+
+@pytest.mark.parametrize("seed", range(20))
+def test_g2_l32_exactly_one_line_matches_base_angle(seed):
+    """基準と同じ角の直線がちょうど1本（複数あると答えが定まらない）。"""
+    _ctx, mr = _cell_mr("math.g2_l32.graph_table", 1, seed)
+    base = int(mr.params["base_angle"])
+    angles = [int(a) for a in mr.params["angles"]]
+    names = [str(n) for n in mr.params["names"]]
+    assert len(angles) == len(names)
+    matched = [n for n, a in zip(names, angles, strict=True) if a == base]
+    assert len(matched) == 1
+    assert mr.sub_questions[0].answer.correct == f"直線{matched[0]}"
+    # 角はすべて相異（同じ角が2本あると平行な組が2つできる）。
+    assert len(set(angles)) == len(angles)
+
+
+@pytest.mark.parametrize("seed", range(20))
+def test_g2_l44_hypotenuse_is_opposite_the_right_angle(seed):
+    """斜辺は直角の頂点をふくまない辺。妨害は斜辺の取り違え2通り。"""
+    _ctx, mr = _cell_mr("math.g2_l44.graph_table", 1, seed)
+    labels = [str(v) for v in mr.params["vertex_labels"]]
+    idx = int(mr.params["right_angle_index"])
+    right = labels[idx]
+    others = [n for i, n in enumerate(labels) if i != idx]
+    answer = mr.sub_questions[0].answer
+    assert answer.correct == (
+        f"斜辺は辺{others[0]}{others[1]}、"
+        f"直角をはさむ2辺は辺{right}{others[0]}と辺{right}{others[1]}"
+    )
+    assert right not in f"{others[0]}{others[1]}"
+    assert len(answer.distractors) == 2

@@ -194,6 +194,10 @@ GRAPH_TABLE_FRAME = Frame(
         "read_solid", "draw_solid",
         # C13 exam_l1: 直線と図形の位置関係を図から読む（内部を通るか）
         "read_position",
+        # Phase E 端物（g1_l37/g2_l32/g2_l44 の Lv1）: 図の中の要素（線分・直線・辺）を
+        # 記号で答える。「値を読む」(read_point) でも「かく」(draw_*) でもなく、
+        # **図の中のどれか**を選ぶ——答えは ChoiceAnswer になる。
+        "read_figure_element",
     }),
     visual="required",
     _forbidden_by_asked={

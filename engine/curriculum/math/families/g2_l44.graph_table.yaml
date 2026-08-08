@@ -1,0 +1,37 @@
+family: math.g2_l44.graph_table
+form: graph_table
+source_desc: |
+  直角三角形の合同条件 — 図に示す
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: 斜辺・直角・対応要素を図に示す。
+       example: 図の直角三角形ABC(∠C=90°)について、斜辺にあたる辺と直角をはさむ2辺を、
+                記号を用いて示せ。
+  ---
+  【3セル共通の投資】g1_l37.graph_table Lv1 の source_desc を参照
+  （frame の `read_figure_element` ＋ `visuals/plane_figure.py` を共有する）。
+
+  【選択肢の作り】妨害は「斜辺の取り違え」＝直角をはさむ辺のどちらかを斜辺と答える形。
+  直角三角形の合同条件（斜辺と1鋭角・斜辺と他の1辺）で実際に起きる誤りをそのまま
+  選択肢にしてある。
+
+  【答えを図に描かない】描くのは直角の記号だけ（∠C=90° は問題文が与えている条件）。
+  斜辺に印をつけると答えが図に出る。
+
+  【dup】頂点名は連続3文字（24通り）× 直角の頂点の位置（3通り）× 2辺の長さ（px）。
+  辺の長さは答えに効かない surface だが、図の形が変わるので生徒には別の問題に見える。
+concepts_default: [right_triangle_congruence.read_hypotenuse_and_legs]
+levels:
+  "1":
+    signature: identify_right_triangle_sides
+    recipe: math.identify_right_triangle_sides
+    params:
+      leg_px_domain: {int_range: [90, 170]}
+    given: [condition]
+    asked: [read_figure_element]
+    visual: required
+    text: {tier: T1, template: lf_motion_area_v1, visual_builder: math.right_triangle_figure}
+    hints: [steps_prefix]
+    concept_tags: [right_triangle_congruence.read_hypotenuse_and_legs]
+    cause_tags: []
+remedial:
+  default_level: 1

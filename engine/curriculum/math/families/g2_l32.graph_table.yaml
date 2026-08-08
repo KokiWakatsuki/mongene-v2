@@ -1,0 +1,44 @@
+family: math.g2_l32.graph_table
+form: graph_table
+source_desc: |
+  平行線の性質と平行になるための条件 — 図で識別する
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: 平行となる直線を図で識別する。
+       example: 右の図の直線 a〜d のうち、直線 l と平行であるものを記号で答えよ。
+  ---
+  【3セル共通の投資】g1_l37.graph_table Lv1 の source_desc を参照
+  （frame の `read_figure_element` ＋ `visuals/plane_figure.py` を共有する）。
+
+  【図の作り】横断線を1本（縦）引き、それが横切る直線ごとに「横断線となす角」を
+  書きこむ。**線の向きは横断線の向きを角の分だけ回して作る**——横断線を斜めにして
+  「水平からの角」で線を引くと、図に書いた角と実際の角が食い違う（最初に踏んだ）。
+  同位角が等しい直線が基準の直線と平行、という条件そのものが読み取りになる。
+
+  【答えを図に描かない】平行の矢羽根は描かない（描くと答えが図に出る）。
+
+  【退化の封じ方】基準と同じ角の直線がちょうど1本になるように構成する
+  （角はすべて相異に引き、正解の1本だけ基準と同じ角にする）。solver 側でも
+  一致が1本であることを検査する。
+
+  【dup】候補の本数（3〜4）× 基準の角（35〜80）× 他の角の組（相異）× 正解の位置。
+concepts_default: [parallel_lines.identify_parallel_from_figure]
+levels:
+  "1":
+    signature: identify_parallel_line
+    recipe: math.identify_parallel_line
+    params:
+      transversal_name: "m"
+      base_name: "l"
+      line_name_candidates: ["a", "b", "c", "d"]
+      candidate_count_domain: {int_range: [3, 4]}
+      angle_domain: {int_range: [35, 80]}
+      angle_range: [30, 85]
+    given: [condition]
+    asked: [read_figure_element]
+    visual: required
+    text: {tier: T1, template: lf_motion_area_v1, visual_builder: math.parallel_candidates}
+    hints: [steps_prefix]
+    concept_tags: [parallel_lines.identify_parallel_from_figure]
+    cause_tags: []
+remedial:
+  default_level: 1
