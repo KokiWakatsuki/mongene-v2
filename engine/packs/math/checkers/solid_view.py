@@ -69,4 +69,29 @@ def double_solve_solid_projection(mr: MR) -> Solution:
     )
 
 
-__all__ = ["double_solve_solid_of_revolution", "double_solve_solid_projection"]
+@register_checker("math.solid_net.double_solve")
+def double_solve_solid_net(mr: MR) -> Solution:
+    """展開図の2セル。params が持つのは本文が与えている寸法だけで、
+    答え（側面の長方形の縦横・母線・弧の長さ）は入っていない。
+    """
+    p = mr.params
+    if str(p["solid_kind"]) == "cylinder_cone_side":
+        return cast(
+            Solution,
+            REGISTRY.solver("math.composite_side_net")(
+                p["radius_len"], p["cylinder_height"], p["cone_height"]
+            ),
+        )
+    return cast(
+        Solution,
+        REGISTRY.solver("math.prism_net_side_rectangle")(
+            p["base_edges"], p["base_len"], p["solid_height"]
+        ),
+    )
+
+
+__all__ = [
+    "double_solve_solid_of_revolution",
+    "double_solve_solid_projection",
+    "double_solve_solid_net",
+]

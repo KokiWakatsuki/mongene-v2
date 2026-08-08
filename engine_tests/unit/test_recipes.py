@@ -10038,3 +10038,72 @@ def test_g1_l50_level_sep():
         )
     assert len(set(shapes)) == 3
     assert len({s[2] for s in shapes}) == 3  # both / none / plan
+
+
+# ---------------------------------------------------------------------------
+# C8 g1_l51.graph_table（展開図）
+#
+# この単元の典型的な誤りは「側面の長方形の横＝1辺」と取り違えること。
+# 正しくは底面の周の長さ（正n角柱なら n×1辺）。
+# ---------------------------------------------------------------------------
+@pytest.mark.parametrize("seed", range(30))
+def test_g1_l51_prism_net_property(seed):
+    _ctx, mr = _cell_mr("math.g1_l51.graph_table", 2, seed)
+    sq = mr.sub_questions[0]
+    assert sq.asked == "draw_solid"
+    assert [s.op for s in sq.steps] == [
+        "unfold_lateral_faces", "determine_side_rectangle_size", "draw_net",
+    ]
+    n = int(mr.params["base_edges"])
+    base, height = int(mr.params["base_len"]), int(mr.params["solid_height"])
+    assert n in (3, 4, 5, 6)
+    # ★典型的な誤りの固定: 側面の長方形の横は底面の周（n×1辺）で、1辺ではない。
+    h_f, w_f, _n_f = sq.answer.features
+    assert h_f.display.endswith(str(height))
+    assert w_f.display.endswith(str(n * base))
+    assert n * base != base
+    # ★退化の封じ: 縦と横が一致しない（一致すると横を正しく出せたか判別できない）。
+    assert n * base != height and base != height
+    # 展開図は側面 n 枚＋底面2枚で、底面は正n角形（頂点が n 個）。
+    polys = re.findall(r'<polygon points="([^"]+)"', sq.answer.solution_svg_ref)
+    assert len(polys) == n + 2
+    base_polys = [p for p in polys if len(p.split(" ")) == n]
+    assert len(base_polys) >= 2 if n != 4 else len(polys) == n + 2
+
+
+@pytest.mark.parametrize("seed", range(30))
+def test_g1_l51_composite_net_property(seed):
+    _ctx, mr = _cell_mr("math.g1_l51.graph_table", 3, seed)
+    sq = mr.sub_questions[0]
+    assert [s.op for s in sq.steps] == [
+        "separate_lateral_surfaces", "unfold_cylinder_side",
+        "unfold_cone_side", "draw_composite_net",
+    ]
+    r = int(mr.params["radius_len"])
+    cone_h, cyl_h = int(mr.params["cone_height"]), int(mr.params["cylinder_height"])
+    # ★母線は整数（無理数を答えさせない）。
+    slant = sympy.sqrt(r * r + cone_h * cone_h)
+    assert slant.is_Integer
+    kinds = [f.kind for f in sq.answer.features]
+    assert kinds == [
+        "cylinder_side_height", "cylinder_side_width",
+        "sector_radius", "sector_arc_length",
+    ]
+    # 円柱側面の横と、おうぎ形の弧の長さは、どちらも底面の円周 2πr で等しい。
+    assert sq.answer.features[1].srepr == sq.answer.features[3].srepr
+    assert sympy.sympify(sq.answer.features[1].srepr) == 2 * sympy.pi * r
+    assert sympy.sympify(sq.answer.features[2].srepr) == slant
+    assert sq.answer.features[0].display.endswith(str(cyl_h))
+    # おうぎ形の中心角は 360°×(底面の半径/母線)。図の形が答えと合っている。
+    assert abs(float(mr.params["sector_angle_deg"]) - 360.0 * r / int(slant)) < 1e-9
+
+
+def test_g1_l51_level_sep():
+    """Lv2（単一立体・3手）と Lv3（複合立体・4手）は相異する。"""
+    shapes = []
+    for level in (2, 3):
+        _ctx, mr = _cell_mr("math.g1_l51.graph_table", level, 1)
+        sq = mr.sub_questions[0]
+        shapes.append((len(sq.answer.features), tuple(s.op for s in sq.steps)))
+    assert len(set(shapes)) == 2
+    assert shapes[0][0] != shapes[1][0]

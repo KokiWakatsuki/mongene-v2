@@ -333,6 +333,125 @@ def complete_projection(plan: object, elevation: object) -> Solution:
     )
 
 
+# ---------------------------------------------------------------------------
+# 展開図（g1_l51.graph_table Lv2/Lv3）
+#
+# 角柱の展開図は「側面の帯（長方形）＋底面2枚」。側面の長方形は
+#   縦 = 立体の高さ／横 = 底面の周の長さ（正n角柱なら n×1辺）
+# ここを「横＝1辺」と取り違えるのがこの単元の典型的な誤り。
+#
+# 複合立体（円柱の上に円錐）の側面は、円柱側面の長方形（縦 h・横 2πr）と
+# 円錐側面のおうぎ形（半径＝母線 l＝√(r²+h²)・弧の長さ 2πr）に分かれる。
+# ---------------------------------------------------------------------------
+_NET_OPS = ["unfold_lateral_faces", "determine_side_rectangle_size", "draw_net"]
+_NET_NARRATION = {
+    "unfold_lateral_faces": "側面をすべて切り開いて横一列に並べると、ひとつながりの長方形になることを確かめる。",
+    "determine_side_rectangle_size": "その長方形の縦は立体の高さ、横は底面の周の長さになることから、それぞれの長さを求める。",
+    "draw_net": "側面の長方形に底面をつけ加えて展開図を仕上げ、縦と横の長さを書き入れる。",
+}
+_NET_PHRASE = {
+    "unfold_lateral_faces": "側面を切り開く",
+    "determine_side_rectangle_size": "側面の長方形の縦と横を求める",
+}
+
+
+@register_solver("math.prism_net_side_rectangle")
+def prism_net_side_rectangle(face_count: object, base: object, height: object) -> Solution:
+    """正n角柱の展開図で、側面の長方形の縦と横を答える（g1_l51.graph_table Lv2）。"""
+    n, b, h = int(face_count), int(base), int(height)
+    if n < 3 or b <= 0 or h <= 0:
+        raise ValueError("面の数は3以上、辺と高さは正であること")
+    width = n * b  # 底面の周の長さ（「横＝1辺」と取り違えるのが典型的な誤り）
+    base_jp = {3: "正三角形", 4: "正方形", 5: "正五角形", 6: "正六角形"}.get(n, f"正{n}角形")
+    features = [
+        Feature(
+            kind="side_rect_height", srepr=sympy.srepr(sympy.Integer(h)),
+            display=f"側面の長方形の縦 {h}",
+        ),
+        Feature(
+            kind="side_rect_width", srepr=sympy.srepr(sympy.Integer(width)),
+            display=f"側面の長方形の横 {width}",
+        ),
+        Feature(
+            kind="base_edge_count", srepr=sympy.srepr(sympy.Integer(n)),
+            display=f"底面は{base_jp}",
+        ),
+    ]
+    disp = f"側面の長方形は縦 {h}、横 {width}"
+    srepr = sympy.srepr(sympy.Tuple(sympy.Integer(h), sympy.Integer(width), sympy.Integer(n)))
+    return Solution(
+        answer=GraphAnswer(features=features, solution_svg_ref=""),
+        steps=_steps(_NET_OPS, _NET_NARRATION, _NET_PHRASE, srepr, disp),
+    )
+
+
+_COMPOSITE_OPS = [
+    "separate_lateral_surfaces",
+    "unfold_cylinder_side",
+    "unfold_cone_side",
+    "draw_composite_net",
+]
+_COMPOSITE_NARRATION = {
+    "separate_lateral_surfaces": "側面を、円柱の部分と円錐の部分の二つに分けて考える。",
+    "unfold_cylinder_side": "円柱の側面を切り開くと長方形になり、その横は底面の円周の長さになることを確かめる。",
+    "unfold_cone_side": "円錐の側面を切り開くとおうぎ形になり、その半径は母線の長さ、弧の長さは底面の円周の長さになることを確かめる。",
+    "draw_composite_net": "求めた長さを書き入れて、二つをならべた側面の展開図をかく。",
+}
+_COMPOSITE_PHRASE = {
+    "separate_lateral_surfaces": "側面を二つに分ける",
+    "unfold_cylinder_side": "円柱の側面を切り開く",
+    "unfold_cone_side": "円錐の側面を切り開く",
+}
+
+
+@register_solver("math.composite_side_net")
+def composite_side_net(
+    radius: object, cylinder_height: object, cone_height: object
+) -> Solution:
+    """円柱の上に円錐をのせた立体の、側面の展開図に要る長さを答える。
+
+    （g1_l51.graph_table Lv3）。母線 l=√(r²+h²) が整数になる組だけを recipe が引く。
+    """
+    r, h1, h2 = int(radius), int(cylinder_height), int(cone_height)
+    if r <= 0 or h1 <= 0 or h2 <= 0:
+        raise ValueError("半径・高さは正であること")
+    slant = sympy.sqrt(sympy.Integer(r) ** 2 + sympy.Integer(h2) ** 2)
+    if not slant.is_Integer:
+        raise ValueError(f"母線が整数にならない: {slant}")
+    circumference = 2 * sympy.pi * r
+    # 表示は教科書表記（"6π"）にそろえる。sympy の既定表示は "6*pi" で読めない。
+    circ_disp = f"{2 * r}π"
+    features = [
+        Feature(
+            kind="cylinder_side_height", srepr=sympy.srepr(sympy.Integer(h1)),
+            display=f"円柱の側面の縦 {h1}",
+        ),
+        Feature(
+            kind="cylinder_side_width", srepr=sympy.srepr(circumference),
+            display=f"円柱の側面の横 {circ_disp}",
+        ),
+        Feature(
+            kind="sector_radius", srepr=sympy.srepr(slant),
+            display=f"おうぎ形の半径 {slant}",
+        ),
+        Feature(
+            kind="sector_arc_length", srepr=sympy.srepr(circumference),
+            display=f"おうぎ形の弧の長さ {circ_disp}",
+        ),
+    ]
+    disp = (
+        f"円柱の側面は縦 {h1}・横 {circ_disp}、"
+        f"円錐の側面のおうぎ形は半径 {slant}・弧の長さ {circ_disp}"
+    )
+    srepr = sympy.srepr(
+        sympy.Tuple(sympy.Integer(h1), circumference, slant, circumference)
+    )
+    return Solution(
+        answer=GraphAnswer(features=features, solution_svg_ref=""),
+        steps=_steps(_COMPOSITE_OPS, _COMPOSITE_NARRATION, _COMPOSITE_PHRASE, srepr, disp),
+    )
+
+
 __all__ = [
     "solid_of_revolution_name",
     "solid_of_revolution_sketch",
@@ -343,4 +462,6 @@ __all__ = [
     "projection_shapes",
     "solid_from_views",
     "solid_name_jp",
+    "prism_net_side_rectangle",
+    "composite_side_net",
 ]

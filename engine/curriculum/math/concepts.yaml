@@ -1369,6 +1369,12 @@ concepts:
   - id: solid_projection.complete
     label: "投影図の片方と条件から立体を一つに特定し、もう一方の図を構成する"
     unit: g1_l50
+  - id: solid_net.prism
+    label: "角柱の側面を切り開いて展開図をかき、側面の長方形の縦と横を求める"
+    unit: g1_l51
+  - id: solid_net.composite
+    label: "円柱と円錐を貼り合わせた立体の側面を、長方形とおうぎ形に分けて展開する"
+    unit: g1_l51
   - id: sphere_measure.direct
     label: "半径から球の表面積・体積をそれぞれ直接求める"
     unit: g1_l53

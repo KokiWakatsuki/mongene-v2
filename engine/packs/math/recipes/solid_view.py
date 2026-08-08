@@ -18,6 +18,8 @@ from __future__ import annotations
 
 from typing import Any, cast
 
+import sympy
+
 from engine.core.contracts import (
     MR,
     CellContext,
@@ -360,4 +362,124 @@ def solid_projection_recipe(ctx: CellContext, rng: Rng) -> MR:
     raise ValueError(f"未知の mode: {mode!r}")
 
 
-__all__ = ["solid_of_revolution_recipe", "solid_projection_recipe"]
+# ---------------------------------------------------------------------------
+# g1_l51.graph_table Lv2/Lv3: 展開図
+# ---------------------------------------------------------------------------
+_NET_CONCEPTS = ["solid_net.prism", "solid_net.composite"]
+
+_POLYGON_JP = {3: "正三角形", 4: "正方形", 5: "正五角形", 6: "正六角形"}
+_PRISM_JP = {3: "正三角柱", 4: "正四角柱", 5: "正五角柱", 6: "正六角柱"}
+
+
+@register_recipe("math.solid_net", provides_concepts=_NET_CONCEPTS)
+def solid_net_recipe(ctx: CellContext, rng: Rng) -> MR:
+    """角柱の展開図をかく／複合立体の側面の展開図をかく（g1_l51.graph_table Lv2/Lv3）。"""
+    p = cast("dict[str, Any]", ctx.spec_level.params)
+    mode = str(p["mode"])
+    unit = str(p.get("unit", "cm"))
+    lo, hi = (int(v) for v in p["length_range"])
+
+    if mode == "prism":
+        n = int(draw({"int_set": [int(v) for v in p["face_count_set"]]}, rng))
+        base = int(draw({"int_range": [lo, hi]}, rng))
+        # 1辺と高さを相異にし、さらに「側面の長方形の縦と横」が一致する組も外す
+        # （縦＝横だと、横が底面の周の長さであることを正しく出せたか判別できない）。
+        height = int(draw({
+            "int_set": [
+                v for v in range(lo, hi + 1) if v != base and v != n * base
+            ]
+        }, rng))
+        sol = cast(
+            Solution, REGISTRY.solver("math.prism_net_side_rectangle")(n, base, height)
+        )
+        assert isinstance(sol.answer, GraphAnswer)
+        params: dict[str, Any] = {
+            "view": "net",
+            "solid_kind": "triangular_prism" if n == 3 else "square_prism",
+            "face_count": n,
+            "width_px": _to_px(base, lo, hi) * 0.5,
+            "height_px": _to_px(height, lo, hi),
+            "base_px": _to_px(base, lo, hi) * 0.5,
+            "base_edges": n,
+            "base_len": base,
+            "solid_height": height,
+        }
+        answer = GraphAnswer(
+            features=sol.answer.features,
+            solution_svg_ref=render_solid_solution_svg(params),
+        )
+        return _mr(
+            ctx, params=params,
+            statement=(
+                f"底面が1辺{base}{unit}の{_POLYGON_JP[n]}、高さ{height}{unit}の"
+                f"{_PRISM_JP[n]}がある。この立体の展開図をかき、"
+                "側面の長方形の縦と横の長さを書き入れよ"
+            ),
+            asked="draw_solid", sol=Solution(answer=answer, steps=sol.steps),
+            recipe="math.solid_net", element_kind="net",
+        )
+
+    if mode == "composite":
+        # 母線 √(r²+h²) が整数になる (半径, 円錐の高さ) の組だけを列挙して引く。
+        # 【定義域の数え上げ】この条件を満たす組は範囲によって
+        #   ≦15 で 10 組 ／ ≦20 で 14 組 ／ ≦24 で 22 組 ／ ≦30 で 26 組。
+        # 円柱の高さと合わせて 250 通りを超える必要があるので、円錐側は ≦24 まで、
+        # 円柱の高さは別レンジ（広め）で引く（≦15 の 10 組では dup 0.27 で落ちた）。
+        c_lo, c_hi = (int(v) for v in p["cone_length_range"])
+        pairs = [
+            (r, h)
+            for r in range(c_lo, c_hi + 1)
+            for h in range(c_lo, c_hi + 1)
+            if sympy.sqrt(r * r + h * h).is_Integer
+        ]
+        idx = int(draw({"int_set": list(range(len(pairs)))}, rng))
+        radius, cone_h = pairs[idx]
+        cyl_lo, cyl_hi = (int(v) for v in p["cylinder_height_range"])
+        cyl_h = int(draw({"int_range": [cyl_lo, cyl_hi]}, rng))
+        sol = cast(
+            Solution, REGISTRY.solver("math.composite_side_net")(radius, cyl_h, cone_h)
+        )
+        assert isinstance(sol.answer, GraphAnswer)
+        slant = int(sympy.sqrt(radius * radius + cone_h * cone_h))
+        params = {
+            "view": "net",
+            "solid_kind": "cylinder_cone_side",
+            "width_px": 0,
+            "height_px": _to_px(cyl_h, cyl_lo, cyl_hi),
+            "band_width_px": 150.0,
+            "slant_px": _to_px(slant, c_lo, 2 * c_hi),
+            # おうぎ形の中心角は 360°×(底面の半径/母線)。図の形を答えと合わせる。
+            "sector_angle_deg": 360.0 * radius / slant,
+            "radius_len": radius,
+            "cone_height": cone_h,
+            "cylinder_height": cyl_h,
+            "dim_labels": [
+                f"{cyl_h}{unit}", f"{2 * radius}π{unit}",
+                f"{slant}{unit}", f"{2 * radius}π{unit}",
+            ],
+        }
+        answer = GraphAnswer(
+            features=sol.answer.features,
+            solution_svg_ref=render_solid_solution_svg(params),
+        )
+        return _mr(
+            ctx, params=params,
+            statement=(
+                f"底面の半径{radius}{unit}、高さ{cyl_h}{unit}の円柱の上に、"
+                f"底面の半径が等しく高さ{cone_h}{unit}の円錐をのせた立体がある。"
+                "この立体の側面部分の展開図をかき、面積計算に必要な長さ"
+                "（円柱側面の縦横・円錐側面のおうぎ形の半径と弧の長さ）を書き入れよ。"
+                "ただし円周率はπとする"
+            ),
+            asked="draw_solid", sol=Solution(answer=answer, steps=sol.steps),
+            recipe="math.solid_net", element_kind="net",
+        )
+
+    raise ValueError(f"未知の mode: {mode!r}")
+
+
+__all__ = [
+    "solid_of_revolution_recipe",
+    "solid_projection_recipe",
+    "solid_net_recipe",
+]

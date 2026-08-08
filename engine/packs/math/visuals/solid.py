@@ -409,6 +409,45 @@ def _net_parts(params: dict[str, Any]) -> list[str]:
         parts.append(_circle(x0 + band_w / 2, y0 - r - 8, r))
         parts.append(_circle(x0 + band_w / 2, y0 + h + r + 8, r))
         return parts
+    if kind == "cylinder_cone_side":
+        # 複合立体（円柱の上に円錐）の側面だけの展開図: 長方形とおうぎ形を横に並べる。
+        band_w = float(params["band_width_px"])
+        slant = float(params["slant_px"])
+        angle = float(params["sector_angle_deg"])
+        x0, y0 = _PAD, _H / 2 - h / 2
+        parts.append(_polygon([
+            (x0, y0), (x0 + band_w, y0), (x0 + band_w, y0 + h), (x0, y0 + h)
+        ]))
+        a0, a1 = math.radians(-angle / 2), math.radians(angle / 2)
+        # おうぎ形が長方形に重ならないように置く。中心角が 180°を超えると扇は中心より
+        # 左にもはみ出すので、はみ出し量を測ってから左端を決める（固定の余白では重なる）。
+        gap = 28.0
+        left_overhang = max(0.0, -min(math.cos(a0), math.cos(a1), 1.0)) * slant
+        avail = _W - _PAD - (x0 + band_w + gap)
+        span = slant + left_overhang
+        if span > avail:  # 枠に収まるよう縮める
+            slant *= avail / span
+            left_overhang *= avail / span
+        cx = x0 + band_w + gap + left_overhang
+        cy = _H / 2
+        p0 = (cx + slant * math.cos(a0), cy + slant * math.sin(a0))
+        p1 = (cx + slant * math.cos(a1), cy + slant * math.sin(a1))
+        large = 1 if angle > 180 else 0
+        parts.append(
+            f'<path d="M {cx:.2f} {cy:.2f} L {p0[0]:.2f} {p0[1]:.2f} '
+            f'A {slant:.2f} {slant:.2f} 0 {large} 1 {p1[0]:.2f} {p1[1]:.2f} Z" '
+            f'fill="none" stroke="{_STROKE}" stroke-width="{_THIN}"/>'
+        )
+        labels = list(params.get("dim_labels") or [])
+        anchors = [
+            (x0 - 6, _H / 2),                    # 円柱側面の縦
+            (x0 + band_w / 2, y0 + h + 16),      # 円柱側面の横
+            (cx + slant * 0.55, cy - 10),        # おうぎ形の半径
+            (cx + slant + 24, cy + 18),          # おうぎ形の弧の長さ
+        ]
+        for lab, (lx, ly) in zip(labels, anchors, strict=False):
+            parts.append(_text(lx, ly, str(lab)))
+        return parts
     if kind == "cone":
         r = float(params["radius_px"])
         slant = float(params["slant_px"])
@@ -427,32 +466,45 @@ def _net_parts(params: dict[str, Any]) -> list[str]:
         parts.append(_circle(cx + slant + r + 16, cy, r))
         return parts
     # 角柱: 側面の帯（辺の数ぶんの長方形）＋底面2枚。
-    # 底面の形は側面の枚数で決まる（3枚なら三角形・4枚なら四角形）。角柱の展開図で
-    # 底面を一律に長方形で描くと、三角柱の展開図が誤りになる。
+    # 底面の形は側面の枚数で決まる（3枚なら正三角形・6枚なら正六角形）。角柱の展開図で
+    # 底面を一律に長方形で描くと、三角柱や五角柱・六角柱の展開図が誤りになる。
     faces = int(params.get("face_count", 4))
-    x0, y0 = _PAD + 20, _H / 2 - h / 2
+    # 帯（faces 枚ぶん）と底面が枠に収まるよう、1枚の幅を自動で縮める。
+    avail = _W - 2 * _PAD
+    w = min(w, avail / (faces + 1))
+    x0, y0 = _PAD, _H / 2 - h / 2
     for i in range(faces):
         x = x0 + i * w
         parts.append(_polygon([(x, y0), (x + w, y0), (x + w, y0 + h), (x, y0 + h)]))
-    base = float(params.get("base_px", w))
-    parts += _net_base_parts(faces, x0, y0, base, above=True)
-    parts += _net_base_parts(faces, x0, y0 + h, base, above=False)
+    parts += _net_base_parts(faces, x0, y0, w, above=True)
+    parts += _net_base_parts(faces, x0, y0 + h, w, above=False)
     return parts
 
 
 def _net_base_parts(
     faces: int, x0: float, y_edge: float, base: float, *, above: bool
 ) -> list[str]:
-    """展開図の底面1枚。側面の枚数で形が決まる（3枚＝正三角形／4枚＝正方形）。
+    """展開図の底面1枚（正 faces 角形）を、側面の帯の1辺に貼り付ける。
 
-    `above=True` は側面の帯の上に、False は下に貼り付ける。
+    帯の左端の1辺 [x0, x0+base] をそのまま多角形の1辺として使い、正多角形を
+    その外側（above=True なら上）に組む。`above` は貼り付ける側。
     """
-    if faces == 3:
-        height = base * math.sqrt(3) / 2
-        apex_y = y_edge - height if above else y_edge + height
-        return [_polygon([(x0, y_edge), (x0 + base, y_edge), (x0 + base / 2, apex_y)])]
-    y_far = y_edge - base if above else y_edge + base
-    return [_polygon([(x0, y_edge), (x0 + base, y_edge), (x0 + base, y_far), (x0, y_far)])]
+    n = max(3, faces)
+    # 正n角形: 1辺 base のとき、外接円の半径 R と、辺から中心までの距離（アポテム）。
+    apothem = base / (2 * math.tan(math.pi / n))
+    radius = base / (2 * math.sin(math.pi / n))
+    cx = x0 + base / 2
+    cy = y_edge - apothem if above else y_edge + apothem
+    start = math.atan2(y_edge - cy, x0 - cx)
+    step = 2 * math.pi / n
+    # above のときは辺の左端から時計回り（画面座標では角度が減る向き）に頂点を並べる。
+    sign = -1.0 if above else 1.0
+    pts = [
+        (cx + radius * math.cos(start + sign * step * k),
+         cy + radius * math.sin(start + sign * step * k))
+        for k in range(n)
+    ]
+    return [_polygon(pts)]
 
 
 # ---------------------------------------------------------------------------
