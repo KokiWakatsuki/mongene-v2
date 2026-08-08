@@ -10790,3 +10790,53 @@ def test_g2_l44_hypotenuse_is_opposite_the_right_angle(seed):
     )
     assert right not in f"{others[0]}{others[1]}"
     assert len(answer.distractors) == 2
+
+
+# ---------------------------------------------------------------------------
+# Phase E 端物: 樹形図に整理する2セル（g2_l52 / g2_l53 の graph_table Lv1）
+# ---------------------------------------------------------------------------
+@pytest.mark.parametrize(
+    ("family", "signature", "with_replacement", "n_paths"),
+    [
+        ("math.g2_l52.graph_table", "tree_diagram_coins", True, 4),
+        ("math.g2_l53.graph_table", "tree_diagram_draws", False, 6),
+    ],
+)
+@pytest.mark.parametrize("seed", range(20))
+def test_tree_diagram_cells(seed, family, signature, with_replacement, n_paths):
+    """場合の列は itertools の列挙と一致し、重複が無い。総数の feature も一致する。"""
+    import itertools
+
+    _ctx, mr = _cell_mr(family, 1, seed)
+    assert mr.signature == signature
+    assert mr.params["with_replacement"] is with_replacement
+    items = [str(v) for v in mr.params["items"]]
+    draws = int(mr.params["draws"])
+    expected = (
+        list(itertools.product(items, repeat=draws))
+        if with_replacement
+        else list(itertools.permutations(items, draws))
+    )
+    assert len(expected) == n_paths
+    features = mr.sub_questions[0].answer.features
+    outcomes = [f.display for f in features if f.kind == "outcome"]
+    assert outcomes == ["、".join(t) for t in expected]
+    assert len(set(outcomes)) == len(outcomes), "同じ場合が2回出てはいけない"
+    total = [f for f in features if f.kind == "total_count"]
+    assert len(total) == 1 and sympy.sympify(total[0].srepr) == n_paths
+    # 答え（場合の列）は checker が params から独立に列挙し直せる。
+    checker = REGISTRY.checker("math.tree_diagram.double_solve")
+    assert [f.display for f in checker(mr).answer.features] == [f.display for f in features]
+    # 問題図には樹形図を描かない（描く対象は題材の絵だけ）。
+    assert [e.kind for e in mr.visual_plan.elements] == ["subject_given"]
+
+
+@pytest.mark.parametrize("seed", range(20))
+def test_g2_l53_draws_do_not_repeat_the_same_item(seed):
+    """もとに戻さないので、同じものが2回出る場合は樹形図に現れない。"""
+    _ctx, mr = _cell_mr("math.g2_l53.graph_table", 1, seed)
+    for f in mr.sub_questions[0].answer.features:
+        if f.kind != "outcome":
+            continue
+        first, second = f.display.split("、")
+        assert first != second

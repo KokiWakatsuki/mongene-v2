@@ -21,6 +21,7 @@ from engine.packs.math.recipes import proportion_graph  # noqa: F401,E402  (poly
 from engine.packs.math.recipes import statistics_distribution  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.recipes import distribution_chart  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.recipes import figure_reading  # noqa: F401  (登録の副作用のため import)
+from engine.packs.math.recipes import tree_diagram  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.recipes import solid_view  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.recipes import statistics_inquiry  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.recipes import quartile  # noqa: F401  (登録の副作用のため import)

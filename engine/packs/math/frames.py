@@ -198,6 +198,9 @@ GRAPH_TABLE_FRAME = Frame(
         # 記号で答える。「値を読む」(read_point) でも「かく」(draw_*) でもなく、
         # **図の中のどれか**を選ぶ——答えは ChoiceAnswer になる。
         "read_figure_element",
+        # Phase E 端物（g2_l52/g2_l53 の Lv1）: 起こりうる場合を樹形図に整理してかく。
+        # 答えは「枝の並び」＝すべての場合の列なので GraphAnswer の features で持つ。
+        "draw_tree_diagram",
     }),
     visual="required",
     _forbidden_by_asked={

@@ -24,6 +24,7 @@ from engine.packs.math.solvers import quartile  # noqa: F401  (登録の副作�
 from engine.packs.math.solvers import sample_survey  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.solvers import plane_geometry  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.solvers import figure_reading  # noqa: F401  (登録の副作用のため import)
+from engine.packs.math.solvers import tree_diagram  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.solvers import solid_view  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.solvers import statistics_inquiry  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.solvers import exam_linear_figure  # noqa: F401  (登録の副作用のため import)

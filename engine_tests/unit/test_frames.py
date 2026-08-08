@@ -118,6 +118,8 @@ def test_graph_table_vocab_and_visual():
         "read_position",
         # Phase E 端物: 図の中の要素（線分・直線・辺）を記号で答える
         "read_figure_element",
+        # Phase E 端物: 起こりうる場合を樹形図に整理してかく
+        "draw_tree_diagram",
     })
     assert f.visual == "required"
 

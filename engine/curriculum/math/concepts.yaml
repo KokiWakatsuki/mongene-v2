@@ -1002,6 +1002,12 @@ concepts:
   - id: line_angle_terms.read_point_line_distance
     label: "図の中で点と直線の距離を表している線分を選ぶ"
     unit: g1_l37
+  - id: counting.tree_diagram_coins
+    label: "硬貨の表と裏の出方を樹形図に整理して、起こりうる場合をすべて書き出す"
+    unit: g2_l52
+  - id: counting.tree_diagram_draws
+    label: "もとに戻さずに続けて取り出す場合を樹形図に整理して、すべて書き出す"
+    unit: g2_l53
   - id: parallel_lines.identify_parallel_from_figure
     label: "横断線となす角を見比べて、平行な直線を図から選ぶ"
     unit: g2_l32

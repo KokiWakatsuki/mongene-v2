@@ -11,5 +11,6 @@ from engine.packs.math.visuals import number_line  # noqa: F401  (register_visua
 from engine.packs.math.visuals import plane_figure  # noqa: F401  (register_visual の副作用のため import)
 from engine.packs.math.visuals import plane_transform  # noqa: F401  (register_visual の副作用のため import)
 from engine.packs.math.visuals import solid  # noqa: F401  (register_visual の副作用のため import)
+from engine.packs.math.visuals import tree_diagram  # noqa: F401  (register_visual の副作用のため import)
 
 __all__: list[str] = []
