@@ -35,19 +35,21 @@ g1 ことがら…         5/5                                 g3 標本調査  
 **一次方程式・二次方程式は完成**（`g1_l21〜l27` / `g3_l24〜l31` がすべて 0 gaps。
 最後まで残っていた g1_l27 Lv4・g3_l31 Lv3/Lv4 は Phase A で回収済み）。
 
-## 1. 残り102セルの実態
+## 1. 残り76セルの実態（2026-08-08 実測）
 
 | form | 残り | 起点(201) | 性質 |
 |---|---|---|---|
 | proof | 51 | 51 | **form ごと未実装**（frame も solver も checker もゼロ）。手つかず |
-| graph_table | 14 | 58 | exam 7・端物 7 |
-| word_problem | 15 | 36 | exam 融合 14・端物 1 |
-| find_value | 12 | 36 | exam 融合 10・端物 2 |
 | construction | 9 | 9 | **form ごと未実装**。M2 送り |
+| graph_table | 8 | 58 | exam_l4 Lv2 の1つ以外は端物7 |
+| find_value | 4 | 36 | exam_l4 Lv3/Lv4・端物2（g2_l33 Lv2・g2_l50 Lv3） |
+| word_problem | 3 | 36 | exam_l4 Lv3/Lv4・端物1（g3_l53 Lv4） |
 | knowledge | 1 | 10 | g2_l38 Lv2 のみ |
 
-exam（`exam_l1`〜`exam_l7`）は単元横断で**32セル**あり、上の form 内訳に散っている
-（graph_table 7・word_problem 14・find_value 10・proof 1）。単独で見ると最大の塊。
+**exam は 29/35 まで進み、残りは exam_l4 の5セルと exam_l6 の proof 1セルだけ**
+（exam_l4: find_value Lv3/Lv4・graph_table Lv2・word_problem Lv3/Lv4）。
+かつて「単元横断で32セルあり form 内訳に散っていて見えない」と書いた塊は、
+Phase D でほぼ解消した。
 
 ### 効いた手・尽きた手
 
@@ -307,12 +309,11 @@ g1_l41〜l44（垂直二等分線・角の二等分線・垂線・作図の利�
 
 | Phase | 内容 | セル | 累計 |
 |---|---|---|---|
-| — | 現在 | — | **523** |
-| C | 統計の word_problem | 5 | 528 |
-| D | exam 融合 | 31 | 559 |
+| — | 現在（2026-08-08 実測） | — | **554** |
+| D | exam 融合の残り＝exam_l4 のみ | 5 | 559 |
 | E | 端物 | 11 | 570 |
-| F | proof | 51 | 621 |
+| F | proof（exam_l6 Lv3 を含む） | 51 | 621 |
 | G | construction | 9 | **630** |
 
-Phase A〜E で **570/630（90.5%）**。残りは proof と construction という
+Phase D の残り5セル＋E で **570/630（90.5%）**。残りは proof と construction という
 「form ごと新規設計」の2つだけになる。
