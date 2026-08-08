@@ -1,0 +1,52 @@
+family: math.g2_l39.proof
+form: proof
+source_desc: |
+  三角形の合同条件を使った証明の書き方
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv2 desc: 誘導あり・与えられた等しい要素から1つの合同条件で直接証明する。
+  Lv3 desc: 誘導なし・使う要素と合同条件を自分で選び証明を構成する。
+  ---
+  【設計モデル】**問題を手で書かない。** 作図手順で図を組み（geometry/construct.py）、
+  前向き推論で導ける事実を飽和させ（geometry/deduce.py）、Lv に合う結論を選んで
+  （geometry/naturalness.py）証明文を組む（geometry/render_text.py）。
+  設計は docs/proof_engine_design_2026-08-08.md。
+
+  **なぜこの作りにしたか**: このシステムは無限に問題を生成する。無限には「数値が違う
+  問題」だけでなく「**解き方が違う問題・この世にまだない問題**」が含まれる。
+  手で scenario_kind を並べると、解き方の種類が人が書いた分だけで止まる。
+
+  【難易度】導出の深さで決まる（Lv2＝深さ1・Lv3＝深さ2）。人が指定しない。
+  たこ形は深さ1で SSS、X字型は 中点→対頂角→SAS で深さ2 になる——**構成が難易度を
+  決める**ので、同じ構成で Lv を上げると別の結論（合同の先にある角の等式）が選ばれる。
+
+  【質のフィルタ】探索は「解けるが人が作らない問題」を出すので、次を弾く:
+  ①聞く価値のない結論（仮定そのまま・自明）②単元に合わない定理を使う証明
+  ③つぶれた図 ④**図がたまたま見せている性質**（同じ手順を別のパラメータで組み直し、
+  残らない一致は偶然と判定する）。
+
+  【検証】checker は答えを見ない。params の構成パラメータだけから**証明を探索し直し**、
+  同じ結論・同じ根拠の列になるかを見る。
+
+  【答えの型】ProofAnswer（証明文＋その構造）。engine は問題・図・模範解答を出すまでを
+  担い、生徒の答案の採点は別の LLM エンジンが行う。構造（根拠の列）を渡せるので、
+  自由文の模範解答だけを渡すより採点がぶれない。
+concepts_default: [congruence_proof.triangle_congruence]
+levels:
+  "2":
+    signature: geometry_proof_congruence_direct
+    recipe: math.geometry_proof
+    params:
+      construction: kite
+      # 長さと角の定義域（10倍の整数で引いて recipe が 1/10 する）。
+      base_domain: {int_range: [24, 38]}
+      angle_domain: {int_range: [62, 96]}
+      offset_domain: {int_range: [28, 46]}
+    given: [premises, conclusion]
+    asked: [proof_text]
+    visual: optional
+    text: {tier: T1, template: pf_geometry_proof_v1}
+    hints: [steps_prefix]
+    concept_tags: [congruence_proof.triangle_congruence]
+    cause_tags: []
+remedial:
+  default_level: 2

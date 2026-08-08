@@ -126,8 +126,35 @@ class GraphAnswer(BaseModel):     # graph_table「かく」・construction
     solution_svg_ref: str = ""    # 模範解答図（問題図とは別部品・開示制御対象）
 
 
+class ProofStep(BaseModel):       # proof: 証明文の1行（主張＋根拠）
+    """証明の1行。**構造のまま持つ**ので、採点する側が根拠の列で照合できる。
+
+    自由文の模範解答だけを渡すより、(主張, 根拠) の列を渡すほうが、生徒の記述との
+    突き合わせがぶれない（採点は別の LLM エンジンが行う前提・docs/proof_engine_design）。
+    """
+    model_config = ConfigDict(extra="forbid")
+    claim: str                     # 「AB ＝ AD」など
+    reason: str                    # 「仮定より」「3組の辺がそれぞれ等しい」など
+    number: int | None = None      # 証明文中の通し番号（①②③）。結論の行は None
+    refs: list[int] = Field(default_factory=list)  # この行が引く先行行の番号
+    op: str = ""                   # 適用した規則の識別子（op 列＝level_sep の材料）
+
+
+class ProofAnswer(BaseModel):     # proof（記述式の証明）
+    """証明の答え。**証明文そのもの**と、その構造（行の列）を両方持つ。
+
+    engine が採点するのではなく、engine は「問題・図・模範解答」を出すところまでを担う。
+    `text` が解説にそのまま出る証明文で、`lines` はその構造（採点側が使う）。
+    """
+    model_config = ConfigDict(extra="forbid")
+    kind: Literal["proof"] = "proof"
+    text: str                                        # レンダリング済みの証明文
+    lines: list[ProofStep] = Field(default_factory=list)
+    solution_svg_ref: str = ""                       # 模範解答図（あれば）
+
+
 # form により直和で拡張（H4 の form 差の受け皿）。判別は kind フィールド。
-AnswerPayload = Union[SymbolicAnswer, ChoiceAnswer, GraphAnswer]
+AnswerPayload = Union[SymbolicAnswer, ChoiceAnswer, GraphAnswer, ProofAnswer]
 
 
 class Solution(BaseModel):

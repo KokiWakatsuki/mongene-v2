@@ -22,6 +22,7 @@ from engine.packs.math.checkers import distribution_chart  # noqa: F401  (登録
 from engine.packs.math.checkers import figure_reading  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.checkers import tree_diagram  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.checkers import proposition_logic  # noqa: F401  (登録の副作用のため import)
+from engine.packs.math.checkers import geometry_proof  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.checkers import solid_view  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.checkers import statistics_inquiry  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.checkers import quartile  # noqa: F401  (登録の副作用のため import)

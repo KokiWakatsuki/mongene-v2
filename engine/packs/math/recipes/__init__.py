@@ -23,6 +23,7 @@ from engine.packs.math.recipes import distribution_chart  # noqa: F401  (登録�
 from engine.packs.math.recipes import figure_reading  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.recipes import tree_diagram  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.recipes import proposition_logic  # noqa: F401  (登録の副作用のため import)
+from engine.packs.math.recipes import geometry_proof  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.recipes import solid_view  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.recipes import statistics_inquiry  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.recipes import quartile  # noqa: F401  (登録の副作用のため import)

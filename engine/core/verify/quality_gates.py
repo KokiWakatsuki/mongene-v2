@@ -168,7 +168,12 @@ def _gate_fp(obj: object, ctx: "CellContext") -> tuple[bool, str]:
 # 無検証の小問を構造的に作れないようにするため（H5 の趣旨: 検証の穴を残さない）。
 # ---------------------------------------------------------------------------
 def _answers_match(a: "AnswerPayload", b: "AnswerPayload") -> tuple[bool, str]:
-    from engine.core.contracts import ChoiceAnswer, GraphAnswer, SymbolicAnswer
+    from engine.core.contracts import (
+        ChoiceAnswer,
+        GraphAnswer,
+        ProofAnswer,
+        SymbolicAnswer,
+    )
 
     if a.kind != b.kind:
         return False, f"answer.kind 不一致: {a.kind!r} != {b.kind!r}"
@@ -188,6 +193,15 @@ def _answers_match(a: "AnswerPayload", b: "AnswerPayload") -> tuple[bool, str]:
         set_b = {f.srepr for f in b.features}
         if set_a != set_b:
             return False, f"graph.features(srepr集合) 不一致: {sorted(set_a)} != {sorted(set_b)}"
+        return True, ""
+    if isinstance(a, ProofAnswer) and isinstance(b, ProofAnswer):
+        # 証明は「文字列が一致するか」ではなく「**同じ主張を同じ根拠で並べたか**」で見る。
+        # checker は答えを見ずに証明を探索し直しているので、ここが一致すれば
+        # 「同じ結論に、同じ筋道で到達した」ことになる。
+        chain_a = [(line.op, line.claim, line.reason) for line in a.lines]
+        chain_b = [(line.op, line.claim, line.reason) for line in b.lines]
+        if chain_a != chain_b:
+            return False, f"proof の筋道が不一致: {chain_a} != {chain_b}"
         return True, ""
     return False, f"未知の answer.kind: {a.kind!r}"
 
@@ -296,6 +310,11 @@ def _answer_values(answer: "AnswerPayload") -> list[str]:
         for f in answer.features:
             vals.extend([f.srepr, f.display])
         return vals
+    if answer.kind == "proof":
+        # 証明文は問題文と同じ記号（点名・辺）を使うのが当たり前なので、漏洩検査の
+        # 対象にすると必ず誤検出する。ここでは値を返さない（証明の正しさは推論器が
+        # 保証しており、ゲートで見るのは「問題文に答えが混ざっていないか」である）。
+        return []
     return []
 
 

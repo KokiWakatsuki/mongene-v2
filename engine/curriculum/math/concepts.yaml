@@ -1080,6 +1080,9 @@ concepts:
   - id: triangle_angle.third_angle
     label: "三角形の内角の和180°で第3の角を求める"
     unit: g2_l33
+  - id: congruence_proof.triangle_congruence
+    label: "与えられた条件から合同条件を選び、三角形の合同を証明する"
+    unit: g2_l39
   - id: triangle_angle.arrowhead_multi_step
     label: "補助線を引いて2つの三角形に分け、外角の性質を2回使って角を求める"
     unit: g2_l33

@@ -22,7 +22,13 @@ LF_SECTOR_ARC_LENGTH_OR_AREA_V1 = "{{ given.condition }}。"
 LF_SECTOR_SOLVE_CENTRAL_ANGLE_V1 = "{{ given.condition }}。"
 
 
+# 図形の証明（proof form）。前提と結論を並べるだけで、問いの言い方は固定。
+# 市販の問題集がこの型で書いているので、テンプレートで揺らさない。
+PF_GEOMETRY_PROOF_V1 = "{{ given.premises }}。このとき、{{ given.conclusion }} であることを証明せよ。"
+
+
 def _register_all() -> None:
+    REGISTRY.register_template("pf_geometry_proof_v1", PF_GEOMETRY_PROOF_V1)
     REGISTRY.register_template(
         "lf_judge_transformation_invariant_v1", LF_JUDGE_TRANSFORMATION_INVARIANT_V1
     )
