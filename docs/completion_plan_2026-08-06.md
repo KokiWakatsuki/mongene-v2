@@ -1,9 +1,9 @@
-# エンジン完成計画（2026-08-06 起点・429/630 → **2026-08-08 現在 554/630**）
+# エンジン完成計画（2026-08-06 起点・429/630 → **2026-08-08 現在 559/630**）
 
 > 進捗更新: 2026-08-08。Phase 0（回収）・Phase 1（曲線グラフ基盤）・Phase 4（C11 統計）が完了、
 > Phase A（動点・速さ）・B（立体）・C（統計の word_problem）が完了。
-> **Phase D（exam 融合）は 26/31 が着地**（exam_l1・l2・l3・l5・l6・l7）。
-> 残りは exam_l4（三平方と空間図形・5セル）と exam_l6.proof Lv3（Phase F 扱い）。
+> **Phase D（exam 融合）完了**（exam_l1〜l7 の 31セル）。exam の残りは exam_l6.proof Lv3 だけで、
+> これは proof form ごと未実装なので Phase F に属する。次は Phase E（端物 11セル）。
 > 台帳は `PYTHONPATH=. .venv/bin/python -m engine.tools.coverage_page` で再生成（docs/coverage.html）。
 > 未実装セル一覧は `PYTHONPATH=. .venv/bin/python scratchpad/list_gaps.py <unit接頭辞>`。
 >
@@ -16,10 +16,10 @@
 >   g3_l55・g3_l56 Lv4 は実装したのに「担当外」の記述が残っていた
 >   → 未使用 recipe/solver・除外記述と gaps の突き合わせ を機械で検出する
 
-## 0. いまの実測（2026-08-08）
+## 0. いまの実測（2026-08-08・Phase D 完了時点）
 
 ```
-合計 554/630 (87.9%)  ※章（台帳の chapter）別の実測。C1〜C16 のクラスタ別集計は
+合計 559/630 (88.7%)  ※章（台帳の chapter）別の実測。C1〜C16 のクラスタ別集計は
                       振り分け規則を再現できなかったため、章別の実測に置き換えた。
 g1 正の数・負の数    39/39   g2 式の計算          20/24   g3 多項式          25/27
 g1 文字の式          27/27   g2 連立方程式        20/20   g3 平方根          26/26
@@ -29,27 +29,28 @@ g1 平面図形          19/30   g2 三角形と四角形    18/42   g3 相似�
 g1 空間図形          24/24   g2 データの分布の比較 13/13  g3 円              10/13
 g1 データの分布…    25/25   g2 確率              20/22   g3 三平方の定理    24/29
 g1 ことがら…         5/5                                 g3 標本調査        13/13
-                                                          exam 入試対策      29/35
+                                                          exam 入試対策      34/35
 ```
 
 **一次方程式・二次方程式は完成**（`g1_l21〜l27` / `g3_l24〜l31` がすべて 0 gaps。
 最後まで残っていた g1_l27 Lv4・g3_l31 Lv3/Lv4 は Phase A で回収済み）。
 
-## 1. 残り76セルの実態（2026-08-08 実測）
+## 1. 残り71セルの実態（2026-08-08 実測）
 
 | form | 残り | 起点(201) | 性質 |
 |---|---|---|---|
 | proof | 51 | 51 | **form ごと未実装**（frame も solver も checker もゼロ）。手つかず |
 | construction | 9 | 9 | **form ごと未実装**。M2 送り |
-| graph_table | 8 | 58 | exam_l4 Lv2 の1つ以外は端物7 |
-| find_value | 4 | 36 | exam_l4 Lv3/Lv4・端物2（g2_l33 Lv2・g2_l50 Lv3） |
-| word_problem | 3 | 36 | exam_l4 Lv3/Lv4・端物1（g3_l53 Lv4） |
+| graph_table | 7 | 58 | すべて端物 |
+| find_value | 2 | 36 | g2_l33 Lv2・g2_l50 Lv3 |
+| word_problem | 1 | 36 | g3_l53 Lv4 |
 | knowledge | 1 | 10 | g2_l38 Lv2 のみ |
 
-**exam は 29/35 まで進み、残りは exam_l4 の5セルと exam_l6 の proof 1セルだけ**
-（exam_l4: find_value Lv3/Lv4・graph_table Lv2・word_problem Lv3/Lv4）。
-かつて「単元横断で32セルあり form 内訳に散っていて見えない」と書いた塊は、
-Phase D でほぼ解消した。
+**exam は 34/35。残りは exam_l6.proof Lv3 の1セルだけで、これは proof form ごと
+未実装なので Phase F に属する**。かつて「単元横断で32セルあり form 内訳に散っていて
+見えない」と書いた塊は、Phase D で解消した。
+**proof と construction を除くと、残りは端物10セルだけ**（graph_table 7・
+find_value 2・word_problem 1・knowledge 1）。
 
 ### 効いた手・尽きた手
 
@@ -220,7 +221,7 @@ g3_l57/l58.word_problem Lv2（標本調査）は C14 側に計上されており
    空にしたら、契約テスト（numbers が空なら本文に算用数字が無いこと）に落ちた。
    列は `numbers` に載せ、checker はそこから組み直す＝二重管理にしない。
 
-## Phase D：C13 exam 融合（31セル）★セル数では最大 — **26/31 着地（2026-08-08）**
+## Phase D：C13 exam 融合（31セル）★セル数では最大 — **完了（2026-08-08）**
 
 `exam_l1`〜`exam_l7`。内訳は graph_table 7・word_problem 14・find_value 10
 （残り1つ exam_l6 の proof は Phase F）。
@@ -232,10 +233,11 @@ exam_l7（データの活用・4）。いずれも既存単元の recipe モジ�
 similarity_scale_ratio.py）。新しい数学は exam_l5 の余事象2本と exam_l6 の
 台形の対角線1本だけで、残りは既存 solver の合成。
 
-**残り（5セル）**: exam_l4（三平方の定理と空間図形）find_value Lv3/Lv4・
-graph_table Lv2・word_problem Lv3/Lv4。graph_table Lv2 が「断面の直角三角形を
-平面にかき出す」＝**図の資産が要る唯一の exam セル**なので、ここだけ Phase B の
-立体描画資産との突き合わせが要る。
+**exam_l4（5セル・最後の束）**: 既存の `word_problem_pythagorean.py` に
+scenario_kind を3つ足しただけで、find_value/word_problem の4セルが載った。
+唯一図が要る graph_table Lv2 は、Phase B の `visuals/solid.py` の断面ビュー
+（長方形＋対角線）に `mode="cube_section"` を足すだけで足りた
+——**図の資産の投資は Phase B で先に済んでいた**、というのが結果。
 **既存単元 solver の合成**（`packs/math/recipes/exam_fusion.py` が既にある）ので
 新しい数学はほぼ不要。ただし Lv3/Lv4 のみ＝多段構成が要る。
 **Phase A・B が終わっているほど安くなる**（exam_l3 は動点、exam_l4 は空間図形、
@@ -309,11 +311,10 @@ g1_l41〜l44（垂直二等分線・角の二等分線・垂線・作図の利�
 
 | Phase | 内容 | セル | 累計 |
 |---|---|---|---|
-| — | 現在（2026-08-08 実測） | — | **554** |
-| D | exam 融合の残り＝exam_l4 のみ | 5 | 559 |
+| — | 現在（2026-08-08 実測・Phase D 完了） | — | **559** |
 | E | 端物 | 11 | 570 |
 | F | proof（exam_l6 Lv3 を含む） | 51 | 621 |
 | G | construction | 9 | **630** |
 
-Phase D の残り5セル＋E で **570/630（90.5%）**。残りは proof と construction という
+Phase E まで進めば **570/630（90.5%）**。残りは proof と construction という
 「form ごと新規設計」の2つだけになる。
