@@ -344,3 +344,32 @@ def equilateral_points_on_sides(p: dict[str, Any]) -> Construction:
         "正三角形ABCの辺BC上に点D、辺CA上に点Eを、BD ＝ CE となるようにとる"
     )
     return c
+
+
+@register_construction("triangle_equal_angles")
+def triangle_equal_angles(p: dict[str, Any]) -> Construction:
+    """3つの角が等しい三角形ABC（**辺の長さは仮定しない**）。g2_l43 Lv3 の図。
+
+    正三角形に**なるための条件**を示す回なので、辺が等しいことを仮定に入れてはいけない
+    （`equilateral` は3辺の等しさを仮定するので、こちらでは使えない——あれは性質を
+    示す図である）。与えるのは角の等しさだけで、「2つの角が等しい三角形は二等辺
+    三角形である」を2回使って3辺の等しさにたどりつく。
+
+    図としては正三角形を描く（角が等しい三角形は正三角形なのだから、そう描くほかない）。
+    仮定に入っているのは角の等しさだけである、というのは事実の側の話である。
+    """
+    c = Construction()
+    rot = _rotator((float(p["angle"]) - 60.0) * 0.35 + (float(p["offset"]) - 2.6) * 2.5)
+    b = float(p["base"])
+    c.free_point("B", *rot(0.0, 0.0))
+    c.free_point("C", *rot(b, 0.0))
+    c.free_point("A", *rot(b / 2.0, b * math.sqrt(3.0) / 2.0))
+    for x, y in (("A", "B"), ("B", "C"), ("C", "A")):
+        c.connect(x, y)
+    for first, second in ((("A", "B", "C"), ("B", "A", "C")), (("B", "A", "C"), ("C", "A", "B"))):
+        f = ang_eq(ang(*first), ang(*second))
+        c.facts.add(f)
+        c.givens.append(f)
+    c.steps.append("∠A、∠B、∠Cが等しくなるように三角形ABCをとる")
+    c.description = "右の図の△ABCで、∠A ＝ ∠B ＝ ∠C である"
+    return c

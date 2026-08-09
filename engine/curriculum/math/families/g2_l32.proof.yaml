@@ -1,0 +1,61 @@
+family: math.g2_l32.proof
+form: proof
+source_desc: |
+  平行線の性質と平行になるための条件
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv2 desc: 誘導あり・錯角等が等しいことから平行を1段で示す。
+  Lv3 desc: 誘導なし・補助線や複数角の関係を自分で構成して平行を示す。
+  ---
+  【設計モデル】g2_l39.proof と同じ推論器（構成 → 前向き推論 → 結論 → 証明文）。
+
+  【★平行であることは仮定に入れない】この単元で示すのは「2直線が平行であること」
+  なので、構成が平行を持っていたら問題にならない。Lv2 は錯角が等しいことだけを
+  与える図、Lv3 は**角の等しさ自体を導く**図（X字型で合同から対応する角を出す）。
+
+  【規則の所属を直した】「錯角が等しければ平行」は `rules_similarity.py` に置いて
+  あるが、**これは2年の定理**である。topics に similarity が入っていたせいで、
+  2年の単元（topic_set: congruence）からこの定理が使えなかった。topics を
+  parallel だけにした。
+
+  【深さ】Lv2 は仮定 → 平行（深さ1）。Lv3 は中点 → 対頂角 → SAS 合同 →
+  対応する角が等しい → 平行（深さ4）。op 列は当然に相異する。
+concepts_default: [parallel_lines.judge_from_angle]
+levels:
+  "2":
+    signature: geometry_proof_parallel_by_alternate
+    recipe: math.geometry_proof
+    params:
+      construction: alternate_angle_cross
+      topic_set: congruence
+      proof_depth: 1
+      prefer: parallel
+      base_domain: {int_range: [28, 46]}
+      angle_domain: {int_range: [40, 85]}
+      offset_domain: {int_range: [10, 26]}
+    given: [premises, conclusion]
+    asked: [proof_text]
+    visual: optional
+    text: {tier: T1, template: pf_geometry_proof_v1, visual_builder: math.geometry_construction}
+    hints: [steps_prefix]
+    concept_tags: [parallel_lines.judge_from_angle]
+    cause_tags: []
+  "3":
+    signature: geometry_proof_parallel_via_congruence
+    recipe: math.geometry_proof
+    params:
+      construction: x_shape
+      topic_set: congruence
+      proof_depth: 4
+      prefer: parallel
+      base_domain: {int_range: [28, 46]}
+      angle_domain: {int_range: [40, 85]}
+      offset_domain: {int_range: [10, 26]}
+    given: [premises, conclusion]
+    asked: [proof_text]
+    visual: optional
+    text: {tier: T1, template: pf_geometry_proof_v1, visual_builder: math.geometry_construction}
+    hints: [steps_prefix]
+    concept_tags: [parallel_angle_property.rule_recall]
+    cause_tags: []
+remedial:
+  default_level: 2

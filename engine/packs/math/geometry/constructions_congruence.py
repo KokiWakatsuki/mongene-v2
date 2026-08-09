@@ -5,6 +5,7 @@
 """
 from __future__ import annotations
 
+import math
 from typing import Any
 
 from engine.packs.math.geometry.catalog import register_construction
@@ -117,4 +118,35 @@ def isosceles_with_apex_bisector(p: dict[str, Any]) -> Construction:
         c.connect(x, y)
     c.connect("A", "M", shared=True)
     c.description = "AB ＝ AC である二等辺三角形ABCで、∠Aの二等分線と辺BCとの交点をMとした"
+    return c
+
+
+@register_construction("alternate_angle_cross")
+def alternate_angle_cross(p: dict[str, Any]) -> Construction:
+    """2直線 AC と BD が点Oで交わり、**錯角 ∠OAB ＝ ∠OCD が与えられた**図（g2_l32）。
+
+    「錯角が等しければ2直線は平行」を1段で使う図。平行であることは**仮定に入れない**
+    ——それが示すことだからである。角が等しいことは作図の手順が保証している
+    （B を、∠OAB と等しい角の向きにとった）。
+    """
+    c = Construction()
+    theta = math.radians(float(p["angle"]) / 2.0 + 20.0)
+    arm = float(p["base"])
+    other = float(p["offset"]) + 1.4
+    c.free_point("O", 0.0, 0.0)
+    c.free_point("A", -arm * math.cos(theta), arm * math.sin(theta))
+    c.free_point("C", arm * math.cos(theta), -arm * math.sin(theta))
+    # B は A から見て O の向こう側、D は C から見て O の向こう側（＝錯角の位置）。
+    c.coords["B"] = (-arm * math.cos(theta) + other, arm * math.sin(theta) - other * 0.35)
+    c.coords["D"] = (arm * math.cos(theta) - other, -arm * math.sin(theta) + other * 0.35)
+    c.steps.append("∠OABと∠OCDが等しくなるように点B、Dをとる")
+    for triple in (("A", "O", "C"), ("B", "O", "D")):
+        c.facts.add(collinear(*triple))
+        c.collinear_order.append(triple)
+    equal = ang_eq(ang("A", "O", "B"), ang("C", "O", "D"))
+    c.facts.add(equal)
+    c.givens.append(equal)
+    for x, y in (("A", "C"), ("B", "D"), ("A", "B"), ("C", "D")):
+        c.connect(x, y)
+    c.description = "右の図で、2直線ACとBDは点Oで交わっていて、∠OAB ＝ ∠OCD である"
     return c

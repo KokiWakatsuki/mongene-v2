@@ -137,6 +137,8 @@ _PROOF_CONCEPTS = [
     "circle_proof.inscribed_direct",
     "circle_proof.two_step",
     "circle_proof.construct",
+    "parallel_lines.judge_from_angle",
+    "parallel_angle_property.rule_recall",
     "equal_area_proof.parallel_direct",
     "equal_area_proof.chain",
 ]

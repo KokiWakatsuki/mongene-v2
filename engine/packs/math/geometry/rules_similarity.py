@@ -379,7 +379,10 @@ SIMILARITY_RULES: tuple[Rule, ...] = (
         "conclude_parallel_by_alternate_angles",
         "錯角が等しい",
         _apply_parallel_by_alternate_angles,
-        ("similarity", "parallel"),
+        # **これは2年（g2_l32「平行になるための条件」）の定理**。相似のモジュールに
+        # 置いてあるのは実装の都合で、単元としては相似ではない——topics に similarity を
+        # 入れていたせいで、2年の単元からこの定理が使えなくなっていた。
+        ("parallel",),
     ),
     # -- 平行線と線分の比とその逆 ---------------------------------------------
     Rule(
