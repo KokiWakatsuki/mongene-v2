@@ -26,31 +26,31 @@ meta:
 problem_ref: 6e12e4585390fa1b
 problem_text: '次の計算をせよ。
 
-  (-1.1)²'
+  (0.8)³'
 sub_questions:
 - answer:
-    display: 121/100
+    display: '0.512'
     kind: symbolic
-    srepr: Rational(121, 100)
+    srepr: Rational(64, 125)
   cause_tags: []
   concept_tags:
   - signed_number.power_single
   explanation: 'まず、累乗を、同じ数を指数の回数だけかけ合わせる積に書き直す。（累乗を積に書き直す）
 
-    次に、符号に注意して計算し、累乗の値を求める。（121/100）'
+    次に、符号に注意して計算し、累乗の値を求める。（0.512）'
   hints:
   - 累乗を、同じ数を指数の回数だけかけ合わせる積に書き直す。
   label: (1)
-  prompt_text: value を求めなさい。
+  prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
     narration: 累乗を、同じ数を指数の回数だけかけ合わせる積に書き直す。
     op: rewrite_power_as_product
     result_display: 累乗を積に書き直す
-    result_srepr: Rational(121, 100)
+    result_srepr: Rational(64, 125)
   - args: []
     narration: 符号に注意して計算し、累乗の値を求める。
     op: evaluate_power_with_sign
-    result_display: 121/100
-    result_srepr: Rational(121, 100)
+    result_display: '0.512'
+    result_srepr: Rational(64, 125)
 visual_svg: null

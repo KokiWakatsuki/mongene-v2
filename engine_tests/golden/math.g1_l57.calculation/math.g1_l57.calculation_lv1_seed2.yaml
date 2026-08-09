@@ -42,7 +42,7 @@ sub_questions:
   - データの値をすべて足し合わせ、個数でわって平均値を求める。
   - データを大きさの順に並べ、中央の値（個数が偶数のときは中央に並ぶ値どうしの平均）を求める。
   label: (1)
-  prompt_text: value を求めなさい。
+  prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
     narration: データの値をすべて足し合わせ、個数でわって平均値を求める。

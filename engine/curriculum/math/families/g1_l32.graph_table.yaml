@@ -23,7 +23,7 @@ levels:
       denominator_domain: {int_set: [1, 2, 3, 4, 5]}
       value_abs_max: 16
       x_abs_max: 12
-    given: []
+    given: [x_target]
     asked: [read_point]
     visual: required
     text: {tier: T1, template: propg_read_lattice_v1, visual_builder: math.linear_graph}

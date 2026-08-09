@@ -19,7 +19,7 @@ levels:
       x_abs_max: 12
       y_abs_max: 12
       coeff_abs_max: 48
-    given: []
+    given: [x_target]
     asked: [read_point]
     visual: required
     text: {tier: T1, template: propg_read_lattice_hyperbola_v1, visual_builder: math.curve_graph}

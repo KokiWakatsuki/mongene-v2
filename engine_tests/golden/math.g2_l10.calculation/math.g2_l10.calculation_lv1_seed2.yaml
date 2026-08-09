@@ -39,7 +39,7 @@ sub_questions:
   hints:
   - 左辺の x と y に、与えられた値をそれぞれ代入する。
   label: (1)
-  prompt_text: value を求めなさい。
+  prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
     narration: 左辺の x と y に、与えられた値をそれぞれ代入する。

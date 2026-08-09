@@ -23,8 +23,8 @@ levels:
     signature: similar_area_ratio
     recipe: math.similar_area_ratio
     params:
-      ratio_domain: {int_range: [1, 12]}
-      area_domain: {int_range: [1, 300]}
+      ratio_max: 6
+      area_max: 600
     given: [condition]
     asked: [value]
     visual: none

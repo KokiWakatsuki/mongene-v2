@@ -384,13 +384,21 @@ _COEFF_FROM_INTERSECTION_PHRASE: dict[str, str] = {
 
 
 @register_solver("math.parabola_coefficient_from_intersection")
-def parabola_coefficient_from_intersection(m: object, b: object, x_a: object) -> Solution:
-    """交点 A の x 座標から放物線 y=ax² の係数 a を逆算し、三角形 OAB の面積も求める。
+def parabola_coefficient_from_intersection(
+    m: object, b: object, x_a: object, labels: object = None
+) -> Solution:
+    """交点の x 座標から放物線 y=ax² の係数 a を逆算し、三角形の面積も求める。
 
-    A は直線 y=mx+b の上にあるので yA=m·xA+b、放物線の上にもあるので a=yA/xA²。
-    B は残りの交点。面積は既存の shoelace 公式（`_shoelace_area`）で求める
-    ＝新しい幾何ロジックは足さない。答えは (a, 三角形 OAB の面積) の組。
+    一方の交点は直線 y=mx+b の上にあるので y=m·x+b、放物線の上にもあるので a=y/x²。
+    もう一方は残りの交点。面積は既存の shoelace 公式（`_shoelace_area`）で求める
+    ＝新しい幾何ロジックは足さない。答えは (a, 三角形の面積) の組。
+
+    **点の名前は recipe から受け取る。** 問題文が「2点F、Dで交わり」と名づけるのに
+    ここを A・B に固定していたため、答えが `a = 4、△OAB = 60` と問題文に無い記号で
+    出ていた。
     """
+    lab = str(labels or "AB")
+    la, lb = (lab[0], lab[1]) if len(lab) >= 2 else ("A", "B")
     m_s, b_s = sympy.nsimplify(sympy.sympify(m)), sympy.nsimplify(sympy.sympify(b))
     xa_s = sympy.nsimplify(sympy.sympify(x_a))
     if xa_s == 0:
@@ -414,7 +422,7 @@ def parabola_coefficient_from_intersection(m: object, b: object, x_a: object) ->
 
     answer = sympy.Tuple(a_val, area)
     srepr = sympy.srepr(answer)
-    disp = f"a = {_fmt_scalar(a_val)}、△OAB = {_fmt_scalar(area)}"
+    disp = f"a = {_fmt_scalar(a_val)}、△O{la}{lb} = {_fmt_scalar(area)}"
     steps = [
         Step(
             op=op,

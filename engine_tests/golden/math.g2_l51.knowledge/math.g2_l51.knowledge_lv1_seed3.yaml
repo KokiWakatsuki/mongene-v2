@@ -24,7 +24,7 @@ meta:
   seed: 3
   signature: probability_terms_term_recall_g2
 problem_ref: 0fb5210ffd844afe
-problem_text: 1から435までの番号のカードのように、起こりうるどの結果も同じ程度に起こると考えられるようす を何といいますか。
+problem_text: 1から435までの番号のカードのように、起こりうるどの結果も同じ程度に起こると考えられるようすを何といいますか。
 sub_questions:
 - answer:
     correct: 同様に確からしい
@@ -42,7 +42,7 @@ sub_questions:
   hints:
   - 説明されている式や数の部分がどれかを読み取る。
   label: (1)
-  prompt_text: choice を求めなさい。
+  prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
     narration: 説明されている式や数の部分がどれかを読み取る。

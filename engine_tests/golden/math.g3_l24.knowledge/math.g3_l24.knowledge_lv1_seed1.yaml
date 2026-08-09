@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: quadratic_terms_term_recall
 problem_ref: 6c0b1911d90f8e34
-problem_text: 移項して整理すると x² - 4x - 9 = 0 のように、x の2乗をふくむ形になる方程式 を何といいますか。
+problem_text: 移項して整理すると x² - 4x - 9 = 0 のように、x の2乗をふくむ形になる方程式を何といいますか。
 sub_questions:
 - answer:
     correct: 二次方程式
@@ -41,7 +41,7 @@ sub_questions:
   hints:
   - 説明されている式や数の部分がどれかを読み取る。
   label: (1)
-  prompt_text: choice を求めなさい。
+  prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
     narration: 説明されている式や数の部分がどれかを読み取る。

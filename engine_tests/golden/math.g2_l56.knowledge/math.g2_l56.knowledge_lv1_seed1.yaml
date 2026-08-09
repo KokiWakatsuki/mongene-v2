@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: box_plot_terms_term_recall
 problem_ref: 86b47d2dc59c4c5e
-problem_text: 98個のデータを表した箱ひげ図で、箱の右端が表す値 を何といいますか。
+problem_text: 98個のデータを表した箱ひげ図で、箱の右端が表す値を何といいますか。
 sub_questions:
 - answer:
     correct: 第三四分位数
@@ -44,7 +44,7 @@ sub_questions:
   hints:
   - 説明されている式や数の部分がどれかを読み取る。
   label: (1)
-  prompt_text: choice を求めなさい。
+  prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
     narration: 説明されている式や数の部分がどれかを読み取る。

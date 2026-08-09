@@ -141,8 +141,8 @@ def render_frequency_chart_svg(params: dict[str, Any], *, draw: bool) -> str:
 
     parts: list[str] = [
         f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {_SVG_W} {_SVG_H}" '
-        f'width="{_SVG_W}" height="{_SVG_H}">',
-        f'<rect x="0" y="0" width="{_SVG_W}" height="{_SVG_H}" fill="none" stroke="none"/>',
+        f'width="{_SVG_W}" height="{_SVG_H}" font-family="Hiragino Sans, Hiragino Kaku Gothic ProN, Noto Sans JP, Yu Gothic, Meiryo, sans-serif">',
+        f'<rect x="0" y="0" width="{_SVG_W}" height="{_SVG_H}" fill="#ffffff" stroke="none"/>',
     ]
 
     # --- 横の補助線（度数の目盛） ---
@@ -336,8 +336,8 @@ def render_box_plot_svg(params: dict[str, Any], *, draw: bool) -> str:
 
     parts: list[str] = [
         f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {_SVG_W} {_SVG_H}" '
-        f'width="{_SVG_W}" height="{_SVG_H}">',
-        f'<rect x="0" y="0" width="{_SVG_W}" height="{_SVG_H}" fill="none" stroke="none"/>',
+        f'width="{_SVG_W}" height="{_SVG_H}" font-family="Hiragino Sans, Hiragino Kaku Gothic ProN, Noto Sans JP, Yu Gothic, Meiryo, sans-serif">',
+        f'<rect x="0" y="0" width="{_SVG_W}" height="{_SVG_H}" fill="#ffffff" stroke="none"/>',
     ]
 
     # --- 縦の補助線（数直線の目盛） ---

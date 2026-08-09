@@ -1,8 +1,11 @@
-approved_at: '2026-07-30T16:42:23.438215'
+approved_at: '2026-08-10T04:16:14.994836'
 approver: koki
-content_sha256: 4ebb5b13419320195ed375cffbf86193c27308dadb25167622eb527c14fcb8da
+content_sha256: 6ec52d3b1e6128021b892dfd16e3c77f4ada79ee69dd91f229c339f8093a60cb
 family: math.g2_l38.knowledge
 files:
 - engine_tests/golden/math.g2_l38.knowledge/math.g2_l38.knowledge_lv1_seed1.yaml
 - engine_tests/golden/math.g2_l38.knowledge/math.g2_l38.knowledge_lv1_seed2.yaml
 - engine_tests/golden/math.g2_l38.knowledge/math.g2_l38.knowledge_lv1_seed3.yaml
+- engine_tests/golden/math.g2_l38.knowledge/math.g2_l38.knowledge_lv2_seed1.yaml
+- engine_tests/golden/math.g2_l38.knowledge/math.g2_l38.knowledge_lv2_seed2.yaml
+- engine_tests/golden/math.g2_l38.knowledge/math.g2_l38.knowledge_lv2_seed3.yaml

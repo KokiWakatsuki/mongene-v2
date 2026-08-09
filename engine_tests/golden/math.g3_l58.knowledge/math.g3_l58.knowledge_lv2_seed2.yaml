@@ -41,7 +41,7 @@ sub_questions:
   hints:
   - 母集団に含まれるすべての対象が、同じ機会で選ばれる方法になっているかを調べる。
   label: (1)
-  prompt_text: choice を求めなさい。
+  prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
     narration: 母集団に含まれるすべての対象が、同じ機会で選ばれる方法になっているかを調べる。

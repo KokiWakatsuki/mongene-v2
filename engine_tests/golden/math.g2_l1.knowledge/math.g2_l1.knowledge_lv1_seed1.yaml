@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: poly_term_recall
 problem_ref: 3436a04a0577555d
-problem_text: 単項式 -2m³ で、かけ合わされている文字の個数 を何といいますか。
+problem_text: 単項式 -2m³ で、かけ合わされている文字の個数を何といいますか。
 sub_questions:
 - answer:
     correct: 次数
@@ -43,7 +43,7 @@ sub_questions:
   hints:
   - 説明されている式や数の部分がどれかを読み取る。
   label: (1)
-  prompt_text: choice を求めなさい。
+  prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
     narration: 説明されている式や数の部分がどれかを読み取る。

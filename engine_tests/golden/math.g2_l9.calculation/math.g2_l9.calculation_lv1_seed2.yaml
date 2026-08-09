@@ -37,9 +37,9 @@ sub_questions:
   - polynomial.rearrange_move
   explanation: まず、解く文字の項だけを片方の辺に残すよう、ほかの項を移項する。（y = -4x - 7）
   hints:
-  - 問題文の与えられた値をもう一度確認しよう。
+  - 解く文字の項だけを片方の辺に残すよう、ほかの項を移項する。
   label: (1)
-  prompt_text: expression を求めなさい。
+  prompt_text: 式に表しなさい。
   solution_steps:
   - args: []
     narration: 解く文字の項だけを片方の辺に残すよう、ほかの項を移項する。

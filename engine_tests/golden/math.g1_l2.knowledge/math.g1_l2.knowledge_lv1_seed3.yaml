@@ -24,7 +24,7 @@ meta:
   seed: 3
   signature: number_term_recall
 problem_ref: 5c1d968bb6056778
-problem_text: +87 や -87 の前についている、正と負を表す + や - のしるし を何といいますか。
+problem_text: +87 や -87 の前についている、正と負を表す + や - のしるしを何といいますか。
 sub_questions:
 - answer:
     correct: 符号
@@ -43,7 +43,7 @@ sub_questions:
   hints:
   - 説明されている式や数の部分がどれかを読み取る。
   label: (1)
-  prompt_text: choice を求めなさい。
+  prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
     narration: 説明されている式や数の部分がどれかを読み取る。

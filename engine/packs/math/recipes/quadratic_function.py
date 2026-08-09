@@ -508,7 +508,7 @@ def exam_parabola_coefficient_from_intersection_recipe(ctx: CellContext, rng: Rn
     la, lb = _draw_distinct_points(2, rng)
 
     sol = cast(
-        Solution, REGISTRY.solver("math.parabola_coefficient_from_intersection")(m, b, xa)
+        Solution, REGISTRY.solver("math.parabola_coefficient_from_intersection")(m, b, xa, la + lb)
     )
     assert isinstance(sol.answer, SymbolicAnswer)
     a_val, area = sympy.sympify(sol.answer.srepr)

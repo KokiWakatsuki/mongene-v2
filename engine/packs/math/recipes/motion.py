@@ -325,7 +325,7 @@ def word_problem_moving_points_area_recipe(ctx: CellContext, rng: Rng) -> MR:
     p = cast("dict[str, Any]", ctx.spec_level.params)
     s, v, area, labels_txt, scenario, quantities, ask_f, ask_v = _construct_two_points(p, rng)
 
-    expr_sol = cast(Solution, REGISTRY.solver("math.express_moving_points_area")(v))
+    expr_sol = cast(Solution, REGISTRY.solver("math.express_moving_points_area")(v, labels_txt))
     time_sol = cast(Solution, REGISTRY.solver("math.solve_moving_points_area_time")(v, area))
     assert isinstance(expr_sol.answer, SymbolicAnswer)
     assert isinstance(time_sol.answer, SymbolicAnswer)
@@ -417,7 +417,7 @@ def word_problem_moving_point_all_times_recipe(ctx: CellContext, rng: Rng) -> MR
     s, v, area, labels_txt, scenario, ask_v = _construct_all_times(p, rng)
 
     sol = cast(
-        Solution, REGISTRY.solver("math.solve_moving_point_area_all_times")(s, v, area)
+        Solution, REGISTRY.solver("math.solve_moving_point_area_all_times")(s, v, area, labels_txt)
     )
     assert isinstance(sol.answer, SymbolicAnswer)
     times = sympy.sympify(sol.answer.srepr)
@@ -515,7 +515,7 @@ def word_problem_area_graph_and_times_recipe(ctx: CellContext, rng: Rng) -> MR:
         Solution, REGISTRY.solver("math.draw_three_interval_area_graph_features")(s, v)
     )
     times_sol = cast(
-        Solution, REGISTRY.solver("math.solve_moving_point_area_all_times")(s, v, area)
+        Solution, REGISTRY.solver("math.solve_moving_point_area_all_times")(s, v, area, labels_txt)
     )
     assert isinstance(graph_sol.answer, GraphAnswer)
     assert isinstance(times_sol.answer, SymbolicAnswer)
@@ -997,7 +997,7 @@ def exam_area_all_times_recipe(ctx: CellContext, rng: Rng) -> MR:
     s, v, area, labels_txt, _scenario = _three_interval_scene(p, rng, with_area=True)
 
     sol = cast(
-        Solution, REGISTRY.solver("math.solve_moving_point_area_all_times")(s, v, area)
+        Solution, REGISTRY.solver("math.solve_moving_point_area_all_times")(s, v, area, labels_txt)
     )
     assert isinstance(sol.answer, SymbolicAnswer)
     times = sympy.sympify(sol.answer.srepr)
@@ -1124,7 +1124,7 @@ def exam_word_problem_three_intervals_recipe(ctx: CellContext, rng: Rng) -> MR:
     first = cast(Solution, REGISTRY.solver("math.express_single_interval_area")(s, v))
     flat = cast(Solution, REGISTRY.solver("math.express_constant_interval_area")(s, v))
     times = cast(
-        Solution, REGISTRY.solver("math.solve_moving_point_area_all_times")(s, v, area)
+        Solution, REGISTRY.solver("math.solve_moving_point_area_all_times")(s, v, area, labels_txt)
     )
     assert isinstance(first.answer, SymbolicAnswer)
     assert isinstance(flat.answer, SymbolicAnswer)
@@ -1192,10 +1192,11 @@ def exam_word_problem_quarter_area_recipe(ctx: CellContext, rng: Rng) -> MR:
     idx = int(draw({"int_set": list(range(len(cands)))}, rng))
     s, v = cands[idx]
     la, lb, lc, ld, lp = _draw_distinct_points(5, rng)
+    labels_txt = la + lb + lc + ld + lp
     area = s * s // 4
 
     sol = cast(
-        Solution, REGISTRY.solver("math.solve_moving_point_area_all_times")(s, v, area)
+        Solution, REGISTRY.solver("math.solve_moving_point_area_all_times")(s, v, area, labels_txt)
     )
     assert isinstance(sol.answer, SymbolicAnswer)
     times = sympy.sympify(sol.answer.srepr)
@@ -1212,7 +1213,7 @@ def exam_word_problem_quarter_area_recipe(ctx: CellContext, rng: Rng) -> MR:
         level=ctx.level,
         purpose=ctx.purpose,
         seed=0,
-        params={"numbers": {"side": str(s), "speed": str(v)}, "labels": la + lb + lc + ld + lp},
+        params={"numbers": {"side": str(s), "speed": str(v)}, "labels": labels_txt},
         given={"scenario": scenario},
         context_slots={
             "ask_value": (

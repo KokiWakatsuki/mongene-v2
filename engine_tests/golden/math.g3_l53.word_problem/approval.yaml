@@ -1,8 +1,11 @@
-approved_at: '2026-08-04T11:03:04.917754'
+approved_at: '2026-08-10T04:26:49.640598'
 approver: koki
-content_sha256: 93ec45b64bf1efe2c3026d9c4fef0a29725ba757f4abd9cab25dc60624577eee
+content_sha256: fe36c3dfa23e59d88ec247199f1e2f202932ddb8e5b5735053b4c8626926d566
 family: math.g3_l53.word_problem
 files:
 - engine_tests/golden/math.g3_l53.word_problem/math.g3_l53.word_problem_lv3_seed1.yaml
 - engine_tests/golden/math.g3_l53.word_problem/math.g3_l53.word_problem_lv3_seed2.yaml
 - engine_tests/golden/math.g3_l53.word_problem/math.g3_l53.word_problem_lv3_seed3.yaml
+- engine_tests/golden/math.g3_l53.word_problem/math.g3_l53.word_problem_lv4_seed1.yaml
+- engine_tests/golden/math.g3_l53.word_problem/math.g3_l53.word_problem_lv4_seed2.yaml
+- engine_tests/golden/math.g3_l53.word_problem/math.g3_l53.word_problem_lv4_seed3.yaml

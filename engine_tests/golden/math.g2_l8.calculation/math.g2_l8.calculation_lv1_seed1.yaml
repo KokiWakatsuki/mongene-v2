@@ -39,7 +39,7 @@ sub_questions:
   hints:
   - もとの数と、位を入れかえた数を、それぞれ文字式で書き出す。
   label: (1)
-  prompt_text: simplified_expr を求めなさい。
+  prompt_text: 式を簡単にしなさい。
   solution_steps:
   - args: []
     narration: もとの数と、位を入れかえた数を、それぞれ文字式で書き出す。

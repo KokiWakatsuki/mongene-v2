@@ -23,7 +23,9 @@ levels:
     signature: parallel_segment_ratio_length
     recipe: math.parallel_segment_ratio_length
     params:
-      length_domain: {int_range: [1, 200]}
+      # BC=DE·(AD+DB)/AD が整数になる組だけを列挙して引く（_segment_lengths）。
+      part_max: 12
+      side_max: 60
     given: [condition]
     asked: [value]
     visual: none
@@ -35,7 +37,8 @@ levels:
     signature: parallel_lines_transversal_ratio
     recipe: math.parallel_lines_transversal_ratio
     params:
-      length_domain: {int_range: [1, 20]}
+      # BC=AB·EF/DE が整数になる組だけを引く（105/19 のような答えを出さない）。
+      length_max: 20
     given: [condition]
     asked: [value]
     visual: none

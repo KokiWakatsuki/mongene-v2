@@ -37,9 +37,9 @@ sub_questions:
   - radical.square_of_root
   explanation: まず、根号のついた数を2乗し、根号の中の数にもどす。（47）
   hints:
-  - 問題文の与えられた値をもう一度確認しよう。
+  - 根号のついた数を2乗し、根号の中の数にもどす。
   label: (1)
-  prompt_text: simplified_expr を求めなさい。
+  prompt_text: 式を簡単にしなさい。
   solution_steps:
   - args: []
     narration: 根号のついた数を2乗し、根号の中の数にもどす。

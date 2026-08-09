@@ -44,7 +44,7 @@ sub_questions:
   - かっこを外して、符号のついた項の和とみなす。
   - 分数・小数を通分してそろえる。
   label: (1)
-  prompt_text: value を求めなさい。
+  prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
     narration: かっこを外して、符号のついた項の和とみなす。

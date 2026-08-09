@@ -43,7 +43,7 @@ sub_questions:
   hints:
   - 相似を表す式で、頂点がどの順に対応づけられているかを確認する。
   label: (1)
-  prompt_text: choice を求めなさい。
+  prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
     narration: 相似を表す式で、頂点がどの順に対応づけられているかを確認する。

@@ -44,7 +44,7 @@ sub_questions:
   - 係数のついたはじめの項を平方する。
   - 2つの項の積の2倍（中間の項）を求める。
   label: (1)
-  prompt_text: simplified_expr を求めなさい。
+  prompt_text: 式を簡単にしなさい。
   solution_steps:
   - args: []
     narration: 係数のついたはじめの項を平方する。

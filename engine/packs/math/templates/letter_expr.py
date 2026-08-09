@@ -30,7 +30,9 @@ LF_NOTATION_QUOTIENT_V1 = (
     "次の式を、除法の表し方のきまりに従って分数の形で表せ。\n{{ given.expression }}"
 )
 # g1_l17/l19/l21.knowledge Lv1: 説明された対象の用語の名称を答える（用語想起）
-LF_TERM_RECALL_V1 = "{{ given.statement }} を何といいますか。"
+# **半角スペースを入れないこと。** statement は体言止めの語句なので、
+# 「きょり を何といいますか」のように助詞の前に空白が入ってしまう。
+LF_TERM_RECALL_V1 = "{{ given.statement }}を何といいますか。"
 # g1_l21.knowledge Lv2: ある値が方程式の解かを判別する（verify）
 LF_VERIFY_SOLUTION_V1 = "{{ given.statement }} は、この方程式の解であるといえますか。"
 # g1_l2.knowledge Lv2: 2数の大小を判別する（verify）

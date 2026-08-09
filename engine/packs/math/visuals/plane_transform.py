@@ -73,10 +73,10 @@ def _plain_grid_scaffold(params: dict[str, Any]) -> _GridScaffold:
     parts: list[str] = []
     parts.append(
         f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {_SVG_SIZE} {_SVG_SIZE}" '
-        f'width="{_SVG_SIZE}" height="{_SVG_SIZE}">'
+        f'width="{_SVG_SIZE}" height="{_SVG_SIZE}" font-family="Hiragino Sans, Hiragino Kaku Gothic ProN, Noto Sans JP, Yu Gothic, Meiryo, sans-serif">'
     )
     parts.append(
-        f'<rect x="0" y="0" width="{_SVG_SIZE}" height="{_SVG_SIZE}" fill="none" stroke="none"/>'
+        f'<rect x="0" y="0" width="{_SVG_SIZE}" height="{_SVG_SIZE}" fill="#ffffff" stroke="none"/>'
     )
     for gx in range(x_lo, x_hi + 1):
         px = to_px_x(gx)

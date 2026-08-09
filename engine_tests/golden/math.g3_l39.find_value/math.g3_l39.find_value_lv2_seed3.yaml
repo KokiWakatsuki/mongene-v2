@@ -24,22 +24,22 @@ meta:
   seed: 3
   signature: similarity_ratio_transfer
 problem_ref: 42bff6a592baf35c
-problem_text: 三角形JQDと三角形GNRは相似で、相似比は 3:5 である。JQ=126cm のとき、対応する辺GNの長さを求めよ。
+problem_text: 三角形JQDと三角形GNRは相似で、相似比は 7:6 である。JQ=28cm のとき、対応する辺GNの長さを求めよ。
 sub_questions:
 - answer:
-    display: '210'
+    display: '24'
     kind: symbolic
-    srepr: Integer(210)
+    srepr: Integer(24)
   cause_tags: []
   concept_tags:
   - similarity.ratio_transfer
   explanation: 'まず、2つの図形の相似比と、わかっている辺の長さを読み取る。（相似比とわかっている辺の長さを読み取る）
 
-    次に、相似な図形では対応する辺の長さの比が相似比に等しいことから、対応する辺の長さを求める。（210）'
+    次に、相似な図形では対応する辺の長さの比が相似比に等しいことから、対応する辺の長さを求める。（24）'
   hints:
   - 2つの図形の相似比と、わかっている辺の長さを読み取る。
   label: (1)
-  prompt_text: value を求めなさい。
+  prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
     narration: 2つの図形の相似比と、わかっている辺の長さを読み取る。
@@ -49,6 +49,6 @@ sub_questions:
   - args: []
     narration: 相似な図形では対応する辺の長さの比が相似比に等しいことから、対応する辺の長さを求める。
     op: apply_similarity_ratio
-    result_display: '210'
-    result_srepr: Integer(210)
+    result_display: '24'
+    result_srepr: Integer(24)
 visual_svg: null

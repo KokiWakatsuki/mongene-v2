@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: polygon_exterior_sum_property_rule_recall
 problem_ref: 2453f68e15addfeb
-problem_text: 195角形の外角の和は、辺の数を変えた他の多角形の外角の和と比べてどうなるか。正しく述べているものを1つ選びなさい。
+problem_text: 5角形の外角の和は、辺の数を変えた他の多角形の外角の和と比べてどうなるか。正しく述べているものを1つ選びなさい。
 sub_questions:
 - answer:
     correct: どんな多角形であっても常に一定である
@@ -42,7 +42,7 @@ sub_questions:
   hints:
   - 問題で問われている規則や約束が、何についてのものかを読み取る。
   label: (1)
-  prompt_text: choice を求めなさい。
+  prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
     narration: 問題で問われている規則や約束が、何についてのものかを読み取る。

@@ -41,7 +41,7 @@ sub_questions:
   hints:
   - 場面の中で、比べられている、または等しくなっている数量に着目する。
   label: (1)
-  prompt_text: formulation を求めなさい。
+  prompt_text: 式に表しなさい。
   solution_steps:
   - args: []
     narration: 場面の中で、比べられている、または等しくなっている数量に着目する。

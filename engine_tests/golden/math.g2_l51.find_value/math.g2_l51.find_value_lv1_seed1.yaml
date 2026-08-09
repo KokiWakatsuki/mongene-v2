@@ -24,12 +24,12 @@ meta:
   seed: 1
   signature: probability_single_die_count
 problem_ref: 03af962751908946
-problem_text: 1から53までの番号が1つずつ書かれた53枚のカードから1枚を引く。引いたカードの番号が51以上である確率を求めよ。
+problem_text: 1から7までの番号が1つずつ書かれた7枚のカードから1枚を引く。引いたカードの番号が2以上である確率を求めよ。
 sub_questions:
 - answer:
-    display: 3/53
+    display: 6/7
     kind: symbolic
-    srepr: Rational(3, 53)
+    srepr: Rational(6, 7)
   cause_tags: []
   concept_tags:
   - probability.count_single_space
@@ -37,12 +37,12 @@ sub_questions:
 
     次に、そのうち、求める条件にあてはまる場合の数を数える。（条件にあてはまる場合を数える）
 
-    最後に、条件にあてはまる場合の数を、すべての場合の数でわる。（3/53）'
+    最後に、条件にあてはまる場合の数を、すべての場合の数でわる。（6/7）'
   hints:
   - 起こりうるすべての場合を数え上げる。
   - そのうち、求める条件にあてはまる場合の数を数える。
   label: (1)
-  prompt_text: value を求めなさい。
+  prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
     narration: 起こりうるすべての場合を数え上げる。
@@ -57,6 +57,6 @@ sub_questions:
   - args: []
     narration: 条件にあてはまる場合の数を、すべての場合の数でわる。
     op: compute_probability
-    result_display: 3/53
-    result_srepr: Rational(3, 53)
+    result_display: 6/7
+    result_srepr: Rational(6, 7)
 visual_svg: null

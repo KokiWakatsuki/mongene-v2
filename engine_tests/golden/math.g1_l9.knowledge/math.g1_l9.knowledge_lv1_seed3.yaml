@@ -24,7 +24,7 @@ meta:
   seed: 3
   signature: laws_term_recall
 problem_ref: a25e3eefc1aaa758
-problem_text: 3 × (19 + 39) = 3 × 19 + 3 × 39 のように、かっこの中の和にかけ算を分けて計算できるという計算のきまり を何といいますか。
+problem_text: 3 × (19 + 39) = 3 × 19 + 3 × 39 のように、かっこの中の和にかけ算を分けて計算できるという計算のきまりを何といいますか。
 sub_questions:
 - answer:
     correct: 分配法則
@@ -42,7 +42,7 @@ sub_questions:
   hints:
   - 説明されている式や数の部分がどれかを読み取る。
   label: (1)
-  prompt_text: choice を求めなさい。
+  prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
     narration: 説明されている式や数の部分がどれかを読み取る。

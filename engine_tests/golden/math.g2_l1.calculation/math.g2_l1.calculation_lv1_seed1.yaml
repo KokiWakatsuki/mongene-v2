@@ -41,7 +41,7 @@ sub_questions:
   hints:
   - 式の中で、文字の指数がもっとも高い項を見つける。
   label: (1)
-  prompt_text: degree を求めなさい。
+  prompt_text: 次数を答えなさい。
   solution_steps:
   - args: []
     narration: 式の中で、文字の指数がもっとも高い項を見つける。

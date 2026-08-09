@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: probability_terms_term_recall_g2
 problem_ref: 695ec10656dce2d4
-problem_text: 390回中の一部で起こることがらのように、あることがらの起こりやすさの程度を表す数のこと を何といいますか。
+problem_text: 390回中の一部で起こることがらのように、あることがらの起こりやすさの程度を表す数のことを何といいますか。
 sub_questions:
 - answer:
     correct: 確率
@@ -42,7 +42,7 @@ sub_questions:
   hints:
   - 説明されている式や数の部分がどれかを読み取る。
   label: (1)
-  prompt_text: choice を求めなさい。
+  prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
     narration: 説明されている式や数の部分がどれかを読み取る。

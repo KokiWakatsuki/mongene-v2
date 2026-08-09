@@ -24,24 +24,24 @@ meta:
   seed: 2
   signature: relative_frequency_basic
 problem_ref: 6a40662fe4c58752
-problem_text: さいころを89回投げたところ、1の目が57回出た。1の目が出た相対度数を求めよ。
+problem_text: さいころを2000回投げたところ、1の目が262回出た。1の目が出た相対度数を小数で求めよ。
 sub_questions:
 - answer:
-    display: 57/89
+    display: '0.131'
     kind: symbolic
-    srepr: Rational(57, 89)
+    srepr: Rational(131, 1000)
   cause_tags: []
   concept_tags:
   - probability.relative_frequency_basic
-  explanation: まず、ことがらが起こった回数を、試行の総回数でわる。（57/89）
+  explanation: まず、ことがらが起こった回数を、試行の総回数でわる。（0.131）
   hints:
-  - 問題文の与えられた値をもう一度確認しよう。
+  - ことがらが起こった回数を、試行の総回数でわる。
   label: (1)
-  prompt_text: value を求めなさい。
+  prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
     narration: ことがらが起こった回数を、試行の総回数でわる。
     op: divide_occurred_by_total
-    result_display: 57/89
-    result_srepr: Rational(57, 89)
+    result_display: '0.131'
+    result_srepr: Rational(131, 1000)
 visual_svg: null

@@ -32,6 +32,7 @@ from engine.core.contracts import (
     SymbolicAnswer,
 )
 from engine.core.registry import register_solver
+from engine.packs.math.solvers.radical import fmt_radical
 
 
 @register_solver("math.pythagorean_hypotenuse")
@@ -45,7 +46,7 @@ def pythagorean_hypotenuse(leg_a: object, leg_b: object) -> Solution:
     a = sympy.sympify(str(leg_a))
     b = sympy.sympify(str(leg_b))
     result = sympy.sqrt(a**2 + b**2)
-    disp = sympy.sstr(result)
+    disp = f"{fmt_radical(result)} cm"  # sstr のままだと "sqrt(3106)" と出ていた
     srepr = sympy.srepr(result)
     steps = [
         Step(

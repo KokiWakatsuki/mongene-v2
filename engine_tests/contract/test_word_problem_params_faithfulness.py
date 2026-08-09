@@ -33,6 +33,12 @@ _SEEDS = 8
 # 新セルは必ず numbers 形にすること＝ここに足すのではなく recipe 側を直す。
 _NO_NUMBERS_KEY_CELLS: frozenset[tuple[str, int]] = frozenset({("g2_l16", 2)})
 
+# **語で書かれている値**は、算用数字としては本文に現れない（それでも読者には見えている）。
+#   faces      … 「大小2個のさいころ」＝6面（「1から6までの目が出る」とは書かない）
+#   condition  … 「和が○以上になる」「積が○になる」（"sum_at_least" は符号）
+# どちらも答えを漏らす値ではない（条件が分かっても数え上げは要る）。
+_WORD_ENCODED_KEYS: frozenset[str] = frozenset({"faces", "condition"})
+
 
 def test_word_problem_params_numbers_all_appear_in_problem_text() -> None:
     bootstrap()
@@ -94,7 +100,7 @@ def test_word_problem_params_numbers_all_appear_in_problem_text() -> None:
             missing = [
                 f"{name}={sympy.sympify(value)}"
                 for name, value in numbers.items()
-                if str(sympy.sympify(value)) not in text
+                if name not in _WORD_ENCODED_KEYS and str(sympy.sympify(value)) not in text
             ]
             if missing:
                 violations.append(

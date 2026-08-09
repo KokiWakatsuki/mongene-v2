@@ -46,7 +46,7 @@ sub_questions:
   - 傾き a の符号から、グラフが右上がりか右下がりかを判断する。
   - 切片 b の符号から、y 軸の正の部分・負の部分のどちらで交わるかを判断する。
   label: (1)
-  prompt_text: choice を求めなさい。
+  prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
     narration: 傾き a の符号から、グラフが右上がりか右下がりかを判断する。

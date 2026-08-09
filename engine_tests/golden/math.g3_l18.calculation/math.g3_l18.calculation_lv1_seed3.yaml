@@ -26,22 +26,22 @@ meta:
 problem_ref: bf8a0032829c71fd
 problem_text: '次の式を計算せよ。
 
-  √475'
+  √90'
 sub_questions:
 - answer:
-    display: 5√19
+    display: 3√10
     kind: symbolic
-    srepr: Mul(Integer(5), Pow(Integer(19), Rational(1, 2)))
+    srepr: Mul(Integer(3), Pow(Integer(10), Rational(1, 2)))
   cause_tags: []
   concept_tags:
   - radical.simplify_form
   explanation: 'まず、根号の中を素因数分解し、平方の因数を見つける。（平方の因数を見つける）
 
-    次に、平方の因数を根号の外に出して a√b の形にする。（5√19）'
+    次に、平方の因数を根号の外に出して a√b の形にする。（3√10）'
   hints:
   - 根号の中を素因数分解し、平方の因数を見つける。
   label: (1)
-  prompt_text: simplified_expr を求めなさい。
+  prompt_text: 式を簡単にしなさい。
   solution_steps:
   - args: []
     narration: 根号の中を素因数分解し、平方の因数を見つける。
@@ -51,6 +51,6 @@ sub_questions:
   - args: []
     narration: 平方の因数を根号の外に出して a√b の形にする。
     op: take_root_outside
-    result_display: 5√19
-    result_srepr: Mul(Integer(5), Pow(Integer(19), Rational(1, 2)))
+    result_display: 3√10
+    result_srepr: Mul(Integer(3), Pow(Integer(10), Rational(1, 2)))
 visual_svg: null

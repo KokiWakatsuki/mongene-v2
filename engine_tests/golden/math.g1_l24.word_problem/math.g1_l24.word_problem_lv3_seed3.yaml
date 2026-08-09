@@ -50,7 +50,7 @@ sub_questions:
   - その量を x を使って両辺に表し、方程式をつくる。
   - 比例式の性質を使い、外項の積と内項の積が等しい式（たすきがけ）をつくる。
   label: (1)
-  prompt_text: value を求めなさい。
+  prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
     narration: 連比の各項をたして、全体がいくつ分にあたるかを求める。

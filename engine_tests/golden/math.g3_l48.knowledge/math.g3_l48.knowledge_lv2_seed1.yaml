@@ -35,16 +35,16 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - circle.judge_concyclic
-  explanation: 'まず、直線ABの同じ側にある2点C, Dでできる角が、等しいかどうかを確認する。（2つの角が等しいかどうかを確認する）
+  explanation: 'まず、直線DBの同じ側にある2点G, Hでできる角が、等しいかどうかを確認する。（2つの角が等しいかどうかを確認する）
 
     次に、円周角の定理の逆から、4点が同一円周上にあるといえるかどうかを判別する。（同一円周上にあるとはいえない）'
   hints:
-  - 直線ABの同じ側にある2点C, Dでできる角が、等しいかどうかを確認する。
+  - 直線DBの同じ側にある2点G, Hでできる角が、等しいかどうかを確認する。
   label: (1)
-  prompt_text: choice を求めなさい。
+  prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
-    narration: 直線ABの同じ側にある2点C, Dでできる角が、等しいかどうかを確認する。
+    narration: 直線DBの同じ側にある2点G, Hでできる角が、等しいかどうかを確認する。
     op: compare_angles_on_same_side
     result_display: 2つの角が等しいかどうかを確認する
     result_srepr: not_equal

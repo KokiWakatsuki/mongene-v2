@@ -24,22 +24,22 @@ meta:
   seed: 3
   signature: similar_solid_surface_volume_ratio
 problem_ref: 346fd47dd6d3808a
-problem_text: 相似比が 33:41 である2つの相似な立体について、表面積の比と体積の比をそれぞれ求めよ。
+problem_text: 相似な2つの円錐R, Fがあり、相似比は 2:7 である。RとFの表面積の比と体積の比をそれぞれ求めよ。
 sub_questions:
 - answer:
-    display: 表面積の比 1089:1681、体積の比 35937:68921
+    display: 表面積の比 4:49、体積の比 8:343
     kind: symbolic
-    srepr: Tuple(Integer(1089), Integer(1681), Integer(35937), Integer(68921))
+    srepr: Tuple(Integer(4), Integer(49), Integer(8), Integer(343))
   cause_tags: []
   concept_tags:
   - similarity.solid_surface_volume_ratio
   explanation: 'まず、相似な立体の表面積の比は相似比の二乗に等しいことから、表面積の比を求める。（相似比を二乗して表面積の比を求める）
 
-    次に、相似な立体の体積の比は相似比の三乗に等しいことから、体積の比を求める。（表面積の比 1089:1681、体積の比 35937:68921）'
+    次に、相似な立体の体積の比は相似比の三乗に等しいことから、体積の比を求める。（表面積の比 4:49、体積の比 8:343）'
   hints:
   - 相似な立体の表面積の比は相似比の二乗に等しいことから、表面積の比を求める。
   label: (1)
-  prompt_text: value を求めなさい。
+  prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
     narration: 相似な立体の表面積の比は相似比の二乗に等しいことから、表面積の比を求める。
@@ -49,6 +49,6 @@ sub_questions:
   - args: []
     narration: 相似な立体の体積の比は相似比の三乗に等しいことから、体積の比を求める。
     op: cube_ratio_for_volume
-    result_display: 表面積の比 1089:1681、体積の比 35937:68921
-    result_srepr: Tuple(Integer(1089), Integer(1681), Integer(35937), Integer(68921))
+    result_display: 表面積の比 4:49、体積の比 8:343
+    result_srepr: Tuple(Integer(4), Integer(49), Integer(8), Integer(343))
 visual_svg: null

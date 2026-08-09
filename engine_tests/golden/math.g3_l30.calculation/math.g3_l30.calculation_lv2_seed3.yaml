@@ -26,12 +26,12 @@ meta:
 problem_ref: b4f63285ca987518
 problem_text: '次の2次方程式を解け。
 
-  x(x + 9) = 3402'
+  x(x + 9) = 486'
 sub_questions:
 - answer:
-    display: x = -63, x = 54
+    display: x = -27, x = 18
     kind: symbolic
-    srepr: Tuple(Integer(-63), Integer(54))
+    srepr: Tuple(Integer(-27), Integer(18))
   cause_tags: []
   concept_tags:
   - quadratic.solve_from_word_setup
@@ -39,12 +39,12 @@ sub_questions:
 
     次に、左辺を因数分解する。（左辺を因数分解する）
 
-    最後に、積が 0 になるのは各因数が 0 のときだから、それぞれを 0 とおいて x を求める。（x = -63, x = 54）'
+    最後に、積が 0 になるのは各因数が 0 のときだから、それぞれを 0 とおいて x を求める。（x = -27, x = 18）'
   hints:
   - かっこを展開し、右辺を左辺に移項して、=0 の形に整理する。
   - 左辺を因数分解する。
   label: (1)
-  prompt_text: solution を求めなさい。
+  prompt_text: 解を求めなさい。
   solution_steps:
   - args: []
     narration: かっこを展開し、右辺を左辺に移項して、=0 の形に整理する。
@@ -59,6 +59,6 @@ sub_questions:
   - args: []
     narration: 積が 0 になるのは各因数が 0 のときだから、それぞれを 0 とおいて x を求める。
     op: apply_zero_product
-    result_display: x = -63, x = 54
-    result_srepr: Tuple(Integer(-63), Integer(54))
+    result_display: x = -27, x = 18
+    result_srepr: Tuple(Integer(-27), Integer(18))
 visual_svg: null

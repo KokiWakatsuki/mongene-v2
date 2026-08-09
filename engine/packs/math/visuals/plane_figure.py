@@ -29,8 +29,8 @@ _STROKE = '<line x1="{x1:.2f}" y1="{y1:.2f}" x2="{x2:.2f}" y2="{y2:.2f}" stroke=
 def _svg_open(width: int = _W, height: int = _H) -> list[str]:
     return [
         f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {width} {height}" '
-        f'width="{width}" height="{height}">',
-        f'<rect x="0" y="0" width="{width}" height="{height}" fill="none" stroke="none"/>',
+        f'width="{width}" height="{height}" font-family="Hiragino Sans, Hiragino Kaku Gothic ProN, Noto Sans JP, Yu Gothic, Meiryo, sans-serif">',
+        f'<rect x="0" y="0" width="{width}" height="{height}" fill="#ffffff" stroke="none"/>',
     ]
 
 

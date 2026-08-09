@@ -41,7 +41,7 @@ sub_questions:
   hints:
   - 根号どうしの乗除を先に計算し、それぞれ a√b の形に簡単にする。
   label: (1)
-  prompt_text: simplified_expr を求めなさい。
+  prompt_text: 式を簡単にしなさい。
   solution_steps:
   - args: []
     narration: 根号どうしの乗除を先に計算し、それぞれ a√b の形に簡単にする。

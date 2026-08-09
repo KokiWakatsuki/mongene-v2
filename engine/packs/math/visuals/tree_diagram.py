@@ -21,8 +21,8 @@ if TYPE_CHECKING:  # pragma: no cover - 型のみ
 def _svg_open(width: int, height: int) -> list[str]:
     return [
         f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {width} {height}" '
-        f'width="{width}" height="{height}">',
-        f'<rect x="0" y="0" width="{width}" height="{height}" fill="none" stroke="none"/>',
+        f'width="{width}" height="{height}" font-family="Hiragino Sans, Hiragino Kaku Gothic ProN, Noto Sans JP, Yu Gothic, Meiryo, sans-serif">',
+        f'<rect x="0" y="0" width="{width}" height="{height}" fill="#ffffff" stroke="none"/>',
     ]
 
 

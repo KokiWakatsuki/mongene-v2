@@ -24,7 +24,7 @@ meta:
   seed: 2
   signature: polygon_interior_sum_reason_rule_recall
 problem_ref: 2280af123a1bdc55
-problem_text: 72角形の内角の和を求めるとき、1つの頂点から対角線をひいて三角形に分けられる、その個数の求め方。正しく述べているものを1つ選びなさい。
+problem_text: 18角形の内角の和を求めるとき、1つの頂点から対角線をひいて三角形に分けられる、その個数の求め方。正しく述べているものを1つ選びなさい。
 sub_questions:
 - answer:
     correct: 一つの頂点からひける対角線によって、三角形に分けられるから
@@ -42,7 +42,7 @@ sub_questions:
   hints:
   - 問題で問われている規則や約束が、何についてのものかを読み取る。
   label: (1)
-  prompt_text: choice を求めなさい。
+  prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
     narration: 問題で問われている規則や約束が、何についてのものかを読み取る。

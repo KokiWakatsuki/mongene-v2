@@ -23,7 +23,11 @@ levels:
     signature: similar_solid_surface_volume_ratio
     recipe: math.similar_solid_surface_volume_ratio
     params:
-      ratio_domain: {int_range: [1, 60]}
+      # 体積比は相似比の三乗なので、比を広げると答えが5桁になる（24:41 → 13824:68921）。
+      # 比は小さいまま、立体の種類と名前を軸にして組み合わせを稼ぐ。
+      ratio_domain: {int_range: [1, 7]}
+      ratio_max: 7
+      solid_set: [円柱, 円錐, 三角柱, 四角柱, 三角錐, 正四角錐]
     given: [condition]
     asked: [value]
     visual: none

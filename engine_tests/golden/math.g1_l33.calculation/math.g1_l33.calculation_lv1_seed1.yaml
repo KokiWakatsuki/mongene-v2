@@ -39,7 +39,7 @@ sub_questions:
   hints:
   - 比例定数と x の値を、反比例の式 y=a/x の x にあてはめる。
   label: (1)
-  prompt_text: value を求めなさい。
+  prompt_text: 答えを求めなさい。
   solution_steps:
   - args:
     - '240'

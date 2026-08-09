@@ -1,0 +1,86 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - proof_logic_terms.converse_and_counterexample
+  provenance:
+    git_commit: ''
+    recipe: math.proposition_converse
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_statement_only_v1
+    tier: T1
+  requested:
+    form: knowledge
+    level: 2
+    subject: math
+    unit: g2_l38
+  resolved:
+    form: knowledge
+    level: 2
+    subject: math
+    unit: g2_l38
+  seed: 2
+  signature: proposition_converse
+problem_ref: 777946d62268c88b
+problem_text: 「k>0かつk'>0であるならば、k+k'>0である」という命題について、次の問いに答えよ。(1) この命題の逆として正しいものを選べ。(2) (1)で選んだ逆が正しくないことを示す反例として適切なものを選べ。
+sub_questions:
+- answer:
+    correct: k+k'>0であるならば、k>0かつk'>0である
+    distractors:
+    - k>0かつk'>0でないならば、k+k'>0でない
+    - k+k'>0でないならば、k>0かつk'>0でない
+    - k>0かつk'>0であるならば、k+k'>0である
+    fact_id: proof_logic.converse_of_proposition
+    kind: choice
+  cause_tags: []
+  concept_tags:
+  - proof_logic_terms.converse_and_counterexample
+  explanation: 'まず、「…ならば…」の形の文で、「ならば」の前が仮定、後ろが結論であることを確かめて、それぞれを取り出す。（仮定と結論を取り出す）
+
+    次に、逆は、仮定と結論を入れかえた文だから、取り出した2つを入れかえて作る。（k+k''>0であるならば、k>0かつk''>0である）'
+  hints:
+  - 「…ならば…」の形の文で、「ならば」の前が仮定、後ろが結論であることを確かめて、それぞれを取り出す。
+  label: (1)
+  prompt_text: 正しいものを選びなさい。
+  solution_steps:
+  - args: []
+    narration: 「…ならば…」の形の文で、「ならば」の前が仮定、後ろが結論であることを確かめて、それぞれを取り出す。
+    op: extract_hypothesis_and_conclusion
+    result_display: 仮定と結論を取り出す
+    result_srepr: ''
+  - args: []
+    narration: 逆は、仮定と結論を入れかえた文だから、取り出した2つを入れかえて作る。
+    op: swap_for_converse
+    result_display: k+k'>0であるならば、k>0かつk'>0である
+    result_srepr: ''
+- answer:
+    correct: k=-4、k'=14
+    distractors:
+    - k=4、k'=10
+    - k=-4、k'=-10
+    fact_id: proof_logic.counterexample_for_converse
+    kind: choice
+  cause_tags: []
+  concept_tags:
+  - proof_logic_terms.converse_and_counterexample
+  explanation: 'まず、反例は、逆の仮定は満たすのに逆の結論は満たさない例のことである。この2つを同時に見る必要がある。（反例の条件を確かめる）
+
+    次に、候補を1つずつ確かめて、逆の仮定を満たし、しかも逆の結論を満たさないものを選ぶ。それが1つ見つかれば、逆は正しくないと言える。（k=-4、k''=14）'
+  hints:
+  - 反例は、逆の仮定は満たすのに逆の結論は満たさない例のことである。この2つを同時に見る必要がある。
+  label: (2)
+  prompt_text: 正しいものを選びなさい。
+  solution_steps:
+  - args: []
+    narration: 反例は、逆の仮定は満たすのに逆の結論は満たさない例のことである。この2つを同時に見る必要がある。
+    op: state_counterexample_condition
+    result_display: 反例の条件を確かめる
+    result_srepr: ''
+  - args: []
+    narration: 候補を1つずつ確かめて、逆の仮定を満たし、しかも逆の結論を満たさないものを選ぶ。それが1つ見つかれば、逆は正しくないと言える。
+    op: pick_counterexample
+    result_display: k=-4、k'=14
+    result_srepr: ''
+visual_svg: null

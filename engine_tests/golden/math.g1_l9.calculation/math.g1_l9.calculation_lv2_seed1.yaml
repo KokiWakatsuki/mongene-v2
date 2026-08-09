@@ -44,7 +44,7 @@ sub_questions:
   - 累乗とかっこの中を先に計算する。
   - 乗法と除法を計算する。
   label: (1)
-  prompt_text: value を求めなさい。
+  prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
     narration: 累乗とかっこの中を先に計算する。

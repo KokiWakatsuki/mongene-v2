@@ -157,6 +157,33 @@ def compute_grid_bounds(mr: "MR") -> tuple[int, int, int, int]:
     return compute_grid_bounds_from_params(mr.params)
 
 
+# 目盛ラベルの最小の間隔（px）。"-16" のような3文字が隣とぶつからない幅。
+_MIN_LABEL_GAP_PX = 20.0
+
+
+def _label_stride(lo: int, hi: int, step: int) -> int:
+    """軸ラベルを何目盛おきに出すか。
+
+    **範囲が広いと目盛ラベルが重なって読めなくなる。** -16〜16 を1目盛おきに書くと
+    33個のラベルが約344pxに並び、"-16-15-14-13…" と続いて読めなかった
+    （グラフから座標を読ませる問題なのに、読めない）。教科書と同じく間引く。
+    """
+    count = len(range(lo, hi + 1, step))
+    if count <= 1:
+        return 1
+    gap = (_SVG_SIZE - 2 * _MARGIN) / (count - 1)
+    for k in (1, 2, 5, 10):
+        if gap * k >= _MIN_LABEL_GAP_PX:
+            return k
+    return 10
+
+
+def _labelled_ticks(lo: int, hi: int, step: int) -> list[int]:
+    """ラベルを書く目盛の値（0 を基準に間引くので、原点まわりが左右対称になる）。"""
+    span = step * _label_stride(lo, hi, step)
+    return [g for g in range(lo, hi + 1, step) if g % span == 0]
+
+
 def tick_labels_from_params(params: dict[str, Any]) -> list[str]:
     """実描画される軸目盛の数値ラベル一覧（0 を除く。visual_plan.labels 用）。
 
@@ -165,11 +192,11 @@ def tick_labels_from_params(params: dict[str, Any]) -> list[str]:
     """
     spec = compute_grid_spec_from_params(params)
     labels: list[str] = []
-    for gx in range(spec.x_lo, spec.x_hi + 1, spec.x_step):
+    for gx in _labelled_ticks(spec.x_lo, spec.x_hi, spec.x_step):
         if gx == 0:
             continue
         labels.append(_format_tick(sympy.Integer(gx)))
-    for gy in range(spec.y_lo, spec.y_hi + 1, spec.y_step):
+    for gy in _labelled_ticks(spec.y_lo, spec.y_hi, spec.y_step):
         labels.append(_format_tick(sympy.Integer(gy)))
     return labels
 
@@ -214,9 +241,9 @@ def _grid_scaffold(params: dict[str, Any]) -> _GridScaffold:
     parts: list[str] = []
     parts.append(
         f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {_SVG_SIZE} {_SVG_SIZE}" '
-        f'width="{_SVG_SIZE}" height="{_SVG_SIZE}">'
+        f'width="{_SVG_SIZE}" height="{_SVG_SIZE}" font-family="Hiragino Sans, Hiragino Kaku Gothic ProN, Noto Sans JP, Yu Gothic, Meiryo, sans-serif">'
     )
-    parts.append(f'<rect x="0" y="0" width="{_SVG_SIZE}" height="{_SVG_SIZE}" fill="none" stroke="none"/>')
+    parts.append(f'<rect x="0" y="0" width="{_SVG_SIZE}" height="{_SVG_SIZE}" fill="#ffffff" stroke="none"/>')
 
     # --- グリッド線（細い灰の実線。モノクロ印刷可＝色に情報を載せない） ---
     for gx in range(x_lo, x_hi + 1, spec.x_step):
@@ -256,7 +283,7 @@ def _grid_ticks(sc: _GridScaffold) -> list[str]:
     """軸目盛の数値ラベル（<text> はこれのみ。visual_plan.labels と一致させる）。"""
     ticks: list[str] = []
     py0 = sc.to_px_y(0) if sc.y_lo <= 0 <= sc.y_hi else sc.plot_hi
-    for gx in range(sc.x_lo, sc.x_hi + 1, sc.x_step):
+    for gx in _labelled_ticks(sc.x_lo, sc.x_hi, sc.x_step):
         if gx == 0:
             continue  # 原点の重複表記を避ける（0 は y 軸側で1回だけ出す）
         px = sc.to_px_x(gx)
@@ -265,7 +292,7 @@ def _grid_ticks(sc: _GridScaffold) -> list[str]:
             f'text-anchor="middle" fill="#000000">{_format_tick(sympy.Integer(gx))}</text>'
         )
     px0 = sc.to_px_x(0) if sc.x_lo <= 0 <= sc.x_hi else sc.plot_lo
-    for gy in range(sc.y_lo, sc.y_hi + 1, sc.y_step):
+    for gy in _labelled_ticks(sc.y_lo, sc.y_hi, sc.y_step):
         py = sc.to_px_y(gy)
         ticks.append(
             f'<text x="{px0 - 8:.2f}" y="{py + 3:.2f}" font-size="10" '

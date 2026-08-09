@@ -24,7 +24,7 @@ meta:
   seed: 2
   signature: system_term_recall
 problem_ref: edf8d7d4abc7914e
-problem_text: x, y の2つの文字をふくむ1次方程式 -6x + 2y = 3 を何といいますか。
+problem_text: x, y の2つの文字をふくむ1次方程式 -6x + 2y = 3を何といいますか。
 sub_questions:
 - answer:
     correct: 2元1次方程式
@@ -42,7 +42,7 @@ sub_questions:
   hints:
   - 説明されている方程式や値の組がどれかを読み取る。
   label: (1)
-  prompt_text: choice を求めなさい。
+  prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
     narration: 説明されている方程式や値の組がどれかを読み取る。

@@ -15,7 +15,8 @@ levels:
     signature: exam_probability_from_counts
     recipe: math.exam_probability_from_counts
     params:
-      total_domain: {int_range: [10, 200]}
+      # 中学の数え上げで出る通り数（200通りは数え上げの結果として大きすぎる）。
+      total_domain: {int_range: [6, 60]}
     given: [expressions]
     asked: [value]
     visual: none

@@ -15,6 +15,11 @@ source_desc: |
 
   【深さ】合同を示す（深さ2・中点の展開を含む）→ 対応する角が等しい（深さ3）。
   台帳の desc「性質を合同で1段で証明する」がこの形にあたる。
+
+  【Lv4 だけ exclude_rules を置かない】台帳 Lv4 は「誘導なし・**性質を組み合わせ**
+  方針を自分で構成する」。Lv2/Lv3 が底角の性質を**証明する**回なので規則から外すの
+  に対し、Lv4 はその性質を**使う**回である。ここを取り違えて外すと、Lv4 の図
+  （辺の上に BD ＝ CE となる点をとった図）から証明が1つも出なくなる。
 concepts_default: [isosceles_proof.property_by_congruence]
 levels:
   "2":
@@ -48,6 +53,28 @@ levels:
       base_domain: {int_range: [30, 44]}
       angle_domain: {int_range: [55, 88]}
       offset_domain: {int_range: [18, 34]}
+    given: [premises, conclusion]
+    asked: [proof_text]
+    visual: optional
+    text: {tier: T1, template: pf_geometry_proof_v1, visual_builder: math.geometry_construction}
+    hints: [steps_prefix]
+    concept_tags: [isosceles_proof.property_by_congruence]
+    cause_tags: []
+  "4":
+    signature: geometry_proof_isosceles_combine
+    recipe: math.geometry_proof
+    params:
+      # 辺AB、AC上に BD ＝ CE となる点をとった図。**Lv2/Lv3 と違って
+      # `exclude_rules` を置かない**——ここは底角の性質を「証明する」回ではなく
+      # 「道具として使う」回だからである（台帳 Lv4「性質を組み合わせ」）。
+      #   底角 ∠DBC ＝ ∠ECB（深さ1）→ △DBC ≡ △ECB（深さ2）→ DC ＝ EB（深さ3）
+      # op 列は Lv2（合同→対応する角）とも Lv3（補助線→合同→中点）とも相異する。
+      construction: isosceles_equal_segments
+      proof_depth: 3
+      prefer: seg_eq
+      base_domain: {int_range: [26, 54]}
+      angle_domain: {int_range: [44, 110]}
+      offset_domain: {int_range: [16, 44]}
     given: [premises, conclusion]
     asked: [proof_text]
     visual: optional

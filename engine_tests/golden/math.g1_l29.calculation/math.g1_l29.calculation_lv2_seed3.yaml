@@ -24,7 +24,7 @@ meta:
   seed: 3
   signature: direct_proportion_evaluate_signed
 problem_ref: c9d628fb5f35f78a
-problem_text: 比例の式 y = -3/2x について、x = 8 のときの y の値を求めよ。
+problem_text: 比例の式 y = (-3/2)x について、x = 8 のときの y の値を求めよ。
 sub_questions:
 - answer:
     display: '-12'
@@ -42,7 +42,7 @@ sub_questions:
   - 比例定数とxの値、それぞれの符号（正か負か）を確認する。
   - 比例定数と x の値を、比例の式 y=ax の x にあてはめる。
   label: (1)
-  prompt_text: value を求めなさい。
+  prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
     narration: 比例定数とxの値、それぞれの符号（正か負か）を確認する。

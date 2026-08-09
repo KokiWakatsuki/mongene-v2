@@ -195,7 +195,9 @@ def _construct_positive_root_product_form(rng: Rng) -> tuple[int, int, int]:
     （answer-first）。c,k>0 なら2根の積は -k<0 で異符号になるため、常にちょうど1つの
     正根（=x0）を持つ（鉄則⑤: 場合分け不要な形に構成時から絞る）。
     """
-    x0 = int(draw({"int_range": [1, 60]}, rng))
+    # 解も定数項も教科書の大きさに収める。x0 を 60 まで振っていたので
+    # 「x(x + 9) = 3402」（解 x=54）のように、因数分解で解けない式が出ていた。
+    x0 = int(draw({"int_range": [1, 24]}, rng))
     c = int(draw({"int_range": [1, 20]}, rng))
     k = x0 * (x0 + c)
     return x0, c, k

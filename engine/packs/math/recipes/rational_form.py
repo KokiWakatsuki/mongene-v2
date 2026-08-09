@@ -30,9 +30,32 @@ def _has_non_terminating_factor(q: int) -> bool:
     return q > 1
 
 
-# 分母候補（Lv1）: 2,5 以外の素因数を持つ（＝小数が必ず循環する）2〜99 の整数。
-# dup（自由度）を広く取るため範囲を大きめにする（鉄則②）。
-_REPEATING_DENOMINATORS = [q for q in range(2, 100) if _has_non_terminating_factor(q)]
+def _repeating_period(q: int) -> int:
+    """1/q の循環節の長さ（＝10 の法 q' における位数。q' は q から 2,5 を除いた数）。"""
+    m = q
+    while m % 2 == 0:
+        m //= 2
+    while m % 5 == 0:
+        m //= 5
+    if m == 1:
+        return 0
+    k, r = 1, 10 % m
+    while r != 1:
+        r = r * 10 % m
+        k += 1
+    return k
+
+
+# 分母候補（Lv1）: 小数が必ず循環し、**循環節が6桁までに収まる** 2〜99 の整数。
+# 循環節の長さを見ずに広くとっていたため「9/92 → 0.0̇97826086956521739130434̇」という、
+# 手では書き出せない答えが出ていた（教科書は 1/3・1/7・5/6 のように短い周期を扱う）。
+# 周期の上限を入れても分子との組は1000通り以上あるので、dup_rate は困らない。
+_MAX_REPEATING_PERIOD = 6
+_REPEATING_DENOMINATORS = [
+    q
+    for q in range(2, 100)
+    if _has_non_terminating_factor(q) and _repeating_period(q) <= _MAX_REPEATING_PERIOD
+]
 
 
 def _effective_concept_tags(ctx: CellContext) -> list[str]:

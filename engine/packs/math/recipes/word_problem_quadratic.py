@@ -106,9 +106,9 @@ def _formulate(lhs: str, rhs: str, display: str) -> QuadFormulation:
     )
 
 
-def formulate_consecutive_integers(*, product: int) -> QuadFormulation:
-    """x(x+1)=p（小さい方の整数を x とする・c=1 固定）。"""
-    return _formulate("x*(x+1)", f"{product}", f"x(x + 1) = {product}")
+def formulate_consecutive_integers(*, product: int, gap: int = 1) -> QuadFormulation:
+    """x(x+g)=p（小さい方の整数を x とする）。g=1 は連続する整数、g=2 は連続する偶数・奇数。"""
+    return _formulate(f"x*(x+{gap})", f"{product}", f"x(x + {gap}) = {product}")
 
 
 def formulate_square_relation(*, multiplier: int, diff: int) -> QuadFormulation:
@@ -170,18 +170,37 @@ def _index_domain(n: int) -> dict[str, list[int]]:
 
 
 def _scene_consecutive_integers(p: Mapping[str, Any], rng: Rng) -> QuadScene:
-    """g3_l29 Lv2: 連続する2つの正の整数の積が p（誘導あり・c=1 固定）。"""
-    x0 = int(draw(p["small_domain"], rng))
-    product = x0 * (x0 + 1)
+    """g3_l29 Lv2: 連続する2つの正の整数・偶数・奇数の積が p（誘導あり）。
+
+    **積 p は教科書の大きさ（x0 ≤ small_max）に収める。** 以前は x0 を 3〜700 まで
+    引いていて「2数の積は132860である → 364と365」が出ていた。これは dup_rate を
+    通すためだけの定義域拡大で、YAML にその旨のコメントまで残っていた。
+    軸は「整数・偶数・奇数」の3通り（どれも教科書にある形で、立式は x(x+1) と
+    x(x+2) に分かれる）に置きかえ、それでも足りないぶんは `dup_rate_max` で
+    問題空間の狭さとして宣言する（FIXES.md の原則1→3）。
+    """
+    kind = str(draw(["integers", "even", "odd"], rng))
+    x0_max = int(p["small_max"])
+    if kind == "integers":
+        cands = list(range(2, x0_max + 1))
+        gap, noun = 1, "正の整数"
+    elif kind == "even":
+        cands = list(range(2, x0_max + 1, 2))
+        gap, noun = 2, "正の偶数"
+    else:
+        cands = list(range(3, x0_max + 1, 2))
+        gap, noun = 2, "正の奇数"
+    x0 = cands[int(draw(_index_domain(len(cands)), rng))]
+    product = x0 * (x0 + gap)
     return QuadScene(
-        numbers={"product": product},
-        scenario=f"連続する2つの正の整数がある。この2数の積は{product}である。",
-        quantities="小さい方の整数を x とする。",
+        numbers={"product": product, "gap": gap},
+        scenario=f"連続する2つの{noun}がある。この2数の積は{product}である。",
+        quantities="小さい方の数を x とする。",
         ask_formulation="2数の積の関係を、x を使った方程式で表せ。",
-        ask_value="この2つの整数を求めよ。",
-        relation_label="2つの整数の積",
-        answer_coeffs=((1, 0), (1, 1)),
-        answer_labels=("小さい方の整数は", "大きい方の整数は"),
+        ask_value="この2つの数を求めよ。",
+        relation_label="2つの数の積",
+        answer_coeffs=((1, 0), (1, gap)),
+        answer_labels=("小さい方の数は", "大きい方の数は"),
         answer_units=("", ""),
         slots={},
     )
@@ -221,14 +240,22 @@ def _scene_square_relation(p: Mapping[str, Any], rng: Rng) -> QuadScene:
     )
 
 
+_RECTANGLE_SCENES = ["長方形", "長方形の紙", "長方形の板", "長方形の花だん", "長方形の畑"]
+
+
 def _scene_rectangle_area(p: Mapping[str, Any], rng: Rng) -> QuadScene:
-    """g3_l30 Lv2: 横が縦より d cm 長い長方形の面積が k（誘導あり）。"""
+    """g3_l30 Lv2: 横が縦より d cm 長い長方形の面積が k（誘導あり）。
+
+    縦と差は教科書の大きさに収める（以前は縦40cm・面積2200cm² まで出ていた）。
+    狭めたぶんは場面の軸で稼ぐ（FIXES.md の原則1・2）。
+    """
     height = int(draw(p["height_domain"], rng))
     diff = int(draw(p["diff_domain"], rng))
     area = height * (height + diff)
+    scene = str(draw(_RECTANGLE_SCENES, rng))
     return QuadScene(
         numbers={"diff": diff, "area": area},
-        scenario=f"横が縦より{diff}cm長い長方形がある。その面積は{area}cm²である。",
+        scenario=f"横が縦より{diff}cm長い{scene}がある。その面積は{area}cm²である。",
         quantities="縦の長さを x cm とする。",
         ask_formulation="面積の関係を、x を使った方程式で表せ。",
         ask_value="縦の長さを求めよ。",
@@ -236,7 +263,8 @@ def _scene_rectangle_area(p: Mapping[str, Any], rng: Rng) -> QuadScene:
         answer_coeffs=((1, 0),),
         answer_labels=("",),
         answer_units=("cm",),
-        slots={},
+        # 題材は params の "slots" に入る（numbers は立式の引数そのものなので混ぜられない）。
+        slots={"scene": scene},
     )
 
 

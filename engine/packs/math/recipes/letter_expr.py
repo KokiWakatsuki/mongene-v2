@@ -642,11 +642,13 @@ def _draw_term_statement(domain: str, concept: str, rng: Rng, p: dict[str, objec
         a = int(draw({"int_set": [
             v for v in _domain_candidates(cast("dict[str, object]", p["number_domain"])) if v != 0
         ]}, rng))
+        # **体言止めで返すこと。** テンプレートが「〜を何といいますか。」を付けるので、
+        # 「〜を何というか」で終えると「を何というか を何といいますか」と二重になる。
         if concept == "proportionality_constant":
-            return f"y = {a}x² の式で、x² にかけられている数（a にあたる部分）を何というか"
+            return f"y = {a}x² の式で、x² にかけられている数（a にあたる部分）"
         if concept == "vertex":
-            return "関数 y=ax² のグラフ（放物線）が、対称の中心として通る点を何というか"
-        return "関数 y=ax² のグラフ（放物線）が、左右対称になるもとになる直線を何というか"  # axis_of_symmetry
+            return "関数 y=ax² のグラフ（放物線）が、対称の中心として通る点"
+        return "関数 y=ax² のグラフ（放物線）が、左右対称になるもとになる直線"  # axis_of_symmetry
 
     if domain == "function_terms":
         # g1_l28 関数まわりの用語（変数・関数・変域）。具体例（正方形の1辺と周の長さ）を
@@ -1311,8 +1313,16 @@ def _signed_paren(sign: str, mag: int) -> str:
     return f"({sign}{mag})"
 
 
-def _draw_rule_statement(topic: str, concept: str, rng: Rng, p: dict[str, object]) -> str:
-    """(topic, concept) から surface（具体例つきの文脈文）を組み立てる。"""
+def _draw_rule_statement(
+    topic: str, concept: str, rng: Rng, p: dict[str, object],
+    labels_out: dict[str, str] | None = None,
+) -> str:
+    """(topic, concept) から surface（具体例つきの文脈文）を組み立てる。
+
+    **選択肢に点名が出る topic は、引いた点名を `labels_out["labels"]` に書き出す。**
+    書き出さないと、問題文が「三角形KFDで…点Q, Cが」なのに選択肢は「ADとABの比」と
+    固定の点名で並ぶことになる（実際そうなっていた）。solver に渡して揃える。
+    """
     if topic == "addition_sign":
         # g1_l3 加法の符号規則。同符号／異符号の2数の和を具体例として埋め込み dup 分散。
         m1 = int(draw(p["number_domain"], rng))
@@ -1591,6 +1601,8 @@ def _draw_rule_statement(topic: str, concept: str, rng: Rng, p: dict[str, object
     if topic == "parallel_segment_ratio_theorem":
         # g3_l42 平行線と線分の比の定理。具体例の三角形と分点の点名を埋め込み surface を分散する。
         pa, pb, pc, pd, pe = _draw_distinct_points(5, rng)
+        if labels_out is not None:
+            labels_out["labels"] = pa + pb + pc + pd + pe
         return (
             f"三角形{pa}{pb}{pc}で、辺{pa}{pb}, {pa}{pc}上に点{pd}, {pe}があり"
             f"{pd}{pe}∥{pb}{pc}であるとき、線分の比について成り立つ関係"
@@ -1599,6 +1611,8 @@ def _draw_rule_statement(topic: str, concept: str, rng: Rng, p: dict[str, object
     if topic == "parallel_segment_ratio_converse":
         # g3_l43 平行線と線分の比の定理の逆。具体例の三角形と分点の点名を埋め込み surface を分散する。
         pa, pb, pc, pd, pe = _draw_distinct_points(5, rng)
+        if labels_out is not None:
+            labels_out["labels"] = pa + pb + pc + pd + pe
         return (
             f"三角形{pa}{pb}{pc}の辺{pa}{pb}, {pa}{pc}上の点{pd}, {pe}について、"
             f"{pa}{pd}:{pd}{pb}={pa}{pe}:{pe}{pc}が成り立つとき、いえること"
@@ -1670,10 +1684,14 @@ def recall_rule(ctx: CellContext, rng: Rng) -> MR:
     p = ctx.spec_level.params
     topic = cast(str, p["topic"])
     concept = str(draw(cast("list[str]", p["concept_set"]), rng))
-    statement = _draw_rule_statement(topic, concept, rng, cast("dict[str, object]", p))
+    labels_out: dict[str, str] = {}
+    statement = _draw_rule_statement(
+        topic, concept, rng, cast("dict[str, object]", p), labels_out
+    )
+    labels = labels_out.get("labels", "")
 
     solver = REGISTRY.solver("math.recall_rule_statement")
-    sol = cast(Solution, solver(topic, concept))
+    sol = cast(Solution, solver(topic, concept, labels))
     assert isinstance(sol.answer, ChoiceAnswer)
     assert [s.op for s in sol.steps] == ["read_rule_context", "recall_correct_rule"]
     assert sol.answer.correct not in sol.answer.distractors
@@ -1686,7 +1704,8 @@ def recall_rule(ctx: CellContext, rng: Rng) -> MR:
         signature=ctx.spec_level.signature, family=ctx.family, level=ctx.level,
         purpose=ctx.purpose, seed=0,
         # statement（具体例＝surface）を params に含め dup_key を分散させる（§7.7）。
-        params={"topic": topic, "concept": concept, "statement": statement},
+        # labels は選択肢の点名を問題文に揃えるために checker へ渡す（点名を使う topic のみ非空）。
+        params={"topic": topic, "concept": concept, "statement": statement, "labels": labels},
         given={"statement": statement}, sub_questions=[sub_question], visual_plan=None,
         provenance=Provenance(recipe="math.recall_rule"),
     )

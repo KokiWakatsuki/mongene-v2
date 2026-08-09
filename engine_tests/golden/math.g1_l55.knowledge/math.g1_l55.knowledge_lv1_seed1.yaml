@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: relative_frequency_terms_term_recall
 problem_ref: 77de130d7a6b82dc
-problem_text: 総度数が123の度数分布表で、各階級の度数の、総度数に対する割合 を何といいますか。
+problem_text: 総度数が123の度数分布表で、各階級の度数の、総度数に対する割合を何といいますか。
 sub_questions:
 - answer:
     correct: 相対度数
@@ -41,7 +41,7 @@ sub_questions:
   hints:
   - 説明されている式や数の部分がどれかを読み取る。
   label: (1)
-  prompt_text: choice を求めなさい。
+  prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
     narration: 説明されている式や数の部分がどれかを読み取る。

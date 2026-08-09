@@ -421,22 +421,45 @@ def compare_relative_frequency_chart_recipe(ctx: CellContext, rng: Rng) -> MR:
     p = ctx.spec_level.params
     n_classes = int(draw(p["n_classes"], rng))
     scene, unit, lo, width = _scene(rng)
-    freq_a = [int(draw(p["frequency_domain"], rng)) for _ in range(n_classes)]
-    freq_b = [int(draw(p["frequency_domain"], rng)) for _ in range(n_classes)]
-    target = int(draw({"int_range": [0, n_classes - 1]}, rng))
-    filler = (target + 1) % n_classes
 
-    total_a = sum(freq_a)
-    for _ in range(4):
+    def _is_decimal(freq: int, total: int) -> bool:
+        """相対度数が小数第3位までで書き切れるか（**相対度数は小数で答える**・D-24）。"""
+        q = int(sympy.Rational(freq, total).q)
+        while q % 2 == 0:
+            q //= 2
+        while q % 5 == 0:
+            q //= 5
+        return q == 1
+
+    # 総度数を独立に決めていたので「A: 7/36、B: 3/35」という、割合として比べにくい
+    # 答えが出ていた。**両方の相対度数が小数で書ける組**になるまで引き直す。
+    for _ in range(200):
+        freq_a = [int(draw(p["frequency_domain"], rng)) for _ in range(n_classes)]
+        freq_b = [int(draw(p["frequency_domain"], rng)) for _ in range(n_classes)]
+        target = int(draw({"int_range": [0, n_classes - 1]}, rng))
+        filler = (target + 1) % n_classes
+
+        total_a = sum(freq_a)
+        for _ in range(4):
+            total_b = sum(freq_b)
+            distinct_total = total_b != total_a
+            distinct_ratio = sympy.Rational(freq_b[target], total_b) != sympy.Rational(
+                freq_a[target], total_a
+            )
+            if distinct_total and distinct_ratio:
+                break
+            freq_b[filler] += 1
         total_b = sum(freq_b)
-        distinct_total = total_b != total_a
-        distinct_ratio = sympy.Rational(freq_b[target], total_b) != sympy.Rational(
-            freq_a[target], total_a
-        )
-        if distinct_total and distinct_ratio:
+        if (
+            total_b != total_a
+            and _is_decimal(freq_a[target], total_a)
+            and _is_decimal(freq_b[target], total_b)
+        ):
             break
-        freq_b[filler] += 1
-    total_b = sum(freq_b)
+    else:
+        raise ValueError(
+            "compare_relative_frequency_chart_recipe: 相対度数が小数になる度数を構成できず"
+        )
 
     solver = REGISTRY.solver("math.compare_relative_frequency")
     sol = cast(Solution, solver(freq_a[target], total_a, freq_b[target], total_b))

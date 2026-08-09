@@ -26,12 +26,12 @@ meta:
 problem_ref: 379610e9c6546de8
 problem_text: '次の計算をせよ。
 
-  (-5/4)+1.4+(-5)'
+  (-9/8)+(-4.5)+8'
 sub_questions:
 - answer:
-    display: -97/20
+    display: 19/8
     kind: symbolic
-    srepr: Rational(-97, 20)
+    srepr: Rational(19, 8)
   cause_tags: []
   concept_tags:
   - signed_number.add_terms
@@ -39,26 +39,26 @@ sub_questions:
 
     次に、正の項どうし、負の項どうしをそれぞれまとめる。（正の項・負の項をまとめる）
 
-    最後に、正の合計と負の合計を合わせて、答えを求める。（-97/20）'
+    最後に、正の合計と負の合計を合わせて、答えを求める。（19/8）'
   hints:
   - かっこを外し、それぞれの数を符号のついた項として並べる。
   - 正の項どうし、負の項どうしをそれぞれまとめる。
   label: (1)
-  prompt_text: value を求めなさい。
+  prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
     narration: かっこを外し、それぞれの数を符号のついた項として並べる。
     op: rewrite_as_term_sum
     result_display: 符号のついた項の和に直す
-    result_srepr: Rational(-97, 20)
+    result_srepr: Rational(19, 8)
   - args: []
     narration: 正の項どうし、負の項どうしをそれぞれまとめる。
     op: group_by_sign
     result_display: 正の項・負の項をまとめる
-    result_srepr: Rational(-97, 20)
+    result_srepr: Rational(19, 8)
   - args: []
     narration: 正の合計と負の合計を合わせて、答えを求める。
     op: total_terms
-    result_display: -97/20
-    result_srepr: Rational(-97, 20)
+    result_display: 19/8
+    result_srepr: Rational(19, 8)
 visual_svg: null

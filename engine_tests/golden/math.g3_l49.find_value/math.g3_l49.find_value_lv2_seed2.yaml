@@ -24,22 +24,22 @@ meta:
   seed: 2
   signature: circle_similar_chord_length
 problem_ref: 19db7ca9d84846ce
-problem_text: 円周上の4点K, N, G, Lについて三角形JKN∽三角形JLGが示されている。弦KGと弦NLの交点をJとし、JK=130cm, JN=153cm, JL=109cm のとき、線分JGの長さを求めよ。
+problem_text: 円周上の4点K, N, G, Lについて三角形JKN∽三角形JLGが示されている。弦KGと弦NLの交点をJとし、JK=5cm, JN=50cm, JL=2cm のとき、線分JGの長さを求めよ。
 sub_questions:
 - answer:
-    display: 16677/130
+    display: '20'
     kind: symbolic
-    srepr: Rational(16677, 130)
+    srepr: Integer(20)
   cause_tags: []
   concept_tags:
   - circle.similar_chord_length
   explanation: 'まず、2つの図形の相似比と、わかっている辺の長さを読み取る。（相似比とわかっている辺の長さを読み取る）
 
-    次に、相似な図形では対応する辺の長さの比が相似比に等しいことから、対応する辺の長さを求める。（16677/130）'
+    次に、相似な図形では対応する辺の長さの比が相似比に等しいことから、対応する辺の長さを求める。（20）'
   hints:
   - 2つの図形の相似比と、わかっている辺の長さを読み取る。
   label: (1)
-  prompt_text: value を求めなさい。
+  prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
     narration: 2つの図形の相似比と、わかっている辺の長さを読み取る。
@@ -49,6 +49,6 @@ sub_questions:
   - args: []
     narration: 相似な図形では対応する辺の長さの比が相似比に等しいことから、対応する辺の長さを求める。
     op: apply_similarity_ratio
-    result_display: 16677/130
-    result_srepr: Rational(16677, 130)
+    result_display: '20'
+    result_srepr: Integer(20)
 visual_svg: null

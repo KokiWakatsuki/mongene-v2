@@ -11,6 +11,8 @@ exam_l5/exam_l7 の単発セルがある。
 """
 from __future__ import annotations
 
+from collections.abc import Mapping
+from functools import lru_cache
 from typing import Any, cast
 
 import sympy
@@ -42,6 +44,17 @@ def _effective_cause_tags(ctx: CellContext) -> list[str]:
 # ---------------------------------------------------------------------------
 # exam_l5.calculation Lv2: 場合の数から確率を計算処理する（既存 math.relative_frequency 再利用）
 # ---------------------------------------------------------------------------
+# 数え上げの場面（数を小さく保ったまま組み合わせを稼ぐ軸。前は場面が無く
+# 「ある試行で起こりうる場合が全部で164通り」という抽象的な文だった）。
+# 場面は**起こりうる場合の数を決めつけないもの**だけを使う（「2個のさいころ」だと
+# 全体が36通りに決まってしまい、本文の「全部で108通り」と食い違う）。
+_COUNT_SCENES: list[tuple[str, str, str]] = [
+    ("箱の中のくじから2本を続けて引くとき、", "通り", "当たりが出る"),
+    ("何枚かの数字カードを並べて整数をつくるとき、", "通り", "偶数になる"),
+    ("袋から玉を続けて2個取り出すとき、", "通り", "同じ色になる"),
+    ("何人かの中から2人の委員を選ぶとき、", "通り", "特定の1人がふくまれる"),
+]
+
 _EXAM_PROBABILITY_FROM_COUNTS_CONCEPTS = ["exam.probability_from_counts"]
 
 
@@ -49,19 +62,27 @@ _EXAM_PROBABILITY_FROM_COUNTS_CONCEPTS = ["exam.probability_from_counts"]
     "math.exam_probability_from_counts", provides_concepts=_EXAM_PROBABILITY_FROM_COUNTS_CONCEPTS
 )
 def exam_probability_from_counts_recipe(ctx: CellContext, rng: Rng) -> MR:
-    """場合の数(全体・該当)から確率を求める（exam_l5.calculation Lv2・answer-first）。"""
+    """場合の数(全体・該当)から確率を求める（exam_l5.calculation Lv2・answer-first）。
+
+    **場面のない「ある試行で全部で164通り」は教材の問題になっていない。**
+    数え上げた結果を確率に直す処理そのものが眼目のセルなので、数え上げは済んで
+    いるものとして与えるが、その場面は具体的に書く（くじ・カード・玉）。
+    """
     p = ctx.spec_level.params
+    scene_index = int(draw({"int_set": list(range(len(_COUNT_SCENES)))}, rng))
+    scene, unit, cond = _COUNT_SCENES[scene_index]
     total = int(draw(p["total_domain"], rng))
     favorable = int(draw({"int_range": [1, total - 1]}, rng))
 
+    # 確率は分数で答えるのが教材の作法（小数で答えるのは相対度数のほう）。
     solver = REGISTRY.solver("math.relative_frequency")
-    sol = cast(Solution, solver(favorable, total))
+    sol = cast(Solution, solver(favorable, total, False))
     assert isinstance(sol.answer, SymbolicAnswer)
     assert sol.answer.srepr == sympy.srepr(sympy.Rational(favorable, total))
 
     statement = (
-        f"ある試行で起こりうる場合が全部で{total}通りあり、そのうち条件に当てはまる場合が"
-        f"{favorable}通りである。この条件が起こる確率を求めよ"
+        f"{scene}起こりうる場合は全部で{total}{unit}あり、そのうち{cond}場合は"
+        f"{favorable}{unit}であった。{cond}確率を求めよ"
     )
 
     sub_question = SubQuestionMR(
@@ -71,7 +92,7 @@ def exam_probability_from_counts_recipe(ctx: CellContext, rng: Rng) -> MR:
     return MR(
         signature=ctx.spec_level.signature, family=ctx.family, level=ctx.level,
         purpose=ctx.purpose, seed=0,
-        params={"occurred": favorable, "total": total},
+        params={"occurred": favorable, "total": total, "scene": scene},
         given={"expressions": statement}, sub_questions=[sub_question], visual_plan=None,
         provenance=Provenance(recipe="math.exam_probability_from_counts"),
     )
@@ -80,6 +101,24 @@ def exam_probability_from_counts_recipe(ctx: CellContext, rng: Rng) -> MR:
 # ---------------------------------------------------------------------------
 # exam_l7.calculation Lv2: 相対度数・比率の計算処理（既存 math.relative_frequency 再利用）
 # ---------------------------------------------------------------------------
+# 標本調査の標本の大きさ（教科書はきりのよい人数で調べる）。
+_SAMPLE_TOTALS = (20, 25, 40, 50, 80, 100, 125, 200, 250, 400, 500)
+
+
+@lru_cache(maxsize=4)
+def _sample_ratio_pairs(totals: tuple[int, ...]) -> tuple[tuple[int, int], ...]:
+    """割合が小数第3位までで書き切れる (標本の大きさ, 賛成者数) の組。"""
+    return tuple(
+        (t, f) for t in totals for f in range(1, t) if (1000 * f) % t == 0
+    )
+
+
+def _draw_sample_ratio(p: Mapping[str, object], rng: Rng) -> tuple[int, int]:
+    totals = tuple(int(v) for v in cast("list[int]", p.get("total_set") or _SAMPLE_TOTALS))
+    cands = _sample_ratio_pairs(totals)
+    return cands[int(draw({"int_set": list(range(len(cands)))}, rng))]
+
+
 _EXAM_RELATIVE_FREQUENCY_CONCEPTS = ["exam.relative_frequency_ratio"]
 
 
@@ -87,8 +126,10 @@ _EXAM_RELATIVE_FREQUENCY_CONCEPTS = ["exam.relative_frequency_ratio"]
 def exam_relative_frequency_recipe(ctx: CellContext, rng: Rng) -> MR:
     """標本調査の賛成者数などから相対度数(割合)を求める（exam_l7.calculation Lv2・answer-first）。"""
     p = ctx.spec_level.params
-    total = int(draw(p["total_domain"], rng))
-    favorable = int(draw({"int_range": [1, total - 1]}, rng))
+    # 相対度数は小数で答えるのが教材の作法。標本の人数と賛成者数を独立に引いていたので
+    # 「標本28人のうち27人 → 27/28」という、割合として使えない答えが出ていた（D-24）。
+    # 標本の大きさはきりのよい人数にし、割合が小数で書き切れる組だけを引く。
+    total, favorable = _draw_sample_ratio(p, rng)
 
     solver = REGISTRY.solver("math.relative_frequency")
     sol = cast(Solution, solver(favorable, total))
@@ -97,7 +138,7 @@ def exam_relative_frequency_recipe(ctx: CellContext, rng: Rng) -> MR:
 
     statement = (
         f"ある調査で、標本{total}人のうち賛成した人が{favorable}人であった。"
-        "賛成した人の相対度数(割合)を求めよ"
+        "賛成した人の相対度数(割合)を小数で求めよ"
     )
 
     sub_question = SubQuestionMR(
@@ -249,7 +290,7 @@ def exam_linear_intersection_area_recipe(ctx: CellContext, rng: Rng) -> MR:
     lp, lq = _draw_distinct_points(2, rng)
 
     sol = cast(
-        Solution, REGISTRY.solver("math.lines_intersection_and_triangle_area")(m1, b1, m2, b2)
+        Solution, REGISTRY.solver("math.lines_intersection_and_triangle_area")(m1, b1, m2, b2, lp + lq)
     )
     assert isinstance(sol.answer, SymbolicAnswer)
     (pt, area) = sympy.sympify(sol.answer.srepr)

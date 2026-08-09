@@ -203,17 +203,66 @@ def _build_hints(mr: "MR", ctx: "CellContext", sq_index: int) -> list[str]:
     if "steps_prefix" in hint_modes and len(sq.steps) >= 2:
         return [step.narration for step in sq.steps[:-1]]
 
-    # steps < 2、または steps_prefix が宣言されていない場合はテンプレ定義ヒントを使う。
+    # steps < 2、または steps_prefix が宣言されていない場合はテンプレ定義ヒントを使う
+    # （**手で書かれたヒントがあれば、それがいちばん良い**ので最優先）。
     template_hints = ctx.spec_level.text.get("hints") if isinstance(ctx.spec_level.text, dict) else None
     if template_hints:
         return list(template_hints)
+
+    # **1手で解ける問題は、前から開示できる手が無い。**「最後の手は答えを明かすので
+    # ヒントにしない」という規則が候補を空にし、既定の「与えられた値をもう一度
+    # 確認しよう」——何も言っていない文——に落ちていた（EVALUATION D-17・26セル）。
+    #
+    # narration には数字を書かない規約（鉄則⑦。値は result_display にだけ置く）が
+    # あるので、1手のときはその手の narration をそのまま出してよい。
+    # 「(√105)² を計算せよ」に対して「根号のついた数を2乗し、根号の中の数にもどす」と
+    # 言うことになる＝**使う規則を、答えの値を明かさずに教える**。
+    if "steps_prefix" in hint_modes and len(sq.steps) == 1 and sq.steps[0].narration:
+        return [sq.steps[0].narration]
+
     return [_DEFAULT_MINIMAL_HINT]
 
 
-# 小問の問いかけは既定で「{asked} を求めなさい。」だが、**求値でない問い**はそれでは
-# 日本語にならない（「proof_text を求めなさい。」）。asked ごとの言い方をここに置く。
-# 求値の小問は既定のままでよいので、**言い方が違うものだけ**を書く。
+# 小問の問いかけ。**asked は内部の符号なので、そのまま出すと日本語にならない**
+# （「choice を求めなさい。」「draw_graph を求めなさい。」）。台帳で使われている
+# asked をすべてここに並べる。既定にこぼすと英語が問題文に出る。
+#
+# **言い回しに数字を入れないこと。** 品質ゲートは本文に出る数値を given 由来のものだけに
+# 限るので、「1つ選びなさい」の「1」が弾かれる。「正しいものを選びなさい。」でよい。
 _ASKED_PROMPTS: dict[str, str] = {
+    # 求値
+    "value": "答えを求めなさい。",
+    "solution": "解を求めなさい。",
+    "area": "面積を求めなさい。",
+    "coordinate": "座標を求めなさい。",
+    "intersection": "交点の座標を求めなさい。",
+    "domain_range": "変域を求めなさい。",
+    "rate_of_change": "変化の割合を求めなさい。",
+    "degree": "次数を答えなさい。",
+    # 式
+    "simplified_expr": "式を簡単にしなさい。",
+    "expression": "式に表しなさい。",
+    "formulation": "式に表しなさい。",
+    # 選ぶ・答える
+    "choice": "正しいものを選びなさい。",
+    # 読み取る
+    "read_point": "点の座標を読み取りなさい。",
+    "read_table": "表から読み取りなさい。",
+    "read_box_plot": "箱ひげ図から読み取りなさい。",
+    "read_slope_intercept": "傾きと切片を読み取りなさい。",
+    "read_intersection": "交点の座標を読み取りなさい。",
+    "read_figure_element": "図から読み取りなさい。",
+    "read_solid": "立体の図から読み取りなさい。",
+    "read_position": "位置を読み取りなさい。",
+    # かく
+    "draw_graph": "グラフをかきなさい。",
+    "draw_solid": "見取図をかきなさい。",
+    "draw_transformed_polygon": "移した図形をかきなさい。",
+    "draw_tree_diagram": "樹形図をかきなさい。",
+    "draw_segment": "線分をかきなさい。",
+    "draw_box_plot": "箱ひげ図をかきなさい。",
+    "construction_steps": "作図しなさい。",
+    # 記述
     "proof_text": "証明しなさい。",
 }
 

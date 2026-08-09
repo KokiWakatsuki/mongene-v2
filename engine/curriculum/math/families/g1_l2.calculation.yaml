@@ -17,17 +17,25 @@ levels:
     signature: absolute_value
     recipe: math.compute_signed_arithmetic
     params:
-      # |a|。a は整数・分数（符号つき）。小数入力は答えが分数化して不自然なため除く。
-      # frac を重み付けし dup を分散。
+      # |a|。a は整数・分数・小数（符号つき）。
+      # **小数を軸に戻した**（教科書は -2.5 を出す）。以前は「答えが分数化して
+      # 不自然」という理由で除いていたが、小数で与えたら小数で答えるようにしたので
+      # その理由は消えた（D-26）。分数の定義域を教材の大きさに狭めたぶんを、
+      # 小数の軸で取り戻す（FIXES.md の原則1）。
       mode: absolute_value
-      value_kinds: [int, frac, frac, frac]
-      int_domain: {int_range: [-20, 20], exclude: [0]}
-      frac_domain: {frac_range: {num: [-24, 24], den: [2, 15]}}
+      value_kinds: [int, frac, dec]
+      int_domain: {int_range: [-30, 30], exclude: [0]}
+      # 中1の絶対値で与える数は小さく素直な数（教科書は -5, -2.5, -1/2）。
+      # 分母15までだと「-17/13 の絶対値」になり、単元の狙いから外れる。
+      frac_domain: {frac_range: {num: [-12, 12], den: [2, 8]}}
     given: [expression]
     asked: [value]
     visual: none
     text: {tier: T1, template: lf_calc_abs_v1}
     hints: [steps_prefix]
+    dup_rate_max: 0.30
+    dup_rate_reason: >-
+      中1の絶対値で扱う数は、教科書では小さく素直な数に限られる（-5, -2.5, -1/2 のあたり。整数は30まで、分数は分母8まで、小数は0.1刻みの終端小数）。整数・分数・小数の3つを合わせても180通りほどしかなく、既定の0.20を通すには「-17/13 の絶対値」のような、単元の狙い（0からの距離）から外れた数を作ることになる。数を現実に戻したうえで重複を仕様として宣言する。
     concept_tags: [signed_number.absolute_value]
     cause_tags: []
   "2":

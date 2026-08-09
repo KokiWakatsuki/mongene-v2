@@ -39,30 +39,57 @@ def _fmt_ratio(p: sympy.Rational) -> str:
     return str(p)
 
 
+def _fmt_relative_frequency(p: sympy.Rational) -> str:
+    """相対度数の表示。**割り切れるなら小数**、そうでなければ分数。
+
+    相対度数（確率の推定値）は小数で答えるのが教材の作法で、「1292回投げて726回 →
+    363/646」は約分しても意味を持たない。recipe 側で割り切れる組だけを引くので、
+    ここは実際には常に小数になる（保険として分数も残す）。
+    """
+    q = int(p.q)
+    while q % 2 == 0:
+        q //= 2
+    while q % 5 == 0:
+        q //= 5
+    if q != 1:
+        return str(p)  # 割り切れない（＝小数で書けない）ので分数のまま
+    digits = 0
+    r = sympy.Rational(p)
+    while r.q != 1:
+        r *= 10
+        digits += 1
+    return f"{float(p):.{digits}f}" if digits else str(int(p))
+
+
 # ---------------------------------------------------------------------------
 # g1_l59.calculation Lv1 / g2_l51.find_value Lv2: 相対度数 = 起こった回数 ÷ 試行回数
 # ---------------------------------------------------------------------------
 @register_solver("math.relative_frequency")
-def relative_frequency(occurred: object, total: object) -> Solution:
+def relative_frequency(
+    occurred: object, total: object, as_decimal: object = True
+) -> Solution:
     """起こった回数 ÷ 試行回数 で相対度数（確率の推定値）を求める。
 
     2つの整数だけから既約分数を計算する（double-solve）。narration に数字は書かない。
+    `as_decimal=False` は表示を分数のままにする（**確率は分数で答えるのが教材の作法**で、
+    小数で答えるのは相対度数のほう。同じ割り算でも書き方の作法が違う）。
     """
     o = sympy.Integer(int(str(occurred)))
     t = sympy.Integer(int(str(total)))
     if t == 0:
         raise ValueError("試行回数が0では相対度数が定まらない")
     p = sympy.Rational(o, t)
+    disp = _fmt_relative_frequency(p) if bool(as_decimal) else _fmt_ratio(p)
     steps = [
         Step(
             op="divide_occurred_by_total",
             args=[],
             result_srepr=sympy.srepr(p),
-            result_display=_fmt_ratio(p),
+            result_display=disp,
             narration="ことがらが起こった回数を、試行の総回数でわる。",
         ),
     ]
-    answer = SymbolicAnswer(srepr=sympy.srepr(p), display=_fmt_ratio(p))
+    answer = SymbolicAnswer(srepr=sympy.srepr(p), display=disp)
     return Solution(answer=answer, steps=steps)
 
 
@@ -188,6 +215,18 @@ def probability_two_dice(faces: object, condition: object, target: object) -> So
         favorable = [(a, b) for a, b in pairs if (a * b) % 2 == t]
     elif cond == "sum_parity":
         favorable = [(a, b) for a, b in pairs if (a + b) % 2 == t]
+    # 以下は6面に戻したぶんの条件を、**教科書にある問い方**で足したもの
+    # （面数を広げて組合せを稼ぐのはやめた。D-13 と同じ理由）。
+    elif cond == "sum_at_most":
+        favorable = [(a, b) for a, b in pairs if a + b <= t]
+    elif cond == "diff_equals":
+        favorable = [(a, b) for a, b in pairs if abs(a - b) == t]
+    elif cond == "sum_multiple_of":
+        favorable = [(a, b) for a, b in pairs if (a + b) % t == 0]
+    elif cond == "at_least_one_equals":
+        favorable = [(a, b) for a, b in pairs if t in (a, b)]
+    elif cond == "same_faces":
+        favorable = [(a, b) for a, b in pairs if a == b]
     else:
         raise ValueError(f"未知の condition: {cond!r}")
     p = sympy.Rational(len(favorable), len(pairs))

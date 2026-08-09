@@ -26,12 +26,12 @@ meta:
 problem_ref: 697c3126fd4c7d27
 problem_text: '次の計算をせよ。
 
-  8/3-(-0.1)-(-6)'
+  3/4-(-0.5)-7'
 sub_questions:
 - answer:
-    display: 263/30
+    display: -23/4
     kind: symbolic
-    srepr: Rational(263, 30)
+    srepr: Rational(-23, 4)
   cause_tags: []
   concept_tags:
   - signed_number.subtract_terms
@@ -39,26 +39,26 @@ sub_questions:
 
     次に、正の項どうし、負の項どうしをそれぞれまとめる。（正の項・負の項をまとめる）
 
-    最後に、正の合計と負の合計を合わせて、答えを求める。（263/30）'
+    最後に、正の合計と負の合計を合わせて、答えを求める。（-23/4）'
   hints:
   - すべてのひき算を、符号を変えてたし算に直す。
   - 正の項どうし、負の項どうしをそれぞれまとめる。
   label: (1)
-  prompt_text: value を求めなさい。
+  prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
     narration: すべてのひき算を、符号を変えてたし算に直す。
     op: rewrite_all_as_addition
     result_display: すべてたし算に直す
-    result_srepr: Rational(263, 30)
+    result_srepr: Rational(-23, 4)
   - args: []
     narration: 正の項どうし、負の項どうしをそれぞれまとめる。
     op: group_by_sign
     result_display: 正の項・負の項をまとめる
-    result_srepr: Rational(263, 30)
+    result_srepr: Rational(-23, 4)
   - args: []
     narration: 正の合計と負の合計を合わせて、答えを求める。
     op: total_terms
-    result_display: 263/30
-    result_srepr: Rational(263, 30)
+    result_display: -23/4
+    result_srepr: Rational(-23, 4)
 visual_svg: null

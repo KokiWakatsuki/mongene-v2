@@ -53,7 +53,7 @@ sub_questions:
   - 左辺を因数分解する。
   - 積が 0 になるのは各因数が 0 のときだから、それぞれを 0 とおいて x を求める。
   label: (1)
-  prompt_text: value を求めなさい。
+  prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
     narration: 場面の中で、どちらの見方でも同じになる（等しくなっている）量に着目する。

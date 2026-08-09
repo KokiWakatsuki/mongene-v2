@@ -5,6 +5,8 @@ C11（データ・統計）クラスタのうち g1_l54〜g1_l57 の非 visual �
 """
 from __future__ import annotations
 
+from collections.abc import Mapping
+from functools import lru_cache
 from typing import cast
 
 import sympy
@@ -88,22 +90,44 @@ def frequency_table_value_recipe(ctx: CellContext, rng: Rng) -> MR:
 # ---------------------------------------------------------------------------
 # g1_l55.calculation Lv1: 1階級の相対度数（既存 math.relative_frequency を再利用）
 # ---------------------------------------------------------------------------
+# 度数分布表の総度数（きりのよい人数で調べる）。相対度数が小数で書き切れる組だけを引く。
+_STATS_TOTALS = (20, 25, 40, 50, 80, 100, 125, 200, 250)
+
+
+@lru_cache(maxsize=4)
+def _stats_frequency_pairs(totals: tuple[int, ...]) -> tuple[tuple[int, int], ...]:
+    return tuple((t, o) for t in totals for o in range(1, t) if (1000 * o) % t == 0)
+
+
+def _draw_frequency_pair(p: Mapping[str, object], rng: Rng) -> tuple[int, int]:
+    totals = tuple(int(v) for v in cast("list[int]", p.get("total_set") or _STATS_TOTALS))
+    cands = _stats_frequency_pairs(totals)
+    return cands[int(draw({"int_set": list(range(len(cands)))}, rng))]
+
+
 _RELATIVE_FREQUENCY_STATS_CONCEPTS = ["relative_frequency.compute_single"]
 
 
 @register_recipe("math.relative_frequency_stats_single", provides_concepts=_RELATIVE_FREQUENCY_STATS_CONCEPTS)
 def relative_frequency_stats_single_recipe(ctx: CellContext, rng: Rng) -> MR:
-    """度数分布表の1階級の相対度数を求める（g1_l55.calculation Lv1・answer-first）。"""
+    """度数分布表の1階級の相対度数を求める（g1_l55.calculation Lv1・answer-first）。
+
+    **相対度数は小数で答えるのが教材の作法**（D-19/D-24）。総度数と度数を独立に
+    引いていたので「123人のうち72人 → 24/41」という、割合として使えない答えが
+    出ていた。割合が小数第3位までで書き切れる組だけを引く。
+    """
     p = ctx.spec_level.params
-    total = int(draw(p["total_domain"], rng))
-    occurred = int(draw({"int_range": [1, total - 1]}, rng))
+    total, occurred = _draw_frequency_pair(p, rng)
 
     solver = REGISTRY.solver("math.relative_frequency")
     sol = cast(Solution, solver(occurred, total))
     assert isinstance(sol.answer, SymbolicAnswer)
     assert sol.answer.srepr == sympy.srepr(sympy.Rational(occurred, total))
 
-    statement = f"{total}人のうち、ある階級の度数が{occurred}人であった。この階級の相対度数を求めよ"
+    statement = (
+        f"{total}人のうち、ある階級の度数が{occurred}人であった。"
+        "この階級の相対度数を小数で求めよ"
+    )
 
     sub_question = SubQuestionMR(
         label="(1)", asked="value", answer=sol.answer, steps=sol.steps,
@@ -129,10 +153,13 @@ _SCHOOL_NAMES = ["A中学", "B中学", "C中学", "D中学"]
 def compare_relative_frequency_recipe(ctx: CellContext, rng: Rng) -> MR:
     """総度数の異なる2集団の相対度数を求め比較する（g1_l55.calculation Lv2・answer-first）。"""
     p = ctx.spec_level.params
+    # **相対度数は小数で答える**（EVALUATION D-24）。度数を独立に引いていたので
+    # 「A: 27/40、B: 7/30」という、割合として比べにくい答えが出ていた。
+    # 割合が小数第3位までで書き切れる度数だけを引く。
     total_a = int(draw(p["total_domain"], rng))
     total_b = int(draw({"int_set": [v for v in _domain_int_set(p["total_domain"]) if v != total_a]}, rng))
-    freq_a = int(draw({"int_range": [1, total_a - 1]}, rng))
-    freq_b = int(draw({"int_range": [1, total_b - 1]}, rng))
+    freq_a = int(draw({"int_set": [f for f in range(1, total_a) if (1000 * f) % total_a == 0]}, rng))
+    freq_b = int(draw({"int_set": [f for f in range(1, total_b) if (1000 * f) % total_b == 0]}, rng))
     name_a, name_b = _SCHOOL_NAMES[0], _SCHOOL_NAMES[1]
     lo = int(draw(p["class_lo_domain"], rng))
     width = int(draw(p["class_width_domain"], rng))
@@ -318,11 +345,24 @@ def mean_from_grouped_table_recipe(ctx: CellContext, rng: Rng) -> MR:
     """度数分布表の階級値を用いて平均値を求める（g1_l57.calculation Lv2・answer-first）。"""
     p = ctx.spec_level.params
     n_classes = 4
-    start, width, freqs = _draw_frequency_table(rng, cast("dict[str, object]", p), n_classes)
-
+    # **平均値が小数で書き切れる度数の組だけを引く。** 度数を独立に引いていたので
+    # 合計が23人になり「平均値 694/23」という、教材にならない答えが出ていた
+    # （教科書は度数の合計を割り切れる人数にとる）。
     solver = REGISTRY.solver("math.mean_from_grouped_table")
-    sol = cast(Solution, solver(start, width, freqs))
-    assert isinstance(sol.answer, SymbolicAnswer)
+    for _ in range(200):
+        start, width, freqs = _draw_frequency_table(rng, cast("dict[str, object]", p), n_classes)
+        sol = cast(Solution, solver(start, width, freqs))
+        assert isinstance(sol.answer, SymbolicAnswer)
+        mean = sympy.Rational(sympy.sympify(sol.answer.srepr))
+        q = int(mean.q)
+        while q % 2 == 0:
+            q //= 2
+        while q % 5 == 0:
+            q //= 5
+        if q == 1 and mean.q in (1, 2, 4, 5, 10, 20):  # 小数第2位までで書き切れる
+            break
+    else:
+        raise ValueError("mean_from_grouped_table_recipe: 平均が小数になる度数を構成できず")
 
     table_text = _format_frequency_table_text(start, width, freqs, "点")
     statement = f"次の度数分布表について、各階級の階級値を用いて平均値を求めよ。〔階級と度数：{table_text}〕"

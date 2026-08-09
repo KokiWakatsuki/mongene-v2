@@ -438,9 +438,11 @@ def test_solid_all_views_render_monochrome_svg():
         svg = render_solid_svg(params, draw=True)
         assert svg.startswith("<svg"), name
         assert svg.endswith("</svg>"), name
-        # モノクロ印刷可: 色は黒か none のみ（彩度で情報を区別しない）。
+        # モノクロ印刷可: 色は黒か白（背景）か none のみ（彩度で情報を区別しない）。
+        # 白は背景の矩形。透過のままだと PNG に起こしたとき暗い背景で線が見えなく
+        # なるので敷いてある（EVALUATION D-11）。
         colors = set(re.findall(r'(?:stroke|fill)="(#[0-9a-fA-F]{6})"', svg))
-        assert colors <= {"#000000"}, (name, colors)
+        assert colors <= {"#000000", "#ffffff"}, (name, colors)
 
 
 def test_solid_sketch_has_hidden_edges():

@@ -43,18 +43,14 @@ def _effective_cause_tags(ctx: CellContext) -> list[str]:
     return list(ctx.spec_level.cause_tags)
 
 
-def _fmt_direct_proportion_display(a: sympy.Expr) -> str:
-    """比例の式 y=ax の表示（a=1は"y = x"・a=-1は"y = -x"）。"""
-    if a == 1:
-        return "y = x"
-    if a == -1:
-        return "y = -x"
-    return f"y = {fmt_number(a)}x"
-
-
-def _fmt_inverse_proportion_display(a: sympy.Expr) -> str:
-    """反比例の式 y=a/x の表示。"""
-    return f"y = {fmt_number(a)}/x"
+# 式の表示は solver 側の実装を**そのまま使う**。ここに同じものを2つ持っていたので、
+# 片方だけ直しても問題文は変わらなかった（`y = -62/5/x` が残った）。
+from engine.packs.math.solvers.proportion import (  # noqa: E402
+    _format_direct_proportion_expr as _fmt_direct_proportion_display,
+)
+from engine.packs.math.solvers.proportion import (  # noqa: E402
+    _format_inverse_proportion_expr as _fmt_inverse_proportion_display,
+)
 
 
 # ---------------------------------------------------------------------------

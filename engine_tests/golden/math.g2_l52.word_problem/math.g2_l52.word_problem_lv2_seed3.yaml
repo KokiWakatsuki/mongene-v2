@@ -39,9 +39,9 @@ sub_questions:
   - probability.word_problem_coin_toss_count_and_probability
   explanation: まず、硬貨を区別して、1枚ごとに表と裏の2通りがあることを枝分かれで書き出し、出方の総数を数える。（32通り）
   hints:
-  - 問題文の与えられた値をもう一度確認しよう。
+  - 硬貨を区別して、1枚ごとに表と裏の2通りがあることを枝分かれで書き出し、出方の総数を数える。
   label: (1)
-  prompt_text: value を求めなさい。
+  prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
     narration: 硬貨を区別して、1枚ごとに表と裏の2通りがあることを枝分かれで書き出し、出方の総数を数える。
@@ -64,7 +64,7 @@ sub_questions:
   - 硬貨を区別して、表と裏の出方をすべて書き出す。
   - 書き出した出方のうち、条件にあてはまるものの数を数える。
   label: (2)
-  prompt_text: value を求めなさい。
+  prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
     narration: 硬貨を区別して、表と裏の出方をすべて書き出す。

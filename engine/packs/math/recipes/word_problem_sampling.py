@@ -43,6 +43,8 @@ params の `scenario_kind` が
 """
 from __future__ import annotations
 
+import math
+
 from collections.abc import Callable, Mapping
 from dataclasses import dataclass
 from typing import Any, cast
@@ -115,7 +117,9 @@ def ratio_steps_and_answer(numbers: Mapping[str, int]) -> tuple[list[Step], Symb
     同じ「第1手はダミー結果・第2手が実際の値」の型）。narration に数字は書かない。
     """
     ratio = sympy.Rational(int(numbers["sample_count"]), int(numbers["sample_size"]))
-    disp = sympy.sstr(ratio)
+    # **標本での割合は小数で答える**（相対度数と同じ作法・EVALUATION D-24）。
+    # 「120匹中15匹 → 1/8」は約分しても割合として読めない（0.125 と書く）。
+    disp = _fmt_ratio_as_decimal(ratio)
     srepr = sympy.srepr(ratio)
     steps = [
         Step(
@@ -134,6 +138,22 @@ def ratio_steps_and_answer(numbers: Mapping[str, int]) -> tuple[list[Step], Symb
         ),
     ]
     return steps, SymbolicAnswer(srepr=srepr, display=disp)
+
+
+def _fmt_ratio_as_decimal(v: sympy.Rational) -> str:
+    """割合の表示。割り切れるなら小数、そうでなければ分数（構成側で割り切れる組を引く）。"""
+    q = int(v.q)
+    while q % 2 == 0:
+        q //= 2
+    while q % 5 == 0:
+        q //= 5
+    if q != 1:
+        return sympy.sstr(v)
+    digits, r = 0, sympy.Rational(v)
+    while r.q != 1:
+        r *= 10
+        digits += 1
+    return f"{float(v):.{digits}f}" if digits else str(int(v))
 
 
 def _derive_steps(answer_offset: int, narration: str, answer_value: sympy.Expr, unit: str) -> list[Step]:
@@ -177,6 +197,20 @@ def _draw_index(n: int, rng: Rng) -> int:
     return int(draw({"int_range": [0, n - 1]}, rng))
 
 
+def _ratio_is_decimal(count: int, size: int) -> bool:
+    """標本での割合 count/size が小数で書き切れるか。
+
+    **(1) の答えは「標本での割合」で、小数で答えるのが教材の作法**（D-24）。
+    「120匹中15匹 → 1/8」のような、約分しても割合として読めない答えを作らない。
+    """
+    q = size // math.gcd(count, size)
+    while q % 2 == 0:
+        q //= 2
+    while q % 5 == 0:
+        q //= 5
+    return q == 1
+
+
 def _candidates_solve_population(
     sizes: list[int], counts: list[int], knowns: list[int]
 ) -> list[tuple[int, int, int]]:
@@ -189,7 +223,7 @@ def _candidates_solve_population(
     out: list[tuple[int, int, int]] = []
     for size in sizes:
         for count in counts:
-            if count >= size:
+            if count >= size or not _ratio_is_decimal(count, size):
                 continue
             for known in knowns:
                 if (known * size) % count:
@@ -208,7 +242,7 @@ def _candidates_estimate(
     out: list[tuple[int, int, int]] = []
     for size in sizes:
         for count in counts:
-            if count >= size:
+            if count >= size or not _ratio_is_decimal(count, size):
                 continue
             for population in populations:
                 if (population * count) % size:

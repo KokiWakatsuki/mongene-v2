@@ -24,7 +24,8 @@ levels:
       # die6/coin2 は条件の組合せが少なく単独では dup_rate が閾値を超えるため、cards_n の
       # 比重を高くして自由度を確保する（鉄則②。リストの重複要素で一様抽選の重みを付ける）。
       space_choices: [die6, coin2, cards_n, cards_n, cards_n, cards_n, cards_n, cards_n, cards_n, cards_n, cards_n, cards_n, cards_n, cards_n, cards_n, cards_n]
-      n_domain: {int_range: [6, 80]}
+      # カードの枚数は教材の大きさに（80枚のカードは教材にならない）。
+      n_domain: {int_range: [5, 20]}
     given: [condition]
     asked: [value]
     visual: none
@@ -32,11 +33,14 @@ levels:
     hints: [steps_prefix]
     concept_tags: [probability.count_single_space]
     cause_tags: []
+    dup_rate_max: 0.35
+    dup_rate_reason: >-
+      1個のさいころ・硬貨・番号カードで条件を1つ問う形は、教材にありうる組み合わせが数十通りしかない（さいころは6面、カードは5〜20枚、条件は偶数・奇数・以上・以下・倍数）。既定の0.20を通すには「1から53までのカード」「1から30までの目が出るさいころ」を作ることになり、存在しない道具になる。数を現実に戻したうえで重複を仕様として宣言する。
   "3":
     signature: probability_two_dice_count
     recipe: math.probability_two_dice
     params:
-      faces_domain: {int_range: [4, 9]}
+      faces_domain: {int_set: [6]}
     given: [condition]
     asked: [value]
     visual: none
@@ -44,5 +48,8 @@ levels:
     hints: [steps_prefix]
     concept_tags: [probability.count_two_dice]
     cause_tags: []
+    dup_rate_max: 0.55
+    dup_rate_reason: >-
+      大小2個のさいころ（6面）で問える条件は、和・積・差・倍数・少なくとも一方を合わせても57通りしかない。既定の0.20を通すには面数を14面・20面まで広げることになり、存在しないさいころになる（D-13 と同じ）。数を現実に戻したうえで重複を仕様として宣言する。
 remedial:
   default_level: 1

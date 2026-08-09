@@ -51,7 +51,7 @@ levels:
       # 面数の候補プールを広く取る（6面だけだと積の目標値が17通りしかなく
       # dup_rate が構造的に閾値を超えるため鉄則②で一般化。6も含みつつ均等に
       # 7〜14面も選べるようにする＝(faces,target)の相異な組が400以上）。
-      faces_domain: [6, 7, 8, 9, 10, 11, 12, 13, 14]
+      faces_domain: [6]
     given: [scenario]
     asked: [value]
     visual: none
@@ -59,5 +59,8 @@ levels:
     hints: [steps_prefix]
     concept_tags: [probability.word_problem_two_dice_product]
     cause_tags: []
+    dup_rate_max: 0.55
+    dup_rate_reason: >-
+      大小2個のさいころ（6面）で問える条件は57通りしかない。面数を広げれば通るが、存在しないさいころになる（D-13 と同じ）。数を現実に戻したうえで重複を仕様として宣言する。
 remedial:
   default_level: 3

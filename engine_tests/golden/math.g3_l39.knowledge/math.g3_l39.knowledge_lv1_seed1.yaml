@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: similarity_terms_term_recall
 problem_ref: e55766ce2c2f4cc1
-problem_text: 図形Fと図形Gが相似であるとき、対応する辺の長さの比のこと を何といいますか。
+problem_text: 図形Fと図形Gが相似であるとき、対応する辺の長さの比のことを何といいますか。
 sub_questions:
 - answer:
     correct: 相似比
@@ -40,7 +40,7 @@ sub_questions:
   hints:
   - 説明されている式や数の部分がどれかを読み取る。
   label: (1)
-  prompt_text: choice を求めなさい。
+  prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
     narration: 説明されている式や数の部分がどれかを読み取る。

@@ -43,7 +43,8 @@ levels:
     recipe: math.word_problem_pythagorean
     params:
       scenario_kind: exam_cube_guided
-      edge_domain: {int_range: [2, 30]}
+      # 1辺は教科書の大きさに（1辺30cmの正四面体は体積が5桁になる）。
+      edge_domain: {int_range: [2, 24]}
     given: [scenario]
     asked: [value]
     visual: none
@@ -56,7 +57,8 @@ levels:
     recipe: math.word_problem_pythagorean
     params:
       scenario_kind: exam_regular_tetrahedron
-      edge_domain: {int_range: [2, 30]}
+      # 1辺は教科書の大きさに（1辺30cmの正四面体は体積が5桁になる）。
+      edge_domain: {int_range: [2, 24]}
       # 垂線の足の名前（頂点名と重ならないものを引く）。
       foot_candidates: [H, I, K, M, N, P, Q, R, S, T]
     given: [scenario]

@@ -24,24 +24,24 @@ meta:
   seed: 1
   signature: exam_relative_frequency
 problem_ref: 43b1e0117df0afa7
-problem_text: ある調査で、標本28人のうち賛成した人が27人であった。賛成した人の相対度数(割合)を求めよ。
+problem_text: ある調査で、標本400人のうち賛成した人が220人であった。賛成した人の相対度数(割合)を小数で求めよ。
 sub_questions:
 - answer:
-    display: 27/28
+    display: '0.55'
     kind: symbolic
-    srepr: Rational(27, 28)
+    srepr: Rational(11, 20)
   cause_tags: []
   concept_tags:
   - exam.relative_frequency_ratio
-  explanation: まず、ことがらが起こった回数を、試行の総回数でわる。（27/28）
+  explanation: まず、ことがらが起こった回数を、試行の総回数でわる。（0.55）
   hints:
-  - 問題文の与えられた値をもう一度確認しよう。
+  - ことがらが起こった回数を、試行の総回数でわる。
   label: (1)
-  prompt_text: value を求めなさい。
+  prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
     narration: ことがらが起こった回数を、試行の総回数でわる。
     op: divide_occurred_by_total
-    result_display: 27/28
-    result_srepr: Rational(27, 28)
+    result_display: '0.55'
+    result_srepr: Rational(11, 20)
 visual_svg: null

@@ -32,6 +32,48 @@ def _effective_cause_tags(ctx: CellContext) -> list[str]:
     return list(ctx.spec_level.cause_tags)
 
 
+def _proportional_lengths(
+    rng: Rng,
+    *,
+    ratio_max: int,
+    scale_max: int,
+    side_max: int,
+    increasing: bool = False,
+) -> tuple[int, int, int, int]:
+    """相似比 m:n（既約）と、m の倍数である既知の辺 s=m·k、対応する辺 t=n·k を引く。
+
+    **答えが整数になる組だけを列挙してから引く。** 辺の長さを独立に引いていたため
+    「RB=198cm, RF=17cm, BA=171cm のとき FN=34762/37」のような、教材にならない
+    答えが出ていた。教科書は「相似比 2:3、AB=8cm のとき DE=12cm」のように、
+    与える辺を相似比の倍数にとる。
+
+    **狭めたぶんの組み合わせは、定義域ではなく軸で取り戻す**（点名を params に
+    記録して dup_key に効かせる。FIXES.md の原則1・2）。定義域を広げて dup_rate を
+    通すのは、この欠陥そのものだった。
+
+    `increasing=True` は m<n を要求する（辺ADが辺ABの一部であるように、
+    小さいほうを先に置く場面用）。
+    """
+    cands: list[tuple[int, int, int, int]] = []
+    for m in range(2, ratio_max + 1):
+        for n in range(2, ratio_max + 1):
+            if m == n or math.gcd(m, n) != 1:
+                continue
+            if increasing and m > n:
+                continue
+            for k in range(2, scale_max + 1):
+                s, t = m * k, n * k
+                if s > side_max or t > side_max:
+                    continue
+                if t in {m, n, s}:  # 答えが本文に出る数と一致する組は外す（G-Q5t）
+                    continue
+                cands.append((m, n, s, t))
+    if not cands:
+        raise ValueError("_proportional_lengths: 有効な組が無い")
+    idx = int(draw({"int_set": list(range(len(cands)))}, rng))
+    return cands[idx]
+
+
 # ---------------------------------------------------------------------------
 # g3_l39.find_value Lv2: 相似比を用い対応辺の長さを比例式で求める
 # ---------------------------------------------------------------------------
@@ -45,14 +87,12 @@ def similarity_ratio_transfer_recipe(ctx: CellContext, rng: Rng) -> MR:
     """相似比を用い、対応する辺の長さを比例式で求める（g3_l39.find_value Lv2・answer-first）。"""
     p = ctx.spec_level.params
     pa, pb, pc, pd, pe, pf = _draw_distinct_points(6, rng)
-    for _ in range(200):
-        ratio_num = int(draw(p["ratio_domain"], rng))
-        ratio_den = int(draw([v for v in range(1, 13) if v != ratio_num], rng))
-        if math.gcd(ratio_num, ratio_den) == 1:
-            break
-    else:
-        raise ValueError("similarity_ratio_transfer_recipe: 既約な相似比を構成できず")
-    known_side = int(draw(p["side_domain"], rng))
+    ratio_num, ratio_den, known_side, _ = _proportional_lengths(
+        rng,
+        ratio_max=int(p["ratio_max"]),
+        scale_max=int(p["scale_max"]),
+        side_max=int(p["side_max"]),
+    )
 
     solver = REGISTRY.solver("math.similarity_ratio_transfer")
     sol = cast(Solution, solver(ratio_num, ratio_den, known_side))
@@ -70,7 +110,11 @@ def similarity_ratio_transfer_recipe(ctx: CellContext, rng: Rng) -> MR:
     return MR(
         signature=ctx.spec_level.signature, family=ctx.family, level=ctx.level,
         purpose=ctx.purpose, seed=0,
-        params={"ratio_num": ratio_num, "ratio_den": ratio_den, "known_side": known_side},
+        params={
+            "ratio_num": ratio_num, "ratio_den": ratio_den, "known_side": known_side,
+            # 数を教材の大きさに戻したぶんの組み合わせは、点名の軸で稼ぐ（原則1・2）。
+            "labels": pa + pb + pc + pd + pe + pf,
+        },
         given={"condition": statement}, sub_questions=[sub_question], visual_plan=None,
         provenance=Provenance(recipe="math.similarity_ratio_transfer"),
     )
@@ -134,14 +178,14 @@ def similarity_proven_ratio_length_recipe(ctx: CellContext, rng: Rng) -> MR:
     """
     p = ctx.spec_level.params
     pa, pb, pc, pd, pe = _draw_distinct_points(5, rng)
-    for _ in range(200):
-        ae = int(draw(p["side_domain"], rng))
-        ab = int(draw(p["side_domain"], rng))
-        if math.gcd(ae, ab) == 1:
-            break
-    else:
-        raise ValueError("similarity_proven_ratio_length_recipe: 既約な比を構成できず")
-    de = int(draw(p["side_domain"], rng))
+    # 点Dは辺AB上にあるので AD < AB（独立に引くと AD > AB という図にならない組が出る）。
+    ae, ab, de, _ = _proportional_lengths(
+        rng,
+        ratio_max=int(p["ratio_max"]),
+        scale_max=int(p["scale_max"]),
+        side_max=int(p["side_max"]),
+        increasing=True,
+    )
 
     solver = REGISTRY.solver("math.similarity_ratio_transfer")
     sol = cast(Solution, solver(ae, ab, de))
@@ -160,7 +204,10 @@ def similarity_proven_ratio_length_recipe(ctx: CellContext, rng: Rng) -> MR:
     return MR(
         signature=ctx.spec_level.signature, family=ctx.family, level=ctx.level,
         purpose=ctx.purpose, seed=0,
-        params={"ratio_num": ae, "ratio_den": ab, "known_side": de},
+        params={
+            "ratio_num": ae, "ratio_den": ab, "known_side": de,
+            "labels": pa + pb + pc + pd + pe,
+        },
         given={"condition": statement}, sub_questions=[sub_question], visual_plan=None,
         provenance=Provenance(recipe="math.similarity_proven_ratio_length"),
     )
@@ -185,14 +232,12 @@ def circle_similar_chord_length_recipe(ctx: CellContext, rng: Rng) -> MR:
     """
     p = ctx.spec_level.params
     pp, pa, pb, pc, pd = _draw_distinct_points(5, rng)
-    for _ in range(200):
-        pa_len = int(draw(p["side_domain"], rng))
-        pd_len = int(draw(p["side_domain"], rng))
-        if math.gcd(pa_len, pd_len) == 1:
-            break
-    else:
-        raise ValueError("circle_similar_chord_length_recipe: 既約な比を構成できず")
-    pb_len = int(draw(p["side_domain"], rng))
+    pa_len, pd_len, pb_len, _ = _proportional_lengths(
+        rng,
+        ratio_max=int(p["ratio_max"]),
+        scale_max=int(p["scale_max"]),
+        side_max=int(p["side_max"]),
+    )
 
     solver = REGISTRY.solver("math.similarity_ratio_transfer")
     sol = cast(Solution, solver(pa_len, pd_len, pb_len))
@@ -211,7 +256,10 @@ def circle_similar_chord_length_recipe(ctx: CellContext, rng: Rng) -> MR:
     return MR(
         signature=ctx.spec_level.signature, family=ctx.family, level=ctx.level,
         purpose=ctx.purpose, seed=0,
-        params={"ratio_num": pa_len, "ratio_den": pd_len, "known_side": pb_len},
+        params={
+            "ratio_num": pa_len, "ratio_den": pd_len, "known_side": pb_len,
+            "labels": pp + pa + pb + pc + pd,
+        },
         given={"condition": statement}, sub_questions=[sub_question], visual_plan=None,
         provenance=Provenance(recipe="math.circle_similar_chord_length"),
     )

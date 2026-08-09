@@ -26,12 +26,12 @@ meta:
 problem_ref: a54dfd15537fc6ed
 problem_text: '次の式を計算せよ。
 
-  3√4617'
+  3√180'
 sub_questions:
 - answer:
-    display: 27√57
+    display: 18√5
     kind: symbolic
-    srepr: Mul(Integer(27), Pow(Integer(57), Rational(1, 2)))
+    srepr: Mul(Integer(18), Pow(Integer(5), Rational(1, 2)))
   cause_tags: []
   concept_tags:
   - radical.simplify_form
@@ -39,12 +39,12 @@ sub_questions:
 
     次に、それぞれの平方の因数を根号の外に出す。（根号の外に出す）
 
-    最後に、根号の中をできるだけ簡単な形に直す。（27√57）'
+    最後に、根号の中をできるだけ簡単な形に直す。（18√5）'
   hints:
   - 根号の中の大きな数を、平方の因数と残りに分ける。
   - それぞれの平方の因数を根号の外に出す。
   label: (1)
-  prompt_text: simplified_expr を求めなさい。
+  prompt_text: 式を簡単にしなさい。
   solution_steps:
   - args: []
     narration: 根号の中の大きな数を、平方の因数と残りに分ける。
@@ -59,6 +59,6 @@ sub_questions:
   - args: []
     narration: 根号の中をできるだけ簡単な形に直す。
     op: simplify_result
-    result_display: 27√57
-    result_srepr: Mul(Integer(27), Pow(Integer(57), Rational(1, 2)))
+    result_display: 18√5
+    result_srepr: Mul(Integer(18), Pow(Integer(5), Rational(1, 2)))
 visual_svg: null

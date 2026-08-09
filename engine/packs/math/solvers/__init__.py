@@ -44,5 +44,7 @@ from engine.packs.math.solvers import solid_figure  # noqa: F401  (登録の副�
 from engine.packs.math.solvers import g1_space  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.solvers import number_proof  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.solvers import construction  # noqa: F401  (登録の副作用のため import)
+from engine.packs.math.solvers import conditional_proof  # noqa: F401,E402  (number_proof の表示ヘルパに依存＝後に import)
+from engine.packs.math.solvers import pythagoras_proof  # noqa: F401,E402  (登録の副作用のため import)
 
 __all__: list[str] = []

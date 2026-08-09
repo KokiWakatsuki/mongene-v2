@@ -43,7 +43,7 @@ sub_questions:
   hints:
   - 問題で問われている規則や約束が、何についてのものかを読み取る。
   label: (1)
-  prompt_text: choice を求めなさい。
+  prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
     narration: 問題で問われている規則や約束が、何についてのものかを読み取る。

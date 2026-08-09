@@ -60,12 +60,18 @@ def _x_intercept(m: sympy.Rational, b: sympy.Rational) -> sympy.Rational:
 # ---------------------------------------------------------------------------
 @register_solver("math.lines_intersection_and_triangle_area")
 def lines_intersection_and_triangle_area(
-    m1: object, b1: object, m2: object, b2: object
+    m1: object, b1: object, m2: object, b2: object, labels: object = None
 ) -> Solution:
-    """2直線の交点 P と、2本目の x 切片 Q・原点 O がつくる三角形 OPQ の面積を求める。
+    """2直線の交点と、2本目の x 切片・原点がつくる三角形の面積を求める。
 
-    答えは (P の座標, 三角形 OPQ の面積) の組。面積は shoelace 公式で求める。
+    答えは (交点の座標, 三角形の面積) の組。面積は shoelace 公式で求める。
+
+    **点の名前は recipe から受け取る。** 問題文は「交点をG、x軸との交点をH」と
+    名づけるのに、ここを P・Q に固定していたため、答えが `P(5, 12)、△OPQ = 12` と
+    問題文に無い記号で出ていた。
     """
+    lab = str(labels or "PQ")
+    lp, lq = (lab[0], lab[1]) if len(lab) >= 2 else ("P", "Q")
     m1_s, b1_s = sympy.nsimplify(sympy.sympify(m1)), sympy.nsimplify(sympy.sympify(b1))
     m2_s, b2_s = sympy.nsimplify(sympy.sympify(m2)), sympy.nsimplify(sympy.sympify(b2))
     px, py = _intersection(m1_s, b1_s, m2_s, b2_s)
@@ -80,7 +86,7 @@ def lines_intersection_and_triangle_area(
 
     answer = sympy.Tuple(sympy.Tuple(px, py), area)
     srepr = sympy.srepr(answer)
-    disp = f"P{_fmt_pt((px, py))}、△OPQ = {_fmt(area)}"
+    disp = f"{lp}{_fmt_pt((px, py))}、△O{lp}{lq} = {_fmt(area)}"
     return Solution(
         answer=SymbolicAnswer(srepr=srepr, display=disp),
         steps=_steps([
@@ -88,9 +94,9 @@ def lines_intersection_and_triangle_area(
              "2つの直線の式の右辺どうしを等しいとおいて、方程式を立てる。"),
             ("solve_for_x", "", "交点の x 座標を求める",
              "その方程式を解いて、交点の x 座標を求める。"),
-            ("compute_y", "", f"P{_fmt_pt((px, py))}",
+            ("compute_y", "", f"{lp}{_fmt_pt((px, py))}",
              "求めた x の値をどちらかの式に代入して、交点の y 座標を求める。"),
-            ("find_x_intercept", "", f"Q{_fmt_pt((qx, sympy.Integer(0)))}",
+            ("find_x_intercept", "", f"{lq}{_fmt_pt((qx, sympy.Integer(0)))}",
              "x 軸上の点は y 座標がゼロなので、y にゼロを代入して交わる点の座標を求める。"),
             ("compute_triangle_area", srepr, disp,
              "3つの頂点の座標がそろったので、三角形の面積を求める公式で面積を計算する。"),

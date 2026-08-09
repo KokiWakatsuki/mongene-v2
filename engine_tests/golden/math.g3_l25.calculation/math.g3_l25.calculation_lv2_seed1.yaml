@@ -44,7 +44,7 @@ sub_questions:
   - 定数項を移項し、両辺に同じ数を加えて左辺を平方の形にする。
   - 平方根の考え方で、両辺の平方根をとる。
   label: (1)
-  prompt_text: solution を求めなさい。
+  prompt_text: 解を求めなさい。
   solution_steps:
   - args: []
     narration: 定数項を移項し、両辺に同じ数を加えて左辺を平方の形にする。

@@ -42,7 +42,7 @@ sub_questions:
   - データを大きさの順に並べ、中央値を境に下組と上組に分ける。
   - 下組の中央値を第一四分位数、上組の中央値を第三四分位数とする。
   label: (1)
-  prompt_text: value を求めなさい。
+  prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
     narration: データを大きさの順に並べ、中央値を境に下組と上組に分ける。

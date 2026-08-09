@@ -41,7 +41,7 @@ sub_questions:
   hints:
   - 比例式の性質を使い、外項の積と内項の積が等しい式（たすきがけ）をつくる。
   label: (1)
-  prompt_text: solution を求めなさい。
+  prompt_text: 解を求めなさい。
   solution_steps:
   - args: []
     narration: 比例式の性質を使い、外項の積と内項の積が等しい式（たすきがけ）をつくる。

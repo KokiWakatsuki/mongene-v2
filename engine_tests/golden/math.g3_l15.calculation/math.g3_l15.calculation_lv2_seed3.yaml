@@ -41,7 +41,7 @@ sub_questions:
   hints:
   - 整数や係数つきの根号もふくめ、すべての数を2乗した値に直す。
   label: (1)
-  prompt_text: value を求めなさい。
+  prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
     narration: 整数や係数つきの根号もふくめ、すべての数を2乗した値に直す。

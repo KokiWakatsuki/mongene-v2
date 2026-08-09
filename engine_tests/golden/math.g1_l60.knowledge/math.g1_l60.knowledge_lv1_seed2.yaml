@@ -24,7 +24,7 @@ meta:
   seed: 2
   signature: approximation_term_recall
 problem_ref: de39a4b969813fe9
-problem_text: 近似値 30 cm のうち、測定して意味があると考えられる位の数字 を何といいますか。
+problem_text: 近似値 30 cm のうち、測定して意味があると考えられる位の数字を何といいますか。
 sub_questions:
 - answer:
     correct: 有効数字
@@ -42,7 +42,7 @@ sub_questions:
   hints:
   - 説明されている式や数の部分がどれかを読み取る。
   label: (1)
-  prompt_text: choice を求めなさい。
+  prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
     narration: 説明されている式や数の部分がどれかを読み取る。

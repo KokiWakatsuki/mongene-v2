@@ -24,14 +24,14 @@ meta:
   seed: 2
   signature: word_problem_two_dice_product_at_least
 problem_ref: 0b5c30e245ad752e
-problem_text: '1から14までの目が出る大小2個のさいころを同時に投げる。出た目の積が99以上になるかどうかを考える。
+problem_text: '大小2個のさいころを同時に投げる。少なくとも一方が4の目であるかどうかを考える。
 
   この確率を求めよ。'
 sub_questions:
 - answer:
-    display: 37/196
+    display: 11/36
     kind: symbolic
-    srepr: Rational(37, 196)
+    srepr: Rational(11, 36)
   cause_tags: []
   concept_tags:
   - probability.word_problem_two_dice_product
@@ -39,12 +39,12 @@ sub_questions:
 
     次に、そのうち、求める条件にあてはまる組合せの数を数える。（条件にあてはまる組合せを数える）
 
-    最後に、条件にあてはまる組合せの数を、すべての組合せの数でわる。（37/196）'
+    最後に、条件にあてはまる組合せの数を、すべての組合せの数でわる。（11/36）'
   hints:
   - 大小2個のさいころの目の組合せを、表などを使ってすべて数え上げる。
   - そのうち、求める条件にあてはまる組合せの数を数える。
   label: (1)
-  prompt_text: value を求めなさい。
+  prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
     narration: 大小2個のさいころの目の組合せを、表などを使ってすべて数え上げる。
@@ -59,6 +59,6 @@ sub_questions:
   - args: []
     narration: 条件にあてはまる組合せの数を、すべての組合せの数でわる。
     op: compute_probability
-    result_display: 37/196
-    result_srepr: Rational(37, 196)
+    result_display: 11/36
+    result_srepr: Rational(11, 36)
 visual_svg: null

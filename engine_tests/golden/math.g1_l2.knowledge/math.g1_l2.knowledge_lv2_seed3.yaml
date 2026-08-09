@@ -41,7 +41,7 @@ sub_questions:
   hints:
   - 2つの数を数直線上に置き、右にあるほうが大きいと考える。
   label: (1)
-  prompt_text: choice を求めなさい。
+  prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
     narration: 2つの数を数直線上に置き、右にあるほうが大きいと考える。

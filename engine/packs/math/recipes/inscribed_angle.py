@@ -105,7 +105,9 @@ def inscribed_angle_two_chords_intersection_recipe(ctx: CellContext, rng: Rng) -
     assert isinstance(sol.answer, SymbolicAnswer)
 
     statement = (
-        f"右の図で、4点{pa}, {pb}, {pc}, {pd}は円周上にある。∠{pb}{pa}{pc}={bac}°、"
+        # 「右の図で」と書いていたが、このセルは visual: none（D-6）。弦の交点を
+        # 文で指定しているので配置は決まる——図への言及だけを外す。
+        f"4点{pa}, {pb}, {pc}, {pd}がこの順に円周上にある。∠{pb}{pa}{pc}={bac}°、"
         f"∠{pa}{pc}{pd}={acd}° であるとき、2本の弦{pa}{pd}, {pb}{pc}の交点を{pp}として、"
         f"∠{pa}{pp}{pb}の大きさを求めよ"
     )
@@ -192,7 +194,7 @@ def judge_concyclic_from_angle_recipe(ctx: CellContext, rng: Rng) -> MR:
         raise ValueError("judge_concyclic_from_angle_recipe: 有効な角の組を構成できず")
 
     solver = REGISTRY.solver("math.judge_concyclic_from_angle")
-    sol = cast(Solution, solver(angle_c, angle_d))
+    sol = cast(Solution, solver(angle_c, angle_d, pa + pb + pc + pd))
     assert isinstance(sol.answer, ChoiceAnswer)
 
     statement = (
@@ -208,7 +210,7 @@ def judge_concyclic_from_angle_recipe(ctx: CellContext, rng: Rng) -> MR:
     return MR(
         signature=ctx.spec_level.signature, family=ctx.family, level=ctx.level,
         purpose=ctx.purpose, seed=0,
-        params={"angle_c": angle_c, "angle_d": angle_d},
+        params={"angle_c": angle_c, "angle_d": angle_d, "labels": pa + pb + pc + pd},
         given={"statement": statement}, sub_questions=[sub_question], visual_plan=None,
         provenance=Provenance(recipe="math.judge_concyclic_from_angle"),
     )

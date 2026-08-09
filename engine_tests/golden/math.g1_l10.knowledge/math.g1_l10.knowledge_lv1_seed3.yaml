@@ -24,7 +24,7 @@ meta:
   seed: 3
   signature: number_set_term_recall
 problem_ref: 280264b8ad50a170
-problem_text: 48, 80 のように、ものの個数や順番を表すのに使う、1 以上の整数を集めたもの を何といいますか。
+problem_text: 48, 80 のように、ものの個数や順番を表すのに使う、1 以上の整数を集めたものを何といいますか。
 sub_questions:
 - answer:
     correct: 自然数
@@ -41,7 +41,7 @@ sub_questions:
   hints:
   - 説明されている式や数の部分がどれかを読み取る。
   label: (1)
-  prompt_text: choice を求めなさい。
+  prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
     narration: 説明されている式や数の部分がどれかを読み取る。

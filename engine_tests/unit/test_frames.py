@@ -107,6 +107,8 @@ def test_graph_table_vocab_and_visual():
         "expression", "data_table", "situation_params", "equation", "equation2",
         "x_domain", "condition", "line_a", "line_b",
         "polygon_points", "polygon_coordinates", "move_spec",
+        # g1_l32/g1_l35 Lv1: 読ませる格子点の x 座標だけを与える（答えを一意にする）。
+        "x_target",
     })
     assert f.asked_vocab == frozenset({
         "draw_graph", "read_point", "read_intersection", "read_table", "complete_table",

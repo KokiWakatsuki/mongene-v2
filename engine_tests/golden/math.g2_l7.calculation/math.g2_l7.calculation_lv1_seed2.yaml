@@ -39,7 +39,7 @@ sub_questions:
   hints:
   - それぞれの数を表す式の和を、かっこを外して書き出す。
   label: (1)
-  prompt_text: simplified_expr を求めなさい。
+  prompt_text: 式を簡単にしなさい。
   solution_steps:
   - args: []
     narration: それぞれの数を表す式の和を、かっこを外して書き出す。

@@ -42,7 +42,7 @@ sub_questions:
   - x の値を式に代入する。
   - 計算して y の値を求める。
   label: (1)
-  prompt_text: coordinate を求めなさい。
+  prompt_text: 座標を求めなさい。
   solution_steps:
   - args:
     - '4'

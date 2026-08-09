@@ -44,7 +44,7 @@ sub_questions:
   - すべてのわり算を、逆数をかけるかけ算に直す。
   - かけ合わせる数の符号から、積の符号を先に決める。
   label: (1)
-  prompt_text: value を求めなさい。
+  prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
     narration: すべてのわり算を、逆数をかけるかけ算に直す。

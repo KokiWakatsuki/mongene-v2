@@ -16,7 +16,8 @@ import pytest
 
 from engine.bootstrap import bootstrap
 from engine.core.contracts import GenerateOptions, GenerateRequest, Problem, Unsupported
-from engine.core.pipeline import generate
+from engine.core.curriculum import load_curriculum
+from engine.core.pipeline import _default_families, generate
 from engine.core.verify.quality_gates import reset_fp_cache
 
 
@@ -42,14 +43,6 @@ _CASES = [
         "level_not_supported",
         GenerateRequest(subject="math", unit="g2_l25", form="find_value", level=99, seed=1),
         "level_not_supported",
-    ),
-    (
-        # タクソノミーには在るが FamilySpec 未制作。ここが実装されたら、まだ未制作の
-        # 別セルに差し替える（exam_l1.find_value Lv3 は C13 で実装済みになった）。
-        # proof form は frame ごと未実装なので、当面いちばん動かない座標である。
-        "not_implemented",
-        GenerateRequest(subject="math", unit="exam_l6", form="proof", level=3, seed=1),
-        "not_implemented",
     ),
     (
         "purpose_not_supported",  # variant は M0 未対応（黙って base を返さない）
@@ -83,9 +76,51 @@ def test_unsupported_code_fires_and_never_returns_a_problem(
     assert result.code == expected, f"{label}: code={result.code} (期待 {expected})"
 
 
+def test_not_implemented_fires_when_a_family_spec_is_missing() -> None:
+    """FamilySpec 未制作の座標は `not_implemented`（別種の Problem を返さない）。
+
+    **台帳の座標を1つ名指しにはできない。** 630/630 が実装済みになり、
+    「タクソノミーに在るのに FamilySpec が無い」座標はもう1つも残っていない
+    （以前ここに置いていた exam_l6.proof Lv3 も実装された）。かといってこのコードは
+    死んでいない——**セルを1つ足し忘れた／family を消した**ときに出るべきものだからだ。
+    そこで実 curriculum はそのままに、**families から1枚だけ抜いて**発火させる。
+    実エンジンの経路を通しつつ、台帳の側に穴を空けておく必要がなくなる。
+    """
+    families = dict(_default_families())
+    withheld = "math.g2_l25.find_value"
+    assert withheld in families, f"前提が崩れた: {withheld} が families に無い"
+    del families[withheld]
+
+    result = generate(
+        GenerateRequest(subject="math", unit="g2_l25", form="find_value", level=2, seed=1),
+        families=families,
+    )
+    assert not isinstance(result, Problem), "FamilySpec が無いのに Problem が返った（F-5 違反）"
+    assert isinstance(result, Unsupported)
+    assert result.code == "not_implemented", f"code={result.code}"
+
+
+def test_every_taxonomy_coordinate_has_a_family_spec() -> None:
+    """台帳の全座標が実装済みであること（`not_implemented` の裏返し）。
+
+    上のテストが台帳の穴に頼らなくなったぶん、「穴が空いていないこと」は
+    ここで正面から固定する。family を消す・レベルを消すと落ちる。
+    """
+    curriculum = load_curriculum()
+    families = _default_families()
+    missing: list[str] = []
+    for unit, unit_spec in curriculum.units.items():
+        for form, form_spec in (unit_spec.get("forms") or {}).items():
+            spec = families.get(f"math.{unit}.{form}")
+            for level in (form_spec.get("levels") or {}):
+                if spec is None or str(level) not in spec.levels:
+                    missing.append(f"{unit}.{form}.Lv{level}")
+    assert not missing, f"FamilySpec が無い台帳座標: {missing}"
+
+
 def test_all_m0_reachable_codes_are_covered() -> None:
     """本ファイルが M0 で到達可能な全 Unsupported コードを発火していることの自己検査。"""
-    covered = {expected for _, _, expected in _CASES}
+    covered = {expected for _, _, expected in _CASES} | {"not_implemented"}
     m0_reachable = {
         "unit_not_found", "form_not_supported", "level_not_supported",
         "purpose_not_supported", "cause_not_found", "not_implemented",

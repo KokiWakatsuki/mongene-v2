@@ -24,7 +24,7 @@ meta:
   seed: 2
   signature: square_root_term_recall
 problem_ref: 063a03942e16d3eb
-problem_text: 2乗すると 23716 になる数のように、2乗するとその数になるもとの数（正と負の2つがある） を何といいますか。
+problem_text: 2乗すると 23716 になる数のように、2乗するとその数になるもとの数（正と負の2つがある）を何といいますか。
 sub_questions:
 - answer:
     correct: 平方根
@@ -41,7 +41,7 @@ sub_questions:
   hints:
   - 説明されている式や数の部分がどれかを読み取る。
   label: (1)
-  prompt_text: choice を求めなさい。
+  prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
     narration: 説明されている式や数の部分がどれかを読み取る。

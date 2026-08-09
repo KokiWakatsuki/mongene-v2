@@ -26,22 +26,22 @@ meta:
 problem_ref: d1f79c4807a4e70e
 problem_text: '次の式を計算せよ。
 
-  2√63'
+  2√140'
 sub_questions:
 - answer:
-    display: 6√7
+    display: 4√35
     kind: symbolic
-    srepr: Mul(Integer(6), Pow(Integer(7), Rational(1, 2)))
+    srepr: Mul(Integer(4), Pow(Integer(35), Rational(1, 2)))
   cause_tags: []
   concept_tags:
   - radical.simplify_form
   explanation: 'まず、根号の中を素因数分解し、平方の因数を見つける。（平方の因数を見つける）
 
-    次に、平方の因数を根号の外に出して a√b の形にする。（6√7）'
+    次に、平方の因数を根号の外に出して a√b の形にする。（4√35）'
   hints:
   - 根号の中を素因数分解し、平方の因数を見つける。
   label: (1)
-  prompt_text: simplified_expr を求めなさい。
+  prompt_text: 式を簡単にしなさい。
   solution_steps:
   - args: []
     narration: 根号の中を素因数分解し、平方の因数を見つける。
@@ -51,6 +51,6 @@ sub_questions:
   - args: []
     narration: 平方の因数を根号の外に出して a√b の形にする。
     op: take_root_outside
-    result_display: 6√7
-    result_srepr: Mul(Integer(6), Pow(Integer(7), Rational(1, 2)))
+    result_display: 4√35
+    result_srepr: Mul(Integer(4), Pow(Integer(35), Rational(1, 2)))
 visual_svg: null

@@ -39,7 +39,7 @@ sub_questions:
   hints:
   - 標本での該当する個数の割合が、母集団全体でもおよそ等しいとみて比例式をつくる。
   label: (1)
-  prompt_text: value を求めなさい。
+  prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
     narration: 標本での該当する個数の割合が、母集団全体でもおよそ等しいとみて比例式をつくる。

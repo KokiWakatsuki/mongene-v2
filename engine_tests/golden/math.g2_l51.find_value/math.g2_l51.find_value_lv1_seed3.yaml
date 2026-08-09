@@ -24,12 +24,12 @@ meta:
   seed: 3
   signature: probability_single_die_count
 problem_ref: 0f3034a8db54ac34
-problem_text: 1から49までの番号が1つずつ書かれた49枚のカードから1枚を引く。引いたカードの番号が22以下である確率を求めよ。
+problem_text: 1から14までの番号が1つずつ書かれた14枚のカードから1枚を引く。引いたカードの番号が8以下である確率を求めよ。
 sub_questions:
 - answer:
-    display: 22/49
+    display: 4/7
     kind: symbolic
-    srepr: Rational(22, 49)
+    srepr: Rational(4, 7)
   cause_tags: []
   concept_tags:
   - probability.count_single_space
@@ -37,12 +37,12 @@ sub_questions:
 
     次に、そのうち、求める条件にあてはまる場合の数を数える。（条件にあてはまる場合を数える）
 
-    最後に、条件にあてはまる場合の数を、すべての場合の数でわる。（22/49）'
+    最後に、条件にあてはまる場合の数を、すべての場合の数でわる。（4/7）'
   hints:
   - 起こりうるすべての場合を数え上げる。
   - そのうち、求める条件にあてはまる場合の数を数える。
   label: (1)
-  prompt_text: value を求めなさい。
+  prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
     narration: 起こりうるすべての場合を数え上げる。
@@ -57,6 +57,6 @@ sub_questions:
   - args: []
     narration: 条件にあてはまる場合の数を、すべての場合の数でわる。
     op: compute_probability
-    result_display: 22/49
-    result_srepr: Rational(22, 49)
+    result_display: 4/7
+    result_srepr: Rational(4, 7)
 visual_svg: null

@@ -39,7 +39,7 @@ sub_questions:
   hints:
   - 折れ曲がった点を通り、2直線に平行な補助線をひく。
   label: (1)
-  prompt_text: value を求めなさい。
+  prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
     narration: 折れ曲がった点を通り、2直線に平行な補助線をひく。

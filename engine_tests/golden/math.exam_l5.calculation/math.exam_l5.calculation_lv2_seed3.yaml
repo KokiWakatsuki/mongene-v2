@@ -24,24 +24,24 @@ meta:
   seed: 3
   signature: exam_probability_from_counts
 problem_ref: fa80725b4b9d3edc
-problem_text: ある試行で起こりうる場合が全部で10通りあり、そのうち条件に当てはまる場合が5通りである。この条件が起こる確率を求めよ。
+problem_text: 何枚かの数字カードを並べて整数をつくるとき、起こりうる場合は全部で51通りあり、そのうち偶数になる場合は4通りであった。偶数になる確率を求めよ。
 sub_questions:
 - answer:
-    display: 1/2
+    display: 4/51
     kind: symbolic
-    srepr: Rational(1, 2)
+    srepr: Rational(4, 51)
   cause_tags: []
   concept_tags:
   - exam.probability_from_counts
-  explanation: まず、ことがらが起こった回数を、試行の総回数でわる。（1/2）
+  explanation: まず、ことがらが起こった回数を、試行の総回数でわる。（4/51）
   hints:
-  - 問題文の与えられた値をもう一度確認しよう。
+  - ことがらが起こった回数を、試行の総回数でわる。
   label: (1)
-  prompt_text: value を求めなさい。
+  prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
     narration: ことがらが起こった回数を、試行の総回数でわる。
     op: divide_occurred_by_total
-    result_display: 1/2
-    result_srepr: Rational(1, 2)
+    result_display: 4/51
+    result_srepr: Rational(4, 51)
 visual_svg: null

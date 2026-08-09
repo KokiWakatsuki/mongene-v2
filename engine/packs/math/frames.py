@@ -182,6 +182,9 @@ GRAPH_TABLE_FRAME = Frame(
         # ＋移動の指定。Lv1/Lv2 でキー名を分ける（level_sep・G-FP: 同一 family 内で
         # 同じ solver を使い回すため、given_types の相異だけで fp を分離する）。
         "polygon_points", "polygon_coordinates", "move_spec",
+        # g1_l32/g1_l35 Lv1: 読ませる格子点の x 座標だけを与える（式は与えない）。
+        # 「格子点を一つ読み取り」では正解が複数あるのに答えを1つしか持てなかった。
+        "x_target",
     }),
     asked_vocab=frozenset({
         "draw_graph", "read_point", "read_intersection", "read_table", "complete_table",

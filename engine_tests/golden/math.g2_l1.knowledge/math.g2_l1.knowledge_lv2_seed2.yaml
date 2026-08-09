@@ -41,7 +41,7 @@ sub_questions:
   hints:
   - 式が、単独の項か、いくつかの項の和かを見分ける。
   label: (1)
-  prompt_text: choice を求めなさい。
+  prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
     narration: 式が、単独の項か、いくつかの項の和かを見分ける。

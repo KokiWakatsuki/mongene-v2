@@ -41,7 +41,7 @@ sub_questions:
   hints:
   - うしろのかっこの前が - なので、かっこの中の各項の符号を変えてかっこを外す。
   label: (1)
-  prompt_text: simplified_expr を求めなさい。
+  prompt_text: 式を簡単にしなさい。
   solution_steps:
   - args: []
     narration: うしろのかっこの前が - なので、かっこの中の各項の符号を変えてかっこを外す。

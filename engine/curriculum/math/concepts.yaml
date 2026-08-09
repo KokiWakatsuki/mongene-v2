@@ -1272,6 +1272,13 @@ concepts:
   - id: proof_logic_terms.converse_and_counterexample
     label: "命題の逆を判別し、その逆が正しくないことを示す反例を選ぶ"
     unit: g2_l38
+  # 仮定と結論の証明・反例による否定（form: proof・math.conditional_statement_proof）
+  - id: proof_logic.prove_conditional_statement
+    label: "仮定を文字でおき、仮定から結論への1段の筋道を書いて証明する"
+    unit: g2_l38
+  - id: proof_logic.judge_truth_by_counterexample
+    label: "命題の真偽を判断し、正しければ証明を、正しくなければ反例を示す"
+    unit: g2_l38
   - id: isosceles.base_angle_from_apex
     label: "二等辺三角形の頂角から底角を求める"
     unit: g2_l41
@@ -1338,6 +1345,13 @@ concepts:
   - id: pythagorean.identify_hypotenuse
     label: "直角の頂点の位置から斜辺がどの辺かを判別する"
     unit: g3_l51
+  # 三平方の定理の証明（form: proof・math.pythagoras_area_proof）
+  - id: pythagorean.prove_theorem_by_area
+    label: "与えられた図の面積を2通りに表して三平方の定理を証明する"
+    unit: g3_l51
+  - id: pythagorean.construct_area_proof
+    label: "面積を2通りに表せる図を自分で決めて三平方の定理を証明する"
+    unit: g3_l51
   - id: pythagorean.verify_right_triangle
     label: "3辺の長さから三平方の定理の逆で直角三角形かを確かめる"
     unit: g3_l52
@@ -1346,6 +1360,10 @@ concepts:
     unit: g3_l52
   - id: pythagorean.judge_right_triangle
     label: "3辺の長さから直角三角形かを判別する"
+    unit: g3_l52
+  # 三平方の定理の逆による説明（form: proof・math.pythagoras_converse_proof）
+  - id: pythagorean_converse.explain_right_angle
+    label: "3辺の長さと三平方の定理の逆を用いて、ある角が直角であることを説明する"
     unit: g3_l52
   - id: similarity.ratio_transfer
     label: "相似比を用い対応辺の長さを比例式で求める"

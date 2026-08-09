@@ -3817,7 +3817,9 @@ def test_recall_rule_double_solve_property(family, level, seed):
     rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
     mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
     solver = REGISTRY.solver("math.recall_rule_statement")
-    sol = solver(mr.params["topic"], mr.params["concept"])
+    # labels は checker が渡すのと同じ経路（点名を使う規則は選択肢の記号を問題文に
+    # 合わせる。渡さないと「三角形KFDで…」と問うて「ADとABの比」と答えることになる）。
+    sol = solver(mr.params["topic"], mr.params["concept"], mr.params.get("labels"))
     assert sol.answer.correct == mr.sub_questions[0].answer.correct
     assert sol.answer.fact_id == mr.sub_questions[0].answer.fact_id
     # 答えは規則の文（数字トークンなし）＝G-Q5t 素通り。
@@ -6946,19 +6948,27 @@ def test_word_problem_quadratic_double_solve_property(seed, family, level, signa
     assert other_roots[0] < 0
 
     # params の数値はすべて given に現れている（＝読者に見えている数だけを持つ）。
+    # 例外は「言葉で書かれている値」。連続する2数の差 gap は本文では数字ではなく
+    # 「正の整数（差1）／正の偶数・正の奇数（差2）」という語で示されるので、
+    # 数字としては現れない。答えを漏らす値ではない（積から解かないと x は出ない）。
+    _WORD_ENCODED = {"gap"}
     given_text = "".join(mr.given.values())
-    for value in numbers.values():
+    for key, value in numbers.items():
+        if key in _WORD_ENCODED:
+            continue
         assert str(value) in given_text
 
 
 @pytest.mark.parametrize("seed", range(30))
 def test_word_problem_quadratic_non_degenerate(seed):
     """非退化条件: 各場面の構成上の不変量が保たれている。"""
-    # 連続整数: 積は x0(x0+1) 型で常に正
+    # 連続する2数: 積は x0(x0+g) 型で常に正（g=1 は整数、g=2 は偶数・奇数）。
     ctx = _make_ctx("math.g3_l29.word_problem", 2)
     rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
     numbers = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng).params["numbers"]
-    assert int(numbers["product"]) >= 3 * 4
+    gap = int(numbers["gap"])
+    assert gap in (1, 2)
+    assert int(numbers["product"]) >= 2 * (2 + gap)
 
     # 数の関係: multiplier < x0（m>0 を保証する範囲）は diff>0 で確認できる
     ctx = _make_ctx("math.g3_l29.word_problem", 3)
@@ -6986,12 +6996,13 @@ def test_word_problem_quadratic_derived_answer_is_a_pair():
     ctx = _make_ctx("math.g3_l29.word_problem", 2)
     rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
     mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+    gap = int(mr.params["numbers"]["gap"])
     assert [[int(sympy.sympify(v)) for v in row] for row in mr.params["answer_coeffs"]] == [
         [1, 0],
-        [1, 1],
+        [1, gap],
     ]
     small, large = sympy.sympify(mr.sub_questions[-1].answer.srepr)
-    assert large == small + 1
+    assert large == small + gap
     assert mr.sub_questions[-1].steps[-1].op == "derive_asked_quantity"
 
 
@@ -7012,10 +7023,12 @@ def test_word_problem_quadratic_level_sep_places_letters_differently():
         numbers = {k: int(sympy.sympify(v)) for k, v in mr.params["numbers"].items()}
         forms[(family, level)] = FORMULATION_BUILDERS[mr.params["scenario_kind"]](**numbers)
 
-    # g3_l29 Lv2: 積の形 x(x+1)（c=1固定）。g3_l29 Lv3: x² = nx + m（積の形ではない）。
+    # g3_l29 Lv2: 積の形 x(x+g)（g は 1 か 2）。g3_l29 Lv3: x² = nx + m（積の形ではない）。
     lv29_2 = forms[("math.g3_l29.word_problem", 2)].eq
     lv29_3 = forms[("math.g3_l29.word_problem", 3)].eq
-    assert sympy.Poly(lv29_2.lhs - lv29_2.rhs, sympy.Symbol("x")).coeff_monomial(sympy.Symbol("x")) == 1
+    assert sympy.Poly(
+        lv29_2.lhs - lv29_2.rhs, sympy.Symbol("x")
+    ).coeff_monomial(sympy.Symbol("x")) in (1, 2)
     assert lv29_3.lhs == sympy.Symbol("x") ** 2
     # g3_l30 Lv2: 積の形 x(x+d)。g3_l30 Lv3: 差の平方 (s-x)(s+x)（他の3つと系統が違う）。
     lv30_2 = forms[("math.g3_l30.word_problem", 2)]
@@ -7625,6 +7638,11 @@ def test_word_problem_probability_double_solve_property(seed, family, level, sig
     given_text = "".join(mr.given.values())
     for key, value in mr.params["numbers"].items():
         if key == "faces" and int(sympy.sympify(value)) == 6:
+            continue
+        # condition は「和が○以上になる」「積が○になる」のように**語で**本文に
+        # 書かれる（"sum_at_least" という符号そのものは本文に出ない）。
+        # 答えを漏らす値ではない（条件が分かっても数え上げは要る）。
+        if key == "condition":
             continue
         assert str(value) in given_text
     for value in mr.params["slots"].values():

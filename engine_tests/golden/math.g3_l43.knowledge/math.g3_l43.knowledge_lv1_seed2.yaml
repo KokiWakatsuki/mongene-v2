@@ -27,10 +27,10 @@ problem_ref: 34ce73e62b57b6f6
 problem_text: 三角形FGDの辺FG, FD上の点Q, Kについて、FQ:QG=FK:KDが成り立つとき、いえること。正しく述べているものを1つ選びなさい。
 sub_questions:
 - answer:
-    correct: DEとBCが平行である
+    correct: QKとGDが平行である
     distractors:
-    - DEとBCが垂直に交わる
-    - 三角形ABCと三角形ADEが合同である
+    - QKとGDが垂直に交わる
+    - 三角形FGDと三角形FQKが合同である
     fact_id: parallel_segment_ratio_converse.rule.statement
     kind: choice
   cause_tags: []
@@ -38,11 +38,11 @@ sub_questions:
   - parallel_segment_ratio_converse.rule_recall
   explanation: 'まず、問題で問われている規則や約束が、何についてのものかを読み取る。（問われている規則が何についてかを読み取る）
 
-    次に、その規則の正しい内容を思い出して選ぶ。（DEとBCが平行である）'
+    次に、その規則の正しい内容を思い出して選ぶ。（QKとGDが平行である）'
   hints:
   - 問題で問われている規則や約束が、何についてのものかを読み取る。
   label: (1)
-  prompt_text: choice を求めなさい。
+  prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
     narration: 問題で問われている規則や約束が、何についてのものかを読み取る。
@@ -52,6 +52,6 @@ sub_questions:
   - args: []
     narration: その規則の正しい内容を思い出して選ぶ。
     op: recall_correct_rule
-    result_display: DEとBCが平行である
-    result_srepr: DEとBCが平行である
+    result_display: QKとGDが平行である
+    result_srepr: QKとGDが平行である
 visual_svg: null

@@ -28,7 +28,7 @@ def double_solve_similar_solid_surface_volume_ratio(mr: MR) -> Solution:
 def double_solve_similar_triangle_trapezoid_area_ratio(mr: MR) -> Solution:
     p = mr.params
     solver = REGISTRY.solver("math.similar_triangle_trapezoid_area_ratio")
-    return cast(Solution, solver(p["ad"], p["db"]))
+    return cast(Solution, solver(p["ad"], p["db"], p.get("labels")))
 
 
 @register_checker("math.similar_solid_ratio_from_volume.double_solve")

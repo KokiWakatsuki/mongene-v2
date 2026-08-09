@@ -24,7 +24,7 @@ meta:
   seed: 3
   signature: quadratic_function_terms_term_recall
 problem_ref: 95ba0b455e6c2e10
-problem_text: y = 280x² の式で、x² にかけられている数（a にあたる部分）を何というか を何といいますか。
+problem_text: y = 280x² の式で、x² にかけられている数（a にあたる部分）を何といいますか。
 sub_questions:
 - answer:
     correct: 比例定数
@@ -42,7 +42,7 @@ sub_questions:
   hints:
   - 説明されている式や数の部分がどれかを読み取る。
   label: (1)
-  prompt_text: choice を求めなさい。
+  prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
     narration: 説明されている式や数の部分がどれかを読み取る。

@@ -36,6 +36,9 @@ levels:
       term_kinds: [frac, dec, int]
       int_domain: {int_range: [-9, 9], exclude: [0]}
       frac_domain: {frac_range: {num: [-9, 9], den: [2, 9]}}
+      # 答えの分母に上限（定義域は狭めない）。分数と小数を各項で独立に引くので、
+      # 分母 9 と 7 の最小公倍数 63 に小数の 10 と 5 が掛かって 614/315 が出ていた。
+      answer_denominator_max: 12
     given: [expression]
     asked: [value]
     visual: none

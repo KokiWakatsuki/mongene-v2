@@ -33,7 +33,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - linear_function.intersection_of_two_lines
-  explanation: 'まず、2つの直線を ax + by = c の形にそろえて連立方程式を立てる。（Eq(x - y, 5), Eq(3*x - y, 15)）
+  explanation: 'まず、2つの直線を ax + by = c の形にそろえて連立方程式を立てる。（x - y = 5, 3x - y = 15）
 
     次に、係数をそろえて一方の文字を消去し、残った文字を求める。（x = 5）
 
@@ -42,14 +42,14 @@ sub_questions:
   - 2つの直線を ax + by = c の形にそろえて連立方程式を立てる。
   - 係数をそろえて一方の文字を消去し、残った文字を求める。
   label: (1)
-  prompt_text: intersection を求めなさい。
+  prompt_text: 交点の座標を求めなさい。
   solution_steps:
   - args:
     - Eq(x - y, 5)
     - Eq(3*x - y, 15)
     narration: 2つの直線を ax + by = c の形にそろえて連立方程式を立てる。
     op: setup_system
-    result_display: Eq(x - y, 5), Eq(3*x - y, 15)
+    result_display: x - y = 5, 3x - y = 15
     result_srepr: '[Equality(Add(Symbol(''x''), Mul(Integer(-1), Symbol(''y''))), Integer(5)), Equality(Add(Mul(Integer(3), Symbol(''x'')), Mul(Integer(-1), Symbol(''y''))), Integer(15))]'
   - args:
     - Eq(x - y, 5)

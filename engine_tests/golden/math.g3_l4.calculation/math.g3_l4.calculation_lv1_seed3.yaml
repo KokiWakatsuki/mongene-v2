@@ -41,7 +41,7 @@ sub_questions:
   hints:
   - はじめの項の平方・積の2倍・終わりの項の平方を求める。
   label: (1)
-  prompt_text: simplified_expr を求めなさい。
+  prompt_text: 式を簡単にしなさい。
   solution_steps:
   - args: []
     narration: はじめの項の平方・積の2倍・終わりの項の平方を求める。

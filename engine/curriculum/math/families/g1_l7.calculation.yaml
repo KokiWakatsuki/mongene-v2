@@ -23,6 +23,9 @@ levels:
       base_kinds: [int, frac, frac, frac, dec]
       int_domain: {int_range: [-15, -2]}
       frac_domain: {frac_range: {num: [-15, 15], den: [2, 12]}}
+      # 底の定義域は広いまま、**答えの分子・分母**に上限を置く
+      # （狭めると dup_rate が跳ねる。(-14/3)³ = -2744/27 はこれで外れる）。
+      answer_magnitude_max: 2000
       exponent_domain: {int_set: [2, 3]}
     given: [expression]
     asked: [value]
@@ -40,6 +43,9 @@ levels:
       base_kinds: [int, frac, frac]
       int_domain: {int_range: [2, 20]}
       frac_domain: {frac_range: {num: [-15, 15], den: [2, 12]}}
+      # 底の定義域は広いまま、**答えの分子・分母**に上限を置く
+      # （狭めると dup_rate が跳ねる。(-14/3)³ = -2744/27 はこれで外れる）。
+      answer_magnitude_max: 2000
       exponent_domain: {int_set: [2, 3]}
     given: [expression]
     asked: [value]

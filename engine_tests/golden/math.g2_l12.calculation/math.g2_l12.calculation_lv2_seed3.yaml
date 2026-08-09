@@ -44,7 +44,7 @@ sub_questions:
   - y の係数をそろえるため、一方の式を何倍かする。
   - 2式を加減して y を消去し、x を求める。
   label: (1)
-  prompt_text: solution を求めなさい。
+  prompt_text: 解を求めなさい。
   solution_steps:
   - args:
     - 2x + y = -7

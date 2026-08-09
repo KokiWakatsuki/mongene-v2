@@ -48,7 +48,7 @@ sub_questions:
   - 歩いた道のりを x km、自転車で進んだ道のりを y km とおく。
   - 道のりの関係に着目して、1つめの式をつくる。
   label: (1)
-  prompt_text: formulation を求めなさい。
+  prompt_text: 式に表しなさい。
   solution_steps:
   - args: []
     narration: 歩いた道のりを x km、自転車で進んだ道のりを y km とおく。
@@ -78,7 +78,7 @@ sub_questions:
   hints:
   - 係数をそろえて一方の文字を消去し、残った文字を求める。
   label: (2)
-  prompt_text: value を求めなさい。
+  prompt_text: 答えを求めなさい。
   solution_steps:
   - args:
     - Eq(x + y, 44)

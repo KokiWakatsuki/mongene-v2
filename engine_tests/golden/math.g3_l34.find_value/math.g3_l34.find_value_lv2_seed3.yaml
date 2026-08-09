@@ -39,7 +39,7 @@ sub_questions:
   hints:
   - x の変域の両端の値を、それぞれ式に代入して y の値を求める。
   label: (1)
-  prompt_text: domain_range を求めなさい。
+  prompt_text: 変域を求めなさい。
   solution_steps:
   - args: []
     narration: x の変域の両端の値を、それぞれ式に代入して y の値を求める。

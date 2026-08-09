@@ -26,12 +26,12 @@ meta:
 problem_ref: e7745c466618ec8b
 problem_text: '次の計算をせよ。
 
-  2/5+(-4.5)+(-2/7)-1.7'
+  3/5-0.1+(-1/8)+0.25'
 sub_questions:
 - answer:
-    display: -213/35
+    display: 5/8
     kind: symbolic
-    srepr: Rational(-213, 35)
+    srepr: Rational(5, 8)
   cause_tags: []
   concept_tags:
   - signed_number.add_sub_terms_rational
@@ -39,26 +39,26 @@ sub_questions:
 
     次に、分数・小数を通分してそろえる。（分数・小数を通分してそろえる）
 
-    最後に、正の合計と負の合計を合わせて、答えを求める。（-213/35）'
+    最後に、正の合計と負の合計を合わせて、答えを求める。（5/8）'
   hints:
   - かっこを外して、符号のついた項の和とみなす。
   - 分数・小数を通分してそろえる。
   label: (1)
-  prompt_text: value を求めなさい。
+  prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
     narration: かっこを外して、符号のついた項の和とみなす。
     op: drop_parentheses_to_terms
     result_display: かっこを外し項の和とみなす
-    result_srepr: Rational(-213, 35)
+    result_srepr: Rational(5, 8)
   - args: []
     narration: 分数・小数を通分してそろえる。
     op: align_fractions
     result_display: 分数・小数を通分してそろえる
-    result_srepr: Rational(-213, 35)
+    result_srepr: Rational(5, 8)
   - args: []
     narration: 正の合計と負の合計を合わせて、答えを求める。
     op: total_terms
-    result_display: -213/35
-    result_srepr: Rational(-213, 35)
+    result_display: 5/8
+    result_srepr: Rational(5, 8)
 visual_svg: null

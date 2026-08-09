@@ -41,7 +41,7 @@ sub_questions:
   - linear_function.slope_from_two_points
   - linear_function.intercept_from_point
   - linear_function.expression_from_two_points
-  explanation: 'まず、2点をそれぞれ y = ax + b に代入し、a, b の連立方程式を立てる。（Eq(5*a + b, -41/2), Eq(b, -8)）
+  explanation: 'まず、2点をそれぞれ y = ax + b に代入し、a, b の連立方程式を立てる。（5a + b = -41/2, b = -8）
 
     次に、連立方程式を解いて a, b を同時に求める。（a = -5/2, b = -8）
 
@@ -50,14 +50,14 @@ sub_questions:
   - 2点をそれぞれ y = ax + b に代入し、a, b の連立方程式を立てる。
   - 連立方程式を解いて a, b を同時に求める。
   label: (1)
-  prompt_text: expression を求めなさい。
+  prompt_text: 式に表しなさい。
   solution_steps:
   - args:
     - (5, -41/2)
     - (0, -8)
     narration: 2点をそれぞれ y = ax + b に代入し、a, b の連立方程式を立てる。
     op: setup_simultaneous
-    result_display: Eq(5*a + b, -41/2), Eq(b, -8)
+    result_display: 5a + b = -41/2, b = -8
     result_srepr: '[Equality(Add(Mul(Integer(5), Symbol(''a'')), Symbol(''b'')), Rational(-41, 2)), Equality(Symbol(''b''), Integer(-8))]'
   - args:
     - Eq(5*a + b, -41/2)

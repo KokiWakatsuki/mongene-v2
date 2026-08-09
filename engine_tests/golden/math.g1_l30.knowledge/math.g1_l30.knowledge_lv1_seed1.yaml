@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: quadrant_terms_term_recall
 problem_ref: ede4210763069e0b
-problem_text: 座標平面上で、x座標が49のように正、y座標も76のように正である点が含まれる部分 を何といいますか。
+problem_text: 座標平面上で、x座標が49のように正、y座標も76のように正である点が含まれる部分を何といいますか。
 sub_questions:
 - answer:
     correct: 第一象限
@@ -44,7 +44,7 @@ sub_questions:
   hints:
   - 説明されている式や数の部分がどれかを読み取る。
   label: (1)
-  prompt_text: choice を求めなさい。
+  prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
     narration: 説明されている式や数の部分がどれかを読み取る。

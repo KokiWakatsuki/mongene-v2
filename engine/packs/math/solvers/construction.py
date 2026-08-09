@@ -10,6 +10,14 @@ SymPy 恒真。乱数は引かない。図は描かない（描画は visual 層
   座標を入れる。座標は有理数に閉じるように問題側を構成してあるので、一致は厳密に
   判定できる（浮動小数の近似一致に頼らない）。
 
+  **座標と直線の式は `srepr`（機械の照合用）にだけ置き、`display` には出さない。**
+  作図の図には座標軸が無い（線分と点の名前しか描かれていない）ので、
+  「中点(2, -5)」「線分CDの垂直二等分線＝直線 2x - 5y - 29 = 0」と答えても、
+  生徒は自分の作図と照合できない。しかも直線の一般形 ax+by+c=0 は中学の範囲外
+  （一次関数は中2、一般形は高校数II）。**生徒に見せる答えは「何をかいたか」**——
+  「線分CDの垂直二等分線」——であって、その式ではない。手順そのものは教科書どおり
+  なので、直しはこの表示層で閉じている。
+
   角の二等分線だけは、方向が u/|u| + v/|v| になるため一般には無理数になる。そこで
   **2辺の方向ベクトルは長さが整数のもの（(3,4) など）から引く**——こうすると
   二等分線の方向は u*|v| + v*|u| という整数ベクトルになり、厳密に扱える。
@@ -33,10 +41,6 @@ _V = tuple[sympy.Expr, sympy.Expr]
 # ---------------------------------------------------------------------------
 def _pt(x: object, y: object) -> _V:
     return (sympy.nsimplify(x), sympy.nsimplify(y))
-
-
-def _disp(p: _V) -> str:
-    return f"({sympy.sstr(p[0])}, {sympy.sstr(p[1])})"
 
 
 def _srepr_pt(p: _V) -> str:
@@ -76,22 +80,6 @@ def _line_from_normal(p: _V, n: _V) -> sympy.Tuple:
     return _line_coeffs(p, (-n[1], n[0]))
 
 
-def _line_disp(coeffs: sympy.Tuple) -> str:
-    a, b, c = coeffs
-    terms = []
-    if a != 0:
-        terms.append("x" if a == 1 else ("-x" if a == -1 else f"{sympy.sstr(a)}x"))
-    if b != 0:
-        sign = "" if not terms else ("+ " if b > 0 else "- ")
-        mag = abs(b)
-        body = "y" if mag == 1 else f"{sympy.sstr(mag)}y"
-        terms.append(f"{sign}{body}" if terms else (body if b > 0 else f"-{body}"))
-    if c != 0:
-        sign = "+ " if c > 0 else "- "
-        terms.append(f"{sign}{sympy.sstr(abs(c))}")
-    return "直線 " + " ".join(terms) + " = 0"
-
-
 def _intersect(l1: sympy.Tuple, l2: sympy.Tuple) -> _V:
     a1, b1, c1 = l1
     a2, b2, c2 = l2
@@ -128,27 +116,26 @@ def _bisector_dir(u: _V, v: _V) -> _V:
 # 基本作図の手順（steps）。op がレベル分離の材料になる。
 # ---------------------------------------------------------------------------
 def _perp_bisector_steps(a: _V, b: _V, na: str, nb: str, coeffs: sympy.Tuple) -> list[Step]:
-    mid = _midpoint(a, b)
     return [
         Step(
             op="arc_from_first_endpoint",
             args=[na],
             result_srepr=_srepr_pt(a),
-            result_display=f"中心 {na}{_disp(a)}",
+            result_display=f"点{na}を中心とする弧",
             narration=f"点{na}を中心に、線分の長さの半分より大きい半径で弧をかく。",
         ),
         Step(
             op="arc_from_second_endpoint",
             args=[nb],
             result_srepr=_srepr_pt(b),
-            result_display=f"中心 {nb}{_disp(b)}",
+            result_display=f"点{nb}を中心とする同じ半径の弧（先の弧との交点2つ）",
             narration=f"点{nb}を中心に、同じ半径で弧をかき、先の弧との交点を二つ得る。",
         ),
         Step(
             op="draw_perpendicular_bisector",
             args=[na, nb],
             result_srepr=sympy.srepr(coeffs),
-            result_display=f"{_line_disp(coeffs)}（中点{_disp(mid)}を通る）",
+            result_display=f"線分{na}{nb}の垂直二等分線",
             narration="二つの交点を通る直線をひく。これが線分の垂直二等分線になる。",
         ),
     ]
@@ -160,7 +147,7 @@ def _angle_bisector_steps(o: _V, no: str, n1: str, n2: str, coeffs: sympy.Tuple)
             op="arc_from_vertex",
             args=[no],
             result_srepr=_srepr_pt(o),
-            result_display=f"中心 {no}{_disp(o)}",
+            result_display=f"頂点{no}を中心とする弧（二辺との交点2つ）",
             narration=f"頂点{no}を中心に弧をかき、角の二辺との交点をとる。",
         ),
         Step(
@@ -174,7 +161,7 @@ def _angle_bisector_steps(o: _V, no: str, n1: str, n2: str, coeffs: sympy.Tuple)
             op="draw_angle_bisector",
             args=[no],
             result_srepr=sympy.srepr(coeffs),
-            result_display=_line_disp(coeffs),
+            result_display=f"∠{n1}{no}{n2}の二等分線",
             narration="頂点とその交点を通る半直線をひく。これが角の二等分線になる。",
         ),
     ]
@@ -186,7 +173,7 @@ def _perpendicular_steps(p: _V, np_: str, coeffs: sympy.Tuple) -> list[Step]:
             op="arc_from_point_cross_line",
             args=[np_],
             result_srepr=_srepr_pt(p),
-            result_display=f"中心 {np_}{_disp(p)}",
+            result_display=f"点{np_}を中心とする円（直線との交点2つ）",
             narration=f"点{np_}を中心に、直線と二つの点で交わる円をかく。",
         ),
         Step(
@@ -200,7 +187,7 @@ def _perpendicular_steps(p: _V, np_: str, coeffs: sympy.Tuple) -> list[Step]:
             op="draw_perpendicular",
             args=[np_],
             result_srepr=sympy.srepr(coeffs),
-            result_display=_line_disp(coeffs),
+            result_display=f"点{np_}を通り、与えられた直線に垂直な直線",
             narration="もとの点とその交点を通る直線をひく。これが直線への垂線になる。",
         ),
     ]
@@ -223,11 +210,11 @@ def perpendicular_bisector_of_segment(
     mid = _midpoint(a, b)
     coeffs = _line_from_normal(mid, (b[0] - a[0], b[1] - a[1]))
     features = [
-        Feature(kind="midpoint", srepr=_srepr_pt(mid), display=f"中点{_disp(mid)}"),
+        Feature(kind="midpoint", srepr=_srepr_pt(mid), display=f"線分{na_s}{nb_s}の中点"),
         Feature(
             kind="perpendicular_bisector",
             srepr=sympy.srepr(coeffs),
-            display=f"線分{na_s}{nb_s}の垂直二等分線＝{_line_disp(coeffs)}",
+            display=f"線分{na_s}{nb_s}の垂直二等分線（かいた直線）",
         ),
     ]
     return Solution(answer=_graph(features), steps=_perp_bisector_steps(a, b, na_s, nb_s, coeffs))
@@ -254,23 +241,27 @@ def equidistant_point_on_line(
         Feature(
             kind="perpendicular_bisector",
             srepr=sympy.srepr(bis),
-            display=f"線分{na_s}{nb_s}の垂直二等分線＝{_line_disp(bis)}",
+            display=f"線分{na_s}{nb_s}の垂直二等分線（かいた直線）",
         ),
-        Feature(kind="point", srepr=_srepr_pt(p), display=f"点P{_disp(p)}"),
+        Feature(
+            kind="point",
+            srepr=_srepr_pt(p),
+            display=f"点P（線分{na_s}{nb_s}の垂直二等分線と、与えられた直線との交点）",
+        ),
     ]
     steps = _perp_bisector_steps(a, b, na_s, nb_s, bis) + [
         Step(
             op="intersect_with_given_line",
             args=[],
             result_srepr=_srepr_pt(p),
-            result_display=_disp(p),
+            result_display="垂直二等分線と与えられた直線との交点",
             narration="ひいた垂直二等分線と、与えられた直線との交点をとる。",
         ),
         Step(
             op="mark_result_point",
             args=[],
             result_srepr=_srepr_pt(p),
-            result_display=f"P{_disp(p)}",
+            result_display="点P",
             narration=(
                 f"その交点は{na_s}からの距離と{nb_s}からの距離が等しく、"
                 "直線上にもあるので、求める点である。"
@@ -295,11 +286,11 @@ def angle_bisector_of_angle(
     w = _bisector_dir(u, v)
     coeffs = _line_coeffs(o, w)
     features = [
-        Feature(kind="vertex", srepr=_srepr_pt(o), display=f"頂点{no_s}{_disp(o)}"),
+        Feature(kind="vertex", srepr=_srepr_pt(o), display=f"頂点{no_s}"),
         Feature(
             kind="angle_bisector",
             srepr=sympy.srepr(coeffs),
-            display=f"∠{n1_s}{no_s}{n2_s}の二等分線＝{_line_disp(coeffs)}",
+            display=f"∠{n1_s}{no_s}{n2_s}の二等分線（かいた半直線）",
         ),
     ]
     return Solution(
@@ -329,23 +320,27 @@ def equidistant_point_from_two_sides(
         Feature(
             kind="angle_bisector",
             srepr=sympy.srepr(bis),
-            display=f"∠{n1_s}{no_s}{n2_s}の二等分線＝{_line_disp(bis)}",
+            display=f"∠{n1_s}{no_s}{n2_s}の二等分線（かいた半直線）",
         ),
-        Feature(kind="point", srepr=_srepr_pt(p), display=f"点P{_disp(p)}"),
+        Feature(
+            kind="point",
+            srepr=_srepr_pt(p),
+            display=f"点P（∠{n1_s}{no_s}{n2_s}の二等分線と線分{n1_s}{n2_s}との交点）",
+        ),
     ]
     steps = _angle_bisector_steps(o, no_s, n1_s, n2_s, bis) + [
         Step(
             op="intersect_with_given_segment",
             args=[n1_s, n2_s],
             result_srepr=_srepr_pt(p),
-            result_display=_disp(p),
+            result_display=f"二等分線と線分{n1_s}{n2_s}との交点",
             narration="ひいた二等分線と、与えられた線分との交点をとる。",
         ),
         Step(
             op="mark_result_point",
             args=[],
             result_srepr=_srepr_pt(p),
-            result_display=f"P{_disp(p)}",
+            result_display="点P",
             narration=(
                 "角の二等分線上の点は角の二辺までの距離が等しいので、その交点が求める点である。"
             ),
@@ -367,11 +362,11 @@ def perpendicular_through_point(
     name = str(np_)
     coeffs = _line_coeffs(p, (-ld[1], ld[0]))
     features = [
-        Feature(kind="through_point", srepr=_srepr_pt(p), display=f"点{name}{_disp(p)}"),
+        Feature(kind="through_point", srepr=_srepr_pt(p), display=f"点{name}"),
         Feature(
             kind="perpendicular_line",
             srepr=sympy.srepr(coeffs),
-            display=f"点{name}を通る垂線＝{_line_disp(coeffs)}",
+            display=f"点{name}を通る垂線（かいた直線）",
         ),
     ]
     return Solution(answer=_graph(features), steps=_perpendicular_steps(p, name, coeffs))
@@ -395,16 +390,16 @@ def foot_and_point_line_distance(
         Feature(
             kind="perpendicular_line",
             srepr=sympy.srepr(coeffs),
-            display=f"点{name}を通る垂線＝{_line_disp(coeffs)}",
+            display=f"点{name}を通る垂線（かいた直線）",
         ),
-        Feature(kind="foot", srepr=_srepr_pt(h), display=f"垂線の足{hname}{_disp(h)}"),
+        Feature(kind="foot", srepr=_srepr_pt(h), display=f"垂線の足{hname}"),
     ]
     steps = _perpendicular_steps(p, name, coeffs) + [
         Step(
             op="mark_foot_of_perpendicular",
             args=[hname],
             result_srepr=_srepr_pt(h),
-            result_display=f"{hname}{_disp(h)}",
+            result_display=f"垂線の足{hname}",
             narration="ひいた垂線ともとの直線との交点に印をつける。これが垂線の足である。",
         ),
         Step(
@@ -431,11 +426,11 @@ def locus_equidistant_two_points(
     mid = _midpoint(a, b)
     coeffs = _line_from_normal(mid, (b[0] - a[0], b[1] - a[1]))
     features = [
-        Feature(kind="midpoint", srepr=_srepr_pt(mid), display=f"中点{_disp(mid)}"),
+        Feature(kind="midpoint", srepr=_srepr_pt(mid), display=f"線分{na_s}{nb_s}の中点"),
         Feature(
             kind="perpendicular_bisector",
             srepr=sympy.srepr(coeffs),
-            display=f"{na_s}、{nb_s}から等距離の点の集まり＝{_line_disp(coeffs)}",
+            display=f"{na_s}、{nb_s}から等距離の点の集まり＝線分{na_s}{nb_s}の垂直二等分線",
         ),
     ]
     steps = [
@@ -474,14 +469,18 @@ def circumcenter_of_three_points(
         Feature(
             kind="perpendicular_bisector_first",
             srepr=sympy.srepr(bis_ab),
-            display=f"線分{na_s}{nb_s}の垂直二等分線＝{_line_disp(bis_ab)}",
+            display=f"線分{na_s}{nb_s}の垂直二等分線（かいた1本目）",
         ),
         Feature(
             kind="perpendicular_bisector_second",
             srepr=sympy.srepr(bis_bc),
-            display=f"線分{nb_s}{nc_s}の垂直二等分線＝{_line_disp(bis_bc)}",
+            display=f"線分{nb_s}{nc_s}の垂直二等分線（かいた2本目）",
         ),
-        Feature(kind="point", srepr=_srepr_pt(p), display=f"点P{_disp(p)}"),
+        Feature(
+            kind="point",
+            srepr=_srepr_pt(p),
+            display="点P（2本の垂直二等分線の交点）",
+        ),
     ]
     first = _perp_bisector_steps(a, b, na_s, nb_s, bis_ab)
     second = _perp_bisector_steps(b, c, nb_s, nc_s, bis_bc)
@@ -493,14 +492,14 @@ def circumcenter_of_three_points(
             op="arc_from_third_point",
             args=[nc_s],
             result_srepr=_srepr_pt(c),
-            result_display=f"中心 {nc_s}{_disp(c)}",
+            result_display=f"点{nc_s}を中心とする弧",
             narration=f"次の組についても、点{nc_s}を中心に同じ要領で弧をかく。",
         ),
         Step(
             op="arc_from_shared_point",
             args=[nb_s],
             result_srepr=_srepr_pt(b),
-            result_display=f"中心 {nb_s}{_disp(b)}",
+            result_display=f"点{nb_s}を中心とする同じ半径の弧（先の弧との交点2つ）",
             narration="組のもう一方の点を中心に、同じ半径で弧をかいて交点を得る。",
         ),
         Step(
@@ -514,14 +513,14 @@ def circumcenter_of_three_points(
             op="intersect_two_bisectors",
             args=[],
             result_srepr=_srepr_pt(p),
-            result_display=_disp(p),
+            result_display="2本の垂直二等分線の交点",
             narration="二本の垂直二等分線の交点をとる。",
         ),
         Step(
             op="mark_result_point",
             args=[],
             result_srepr=_srepr_pt(p),
-            result_display=f"P{_disp(p)}",
+            result_display="点P",
             narration="その交点はどの点からの距離も等しいので、求める点である。",
         ),
     ]
@@ -550,9 +549,13 @@ def point_on_side_equidistant_from_two_sides(
         Feature(
             kind="angle_bisector",
             srepr=sympy.srepr(bis),
-            display=f"∠{nb_s}{na_s}{nc_s}の二等分線＝{_line_disp(bis)}",
+            display=f"∠{nb_s}{na_s}{nc_s}の二等分線（かいた半直線）",
         ),
-        Feature(kind="point", srepr=_srepr_pt(p), display=f"点P{_disp(p)}"),
+        Feature(
+            kind="point",
+            srepr=_srepr_pt(p),
+            display=f"点P（∠{nb_s}{na_s}{nc_s}の二等分線と辺{nb_s}{nc_s}との交点）",
+        ),
     ]
     steps = [
         Step(
@@ -570,14 +573,14 @@ def point_on_side_equidistant_from_two_sides(
             op="intersect_with_opposite_side",
             args=[nb_s, nc_s],
             result_srepr=_srepr_pt(p),
-            result_display=_disp(p),
+            result_display=f"二等分線と辺{nb_s}{nc_s}との交点",
             narration="ひいた二等分線と、向かい合う辺との交点をとる。",
         ),
         Step(
             op="mark_result_point",
             args=[],
             result_srepr=_srepr_pt(p),
-            result_display=f"P{_disp(p)}",
+            result_display="点P",
             narration="その交点は辺の上にあり、二辺までの距離も等しいので、求める点である。",
         ),
     ]

@@ -24,12 +24,12 @@ meta:
   seed: 3
   signature: quad_rectangle_area_positive_root
 problem_ref: 1827c06820fb961c
-problem_text: 縦が x cm、横が (x + 5) cm の長方形の面積が 1116cm² であるとき、x の値を求めよ。
+problem_text: 縦が x cm、横が (x + 5) cm の長方形の面積が 84cm² であるとき、x の値を求めよ。
 sub_questions:
 - answer:
-    display: '31'
+    display: '7'
     kind: symbolic
-    srepr: Integer(31)
+    srepr: Integer(7)
   cause_tags: []
   concept_tags:
   - quadratic.solve_from_rectangle_area
@@ -39,13 +39,13 @@ sub_questions:
 
     次に、積が 0 になるのは各因数が 0 のときだから、それぞれを 0 とおいて x を求める。
 
-    最後に、求めるものは正の数だから、2つの解のうち条件に合う正の解を選ぶ。（31）'
+    最後に、求めるものは正の数だから、2つの解のうち条件に合う正の解を選ぶ。（7）'
   hints:
   - かっこを展開し、右辺を左辺に移項して、=0 の形に整理する。
   - 左辺を因数分解する。
   - 積が 0 になるのは各因数が 0 のときだから、それぞれを 0 とおいて x を求める。
   label: (1)
-  prompt_text: value を求めなさい。
+  prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
     narration: かっこを展開し、右辺を左辺に移項して、=0 の形に整理する。
@@ -65,6 +65,6 @@ sub_questions:
   - args: []
     narration: 求めるものは正の数だから、2つの解のうち条件に合う正の解を選ぶ。
     op: select_positive_root
-    result_display: '31'
-    result_srepr: Integer(31)
+    result_display: '7'
+    result_srepr: Integer(7)
 visual_svg: null

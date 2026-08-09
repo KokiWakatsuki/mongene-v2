@@ -26,13 +26,32 @@ from engine.core.contracts import Solution, Step, SymbolicAnswer
 from engine.core.registry import register_solver
 
 
+def _points(labels: object, default: str = "ABCDE") -> tuple[str, str, str, str, str]:
+    """頂点の記号（A,B,C,D,E の順）。
+
+    **問題文の頂点名は recipe が引く**ので、solver がここを固定にすると
+    「三角形EABで…辺ABの長さを求めよ」と問うて「DE∥BC であることから、
+    三角形ADEと三角形ABCが相似になる」と解説することになる（実際そうなっていた）。
+    recipe から受け取り、無ければ既定を使う。
+    """
+    s = str(labels or default)
+    if len(s) < 5:
+        s = default
+    return (s[0], s[1], s[2], s[3], s[4])
+
+
 @register_solver("math.parallel_segment_ratio_length")
-def parallel_segment_ratio_length(ad: object, db: object, de: object) -> Solution:
+def parallel_segment_ratio_length(
+    ad: object, db: object, de: object, labels: object = None
+) -> Solution:
     """DE∥BC のとき、AD,DB,DE から辺BCの長さを求める（g3_l42.find_value Lv2）。
 
     ad/db/de だけから、DE∥BC により三角形ADE∽三角形ABCとなり
     AD:AB=DE:BC が成り立つという恒真の性質で計算する（double-solve）。
+    `labels` は問題文の頂点名（A,B,C,D,E の順）で、解説の記号を問題文に
+    合わせるためだけに使う（計算には効かない）。
     """
+    pa, pb, pc, pd, pe = _points(labels)
     a = sympy.sympify(str(ad))
     b = sympy.sympify(str(db))
     e = sympy.sympify(str(de))
@@ -43,25 +62,31 @@ def parallel_segment_ratio_length(ad: object, db: object, de: object) -> Solutio
         Step(
             op="identify_similar_triangles_from_parallel",
             args=[], result_srepr="", result_display="平行線がつくる相似な三角形を見つける",
-            narration="DE∥BC であることから、三角形ADEと三角形ABCが相似になることを見つける。",
+            narration=f"{pd}{pe}∥{pb}{pc} であることから、三角形{pa}{pd}{pe}と"
+            f"三角形{pa}{pb}{pc}が相似になることを見つける。",
         ),
         Step(
             op="apply_parallel_segment_ratio",
             args=[], result_srepr=srepr, result_display=disp,
-            narration="AD:AB=DE:BC が成り立つことから、辺BCの長さを求める。",
+            narration=f"{pa}{pd}:{pa}{pb}={pd}{pe}:{pb}{pc} が成り立つことから、"
+            f"辺{pb}{pc}の長さを求める。",
         ),
     ]
     return Solution(answer=SymbolicAnswer(srepr=srepr, display=disp), steps=steps)
 
 
 @register_solver("math.judge_parallel_from_ratio")
-def judge_parallel_from_ratio(ad: object, db: object, ae: object, ec: object) -> Solution:
+def judge_parallel_from_ratio(
+    ad: object, db: object, ae: object, ec: object, labels: object = None
+) -> Solution:
     """AD:DBとAE:ECの比を比べて、DE∥BCといえるかを確かめる（g3_l43.find_value Lv2）。
 
     ad/db/ae/ec だけから、AD:DB=AE:EC が成り立つならば平行線と線分の比の定理の
     逆によりDE∥BCといえるという恒真の判定で計算する（double-solve）。答えは
-    真偽値のSymbolicAnswer。
+    真偽値のSymbolicAnswer。`labels` は問題文の頂点名（A,B,C,D,E の順）で、
+    解説の記号を問題文に合わせるためだけに使う（判定には効かない）。
     """
+    pa, pb, pc, pd, pe = _points(labels)
     a, b, c, d = int(str(ad)), int(str(db)), int(str(ae)), int(str(ec))
     is_parallel = a * d == b * c
     result = sympy.true if is_parallel else sympy.false
@@ -70,13 +95,15 @@ def judge_parallel_from_ratio(ad: object, db: object, ae: object, ec: object) ->
     steps = [
         Step(
             op="compare_division_ratios",
-            args=[], result_srepr="", result_display="AD:DBとAE:ECの比を比べる",
-            narration="AD:DBとAE:ECの比が等しいかどうかを比べる。",
+            args=[], result_srepr="",
+            result_display=f"{pa}{pd}:{pd}{pb}と{pa}{pe}:{pe}{pc}の比を比べる",
+            narration=f"{pa}{pd}:{pd}{pb}と{pa}{pe}:{pe}{pc}の比が等しいかどうかを比べる。",
         ),
         Step(
             op="judge_by_parallel_ratio_converse",
             args=[], result_srepr=srepr, result_display=disp,
-            narration="平行線と線分の比の定理の逆から、DEとBCが平行であるかどうかを判別する。",
+            narration=f"平行線と線分の比の定理の逆から、{pd}{pe}と{pb}{pc}が"
+            "平行であるかどうかを判別する。",
         ),
     ]
     return Solution(answer=SymbolicAnswer(srepr=srepr, display=disp), steps=steps)
@@ -113,7 +140,7 @@ def parallel_lines_transversal_ratio(ab: object, de: object, ef: object) -> Solu
 
 @register_solver("math.parallel_ratio_judge_then_length")
 def parallel_ratio_judge_then_length(
-    ad: object, db: object, ae: object, ec: object, de: object
+    ad: object, db: object, ae: object, ec: object, de: object, labels: object = None
 ) -> Solution:
     """AD:DBとAE:ECの比が等しいことからDE∥BCを確かめたうえで、DEの長さから
 
@@ -123,8 +150,8 @@ def parallel_ratio_judge_then_length(
     合成した double-solve。ad/db/ae/ec/de だけから計算する（新しい数学的
     計算は増やさない）。
     """
-    judge_sol = judge_parallel_from_ratio(ad, db, ae, ec)
-    length_sol = parallel_segment_ratio_length(ad, db, de)
+    judge_sol = judge_parallel_from_ratio(ad, db, ae, ec, labels)
+    length_sol = parallel_segment_ratio_length(ad, db, de, labels)
     assert isinstance(length_sol.answer, SymbolicAnswer)
     steps = list(judge_sol.steps) + list(length_sol.steps)
     return Solution(answer=length_sol.answer, steps=steps)

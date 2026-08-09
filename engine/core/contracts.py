@@ -10,7 +10,7 @@ from __future__ import annotations
 
 from typing import Any, Literal, Protocol, Union, runtime_checkable
 
-from pydantic import BaseModel, ConfigDict, Field, field_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
 # ---------------------------------------------------------------------------
 # 語彙（Literal）
@@ -297,6 +297,26 @@ class SpecLevel(BaseModel):
     hints: list[str] = Field(default_factory=list)
     concept_tags: list[str] = Field(default_factory=list)
     cause_tags: list[str] = Field(default_factory=list)
+    # **問題空間が本質的に狭いセルの、重複率の上限**（既定 0.20 を上書きする）。
+    #
+    # 多角形の内角・外角のように、**教材にありうる設定が十数通りしかない**単元がある。
+    # 正多角形なら三角形〜正三十六角形あたりまでで、それ以上は問題集に出ない。
+    # 既定の 0.20 を通そうとすると「正348角形」「1つの内角が 4860/29°」を作ることになり、
+    # 実際そうなっていた（確率の「1から28までの目が出るさいころ」も同じ理由で入っていた）。
+    #
+    # **数を現実に戻すのが先で、重複は仕様として宣言する。** 宣言するときは
+    # `dup_rate_reason` に「なぜ狭いのか」を書くこと（書かないとロードで落ちる）。
+    dup_rate_max: float | None = None
+    dup_rate_reason: str = ""
+
+    @model_validator(mode="after")
+    def _dup_rate_needs_reason(self) -> "SpecLevel":
+        if self.dup_rate_max is not None and not self.dup_rate_reason.strip():
+            raise ValueError(
+                "dup_rate_max を宣言するときは dup_rate_reason に理由を書くこと"
+                "（問題空間が狭い根拠が無いまま閾値を上げると、質の低下が隠れる）"
+            )
+        return self
 
 
 class SpecFamily(BaseModel):

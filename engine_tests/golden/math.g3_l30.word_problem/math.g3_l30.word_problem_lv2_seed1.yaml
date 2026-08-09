@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: word_problem_quadratic_rectangle_area
 problem_ref: b64ef35443ae5d40
-problem_text: '横が縦より15cm長い長方形がある。その面積は1924cm²である。
+problem_text: '横が縦より6cm長い長方形がある。その面積は55cm²である。
 
   縦の長さを x cm とする。
 
@@ -33,19 +33,19 @@ problem_text: '横が縦より15cm長い長方形がある。その面積は1924
   (2) 縦の長さを求めよ。'
 sub_questions:
 - answer:
-    display: x(x + 15) = 1924
+    display: x(x + 6) = 55
     kind: symbolic
-    srepr: Equality(Mul(Symbol('x'), Add(Symbol('x'), Integer(15))), Integer(1924))
+    srepr: Equality(Mul(Symbol('x'), Add(Symbol('x'), Integer(6))), Integer(55))
   cause_tags: []
   concept_tags:
   - quadratic.word_problem_rectangle_area
   explanation: 'まず、場面の中で、どちらの見方でも同じになる（等しくなっている）量に着目する。（長方形の面積）
 
-    次に、その量を x を使って両辺に表し、方程式をつくる。（x(x + 15) = 1924）'
+    次に、その量を x を使って両辺に表し、方程式をつくる。（x(x + 6) = 55）'
   hints:
   - 場面の中で、どちらの見方でも同じになる（等しくなっている）量に着目する。
   label: (1)
-  prompt_text: formulation を求めなさい。
+  prompt_text: 式に表しなさい。
   solution_steps:
   - args: []
     narration: 場面の中で、どちらの見方でも同じになる（等しくなっている）量に着目する。
@@ -55,12 +55,12 @@ sub_questions:
   - args: []
     narration: その量を x を使って両辺に表し、方程式をつくる。
     op: formulate_equation
-    result_display: x(x + 15) = 1924
-    result_srepr: Equality(Mul(Symbol('x'), Add(Symbol('x'), Integer(15))), Integer(1924))
+    result_display: x(x + 6) = 55
+    result_srepr: Equality(Mul(Symbol('x'), Add(Symbol('x'), Integer(6))), Integer(55))
 - answer:
-    display: 37cm
+    display: 5cm
     kind: symbolic
-    srepr: Tuple(Integer(37))
+    srepr: Tuple(Integer(5))
   cause_tags: []
   concept_tags:
   - quadratic.word_problem_rectangle_area
@@ -70,13 +70,13 @@ sub_questions:
 
     次に、積が 0 になるのは各因数が 0 のときだから、それぞれを 0 とおいて x を求める。
 
-    最後に、求めるものは正の数だから、2つの解のうち条件に合う正の解を選ぶ。（37）'
+    最後に、求めるものは正の数だから、2つの解のうち条件に合う正の解を選ぶ。（5）'
   hints:
   - かっこを展開し、右辺を左辺に移項して、=0 の形に整理する。
   - 左辺を因数分解する。
   - 積が 0 になるのは各因数が 0 のときだから、それぞれを 0 とおいて x を求める。
   label: (2)
-  prompt_text: value を求めなさい。
+  prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
     narration: かっこを展開し、右辺を左辺に移項して、=0 の形に整理する。
@@ -96,6 +96,6 @@ sub_questions:
   - args: []
     narration: 求めるものは正の数だから、2つの解のうち条件に合う正の解を選ぶ。
     op: select_positive_root
-    result_display: '37'
-    result_srepr: Integer(37)
+    result_display: '5'
+    result_srepr: Integer(5)
 visual_svg: null

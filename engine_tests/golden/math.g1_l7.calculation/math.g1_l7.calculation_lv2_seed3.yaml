@@ -26,31 +26,31 @@ meta:
 problem_ref: ee2ebc40b479e7c6
 problem_text: '次の計算をせよ。
 
-  (-7/4)²'
+  (-7/8)²'
 sub_questions:
 - answer:
-    display: 49/16
+    display: 49/64
     kind: symbolic
-    srepr: Rational(49, 16)
+    srepr: Rational(49, 64)
   cause_tags: []
   concept_tags:
   - signed_number.power_sign_contrast
   explanation: 'まず、指数がどの数にかかっているか（かっこの有無）を見分ける。（指数のかかる数を見分ける）
 
-    次に、符号に注意して計算し、累乗の値を求める。（49/16）'
+    次に、符号に注意して計算し、累乗の値を求める。（49/64）'
   hints:
   - 指数がどの数にかかっているか（かっこの有無）を見分ける。
   label: (1)
-  prompt_text: value を求めなさい。
+  prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
     narration: 指数がどの数にかかっているか（かっこの有無）を見分ける。
     op: identify_base_scope
     result_display: 指数のかかる数を見分ける
-    result_srepr: Rational(49, 16)
+    result_srepr: Rational(49, 64)
   - args: []
     narration: 符号に注意して計算し、累乗の値を求める。
     op: evaluate_power_with_sign
-    result_display: 49/16
-    result_srepr: Rational(49, 16)
+    result_display: 49/64
+    result_srepr: Rational(49, 64)
 visual_svg: null

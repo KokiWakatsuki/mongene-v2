@@ -24,7 +24,7 @@ meta:
   seed: 2
   signature: congruence_condition_terms_term_recall
 problem_ref: 1908c5406e1e9db0
-problem_text: 三角形MRQと三角形EGHで、1組の辺とその両端の角がそれぞれ等しいとわかっているとき、合同を示すのに使える条件 を何といいますか。
+problem_text: 三角形MRQと三角形EGHで、1組の辺とその両端の角がそれぞれ等しいとわかっているとき、合同を示すのに使える条件を何といいますか。
 sub_questions:
 - answer:
     correct: 一辺とその両端の角がそれぞれ等しい
@@ -42,7 +42,7 @@ sub_questions:
   hints:
   - 説明されている式や数の部分がどれかを読み取る。
   label: (1)
-  prompt_text: choice を求めなさい。
+  prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
     narration: 説明されている式や数の部分がどれかを読み取る。

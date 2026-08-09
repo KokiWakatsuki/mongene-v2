@@ -24,7 +24,7 @@ meta:
   seed: 3
   signature: proof_logic_terms_term_recall
 problem_ref: ecd6a60eafe49974
-problem_text: 「a、bが464より大きい数ならば、a+bも464より大きい」という文で、「ならば」の後に書かれている部分 を何といいますか。
+problem_text: 「a、bが464より大きい数ならば、a+bも464より大きい」という文で、「ならば」の後に書かれている部分を何といいますか。
 sub_questions:
 - answer:
     correct: 結論
@@ -42,7 +42,7 @@ sub_questions:
   hints:
   - 説明されている式や数の部分がどれかを読み取る。
   label: (1)
-  prompt_text: choice を求めなさい。
+  prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
     narration: 説明されている式や数の部分がどれかを読み取る。

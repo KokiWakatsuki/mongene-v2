@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: system_term_recall
 problem_ref: 178ab225466e41d0
-problem_text: 連立方程式 6x + y = 2, 5x - 5y = 6 を、どちらも成り立たせる x, y の値の組 を何といいますか。
+problem_text: 連立方程式 6x + y = 2, 5x - 5y = 6 を、どちらも成り立たせる x, y の値の組を何といいますか。
 sub_questions:
 - answer:
     correct: 連立方程式の解
@@ -42,7 +42,7 @@ sub_questions:
   hints:
   - 説明されている方程式や値の組がどれかを読み取る。
   label: (1)
-  prompt_text: choice を求めなさい。
+  prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
     narration: 説明されている方程式や値の組がどれかを読み取る。

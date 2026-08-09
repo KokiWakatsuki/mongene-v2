@@ -39,9 +39,9 @@ sub_questions:
   - probability.interpret_relative_frequency_limit
   explanation: まず、試行回数を増やしたときに相対度数が近づく値が、何を表すかを思い出す。（その事象の起こる確率）
   hints:
-  - 問題文の与えられた値をもう一度確認しよう。
+  - 試行回数を増やしたときに相対度数が近づく値が、何を表すかを思い出す。
   label: (1)
-  prompt_text: choice を求めなさい。
+  prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
     narration: 試行回数を増やしたときに相対度数が近づく値が、何を表すかを思い出す。

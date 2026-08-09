@@ -20,7 +20,8 @@ levels:
     signature: probability_complement
     recipe: math.probability_complement
     params:
-      faces_domain: {int_range: [4, 30]}
+      # さいころは6面（20面のさいころは存在しない。D-13 と同じ理由）。
+      faces_domain: {int_set: [6]}
     given: [condition]
     asked: [value]
     visual: none
@@ -28,11 +29,22 @@ levels:
     hints: [steps_prefix]
     concept_tags: [probability.complement]
     cause_tags: []
+    dup_rate_max: 0.75
+    dup_rate_reason: >-
+      余事象の答え 1−p は、条件が違っても確率が同じなら同じ値になる。大小2個のさいころ（6面）では34通りしか残らない。面数を30面まで広げれば通るが、存在しないさいころになる（D-13 と同じ）。数を現実に戻したうえで重複を仕様として宣言する。
   "3":
     signature: probability_at_least_one
     recipe: math.probability_at_least_one
     params:
-      trials_domain: {int_range: [3, 12]}
+      # 台帳の例は「3枚の硬貨」。以前は 3〜12 回で、しかも
+      # 「1から28までの目が出るさいころ」まで作っていた（dup_rate を通すため）。
+      # **道具は実在するものに戻し、組み合わせは場面の数で稼ぐ**
+      # （`recipes/probability.py` の `_AT_LEAST_ONE_SCENES` が61場面）。
+      # 61場面 × 4回 = 244通りで dup_rate 0.15。
+      trials_domain: {int_range: [2, 5]}
+      # 余事象の分母は（全事象の大きさ）^（回数）。20枚のカードを4回で 160000 に
+      # なっていたので、教科書の上限（6⁴=1296）で場面と回数の組を絞る。
+      denominator_max: 1296
     given: [condition]
     asked: [value]
     visual: none

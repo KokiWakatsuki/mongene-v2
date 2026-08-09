@@ -21,6 +21,7 @@ from engine.core.contracts import (
 from engine.core.registry import REGISTRY, register_recipe
 from engine.core.rng import Rng, draw
 from engine.packs.math.recipes.letter_expr import _draw_distinct_points
+from engine.packs.math.recipes.similarity import _proportional_lengths
 
 
 def _effective_concept_tags(ctx: CellContext) -> list[str]:
@@ -44,17 +45,26 @@ def similar_triangle_x_shape_recipe(ctx: CellContext, rng: Rng) -> MR:
     （g3_l40.find_value Lv2・answer-first）。
     """
     p = ctx.spec_level.params
-    oa = int(draw(p["length_domain"], rng))
-    ob = int(draw(p["length_domain"], rng))
-    oc = int(draw(p["length_domain"], rng))
+    # OD = OB·OC/OA なので、OC を OA の倍数にとらないと答えが分数になる
+    # （OA=168, OB=195, OC=97 で OD=6630/133 が出ていた）。
+    pa, pb, pc, pd, po = _draw_distinct_points(5, rng)
+    oa, ob, oc, _ = _proportional_lengths(
+        rng,
+        ratio_max=int(p["ratio_max"]),
+        scale_max=int(p["scale_max"]),
+        side_max=int(p["side_max"]),
+    )
 
     solver = REGISTRY.solver("math.similar_triangle_x_shape")
-    sol = cast(Solution, solver(oa, ob, oc))
+    sol = cast(Solution, solver(oa, ob, oc, pa + pb + pc + pd + po))
     assert isinstance(sol.answer, SymbolicAnswer)
 
+    # 交わるのは AC と BD（AB と CD は平行なので交わらない。前は
+    # 「線分ABと線分CDが点Oで交わり、AB∥CD」＝図として成り立たない文だった）。
     statement = (
-        f"線分ABと線分CDが点Oで交わり、AB∥CDである。OA={oa}cm, OB={ob}cm, OC={oc}cm "
-        "のとき、相似な三角形を見つけて線分ODの長さを求めよ"
+        f"線分{pa}{pc}と線分{pb}{pd}が点{po}で交わり、{pa}{pb}∥{pc}{pd}である。"
+        f"{po}{pa}={oa}cm, {po}{pb}={ob}cm, {po}{pc}={oc}cm "
+        f"のとき、相似な三角形を見つけて線分{po}{pd}の長さを求めよ"
     )
 
     sub_question = SubQuestionMR(
@@ -64,7 +74,7 @@ def similar_triangle_x_shape_recipe(ctx: CellContext, rng: Rng) -> MR:
     return MR(
         signature=ctx.spec_level.signature, family=ctx.family, level=ctx.level,
         purpose=ctx.purpose, seed=0,
-        params={"oa": oa, "ob": ob, "oc": oc},
+        params={"oa": oa, "ob": ob, "oc": oc, "labels": pa + pb + pc + pd + po},
         given={"condition": statement}, sub_questions=[sub_question], visual_plan=None,
         provenance=Provenance(recipe="math.similar_triangle_x_shape"),
     )

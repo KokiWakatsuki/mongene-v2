@@ -47,7 +47,7 @@ sub_questions:
   - もう一方の倍数の条件にあてはまる場合の数を数え、その確率を求める。
   - 両方の倍数に共通してあてはまる場合の数を数え、その確率を求める。
   label: (1)
-  prompt_text: value を求めなさい。
+  prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
     narration: 一方の倍数の条件にあてはまる場合の数を数え、その確率を求める。

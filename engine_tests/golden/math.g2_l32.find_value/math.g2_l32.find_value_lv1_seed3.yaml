@@ -39,7 +39,7 @@ sub_questions:
   hints:
   - 平行な2直線と1本の直線がつくる同位角の関係を確認する。
   label: (1)
-  prompt_text: value を求めなさい。
+  prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
     narration: 平行な2直線と1本の直線がつくる同位角の関係を確認する。

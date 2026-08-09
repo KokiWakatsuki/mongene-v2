@@ -37,9 +37,9 @@ sub_questions:
   - polynomial.factor_common
   explanation: まず、各項に共通する因数をかっこの外にくくり出す。（6m(3m + 4)）
   hints:
-  - 問題文の与えられた値をもう一度確認しよう。
+  - 各項に共通する因数をかっこの外にくくり出す。
   label: (1)
-  prompt_text: simplified_expr を求めなさい。
+  prompt_text: 式を簡単にしなさい。
   solution_steps:
   - args: []
     narration: 各項に共通する因数をかっこの外にくくり出す。

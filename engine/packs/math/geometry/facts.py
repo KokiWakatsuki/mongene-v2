@@ -288,6 +288,42 @@ def tri_text(t: tuple[Point, Point, Point]) -> str:
     return f"△{t[0]}{t[1]}{t[2]}"
 
 
+_QUAD_NAMES = {
+    "parallelogram": "平行四辺形",
+    "rectangle": "長方形",
+    "rhombus": "ひし形",
+    "square": "正方形",
+}
+
+
+def _quad_text(f: Fact, *, predicative: bool) -> str:
+    """四角形の種類。`predicative` で言い切るかどうかを分ける。
+
+    証明の本文では「四角形ABCD は平行四辺形である」と言い切る。
+    問題文の結論に差し込むときは言い切ってはいけない——テンプレートが
+    「〜であることを証明せよ」を付けるので、「平行四辺形である であることを
+    証明せよ」と二重になる（実際6セルで起きていた）。
+    """
+    body = f"四角形{''.join(f.args[0])} は{_QUAD_NAMES[f.kind]}"
+    return f"{body}である" if predicative else body
+
+
+def goal_text(f: Fact) -> str:
+    """問題文の「このとき、〜ことを証明せよ」に差し込む形（**言い切りまで作る**）。
+
+    「である」をどちら側が持つかで空きが変わるので、ここで持つ。
+      数式の事実  「AB ＝ CD である」  … 数式と助詞の間は空ける（教科書の組み方）
+      四角形の種類「四角形ABCD は平行四辺形である」… 日本語なので詰める
+
+    テンプレート側で「〜 であることを証明せよ」と付けていたときは、
+    四角形で「平行四辺形である であることを証明せよ」と二重になり、
+    片方を消すと今度は「平行四辺形 であることを」と語中に空きが残った。
+    """
+    if f.kind in _QUAD_NAMES:
+        return _quad_text(f, predicative=True)
+    return f"{fact_text(f)} である"
+
+
 def fact_text(f: Fact) -> str:
     """事実の日本語（証明文の「主張」欄に入る文字列）。"""
     if f.kind == "seg_eq":
@@ -312,13 +348,7 @@ def fact_text(f: Fact) -> str:
     if f.kind == "right_angle":
         return f"{ang_text(f.args[0])} ＝ 90°"
     if f.kind in ("parallelogram", "rectangle", "rhombus", "square"):
-        name = {
-            "parallelogram": "平行四辺形",
-            "rectangle": "長方形",
-            "rhombus": "ひし形",
-            "square": "正方形",
-        }[f.kind]
-        return f"四角形{''.join(f.args[0])} は{name}である"
+        return _quad_text(f, predicative=True)
     if f.kind == "seg_half":
         return f"{seg_text(f.args[0])} ＝ ½{seg_text(f.args[1])}"
     if f.kind == "ratio_eq":
@@ -344,6 +374,7 @@ __all__ = [
     "ang_text",
     "collinear",
     "fact_text",
+    "goal_text",
     "is_common_segment",
     "midpoint",
     "on_circle",

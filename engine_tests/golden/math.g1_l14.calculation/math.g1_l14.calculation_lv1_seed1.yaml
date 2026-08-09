@@ -37,9 +37,9 @@ sub_questions:
   - notation.quotient_as_fraction
   explanation: まず、除法の記号 ÷ を使わず、分数の形で表す。（y/a）
   hints:
-  - 問題文の与えられた値をもう一度確認しよう。
+  - 除法の記号 ÷ を使わず、分数の形で表す。
   label: (1)
-  prompt_text: simplified_expr を求めなさい。
+  prompt_text: 式を簡単にしなさい。
   solution_steps:
   - args: []
     narration: 除法の記号 ÷ を使わず、分数の形で表す。

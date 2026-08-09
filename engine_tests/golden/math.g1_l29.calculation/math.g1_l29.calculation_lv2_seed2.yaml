@@ -24,7 +24,7 @@ meta:
   seed: 2
   signature: direct_proportion_evaluate_signed
 problem_ref: d033d1e5bb05a0f2
-problem_text: 比例の式 y = 1/4x について、x = 1 のときの y の値を求めよ。
+problem_text: 比例の式 y = (1/4)x について、x = 1 のときの y の値を求めよ。
 sub_questions:
 - answer:
     display: 1/4
@@ -42,7 +42,7 @@ sub_questions:
   - 比例定数とxの値、それぞれの符号（正か負か）を確認する。
   - 比例定数と x の値を、比例の式 y=ax の x にあてはめる。
   label: (1)
-  prompt_text: value を求めなさい。
+  prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
     narration: 比例定数とxの値、それぞれの符号（正か負か）を確認する。

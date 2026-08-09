@@ -41,7 +41,7 @@ sub_questions:
   hints:
   - その集合の数どうしでその演算をした結果が、いつでもその集合に入るかを調べる。
   label: (1)
-  prompt_text: choice を求めなさい。
+  prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
     narration: その集合の数どうしでその演算をした結果が、いつでもその集合に入るかを調べる。

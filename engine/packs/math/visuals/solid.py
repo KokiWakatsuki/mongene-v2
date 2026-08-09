@@ -54,8 +54,8 @@ _CHAIN = 'stroke-dasharray="12 3 3 3"'  # 一点鎖線（回転の軸）
 def _svg(parts: list[str], width: int = _W, height: int = _H) -> str:
     head = (
         f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {width} {height}" '
-        f'width="{width}" height="{height}">'
-        f'<rect x="0" y="0" width="{width}" height="{height}" fill="none" stroke="none"/>'
+        f'width="{width}" height="{height}" font-family="Hiragino Sans, Hiragino Kaku Gothic ProN, Noto Sans JP, Yu Gothic, Meiryo, sans-serif">'
+        f'<rect x="0" y="0" width="{width}" height="{height}" fill="#ffffff" stroke="none"/>'
     )
     return head + "".join(parts) + "</svg>"
 

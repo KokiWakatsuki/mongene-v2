@@ -24,12 +24,12 @@ meta:
   seed: 2
   signature: probability_coin_or_die_count
 problem_ref: 94d19c4f8d85ec1f
-problem_text: 1から65までの番号が1つずつ書かれた65枚のカードから1枚を引く。引いたカードの番号が52以上である確率を求めよ。
+problem_text: 1から12までの番号が1つずつ書かれた12枚のカードから1枚を引く。引いたカードの番号が4以上である確率を求めよ。
 sub_questions:
 - answer:
-    display: 14/65
+    display: 3/4
     kind: symbolic
-    srepr: Rational(14, 65)
+    srepr: Rational(3, 4)
   cause_tags: []
   concept_tags:
   - probability.count_single_space
@@ -37,12 +37,12 @@ sub_questions:
 
     次に、そのうち、求める条件にあてはまる場合の数を数える。（条件にあてはまる場合を数える）
 
-    最後に、条件にあてはまる場合の数を、すべての場合の数でわる。（14/65）'
+    最後に、条件にあてはまる場合の数を、すべての場合の数でわる。（3/4）'
   hints:
   - 起こりうるすべての場合を数え上げる。
   - そのうち、求める条件にあてはまる場合の数を数える。
   label: (1)
-  prompt_text: value を求めなさい。
+  prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
     narration: 起こりうるすべての場合を数え上げる。
@@ -57,6 +57,6 @@ sub_questions:
   - args: []
     narration: 条件にあてはまる場合の数を、すべての場合の数でわる。
     op: compute_probability
-    result_display: 14/65
-    result_srepr: Rational(14, 65)
+    result_display: 3/4
+    result_srepr: Rational(3, 4)
 visual_svg: null

@@ -50,7 +50,7 @@ sub_questions:
   - 傾きと通る点の座標を y = ax + b に代入する。
   - 代入した式を b について解き、切片を求める。
   label: (1)
-  prompt_text: formulation を求めなさい。
+  prompt_text: 式に表しなさい。
   solution_steps:
   - args:
     - '3'
@@ -89,7 +89,7 @@ sub_questions:
   - 傾きと通る点の座標を y = ax + b に代入する。
   - 代入した式を b について解き、切片を求める。
   label: (2)
-  prompt_text: formulation を求めなさい。
+  prompt_text: 式に表しなさい。
   solution_steps:
   - args:
     - '2'
@@ -125,7 +125,7 @@ sub_questions:
   hints:
   - 等式の性質を使い、両辺から同じ数をひく（または加える）。
   label: (3)
-  prompt_text: value を求めなさい。
+  prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
     narration: 等式の性質を使い、両辺から同じ数をひく（または加える）。

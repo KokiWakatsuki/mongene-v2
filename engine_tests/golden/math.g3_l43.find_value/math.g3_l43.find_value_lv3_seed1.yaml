@@ -1,0 +1,70 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - parallel_segment.judge_then_length
+  provenance:
+    git_commit: ''
+    recipe: math.parallel_ratio_judge_then_length
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_parallel_line_ratio_condition_v1
+    tier: T1
+  requested:
+    form: find_value
+    level: 3
+    subject: math
+    unit: g3_l43
+  resolved:
+    form: find_value
+    level: 3
+    subject: math
+    unit: g3_l43
+  seed: 1
+  signature: parallel_ratio_judge_then_length
+problem_ref: e0eb3f24220a9937
+problem_text: 三角形QEMで、辺QE, QM上に点R, Bがある。QR=9cm, RE=5cm, QB=36cm, BM=20cm である。RB=27cm のとき、RBとEMが平行であることを確かめたうえで、辺EMの長さを求めよ。
+sub_questions:
+- answer:
+    display: '42'
+    kind: symbolic
+    srepr: Integer(42)
+  cause_tags: []
+  concept_tags:
+  - parallel_segment.judge_then_length
+  explanation: 'まず、QR:REとQB:BMの比が等しいかどうかを比べる。（QR:REとQB:BMの比を比べる）
+
+    次に、平行線と線分の比の定理の逆から、RBとEMが平行であるかどうかを判別する。（平行である）
+
+    次に、RB∥EM であることから、三角形QRBと三角形QEMが相似になることを見つける。（平行線がつくる相似な三角形を見つける）
+
+    最後に、QR:QE=RB:EM が成り立つことから、辺EMの長さを求める。（42）'
+  hints:
+  - QR:REとQB:BMの比が等しいかどうかを比べる。
+  - 平行線と線分の比の定理の逆から、RBとEMが平行であるかどうかを判別する。
+  - RB∥EM であることから、三角形QRBと三角形QEMが相似になることを見つける。
+  label: (1)
+  prompt_text: 答えを求めなさい。
+  solution_steps:
+  - args: []
+    narration: QR:REとQB:BMの比が等しいかどうかを比べる。
+    op: compare_division_ratios
+    result_display: QR:REとQB:BMの比を比べる
+    result_srepr: ''
+  - args: []
+    narration: 平行線と線分の比の定理の逆から、RBとEMが平行であるかどうかを判別する。
+    op: judge_by_parallel_ratio_converse
+    result_display: 平行である
+    result_srepr: 'true'
+  - args: []
+    narration: RB∥EM であることから、三角形QRBと三角形QEMが相似になることを見つける。
+    op: identify_similar_triangles_from_parallel
+    result_display: 平行線がつくる相似な三角形を見つける
+    result_srepr: ''
+  - args: []
+    narration: QR:QE=RB:EM が成り立つことから、辺EMの長さを求める。
+    op: apply_parallel_segment_ratio
+    result_display: '42'
+    result_srepr: Integer(42)
+visual_svg: null

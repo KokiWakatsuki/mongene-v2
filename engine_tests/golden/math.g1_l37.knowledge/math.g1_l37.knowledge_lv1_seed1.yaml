@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: line_angle_terms_term_recall
 problem_ref: 981900fda25c2243
-problem_text: 点Gから出る2つの半直線GJ、GBがつくる図形 を何といいますか。
+problem_text: 点Gから出る2つの半直線GJ、GBがつくる図形を何といいますか。
 sub_questions:
 - answer:
     correct: 角
@@ -43,7 +43,7 @@ sub_questions:
   hints:
   - 説明されている式や数の部分がどれかを読み取る。
   label: (1)
-  prompt_text: choice を求めなさい。
+  prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
     narration: 説明されている式や数の部分がどれかを読み取る。

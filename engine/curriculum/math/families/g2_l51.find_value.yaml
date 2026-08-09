@@ -25,7 +25,8 @@ levels:
       # cards_n（1〜Nの番号カードから引く・同じ数え上げスキルの一般化）の比重を高くして
       # 自由度を確保する（鉄則②。リストの重複要素で一様抽選の重みを付けている）。
       space_choices: [die6, cards_n, cards_n, cards_n, cards_n, cards_n, cards_n, cards_n, cards_n]
-      n_domain: {int_range: [6, 60]}
+      # カードの枚数は教材の大きさに（53枚のカードは教材にならない）。
+      n_domain: {int_range: [5, 20]}
     given: [condition]
     asked: [value]
     visual: none
@@ -37,7 +38,8 @@ levels:
     signature: relative_frequency_estimate
     recipe: math.relative_frequency_g2
     params:
-      total_domain: {int_range: [200, 2000]}
+      # 回数は _FREQUENCY_TOTALS（きりのよい実験回数）から。相対度数が小数で書ける組だけを引く。
+      params_note: relative_frequency
     given: [condition]
     asked: [value]
     visual: none

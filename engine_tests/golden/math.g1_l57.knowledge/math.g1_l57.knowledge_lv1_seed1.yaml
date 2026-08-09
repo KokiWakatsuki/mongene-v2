@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: representative_value_terms_term_recall
 problem_ref: 19ac84064f1b33eb
-problem_text: 148個のデータの中で、もっとも個数が多く現れる値 を何といいますか。
+problem_text: 148個のデータの中で、もっとも個数が多く現れる値を何といいますか。
 sub_questions:
 - answer:
     correct: 最頻値
@@ -42,7 +42,7 @@ sub_questions:
   hints:
   - 説明されている式や数の部分がどれかを読み取る。
   label: (1)
-  prompt_text: choice を求めなさい。
+  prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
     narration: 説明されている式や数の部分がどれかを読み取る。

@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: quadratic_coefficient_term_recall
 problem_ref: d8ba705f7c6644d1
-problem_text: 2次方程式 4x² + 4x - 14 = 0 において、x の項の係数 を何といいますか。
+problem_text: 2次方程式 4x² + 4x - 14 = 0 において、x の項の係数を何といいますか。
 sub_questions:
 - answer:
     correct: b
@@ -42,7 +42,7 @@ sub_questions:
   hints:
   - 説明されている項が、2次方程式のどの位置（x²・x・定数項）にあるかを読み取る。
   label: (1)
-  prompt_text: choice を求めなさい。
+  prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
     narration: 説明されている項が、2次方程式のどの位置（x²・x・定数項）にあるかを読み取る。

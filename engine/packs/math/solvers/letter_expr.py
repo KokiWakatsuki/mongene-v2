@@ -1007,22 +1007,23 @@ _RULE_MAPS: dict[str, dict[str, tuple[str, list[str]]]] = {
         ),
     },
     # g3_l42 平行線と線分の比の定理（AD:AB=AE:AC=DE:BC がすべて等しい）
+    # 選択肢に点名が出るので `{a}`〜`{e}` の穴にしてある（_LABELED_RULE_TOPICS 参照）。
     "parallel_segment_ratio_theorem": {
         "statement": (
-            "ADとABの比、AEとACの比、DEとBCの比が、すべて等しい",
+            "{a}{d}と{a}{b}の比、{a}{e}と{a}{c}の比、{d}{e}と{b}{c}の比が、すべて等しい",
             [
-                "ADとDBの比、AEとACの比が等しい",
-                "DEの長さは、BCの長さから一定の数をひいた値に等しい",
+                "{a}{d}と{d}{b}の比、{a}{e}と{a}{c}の比が等しい",
+                "{d}{e}の長さは、{b}{c}の長さから一定の数をひいた値に等しい",
             ],
         ),
     },
     # g3_l43 平行線と線分の比の定理の逆（AD:DB=AE:ECが成り立てばDE//BC）
     "parallel_segment_ratio_converse": {
         "statement": (
-            "DEとBCが平行である",
+            "{d}{e}と{b}{c}が平行である",
             [
-                "DEとBCが垂直に交わる",
-                "三角形ABCと三角形ADEが合同である",
+                "{d}{e}と{b}{c}が垂直に交わる",
+                "三角形{a}{b}{c}と三角形{a}{d}{e}が合同である",
             ],
         ),
     },
@@ -1347,13 +1348,31 @@ def interpret_expression(item_a: object, item_b: object) -> Solution:
     return Solution(answer=answer, steps=steps)
 
 
+# 選択肢に点名が出る topic。記述は `{a}`〜`{e}` の穴を持ち、問題文の点名で埋める。
+# **問題文の点名は recipe が引く**ので、ここを固定にすると「三角形KFDで…点Q, Cが」と
+# 問うて「ADとABの比」と答えることになる（実際そうなっていた）。
+_LABELED_RULE_TOPICS = frozenset(
+    {"parallel_segment_ratio_theorem", "parallel_segment_ratio_converse"}
+)
+
+
+def _rule_points(labels: object) -> dict[str, str]:
+    """`{a}`〜`{e}` に入れる点名（A,B,C,D,E の順）。無ければ既定。"""
+    s = str(labels or "ABCDE")
+    if len(s) < 5:
+        s = "ABCDE"
+    return {"a": s[0], "b": s[1], "c": s[2], "d": s[3], "e": s[4]}
+
+
 @register_solver("math.recall_rule_statement")
-def recall_rule_statement(topic: object, concept: object) -> Solution:
+def recall_rule_statement(topic: object, concept: object, labels: object = None) -> Solution:
     """規則・約束の正しい記述を選ぶ（knowledge 規則想起・g1_l22 Lv1 ほか）。
 
     topic（規則の分野）と concept（問われている規則）だけから正しい記述を判定する
     （具体例の値は無関係・double-solve）。答えは ChoiceAnswer（concept で correct が変わる）。
     distractors は同 topic のもっともらしい誤り記述。op 列は用語想起／verify 型と相異＝level_sep。
+    `labels` は問題文の点名で、選択肢の記号を問題文に合わせるためだけに使う
+    （どれが正しい記述かの判定には効かない）。
     """
     t = str(topic)
     c = str(concept)
@@ -1363,6 +1382,10 @@ def recall_rule_statement(topic: object, concept: object) -> Solution:
     if c not in rules:
         raise ValueError(f"未知の concept: {c!r}（topic={t!r}）")
     correct, distractors = rules[c]
+    if t in _LABELED_RULE_TOPICS:
+        pts = _rule_points(labels)
+        correct = correct.format(**pts)
+        distractors = [d.format(**pts) for d in distractors]
     steps = [
         Step(
             op="read_rule_context",

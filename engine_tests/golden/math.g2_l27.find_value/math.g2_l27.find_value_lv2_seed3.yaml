@@ -42,7 +42,7 @@ sub_questions:
   - 2つの直線の y を等しいとおき、x についての方程式を解く。
   - x の値を求める。
   label: (1)
-  prompt_text: intersection を求めなさい。
+  prompt_text: 交点の座標を求めなさい。
   solution_steps:
   - args:
     - Eq(x - y, -2)

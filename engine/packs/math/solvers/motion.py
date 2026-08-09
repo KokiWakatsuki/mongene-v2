@@ -34,6 +34,17 @@ _MOTION_OP_PHRASE: dict[str, str] = {
 }
 
 
+def _label(labels: object, index: int, default: str) -> str:
+    """点名の1文字（`labels` は recipe が引いた頂点名を並べた文字列）。
+
+    **問題文の点名は recipe が引く**ので、solver がここを固定にすると
+    「点Jが動く」と問うて「点 P がどの辺の上にあるか」と解説することになる
+    （実際そうなっていた）。recipe から受け取り、無ければ既定を使う。
+    """
+    s = str(labels or "")
+    return s[index] if len(s) > index else default
+
+
 def _shoelace_triangle_area(
     ax: sympy.Rational, ay: sympy.Rational,
     px: sympy.Rational, py: sympy.Rational,
@@ -183,12 +194,16 @@ def _pq_area_expr(v: sympy.Rational) -> sympy.Expr:
 
 
 @register_solver("math.express_moving_points_area")
-def express_moving_points_area(v: object) -> Solution:
+def express_moving_points_area(v: object, labels: object = None) -> Solution:
     """点 P・Q が直交2辺を速さ v で動くときの三角形 APQ の面積を x の式で表す。
 
     問題パラメータ（速さ v）だけから導く。正方形の1辺 s は**式に現れない**
     （P・Q が辺の上にある間の話なので、面積は s に依存しない）ため受け取らない。
+    `labels` は問題文の点名（A,B,C,D,P,Q の順）で、解説の点名を問題文に合わせる
+    ためだけに使う（計算には効かない）。
     """
+    lp = _label(labels, 4, "P")
+    lq = _label(labels, 5, "Q")
     v_v = sympy.Rational(str(v))
     if v_v <= 0:
         raise ValueError("速さは正であること")
@@ -200,7 +215,7 @@ def express_moving_points_area(v: object) -> Solution:
 
     ops = ["locate_points_pq", "express_area_in_x"]
     narration = {
-        "locate_points_pq": "経過した時間と速さから、点 P と点 Q が動いた道のりを、それぞれ x を使って表す。",
+        "locate_points_pq": f"経過した時間と速さから、点{lp}と点{lq}が動いた道のりを、それぞれ x を使って表す。",
         "express_area_in_x": "直角をはさむ二辺の長さがわかったので、三角形の面積を x の式で表す。",
     }
     srepr = sympy.srepr(expr)
@@ -210,7 +225,7 @@ def express_moving_points_area(v: object) -> Solution:
             op=op,
             args=[],
             result_srepr=srepr if i == len(ops) - 1 else "",
-            result_display=disp if i == len(ops) - 1 else "点 P と点 Q の位置を x で表す",
+            result_display=disp if i == len(ops) - 1 else f"点{lp}と点{lq}の位置を x で表す",
             narration=narration[op],
         )
         for i, op in enumerate(ops)
@@ -275,13 +290,16 @@ _ALL_TIMES_OPS = [
     "collect_all_times",
 ]
 
-_ALL_TIMES_NARRATION: dict[str, str] = {
-    "identify_intervals": "点 P がどの辺の上にあるかで時間を区間に分け、区間ごとに面積の式が変わることを確かめる。",
-    "solve_on_increasing_interval": "はじめの辺の上では高さが時間に比例するので、面積の式を方程式とみて解く。",
-    "check_constant_interval": "次の辺の上では底辺も高さも変わらず面積が一定なので、その値と比べて解があるかを調べる。",
-    "solve_on_decreasing_interval": "最後の辺の上では高さが減っていくので、その区間の式を方程式とみて解く。",
-    "collect_all_times": "求めた時刻がそれぞれの区間の中にあることを確かめ、答えをすべて並べる。",
-}
+def _all_times_narration(lp: str) -> dict[str, str]:
+    """解く筋道の言葉。動く点の名前だけ問題文に合わせる（それ以外は固定）。"""
+    return {
+        "identify_intervals": f"点{lp}がどの辺の上にあるかで時間を区間に分け、区間ごとに面積の式が変わることを確かめる。",
+        "solve_on_increasing_interval": "はじめの辺の上では高さが時間に比例するので、面積の式を方程式とみて解く。",
+        "check_constant_interval": "次の辺の上では底辺も高さも変わらず面積が一定なので、その値と比べて解があるかを調べる。",
+        "solve_on_decreasing_interval": "最後の辺の上では高さが減っていくので、その区間の式を方程式とみて解く。",
+        "collect_all_times": "求めた時刻がそれぞれの区間の中にあることを確かめ、答えをすべて並べる。",
+    }
+
 
 _ALL_TIMES_PHRASE: dict[str, str] = {
     "identify_intervals": "時間を区間に分ける",
@@ -292,14 +310,19 @@ _ALL_TIMES_PHRASE: dict[str, str] = {
 
 
 @register_solver("math.solve_moving_point_area_all_times")
-def solve_moving_point_area_all_times(s: object, v: object, area: object) -> Solution:
+def solve_moving_point_area_all_times(
+    s: object, v: object, area: object, labels: object = None
+) -> Solution:
     """三角形 APD の面積が与えられた値になる時刻をすべて求める（g3_l31.word_problem Lv4）。
 
     正方形 A=(0,0), B=(s,0), C=(s,s), D=(0,s) の周上を、点 P が A を出発して
     A→B→C→D の順に速さ v で動く。区間ごとに P の座標を決め、面積は既存の
     shoelace 公式（`_shoelace_triangle_area`）で求める＝新しい幾何ロジックは足さない。
     問題パラメータ（s・v・面積）だけから独立に再計算する（double-solve）。
+    `labels` は問題文の点名（A,B,C,D,P の順）で、解説の点名を問題文に合わせる
+    ためだけに使う（計算には効かない）。
     """
+    narration = _all_times_narration(_label(labels, 4, "P"))
     s_v = sympy.Rational(str(s))
     v_v = sympy.Rational(str(v))
     area_v = sympy.Rational(str(area))
@@ -344,7 +367,7 @@ def solve_moving_point_area_all_times(s: object, v: object, area: object) -> Sol
             args=[],
             result_srepr=srepr if i == len(_ALL_TIMES_OPS) - 1 else "",
             result_display=disp if i == len(_ALL_TIMES_OPS) - 1 else _ALL_TIMES_PHRASE[op],
-            narration=_ALL_TIMES_NARRATION[op],
+            narration=narration[op],
         )
         for i, op in enumerate(_ALL_TIMES_OPS)
     ]

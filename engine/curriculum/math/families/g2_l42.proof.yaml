@@ -15,9 +15,15 @@ source_desc: |
 
   【深さ】合同（深さ1）→ 対応する辺が等しい（深さ2）。
 
-  【Lv3 は未実装】台帳 Lv3「誘導なし・角の等しさを補助線/合同で導き二等辺を構成する」
-  には、**角の等しさが導出の途中に出てくる図**が要る（いまの構成カタログはどれも、
-  角の等しさを仮定として与えてしまう）。図を1つ足せば開く。
+  【Lv3】台帳「誘導なし・角の等しさを補助線/合同で導き二等辺を構成する」。
+  見立てどおり、**角の等しさが導出の途中に出てくる図**を1つ足したら開いた
+  （`equal_altitudes`＝2頂点から対辺にひいた垂線の長さが等しい図）。Lv2 が角の
+  等しさを仮定として与えるのに対し、Lv3 は直角三角形の合同から角の等しさを**導く**。
+
+    △CBD ≡ △BCE（斜辺と他の1辺・深さ1／斜辺 BC は共通）
+      → ∠ACB ＝ ∠ABC（対応する角・深さ2）→ AB ＝ AC（深さ3）
+
+  op 列は Lv2（4手・ASA から対応する辺）と相異する（7手・RHS から二等辺の条件）。
 concepts_default: [isosceles_proof.condition_two_angles]
 levels:
   "2":
@@ -37,6 +43,29 @@ levels:
     text: {tier: T1, template: pf_geometry_proof_v1, visual_builder: math.geometry_construction}
     hints: [steps_prefix]
     concept_tags: [isosceles_proof.condition_two_angles]
+    cause_tags: []
+  "3":
+    signature: geometry_proof_isosceles_condition_construct
+    recipe: math.geometry_proof
+    params:
+      # **二等辺であることは仮定に入れない**（このクラスタの約束）。A を BC の
+      # 垂直二等分線上に「置く」が、AB ＝ AC は事実にしない——2本の垂線の長さが
+      # 等しいことだけを与え、二等辺であることは結論として導かせる。
+      construction: equal_altitudes
+      topic_set: right_triangle
+      proof_depth: 3
+      prefer: seg_eq
+      # fit_domain の実測: 粗格子 780/1320（59%）。落ちるのは「∠BCE がつぶれる」
+      # （縦長すぎる図）と偶然の一致で、どちらも引き直せば抜ける。
+      base_domain: {int_range: [26, 54]}
+      angle_domain: {int_range: [40, 108]}
+      offset_domain: {int_range: [20, 45]}
+    given: [premises, conclusion]
+    asked: [proof_text]
+    visual: optional
+    text: {tier: T1, template: pf_geometry_proof_v1, visual_builder: math.geometry_construction}
+    hints: [steps_prefix]
+    concept_tags: [isosceles_proof.condition_construct]
     cause_tags: []
 remedial:
   default_level: 2

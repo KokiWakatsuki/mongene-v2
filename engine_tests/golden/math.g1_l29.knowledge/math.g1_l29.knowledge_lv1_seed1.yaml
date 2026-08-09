@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: direct_proportion_term_recall
 problem_ref: 1224781f8d10a610
-problem_text: y = 208x のように、x の値が2倍、3倍になると、それにともなって y の値も2倍、3倍になる関係 を何といいますか。
+problem_text: y = 208x のように、x の値が2倍、3倍になると、それにともなって y の値も2倍、3倍になる関係を何といいますか。
 sub_questions:
 - answer:
     correct: 比例
@@ -41,7 +41,7 @@ sub_questions:
   hints:
   - 説明されている式や数の部分がどれかを読み取る。
   label: (1)
-  prompt_text: choice を求めなさい。
+  prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
     narration: 説明されている式や数の部分がどれかを読み取る。

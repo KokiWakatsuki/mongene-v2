@@ -37,9 +37,9 @@ sub_questions:
   - radical.add_subtract
   explanation: まず、根号の中が同じ項を、同類項のようにまとめる。（3√2）
   hints:
-  - 問題文の与えられた値をもう一度確認しよう。
+  - 根号の中が同じ項を、同類項のようにまとめる。
   label: (1)
-  prompt_text: simplified_expr を求めなさい。
+  prompt_text: 式を簡単にしなさい。
   solution_steps:
   - args: []
     narration: 根号の中が同じ項を、同類項のようにまとめる。

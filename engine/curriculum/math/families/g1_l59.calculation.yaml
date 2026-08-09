@@ -13,7 +13,8 @@ levels:
     signature: relative_frequency_basic
     recipe: math.relative_frequency_g1
     params:
-      total_domain: {int_range: [50, 500]}
+      # 回数は _FREQUENCY_TOTALS（きりのよい実験回数）から。相対度数が小数で書ける組だけを引く。
+      params_note: relative_frequency
     given: [expressions]
     asked: [value]
     visual: none

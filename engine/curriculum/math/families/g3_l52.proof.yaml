@@ -1,0 +1,44 @@
+family: math.g3_l52.proof
+form: proof
+source_desc: |
+  三平方の定理の逆（逆の記述による説明）
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv3 desc: 三平方の定理の逆を用いて直角であることを説明。
+       example: 四角形 ABCD で、AB=3cm, BC=4cm, AC=5cm である。
+                三平方の定理の逆を用いて、∠ABC が直角であることを説明せよ。
+  ---
+  【設計モデル】solvers/pythagoras_proof.py（g3_l51 の面積証明と同居）。
+  3辺はピタゴラス数の生成器 (m, n) → (m²-n², 2mn, m²+n²) とその倍数から引く。
+  **3辺の表を手で並べない**——生成した3辺で a² + b² と c² を実際に計算し、
+  一致することを確かめてから「直角である」と結論する。
+
+  場面は3つ（台帳 example が四角形の対角線の型なので、それを含める）:
+    triangle       △ABC の3辺
+    quadrilateral  四角形ABCD の2辺と対角線（台帳 example の型）
+    field          運動場に張った3本のロープ（長さの単位が m になる）
+  どの場面でも、直角になるのは「2辺のあいだの頂点」で、斜辺は残りの2点を結ぶ辺である
+  ——場面が変わっても、この対応はコードが1か所で決める。
+
+  【筋道】5手（cite_side_lengths → compute_squares_of_legs →
+  compute_square_of_hypotenuse → compare_two_values → conclude_right_angle）。
+  「いちばん長い辺を見つける」が先頭にあるのは、この単元の定番のつまずきが
+  「どれを斜辺とみるか」だから（g3_l52 knowledge Lv2 と同じ勘所）。
+
+  【dup_rate】場面3 × 記号の組6 × ピタゴラス数43 × 2辺の入れ替え2 = 1548。
+  閾 0.20 に要る 250 通りに対して十分広い。
+concepts_default: [pythagorean_converse.explain_right_angle]
+levels:
+  "3":
+    signature: pythagoras_converse_explain
+    recipe: math.pythagoras_converse_proof
+    params:
+      context_set: [triangle, quadrilateral, field]
+    given: [premises, conclusion]
+    asked: [proof_text]
+    visual: none
+    text: {tier: T1, template: pf_pythagoras_converse_v1}
+    hints: [steps_prefix]
+    concept_tags: [pythagorean_converse.explain_right_angle]
+    cause_tags: []
+remedial:
+  default_level: 3

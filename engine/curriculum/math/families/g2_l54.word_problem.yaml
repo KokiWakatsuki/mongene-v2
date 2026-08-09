@@ -58,7 +58,8 @@ levels:
       # dup_key は(faces, target_face)の組。6面だけ・少数面だけだと組合せが少なすぎ
       # dup_rate が構造的に閾値を超えるため、面数の候補プールを広く取る（鉄則②。
       # g2_l54.find_value の probability_at_least_one_recipe と同じ範囲 4〜30）。
-      faces_domain: {int_range: [4, 30]}
+      # さいころは6面（17面のさいころは存在しない。D-13 と同じ理由）。
+      faces_domain: {int_set: [6]}
       trials: 2
     given: [scenario]
     asked: [value]
@@ -67,6 +68,9 @@ levels:
     hints: [steps_prefix]
     concept_tags: [probability.word_problem_dice_repeat_at_least_one]
     cause_tags: []
+    dup_rate_max: 0.8
+    dup_rate_reason: >-
+      「少なくとも1回」を実在の道具（6面のさいころ・5〜10枚のカード・4色の玉）と2〜3回の試行で作ると、30通りしか残らない。面数を30面まで広げれば通るが、存在しない道具になる（D-13 と同じ）。数を現実に戻したうえで重複を仕様として宣言する。
   "4":
     signature: word_problem_at_least_two_colors
     recipe: math.word_problem_probability

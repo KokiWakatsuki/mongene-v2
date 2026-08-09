@@ -15,8 +15,11 @@ levels:
     signature: similarity_ratio_transfer
     recipe: math.similarity_ratio_transfer
     params:
-      ratio_domain: {int_range: [2, 12]}
-      side_domain: {int_range: [1, 200]}
+      # 相似比 m:n と、m の倍数である既知の辺だけを組む（答えを整数にする）。
+      # 定義域を広げて dup_rate を通すのはやめ、点名を params に記録して軸にした。
+      ratio_max: 9
+      scale_max: 12
+      side_max: 60
     given: [condition]
     asked: [value]
     visual: none

@@ -43,7 +43,7 @@ sub_questions:
   hints:
   - その数が、整数を使った分数（p/q）の形で表せるかどうかを調べる。
   label: (1)
-  prompt_text: choice を求めなさい。
+  prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
     narration: その数が、整数を使った分数（p/q）の形で表せるかどうかを調べる。

@@ -1,0 +1,54 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - parallel_segment.transversal_ratio
+  provenance:
+    git_commit: ''
+    recipe: math.parallel_lines_transversal_ratio
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_parallel_line_ratio_condition_v1
+    tier: T1
+  requested:
+    form: find_value
+    level: 3
+    subject: math
+    unit: g3_l42
+  resolved:
+    form: find_value
+    level: 3
+    subject: math
+    unit: g3_l42
+  seed: 3
+  signature: parallel_lines_transversal_ratio
+problem_ref: b0bee7df7a179ef1
+problem_text: 3本の直線w, r, sは平行である。直線uはw, r, sとそれぞれ点Q, R, Lで交わり、直線zはw, r, sとそれぞれ点H, F, Nで交わる。QR=14cm, HF=7cm, FN=4cm のとき、線分RLの長さを求めよ。
+sub_questions:
+- answer:
+    display: '8'
+    kind: symbolic
+    srepr: Integer(8)
+  cause_tags: []
+  concept_tags:
+  - parallel_segment.transversal_ratio
+  explanation: 'まず、3本の平行な直線が2本の直線と交わるとき、対応する線分の比が等しくなることを見つける。（3本の平行線が2直線を切る比例関係を見つける）
+
+    次に、対応する線分の比が等しいことから、比例式を立てて長さを求める。（8）'
+  hints:
+  - 3本の平行な直線が2本の直線と交わるとき、対応する線分の比が等しくなることを見つける。
+  label: (1)
+  prompt_text: 答えを求めなさい。
+  solution_steps:
+  - args: []
+    narration: 3本の平行な直線が2本の直線と交わるとき、対応する線分の比が等しくなることを見つける。
+    op: identify_parallel_lines_cut_transversals
+    result_display: 3本の平行線が2直線を切る比例関係を見つける
+    result_srepr: ''
+  - args: []
+    narration: 対応する線分の比が等しいことから、比例式を立てて長さを求める。
+    op: apply_transversal_ratio
+    result_display: '8'
+    result_srepr: Integer(8)
+visual_svg: null

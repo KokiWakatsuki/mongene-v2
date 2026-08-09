@@ -10,7 +10,7 @@ from typing import Any
 
 from engine.packs.math.geometry.catalog import register_construction
 from engine.packs.math.geometry.construct import Construction
-from engine.packs.math.geometry.facts import ang, ang_eq, collinear
+from engine.packs.math.geometry.facts import ang, ang_eq, collinear, seg, seg_eq
 
 
 @register_construction("kite")
@@ -149,4 +149,91 @@ def alternate_angle_cross(p: dict[str, Any]) -> Construction:
     for x, y in (("A", "C"), ("B", "D"), ("A", "B"), ("C", "D")):
         c.connect(x, y)
     c.description = "右の図で、2直線ACとBDは点Oで交わっていて、∠OAB ＝ ∠OCD である"
+    return c
+
+
+@register_construction("kite_diagonals")
+def kite_diagonals(p: dict[str, Any]) -> Construction:
+    """たこ形（AB=AD・CB=CD）に**対角線を2本とも**引き、交点を P とした図（g2_l40 Lv4）。
+
+    `kite` との違いは対角線 BD と交点 P だけだが、**証明の性質が変わる**。
+    たこ形1本の対角線では「合同 → 対応する辺（角）」の2手で終わるのに対し、
+    ここは
+
+      △ABC ≡ △ADC（3組の辺・深さ1）
+        → ∠BAC ＝ ∠DAC（対応する角・深さ2）
+        → △ABP ≡ △ADP（2組の辺とその間の角・深さ3）
+        → BP ＝ DP（対応する辺・深さ4）
+
+    と、**1つ目の合同から出た角を材料にして2つ目の合同を示す**。台帳 Lv4 の
+    「複数三角形の合同を組み合わせ方針を自分で構成する」がちょうどこの形である。
+
+    ∠BAP と ∠BAC が同じ角であることは、P が線分 AC の上にあることから
+    `ray_classes` が吸収する（`intersection` が「間にある」を記録している）。
+    AP が2つ目の合同の共通の辺になるので、その等式も持たせる——線としては対角線 AC の
+    一部だが、証明では AP と書く辺である。
+    """
+    c = Construction()
+    c.free_point("A", 0.0, 0.0)
+    c.free_point("B", float(p["base"]), 0.0)
+    c.point_on_circle("D", "A", "B", angle_deg=float(p["angle"]))
+    c.point_on_perpendicular_bisector("C", "B", "D", offset=-float(p["offset"]))
+    for x, y in (("A", "B"), ("A", "D"), ("B", "C"), ("D", "C")):
+        c.connect(x, y)
+    c.intersection("P", ("A", "C"), ("B", "D"))
+    c.connect("A", "C", shared=True)
+    c.connect("B", "D")
+    c.facts.add(seg_eq(seg("A", "P"), seg("A", "P")))
+    # 交点Pは仮定ではなく**構成で置いた点**なので、条件を並べる既定の書き方では
+    # 問題文に出てこない（結論の BP ＝ DP に、本文に無い点が出てしまう）。
+    c.description = (
+        "右の図で、AB ＝ AD、CB ＝ CD である四角形ABCDに対角線AC、BDを引き、"
+        "その交点をPとした"
+    )
+    return c
+
+
+@register_construction("isosceles_equal_segments")
+def isosceles_equal_segments(p: dict[str, Any]) -> Construction:
+    """二等辺三角形 ABC（AB=AC）の辺 AB、AC 上に BD ＝ CE となる点 D、E をとった図。
+
+    g2_l41 Lv4（誘導なし・**性質を組み合わせて**方針を自分で立てる）のための図。
+    Lv2/Lv3 が「二等辺三角形の性質そのものを証明する」ので底角の規則を外して探索する
+    のに対し、ここは**その性質を道具として使う**側である。
+
+      底角 ∠DBC ＝ ∠ECB（二等辺三角形の底角は等しい・深さ1）
+        → △DBC ≡ △ECB（2組の辺とその間の角・深さ2）
+        → DC ＝ EB（対応する辺・深さ3）
+
+    ∠DBC が ∠ABC と同じ角であることは、D が辺 AB の上にあることから `ray_classes`
+    が吸収する。D と E は**端点から等しい長さのところ**にとるので、図をゆらしても
+    BD ＝ CE は保たれる（偶然の一致にならない）。
+
+    base ＝ 底辺 BC、offset ＝ 高さ、angle ＝ BD の長さの取り方（辺の何割か）。
+    """
+    c = Construction()
+    c.free_point("B", 0.0, 0.0)
+    c.free_point("C", float(p["base"]), 0.0)
+    c.point_on_perpendicular_bisector("A", "B", "C", offset=float(p["offset"]) + 1.0)
+    (ax, ay), (bx, by), (cx, cy) = c.coords["A"], c.coords["B"], c.coords["C"]
+    # 辺の何割のところに点をとるか。角度のパラメータを割合に**単調に**写す
+    # （剰余で折り返すと、図をゆらしたときに割合が飛んで、偶然の一致の判定が
+    # パラメータの連続な変化を見なくなる）。
+    frac = 0.26 + max(0.0, float(p["angle"]) - 40.0) / 220.0
+    c.coords["D"] = (bx + (ax - bx) * frac, by + (ay - by) * frac)
+    c.coords["E"] = (cx + (ax - cx) * frac, cy + (ay - cy) * frac)
+    c.steps.append("辺AB、AC上に、BD ＝ CE となる点D、Eをとる")
+    for a_, m_, b_ in (("A", "D", "B"), ("A", "E", "C")):
+        c.facts.add(collinear(a_, m_, b_))
+        c.collinear_order.append((a_, m_, b_))
+    equal = seg_eq(seg("B", "D"), seg("C", "E"))
+    c.facts.add(equal)
+    c.givens.append(equal)
+    for x, y in (("A", "B"), ("A", "C"), ("D", "C"), ("B", "E")):
+        c.connect(x, y)
+    c.connect("B", "C", shared=True)
+    c.description = (
+        "AB ＝ AC である二等辺三角形ABCで、辺AB上に点D、辺AC上に点Eを、"
+        "BD ＝ CE となるようにとり、点Dと点C、点Bと点Eをそれぞれ結んだ"
+    )
     return c

@@ -24,12 +24,12 @@ meta:
   seed: 2
   signature: probability_single_die_count
 problem_ref: 34910e2b26191167
-problem_text: 1から51までの番号が1つずつ書かれた51枚のカードから1枚を引く。引いたカードの番号が23以上である確率を求めよ。
+problem_text: 1から16までの番号が1つずつ書かれた16枚のカードから1枚を引く。引いたカードの番号が2以上である確率を求めよ。
 sub_questions:
 - answer:
-    display: 29/51
+    display: 15/16
     kind: symbolic
-    srepr: Rational(29, 51)
+    srepr: Rational(15, 16)
   cause_tags: []
   concept_tags:
   - probability.count_single_space
@@ -37,12 +37,12 @@ sub_questions:
 
     次に、そのうち、求める条件にあてはまる場合の数を数える。（条件にあてはまる場合を数える）
 
-    最後に、条件にあてはまる場合の数を、すべての場合の数でわる。（29/51）'
+    最後に、条件にあてはまる場合の数を、すべての場合の数でわる。（15/16）'
   hints:
   - 起こりうるすべての場合を数え上げる。
   - そのうち、求める条件にあてはまる場合の数を数える。
   label: (1)
-  prompt_text: value を求めなさい。
+  prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
     narration: 起こりうるすべての場合を数え上げる。
@@ -57,6 +57,6 @@ sub_questions:
   - args: []
     narration: 条件にあてはまる場合の数を、すべての場合の数でわる。
     op: compute_probability
-    result_display: 29/51
-    result_srepr: Rational(29, 51)
+    result_display: 15/16
+    result_srepr: Rational(15, 16)
 visual_svg: null

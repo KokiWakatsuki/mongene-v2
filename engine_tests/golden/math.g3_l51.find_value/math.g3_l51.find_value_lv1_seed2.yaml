@@ -24,22 +24,22 @@ meta:
   seed: 2
   signature: pythagorean_hypotenuse
 problem_ref: 4e412f1db4874330
-problem_text: 直角をはさむ2辺が 51cm, 13cm の直角三角形の斜辺の長さを求めよ。
+problem_text: 直角をはさむ2辺が 13cm, 16cm の直角三角形の斜辺の長さを求めよ。
 sub_questions:
 - answer:
-    display: sqrt(2770)
+    display: 5√17 cm
     kind: symbolic
-    srepr: Pow(Integer(2770), Rational(1, 2))
+    srepr: Mul(Integer(5), Pow(Integer(17), Rational(1, 2)))
   cause_tags: []
   concept_tags:
   - pythagorean.hypotenuse_from_legs
   explanation: 'まず、直角三角形で、直角をはさむ2辺の長さを読み取る。（直角をはさむ2辺の長さを読み取る）
 
-    次に、直角をはさむ2辺の長さの二乗の和が、斜辺の長さの二乗に等しいという三平方の定理から、斜辺の長さを求める。（sqrt(2770)）'
+    次に、直角をはさむ2辺の長さの二乗の和が、斜辺の長さの二乗に等しいという三平方の定理から、斜辺の長さを求める。（5√17 cm）'
   hints:
   - 直角三角形で、直角をはさむ2辺の長さを読み取る。
   label: (1)
-  prompt_text: value を求めなさい。
+  prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
     narration: 直角三角形で、直角をはさむ2辺の長さを読み取る。
@@ -49,6 +49,6 @@ sub_questions:
   - args: []
     narration: 直角をはさむ2辺の長さの二乗の和が、斜辺の長さの二乗に等しいという三平方の定理から、斜辺の長さを求める。
     op: apply_pythagorean_theorem
-    result_display: sqrt(2770)
-    result_srepr: Pow(Integer(2770), Rational(1, 2))
+    result_display: 5√17 cm
+    result_srepr: Mul(Integer(5), Pow(Integer(17), Rational(1, 2)))
 visual_svg: null

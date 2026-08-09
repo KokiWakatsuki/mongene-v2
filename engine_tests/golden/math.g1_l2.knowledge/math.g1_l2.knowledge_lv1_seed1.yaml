@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: number_term_recall
 problem_ref: 2d649e3b673cb5c7
-problem_text: 数 19 について、数直線上でそれに対応する点と原点とのきょり を何といいますか。
+problem_text: 数 19 について、数直線上でそれに対応する点と原点とのきょりを何といいますか。
 sub_questions:
 - answer:
     correct: 絶対値
@@ -43,7 +43,7 @@ sub_questions:
   hints:
   - 説明されている式や数の部分がどれかを読み取る。
   label: (1)
-  prompt_text: choice を求めなさい。
+  prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
     narration: 説明されている式や数の部分がどれかを読み取る。

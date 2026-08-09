@@ -42,7 +42,7 @@ sub_questions:
   - 起こりうるすべての場合を数え上げる。
   - そのうち、求める条件にあてはまる場合の数を数える。
   label: (1)
-  prompt_text: value を求めなさい。
+  prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
     narration: 起こりうるすべての場合を数え上げる。

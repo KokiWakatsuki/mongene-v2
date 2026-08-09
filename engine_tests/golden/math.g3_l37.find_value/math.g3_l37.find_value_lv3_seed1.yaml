@@ -48,7 +48,7 @@ sub_questions:
   - 求めた x の値を式に代入して、交点の y 座標を求める。
   - 2点の座標の差から、線分の長さを求める。
   label: (1)
-  prompt_text: area を求めなさい。
+  prompt_text: 面積を求めなさい。
   solution_steps:
   - args: []
     narration: 放物線の式と直線の式の右辺どうしを等しいとおき、方程式を立てる。

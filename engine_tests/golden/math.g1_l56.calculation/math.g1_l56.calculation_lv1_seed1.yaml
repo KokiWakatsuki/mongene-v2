@@ -35,9 +35,9 @@ sub_questions:
   - cumulative_frequency.compute
   explanation: まず、いちばん小さい階級から対象の階級まで、度数を順に足し合わせる。（19）
   hints:
-  - 問題文の与えられた値をもう一度確認しよう。
+  - いちばん小さい階級から対象の階級まで、度数を順に足し合わせる。
   label: (1)
-  prompt_text: value を求めなさい。
+  prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
     narration: いちばん小さい階級から対象の階級まで、度数を順に足し合わせる。

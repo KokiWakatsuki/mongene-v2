@@ -58,9 +58,9 @@ levels:
     recipe: math.pythagorean_find_value
     params:
       scenario_kind: regular_tetrahedron_height_volume
-      # 1辺 60 通り × 頂点名（連続4文字 23 通り）＝ 1380 通り
-      # （閾 0.20 に必要な約250通りを大きく超える）。
-      edge_domain: {int_range: [1, 60]}
+      # 1辺は教科書の大きさに（1辺57cmの正四面体は教材にならない）。
+      # 1辺 23 通り × 頂点名（連続4文字 23 通り）＝ 529 通りで閾は通る。
+      edge_domain: {int_range: [2, 24]}
     given: [condition]
     asked: [value]
     visual: none

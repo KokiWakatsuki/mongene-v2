@@ -7,6 +7,7 @@ find_value/knowledge セル群に対応する recipe を集約する。定理・
 """
 from __future__ import annotations
 
+from functools import lru_cache
 from typing import cast
 
 from engine.core.contracts import (
@@ -29,6 +30,48 @@ _PRIMITIVE_TRIPLES: list[tuple[int, int, int]] = [
 ]
 
 
+def _squarefree_part(n: int) -> int:
+    """n から平方因数を取り除いた残り（√n = k√m の m）。"""
+    m, d = n, 2
+    while d * d <= m:
+        while m % (d * d) == 0:
+            m //= d * d
+        d += 1
+    return m
+
+
+@lru_cache(maxsize=16)
+def usable_leg_pairs(leg_max: int, radicand_max: int) -> tuple[tuple[int, int], ...]:
+    """斜辺が教材で扱える形になる（直角をはさむ2辺）の組。
+
+    斜辺 √(a²+b²) は、整数になるか、a√b に直したとき**根号の中が小さい**もの
+    （教科書に出るのは √2, √5, √13 くらいまで）に限る。前は 1〜60 を独立に
+    引いていたので「55cm, 9cm → √3106」という、素因数分解もできない答えが
+    出ていた。狭めたぶんは順序と言い回し・点名の軸で稼ぐ（FIXES.md の原則1）。
+    """
+    out: list[tuple[int, int]] = []
+    for a in range(1, leg_max + 1):
+        for b in range(1, leg_max + 1):
+            if a == b:
+                continue  # 直角二等辺は Lv3 の題材なのでここでは避ける
+            if _squarefree_part(a * a + b * b) <= radicand_max:
+                out.append((a, b))
+    return tuple(out)
+
+
+@lru_cache(maxsize=16)
+def usable_hypotenuse_leg_pairs(
+    side_max: int, radicand_max: int
+) -> tuple[tuple[int, int], ...]:
+    """残りの辺が教材で扱える形になる（斜辺, 直角をはさむ1辺）の組。"""
+    out: list[tuple[int, int]] = []
+    for c in range(2, side_max + 1):
+        for b in range(1, c):
+            if _squarefree_part(c * c - b * b) <= radicand_max:
+                out.append((c, b))
+    return tuple(out)
+
+
 def _effective_concept_tags(ctx: CellContext) -> list[str]:
     return list(ctx.spec_level.concept_tags or ctx.spec_family.concepts_default)
 
@@ -47,14 +90,23 @@ _PYTHAGOREAN_HYPOTENUSE_CONCEPTS = ["pythagorean.hypotenuse_from_legs"]
 def pythagorean_hypotenuse_recipe(ctx: CellContext, rng: Rng) -> MR:
     """直角をはさむ2辺の長さから斜辺の長さを求める（g3_l51.find_value Lv1・answer-first）。"""
     p = ctx.spec_level.params
-    leg_a = int(draw(p["leg_domain"], rng))
-    leg_b = int(draw(p["leg_domain"], rng))
+    pairs = usable_leg_pairs(int(p["leg_max"]), int(p["radicand_max"]))
+    leg_a, leg_b = pairs[int(draw({"int_set": list(range(len(pairs)))}, rng))]
+    # 言い回しを2つ持つ（辺の名前で問う形は教科書の定番で、点名の軸も乗る）。
+    wording = str(draw(["plain", "named"], rng))
+    pa, pb, pc = _draw_distinct_points(3, rng)
 
     solver = REGISTRY.solver("math.pythagorean_hypotenuse")
     sol = cast(Solution, solver(leg_a, leg_b))
     assert isinstance(sol.answer, SymbolicAnswer)
 
-    statement = f"直角をはさむ2辺が {leg_a}cm, {leg_b}cm の直角三角形の斜辺の長さを求めよ"
+    if wording == "plain":
+        statement = f"直角をはさむ2辺が {leg_a}cm, {leg_b}cm の直角三角形の斜辺の長さを求めよ"
+    else:
+        statement = (
+            f"∠{pc}=90°の直角三角形{pa}{pb}{pc}で、{pa}{pc}={leg_a}cm, "
+            f"{pb}{pc}={leg_b}cm である。斜辺{pa}{pb}の長さを求めよ"
+        )
 
     sub_question = SubQuestionMR(
         label="(1)", asked="value", answer=sol.answer, steps=sol.steps,
@@ -63,7 +115,10 @@ def pythagorean_hypotenuse_recipe(ctx: CellContext, rng: Rng) -> MR:
     return MR(
         signature=ctx.spec_level.signature, family=ctx.family, level=ctx.level,
         purpose=ctx.purpose, seed=0,
-        params={"leg_a": leg_a, "leg_b": leg_b},
+        params={
+            "leg_a": leg_a, "leg_b": leg_b,
+            "wording": wording, "labels": pa + pb + pc,
+        },
         given={"condition": statement}, sub_questions=[sub_question], visual_plan=None,
         provenance=Provenance(recipe="math.pythagorean_hypotenuse"),
     )

@@ -24,7 +24,7 @@ meta:
   seed: 3
   signature: angle_pair_terms_term_recall
 problem_ref: b6c5cfcfff5d699d
-problem_text: 2直線v、rが1点で交わってできる4つの角のうち、向かい合う位置にある2つの角の関係 を何といいますか。
+problem_text: 2直線v、rが1点で交わってできる4つの角のうち、向かい合う位置にある2つの角の関係を何といいますか。
 sub_questions:
 - answer:
     correct: 対頂角
@@ -42,7 +42,7 @@ sub_questions:
   hints:
   - 説明されている式や数の部分がどれかを読み取る。
   label: (1)
-  prompt_text: choice を求めなさい。
+  prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
     narration: 説明されている式や数の部分がどれかを読み取る。

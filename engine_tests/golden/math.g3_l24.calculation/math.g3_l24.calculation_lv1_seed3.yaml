@@ -41,7 +41,7 @@ sub_questions:
   hints:
   - 指定された値を左辺の文字に代入する。
   label: (1)
-  prompt_text: value を求めなさい。
+  prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
     narration: 指定された値を左辺の文字に代入する。

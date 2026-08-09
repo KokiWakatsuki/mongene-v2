@@ -32,7 +32,8 @@ levels:
       # dup_key は params（scenario_kind + numbers）で決まる。
       # 斜辺枠 60×60=3600 通り + 直角をはさむ辺枠（斜辺 2..60 × 短い辺 < 斜辺）1770 通り
       # ＝ 5370 通り（閾 0.20 に必要な約250通りを大きく超える）。
-      side_domain: {int_range: [1, 60]}
+      side_max: 30
+      radicand_max: 30
     given: [condition]
     asked: [value]
     visual: none

@@ -11,7 +11,7 @@ from engine.core.registry import REGISTRY, register_checker
 def double_solve_similar_triangle_x_shape(mr: MR) -> Solution:
     p = mr.params
     solver = REGISTRY.solver("math.similar_triangle_x_shape")
-    return cast(Solution, solver(p["oa"], p["ob"], p["oc"]))
+    return cast(Solution, solver(p["oa"], p["ob"], p["oc"], p.get("labels")))
 
 
 @register_checker("math.identify_similarity_condition.double_solve")

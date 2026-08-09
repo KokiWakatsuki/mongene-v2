@@ -43,9 +43,9 @@ levels:
     signature: parallel_ratio_judge_then_length
     recipe: math.parallel_ratio_judge_then_length
     params:
-      length_domain: {int_range: [1, 15]}
-      scale_domain: {int_range: [1, 8]}
-      de_domain: {int_range: [1, 15]}
+      part_max: 12
+      side_max: 60
+      scale_domain: {int_range: [2, 8]}
     given: [condition]
     asked: [value]
     visual: none

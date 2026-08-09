@@ -62,7 +62,21 @@ class FamilyFpCollision:
     signatures: list[str]
 
 
+def _threshold_for(env: EvalEnv, coord: Coordinate, default: float) -> float:
+    """そのセルに宣言された重複率の上限（無ければ既定）。
+
+    多角形の内角・外角のように**教材にありうる設定が十数通りしかない**単元がある。
+    既定の 0.20 を通そうとすると「正348角形」を作ることになるので、
+    family YAML の `dup_rate_max` で宣言できるようにしてある（理由の記載が必須）。
+    """
+    spec = env.families.get(f"math.{coord.unit}.{coord.form}")
+    level = spec.levels.get(str(coord.level)) if spec else None
+    declared = getattr(level, "dup_rate_max", None) if level else None
+    return float(declared) if declared is not None else default
+
+
 def cell_dup_rate(env: EvalEnv, coord: Coordinate, seeds: int, threshold: float) -> CellDupRate:
+    threshold = _threshold_for(env, coord, threshold)
     dup_keys: list[str] = []
     fps: set[str] = set()
     failures: list[dict[str, object]] = []

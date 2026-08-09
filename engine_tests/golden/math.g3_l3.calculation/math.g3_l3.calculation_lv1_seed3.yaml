@@ -41,7 +41,7 @@ sub_questions:
   hints:
   - 2つの定数の和と積を求める。
   label: (1)
-  prompt_text: simplified_expr を求めなさい。
+  prompt_text: 式を簡単にしなさい。
   solution_steps:
   - args: []
     narration: 2つの定数の和と積を求める。

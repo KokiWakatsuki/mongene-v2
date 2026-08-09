@@ -26,12 +26,12 @@ meta:
 problem_ref: b3e1af942575bb9d
 problem_text: '次の計算をせよ。
 
-  (-7/3)-(-0.9)-(-6)'
+  (-1/6)-0.75-8'
 sub_questions:
 - answer:
-    display: 137/30
+    display: -107/12
     kind: symbolic
-    srepr: Rational(137, 30)
+    srepr: Rational(-107, 12)
   cause_tags: []
   concept_tags:
   - signed_number.subtract_terms
@@ -39,26 +39,26 @@ sub_questions:
 
     次に、正の項どうし、負の項どうしをそれぞれまとめる。（正の項・負の項をまとめる）
 
-    最後に、正の合計と負の合計を合わせて、答えを求める。（137/30）'
+    最後に、正の合計と負の合計を合わせて、答えを求める。（-107/12）'
   hints:
   - すべてのひき算を、符号を変えてたし算に直す。
   - 正の項どうし、負の項どうしをそれぞれまとめる。
   label: (1)
-  prompt_text: value を求めなさい。
+  prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
     narration: すべてのひき算を、符号を変えてたし算に直す。
     op: rewrite_all_as_addition
     result_display: すべてたし算に直す
-    result_srepr: Rational(137, 30)
+    result_srepr: Rational(-107, 12)
   - args: []
     narration: 正の項どうし、負の項どうしをそれぞれまとめる。
     op: group_by_sign
     result_display: 正の項・負の項をまとめる
-    result_srepr: Rational(137, 30)
+    result_srepr: Rational(-107, 12)
   - args: []
     narration: 正の合計と負の合計を合わせて、答えを求める。
     op: total_terms
-    result_display: 137/30
-    result_srepr: Rational(137, 30)
+    result_display: -107/12
+    result_srepr: Rational(-107, 12)
 visual_svg: null

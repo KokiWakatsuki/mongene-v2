@@ -67,6 +67,10 @@ from engine.core.contracts import (
 )
 from engine.core.registry import REGISTRY, register_recipe
 from engine.core.rng import Rng, draw
+from engine.packs.math.recipes.pythagorean import (
+    usable_hypotenuse_leg_pairs,
+    usable_leg_pairs,
+)
 from engine.packs.math.visuals.graph import (
     render_coordinate_triangle_solution_svg,
     tick_labels_from_params,
@@ -572,18 +576,23 @@ def _int_range(p: Mapping[str, Any], key: str) -> tuple[int, int]:
 
 # --- g3_l53 Lv2 -------------------------------------------------------------
 def _scene_right_triangle_missing_side(p: Mapping[str, Any], rng: Rng) -> FindValueScene:
-    lo, hi = _int_range(p, "side_domain")
+    """求める辺が教材で扱える形（整数か、根号の中が小さい a√b）になる組だけを引く。
+
+    前は 1〜60 を独立に引いていたので「24cm, 41cm → √2257」のような、
+    素因数分解もできない答えが出ていた。
+    """
+    side_max, radicand_max = int(p["side_max"]), int(p["radicand_max"])
     role = str(draw(["hypotenuse", "leg"], rng))
     if role == "hypotenuse":
-        known_a = int(draw(p["side_domain"], rng))
-        known_b = int(draw(p["side_domain"], rng))
+        pairs = usable_leg_pairs(side_max, radicand_max)
+        known_a, known_b = pairs[int(draw({"int_set": list(range(len(pairs)))}, rng))]
         statement = (
             f"直角をはさむ2辺の長さが {known_a}cm, {known_b}cm である直角三角形の"
             "斜辺の長さを求めよ"
         )
     else:
-        known_a = int(draw({"int_range": [lo + 1, hi]}, rng))  # 斜辺
-        known_b = int(draw({"int_range": [lo, known_a - 1]}, rng))  # 直角をはさむ一方の辺
+        pairs = usable_hypotenuse_leg_pairs(side_max, radicand_max)
+        known_a, known_b = pairs[int(draw({"int_set": list(range(len(pairs)))}, rng))]
         statement = (
             f"斜辺の長さが {known_a}cm、直角をはさむ1辺の長さが {known_b}cm である"
             "直角三角形の、直角をはさむもう1辺の長さを求めよ"

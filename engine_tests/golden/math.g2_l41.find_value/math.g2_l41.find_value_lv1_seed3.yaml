@@ -39,7 +39,7 @@ sub_questions:
   hints:
   - 二等辺三角形の頂角・底角のうち、わかっているほうの大きさを読み取る。
   label: (1)
-  prompt_text: value を求めなさい。
+  prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
     narration: 二等辺三角形の頂角・底角のうち、わかっているほうの大きさを読み取る。

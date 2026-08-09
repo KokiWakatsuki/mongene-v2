@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: survey_method_terms_term_recall
 problem_ref: 30f95d9a39b047f3
-problem_text: 22個（人）の対象の集団から一部を取り出して調べ、集団全体のようすを推定する調査 を何といいますか。
+problem_text: 22個（人）の対象の集団から一部を取り出して調べ、集団全体のようすを推定する調査を何といいますか。
 sub_questions:
 - answer:
     correct: 標本調査
@@ -41,7 +41,7 @@ sub_questions:
   hints:
   - 説明されている式や数の部分がどれかを読み取る。
   label: (1)
-  prompt_text: choice を求めなさい。
+  prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
     narration: 説明されている式や数の部分がどれかを読み取る。

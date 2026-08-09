@@ -41,7 +41,7 @@ sub_questions:
   hints:
   - 仕入れた個数と1個あたりの売り値をかけて、売り上げを求める式をつくる。
   label: (1)
-  prompt_text: formulation を求めなさい。
+  prompt_text: 式に表しなさい。
   solution_steps:
   - args: []
     narration: 仕入れた個数と1個あたりの売り値をかけて、売り上げを求める式をつくる。

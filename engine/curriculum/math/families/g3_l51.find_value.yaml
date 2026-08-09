@@ -14,7 +14,10 @@ levels:
     signature: pythagorean_hypotenuse
     recipe: math.pythagorean_hypotenuse
     params:
-      leg_domain: {int_range: [1, 60]}
+      # 斜辺が整数か、根号の中が小さい a√b になる組だけを引く
+      # （前は 1〜60 を独立に引いて √3106 のような答えが出ていた）。
+      leg_max: 30
+      radicand_max: 30
     given: [condition]
     asked: [value]
     visual: none

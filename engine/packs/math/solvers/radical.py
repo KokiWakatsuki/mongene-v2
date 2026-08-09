@@ -30,6 +30,15 @@ def fmt_radical(expr: sympy.Expr) -> str:
     return s.replace("*", "")
 
 
+def fmt_radical_source(expr_str: str) -> str:
+    """**与式の文字列**の表示形（簡約しない）。例: "sqrt(44)"->"√44" / "3*sqrt(2)"->"3√2"。
+
+    `fmt_radical` は sympy の式を受けるので簡約後の形になる。問題文に出ている形を
+    そのまま答えに使いたいときはこちらを使う。
+    """
+    return _SQRT_RE.sub(r"√\1", expr_str).replace("*", "")
+
+
 # mode -> op 列（level_sep はこの op 列の相異で作る）。narration に数字を書かない。
 _RADICAL_STEPS: dict[str, list[str]] = {
     # g3_l14 根号と平方の相互変換
@@ -245,9 +254,13 @@ def compare_radical_values(exprs: object, mode: object) -> Solution:
     mode_s = str(mode)
     if mode_s not in _COMPARE_STEPS:
         raise ValueError(f"未知の mode: {mode_s!r}")
-    vals = [sympy.sympify(e) for e in cast("list[str]", exprs)]
-    ordered = sorted(vals)
-    disp = " < ".join(fmt_radical(v) for v in ordered)
+    # **答えは問題文に出ている形のまま並べる。** sympy に簡約させると √44 が 2√11 に
+    # なり、「√82 と √44 の大小を表せ」に対して「2√11 < √82」と答えることになっていた
+    # （EVALUATION D-21）。Lv1 は「2乗して比べる」だけの段なので、変形は答えに要らない。
+    raw = [str(e) for e in cast("list[str]", exprs)]
+    pairs = sorted(((sympy.sympify(s), s) for s in raw), key=lambda t: t[0])
+    ordered = [v for v, _ in pairs]
+    disp = " < ".join(fmt_radical_source(s) for _, s in pairs)
     srepr = sympy.srepr(sympy.Tuple(*ordered))
 
     ops = _COMPARE_STEPS[mode_s]
@@ -266,5 +279,6 @@ def compare_radical_values(exprs: object, mode: object) -> Solution:
 
 
 __all__ = [
-    "simplify_radical", "fmt_radical", "evaluate_radical_substitution", "compare_radical_values",
+    "simplify_radical", "fmt_radical", "fmt_radical_source",
+    "evaluate_radical_substitution", "compare_radical_values",
 ]

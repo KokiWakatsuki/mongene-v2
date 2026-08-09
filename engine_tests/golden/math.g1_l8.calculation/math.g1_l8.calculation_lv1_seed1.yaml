@@ -41,7 +41,7 @@ sub_questions:
   hints:
   - わる数の逆数をかけるかけ算に直す。
   label: (1)
-  prompt_text: value を求めなさい。
+  prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
     narration: わる数の逆数をかけるかけ算に直す。

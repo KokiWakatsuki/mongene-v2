@@ -50,7 +50,7 @@ sub_questions:
   - ÷ を、その式の逆数をかけるかけ算に直す。
   - 係数どうしをかけ算する。
   label: (1)
-  prompt_text: formulation を求めなさい。
+  prompt_text: 式に表しなさい。
   solution_steps:
   - args: []
     narration: 速さに時間をかけて、道のりをmで表す式をつくる。

@@ -24,31 +24,31 @@ meta:
   seed: 1
   signature: parallel_segment_ratio_length
 problem_ref: 503192cfaf37dfe4
-problem_text: 三角形EABで、辺EA, EB上に点F, Pがあり、FP∥ABである。EF=111cm, FA=11cm, FP=85cm のとき、辺ABの長さを求めよ。
+problem_text: 三角形EABで、辺EA, EB上に点F, Pがあり、FP∥ABである。EF=3cm, FA=5cm, FP=6cm のとき、辺ABの長さを求めよ。
 sub_questions:
 - answer:
-    display: 10370/111
+    display: '16'
     kind: symbolic
-    srepr: Rational(10370, 111)
+    srepr: Integer(16)
   cause_tags: []
   concept_tags:
   - parallel_segment.ratio_length
-  explanation: 'まず、DE∥BC であることから、三角形ADEと三角形ABCが相似になることを見つける。（平行線がつくる相似な三角形を見つける）
+  explanation: 'まず、FP∥AB であることから、三角形EFPと三角形EABが相似になることを見つける。（平行線がつくる相似な三角形を見つける）
 
-    次に、AD:AB=DE:BC が成り立つことから、辺BCの長さを求める。（10370/111）'
+    次に、EF:EA=FP:AB が成り立つことから、辺ABの長さを求める。（16）'
   hints:
-  - DE∥BC であることから、三角形ADEと三角形ABCが相似になることを見つける。
+  - FP∥AB であることから、三角形EFPと三角形EABが相似になることを見つける。
   label: (1)
-  prompt_text: value を求めなさい。
+  prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
-    narration: DE∥BC であることから、三角形ADEと三角形ABCが相似になることを見つける。
+    narration: FP∥AB であることから、三角形EFPと三角形EABが相似になることを見つける。
     op: identify_similar_triangles_from_parallel
     result_display: 平行線がつくる相似な三角形を見つける
     result_srepr: ''
   - args: []
-    narration: AD:AB=DE:BC が成り立つことから、辺BCの長さを求める。
+    narration: EF:EA=FP:AB が成り立つことから、辺ABの長さを求める。
     op: apply_parallel_segment_ratio
-    result_display: 10370/111
-    result_srepr: Rational(10370, 111)
+    result_display: '16'
+    result_srepr: Integer(16)
 visual_svg: null

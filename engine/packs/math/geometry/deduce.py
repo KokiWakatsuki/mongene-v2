@@ -14,7 +14,11 @@ from dataclasses import dataclass, field
 from engine.packs.math.geometry.facts import Fact, ang, ang_eq
 from engine.packs.math.geometry.rules import RULES, Rule
 
-_MAX_ROUNDS = 12  # 飽和しないことは無いが、暴走の歯止め
+# 暴走の歯止め（飽和しないことは無い）。**深さではなく事実の数が本当の歯止めである**
+# ——12 にしていたとき、二等辺三角形の辺の上に点を2つとった図（143 個の事実・最大
+# 深さ 15）が「飽和しない」で落ちていた。等式が鎖のようにつながる図では、事実が
+# 増えなくても深さだけが伸びる。数えてみると 143 個で 0.4 秒なので、暴走とは桁が違う。
+_MAX_ROUNDS = 24
 
 
 @dataclass(frozen=True)

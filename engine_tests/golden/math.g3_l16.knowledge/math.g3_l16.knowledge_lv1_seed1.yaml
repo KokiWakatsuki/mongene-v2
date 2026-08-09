@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: real_numbers_term_recall
 problem_ref: 3a7ad7e6100b6114
-problem_text: 0.898989… のように、小数点以下で同じ数字の並びがくり返し続く小数 を何といいますか。
+problem_text: 0.898989… のように、小数点以下で同じ数字の並びがくり返し続く小数を何といいますか。
 sub_questions:
 - answer:
     correct: 循環小数
@@ -42,7 +42,7 @@ sub_questions:
   hints:
   - 説明されている式や数の部分がどれかを読み取る。
   label: (1)
-  prompt_text: choice を求めなさい。
+  prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
     narration: 説明されている式や数の部分がどれかを読み取る。

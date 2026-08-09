@@ -42,10 +42,10 @@ levels:
     params:
       scenario_kind: consecutive_integers
       guided: true
-      # 積 p=x0(x0+1) が場面文の唯一の数値なので、自由度を確保するため広めにとる
-      # （x0 が小さい範囲だけだと積のバリエーションが足りず dup_rate が閾を超える。
-      # 実測: [3,300]→dup=0.24 で閾超過。[3,700]→dup=0.11 で通過）。
-      small_domain: {int_range: [3, 700]}
+      # 積 p=x0(x0+g) は教科書の大きさに収める（以前は dup_rate を通すために
+      # x0 を 700 まで広げ、「2数の積は132860である」が出ていた）。
+      # 軸は「整数・偶数・奇数」の3通り。残る重複は下で仕様として宣言する。
+      small_max: 30
     given: [scenario, quantities]
     asked: [formulation, value]
     visual: none
@@ -53,6 +53,9 @@ levels:
     hints: [steps_prefix]
     concept_tags: [quadratic.word_problem_consecutive_integers]
     cause_tags: []
+    dup_rate_max: 0.60
+    dup_rate_reason: >-
+      連続する2数の積は、場面文に出る数値が積ひとつしかない。教科書の大きさ（小さい方が30以下）に収めると、整数・偶数・奇数の3通りを合わせても場面は58通りしかなく、既定の0.20を通すには「2数の積は132860である」を作ることになる。数を現実に戻したうえで重複を仕様として宣言する。
   "3":
     signature: word_problem_quadratic_number_square_relation
     recipe: math.word_problem_quadratic

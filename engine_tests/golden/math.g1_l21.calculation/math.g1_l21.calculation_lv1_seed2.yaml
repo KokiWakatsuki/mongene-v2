@@ -41,7 +41,7 @@ sub_questions:
   hints:
   - 等式の性質を使い、両辺から同じ数をひく（または加える）。
   label: (1)
-  prompt_text: solution を求めなさい。
+  prompt_text: 解を求めなさい。
   solution_steps:
   - args: []
     narration: 等式の性質を使い、両辺から同じ数をひく（または加える）。

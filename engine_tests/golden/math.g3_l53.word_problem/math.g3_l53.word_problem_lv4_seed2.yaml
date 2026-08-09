@@ -1,0 +1,80 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - pythagorean.word_problem_triangle_height_area_solo
+  provenance:
+    git_commit: ''
+    recipe: math.word_problem_pythagorean
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: wp_linear_solo_v1
+    tier: T1
+  requested:
+    form: word_problem
+    level: 4
+    subject: math
+    unit: g3_l53
+  resolved:
+    form: word_problem
+    level: 4
+    subject: math
+    unit: g3_l53
+  seed: 2
+  signature: word_problem_triangle_height_area_solo
+problem_ref: 0f74826248d3df25
+problem_text: 'QRが13cm、RSが21cm、SQが20cmの三角形QRSがある。
+
+  必要な補助線を自分で引き、辺RSを底辺としたときの高さと三角形QRSの面積を求めよ。'
+sub_questions:
+- answer:
+    display: 高さ 12 cm、面積 126 cm²
+    kind: symbolic
+    srepr: Tuple(Integer(12), Integer(126))
+  cause_tags: []
+  concept_tags:
+  - pythagorean.word_problem_triangle_height_area_solo
+  explanation: 'まず、3辺の長さしかわかっていないので、頂点から底辺に垂線を引く補助線を自分で入れる。底辺が2つに分かれて、高さを共有する直角三角形が2つできる。
+
+    次に、分かれた底辺の一方の長さを文字でおくと、もう一方は底辺の長さからその分をひいた残りになる。（5 cm）
+
+    次に、2つの直角三角形それぞれで、高さの二乗を三平方の定理で表す。高さは共通だから、その2つの式は等しい。この方程式を解いて、分けた底辺の長さを求める。
+
+    次に、求めた長さを一方の直角三角形にあてはめて、三平方の定理から高さを求める。（12 cm）
+
+    最後に、底辺と、いま求めた高さから、三角形の面積を求める。（高さ 12 cm、面積 126 cm²）'
+  hints:
+  - 3辺の長さしかわかっていないので、頂点から底辺に垂線を引く補助線を自分で入れる。底辺が2つに分かれて、高さを共有する直角三角形が2つできる。
+  - 分かれた底辺の一方の長さを文字でおくと、もう一方は底辺の長さからその分をひいた残りになる。
+  - 2つの直角三角形それぞれで、高さの二乗を三平方の定理で表す。高さは共通だから、その2つの式は等しい。この方程式を解いて、分けた底辺の長さを求める。
+  - 求めた長さを一方の直角三角形にあてはめて、三平方の定理から高さを求める。
+  label: (1)
+  prompt_text: 答えを求めなさい。
+  solution_steps:
+  - args: []
+    narration: 3辺の長さしかわかっていないので、頂点から底辺に垂線を引く補助線を自分で入れる。底辺が2つに分かれて、高さを共有する直角三角形が2つできる。
+    op: draw_auxiliary_perpendicular
+    result_display: ''
+    result_srepr: ''
+  - args: []
+    narration: 分かれた底辺の一方の長さを文字でおくと、もう一方は底辺の長さからその分をひいた残りになる。
+    op: set_unknown_on_base
+    result_display: 5 cm
+    result_srepr: Integer(5)
+  - args: []
+    narration: 2つの直角三角形それぞれで、高さの二乗を三平方の定理で表す。高さは共通だから、その2つの式は等しい。この方程式を解いて、分けた底辺の長さを求める。
+    op: express_height_two_ways
+    result_display: ''
+    result_srepr: ''
+  - args: []
+    narration: 求めた長さを一方の直角三角形にあてはめて、三平方の定理から高さを求める。
+    op: apply_pythagorean_theorem
+    result_display: 12 cm
+    result_srepr: Integer(12)
+  - args: []
+    narration: 底辺と、いま求めた高さから、三角形の面積を求める。
+    op: compute_triangle_area
+    result_display: 高さ 12 cm、面積 126 cm²
+    result_srepr: Tuple(Integer(12), Integer(126))
+visual_svg: null

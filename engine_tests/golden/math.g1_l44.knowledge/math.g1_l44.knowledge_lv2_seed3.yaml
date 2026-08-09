@@ -24,7 +24,7 @@ meta:
   seed: 3
   signature: construction_choice_terms_term_recall
 problem_ref: b34c890a9fabdb29
-problem_text: ∠LAFの2辺AL、AFから等しい距離にある点の集まりを作図するときに使う、基本作図の名前 を何といいますか。
+problem_text: ∠LAFの2辺AL、AFから等しい距離にある点の集まりを作図するときに使う、基本作図の名前を何といいますか。
 sub_questions:
 - answer:
     correct: 角の二等分線
@@ -41,7 +41,7 @@ sub_questions:
   hints:
   - 説明されている式や数の部分がどれかを読み取る。
   label: (1)
-  prompt_text: choice を求めなさい。
+  prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
     narration: 説明されている式や数の部分がどれかを読み取る。

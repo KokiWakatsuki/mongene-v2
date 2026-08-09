@@ -24,7 +24,7 @@ meta:
   seed: 3
   signature: prime_concepts_term_recall
 problem_ref: 9de45beea53cac39
-problem_text: 整数 267 を 89 × 3 のように素数だけの積で表したときの、その1つ1つの素数 を何といいますか。
+problem_text: 整数 267 を 89 × 3 のように素数だけの積で表したときの、その1つ1つの素数を何といいますか。
 sub_questions:
 - answer:
     correct: 素因数
@@ -42,7 +42,7 @@ sub_questions:
   hints:
   - 説明されている式や数の部分がどれかを読み取る。
   label: (1)
-  prompt_text: choice を求めなさい。
+  prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
     narration: 説明されている式や数の部分がどれかを読み取る。

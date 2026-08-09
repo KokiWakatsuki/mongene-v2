@@ -24,12 +24,12 @@ meta:
   seed: 3
   signature: probability_two_dice_count
 problem_ref: 6f8703e684258013
-problem_text: 1から7までの目が出る大小2個のさいころを同時に投げるとき、出た目の和が6以上になる確率を、表を作って求めよ。
+problem_text: 大小2個のさいころを同時に投げるとき、出た目の積が3になる確率を求めよ。
 sub_questions:
 - answer:
-    display: 39/49
+    display: 1/18
     kind: symbolic
-    srepr: Rational(39, 49)
+    srepr: Rational(1, 18)
   cause_tags: []
   concept_tags:
   - probability.count_two_dice
@@ -37,12 +37,12 @@ sub_questions:
 
     次に、そのうち、求める条件にあてはまる組合せの数を数える。（条件にあてはまる組合せを数える）
 
-    最後に、条件にあてはまる組合せの数を、すべての組合せの数でわる。（39/49）'
+    最後に、条件にあてはまる組合せの数を、すべての組合せの数でわる。（1/18）'
   hints:
   - 大小2個のさいころの目の組合せを、表などを使ってすべて数え上げる。
   - そのうち、求める条件にあてはまる組合せの数を数える。
   label: (1)
-  prompt_text: value を求めなさい。
+  prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
     narration: 大小2個のさいころの目の組合せを、表などを使ってすべて数え上げる。
@@ -57,6 +57,6 @@ sub_questions:
   - args: []
     narration: 条件にあてはまる組合せの数を、すべての組合せの数でわる。
     op: compute_probability
-    result_display: 39/49
-    result_srepr: Rational(39, 49)
+    result_display: 1/18
+    result_srepr: Rational(1, 18)
 visual_svg: null

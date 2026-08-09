@@ -50,7 +50,10 @@ def double_solve_compare_signed_numbers(mr: MR) -> Solution:
 @register_checker("math.recall_rule.double_solve")
 def double_solve_recall_rule(mr: MR) -> Solution:
     solver = REGISTRY.solver("math.recall_rule_statement")
-    return cast(Solution, solver(mr.params["topic"], mr.params["concept"]))
+    return cast(
+        Solution,
+        solver(mr.params["topic"], mr.params["concept"], mr.params.get("labels")),
+    )
 
 
 @register_checker("math.classify_number_sign.double_solve")

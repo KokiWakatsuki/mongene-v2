@@ -24,24 +24,24 @@ meta:
   seed: 1
   signature: relative_frequency_stats_single
 problem_ref: f791c9f42e997432
-problem_text: 123人のうち、ある階級の度数が72人であった。この階級の相対度数を求めよ。
+problem_text: 125人のうち、ある階級の度数が109人であった。この階級の相対度数を小数で求めよ。
 sub_questions:
 - answer:
-    display: 24/41
+    display: '0.872'
     kind: symbolic
-    srepr: Rational(24, 41)
+    srepr: Rational(109, 125)
   cause_tags: []
   concept_tags:
   - relative_frequency.compute_single
-  explanation: まず、ことがらが起こった回数を、試行の総回数でわる。（24/41）
+  explanation: まず、ことがらが起こった回数を、試行の総回数でわる。（0.872）
   hints:
-  - 問題文の与えられた値をもう一度確認しよう。
+  - ことがらが起こった回数を、試行の総回数でわる。
   label: (1)
-  prompt_text: value を求めなさい。
+  prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
     narration: ことがらが起こった回数を、試行の総回数でわる。
     op: divide_occurred_by_total
-    result_display: 24/41
-    result_srepr: Rational(24, 41)
+    result_display: '0.872'
+    result_srepr: Rational(109, 125)
 visual_svg: null

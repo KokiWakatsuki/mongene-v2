@@ -48,7 +48,7 @@ sub_questions:
   - 傾きと通る点の座標を y = ax + b に代入する。
   - 代入した式を b について解き、切片を求める。
   label: (1)
-  prompt_text: formulation を求めなさい。
+  prompt_text: 式に表しなさい。
   solution_steps:
   - args:
     - '84'
@@ -87,7 +87,7 @@ sub_questions:
   - もう一方の人が出発地点から相手に向かって進むようすを、道のりの式で表す。
   - 2つの直線の y を等しいとおき、x についての方程式を解く。
   label: (2)
-  prompt_text: value を求めなさい。
+  prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
     narration: もう一方の人が出発地点から相手に向かって進むようすを、道のりの式で表す。

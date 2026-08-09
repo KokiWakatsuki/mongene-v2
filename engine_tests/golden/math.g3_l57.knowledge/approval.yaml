@@ -1,6 +1,6 @@
-approved_at: '2026-07-30T16:48:15.671514'
+approved_at: '2026-08-10T04:27:11.381511'
 approver: koki
-content_sha256: c740c440e581de7657ff1bb83851e72af8594c887cac0020dff7c9daa1a60048
+content_sha256: fbc0afb723cba50ffd363c5b710931312f941d3b0381f9596e8e39699454ed70
 family: math.g3_l57.knowledge
 files:
 - engine_tests/golden/math.g3_l57.knowledge/math.g3_l57.knowledge_lv1_seed1.yaml

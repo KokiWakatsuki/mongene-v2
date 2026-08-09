@@ -42,7 +42,7 @@ sub_questions:
   - データを大きさの順に並べ、データ全体の中央値（第二四分位数）を求める。
   - 中央値を境に下組と上組に分ける。
   label: (1)
-  prompt_text: value を求めなさい。
+  prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
     narration: データを大きさの順に並べ、データ全体の中央値（第二四分位数）を求める。

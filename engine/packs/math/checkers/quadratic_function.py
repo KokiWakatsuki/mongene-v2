@@ -101,7 +101,7 @@ def double_solve_exam_parabola_coefficient_from_intersection(mr: MR) -> Solution
     return cast(
         Solution,
         REGISTRY.solver("math.parabola_coefficient_from_intersection")(
-            p["m"], p["b"], p["x_a"]
+            p["m"], p["b"], p["x_a"], p.get("labels")
         ),
     )
 

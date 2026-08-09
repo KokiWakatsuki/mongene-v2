@@ -26,22 +26,22 @@ meta:
 problem_ref: 3f990e6c691601d6
 problem_text: '次の式を計算せよ。
 
-  7√124'
+  7√80'
 sub_questions:
 - answer:
-    display: 14√31
+    display: 28√5
     kind: symbolic
-    srepr: Mul(Integer(14), Pow(Integer(31), Rational(1, 2)))
+    srepr: Mul(Integer(28), Pow(Integer(5), Rational(1, 2)))
   cause_tags: []
   concept_tags:
   - radical.simplify_form
   explanation: 'まず、根号の中を素因数分解し、平方の因数を見つける。（平方の因数を見つける）
 
-    次に、平方の因数を根号の外に出して a√b の形にする。（14√31）'
+    次に、平方の因数を根号の外に出して a√b の形にする。（28√5）'
   hints:
   - 根号の中を素因数分解し、平方の因数を見つける。
   label: (1)
-  prompt_text: simplified_expr を求めなさい。
+  prompt_text: 式を簡単にしなさい。
   solution_steps:
   - args: []
     narration: 根号の中を素因数分解し、平方の因数を見つける。
@@ -51,6 +51,6 @@ sub_questions:
   - args: []
     narration: 平方の因数を根号の外に出して a√b の形にする。
     op: take_root_outside
-    result_display: 14√31
-    result_srepr: Mul(Integer(14), Pow(Integer(31), Rational(1, 2)))
+    result_display: 28√5
+    result_srepr: Mul(Integer(28), Pow(Integer(5), Rational(1, 2)))
 visual_svg: null

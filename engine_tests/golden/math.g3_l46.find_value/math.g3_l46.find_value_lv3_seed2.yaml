@@ -1,0 +1,62 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - similarity.solid_ratio_from_volume
+  provenance:
+    git_commit: ''
+    recipe: math.similar_solid_ratio_from_volume
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_similarity_scale_ratio_condition_v1
+    tier: T1
+  requested:
+    form: find_value
+    level: 3
+    subject: math
+    unit: g3_l46
+  resolved:
+    form: find_value
+    level: 3
+    subject: math
+    unit: g3_l46
+  seed: 2
+  signature: similar_solid_ratio_from_volume
+problem_ref: febbd3b43a5b0dbc
+problem_text: 相似な2つの円錐P, Qがあり、Pの体積は3750cm³、Qの体積は6480cm³である。PとQの表面積の比を求めよ。
+sub_questions:
+- answer:
+    display: 表面積の比 25:36
+    kind: symbolic
+    srepr: Tuple(Integer(25), Integer(36))
+  cause_tags: []
+  concept_tags:
+  - similarity.solid_ratio_from_volume
+  explanation: 'まず、PとQの体積の比を、最も簡単な整数の比に直す。（体積の比を最も簡単な整数の比に直す）
+
+    次に、体積の比は相似比の三乗に等しいことから、相似比を求める。（体積の比から相似比を求める）
+
+    最後に、相似な立体の表面積の比は相似比の二乗に等しいことから、表面積の比を求める。（表面積の比 25:36）'
+  hints:
+  - PとQの体積の比を、最も簡単な整数の比に直す。
+  - 体積の比は相似比の三乗に等しいことから、相似比を求める。
+  label: (1)
+  prompt_text: 答えを求めなさい。
+  solution_steps:
+  - args: []
+    narration: PとQの体積の比を、最も簡単な整数の比に直す。
+    op: reduce_volume_ratio
+    result_display: 体積の比を最も簡単な整数の比に直す
+    result_srepr: ''
+  - args: []
+    narration: 体積の比は相似比の三乗に等しいことから、相似比を求める。
+    op: extract_similarity_ratio_via_cube_root
+    result_display: 体積の比から相似比を求める
+    result_srepr: ''
+  - args: []
+    narration: 相似な立体の表面積の比は相似比の二乗に等しいことから、表面積の比を求める。
+    op: square_ratio_for_surface_area
+    result_display: 表面積の比 25:36
+    result_srepr: Tuple(Integer(25), Integer(36))
+visual_svg: null

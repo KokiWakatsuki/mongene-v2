@@ -24,12 +24,12 @@ meta:
   seed: 3
   signature: probability_at_least_one
 problem_ref: 78617962ea8c58e6
-problem_text: 1個のさいころ（1から12までの目が出る）を10回投げるとき、少なくとも1回は1の目が出る確率を、余事象を利用して求めよ。
+problem_text: 当たりが3本、はずれが7本入っているくじがある。1本引いてはもとにもどすことを2回くり返すとき、少なくとも1回は当たる確率を、余事象を利用して求めよ。
 sub_questions:
 - answer:
-    display: 35979939623/61917364224
+    display: 51/100
     kind: symbolic
-    srepr: Rational(35979939623, 61917364224)
+    srepr: Rational(51, 100)
   cause_tags: []
   concept_tags:
   - probability.at_least_one_via_complement
@@ -37,12 +37,12 @@ sub_questions:
 
     次に、独立な試行をくり返すので、すべての回で条件が起こらない確率は1回分の確率を試行回数だけかけ合わせたものになる。（余事象の確率を求める）
 
-    最後に、1から、その余事象の確率をひいて、少なくとも1回起こる確率を求める。（35979939623/61917364224）'
+    最後に、1から、その余事象の確率をひいて、少なくとも1回起こる確率を求める。（51/100）'
   hints:
   - 1回の試行で条件が起こらない場合の数を数え、その確率を求める。
   - 独立な試行をくり返すので、すべての回で条件が起こらない確率は1回分の確率を試行回数だけかけ合わせたものになる。
   label: (1)
-  prompt_text: value を求めなさい。
+  prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
     narration: 1回の試行で条件が起こらない場合の数を数え、その確率を求める。
@@ -57,6 +57,6 @@ sub_questions:
   - args: []
     narration: 1から、その余事象の確率をひいて、少なくとも1回起こる確率を求める。
     op: subtract_from_one
-    result_display: 35979939623/61917364224
-    result_srepr: Rational(35979939623, 61917364224)
+    result_display: 51/100
+    result_srepr: Rational(51, 100)
 visual_svg: null

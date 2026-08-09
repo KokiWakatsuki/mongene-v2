@@ -24,22 +24,22 @@ meta:
   seed: 1
   signature: similarity_ratio_transfer
 problem_ref: 548fd983f25a17f7
-problem_text: 三角形JQBと三角形CMHは相似で、相似比は 11:1 である。JQ=75cm のとき、対応する辺CMの長さを求めよ。
+problem_text: 三角形JQBと三角形CMHは相似で、相似比は 7:9 である。JQ=35cm のとき、対応する辺CMの長さを求めよ。
 sub_questions:
 - answer:
-    display: 75/11
+    display: '45'
     kind: symbolic
-    srepr: Rational(75, 11)
+    srepr: Integer(45)
   cause_tags: []
   concept_tags:
   - similarity.ratio_transfer
   explanation: 'まず、2つの図形の相似比と、わかっている辺の長さを読み取る。（相似比とわかっている辺の長さを読み取る）
 
-    次に、相似な図形では対応する辺の長さの比が相似比に等しいことから、対応する辺の長さを求める。（75/11）'
+    次に、相似な図形では対応する辺の長さの比が相似比に等しいことから、対応する辺の長さを求める。（45）'
   hints:
   - 2つの図形の相似比と、わかっている辺の長さを読み取る。
   label: (1)
-  prompt_text: value を求めなさい。
+  prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
     narration: 2つの図形の相似比と、わかっている辺の長さを読み取る。
@@ -49,6 +49,6 @@ sub_questions:
   - args: []
     narration: 相似な図形では対応する辺の長さの比が相似比に等しいことから、対応する辺の長さを求める。
     op: apply_similarity_ratio
-    result_display: 75/11
-    result_srepr: Rational(75, 11)
+    result_display: '45'
+    result_srepr: Integer(45)
 visual_svg: null

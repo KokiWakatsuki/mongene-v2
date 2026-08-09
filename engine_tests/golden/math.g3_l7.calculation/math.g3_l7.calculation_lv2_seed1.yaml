@@ -41,7 +41,7 @@ sub_questions:
   hints:
   - 各項の係数と文字に共通する因数を見つける。
   label: (1)
-  prompt_text: simplified_expr を求めなさい。
+  prompt_text: 式を簡単にしなさい。
   solution_steps:
   - args: []
     narration: 各項の係数と文字に共通する因数を見つける。

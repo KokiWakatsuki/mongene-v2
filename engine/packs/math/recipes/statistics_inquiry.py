@@ -109,6 +109,26 @@ def _draw_population(p: dict[str, Any], rng: Rng) -> int:
     return int(draw({"int_set": list(range(lo, hi + 1, step))}, rng))
 
 
+# 記録の種目と、中学生の記録として実際にありうる値の幅（単位は十分の一秒）。
+# 「立ち幅とびの助走時間」は立ち幅とびに助走が無いので外した。
+_TIMED_EVENTS: list[tuple[str, int, int]] = [
+    ("50m走の記録（十分の一秒）", 75, 95),
+    ("100m走の記録（十分の一秒）", 140, 180),
+    ("二十メートル走の記録（十分の一秒）", 33, 45),
+    ("シャトルランの折り返しにかかる時間（十分の一秒）", 60, 90),
+    ("反復横とびの一往復にかかる時間（十分の一秒）", 10, 18),
+]
+
+
+def _shuffle(values: list[int], rng: Rng) -> list[int]:
+    """draw だけで並びを撹拌する（乱数は draw 以外で解釈しない・H8）。"""
+    rest = list(values)
+    out: list[int] = []
+    while rest:
+        out.append(rest.pop(int(draw({"int_set": list(range(len(rest)))}, rng))))
+    return out
+
+
 def _draw_stable_pair(p: dict[str, Any], rng: Rng) -> tuple[list[int], list[int]]:
     """平均が等しく、範囲が相異なる2つのデータ（安定しているほうが一意に決まる）。
 
@@ -138,12 +158,16 @@ def _draw_stable_pair(p: dict[str, Any], rng: Rng) -> tuple[list[int], list[int]
             vals.extend([mean - k, mean + k])
         if n % 2:
             vals.append(mean)
-        return vals
+        # **並べたままだと「4、8、4、8、5、7…」と対が丸見えになる**（EVALUATION D-14）。
+        # 平均も範囲も並び順では変わらないので、記録らしく撹拌して出す。
+        return _shuffle(vals, rng)
 
     return build(wa, 0), build(wb, 1)
 
 
-def _draw_agreeing_pair(p: dict[str, Any], rng: Rng) -> tuple[list[int], list[int]]:
+def _draw_agreeing_pair(
+    p: dict[str, Any], rng: Rng, base_lo: int, base_hi: int
+) -> tuple[list[int], list[int]]:
     """平均値・中央値・最頻値のすべてが同じ側を指す2つのデータ。
 
     【構成】A のすべての値が B のすべての値より小さくなるように作る（帯を分ける）。
@@ -151,15 +175,29 @@ def _draw_agreeing_pair(p: dict[str, Any], rng: Rng) -> tuple[list[int], list[in
     各データは中央の値を多数派にして最頻値を一意にする。
     """
     n = int(draw({"int_set": [int(v) for v in p["size_set"]]}, rng))
-    base = int(draw({"int_range": [int(v) for v in p["base_range"]]}, rng))
+    base = int(draw({"int_range": [base_lo, base_hi]}, rng))
     gap = int(draw({"int_set": [int(v) for v in p["gap_set"]]}, rng))
     spread = int(draw({"int_set": [int(v) for v in p["spread_set"]]}, rng))
 
+    # **同じ値が8個続くと、記録として不自然になる**（EVALUATION D-14。100m走で
+    # 8人が同タイムになっていた）。中央の値は最頻値を一意にするぶんだけ重ねて、
+    # 残りは中央のまわりに対称な組で散らす——平均・中央値・最頻値はどれも中央の
+    # 値のままなので、「3つの指標が同じ側を指す」という構成は変わらない。
+    pairs = 0
+    for m in range((n - 2) // 2, 0, -1):
+        repeats = -(-m // spread)  # 同じ差を使い回す回数（切り上げ）
+        if n - 2 * m > repeats:
+            pairs = m
+            break
+    center_count = n - 2 * pairs
+
     def build(center: int) -> list[int]:
-        """中央の値を多数派にして最頻値を一意にしつつ、値が数種類は出るようにする。"""
-        vals = [center] * (n - 4)
-        vals += [center - spread, center + spread, center - 1, center + 1]
-        return vals
+        """中央の値を最頻値にしつつ、値が数種類は出るようにする（平均＝中央値＝中央の値）。"""
+        vals = [center] * center_count
+        for i in range(pairs):
+            d = 1 + (i % spread)
+            vals.extend([center - d, center + d])
+        return _shuffle(vals, rng)
 
     return build(base), build(base + gap)
 
@@ -200,9 +238,13 @@ def statistics_inquiry_recipe(ctx: CellContext, rng: Rng) -> MR:
         )
 
     if mode == "choose_statistic":
-        data_a, data_b = _draw_agreeing_pair(p, rng)
+        # **場面ごとに、実際に起こりうる値の幅を持たせる。** 1つの base_range を
+        # すべての種目で使い回していたので「100m走の記録（十分の一秒）: 91」＝9.1秒
+        # という、世界記録より速い記録が出ていた（EVALUATION D-14）。
+        idx = int(draw({"int_set": list(range(len(_TIMED_EVENTS)))}, rng))
+        subject, base_lo, base_hi = _TIMED_EVENTS[idx]
+        data_a, data_b = _draw_agreeing_pair(p, rng, base_lo, base_hi)
         smaller = bool(p["smaller_is_better"])
-        subject = str(draw(list(p["subject_set"]), rng))
         sol = cast(
             Solution,
             REGISTRY.solver("math.judge_group_by_any_statistic")(data_a, data_b, smaller),

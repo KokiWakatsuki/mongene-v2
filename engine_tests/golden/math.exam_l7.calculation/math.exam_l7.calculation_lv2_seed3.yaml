@@ -24,24 +24,24 @@ meta:
   seed: 3
   signature: exam_relative_frequency
 problem_ref: 8d0acd79541d0f9d
-problem_text: ある調査で、標本149人のうち賛成した人が103人であった。賛成した人の相対度数(割合)を求めよ。
+problem_text: ある調査で、標本200人のうち賛成した人が148人であった。賛成した人の相対度数(割合)を小数で求めよ。
 sub_questions:
 - answer:
-    display: 103/149
+    display: '0.74'
     kind: symbolic
-    srepr: Rational(103, 149)
+    srepr: Rational(37, 50)
   cause_tags: []
   concept_tags:
   - exam.relative_frequency_ratio
-  explanation: まず、ことがらが起こった回数を、試行の総回数でわる。（103/149）
+  explanation: まず、ことがらが起こった回数を、試行の総回数でわる。（0.74）
   hints:
-  - 問題文の与えられた値をもう一度確認しよう。
+  - ことがらが起こった回数を、試行の総回数でわる。
   label: (1)
-  prompt_text: value を求めなさい。
+  prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
     narration: ことがらが起こった回数を、試行の総回数でわる。
     op: divide_occurred_by_total
-    result_display: 103/149
-    result_srepr: Rational(103, 149)
+    result_display: '0.74'
+    result_srepr: Rational(37, 50)
 visual_svg: null

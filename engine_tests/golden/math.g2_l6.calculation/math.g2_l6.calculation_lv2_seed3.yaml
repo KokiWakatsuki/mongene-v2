@@ -41,7 +41,7 @@ sub_questions:
   hints:
   - 分母の最小公倍数を求めて通分する。
   label: (1)
-  prompt_text: simplified_expr を求めなさい。
+  prompt_text: 式を簡単にしなさい。
   solution_steps:
   - args: []
     narration: 分母の最小公倍数を求めて通分する。

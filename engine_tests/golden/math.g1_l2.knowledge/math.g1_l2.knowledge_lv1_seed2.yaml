@@ -24,7 +24,7 @@ meta:
   seed: 2
   signature: number_term_recall
 problem_ref: c95ca8bf99bf80bb
-problem_text: +6 や -6 の前についている、正と負を表す + や - のしるし を何といいますか。
+problem_text: +6 や -6 の前についている、正と負を表す + や - のしるしを何といいますか。
 sub_questions:
 - answer:
     correct: 符号
@@ -43,7 +43,7 @@ sub_questions:
   hints:
   - 説明されている式や数の部分がどれかを読み取る。
   label: (1)
-  prompt_text: choice を求めなさい。
+  prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
     narration: 説明されている式や数の部分がどれかを読み取る。

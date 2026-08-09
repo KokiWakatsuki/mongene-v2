@@ -24,14 +24,14 @@ meta:
   seed: 1
   signature: word_problem_dice_repeat_at_least_one
 problem_ref: 07fe8f833a38bd65
-problem_text: '1から17までの目が出るさいころを2回投げる。9の目に注目する。
+problem_text: 'さいころを2回投げる。4の目に注目する。
 
   少なくとも1回は、その目が出る確率を求めよ。'
 sub_questions:
 - answer:
-    display: 33/289
+    display: 11/36
     kind: symbolic
-    srepr: Rational(33, 289)
+    srepr: Rational(11, 36)
   cause_tags: []
   concept_tags:
   - probability.word_problem_dice_repeat_at_least_one
@@ -39,12 +39,12 @@ sub_questions:
 
     次に、独立な試行をくり返すので、すべての回で条件が起こらない確率は1回分の確率を試行回数だけかけ合わせたものになる。（余事象の確率を求める）
 
-    最後に、1から、その余事象の確率をひいて、少なくとも1回起こる確率を求める。（33/289）'
+    最後に、1から、その余事象の確率をひいて、少なくとも1回起こる確率を求める。（11/36）'
   hints:
   - 1回の試行で条件が起こらない場合の数を数え、その確率を求める。
   - 独立な試行をくり返すので、すべての回で条件が起こらない確率は1回分の確率を試行回数だけかけ合わせたものになる。
   label: (1)
-  prompt_text: value を求めなさい。
+  prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
     narration: 1回の試行で条件が起こらない場合の数を数え、その確率を求める。
@@ -59,6 +59,6 @@ sub_questions:
   - args: []
     narration: 1から、その余事象の確率をひいて、少なくとも1回起こる確率を求める。
     op: subtract_from_one
-    result_display: 33/289
-    result_srepr: Rational(33, 289)
+    result_display: 11/36
+    result_srepr: Rational(11, 36)
 visual_svg: null

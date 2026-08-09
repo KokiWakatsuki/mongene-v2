@@ -24,22 +24,22 @@ meta:
   seed: 3
   signature: polygon_interior_sum_and_angle
 problem_ref: 1dd8bd4be6776a45
-problem_text: 正158角形の内角の和を求めよ。また、正158角形の1つの内角の大きさを求めよ。
+problem_text: 正九角形の内角の和を求めよ。また、正九角形の1つの内角の大きさを求めよ。
 sub_questions:
 - answer:
-    display: 内角の和 28080°、1つの内角 14040/79°
+    display: 内角の和 1260°、1つの内角 140°
     kind: symbolic
-    srepr: Tuple(Integer(28080), Rational(14040, 79))
+    srepr: Tuple(Integer(1260), Integer(140))
   cause_tags: []
   concept_tags:
   - polygon_angle.interior_sum_and_angle
   explanation: 'まず、一直線の角(平角)を、頂点の数より二少ない数だけ集めた大きさが内角の和になる、という公式に辺の数をあてはめる。（内角の和の公式にあてはめる）
 
-    次に、正多角形はすべての内角が等しいことから、内角の和を辺の数でわって1つの内角を求める。（内角の和 28080°、1つの内角 14040/79°）'
+    次に、正多角形はすべての内角が等しいことから、内角の和を辺の数でわって1つの内角を求める。（内角の和 1260°、1つの内角 140°）'
   hints:
   - 一直線の角(平角)を、頂点の数より二少ない数だけ集めた大きさが内角の和になる、という公式に辺の数をあてはめる。
   label: (1)
-  prompt_text: value を求めなさい。
+  prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
     narration: 一直線の角(平角)を、頂点の数より二少ない数だけ集めた大きさが内角の和になる、という公式に辺の数をあてはめる。
@@ -49,6 +49,6 @@ sub_questions:
   - args: []
     narration: 正多角形はすべての内角が等しいことから、内角の和を辺の数でわって1つの内角を求める。
     op: divide_for_one_angle
-    result_display: 内角の和 28080°、1つの内角 14040/79°
-    result_srepr: Tuple(Integer(28080), Rational(14040, 79))
+    result_display: 内角の和 1260°、1つの内角 140°
+    result_srepr: Tuple(Integer(1260), Integer(140))
 visual_svg: null

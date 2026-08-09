@@ -26,31 +26,31 @@ meta:
 problem_ref: c1b7ba256f6ecec7
 problem_text: '次の計算をせよ。
 
-  (-9)²'
+  (-5)³'
 sub_questions:
 - answer:
-    display: '81'
+    display: '-125'
     kind: symbolic
-    srepr: Integer(81)
+    srepr: Integer(-125)
   cause_tags: []
   concept_tags:
   - signed_number.power_sign_contrast
   explanation: 'まず、指数がどの数にかかっているか（かっこの有無）を見分ける。（指数のかかる数を見分ける）
 
-    次に、符号に注意して計算し、累乗の値を求める。（81）'
+    次に、符号に注意して計算し、累乗の値を求める。（-125）'
   hints:
   - 指数がどの数にかかっているか（かっこの有無）を見分ける。
   label: (1)
-  prompt_text: value を求めなさい。
+  prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
     narration: 指数がどの数にかかっているか（かっこの有無）を見分ける。
     op: identify_base_scope
     result_display: 指数のかかる数を見分ける
-    result_srepr: Integer(81)
+    result_srepr: Integer(-125)
   - args: []
     narration: 符号に注意して計算し、累乗の値を求める。
     op: evaluate_power_with_sign
-    result_display: '81'
-    result_srepr: Integer(81)
+    result_display: '-125'
+    result_srepr: Integer(-125)
 visual_svg: null

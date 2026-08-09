@@ -26,22 +26,22 @@ meta:
 problem_ref: 73201eedd5e5b4f5
 problem_text: '次の分数を小数で表し、循環小数の記号を用いて書け。
 
-  48/49'
+  13/14'
 sub_questions:
 - answer:
-    display: 0.9̇79591836734693877551020408163265306122448̇
+    display: 0.92̇85714̇
     kind: symbolic
-    srepr: 0.(979591836734693877551020408163265306122448)
+    srepr: 0.9(285714)
   cause_tags: []
   concept_tags:
   - rational_form.fraction_to_decimal
   explanation: 'まず、分子を分母で割り進め、そのつど現れる余りを記録していく。（余りを記録しながら割り進める）
 
-    次に、同じ余りが再び現れた区間の商の並びを、循環節として書き出す。（0.9̇79591836734693877551020408163265306122448̇）'
+    次に、同じ余りが再び現れた区間の商の並びを、循環節として書き出す。（0.92̇85714̇）'
   hints:
   - 分子を分母で割り進め、そのつど現れる余りを記録していく。
   label: (1)
-  prompt_text: value を求めなさい。
+  prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
     narration: 分子を分母で割り進め、そのつど現れる余りを記録していく。
@@ -51,6 +51,6 @@ sub_questions:
   - args: []
     narration: 同じ余りが再び現れた区間の商の並びを、循環節として書き出す。
     op: identify_repeating_block
-    result_display: 0.9̇79591836734693877551020408163265306122448̇
-    result_srepr: 0.(979591836734693877551020408163265306122448)
+    result_display: 0.92̇85714̇
+    result_srepr: 0.9(285714)
 visual_svg: null

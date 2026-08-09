@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: approximation_term_recall
 problem_ref: fa9389ddb2e267ff
-problem_text: 測定で 615 cm を得たときのように、近似値から真の値をひいた差（真の値とのちがい） を何といいますか。
+problem_text: 測定で 615 cm を得たときのように、近似値から真の値をひいた差（真の値とのちがい）を何といいますか。
 sub_questions:
 - answer:
     correct: 誤差
@@ -42,7 +42,7 @@ sub_questions:
   hints:
   - 説明されている式や数の部分がどれかを読み取る。
   label: (1)
-  prompt_text: choice を求めなさい。
+  prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
     narration: 説明されている式や数の部分がどれかを読み取る。

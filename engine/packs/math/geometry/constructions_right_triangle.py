@@ -373,3 +373,62 @@ def triangle_equal_angles(p: dict[str, Any]) -> Construction:
     c.steps.append("∠A、∠B、∠Cが等しくなるように三角形ABCをとる")
     c.description = "右の図の△ABCで、∠A ＝ ∠B ＝ ∠C である"
     return c
+
+
+# ---------------------------------------------------------------------------
+# g2_l42 Lv3 二等辺になるための条件（角の等しさを導出の途中で作る図）
+# ---------------------------------------------------------------------------
+@register_construction("equal_altitudes")
+def equal_altitudes(p: dict[str, Any]) -> Construction:
+    """△ABC の頂点 B、C から対辺に垂線 BD、CE をひき、**BD ＝ CE** を与えた図。
+
+    g2_l42 Lv3（誘導なし・**角の等しさを合同で導いて**二等辺を構成する）のための図。
+    Lv2 の `bisector_perp_base` が角の等しさを仮定として与えるのに対し、ここは
+    角の等しさが**導出の途中に出てくる**——それが台帳 Lv3 の desc そのものである。
+
+      △CBD ≡ △BCE（直角三角形の斜辺と他の1辺・深さ1／斜辺 BC は共通）
+        → ∠ACB ＝ ∠ABC（対応する角・深さ2）
+        → AB ＝ AC（2つの角が等しい三角形は二等辺三角形・深さ3）
+
+    **二等辺であることは仮定に入れない**（このクラスタの約束）。A は座標としては
+    BC の垂直二等分線上に置くが、`point_on_perpendicular_bisector` は使わない
+    ——あの操作は「AB ＝ AC」を仮定として出してしまい、示すことが無くなる。
+    2本の垂線の長さが等しければ三角形は二等辺になるので、図がそう見えるのは
+    正しく、ゆらしても保たれる（＝偶然の一致ではない）。
+
+    ∠BCD が ∠BCA と同じ角であることは、D が辺 AC の上にあることから
+    `ray_classes` が吸収する。
+
+    base ＝ 底辺 BC、offset ＝ 高さ、angle ＝ 図の傾き。
+    """
+    c = Construction()
+    rot = _rotator((float(p["angle"]) - 70.0) / 5.0)
+    bc = float(p["base"])
+    height = float(p["offset"]) + 1.6
+    c.free_point("B", *rot(0.0, 0.0))
+    c.free_point("C", *rot(bc, 0.0))
+    _put(c, "A", rot(bc / 2.0, height), "点Aをとる")
+    for foot, frm, opp in (("D", "B", ("A", "C")), ("E", "C", ("A", "B"))):
+        _put(
+            c,
+            foot,
+            _foot(c.coords[frm], c.coords[opp[0]], c.coords[opp[1]]),
+            f"点{frm}から辺{opp[0]}{opp[1]}に垂線をひき、その足を{foot}とする",
+        )
+        _between(c, opp[0], foot, opp[1])
+        # 垂線を下ろした以上、足のところの角は**どちらの向きに見ても**直角である。
+        # 直角三角形の合同条件は「直角の頂点がどれか」から三角形を決めるので、
+        # 使う側の書き方（斜辺が BC になる書き方）で持っていないと引き当てられない。
+        for arm in opp:
+            c.facts.add(right_angle(foot, frm, arm))
+    equal = seg_eq(seg("B", "D"), seg("C", "E"))
+    c.facts.add(equal)
+    c.givens.append(equal)
+    for x, y in (("A", "B"), ("A", "C"), ("B", "D"), ("C", "E")):
+        c.connect(x, y)
+    c.connect("B", "C", shared=True)
+    c.description = (
+        "右の図の△ABCで、頂点Bから辺ACに垂線BDを、頂点Cから辺ABに垂線CEをひくと、"
+        "BD ＝ CE であった"
+    )
+    return c

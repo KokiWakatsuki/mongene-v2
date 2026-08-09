@@ -44,7 +44,7 @@ sub_questions:
   - かっこの前の数を、かっこの中の各項にかけて計算する。
   - ÷ の計算を、その数の逆数をかっこの中の各項にかける計算に直す。
   label: (1)
-  prompt_text: simplified_expr を求めなさい。
+  prompt_text: 式を簡単にしなさい。
   solution_steps:
   - args: []
     narration: かっこの前の数を、かっこの中の各項にかけて計算する。

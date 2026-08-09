@@ -1,0 +1,62 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - similarity.trapezoid_area_ratio
+  provenance:
+    git_commit: ''
+    recipe: math.similar_triangle_trapezoid_area_ratio
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_similarity_scale_ratio_condition_v1
+    tier: T1
+  requested:
+    form: find_value
+    level: 3
+    subject: math
+    unit: g3_l45
+  resolved:
+    form: find_value
+    level: 3
+    subject: math
+    unit: g3_l45
+  seed: 3
+  signature: similar_triangle_trapezoid_area_ratio
+problem_ref: f8645cc96c1dc663
+problem_text: 三角形HQBで、辺HQ, HB上に点E, AがありEA∥QB、HE:EQ=3:7である。三角形HEAの面積と、台形EQBAの面積の比を求めよ。
+sub_questions:
+- answer:
+    display: 三角形HEA:台形EQBA = 9:91
+    kind: symbolic
+    srepr: Tuple(Integer(9), Integer(91))
+  cause_tags: []
+  concept_tags:
+  - similarity.trapezoid_area_ratio
+  explanation: 'まず、HEとEQの比から、HEとHQ全体の比になおす。（HEとHQ全体の比になおす）
+
+    次に、三角形HEAと三角形HQBは相似であることから、面積比は相似比の二乗に等しいことを使って、三角形HEAと三角形HQB全体の面積比を求める。（相似比を二乗して三角形HEAと三角形HQBの面積比を求める）
+
+    最後に、三角形HQB全体の面積から三角形HEAの面積を除いた残りが台形の面積になることから、三角形HEAと台形の面積比を求める。（三角形HEA:台形EQBA = 9:91）'
+  hints:
+  - HEとEQの比から、HEとHQ全体の比になおす。
+  - 三角形HEAと三角形HQBは相似であることから、面積比は相似比の二乗に等しいことを使って、三角形HEAと三角形HQB全体の面積比を求める。
+  label: (1)
+  prompt_text: 答えを求めなさい。
+  solution_steps:
+  - args: []
+    narration: HEとEQの比から、HEとHQ全体の比になおす。
+    op: convert_partial_to_whole_ratio
+    result_display: HEとHQ全体の比になおす
+    result_srepr: ''
+  - args: []
+    narration: 三角形HEAと三角形HQBは相似であることから、面積比は相似比の二乗に等しいことを使って、三角形HEAと三角形HQB全体の面積比を求める。
+    op: square_similarity_ratio
+    result_display: 相似比を二乗して三角形HEAと三角形HQBの面積比を求める
+    result_srepr: ''
+  - args: []
+    narration: 三角形HQB全体の面積から三角形HEAの面積を除いた残りが台形の面積になることから、三角形HEAと台形の面積比を求める。
+    op: compute_trapezoid_remainder_ratio
+    result_display: 三角形HEA:台形EQBA = 9:91
+    result_srepr: Tuple(Integer(9), Integer(91))
+visual_svg: null

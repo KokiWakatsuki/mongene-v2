@@ -74,6 +74,26 @@ def frequency_table_value(class_start: object, class_width: object, frequencies:
 # ---------------------------------------------------------------------------
 # g1_l55.calculation Lv2: 総度数の異なる2集団の相対度数を比較する
 # ---------------------------------------------------------------------------
+def _fmt_relative(v: sympy.Rational) -> str:
+    """相対度数の表示。**割り切れるなら小数**、そうでなければ分数。
+
+    相対度数は小数で答えるのが教材の作法（EVALUATION D-24）。
+    recipe 側で割り切れる組だけを引くので、実際には常に小数になる。
+    """
+    q = int(v.q)
+    while q % 2 == 0:
+        q //= 2
+    while q % 5 == 0:
+        q //= 5
+    if q != 1:
+        return str(v)
+    digits, r = 0, sympy.Rational(v)
+    while r.q != 1:
+        r *= 10
+        digits += 1
+    return f"{float(v):.{digits}f}" if digits else str(int(v))
+
+
 @register_solver("math.compare_relative_frequency")
 def compare_relative_frequency(freq_a: object, total_a: object, freq_b: object, total_b: object) -> Solution:
     """総度数の異なる2集団それぞれの相対度数を求め、どちらが大きいか比較する（g1_l55.calculation Lv2）。
@@ -86,7 +106,7 @@ def compare_relative_frequency(freq_a: object, total_a: object, freq_b: object, 
     rel_a = sympy.Rational(fa, ta)
     rel_b = sympy.Rational(fb, tb)
     larger = "A" if rel_a > rel_b else "B"
-    disp = f"A: {rel_a}、B: {rel_b}（{larger}のほうが大きい）"
+    disp = f"A: {_fmt_relative(rel_a)}、B: {_fmt_relative(rel_b)}（{larger}のほうが大きい）"
     srepr = sympy.srepr(sympy.Tuple(rel_a, rel_b))
     steps = [
         Step(
@@ -150,7 +170,7 @@ def cumulative_relative_frequency_and_complement(frequencies: object, target_ind
     cum = sum(freqs[: idx + 1])
     cum_rel = sympy.Rational(cum, total)
     percent_over = (1 - cum_rel) * 100
-    disp = f"累積相対度数 {cum_rel}、超える部分の割合 {percent_over}%"
+    disp = f"累積相対度数 {_fmt_relative(cum_rel)}、超える部分の割合 {percent_over}%"
     srepr = sympy.srepr(sympy.Tuple(cum_rel, percent_over))
     steps = [
         Step(
@@ -239,7 +259,9 @@ def mean_from_grouped_table(class_start: object, class_width: object, frequencie
     total = sum(freqs)
     weighted_sum = sum(_class_midpoint(start, width, i) * f for i, f in enumerate(freqs))
     mean = sympy.Rational(weighted_sum, total)
-    disp = sympy.sstr(mean)
+    # 平均値は小数で書けるなら小数で（教科書は「20.5点」と書く。分数のままだと
+    # 「694/23」のような、平均としては読めない値になる）。
+    disp = _fmt_relative(mean)
     srepr = sympy.srepr(mean)
     steps = [
         Step(

@@ -44,7 +44,7 @@ sub_questions:
   hints:
   - 四角形で示されている、等しい・平行である要素が何かを読み取る。
   label: (1)
-  prompt_text: choice を求めなさい。
+  prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
     narration: 四角形で示されている、等しい・平行である要素が何かを読み取る。

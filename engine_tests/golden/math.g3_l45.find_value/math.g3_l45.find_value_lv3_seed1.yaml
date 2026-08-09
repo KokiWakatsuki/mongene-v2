@@ -1,0 +1,62 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - similarity.trapezoid_area_ratio
+  provenance:
+    git_commit: ''
+    recipe: math.similar_triangle_trapezoid_area_ratio
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_similarity_scale_ratio_condition_v1
+    tier: T1
+  requested:
+    form: find_value
+    level: 3
+    subject: math
+    unit: g3_l45
+  resolved:
+    form: find_value
+    level: 3
+    subject: math
+    unit: g3_l45
+  seed: 1
+  signature: similar_triangle_trapezoid_area_ratio
+problem_ref: 39032dc7be43d93c
+problem_text: 三角形ABMで、辺AB, AM上に点K, JがありKJ∥BM、AK:KB=2:3である。三角形AKJの面積と、台形KBMJの面積の比を求めよ。
+sub_questions:
+- answer:
+    display: 三角形AKJ:台形KBMJ = 4:21
+    kind: symbolic
+    srepr: Tuple(Integer(4), Integer(21))
+  cause_tags: []
+  concept_tags:
+  - similarity.trapezoid_area_ratio
+  explanation: 'まず、AKとKBの比から、AKとAB全体の比になおす。（AKとAB全体の比になおす）
+
+    次に、三角形AKJと三角形ABMは相似であることから、面積比は相似比の二乗に等しいことを使って、三角形AKJと三角形ABM全体の面積比を求める。（相似比を二乗して三角形AKJと三角形ABMの面積比を求める）
+
+    最後に、三角形ABM全体の面積から三角形AKJの面積を除いた残りが台形の面積になることから、三角形AKJと台形の面積比を求める。（三角形AKJ:台形KBMJ = 4:21）'
+  hints:
+  - AKとKBの比から、AKとAB全体の比になおす。
+  - 三角形AKJと三角形ABMは相似であることから、面積比は相似比の二乗に等しいことを使って、三角形AKJと三角形ABM全体の面積比を求める。
+  label: (1)
+  prompt_text: 答えを求めなさい。
+  solution_steps:
+  - args: []
+    narration: AKとKBの比から、AKとAB全体の比になおす。
+    op: convert_partial_to_whole_ratio
+    result_display: AKとAB全体の比になおす
+    result_srepr: ''
+  - args: []
+    narration: 三角形AKJと三角形ABMは相似であることから、面積比は相似比の二乗に等しいことを使って、三角形AKJと三角形ABM全体の面積比を求める。
+    op: square_similarity_ratio
+    result_display: 相似比を二乗して三角形AKJと三角形ABMの面積比を求める
+    result_srepr: ''
+  - args: []
+    narration: 三角形ABM全体の面積から三角形AKJの面積を除いた残りが台形の面積になることから、三角形AKJと台形の面積比を求める。
+    op: compute_trapezoid_remainder_ratio
+    result_display: 三角形AKJ:台形KBMJ = 4:21
+    result_srepr: Tuple(Integer(4), Integer(21))
+visual_svg: null

@@ -1,0 +1,62 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - circle.equal_arc_inscribed_angle
+  provenance:
+    git_commit: ''
+    recipe: math.equal_arc_inscribed_angle
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_inscribed_angle_condition_v1
+    tier: T1
+  requested:
+    form: find_value
+    level: 3
+    subject: math
+    unit: g3_l50
+  resolved:
+    form: find_value
+    level: 3
+    subject: math
+    unit: g3_l50
+  seed: 3
+  signature: equal_arc_inscribed_angle
+problem_ref: 83e850e73df1890a
+problem_text: 円周を6等分する点を順にPMRBJAとする。これらの点を頂点とする六角形について、∠BPMの大きさを求めよ。
+sub_questions:
+- answer:
+    display: 60°
+    kind: symbolic
+    srepr: Integer(60)
+  cause_tags: []
+  concept_tags:
+  - circle.equal_arc_inscribed_angle
+  explanation: 'まず、円周をn等分してできる1つの弧に対する中心角から、その弧に対する円周角を求める。（円をn等分した1つの弧に対する円周角を求める）
+
+    次に、角の頂点をふくまない側の弧が、等分した弧の何個分にあたるかを数える。（角の頂点をふくまない側の弧が単位弧の何個分かを数える）
+
+    最後に、弧の長さは円周角の大きさに比例することから、求める角の大きさを求める。（60°）'
+  hints:
+  - 円周をn等分してできる1つの弧に対する中心角から、その弧に対する円周角を求める。
+  - 角の頂点をふくまない側の弧が、等分した弧の何個分にあたるかを数える。
+  label: (1)
+  prompt_text: 答えを求めなさい。
+  solution_steps:
+  - args: []
+    narration: 円周をn等分してできる1つの弧に対する中心角から、その弧に対する円周角を求める。
+    op: identify_unit_arc_from_equal_division
+    result_display: 円をn等分した1つの弧に対する円周角を求める
+    result_srepr: ''
+  - args: []
+    narration: 角の頂点をふくまない側の弧が、等分した弧の何個分にあたるかを数える。
+    op: identify_arc_span_excluding_vertex
+    result_display: 角の頂点をふくまない側の弧が単位弧の何個分かを数える
+    result_srepr: ''
+  - args: []
+    narration: 弧の長さは円周角の大きさに比例することから、求める角の大きさを求める。
+    op: apply_inscribed_angle_theorem
+    result_display: 60°
+    result_srepr: Integer(60)
+visual_svg: null

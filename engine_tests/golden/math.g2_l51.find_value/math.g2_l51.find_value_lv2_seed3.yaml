@@ -24,24 +24,24 @@ meta:
   seed: 3
   signature: relative_frequency_estimate
 problem_ref: ce86afc1672da17e
-problem_text: あるびんのふたを1863回投げたところ、表が向いた回数が185回であった。この結果から、このふたを投げたとき表が出る確率を分数で推定せよ。
+problem_text: あるペットボトルのふたを2000回投げたところ、表が向いた回数が682回であった。この結果から、このペットボトルのふたを投げたとき表が出る確率を小数で推定せよ。
 sub_questions:
 - answer:
-    display: 185/1863
+    display: '0.341'
     kind: symbolic
-    srepr: Rational(185, 1863)
+    srepr: Rational(341, 1000)
   cause_tags: []
   concept_tags:
   - probability.relative_frequency_estimate
-  explanation: まず、ことがらが起こった回数を、試行の総回数でわる。（185/1863）
+  explanation: まず、ことがらが起こった回数を、試行の総回数でわる。（0.341）
   hints:
-  - 問題文の与えられた値をもう一度確認しよう。
+  - ことがらが起こった回数を、試行の総回数でわる。
   label: (1)
-  prompt_text: value を求めなさい。
+  prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
     narration: ことがらが起こった回数を、試行の総回数でわる。
     op: divide_occurred_by_total
-    result_display: 185/1863
-    result_srepr: Rational(185, 1863)
+    result_display: '0.341'
+    result_srepr: Rational(341, 1000)
 visual_svg: null

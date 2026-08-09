@@ -24,43 +24,43 @@ meta:
   seed: 1
   signature: word_problem_quadratic_consecutive_integers
 problem_ref: fc3e3fb1e41e0d66
-problem_text: '連続する2つの正の整数がある。この2数の積は132860である。
+problem_text: '連続する2つの正の奇数がある。この2数の積は675である。
 
-  小さい方の整数を x とする。
+  小さい方の数を x とする。
 
   (1) 2数の積の関係を、x を使った方程式で表せ。
 
-  (2) この2つの整数を求めよ。'
+  (2) この2つの数を求めよ。'
 sub_questions:
 - answer:
-    display: x(x + 1) = 132860
+    display: x(x + 2) = 675
     kind: symbolic
-    srepr: Equality(Mul(Symbol('x'), Add(Symbol('x'), Integer(1))), Integer(132860))
+    srepr: Equality(Mul(Symbol('x'), Add(Symbol('x'), Integer(2))), Integer(675))
   cause_tags: []
   concept_tags:
   - quadratic.word_problem_consecutive_integers
-  explanation: 'まず、場面の中で、どちらの見方でも同じになる（等しくなっている）量に着目する。（2つの整数の積）
+  explanation: 'まず、場面の中で、どちらの見方でも同じになる（等しくなっている）量に着目する。（2つの数の積）
 
-    次に、その量を x を使って両辺に表し、方程式をつくる。（x(x + 1) = 132860）'
+    次に、その量を x を使って両辺に表し、方程式をつくる。（x(x + 2) = 675）'
   hints:
   - 場面の中で、どちらの見方でも同じになる（等しくなっている）量に着目する。
   label: (1)
-  prompt_text: formulation を求めなさい。
+  prompt_text: 式に表しなさい。
   solution_steps:
   - args: []
     narration: 場面の中で、どちらの見方でも同じになる（等しくなっている）量に着目する。
     op: find_equal_relation
-    result_display: 2つの整数の積
+    result_display: 2つの数の積
     result_srepr: Symbol('x')
   - args: []
     narration: その量を x を使って両辺に表し、方程式をつくる。
     op: formulate_equation
-    result_display: x(x + 1) = 132860
-    result_srepr: Equality(Mul(Symbol('x'), Add(Symbol('x'), Integer(1))), Integer(132860))
+    result_display: x(x + 2) = 675
+    result_srepr: Equality(Mul(Symbol('x'), Add(Symbol('x'), Integer(2))), Integer(675))
 - answer:
-    display: 小さい方の整数は364、大きい方の整数は365
+    display: 小さい方の数は25、大きい方の数は27
     kind: symbolic
-    srepr: Tuple(Integer(364), Integer(365))
+    srepr: Tuple(Integer(25), Integer(27))
   cause_tags: []
   concept_tags:
   - quadratic.word_problem_consecutive_integers
@@ -70,16 +70,16 @@ sub_questions:
 
     次に、積が 0 になるのは各因数が 0 のときだから、それぞれを 0 とおいて x を求める。
 
-    次に、求めるものは正の数だから、2つの解のうち条件に合う正の解を選ぶ。（364）
+    次に、求めるものは正の数だから、2つの解のうち条件に合う正の解を選ぶ。（25）
 
-    最後に、求めた x をもとに、問われている量を計算する。（小さい方の整数は364、大きい方の整数は365）'
+    最後に、求めた x をもとに、問われている量を計算する。（小さい方の数は25、大きい方の数は27）'
   hints:
   - かっこを展開し、右辺を左辺に移項して、=0 の形に整理する。
   - 左辺を因数分解する。
   - 積が 0 になるのは各因数が 0 のときだから、それぞれを 0 とおいて x を求める。
   - 求めるものは正の数だから、2つの解のうち条件に合う正の解を選ぶ。
   label: (2)
-  prompt_text: value を求めなさい。
+  prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
     narration: かっこを展開し、右辺を左辺に移項して、=0 の形に整理する。
@@ -99,11 +99,11 @@ sub_questions:
   - args: []
     narration: 求めるものは正の数だから、2つの解のうち条件に合う正の解を選ぶ。
     op: select_positive_root
-    result_display: '364'
-    result_srepr: Integer(364)
+    result_display: '25'
+    result_srepr: Integer(25)
   - args: []
     narration: 求めた x をもとに、問われている量を計算する。
     op: derive_asked_quantity
-    result_display: 小さい方の整数は364、大きい方の整数は365
-    result_srepr: Tuple(Integer(364), Integer(365))
+    result_display: 小さい方の数は25、大きい方の数は27
+    result_srepr: Tuple(Integer(25), Integer(27))
 visual_svg: null

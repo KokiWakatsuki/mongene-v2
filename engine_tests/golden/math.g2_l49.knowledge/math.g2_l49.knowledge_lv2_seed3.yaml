@@ -43,7 +43,7 @@ sub_questions:
   hints:
   - 対角線が等しいか、垂直に交わるか、それぞれの条件を確認する。
   label: (1)
-  prompt_text: choice を求めなさい。
+  prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
     narration: 対角線が等しいか、垂直に交わるか、それぞれの条件を確認する。

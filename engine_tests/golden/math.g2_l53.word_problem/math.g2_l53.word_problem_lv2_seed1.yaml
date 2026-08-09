@@ -39,9 +39,9 @@ sub_questions:
   - probability.word_problem_two_digit_cards
   explanation: まず、十の位に置くカードの選び方それぞれについて、残ったカードから一の位を選ぶ選び方を枝分かれで書き出し、総数を数える。（20通り）
   hints:
-  - 問題文の与えられた値をもう一度確認しよう。
+  - 十の位に置くカードの選び方それぞれについて、残ったカードから一の位を選ぶ選び方を枝分かれで書き出し、総数を数える。
   label: (1)
-  prompt_text: value を求めなさい。
+  prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
     narration: 十の位に置くカードの選び方それぞれについて、残ったカードから一の位を選ぶ選び方を枝分かれで書き出し、総数を数える。
@@ -64,7 +64,7 @@ sub_questions:
   - 十の位と一の位に置くカードの選び方を枝分かれで書き出し、できる整数をすべて数え上げる。
   - 書き出した整数のうち、一の位が偶数になっているものの個数を数える。
   label: (2)
-  prompt_text: value を求めなさい。
+  prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
     narration: 十の位と一の位に置くカードの選び方を枝分かれで書き出し、できる整数をすべて数え上げる。

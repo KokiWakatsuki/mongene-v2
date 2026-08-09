@@ -37,9 +37,9 @@ sub_questions:
   - letter_expr.distribute_linear
   explanation: まず、かっこの前の数を、かっこの中の各項にかけて計算する。（25x - 5）
   hints:
-  - 問題文の与えられた値をもう一度確認しよう。
+  - かっこの前の数を、かっこの中の各項にかけて計算する。
   label: (1)
-  prompt_text: simplified_expr を求めなさい。
+  prompt_text: 式を簡単にしなさい。
   solution_steps:
   - args: []
     narration: かっこの前の数を、かっこの中の各項にかけて計算する。

@@ -24,7 +24,7 @@ meta:
   seed: 3
   signature: poly_term_recall
 problem_ref: 6321face3f95a2ba
-problem_text: 数や文字の乗法だけでできている式 8a³ を何といいますか。
+problem_text: 数や文字の乗法だけでできている式 8a³を何といいますか。
 sub_questions:
 - answer:
     correct: 単項式
@@ -43,7 +43,7 @@ sub_questions:
   hints:
   - 説明されている式や数の部分がどれかを読み取る。
   label: (1)
-  prompt_text: choice を求めなさい。
+  prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
     narration: 説明されている式や数の部分がどれかを読み取る。

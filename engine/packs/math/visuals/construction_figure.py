@@ -226,7 +226,7 @@ def render_scene(
     to_px, scale = _projector(bbox_elements if bbox_elements is not None else elements)
     parts = [
         f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {_W} {_H}" '
-        f'width="{_W}" height="{_H}">',
+        f'width="{_W}" height="{_H}" font-family="Hiragino Sans, Hiragino Kaku Gothic ProN, Noto Sans JP, Yu Gothic, Meiryo, sans-serif">',
         f'<rect x="0" y="0" width="{_W}" height="{_H}" fill="#ffffff" stroke="none"/>',
     ]
     drawn: list[tuple[Pt, Pt]] = []   # 画素座標の線分（ラベルの向き決めに使う）

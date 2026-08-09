@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: sampling_terms_term_recall
 problem_ref: a6fe71c918982fa2
-problem_text: 495個（人）からなる対象全体から、かたよりが出ないように偶然にまかせて標本を選び出す方法 を何といいますか。
+problem_text: 495個（人）からなる対象全体から、かたよりが出ないように偶然にまかせて標本を選び出す方法を何といいますか。
 sub_questions:
 - answer:
     correct: 無作為抽出
@@ -42,7 +42,7 @@ sub_questions:
   hints:
   - 説明されている式や数の部分がどれかを読み取る。
   label: (1)
-  prompt_text: choice を求めなさい。
+  prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
     narration: 説明されている式や数の部分がどれかを読み取る。

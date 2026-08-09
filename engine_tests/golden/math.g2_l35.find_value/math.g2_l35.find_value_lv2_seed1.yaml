@@ -24,22 +24,22 @@ meta:
   seed: 1
   signature: polygon_sides_from_interior_angle
 problem_ref: fbf1a9bb5a3418df
-problem_text: 1つの内角が4860/29°である正多角形は正何角形か、外角の和を使って求めよ。
+problem_text: 1つの内角が108°である正多角形は正何角形か、外角の和を使って求めよ。
 sub_questions:
 - answer:
-    display: '29'
+    display: '5'
     kind: symbolic
-    srepr: Integer(29)
+    srepr: Integer(5)
   cause_tags: []
   concept_tags:
   - polygon_angle.sides_from_interior_angle
   explanation: 'まず、内角ととなり合う外角は、一直線の角(平角)から内角をひいて求める。（内角ととなり合う外角の大きさを求める）
 
-    次に、外角の和がつねに一定であることから、その値を1つの外角でわって辺の数を求める。（29）'
+    次に、外角の和がつねに一定であることから、その値を1つの外角でわって辺の数を求める。（5）'
   hints:
   - 内角ととなり合う外角は、一直線の角(平角)から内角をひいて求める。
   label: (1)
-  prompt_text: value を求めなさい。
+  prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
     narration: 内角ととなり合う外角は、一直線の角(平角)から内角をひいて求める。
@@ -49,6 +49,6 @@ sub_questions:
   - args: []
     narration: 外角の和がつねに一定であることから、その値を1つの外角でわって辺の数を求める。
     op: divide_exterior_sum
-    result_display: '29'
-    result_srepr: Integer(29)
+    result_display: '5'
+    result_srepr: Integer(5)
 visual_svg: null

@@ -39,7 +39,7 @@ sub_questions:
   hints:
   - データを大きさの順に並べ、いちばん小さい値といちばん大きい値を求める。
   label: (1)
-  prompt_text: value を求めなさい。
+  prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
     narration: データを大きさの順に並べ、いちばん小さい値といちばん大きい値を求める。

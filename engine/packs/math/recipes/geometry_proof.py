@@ -40,7 +40,7 @@ from engine.packs.math.geometry import (  # noqa: F401  登録の副作用で構
 from engine.packs.math.geometry.catalog import CONSTRUCTIONS, topics_of
 from engine.packs.math.geometry.construct import figure_quality_problems
 from engine.packs.math.geometry.deduce import saturate
-from engine.packs.math.geometry.facts import fact_text
+from engine.packs.math.geometry.facts import fact_text, goal_text
 from engine.packs.math.geometry.naturalness import accidental_coincidences, select_goal
 from engine.packs.math.geometry.rules import RULES
 from engine.packs.math.geometry.render_text import (
@@ -210,7 +210,7 @@ def geometry_proof_recipe(ctx: CellContext, rng: Rng) -> MR:
             "proof_depth": int(p["proof_depth"]) if p.get("proof_depth") is not None else None,
             "prefer": str(p["prefer"]) if p.get("prefer") else None,
         },
-        given={"premises": premise_text, "conclusion": fact_text(goal.fact)},
+        given={"premises": premise_text, "conclusion": goal_text(goal.fact)},
         sub_questions=[
             SubQuestionMR(
                 label="(1)", asked="proof_text", answer=answer,

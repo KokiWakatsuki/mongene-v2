@@ -44,7 +44,7 @@ sub_questions:
   - 定価から、割引きの割合の分だけ差し引いた代金を考える。
   - 文字の部分が同じ項（同類項）どうしをまとめる。
   label: (1)
-  prompt_text: formulation を求めなさい。
+  prompt_text: 式に表しなさい。
   solution_steps:
   - args: []
     narration: 定価から、割引きの割合の分だけ差し引いた代金を考える。

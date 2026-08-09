@@ -20,7 +20,8 @@ levels:
     signature: relative_frequency_stats_single
     recipe: math.relative_frequency_stats_single
     params:
-      total_domain: {int_range: [20, 200]}
+      # 相対度数が小数で書き切れるよう、総度数はきりのよい人数から引く。
+      total_domain: {int_set: [20, 25, 40, 50, 80, 100, 125, 200]}
     given: [expressions]
     asked: [value]
     visual: none

@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: power_term_recall
 problem_ref: c5305e69155f5e25
-problem_text: 同じ数 16 を 4 回かけ合わせて、1 つの数の形で表したもの を何といいますか。
+problem_text: 同じ数 16 を 4 回かけ合わせて、1 つの数の形で表したものを何といいますか。
 sub_questions:
 - answer:
     correct: 累乗
@@ -42,7 +42,7 @@ sub_questions:
   hints:
   - 説明されている式や数の部分がどれかを読み取る。
   label: (1)
-  prompt_text: choice を求めなさい。
+  prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
     narration: 説明されている式や数の部分がどれかを読み取る。

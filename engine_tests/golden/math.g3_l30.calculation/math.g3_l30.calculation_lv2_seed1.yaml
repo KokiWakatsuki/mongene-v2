@@ -26,12 +26,12 @@ meta:
 problem_ref: 35f2e31c667eb7bf
 problem_text: '次の2次方程式を解け。
 
-  x(x + 17) = 2090'
+  x(x + 17) = 38'
 sub_questions:
 - answer:
-    display: x = -55, x = 38
+    display: x = -19, x = 2
     kind: symbolic
-    srepr: Tuple(Integer(-55), Integer(38))
+    srepr: Tuple(Integer(-19), Integer(2))
   cause_tags: []
   concept_tags:
   - quadratic.solve_from_word_setup
@@ -39,12 +39,12 @@ sub_questions:
 
     次に、左辺を因数分解する。（左辺を因数分解する）
 
-    最後に、積が 0 になるのは各因数が 0 のときだから、それぞれを 0 とおいて x を求める。（x = -55, x = 38）'
+    最後に、積が 0 になるのは各因数が 0 のときだから、それぞれを 0 とおいて x を求める。（x = -19, x = 2）'
   hints:
   - かっこを展開し、右辺を左辺に移項して、=0 の形に整理する。
   - 左辺を因数分解する。
   label: (1)
-  prompt_text: solution を求めなさい。
+  prompt_text: 解を求めなさい。
   solution_steps:
   - args: []
     narration: かっこを展開し、右辺を左辺に移項して、=0 の形に整理する。
@@ -59,6 +59,6 @@ sub_questions:
   - args: []
     narration: 積が 0 になるのは各因数が 0 のときだから、それぞれを 0 とおいて x を求める。
     op: apply_zero_product
-    result_display: x = -55, x = 38
-    result_srepr: Tuple(Integer(-55), Integer(38))
+    result_display: x = -19, x = 2
+    result_srepr: Tuple(Integer(-19), Integer(2))
 visual_svg: null

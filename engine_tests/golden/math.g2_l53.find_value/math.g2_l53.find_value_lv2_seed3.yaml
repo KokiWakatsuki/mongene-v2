@@ -24,7 +24,7 @@ meta:
   seed: 3
   signature: probability_ordered_selection
 problem_ref: 7d817cce0fc72c1f
-problem_text: 5人の生徒から、委員長、副委員長を1人ずつ順に選ぶ。選び方は全部で何通りあるか樹形図で数え、生徒Aが委員長に選ばれる確率を求めよ。
+problem_text: 5人の係の候補から、委員長、副委員長を1人ずつ順に選ぶ。選び方は全部で何通りあるか樹形図で数え、はるとさんが委員長に選ばれる確率を求めよ。
 sub_questions:
 - answer:
     display: 1/5
@@ -42,7 +42,7 @@ sub_questions:
   - 役職の決め方を、樹形図などを使ってすべて数え上げる。
   - そのうち、求める人がその役職に選ばれる決め方の数を数える。
   label: (1)
-  prompt_text: value を求めなさい。
+  prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
     narration: 役職の決め方を、樹形図などを使ってすべて数え上げる。

@@ -1,0 +1,54 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - circle.two_chords_intersection_angle
+  provenance:
+    git_commit: ''
+    recipe: math.inscribed_angle_two_chords_intersection
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_inscribed_angle_condition_v1
+    tier: T1
+  requested:
+    form: find_value
+    level: 3
+    subject: math
+    unit: g3_l47
+  resolved:
+    form: find_value
+    level: 3
+    subject: math
+    unit: g3_l47
+  seed: 1
+  signature: inscribed_angle_two_chords_intersection
+problem_ref: 0bf76b303c3a11b7
+problem_text: 4点K, N, R, Lがこの順に円周上にある。∠NKR=65°、∠KRL=71° であるとき、2本の弦KL, NRの交点をQとして、∠KQNの大きさを求めよ。
+sub_questions:
+- answer:
+    display: 44°
+    kind: symbolic
+    srepr: Integer(44)
+  cause_tags: []
+  concept_tags:
+  - circle.two_chords_intersection_angle
+  explanation: 'まず、円周角の定理から、それぞれの円周角に対応する弧の大きさを求める。（2つの円周角に対応する弧の大きさを求める）
+
+    次に、円周の全体と2つの弧の大きさの関係から、2本の弦の交点にできる角の大きさを求める。（44°）'
+  hints:
+  - 円周角の定理から、それぞれの円周角に対応する弧の大きさを求める。
+  label: (1)
+  prompt_text: 答えを求めなさい。
+  solution_steps:
+  - args: []
+    narration: 円周角の定理から、それぞれの円周角に対応する弧の大きさを求める。
+    op: identify_arcs_from_inscribed_angles
+    result_display: 2つの円周角に対応する弧の大きさを求める
+    result_srepr: ''
+  - args: []
+    narration: 円周の全体と2つの弧の大きさの関係から、2本の弦の交点にできる角の大きさを求める。
+    op: apply_intersecting_chords_angle
+    result_display: 44°
+    result_srepr: Integer(44)
+visual_svg: null

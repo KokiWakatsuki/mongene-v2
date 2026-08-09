@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: angle_pair_terms_term_recall
 problem_ref: 986edd338024d23a
-problem_text: 平行な2直線r、ℓに1本の直線sが交わってできる角のうち、直線sに対して同じ側の同じ位置にある2つの角の関係 を何といいますか。
+problem_text: 平行な2直線r、ℓに1本の直線sが交わってできる角のうち、直線sに対して同じ側の同じ位置にある2つの角の関係を何といいますか。
 sub_questions:
 - answer:
     correct: 同位角
@@ -42,7 +42,7 @@ sub_questions:
   hints:
   - 説明されている式や数の部分がどれかを読み取る。
   label: (1)
-  prompt_text: choice を求めなさい。
+  prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
     narration: 説明されている式や数の部分がどれかを読み取る。

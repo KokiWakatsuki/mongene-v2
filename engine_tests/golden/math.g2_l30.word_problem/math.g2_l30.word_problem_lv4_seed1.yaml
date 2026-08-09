@@ -1,0 +1,72 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - linear_function.word_problem_second_meeting
+  provenance:
+    git_commit: ''
+    recipe: math.word_problem_linear_function
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: wp_linear_solo_v1
+    tier: T1
+  requested:
+    form: word_problem
+    level: 4
+    subject: math
+    unit: g2_l30
+  resolved:
+    form: word_problem
+    level: 4
+    subject: math
+    unit: g2_l30
+  seed: 1
+  signature: word_problem_second_meeting
+problem_ref: eb67d2fb0c433fdf
+problem_text: 'P地点とQ地点は1200mはなれている。けんたさんはP地点を出発してQ地点へ毎分120mで進み、Q地点に着くとすぐ折り返して同じ速さでP地点へもどる。みさきさんはけんたさんが出発してから9分後にQ地点を出発し、毎分90mでP地点へ進む。
+
+  2人が2回目に出会うのはけんたさんが出発してから何分後か求めよ。'
+sub_questions:
+- answer:
+    display: 13分後
+    kind: symbolic
+    srepr: Integer(13)
+  cause_tags: []
+  concept_tags:
+  - linear_function.word_problem_second_meeting
+  explanation: 'まず、二人の位置を、出発してからの時間を使ってそれぞれ式で表す。（二人の位置を時間の式で表す）
+
+    次に、向かい合って進む間に位置が等しくなる時刻を求め、これが一回目の出会いであることを確かめる。（一回目に出会う時刻を求める）
+
+    次に、折り返したあとの位置は、折り返す地点までの道のりから、折り返してから進んだ道のりを引いて表す。（折り返したあとの位置を式で表す）
+
+    最後に、折り返したあとの位置と、向かってくる相手の位置が等しいとおいて方程式を解く。（13分後）'
+  hints:
+  - 二人の位置を、出発してからの時間を使ってそれぞれ式で表す。
+  - 向かい合って進む間に位置が等しくなる時刻を求め、これが一回目の出会いであることを確かめる。
+  - 折り返したあとの位置は、折り返す地点までの道のりから、折り返してから進んだ道のりを引いて表す。
+  label: (1)
+  prompt_text: 答えを求めなさい。
+  solution_steps:
+  - args: []
+    narration: 二人の位置を、出発してからの時間を使ってそれぞれ式で表す。
+    op: express_positions_in_time
+    result_display: 二人の位置を時間の式で表す
+    result_srepr: ''
+  - args: []
+    narration: 向かい合って進む間に位置が等しくなる時刻を求め、これが一回目の出会いであることを確かめる。
+    op: find_first_meeting
+    result_display: 一回目に出会う時刻を求める
+    result_srepr: ''
+  - args: []
+    narration: 折り返したあとの位置は、折り返す地点までの道のりから、折り返してから進んだ道のりを引いて表す。
+    op: express_position_after_turn
+    result_display: 折り返したあとの位置を式で表す
+    result_srepr: ''
+  - args: []
+    narration: 折り返したあとの位置と、向かってくる相手の位置が等しいとおいて方程式を解く。
+    op: solve_for_second_meeting
+    result_display: 13分後
+    result_srepr: Integer(13)
+visual_svg: null

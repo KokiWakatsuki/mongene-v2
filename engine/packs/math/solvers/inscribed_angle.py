@@ -84,13 +84,20 @@ def inscribed_angle_transfer_same_arc(known_angle: object) -> Solution:
 
 
 @register_solver("math.judge_concyclic_from_angle")
-def judge_concyclic_from_angle(angle_c: object, angle_d: object) -> Solution:
+def judge_concyclic_from_angle(
+    angle_c: object, angle_d: object, labels: object = None
+) -> Solution:
     """直線ABの同じ側にある2点C,Dの角が等しいかどうかから、4点が同一円周上に
 
     あるかを判別する（g3_l48.knowledge Lv2）。angle_c/angle_d だけから、
     円周角の定理の逆（∠ACB=∠ADBならば同一円周上）という恒真の判定で計算する
-    （double-solve）。答えは ChoiceAnswer。
+    （double-solve）。答えは ChoiceAnswer。`labels` は問題文の点名（A,B,C,D の順）で、
+    解説の記号を問題文に合わせるためだけに使う（判定には効かない）。
     """
+    ls = str(labels or "ABCD")
+    if len(ls) < 4:
+        ls = "ABCD"
+    pa, pb, pc, pd = ls[0], ls[1], ls[2], ls[3]
     c = sympy.sympify(str(angle_c))
     d = sympy.sympify(str(angle_d))
     is_concyclic = bool(c == d)
@@ -101,7 +108,8 @@ def judge_concyclic_from_angle(angle_c: object, angle_d: object) -> Solution:
             op="compare_angles_on_same_side",
             args=[], result_srepr=("equal" if is_concyclic else "not_equal"),
             result_display="2つの角が等しいかどうかを確認する",
-            narration="直線ABの同じ側にある2点C, Dでできる角が、等しいかどうかを確認する。",
+            narration=f"直線{pa}{pb}の同じ側にある2点{pc}, {pd}でできる角が、"
+            "等しいかどうかを確認する。",
         ),
         Step(
             op="judge_by_inscribed_angle_converse",

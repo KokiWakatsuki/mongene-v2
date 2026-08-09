@@ -82,19 +82,27 @@ def _radical_construct(mode: str, rng: Rng) -> tuple[str, str]:
         return f"sqrt({a})*sqrt({b})", f"√{a} × √{b}"
 
     if mode == "root_mult_div":
+        # 根号の中に**平方数を残さない**（教科書は √4 とは書かず 2 と書く）。
+        # また割る数と掛ける数が同じだと相殺するだけの式になり、問題として成立しない
+        # （「4√6 × √8 ÷ √8」が実際に出ていた）。
+        radicands = [n for n in range(2, 13) if int(n**0.5) ** 2 != n]
         c = int(draw({"int_set": list(range(1, 5))}, rng))
-        a = int(draw({"int_set": list(range(2, 13))}, rng))
-        b = int(draw({"int_set": list(range(2, 13))}, rng))
-        d = int(draw({"int_set": list(range(2, 13))}, rng))
+        a = int(draw({"int_set": radicands}, rng))
+        b = int(draw({"int_set": radicands}, rng))
+        d = int(draw({"int_set": [n for n in radicands if n not in (a, b)]}, rng))
         expr = f"{c}*sqrt({a})*sqrt({b})/sqrt({d})"
         disp = f"{'' if c == 1 else c}√{a} × √{b} ÷ √{d}"
         return expr, disp
 
     if mode in ("simplify_root", "simplify_root_large"):
+        # 根号の中の数に上限を置く。前は k を 9、m を 59 まで独立に引いていたので
+        # 「3√4617」（=3√(9²×57)）のように、中学の手に負えない素因数分解を
+        # 要求する式が出ていた（教科書は √72・√180 のあたり）。
         krange = list(range(2, 6)) if mode == "simplify_root" else list(range(2, 10))
+        n_max = 300 if mode == "simplify_root" else 800
+        pairs = [(k, m) for k in krange for m in _SQUAREFREE if k * k * m <= n_max]
         c = int(draw({"int_set": list(range(1, 10))}, rng))
-        k = int(draw({"int_set": krange}, rng))
-        m = int(draw({"int_set": _SQUAREFREE}, rng))
+        k, m = pairs[int(draw({"int_set": list(range(len(pairs)))}, rng))]
         n = k * k * m
         expr = f"{c}*sqrt({n})"
         disp = f"{'' if c == 1 else c}√{n}"
@@ -348,6 +356,16 @@ def _evaluate_substitute_conjugate_pair(ctx: CellContext, rng: Rng, mode: str) -
     )
 
 
+# 正方形の面積から1辺を求める場面（数を小さく保ったまま組み合わせを稼ぐ軸）。
+_AREA_SCENES: list[tuple[str, str]] = [
+    ("正方形", "cm"),
+    ("正方形の紙", "cm"),
+    ("正方形のタイル", "cm"),
+    ("正方形の板", "cm"),
+    ("正方形の花だん", "m"),
+    ("正方形の土地", "m"),
+]
+
 _SIDE_FROM_AREA_CONCEPTS = ["radical.find_side_from_area"]
 
 
@@ -360,11 +378,22 @@ def find_side_from_area(ctx: CellContext, rng: Rng) -> MR:
     （mode=find_side_from_area）が area だけから √area を a·k²/a の平方因数を
     見つけて簡約し直す（double-solve）。
     """
-    a = int(draw({"int_set": _SQUAREFREE}, rng))
-    k = int(draw({"int_set": list(range(1, 20))}, rng))
+    # 面積に上限を置く。前は k を 1〜19、a を 59 まで独立に引いていたので
+    # 「面積 19133cm²（=19²×53）→ 19√53」のように、素因数分解が中学の手に負えない
+    # 問題が出ていた。狭めたぶんは**場面**の軸で稼ぐ（FIXES.md の原則1・2）。
+    area_max = int(ctx.spec_level.params.get("area_max", 600))
+    cands = [
+        (a, k)
+        for a in _SQUAREFREE
+        for k in range(1, 20)
+        if k * k * a <= area_max
+    ]
+    a, k = cands[int(draw({"int_set": list(range(len(cands)))}, rng))]
     area = k * k * a
+    scene_index = int(draw({"int_set": list(range(len(_AREA_SCENES)))}, rng))
+    scene, unit = _AREA_SCENES[scene_index]
     expr_str = f"sqrt({area})"
-    condition = f"面積が {area}cm² の正方形の1辺の長さを、根号を使って表せ"
+    condition = f"面積が {area}{unit}² の{scene}の1辺の長さを、根号を使って表せ"
 
     solver = REGISTRY.solver("math.simplify_radical")
     sol = cast(Solution, solver(expr_str, "find_side_from_area"))
@@ -388,7 +417,7 @@ def find_side_from_area(ctx: CellContext, rng: Rng) -> MR:
         level=ctx.level,
         purpose=ctx.purpose,
         seed=0,
-        params={"expr_str": expr_str},
+        params={"expr_str": expr_str, "scene": scene},
         given={"condition": condition},
         sub_questions=[sub_question],
         visual_plan=None,

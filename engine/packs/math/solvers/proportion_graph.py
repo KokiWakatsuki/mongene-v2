@@ -69,7 +69,14 @@ def _fmt_inverse(a: sympy.Expr) -> str:
 # ---------------------------------------------------------------------------
 @register_solver("math.read_coordinate_components")
 def read_coordinate_components(x0: object, y0: object) -> Solution:
-    """x座標・y座標の値から点の座標を組み立てる（g1_l30.graph_table Lv1）。"""
+    """x座標・y座標の値から点の座標を組み立てる（g1_l30.graph_table Lv1）。
+
+    **このセルは「図から読む」問題ではない。** 座標は本文が与え、図は空の方眼で、
+    生徒はそこに点をとる。それなのに解説が「どれだけ進んだ位置かを読み」と
+    言っていたので、読む対象が無いのに読めと指示していた（EVALUATION D-8）。
+    実際にやることは「与えられた2つの数を、横・縦の位置として受け取り、
+    (x座標, y座標) の形に並べて、方眼の上でその位置に点をとる」こと。
+    """
     x_s, y_s = _int(x0), _int(y0)
     pt = _pt(x_s, y_s)
     steps = [
@@ -78,21 +85,22 @@ def read_coordinate_components(x0: object, y0: object) -> Solution:
             args=[fmt_number(x_s)],
             result_srepr=sympy.srepr(x_s),
             result_display=f"x座標 = {fmt_number(x_s)}",
-            narration="横の向き（x軸の向き）にどれだけ進んだ位置かを読み、x座標を決める。",
+            narration="与えられたx座標を、原点から横の向き（x軸の向き）に進む量として受け取る。",
         ),
         Step(
             op="read_y_coordinate",
             args=[fmt_number(y_s)],
             result_srepr=sympy.srepr(y_s),
             result_display=f"y座標 = {fmt_number(y_s)}",
-            narration="縦の向き（y軸の向き）にどれだけ進んだ位置かを読み、y座標を決める。",
+            narration="与えられたy座標を、原点から縦の向き（y軸の向き）に進む量として受け取る。",
         ),
         Step(
             op="write_coordinate",
             args=[],
             result_srepr=sympy.srepr(pt),
             result_display=_pt_display(pt),
-            narration="x座標、y座標の順にかっこの中へ並べて、点の座標の形に書く。",
+            narration="x座標、y座標の順にかっこの中へ並べて、点の座標の形に書く。"
+            "その位置を方眼の上でたどって、点をとる。",
         ),
     ]
     return Solution(

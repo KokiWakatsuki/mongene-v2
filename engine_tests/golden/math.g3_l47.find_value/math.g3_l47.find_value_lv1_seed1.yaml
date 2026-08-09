@@ -24,22 +24,22 @@ meta:
   seed: 1
   signature: inscribed_angle_from_central
 problem_ref: 3a5570b40ddbf5a6
-problem_text: 円Nの周上に点Hがある。弧KGに対する中心角∠KNG=9° のとき、同じ弧KGに対する円周角∠KHGの大きさを求めよ。
+problem_text: 円Nの周上に点Hがある。弧KGに対する中心角∠KNG=138° のとき、同じ弧KGに対する円周角∠KHGの大きさを求めよ。
 sub_questions:
 - answer:
-    display: 9/2°
+    display: 69°
     kind: symbolic
-    srepr: Rational(9, 2)
+    srepr: Integer(69)
   cause_tags: []
   concept_tags:
   - circle.inscribed_angle_from_central
   explanation: 'まず、弧に対する中心角の大きさを読み取る。（中心角の大きさを読み取る）
 
-    次に、同じ弧に対する円周角の大きさは、中心角の大きさの半分に等しいことから、円周角の大きさを求める。（9/2°）'
+    次に、同じ弧に対する円周角の大きさは、中心角の大きさの半分に等しいことから、円周角の大きさを求める。（69°）'
   hints:
   - 弧に対する中心角の大きさを読み取る。
   label: (1)
-  prompt_text: value を求めなさい。
+  prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
     narration: 弧に対する中心角の大きさを読み取る。
@@ -49,6 +49,6 @@ sub_questions:
   - args: []
     narration: 同じ弧に対する円周角の大きさは、中心角の大きさの半分に等しいことから、円周角の大きさを求める。
     op: apply_inscribed_angle_theorem
-    result_display: 9/2°
-    result_srepr: Rational(9, 2)
+    result_display: 69°
+    result_srepr: Integer(69)
 visual_svg: null

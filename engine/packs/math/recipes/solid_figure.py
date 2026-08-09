@@ -351,21 +351,37 @@ _L53_DIRECT_CONCEPTS = ["sphere_measure.direct"]
 _L53_DIRECT_MODE = "l53_sphere_direct"
 
 
-def _draw_sphere_scene(p: Any, rng: Rng) -> tuple[int, str, str]:
-    """(半径, 与え方, 単位)。
+# 球の場面と、その場面に合う単位。**半径を教科書の大きさに戻したぶんを、場面で稼ぐ。**
+# 前は半径を 2〜60 まで振っていて「直径94cmの球 → 体積 415292π/3 cm³」が出ていた。
+_SPHERE_SCENES: list[tuple[str, tuple[str, ...]]] = [
+    ("球", ("cm", "m", "mm")),
+    ("ボール", ("cm",)),
+    ("ビー玉", ("mm", "cm")),
+    ("地球儀", ("cm",)),
+    ("風船", ("cm",)),
+    ("鉄球", ("cm", "mm")),
+    ("シャボン玉", ("cm", "mm")),
+    ("ゴムまり", ("cm",)),
+]
 
-    【なぜ軸が3つ要るか】dup_key は signature + params なので、params が半径ひとつ
+
+def _draw_sphere_scene(p: Any, rng: Rng) -> tuple[int, str, str, str]:
+    """(半径, 与え方, 単位, 場面)。
+
+    【なぜ軸が要るか】dup_key は signature + params なので、params が半径ひとつ
     だけだと 100seed で dup≤0.20 に届かない（約250通り必要・BRIEF「★単一パラメータの
     セルは原理的に通らない」）。そこで
       ・半径で与えるか直径で与えるか（2通り）
-      ・長さの単位（3通り）
-    を足す。与え方は op 列を変えない（solver の第1手 read_radius_from_statement が
+      ・場面と、その場面に合う長さの単位（9通り）
+    を足す。**半径そのものは広げない**——広げると答えの数が教材から離れる。
+    与え方は op 列を変えない（solver の第1手 read_radius_from_statement が
     variant 中立なので、どちらでも同じ手順になる）＝G-FP は安定する。
     """
     r = int(draw(p["radius_domain"], rng))
     given_as = str(draw(list(p["given_as_set"]), rng))
-    unit = str(draw(list(p["unit_set"]), rng))
-    return r, given_as, unit
+    pairs = [(name, u) for name, units in _SPHERE_SCENES for u in units]
+    scene, unit = pairs[int(draw({"int_set": list(range(len(pairs)))}, rng))]
+    return r, given_as, unit, scene
 
 
 def _sphere_size_phrase(r: int, given_as: str, unit: str) -> str:
@@ -376,10 +392,13 @@ def _sphere_size_phrase(r: int, given_as: str, unit: str) -> str:
 def solid_sphere_direct_recipe(ctx: CellContext, rng: Rng) -> MR:
     """半径から球の表面積・体積をそれぞれ直接求める（g1_l53.find_value Lv1・answer-first）。"""
     p = ctx.spec_level.params
-    r, given_as, unit = _draw_sphere_scene(p, rng)
-    values = {"radius": r, "given_as": given_as, "unit": unit}
+    r, given_as, unit, scene = _draw_sphere_scene(p, rng)
+    values = {"radius": r, "given_as": given_as, "unit": unit, "scene": scene}
     size = _sphere_size_phrase(r, given_as, unit)
-    statement = f"{size}の球がある。この球の表面積と体積をそれぞれ求めよ。ただし円周率はπとする"
+    statement = (
+        f"{size}の{scene}がある。この{scene}の表面積と体積をそれぞれ求めよ。"
+        "ただし円周率はπとする"
+    )
 
     sol = _solve(_L53_DIRECT_MODE, values)
     return _make_mr(ctx, "math.solid_sphere_direct", _L53_DIRECT_MODE, values, statement, "condition", sol)
@@ -404,15 +423,16 @@ def solid_hemisphere_or_reverse_recipe(ctx: CellContext, rng: Rng) -> MR:
     # 混ぜると 1レベル＝1 signature＝1 op 列が崩れ G-FP が不安定になる
     # （BRIEF 失敗パターン1）。半球（台帳 example そのもの）を採る。
     variant = "hemisphere_surface"
-    r, given_as, unit = _draw_sphere_scene(p, rng)
+    r, given_as, unit, scene = _draw_sphere_scene(p, rng)
 
     if variant == "hemisphere_surface":
         values: dict[str, object] = {
             "variant": variant, "radius": r, "given_as": given_as, "unit": unit,
+            "scene": scene,
         }
         size = _sphere_size_phrase(r, given_as, unit)
         statement = (
-            f"{size}の球を中心を通る平面で半分に切った半球がある。この半球の表面積を"
+            f"{size}の{scene}を中心を通る平面で半分に切った半球がある。この半球の表面積を"
             "求めよ。ただし円周率はπとする"
         )
     else:  # reverse_sphere_radius

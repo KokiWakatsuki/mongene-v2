@@ -38,26 +38,26 @@ sub_questions:
       kind: point
       srepr: Tuple(Integer(-1), Integer(2))
     kind: graph
-    solution_svg_ref: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400"><rect x="0" y="0" width="400" height="400" fill="none" stroke="none"/><line x1="28.00" y1="28.00"
-      x2="28.00" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="52.57" y1="28.00" x2="52.57" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="77.14" y1="28.00" x2="77.14" y2="372.00"
-      stroke="#bbbbbb" stroke-width="0.5"/><line x1="101.71" y1="28.00" x2="101.71" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="126.29" y1="28.00" x2="126.29" y2="372.00" stroke="#bbbbbb"
-      stroke-width="0.5"/><line x1="150.86" y1="28.00" x2="150.86" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="175.43" y1="28.00" x2="175.43" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line
-      x1="200.00" y1="28.00" x2="200.00" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="224.57" y1="28.00" x2="224.57" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="249.14" y1="28.00"
-      x2="249.14" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="273.71" y1="28.00" x2="273.71" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="298.29" y1="28.00" x2="298.29" y2="372.00"
-      stroke="#bbbbbb" stroke-width="0.5"/><line x1="322.86" y1="28.00" x2="322.86" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="347.43" y1="28.00" x2="347.43" y2="372.00" stroke="#bbbbbb"
-      stroke-width="0.5"/><line x1="372.00" y1="28.00" x2="372.00" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="372.00" x2="372.00" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line
-      x1="28.00" y1="347.43" x2="372.00" y2="347.43" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="322.86" x2="372.00" y2="322.86" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="298.29"
-      x2="372.00" y2="298.29" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="273.71" x2="372.00" y2="273.71" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="249.14" x2="372.00" y2="249.14"
-      stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="224.57" x2="372.00" y2="224.57" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="200.00" x2="372.00" y2="200.00" stroke="#bbbbbb"
-      stroke-width="0.5"/><line x1="28.00" y1="175.43" x2="372.00" y2="175.43" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="150.86" x2="372.00" y2="150.86" stroke="#bbbbbb" stroke-width="0.5"/><line
-      x1="28.00" y1="126.29" x2="372.00" y2="126.29" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="101.71" x2="372.00" y2="101.71" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="77.14"
-      x2="372.00" y2="77.14" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="52.57" x2="372.00" y2="52.57" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="28.00" x2="372.00" y2="28.00"
-      stroke="#bbbbbb" stroke-width="0.5"/><line x1="200.00" y1="28.00" x2="200.00" y2="372.00" stroke="#000000" stroke-width="1.5"/><path d="M 175.43 224.57 L 249.14 224.57 L 224.57 150.86 Z" fill="none"
-      stroke="#000000" stroke-width="2"/><circle cx="175.43" cy="224.57" r="2.5" fill="#000000"/><text x="181.43" y="218.57" font-size="13" fill="#000000">A</text><circle cx="249.14" cy="224.57" r="2.5"
-      fill="#000000"/><text x="255.14" y="218.57" font-size="13" fill="#000000">B</text><circle cx="224.57" cy="150.86" r="2.5" fill="#000000"/><text x="230.57" y="144.86" font-size="13" fill="#000000">C</text><path
-      d="M 224.57 224.57 L 150.86 224.57 L 175.43 150.86 Z" fill="none" stroke="#000000" stroke-width="2" stroke-dasharray="5 4"/><circle cx="224.57" cy="224.57" r="2.5" fill="#000000"/><text x="230.57"
-      y="218.57" font-size="13" fill="#000000">A'</text><circle cx="150.86" cy="224.57" r="2.5" fill="#000000"/><text x="156.86" y="218.57" font-size="13" fill="#000000">B'</text><circle cx="175.43" cy="150.86"
-      r="2.5" fill="#000000"/><text x="181.43" y="144.86" font-size="13" fill="#000000">C'</text></svg>
+    solution_svg_ref: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400" font-family="Hiragino Sans, Hiragino Kaku Gothic ProN, Noto Sans JP, Yu Gothic, Meiryo, sans-serif"><rect
+      x="0" y="0" width="400" height="400" fill="#ffffff" stroke="none"/><line x1="28.00" y1="28.00" x2="28.00" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="52.57" y1="28.00" x2="52.57" y2="372.00"
+      stroke="#bbbbbb" stroke-width="0.5"/><line x1="77.14" y1="28.00" x2="77.14" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="101.71" y1="28.00" x2="101.71" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line
+      x1="126.29" y1="28.00" x2="126.29" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="150.86" y1="28.00" x2="150.86" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="175.43" y1="28.00"
+      x2="175.43" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="200.00" y1="28.00" x2="200.00" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="224.57" y1="28.00" x2="224.57" y2="372.00"
+      stroke="#bbbbbb" stroke-width="0.5"/><line x1="249.14" y1="28.00" x2="249.14" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="273.71" y1="28.00" x2="273.71" y2="372.00" stroke="#bbbbbb"
+      stroke-width="0.5"/><line x1="298.29" y1="28.00" x2="298.29" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="322.86" y1="28.00" x2="322.86" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line
+      x1="347.43" y1="28.00" x2="347.43" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="372.00" y1="28.00" x2="372.00" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="372.00"
+      x2="372.00" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="347.43" x2="372.00" y2="347.43" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="322.86" x2="372.00" y2="322.86"
+      stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="298.29" x2="372.00" y2="298.29" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="273.71" x2="372.00" y2="273.71" stroke="#bbbbbb"
+      stroke-width="0.5"/><line x1="28.00" y1="249.14" x2="372.00" y2="249.14" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="224.57" x2="372.00" y2="224.57" stroke="#bbbbbb" stroke-width="0.5"/><line
+      x1="28.00" y1="200.00" x2="372.00" y2="200.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="175.43" x2="372.00" y2="175.43" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="150.86"
+      x2="372.00" y2="150.86" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="126.29" x2="372.00" y2="126.29" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="101.71" x2="372.00" y2="101.71"
+      stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="77.14" x2="372.00" y2="77.14" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="52.57" x2="372.00" y2="52.57" stroke="#bbbbbb" stroke-width="0.5"/><line
+      x1="28.00" y1="28.00" x2="372.00" y2="28.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="200.00" y1="28.00" x2="200.00" y2="372.00" stroke="#000000" stroke-width="1.5"/><path d="M 175.43 224.57
+      L 249.14 224.57 L 224.57 150.86 Z" fill="none" stroke="#000000" stroke-width="2"/><circle cx="175.43" cy="224.57" r="2.5" fill="#000000"/><text x="181.43" y="218.57" font-size="13" fill="#000000">A</text><circle
+      cx="249.14" cy="224.57" r="2.5" fill="#000000"/><text x="255.14" y="218.57" font-size="13" fill="#000000">B</text><circle cx="224.57" cy="150.86" r="2.5" fill="#000000"/><text x="230.57" y="144.86"
+      font-size="13" fill="#000000">C</text><path d="M 224.57 224.57 L 150.86 224.57 L 175.43 150.86 Z" fill="none" stroke="#000000" stroke-width="2" stroke-dasharray="5 4"/><circle cx="224.57" cy="224.57"
+      r="2.5" fill="#000000"/><text x="230.57" y="218.57" font-size="13" fill="#000000">A'</text><circle cx="150.86" cy="224.57" r="2.5" fill="#000000"/><text x="156.86" y="218.57" font-size="13" fill="#000000">B'</text><circle
+      cx="175.43" cy="150.86" r="2.5" fill="#000000"/><text x="181.43" y="144.86" font-size="13" fill="#000000">C'</text></svg>
   cause_tags: []
   concept_tags:
   - polygon_transform.reflect
@@ -67,7 +67,7 @@ sub_questions:
   hints:
   - 対称移動の軸がどこにあるかを読み取る。
   label: (1)
-  prompt_text: draw_transformed_polygon を求めなさい。
+  prompt_text: 移した図形をかきなさい。
   solution_steps:
   - args: []
     narration: 対称移動の軸がどこにあるかを読み取る。
@@ -79,20 +79,20 @@ sub_questions:
     op: reflect_each_vertex
     result_display: 各頂点を軸について折り返す
     result_srepr: ''
-visual_svg: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400"><rect x="0" y="0" width="400" height="400" fill="none" stroke="none"/><line x1="28.00" y1="28.00" x2="28.00"
-  y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="52.57" y1="28.00" x2="52.57" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="77.14" y1="28.00" x2="77.14" y2="372.00" stroke="#bbbbbb"
-  stroke-width="0.5"/><line x1="101.71" y1="28.00" x2="101.71" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="126.29" y1="28.00" x2="126.29" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line
-  x1="150.86" y1="28.00" x2="150.86" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="175.43" y1="28.00" x2="175.43" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="200.00" y1="28.00"
-  x2="200.00" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="224.57" y1="28.00" x2="224.57" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="249.14" y1="28.00" x2="249.14" y2="372.00"
-  stroke="#bbbbbb" stroke-width="0.5"/><line x1="273.71" y1="28.00" x2="273.71" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="298.29" y1="28.00" x2="298.29" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line
-  x1="322.86" y1="28.00" x2="322.86" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="347.43" y1="28.00" x2="347.43" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="372.00" y1="28.00"
-  x2="372.00" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="372.00" x2="372.00" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="347.43" x2="372.00" y2="347.43"
-  stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="322.86" x2="372.00" y2="322.86" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="298.29" x2="372.00" y2="298.29" stroke="#bbbbbb" stroke-width="0.5"/><line
-  x1="28.00" y1="273.71" x2="372.00" y2="273.71" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="249.14" x2="372.00" y2="249.14" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="224.57"
-  x2="372.00" y2="224.57" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="200.00" x2="372.00" y2="200.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="175.43" x2="372.00" y2="175.43"
-  stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="150.86" x2="372.00" y2="150.86" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="126.29" x2="372.00" y2="126.29" stroke="#bbbbbb" stroke-width="0.5"/><line
-  x1="28.00" y1="101.71" x2="372.00" y2="101.71" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="77.14" x2="372.00" y2="77.14" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="52.57"
-  x2="372.00" y2="52.57" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="28.00" x2="372.00" y2="28.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="200.00" y1="28.00" x2="200.00" y2="372.00"
-  stroke="#000000" stroke-width="1.5"/><path d="M 175.43 224.57 L 249.14 224.57 L 224.57 150.86 Z" fill="none" stroke="#000000" stroke-width="2"/><circle cx="175.43" cy="224.57" r="2.5" fill="#000000"/><text
-  x="181.43" y="218.57" font-size="13" fill="#000000">A</text><circle cx="249.14" cy="224.57" r="2.5" fill="#000000"/><text x="255.14" y="218.57" font-size="13" fill="#000000">B</text><circle cx="224.57"
-  cy="150.86" r="2.5" fill="#000000"/><text x="230.57" y="144.86" font-size="13" fill="#000000">C</text></svg>
+visual_svg: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400" font-family="Hiragino Sans, Hiragino Kaku Gothic ProN, Noto Sans JP, Yu Gothic, Meiryo, sans-serif"><rect
+  x="0" y="0" width="400" height="400" fill="#ffffff" stroke="none"/><line x1="28.00" y1="28.00" x2="28.00" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="52.57" y1="28.00" x2="52.57" y2="372.00"
+  stroke="#bbbbbb" stroke-width="0.5"/><line x1="77.14" y1="28.00" x2="77.14" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="101.71" y1="28.00" x2="101.71" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line
+  x1="126.29" y1="28.00" x2="126.29" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="150.86" y1="28.00" x2="150.86" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="175.43" y1="28.00"
+  x2="175.43" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="200.00" y1="28.00" x2="200.00" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="224.57" y1="28.00" x2="224.57" y2="372.00"
+  stroke="#bbbbbb" stroke-width="0.5"/><line x1="249.14" y1="28.00" x2="249.14" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="273.71" y1="28.00" x2="273.71" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line
+  x1="298.29" y1="28.00" x2="298.29" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="322.86" y1="28.00" x2="322.86" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="347.43" y1="28.00"
+  x2="347.43" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="372.00" y1="28.00" x2="372.00" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="372.00" x2="372.00" y2="372.00"
+  stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="347.43" x2="372.00" y2="347.43" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="322.86" x2="372.00" y2="322.86" stroke="#bbbbbb" stroke-width="0.5"/><line
+  x1="28.00" y1="298.29" x2="372.00" y2="298.29" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="273.71" x2="372.00" y2="273.71" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="249.14"
+  x2="372.00" y2="249.14" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="224.57" x2="372.00" y2="224.57" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="200.00" x2="372.00" y2="200.00"
+  stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="175.43" x2="372.00" y2="175.43" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="150.86" x2="372.00" y2="150.86" stroke="#bbbbbb" stroke-width="0.5"/><line
+  x1="28.00" y1="126.29" x2="372.00" y2="126.29" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="101.71" x2="372.00" y2="101.71" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="77.14"
+  x2="372.00" y2="77.14" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="52.57" x2="372.00" y2="52.57" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="28.00" x2="372.00" y2="28.00" stroke="#bbbbbb"
+  stroke-width="0.5"/><line x1="200.00" y1="28.00" x2="200.00" y2="372.00" stroke="#000000" stroke-width="1.5"/><path d="M 175.43 224.57 L 249.14 224.57 L 224.57 150.86 Z" fill="none" stroke="#000000" stroke-width="2"/><circle
+  cx="175.43" cy="224.57" r="2.5" fill="#000000"/><text x="181.43" y="218.57" font-size="13" fill="#000000">A</text><circle cx="249.14" cy="224.57" r="2.5" fill="#000000"/><text x="255.14" y="218.57" font-size="13"
+  fill="#000000">B</text><circle cx="224.57" cy="150.86" r="2.5" fill="#000000"/><text x="230.57" y="144.86" font-size="13" fill="#000000">C</text></svg>

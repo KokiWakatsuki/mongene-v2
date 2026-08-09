@@ -41,7 +41,7 @@ sub_questions:
   hints:
   - 分配法則や乗法公式で根号を含む式を展開する。
   label: (1)
-  prompt_text: simplified_expr を求めなさい。
+  prompt_text: 式を簡単にしなさい。
   solution_steps:
   - args: []
     narration: 分配法則や乗法公式で根号を含む式を展開する。

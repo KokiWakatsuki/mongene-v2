@@ -24,7 +24,10 @@ LF_SECTOR_SOLVE_CENTRAL_ANGLE_V1 = "{{ given.condition }}。"
 
 # 図形の証明（proof form）。前提と結論を並べるだけで、問いの言い方は固定。
 # 市販の問題集がこの型で書いているので、テンプレートで揺らさない。
-PF_GEOMETRY_PROOF_V1 = "{{ given.premises }}。このとき、{{ given.conclusion }} であることを証明せよ。"
+# `given.conclusion` は `facts.goal_text` が**言い切りまで**作って渡す
+# （「AB ＝ CD である」／「四角形ABCD は平行四辺形である」）。ここで「である」を
+# 付け足さないこと——四角形で二重になる。
+PF_GEOMETRY_PROOF_V1 = "{{ given.premises }}。このとき、{{ given.conclusion }}ことを証明せよ。"
 
 
 def _register_all() -> None:

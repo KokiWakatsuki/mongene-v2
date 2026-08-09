@@ -29,6 +29,26 @@ def fmt_number(v: sympy.Expr) -> str:
     raise ValueError(f"数として表示できない値: {v!r}")
 
 
+def _decimal_display(v: sympy.Expr) -> str | None:
+    """有限小数で書ける値を小数の文字列にする（書けなければ None）。"""
+    if v.is_Integer:
+        return str(int(v))
+    if not isinstance(v, sympy.Rational):
+        return None
+    q = int(v.q)
+    while q % 2 == 0:
+        q //= 2
+    while q % 5 == 0:
+        q //= 5
+    if q != 1:
+        return None
+    digits, r = 0, sympy.Rational(v)
+    while r.q != 1:
+        r *= 10
+        digits += 1
+    return f"{float(v):.{digits}f}"
+
+
 # mode -> op 列（steps の骨格）。level_sep はこの op 列の相異で作る（同一 unit の
 # Lv1/Lv2 が異なる mode を持つ）。narration に数字は書かない（G-Q5t 偽陽性の元・§5-#9）。
 _MODE_STEPS: dict[str, list[str]] = {
@@ -127,6 +147,13 @@ def evaluate_numeric_expression(expr_str: str, mode: object) -> Solution:
         raise ValueError(f"数値に評価されない与式: {expr_str!r} -> {value!r}")
     r_srepr = sympy.srepr(value)
     r_disp = fmt_number(value)
+    # **小数で与えた累乗は小数で答える。** 中1の「(-0.9)³」の答えを -729/1000 と
+    # 書く教材は無い（-0.729 と書く）。累乗は底がそのまま与式に出るので、与式に
+    # 小数が入っていれば答えも小数で書ける（分数は登場しない mode）。
+    if mode_s in ("power_single", "power_sign_contrast", "absolute_value") and "." in expr_str:
+        as_decimal = _decimal_display(value)
+        if as_decimal is not None:
+            r_disp = as_decimal
 
     ops = _MODE_STEPS[mode_s]
     steps = [
@@ -408,7 +435,10 @@ def read_number_line_point(a: object, k: object, i: object) -> Solution:
     """
     a_i, k_i, i_i = int(str(a)), int(str(k)), int(str(i))
     value = _read_number_line_point(a_i, k_i, i_i)
-    disp = fmt_number(value)
+    # **2等分・4等分・5等分の目もりは小数で読む。** 教科書は数直線から読んだ数を
+    # 「-8.5」と書き、「-17/2」とは書かない（EVALUATION D-5）。3等分のように
+    # 小数で書き切れないときだけ分数のままにする。
+    disp = _decimal_display(value) or fmt_number(value)
     srepr = sympy.srepr(value)
 
     steps = [
@@ -424,7 +454,7 @@ def read_number_line_point(a: object, k: object, i: object) -> Solution:
             args=[],
             result_srepr=srepr,
             result_display=disp,
-            narration="目もりの間を等分した位置に着目し、点Pが表す数を分数で求める。",
+            narration="目もりの間を等分した位置に着目し、点Pが表す数を求める。",
         ),
     ]
     answer = SymbolicAnswer(srepr=srepr, display=disp)

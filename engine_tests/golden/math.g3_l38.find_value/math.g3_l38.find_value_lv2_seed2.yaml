@@ -39,7 +39,7 @@ sub_questions:
   hints:
   - 動いた道のりから、点 P の位置の座標を決める。
   label: (1)
-  prompt_text: area を求めなさい。
+  prompt_text: 面積を求めなさい。
   solution_steps:
   - args: []
     narration: 動いた道のりから、点 P の位置の座標を決める。

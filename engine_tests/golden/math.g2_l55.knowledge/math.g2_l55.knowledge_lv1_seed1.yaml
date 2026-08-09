@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: quartile_terms_term_recall
 problem_ref: ce9d1003969d178b
-problem_text: 378個のデータを大きさの順に並べたときの中央値のよび名 を何といいますか。
+problem_text: 378個のデータを大きさの順に並べたときの中央値のよび名を何といいますか。
 sub_questions:
 - answer:
     correct: 第二四分位数
@@ -43,7 +43,7 @@ sub_questions:
   hints:
   - 説明されている式や数の部分がどれかを読み取る。
   label: (1)
-  prompt_text: choice を求めなさい。
+  prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
     narration: 説明されている式や数の部分がどれかを読み取る。

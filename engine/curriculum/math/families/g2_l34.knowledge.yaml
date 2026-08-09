@@ -17,7 +17,7 @@ levels:
     params:
       topic: polygon_interior_sum_reason
       concept_set: [diagonal_from_vertex]
-      sides_domain: {int_range: [5, 400]}
+      sides_domain: {int_set: [3, 4, 5, 6, 8, 9, 10, 12, 15, 18, 20, 24, 30, 36]}
     given: [statement]
     asked: [choice]
     visual: none
@@ -25,5 +25,8 @@ levels:
     hints: [steps_prefix]
     concept_tags: [polygon_interior_sum_reason.rule_recall]
     cause_tags: []
+    dup_rate_max: 0.90
+    dup_rate_reason: >-
+      教材にありうる正多角形は三角形〜正三十六角形あたりまでで、問題空間が本質的に14通りしかない。既定の0.20を通すには「正348角形」「1つの内角が4860/29°」を作ることになり、教材にならない。数を現実に戻したうえで重複を仕様として宣言する。
 remedial:
   default_level: 1

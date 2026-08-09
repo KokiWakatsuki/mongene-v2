@@ -1,0 +1,64 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - pythagorean.word_problem_box_shortest_path_choose
+  provenance:
+    git_commit: ''
+    recipe: math.word_problem_pythagorean
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: wp_linear_solo_v1
+    tier: T1
+  requested:
+    form: word_problem
+    level: 4
+    subject: math
+    unit: g3_l56
+  resolved:
+    form: word_problem
+    level: 4
+    subject: math
+    unit: g3_l56
+  seed: 2
+  signature: word_problem_box_shortest_path_choose
+problem_ref: 17edb62473f39bae
+problem_text: '辺OPの長さが15cm、辺PQの長さが3cm、高さが13cmの直方体OPQR-STUVの形をしたケースがある。ここでOPQRは底面、STUVは上面で、辺OSが高さにあたる。
+
+  このケースの表面上を頂点Oから頂点Uまで進むとき、どの面をどのように開くと最短になるかを自分で判断し、その最短の道のりを求めよ。'
+sub_questions:
+- answer:
+    display: √481 cm
+    kind: symbolic
+    srepr: Pow(Integer(481), Rational(1, 2))
+  cause_tags: []
+  concept_tags:
+  - pythagorean.word_problem_box_shortest_path_choose
+  explanation: 'まず、となり合う二つの面の開き方が三通りあることを確かめ、それぞれで開いた長方形の縦と横を書き出す。（三通りの開き方を書き出す）
+
+    次に、開いた長方形の対角線の長さを三通りとも式にして比べ、最も短くなるのがどれかを決める。（どの開き方が最も短いかを比べる）
+
+    最後に、選んだ開き方の長方形について、対角線の長さを三平方の定理で求める。（√481 cm）'
+  hints:
+  - となり合う二つの面の開き方が三通りあることを確かめ、それぞれで開いた長方形の縦と横を書き出す。
+  - 開いた長方形の対角線の長さを三通りとも式にして比べ、最も短くなるのがどれかを決める。
+  label: (1)
+  prompt_text: 答えを求めなさい。
+  solution_steps:
+  - args: []
+    narration: となり合う二つの面の開き方が三通りあることを確かめ、それぞれで開いた長方形の縦と横を書き出す。
+    op: enumerate_unfoldings
+    result_display: 三通りの開き方を書き出す
+    result_srepr: ''
+  - args: []
+    narration: 開いた長方形の対角線の長さを三通りとも式にして比べ、最も短くなるのがどれかを決める。
+    op: compare_three_paths
+    result_display: どの開き方が最も短いかを比べる
+    result_srepr: ''
+  - args: []
+    narration: 選んだ開き方の長方形について、対角線の長さを三平方の定理で求める。
+    op: compute_shortest_path
+    result_display: √481 cm
+    result_srepr: Pow(Integer(481), Rational(1, 2))
+visual_svg: null

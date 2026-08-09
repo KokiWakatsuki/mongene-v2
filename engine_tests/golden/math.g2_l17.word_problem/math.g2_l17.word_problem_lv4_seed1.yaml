@@ -50,7 +50,7 @@ sub_questions:
   - 同じ向きに進んだときの道のりの関係に着目して、2つめの式をつくる。
   - 係数をそろえて一方の文字を消去し、残った文字を求める。
   label: (1)
-  prompt_text: value を求めなさい。
+  prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
     narration: Aさんの速さを分速 x m、Bさんの速さを分速 y m とおく。

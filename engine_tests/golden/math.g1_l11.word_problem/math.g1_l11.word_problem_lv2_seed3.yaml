@@ -43,7 +43,7 @@ sub_questions:
   hints:
   - 小さい素数から順にわり、商が素数になるまでわり続ける。
   label: (1)
-  prompt_text: value を求めなさい。
+  prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
     narration: 小さい素数から順にわり、商が素数になるまでわり続ける。
@@ -68,7 +68,7 @@ sub_questions:
   hints:
   - 素因数分解した結果から、指数が奇数になっている素因数を選び出す。
   label: (2)
-  prompt_text: value を求めなさい。
+  prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
     narration: 素因数分解した結果から、指数が奇数になっている素因数を選び出す。

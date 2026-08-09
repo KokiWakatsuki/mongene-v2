@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: word_problem_sample_mark_recapture_guided
 problem_ref: d594bc8ead4080e6
-problem_text: 'ある池にいる魚の総数を調べるため、無作為に120匹の魚を調べたところ、そのうち印のついた魚が15匹いた。この池にはあらかじめ印をつけた魚が20匹放してある。
+problem_text: 'ある池にいる魚の総数を調べるため、無作為に300匹の魚を調べたところ、そのうち印のついた魚が15匹いた。この池にはあらかじめ印をつけた魚が45匹放してある。
 
   この池にいる魚の総数を x 匹とする。
 
@@ -33,19 +33,19 @@ problem_text: 'ある池にいる魚の総数を調べるため、無作為に12
   (2) この池の魚のおよその総数を求めよ。'
 sub_questions:
 - answer:
-    display: 1/8
+    display: '0.05'
     kind: symbolic
-    srepr: Rational(1, 8)
+    srepr: Rational(1, 20)
   cause_tags: []
   concept_tags:
   - sample_survey.word_problem_mark_recapture
   explanation: 'まず、標本の中で、該当するものの個数と標本全体の個数を確認する。（標本の大きさと、そのうち該当するものの個数）
 
-    次に、該当するものの個数を標本の大きさでわり、標本での割合を求める。（1/8）'
+    次に、該当するものの個数を標本の大きさでわり、標本での割合を求める。（0.05）'
   hints:
   - 標本の中で、該当するものの個数と標本全体の個数を確認する。
   label: (1)
-  prompt_text: formulation を求めなさい。
+  prompt_text: 式に表しなさい。
   solution_steps:
   - args: []
     narration: 標本の中で、該当するものの個数と標本全体の個数を確認する。
@@ -55,22 +55,22 @@ sub_questions:
   - args: []
     narration: 該当するものの個数を標本の大きさでわり、標本での割合を求める。
     op: compute_sample_ratio
-    result_display: 1/8
-    result_srepr: Rational(1, 8)
+    result_display: '0.05'
+    result_srepr: Rational(1, 20)
 - answer:
-    display: 160匹
+    display: 900匹
     kind: symbolic
-    srepr: Integer(160)
+    srepr: Integer(900)
   cause_tags: []
   concept_tags:
   - sample_survey.word_problem_mark_recapture
   explanation: 'まず、標本での該当する個数の割合が、母集団全体でもおよそ等しいとみて、母集団の大きさ x を含む比例式をつくる。（標本比率と母集団の比率が等しいとみて x を含む比例式をつくる）
 
-    次に、比例式を解き、母集団の大きさ x を求める。（160）'
+    次に、比例式を解き、母集団の大きさ x を求める。（900）'
   hints:
   - 標本での該当する個数の割合が、母集団全体でもおよそ等しいとみて、母集団の大きさ x を含む比例式をつくる。
   label: (2)
-  prompt_text: value を求めなさい。
+  prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
     narration: 標本での該当する個数の割合が、母集団全体でもおよそ等しいとみて、母集団の大きさ x を含む比例式をつくる。
@@ -80,6 +80,6 @@ sub_questions:
   - args: []
     narration: 比例式を解き、母集団の大きさ x を求める。
     op: solve_for_x
-    result_display: '160'
-    result_srepr: Integer(160)
+    result_display: '900'
+    result_srepr: Integer(900)
 visual_svg: null

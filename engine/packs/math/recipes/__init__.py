@@ -62,5 +62,7 @@ from engine.packs.math.recipes import quadratic_function_graph  # noqa: F401,E40
 from engine.packs.math.recipes import g1_space  # noqa: F401,E402  (letter_expr の _draw_distinct_points に依存＝後に import)
 from engine.packs.math.recipes import number_proof  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.recipes import construction  # noqa: F401,E402  (visuals.construction_figure に依存＝後に import)
+from engine.packs.math.recipes import conditional_proof  # noqa: F401  (登録の副作用のため import)
+from engine.packs.math.recipes import pythagoras_proof  # noqa: F401  (登録の副作用のため import)
 
 __all__: list[str] = []

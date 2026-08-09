@@ -29,7 +29,7 @@ problem_text: '次の2つの数の大小を、不等号を使って表せ。
   √84 と √24'
 sub_questions:
 - answer:
-    display: 2√6 < 2√21
+    display: √24 < √84
     kind: symbolic
     srepr: Tuple(Mul(Integer(2), Pow(Integer(6), Rational(1, 2))), Mul(Integer(2), Pow(Integer(21), Rational(1, 2))))
   cause_tags: []
@@ -37,11 +37,11 @@ sub_questions:
   - radical.compare_magnitude
   explanation: 'まず、根号を含む数はそれぞれ2乗し、根号のない数どうしで比べられるようにする。（それぞれ2乗する）
 
-    次に、2乗した値どうしを比べ、値が大きいほうがもとの数も大きいと判断する。（2√6 < 2√21）'
+    次に、2乗した値どうしを比べ、値が大きいほうがもとの数も大きいと判断する。（√24 < √84）'
   hints:
   - 根号を含む数はそれぞれ2乗し、根号のない数どうしで比べられるようにする。
   label: (1)
-  prompt_text: value を求めなさい。
+  prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
     narration: 根号を含む数はそれぞれ2乗し、根号のない数どうしで比べられるようにする。
@@ -51,6 +51,6 @@ sub_questions:
   - args: []
     narration: 2乗した値どうしを比べ、値が大きいほうがもとの数も大きいと判断する。
     op: compare_squares
-    result_display: 2√6 < 2√21
+    result_display: √24 < √84
     result_srepr: Tuple(Mul(Integer(2), Pow(Integer(6), Rational(1, 2))), Mul(Integer(2), Pow(Integer(21), Rational(1, 2))))
 visual_svg: null

@@ -45,7 +45,7 @@ sub_questions:
   hints:
   - 点が最初の辺の上にある間は、速さと経過時間から、動いた道のりを x を使って表す。
   label: (1)
-  prompt_text: formulation を求めなさい。
+  prompt_text: 式に表しなさい。
   solution_steps:
   - args: []
     narration: 点が最初の辺の上にある間は、速さと経過時間から、動いた道のりを x を使って表す。
@@ -70,7 +70,7 @@ sub_questions:
   hints:
   - 点が次の辺の上に移ったあと、三角形の底辺と高さがどうなるかを確かめる。
   label: (2)
-  prompt_text: formulation を求めなさい。
+  prompt_text: 式に表しなさい。
   solution_steps:
   - args: []
     narration: 点が次の辺の上に移ったあと、三角形の底辺と高さがどうなるかを確かめる。

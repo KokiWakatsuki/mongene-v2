@@ -24,22 +24,22 @@ meta:
   seed: 3
   signature: pythagorean_hypotenuse
 problem_ref: dafd140b2339b4c0
-problem_text: 直角をはさむ2辺が 27cm, 4cm の直角三角形の斜辺の長さを求めよ。
+problem_text: ∠N=90°の直角三角形EDNで、EN=9cm, DN=18cm である。斜辺EDの長さを求めよ。
 sub_questions:
 - answer:
-    display: sqrt(745)
+    display: 9√5 cm
     kind: symbolic
-    srepr: Pow(Integer(745), Rational(1, 2))
+    srepr: Mul(Integer(9), Pow(Integer(5), Rational(1, 2)))
   cause_tags: []
   concept_tags:
   - pythagorean.hypotenuse_from_legs
   explanation: 'まず、直角三角形で、直角をはさむ2辺の長さを読み取る。（直角をはさむ2辺の長さを読み取る）
 
-    次に、直角をはさむ2辺の長さの二乗の和が、斜辺の長さの二乗に等しいという三平方の定理から、斜辺の長さを求める。（sqrt(745)）'
+    次に、直角をはさむ2辺の長さの二乗の和が、斜辺の長さの二乗に等しいという三平方の定理から、斜辺の長さを求める。（9√5 cm）'
   hints:
   - 直角三角形で、直角をはさむ2辺の長さを読み取る。
   label: (1)
-  prompt_text: value を求めなさい。
+  prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
     narration: 直角三角形で、直角をはさむ2辺の長さを読み取る。
@@ -49,6 +49,6 @@ sub_questions:
   - args: []
     narration: 直角をはさむ2辺の長さの二乗の和が、斜辺の長さの二乗に等しいという三平方の定理から、斜辺の長さを求める。
     op: apply_pythagorean_theorem
-    result_display: sqrt(745)
-    result_srepr: Pow(Integer(745), Rational(1, 2))
+    result_display: 9√5 cm
+    result_srepr: Mul(Integer(9), Pow(Integer(5), Rational(1, 2)))
 visual_svg: null

@@ -41,7 +41,7 @@ sub_questions:
   hints:
   - 循環小数を文字でおき、桁をずらした式との差を作って循環部分を消す。
   label: (1)
-  prompt_text: value を求めなさい。
+  prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
     narration: 循環小数を文字でおき、桁をずらした式との差を作って循環部分を消す。

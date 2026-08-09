@@ -45,7 +45,7 @@ sub_questions:
   hints:
   - 式の x に、与えられた値をあてはめる。
   label: (1)
-  prompt_text: value を求めなさい。
+  prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
     narration: 式の x に、与えられた値をあてはめる。
@@ -73,7 +73,7 @@ sub_questions:
   - 求める時刻を x とみて、距離を表す式に、与えられている距離をあてはめて方程式をつくる。
   - 両辺を x の2乗にかかっている数でわり、平方根の考え方で x を求める。
   label: (2)
-  prompt_text: value を求めなさい。
+  prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
     narration: 求める時刻を x とみて、距離を表す式に、与えられている距離をあてはめて方程式をつくる。

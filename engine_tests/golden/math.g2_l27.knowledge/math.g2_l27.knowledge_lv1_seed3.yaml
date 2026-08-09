@@ -42,7 +42,7 @@ sub_questions:
   hints:
   - 連立方程式の解が、2つの式のグラフのどこにあたるかを思い出す。
   label: (1)
-  prompt_text: choice を求めなさい。
+  prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
     narration: 連立方程式の解が、2つの式のグラフのどこにあたるかを思い出す。

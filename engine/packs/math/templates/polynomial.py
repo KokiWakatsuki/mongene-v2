@@ -35,8 +35,9 @@ LF_NUMBER_PROPERTY_V1 = "{{ given.expressions }} の和を計算し、1つの式
 LF_DIGIT_NUMBER_V1 = "{{ given.expressions }} を計算し、式を簡単にせよ。"
 
 # g2_l1.knowledge Lv1: 多項式まわりの用語想起／ g2_l10.knowledge Lv1: 連立の用語想起
-LF_POLY_TERM_RECALL_V1 = "{{ given.statement }} を何といいますか。"
-LF_SYSTEM_TERM_RECALL_V1 = "{{ given.statement }} を何といいますか。"
+# **半角スペースを入れないこと**（`letter_expr.py` と同じ理由。statement は体言止め）。
+LF_POLY_TERM_RECALL_V1 = "{{ given.statement }}を何といいますか。"
+LF_SYSTEM_TERM_RECALL_V1 = "{{ given.statement }}を何といいますか。"
 # g2_l1.knowledge Lv2: 単項式か多項式かの判別
 LF_POLY_CLASSIFY_V1 = "次の式 {{ given.statement }} は、単項式と多項式のどちらですか。"
 # g2_l2.knowledge Lv1: 同類項かどうかの判別

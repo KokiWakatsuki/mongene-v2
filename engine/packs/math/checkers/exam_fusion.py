@@ -41,7 +41,7 @@ def double_solve_exam_linear_intersection_area(mr: MR) -> Solution:
     return cast(
         Solution,
         REGISTRY.solver("math.lines_intersection_and_triangle_area")(
-            p["m1"], p["b1"], p["m2"], p["b2"]
+            p["m1"], p["b1"], p["m2"], p["b2"], p.get("labels")
         ),
     )
 

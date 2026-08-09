@@ -17,7 +17,9 @@ levels:
     signature: similarity_proven_ratio_length
     recipe: math.similarity_proven_ratio_length
     params:
-      side_domain: {int_range: [1, 200]}
+      ratio_max: 9
+      scale_max: 12
+      side_max: 60
     given: [condition]
     asked: [value]
     visual: none

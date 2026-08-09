@@ -24,7 +24,7 @@ meta:
   seed: 2
   signature: equation_term_recall
 problem_ref: 0f9dc3400f058790
-problem_text: 方程式 6x + 9 = -27 を成り立たせる文字の値 を何といいますか。
+problem_text: 方程式 6x + 9 = -27 を成り立たせる文字の値を何といいますか。
 sub_questions:
 - answer:
     correct: 解
@@ -43,7 +43,7 @@ sub_questions:
   hints:
   - 説明されている式や数の部分がどれかを読み取る。
   label: (1)
-  prompt_text: choice を求めなさい。
+  prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
     narration: 説明されている式や数の部分がどれかを読み取る。

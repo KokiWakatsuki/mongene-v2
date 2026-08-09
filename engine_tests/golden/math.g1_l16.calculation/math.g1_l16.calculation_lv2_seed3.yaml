@@ -44,7 +44,7 @@ sub_questions:
   - 負の数を代入するときは、かっこをつけて文字とおきかえる。
   - 累乗はかっこの中の数をその回数だけかけ合わせ、符号に注意して計算する。
   label: (1)
-  prompt_text: value を求めなさい。
+  prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
     narration: 負の数を代入するときは、かっこをつけて文字とおきかえる。

@@ -104,6 +104,31 @@ def _draw_decimal_operand(rng: Rng) -> tuple[sympy.Rational, str]:
     return r, disp
 
 
+def _draw_power_operand(
+    rng: Rng, kind: str, p: dict[str, object], n: int, limit: int
+) -> tuple[sympy.Rational, str]:
+    """累乗の底を引く。**答えの分子・分母が limit を超える底は引き直す。**
+
+    定義域を絞るのではなく答えの大きさで測る（絞ると dup_rate が跳ねる）。
+    前は底の分子・分母をそのまま広くとっていたので「(-14/3)³ = -2744/27」という、
+    中1の累乗としてありえない答えが出ていた。整数の底は対象外——「-13³ = -2197」は
+    桁数が多くても教科書にある形で、壊れていたのは分数・小数の底のほうだけ。
+    """
+    if kind == "int":
+        return _draw_operand(rng, kind, p)
+    for _ in range(200):
+        bval, bmag = _draw_operand(rng, kind, p)
+        v = sympy.Rational(bval) ** n
+        if abs(v.p) > limit or v.q > limit:
+            continue
+        # 小数の底は答えも小数で書くので、小数第3位までに収まるものだけ
+        # （0.625³ = 0.244140625 は中1の計算問題にならない）。
+        if kind == "dec" and 1000 % v.q != 0:
+            continue
+        return bval, bmag
+    raise ValueError("_draw_power_operand: 答えが大きすぎない底を引けず")
+
+
 def _draw_operand(rng: Rng, kind: str, p: dict[str, object]) -> tuple[sympy.Rational, str]:
     """kind（"int"/"frac"/"dec"）に応じて1つの被演算子を引く（value, 絶対値表示）。"""
     if kind == "int":
@@ -171,7 +196,32 @@ _SIGNED_ARITHMETIC_CONCEPTS = [
 
 @register_recipe("math.compute_signed_arithmetic", provides_concepts=_SIGNED_ARITHMETIC_CONCEPTS)
 def compute_signed_arithmetic(ctx: CellContext, rng: Rng) -> MR:
-    """正負の数の四則（数値式）を構成して評価する（構成的生成・calculation）。"""
+    """正負の数の四則（数値式）を構成して評価する（構成的生成・calculation）。
+
+    `answer_denominator_max` を宣言したレベルは、**答えの分母がその上限に収まるまで
+    組み直す**。正負の数の加減は分数と小数を各項で独立に引くので、分母 9 と 7 の
+    最小公倍数 63 に小数の 10 と 5 が掛かって `7/9-(-1.2)+4/7-0.6 → 614/315` が
+    出ていた（実測で `g1_l5.calculation.Lv2` は 60問中44問が分母13以上）。
+    この単元の狙いは符号の処理なので、通分の負荷が支配してはいけない。
+
+    **定義域は狭めない**（狭めると dup_rate が跳ねる）。答えの大きさで測る——
+    `g1_l7`（累乗）で同じ手が効いたのと同じ考え方。
+    """
+    limit = int(ctx.spec_level.params.get("answer_denominator_max", 0))
+    if limit <= 0:
+        return _compute_signed_arithmetic_once(ctx, rng)
+    for _ in range(80):
+        mr = _compute_signed_arithmetic_once(ctx, rng)
+        value = sympy.Rational(sympy.sympify(mr.params["expr_str"], rational=True))
+        if value.q <= limit:
+            return mr
+    raise ValueError(
+        f"compute_signed_arithmetic: 答えの分母が {limit} 以下になる式を構成できず"
+    )
+
+
+def _compute_signed_arithmetic_once(ctx: CellContext, rng: Rng) -> MR:
+    """1回ぶんの構成（答えの分母の上限は見ない）。"""
     p = ctx.spec_level.params
     mode: str = cast(str, p["mode"])
 
@@ -233,11 +283,17 @@ def compute_signed_arithmetic(ctx: CellContext, rng: Rng) -> MR:
         return _build(expr_str, disp, mode, ctx)
 
     if mode == "absolute_value":
-        # 絶対値を求める。|a|。a は整数・分数・小数（符号つき）。
+        # 絶対値を求める。**問題文には裸の数を出す**（`|-5|` ではなく `-5`）。
+        # テンプレートが「次の数の絶対値を求めよ。」と言っているので、ここで
+        # 絶対値記号を付けると「絶対値の絶対値」を問うことになる。
+        # 教科書も裸の数を並べる（FdData 中1 は `-5, -2.5, -1/2`）。
         kind = str(draw(p["value_kinds"], rng))
         aval, amag = _draw_operand(rng, kind, p)
-        expr_str = f"Abs({aval})"
-        disp = f"|{_fmt_signed(aval, amag)}|"
+        # 小数は**小数のまま**式に載せる（solver が「小数で与えたら小数で答える」を
+        # 判断できるように。Rational に直すと -2.5 の絶対値が 5/2 と出る）。
+        src = _fmt_signed(aval, amag) if kind == "dec" else str(aval)
+        expr_str = f"Abs({src})"
+        disp = _fmt_signed(aval, amag)
         return _build(expr_str, disp, mode, ctx)
 
     if mode == "order_numbers":
@@ -271,9 +327,13 @@ def compute_signed_arithmetic(ctx: CellContext, rng: Rng) -> MR:
     if mode == "power_single":
         # 累乗の計算。底は整数・分数・小数（符号つき）、指数 n。底の種類で dup を分散する。
         kind = str(draw(p["base_kinds"], rng))
-        bval, bmag = _draw_operand(rng, kind, p)
         n = int(draw(p["exponent_domain"], rng))
-        expr_str = f"({bval})**{n}"
+        bval, bmag = _draw_power_operand(rng, kind, p, n, int(p["answer_magnitude_max"]))
+        # 小数の底は**小数のまま**式に載せる（solver が「小数で与えた累乗は小数で
+        # 答える」を判断できるように。Rational に直して渡すと (-0.9)³ の答えが
+        # -729/1000 と出ていた）。sympify(..., rational=True) なので値は厳密。
+        base_src = f"-{bmag}" if (kind == "dec" and bval < 0) else (bmag if kind == "dec" else str(bval))
+        expr_str = f"({base_src})**{n}"
         disp = f"{_fmt_power_base(bval, bmag)}{_superscript(n)}"
         return _build(expr_str, disp, mode, ctx)
 
@@ -281,8 +341,8 @@ def compute_signed_arithmetic(ctx: CellContext, rng: Rng) -> MR:
         # (-a)^n と -a^n の区別。整数底のみ form=neg_inside（-a^n）を出し、指数のかかる範囲を
         # 見分けさせる。分数・小数底は neg_outside（かっこつき）で dup 分散のみに使う。
         kind = str(draw(p["base_kinds"], rng))
-        bval, bmag = _draw_operand(rng, kind, p)
         n = int(draw(p["exponent_domain"], rng))
+        bval, bmag = _draw_power_operand(rng, kind, p, n, int(p["answer_magnitude_max"]))
         form = str(draw(["neg_outside", "neg_inside"], rng)) if kind == "int" else "neg_outside"
         if form == "neg_inside":
             # 指数は数だけにかかり、先頭の - は最後（常に負）。底の絶対値を使う。
@@ -290,8 +350,8 @@ def compute_signed_arithmetic(ctx: CellContext, rng: Rng) -> MR:
             disp = f"-{bmag}{_superscript(n)}"
         else:
             # 底ごと累乗（負の底はかっこで囲む）。分数・小数底もここで扱う。
-            neg_val = -abs(bval)
-            expr_str = f"({neg_val})**{n}"
+            neg_src = f"-{bmag}" if kind == "dec" else str(-abs(bval))
+            expr_str = f"({neg_src})**{n}"
             disp = f"(-{bmag}){_superscript(n)}"
         return _build(expr_str, disp, mode, ctx)
 

@@ -488,7 +488,8 @@ def read_lattice_point_on_proportion_graph(ctx: CellContext, rng: Rng) -> MR:
     return _mr(
         ctx,
         params=mr_params,
-        given={},
+        # x座標だけを与えて答えを一意にする（式は与えない＝y は図から読むしかない）。
+        given={"x_target": fmt_number(sympy.Integer(x0))},
         sub_question=_sub_question(ctx, asked="read_point", answer=sol.answer, steps=sol.steps),
         visual_plan=_grid_plan(tick_labels_from_params(mr_params), extra_kind="line"),
         recipe="math.read_lattice_point_on_proportion_graph",
@@ -708,7 +709,7 @@ def read_lattice_point_on_hyperbola_graph(ctx: CellContext, rng: Rng) -> MR:
     return _mr(
         ctx,
         params=mr_params,
-        given={},
+        given={"x_target": fmt_number(sympy.Integer(x0))},
         sub_question=_sub_question(ctx, asked="read_point", answer=sol.answer, steps=sol.steps),
         visual_plan=_grid_plan(tick_labels_from_params(mr_params), extra_kind="curve"),
         recipe="math.read_lattice_point_on_hyperbola_graph",

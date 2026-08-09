@@ -39,7 +39,7 @@ sub_questions:
   hints:
   - 反比例の式 y=a/x に、通る点の x, y の値をあてはめ、比例定数を求める式をつくる。
   label: (1)
-  prompt_text: expression を求めなさい。
+  prompt_text: 式に表しなさい。
   solution_steps:
   - args:
     - '3'

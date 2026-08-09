@@ -39,7 +39,7 @@ sub_questions:
   hints:
   - x の項を右辺に移項し、y の項だけを左辺に残す。
   label: (1)
-  prompt_text: simplified_expr を求めなさい。
+  prompt_text: 式を簡単にしなさい。
   solution_steps:
   - args:
     - -12x + 3y = -9

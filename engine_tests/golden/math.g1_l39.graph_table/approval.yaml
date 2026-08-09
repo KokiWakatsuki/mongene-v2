@@ -1,6 +1,6 @@
-approved_at: '2026-07-30T16:37:21.568602'
+approved_at: '2026-08-10T04:07:43.477231'
 approver: koki
-content_sha256: 5e76bf60773549a8e154a7cdfbf4124797b1287b9da1dee0c4028b95c0c4fb43
+content_sha256: 7ef8395c09db116d384258dde8571e6e7d22a978bcc0babc5d1adc9c37fdb386
 family: math.g1_l39.graph_table
 files:
 - engine_tests/golden/math.g1_l39.graph_table/math.g1_l39.graph_table_lv1_seed1.yaml
@@ -9,3 +9,6 @@ files:
 - engine_tests/golden/math.g1_l39.graph_table/math.g1_l39.graph_table_lv2_seed1.yaml
 - engine_tests/golden/math.g1_l39.graph_table/math.g1_l39.graph_table_lv2_seed2.yaml
 - engine_tests/golden/math.g1_l39.graph_table/math.g1_l39.graph_table_lv2_seed3.yaml
+- engine_tests/golden/math.g1_l39.graph_table/math.g1_l39.graph_table_lv3_seed1.yaml
+- engine_tests/golden/math.g1_l39.graph_table/math.g1_l39.graph_table_lv3_seed2.yaml
+- engine_tests/golden/math.g1_l39.graph_table/math.g1_l39.graph_table_lv3_seed3.yaml

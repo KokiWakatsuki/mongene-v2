@@ -41,7 +41,7 @@ sub_questions:
   hints:
   - 1つあたりの値段に個数をかけると、代金になる。
   label: (1)
-  prompt_text: formulation を求めなさい。
+  prompt_text: 式に表しなさい。
   solution_steps:
   - args: []
     narration: 1つあたりの値段に個数をかけると、代金になる。

@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: equality_term_recall
 problem_ref: 2ffc2cc3f8a30ba3
-problem_text: 等式 -6x - 4 = 14 で、左辺と右辺を合わせたよび名 を何といいますか。
+problem_text: 等式 -6x - 4 = 14 で、左辺と右辺を合わせたよび名を何といいますか。
 sub_questions:
 - answer:
     correct: 両辺
@@ -43,7 +43,7 @@ sub_questions:
   hints:
   - 説明されている式や数の部分がどれかを読み取る。
   label: (1)
-  prompt_text: choice を求めなさい。
+  prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
     narration: 説明されている式や数の部分がどれかを読み取る。

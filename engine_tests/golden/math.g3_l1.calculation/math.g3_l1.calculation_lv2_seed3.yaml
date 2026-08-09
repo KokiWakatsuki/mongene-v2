@@ -41,7 +41,7 @@ sub_questions:
   hints:
   - それぞれの単項式を、対応するかっこの中の各項にかける。
   label: (1)
-  prompt_text: simplified_expr を求めなさい。
+  prompt_text: 式を簡単にしなさい。
   solution_steps:
   - args: []
     narration: それぞれの単項式を、対応するかっこの中の各項にかける。

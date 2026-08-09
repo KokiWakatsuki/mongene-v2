@@ -60,8 +60,21 @@ def similar_area_ratio_recipe(ctx: CellContext, rng: Rng) -> MR:
     （g3_l45.find_value Lv2・answer-first）。
     """
     p = ctx.spec_level.params
-    ratio_num, ratio_den = _draw_coprime_ratio(rng, p["ratio_domain"], 12)
-    known_area = int(draw(p["area_domain"], rng))
+    # 面積比は相似比の二乗なので、比を広げると答えが4桁になる（4:11・208cm² → 1573cm²）。
+    # 小さいほうの面積は m² の倍数にとる（でないと大きいほうが分数になる）。
+    area_max = int(p["area_max"])
+    cands: list[tuple[int, int, int]] = []
+    for m in range(1, int(p["ratio_max"]) + 1):
+        for n in range(m + 1, int(p["ratio_max"]) + 1):
+            if math.gcd(m, n) != 1:
+                continue
+            for j in range(1, area_max + 1):
+                small, large = m * m * j, n * n * j
+                if small < 4 or large > area_max:
+                    continue
+                cands.append((m, n, small))
+    idx = int(draw({"int_set": list(range(len(cands)))}, rng))
+    ratio_num, ratio_den, known_area = cands[idx]
 
     solver = REGISTRY.solver("math.similar_area_ratio")
     sol = cast(Solution, solver(ratio_num, ratio_den, known_area))
@@ -95,17 +108,25 @@ _SIMILAR_SOLID_RATIO_CONCEPTS = ["similarity.solid_surface_volume_ratio"]
     "math.similar_solid_surface_volume_ratio", provides_concepts=_SIMILAR_SOLID_RATIO_CONCEPTS
 )
 def similar_solid_surface_volume_ratio_recipe(ctx: CellContext, rng: Rng) -> MR:
-    """相似比から表面積比・体積比を直接求める（g3_l46.find_value Lv2・answer-first）。"""
+    """相似比から表面積比・体積比を直接求める（g3_l46.find_value Lv2・answer-first）。
+
+    相似比は**小さい整数**に限る。前は `ratio_domain` が 1〜60 で「相似比 24:41 →
+    体積比 13824:68921」が出ていた（体積比は相似比の三乗なので、比を広げると
+    答えが一気に5桁になる）。狭めたぶんは**立体の種類と名前**という軸で稼ぐ
+    （FIXES.md の原則1・2）——どちらも教科書にある言い方で、数は小さいまま。
+    """
     p = ctx.spec_level.params
-    ratio_num, ratio_den = _draw_coprime_ratio(rng, p["ratio_domain"], 60)
+    ratio_num, ratio_den = _draw_coprime_ratio(rng, p["ratio_domain"], int(p["ratio_max"]))
+    solid = str(draw(cast("list[str]", p["solid_set"]), rng))
+    ls, lt = _draw_distinct_points(2, rng)
 
     solver = REGISTRY.solver("math.similar_solid_surface_volume_ratio")
     sol = cast(Solution, solver(ratio_num, ratio_den))
     assert isinstance(sol.answer, SymbolicAnswer)
 
     statement = (
-        f"相似比が {ratio_num}:{ratio_den} である2つの相似な立体について、表面積の比と"
-        "体積の比をそれぞれ求めよ"
+        f"相似な2つの{solid}{ls}, {lt}があり、相似比は {ratio_num}:{ratio_den} である。"
+        f"{ls}と{lt}の表面積の比と体積の比をそれぞれ求めよ"
     )
 
     sub_question = SubQuestionMR(
@@ -115,7 +136,11 @@ def similar_solid_surface_volume_ratio_recipe(ctx: CellContext, rng: Rng) -> MR:
     return MR(
         signature=ctx.spec_level.signature, family=ctx.family, level=ctx.level,
         purpose=ctx.purpose, seed=0,
-        params={"ratio_num": ratio_num, "ratio_den": ratio_den},
+        # 立体の種類と名前も dup_key に効かせる（params に無いと話の違いを見落とす）。
+        params={
+            "ratio_num": ratio_num, "ratio_den": ratio_den,
+            "solid": solid, "labels": ls + lt,
+        },
         given={"condition": statement}, sub_questions=[sub_question], visual_plan=None,
         provenance=Provenance(recipe="math.similar_solid_surface_volume_ratio"),
     )
@@ -149,7 +174,7 @@ def similar_triangle_trapezoid_area_ratio_recipe(ctx: CellContext, rng: Rng) -> 
         raise ValueError("similar_triangle_trapezoid_area_ratio_recipe: 有効な比を構成できず")
 
     solver = REGISTRY.solver("math.similar_triangle_trapezoid_area_ratio")
-    sol = cast(Solution, solver(ad, db))
+    sol = cast(Solution, solver(ad, db, pa + pb + pc + pd + pe))
     assert isinstance(sol.answer, SymbolicAnswer)
 
     statement = (

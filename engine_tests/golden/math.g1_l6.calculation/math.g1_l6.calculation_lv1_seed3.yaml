@@ -41,7 +41,7 @@ sub_questions:
   hints:
   - かけ合わせる数の符号から、積の符号を先に決める。
   label: (1)
-  prompt_text: value を求めなさい。
+  prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
     narration: かけ合わせる数の符号から、積の符号を先に決める。

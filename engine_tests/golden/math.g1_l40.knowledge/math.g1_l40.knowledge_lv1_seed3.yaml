@@ -41,7 +41,7 @@ sub_questions:
   hints:
   - 図形を対称移動する前と後で、対応する点を結ぶ線分と対称の軸との関係を見比べる。
   label: (1)
-  prompt_text: choice を求めなさい。
+  prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
     narration: 図形を対称移動する前と後で、対応する点を結ぶ線分と対称の軸との関係を見比べる。

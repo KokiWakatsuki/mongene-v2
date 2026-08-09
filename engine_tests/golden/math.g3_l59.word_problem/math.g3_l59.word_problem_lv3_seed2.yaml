@@ -24,30 +24,30 @@ meta:
   seed: 2
   signature: word_problem_sample_defect_estimate_solo
 problem_ref: 55584fc89ee9a0b7
-problem_text: 'ある工場で1日に作られる大量の製品から無作為に250個を取り出したところ、不良品が12個含まれていた。この日に作られた製品は2000個である。
+problem_text: 'ある工場で1日に作られる大量の製品から無作為に250個を取り出したところ、不良品が6個含まれていた。この日に作られた製品は2500個である。
 
   この中に含まれる不良品はおよそ何個と推定できるか求めよ。'
 sub_questions:
 - answer:
-    display: 96個
+    display: 60個
     kind: symbolic
-    srepr: Integer(96)
+    srepr: Integer(60)
   cause_tags: []
   concept_tags:
   - sample_survey.word_problem_defect_estimate
   explanation: 'まず、標本の中で、該当するものの個数と標本全体の個数を確認する。（標本の大きさと、そのうち該当するものの個数）
 
-    次に、該当するものの個数を標本の大きさでわり、標本での割合を求める。（6/125）
+    次に、該当するものの個数を標本の大きさでわり、標本での割合を求める。（0.024）
 
     次に、標本での該当する個数の割合が、母集団全体でもおよそ等しいとみて比例式をつくる。（標本比率と母集団の比率が等しいとみて比例式をつくる）
 
-    最後に、比例式を解き、母集団に含まれるおよその個数を求める。（96）'
+    最後に、比例式を解き、母集団に含まれるおよその個数を求める。（60）'
   hints:
   - 標本の中で、該当するものの個数と標本全体の個数を確認する。
   - 該当するものの個数を標本の大きさでわり、標本での割合を求める。
   - 標本での該当する個数の割合が、母集団全体でもおよそ等しいとみて比例式をつくる。
   label: (1)
-  prompt_text: value を求めなさい。
+  prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
     narration: 標本の中で、該当するものの個数と標本全体の個数を確認する。
@@ -57,8 +57,8 @@ sub_questions:
   - args: []
     narration: 該当するものの個数を標本の大きさでわり、標本での割合を求める。
     op: compute_sample_ratio
-    result_display: 6/125
-    result_srepr: Rational(6, 125)
+    result_display: '0.024'
+    result_srepr: Rational(3, 125)
   - args: []
     narration: 標本での該当する個数の割合が、母集団全体でもおよそ等しいとみて比例式をつくる。
     op: form_ratio_equation
@@ -67,6 +67,6 @@ sub_questions:
   - args: []
     narration: 比例式を解き、母集団に含まれるおよその個数を求める。
     op: solve_for_estimate
-    result_display: '96'
-    result_srepr: Integer(96)
+    result_display: '60'
+    result_srepr: Integer(60)
 visual_svg: null

@@ -41,7 +41,7 @@ sub_questions:
   hints:
   - 小数点を、一の位が1以上10未満になる位置まで動かし、動かした桁数を数える。
   label: (1)
-  prompt_text: value を求めなさい。
+  prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
     narration: 小数点を、一の位が1以上10未満になる位置まで動かし、動かした桁数を数える。

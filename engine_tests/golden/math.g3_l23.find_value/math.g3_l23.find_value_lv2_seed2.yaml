@@ -24,22 +24,22 @@ meta:
   seed: 2
   signature: radical_find_side_from_area
 problem_ref: 4ace299b63de06ab
-problem_text: 面積が 180cm² の正方形の1辺の長さを、根号を使って表せ。
+problem_text: 面積が 414cm² の正方形の1辺の長さを、根号を使って表せ。
 sub_questions:
 - answer:
-    display: 6√5
+    display: 3√46
     kind: symbolic
-    srepr: Mul(Integer(6), Pow(Integer(5), Rational(1, 2)))
+    srepr: Mul(Integer(3), Pow(Integer(46), Rational(1, 2)))
   cause_tags: []
   concept_tags:
   - radical.find_side_from_area
   explanation: 'まず、根号の中を素因数分解し、平方の因数を見つける。（平方の因数を見つける）
 
-    次に、平方の因数を根号の外に出して a√b の形にする。（6√5）'
+    次に、平方の因数を根号の外に出して a√b の形にする。（3√46）'
   hints:
   - 根号の中を素因数分解し、平方の因数を見つける。
   label: (1)
-  prompt_text: value を求めなさい。
+  prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
     narration: 根号の中を素因数分解し、平方の因数を見つける。
@@ -49,6 +49,6 @@ sub_questions:
   - args: []
     narration: 平方の因数を根号の外に出して a√b の形にする。
     op: take_root_outside
-    result_display: 6√5
-    result_srepr: Mul(Integer(6), Pow(Integer(5), Rational(1, 2)))
+    result_display: 3√46
+    result_srepr: Mul(Integer(3), Pow(Integer(46), Rational(1, 2)))
 visual_svg: null

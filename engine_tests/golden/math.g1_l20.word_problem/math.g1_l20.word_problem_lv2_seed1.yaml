@@ -44,7 +44,7 @@ sub_questions:
   - 比べられている数量のうち、一方を x を使った式で表す。
   - もう一方の数量も、同じように x を使った式で表す。
   label: (1)
-  prompt_text: formulation を求めなさい。
+  prompt_text: 式に表しなさい。
   solution_steps:
   - args: []
     narration: 比べられている数量のうち、一方を x を使った式で表す。

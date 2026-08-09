@@ -89,10 +89,10 @@ def render_number_line(mr: "MR", ctx: "CellContext") -> str:
     parts: list[str] = []
     parts.append(
         f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {_WIDTH} {_HEIGHT}" '
-        f'width="{_WIDTH}" height="{_HEIGHT}">'
+        f'width="{_WIDTH}" height="{_HEIGHT}" font-family="Hiragino Sans, Hiragino Kaku Gothic ProN, Noto Sans JP, Yu Gothic, Meiryo, sans-serif">'
     )
     parts.append(
-        f'<rect x="0" y="0" width="{_WIDTH}" height="{_HEIGHT}" fill="none" stroke="none"/>'
+        f'<rect x="0" y="0" width="{_WIDTH}" height="{_HEIGHT}" fill="#ffffff" stroke="none"/>'
     )
 
     # --- 数直線本体（水平の黒い実線・両端に矢じり） ---

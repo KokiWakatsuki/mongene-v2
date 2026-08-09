@@ -122,8 +122,8 @@ def render_construction_svg(params: dict[str, Any]) -> str:
 
     parts = [
         f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {_W} {_H}" '
-        f'width="{_W}" height="{_H}">',
-        f'<rect x="0" y="0" width="{_W}" height="{_H}" fill="none" stroke="none"/>',
+        f'width="{_W}" height="{_H}" font-family="Hiragino Sans, Hiragino Kaku Gothic ProN, Noto Sans JP, Yu Gothic, Meiryo, sans-serif">',
+        f'<rect x="0" y="0" width="{_W}" height="{_H}" fill="#ffffff" stroke="none"/>',
     ]
     # 円は先に描く（線分やラベルの下になるように）。
     for (ox, oy), r in circles:

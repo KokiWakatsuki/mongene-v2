@@ -1,0 +1,64 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - pythagorean.word_problem_cube_vertex_to_plane
+  provenance:
+    git_commit: ''
+    recipe: math.word_problem_pythagorean
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: wp_linear_solo_v1
+    tier: T1
+  requested:
+    form: word_problem
+    level: 4
+    subject: math
+    unit: g3_l55
+  resolved:
+    form: word_problem
+    level: 4
+    subject: math
+    unit: g3_l55
+  seed: 2
+  signature: word_problem_cube_vertex_to_plane
+problem_ref: 8932443c123a1571
+problem_text: '1辺が30cmの立方体STUV-WXYZがある。ここでSTUVは底面、WXYZは上面で、辺SWが高さにあたる。
+
+  頂点Tから平面SUXに下ろした垂線の長さを、立体の体積を二通りに表す方針を自分で立てて求めよ。'
+sub_questions:
+- answer:
+    display: 10√3 cm
+    kind: symbolic
+    srepr: Mul(Integer(10), Pow(Integer(3), Rational(1, 2)))
+  cause_tags: []
+  concept_tags:
+  - pythagorean.word_problem_cube_vertex_to_plane
+  explanation: 'まず、三角錐の体積を、直角をはさむ三つの辺を使う見方と、求める垂線を高さとみる見方の二通りで表すことにする。（4500 cm³）
+
+    次に、底面とみる三角形は正三角形なので、その一辺の長さから面積を求める。（450√3 cm²）
+
+    最後に、二通りに表した体積が等しいとおいて、垂線の長さについて解く。（10√3 cm）'
+  hints:
+  - 三角錐の体積を、直角をはさむ三つの辺を使う見方と、求める垂線を高さとみる見方の二通りで表すことにする。
+  - 底面とみる三角形は正三角形なので、その一辺の長さから面積を求める。
+  label: (1)
+  prompt_text: 答えを求めなさい。
+  solution_steps:
+  - args: []
+    narration: 三角錐の体積を、直角をはさむ三つの辺を使う見方と、求める垂線を高さとみる見方の二通りで表すことにする。
+    op: express_volume_two_ways
+    result_display: 4500 cm³
+    result_srepr: Integer(4500)
+  - args: []
+    narration: 底面とみる三角形は正三角形なので、その一辺の長さから面積を求める。
+    op: compute_equilateral_face_area
+    result_display: 450√3 cm²
+    result_srepr: Mul(Integer(450), Pow(Integer(3), Rational(1, 2)))
+  - args: []
+    narration: 二通りに表した体積が等しいとおいて、垂線の長さについて解く。
+    op: solve_for_perpendicular
+    result_display: 10√3 cm
+    result_srepr: Mul(Integer(10), Pow(Integer(3), Rational(1, 2)))
+visual_svg: null

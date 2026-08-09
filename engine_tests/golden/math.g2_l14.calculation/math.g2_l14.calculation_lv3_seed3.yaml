@@ -44,7 +44,7 @@ sub_questions:
   - 分母を払って整数の連立方程式に直す。
   - 整理した連立方程式を加減法で解いて x を求める。
   label: (1)
-  prompt_text: solution を求めなさい。
+  prompt_text: 解を求めなさい。
   solution_steps:
   - args:
     - x - 2y/3 = -2/3

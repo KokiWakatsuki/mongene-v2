@@ -86,8 +86,23 @@ def similar_solid_surface_volume_ratio(ratio_num: object, ratio_den: object) -> 
     return Solution(answer=SymbolicAnswer(srepr=srepr, display=disp), steps=steps)
 
 
+def _points(labels: object, default: str = "ABCDE") -> tuple[str, str, str, str, str]:
+    """頂点の記号（A,B,C,D,E の順）。
+
+    **問題文の頂点名は recipe が引く**ので、solver がここを固定にすると
+    「三角形AKJ の面積を求めよ」と問うて「三角形ADE:台形DBCE = 4:21」と答える
+    ことになる（実際そうなっていた）。recipe から受け取り、無ければ既定を使う。
+    """
+    s = str(labels or default)
+    if len(s) < 5:
+        s = default
+    return (s[0], s[1], s[2], s[3], s[4])
+
+
 @register_solver("math.similar_triangle_trapezoid_area_ratio")
-def similar_triangle_trapezoid_area_ratio(ad: object, db: object) -> Solution:
+def similar_triangle_trapezoid_area_ratio(
+    ad: object, db: object, labels: object = None
+) -> Solution:
     """DE∥BC、AD:DBの比から、三角形ADEと台形DBCEの面積比を求める
 
     （g3_l45.find_value Lv3）。ad/db だけから、まずADとAB全体の比になおし、
@@ -97,6 +112,10 @@ def similar_triangle_trapezoid_area_ratio(ad: object, db: object) -> Solution:
     面積になるという合成で、三角形ADEと台形DBCEの面積比を導く
     （double-solve）。
     """
+    pa, pb, pc, pd, pe = _points(labels)
+    small = f"三角形{pa}{pd}{pe}"
+    whole_tri = f"三角形{pa}{pb}{pc}"
+    trap = f"台形{pd}{pb}{pc}{pe}"
     a = sympy.Integer(int(str(ad)))
     b = sympy.Integer(int(str(db)))
     ab = a + b
@@ -105,26 +124,27 @@ def similar_triangle_trapezoid_area_ratio(ad: object, db: object) -> Solution:
     g = sympy.gcd(ade, trapezoid)
     ratio_num, ratio_den = ade // g, trapezoid // g
     result = sympy.Tuple(ratio_num, ratio_den)
-    disp = f"三角形ADE:台形DBCE = {ratio_num}:{ratio_den}"
+    disp = f"{small}:{trap} = {ratio_num}:{ratio_den}"
     srepr = sympy.srepr(result)
     steps = [
         Step(
             op="convert_partial_to_whole_ratio",
-            args=[], result_srepr="", result_display="ADとAB全体の比になおす",
-            narration="ADとDBの比から、ADとAB全体の比になおす。",
+            args=[], result_srepr="",
+            result_display=f"{pa}{pd}と{pa}{pb}全体の比になおす",
+            narration=f"{pa}{pd}と{pd}{pb}の比から、{pa}{pd}と{pa}{pb}全体の比になおす。",
         ),
         Step(
             op="square_similarity_ratio",
             args=[], result_srepr="",
-            result_display="相似比を二乗して三角形ADEと三角形ABCの面積比を求める",
-            narration="三角形ADEと三角形ABCは相似であることから、面積比は相似比の二乗に"
-            "等しいことを使って、三角形ADEと三角形ABC全体の面積比を求める。",
+            result_display=f"相似比を二乗して{small}と{whole_tri}の面積比を求める",
+            narration=f"{small}と{whole_tri}は相似であることから、面積比は相似比の二乗に"
+            f"等しいことを使って、{small}と{whole_tri}全体の面積比を求める。",
         ),
         Step(
             op="compute_trapezoid_remainder_ratio",
             args=[], result_srepr=srepr, result_display=disp,
-            narration="三角形ABC全体の面積から三角形ADEの面積を除いた残りが台形の面積に"
-            "なることから、三角形ADEと台形の面積比を求める。",
+            narration=f"{whole_tri}全体の面積から{small}の面積を除いた残りが台形の面積に"
+            f"なることから、{small}と台形の面積比を求める。",
         ),
     ]
     return Solution(answer=SymbolicAnswer(srepr=srepr, display=disp), steps=steps)

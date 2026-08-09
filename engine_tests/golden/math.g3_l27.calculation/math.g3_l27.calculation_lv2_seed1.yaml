@@ -41,7 +41,7 @@ sub_questions:
   hints:
   - 左辺の共通因数をくくり出す。
   label: (1)
-  prompt_text: solution を求めなさい。
+  prompt_text: 解を求めなさい。
   solution_steps:
   - args: []
     narration: 左辺の共通因数をくくり出す。

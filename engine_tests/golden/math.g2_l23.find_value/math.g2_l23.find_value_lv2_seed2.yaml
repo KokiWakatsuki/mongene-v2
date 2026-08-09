@@ -42,7 +42,7 @@ sub_questions:
   - 傾きの正負を調べ、端点の対応（どちらの端が最大・最小か）を決める。
   - 変域の両端の x を式に代入し、対応する y の値を求める。
   label: (1)
-  prompt_text: domain_range を求めなさい。
+  prompt_text: 変域を求めなさい。
   solution_steps:
   - args:
     - '4'

@@ -24,24 +24,24 @@ meta:
   seed: 2
   signature: exam_probability_from_counts
 problem_ref: aa31c4ed9326dcb3
-problem_text: ある試行で起こりうる場合が全部で34通りあり、そのうち条件に当てはまる場合が14通りである。この条件が起こる確率を求めよ。
+problem_text: 袋から玉を続けて2個取り出すとき、起こりうる場合は全部で30通りあり、そのうち同じ色になる場合は18通りであった。同じ色になる確率を求めよ。
 sub_questions:
 - answer:
-    display: 7/17
+    display: 3/5
     kind: symbolic
-    srepr: Rational(7, 17)
+    srepr: Rational(3, 5)
   cause_tags: []
   concept_tags:
   - exam.probability_from_counts
-  explanation: まず、ことがらが起こった回数を、試行の総回数でわる。（7/17）
+  explanation: まず、ことがらが起こった回数を、試行の総回数でわる。（3/5）
   hints:
-  - 問題文の与えられた値をもう一度確認しよう。
+  - ことがらが起こった回数を、試行の総回数でわる。
   label: (1)
-  prompt_text: value を求めなさい。
+  prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
     narration: ことがらが起こった回数を、試行の総回数でわる。
     op: divide_occurred_by_total
-    result_display: 7/17
-    result_srepr: Rational(7, 17)
+    result_display: 3/5
+    result_srepr: Rational(3, 5)
 visual_svg: null

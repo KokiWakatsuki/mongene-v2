@@ -24,7 +24,7 @@ meta:
   seed: 2
   signature: proof_logic_terms_term_recall
 problem_ref: a43cfbb0132e262d
-problem_text: 「a、bが353より大きい数ならば、a+bも353より大きい」という文で、「ならば」の前に書かれている部分 を何といいますか。
+problem_text: 「a、bが353より大きい数ならば、a+bも353より大きい」という文で、「ならば」の前に書かれている部分を何といいますか。
 sub_questions:
 - answer:
     correct: 仮定
@@ -42,7 +42,7 @@ sub_questions:
   hints:
   - 説明されている式や数の部分がどれかを読み取る。
   label: (1)
-  prompt_text: choice を求めなさい。
+  prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
     narration: 説明されている式や数の部分がどれかを読み取る。

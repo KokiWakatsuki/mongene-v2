@@ -41,7 +41,7 @@ sub_questions:
   hints:
   - 対象すべてを調べることが、手間や対象の性質から現実的に可能かどうかを調べる。
   label: (1)
-  prompt_text: choice を求めなさい。
+  prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
     narration: 対象すべてを調べることが、手間や対象の性質から現実的に可能かどうかを調べる。

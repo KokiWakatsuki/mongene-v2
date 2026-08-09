@@ -41,7 +41,7 @@ sub_questions:
   hints:
   - それぞれの根号を a√b の形に直す。
   label: (1)
-  prompt_text: simplified_expr を求めなさい。
+  prompt_text: 式を簡単にしなさい。
   solution_steps:
   - args: []
     narration: それぞれの根号を a√b の形に直す。

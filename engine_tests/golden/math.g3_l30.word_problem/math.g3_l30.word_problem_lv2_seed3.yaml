@@ -24,7 +24,7 @@ meta:
   seed: 3
   signature: word_problem_quadratic_rectangle_area
 problem_ref: da7cc6cbb1f6c11c
-problem_text: '横が縦より4cm長い長方形がある。その面積は252cm²である。
+problem_text: '横が縦より1cm長い長方形がある。その面積は20cm²である。
 
   縦の長さを x cm とする。
 
@@ -33,19 +33,19 @@ problem_text: '横が縦より4cm長い長方形がある。その面積は252cm
   (2) 縦の長さを求めよ。'
 sub_questions:
 - answer:
-    display: x(x + 4) = 252
+    display: x(x + 1) = 20
     kind: symbolic
-    srepr: Equality(Mul(Symbol('x'), Add(Symbol('x'), Integer(4))), Integer(252))
+    srepr: Equality(Mul(Symbol('x'), Add(Symbol('x'), Integer(1))), Integer(20))
   cause_tags: []
   concept_tags:
   - quadratic.word_problem_rectangle_area
   explanation: 'まず、場面の中で、どちらの見方でも同じになる（等しくなっている）量に着目する。（長方形の面積）
 
-    次に、その量を x を使って両辺に表し、方程式をつくる。（x(x + 4) = 252）'
+    次に、その量を x を使って両辺に表し、方程式をつくる。（x(x + 1) = 20）'
   hints:
   - 場面の中で、どちらの見方でも同じになる（等しくなっている）量に着目する。
   label: (1)
-  prompt_text: formulation を求めなさい。
+  prompt_text: 式に表しなさい。
   solution_steps:
   - args: []
     narration: 場面の中で、どちらの見方でも同じになる（等しくなっている）量に着目する。
@@ -55,12 +55,12 @@ sub_questions:
   - args: []
     narration: その量を x を使って両辺に表し、方程式をつくる。
     op: formulate_equation
-    result_display: x(x + 4) = 252
-    result_srepr: Equality(Mul(Symbol('x'), Add(Symbol('x'), Integer(4))), Integer(252))
+    result_display: x(x + 1) = 20
+    result_srepr: Equality(Mul(Symbol('x'), Add(Symbol('x'), Integer(1))), Integer(20))
 - answer:
-    display: 14cm
+    display: 4cm
     kind: symbolic
-    srepr: Tuple(Integer(14))
+    srepr: Tuple(Integer(4))
   cause_tags: []
   concept_tags:
   - quadratic.word_problem_rectangle_area
@@ -70,13 +70,13 @@ sub_questions:
 
     次に、積が 0 になるのは各因数が 0 のときだから、それぞれを 0 とおいて x を求める。
 
-    最後に、求めるものは正の数だから、2つの解のうち条件に合う正の解を選ぶ。（14）'
+    最後に、求めるものは正の数だから、2つの解のうち条件に合う正の解を選ぶ。（4）'
   hints:
   - かっこを展開し、右辺を左辺に移項して、=0 の形に整理する。
   - 左辺を因数分解する。
   - 積が 0 になるのは各因数が 0 のときだから、それぞれを 0 とおいて x を求める。
   label: (2)
-  prompt_text: value を求めなさい。
+  prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
     narration: かっこを展開し、右辺を左辺に移項して、=0 の形に整理する。
@@ -96,6 +96,6 @@ sub_questions:
   - args: []
     narration: 求めるものは正の数だから、2つの解のうち条件に合う正の解を選ぶ。
     op: select_positive_root
-    result_display: '14'
-    result_srepr: Integer(14)
+    result_display: '4'
+    result_srepr: Integer(4)
 visual_svg: null

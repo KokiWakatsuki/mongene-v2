@@ -24,7 +24,7 @@ meta:
   seed: 3
   signature: perpendicular_terms_term_recall_g1_l43
 problem_ref: d4383a23f4450792
-problem_text: 点Mから直線mに垂線を引いたときの、直線mとの交点H を何といいますか。
+problem_text: 点Mから直線mに垂線を引いたときの、直線mとの交点Hを何といいますか。
 sub_questions:
 - answer:
     correct: 垂線の足
@@ -41,7 +41,7 @@ sub_questions:
   hints:
   - 説明されている式や数の部分がどれかを読み取る。
   label: (1)
-  prompt_text: choice を求めなさい。
+  prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
     narration: 説明されている式や数の部分がどれかを読み取る。

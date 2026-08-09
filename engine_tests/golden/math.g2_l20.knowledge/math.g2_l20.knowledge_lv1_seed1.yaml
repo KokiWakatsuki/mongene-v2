@@ -42,7 +42,7 @@ sub_questions:
   hints:
   - 1次関数では、x がどこで増えても y の増え方が同じであることを思い出す。
   label: (1)
-  prompt_text: choice を求めなさい。
+  prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
     narration: 1次関数では、x がどこで増えても y の増え方が同じであることを思い出す。

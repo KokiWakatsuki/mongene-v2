@@ -39,7 +39,7 @@ sub_questions:
   hints:
   - 2点から y の増加量と x の増加量をそれぞれ求める。
   label: (1)
-  prompt_text: rate_of_change を求めなさい。
+  prompt_text: 変化の割合を求めなさい。
   solution_steps:
   - args:
     - (2, -7)

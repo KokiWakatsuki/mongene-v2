@@ -24,24 +24,24 @@ meta:
   seed: 2
   signature: relative_frequency_estimate
 problem_ref: 744aad390d055742
-problem_text: あるびんのふたを480回投げたところ、表が向いた回数が453回であった。この結果から、このふたを投げたとき表が出る確率を分数で推定せよ。
+problem_text: ある10円硬貨を500回投げたところ、表が向いた回数が235回であった。この結果から、この10円硬貨を投げたとき表が出る確率を小数で推定せよ。
 sub_questions:
 - answer:
-    display: 151/160
+    display: '0.47'
     kind: symbolic
-    srepr: Rational(151, 160)
+    srepr: Rational(47, 100)
   cause_tags: []
   concept_tags:
   - probability.relative_frequency_estimate
-  explanation: まず、ことがらが起こった回数を、試行の総回数でわる。（151/160）
+  explanation: まず、ことがらが起こった回数を、試行の総回数でわる。（0.47）
   hints:
-  - 問題文の与えられた値をもう一度確認しよう。
+  - ことがらが起こった回数を、試行の総回数でわる。
   label: (1)
-  prompt_text: value を求めなさい。
+  prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
     narration: ことがらが起こった回数を、試行の総回数でわる。
     op: divide_occurred_by_total
-    result_display: 151/160
-    result_srepr: Rational(151, 160)
+    result_display: '0.47'
+    result_srepr: Rational(47, 100)
 visual_svg: null

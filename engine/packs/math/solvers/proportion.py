@@ -40,11 +40,25 @@ def _format_direct_proportion_expr(a: sympy.Expr) -> str:
         return "y = x"
     if a == -1:
         return "y = -x"
+    # **分数の比例定数はかっこで囲む。** `y = -4/3x` と書くと
+    # `(-4/3)x` なのか `-4/(3x)` なのか読めない（反比例を隣の単元で扱うので紛れる）。
+    if sympy.nsimplify(a).q != 1:
+        return f"y = ({fmt_number(a)})x"
     return f"y = {fmt_number(a)}x"
 
 
 def _format_inverse_proportion_expr(a: sympy.Expr) -> str:
-    """反比例の式 y=a/x の表示。"""
+    """反比例の式 y=a/x の表示。
+
+    **分数の比例定数は分母をまとめる。** `fmt_number` が `-62/5` を返すので、
+    そのまま `/x` を継ぐと `y = -62/5/x` になり、スラッシュが2つ並んで
+    式の意味が確定しない（答えから逆算しないと読めなかった）。
+    `-62/5` は `-62/(5x)` と書けば一意になる。
+    """
+    r = sympy.nsimplify(a)
+    if r.q != 1:
+        sign = "-" if r < 0 else ""
+        return f"y = {sign}{abs(r.p)}/({r.q}x)"
     return f"y = {fmt_number(a)}/x"
 
 

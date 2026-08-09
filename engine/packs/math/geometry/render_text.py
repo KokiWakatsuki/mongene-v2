@@ -45,6 +45,10 @@ class ProofLine:
     number: int | None
     refs: tuple[int, ...] = ()
     op: str = ""  # 規則名（op 列＝level_sep の材料になる）
+    # この行の前に立てる見出しの2三角形。**証明の途中で比べる三角形が変わったら
+    # 見出しを立て直す**ために要る（合同を2回使う証明で、冒頭の
+    # 「△ABC と △ADC において」のまま別の組の条件を並べると文が食い違う）。
+    heading: tuple[tuple[str, ...], ...] = ()
 
 
 _CIRCLED = "①②③④⑤⑥⑦⑧⑨⑩⑪⑫"
@@ -75,52 +79,83 @@ def build_proof_lines(
             if ded.rule_of(premise) is None:
                 folded[f] = premise
 
-    used_given: list[Fact] = []
+    # **比べる三角形が変わるところで証明を段に分ける。** 合同を2回使う証明で、
+    # 冒頭の「△ABC と △ADC において」のまま2組目の条件（AP は共通）を並べると、
+    # その三角形の辺でないものを見出しの下に書くことになる。段に分けておけば、
+    # 仮定の行も「その段で初めて使う段」に置けて、番号も上から順に並ぶ。
+    segment_of_line: list[int] = []
+    seg = 0
+    cur_pair: tuple[tuple[str, ...], ...] = ()
     for f in chain:
+        if f.kind == "tri_cong":
+            if cur_pair and f.args != cur_pair:
+                seg += 1
+            cur_pair = f.args
+        segment_of_line.append(seg)
+    n_segments = seg + 1
+    heading_of_segment: dict[int, tuple[tuple[str, ...], ...]] = {}
+    for i, f in enumerate(chain):
+        s = segment_of_line[i]
+        if f.kind == "tri_cong" and s not in heading_of_segment:
+            heading_of_segment[s] = f.args
+
+    # 仮定は「最初に使われる段」に置く（そこまでは出さない）。
+    given_of_segment: dict[int, list[Fact]] = {s: [] for s in range(n_segments)}
+    placed: set[Fact] = set()
+    for i, f in enumerate(chain):
         for p in ded.premises_of(f):
             if ded.rule_of(p) is not None or p.kind in _STRUCTURAL_KINDS:
                 continue
-            if p in folded.values():
+            if p in folded.values() or p in placed:
                 continue  # 畳んだ行の中に書くので、単独の仮定の行にはしない
-            if p not in used_given:
-                used_given.append(p)
+            placed.add(p)
+            given_of_segment[segment_of_line[i]].append(p)
 
     lines: list[ProofLine] = []
     number_of: dict[Fact, int] = {}
     n = 0
-    for f in used_given:
-        n += 1
-        number_of[f] = n
-        # 「AC は共通」は主張の中に根拠が入っているので、根拠欄を空にする
-        # （「共通　AC は共通」と二重に書かない）。
-        common = is_common_segment(f) or f in common_facts
-        lines.append(
-            ProofLine(
-                claim=fact_text(f),
-                reason="" if is_common_segment(f) else ("共通だから" if common else "仮定より"),
-                number=n,
-                op="cite_common" if common else "cite_hypothesis",
-            )
-        )
-    for f in chain:
-        rule = ded.rule_of(f)
-        assert rule is not None
-        refs = tuple(number_of[p] for p in ded.premises_of(f) if p in number_of)
-        is_goal = f == goal
-        if not is_goal:
+    for s in range(n_segments):
+        # 2段目以降は「次に、△ABP と △ADP において」を立て直す（教科書の型）。
+        heading = heading_of_segment.get(s, ()) if s else ()
+        for f in given_of_segment[s]:
             n += 1
             number_of[f] = n
-        # 定義を開く行は「（仮定）だから　（結論）」の1行にする。
-        reason = f"{fact_text(folded[f])}だから" if f in folded else rule.reason
-        lines.append(
-            ProofLine(
-                claim=fact_text(f),
-                reason=reason,
-                number=None if is_goal else n,
-                refs=() if f in folded else refs,
-                op=rule.name,
+            # 「AC は共通」は主張の中に根拠が入っているので、根拠欄を空にする
+            # （「共通　AC は共通」と二重に書かない）。
+            common = is_common_segment(f) or f in common_facts
+            lines.append(
+                ProofLine(
+                    claim=fact_text(f),
+                    reason="" if is_common_segment(f) else ("共通だから" if common else "仮定より"),
+                    number=n,
+                    op="cite_common" if common else "cite_hypothesis",
+                    heading=heading,
+                )
             )
-        )
+            heading = ()
+        for i, f in enumerate(chain):
+            if segment_of_line[i] != s:
+                continue
+            rule = ded.rule_of(f)
+            assert rule is not None
+            refs = tuple(number_of[p] for p in ded.premises_of(f) if p in number_of)
+            is_goal = f == goal
+            if not is_goal:
+                n += 1
+                number_of[f] = n
+            # 定義を開く行は「（仮定）だから　（結論）」の1行にする。
+            reason = f"{fact_text(folded[f])}だから" if f in folded else rule.reason
+            lines.append(
+                ProofLine(
+                    claim=fact_text(f),
+                    reason=reason,
+                    number=None if is_goal else n,
+                    refs=() if f in folded else refs,
+                    op=rule.name,
+                    heading=heading,
+                )
+            )
+            heading = ()
     return lines
 
 
@@ -140,13 +175,20 @@ def compared_triangles(ded: Deduction, goal: Fact) -> tuple[tuple[str, ...], ...
 
 
 def render_proof(lines: list[ProofLine], *, targets: tuple[tuple[str, ...], ...] = ()) -> str:
-    """行の並びを証明文にする。`targets` は冒頭の「△ABC と △ADC において」の2三角形。"""
+    """行の並びを証明文にする。`targets` は冒頭の「△ABC と △ADC において」の2三角形。
+
+    **合同を2回使う証明では、比べる三角形が変わったところで見出しを立て直す。**
+    冒頭の見出しのまま別の組の合同を書くと、「△ABC と △ADC において … △ABP ≡ △ADP」
+    という食い違った文になる（教科書は必ず「次に、△ABP と △ADP において」と書き直す）。
+    """
     out: list[str] = []
     head = "（証明）"
     if targets:
         head += " と ".join(tri_text(t) for t in targets) + " において"
     out.append(head)
     for line in lines:
+        if line.heading:
+            out.append("　　次に、" + " と ".join(tri_text(t) for t in line.heading) + " において")
         tail = f"　…{_num(line.number)}" if line.number is not None else ""
         if line.refs:
             refs = "、".join(_num(r) for r in line.refs)

@@ -44,9 +44,9 @@ levels:
     signature: sphere_measure_direct
     recipe: math.solid_sphere_direct
     params:
-      radius_domain: {int_range: [2, 60]}
+      # 半径は教科書の大きさに。組み合わせは場面（_SPHERE_SCENES）の軸で稼ぐ。
+      radius_domain: {int_range: [2, 15]}
       given_as_set: [radius, diameter]
-      unit_set: [cm, m, mm]
     given: [condition]
     asked: [value]
     visual: none
@@ -58,9 +58,9 @@ levels:
     signature: sphere_measure_hemisphere
     recipe: math.solid_hemisphere_or_reverse
     params:
-      radius_domain: {int_range: [2, 60]}
+      # 半径は教科書の大きさに。組み合わせは場面（_SPHERE_SCENES）の軸で稼ぐ。
+      radius_domain: {int_range: [2, 15]}
       given_as_set: [radius, diameter]
-      unit_set: [cm, m, mm]
     given: [condition]
     asked: [value]
     visual: none

@@ -41,7 +41,7 @@ sub_questions:
   hints:
   - 速さに時間をかけると、道のりになる。
   label: (1)
-  prompt_text: formulation を求めなさい。
+  prompt_text: 式に表しなさい。
   solution_steps:
   - args: []
     narration: 速さに時間をかけると、道のりになる。

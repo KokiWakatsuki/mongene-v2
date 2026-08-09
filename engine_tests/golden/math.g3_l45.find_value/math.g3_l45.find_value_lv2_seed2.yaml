@@ -24,22 +24,22 @@ meta:
   seed: 2
   signature: similar_area_ratio
 problem_ref: b22ef5f719abb588
-problem_text: 相似比が 4:11 である2つの相似な三角形について、面積比を求めよ。また、小さいほうの面積が 208cm² のとき、大きいほうの面積を求めよ。
+problem_text: 相似比が 2:5 である2つの相似な三角形について、面積比を求めよ。また、小さいほうの面積が 88cm² のとき、大きいほうの面積を求めよ。
 sub_questions:
 - answer:
-    display: 面積比 16:121、大きいほうの面積 1573
+    display: 面積比 4:25、大きいほうの面積 550
     kind: symbolic
-    srepr: Tuple(Integer(16), Integer(121), Integer(1573))
+    srepr: Tuple(Integer(4), Integer(25), Integer(550))
   cause_tags: []
   concept_tags:
   - similarity.area_ratio
   explanation: 'まず、相似な図形の面積比は相似比の二乗に等しいことから、面積比を求める。（相似比を二乗して面積比を求める）
 
-    次に、求めた面積比と、わかっている一方の面積から、もう一方の面積を求める。（面積比 16:121、大きいほうの面積 1573）'
+    次に、求めた面積比と、わかっている一方の面積から、もう一方の面積を求める。（面積比 4:25、大きいほうの面積 550）'
   hints:
   - 相似な図形の面積比は相似比の二乗に等しいことから、面積比を求める。
   label: (1)
-  prompt_text: value を求めなさい。
+  prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
     narration: 相似な図形の面積比は相似比の二乗に等しいことから、面積比を求める。
@@ -49,6 +49,6 @@ sub_questions:
   - args: []
     narration: 求めた面積比と、わかっている一方の面積から、もう一方の面積を求める。
     op: apply_area_ratio
-    result_display: 面積比 16:121、大きいほうの面積 1573
-    result_srepr: Tuple(Integer(16), Integer(121), Integer(1573))
+    result_display: 面積比 4:25、大きいほうの面積 550
+    result_srepr: Tuple(Integer(4), Integer(25), Integer(550))
 visual_svg: null

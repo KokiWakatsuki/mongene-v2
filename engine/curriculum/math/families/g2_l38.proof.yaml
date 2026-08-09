@@ -1,0 +1,85 @@
+family: math.g2_l38.proof
+form: proof
+source_desc: |
+  仮定と結論、証明の進め方の基本（反例による否定を含む）
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv2 desc: 誘導あり・仮定から結論への1段の筋道を書く/反例を1つ挙げる。
+       example: 「n が偶数ならば n+2 も偶数である」ことを、n=2m（m は整数）とおいて
+                証明せよ。
+  Lv3 desc: 誘導なし・命題の真偽を判断し証明または反例を自分で構成する。
+       example: 「連続する2つの整数の和は奇数である」という命題が正しいかどうかを
+                判断し、正しければ証明を、正しくなければ反例を示せ。
+  ---
+  【設計モデル】新設 solvers/conditional_proof.py。同じ form の
+  math.number_property_proof（g2_l7/g2_l8/g3_l13）とは**作るものが逆**なので別機構に
+  した。あちらは「必ず正しい命題」を作って**示すべき性質を式から導く**（derive_goal）。
+  こちらは g2_l38＝証明の進め方の単元なので、
+    ・仮定と結論がはっきり分かれた形を作り、1段の筋道で結ぶ
+    ・**正しくない命題も作る**（Lv3 は真偽の判断が先に来て、偽なら反例1つで終わる）
+  が仕事になり、中心は「与えた性質が成り立つか判定する」（holds_always）になる。
+  同じ g2_l38 の knowledge Lv2（math.proposition_converse）は「逆と反例を**選ぶ**」で、
+  命題を選択肢に畳む機構。こちらは記述（ProofAnswer）で筋道そのものを出すため、
+  命題の持ち方（数の類 NumberClass）から別に組んでいる。
+
+  使う型は3つ:
+    conditional_class     … 「n が◯ならば、an + c は◯である」（台帳 Lv2 example の型）
+    pair_condition        … 「m が◯、n が◯ならば、m + n（m - n / mn）は◯である」
+    consecutive_sum_claim … 「連続する c つの◯の和は◯である」（台帳 Lv3 example の型）
+  「偶数」「奇数」「k の倍数」は (modulus, residue) の1つの型（NumberClass）にまとめて
+  あり、仮定・結論・連続する数の基底が同じ語彙で書ける。命題文はコード中に文字列として
+  書かれていない——類と演算のパラメータから組み上がる。
+
+  【退化の封じ方】(1) **仮定を使わずに成り立つ結論**は退ける（各型は「仮定を落とした式」
+  を一緒に返し、それが結論の性質を常に満たすなら不採用）。これで「n が偶数ならば 2n は
+  偶数である」（n が何であれ真）や「連続する2つの偶数の和は偶数である」（連続性を
+  使っていない）が自動で落ちる——number_proof が手で並べた除外表を判定に置き換えたもの。
+  (2) 仮定と結論が同じ文になる組を退ける。(3) 結論の式が対象そのもの（a=1, c=0）は
+  真の命題のときだけ許す。反例は「仮定を満たす**正の**数」を小さい順に探して見つける。
+
+  【Lv 差】Lv2 は誘導あり4手（state_hypothesis → form_conclusion_expression →
+  rewrite_to_goal_form → conclude_property）、Lv3 は誘導なしで**真偽の判断が先頭に付いて
+  5手**（judge_truth → set_representation → form_conclusion_expression → test_conclusion
+  → conclude_judgement）。given のキーも変わる（Lv2 は premises+conclusion・Lv3 は
+  conclusion のみ）。ここを揃えると level_sep が落ちる。
+  なお Lv3 の**中**では真の枝と偽の枝が同じ op 列を通る（同一 signature で op 列が
+  揺れると fp が seed ごとに変わり G-FP が落ちるため）。
+
+  【dup_rate】型 × 軸 × 文字。軸の直積は
+    conditional_class     仮定9 × 係数6 × 定数19 × 結論10 = 10260
+    pair_condition        仮定9 × 仮定9 × 演算3 × 結論10 = 2430
+    consecutive_sum_claim 基底6 × 個数4 × 結論10 = 240
+  で計 12930。Lv2 が使う「正しい命題」だけでも1割ほど（約1300）残り、これに文字
+  （1文字型は18通り・2文字型は306通り・4文字型は7万通り超）が掛かる。閾 0.20 に要る
+  250通りに対して十分広い。
+concepts_default: [proof_logic.prove_conditional_statement]
+levels:
+  "2":
+    signature: conditional_proof_guided
+    recipe: math.conditional_statement_proof
+    params:
+      mode: prove
+      proposition_set: [conditional_class, pair_condition, consecutive_sum_claim]
+      letter_pool: [a, b, c, d, f, g, h, k, m, n, p, q, r, s, t, u, w, z]
+    given: [premises, conclusion]
+    asked: [proof_text]
+    visual: none
+    text: {tier: T1, template: pf_conditional_guided_v1}
+    hints: [steps_prefix]
+    concept_tags: [proof_logic.prove_conditional_statement]
+    cause_tags: []
+  "3":
+    signature: conditional_proof_judge
+    recipe: math.conditional_statement_proof
+    params:
+      mode: judge
+      proposition_set: [conditional_class, pair_condition, consecutive_sum_claim]
+      letter_pool: [a, b, c, d, f, g, h, k, m, n, p, q, r, s, t, u, w, z]
+    given: [conclusion]
+    asked: [proof_text]
+    visual: none
+    text: {tier: T1, template: pf_conditional_judge_v1}
+    hints: [steps_prefix]
+    concept_tags: [proof_logic.judge_truth_by_counterexample]
+    cause_tags: []
+remedial:
+  default_level: 2

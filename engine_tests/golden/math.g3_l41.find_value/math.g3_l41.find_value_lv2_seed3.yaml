@@ -24,22 +24,22 @@ meta:
   seed: 3
   signature: similarity_proven_ratio_length
 problem_ref: 1b375dacfc2c7d0a
-problem_text: 三角形KAE∽三角形KDPであることが証明されている。KD=97cm, KA=198cm, DP=2cm のとき、辺AEの長さを求めよ。
+problem_text: 三角形KAE∽三角形KDPであることが証明されている。KD=5cm, KA=7cm, DP=10cm のとき、辺AEの長さを求めよ。
 sub_questions:
 - answer:
-    display: 396/97
+    display: '14'
     kind: symbolic
-    srepr: Rational(396, 97)
+    srepr: Integer(14)
   cause_tags: []
   concept_tags:
   - similarity.proven_ratio_length
   explanation: 'まず、2つの図形の相似比と、わかっている辺の長さを読み取る。（相似比とわかっている辺の長さを読み取る）
 
-    次に、相似な図形では対応する辺の長さの比が相似比に等しいことから、対応する辺の長さを求める。（396/97）'
+    次に、相似な図形では対応する辺の長さの比が相似比に等しいことから、対応する辺の長さを求める。（14）'
   hints:
   - 2つの図形の相似比と、わかっている辺の長さを読み取る。
   label: (1)
-  prompt_text: value を求めなさい。
+  prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
     narration: 2つの図形の相似比と、わかっている辺の長さを読み取る。
@@ -49,6 +49,6 @@ sub_questions:
   - args: []
     narration: 相似な図形では対応する辺の長さの比が相似比に等しいことから、対応する辺の長さを求める。
     op: apply_similarity_ratio
-    result_display: 396/97
-    result_srepr: Rational(396, 97)
+    result_display: '14'
+    result_srepr: Integer(14)
 visual_svg: null

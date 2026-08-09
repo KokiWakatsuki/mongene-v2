@@ -41,7 +41,7 @@ sub_questions:
   hints:
   - 根号の積を、1つの根号の中の積にまとめる。
   label: (1)
-  prompt_text: simplified_expr を求めなさい。
+  prompt_text: 式を簡単にしなさい。
   solution_steps:
   - args: []
     narration: 根号の積を、1つの根号の中の積にまとめる。

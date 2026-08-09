@@ -26,12 +26,12 @@ meta:
 problem_ref: 7487a0d255b35240
 problem_text: '次の2次方程式を解け。
 
-  x(x + 20) = 1196'
+  x(x + 20) = 476'
 sub_questions:
 - answer:
-    display: x = -46, x = 26
+    display: x = -34, x = 14
     kind: symbolic
-    srepr: Tuple(Integer(-46), Integer(26))
+    srepr: Tuple(Integer(-34), Integer(14))
   cause_tags: []
   concept_tags:
   - quadratic.solve_from_word_setup
@@ -39,12 +39,12 @@ sub_questions:
 
     次に、左辺を因数分解する。（左辺を因数分解する）
 
-    最後に、積が 0 になるのは各因数が 0 のときだから、それぞれを 0 とおいて x を求める。（x = -46, x = 26）'
+    最後に、積が 0 になるのは各因数が 0 のときだから、それぞれを 0 とおいて x を求める。（x = -34, x = 14）'
   hints:
   - かっこを展開し、右辺を左辺に移項して、=0 の形に整理する。
   - 左辺を因数分解する。
   label: (1)
-  prompt_text: solution を求めなさい。
+  prompt_text: 解を求めなさい。
   solution_steps:
   - args: []
     narration: かっこを展開し、右辺を左辺に移項して、=0 の形に整理する。
@@ -59,6 +59,6 @@ sub_questions:
   - args: []
     narration: 積が 0 になるのは各因数が 0 のときだから、それぞれを 0 とおいて x を求める。
     op: apply_zero_product
-    result_display: x = -46, x = 26
-    result_srepr: Tuple(Integer(-46), Integer(26))
+    result_display: x = -34, x = 14
+    result_srepr: Tuple(Integer(-34), Integer(14))
 visual_svg: null

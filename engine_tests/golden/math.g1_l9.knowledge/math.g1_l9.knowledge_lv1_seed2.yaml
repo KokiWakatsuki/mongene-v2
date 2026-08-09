@@ -24,7 +24,7 @@ meta:
   seed: 2
   signature: laws_term_recall
 problem_ref: 330f014808d2003b
-problem_text: (3 + 28) + 22 = 3 + (28 + 22) のように、たす組み合わせを変えても和が変わらないという計算のきまり を何といいますか。
+problem_text: (3 + 28) + 22 = 3 + (28 + 22) のように、たす組み合わせを変えても和が変わらないという計算のきまりを何といいますか。
 sub_questions:
 - answer:
     correct: 結合法則
@@ -42,7 +42,7 @@ sub_questions:
   hints:
   - 説明されている式や数の部分がどれかを読み取る。
   label: (1)
-  prompt_text: choice を求めなさい。
+  prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
     narration: 説明されている式や数の部分がどれかを読み取る。

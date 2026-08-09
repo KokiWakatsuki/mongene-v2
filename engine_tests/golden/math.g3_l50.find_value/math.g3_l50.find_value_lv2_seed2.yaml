@@ -39,7 +39,7 @@ sub_questions:
   hints:
   - 2つの弧の長さの比を読み取る。
   label: (1)
-  prompt_text: value を求めなさい。
+  prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
     narration: 2つの弧の長さの比を読み取る。

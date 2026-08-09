@@ -44,7 +44,7 @@ sub_questions:
   - 一方の式の y を、もう一方の式に代入して x だけの方程式にする。
   - x の値を求める。
   label: (1)
-  prompt_text: solution を求めなさい。
+  prompt_text: 解を求めなさい。
   solution_steps:
   - args:
     - y = 2x + 11

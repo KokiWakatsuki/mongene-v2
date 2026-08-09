@@ -27,7 +27,7 @@ problem_ref: 9a9107055737a37e
 problem_text: yはxに比例し、x=2のときy=-1である。yをxの式で表せ。
 sub_questions:
 - answer:
-    display: y = -1/2x
+    display: y = (-1/2)x
     kind: symbolic
     srepr: Mul(Integer(-1), Rational(1, 2), Symbol('x'))
   cause_tags: []
@@ -37,12 +37,12 @@ sub_questions:
 
     次に、求めた商を約分し、比例定数を最も簡単な分数の形に整理する。（a = -1/2）
 
-    最後に、求めた比例定数を使って、比例の式を組み立てる。（y = -1/2x）'
+    最後に、求めた比例定数を使って、比例の式を組み立てる。（y = (-1/2)x）'
   hints:
   - 比例の式 y=ax に、通る点の x, y の値をあてはめ、比例定数を求める式をつくる。
   - 求めた商を約分し、比例定数を最も簡単な分数の形に整理する。
   label: (1)
-  prompt_text: expression を求めなさい。
+  prompt_text: 式に表しなさい。
   solution_steps:
   - args:
     - '2'
@@ -60,6 +60,6 @@ sub_questions:
     - -1/2
     narration: 求めた比例定数を使って、比例の式を組み立てる。
     op: form_expression
-    result_display: y = -1/2x
+    result_display: y = (-1/2)x
     result_srepr: Mul(Integer(-1), Rational(1, 2), Symbol('x'))
 visual_svg: null

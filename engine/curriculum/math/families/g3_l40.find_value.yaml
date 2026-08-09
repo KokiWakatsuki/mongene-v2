@@ -16,7 +16,9 @@ levels:
     signature: similar_triangle_x_shape
     recipe: math.similar_triangle_x_shape
     params:
-      length_domain: {int_range: [1, 200]}
+      ratio_max: 9
+      scale_max: 12
+      side_max: 60
     given: [condition]
     asked: [value]
     visual: none

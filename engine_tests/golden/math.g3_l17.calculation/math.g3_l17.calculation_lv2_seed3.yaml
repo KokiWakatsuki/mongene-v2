@@ -26,12 +26,12 @@ meta:
 problem_ref: cdf5b3e8426eef92
 problem_text: '次の式を計算せよ。
 
-  2√6 × √8 ÷ √9'
+  2√12 × √2 ÷ √5'
 sub_questions:
 - answer:
-    display: 8√3/3
+    display: 4√30/5
     kind: symbolic
-    srepr: Mul(Rational(8, 3), Pow(Integer(3), Rational(1, 2)))
+    srepr: Mul(Rational(4, 5), Pow(Integer(30), Rational(1, 2)))
   cause_tags: []
   concept_tags:
   - radical.multiply_divide
@@ -39,12 +39,12 @@ sub_questions:
 
     次に、係数どうし・根号の中どうしをそれぞれまとめる。（係数と根号をまとめる）
 
-    最後に、根号の中をできるだけ簡単な形に直す。（8√3/3）'
+    最後に、根号の中をできるだけ簡単な形に直す。（4√30/5）'
   hints:
   - わり算を、逆数をかけるかけ算に直す。
   - 係数どうし・根号の中どうしをそれぞれまとめる。
   label: (1)
-  prompt_text: simplified_expr を求めなさい。
+  prompt_text: 式を簡単にしなさい。
   solution_steps:
   - args: []
     narration: わり算を、逆数をかけるかけ算に直す。
@@ -59,6 +59,6 @@ sub_questions:
   - args: []
     narration: 根号の中をできるだけ簡単な形に直す。
     op: simplify_result
-    result_display: 8√3/3
-    result_srepr: Mul(Rational(8, 3), Pow(Integer(3), Rational(1, 2)))
+    result_display: 4√30/5
+    result_srepr: Mul(Rational(4, 5), Pow(Integer(30), Rational(1, 2)))
 visual_svg: null

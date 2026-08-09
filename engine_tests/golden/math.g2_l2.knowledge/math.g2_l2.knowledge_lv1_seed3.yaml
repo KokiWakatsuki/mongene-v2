@@ -41,7 +41,7 @@ sub_questions:
   hints:
   - 2つの項の、文字の部分（文字と指数）が同じかどうかを比べる。
   label: (1)
-  prompt_text: choice を求めなさい。
+  prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
     narration: 2つの項の、文字の部分（文字と指数）が同じかどうかを比べる。

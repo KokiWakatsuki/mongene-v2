@@ -38,8 +38,10 @@ levels:
       scenario_kind: rectangle_area
       guided: true
       # 縦 x0（3〜40cm）・横−縦の差 d（1〜15cm）。面積 k=x0(x0+d) は本文の数値。
-      height_domain: {int_range: [3, 40]}
-      diff_domain: {int_range: [1, 15]}
+      # 縦・差は教科書の大きさに（面積2200cm²の長方形は教材にならない）。
+      # 狭めたぶんは題材（_RECTANGLE_SCENES）の軸で稼ぐ。
+      height_domain: {int_range: [3, 20]}
+      diff_domain: {int_range: [1, 12]}
     given: [scenario, quantities]
     asked: [formulation, value]
     visual: none

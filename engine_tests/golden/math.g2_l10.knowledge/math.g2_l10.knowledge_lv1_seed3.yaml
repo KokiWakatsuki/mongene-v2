@@ -24,7 +24,7 @@ meta:
   seed: 3
   signature: system_term_recall
 problem_ref: 438e2e38e8a75e62
-problem_text: 2つの2元1次方程式を1つの組にした 6x - 3y = 6, 2x - 6y = -9 を何といいますか。
+problem_text: 2つの2元1次方程式を1つの組にした 6x - 3y = 6, 2x - 6y = -9を何といいますか。
 sub_questions:
 - answer:
     correct: 連立方程式
@@ -42,7 +42,7 @@ sub_questions:
   hints:
   - 説明されている方程式や値の組がどれかを読み取る。
   label: (1)
-  prompt_text: choice を求めなさい。
+  prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
     narration: 説明されている方程式や値の組がどれかを読み取る。

@@ -111,7 +111,7 @@ def linear_expr_from_two_points(
                 op="setup_simultaneous",
                 args=[str(p1), str(p2)],
                 result_srepr=sympy.srepr([eq1, eq2]),
-                result_display=f"{sympy.sstr(eq1)}, {sympy.sstr(eq2)}",
+                result_display=f"{_format_equation_display(eq1)}, {_format_equation_display(eq2)}",
                 narration="2点をそれぞれ y = ax + b に代入し、a, b の連立方程式を立てる。",
             ),
             Step(
@@ -334,7 +334,7 @@ def intersection_of_two_lines(
                 op="setup_system",
                 args=[sympy.sstr(eq1), sympy.sstr(eq2)],
                 result_srepr=sympy.srepr([eq1, eq2]),
-                result_display=f"{sympy.sstr(eq1)}, {sympy.sstr(eq2)}",
+                result_display=f"{_format_equation_display(eq1)}, {_format_equation_display(eq2)}",
                 narration="2つの直線を ax + by = c の形にそろえて連立方程式を立てる。",
             ),
             Step(
@@ -591,6 +591,19 @@ def draw_linear_features(a: object, b: object) -> Solution:
     「読む」（SymbolicAnswer）と違い answer.kind="graph" になる別構造。
     """
     return _draw_linear_features_core(a, b)
+
+
+def _format_equation_display(eq: sympy.Eq) -> str:
+    """方程式を教材の書き方で表示する（`Eq(5*x + y, 45)` → `5x + y = 45`）。
+
+    `sympy.sstr` をそのまま解説に出していたので、生徒に
+    「Eq(5*x + y, 45), Eq(-10*x + y, 0) の連立方程式を立てる」と見せていた。
+    """
+    def side(expr: sympy.Expr) -> str:
+        s = sympy.sstr(sympy.expand(expr))
+        return s.replace("*", "")
+
+    return f"{side(eq.lhs)} = {side(eq.rhs)}"
 
 
 def _format_two_var_equation(a: sympy.Expr, b: sympy.Expr, c: sympy.Expr) -> str:

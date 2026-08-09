@@ -29,13 +29,21 @@ _SIMILARITY_CONDITION_NAMES: dict[str, str] = {
 
 
 @register_solver("math.similar_triangle_x_shape")
-def similar_triangle_x_shape(oa: object, ob: object, oc: object) -> Solution:
+def similar_triangle_x_shape(
+    oa: object, ob: object, oc: object, labels: object = None
+) -> Solution:
     """AB//CD の2線分が点Oで交わってできる相似な三角形OAB・OCDから、
 
     対応する辺OD の長さを求める（g3_l40.find_value Lv2）。oa/ob/oc（既知の
     3辺の長さ）だけから、平行線がつくる相似（対頂角＋錯角の等しさ）で
     OA:OC=OB:OD が成り立つという恒真の性質で計算する（double-solve）。
+    `labels` は問題文の点名（A,B,C,D,O の順）で、解説の記号を問題文に合わせる
+    ためだけに使う（計算には効かない）。
     """
+    ls = str(labels or "ABCDO")
+    if len(ls) < 5:
+        ls = "ABCDO"
+    pa, pb, pc, pd, po = ls[0], ls[1], ls[2], ls[3], ls[4]
     a = sympy.sympify(str(oa))
     b = sympy.sympify(str(ob))
     c = sympy.sympify(str(oc))
@@ -46,14 +54,14 @@ def similar_triangle_x_shape(oa: object, ob: object, oc: object) -> Solution:
         Step(
             op="identify_similar_triangles_in_x_shape",
             args=[], result_srepr="", result_display="平行線がつくる相似な三角形を見つける",
-            narration="AB//CD であることから、対頂角と錯角がそれぞれ等しくなる"
-            "相似な三角形の組を見つける。",
+            narration=f"{pa}{pb}∥{pc}{pd} であることから、対頂角と錯角がそれぞれ等しくなる"
+            f"相似な三角形（三角形{po}{pa}{pb}と三角形{po}{pc}{pd}）の組を見つける。",
         ),
         Step(
             op="apply_proportion",
             args=[], result_srepr=srepr, result_display=disp,
-            narration="相似な三角形の対応する辺の長さの比が等しいことから、"
-            "求める辺の長さを求める。",
+            narration=f"相似な三角形の対応する辺の長さの比が等しい（{po}{pa}:{po}{pc}="
+            f"{po}{pb}:{po}{pd}）ことから、求める辺の長さを求める。",
         ),
     ]
     return Solution(answer=SymbolicAnswer(srepr=srepr, display=disp), steps=steps)

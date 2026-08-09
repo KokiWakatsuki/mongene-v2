@@ -45,7 +45,7 @@ sub_questions:
   - 共通する部分を1つの文字に置きかえる。
   - 置きかえた式に乗法公式をあてはめる。
   label: (1)
-  prompt_text: simplified_expr を求めなさい。
+  prompt_text: 式を簡単にしなさい。
   solution_steps:
   - args: []
     narration: 共通する部分を1つの文字に置きかえる。

@@ -68,8 +68,10 @@ levels:
       # 敬称は本文側で付けるので候補には含めない（「Aさんさん」になる事故を防ぐ）。
       person_pair_set: [A|B, あきら|ひろし, さくら|みなみ, けんた|しょう,
                         ゆうか|なつみ, たける|そうた, りく|はると, あおい|ひなた]
+      # 「一週間の読書時間」だと値が12個あることと合わない（EVALUATION D-14）。
+      # 記録の個数を決めつけない言い方にする。
       subject_set: [小テスト（10点満点）の得点, 漢字テストの得点, 計算テストの得点,
-                    英単語テストの得点, 一日の学習時間（十分）, 一週間の読書時間（時間）]
+                    英単語テストの得点, 日ごとの学習時間（十分）, 週ごとの読書時間（時間）]
     given: [scenario]
     asked: [value, value, value]
     visual: none
@@ -83,15 +85,13 @@ levels:
     params:
       mode: choose_statistic
       size_set: [8, 10, 12]
-      base_range: [75, 95]
       gap_set: [4, 5, 6]
       spread_set: [2, 3, 4]
       smaller_is_better: true
       goal_phrase: 速い生徒が多い
+      # 種目と、その種目で実際にありうる値の幅は recipe の `_TIMED_EVENTS` が持つ
+      # （1つの base_range を使い回すと「100m走が9.1秒」になる）。
       # 「ハードル走」は "ドル" を含み G-STY（通貨表記の禁止）に当たるので使わない。
-      subject_set: [50m走の記録（十分の一秒）, 100m走の記録（十分の一秒）,
-                    シャトルランの折り返しにかかる時間（十分の一秒）,
-                    立ち幅とびの助走時間（十分の一秒）, 二十メートル走の記録（十分の一秒）]
     given: [scenario]
     asked: [value]
     visual: none

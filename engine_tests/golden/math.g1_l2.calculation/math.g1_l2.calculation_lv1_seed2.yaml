@@ -26,31 +26,31 @@ meta:
 problem_ref: 0060dda608d1a4fd
 problem_text: '次の数の絶対値を求めよ。
 
-  |19/10|'
+  -9'
 sub_questions:
 - answer:
-    display: 19/10
+    display: '9'
     kind: symbolic
-    srepr: Rational(19, 10)
+    srepr: Integer(9)
   cause_tags: []
   concept_tags:
   - signed_number.absolute_value
   explanation: 'まず、その数が数直線上で 0 からどちら側にあるかを見る。
 
-    次に、0 からの距離が絶対値なので、符号を取り去った大きさを答える。（19/10）'
+    次に、0 からの距離が絶対値なので、符号を取り去った大きさを答える。（9）'
   hints:
   - その数が数直線上で 0 からどちら側にあるかを見る。
   label: (1)
-  prompt_text: value を求めなさい。
+  prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
     narration: その数が数直線上で 0 からどちら側にあるかを見る。
     op: locate_on_number_line
     result_display: ''
-    result_srepr: Rational(19, 10)
+    result_srepr: Integer(9)
   - args: []
     narration: 0 からの距離が絶対値なので、符号を取り去った大きさを答える。
     op: read_distance_from_zero
-    result_display: 19/10
-    result_srepr: Rational(19, 10)
+    result_display: '9'
+    result_srepr: Integer(9)
 visual_svg: null

@@ -41,7 +41,7 @@ sub_questions:
   hints:
   - 分母と分子に、分母と同じ根号をかける。
   label: (1)
-  prompt_text: simplified_expr を求めなさい。
+  prompt_text: 式を簡単にしなさい。
   solution_steps:
   - args: []
     narration: 分母と分子に、分母と同じ根号をかける。

@@ -24,22 +24,22 @@ meta:
   seed: 2
   signature: similar_solid_surface_volume_ratio
 problem_ref: 7bf649de777bcb81
-problem_text: 相似比が 11:32 である2つの相似な立体について、表面積の比と体積の比をそれぞれ求めよ。
+problem_text: 相似な2つの円錐P, Dがあり、相似比は 1:5 である。PとDの表面積の比と体積の比をそれぞれ求めよ。
 sub_questions:
 - answer:
-    display: 表面積の比 121:1024、体積の比 1331:32768
+    display: 表面積の比 1:25、体積の比 1:125
     kind: symbolic
-    srepr: Tuple(Integer(121), Integer(1024), Integer(1331), Integer(32768))
+    srepr: Tuple(Integer(1), Integer(25), Integer(1), Integer(125))
   cause_tags: []
   concept_tags:
   - similarity.solid_surface_volume_ratio
   explanation: 'まず、相似な立体の表面積の比は相似比の二乗に等しいことから、表面積の比を求める。（相似比を二乗して表面積の比を求める）
 
-    次に、相似な立体の体積の比は相似比の三乗に等しいことから、体積の比を求める。（表面積の比 121:1024、体積の比 1331:32768）'
+    次に、相似な立体の体積の比は相似比の三乗に等しいことから、体積の比を求める。（表面積の比 1:25、体積の比 1:125）'
   hints:
   - 相似な立体の表面積の比は相似比の二乗に等しいことから、表面積の比を求める。
   label: (1)
-  prompt_text: value を求めなさい。
+  prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
     narration: 相似な立体の表面積の比は相似比の二乗に等しいことから、表面積の比を求める。
@@ -49,6 +49,6 @@ sub_questions:
   - args: []
     narration: 相似な立体の体積の比は相似比の三乗に等しいことから、体積の比を求める。
     op: cube_ratio_for_volume
-    result_display: 表面積の比 121:1024、体積の比 1331:32768
-    result_srepr: Tuple(Integer(121), Integer(1024), Integer(1331), Integer(32768))
+    result_display: 表面積の比 1:25、体積の比 1:125
+    result_srepr: Tuple(Integer(1), Integer(25), Integer(1), Integer(125))
 visual_svg: null

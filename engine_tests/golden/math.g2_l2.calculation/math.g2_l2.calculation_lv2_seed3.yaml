@@ -44,7 +44,7 @@ sub_questions:
   - 式の中から、文字の部分が同じ項（同類項）の組を見分ける。
   - 文字の部分が同じ項（同類項）どうしをまとめる。
   label: (1)
-  prompt_text: simplified_expr を求めなさい。
+  prompt_text: 式を簡単にしなさい。
   solution_steps:
   - args: []
     narration: 式の中から、文字の部分が同じ項（同類項）の組を見分ける。

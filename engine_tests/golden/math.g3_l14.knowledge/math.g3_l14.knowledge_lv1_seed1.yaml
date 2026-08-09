@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: square_root_term_recall
 problem_ref: 60e37026ccfe9d66
-problem_text: √121 の √ のように、平方根を表すために使う記号 を何といいますか。
+problem_text: √121 の √ のように、平方根を表すために使う記号を何といいますか。
 sub_questions:
 - answer:
     correct: 根号
@@ -41,7 +41,7 @@ sub_questions:
   hints:
   - 説明されている式や数の部分がどれかを読み取る。
   label: (1)
-  prompt_text: choice を求めなさい。
+  prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
     narration: 説明されている式や数の部分がどれかを読み取る。

@@ -26,12 +26,12 @@ meta:
 problem_ref: 1fb93b8b6666c238
 problem_text: '次の計算をせよ。
 
-  (-6/7)+(-3.5)+(-2)'
+  1/2+(-0.6)+(-2)'
 sub_questions:
 - answer:
-    display: -89/14
+    display: -21/10
     kind: symbolic
-    srepr: Rational(-89, 14)
+    srepr: Rational(-21, 10)
   cause_tags: []
   concept_tags:
   - signed_number.add_terms
@@ -39,26 +39,26 @@ sub_questions:
 
     次に、正の項どうし、負の項どうしをそれぞれまとめる。（正の項・負の項をまとめる）
 
-    最後に、正の合計と負の合計を合わせて、答えを求める。（-89/14）'
+    最後に、正の合計と負の合計を合わせて、答えを求める。（-21/10）'
   hints:
   - かっこを外し、それぞれの数を符号のついた項として並べる。
   - 正の項どうし、負の項どうしをそれぞれまとめる。
   label: (1)
-  prompt_text: value を求めなさい。
+  prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
     narration: かっこを外し、それぞれの数を符号のついた項として並べる。
     op: rewrite_as_term_sum
     result_display: 符号のついた項の和に直す
-    result_srepr: Rational(-89, 14)
+    result_srepr: Rational(-21, 10)
   - args: []
     narration: 正の項どうし、負の項どうしをそれぞれまとめる。
     op: group_by_sign
     result_display: 正の項・負の項をまとめる
-    result_srepr: Rational(-89, 14)
+    result_srepr: Rational(-21, 10)
   - args: []
     narration: 正の合計と負の合計を合わせて、答えを求める。
     op: total_terms
-    result_display: -89/14
-    result_srepr: Rational(-89, 14)
+    result_display: -21/10
+    result_srepr: Rational(-21, 10)
 visual_svg: null

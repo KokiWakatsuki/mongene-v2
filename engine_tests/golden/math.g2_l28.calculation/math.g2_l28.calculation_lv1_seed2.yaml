@@ -39,7 +39,7 @@ sub_questions:
   hints:
   - x の値を式に代入する。
   label: (1)
-  prompt_text: value を求めなさい。
+  prompt_text: 答えを求めなさい。
   solution_steps:
   - args:
     - 3/2

@@ -41,7 +41,7 @@ sub_questions:
   hints:
   - 2つの数の平方の差を、和と差の積の形になおす。
   label: (1)
-  prompt_text: value を求めなさい。
+  prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
     narration: 2つの数の平方の差を、和と差の積の形になおす。

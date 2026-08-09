@@ -33,21 +33,21 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - parallel_segment.judge_from_ratio
-  explanation: 'まず、AD:DBとAE:ECの比が等しいかどうかを比べる。（AD:DBとAE:ECの比を比べる）
+  explanation: 'まず、PQ:QBとPD:DAの比が等しいかどうかを比べる。（PQ:QBとPD:DAの比を比べる）
 
-    次に、平行線と線分の比の定理の逆から、DEとBCが平行であるかどうかを判別する。（平行ではない）'
+    次に、平行線と線分の比の定理の逆から、QDとBAが平行であるかどうかを判別する。（平行ではない）'
   hints:
-  - AD:DBとAE:ECの比が等しいかどうかを比べる。
+  - PQ:QBとPD:DAの比が等しいかどうかを比べる。
   label: (1)
-  prompt_text: value を求めなさい。
+  prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
-    narration: AD:DBとAE:ECの比が等しいかどうかを比べる。
+    narration: PQ:QBとPD:DAの比が等しいかどうかを比べる。
     op: compare_division_ratios
-    result_display: AD:DBとAE:ECの比を比べる
+    result_display: PQ:QBとPD:DAの比を比べる
     result_srepr: ''
   - args: []
-    narration: 平行線と線分の比の定理の逆から、DEとBCが平行であるかどうかを判別する。
+    narration: 平行線と線分の比の定理の逆から、QDとBAが平行であるかどうかを判別する。
     op: judge_by_parallel_ratio_converse
     result_display: 平行ではない
     result_srepr: 'false'

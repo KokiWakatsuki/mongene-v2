@@ -76,6 +76,7 @@ from engine.core.contracts import (
 )
 from engine.core.registry import REGISTRY, register_recipe
 from engine.core.rng import Rng, draw, draw_many
+from engine.packs.math.recipes.probability import _construct_two_dice
 
 RECIPE_NAME = "math.word_problem_probability"
 
@@ -217,10 +218,15 @@ def solve_multiple_union(numbers: Mapping[str, Any]) -> list[Solution]:
 
 
 def solve_two_dice_product_at_least(numbers: Mapping[str, Any]) -> list[Solution]:
-    """g2_l52 Lv3: 大小2個のさいころの積が条件以上。"""
+    """g2_l52 Lv3: 大小2個のさいころで、和・積・差などの条件を満たす確率。
+
+    条件は `numbers["condition"]`（無ければ従来どおり積が target 以上）。
+    面数を広げて組み合わせを稼ぐのをやめたぶん、問い方の種類で稼いでいる。
+    """
     faces, target = int(numbers["faces"]), int(numbers["target"])
+    condition = str(numbers.get("condition", "product_at_least"))
     solver = REGISTRY.solver("math.probability_two_dice")
-    sol = cast(Solution, solver(faces, "product_at_least", target))
+    sol = cast(Solution, solver(faces, condition, target))
     return [sol]
 
 
@@ -502,16 +508,33 @@ def _two_dice_product_at_least_candidates(faces: int) -> list[int]:
     return [v for v in products if v > min(products)]
 
 
+# 「〜になるかどうかを考える」の言い方（`_TWO_DICE_QUESTIONS` と対になる）。
+_TWO_DICE_SITUATIONS: dict[str, str] = {
+    "sum_equals": "出た目の和が{t}になる",
+    "sum_at_least": "出た目の和が{t}以上になる",
+    "sum_at_most": "出た目の和が{t}以下になる",
+    "sum_multiple_of": "出た目の和が{t}の倍数になる",
+    "product_equals": "出た目の積が{t}になる",
+    "product_at_least": "出た目の積が{t}以上になる",
+    "diff_equals": "出た目の差が{t}になる",
+    "at_least_one_equals": "少なくとも一方が{t}の目である",
+}
+
+
 def _scene_two_dice_product_at_least(p: Mapping[str, Any], rng: Rng) -> ProbabilityScene:
+    """大小2個のさいころで、和・積・差などの条件を満たすかを考える（g2_l52 Lv3）。
+
+    **面数は6。** 6〜14 で振っていたので「1から14までの目が出るさいころ」が出ていた
+    （D-13 と同じ）。面数のかわりに問い方の種類で組み合わせを稼ぐ。
+    """
     faces = int(draw(p["faces_domain"], rng))
-    cands = _two_dice_product_at_least_candidates(faces)
-    target = int(draw({"int_set": cands}, rng))
-    face_phrase = "" if faces == 6 else f"1から{faces}までの目が出る"
+    kind, target, _text = _construct_two_dice(rng, faces)
     # target も given.scenario に置く（ask にしか出さないと whitelist されず G-Q5t が
     # 偽陽性になる＝踏んだ罠。ask は数値を含まない指示文だけにする）。
-    scenario = f"{face_phrase}大小2個のさいころを同時に投げる。出た目の積が{target}以上になるかどうかを考える。"
+    happens = _TWO_DICE_SITUATIONS[kind].format(t=target)
+    scenario = f"大小2個のさいころを同時に投げる。{happens}かどうかを考える。"
     ask_texts = ("この確率を求めよ。",)
-    numbers = {"faces": faces, "target": target}
+    numbers = {"faces": faces, "target": target, "condition": kind}
     return ProbabilityScene(numbers=numbers, scenario=scenario, ask_texts=ask_texts, slots={})
 
 
@@ -557,16 +580,29 @@ def _scene_two_balls_complement(p: Mapping[str, Any], rng: Rng) -> ProbabilitySc
     )
 
 
+# 「少なくとも1回」を扱える実在の道具（全事象の大きさ, 場面文, 注目するものの言い方）。
+# **さいころは6面に固定した**（面数を 4〜30 で振っていたので「1から17までの目が出る
+# さいころ」が出ていた。D-13 と同じ）。面数のかわりに道具で組み合わせを稼ぐ。
+_REPEAT_TOOLS: list[tuple[int, str, str]] = [
+    (6, "さいころを{t}回投げる。{k}の目に注目する。", "その目が出る"),
+    (5, "1から5までの番号が書かれた5枚のカードから1枚引いてはもとにもどすことを{t}回くり返す。{k}の番号に注目する。", "その番号を引く"),
+    (8, "1から8までの番号が書かれた8枚のカードから1枚引いてはもとにもどすことを{t}回くり返す。{k}の番号に注目する。", "その番号を引く"),
+    (10, "1から10までの番号が書かれた10枚のカードから1枚引いてはもとにもどすことを{t}回くり返す。{k}の番号に注目する。", "その番号を引く"),
+    (4, "赤・青・黄・緑の4色の玉が1個ずつ入った袋から1個取り出してはもとにもどすことを{t}回くり返す。{k}番目の色に注目する。", "その色が出る"),
+]
+
+
 def _scene_dice_repeat_at_least_one(p: Mapping[str, Any], rng: Rng) -> ProbabilityScene:
-    faces = int(draw(p["faces_domain"], rng))
+    idx = int(draw({"int_set": list(range(len(_REPEAT_TOOLS)))}, rng))
+    faces, scene_fmt, what = _REPEAT_TOOLS[idx]
     trials = int(draw(p["trials"], rng))
     # target_face は solver には渡らない（favorable_size=1 は目の値によらない）が、
     # 場面文に出す数値なので numbers に含める（params の全数値が given に現れる規約）。
     # ask にしか出さないと G-Q5t の whitelist（mr.given だけを見る）に載らず偽陽性に
     # なる＝踏んだ罠。target_face も given.scenario に置き、ask は指示文だけにする。
     target_face = int(draw({"int_range": [1, faces]}, rng))
-    scenario = f"1から{faces}までの目が出るさいころを{trials}回投げる。{target_face}の目に注目する。"
-    ask_texts = ("少なくとも1回は、その目が出る確率を求めよ。",)
+    scenario = scene_fmt.format(t=trials, k=target_face)
+    ask_texts = (f"少なくとも1回は、{what}確率を求めよ。",)
     numbers = {"faces": faces, "trials": trials, "target_face": target_face}
     return ProbabilityScene(numbers=numbers, scenario=scenario, ask_texts=ask_texts, slots={})
 

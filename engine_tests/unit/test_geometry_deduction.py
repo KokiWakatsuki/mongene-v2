@@ -206,13 +206,36 @@ def test_construction_emits_facts_from_steps_not_coordinates():
 
 
 def test_figure_quality_rejects_degenerate_shapes():
-    """つぶれた三角形・近すぎる点を弾く。"""
+    """つぶれた三角形・近すぎる点を弾く。
+
+    **辺を実際に引くこと。** 検査は「図に描かれている線でできる角」だけを見るので、
+    点を置いただけでは何も検査されない（描かれていない角はつぶれて見えようがない）。
+    点を置くだけで弾けると書いていたころのテストは、フィルタが描画基準に変わった
+    あとも通っているように見えていた——`pytest -q` が engine_tests を集めて
+    いなかったため、誰も落ちているところを見ていなかった。
+    """
     assert figure_quality_problems(_kite_construction()) == []
     flat = Construction()
     flat.free_point("A", 0.0, 0.0)
     flat.free_point("B", 3.0, 0.0)
     flat.free_point("C", 6.0, 0.05)  # ほぼ一直線
+    flat.connect("A", "B")
+    flat.connect("A", "C")
     assert figure_quality_problems(flat)
+
+
+def test_figure_quality_ignores_angles_that_are_not_drawn():
+    """線として描かれていない角は、つぶれていても図の問題ではない。
+
+    上のテストと対にしておく（辺を引かなければ弾かれない、が仕様である）。
+    これを固定しておかないと、「描かれた角だけを見る」という判断が、
+    次に誰かがフィルタを触ったときに黙って戻る。
+    """
+    bare = Construction()
+    bare.free_point("A", 0.0, 0.0)
+    bare.free_point("B", 3.0, 0.0)
+    bare.free_point("C", 6.0, 0.05)
+    assert figure_quality_problems(bare) == []
 
 
 def test_collinear_points_are_not_called_degenerate():

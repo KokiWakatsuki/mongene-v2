@@ -41,7 +41,7 @@ sub_questions:
   - linear_function.slope_from_two_points
   - linear_function.intercept_from_point
   - linear_function.expression_from_two_points
-  explanation: 'まず、2点をそれぞれ y = ax + b に代入し、a, b の連立方程式を立てる。（Eq(a + b, -14/3), Eq(-4*a + b, -4/3)）
+  explanation: 'まず、2点をそれぞれ y = ax + b に代入し、a, b の連立方程式を立てる。（a + b = -14/3, -4a + b = -4/3）
 
     次に、連立方程式を解いて a, b を同時に求める。（a = -2/3, b = -4）
 
@@ -50,14 +50,14 @@ sub_questions:
   - 2点をそれぞれ y = ax + b に代入し、a, b の連立方程式を立てる。
   - 連立方程式を解いて a, b を同時に求める。
   label: (1)
-  prompt_text: expression を求めなさい。
+  prompt_text: 式に表しなさい。
   solution_steps:
   - args:
     - (1, -14/3)
     - (-4, -4/3)
     narration: 2点をそれぞれ y = ax + b に代入し、a, b の連立方程式を立てる。
     op: setup_simultaneous
-    result_display: Eq(a + b, -14/3), Eq(-4*a + b, -4/3)
+    result_display: a + b = -14/3, -4a + b = -4/3
     result_srepr: '[Equality(Add(Symbol(''a''), Symbol(''b'')), Rational(-14, 3)), Equality(Add(Mul(Integer(-1), Integer(4), Symbol(''a'')), Symbol(''b'')), Rational(-4, 3))]'
   - args:
     - Eq(a + b, -14/3)

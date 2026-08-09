@@ -63,5 +63,7 @@ from engine.packs.math.checkers import quadratic_function_graph  # noqa: F401,E4
 from engine.packs.math.checkers import g1_space  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.checkers import number_proof  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.checkers import construction  # noqa: F401  (登録の副作用のため import)
+from engine.packs.math.checkers import conditional_proof  # noqa: F401  (登録の副作用のため import)
+from engine.packs.math.checkers import pythagoras_proof  # noqa: F401  (登録の副作用のため import)
 
 __all__: list[str] = []

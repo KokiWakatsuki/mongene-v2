@@ -42,7 +42,7 @@ sub_questions:
   - 放物線の式と直線の式の右辺どうしを等しいとおき、方程式を立てる。
   - その方程式を解いて、交点の x 座標を求める。
   label: (1)
-  prompt_text: intersection を求めなさい。
+  prompt_text: 交点の座標を求めなさい。
   solution_steps:
   - args: []
     narration: 放物線の式と直線の式の右辺どうしを等しいとおき、方程式を立てる。
