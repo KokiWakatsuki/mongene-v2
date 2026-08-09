@@ -136,9 +136,17 @@ def accidental_coincidences(
     problems: list[str] = []
 
     def equal_pairs(con: Construction) -> set:
+        # **図に描かれているものだけを見る。** 生徒が図から読み取れるのは、線として
+        # 引かれた線分の長さと、その線分どうしがつくる角だけである。描かれていない
+        # 線分の長さがたまたまそろっていても、誰もそれを読み取らない。
+        # ここを全点の組に広げていたせいで、中点連結定理の図・ピラミッド型・
+        # 平行四辺形の辺の中点の図が、**見えない線の偶然**を理由に全部落ちていた。
+        drawn = {frozenset(s) for s in con.segments}
         out = set()
         lengths = {}
         for p, q in itertools.combinations(con.points, 2):
+            if frozenset({p, q}) not in drawn:
+                continue
             (x1, y1), (x2, y2) = con.coords[p], con.coords[q]
             lengths[seg(p, q)] = math.hypot(x2 - x1, y2 - y1)
         for s1, s2 in itertools.combinations(sorted(lengths), 2):
@@ -147,7 +155,8 @@ def accidental_coincidences(
                 out.add(("seg", s1, s2))
         angles = {}
         for v in con.points:
-            for p, q in itertools.combinations([x for x in con.points if x != v], 2):
+            arms = [x for x in con.points if x != v and frozenset({v, x}) in drawn]
+            for p, q in itertools.combinations(arms, 2):
                 angles[ang(v, p, q)] = _angle_between(con.coords[p], con.coords[v], con.coords[q])
         for a1, a2 in itertools.combinations(sorted(angles), 2):
             if abs(angles[a1] - angles[a2]) <= _ANGLE_TOL:

@@ -1,0 +1,36 @@
+family: math.exam_l6.proof
+form: proof
+source_desc: |
+  相似と面積比・体積比の融合
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv3 desc: 融合問題内で相似であることを記述証明する。
+  ---
+  【設計モデル】g2_l39.proof と同じ推論器。図はピラミッド型（△ABCの辺AB上の点D、
+  辺AC上の点Eについて DE ∥ BC）——面積比・体積比の問題で必ず出てくる形で、
+  その中の「相似であることの記述証明」をこのセルが受け持つ。
+
+  【なぜ g3_l41 と別のセルになるか】g3_l41 は砂時計型（錯角と対頂角）で、こちらは
+  ピラミッド型（同位角）。**使う根拠が違う**ので op 列が相異する
+  （use_alternate_angles / use_corresponding_angles）。
+concepts_default: [similarity_proof.direct_condition]
+levels:
+  "3":
+    signature: geometry_proof_exam_similar_pyramid
+    recipe: math.geometry_proof
+    params:
+      construction: similar_pyramid
+      topic_set: similarity
+      proof_depth: 2
+      prefer: tri_sim
+      base_domain: {int_range: [28, 46]}
+      angle_domain: {int_range: [40, 85]}
+      offset_domain: {int_range: [10, 26]}
+    given: [premises, conclusion]
+    asked: [proof_text]
+    visual: optional
+    text: {tier: T1, template: pf_geometry_proof_v1, visual_builder: math.geometry_construction}
+    hints: [steps_prefix]
+    concept_tags: [similarity_proof.direct_condition]
+    cause_tags: []
+remedial:
+  default_level: 3

@@ -57,5 +57,25 @@ levels:
     hints: [steps_prefix]
     concept_tags: [similarity_proof.two_step]
     cause_tags: []
+  "4":
+    signature: geometry_proof_similar_construct
+    recipe: math.geometry_proof
+    params:
+      # ピラミッド型から、相似の1段先（対応する辺の比）を結論に取る。
+      # どの三角形を相似とみるかを決めてからでないと比の式が書けない。
+      construction: similar_pyramid
+      topic_set: similarity
+      proof_depth: 3
+      prefer: ratio_eq
+      base_domain: {int_range: [28, 46]}
+      angle_domain: {int_range: [40, 85]}
+      offset_domain: {int_range: [10, 26]}
+    given: [premises, conclusion]
+    asked: [proof_text]
+    visual: optional
+    text: {tier: T1, template: pf_geometry_proof_v1, visual_builder: math.geometry_construction}
+    hints: [steps_prefix]
+    concept_tags: [similarity_proof.construct]
+    cause_tags: []
 remedial:
   default_level: 2
