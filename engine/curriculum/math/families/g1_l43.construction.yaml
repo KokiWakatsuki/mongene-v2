@@ -1,0 +1,62 @@
+family: math.g1_l43.construction
+form: construction
+source_desc: |
+  垂線の作図（units.generated.yaml の desc/example を正として転記）。
+  Lv1 desc: 直線上の点/直線外の点を通る垂線を基本手順で作図する。
+       example: 直線ℓと、その直線上にない点Pが与えられている。定規とコンパスだけを
+                使って、点Pを通り直線ℓに垂直な直線を作図せよ。作図に用いた線は残すこと。
+  Lv2 desc: 点と直線の距離・垂線の足を求める作図に正確に適用する。
+       example: 直線ℓと、直線上にない点Pが与えられている。点Pと直線ℓとの距離を表す
+                線分を作図によってかき、垂線の足Hを図中に示せ。
+  【この form の型】問題文は固定、動くのは図（直線の傾き・点の位置・記号名）。
+  Lv1 は desc のとおり**直線上の点と直線外の点の両方**を出す。手順（点を中心に直線と
+  二点で交わる円→その二点から等半径の弧→交点と結ぶ）はどちらも同じなので op 列は
+  変わらず、G-FP（同一 signature の指紋安定）を壊さない。
+  【level_sep】Lv1 は基本作図の3手。Lv2 はそこへ「垂線の足に印をつける」「点と足を
+  結ぶ線分（＝点と直線の距離）をひく」が積み増され、5手になる。Lv2 の点は必ず直線の外。
+  【検証】answer は GraphAnswer。①recipe は「その直線が点を通り、ℓに垂直か」
+  「足がℓ上にあり、点と足を結ぶ向きがℓに垂直か」という条件そのもので確かめる。
+  ②G-Q1 が params（点と直線の座標）だけから独立ソルバ
+  （math.perpendicular_through_point / math.foot_and_point_line_distance）で解き直す。
+  垂線の足は有理点になるので厳密に一致判定できる。
+concepts_default: [construction.perpendicular_basic]
+levels:
+  "1":
+    signature: construct_perpendicular_basic
+    recipe: math.construct_perpendicular
+    params:
+      # (直線の向き 7 通り, 点の位置, 記号 3 通り) を全列挙。点は直線上（距離0）か、
+      # 距離が dist_min..dist_max（平方を 100 倍した整数で比較）にあるもの。
+      box: 8
+      dist_min_sq100: 900
+      dist_max_sq100: 4900
+    given: [construction_conditions]
+    asked: [construction_steps]
+    visual: required
+    text:
+      tier: T1
+      template: cs_perpendicular_v1
+      visual_builder: math.construction_figure
+    hints: [steps_prefix]
+    concept_tags: [construction.perpendicular_basic]
+    cause_tags: []
+  "2":
+    signature: construct_foot_and_distance
+    recipe: math.construct_foot_and_distance
+    params:
+      # Lv2 は直線上の点を許さない（距離が 0 だと「点と直線の距離」が題材にならない）。
+      box: 9
+      dist_min_sq100: 900
+      dist_max_sq100: 4900
+    given: [construction_conditions]
+    asked: [construction_steps]
+    visual: required
+    text:
+      tier: T1
+      template: cs_foot_and_distance_v1
+      visual_builder: math.construction_figure
+    hints: [steps_prefix]
+    concept_tags: [construction.foot_and_point_line_distance]
+    cause_tags: []
+remedial:
+  default_level: 1

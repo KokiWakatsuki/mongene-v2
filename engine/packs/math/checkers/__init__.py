@@ -61,5 +61,7 @@ from engine.packs.math.checkers import solid_figure  # noqa: F401  (登録の副
 from engine.packs.math.checkers import proportion_graph  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.checkers import quadratic_function_graph  # noqa: F401,E402  (letter_expr/polynomial のヘルパに依存＝後に import)
 from engine.packs.math.checkers import g1_space  # noqa: F401  (登録の副作用のため import)
+from engine.packs.math.checkers import number_proof  # noqa: F401  (登録の副作用のため import)
+from engine.packs.math.checkers import construction  # noqa: F401  (登録の副作用のため import)
 
 __all__: list[str] = []

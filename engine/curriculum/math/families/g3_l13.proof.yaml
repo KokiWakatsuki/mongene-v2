@@ -1,0 +1,62 @@
+family: math.g3_l13.proof
+form: proof
+source_desc: |
+  式の計算の利用（数の性質の説明への応用）
+  （units.generated.yaml の desc/example を正として転記）。
+  Lv2 desc: 誘導あり・文字でおく指示に沿い1つの関係を式変形で説明。
+       example: 連続する2つの奇数の積に1を加えた数は、4の倍数になる。このことを、
+                小さい方の奇数を 2n-1 とおいて説明せよ。
+  Lv3 desc: 誘導なし・何を文字でおくか・示す関係を自分で構成する記述。
+       example: 連続する2つの偶数の積に1を加えた数は、ある整数の平方から1をひいた数に
+                等しい。このことを説明せよ。
+  ---
+  【設計モデル】g2_l7/g2_l8 の proof と同じ機構（solvers/number_proof.py）。この単元は
+  **展開・因数分解が要る型**だけを使う（g2 の型は1次式の整理で済むのに対し、こちらは
+  積や平方を展開してから整理する）:
+    product_plus                 … 積に数を加えた数（(2n-1)(2n+1)+1 = 4n² など）
+    square_difference            … 平方の差（(2n+1)²-(2n-1)² = 8n など）
+    square_sum                   … 平方の和
+    digit_swap_square_difference … 2けたの数と入れかえた数の平方の差（99 の倍数）
+  台帳 example の「連続する2つの奇数の積に1を加えた数は4の倍数」は product_plus の
+  mode=1、calculation Lv2 の「(2n+1)²-(2n-1)²」は square_difference にあたる。
+  結論（4の倍数／ある整数の2乗）は書いていない——展開した式の係数の最大公約数が
+  2 以上なら倍数、1 なら因数分解して平方かどうかを見る、という判定で導いている
+  （`derive_goal`）。台帳 Lv3 example の言い方（ある整数の平方から1をひいた数）は
+  同じ命題を移項した形で、本実装は「ある整数の2乗になる」の側で出す。
+
+  【Lv 差】誘導の有無で op 列が変わる（4手 / 6手）。given のキーも変わる。
+
+  【dup_rate】型 × 軸（積に加える数・差・偶奇・どの数を基準に置くか）× 文字。
+  4型あわせて 28 通りの命題型に、文字（18通り／2文字は153通り）が掛かる。
+concepts_default: [polynomial.proof_expand_number_property]
+levels:
+  "2":
+    signature: number_proof_expand_guided
+    recipe: math.number_property_proof
+    params:
+      guided: true
+      proposition_set: [product_plus, square_difference, square_sum, digit_swap_square_difference]
+      letter_pool: [a, b, c, d, f, g, h, k, m, n, p, q, r, s, t, u, w, z]
+    given: [premises, conclusion]
+    asked: [proof_text]
+    visual: none
+    text: {tier: T1, template: pf_number_property_guided_v1}
+    hints: [steps_prefix]
+    concept_tags: [polynomial.proof_expand_number_property, polynomial.proof_factor_to_square]
+    cause_tags: []
+  "3":
+    signature: number_proof_expand_open
+    recipe: math.number_property_proof
+    params:
+      guided: false
+      proposition_set: [product_plus, square_difference, square_sum, digit_swap_square_difference]
+      letter_pool: [a, b, c, d, f, g, h, k, m, n, p, q, r, s, t, u, w, z]
+    given: [conclusion]
+    asked: [proof_text]
+    visual: none
+    text: {tier: T1, template: pf_number_property_open_v1}
+    hints: [steps_prefix]
+    concept_tags: [polynomial.proof_expand_number_property, polynomial.proof_factor_to_square]
+    cause_tags: []
+remedial:
+  default_level: 2

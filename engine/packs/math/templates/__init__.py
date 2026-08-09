@@ -40,5 +40,7 @@ from engine.packs.math.templates import solid_figure  # noqa: F401  (登録の�
 
 from engine.packs.math.templates import proportion_graph  # noqa: F401  (登録の副作用のため import)
 from engine.packs.math.templates import g1_space  # noqa: F401  (登録の副作用のため import)
+from engine.packs.math.templates import number_proof  # noqa: F401  (登録の副作用のため import)
+from engine.packs.math.templates import construction  # noqa: F401  (登録の副作用のため import)
 
 __all__: list[str] = []

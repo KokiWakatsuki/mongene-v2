@@ -192,6 +192,12 @@ concepts:
   - id: polynomial.proof_diff_squares_linear
     label: "証明で用いる展開・因数分解の式変形（(an+b)²-(an+d)²の展開など）"
     unit: g3_l13
+  - id: polynomial.proof_expand_number_property
+    label: "展開を利用して、積や平方の差についての数の性質を説明する"
+    unit: g3_l13
+  - id: polynomial.proof_factor_to_square
+    label: "展開した式を因数分解し、ある整数の2乗になることを説明する"
+    unit: g3_l13
   # C3 g3 平方根の計算
   - id: radical.square_of_root
     label: "根号と平方の相互変換（(√a)²=a・√(a²)=a）"
@@ -383,6 +389,19 @@ concepts:
     unit: g2_l7
   - id: polynomial.two_digit_number_property
     label: "2けたの自然数と位を入れかえた数の和・差を整理する"
+    unit: g2_l8
+  # C2 文字式による数の性質の説明（form: proof・math.number_property_proof）
+  - id: polynomial.proof_consecutive_integers
+    label: "連続する整数・偶数・奇数の和の性質を文字式で説明する"
+    unit: g2_l7
+  - id: polynomial.proof_parity_operation
+    label: "偶数・奇数の和・差・積の性質を文字式で説明する"
+    unit: g2_l7
+  - id: polynomial.proof_two_digit_swap
+    label: "2けた・3けたの自然数と位を入れかえた数の和・差の性質を説明する"
+    unit: g2_l8
+  - id: polynomial.proof_digit_sum_relation
+    label: "自然数と各位の数の和との差の性質を文字式で説明する"
     unit: g2_l8
   - id: polynomial.term_recall
     label: "単項式・多項式・係数・次数の用語を想起する"
@@ -1037,6 +1056,34 @@ concepts:
     unit: g1_l42
   - id: construction_choice_terms.term_recall
     label: "等距離の条件に対応する基本作図を判別する"
+    unit: g1_l44
+  # 基本作図（form: construction・g1_l41〜l44）
+  - id: construction.perpendicular_bisector_basic
+    label: "線分の垂直二等分線を基本手順で作図する"
+    unit: g1_l41
+  - id: construction.equidistant_point_on_line
+    label: "2点から等距離で、与えられた直線上にある点を作図で求める"
+    unit: g1_l41
+  - id: construction.angle_bisector_basic
+    label: "角の二等分線を基本手順で作図する"
+    unit: g1_l42
+  - id: construction.equidistant_point_from_two_sides
+    label: "角の2辺から等距離で、与えられた線分上にある点を作図で求める"
+    unit: g1_l42
+  - id: construction.perpendicular_basic
+    label: "直線上の点/直線外の点を通る垂線を基本手順で作図する"
+    unit: g1_l43
+  - id: construction.foot_and_point_line_distance
+    label: "点と直線の距離を表す線分をかき、垂線の足を作図で示す"
+    unit: g1_l43
+  - id: construction.locus_equidistant_two_points
+    label: "2点から等距離にある点の集まりを、基本作図1つで作図する"
+    unit: g1_l44
+  - id: construction.circumcenter_three_points
+    label: "3点から等距離にある点を、垂直二等分線2本の交点として作図する"
+    unit: g1_l44
+  - id: construction.point_on_side_equidistant_two_sides
+    label: "三角形の辺上にあり2辺から等距離にある点を、方針を選んで作図する"
     unit: g1_l44
   - id: circle_terms.term_recall
     label: "半径・弦・弧・おうぎ形・中心角の用語を想起する"
