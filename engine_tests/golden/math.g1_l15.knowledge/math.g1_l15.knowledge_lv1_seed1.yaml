@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: speed_relation_rule_recall
 problem_ref: 977e5c77e038d56f
-problem_text: 道のり 42 km を速さ 44 km/時 で進む場面のように、道のり・速さ・時間の関係で「時間」を求める式。正しく述べているものを1つ選びなさい。
+problem_text: 道のり42kmを速さ44km/時で進む場面のように、道のり・速さ・時間の関係で「時間」を求める式。正しく述べているものを1つ選びなさい。
 sub_questions:
 - answer:
     correct: （時間）＝（道のり）÷（速さ）

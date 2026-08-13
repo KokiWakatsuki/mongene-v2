@@ -24,14 +24,14 @@ meta:
   seed: 3
   signature: word_problem_multiple_union
 problem_ref: e743e74a2e04a53c
-problem_text: '1から59までの番号が1つずつ書かれた59枚のカードから1枚を引く。引いたカードの番号が5の倍数であるか、9の倍数であるかを考える。
+problem_text: '1から44までの番号が1つずつ書かれた44枚のカードから1枚を引く。引いたカードの番号が4の倍数であるか、5の倍数であるかを考える。
 
   そのどちらかの倍数である確率を求めよ。'
 sub_questions:
 - answer:
-    display: 16/59
+    display: 17/44
     kind: symbolic
-    srepr: Rational(16, 59)
+    srepr: Rational(17, 44)
   cause_tags: []
   concept_tags:
   - probability.word_problem_multiple_union
@@ -41,7 +41,7 @@ sub_questions:
 
     次に、両方の倍数に共通してあてはまる場合の数を数え、その確率を求める。（両方の倍数に共通する場合の数を数える）
 
-    最後に、重なっている分を引いて、どちらかの倍数である確率を求める。（16/59）'
+    最後に、重なっている分を引いて、どちらかの倍数である確率を求める。（17/44）'
   hints:
   - 一方の倍数の条件にあてはまる場合の数を数え、その確率を求める。
   - もう一方の倍数の条件にあてはまる場合の数を数え、その確率を求める。
@@ -67,6 +67,6 @@ sub_questions:
   - args: []
     narration: 重なっている分を引いて、どちらかの倍数である確率を求める。
     op: apply_inclusion_exclusion
-    result_display: 16/59
-    result_srepr: Rational(16, 59)
+    result_display: 17/44
+    result_srepr: Rational(17, 44)
 visual_svg: null

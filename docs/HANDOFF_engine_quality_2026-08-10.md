@@ -4,42 +4,46 @@
 `scratchpad/HANDOFF_2026-08-09b_quality_fixes.md`（2回目・詳細版）。
 **この文書は別の環境へ渡すための自己完結版**で、完了したものだけを記録する。
 
+**2026-08-10 に3回目のセッションを行った**（§9 以降）。前の版で「未確認」としていた
+`engine.eval` を通し、コーパスを3〜6周目まで回して**さらに14件を直した**。
+
+**2026-08-13 に4回目のセッションを行った**（§11-A）。**走査は6周目で空**だったので、
+まだ読んでいなかった form（find_value・proof・graph_table/construction・
+中1 knowledge/calculation・中2 calculation・中3 knowledge）を読み、**さらに9件を直した**。
+うち3件（負の長さ・解けない問題・存在しない三角形）は質ではなく**問題として壊れていた**。
+
 ---
 
 ## 1. 何をしたか（1行で）
 
 台帳630セルの実装が終わったあと、**生成される問題そのものの質**を評価し、
-記録された欠陥24件と、直す過程で新しく見つけた欠陥5件を、**全部直した**。
+記録された欠陥24件と、直す過程で新しく見つけた欠陥28件（5＋14＋9）を、**全部直した**。
 
 ---
 
 ## 2. いまの状態（すべて実測値）
 
+> **⚠️ 何を確かめて、何を確かめていないかは §11-B に書いた。まずそこを読むこと。**
+> 作業ツリーは **commit していない**。手順1〜4（§11-B）を通してから commit する。
+
 | | 状態 | いつ測ったか |
 |---|---|---|
-| 台帳の充足 | **630 / 630** | `audit_progress.py` 監査 OK |
-| `engine_tests` | **49,589 passed / 0 failed**（golden 込み） | 最後の修正を含めて完走 |
-| golden | **279 / 279 再承認済み** | 最後の修正のあと |
-| `engine.eval`（4ゲート） | coverage / dup_rate / level_sep / retry すべて OK | **下記の但し書きを読むこと** |
-| 図 | 905枚を座標で照合して食い違い0 | 回帰なし |
-| 質の欠陥 | 記録24件＋新規5件を**全件修正** | 各セル `check_cell.py` 実測 |
-
-### 但し書き（ここだけ未確認）
-
-`engine.eval` は **1つ前の版で OK**（4ゲート全通過）。そのあと入れた
-**最後の4件の修正（下の §3 の「2周目」）については eval を再走中に引き継いだ**。
-`engine_tests` 49,589 は最後の4件を含めて通っている。
-**再開したら最初に `engine.eval` を回すこと**（約25分・exit 0 が DoD）。
-
-```bash
-PYTHONPATH=. .venv/bin/python -m engine.eval
-```
+| 台帳の充足 | 630 / 630（3・4回目のセッションでは**未確認**） | 2回目のセッションの `audit_progress.py` |
+| `engine_tests` | **未確認** | §11-B |
+| golden | 12 family を再承認（3回目）。4回目で**9 family が再承認待ち** | §11-B |
+| `engine.eval` | 4ゲートは **exit 0**（3回目の**修正前**の版）。**5ゲートの通しは未実施** | §11-B |
+| 図 | 905枚を座標で照合して食い違い0（2回目）。3・4回目は未確認 | 回帰なし |
+| 質の欠陥 | 記録24件＋新規28件を**全件修正・全セル `check_cell.py` 実測** | §10 / §11-A |
+| コーパスの走査 | 7周目＝実物2件（S-10）を直した。以後は既知の偽陽性のみ | `scan_defects.py` |
+| 精読 | **630セル全部が少なくとも1回は読まれた**（4回目で残りを読み切った） | §11-A |
+| `test_eval_suite.py` | **13 passed / 0 failed** | §11-A2 |
+| `engine_tests` 全走 | **98%まで 0 failed で停止**。残り2%が未確認 | §11-A2 |
 
 ---
 
 ## 3. 直した欠陥（記録は `scratchpad/corpus/FIXES.md` に全部ある）
 
-### 大きいもの
+### 大きいもの（1〜2回目）
 
 | | 中身 | 規模 |
 |---|---|---|
@@ -54,15 +58,24 @@ PYTHONPATH=. .venv/bin/python -m engine.eval
 | D-19/D-24 | 相対度数・割合を**分数**で答えている（`363/646`・`27/40`・`1/8`） | 8セル |
 | D-1/D-3/D-4/D-5/D-6/D-8/D-9/D-18/D-20/D-21/D-22/D-23 | 個別 | 各1〜6セル |
 
-### 直す過程で新しく見つけたもの
+### 直す過程で新しく見つけたもの（1〜2回目）
 
 | | 中身 |
 |---|---|
 | D-25 | 解説に**生の sympy** が出ていた（`Eq(5*x + y, 45)` → `5x + y = 45`） |
-| D-25b | 「線分ABと線分CDが点Oで交わり、AB∥CD」＝**図として成り立たない文**（交わるのは AC と BD） |
+| D-25b | 「線分ABと線分CDが点Oで交わり、AB∥CD」＝**図として成り立たない文** |
 | D-26 | 小数で与えた累乗の答えが分数（`(-0.9)³ → -729/1000` → `-0.729`） |
 | D-27 | **座標軸の目盛りラベルが重なって読めない**（`-16-15-14-13…`） |
 | D-28 | **コーパスを作り直したら、同じ根の取りこぼしが11件**（2周分） |
+
+### 3回目のセッションで見つけたもの（§9 に詳細）
+
+| | 中身 |
+|---|---|
+| D-29 | 標本調査の**母集団の大きさが場面に対してありえない**（有権者240人の市・蔵書90冊の図書館・「魚のおよその数を調べたい。対象は全部で270匹ある」） |
+| D-30 | 確率の用語想起の例文が**日本語として壊れている**／1から487までのカード |
+| D-31 | 原則⓪（答えの大きさで測る）の取りこぼし3件（`12167√2/12`・`53a/500`・「1554大きい」） |
+| R-1〜R-11 | 走査5件＋走査の目を直して2件＋読んで4件（`271/8`・`225/2°`・`821/1980`・「差 を」・カード60枚・`1/6`・`27/2`・問いと答えの型の不一致・337個の階級・1°の円周角・`25/2kg`） |
 
 ---
 
@@ -72,16 +85,47 @@ PYTHONPATH=. .venv/bin/python -m engine.eval
 
 D-13（存在しない道具）を「直した」あとに `build_corpus.py` → `scan_defects.py` を
 回したら、**同じ単元の別セルに 20面・17面・14面・9面のさいころが残っていた**。
-さらに直してもう一度回したら、**また4件出た**（87枚のカード・標本比率の分数）。
+さらに直してもう一度回したら、**また4件出た**。3回目のセッションでは
+**3周目5件 → 4周目2件 → 5周目0件**で、ようやく機械の走査が収束した。
 
 **1セルずつ直すと必ず取りこぼす。「作り直す → 走査 → 直す」を、走査が空になるまで回す。**
+
+### ①' 走査は、コーパスが印字したものしか見られない（3回目に分かった）
+
+`build_corpus.py` が **1小問目の答えしか出さず、選択（`ChoiceAnswer`）と作図
+（`GraphAnswer`）の答えは空欄**だった。これが「答えが空 213セル」の正体で、
+**213セル分の答えを走査が一度も見ていなかった**。直したら、その中から2件出た
+（相対度数 `1/6`・四分位数 `27/2`）。
+
+**「作り直す → 走査 → 直す」の輪に、コーパスが何を出しているかも入る。**
+
+### ①'' 走査が空になっても、読むと出る（3回目に分かった）
+
+走査が0件になったあとで、初めて印字された213セル分の答えを**読んだら4件出た**。
+いちばん重いのは **問いと答えの型が噛み合っていない**もの:
+
+```
+問題: 中心角が2倍になると、それに対する弧の長さはどうなるか、答えよ
+答え: 正しい                      ← 生徒は「2倍になる」と書き、正解と一致しない
+```
+
+これは文面の規則では書けない種類の欠陥で、**人が読むしかない**。
 
 ### ② dup_rate を通す手は、この順に試す（`FIXES.md` 冒頭にも書いた）
 
 0. **定義域ではなく「答えの大きさ」で測る**（まずこれ）
-   — 定義域は広いまま、答えの分母・分子・根号の中に上限を置いて超えたら組み直す。
+   — 定義域は広いまま、答えの分母・分子・根号の中に上限を置いて、超えたら組み直す。
    `g1_l3〜l6` は定義域を1つも狭めずに分母420→12・dup 0.00 になった
+
+   **上限を足して dup が跳ねたら、上限を緩める前に「引き方が偏っていないか」を見る。**
+   `g3_l16` は分母に上限を置いたら dup が 0.30 に跳ねたが、原因は上限ではなく
+   「桁数を一様に引いてから桁を引く」ことで、9通りしかない組に確率の 1/9 が集まって
+   いたことだった。**通る組を先に全部並べて一様に引く**と943通りに散り 0.05 になった。
 1. **軸を増やす** — 場面・道具・問い方（数を小さく保ったまま組み合わせを稼ぐ）
+
+   **軸を足したら、実際に何通りになったかを `check_cell` で測る。**
+   `g1_l56` は階級数と場面をどちらも `n % 8` から作ったので、64通りのはずが
+   **8通りにしかならず** dup が 0.34 に跳ねた（別の桁 `n // 8` から作って 0.05）。
 2. **params に記録する** — 場面が params に無いと `dup_key` が話の違いを見落とす
 3. **問題空間の狭さを宣言する** — `SpecLevel.dup_rate_max`（`dup_rate_reason` 必須）
 
@@ -89,9 +133,11 @@ D-13（存在しない道具）を「直した」あとに `build_corpus.py` →
 
 ### ③ 数が小さくても「場面に対して値がありえない」ことがある
 
-「さいころを800回投げて1の目が756回（相対度数0.945）」「100m走が9.1秒」は
-数がすべて小さい。**場面ごとに起こりうる値の幅を持たせる**しかない
-（`_FREQUENCY_TOOLS` / `_TIMED_EVENTS` がその形）。数の大きさの検査では捕まらない。
+「さいころを800回投げて1の目が756回」「100m走が9.1秒」「有権者240人の市」
+「337個の階級に分けた度数分布表」「円周角が1°」は数がすべて小さい。
+**場面ごとに起こりうる値の幅を持たせる**しかない
+（`_FREQUENCY_TOOLS` / `_TIMED_EVENTS` / `scene_set` の `lo,hi,step` がその形）。
+数の大きさの検査では捕まらない。
 
 ### ④ 定義域を触ったら必ず `check_cell` を回す
 
@@ -108,23 +154,34 @@ D-27 で目盛りを間引いたとき、`tick_labels_from_params`（G-Q5v の w
 `test_recall_rule_double_solve_property` は solver を labels 無しで呼んで
 recipe の答えと比べていた。**checker と同じ経路**（`mr.params` から渡す）に直した。
 
+### ⑦ 「設計変更にテストが追随していない」は、E-2 のあとも起きた
+
+3回目のセッションで `test_dup_rate_fails_under_impossible_threshold` が
+**HEAD の時点で落ちていた**（引き継ぎ書の「49,589 passed / 0 failed」はコミットされた
+状態には当てはまっていなかった。**HEAD に worktree を切って同じ1本だけを回して確認**）。
+原因は前任者が入れた `dup_rate_max` そのもの——テストは「閾値に -1.0 を渡せば全セルが
+不合格」という不変条件を書いていたが、宣言があるセルは宣言値で判定される。
+
 ---
 
-## 5. 道具（すべて `scratchpad/` にある。この commit に含めた）
+## 5. 道具（すべて `scratchpad/` にある）
 
 | 道具 | 何をするか |
 |---|---|
 | `scratchpad/check_cell.py` | **1セルの実測（rejects / dup）。これが本物の検証** |
-| `scratchpad/scan_defects.py` | コーパスを走査して文面の粗さ10種を数える（**再発検査**） |
-| `scratchpad/scan_point_names.py` | 答え・解説の記号が問題文にあるか（全630セル・D-10） |
-| `scratchpad/scan_big_numbers.py` | セルごとの最大の数・答えの分母を大きい順に（D-12） |
-| `scratchpad/scan_empty_hints.py` | 中身のないヒントに落ちているセル（D-17） |
+| `scratchpad/scan_defects.py` | コーパスを走査して文面の粗さ13種を数える（**再発検査**） |
+| `scratchpad/scan_detail.py` | 走査の当たりを、セル単位でマッチ箇所つきに展開する（偽陽性の切り分け用） |
+| `scratchpad/compact_cells.py` | コーパスを「問題＋答え」1問1ブロックに圧縮する（**精読の1周目用**） |
+| `scratchpad/extract_cells.py` | `INDEX.md` から特定の form/単元の節だけを抜く |
+| `scratchpad/scan_point_names.py` | 答え・解説の記号が問題文にあるか（→ **ゲートに昇格済み**） |
+| `scratchpad/scan_big_numbers.py` | セルごとの最大の数・答えの分母を大きい順に（**合否の基準を持たない**） |
+| `scratchpad/scan_empty_hints.py` | 中身のないヒントに落ちているセル（→ **ゲートに昇格済み**） |
 | `scratchpad/check_figure_matches_givens.py` | 図の座標が仮定を満たすか（905枚） |
 | `scratchpad/peek_many.py` | 複数セル・複数 seed をまとめて素で見る |
 | `scratchpad/audit_progress.py` | 進捗の6検査（**進捗を書く前に必ず回す**） |
 | `scratchpad/build_corpus.py` → `build_html.py` | 全型のコーパス生成（約14分＋1分） |
 
-記録は `scratchpad/corpus/EVALUATION.md`（欠陥29件・全件✅）と
+記録は `scratchpad/corpus/EVALUATION.md`（欠陥43件・全件✅）と
 `scratchpad/corpus/FIXES.md`（直し方と実測値）。
 
 **`scratchpad/corpus/mongene_problems.html`（2.5MB）と `figs/` は commit していない**
@@ -138,23 +195,25 @@ recipe の答えと比べていた。**checker と同じ経路**（`mr.params` �
 PYTHONPATH=. .venv/bin/python scratchpad/check_cell.py <unit> <form> <lv,lv>
 PYTHONPATH=. .venv/bin/python scratchpad/scan_defects.py
 PYTHONPATH=. .venv/bin/python -m pytest engine_tests -q --no-cov -n auto   # 約25分
-PYTHONPATH=. .venv/bin/python -m engine.eval                              # 約25分・exit 0 が DoD
+PYTHONPATH=. .venv/bin/python -m engine.eval                              # 約30分・exit 0 が DoD
 ```
 
 **`pytest -q`（パス指定なし）はエンジンを1本もテストしない。**
 `pyproject.toml` の `testpaths=["tests"]` が旧 apps スタックを指すので、
 `engine_tests` を必ず明示すること。
 
-**問題文か答えの表示を変えたら golden の再承認が要る。** 1プロセスで回すこと
-（family ごとに subprocess を起こすと10倍遅い）:
+**問題文か答えの表示を変えたら golden の再承認が要る。**
+**盲目的に全279 family を承認しないこと。** 先に golden テストを回して
+**落ちた family の一覧を取り、意図した変更と一致することを確かめてから**承認する
+（3回目のセッションでは 27 failed = 9セル×3seed / 7 failed = 3 family で、
+どちらも意図した surface とちょうど一致した）。
 
 ```bash
+PYTHONPATH=. .venv/bin/python -m pytest engine_tests/golden -q --no-cov -n 4   # 落ちた一覧を取る
 PYTHONPATH=. .venv/bin/python - <<'EOF'
-import pathlib
 from engine.tools import spec_cli
-for p in sorted(pathlib.Path("engine_tests/golden").iterdir()):
-    if p.is_dir() and p.name != "__pycache__":
-        spec_cli.main(["approve", p.name])
+for name in ["math.g1_l45.knowledge", ...]:   # 落ちた family だけ
+    spec_cli.main(["approve", name])
 EOF
 ```
 
@@ -167,13 +226,17 @@ EOF
 
 ## 7. 次の一手
 
-1. **`engine.eval` を回す**（§2 の但し書き。最後の4件がまだ eval を通っていない）
-2. **`build_corpus.py` → `build_html.py` → `scan_defects.py` を回し、走査が空になるまで直す**
-   （§4 の①。いまは 2周目まで済んでいて、3周目が未実施）
-3. 未精読のところを読む（word_problem 90セル・中2 knowledge・中3 calculation）
-4. 走査3つ（`scan_point_names` `scan_big_numbers` `scan_empty_hints`）をゲートに昇格させる
-   — `scan_point_names` の偽陽性は1件だけ（`g2_l15` の「A=B=C」）なので、
-   除外規則を1つ足せばそのまま入る
+1. **`scan_big_numbers` のゲート化**（残った1つ）。道具の説明自身が
+   「数が大きいこと自体は欠陥ではない（標本調査の20000個・有効数字の9780は適切）」と
+   書いているとおり、**合否の基準を持っていない**。ゲートにするなら「問題文の数」では
+   なく**答えの大きさ**（分母・分子・根号の中）に上限を置き、超えるセルは
+   `dup_rate_max` と同じ形で理由つきに宣言する形になる。確率の答えは分数が作法なので、
+   宣言の中心はそこになる
+2. **残りの form の精読**（proof 51セル・find_value 105セル）。3回目のセッションで
+   読んだのは word_problem 全100・中2 knowledge・中3 calculation・
+   新たに見えた213セルの答え
+3. **「図に言及しているのに図が無い」「答えが問題文にそのまま出ている」の検査**
+   （`EVALUATION.md` の「足りないゲート」の表で未実装のまま）
 
 ---
 
@@ -181,6 +244,275 @@ EOF
 
 | | 中身 | なぜ残したか |
 |---|---|---|
-| D-12 の裾 | 素因数分解 3822・複合立体 16320cm³・不等式の 2896円 | 大半は教材として通る範囲。一律に狭めない |
-| 未精読 | word_problem 90セル・中2 knowledge・中3 calculation | 通読はしたが精読していない |
+| D-12 の裾 | 素因数分解 3822・複合立体 16320cm³・不等式の 2896円・`y = 411x²`・「367より大きい数ならば」・確率 `223/256` | 答えに効かない飾り。大半は教材として通る範囲。一律に狭めない |
+| `g3_l34.graph_table.Lv2` の変域 `-25/2 ≦ y ≦ 0` | 変域を分数で書く教科書はある。同じ表示関数が作る `傾き -5/4` を小数にすると逆に誤りになる |
+| 相対度数 `0.21875`（総度数32） | 細かいが誤りではない |
 | `dup_rate_max` の宣言 | 確率まわり5セル（0.35〜0.80）・多角形6セル（0.90）・絶対値1セル（0.30）・連続2数1セル（0.60） | どれも**問題空間が本質的に狭い**ため。理由は各 YAML の `dup_rate_reason` に書いてある |
+
+---
+
+## 9. 3回目のセッション（2026-08-10）で何をしたか
+
+### やった順
+
+1. **`engine.eval` を回した**（前の版の唯一の未確認事項）→ **4ゲート全通過・exit 0**
+2. **未精読3か所を精読**（中3 calculation 全件・中2 knowledge 全件・word_problem 全100セル）
+   → D-29 / D-30 / D-31
+3. **コーパス3周目 → 走査** → R-1〜R-5
+4. 8件を直して golden を9 family 再承認
+5. **`build_corpus.py` の穴を直した**（1小問目しか答えを出していなかった）
+6. **コーパス4周目 → 走査** → R-6 / R-7（213セル分の答えが初めて見えた結果）
+7. **コーパス5周目 → 走査は空**。そのうえで**新たに見えた答えを読んだ** → R-8〜R-11
+8. **コーパス6周目 → 走査は空**（実物0件・残りは既知の偽陽性のみ）
+9. **走査2つをゲートに昇格**（`engine/eval/text_quality.py`）
+
+### 新しいゲート `text_quality`（`engine.eval` の5つ目）
+
+前の4つ（coverage / dup_rate / level_sep / retry）はどれも**構造**しか見ていない。
+「その問題が教材としてありうるか」を測るものが無かったので、走査として動いていた
+2つを回帰の歯止めとして上げた。
+
+| 検査 | 捕まるもの |
+|---|---|
+| 記号の食い違い | D-10（12セル）・D-25（生の sympy `Eq(...)` の E も釣れた） |
+| 中身のないヒント | D-17（26セル） |
+
+**2つの検査は1回の generate を共有する**（別ゲートにすると630セル分の生成が二重になる）。
+`scan_point_names` の偽陽性は1件（`g2_l15` の `A=B=C` ＝式そのものの代わりに使う
+一般形の書き方）だけだったので、**除外規則を1つだけ**足して入れた。
+
+### 走査に足した再発検査（`scan_defects.py`）
+
+| 検査 | 由来 |
+|---|---|
+| 代表値を分数で答えている | R-1（`平均値 271/8`） |
+| 角の大きさが分数 | R-2（`225/2°`） |
+| 問うている数を問題文が与えている | D-29（「およその数を調べたい」＋「対象は全部で」） |
+| 存在しない面数の道具の**例外** | R-5（倍数の包除は50枚まで許す・理由つき） |
+
+---
+
+## 10. 3回目のセッションで直した14件（座標と実測値）
+
+| | セル | 中身 | rejects | dup |
+|---|---|---|---|---|
+| D-29 | `g3_l57.word_problem.Lv2` | 母集団の幅を場面ごとに | 0/120 | 0.06 |
+| D-29 | `g3_l58.word_problem.Lv2` | 同上＋単位（ごみは世帯） | 0/120 | 0.14 |
+| D-29 | `g1_l58.word_problem.Lv4` | 同上 | 0/120 | 0.12 |
+| D-30 | `g2_l51.knowledge.Lv1` | 例文の作り直し・カード5〜19枚 | 0/120 | 0.17 |
+| D-30 | `g1_l59.knowledge.Lv1` | 同上 | 0/120 | 0.04 |
+| D-31 | `exam_l4.word_problem.Lv4` | 体積の係数に上限 | 0/120 | 0.02 |
+| D-31 | `g1_l15.word_problem.Lv2` | 答えの分母に上限＋文字の軸 | 0/120 | 0.14 |
+| D-31 | `g3_l29.word_problem.Lv3` | m に上限＋言い方3通り | 0/120 | 0.15 |
+| R-1 | `g1_l57.calculation.Lv1` | 平均が割り切れる組＋小数表示 | 0/120 | 0.00 |
+| R-2 | `g3_l50.find_value.Lv3` | 円周角が整数になる組だけ | 0/120 | 0.00 |
+| R-3 | `g3_l16.calculation.Lv2` | 分母99以下の組を全列挙して一様に引く | 0/120 | 0.05 |
+| R-4 | `g2_l8.calculation.Lv1` | テンプレートの半角スペース | 0/120 | 0.08 |
+| R-5 | `g2_l51.word_problem.Lv3` | カード上限 60→50 | 0/120 | 0.19 |
+| R-6 | `g1_l55.graph_table.Lv2` | 総度数を 20/25/40/50 に＋小数表示 | 0/120 | 0.00 |
+| R-7 | `exam_l7.graph_table.Lv3` | 四分位数を小数表示 | 0/120 | 0.00 |
+| R-8 | `g1_l45.knowledge.Lv2` | 問いの型を答えの型にそろえた | 0/120 | 0.06 |
+| R-9 | `g1_l56.knowledge.Lv1` | 階級5〜12個＋場面8・総度数7の軸 | 0/120 | 0.05 |
+| R-10 | `g3_l48.knowledge.Lv2` | 円周角20〜80°・差5°以上 | 0/120 | 0.00 |
+| R-11 | `g1_l58.graph_table.Lv3` | 階級値を小数表示 | 0/120 | 0.00 |
+
+（`g2_l56.graph_table.Lv3` は R-7 と同じ solver なので一緒に直った）
+
+---
+
+## 11-A. 4回目のセッション（2026-08-13）— 未読の form を読んで9件
+
+3回目の「確かめていないこと」（§11-B）を回しながら、**まだ読んでいなかった form**を読んだ。
+走査は6周目で空だったので、**ここで出たものはすべて機械の走査に一度も引っかかっていない**。
+
+読んだ範囲: **find_value 105セル・proof 51セル・graph_table/construction 全件・
+中1 knowledge/calculation・中2 calculation・中3 knowledge・exam の残り**。
+これで **630セル全部が少なくとも1回は読まれた**ことになる。
+proof 51セルは**欠陥なし**（探索と前向き推論で作ったぶん文面が安定している）。
+
+| | セル | 中身 | 根 |
+|---|---|---|---|
+| S-1【致命】 | `g3_l43.find_value.Lv2` | 線分の長さが **`EM=-5cm`** | 新種 |
+| S-2【致命】 | `g1_l50.graph_table` | 「1辺が14cmの立方体」の**高さが 3cm** | 新種 |
+| S-3 | `g2_l56`/`g2_l57`/`exam_l7` 箱ひげ図 | 自由形の記録 **4秒**・睡眠時間の第一四分位数 **3時間** | D-29 |
+| S-4【致命】 | `g1_l56.calculation.Lv2` | 階級が「1区間目…」で**どれが8時間未満か読めない＝解けない** | 新種 |
+| S-5 | `g3_l26.knowledge.Lv1` | 「係数**を何といいますか**」の答えが `b` | R-8 |
+| S-6 | `g3_l57`/`g3_l58.knowledge.Lv1` | **22個（人）の集団**に「標本調査」 | D-29 |
+| S-7 | `g2_l53.find_value.Lv2` | 候補にいると書いていない人の確率 | 新種 |
+| S-8 | `g3_l37`/`exam_l2.find_value.Lv3` | 線分ABが **`5√442`** | D-31 |
+| S-9【致命】 | `g3_l52.find_value`/`knowledge.Lv2` | **三角形にならない3辺**（5・12・19 / 7・24・33） | S-1 と同じ |
+| S-10 | `g1_l1.knowledge.Lv2`・`g1_l15.knowledge.Lv1` | 「」 を、」「44 km/時 で」の半角スペース（7周目の走査で出た） | D-3 / R-4 |
+
+**全20セルを `check_cell` で実測** — rejects=0/120・dup すべて閾値内（0.00〜0.16）。
+直し方は `scratchpad/corpus/FIXES.md` の「4回目のセッション」に全部ある。
+
+### この回で分かったこと（前の3つに足すもの）
+
+```
+①   コーパスを作り直して読み直すまで、同じ根の別の出口は見えない（1回目）
+①'  走査は、コーパスが印字したものしか見られない（3回目）
+①'' 走査が空になっても、読むと出る（3回目）
+①'''走査の検査は「予期した壊れ方」しか見ない。予期していない壊れ方は全部すり抜ける
+```
+
+S-1（負の長さ）・S-4（解けない）・S-9（存在しない三角形）は**質の話ではなく
+「問題として壊れている」**。走査は「大きすぎる数」「分数の答え」のような
+**形が決まっている欠陥**を探す道具なので、この種類は原理的に見つけられない。
+
+もう1つ、**S-1 / S-2 / S-9 は同じ形の見落とし**だった:
+
+> **引いたあと、組み上がったものが場面として成り立つかを見ていない。**
+> answer-first で先に決めるのは**答え**であって、**場面の整合ではない**。
+> 「答えは正しいが、その図形は存在しない」は double-solve を素通りする。
+
+この形の再発を止めるために、走査に**2つの検査**を足した（`scan_defects.py`）:
+`長さ・個数が負` と `3辺が三角形にならない`。
+
+### S-8 で分かった、上限の決め方
+
+**上限は当てずっぽうで置かない。** 上限を決めたら、**その上限で組が何通り残るかを
+先に数える**。100 seed の distinct は概ね `N(1 − (1 − 1/N)^100)` なので、
+`check_cell` を回す前に dup がいくつになるか分かる（dup ≤ 0.20 には約250通り要る）。
+S-8 は 528→288通りと数えて dup ≈ 0.15 と見積もり、実測 0.16 / 0.15 だった。
+
+---
+
+## 11-A2. 【最重要】4回目のセッションの終了時点（2026-08-13）
+
+**このセッションもテストの全走の途中で止めた。** 何が済んで何が済んでいないかを分ける。
+
+### ✅ 確かめたこと（実測値がある）
+
+| | 結果 |
+|---|---|
+| `check_cell.py`（**S-1〜S-10 の20セル**） | **全セル rejects=0/120・dup 0.00〜0.16**（すべて閾値内） |
+| `scan_defects.py`（**7周目**） | 実物2件（S-10）→ 直した。残りは既知の偽陽性のみ |
+| `engine_tests/eval/test_eval_suite.py` | **13 passed / 0 failed**（1時間4分）。§11-B で未確認だった `test_dup_rate_fails_under_impossible_threshold` が**通った** |
+| `engine_tests/golden`（S-1〜S-9 のあと） | 23 failed = **9 family**。全部このセッションで変更したセルと一致 |
+| golden の再承認 | **9 family を承認済み**（`spec_cli approve` を1プロセスで実行） |
+| `engine_tests` 全走（承認後） | **98%まで進んで failures 0**。そこで停止 |
+
+### ❌ 確かめていないこと（**再開したらこの順で**）
+
+| | なぜ未確認か |
+|---|---|
+| **`engine_tests` の残り2%** | 98%・0 failed まで進めて止めた。残りは golden の後半と eval |
+| **golden の再検証** | 承認したあと、golden テストを回し直していない |
+| **`engine.eval`（5ゲート）** | **このセッションでは1度も回していない**。前回 exit 0 を確認したのは3回目の修正前の版 |
+| **`audit_progress.py`（台帳630/630）** | 3・4回目とも未実行 |
+| **図の回帰（`check_figure_matches_givens.py`）** | 未実行 |
+
+```bash
+# 1. 全走（約60〜70分。eval スイート単体で1時間かかる）
+PYTHONPATH=. .venv/bin/python -m pytest engine_tests -q --no-cov -n auto
+
+# 2. 5ゲートの通し（exit 0 が DoD）
+PYTHONPATH=. .venv/bin/python -m engine.eval
+
+# 3. 台帳と図
+PYTHONPATH=. .venv/bin/python scratchpad/audit_progress.py
+PYTHONPATH=. .venv/bin/python scratchpad/check_figure_matches_givens.py
+```
+
+### 4回目のセッションの差分（`a8f2eb3` からの累積・**commit していない**）
+
+`119 files changed, 1620 insertions(+), 430 deletions(-)`
+
+| 種類 | 4回目で触ったもの |
+|---|---|
+| recipe | `parallel_line_ratio`（S-1）`solid_view`（S-2）`box_plot`（S-3）`statistics_distribution`（S-4）`letter_expr`（S-5/S-6/S-10）`probability`（S-7）`quadratic_function`（S-8）`pythagorean`（S-9） |
+| family YAML | `g2_l56.graph_table` `g2_l57.graph_table` `g2_l57.word_problem` `exam_l7.graph_table` `exam_l7.word_problem`（S-3）`g1_l56.calculation`（S-4） |
+| template | `letter_expr`（S-10 の `LF_OPPOSITE_QUANTITY_V1`） |
+| 走査の道具 | `scan_defects.py`（検査2つ追加＋偽陽性の除外1つ） |
+| golden | 9 family（承認済み・78ファイル） |
+| 記録 | この文書・`EVALUATION.md`（S-1〜S-10）・`FIXES.md`（4回目の節） |
+
+**commit していない。上の1〜3を通してから commit する。**
+
+### エンジンの外で作ったもの（このセッションの副産物）
+
+**対外説明用の解説ページ**（「どうやって問題生成しているのか」に答える資料）。
+公開先 `https://claude.ai/code/artifact/87856dcb-8f6d-4616-846e-4a0fc6d5cd97`。
+ソースは `scratchpad/`（未追跡）ではなくセッションの一時領域にあるため、
+**続きを作るなら作り直しになる**。中身で使った実測値だけ残す:
+
+| 使った数字 | 出どころ |
+|---|---|
+| 1つのセルの組み合わせ **502,656通り** | `g1_l25.word_problem.Lv2` の params から計算（合計個数8 × 答え平均8.5 × 単価132 × 品名56） |
+| でたらめに引くと使えるのは **5%** | 同じ定義域で10万回シミュレーション |
+| 骨組み **1,466種** | `build_corpus.py` の出力（630セルの型の総数） |
+| recipe 304・solver 273・文型235・184単元 | `@register_*` の数と family の数 |
+
+読み手からの指摘で**資料の作り直しを3回**した。効いた指摘は次の3つ:
+①「ふつうのやり方」を藁人形にしない（人も逆算する。対比すべきは*素朴なプログラム*）
+②アニメを見せるより**操作させる**
+③「AIなしで問題文を解釈できるのか」→ **していない**（渡すのは名札つきの数だけ）
+
+---
+
+## 11-B. 【最重要】3回目のセッションで**確かめていないこと**
+
+**このセッションは、最終確認の途中で中断した。**
+前任者の引き継ぎ書が「49,589 passed / 0 failed」と書いていながら実際には HEAD で
+1本落ちていた（§4 の⑦）——同じことを繰り返さないために、**確かめたことと
+確かめていないことを分けて書く**。
+
+### ✅ 確かめたこと（実測値がある）
+
+| | 結果 | いつ |
+|---|---|---|
+| `engine.eval`（**4ゲート**） | **exit 0・全通過** | **修正を入れる前**の版（＝前任者が残した未確認事項の解消） |
+| `check_cell.py`（19セル） | **全セル rejects=0/120・dup すべて閾値内** | 各修正の直後（§10 の表） |
+| `scan_defects.py`（6周目） | **実物0件**（残りは既知の偽陽性のみ） | 最後のコーパス生成のあと |
+| `engine.eval.text_quality`（seeds=5） | **0セル / 0セル** | **R-6〜R-11 を直す前** |
+| golden（1回目） | 27 failed = 9セル×3seed → 9 family 承認 | R-1〜R-5・D-29〜31 のあと |
+| golden（2回目） | 7 failed = 3 family → 3 family 承認 | R-8〜R-10 のあと |
+| `engine_tests`（golden 除く） | 48,260 passed / **1 failed** | R-1〜R-5 のあと。落ちた1本は§4⑦の既知（HEAD でも落ちる） |
+
+### ❌ 確かめていないこと（**再開したら最初にこれを回す**）
+
+| | なぜ未確認か |
+|---|---|
+| **`engine.eval`（5ゲート）を最新の版で** | 4ゲートを通したのは**修正前**の版。`text_quality` を足したあとの通し実行を**一度もしていない** |
+| **`engine_tests` の全走** | 95% まで進んで**0 failed** だったが、そこで中断した。**残り5%（eval と golden の一部）は未確認** |
+| **`test_dup_rate_fails_under_impossible_threshold` の修正が通ること** | テストは直したが、**直したあとに1度も通していない**（実行に1時間かかり、途中で止めた） |
+| **golden の再検証** | 3 family を承認したあと、golden テストを**回し直していない**（承認が正しく効いたかは未確認） |
+| **`text_quality` を R-6〜R-11 のあとで** | 0/0 を測ったのはそれより前。R-8（問いと答えの型）を直したので、記号の検査に影響しうる |
+| **`audit_progress.py`（台帳630/630）** | このセッションでは1度も回していない（台帳自体は触っていないので変わらないはずだが、未確認） |
+| **図の回帰（`check_figure_matches_givens.py`）** | 図を作る側は触っていないが、未確認 |
+
+### 再開したときの手順（この順で）
+
+```bash
+# 1. まず全走（約25分）。落ちたら §4⑦ の型を疑う（設計変更にテストが追随していない）
+PYTHONPATH=. .venv/bin/python -m pytest engine_tests -q --no-cov -n auto
+
+# 2. golden が落ちたら、落ちた family の一覧を取ってから承認する（盲目的に全承認しない）
+PYTHONPATH=. .venv/bin/python -m pytest engine_tests/golden -q --no-cov -n 4
+
+# 3. 5ゲートの通し（約30分・exit 0 が DoD）
+PYTHONPATH=. .venv/bin/python -m engine.eval
+
+# 4. 台帳と図の回帰
+PYTHONPATH=. .venv/bin/python scratchpad/audit_progress.py
+PYTHONPATH=. .venv/bin/python scratchpad/check_figure_matches_givens.py
+```
+
+### 中断時点の作業ツリー
+
+**commit していない。** `a8f2eb3` からの差分は次のとおり（`scratchpad/` の未追跡ファイルを除く）:
+
+| 種類 | ファイル数 | 中身 |
+|---|---|---|
+| family YAML | 7 | `g1_l15` `g1_l58` `g2_l51` `g3_l29` `g3_l48` `g3_l57` `g3_l58` |
+| recipe | 10 | `distribution_chart` `inscribed_angle` `letter_expr` `plane_geometry` `rational_form` `statistics_distribution` `statistics_inquiry` `word_problem_expression` `word_problem_pythagorean` `word_problem_quadratic` |
+| solver | 3 | `distribution_chart` `quartile` `statistics_distribution` |
+| template | 1 | `polynomial`（`LF_DIGIT_NUMBER_V1` の半角スペース） |
+| eval | 2 | `engine/eval/text_quality.py`（**新規**）・`engine/eval/__main__.py`（結線） |
+| test | 1 | `engine_tests/eval/test_eval_suite.py`（§4⑦） |
+| golden | 46 | 12 family × (3 seed + approval) |
+| 走査の道具 | 3 | `scan_defects.py`（検査4つ追加）・`build_corpus.py`（答えの出し方）・`scan_detail.py`（新規） |
+| 記録 | 3 | この文書・`EVALUATION.md`・`FIXES.md` |
+
+**未確認のまま commit しないこと。** 上の手順1〜4を通してから commit する。
+

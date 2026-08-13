@@ -24,7 +24,7 @@ meta:
   seed: 3
   signature: cumulative_frequency_terms_term_recall
 problem_ref: 6919b1525467e7fa
-problem_text: 480個の階級に分けた度数分布表で、いちばん小さい階級から対象の階級までの相対度数を合計した値を何といいますか。
+problem_text: 生徒35人の身長を5個の階級に分けた度数分布表で、いちばん小さい階級から対象の階級までの相対度数を合計した値を何といいますか。
 sub_questions:
 - answer:
     correct: 累積相対度数

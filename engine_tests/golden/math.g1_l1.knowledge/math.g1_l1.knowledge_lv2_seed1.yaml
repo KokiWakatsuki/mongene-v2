@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: number_opposite_quantity
 problem_ref: 774b8adc010b4caf
-problem_text: 「値上がり 449円」を +449円 と表すことにするとき、「値下がり 457円」 を、符号を使って表しなさい。
+problem_text: 「値上がり 449円」を +449円 と表すことにするとき、「値下がり 457円」を、符号を使って表しなさい。
 sub_questions:
 - answer:
     correct: '-457'

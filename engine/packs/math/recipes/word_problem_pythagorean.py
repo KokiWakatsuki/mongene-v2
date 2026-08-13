@@ -66,6 +66,7 @@ from __future__ import annotations
 import re
 from collections.abc import Callable, Mapping
 from dataclasses import dataclass
+from math import gcd
 from typing import Any, cast
 
 import sympy
@@ -955,9 +956,29 @@ def _scene_exam_cube_guided(p: Mapping[str, Any], rng: Rng) -> PythagoreanScene:
     )
 
 
+# 正四面体の体積 a³√2/12 の、既約分数にしたときの分子の上限。
+# 1辺6cm → 18√2、12cm → 144√2、18cm → 486√2 までが読める大きさ。
+_MAX_TETRAHEDRON_VOLUME_NUMERATOR = 500
+
+
+def _tetrahedron_edges(domain: Mapping[str, Any]) -> list[int]:
+    """1辺の候補のうち、**体積の係数が上限内**のものだけ（原則⓪: 答えの大きさで測る）。"""
+    lo, hi = (int(v) for v in cast("list[object]", domain["int_range"]))
+    return [
+        a
+        for a in range(lo, hi + 1)
+        if a**3 // gcd(a**3, 12) <= _MAX_TETRAHEDRON_VOLUME_NUMERATOR
+    ]
+
+
 def _scene_exam_regular_tetrahedron(p: Mapping[str, Any], rng: Rng) -> PythagoreanScene:
-    """exam_l4.word_problem Lv4: 正四面体の高さと体積（誘導なし1小問）。"""
-    edge = int(draw(p["edge_domain"], rng))
+    """exam_l4.word_problem Lv4: 正四面体の高さと体積（誘導なし1小問）。
+
+    **体積の係数が大きくなる1辺は引き直す**（EVALUATION D-31。体積は 1辺³×√2/12 なので、
+    定義域を 2〜24 に狭めても 1辺23cm で `12167√2/12 cm³` になっていた。壊れているのは
+    定義域の広さではなく答えの大きさ＝原則⓪）。教科書は1辺6cm（18√2）のあたりを使う。
+    """
+    edge = int(draw({"int_set": _tetrahedron_edges(p["edge_domain"])}, rng))
     n = _draw_consecutive_labels(4, rng)
     foot = str(_draw_from([str(v) for v in p["foot_candidates"] if str(v) not in n], rng))
     scenario = f"1辺が{edge}cmの正四面体{n}がある。"

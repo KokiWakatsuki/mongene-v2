@@ -24,14 +24,14 @@ meta:
   seed: 2
   signature: word_problem_multiple_union
 problem_ref: 81e52a8cc279b819
-problem_text: '1から41までの番号が1つずつ書かれた41枚のカードから1枚を引く。引いたカードの番号が3の倍数であるか、8の倍数であるかを考える。
+problem_text: '1から42までの番号が1つずつ書かれた42枚のカードから1枚を引く。引いたカードの番号が2の倍数であるか、5の倍数であるかを考える。
 
   そのどちらかの倍数である確率を求めよ。'
 sub_questions:
 - answer:
-    display: 17/41
+    display: 25/42
     kind: symbolic
-    srepr: Rational(17, 41)
+    srepr: Rational(25, 42)
   cause_tags: []
   concept_tags:
   - probability.word_problem_multiple_union
@@ -41,7 +41,7 @@ sub_questions:
 
     次に、両方の倍数に共通してあてはまる場合の数を数え、その確率を求める。（両方の倍数に共通する場合の数を数える）
 
-    最後に、重なっている分を引いて、どちらかの倍数である確率を求める。（17/41）'
+    最後に、重なっている分を引いて、どちらかの倍数である確率を求める。（25/42）'
   hints:
   - 一方の倍数の条件にあてはまる場合の数を数え、その確率を求める。
   - もう一方の倍数の条件にあてはまる場合の数を数え、その確率を求める。
@@ -67,6 +67,6 @@ sub_questions:
   - args: []
     narration: 重なっている分を引いて、どちらかの倍数である確率を求める。
     op: apply_inclusion_exclusion
-    result_display: 17/41
-    result_srepr: Rational(17, 41)
+    result_display: 25/42
+    result_srepr: Rational(25, 42)
 visual_svg: null

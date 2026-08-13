@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: judge_parallel_from_ratio
 problem_ref: 067aa2c5550623e7
-problem_text: 三角形DNFで、辺DN, DF上に点L, Bがある。DL=3cm, LN=15cm, DB=36cm, BF=180cm であるとき、LBとNFが平行であるかどうかを、比を調べて答えよ。
+problem_text: 三角形DNFで、辺DN, DF上に点L, Bがある。DL=16cm, LN=6cm, DB=16cm, BF=6cm であるとき、LBとNFが平行であるかどうかを、比を調べて答えよ。
 sub_questions:
 - answer:
     display: 平行である

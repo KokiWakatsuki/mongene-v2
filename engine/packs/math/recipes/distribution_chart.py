@@ -345,6 +345,29 @@ def compare_distribution_shape_recipe(ctx: CellContext, rng: Rng) -> MR:
 _RELATIVE_POLYGON_CONCEPTS = ["frequency_polygon.draw_relative_frequency"]
 
 
+# 相対度数がすべて小数で書き切れる総度数（2 と 5 だけでできた数）。
+# 度数を独立に引いていたので総度数が36人になり「相対度数は 1/6」と出ていた
+# （EVALUATION D-24 の取りこぼし＝R-6）。教科書は総度数を 20・25・40・50 のような
+# きりのよい人数にとる。度数の定義域（2〜12）は狭めていない。
+_TERMINATING_TOTALS = (20, 25, 40, 50)
+
+
+def _draw_terminating_freqs(p: Mapping[str, Any], n_classes: int, rng: Rng) -> list[int]:
+    """総度数がきりのよい人数になる度数の組（各階級の相対度数が必ず小数で書ける）。
+
+    最後の1つを「合計が目標になる値」に決めるだけで、他の階級は今までどおり自由に
+    引く（組み合わせは十分残る）。目標に届かない引きになったら引き直す。
+    """
+    lo, hi = (int(v) for v in cast("list[object]", p["frequency_domain"]["int_range"]))
+    for _ in range(200):
+        total = int(draw({"int_set": list(_TERMINATING_TOTALS)}, rng))
+        head = [int(draw(p["frequency_domain"], rng)) for _ in range(n_classes - 1)]
+        last = total - sum(head)
+        if lo <= last <= hi and len(set([*head, last])) > 1:
+            return [*head, last]
+    raise ValueError("_draw_terminating_freqs: 総度数がきりのよい人数になる度数を構成できず")
+
+
 def _avoid_flat(freqs: list[int], rng: Rng) -> list[int]:
     """度数が全部同じ（分布の形が読めない）退化を1つだけ持ち上げて避ける。"""
     if len(set(freqs)) > 1:
@@ -365,7 +388,7 @@ def relative_frequency_polygon_recipe(ctx: CellContext, rng: Rng) -> MR:
     p = ctx.spec_level.params
     n_classes = int(draw(p["n_classes"], rng))
     scene, unit, lo, width = _scene(rng)
-    freqs = _avoid_flat([int(draw(p["frequency_domain"], rng)) for _ in range(n_classes)], rng)
+    freqs = _draw_terminating_freqs(p, n_classes, rng)
 
     solver = REGISTRY.solver("math.relative_frequency_polygon")
     sol = cast(Solution, solver(freqs, lo, width, unit))

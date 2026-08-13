@@ -24,12 +24,12 @@ meta:
   seed: 2
   signature: representative_values_raw
 problem_ref: 81c57fc30b4d8293
-problem_text: 次の9個のデータの平均値・中央値・最頻値をそれぞれ求めよ。〔1、20、39、20、5、41、7、25、13〕。
+problem_text: 次の9個のデータの平均値・中央値・最頻値をそれぞれ求めよ。〔1、5、39、20、5、41、7、22、13〕。
 sub_questions:
 - answer:
-    display: 平均値 19、中央値 20、最頻値 20
+    display: 平均値 17、中央値 13、最頻値 5
     kind: symbolic
-    srepr: Tuple(Integer(19), Integer(20), Integer(20))
+    srepr: Tuple(Integer(17), Integer(13), Integer(5))
   cause_tags: []
   concept_tags:
   - representative_value.compute_raw
@@ -37,7 +37,7 @@ sub_questions:
 
     次に、データを大きさの順に並べ、中央の値（個数が偶数のときは中央に並ぶ値どうしの平均）を求める。（大きさの順に並べた中央の値を読み取る）
 
-    最後に、もっとも個数が多く現れる値を求める。（平均値 19、中央値 20、最頻値 20）'
+    最後に、もっとも個数が多く現れる値を求める。（平均値 17、中央値 13、最頻値 5）'
   hints:
   - データの値をすべて足し合わせ、個数でわって平均値を求める。
   - データを大きさの順に並べ、中央の値（個数が偶数のときは中央に並ぶ値どうしの平均）を求める。
@@ -57,6 +57,6 @@ sub_questions:
   - args: []
     narration: もっとも個数が多く現れる値を求める。
     op: compute_mode
-    result_display: 平均値 19、中央値 20、最頻値 20
-    result_srepr: Tuple(Integer(19), Integer(20), Integer(20))
+    result_display: 平均値 17、中央値 13、最頻値 5
+    result_srepr: Tuple(Integer(17), Integer(13), Integer(5))
 visual_svg: null

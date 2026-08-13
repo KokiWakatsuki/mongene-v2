@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: judge_concyclic_from_angle
 problem_ref: 667224c3a643e7ba
-problem_text: 直線DBについて同じ側に点G, Hがある。∠DGB=43°、∠DHB=35° のとき、4点D, B, G, Hが同一円周上にあるといえるかどうかを、理由とともに答えよ。
+problem_text: 直線DBについて同じ側に点G, Hがある。∠DGB=48°、∠DHB=36° のとき、4点D, B, G, Hが同一円周上にあるといえるかどうかを、理由とともに答えよ。
 sub_questions:
 - answer:
     correct: 同一円周上にあるとはいえない

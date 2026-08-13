@@ -24,12 +24,12 @@ meta:
   seed: 2
   signature: equal_arc_inscribed_angle
 problem_ref: 59a06c2befa30654
-problem_text: 円周を7等分する点を順にKLGBCAHとする。これらの点を頂点とする七角形について、∠HKBの大きさを求めよ。
+problem_text: 円周を6等分する点を順にCEGLJMとする。これらの点を頂点とする六角形について、∠MCEの大きさを求めよ。
 sub_questions:
 - answer:
-    display: 540/7°
+    display: 120°
     kind: symbolic
-    srepr: Rational(540, 7)
+    srepr: Integer(120)
   cause_tags: []
   concept_tags:
   - circle.equal_arc_inscribed_angle
@@ -37,7 +37,7 @@ sub_questions:
 
     次に、角の頂点をふくまない側の弧が、等分した弧の何個分にあたるかを数える。（角の頂点をふくまない側の弧が単位弧の何個分かを数える）
 
-    最後に、弧の長さは円周角の大きさに比例することから、求める角の大きさを求める。（540/7°）'
+    最後に、弧の長さは円周角の大きさに比例することから、求める角の大きさを求める。（120°）'
   hints:
   - 円周をn等分してできる1つの弧に対する中心角から、その弧に対する円周角を求める。
   - 角の頂点をふくまない側の弧が、等分した弧の何個分にあたるかを数える。
@@ -57,6 +57,6 @@ sub_questions:
   - args: []
     narration: 弧の長さは円周角の大きさに比例することから、求める角の大きさを求める。
     op: apply_inscribed_angle_theorem
-    result_display: 540/7°
-    result_srepr: Rational(540, 7)
+    result_display: 120°
+    result_srepr: Integer(120)
 visual_svg: null

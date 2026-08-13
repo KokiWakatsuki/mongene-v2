@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: judge_circle_property
 problem_ref: f34688fbc53ee474
-problem_text: 中心N、半径4cmの円で、中心角が2倍になると、それに対する弧の長さはどうなるか、答えよ。
+problem_text: 中心N、半径4cmの円で、「中心角の大きさを2倍にすると、それに対する弧の長さも2倍になる」といえるか、答えよ。
 sub_questions:
 - answer:
     correct: 正しい

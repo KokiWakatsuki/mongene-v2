@@ -24,7 +24,7 @@ meta:
   seed: 3
   signature: two_digit_number_property
 problem_ref: 6b82661bbbef98cb
-problem_text: 十の位が k、一の位が t の2けたの自然数 10k+t と、位を入れかえた数 10t+k の差 を計算し、式を簡単にせよ。
+problem_text: 十の位が k、一の位が t の2けたの自然数 10k+t と、位を入れかえた数 10t+k の差を計算し、式を簡単にせよ。
 sub_questions:
 - answer:
     display: 9k - 9t

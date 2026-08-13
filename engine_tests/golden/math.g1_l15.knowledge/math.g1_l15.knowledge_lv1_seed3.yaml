@@ -24,7 +24,7 @@ meta:
   seed: 3
   signature: speed_relation_rule_recall
 problem_ref: b035a62320a307f2
-problem_text: 道のり 55 km を 18 時間で進む場面のように、道のり・速さ・時間の関係で「速さ」を求める式。正しく述べているものを1つ選びなさい。
+problem_text: 道のり55kmを18時間で進む場面のように、道のり・速さ・時間の関係で「速さ」を求める式。正しく述べているものを1つ選びなさい。
 sub_questions:
 - answer:
     correct: （速さ）＝（道のり）÷（時間）

@@ -261,13 +261,20 @@ def cumulative_relative_frequency_and_complement_recipe(ctx: CellContext, rng: R
         for i in range(total - base * n_classes):
             freqs[i] += 1
     target_index = int(draw({"int_range": [0, n_classes - 2]}, rng))
-    boundary_hour = int(draw(p["boundary_domain"], rng))
+    # 階級を「1区間目…」と書き、境界の時刻を別に引いていたので、どの区間が
+    # 「8時間未満」なのかが表から読めず、問題として解けなかった。階級に実際の
+    # 時間の範囲を書き、境界はその階級の上端として導く。
+    start_hour = int(draw(p["start_domain"], rng))
+    boundary_hour = start_hour + target_index + 1
 
     solver = REGISTRY.solver("math.cumulative_relative_frequency_and_complement")
     sol = cast(Solution, solver(freqs, target_index))
     assert isinstance(sol.answer, SymbolicAnswer)
 
-    table_text = "、".join(f"{i+1}区間目…{f}人" for i, f in enumerate(freqs))
+    table_text = "、".join(
+        f"{start_hour + i}時間以上{start_hour + i + 1}時間未満…{f}人"
+        for i, f in enumerate(freqs)
+    )
     statement = (
         f"生徒{total}人の睡眠時間を調べた度数分布表がある。{boundary_hour}時間未満の生徒までの"
         f"累積相対度数を求めよ。また、睡眠時間が{boundary_hour}時間以上の生徒は全体の何％か求めよ。"
@@ -303,11 +310,18 @@ def representative_values_raw_recipe(ctx: CellContext, rng: Rng) -> MR:
     rng_state = rng
     distinct = []
     remaining = list(pool)
-    for _ in range(n - 1):
+    for _ in range(n - 2):
         v = int(draw({"int_set": remaining}, rng_state))
         distinct.append(v)
         remaining = [x for x in remaining if x != v]
     dup_value = int(draw({"int_set": distinct}, rng_state))
+    # **最後の1つは、平均値が割り切れる値だけから引く。**（EVALUATION D-28 と同じ根。
+    # 値を独立に引いていたので合計271・個数8で「平均値 271/8」という、教材にならない
+    # 答えが出ていた。定義域は狭めず、**答えの大きさ側で**割り切れる組に限る。）
+    partial = sum(distinct) + dup_value
+    divisible = [v for v in remaining if (partial + v) % n == 0]
+    last = int(draw({"int_set": divisible or remaining}, rng_state))
+    distinct.append(last)
     data = distinct + [dup_value]
     # 出現順をシャッフル（辞書順そのままだと surface が単調になりやすいので軽く混ぜる）。
     for i in range(len(data) - 1, 0, -1):

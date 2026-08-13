@@ -32,6 +32,27 @@ def _ints(values: object) -> list[int]:
     return [int(str(v)) for v in cast("list[object]", values)]
 
 
+def _fmt_decimal(value: sympy.Rational) -> str:
+    """割り切れるなら小数、割り切れなければ分数のまま。
+
+    相対度数は小数で答えるのが教材の作法（EVALUATION D-24）。recipe が割り切れる
+    組だけを引くので、実際には常に小数になる——割り切れない値がここに来たら、
+    recipe 側の構成が崩れた合図なので分数のまま出して見えるようにする。
+    """
+    q = int(value.q)
+    while q % 2 == 0:
+        q //= 2
+    while q % 5 == 0:
+        q //= 5
+    if q != 1:
+        return str(value)
+    digits, r = 0, sympy.Rational(value)
+    while r.q != 1:
+        r *= 10
+        digits += 1
+    return f"{float(value):.{digits}f}" if digits else str(int(value))
+
+
 def _class_bounds(class_lo: int, class_width: int, index: int) -> tuple[int, int]:
     lo = class_lo + class_width * index
     return lo, lo + class_width
@@ -285,7 +306,9 @@ def relative_frequency_polygon(
             Feature(
                 kind="relative_frequency",
                 srepr=sympy.srepr(sympy.Tuple(sympy.Integer(c_lo), rel)),
-                display=f"{c_lo}{u}以上{c_hi}{u}未満の相対度数は{rel}",
+                # **相対度数は小数で書く**（EVALUATION D-24。`1/6` と出ていた）。
+                # recipe が「総度数が 20・25・40・50」の組だけを引くので必ず割り切れる。
+                display=f"{c_lo}{u}以上{c_hi}{u}未満の相対度数は{_fmt_decimal(rel)}",
             )
         )
     for i, f in enumerate(freqs):
@@ -294,7 +317,10 @@ def relative_frequency_polygon(
             Feature(
                 kind="polygon_vertex",
                 srepr=sympy.srepr(sympy.Tuple(mid, sympy.Integer(f))),
-                display=f"折れ線の頂点（階級値{mid}{u}、度数{f}人）",
+                # 階級値は「下端と上端の平均」なので階級幅が奇数だと x.5 になる。
+                # **小数で書き切れるなら小数**（EVALUATION D-5/R-11。`25/2kg` と
+                # 仮分数で出ていた）。
+                display=f"折れ線の頂点（階級値{_fmt_decimal(mid)}{u}、度数{f}人）",
             )
         )
 
@@ -465,7 +491,7 @@ def overlay_frequency_polygons(
                 Feature(
                     kind=kind,
                     srepr=sympy.srepr(sympy.Tuple(sympy.Symbol(kind), mid, sympy.Integer(f))),
-                    display=f"{names[kind]}の折れ線の頂点（階級値{mid}{u}、度数{f}人）",
+                    display=f"{names[kind]}の折れ線の頂点（階級値{_fmt_decimal(mid)}{u}、度数{f}人）",
                 )
             )
 

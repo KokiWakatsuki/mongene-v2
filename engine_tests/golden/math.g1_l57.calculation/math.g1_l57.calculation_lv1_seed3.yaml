@@ -24,12 +24,12 @@ meta:
   seed: 3
   signature: representative_values_raw
 problem_ref: d15c68ebcd283c61
-problem_text: 次の6個のデータの平均値・中央値・最頻値をそれぞれ求めよ。〔41、44、4、49、1、49〕。
+problem_text: 次の6個のデータの平均値・中央値・最頻値をそれぞれ求めよ。〔41、44、4、4、26、49〕。
 sub_questions:
 - answer:
-    display: 平均値 94/3、中央値 85/2、最頻値 49
+    display: 平均値 28、中央値 33.5、最頻値 4
     kind: symbolic
-    srepr: Tuple(Rational(94, 3), Rational(85, 2), Integer(49))
+    srepr: Tuple(Integer(28), Rational(67, 2), Integer(4))
   cause_tags: []
   concept_tags:
   - representative_value.compute_raw
@@ -37,7 +37,7 @@ sub_questions:
 
     次に、データを大きさの順に並べ、中央の値（個数が偶数のときは中央に並ぶ値どうしの平均）を求める。（大きさの順に並べた中央の値を読み取る）
 
-    最後に、もっとも個数が多く現れる値を求める。（平均値 94/3、中央値 85/2、最頻値 49）'
+    最後に、もっとも個数が多く現れる値を求める。（平均値 28、中央値 33.5、最頻値 4）'
   hints:
   - データの値をすべて足し合わせ、個数でわって平均値を求める。
   - データを大きさの順に並べ、中央の値（個数が偶数のときは中央に並ぶ値どうしの平均）を求める。
@@ -57,6 +57,6 @@ sub_questions:
   - args: []
     narration: もっとも個数が多く現れる値を求める。
     op: compute_mode
-    result_display: 平均値 94/3、中央値 85/2、最頻値 49
-    result_srepr: Tuple(Rational(94, 3), Rational(85, 2), Integer(49))
+    result_display: 平均値 28、中央値 33.5、最頻値 4
+    result_srepr: Tuple(Integer(28), Rational(67, 2), Integer(4))
 visual_svg: null

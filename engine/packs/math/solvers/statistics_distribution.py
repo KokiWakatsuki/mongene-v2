@@ -214,7 +214,12 @@ def representative_values_raw(data: object) -> Solution:
     for v in vals:
         counts[v] = counts.get(v, 0) + 1
     mode = sympy.Integer(max(counts, key=lambda k: counts[k]))
-    disp = f"平均値 {mean}、中央値 {median}、最頻値 {mode}"
+    # **代表値は小数で書き切れるなら小数**（EVALUATION D-5/D-28。平均値が `271/8`、
+    # 中央値が `71/2` と仮分数で出ていた）。recipe が平均の割り切れる組だけを引くので
+    # 平均は整数か小数第2位まで、中央値は個数が偶数のとき x.5 になりうる。
+    disp = (
+        f"平均値 {_fmt_relative(mean)}、中央値 {_fmt_relative(median)}、最頻値 {mode}"
+    )
     srepr = sympy.srepr(sympy.Tuple(mean, median, mode))
     steps = [
         Step(

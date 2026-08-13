@@ -354,7 +354,10 @@ def probability_ordered_selection_recipe(ctx: CellContext, rng: Rng) -> MR:
     person = str(draw(_SELECTION_PERSONS, rng))
     roles = "、".join(_ROLE_NAMES[:r])
     condition = (
-        f"{n}人の{group}から、{roles}を1人ずつ順に選ぶ。選び方は全部で何通りあるか樹形図で数え、"
+        # 「りくさんが書記に選ばれる確率」を問う以上、その人が候補に入っていることを
+        # 問題文が言わなければならない（前は n 人の中にいるかどうかが書かれていなかった）。
+        f"{person}さんをふくむ{n}人の{group}から、{roles}を1人ずつ順に選ぶ。"
+        f"選び方は全部で何通りあるか樹形図で数え、"
         f"{person}さんが{_ROLE_NAMES[target_index]}に選ばれる確率を求めよ"
     )
 

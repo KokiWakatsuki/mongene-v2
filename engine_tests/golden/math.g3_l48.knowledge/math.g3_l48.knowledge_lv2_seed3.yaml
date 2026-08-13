@@ -24,7 +24,7 @@ meta:
   seed: 3
   signature: judge_concyclic_from_angle
 problem_ref: 0bd0d47e4aaec49f
-problem_text: 直線CGについて同じ側に点A, Mがある。∠CAG=9°、∠CMG=17° のとき、4点C, G, A, Mが同一円周上にあるといえるかどうかを、理由とともに答えよ。
+problem_text: 直線CGについて同じ側に点A, Mがある。∠CAG=70°、∠CMG=82° のとき、4点C, G, A, Mが同一円周上にあるといえるかどうかを、理由とともに答えよ。
 sub_questions:
 - answer:
     correct: 同一円周上にあるとはいえない

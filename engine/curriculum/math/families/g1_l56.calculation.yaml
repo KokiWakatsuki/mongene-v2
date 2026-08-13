@@ -36,7 +36,9 @@ levels:
     recipe: math.cumulative_relative_frequency_and_complement
     params:
       total_domain: {int_set: [20, 25, 40, 50, 100]}
-      boundary_domain: {int_range: [5, 9]}
+      # 度数分布表のいちばん下の階級の下端（1時間はば・4階級）。
+      # 「〜時間未満」の境界は、問う階級の上端としてここから決まる。
+      start_domain: {int_range: [5, 6]}
     given: [expressions]
     asked: [value]
     visual: none

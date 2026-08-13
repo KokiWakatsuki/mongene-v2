@@ -112,11 +112,22 @@ def _scene(p: dict[str, Any], rng: Rng, key: str = "scene_set") -> list[str]:
     return parts
 
 
-def _axis_from_step(step: int) -> tuple[int, int, int]:
-    """(axis_lo, axis_hi, axis_step)。左端は 0 固定・右端は目もり本数から決まる。"""
+def _axis_from_step(step: int | str) -> tuple[int, int, int]:
+    """(axis_lo, axis_hi, axis_step)。右端は目もり本数から決まる。
+
+    場面は目もり間隔を `"間隔"` か `"間隔@左端"` の形で持つ。左端を 0 に固定していた
+    ため、「自由形の記録が4秒」「睡眠時間の第一四分位数が3時間」のような、場面に
+    対してありえない値が出ていた。左端を場面ごとに持たせれば、目もり位置の組み合わせ
+    （C(9,5)=126通り）は減らさずに値を場面の帯に収められる。
+    """
+    axis_lo = 0
+    if isinstance(step, str) and "@" in step:
+        step_text, lo_text = step.split("@", 1)
+        step, axis_lo = int(step_text), int(lo_text)
+    step = int(step)
     if step <= 0:
         raise ValueError(f"目もりの間隔は正: {step!r}")
-    return 0, step * _TICK_COUNT, step
+    return axis_lo, axis_lo + step * _TICK_COUNT, step
 
 
 def _axis(p: dict[str, Any], rng: Rng) -> tuple[int, int, int]:
@@ -200,7 +211,7 @@ def read_box_plot_recipe(ctx: CellContext, rng: Rng) -> MR:
     """
     p = cast("dict[str, Any]", ctx.spec_level.params)
     group, quantity, step_s = _scene(p, rng)
-    axis_lo, axis_hi, axis_step = _axis_from_step(int(step_s))
+    axis_lo, axis_hi, axis_step = _axis_from_step(step_s)
     ticks = _ticks(rng)
     target = str(draw(cast("list[str]", p["read_target_set"]), rng))
 
@@ -288,7 +299,7 @@ def draw_box_plot_from_data_recipe(ctx: CellContext, rng: Rng) -> MR:
 # g2_l57.graph_table Lv1 / Lv3: 2本の箱ひげ図を並べて読む／比べる
 # ---------------------------------------------------------------------------
 def _two_series_where(
-    axis_step: int,
+    axis_step: int | str,
     rng: Rng,
     predicate: Callable[[list[int], list[int]], bool],
     *,
@@ -311,7 +322,7 @@ def _two_series_where(
 
 
 def _two_series(
-    axis_step: int, rng: Rng, *, compare_index: tuple[int, int]
+    axis_step: int | str, rng: Rng, *, compare_index: tuple[int, int]
 ) -> tuple[int, int, int, list[int], list[int]]:
     """2群ぶんの目もり位置を引く。
 
@@ -353,7 +364,7 @@ def read_two_box_plots_recipe(ctx: CellContext, rng: Rng) -> MR:
     p = cast("dict[str, Any]", ctx.spec_level.params)
     group_a, group_b, quantity, step_s = _scene(p, rng)
     axis_lo, axis_hi, axis_step, ticks_a, ticks_b = _two_series(
-        int(step_s), rng, compare_index=(0, 4)
+        step_s, rng, compare_index=(0, 4)
     )
 
     solver = REGISTRY.solver("math.compare_box_plots_center_spread")
@@ -392,7 +403,7 @@ def compare_two_box_plots_iqr_recipe(ctx: CellContext, rng: Rng) -> MR:
     p = cast("dict[str, Any]", ctx.spec_level.params)
     group_a, group_b, quantity, step_s = _scene(p, rng)
     axis_lo, axis_hi, axis_step, ticks_a, ticks_b = _two_series(
-        int(step_s), rng, compare_index=(1, 3)
+        step_s, rng, compare_index=(1, 3)
     )
 
     solver = REGISTRY.solver("math.compare_box_plots_iqr")
@@ -434,9 +445,9 @@ def _wp_scenario(group_a: str, group_b: str, quantity: str, unit: str) -> str:
 # 場面 = "集団A|集団B|量|単位|形容詞|目もり間隔"。形容詞は主張文に埋める語
 # （時間なら「長い」・冊数なら「多い」・得点なら「高い」）。量ごとに自然な語が違うので
 # 場面と一緒に持たせる。
-def _wp_scene(p: dict[str, Any], rng: Rng) -> tuple[str, str, str, str, str, int]:
+def _wp_scene(p: dict[str, Any], rng: Rng) -> tuple[str, str, str, str, str, str]:
     group_a, group_b, quantity, unit, adjective, step_s = _scene(p, rng)
-    return group_a, group_b, quantity, unit, adjective, int(step_s)
+    return group_a, group_b, quantity, unit, adjective, step_s
 
 
 def _wp_params(

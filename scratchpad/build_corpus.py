@@ -44,6 +44,26 @@ _SEEDS_PER_TYPE = 60      # 型1つあたり、これだけ seed を引いてみ
 _SEED_CAP = 2400          # 1セルの上限
 
 
+def _answer_text(answer: object) -> str:
+    """答えの表示。**選択肢と作図にも文字列を出す**（走査に見えるようにするため）。
+
+    `display` を持つのは数値・式・証明の答えだけで、選択（ChoiceAnswer）は `correct`、
+    作図とグラフ（GraphAnswer）は特徴点の並びが答えにあたる。ここが空だと
+    「答えが空」が213セルに出て、その中の欠陥（分数の相対度数など）を文面の走査が
+    一度も見ないままになる。
+    """
+    display = getattr(answer, "display", None)
+    if display:
+        return str(display)
+    correct = getattr(answer, "correct", None)
+    if correct:
+        return str(correct)
+    features = getattr(answer, "features", None)
+    if features:
+        return "、".join(f"{f.kind} {f.display}" for f in features)
+    return str(getattr(answer, "text", "") or "")
+
+
 def type_axes(params: dict) -> list[str]:
     """型の軸になる params のキー。
 
@@ -208,7 +228,15 @@ def main() -> None:
                 continue
             n_problems += 1
             sq = res.sub_questions[0]
-            ans = getattr(sq.answer, "display", None) or getattr(sq.answer, "text", "")
+            # **答えは全小問ぶん出す。** 1つ目しか出していなかったので、(2)(3) の答えを
+            # 走査が一度も見ていなかった。選択肢の答え（ChoiceAnswer）と作図の答え
+            # （GraphAnswer）も出す——これらが空欄だったため「答えが空」が213セルに
+            # 出ていて、その中の欠陥は文面の走査に一度もかからなかった。
+            ans = " ／ ".join(
+                f"{s.label} {_answer_text(s.answer)}" if len(res.sub_questions) > 1
+                else _answer_text(s.answer)
+                for s in res.sub_questions
+            )
 
             fig = "（図なし）"
             if res.visual_svg:

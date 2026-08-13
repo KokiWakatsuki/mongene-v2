@@ -96,7 +96,7 @@ def lists_from_numbers(numbers: dict[str, str]) -> tuple[list[int], list[int]]:
     return a, b
 
 
-def _draw_population(p: dict[str, Any], rng: Rng) -> int:
+def _draw_population(spec: str, rng: Rng) -> int:
     """母集団の大きさ。場面として自然な情報であると同時に dup の第2の軸。
 
     判断を問うセル（全数か標本か・どの抽出方法か・どの調べ方か）は、場面の種類が
@@ -104,8 +104,14 @@ def _draw_population(p: dict[str, Any], rng: Rng) -> int:
     （BRIEF「★単一パラメータのセルは原理的に通らない」）。母集団の大きさは答えを
     変えない（判断の根拠は「全部調べられるか」「同じ機会で選ばれるか」）ので、
     第2の軸として安全に足せる。
+
+    **ただし幅は場面ごとに持つ。** 以前は全場面で同じ `population_range`（60〜510）
+    から引いていたので「ある市の有権者…対象は全部で240人ある」「ある図書館で蔵書が
+    すべてそろっているか…全部で90冊」のような、場面としてありえない数が出ていた
+    （EVALUATION D-29。数の大きさの検査では捕まらない＝D-14 の 100m走9.1秒と同じ根）。
+    `spec` は場面が持つ "lo,hi,step"。各場面46通りに揃えてあるので広さは変わらない。
     """
-    lo, hi, step = (int(v) for v in p["population_range"])
+    lo, hi, step = (int(v) for v in spec.split(","))
     return int(draw({"int_set": list(range(lo, hi + 1, step))}, rng))
 
 
@@ -273,12 +279,12 @@ def statistics_inquiry_recipe(ctx: CellContext, rng: Rng) -> MR:
 
     if mode == "design_plan":
         scene = str(draw(list(p["question_set"]), rng)).split("|")
-        question, valid, bad1, bad2 = scene
+        question, valid, bad1, bad2, pop_spec = scene
         labels = [bad1, valid, bad2]
         flags = [0, 1, 0]
         # 母集団の大きさ。場面として自然な情報であると同時に、dup の第2の軸になる
         # （場面の種類だけだと候補が十数通りしかなく、100seed で dup≤0.20 に届かない）。
-        size = _draw_population(p, rng)
+        size = _draw_population(pop_spec, rng)
         sol = cast(Solution, REGISTRY.solver("math.choose_valid_inquiry_plan")(labels, flags))
         return _mr(
             ctx,
@@ -305,9 +311,9 @@ def statistics_inquiry_recipe(ctx: CellContext, rng: Rng) -> MR:
 
     if mode == "judge_survey_method":
         scene = str(draw(list(p["scene_set"]), rng)).split("|")
-        situation, needs_sample_s, unit_word = scene
+        situation, needs_sample_s, unit_word, pop_spec = scene
         needs_sample = needs_sample_s == "sample"
-        size = _draw_population(p, rng)
+        size = _draw_population(pop_spec, rng)
         sol = cast(
             Solution, REGISTRY.solver("math.judge_appropriate_survey_method")(needs_sample)
         )
@@ -329,10 +335,10 @@ def statistics_inquiry_recipe(ctx: CellContext, rng: Rng) -> MR:
 
     if mode == "choose_unbiased":
         scene = str(draw(list(p["scene_set"]), rng)).split("|")
-        situation, unbiased, bad1, bad2 = scene
+        situation, unbiased, bad1, bad2, unit_word, pop_spec = scene
         labels = [bad1, unbiased, bad2]
         flags = [0, 1, 0]
-        size = _draw_population(p, rng)
+        size = _draw_population(pop_spec, rng)
         sol = cast(
             Solution, REGISTRY.solver("math.choose_unbiased_sampling_method")(labels, flags)
         )
@@ -342,7 +348,8 @@ def statistics_inquiry_recipe(ctx: CellContext, rng: Rng) -> MR:
                 "mode": mode, "labels": labels, "flags": flags,
                 "numbers": {"population": str(size)},
             },
-            given={"scenario": f"{situation}母集団は全部で{size}人である。"},
+            # 母集団の単位は場面で変わる（ごみの量は「世帯」であって「人」ではない）。
+            given={"scenario": f"{situation}母集団は全部で{size}{unit_word}である。"},
             context_slots={
                 "ask_value": (
                     "偏りが生じにくい抽出方法はどれか、理由を考えたうえで次から一つ選べ。"

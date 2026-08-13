@@ -24,7 +24,7 @@ meta:
   seed: 2
   signature: speed_relation_rule_recall
 problem_ref: ed32406049491dfd
-problem_text: 速さ 53 km/時 で 12 時間進む場面のように、道のり・速さ・時間の関係で「道のり」を求める式。正しく述べているものを1つ選びなさい。
+problem_text: 速さ53km/時で12時間進む場面のように、道のり・速さ・時間の関係で「道のり」を求める式。正しく述べているものを1つ選びなさい。
 sub_questions:
 - answer:
     correct: （道のり）＝（速さ）×（時間）

@@ -255,18 +255,29 @@ _PROJECTION_PHRASE = {
 }
 
 
+# 底面の長さを決めると高さも決まる立体（本文が高さを別に言わない）。
+_HEIGHT_FROM_BASE_KINDS = frozenset({"cube", "sphere"})
+
+
 def _projection_scene(p: dict[str, Any], rng: Rng) -> tuple[str, int, int]:
     """(立体, 底面の長さ, 高さ)。
 
-    【組合せ数】立体7種 × 底面 × 高さ（相異）。既定（2〜15）で 7×14×13=1274 通り。
+    【組合せ数】既定（2〜15＝14通り）で、高さが自由な5〜7種は 14×13、
+    立方体と球は 14。Lv1/Lv3（7種）で 5×182+2×14=938、Lv2（6種）で 5×182+14=924 通り。
 
-    【退化の封じ方】底面と高さを相異にする（等しいと正四角柱と立方体の区別が
-    figure の上でつかなくなる）。
+    【退化の封じ方】高さが自由な立体は底面と高さを相異にする（等しいと正四角柱と
+    立方体の区別が figure の上でつかなくなる）。立方体と球は底面が高さを決めるので
+    等しいのが正しく、ここは相異にしてはいけない。
     """
     kind = str(draw(list(p["solid_set"]), rng))
     lo, hi = (int(v) for v in p["length_range"])
     base = int(draw({"int_range": [lo, hi]}, rng))
-    height = int(draw({"int_set": [v for v in range(lo, hi + 1) if v != base]}, rng))
+    if kind in _HEIGHT_FROM_BASE_KINDS:
+        # 立方体と球は、高さが底面の長さで決まってしまう。別に振っていたので
+        # 「1辺が14cmの立方体」の高さが3cm になっていた。
+        height = base
+    else:
+        height = int(draw({"int_set": [v for v in range(lo, hi + 1) if v != base]}, rng))
     return kind, base, height
 
 

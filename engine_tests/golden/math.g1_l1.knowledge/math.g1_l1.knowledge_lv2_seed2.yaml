@@ -24,7 +24,7 @@ meta:
   seed: 2
   signature: number_opposite_quantity
 problem_ref: 7d44e617fcbce28c
-problem_text: 「収入 103円」を +103円 と表すことにするとき、「支出 431円」 を、符号を使って表しなさい。
+problem_text: 「収入 103円」を +103円 と表すことにするとき、「支出 431円」を、符号を使って表しなさい。
 sub_questions:
 - answer:
     correct: '-431'

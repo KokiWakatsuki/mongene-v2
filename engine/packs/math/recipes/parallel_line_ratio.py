@@ -108,6 +108,10 @@ def parallel_segment_ratio_length_recipe(ctx: CellContext, rng: Rng) -> MR:
 # ---------------------------------------------------------------------------
 _JUDGE_PARALLEL_FROM_RATIO_CONCEPTS = ["parallel_segment.judge_from_ratio"]
 
+# 三角形の1辺として図に描ける長さの上限（cm）。定義域は広いまま、
+# 組み上がった線分の長さで測って引き直す。
+_MAX_SEGMENT_LENGTH = 120
+
 
 @register_recipe(
     "math.judge_parallel_from_ratio", provides_concepts=_JUDGE_PARALLEL_FROM_RATIO_CONCEPTS
@@ -130,6 +134,10 @@ def judge_parallel_from_ratio_recipe(ctx: CellContext, rng: Rng) -> MR:
         if not is_parallel:
             delta = int(draw(p["delta_domain"], rng))
             ec += delta
+        # 線分の長さなので正でなければならない（deltaが負のとき0以下になりうる）。
+        # 図に描ける大きさに収めるため、いちばん長い線分の上限でも引き直す。
+        if ec <= 0 or max(ad, db, ae, ec) > _MAX_SEGMENT_LENGTH:
+            continue
         solver = REGISTRY.solver("math.judge_parallel_from_ratio")
         sol = cast(Solution, solver(ad, db, ae, ec, pa + pb + pc + pd + pe))
         assert isinstance(sol.answer, SymbolicAnswer)

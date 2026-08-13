@@ -24,7 +24,7 @@ meta:
   seed: 2
   signature: probability_terms_term_recall
 problem_ref: a496402e87cd59ac
-problem_text: 374回中の一部で起こることがらのように、あることがらの起こりやすさの程度を表す数のことを何といいますか。
+problem_text: 1から17までの番号のカードから4の倍数のカードを引く起こりやすさのように、あることがらの起こりやすさの程度を表す数のことを何といいますか。
 sub_questions:
 - answer:
     correct: 確率

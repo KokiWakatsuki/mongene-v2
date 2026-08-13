@@ -10020,7 +10020,12 @@ def test_g1_l50_projection_draw_property(seed):
     assert "立面図" not in (mr.given["condition"].split("。")[0])
     base, height = int(mr.params["base_len"]), int(mr.params["solid_height"])
     # ★退化の封じ: 底面と高さが同じだと正四角柱と立方体が図で区別できない。
-    assert base != height
+    # ただし立方体と球は本文が高さを別に言わない（底面が高さを決める）ので、
+    # 等しいのが正しい。相異にすると「1辺が14cmの立方体」の高さが3cm になる。
+    if mr.params["solid_kind"] in {"cube", "sphere"}:
+        assert base == height
+    else:
+        assert base != height
     # 模範解答図に寸法が書かれている（設問が「長さがわかるようにかけ」）。
     svg = sq.answer.solution_svg_ref
     assert f"{base}cm" in svg and f"{height}cm" in svg

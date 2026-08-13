@@ -68,10 +68,30 @@ def test_dup_rate_ok_on_slice(env) -> None:  # type: ignore[no-untyped-def]
 
 
 def test_dup_rate_fails_under_impossible_threshold(env) -> None:  # type: ignore[no-untyped-def]
-    """閾値を負にすると dup_rate=0 でも over_threshold=True になり不合格（fail 経路の実証）。"""
+    """閾値を負にすると dup_rate=0 でも over_threshold=True になり不合格（fail 経路の実証）。
+
+    **`dup_rate_max` を宣言したセルは別扱い。** 宣言があるセルは外から渡した閾値では
+    なく宣言値で判定する（`dup_rate._threshold_for`）——それが宣言の意味なので、
+    「負の閾値なら全セルが不合格」は成り立たない。宣言セルについては
+    **宣言値で判定されていること**を確かめて、宣言が黙って効かなくなる回帰を止める。
+    """
     report = dup_rate.run_dup_rate(env, seeds=20, threshold=-1.0)
     assert not report.ok
-    assert all(c.over_threshold for c in report.cells)
+
+    declared: dict[str, float] = {}
+    for name, spec in env.families.items():
+        unit, form = name.removeprefix("math.").rsplit(".", 1)
+        for lv, level in spec.levels.items():
+            value = getattr(level, "dup_rate_max", None)
+            if value is not None:
+                declared[f"{unit}.{form}.Lv{lv}"] = float(value)
+    assert declared, "dup_rate_max を宣言したセルが無い（この検査が空回りしている）"
+
+    for c in report.cells:
+        if c.cell in declared:
+            assert c.over_threshold == (c.dup_rate > declared[c.cell]), c
+        else:
+            assert c.over_threshold, c
 
 
 def test_dup_rate_detects_cross_signature_fp_collision() -> None:

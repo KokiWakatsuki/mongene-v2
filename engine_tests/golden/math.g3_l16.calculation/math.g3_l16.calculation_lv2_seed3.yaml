@@ -26,18 +26,18 @@ meta:
 problem_ref: 2dac72f946b5477c
 problem_text: '次の循環小数を分数で表せ。
 
-  0.2̇76̇'
+  0.242̇4̇'
 sub_questions:
 - answer:
-    display: 92/333
+    display: 8/33
     kind: symbolic
-    srepr: Rational(92, 333)
+    srepr: Rational(8, 33)
   cause_tags: []
   concept_tags:
   - rational_form.decimal_to_fraction
   explanation: 'まず、循環小数を文字でおき、桁をずらした式との差を作って循環部分を消す。（桁をずらした式の差を作る）
 
-    次に、できた等式を整理し、分数の形に直して約分する。（92/333）'
+    次に、できた等式を整理し、分数の形に直して約分する。（8/33）'
   hints:
   - 循環小数を文字でおき、桁をずらした式との差を作って循環部分を消す。
   label: (1)
@@ -51,6 +51,6 @@ sub_questions:
   - args: []
     narration: できた等式を整理し、分数の形に直して約分する。
     op: solve_for_fraction
-    result_display: 92/333
-    result_srepr: Rational(92, 333)
+    result_display: 8/33
+    result_srepr: Rational(8, 33)
 visual_svg: null

@@ -24,7 +24,7 @@ meta:
   seed: 3
   signature: number_opposite_quantity
 problem_ref: 3edf407d22f1ab3b
-problem_text: 「得点 65点」を +65点 と表すことにするとき、「失点 413点」 を、符号を使って表しなさい。
+problem_text: 「得点 65点」を +65点 と表すことにするとき、「失点 413点」を、符号を使って表しなさい。
 sub_questions:
 - answer:
     correct: '-413'

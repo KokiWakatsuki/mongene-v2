@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: probability_ordered_selection
 problem_ref: 46864837b7ddc7b3
-problem_text: 6人の委員の候補から、委員長、副委員長、書記を1人ずつ順に選ぶ。選び方は全部で何通りあるか樹形図で数え、りくさんが書記に選ばれる確率を求めよ。
+problem_text: りくさんをふくむ6人の委員の候補から、委員長、副委員長、書記を1人ずつ順に選ぶ。選び方は全部で何通りあるか樹形図で数え、りくさんが書記に選ばれる確率を求めよ。
 sub_questions:
 - answer:
     display: 1/6

@@ -24,20 +24,20 @@ meta:
   seed: 3
   signature: word_problem_quadratic_number_square_relation
 problem_ref: 5ac4dde791380854
-problem_text: 'ある正の整数がある。この数を2乗した数は、もとの数の4倍より285大きい。
+problem_text: 'ある正の整数がある。この数を2乗した数から、もとの数の7倍をひくと60になる。
 
   この整数を求めよ。'
 sub_questions:
 - answer:
-    display: '19'
+    display: '12'
     kind: symbolic
-    srepr: Tuple(Integer(19))
+    srepr: Tuple(Integer(12))
   cause_tags: []
   concept_tags:
   - quadratic.word_problem_number_relation
   explanation: 'まず、場面の中で、どちらの見方でも同じになる（等しくなっている）量に着目する。（2乗した数ともとの数をもとにした数）
 
-    次に、その量を x を使って両辺に表し、方程式をつくる。（x² = 4x + 285）
+    次に、その量を x を使って両辺に表し、方程式をつくる。（x² = 7x + 60）
 
     次に、かっこを展開し、右辺を左辺に移項して、=0 の形に整理する。（展開して整理する）
 
@@ -45,7 +45,7 @@ sub_questions:
 
     次に、積が 0 になるのは各因数が 0 のときだから、それぞれを 0 とおいて x を求める。
 
-    最後に、求めるものは正の数だから、2つの解のうち条件に合う正の解を選ぶ。（19）'
+    最後に、求めるものは正の数だから、2つの解のうち条件に合う正の解を選ぶ。（12）'
   hints:
   - 場面の中で、どちらの見方でも同じになる（等しくなっている）量に着目する。
   - その量を x を使って両辺に表し、方程式をつくる。
@@ -63,8 +63,8 @@ sub_questions:
   - args: []
     narration: その量を x を使って両辺に表し、方程式をつくる。
     op: formulate_equation
-    result_display: x² = 4x + 285
-    result_srepr: Equality(Pow(Symbol('x'), Integer(2)), Add(Mul(Integer(4), Symbol('x')), Integer(285)))
+    result_display: x² = 7x + 60
+    result_srepr: Equality(Pow(Symbol('x'), Integer(2)), Add(Mul(Integer(7), Symbol('x')), Integer(60)))
   - args: []
     narration: かっこを展開し、右辺を左辺に移項して、=0 の形に整理する。
     op: expand_and_rearrange
@@ -83,6 +83,6 @@ sub_questions:
   - args: []
     narration: 求めるものは正の数だから、2つの解のうち条件に合う正の解を選ぶ。
     op: select_positive_root
-    result_display: '19'
-    result_srepr: Integer(19)
+    result_display: '12'
+    result_srepr: Integer(12)
 visual_svg: null

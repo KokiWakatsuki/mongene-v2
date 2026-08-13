@@ -24,7 +24,7 @@ meta:
   seed: 2
   signature: two_digit_number_property
 problem_ref: 434c8c930fce3ece
-problem_text: 十の位が w、一の位が f の2けたの自然数 10w+f と、位を入れかえた数 10f+w の和 を計算し、式を簡単にせよ。
+problem_text: 十の位が w、一の位が f の2けたの自然数 10w+f と、位を入れかえた数 10f+w の和を計算し、式を簡単にせよ。
 sub_questions:
 - answer:
     display: 11f + 11w

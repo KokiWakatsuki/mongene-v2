@@ -24,14 +24,14 @@ meta:
   seed: 3
   signature: word_problem_expression_unit_convert
 problem_ref: bbc89251f6fd6fdb
-problem_text: '分速169mでa分間走る。
+problem_text: '分速125mでn分間走る。
 
-  進んだ道のりは何kmか、aを使った式で表せ。'
+  進んだ道のりは何kmか、nを使った式で表せ。'
 sub_questions:
 - answer:
-    display: 169a/1000km
+    display: n/8 km
     kind: symbolic
-    srepr: Mul(Rational(169, 1000), Symbol('a'))
+    srepr: Mul(Rational(1, 8), Symbol('n'))
   cause_tags: []
   concept_tags:
   - letter_expr.word_problem_unit_convert
@@ -43,7 +43,7 @@ sub_questions:
 
     次に、係数どうしをかけ算する。（係数どうしをかける）
 
-    最後に、同じ文字は指数の和にまとめ、1つの単項式にする。（169a/1000）'
+    最後に、同じ文字は指数の和にまとめ、1つの単項式にする。（n/8）'
   hints:
   - 速さに時間をかけて、道のりをmで表す式をつくる。
   - 1kmは1000mなので、mの式を1000でわるとkmの式になる。
@@ -66,15 +66,15 @@ sub_questions:
     narration: ÷ を、その式の逆数をかけるかけ算に直す。
     op: convert_divisions_to_reciprocal
     result_display: ÷ を逆数のかけ算に直す
-    result_srepr: Mul(Rational(169, 1000), Symbol('a'))
+    result_srepr: Mul(Rational(1, 8), Symbol('n'))
   - args: []
     narration: 係数どうしをかけ算する。
     op: multiply_coefficients
     result_display: 係数どうしをかける
-    result_srepr: Mul(Rational(169, 1000), Symbol('a'))
+    result_srepr: Mul(Rational(1, 8), Symbol('n'))
   - args: []
     narration: 同じ文字は指数の和にまとめ、1つの単項式にする。
     op: combine_powers
-    result_display: 169a/1000
-    result_srepr: Mul(Rational(169, 1000), Symbol('a'))
+    result_display: n/8
+    result_srepr: Mul(Rational(1, 8), Symbol('n'))
 visual_svg: null

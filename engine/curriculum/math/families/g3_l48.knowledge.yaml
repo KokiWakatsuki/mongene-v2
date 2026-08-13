@@ -33,8 +33,12 @@ levels:
     signature: judge_concyclic_from_angle
     recipe: math.judge_concyclic_from_angle
     params:
-      angle_domain: {int_range: [1, 89]}
-      delta_domain: {int_set: [-8, -7, -6, -5, -4, -3, -2, -1, 1, 2, 3, 4, 5, 6, 7, 8]}
+      # 円周角として図に描ける大きさにとる（EVALUATION R-10。1〜89 だったので
+      # 「∠RGN=1°、∠RFN=1°」が出ていた。1°の円周角は図として成り立たない）。
+      angle_domain: {int_range: [20, 80]}
+      # 「同一円周上にあるとはいえない」側の差。1°差は数値でしか見分けられないので、
+      # 教科書と同じく5°以上の差にする。
+      delta_domain: {int_set: [-12, -11, -10, -9, -8, -7, -6, -5, 5, 6, 7, 8, 9, 10, 11, 12]}
     given: [statement]
     asked: [choice]
     visual: none

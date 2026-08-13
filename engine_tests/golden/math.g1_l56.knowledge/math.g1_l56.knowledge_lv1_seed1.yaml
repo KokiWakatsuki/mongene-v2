@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: cumulative_frequency_terms_term_recall
 problem_ref: e1ee0fe90c6feba5
-problem_text: 337個の階級に分けた度数分布表で、いちばん小さい階級から対象の階級までの度数を合計した値を何といいますか。
+problem_text: 生徒25人の一日の読書時間を6個の階級に分けた度数分布表で、いちばん小さい階級から対象の階級までの度数を合計した値を何といいますか。
 sub_questions:
 - answer:
     correct: 累積度数

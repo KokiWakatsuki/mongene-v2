@@ -24,12 +24,12 @@ meta:
   seed: 1
   signature: quadratic_intersection_segment_area
 problem_ref: 03cd1bc516661d51
-problem_text: 放物線 y = 3x² と直線 y = 21x - 18 が2点 A, B で交わっている。線分 AB の長さと、原点 O と2点 A, B を結んでできる三角形 OAB の面積を求めよ。
+problem_text: 放物線 y = -3x² と直線 y = -6x - 9 が2点 A, B で交わっている。線分 AB の長さと、原点 O と2点 A, B を結んでできる三角形 OAB の面積を求めよ。
 sub_questions:
 - answer:
-    display: AB = 5√442, △OAB = 45
+    display: AB = 4√37, △OAB = 18
     kind: symbolic
-    srepr: Tuple(Mul(Integer(5), Pow(Integer(442), Rational(1, 2))), Integer(45))
+    srepr: Tuple(Mul(Integer(4), Pow(Integer(37), Rational(1, 2))), Integer(18))
   cause_tags: []
   concept_tags:
   - quadratic_function.intersection_with_line
@@ -41,7 +41,7 @@ sub_questions:
 
     次に、2点の座標の差から、線分の長さを求める。（線分の長さを求める）
 
-    最後に、頂点の座標から、三角形の面積を求める公式で面積を計算する。（AB = 5√442, △OAB = 45）'
+    最後に、頂点の座標から、三角形の面積を求める公式で面積を計算する。（AB = 4√37, △OAB = 18）'
   hints:
   - 放物線の式と直線の式の右辺どうしを等しいとおき、方程式を立てる。
   - その方程式を解いて、交点の x 座標を求める。
@@ -73,6 +73,6 @@ sub_questions:
   - args: []
     narration: 頂点の座標から、三角形の面積を求める公式で面積を計算する。
     op: compute_triangle_area
-    result_display: AB = 5√442, △OAB = 45
-    result_srepr: Tuple(Mul(Integer(5), Pow(Integer(442), Rational(1, 2))), Integer(45))
+    result_display: AB = 4√37, △OAB = 18
+    result_srepr: Tuple(Mul(Integer(4), Pow(Integer(37), Rational(1, 2))), Integer(18))
 visual_svg: null

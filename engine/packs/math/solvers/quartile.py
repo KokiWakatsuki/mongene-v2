@@ -285,6 +285,19 @@ _BOX_READ_TARGETS: dict[str, tuple[tuple[int, int], tuple[str, str]]] = {
 }
 
 
+def _fmt_half(value: sympy.Expr) -> str:
+    """整数はそのまま、分母2の分数は小数で書く（四分位数は整数か x.5 にしかならない）。
+
+    それ以外が来たら分数のまま出す——構成が崩れた合図を隠さないため。
+    """
+    rational = sympy.Rational(value)
+    if rational.q == 1:
+        return str(int(rational))
+    if rational.q == 2:
+        return f"{float(rational):.1f}"
+    return str(rational)
+
+
 def _restore_five(axis_lo: object, axis_step: object, box_ticks: object) -> list[sympy.Integer]:
     """目もりの位置から5数要約を復元する（狭義単調増加＝退化なしを強制）。"""
     lo = int(str(axis_lo))
@@ -358,8 +371,11 @@ def draw_box_plot_features(data: object) -> Solution:
         raise ValueError(f"5数要約が狭義単調増加でない（箱やひげが潰れる）: {five}")
 
     kinds = ("min", "q1", "median", "q3", "max")
+    # **四分位数は小数で書く**（EVALUATION D-5/R-7。個数が偶数の組では中央値どうしの
+    # 平均になるので `27/2` `91/2` と仮分数で出ていた。教科書は 13.5・45.5 と書く。
+    # 整数データの四分位数は必ず整数か x.5 なので、小数は必ず書き切れる）。
     features = [
-        Feature(kind=k, srepr=sympy.srepr(v), display=f"{lab} {v}")
+        Feature(kind=k, srepr=sympy.srepr(v), display=f"{lab} {_fmt_half(v)}")
         for k, lab, v in zip(kinds, _QUARTILE_LABEL_JP, five, strict=True)
     ]
     disp = "、".join(f.display for f in features)

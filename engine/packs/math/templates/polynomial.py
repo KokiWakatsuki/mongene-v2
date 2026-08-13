@@ -32,7 +32,10 @@ LF_SOLVE_FOR_VARIABLE_V1 = (
 LF_NUMBER_PROPERTY_V1 = "{{ given.expressions }} の和を計算し、1つの式で表せ。"
 
 # g2_l8.calculation Lv1: 2けたの自然数と位を入れかえた数の和・差を整理する
-LF_DIGIT_NUMBER_V1 = "{{ given.expressions }} を計算し、式を簡単にせよ。"
+# **半角スペースを入れないこと**。`expressions` は「…の和」「…の差」と日本語の名詞で
+# 終わる（式で終わる `LF_NUMBER_PROPERTY_V1` とは違う）ので、空けると「差 を計算し」に
+# なる（EVALUATION D-3 と同じ粗さ）。
+LF_DIGIT_NUMBER_V1 = "{{ given.expressions }}を計算し、式を簡単にせよ。"
 
 # g2_l1.knowledge Lv1: 多項式まわりの用語想起／ g2_l10.knowledge Lv1: 連立の用語想起
 # **半角スペースを入れないこと**（`letter_expr.py` と同じ理由。statement は体言止め）。

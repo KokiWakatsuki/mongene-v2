@@ -273,18 +273,23 @@ def equal_arc_inscribed_angle_recipe(ctx: CellContext, rng: Rng) -> MR:
     五角形で∠ABDを求める」を一般化した、弧の分割と比の合成の多段構成。
     """
     p = ctx.spec_level.params
-    n = int(draw(p["n_domain"], rng))
-    points = _draw_distinct_points(n, rng)
-    labels = "".join(points)
+    # **円周角（span×180/n）が整数になる組だけを引く。** 定義域 n_domain は狭めない
+    # （EVALUATION D-23 と同じ根＝角の答えが `225/2°` になっていた。教科書は角を整数に
+    # とる）。n=7 はどの span でも整数にならないので、この条件だけで自然に落ちる。
     for _ in range(200):
+        n = int(draw(p["n_domain"], rng))
         span = int(draw({"int_range": [1, n - 2]}, rng))
         remain = n - span
         x = int(draw({"int_range": [1, remain - 1]}, rng))
         y = remain - x
+        if span * 180 % n:  # 円周角が分数になる（教科書は整数）
+            continue
         if span * 180 != 90 * n:  # 円周角が90°に固定される退化を避ける
             break
     else:
         raise ValueError("equal_arc_inscribed_angle_recipe: 有効な分割を構成できず")
+    points = _draw_distinct_points(n, rng)
+    labels = "".join(points)
 
     vertex = points[0]
     pa = points[(0 - x) % n]

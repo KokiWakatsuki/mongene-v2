@@ -215,20 +215,36 @@ def _square_relation_candidates(p: Mapping[str, Any]) -> list[tuple[int, int]]:
     """
     multipliers = [int(v) for v in p["multiplier_candidates"]]
     x0_max = int(p["small_max"])
+    # **本文に出る m に上限を置く**（EVALUATION D-31。x0 の定義域だけを見ていたので
+    # 「もとの数の5倍より1554大きい」が出ていた。教科書は「3倍より10大きい」のように
+    # 2桁でとる）。x0 の定義域は狭めない＝原則⓪「答えの大きさで測る」。
+    diff_max = int(p["diff_max"])
     out: list[tuple[int, int]] = []
     for n in multipliers:
         for x0 in range(n + 1, x0_max + 1):
-            out.append((n, x0 * x0 - n * x0))
+            m = x0 * x0 - n * x0
+            if m <= diff_max:
+                out.append((n, m))
     return out
+
+
+# 同じ関係 x² = n·x + m の言い方（原則①: m を絞ったぶんの組み合わせを軸で取り戻す）。
+_SQUARE_RELATION_PHRASINGS = ("larger", "subtract", "sum")
 
 
 def _scene_square_relation(p: Mapping[str, Any], rng: Rng) -> QuadScene:
     """g3_l29 Lv3: ある正の整数を2乗した数が、もとの数の n 倍より m 大きい（誘導なし）。"""
     cands = _square_relation_candidates(p)
     n, m = cands[int(draw(_index_domain(len(cands)), rng))]
+    phrasing = str(draw(list(_SQUARE_RELATION_PHRASINGS), rng))
+    relation = {
+        "larger": f"この数を2乗した数は、もとの数の{n}倍より{m}大きい。",
+        "subtract": f"この数を2乗した数から、もとの数の{n}倍をひくと{m}になる。",
+        "sum": f"この数を2乗した数は、もとの数の{n}倍と{m}の和に等しい。",
+    }[phrasing]
     return QuadScene(
         numbers={"multiplier": n, "diff": m},
-        scenario=f"ある正の整数がある。この数を2乗した数は、もとの数の{n}倍より{m}大きい。",
+        scenario=f"ある正の整数がある。{relation}",
         quantities="",
         ask_formulation="",
         ask_value="この整数を求めよ。",
@@ -236,7 +252,8 @@ def _scene_square_relation(p: Mapping[str, Any], rng: Rng) -> QuadScene:
         answer_coeffs=((1, 0),),
         answer_labels=("",),
         answer_units=("",),
-        slots={},
+        # 言い方は場面の違いなので params に記録する（dup_key は params だけを見る）。
+        slots={"phrasing": phrasing},
     )
 
 

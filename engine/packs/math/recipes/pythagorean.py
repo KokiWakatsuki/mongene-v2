@@ -23,6 +23,12 @@ from engine.core.registry import REGISTRY, register_recipe
 from engine.core.rng import Rng, draw
 from engine.packs.math.recipes.letter_expr import _draw_distinct_points
 
+def _is_triangle(a: int, b: int, c: int) -> bool:
+    """3辺が三角形をつくるか（正で、いちばん長い辺が他の2辺の和より短い）。"""
+    x, y, z = sorted((a, b, c))
+    return x > 0 and x + y > z
+
+
 # 有名な原始ピタゴラス数（g3_l52.find_value/knowledge の非退化構成に使う）。
 _PRIMITIVE_TRIPLES: list[tuple[int, int, int]] = [
     (3, 4, 5), (5, 12, 13), (8, 15, 17), (7, 24, 25),
@@ -183,6 +189,10 @@ def verify_right_triangle_from_sides_recipe(ctx: CellContext, rng: Rng) -> MR:
         if not is_right:
             delta = int(draw(p["delta_domain"], rng))
             c += delta
+            # 三角形として成り立たない3辺（7・24・33 や 5・12・19）が出ていた。
+            # 「直角三角形ではない」は正しくても、その三角形自体が存在しない。
+            if not _is_triangle(a, b, c):
+                continue
         solver = REGISTRY.solver("math.verify_right_triangle_from_sides")
         sol = cast(Solution, solver(a, b, c))
         assert isinstance(sol.answer, SymbolicAnswer)
@@ -228,6 +238,10 @@ def judge_right_triangle_from_three_sides_recipe(ctx: CellContext, rng: Rng) -> 
         if not is_right:
             delta = int(draw(p["delta_domain"], rng))
             c += delta
+            # 三角形として成り立たない3辺（7・24・33 や 5・12・19）が出ていた。
+            # 「直角三角形ではない」は正しくても、その三角形自体が存在しない。
+            if not _is_triangle(a, b, c):
+                continue
         solver = REGISTRY.solver("math.judge_right_triangle_from_three_sides")
         sol = cast(Solution, solver(a, b, c))
         assert isinstance(sol.answer, ChoiceAnswer)

@@ -24,12 +24,12 @@ meta:
   seed: 1
   signature: representative_values_raw
 problem_ref: 11630caac34247cd
-problem_text: 次の8個のデータの平均値・中央値・最頻値をそれぞれ求めよ。〔35、35、48、45、37、31、29、11〕。
+problem_text: 次の8個のデータの平均値・中央値・最頻値をそれぞれ求めよ。〔35、48、48、45、37、31、29、7〕。
 sub_questions:
 - answer:
-    display: 平均値 271/8、中央値 35、最頻値 35
+    display: 平均値 35、中央値 36、最頻値 48
     kind: symbolic
-    srepr: Tuple(Rational(271, 8), Integer(35), Integer(35))
+    srepr: Tuple(Integer(35), Integer(36), Integer(48))
   cause_tags: []
   concept_tags:
   - representative_value.compute_raw
@@ -37,7 +37,7 @@ sub_questions:
 
     次に、データを大きさの順に並べ、中央の値（個数が偶数のときは中央に並ぶ値どうしの平均）を求める。（大きさの順に並べた中央の値を読み取る）
 
-    最後に、もっとも個数が多く現れる値を求める。（平均値 271/8、中央値 35、最頻値 35）'
+    最後に、もっとも個数が多く現れる値を求める。（平均値 35、中央値 36、最頻値 48）'
   hints:
   - データの値をすべて足し合わせ、個数でわって平均値を求める。
   - データを大きさの順に並べ、中央の値（個数が偶数のときは中央に並ぶ値どうしの平均）を求める。
@@ -57,6 +57,6 @@ sub_questions:
   - args: []
     narration: もっとも個数が多く現れる値を求める。
     op: compute_mode
-    result_display: 平均値 271/8、中央値 35、最頻値 35
-    result_srepr: Tuple(Rational(271, 8), Integer(35), Integer(35))
+    result_display: 平均値 35、中央値 36、最頻値 48
+    result_srepr: Tuple(Integer(35), Integer(36), Integer(48))
 visual_svg: null

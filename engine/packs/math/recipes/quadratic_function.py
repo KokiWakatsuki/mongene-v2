@@ -199,6 +199,9 @@ def rate_of_change_quadratic_recipe(ctx: CellContext, rng: Rng) -> MR:
 # ---------------------------------------------------------------------------
 _INTERSECTION_CONCEPTS = ["quadratic_function.intersection_with_line"]
 
+# 線分ABの長さ |xB - xA|・√(1 + m²) の、根号の中の上限。
+_MAX_SEGMENT_RADICAND = 65
+
 _INTERSECTION_QUESTION_BY_MODE: dict[str, str] = {
     "find_intersection": "この交点 A, B の座標をすべて求めよ",
     "segment_and_area": (
@@ -222,10 +225,17 @@ def intersection_parabola_line_recipe(ctx: CellContext, rng: Rng) -> MR:
     mode = cast(str, p["mode"])
     a_cands = [v for v in _domain_candidates(p["a_domain"]) if v != 0]
     x_cands = [v for v in _domain_candidates(p["x_domain"]) if v != 0]
-    a = int(draw({"int_set": a_cands}, rng))
-    xA, xB = (int(v) for v in draw_many({"int_set": x_cands, "distinct": ["value"]}, rng, k=2))
+    for _ in range(200):
+        a = int(draw({"int_set": a_cands}, rng))
+        xA, xB = (int(v) for v in draw_many({"int_set": x_cands, "distinct": ["value"]}, rng, k=2))
+        m = a * (xA + xB)
+        # AB = |xB - xA|・√(1 + m²) なので、m が大きいと根号の中が跳ね上がる
+        # （5√442 が出ていた）。定義域は広いまま、答えの根号の中で測って引き直す。
+        if mode != "segment_and_area" or 1 + m * m <= _MAX_SEGMENT_RADICAND:
+            break
+    else:
+        raise ValueError("intersection_parabola_line_recipe: 根号の中が上限に収まる組を構成できず")
 
-    m = a * (xA + xB)
     b = -a * xA * xB
     assert b != 0  # xA≠xB・a≠0 より構成的に保証（O,A,B 同一直線上の退化を排除）
 

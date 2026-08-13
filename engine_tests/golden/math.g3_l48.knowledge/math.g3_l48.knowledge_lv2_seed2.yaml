@@ -24,7 +24,7 @@ meta:
   seed: 2
   signature: judge_concyclic_from_angle
 problem_ref: 59ff46bb5ede92af
-problem_text: 直線NBについて同じ側に点Q, Rがある。∠NQB=31°、∠NRB=31° のとき、4点N, B, Q, Rが同一円周上にあるといえるかどうかを、理由とともに答えよ。
+problem_text: 直線NBについて同じ側に点Q, Rがある。∠NQB=50°、∠NRB=50° のとき、4点N, B, Q, Rが同一円周上にあるといえるかどうかを、理由とともに答えよ。
 sub_questions:
 - answer:
     correct: 同一円周上にあるといえる

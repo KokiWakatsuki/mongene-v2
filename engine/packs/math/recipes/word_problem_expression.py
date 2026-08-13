@@ -41,6 +41,7 @@ from __future__ import annotations
 
 from collections.abc import Callable, Mapping
 from dataclasses import dataclass
+from math import gcd
 from typing import Any, cast
 
 import sympy
@@ -170,11 +171,11 @@ def formulate_distance_letter(*, speed: str, letter: str) -> ExpressionFormulati
     )
 
 
-def formulate_unit_convert(*, speed: str) -> ExpressionFormulation:
-    """g1_l15 Lv2: 分速 speed m で a 分進んだ道のりを km で表す（÷1000 が要る）。"""
+def formulate_unit_convert(*, speed: str, letter: str) -> ExpressionFormulation:
+    """g1_l15 Lv2: 分速 speed m で letter 分進んだ道のりを km で表す（÷1000 が要る）。"""
     s = int(speed)
     return ExpressionFormulation(
-        expr_str=f"{s}*a/1000",
+        expr_str=f"{s}*{letter}/1000",
         setup_steps=[
             _relation_step(
                 "identify_relation",
@@ -240,9 +241,10 @@ def solve_expression(kind: str, numbers: Mapping[str, str]) -> tuple[ExpressionF
 
 def build_answer(formulation: ExpressionFormulation, sol: Solution) -> SymbolicAnswer:
     assert isinstance(sol.answer, SymbolicAnswer)
-    return SymbolicAnswer(
-        srepr=sol.answer.srepr, display=f"{sol.answer.display}{formulation.answer_unit}"
-    )
+    # 単位の前は空ける。答えが分数の式（`a/8`）だと詰めたときに `a/8km` となり、
+    # km が分母に続いて読める（EVALUATION D-20 と同じ読めなさ）。
+    unit = f" {formulation.answer_unit}" if formulation.answer_unit else ""
+    return SymbolicAnswer(srepr=sol.answer.srepr, display=f"{sol.answer.display}{unit}")
 
 
 def build_steps(formulation: ExpressionFormulation, sol: Solution) -> list[Step]:
@@ -319,13 +321,28 @@ def _scene_distance_letter(p: Mapping[str, Any], rng: Rng) -> ExpressionScene:
     )
 
 
+# 単位変換（m→km）の答えの分母の上限。台帳の例「分速60m → 3a/50」が分母50なので、
+# そこまでを教材の範囲とする。**速さの定義域は狭めない**（原則⓪: 壊れているのは答えの
+# 大きさであって定義域の広さではない。分速106m だと `53a/500` になっていた＝D-31）。
+_MAX_UNIT_CONVERT_DENOMINATOR = 50
+
+
+def _unit_convert_speeds(domain: Mapping[str, Any]) -> list[int]:
+    """答えの分母（1000/gcd(速さ, 1000)）が上限内の速さだけ。"""
+    lo, hi = (int(v) for v in cast("list[object]", domain["int_range"]))
+    return [v for v in range(lo, hi + 1) if 1000 // gcd(v, 1000) <= _MAX_UNIT_CONVERT_DENOMINATOR]
+
+
 def _scene_unit_convert(p: Mapping[str, Any], rng: Rng) -> ExpressionScene:
-    speed = int(draw(p["speed_domain"], rng))
+    speed = int(draw({"int_set": _unit_convert_speeds(p["speed_domain"])}, rng))
     verb = str(draw(list(p["verb_candidates"]), rng))
+    # 答えの分母を絞ったぶん、**文字の選び方**を軸に足して組み合わせを取り戻す
+    # （Lv1 と同じ手。原則①: 軸を増やす）。
+    letter = str(draw(list(p["letter_candidates"]), rng))
     return ExpressionScene(
-        numbers={"speed": str(speed)},
-        scenario=f"分速{speed}mでa分間{verb}。",
-        ask="進んだ道のりは何kmか、aを使った式で表せ。",
+        numbers={"speed": str(speed), "letter": letter},
+        scenario=f"分速{speed}mで{letter}分間{verb}。",
+        ask=f"進んだ道のりは何kmか、{letter}を使った式で表せ。",
         kind="unit_convert",
         slots={"verb": verb},
     )

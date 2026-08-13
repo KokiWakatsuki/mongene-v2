@@ -24,12 +24,12 @@ meta:
   seed: 1
   signature: equal_arc_inscribed_angle
 problem_ref: 1d307bc502ead95a
-problem_text: 円周を8等分する点を順にJDEMFNAHとする。これらの点を頂点とする八角形について、∠HJEの大きさを求めよ。
+problem_text: 円周を9等分する点を順にRLFDMPJKAとする。これらの点を頂点とする九角形について、∠ARDの大きさを求めよ。
 sub_questions:
 - answer:
-    display: 225/2°
+    display: 100°
     kind: symbolic
-    srepr: Rational(225, 2)
+    srepr: Integer(100)
   cause_tags: []
   concept_tags:
   - circle.equal_arc_inscribed_angle
@@ -37,7 +37,7 @@ sub_questions:
 
     次に、角の頂点をふくまない側の弧が、等分した弧の何個分にあたるかを数える。（角の頂点をふくまない側の弧が単位弧の何個分かを数える）
 
-    最後に、弧の長さは円周角の大きさに比例することから、求める角の大きさを求める。（225/2°）'
+    最後に、弧の長さは円周角の大きさに比例することから、求める角の大きさを求める。（100°）'
   hints:
   - 円周をn等分してできる1つの弧に対する中心角から、その弧に対する円周角を求める。
   - 角の頂点をふくまない側の弧が、等分した弧の何個分にあたるかを数える。
@@ -57,6 +57,6 @@ sub_questions:
   - args: []
     narration: 弧の長さは円周角の大きさに比例することから、求める角の大きさを求める。
     op: apply_inscribed_angle_theorem
-    result_display: 225/2°
-    result_srepr: Rational(225, 2)
+    result_display: 100°
+    result_srepr: Integer(100)
 visual_svg: null

@@ -24,7 +24,7 @@ meta:
   seed: 3
   signature: probability_ordered_selection
 problem_ref: 7d817cce0fc72c1f
-problem_text: 5人の係の候補から、委員長、副委員長を1人ずつ順に選ぶ。選び方は全部で何通りあるか樹形図で数え、はるとさんが委員長に選ばれる確率を求めよ。
+problem_text: はるとさんをふくむ5人の係の候補から、委員長、副委員長を1人ずつ順に選ぶ。選び方は全部で何通りあるか樹形図で数え、はるとさんが委員長に選ばれる確率を求めよ。
 sub_questions:
 - answer:
     display: 1/5

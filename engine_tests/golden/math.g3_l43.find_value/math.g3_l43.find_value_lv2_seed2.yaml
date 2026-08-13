@@ -24,7 +24,7 @@ meta:
   seed: 2
   signature: judge_parallel_from_ratio
 problem_ref: 1bf15102f38b95fb
-problem_text: 三角形PBAで、辺PB, PA上に点Q, Dがある。PQ=8cm, QB=15cm, PD=104cm, DA=197cm であるとき、QDとBAが平行であるかどうかを、比を調べて答えよ。
+problem_text: 三角形PBAで、辺PB, PA上に点Q, Dがある。PQ=17cm, QB=11cm, PD=51cm, DA=28cm であるとき、QDとBAが平行であるかどうかを、比を調べて答えよ。
 sub_questions:
 - answer:
     display: 平行ではない

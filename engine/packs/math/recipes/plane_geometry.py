@@ -186,9 +186,12 @@ def judge_circle_property_recipe(ctx: CellContext, rng: Rng) -> MR:
     if concept == "arc_central_angle_proportional":
         o = _draw_distinct_points(1, rng)[0]
         r = int(draw(p["number_domain"], rng))
+        # **問いの形と答えの形をそろえる**（EVALUATION R-8）。答えは「正しい／誤り」の
+        # 判別（`math.judge_circle_property`）なのに、問題文が「どうなるか、答えよ」と
+        # 値を尋ねていた——生徒は「2倍になる」と書き、正解の「正しい」と一致しない。
         statement = (
-            f"中心{o}、半径{r}cmの円で、中心角が2倍になると、それに対する弧の長さは"
-            "どうなるか、答えよ"
+            f"中心{o}、半径{r}cmの円で、「中心角の大きさを2倍にすると、それに対する"
+            "弧の長さも2倍になる」といえるか、答えよ"
         )
         surface = {"center": o, "r": r}
     else:  # tangent_perpendicular

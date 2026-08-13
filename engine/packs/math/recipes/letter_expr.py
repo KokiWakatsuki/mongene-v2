@@ -433,6 +433,28 @@ def compute_notation(ctx: CellContext, rng: Rng) -> MR:
 # knowledge 系（ChoiceAnswer・用語想起／解の判別）— C1 g1 数と式の残 knowledge セル。
 # 答えはテキスト＝G-Q5t 素通り（§7.7）。dup は具体例（surface）と concept のパラメータ化で分散。
 # ---------------------------------------------------------------------------
+# 度数分布表の場面（g1_l56 の用語想起）。階級の個数を教科書の範囲に戻したぶんの
+# 組み合わせを、場面と総度数で取り戻す（原則①: 軸を増やす）。
+_FREQUENCY_TABLE_SCENES = (
+    "通学にかかる時間",
+    "ハンドボール投げの記録",
+    "一日の読書時間",
+    "睡眠時間",
+    "身長",
+    "反復横とびの記録",
+    "50m走の記録",
+    "立ち幅とびの記録",
+)
+
+def _population_size(n: int) -> int:
+    """引いた数を、標本調査が成り立つ母集団の大きさに直す（1000〜50000）。
+
+    定義域（10〜500）はそのままに、場面が要求する桁だけを上げる。全部を調べられる
+    大きさの集団に「標本調査」と言わせないため（原則⓪: 答え／場面の大きさで測る）。
+    """
+    return n * 100
+
+
 _TERM_RECALL_CONCEPTS = [
     "letter_expr.term_recall",
     "equality.term_recall",
@@ -621,21 +643,61 @@ def _draw_term_statement(domain: str, concept: str, rng: Rng, p: dict[str, objec
         b = int(draw({"int_set": bc_cands}, rng))
         c = int(draw({"int_set": bc_cands}, rng))
         eqx = f"{_fmt_poly_x_terms([(a, 2), (b, 1), (c, 0)])} = 0"
+        # テンプレは「〜を何といいますか。」で閉じるので、名前が答え（a・b・c）に
+        # なる語で終わらせる。「x の項の係数を何といいますか。→ b」は問いと答えの
+        # 型が噛み合っていなかった（係数の名前ではなく、対応する文字を聞いている）。
+        head = f"2次方程式 {eqx} を一般の形 ax² + bx + c = 0 と見比べたとき、"
         if concept == "coeff_a":
-            return f"2次方程式 {eqx} において、x² の項の係数"
+            return f"{head}x² の項の係数にあたる文字"
         if concept == "coeff_b":
-            return f"2次方程式 {eqx} において、x の項の係数"
-        return f"2次方程式 {eqx} において、定数項"  # coeff_c
+            return f"{head}x の項の係数にあたる文字"
+        return f"{head}定数項にあたる文字"  # coeff_c
 
     if domain == "probability_terms":
-        # g1_l59/g2_l51 確率まわりの用語。具体例（さいころをn回投げる等）を埋め込み
+        # g1_l59/g2_l51 確率まわりの用語。具体例（さいころを何回か投げる等）を埋め込み
         # surface を分散する。
+        #
+        # **直したこと（EVALUATION D-30）**
+        #  1. `probability` の例文「{n}回中の一部で起こることがら」は日本語として意味を
+        #     なしていなかった。確率の定義の例になる場面に置き直した。
+        #  2. `number_domain`（10〜500）を3つの concept で共有していたので
+        #     「1から487までの番号のカード」が出ていた（D-13 と同じ根＝存在しない道具）。
+        #
+        # **定義域は狭めない。** 引いた n は「回数」（10〜500 はどれも実験としてありうる）
+        # にそのまま使い、道具の個数には n から作った小さな数を使う。失う組み合わせは
+        # 道具（3通り）と2つ目の数で取り戻す（原則①: 軸を増やす）。
         n = int(draw(p["number_domain"], rng))
+        tool = int(draw({"int_set": [0, 1, 2]}, rng))
+        few = 1 + n % 8  # 1〜8（当たり・赤玉の数）
+        many = 2 + int(draw({"int_range": [0, 9]}, rng))  # 2〜11（はずれ・白玉の数）
         if concept == "trial":
-            return f"さいころを{n}回投げる実験のように、同じ条件のもとで何回もくり返すことができる実験や観察のこと"
+            times = max(1, round(n / 10)) * 10  # きりのよい回数（10〜500回）
+            thing = ("さいころ", "硬貨", "画びょう")[tool]
+            verb = "落とす" if tool == 2 else "投げる"
+            return (
+                f"{thing}を{times}回{verb}実験のように、"
+                "同じ条件のもとで何回もくり返すことができる実験や観察のこと"
+            )
         if concept == "probability":
-            return f"{n}回中の一部で起こることがらのように、あることがらの起こりやすさの程度を表す数のこと"
-        return f"1から{n}までの番号のカードのように、起こりうるどの結果も同じ程度に起こると考えられるようす"  # equally_likely
+            if tool == 2:
+                # カードの枚数は 6〜19（20枚以上は教材のカードとして見かけない）。
+                # 倍数は**カードの中に2枚以上ある**ものだけ（「1から4までのカードから
+                # 5の倍数」だと該当が0枚で、起こりやすさの例にならない）。
+                cards = 6 + int(draw({"int_range": [0, 13]}, rng))
+                mult = int(draw({"int_set": [m for m in range(2, 9) if 2 * m <= cards]}, rng))
+                example = f"1から{cards}までの番号のカードから{mult}の倍数のカードを引く起こりやすさ"
+            else:
+                example = (
+                    f"当たりが{few}本、はずれが{many}本入っているくじで当たりを引く起こりやすさ",
+                    f"赤玉が{few}個、白玉が{many}個入っている袋から赤玉を取り出す起こりやすさ",
+                )[tool]
+            return f"{example}のように、あることがらの起こりやすさの程度を表す数のこと"
+        example = (  # equally_likely
+            f"1から{few + many}までの番号のカード",
+            f"赤玉が{few}個、白玉が{many}個入っている袋から取り出す1個の玉",
+            f"当たりが{few}本、はずれが{many}本入っているくじから引く1本",
+        )[tool]
+        return f"{example}のように、起こりうるどの結果も同じ程度に起こると考えられるようす"
 
     if domain == "quadratic_function_terms":
         # g3_l32 y=ax² まわりの用語。具体例の比例定数 a(≠0) を埋め込み surface を分散する。
@@ -716,11 +778,21 @@ def _draw_term_statement(domain: str, concept: str, rng: Rng, p: dict[str, objec
         return f"総度数{n}の度数分布表の、各階級の相対度数を折れ線でつないで表したグラフ"  # frequency_polygon
 
     if domain == "cumulative_frequency_terms":
-        # g1_l56 累積度数まわりの用語。具体例の階級数 n を埋め込み surface を分散する。
+        # g1_l56 累積度数まわりの用語。具体例の階級数と場面を埋め込み surface を分散する。
+        # **階級の個数は5〜12にする**（EVALUATION R-9。`number_domain` が 3〜500 だったので
+        # 「337個の階級に分けた度数分布表」が出ていた。教科書の階級は5〜10個で、
+        # 度数分布表として成り立つ範囲がある＝D-29 と同じ「場面に対して値がありうるか」）。
+        # 定義域は狭めず、引いた n を階級数と場面の2軸に写す（原則①）。
         n = int(draw(p["number_domain"], rng))
+        # 階級数と場面は**別の桁**から作る（同じ n%8 で両方を決めると完全に連動して
+        # 8通りにしかならず、dup が 0.34 に跳ねる）。
+        classes = 5 + n % 8  # 5〜12個
+        scene = _FREQUENCY_TABLE_SCENES[(n // 8) % len(_FREQUENCY_TABLE_SCENES)]
+        total = int(draw({"int_set": [20, 25, 30, 35, 40, 45, 50]}, rng))
+        head = f"生徒{total}人の{scene}を{classes}個の階級に分けた度数分布表で"
         if concept == "cumulative_frequency":
-            return f"{n}個の階級に分けた度数分布表で、いちばん小さい階級から対象の階級までの度数を合計した値"
-        return f"{n}個の階級に分けた度数分布表で、いちばん小さい階級から対象の階級までの相対度数を合計した値"  # cumulative_relative_frequency
+            return f"{head}、いちばん小さい階級から対象の階級までの度数を合計した値"
+        return f"{head}、いちばん小さい階級から対象の階級までの相対度数を合計した値"  # cumulative_relative_frequency
 
     if domain == "representative_value_terms":
         # g1_l57 代表値の用語。具体例のデータ個数 n を埋め込み surface を分散する。
@@ -759,12 +831,19 @@ def _draw_term_statement(domain: str, concept: str, rng: Rng, p: dict[str, objec
         # g3_l57 標本調査の用語。具体例（対象の個数 n）を埋め込み surface を分散する。
         n = int(draw(p["number_domain"], rng))
         if concept == "census":
+            # 全数調査はすべてを調べる調査なので、小さい集団のままでよい。
             return f"{n}個（人）の対象すべてを、もれなく調べる調査"
-        return f"{n}個（人）の対象の集団から一部を取り出して調べ、集団全体のようすを推定する調査"  # sample_survey
+        # 標本調査は「全部は調べられない」場面の方法。22個（人）の集団では成り立たない
+        # ので、引いた n をそのまま使わず母集団の大きさに直す（D-29 と同じ根）。
+        return (
+            f"{_population_size(n)}個（人）の対象の集団から一部を取り出して調べ、"
+            "集団全体のようすを推定する調査"
+        )  # sample_survey
 
     if domain == "sampling_terms":
         # g3_l58 標本の取り出し方の用語。具体例（対象の個数 n）を埋め込み surface を分散する。
-        n = int(draw(p["number_domain"], rng))
+        # 母集団・標本・無作為抽出はどれも標本調査の語なので、母集団の大きさに直す。
+        n = _population_size(int(draw(p["number_domain"], rng)))
         if concept == "population":
             return f"{n}個（人）からなる、調査したい対象全体の集まり"
         if concept == "sample":
@@ -1362,10 +1441,10 @@ def _draw_rule_statement(
         t = int(draw(p["number_domain"], rng))
         v = int(draw(p["number_domain"], rng))
         if concept == "speed":
-            return f"道のり {d} km を {t} 時間で進む場面のように、道のり・速さ・時間の関係で「速さ」を求める式"
+            return f"道のり{d}kmを{t}時間で進む場面のように、道のり・速さ・時間の関係で「速さ」を求める式"
         if concept == "distance":
-            return f"速さ {v} km/時 で {t} 時間進む場面のように、道のり・速さ・時間の関係で「道のり」を求める式"
-        return f"道のり {d} km を速さ {v} km/時 で進む場面のように、道のり・速さ・時間の関係で「時間」を求める式"  # time
+            return f"速さ{v}km/時で{t}時間進む場面のように、道のり・速さ・時間の関係で「道のり」を求める式"
+        return f"道のり{d}kmを速さ{v}km/時で進む場面のように、道のり・速さ・時間の関係で「時間」を求める式"  # time
 
     if topic == "letter_meaning":
         # g1_l12 文字を使った式。1本 price 円の品物を x 本買う場面を surface に埋め込み dup 分散。

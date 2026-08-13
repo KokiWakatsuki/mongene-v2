@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: probability_terms_term_recall_g2
 problem_ref: 695ec10656dce2d4
-problem_text: 390回中の一部で起こることがらのように、あることがらの起こりやすさの程度を表す数のことを何といいますか。
+problem_text: 赤玉が7個、白玉が3個入っている袋から赤玉を取り出す起こりやすさのように、あることがらの起こりやすさの程度を表す数のことを何といいますか。
 sub_questions:
 - answer:
     correct: 確率

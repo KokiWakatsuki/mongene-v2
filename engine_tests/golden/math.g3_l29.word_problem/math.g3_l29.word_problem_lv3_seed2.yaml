@@ -24,20 +24,20 @@ meta:
   seed: 2
   signature: word_problem_quadratic_number_square_relation
 problem_ref: b6906a8b2db5e40f
-problem_text: 'ある正の整数がある。この数を2乗した数は、もとの数の3倍より340大きい。
+problem_text: 'ある正の整数がある。この数を2乗した数から、もとの数の7倍をひくと170になる。
 
   この整数を求めよ。'
 sub_questions:
 - answer:
-    display: '20'
+    display: '17'
     kind: symbolic
-    srepr: Tuple(Integer(20))
+    srepr: Tuple(Integer(17))
   cause_tags: []
   concept_tags:
   - quadratic.word_problem_number_relation
   explanation: 'まず、場面の中で、どちらの見方でも同じになる（等しくなっている）量に着目する。（2乗した数ともとの数をもとにした数）
 
-    次に、その量を x を使って両辺に表し、方程式をつくる。（x² = 3x + 340）
+    次に、その量を x を使って両辺に表し、方程式をつくる。（x² = 7x + 170）
 
     次に、かっこを展開し、右辺を左辺に移項して、=0 の形に整理する。（展開して整理する）
 
@@ -45,7 +45,7 @@ sub_questions:
 
     次に、積が 0 になるのは各因数が 0 のときだから、それぞれを 0 とおいて x を求める。
 
-    最後に、求めるものは正の数だから、2つの解のうち条件に合う正の解を選ぶ。（20）'
+    最後に、求めるものは正の数だから、2つの解のうち条件に合う正の解を選ぶ。（17）'
   hints:
   - 場面の中で、どちらの見方でも同じになる（等しくなっている）量に着目する。
   - その量を x を使って両辺に表し、方程式をつくる。
@@ -63,8 +63,8 @@ sub_questions:
   - args: []
     narration: その量を x を使って両辺に表し、方程式をつくる。
     op: formulate_equation
-    result_display: x² = 3x + 340
-    result_srepr: Equality(Pow(Symbol('x'), Integer(2)), Add(Mul(Integer(3), Symbol('x')), Integer(340)))
+    result_display: x² = 7x + 170
+    result_srepr: Equality(Pow(Symbol('x'), Integer(2)), Add(Mul(Integer(7), Symbol('x')), Integer(170)))
   - args: []
     narration: かっこを展開し、右辺を左辺に移項して、=0 の形に整理する。
     op: expand_and_rearrange
@@ -83,6 +83,6 @@ sub_questions:
   - args: []
     narration: 求めるものは正の数だから、2つの解のうち条件に合う正の解を選ぶ。
     op: select_positive_root
-    result_display: '20'
-    result_srepr: Integer(20)
+    result_display: '17'
+    result_srepr: Integer(17)
 visual_svg: null

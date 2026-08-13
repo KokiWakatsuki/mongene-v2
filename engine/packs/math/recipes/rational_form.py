@@ -58,6 +58,50 @@ _REPEATING_DENOMINATORS = [
 ]
 
 
+# 循環小数→分数（Lv2）の答えの分母の上限。教科書が扱うのは 1/3・4/33・5/6・7/30 の
+# ように分母99までで、`821/1980` のような分数は約分しても意味を持たない。
+_MAX_ANSWER_DENOMINATOR = 99
+
+
+def _decimal_to_fraction_denominator(non_repeating: str, repeating: str) -> int:
+    """0.<非循環部><循環節> を既約分数にしたときの分母（整数演算だけで求める）。"""
+    m, n = len(non_repeating), len(repeating)
+    num = int(non_repeating + repeating) - int(non_repeating or "0")
+    den = (10**n - 1) * 10**m
+    return den // gcd(num, den) if num else 1
+
+
+def _valid_repeating_pairs() -> list[tuple[str, str]]:
+    """(非循環部, 循環節) のうち、**答えの分母が上限内**のものを全部並べる。
+
+    以前は桁数 m・n を一様に引いてから桁を引き、上限を超えたら引き直していた。
+    これだと (m,n)=(0,1) の9通りしかない組に全体の 1/9 の確率が集まり、
+    dup_rate が 0.30 まで跳ねる。**組を先に全部作って、そこから一様に引く**と
+    943通りに散る（実測 dup 0.30 → 0.05）。
+    「答えの大きさで測る」（原則⓪）と「軸を増やす」（原則①）は両立する。
+    """
+    out: list[tuple[str, str]] = []
+    for m in (0, 1, 2):
+        for n in (1, 2, 3):
+            for head in range(10**m):
+                non_repeating = f"{head:0{m}d}" if m else ""
+                for block in range(10**n):
+                    repeating = f"{block:0{n}d}"
+                    # 循環節の先頭は0でない・全桁が同じだと短い周期に退化する
+                    # （"55" は実質周期1の 0.5̇ と同値。鉄則⑤: 構成時に排除）。
+                    if repeating[0] == "0" or (n > 1 and len(set(repeating)) == 1):
+                        continue
+                    if (
+                        _decimal_to_fraction_denominator(non_repeating, repeating)
+                        <= _MAX_ANSWER_DENOMINATOR
+                    ):
+                        out.append((non_repeating, repeating))
+    return out
+
+
+_REPEATING_PAIRS = _valid_repeating_pairs()
+
+
 def _effective_concept_tags(ctx: CellContext) -> list[str]:
     return list(ctx.spec_level.concept_tags or ctx.spec_family.concepts_default)
 
@@ -109,29 +153,12 @@ def _construct_fraction_to_decimal(ctx: CellContext, rng: Rng, mode: str) -> MR:
     )
 
 
-def _draw_repeating_block(rng: Rng, n: int) -> str:
-    """循環節の桁（長さ n）を構成する。全桁が同じ数字だと n 未満の周期に退化する
-    （例 n=2 の"55"は実質周期1の0.5̇と同値）ため、最後の桁だけ「それまでの桁が
-    全部同じ数字」のときに限りその数字を除外して引く（鉄則⑤: 構成時に排除）。
-    """
-    first = int(draw({"int_range": [1, 9]}, rng))
-    digits = [first]
-    for i in range(1, n):
-        if i == n - 1 and all(d == first for d in digits):
-            cands = [v for v in range(0, 10) if v != first]
-        else:
-            cands = list(range(0, 10))
-        digits.append(int(draw({"int_set": cands}, rng)))
-    return "".join(str(d) for d in digits)
-
-
 def _construct_decimal_to_fraction(ctx: CellContext, rng: Rng, mode: str) -> MR:
-    # 非循環部の桁数 m（0〜2桁）と循環節の桁数 n（1〜3桁）。dup（自由度）を広く取るため
-    # 範囲を広めにする（鉄則②）。
-    m = int(draw({"int_set": [0, 1, 2]}, rng))
-    n = int(draw({"int_set": [1, 2, 3]}, rng))
-    non_repeating = "".join(str(int(draw({"int_range": [0, 9]}, rng))) for _ in range(m))
-    repeating = _draw_repeating_block(rng, n)
+    # 非循環部（0〜2桁）と循環節（1〜3桁）の組。**答えの分母が99以下の組だけ**を
+    # あらかじめ並べておき、そこから一様に引く（`_valid_repeating_pairs` の説明を参照。
+    # 桁の定義域は狭めていない＝原則⓪「答えの大きさで測る」）。
+    index = int(draw({"int_range": [0, len(_REPEATING_PAIRS) - 1]}, rng))
+    non_repeating, repeating = _REPEATING_PAIRS[index]
 
     solver = REGISTRY.solver("math.repeating_decimal_to_fraction")
     sol = cast(Solution, solver(non_repeating, repeating))

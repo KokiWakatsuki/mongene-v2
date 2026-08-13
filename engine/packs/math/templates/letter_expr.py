@@ -47,7 +47,9 @@ LF_RULE_RECALL_V1 = "{{ given.statement }}。正しく述べているものを1�
 # g1_l1.knowledge Lv1: 符号のついた数を正の数・負の数に分類する
 LF_CLASSIFY_SIGN_V1 = "次の数は、正の数・負の数のどちらですか。\n{{ given.statement }}"
 # g1_l1.knowledge Lv2: 反対の性質をもつ量を符号を使って表す
-LF_OPPOSITE_QUANTITY_V1 = "{{ given.statement }} を、符号を使って表しなさい。"
+# **半角スペースを入れないこと。** statement は「値下がり 457円」のように鉤括弧で
+# 閉じる語句なので、「」 を、」と助詞の前に空白が入ってしまう（D-3 / R-4 と同じ）。
+LF_OPPOSITE_QUANTITY_V1 = "{{ given.statement }}を、符号を使って表しなさい。"
 # g1_l10.knowledge Lv2: 数の集合が四則について閉じているかを判別する
 LF_SET_CLOSURE_V1 = "{{ given.statement }}。あてはまるものを選びなさい。"
 # g1_l60.knowledge Lv2: 測定値の有効数字が何けたかを判別する

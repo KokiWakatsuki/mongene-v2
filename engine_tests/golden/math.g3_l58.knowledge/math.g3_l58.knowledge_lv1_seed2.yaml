@@ -24,7 +24,7 @@ meta:
   seed: 2
   signature: sampling_terms_term_recall
 problem_ref: 3b7c1adcd02c0371
-problem_text: 416個（人）からなる対象全体から、かたよりが出ないように偶然にまかせて標本を選び出す方法を何といいますか。
+problem_text: 41600個（人）からなる対象全体から、かたよりが出ないように偶然にまかせて標本を選び出す方法を何といいますか。
 sub_questions:
 - answer:
     correct: 無作為抽出
