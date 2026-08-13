@@ -1,0 +1,1001 @@
+<title>問題生成エンジンのしくみ</title>
+
+<style>
+  :root {
+    color-scheme: light;
+    --bg:#eceff3; --card:#fff; --ink:#0d1117; --ink2:#59636f; --line:#c5ccd5;
+    --blue:#1652c0; --blueBg:#dde7f8; --red:#c62d20; --redBg:#fadedb;
+    --green:#0f7346; --greenBg:#d6ecdf; --gold:#9c6300; --goldBg:#f8ead0; --dim:#e2e7ec;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { color-scheme: dark;
+      --bg:#0b0e13; --card:#151a22; --ink:#e5ebf2; --ink2:#95a1af; --line:#2a3441;
+      --blue:#6ea4f6; --blueBg:#152540; --red:#f0796b; --redBg:#331916;
+      --green:#5ec392; --greenBg:#112a1e; --gold:#dfab4d; --goldBg:#2f2517; --dim:#1c222b; }
+  }
+  :root[data-theme="dark"] { color-scheme: dark;
+    --bg:#0b0e13; --card:#151a22; --ink:#e5ebf2; --ink2:#95a1af; --line:#2a3441;
+    --blue:#6ea4f6; --blueBg:#152540; --red:#f0796b; --redBg:#331916;
+    --green:#5ec392; --greenBg:#112a1e; --gold:#dfab4d; --goldBg:#2f2517; --dim:#1c222b; }
+  :root[data-theme="light"] { color-scheme: light;
+    --bg:#eceff3; --card:#fff; --ink:#0d1117; --ink2:#59636f; --line:#c5ccd5;
+    --blue:#1652c0; --blueBg:#dde7f8; --red:#c62d20; --redBg:#fadedb;
+    --green:#0f7346; --greenBg:#d6ecdf; --gold:#9c6300; --goldBg:#f8ead0; --dim:#e2e7ec; }
+
+  :root {
+    --fs:"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic",YuGothic,"Noto Sans JP",system-ui,sans-serif;
+    --fm:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font-family:var(--fs);
+         line-height:1.85; -webkit-font-smoothing:antialiased;
+         /* 折り返しは文節の切れ目でしか起こさない（既定の日本語は文字単位で折る）。
+            行は貪欲に詰めるので横幅は目一杯使い、最終行だけが極端に短くなるのを
+            text-wrap:pretty が抑える。 */
+         word-break:auto-phrase; line-break:strict; text-wrap:pretty; }
+  /* 等幅の塊は元の折り返しのまま（式や表を文節で切らない）。 */
+  pre, code, .eq, .mono { word-break:normal; }
+  .wrap { max-width:58rem; margin:0 auto; padding:0 1rem; }
+
+  section { padding:clamp(2.5rem,7vw,4.5rem) 0; border-top:1px solid var(--line); }
+  section:first-of-type { border-top:0; }
+
+  h1 { font-size:clamp(1.8rem,6.5vw,3.2rem); font-weight:800; line-height:1.3;
+       margin:0 0 1.4rem; letter-spacing:-0.01em; }
+  h2 { font-size:clamp(1.35rem,4.4vw,2.1rem); font-weight:800; line-height:1.4;
+       margin:0 0 0.5rem; }
+  h2 .n { color:var(--blue); font-family:var(--fm); font-size:0.55em; margin-right:0.5rem;
+          vertical-align:0.15em; }
+  h3 { font-size:1.05rem; font-weight:800; margin:2rem 0 0.5rem; }
+  .lead { font-size:clamp(0.95rem,2.4vw,1.08rem); color:var(--ink2); margin:0 0 1.8rem;
+          max-width:40em; }
+  p { max-width:40em; margin:0 0 1rem; }
+  .note { font-size:0.88rem; color:var(--ink2); max-width:40em; }
+  b { font-weight:700; }
+  code { font-family:var(--fm); font-size:0.88em; background:var(--dim); padding:0.1em 0.35em; }
+  pre { font-family:var(--fm); font-size:0.83rem; line-height:1.9; background:var(--dim);
+        border:1px solid var(--line); padding:0.9rem 1rem; overflow-x:auto; margin:0.8rem 0 1rem; }
+  pre .c { color:var(--ink2); }
+  pre .k { color:var(--blue); font-weight:700; }
+
+  .panel { background:var(--card); border:1px solid var(--line); padding:clamp(1rem,3vw,1.7rem);
+           margin:1.4rem 0; }
+
+  button { font-family:var(--fs); font-weight:700; font-size:0.9rem; cursor:pointer;
+           border:1px solid var(--blue); background:var(--card); color:var(--blue);
+           padding:0.45rem 0.9rem; border-radius:2px; }
+  button:hover { background:var(--blueBg); }
+  button.on { background:var(--blue); color:var(--card); }
+  button:focus-visible { outline:3px solid var(--gold); outline-offset:2px; }
+  .btnrow { display:flex; flex-wrap:wrap; gap:0.4rem; align-items:center; }
+  .btnrow .lbl { font-size:0.8rem; color:var(--ink2); min-width:5.5rem; font-weight:700; }
+
+  .qcard { border:2px solid var(--ink); background:var(--card); padding:clamp(0.9rem,3vw,1.5rem);
+           font-size:clamp(0.95rem,2.6vw,1.15rem); line-height:2.5; }
+  .qcard.wide { overflow-x:auto; }
+  .qline { white-space:nowrap; }
+  .sl { display:inline-block; font-weight:800; color:var(--blue);
+        font-variant-numeric:tabular-nums; text-align:center; }
+  .sl.n3 { min-width:3.2em; text-align:right; }
+  .sl.n4 { min-width:4.2em; text-align:right; }
+  .sl.n2 { min-width:2.2em; text-align:right; }
+  .sl.w  { min-width:5em; }
+  .qans { margin-top:0.8rem; padding-top:0.8rem; border-top:1px dashed var(--line);
+          font-size:0.95rem; color:var(--ink2); white-space:nowrap; }
+  .qans b { color:var(--green); font-size:1.2em; font-variant-numeric:tabular-nums;
+            display:inline-block; min-width:3.5em; }
+  .qans .eq { color:var(--ink); font-family:var(--fm); font-size:0.95em;
+              display:inline-block; min-width:16em; }
+
+  .verdict { margin-top:0.9rem; padding:0.6rem 0.9rem; font-weight:700; font-size:0.95rem;
+             border:1px solid var(--line); min-height:3rem; display:flex; align-items:center; }
+  .verdict.ok { border-color:var(--green); background:var(--greenBg); color:var(--green); }
+  .verdict.ng { border-color:var(--red); background:var(--redBg); color:var(--red); }
+
+  /* 100回引く */
+  .simhead { display:flex; flex-wrap:wrap; gap:0.8rem; align-items:baseline; margin-bottom:0.7rem; }
+  .simbig { font-family:var(--fm); font-weight:800; font-variant-numeric:tabular-nums;
+            font-size:clamp(1.6rem,6vw,2.6rem); color:var(--red); }
+  .simbig .ok { color:var(--green); }
+  .simlist { display:grid; gap:0.3rem; min-height:8rem; }
+  .simrow { font-size:0.85rem; line-height:1.6; border-left:3px solid var(--red);
+            padding:0.25rem 0 0.25rem 0.7rem; }
+  .simrow.good { border-left-color:var(--green); }
+  .simrow .r { font-family:var(--fm); font-weight:700; color:var(--red); }
+  .simrow.good .r { color:var(--green); }
+
+  /* 穴埋め */
+  .paper { border:2px solid var(--gold); padding:1.1rem; position:relative;
+           font-size:clamp(0.95rem,2.5vw,1.15rem); line-height:2.7; }
+  .paper .by { position:absolute; top:-0.8rem; left:0.8rem; background:var(--gold);
+               color:var(--card); font-size:0.7rem; font-weight:800; padding:0.1rem 0.55rem; }
+  .hole { display:inline-block; min-width:3.6em; text-align:center; border:2px dashed var(--line);
+          background:var(--dim); color:transparent; font-weight:800; padding:0 0.25em;
+          margin:0 0.1em; transition:color .2s,border-color .2s,background .2s; }
+  .hole.f { color:var(--blue); border-style:solid; border-color:var(--blue); background:var(--blueBg); }
+  .parts { display:flex; flex-wrap:wrap; gap:0.4rem; margin-top:0.9rem; }
+  .part { font-family:var(--fm); font-size:0.85rem; font-weight:700; border:1px solid var(--blue);
+          color:var(--blue); background:var(--blueBg); padding:0.3rem 0.55rem; transition:opacity .3s; }
+  .part.used { opacity:0.18; }
+
+  /* ピッカー */
+  .pick { display:grid; gap:0.9rem; }
+  .pickrow { display:grid; grid-template-columns:1fr; gap:0.3rem; }
+  @media (min-width:40rem) { .pickrow { grid-template-columns:6rem 1fr; align-items:start; } }
+  .pickrow > .lbl { font-size:0.8rem; font-weight:700; color:var(--ink2); padding-top:0.5rem; }
+  .out { border:1px solid var(--line); background:var(--dim); padding:1rem;
+         min-height:11rem; font-size:0.95rem; line-height:1.95; white-space:pre-wrap; }
+  .out .ans { display:block; margin-top:0.7rem; padding-top:0.7rem;
+              border-top:1px dashed var(--line); color:var(--green); font-weight:700; }
+
+  /* 検算 */
+  .two { display:grid; gap:0.8rem; }
+  @media (min-width:48rem) { .two { grid-template-columns:1fr 1fr; } }
+  .col { border:1px solid var(--line); padding:0.9rem; }
+  .col.a { border-color:var(--blue); }
+  .col.b { border-color:var(--gold); }
+  .col h4 { margin:0 0 0.2rem; font-size:0.98rem; font-weight:800; }
+  .col.a h4 { color:var(--blue); } .col.b h4 { color:var(--gold); }
+  .col .sub { font-size:0.78rem; color:var(--ink2); margin-bottom:0.7rem; min-height:2.6em; }
+  .step { font-family:var(--fm); font-size:0.86rem; padding:0.3rem 0; opacity:0.15;
+          transition:opacity .35s; border-bottom:1px solid var(--dim); }
+  .step.on { opacity:1; }
+  .step:last-child { border-bottom:0; font-weight:800; font-size:1rem; }
+
+  /* 数の内訳 */
+  .calc { display:grid; gap:0.4rem; }
+  .crow { display:grid; grid-template-columns:1fr auto; gap:0.6rem; align-items:baseline;
+          border-bottom:1px solid var(--dim); padding:0.35rem 0; }
+  .crow .k { font-size:0.9rem; }
+  .crow .v { font-family:var(--fm); font-weight:800; font-variant-numeric:tabular-nums; }
+  .crow.total { border-bottom:0; border-top:2px solid var(--ink); margin-top:0.3rem; padding-top:0.6rem; }
+  .crow.total .v { font-size:clamp(1.4rem,5vw,2.2rem); color:var(--blue); }
+
+  /* AI */
+  .flow3 { display:grid; gap:0.6rem; }
+  @media (min-width:48rem) { .flow3 { grid-template-columns:1fr auto 1fr; align-items:center; } }
+  .fbox { border:1px solid var(--line); padding:0.9rem; }
+  .fbox.now { background:var(--dim); }
+  .fbox.next { border-color:var(--blue); }
+  .fbox .t { font-weight:800; font-size:0.92rem; margin-bottom:0.4rem; }
+  .fbox .d { font-size:0.86rem; color:var(--ink2); line-height:1.8; }
+  .fto { text-align:center; font-size:1.4rem; color:var(--ink2); }
+  .steps3 { display:grid; gap:0.5rem; counter-reset:s; }
+  .s3 { display:grid; grid-template-columns:1.9rem 1fr; gap:0.7rem; align-items:start; }
+  .s3 .n { width:1.9rem; height:1.9rem; display:grid; place-items:center; font-family:var(--fm);
+           font-size:0.8rem; font-weight:800; border:1px solid var(--green); color:var(--green); }
+  .s3 .t { font-size:0.92rem; line-height:1.8; }
+
+  /* まとめ表 */
+  .maptbl { width:100%; border-collapse:collapse; font-size:0.9rem; min-width:34rem; }
+  .maptbl th, .maptbl td { text-align:left; padding:0.6rem 0.8rem 0.6rem 0; vertical-align:top;
+                           border-bottom:1px solid var(--line); line-height:1.75; }
+  .maptbl thead th { font-family:var(--fm); font-size:0.72rem; color:var(--ink2); font-weight:400;
+                     letter-spacing:0.05em; white-space:nowrap; }
+  .maptbl td.nm { font-weight:800; white-space:nowrap; }
+  .maptbl td.wh { font-family:var(--fm); font-size:0.8rem; color:var(--blue); white-space:nowrap; }
+  .who { display:inline-block; font-size:0.72rem; font-weight:800; padding:0.08em 0.45em;
+         white-space:nowrap; }
+  .who.h { color:var(--gold); border:1px solid var(--gold); background:var(--goldBg); }
+  .who.m { color:var(--blue); border:1px solid var(--blue); background:var(--blueBg); }
+  /* バッジは inline-block なので、その直後で必ず折れうる。続く助詞と束ねて、
+     「機械」だけが行末に取り残されるのを防ぐ。 */
+  .nb { white-space:nowrap; }
+  .scroll { overflow-x:auto; }
+
+  /* 実物の図。エンジンは白地・黒線で描く（暗い画面で線が消えないように）ので、
+     ページが暗くてもそのまま白地で置く。狭い画面でははみ出させず縮める。 */
+  .figbox { overflow-x:auto; text-align:center; }
+  .figbox svg { max-width:100%; height:auto; border:1px solid var(--line); }
+
+  .foot { font-family:var(--fm); font-size:0.72rem; color:var(--ink2);
+          border-top:1px solid var(--line); padding:1.2rem 0 4rem; line-height:1.9; }
+
+  /* ===== 用語のひとこと（? のチップ） =====
+     ホバーだけにすると、スマホ・タブレットではこの説明が永久に読めない。
+     開閉の権威はクリック（タップ）に置き、ホバーは机上の付け足しにする。 */
+  .g { position:relative; display:inline; }
+  .gq { font-family:var(--fm); font-size:0.68rem; font-weight:800; line-height:1;
+        width:1.15rem; height:1.15rem; padding:0; margin-left:0.15rem; border-radius:50%;
+        border:1px solid var(--blue); color:var(--blue); background:var(--card);
+        vertical-align:0.28em; cursor:pointer; }
+  .gq:hover { background:var(--blue); color:var(--card); }
+  .g.on .gq { background:var(--blue); color:var(--card); }
+  .gt { display:none; position:absolute; left:0; top:calc(100% + 0.45rem); z-index:20;
+        width:max-content; max-width:min(24rem,78vw); padding:0.6rem 0.8rem;
+        background:var(--card); border:1px solid var(--blue);
+        box-shadow:0 6px 20px rgba(0,0,0,0.16); font-size:0.85rem; font-weight:400;
+        line-height:1.75; color:var(--ink); text-align:left; white-space:normal; }
+  .g.on .gt { display:block; }
+  @media (hover:hover) and (pointer:fine) { .g:hover .gt { display:block; } }
+
+  /* ===== その場で開く詳細 ===== */
+  .more { border-left:2px solid var(--line); padding-left:0.9rem; margin:0.6rem 0 1.3rem;
+          max-width:40em; }
+  .more > summary { cursor:pointer; font-size:0.86rem; font-weight:700; color:var(--blue);
+                    list-style:none; padding:0.15rem 0; }
+  .more > summary::-webkit-details-marker { display:none; }
+  .more > summary::before { content:"＋ "; font-family:var(--fm); }
+  .more[open] > summary::before { content:"− "; }
+  .more > summary:hover { text-decoration:underline; }
+  .more > summary:focus-visible { outline:3px solid var(--gold); outline-offset:2px; }
+  .more[open] > summary { margin-bottom:0.5rem; }
+  .more .panel:first-of-type { margin-top:0.4rem; }
+
+  /* ===== 組み立ての図 =====
+     文章は HTML に流し、線だけを実行時に座標から引く。SVG に文字を置くと
+     日本語の幅で穴の位置がずれるので、穴の位置は必ずレイアウトに聞く。
+     束と「組み立て係」は穴の真上へ JS で動かす。ずれると線が交差して読めない。 */
+  .asm { position:relative; }
+  .asmstage { overflow-x:auto; }
+  .asminner { position:relative; width:max-content; min-width:100%; padding-bottom:0.5rem; }
+  .asmwire { position:absolute; inset:0; width:100%; height:100%; pointer-events:none; z-index:0; }
+  .asminner > *:not(.asmwire) { position:relative; z-index:1; }
+
+  .pc { border:1px solid var(--line); background:var(--card); padding:0.55rem 0.75rem;
+        font-size:0.78rem; line-height:1.65; }
+  .pc .pct { font-weight:800; font-size:0.72rem; margin-bottom:0.1rem; }
+  .pc .pcb { color:var(--ink2); }
+  .pc-spec { border-color:var(--gold); } .pc-spec .pct { color:var(--gold); }
+  .pc-fig  { border-style:dashed; }
+  .pc-chk  { border-color:var(--blue); } .pc-chk .pct { color:var(--blue); }
+  .pc-gate { border-color:var(--green); } .pc-gate .pct { color:var(--green); }
+
+  .asmband { display:flex; gap:0.8rem; align-items:stretch; margin-bottom:3.2rem; }
+  .asmband .pc-spec { flex:0 0 26rem; }
+  .asmband .pc-fig  { flex:0 0 14rem; }
+
+  .stacks { position:relative; height:4.5rem; margin-bottom:2.2rem; }
+  .stk { position:absolute; top:0; width:5rem; text-align:center; }
+  .stk .cards { position:relative; height:2.6rem; }
+  .stk .cards i, .stk .cards b {
+        position:absolute; left:0; right:0; top:0; height:1.85rem; display:grid; place-items:center;
+        border:1px solid var(--blue); background:var(--card);
+        font-family:var(--fm); font-size:0.8rem; font-weight:800; color:var(--blue); }
+  .stk .cards i:nth-child(1) { transform:translate(7px,7px); opacity:0.3; }
+  .stk .cards i:nth-child(2) { transform:translate(3.5px,3.5px); opacity:0.55; }
+  .stk .cards b { background:var(--blueBg); }
+  .stk span { display:block; font-size:0.68rem; color:var(--ink2); margin-top:0.5rem;
+              white-space:nowrap; }
+  /* 6つ目の穴。束が無く、計算で作る側 */
+  .stk.calc .cards b { border-color:var(--green); background:var(--greenBg); color:var(--green); }
+  .stk.calc span { color:var(--green); }
+
+  .tmpl { border:2px solid var(--gold); background:var(--card); padding:0.85rem 1rem;
+          font-size:0.85rem; line-height:2.4; white-space:nowrap; }
+  .tmpl .hl { display:inline-block; min-width:2.6em; text-align:center; margin:0 0.15em;
+              padding:0 0.3em; font-family:var(--fm); font-weight:800;
+              border:1px solid var(--blue); background:var(--blueBg); color:var(--blue); }
+  .tmpl .hl.calc { border-color:var(--green); background:var(--greenBg); color:var(--green); }
+  .tcap { font-size:0.7rem; color:var(--ink2); margin:0.35rem 0 0; }
+
+  .asmflow { display:flex; gap:0.8rem; margin-top:3rem; }
+  .asmflow .pc { flex:0 0 22rem; }
+
+  .asmnote { font-size:0.78rem; color:var(--ink2); margin:0.8rem 0 0; max-width:none; }
+  .asmnote .sw { display:inline-block; width:0.75rem; height:0.75rem; margin:0 0.25rem 0 0.7rem;
+                 vertical-align:-0.05rem; border:1px solid var(--blue); background:var(--blueBg); }
+  .asmnote .sw.g { border-color:var(--green); background:var(--greenBg); }
+
+  @media (prefers-reduced-motion:reduce) { *,*::before,*::after { transition-duration:.001s !important; } }
+</style>
+
+<!-- lang="ja" は装飾ではない。Chrome の文節分割（word-break:auto-phrase）は、
+     その要素の言語が日本語だと分かっているときだけ働く。外すと「多/様性」
+     「突き合/わせて」のように語の途中で折れる。 -->
+<div class="wrap" lang="ja">
+
+<!-- ========== 0 ========== -->
+<section>
+  <h1>この問題文を書いたのは、人間です。<br>機械が入れたのは数だけ。</h1>
+
+  <div class="panel">
+    <div class="qcard wide">
+      <div class="qline">1個<span class="sl n3" id="h_pa">130</span>円の<span class="sl w" id="h_a">なし</span>と、1個<span class="sl n3" id="h_pb">110</span>円の<span class="sl w" id="h_b">ぶどう</span>を</div>
+      <div class="qline">合わせて<span class="sl n2" id="h_n">10</span>個買ったところ、代金の合計は<span class="sl n4" id="h_t">1200</span>円だった。</div>
+      <div class="qline"><span class="sl w" id="h_a2">なし</span>を買った個数を x 個とする。方程式をつくって、その個数を求めよ。</div>
+      <div class="qans">こたえ&nbsp;&nbsp;<span class="eq" id="h_eq">130x + 110(10 - x) = 1200</span>&nbsp;→&nbsp;<b id="h_ans">5個</b></div>
+    </div>
+    <div class="btnrow" style="margin-top:1rem">
+      <button id="h_next">別の問題を出す</button>
+      <span class="note" id="h_cnt" style="margin:0">1問目</span>
+    </div>
+  </div>
+
+  <p>ボタンとスライダーは全部動きます。</p>
+
+  <p><b>これを作っているのは生成AIではありません。</b>生徒が1問出すたびにAIが呼ばれることもありません。</p>
+  <details class="more"><summary>なぜ使っていないのか</summary>
+    <p>出した問題が正しいことを、機械が確かめられる形にしておきたいからです。文と答えをまとめてAIに書かせると、その確かめができません。確かめ方は 05、AIをどこでなら使えるかは 07 で扱います。</p>
+  </details>
+</section>
+
+<!-- ========== 1 ========== -->
+<section>
+  <h2><span class="n">01</span>作る順番</h2>
+  <p class="lead">答えを先に決めて、そこから問題の数を逆算します。先生が作るときと同じ順番です。</p>
+
+  <p>動かしてみてください。<b>どう動かしても答えは整数のまま</b>です。</p>
+
+  <div class="panel">
+    <div class="btnrow" style="margin-bottom:0.5rem">
+      <span class="lbl">なしの値段</span>
+      <input type="range" id="s_pa" min="40" max="160" step="10" value="130" style="flex:1;min-width:9rem">
+      <span class="sl n3" id="v_pa">130</span>円
+    </div>
+    <div class="btnrow" style="margin-bottom:0.5rem">
+      <span class="lbl">ぶどうの値段</span>
+      <input type="range" id="s_pb" min="40" max="160" step="10" value="110" style="flex:1;min-width:9rem">
+      <span class="sl n3" id="v_pb">110</span>円
+    </div>
+    <div class="btnrow" style="margin-bottom:0.5rem">
+      <span class="lbl">合わせて</span>
+      <input type="range" id="s_n" min="6" max="15" step="1" value="10" style="flex:1;min-width:9rem">
+      <span class="sl n2" id="v_n">10</span>個
+    </div>
+    <div class="btnrow">
+      <span class="lbl">なしの個数<br><small style="font-weight:400">＝これが答え</small></span>
+      <input type="range" id="s_x" min="1" max="9" step="1" value="5" style="flex:1;min-width:9rem">
+      <span class="sl n2" id="v_x">5</span>個
+    </div>
+
+    <div class="qcard wide" style="margin-top:1.2rem">
+      <div class="qline">1個<span class="sl n3" id="b_pa">130</span>円のなしと、1個<span class="sl n3" id="b_pb">110</span>円のぶどうを</div>
+      <div class="qline">合わせて<span class="sl n2" id="b_n">10</span>個買ったところ、代金の合計は<span class="sl n4" id="b_t">1200</span>円だった。</div>
+      <div class="qans">なしの個数&nbsp;→&nbsp;<b id="b_ans">5個</b></div>
+    </div>
+    <div class="verdict ok" id="b_msg"></div>
+  </div>
+
+
+  <h3>数を先に決めるとどうなるか</h3>
+  <p>逆に、全部でたらめに引いてから解いてみます。</p>
+
+  <div class="panel">
+    <div class="simhead">
+      <div class="simbig" id="sim_n">— / 100</div>
+      <div class="note" id="sim_t" style="margin:0">ボタンを押すと引きます</div>
+    </div>
+    <div class="simlist" id="sim_list"></div>
+    <div class="btnrow" style="margin-top:0.8rem"><button id="sim_go">100回引く</button></div>
+  </div>
+
+  <p>使えるのは、だいたい<b>100回に5回</b>です。</p>
+  <details class="more"><summary>残りの95回に何が起きているか</summary>
+    <p>なしを <code>67/8</code> 個買ったことになったり、10個しか買っていないのに答えが16個になったりします。エンジンは1つの置き場所の50万通りを全部使える状態にしておく必要があるので、この当たりはずれのやり方は取れません。</p>
+  </details>
+</section>
+
+<!-- ========== 2 ========== -->
+<section>
+  <h2><span class="n">02</span>日本語はどこから来るのか</h2>
+  <p class="lead">文そのものは人が書いています。機械が決めているのは、下の枠の中身だけです。</p>
+
+  <div class="panel">
+    <div class="paper" id="paper">
+      <span class="by">人が書いた文</span>
+      1個<span class="hole" data-h="0"></span>円の<span class="hole" data-h="1"></span>と、
+      1個<span class="hole" data-h="2"></span>円の<span class="hole" data-h="3"></span>を<br>
+      合わせて<span class="hole" data-h="4"></span>個買ったところ、代金の合計は<span class="hole" data-h="5"></span>円だった。
+    </div>
+    <div class="parts" id="parts">
+      <span class="part">130</span><span class="part">なし</span><span class="part">110</span>
+      <span class="part">ぶどう</span><span class="part">10</span><span class="part">1200</span>
+    </div>
+    <div class="btnrow" style="margin-top:1rem"><button id="p_play">枠を埋める</button></div>
+  </div>
+
+  <details class="more"><summary>品名はどこから来るのか</summary>
+    <p>品名は <code>[みかん, りんご, なし, もも, かき, ぶどう, レモン, オレンジ]</code> という一覧から選ばれます。この一覧も、文そのものも、人が書いたものです。</p>
+  </details>
+  <p class="note">こういう<span class="g">文型<button class="gq" aria-label="文型とは">?</button><span class="gt">枠のあいた日本語の文。枠に数と品名を入れると問題文になる。1枚が複数の単元で使い回される。</span></span>はいま234枚。増やせるのは人だけで、ここが多様性の上限です（07）。</p>
+</section>
+
+<!-- ========== 3 ========== -->
+<section>
+  <h2><span class="n">03</span>問題の置き場所</h2>
+  <p class="lead">単元・形式・難易度の3つを指定すると、<span class="g">置き場所<button class="gq" aria-label="置き場所とは">?</button><span class="gt">単元（1年・方程式の利用など）× 形式（計算・文章題・証明など）× 難易度 で決まる枠のこと。ここに問題の作り方が1つ入っている。</span></span>が1つ決まります。実在する置き場所が630あります。</p>
+
+  <p>選んでみてください。単元によって、ある形式と無い形式があります。</p>
+
+  <div class="panel">
+    <div class="pick">
+      <div class="pickrow"><span class="lbl">単元</span><div class="btnrow" id="pk_unit"></div></div>
+      <div class="pickrow"><span class="lbl">形式</span><div class="btnrow" id="pk_form"></div></div>
+      <div class="pickrow"><span class="lbl">難易度</span><div class="btnrow" id="pk_lv"></div></div>
+    </div>
+    <div class="out" id="pk_out" style="margin-top:1rem"></div>
+  </div>
+
+  <details class="more"><summary>同じ単元でも、形式で聞かれることが変わる</summary>
+    <p>「2年・二等辺三角形」で形式を切り替えてみてください。性質を答えさせるのか、角度を計算させるのか、証明を書かせるのか。難易度の数も形式ごとに違います。</p>
+  </details>
+
+  <p>難易度は、数を大きくすることではありません。<b>問いの構造そのもの</b>を変えています。Lv を上げても構造が変わらない置き場所は、検査で不合格になります。</p>
+
+  <details class="more">
+    <summary>Lv2 と Lv3 で何が違うのか（1年・方程式の利用・文章題）</summary>
+    <div class="panel scroll">
+      <table class="maptbl">
+        <thead><tr><th></th><th>Lv2</th><th>Lv3</th></tr></thead>
+        <tbody>
+          <tr><td class="nm">誘導</td><td>あり</td><td>なし</td></tr>
+          <tr><td class="nm">小問</td><td>2つ（式を立てる → 値を出す）</td><td>1つ（値だけ）</td></tr>
+          <tr><td class="nm">与える数</td><td>合計個数を書いてある</td><td>合計個数を書かない</td></tr>
+          <tr><td class="nm">立てる式</td><td><span class="eq">a·x + b(k − x) = c</span></td><td><span class="eq">a·x + b(x + d) = c</span></td></tr>
+          <tr><td class="nm">生徒がやること</td><td>与えられた形に当てはめる</td><td>「B は A より d 多い」を自分で <span class="eq">x + d</span> に読み替える</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>Lv3 は「合計が何個か」を書きません。そこを自分で文字に直すところが、この難易度で増えている仕事です。数の大きさは Lv2 と変わりません。検査が見ているのは、この表の「小問の数」「与える数」「式の形」です。</p>
+  </details>
+</section>
+
+<!-- ========== 4（図） ========== -->
+<section>
+  <h2><span class="n">04</span>図はどこから来るのか</h2>
+  <p class="lead">図も同じです。絵を用意して選んでいるのではなく、問題文の数から座標を計算して線を引いています。</p>
+
+  <p>03 の「2年・二等辺三角形・証明」で出てくる図を、実物のまま置きます。</p>
+
+  <div class="panel">
+    <div class="qcard wide" style="margin-bottom:1rem">
+      <div class="qline">AB ＝ AC である二等辺三角形ABCで、辺BCの中点をMとし、点Aと点Mを結んだ。</div>
+      <div class="qline">このとき、∠BAM ＝ ∠CAM であることを証明せよ。</div>
+    </div>
+    <div class="figbox">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 340" width="420" height="340" role="img" aria-label="二等辺三角形ABCと辺BCの中点M"><rect x="0" y="0" width="420" height="340" fill="#ffffff" stroke="none"/><line x1="210.00" y1="46.00" x2="52.18" y2="294.00" stroke="#000000" stroke-width="1.6"/><line x1="210.00" y1="46.00" x2="367.82" y2="294.00" stroke="#000000" stroke-width="1.6"/><line x1="52.18" y1="294.00" x2="367.82" y2="294.00" stroke="#000000" stroke-width="1.6"/><line x1="210.00" y1="46.00" x2="210.00" y2="294.00" stroke="#000000" stroke-width="1.6"/><line x1="127.95" y1="165.63" x2="134.24" y2="174.37" stroke="#000000" stroke-width="1.2"/><line x1="283.62" y1="171.00" x2="294.20" y2="169.00" stroke="#000000" stroke-width="1.2"/><circle cx="52.18" cy="294.00" r="3.2" fill="#000000"/><text x="39.03" y="305.22" font-size="14" text-anchor="middle" fill="#000000" font-family="sans-serif">B</text><circle cx="367.82" cy="294.00" r="3.2" fill="#000000"/><text x="380.97" y="305.22" font-size="14" text-anchor="middle" fill="#000000" font-family="sans-serif">C</text><circle cx="210.00" cy="46.00" r="3.2" fill="#000000"/><text x="210.00" y="35.00" font-size="14" text-anchor="middle" fill="#000000" font-family="sans-serif">A</text><circle cx="210.00" cy="294.00" r="3.2" fill="#000000"/><text x="210.00" y="313.00" font-size="14" text-anchor="middle" fill="#000000" font-family="sans-serif">M</text></svg>
+    </div>
+  </div>
+
+  <p>中身は4つの点の座標と、それを結ぶ線だけです。<b>図が問題文どおりかは、人が見て判断していません。</b>座標を測って突き合わせます。</p>
+
+  <details class="more">
+    <summary>座標と、その突き合わせを見る</summary>
+    <pre><span class="k">A</span> = (210.00,  46.00)
+<span class="k">B</span> = ( 52.18, 294.00)
+<span class="k">C</span> = (367.82, 294.00)
+<span class="k">M</span> = (210.00, 294.00)</pre>
+    <p>問題文は「AB ＝ AC」「M は BC の中点」と言っています。座標から測るとこうなります。</p>
+    <div class="panel">
+      <div class="calc">
+        <div class="crow"><span class="k">AB</span><span class="v">293.96</span></div>
+        <div class="crow"><span class="k">AC</span><span class="v">293.96</span></div>
+        <div class="crow"><span class="k">BM</span><span class="v">157.82</span></div>
+        <div class="crow"><span class="k">CM</span><span class="v">157.82</span></div>
+      </div>
+      <div class="verdict ok" style="margin-top:0.8rem">仮定のとおり。図と問題文が食い違っていない。</div>
+    </div>
+  </details>
+
+  <p>この照合は、図のある問題ぜんぶでやっています。905枚を測って、仮定と食い違ったものは0枚でした。</p>
+
+  <details class="more"><summary>図の種類と、もう1つの検査</summary>
+    <p>形式ごとに違います。作図（定規とコンパスの線）、グラフ、投影図、箱ひげ図、度数分布表。どれも答えを先に決めて、そこから座標を出します。<b>答えそのものを図に描いてしまわないこと</b>も検査しています。作図の問題で、答えの線を最初から引いておくわけにいかないからです。</p>
+  </details>
+</section>
+
+<!-- ========== 5 ========== -->
+<section>
+  <h2><span class="n">05</span>答えが合っているかの確かめ方</h2>
+  <p class="lead">作ったときの計算をもう一度なぞっても、確かめたことになりません。そこで、問題文に出ている数だけを渡して、別に解かせます。</p>
+
+  <p>渡すのは<b>名札のついた数だけ</b>。答えも、問題文の日本語も渡しません。式の型は人が書いてあるので、確かめる側は<b>そこに数を入れて解くだけ</b>です。<b>日本語の解釈はどこにも入っていません。</b></p>
+
+  <details class="more">
+    <summary>受け取るものと、式の組み方を見る</summary>
+    <pre><span class="c">// 場面の種類と、問題文に出ている数</span>
+<span class="k">kind</span>    = "price_count"
+<span class="k">price_a</span> = 130    <span class="c">// 「1個130円のなし」の130</span>
+<span class="k">price_b</span> = 110    <span class="c">// 「1個110円のぶどう」の110</span>
+<span class="k">total</span>   = 10     <span class="c">// 「合わせて10個」の10</span>
+<span class="k">cost</span>    = 1200   <span class="c">// 「合計は1200円」の1200</span></pre>
+    <p>場面の種類ごとに、<b>式の型</b>が用意してあります。<code>price_count</code> ならこれです。</p>
+    <pre><span class="k">def</span> formulate_price_count(price_a, price_b, total, cost):
+    <span class="k">return</span> f"{price_a}*x + {price_b}*({total} - x) = {cost}"
+
+<span class="c">→  "130*x + 110*(10 - x) = 1200"</span></pre>
+    <p>人が書いた2行です。数を決まった位置に置くだけで、式そのものは考えていません。できた式は sympy という数式処理ライブラリが解きます。中学生が移項してやることを、記号のまま機械がやります。</p>
+    <p>作ったときは <code>130×5 + 110×5</code> と<b>掛けて足した</b>だけで、方程式は解いていません。確かめる側は印刷された <code>1200</code> から<b>解いて</b> 5 を出します。<b>向きが逆</b>なので、逆算を間違えていればここでずれます。</p>
+  </details>
+
+  <div class="panel">
+    <div class="two">
+      <div class="col a">
+        <h4>作ったほう</h4>
+        <div class="sub">答えを先に決めて、合計を計算した</div>
+        <div class="step" data-a="0">x = 5 と決める</div>
+        <div class="step" data-a="1">130 × 5 = 650</div>
+        <div class="step" data-a="2">110 × 5 = 550</div>
+        <div class="step" data-a="3">合計 1200 を問題文に書く</div>
+        <div class="step" data-a="4">答え x = 5</div>
+      </div>
+      <div class="col b">
+        <h4>確かめるほう</h4>
+        <div class="sub">名札つきの数だけ受け取り、式を組んで解いた</div>
+        <div class="step" data-b="0">130, 110, 10, 1200 を受け取る</div>
+        <div class="step" data-b="1">130x + 110(10 − x) = 1200</div>
+        <div class="step" data-b="2">1100 + 20x = 1200</div>
+        <div class="step" data-b="3">20x = 100</div>
+        <div class="step" data-b="4">答え x = 5</div>
+      </div>
+    </div>
+    <div class="verdict" id="d_msg">下のボタンで動かしてください</div>
+    <div class="btnrow" style="margin-top:0.8rem">
+      <button id="d_ok">解かせる</button>
+      <button id="d_ng">合計を書き間違えてみる</button>
+    </div>
+  </div>
+
+  <p><b>守れるのは</b>、印刷された問題文と答えが食い違わないこと。<b>守れないのは</b>、「130 は単価」という日本語との対応づけです。</p>
+
+  <details class="more"><summary>それぞれ、なぜそうなるのか</summary>
+    <p><b>守れること。</b>問題文に出ている数だけから解き直した答えと、作ったときの答えを突き合わせています。ずれていたら捨てます。答えを差し替えて出すことはしません。逆算を計算間違いした問題は、生徒に届く前に消えます。</p>
+    <p><b>守れないこと。</b>「130 は単価、10 は個数」が合っているのは、問題文を書いた人と式を組む関数を書いた人が同じだったからです。機械が確かめたわけではありません。07 でこの話に戻ります。</p>
+    <p>この確認のほかに10種類の検査があります。答えが問題文に混ざっていないか、図に答えが描かれていないか、など。1つでも落ちた問題は捨てます。直しません。</p>
+  </details>
+</section>
+
+<!-- ========== 6 ========== -->
+<section>
+  <h2><span class="n">06</span>どのくらいの数が出るのか</h2>
+  <p class="lead">「数が違うだけ」はそのとおりです。その数を数えてみます。</p>
+
+  <p>01 で動かした置き場所ひとつで <b>502,656通り</b>。1日10問ずつ解いても137年かかります。</p>
+
+  <details class="more">
+    <summary>50万通りの内訳</summary>
+    <div class="panel">
+      <div class="calc">
+        <div class="crow"><span class="k">合わせて買う個数（8〜15個）</span><span class="v">8</span></div>
+        <div class="crow"><span class="k">答えになる個数（平均）</span><span class="v">× 8.5</span></div>
+        <div class="crow"><span class="k">2つの値段の組み（12種から2つ）</span><span class="v">× 132</span></div>
+        <div class="crow"><span class="k">2つの品名の組み（8種から2つ）</span><span class="v">× 56</span></div>
+        <div class="crow total"><span class="k">この置き場所ひとつで</span><span class="v">502,656</span></div>
+      </div>
+    </div>
+  </details>
+
+  <p>ただし、これは同じ文型に別の数を入れた50万通りです。<b>話の<span class="g">骨組み<button class="gq" aria-label="骨組みとは">?</button><span class="gt">数を入れ替えても変わらない、話の骨格のこと。「2種類の品物を合わせて買う」は骨組みが1つ。値段や個数を変えても同じ骨組み。</span></span>は1つ</b>のままです。骨組みの数は、630の置き場所ぜんぶで1,466種。ここは有限です。</p>
+
+  <details class="more">
+    <summary>置き場所630・骨組み1,466・文型234 の関係</summary>
+    <div class="panel scroll">
+      <table class="maptbl">
+        <thead><tr><th>数えているもの</th><th></th><th></th></tr></thead>
+        <tbody>
+          <tr><td class="nm">置き場所</td><td>630</td><td>単元・形式・難易度で決まる枠</td></tr>
+          <tr><td class="nm">骨組み</td><td>1,466</td><td>その枠の中にある、話の骨格が違う問題。1つの置き場所に平均2.3種</td></tr>
+          <tr><td class="nm">文型</td><td>234</td><td>枠のあいた日本語の文。単元をまたいで使い回す</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </details>
+
+  <p><b>数を増やすのは機械にできて、骨組みを増やすのは人しかできません。</b></p>
+</section>
+
+<!-- ========== 7 ========== -->
+<section>
+  <h2><span class="n">07</span>骨組みをAIに書かせられるか</h2>
+  <p class="lead">まだ実装していません。設計だけあります。</p>
+
+  <p>話と式が1つの関数に一緒に書いてあるので、話だけ差し替えることができません。</p>
+
+  <div class="panel">
+    <div class="flow3">
+      <div class="fbox now">
+        <div class="t">いま</div>
+        <div class="d">果物を買う話 ＝ a·x + b(k−x) = c<br>話と式がくっついている。話を1つ増やすたびに、式も書き直す。</div>
+      </div>
+      <div class="fto">→</div>
+      <div class="fbox next">
+        <div class="t">切り離したあと</div>
+        <div class="d">果物を買う話／バス代を払う話／切手を買う話<br>どれも同じ a·x + b(k−x) = c。式は人が管理したまま、話だけ増やせる。</div>
+      </div>
+    </div>
+  </div>
+
+  <p>話を書くのは AI が得意です。ただ、そのまま書かせるとこうなります。</p>
+
+  <div class="panel">
+    <div class="qcard" style="border-color:var(--red)">
+      <div style="line-height:2.2">横が縦より6cm<b style="color:var(--red)">短い</b>長方形がある。その面積は 55cm² である。<br>縦の長さを x cm とする。縦の長さを求めよ。</div>
+      <div class="qans">式&nbsp;&nbsp;<span class="eq">x(x + 6) = 55</span>&nbsp;→&nbsp;<b>5cm</b></div>
+    </div>
+    <div class="verdict ng" style="margin-top:0.8rem">正しくは 11cm。日本語に従えば x(x − 6) = 55 で、縦が11cm・横が5cm。</div>
+  </div>
+
+  <p>「長い」を「短い」に書き換えただけです。<b>それでも、すべての検査を通り抜けます。</b></p>
+
+  <details class="more"><summary>なぜ検査に引っかからないのか</summary>
+    <p>もとの文は「横が縦より6cm<b>長い</b>」で、そのときは 5cm が正解でした。「短い」にすると縦と横が入れ替わり、答えは 11cm になります。ところが式を組む関数が受け取るのは「6」という数だけで、長いのか短いのかを知りません。だから 5cm のまま出ます。</p>
+    <p>6 も 55 も本文にあり、式は解けて 5 になり、逆算した答えとも一致します。だから 05 の突き合わせも、ほかの10種類の検査も通ります。人が文と式を同時に書いていたあいだは起きなかった種類の間違いです。</p>
+  </details>
+
+  <h3>足す予定の検査</h3>
+  <div class="panel">
+    <div class="steps3">
+      <div class="s3"><span class="n">1</span><span class="t">AIが書いた問題文を、別のAIに渡す。</span></div>
+      <div class="s3"><span class="n">2</span><span class="t">答えも式も見せずに「これを読んで方程式を立てて」とだけ頼む。</span></div>
+      <div class="s3"><span class="n">3</span><span class="t">返ってきた式が、人が管理している式と同じなら採用。違えば捨てる。</span></div>
+    </div>
+  </div>
+
+  <p>日本語から式を立て直させるので、「短い」と「長い」の取り違えはここで落ちます。<b>この検査はオフラインで1回だけ回し、通った文型を焼き込みます。生徒に配るときは、これまでどおりAIは動きません。</b></p>
+  <p class="note">着手順は決めてあります。①話と式の切り離し ②この検査の実装 ③AIで増産（<code>docs/llm_template_expansion.md</code>）。いまは①の前です。</p>
+</section>
+
+<!-- ========== 8 ========== -->
+<section>
+  <h2><span class="n">08</span>どこで何が動いていたか</h2>
+  <p class="lead">ここまでに出てきたものは、6つだけです。1問できるまでを1枚にします。</p>
+
+  <div class="panel">
+    <div class="asm" id="asm">
+      <div class="asmstage">
+        <div class="asminner" id="asmin">
+          <svg class="asmwire" id="asmwire" aria-hidden="true"></svg>
+
+          <div class="asmband">
+            <div class="pc pc-spec" id="a_spec">
+              <div class="pct">① 設計図</div>
+              <div class="pcb">この問題の作り方を書いたファイル。<b>どの文型を使うか・どの欄をどの候補から引くか・合計をどう計算するか</b>。部品の一覧は、その一部。</div>
+            </div>
+            <div class="pc pc-fig" id="a_fig">
+              <div class="pct">② 図の係</div>
+              <div class="pcb">図のある問題では、同じ設計図から座標を出す（この問題には図が無い）。</div>
+            </div>
+          </div>
+
+          <div class="stacks" id="stks">
+            <div class="stk" id="t0"><div class="cards" id="k0"><i></i><i></i><b>130</b></div><span>値段 12種</span></div>
+            <div class="stk" id="t1"><div class="cards" id="k1"><i></i><i></i><b>なし</b></div><span>品名 8種</span></div>
+            <div class="stk" id="t2"><div class="cards" id="k2"><i></i><i></i><b>110</b></div><span>値段 12種</span></div>
+            <div class="stk" id="t3"><div class="cards" id="k3"><i></i><i></i><b>ぶどう</b></div><span>品名 8種</span></div>
+            <div class="stk" id="t4"><div class="cards" id="k4"><i></i><i></i><b>10</b></div><span>個数 8種</span></div>
+            <div class="stk calc" id="t5"><div class="cards" id="k5"><b>1200</b></div><span>③ 組み立て係</span></div>
+          </div>
+
+          <div class="tmpl" id="a_tmpl">1個<span class="hl" id="h0">130</span>円の<span class="hl" id="h1">なし</span>と、1個<span class="hl" id="h2">110</span>円の<span class="hl" id="h3">ぶどう</span>を合わせて<span class="hl" id="h4">10</span>個買ったところ、代金の合計は<span class="hl calc" id="h5">1200</span>円だった。</div>
+          <p class="tcap">④ 文型 — 人が書いた、空白つきの文。ここに数と品名が入って問題文になる。</p>
+
+          <div class="asmflow">
+            <div class="pc pc-chk" id="a_chk">
+              <div class="pct">⑤ 確かめ係</div>
+              <div class="pcb">問題文の<b>数だけ</b>を受け取り、人が書いた<b>式の型に入れて解く</b> → <b>5個</b>。作ったときと計算の向きが逆になる。</div>
+            </div>
+            <div class="pc pc-gate" id="a_gate">
+              <div class="pct">⑥ 検査</div>
+              <div class="pcb">最初に決めた答えと<b>一致すれば出す</b>。ずれていれば捨てる。</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="asmnote"><span class="sw"></span>候補の束から引いた5つ<span class="sw g"></span>答えから計算した1つ。<b>穴は6つあるのに、束は5つしかありません。</b></p>
+    </div>
+  </div>
+
+  <p>合計の欄だけ、候補の束がありません。ここは引くのではなく、決めた答えから計算します。<b>だから割り切れない問題が原理的に出ません。</b></p>
+
+  <div class="panel scroll">
+    <table class="maptbl">
+      <thead><tr><th>名前</th><th>正体</th><th>このページのどこ</th><th>書いた人</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="nm">① 設計図</td>
+          <td>どの文型を使い、どの欄をどこから引き、何を計算するかを書いた設定ファイル</td>
+          <td class="wh">08 の図の①</td>
+          <td><span class="who h">人</span></td>
+        </tr>
+        <tr>
+          <td class="nm">② 図の係</td>
+          <td>数から座標を計算して線を引く関数</td>
+          <td class="wh">04 の三角形</td>
+          <td><span class="who h">人</span></td>
+        </tr>
+        <tr>
+          <td class="nm">③ 組み立て係</td>
+          <td>答えから合計を逆算する関数</td>
+          <td class="wh">01 で合計を計算していたもの</td>
+          <td><span class="who h">人</span></td>
+        </tr>
+        <tr>
+          <td class="nm">④ 文型</td>
+          <td>枠のあいた日本語</td>
+          <td class="wh">02 の黄色い枠</td>
+          <td><span class="who h">人</span></td>
+        </tr>
+        <tr>
+          <td class="nm">⑤ 確かめ係</td>
+          <td>問題文の数を、人が書いた式の型に入れて解く関数</td>
+          <td class="wh">05 の右の列</td>
+          <td><span class="who h">人</span></td>
+        </tr>
+        <tr>
+          <td class="nm">⑥ 検査</td>
+          <td>通すか捨てるかを決める小さな関数</td>
+          <td class="wh">05 で「捨てる」を出したもの</td>
+          <td><span class="who h">人</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>6つとも人が書いたプログラムです。<span class="nb"><span class="who m">機械</span>が</span>やっているのは、書かれたとおりに数を引き、計算し、突き合わせることだけです。機械学習も特別な理論も使っていません。</p>
+  <details class="more"><summary>コードを読むなら</summary>
+    <p>設計図（YAML）を1本 → 組み立て係を1本 → 確かめ係を1本、の順が早いはずです。全体をつなぐ部分は抽象化のためのコードが多く、具体例を知らずに読むと迷います。</p>
+  </details>
+</section>
+
+<p class="foot">
+数値と出力はすべて実物のエンジンから取得（2026-08-13）。<br>
+184単元 ／ 7形式 ／ 630の置き場所 ／ 骨組み1,466種 ／ 文型234枚 ／ 実行時の生成AI 0行。
+</p>
+</div>
+
+<script>
+(function(){
+  var $ = function(id){ return document.getElementById(id); };
+
+  /* ===== 0 ===== */
+  var P = [
+    {pa:"130",a:"なし",pb:"110",b:"ぶどう",n:"10",t:"1200",eq:"130x + 110(10 - x) = 1200",ans:"5個"},
+    {pa:"90",a:"なし",pb:"160",b:"かき",n:"8",t:"930",eq:"90x + 160(8 - x) = 930",ans:"5個"},
+    {pa:"160",a:"なし",pb:"80",b:"りんご",n:"13",t:"1200",eq:"160x + 80(13 - x) = 1200",ans:"2個"},
+    {pa:"150",a:"りんご",pb:"110",b:"ぶどう",n:"12",t:"1640",eq:"150x + 110(12 - x) = 1640",ans:"8個"},
+    {pa:"50",a:"オレンジ",pb:"80",b:"なし",n:"12",t:"660",eq:"50x + 80(12 - x) = 660",ans:"10個"},
+    {pa:"130",a:"みかん",pb:"80",b:"オレンジ",n:"9",t:"1070",eq:"130x + 80(9 - x) = 1070",ans:"7個"},
+    {pa:"150",a:"オレンジ",pb:"60",b:"レモン",n:"13",t:"1500",eq:"150x + 60(13 - x) = 1500",ans:"8個"},
+    {pa:"90",a:"かき",pb:"40",b:"オレンジ",n:"13",t:"920",eq:"90x + 40(13 - x) = 920",ans:"8個"}
+  ];
+  var hi = 0;
+  $('h_next').addEventListener('click', function(){
+    hi = (hi+1) % P.length; var p = P[hi];
+    ['pa','a','pb','b','n','t','eq','ans'].forEach(function(k){ $('h_'+k).textContent = p[k]; });
+    // 「〜を買った個数を x 個とする」の品名も差し替える。固定にすると、問題文に
+    // 出てこない品物を問うことになる（エンジン側は G-Q5t で弾いている型の欠陥）。
+    $('h_a2').textContent = p.a;
+    $('h_cnt').textContent = (hi+1)+'問目';
+  });
+
+  /* ===== 1 答えから作る ===== */
+  function build(){
+    var pa=+$('s_pa').value, pb=+$('s_pb').value, n=+$('s_n').value, sx=$('s_x');
+    sx.max = n-1; if(+sx.value > n-1) sx.value = n-1;
+    var x=+sx.value, t=pa*x+pb*(n-x);
+    $('v_pa').textContent=pa; $('v_pb').textContent=pb; $('v_n').textContent=n; $('v_x').textContent=x;
+    $('b_pa').textContent=pa; $('b_pb').textContent=pb; $('b_n').textContent=n;
+    $('b_t').textContent=t;   $('b_ans').textContent=x+'個';
+    $('b_msg').textContent = '合計 = '+pa+'×'+x+' + '+pb+'×'+(n-x)+' = '+t+'円。答えの'+x+'個を先に決めて、そこから合計を出しています。かけて足すだけで、割り算が出てきません。';
+  }
+  ['s_pa','s_pb','s_n','s_x'].forEach(function(id){ $(id).addEventListener('input', build); });
+  build();
+
+  /* ===== 1 でたらめに引く ===== */
+  var PRICES=[40,50,60,70,80,90,110,120,130,140,150,160];
+  var NAMES=['みかん','りんご','なし','もも','かき','ぶどう','レモン','オレンジ'];
+  function gcd(a,b){ return b ? gcd(b,a%b) : a; }
+  function frac(num,den){
+    var s=(num<0)!==(den<0)?'-':''; num=Math.abs(num); den=Math.abs(den);
+    var g=gcd(num,den)||1; return (den/g===1) ? s+(num/g) : s+(num/g)+'/'+(den/g);
+  }
+  function pick(a){ return a[Math.floor(Math.random()*a.length)]; }
+  $('sim_go').addEventListener('click', function(){
+    var ok=0, shown=[];
+    for (var i=0;i<100;i++){
+      var pa=pick(PRICES), pb=pick(PRICES);
+      while (pb===pa) pb=pick(PRICES);
+      var n=6+Math.floor(Math.random()*10);
+      var cost=300+10*Math.floor(Math.random()*211);
+      var den=pa-pb, num=cost-pb*n, x=num/den;
+      var good = Number.isInteger(x) && x>=1 && x<=n-1;
+      if (good) ok++;
+      if (shown.length<4 && (good ? shown.filter(function(s){return s.good;}).length===0
+                                  : shown.filter(function(s){return !s.good;}).length<3)) {
+        var na=pick(NAMES), nb=pick(NAMES); while(nb===na) nb=pick(NAMES);
+        var f=frac(num,den), rtxt;
+        if (good)          rtxt = x+'個';
+        else if (x < 1)    rtxt = f+'個（0個以下になった）';
+        else if (x > n-1)  rtxt = f+'個（'+n+'個しか買っていない）';
+        else               rtxt = f+'個（割り切れない）';
+        shown.push({good:good, pa:pa, pb:pb, n:n, cost:cost, na:na, nb:nb, r:rtxt});
+      }
+    }
+    $('sim_n').innerHTML = '<span class="ok">'+ok+'</span> / 100';
+    $('sim_t').textContent = '使える問題になったのは '+ok+' 回でした';
+    var host=$('sim_list'); host.innerHTML='';
+    shown.forEach(function(s){
+      var d=document.createElement('div');
+      d.className='simrow'+(s.good?' good':'');
+      d.innerHTML='1個'+s.pa+'円の'+s.na+'と1個'+s.pb+'円の'+s.nb+'を合わせて'+s.n+'個で合計'+s.cost+'円 → <span class="r">'+s.r+'</span>';
+      host.appendChild(d);
+    });
+  });
+
+  /* ===== 2 ===== */
+  var holes=document.querySelectorAll('#paper .hole');
+  var parts=document.querySelectorAll('#parts .part');
+  var pt=[];
+  $('p_play').addEventListener('click', function(){
+    pt.forEach(clearTimeout); pt=[];
+    holes.forEach(function(h){ h.classList.remove('f'); h.textContent=''; });
+    parts.forEach(function(p){ p.classList.remove('used'); });
+    holes.forEach(function(h,i){
+      pt.push(setTimeout(function(){
+        h.textContent=parts[i].textContent; h.classList.add('f'); parts[i].classList.add('used');
+      }, 350+i*380));
+    });
+  });
+
+  /* ===== 3 ===== */
+  var DATA = [{"unit": "g1_l25", "jp": "1年・方程式の利用", "forms": [{"key": "calculation", "jp": "計算", "levels": {"1": {"q": "次の方程式を解け。\n40x + 130(14 - x) = 920", "a": "x = 10"}}}, {"key": "word_problem", "jp": "文章題", "levels": {"2": {"q": "1個130円のなしと1個110円のぶどうを合わせて10個買ったところ、代金の合計は1200円だった。\nなしを買った個数を x 個とする。\n(1) 代金の関係を、x を使った方程式で表せ。\n(2) なしを買った個数を求めよ。", "a": "130x + 110(10 - x) = 1200 ／ 5個"}, "3": {"q": "ある店で、1本200円の定規と1本110円のボールペンを買った。ボールペンは定規より2本多く買い、代金の合計は2390円だった。\n定規を買った本数を求めよ。", "a": "7本"}}}]}, {"unit": "g1_l41", "jp": "1年・作図", "forms": [{"key": "construction", "jp": "作図", "levels": {"1": {"q": "下の図に線分CDが与えられている。定規とコンパスだけを使って、この線分の垂直二等分線を作図せよ。作図に用いた線は消さずに残すこと。", "a": "線分CDの中点、線分CDの垂直二等分線（かいた直線）"}, "2": {"q": "下の図に2点A、Bと直線ℓが与えられている。この2点から等しい距離にあり、かつ直線ℓ上にある点Pを、作図によって求めよ。作図に用いた線は残すこと。", "a": "線分ABの垂直二等分線（かいた直線）、点P（線分ABの垂直二等分線と、与えられた直線との交点）"}}}, {"key": "knowledge", "jp": "知識", "levels": {"1": {"q": "線分GJの垂直二等分線上に点Hをとる。このとき、HGとHJの長さの関係を、その理由となる性質の名前とともに答えよ。", "a": "等しい"}}}]}, {"unit": "g2_l41", "jp": "2年・二等辺三角形", "forms": [{"key": "find_value", "jp": "値を求める", "levels": {"1": {"q": "AB=ACの二等辺三角形ABCで、底角∠Bの大きさが13°のとき、頂角∠Aの大きさを求めよ。", "a": "154"}}}, {"key": "knowledge", "jp": "知識", "levels": {"1": {"q": "FJ=FRの二等辺三角形FJRで、底角どうしの大きさの関係。正しく述べているものを1つ選びなさい。", "a": "底角の大きさは等しい"}}}, {"key": "proof", "jp": "証明", "levels": {"2": {"q": "AB ＝ AC である二等辺三角形ABCで、辺BCの中点をMとし、点Aと点Mを結んだ。このとき、∠BAM ＝ ∠CAM であることを証明せよ。", "a": "（証明）△ABM と △ACM で AB＝AC、AM 共通、BM＝CM。3組の辺がそれぞれ等しいので合同。よって ∠BAM＝∠CAM"}, "3": {"q": "AB ＝ AC である二等辺三角形ABCで、∠Aの二等分線と辺BCとの交点をMとした。このとき、BM ＝ CM であることを証明せよ。", "a": "（証明）△ABM と △ACM で AB＝AC、∠BAM＝∠CAM、AM 共通。2組の辺とその間の角がそれぞれ等しいので合同。よって BM＝CM"}, "4": {"q": "AB ＝ AC である二等辺三角形ABCで、辺AB上に点D、辺AC上に点Eを、BD ＝ CE となるようにとり、点Dと点C、点Bと点Eをそれぞれ結んだ。このとき、BE ＝ CD であることを証明せよ。", "a": "（証明）△BCD と △CBE で BD＝CE、∠DBC＝∠ECB、BC 共通。2組の辺とその間の角がそれぞれ等しいので合同。よって BE＝CD"}}}]}, {"unit": "g3_l30", "jp": "3年・二次方程式の利用", "forms": [{"key": "calculation", "jp": "計算", "levels": {"2": {"q": "次の2次方程式を解け。\nx(x + 17) = 38", "a": "x = -19, x = 2"}}}, {"key": "find_value", "jp": "値を求める", "levels": {"2": {"q": "縦が x cm、横が (x + 20) cm の長方形の面積が 224cm² であるとき、x の値を求めよ。", "a": "8"}}}, {"key": "word_problem", "jp": "文章題", "levels": {"2": {"q": "横が縦より6cm長い長方形がある。その面積は55cm²である。\n縦の長さを x cm とする。\n(1) 面積の関係を、x を使った方程式で表せ。\n(2) 縦の長さを求めよ。", "a": "x(x + 6) = 55 ／ 5cm"}, "3": {"q": "1辺が37cmの正方形がある。縦を x cm 短くし、横を x cm 長くして長方形をつくったところ、面積が1288cm²になった。\nx の値を求めよ。", "a": "9cm"}}}]}];
+  var ui=0, fi=0, li=0;
+  function chips(host, items, active, onPick){
+    host.innerHTML='';
+    items.forEach(function(label,i){
+      var b=document.createElement('button');
+      b.textContent=label; if(i===active) b.classList.add('on');
+      b.addEventListener('click', function(){ onPick(i); });
+      host.appendChild(b);
+    });
+  }
+  function render(){
+    var u=DATA[ui];
+    chips($('pk_unit'), DATA.map(function(d){return d.jp;}), ui, function(i){ ui=i; fi=0; li=0; render(); });
+    chips($('pk_form'), u.forms.map(function(f){return f.jp;}), fi, function(i){ fi=i; li=0; render(); });
+    var f=u.forms[fi], lvs=Object.keys(f.levels).sort();
+    if (li>=lvs.length) li=0;
+    chips($('pk_lv'), lvs.map(function(l){return 'Lv'+l;}), li, function(i){ li=i; render(); });
+    var cell=f.levels[lvs[li]], out=$('pk_out');
+    out.textContent=cell.q;
+    var s=document.createElement('span'); s.className='ans';
+    s.textContent='こたえ　'+(cell.a||'（証明を書く）');
+    out.appendChild(s);
+  }
+  render();
+
+  /* ===== 4 ===== */
+  /* 「ずれ」は最後の行ではなく上流に入れる。作ったほうが合計を 1240 と書き
+     間違えると、確かめるほうは 1240 から解くので 7 になる。どちらの側も
+     計算は正しいまま、答えだけが食い違う。 */
+  var D_OK = {
+    a3:'合計 1200 を問題文に書く',
+    b:['130, 110, 10, 1200 を受け取る','130x + 110(10 − x) = 1200',
+       '1100 + 20x = 1200','20x = 100','答え x = 5']
+  };
+  var D_NG = {
+    a3:'合計 1240 と書き間違える（650 + 550 = 1200 なのに）',
+    b:['130, 110, 10, 1240 を受け取る','130x + 110(10 − x) = 1240',
+       '1100 + 20x = 1240','20x = 140','答え x = 7']
+  };
+  var dt=[];
+  function dRun(ok){
+    dt.forEach(clearTimeout); dt=[];
+    document.querySelectorAll('.step').forEach(function(s){ s.classList.remove('on'); });
+    var m=$('d_msg'); m.className='verdict'; m.textContent='…';
+    var A=document.querySelectorAll('[data-a]'), B=document.querySelectorAll('[data-b]');
+    var d = ok ? D_OK : D_NG;
+    A[3].textContent = d.a3;
+    for (var i=0;i<5;i++) B[i].textContent = d.b[i];
+    for (var i=0;i<5;i++) (function(i){
+      dt.push(setTimeout(function(){ A[i].classList.add('on'); }, 250+i*260));
+      dt.push(setTimeout(function(){ B[i].classList.add('on'); }, 400+i*260));
+    })(i);
+    dt.push(setTimeout(function(){
+      var m=$('d_msg');
+      if (ok) { m.className='verdict ok'; m.textContent='5 と 5。一致したので、この問題は出します。'; }
+      else    { m.className='verdict ng'; m.textContent='5 と 7。一致しないので捨てます。直して出すことはしません。'; }
+    }, 1900));
+  }
+  $('d_ok').addEventListener('click', function(){ dRun(true); });
+  $('d_ng').addEventListener('click', function(){ dRun(false); });
+
+  /* ===== 用語の ? =====
+     タップで開閉する。ホバーは CSS 側の付け足しで、こちらが本体。
+     同時に開くのは1つだけ。Esc と外側クリックで閉じる。 */
+  function closeGloss(except){
+    document.querySelectorAll('.g.on').forEach(function(g){
+      if (g === except) return;
+      g.classList.remove('on');
+      var q = g.querySelector('.gq'); if (q) q.setAttribute('aria-expanded','false');
+    });
+  }
+  document.querySelectorAll('.g .gq').forEach(function(q){
+    q.setAttribute('aria-expanded','false');
+    q.addEventListener('click', function(e){
+      e.stopPropagation();
+      var g = q.closest('.g'), open = !g.classList.contains('on');
+      closeGloss(g);
+      g.classList.toggle('on', open);
+      q.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+  });
+  document.addEventListener('click', function(){ closeGloss(null); });
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape') closeGloss(null); });
+
+  /* ===== 08 組み立ての図 =====
+     穴の位置は日本語の文字幅で決まるので座標を決め打ちにできない。実際に
+     配置された矩形を測り、束（と6つ目の「組み立て係」）を穴の真上へ動かして
+     から線を引く。並びがずれると線が交差して読めなくなる。 */
+  (function(){
+    var inner = $('asmin'); if (!inner) return;
+    var wire = $('asmwire');
+    var NS = 'http://www.w3.org/2000/svg';
+    // [束, カード, 穴, 計算で作る側か]
+    var LINK = [['t0','k0','h0',0],['t1','k1','h1',0],['t2','k2','h2',0],
+                ['t3','k3','h3',0],['t4','k4','h4',0],['t5','k5','h5',1]];
+
+    function layout(){
+      var b = inner.getBoundingClientRect(); if (!b.width) return;
+
+      LINK.forEach(function(L){                       // ① 穴の真上へ
+        var stk = $(L[0]), hr = $(L[2]).getBoundingClientRect();
+        stk.style.left = Math.round((hr.left+hr.right)/2 - b.left - stk.offsetWidth/2) + 'px';
+      });
+
+      var v = inner.getBoundingClientRect();          // ② 線
+      wire.setAttribute('viewBox', '0 0 ' + v.width + ' ' + v.height);
+      while (wire.firstChild) wire.removeChild(wire.firstChild);
+
+      function r(id){
+        var e = $(id); if (!e) return null;
+        var q = e.getBoundingClientRect();
+        return { t:q.top-v.top, bo:q.bottom-v.top, cx:(q.left+q.right)/2-v.left,
+                 l:q.left-v.left, r:q.right-v.left, cy:(q.top+q.bottom)/2-v.top };
+      }
+      function line(x1,y1,x2,y2,col,faint){
+        var mid=(y1+y2)/2;
+        var pth=document.createElementNS(NS,'path');
+        pth.setAttribute('d','M '+x1+' '+y1+' C '+x1+' '+mid+', '+x2+' '+mid+', '+x2+' '+y2);
+        pth.setAttribute('fill','none'); pth.setAttribute('stroke',col);
+        pth.setAttribute('stroke-width', faint?'1':'1.5');
+        pth.setAttribute('opacity', faint?'0.26':'0.6');
+        if (faint) pth.setAttribute('stroke-dasharray','3 3');
+        wire.appendChild(pth);
+        if (faint) return;
+        var ar=document.createElementNS(NS,'path');
+        ar.setAttribute('d','M '+(x2-3.5)+' '+(y2-5)+' L '+x2+' '+y2+' L '+(x2+3.5)+' '+(y2-5));
+        ar.setAttribute('fill','none'); ar.setAttribute('stroke',col); ar.setAttribute('stroke-width','1.5');
+        wire.appendChild(ar);
+      }
+      function hline(x1,y1,x2,y2,col,faint){
+        var mid=(x1+x2)/2;
+        var pth=document.createElementNS(NS,'path');
+        pth.setAttribute('d','M '+x1+' '+y1+' C '+mid+' '+y1+', '+mid+' '+y2+', '+x2+' '+y2);
+        pth.setAttribute('fill','none'); pth.setAttribute('stroke',col);
+        pth.setAttribute('stroke-width', faint?'1':'1.5');
+        pth.setAttribute('opacity', faint?'0.26':'0.6');
+        if (faint) pth.setAttribute('stroke-dasharray','3 3');
+        wire.appendChild(pth);
+        if (faint) return;
+        var ar=document.createElementNS(NS,'path');
+        ar.setAttribute('d','M '+(x2-5)+' '+(y2-3.5)+' L '+x2+' '+y2+' L '+(x2-5)+' '+(y2+3.5));
+        ar.setAttribute('fill','none'); ar.setAttribute('stroke',col); ar.setAttribute('stroke-width','1.5');
+        wire.appendChild(ar);
+      }
+      var BLUE='var(--blue)', GREEN='var(--green)', GOLD='var(--gold)';
+      var spec=r('a_spec'), fig=r('a_fig'), tmpl=r('a_tmpl'), chk=r('a_chk'), gate=r('a_gate');
+
+      // 設計図は「作り方」なので、束・組み立て係・文型・図の係の全部に薄くつながる
+      LINK.forEach(function(L){
+        var k=r(L[1]); if (spec&&k) line(spec.cx, spec.bo, k.cx, k.t-3, GOLD, true);
+      });
+      if (spec&&tmpl) line(spec.cx, spec.bo, spec.cx, tmpl.t-3, GOLD, true);
+      if (spec&&fig)  hline(spec.r, spec.cy, fig.l-2, fig.cy, GOLD, true);
+
+      LINK.forEach(function(L){                       // 束（と計算）→ 穴
+        var k=r(L[1]), h=r(L[2]);
+        if (k&&h) line(k.cx, k.bo, h.cx, h.t-3, L[3]?GREEN:BLUE, false);
+      });
+      if (tmpl&&chk)  line(tmpl.cx, tmpl.bo+18, chk.cx, chk.t-3, BLUE, false);
+      if (chk&&gate)  hline(chk.r, chk.cy, gate.l-3, gate.cy, GREEN, false);
+    }
+
+    layout();
+    if (window.ResizeObserver) new ResizeObserver(layout).observe(inner);
+    window.addEventListener('resize', layout);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(layout);
+  })();
+})();
+</script>
