@@ -35,7 +35,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - notation.quotient_mixed
-  explanation: 'まず、乗法の部分を先にまとめてから、分数の形に表す。（乗法の部分をまとめる）
+  explanation: 'まず、乗法の部分を先にまとめてから、分数の形に表す。（7cx）
 
     次に、除法の記号 ÷ を使わず、分数の形で表す。（7cx/n）'
   hints:
@@ -46,7 +46,7 @@ sub_questions:
   - args: []
     narration: 乗法の部分を先にまとめてから、分数の形に表す。
     op: collect_numerator
-    result_display: 乗法の部分をまとめる
+    result_display: 7cx
     result_srepr: Mul(Integer(7), Symbol('c'), Pow(Symbol('n'), Integer(-1)), Symbol('x'))
   - args: []
     narration: 除法の記号 ÷ を使わず、分数の形で表す。

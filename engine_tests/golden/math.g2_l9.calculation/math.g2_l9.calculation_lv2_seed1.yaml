@@ -35,7 +35,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - polynomial.rearrange_divide
-  explanation: 'まず、解く文字の項だけを片方の辺に残すよう、ほかの項を移項する。（ほかの項を移項する）
+  explanation: 'まず、解く文字の項だけを片方の辺に残すよう、ほかの項を移項する。（-2x = -y - 9）
 
     次に、両辺を、解く文字にかかっている係数でわる。（x = y/2 + 9/2）'
   hints:
@@ -46,7 +46,7 @@ sub_questions:
   - args: []
     narration: 解く文字の項だけを片方の辺に残すよう、ほかの項を移項する。
     op: isolate_target
-    result_display: ほかの項を移項する
+    result_display: -2x = -y - 9
     result_srepr: Add(Mul(Rational(1, 2), Symbol('y')), Rational(9, 2))
   - args: []
     narration: 両辺を、解く文字にかかっている係数でわる。

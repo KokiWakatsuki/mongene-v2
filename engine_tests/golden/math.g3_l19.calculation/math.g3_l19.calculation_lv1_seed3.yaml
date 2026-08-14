@@ -35,7 +35,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - radical.rationalize_denominator
-  explanation: 'まず、分母と分子に、分母と同じ根号をかける。（同じ根号をかける）
+  explanation: 'まず、分母と分子に、分母と同じ根号をかける。（(2 × √5) / (√5 × √5)）
 
     次に、分母を根号のない形にし、約分して簡単にする。（2√5/5）'
   hints:
@@ -46,7 +46,7 @@ sub_questions:
   - args: []
     narration: 分母と分子に、分母と同じ根号をかける。
     op: multiply_by_same_root
-    result_display: 同じ根号をかける
+    result_display: (2 × √5) / (√5 × √5)
     result_srepr: ''
   - args: []
     narration: 分母を根号のない形にし、約分して簡単にする。

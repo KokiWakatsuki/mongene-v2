@@ -35,7 +35,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - equation.solve_shortage
-  explanation: 'まず、文字の項を左辺に、数の項を右辺に、符号を変えて移項する。（文字は左辺・数は右辺に移項する）
+  explanation: 'まず、文字の項を左辺に、数の項を右辺に、符号を変えて移項する。（5x - 7x = -13 - 5）
 
     次に、両辺をそれぞれ整理し、x の係数で両辺をわって解を求める。（x = 9）'
   hints:
@@ -46,7 +46,7 @@ sub_questions:
   - args: []
     narration: 文字の項を左辺に、数の項を右辺に、符号を変えて移項する。
     op: transpose_terms
-    result_display: 文字は左辺・数は右辺に移項する
+    result_display: 5x - 7x = -13 - 5
     result_srepr: Integer(9)
   - args: []
     narration: 両辺をそれぞれ整理し、x の係数で両辺をわって解を求める。

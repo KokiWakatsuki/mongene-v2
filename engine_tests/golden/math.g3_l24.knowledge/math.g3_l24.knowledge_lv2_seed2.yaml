@@ -35,7 +35,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - quadratic.verify_solution
-  explanation: 'まず、候補の値を2次方程式の x にあてはめる。（候補の値を方程式の x に代入する）
+  explanation: 'まず、候補の値を2次方程式の x にあてはめる。（左辺 44）
 
     次に、左辺の値が0になれば解、0にならなければ解ではない。（解ではない）'
   hints:
@@ -46,7 +46,7 @@ sub_questions:
   - args: []
     narration: 候補の値を2次方程式の x にあてはめる。
     op: substitute_candidate
-    result_display: 候補の値を方程式の x に代入する
+    result_display: 左辺 44
     result_srepr: Integer(-2)
   - args: []
     narration: 左辺の値が0になれば解、0にならなければ解ではない。

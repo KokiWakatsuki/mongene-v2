@@ -35,7 +35,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - equation.solve_by_equality_property
-  explanation: 'まず、等式の性質を使い、両辺から同じ数をひく（または加える）。（両辺から同じ数をひく）
+  explanation: 'まず、等式の性質を使い、両辺から同じ数をひく（または加える）。（x = -2 - 5）
 
     次に、両辺を計算して、解を求める。（x = -7）'
   hints:
@@ -46,7 +46,7 @@ sub_questions:
   - args: []
     narration: 等式の性質を使い、両辺から同じ数をひく（または加える）。
     op: subtract_constant_both_sides
-    result_display: 両辺から同じ数をひく
+    result_display: x = -2 - 5
     result_srepr: Integer(-7)
   - args: []
     narration: 両辺を計算して、解を求める。

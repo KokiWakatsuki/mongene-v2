@@ -39,7 +39,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - quadratic_function.word_problem_given_equation
-  explanation: 'まず、式の x に、与えられた値をあてはめる。（x に代入する）
+  explanation: 'まず、式の x に、与えられた値をあてはめる。（5 × (3)²）
 
     次に、2乗を計算してから比例定数をかけ、y の値を求める。（45）'
   hints:
@@ -50,7 +50,7 @@ sub_questions:
   - args: []
     narration: 式の x に、与えられた値をあてはめる。
     op: substitute_x
-    result_display: x に代入する
+    result_display: 5 × (3)²
     result_srepr: ''
   - args: []
     narration: 2乗を計算してから比例定数をかけ、y の値を求める。
@@ -64,9 +64,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - quadratic_function.word_problem_given_equation
-  explanation: 'まず、求める時刻を x とみて、距離を表す式に、与えられている距離をあてはめて方程式をつくる。（距離の式に、与えられた距離をあてはめる）
+  explanation: 'まず、求める時刻を x とみて、距離を表す式に、与えられている距離をあてはめて方程式をつくる。（5x² = 125）
 
-    次に、両辺を x の2乗にかかっている数でわり、平方根の考え方で x を求める。（平方根の考え方で x を求める）
+    次に、両辺を x の2乗にかかっている数でわり、平方根の考え方で x を求める。（x² = 25）
 
     最後に、時刻は正の数だから、求めた解のうち正の解を選ぶ。（5秒後）'
   hints:
@@ -78,12 +78,12 @@ sub_questions:
   - args: []
     narration: 求める時刻を x とみて、距離を表す式に、与えられている距離をあてはめて方程式をつくる。
     op: set_up_equation
-    result_display: 距離の式に、与えられた距離をあてはめる
+    result_display: 5x² = 125
     result_srepr: ''
   - args: []
     narration: 両辺を x の2乗にかかっている数でわり、平方根の考え方で x を求める。
     op: solve_for_x
-    result_display: 平方根の考え方で x を求める
+    result_display: x² = 25
     result_srepr: ''
   - args: []
     narration: 時刻は正の数だから、求めた解のうち正の解を選ぶ。

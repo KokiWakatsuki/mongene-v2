@@ -35,7 +35,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - polynomial.factor_various
-  explanation: 'まず、各項に共通する因数をかっこの外にくくり出す。（共通因数をくくり出す）
+  explanation: 'まず、各項に共通する因数をかっこの外にくくり出す。（7(x² - 81)）
 
     次に、くくり出した後のかっこの中を乗法公式の逆で因数分解する。（7(x - 9)(x + 9)）'
   hints:
@@ -46,7 +46,7 @@ sub_questions:
   - args: []
     narration: 各項に共通する因数をかっこの外にくくり出す。
     op: factor_out_common
-    result_display: 共通因数をくくり出す
+    result_display: 7(x² - 81)
     result_srepr: ''
   - args: []
     narration: くくり出した後のかっこの中を乗法公式の逆で因数分解する。

@@ -35,7 +35,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - radical.various_calculation
-  explanation: 'まず、分母と分子に、分母の共役な式をかける。（共役な式をかける）
+  explanation: 'まず、分母と分子に、分母の共役な式をかける。（(1 × (√14 + √3)) / ((√14 - √3) × (√14 + √3))）
 
     次に、分母を根号のない形にし、約分して簡単にする。（(√3 + √14)/11）'
   hints:
@@ -46,7 +46,7 @@ sub_questions:
   - args: []
     narration: 分母と分子に、分母の共役な式をかける。
     op: multiply_by_conjugate
-    result_display: 共役な式をかける
+    result_display: (1 × (√14 + √3)) / ((√14 - √3) × (√14 + √3))
     result_srepr: ''
   - args: []
     narration: 分母を根号のない形にし、約分して簡単にする。

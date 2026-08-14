@@ -24,7 +24,7 @@ meta:
   seed: 2
   signature: verify_right_triangle_from_sides
 problem_ref: 2d5620ac70e8b029
-problem_text: 3辺の長さが 35cm, 120cm, 130cm である三角形が直角三角形であるかどうかを、三平方の定理の逆を用いて確かめよ。
+problem_text: 3辺の長さが 42cm, 56cm, 66cm である三角形が直角三角形であるかどうかを、三平方の定理の逆を用いて確かめよ。
 sub_questions:
 - answer:
     display: 直角三角形ではない
@@ -33,7 +33,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - pythagorean.verify_right_triangle
-  explanation: 'まず、最も長い辺の長さの二乗と、他の2辺の長さの二乗の和を比べる。（最も長い辺と他の2辺の二乗の関係を調べる）
+  explanation: 'まず、最も長い辺の長さの二乗と、他の2辺の長さの二乗の和を比べる。（42² + 56² ≠ 66²）
 
     次に、三平方の定理の逆から、直角三角形であるかどうかを判別する。（直角三角形ではない）'
   hints:
@@ -44,7 +44,7 @@ sub_questions:
   - args: []
     narration: 最も長い辺の長さの二乗と、他の2辺の長さの二乗の和を比べる。
     op: compute_squares_and_compare
-    result_display: 最も長い辺と他の2辺の二乗の関係を調べる
+    result_display: 42² + 56² ≠ 66²
     result_srepr: ''
   - args: []
     narration: 三平方の定理の逆から、直角三角形であるかどうかを判別する。

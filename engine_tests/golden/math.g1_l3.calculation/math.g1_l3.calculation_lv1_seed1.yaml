@@ -35,7 +35,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - signed_number.add_pair
-  explanation: 'まず、たがいの数の符号を見て、和の符号を先に決める（同符号なら絶対値の和、異符号なら絶対値の差）。（和の符号を先に決める）
+  explanation: 'まず、たがいの数の符号を見て、和の符号を先に決める（同符号なら絶対値の和、異符号なら絶対値の差）。（+(7 - 6)）
 
     次に、決めた符号のもとで絶対値を計算し、和を求める。（1）'
   hints:
@@ -46,7 +46,7 @@ sub_questions:
   - args: []
     narration: たがいの数の符号を見て、和の符号を先に決める（同符号なら絶対値の和、異符号なら絶対値の差）。
     op: determine_sum_sign
-    result_display: 和の符号を先に決める
+    result_display: +(7 - 6)
     result_srepr: Integer(1)
   - args: []
     narration: 決めた符号のもとで絶対値を計算し、和を求める。

@@ -33,13 +33,13 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - quadratic_function.intersection_with_line
-  explanation: 'まず、放物線の式と直線の式の右辺どうしを等しいとおき、方程式を立てる。（放物線と直線の式を等しいとおく）
+  explanation: 'まず、放物線の式と直線の式の右辺どうしを等しいとおき、方程式を立てる。（-4x² = -8x - 96）
 
-    次に、その方程式を解いて、交点の x 座標を求める。（交点の x 座標を求める）
+    次に、その方程式を解いて、交点の x 座標を求める。（x = -4, x = 6）
 
-    次に、求めた x の値を式に代入して、交点の y 座標を求める。（交点の y 座標を求める）
+    次に、求めた x の値を式に代入して、交点の y 座標を求める。（A(-4, -64), B(6, -144)）
 
-    次に、2点の座標の差から、線分の長さを求める。（線分の長さを求める）
+    次に、2点の座標の差から、線分の長さを求める。（AB = 10√65）
 
     最後に、頂点の座標から、三角形の面積を求める公式で面積を計算する。（AB = 10√65, △OAB = 480）'
   hints:
@@ -53,22 +53,22 @@ sub_questions:
   - args: []
     narration: 放物線の式と直線の式の右辺どうしを等しいとおき、方程式を立てる。
     op: set_up_equation
-    result_display: 放物線と直線の式を等しいとおく
+    result_display: -4x² = -8x - 96
     result_srepr: ''
   - args: []
     narration: その方程式を解いて、交点の x 座標を求める。
     op: solve_for_x
-    result_display: 交点の x 座標を求める
+    result_display: x = -4, x = 6
     result_srepr: ''
   - args: []
     narration: 求めた x の値を式に代入して、交点の y 座標を求める。
     op: compute_y
-    result_display: 交点の y 座標を求める
+    result_display: A(-4, -64), B(6, -144)
     result_srepr: ''
   - args: []
     narration: 2点の座標の差から、線分の長さを求める。
     op: compute_segment_length
-    result_display: 線分の長さを求める
+    result_display: AB = 10√65
     result_srepr: ''
   - args: []
     narration: 頂点の座標から、三角形の面積を求める公式で面積を計算する。

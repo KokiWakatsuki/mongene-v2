@@ -35,7 +35,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - probability.word_problem_lottery_at_least_one
-  explanation: 'まず、戻さずに2本引いたとき、2本とも外れる場合を数えて、その確率を求める。（2本とも外れる場合を数える）
+  explanation: 'まず、戻さずに2本引いたとき、2本とも外れる場合を数えて、その確率を求める。（2/7）
 
     次に、1から、2本とも外れる確率をひいて、少なくとも一方が当たる確率を求める。（5/7）'
   hints:
@@ -46,7 +46,7 @@ sub_questions:
   - args: []
     narration: 戻さずに2本引いたとき、2本とも外れる場合を数えて、その確率を求める。
     op: compute_both_lose_probability
-    result_display: 2本とも外れる場合を数える
+    result_display: 2/7
     result_srepr: ''
   - args: []
     narration: 1から、2本とも外れる確率をひいて、少なくとも一方が当たる確率を求める。

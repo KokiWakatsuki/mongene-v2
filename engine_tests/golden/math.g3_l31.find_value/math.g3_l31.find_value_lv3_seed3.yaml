@@ -33,9 +33,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - motion.area_two_segment
-  explanation: 'まず、点 P が動いた道のりから、今どの辺の上にいるかを判断する。（どの辺の上にいるかを判断する）
+  explanation: 'まず、点 P が動いた道のりから、今どの辺の上にいるかを判断する。（次の辺の上）
 
-    次に、経過した時間と速さから、点 P が動いた道のりを求め、その位置の座標を決める。（点 P の座標を決める）
+    次に、経過した時間と速さから、点 P が動いた道のりを求め、その位置の座標を決める。（P(18, 1)）
 
     最後に、3点の座標から、三角形の面積を求める公式で面積を計算する。（162）'
   hints:
@@ -47,12 +47,12 @@ sub_questions:
   - args: []
     narration: 点 P が動いた道のりから、今どの辺の上にいるかを判断する。
     op: determine_which_segment
-    result_display: どの辺の上にいるかを判断する
+    result_display: 次の辺の上
     result_srepr: ''
   - args: []
     narration: 経過した時間と速さから、点 P が動いた道のりを求め、その位置の座標を決める。
     op: locate_point_p
-    result_display: 点 P の座標を決める
+    result_display: P(18, 1)
     result_srepr: ''
   - args: []
     narration: 3点の座標から、三角形の面積を求める公式で面積を計算する。

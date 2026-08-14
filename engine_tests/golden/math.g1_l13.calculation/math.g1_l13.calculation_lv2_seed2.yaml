@@ -35,7 +35,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - notation.product_rule_powers
-  explanation: 'まず、数を文字の前に書き、乗法の記号 × を省いて表す。（数を前にして × を省く）
+  explanation: 'まず、数を文字の前に書き、乗法の記号 × を省いて表す。（-8akka）
 
     次に、同じ文字の積は、累乗の指数を使ってまとめる。（-8a²k²）'
   hints:
@@ -46,7 +46,7 @@ sub_questions:
   - args: []
     narration: 数を文字の前に書き、乗法の記号 × を省いて表す。
     op: apply_product_rule
-    result_display: 数を前にして × を省く
+    result_display: -8akka
     result_srepr: Mul(Integer(-1), Integer(8), Pow(Symbol('a'), Integer(2)), Pow(Symbol('k'), Integer(2)))
   - args: []
     narration: 同じ文字の積は、累乗の指数を使ってまとめる。

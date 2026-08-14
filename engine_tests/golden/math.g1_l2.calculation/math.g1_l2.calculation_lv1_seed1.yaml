@@ -35,7 +35,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - signed_number.absolute_value
-  explanation: 'まず、その数が数直線上で 0 からどちら側にあるかを見る。
+  explanation: 'まず、その数が数直線上で 0 からどちら側にあるかを見る。（-1.4 は 0 より左）
 
     次に、0 からの距離が絶対値なので、符号を取り去った大きさを答える。（1.4）'
   hints:
@@ -46,7 +46,7 @@ sub_questions:
   - args: []
     narration: その数が数直線上で 0 からどちら側にあるかを見る。
     op: locate_on_number_line
-    result_display: ''
+    result_display: -1.4 は 0 より左
     result_srepr: Rational(7, 5)
   - args: []
     narration: 0 からの距離が絶対値なので、符号を取り去った大きさを答える。

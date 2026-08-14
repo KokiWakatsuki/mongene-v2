@@ -35,7 +35,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - polynomial.expand_formula_square
-  explanation: 'まず、はじめの項の平方・積の2倍・終わりの項の平方を求める。（平方と積の2倍を求める）
+  explanation: 'まず、はじめの項の平方・積の2倍・終わりの項の平方を求める。（a²、14a、49）
 
     次に、乗法公式にあてはめて展開した式を書く。（a² + 14a + 49）'
   hints:
@@ -46,7 +46,7 @@ sub_questions:
   - args: []
     narration: はじめの項の平方・積の2倍・終わりの項の平方を求める。
     op: compute_square_terms
-    result_display: 平方と積の2倍を求める
+    result_display: a²、14a、49
     result_srepr: ''
   - args: []
     narration: 乗法公式にあてはめて展開した式を書く。

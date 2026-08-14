@@ -35,9 +35,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - letter_expr.distribute_divide_mixed
-  explanation: 'まず、かっこの前の数を、かっこの中の各項にかけて計算する。（かっこの前の数を各項にかける）
+  explanation: 'まず、かっこの前の数を、かっこの中の各項にかけて計算する。（8x - 20 + (12x - 15) ÷ 3）
 
-    次に、÷ の計算を、その数の逆数をかっこの中の各項にかける計算に直す。（÷ を逆数のかけ算に直す）
+    次に、÷ の計算を、その数の逆数をかっこの中の各項にかける計算に直す。（8x - 20 + (4x - 5)）
 
     最後に、同類項をまとめて計算する。（12x - 25）'
   hints:
@@ -49,12 +49,12 @@ sub_questions:
   - args: []
     narration: かっこの前の数を、かっこの中の各項にかけて計算する。
     op: distribute_multiplication
-    result_display: かっこの前の数を各項にかける
+    result_display: 8x - 20 + (12x - 15) ÷ 3
     result_srepr: Add(Mul(Integer(12), Symbol('x')), Integer(-25))
   - args: []
     narration: ÷ の計算を、その数の逆数をかっこの中の各項にかける計算に直す。
     op: convert_division_to_multiplication
-    result_display: ÷ を逆数のかけ算に直す
+    result_display: 8x - 20 + (4x - 5)
     result_srepr: Add(Mul(Integer(12), Symbol('x')), Integer(-25))
   - args: []
     narration: 同類項をまとめて計算する。

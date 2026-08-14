@@ -36,7 +36,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - parallelogram_conditions.rule_recall
-  explanation: 'まず、問題で問われている規則や約束が、何についてのものかを読み取る。（問われている規則が何についてかを読み取る）
+  explanation: 'まず、問題で問われている規則や約束が、何についてのものかを読み取る。
 
     次に、その規則の正しい内容を思い出して選ぶ。（二組の対辺がそれぞれ平行である、二組の対辺の長さがそれぞれ等しい、二組の対角の大きさがそれぞれ等しい、対角線がそれぞれの中点で交わる、一組の対辺が平行でその長さが等しい、のいずれか）'
   hints:
@@ -47,7 +47,7 @@ sub_questions:
   - args: []
     narration: 問題で問われている規則や約束が、何についてのものかを読み取る。
     op: read_rule_context
-    result_display: 問われている規則が何についてかを読み取る
+    result_display: ''
     result_srepr: all_five
   - args: []
     narration: その規則の正しい内容を思い出して選ぶ。

@@ -55,9 +55,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - probability.word_problem_bag_one_draw
-  explanation: 'まず、玉を区別して、取り出し方をすべて数え上げる。（すべての取り出し方を数え上げる）
+  explanation: 'まず、玉を区別して、取り出し方をすべて数え上げる。（全部で10通り）
 
-    次に、そのうち、求める条件にあてはまる取り出し方の数を数える。（条件にあてはまる取り出し方を数える）
+    次に、そのうち、求める条件にあてはまる取り出し方の数を数える。（あてはまるのは7通り）
 
     最後に、条件にあてはまる取り出し方の数を、すべての取り出し方の数でわる。（7/10）'
   hints:
@@ -69,12 +69,12 @@ sub_questions:
   - args: []
     narration: 玉を区別して、取り出し方をすべて数え上げる。
     op: enumerate_all_combinations
-    result_display: すべての取り出し方を数え上げる
+    result_display: 全部で10通り
     result_srepr: ''
   - args: []
     narration: そのうち、求める条件にあてはまる取り出し方の数を数える。
     op: count_favorable_combinations
-    result_display: 条件にあてはまる取り出し方を数える
+    result_display: あてはまるのは7通り
     result_srepr: ''
   - args: []
     narration: 条件にあてはまる取り出し方の数を、すべての取り出し方の数でわる。

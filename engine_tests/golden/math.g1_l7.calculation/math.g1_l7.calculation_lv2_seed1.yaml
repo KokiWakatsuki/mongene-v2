@@ -35,7 +35,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - signed_number.power_sign_contrast
-  explanation: 'まず、指数がどの数にかかっているか（かっこの有無）を見分ける。（指数のかかる数を見分ける）
+  explanation: 'まず、指数がどの数にかかっているか（かっこの有無）を見分ける。（(-5) × (-5) × (-5)）
 
     次に、符号に注意して計算し、累乗の値を求める。（-125）'
   hints:
@@ -46,7 +46,7 @@ sub_questions:
   - args: []
     narration: 指数がどの数にかかっているか（かっこの有無）を見分ける。
     op: identify_base_scope
-    result_display: 指数のかかる数を見分ける
+    result_display: (-5) × (-5) × (-5)
     result_srepr: Integer(-125)
   - args: []
     narration: 符号に注意して計算し、累乗の値を求める。

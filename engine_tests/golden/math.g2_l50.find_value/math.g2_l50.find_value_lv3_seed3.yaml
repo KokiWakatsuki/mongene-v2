@@ -33,9 +33,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - equal_area.bisecting_line_point
-  explanation: 'まず、まわりの座標から四角形全体の面積を求める。（四角形全体の面積を求める）
+  explanation: 'まず、まわりの座標から四角形全体の面積を求める。（48）
 
-    次に、頂点を通る直線が面積を2等分するのだから、分けられた一方の三角形の面積が全体の半分になる、という式を立てる。（半分になる条件を式にする）
+    次に、頂点を通る直線が面積を2等分するのだから、分けられた一方の三角形の面積が全体の半分になる、という式を立てる。（△ABP = 24（△ABC = 30））
 
     最後に、その三角形は辺の上の点までの長さを底辺とみられるので、面積の式を長さについて解いて、点の位置を求める。（P(8, 0)（BP:PC = 4:1））'
   hints:
@@ -47,12 +47,12 @@ sub_questions:
   - args: []
     narration: まわりの座標から四角形全体の面積を求める。
     op: compute_quadrilateral_area
-    result_display: 四角形全体の面積を求める
+    result_display: '48'
     result_srepr: ''
   - args: []
     narration: 頂点を通る直線が面積を2等分するのだから、分けられた一方の三角形の面積が全体の半分になる、という式を立てる。
     op: set_half_area_condition
-    result_display: 半分になる条件を式にする
+    result_display: △ABP = 24（△ABC = 30）
     result_srepr: ''
   - args: []
     narration: その三角形は辺の上の点までの長さを底辺とみられるので、面積の式を長さについて解いて、点の位置を求める。

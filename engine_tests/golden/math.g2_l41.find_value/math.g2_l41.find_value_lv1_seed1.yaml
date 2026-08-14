@@ -33,7 +33,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - isosceles.base_angle_from_apex
-  explanation: 'まず、二等辺三角形の頂角・底角のうち、わかっているほうの大きさを読み取る。（わかっている角の大きさを読み取る）
+  explanation: 'まず、二等辺三角形の頂角・底角のうち、わかっているほうの大きさを読み取る。（13°）
 
     次に、等しい2つの底角の大きさを2つ分合わせてひくと、残りが頂角の大きさになることから頂角を求める。（154）'
   hints:
@@ -44,7 +44,7 @@ sub_questions:
   - args: []
     narration: 二等辺三角形の頂角・底角のうち、わかっているほうの大きさを読み取る。
     op: identify_known_angle
-    result_display: わかっている角の大きさを読み取る
+    result_display: 13°
     result_srepr: ''
   - args: []
     narration: 等しい2つの底角の大きさを2つ分合わせてひくと、残りが頂角の大きさになることから頂角を求める。

@@ -35,7 +35,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - polynomial.expand_product
-  explanation: 'まず、分配法則で、前のかっこの各項を後ろのかっこの各項にすべてかける。（各項の積をすべて書き出す）
+  explanation: 'まず、分配法則で、前のかっこの各項を後ろのかっこの各項にすべてかける。（y² - 6y + 4y - 24）
 
     次に、同類項をまとめて計算する。（y² - 2y - 24）'
   hints:
@@ -46,7 +46,7 @@ sub_questions:
   - args: []
     narration: 分配法則で、前のかっこの各項を後ろのかっこの各項にすべてかける。
     op: expand_all_products
-    result_display: 各項の積をすべて書き出す
+    result_display: y² - 6y + 4y - 24
     result_srepr: ''
   - args: []
     narration: 同類項をまとめて計算する。

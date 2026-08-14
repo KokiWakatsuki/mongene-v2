@@ -35,7 +35,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - sampling.judge_bias
-  explanation: 'まず、母集団に含まれるすべての対象が、同じ機会で選ばれる方法になっているかを調べる。（母集団のすべてが同じ機会で選ばれうるかを調べる）
+  explanation: 'まず、母集団に含まれるすべての対象が、同じ機会で選ばれる方法になっているかを調べる。（同じ機会になる）
 
     次に、一部の対象だけが選ばれやすい方法になっていれば偏りが生じ、適切とはいえないと判断する。（偏りが生じにくく、適切といえる）'
   hints:
@@ -46,7 +46,7 @@ sub_questions:
   - args: []
     narration: 母集団に含まれるすべての対象が、同じ機会で選ばれる方法になっているかを調べる。
     op: check_random_coverage
-    result_display: 母集団のすべてが同じ機会で選ばれうるかを調べる
+    result_display: 同じ機会になる
     result_srepr: unbiased
   - args: []
     narration: 一部の対象だけが選ばれやすい方法になっていれば偏りが生じ、適切とはいえないと判断する。

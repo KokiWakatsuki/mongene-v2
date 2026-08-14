@@ -33,7 +33,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - sector.solve_central_angle
-  explanation: 'まず、おうぎ形の面積の公式に、半径と分からない中心角をあてはめて方程式をつくる。（面積の公式に半径とわからない中心角をあてはめ方程式をつくる）
+  explanation: 'まず、おうぎ形の面積の公式に、半径と分からない中心角をあてはめて方程式をつくる。（4² × π × x/360 = 44/3π）
 
     次に、方程式を中心角について解き、その大きさを求める。（330）'
   hints:
@@ -44,7 +44,7 @@ sub_questions:
   - args: []
     narration: おうぎ形の面積の公式に、半径と分からない中心角をあてはめて方程式をつくる。
     op: form_area_equation
-    result_display: 面積の公式に半径とわからない中心角をあてはめ方程式をつくる
+    result_display: 4² × π × x/360 = 44/3π
     result_srepr: ''
   - args: []
     narration: 方程式を中心角について解き、その大きさを求める。

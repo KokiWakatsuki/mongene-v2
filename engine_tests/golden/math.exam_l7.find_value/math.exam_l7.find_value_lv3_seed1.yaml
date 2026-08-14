@@ -33,9 +33,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - exam.quartiles_full_summary
-  explanation: 'まず、データを大きさの順に並べ、データ全体の中央値（第二四分位数）を求める。（データ全体の中央値を求める）
+  explanation: 'まず、データを大きさの順に並べ、データ全体の中央値（第二四分位数）を求める。（第2四分位数(中央値) 23）
 
-    次に、中央値を境に下組と上組に分ける。（中央値を境に下組と上組に分ける）
+    次に、中央値を境に下組と上組に分ける。（下組 1、10、16、17 / 上組 23、30、42、44）
 
     最後に、下組・上組それぞれの中央値を第一・第三四分位数とし、その差から四分位範囲を求める。（第1四分位数 13、第2四分位数(中央値) 23、第3四分位数 36、四分位範囲 23）'
   hints:
@@ -47,12 +47,12 @@ sub_questions:
   - args: []
     narration: データを大きさの順に並べ、データ全体の中央値（第二四分位数）を求める。
     op: compute_median
-    result_display: データ全体の中央値を求める
+    result_display: 第2四分位数(中央値) 23
     result_srepr: ''
   - args: []
     narration: 中央値を境に下組と上組に分ける。
     op: split_into_halves
-    result_display: 中央値を境に下組と上組に分ける
+    result_display: 下組 1、10、16、17 / 上組 23、30、42、44
     result_srepr: ''
   - args: []
     narration: 下組・上組それぞれの中央値を第一・第三四分位数とし、その差から四分位範囲を求める。

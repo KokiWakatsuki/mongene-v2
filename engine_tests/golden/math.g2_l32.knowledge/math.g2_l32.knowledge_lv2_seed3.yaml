@@ -35,7 +35,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - parallel_lines.judge_from_angle
-  explanation: 'まず、示されている同位角や錯角が、等しいといえる条件を満たしているかを確認する。（同位角や錯角が等しいかどうかを確認する）
+  explanation: 'まず、示されている同位角や錯角が、等しいといえる条件を満たしているかを確認する。（等しくない）
 
     次に、その条件を満たしていれば2直線は平行であるという性質から判別する。（平行であるとはいえない）'
   hints:
@@ -46,7 +46,7 @@ sub_questions:
   - args: []
     narration: 示されている同位角や錯角が、等しいといえる条件を満たしているかを確認する。
     op: check_angle_equality
-    result_display: 同位角や錯角が等しいかどうかを確認する
+    result_display: 等しくない
     result_srepr: not_equal
   - args: []
     narration: その条件を満たしていれば2直線は平行であるという性質から判別する。

@@ -33,11 +33,11 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - parallel_segment.judge_then_length
-  explanation: 'まず、BH:HLとBN:NDの比が等しいかどうかを比べる。（BH:HLとBN:NDの比を比べる）
+  explanation: 'まず、BH:HLとBN:NDの比が等しいかどうかを比べる。（12:12 と 36:36）
 
     次に、平行線と線分の比の定理の逆から、HNとLDが平行であるかどうかを判別する。（平行である）
 
-    次に、HN∥LD であることから、三角形BHNと三角形BLDが相似になることを見つける。（平行線がつくる相似な三角形を見つける）
+    次に、HN∥LD であることから、三角形BHNと三角形BLDが相似になることを見つける。（三角形BHN と 三角形BLD）
 
     最後に、BH:BL=HN:LD が成り立つことから、辺LDの長さを求める。（28）'
   hints:
@@ -50,7 +50,7 @@ sub_questions:
   - args: []
     narration: BH:HLとBN:NDの比が等しいかどうかを比べる。
     op: compare_division_ratios
-    result_display: BH:HLとBN:NDの比を比べる
+    result_display: 12:12 と 36:36
     result_srepr: ''
   - args: []
     narration: 平行線と線分の比の定理の逆から、HNとLDが平行であるかどうかを判別する。
@@ -60,7 +60,7 @@ sub_questions:
   - args: []
     narration: HN∥LD であることから、三角形BHNと三角形BLDが相似になることを見つける。
     op: identify_similar_triangles_from_parallel
-    result_display: 平行線がつくる相似な三角形を見つける
+    result_display: 三角形BHN と 三角形BLD
     result_srepr: ''
   - args: []
     narration: BH:BL=HN:LD が成り立つことから、辺LDの長さを求める。

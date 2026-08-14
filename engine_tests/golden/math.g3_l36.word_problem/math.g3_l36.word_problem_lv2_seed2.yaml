@@ -39,7 +39,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - quadratic_function.word_problem_determine_then_evaluate
-  explanation: 'まず、y は x の2乗に比例するから、比例定数を a とおいて y=ax² と表し、与えられている x と y の値を代入する。（y=ax² に与えられた値を代入する）
+  explanation: 'まず、y は x の2乗に比例するから、比例定数を a とおいて y=ax² と表し、与えられている x と y の値を代入する。（y = ax²）
 
     次に、代入してできた式を a について解いて、比例定数を求める。（a = 1/200）
 
@@ -53,7 +53,7 @@ sub_questions:
   - args: []
     narration: y は x の2乗に比例するから、比例定数を a とおいて y=ax² と表し、与えられている x と y の値を代入する。
     op: set_up_proportion_equation
-    result_display: y=ax² に与えられた値を代入する
+    result_display: y = ax²
     result_srepr: ''
   - args: []
     narration: 代入してできた式を a について解いて、比例定数を求める。
@@ -72,7 +72,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - quadratic_function.word_problem_determine_then_evaluate
-  explanation: 'まず、式の x に、与えられた値をあてはめる。（x に代入する）
+  explanation: 'まず、式の x に、与えられた値をあてはめる。（1/200 × (120)²）
 
     次に、2乗を計算してから比例定数をかけ、y の値を求める。（72）'
   hints:
@@ -83,7 +83,7 @@ sub_questions:
   - args: []
     narration: 式の x に、与えられた値をあてはめる。
     op: substitute_x
-    result_display: x に代入する
+    result_display: 1/200 × (120)²
     result_srepr: ''
   - args: []
     narration: 2乗を計算してから比例定数をかけ、y の値を求める。

@@ -24,18 +24,18 @@ meta:
   seed: 2
   signature: midpoint_connector_length
 problem_ref: 43a51d55215ddc6e
-problem_text: 三角形HGEで、辺HG, HEの中点をそれぞれK, Nとする。GE=333cm のとき、線分KNの長さを求めよ。
+problem_text: 三角形HLRで、辺HL, HRの中点をそれぞれF, Bとする。LR=45cm のとき、線分FBの長さを求めよ。
 sub_questions:
 - answer:
-    display: 333/2
+    display: '22.5'
     kind: symbolic
-    srepr: Rational(333, 2)
+    srepr: Rational(45, 2)
   cause_tags: []
   concept_tags:
   - midpoint_connector.length
-  explanation: 'まず、三角形の2辺の中点を結ぶ線分に対して、残りの辺の長さを読み取る。（残りの辺の長さを読み取る）
+  explanation: 'まず、三角形の2辺の中点を結ぶ線分に対して、残りの辺の長さを読み取る。（45）
 
-    次に、中点を結ぶ線分の長さは、残りの辺の長さの半分に等しいことから、その長さを求める。（333/2）'
+    次に、中点を結ぶ線分の長さは、残りの辺の長さの半分に等しいことから、その長さを求める。（22.5）'
   hints:
   - 三角形の2辺の中点を結ぶ線分に対して、残りの辺の長さを読み取る。
   label: (1)
@@ -44,11 +44,11 @@ sub_questions:
   - args: []
     narration: 三角形の2辺の中点を結ぶ線分に対して、残りの辺の長さを読み取る。
     op: identify_remaining_side
-    result_display: 残りの辺の長さを読み取る
+    result_display: '45'
     result_srepr: ''
   - args: []
     narration: 中点を結ぶ線分の長さは、残りの辺の長さの半分に等しいことから、その長さを求める。
     op: apply_midpoint_connector_theorem
-    result_display: 333/2
-    result_srepr: Rational(333, 2)
+    result_display: '22.5'
+    result_srepr: Rational(45, 2)
 visual_svg: null

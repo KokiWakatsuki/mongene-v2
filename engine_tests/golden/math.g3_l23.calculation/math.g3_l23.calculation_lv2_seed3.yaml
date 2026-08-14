@@ -35,21 +35,21 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - radical.various_calculation
-  explanation: 'まず、根号どうしの乗除を先に計算し、それぞれ a√b の形に簡単にする。（乗除を計算し a√b の形にする）
+  explanation: 'まず、根号どうしの乗除を先に計算して、1つの根号にまとめる。（√1600 + √40）
 
-    次に、根号の中が同じ項をまとめて、式全体を簡単にする。（2√10 + 40）'
+    次に、それぞれの根号を簡単にし、根号の中が同じ項をまとめる。（2√10 + 40）'
   hints:
-  - 根号どうしの乗除を先に計算し、それぞれ a√b の形に簡単にする。
+  - 根号どうしの乗除を先に計算して、1つの根号にまとめる。
   label: (1)
   prompt_text: 式を簡単にしなさい。
   solution_steps:
   - args: []
-    narration: 根号どうしの乗除を先に計算し、それぞれ a√b の形に簡単にする。
+    narration: 根号どうしの乗除を先に計算して、1つの根号にまとめる。
     op: multiply_and_simplify_roots
-    result_display: 乗除を計算し a√b の形にする
+    result_display: √1600 + √40
     result_srepr: ''
   - args: []
-    narration: 根号の中が同じ項をまとめて、式全体を簡単にする。
+    narration: それぞれの根号を簡単にし、根号の中が同じ項をまとめる。
     op: combine_like_radicals_final
     result_display: 2√10 + 40
     result_srepr: Add(Mul(Integer(2), Pow(Integer(10), Rational(1, 2))), Integer(40))

@@ -33,7 +33,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - sector.arc_length_or_area
-  explanation: 'まず、おうぎ形の半径と中心角の大きさを読み取る。（半径と中心角の大きさを読み取る）
+  explanation: 'まず、おうぎ形の半径と中心角の大きさを読み取る。（半径 9、中心角 60°）
 
     次に、おうぎ形の面積の公式（半径の2乗×中心角の割合×π）にあてはめて計算する。（27π/2）'
   hints:
@@ -44,7 +44,7 @@ sub_questions:
   - args: []
     narration: おうぎ形の半径と中心角の大きさを読み取る。
     op: identify_radius_and_angle
-    result_display: 半径と中心角の大きさを読み取る
+    result_display: 半径 9、中心角 60°
     result_srepr: ''
   - args: []
     narration: おうぎ形の面積の公式（半径の2乗×中心角の割合×π）にあてはめて計算する。

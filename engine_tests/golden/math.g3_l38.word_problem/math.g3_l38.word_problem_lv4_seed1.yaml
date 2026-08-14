@@ -47,15 +47,15 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - quadratic_function.word_problem_area_graph_and_times
-  explanation: 'まず、動く点がどの辺の上にあるかで、時間を区間に分ける。（時間を区間に分ける）
+  explanation: 'まず、動く点がどの辺の上にあるかで、時間を区間に分ける。（0〜10秒、10〜20秒、20〜30秒）
 
-    次に、はじめの区間では高さが時間に比例するので、面積を時間の1次式で表す。（増えていく区間の式をつくる）
+    次に、はじめの区間では高さが時間に比例するので、面積を時間の1次式で表す。（y = 5x）
 
-    次に、次の区間では底辺も高さも変わらないので、面積が一定になることを確かめる。（一定の区間であることを確かめる）
+    次に、次の区間では底辺も高さも変わらないので、面積が一定になることを確かめる。（y = 50）
 
-    次に、最後の区間では高さが減っていくので、面積を時間の1次式で表す。（減っていく区間の式をつくる）
+    次に、最後の区間では高さが減っていくので、面積を時間の1次式で表す。（y = -5x + 150）
 
-    次に、区間の境目と両端で面積を求め、その組を座標とみて点をとる。（区間の境目の点をとる）
+    次に、区間の境目と両端で面積を求め、その組を座標とみて点をとる。（(0, 0)、(10, 50)、(20, 50)、(30, 0)）
 
     最後に、とった点を順に線分で結び、区間ごとに式が変わるグラフをかく。（区間の境目を折れ点とする折れ線）'
   hints:
@@ -70,27 +70,27 @@ sub_questions:
   - args: []
     narration: 動く点がどの辺の上にあるかで、時間を区間に分ける。
     op: identify_intervals
-    result_display: 時間を区間に分ける
+    result_display: 0〜10秒、10〜20秒、20〜30秒
     result_srepr: ''
   - args: []
     narration: はじめの区間では高さが時間に比例するので、面積を時間の1次式で表す。
     op: express_area_on_increasing_interval
-    result_display: 増えていく区間の式をつくる
+    result_display: y = 5x
     result_srepr: ''
   - args: []
     narration: 次の区間では底辺も高さも変わらないので、面積が一定になることを確かめる。
     op: express_area_on_constant_interval
-    result_display: 一定の区間であることを確かめる
+    result_display: y = 50
     result_srepr: ''
   - args: []
     narration: 最後の区間では高さが減っていくので、面積を時間の1次式で表す。
     op: express_area_on_decreasing_interval
-    result_display: 減っていく区間の式をつくる
+    result_display: y = -5x + 150
     result_srepr: ''
   - args: []
     narration: 区間の境目と両端で面積を求め、その組を座標とみて点をとる。
     op: plot_breakpoints
-    result_display: 区間の境目の点をとる
+    result_display: (0, 0)、(10, 50)、(20, 50)、(30, 0)
     result_srepr: ''
   - args: []
     narration: とった点を順に線分で結び、区間ごとに式が変わるグラフをかく。
@@ -104,13 +104,13 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - quadratic_function.word_problem_area_graph_and_times
-  explanation: 'まず、点Jがどの辺の上にあるかで時間を区間に分け、区間ごとに面積の式が変わることを確かめる。（時間を区間に分ける）
+  explanation: 'まず、点Jがどの辺の上にあるかで時間を区間に分け、区間ごとに面積の式が変わることを確かめる。（0〜10秒、10〜20秒、20〜30秒）
 
-    次に、はじめの辺の上では高さが時間に比例するので、面積の式を方程式とみて解く。（増えていく区間で解く）
+    次に、はじめの辺の上では高さが時間に比例するので、面積の式を方程式とみて解く。（8秒後）
 
-    次に、次の辺の上では底辺も高さも変わらず面積が一定なので、その値と比べて解があるかを調べる。（一定の区間に解が無いことを確かめる）
+    次に、次の辺の上では底辺も高さも変わらず面積が一定なので、その値と比べて解があるかを調べる。（面積は 50 のままなので解なし）
 
-    次に、最後の辺の上では高さが減っていくので、その区間の式を方程式とみて解く。（減っていく区間で解く）
+    次に、最後の辺の上では高さが減っていくので、その区間の式を方程式とみて解く。（22秒後）
 
     最後に、求めた時刻がそれぞれの区間の中にあることを確かめ、答えをすべて並べる。（8秒後、22秒後）'
   hints:
@@ -124,22 +124,22 @@ sub_questions:
   - args: []
     narration: 点Jがどの辺の上にあるかで時間を区間に分け、区間ごとに面積の式が変わることを確かめる。
     op: identify_intervals
-    result_display: 時間を区間に分ける
+    result_display: 0〜10秒、10〜20秒、20〜30秒
     result_srepr: ''
   - args: []
     narration: はじめの辺の上では高さが時間に比例するので、面積の式を方程式とみて解く。
     op: solve_on_increasing_interval
-    result_display: 増えていく区間で解く
+    result_display: 8秒後
     result_srepr: ''
   - args: []
     narration: 次の辺の上では底辺も高さも変わらず面積が一定なので、その値と比べて解があるかを調べる。
     op: check_constant_interval
-    result_display: 一定の区間に解が無いことを確かめる
+    result_display: 面積は 50 のままなので解なし
     result_srepr: ''
   - args: []
     narration: 最後の辺の上では高さが減っていくので、その区間の式を方程式とみて解く。
     op: solve_on_decreasing_interval
-    result_display: 減っていく区間で解く
+    result_display: 22秒後
     result_srepr: ''
   - args: []
     narration: 求めた時刻がそれぞれの区間の中にあることを確かめ、答えをすべて並べる。

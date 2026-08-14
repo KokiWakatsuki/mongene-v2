@@ -26,20 +26,20 @@ meta:
 problem_ref: 284f0abf6791fee3
 problem_text: '次の2次方程式を解け。
 
-  3x² - x - 5 = 0'
+  5x² - 9x - 9 = 0'
 sub_questions:
 - answer:
-    display: x = (1 - √61)/6, x = (1 + √61)/6
+    display: x = 3(3 - √29)/10, x = 3(3 + √29)/10
     kind: symbolic
-    srepr: Tuple(Add(Rational(1, 6), Mul(Integer(-1), Rational(1, 6), Pow(Integer(61), Rational(1, 2)))), Add(Rational(1, 6), Mul(Rational(1, 6), Pow(Integer(61), Rational(1, 2)))))
+    srepr: Tuple(Add(Rational(9, 10), Mul(Integer(-1), Rational(3, 10), Pow(Integer(29), Rational(1, 2)))), Add(Rational(9, 10), Mul(Rational(3, 10), Pow(Integer(29), Rational(1, 2)))))
   cause_tags: []
   concept_tags:
   - quadratic.solve_by_formula
-  explanation: 'まず、与式を整理して、それぞれの項の係数 a・b・c を読み取る。（a・b・c を読み取る）
+  explanation: 'まず、与式を整理して、それぞれの項の係数 a・b・c を読み取る。（a = 5、b = -9、c = -9）
 
-    次に、根号の中の値（判別式）を計算する。（根号の中を計算する）
+    次に、根号の中の値（判別式）を計算する。（(-9)² - 4 × 5 × (-9) = 261）
 
-    最後に、a・b・c を解の公式に代入して x を求める。（x = (1 - √61)/6, x = (1 + √61)/6）'
+    最後に、a・b・c を解の公式に代入して x を求める。（x = 3(3 - √29)/10, x = 3(3 + √29)/10）'
   hints:
   - 与式を整理して、それぞれの項の係数 a・b・c を読み取る。
   - 根号の中の値（判別式）を計算する。
@@ -49,16 +49,16 @@ sub_questions:
   - args: []
     narration: 与式を整理して、それぞれの項の係数 a・b・c を読み取る。
     op: identify_coefficients
-    result_display: a・b・c を読み取る
+    result_display: a = 5、b = -9、c = -9
     result_srepr: ''
   - args: []
     narration: 根号の中の値（判別式）を計算する。
     op: compute_discriminant
-    result_display: 根号の中を計算する
+    result_display: (-9)² - 4 × 5 × (-9) = 261
     result_srepr: ''
   - args: []
     narration: a・b・c を解の公式に代入して x を求める。
     op: apply_quadratic_formula
-    result_display: x = (1 - √61)/6, x = (1 + √61)/6
-    result_srepr: Tuple(Add(Rational(1, 6), Mul(Integer(-1), Rational(1, 6), Pow(Integer(61), Rational(1, 2)))), Add(Rational(1, 6), Mul(Rational(1, 6), Pow(Integer(61), Rational(1, 2)))))
+    result_display: x = 3(3 - √29)/10, x = 3(3 + √29)/10
+    result_srepr: Tuple(Add(Rational(9, 10), Mul(Integer(-1), Rational(3, 10), Pow(Integer(29), Rational(1, 2)))), Add(Rational(9, 10), Mul(Rational(3, 10), Pow(Integer(29), Rational(1, 2)))))
 visual_svg: null

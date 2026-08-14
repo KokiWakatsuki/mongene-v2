@@ -35,9 +35,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - equation.solve_by_clear_denominators
-  explanation: 'まず、分母の最小公倍数を両辺にかけて、分母をはらう。（分母をはらう）
+  explanation: 'まず、分母の最小公倍数を両辺にかけて、分母をはらう。（3 - 3x = 24）
 
-    次に、分配法則でかっこを外し、文字の項を左辺・数の項を右辺に移項する。（かっこを外して移項する）
+    次に、分配法則でかっこを外し、文字の項を左辺・数の項を右辺に移項する。（-3x = 21）
 
     最後に、同類項をまとめ、x の係数で両辺をわって解を求める。（x = -7）'
   hints:
@@ -49,12 +49,12 @@ sub_questions:
   - args: []
     narration: 分母の最小公倍数を両辺にかけて、分母をはらう。
     op: clear_denominators
-    result_display: 分母をはらう
+    result_display: 3 - 3x = 24
     result_srepr: Integer(-7)
   - args: []
     narration: 分配法則でかっこを外し、文字の項を左辺・数の項を右辺に移項する。
     op: expand_and_transpose
-    result_display: かっこを外して移項する
+    result_display: -3x = 21
     result_srepr: Integer(-7)
   - args: []
     narration: 同類項をまとめ、x の係数で両辺をわって解を求める。

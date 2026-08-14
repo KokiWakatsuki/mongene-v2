@@ -33,9 +33,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - probability.count_single_space
-  explanation: 'まず、起こりうるすべての場合を数え上げる。（すべての場合を数え上げる）
+  explanation: 'まず、起こりうるすべての場合を数え上げる。（全部で14通り）
 
-    次に、そのうち、求める条件にあてはまる場合の数を数える。（条件にあてはまる場合を数える）
+    次に、そのうち、求める条件にあてはまる場合の数を数える。（あてはまるのは8通り）
 
     最後に、条件にあてはまる場合の数を、すべての場合の数でわる。（4/7）'
   hints:
@@ -47,12 +47,12 @@ sub_questions:
   - args: []
     narration: 起こりうるすべての場合を数え上げる。
     op: enumerate_all_outcomes
-    result_display: すべての場合を数え上げる
+    result_display: 全部で14通り
     result_srepr: ''
   - args: []
     narration: そのうち、求める条件にあてはまる場合の数を数える。
     op: count_favorable
-    result_display: 条件にあてはまる場合を数える
+    result_display: あてはまるのは8通り
     result_srepr: ''
   - args: []
     narration: 条件にあてはまる場合の数を、すべての場合の数でわる。

@@ -1,6 +1,6 @@
-approved_at: '2026-08-10T04:17:28.103184'
+approved_at: '2026-08-14T14:30:46.287970'
 approver: koki
-content_sha256: 8a4b3c9ab451827df0670534b33c1436e91fb6466605c27837375aebdeffed12
+content_sha256: abcbbf62d652fa4452a8f5e5dc5497f40f27c092cdc22e733902671f3a0613d5
 family: math.g2_l5.calculation
 files:
 - engine_tests/golden/math.g2_l5.calculation/math.g2_l5.calculation_lv1_seed1.yaml

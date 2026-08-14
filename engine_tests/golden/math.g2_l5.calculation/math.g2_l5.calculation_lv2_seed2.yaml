@@ -35,7 +35,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - polynomial.divide_polynomial
-  explanation: 'まず、÷ の計算を、その数の逆数をかっこにかける計算に直す。（÷ を逆数をかける計算に直す）
+  explanation: 'まず、÷ の計算を、その数の逆数をかっこにかける計算に直す。（(15x - 5y) × (-1/5)）
 
     次に、逆数をかっこの中の各項にかけて計算する。（-3x + y）'
   hints:
@@ -46,7 +46,7 @@ sub_questions:
   - args: []
     narration: ÷ の計算を、その数の逆数をかっこにかける計算に直す。
     op: convert_division_to_multiplication
-    result_display: ÷ を逆数をかける計算に直す
+    result_display: (15x - 5y) × (-1/5)
     result_srepr: Add(Mul(Integer(-1), Integer(3), Symbol('x')), Symbol('y'))
   - args: []
     narration: 逆数をかっこの中の各項にかけて計算する。

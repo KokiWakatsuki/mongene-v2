@@ -35,9 +35,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - polynomial.expand_formula_sum_product
-  explanation: 'まず、それぞれの定数の符号を確かめる。（定数の符号を確かめる）
+  explanation: 'まず、それぞれの定数の符号を確かめる。（-12 と -11）
 
-    次に、2つの定数の和と積を求める。（和と積を求める）
+    次に、2つの定数の和と積を求める。（和 -23、積 132）
 
     最後に、乗法公式にあてはめて展開した式を書く。（a² - 23a + 132）'
   hints:
@@ -49,12 +49,12 @@ sub_questions:
   - args: []
     narration: それぞれの定数の符号を確かめる。
     op: determine_constant_signs
-    result_display: 定数の符号を確かめる
+    result_display: -12 と -11
     result_srepr: ''
   - args: []
     narration: 2つの定数の和と積を求める。
     op: compute_sum_and_product
-    result_display: 和と積を求める
+    result_display: 和 -23、積 132
     result_srepr: ''
   - args: []
     narration: 乗法公式にあてはめて展開した式を書く。

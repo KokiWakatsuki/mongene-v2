@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: probability_ordered_selection
 problem_ref: 46864837b7ddc7b3
-problem_text: りくさんをふくむ6人の委員の候補から、委員長、副委員長、書記を1人ずつ順に選ぶ。選び方は全部で何通りあるか樹形図で数え、りくさんが書記に選ばれる確率を求めよ。
+problem_text: りくさんをふくむ6人の委員の候補から、委員長、副委員長、書記を1人ずつ順に選ぶ。選び方は全部で何通りあるか樹形図で数えて、りくさんが書記に選ばれる確率を求めよ。
 sub_questions:
 - answer:
     display: 1/6
@@ -33,9 +33,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - probability.count_ordered_selection
-  explanation: 'まず、役職の決め方を、樹形図などを使ってすべて数え上げる。（すべての決め方を数え上げる）
+  explanation: 'まず、役職の決め方を、樹形図などを使ってすべて数え上げる。（全部で120通り）
 
-    次に、そのうち、求める人がその役職に選ばれる決め方の数を数える。（条件にあてはまる決め方を数える）
+    次に、そのうち、求める人がその役職に選ばれる決め方の数を数える。（あてはまるのは20通り）
 
     最後に、条件にあてはまる決め方の数を、すべての決め方の数でわる。（1/6）'
   hints:
@@ -47,12 +47,12 @@ sub_questions:
   - args: []
     narration: 役職の決め方を、樹形図などを使ってすべて数え上げる。
     op: enumerate_all_orderings
-    result_display: すべての決め方を数え上げる
+    result_display: 全部で120通り
     result_srepr: ''
   - args: []
     narration: そのうち、求める人がその役職に選ばれる決め方の数を数える。
     op: count_favorable_orderings
-    result_display: 条件にあてはまる決め方を数える
+    result_display: あてはまるのは20通り
     result_srepr: ''
   - args: []
     narration: 条件にあてはまる決め方の数を、すべての決め方の数でわる。

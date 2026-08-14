@@ -26,20 +26,20 @@ meta:
 problem_ref: a45346afd58e3770
 problem_text: '次の2次方程式を解け。
 
-  (x - 6)(x + 1) = 21'
+  (x - 4)(x + 2) = 16'
 sub_questions:
 - answer:
-    display: x = (5 - √133)/2, x = (5 + √133)/2
+    display: x = -4, x = 6
     kind: symbolic
-    srepr: Tuple(Add(Rational(5, 2), Mul(Integer(-1), Rational(1, 2), Pow(Integer(133), Rational(1, 2)))), Add(Rational(5, 2), Mul(Rational(1, 2), Pow(Integer(133), Rational(1, 2)))))
+    srepr: Tuple(Integer(-4), Integer(6))
   cause_tags: []
   concept_tags:
   - quadratic.solve_by_choice
-  explanation: 'まず、かっこを展開し、右辺を左辺に移項して、=0 の形に整理する。（展開して整理する）
+  explanation: 'まず、かっこを展開し、右辺を左辺に移項して、=0 の形に整理する。（x² - 2x - 24 = 0）
 
-    次に、左辺を因数分解する。（左辺を因数分解する）
+    次に、左辺を因数分解する。（(x - 6)(x + 4) = 0）
 
-    最後に、積が 0 になるのは各因数が 0 のときだから、それぞれを 0 とおいて x を求める。（x = (5 - √133)/2, x = (5 + √133)/2）'
+    最後に、積が 0 になるのは各因数が 0 のときだから、それぞれを 0 とおいて x を求める。（x = -4, x = 6）'
   hints:
   - かっこを展開し、右辺を左辺に移項して、=0 の形に整理する。
   - 左辺を因数分解する。
@@ -49,16 +49,16 @@ sub_questions:
   - args: []
     narration: かっこを展開し、右辺を左辺に移項して、=0 の形に整理する。
     op: expand_and_rearrange
-    result_display: 展開して整理する
+    result_display: x² - 2x - 24 = 0
     result_srepr: ''
   - args: []
     narration: 左辺を因数分解する。
     op: factor_left_side
-    result_display: 左辺を因数分解する
+    result_display: (x - 6)(x + 4) = 0
     result_srepr: ''
   - args: []
     narration: 積が 0 になるのは各因数が 0 のときだから、それぞれを 0 とおいて x を求める。
     op: apply_zero_product
-    result_display: x = (5 - √133)/2, x = (5 + √133)/2
-    result_srepr: Tuple(Add(Rational(5, 2), Mul(Integer(-1), Rational(1, 2), Pow(Integer(133), Rational(1, 2)))), Add(Rational(5, 2), Mul(Rational(1, 2), Pow(Integer(133), Rational(1, 2)))))
+    result_display: x = -4, x = 6
+    result_srepr: Tuple(Integer(-4), Integer(6))
 visual_svg: null

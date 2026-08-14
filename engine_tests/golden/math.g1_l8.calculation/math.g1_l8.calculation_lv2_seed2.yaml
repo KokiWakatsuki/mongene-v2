@@ -26,20 +26,20 @@ meta:
 problem_ref: 45969e9963e098a1
 problem_text: '次の計算をせよ。
 
-  9/7÷1/3×3/7'
+  9/5÷(-3/2)×(-1/6)'
 sub_questions:
 - answer:
-    display: 81/49
+    display: 1/5
     kind: symbolic
-    srepr: Rational(81, 49)
+    srepr: Rational(1, 5)
   cause_tags: []
   concept_tags:
   - signed_number.divide_chain
-  explanation: 'まず、すべてのわり算を、逆数をかけるかけ算に直す。（すべて逆数のかけ算に直す）
+  explanation: 'まず、すべてのわり算を、逆数をかけるかけ算に直す。（9/5 × (-2/3) × (-1/6)）
 
-    次に、かけ合わせる数の符号から、積の符号を先に決める。（積の符号を先に決める）
+    次に、かけ合わせる数の符号から、積の符号を先に決める。（+(9/5 × 2/3 × 1/6)）
 
-    最後に、すべての絶対値をかけ合わせて、積を求める。（81/49）'
+    最後に、すべての絶対値をかけ合わせて、積を求める。（1/5）'
   hints:
   - すべてのわり算を、逆数をかけるかけ算に直す。
   - かけ合わせる数の符号から、積の符号を先に決める。
@@ -49,16 +49,16 @@ sub_questions:
   - args: []
     narration: すべてのわり算を、逆数をかけるかけ算に直す。
     op: rewrite_all_as_reciprocal
-    result_display: すべて逆数のかけ算に直す
-    result_srepr: Rational(81, 49)
+    result_display: 9/5 × (-2/3) × (-1/6)
+    result_srepr: Rational(1, 5)
   - args: []
     narration: かけ合わせる数の符号から、積の符号を先に決める。
     op: determine_product_sign
-    result_display: 積の符号を先に決める
-    result_srepr: Rational(81, 49)
+    result_display: +(9/5 × 2/3 × 1/6)
+    result_srepr: Rational(1, 5)
   - args: []
     narration: すべての絶対値をかけ合わせて、積を求める。
     op: multiply_all_magnitudes
-    result_display: 81/49
-    result_srepr: Rational(81, 49)
+    result_display: 1/5
+    result_srepr: Rational(1, 5)
 visual_svg: null

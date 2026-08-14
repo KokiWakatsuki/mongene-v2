@@ -35,7 +35,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - transformation_invariant.reflection
-  explanation: 'まず、図形を対称移動する前と後で、対応する点を結ぶ線分と対称の軸との関係を見比べる。（図形を対称移動する前と後で、対応する点を結ぶ線分と対称の軸との関係を見比べる。）
+  explanation: 'まず、図形を対称移動する前と後で、対応する点を結ぶ線分と対称の軸との関係を見比べる。
 
     次に、移動の性質として、その関係がつねに成り立つかどうかを判別する。（垂直に二等分される）'
   hints:
@@ -46,7 +46,7 @@ sub_questions:
   - args: []
     narration: 図形を対称移動する前と後で、対応する点を結ぶ線分と対称の軸との関係を見比べる。
     op: compare_before_after
-    result_display: 図形を対称移動する前と後で、対応する点を結ぶ線分と対称の軸との関係を見比べる。
+    result_display: ''
     result_srepr: reflection
   - args: []
     narration: 移動の性質として、その関係がつねに成り立つかどうかを判別する。

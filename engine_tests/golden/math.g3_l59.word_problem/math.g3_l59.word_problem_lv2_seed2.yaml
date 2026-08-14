@@ -64,7 +64,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - sample_survey.word_problem_mark_recapture
-  explanation: 'まず、標本での該当する個数の割合が、母集団全体でもおよそ等しいとみて、母集団の大きさ x を含む比例式をつくる。（標本比率と母集団の比率が等しいとみて x を含む比例式をつくる）
+  explanation: 'まず、標本での該当する個数の割合が、母集団全体でもおよそ等しいとみて、母集団の大きさ x を含む比例式をつくる。（15 : 150 = 80 : x）
 
     次に、比例式を解き、母集団の大きさ x を求める。（800）'
   hints:
@@ -75,7 +75,7 @@ sub_questions:
   - args: []
     narration: 標本での該当する個数の割合が、母集団全体でもおよそ等しいとみて、母集団の大きさ x を含む比例式をつくる。
     op: form_ratio_equation_for_x
-    result_display: 標本比率と母集団の比率が等しいとみて x を含む比例式をつくる
+    result_display: '15 : 150 = 80 : x'
     result_srepr: ''
   - args: []
     narration: 比例式を解き、母集団の大きさ x を求める。

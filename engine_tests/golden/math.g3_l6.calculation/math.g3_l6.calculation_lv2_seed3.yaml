@@ -35,7 +35,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - polynomial.expand_various
-  explanation: 'まず、それぞれのかっこを乗法公式で展開する。（各かっこを展開する）
+  explanation: 'まず、それぞれのかっこを乗法公式で展開する。（(y² + 16y + 64) - (y² - 4y + 4)）
 
     次に、同類項をまとめて計算する。（20y + 60）'
   hints:
@@ -46,7 +46,7 @@ sub_questions:
   - args: []
     narration: それぞれのかっこを乗法公式で展開する。
     op: expand_each_part
-    result_display: 各かっこを展開する
+    result_display: (y² + 16y + 64) - (y² - 4y + 4)
     result_srepr: ''
   - args: []
     narration: 同類項をまとめて計算する。

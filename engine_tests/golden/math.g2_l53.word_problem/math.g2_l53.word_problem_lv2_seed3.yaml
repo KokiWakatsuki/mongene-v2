@@ -55,9 +55,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - probability.word_problem_two_digit_cards
-  explanation: 'まず、十の位と一の位に置くカードの選び方を枝分かれで書き出し、できる整数をすべて数え上げる。（できる整数をすべて書き出す）
+  explanation: 'まず、十の位と一の位に置くカードの選び方を枝分かれで書き出し、できる整数をすべて数え上げる。（20通り）
 
-    次に、書き出した整数のうち、一の位が奇数になっているものの個数を数える。（条件にあてはまる整数を数える）
+    次に、書き出した整数のうち、一の位が奇数になっているものの個数を数える。（12通り）
 
     最後に、条件にあてはまる整数の個数を、できる整数の総数でわる。（3/5）'
   hints:
@@ -69,12 +69,12 @@ sub_questions:
   - args: []
     narration: 十の位と一の位に置くカードの選び方を枝分かれで書き出し、できる整数をすべて数え上げる。
     op: enumerate_all_two_digit_numbers
-    result_display: できる整数をすべて書き出す
+    result_display: 20通り
     result_srepr: ''
   - args: []
     narration: 書き出した整数のうち、一の位が奇数になっているものの個数を数える。
     op: count_favorable_numbers
-    result_display: 条件にあてはまる整数を数える
+    result_display: 12通り
     result_srepr: ''
   - args: []
     narration: 条件にあてはまる整数の個数を、できる整数の総数でわる。

@@ -27,15 +27,15 @@ problem_ref: 7995b80f6e10ea3d
 problem_text: 1辺 43cm の正方形 ABCD の辺 BC 上を点 P が B から C に向かって動く。BP=7cm のときの三角形 ABP の面積を求めよ。
 sub_questions:
 - answer:
-    display: 301/2
+    display: '150.5'
     kind: symbolic
     srepr: Rational(301, 2)
   cause_tags: []
   concept_tags:
   - quadratic_function.motion_area
-  explanation: 'まず、動いた道のりから、点 P の位置の座標を決める。（点 P の座標を決める）
+  explanation: 'まず、動いた道のりから、点 P の位置の座標を決める。（P(43, 7)）
 
-    次に、3点の座標から、三角形の面積を求める公式で面積を計算する。（301/2）'
+    次に、3点の座標から、三角形の面積を求める公式で面積を計算する。（150.5）'
   hints:
   - 動いた道のりから、点 P の位置の座標を決める。
   label: (1)
@@ -44,11 +44,11 @@ sub_questions:
   - args: []
     narration: 動いた道のりから、点 P の位置の座標を決める。
     op: locate_point_p
-    result_display: 点 P の座標を決める
+    result_display: P(43, 7)
     result_srepr: ''
   - args: []
     narration: 3点の座標から、三角形の面積を求める公式で面積を計算する。
     op: compute_triangle_area
-    result_display: 301/2
+    result_display: '150.5'
     result_srepr: Rational(301, 2)
 visual_svg: null

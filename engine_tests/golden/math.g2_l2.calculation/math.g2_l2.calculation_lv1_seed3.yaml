@@ -35,7 +35,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - polynomial.combine_like_terms_basic
-  explanation: 'まず、文字の部分が同じ項（同類項）どうしをまとめる。（文字の部分が同じ項どうしをまとめる）
+  explanation: 'まず、文字の部分が同じ項（同類項）どうしをまとめる。（(-x + 3x - 7x)）
 
     次に、まとめた同類項の係数を計算し、式を簡単にする。（-5x）'
   hints:
@@ -46,7 +46,7 @@ sub_questions:
   - args: []
     narration: 文字の部分が同じ項（同類項）どうしをまとめる。
     op: group_like_terms
-    result_display: 文字の部分が同じ項どうしをまとめる
+    result_display: (-x + 3x - 7x)
     result_srepr: Mul(Integer(-1), Integer(5), Symbol('x'))
   - args: []
     narration: まとめた同類項の係数を計算し、式を簡単にする。

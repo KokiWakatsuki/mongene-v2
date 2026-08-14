@@ -33,7 +33,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - quadratic_function.evaluate
-  explanation: 'まず、式の x に、与えられた値をあてはめる。（x に代入する）
+  explanation: 'まず、式の x に、与えられた値をあてはめる。（-6 × (8)²）
 
     次に、2乗を計算してから比例定数をかけ、y の値を求める。（-384）'
   hints:
@@ -44,7 +44,7 @@ sub_questions:
   - args: []
     narration: 式の x に、与えられた値をあてはめる。
     op: substitute_x
-    result_display: x に代入する
+    result_display: -6 × (8)²
     result_srepr: ''
   - args: []
     narration: 2乗を計算してから比例定数をかけ、y の値を求める。

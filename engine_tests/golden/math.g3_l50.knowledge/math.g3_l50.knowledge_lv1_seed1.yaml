@@ -36,7 +36,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - arc_angle_proportion.rule_recall
-  explanation: 'まず、問題で問われている規則や約束が、何についてのものかを読み取る。（問われている規則が何についてかを読み取る）
+  explanation: 'まず、問題で問われている規則や約束が、何についてのものかを読み取る。
 
     次に、その規則の正しい内容を思い出して選ぶ。（弧の長さは、その弧に対する円周角の大きさに比例する）'
   hints:
@@ -47,7 +47,7 @@ sub_questions:
   - args: []
     narration: 問題で問われている規則や約束が、何についてのものかを読み取る。
     op: read_rule_context
-    result_display: 問われている規則が何についてかを読み取る
+    result_display: ''
     result_srepr: statement
   - args: []
     narration: その規則の正しい内容を思い出して選ぶ。

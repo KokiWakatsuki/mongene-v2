@@ -33,7 +33,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - circle.arc_proportional_angle
-  explanation: 'まず、2つの弧の長さの比を読み取る。（弧の長さの比を読み取る）
+  explanation: 'まず、2つの弧の長さの比を読み取る。（3倍）
 
     次に、弧の長さは、その弧に対する円周角の大きさに比例することから、求める円周角の大きさを求める。（3°）'
   hints:
@@ -44,7 +44,7 @@ sub_questions:
   - args: []
     narration: 2つの弧の長さの比を読み取る。
     op: identify_arc_length_ratio
-    result_display: 弧の長さの比を読み取る
+    result_display: 3倍
     result_srepr: ''
   - args: []
     narration: 弧の長さは、その弧に対する円周角の大きさに比例することから、求める円周角の大きさを求める。

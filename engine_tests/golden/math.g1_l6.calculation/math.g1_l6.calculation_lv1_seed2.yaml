@@ -35,7 +35,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - signed_number.multiply_pair
-  explanation: 'まず、かけ合わせる数の符号から、積の符号を先に決める。（積の符号を先に決める）
+  explanation: 'まず、かけ合わせる数の符号から、積の符号を先に決める。（+(11 × 3)）
 
     次に、絶対値どうしをかけて、積を求める。（33）'
   hints:
@@ -46,7 +46,7 @@ sub_questions:
   - args: []
     narration: かけ合わせる数の符号から、積の符号を先に決める。
     op: determine_product_sign
-    result_display: 積の符号を先に決める
+    result_display: +(11 × 3)
     result_srepr: Integer(33)
   - args: []
     narration: 絶対値どうしをかけて、積を求める。

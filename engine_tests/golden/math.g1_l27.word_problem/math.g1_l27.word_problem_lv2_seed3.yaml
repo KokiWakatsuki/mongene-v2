@@ -64,7 +64,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - equation.word_problem_round_trip
-  explanation: 'まず、分母の最小公倍数を両辺にかけて、分母をはらう。（分母をはらう）
+  explanation: 'まず、分母の最小公倍数を両辺にかけて、分母をはらう。（4x = 72）
 
     次に、同類項をまとめ、x の係数で両辺をわって解を求める。（x = 18）'
   hints:
@@ -75,7 +75,7 @@ sub_questions:
   - args: []
     narration: 分母の最小公倍数を両辺にかけて、分母をはらう。
     op: clear_denominators
-    result_display: 分母をはらう
+    result_display: 4x = 72
     result_srepr: Integer(18)
   - args: []
     narration: 同類項をまとめ、x の係数で両辺をわって解を求める。

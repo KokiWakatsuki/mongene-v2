@@ -35,9 +35,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - signed_number.add_sub_terms_rational
-  explanation: 'まず、かっこを外して、符号のついた項の和とみなす。（かっこを外し項の和とみなす）
+  explanation: 'まず、かっこを外して、符号のついた項の和とみなす。（3/5 - 1/10 - 1/8 + 1/4）
 
-    次に、分数・小数を通分してそろえる。（分数・小数を通分してそろえる）
+    次に、分数・小数を通分してそろえる。（24/40 - 4/40 - 5/40 + 10/40）
 
     最後に、正の合計と負の合計を合わせて、答えを求める。（5/8）'
   hints:
@@ -49,12 +49,12 @@ sub_questions:
   - args: []
     narration: かっこを外して、符号のついた項の和とみなす。
     op: drop_parentheses_to_terms
-    result_display: かっこを外し項の和とみなす
+    result_display: 3/5 - 1/10 - 1/8 + 1/4
     result_srepr: Rational(5, 8)
   - args: []
     narration: 分数・小数を通分してそろえる。
     op: align_fractions
-    result_display: 分数・小数を通分してそろえる
+    result_display: 24/40 - 4/40 - 5/40 + 10/40
     result_srepr: Rational(5, 8)
   - args: []
     narration: 正の合計と負の合計を合わせて、答えを求める。

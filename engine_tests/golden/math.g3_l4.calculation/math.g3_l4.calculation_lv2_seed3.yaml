@@ -35,9 +35,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - polynomial.expand_formula_square
-  explanation: 'まず、係数のついたはじめの項を平方する。（はじめの項を平方する）
+  explanation: 'まず、係数のついたはじめの項を平方する。（4m²）
 
-    次に、2つの項の積の2倍（中間の項）を求める。（中間の項を求める）
+    次に、2つの項の積の2倍（中間の項）を求める。（-4m）
 
     最後に、乗法公式にあてはめて展開した式を書く。（4m² - 4m + 1）'
   hints:
@@ -49,12 +49,12 @@ sub_questions:
   - args: []
     narration: 係数のついたはじめの項を平方する。
     op: square_leading_term
-    result_display: はじめの項を平方する
+    result_display: 4m²
     result_srepr: ''
   - args: []
     narration: 2つの項の積の2倍（中間の項）を求める。
     op: compute_cross_term
-    result_display: 中間の項を求める
+    result_display: -4m
     result_srepr: ''
   - args: []
     narration: 乗法公式にあてはめて展開した式を書く。

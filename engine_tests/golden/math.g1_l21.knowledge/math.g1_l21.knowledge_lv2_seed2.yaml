@@ -35,7 +35,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - equation.verify_solution
-  explanation: 'まず、候補の値を方程式の x にあてはめる。（候補の値を方程式の x に代入する）
+  explanation: 'まず、候補の値を方程式の x にあてはめる。（左辺 -47、右辺 -47）
 
     次に、左辺と右辺の値が等しければ解、等しくなければ解ではない。（解である）'
   hints:
@@ -46,7 +46,7 @@ sub_questions:
   - args: []
     narration: 候補の値を方程式の x にあてはめる。
     op: substitute_candidate
-    result_display: 候補の値を方程式の x に代入する
+    result_display: 左辺 -47、右辺 -47
     result_srepr: Integer(8)
   - args: []
     narration: 左辺と右辺の値が等しければ解、等しくなければ解ではない。

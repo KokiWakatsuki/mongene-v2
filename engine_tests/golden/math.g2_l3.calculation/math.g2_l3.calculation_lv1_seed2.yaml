@@ -35,7 +35,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - polynomial.add_polynomials
-  explanation: 'まず、かっこの前が + なので、そのままかっこを外す。（かっこをそのまま外す）
+  explanation: 'まず、かっこの前が + なので、そのままかっこを外す。（2x - 4y + 4x - 2y）
 
     次に、同類項をまとめて計算する。（6x - 6y）'
   hints:
@@ -46,7 +46,7 @@ sub_questions:
   - args: []
     narration: かっこの前が + なので、そのままかっこを外す。
     op: remove_parentheses
-    result_display: かっこをそのまま外す
+    result_display: 2x - 4y + 4x - 2y
     result_srepr: Add(Mul(Integer(6), Symbol('x')), Mul(Integer(-1), Integer(6), Symbol('y')))
   - args: []
     narration: 同類項をまとめて計算する。

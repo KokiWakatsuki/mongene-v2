@@ -33,9 +33,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - quadratic_function.motion_area
-  explanation: 'まず、点 P が動いた道のりから、周上のどの辺の上にいるかを判断する。（どの辺の上にいるかを判断する）
+  explanation: 'まず、点 P が動いた道のりから、周上のどの辺の上にいるかを判断する。（辺BC上）
 
-    次に、動いた道のりから、点 P の位置の座標を決める。（点 P の座標を決める）
+    次に、動いた道のりから、点 P の位置の座標を決める。（P(18, 5)）
 
     最後に、3点の座標から、三角形の面積を求める公式で面積を計算する。（45）'
   hints:
@@ -47,12 +47,12 @@ sub_questions:
   - args: []
     narration: 点 P が動いた道のりから、周上のどの辺の上にいるかを判断する。
     op: determine_which_segment
-    result_display: どの辺の上にいるかを判断する
+    result_display: 辺BC上
     result_srepr: ''
   - args: []
     narration: 動いた道のりから、点 P の位置の座標を決める。
     op: locate_point_p
-    result_display: 点 P の座標を決める
+    result_display: P(18, 5)
     result_srepr: ''
   - args: []
     narration: 3点の座標から、三角形の面積を求める公式で面積を計算する。

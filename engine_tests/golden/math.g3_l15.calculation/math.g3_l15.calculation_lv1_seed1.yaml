@@ -35,7 +35,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - radical.compare_magnitude
-  explanation: 'まず、根号を含む数はそれぞれ2乗し、根号のない数どうしで比べられるようにする。（それぞれ2乗する）
+  explanation: 'まず、根号を含む数はそれぞれ2乗し、根号のない数どうしで比べられるようにする。（44、82）
 
     次に、2乗した値どうしを比べ、値が大きいほうがもとの数も大きいと判断する。（√44 < √82）'
   hints:
@@ -46,7 +46,7 @@ sub_questions:
   - args: []
     narration: 根号を含む数はそれぞれ2乗し、根号のない数どうしで比べられるようにする。
     op: square_each_value
-    result_display: それぞれ2乗する
+    result_display: 44、82
     result_srepr: ''
   - args: []
     narration: 2乗した値どうしを比べ、値が大きいほうがもとの数も大きいと判断する。

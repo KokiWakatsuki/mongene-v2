@@ -33,7 +33,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - parallel_segment.judge_from_ratio
-  explanation: 'まず、DL:LNとDB:BFの比が等しいかどうかを比べる。（DL:LNとDB:BFの比を比べる）
+  explanation: 'まず、DL:LNとDB:BFの比が等しいかどうかを比べる。（16:6 と 16:6）
 
     次に、平行線と線分の比の定理の逆から、LBとNFが平行であるかどうかを判別する。（平行である）'
   hints:
@@ -44,7 +44,7 @@ sub_questions:
   - args: []
     narration: DL:LNとDB:BFの比が等しいかどうかを比べる。
     op: compare_division_ratios
-    result_display: DL:LNとDB:BFの比を比べる
+    result_display: 16:6 と 16:6
     result_srepr: ''
   - args: []
     narration: 平行線と線分の比の定理の逆から、LBとNFが平行であるかどうかを判別する。

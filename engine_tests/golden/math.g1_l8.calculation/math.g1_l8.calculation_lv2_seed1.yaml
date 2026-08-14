@@ -35,9 +35,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - signed_number.divide_chain
-  explanation: 'まず、すべてのわり算を、逆数をかけるかけ算に直す。（すべて逆数のかけ算に直す）
+  explanation: 'まず、すべてのわり算を、逆数をかけるかけ算に直す。（(-1/6) × (-3) × 1/2）
 
-    次に、かけ合わせる数の符号から、積の符号を先に決める。（積の符号を先に決める）
+    次に、かけ合わせる数の符号から、積の符号を先に決める。（+(1/6 × 3 × 1/2)）
 
     最後に、すべての絶対値をかけ合わせて、積を求める。（1/4）'
   hints:
@@ -49,12 +49,12 @@ sub_questions:
   - args: []
     narration: すべてのわり算を、逆数をかけるかけ算に直す。
     op: rewrite_all_as_reciprocal
-    result_display: すべて逆数のかけ算に直す
+    result_display: (-1/6) × (-3) × 1/2
     result_srepr: Rational(1, 4)
   - args: []
     narration: かけ合わせる数の符号から、積の符号を先に決める。
     op: determine_product_sign
-    result_display: 積の符号を先に決める
+    result_display: +(1/6 × 3 × 1/2)
     result_srepr: Rational(1, 4)
   - args: []
     narration: すべての絶対値をかけ合わせて、積を求める。

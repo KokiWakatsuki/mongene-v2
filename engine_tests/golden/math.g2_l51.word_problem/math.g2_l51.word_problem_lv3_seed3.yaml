@@ -35,11 +35,11 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - probability.word_problem_multiple_union
-  explanation: 'まず、一方の倍数の条件にあてはまる場合の数を数え、その確率を求める。（一方の倍数の場合の数を数える）
+  explanation: 'まず、一方の倍数の条件にあてはまる場合の数を数え、その確率を求める。（1/4）
 
-    次に、もう一方の倍数の条件にあてはまる場合の数を数え、その確率を求める。（もう一方の倍数の場合の数を数える）
+    次に、もう一方の倍数の条件にあてはまる場合の数を数え、その確率を求める。（2/11）
 
-    次に、両方の倍数に共通してあてはまる場合の数を数え、その確率を求める。（両方の倍数に共通する場合の数を数える）
+    次に、両方の倍数に共通してあてはまる場合の数を数え、その確率を求める。（1/22）
 
     最後に、重なっている分を引いて、どちらかの倍数である確率を求める。（17/44）'
   hints:
@@ -52,17 +52,17 @@ sub_questions:
   - args: []
     narration: 一方の倍数の条件にあてはまる場合の数を数え、その確率を求める。
     op: count_condition_a
-    result_display: 一方の倍数の場合の数を数える
+    result_display: 1/4
     result_srepr: ''
   - args: []
     narration: もう一方の倍数の条件にあてはまる場合の数を数え、その確率を求める。
     op: count_condition_b
-    result_display: もう一方の倍数の場合の数を数える
+    result_display: 2/11
     result_srepr: ''
   - args: []
     narration: 両方の倍数に共通してあてはまる場合の数を数え、その確率を求める。
     op: count_overlap
-    result_display: 両方の倍数に共通する場合の数を数える
+    result_display: 1/22
     result_srepr: ''
   - args: []
     narration: 重なっている分を引いて、どちらかの倍数である確率を求める。

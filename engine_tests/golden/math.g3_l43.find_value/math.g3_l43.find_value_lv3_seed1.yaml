@@ -33,11 +33,11 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - parallel_segment.judge_then_length
-  explanation: 'まず、QR:REとQB:BMの比が等しいかどうかを比べる。（QR:REとQB:BMの比を比べる）
+  explanation: 'まず、QR:REとQB:BMの比が等しいかどうかを比べる。（9:5 と 36:20）
 
     次に、平行線と線分の比の定理の逆から、RBとEMが平行であるかどうかを判別する。（平行である）
 
-    次に、RB∥EM であることから、三角形QRBと三角形QEMが相似になることを見つける。（平行線がつくる相似な三角形を見つける）
+    次に、RB∥EM であることから、三角形QRBと三角形QEMが相似になることを見つける。（三角形QRB と 三角形QEM）
 
     最後に、QR:QE=RB:EM が成り立つことから、辺EMの長さを求める。（42）'
   hints:
@@ -50,7 +50,7 @@ sub_questions:
   - args: []
     narration: QR:REとQB:BMの比が等しいかどうかを比べる。
     op: compare_division_ratios
-    result_display: QR:REとQB:BMの比を比べる
+    result_display: 9:5 と 36:20
     result_srepr: ''
   - args: []
     narration: 平行線と線分の比の定理の逆から、RBとEMが平行であるかどうかを判別する。
@@ -60,7 +60,7 @@ sub_questions:
   - args: []
     narration: RB∥EM であることから、三角形QRBと三角形QEMが相似になることを見つける。
     op: identify_similar_triangles_from_parallel
-    result_display: 平行線がつくる相似な三角形を見つける
+    result_display: 三角形QRB と 三角形QEM
     result_srepr: ''
   - args: []
     narration: QR:QE=RB:EM が成り立つことから、辺EMの長さを求める。

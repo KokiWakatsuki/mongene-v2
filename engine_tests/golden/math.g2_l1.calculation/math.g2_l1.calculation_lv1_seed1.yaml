@@ -35,7 +35,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - polynomial.degree_of_expression
-  explanation: 'まず、式の中で、文字の指数がもっとも高い項を見つける。（次数がもっとも高い項を見つける）
+  explanation: 'まず、式の中で、文字の指数がもっとも高い項を見つける。（-x）
 
     次に、その項の文字の指数（の和）が、この式の次数になる。（1）'
   hints:
@@ -46,7 +46,7 @@ sub_questions:
   - args: []
     narration: 式の中で、文字の指数がもっとも高い項を見つける。
     op: find_highest_degree_term
-    result_display: 次数がもっとも高い項を見つける
+    result_display: -x
     result_srepr: Integer(1)
   - args: []
     narration: その項の文字の指数（の和）が、この式の次数になる。

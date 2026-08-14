@@ -33,7 +33,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - pythagorean.hypotenuse_from_legs
-  explanation: 'まず、直角三角形で、直角をはさむ2辺の長さを読み取る。（直角をはさむ2辺の長さを読み取る）
+  explanation: 'まず、直角三角形で、直角をはさむ2辺の長さを読み取る。（9 と 18）
 
     次に、直角をはさむ2辺の長さの二乗の和が、斜辺の長さの二乗に等しいという三平方の定理から、斜辺の長さを求める。（9√5 cm）'
   hints:
@@ -44,7 +44,7 @@ sub_questions:
   - args: []
     narration: 直角三角形で、直角をはさむ2辺の長さを読み取る。
     op: identify_two_legs
-    result_display: 直角をはさむ2辺の長さを読み取る
+    result_display: 9 と 18
     result_srepr: ''
   - args: []
     narration: 直角をはさむ2辺の長さの二乗の和が、斜辺の長さの二乗に等しいという三平方の定理から、斜辺の長さを求める。

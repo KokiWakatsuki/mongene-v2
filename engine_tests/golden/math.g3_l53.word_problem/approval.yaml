@@ -1,6 +1,6 @@
-approved_at: '2026-08-10T04:26:49.640598'
+approved_at: '2026-08-14T14:39:01.278351'
 approver: koki
-content_sha256: fe36c3dfa23e59d88ec247199f1e2f202932ddb8e5b5735053b4c8626926d566
+content_sha256: a1b4778cfa7947e4baacc872e554ba2d878cac0cb891a5b25257793cd1534cde
 family: math.g3_l53.word_problem
 files:
 - engine_tests/golden/math.g3_l53.word_problem/math.g3_l53.word_problem_lv3_seed1.yaml

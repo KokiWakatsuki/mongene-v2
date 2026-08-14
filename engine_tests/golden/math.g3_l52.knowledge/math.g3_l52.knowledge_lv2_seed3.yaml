@@ -24,20 +24,20 @@ meta:
   seed: 3
   signature: judge_right_triangle_from_three_sides
 problem_ref: 97ed5969102cd7e8
-problem_text: 3辺の長さが 63cm, 280cm, 293cm である三角形は直角三角形であるといえるか答えよ。
+problem_text: 3辺の長さが 24cm, 70cm, 74cm である三角形は直角三角形であるといえるか答えよ。
 sub_questions:
 - answer:
-    correct: 直角三角形ではない
+    correct: 直角三角形である
     distractors:
-    - 直角三角形である
+    - 直角三角形ではない
     fact_id: pythagorean.judge_right_triangle
     kind: choice
   cause_tags: []
   concept_tags:
   - pythagorean.judge_right_triangle
-  explanation: 'まず、最も長い辺の長さの二乗と、他の2辺の長さの二乗の和を比べる。（最も長い辺と他の2辺の二乗の関係を調べる）
+  explanation: 'まず、最も長い辺の長さの二乗と、他の2辺の長さの二乗の和を比べる。（24² + 70² = 74²）
 
-    次に、三平方の定理の逆から、直角三角形であるかどうかを判別する。（直角三角形ではない）'
+    次に、三平方の定理の逆から、直角三角形であるかどうかを判別する。（直角三角形である）'
   hints:
   - 最も長い辺の長さの二乗と、他の2辺の長さの二乗の和を比べる。
   label: (1)
@@ -46,11 +46,11 @@ sub_questions:
   - args: []
     narration: 最も長い辺の長さの二乗と、他の2辺の長さの二乗の和を比べる。
     op: compute_squares_and_compare
-    result_display: 最も長い辺と他の2辺の二乗の関係を調べる
+    result_display: 24² + 70² = 74²
     result_srepr: ''
   - args: []
     narration: 三平方の定理の逆から、直角三角形であるかどうかを判別する。
     op: judge_by_pythagorean_converse
-    result_display: 直角三角形ではない
-    result_srepr: 直角三角形ではない
+    result_display: 直角三角形である
+    result_srepr: 直角三角形である
 visual_svg: null

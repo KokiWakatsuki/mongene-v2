@@ -36,7 +36,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - representative_value.judge_appropriate
-  explanation: 'まず、分布の中に、極端に大きい値や小さい値が混じっているかどうかを調べる。（極端に大きい・小さい値が混じっているかを調べる）
+  explanation: 'まず、分布の中に、極端に大きい値や小さい値が混じっているかどうかを調べる。（極端な値はない）
 
     次に、極端な値に影響されにくい代表値ほど、集団の「まん中あたり」を適切に表す。（平均値）'
   hints:
@@ -47,7 +47,7 @@ sub_questions:
   - args: []
     narration: 分布の中に、極端に大きい値や小さい値が混じっているかどうかを調べる。
     op: check_outliers
-    result_display: 極端に大きい・小さい値が混じっているかを調べる
+    result_display: 極端な値はない
     result_srepr: no_outliers
   - args: []
     narration: 極端な値に影響されにくい代表値ほど、集団の「まん中あたり」を適切に表す。

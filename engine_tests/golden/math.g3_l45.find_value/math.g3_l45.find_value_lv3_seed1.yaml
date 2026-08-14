@@ -33,9 +33,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - similarity.trapezoid_area_ratio
-  explanation: 'まず、AKとKBの比から、AKとAB全体の比になおす。（AKとAB全体の比になおす）
+  explanation: 'まず、AKとKBの比から、AKとAB全体の比になおす。（AK:AB = 2:5）
 
-    次に、三角形AKJと三角形ABMは相似であることから、面積比は相似比の二乗に等しいことを使って、三角形AKJと三角形ABM全体の面積比を求める。（相似比を二乗して三角形AKJと三角形ABMの面積比を求める）
+    次に、三角形AKJと三角形ABMは相似であることから、面積比は相似比の二乗に等しいことを使って、三角形AKJと三角形ABM全体の面積比を求める。（4:25）
 
     最後に、三角形ABM全体の面積から三角形AKJの面積を除いた残りが台形の面積になることから、三角形AKJと台形の面積比を求める。（三角形AKJ:台形KBMJ = 4:21）'
   hints:
@@ -47,12 +47,12 @@ sub_questions:
   - args: []
     narration: AKとKBの比から、AKとAB全体の比になおす。
     op: convert_partial_to_whole_ratio
-    result_display: AKとAB全体の比になおす
+    result_display: AK:AB = 2:5
     result_srepr: ''
   - args: []
     narration: 三角形AKJと三角形ABMは相似であることから、面積比は相似比の二乗に等しいことを使って、三角形AKJと三角形ABM全体の面積比を求める。
     op: square_similarity_ratio
-    result_display: 相似比を二乗して三角形AKJと三角形ABMの面積比を求める
+    result_display: '4:25'
     result_srepr: ''
   - args: []
     narration: 三角形ABM全体の面積から三角形AKJの面積を除いた残りが台形の面積になることから、三角形AKJと台形の面積比を求める。

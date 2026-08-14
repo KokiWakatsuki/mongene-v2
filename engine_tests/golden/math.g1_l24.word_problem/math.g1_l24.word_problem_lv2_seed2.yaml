@@ -64,7 +64,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - equation.word_problem_proportion_pair
-  explanation: 'まず、比例式の性質を使い、外項の積と内項の積が等しい式（たすきがけ）をつくる。（たすきがけの式をつくる）
+  explanation: 'まず、比例式の性質を使い、外項の積と内項の積が等しい式（たすきがけ）をつくる。（4 × x = 240 × 7）
 
     次に、x の係数で両辺をわって、x の値を求める。（x = 420）'
   hints:
@@ -75,7 +75,7 @@ sub_questions:
   - args: []
     narration: 比例式の性質を使い、外項の積と内項の積が等しい式（たすきがけ）をつくる。
     op: cross_multiply
-    result_display: たすきがけの式をつくる
+    result_display: 4 × x = 240 × 7
     result_srepr: Integer(420)
   - args: []
     narration: x の係数で両辺をわって、x の値を求める。

@@ -24,22 +24,22 @@ meta:
   seed: 1
   signature: word_problem_box_shortest_path_choose
 problem_ref: a5dd8ecbd6418840
-problem_text: '辺BCの長さが10cm、辺CDの長さが15cm、高さが8cmの直方体BCDE-FGHIの形をした容器がある。ここでBCDEは底面、FGHIは上面で、辺BFが高さにあたる。
+problem_text: '辺LMの長さが11cm、辺MNの長さが2cm、高さが9cmの直方体LMNO-PQRSの形をした容器がある。ここでLMNOは底面、PQRSは上面で、辺LPが高さにあたる。
 
-  この容器の表面上を頂点Bから頂点Hまで進むとき、どの面をどのように開くと最短になるかを自分で判断し、その最短の道のりを求めよ。'
+  この容器の表面上を頂点Lから頂点Rまで進むとき、どの面をどのように開くと最短になるかを自分で判断し、その最短の道のりを求めよ。'
 sub_questions:
 - answer:
-    display: 3√61 cm
+    display: 11√2 cm
     kind: symbolic
-    srepr: Mul(Integer(3), Pow(Integer(61), Rational(1, 2)))
+    srepr: Mul(Integer(11), Pow(Integer(2), Rational(1, 2)))
   cause_tags: []
   concept_tags:
   - pythagorean.word_problem_box_shortest_path_choose
-  explanation: 'まず、となり合う二つの面の開き方が三通りあることを確かめ、それぞれで開いた長方形の縦と横を書き出す。（三通りの開き方を書き出す）
+  explanation: 'まず、となり合う二つの面の開き方が三通りあることを確かめ、それぞれで開いた長方形の縦と横を書き出す。（11√2 cm、5√10 cm、2√101 cm）
 
-    次に、開いた長方形の対角線の長さを三通りとも式にして比べ、最も短くなるのがどれかを決める。（どの開き方が最も短いかを比べる）
+    次に、開いた長方形の対角線の長さを三通りとも式にして比べ、最も短くなるのがどれかを決める。（最も短いのは 11√2 cm）
 
-    最後に、選んだ開き方の長方形について、対角線の長さを三平方の定理で求める。（3√61 cm）'
+    最後に、選んだ開き方の長方形について、対角線の長さを三平方の定理で求める。（11√2 cm）'
   hints:
   - となり合う二つの面の開き方が三通りあることを確かめ、それぞれで開いた長方形の縦と横を書き出す。
   - 開いた長方形の対角線の長さを三通りとも式にして比べ、最も短くなるのがどれかを決める。
@@ -49,16 +49,16 @@ sub_questions:
   - args: []
     narration: となり合う二つの面の開き方が三通りあることを確かめ、それぞれで開いた長方形の縦と横を書き出す。
     op: enumerate_unfoldings
-    result_display: 三通りの開き方を書き出す
+    result_display: 11√2 cm、5√10 cm、2√101 cm
     result_srepr: ''
   - args: []
     narration: 開いた長方形の対角線の長さを三通りとも式にして比べ、最も短くなるのがどれかを決める。
     op: compare_three_paths
-    result_display: どの開き方が最も短いかを比べる
+    result_display: 最も短いのは 11√2 cm
     result_srepr: ''
   - args: []
     narration: 選んだ開き方の長方形について、対角線の長さを三平方の定理で求める。
     op: compute_shortest_path
-    result_display: 3√61 cm
-    result_srepr: Mul(Integer(3), Pow(Integer(61), Rational(1, 2)))
+    result_display: 11√2 cm
+    result_srepr: Mul(Integer(11), Pow(Integer(2), Rational(1, 2)))
 visual_svg: null

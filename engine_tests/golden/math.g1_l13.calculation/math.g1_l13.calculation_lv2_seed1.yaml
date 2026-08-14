@@ -35,7 +35,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - notation.product_rule_powers
-  explanation: 'まず、数を文字の前に書き、乗法の記号 × を省いて表す。（数を前にして × を省く）
+  explanation: 'まず、数を文字の前に書き、乗法の記号 × を省いて表す。（8nnnbbcbc）
 
     次に、同じ文字の積は、累乗の指数を使ってまとめる。（8b³c²n³）'
   hints:
@@ -46,7 +46,7 @@ sub_questions:
   - args: []
     narration: 数を文字の前に書き、乗法の記号 × を省いて表す。
     op: apply_product_rule
-    result_display: 数を前にして × を省く
+    result_display: 8nnnbbcbc
     result_srepr: Mul(Integer(8), Pow(Symbol('b'), Integer(3)), Pow(Symbol('c'), Integer(2)), Pow(Symbol('n'), Integer(3)))
   - args: []
     narration: 同じ文字の積は、累乗の指数を使ってまとめる。

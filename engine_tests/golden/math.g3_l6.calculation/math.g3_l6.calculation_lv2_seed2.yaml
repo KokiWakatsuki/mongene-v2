@@ -35,7 +35,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - polynomial.expand_various
-  explanation: 'まず、それぞれのかっこを乗法公式で展開する。（各かっこを展開する）
+  explanation: 'まず、それぞれのかっこを乗法公式で展開する。（(t² - 12t + 36) - (t² + 14t + 48)）
 
     次に、同類項をまとめて計算する。（-26t - 12）'
   hints:
@@ -46,7 +46,7 @@ sub_questions:
   - args: []
     narration: それぞれのかっこを乗法公式で展開する。
     op: expand_each_part
-    result_display: 各かっこを展開する
+    result_display: (t² - 12t + 36) - (t² + 14t + 48)
     result_srepr: ''
   - args: []
     narration: 同類項をまとめて計算する。

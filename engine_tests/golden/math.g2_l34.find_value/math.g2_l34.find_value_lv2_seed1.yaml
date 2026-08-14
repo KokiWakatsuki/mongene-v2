@@ -33,7 +33,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - polygon_angle.sides_from_interior_sum
-  explanation: 'まず、内角の和の公式に、わからない辺の数をあてはめて方程式をつくる。（内角の和の公式に、わからない辺の数をあてはめ方程式をつくる）
+  explanation: 'まず、内角の和の公式に、わからない辺の数をあてはめて方程式をつくる。（180° × (n - 2) = 5040°）
 
     次に、方程式を辺の数について解き、何角形かを求める。（30）'
   hints:
@@ -44,7 +44,7 @@ sub_questions:
   - args: []
     narration: 内角の和の公式に、わからない辺の数をあてはめて方程式をつくる。
     op: form_interior_sum_equation
-    result_display: 内角の和の公式に、わからない辺の数をあてはめ方程式をつくる
+    result_display: 180° × (n - 2) = 5040°
     result_srepr: ''
   - args: []
     narration: 方程式を辺の数について解き、何角形かを求める。

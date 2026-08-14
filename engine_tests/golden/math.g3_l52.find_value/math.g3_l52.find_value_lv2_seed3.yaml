@@ -24,18 +24,18 @@ meta:
   seed: 3
   signature: verify_right_triangle_from_sides
 problem_ref: c76ce0fcf228ab8c
-problem_text: 3辺の長さが 180cm, 800cm, 826cm である三角形が直角三角形であるかどうかを、三平方の定理の逆を用いて確かめよ。
+problem_text: 3辺の長さが 16cm, 30cm, 34cm である三角形が直角三角形であるかどうかを、三平方の定理の逆を用いて確かめよ。
 sub_questions:
 - answer:
-    display: 直角三角形ではない
+    display: 直角三角形である
     kind: symbolic
-    srepr: 'false'
+    srepr: 'true'
   cause_tags: []
   concept_tags:
   - pythagorean.verify_right_triangle
-  explanation: 'まず、最も長い辺の長さの二乗と、他の2辺の長さの二乗の和を比べる。（最も長い辺と他の2辺の二乗の関係を調べる）
+  explanation: 'まず、最も長い辺の長さの二乗と、他の2辺の長さの二乗の和を比べる。（16² + 30² = 34²）
 
-    次に、三平方の定理の逆から、直角三角形であるかどうかを判別する。（直角三角形ではない）'
+    次に、三平方の定理の逆から、直角三角形であるかどうかを判別する。（直角三角形である）'
   hints:
   - 最も長い辺の長さの二乗と、他の2辺の長さの二乗の和を比べる。
   label: (1)
@@ -44,11 +44,11 @@ sub_questions:
   - args: []
     narration: 最も長い辺の長さの二乗と、他の2辺の長さの二乗の和を比べる。
     op: compute_squares_and_compare
-    result_display: 最も長い辺と他の2辺の二乗の関係を調べる
+    result_display: 16² + 30² = 34²
     result_srepr: ''
   - args: []
     narration: 三平方の定理の逆から、直角三角形であるかどうかを判別する。
     op: judge_by_pythagorean_converse
-    result_display: 直角三角形ではない
-    result_srepr: 'false'
+    result_display: 直角三角形である
+    result_srepr: 'true'
 visual_svg: null

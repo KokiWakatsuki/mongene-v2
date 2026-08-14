@@ -35,7 +35,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - circle_property.judge
-  explanation: 'まず、1つの円で中心角と弧の長さが比例するかどうかを見比べる。（1つの円で中心角と弧の長さが比例するかどうかを見比べる。）
+  explanation: 'まず、1つの円で中心角と弧の長さが比例するかどうかを見比べる。
 
     次に、その性質がつねに成り立つ関係かどうかを判別する。（正しい）'
   hints:
@@ -46,7 +46,7 @@ sub_questions:
   - args: []
     narration: 1つの円で中心角と弧の長さが比例するかどうかを見比べる。
     op: identify_circle_property
-    result_display: 1つの円で中心角と弧の長さが比例するかどうかを見比べる。
+    result_display: ''
     result_srepr: arc_central_angle_proportional
   - args: []
     narration: その性質がつねに成り立つ関係かどうかを判別する。

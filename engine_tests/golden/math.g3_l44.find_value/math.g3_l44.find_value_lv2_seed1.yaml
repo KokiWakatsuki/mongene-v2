@@ -24,18 +24,18 @@ meta:
   seed: 1
   signature: midpoint_connector_length
 problem_ref: e9da4dfee9b3d1c3
-problem_text: 三角形EGDで、辺EG, EDの中点をそれぞれR, Pとする。GD=276cm のとき、線分RPの長さを求めよ。
+problem_text: 三角形JENで、辺JE, JNの中点をそれぞれM, Rとする。EN=45cm のとき、線分MRの長さを求めよ。
 sub_questions:
 - answer:
-    display: '138'
+    display: '22.5'
     kind: symbolic
-    srepr: Integer(138)
+    srepr: Rational(45, 2)
   cause_tags: []
   concept_tags:
   - midpoint_connector.length
-  explanation: 'まず、三角形の2辺の中点を結ぶ線分に対して、残りの辺の長さを読み取る。（残りの辺の長さを読み取る）
+  explanation: 'まず、三角形の2辺の中点を結ぶ線分に対して、残りの辺の長さを読み取る。（45）
 
-    次に、中点を結ぶ線分の長さは、残りの辺の長さの半分に等しいことから、その長さを求める。（138）'
+    次に、中点を結ぶ線分の長さは、残りの辺の長さの半分に等しいことから、その長さを求める。（22.5）'
   hints:
   - 三角形の2辺の中点を結ぶ線分に対して、残りの辺の長さを読み取る。
   label: (1)
@@ -44,11 +44,11 @@ sub_questions:
   - args: []
     narration: 三角形の2辺の中点を結ぶ線分に対して、残りの辺の長さを読み取る。
     op: identify_remaining_side
-    result_display: 残りの辺の長さを読み取る
+    result_display: '45'
     result_srepr: ''
   - args: []
     narration: 中点を結ぶ線分の長さは、残りの辺の長さの半分に等しいことから、その長さを求める。
     op: apply_midpoint_connector_theorem
-    result_display: '138'
-    result_srepr: Integer(138)
+    result_display: '22.5'
+    result_srepr: Rational(45, 2)
 visual_svg: null

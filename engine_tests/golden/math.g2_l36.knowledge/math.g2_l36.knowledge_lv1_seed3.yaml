@@ -38,7 +38,7 @@ sub_questions:
   - congruence.symbol_and_correspondence
   explanation: 'まず、2つの図形が合同であることを表すのに使う記号を思い出す。（合同を表す記号を思い出す）
 
-    次に、合同を表す式で、頂点がどの順に対応づけられているかを確認する。（頂点の対応する並びを確認する）
+    次に、合同を表す式で、頂点がどの順に対応づけられているかを確認する。（LQC と FJE）
 
     最後に、対応する位置にある頂点どうしが結ぶ辺が、対応する辺になることから読み取る。（合同を表す記号は≡であり、辺LQに対応する辺は辺FJである）'
   hints:
@@ -55,7 +55,7 @@ sub_questions:
   - args: []
     narration: 合同を表す式で、頂点がどの順に対応づけられているかを確認する。
     op: identify_side_correspondence
-    result_display: 頂点の対応する並びを確認する
+    result_display: LQC と FJE
     result_srepr: ''
   - args: []
     narration: 対応する位置にある頂点どうしが結ぶ辺が、対応する辺になることから読み取る。

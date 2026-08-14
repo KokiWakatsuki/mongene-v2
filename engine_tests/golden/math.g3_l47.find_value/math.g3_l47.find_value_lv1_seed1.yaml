@@ -33,7 +33,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - circle.inscribed_angle_from_central
-  explanation: 'まず、弧に対する中心角の大きさを読み取る。（中心角の大きさを読み取る）
+  explanation: 'まず、弧に対する中心角の大きさを読み取る。（138°）
 
     次に、同じ弧に対する円周角の大きさは、中心角の大きさの半分に等しいことから、円周角の大きさを求める。（69°）'
   hints:
@@ -44,7 +44,7 @@ sub_questions:
   - args: []
     narration: 弧に対する中心角の大きさを読み取る。
     op: identify_central_angle
-    result_display: 中心角の大きさを読み取る
+    result_display: 138°
     result_srepr: ''
   - args: []
     narration: 同じ弧に対する円周角の大きさは、中心角の大きさの半分に等しいことから、円周角の大きさを求める。

@@ -35,7 +35,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - radical.simplify_form
-  explanation: 'まず、根号の中を素因数分解し、平方の因数を見つける。（平方の因数を見つける）
+  explanation: 'まず、根号の中を素因数分解し、平方の因数を見つける。（√(9 × 10)）
 
     次に、平方の因数を根号の外に出して a√b の形にする。（3√10）'
   hints:
@@ -46,7 +46,7 @@ sub_questions:
   - args: []
     narration: 根号の中を素因数分解し、平方の因数を見つける。
     op: factor_out_square
-    result_display: 平方の因数を見つける
+    result_display: √(9 × 10)
     result_srepr: ''
   - args: []
     narration: 平方の因数を根号の外に出して a√b の形にする。

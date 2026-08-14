@@ -33,7 +33,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - parallel_segment.judge_from_ratio
-  explanation: 'まず、GD:DJとGM:MEの比が等しいかどうかを比べる。（GD:DJとGM:MEの比を比べる）
+  explanation: 'まず、GD:DJとGM:MEの比が等しいかどうかを比べる。（3:13 と 12:59）
 
     次に、平行線と線分の比の定理の逆から、DMとJEが平行であるかどうかを判別する。（平行ではない）'
   hints:
@@ -44,7 +44,7 @@ sub_questions:
   - args: []
     narration: GD:DJとGM:MEの比が等しいかどうかを比べる。
     op: compare_division_ratios
-    result_display: GD:DJとGM:MEの比を比べる
+    result_display: 3:13 と 12:59
     result_srepr: ''
   - args: []
     narration: 平行線と線分の比の定理の逆から、DMとJEが平行であるかどうかを判別する。

@@ -39,7 +39,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - inverse_proportion.judge_table
-  explanation: 'まず、表の対応するxとyについて、積xyをそれぞれ計算する。（対応するxとyの積 xy を、それぞれ計算する）
+  explanation: 'まず、表の対応するxとyについて、積xyをそれぞれ計算する。（216、228、216、216）
 
     次に、積xyがすべて等しければ反比例するといえる。等しくなければ反比例するとはいえない。（反比例するとはいえない）'
   hints:
@@ -50,7 +50,7 @@ sub_questions:
   - args: []
     narration: 表の対応するxとyについて、積xyをそれぞれ計算する。
     op: compute_product_xy
-    result_display: 対応するxとyの積 xy を、それぞれ計算する
+    result_display: 216、228、216、216
     result_srepr: '[''Integer(216)'', ''Integer(228)'', ''Integer(216)'', ''Integer(216)'']'
   - args: []
     narration: 積xyがすべて等しければ反比例するといえる。等しくなければ反比例するとはいえない。

@@ -35,7 +35,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - linear_function.coefficient_role
-  explanation: 'まず、1次関数の式の、x の係数の部分か、定数項の部分かを確かめる。（式のどの部分に注目するかを確かめる）
+  explanation: 'まず、1次関数の式の、x の係数の部分か、定数項の部分かを確かめる。（x の係数の部分）
 
     次に、x の係数は傾き、定数項は切片を表すことを思い出す。（傾き）'
   hints:
@@ -46,7 +46,7 @@ sub_questions:
   - args: []
     narration: 1次関数の式の、x の係数の部分か、定数項の部分かを確かめる。
     op: locate_part
-    result_display: 式のどの部分に注目するかを確かめる
+    result_display: x の係数の部分
     result_srepr: slope
   - args: []
     narration: x の係数は傾き、定数項は切片を表すことを思い出す。

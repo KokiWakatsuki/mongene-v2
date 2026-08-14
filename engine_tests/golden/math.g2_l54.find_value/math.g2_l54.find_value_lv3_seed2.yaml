@@ -33,9 +33,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - probability.at_least_one_via_complement
-  explanation: 'まず、1回の試行で条件が起こらない場合の数を数え、その確率を求める。（1回分の余事象の確率を求める）
+  explanation: 'まず、1回の試行で条件が起こらない場合の数を数え、その確率を求める。（9/11）
 
-    次に、独立な試行をくり返すので、すべての回で条件が起こらない確率は1回分の確率を試行回数だけかけ合わせたものになる。（余事象の確率を求める）
+    次に、独立な試行をくり返すので、すべての回で条件が起こらない確率は1回分の確率を試行回数だけかけ合わせたものになる。（81/121）
 
     最後に、1から、その余事象の確率をひいて、少なくとも1回起こる確率を求める。（40/121）'
   hints:
@@ -47,12 +47,12 @@ sub_questions:
   - args: []
     narration: 1回の試行で条件が起こらない場合の数を数え、その確率を求める。
     op: compute_single_trial_complement
-    result_display: 1回分の余事象の確率を求める
+    result_display: 9/11
     result_srepr: ''
   - args: []
     narration: 独立な試行をくり返すので、すべての回で条件が起こらない確率は1回分の確率を試行回数だけかけ合わせたものになる。
     op: compute_complement_probability
-    result_display: 余事象の確率を求める
+    result_display: 81/121
     result_srepr: ''
   - args: []
     narration: 1から、その余事象の確率をひいて、少なくとも1回起こる確率を求める。

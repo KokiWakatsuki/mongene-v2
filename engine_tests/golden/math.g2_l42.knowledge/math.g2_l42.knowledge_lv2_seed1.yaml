@@ -35,7 +35,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - isosceles.judge_from_angle
-  explanation: 'まず、示されている2つの角が、等しいといえる条件を満たしているかを確認する。（2つの角が等しいかどうかを確認する）
+  explanation: 'まず、示されている2つの角が、等しいといえる条件を満たしているかを確認する。（等しい）
 
     次に、2つの角が等しければ、その対辺どうしも等しく二等辺三角形になるという性質から判別する。（二等辺三角形であるといえる）'
   hints:
@@ -46,7 +46,7 @@ sub_questions:
   - args: []
     narration: 示されている2つの角が、等しいといえる条件を満たしているかを確認する。
     op: check_two_angles_equal
-    result_display: 2つの角が等しいかどうかを確認する
+    result_display: 等しい
     result_srepr: equal
   - args: []
     narration: 2つの角が等しければ、その対辺どうしも等しく二等辺三角形になるという性質から判別する。

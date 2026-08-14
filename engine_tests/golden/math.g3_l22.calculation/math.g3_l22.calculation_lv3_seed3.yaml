@@ -35,7 +35,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - radical.evaluate_symmetric_pair_value
-  explanation: 'まず、式の2つの文字に、根号を含む共役な値の組をそれぞれあてはめる。（根号を含む値の組をあてはめる）
+  explanation: 'まず、式の2つの文字に、根号を含む共役な値の組をそれぞれあてはめる。（(√17+(-6))²+(√17-(-6))²）
 
     次に、かっこを展開し、根号を含む項どうしを整理して式の値を求める。（106）'
   hints:
@@ -46,7 +46,7 @@ sub_questions:
   - args: []
     narration: 式の2つの文字に、根号を含む共役な値の組をそれぞれあてはめる。
     op: substitute_conjugate_pair_values
-    result_display: 根号を含む値の組をあてはめる
+    result_display: (√17+(-6))²+(√17-(-6))²
     result_srepr: ''
   - args: []
     narration: かっこを展開し、根号を含む項どうしを整理して式の値を求める。

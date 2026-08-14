@@ -35,9 +35,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - probability.word_problem_two_dice_product
-  explanation: 'まず、大小2個のさいころの目の組合せを、表などを使ってすべて数え上げる。（すべての目の組合せを数え上げる）
+  explanation: 'まず、大小2個のさいころの目の組合せを、表などを使ってすべて数え上げる。（全部で36通り）
 
-    次に、そのうち、求める条件にあてはまる組合せの数を数える。（条件にあてはまる組合せを数える）
+    次に、そのうち、求める条件にあてはまる組合せの数を数える。（あてはまるのは11通り）
 
     最後に、条件にあてはまる組合せの数を、すべての組合せの数でわる。（11/36）'
   hints:
@@ -49,12 +49,12 @@ sub_questions:
   - args: []
     narration: 大小2個のさいころの目の組合せを、表などを使ってすべて数え上げる。
     op: enumerate_all_pairs
-    result_display: すべての目の組合せを数え上げる
+    result_display: 全部で36通り
     result_srepr: ''
   - args: []
     narration: そのうち、求める条件にあてはまる組合せの数を数える。
     op: count_favorable_pairs
-    result_display: 条件にあてはまる組合せを数える
+    result_display: あてはまるのは11通り
     result_srepr: ''
   - args: []
     narration: 条件にあてはまる組合せの数を、すべての組合せの数でわる。

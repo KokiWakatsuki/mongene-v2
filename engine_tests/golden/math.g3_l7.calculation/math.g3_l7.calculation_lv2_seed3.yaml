@@ -35,7 +35,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - polynomial.factor_common
-  explanation: 'まず、各項の係数と文字に共通する因数を見つける。（共通因数を見つける）
+  explanation: 'まず、各項の係数と文字に共通する因数を見つける。（2xy）
 
     次に、各項に共通する因数をかっこの外にくくり出す。（-2xy(2x - 5y - 1)）'
   hints:
@@ -46,7 +46,7 @@ sub_questions:
   - args: []
     narration: 各項の係数と文字に共通する因数を見つける。
     op: identify_common_factor
-    result_display: 共通因数を見つける
+    result_display: 2xy
     result_srepr: ''
   - args: []
     narration: 各項に共通する因数をかっこの外にくくり出す。

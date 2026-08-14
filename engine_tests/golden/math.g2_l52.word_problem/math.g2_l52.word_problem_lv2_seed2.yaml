@@ -55,9 +55,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - probability.word_problem_coin_toss_count_and_probability
-  explanation: 'まず、硬貨を区別して、表と裏の出方をすべて書き出す。（すべての出方を書き出す）
+  explanation: 'まず、硬貨を区別して、表と裏の出方をすべて書き出す。（全部で8通り）
 
-    次に、書き出した出方のうち、条件にあてはまるものの数を数える。（条件にあてはまる出方を数える）
+    次に、書き出した出方のうち、条件にあてはまるものの数を数える。（あてはまるのは3通り）
 
     最後に、条件にあてはまる出方の数を、すべての出方の数でわる。（3/8）'
   hints:
@@ -69,12 +69,12 @@ sub_questions:
   - args: []
     narration: 硬貨を区別して、表と裏の出方をすべて書き出す。
     op: enumerate_all_outcomes
-    result_display: すべての出方を書き出す
+    result_display: 全部で8通り
     result_srepr: ''
   - args: []
     narration: 書き出した出方のうち、条件にあてはまるものの数を数える。
     op: count_favorable_outcomes
-    result_display: 条件にあてはまる出方を数える
+    result_display: あてはまるのは3通り
     result_srepr: ''
   - args: []
     narration: 条件にあてはまる出方の数を、すべての出方の数でわる。

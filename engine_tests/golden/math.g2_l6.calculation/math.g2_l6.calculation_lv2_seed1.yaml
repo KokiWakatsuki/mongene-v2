@@ -35,7 +35,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - polynomial.combine_fractions_basic
-  explanation: 'まず、分母の最小公倍数を求めて通分する。（分母を最小公倍数にそろえる）
+  explanation: 'まず、分母の最小公倍数を求めて通分する。（(-5x - 2y + (-9x - 6y)) / 6）
 
     次に、分子どうしを計算し、1つの分数にまとめる。（(-7x - 4y)/3）'
   hints:
@@ -46,7 +46,7 @@ sub_questions:
   - args: []
     narration: 分母の最小公倍数を求めて通分する。
     op: find_common_denominator
-    result_display: 分母を最小公倍数にそろえる
+    result_display: (-5x - 2y + (-9x - 6y)) / 6
     result_srepr: Mul(Rational(1, 3), Add(Mul(Integer(-1), Integer(7), Symbol('x')), Mul(Integer(-1), Integer(4), Symbol('y'))))
   - args: []
     narration: 分子どうしを計算し、1つの分数にまとめる。

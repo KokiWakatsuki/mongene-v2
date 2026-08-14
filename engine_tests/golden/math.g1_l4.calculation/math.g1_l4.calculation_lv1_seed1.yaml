@@ -35,7 +35,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - signed_number.subtract_pair
-  explanation: 'まず、ひく数の符号を変えて、たし算に直す。（ひき算をたし算に直す）
+  explanation: 'まず、ひく数の符号を変えて、たし算に直す。（(-1) + (-6)）
 
     次に、符号に注意して和を計算する。（-7）'
   hints:
@@ -46,7 +46,7 @@ sub_questions:
   - args: []
     narration: ひく数の符号を変えて、たし算に直す。
     op: rewrite_subtraction_as_addition
-    result_display: ひき算をたし算に直す
+    result_display: (-1) + (-6)
     result_srepr: Integer(-7)
   - args: []
     narration: 符号に注意して和を計算する。

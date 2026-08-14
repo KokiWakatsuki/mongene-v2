@@ -33,7 +33,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - similarity.x_shape_length
-  explanation: 'まず、HL∥KM であることから、対頂角と錯角がそれぞれ等しくなる相似な三角形（三角形DHLと三角形DKM）の組を見つける。（平行線がつくる相似な三角形を見つける）
+  explanation: 'まず、HL∥KM であることから、対頂角と錯角がそれぞれ等しくなる相似な三角形（三角形DHLと三角形DKM）の組を見つける。
 
     次に、相似な三角形の対応する辺の長さの比が等しい（DH:DK=DL:DM）ことから、求める辺の長さを求める。（45）'
   hints:
@@ -44,7 +44,7 @@ sub_questions:
   - args: []
     narration: HL∥KM であることから、対頂角と錯角がそれぞれ等しくなる相似な三角形（三角形DHLと三角形DKM）の組を見つける。
     op: identify_similar_triangles_in_x_shape
-    result_display: 平行線がつくる相似な三角形を見つける
+    result_display: ''
     result_srepr: ''
   - args: []
     narration: 相似な三角形の対応する辺の長さの比が等しい（DH:DK=DL:DM）ことから、求める辺の長さを求める。

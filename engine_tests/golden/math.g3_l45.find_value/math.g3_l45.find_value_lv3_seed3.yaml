@@ -33,9 +33,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - similarity.trapezoid_area_ratio
-  explanation: 'まず、HEとEQの比から、HEとHQ全体の比になおす。（HEとHQ全体の比になおす）
+  explanation: 'まず、HEとEQの比から、HEとHQ全体の比になおす。（HE:HQ = 3:10）
 
-    次に、三角形HEAと三角形HQBは相似であることから、面積比は相似比の二乗に等しいことを使って、三角形HEAと三角形HQB全体の面積比を求める。（相似比を二乗して三角形HEAと三角形HQBの面積比を求める）
+    次に、三角形HEAと三角形HQBは相似であることから、面積比は相似比の二乗に等しいことを使って、三角形HEAと三角形HQB全体の面積比を求める。（9:100）
 
     最後に、三角形HQB全体の面積から三角形HEAの面積を除いた残りが台形の面積になることから、三角形HEAと台形の面積比を求める。（三角形HEA:台形EQBA = 9:91）'
   hints:
@@ -47,12 +47,12 @@ sub_questions:
   - args: []
     narration: HEとEQの比から、HEとHQ全体の比になおす。
     op: convert_partial_to_whole_ratio
-    result_display: HEとHQ全体の比になおす
+    result_display: HE:HQ = 3:10
     result_srepr: ''
   - args: []
     narration: 三角形HEAと三角形HQBは相似であることから、面積比は相似比の二乗に等しいことを使って、三角形HEAと三角形HQB全体の面積比を求める。
     op: square_similarity_ratio
-    result_display: 相似比を二乗して三角形HEAと三角形HQBの面積比を求める
+    result_display: 9:100
     result_srepr: ''
   - args: []
     narration: 三角形HQB全体の面積から三角形HEAの面積を除いた残りが台形の面積になることから、三角形HEAと台形の面積比を求める。

@@ -33,7 +33,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - number_line.read_point
-  explanation: 'まず、点Pをはさむ両側の整数の目もりを数直線から読み取る。（点Pをはさむ目もりを読む）
+  explanation: 'まず、点Pをはさむ両側の整数の目もりを数直線から読み取る。（12 と 13 の間）
 
     次に、目もりの間を等分した位置に着目し、点Pが表す数を求める。（12.2）'
   hints:
@@ -44,7 +44,7 @@ sub_questions:
   - args: []
     narration: 点Pをはさむ両側の整数の目もりを数直線から読み取る。
     op: identify_interval
-    result_display: 点Pをはさむ目もりを読む
+    result_display: 12 と 13 の間
     result_srepr: ''
   - args: []
     narration: 目もりの間を等分した位置に着目し、点Pが表す数を求める。

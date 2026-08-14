@@ -35,29 +35,29 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - polynomial.factor_various
-  explanation: 'まず、共通する部分を1つの文字に置きかえる。（共通部分を置きかえる）
+  explanation: 'まず、共通する部分をひとかたまりとみる。（(a - 6)² - 4²）
 
-    次に、置きかえた式を公式の逆で因数分解する。（公式の逆で因数分解する）
+    次に、かたまりのままの式を公式の逆で因数分解する。（((a - 6) + 4)((a - 6) - 4)）
 
-    最後に、置きかえをもとにもどして整理する。（(a - 10)(a - 2)）'
+    最後に、かたまりをもとの式にもどして整理する。（(a - 10)(a - 2)）'
   hints:
-  - 共通する部分を1つの文字に置きかえる。
-  - 置きかえた式を公式の逆で因数分解する。
+  - 共通する部分をひとかたまりとみる。
+  - かたまりのままの式を公式の逆で因数分解する。
   label: (1)
   prompt_text: 式を簡単にしなさい。
   solution_steps:
   - args: []
-    narration: 共通する部分を1つの文字に置きかえる。
+    narration: 共通する部分をひとかたまりとみる。
     op: substitute_common_part
-    result_display: 共通部分を置きかえる
+    result_display: (a - 6)² - 4²
     result_srepr: ''
   - args: []
-    narration: 置きかえた式を公式の逆で因数分解する。
+    narration: かたまりのままの式を公式の逆で因数分解する。
     op: apply_formula_factor
-    result_display: 公式の逆で因数分解する
+    result_display: ((a - 6) + 4)((a - 6) - 4)
     result_srepr: ''
   - args: []
-    narration: 置きかえをもとにもどして整理する。
+    narration: かたまりをもとの式にもどして整理する。
     op: restore_factors
     result_display: (a - 10)(a - 2)
     result_srepr: Mul(Add(Symbol('a'), Integer(-10)), Add(Symbol('a'), Integer(-2)))

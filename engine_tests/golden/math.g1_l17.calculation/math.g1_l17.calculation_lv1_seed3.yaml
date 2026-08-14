@@ -35,7 +35,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - letter_expr.combine_linear
-  explanation: 'まず、文字の部分が同じ項（同類項）どうしをまとめる。（同類項どうしをまとめる）
+  explanation: 'まず、文字の部分が同じ項（同類項）どうしをまとめる。（(-8x - 3x) + (-1 - 4)）
 
     次に、まとめた同類項の係数を計算して、式を簡単にする。（-11x - 5）'
   hints:
@@ -46,7 +46,7 @@ sub_questions:
   - args: []
     narration: 文字の部分が同じ項（同類項）どうしをまとめる。
     op: group_like_terms
-    result_display: 同類項どうしをまとめる
+    result_display: (-8x - 3x) + (-1 - 4)
     result_srepr: Add(Mul(Integer(-1), Integer(11), Symbol('x')), Integer(-5))
   - args: []
     narration: まとめた同類項の係数を計算して、式を簡単にする。

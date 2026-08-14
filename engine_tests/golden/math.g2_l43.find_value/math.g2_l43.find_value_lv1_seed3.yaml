@@ -33,7 +33,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - equilateral.properties_from_side
-  explanation: 'まず、正三角形の与えられた1辺の長さを読み取る。（与えられた1辺の長さを読み取る）
+  explanation: 'まず、正三角形の与えられた1辺の長さを読み取る。（21）
 
     次に、正三角形は3辺の長さがすべて等しく、3つの内角もすべて等しく分け合うことから、もう1辺の長さと1つの内角の大きさを求める。（辺の長さ 21、∠A 60°）'
   hints:
@@ -44,7 +44,7 @@ sub_questions:
   - args: []
     narration: 正三角形の与えられた1辺の長さを読み取る。
     op: identify_given_side
-    result_display: 与えられた1辺の長さを読み取る
+    result_display: '21'
     result_srepr: ''
   - args: []
     narration: 正三角形は3辺の長さがすべて等しく、3つの内角もすべて等しく分け合うことから、もう1辺の長さと1つの内角の大きさを求める。

@@ -33,7 +33,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - simultaneous_equations.substitute_and_evaluate
-  explanation: 'まず、左辺の x と y に、与えられた値をそれぞれ代入する。（左辺に x, y の値を代入する）
+  explanation: 'まず、左辺の x と y に、与えられた値をそれぞれ代入する。（4 × (-2) + -2 × (-2)）
 
     次に、代入した左辺を計算して、その値を求める。（-4）'
   hints:
@@ -44,7 +44,7 @@ sub_questions:
   - args: []
     narration: 左辺の x と y に、与えられた値をそれぞれ代入する。
     op: substitute_candidate
-    result_display: 左辺に x, y の値を代入する
+    result_display: 4 × (-2) + -2 × (-2)
     result_srepr: Tuple(Integer(-2), Integer(-2))
   - args: []
     narration: 代入した左辺を計算して、その値を求める。

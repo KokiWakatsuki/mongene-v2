@@ -33,7 +33,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - quadratic_function.rate_of_change
-  explanation: 'まず、y=ax² の変化の割合を a を使った式で表し、与えられた値と等しいとおく。（変化の割合を a の式で表す）
+  explanation: 'まず、y=ax² の変化の割合を a を使った式で表し、与えられた値と等しいとおく。（a × (5 + 9) = 70）
 
     次に、その方程式を解いて、比例定数 a の値を求める。（5）'
   hints:
@@ -44,7 +44,7 @@ sub_questions:
   - args: []
     narration: y=ax² の変化の割合を a を使った式で表し、与えられた値と等しいとおく。
     op: set_up_rate_equation
-    result_display: 変化の割合を a の式で表す
+    result_display: a × (5 + 9) = 70
     result_srepr: ''
   - args: []
     narration: その方程式を解いて、比例定数 a の値を求める。

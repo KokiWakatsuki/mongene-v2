@@ -35,7 +35,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - polynomial.subtract_polynomials
-  explanation: 'まず、うしろのかっこの前が - なので、かっこの中の各項の符号を変えてかっこを外す。（うしろのかっこの符号を変えて外す）
+  explanation: 'まず、うしろのかっこの前が - なので、かっこの中の各項の符号を変えてかっこを外す。（a + 4b - 4 - 3a - 3b - 5）
 
     次に、同類項をまとめて計算する。（-2a + b - 9）'
   hints:
@@ -46,7 +46,7 @@ sub_questions:
   - args: []
     narration: うしろのかっこの前が - なので、かっこの中の各項の符号を変えてかっこを外す。
     op: distribute_negative_sign
-    result_display: うしろのかっこの符号を変えて外す
+    result_display: a + 4b - 4 - 3a - 3b - 5
     result_srepr: Add(Mul(Integer(-1), Integer(2), Symbol('a')), Symbol('b'), Integer(-9))
   - args: []
     narration: 同類項をまとめて計算する。

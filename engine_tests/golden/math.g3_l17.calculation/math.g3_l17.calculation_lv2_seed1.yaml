@@ -35,9 +35,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - radical.multiply_divide
-  explanation: 'まず、わり算を、逆数をかけるかけ算に直す。（わり算をかけ算に直す）
+  explanation: 'まず、わり算を、逆数をかけるかけ算に直す。（4 × √6 × √2 × 1/√3）
 
-    次に、係数どうし・根号の中どうしをそれぞれまとめる。（係数と根号をまとめる）
+    次に、係数どうし・根号の中どうしをそれぞれまとめる。（4√(6 × 2 / 3)）
 
     最後に、根号の中をできるだけ簡単な形に直す。（8）'
   hints:
@@ -49,12 +49,12 @@ sub_questions:
   - args: []
     narration: わり算を、逆数をかけるかけ算に直す。
     op: rewrite_division_as_multiplication
-    result_display: わり算をかけ算に直す
+    result_display: 4 × √6 × √2 × 1/√3
     result_srepr: ''
   - args: []
     narration: 係数どうし・根号の中どうしをそれぞれまとめる。
     op: combine_roots
-    result_display: 係数と根号をまとめる
+    result_display: 4√(6 × 2 / 3)
     result_srepr: ''
   - args: []
     narration: 根号の中をできるだけ簡単な形に直す。

@@ -35,9 +35,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - polynomial.multiply_monomials_powers
-  explanation: 'まず、かけ合わせる式の符号から、答えの符号を先に決める。（答えの符号を先に決める）
+  explanation: 'まず、かけ合わせる式の符号から、答えの符号を先に決める。（符号は -）
 
-    次に、係数どうしをかけ算する。（係数どうしをかける）
+    次に、係数どうしをかけ算する。（-18）
 
     最後に、同じ文字は指数の和にまとめ、1つの単項式にする。（-18a³b⁴）'
   hints:
@@ -49,12 +49,12 @@ sub_questions:
   - args: []
     narration: かけ合わせる式の符号から、答えの符号を先に決める。
     op: determine_sign
-    result_display: 答えの符号を先に決める
+    result_display: 符号は -
     result_srepr: Mul(Integer(-1), Integer(18), Pow(Symbol('a'), Integer(3)), Pow(Symbol('b'), Integer(4)))
   - args: []
     narration: 係数どうしをかけ算する。
     op: multiply_coefficients
-    result_display: 係数どうしをかける
+    result_display: '-18'
     result_srepr: Mul(Integer(-1), Integer(18), Pow(Symbol('a'), Integer(3)), Pow(Symbol('b'), Integer(4)))
   - args: []
     narration: 同じ文字は指数の和にまとめ、1つの単項式にする。

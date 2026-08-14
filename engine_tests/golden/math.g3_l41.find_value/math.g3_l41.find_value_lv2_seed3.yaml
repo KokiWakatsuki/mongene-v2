@@ -33,7 +33,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - similarity.proven_ratio_length
-  explanation: 'まず、2つの図形の相似比と、わかっている辺の長さを読み取る。（相似比とわかっている辺の長さを読み取る）
+  explanation: 'まず、2つの図形の相似比と、わかっている辺の長さを読み取る。（相似比 5:7、辺の長さ 10）
 
     次に、相似な図形では対応する辺の長さの比が相似比に等しいことから、対応する辺の長さを求める。（14）'
   hints:
@@ -44,7 +44,7 @@ sub_questions:
   - args: []
     narration: 2つの図形の相似比と、わかっている辺の長さを読み取る。
     op: identify_similarity_ratio
-    result_display: 相似比とわかっている辺の長さを読み取る
+    result_display: 相似比 5:7、辺の長さ 10
     result_srepr: ''
   - args: []
     narration: 相似な図形では対応する辺の長さの比が相似比に等しいことから、対応する辺の長さを求める。

@@ -35,7 +35,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - equation.solve_proportion
-  explanation: 'まず、比例式の性質を使い、外項の積と内項の積が等しい式（たすきがけ）をつくる。（たすきがけの式をつくる）
+  explanation: 'まず、比例式の性質を使い、外項の積と内項の積が等しい式（たすきがけ）をつくる。（3 × x = 7 × 6）
 
     次に、x の係数で両辺をわって、x の値を求める。（x = 14）'
   hints:
@@ -46,7 +46,7 @@ sub_questions:
   - args: []
     narration: 比例式の性質を使い、外項の積と内項の積が等しい式（たすきがけ）をつくる。
     op: cross_multiply
-    result_display: たすきがけの式をつくる
+    result_display: 3 × x = 7 × 6
     result_srepr: Integer(14)
   - args: []
     narration: x の係数で両辺をわって、x の値を求める。

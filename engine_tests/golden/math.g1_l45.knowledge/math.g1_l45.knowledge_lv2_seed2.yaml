@@ -36,7 +36,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - circle_property.judge
-  explanation: 'まず、円の接線と、接点を通る半径との位置関係を見比べる。（円の接線と、接点を通る半径との位置関係を見比べる。）
+  explanation: 'まず、円の接線と、接点を通る半径との位置関係を見比べる。
 
     次に、その性質がつねに成り立つ関係かどうかを判別する。（垂直）'
   hints:
@@ -47,7 +47,7 @@ sub_questions:
   - args: []
     narration: 円の接線と、接点を通る半径との位置関係を見比べる。
     op: identify_circle_property
-    result_display: 円の接線と、接点を通る半径との位置関係を見比べる。
+    result_display: ''
     result_srepr: tangent_perpendicular
   - args: []
     narration: その性質がつねに成り立つ関係かどうかを判別する。

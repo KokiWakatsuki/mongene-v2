@@ -26,20 +26,20 @@ meta:
 problem_ref: 920932e7e9c83901
 problem_text: '次の計算をせよ。
 
-  (-1/2)÷7/8×(-2/3)'
+  3/7÷3/8×5/8'
 sub_questions:
 - answer:
-    display: 8/21
+    display: 5/7
     kind: symbolic
-    srepr: Rational(8, 21)
+    srepr: Rational(5, 7)
   cause_tags: []
   concept_tags:
   - signed_number.divide_chain
-  explanation: 'まず、すべてのわり算を、逆数をかけるかけ算に直す。（すべて逆数のかけ算に直す）
+  explanation: 'まず、すべてのわり算を、逆数をかけるかけ算に直す。（3/7 × 8/3 × 5/8）
 
-    次に、かけ合わせる数の符号から、積の符号を先に決める。（積の符号を先に決める）
+    次に、かけ合わせる数の符号から、積の符号を先に決める。（+(3/7 × 8/3 × 5/8)）
 
-    最後に、すべての絶対値をかけ合わせて、積を求める。（8/21）'
+    最後に、すべての絶対値をかけ合わせて、積を求める。（5/7）'
   hints:
   - すべてのわり算を、逆数をかけるかけ算に直す。
   - かけ合わせる数の符号から、積の符号を先に決める。
@@ -49,16 +49,16 @@ sub_questions:
   - args: []
     narration: すべてのわり算を、逆数をかけるかけ算に直す。
     op: rewrite_all_as_reciprocal
-    result_display: すべて逆数のかけ算に直す
-    result_srepr: Rational(8, 21)
+    result_display: 3/7 × 8/3 × 5/8
+    result_srepr: Rational(5, 7)
   - args: []
     narration: かけ合わせる数の符号から、積の符号を先に決める。
     op: determine_product_sign
-    result_display: 積の符号を先に決める
-    result_srepr: Rational(8, 21)
+    result_display: +(3/7 × 8/3 × 5/8)
+    result_srepr: Rational(5, 7)
   - args: []
     narration: すべての絶対値をかけ合わせて、積を求める。
     op: multiply_all_magnitudes
-    result_display: 8/21
-    result_srepr: Rational(8, 21)
+    result_display: 5/7
+    result_srepr: Rational(5, 7)
 visual_svg: null

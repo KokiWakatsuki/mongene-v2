@@ -35,9 +35,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - signed_number.add_terms
-  explanation: 'まず、かっこを外し、それぞれの数を符号のついた項として並べる。（符号のついた項の和に直す）
+  explanation: 'まず、かっこを外し、それぞれの数を符号のついた項として並べる。（1/2 - 3/5 - 2）
 
-    次に、正の項どうし、負の項どうしをそれぞれまとめる。（正の項・負の項をまとめる）
+    次に、正の項どうし、負の項どうしをそれぞれまとめる。（1/2 + (-13/5)）
 
     最後に、正の合計と負の合計を合わせて、答えを求める。（-21/10）'
   hints:
@@ -49,12 +49,12 @@ sub_questions:
   - args: []
     narration: かっこを外し、それぞれの数を符号のついた項として並べる。
     op: rewrite_as_term_sum
-    result_display: 符号のついた項の和に直す
+    result_display: 1/2 - 3/5 - 2
     result_srepr: Rational(-21, 10)
   - args: []
     narration: 正の項どうし、負の項どうしをそれぞれまとめる。
     op: group_by_sign
-    result_display: 正の項・負の項をまとめる
+    result_display: 1/2 + (-13/5)
     result_srepr: Rational(-21, 10)
   - args: []
     narration: 正の合計と負の合計を合わせて、答えを求める。

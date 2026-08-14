@@ -33,7 +33,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - frequency_table.compute_value
-  explanation: 'まず、対象の階級の下端と上端の値の平均を求め、階級値とする。（階級の下端と上端の中央の値を求める）
+  explanation: 'まず、対象の階級の下端と上端の値の平均を求め、階級値とする。（10）
 
     次に、すべての階級の度数を足し合わせ、度数の合計を求める。（階級値 10、度数の合計 22）'
   hints:
@@ -44,7 +44,7 @@ sub_questions:
   - args: []
     narration: 対象の階級の下端と上端の値の平均を求め、階級値とする。
     op: compute_class_value
-    result_display: 階級の下端と上端の中央の値を求める
+    result_display: '10'
     result_srepr: Integer(10)
   - args: []
     narration: すべての階級の度数を足し合わせ、度数の合計を求める。

@@ -37,7 +37,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - sqrt_square_meaning.rule_recall
-  explanation: 'まず、問題で問われている規則や約束が、何についてのものかを読み取る。（問われている規則が何についてかを読み取る）
+  explanation: 'まず、問題で問われている規則や約束が、何についてのものかを読み取る。
 
     次に、その規則の正しい内容を思い出して選ぶ。（a を自乗した数の平方根は、a の絶対値 |a| に等しい（a が負の数のときは -a になる））'
   hints:
@@ -48,7 +48,7 @@ sub_questions:
   - args: []
     narration: 問題で問われている規則や約束が、何についてのものかを読み取る。
     op: read_rule_context
-    result_display: 問われている規則が何についてかを読み取る
+    result_display: ''
     result_srepr: abs_value_rule
   - args: []
     narration: その規則の正しい内容を思い出して選ぶ。

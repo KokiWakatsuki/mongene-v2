@@ -39,7 +39,7 @@ sub_questions:
 
     次に、その量を x を使って両辺に表し、方程式をつくる。（4x + 10 = 5(x - 1) + 1）
 
-    次に、分配法則を使って、かっこを外す。（かっこを外す）
+    次に、分配法則を使って、かっこを外す。（4x + 10 = 5x - 4）
 
     次に、文字の項を左辺に、数の項を右辺に移項し、両辺を整理して解く。（x = 14）
 
@@ -65,7 +65,7 @@ sub_questions:
   - args: []
     narration: 分配法則を使って、かっこを外す。
     op: expand_parentheses
-    result_display: かっこを外す
+    result_display: 4x + 10 = 5x - 4
     result_srepr: Integer(14)
   - args: []
     narration: 文字の項を左辺に、数の項を右辺に移項し、両辺を整理して解く。

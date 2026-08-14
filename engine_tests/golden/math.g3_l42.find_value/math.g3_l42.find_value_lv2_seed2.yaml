@@ -33,7 +33,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - parallel_segment.ratio_length
-  explanation: 'まず、QP∥JH であることから、三角形AQPと三角形AJHが相似になることを見つける。（平行線がつくる相似な三角形を見つける）
+  explanation: 'まず、QP∥JH であることから、三角形AQPと三角形AJHが相似になることを見つける。（三角形AQP と 三角形AJH）
 
     次に、AQ:AJ=QP:JH が成り立つことから、辺JHの長さを求める。（18）'
   hints:
@@ -44,7 +44,7 @@ sub_questions:
   - args: []
     narration: QP∥JH であることから、三角形AQPと三角形AJHが相似になることを見つける。
     op: identify_similar_triangles_from_parallel
-    result_display: 平行線がつくる相似な三角形を見つける
+    result_display: 三角形AQP と 三角形AJH
     result_srepr: ''
   - args: []
     narration: AQ:AJ=QP:JH が成り立つことから、辺JHの長さを求める。

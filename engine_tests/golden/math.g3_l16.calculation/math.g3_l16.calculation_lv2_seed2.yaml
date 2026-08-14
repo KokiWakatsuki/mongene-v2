@@ -35,7 +35,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - rational_form.decimal_to_fraction
-  explanation: 'まず、循環小数を文字でおき、桁をずらした式との差を作って循環部分を消す。（桁をずらした式の差を作る）
+  explanation: 'まず、循環小数を文字でおき、桁をずらした式との差を作って循環部分を消す。（1000倍した式との差）
 
     次に、できた等式を整理し、分数の形に直して約分する。（19/66）'
   hints:
@@ -46,7 +46,7 @@ sub_questions:
   - args: []
     narration: 循環小数を文字でおき、桁をずらした式との差を作って循環部分を消す。
     op: set_up_algebraic_equation
-    result_display: 桁をずらした式の差を作る
+    result_display: 1000倍した式との差
     result_srepr: ''
   - args: []
     narration: できた等式を整理し、分数の形に直して約分する。

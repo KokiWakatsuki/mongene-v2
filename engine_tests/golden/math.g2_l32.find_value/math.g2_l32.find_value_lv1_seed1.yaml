@@ -33,7 +33,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - angle_pair.solve_by_equality
-  explanation: 'まず、平行な2直線と1本の直線がつくる同位角の関係を確認する。（角の位置関係を読み取る）
+  explanation: 'まず、平行な2直線と1本の直線がつくる同位角の関係を確認する。（同位角）
 
     次に、その関係にある角は等しいという性質から、求める角の大きさを決める。（131）'
   hints:
@@ -44,7 +44,7 @@ sub_questions:
   - args: []
     narration: 平行な2直線と1本の直線がつくる同位角の関係を確認する。
     op: identify_angle_relation
-    result_display: 角の位置関係を読み取る
+    result_display: 同位角
     result_srepr: corresponding
   - args: []
     narration: その関係にある角は等しいという性質から、求める角の大きさを決める。

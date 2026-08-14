@@ -35,7 +35,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - polynomial.combine_like_terms_basic
-  explanation: 'まず、文字の部分が同じ項（同類項）どうしをまとめる。（文字の部分が同じ項どうしをまとめる）
+  explanation: 'まず、文字の部分が同じ項（同類項）どうしをまとめる。（(-7x - 9x)）
 
     次に、まとめた同類項の係数を計算し、式を簡単にする。（-16x）'
   hints:
@@ -46,7 +46,7 @@ sub_questions:
   - args: []
     narration: 文字の部分が同じ項（同類項）どうしをまとめる。
     op: group_like_terms
-    result_display: 文字の部分が同じ項どうしをまとめる
+    result_display: (-7x - 9x)
     result_srepr: Mul(Integer(-1), Integer(16), Symbol('x'))
   - args: []
     narration: まとめた同類項の係数を計算し、式を簡単にする。

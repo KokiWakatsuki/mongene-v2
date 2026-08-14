@@ -33,7 +33,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - representative_value.compute_grouped_mean
-  explanation: 'まず、各階級の階級値に、その階級の度数をかける。（各階級の階級値と度数の積を求める）
+  explanation: 'まず、各階級の階級値に、その階級の度数をかける。（176、24、32、80）
 
     次に、それらの積をすべて足し合わせ、度数の合計でわって平均値を求める。（20.8）'
   hints:
@@ -44,7 +44,7 @@ sub_questions:
   - args: []
     narration: 各階級の階級値に、その階級の度数をかける。
     op: weight_by_class_value
-    result_display: 各階級の階級値と度数の積を求める
+    result_display: 176、24、32、80
     result_srepr: ''
   - args: []
     narration: それらの積をすべて足し合わせ、度数の合計でわって平均値を求める。

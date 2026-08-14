@@ -35,7 +35,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - polynomial.proof_diff_squares_linear
-  explanation: 'まず、2つの平方の差を、和と差の積の形になおす。（和と差の積の形になおす）
+  explanation: 'まず、2つの平方の差を、和と差の積の形になおす。（((5n - 7) + (5n + 6))((5n - 7) - (5n + 6))）
 
     次に、積の形を計算し、式を簡単にする。（13 - 130n）'
   hints:
@@ -46,7 +46,7 @@ sub_questions:
   - args: []
     narration: 2つの平方の差を、和と差の積の形になおす。
     op: apply_diff_of_squares_formula
-    result_display: 和と差の積の形になおす
+    result_display: ((5n - 7) + (5n + 6))((5n - 7) - (5n + 6))
     result_srepr: ''
   - args: []
     narration: 積の形を計算し、式を簡単にする。

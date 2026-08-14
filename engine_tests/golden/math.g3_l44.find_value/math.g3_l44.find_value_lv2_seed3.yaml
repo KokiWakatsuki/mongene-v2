@@ -24,18 +24,18 @@ meta:
   seed: 3
   signature: midpoint_connector_length
 problem_ref: 14e1f778853c32a7
-problem_text: 三角形PQEで、辺PQ, PEの中点をそれぞれK, Hとする。QE=307cm のとき、線分KHの長さを求めよ。
+problem_text: 三角形ACRで、辺AC, ARの中点をそれぞれF, Jとする。CR=51cm のとき、線分FJの長さを求めよ。
 sub_questions:
 - answer:
-    display: 307/2
+    display: '25.5'
     kind: symbolic
-    srepr: Rational(307, 2)
+    srepr: Rational(51, 2)
   cause_tags: []
   concept_tags:
   - midpoint_connector.length
-  explanation: 'まず、三角形の2辺の中点を結ぶ線分に対して、残りの辺の長さを読み取る。（残りの辺の長さを読み取る）
+  explanation: 'まず、三角形の2辺の中点を結ぶ線分に対して、残りの辺の長さを読み取る。（51）
 
-    次に、中点を結ぶ線分の長さは、残りの辺の長さの半分に等しいことから、その長さを求める。（307/2）'
+    次に、中点を結ぶ線分の長さは、残りの辺の長さの半分に等しいことから、その長さを求める。（25.5）'
   hints:
   - 三角形の2辺の中点を結ぶ線分に対して、残りの辺の長さを読み取る。
   label: (1)
@@ -44,11 +44,11 @@ sub_questions:
   - args: []
     narration: 三角形の2辺の中点を結ぶ線分に対して、残りの辺の長さを読み取る。
     op: identify_remaining_side
-    result_display: 残りの辺の長さを読み取る
+    result_display: '51'
     result_srepr: ''
   - args: []
     narration: 中点を結ぶ線分の長さは、残りの辺の長さの半分に等しいことから、その長さを求める。
     op: apply_midpoint_connector_theorem
-    result_display: 307/2
-    result_srepr: Rational(307, 2)
+    result_display: '25.5'
+    result_srepr: Rational(51, 2)
 visual_svg: null

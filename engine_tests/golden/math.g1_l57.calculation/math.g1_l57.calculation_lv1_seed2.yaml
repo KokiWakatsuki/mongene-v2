@@ -33,9 +33,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - representative_value.compute_raw
-  explanation: 'まず、データの値をすべて足し合わせ、個数でわって平均値を求める。（データの値の合計を個数でわる）
+  explanation: 'まず、データの値をすべて足し合わせ、個数でわって平均値を求める。（17）
 
-    次に、データを大きさの順に並べ、中央の値（個数が偶数のときは中央に並ぶ値どうしの平均）を求める。（大きさの順に並べた中央の値を読み取る）
+    次に、データを大きさの順に並べ、中央の値（個数が偶数のときは中央に並ぶ値どうしの平均）を求める。（13）
 
     最後に、もっとも個数が多く現れる値を求める。（平均値 17、中央値 13、最頻値 5）'
   hints:
@@ -47,12 +47,12 @@ sub_questions:
   - args: []
     narration: データの値をすべて足し合わせ、個数でわって平均値を求める。
     op: compute_mean
-    result_display: データの値の合計を個数でわる
+    result_display: '17'
     result_srepr: ''
   - args: []
     narration: データを大きさの順に並べ、中央の値（個数が偶数のときは中央に並ぶ値どうしの平均）を求める。
     op: compute_median
-    result_display: 大きさの順に並べた中央の値を読み取る
+    result_display: '13'
     result_srepr: ''
   - args: []
     narration: もっとも個数が多く現れる値を求める。

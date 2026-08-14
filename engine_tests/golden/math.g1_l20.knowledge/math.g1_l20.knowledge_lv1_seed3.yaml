@@ -39,7 +39,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - inequality.term_recall
-  explanation: 'まず、説明されている、数量の間の大小の関係を読み取る。（説明されている数量の大小の関係を読み取る）
+  explanation: 'まず、説明されている、数量の間の大小の関係を読み取る。
 
     次に、その関係を表す不等号の記号を思い出す。（≦）'
   hints:
@@ -50,7 +50,7 @@ sub_questions:
   - args: []
     narration: 説明されている、数量の間の大小の関係を読み取る。
     op: identify_description
-    result_display: 説明されている数量の大小の関係を読み取る
+    result_display: ''
     result_srepr: at_most
   - args: []
     narration: その関係を表す不等号の記号を思い出す。

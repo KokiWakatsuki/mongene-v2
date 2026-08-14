@@ -35,9 +35,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - equation.solve_proportion_linear
-  explanation: 'まず、比例式の性質を使い、外項の積と内項の積が等しい式（たすきがけ）をつくる。（たすきがけの式をつくる）
+  explanation: 'まず、比例式の性質を使い、外項の積と内項の積が等しい式（たすきがけ）をつくる。（9 × (x - 1) = 9 × 5）
 
-    次に、分配法則を使って、かっこを外す。（かっこを外す）
+    次に、分配法則を使って、かっこを外す。（9x - 9 = 45）
 
     最後に、文字の項を左辺に、数の項を右辺に移項し、両辺を整理して解く。（x = 6）'
   hints:
@@ -49,12 +49,12 @@ sub_questions:
   - args: []
     narration: 比例式の性質を使い、外項の積と内項の積が等しい式（たすきがけ）をつくる。
     op: cross_multiply
-    result_display: たすきがけの式をつくる
+    result_display: 9 × (x - 1) = 9 × 5
     result_srepr: Integer(6)
   - args: []
     narration: 分配法則を使って、かっこを外す。
     op: expand_parentheses
-    result_display: かっこを外す
+    result_display: 9x - 9 = 45
     result_srepr: Integer(6)
   - args: []
     narration: 文字の項を左辺に、数の項を右辺に移項し、両辺を整理して解く。

@@ -33,7 +33,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - polynomial.symmetric_expression_from_sum_product
-  explanation: 'まず、求める式を、和と積だけで表せる形に変形する。（和と積だけの形に変形する）
+  explanation: 'まず、求める式を、和と積だけで表せる形に変形する。（(x + y)² - 2xy）
 
     次に、和と積の値をあてはめて計算する。（9）'
   hints:
@@ -44,7 +44,7 @@ sub_questions:
   - args: []
     narration: 求める式を、和と積だけで表せる形に変形する。
     op: express_via_elementary_symmetric
-    result_display: 和と積だけの形に変形する
+    result_display: (x + y)² - 2xy
     result_srepr: ''
   - args: []
     narration: 和と積の値をあてはめて計算する。

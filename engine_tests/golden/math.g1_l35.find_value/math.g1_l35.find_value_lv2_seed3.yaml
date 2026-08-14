@@ -33,7 +33,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - inverse_proportion.solve_from_point
-  explanation: 'まず、通る点のx座標とy座標、それぞれの符号（正か負か）を確認する。（点のx座標とy座標の符号を確認する）
+  explanation: 'まず、通る点のx座標とy座標、それぞれの符号（正か負か）を確認する。（xは負、yは正）
 
     次に、反比例の式 y=a/x に、通る点の x, y の値をあてはめ、比例定数を求める式をつくる。（a = (-3) × 12）
 
@@ -47,7 +47,7 @@ sub_questions:
   - args: []
     narration: 通る点のx座標とy座標、それぞれの符号（正か負か）を確認する。
     op: check_signs
-    result_display: 点のx座標とy座標の符号を確認する
+    result_display: xは負、yは正
     result_srepr: Integer(-36)
   - args:
     - '-3'

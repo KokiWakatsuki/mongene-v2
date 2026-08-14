@@ -33,11 +33,11 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - quadratic.solve_from_rectangle_area
-  explanation: 'まず、かっこを展開し、右辺を左辺に移項して、=0 の形に整理する。（展開して整理する）
+  explanation: 'まず、かっこを展開し、右辺を左辺に移項して、=0 の形に整理する。（x² + 20x - 224 = 0）
 
-    次に、左辺を因数分解する。（左辺を因数分解する）
+    次に、左辺を因数分解する。（(x - 8)(x + 28) = 0）
 
-    次に、積が 0 になるのは各因数が 0 のときだから、それぞれを 0 とおいて x を求める。
+    次に、積が 0 になるのは各因数が 0 のときだから、それぞれを 0 とおいて x を求める。（x - 8 = 0、x + 28 = 0）
 
     最後に、求めるものは正の数だから、2つの解のうち条件に合う正の解を選ぶ。（8）'
   hints:
@@ -50,17 +50,17 @@ sub_questions:
   - args: []
     narration: かっこを展開し、右辺を左辺に移項して、=0 の形に整理する。
     op: expand_and_rearrange
-    result_display: 展開して整理する
+    result_display: x² + 20x - 224 = 0
     result_srepr: ''
   - args: []
     narration: 左辺を因数分解する。
     op: factor_left_side
-    result_display: 左辺を因数分解する
+    result_display: (x - 8)(x + 28) = 0
     result_srepr: ''
   - args: []
     narration: 積が 0 になるのは各因数が 0 のときだから、それぞれを 0 とおいて x を求める。
     op: apply_zero_product
-    result_display: ''
+    result_display: x - 8 = 0、x + 28 = 0
     result_srepr: ''
   - args: []
     narration: 求めるものは正の数だから、2つの解のうち条件に合う正の解を選ぶ。

@@ -35,7 +35,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - quadratic.evaluate_solution
-  explanation: 'まず、指定された値を左辺の文字に代入する。（値を代入する）
+  explanation: 'まず、指定された値を左辺の文字に代入する。（(2)² - 5(2) - 8）
 
     次に、左辺を計算して、その値を求める（値が 0 なら等式が成り立つ）。（-14）'
   hints:
@@ -46,7 +46,7 @@ sub_questions:
   - args: []
     narration: 指定された値を左辺の文字に代入する。
     op: substitute_value
-    result_display: 値を代入する
+    result_display: (2)² - 5(2) - 8
     result_srepr: ''
   - args: []
     narration: 左辺を計算して、その値を求める（値が 0 なら等式が成り立つ）。

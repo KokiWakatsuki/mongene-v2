@@ -37,7 +37,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - letter_meaning.interpret_expression
-  explanation: 'まず、式の各項は、買った個数にひとつあたりの値段をかけた「代金」を表すことを読み取る。（式の各項が表す数量を読み取る）
+  explanation: 'まず、式の各項は、買った個数にひとつあたりの値段をかけた「代金」を表すことを読み取る。（あめの代金とノートの代金）
 
     次に、項どうしが和で結ばれているので、式全体は代金の合計を表すと判断する。（買ったあめ全部の代金と、買ったノート全部の代金を合わせた金額）'
   hints:
@@ -48,7 +48,7 @@ sub_questions:
   - args: []
     narration: 式の各項は、買った個数にひとつあたりの値段をかけた「代金」を表すことを読み取る。
     op: read_each_term_meaning
-    result_display: 式の各項が表す数量を読み取る
+    result_display: あめの代金とノートの代金
     result_srepr: term_meaning
   - args: []
     narration: 項どうしが和で結ばれているので、式全体は代金の合計を表すと判断する。

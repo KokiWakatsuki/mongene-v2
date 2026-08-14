@@ -70,7 +70,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - pythagorean.word_problem_rhombus_diagonal_area
-  explanation: 'まず、ひし形の面積は、対角線どうしの積の半分で求められることを使う。
+  explanation: 'まず、ひし形の面積は、対角線どうしの積の半分で求められることを使う。（（対角線）×（対角線）÷ 2）
 
     次に、与えられた対角線の長さと、いま求めた対角線の長さをかけ、その半分をとってひし形の面積を求める。（40√6 cm²）'
   hints:
@@ -81,7 +81,7 @@ sub_questions:
   - args: []
     narration: ひし形の面積は、対角線どうしの積の半分で求められることを使う。
     op: recall_rhombus_area_rule
-    result_display: ''
+    result_display: （対角線）×（対角線）÷ 2
     result_srepr: ''
   - args: []
     narration: 与えられた対角線の長さと、いま求めた対角線の長さをかけ、その半分をとってひし形の面積を求める。

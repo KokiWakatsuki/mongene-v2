@@ -35,9 +35,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - letter_expr.substitute_signed
-  explanation: 'まず、負の数を代入するときは、かっこをつけて文字とおきかえる。（かっこをつけて文字を数におきかえる）
+  explanation: 'まず、負の数を代入するときは、かっこをつけて文字とおきかえる。（2 × (-3)² + 7 × (-3)）
 
-    次に、累乗はかっこの中の数をその回数だけかけ合わせ、符号に注意して計算する。（累乗を符号に注意して計算する）
+    次に、累乗はかっこの中の数をその回数だけかけ合わせ、符号に注意して計算する。（2 × 9 + 7 × (-3)）
 
     最後に、あてはめた式を計算して、式の値を求める。（-3）'
   hints:
@@ -49,12 +49,12 @@ sub_questions:
   - args: []
     narration: 負の数を代入するときは、かっこをつけて文字とおきかえる。
     op: substitute_with_parentheses
-    result_display: かっこをつけて文字を数におきかえる
+    result_display: 2 × (-3)² + 7 × (-3)
     result_srepr: Integer(-3)
   - args: []
     narration: 累乗はかっこの中の数をその回数だけかけ合わせ、符号に注意して計算する。
     op: evaluate_powers
-    result_display: 累乗を符号に注意して計算する
+    result_display: 2 × 9 + 7 × (-3)
     result_srepr: Integer(-3)
   - args: []
     narration: あてはめた式を計算して、式の値を求める。

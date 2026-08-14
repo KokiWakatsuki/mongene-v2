@@ -38,7 +38,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - box_plot_terms.term_recall
-  explanation: 'まず、説明されている式や数の部分がどれかを読み取る。（説明されている対象を読み取る）
+  explanation: 'まず、説明されている式や数の部分がどれかを読み取る。
 
     次に、その対象を表す用語の名前を思い出す。（第三四分位数）'
   hints:
@@ -49,7 +49,7 @@ sub_questions:
   - args: []
     narration: 説明されている式や数の部分がどれかを読み取る。
     op: identify_description
-    result_display: 説明されている対象を読み取る
+    result_display: ''
     result_srepr: box_right
   - args: []
     narration: その対象を表す用語の名前を思い出す。

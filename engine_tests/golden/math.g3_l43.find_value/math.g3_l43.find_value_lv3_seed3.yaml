@@ -33,11 +33,11 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - parallel_segment.judge_then_length
-  explanation: 'まず、PJ:JBとPM:MDの比が等しいかどうかを比べる。（PJ:JBとPM:MDの比を比べる）
+  explanation: 'まず、PJ:JBとPM:MDの比が等しいかどうかを比べる。（3:6 と 12:24）
 
     次に、平行線と線分の比の定理の逆から、JMとBDが平行であるかどうかを判別する。（平行である）
 
-    次に、JM∥BD であることから、三角形PJMと三角形PBDが相似になることを見つける。（平行線がつくる相似な三角形を見つける）
+    次に、JM∥BD であることから、三角形PJMと三角形PBDが相似になることを見つける。（三角形PJM と 三角形PBD）
 
     最後に、PJ:PB=JM:BD が成り立つことから、辺BDの長さを求める。（45）'
   hints:
@@ -50,7 +50,7 @@ sub_questions:
   - args: []
     narration: PJ:JBとPM:MDの比が等しいかどうかを比べる。
     op: compare_division_ratios
-    result_display: PJ:JBとPM:MDの比を比べる
+    result_display: 3:6 と 12:24
     result_srepr: ''
   - args: []
     narration: 平行線と線分の比の定理の逆から、JMとBDが平行であるかどうかを判別する。
@@ -60,7 +60,7 @@ sub_questions:
   - args: []
     narration: JM∥BD であることから、三角形PJMと三角形PBDが相似になることを見つける。
     op: identify_similar_triangles_from_parallel
-    result_display: 平行線がつくる相似な三角形を見つける
+    result_display: 三角形PJM と 三角形PBD
     result_srepr: ''
   - args: []
     narration: PJ:PB=JM:BD が成り立つことから、辺BDの長さを求める。

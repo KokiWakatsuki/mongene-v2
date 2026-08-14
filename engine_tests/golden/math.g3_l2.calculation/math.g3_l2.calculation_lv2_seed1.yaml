@@ -35,9 +35,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - polynomial.expand_product
-  explanation: 'まず、分配法則で、前のかっこの各項を後ろのかっこの各項にすべてかける。（各項の積をすべて書き出す）
+  explanation: 'まず、分配法則で、前のかっこの各項を後ろのかっこの各項にすべてかける。（9a² - 18a - 27a + 54）
 
-    次に、文字の1次の項どうしを集める。（1次の項を集める）
+    次に、文字の1次の項どうしを集める。（9a² + (-18 - 27)a + 54）
 
     最後に、同類項をまとめて計算する。（9a² - 45a + 54）'
   hints:
@@ -49,12 +49,12 @@ sub_questions:
   - args: []
     narration: 分配法則で、前のかっこの各項を後ろのかっこの各項にすべてかける。
     op: expand_all_products
-    result_display: 各項の積をすべて書き出す
+    result_display: 9a² - 18a - 27a + 54
     result_srepr: ''
   - args: []
     narration: 文字の1次の項どうしを集める。
     op: collect_x_terms
-    result_display: 1次の項を集める
+    result_display: 9a² + (-18 - 27)a + 54
     result_srepr: ''
   - args: []
     narration: 同類項をまとめて計算する。

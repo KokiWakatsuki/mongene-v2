@@ -37,7 +37,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - quadrilateral.classify_from_diagonal
-  explanation: 'まず、対角線が等しいか、垂直に交わるか、それぞれの条件を確認する。（対角線の条件を確認する）
+  explanation: 'まず、対角線が等しいか、垂直に交わるか、それぞれの条件を確認する。（長さは等しい／垂直には交わらない）
 
     次に、対角線の条件の組み合わせから、平行四辺形がどんな四角形になるかを判別する。（長方形）'
   hints:
@@ -48,7 +48,7 @@ sub_questions:
   - args: []
     narration: 対角線が等しいか、垂直に交わるか、それぞれの条件を確認する。
     op: check_diagonal_conditions
-    result_display: 対角線の条件を確認する
+    result_display: 長さは等しい／垂直には交わらない
     result_srepr: yesno
   - args: []
     narration: 対角線の条件の組み合わせから、平行四辺形がどんな四角形になるかを判別する。

@@ -33,7 +33,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - special_parallelogram.diagonal_value
-  explanation: 'まず、対角線についてわかっている長さや、四角形の種類を読み取る。（わかっている対角線の値を読み取る）
+  explanation: 'まず、対角線についてわかっている長さや、四角形の種類を読み取る。（26）
 
     次に、対角線の長さが等しく、それぞれの中点で交わることから、交点から頂点までの長さを求める。（13）'
   hints:
@@ -44,7 +44,7 @@ sub_questions:
   - args: []
     narration: 対角線についてわかっている長さや、四角形の種類を読み取る。
     op: identify_given_diagonal_value
-    result_display: わかっている対角線の値を読み取る
+    result_display: '26'
     result_srepr: ''
   - args: []
     narration: 対角線の長さが等しく、それぞれの中点で交わることから、交点から頂点までの長さを求める。

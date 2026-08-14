@@ -39,7 +39,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - direct_proportion.judge_table
-  explanation: 'まず、表の対応するxとyについて、商y/xをそれぞれ計算する。（対応するxとyの商 y/x を、それぞれ計算する）
+  explanation: 'まず、表の対応するxとyについて、商y/xをそれぞれ計算する。（8、8、8、8）
 
     次に、商y/xがすべて等しければ比例するといえる。等しくなければ比例するとはいえない。（比例するといえる）'
   hints:
@@ -50,7 +50,7 @@ sub_questions:
   - args: []
     narration: 表の対応するxとyについて、商y/xをそれぞれ計算する。
     op: compute_ratio_y_over_x
-    result_display: 対応するxとyの商 y/x を、それぞれ計算する
+    result_display: 8、8、8、8
     result_srepr: '[''Integer(8)'', ''Integer(8)'', ''Integer(8)'', ''Integer(8)'']'
   - args: []
     narration: 商y/xがすべて等しければ比例するといえる。等しくなければ比例するとはいえない。

@@ -24,18 +24,18 @@ meta:
   seed: 2
   signature: special_parallelogram_diagonal_value
 problem_ref: 021930e4330f065d
-problem_text: ひし形NQFCで対角線NFとQCの交点をOとする。NF=174cm のとき、∠NOQの大きさを求めよ。
+problem_text: 正方形QLHPで対角線QHとLPの交点をOとする。QH=84cm のとき、線分OLの長さを求めよ。
 sub_questions:
 - answer:
-    display: 90°
+    display: '42'
     kind: symbolic
-    srepr: Integer(90)
+    srepr: Integer(42)
   cause_tags: []
   concept_tags:
   - special_parallelogram.diagonal_value
-  explanation: 'まず、対角線についてわかっている長さや、四角形の種類を読み取る。（わかっている対角線の値を読み取る）
+  explanation: 'まず、対角線についてわかっている長さや、四角形の種類を読み取る。（84）
 
-    次に、ひし形の対角線は垂直に交わることから、その交点にできる角の大きさを求める。（90°）'
+    次に、対角線の長さが等しく、それぞれの中点で交わることから、交点から頂点までの長さを求める。（42）'
   hints:
   - 対角線についてわかっている長さや、四角形の種類を読み取る。
   label: (1)
@@ -44,11 +44,11 @@ sub_questions:
   - args: []
     narration: 対角線についてわかっている長さや、四角形の種類を読み取る。
     op: identify_given_diagonal_value
-    result_display: わかっている対角線の値を読み取る
+    result_display: '84'
     result_srepr: ''
   - args: []
-    narration: ひし形の対角線は垂直に交わることから、その交点にできる角の大きさを求める。
+    narration: 対角線の長さが等しく、それぞれの中点で交わることから、交点から頂点までの長さを求める。
     op: apply_diagonal_property
-    result_display: 90°
-    result_srepr: Integer(90)
+    result_display: '42'
+    result_srepr: Integer(42)
 visual_svg: null

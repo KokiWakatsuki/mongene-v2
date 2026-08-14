@@ -35,7 +35,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - circle.judge_concyclic
-  explanation: 'まず、直線CGの同じ側にある2点A, Mでできる角が、等しいかどうかを確認する。（2つの角が等しいかどうかを確認する）
+  explanation: 'まず、直線CGの同じ側にある2点A, Mでできる角が、等しいかどうかを確認する。（等しくない）
 
     次に、円周角の定理の逆から、4点が同一円周上にあるといえるかどうかを判別する。（同一円周上にあるとはいえない）'
   hints:
@@ -46,7 +46,7 @@ sub_questions:
   - args: []
     narration: 直線CGの同じ側にある2点A, Mでできる角が、等しいかどうかを確認する。
     op: compare_angles_on_same_side
-    result_display: 2つの角が等しいかどうかを確認する
+    result_display: 等しくない
     result_srepr: not_equal
   - args: []
     narration: 円周角の定理の逆から、4点が同一円周上にあるといえるかどうかを判別する。

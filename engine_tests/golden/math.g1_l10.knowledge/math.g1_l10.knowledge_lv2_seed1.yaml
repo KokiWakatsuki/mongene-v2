@@ -35,7 +35,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - number_set.closure
-  explanation: 'まず、その集合の数どうしでその演算をした結果が、いつでもその集合に入るかを調べる。（その演算の結果が必ずその集合に入るかを調べる）
+  explanation: 'まず、その集合の数どうしでその演算をした結果が、いつでもその集合に入るかを調べる。（入らない場合がある）
 
     次に、結果がいつでもその集合に入るなら閉じている、そうでなければ閉じていないと判断する。（閉じていない）'
   hints:
@@ -46,7 +46,7 @@ sub_questions:
   - args: []
     narration: その集合の数どうしでその演算をした結果が、いつでもその集合に入るかを調べる。
     op: check_operation_result
-    result_display: その演算の結果が必ずその集合に入るかを調べる
+    result_display: 入らない場合がある
     result_srepr: natural.sub
   - args: []
     narration: 結果がいつでもその集合に入るなら閉じている、そうでなければ閉じていないと判断する。

@@ -54,26 +54,46 @@ sub_questions:
       stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="77.14" x2="372.00" y2="77.14" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="52.57" x2="372.00" y2="52.57" stroke="#bbbbbb" stroke-width="0.5"/><line
       x1="28.00" y1="28.00" x2="372.00" y2="28.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="200.00" x2="372.00" y2="200.00" stroke="#000000" stroke-width="1.5"/><line x1="200.00" y1="28.00"
       x2="200.00" y2="372.00" stroke="#000000" stroke-width="1.5"/><line x1="28.00" y1="-113.29" x2="372.00" y2="316.71" stroke="#000000" stroke-width="2.5"/><text x="28.00" y="212.00" font-size="10" text-anchor="middle"
-      fill="#000000">-7</text><text x="52.57" y="212.00" font-size="10" text-anchor="middle" fill="#000000">-6</text><text x="77.14" y="212.00" font-size="10" text-anchor="middle" fill="#000000">-5</text><text
-      x="101.71" y="212.00" font-size="10" text-anchor="middle" fill="#000000">-4</text><text x="126.29" y="212.00" font-size="10" text-anchor="middle" fill="#000000">-3</text><text x="150.86" y="212.00"
-      font-size="10" text-anchor="middle" fill="#000000">-2</text><text x="175.43" y="212.00" font-size="10" text-anchor="middle" fill="#000000">-1</text><text x="224.57" y="212.00" font-size="10" text-anchor="middle"
-      fill="#000000">1</text><text x="249.14" y="212.00" font-size="10" text-anchor="middle" fill="#000000">2</text><text x="273.71" y="212.00" font-size="10" text-anchor="middle" fill="#000000">3</text><text
-      x="298.29" y="212.00" font-size="10" text-anchor="middle" fill="#000000">4</text><text x="322.86" y="212.00" font-size="10" text-anchor="middle" fill="#000000">5</text><text x="347.43" y="212.00"
-      font-size="10" text-anchor="middle" fill="#000000">6</text><text x="372.00" y="212.00" font-size="10" text-anchor="middle" fill="#000000">7</text><text x="192.00" y="375.00" font-size="10" text-anchor="end"
-      fill="#000000">-7</text><text x="192.00" y="350.43" font-size="10" text-anchor="end" fill="#000000">-6</text><text x="192.00" y="325.86" font-size="10" text-anchor="end" fill="#000000">-5</text><text
-      x="192.00" y="301.29" font-size="10" text-anchor="end" fill="#000000">-4</text><text x="192.00" y="276.71" font-size="10" text-anchor="end" fill="#000000">-3</text><text x="192.00" y="252.14" font-size="10"
-      text-anchor="end" fill="#000000">-2</text><text x="192.00" y="227.57" font-size="10" text-anchor="end" fill="#000000">-1</text><text x="192.00" y="203.00" font-size="10" text-anchor="end" fill="#000000">0</text><text
-      x="192.00" y="178.43" font-size="10" text-anchor="end" fill="#000000">1</text><text x="192.00" y="153.86" font-size="10" text-anchor="end" fill="#000000">2</text><text x="192.00" y="129.29" font-size="10"
-      text-anchor="end" fill="#000000">3</text><text x="192.00" y="104.71" font-size="10" text-anchor="end" fill="#000000">4</text><text x="192.00" y="80.14" font-size="10" text-anchor="end" fill="#000000">5</text><text
-      x="192.00" y="55.57" font-size="10" text-anchor="end" fill="#000000">6</text><text x="192.00" y="31.00" font-size="10" text-anchor="end" fill="#000000">7</text></svg>
+      stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">-7</text><text x="28.00" y="212.00" font-size="10" text-anchor="middle" fill="#000000">-7</text><text x="52.57" y="212.00"
+      font-size="10" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">-6</text><text x="52.57" y="212.00" font-size="10" text-anchor="middle" fill="#000000">-6</text><text
+      x="77.14" y="212.00" font-size="10" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">-5</text><text x="77.14" y="212.00" font-size="10" text-anchor="middle"
+      fill="#000000">-5</text><text x="101.71" y="212.00" font-size="10" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">-4</text><text x="101.71" y="212.00"
+      font-size="10" text-anchor="middle" fill="#000000">-4</text><text x="126.29" y="212.00" font-size="10" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">-3</text><text
+      x="126.29" y="212.00" font-size="10" text-anchor="middle" fill="#000000">-3</text><text x="150.86" y="212.00" font-size="10" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round"
+      fill="#ffffff">-2</text><text x="150.86" y="212.00" font-size="10" text-anchor="middle" fill="#000000">-2</text><text x="175.43" y="212.00" font-size="10" text-anchor="middle" stroke="#ffffff" stroke-width="3"
+      stroke-linejoin="round" fill="#ffffff">-1</text><text x="175.43" y="212.00" font-size="10" text-anchor="middle" fill="#000000">-1</text><text x="224.57" y="212.00" font-size="10" text-anchor="middle"
+      stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">1</text><text x="224.57" y="212.00" font-size="10" text-anchor="middle" fill="#000000">1</text><text x="249.14" y="212.00"
+      font-size="10" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">2</text><text x="249.14" y="212.00" font-size="10" text-anchor="middle" fill="#000000">2</text><text
+      x="273.71" y="212.00" font-size="10" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">3</text><text x="273.71" y="212.00" font-size="10" text-anchor="middle"
+      fill="#000000">3</text><text x="298.29" y="212.00" font-size="10" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">4</text><text x="298.29" y="212.00"
+      font-size="10" text-anchor="middle" fill="#000000">4</text><text x="322.86" y="212.00" font-size="10" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">5</text><text
+      x="322.86" y="212.00" font-size="10" text-anchor="middle" fill="#000000">5</text><text x="347.43" y="212.00" font-size="10" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round"
+      fill="#ffffff">6</text><text x="347.43" y="212.00" font-size="10" text-anchor="middle" fill="#000000">6</text><text x="372.00" y="212.00" font-size="10" text-anchor="middle" stroke="#ffffff" stroke-width="3"
+      stroke-linejoin="round" fill="#ffffff">7</text><text x="372.00" y="212.00" font-size="10" text-anchor="middle" fill="#000000">7</text><text x="192.00" y="375.00" font-size="10" text-anchor="end" stroke="#ffffff"
+      stroke-width="3" stroke-linejoin="round" fill="#ffffff">-7</text><text x="192.00" y="375.00" font-size="10" text-anchor="end" fill="#000000">-7</text><text x="192.00" y="350.43" font-size="10" text-anchor="end"
+      stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">-6</text><text x="192.00" y="350.43" font-size="10" text-anchor="end" fill="#000000">-6</text><text x="192.00" y="325.86" font-size="10"
+      text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">-5</text><text x="192.00" y="325.86" font-size="10" text-anchor="end" fill="#000000">-5</text><text x="192.00"
+      y="301.29" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">-4</text><text x="192.00" y="301.29" font-size="10" text-anchor="end" fill="#000000">-4</text><text
+      x="192.00" y="276.71" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">-3</text><text x="192.00" y="276.71" font-size="10" text-anchor="end"
+      fill="#000000">-3</text><text x="192.00" y="252.14" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">-2</text><text x="192.00" y="252.14" font-size="10"
+      text-anchor="end" fill="#000000">-2</text><text x="192.00" y="227.57" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">-1</text><text x="192.00"
+      y="227.57" font-size="10" text-anchor="end" fill="#000000">-1</text><text x="192.00" y="203.00" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">0</text><text
+      x="192.00" y="203.00" font-size="10" text-anchor="end" fill="#000000">0</text><text x="192.00" y="178.43" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round"
+      fill="#ffffff">1</text><text x="192.00" y="178.43" font-size="10" text-anchor="end" fill="#000000">1</text><text x="192.00" y="153.86" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3"
+      stroke-linejoin="round" fill="#ffffff">2</text><text x="192.00" y="153.86" font-size="10" text-anchor="end" fill="#000000">2</text><text x="192.00" y="129.29" font-size="10" text-anchor="end" stroke="#ffffff"
+      stroke-width="3" stroke-linejoin="round" fill="#ffffff">3</text><text x="192.00" y="129.29" font-size="10" text-anchor="end" fill="#000000">3</text><text x="192.00" y="104.71" font-size="10" text-anchor="end"
+      stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">4</text><text x="192.00" y="104.71" font-size="10" text-anchor="end" fill="#000000">4</text><text x="192.00" y="80.14" font-size="10"
+      text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">5</text><text x="192.00" y="80.14" font-size="10" text-anchor="end" fill="#000000">5</text><text x="192.00"
+      y="55.57" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">6</text><text x="192.00" y="55.57" font-size="10" text-anchor="end" fill="#000000">6</text><text
+      x="192.00" y="31.00" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">7</text><text x="192.00" y="31.00" font-size="10" text-anchor="end" fill="#000000">7</text></svg>
   cause_tags: []
   concept_tags:
   - linear_function.draw_graph_fraction
   explanation: 'まず、y 軸との交点（切片）に点をとる。（(0, 4)）
 
-    次に、切片から、傾きの分母のぶんだけ x 軸の正の向きに進む。（分母のぶん x 方向へ）
+    次に、切片から、傾きの分母のぶんだけ x 軸の正の向きに進む。（x 方向に 4）
 
-    次に、そこから、傾きの分子のぶんだけ y 軸方向に進む（分子の符号にしたがう）。（分子のぶん y 方向へ）
+    次に、そこから、傾きの分子のぶんだけ y 軸方向に進む（分子の符号にしたがう）。（y 方向に -5）
 
     次に、進んだ先の格子点に印をつける。（(4, -1)）
 
@@ -94,12 +114,12 @@ sub_questions:
   - args: []
     narration: 切片から、傾きの分母のぶんだけ x 軸の正の向きに進む。
     op: apply_slope_denominator
-    result_display: 分母のぶん x 方向へ
+    result_display: x 方向に 4
     result_srepr: Integer(4)
   - args: []
     narration: そこから、傾きの分子のぶんだけ y 軸方向に進む（分子の符号にしたがう）。
     op: apply_slope_numerator
-    result_display: 分子のぶん y 方向へ
+    result_display: y 方向に -5
     result_srepr: Integer(-5)
   - args: []
     narration: 進んだ先の格子点に印をつける。
@@ -126,15 +146,34 @@ visual_svg: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width=
   x1="28.00" y1="126.29" x2="372.00" y2="126.29" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="101.71" x2="372.00" y2="101.71" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="77.14"
   x2="372.00" y2="77.14" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="52.57" x2="372.00" y2="52.57" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="28.00" x2="372.00" y2="28.00" stroke="#bbbbbb"
   stroke-width="0.5"/><line x1="28.00" y1="200.00" x2="372.00" y2="200.00" stroke="#000000" stroke-width="1.5"/><line x1="200.00" y1="28.00" x2="200.00" y2="372.00" stroke="#000000" stroke-width="1.5"/><text
-  x="28.00" y="212.00" font-size="10" text-anchor="middle" fill="#000000">-7</text><text x="52.57" y="212.00" font-size="10" text-anchor="middle" fill="#000000">-6</text><text x="77.14" y="212.00" font-size="10"
-  text-anchor="middle" fill="#000000">-5</text><text x="101.71" y="212.00" font-size="10" text-anchor="middle" fill="#000000">-4</text><text x="126.29" y="212.00" font-size="10" text-anchor="middle" fill="#000000">-3</text><text
-  x="150.86" y="212.00" font-size="10" text-anchor="middle" fill="#000000">-2</text><text x="175.43" y="212.00" font-size="10" text-anchor="middle" fill="#000000">-1</text><text x="224.57" y="212.00" font-size="10"
-  text-anchor="middle" fill="#000000">1</text><text x="249.14" y="212.00" font-size="10" text-anchor="middle" fill="#000000">2</text><text x="273.71" y="212.00" font-size="10" text-anchor="middle" fill="#000000">3</text><text
-  x="298.29" y="212.00" font-size="10" text-anchor="middle" fill="#000000">4</text><text x="322.86" y="212.00" font-size="10" text-anchor="middle" fill="#000000">5</text><text x="347.43" y="212.00" font-size="10"
-  text-anchor="middle" fill="#000000">6</text><text x="372.00" y="212.00" font-size="10" text-anchor="middle" fill="#000000">7</text><text x="192.00" y="375.00" font-size="10" text-anchor="end" fill="#000000">-7</text><text
-  x="192.00" y="350.43" font-size="10" text-anchor="end" fill="#000000">-6</text><text x="192.00" y="325.86" font-size="10" text-anchor="end" fill="#000000">-5</text><text x="192.00" y="301.29" font-size="10"
-  text-anchor="end" fill="#000000">-4</text><text x="192.00" y="276.71" font-size="10" text-anchor="end" fill="#000000">-3</text><text x="192.00" y="252.14" font-size="10" text-anchor="end" fill="#000000">-2</text><text
-  x="192.00" y="227.57" font-size="10" text-anchor="end" fill="#000000">-1</text><text x="192.00" y="203.00" font-size="10" text-anchor="end" fill="#000000">0</text><text x="192.00" y="178.43" font-size="10"
-  text-anchor="end" fill="#000000">1</text><text x="192.00" y="153.86" font-size="10" text-anchor="end" fill="#000000">2</text><text x="192.00" y="129.29" font-size="10" text-anchor="end" fill="#000000">3</text><text
-  x="192.00" y="104.71" font-size="10" text-anchor="end" fill="#000000">4</text><text x="192.00" y="80.14" font-size="10" text-anchor="end" fill="#000000">5</text><text x="192.00" y="55.57" font-size="10"
-  text-anchor="end" fill="#000000">6</text><text x="192.00" y="31.00" font-size="10" text-anchor="end" fill="#000000">7</text></svg>
+  x="28.00" y="212.00" font-size="10" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">-7</text><text x="28.00" y="212.00" font-size="10" text-anchor="middle"
+  fill="#000000">-7</text><text x="52.57" y="212.00" font-size="10" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">-6</text><text x="52.57" y="212.00" font-size="10"
+  text-anchor="middle" fill="#000000">-6</text><text x="77.14" y="212.00" font-size="10" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">-5</text><text x="77.14"
+  y="212.00" font-size="10" text-anchor="middle" fill="#000000">-5</text><text x="101.71" y="212.00" font-size="10" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">-4</text><text
+  x="101.71" y="212.00" font-size="10" text-anchor="middle" fill="#000000">-4</text><text x="126.29" y="212.00" font-size="10" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round"
+  fill="#ffffff">-3</text><text x="126.29" y="212.00" font-size="10" text-anchor="middle" fill="#000000">-3</text><text x="150.86" y="212.00" font-size="10" text-anchor="middle" stroke="#ffffff" stroke-width="3"
+  stroke-linejoin="round" fill="#ffffff">-2</text><text x="150.86" y="212.00" font-size="10" text-anchor="middle" fill="#000000">-2</text><text x="175.43" y="212.00" font-size="10" text-anchor="middle"
+  stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">-1</text><text x="175.43" y="212.00" font-size="10" text-anchor="middle" fill="#000000">-1</text><text x="224.57" y="212.00" font-size="10"
+  text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">1</text><text x="224.57" y="212.00" font-size="10" text-anchor="middle" fill="#000000">1</text><text x="249.14"
+  y="212.00" font-size="10" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">2</text><text x="249.14" y="212.00" font-size="10" text-anchor="middle" fill="#000000">2</text><text
+  x="273.71" y="212.00" font-size="10" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">3</text><text x="273.71" y="212.00" font-size="10" text-anchor="middle"
+  fill="#000000">3</text><text x="298.29" y="212.00" font-size="10" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">4</text><text x="298.29" y="212.00" font-size="10"
+  text-anchor="middle" fill="#000000">4</text><text x="322.86" y="212.00" font-size="10" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">5</text><text x="322.86"
+  y="212.00" font-size="10" text-anchor="middle" fill="#000000">5</text><text x="347.43" y="212.00" font-size="10" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">6</text><text
+  x="347.43" y="212.00" font-size="10" text-anchor="middle" fill="#000000">6</text><text x="372.00" y="212.00" font-size="10" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round"
+  fill="#ffffff">7</text><text x="372.00" y="212.00" font-size="10" text-anchor="middle" fill="#000000">7</text><text x="192.00" y="375.00" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3"
+  stroke-linejoin="round" fill="#ffffff">-7</text><text x="192.00" y="375.00" font-size="10" text-anchor="end" fill="#000000">-7</text><text x="192.00" y="350.43" font-size="10" text-anchor="end" stroke="#ffffff"
+  stroke-width="3" stroke-linejoin="round" fill="#ffffff">-6</text><text x="192.00" y="350.43" font-size="10" text-anchor="end" fill="#000000">-6</text><text x="192.00" y="325.86" font-size="10" text-anchor="end"
+  stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">-5</text><text x="192.00" y="325.86" font-size="10" text-anchor="end" fill="#000000">-5</text><text x="192.00" y="301.29" font-size="10"
+  text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">-4</text><text x="192.00" y="301.29" font-size="10" text-anchor="end" fill="#000000">-4</text><text x="192.00"
+  y="276.71" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">-3</text><text x="192.00" y="276.71" font-size="10" text-anchor="end" fill="#000000">-3</text><text
+  x="192.00" y="252.14" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">-2</text><text x="192.00" y="252.14" font-size="10" text-anchor="end" fill="#000000">-2</text><text
+  x="192.00" y="227.57" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">-1</text><text x="192.00" y="227.57" font-size="10" text-anchor="end" fill="#000000">-1</text><text
+  x="192.00" y="203.00" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">0</text><text x="192.00" y="203.00" font-size="10" text-anchor="end" fill="#000000">0</text><text
+  x="192.00" y="178.43" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">1</text><text x="192.00" y="178.43" font-size="10" text-anchor="end" fill="#000000">1</text><text
+  x="192.00" y="153.86" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">2</text><text x="192.00" y="153.86" font-size="10" text-anchor="end" fill="#000000">2</text><text
+  x="192.00" y="129.29" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">3</text><text x="192.00" y="129.29" font-size="10" text-anchor="end" fill="#000000">3</text><text
+  x="192.00" y="104.71" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">4</text><text x="192.00" y="104.71" font-size="10" text-anchor="end" fill="#000000">4</text><text
+  x="192.00" y="80.14" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">5</text><text x="192.00" y="80.14" font-size="10" text-anchor="end" fill="#000000">5</text><text
+  x="192.00" y="55.57" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">6</text><text x="192.00" y="55.57" font-size="10" text-anchor="end" fill="#000000">6</text><text
+  x="192.00" y="31.00" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">7</text><text x="192.00" y="31.00" font-size="10" text-anchor="end" fill="#000000">7</text></svg>

@@ -35,7 +35,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - number.opposite_quantity
-  explanation: 'まず、どちらの向き（性質）を正の数で表すことにしたかを読み取る。（どちらの向きを正の数で表すことにしたかを読み取る）
+  explanation: 'まず、どちらの向き（性質）を正の数で表すことにしたかを読み取る。（値上がり）
 
     次に、正の数で表す向きと反対の向きの量には、反対の符号をつけて表す。（-457）'
   hints:
@@ -46,7 +46,7 @@ sub_questions:
   - args: []
     narration: どちらの向き（性質）を正の数で表すことにしたかを読み取る。
     op: identify_base_direction
-    result_display: どちらの向きを正の数で表すことにしたかを読み取る
+    result_display: 値上がり
     result_srepr: 値上がり
   - args: []
     narration: 正の数で表す向きと反対の向きの量には、反対の符号をつけて表す。

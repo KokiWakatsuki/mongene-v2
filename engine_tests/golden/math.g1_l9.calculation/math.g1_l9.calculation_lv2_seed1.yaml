@@ -35,9 +35,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - signed_number.four_operations
-  explanation: 'まず、累乗とかっこの中を先に計算する。（累乗とかっこの中を先に計算する）
+  explanation: 'まず、累乗とかっこの中を先に計算する。（8 - 36 × 5 + 16 ÷ (-4)）
 
-    次に、乗法と除法を計算する。（乗法と除法を計算する）
+    次に、乗法と除法を計算する。（8 - 180 - 4）
 
     最後に、加法と減法を計算して答えを求める。（-176）'
   hints:
@@ -49,12 +49,12 @@ sub_questions:
   - args: []
     narration: 累乗とかっこの中を先に計算する。
     op: evaluate_powers_and_parentheses
-    result_display: 累乗とかっこの中を先に計算する
+    result_display: 8 - 36 × 5 + 16 ÷ (-4)
     result_srepr: Integer(-176)
   - args: []
     narration: 乗法と除法を計算する。
     op: multiply_and_divide
-    result_display: 乗法と除法を計算する
+    result_display: 8 - 180 - 4
     result_srepr: Integer(-176)
   - args: []
     narration: 加法と減法を計算して答えを求める。

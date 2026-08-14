@@ -35,7 +35,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - polynomial.multiply_monomials
-  explanation: 'まず、係数どうしをかけ算する。（係数どうしをかける）
+  explanation: 'まず、係数どうしをかけ算する。（-49）
 
     次に、同じ文字は指数の和にまとめ、1つの単項式にする。（-49x⁴）'
   hints:
@@ -46,7 +46,7 @@ sub_questions:
   - args: []
     narration: 係数どうしをかけ算する。
     op: multiply_coefficients
-    result_display: 係数どうしをかける
+    result_display: '-49'
     result_srepr: Mul(Integer(-1), Integer(49), Pow(Symbol('x'), Integer(4)))
   - args: []
     narration: 同じ文字は指数の和にまとめ、1つの単項式にする。

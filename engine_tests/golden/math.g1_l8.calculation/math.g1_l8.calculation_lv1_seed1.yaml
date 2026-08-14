@@ -35,7 +35,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - signed_number.divide_pair
-  explanation: 'まず、わる数の逆数をかけるかけ算に直す。（逆数をかけるかけ算に直す）
+  explanation: 'まず、わる数の逆数をかけるかけ算に直す。（(-36) × (-1/6)）
 
     次に、符号に注意してかけ算を計算する。（6）'
   hints:
@@ -46,7 +46,7 @@ sub_questions:
   - args: []
     narration: わる数の逆数をかけるかけ算に直す。
     op: rewrite_division_as_reciprocal
-    result_display: 逆数をかけるかけ算に直す
+    result_display: (-36) × (-1/6)
     result_srepr: Integer(6)
   - args: []
     narration: 符号に注意してかけ算を計算する。

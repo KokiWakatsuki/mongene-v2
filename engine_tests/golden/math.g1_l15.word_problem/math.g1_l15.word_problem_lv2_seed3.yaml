@@ -39,9 +39,9 @@ sub_questions:
 
     次に、1kmは1000mなので、mの式を1000でわるとkmの式になる。（道のり(m) ÷ 1000 = 道のり(km)）
 
-    次に、÷ を、その式の逆数をかけるかけ算に直す。（÷ を逆数のかけ算に直す）
+    次に、÷ を、その式の逆数をかけるかけ算に直す。（(125) × (n) × (1/1000)）
 
-    次に、係数どうしをかけ算する。（係数どうしをかける）
+    次に、係数どうしをかけ算する。（1/8）
 
     最後に、同じ文字は指数の和にまとめ、1つの単項式にする。（n/8）'
   hints:
@@ -65,12 +65,12 @@ sub_questions:
   - args: []
     narration: ÷ を、その式の逆数をかけるかけ算に直す。
     op: convert_divisions_to_reciprocal
-    result_display: ÷ を逆数のかけ算に直す
+    result_display: (125) × (n) × (1/1000)
     result_srepr: Mul(Rational(1, 8), Symbol('n'))
   - args: []
     narration: 係数どうしをかけ算する。
     op: multiply_coefficients
-    result_display: 係数どうしをかける
+    result_display: 1/8
     result_srepr: Mul(Rational(1, 8), Symbol('n'))
   - args: []
     narration: 同じ文字は指数の和にまとめ、1つの単項式にする。

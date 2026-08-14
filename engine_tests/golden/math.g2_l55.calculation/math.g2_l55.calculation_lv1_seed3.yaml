@@ -33,7 +33,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - quartile.compute_median
-  explanation: 'まず、データを大きさの順に並べかえる。（データを大きさの順に並べる）
+  explanation: 'まず、データを大きさの順に並べかえる。（3、16、20、21、25、25、29、30、42、49、50）
 
     次に、並べたデータの中央にある値（中央値）を求める。（25）'
   hints:
@@ -44,7 +44,7 @@ sub_questions:
   - args: []
     narration: データを大きさの順に並べかえる。
     op: sort_data
-    result_display: データを大きさの順に並べる
+    result_display: 3、16、20、21、25、25、29、30、42、49、50
     result_srepr: ''
   - args: []
     narration: 並べたデータの中央にある値（中央値）を求める。

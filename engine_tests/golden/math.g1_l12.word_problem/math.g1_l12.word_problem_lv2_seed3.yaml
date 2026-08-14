@@ -37,7 +37,7 @@ sub_questions:
   - letter_expr.word_problem_discount
   explanation: 'まず、定価から、割引きの割合の分だけ差し引いた代金を考える。（定価 − 割引き額 = 代金）
 
-    次に、文字の部分が同じ項（同類項）どうしをまとめる。（同類項どうしをまとめる）
+    次に、文字の部分が同じ項（同類項）どうしをまとめる。（(a - 9a/10)）
 
     最後に、まとめた同類項の係数を計算して、式を簡単にする。（a/10）'
   hints:
@@ -54,7 +54,7 @@ sub_questions:
   - args: []
     narration: 文字の部分が同じ項（同類項）どうしをまとめる。
     op: group_like_terms
-    result_display: 同類項どうしをまとめる
+    result_display: (a - 9a/10)
     result_srepr: Mul(Rational(1, 10), Symbol('a'))
   - args: []
     narration: まとめた同類項の係数を計算して、式を簡単にする。

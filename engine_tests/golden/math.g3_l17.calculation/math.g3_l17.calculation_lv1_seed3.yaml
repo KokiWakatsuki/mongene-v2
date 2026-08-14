@@ -26,18 +26,18 @@ meta:
 problem_ref: 94de141be0a92393
 problem_text: '次の式を計算せよ。
 
-  √10 × √19'
+  √15 × √9'
 sub_questions:
 - answer:
-    display: √190
+    display: 3√15
     kind: symbolic
-    srepr: Pow(Integer(190), Rational(1, 2))
+    srepr: Mul(Integer(3), Pow(Integer(15), Rational(1, 2)))
   cause_tags: []
   concept_tags:
   - radical.multiply_divide
-  explanation: 'まず、根号の積を、1つの根号の中の積にまとめる。（1つの根号にまとめる）
+  explanation: 'まず、根号の積を、1つの根号の中の積にまとめる。（√135）
 
-    次に、根号の中を素因数分解し、平方の因数を根号の外に出す。（√190）'
+    次に、根号の中を素因数分解し、平方の因数を根号の外に出す。（3√15）'
   hints:
   - 根号の積を、1つの根号の中の積にまとめる。
   label: (1)
@@ -46,11 +46,11 @@ sub_questions:
   - args: []
     narration: 根号の積を、1つの根号の中の積にまとめる。
     op: multiply_under_one_root
-    result_display: 1つの根号にまとめる
+    result_display: √135
     result_srepr: ''
   - args: []
     narration: 根号の中を素因数分解し、平方の因数を根号の外に出す。
     op: simplify_root
-    result_display: √190
-    result_srepr: Pow(Integer(190), Rational(1, 2))
+    result_display: 3√15
+    result_srepr: Mul(Integer(3), Pow(Integer(15), Rational(1, 2)))
 visual_svg: null

@@ -46,14 +46,25 @@ sub_questions:
       x1="28.00" y1="104.44" x2="372.00" y2="104.44" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="66.22" x2="372.00" y2="66.22" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="28.00"
       x2="372.00" y2="28.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="372.00" x2="372.00" y2="372.00" stroke="#000000" stroke-width="1.5"/><line x1="28.00" y1="28.00" x2="28.00" y2="372.00"
       stroke="#000000" stroke-width="1.5"/><line x1="28.00" y1="372.00" x2="322.86" y2="62.40" stroke="#000000" stroke-width="2.5"/><circle cx="28.00" cy="372.00" r="4" fill="#000000"/><circle cx="322.86"
-      cy="62.40" r="4" fill="#000000"/><text x="77.14" y="384.00" font-size="10" text-anchor="middle" fill="#000000">1</text><text x="126.29" y="384.00" font-size="10" text-anchor="middle" fill="#000000">2</text><text
-      x="175.43" y="384.00" font-size="10" text-anchor="middle" fill="#000000">3</text><text x="224.57" y="384.00" font-size="10" text-anchor="middle" fill="#000000">4</text><text x="273.71" y="384.00"
-      font-size="10" text-anchor="middle" fill="#000000">5</text><text x="322.86" y="384.00" font-size="10" text-anchor="middle" fill="#000000">6</text><text x="372.00" y="384.00" font-size="10" text-anchor="middle"
-      fill="#000000">7</text><text x="20.00" y="375.00" font-size="10" text-anchor="end" fill="#000000">0</text><text x="20.00" y="336.78" font-size="10" text-anchor="end" fill="#000000">20</text><text
-      x="20.00" y="298.56" font-size="10" text-anchor="end" fill="#000000">40</text><text x="20.00" y="260.33" font-size="10" text-anchor="end" fill="#000000">60</text><text x="20.00" y="222.11" font-size="10"
-      text-anchor="end" fill="#000000">80</text><text x="20.00" y="183.89" font-size="10" text-anchor="end" fill="#000000">100</text><text x="20.00" y="145.67" font-size="10" text-anchor="end" fill="#000000">120</text><text
-      x="20.00" y="107.44" font-size="10" text-anchor="end" fill="#000000">140</text><text x="20.00" y="69.22" font-size="10" text-anchor="end" fill="#000000">160</text><text x="20.00" y="31.00" font-size="10"
-      text-anchor="end" fill="#000000">180</text></svg>
+      cy="62.40" r="4" fill="#000000"/><text x="77.14" y="384.00" font-size="10" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">1</text><text x="77.14" y="384.00"
+      font-size="10" text-anchor="middle" fill="#000000">1</text><text x="126.29" y="384.00" font-size="10" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">2</text><text
+      x="126.29" y="384.00" font-size="10" text-anchor="middle" fill="#000000">2</text><text x="175.43" y="384.00" font-size="10" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round"
+      fill="#ffffff">3</text><text x="175.43" y="384.00" font-size="10" text-anchor="middle" fill="#000000">3</text><text x="224.57" y="384.00" font-size="10" text-anchor="middle" stroke="#ffffff" stroke-width="3"
+      stroke-linejoin="round" fill="#ffffff">4</text><text x="224.57" y="384.00" font-size="10" text-anchor="middle" fill="#000000">4</text><text x="273.71" y="384.00" font-size="10" text-anchor="middle"
+      stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">5</text><text x="273.71" y="384.00" font-size="10" text-anchor="middle" fill="#000000">5</text><text x="322.86" y="384.00"
+      font-size="10" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">6</text><text x="322.86" y="384.00" font-size="10" text-anchor="middle" fill="#000000">6</text><text
+      x="372.00" y="384.00" font-size="10" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">7</text><text x="372.00" y="384.00" font-size="10" text-anchor="middle"
+      fill="#000000">7</text><text x="20.00" y="375.00" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">0</text><text x="20.00" y="375.00" font-size="10"
+      text-anchor="end" fill="#000000">0</text><text x="20.00" y="336.78" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">20</text><text x="20.00"
+      y="336.78" font-size="10" text-anchor="end" fill="#000000">20</text><text x="20.00" y="298.56" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">40</text><text
+      x="20.00" y="298.56" font-size="10" text-anchor="end" fill="#000000">40</text><text x="20.00" y="260.33" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round"
+      fill="#ffffff">60</text><text x="20.00" y="260.33" font-size="10" text-anchor="end" fill="#000000">60</text><text x="20.00" y="222.11" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3"
+      stroke-linejoin="round" fill="#ffffff">80</text><text x="20.00" y="222.11" font-size="10" text-anchor="end" fill="#000000">80</text><text x="20.00" y="183.89" font-size="10" text-anchor="end" stroke="#ffffff"
+      stroke-width="3" stroke-linejoin="round" fill="#ffffff">100</text><text x="20.00" y="183.89" font-size="10" text-anchor="end" fill="#000000">100</text><text x="20.00" y="145.67" font-size="10" text-anchor="end"
+      stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">120</text><text x="20.00" y="145.67" font-size="10" text-anchor="end" fill="#000000">120</text><text x="20.00" y="107.44" font-size="10"
+      text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">140</text><text x="20.00" y="107.44" font-size="10" text-anchor="end" fill="#000000">140</text><text x="20.00"
+      y="69.22" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">160</text><text x="20.00" y="69.22" font-size="10" text-anchor="end" fill="#000000">160</text><text
+      x="20.00" y="31.00" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">180</text><text x="20.00" y="31.00" font-size="10" text-anchor="end" fill="#000000">180</text></svg>
   cause_tags: []
   concept_tags:
   - motion.area_time_graph_segment
@@ -93,10 +104,21 @@ visual_svg: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width=
   x2="372.00" y2="180.89" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="142.67" x2="372.00" y2="142.67" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="104.44" x2="372.00" y2="104.44"
   stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="66.22" x2="372.00" y2="66.22" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="28.00" x2="372.00" y2="28.00" stroke="#bbbbbb" stroke-width="0.5"/><line
   x1="28.00" y1="372.00" x2="372.00" y2="372.00" stroke="#000000" stroke-width="1.5"/><line x1="28.00" y1="28.00" x2="28.00" y2="372.00" stroke="#000000" stroke-width="1.5"/><text x="77.14" y="384.00" font-size="10"
-  text-anchor="middle" fill="#000000">1</text><text x="126.29" y="384.00" font-size="10" text-anchor="middle" fill="#000000">2</text><text x="175.43" y="384.00" font-size="10" text-anchor="middle" fill="#000000">3</text><text
-  x="224.57" y="384.00" font-size="10" text-anchor="middle" fill="#000000">4</text><text x="273.71" y="384.00" font-size="10" text-anchor="middle" fill="#000000">5</text><text x="322.86" y="384.00" font-size="10"
-  text-anchor="middle" fill="#000000">6</text><text x="372.00" y="384.00" font-size="10" text-anchor="middle" fill="#000000">7</text><text x="20.00" y="375.00" font-size="10" text-anchor="end" fill="#000000">0</text><text
-  x="20.00" y="336.78" font-size="10" text-anchor="end" fill="#000000">20</text><text x="20.00" y="298.56" font-size="10" text-anchor="end" fill="#000000">40</text><text x="20.00" y="260.33" font-size="10"
-  text-anchor="end" fill="#000000">60</text><text x="20.00" y="222.11" font-size="10" text-anchor="end" fill="#000000">80</text><text x="20.00" y="183.89" font-size="10" text-anchor="end" fill="#000000">100</text><text
-  x="20.00" y="145.67" font-size="10" text-anchor="end" fill="#000000">120</text><text x="20.00" y="107.44" font-size="10" text-anchor="end" fill="#000000">140</text><text x="20.00" y="69.22" font-size="10"
-  text-anchor="end" fill="#000000">160</text><text x="20.00" y="31.00" font-size="10" text-anchor="end" fill="#000000">180</text></svg>
+  text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">1</text><text x="77.14" y="384.00" font-size="10" text-anchor="middle" fill="#000000">1</text><text x="126.29"
+  y="384.00" font-size="10" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">2</text><text x="126.29" y="384.00" font-size="10" text-anchor="middle" fill="#000000">2</text><text
+  x="175.43" y="384.00" font-size="10" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">3</text><text x="175.43" y="384.00" font-size="10" text-anchor="middle"
+  fill="#000000">3</text><text x="224.57" y="384.00" font-size="10" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">4</text><text x="224.57" y="384.00" font-size="10"
+  text-anchor="middle" fill="#000000">4</text><text x="273.71" y="384.00" font-size="10" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">5</text><text x="273.71"
+  y="384.00" font-size="10" text-anchor="middle" fill="#000000">5</text><text x="322.86" y="384.00" font-size="10" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">6</text><text
+  x="322.86" y="384.00" font-size="10" text-anchor="middle" fill="#000000">6</text><text x="372.00" y="384.00" font-size="10" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round"
+  fill="#ffffff">7</text><text x="372.00" y="384.00" font-size="10" text-anchor="middle" fill="#000000">7</text><text x="20.00" y="375.00" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3"
+  stroke-linejoin="round" fill="#ffffff">0</text><text x="20.00" y="375.00" font-size="10" text-anchor="end" fill="#000000">0</text><text x="20.00" y="336.78" font-size="10" text-anchor="end" stroke="#ffffff"
+  stroke-width="3" stroke-linejoin="round" fill="#ffffff">20</text><text x="20.00" y="336.78" font-size="10" text-anchor="end" fill="#000000">20</text><text x="20.00" y="298.56" font-size="10" text-anchor="end"
+  stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">40</text><text x="20.00" y="298.56" font-size="10" text-anchor="end" fill="#000000">40</text><text x="20.00" y="260.33" font-size="10"
+  text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">60</text><text x="20.00" y="260.33" font-size="10" text-anchor="end" fill="#000000">60</text><text x="20.00"
+  y="222.11" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">80</text><text x="20.00" y="222.11" font-size="10" text-anchor="end" fill="#000000">80</text><text
+  x="20.00" y="183.89" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">100</text><text x="20.00" y="183.89" font-size="10" text-anchor="end" fill="#000000">100</text><text
+  x="20.00" y="145.67" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">120</text><text x="20.00" y="145.67" font-size="10" text-anchor="end" fill="#000000">120</text><text
+  x="20.00" y="107.44" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">140</text><text x="20.00" y="107.44" font-size="10" text-anchor="end" fill="#000000">140</text><text
+  x="20.00" y="69.22" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">160</text><text x="20.00" y="69.22" font-size="10" text-anchor="end" fill="#000000">160</text><text
+  x="20.00" y="31.00" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">180</text><text x="20.00" y="31.00" font-size="10" text-anchor="end" fill="#000000">180</text></svg>

@@ -35,9 +35,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - radical.simplify_form
-  explanation: 'まず、根号の中の大きな数を、平方の因数と残りに分ける。（平方の因数に分ける）
+  explanation: 'まず、根号の中の大きな数を、平方の因数と残りに分ける。（3 × √(36 × 5)）
 
-    次に、それぞれの平方の因数を根号の外に出す。（根号の外に出す）
+    次に、それぞれの平方の因数を根号の外に出す。（3 × 6√5）
 
     最後に、根号の中をできるだけ簡単な形に直す。（18√5）'
   hints:
@@ -49,12 +49,12 @@ sub_questions:
   - args: []
     narration: 根号の中の大きな数を、平方の因数と残りに分ける。
     op: factor_into_squares
-    result_display: 平方の因数に分ける
+    result_display: 3 × √(36 × 5)
     result_srepr: ''
   - args: []
     narration: それぞれの平方の因数を根号の外に出す。
     op: take_roots_outside
-    result_display: 根号の外に出す
+    result_display: 3 × 6√5
     result_srepr: ''
   - args: []
     narration: 根号の中をできるだけ簡単な形に直す。

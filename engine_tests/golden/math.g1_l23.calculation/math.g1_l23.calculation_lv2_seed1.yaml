@@ -35,7 +35,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - equation.solve_by_expand_parens
-  explanation: 'まず、分配法則を使って、かっこを外す。（かっこを外す）
+  explanation: 'まず、分配法則を使って、かっこを外す。（2x - 10 = 6x - 46）
 
     次に、文字の項を左辺に、数の項を右辺に移項し、両辺を整理して解く。（x = 9）'
   hints:
@@ -46,7 +46,7 @@ sub_questions:
   - args: []
     narration: 分配法則を使って、かっこを外す。
     op: expand_parentheses
-    result_display: かっこを外す
+    result_display: 2x - 10 = 6x - 46
     result_srepr: Integer(9)
   - args: []
     narration: 文字の項を左辺に、数の項を右辺に移項し、両辺を整理して解く。

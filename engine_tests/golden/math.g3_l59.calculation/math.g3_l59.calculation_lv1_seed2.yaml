@@ -33,7 +33,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - sample_survey.ratio_estimate
-  explanation: 'まず、標本での該当する個数の割合が、母集団全体でもおよそ等しいとみて比例式をつくる。（標本比率と母集団の比率が等しいとみて比例式をつくる）
+  explanation: 'まず、標本での該当する個数の割合が、母集団全体でもおよそ等しいとみて比例式をつくる。（136 : 168 = x : 5712）
 
     次に、比例式を解き、母集団に含まれるおよその個数を求める。（4624）'
   hints:
@@ -44,7 +44,7 @@ sub_questions:
   - args: []
     narration: 標本での該当する個数の割合が、母集団全体でもおよそ等しいとみて比例式をつくる。
     op: form_ratio_equation
-    result_display: 標本比率と母集団の比率が等しいとみて比例式をつくる
+    result_display: '136 : 168 = x : 5712'
     result_srepr: ''
   - args: []
     narration: 比例式を解き、母集団に含まれるおよその個数を求める。

@@ -33,7 +33,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - circle.two_chords_intersection_angle
-  explanation: 'まず、円周角の定理から、それぞれの円周角に対応する弧の大きさを求める。（2つの円周角に対応する弧の大きさを求める）
+  explanation: 'まず、円周角の定理から、それぞれの円周角に対応する弧の大きさを求める。（130° と 142°）
 
     次に、円周の全体と2つの弧の大きさの関係から、2本の弦の交点にできる角の大きさを求める。（44°）'
   hints:
@@ -44,7 +44,7 @@ sub_questions:
   - args: []
     narration: 円周角の定理から、それぞれの円周角に対応する弧の大きさを求める。
     op: identify_arcs_from_inscribed_angles
-    result_display: 2つの円周角に対応する弧の大きさを求める
+    result_display: 130° と 142°
     result_srepr: ''
   - args: []
     narration: 円周の全体と2つの弧の大きさの関係から、2本の弦の交点にできる角の大きさを求める。

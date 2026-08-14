@@ -35,7 +35,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - polynomial.factor_perfect_square
-  explanation: 'まず、はじめと終わりが平方で、中央が積の2倍になっていることを確かめる。（平方の形を確かめる）
+  explanation: 'まず、はじめと終わりが平方で、中央が積の2倍になっていることを確かめる。（m² と 1²、中央は 2 × m × 1）
 
     次に、1次式の平方の形で表す。（(m + 1)²）'
   hints:
@@ -46,7 +46,7 @@ sub_questions:
   - args: []
     narration: はじめと終わりが平方で、中央が積の2倍になっていることを確かめる。
     op: recognize_perfect_square
-    result_display: 平方の形を確かめる
+    result_display: m² と 1²、中央は 2 × m × 1
     result_srepr: ''
   - args: []
     narration: 1次式の平方の形で表す。

@@ -65,7 +65,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - proof_logic_terms.converse_and_counterexample
-  explanation: 'まず、反例は、逆の仮定は満たすのに逆の結論は満たさない例のことである。この2つを同時に見る必要がある。（反例の条件を確かめる）
+  explanation: 'まず、反例は、逆の仮定は満たすのに逆の結論は満たさない例のことである。この2つを同時に見る必要がある。（逆の仮定は満たし、逆の結論は満たさない例）
 
     次に、候補を1つずつ確かめて、逆の仮定を満たし、しかも逆の結論を満たさないものを選ぶ。それが1つ見つかれば、逆は正しくないと言える。（k=-4、k''=14）'
   hints:
@@ -76,7 +76,7 @@ sub_questions:
   - args: []
     narration: 反例は、逆の仮定は満たすのに逆の結論は満たさない例のことである。この2つを同時に見る必要がある。
     op: state_counterexample_condition
-    result_display: 反例の条件を確かめる
+    result_display: 逆の仮定は満たし、逆の結論は満たさない例
     result_srepr: ''
   - args: []
     narration: 候補を1つずつ確かめて、逆の仮定を満たし、しかも逆の結論を満たさないものを選ぶ。それが1つ見つかれば、逆は正しくないと言える。

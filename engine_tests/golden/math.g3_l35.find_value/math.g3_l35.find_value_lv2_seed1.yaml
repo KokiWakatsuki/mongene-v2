@@ -33,7 +33,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - quadratic_function.rate_of_change
-  explanation: 'まず、x の変域の両端の値を、それぞれ式に代入して y の値を求める。（両端の y の値を求める）
+  explanation: 'まず、x の変域の両端の値を、それぞれ式に代入して y の値を求める。（x = 2 のとき y = 24、x = 8 のとき y = 384）
 
     次に、y の増加量を x の増加量で割り、変化の割合を求める。（60）'
   hints:
@@ -44,7 +44,7 @@ sub_questions:
   - args: []
     narration: x の変域の両端の値を、それぞれ式に代入して y の値を求める。
     op: evaluate_endpoints_roc
-    result_display: 両端の y の値を求める
+    result_display: x = 2 のとき y = 24、x = 8 のとき y = 384
     result_srepr: ''
   - args: []
     narration: y の増加量を x の増加量で割り、変化の割合を求める。

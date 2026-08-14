@@ -39,7 +39,7 @@ sub_questions:
 
     次に、その量を x を使って両辺に表し、方程式をつくる。（75(x + 6) = 165x）
 
-    次に、分配法則を使って、かっこを外す。（かっこを外す）
+    次に、分配法則を使って、かっこを外す。（75x + 450 = 165x）
 
     最後に、文字の項を左辺に、数の項を右辺に移項し、両辺を整理して解く。（x = 5）'
   hints:
@@ -62,7 +62,7 @@ sub_questions:
   - args: []
     narration: 分配法則を使って、かっこを外す。
     op: expand_parentheses
-    result_display: かっこを外す
+    result_display: 75x + 450 = 165x
     result_srepr: Integer(5)
   - args: []
     narration: 文字の項を左辺に、数の項を右辺に移項し、両辺を整理して解く。

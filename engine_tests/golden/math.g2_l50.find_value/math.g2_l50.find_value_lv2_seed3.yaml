@@ -33,7 +33,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - equal_area.transform_value
-  explanation: 'まず、等積変形をする前の、もとの図形の面積を読み取る。（もとの図形の面積を読み取る）
+  explanation: 'まず、等積変形をする前の、もとの図形の面積を読み取る。（101）
 
     次に、等積変形は面積を変えずに図形の形だけを変える操作であることから、つくった三角形の面積を求める。（101）'
   hints:
@@ -44,7 +44,7 @@ sub_questions:
   - args: []
     narration: 等積変形をする前の、もとの図形の面積を読み取る。
     op: identify_original_area
-    result_display: もとの図形の面積を読み取る
+    result_display: '101'
     result_srepr: ''
   - args: []
     narration: 等積変形は面積を変えずに図形の形だけを変える操作であることから、つくった三角形の面積を求める。

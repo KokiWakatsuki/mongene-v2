@@ -33,9 +33,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - signed_number.order_numbers
-  explanation: 'まず、分数と小数がまざっているので、大きさを比べやすい形にそろえる。（分数・小数を比べやすい形にそろえる）
+  explanation: 'まず、分数と小数がまざっているので、大きさを比べやすい形にそろえる。（3、4/7、17/10、-3/2）
 
-    次に、それぞれの数が数直線上でどの位置にあるかで大小を比べる（負の数は絶対値が大きいほど小さい）。（数直線上での位置で大小を比べる）
+    次に、それぞれの数が数直線上でどの位置にあるかで大小を比べる（負の数は絶対値が大きいほど小さい）。（-3/2、4/7、17/10、3）
 
     最後に、小さい順（または大きい順）に並べかえて答える。（-3/2, 4/7, 1.7, 3）'
   hints:
@@ -47,12 +47,12 @@ sub_questions:
   - args: []
     narration: 分数と小数がまざっているので、大きさを比べやすい形にそろえる。
     op: convert_to_common_form
-    result_display: 分数・小数を比べやすい形にそろえる
+    result_display: 3、4/7、17/10、-3/2
     result_srepr: Tuple(Rational(-3, 2), Rational(4, 7), Rational(17, 10), Integer(3))
   - args: []
     narration: それぞれの数が数直線上でどの位置にあるかで大小を比べる（負の数は絶対値が大きいほど小さい）。
     op: compare_on_number_line
-    result_display: 数直線上での位置で大小を比べる
+    result_display: -3/2、4/7、17/10、3
     result_srepr: Tuple(Rational(-3, 2), Rational(4, 7), Rational(17, 10), Integer(3))
   - args: []
     narration: 小さい順（または大きい順）に並べかえて答える。

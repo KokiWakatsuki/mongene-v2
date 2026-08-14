@@ -35,7 +35,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - transformation_invariant.rotation
-  explanation: 'まず、図形を回転移動する前と後で、対応する点と回転の中心との関係を見比べる。（図形を回転移動する前と後で、対応する点と回転の中心との関係を見比べる。）
+  explanation: 'まず、図形を回転移動する前と後で、対応する点と回転の中心との関係を見比べる。
 
     次に、移動の性質として、その関係がつねに成り立つかどうかを判別する。（等しい）'
   hints:
@@ -46,7 +46,7 @@ sub_questions:
   - args: []
     narration: 図形を回転移動する前と後で、対応する点と回転の中心との関係を見比べる。
     op: compare_before_after
-    result_display: 図形を回転移動する前と後で、対応する点と回転の中心との関係を見比べる。
+    result_display: ''
     result_srepr: rotation
   - args: []
     narration: 移動の性質として、その関係がつねに成り立つかどうかを判別する。

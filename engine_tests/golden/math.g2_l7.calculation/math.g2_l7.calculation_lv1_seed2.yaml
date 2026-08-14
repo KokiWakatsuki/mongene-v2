@@ -33,7 +33,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - polynomial.consecutive_number_sum
-  explanation: 'まず、それぞれの数を表す式の和を、かっこを外して書き出す。（かっこを外して和を書き出す）
+  explanation: 'まず、それぞれの数を表す式の和を、かっこを外して書き出す。（f + f + 1）
 
     次に、同類項をまとめて、1つの式にする。（2f + 1）'
   hints:
@@ -44,7 +44,7 @@ sub_questions:
   - args: []
     narration: それぞれの数を表す式の和を、かっこを外して書き出す。
     op: expand_expression
-    result_display: かっこを外して和を書き出す
+    result_display: f + f + 1
     result_srepr: Add(Mul(Integer(2), Symbol('f')), Integer(1))
   - args: []
     narration: 同類項をまとめて、1つの式にする。

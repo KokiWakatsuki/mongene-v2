@@ -33,7 +33,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - polygon_angle.sides_from_interior_angle
-  explanation: 'まず、内角ととなり合う外角は、一直線の角(平角)から内角をひいて求める。（内角ととなり合う外角の大きさを求める）
+  explanation: 'まず、内角ととなり合う外角は、一直線の角(平角)から内角をひいて求める。（72°）
 
     次に、外角の和がつねに一定であることから、その値を1つの外角でわって辺の数を求める。（5）'
   hints:
@@ -44,7 +44,7 @@ sub_questions:
   - args: []
     narration: 内角ととなり合う外角は、一直線の角(平角)から内角をひいて求める。
     op: compute_exterior_from_interior
-    result_display: 内角ととなり合う外角の大きさを求める
+    result_display: 72°
     result_srepr: ''
   - args: []
     narration: 外角の和がつねに一定であることから、その値を1つの外角でわって辺の数を求める。

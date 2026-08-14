@@ -35,7 +35,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - proportion.judge_graph_direction
-  explanation: 'まず、比例の式 y=ax の比例定数 a の符号（正か負か）を確認する。（比例定数の符号を確認する）
+  explanation: 'まず、比例の式 y=ax の比例定数 a の符号（正か負か）を確認する。（aは負）
 
     次に、aが正なら右上がり、負なら右下がりの直線になる。どちらも必ず原点を通る。（右下がりの直線になる（原点を通る））'
   hints:
@@ -46,7 +46,7 @@ sub_questions:
   - args: []
     narration: 比例の式 y=ax の比例定数 a の符号（正か負か）を確認する。
     op: check_sign
-    result_display: 比例定数の符号を確認する
+    result_display: aは負
     result_srepr: negative
   - args: []
     narration: aが正なら右上がり、負なら右下がりの直線になる。どちらも必ず原点を通る。

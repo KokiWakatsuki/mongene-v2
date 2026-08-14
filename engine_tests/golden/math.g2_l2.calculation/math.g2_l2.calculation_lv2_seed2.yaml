@@ -35,9 +35,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - polynomial.combine_like_terms_mixed
-  explanation: 'まず、式の中から、文字の部分が同じ項（同類項）の組を見分ける。（文字の部分が同じ項どうしを見分ける）
+  explanation: 'まず、式の中から、文字の部分が同じ項（同類項）の組を見分ける。（a の項、b の項）
 
-    次に、文字の部分が同じ項（同類項）どうしをまとめる。（文字の部分が同じ項どうしをまとめる）
+    次に、文字の部分が同じ項（同類項）どうしをまとめる。（(-2a + 7a) + (b + 8b)）
 
     最後に、まとめた同類項の係数を計算し、式を簡単にする。（5a + 9b）'
   hints:
@@ -49,12 +49,12 @@ sub_questions:
   - args: []
     narration: 式の中から、文字の部分が同じ項（同類項）の組を見分ける。
     op: identify_like_terms
-    result_display: 文字の部分が同じ項どうしを見分ける
+    result_display: a の項、b の項
     result_srepr: ''
   - args: []
     narration: 文字の部分が同じ項（同類項）どうしをまとめる。
     op: group_like_terms
-    result_display: 文字の部分が同じ項どうしをまとめる
+    result_display: (-2a + 7a) + (b + 8b)
     result_srepr: Add(Mul(Integer(5), Symbol('a')), Mul(Integer(9), Symbol('b')))
   - args: []
     narration: まとめた同類項の係数を計算し、式を簡単にする。

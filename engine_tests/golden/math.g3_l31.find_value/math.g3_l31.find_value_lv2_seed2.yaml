@@ -33,7 +33,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - motion.area_single_segment
-  explanation: 'まず、経過した時間と速さから、点 P が動いた道のりを求め、その位置の座標を決める。（点 P の座標を決める）
+  explanation: 'まず、経過した時間と速さから、点 P が動いた道のりを求め、その位置の座標を決める。（P(6, 0)）
 
     次に、3点の座標から、三角形の面積を求める公式で面積を計算する。（78）'
   hints:
@@ -44,7 +44,7 @@ sub_questions:
   - args: []
     narration: 経過した時間と速さから、点 P が動いた道のりを求め、その位置の座標を決める。
     op: locate_point_p
-    result_display: 点 P の座標を決める
+    result_display: P(6, 0)
     result_srepr: ''
   - args: []
     narration: 3点の座標から、三角形の面積を求める公式で面積を計算する。

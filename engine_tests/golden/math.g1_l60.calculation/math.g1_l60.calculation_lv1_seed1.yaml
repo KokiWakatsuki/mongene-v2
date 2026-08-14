@@ -35,7 +35,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - scientific_notation.express_basic
-  explanation: 'まず、小数点を、一の位が1以上10未満になる位置まで動かし、動かした桁数を数える。（小数点の位置を決める）
+  explanation: 'まず、小数点を、一の位が1以上10未満になる位置まで動かし、動かした桁数を数える。（9.78（小数点を3桁動かす））
 
     次に、1以上10未満の数と、10を動かした桁数だけ累乗した数との積の形に表す。（9.78×10³）'
   hints:
@@ -46,7 +46,7 @@ sub_questions:
   - args: []
     narration: 小数点を、一の位が1以上10未満になる位置まで動かし、動かした桁数を数える。
     op: locate_decimal_point
-    result_display: 小数点の位置を決める
+    result_display: 9.78（小数点を3桁動かす）
     result_srepr: 9.78E3
   - args: []
     narration: 1以上10未満の数と、10を動かした桁数だけ累乗した数との積の形に表す。

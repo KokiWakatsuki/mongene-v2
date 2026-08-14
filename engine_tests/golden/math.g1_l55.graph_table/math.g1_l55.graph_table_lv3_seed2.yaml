@@ -1,0 +1,83 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - frequency_polygon.compare_groups_by_relative_frequency
+  provenance:
+    git_commit: ''
+    recipe: math.compare_relative_frequency_chart
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: df_condition_v1
+    tier: T1
+  requested:
+    form: graph_table
+    level: 3
+    subject: math
+    unit: g1_l55
+  resolved:
+    form: graph_table
+    level: 3
+    subject: math
+    unit: g1_l55
+  seed: 2
+  signature: compare_groups_by_relative_frequency_chart
+problem_ref: 662138724c605772
+problem_text: A校の生徒28人とB校の生徒30人の身長を調べ、145cmから5cmずつの同じ階級に分けて、2つの度数折れ線を1つのグラフに重ねて表した（A校は実線、B校は破線）。160cm以上165cm未満の階級について、それぞれの相対度数をグラフから読み取って求め、この階級の割合が大きいのはどちらの学校か答えよ。
+sub_questions:
+- answer:
+    display: 'A: 0.25、B: 0.3（Bのほうが大きい）'
+    kind: symbolic
+    srepr: Tuple(Rational(1, 4), Rational(3, 10))
+  cause_tags: []
+  concept_tags:
+  - frequency_polygon.compare_groups_by_relative_frequency
+  explanation: 'まず、それぞれの集団について、対象の階級の度数を総度数でわり、相対度数を求める。（A 0.25、B 0.3）
+
+    次に、求めた相対度数どうしを比べ、値が大きいほうを答える。（A: 0.25、B: 0.3（Bのほうが大きい））'
+  hints:
+  - それぞれの集団について、対象の階級の度数を総度数でわり、相対度数を求める。
+  label: (1)
+  prompt_text: 表から読み取りなさい。
+  solution_steps:
+  - args: []
+    narration: それぞれの集団について、対象の階級の度数を総度数でわり、相対度数を求める。
+    op: compute_relative_frequency_each
+    result_display: A 0.25、B 0.3
+    result_srepr: ''
+  - args: []
+    narration: 求めた相対度数どうしを比べ、値が大きいほうを答える。
+    op: compare_relative_frequency
+    result_display: 'A: 0.25、B: 0.3（Bのほうが大きい）'
+    result_srepr: Tuple(Rational(1, 4), Rational(3, 10))
+visual_svg: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 400" width="460" height="400" font-family="Hiragino Sans, Hiragino Kaku Gothic ProN, Noto Sans JP, Yu Gothic, Meiryo, sans-serif"><rect
+  x="0" y="0" width="460" height="400" fill="#ffffff" stroke="none"/><line x1="40.00" y1="366.00" x2="440.00" y2="366.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="40.00" y1="331.40" x2="440.00" y2="331.40"
+  stroke="#bbbbbb" stroke-width="0.5"/><line x1="40.00" y1="296.80" x2="440.00" y2="296.80" stroke="#bbbbbb" stroke-width="0.5"/><line x1="40.00" y1="262.20" x2="440.00" y2="262.20" stroke="#bbbbbb" stroke-width="0.5"/><line
+  x1="40.00" y1="227.60" x2="440.00" y2="227.60" stroke="#bbbbbb" stroke-width="0.5"/><line x1="40.00" y1="193.00" x2="440.00" y2="193.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="40.00" y1="158.40"
+  x2="440.00" y2="158.40" stroke="#bbbbbb" stroke-width="0.5"/><line x1="40.00" y1="123.80" x2="440.00" y2="123.80" stroke="#bbbbbb" stroke-width="0.5"/><line x1="40.00" y1="89.20" x2="440.00" y2="89.20"
+  stroke="#bbbbbb" stroke-width="0.5"/><line x1="40.00" y1="54.60" x2="440.00" y2="54.60" stroke="#bbbbbb" stroke-width="0.5"/><line x1="40.00" y1="20.00" x2="440.00" y2="20.00" stroke="#bbbbbb" stroke-width="0.5"/><line
+  x1="40.00" y1="366.00" x2="440.00" y2="366.00" stroke="#000000" stroke-width="1.5"/><line x1="40.00" y1="20.00" x2="40.00" y2="366.00" stroke="#000000" stroke-width="1.5"/><polyline points="40.00,366.00
+  106.67,123.80 173.33,227.60 240.00,89.20 306.67,123.80 373.33,296.80 440.00,366.00" fill="none" stroke="#000000" stroke-width="2.5"/><circle cx="40.00" cy="366.00" r="3" fill="#000000"/><circle cx="106.67"
+  cy="123.80" r="3" fill="#000000"/><circle cx="173.33" cy="227.60" r="3" fill="#000000"/><circle cx="240.00" cy="89.20" r="3" fill="#000000"/><circle cx="306.67" cy="123.80" r="3" fill="#000000"/><circle
+  cx="373.33" cy="296.80" r="3" fill="#000000"/><circle cx="440.00" cy="366.00" r="3" fill="#000000"/><polyline points="40.00,366.00 106.67,193.00 173.33,54.60 240.00,296.80 306.67,54.60 373.33,193.00 440.00,366.00"
+  fill="none" stroke="#000000" stroke-width="2.5" stroke-dasharray="6 3"/><circle cx="40.00" cy="366.00" r="3" fill="#000000"/><circle cx="106.67" cy="193.00" r="3" fill="#000000"/><circle cx="173.33" cy="54.60"
+  r="3" fill="#000000"/><circle cx="240.00" cy="296.80" r="3" fill="#000000"/><circle cx="306.67" cy="54.60" r="3" fill="#000000"/><circle cx="373.33" cy="193.00" r="3" fill="#000000"/><circle cx="440.00"
+  cy="366.00" r="3" fill="#000000"/><text x="73.33" y="380.00" font-size="10" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">145</text><text x="73.33" y="380.00"
+  font-size="10" text-anchor="middle" fill="#000000">145</text><text x="140.00" y="380.00" font-size="10" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">150</text><text
+  x="140.00" y="380.00" font-size="10" text-anchor="middle" fill="#000000">150</text><text x="206.67" y="380.00" font-size="10" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round"
+  fill="#ffffff">155</text><text x="206.67" y="380.00" font-size="10" text-anchor="middle" fill="#000000">155</text><text x="273.33" y="380.00" font-size="10" text-anchor="middle" stroke="#ffffff" stroke-width="3"
+  stroke-linejoin="round" fill="#ffffff">160</text><text x="273.33" y="380.00" font-size="10" text-anchor="middle" fill="#000000">160</text><text x="340.00" y="380.00" font-size="10" text-anchor="middle"
+  stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">165</text><text x="340.00" y="380.00" font-size="10" text-anchor="middle" fill="#000000">165</text><text x="406.67" y="380.00"
+  font-size="10" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">170</text><text x="406.67" y="380.00" font-size="10" text-anchor="middle" fill="#000000">170</text><text
+  x="34.00" y="369.00" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">0</text><text x="34.00" y="369.00" font-size="10" text-anchor="end" fill="#000000">0</text><text
+  x="34.00" y="334.40" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">1</text><text x="34.00" y="334.40" font-size="10" text-anchor="end" fill="#000000">1</text><text
+  x="34.00" y="299.80" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">2</text><text x="34.00" y="299.80" font-size="10" text-anchor="end" fill="#000000">2</text><text
+  x="34.00" y="265.20" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">3</text><text x="34.00" y="265.20" font-size="10" text-anchor="end" fill="#000000">3</text><text
+  x="34.00" y="230.60" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">4</text><text x="34.00" y="230.60" font-size="10" text-anchor="end" fill="#000000">4</text><text
+  x="34.00" y="196.00" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">5</text><text x="34.00" y="196.00" font-size="10" text-anchor="end" fill="#000000">5</text><text
+  x="34.00" y="161.40" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">6</text><text x="34.00" y="161.40" font-size="10" text-anchor="end" fill="#000000">6</text><text
+  x="34.00" y="126.80" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">7</text><text x="34.00" y="126.80" font-size="10" text-anchor="end" fill="#000000">7</text><text
+  x="34.00" y="92.20" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">8</text><text x="34.00" y="92.20" font-size="10" text-anchor="end" fill="#000000">8</text><text
+  x="34.00" y="57.60" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">9</text><text x="34.00" y="57.60" font-size="10" text-anchor="end" fill="#000000">9</text><text
+  x="34.00" y="23.00" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">10</text><text x="34.00" y="23.00" font-size="10" text-anchor="end" fill="#000000">10</text></svg>

@@ -33,9 +33,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - quartile.compute_q1_q3_iqr
-  explanation: 'まず、データを大きさの順に並べ、中央値を境に下組と上組に分ける。（中央値を境に下組と上組に分ける）
+  explanation: 'まず、データを大きさの順に並べ、中央値を境に下組と上組に分ける。（下組 1、2、3、9、22 / 上組 33、35、40、43、49）
 
-    次に、下組の中央値を第一四分位数、上組の中央値を第三四分位数とする。（下組・上組それぞれの中央値を求める）
+    次に、下組の中央値を第一四分位数、上組の中央値を第三四分位数とする。（第1四分位数 3、第3四分位数 40）
 
     最後に、上組の中央値から下組の中央値をひき、四分位範囲を求める。（第1四分位数 3、第3四分位数 40、四分位範囲 37）'
   hints:
@@ -47,12 +47,12 @@ sub_questions:
   - args: []
     narration: データを大きさの順に並べ、中央値を境に下組と上組に分ける。
     op: split_into_halves
-    result_display: 中央値を境に下組と上組に分ける
+    result_display: 下組 1、2、3、9、22 / 上組 33、35、40、43、49
     result_srepr: ''
   - args: []
     narration: 下組の中央値を第一四分位数、上組の中央値を第三四分位数とする。
     op: compute_q1_q3
-    result_display: 下組・上組それぞれの中央値を求める
+    result_display: 第1四分位数 3、第3四分位数 40
     result_srepr: ''
   - args: []
     narration: 上組の中央値から下組の中央値をひき、四分位範囲を求める。

@@ -35,7 +35,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - number.compare_magnitude
-  explanation: 'まず、2つの数を数直線上に置き、右にあるほうが大きいと考える。（2数を数直線上の位置で比べる）
+  explanation: 'まず、2つの数を数直線上に置き、右にあるほうが大きいと考える。（-1 より 5 が右）
 
     次に、負の数どうしでは、絶対値が大きいほど小さいことに注意して大きいほうを選ぶ。（5）'
   hints:
@@ -46,7 +46,7 @@ sub_questions:
   - args: []
     narration: 2つの数を数直線上に置き、右にあるほうが大きいと考える。
     op: compare_on_number_line
-    result_display: 2数を数直線上の位置で比べる
+    result_display: -1 より 5 が右
     result_srepr: Integer(5)
   - args: []
     narration: 負の数どうしでは、絶対値が大きいほど小さいことに注意して大きいほうを選ぶ。

@@ -35,7 +35,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - function.judge_functional_relation
-  explanation: 'まず、xの値を1つ決めたとき、それに対応するyの値がただ1つに決まるかどうかを調べる。（xの値を1つ決めたとき、yの値がただ1つに決まるかを調べる）
+  explanation: 'まず、xの値を1つ決めたとき、それに対応するyの値がただ1つに決まるかどうかを調べる。（ただ1つに決まる）
 
     次に、yの値がただ1つに決まるなら関数であるといえ、決まらなければ関数であるとはいえない。（yはxの関数であるといえる）'
   hints:
@@ -46,7 +46,7 @@ sub_questions:
   - args: []
     narration: xの値を1つ決めたとき、それに対応するyの値がただ1つに決まるかどうかを調べる。
     op: check_unique_determination
-    result_display: xの値を1つ決めたとき、yの値がただ1つに決まるかを調べる
+    result_display: ただ1つに決まる
     result_srepr: functional
   - args: []
     narration: yの値がただ1つに決まるなら関数であるといえ、決まらなければ関数であるとはいえない。

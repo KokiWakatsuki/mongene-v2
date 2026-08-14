@@ -33,7 +33,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - parallel_segment.judge_from_ratio
-  explanation: 'まず、PQ:QBとPD:DAの比が等しいかどうかを比べる。（PQ:QBとPD:DAの比を比べる）
+  explanation: 'まず、PQ:QBとPD:DAの比が等しいかどうかを比べる。（17:11 と 51:28）
 
     次に、平行線と線分の比の定理の逆から、QDとBAが平行であるかどうかを判別する。（平行ではない）'
   hints:
@@ -44,7 +44,7 @@ sub_questions:
   - args: []
     narration: PQ:QBとPD:DAの比が等しいかどうかを比べる。
     op: compare_division_ratios
-    result_display: PQ:QBとPD:DAの比を比べる
+    result_display: 17:11 と 51:28
     result_srepr: ''
   - args: []
     narration: 平行線と線分の比の定理の逆から、QDとBAが平行であるかどうかを判別する。

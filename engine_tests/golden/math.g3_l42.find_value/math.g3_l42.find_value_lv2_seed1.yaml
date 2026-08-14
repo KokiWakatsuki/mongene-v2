@@ -33,7 +33,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - parallel_segment.ratio_length
-  explanation: 'まず、FP∥AB であることから、三角形EFPと三角形EABが相似になることを見つける。（平行線がつくる相似な三角形を見つける）
+  explanation: 'まず、FP∥AB であることから、三角形EFPと三角形EABが相似になることを見つける。（三角形EFP と 三角形EAB）
 
     次に、EF:EA=FP:AB が成り立つことから、辺ABの長さを求める。（16）'
   hints:
@@ -44,7 +44,7 @@ sub_questions:
   - args: []
     narration: FP∥AB であることから、三角形EFPと三角形EABが相似になることを見つける。
     op: identify_similar_triangles_from_parallel
-    result_display: 平行線がつくる相似な三角形を見つける
+    result_display: 三角形EFP と 三角形EAB
     result_srepr: ''
   - args: []
     narration: EF:EA=FP:AB が成り立つことから、辺ABの長さを求める。

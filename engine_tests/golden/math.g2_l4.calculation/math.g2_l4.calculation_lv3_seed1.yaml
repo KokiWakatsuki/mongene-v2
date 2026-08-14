@@ -35,9 +35,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - polynomial.monomial_mul_div_chain
-  explanation: 'まず、÷ を、その式の逆数をかけるかけ算に直す。（÷ を逆数のかけ算に直す）
+  explanation: 'まず、÷ を、その式の逆数をかけるかけ算に直す。（(-12x²y) × (-2/(3x)) × (6xy)）
 
-    次に、係数どうしをかけ算する。（係数どうしをかける）
+    次に、係数どうしをかけ算する。（48）
 
     最後に、同じ文字は指数の和にまとめ、1つの単項式にする。（48x²y²）'
   hints:
@@ -49,12 +49,12 @@ sub_questions:
   - args: []
     narration: ÷ を、その式の逆数をかけるかけ算に直す。
     op: convert_divisions_to_reciprocal
-    result_display: ÷ を逆数のかけ算に直す
+    result_display: (-12x²y) × (-2/(3x)) × (6xy)
     result_srepr: Mul(Integer(48), Pow(Symbol('x'), Integer(2)), Pow(Symbol('y'), Integer(2)))
   - args: []
     narration: 係数どうしをかけ算する。
     op: multiply_coefficients
-    result_display: 係数どうしをかける
+    result_display: '48'
     result_srepr: Mul(Integer(48), Pow(Symbol('x'), Integer(2)), Pow(Symbol('y'), Integer(2)))
   - args: []
     narration: 同じ文字は指数の和にまとめ、1つの単項式にする。

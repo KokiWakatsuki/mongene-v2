@@ -39,7 +39,7 @@ sub_questions:
   - radical.word_problem_square_plot_approx
   explanation: 'まず、正方形の面積は1辺の長さを2乗した値だから、1辺の長さは面積の正の平方根で表せる。（√448）
 
-    次に、根号の中を素因数分解し、平方の因数を見つける。（平方の因数を見つける）
+    次に、根号の中を素因数分解し、平方の因数を見つける。（√(64 × 7)）
 
     最後に、平方の因数を根号の外に出して a√b の形にする。（8√7）'
   hints:
@@ -56,7 +56,7 @@ sub_questions:
   - args: []
     narration: 根号の中を素因数分解し、平方の因数を見つける。
     op: factor_out_square
-    result_display: 平方の因数を見つける
+    result_display: √(64 × 7)
     result_srepr: ''
   - args: []
     narration: 平方の因数を根号の外に出して a√b の形にする。

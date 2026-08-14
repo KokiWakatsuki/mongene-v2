@@ -36,29 +36,29 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - polynomial.expand_various
-  explanation: 'まず、共通する部分を1つの文字に置きかえる。（共通部分を置きかえる）
+  explanation: 'まず、共通する部分をひとかたまりとみる。（((s + t) - 8)((s + t) + 1)）
 
-    次に、置きかえた式に乗法公式をあてはめる。（公式にあてはめる）
+    次に、かたまりのままの式に乗法公式をあてはめる。（(s + t)² - 7(s + t) - 8）
 
-    最後に、置きかえをもとにもどして展開した式を整理する。（s² + 2st - 7s + t² - 7t - 8）'
+    最後に、かたまりをもとの式にもどして、展開した式を整理する。（s² + 2st - 7s + t² - 7t - 8）'
   hints:
-  - 共通する部分を1つの文字に置きかえる。
-  - 置きかえた式に乗法公式をあてはめる。
+  - 共通する部分をひとかたまりとみる。
+  - かたまりのままの式に乗法公式をあてはめる。
   label: (1)
   prompt_text: 式を簡単にしなさい。
   solution_steps:
   - args: []
-    narration: 共通する部分を1つの文字に置きかえる。
+    narration: 共通する部分をひとかたまりとみる。
     op: substitute_common_part
-    result_display: 共通部分を置きかえる
+    result_display: ((s + t) - 8)((s + t) + 1)
     result_srepr: ''
   - args: []
-    narration: 置きかえた式に乗法公式をあてはめる。
+    narration: かたまりのままの式に乗法公式をあてはめる。
     op: apply_formula
-    result_display: 公式にあてはめる
+    result_display: (s + t)² - 7(s + t) - 8
     result_srepr: ''
   - args: []
-    narration: 置きかえをもとにもどして展開した式を整理する。
+    narration: かたまりをもとの式にもどして、展開した式を整理する。
     op: restore_expansion
     result_display: s² + 2st - 7s + t² - 7t - 8
     result_srepr: Add(Pow(Symbol('s'), Integer(2)), Mul(Integer(2), Symbol('s'), Symbol('t')), Mul(Integer(-1), Integer(7), Symbol('s')), Pow(Symbol('t'), Integer(2)), Mul(Integer(-1), Integer(7), Symbol('t')),

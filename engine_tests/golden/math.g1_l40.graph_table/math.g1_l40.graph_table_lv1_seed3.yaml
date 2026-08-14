@@ -55,17 +55,22 @@ sub_questions:
       stroke-width="0.5"/><line x1="28.00" y1="114.00" x2="372.00" y2="114.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="92.50" x2="372.00" y2="92.50" stroke="#bbbbbb" stroke-width="0.5"/><line
       x1="28.00" y1="71.00" x2="372.00" y2="71.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="49.50" x2="372.00" y2="49.50" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="28.00"
       x2="372.00" y2="28.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="200.00" y1="28.00" x2="200.00" y2="372.00" stroke="#000000" stroke-width="1.5"/><path d="M 264.50 307.50 L 307.50 221.50 L 329.00
-      221.50 Z" fill="none" stroke="#000000" stroke-width="2"/><circle cx="264.50" cy="307.50" r="2.5" fill="#000000"/><text x="270.50" y="301.50" font-size="13" fill="#000000">A</text><circle cx="307.50"
-      cy="221.50" r="2.5" fill="#000000"/><text x="313.50" y="215.50" font-size="13" fill="#000000">B</text><circle cx="329.00" cy="221.50" r="2.5" fill="#000000"/><text x="335.00" y="215.50" font-size="13"
-      fill="#000000">C</text><path d="M 135.50 307.50 L 92.50 221.50 L 71.00 221.50 Z" fill="none" stroke="#000000" stroke-width="2" stroke-dasharray="5 4"/><circle cx="135.50" cy="307.50" r="2.5" fill="#000000"/><text
-      x="141.50" y="301.50" font-size="13" fill="#000000">A'</text><circle cx="92.50" cy="221.50" r="2.5" fill="#000000"/><text x="98.50" y="215.50" font-size="13" fill="#000000">B'</text><circle cx="71.00"
-      cy="221.50" r="2.5" fill="#000000"/><text x="77.00" y="215.50" font-size="13" fill="#000000">C'</text></svg>
+      221.50 Z" fill="none" stroke="#000000" stroke-width="2"/><circle cx="264.50" cy="307.50" r="2.5" fill="#000000"/><text x="258.14" y="326.68" font-size="13" text-anchor="end" stroke="#ffffff" stroke-width="3"
+      stroke-linejoin="round" fill="#ffffff">A</text><text x="258.14" y="326.68" font-size="13" text-anchor="end" fill="#000000">A</text><circle cx="307.50" cy="221.50" r="2.5" fill="#000000"/><text x="310.41"
+      y="207.86" font-size="13" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">B</text><text x="310.41" y="207.86" font-size="13" text-anchor="middle" fill="#000000">B</text><circle
+      cx="329.00" cy="221.50" r="2.5" fill="#000000"/><text x="337.49" y="211.01" font-size="13" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">C</text><text
+      x="337.49" y="211.01" font-size="13" text-anchor="start" fill="#000000">C</text><path d="M 135.50 307.50 L 92.50 221.50 L 71.00 221.50 Z" fill="none" stroke="#000000" stroke-width="2" stroke-dasharray="5
+      4"/><circle cx="135.50" cy="307.50" r="2.5" fill="#000000"/><text x="141.86" y="326.68" font-size="13" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">A'</text><text
+      x="141.86" y="326.68" font-size="13" text-anchor="start" fill="#000000">A'</text><circle cx="92.50" cy="221.50" r="2.5" fill="#000000"/><text x="89.59" y="207.86" font-size="13" text-anchor="middle"
+      stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">B'</text><text x="89.59" y="207.86" font-size="13" text-anchor="middle" fill="#000000">B'</text><circle cx="71.00" cy="221.50"
+      r="2.5" fill="#000000"/><text x="62.51" y="211.01" font-size="13" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">C'</text><text x="62.51" y="211.01" font-size="13"
+      text-anchor="end" fill="#000000">C'</text></svg>
   cause_tags: []
   concept_tags:
   - polygon_transform.reflect
-  explanation: 'まず、対称移動の軸がどこにあるかを読み取る。（対称の軸を読み取る）
+  explanation: 'まず、対称移動の軸がどこにあるかを読み取る。
 
-    次に、もとの図形の各頂点を、軸について反対側の同じ距離の位置に折り返す。（各頂点を軸について折り返す）'
+    次に、もとの図形の各頂点を、軸について反対側の同じ距離の位置に折り返す。（(-3, -5)、(-5, -1)、(-6, -1)）'
   hints:
   - 対称移動の軸がどこにあるかを読み取る。
   label: (1)
@@ -74,12 +79,12 @@ sub_questions:
   - args: []
     narration: 対称移動の軸がどこにあるかを読み取る。
     op: identify_axis
-    result_display: 対称の軸を読み取る
+    result_display: ''
     result_srepr: ''
   - args: []
     narration: もとの図形の各頂点を、軸について反対側の同じ距離の位置に折り返す。
     op: reflect_each_vertex
-    result_display: 各頂点を軸について折り返す
+    result_display: (-3, -5)、(-5, -1)、(-6, -1)
     result_srepr: ''
 visual_svg: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400" font-family="Hiragino Sans, Hiragino Kaku Gothic ProN, Noto Sans JP, Yu Gothic, Meiryo, sans-serif"><rect
   x="0" y="0" width="400" height="400" fill="#ffffff" stroke="none"/><line x1="28.00" y1="28.00" x2="28.00" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="50.93" y1="28.00" x2="50.93" y2="372.00"
@@ -96,6 +101,8 @@ visual_svg: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width=
   x1="28.00" y1="150.86" x2="372.00" y2="150.86" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="126.29" x2="372.00" y2="126.29" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="101.71"
   x2="372.00" y2="101.71" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="77.14" x2="372.00" y2="77.14" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="52.57" x2="372.00" y2="52.57"
   stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="28.00" x2="372.00" y2="28.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="188.53" y1="28.00" x2="188.53" y2="372.00" stroke="#000000" stroke-width="1.5"/><path
-  d="M 257.33 322.86 L 303.20 224.57 L 326.13 224.57 Z" fill="none" stroke="#000000" stroke-width="2"/><circle cx="257.33" cy="322.86" r="2.5" fill="#000000"/><text x="263.33" y="316.86" font-size="13"
-  fill="#000000">A</text><circle cx="303.20" cy="224.57" r="2.5" fill="#000000"/><text x="309.20" y="218.57" font-size="13" fill="#000000">B</text><circle cx="326.13" cy="224.57" r="2.5" fill="#000000"/><text
-  x="332.13" y="218.57" font-size="13" fill="#000000">C</text></svg>
+  d="M 257.33 322.86 L 303.20 224.57 L 326.13 224.57 Z" fill="none" stroke="#000000" stroke-width="2"/><circle cx="257.33" cy="322.86" r="2.5" fill="#000000"/><text x="251.29" y="342.22" font-size="13"
+  text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">A</text><text x="251.29" y="342.22" font-size="13" text-anchor="end" fill="#000000">A</text><circle cx="303.20"
+  cy="224.57" r="2.5" fill="#000000"/><text x="305.93" y="210.89" font-size="13" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">B</text><text x="305.93" y="210.89"
+  font-size="13" text-anchor="middle" fill="#000000">B</text><circle cx="326.13" cy="224.57" r="2.5" fill="#000000"/><text x="334.32" y="213.80" font-size="13" text-anchor="start" stroke="#ffffff" stroke-width="3"
+  stroke-linejoin="round" fill="#ffffff">C</text><text x="334.32" y="213.80" font-size="13" text-anchor="start" fill="#000000">C</text></svg>

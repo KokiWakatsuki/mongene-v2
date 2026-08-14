@@ -24,20 +24,20 @@ meta:
   seed: 3
   signature: judge_hyperbola_quadrants
 problem_ref: cc665046d11ea7a4
-problem_text: 反比例y=-23/xのグラフである双曲線について、次の文の正誤を答えよ。「a>0のとき、双曲線は第1象限と第3象限にある。」また、双曲線はx軸・y軸と交わるかどうか答えよ。
+problem_text: 反比例y=-3/xのグラフである双曲線は、座標平面の右上と左下の部分と、左上と右下の部分の、どちらにあるか答えよ。また、双曲線はx軸・y軸と交わるかどうかも答えよ。
 sub_questions:
 - answer:
-    correct: 第二象限と第四象限にある（二つの枝からなり、x軸・y軸と交わらない）
+    correct: 左上と右下の部分にある（二つの枝からなり、x軸・y軸と交わらない）
     distractors:
-    - 第一象限と第三象限にある（二つの枝からなり、x軸・y軸と交わらない）
+    - 右上と左下の部分にある（二つの枝からなり、x軸・y軸と交わらない）
     fact_id: proportion.judge_hyperbola_quadrants
     kind: choice
   cause_tags: []
   concept_tags:
   - inverse_proportion.judge_hyperbola_quadrants
-  explanation: 'まず、反比例の式 y=a/x の比例定数 a の符号（正か負か）を確認する。（比例定数の符号を確認する）
+  explanation: 'まず、反比例の式 y=a/x の比例定数 a の符号（正か負か）を確認する。（aは負）
 
-    次に、aが正なら第一・第三象限、負なら第二・第四象限に双曲線がある。どちらも二つの枝からなり、x軸・y軸と交わらない。（第二象限と第四象限にある（二つの枝からなり、x軸・y軸と交わらない））'
+    次に、aが正なら右上と左下、負なら左上と右下の部分に双曲線がある。どちらも二つの枝からなり、x軸・y軸と交わらない。（左上と右下の部分にある（二つの枝からなり、x軸・y軸と交わらない））'
   hints:
   - 反比例の式 y=a/x の比例定数 a の符号（正か負か）を確認する。
   label: (1)
@@ -46,11 +46,11 @@ sub_questions:
   - args: []
     narration: 反比例の式 y=a/x の比例定数 a の符号（正か負か）を確認する。
     op: check_sign
-    result_display: 比例定数の符号を確認する
+    result_display: aは負
     result_srepr: negative
   - args: []
-    narration: aが正なら第一・第三象限、負なら第二・第四象限に双曲線がある。どちらも二つの枝からなり、x軸・y軸と交わらない。
+    narration: aが正なら右上と左下、負なら左上と右下の部分に双曲線がある。どちらも二つの枝からなり、x軸・y軸と交わらない。
     op: judge_hyperbola_quadrants
-    result_display: 第二象限と第四象限にある（二つの枝からなり、x軸・y軸と交わらない）
-    result_srepr: 第二象限と第四象限にある（二つの枝からなり、x軸・y軸と交わらない）
+    result_display: 左上と右下の部分にある（二つの枝からなり、x軸・y軸と交わらない）
+    result_srepr: 左上と右下の部分にある（二つの枝からなり、x軸・y軸と交わらない）
 visual_svg: null

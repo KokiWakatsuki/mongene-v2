@@ -33,7 +33,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - quadratic_function.y_range
-  explanation: 'まず、x の変域の両端の値を、それぞれ式に代入して y の値を求める。（両端の y の値を求める）
+  explanation: 'まず、x の変域の両端の値を、それぞれ式に代入して y の値を求める。（x = -4 のとき y = 64、x = -2 のとき y = 16）
 
     次に、a の符号に注意して、2つの端点の y の値を大小の順に並べる。（16 ≦ y ≦ 64）'
   hints:
@@ -44,7 +44,7 @@ sub_questions:
   - args: []
     narration: x の変域の両端の値を、それぞれ式に代入して y の値を求める。
     op: evaluate_endpoints
-    result_display: 両端の y の値を求める
+    result_display: x = -4 のとき y = 64、x = -2 のとき y = 16
     result_srepr: ''
   - args: []
     narration: a の符号に注意して、2つの端点の y の値を大小の順に並べる。

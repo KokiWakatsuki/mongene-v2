@@ -35,9 +35,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - signed_number.distributive_trick
-  explanation: 'まず、計算しやすいように、片方の数をきりのよい数と小さな数の和や差に分ける。（きりのよい数と小さな数に分ける）
+  explanation: 'まず、計算しやすいように、片方の数をきりのよい数と小さな数の和や差に分ける。（(30 - 2) × 16）
 
-    次に、分配法則を使って、きりのよい数の積と小さな数の積に分けて計算する。（分配法則で積を2つに分けて計算する）
+    次に、分配法則を使って、きりのよい数の積と小さな数の積に分けて計算する。（30 × 16 - 2 × 16）
 
     最後に、2つの積を合わせて、答えを求める。（448）'
   hints:
@@ -49,12 +49,12 @@ sub_questions:
   - args: []
     narration: 計算しやすいように、片方の数をきりのよい数と小さな数の和や差に分ける。
     op: rewrite_as_round_plus_offset
-    result_display: きりのよい数と小さな数に分ける
+    result_display: (30 - 2) × 16
     result_srepr: Integer(448)
   - args: []
     narration: 分配法則を使って、きりのよい数の積と小さな数の積に分けて計算する。
     op: distribute_over_round
-    result_display: 分配法則で積を2つに分けて計算する
+    result_display: 30 × 16 - 2 × 16
     result_srepr: Integer(448)
   - args: []
     narration: 2つの積を合わせて、答えを求める。

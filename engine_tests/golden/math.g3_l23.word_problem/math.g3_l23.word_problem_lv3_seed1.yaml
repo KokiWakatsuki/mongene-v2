@@ -41,7 +41,7 @@ sub_questions:
 
     次に、両辺を比から出てきた数でわって、縦の長さの2乗の値を求める。（x² = 20）
 
-    次に、根号の中を素因数分解し、平方の因数を見つける。（平方の因数を見つける）
+    次に、根号の中を素因数分解し、平方の因数を見つける。（√(4 × 5)）
 
     最後に、平方の因数を根号の外に出して a√b の形にする。（2√5）'
   hints:
@@ -70,7 +70,7 @@ sub_questions:
   - args: []
     narration: 根号の中を素因数分解し、平方の因数を見つける。
     op: factor_out_square
-    result_display: 平方の因数を見つける
+    result_display: √(4 × 5)
     result_srepr: ''
   - args: []
     narration: 平方の因数を根号の外に出して a√b の形にする。

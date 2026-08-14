@@ -39,7 +39,7 @@ sub_questions:
 
     次に、その量を x を使って両辺に表し、方程式をつくる。（180x + 130(x + 5) = 2510）
 
-    次に、分配法則を使って、かっこを外す。（かっこを外す）
+    次に、分配法則を使って、かっこを外す。（310x + 650 = 2510）
 
     最後に、文字の項を左辺に、数の項を右辺に移項し、両辺を整理して解く。（x = 6）'
   hints:
@@ -62,7 +62,7 @@ sub_questions:
   - args: []
     narration: 分配法則を使って、かっこを外す。
     op: expand_parentheses
-    result_display: かっこを外す
+    result_display: 310x + 650 = 2510
     result_srepr: Integer(6)
   - args: []
     narration: 文字の項を左辺に、数の項を右辺に移項し、両辺を整理して解く。

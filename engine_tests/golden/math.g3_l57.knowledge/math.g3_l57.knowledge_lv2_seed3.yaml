@@ -35,7 +35,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - survey_method.judge_appropriate
-  explanation: 'まず、対象すべてを調べることが、手間や対象の性質から現実的に可能かどうかを調べる。（全部を調べることが現実的に可能かを調べる）
+  explanation: 'まず、対象すべてを調べることが、手間や対象の性質から現実的に可能かどうかを調べる。（全部を調べるのは難しい）
 
     次に、全部を調べるのが難しい・不要な場合は標本調査、そうでない場合は全数調査が適切と判断する。（標本調査で行うのが適切）'
   hints:
@@ -46,7 +46,7 @@ sub_questions:
   - args: []
     narration: 対象すべてを調べることが、手間や対象の性質から現実的に可能かどうかを調べる。
     op: check_feasibility
-    result_display: 全部を調べることが現実的に可能かを調べる
+    result_display: 全部を調べるのは難しい
     result_srepr: needs_sample
   - args: []
     narration: 全部を調べるのが難しい・不要な場合は標本調査、そうでない場合は全数調査が適切と判断する。

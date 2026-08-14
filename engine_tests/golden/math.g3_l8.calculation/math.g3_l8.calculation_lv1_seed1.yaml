@@ -35,7 +35,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - polynomial.factor_sum_product
-  explanation: 'まず、たすと1次の係数、かけると定数になる2つの数を見つける。（2つの数を見つける）
+  explanation: 'まず、たすと1次の係数、かけると定数になる2つの数を見つける。（4 と 5）
 
     次に、見つけた2つの数を使い、2つの1次式の積で表す。（(x + 4)(x + 5)）'
   hints:
@@ -46,7 +46,7 @@ sub_questions:
   - args: []
     narration: たすと1次の係数、かけると定数になる2つの数を見つける。
     op: find_two_numbers
-    result_display: 2つの数を見つける
+    result_display: 4 と 5
     result_srepr: ''
   - args: []
     narration: 見つけた2つの数を使い、2つの1次式の積で表す。

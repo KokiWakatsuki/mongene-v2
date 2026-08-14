@@ -33,9 +33,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - circle.equal_arc_inscribed_angle
-  explanation: 'まず、円周をn等分してできる1つの弧に対する中心角から、その弧に対する円周角を求める。（円をn等分した1つの弧に対する円周角を求める）
+  explanation: 'まず、円周をn等分してできる1つの弧に対する中心角から、その弧に対する円周角を求める。（30°）
 
-    次に、角の頂点をふくまない側の弧が、等分した弧の何個分にあたるかを数える。（角の頂点をふくまない側の弧が単位弧の何個分かを数える）
+    次に、角の頂点をふくまない側の弧が、等分した弧の何個分にあたるかを数える。（2個分）
 
     最後に、弧の長さは円周角の大きさに比例することから、求める角の大きさを求める。（60°）'
   hints:
@@ -47,12 +47,12 @@ sub_questions:
   - args: []
     narration: 円周をn等分してできる1つの弧に対する中心角から、その弧に対する円周角を求める。
     op: identify_unit_arc_from_equal_division
-    result_display: 円をn等分した1つの弧に対する円周角を求める
+    result_display: 30°
     result_srepr: ''
   - args: []
     narration: 角の頂点をふくまない側の弧が、等分した弧の何個分にあたるかを数える。
     op: identify_arc_span_excluding_vertex
-    result_display: 角の頂点をふくまない側の弧が単位弧の何個分かを数える
+    result_display: 2個分
     result_srepr: ''
   - args: []
     narration: 弧の長さは円周角の大きさに比例することから、求める角の大きさを求める。

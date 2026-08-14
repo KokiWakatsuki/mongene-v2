@@ -37,9 +37,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - linear_function.classify_line_by_signs
-  explanation: 'まず、傾き a の符号から、グラフが右上がりか右下がりかを判断する。（傾きの符号）
+  explanation: 'まず、傾き a の符号から、グラフが右上がりか右下がりかを判断する。（傾きは負）
 
-    次に、切片 b の符号から、y 軸の正の部分・負の部分のどちらで交わるかを判断する。（切片の符号）
+    次に、切片 b の符号から、y 軸の正の部分・負の部分のどちらで交わるかを判断する。（切片は正）
 
     最後に、傾きと切片の符号を合わせて、グラフのようすを選ぶ。（右下がりで、y 軸の正の部分で y 軸と交わる）'
   hints:
@@ -51,12 +51,12 @@ sub_questions:
   - args: []
     narration: 傾き a の符号から、グラフが右上がりか右下がりかを判断する。
     op: identify_slope_sign
-    result_display: 傾きの符号
+    result_display: 傾きは負
     result_srepr: Integer(-1)
   - args: []
     narration: 切片 b の符号から、y 軸の正の部分・負の部分のどちらで交わるかを判断する。
     op: identify_intercept_sign
-    result_display: 切片の符号
+    result_display: 切片は正
     result_srepr: Integer(1)
   - args: []
     narration: 傾きと切片の符号を合わせて、グラフのようすを選ぶ。

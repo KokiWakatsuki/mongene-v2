@@ -35,7 +35,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - letter_expr.substitute_positive
-  explanation: 'まず、式の文字に、代入する数をあてはめる。（文字に数をあてはめる）
+  explanation: 'まず、式の文字に、代入する数をあてはめる。（5 × 2 + 1）
 
     次に、あてはめた式を計算して、式の値を求める。（11）'
   hints:
@@ -46,7 +46,7 @@ sub_questions:
   - args: []
     narration: 式の文字に、代入する数をあてはめる。
     op: substitute_value
-    result_display: 文字に数をあてはめる
+    result_display: 5 × 2 + 1
     result_srepr: Integer(11)
   - args: []
     narration: あてはめた式を計算して、式の値を求める。

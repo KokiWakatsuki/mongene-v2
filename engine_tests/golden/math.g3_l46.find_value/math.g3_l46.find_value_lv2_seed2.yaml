@@ -33,7 +33,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - similarity.solid_surface_volume_ratio
-  explanation: 'まず、相似な立体の表面積の比は相似比の二乗に等しいことから、表面積の比を求める。（相似比を二乗して表面積の比を求める）
+  explanation: 'まず、相似な立体の表面積の比は相似比の二乗に等しいことから、表面積の比を求める。（1:25）
 
     次に、相似な立体の体積の比は相似比の三乗に等しいことから、体積の比を求める。（表面積の比 1:25、体積の比 1:125）'
   hints:
@@ -44,7 +44,7 @@ sub_questions:
   - args: []
     narration: 相似な立体の表面積の比は相似比の二乗に等しいことから、表面積の比を求める。
     op: square_ratio_for_surface_area
-    result_display: 相似比を二乗して表面積の比を求める
+    result_display: '1:25'
     result_srepr: ''
   - args: []
     narration: 相似な立体の体積の比は相似比の三乗に等しいことから、体積の比を求める。

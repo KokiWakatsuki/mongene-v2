@@ -35,9 +35,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - quadratic.solve_from_word_setup
-  explanation: 'まず、かっこを展開し、右辺を左辺に移項して、=0 の形に整理する。（展開して整理する）
+  explanation: 'まず、かっこを展開し、右辺を左辺に移項して、=0 の形に整理する。（x² + x - 156 = 0）
 
-    次に、左辺を因数分解する。（左辺を因数分解する）
+    次に、左辺を因数分解する。（(x - 12)(x + 13) = 0）
 
     最後に、積が 0 になるのは各因数が 0 のときだから、それぞれを 0 とおいて x を求める。（x = -13, x = 12）'
   hints:
@@ -49,12 +49,12 @@ sub_questions:
   - args: []
     narration: かっこを展開し、右辺を左辺に移項して、=0 の形に整理する。
     op: expand_and_rearrange
-    result_display: 展開して整理する
+    result_display: x² + x - 156 = 0
     result_srepr: ''
   - args: []
     narration: 左辺を因数分解する。
     op: factor_left_side
-    result_display: 左辺を因数分解する
+    result_display: (x - 12)(x + 13) = 0
     result_srepr: ''
   - args: []
     narration: 積が 0 になるのは各因数が 0 のときだから、それぞれを 0 とおいて x を求める。

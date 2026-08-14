@@ -35,13 +35,13 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - proportion.word_problem_max_area_and_times
-  explanation: 'まず、動く点がどの辺の上にあるかで時間を区間に分け、面積が増える区間・変わらない区間・減る区間を見つける。（時間を区間に分ける）
+  explanation: 'まず、動く点がどの辺の上にあるかで時間を区間に分け、面積が増える区間・変わらない区間・減る区間を見つける。（0〜20秒、20〜40秒、40〜60秒）
 
-    次に、面積が変わらない区間で最大になるので、その面積の値と、区間の始まりと終わりの時刻を求める。（面積が最大になるところを見つける）
+    次に、面積が変わらない区間で最大になるので、その面積の値と、区間の始まりと終わりの時刻を求める。（200cm²）
 
-    次に、増えていく区間の式を方程式とみて、指定された面積になる時刻を求める。（増えていく区間で解く）
+    次に、増えていく区間の式を方程式とみて、指定された面積になる時刻を求める。（9秒後）
 
-    次に、減っていく区間の式を方程式とみて、指定された面積になる時刻を求める。（減っていく区間で解く）
+    次に、減っていく区間の式を方程式とみて、指定された面積になる時刻を求める。（51秒後）
 
     最後に、求めた時刻がそれぞれの区間の中にあることを確かめ、答えを並べる。（面積が最大になるのは x が 20 から 40 までのときで、そのときの面積は 200cm²。指定された面積になるのは 9秒後と51秒後）'
   hints:
@@ -55,22 +55,22 @@ sub_questions:
   - args: []
     narration: 動く点がどの辺の上にあるかで時間を区間に分け、面積が増える区間・変わらない区間・減る区間を見つける。
     op: identify_intervals
-    result_display: 時間を区間に分ける
+    result_display: 0〜20秒、20〜40秒、40〜60秒
     result_srepr: ''
   - args: []
     narration: 面積が変わらない区間で最大になるので、その面積の値と、区間の始まりと終わりの時刻を求める。
     op: find_maximum_area
-    result_display: 面積が最大になるところを見つける
+    result_display: 200cm²
     result_srepr: ''
   - args: []
     narration: 増えていく区間の式を方程式とみて、指定された面積になる時刻を求める。
     op: solve_on_increasing_interval
-    result_display: 増えていく区間で解く
+    result_display: 9秒後
     result_srepr: ''
   - args: []
     narration: 減っていく区間の式を方程式とみて、指定された面積になる時刻を求める。
     op: solve_on_decreasing_interval
-    result_display: 減っていく区間で解く
+    result_display: 51秒後
     result_srepr: ''
   - args: []
     narration: 求めた時刻がそれぞれの区間の中にあることを確かめ、答えを並べる。

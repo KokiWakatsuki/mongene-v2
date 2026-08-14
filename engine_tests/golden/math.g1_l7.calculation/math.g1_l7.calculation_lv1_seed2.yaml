@@ -35,7 +35,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - signed_number.power_single
-  explanation: 'まず、累乗を、同じ数を指数の回数だけかけ合わせる積に書き直す。（累乗を積に書き直す）
+  explanation: 'まず、累乗を、同じ数を指数の回数だけかけ合わせる積に書き直す。（(-12) × (-12) × (-12)）
 
     次に、符号に注意して計算し、累乗の値を求める。（-1728）'
   hints:
@@ -46,7 +46,7 @@ sub_questions:
   - args: []
     narration: 累乗を、同じ数を指数の回数だけかけ合わせる積に書き直す。
     op: rewrite_power_as_product
-    result_display: 累乗を積に書き直す
+    result_display: (-12) × (-12) × (-12)
     result_srepr: Integer(-1728)
   - args: []
     narration: 符号に注意して計算し、累乗の値を求める。

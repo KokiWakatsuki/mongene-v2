@@ -38,7 +38,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - parallelogram.identify_condition
-  explanation: 'まず、四角形で示されている、等しい・平行である要素が何かを読み取る。（示されている等しい要素を読み取る）
+  explanation: 'まず、四角形で示されている、等しい・平行である要素が何かを読み取る。
 
     次に、平行四辺形になるための5条件のうち、示されている要素がどれに当てはまるかを判別する。（二組の対角の大きさがそれぞれ等しい条件）'
   hints:
@@ -49,7 +49,7 @@ sub_questions:
   - args: []
     narration: 四角形で示されている、等しい・平行である要素が何かを読み取る。
     op: identify_given_elements
-    result_display: 示されている等しい要素を読み取る
+    result_display: ''
     result_srepr: ''
   - args: []
     narration: 平行四辺形になるための5条件のうち、示されている要素がどれに当てはまるかを判別する。

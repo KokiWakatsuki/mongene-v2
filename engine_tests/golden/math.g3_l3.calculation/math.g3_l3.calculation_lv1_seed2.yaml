@@ -35,7 +35,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - polynomial.expand_formula_sum_product
-  explanation: 'まず、2つの定数の和と積を求める。（和と積を求める）
+  explanation: 'まず、2つの定数の和と積を求める。（和 16、積 55）
 
     次に、乗法公式にあてはめて展開した式を書く。（y² + 16y + 55）'
   hints:
@@ -46,7 +46,7 @@ sub_questions:
   - args: []
     narration: 2つの定数の和と積を求める。
     op: compute_sum_and_product
-    result_display: 和と積を求める
+    result_display: 和 16、積 55
     result_srepr: ''
   - args: []
     narration: 乗法公式にあてはめて展開した式を書く。

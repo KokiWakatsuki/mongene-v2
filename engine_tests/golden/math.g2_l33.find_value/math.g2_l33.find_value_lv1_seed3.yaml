@@ -33,7 +33,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - triangle_angle.third_angle
-  explanation: 'まず、わかっている2つの内角の大きさを読み取る。（わかっている2つの内角を読み取る）
+  explanation: 'まず、わかっている2つの内角の大きさを読み取る。（72° と 18°）
 
     次に、三角形の内角の和が一直線の角(平角)に等しいことから、残りの内角の大きさを求める。（90）'
   hints:
@@ -44,7 +44,7 @@ sub_questions:
   - args: []
     narration: わかっている2つの内角の大きさを読み取る。
     op: identify_two_interior_angles
-    result_display: わかっている2つの内角を読み取る
+    result_display: 72° と 18°
     result_srepr: ''
   - args: []
     narration: 三角形の内角の和が一直線の角(平角)に等しいことから、残りの内角の大きさを求める。

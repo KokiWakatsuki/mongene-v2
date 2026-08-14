@@ -33,7 +33,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - cumulative_frequency.compute_relative_and_complement
-  explanation: 'まず、対象の階級までの累積度数を求め、総度数でわって累積相対度数を求める。（累積度数を総度数でわる）
+  explanation: 'まず、対象の階級までの累積度数を求め、総度数でわって累積相対度数を求める。（0.54）
 
     次に、全体の割合から累積相対度数を除いた残りを百分率になおし、超える部分の割合を求める。（累積相対度数 0.54、超える部分の割合 46%）'
   hints:
@@ -44,7 +44,7 @@ sub_questions:
   - args: []
     narration: 対象の階級までの累積度数を求め、総度数でわって累積相対度数を求める。
     op: accumulate_relative_frequency
-    result_display: 累積度数を総度数でわる
+    result_display: '0.54'
     result_srepr: ''
   - args: []
     narration: 全体の割合から累積相対度数を除いた残りを百分率になおし、超える部分の割合を求める。

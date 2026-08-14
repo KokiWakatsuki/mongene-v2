@@ -33,7 +33,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - quartile.compute_five_number_summary
-  explanation: 'まず、データを大きさの順に並べ、いちばん小さい値といちばん大きい値を求める。（データを大きさの順に並べ両端の値を読み取る）
+  explanation: 'まず、データを大きさの順に並べ、いちばん小さい値といちばん大きい値を求める。（最小値 2、最大値 49）
 
     次に、中央値を境に下組と上組に分け、それぞれの中央値を第一四分位数・第三四分位数とする。（最小値 2、最大値 49、第1四分位数 10、第3四分位数 41）'
   hints:
@@ -44,7 +44,7 @@ sub_questions:
   - args: []
     narration: データを大きさの順に並べ、いちばん小さい値といちばん大きい値を求める。
     op: identify_min_max
-    result_display: データを大きさの順に並べ両端の値を読み取る
+    result_display: 最小値 2、最大値 49
     result_srepr: ''
   - args: []
     narration: 中央値を境に下組と上組に分け、それぞれの中央値を第一四分位数・第三四分位数とする。

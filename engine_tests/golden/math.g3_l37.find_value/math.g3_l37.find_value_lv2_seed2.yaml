@@ -33,9 +33,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - quadratic_function.intersection_with_line
-  explanation: 'まず、放物線の式と直線の式の右辺どうしを等しいとおき、方程式を立てる。（放物線と直線の式を等しいとおく）
+  explanation: 'まず、放物線の式と直線の式の右辺どうしを等しいとおき、方程式を立てる。（-x² = 18 - 9x）
 
-    次に、その方程式を解いて、交点の x 座標を求める。（交点の x 座標を求める）
+    次に、その方程式を解いて、交点の x 座標を求める。（x = 3, x = 6）
 
     最後に、求めた x の値を式に代入して、交点の y 座標を求める。（A(3, -9), B(6, -36)）'
   hints:
@@ -47,12 +47,12 @@ sub_questions:
   - args: []
     narration: 放物線の式と直線の式の右辺どうしを等しいとおき、方程式を立てる。
     op: set_up_equation
-    result_display: 放物線と直線の式を等しいとおく
+    result_display: -x² = 18 - 9x
     result_srepr: ''
   - args: []
     narration: その方程式を解いて、交点の x 座標を求める。
     op: solve_for_x
-    result_display: 交点の x 座標を求める
+    result_display: x = 3, x = 6
     result_srepr: ''
   - args: []
     narration: 求めた x の値を式に代入して、交点の y 座標を求める。

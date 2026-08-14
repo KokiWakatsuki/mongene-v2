@@ -35,7 +35,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - quadratic.solve_by_square_root
-  explanation: 'まず、平方根の考え方で、両辺の平方根をとる。（平方根をとる）
+  explanation: 'まず、平方根の考え方で、両辺の平方根をとる。（x - 2 = ±√22）
 
     次に、正の場合と負の場合に分けて x を求める。（x = 2 - √22, x = 2 + √22）'
   hints:
@@ -46,7 +46,7 @@ sub_questions:
   - args: []
     narration: 平方根の考え方で、両辺の平方根をとる。
     op: take_square_root
-    result_display: 平方根をとる
+    result_display: x - 2 = ±√22
     result_srepr: ''
   - args: []
     narration: 正の場合と負の場合に分けて x を求める。

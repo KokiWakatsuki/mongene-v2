@@ -24,24 +24,24 @@ meta:
   seed: 3
   signature: word_problem_box_surface_shortest_path_guided
 problem_ref: 87d9baef852a8de1
-problem_text: '辺LMの長さが7cm、辺MNの長さが4cm、高さが14cmの直方体LMNO-PQRSの形をしたケースがある。ここでLMNOは底面、PQRSは上面で、辺LPが高さにあたる。このケースの表面上を、頂点Lから、側面LMQPと側面MNRQを通って、頂点Rまで進む。
+problem_text: '辺MNの長さが12cm、辺NOの長さが8cm、高さが10cmの直方体MNOP-QRSTの形をしたケースがある。ここでMNOPは底面、QRSTは上面で、辺MQが高さにあたる。このケースの表面上を、頂点Mから、側面MNRQと側面NOSRを通って、頂点Sまで進む。
 
   (1) 進む道のりが最も短くなるときの、その道のりの長さを求めよ。
 
   (2) この二つの側面の面積の和を求めよ。'
 sub_questions:
 - answer:
-    display: √317 cm
+    display: 10√5 cm
     kind: symbolic
-    srepr: Pow(Integer(317), Rational(1, 2))
+    srepr: Mul(Integer(10), Pow(Integer(5), Rational(1, 2)))
   cause_tags: []
   concept_tags:
   - pythagorean.word_problem_box_shortest_path
-  explanation: 'まず、表面上の最短の道のりを考えるために、通る二つの側面を一つの平面に開いた展開図をかく。
+  explanation: 'まず、表面上の最短の道のりを考えるために、通る二つの側面を一つの平面に開いた展開図をかく。（横 20、縦 10 の長方形）
 
-    次に、開いた図では二つの側面が横に並んだ長方形になり、道のりが最も短くなるのは出発点と到着点を結ぶ線分のときだから、その線分を斜辺とする直角三角形をとらえる。（11 cm）
+    次に、開いた図では二つの側面が横に並んだ長方形になり、道のりが最も短くなるのは出発点と到着点を結ぶ線分のときだから、その線分を斜辺とする直角三角形をとらえる。（20 cm）
 
-    最後に、直角をはさむ2辺は、底面の二つの辺の長さの和と、直方体の高さだから、三平方の定理から最短の道のりを求める。（√317 cm）'
+    最後に、直角をはさむ2辺は、底面の二つの辺の長さの和と、直方体の高さだから、三平方の定理から最短の道のりを求める。（10√5 cm）'
   hints:
   - 表面上の最短の道のりを考えるために、通る二つの側面を一つの平面に開いた展開図をかく。
   - 開いた図では二つの側面が横に並んだ長方形になり、道のりが最も短くなるのは出発点と到着点を結ぶ線分のときだから、その線分を斜辺とする直角三角形をとらえる。
@@ -51,28 +51,28 @@ sub_questions:
   - args: []
     narration: 表面上の最短の道のりを考えるために、通る二つの側面を一つの平面に開いた展開図をかく。
     op: unfold_two_side_faces
-    result_display: ''
+    result_display: 横 20、縦 10 の長方形
     result_srepr: ''
   - args: []
     narration: 開いた図では二つの側面が横に並んだ長方形になり、道のりが最も短くなるのは出発点と到着点を結ぶ線分のときだから、その線分を斜辺とする直角三角形をとらえる。
     op: identify_right_triangle
-    result_display: 11 cm
-    result_srepr: Integer(11)
+    result_display: 20 cm
+    result_srepr: Integer(20)
   - args: []
     narration: 直角をはさむ2辺は、底面の二つの辺の長さの和と、直方体の高さだから、三平方の定理から最短の道のりを求める。
     op: apply_pythagorean_theorem
-    result_display: √317 cm
-    result_srepr: Pow(Integer(317), Rational(1, 2))
+    result_display: 10√5 cm
+    result_srepr: Mul(Integer(10), Pow(Integer(5), Rational(1, 2)))
 - answer:
-    display: 154 cm²
+    display: 200 cm²
     kind: symbolic
-    srepr: Integer(154)
+    srepr: Integer(200)
   cause_tags: []
   concept_tags:
   - pythagorean.word_problem_box_shortest_path
-  explanation: 'まず、開いた二つの側面は、あわせて横が底面の二つの辺の長さの和、縦が直方体の高さである一つの長方形になる。（11 cm）
+  explanation: 'まず、開いた二つの側面は、あわせて横が底面の二つの辺の長さの和、縦が直方体の高さである一つの長方形になる。（20 cm）
 
-    次に、その長方形の縦と横の長さをかけて、通る側面の面積の和を求める。（154 cm²）'
+    次に、その長方形の縦と横の長さをかけて、通る側面の面積の和を求める。（200 cm²）'
   hints:
   - 開いた二つの側面は、あわせて横が底面の二つの辺の長さの和、縦が直方体の高さである一つの長方形になる。
   label: (2)
@@ -81,11 +81,11 @@ sub_questions:
   - args: []
     narration: 開いた二つの側面は、あわせて横が底面の二つの辺の長さの和、縦が直方体の高さである一つの長方形になる。
     op: combine_two_side_faces
-    result_display: 11 cm
-    result_srepr: Integer(11)
+    result_display: 20 cm
+    result_srepr: Integer(20)
   - args: []
     narration: その長方形の縦と横の長さをかけて、通る側面の面積の和を求める。
     op: compute_rectangle_area
-    result_display: 154 cm²
-    result_srepr: Integer(154)
+    result_display: 200 cm²
+    result_srepr: Integer(200)
 visual_svg: null

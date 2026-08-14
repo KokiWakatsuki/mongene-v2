@@ -35,7 +35,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - radical.evaluate_expression_value
-  explanation: 'まず、式の文字に、根号を含む値をそのままあてはめる。（根号を含む値をあてはめる）
+  explanation: 'まず、式の文字に、根号を含む値をそのままあてはめる。（(√15+(-12))²-2(-12)(√15+(-12))）
 
     次に、かっこを展開し、根号を含む項どうしを整理して式の値を求める。（-129）'
   hints:
@@ -46,7 +46,7 @@ sub_questions:
   - args: []
     narration: 式の文字に、根号を含む値をそのままあてはめる。
     op: substitute_root_value
-    result_display: 根号を含む値をあてはめる
+    result_display: (√15+(-12))²-2(-12)(√15+(-12))
     result_srepr: ''
   - args: []
     narration: かっこを展開し、根号を含む項どうしを整理して式の値を求める。

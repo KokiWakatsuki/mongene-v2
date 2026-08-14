@@ -35,7 +35,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - polynomial.rearrange_product
-  explanation: 'まず、分母をなくすため、両辺に分母をかける。（両辺に分母をかける）
+  explanation: 'まず、分母をなくすため、両辺に分母をかける。（4n = pr）
 
     次に、両辺を、解く文字にかかっている係数でわる。（r = 4n/p）'
   hints:
@@ -46,7 +46,7 @@ sub_questions:
   - args: []
     narration: 分母をなくすため、両辺に分母をかける。
     op: multiply_both_sides
-    result_display: 両辺に分母をかける
+    result_display: 4n = pr
     result_srepr: Mul(Integer(4), Symbol('n'), Pow(Symbol('p'), Integer(-1)))
   - args: []
     narration: 両辺を、解く文字にかかっている係数でわる。

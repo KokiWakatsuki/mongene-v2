@@ -35,7 +35,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - quadratic.solve_by_factoring
-  explanation: 'まず、左辺の共通因数をくくり出す。（共通因数をくくり出す）
+  explanation: 'まず、左辺の共通因数をくくり出す。（x(5x + 37) = 0）
 
     次に、積が 0 になるのは各因数が 0 のときだから、それぞれを 0 とおいて x を求める。（x = -37/5, x = 0）'
   hints:
@@ -46,7 +46,7 @@ sub_questions:
   - args: []
     narration: 左辺の共通因数をくくり出す。
     op: factor_out_common
-    result_display: 共通因数をくくり出す
+    result_display: x(5x + 37) = 0
     result_srepr: ''
   - args: []
     narration: 積が 0 になるのは各因数が 0 のときだから、それぞれを 0 とおいて x を求める。

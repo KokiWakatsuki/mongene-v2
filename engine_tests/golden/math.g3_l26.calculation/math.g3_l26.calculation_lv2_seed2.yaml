@@ -35,7 +35,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - quadratic.solve_by_formula
-  explanation: 'まず、与式を整理して、それぞれの項の係数 a・b・c を読み取る。（a・b・c を読み取る）
+  explanation: 'まず、与式を整理して、それぞれの項の係数 a・b・c を読み取る。（a = 5、b = 3、c = -1）
 
     次に、a・b・c を解の公式に代入して x を求める。（x = (-√29 - 3)/10, x = (-3 + √29)/10）'
   hints:
@@ -46,7 +46,7 @@ sub_questions:
   - args: []
     narration: 与式を整理して、それぞれの項の係数 a・b・c を読み取る。
     op: identify_coefficients
-    result_display: a・b・c を読み取る
+    result_display: a = 5、b = 3、c = -1
     result_srepr: ''
   - args: []
     narration: a・b・c を解の公式に代入して x を求める。

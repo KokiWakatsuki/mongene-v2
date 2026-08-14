@@ -35,7 +35,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - polynomial.combine_fractions_basic
-  explanation: 'まず、分母の最小公倍数を求めて通分する。（分母を最小公倍数にそろえる）
+  explanation: 'まず、分母の最小公倍数を求めて通分する。（(8x - 12y + (9x - 9y)) / 12）
 
     次に、分子どうしを計算し、1つの分数にまとめる。（(17x - 21y)/12）'
   hints:
@@ -46,7 +46,7 @@ sub_questions:
   - args: []
     narration: 分母の最小公倍数を求めて通分する。
     op: find_common_denominator
-    result_display: 分母を最小公倍数にそろえる
+    result_display: (8x - 12y + (9x - 9y)) / 12
     result_srepr: Mul(Rational(1, 12), Add(Mul(Integer(17), Symbol('x')), Mul(Integer(-1), Integer(21), Symbol('y'))))
   - args: []
     narration: 分子どうしを計算し、1つの分数にまとめる。

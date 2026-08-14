@@ -36,7 +36,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - similarity.identify_condition
-  explanation: 'まず、2つの三角形で示されている、等しい角や辺の比が何かを読み取る。（示されている等しい要素を読み取る）
+  explanation: 'まず、2つの三角形で示されている、等しい角や辺の比が何かを読み取る。
 
     次に、三角形の相似条件のうち、示されている要素がどれに当てはまるかを判別する。（二組の辺の比とその間の角がそれぞれ等しい条件）'
   hints:
@@ -47,7 +47,7 @@ sub_questions:
   - args: []
     narration: 2つの三角形で示されている、等しい角や辺の比が何かを読み取る。
     op: identify_given_elements
-    result_display: 示されている等しい要素を読み取る
+    result_display: ''
     result_srepr: ''
   - args: []
     narration: 三角形の相似条件のうち、示されている要素がどれに当てはまるかを判別する。

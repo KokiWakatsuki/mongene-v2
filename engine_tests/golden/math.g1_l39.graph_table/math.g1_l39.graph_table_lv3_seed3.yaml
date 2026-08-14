@@ -49,31 +49,58 @@ sub_questions:
       stroke-width="0.5"/><line x1="28.00" y1="92.50" x2="372.00" y2="92.50" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="71.00" x2="372.00" y2="71.00" stroke="#bbbbbb" stroke-width="0.5"/><line
       x1="28.00" y1="49.50" x2="372.00" y2="49.50" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="28.00" x2="372.00" y2="28.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="221.50"
       x2="372.00" y2="221.50" stroke="#000000" stroke-width="1.5"/><line x1="188.53" y1="28.00" x2="188.53" y2="372.00" stroke="#000000" stroke-width="1.5"/><path d="M 257.33 221.50 L 326.13 329.00 L 96.80
-      221.50 Z" fill="none" stroke="#000000" stroke-width="2"/><circle cx="257.33" cy="221.50" r="2.5" fill="#000000"/><text x="263.33" y="215.50" font-size="13" fill="#000000">A</text><circle cx="326.13"
-      cy="329.00" r="2.5" fill="#000000"/><text x="332.13" y="323.00" font-size="13" fill="#000000">B</text><circle cx="96.80" cy="221.50" r="2.5" fill="#000000"/><text x="102.80" y="215.50" font-size="13"
-      fill="#000000">C</text><path d="M 303.20 221.50 L 188.53 286.00 L 303.20 71.00 Z" fill="none" stroke="#000000" stroke-width="2" stroke-dasharray="5 4"/><circle cx="303.20" cy="221.50" r="2.5" fill="#000000"/><text
-      x="309.20" y="215.50" font-size="13" fill="#000000">A'</text><circle cx="188.53" cy="286.00" r="2.5" fill="#000000"/><text x="194.53" y="280.00" font-size="13" fill="#000000">B'</text><circle cx="303.20"
-      cy="71.00" r="2.5" fill="#000000"/><text x="309.20" y="65.00" font-size="13" fill="#000000">C'</text><circle cx="280.27" cy="243.00" r="2.5" fill="#000000"/><text x="286.27" y="237.00" font-size="13"
-      fill="#000000">R</text><text x="28.00" y="233.50" font-size="10" text-anchor="middle" fill="#000000">-7</text><text x="50.93" y="233.50" font-size="10" text-anchor="middle" fill="#000000">-6</text><text
-      x="73.87" y="233.50" font-size="10" text-anchor="middle" fill="#000000">-5</text><text x="96.80" y="233.50" font-size="10" text-anchor="middle" fill="#000000">-4</text><text x="119.73" y="233.50"
-      font-size="10" text-anchor="middle" fill="#000000">-3</text><text x="142.67" y="233.50" font-size="10" text-anchor="middle" fill="#000000">-2</text><text x="165.60" y="233.50" font-size="10" text-anchor="middle"
-      fill="#000000">-1</text><text x="211.47" y="233.50" font-size="10" text-anchor="middle" fill="#000000">1</text><text x="234.40" y="233.50" font-size="10" text-anchor="middle" fill="#000000">2</text><text
-      x="257.33" y="233.50" font-size="10" text-anchor="middle" fill="#000000">3</text><text x="280.27" y="233.50" font-size="10" text-anchor="middle" fill="#000000">4</text><text x="303.20" y="233.50"
-      font-size="10" text-anchor="middle" fill="#000000">5</text><text x="326.13" y="233.50" font-size="10" text-anchor="middle" fill="#000000">6</text><text x="349.07" y="233.50" font-size="10" text-anchor="middle"
-      fill="#000000">7</text><text x="372.00" y="233.50" font-size="10" text-anchor="middle" fill="#000000">8</text><text x="180.53" y="375.00" font-size="10" text-anchor="end" fill="#000000">-7</text><text
-      x="180.53" y="353.50" font-size="10" text-anchor="end" fill="#000000">-6</text><text x="180.53" y="332.00" font-size="10" text-anchor="end" fill="#000000">-5</text><text x="180.53" y="310.50" font-size="10"
-      text-anchor="end" fill="#000000">-4</text><text x="180.53" y="289.00" font-size="10" text-anchor="end" fill="#000000">-3</text><text x="180.53" y="267.50" font-size="10" text-anchor="end" fill="#000000">-2</text><text
-      x="180.53" y="246.00" font-size="10" text-anchor="end" fill="#000000">-1</text><text x="180.53" y="224.50" font-size="10" text-anchor="end" fill="#000000">0</text><text x="180.53" y="203.00" font-size="10"
-      text-anchor="end" fill="#000000">1</text><text x="180.53" y="181.50" font-size="10" text-anchor="end" fill="#000000">2</text><text x="180.53" y="160.00" font-size="10" text-anchor="end" fill="#000000">3</text><text
-      x="180.53" y="138.50" font-size="10" text-anchor="end" fill="#000000">4</text><text x="180.53" y="117.00" font-size="10" text-anchor="end" fill="#000000">5</text><text x="180.53" y="95.50" font-size="10"
-      text-anchor="end" fill="#000000">6</text><text x="180.53" y="74.00" font-size="10" text-anchor="end" fill="#000000">7</text><text x="180.53" y="52.50" font-size="10" text-anchor="end" fill="#000000">8</text><text
+      221.50 Z" fill="none" stroke="#000000" stroke-width="2"/><circle cx="257.33" cy="221.50" r="2.5" fill="#000000"/><text x="265.12" y="210.37" font-size="13" text-anchor="start" stroke="#ffffff" stroke-width="3"
+      stroke-linejoin="round" fill="#ffffff">A</text><text x="265.12" y="210.37" font-size="13" text-anchor="start" fill="#000000">A</text><circle cx="326.13" cy="329.00" r="2.5" fill="#000000"/><text x="335.87"
+      y="345.02" font-size="13" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">B</text><text x="335.87" y="345.02" font-size="13" text-anchor="start" fill="#000000">B</text><circle
+      cx="96.80" cy="221.50" r="2.5" fill="#000000"/><text x="72.70" y="218.85" font-size="13" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">C</text><text x="72.70"
+      y="218.85" font-size="13" text-anchor="end" fill="#000000">C</text><path d="M 303.20 221.50 L 188.53 286.00 L 303.20 71.00 Z" fill="none" stroke="#000000" stroke-width="2" stroke-dasharray="5 4"/><circle
+      cx="303.20" cy="221.50" r="2.5" fill="#000000"/><text x="333.60" y="253.30" font-size="13" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">A'</text><text
+      x="333.60" y="253.30" font-size="13" text-anchor="start" fill="#000000">A'</text><circle cx="188.53" cy="286.00" r="2.5" fill="#000000"/><text x="164.43" y="324.38" font-size="13" text-anchor="end"
+      stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">B'</text><text x="164.43" y="324.38" font-size="13" text-anchor="end" fill="#000000">B'</text><circle cx="303.20" cy="71.00"
+      r="2.5" fill="#000000"/><text x="306.79" y="57.55" font-size="13" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">C'</text><text x="306.79" y="57.55"
+      font-size="13" text-anchor="middle" fill="#000000">C'</text><circle cx="280.27" cy="243.00" r="2.5" fill="#000000"/><text x="286.27" y="237.00" font-size="13" fill="#000000">R</text><text x="28.00"
+      y="233.50" font-size="10" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">-7</text><text x="28.00" y="233.50" font-size="10" text-anchor="middle" fill="#000000">-7</text><text
+      x="50.93" y="233.50" font-size="10" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">-6</text><text x="50.93" y="233.50" font-size="10" text-anchor="middle"
+      fill="#000000">-6</text><text x="73.87" y="233.50" font-size="10" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">-5</text><text x="73.87" y="233.50"
+      font-size="10" text-anchor="middle" fill="#000000">-5</text><text x="96.80" y="233.50" font-size="10" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">-4</text><text
+      x="96.80" y="233.50" font-size="10" text-anchor="middle" fill="#000000">-4</text><text x="119.73" y="233.50" font-size="10" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round"
+      fill="#ffffff">-3</text><text x="119.73" y="233.50" font-size="10" text-anchor="middle" fill="#000000">-3</text><text x="142.67" y="233.50" font-size="10" text-anchor="middle" stroke="#ffffff" stroke-width="3"
+      stroke-linejoin="round" fill="#ffffff">-2</text><text x="142.67" y="233.50" font-size="10" text-anchor="middle" fill="#000000">-2</text><text x="165.60" y="233.50" font-size="10" text-anchor="middle"
+      stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">-1</text><text x="165.60" y="233.50" font-size="10" text-anchor="middle" fill="#000000">-1</text><text x="211.47" y="233.50"
+      font-size="10" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">1</text><text x="211.47" y="233.50" font-size="10" text-anchor="middle" fill="#000000">1</text><text
+      x="234.40" y="233.50" font-size="10" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">2</text><text x="234.40" y="233.50" font-size="10" text-anchor="middle"
+      fill="#000000">2</text><text x="257.33" y="233.50" font-size="10" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">3</text><text x="257.33" y="233.50"
+      font-size="10" text-anchor="middle" fill="#000000">3</text><text x="280.27" y="233.50" font-size="10" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">4</text><text
+      x="280.27" y="233.50" font-size="10" text-anchor="middle" fill="#000000">4</text><text x="303.20" y="233.50" font-size="10" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round"
+      fill="#ffffff">5</text><text x="303.20" y="233.50" font-size="10" text-anchor="middle" fill="#000000">5</text><text x="326.13" y="233.50" font-size="10" text-anchor="middle" stroke="#ffffff" stroke-width="3"
+      stroke-linejoin="round" fill="#ffffff">6</text><text x="326.13" y="233.50" font-size="10" text-anchor="middle" fill="#000000">6</text><text x="349.07" y="233.50" font-size="10" text-anchor="middle"
+      stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">7</text><text x="349.07" y="233.50" font-size="10" text-anchor="middle" fill="#000000">7</text><text x="372.00" y="233.50"
+      font-size="10" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">8</text><text x="372.00" y="233.50" font-size="10" text-anchor="middle" fill="#000000">8</text><text
+      x="180.53" y="375.00" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">-7</text><text x="180.53" y="375.00" font-size="10" text-anchor="end"
+      fill="#000000">-7</text><text x="180.53" y="353.50" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">-6</text><text x="180.53" y="353.50" font-size="10"
+      text-anchor="end" fill="#000000">-6</text><text x="180.53" y="332.00" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">-5</text><text x="180.53"
+      y="332.00" font-size="10" text-anchor="end" fill="#000000">-5</text><text x="180.53" y="310.50" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">-4</text><text
+      x="180.53" y="310.50" font-size="10" text-anchor="end" fill="#000000">-4</text><text x="180.53" y="289.00" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round"
+      fill="#ffffff">-3</text><text x="180.53" y="289.00" font-size="10" text-anchor="end" fill="#000000">-3</text><text x="180.53" y="267.50" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3"
+      stroke-linejoin="round" fill="#ffffff">-2</text><text x="180.53" y="267.50" font-size="10" text-anchor="end" fill="#000000">-2</text><text x="180.53" y="246.00" font-size="10" text-anchor="end" stroke="#ffffff"
+      stroke-width="3" stroke-linejoin="round" fill="#ffffff">-1</text><text x="180.53" y="246.00" font-size="10" text-anchor="end" fill="#000000">-1</text><text x="180.53" y="224.50" font-size="10" text-anchor="end"
+      stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">0</text><text x="180.53" y="224.50" font-size="10" text-anchor="end" fill="#000000">0</text><text x="180.53" y="203.00" font-size="10"
+      text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">1</text><text x="180.53" y="203.00" font-size="10" text-anchor="end" fill="#000000">1</text><text x="180.53"
+      y="181.50" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">2</text><text x="180.53" y="181.50" font-size="10" text-anchor="end" fill="#000000">2</text><text
+      x="180.53" y="160.00" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">3</text><text x="180.53" y="160.00" font-size="10" text-anchor="end"
+      fill="#000000">3</text><text x="180.53" y="138.50" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">4</text><text x="180.53" y="138.50" font-size="10"
+      text-anchor="end" fill="#000000">4</text><text x="180.53" y="117.00" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">5</text><text x="180.53"
+      y="117.00" font-size="10" text-anchor="end" fill="#000000">5</text><text x="180.53" y="95.50" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">6</text><text
+      x="180.53" y="95.50" font-size="10" text-anchor="end" fill="#000000">6</text><text x="180.53" y="74.00" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">7</text><text
+      x="180.53" y="74.00" font-size="10" text-anchor="end" fill="#000000">7</text><text x="180.53" y="52.50" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">8</text><text
+      x="180.53" y="52.50" font-size="10" text-anchor="end" fill="#000000">8</text><text x="180.53" y="31.00" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">9</text><text
       x="180.53" y="31.00" font-size="10" text-anchor="end" fill="#000000">9</text></svg>
   cause_tags: []
   concept_tags:
   - polygon_transform.find_rotation_center
-  explanation: 'まず、回転の中心は、対応する2点から同じ距離にある。だから1組の対応する点を結び、その線分の垂直二等分線を引く。中心はこの直線上のどこかにある。（1組目の垂直二等分線を引く）
+  explanation: 'まず、回転の中心は、対応する2点から同じ距離にある。だから1組の対応する点を結び、その線分の垂直二等分線を引く。中心はこの直線上のどこかにある。（1組目の垂直二等分線）
 
-    次に、もう1組の対応する点についても同じように垂直二等分線を引く。中心はこの直線上にもある。（2組目の垂直二等分線を引く）
+    次に、もう1組の対応する点についても同じように垂直二等分線を引く。中心はこの直線上にもある。（2組目の垂直二等分線）
 
     最後に、2本の垂直二等分線の交点が、両方の条件を同時に満たす点、つまり回転の中心である。（(4, -1)）'
   hints:
@@ -85,12 +112,12 @@ sub_questions:
   - args: []
     narration: 回転の中心は、対応する2点から同じ距離にある。だから1組の対応する点を結び、その線分の垂直二等分線を引く。中心はこの直線上のどこかにある。
     op: draw_perpendicular_bisector_first
-    result_display: 1組目の垂直二等分線を引く
+    result_display: 1組目の垂直二等分線
     result_srepr: ''
   - args: []
     narration: もう1組の対応する点についても同じように垂直二等分線を引く。中心はこの直線上にもある。
     op: draw_perpendicular_bisector_second
-    result_display: 2組目の垂直二等分線を引く
+    result_display: 2組目の垂直二等分線
     result_srepr: ''
   - args: []
     narration: 2本の垂直二等分線の交点が、両方の条件を同時に満たす点、つまり回転の中心である。
@@ -114,20 +141,46 @@ visual_svg: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width=
   stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="71.00" x2="372.00" y2="71.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="49.50" x2="372.00" y2="49.50" stroke="#bbbbbb" stroke-width="0.5"/><line
   x1="28.00" y1="28.00" x2="372.00" y2="28.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="221.50" x2="372.00" y2="221.50" stroke="#000000" stroke-width="1.5"/><line x1="188.53" y1="28.00"
   x2="188.53" y2="372.00" stroke="#000000" stroke-width="1.5"/><path d="M 257.33 221.50 L 326.13 329.00 L 96.80 221.50 Z" fill="none" stroke="#000000" stroke-width="2"/><circle cx="257.33" cy="221.50" r="2.5"
-  fill="#000000"/><text x="263.33" y="215.50" font-size="13" fill="#000000">A</text><circle cx="326.13" cy="329.00" r="2.5" fill="#000000"/><text x="332.13" y="323.00" font-size="13" fill="#000000">B</text><circle
-  cx="96.80" cy="221.50" r="2.5" fill="#000000"/><text x="102.80" y="215.50" font-size="13" fill="#000000">C</text><path d="M 303.20 221.50 L 188.53 286.00 L 303.20 71.00 Z" fill="none" stroke="#000000"
-  stroke-width="2" stroke-dasharray="5 4"/><circle cx="303.20" cy="221.50" r="2.5" fill="#000000"/><text x="309.20" y="215.50" font-size="13" fill="#000000">A'</text><circle cx="188.53" cy="286.00" r="2.5"
-  fill="#000000"/><text x="194.53" y="280.00" font-size="13" fill="#000000">B'</text><circle cx="303.20" cy="71.00" r="2.5" fill="#000000"/><text x="309.20" y="65.00" font-size="13" fill="#000000">C'</text><text
-  x="28.00" y="233.50" font-size="10" text-anchor="middle" fill="#000000">-7</text><text x="50.93" y="233.50" font-size="10" text-anchor="middle" fill="#000000">-6</text><text x="73.87" y="233.50" font-size="10"
-  text-anchor="middle" fill="#000000">-5</text><text x="96.80" y="233.50" font-size="10" text-anchor="middle" fill="#000000">-4</text><text x="119.73" y="233.50" font-size="10" text-anchor="middle" fill="#000000">-3</text><text
-  x="142.67" y="233.50" font-size="10" text-anchor="middle" fill="#000000">-2</text><text x="165.60" y="233.50" font-size="10" text-anchor="middle" fill="#000000">-1</text><text x="211.47" y="233.50" font-size="10"
-  text-anchor="middle" fill="#000000">1</text><text x="234.40" y="233.50" font-size="10" text-anchor="middle" fill="#000000">2</text><text x="257.33" y="233.50" font-size="10" text-anchor="middle" fill="#000000">3</text><text
-  x="280.27" y="233.50" font-size="10" text-anchor="middle" fill="#000000">4</text><text x="303.20" y="233.50" font-size="10" text-anchor="middle" fill="#000000">5</text><text x="326.13" y="233.50" font-size="10"
-  text-anchor="middle" fill="#000000">6</text><text x="349.07" y="233.50" font-size="10" text-anchor="middle" fill="#000000">7</text><text x="372.00" y="233.50" font-size="10" text-anchor="middle" fill="#000000">8</text><text
-  x="180.53" y="375.00" font-size="10" text-anchor="end" fill="#000000">-7</text><text x="180.53" y="353.50" font-size="10" text-anchor="end" fill="#000000">-6</text><text x="180.53" y="332.00" font-size="10"
-  text-anchor="end" fill="#000000">-5</text><text x="180.53" y="310.50" font-size="10" text-anchor="end" fill="#000000">-4</text><text x="180.53" y="289.00" font-size="10" text-anchor="end" fill="#000000">-3</text><text
-  x="180.53" y="267.50" font-size="10" text-anchor="end" fill="#000000">-2</text><text x="180.53" y="246.00" font-size="10" text-anchor="end" fill="#000000">-1</text><text x="180.53" y="224.50" font-size="10"
-  text-anchor="end" fill="#000000">0</text><text x="180.53" y="203.00" font-size="10" text-anchor="end" fill="#000000">1</text><text x="180.53" y="181.50" font-size="10" text-anchor="end" fill="#000000">2</text><text
-  x="180.53" y="160.00" font-size="10" text-anchor="end" fill="#000000">3</text><text x="180.53" y="138.50" font-size="10" text-anchor="end" fill="#000000">4</text><text x="180.53" y="117.00" font-size="10"
-  text-anchor="end" fill="#000000">5</text><text x="180.53" y="95.50" font-size="10" text-anchor="end" fill="#000000">6</text><text x="180.53" y="74.00" font-size="10" text-anchor="end" fill="#000000">7</text><text
-  x="180.53" y="52.50" font-size="10" text-anchor="end" fill="#000000">8</text><text x="180.53" y="31.00" font-size="10" text-anchor="end" fill="#000000">9</text></svg>
+  fill="#000000"/><text x="265.12" y="210.37" font-size="13" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">A</text><text x="265.12" y="210.37" font-size="13"
+  text-anchor="start" fill="#000000">A</text><circle cx="326.13" cy="329.00" r="2.5" fill="#000000"/><text x="335.87" y="345.02" font-size="13" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round"
+  fill="#ffffff">B</text><text x="335.87" y="345.02" font-size="13" text-anchor="start" fill="#000000">B</text><circle cx="96.80" cy="221.50" r="2.5" fill="#000000"/><text x="72.70" y="218.85" font-size="13"
+  text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">C</text><text x="72.70" y="218.85" font-size="13" text-anchor="end" fill="#000000">C</text><path d="M 303.20
+  221.50 L 188.53 286.00 L 303.20 71.00 Z" fill="none" stroke="#000000" stroke-width="2" stroke-dasharray="5 4"/><circle cx="303.20" cy="221.50" r="2.5" fill="#000000"/><text x="333.60" y="253.30" font-size="13"
+  text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">A'</text><text x="333.60" y="253.30" font-size="13" text-anchor="start" fill="#000000">A'</text><circle cx="188.53"
+  cy="286.00" r="2.5" fill="#000000"/><text x="164.43" y="324.38" font-size="13" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">B'</text><text x="164.43" y="324.38"
+  font-size="13" text-anchor="end" fill="#000000">B'</text><circle cx="303.20" cy="71.00" r="2.5" fill="#000000"/><text x="306.79" y="57.55" font-size="13" text-anchor="middle" stroke="#ffffff" stroke-width="3"
+  stroke-linejoin="round" fill="#ffffff">C'</text><text x="306.79" y="57.55" font-size="13" text-anchor="middle" fill="#000000">C'</text><text x="28.00" y="233.50" font-size="10" text-anchor="middle" stroke="#ffffff"
+  stroke-width="3" stroke-linejoin="round" fill="#ffffff">-7</text><text x="28.00" y="233.50" font-size="10" text-anchor="middle" fill="#000000">-7</text><text x="50.93" y="233.50" font-size="10" text-anchor="middle"
+  stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">-6</text><text x="50.93" y="233.50" font-size="10" text-anchor="middle" fill="#000000">-6</text><text x="73.87" y="233.50" font-size="10"
+  text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">-5</text><text x="73.87" y="233.50" font-size="10" text-anchor="middle" fill="#000000">-5</text><text x="96.80"
+  y="233.50" font-size="10" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">-4</text><text x="96.80" y="233.50" font-size="10" text-anchor="middle" fill="#000000">-4</text><text
+  x="119.73" y="233.50" font-size="10" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">-3</text><text x="119.73" y="233.50" font-size="10" text-anchor="middle"
+  fill="#000000">-3</text><text x="142.67" y="233.50" font-size="10" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">-2</text><text x="142.67" y="233.50" font-size="10"
+  text-anchor="middle" fill="#000000">-2</text><text x="165.60" y="233.50" font-size="10" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">-1</text><text x="165.60"
+  y="233.50" font-size="10" text-anchor="middle" fill="#000000">-1</text><text x="211.47" y="233.50" font-size="10" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">1</text><text
+  x="211.47" y="233.50" font-size="10" text-anchor="middle" fill="#000000">1</text><text x="234.40" y="233.50" font-size="10" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round"
+  fill="#ffffff">2</text><text x="234.40" y="233.50" font-size="10" text-anchor="middle" fill="#000000">2</text><text x="257.33" y="233.50" font-size="10" text-anchor="middle" stroke="#ffffff" stroke-width="3"
+  stroke-linejoin="round" fill="#ffffff">3</text><text x="257.33" y="233.50" font-size="10" text-anchor="middle" fill="#000000">3</text><text x="280.27" y="233.50" font-size="10" text-anchor="middle" stroke="#ffffff"
+  stroke-width="3" stroke-linejoin="round" fill="#ffffff">4</text><text x="280.27" y="233.50" font-size="10" text-anchor="middle" fill="#000000">4</text><text x="303.20" y="233.50" font-size="10" text-anchor="middle"
+  stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">5</text><text x="303.20" y="233.50" font-size="10" text-anchor="middle" fill="#000000">5</text><text x="326.13" y="233.50" font-size="10"
+  text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">6</text><text x="326.13" y="233.50" font-size="10" text-anchor="middle" fill="#000000">6</text><text x="349.07"
+  y="233.50" font-size="10" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">7</text><text x="349.07" y="233.50" font-size="10" text-anchor="middle" fill="#000000">7</text><text
+  x="372.00" y="233.50" font-size="10" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">8</text><text x="372.00" y="233.50" font-size="10" text-anchor="middle"
+  fill="#000000">8</text><text x="180.53" y="375.00" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">-7</text><text x="180.53" y="375.00" font-size="10"
+  text-anchor="end" fill="#000000">-7</text><text x="180.53" y="353.50" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">-6</text><text x="180.53"
+  y="353.50" font-size="10" text-anchor="end" fill="#000000">-6</text><text x="180.53" y="332.00" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">-5</text><text
+  x="180.53" y="332.00" font-size="10" text-anchor="end" fill="#000000">-5</text><text x="180.53" y="310.50" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">-4</text><text
+  x="180.53" y="310.50" font-size="10" text-anchor="end" fill="#000000">-4</text><text x="180.53" y="289.00" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">-3</text><text
+  x="180.53" y="289.00" font-size="10" text-anchor="end" fill="#000000">-3</text><text x="180.53" y="267.50" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">-2</text><text
+  x="180.53" y="267.50" font-size="10" text-anchor="end" fill="#000000">-2</text><text x="180.53" y="246.00" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">-1</text><text
+  x="180.53" y="246.00" font-size="10" text-anchor="end" fill="#000000">-1</text><text x="180.53" y="224.50" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">0</text><text
+  x="180.53" y="224.50" font-size="10" text-anchor="end" fill="#000000">0</text><text x="180.53" y="203.00" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">1</text><text
+  x="180.53" y="203.00" font-size="10" text-anchor="end" fill="#000000">1</text><text x="180.53" y="181.50" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">2</text><text
+  x="180.53" y="181.50" font-size="10" text-anchor="end" fill="#000000">2</text><text x="180.53" y="160.00" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">3</text><text
+  x="180.53" y="160.00" font-size="10" text-anchor="end" fill="#000000">3</text><text x="180.53" y="138.50" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">4</text><text
+  x="180.53" y="138.50" font-size="10" text-anchor="end" fill="#000000">4</text><text x="180.53" y="117.00" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">5</text><text
+  x="180.53" y="117.00" font-size="10" text-anchor="end" fill="#000000">5</text><text x="180.53" y="95.50" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">6</text><text
+  x="180.53" y="95.50" font-size="10" text-anchor="end" fill="#000000">6</text><text x="180.53" y="74.00" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">7</text><text
+  x="180.53" y="74.00" font-size="10" text-anchor="end" fill="#000000">7</text><text x="180.53" y="52.50" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">8</text><text
+  x="180.53" y="52.50" font-size="10" text-anchor="end" fill="#000000">8</text><text x="180.53" y="31.00" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">9</text><text
+  x="180.53" y="31.00" font-size="10" text-anchor="end" fill="#000000">9</text></svg>
