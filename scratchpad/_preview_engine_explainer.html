@@ -242,8 +242,9 @@
   .pc-gate { border-color:var(--green); } .pc-gate .pct { color:var(--green); }
 
   .asmband { display:flex; gap:0.8rem; align-items:stretch; margin-bottom:3.2rem; }
-  .asmband .pc-spec { flex:0 0 26rem; }
-  .asmband .pc-fig  { flex:0 0 14rem; }
+  .asmband .pc-spec { flex:0 0 30rem; }
+  .asmcol { display:flex; flex-direction:column; gap:0.6rem; flex:0 0 15rem; }
+  .asmcol .pc { flex:1 1 auto; }
 
   .stacks { position:relative; height:4.5rem; margin-bottom:2.2rem; }
   .stk { position:absolute; top:0; width:5rem; text-align:center; }
@@ -267,7 +268,9 @@
               padding:0 0.3em; font-family:var(--fm); font-weight:800;
               border:1px solid var(--blue); background:var(--blueBg); color:var(--blue); }
   .tmpl .hl.calc { border-color:var(--green); background:var(--greenBg); color:var(--green); }
-  .tcap { font-size:0.7rem; color:var(--ink2); margin:0.35rem 0 0; }
+  /* 線は文字の下（z-index 0）を通る。説明文の下に背景を敷いて線を隠す。 */
+  .tcap { font-size:0.7rem; color:var(--ink2); margin:0.35rem 0 0; display:inline-block;
+          background:var(--card); padding-right:0.5rem; max-width:52rem; }
 
   .asmflow { display:flex; gap:0.8rem; margin-top:3rem; }
   .asmflow .pc { flex:0 0 22rem; }
@@ -276,6 +279,45 @@
   .asmnote .sw { display:inline-block; width:0.75rem; height:0.75rem; margin:0 0.25rem 0 0.7rem;
                  vertical-align:-0.05rem; border:1px solid var(--blue); background:var(--blueBg); }
   .asmnote .sw.g { border-color:var(--green); background:var(--greenBg); }
+
+  /* ① 設計図は「作り方を書いたファイル」と言うより、中身を1行ずつ出したほうが速い。
+     実物の YAML（g1_l25.word_problem Lv2）の要約。数はすべて実物から取った。 */
+  .spec { font-family:var(--fm); font-size:0.7rem; line-height:1.7; margin-top:0.45rem; }
+  .spec .r { display:flex; gap:0.55rem; padding:0.14rem 0; border-top:1px dotted var(--line); }
+  .spec .r:first-child { border-top:0; }
+  .spec .k { flex:0 0 4.2rem; color:var(--gold); font-weight:800; }
+  .spec .v { flex:1 1 auto; color:var(--ink); }
+  .spec .c { flex:0 0 auto; color:var(--ink2); }
+  .spec .r.calc .k, .spec .r.calc .c { color:var(--green); }
+  .spec .r.calc .v { color:var(--green); }
+
+  /* 答えの束。引くのに問題文の穴には入らない（⑥ の突き合わせにだけ使う）。 */
+  .pc-ans { border-color:var(--green); } .pc-ans .pct { color:var(--green); }
+  .card1 { display:inline-block; font-family:var(--fm); font-weight:800; padding:0 0.45em;
+           border:1px solid var(--green); background:var(--greenBg); color:var(--green); }
+
+  /* ⑤ 式の型。④ 文型と同じ見た目にして、入るのが数だけだと見せる。 */
+  .eqb { border:2px solid var(--blue); background:var(--card); padding:0.95rem 1rem;
+         margin-top:3.4rem; font-family:var(--fm); font-size:0.95rem; white-space:nowrap; }
+  .eqb .hl { display:inline-block; min-width:2.6em; text-align:center; margin:0 0.15em;
+             padding:0 0.3em; font-weight:800;
+             border:1px solid var(--blue); background:var(--blueBg); color:var(--blue); }
+  .eqb .hl.calc { border-color:var(--green); background:var(--greenBg); color:var(--green); }
+  .eqb .sk { color:var(--ink2); font-size:0.8rem; margin-left:1.2rem; }
+  .solve { font-family:var(--fm); font-size:0.76rem; line-height:1.85; margin-top:0.35rem;
+           color:var(--ink2); }
+  .solve b { color:var(--blue); }
+
+  /* 動かす前・巻き戻したあとの空の穴。幅を保ったまま中身だけ消す（線がずれない）。 */
+  /* 中の要素は色を自分で持っている（`.cards b` も `.solve b` も）ので、
+     子孫までまとめて透明にしないと消えない。 */
+  .off, .off * { color:transparent !important; }
+  .stk .cards.off b, .card1.off { background:var(--card) !important; }
+  /* いま動いている部品 */
+  .pc.on, .tmpl.on, .eqb.on { border-color:var(--gold); box-shadow:0 0 0 3px var(--goldBg); }
+  .stk.on .cards b { box-shadow:0 0 0 3px var(--goldBg); }
+  .asmstep { font-size:0.8rem; font-weight:700; color:var(--gold); margin:0.9rem 0 0;
+             min-height:1.6em; }
 
   @media (prefers-reduced-motion:reduce) { *,*::before,*::after { transition-duration:.001s !important; } }
 </style>
@@ -629,7 +671,7 @@
 <!-- ========== 8 ========== -->
 <section>
   <h2><span class="n">08</span>どこで何が動いていたか</h2>
-  <p class="lead">ここまでに出てきたものは、6つだけです。1問できるまでを1枚にします。</p>
+  <p class="lead">ここまでに出てきたものは、6つだけです。1問できるまでを1枚にします。冒頭の問題が、この順で組み上がっています。</p>
 
   <div class="panel">
     <div class="asm" id="asm">
@@ -639,12 +681,26 @@
 
           <div class="asmband">
             <div class="pc pc-spec" id="a_spec">
-              <div class="pct">① 設計図</div>
-              <div class="pcb">この問題の作り方を書いたファイル。<b>どの文型を使うか・どの欄をどの候補から引くか・合計をどう計算するか</b>。部品の一覧は、その一部。</div>
+              <div class="pct">① 設計図 — 置き場所1つにつき1枚（1年・方程式の利用・文章題・Lv2）</div>
+              <div class="spec">
+                <div class="r"><span class="k">値段</span><span class="v">[40, 50, 60, 70, 80, 90, 110, … , 160] から2つ</span><span class="c">12種</span></div>
+                <div class="r"><span class="k">品名</span><span class="v">[みかん, りんご, なし, もも, かき, ぶどう, … ] から2つ</span><span class="c">8種</span></div>
+                <div class="r"><span class="k">個数</span><span class="v">8 〜 15 から1つ</span><span class="c">8種</span></div>
+                <div class="r"><span class="k">答え</span><span class="v">2 〜 (個数 − 2) から1つ</span><span class="c">平均10種</span></div>
+                <div class="r calc"><span class="k">合計</span><span class="v">値段a × 答え ＋ 値段b × (個数 − 答え)</span><span class="c">引かずに計算</span></div>
+                <div class="r"><span class="k">文型</span><span class="v">「1個〇円の〇と、1個〇円の〇を合わせて…」</span><span class="c">234枚から1枚</span></div>
+                <div class="r"><span class="k">式の型</span><span class="v">〇x ＋ 〇(〇 − x) ＝ 〇</span><span class="c">確かめ用</span></div>
+              </div>
             </div>
-            <div class="pc pc-fig" id="a_fig">
-              <div class="pct">② 図の係</div>
-              <div class="pcb">図のある問題では、同じ設計図から座標を出す（この問題には図が無い）。</div>
+            <div class="asmcol">
+              <div class="pc pc-fig" id="a_fig">
+                <div class="pct">② 図の係</div>
+                <div class="pcb">図のある問題では、同じ設計図から座標を出す（この問題には図が無い）。</div>
+              </div>
+              <div class="pc pc-ans" id="a_ans">
+                <div class="pct">答えを先に引く</div>
+                <div class="pcb"><b class="card1" id="kans">5</b> ← 問題文の穴には入らない。⑥ の突き合わせに使う。</div>
+              </div>
             </div>
           </div>
 
@@ -660,23 +716,37 @@
           <div class="tmpl" id="a_tmpl">1個<span class="hl" id="h0">130</span>円の<span class="hl" id="h1">なし</span>と、1個<span class="hl" id="h2">110</span>円の<span class="hl" id="h3">ぶどう</span>を合わせて<span class="hl" id="h4">10</span>個買ったところ、代金の合計は<span class="hl calc" id="h5">1200</span>円だった。</div>
           <p class="tcap">④ 文型 — 人が書いた、空白つきの文。ここに数と品名が入って問題文になる。</p>
 
+          <div class="eqb" id="a_eq"><span class="hl" id="e0">130</span>x ＋ <span class="hl" id="e1">110</span>(<span class="hl" id="e2">10</span> − x) ＝ <span class="hl calc" id="e3">1200</span><span class="sk">← 人が書いた形は 〇x ＋ 〇(〇 − x) ＝ 〇</span></div>
+          <p class="tcap">⑤ 式の型 — 文型と同じで、穴のあいた式です。<b>数だけが入ります</b>（品名は渡りません）。式そのものは人が書いたもので、機械は考えていません。</p>
+
           <div class="asmflow">
             <div class="pc pc-chk" id="a_chk">
-              <div class="pct">⑤ 確かめ係</div>
-              <div class="pcb">問題文の<b>数だけ</b>を受け取り、人が書いた<b>式の型に入れて解く</b> → <b>5個</b>。作ったときと計算の向きが逆になる。</div>
+              <div class="pct">⑤ 確かめ係 — 入った式を解く</div>
+              <div class="solve">
+                <div id="sv1">130x ＋ 110(10 − x) ＝ 1200</div>
+                <div id="sv2">1100 ＋ 20x ＝ 1200　→　20x ＝ 100</div>
+                <div id="sv3">x ＝ <b>5</b></div>
+              </div>
             </div>
             <div class="pc pc-gate" id="a_gate">
               <div class="pct">⑥ 検査</div>
-              <div class="pcb">最初に決めた答えと<b>一致すれば出す</b>。ずれていれば捨てる。</div>
+              <div class="pcb">先に引いた <b class="card1">5</b> と、解いて出た <b>5</b> が<b>一致すれば出す</b>。ずれていれば捨てる。</div>
             </div>
           </div>
         </div>
       </div>
       <p class="asmnote"><span class="sw"></span>候補の束から引いた5つ<span class="sw g"></span>答えから計算した1つ。<b>穴は6つあるのに、束は5つしかありません。</b></p>
+      <p class="asmstep" id="a_step"></p>
+    </div>
+    <div class="btnrow" style="margin-top:0.4rem">
+      <button id="a_play">1問できるまでを動かす</button>
+      <span class="note" style="margin:0">押すと空にしてから、順に埋めます</span>
     </div>
   </div>
 
   <p>合計の欄だけ、候補の束がありません。ここは引くのではなく、決めた答えから計算します。<b>だから割り切れない問題が原理的に出ません。</b></p>
+
+  <p>式の型に入る数は、文型に入る数と<b>同じ4つ</b>です（130・110・10・1200）。品名は渡していません。だから確かめる側は「なしが何個か」を知らないまま <span class="eq">x ＝ 5</span> を出します。<b>日本語の意味は、ここでは一度も使われていません。</b></p>
 
   <div class="panel scroll">
     <table class="maptbl">
@@ -684,8 +754,8 @@
       <tbody>
         <tr>
           <td class="nm">① 設計図</td>
-          <td>どの文型を使い、どの欄をどこから引き、何を計算するかを書いた設定ファイル</td>
-          <td class="wh">08 の図の①</td>
+          <td>どの文型を使い、どの欄をどこから引き、何を計算するかを書いた設定ファイル（YAML）</td>
+          <td class="wh">08 の図の①（中身の要約）</td>
           <td><span class="who h">人</span></td>
         </tr>
         <tr>
@@ -708,8 +778,8 @@
         </tr>
         <tr>
           <td class="nm">⑤ 確かめ係</td>
-          <td>問題文の数を、人が書いた式の型に入れて解く関数</td>
-          <td class="wh">05 の右の列</td>
+          <td>問題文の数を、人が書いた式の型（<span class="eq">〇x ＋ 〇(〇 − x) ＝ 〇</span>）に入れて解く関数</td>
+          <td class="wh">05 の右の列 ／ 08 の図の⑤</td>
           <td><span class="who h">人</span></td>
         </tr>
         <tr>
@@ -925,6 +995,8 @@
     // [束, カード, 穴, 計算で作る側か]
     var LINK = [['t0','k0','h0',0],['t1','k1','h1',0],['t2','k2','h2',0],
                 ['t3','k3','h3',0],['t4','k4','h4',0],['t5','k5','h5',1]];
+    // [問題文の穴, 式の型の穴, 計算で作る側か]。品名の穴（h1/h3）は式に渡らない。
+    var EQL = [['h0','e0',0],['h2','e1',0],['h4','e2',0],['h5','e3',1]];
 
     function layout(){
       var b = inner.getBoundingClientRect(); if (!b.width) return;
@@ -976,6 +1048,7 @@
       }
       var BLUE='var(--blue)', GREEN='var(--green)', GOLD='var(--gold)';
       var spec=r('a_spec'), fig=r('a_fig'), tmpl=r('a_tmpl'), chk=r('a_chk'), gate=r('a_gate');
+      var ans=r('a_ans'), eq=r('a_eq');
 
       // 設計図は「作り方」なので、束・組み立て係・文型・図の係の全部に薄くつながる
       LINK.forEach(function(L){
@@ -983,19 +1056,81 @@
       });
       if (spec&&tmpl) line(spec.cx, spec.bo, spec.cx, tmpl.t-3, GOLD, true);
       if (spec&&fig)  hline(spec.r, spec.cy, fig.l-2, fig.cy, GOLD, true);
+      if (spec&&eq)   line(spec.l+30, spec.bo, eq.l+30, eq.t-3, GOLD, true);
 
       LINK.forEach(function(L){                       // 束（と計算）→ 穴
         var k=r(L[1]), h=r(L[2]);
         if (k&&h) line(k.cx, k.bo, h.cx, h.t-3, L[3]?GREEN:BLUE, false);
       });
-      if (tmpl&&chk)  line(tmpl.cx, tmpl.bo+18, chk.cx, chk.t-3, BLUE, false);
-      if (chk&&gate)  hline(chk.r, chk.cy, gate.l-3, gate.cy, GREEN, false);
+      // 先に引いた答え → ③ 組み立て係（合計はここで計算される）
+      var kans=r('kans'), k5=r('k5');
+      if (kans&&k5) line(kans.cx, kans.bo+2, k5.cx+6, k5.t-3, GREEN, false);
+      // 問題文の穴 → 式の型の穴（数だけが渡る。品名の穴 h1/h3 からは線が出ない）
+      EQL.forEach(function(L){
+        var h=r(L[0]), e=r(L[1]);
+        if (h&&e) line(h.cx, h.bo+2, e.cx, e.t-3, L[2]?GREEN:BLUE, false);
+      });
+      if (eq&&chk)   line(eq.cx, eq.bo+18, chk.cx, chk.t-3, BLUE, false);
+      if (chk&&gate) hline(chk.r, chk.cy, gate.l-3, gate.cy, GREEN, false);
     }
 
     layout();
     if (window.ResizeObserver) new ResizeObserver(layout).observe(inner);
     window.addEventListener('resize', layout);
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(layout);
+
+    /* 動かす。空にしてから、引く → 計算する → 文型に入れる → 式の型に入れる →
+       解く → 突き合わせる、の順に埋める。文型に文字が入るのと、式に数が入るのを
+       同じ見た目にしてあるので、並べて動かすと対応が読める。
+       穴は `off` で中身だけ消す（幅が変わると線を引き直すことになる）。 */
+    var stepEl=$('a_step'), btn=$('a_play'), timer=null;
+    var FILL = ['k0','k1','k2','k3','k4','k5','kans','h0','h1','h2','h3','h4','h5',
+                'e0','e1','e2','e3','sv1','sv2','sv3'];
+    var PARTS = ['a_spec','a_fig','a_ans','a_tmpl','a_eq','a_chk','a_gate',
+                 't0','t1','t2','t3','t4','t5'];
+    var STEPS = [
+      { t:'① 設計図を読む — どこから引くか・何を計算するか・どの文型を使うかが書いてある',
+        on:['a_spec','a_fig'] },
+      { t:'候補の束から5つ引く（値段2つ・品名2つ・個数1つ）',
+        on:['t0','t1','t2','t3','t4'], fill:['k0','k1','k2','k3','k4'] },
+      { t:'答えも先に引く — これは問題文には出さない',
+        on:['a_ans'], fill:['kans'] },
+      { t:'③ 組み立て係が合計を計算する — 130×5 ＋ 110×5 ＝ 1200（引くのではない）',
+        on:['t5'], fill:['k5'] },
+      { t:'④ 文型の穴に入れる — ここで問題文になる',
+        on:['a_tmpl'], fill:['h0','h1','h2','h3','h4','h5'] },
+      { t:'⑤ 式の型の穴に、問題文の数だけを入れる — 品名は渡らない',
+        on:['a_eq'], fill:['e0','e1','e2','e3'] },
+      { t:'⑤ 入った式を解く — 作ったときと向きが逆（かけて足した → 解く）',
+        on:['a_chk'], fill:['sv1','sv2','sv3'] },
+      { t:'⑥ 先に引いた 5 と、解いて出た 5 を突き合わせる → 一致したので出す',
+        on:['a_gate'] }
+    ];
+
+    function clearOn(){ PARTS.forEach(function(id){ var e=$(id); if (e) e.classList.remove('on'); }); }
+    function setFilled(on){
+      FILL.forEach(function(id){ var e=$(id); if (e) e.classList.toggle('off', !on); });
+    }
+    function stop(){ if (timer) { clearTimeout(timer); timer=null; } }
+
+    function play(){
+      stop(); clearOn(); setFilled(false); stepEl.textContent='';
+      btn.textContent='もう一度';
+      var i=0;
+      (function next(){
+        if (i >= STEPS.length) {
+          clearOn(); stepEl.textContent='ここまでで1問。機械がしたのは、引く・計算する・入れる・突き合わせるだけです。';
+          timer=null; return;
+        }
+        var s=STEPS[i++];
+        clearOn();
+        (s.on||[]).forEach(function(id){ var e=$(id); if (e) e.classList.add('on'); });
+        (s.fill||[]).forEach(function(id){ var e=$(id); if (e) e.classList.remove('off'); });
+        stepEl.textContent=s.t;
+        timer=setTimeout(next, 1500);
+      })();
+    }
+    if (btn) btn.addEventListener('click', play);
   })();
 })();
 </script>
