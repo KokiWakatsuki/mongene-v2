@@ -285,7 +285,7 @@ def solve_exam_similar_solid_volume(numbers: Mapping[str, Any]) -> list[Solution
         _exam_l6_step(
             "cube_ratio_for_volume",
             "相似な立体の体積の比は相似比の三乗に等しいことから、体積の比を求める。",
-            "相似比を三乗して体積の比を求める",
+            f"{m}³:{n}³",
         ),
         _exam_l6_step(
             "apply_volume_ratio",
@@ -319,13 +319,13 @@ def solve_exam_cone_split_volume_ratio(numbers: Mapping[str, Any]) -> list[Solut
             "identify_similar_cone",
             "底面に平行な平面で切ると、切り口から上の小さい円錐はもとの円錐と相似になる。"
             "その相似比は、高さの比（上の部分ともとの円錐全体の比）に等しい。",
-            "小さい円錐ともとの円錐の相似比を求める",
+            f"{upper}:{upper + lower}",
         ),
         _exam_l6_step(
             "cube_ratio_for_volume",
             "相似な立体の体積の比は相似比の三乗に等しいことから、"
             "小さい円錐ともとの円錐全体の体積の比を求める。",
-            "相似比を三乗して体積の比を求める",
+            f"{small}:{whole}",
         ),
         _exam_l6_step(
             "subtract_for_frustum",
@@ -403,7 +403,7 @@ def solve_exam_parallel_line_area_guided(numbers: Mapping[str, Any]) -> list[Sol
                 "compute_whole_area",
                 "求めた面積の比と、わかっている三角形ADEの面積から、"
                 "三角形ABC全体の面積を求める。",
-                "三角形ABC全体の面積を求める",
+                f"{quad + area_ade}cm²",
             ),
             _exam_l6_step(
                 "subtract_inner_triangle",

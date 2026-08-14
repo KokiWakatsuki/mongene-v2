@@ -26,6 +26,9 @@ from engine.core.registry import register_solver
 # math.judge_polyhedron_element_count（g1_l47.knowledge Lv2・mode="element_count"）
 # ---------------------------------------------------------------------------
 ELEMENT_QUANTITIES: tuple[str, ...] = ("faces", "edges", "vertices")
+
+# 解説の括弧に出す日本語（面③。「読み取った結果」＝何の数を問われているか）。
+_QUANTITY_JP: dict[str, str] = {"faces": "面", "edges": "辺", "vertices": "頂点"}
 ELEMENT_LABEL_JA: dict[str, str] = {"faces": "面", "edges": "辺", "vertices": "頂点"}
 SOLID_LABEL_JA: dict[str, str] = {"prism": "角柱", "pyramid": "角錐"}
 
@@ -82,7 +85,7 @@ def judge_polyhedron_element_count(
     other = "誤り" if is_true else "正しい"
     steps = _judge_steps(
         correct,
-        "主張されている立体の種類と、問われている量の種類を読み取る",
+        f"{_QUANTITY_JP[q]}の数の主張",
         "立体の種類（角柱か角錐か）と、数を主張されている量（面・辺・頂点のどれか）を読み取る。",
         "底面の辺の数から公式で実際の個数を求め、主張されている個数と比べて正誤を判別する。",
     )
@@ -113,11 +116,11 @@ def judge_regular_polyhedron_condition(shape_sides: object, count_at_vertex: obj
     other = "誤り" if can_form else "正しい"
     steps = _judge_steps(
         correct,
-        "面の正多角形の種類と、1つの頂点に集まる面の数を読み取る",
+        f"正{m}角形が{k}枚",
         "面になっている正多角形の種類と、1つの頂点に集まる面の数を読み取る。",
         (
             "その正多角形の1つの内角の大きさに、集まる面の数をかけた角の和を求め、"
-            "それが一まわりの角より小さいときだけ、へこませて立体に組み立てられると判別する。"
+            "それが一まわりの角より小さいときだけ、折り曲げて立体の頂点にできると判別する。"
         ),
     )
     answer = ChoiceAnswer(
@@ -219,7 +222,7 @@ def judge_solid_position_relation(
             raise ValueError(f"辺の指定が不正: {a!r}, {b!r}")
         correct = _classify_edge_edge(coord, a, b)
         options = EDGE_EDGE_OPTIONS
-        s1_display = "問われている2つの辺を読み取る"
+        s1_display = ""
         s1_narration = "直方体の中で、位置関係を問われている2つの辺がどれかを読み取る。"
         s2_narration = (
             "2辺の向きが同じなら平行、向きが異なり交わっていれば垂直に交わる、"
@@ -231,7 +234,7 @@ def judge_solid_position_relation(
             raise ValueError(f"辺/面の指定が不正: {a!r}, {b!r}")
         correct = _classify_edge_face(coord, a, b)
         options = EDGE_FACE_OPTIONS
-        s1_display = "問われている辺と面を読み取る"
+        s1_display = ""
         s1_narration = "直方体の中で、位置関係を問われている辺と面がどれかを読み取る。"
         s2_narration = (
             "辺が面にふくまれていれば面上にある、辺が面とどこまでいっても交わらなければ平行、"

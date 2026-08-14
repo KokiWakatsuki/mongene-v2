@@ -54,7 +54,7 @@ def congruence_transfer_values(side_value: object, angle_value: object) -> Solut
     steps = [
         Step(
             op="identify_given_correspondence",
-            args=[], result_srepr="", result_display="対応する辺・角の組を読み取る",
+            args=[], result_srepr="", result_display=f"{sympy.sstr(sv)} と {sympy.sstr(av)}°",
             narration="合同である2つの図形のうち、わかっている辺の長さと角の大きさが、"
             "それぞれどの辺・角に対応するかを読み取る。",
         ),
@@ -93,7 +93,7 @@ def congruence_symbol_and_side(p_labels: object, q_labels: object, i: object, j:
         ),
         Step(
             op="identify_side_correspondence",
-            args=[], result_srepr="", result_display="頂点の対応する並びを確認する",
+            args=[], result_srepr="", result_display=f"{p_labels} と {q_labels}",
             narration="合同を表す式で、頂点がどの順に対応づけられているかを確認する。",
         ),
         Step(
@@ -136,7 +136,7 @@ def congruence_corresponding_pair(
     steps = [
         Step(
             op="identify_angle_correspondence",
-            args=[], result_srepr="", result_display="角の対応する頂点を確認する",
+            args=[], result_srepr="", result_display=f"{p} と {q}",
             narration="合同を表す式で、角の頂点がどの位置に対応づけられているかを確認する。",
         ),
         Step(
@@ -146,7 +146,7 @@ def congruence_corresponding_pair(
         ),
         Step(
             op="identify_side_correspondence",
-            args=[], result_srepr="", result_display="辺の対応する頂点の並びを確認する",
+            args=[], result_srepr="", result_display=f"{p} と {q}",
             narration="合同を表す式で、辺の両端の頂点がどの位置に対応づけられているかを確認する。",
         ),
         Step(

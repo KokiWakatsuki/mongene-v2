@@ -37,6 +37,12 @@ levels:
     params:
       scale_domain: {int_range: [1, 20]}
       delta_domain: {int_set: [-8, -7, -6, -5, -4, -3, -2, -1, 1, 2, 3, 4, 5, 6, 7, 8]}
+    # 図形の寸法を教材の大きさに戻した結果、組の数が減った（`statement_size`）。
+    # 数を現実に戻すのが先で、重複は仕様として宣言する。
+    dup_rate_max: 0.35
+    dup_rate_reason: |
+      三平方の定理の逆の判定も、使える3辺の組はピタゴラス数とその近傍に限られる
+      （最長辺 100cm 以下・実測 0.25）。g3_l52.find_value.Lv2 と同じ理由。
     given: [statement]
     asked: [choice]
     visual: none

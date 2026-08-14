@@ -23,6 +23,7 @@ from engine.core.contracts import (
 )
 from engine.core.registry import REGISTRY, register_recipe
 from engine.core.rng import Rng, draw
+from engine.core.verify.answer_size import answer_is_too_big, limits_for
 
 _X = sympy.Symbol("x")
 
@@ -203,14 +204,30 @@ def _construct_positive_root_product_form(rng: Rng) -> tuple[int, int, int]:
     return x0, c, k
 
 
+# 答えが大きすぎたら引き直す回数（`pythagorean_find_value.py` と同じ考え）。
+_ANSWER_SIZE_REDRAWS = 40
+
+
 @register_recipe("math.solve_quadratic", provides_concepts=_QUADRATIC_CONCEPTS)
 def solve_quadratic(ctx: CellContext, rng: Rng) -> MR:
-    """2次方程式を解く／左辺に代入して評価する MR を組む（C3 g3_l24〜l28.calculation）。"""
-    mode = cast(str, ctx.spec_level.params["mode"])
-    eq_str, given_disp, value = _quadratic_construct(mode, rng)
+    """2次方程式を解く／左辺に代入して評価する MR を組む（C3 g3_l24〜l28.calculation）。
 
+    **解の根号の中に上限を置き、超えたら係数を引き直す。** 係数の定義域はそのまま。
+    前は判別式が 325 まで振れたので `x = (7 ± √229)/10` のような、解を見ても
+    大きさの見当がつかない答えが出ていた（教科書の解の公式の練習は √50 あたりまで）。
+    """
+    mode = cast(str, ctx.spec_level.params["mode"])
+    limits = limits_for(ctx.spec_level)
     solver = REGISTRY.solver("math.solve_quadratic")
-    sol = cast(Solution, solver(eq_str, mode, value))
+    eq_str = given_disp = value = sol = None
+    for attempt in range(_ANSWER_SIZE_REDRAWS):
+        attempt_rng = rng.spawn(attempt) if attempt else rng
+        eq_str, given_disp, value = _quadratic_construct(mode, attempt_rng)
+        sol = cast(Solution, solver(eq_str, mode, value))
+        display = str(getattr(sol.answer, "display", "") or "")
+        if not answer_is_too_big(display, limits):
+            break
+    assert eq_str is not None and given_disp is not None and sol is not None
     assert isinstance(sol.answer, SymbolicAnswer)
 
     lhs_s, rhs_s = eq_str.split("=", 1)

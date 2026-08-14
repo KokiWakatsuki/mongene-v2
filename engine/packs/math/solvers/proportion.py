@@ -88,7 +88,9 @@ def evaluate_direct_proportion(a: object, x0: object, mode: object) -> Solution:
                 op="check_signs",
                 args=[],
                 result_srepr=sympy.srepr(a_s * x_s),
-                result_display="比例定数とxの値の符号を確認する",
+                result_display=(
+                    f"aは{'正' if a_s > 0 else '負'}、xは{'正' if x_s > 0 else '負'}"
+                ),
                 narration="比例定数とxの値、それぞれの符号（正か負か）を確認する。",
             )
         )
@@ -192,7 +194,7 @@ def judge_functional_relation(is_functional: object) -> Solution:
             op="check_unique_determination",
             args=[],
             result_srepr=("functional" if truthy else "not_functional"),
-            result_display="xの値を1つ決めたとき、yの値がただ1つに決まるかを調べる",
+            result_display=("ただ1つに決まる" if truthy else "ただ1つには決まらない"),
             narration="xの値を1つ決めたとき、それに対応するyの値がただ1つに決まるかどうかを調べる。",
         ),
         Step(
@@ -234,7 +236,7 @@ def judge_direct_proportion_table(xs: object, ys: object) -> Solution:
             op="compute_ratio_y_over_x",
             args=[],
             result_srepr=str([sympy.srepr(r) for r in ratios]),
-            result_display="対応するxとyの商 y/x を、それぞれ計算する",
+            result_display="、".join(fmt_number(r) for r in ratios),
             narration="表の対応するxとyについて、商y/xをそれぞれ計算する。",
         ),
         Step(
@@ -274,7 +276,7 @@ def judge_inverse_proportion_table(xs: object, ys: object) -> Solution:
             op="compute_product_xy",
             args=[],
             result_srepr=str([sympy.srepr(p) for p in products]),
-            result_display="対応するxとyの積 xy を、それぞれ計算する",
+            result_display="、".join(fmt_number(pr) for pr in products),
             narration="表の対応するxとyについて、積xyをそれぞれ計算する。",
         ),
         Step(
@@ -368,7 +370,9 @@ def solve_inverse_proportion_from_point(x0: object, y0: object, mode: object) ->
                 op="check_signs",
                 args=[],
                 result_srepr=sympy.srepr(a),
-                result_display="点のx座標とy座標の符号を確認する",
+                result_display=(
+                    f"xは{'正' if x0_s > 0 else '負'}、yは{'正' if y0_s > 0 else '負'}"
+                ),
                 narration="通る点のx座標とy座標、それぞれの符号（正か負か）を確認する。",
             )
         )
@@ -413,7 +417,7 @@ def judge_proportion_graph_direction(is_a_positive: object) -> Solution:
             op="check_sign",
             args=[],
             result_srepr=("positive" if truthy else "negative"),
-            result_display="比例定数の符号を確認する",
+            result_display=("aは正" if truthy else "aは負"),
             narration="比例の式 y=ax の比例定数 a の符号（正か負か）を確認する。",
         ),
         Step(
@@ -433,29 +437,26 @@ def judge_proportion_graph_direction(is_a_positive: object) -> Solution:
 # ---------------------------------------------------------------------------
 @register_solver("math.judge_hyperbola_quadrants")
 def judge_hyperbola_quadrants(is_a_positive: object) -> Solution:
-    """比例定数 a の符号から双曲線がどの象限にあるかを判別する（g1_l34.knowledge Lv1）。
+    """比例定数 a の符号から双曲線が座標平面のどの部分にあるかを判別する（g1_l34.knowledge Lv1）。
 
     is_a_positive（bool 相当）だけから判定する（double-solve）。答えは ChoiceAnswer
     （二つの枝からなり軸に交わらないことは符号によらない不変の事実として correct 文に
     含める）。narration に数字は書かない。
+
+    **「象限」は使わない。** 中学の教科書に無い用語（高校で扱う）なので、中1の
+    反比例のグラフでは「右上と左下の部分」「左上と右下の部分」と書く。
     """
     truthy = str(is_a_positive).lower() in ("true", "1")
-    correct = (
-        "第一象限と第三象限にある（二つの枝からなり、x軸・y軸と交わらない）"
-        if truthy
-        else "第二象限と第四象限にある（二つの枝からなり、x軸・y軸と交わらない）"
-    )
-    other = (
-        "第二象限と第四象限にある（二つの枝からなり、x軸・y軸と交わらない）"
-        if truthy
-        else "第一象限と第三象限にある（二つの枝からなり、x軸・y軸と交わらない）"
-    )
+    positive_side = "右上と左下の部分にある（二つの枝からなり、x軸・y軸と交わらない）"
+    negative_side = "左上と右下の部分にある（二つの枝からなり、x軸・y軸と交わらない）"
+    correct = positive_side if truthy else negative_side
+    other = negative_side if truthy else positive_side
     steps = [
         Step(
             op="check_sign",
             args=[],
             result_srepr=("positive" if truthy else "negative"),
-            result_display="比例定数の符号を確認する",
+            result_display=("aは正" if truthy else "aは負"),
             narration="反比例の式 y=a/x の比例定数 a の符号（正か負か）を確認する。",
         ),
         Step(
@@ -463,7 +464,7 @@ def judge_hyperbola_quadrants(is_a_positive: object) -> Solution:
             args=[],
             result_srepr=correct,
             result_display=correct,
-            narration="aが正なら第一・第三象限、負なら第二・第四象限に双曲線がある。"
+            narration="aが正なら右上と左下、負なら左上と右下の部分に双曲線がある。"
             "どちらも二つの枝からなり、x軸・y軸と交わらない。",
         ),
     ]

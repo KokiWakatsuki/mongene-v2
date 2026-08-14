@@ -41,6 +41,11 @@ levels:
       mode: segment_and_area
       a_domain: {int_range: [-4, 4], exclude: [0]}
       x_domain: {int_range: [-6, 6], exclude: [0]}
+    # 答えの分母・根号の中がこの単元では構造的に大きくなる（`engine.eval.answer_size`）。
+    answer_size_max: {radicand: 65}
+    answer_size_reason: |
+      線分ABの長さは |xB − xA|・√(1 + 傾き²) なので、根号の中は 1+傾き² の形にしか
+      ならない（傾き8で 65）。g3_l37.find_value.Lv3 と同じ理由。
     given: [condition]
     asked: [area]
     visual: none

@@ -36,6 +36,7 @@ import sympy
 
 from engine.core.contracts import Solution, Step, SymbolicAnswer
 from engine.core.registry import register_solver
+from engine.packs.math.solvers.arithmetic import fmt_measure
 
 _PI_STAR_RE = re.compile(r"\*pi")
 
@@ -47,7 +48,15 @@ def _fmt_pi(expr: sympy.Expr, unit: str = "") -> str:
 
 
 def _fmt_plain(expr: sympy.Expr, unit: str = "") -> str:
-    """π を含まない値の表示形（分数は "p/q"）。単位があれば末尾に空白区切り。"""
+    """π を含まない値の表示形。単位があれば末尾に空白区切り。
+
+    **有限小数で書ける値は小数で書く。** 量には小数で答えるのが教材の作法で、
+    「三角柱の体積 225/2 cm³」は「112.5 cm³」でなければならない
+    （底面が直角をはさむ2辺 3cm・5cm の直角三角形＝底面積が 15/2 になる場合）。
+    割り切れない値は分数のまま出す（量として書けない形を隠さない）。
+    """
+    if isinstance(expr, sympy.Rational):
+        return f"{fmt_measure(expr)} {unit}" if unit else fmt_measure(expr)
     s = sympy.sstr(expr).replace("*", "")
     return f"{s} {unit}" if unit else s
 
@@ -256,7 +265,7 @@ def _handle_l51_composite_or_reverse_surface(values: Mapping[str, object]) -> So
         steps = [
             Step(
                 op="form_surface_area_equation",
-                args=[], result_srepr="", result_display="2πr²+2πrh=表面積 の方程式をつくる",
+                args=[], result_srepr="", result_display=f"2πr² + 2πr × {h} = {k}π",
                 narration=(
                     "円柱の表面積の公式に、高さと表面積の値をあてはめ、半径 r についての"
                     "方程式をつくる。"
@@ -283,7 +292,7 @@ def _handle_l52_cylinder_volume_substitution(values: Mapping[str, object]) -> So
     steps = [
         Step(
             op="substitute_into_volume_formula",
-            args=[], result_srepr="", result_display="V=πr²h に半径と高さの値を代入する",
+            args=[], result_srepr="", result_display=f"π × {r}² × {h}",
             narration="体積の公式に、与えられた半径と高さの値をそれぞれ代入する。",
         ),
         Step(
@@ -403,7 +412,7 @@ def _handle_l52_composite_or_reverse_volume(values: Mapping[str, object]) -> Sol
         steps = [
             Step(
                 op="form_volume_equation",
-                args=[], result_srepr="", result_display="立方体+1/3·a²h=合計の体積 の方程式をつくる",
+                args=[], result_srepr="", result_display=f"{a}³ + {a}² × h / 3 = {k}",
                 narration=(
                     "立方体の体積と、高さの分からない正四角錐の体積の公式に、辺の長さと"
                     "全体の体積の値をあてはめ、高さについての方程式をつくる。"
@@ -435,7 +444,7 @@ def _handle_l53_sphere_direct(values: Mapping[str, object]) -> Solution:
         # ＝G-FP が安定する（BRIEF「★単一パラメータのセルは原理的に通らない」）。
         Step(
             op="read_radius_from_statement",
-            args=[], result_srepr="", result_display="球の半径を読み取る",
+            args=[], result_srepr="", result_display=f"{r}",
             narration="問題文から球の半径を読み取る（直径で与えられているときは半分にする）。",
         ),
         Step(
@@ -475,7 +484,7 @@ def _handle_l53_hemisphere_or_reverse(values: Mapping[str, object]) -> Solution:
             # Lv1 と同じ variant 中立の第1手（与え方を dup の軸にするため）。
             Step(
                 op="read_radius_from_statement",
-                args=[], result_srepr="", result_display="球の半径を読み取る",
+                args=[], result_srepr="", result_display=f"{r}",
                 narration="問題文から球の半径を読み取る（直径で与えられているときは半分にする）。",
             ),
             Step(
@@ -504,7 +513,7 @@ def _handle_l53_hemisphere_or_reverse(values: Mapping[str, object]) -> Solution:
         steps = [
             Step(
                 op="form_sphere_surface_equation",
-                args=[], result_srepr="", result_display="4πr²=表面積 の方程式をつくる",
+                args=[], result_srepr="", result_display=f"4πr² = {k}π",
                 narration="球の表面積の公式に、表面積の値をあてはめ、半径 r についての方程式をつくる。",
             ),
             Step(

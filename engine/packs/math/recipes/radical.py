@@ -24,6 +24,7 @@ from engine.core.contracts import (
 )
 from engine.core.registry import REGISTRY, register_recipe
 from engine.core.rng import Rng, draw
+from engine.core.verify.answer_size import answer_is_too_big, limits_for
 
 _RADICAL_CONCEPTS = [
     "radical.square_of_root",
@@ -180,14 +181,33 @@ def _radical_construct(mode: str, rng: Rng) -> tuple[str, str]:
     raise ValueError(f"未知の mode: {mode!r}")
 
 
+# 答えが大きすぎたら引き直す回数（`pythagorean_find_value.py` と同じ考え）。
+_ANSWER_SIZE_REDRAWS = 40
+
+
 @register_recipe("math.simplify_radical", provides_concepts=_RADICAL_CONCEPTS)
 def simplify_radical(ctx: CellContext, rng: Rng) -> MR:
-    """根号を含む式を簡約する MR を組む（C3 g3_l14/l17〜l21.calculation）。"""
-    mode = cast(str, ctx.spec_level.params["mode"])
-    expr_str, given_disp = _radical_construct(mode, rng)
+    """根号を含む式を簡約する MR を組む（C3 g3_l14/l17〜l21.calculation）。
 
+    **答えの根号の中に上限を置き、超えたら組み直す。** 前は `√11 × √19 → √209`・
+    `2√5 × √7 ÷ √11 → 2√385/11` のように、素因数分解のできない答えが出ていた
+    （中学は3つの異なる素数を1つの式に置かない）。定義域（2〜20）はそのまま。
+
+    有理化のように**根号の中と分母が同じ数になる**セルは family YAML の
+    `answer_size_max` で宣言してあり、そのセルは引き直さない。
+    """
+    mode = cast(str, ctx.spec_level.params["mode"])
+    limits = limits_for(ctx.spec_level)
     solver = REGISTRY.solver("math.simplify_radical")
-    sol = cast(Solution, solver(expr_str, mode))
+    expr_str = given_disp = sol = None
+    for attempt in range(_ANSWER_SIZE_REDRAWS):
+        attempt_rng = rng.spawn(attempt) if attempt else rng
+        expr_str, given_disp = _radical_construct(mode, attempt_rng)
+        sol = cast(Solution, solver(expr_str, mode))
+        display = str(getattr(sol.answer, "display", "") or "")
+        if not answer_is_too_big(display, limits):
+            break
+    assert expr_str is not None and given_disp is not None and sol is not None
     assert isinstance(sol.answer, SymbolicAnswer)
     # 恒真: 答えは与式と数学的に等しい（簡約前後で値が変わらない）。sympy の堅牢なゼロ判定
     # `.equals(0)` を使う（`diff.evalf()` は記号的にゼロの式でゼロ確定のため精度を無限に上げ

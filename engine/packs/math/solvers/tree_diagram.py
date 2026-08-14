@@ -27,10 +27,12 @@ _TREE_NARRATION: dict[str, str] = {
                        "それを順に読み上げて、全部で何通りかを数える。",
 }
 
-_TREE_PHRASE: dict[str, str] = {
-    "list_first_choices": "1回目の枝を分ける",
-    "branch_second_choices": "2回目の枝を分ける",
-}
+def _tree_phrase(firsts: list[str], seconds: list[str]) -> dict[str, str]:
+    """樹形図の手の括弧（枝そのもの）。指示の言い直しは置かない（面③）。"""
+    return {
+        "list_first_choices": "、".join(firsts),
+        "branch_second_choices": "、".join(seconds),
+    }
 
 
 @register_solver("math.tree_diagram_outcomes")
@@ -74,7 +76,11 @@ def tree_diagram_outcomes(items: object, draws: object, replace: object) -> Solu
         Step(
             op=op, args=[],
             result_srepr=srepr if i == len(_TREE_OPS) - 1 else "",
-            result_display=disp if i == len(_TREE_OPS) - 1 else _TREE_PHRASE[op],
+            result_display=disp if i == len(_TREE_OPS) - 1
+            else _tree_phrase(
+                list(dict.fromkeys(t[0] for t in tuples)),
+                list(dict.fromkeys(t[1] for t in tuples if len(t) > 1)),
+            )[op],
             narration=_TREE_NARRATION[op],
         )
         for i, op in enumerate(_TREE_OPS)

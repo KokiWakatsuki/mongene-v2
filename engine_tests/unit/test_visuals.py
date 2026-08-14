@@ -280,6 +280,25 @@ def test_frequency_polygon_drops_to_zero_at_both_ends() -> None:
     assert ys[0] == ys[-1] == max(ys)  # y は下向きが正＝0 が最下端
 
 
+def test_frequency_polygon_stays_inside_the_axes() -> None:
+    """度数折れ線は**軸の内側**に収まる（両端を階級の外へ下ろすので軸を広げる）。
+
+    軸を階級の範囲だけで取っていたころ、折れ線の両端が軸の外へ出て、
+    グラフが枠を突き抜けて切れていた。図として正しくない上に、生徒には
+    「線がどこかへ消えた」ようにしか見えない。
+    """
+    for params in (_POLY, _CMP):
+        svg = render_frequency_chart_svg(params, draw=True)
+        axis = re.findall(
+            r'<line x1="([\d.]+)" y1="[\d.]+" x2="([\d.]+)" y2="[\d.]+" '
+            r'stroke="#000000" stroke-width="1.5"/>', svg)
+        x_left = min(float(a) for a, _ in axis)
+        x_right = max(float(b) for _, b in axis)
+        for chunk in re.findall(r'<polyline points="([^"]*)"', svg):
+            xs = [float(p.split(",")[0]) for p in chunk.split(" ")]
+            assert x_left - 0.5 <= min(xs) and max(xs) <= x_right + 0.5
+
+
 def test_cumulative_line_is_monotone_non_decreasing() -> None:
     """累積の折れ線は必ず単調非減少（描画 y は単調非増加）。"""
     svg = render_frequency_chart_svg(_CUML, draw=True)

@@ -14,6 +14,13 @@ levels:
     recipe: math.equilateral_triangle_properties
     params:
       side_domain: {int_range: [1, 500]}
+    # 図形の寸法を教材の大きさに戻した結果、組の数が減った（`statement_size`）。
+    # 数を現実に戻すのが先で、重複は仕様として宣言する。
+    dup_rate_max: 0.45
+    dup_rate_reason: |
+      「1辺 N cm の正三角形の辺の長さと角の大きさ」なので、変えられるのは N だけ。
+      図形の寸法を教材の大きさ（100cm 以下）に戻すと N は約100通りしかない
+      （実測 0.36）。N を広げると「1辺445cmの正三角形」に戻る。
     given: [condition]
     asked: [value]
     visual: none

@@ -189,21 +189,21 @@ def solve_multiple_union(numbers: Mapping[str, Any]) -> list[Solution]:
             op="count_condition_a",
             args=[],
             result_srepr="",
-            result_display="一方の倍数の場合の数を数える",
+            result_display=f"{p_a}",
             narration="一方の倍数の条件にあてはまる場合の数を数え、その確率を求める。",
         ),
         Step(
             op="count_condition_b",
             args=[],
             result_srepr="",
-            result_display="もう一方の倍数の場合の数を数える",
+            result_display=f"{p_b}",
             narration="もう一方の倍数の条件にあてはまる場合の数を数え、その確率を求める。",
         ),
         Step(
             op="count_overlap",
             args=[],
             result_srepr="",
-            result_display="両方の倍数に共通する場合の数を数える",
+            result_display=f"{p_ab}",
             narration="両方の倍数に共通してあてはまる場合の数を数え、その確率を求める。",
         ),
         Step(
@@ -247,7 +247,7 @@ def solve_lottery_at_least_one(numbers: Mapping[str, Any]) -> list[Solution]:
             op="compute_both_lose_probability",
             args=[],
             result_srepr="",
-            result_display="2本とも外れる場合を数える",
+            result_display=f"{p_lose}",
             narration="戻さずに2本引いたとき、2本とも外れる場合を数えて、その確率を求める。",
         ),
         Step(

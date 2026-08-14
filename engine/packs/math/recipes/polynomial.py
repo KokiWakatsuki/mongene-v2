@@ -28,6 +28,7 @@ from engine.core.contracts import (
 )
 from engine.core.registry import REGISTRY, register_recipe
 from engine.core.rng import Rng, draw
+from engine.packs.math.solvers.polynomial import variable_parts
 
 _COMBINE_LIKE_TERMS_CONCEPTS_LV1 = ["polynomial.combine_like_terms_basic"]
 _COMBINE_LIKE_TERMS_CONCEPTS_LV2 = ["polynomial.combine_like_terms_mixed"]
@@ -189,7 +190,13 @@ def combine_like_terms(ctx: CellContext, rng: Rng) -> MR:
                 op="identify_like_terms",
                 args=[],
                 result_srepr="",
-                result_display="文字の部分が同じ項どうしを見分ける",
+                # 見分けた結果＝**どの文字の項があるか**（「a の項と b の項」）。
+                # 指示の言い直しを括弧に置かない（面③）。
+                # 「項 と b」のように**かなの前に半角スペース**を置かない
+                # （`scan_explanations` の「かなと語の間の半角スペース」に当たる）。
+                result_display="、".join(
+                    f"{v} の項" for v in variable_parts(sympy.sympify(expr_str))
+                ),
                 narration="式の中から、文字の部分が同じ項（同類項）の組を見分ける。",
             )
         )

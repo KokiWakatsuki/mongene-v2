@@ -69,6 +69,11 @@ levels:
         - "白いさいころと黒いさいころを同時に投げる"
         - "PとQの2個のさいころを同時に投げる"
         - "1と2の番号をつけた2個のさいころを同時に投げる"
+    # 確率の答えは約分した分数で書くのが作法で、分母は「同じ確からしさで起こる
+    # 場合の数」そのもの。数を小さくする方向では直せない（`engine.eval.answer_size`）。
+    answer_size_max: {denominator: 216, numerator: 216}
+    answer_size_reason: |
+      さいころ3つ（または1つを3回）なので、分母は最大 6³=216。
     given: [scenario]
     asked: [value]
     visual: none
@@ -95,6 +100,11 @@ levels:
       count_target_domain: {int_range: [2, 6]}
       count_other_domain: {int_range: [2, 6]}
       draws_domain: {int_range: [2, 3]}
+    # 確率の答えは約分した分数で書くのが作法で、分母は「同じ確からしさで起こる
+    # 場合の数」そのもの。数を小さくする方向では直せない（`engine.eval.answer_size`）。
+    answer_size_max: {denominator: 220, numerator: 220}
+    answer_size_reason: |
+      玉の総数（最大12個）から最大3個を取り出す組合せなので、分母は最大 ₁₂C₃=220。余事象を使うので分子も同じ大きさになる。
     given: [scenario]
     asked: [value]
     visual: none

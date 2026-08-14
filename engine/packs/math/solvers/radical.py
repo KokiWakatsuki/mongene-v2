@@ -20,8 +20,10 @@ import sympy
 
 from engine.core.contracts import Solution, Step, SymbolicAnswer
 from engine.core.registry import register_solver
+from engine.packs.math.solvers._step_text import top_level_parts, wrapped_in_parens
 
 _SQRT_RE = re.compile(r"sqrt\((\d+)\)")
+_TO_SUPERSCRIPT = str.maketrans("0123456789", "⁰¹²³⁴⁵⁶⁷⁸⁹")
 
 
 def fmt_radical(expr: sympy.Expr) -> str:
@@ -35,8 +37,12 @@ def fmt_radical_source(expr_str: str) -> str:
 
     `fmt_radical` は sympy の式を受けるので簡約後の形になる。問題文に出ている形を
     そのまま答えに使いたいときはこちらを使う。
+
+    **累乗は上付きにしてから `*` を落とす。** 先に `*` を落とすと `x**2` が `x2` になる
+    （代入した式の解説が `(√59+(-6))2` と出ていた）。
     """
-    return _SQRT_RE.sub(r"√\1", expr_str).replace("*", "")
+    text = re.sub(r"\*\*(\d+)", lambda m: m.group(1).translate(_TO_SUPERSCRIPT), expr_str)
+    return _SQRT_RE.sub(r"√\1", text).replace("*", "")
 
 
 # mode -> op 列（level_sep はこの op 列の相異で作る）。narration に数字を書かない。
@@ -81,23 +87,156 @@ _RADICAL_OP_NARRATION: dict[str, str] = {
     "expand_with_distribution": "分配法則や乗法公式で根号を含む式を展開する。",
     "combine_like_terms_and_radicals": "数の項どうし・根号の項どうしをまとめる。",
     "multiply_by_conjugate": "分母と分子に、分母の共役な式をかける。",
-    "multiply_and_simplify_roots": "根号どうしの乗除を先に計算し、それぞれ a√b の形に簡単にする。",
-    "combine_like_radicals_final": "根号の中が同じ項をまとめて、式全体を簡単にする。",
+    "multiply_and_simplify_roots": "根号どうしの乗除を先に計算して、1つの根号にまとめる。",
+    "combine_like_radicals_final": "それぞれの根号を簡単にし、根号の中が同じ項をまとめる。",
 }
 
-_RADICAL_OP_PHRASE: dict[str, str] = {
-    "multiply_under_one_root": "1つの根号にまとめる",
-    "rewrite_division_as_multiplication": "わり算をかけ算に直す",
-    "combine_roots": "係数と根号をまとめる",
-    "factor_out_square": "平方の因数を見つける",
-    "factor_into_squares": "平方の因数に分ける",
-    "take_roots_outside": "根号の外に出す",
-    "multiply_by_same_root": "同じ根号をかける",
-    "simplify_each_root": "各根号を a√b にする",
-    "expand_with_distribution": "展開する",
-    "multiply_by_conjugate": "共役な式をかける",
-    "multiply_and_simplify_roots": "乗除を計算し a√b の形にする",
-}
+# ---------------------------------------------------------------------------
+# 途中の手の括弧に入れる**式そのもの**（面③）。以前は「1つの根号にまとめる」の
+# ような指示の言い直しが入っていた。`narration` は触らない。
+# ---------------------------------------------------------------------------
+def _square_split(n: int) -> tuple[int, int]:
+    """根号の中の数を（平方の因数, 残り）に分ける（`180` → `(36, 5)`）。"""
+    square = 1
+    rest = n
+    for base, exp in sympy.factorint(n).items():
+        square *= base ** (exp // 2 * 2)
+        rest //= base ** (exp // 2 * 2)
+    return square, rest
+
+
+def _parse_factors(text: str) -> tuple[sympy.Integer, list[int]]:
+    """`4*sqrt(6)*sqrt(2)` を（係数 4, 根号の中 [6, 2]）に分ける。
+
+    **文字列から読む。** `sympy.sympify("sqrt(20)")` は `2√5` に簡約してしまうので、
+    「まだ簡単にしていない形」を見せるこの手では sympy を通せない。
+    """
+    coeff = sympy.Integer(1)
+    radicands: list[int] = []
+    for _op, part in top_level_parts(text.strip(), "*"):
+        token = part.strip()
+        while wrapped_in_parens(token):
+            token = token[1:-1].strip()
+        m = _SQRT_RE.fullmatch(token)
+        if m:
+            radicands.append(int(m.group(1)))
+        elif token:
+            coeff *= sympy.Integer(token)
+    return coeff, radicands
+
+
+def _as_a_root_b(coeff: sympy.Integer, radicand: int) -> str:
+    """`3*sqrt(180)` を `18√5` の形の文字列にする（外に出せる分を出す）。"""
+    square, rest = _square_split(radicand)
+    outside = coeff * sympy.Integer(square) ** sympy.Rational(1, 2)
+    if rest == 1:
+        return sympy.sstr(outside)
+    head = "" if outside == 1 else ("-" if outside == -1 else sympy.sstr(outside))
+    return f"{head}√{rest}"
+
+
+def _radical_step_display(op: str, expr_str: str, expr: sympy.Expr) -> str:
+    """1手ぶんの括弧の中身（この手で得た式）。"""
+    if op == "multiply_under_one_root":
+        # `√20 × √10` → `√200`（まだ簡単にしない）。
+        coeff, radicands = _parse_factors(expr_str)
+        product = 1
+        for r in radicands:
+            product *= r
+        head = "" if coeff == 1 else sympy.sstr(coeff)
+        return f"{head}√{product}"
+    if op == "rewrite_division_as_multiplication":
+        num, den = expr_str.rsplit("/", 1)
+        coeff, radicands = _parse_factors(num)
+        head = [] if coeff == 1 else [sympy.sstr(coeff)]
+        shown = " × ".join([*head, *(f"√{r}" for r in radicands)])
+        return f"{shown} × 1/{fmt_radical_source(den)}"
+    if op == "combine_roots":
+        # 係数どうし・根号の中どうしをまとめた形（`4√(6 × 2 / 3)`）。
+        num, den = expr_str.rsplit("/", 1)
+        coeff, radicands = _parse_factors(num)
+        _dcoeff, dradicands = _parse_factors(den)
+        inside = " × ".join(str(r) for r in radicands)
+        if dradicands:
+            inside += " / " + " × ".join(str(r) for r in dradicands)
+        head = "" if coeff == 1 else sympy.sstr(coeff)
+        return f"{head}√({inside})"
+    if op == "multiply_and_simplify_roots":
+        # 乗除を計算して1つの根号にした形（`√2025 + √80`）。a√b に直すのは次の手。
+        pieces: list[str] = []
+        for i, (sign, part) in enumerate(top_level_parts(expr_str, "+-")):
+            coeff, radicands = _parse_factors(part)
+            product = 1
+            for r in radicands:
+                product *= r
+            head = "" if coeff == 1 else sympy.sstr(coeff)
+            body = f"{head}√{product}" if radicands else sympy.sstr(coeff)
+            joiner = "" if i == 0 else (" - " if sign == "-" else " + ")
+            pieces.append(joiner + body)
+        return "".join(pieces)
+    if op == "simplify_each_root":
+        # 項ごとに根号の中を計算し、a√b の形に直した並び（`6√5 - 5√5 + 3√5`）。
+        pieces: list[str] = []
+        for i, (sign, part) in enumerate(top_level_parts(expr_str, "+-")):
+            coeff, radicands = _parse_factors(part)
+            product = 1
+            for r in radicands:
+                product *= r
+            body = _as_a_root_b(coeff, product) if radicands else sympy.sstr(coeff)
+            joiner = "" if i == 0 else (" - " if sign == "-" else " + ")
+            pieces.append(joiner + body)
+        return "".join(pieces)
+    if op == "expand_with_distribution":
+        # かっこごとに展開した形（まとめる前）。
+        parts = []
+        for i, (sign, part) in enumerate(top_level_parts(expr_str, "+-")):
+            joiner = "" if i == 0 else (" - " if sign == "-" else " + ")
+            parts.append(f"{joiner}({fmt_radical(sympy.expand(sympy.sympify(part)))})")
+        return "".join(parts)
+    if op in ("factor_out_square", "factor_into_squares"):
+        # 根号の中を「平方の因数 × 残り」に分けた形（`2 × √(4 × 35)`）。
+        coeff, radicands = _parse_factors(expr_str)
+        square, rest = _square_split(radicands[0])
+        head = "" if coeff == 1 else f"{sympy.sstr(coeff)} × "
+        return f"{head}√({square} × {rest})"
+    if op == "take_roots_outside":
+        # 平方の因数を外に出した形（`3 × 6√5`。かけ算は次の手）。
+        coeff, radicands = _parse_factors(expr_str)
+        square, rest = _square_split(radicands[0])
+        outside = sympy.Integer(square) ** sympy.Rational(1, 2)
+        head = "" if coeff == 1 else f"{sympy.sstr(coeff)} × "
+        return f"{head}{sympy.sstr(outside)}√{rest}"
+    if op == "multiply_by_same_root":
+        num, den = expr_str.rsplit("/", 1)
+        d = fmt_radical_source(den)
+        return f"({fmt_radical_source(num)} × {d}) / ({d} × {d})"
+    if op == "multiply_by_conjugate":
+        num, den = expr_str.split("/", 1)
+        shown_d, shown_conj = _denominator_and_conjugate(den)
+        return (
+            f"({fmt_radical_source(num)} × ({shown_conj})) / "
+            f"(({shown_d}) × ({shown_conj}))"
+        )
+    raise ValueError(f"途中の表示を組めない op: {op!r}")
+
+
+def _denominator_and_conjugate(den: str) -> tuple[str, str]:
+    """分母とその共役を、**書かれた順のまま**文字列で組む。
+
+    sympy に渡すと `√3 - √13` が `-√13 + √3` に並べかえられ、共役も
+    `-√13 - √3` という見慣れない形になる（教科書は `√3 + √13` と書く）。
+    """
+    text = den.strip()
+    while wrapped_in_parens(text):
+        text = text[1:-1].strip()
+    parts = top_level_parts(text, "+-")
+    if len(parts) != 2:
+        raise ValueError(f"2項でない分母の共役は組めない: {den!r}")
+    (_, first), (sign, second) = parts
+    shown = f"{fmt_radical_source(first)} {sign} {fmt_radical_source(second)}"
+    flipped = "+" if sign == "-" else "-"
+    conj = f"{fmt_radical_source(first)} {flipped} {fmt_radical_source(second)}"
+    return shown, conj
 
 # 分母の有理化を確実に行う mode（sympy.radsimp を使う）。
 _RATIONALIZE_MODES = {"rationalize_mono", "rationalize_conjugate"}
@@ -138,7 +277,8 @@ def simplify_radical(expr_str: str, mode: object) -> Solution:
             op=op,
             args=[],
             result_srepr=srepr if i == len(ops) - 1 else "",
-            result_display=disp if i == len(ops) - 1 else _RADICAL_OP_PHRASE.get(op, ""),
+            result_display=disp if i == len(ops) - 1
+            else _radical_step_display(op, expr_str, expr),
             narration=_RADICAL_OP_NARRATION[op],
         )
         for i, op in enumerate(ops)
@@ -170,10 +310,19 @@ _SUBSTITUTE_ROOT_NARRATION: dict[str, str] = {
     "expand_and_simplify": "かっこを展開し、根号を含む項どうしを整理して式の値を求める。",
 }
 
-_SUBSTITUTE_ROOT_PHRASE: dict[str, str] = {
-    "substitute_root_value": "根号を含む値をあてはめる",
-    "substitute_conjugate_pair_values": "根号を含む値の組をあてはめる",
-}
+def _substitute_root_phrase(expr_str: str, value_str: str, value_str_y: str | None) -> dict[str, str]:
+    """代入した式そのもの（面③）。`x²-2·5·x` に `√7+5` を入れた形を見せる。"""
+    shown = fmt_radical_source(value_str)
+    body = fmt_radical_source(expr_str).replace("x", f"({shown})")
+    if value_str_y:
+        body = fmt_radical_source(expr_str)
+        body = body.replace("x", f"({shown})").replace(
+            "y", f"({fmt_radical_source(value_str_y)})"
+        )
+    return {
+        "substitute_root_value": body,
+        "substitute_conjugate_pair_values": body,
+    }
 
 
 @register_solver("math.evaluate_radical_substitution")
@@ -210,7 +359,8 @@ def evaluate_radical_substitution(
             op=op,
             args=[],
             result_srepr=srepr if i == len(ops) - 1 else "",
-            result_display=disp if i == len(ops) - 1 else _SUBSTITUTE_ROOT_PHRASE.get(op, ""),
+            result_display=disp if i == len(ops) - 1
+            else _substitute_root_phrase(expr_str, value_str, value_str_y)[op],
             narration=_SUBSTITUTE_ROOT_NARRATION[op],
         )
         for i, op in enumerate(ops)
@@ -238,8 +388,8 @@ _COMPARE_OP_NARRATION: dict[str, str] = {
 }
 
 _COMPARE_OP_PHRASE: dict[str, str] = {
-    "square_each_value": "それぞれ2乗する",
-    "convert_to_squared_form": "2乗した値に直す",
+    "square_each_value": "",
+    "convert_to_squared_form": "",
 }
 
 
@@ -269,7 +419,9 @@ def compare_radical_values(exprs: object, mode: object) -> Solution:
             op=op,
             args=[],
             result_srepr=srepr if i == len(ops) - 1 else "",
-            result_display=disp if i == len(ops) - 1 else _COMPARE_OP_PHRASE.get(op, ""),
+            # 2乗した値そのものを見せる（面③）。ここが比較の根拠になる。
+            result_display=disp if i == len(ops) - 1
+            else "、".join(sympy.sstr(sympy.expand(v**2)) for v, _ in pairs),
             narration=_COMPARE_OP_NARRATION[op],
         )
         for i, op in enumerate(ops)

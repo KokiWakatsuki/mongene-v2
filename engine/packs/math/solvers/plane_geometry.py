@@ -61,7 +61,8 @@ def judge_transformation_invariant(topic: object) -> Solution:
             op="compare_before_after",
             args=[],
             result_srepr=t,
-            result_display=_TRANSFORMATION_NARRATION_S1[t],
+            # 見比べた結果（＝答えそのもの）は次の手なので、ここは括弧なしにする。
+            result_display="",
             narration=_TRANSFORMATION_NARRATION_S1[t],
         ),
         Step(
@@ -101,7 +102,7 @@ def judge_construction_property(topic: object) -> Solution:
             op="identify_construction_property",
             args=[],
             result_srepr=t,
-            result_display=_CONSTRUCTION_PROPERTY_NARRATION[t],
+            result_display="",
             narration=_CONSTRUCTION_PROPERTY_NARRATION[t],
         ),
         Step(
@@ -147,7 +148,7 @@ def judge_circle_property(concept: object) -> Solution:
             op="identify_circle_property",
             args=[],
             result_srepr=c,
-            result_display=narration_s1,
+            result_display="",
             narration=narration_s1,
         ),
         Step(
@@ -182,7 +183,7 @@ def judge_point_line_distance_meaning(dummy: object) -> Solution:
             op="identify_point_and_line",
             args=[],
             result_srepr="",
-            result_display="点と直線の位置関係を読み取る",
+            result_display="",
             narration="点と直線の位置関係を読み取る。",
         ),
         Step(
@@ -235,7 +236,7 @@ def sector_arc_length_or_area(radius: object, angle: object, target: object) -> 
             op="identify_radius_and_angle",
             args=[],
             result_srepr="",
-            result_display="半径と中心角の大きさを読み取る",
+            result_display=f"半径 {sympy.sstr(r)}、中心角 {sympy.sstr(a)}°",
             narration="おうぎ形の半径と中心角の大きさを読み取る。",
         ),
         Step(
@@ -270,7 +271,7 @@ def sector_solve_central_angle(radius: object, area_pi_coeff: object) -> Solutio
             op="form_area_equation",
             args=[],
             result_srepr="",
-            result_display="面積の公式に半径とわからない中心角をあてはめ方程式をつくる",
+            result_display=f"{sympy.sstr(r)}² × π × x/360 = {sympy.sstr(k)}π",
             narration="おうぎ形の面積の公式に、半径と分からない中心角をあてはめて方程式をつくる。",
         ),
         Step(
@@ -299,10 +300,13 @@ _AREA_BISECT_NARRATION: dict[str, str] = {
                                "面積の式を長さについて解いて、点の位置を求める。",
 }
 
-_AREA_BISECT_PHRASE: dict[str, str] = {
-    "compute_quadrilateral_area": "四角形全体の面積を求める",
-    "set_half_area_condition": "半分になる条件を式にする",
-}
+def _area_bisect_display(op: str, whole, abc) -> str:
+    """面積を2等分する点の手の括弧（この手で得た値・式）。"""
+    if op == "compute_quadrilateral_area":
+        return sympy.sstr(whole)
+    if op == "set_half_area_condition":
+        return f"△ABP = {sympy.sstr(sympy.Rational(whole, 2))}（△ABC = {sympy.sstr(abc)}）"
+    raise ValueError(f"途中の表示を組めない op: {op!r}")
 
 
 def _polygon_area(pts: list[tuple[sympy.Expr, sympy.Expr]]) -> sympy.Expr:
@@ -356,7 +360,8 @@ def area_bisecting_point_on_side(
         Step(
             op=op, args=[],
             result_srepr=srepr if i == len(_AREA_BISECT_OPS) - 1 else "",
-            result_display=disp if i == len(_AREA_BISECT_OPS) - 1 else _AREA_BISECT_PHRASE[op],
+            result_display=disp if i == len(_AREA_BISECT_OPS) - 1
+            else _area_bisect_display(op, whole, abc),
             narration=_AREA_BISECT_NARRATION[op],
         )
         for i, op in enumerate(_AREA_BISECT_OPS)

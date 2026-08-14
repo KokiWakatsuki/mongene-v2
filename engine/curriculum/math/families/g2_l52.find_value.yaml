@@ -26,6 +26,11 @@ levels:
       space_choices: [die6, coin2, cards_n, cards_n, cards_n, cards_n, cards_n, cards_n, cards_n, cards_n, cards_n, cards_n, cards_n, cards_n, cards_n, cards_n]
       # カードの枚数は教材の大きさに（80枚のカードは教材にならない）。
       n_domain: {int_range: [5, 20]}
+    # 確率の答えは約分した分数で書くのが作法で、分母は「同じ確からしさで起こる
+    # 場合の数」そのもの。数を小さくする方向では直せない（`engine.eval.answer_size`）。
+    answer_size_max: {denominator: 20}
+    answer_size_reason: |
+      硬貨・さいころ・カードのどれか1つを1回なので、分母は場合の数そのもの（5〜20）。
     given: [condition]
     asked: [value]
     visual: none
@@ -41,6 +46,11 @@ levels:
     recipe: math.probability_two_dice
     params:
       faces_domain: {int_set: [6]}
+    # 確率の答えは約分した分数で書くのが作法で、分母は「同じ確からしさで起こる
+    # 場合の数」そのもの。数を小さくする方向では直せない（`engine.eval.answer_size`）。
+    answer_size_max: {denominator: 36}
+    answer_size_reason: |
+      2つのさいころなので分母は 6×6=36 で固定。ここを12以下にするには「2つのさいころ」をやめるしかない。
     given: [condition]
     asked: [value]
     visual: none

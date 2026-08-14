@@ -29,6 +29,13 @@ import sympy
 from engine.core.contracts import ChoiceAnswer, Solution, Step, SymbolicAnswer
 from engine.core.registry import register_solver
 
+# 関係の名前（解説の括弧に入れる＝「読み取った結果」そのもの）。
+_ANGLE_RELATION_NAME = {
+    "vertical": "対頂角",
+    "corresponding": "同位角",
+    "alternate": "錯角",
+}
+
 _ANGLE_RELATION_NARRATION = {
     "vertical": "2直線が交わってできる対頂角の関係を確認する。",
     "corresponding": "平行な2直線と1本の直線がつくる同位角の関係を確認する。",
@@ -50,7 +57,7 @@ def solve_angle_by_equality_relation(relation: object, angle: object) -> Solutio
     steps = [
         Step(
             op="identify_angle_relation",
-            args=[], result_srepr=r, result_display="角の位置関係を読み取る",
+            args=[], result_srepr=r, result_display=_ANGLE_RELATION_NAME.get(r, ""),
             narration=_ANGLE_RELATION_NARRATION.get(r, "角の位置関係を読み取る。"),
         ),
         Step(
@@ -77,7 +84,7 @@ def solve_zigzag_angle_sum(angle1: object, angle2: object) -> Solution:
     steps = [
         Step(
             op="draw_auxiliary_line",
-            args=[], result_srepr="", result_display="折れ曲がった点を通り2直線に平行な補助線をひく",
+            args=[], result_srepr="", result_display="2直線に平行な補助線",
             narration="折れ曲がった点を通り、2直線に平行な補助線をひく。",
         ),
         Step(
@@ -103,7 +110,7 @@ def triangle_third_angle(angle_a: object, angle_b: object) -> Solution:
     steps = [
         Step(
             op="identify_two_interior_angles",
-            args=[], result_srepr="", result_display="わかっている2つの内角を読み取る",
+            args=[], result_srepr="", result_display=f"{sympy.sstr(a)}° と {sympy.sstr(b)}°",
             narration="わかっている2つの内角の大きさを読み取る。",
         ),
         Step(
@@ -130,7 +137,7 @@ def polygon_interior_sum_and_angle(sides: object) -> Solution:
     steps = [
         Step(
             op="apply_interior_sum_formula",
-            args=[], result_srepr="", result_display="内角の和の公式にあてはめる",
+            args=[], result_srepr="", result_display=f"180° × ({sympy.sstr(n)} - 2) = {sympy.sstr(total)}°",
             narration="一直線の角(平角)を、頂点の数より二少ない数だけ集めた大きさが内角の和になる、"
             "という公式に辺の数をあてはめる。",
         ),
@@ -156,7 +163,8 @@ def polygon_sides_from_interior_sum(interior_sum: object) -> Solution:
     steps = [
         Step(
             op="form_interior_sum_equation",
-            args=[], result_srepr="", result_display="内角の和の公式に、わからない辺の数をあてはめ方程式をつくる",
+            args=[], result_srepr="",
+            result_display=f"180° × (n - 2) = {sympy.sstr(total)}°",
             narration="内角の和の公式に、わからない辺の数をあてはめて方程式をつくる。",
         ),
         Step(
@@ -209,7 +217,7 @@ def polygon_sides_from_interior_angle(interior_angle: object) -> Solution:
     steps = [
         Step(
             op="compute_exterior_from_interior",
-            args=[], result_srepr="", result_display="内角ととなり合う外角の大きさを求める",
+            args=[], result_srepr="", result_display=f"{sympy.sstr(ext)}°",
             narration="内角ととなり合う外角は、一直線の角(平角)から内角をひいて求める。",
         ),
         Step(
@@ -235,7 +243,7 @@ def judge_parallel_from_angle_condition(is_equal: object) -> Solution:
         Step(
             op="check_angle_equality",
             args=[], result_srepr=("equal" if truthy else "not_equal"),
-            result_display="同位角や錯角が等しいかどうかを確認する",
+            result_display="等しい" if truthy else "等しくない",
             narration="示されている同位角や錯角が、等しいといえる条件を満たしているかを確認する。",
         ),
         Step(
@@ -266,11 +274,15 @@ _ARROWHEAD_NARRATION: dict[str, str] = {
                                "それらをたして求める。",
 }
 
-_ARROWHEAD_PHRASE: dict[str, str] = {
-    "draw_auxiliary_line": "補助線を引いて2つの三角形に分ける",
-    "apply_exterior_angle_first": "一方の三角形の外角を求める",
-    "apply_exterior_angle_second": "もう一方の三角形の外角を求める",
-}
+def _arrowhead_display(op: str, a, b, c) -> str:
+    """ブーメラン型の手の括弧（この手で得た角）。指示の言い直しは置かない（面③）。"""
+    if op == "draw_auxiliary_line":
+        return "点Aと点Dを結んでのばした線"
+    if op == "apply_exterior_angle_first":
+        return f"{sympy.sstr(a)}° の一部と {sympy.sstr(b)}° の和"
+    if op == "apply_exterior_angle_second":
+        return f"{sympy.sstr(a)}° の残りと {sympy.sstr(c)}° の和"
+    raise ValueError(f"途中の表示を組めない op: {op!r}")
 
 
 @register_solver("math.arrowhead_angle")
@@ -298,7 +310,8 @@ def arrowhead_angle(angle_a: object, angle_b: object, angle_c: object) -> Soluti
         Step(
             op=op, args=[],
             result_srepr=srepr if i == len(_ARROWHEAD_OPS) - 1 else "",
-            result_display=disp if i == len(_ARROWHEAD_OPS) - 1 else _ARROWHEAD_PHRASE[op],
+            result_display=disp if i == len(_ARROWHEAD_OPS) - 1
+            else _arrowhead_display(op, a, b, c),
             narration=_ARROWHEAD_NARRATION[op],
         )
         for i, op in enumerate(_ARROWHEAD_OPS)

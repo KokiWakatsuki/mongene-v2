@@ -27,6 +27,7 @@ from engine.core.contracts import (
 )
 from engine.core.registry import REGISTRY, register_recipe
 from engine.core.rng import Rng, draw
+from engine.core.verify.answer_size import answer_is_too_big, limits_for
 from engine.packs.math.visuals.number_line import number_line_labels
 
 
@@ -207,17 +208,27 @@ def compute_signed_arithmetic(ctx: CellContext, rng: Rng) -> MR:
     **定義域は狭めない**（狭めると dup_rate が跳ねる）。答えの大きさで測る——
     `g1_l7`（累乗）で同じ手が効いたのと同じ考え方。
     """
+    # `answer_denominator_max`（旧・分母だけを見る宣言）と、`answer_size_max`
+    # （分母・分子・根号の中をまとめて見る宣言＝`engine.core.verify.answer_size`）の
+    # 両方を満たす式を引く。後者は宣言が無くても既定の上限（分母12・分子100）が効くので、
+    # `(1/12)³ → 1/1728`・`4/7÷9/8×1/9 → 32/567` はここで落ちて引き直しになる。
     limit = int(ctx.spec_level.params.get("answer_denominator_max", 0))
-    if limit <= 0:
-        return _compute_signed_arithmetic_once(ctx, rng)
+    limits = limits_for(ctx.spec_level)
+    last: MR | None = None
     for _ in range(80):
         mr = _compute_signed_arithmetic_once(ctx, rng)
-        value = sympy.Rational(sympy.sympify(mr.params["expr_str"], rational=True))
-        if value.q <= limit:
+        last = mr
+        if limit > 0:
+            value = sympy.Rational(sympy.sympify(mr.params["expr_str"], rational=True))
+            if value.q > limit:
+                continue
+        display = str(getattr(mr.sub_questions[0].answer, "display", "") or "")
+        if not answer_is_too_big(display, limits):
             return mr
-    raise ValueError(
-        f"compute_signed_arithmetic: 答えの分母が {limit} 以下になる式を構成できず"
-    )
+    # 80回引いても収まらないときは最後の式で通す（1セル丸ごと消えるより軽い。
+    # 常態化していれば `python -m engine.eval.answer_size` が上限超えとして見つける）。
+    assert last is not None
+    return last
 
 
 def _compute_signed_arithmetic_once(ctx: CellContext, rng: Rng) -> MR:

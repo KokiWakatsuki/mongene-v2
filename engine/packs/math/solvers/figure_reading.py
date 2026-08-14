@@ -88,7 +88,7 @@ def identify_parallel_line(
             (
                 "read_angles_with_transversal",
                 "それぞれの直線が横断線となす角を図から読み取る。",
-                "図から角を読む",
+                "",
             ),
             (
                 "compare_corresponding_angles",
@@ -135,7 +135,7 @@ def identify_right_triangle_sides(labels: object, right_index: object) -> Soluti
             (
                 "locate_right_angle",
                 "図の直角の記号から、どの頂点が直角かを確かめる。",
-                "直角の頂点を見つける",
+                "",
             ),
             (
                 "identify_hypotenuse_and_legs",

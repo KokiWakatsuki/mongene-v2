@@ -82,6 +82,7 @@ from engine.core.contracts import (
 )
 from engine.core.registry import REGISTRY, register_recipe
 from engine.core.rng import Rng, draw
+from engine.core.verify.answer_size import answer_is_too_big, limits_for
 
 RECIPE_NAME = "math.word_problem_pythagorean"
 
@@ -125,10 +126,17 @@ def _symbolic(value: sympy.Expr, unit: str) -> SymbolicAnswer:
     return SymbolicAnswer(srepr=sympy.srepr(value), display=_fmt(value, unit))
 
 
-def _step(op: str, narration: str, value: sympy.Expr | None = None, unit: str = "") -> Step:
-    """1手＝1 Step。値は result_display にだけ置く（narration に数字を書かない）。"""
+def _step(
+    op: str, narration: str, value: sympy.Expr | None = None, unit: str = "",
+    note: str = "",
+) -> Step:
+    """1手＝1 Step。値は result_display にだけ置く（narration に数字を書かない）。
+
+    `note` は値の出ない手（補助線をひく・断面をとらえる）の括弧に入れる**その手で
+    得たもの**（面③）。空のままだと括弧なしの行になり、何をつかんだかが残らない。
+    """
     if value is None:
-        return Step(op=op, args=[], result_srepr="", result_display="", narration=narration)
+        return Step(op=op, args=[], result_srepr="", result_display=note, narration=narration)
     return Step(
         op=op, args=[], result_srepr=sympy.srepr(value),
         result_display=_fmt(value, unit), narration=narration,
@@ -218,6 +226,7 @@ def solve_rhombus_diagonal_area(numbers: Mapping[str, Any]) -> list[Solution]:
             _step(
                 "recall_rhombus_area_rule",
                 "ひし形の面積は、対角線どうしの積の半分で求められることを使う。",
+                note="（対角線）×（対角線）÷ 2",
             ),
             _step(
                 "compute_rhombus_area",
@@ -301,6 +310,7 @@ def solve_box_surface_shortest_path(numbers: Mapping[str, Any]) -> list[Solution
                 "unfold_two_side_faces",
                 "表面上の最短の道のりを考えるために、通る二つの側面を"
                 "一つの平面に開いた展開図をかく。",
+                note=f"横 {unfolded_width}、縦 {height} の長方形",
             ),
             _step(
                 "identify_right_triangle",
@@ -404,12 +414,12 @@ def solve_box_shortest_path_choose(numbers: Mapping[str, Any]) -> list[Solution]
     steps = [
         Step(
             op="enumerate_unfoldings", args=[], result_srepr="",
-            result_display="三通りの開き方を書き出す",
+            result_display="、".join(f"{_fmt(v, 'cm')}" for v in values),
             narration="となり合う二つの面の開き方が三通りあることを確かめ、それぞれで開いた長方形の縦と横を書き出す。",
         ),
         Step(
             op="compare_three_paths", args=[], result_srepr="",
-            result_display="どの開き方が最も短いかを比べる",
+            result_display=f"最も短いのは {_fmt(shortest, 'cm')}",
             narration="開いた長方形の対角線の長さを三通りとも式にして比べ、最も短くなるのがどれかを決める。",
         ),
         Step(
@@ -449,6 +459,7 @@ def solve_exam_box_space_diagonal(numbers: Mapping[str, Any]) -> list[Solution]:
             "identify_section_right_triangle",
             "求める対角線は、いま求めた底面の対角線と高さを直角をはさむ2辺とする"
             "直角三角形の斜辺になる。この直角三角形が立体の断面である。",
+            note=f"直角をはさむ2辺は {_fmt(base_diagonal, 'cm')} と {h}cm",
         ),
         _step(
             "apply_pythagorean_theorem",
@@ -516,6 +527,7 @@ def solve_exam_cube_guided(numbers: Mapping[str, Any]) -> list[Solution]:
                 "unfold_two_side_faces",
                 "表面上を進む最短の道のりを考えるために、通る二つの面を"
                 "一つの平面に開いた展開図をかく。",
+                note=f"横 {2 * a}、縦 {a} の長方形",
             ),
             _step(
                 "identify_right_triangle",
@@ -565,6 +577,7 @@ def solve_exam_regular_tetrahedron(numbers: Mapping[str, Any]) -> list[Solution]
             "take_section_right_triangle",
             "頂点・垂線の足・底面の1つの頂点を通る平面で切り取ると、"
             "辺を斜辺、いま求めた長さを直角をはさむ一方の辺とする直角三角形が現れる。",
+            note=f"斜辺 {a}cm、他の1辺 {_fmt(centroid_distance, 'cm')}",
         ),
         _step(
             "apply_pythagorean_theorem",
@@ -612,6 +625,7 @@ def solve_triangle_height_area_solo(numbers: Mapping[str, Any]) -> list[Solution
             "draw_auxiliary_perpendicular",
             "3辺の長さしかわかっていないので、頂点から底辺に垂線を引く補助線を自分で入れる。"
             "底辺が2つに分かれて、高さを共有する直角三角形が2つできる。",
+            note="頂点から底辺への垂線",
         ),
         _step(
             "set_unknown_on_base",
@@ -624,6 +638,7 @@ def solve_triangle_height_area_solo(numbers: Mapping[str, Any]) -> list[Solution
             "2つの直角三角形それぞれで、高さの二乗を三平方の定理で表す。"
             "高さは共通だから、その2つの式は等しい。この方程式を解いて、"
             "分けた底辺の長さを求める。",
+            note=f"{c}² - x² = {b}² - ({a} - x)²",
         ),
         _step(
             "apply_pythagorean_theorem",
@@ -1009,12 +1024,37 @@ _SCENE_BUILDERS: dict[str, Callable[[Mapping[str, Any], Rng], PythagoreanScene]]
 # ---------------------------------------------------------------------------
 # recipe（3セル共通。scenario_kind が題材＝どの立体・どの平面図形かを選ぶ）
 # ---------------------------------------------------------------------------
+# 答えが大きすぎたときに引き直す回数（`pythagorean_find_value.py` と同じ理由）。
+_ANSWER_SIZE_REDRAWS = 40
+
+
+def _draw_scene_with_answer_in_range(
+    ctx: CellContext, rng: Rng, kind: str
+) -> tuple[PythagoreanScene, list[Solution]]:
+    """答えの大きさ（根号の中・分母・分子）が上限内になる組を引く。
+
+    定義域は広いまま、超えたら組み直す（`engine.core.verify.answer_size`）。
+    小問が2つあるセルは**どちらの答えも**上限内であることを見る。
+    """
+    p = ctx.spec_level.params
+    limits = limits_for(ctx.spec_level)
+    scene = solutions = None
+    for attempt in range(_ANSWER_SIZE_REDRAWS):
+        attempt_rng = rng.spawn(attempt) if attempt else rng
+        scene = _SCENE_BUILDERS[kind](p, attempt_rng)
+        solutions = SOLVE_BUILDERS[kind](scene.numbers)
+        displays = [str(getattr(s.answer, "display", "") or "") for s in solutions]
+        if not any(answer_is_too_big(d, limits) for d in displays):
+            break
+    assert scene is not None and solutions is not None
+    return scene, solutions
+
+
 @register_recipe(RECIPE_NAME, provides_concepts=_PYTHAGOREAN_WP_CONCEPTS)
 def word_problem_pythagorean(ctx: CellContext, rng: Rng) -> MR:
     p = ctx.spec_level.params
     kind = str(p["scenario_kind"])
-    scene = _SCENE_BUILDERS[kind](p, rng)
-    solutions = SOLVE_BUILDERS[kind](scene.numbers)
+    scene, solutions = _draw_scene_with_answer_in_range(ctx, rng, kind)
     assert len(solutions) == len(scene.ask_texts)
 
     concept_tags = list(ctx.spec_level.concept_tags or ctx.spec_family.concepts_default)

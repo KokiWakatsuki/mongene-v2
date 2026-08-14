@@ -90,9 +90,10 @@ def lines_intersection_and_triangle_area(
     return Solution(
         answer=SymbolicAnswer(srepr=srepr, display=disp),
         steps=_steps([
-            ("set_up_equation", "", "2直線の式を等しいとおく",
+            ("set_up_equation", "",
+             f"{_fmt(m1_s)}x + {_fmt(b1_s)} = {_fmt(m2_s)}x + {_fmt(b2_s)}",
              "2つの直線の式の右辺どうしを等しいとおいて、方程式を立てる。"),
-            ("solve_for_x", "", "交点の x 座標を求める",
+            ("solve_for_x", "", f"x = {_fmt(px)}",
              "その方程式を解いて、交点の x 座標を求める。"),
             ("compute_y", "", f"{lp}{_fmt_pt((px, py))}",
              "求めた x の値をどちらかの式に代入して、交点の y 座標を求める。"),
@@ -137,7 +138,7 @@ def slope_from_triangle_area(b: object, area: object) -> Solution:
             ("express_intercepts", "", "両軸との交点を a で表す",
              "x 軸との交点は y がゼロ、y 軸との交点は x がゼロになるところなので、"
              "それぞれの座標を a を使って表す。"),
-            ("set_up_area_equation", "", "面積についての方程式をつくる",
+            ("set_up_area_equation", "", f"{_fmt(b_s)} × x切片 ÷ 2 = {_fmt(area_s)}",
              "2つの交点と原点を頂点とする三角形の面積を a の式で表し、"
              "与えられた面積に等しいとおく。"),
             ("solve_for_coefficient", srepr, disp,
@@ -178,7 +179,7 @@ def judge_line_through_triangle(m: object, b: object, verts: object) -> Solution
         steps=_steps([
             ("plot_line_and_triangle", "", "直線と三角形をかき入れる",
              "直線が両軸と交わる点をとって直線をかき、与えられた3つの頂点を結んで三角形をかく。"),
-            ("compare_vertices_to_line", "", "3つの頂点が直線のどちら側にあるかを調べる",
+            ("compare_vertices_to_line", "", ("同じ側" if correct == "通らない" else "分かれている"),
              "それぞれの頂点について、直線より上にあるか下にあるかを調べる。"),
             ("conclude_position", correct, correct,
              "3つの頂点が直線の同じ側にそろえば直線は三角形を通らず、"
@@ -204,9 +205,10 @@ def intersection_point_of_two_lines(
     return Solution(
         answer=SymbolicAnswer(srepr=srepr, display=disp),
         steps=_steps([
-            ("set_up_equation", "", "2直線の式を等しいとおく",
+            ("set_up_equation", "",
+             f"{_fmt(m1_s)}x + {_fmt(b1_s)} = {_fmt(m2_s)}x + {_fmt(b2_s)}",
              "2つの直線の式の右辺どうしを等しいとおいて、方程式を立てる。"),
-            ("solve_for_x", "", "交点の x 座標を求める",
+            ("solve_for_x", "", f"x = {_fmt(px)}",
              "その方程式を解いて、交点の x 座標を求める。"),
             ("compute_y", srepr, disp,
              "求めた x の値をどちらかの式に代入して、交点の y 座標を求める。"),
@@ -231,7 +233,8 @@ def x_intercepts_of_two_lines(
     return Solution(
         answer=SymbolicAnswer(srepr=srepr, display=disp),
         steps=_steps([
-            ("substitute_zero_for_y", "", "y にゼロを代入する",
+            ("substitute_zero_for_y", "",
+             f"{_fmt(m1_s)}x + {_fmt(b1_s)} = 0、{_fmt(m2_s)}x + {_fmt(b2_s)} = 0",
              "x 軸上の点は y 座標がゼロなので、それぞれの式の y にゼロを代入する。"),
             ("solve_for_x_intercepts", srepr, disp,
              "できた方程式をそれぞれ解いて、x 軸と交わる点の座標を求める。"),
@@ -261,9 +264,9 @@ def triangle_area_from_two_lines(
     return Solution(
         answer=SymbolicAnswer(srepr=srepr, display=disp),
         steps=_steps([
-            ("identify_base_on_x_axis", "", "x 軸上の辺を底辺とみる",
+            ("identify_base_on_x_axis", "", f"底辺 {_fmt(sympy.Abs(q1 - q2))}",
              "x 軸上にある2つの頂点を結んだ辺を底辺とみて、その長さを2点の x 座標の差から求める。"),
-            ("read_height_from_vertex", "", "高さを交点の y 座標から読む",
+            ("read_height_from_vertex", "", f"高さ {_fmt(sympy.Abs(py))}",
              "残りの頂点の y 座標の絶対値が、その底辺に対する高さになる。"),
             ("compute_triangle_area", srepr, disp,
              "底辺と高さがそろったので、三角形の面積を求める。"),
@@ -303,13 +306,13 @@ def point_on_x_axis_for_area_multiple(m: object, b: object, k: object) -> Soluti
     return Solution(
         answer=SymbolicAnswer(srepr=srepr, display=disp),
         steps=_steps([
-            ("find_intercepts", "", "直線と両軸との交点を求める",
+            ("find_intercepts", "", f"{_fmt_pt((ax, zero))}、{_fmt_pt((zero, b_s))}",
              "x 軸との交点は y がゼロ、y 軸との交点は x がゼロになるところなので、"
              "それぞれの座標を求める。"),
             ("note_common_height", "", "高さが共通であることに気づく",
              "底辺をどちらも x 軸上にとると、2つの三角形の高さはどちらも同じ点の"
              "y 座標になるので、面積の比は底辺の長さの比に等しい。"),
-            ("set_up_ratio_equation", "", "底辺の長さについての方程式をつくる",
+            ("set_up_ratio_equation", "", f"底辺の比が {_fmt(k_s)} になる位置",
              "面積が指定された倍率になる条件を、底辺の長さの比に置きかえて式にする。"),
             ("solve_for_point", srepr, disp,
              "その方程式を解き、x 軸の正の部分にあるという条件に合う点の座標を求める。"),

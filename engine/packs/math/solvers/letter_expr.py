@@ -17,7 +17,17 @@ import sympy
 from engine.core.contracts import ChoiceAnswer, Solution, Step, SymbolicAnswer
 from engine.core.registry import register_solver
 from engine.packs.math.solvers.arithmetic import fmt_number
-from engine.packs.math.solvers.polynomial import _fmt_monomial_display, _fmt_poly_display
+from engine.packs.math.solvers._step_text import (
+    fmt_expr,
+    join_signed,
+    top_level_parts,
+)
+from engine.packs.math.solvers.polynomial import (
+    _fmt_monomial_display,
+    _fmt_poly_display,
+    _terms_in_written_order,
+    grouped_by_variable_part,
+)
 
 # mode -> op 列（steps の骨格）。level_sep はこの op 列の相異で作る（同一 unit の
 # Lv1/Lv2 が異なる mode を持つ）。narration に数字は書かない（G-Q5t 偽陽性の元・§5-#9）。
@@ -44,13 +54,43 @@ _OP_NARRATION: dict[str, str] = {
     "convert_division_to_multiplication": "÷ の計算を、その数の逆数をかっこの中の各項にかける計算に直す。",
 }
 
-# op -> 非終端 step の result_display フレーズ（数字を書かない）。
-_OP_PHRASE: dict[str, str] = {
-    "group_like_terms": "同類項どうしをまとめる",
-    "remove_parentheses": "符号に注意してかっこを外す",
-    "distribute_multiplication": "かっこの前の数を各項にかける",
-    "convert_division_to_multiplication": "÷ を逆数のかけ算に直す",
-}
+# ---------------------------------------------------------------------------
+# 途中の手の括弧に入れる**式そのもの**（面③）。以前は「同類項どうしをまとめる」の
+# ような指示の言い直しが入っていた。`narration` は触らない（ヒントが narration しか
+# 見ないので、そちらに数字を書くと答えの先出しになる）。
+# ---------------------------------------------------------------------------
+def _linear_step_displays(expr_str: str, mode: str, final: str) -> list[str]:
+    """一次式の計算の各手の括弧に入れる表示（最後は答え）。"""
+    if mode == "combine_linear":
+        return [grouped_by_variable_part(_terms_in_written_order(expr_str)), final]
+    if mode == "expand_paren_linear":
+        return [join_signed(_terms_in_written_order(expr_str)), final]
+    if mode == "distribute_divide_linear":
+        # `4(x - 5) - (4x + 4) ÷ 2` の3手。
+        #   ① かっこの前の数を配る（÷ の部分はまだ触らない）
+        #   ② ÷ を逆数のかけ算にして、その部分も式にする
+        #   ③ 同類項をまとめる（＝答え）
+        parts = top_level_parts(expr_str, "+-")
+
+        def line(divide_done: bool) -> str:
+            out = ""
+            for op, part in parts:
+                joiner = "" if not out else (" - " if op == "-" else " + ")
+                if "/" in part:
+                    num, den = part.rsplit("/", 1)
+                    inner = sympy.expand(sympy.sympify(num))
+                    piece = (
+                        f"({fmt_expr(sympy.expand(inner / sympy.sympify(den)))})"
+                        if divide_done
+                        else f"({fmt_expr(inner)}) ÷ {fmt_expr(sympy.sympify(den))}"
+                    )
+                else:
+                    piece = fmt_expr(sympy.expand(sympy.sympify(part)))
+                out += joiner + piece
+            return out
+
+        return [line(False), line(True), final]
+    raise ValueError(f"途中の表示を組めない mode: {mode!r}")
 
 
 @register_solver("math.evaluate_letter_expression")
@@ -69,12 +109,14 @@ def evaluate_letter_expression(expr_str: str, mode: object) -> Solution:
     r_disp = _fmt_poly_display(simplified)
 
     ops = _MODE_STEPS[mode_s]
+    displays = [r_disp] if len(ops) == 1 else _linear_step_displays(expr_str, mode_s, r_disp)
+    assert len(displays) == len(ops)
     steps = [
         Step(
             op=op,
             args=[],
             result_srepr=r_srepr,
-            result_display=r_disp if i == len(ops) - 1 else _OP_PHRASE.get(op, ""),
+            result_display=displays[i],
             narration=_OP_NARRATION[op],
         )
         for i, op in enumerate(ops)
@@ -102,11 +144,44 @@ _SUBSTITUTE_NARRATION: dict[str, str] = {
     "evaluate_powers": "累乗はかっこの中の数をその回数だけかけ合わせ、符号に注意して計算する。",
 }
 
-_SUBSTITUTE_PHRASE: dict[str, str] = {
-    "substitute_value": "文字に数をあてはめる",
-    "substitute_with_parentheses": "かっこをつけて文字を数におきかえる",
-    "evaluate_powers": "累乗を符号に注意して計算する",
-}
+def _term_wise_display(expr_str: str, render_rest: object) -> str:
+    """項ごとに「係数 × （文字の部分）」で書く（`2 × (-8)² - 2 × (-8)`）。
+
+    **× を省かない。** 省くと `6x` に `x=9` を入れた式が `69` になる（実際そうなっていた）。
+    `render_rest` は文字の部分の書き方（代入したまま／累乗まで計算した値）。
+    """
+    pieces: list[str] = []
+    for term in _terms_in_written_order(expr_str):
+        coeff, rest = term.as_coeff_Mul()
+        body = fmt_number(abs(coeff))
+        if rest != 1:
+            body += f" × {render_rest(rest)}"  # type: ignore[operator]
+        pieces.append(("-" if coeff < 0 else "+") + body)
+    out = pieces[0].removeprefix("+")
+    for piece in pieces[1:]:
+        out += f" {piece[0]} {piece[1:]}"
+    return out
+
+
+def _paren_if_negative(v: sympy.Expr) -> str:
+    return f"({fmt_number(v)})" if v < 0 else fmt_number(v)
+
+
+def _substituted_display(expr_str: str, var: sympy.Symbol, val: sympy.Rational) -> str:
+    """文字を数におきかえた式（`2 × (-8)² - 2 × (-8)`）。
+
+    `subs` で数を入れると sympy が計算してしまうので、**値の文字列を名前にした記号**
+    に置きかえて表示だけ作る。負の数はかっこをつける（教科書のきまり）。
+    """
+    placeholder = sympy.Symbol(_paren_if_negative(val))
+    return _term_wise_display(expr_str, lambda rest: fmt_expr(rest.subs(var, placeholder)))
+
+
+def _powers_evaluated_display(
+    expr_str: str, var: sympy.Symbol, val: sympy.Rational
+) -> str:
+    """累乗だけ計算した形（`2 × 64 - 2 × (-8)`）。"""
+    return _term_wise_display(expr_str, lambda rest: _paren_if_negative(rest.subs(var, val)))
 
 
 @register_solver("math.evaluate_substitution")
@@ -130,12 +205,18 @@ def evaluate_substitution(expr_str: str, subs_str: object, mode: object) -> Solu
     r_disp = fmt_number(result)
 
     ops = _SUBSTITUTE_STEPS[mode_s]
+    displays = {
+        "substitute_value": _substituted_display(expr_str, var, val),
+        "substitute_with_parentheses": _substituted_display(expr_str, var, val),
+        "evaluate_powers": _powers_evaluated_display(expr_str, var, val),
+        "compute_value": r_disp,
+    }
     steps = [
         Step(
             op=op,
             args=[],
             result_srepr=r_srepr,
-            result_display=r_disp if i == len(ops) - 1 else _SUBSTITUTE_PHRASE.get(op, ""),
+            result_display=displays[op],
             narration=_SUBSTITUTE_NARRATION[op],
         )
         for i, op in enumerate(ops)
@@ -169,10 +250,20 @@ _NOTATION_NARRATION: dict[str, str] = {
     "collect_numerator": "乗法の部分を先にまとめてから、分数の形に表す。",
 }
 
-_NOTATION_PHRASE: dict[str, str] = {
-    "apply_product_rule": "数を前にして × を省く",
-    "collect_numerator": "乗法の部分をまとめる",
-}
+def _notation_step_displays(expr_str: str, mode: str, final: str) -> list[str]:
+    """記法のきまりの各手の括弧に入れる表示（最後は答え）。"""
+    if mode == "product_powers":
+        # × を省いて数を前に出しただけの形（同じ文字はまだ累乗にまとめない）。
+        factors = [sympy.sympify(t) for _op, t in top_level_parts(expr_str, "*")]
+        numbers = [f for f in factors if f.is_number]
+        letters = [f for f in factors if not f.is_number]
+        head = "".join(fmt_expr(n) for n in numbers)
+        return [head + "".join(fmt_expr(s) for s in letters), final]
+    if mode == "quotient_mixed":
+        # 乗法の部分（分子）をまとめた形。
+        num, _den = expr_str.rsplit("/", 1)
+        return [_fmt_monomial_display(sympy.sympify(num)), final]
+    raise ValueError(f"途中の表示を組めない mode: {mode!r}")
 
 
 @register_solver("math.simplify_notation")
@@ -192,12 +283,14 @@ def simplify_notation(expr_str: str, mode: object) -> Solution:
     r_disp = _fmt_monomial_display(expr)
 
     ops = _NOTATION_STEPS[mode_s]
+    displays = [r_disp] if len(ops) == 1 else _notation_step_displays(expr_str, mode_s, r_disp)
+    assert len(displays) == len(ops)
     steps = [
         Step(
             op=op,
             args=[],
             result_srepr=r_srepr,
-            result_display=r_disp if i == len(ops) - 1 else _NOTATION_PHRASE.get(op, ""),
+            result_display=displays[i],
             narration=_NOTATION_NARRATION[op],
         )
         for i, op in enumerate(ops)
@@ -362,39 +455,39 @@ _TERM_MAPS: dict[str, dict[str, str]] = {
 # domain 別の step テキスト（既定は g1_l17/l19/l21/l2 の現行文＝golden 不変）。
 # inequality は答えが「用語の名前」でなく「記号」なので narration を専用化する。
 _TERM_RECALL_STEP_TEXT_DEFAULT: dict[str, str] = {
-    "s1_display": "説明されている対象を読み取る",
+    "s1_display": "",
     "s1_narration": "説明されている式や数の部分がどれかを読み取る。",
     "s2_narration": "その対象を表す用語の名前を思い出す。",
 }
 _TERM_RECALL_STEP_TEXT_BY_DOMAIN: dict[str, dict[str, str]] = {
     "inequality": {
-        "s1_display": "説明されている数量の大小の関係を読み取る",
+        "s1_display": "",
         "s1_narration": "説明されている、数量の間の大小の関係を読み取る。",
         "s2_narration": "その関係を表す不等号の記号を思い出す。",
     },
     "quadratic_coefficient": {
-        "s1_display": "説明されている項が式のどの位置にあるかを読み取る",
+        "s1_display": "",
         "s1_narration": "説明されている項が、2次方程式のどの位置（x²・x・定数項）にあるかを読み取る。",
         "s2_narration": "ax²+bx+c=0 の形と見比べて、その位置に対応する文字を思い出す。",
     },
     # C8 g1 空間図形: 説明の対象が「式や数の部分」ではなく立体・図なので専用化する。
     "space_solid_terms": {
-        "s1_display": "説明されている立体がどのようなものかを読み取る",
+        "s1_display": "",
         "s1_narration": "底面の形・側面の形・面の数など、説明されている立体の特徴を読み取る。",
         "s2_narration": "その特徴をもつ立体を表す用語の名前を思い出す。",
     },
     "spatial_position_terms": {
-        "s1_display": "説明されている位置関係を読み取る",
+        "s1_display": "",
         "s1_narration": "空間の中で、2つの直線がどのように置かれているかを読み取る。",
         "s2_narration": "その位置関係を表す用語の名前を思い出す。",
     },
     "rotation_solid_terms": {
-        "s1_display": "説明されている、回転させてできる立体や線を読み取る",
+        "s1_display": "",
         "s1_narration": "平面図形を1回転させて立体をつくる場面のどの部分が説明されているかを読み取る。",
         "s2_narration": "その部分を表す用語の名前を思い出す。",
     },
     "projection_terms": {
-        "s1_display": "説明されている、立体を見た向きと図を読み取る",
+        "s1_display": "",
         "s1_narration": "立体をどの向きから見てかいた図かを読み取る。",
         "s2_narration": "その図を表す用語の名前を思い出す。",
     },
@@ -459,7 +552,7 @@ def verify_equation_solution(equation_str: object, value: object) -> Solution:
             op="substitute_candidate",
             args=[],
             result_srepr=sympy.srepr(v),
-            result_display="候補の値を方程式の x に代入する",
+            result_display=f"左辺 {fmt_number(lhs_v)}、右辺 {fmt_number(rhs_v)}",
             narration="候補の値を方程式の x にあてはめる。",
         ),
         Step(
@@ -494,7 +587,7 @@ def compare_signed_numbers(a: object, b: object) -> Solution:
             op="compare_on_number_line",
             args=[],
             result_srepr=sympy.srepr(larger),
-            result_display="2数を数直線上の位置で比べる",
+            result_display=f"{fmt_number(smaller)} より {fmt_number(larger)} が右",
             narration="2つの数を数直線上に置き、右にあるほうが大きいと考える。",
         ),
         Step(
@@ -1132,7 +1225,7 @@ def classify_number_sign(value: object) -> Solution:
             op="read_number_sign",
             args=[],
             result_srepr=("+" if v > 0 else "-"),
-            result_display="数の前についている符号を読み取る",
+            result_display=("+" if v > 0 else "-"),
             narration="数の前についている符号（＋か－か）を読み取る。",
         ),
         Step(
@@ -1194,7 +1287,7 @@ def represent_opposite_quantity(
             op="identify_base_direction",
             args=[],
             result_srepr=pos,
-            result_display="どちらの向きを正の数で表すことにしたかを読み取る",
+            result_display=str(pos),
             narration="どちらの向き（性質）を正の数で表すことにしたかを読み取る。",
         ),
         Step(
@@ -1239,7 +1332,7 @@ def judge_set_closure(number_set: object, operation: object) -> Solution:
             op="check_operation_result",
             args=[],
             result_srepr=f"{s}.{o}",
-            result_display="その演算の結果が必ずその集合に入るかを調べる",
+            result_display=("いつでも入る" if closed else "入らない場合がある"),
             narration="その集合の数どうしでその演算をした結果が、いつでもその集合に入るかを調べる。",
         ),
         Step(
@@ -1292,7 +1385,7 @@ def count_significant_figures(measurement: object) -> Solution:
             op="find_first_significant_digit",
             args=[],
             result_srepr=f"sigfig:{count}",
-            result_display="左から最初の0でない数字を見つける",
+            result_display=next(ch for ch in m if ch.isdigit() and ch != "0"),
             narration="左から見て、最初の0でない数字が有効数字の始まりである（位取りの0は数えない）。",
         ),
         Step(
@@ -1327,7 +1420,7 @@ def interpret_expression(item_a: object, item_b: object) -> Solution:
             op="read_each_term_meaning",
             args=[],
             result_srepr="term_meaning",
-            result_display="式の各項が表す数量を読み取る",
+            result_display=f"{a}の代金と{b}の代金",
             narration=(
                 "式の各項は、買った個数にひとつあたりの値段をかけた「代金」を表すことを読み取る。"
             ),
@@ -1391,7 +1484,7 @@ def recall_rule_statement(topic: object, concept: object, labels: object = None)
             op="read_rule_context",
             args=[],
             result_srepr=c,
-            result_display="問われている規則が何についてかを読み取る",
+            result_display="",
             narration="問題で問われている規則や約束が、何についてのものかを読み取る。",
         ),
         Step(
@@ -1428,7 +1521,7 @@ def classify_rational_irrational(value_str: object) -> Solution:
             op="evaluate_representability",
             args=[],
             result_srepr=("rational" if is_rational else "irrational"),
-            result_display="整数を使った分数の形で表せるかを調べる",
+            result_display=("分数で表せる" if is_rational else "分数では表せない"),
             narration="その数が、整数を使った分数（p/q）の形で表せるかどうかを調べる。",
         ),
         Step(
@@ -1467,7 +1560,7 @@ def verify_quadratic_solution(eq_str: object, value: object) -> Solution:
             op="substitute_candidate",
             args=[],
             result_srepr=sympy.srepr(v),
-            result_display="候補の値を方程式の x に代入する",
+            result_display=f"左辺 {fmt_number(lhs_v)}",
             narration="候補の値を2次方程式の x にあてはめる。",
         ),
         Step(

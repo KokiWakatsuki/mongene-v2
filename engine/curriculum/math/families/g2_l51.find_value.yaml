@@ -27,6 +27,11 @@ levels:
       space_choices: [die6, cards_n, cards_n, cards_n, cards_n, cards_n, cards_n, cards_n, cards_n]
       # カードの枚数は教材の大きさに（53枚のカードは教材にならない）。
       n_domain: {int_range: [5, 20]}
+    # 確率の答えは約分した分数で書くのが作法で、分母は「同じ確からしさで起こる
+    # 場合の数」そのもの。数を小さくする方向では直せない（`engine.eval.answer_size`）。
+    answer_size_max: {denominator: 20}
+    answer_size_reason: |
+      1個のさいころ（または番号カード）1回なので、分母は面（枚数）の数そのもの（5〜20）。約分した分数が答えの作法。
     given: [condition]
     asked: [value]
     visual: none

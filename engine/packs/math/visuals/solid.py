@@ -30,6 +30,7 @@ import math
 from typing import TYPE_CHECKING, Any
 
 from engine.core.registry import register_visual
+from engine.packs.math.visuals._label_place import centroid, haloed_text, outward
 
 if TYPE_CHECKING:  # pragma: no cover - 型のみ
     from engine.core.contracts import MR, CellContext
@@ -290,14 +291,20 @@ def _vertex_labels(params: dict[str, Any], pts: dict[str, str]) -> list[str]:
 
     vertices は「手前左下から時計まわり → 上面も同じ順」で与える規約
     （直方体なら ABCD-EFGH）。位置は立体ごとに固定なので、名前だけを差し替える。
+
+    置く向きは**立体の重心から外へ**。「真上へ 6px」の決め打ちだったころは、
+    立方体の見取図で 8 つの名前のうち 6 つが辺に切られていた。
     """
     names = list(params.get("vertices") or [])
     if not names:
         return []
-    slots = list(pts.values())
+    slots = [(float(x), float(y)) for x, y in pts.values()]
+    cx, cy = centroid(slots)
     out: list[str] = []
     for name, (x, y) in zip(names, slots, strict=False):
-        out.append(_text(float(x), float(y) - 6, str(name)))
+        lx, ly, anchor = outward(x, y, cx, cy, dist=11.0)
+        # 見取図の奥の頂点は、どちらへ逃がしても辺の内側に入る。白い縁取りで浮かせる。
+        out.append(haloed_text(lx, ly, str(name), size=12, anchor=anchor))
     return out
 
 

@@ -74,7 +74,7 @@ _NAME_NARRATION = {
     "identify_rotation_axis": "どの辺を軸にして回すのかを図で確かめ、軸から離れている部分がどこを通るかを考える。",
     "name_solid_of_revolution": "軸のまわりを一回転したとき、面が通る範囲がどんな立体になるかを答える。",
 }
-_NAME_PHRASE = {"identify_rotation_axis": "回転の軸を確かめる"}
+_NAME_PHRASE = {"identify_rotation_axis": ""}
 
 
 @register_solver("math.solid_of_revolution_name")
@@ -107,10 +107,12 @@ _SKETCH_NARRATION = {
     "determine_radius_and_height": "軸に垂直な辺の長さが底面の半径に、軸に重なる辺の長さが高さになることを確かめる。",
     "draw_solid_sketch": "底面の円をつぶれた楕円でかき、見えない部分を破線にして見取図を仕上げる。",
 }
-_SKETCH_PHRASE = {
-    "identify_rotation_axis": "回転の軸を確かめる",
-    "determine_radius_and_height": "底面の半径と高さを決める",
-}
+def _sketch_phrase(r: sympy.Integer, h: sympy.Integer) -> dict[str, str]:
+    """見取図の手の括弧（この手で得た寸法）。指示の言い直しは置かない（面③）。"""
+    return {
+        "identify_rotation_axis": "",
+        "determine_radius_and_height": f"底面の半径 {r}、高さ {h}",
+    }
 
 
 @register_solver("math.solid_of_revolution_sketch")
@@ -136,7 +138,7 @@ def solid_of_revolution_sketch(shape: object, axis_len: object, other_len: objec
     srepr = sympy.srepr(sympy.Tuple(sympy.Symbol(name), r, h))
     return Solution(
         answer=GraphAnswer(features=features, solution_svg_ref=""),
-        steps=_steps(_SKETCH_OPS, _SKETCH_NARRATION, _SKETCH_PHRASE, srepr, disp),
+        steps=_steps(_SKETCH_OPS, _SKETCH_NARRATION, _sketch_phrase(r, h), srepr, disp),
     )
 
 
@@ -150,10 +152,12 @@ _SECTION_NARRATION = {
     "determine_section_shape": "軸の片側にできる図形と、それを軸で折り返した図形を合わせて、切り口の形を決める。",
     "draw_section": "決めた形を、底辺と高さの長さがわかるようにかく。",
 }
-_SECTION_PHRASE = {
-    "identify_section_plane": "切る平面を確かめる",
-    "determine_section_shape": "切り口の形を決める",
-}
+def _section_phrase(section: str) -> dict[str, str]:
+    """断面の手の括弧（この手で分かった形）。"""
+    return {
+        "identify_section_plane": "回転の軸をふくむ平面",
+        "determine_section_shape": section,
+    }
 
 
 @register_solver("math.solid_of_revolution_section")
@@ -183,7 +187,7 @@ def solid_of_revolution_section(shape: object, axis_len: object, other_len: obje
     srepr = sympy.srepr(sympy.Tuple(sympy.Symbol(section), width, h))
     return Solution(
         answer=GraphAnswer(features=features, solution_svg_ref=""),
-        steps=_steps(_SECTION_OPS, _SECTION_NARRATION, _SECTION_PHRASE, srepr, disp),
+        steps=_steps(_SECTION_OPS, _SECTION_NARRATION, _section_phrase(section), srepr, disp),
     )
 
 
@@ -248,7 +252,7 @@ _READ_PROJ_NARRATION = {
     "read_elevation_and_plan": "真正面から見た図（立面図）と真上から見た図（平面図）が、それぞれどんな形かを読み取る。",
     "identify_solid_from_projection": "その二つの形の組み合わせになる立体はどれかを考えて答える。",
 }
-_READ_PROJ_PHRASE = {"read_elevation_and_plan": "二つの図の形を読み取る"}
+_READ_PROJ_PHRASE = {"read_elevation_and_plan": ""}
 
 
 @register_solver("math.solid_from_projection")
@@ -272,10 +276,12 @@ _DRAW_PROJ_NARRATION = {
     "determine_plan": "同じ立体を真上から見たときに、外側の輪郭がどんな形になるかを考える。",
     "draw_projection": "立面図を上、平面図を下にそろえて並べ、対応する位置がたてにそろうようにかく。",
 }
-_DRAW_PROJ_PHRASE = {
-    "determine_elevation": "立面図の形を決める",
-    "determine_plan": "平面図の形を決める",
-}
+def _draw_proj_phrase(elev: str, plan: str) -> dict[str, str]:
+    """投影図の手の括弧（決まった形）。"""
+    return {
+        "determine_elevation": _SHAPE_JP[elev],
+        "determine_plan": _SHAPE_JP[plan],
+    }
 
 
 @register_solver("math.projection_views_of_solid")
@@ -304,7 +310,7 @@ def projection_views_of_solid(kind: object, base: object, height: object) -> Sol
     )
     return Solution(
         answer=GraphAnswer(features=features, solution_svg_ref=""),
-        steps=_steps(_DRAW_PROJ_OPS, _DRAW_PROJ_NARRATION, _DRAW_PROJ_PHRASE, srepr, disp),
+        steps=_steps(_DRAW_PROJ_OPS, _DRAW_PROJ_NARRATION, _draw_proj_phrase(elev, plan), srepr, disp),
     )
 
 
@@ -314,10 +320,12 @@ _COMPLETE_NARRATION = {
     "identify_solid_from_partial": "その形になる立体をすべて挙げ、もう一方の図についての条件に合うものを一つに絞る。",
     "draw_missing_view": "絞りこんだ立体を、与えられていないほうの向きから見た形にかく。",
 }
-_COMPLETE_PHRASE = {
-    "read_given_view": "与えられた図の形を読み取る",
-    "identify_solid_from_partial": "立体を一つに絞る",
-}
+def _complete_phrase(plan_shape: str, name: str) -> dict[str, str]:
+    """投影図を補う手の括弧（読み取った形と絞りこんだ立体）。"""
+    return {
+        "read_given_view": _SHAPE_JP[plan_shape],
+        "identify_solid_from_partial": name,
+    }
 
 
 @register_solver("math.complete_projection")
@@ -342,7 +350,7 @@ def complete_projection(plan: object, elevation: object) -> Solution:
     srepr = sympy.srepr(sympy.Tuple(sympy.Symbol(name), sympy.Symbol(elev_s)))
     return Solution(
         answer=GraphAnswer(features=features, solution_svg_ref=""),
-        steps=_steps(_COMPLETE_OPS, _COMPLETE_NARRATION, _COMPLETE_PHRASE, srepr, disp),
+        steps=_steps(_COMPLETE_OPS, _COMPLETE_NARRATION, _complete_phrase(plan_s, name), srepr, disp),
     )
 
 
@@ -362,10 +370,12 @@ _NET_NARRATION = {
     "determine_side_rectangle_size": "その長方形の縦は立体の高さ、横は底面の周の長さになることから、それぞれの長さを求める。",
     "draw_net": "側面の長方形に底面をつけ加えて展開図を仕上げ、縦と横の長さを書き入れる。",
 }
-_NET_PHRASE = {
-    "unfold_lateral_faces": "側面を切り開く",
-    "determine_side_rectangle_size": "側面の長方形の縦と横を求める",
-}
+def _net_phrase(base_jp: str, h: int, width: int) -> dict[str, str]:
+    """展開図の手の括弧（開いた形と寸法）。"""
+    return {
+        "unfold_lateral_faces": f"底面が{base_jp}の1枚の長方形",
+        "determine_side_rectangle_size": f"縦 {h}、横 {width}",
+    }
 
 
 @register_solver("math.prism_net_side_rectangle")
@@ -394,7 +404,7 @@ def prism_net_side_rectangle(face_count: object, base: object, height: object) -
     srepr = sympy.srepr(sympy.Tuple(sympy.Integer(h), sympy.Integer(width), sympy.Integer(n)))
     return Solution(
         answer=GraphAnswer(features=features, solution_svg_ref=""),
-        steps=_steps(_NET_OPS, _NET_NARRATION, _NET_PHRASE, srepr, disp),
+        steps=_steps(_NET_OPS, _NET_NARRATION, _net_phrase(base_jp, h, width), srepr, disp),
     )
 
 
@@ -410,11 +420,13 @@ _COMPOSITE_NARRATION = {
     "unfold_cone_side": "円錐の側面を切り開くとおうぎ形になり、その半径は母線の長さ、弧の長さは底面の円周の長さになることを確かめる。",
     "draw_composite_net": "求めた長さを書き入れて、二つをならべた側面の展開図をかく。",
 }
-_COMPOSITE_PHRASE = {
-    "separate_lateral_surfaces": "側面を二つに分ける",
-    "unfold_cylinder_side": "円柱の側面を切り開く",
-    "unfold_cone_side": "円錐の側面を切り開く",
-}
+def _composite_phrase(h1: int, circ: str, slant: sympy.Expr) -> dict[str, str]:
+    """組み合わせた立体の展開図の手の括弧（開いた各面の寸法）。"""
+    return {
+        "separate_lateral_surfaces": "円柱の側面と円錐の側面",
+        "unfold_cylinder_side": f"縦 {h1}、横 {circ} の長方形",
+        "unfold_cone_side": f"半径 {slant}、弧の長さ {circ} のおうぎ形",
+    }
 
 
 @register_solver("math.composite_side_net")
@@ -461,7 +473,10 @@ def composite_side_net(
     )
     return Solution(
         answer=GraphAnswer(features=features, solution_svg_ref=""),
-        steps=_steps(_COMPOSITE_OPS, _COMPOSITE_NARRATION, _COMPOSITE_PHRASE, srepr, disp),
+        steps=_steps(
+            _COMPOSITE_OPS, _COMPOSITE_NARRATION,
+            _composite_phrase(h1, circ_disp, slant), srepr, disp,
+        ),
     )
 
 
@@ -481,10 +496,12 @@ _BOX_SECTION_NARRATION = {
     "compute_base_diagonal": "その長方形の横は底面の対角線なので、底面の二辺から三平方の定理で求める。",
     "draw_section_with_diagonal": "切り口の長方形を平面にかき出し、対角線をひいて、対角線を求めるのに使う直角三角形を示す。",
 }
-_BOX_SECTION_PHRASE = {
-    "identify_section_plane": "切り口が長方形になることを確かめる",
-    "compute_base_diagonal": "底面の対角線を求める",
-}
+def _box_section_phrase(base_diag: sympy.Expr) -> dict[str, str]:
+    """直方体の断面の手の括弧（分かった形と長さ）。"""
+    return {
+        "identify_section_plane": "長方形",
+        "compute_base_diagonal": _fmt_len(base_diag),
+    }
 
 
 @register_solver("math.box_section_diagonal")
@@ -519,7 +536,10 @@ def box_section_diagonal(side_a: object, side_b: object, height: object) -> Solu
     srepr = sympy.srepr(sympy.Tuple(base_diag, sympy.Integer(h), body_diag))
     return Solution(
         answer=GraphAnswer(features=features, solution_svg_ref=""),
-        steps=_steps(_BOX_SECTION_OPS, _BOX_SECTION_NARRATION, _BOX_SECTION_PHRASE, srepr, disp),
+        steps=_steps(
+            _BOX_SECTION_OPS, _BOX_SECTION_NARRATION,
+            _box_section_phrase(base_diag), srepr, disp,
+        ),
     )
 
 
@@ -529,10 +549,12 @@ _UNFOLD_NARRATION = {
     "unfold_to_plane": "その二つの面を一つの平面に開くと、横が二辺の長さの和、縦が残りの辺の長さの長方形になることを確かめる。",
     "draw_straight_path": "開いた図の上で二点を直線で結び、その長さを三平方の定理で求める。",
 }
-_UNFOLD_PHRASE = {
-    "choose_two_faces": "またぐ二つの面を確かめる",
-    "unfold_to_plane": "二つの面を一つの平面に開く",
-}
+def _unfold_phrase(width: sympy.Expr, h: int) -> dict[str, str]:
+    """展開して最短経路を見る手の括弧（開いた長方形の寸法）。"""
+    return {
+        "choose_two_faces": "となり合う2面",
+        "unfold_to_plane": f"横 {width}、縦 {h} の長方形",
+    }
 
 
 @register_solver("math.box_unfold_shortest_path")
@@ -565,7 +587,7 @@ def box_unfold_shortest_path(side_a: object, side_b: object, height: object) -> 
     srepr = sympy.srepr(sympy.Tuple(width, sympy.Integer(h), path))
     return Solution(
         answer=GraphAnswer(features=features, solution_svg_ref=""),
-        steps=_steps(_UNFOLD_OPS, _UNFOLD_NARRATION, _UNFOLD_PHRASE, srepr, disp),
+        steps=_steps(_UNFOLD_OPS, _UNFOLD_NARRATION, _unfold_phrase(width, h), srepr, disp),
     )
 
 

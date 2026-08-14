@@ -51,6 +51,22 @@ def _median_of(seq: list[int]) -> sympy.Rational | sympy.Integer:
     return sympy.Rational(seq[m // 2 - 1] + seq[m // 2], 2)
 
 
+def _fmt_half(value: sympy.Expr) -> str:
+    """整数はそのまま、分母2の分数は小数で書く（四分位数は整数か x.5 にしかならない）。
+
+    それ以外が来たら分数のまま出す——構成が崩れた合図を隠さないため。
+
+    中央値・四分位数・四分位範囲の**全部**がこれを通る。箱ひげ図のセルだけ小数、
+    四分位数のセルは分数（`27/2`）になっていたのを揃えた（`engine.eval.answer_size`）。
+    """
+    rational = sympy.Rational(value)
+    if rational.q == 1:
+        return str(int(rational))
+    if rational.q == 2:
+        return f"{float(rational):.1f}"
+    return str(rational)
+
+
 def _split_halves(sorted_data: list[int]) -> tuple[list[int], list[int]]:
     n = len(sorted_data)
     mid = n // 2
@@ -71,14 +87,18 @@ def median_value(data: object) -> Solution:
     vals = [int(str(v)) for v in cast("list[object]", data)]
     ordered = sorted(vals)
     median = _median_of(ordered)
-    disp = sympy.sstr(median)
+    # 偶数個のデータの中央値は x.5 になる。分数（27/2）ではなく小数で書く
+    # （箱ひげ図のセルは `_fmt_half` で 13.5 と書いていた＝同じ量の表示が
+    #  セルによって食い違っていた）。srepr は Rational のまま＝答えの値は変えない。
+    disp = _fmt_half(median)
     srepr = sympy.srepr(median)
     steps = [
         Step(
             op="sort_data",
             args=[],
             result_srepr="",
-            result_display="データを大きさの順に並べる",
+            # 並べかえた結果そのもの（指示の言い直しは置かない・面③）。
+            result_display="、".join(str(v) for v in ordered),
             narration="データを大きさの順に並べかえる。",
         ),
         Step(
@@ -109,21 +129,27 @@ def quartiles_iqr(data: object) -> Solution:
     q1 = _median_of(lower)
     q3 = _median_of(upper)
     iqr = q3 - q1
-    disp = f"第1四分位数 {q1}、第3四分位数 {q3}、四分位範囲 {iqr}"
+    disp = (
+        f"第1四分位数 {_fmt_half(q1)}、第3四分位数 {_fmt_half(q3)}、"
+        f"四分位範囲 {_fmt_half(iqr)}"
+    )
     srepr = sympy.srepr(sympy.Tuple(q1, q3, iqr))
     steps = [
         Step(
             op="split_into_halves",
             args=[],
             result_srepr="",
-            result_display="中央値を境に下組と上組に分ける",
+            result_display=(
+                f"下組 {'、'.join(str(v) for v in lower)} / "
+                f"上組 {'、'.join(str(v) for v in upper)}"
+            ),
             narration="データを大きさの順に並べ、中央値を境に下組と上組に分ける。",
         ),
         Step(
             op="compute_q1_q3",
             args=[],
             result_srepr="",
-            result_display="下組・上組それぞれの中央値を求める",
+            result_display=f"第1四分位数 {_fmt_half(q1)}、第3四分位数 {_fmt_half(q3)}",
             narration="下組の中央値を第一四分位数、上組の中央値を第三四分位数とする。",
         ),
         Step(
@@ -162,7 +188,7 @@ def five_number_summary(data: object) -> Solution:
             op="identify_min_max",
             args=[],
             result_srepr="",
-            result_display="データを大きさの順に並べ両端の値を読み取る",
+            result_display=f"最小値 {v_min}、最大値 {v_max}",
             narration="データを大きさの順に並べ、いちばん小さい値といちばん大きい値を求める。",
         ),
         Step(
@@ -203,21 +229,27 @@ def quartiles_full_summary(data: object) -> Solution:
     q2 = _median_of(ordered)
     q3 = _median_of(upper)
     iqr = q3 - q1
-    disp = f"第1四分位数 {q1}、第2四分位数(中央値) {q2}、第3四分位数 {q3}、四分位範囲 {iqr}"
+    disp = (
+        f"第1四分位数 {_fmt_half(q1)}、第2四分位数(中央値) {_fmt_half(q2)}、"
+        f"第3四分位数 {_fmt_half(q3)}、四分位範囲 {_fmt_half(iqr)}"
+    )
     srepr = sympy.srepr(sympy.Tuple(q1, q2, q3, iqr))
     steps = [
         Step(
             op="compute_median",
             args=[],
             result_srepr="",
-            result_display="データ全体の中央値を求める",
+            result_display=f"第2四分位数(中央値) {_fmt_half(q2)}",
             narration="データを大きさの順に並べ、データ全体の中央値（第二四分位数）を求める。",
         ),
         Step(
             op="split_into_halves",
             args=[],
             result_srepr="",
-            result_display="中央値を境に下組と上組に分ける",
+            result_display=(
+                f"下組 {'、'.join(str(v) for v in lower)} / "
+                f"上組 {'、'.join(str(v) for v in upper)}"
+            ),
             narration="中央値を境に下組と上組に分ける。",
         ),
         Step(
@@ -249,7 +281,7 @@ def classify_distribution_statistic(concept: object) -> Solution:
             op="identify_statistic",
             args=[],
             result_srepr=c,
-            result_display="対象の統計量が何を求めた値かを読み取る",
+            result_display="",
             narration="対象の統計量が、データのどのような性質から求められた値かを読み取る。",
         ),
         Step(
@@ -285,17 +317,6 @@ _BOX_READ_TARGETS: dict[str, tuple[tuple[int, int], tuple[str, str]]] = {
 }
 
 
-def _fmt_half(value: sympy.Expr) -> str:
-    """整数はそのまま、分母2の分数は小数で書く（四分位数は整数か x.5 にしかならない）。
-
-    それ以外が来たら分数のまま出す——構成が崩れた合図を隠さないため。
-    """
-    rational = sympy.Rational(value)
-    if rational.q == 1:
-        return str(int(rational))
-    if rational.q == 2:
-        return f"{float(rational):.1f}"
-    return str(rational)
 
 
 def _restore_five(axis_lo: object, axis_step: object, box_ticks: object) -> list[sympy.Integer]:
@@ -334,7 +355,7 @@ def read_box_plot_values(
             op="read_axis_step",
             args=[],
             result_srepr="",
-            result_display="数直線の目もり一つぶんの大きさを読む",
+            result_display=f"1目もり {sympy.sstr(sympy.Integer(int(str(axis_step))))}",
             narration="数直線の目もりを見て、目もり一つぶんがどれだけの大きさを表すかを読み取る。",
         ),
         Step(
@@ -384,7 +405,7 @@ def draw_box_plot_features(data: object) -> Solution:
             op="sort_data",
             args=[],
             result_srepr="",
-            result_display="データを大きさの順に並べる",
+            result_display="、".join(str(v) for v in ordered),
             narration="データを大きさの順に並べかえる。",
         ),
         Step(
@@ -398,7 +419,7 @@ def draw_box_plot_features(data: object) -> Solution:
             op="draw_box_plot",
             args=[],
             result_srepr="",
-            result_display="求めた五つの値を数直線上にとって箱とひげをかく",
+            result_display="五つの値の位置に箱とひげ",
             narration="求めた五つの値を数直線上にとり、四分位数を結んだ箱と、両端まで伸ばしたひげをかく。",
         ),
     ]
@@ -425,7 +446,7 @@ def compare_box_plots_center_spread(
             op="read_axis_step",
             args=[],
             result_srepr="",
-            result_display="数直線の目もり一つぶんの大きさを読む",
+            result_display=f"1目もり {sympy.sstr(sympy.Integer(int(str(axis_step))))}",
             narration="数直線の目もりを見て、目もり一つぶんがどれだけの大きさを表すかを読み取る。",
         ),
         Step(
@@ -468,14 +489,17 @@ def compare_box_plots_iqr(
             op="read_axis_step",
             args=[],
             result_srepr="",
-            result_display="数直線の目もり一つぶんの大きさを読む",
+            result_display=f"1目もり {sympy.sstr(sympy.Integer(int(str(axis_step))))}",
             narration="数直線の目もりを見て、目もり一つぶんがどれだけの大きさを表すかを読み取る。",
         ),
         Step(
             op="read_quartiles_both",
             args=[],
             result_srepr="",
-            result_display="それぞれの箱の左端と右端の値を読む",
+            result_display=(
+                f"Aは {_fmt_half(a[1])}〜{_fmt_half(a[3])}、"
+                f"Bは {_fmt_half(b[1])}〜{_fmt_half(b[3])}"
+            ),
             narration="それぞれの箱の左端と右端の位置を読み、第一四分位数と第三四分位数を求める。",
         ),
         Step(
@@ -544,7 +568,7 @@ def compare_box_plot_statistic(
             op=f"read_{s}_both",
             args=[],
             result_srepr="",
-            result_display=f"AとBの{name}を読む",
+            result_display=f"A {_fmt_half(va)}、B {_fmt_half(vb)}",
             narration=f"AとBそれぞれの箱ひげ図から{name}を読み取る。",
         ),
         Step(
@@ -583,21 +607,29 @@ def judge_box_plot_trend_claim(
             op="read_quartiles_both",
             args=[],
             result_srepr="",
-            result_display="AとBの四分位数を読む",
+            result_display=(
+                f"Aは {_fmt_half(a[1])}・{_fmt_half(a[2])}・{_fmt_half(a[3])}、"
+                f"Bは {_fmt_half(b[1])}・{_fmt_half(b[2])}・{_fmt_half(b[3])}"
+            ),
             narration="AとBそれぞれの箱ひげ図から、第一四分位数・中央値・第三四分位数を読み取る。",
         ),
         Step(
             op="compare_center",
             args=[],
             result_srepr="",
-            result_display="中央値を比べる",
+            result_display=(
+                f"中央値は A {_fmt_half(a[2])}、B {_fmt_half(b[2])}"
+            ),
             narration="まん中の位置を表す中央値を比べ、どちらが大きいかを見る。",
         ),
         Step(
             op="compare_quartile_positions",
             args=[],
             result_srepr="",
-            result_display="箱の左端と右端も比べる",
+            result_display=(
+                f"箱の左端は A {_fmt_half(a[1])}、B {_fmt_half(b[1])}／"
+                f"右端は A {_fmt_half(a[3])}、B {_fmt_half(b[3])}"
+            ),
             narration="中央値だけでは決められないので、箱の左端と右端の位置も同じように比べる。",
         ),
         Step(
@@ -642,21 +674,24 @@ def judge_box_plot_stability_claim(
             op="read_medians_both",
             args=[],
             result_srepr="",
-            result_display="AとBの中央値を読む",
+            result_display=f"A {_fmt_half(med_a)}、B {_fmt_half(med_b)}",
             narration="「多い」といえるかを見るために、AとBそれぞれの中央値を読み取る。",
         ),
         Step(
             op="read_iqr_both",
             args=[],
             result_srepr="",
-            result_display="AとBの四分位範囲を求める",
+            result_display=f"A {_fmt_half(iqr_a)}、B {_fmt_half(iqr_b)}",
             narration="「安定している」といえるかを見るために、箱の幅から四分位範囲を求める。",
         ),
         Step(
             op="weigh_support_and_counter",
             args=[],
             result_srepr="",
-            result_display="主張を支持する根拠と反論となる根拠を並べる",
+            result_display=(
+                f"中央値は{'A' if med_a > med_b else 'B'}が大きい／"
+                f"四分位範囲は{'A' if iqr_a < iqr_b else 'B'}が小さい"
+            ),
             narration="主張を支持する根拠と、反論となる根拠を、それぞれどの量から言えるか整理する。",
         ),
         Step(
@@ -697,7 +732,7 @@ def read_box_plot_single_statistic(
     steps = [
         Step(
             op="read_axis_step", args=[], result_srepr="",
-            result_display="数直線の目もり一つぶんの大きさを読む",
+            result_display=f"1目もり {sympy.sstr(sympy.Integer(int(str(axis_step))))}",
             narration="数直線の目もりを見て、目もり一つぶんがどれだけの大きさを表すかを読み取る。",
         ),
         Step(
@@ -740,17 +775,20 @@ def judge_spread_claim_by_two_measures(
     steps = [
         Step(
             op="read_iqr_both", args=[], result_srepr="",
-            result_display="AとBの四分位範囲を求める",
+            result_display=f"A {_fmt_half(iqr_a)}、B {_fmt_half(iqr_b)}",
             narration="箱の幅にあたる四分位範囲を、AとBそれぞれについて求める。",
         ),
         Step(
             op="read_range_both", args=[], result_srepr="",
-            result_display="AとBの範囲を求める",
+            result_display=f"A {_fmt_half(rng_a)}、B {_fmt_half(rng_b)}",
             narration="ひげの先から先までの幅にあたる範囲も、AとBそれぞれについて求める。",
         ),
         Step(
             op="check_measures_agree", args=[], result_srepr="",
-            result_display="二つの指標が同じ側を指すかを確かめる",
+            result_display=(
+                "四分位範囲も範囲も A が大きい" if valid
+                else "四分位範囲と範囲で大きいほうが違う"
+            ),
             narration="ばらつきの指標は一つではないので、四分位範囲と範囲が同じ側を指しているかを確かめる。",
         ),
         Step(

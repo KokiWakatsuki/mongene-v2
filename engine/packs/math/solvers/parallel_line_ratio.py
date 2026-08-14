@@ -24,6 +24,7 @@ import sympy
 
 from engine.core.contracts import Solution, Step, SymbolicAnswer
 from engine.core.registry import register_solver
+from engine.packs.math.solvers.arithmetic import fmt_measure
 
 
 def _points(labels: object, default: str = "ABCDE") -> tuple[str, str, str, str, str]:
@@ -56,12 +57,13 @@ def parallel_segment_ratio_length(
     b = sympy.sympify(str(db))
     e = sympy.sympify(str(de))
     result = e * (a + b) / a
-    disp = sympy.sstr(result)
+    disp = fmt_measure(result)
     srepr = sympy.srepr(result)
     steps = [
         Step(
             op="identify_similar_triangles_from_parallel",
-            args=[], result_srepr="", result_display="平行線がつくる相似な三角形を見つける",
+            args=[], result_srepr="",
+            result_display=f"三角形{pa}{pd}{pe} と 三角形{pa}{pb}{pc}",
             narration=f"{pd}{pe}∥{pb}{pc} であることから、三角形{pa}{pd}{pe}と"
             f"三角形{pa}{pb}{pc}が相似になることを見つける。",
         ),
@@ -96,7 +98,7 @@ def judge_parallel_from_ratio(
         Step(
             op="compare_division_ratios",
             args=[], result_srepr="",
-            result_display=f"{pa}{pd}:{pd}{pb}と{pa}{pe}:{pe}{pc}の比を比べる",
+            result_display=f"{a}:{b} と {c}:{d}",
             narration=f"{pa}{pd}:{pd}{pb}と{pa}{pe}:{pe}{pc}の比が等しいかどうかを比べる。",
         ),
         Step(
@@ -121,12 +123,12 @@ def parallel_lines_transversal_ratio(ab: object, de: object, ef: object) -> Solu
     d = sympy.sympify(str(de))
     e = sympy.sympify(str(ef))
     result = a * e / d
-    disp = sympy.sstr(result)
+    disp = fmt_measure(result)
     srepr = sympy.srepr(result)
     steps = [
         Step(
             op="identify_parallel_lines_cut_transversals",
-            args=[], result_srepr="", result_display="3本の平行線が2直線を切る比例関係を見つける",
+            args=[], result_srepr="", result_display=f"{a}:{d} = x:{e}",
             narration="3本の平行な直線が2本の直線と交わるとき、対応する線分の比が等しくなることを見つける。",
         ),
         Step(
@@ -166,12 +168,12 @@ def midpoint_connector_length(bc: object) -> Solution:
     """
     v = sympy.sympify(str(bc))
     result = v / 2
-    disp = sympy.sstr(result)
+    disp = fmt_measure(result)
     srepr = sympy.srepr(result)
     steps = [
         Step(
             op="identify_remaining_side",
-            args=[], result_srepr="", result_display="残りの辺の長さを読み取る",
+            args=[], result_srepr="", result_display=fmt_measure(v),
             narration="三角形の2辺の中点を結ぶ線分に対して、残りの辺の長さを読み取る。",
         ),
         Step(

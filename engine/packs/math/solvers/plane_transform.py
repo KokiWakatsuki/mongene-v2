@@ -55,12 +55,14 @@ def translate_polygon_features(points: object, dx: object, dy: object) -> Soluti
     steps = [
         Step(
             op="identify_translation_vector",
-            args=[], result_srepr="", result_display="平行移動の向きと距離を読み取る",
+            args=[], result_srepr="", result_display=f"x 方向に {d_x}、y 方向に {d_y}",
             narration="平行移動の向きと距離を読み取る。",
         ),
         Step(
             op="translate_each_vertex",
-            args=[], result_srepr="", result_display="各頂点を同じ向き・距離だけ移動する",
+            args=[], result_srepr="", result_display="、".join(
+                f"({x}, {y})" for x, y in new_pts
+            ),
             narration="もとの図形の各頂点を、同じ向きに同じ距離だけ移動する。",
         ),
     ]
@@ -98,12 +100,14 @@ def rotate_polygon_features(points: object, center: object, angle_deg: object) -
     steps = [
         Step(
             op="identify_center_and_angle",
-            args=[], result_srepr="", result_display="回転の中心と回転角を読み取る",
+            args=[], result_srepr="", result_display=f"中心 ({cx}, {cy})、{angle}°",
             narration="回転の中心と、反時計回りの回転角を読み取る。",
         ),
         Step(
             op="rotate_each_vertex",
-            args=[], result_srepr="", result_display="各頂点を回転の中心のまわりに回転させる",
+            args=[], result_srepr="", result_display="、".join(
+                f"({x}, {y})" for x, y in new_pts
+            ),
             narration="もとの図形の各頂点を、回転の中心のまわりに同じ角だけ回転させる。",
         ),
     ]
@@ -136,12 +140,16 @@ def reflect_polygon_features(points: object, axis: object) -> Solution:
     steps = [
         Step(
             op="identify_axis",
-            args=[], result_srepr="", result_display="対称の軸を読み取る",
+            # 軸は図に描かれている（問題文は「直線ℓ」と呼ぶ）ので、
+            # 内部の名前（y_axis）を出さない。読み取るだけの手は括弧を空にする。
+            args=[], result_srepr="", result_display="",
             narration="対称移動の軸がどこにあるかを読み取る。",
         ),
         Step(
             op="reflect_each_vertex",
-            args=[], result_srepr="", result_display="各頂点を軸について折り返す",
+            args=[], result_srepr="", result_display="、".join(
+                f"({x}, {y})" for x, y in new_pts
+            ),
             narration="もとの図形の各頂点を、軸について反対側の同じ距離の位置に折り返す。",
         ),
     ]
@@ -165,8 +173,9 @@ _ROTATION_CENTER_NARRATION: dict[str, str] = {
 }
 
 _ROTATION_CENTER_PHRASE: dict[str, str] = {
-    "draw_perpendicular_bisector_first": "1組目の垂直二等分線を引く",
-    "draw_perpendicular_bisector_second": "2組目の垂直二等分線を引く",
+    # 引いた線そのもの（指示の言い直しは置かない・面③）。
+    "draw_perpendicular_bisector_first": "1組目の垂直二等分線",
+    "draw_perpendicular_bisector_second": "2組目の垂直二等分線",
 }
 
 

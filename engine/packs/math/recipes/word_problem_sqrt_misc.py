@@ -290,7 +290,10 @@ def solve_square_multiplier(
                 op="collect_odd_exponent_primes",
                 args=[],
                 result_srepr="",
-                result_display="指数が奇数の素因数を選ぶ",
+                result_display="、".join(
+                    str(prime) for prime, exp in sorted(sympy.factorint(n).items())
+                    if exp % 2 == 1
+                ),
                 narration="素因数分解した結果から、指数が奇数になっている素因数を選び出す。",
             ),
             Step(

@@ -239,6 +239,32 @@ _STEP_NARRATION: dict[str, str] = {
 }
 
 
+def _claim_tail(claim: str) -> str:
+    """その行で**何が分かるか**を、主張の形から決める。
+
+    以前はどの行も「次がいえる。」で締めていた。解説の接続詞は
+    「次に、」が自動で付くので、証明の途中は「次に、…ことから、次がいえる。」が
+    4行も続き、何が分かったのかを括弧の中まで読まないと分からなかった。
+    """
+    if "≡" in claim:
+        return "2つの三角形が合同だと分かる。"
+    if "∽" in claim:
+        return "2つの三角形が相似だと分かる。"
+    if "∥" in claim:
+        return "2直線が平行だと分かる。"
+    if "⊥" in claim:
+        return "2直線が垂直だと分かる。"
+    if "：" in claim or ":" in claim:
+        return "辺の比が等しいと分かる。"
+    if "°" in claim:
+        return "角の大きさが分かる。"
+    if "∠" in claim:
+        return "等しい角が分かる。"
+    if "＝" in claim or "=" in claim:
+        return "等しい辺が分かる。"
+    return "次のことが分かる。"
+
+
 def _steps_from_lines(lines) -> list[Step]:
     """証明の行を採点粒度の Step にする（op 列＝level_sep の材料になる）。"""
     out: list[Step] = []
@@ -249,9 +275,9 @@ def _steps_from_lines(lines) -> list[Step]:
                 narration = "図から読み取る。"
             elif line.reason.endswith("だから"):
                 # 定義を開く行（「O は AD の中点だから」）はそのまま続ける。
-                narration = f"{line.reason}、等しい辺が分かる。"
+                narration = f"{line.reason}、{_claim_tail(line.claim)}"
             else:
-                narration = f"{line.reason}ことから、次がいえる。"
+                narration = f"{line.reason}ことから、{_claim_tail(line.claim)}"
         out.append(
             Step(op=line.op, args=[], result_srepr="", result_display=line.claim,
                  narration=narration)

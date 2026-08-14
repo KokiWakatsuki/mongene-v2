@@ -32,6 +32,11 @@ levels:
       scenario_kind: bag_one_draw
       color_candidates: [赤, 白, 青, 黄, 黒, 緑, 紫, 橙]
       count_domain: {int_range: [1, 8]}
+    # 確率の答えは約分した分数で書くのが作法で、分母は「同じ確からしさで起こる
+    # 場合の数」そのもの。数を小さくする方向では直せない（`engine.eval.answer_size`）。
+    answer_size_max: {denominator: 16}
+    answer_size_reason: |
+      袋の玉2色が各1〜8個なので、分母は玉の総数＝最大16。約分した分数が答えの作法。
     given: [scenario]
     asked: [value, value]
     visual: none
@@ -50,6 +55,12 @@ levels:
       # カードの枚数。倍数の包除には lcm(a,b) 以上の枚数が要るので20枚では足りないが、
       # 60枚は教材のカードとして広い（教科書は「1から30まで」「1から50まで」）。
       n_range: [20, 50]
+    # 確率の答えは約分した分数で書くのが作法で、分母は「同じ確からしさで起こる
+    # 場合の数」そのもの。数を小さくする方向では直せない（`engine.eval.answer_size`）。
+    answer_size_max: {denominator: 50}
+    answer_size_reason: |
+      1〜N のカード1枚（N は 20〜50）なので、分母はカードの枚数そのもの。
+      「2の倍数または3の倍数」を数える題材で、枚数を12以下にすると倍数の重なりが作れない。
     given: [scenario]
     asked: [value]
     visual: none

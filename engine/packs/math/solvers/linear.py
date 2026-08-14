@@ -26,6 +26,12 @@ def _format_number(v: sympy.Expr) -> str:
     return str(sympy.sstr(v))
 
 
+def _paren_number(v: sympy.Expr) -> str:
+    """負の数はかっこで囲む（解説の途中式で `× -1` と書かないため）。"""
+    text = _format_number(v)
+    return f"({text})" if v < 0 else text
+
+
 def _format_linear_rhs(a: sympy.Expr, b: sympy.Expr) -> str:
     """a*x + b の右辺表示（例: "3x - 1", "-x", "5"）。"""
     a_s = sympy.nsimplify(a)
@@ -705,14 +711,14 @@ def draw_special_lines(xi: object, yi: object, axis: object, k: object) -> Solut
             srepr=sympy.srepr(sympy.Eq(X, k_s)),
             display=f"x = {_format_number(k_s)}",
         )
-        special_narr = "x = 定数 のグラフは、y 軸に平行な縦の直線としてかく。"
+        special_narr = "「x = 定数」のグラフは、y 軸に平行な縦の直線としてかく。"
     elif axis == "horizontal":
         special = Feature(
             kind="horizontal_line",
             srepr=sympy.srepr(sympy.Eq(Y, k_s)),
             display=f"y = {_format_number(k_s)}",
         )
-        special_narr = "y = 定数 のグラフは、x 軸に平行な横の直線としてかく。"
+        special_narr = "「y = 定数」のグラフは、x 軸に平行な横の直線としてかく。"
     else:
         raise ValueError(f"axis は vertical/horizontal のいずれか: {axis!r}")
 
@@ -803,14 +809,14 @@ def draw_linear_features_fraction(p: object, q: object, b: object) -> Solution:
             op="apply_slope_denominator",
             args=[],
             result_srepr=sympy.srepr(q_s),
-            result_display="分母のぶん x 方向へ",
+            result_display=f"x 方向に {_format_number(q_s)}",
             narration="切片から、傾きの分母のぶんだけ x 軸の正の向きに進む。",
         ),
         Step(
             op="apply_slope_numerator",
             args=[],
             result_srepr=sympy.srepr(p_s),
-            result_display="分子のぶん y 方向へ",
+            result_display=f"y 方向に {_format_number(p_s)}",
             narration="そこから、傾きの分子のぶんだけ y 軸方向に進む（分子の符号にしたがう）。",
         ),
         Step(
@@ -965,14 +971,14 @@ def classify_line_by_signs(a: object, b: object) -> Solution:
             op="identify_slope_sign",
             args=[],
             result_srepr=sympy.srepr(sympy.sign(a_s)),
-            result_display="傾きの符号",
+            result_display="傾きは正" if a_s > 0 else "傾きは負",
             narration="傾き a の符号から、グラフが右上がりか右下がりかを判断する。",
         ),
         Step(
             op="identify_intercept_sign",
             args=[],
             result_srepr=sympy.srepr(sympy.sign(b_s)),
-            result_display="切片の符号",
+            result_display="切片は正" if b_s > 0 else "切片は負",
             narration="切片 b の符号から、y 軸の正の部分・負の部分のどちらで交わるかを判断する。",
         ),
         Step(
@@ -1036,7 +1042,11 @@ def evaluate_two_var_lhs(a: object, b: object, x_cand: object, y_cand: object) -
             op="substitute_candidate",
             args=[],
             result_srepr=sympy.srepr(sympy.Tuple(x_s, y_s)),
-            result_display="左辺に x, y の値を代入する",
+            # 代入したままの左辺（`3 × 2 + 4 × (-1)`）。指示の言い直しは置かない（面③）。
+            result_display=(
+                f"{_format_number(a_s)} × {_paren_number(x_s)}"
+                f" + {_format_number(b_s)} × {_paren_number(y_s)}"
+            ),
             narration="左辺の x と y に、与えられた値をそれぞれ代入する。",
         ),
         Step(
@@ -1079,7 +1089,9 @@ def verify_system_solution(
             op="substitute_candidate",
             args=[_format_number(xc), _format_number(yc)],
             result_srepr=sympy.srepr(sympy.Tuple(A1 * xc + B1 * yc, A2 * xc + B2 * yc)),
-            result_display="左辺を計算する",
+            result_display=(
+                f"{_format_number(A1 * xc + B1 * yc)} と {_format_number(A2 * xc + B2 * yc)}"
+            ),
             narration="組の x, y の値を2つの式の左辺にそれぞれ代入する。",
         ),
         Step(
@@ -1142,7 +1154,9 @@ def linear_slope_as_rate(a: object) -> Solution:
             op="compute_increment",
             args=[],
             result_srepr=sympy.srepr(a_s),
-            result_display="x が1増えたときの y の増加量を式の変化から調べる",
+            result_display=(
+                f"({_format_number(a_s)} × (x + 1) + b) - ({_format_number(a_s)} × x + b)"
+            ),
             # 数字を出さない（§5-#9: narration/ヒントに数値を書かない）。
             narration="x が1増えると y がいくつ増えるかを、式の変化から調べる。",
         ),
@@ -1179,7 +1193,12 @@ def classify_linear_function(rhs: object) -> Solution:
             op="inspect_rate_of_change",
             args=[],
             result_srepr=sympy.srepr(deriv),
-            result_display="x が増えるときの y の変わり方を調べる",
+            # 変化の割合そのもの。x が残る式（2乗の式など）は一定にならない。
+            result_display=(
+                "変化の割合が一定でない"
+                if x in deriv.free_symbols
+                else f"変化の割合は {_format_number(deriv)}"
+            ),
             # 数字を出さない（§5-#9: narration/ヒントに数値を書かない）。
             narration="式の形から、x が増えるときに y がどのように変わるかを調べる。",
         ),
@@ -1310,7 +1329,7 @@ def linear_coefficient_role(which: object) -> Solution:
             op="locate_part",
             args=[],
             result_srepr=w,
-            result_display="式のどの部分に注目するかを確かめる",
+            result_display="x の係数の部分" if w == "slope" else "定数項の部分",
             narration="1次関数の式の、x の係数の部分か、定数項の部分かを確かめる。",
         ),
         Step(
@@ -1397,11 +1416,20 @@ _SECOND_MEETING_NARRATION: dict[str, str] = {
     "solve_for_second_meeting": "折り返したあとの位置と、向かってくる相手の位置が等しいとおいて方程式を解く。",
 }
 
-_SECOND_MEETING_PHRASE: dict[str, str] = {
-    "express_positions_in_time": "二人の位置を時間の式で表す",
-    "find_first_meeting": "一回目に出会う時刻を求める",
-    "express_position_after_turn": "折り返したあとの位置を式で表す",
-}
+def _second_meeting_phrase(d, va, vb, h, t_first) -> dict[str, str]:
+    """2回目の出会いの手の括弧（この手で得た式・時刻）。"""
+    return {
+        # **人の名前・記号は書かない**（問題文の記号は recipe が引くので、
+        # solver が A・B と書くと text_quality の「記号の食い違い」に当たる）。
+        "express_positions_in_time": (
+            f"先に出た人は {_format_number(va)}x、あとの人は {_format_number(d)} - "
+            f"{_format_number(vb)}(x - {_format_number(h)})"
+        ),
+        "find_first_meeting": f"{_format_number(t_first)}分後",
+        "express_position_after_turn": (
+            f"折り返した人は {_format_number(2 * d)} - {_format_number(va)}x"
+        ),
+    }
 
 
 @register_solver("math.solve_second_meeting_time")
@@ -1442,7 +1470,8 @@ def solve_second_meeting_time(
         Step(
             op=op, args=[],
             result_srepr=srepr if i == len(_SECOND_MEETING_OPS) - 1 else "",
-            result_display=disp if i == len(_SECOND_MEETING_OPS) - 1 else _SECOND_MEETING_PHRASE[op],
+            result_display=disp if i == len(_SECOND_MEETING_OPS) - 1
+            else _second_meeting_phrase(d, va, vb, h, t_first)[op],
             narration=_SECOND_MEETING_NARRATION[op],
         )
         for i, op in enumerate(_SECOND_MEETING_OPS)

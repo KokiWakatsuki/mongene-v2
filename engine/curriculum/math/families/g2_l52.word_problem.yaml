@@ -36,6 +36,11 @@ levels:
       # 引く（枚数と枚数条件だけでは9通りしかなく実測 dup_rate 0.55 だったため）。
       coin_candidates: [1円硬貨, 5円硬貨, 10円硬貨, 50円硬貨, 100円硬貨, 500円硬貨]
       face_candidates: [表, 裏]
+    # 確率の答えは約分した分数で書くのが作法で、分母は「同じ確からしさで起こる
+    # 場合の数」そのもの。数を小さくする方向では直せない（`engine.eval.answer_size`）。
+    answer_size_max: {denominator: 32}
+    answer_size_reason: |
+      硬貨3〜5枚の表裏なので、分母は 2^枚数（最大 2⁵=32）で固定。
     given: [scenario]
     asked: [value, value]
     visual: none
@@ -52,6 +57,11 @@ levels:
       # dup_rate が構造的に閾値を超えるため鉄則②で一般化。6も含みつつ均等に
       # 7〜14面も選べるようにする＝(faces,target)の相異な組が400以上）。
       faces_domain: [6]
+    # 確率の答えは約分した分数で書くのが作法で、分母は「同じ確からしさで起こる
+    # 場合の数」そのもの。数を小さくする方向では直せない（`engine.eval.answer_size`）。
+    answer_size_max: {denominator: 36}
+    answer_size_reason: |
+      2つのさいころの目の積なので分母は 6×6=36 で固定。
     given: [scenario]
     asked: [value]
     visual: none

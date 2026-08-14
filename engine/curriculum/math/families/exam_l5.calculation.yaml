@@ -17,6 +17,11 @@ levels:
     params:
       # 中学の数え上げで出る通り数（200通りは数え上げの結果として大きすぎる）。
       total_domain: {int_range: [6, 60]}
+    # 確率の答えは約分した分数で書くのが作法で、分母は「同じ確からしさで起こる
+    # 場合の数」そのもの。数を小さくする方向では直せない（`engine.eval.answer_size`）。
+    answer_size_max: {denominator: 60}
+    answer_size_reason: |
+      起こりうる場合の数（6〜60）が問題文に書いてあり、それがそのまま分母になる。分母を12以下にすると、問題文に書く場合の数も12以下になる。
     given: [expressions]
     asked: [value]
     visual: none

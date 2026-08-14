@@ -148,7 +148,8 @@ def _formulate_steps(a: sympy.Rational) -> list[Step]:
             op="set_up_proportion_equation",
             args=[],
             result_srepr="",
-            result_display="y=ax² に与えられた値を代入する",
+            # この手で得たのは「式の形」。値が入るのは次の手（a を求める）。
+            result_display="y = ax²",
             narration=(
                 "y は x の2乗に比例するから、比例定数を a とおいて y=ax² と表し、"
                 "与えられている x と y の値を代入する。"
@@ -203,14 +204,14 @@ def _solve_time_from_distance(
             op="set_up_equation",
             args=[],
             result_srepr="",
-            result_display="距離の式に、与えられた距離をあてはめる",
+            result_display=f"{sympy.sstr(a)}x² = {target}",
             narration="求める時刻を x とみて、距離を表す式に、与えられている距離をあてはめて方程式をつくる。",
         ),
         Step(
             op="solve_for_x",
             args=[],
             result_srepr="",
-            result_display="平方根の考え方で x を求める",
+            result_display=f"x² = {sympy.sstr(sympy.Rational(target) / a)}",
             narration="両辺を x の2乗にかかっている数でわり、平方根の考え方で x を求める。",
         ),
         Step(
@@ -327,7 +328,7 @@ def solve_moving_point_area(numbers: Mapping[str, Any]) -> list[Solution]:
             op="determine_which_segment",
             args=[],
             result_srepr="",
-            result_display="点が次の辺の上にあることを確かめる",
+            result_display="次の辺の上",
             narration="点が次の辺の上に移ったあと、三角形の底辺と高さがどうなるかを確かめる。",
         ),
         Step(

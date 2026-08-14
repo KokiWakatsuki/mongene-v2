@@ -31,6 +31,7 @@ from engine.core.contracts import (
 )
 from engine.core.registry import REGISTRY, register_recipe
 from engine.core.rng import Rng, draw
+from engine.core.verify.answer_size import answer_is_too_big, limits_for
 from engine.packs.math.recipes.polynomial import _domain_candidates
 from engine.packs.math.solvers.arithmetic import fmt_number
 
@@ -121,6 +122,9 @@ _EVALUATE_INVERSE_PROPORTION_CONCEPTS = [
     "inverse_proportion.solve_for_x",
 ]
 
+# 答えが大きすぎたら引き直す回数（`pythagorean_find_value.py` と同じ考え）。
+_ANSWER_SIZE_REDRAWS = 40
+
 
 @register_recipe(
     "math.evaluate_inverse_proportion", provides_concepts=_EVALUATE_INVERSE_PROPORTION_CONCEPTS
@@ -135,11 +139,21 @@ def evaluate_inverse_proportion(ctx: CellContext, rng: Rng) -> MR:
     """
     p = ctx.spec_level.params
     mode = str(p["mode"])
-    a = draw(p["slope_domain"], rng)
-    known = draw(p["known_domain"], rng)
-
     if mode not in ("forward", "backward"):
         raise ValueError(f"未知の mode: {mode!r}")
+
+    # **答えが約分できない大きな分数になる組は引き直す**（定義域はそのまま）。
+    # 比例定数は約数の多い数（12の倍数中心）を並べてあるのに、x は −10〜10 を独立に
+    # 引いていたので `y = 240/x` に `x = 7` が当たって `240/7` が出ていた。
+    # 反比例の値を求める問題の答えが「240/7」では、割り算をした形にならない。
+    limits = limits_for(ctx.spec_level)
+    a = known = None
+    for attempt in range(_ANSWER_SIZE_REDRAWS):
+        attempt_rng = rng.spawn(attempt) if attempt else rng
+        a = draw(p["slope_domain"], attempt_rng)
+        known = draw(p["known_domain"], attempt_rng)
+        if not answer_is_too_big(str(sympy.nsimplify(a) / sympy.nsimplify(known)), limits):
+            break
     a_s, k_s = sympy.nsimplify(a), sympy.nsimplify(known)
     # forward: y=a/x0 を求める。backward: y0=a/x を x について解く（x=a/y0）。
     # どちらも同じ式変形 a/known になる（比例定数と既知値の役割が入れ替わるだけ）。
@@ -598,10 +612,15 @@ def judge_hyperbola_quadrants_recipe(ctx: CellContext, rng: Rng) -> MR:
     sol = cast(Solution, solver(is_a_positive))
     assert isinstance(sol.answer, ChoiceAnswer)
 
+    # 前の問題文は「次の文の正誤を答えよ。『a>0のとき、双曲線は第1象限と第3象限に
+    # ある。』」だった。**問いと答えが食い違っていた**——正誤を問うているのに、
+    # 選択肢は「右上と左下の部分にある（…）」という場所の記述で、正/誤ではない。
+    # しかも a の値（負のこともある）と、引用文の「a>0のとき」が噛み合っていない。
+    # 「象限」も中学の教科書に無い用語（高校で扱う）。問いを答えの形に合わせた。
     statement = (
-        f"反比例y={fmt_number(sympy.Integer(a))}/xのグラフである双曲線について、"
-        "次の文の正誤を答えよ。「a>0のとき、双曲線は第1象限と第3象限にある。」"
-        "また、双曲線はx軸・y軸と交わるかどうか答えよ"
+        f"反比例y={fmt_number(sympy.Integer(a))}/xのグラフである双曲線は、"
+        "座標平面の右上と左下の部分と、左上と右下の部分の、どちらにあるか答えよ。"
+        "また、双曲線はx軸・y軸と交わるかどうかも答えよ"
     )
 
     sub_question = SubQuestionMR(

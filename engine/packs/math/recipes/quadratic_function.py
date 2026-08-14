@@ -207,14 +207,14 @@ _INTERSECTION_QUESTION_BY_MODE: dict[str, str] = {
     "segment_and_area": (
         "線分 AB の長さと、原点 O と2点 A, B を結んでできる三角形 OAB の面積を求めよ"
     ),
-    "bisecting_point": (
-        "原点を O とするとき、y 軸上に点 P をとり、三角形 OAB の面積を"
-        "三角形 PAB の面積が2等分するような点 P の座標を求めよ"
+    "equal_area_point": (
+        "原点を O とするとき、y 軸上に O と異なる点 P をとる。"
+        "三角形 PAB の面積が三角形 OAB の面積と等しくなるような点 P の座標を求めよ"
     ),
 }
 
 _INTERSECTION_ASKED_BY_MODE: dict[str, str] = {
-    "find_intersection": "intersection", "segment_and_area": "area", "bisecting_point": "coordinate",
+    "find_intersection": "intersection", "segment_and_area": "area", "equal_area_point": "coordinate",
 }
 
 

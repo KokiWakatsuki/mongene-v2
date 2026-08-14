@@ -43,7 +43,7 @@ def sample_ratio_estimate(sample_size: object, sample_count: object, population_
             op="form_ratio_equation",
             args=[],
             result_srepr="",
-            result_display="標本比率と母集団の比率が等しいとみて比例式をつくる",
+            result_display=f"{sympy.sstr(c)} : {sympy.sstr(s)} = x : {sympy.sstr(n)}",
             narration="標本での該当する個数の割合が、母集団全体でもおよそ等しいとみて比例式をつくる。",
         ),
         Step(
@@ -79,7 +79,7 @@ def sample_ratio_solve_population(sample_size: object, sample_count: object, kno
             op="form_ratio_equation_for_x",
             args=[],
             result_srepr="",
-            result_display="標本比率と母集団の比率が等しいとみて x を含む比例式をつくる",
+            result_display=f"{sympy.sstr(c)} : {sympy.sstr(s)} = {sympy.sstr(e)} : x",
             narration="標本での該当する個数の割合が、母集団全体でもおよそ等しいとみて、"
             "母集団の大きさ x を含む比例式をつくる。",
         ),
@@ -113,7 +113,7 @@ def judge_appropriate_survey_method(needs_sample: object) -> Solution:
             op="check_feasibility",
             args=[],
             result_srepr=("needs_sample" if truthy else "needs_census"),
-            result_display="全部を調べることが現実的に可能かを調べる",
+            result_display=("全部を調べるのは難しい" if truthy else "全部を調べられる"),
             narration="対象すべてを調べることが、手間や対象の性質から現実的に可能かどうかを調べる。",
         ),
         Step(
@@ -148,7 +148,7 @@ def judge_sampling_bias(is_biased: object) -> Solution:
             op="check_random_coverage",
             args=[],
             result_srepr=("biased" if truthy else "unbiased"),
-            result_display="母集団のすべてが同じ機会で選ばれうるかを調べる",
+            result_display=("同じ機会にならない" if truthy else "同じ機会になる"),
             narration="母集団に含まれるすべての対象が、同じ機会で選ばれる方法になっているかを調べる。",
         ),
         Step(

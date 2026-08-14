@@ -16,6 +16,7 @@ from typing import TYPE_CHECKING, Any, Callable, NamedTuple
 import sympy
 
 from engine.core.registry import register_visual
+from engine.packs.math.visuals._label_place import centroid, haloed_text, outward
 
 if TYPE_CHECKING:  # pragma: no cover - 型のみ
     from engine.core.contracts import MR, CellContext
@@ -279,6 +280,36 @@ def _grid_scaffold(params: dict[str, Any]) -> _GridScaffold:
     )
 
 
+_TICK_FONT = 10.0
+
+
+def _tick_label(px: float, py: float, anchor: str, text: str) -> str:
+    """目盛の数値。白い縁取りを付けて、上を通る線に負けないようにする。
+
+    目盛は最後に描くので文字自体はグラフ線の上に来るが、線は文字の隙間を
+    そのまま通る。傾きの急な直線や放物線が y 軸のそばを通ると、「-4」「-6」の
+    上に太い線が重なって読めなくなっていた（走査で 149 件）。
+    """
+    return haloed_text(px, py, text, size=_TICK_FONT, anchor=anchor)
+
+
+def grid_tick_anchors(sc: _GridScaffold) -> list[tuple[float, float]]:
+    """目盛の数値ラベルを置く位置。**そこへ他のラベルを置かない**ために使う。
+
+    多角形の頂点が軸の上にあると、頂点名と目盛の数字がぴったり重なって
+    どちらも読めなくなっていた（走査で6件）。
+    """
+    out: list[tuple[float, float]] = []
+    py0 = sc.to_px_y(0) if sc.y_lo <= 0 <= sc.y_hi else sc.plot_hi
+    for gx in _labelled_ticks(sc.x_lo, sc.x_hi, sc.x_step):
+        if gx != 0:
+            out.append((sc.to_px_x(gx), py0 + 12))
+    px0 = sc.to_px_x(0) if sc.x_lo <= 0 <= sc.x_hi else sc.plot_lo
+    for gy in _labelled_ticks(sc.y_lo, sc.y_hi, sc.y_step):
+        out.append((px0 - 8, sc.to_px_y(gy) + 3))
+    return out
+
+
 def _grid_ticks(sc: _GridScaffold) -> list[str]:
     """軸目盛の数値ラベル（<text> はこれのみ。visual_plan.labels と一致させる）。"""
     ticks: list[str] = []
@@ -286,18 +317,12 @@ def _grid_ticks(sc: _GridScaffold) -> list[str]:
     for gx in _labelled_ticks(sc.x_lo, sc.x_hi, sc.x_step):
         if gx == 0:
             continue  # 原点の重複表記を避ける（0 は y 軸側で1回だけ出す）
-        px = sc.to_px_x(gx)
-        ticks.append(
-            f'<text x="{px:.2f}" y="{py0 + 12:.2f}" font-size="10" '
-            f'text-anchor="middle" fill="#000000">{_format_tick(sympy.Integer(gx))}</text>'
-        )
+        ticks.append(_tick_label(
+            sc.to_px_x(gx), py0 + 12, "middle", _format_tick(sympy.Integer(gx))))
     px0 = sc.to_px_x(0) if sc.x_lo <= 0 <= sc.x_hi else sc.plot_lo
     for gy in _labelled_ticks(sc.y_lo, sc.y_hi, sc.y_step):
-        py = sc.to_px_y(gy)
-        ticks.append(
-            f'<text x="{px0 - 8:.2f}" y="{py + 3:.2f}" font-size="10" '
-            f'text-anchor="end" fill="#000000">{_format_tick(sympy.Integer(gy))}</text>'
-        )
+        ticks.append(_tick_label(
+            px0 - 8, sc.to_px_y(gy) + 3, "end", _format_tick(sympy.Integer(gy))))
     return ticks
 
 
@@ -772,12 +797,15 @@ def render_coordinate_points_svg(params: dict[str, Any], *, draw_triangle: bool)
 
     pts = [_parse_point(s) for s in params["pts"]]
     labels = [str(v) for v in params.get("point_labels", [])]
+    # 名前を逃がす向きの基準。三角形を描くならその重心（直角の頂点を含む）。
+    shape_px: list[tuple[float, float]] = []
 
     if draw_triangle:
         cx, cy = _parse_point(str(params["right_angle_pt"]))
         (ax, ay), (bx, by) = pts[0], pts[1]
         tri = [(ax, ay), (cx, cy), (bx, by)]
         px_tri = [(sc.to_px_x(float(x)), sc.to_px_y(float(y))) for x, y in tri]
+        shape_px = px_tri
         joined = " ".join(f"{x:.2f},{y:.2f}" for x, y in px_tri)
         parts.append(
             f'<polygon points="{joined}" fill="none" stroke="#000000" stroke-width="2.5"/>'
@@ -793,15 +821,22 @@ def render_coordinate_points_svg(params: dict[str, Any], *, draw_triangle: bool)
             f'fill="none" stroke="#000000" stroke-width="1.2"/>'
         )
 
-    # --- 与えられた2点（黒丸＋点名） ---
-    for i, (x, y) in enumerate(pts):
-        px, py = sc.to_px_x(float(x)), sc.to_px_y(float(y))
+    # --- 与えられた2点（黒丸＋点名。名前は図の重心と反対側へ逃がす） ---
+    px_pts = [(sc.to_px_x(float(x)), sc.to_px_y(float(y))) for x, y in pts]
+    ccx, ccy = centroid(shape_px or px_pts)
+    # 点が軸の上にあると、点名が目盛の数字とぴったり重なる。目盛の位置は避ける。
+    blocked = grid_tick_anchors(sc)
+    for i, (px, py) in enumerate(px_pts):
         parts.append(f'<circle cx="{px:.2f}" cy="{py:.2f}" r="4" fill="#000000"/>')
         if i < len(labels):
-            parts.append(
-                f'<text x="{px + 8:.2f}" y="{py - 8:.2f}" font-size="13" '
-                f'text-anchor="middle" fill="#000000">{labels[i]}</text>'
-            )
+            dist = 13.0
+            for _ in range(4):
+                lx, ly, anchor = outward(px, py, ccx, ccy, dist=dist)
+                if all(abs(lx - qx) > 16.0 or abs(ly - qy) > 13.0 for qx, qy in blocked):
+                    break
+                dist += 13.0
+            blocked.append((lx, ly))
+            parts.append(haloed_text(lx, ly, labels[i], size=13, anchor=anchor))
 
     parts.extend(_grid_ticks(sc))
     parts.append("</svg>")

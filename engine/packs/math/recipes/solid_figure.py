@@ -132,8 +132,10 @@ def solid_cone_surface_central_angle_recipe(ctx: CellContext, rng: Rng) -> MR:
 
     values = {"radius": r, "slant": l}
     statement = (
+        # 「中心角を求め、表面積を求めよ」と書くと**2つ答えさせている**ように読めるが、
+        # 答えは表面積ひとつ。中心角は途中の手なので、そう読める言い方にする。
         f"底面の半径{r}cm、母線の長さ{l}cmの円錐がある。この円錐の側面(おうぎ形)の"
-        "中心角を求め、表面積を求めよ。ただし円周率はπとする"
+        "中心角を使って、表面積を求めよ。ただし円周率はπとする"
     )
     sol = _solve(_L51_CONE_MODE, values)
     return _make_mr(

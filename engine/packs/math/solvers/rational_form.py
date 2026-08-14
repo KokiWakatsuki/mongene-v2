@@ -155,9 +155,9 @@ _DECIMAL_TO_FRACTION_NARRATION: dict[str, str] = {
     "solve_for_fraction": "できた等式を整理し、分数の形に直して約分する。",
 }
 
-_DECIMAL_TO_FRACTION_PHRASE: dict[str, str] = {
-    "set_up_algebraic_equation": "桁をずらした式の差を作る",
-}
+def _decimal_to_fraction_phrase(shift: int) -> dict[str, str]:
+    """循環小数を分数にする手の括弧（何倍した式との差か）。"""
+    return {"set_up_algebraic_equation": f"{shift}倍した式との差"}
 
 
 @register_solver("math.repeating_decimal_to_fraction")
@@ -180,7 +180,10 @@ def repeating_decimal_to_fraction(non_repeating: str, repeating: str) -> Solutio
             op=op,
             args=[],
             result_srepr=srepr if i == len(ops) - 1 else "",
-            result_display=disp if i == len(ops) - 1 else _DECIMAL_TO_FRACTION_PHRASE.get(op, ""),
+            result_display=disp if i == len(ops) - 1
+            else _decimal_to_fraction_phrase(
+                10 ** (len(non_repeating) + len(repeating))
+            )[op],
             narration=_DECIMAL_TO_FRACTION_NARRATION[op],
         )
         for i, op in enumerate(ops)

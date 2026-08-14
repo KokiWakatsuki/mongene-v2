@@ -138,7 +138,7 @@ def proposition_counterexample_choice(
     steps = [
         Step(
             op="state_counterexample_condition", args=[], result_srepr="",
-            result_display="反例の条件を確かめる",
+            result_display="逆の仮定は満たし、逆の結論は満たさない例",
             narration="反例は、逆の仮定は満たすのに逆の結論は満たさない例のことである。"
                       "この2つを同時に見る必要がある。",
         ),

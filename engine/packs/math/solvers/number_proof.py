@@ -133,7 +133,15 @@ def derive_goal(expanded: sympy.Expr) -> Goal | None:
             return None
         phrase = "偶数" if content == 2 else f"{content}の倍数"
         q_disp = _disp(quotient)
-        form = f"{content}({q_disp})" if quotient.is_Add else f"{content} × {q_disp}"
+        # 商が単項のときは並置して書く（`9 × b` ではなく `9b`）。整理した式が
+        # すでに `9b` なので、`×` で書くと「9b = 9 × b」という同語反復になっていた。
+        # ただし商が数字で始まるとき（`2n`）は並置すると `92n` と読めるので `×` のまま。
+        if quotient.is_Add:
+            form = f"{content}({q_disp})"
+        elif q_disp[:1].isdigit():
+            form = f"{content} × {q_disp}"
+        else:
+            form = f"{content}{q_disp}"
         return Goal("multiple", content, phrase, form, quotient, q_disp)
 
     factored = sympy.factor(expanded)
@@ -749,9 +757,19 @@ def _chain_segments(prop: Proposition) -> list[str]:
         segments.append(prop.intermediate_display)
     segments.append(_disp(prop.expr))
     segments.append(prop.goal.form_display)
+
+    def same_expression(a: str, b: str) -> bool:
+        """書き方だけが違う同じ式か（`9b` と `9 × b`）。
+
+        単項の商は `×` で書くので、整理済みの式と因数分解形が
+        「`9b = 9 × b`」という同語反復になっていた。空白と `×` を落として比べる。
+        """
+        strip = str.maketrans("", "", " ×")
+        return a.translate(strip) == b.translate(strip)
+
     out: list[str] = []
     for s in segments:
-        if not out or out[-1] != s:
+        if not out or not same_expression(out[-1], s):
             out.append(s)
     return out
 

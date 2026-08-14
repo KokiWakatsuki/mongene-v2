@@ -17,7 +17,7 @@ source_desc: |
   xA,xB（相異・非0の整数）と比例定数 a（非0）を先に決め、直線の傾き m=a(xA+xB)・切片
   b=-a・xA・xB を逆算する。xA≠xB・a≠0 より b は自動的に非0（O,A,B が同一直線上にならない
   ことが構成的に保証される・鉄則⑤）。mode="find_intersection"/"segment_and_area"/
-  "bisecting_point" で op 列（交点のみ／+線分長・面積／+面積2等分点）が相異＝level_sep。
+  "equal_area_point" で op 列（交点のみ／+線分長・面積／+等積の点）が相異＝level_sep。
 concepts_default: [quadratic_function.intersection_with_line]
 levels:
   "2":
@@ -41,6 +41,12 @@ levels:
       mode: segment_and_area
       a_domain: {int_range: [-4, 4], exclude: [0]}
       x_domain: {int_range: [-6, 6], exclude: [0]}
+    # 答えの分母・根号の中がこの単元では構造的に大きくなる（`engine.eval.answer_size`）。
+    answer_size_max: {radicand: 65}
+    answer_size_reason: |
+      線分ABの長さは |xB − xA|・√(1 + 傾き²) なので、根号の中は 1+傾き² の形にしか
+      ならない。recipe が傾き8まで（1+8²=65）に絞って引き直している
+      （`_MAX_SEGMENT_RADICAND`）。既定の 60 は 1+傾き² で表せない値。
     given: [condition]
     asked: [area]
     visual: none
@@ -49,10 +55,10 @@ levels:
     concept_tags: [quadratic_function.intersection_with_line]
     cause_tags: []
   "4":
-    signature: quadratic_intersection_bisecting_point
+    signature: quadratic_intersection_equal_area_point
     recipe: math.intersection_parabola_line
     params:
-      mode: bisecting_point
+      mode: equal_area_point
       a_domain: {int_range: [-4, 4], exclude: [0]}
       x_domain: {int_range: [-6, 6], exclude: [0]}
     given: [condition]

@@ -81,7 +81,7 @@ def datasets_mean_pair(data_a: object, data_b: object) -> Solution:
     return Solution(
         answer=SymbolicAnswer(srepr=srepr, display=disp),
         steps=_steps([
-            ("sum_each_dataset", "", "それぞれの合計を求める",
+            ("sum_each_dataset", "", f"Aは{sum(a)}、Bは{sum(b)}",
              "それぞれのデータについて、値をすべて足し合わせる。"),
             ("divide_by_count", srepr, disp,
              "合計をデータの個数でわって、それぞれの平均値を求める。"),
@@ -99,7 +99,8 @@ def datasets_range_pair(data_a: object, data_b: object) -> Solution:
     return Solution(
         answer=SymbolicAnswer(srepr=srepr, display=disp),
         steps=_steps([
-            ("find_max_and_min", "", "それぞれの最大値と最小値を見つける",
+            ("find_max_and_min", "",
+             f"Aは{min(a)}〜{max(a)}、Bは{min(b)}〜{max(b)}",
              "それぞれのデータを大きさの順に見て、最も大きい値と最も小さい値を見つける。"),
             ("subtract_min_from_max", srepr, disp,
              "最大値から最小値をひいて、それぞれの範囲を求める。"),
@@ -125,7 +126,7 @@ def judge_more_stable(data_a: object, data_b: object) -> Solution:
             correct=correct, distractors=[other], fact_id="data_compare.more_stable"
         ),
         steps=_steps([
-            ("compare_ranges", "", "二つの範囲を比べる",
+            ("compare_ranges", "", f"Aは{ra}、Bは{rb}",
              "求めた範囲どうしを比べ、値が小さいほうが散らばりが小さいことを確かめる。"),
             ("conclude_more_stable", correct, correct,
              "散らばりが小さいほうが、得点のばらつきが少なく安定しているといえる。"),
@@ -165,12 +166,12 @@ def judge_group_by_any_statistic(
             correct=correct, distractors=[other], fact_id="data_compare.any_statistic"
         ),
         steps=_steps([
-            ("choose_statistic", "", "比べる指標を選ぶ",
+            ("choose_statistic", "", "平均値",
              "平均値・中央値・最頻値のうち、どれで比べるかを自分で決める。"),
             ("compute_statistic_both", sympy.srepr(sympy.Tuple(ma, mb)),
              f"Aの平均値 {ma}、Bの平均値 {mb}",
              "選んだ指標の値を、二つの組それぞれについて求める。"),
-            ("verify_same_conclusion", "", "ほかの指標でも同じ結論になるか確かめる",
+            ("verify_same_conclusion", "", f"中央値でも{correct}",
              "ほかの代表値でも比べてみて、同じ側になることを確かめる。"),
             ("conclude_group", correct, correct,
              "求めた値を根拠として、どちらの組についていえるかを結論づける。"),
@@ -207,9 +208,9 @@ def choose_unbiased_sampling_method(labels: object, flags: object) -> Solution:
             correct=correct, distractors=others, fact_id="sampling.choose_unbiased"
         ),
         steps=_steps([
-            ("list_candidate_methods", "", "並んでいる方法を一つずつ見る",
+            ("list_candidate_methods", "", "",
              "示されたそれぞれの方法について、どんな人が選ばれることになるかを考える。"),
-            ("check_equal_chance", "", "同じ機会で選ばれるかを調べる",
+            ("check_equal_chance", "", f"同じ機会になるのは「{correct}」だけ",
              "母集団にふくまれるすべての対象が、同じ機会で選ばれる方法になっているかを調べる。"),
             ("choose_unbiased_method", correct, correct,
              "一部の対象だけが選ばれやすい方法を除き、偏りが生じにくいものを選ぶ。"),
@@ -226,11 +227,11 @@ def choose_valid_inquiry_plan(labels: object, flags: object) -> Solution:
             correct=correct, distractors=others, fact_id="inquiry.choose_valid_plan"
         ),
         steps=_steps([
-            ("restate_question", "", "何を比べたいのかをはっきりさせる",
+            ("restate_question", "", "",
              "問いが何と何を比べるものなのかを、はっきりさせる。"),
-            ("check_data_covers_comparison", "", "比べる相手がそろうかを調べる",
+            ("check_data_covers_comparison", "", f"そろうのは「{correct}」",
              "それぞれの調べ方で、比べたい相手のデータがそろうかどうかを調べる。"),
-            ("check_sampling_is_fair", "", "偏りが入らないかを調べる",
+            ("check_sampling_is_fair", "", f"偏りが入らないのは「{correct}」",
              "集め方に偏りが入っていないか、一部の人だけに聞いていないかを調べる。"),
             ("choose_valid_plan", correct, correct,
              "比べる相手がそろい、偏りも入らない調べ方を選ぶ。"),

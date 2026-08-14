@@ -29,6 +29,12 @@ levels:
       concept_set: [approximation, error, significant_figures]
       # 具体例の測定値を広めにとり dup を下げる（3 concept × surface 数で分散）。
       number_domain: {int_range: [2, 999]}
+    # 問題文の数が、この単元では単位の上限を超えるのが正しい
+    # （`engine.eval.statement_size`）。
+    statement_size_max: {cm: 100000}
+    statement_size_reason: |
+      有効数字・近似値の単元で、測定値そのものを題材にする（「測定で 896cm を得た」）。
+      図形の寸法ではないので、長さの上限では測れない。
     given: [statement]
     asked: [choice]
     visual: none
@@ -40,6 +46,12 @@ levels:
     signature: approximation_judge_sigfig
     recipe: math.count_significant_figures
     params: {}
+    # 問題文の数が、この単元では単位の上限を超えるのが正しい
+    # （`engine.eval.statement_size`）。
+    statement_size_max: {cm: 100000}
+    statement_size_reason: |
+      有効数字・近似値の単元で、測定値そのものを題材にする（「測定で 896cm を得た」）。
+      図形の寸法ではないので、長さの上限では測れない。
     given: [statement]
     asked: [choice]
     visual: none

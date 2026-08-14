@@ -57,6 +57,12 @@ levels:
       person_pair_candidates: [Aさん|Bさん, 太郎さん|花子さん, ゆうとさん|あおいさん,
                                りくさん|ひなさん, そうたさん|めいさん, はるとさん|ゆいさん,
                                兄|弟, 姉|妹]
+    # 確率の答えは約分した分数で書くのが作法で、分母は「同じ確からしさで起こる
+    # 場合の数」そのもの。数を小さくする方向では直せない（`engine.eval.answer_size`）。
+    answer_size_max: {denominator: 182, numerator: 182}
+    answer_size_reason: |
+      くじ（最大14本）から順に2本引く場合の数なので、分母は最大 14×13=182。
+      「少なくとも一方が当たる」は余事象なので分子も同じ大きさになる。
     given: [scenario]
     asked: [value]
     visual: none

@@ -185,14 +185,14 @@ def tabulate_and_draw_histogram(
             op="tally_into_classes",
             args=[],
             result_srepr="",
-            result_display="各データがどの階級に入るかを数える",
+            result_display="、".join(str(f) for f in freqs),
             narration="データを一つずつ見て、どの階級にふくまれるかを調べ、正の字などで数え上げる。",
         ),
         Step(
             op="build_frequency_table",
             args=[],
             result_srepr="",
-            result_display="階級ごとの度数を表にまとめる",
+            result_display=f"度数の合計は{sum(freqs)}",
             narration="数え上げた個数を階級ごとに書き入れ、度数分布表を完成させる。",
         ),
         Step(
@@ -336,14 +336,17 @@ def relative_frequency_polygon(
             op="divide_each_by_total",
             args=[],
             result_srepr="",
-            result_display="各階級の度数を総度数でわる",
+            result_display="、".join(
+                _fmt_decimal(sympy.Rational(f, total)) for f in freqs
+            ),
             narration="階級ごとに、その階級の度数を総度数でわって相対度数を求め、表に書き入れる。",
         ),
         Step(
             op="draw_frequency_polygon",
             args=[],
             result_srepr="",
-            result_display="階級値の位置に点を打ち、順に結ぶ",
+            # かいたもの（＝この手で得た図）。指示の言い直しは置かない（面③）。
+            result_display="度数折れ線",
             narration="各階級の階級値の位置にその階級の度数の高さで点を打ち、順に線分で結ぶ（両端は度数のない階級まで下ろす）。",
         ),
     ]
@@ -386,14 +389,16 @@ def cumulative_frequency_chart(
             op="accumulate_frequency_table",
             args=[],
             result_srepr="",
-            result_display="いちばん小さい階級から度数を順に足す",
+            result_display="、".join(str(c) for c in cums),
             narration="いちばん小さい階級から順に度数を足し上げ、各階級までの累積度数を表に書き入れる。",
         ),
         Step(
             op="plot_cumulative_points",
             args=[],
             result_srepr="",
-            result_display="各階級の上端に累積度数の点を打つ",
+            result_display="、".join(
+                f"({lo + width * (i + 1)}, {c})" for i, c in enumerate(cums)
+            ),
             narration="累積度数はその階級の上の端までの合計なので、点は階級の上端の位置に打つ。",
         ),
         Step(
@@ -439,7 +444,7 @@ def median_class_from_cumulative(
             op="read_half_of_total",
             args=[],
             result_srepr="",
-            result_display="縦軸で総度数の半分の高さを見る",
+            result_display=f"{_fmt_decimal(sympy.Rational(sum(freqs), 2))}",
             narration="縦軸で総度数の半分にあたる高さを決め、その高さの横線を引く。",
         ),
         Step(
@@ -500,14 +505,14 @@ def overlay_frequency_polygons(
             op="plot_first_polygon",
             args=[],
             result_srepr="",
-            result_display="一方の組の階級値の位置に点を打ち結ぶ",
+            result_display="1本目の折れ線",
             narration="一方の組について、各階級の階級値の位置にその階級の度数の高さで点を打ち、順に結ぶ。",
         ),
         Step(
             op="plot_second_polygon",
             args=[],
             result_srepr="",
-            result_display="もう一方の組を同じ目盛の上にかく",
+            result_display="同じ目盛の上に重ねた2本の折れ線",
             narration="もう一方の組も、同じ横軸・縦軸の目盛の上に同じ手順でかく。",
         ),
         Step(

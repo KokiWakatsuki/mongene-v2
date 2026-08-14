@@ -112,10 +112,20 @@ _SINGLE_NARRATION: dict[str, str] = {
     "compute_probability": "条件にあてはまる場合の数を、すべての場合の数でわる。",
 }
 
-_SINGLE_PHRASE: dict[str, str] = {
-    "enumerate_all_outcomes": "すべての場合を数え上げる",
-    "count_favorable": "条件にあてはまる場合を数える",
-}
+
+
+# ---------------------------------------------------------------------------
+# 途中の手の括弧に入れる**数えた結果**（面③）。以前は「すべての場合を数え上げる」の
+# ような指示の言い直しが入っていた。数え上げの問題では、**何通りあったか**こそが
+# その手で得たもの。`narration` は触らない（ヒントは narration しか見ない）。
+# ---------------------------------------------------------------------------
+def _count_display(op: str, total: int, favorable: int) -> str:
+    """数え上げの手の括弧（全部で何通り／あてはまるのは何通り）。"""
+    if op.startswith("enumerate"):
+        return f"全部で{total}通り"
+    if op.startswith("count"):
+        return f"あてはまるのは{favorable}通り"
+    raise ValueError(f"途中の表示を組めない op: {op!r}")
 
 
 def _single_favorable(space: list[int | str], condition: str, target: object) -> list[int | str]:
@@ -165,7 +175,8 @@ def probability_single_die(space_name: object, condition: object, target: object
         Step(
             op=op, args=[],
             result_srepr=sympy.srepr(p) if i == len(ops) - 1 else "",
-            result_display=_fmt_ratio(p) if i == len(ops) - 1 else _SINGLE_PHRASE.get(op, ""),
+            result_display=_fmt_ratio(p) if i == len(ops) - 1
+            else _count_display(op, len(space), len(favorable)),
             narration=_SINGLE_NARRATION[op],
         )
         for i, op in enumerate(ops)
@@ -185,10 +196,6 @@ _TWO_DICE_NARRATION: dict[str, str] = {
     "compute_probability": "条件にあてはまる組合せの数を、すべての組合せの数でわる。",
 }
 
-_TWO_DICE_PHRASE: dict[str, str] = {
-    "enumerate_all_pairs": "すべての目の組合せを数え上げる",
-    "count_favorable_pairs": "条件にあてはまる組合せを数える",
-}
 
 
 @register_solver("math.probability_two_dice")
@@ -235,7 +242,8 @@ def probability_two_dice(faces: object, condition: object, target: object) -> So
         Step(
             op=op, args=[],
             result_srepr=sympy.srepr(p) if i == len(ops) - 1 else "",
-            result_display=_fmt_ratio(p) if i == len(ops) - 1 else _TWO_DICE_PHRASE.get(op, ""),
+            result_display=_fmt_ratio(p) if i == len(ops) - 1
+            else _count_display(op, len(pairs), len(favorable)),
             narration=_TWO_DICE_NARRATION[op],
         )
         for i, op in enumerate(ops)
@@ -255,10 +263,6 @@ _ORDERED_NARRATION: dict[str, str] = {
     "compute_probability": "条件にあてはまる決め方の数を、すべての決め方の数でわる。",
 }
 
-_ORDERED_PHRASE: dict[str, str] = {
-    "enumerate_all_orderings": "すべての決め方を数え上げる",
-    "count_favorable_orderings": "条件にあてはまる決め方を数える",
-}
 
 
 @register_solver("math.probability_ordered_selection")
@@ -279,7 +283,8 @@ def probability_ordered_selection(n: object, r: object, target_index: object) ->
         Step(
             op=op, args=[],
             result_srepr=sympy.srepr(p) if i == len(ops) - 1 else "",
-            result_display=_fmt_ratio(p) if i == len(ops) - 1 else _ORDERED_PHRASE.get(op, ""),
+            result_display=_fmt_ratio(p) if i == len(ops) - 1
+            else _count_display(op, len(perms), len(favorable)),
             narration=_ORDERED_NARRATION[op],
         )
         for i, op in enumerate(ops)
@@ -299,10 +304,6 @@ _COMBO_NARRATION: dict[str, str] = {
     "compute_probability": "条件にあてはまる取り出し方の数を、すべての取り出し方の数でわる。",
 }
 
-_COMBO_PHRASE: dict[str, str] = {
-    "enumerate_all_combinations": "すべての取り出し方を数え上げる",
-    "count_favorable_combinations": "条件にあてはまる取り出し方を数える",
-}
 
 
 @register_solver("math.probability_combination_selection")
@@ -328,7 +329,8 @@ def probability_combination_selection(counts: object, r: object, target_color: o
         Step(
             op=op, args=[],
             result_srepr=sympy.srepr(p) if i == len(ops) - 1 else "",
-            result_display=_fmt_ratio(p) if i == len(ops) - 1 else _COMBO_PHRASE.get(op, ""),
+            result_display=_fmt_ratio(p) if i == len(ops) - 1
+            else _count_display(op, len(combos), len(favorable)),
             narration=_COMBO_NARRATION[op],
         )
         for i, op in enumerate(ops)
@@ -377,10 +379,13 @@ _AT_LEAST_ONE_NARRATION: dict[str, str] = {
     "subtract_from_one": "1から、その余事象の確率をひいて、少なくとも1回起こる確率を求める。",
 }
 
-_AT_LEAST_ONE_PHRASE: dict[str, str] = {
-    "compute_single_trial_complement": "1回分の余事象の確率を求める",
-    "compute_complement_probability": "余事象の確率を求める",
-}
+def _at_least_one_display(op: str, q_single, q) -> str:
+    """余事象で解く手の括弧（この手で得た確率）。"""
+    if op == "compute_single_trial_complement":
+        return _fmt_ratio(q_single)
+    if op == "compute_complement_probability":
+        return _fmt_ratio(q)
+    raise ValueError(f"途中の表示を組めない op: {op!r}")
 
 
 @register_solver("math.probability_at_least_one")
@@ -407,7 +412,8 @@ def probability_at_least_one(space_size: object, favorable_size: object, trials:
             op=op, args=[],
             result_srepr=sympy.srepr(p) if i == len(_AT_LEAST_ONE_STEPS) - 1 else "",
             result_display=(
-                _fmt_ratio(p) if i == len(_AT_LEAST_ONE_STEPS) - 1 else _AT_LEAST_ONE_PHRASE.get(op, "")
+                _fmt_ratio(p) if i == len(_AT_LEAST_ONE_STEPS) - 1
+                else _at_least_one_display(op, q_single, q)
             ),
             narration=_AT_LEAST_ONE_NARRATION[op],
         )
@@ -435,7 +441,7 @@ def judge_equally_likely(is_equally_likely: object) -> Solution:
             op="check_symmetry",
             args=[],
             result_srepr=("equally_likely" if truthy else "not_equally_likely"),
-            result_display="それぞれの結果の起こりやすさに違いがあるかを調べる",
+            result_display=("違いはない" if truthy else "違いがある"),
             narration="場面に登場するそれぞれの結果の起こりやすさに、違いがあるかどうかを調べる。",
         ),
         Step(
@@ -486,10 +492,6 @@ _COIN_NARRATION: dict[str, str] = {
     "compute_probability": "条件にあてはまる出方の数を、すべての出方の数でわる。",
 }
 
-_COIN_PHRASE: dict[str, str] = {
-    "enumerate_all_outcomes": "すべての出方を書き出す",
-    "count_favorable_outcomes": "条件にあてはまる出方を数える",
-}
 
 
 @register_solver("math.probability_coin_toss")
@@ -516,7 +518,8 @@ def probability_coin_toss(coins: object, count: object, face: object) -> Solutio
             op=op, args=[],
             result_srepr=sympy.srepr(p) if i == len(_COIN_STEPS) - 1 else "",
             result_display=(
-                _fmt_ratio(p) if i == len(_COIN_STEPS) - 1 else _COIN_PHRASE.get(op, "")
+                _fmt_ratio(p) if i == len(_COIN_STEPS) - 1
+                else _count_display(op, len(outcomes), len(favorable))
             ),
             narration=_COIN_NARRATION[op],
         )
@@ -604,14 +607,14 @@ def probability_two_digit_from_cards(digits: object, condition: object) -> Solut
             op="enumerate_all_two_digit_numbers",
             args=[],
             result_srepr="",
-            result_display="できる整数をすべて書き出す",
+            result_display=f"{len(numbers)}通り",
             narration="十の位と一の位に置くカードの選び方を枝分かれで書き出し、できる整数をすべて数え上げる。",
         ),
         Step(
             op="count_favorable_numbers",
             args=[],
             result_srepr="",
-            result_display="条件にあてはまる整数を数える",
+            result_display=f"{len(favorable)}通り",
             narration=f"書き出した整数のうち、{phrase}の個数を数える。",
         ),
         Step(
@@ -703,7 +706,7 @@ def count_two_dice_outcomes(faces: object) -> Solution:
         Step(
             op=op, args=[],
             result_srepr=srepr if i == len(_COUNT_PAIRS_STEPS) - 1 else "",
-            result_display=disp if i == len(_COUNT_PAIRS_STEPS) - 1 else "一つぶんの目を数える",
+            result_display=disp if i == len(_COUNT_PAIRS_STEPS) - 1 else f"{f}通り",
             narration=_COUNT_PAIRS_NARRATION[op],
         )
         for i, op in enumerate(_COUNT_PAIRS_STEPS)
@@ -728,11 +731,15 @@ _AT_LEAST_ONE_DRAW_NARRATION: dict[str, str] = {
     "subtract_from_one": "全体の確率から反対の場合の確率をひいて、求める確率とする。",
 }
 
-_AT_LEAST_ONE_DRAW_PHRASE: dict[str, str] = {
-    "identify_complement_event": "反対の場合を考える",
-    "count_complement_combinations": "反対の場合の数を数える",
-    "compute_complement_probability": "反対の場合の確率を求める",
-}
+def _at_least_one_draw_display(op: str, total: int, none_target: int, q) -> str:
+    """余事象で数える手の括弧（この手で得たもの）。"""
+    if op == "identify_complement_event":
+        return "一つも入らない場合"
+    if op == "count_complement_combinations":
+        return f"{none_target}通り（全部で{total}通り）"
+    if op == "compute_complement_probability":
+        return _fmt_ratio(q)
+    raise ValueError(f"途中の表示を組めない op: {op!r}")
 
 
 @register_solver("math.probability_at_least_one_by_complement")
@@ -766,7 +773,7 @@ def probability_at_least_one_by_complement(
             result_srepr=srepr if i == len(_AT_LEAST_ONE_DRAW_STEPS) - 1 else "",
             result_display=(
                 disp if i == len(_AT_LEAST_ONE_DRAW_STEPS) - 1
-                else _AT_LEAST_ONE_DRAW_PHRASE[op]
+                else _at_least_one_draw_display(op, len(combos), len(none_target), q)
             ),
             narration=_AT_LEAST_ONE_DRAW_NARRATION[op],
         )

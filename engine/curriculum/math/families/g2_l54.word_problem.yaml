@@ -43,6 +43,11 @@ levels:
       # target色は2個同時に取り出すので>=2必要。other色は>=1。
       count_target_domain: {int_range: [2, 6]}
       count_other_domain: {int_range: [1, 5]}
+    # 確率の答えは約分した分数で書くのが作法で、分母は「同じ確からしさで起こる
+    # 場合の数」そのもの。数を小さくする方向では直せない（`engine.eval.answer_size`）。
+    answer_size_max: {denominator: 55}
+    answer_size_reason: |
+      玉の総数（最大11個）から2個を同時に取り出す組合せなので、分母は最大 ₁₁C₂=55。
     given: [scenario]
     asked: [value, value]
     visual: none
@@ -61,6 +66,13 @@ levels:
       # さいころは6面（17面のさいころは存在しない。D-13 と同じ理由）。
       faces_domain: {int_set: [6]}
       trials: 2
+    # 確率の答えは約分した分数で書くのが作法で、分母は「同じ確からしさで起こる
+    # 場合の数」そのもの。数を小さくする方向では直せない（`engine.eval.answer_size`）。
+    answer_size_max: {denominator: 100, numerator: 100}
+    answer_size_reason: |
+      道具を2回くり返す余事象なので、分母は（道具の場合の数）²。道具は
+      さいころ6面・カード5/8/10枚・4色の玉で、最大は 10²=100（19/100 など）。
+      余事象なので分子も同じ大きさになる。
     given: [scenario]
     asked: [value]
     visual: none
@@ -82,6 +94,12 @@ levels:
       # 各色の個数。少なくとも1色は draws 個以上あることを recipe が構成で保証する
       # （全色が draws 未満だと余事象「全部同じ色」が起こりえず答えが常に1に退化する）。
       count_domain: {int_range: [1, 6]}
+    # 確率の答えは約分した分数で書くのが作法で、分母は「同じ確からしさで起こる
+    # 場合の数」そのもの。数を小さくする方向では直せない（`engine.eval.answer_size`）。
+    answer_size_max: {denominator: 816, numerator: 816}
+    answer_size_reason: |
+      3色の玉（各最大6個・総数最大18個）から3個を同時に取り出す組合せなので、分母は最大 ₁₈C₃=816。
+      「少なくとも2色」は余事象なので分子も同じ大きさになる。
     given: [scenario]
     asked: [value]
     visual: none

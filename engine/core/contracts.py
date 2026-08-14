@@ -308,6 +308,27 @@ class SpecLevel(BaseModel):
     # `dup_rate_reason` に「なぜ狭いのか」を書くこと（書かないとロードで落ちる）。
     dup_rate_max: float | None = None
     dup_rate_reason: str = ""
+    # **答えの大きさの上限**（`engine/eval/answer_size.py` の既定を上書きする）。
+    #
+    # `{"denominator": 343, "numerator": 279}` のように、超えてよい項目だけ書く。
+    # 既定は「分母12・分子100・根号の中60」で、これは**教材として書き写せる形**の線。
+    # 確率は約分した分数で答えるのが作法なので、**分母が大きいのが正しい**単元がある
+    # （17個から2個で 136 分の、7通りを3回くり返して 343 分の）。そこを一律の上限で
+    # 落とすと、通すために場面を作り替えることになる——`dup_rate` で「正348角形」を
+    # 生んだのと同じ失敗なので、**場面はそのままで上限を宣言する**。
+    #
+    # 宣言するときは `answer_size_reason` に「なぜ大きいのが正しいのか」を書くこと
+    # （書かないとロードで落ちる）。
+    answer_size_max: dict[str, int] | None = None
+    answer_size_reason: str = ""
+    # **問題文に出る数の、単位ごとの上限**（`engine/core/verify/statement_size.py`）。
+    #
+    # `{"cm": 400}` のように、超えてよい単位だけ書く。既定は「図形の寸法は 100cm まで」
+    # 「道のりは 3000m まで」など、実測の「正しい側の最大」に合わせてある。
+    # 標本調査の母集団（76000人）・有効数字の測定値（615cm）・体育の記録（201cm）は
+    # 大きいのが正しいので、そのセルだけ宣言で通す。
+    statement_size_max: dict[str, int] | None = None
+    statement_size_reason: str = ""
 
     @model_validator(mode="after")
     def _dup_rate_needs_reason(self) -> "SpecLevel":
@@ -315,6 +336,16 @@ class SpecLevel(BaseModel):
             raise ValueError(
                 "dup_rate_max を宣言するときは dup_rate_reason に理由を書くこと"
                 "（問題空間が狭い根拠が無いまま閾値を上げると、質の低下が隠れる）"
+            )
+        if self.answer_size_max is not None and not self.answer_size_reason.strip():
+            raise ValueError(
+                "answer_size_max を宣言するときは answer_size_reason に理由を書くこと"
+                "（答えが大きくてよい根拠が無いまま上限を上げると、質の低下が隠れる）"
+            )
+        if self.statement_size_max is not None and not self.statement_size_reason.strip():
+            raise ValueError(
+                "statement_size_max を宣言するときは statement_size_reason に理由を書くこと"
+                "（問題文の数が大きくてよい根拠が無いまま上限を上げると、質の低下が隠れる）"
             )
         return self
 

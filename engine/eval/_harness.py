@@ -23,10 +23,12 @@ from engine.core.contracts import (
     SpecFamily,
 )
 from engine.core.curriculum import CurriculumModel, load_curriculum
-from engine.core.pipeline import capabilities, resolve
+from engine.core.pipeline import _STATEMENT_SIZE_REDRAWS, capabilities, resolve
 from engine.core.registry import REGISTRY, _Registry
 from engine.core.rng import Rng, derive_rng
 from engine.core.spec.loader import load_family_dir
+from engine.core.verify.statement_size import limits_for as statement_limits_for
+from engine.core.verify.statement_size import statement_is_too_big
 
 _DEFAULT_FAMILIES_DIR = Path("engine/curriculum/math/families")
 
@@ -86,21 +88,44 @@ def _construct_with_bounded_retry(ctx: CellContext, rng: Rng, env: EvalEnv) -> t
     """recipe を呼ぶ。`_bounded_retry` 属性がある recipe のみ最大3回まで rng.spawn で再試行。
 
     戻り値: (mr, attempts_used)。attempts_used は retry_stats 用（1=リトライ無しで成功）。
+
+    **問題文の大きさによる組み直しは pipeline 側と同じ経路を通す。**
+    ここに pipeline の写しを持っていたので、`statement_size` の組み直しを
+    pipeline に足したとき、**ゲートが生徒に出るのと違う MR を測る**状態になっていた
+    （dup_rate も level_sep も `build_mr` を使う）。写しを増やさず、
+    構成の外枠は `engine.core.pipeline` の関数をそのまま呼ぶ。
     """
     recipe_fn = env.registry.recipe(ctx.spec_level.recipe)
     max_attempts = getattr(recipe_fn, "_bounded_retry", 1)
     max_attempts = min(max_attempts, _MAX_BOUNDED_RETRY) if max_attempts else 1
 
-    last_exc: Exception | None = None
-    for attempt in range(max_attempts):
-        attempt_rng = rng.spawn(attempt) if attempt > 0 else rng
-        try:
-            return recipe_fn(ctx, attempt_rng), attempt + 1
-        except Exception as e:  # noqa: BLE001 - 構成失敗は retry_stats の測定対象
-            last_exc = e
-            continue
-    assert last_exc is not None
-    raise last_exc
+    attempts_used = 0
+
+    def one_pass(pass_rng: Rng) -> MR:
+        """recipe の有界リトライ1回ぶん（attempts を数えながら）。"""
+        nonlocal attempts_used
+        last_exc: Exception | None = None
+        for attempt in range(max_attempts):
+            attempt_rng = pass_rng.spawn(attempt) if attempt > 0 else pass_rng
+            attempts_used = attempt + 1
+            try:
+                return recipe_fn(ctx, attempt_rng)
+            except Exception as e:  # noqa: BLE001 - 構成失敗は retry_stats の測定対象
+                last_exc = e
+                continue
+        assert last_exc is not None
+        raise last_exc
+
+    limits = statement_limits_for(ctx.spec_level)
+    last: MR | None = None
+    for redraw in range(_STATEMENT_SIZE_REDRAWS):
+        pass_rng = rng.spawn(1000 + redraw) if redraw else rng
+        last = one_pass(pass_rng)
+        text = " ".join(str(v) for v in last.given.values())
+        if not statement_is_too_big(text, limits):
+            return last, attempts_used
+    assert last is not None
+    return last, attempts_used
 
 
 @dataclass

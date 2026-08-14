@@ -44,7 +44,7 @@ def similar_area_ratio(ratio_num: object, ratio_den: object, known_area: object)
     steps = [
         Step(
             op="square_similarity_ratio",
-            args=[], result_srepr="", result_display="相似比を二乗して面積比を求める",
+            args=[], result_srepr="", result_display=f"{area_ratio_num}:{area_ratio_den}",
             narration="相似な図形の面積比は相似比の二乗に等しいことから、面積比を求める。",
         ),
         Step(
@@ -74,7 +74,7 @@ def similar_solid_surface_volume_ratio(ratio_num: object, ratio_den: object) -> 
     steps = [
         Step(
             op="square_ratio_for_surface_area",
-            args=[], result_srepr="", result_display="相似比を二乗して表面積の比を求める",
+            args=[], result_srepr="", result_display=f"{surface_num}:{surface_den}",
             narration="相似な立体の表面積の比は相似比の二乗に等しいことから、表面積の比を求める。",
         ),
         Step(
@@ -130,13 +130,13 @@ def similar_triangle_trapezoid_area_ratio(
         Step(
             op="convert_partial_to_whole_ratio",
             args=[], result_srepr="",
-            result_display=f"{pa}{pd}と{pa}{pb}全体の比になおす",
+            result_display=f"{pa}{pd}:{pa}{pb} = {a}:{ab}",
             narration=f"{pa}{pd}と{pd}{pb}の比から、{pa}{pd}と{pa}{pb}全体の比になおす。",
         ),
         Step(
             op="square_similarity_ratio",
             args=[], result_srepr="",
-            result_display=f"相似比を二乗して{small}と{whole_tri}の面積比を求める",
+            result_display=f"{ade}:{whole}",
             narration=f"{small}と{whole_tri}は相似であることから、面積比は相似比の二乗に"
             f"等しいことを使って、{small}と{whole_tri}全体の面積比を求める。",
         ),
@@ -176,12 +176,12 @@ def similar_solid_ratio_from_volume(vol_p: object, vol_q: object) -> Solution:
     steps = [
         Step(
             op="reduce_volume_ratio",
-            args=[], result_srepr="", result_display="体積の比を最も簡単な整数の比に直す",
+            args=[], result_srepr="", result_display=f"{num}:{den}",
             narration="PとQの体積の比を、最も簡単な整数の比に直す。",
         ),
         Step(
             op="extract_similarity_ratio_via_cube_root",
-            args=[], result_srepr="", result_display="体積の比から相似比を求める",
+            args=[], result_srepr="", result_display=f"{m}:{n}",
             narration="体積の比は相似比の三乗に等しいことから、相似比を求める。",
         ),
         Step(
@@ -222,13 +222,14 @@ def trapezoid_diagonal_area_ratios(ad: object, bc: object) -> Solution:
     steps = [
         Step(
             op="identify_x_shape_similarity",
-            args=[], result_srepr="", result_display="対頂角と錯角から相似な三角形を見つける",
+            args=[], result_srepr="",
+            result_display="三角形APD と 三角形BPC",
             narration="AD と BC が平行であることから、対頂角と錯角が等しく、"
             "対角線の交点をはさむ2つの三角形が相似であることがわかる。",
         ),
         Step(
             op="square_similarity_ratio",
-            args=[], result_srepr="", result_display="相似比を二乗して面積比を求める",
+            args=[], result_srepr="", result_display=f"{ratio_num}:{ratio_den}",
             narration="相似な図形の面積比は相似比の二乗に等しいことから、"
             "2つの三角形の面積の比を求める。",
         ),

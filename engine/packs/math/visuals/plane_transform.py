@@ -25,12 +25,14 @@ from typing import TYPE_CHECKING, Any
 import sympy
 
 from engine.core.registry import register_visual
+from engine.packs.math.visuals._label_place import centroid, haloed_text, outward
 from engine.packs.math.visuals.graph import (
     _MARGIN,
     _SVG_SIZE,
     _GridScaffold,
     _grid_scaffold,
     _grid_ticks,
+    grid_tick_anchors,
     _linear_scale,
     _parse_point,
     compute_grid_bounds_from_params,
@@ -94,18 +96,33 @@ def _plain_grid_scaffold(params: dict[str, Any]) -> _GridScaffold:
 
 
 def _polygon_parts(
-    sc: _GridScaffold, labeled_pts: list[tuple[str, sympy.Expr, sympy.Expr]], *, dashed: bool = False
+    sc: _GridScaffold,
+    labeled_pts: list[tuple[str, sympy.Expr, sympy.Expr]],
+    *,
+    dashed: bool = False,
+    avoid: list[tuple[float, float]] | None = None,
 ) -> list[str]:
-    """多角形(頂点＋ラベル＋辺)の SVG 要素を組む（実線=移動前／破線=移動後）。"""
+    """多角形(頂点＋ラベル＋辺)の SVG 要素を組む（実線=移動前／破線=移動後）。
+
+    `avoid` に渡した位置（軸の目盛の数字）には頂点名を置かない。頂点が軸の上に
+    あるとき、両方が同じ場所に来て、どちらも読めなくなる。
+    """
     coords = [(sc.to_px_x(float(x)), sc.to_px_y(float(y))) for _, x, y in labeled_pts]
     path_d = "M " + " L ".join(f"{px:.2f} {py:.2f}" for px, py in coords) + " Z"
     dash_attr = ' stroke-dasharray="5 4"' if dashed else ""
     parts = [f'<path d="{path_d}" fill="none" stroke="#000000" stroke-width="2"{dash_attr}/>']
+    cx, cy = centroid(coords)
+    blocked = list(avoid or [])
     for (label, _x, _y), (px, py) in zip(labeled_pts, coords):
         parts.append(f'<circle cx="{px:.2f}" cy="{py:.2f}" r="2.5" fill="#000000"/>')
-        parts.append(
-            f'<text x="{px + 6:.2f}" y="{py - 6:.2f}" font-size="13" fill="#000000">{label}</text>'
-        )
+        dist = 12.0
+        for _ in range(4):
+            lx, ly, anchor = outward(px, py, cx, cy, dist=dist)
+            if all(abs(lx - qx) > 16.0 or abs(ly - qy) > 13.0 for qx, qy in blocked):
+                break
+            dist += 13.0
+        blocked.append((lx, ly))
+        parts.append(haloed_text(lx, ly, label, size=13, anchor=anchor))
     return parts
 
 
@@ -157,7 +174,9 @@ def render_polygon_coordinate(mr: "MR", ctx: "CellContext") -> str:
     """問題図（Lv2・coordinate）。座標平面(軸＋目盛)＋移動前の多角形のみ。"""
     sc = _grid_scaffold(mr.params)
     parts = list(sc.parts)
-    parts.extend(_polygon_parts(sc, _labeled_points_from_params(mr.params, pts_key="pts", labels_key="vertex_labels")))
+    parts.extend(_polygon_parts(
+        sc, _labeled_points_from_params(mr.params, pts_key="pts", labels_key="vertex_labels"),
+        avoid=grid_tick_anchors(sc)))
     parts.extend(_grid_ticks(sc))
     parts.append("</svg>")
     return "".join(parts)
@@ -179,12 +198,16 @@ def render_polygon_transform_solution_svg(params: dict[str, Any], *, style: str)
     parts = list(sc.parts)
     if style == "grid_only" and params.get("reflect_axis") is not None:
         parts.extend(_axis_line_parts(sc, str(params["reflect_axis"])))
-    parts.extend(_polygon_parts(sc, _labeled_points_from_params(params, pts_key="pts", labels_key="vertex_labels")))
+    avoid = [] if style == "grid_only" else grid_tick_anchors(sc)
+    parts.extend(_polygon_parts(
+        sc, _labeled_points_from_params(params, pts_key="pts", labels_key="vertex_labels"),
+        avoid=avoid))
     parts.extend(
         _polygon_parts(
             sc,
             _labeled_points_from_params(params, pts_key="new_pts", labels_key="vertex_labels_prime"),
             dashed=True,
+            avoid=avoid,
         )
     )
     parts.extend(_extra_point_parts(sc, params))
@@ -231,8 +254,11 @@ def render_polygon_pair_coordinate(mr: "MR", ctx: "CellContext") -> str:
     bounds_params = {**mr.params, "pts": [*mr.params["pts"], *mr.params["new_pts"]]}
     sc = _grid_scaffold(bounds_params)
     parts = list(sc.parts)
+    avoid = grid_tick_anchors(sc)
     parts.extend(
-        _polygon_parts(sc, _labeled_points_from_params(mr.params, pts_key="pts", labels_key="vertex_labels"))
+        _polygon_parts(
+            sc, _labeled_points_from_params(mr.params, pts_key="pts", labels_key="vertex_labels"),
+            avoid=avoid)
     )
     parts.extend(
         _polygon_parts(
@@ -241,6 +267,7 @@ def render_polygon_pair_coordinate(mr: "MR", ctx: "CellContext") -> str:
                 mr.params, pts_key="new_pts", labels_key="vertex_labels_prime"
             ),
             dashed=True,
+            avoid=avoid,
         )
     )
     parts.extend(_grid_ticks(sc))

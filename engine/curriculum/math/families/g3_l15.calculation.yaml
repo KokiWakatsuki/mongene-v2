@@ -19,6 +19,13 @@ levels:
     recipe: math.compare_radical_values
     params:
       mode: compare_pair
+    # 答えは「√11 < √95」＝**与えられた2つを並べ直したもの**。根号の中が大きくても
+    # 生徒がすることは中の数を比べるだけで、開く必要も書き写す重さも増えない。
+    answer_size_max: {radicand: 200}
+    answer_size_reason: |
+      大小比較の答えは与式の並べ直しなので、根号の中の大きさが答えの重さにならない
+      （√95 を計算する必要がない）。ここを既定の 60 で縛ると比較の題材が
+      「√2 と √3」に寄って、根号の中で比べるという狙いが薄くなる。
     given: [expression]
     asked: [value]
     visual: none

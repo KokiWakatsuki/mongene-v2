@@ -50,6 +50,12 @@ levels:
       weight_k_range: [1, 7]
       intercept_domain: {int_range: [5, 12]}
       object_candidates: [ばね, ゴムひも, つる巻きばね]
+    # 問題文の数が、この単元では単位の上限を超えるのが正しい
+    # （`engine.eval.statement_size`）。
+    statement_size_max: {cm: 300, L: 500}
+    statement_size_reason: |
+      ばね・ゴムひもの伸びと水そうの容量が題材。ばねは 1m を超えることがあり、
+      水そうは 100L 以上が普通（家庭の浴槽で 200L）。図形の寸法ではない。
     given: [scenario, quantities]
     asked: [formulation, value]
     visual: none
@@ -67,6 +73,12 @@ levels:
       extra_minutes_range: [3, 15]
       # 「容器|液体」の対（容器と液体の組合せが不自然にならないよう対で引く）。
       container_liquid_candidates: [水そう|水, タンク|水, 浴槽|お湯]
+    # 問題文の数が、この単元では単位の上限を超えるのが正しい
+    # （`engine.eval.statement_size`）。
+    statement_size_max: {cm: 300, L: 500}
+    statement_size_reason: |
+      ばね・ゴムひもの伸びと水そうの容量が題材。ばねは 1m を超えることがあり、
+      水そうは 100L 以上が普通（家庭の浴槽で 200L）。図形の寸法ではない。
     given: [scenario, quantities]
     asked: [formulation, formulation, value]
     visual: none
@@ -90,6 +102,12 @@ levels:
       rate_candidates: [2, 3, 4, 5, 6, 7, 8, 9, 10, 12]
       person_pair_candidates: [A|B, あきら|ゆうこ, けんた|みさき, たかし|なおみ,
                                ひろし|さくら, まさと|あやか, りく|ひなた, そうた|めい]
+    # 問題文の数が、この単元では単位の上限を超えるのが正しい
+    # （`engine.eval.statement_size`）。
+    statement_size_max: {cm: 300, L: 500}
+    statement_size_reason: |
+      ばね・ゴムひもの伸びと水そうの容量が題材。ばねは 1m を超えることがあり、
+      水そうは 100L 以上が普通（家庭の浴槽で 200L）。図形の寸法ではない。
     given: [scenario]
     asked: [value]
     visual: none

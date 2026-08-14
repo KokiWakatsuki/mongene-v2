@@ -16,6 +16,7 @@ import sympy
 
 from engine.core.contracts import Solution, Step, SymbolicAnswer
 from engine.core.registry import register_solver
+from engine.packs.math.solvers._step_text import fmt_expr, join_signed
 from engine.packs.math.solvers.arithmetic import fmt_number
 
 # mode -> op 列（steps の骨格）。level_sep はこの op 列の相異で作る。
@@ -62,15 +63,82 @@ _OP_NARRATION: dict[str, str] = {
     "solve_proportion": "x の係数で両辺をわって、x の値を求める。",
 }
 
-_OP_PHRASE: dict[str, str] = {
-    "subtract_constant_both_sides": "両辺から同じ数をひく",
-    "transpose_constant": "数の項を移項する",
-    "transpose_terms": "文字は左辺・数は右辺に移項する",
-    "expand_parentheses": "かっこを外す",
-    "clear_denominators": "分母をはらう",
-    "expand_and_transpose": "かっこを外して移項する",
-    "cross_multiply": "たすきがけの式をつくる",
-}
+# ---------------------------------------------------------------------------
+# 途中の手の括弧に入れる**式そのもの**（面③）。以前は「分母をはらう」のような
+# 指示の言い直しが入っていた。`narration` は触らない（ヒントは narration しか見ない）。
+# ---------------------------------------------------------------------------
+def _denominator_lcm(*exprs: sympy.Expr) -> int:
+    """式に出てくる分母の最小公倍数（分母が無ければ 1）。"""
+    lcm = 1
+    for e in exprs:
+        for term in sympy.expand(e).as_ordered_terms():
+            lcm = sympy.ilcm(lcm, int(sympy.denom(sympy.together(term))))
+    return lcm
+
+
+def _apply_step(
+    op: str, lhs: sympy.Expr, rhs: sympy.Expr, equation_str: str
+) -> tuple[str, sympy.Expr, sympy.Expr]:
+    """1手ぶんの (括弧の中身, 直したあとの左辺, 右辺)。
+
+    **手をつないで持ち回る**。前の手の結果でなく元の式から毎回組むと、
+    分母をはらった次の手が分数のままの式を見せてしまう（実際そうなっていた）。
+    """
+    x = sympy.Symbol("x")
+    if op in ("subtract_constant_both_sides", "transpose_constant"):
+        # 数の項を移した形（`x = 18 - 6`）。**計算はしない**——次の手の仕事なので。
+        const = lhs.subs(x, 0)
+        sign = "-" if const > 0 else "+"
+        disp = (
+            f"{fmt_expr(sympy.expand(lhs - const))} = "
+            f"{fmt_expr(rhs)} {sign} {fmt_expr(abs(const))}"
+        )
+        return disp, sympy.expand(lhs - const), sympy.expand(rhs - const)
+    if op == "transpose_terms":
+        # 文字は左辺・数は右辺（`2x - 4x = 11 - 9`）。
+        lx, rx = lhs - lhs.subs(x, 0), rhs - rhs.subs(x, 0)
+        lc, rc = lhs.subs(x, 0), rhs.subs(x, 0)
+        disp = f"{join_signed([lx, -rx])} = {join_signed([rc, -lc])}"
+        return disp, sympy.expand(lx - rx), sympy.expand(rc - lc)
+    if op == "expand_parentheses":
+        new_l, new_r = sympy.expand(lhs), sympy.expand(rhs)
+        return f"{fmt_expr(new_l)} = {fmt_expr(new_r)}", new_l, new_r
+    if op == "clear_denominators":
+        m = _denominator_lcm(lhs, rhs)
+        new_l, new_r = sympy.expand(m * lhs), sympy.expand(m * rhs)
+        return f"{fmt_expr(new_l)} = {fmt_expr(new_r)}", new_l, new_r
+    if op == "expand_and_transpose":
+        moved = sympy.expand(lhs - rhs)
+        coeff = moved.coeff(x, 1) * x
+        const = moved.subs(x, 0)
+        return f"{fmt_expr(coeff)} = {fmt_expr(-const)}", coeff, -const
+    if op == "cross_multiply":
+        # 比例式の外項の積＝内項の積。**かけ算をした形のまま**見せる
+        # （`3(x - 1) = 9 × 1`）——展開は次の手の仕事。
+        lhs_s, rhs_s = equation_str.split("=")
+
+        def shown(part: str) -> str:
+            # **× を落とさない**。落とすと `3 × 21` が `321` になる。
+            text = str(sympy.sstr(sympy.sympify(part, evaluate=False)))
+            return text.replace("*", " × ")
+
+        return f"{shown(lhs_s)} = {shown(rhs_s)}", lhs, rhs
+    raise ValueError(f"途中の表示を組めない op: {op!r}")
+
+
+def _equation_step_displays(ops: list[str], equation_str: str, final: str) -> list[str]:
+    """各手の括弧の中身（最後は答え）。"""
+    lhs_s, rhs_s = equation_str.split("=")
+    lhs = sympy.sympify(lhs_s, rational=True)
+    rhs = sympy.sympify(rhs_s, rational=True)
+    out: list[str] = []
+    for i, op in enumerate(ops):
+        if i == len(ops) - 1:
+            out.append(final)
+            break
+        disp, lhs, rhs = _apply_step(op, lhs, rhs, equation_str)
+        out.append(disp)
+    return out
 
 
 @register_solver("math.solve_linear_equation")
@@ -95,12 +163,13 @@ def solve_linear_equation(equation_str: str, mode: object) -> Solution:
     r_disp = f"x = {fmt_number(value)}"
 
     ops = _EQUATION_STEPS[mode_s]
+    displays = _equation_step_displays(ops, equation_str, r_disp)
     steps = [
         Step(
             op=op,
             args=[],
             result_srepr=r_srepr,
-            result_display=r_disp if i == len(ops) - 1 else _OP_PHRASE.get(op, ""),
+            result_display=displays[i],
             narration=_OP_NARRATION[op],
         )
         for i, op in enumerate(ops)
@@ -143,12 +212,18 @@ _ROUND_TRIP_AVG_NARRATION: dict[str, str] = {
     "compute_average_speed": "往復の道のりを往復にかかった時間でわって、往復の平均の速さを求める。",
 }
 
-_ROUND_TRIP_AVG_PHRASE: dict[str, str] = {
-    "set_up_round_trip_equation": "時間の和についての方程式をつくる",
-    "clear_denominators": "分母をはらう",
-    "solve_for_one_way_distance": "片道の道のりを求める",
-    "compute_round_trip_distance": "往復の道のりを求める",
-}
+def _round_trip_display(op: str, a, b, t, distance) -> str:
+    """往復の手の括弧（この手で得た式・値）。指示の言い直しは置かない（面③）。"""
+    if op == "set_up_round_trip_equation":
+        return f"x/{fmt_number(a)} + x/{fmt_number(b)} = {fmt_number(t)}"
+    if op == "clear_denominators":
+        m = sympy.ilcm(int(a), int(b))
+        return f"{fmt_number(m / a)}x + {fmt_number(m / b)}x = {fmt_number(m * t)}"
+    if op == "solve_for_one_way_distance":
+        return f"x = {fmt_number(distance)}"
+    if op == "compute_round_trip_distance":
+        return f"{fmt_number(2 * distance)}km"
+    raise ValueError(f"途中の表示を組めない op: {op!r}")
 
 
 @register_solver("math.solve_round_trip_average_speed")
@@ -185,7 +260,8 @@ def solve_round_trip_average_speed(
             op=op,
             args=[],
             result_srepr=srepr if i == len(_ROUND_TRIP_AVG_OPS) - 1 else "",
-            result_display=disp if i == len(_ROUND_TRIP_AVG_OPS) - 1 else _ROUND_TRIP_AVG_PHRASE[op],
+            result_display=disp if i == len(_ROUND_TRIP_AVG_OPS) - 1
+            else _round_trip_display(op, a, b, t, distance),
             narration=_ROUND_TRIP_AVG_NARRATION[op],
         )
         for i, op in enumerate(_ROUND_TRIP_AVG_OPS)

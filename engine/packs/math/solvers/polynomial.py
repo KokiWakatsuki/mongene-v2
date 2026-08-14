@@ -15,6 +15,12 @@ import sympy
 
 from engine.core.contracts import ChoiceAnswer, Solution, Step, SymbolicAnswer
 from engine.core.registry import register_solver
+from engine.packs.math.solvers._step_text import (
+    flatten_factors,
+    fmt_expr,
+    join_signed,
+    top_level_parts,
+)
 
 # 任意桁の指数を上付き数字へ（単項式の乗除は 4 次以上も生じうる）。
 _SUPERSCRIPT = str.maketrans("0123456789", "⁰¹²³⁴⁵⁶⁷⁸⁹")
@@ -46,6 +52,49 @@ def _fmt_monomial_display(expr: sympy.Expr) -> str:
     return s.replace("*", "")
 
 
+def _terms_in_written_order(expr_str: str) -> list[sympy.Expr]:
+    """かっこを外したときの項を、**書かれた順**に並べて返す。
+
+    `sympy.expand` に通すと項の順序が変わる（`(a+4b-4)-(3a+3b+5)` の解説が
+    `-4 - 5 + a - 3a …` の順で出る）ので、文字列の並びのまま外す。
+    """
+    terms: list[sympy.Expr] = []
+    for op, part in top_level_parts(expr_str, "+-"):
+        piece = sympy.expand(sympy.sympify(part))
+        piece = -piece if op == "-" else piece
+        terms.extend(piece.as_ordered_terms())
+    return terms
+
+
+def variable_parts(expr: sympy.Expr) -> list[str]:
+    """式に出てくる**文字の部分**を、出てきた順に返す（`["a", "b"]`）。"""
+    out: list[str] = []
+    for t in expr.as_ordered_terms():
+        _coeff, rest = t.as_coeff_Mul()
+        key = fmt_expr(rest)
+        if key not in out:
+            out.append(key)
+    return out
+
+
+def grouped_by_variable_part(written_terms: list[sympy.Expr]) -> str:
+    """同類項ごとにまとめた形（`(5a - 9a - 4a) + (b - 8b - 4b)`）。
+
+    **足す前**を見せる手なので、`sympy.Add` にはしない（係数が勝手に足される）。
+    引数は「書かれた順の項」——式にしてから渡すと sympy が先にまとめてしまい、
+    この手の括弧に答えがそのまま出ていた。
+    """
+    groups: dict[str, list[sympy.Expr]] = {}
+    for t in written_terms:
+        _coeff, rest = t.as_coeff_Mul()
+        groups.setdefault(fmt_expr(rest), []).append(t)
+    chunks = []
+    for terms in groups.values():
+        body = join_signed(terms)
+        chunks.append(f"({body})" if len(terms) > 1 or body.startswith("-") else body)
+    return " + ".join(chunks)
+
+
 @register_solver("math.simplify_polynomial")
 def simplify_polynomial(expr_str: str) -> Solution:
     """同類項をまとめて式を簡単にする（g2_l2.calculation）。
@@ -62,7 +111,7 @@ def simplify_polynomial(expr_str: str) -> Solution:
             op="group_like_terms",
             args=[],
             result_srepr=sympy.srepr(expr),
-            result_display="文字の部分が同じ項どうしをまとめる",
+            result_display=grouped_by_variable_part(_terms_in_written_order(expr_str)),
             # narration に数字を書かない（G-Q5t 偽陽性の元・§5-#9）。
             narration="文字の部分が同じ項（同類項）どうしをまとめる。",
         ),
@@ -89,12 +138,14 @@ def add_or_subtract_polynomials(expr_str: str, is_subtraction: object) -> Soluti
     expr = sympy.sympify(expr_str)
     simplified = sympy.expand(expr)
     is_sub = bool(is_subtraction)
+    # かっこを外しただけの形（同類項はまだまとめない）＝この手で得たもの。
+    opened = join_signed(_terms_in_written_order(expr_str))
     if is_sub:
         first = Step(
             op="distribute_negative_sign",
             args=[],
             result_srepr=sympy.srepr(expr),
-            result_display="うしろのかっこの符号を変えて外す",
+            result_display=opened,
             narration="うしろのかっこの前が - なので、かっこの中の各項の符号を変えてかっこを外す。",
         )
     else:
@@ -102,7 +153,7 @@ def add_or_subtract_polynomials(expr_str: str, is_subtraction: object) -> Soluti
             op="remove_parentheses",
             args=[],
             result_srepr=sympy.srepr(expr),
-            result_display="かっこをそのまま外す",
+            result_display=opened,
             narration="かっこの前が + なので、そのままかっこを外す。",
         )
     second = Step(
@@ -127,12 +178,19 @@ def distribute_or_divide(expr_str: str, is_division: object) -> Solution:
     simplified = sympy.expand(expr)
     is_div = bool(is_division)
     if is_div:
+        # `(-24x - 12y) ÷ (-6)` を `(-24x - 12y) × (-1/6)` の形にした姿。
+        num, den = expr_str.rsplit("/", 1)
+        reciprocal = 1 / sympy.sympify(den)
+        as_product = (
+            f"({fmt_expr(sympy.expand(sympy.sympify(num)))}) × "
+            f"({fmt_expr(reciprocal)})"
+        )
         steps = [
             Step(
                 op="convert_division_to_multiplication",
                 args=[],
                 result_srepr=sympy.srepr(expr),
-                result_display="÷ を逆数をかける計算に直す",
+                result_display=as_product,
                 narration="÷ の計算を、その数の逆数をかっこにかける計算に直す。",
             ),
             Step(
@@ -190,11 +248,20 @@ def compute_monomial_expression(expr_str: str, mode: object) -> Solution:
         "determine_sign": "かけ合わせる式の符号から、答えの符号を先に決める。",
         "convert_divisions_to_reciprocal": "÷ を、その式の逆数をかけるかけ算に直す。",
     }
+    # 途中の手の括弧には**その手で得たもの**を入れる（面③）。
+    factors = [sympy.sympify(t) for _op, t in top_level_parts(expr_str, "*")]
+    coeff_product = sympy.Integer(1)
+    for f in factors:
+        coeff_product *= f.as_coeff_Mul()[0]
+    reciprocal_form = " × ".join(
+        f"({fmt_expr(1 / sympy.sympify(t))})" if op == "/" else f"({fmt_expr(sympy.sympify(t))})"
+        for op, t in flatten_factors(expr_str)
+    )
     displays = {
-        "multiply_coefficients": "係数どうしをかける",
+        "multiply_coefficients": fmt_expr(coeff_product),
         "combine_powers": r_disp,
-        "determine_sign": "答えの符号を先に決める",
-        "convert_divisions_to_reciprocal": "÷ を逆数のかけ算に直す",
+        "determine_sign": f"符号は {'-' if result.as_coeff_Mul()[0] < 0 else '+'}",
+        "convert_divisions_to_reciprocal": reciprocal_form,
     }
     steps = [
         Step(
@@ -256,10 +323,24 @@ def combine_fractional_expressions(expr_str: str, mode: object) -> Solution:
         "distribute_signs": "うしろの分数の前が - なので、その分子の各項の符号を変える。",
         "add_integer_term": "整数をふくむ項も同じ分母にそろえて、分子に加える。",
     }
+    # 途中の手の括弧には**通分した形**を入れる（面③）。分子はまだ計算しない。
+    written = top_level_parts(expr_str, "+-")
+    fractions = [sympy.fraction(sympy.together(sympy.sympify(t))) for _op, t in written]
+    # **もとの式に書かれている分母の最小公倍数**で通分する。`together` した後の
+    # 分母（約分済み）を使うと 6 と 2 の通分が 3 になり、通分の手が合わなくなる。
+    common = sympy.Integer(1)
+    for _n, d in fractions:
+        common = sympy.lcm(common, d)
+    numerators = [
+        _fmt_poly_display(sympy.expand(n * common / d)) for n, d in fractions
+    ]
+    aligned = numerators[0]
+    for (sign, _t), text in zip(written[1:], numerators[1:], strict=True):
+        aligned += f" {'-' if sign == '-' else '+'} ({text})"
     phrases = {
-        "find_common_denominator": "分母を最小公倍数にそろえる",
+        "find_common_denominator": f"({aligned}) / {_fmt_poly_display(common)}",
         "combine_numerators": "分子を計算して1つの分数にまとめる",
-        "distribute_signs": "うしろの分子の各項の符号を変える",
+        "distribute_signs": _fmt_fraction_display(num_e, den),
         "add_integer_term": "整数の項も通分して分子に加える",
     }
     r_srepr = sympy.srepr(combined)
@@ -293,7 +374,9 @@ def degree_of_expression(expr_str: str) -> Solution:
             op="find_highest_degree_term",
             args=[],
             result_srepr=sympy.srepr(deg_expr),
-            result_display="次数がもっとも高い項を見つける",
+            result_display=fmt_expr(
+                max(expr.as_ordered_terms(), key=lambda t: sympy.degree(t, sympy.Symbol("x")))
+            ),
             narration="式の中で、文字の指数がもっとも高い項を見つける。",
         ),
         Step(
@@ -343,10 +426,22 @@ def solve_for_variable(equation_str: str, target: object, mode: object) -> Solut
         "divide_by_coefficient": "両辺を、解く文字にかかっている係数でわる。",
         "multiply_both_sides": "分母をなくすため、両辺に分母をかける。",
     }
+    # 途中の手の括弧には**その手のあとの式**を入れる（面③）。
+    lhs_e = sympy.sympify(lhs_s)
+    rhs_e = sympy.sympify(rhs_s)
+    moved = sympy.expand(lhs_e - rhs_e)  # = 0 の形
+    coeff = moved.coeff(tvar, 1)
+    rest = sympy.expand(moved - coeff * tvar)
+    denominator = sympy.denom(sympy.together(lhs_e - rhs_e))
     phrases = {
-        "isolate_target": "ほかの項を移項する",
+        "isolate_target": (
+            f"{_fmt_poly_display(coeff * tvar)} = {_fmt_poly_display(-rest)}"
+        ),
         "divide_by_coefficient": "解く文字の係数で両辺をわる",
-        "multiply_both_sides": "両辺に分母をかける",
+        "multiply_both_sides": (
+            f"{_fmt_poly_display(sympy.expand(lhs_e * denominator))}"
+            f" = {_fmt_poly_display(sympy.expand(rhs_e * denominator))}"
+        ),
     }
     r_srepr = sympy.srepr(sol_expr)
     steps = [
@@ -379,7 +474,7 @@ def express_number_property(expr_str: str) -> Solution:
             op="expand_expression",
             args=[],
             result_srepr=sympy.srepr(expr),
-            result_display="かっこを外して和を書き出す",
+            result_display=join_signed(_terms_in_written_order(expr_str)),
             narration="それぞれの数を表す式の和を、かっこを外して書き出す。",
         ),
         Step(
@@ -411,7 +506,7 @@ def combine_digit_number(expr_str: str, operation: object) -> Solution:
             op="express_swapped_number",
             args=[],
             result_srepr=sympy.srepr(expr),
-            result_display="もとの数と入れかえた数を文字式で書き出す",
+            result_display=fmt_expr(expr),
             narration="もとの数と、位を入れかえた数を、それぞれ文字式で書き出す。",
         ),
         Step(
@@ -455,7 +550,7 @@ def poly_term_definition(concept: object) -> Solution:
             op="identify_description",
             args=[],
             result_srepr=c,
-            result_display="説明されている対象を読み取る",
+            result_display="",
             narration="説明されている式や数の部分がどれかを読み取る。",
         ),
         Step(
@@ -486,7 +581,7 @@ def classify_monomial_or_polynomial(expr_str: str) -> Solution:
             op="count_terms",
             args=[],
             result_srepr=sympy.srepr(expr),
-            result_display="式がいくつの項からできているかを見る",
+            result_display=f"{len(expr.as_ordered_terms())}項",
             narration="式が、単独の項か、いくつかの項の和かを見分ける。",
         ),
         Step(
@@ -518,7 +613,7 @@ def judge_like_terms(term1: str, term2: str) -> Solution:
             op="compare_variable_parts",
             args=[],
             result_srepr=sympy.srepr(v1),
-            result_display="2つの項の文字の部分を比べる",
+            result_display=f"{fmt_expr(v1)} と {fmt_expr(v2)}",
             narration="2つの項の、文字の部分（文字と指数）が同じかどうかを比べる。",
         ),
         Step(
@@ -557,7 +652,7 @@ def system_term_definition(concept: object) -> Solution:
             op="identify_description",
             args=[],
             result_srepr=c,
-            result_display="説明されている対象を読み取る",
+            result_display="",
             narration="説明されている方程式や値の組がどれかを読み取る。",
         ),
         Step(
@@ -619,27 +714,150 @@ _EXPAND_OP_NARRATION: dict[str, str] = {
     "compute_cross_term": "2つの項の積の2倍（中間の項）を求める。",
     "apply_diff_of_squares": "和と差の積の公式で、はじめの項の平方から終わりの項の平方をひく。",
     "expand_each_part": "それぞれのかっこを乗法公式で展開する。",
-    "substitute_common_part": "共通する部分を1つの文字に置きかえる。",
-    "apply_formula": "置きかえた式に乗法公式をあてはめる。",
-    "restore_expansion": "置きかえをもとにもどして展開した式を整理する。",
+    "substitute_common_part": "共通する部分をひとかたまりとみる。",
+    "apply_formula": "かたまりのままの式に乗法公式をあてはめる。",
+    "restore_expansion": "かたまりをもとの式にもどして、展開した式を整理する。",
     "apply_diff_of_squares_formula": "2つの平方の差を、和と差の積の形になおす。",
     "simplify_result": "積の形を計算し、式を簡単にする。",
 }
 
-_EXPAND_OP_PHRASE: dict[str, str] = {
-    "distribute_each_monomial": "各単項式を分配する",
-    "expand_all_products": "各項の積をすべて書き出す",
-    "collect_x_terms": "1次の項を集める",
-    "compute_sum_and_product": "和と積を求める",
-    "determine_constant_signs": "定数の符号を確かめる",
-    "compute_square_terms": "平方と積の2倍を求める",
-    "square_leading_term": "はじめの項を平方する",
-    "compute_cross_term": "中間の項を求める",
-    "expand_each_part": "各かっこを展開する",
-    "substitute_common_part": "共通部分を置きかえる",
-    "apply_formula": "公式にあてはめる",
-    "apply_diff_of_squares_formula": "和と差の積の形になおす",
-}
+# ---------------------------------------------------------------------------
+# 展開の途中の手に入れる**式そのもの**（面③）。
+#
+# 以前はここに「各項の積をすべて書き出す」のような**指示の言い直し**が入っていた。
+# 括弧には「その手で得たもの」を入れる——`(y+4)(y-6)` なら
+# `y² - 6y + 4y - 24`（まとめる前）を見せてから `y² - 2y - 24` に進む。
+#
+# `narration` は触らない（ヒントは narration しか見ないので、そちらに数字を書くと
+# 答えの先出しになる）。
+# ---------------------------------------------------------------------------
+def _main_symbol(expr: sympy.Expr) -> sympy.Symbol:
+    """式の主役の文字（複数あればアルファベット順の先頭）。"""
+    return sorted(expr.free_symbols, key=str)[0]
+
+
+def _pair_products(a: sympy.Expr, b: sympy.Expr) -> list[sympy.Expr]:
+    """2つの多項式の各項の積を、**書かれた順**に並べる（まとめない）。"""
+    return [x * y for x in a.as_ordered_terms() for y in b.as_ordered_terms()]
+
+
+def _binomial_factors(expr_str: str) -> tuple[sympy.Expr, sympy.Expr]:
+    """`(y+(4))*(y+(-6))` を2つの因数に分ける（書かれた順を保つ）。"""
+    parts = top_level_parts(expr_str, "*")
+    assert len(parts) == 2, f"2つの因数の積でない: {expr_str!r}"
+    return sympy.sympify(parts[0][1]), sympy.sympify(parts[1][1])
+
+
+def _expand_step_displays(expr_str: str, mode: str, final: str) -> list[str]:
+    """展開の各手の括弧に入れる表示（最後は答え）。"""
+    expr = sympy.sympify(expr_str)
+
+    if mode == "distribute_mono_combine":
+        # それぞれの単項式を分配しただけの形（同類項はまだまとめない）。
+        pieces = [sympy.expand(sympy.sympify(t)) for _op, t in top_level_parts(expr_str, "+-")]
+        signs = [op for op, _t in top_level_parts(expr_str, "+-")]
+        terms: list[sympy.Expr] = []
+        for sign, piece in zip(signs, pieces, strict=True):
+            part = -piece if sign == "-" else piece
+            terms.extend(part.as_ordered_terms())
+        return [join_signed(terms), final]
+
+    if mode in ("binomial_product", "binomial_product_coeff"):
+        a, b = _binomial_factors(expr_str)
+        products = _pair_products(a, b)
+        out = [join_signed(products)]
+        if mode == "binomial_product_coeff":
+            x = _main_symbol(expr)
+            linear = [t for t in products if sympy.degree(t, x) == 1]
+            rest = [t for t in products if sympy.degree(t, x) != 1]
+            quad = [t for t in rest if sympy.degree(t, x) == 2]
+            const = [t for t in rest if sympy.degree(t, x) == 0]
+            coeffs = [sympy.simplify(t / x) for t in linear]
+            middle = f"({join_signed(coeffs)}){x}"
+            c0 = sum(const, sympy.Integer(0))
+            tail = f" - {fmt_expr(-c0)}" if c0 < 0 else f" + {fmt_expr(c0)}"
+            out.append(f"{fmt_expr(sum(quad, sympy.Integer(0)))} + {middle}{tail}")
+        return [*out, final]
+
+    if mode in ("formula_sum_product", "formula_sum_product_signed"):
+        a, b = _binomial_factors(expr_str)
+        x = _main_symbol(expr)
+        p, q = a.subs(x, 0), b.subs(x, 0)
+        both = [f"和 {fmt_expr(p + q)}、積 {fmt_expr(p * q)}"]
+        if mode == "formula_sum_product_signed":
+            # 符号の見分けがこの手の中身なので、2つの定数をそのまま書く。
+            both.insert(0, f"{fmt_expr(p)} と {fmt_expr(q)}")
+        return [*both, final]
+
+    if mode == "square_binomial":
+        base = sympy.sympify(expr_str.rsplit("**", 1)[0])
+        x = _main_symbol(expr)
+        head, tail = base - base.subs(x, 0), base.subs(x, 0)
+        return [
+            f"{fmt_expr(head**2)}、{fmt_expr(2 * head * tail)}、{fmt_expr(tail**2)}",
+            final,
+        ]
+
+    if mode == "square_binomial_coeff":
+        base = sympy.sympify(expr_str.rsplit("**", 1)[0])
+        x = _main_symbol(expr)
+        head, tail = base - base.subs(x, 0), base.subs(x, 0)
+        return [fmt_expr(head**2), fmt_expr(2 * head * tail), final]
+
+    if mode == "expand_multi":
+        # かっこごとに展開した形（かっこは残す＝次の手でまとめる）。
+        out = ""
+        for op, t in top_level_parts(expr_str, "+-"):
+            piece = fmt_expr(sympy.expand(sympy.sympify(t)))
+            joiner = "" if not out else (" - " if op == "-" else " + ")
+            out += f"{joiner}({piece})"
+        return [out, final]
+
+    if mode == "expand_substitution":
+        a, b = _binomial_factors(expr_str)
+        # 共通部分（かたまり）＝ 2つの因数に共通して現れる多項式。
+        # **文字は置かない。** `A = s + t とおく` と書くと、問題文に無い大文字が
+        # 解説に出て `text_quality`（記号の食い違い）に引っかかる。かたまりは
+        # かっこのまま運ぶ（教科書もそう書ける）。
+        chunk = _common_chunk(a, b)
+        pa, pb = sympy.simplify(a - chunk), sympy.simplify(b - chunk)
+        c = f"({fmt_expr(chunk)})"
+        return [
+            f"({c}{_signed_tail(pa)})({c}{_signed_tail(pb)})",
+            f"{c}² {_signed_coeff(pa + pb)}{c} {_signed_tail(pa * pb)}".replace("  ", " "),
+            final,
+        ]
+
+    if mode == "proof_diff_squares_linear":
+        parts = top_level_parts(expr_str, "-")
+        a = sympy.sympify(parts[0][1].rsplit("**", 1)[0])
+        b = sympy.sympify(parts[1][1].rsplit("**", 1)[0])
+        # **和と差はそのまま書く**（`(10n - 1)(-13)` と先に計算してしまうと、
+        # この手で使った公式（和と差の積）が見えなくなる）。
+        sa, sb = f"({fmt_expr(a)})", f"({fmt_expr(b)})"
+        return [f"({sa} + {sb})({sa} - {sb})", final]
+
+    raise ValueError(f"途中の表示を組めない展開 mode: {mode!r}")
+
+
+def _common_chunk(a: sympy.Expr, b: sympy.Expr) -> sympy.Expr:
+    """2つの1次式に共通して現れる「かたまり」（`(s+t)-8` と `(s+t)+1` なら `s+t`）。"""
+    common = [t for t in a.as_ordered_terms() if t in set(b.as_ordered_terms())]
+    return sum(common, sympy.Integer(0))
+
+
+def _signed_tail(v: sympy.Expr) -> str:
+    """定数を符号つきで後ろに置く（`-8` → ` - 8`／`0` → ``）。"""
+    if v == 0:
+        return ""
+    return f" - {fmt_expr(-v)}" if v.is_negative else f" + {fmt_expr(v)}"
+
+
+def _signed_coeff(v: sympy.Expr) -> str:
+    """かたまりにかかる係数を符号つきで書く（`-7` → `- 7`）。"""
+    if v == 0:
+        return ""
+    return f"- {fmt_expr(-v)}" if v.is_negative else f"+ {fmt_expr(v)}"
 
 
 @register_solver("math.expand_expression")
@@ -659,12 +877,18 @@ def expand_expression(expr_str: str, mode: object) -> Solution:
     srepr = sympy.srepr(expanded)
 
     ops = _EXPAND_STEPS[mode_s]
+    displays = (
+        [disp] if len(ops) == 1 else _expand_step_displays(expr_str, mode_s, disp)
+    )
+    assert len(displays) == len(ops), (
+        f"{mode_s}: 手の数 {len(ops)} と途中の表示 {len(displays)} が合わない"
+    )
     steps = [
         Step(
             op=op,
             args=[],
             result_srepr=srepr if i == len(ops) - 1 else "",
-            result_display=disp if i == len(ops) - 1 else _EXPAND_OP_PHRASE.get(op, ""),
+            result_display=displays[i],
             narration=_EXPAND_OP_NARRATION[op],
         )
         for i, op in enumerate(ops)
@@ -707,20 +931,71 @@ _FACTOR_OP_NARRATION: dict[str, str] = {
     "write_square": "1次式の平方の形で表す。",
     "apply_diff_of_squares_factor": "平方の差を、和と差の積の形になおす。",
     "apply_formula": "くくり出した後のかっこの中を乗法公式の逆で因数分解する。",
-    "substitute_common_part": "共通する部分を1つの文字に置きかえる。",
-    "apply_formula_factor": "置きかえた式を公式の逆で因数分解する。",
-    "restore_factors": "置きかえをもとにもどして整理する。",
+    "substitute_common_part": "共通する部分をひとかたまりとみる。",
+    "apply_formula_factor": "かたまりのままの式を公式の逆で因数分解する。",
+    "restore_factors": "かたまりをもとの式にもどして整理する。",
 }
 
-_FACTOR_OP_PHRASE: dict[str, str] = {
-    "identify_common_factor": "共通因数を見つける",
-    "find_two_numbers": "2つの数を見つける",
-    "determine_signs": "符号を決める",
-    "recognize_perfect_square": "平方の形を確かめる",
-    "factor_out_common": "共通因数をくくり出す",
-    "substitute_common_part": "共通部分を置きかえる",
-    "apply_formula_factor": "公式の逆で因数分解する",
-}
+# ---------------------------------------------------------------------------
+# 因数分解の途中の手に入れる**式そのもの**（面③）。展開側と同じ考え方。
+# ---------------------------------------------------------------------------
+def _factor_step_displays(expr_str: str, mode: str, final: str) -> list[str]:
+    """因数分解の各手の括弧に入れる表示（最後は答え）。"""
+    expr = sympy.sympify(expr_str)
+
+    if mode == "factor_common_multi":
+        # 共通因数そのもの（`3pq`）。次の手でくくり出した形が出る。
+        common = sympy.gcd(list(expr.as_ordered_terms()))
+        return [fmt_expr(common), final]
+
+    if mode in ("factor_sum_product", "factor_sum_product_signed"):
+        x = _main_symbol(expr)
+        poly = sympy.Poly(expr, x)
+        b, c = poly.coeff_monomial(x), poly.coeff_monomial(1)
+        # たすと b、かけると c になる2つの数（因数分解の結果から読む）。
+        roots = sorted(-r for r in sympy.roots(poly, x))
+        pair = f"{fmt_expr(sympy.Integer(roots[0]))} と {fmt_expr(sympy.Integer(roots[1]))}"
+        if mode == "factor_sum_product":
+            return [pair, final]
+        signs = "どちらも正" if c > 0 and b > 0 else (
+            "どちらも負" if c > 0 else "符号は異なる"
+        )
+        return [f"積 {fmt_expr(c)}、和 {fmt_expr(b)} なので{signs}", pair, final]
+
+    if mode == "factor_perfect_square":
+        x = _main_symbol(expr)
+        poly = sympy.Poly(expr, x)
+        a2, b1, c0 = poly.coeff_monomial(x**2), poly.coeff_monomial(x), poly.coeff_monomial(1)
+        head, tail = sympy.sqrt(a2) * x, sympy.sqrt(c0) * sympy.sign(b1)
+        signed_tail = f"({fmt_expr(tail)})" if tail < 0 else fmt_expr(tail)
+        return [
+            f"{fmt_expr(head)}² と {fmt_expr(sympy.Abs(tail))}²、"
+            f"中央は 2 × {fmt_expr(head)} × {signed_tail}",
+            final,
+        ]
+
+    if mode == "factor_common_then_formula":
+        common = sympy.gcd(list(expr.as_ordered_terms()))
+        inner = sympy.expand(expr / common)
+        # `common * inner` を sympy に渡すと展開されて元に戻るので、文字列で組む。
+        return [f"{fmt_expr(common)}({fmt_expr(inner)})", final]
+
+    if mode == "factor_substitution":
+        # `(a+2)² - 1` のように、かたまりの平方から数の平方をひく形。
+        parts = top_level_parts(expr_str, "-")
+        chunk = sympy.sympify(parts[0][1].rsplit("**", 1)[0])
+        rest = sympy.sympify(parts[1][1])
+        k = sympy.sqrt(rest)
+        c = f"({fmt_expr(chunk)})"
+        return [
+            f"{c}² - {fmt_expr(k)}²",
+            f"({c} + {fmt_expr(k)})({c} - {fmt_expr(k)})",
+            final,
+        ]
+
+    raise ValueError(f"途中の表示を組めない因数分解 mode: {mode!r}")
+
+
 
 
 @register_solver("math.factor_expression")
@@ -740,12 +1015,18 @@ def factor_expression(expr_str: str, mode: object) -> Solution:
     srepr = sympy.srepr(factored)
 
     ops = _FACTOR_STEPS[mode_s]
+    displays = (
+        [disp] if len(ops) == 1 else _factor_step_displays(expr_str, mode_s, disp)
+    )
+    assert len(displays) == len(ops), (
+        f"{mode_s}: 手の数 {len(ops)} と途中の表示 {len(displays)} が合わない"
+    )
     steps = [
         Step(
             op=op,
             args=[],
             result_srepr=srepr if i == len(ops) - 1 else "",
-            result_display=disp if i == len(ops) - 1 else _FACTOR_OP_PHRASE.get(op, ""),
+            result_display=displays[i],
             narration=_FACTOR_OP_NARRATION[op],
         )
         for i, op in enumerate(ops)
@@ -778,10 +1059,12 @@ _ARITHMETIC_IDENTITY_NARRATION: dict[str, str] = {
     "substitute_and_compute": "和と積の値をあてはめて計算する。",
 }
 
-_ARITHMETIC_IDENTITY_PHRASE: dict[str, str] = {
-    "factor_difference_of_squares": "和と差の積の形になおす",
-    "express_via_elementary_symmetric": "和と積だけの形に変形する",
-}
+def _identity_phrase(v1: sympy.Expr, v2: sympy.Expr) -> dict[str, str]:
+    """恒等式を使う手の括弧（変形したあとの式そのもの・面③）。"""
+    return {
+        "factor_difference_of_squares": f"({v1} + {v2})({v1} - {v2})",
+        "express_via_elementary_symmetric": "(x + y)² - 2xy",
+    }
 
 
 @register_solver("math.evaluate_arithmetic_via_identity")
@@ -814,7 +1097,7 @@ def evaluate_arithmetic_via_identity(mode: object, value1: object, value2: objec
             op=op,
             args=[],
             result_srepr=srepr if i == len(ops) - 1 else "",
-            result_display=disp if i == len(ops) - 1 else _ARITHMETIC_IDENTITY_PHRASE.get(op, ""),
+            result_display=disp if i == len(ops) - 1 else _identity_phrase(v1, v2)[op],
             narration=_ARITHMETIC_IDENTITY_NARRATION[op],
         )
         for i, op in enumerate(ops)

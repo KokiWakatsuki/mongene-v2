@@ -67,6 +67,7 @@ from engine.core.contracts import (
 )
 from engine.core.registry import REGISTRY, register_recipe
 from engine.core.rng import Rng, draw
+from engine.core.verify.answer_size import answer_is_too_big, limits_for
 from engine.packs.math.recipes.pythagorean import (
     usable_hypotenuse_leg_pairs,
     usable_leg_pairs,
@@ -187,7 +188,11 @@ def solve_right_triangle_missing_side(numbers: Mapping[str, Any]) -> list[Soluti
                     "identify_right_triangle_sides",
                     "直角三角形の三つの辺のうち、どれが斜辺で、どの辺の長さがわかっていて、"
                     "どの辺の長さを求めるのかを読み取る。",
-                    phrase="斜辺とわかっている辺を読み取る",
+                    phrase=(
+                        f"わかっている辺 {known_a}cm と {known_b}cm"
+                        if role == "hypotenuse"
+                        else f"斜辺 {known_a}cm、わかっている辺 {known_b}cm"
+                    ),
                 ),
                 _step("apply_pythagorean_theorem", find_narration, result, "cm"),
             ],
@@ -255,19 +260,22 @@ def solve_height_from_special_angles(numbers: Mapping[str, Any]) -> list[Solutio
                     "read_base_angles",
                     "頂点から底辺に垂線を引くと二つの直角三角形ができるから、底辺の両端の角の"
                     "大きさから、それぞれがどの特別な直角三角形にあたるかを読み取る。",
-                    phrase="両端の角から特別な直角三角形を読み取る",
+                    phrase=f"{angle_b}° と {angle_c}° の直角三角形",
                 ),
                 _step(
                     "express_segments_by_special_ratio",
                     "それぞれの特別な直角三角形の辺の比を使って、垂線の足で分けられた底辺の"
                     "二つの部分の長さを、垂線の長さを表す文字の定数倍として表す。",
-                    phrase="分けられた部分を高さの定数倍で表す",
+                    phrase=(
+                        f"それぞれ {_fmt(_cotangent(angle_b))}h と "
+                        f"{_fmt(_cotangent(angle_c))}h"
+                    ),
                 ),
                 _step(
                     "set_up_equation_for_base",
                     "分けられた二つの部分の長さの和が底辺の長さに等しいことから、"
                     "垂線の長さを表す文字についての方程式をつくる。",
-                    phrase="部分の和＝底辺の方程式をつくる",
+                    phrase=f"{_fmt(ratio_sum)}h = {base}",
                 ),
                 _step(
                     "solve_for_height",
@@ -293,7 +301,7 @@ def solve_coordinate_distance(numbers: Mapping[str, Any]) -> list[Solution]:
                     "compute_coordinate_differences",
                     "二つの点の x 座標の差と y 座標の差を求め、座標軸に平行な二辺を"
                     "直角をはさむ二辺とする直角三角形をとらえる。",
-                    phrase="x 座標の差と y 座標の差を求める",
+                    phrase=f"x の差 {dx}、y の差 {dy}",
                 ),
                 _step(
                     "apply_pythagorean_theorem_for_distance",
@@ -321,13 +329,13 @@ def solve_equidistant_point_on_x_axis(numbers: Mapping[str, Any]) -> list[Soluti
                     "express_distances_with_unknown",
                     "求める点は x 軸上にあるから、その x 座標を文字でおき、二つの点までの"
                     "距離の二乗を、三平方の定理を使ってその文字の式で表す。",
-                    phrase="x 座標を文字でおいて距離の二乗を表す",
+                    phrase="（x の差）² ＋（y の差）² の形で表す",
                 ),
                 _step(
                     "set_up_equation_from_equal_distances",
                     "二つの距離が等しいことは、距離の二乗どうしが等しいことと同じだから、"
                     "その等式を方程式とみる。",
-                    phrase="距離の二乗が等しい方程式をつくる",
+                    phrase="（一方の距離）² =（もう一方の距離）²",
                 ),
                 _step(
                     "solve_linear_equation_for_x",
@@ -866,15 +874,45 @@ def _effective_concept_tags(ctx: CellContext) -> list[str]:
     return list(ctx.spec_level.concept_tags or ctx.spec_family.concepts_default)
 
 
+# 答えが大きすぎたときに引き直す回数。切れたら**最後の組をそのまま使う**
+# （生成が失敗して1セル丸ごと消えるより、大きい答えが1問出るほうが軽い）。
+# 引き直しが常態化しているセルは `python -m engine.eval.answer_size` が上限超えとして
+# 見つけるので、そのときは定義域か上限の宣言を直す。
+_ANSWER_SIZE_REDRAWS = 40
+
+
+def _draw_scene_with_answer_in_range(
+    ctx: CellContext, rng: Rng, kind: str
+) -> tuple[FindValueScene, Solution]:
+    """答えの大きさが上限内になる組を引く（超えたら組み直す）。
+
+    定義域は広いまま、**答えの根号の中・分母・分子**に上限を置く。
+    「縦 7cm・横 12cm・高さ 13cm の直方体の対角線 → √362」のような、
+    素因数分解もできない答えを消すのがねらい（`EVALUATION.md` D-32）。
+
+    辺を小さくしても根号の中は下がらない（3,4,12 なら √169 = 13 で根号が消え、
+    2,2,3 でも √17 は残る）ので、定義域を狭める向きでは直らない。
+    """
+    p = ctx.spec_level.params
+    limits = limits_for(ctx.spec_level)
+    scene = solutions = None
+    for attempt in range(_ANSWER_SIZE_REDRAWS):
+        attempt_rng = rng.spawn(attempt) if attempt else rng
+        scene = SCENE_BUILDERS[kind](p, attempt_rng)
+        solutions = SOLVE_BUILDERS[kind](scene.numbers)
+        assert len(solutions) == 1, f"find_value は小問1つ: {kind}"
+        display = str(getattr(solutions[0].answer, "display", "") or "")
+        if not answer_is_too_big(display, limits):
+            break
+    assert scene is not None and solutions is not None
+    return scene, solutions[0]
+
+
 @register_recipe(RECIPE_NAME, provides_concepts=_FIND_VALUE_CONCEPTS)
 def pythagorean_find_value_recipe(ctx: CellContext, rng: Rng) -> MR:
     """三平方の定理の利用の求値（g3_l53/l54/l55/l56.find_value・answer-first）。"""
-    p = ctx.spec_level.params
-    kind = str(p["scenario_kind"])
-    scene = SCENE_BUILDERS[kind](p, rng)
-    solutions = SOLVE_BUILDERS[kind](scene.numbers)
-    assert len(solutions) == 1, f"find_value は小問1つ: {kind}"
-    sol = solutions[0]
+    kind = str(ctx.spec_level.params["scenario_kind"])
+    scene, sol = _draw_scene_with_answer_in_range(ctx, rng, kind)
     asked = ctx.spec_level.asked[0] if ctx.spec_level.asked else "value"
 
     sub_question = SubQuestionMR(
@@ -932,7 +970,11 @@ def solve_special_right_triangle_ratio(numbers: Mapping[str, Any]) -> list[Solut
             steps=[
                 Step(
                     op="identify_special_right_triangle", args=[],
-                    result_srepr="", result_display="どの特別な直角三角形かを見分ける",
+                    result_srepr="",
+                    result_display=(
+                        "45°、45°、90°の直角三角形" if acute_angle == 45
+                        else "30°、60°、90°の直角三角形"
+                    ),
                     narration="直角三角形の角の大きさから、どちらの特別な直角三角形に"
                     "あたるかを見分ける。",
                 ),

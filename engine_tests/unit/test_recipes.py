@@ -4228,12 +4228,12 @@ def test_intersection_parabola_line_lv4_construct():
     ctx = _make_ctx("math.g3_l37.find_value", 4)
     rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
     mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
-    assert mr.signature == "quadratic_intersection_bisecting_point"
+    assert mr.signature == "quadratic_intersection_equal_area_point"
     sq = mr.sub_questions[0]
     assert sq.asked == "coordinate"
     assert [s.op for s in sq.steps] == [
         "set_up_equation", "solve_for_x", "compute_y",
-        "compute_triangle_area", "solve_for_bisecting_point",
+        "compute_triangle_area", "solve_for_equal_area_point",
     ]
 
 

@@ -19,6 +19,7 @@ import sympy
 
 from engine.core.contracts import Solution, Step, SymbolicAnswer
 from engine.core.registry import register_solver
+from engine.packs.math.solvers._step_text import fmt_expr
 
 _X = sympy.Symbol("x")
 _SQRT_RE = re.compile(r"sqrt\((\d+)\)")
@@ -90,17 +91,63 @@ _QUAD_OP_NARRATION: dict[str, str] = {
     "select_positive_root": "求めるものは正の数だから、2つの解のうち条件に合う正の解を選ぶ。",
 }
 
-_QUAD_OP_PHRASE: dict[str, str] = {
-    "substitute_value": "値を代入する",
-    "take_square_root": "平方根をとる",
-    "complete_the_square": "平方完成する",
-    "identify_coefficients": "a・b・c を読み取る",
-    "compute_discriminant": "根号の中を計算する",
-    "factor_left_side": "左辺を因数分解する",
-    "factor_out_common": "共通因数をくくり出す",
-    "expand_and_rearrange": "展開して整理する",
-    "factor_out_common_binomial": "共通なかっこをくくり出す",
-}
+# ---------------------------------------------------------------------------
+# 途中の手の括弧に入れる**式そのもの**（面③）。以前は「左辺を因数分解する」のような
+# 指示の言い直しが入っていて、`apply_zero_product` に至っては括弧が空だった。
+# `narration` は触らない（ヒントは narration しか見ない）。
+# ---------------------------------------------------------------------------
+def _completed_square(expr: sympy.Expr) -> tuple[sympy.Expr, sympy.Expr]:
+    """`x² + bx + c`（=0 の左辺）を `(x + p)² = q` の形にした (x + p, q)。"""
+    poly = sympy.Poly(sympy.expand(expr), _X)
+    a, b, c = (poly.coeff_monomial(_X**2), poly.coeff_monomial(_X), poly.coeff_monomial(1))
+    p = sympy.Rational(b, 2 * a)
+    return _X + p, sympy.simplify(p**2 - sympy.Rational(c, a))
+
+
+def _zero_product_lines(expr: sympy.Expr) -> str:
+    """`(x - 2)(x - 3)` を `x - 2 = 0、x - 3 = 0` にする。"""
+    factored = sympy.factor(sympy.expand(expr))
+    factors = factored.as_ordered_factors() if factored.is_Mul else [factored]
+    parts = [f"{fmt_expr(f)} = 0" for f in factors if _X in f.free_symbols]
+    return "、".join(parts)
+
+
+def _quad_step_display(op: str, eq_str: str, value: object) -> str:
+    """1手ぶんの括弧の中身（この手で得た式）。"""
+    expr = _parse_eq(eq_str)
+    if op == "substitute_value":
+        # 代入したままの式（sympy に渡すと計算されるので、記号に置きかえて表示だけ作る）。
+        val = sympy.nsimplify(sympy.sympify(str(value)))
+        shown = f"({_fmt_scalar(val)})"
+        return fmt_expr(sympy.sympify(eq_str.split("=", 1)[0]).subs(_X, sympy.Symbol(shown)))
+    if op in ("factor_left_side", "factor_out_common", "factor_out_common_binomial"):
+        return f"{fmt_expr(sympy.factor(sympy.expand(expr)))} = 0"
+    if op == "expand_and_rearrange":
+        return f"{fmt_expr(sympy.expand(expr))} = 0"
+    if op == "apply_zero_product":
+        return _zero_product_lines(expr)
+    if op == "identify_coefficients":
+        poly = sympy.Poly(sympy.expand(expr), _X)
+        a, b, c = (poly.coeff_monomial(_X**2), poly.coeff_monomial(_X), poly.coeff_monomial(1))
+        return f"a = {_fmt_scalar(a)}、b = {_fmt_scalar(b)}、c = {_fmt_scalar(c)}"
+    if op == "compute_discriminant":
+        poly = sympy.Poly(sympy.expand(expr), _X)
+        a, b, c = (poly.coeff_monomial(_X**2), poly.coeff_monomial(_X), poly.coeff_monomial(1))
+        def paren(v: sympy.Expr) -> str:
+            return f"({_fmt_scalar(v)})" if v < 0 else _fmt_scalar(v)
+
+        return (
+            f"{paren(b)}² - 4 × {paren(a)} × {paren(c)}"
+            f" = {_fmt_scalar(b**2 - 4 * a * c)}"
+        )
+    if op == "complete_the_square":
+        base, q = _completed_square(expr)
+        return f"({fmt_expr(base)})² = {_fmt_scalar(q)}"
+    if op == "take_square_root":
+        base, q = _completed_square(expr)
+        return f"{fmt_expr(base)} = ±{_fmt_scalar(sympy.sqrt(q))}"
+    raise ValueError(f"途中の表示を組めない op: {op!r}")
+
 
 _EVALUATE_MODES = {"evaluate_quadratic"}
 _POSITIVE_ROOT_MODES = {"solve_product_form_positive_root"}
@@ -142,7 +189,7 @@ def solve_quadratic(eq_str: str, mode: object, value: object = None) -> Solution
             op=op,
             args=[],
             result_srepr=srepr if i == len(ops) - 1 else "",
-            result_display=disp if i == len(ops) - 1 else _QUAD_OP_PHRASE.get(op, ""),
+            result_display=disp if i == len(ops) - 1 else _quad_step_display(op, eq_str, value),
             narration=_QUAD_OP_NARRATION[op],
         )
         for i, op in enumerate(ops)

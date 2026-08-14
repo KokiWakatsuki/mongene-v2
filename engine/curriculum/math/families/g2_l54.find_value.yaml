@@ -22,6 +22,11 @@ levels:
     params:
       # さいころは6面（20面のさいころは存在しない。D-13 と同じ理由）。
       faces_domain: {int_set: [6]}
+    # 確率の答えは約分した分数で書くのが作法で、分母は「同じ確からしさで起こる
+    # 場合の数」そのもの。数を小さくする方向では直せない（`engine.eval.answer_size`）。
+    answer_size_max: {denominator: 36}
+    answer_size_reason: |
+      2つのさいころなので分母は 6×6=36 で固定。
     given: [condition]
     asked: [value]
     visual: none
@@ -45,6 +50,13 @@ levels:
       # 余事象の分母は（全事象の大きさ）^（回数）。20枚のカードを4回で 160000 に
       # なっていたので、教科書の上限（6⁴=1296）で場面と回数の組を絞る。
       denominator_max: 1296
+    # 確率の答えは約分した分数で書くのが作法で、分母は「同じ確からしさで起こる
+    # 場合の数」そのもの。数を小さくする方向では直せない（`engine.eval.answer_size`）。
+    answer_size_max: {denominator: 1296, numerator: 1296}
+    answer_size_reason: |
+      独立試行をくり返す余事象なので、分母は（全事象の大きさ）^（回数）。
+      recipe 側の `denominator_max` が教科書の上限 6⁴=1296 で候補を絞っている（それを超える組は引かれない）。
+      余事象なので分子も同じ大きさになる。
     given: [condition]
     asked: [value]
     visual: none

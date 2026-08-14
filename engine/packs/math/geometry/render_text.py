@@ -138,7 +138,10 @@ def build_proof_lines(
                 continue
             rule = ded.rule_of(f)
             assert rule is not None
-            refs = tuple(number_of[p] for p in ded.premises_of(f) if p in number_of)
+            # 引く番号は**昇順**に並べる。前向き推論の並びのまま出していたので
+            # 「②、①、③より、3組の辺がそれぞれ等しいので」のように番号が
+            # 前後していた（教科書は必ず①、②、③の順に書く）。
+            refs = tuple(sorted(number_of[p] for p in ded.premises_of(f) if p in number_of))
             is_goal = f == goal
             if not is_goal:
                 n += 1

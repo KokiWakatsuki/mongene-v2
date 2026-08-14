@@ -45,7 +45,7 @@ def inscribed_angle_from_central(central_angle: object) -> Solution:
     steps = [
         Step(
             op="identify_central_angle",
-            args=[], result_srepr="", result_display="中心角の大きさを読み取る",
+            args=[], result_srepr="", result_display=f"{sympy.sstr(v)}°",
             narration="弧に対する中心角の大きさを読み取る。",
         ),
         Step(
@@ -71,7 +71,7 @@ def inscribed_angle_transfer_same_arc(known_angle: object) -> Solution:
     steps = [
         Step(
             op="identify_same_arc_angle",
-            args=[], result_srepr="", result_display="同じ弧に対する角の大きさを読み取る",
+            args=[], result_srepr="", result_display=f"{sympy.sstr(v)}°",
             narration="4点が同一円周上にあることから、同じ弧に対応する角の大きさを読み取る。",
         ),
         Step(
@@ -107,7 +107,7 @@ def judge_concyclic_from_angle(
         Step(
             op="compare_angles_on_same_side",
             args=[], result_srepr=("equal" if is_concyclic else "not_equal"),
-            result_display="2つの角が等しいかどうかを確認する",
+            result_display=("等しい" if is_concyclic else "等しくない"),
             narration=f"直線{pa}{pb}の同じ側にある2点{pc}, {pd}でできる角が、"
             "等しいかどうかを確認する。",
         ),
@@ -137,7 +137,7 @@ def inscribed_angle_two_chords_intersection(bac: object, acd: object) -> Solutio
     steps = [
         Step(
             op="identify_arcs_from_inscribed_angles",
-            args=[], result_srepr="", result_display="2つの円周角に対応する弧の大きさを求める",
+            args=[], result_srepr="", result_display=f"{sympy.sstr(2 * a)}° と {sympy.sstr(2 * c)}°",
             narration="円周角の定理から、それぞれの円周角に対応する弧の大きさを求める。",
         ),
         Step(
@@ -180,13 +180,13 @@ def equal_arc_inscribed_angle(
     steps = [
         Step(
             op="identify_unit_arc_from_equal_division",
-            args=[], result_srepr="", result_display="円をn等分した1つの弧に対する円周角を求める",
+            args=[], result_srepr="", result_display=f"{sympy.sstr(unit_angle)}°",
             narration="円周をn等分してできる1つの弧に対する中心角から、その弧に対する円周角を求める。",
         ),
         Step(
             op="identify_arc_span_excluding_vertex",
             args=[], result_srepr="",
-            result_display="角の頂点をふくまない側の弧が単位弧の何個分かを数える",
+            result_display=f"{sympy.sstr(sympy.sympify(str(span)))}個分",
             narration="角の頂点をふくまない側の弧が、等分した弧の何個分にあたるかを数える。",
         ),
         Step(
@@ -213,7 +213,7 @@ def arc_proportional_angle(multiplier: object, known_angle: object) -> Solution:
     steps = [
         Step(
             op="identify_arc_length_ratio",
-            args=[], result_srepr="", result_display="弧の長さの比を読み取る",
+            args=[], result_srepr="", result_display=f"{sympy.sstr(k)}倍",
             narration="2つの弧の長さの比を読み取る。",
         ),
         Step(

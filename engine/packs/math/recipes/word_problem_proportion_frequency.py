@@ -240,7 +240,7 @@ def solve_meet_two_motions(numbers: Mapping[str, Any]) -> list[Solution]:
             op="equate_expressions",
             args=[],
             result_srepr="",
-            result_display="2つの関係のグラフの交点を求める",
+            result_display=f"({sympy.sstr(point[0])}, {sympy.sstr(point[1])})",
             narration=(
                 "2つの関係を同じ座標平面上のグラフとみて、"
                 "道のりが等しくなる点、つまり交点を求める。"

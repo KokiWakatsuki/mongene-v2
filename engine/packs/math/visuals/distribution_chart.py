@@ -23,6 +23,7 @@ from typing import TYPE_CHECKING, Any, Callable
 import sympy
 
 from engine.core.registry import register_visual
+from engine.packs.math.visuals._label_place import haloed_text
 
 if TYPE_CHECKING:  # pragma: no cover - 型のみ
     from engine.core.contracts import MR, CellContext
@@ -136,6 +137,10 @@ def render_frequency_chart_svg(params: dict[str, Any], *, draw: bool) -> str:
     y_hi, y_step = _y_axis_max(plotted + plotted_b)
 
     x_lo, x_hi = lo, lo + width * n
+    if kind == "polygon":
+        # 度数折れ線は両端を度数 0 の階級まで下ろす（半階級ぶん外へ出る）。
+        # 軸をその外まで伸ばしておかないと、折れ線が枠を突き抜けて切れる。
+        x_lo, x_hi = lo - width / 2, lo + width * (n + 0.5)
     px = _scale(x_lo, x_hi, _MARGIN_L, _SVG_W - _MARGIN_R)
     py = _scale(0, y_hi, _SVG_H - _MARGIN_B, _MARGIN_T)  # 上下反転
 
@@ -169,7 +174,7 @@ def render_frequency_chart_svg(params: dict[str, Any], *, draw: bool) -> str:
         if plotted_b:
             parts.extend(_frequency_marks(kind, plotted_b, lo, width, px, py, dashed=True))
 
-    parts.extend(_frequency_ticks(lo, width, n, y_hi, y_step, px, py))
+    parts.extend(_frequency_ticks(lo, width, n, y_hi, y_step, px, py, x_lo=x_lo))
     parts.append("</svg>")
     return "".join(parts)
 
@@ -230,22 +235,21 @@ def _frequency_ticks(
     y_step: int,
     px: Callable[[float], float],
     py: Callable[[float], float],
+    *,
+    x_lo: float | None = None,
 ) -> list[str]:
-    """軸目盛の数値ラベル（<text> はこれのみ）。"""
+    """軸目盛の数値ラベル（<text> はこれのみ）。
+
+    折れ線が目盛の数字の上を通ることがあるので、白フチを付けて浮かせる。
+    """
     out: list[str] = []
     y0 = py(0)
+    left = lo if x_lo is None else x_lo
     for i in range(n + 1):
         v = lo + width * i
-        x = px(v)
-        out.append(
-            f'<text x="{x:.2f}" y="{y0 + 14:.2f}" font-size="10" '
-            f'text-anchor="middle" fill="{_INK}">{_fmt(v)}</text>'
-        )
+        out.append(haloed_text(px(v), y0 + 14, _fmt(v), size=10))
     for i in range(0, y_hi + 1, y_step):
-        out.append(
-            f'<text x="{px(lo) - 6:.2f}" y="{py(i) + 3:.2f}" font-size="10" '
-            f'text-anchor="end" fill="{_INK}">{_fmt(i)}</text>'
-        )
+        out.append(haloed_text(px(left) - 6, py(i) + 3, _fmt(i), size=10, anchor="end"))
     return out
 
 
@@ -360,10 +364,7 @@ def render_box_plot_svg(params: dict[str, Any], *, draw: bool) -> str:
             parts.extend(_box_marks(s, tops[i], px, dashed=(i == 1)))
 
     for v in ticks:
-        parts.append(
-            f'<text x="{px(v):.2f}" y="{y_axis + 14:.2f}" font-size="10" '
-            f'text-anchor="middle" fill="{_INK}">{_fmt(v)}</text>'
-        )
+        parts.append(haloed_text(px(v), y_axis + 14, _fmt(v), size=10))
     parts.append("</svg>")
     return "".join(parts)
 

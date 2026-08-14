@@ -27,6 +27,7 @@ import sympy
 
 from engine.core.contracts import ChoiceAnswer, Solution, Step, SymbolicAnswer
 from engine.core.registry import register_solver
+from engine.packs.math.solvers.arithmetic import fmt_measure
 
 
 @register_solver("math.isosceles_base_angle")
@@ -51,12 +52,12 @@ def isosceles_base_angle(known_type: object, known_value: object) -> Solution:
             "等しい2つの底角の大きさを2つ分合わせてひくと、残りが頂角の大きさになる"
             "ことから頂角を求める。"
         )
-    disp = sympy.sstr(result)
+    disp = fmt_measure(result)
     srepr = sympy.srepr(result)
     steps = [
         Step(
             op="identify_known_angle",
-            args=[], result_srepr="", result_display="わかっている角の大きさを読み取る",
+            args=[], result_srepr="", result_display=f"{fmt_measure(known)}°",
             narration="二等辺三角形の頂角・底角のうち、わかっているほうの大きさを読み取る。",
         ),
         Step(
@@ -82,7 +83,7 @@ def equilateral_triangle_properties(side: object) -> Solution:
     steps = [
         Step(
             op="identify_given_side",
-            args=[], result_srepr="", result_display="与えられた1辺の長さを読み取る",
+            args=[], result_srepr="", result_display=f"{sympy.sstr(m)}",
             narration="正三角形の与えられた1辺の長さを読み取る。",
         ),
         Step(
@@ -109,7 +110,7 @@ def judge_isosceles_from_angle_condition(is_equal: object) -> Solution:
         Step(
             op="check_two_angles_equal",
             args=[], result_srepr=("equal" if truthy else "not_equal"),
-            result_display="2つの角が等しいかどうかを確認する",
+            result_display=("等しい" if truthy else "等しくない"),
             narration="示されている2つの角が、等しいといえる条件を満たしているかを確認する。",
         ),
         Step(
@@ -136,8 +137,10 @@ def judge_equilateral_from_condition(is_equilateral: object) -> Solution:
         Step(
             op="check_side_and_angle_condition",
             args=[], result_srepr=("yes" if truthy else "no"),
-            result_display="辺と角の条件を確認する",
-            narration="示されている辺と角の条件が、正三角形であるといえる条件を満たしているかを確認する。",
+            result_display=("条件を満たす" if truthy else "条件を満たさない"),
+            # **答えの文字列を narration に書かない**（narration はそのままヒントに
+            # なるので、「正三角形であるといえる」と書くと答えの先出しになる）。
+            narration="示されている辺と角の条件が、その形になるための条件を満たしているかを確認する。",
         ),
         Step(
             op="judge_equilateral",
@@ -169,7 +172,7 @@ def judge_right_triangle_congruence(condition_type: object) -> Solution:
         Step(
             op="check_right_triangle_condition",
             args=[], result_srepr=("yes" if truthy else "no"),
-            result_display="読み取れる条件を確認する",
+            result_display=("合同条件にあてはまる" if truthy else "合同条件にあてはまらない"),
             narration="図から読み取れる条件が、直角三角形の合同条件（斜辺と1つの鋭角、"
             "または斜辺と他の1辺）を満たしているかを確認する。",
         ),

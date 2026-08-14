@@ -11,6 +11,14 @@ levels:
     signature: radical_rationalize_mono
     recipe: math.simplify_radical
     params: {mode: rationalize_mono}
+    # 有理化した答えの分母は、根号の中と同じ数になる（13/√19 → 13√19/19）。
+    # 既定の 12 で測ると √13 以上を分母に持つ問題が全部落ちるが、それは
+    # 「分母に根号がある形を直す」というこの単元そのもの。根号の中は既定の 60 で
+    # 測るので、大きすぎる答えはそちらで止まる。
+    answer_size_max: {denominator: 20}
+    answer_size_reason: |
+      有理化の答えの分母は根号の中の数そのもの（k/√a → k√a/a）。分母の上限では
+      測れないので、根号の中の上限（既定 60）に任せる。
     given: [expression]
     asked: [simplified_expr]
     visual: none

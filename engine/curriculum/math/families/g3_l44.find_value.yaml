@@ -15,6 +15,13 @@ levels:
     recipe: math.midpoint_connector_length
     params:
       side_domain: {int_range: [1, 400]}
+    # 図形の寸法を教材の大きさに戻した結果、組の数が減った（`statement_size`）。
+    # 数を現実に戻すのが先で、重複は仕様として宣言する。
+    dup_rate_max: 0.5
+    dup_rate_reason: |
+      中点連結定理の求値は「残りの辺 N cm → その半分」なので、変えられるのは N だけ。
+      図形の寸法を教材の大きさに戻すと N は約100通り（実測 0.42）。
+      頂点名は変わるが、同じ問題の書き換えなので dup_key には入れない。
     given: [condition]
     asked: [value]
     visual: none

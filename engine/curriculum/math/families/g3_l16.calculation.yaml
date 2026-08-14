@@ -35,6 +35,12 @@ levels:
     recipe: math.convert_rational_decimal_form
     params:
       mode: repeating_decimal_to_fraction
+    # 答えの分母・根号の中がこの単元では構造的に大きくなる（`engine.eval.answer_size`）。
+    answer_size_max: {denominator: 99}
+    answer_size_reason: |
+      循環小数を分数に直す問題なので、分母は循環節の桁数で決まる（9・99・90・45 など）。
+      0.72̇ は 13/18、0.9̇1̇ は 91/99。分母を12以下にすると、循環節が1桁で
+      非循環部のない場合（x/9）しか作れなくなる。
     given: [expression]
     asked: [value]
     visual: none

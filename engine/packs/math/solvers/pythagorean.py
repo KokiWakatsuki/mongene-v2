@@ -51,7 +51,7 @@ def pythagorean_hypotenuse(leg_a: object, leg_b: object) -> Solution:
     steps = [
         Step(
             op="identify_two_legs",
-            args=[], result_srepr="", result_display="直角をはさむ2辺の長さを読み取る",
+            args=[], result_srepr="", result_display=f"{sympy.sstr(a)} と {sympy.sstr(b)}",
             narration="直角三角形で、直角をはさむ2辺の長さを読み取る。",
         ),
         Step(
@@ -66,6 +66,16 @@ def pythagorean_hypotenuse(leg_a: object, leg_b: object) -> Solution:
 
 def _side_name(labels: str, i: int, j: int) -> str:
     return f"辺{labels[i]}{labels[j]}"
+
+
+def _squares_comparison(a: int, b: int, c: int) -> str:
+    """`3² + 4² = 5²` の形で、二乗の比べ方そのものを書く（面③）。
+
+    最も長い辺を右辺に置き、残り2辺の二乗の和と等しいかどうかが見えるようにする。
+    """
+    p, q, r = sorted((a, b, c))
+    sign = "=" if p * p + q * q == r * r else "≠"
+    return f"{p}² + {q}² {sign} {r}²"
 
 
 @register_solver("math.identify_hypotenuse")
@@ -84,7 +94,7 @@ def identify_hypotenuse(labels: object, right_angle_index: object) -> Solution:
     steps = [
         Step(
             op="identify_right_angle_vertex",
-            args=[], result_srepr="", result_display="直角の頂点がどこかを読み取る",
+            args=[], result_srepr="", result_display=f"頂点{lb[ri]}",
             narration="直角三角形で、直角の頂点がどこかを読み取る。",
         ),
         Step(
@@ -118,7 +128,7 @@ def verify_right_triangle_from_sides(side_a: object, side_b: object, side_c: obj
     steps = [
         Step(
             op="compute_squares_and_compare",
-            args=[], result_srepr="", result_display="最も長い辺と他の2辺の二乗の関係を調べる",
+            args=[], result_srepr="", result_display=_squares_comparison(a, b, c),
             narration="最も長い辺の長さの二乗と、他の2辺の長さの二乗の和を比べる。",
         ),
         Step(
@@ -144,7 +154,7 @@ def judge_right_triangle_from_three_sides(side_a: object, side_b: object, side_c
     steps = [
         Step(
             op="compute_squares_and_compare",
-            args=[], result_srepr="", result_display="最も長い辺と他の2辺の二乗の関係を調べる",
+            args=[], result_srepr="", result_display=_squares_comparison(a, b, c),
             narration="最も長い辺の長さの二乗と、他の2辺の長さの二乗の和を比べる。",
         ),
         Step(
@@ -171,10 +181,12 @@ _COORD_TRIANGLE_NARRATION: dict[str, str] = {
     "measure_vertical_leg": "縦向きの辺の長さは、2点の y 座標の差の絶対値で求まる。",
 }
 
-_COORD_TRIANGLE_PHRASE: dict[str, str] = {
-    "locate_right_angle_vertex": "直角の頂点をとる",
-    "measure_horizontal_leg": "横の辺の長さを求める",
-}
+def _coord_triangle_phrase(bx, ay, dx) -> dict[str, str]:
+    """座標平面の直角三角形の手の括弧（この手で得た点・長さ）。"""
+    return {
+        "locate_right_angle_vertex": f"({bx}, {ay})",
+        "measure_horizontal_leg": f"{dx}",
+    }
 
 
 @register_solver("math.coordinate_right_triangle_legs")
@@ -205,16 +217,16 @@ def coordinate_right_triangle_legs(
     srepr = sympy.srepr(sympy.Tuple(corner, dx, dy))
     return Solution(
         answer=GraphAnswer(features=features, solution_svg_ref=""),
-        steps=_steps_coord(srepr, disp),
+        steps=_steps_coord(srepr, disp, _coord_triangle_phrase(bx, ay, dx)),
     )
 
 
-def _steps_coord(srepr: str, disp: str) -> list[Step]:
+def _steps_coord(srepr: str, disp: str, phrase: dict[str, str]) -> list[Step]:
     return [
         Step(
             op=op, args=[],
             result_srepr=srepr if i == len(_COORD_TRIANGLE_OPS) - 1 else "",
-            result_display=disp if i == len(_COORD_TRIANGLE_OPS) - 1 else _COORD_TRIANGLE_PHRASE[op],
+            result_display=disp if i == len(_COORD_TRIANGLE_OPS) - 1 else phrase[op],
             narration=_COORD_TRIANGLE_NARRATION[op],
         )
         for i, op in enumerate(_COORD_TRIANGLE_OPS)

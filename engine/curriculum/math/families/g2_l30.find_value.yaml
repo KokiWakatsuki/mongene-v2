@@ -48,6 +48,11 @@ levels:
       p1_domain: {int_range: [3, 8]}
       v2_domain: {int_range: [40, 80]}
       extra_domain: {int_range: [1, 10]}
+    # 問題文の数が、この単元では単位の上限を超えるのが正しい
+    # （`engine.eval.statement_size`）。
+    statement_size_max: {m: 10000}
+    statement_size_reason: |
+      2地点間の道のりが題材で、数kmになるのが自然（毎分数十mで数十分の場面）。
     given: [condition]
     asked: [value]
     visual: none

@@ -56,7 +56,7 @@ def frequency_table_value(class_start: object, class_width: object, frequencies:
             op="compute_class_value",
             args=[],
             result_srepr=sympy.srepr(midpoint),
-            result_display="階級の下端と上端の中央の値を求める",
+            result_display=sympy.sstr(midpoint),
             narration="対象の階級の下端と上端の値の平均を求め、階級値とする。",
         ),
         Step(
@@ -113,7 +113,7 @@ def compare_relative_frequency(freq_a: object, total_a: object, freq_b: object, 
             op="compute_relative_frequency_each",
             args=[],
             result_srepr="",
-            result_display="それぞれの度数を総度数でわる",
+            result_display=f"A {_fmt_relative(rel_a)}、B {_fmt_relative(rel_b)}",
             narration="それぞれの集団について、対象の階級の度数を総度数でわり、相対度数を求める。",
         ),
         Step(
@@ -170,14 +170,19 @@ def cumulative_relative_frequency_and_complement(frequencies: object, target_ind
     cum = sum(freqs[: idx + 1])
     cum_rel = sympy.Rational(cum, total)
     percent_over = (1 - cum_rel) * 100
-    disp = f"累積相対度数 {_fmt_relative(cum_rel)}、超える部分の割合 {percent_over}%"
+    # 割合(%) も相対度数と同じ作法で書く。生の Rational を埋めると 92.5% が
+    # `185/2%` になっていた（百分率を分数で書く教材は無い）。
+    disp = (
+        f"累積相対度数 {_fmt_relative(cum_rel)}、"
+        f"超える部分の割合 {_fmt_relative(percent_over)}%"
+    )
     srepr = sympy.srepr(sympy.Tuple(cum_rel, percent_over))
     steps = [
         Step(
             op="accumulate_relative_frequency",
             args=[],
             result_srepr="",
-            result_display="累積度数を総度数でわる",
+            result_display=_fmt_relative(cum_rel),
             narration="対象の階級までの累積度数を求め、総度数でわって累積相対度数を求める。",
         ),
         Step(
@@ -226,14 +231,14 @@ def representative_values_raw(data: object) -> Solution:
             op="compute_mean",
             args=[],
             result_srepr="",
-            result_display="データの値の合計を個数でわる",
+            result_display=_fmt_relative(mean),
             narration="データの値をすべて足し合わせ、個数でわって平均値を求める。",
         ),
         Step(
             op="compute_median",
             args=[],
             result_srepr="",
-            result_display="大きさの順に並べた中央の値を読み取る",
+            result_display=_fmt_relative(median),
             narration="データを大きさの順に並べ、中央の値（個数が偶数のときは中央に並ぶ値どうしの平均）を求める。",
         ),
         Step(
@@ -273,7 +278,10 @@ def mean_from_grouped_table(class_start: object, class_width: object, frequencie
             op="weight_by_class_value",
             args=[],
             result_srepr="",
-            result_display="各階級の階級値と度数の積を求める",
+            result_display="、".join(
+                sympy.sstr(_class_midpoint(start, width, i) * f)
+                for i, f in enumerate(freqs)
+            ),
             narration="各階級の階級値に、その階級の度数をかける。",
         ),
         Step(
@@ -306,7 +314,7 @@ def judge_appropriate_representative_value(has_outliers: object) -> Solution:
             op="check_outliers",
             args=[],
             result_srepr=("has_outliers" if truthy else "no_outliers"),
-            result_display="極端に大きい・小さい値が混じっているかを調べる",
+            result_display=("極端な値がある" if truthy else "極端な値はない"),
             narration="分布の中に、極端に大きい値や小さい値が混じっているかどうかを調べる。",
         ),
         Step(

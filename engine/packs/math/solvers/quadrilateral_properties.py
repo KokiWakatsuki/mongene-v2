@@ -29,6 +29,7 @@ import sympy
 
 from engine.core.contracts import ChoiceAnswer, Solution, Step, SymbolicAnswer
 from engine.core.registry import register_solver
+from engine.packs.math.solvers.arithmetic import fmt_measure
 
 _PARALLELOGRAM_CONDITION_NAMES: dict[str, str] = {
     "opposite_sides_parallel": "二組の対辺がそれぞれ平行である条件",
@@ -54,7 +55,7 @@ def parallelogram_opposite_properties(side_value: object, angle_value: object) -
     steps = [
         Step(
             op="identify_given_side_and_angle",
-            args=[], result_srepr="", result_display="わかっている辺・角を読み取る",
+            args=[], result_srepr="", result_display=f"{sympy.sstr(sv)} と {sympy.sstr(av)}°",
             narration="平行四辺形のうち、わかっている辺の長さと角の大きさを読み取る。",
         ),
         Step(
@@ -82,7 +83,7 @@ def identify_parallelogram_condition(condition_key: object) -> Solution:
     steps = [
         Step(
             op="identify_given_elements",
-            args=[], result_srepr="", result_display="示されている等しい要素を読み取る",
+            args=[], result_srepr="", result_display="",
             narration="四角形で示されている、等しい・平行である要素が何かを読み取る。",
         ),
         Step(
@@ -113,7 +114,7 @@ def special_parallelogram_diagonal_value(shape: object, value: object) -> Soluti
         narration = "ひし形の対角線は垂直に交わることから、その交点にできる角の大きさを求める。"
     else:
         result = sympy.Rational(v, 2)
-        disp = sympy.sstr(result)
+        disp = fmt_measure(result)
         narration = "対角線の長さが等しく、それぞれの中点で交わることから、交点から頂点までの長さを求める。"
     srepr = sympy.srepr(result)
     # op 名は shape によらず一定にする（G-FP: 同一 signature の fp はセルによらず一定でなければ
@@ -121,7 +122,7 @@ def special_parallelogram_diagonal_value(shape: object, value: object) -> Soluti
     steps = [
         Step(
             op="identify_given_diagonal_value",
-            args=[], result_srepr="", result_display="わかっている対角線の値を読み取る",
+            args=[], result_srepr="", result_display=f"{sympy.sstr(v)}",
             narration="対角線についてわかっている長さや、四角形の種類を読み取る。",
         ),
         Step(
@@ -154,7 +155,11 @@ def classify_quadrilateral_from_diagonal_condition(equal: object, perpendicular:
         Step(
             op="check_diagonal_conditions",
             args=[], result_srepr=("yes" if eq else "no") + ("yes" if pe else "no"),
-            result_display="対角線の条件を確認する",
+            result_display=(
+                ("長さは等しい" if eq else "長さは等しくない")
+                + "／"
+                + ("垂直に交わる" if pe else "垂直には交わらない")
+            ),
             narration="対角線が等しいか、垂直に交わるか、それぞれの条件を確認する。",
         ),
         Step(
@@ -177,12 +182,12 @@ def equal_area_transform_value(area_value: object) -> Solution:
     性質で計算する（double-solve）。答えは面積の SymbolicAnswer。
     """
     v = sympy.sympify(str(area_value))
-    disp = sympy.sstr(v)
+    disp = fmt_measure(v)
     srepr = sympy.srepr(v)
     steps = [
         Step(
             op="identify_original_area",
-            args=[], result_srepr="", result_display="もとの図形の面積を読み取る",
+            args=[], result_srepr="", result_display=fmt_measure(v),
             narration="等積変形をする前の、もとの図形の面積を読み取る。",
         ),
         Step(

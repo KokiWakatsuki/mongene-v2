@@ -439,7 +439,9 @@ def compare_hyperbolas(a1: object, a2: object, a3: object) -> Solution:
             args=[fmt_number(negative)],
             result_srepr=sympy.srepr(negative),
             result_display=fmt_number(negative),
-            narration="比例定数が負のとき、双曲線は左上と右下の象限にあらわれるので、符号を見て選ぶ。",
+            # 「象限」は中学の教科書に無い用語（高校で扱う）。中1の反比例のグラフでは
+            # 「左上と右下の部分」と書く（`judge_hyperbola_quadrants` と同じ扱い）。
+            narration="比例定数が負のとき、双曲線は左上と右下の部分にあらわれるので、符号を見て選ぶ。",
         ),
         Step(
             op="compare_distance_from_origin",

@@ -28,10 +28,13 @@ _MOTION_OP_NARRATION: dict[str, str] = {
     "determine_which_segment": "点 P が動いた道のりから、今どの辺の上にいるかを判断する。",
 }
 
-_MOTION_OP_PHRASE: dict[str, str] = {
-    "locate_point_p": "点 P の座標を決める",
-    "determine_which_segment": "どの辺の上にいるかを判断する",
-}
+def _motion_step_display(op: str, lp: str, px, py, on_ab: bool) -> str:
+    """動点の手の括弧（この手で得た位置）。指示の言い直しは置かない（面③）。"""
+    if op == "locate_point_p":
+        return f"{lp}({sympy.sstr(px)}, {sympy.sstr(py)})"
+    if op == "determine_which_segment":
+        return "はじめの辺の上" if on_ab else "次の辺の上"
+    raise ValueError(f"途中の表示を組めない op: {op!r}")
 
 
 def _label(labels: object, index: int, default: str) -> str:
@@ -88,7 +91,8 @@ def solve_moving_point_area(s: object, v: object, t: object, mode: object) -> So
             op=op,
             args=[],
             result_srepr=srepr if i == len(ops) - 1 else "",
-            result_display=disp if i == len(ops) - 1 else _MOTION_OP_PHRASE.get(op, ""),
+            result_display=disp if i == len(ops) - 1
+            else _motion_step_display(op, _label(None, 4, "P"), px, py, mode_s == "single_segment"),
             narration=_MOTION_OP_NARRATION[op],
         )
         for i, op in enumerate(ops)
@@ -157,11 +161,14 @@ def draw_piecewise_area_graph_features(s: object, v: object) -> Solution:
         "plot_breakpoints": "区間の境目と両端で面積を求め、その組を座標とみて点をとる。",
         "draw_polyline": "とった点を順に線分で結び、区間ごとに式が変わるグラフをかく。",
     }
+    # 括弧には**その手で得た区間・式・点**を入れる（面③）。
     phrase = {
-        "identify_intervals": "時間を区間に分ける",
-        "express_area_on_first_interval": "はじめの区間の式をつくる",
-        "express_area_on_second_interval": "次の区間の式をつくる",
-        "plot_breakpoints": "区間の境目の点をとる",
+        "identify_intervals": f"0〜{sympy.sstr(t1)}秒、{sympy.sstr(t1)}〜{sympy.sstr(t2)}秒",
+        "express_area_on_first_interval": _linear_area_display(s_v * v_v / 2),
+        "express_area_on_second_interval": _linear_area_display(
+            sympy.Integer(0), s_v**2 / 2
+        ),
+        "plot_breakpoints": "、".join(f"({x}, {y})" for x, y in breakpoints),
     }
     srepr = sympy.srepr(sympy.Tuple(*(sympy.Tuple(x, y) for x, y in breakpoints)))
     steps = [
@@ -262,7 +269,8 @@ def solve_moving_points_area_time(v: object, area: object) -> Solution:
             op=op,
             args=[],
             result_srepr=srepr if i == len(ops) - 1 else "",
-            result_display=disp if i == len(ops) - 1 else "面積についての方程式をつくる",
+            result_display=disp if i == len(ops) - 1
+            else f"{_linear_area_display(sympy.Rational(v_v**2, 2))[4:]} = {sympy.sstr(area_v)}",
             narration=narration[op],
         )
         for i, op in enumerate(ops)
@@ -301,12 +309,18 @@ def _all_times_narration(lp: str) -> dict[str, str]:
     }
 
 
-_ALL_TIMES_PHRASE: dict[str, str] = {
-    "identify_intervals": "時間を区間に分ける",
-    "solve_on_increasing_interval": "増えていく区間で解く",
-    "check_constant_interval": "一定の区間に解が無いことを確かめる",
-    "solve_on_decreasing_interval": "減っていく区間で解く",
-}
+def _all_times_display(op: str, t1, t2, t3, const_area, t_first, t_third) -> str:
+    """時刻をすべて求める手の括弧（この手で得た区切り・値）。"""
+    if op == "identify_intervals":
+        return (f"0〜{sympy.sstr(t1)}秒、{sympy.sstr(t1)}〜{sympy.sstr(t2)}秒、"
+                f"{sympy.sstr(t2)}〜{sympy.sstr(t3)}秒")
+    if op == "solve_on_increasing_interval":
+        return f"{sympy.sstr(t_first)}秒後"
+    if op == "check_constant_interval":
+        return f"面積は {sympy.sstr(const_area)} のままなので解なし"
+    if op == "solve_on_decreasing_interval":
+        return f"{sympy.sstr(t_third)}秒後"
+    raise ValueError(f"途中の表示を組めない op: {op!r}")
 
 
 @register_solver("math.solve_moving_point_area_all_times")
@@ -366,7 +380,11 @@ def solve_moving_point_area_all_times(
             op=op,
             args=[],
             result_srepr=srepr if i == len(_ALL_TIMES_OPS) - 1 else "",
-            result_display=disp if i == len(_ALL_TIMES_OPS) - 1 else _ALL_TIMES_PHRASE[op],
+            result_display=disp if i == len(_ALL_TIMES_OPS) - 1
+            else _all_times_display(
+                op, s_v / v_v, 2 * s_v / v_v, 3 * s_v / v_v,
+                s_v**2 / 2, sympy.nsimplify(t_first), sympy.nsimplify(t_third),
+            ),
             narration=narration[op],
         )
         for i, op in enumerate(_ALL_TIMES_OPS)
@@ -430,12 +448,20 @@ def draw_three_interval_area_graph_features(s: object, v: object) -> Solution:
         "plot_breakpoints": "区間の境目と両端で面積を求め、その組を座標とみて点をとる。",
         "draw_polyline": "とった点を順に線分で結び、区間ごとに式が変わるグラフをかく。",
     }
+    # 括弧には**その手で得た区間・式・点**を入れる（面③）。
     phrase = {
-        "identify_intervals": "時間を区間に分ける",
-        "express_area_on_increasing_interval": "増えていく区間の式をつくる",
-        "express_area_on_constant_interval": "一定の区間であることを確かめる",
-        "express_area_on_decreasing_interval": "減っていく区間の式をつくる",
-        "plot_breakpoints": "区間の境目の点をとる",
+        "identify_intervals": (
+            f"0〜{sympy.sstr(t1)}秒、{sympy.sstr(t1)}〜{sympy.sstr(2 * t1)}秒、"
+            f"{sympy.sstr(2 * t1)}〜{sympy.sstr(3 * t1)}秒"
+        ),
+        "express_area_on_increasing_interval": _linear_area_display(s_v * v_v / 2),
+        "express_area_on_constant_interval": _linear_area_display(
+            sympy.Integer(0), s_v**2 / 2
+        ),
+        "express_area_on_decreasing_interval": _linear_area_display(
+            -s_v * v_v / 2, 3 * s_v**2 / 2
+        ),
+        "plot_breakpoints": "、".join(f"({x}, {y})" for x, y in breakpoints),
     }
     srepr = sympy.srepr(sympy.Tuple(*(sympy.Tuple(x, y) for x, y in breakpoints)))
     steps = [
@@ -556,10 +582,16 @@ def express_three_interval_area_exprs(s: object, v: object) -> Solution:
         "express_area_on_constant_interval": "次の区間では底辺も高さも変わらないので、面積が一定になることを確かめる。",
         "express_area_on_decreasing_interval": "最後の区間では高さが減っていくので、面積を x の1次式で表す。",
     }
+    # 括弧には**その手で得た区間・式**を入れる（面③）。
     phrase = {
-        "identify_intervals": "時間を区間に分ける",
-        "express_area_on_increasing_interval": "増えていく区間の式をつくる",
-        "express_area_on_constant_interval": "一定の区間であることを確かめる",
+        "identify_intervals": (
+            f"0〜{sympy.sstr(t1)}秒、{sympy.sstr(t1)}〜{sympy.sstr(2 * t1)}秒、"
+            f"{sympy.sstr(2 * t1)}〜{sympy.sstr(3 * t1)}秒"
+        ),
+        "express_area_on_increasing_interval": _linear_area_display(
+            sympy.Rational(s_v * v_v, 2)
+        ),
+        "express_area_on_constant_interval": f"y = {sympy.sstr(flat)}",
     }
     srepr = sympy.srepr(exprs)
     disp = "、".join(
@@ -621,10 +653,13 @@ def max_area_and_times(s: object, v: object, area: object) -> Solution:
         "collect_answers": "求めた時刻がそれぞれの区間の中にあることを確かめ、答えを並べる。",
     }
     phrase = {
-        "identify_intervals": "時間を区間に分ける",
-        "find_maximum_area": "面積が最大になるところを見つける",
-        "solve_on_increasing_interval": "増えていく区間で解く",
-        "solve_on_decreasing_interval": "減っていく区間で解く",
+        "identify_intervals": (
+            f"0〜{sympy.sstr(t1)}秒、{sympy.sstr(t1)}〜{sympy.sstr(2 * t1)}秒、"
+            f"{sympy.sstr(2 * t1)}〜{sympy.sstr(3 * t1)}秒"
+        ),
+        "find_maximum_area": f"{sympy.sstr(peak)}cm²",
+        "solve_on_increasing_interval": f"{sympy.sstr(t_a)}秒後",
+        "solve_on_decreasing_interval": f"{sympy.sstr(t_b)}秒後",
     }
     srepr = sympy.srepr(vals)
     disp = (
@@ -713,7 +748,8 @@ def express_interval_area_and_value(s: object, v: object, x0: object) -> Solutio
         "substitute_time": "求めた式に与えられた時刻を代入して、そのときの面積を求める。",
     }
     phrase = {
-        "determine_which_segment": "どの辺の上にいるかを判断する",
+        # 判断した結果（何番目の辺の上か）を書く。指示の言い直しは置かない（面③）。
+        "determine_which_segment": ("はじめの辺の上", "次の辺の上", "最後の辺の上")[index],
         "express_area_in_x": expr_disp,
     }
     answer = sympy.Tuple(expr, value)
@@ -763,7 +799,7 @@ def express_constant_interval_area(s: object, v: object) -> Solution:
         Step(
             op=op, args=[],
             result_srepr=srepr if i == len(ops) - 1 else "",
-            result_display=disp if i == len(ops) - 1 else "底辺からの距離が変わらないことを確かめる",
+            result_display=disp if i == len(ops) - 1 else f"高さは {sympy.sstr(s_v)} のまま",
             narration=narration[op],
         )
         for i, op in enumerate(ops)
@@ -799,8 +835,8 @@ def read_area_graph_values(s: object, v: object, x0: object) -> Solution:
         "read_range_of_maximum": "平らな部分の左端と右端の横軸の値を読み、面積が最大になる時間の範囲を答える。",
     }
     phrase = {
-        "read_value_at_time": "与えられた時刻の面積を読む",
-        "find_flat_part": "平らな部分を見つける",
+        "read_value_at_time": f"{sympy.sstr(y0)}cm²",
+        "find_flat_part": f"x が {sympy.sstr(t1)} から {sympy.sstr(2 * t1)} までの平らな部分",
     }
     srepr = sympy.srepr(vals)
     disp = (

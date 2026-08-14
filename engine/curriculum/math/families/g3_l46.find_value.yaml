@@ -28,6 +28,12 @@ levels:
       ratio_domain: {int_range: [1, 7]}
       ratio_max: 7
       solid_set: [円柱, 円錐, 三角柱, 四角柱, 三角錐, 正四角錐]
+    # 問題文の数が、この単元では単位の上限を超えるのが正しい
+    # （`engine.eval.statement_size`）。
+    statement_size_max: {cm³: 100000, cm²: 100000}
+    statement_size_reason: |
+      相似比の三乗が体積比になるので、相似比 1:6 なら体積は 216 倍になる。
+      体積・面積が大きくなるのはこの単元の主題そのもの。
     given: [condition]
     asked: [value]
     visual: none
@@ -45,6 +51,12 @@ levels:
       # 「体積比を最も簡単な整数の比に直す」Lv3 の狙いに沿う大きさに収まる。
       ratio_domain: {int_range: [1, 6]}
       scale_domain: {int_range: [1, 30]}
+    # 問題文の数が、この単元では単位の上限を超えるのが正しい
+    # （`engine.eval.statement_size`）。
+    statement_size_max: {cm³: 100000, cm²: 100000}
+    statement_size_reason: |
+      相似比の三乗が体積比になるので、相似比 1:6 なら体積は 216 倍になる。
+      体積・面積が大きくなるのはこの単元の主題そのもの。
     given: [condition]
     asked: [value]
     visual: none

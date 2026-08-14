@@ -18,6 +18,7 @@ import math
 from typing import TYPE_CHECKING, Any
 
 from engine.core.registry import register_visual
+from engine.packs.math.visuals._label_place import haloed_text
 
 if TYPE_CHECKING:  # pragma: no cover - 型のみ
     from engine.core.contracts import MR, CellContext
@@ -157,6 +158,7 @@ def render_parallel_candidates_svg(params: dict[str, Any]) -> str:
     parts.append(_line(tx, ty1, tx, ty2, w=1.8))
     parts.append(_text(tx - 14.0, ty2 + 4.0, str(params["transversal_name"]), anchor="end"))
 
+    placed: list[tuple[float, float]] = []  # 置いた直線名の位置（重なりを避けるため）
     for i, (name, angle) in enumerate(rows):
         cy = 66.0 + 58.0 * i
         rad = math.radians(angle)
@@ -169,9 +171,17 @@ def render_parallel_candidates_svg(params: dict[str, Any]) -> str:
         back = min(55.0, t_back)
         fwd = min(235.0, t_fwd)
         parts.append(_line(tx - back * dx, cy - back * dy, tx + fwd * dx, cy + fwd * dy))
-        parts.append(
-            _text(tx + (fwd + 13.0) * dx, cy + (fwd + 13.0) * dy + 4.0, name, anchor="start")
-        )
+        # 角の近い直線どうしは終点も近づくので、名前が重なる。重なる間は
+        # **自分の線に沿って**手前へ下げる（線から離さない）。
+        off = 13.0
+        for _ in range(6):
+            lx = tx + (fwd + off) * dx
+            ly = cy + (fwd + off) * dy + 4.0
+            if all(abs(lx - qx) > 20.0 or abs(ly - qy) > 15.0 for qx, qy in placed):
+                break
+            off -= 16.0
+        placed.append((lx, ly))
+        parts.append(haloed_text(lx, ly, name, size=13, anchor="start"))
         # 角の記号（横断線の下向きと直線の向きの間に小さな弧）と、その大きさ。
         r = 26.0
         parts.append(
@@ -182,7 +192,7 @@ def render_parallel_candidates_svg(params: dict[str, Any]) -> str:
         bx, by = (dx + 0.0) / 2.0, (dy + 1.0) / 2.0
         nb = math.hypot(bx, by) or 1.0
         parts.append(
-            _text(tx + bx / nb * 46.0, cy + by / nb * 46.0 + 4.0, f"{angle:g}°", size=12)
+            haloed_text(tx + bx / nb * 46.0, cy + by / nb * 46.0 + 4.0, f"{angle:g}°", size=12)
         )
 
     parts.append("</svg>")

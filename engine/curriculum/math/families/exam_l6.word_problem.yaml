@@ -68,6 +68,11 @@ levels:
     params:
       length_domain: {int_range: [2, 15]}
       height_domain: {int_range: [3, 14]}
+    # 答えの分母・根号の中がこの単元では構造的に大きくなる（`engine.eval.answer_size`）。
+    answer_size_max: {denominator: 15}
+    answer_size_reason: |
+      答えは面積の比（「三角形APDは三角形APBの2/15倍」）。比は約分した分数で書くのが
+      作法で、分母は台形の上底・下底の長さの比（2〜15）で決まる。
     given: [scenario]
     asked: [value]
     visual: none

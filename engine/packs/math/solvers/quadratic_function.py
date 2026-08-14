@@ -24,6 +24,8 @@ import sympy
 
 from engine.core.contracts import Feature, GraphAnswer, Solution, Step, SymbolicAnswer
 from engine.core.registry import register_solver
+from engine.packs.math.solvers._step_text import fmt_expr
+from engine.packs.math.solvers.arithmetic import fmt_measure
 
 _X = sympy.Symbol("x")
 _SQRT_RE = re.compile(r"sqrt\((\d+)\)")
@@ -59,7 +61,8 @@ def evaluate_quadratic_function(a: object, x: object) -> Solution:
             op="substitute_x",
             args=[],
             result_srepr="",
-            result_display="x に代入する",
+            # 代入したままの式（`3 × (-4)²`）。指示の言い直しを括弧に置かない（面③）。
+            result_display=f"{_fmt_scalar(a_s)} × ({_fmt_scalar(x_s)})²",
             narration="式の x に、与えられた値をあてはめる。",
         ),
         Step(
@@ -91,10 +94,15 @@ _RANGE_NARRATION: dict[str, str] = {
     "combine_with_vertex": "頂点の y の値と両端の y の値を合わせて、変域の両端を決める。",
 }
 
-_RANGE_PHRASE: dict[str, str] = {
-    "evaluate_endpoints": "両端の y の値を求める",
-    "check_domain_contains_vertex": "変域が頂点をまたぐか確かめる",
-}
+def _range_step_display(op: str, x1, x2, y1, y2, straddles: bool) -> str:
+    """変域の手の括弧（この手で得た値）。"""
+    if op == "evaluate_endpoints":
+        return f"x = {_fmt_scalar(x1)} のとき y = {_fmt_scalar(y1)}、" \
+               f"x = {_fmt_scalar(x2)} のとき y = {_fmt_scalar(y2)}"
+    if op == "check_domain_contains_vertex":
+        # またぐかどうか＝この手で分かること。またぐなら頂点の y=0 も候補に入る。
+        return "またぐので y = 0 も候補" if straddles else "またがない"
+    raise ValueError(f"途中の表示を組めない op: {op!r}")
 
 
 @register_solver("math.y_range_over_quadratic_domain")
@@ -132,7 +140,8 @@ def y_range_over_quadratic_domain(a: object, x_lo: object, x_hi: object, mode: o
             op=op,
             args=[],
             result_srepr=srepr if i == len(ops) - 1 else "",
-            result_display=disp if i == len(ops) - 1 else _RANGE_PHRASE.get(op, ""),
+            result_display=disp if i == len(ops) - 1
+            else _range_step_display(op, x1, x2, y1, y2, mode_s == "straddles_zero"),
             narration=_RANGE_NARRATION[op],
         )
         for i, op in enumerate(ops)
@@ -158,10 +167,15 @@ _ROC_NARRATION: dict[str, str] = {
     "solve_for_coefficient": "その方程式を解いて、比例定数 a の値を求める。",
 }
 
-_ROC_PHRASE: dict[str, str] = {
-    "evaluate_endpoints_roc": "両端の y の値を求める",
-    "set_up_rate_equation": "変化の割合を a の式で表す",
-}
+def _roc_step_display(op: str, x1, x2, y1, y2, rate) -> str:
+    """変化の割合の手の括弧（この手で得た値・式）。"""
+    if op == "evaluate_endpoints_roc":
+        return (f"x = {_fmt_scalar(x1)} のとき y = {_fmt_scalar(y1)}、"
+                f"x = {_fmt_scalar(x2)} のとき y = {_fmt_scalar(y2)}")
+    if op == "set_up_rate_equation":
+        # 変化の割合は a(x1+x2)。与えられた値と等しいとおいた式。
+        return f"a × ({_fmt_scalar(x1)} + {_fmt_scalar(x2)}) = {_fmt_scalar(rate)}"
+    raise ValueError(f"途中の表示を組めない op: {op!r}")
 
 
 @register_solver("math.rate_of_change_quadratic")
@@ -197,12 +211,18 @@ def rate_of_change_quadratic(a: object, x1: object, x2: object, mode: object) ->
         srepr = sympy.srepr(a_val)
 
     ops = _ROC_STEPS[mode_s]
+    if mode_s == "forward":
+        step_y1, step_y2, step_rate = y1, y2, rate
+    else:
+        step_y1 = step_y2 = None
+        step_rate = rate_s
     steps = [
         Step(
             op=op,
             args=[],
             result_srepr=srepr if i == len(ops) - 1 else "",
-            result_display=disp if i == len(ops) - 1 else _ROC_PHRASE.get(op, ""),
+            result_display=disp if i == len(ops) - 1
+            else _roc_step_display(op, x1_s, x2_s, step_y1, step_y2, step_rate),
             narration=_ROC_NARRATION[op],
         )
         for i, op in enumerate(ops)
@@ -237,9 +257,9 @@ _INTERSECTION_STEPS: dict[str, list[str]] = {
         "compute_segment_length", "compute_triangle_area",
     ],
     # Lv4: 面積を等分する点を逆算する
-    "bisecting_point": [
+    "equal_area_point": [
         "set_up_equation", "solve_for_x", "compute_y",
-        "compute_triangle_area", "solve_for_bisecting_point",
+        "compute_triangle_area", "solve_for_equal_area_point",
     ],
     # g3_l37.word_problem Lv3 の小問: 三角形 OAB の面積だけを答える
     # （segment_and_area は線分長も一緒に答えるので、面積だけを問う小問には使えない）
@@ -254,16 +274,26 @@ _INTERSECTION_NARRATION: dict[str, str] = {
     "compute_y": "求めた x の値を式に代入して、交点の y 座標を求める。",
     "compute_segment_length": "2点の座標の差から、線分の長さを求める。",
     "compute_triangle_area": "頂点の座標から、三角形の面積を求める公式で面積を計算する。",
-    "solve_for_bisecting_point": "面積を等しく分ける条件から方程式を立て、求める点の座標を決める。",
+    "solve_for_equal_area_point": "三角形 PAB の面積が三角形 OAB の面積と等しくなる条件から方程式を立て、点 P の座標を決める。",
 }
 
-_INTERSECTION_PHRASE: dict[str, str] = {
-    "set_up_equation": "放物線と直線の式を等しいとおく",
-    "solve_for_x": "交点の x 座標を求める",
-    "compute_y": "交点の y 座標を求める",
-    "compute_segment_length": "線分の長さを求める",
-    "compute_triangle_area": "三角形の面積を求める",
-}
+def _intersection_step_display(
+    op: str, a, m, b, xA, xB, yA, yB
+) -> str:
+    """交点まわりの手の括弧（この手で得た式・値）。"""
+    if op == "set_up_equation":
+        return f"{fmt_expr(a * _X**2)} = {fmt_expr(m * _X + b)}"
+    if op == "solve_for_x":
+        return f"x = {_fmt_scalar(xA)}, x = {_fmt_scalar(xB)}"
+    if op == "compute_y":
+        return f"A({_fmt_scalar(xA)}, {_fmt_scalar(yA)}), B({_fmt_scalar(xB)}, {_fmt_scalar(yB)})"
+    if op == "compute_segment_length":
+        seg = sympy.sqrt((xB - xA) ** 2 + (yB - yA) ** 2)
+        return f"AB = {_fmt_scalar(seg)}"
+    if op == "compute_triangle_area":
+        area = _shoelace_area([(sympy.Integer(0), sympy.Integer(0)), (xA, yA), (xB, yB)])
+        return f"△OAB = {_fmt_scalar(area)}"
+    raise ValueError(f"途中の表示を組めない op: {op!r}")
 
 
 @register_solver("math.intersection_parabola_line")
@@ -273,8 +303,8 @@ def intersection_parabola_line(
     """放物線 y=ax² と直線 y=mx+b の交点・線分長・面積を求める（g3_l37.find_value）。
 
     mode="find_intersection"（Lv2・交点座標のみ）／"segment_and_area"（Lv3・線分 AB の
-    長さと三角形 OAB の面積）／"bisecting_point"（Lv4・y 軸上の点 P で三角形 OAB の面積を
-    三角形 PAB の面積が2等分するときの P の座標。O 以外の解を採用する）。mode ごとに
+    長さと三角形 OAB の面積）／"equal_area_point"（Lv4・y 軸上の点 P で三角形 PAB の面積が
+    三角形 OAB の面積と**等しくなる**ときの P の座標。O 以外の解を採用する）。mode ごとに
     steps の op 列を変える＝level_sep。問題パラメータ（a・m・b・mode）だけから
     独立に再計算する（double-solve）。
     """
@@ -301,7 +331,7 @@ def intersection_parabola_line(
         area = _shoelace_area([(sympy.Integer(0), sympy.Integer(0)), ptA, ptB])
         disp = f"AB = {_fmt_scalar(seg_len)}, △OAB = {_fmt_scalar(area)}"
         srepr = sympy.srepr(sympy.Tuple(seg_len, area))
-    else:  # bisecting_point
+    else:  # equal_area_point
         area_oab = _shoelace_area([(sympy.Integer(0), sympy.Integer(0)), ptA, ptB])
         # P=(0,p) は y 軸上。△PAB の面積が △OAB と等しくなる p を解く（p=0 以外の解）。
         p_sym = sympy.Symbol("p", real=True)
@@ -312,7 +342,7 @@ def intersection_parabola_line(
             key=lambda v: float(v.evalf()),
         )
         if not p_candidates:
-            raise ValueError("O 以外に面積を2等分する y 軸上の点が求まらない")
+            raise ValueError("O 以外に等積になる y 軸上の点が求まらない")
         p_val = p_candidates[0]
         disp = f"P(0, {_fmt_scalar(p_val)})"
         srepr = sympy.srepr(sympy.Tuple(sympy.Integer(0), p_val))
@@ -323,7 +353,8 @@ def intersection_parabola_line(
             op=op,
             args=[],
             result_srepr=srepr if i == len(ops) - 1 else "",
-            result_display=disp if i == len(ops) - 1 else _INTERSECTION_PHRASE.get(op, ""),
+            result_display=disp if i == len(ops) - 1
+            else _intersection_step_display(op, a_s, m_s, b_s, xA, xB, yA, yB),
             narration=_INTERSECTION_NARRATION[op],
         )
         for i, op in enumerate(ops)
@@ -352,11 +383,15 @@ _EQUAL_AREA_NARRATION: dict[str, str] = {
     "solve_for_equal_area_point": "その平行な直線と放物線が交わる点のうち、原点でないほうを求める。",
 }
 
-_EQUAL_AREA_PHRASE: dict[str, str] = {
-    "set_up_equation": "放物線と直線の式を等しいとおく",
-    "solve_for_x": "交点の x 座標を求める",
-    "find_parallel_line_through_origin": "原点を通る平行な直線を考える",
-}
+def _equal_area_display(op: str, a, m, b, xA, xB) -> str:
+    """面積が等しい点の手の括弧（この手で得た式・値）。"""
+    if op == "set_up_equation":
+        return f"{fmt_expr(a * _X**2)} = {fmt_expr(m * _X + b)}"
+    if op == "solve_for_x":
+        return f"x = {_fmt_scalar(xA)}, x = {_fmt_scalar(xB)}"
+    if op == "find_parallel_line_through_origin":
+        return f"y = {fmt_expr(m * _X)}"
+    raise ValueError(f"途中の表示を組めない op: {op!r}")
 
 
 # ---------------------------------------------------------------------------
@@ -376,11 +411,15 @@ _COEFF_FROM_INTERSECTION_NARRATION: dict[str, str] = {
     "compute_triangle_area": "2つの交点と原点の座標がそろったので、三角形の面積を求める公式で面積を計算する。",
 }
 
-_COEFF_FROM_INTERSECTION_PHRASE: dict[str, str] = {
-    "compute_point_on_line": "交点の y 座標を求める",
-    "solve_for_coefficient": "a の値を求める",
-    "find_other_intersection": "もう一方の交点を求める",
-}
+def _coeff_from_intersection_display(op: str, la, lb, xa, ya, a_val, ptB) -> str:
+    """係数の逆算の手の括弧（この手で得た値）。"""
+    if op == "compute_point_on_line":
+        return f"{la}({_fmt_scalar(xa)}, {_fmt_scalar(ya)})"
+    if op == "solve_for_coefficient":
+        return f"a = {_fmt_scalar(a_val)}"
+    if op == "find_other_intersection":
+        return f"{lb}({_fmt_scalar(ptB[0])}, {_fmt_scalar(ptB[1])})"
+    raise ValueError(f"途中の表示を組めない op: {op!r}")
 
 
 @register_solver("math.parabola_coefficient_from_intersection")
@@ -430,7 +469,7 @@ def parabola_coefficient_from_intersection(
             result_srepr=srepr if i == len(_COEFF_FROM_INTERSECTION_OPS) - 1 else "",
             result_display=(
                 disp if i == len(_COEFF_FROM_INTERSECTION_OPS) - 1
-                else _COEFF_FROM_INTERSECTION_PHRASE[op]
+                else _coeff_from_intersection_display(op, la, lb, xa_s, ya, a_val, ptB)
             ),
             narration=_COEFF_FROM_INTERSECTION_NARRATION[op],
         )
@@ -473,7 +512,8 @@ def parabola_equal_area_point(a: object, m: object, b: object) -> Solution:
         Step(
             op=op, args=[],
             result_srepr=srepr if i == len(_EQUAL_AREA_OPS) - 1 else "",
-            result_display=disp if i == len(_EQUAL_AREA_OPS) - 1 else _EQUAL_AREA_PHRASE[op],
+            result_display=disp if i == len(_EQUAL_AREA_OPS) - 1
+            else _equal_area_display(op, a_s, m_s, b_s, xA, xB),
             narration=_EQUAL_AREA_NARRATION[op],
         )
         for i, op in enumerate(_EQUAL_AREA_OPS)
@@ -497,12 +537,18 @@ _AREA_RATIO_NARRATION: dict[str, str] = {
     "reduce_area_ratio": "求めた二つの面積の比を、できるだけ簡単な整数の比に直す。",
 }
 
-_AREA_RATIO_PHRASE: dict[str, str] = {
-    "set_up_equation": "放物線と直線の式を等しいとおく",
-    "solve_for_x": "交点の座標を求める",
-    "find_x_axis_intersection": "x 軸との交点を求める",
-    "compute_two_triangle_areas": "二つの三角形の面積を求める",
-}
+def _area_ratio_display(op: str, a, m, b, ptA, ptB, ptC, area_oab, area_obc) -> str:
+    """面積の比の手の括弧（この手で得た式・値）。"""
+    if op == "set_up_equation":
+        return f"{fmt_expr(a * _X**2)} = {fmt_expr(m * _X + b)}"
+    if op == "solve_for_x":
+        return (f"A({_fmt_scalar(ptA[0])}, {_fmt_scalar(ptA[1])}), "
+                f"B({_fmt_scalar(ptB[0])}, {_fmt_scalar(ptB[1])})")
+    if op == "find_x_axis_intersection":
+        return f"C({_fmt_scalar(ptC[0])}, 0)"
+    if op == "compute_two_triangle_areas":
+        return f"△OAB = {_fmt_scalar(area_oab)}、△OBC = {_fmt_scalar(area_obc)}"
+    raise ValueError(f"途中の表示を組めない op: {op!r}")
 
 
 @register_solver("math.parabola_line_area_ratio")
@@ -534,7 +580,8 @@ def parabola_line_area_ratio(a: object, m: object, b: object) -> Solution:
         Step(
             op=op, args=[],
             result_srepr=srepr if i == len(_AREA_RATIO_OPS) - 1 else "",
-            result_display=disp if i == len(_AREA_RATIO_OPS) - 1 else _AREA_RATIO_PHRASE[op],
+            result_display=disp if i == len(_AREA_RATIO_OPS) - 1
+            else _area_ratio_display(op, a_s, m_s, b_s, ptA, ptB, ptC, area_oab, area_obc),
             narration=_AREA_RATIO_NARRATION[op],
         )
         for i, op in enumerate(_AREA_RATIO_OPS)
@@ -561,10 +608,13 @@ _QMOTION_NARRATION: dict[str, str] = {
     "determine_which_segment": "点 P が動いた道のりから、周上のどの辺の上にいるかを判断する。",
 }
 
-_QMOTION_PHRASE: dict[str, str] = {
-    "locate_point_p": "点 P の座標を決める",
-    "determine_which_segment": "どの辺の上にいるかを判断する",
-}
+def _qmotion_display(op: str, px, py, on_bc: bool) -> str:
+    """動点の手の括弧（この手で得た位置）。"""
+    if op == "locate_point_p":
+        return f"P({_fmt_scalar(px)}, {_fmt_scalar(py)})"
+    if op == "determine_which_segment":
+        return "辺BC上" if on_bc else "辺CD上"
+    raise ValueError(f"途中の表示を組めない op: {op!r}")
 
 
 @register_solver("math.solve_quadratic_motion_area")
@@ -598,7 +648,9 @@ def solve_quadratic_motion_area(s: object, d: object, mode: object) -> Solution:
             px, py = s_v - (d_v - s_v), s_v
 
     area = _shoelace_area([(sympy.Integer(0), sympy.Integer(0)), (s_v, sympy.Integer(0)), (px, py)])
-    disp = _fmt_scalar(area)
+    # 面積は量なので、割り切れるなら小数で書く（`2065/2` ではなく `1032.5`）。
+    # 座標の表示（`_fmt_scalar`）は分数のままにしておく——放物線上の点は分数で書く。
+    disp = fmt_measure(area) if isinstance(area, sympy.Rational) else _fmt_scalar(area)
     srepr = sympy.srepr(area)
 
     ops = _QMOTION_STEPS[mode_s]
@@ -607,7 +659,8 @@ def solve_quadratic_motion_area(s: object, d: object, mode: object) -> Solution:
             op=op,
             args=[],
             result_srepr=srepr if i == len(ops) - 1 else "",
-            result_display=disp if i == len(ops) - 1 else _QMOTION_PHRASE.get(op, ""),
+            result_display=disp if i == len(ops) - 1
+            else _qmotion_display(op, px, py, d_v < s_v),
             narration=_QMOTION_NARRATION[op],
         )
         for i, op in enumerate(ops)
@@ -701,11 +754,14 @@ def draw_two_parabolas_features(a1: object, a2: object, x_lo: object, x_hi: obje
         "draw_second_parabola": "もう一方の式についても同じように点をとり、放物線をかく。",
         "compare_opening": "比例定数の絶対値が大きいほど開き方はせまいことから、2本を比べる。",
     }
+    # 括弧には**求めた組・かいた曲線の式**を入れる（面③）。
     phrase = {
-        "build_correspondence_table": "対応表をつくる",
-        "plot_table_points": "点をとる",
-        "draw_first_parabola": "放物線をかく",
-        "draw_second_parabola": "もう1本の放物線をかく",
+        "build_correspondence_table": "、".join(
+            f"({_fmt_scalar(x)}, {_fmt_scalar(a1_s * x**2)})" for x in xs
+        ),
+        "plot_table_points": f"{len(xs)}個の点",
+        "draw_first_parabola": f"y = {fmt_expr(a1_s * _X**2)}",
+        "draw_second_parabola": f"y = {fmt_expr(a2_s * _X**2)}",
     }
     disp = f"開き方がせまいのは比例定数が {_fmt_scalar(narrower)} のほう"
     steps = [
@@ -768,9 +824,11 @@ def draw_parabola_domain_features(a: object, x_lo: object, x_hi: object) -> Solu
         "read_y_range": "なぞった部分の最も低いところと最も高いところから、y の変域を読み取る。",
     }
     phrase = {
-        "draw_parabola": "放物線をかく",
-        "mark_domain_endpoints": "変域の両端の点をとる",
-        "trace_domain_part": "変域に対応する部分をなぞる",
+        "draw_parabola": f"y = {fmt_expr(a_s * _X**2)}",
+        "mark_domain_endpoints": (
+            f"({_fmt_scalar(lo)}, {_fmt_scalar(y1)})、({_fmt_scalar(hi)}, {_fmt_scalar(y2)})"
+        ),
+        "trace_domain_part": f"{_fmt_scalar(lo)} ≦ x ≦ {_fmt_scalar(hi)} の部分",
     }
     disp = f"{_fmt_scalar(y_min)} ≦ y ≦ {_fmt_scalar(y_max)}"
     srepr = sympy.srepr(sympy.Tuple(_ROLE_Y_RANGE, y_min, y_max))
@@ -815,10 +873,13 @@ def draw_parabola_line_features(a: object, m: object, b: object) -> Solution:
         "mark_intersections": "放物線と直線の式を連立させて解き、交点をとる。",
         "shade_enclosed_region": "2つの交点にはさまれた、曲線と直線で囲まれた部分に斜線をひく。",
     }
+    # 括弧には**かいたもの・とった点**を入れる（面③）。
     phrase = {
-        "draw_parabola": "放物線をかく",
-        "draw_line": "直線をかく",
-        "mark_intersections": "交点をとる",
+        "draw_parabola": f"y = {fmt_expr(a_s * _X**2)}",
+        "draw_line": f"y = {fmt_expr(m_s * _X + b_s)}",
+        "mark_intersections": "、".join(
+            f"({_fmt_scalar(r)}, {_fmt_scalar(a_s * r**2)})" for r in roots
+        ),
     }
     disp = "、".join(f"({_fmt_scalar(r)}, {_fmt_scalar(a_s * r**2)})" for r in roots)
     srepr = sympy.srepr(sympy.Tuple(*(sympy.Tuple(r, a_s * r**2) for r in roots)))
@@ -861,7 +922,12 @@ def draw_quantity_curve_features(a: object, x_values: object) -> Solution:
         "plot_table_points": "読み取った組を座標とみて、方眼上に点をとる。",
         "draw_smooth_curve": "とった点をなめらかな曲線で結び、変化のようすを表す。",
     }
-    phrase = {"read_table_values": "表の組を読み取る", "plot_table_points": "点をとる"}
+    phrase = {
+        "read_table_values": "、".join(
+            f"({_fmt_scalar(x)}, {_fmt_scalar(a_s * x**2)})" for x in xs
+        ),
+        "plot_table_points": f"{len(xs)}個の点",
+    }
     last = features[-1]
     steps = [
         Step(

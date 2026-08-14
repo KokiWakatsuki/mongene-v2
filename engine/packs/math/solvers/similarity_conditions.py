@@ -53,7 +53,7 @@ def similar_triangle_x_shape(
     steps = [
         Step(
             op="identify_similar_triangles_in_x_shape",
-            args=[], result_srepr="", result_display="平行線がつくる相似な三角形を見つける",
+            args=[], result_srepr="", result_display="",
             narration=f"{pa}{pb}∥{pc}{pd} であることから、対頂角と錯角がそれぞれ等しくなる"
             f"相似な三角形（三角形{po}{pa}{pb}と三角形{po}{pc}{pd}）の組を見つける。",
         ),
@@ -82,7 +82,7 @@ def identify_similarity_condition(condition_key: object) -> Solution:
     steps = [
         Step(
             op="identify_given_elements",
-            args=[], result_srepr="", result_display="示されている等しい要素を読み取る",
+            args=[], result_srepr="", result_display="",
             narration="2つの三角形で示されている、等しい角や辺の比が何かを読み取る。",
         ),
         Step(

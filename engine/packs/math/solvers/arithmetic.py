@@ -15,6 +15,7 @@ import sympy
 
 from engine.core.contracts import Solution, Step, SymbolicAnswer
 from engine.core.registry import register_solver
+from engine.packs.math.solvers._step_text import top_level_parts
 
 
 def fmt_number(v: sympy.Expr) -> str:
@@ -47,6 +48,21 @@ def _decimal_display(v: sympy.Expr) -> str | None:
         r *= 10
         digits += 1
     return f"{float(v):.{digits}f}"
+
+
+def fmt_measure(v: sympy.Expr) -> str:
+    """**長さ・面積・体積の値**の表示。有限小数なら小数で書く。
+
+    量には小数で答えるのが教材の作法（`112.5 cm³` と書き、`225/2 cm³` とは書かない）。
+    式の中の数（`x = -107/12`）は分数のままが正しいので、そちらは `fmt_number`。
+
+    同じ量が、箱ひげ図のセルでは `13.5`、四分位数のセルでは `27/2` になっていた
+    （`_fmt_half`）のと同じ食い違いが、面積・体積・線分の長さにもあった:
+    `173/2`（二等辺三角形の底辺）・`333/2`（長方形の対角線の半分）・
+    `225/2 cm³`（三角柱の体積）・`2065/2`（動点の三角形の面積）。
+    割り切れない値（1/3 など）は分数のまま出す——量として書けない形を隠さないため。
+    """
+    return _decimal_display(v) or fmt_number(v)
 
 
 # mode -> op 列（steps の骨格）。level_sep はこの op 列の相異で作る（同一 unit の
@@ -109,25 +125,220 @@ _OP_NARRATION: dict[str, str] = {
     "read_distance_from_zero": "0 からの距離が絶対値なので、符号を取り去った大きさを答える。",
 }
 
-_OP_PHRASE: dict[str, str] = {
-    "determine_sum_sign": "和の符号を先に決める",
-    "rewrite_as_term_sum": "符号のついた項の和に直す",
-    "group_by_sign": "正の項・負の項をまとめる",
-    "rewrite_subtraction_as_addition": "ひき算をたし算に直す",
-    "rewrite_all_as_addition": "すべてたし算に直す",
-    "drop_parentheses_to_terms": "かっこを外し項の和とみなす",
-    "align_fractions": "分数・小数を通分してそろえる",
-    "determine_product_sign": "積の符号を先に決める",
-    "count_negative_factors": "負の数の個数から符号を決める",
-    "rewrite_power_as_product": "累乗を積に書き直す",
-    "identify_base_scope": "指数のかかる数を見分ける",
-    "rewrite_division_as_reciprocal": "逆数をかけるかけ算に直す",
-    "rewrite_all_as_reciprocal": "すべて逆数のかけ算に直す",
-    "evaluate_powers_and_parentheses": "累乗とかっこの中を先に計算する",
-    "multiply_and_divide": "乗法と除法を計算する",
-    "rewrite_as_round_plus_offset": "きりのよい数と小さな数に分ける",
-    "distribute_over_round": "分配法則で積を2つに分けて計算する",
-}
+# ---------------------------------------------------------------------------
+# 途中の手の括弧に入れる**式そのもの**（面③）。
+#
+# 以前はここに「和の符号を先に決める」のような**指示の言い直し**を置いていた。
+# 解説の括弧は「その手で得たもの」を入れるところなので、言い直しだと読んでも
+# 新しいことが1つも増えない（(-8)-3+(-9) の解説が3行とも指示文だった）。
+#
+# **narration には数字を書かない規約はそのまま。** ヒントは narration しか見ない
+# （`t1_template._build_hints`）ので、ここに値を書いても答えの先出しにはならない。
+#
+# solver は expr_str（recipe が組んだ標準形。被演算子は必ずかっこ付き）しか
+# 受け取らないので、途中の式もここで組み直す。
+# ---------------------------------------------------------------------------
+def _rat(s: str) -> sympy.Rational:
+    return sympy.Rational(sympy.sympify(s, rational=True))
+
+
+def _disp(v: sympy.Rational, decimal: bool) -> str:
+    """値の表示。与式に小数が出ていれば小数で書く（問題文の書き方に合わせる）。"""
+    if decimal:
+        d = _decimal_display(v)
+        if d is not None:
+            return d
+    return fmt_number(v)
+
+
+def _paren(v: sympy.Rational, decimal: bool) -> str:
+    d = _disp(v, decimal)
+    return f"({d})" if v < 0 else d
+
+
+def _join_terms(terms: list[sympy.Rational], decimal: bool) -> str:
+    """符号のついた項の和（`3/4 - 1/2 + 7`）。"""
+    out = _disp(terms[0], decimal)
+    for t in terms[1:]:
+        out += f" - {_disp(-t, decimal)}" if t < 0 else f" + {_disp(t, decimal)}"
+    return out
+
+
+def _join_as_additions(terms: list[sympy.Rational], decimal: bool) -> str:
+    """すべてたし算に直した並び（`3/4 + (1/2) + (-7)`）。"""
+    return " + ".join(_paren(t, decimal) for t in terms)
+
+
+def _group_by_sign(terms: list[sympy.Rational], decimal: bool) -> str:
+    """正の項の和と負の項の和（`10 + (-30)`）。
+
+    **片方の符号しか無いときは和を書かない。** 書くと次の手（答え）と同じ値になり、
+    2行つづけて同じ数が並ぶ。この場合は絶対値の和の形（`-(8 + 3 + 9)`）にする
+    ——教科書がそう書くし、次の手で計算する余地が残る。
+    """
+    zero = sympy.Integer(0)
+    pos = sum((t for t in terms if t > 0), zero)
+    neg = sum((t for t in terms if t < 0), zero)
+    if pos and neg:
+        return f"{_disp(pos, decimal)} + ({_disp(neg, decimal)})"
+    sign = "-" if neg else "+"
+    return f"{sign}({' + '.join(_disp(abs(t), decimal) for t in terms)})"
+
+
+def _common_denominator(terms: list[sympy.Rational], decimal: bool) -> str:
+    """通分した項の並び（`24/40 - 4/40 - 5/40 + 10/40`）。"""
+    lcm = 1
+    for t in terms:
+        lcm = sympy.ilcm(lcm, int(t.q))
+    def one(t: sympy.Rational) -> str:
+        return f"{int(t * lcm)}/{lcm}" if lcm != 1 else fmt_number(t)
+    out = one(terms[0])
+    for t in terms[1:]:
+        out += f" - {one(-t)}" if t < 0 else f" + {one(t)}"
+    return out
+
+
+def _sign_of(v: sympy.Rational) -> str:
+    return "-" if v < 0 else "+"
+
+
+def _magnitudes(values: list[sympy.Rational], decimal: bool) -> str:
+    return " × ".join(_disp(abs(v), decimal) for v in values)
+
+
+def _round_split(base: int) -> tuple[int, int]:
+    """`297` → `(300, -3)`。分配法則で使う「きりのよい数」と「小さな数」。
+
+    recipe は base = r + off（r は 10・100…、|off| ≤ 4）として引く。solver は
+    expr_str しか受け取らないので、ここで同じ分け方を復元する。
+    """
+    for k in (1000, 100, 10):
+        r = int(round(base / k)) * k
+        if r and abs(base - r) <= 4:
+            return r, base - r
+    return base, 0
+
+
+def _signed_step_displays(expr_str: str, mode: str, final: str) -> list[str]:
+    """mode ごとの、各手の括弧に入れる表示（最後は答え）。"""
+    dec = "." in expr_str
+
+    if mode in ("addition_pair", "multiplication_pair"):
+        sep = "+" if mode == "addition_pair" else "*"
+        vals = [_rat(t) for _, t in top_level_parts(expr_str, sep)]
+        a, b = vals[0], vals[1]
+        if mode == "addition_pair":
+            if (a > 0) == (b > 0):
+                inner = f"{_disp(abs(a), dec)} + {_disp(abs(b), dec)}"
+            else:
+                hi, lo = sorted([abs(a), abs(b)], reverse=True)
+                inner = f"{_disp(hi, dec)} - {_disp(lo, dec)}"
+            return [f"{_sign_of(a + b)}({inner})", final]
+        return [f"{_sign_of(a * b)}({_magnitudes(vals, dec)})", final]
+
+    if mode in ("addition_terms", "add_sub_terms", "subtraction_terms",
+                "add_sub_terms_rational"):
+        parts = top_level_parts(expr_str, "+-")
+        terms = [(-_rat(t) if op == "-" else _rat(t)) for op, t in parts]
+        # 「すべてのひき算をたし算に直す」手は、たし算の形で見せる。
+        first = (
+            _join_as_additions(terms, dec)
+            if mode == "subtraction_terms"
+            else _join_terms(terms, dec)
+        )
+        if mode == "add_sub_terms_rational":
+            return [first, _common_denominator(terms, dec), final]
+        return [first, _group_by_sign(terms, dec), final]
+
+    if mode == "subtraction_pair":
+        parts = top_level_parts(expr_str, "-")
+        a = _rat(parts[0][1])
+        b = -_rat(parts[1][1])
+        return [f"{_paren(a, dec)} + {_paren(b, dec)}", final]
+
+    if mode == "multiplication_chain":
+        vals = [_rat(t) for _, t in top_level_parts(expr_str, "*")]
+        product = sympy.Integer(1)
+        for v in vals:
+            product *= v
+        return [f"{_sign_of(product)}({_magnitudes(vals, dec)})", final]
+
+    if mode in ("divide_pair", "divide_chain"):
+        parts = top_level_parts(expr_str, "*/")
+        vals = [(1 / _rat(t) if op == "/" else _rat(t)) for op, t in parts]
+        as_product = " × ".join(_paren(v, dec) for v in vals)
+        if mode == "divide_pair":
+            return [as_product, final]
+        product = sympy.Integer(1)
+        for v in vals:
+            product *= v
+        return [as_product, f"{_sign_of(product)}({_magnitudes(vals, dec)})", final]
+
+    if mode == "power_single":
+        base_str, n = expr_str.rsplit("**", 1)
+        base = _rat(base_str)
+        return [" × ".join([_paren(base, dec)] * int(n)), final]
+
+    if mode == "power_sign_contrast":
+        base_str, n = expr_str.rsplit("**", 1)
+        # `(-5)³` は底ごと・`-5³` は指数が 5 だけにかかる。**この違いがこの手の中身**
+        # なので、括弧にはどちらの積になるかを書く。
+        if base_str.startswith("("):
+            base = _rat(base_str)
+            return [" × ".join([_paren(base, dec)] * int(n)), final]
+        magnitude = _rat(base_str.lstrip("-"))
+        product = " × ".join([_disp(magnitude, dec)] * int(n))
+        return [f"-({product})", final]
+
+    if mode == "four_operations":
+        return _four_operations_displays(expr_str, dec, final)
+
+    if mode == "distributive_trick":
+        parts = top_level_parts(expr_str, "*")
+        base, mul = int(_rat(parts[0][1])), int(_rat(parts[1][1]))
+        r, off = _round_split(base)
+        sign = "+" if off > 0 else "-"
+        return [
+            f"({r} {sign} {abs(off)}) × {mul}",
+            f"{r} × {mul} {sign} {abs(off)} × {mul}",
+            final,
+        ]
+
+    if mode == "absolute_value":
+        inner = _rat(expr_str[len("Abs("):-1])
+        side = "左" if inner < 0 else "右"
+        return [f"{_disp(inner, dec)} は 0 より{side}", final]
+
+    raise ValueError(f"途中の表示を組めない mode: {mode!r}")
+
+
+def _four_operations_displays(expr_str: str, dec: bool, final: str) -> list[str]:
+    """四則混合の3手（累乗・かっこ → 乗除 → 加減）。
+
+    `(8)-(6)**2*(5)+(16)/(-4)` を
+    `8 - 36 × 5 + 16 ÷ (-4)` → `8 - 180 + (-4)` → `-176` と刻む。
+    """
+    terms = top_level_parts(expr_str, "+-")
+    after_power: list[str] = []
+    after_muldiv: list[sympy.Rational] = []
+    for _op, term in terms:
+        factors = top_level_parts(term, "*/")
+        shown: list[str] = []
+        value = sympy.Integer(1)
+        for i, (fop, factor) in enumerate(factors):
+            v = _rat(factor)
+            value = value / v if fop == "/" else (v if i == 0 else value * v)
+            piece = _paren(v, dec)
+            shown.append(piece if i == 0 else f"{'÷' if fop == '/' else '×'} {piece}")
+        after_power.append(" ".join(shown))
+        after_muldiv.append(value)
+
+    signed = [(-v if op == "-" else v) for (op, _), v in zip(terms, after_muldiv, strict=True)]
+    line1 = after_power[0]
+    for (op, _), text in zip(terms[1:], after_power[1:], strict=True):
+        line1 += f" {'-' if op == '-' else '+'} {text}"
+    line2 = _join_terms(signed, dec)
+    return [line1, line2, final]
 
 
 @register_solver("math.evaluate_numeric_expression")
@@ -156,12 +367,16 @@ def evaluate_numeric_expression(expr_str: str, mode: object) -> Solution:
             r_disp = as_decimal
 
     ops = _MODE_STEPS[mode_s]
+    displays = _signed_step_displays(expr_str, mode_s, r_disp)
+    assert len(displays) == len(ops), (
+        f"{mode_s}: 手の数 {len(ops)} と途中の表示 {len(displays)} が合わない"
+    )
     steps = [
         Step(
             op=op,
             args=[],
             result_srepr=r_srepr,
-            result_display=r_disp if i == len(ops) - 1 else _OP_PHRASE.get(op, ""),
+            result_display=displays[i],
             narration=_OP_NARRATION[op],
         )
         for i, op in enumerate(ops)
@@ -192,14 +407,14 @@ def order_signed_numbers(numbers_str: str, ascending: object) -> Solution:
             op="convert_to_common_form",
             args=[],
             result_srepr=r_srepr,
-            result_display="分数・小数を比べやすい形にそろえる",
+            result_display="、".join(fmt_number(v) for _t, v in pairs),
             narration="分数と小数がまざっているので、大きさを比べやすい形にそろえる。",
         ),
         Step(
             op="compare_on_number_line",
             args=[],
             result_srepr=r_srepr,
-            result_display="数直線上での位置で大小を比べる",
+            result_display="、".join(fmt_number(v) for _t, v in ordered_pairs),
             narration="それぞれの数が数直線上でどの位置にあるかで大小を比べる（負の数は絶対値が大きいほど小さい）。",
         ),
         Step(
@@ -265,10 +480,16 @@ _FACTORIZE_OP_NARRATION: dict[str, str] = {
     ),
 }
 
-_FACTORIZE_OP_PHRASE: dict[str, str] = {
-    "divide_out_primes_in_order": "小さい素数から順にわる",
-    "test_successive_prime_divisors": "次に大きい素数を順に試す",
-}
+def _factorize_phrase(n: int) -> dict[str, str]:
+    """素因数分解の手の括弧（わり出した素数そのもの・面③）。"""
+    primes = sorted(sympy.factorint(n))
+    # 「小さい素数から順にわる」＝1桁の素数、「次に大きい素数を順に試す」＝2桁以上。
+    small = [p for p in primes if p < 10]
+    large = [p for p in primes if p >= 10]
+    return {
+        "divide_out_primes_in_order": "、".join(str(p) for p in small) or "わり切れない",
+        "test_successive_prime_divisors": "、".join(str(p) for p in large) or "残りは素数",
+    }
 
 
 @register_solver("math.factorize_integer")
@@ -293,7 +514,7 @@ def factorize_integer(value: object, mode: object) -> Solution:
             op=op,
             args=[],
             result_srepr=srepr,
-            result_display=disp if i == len(ops) - 1 else _FACTORIZE_OP_PHRASE.get(op, ""),
+            result_display=disp if i == len(ops) - 1 else _factorize_phrase(n)[op],
             narration=_FACTORIZE_OP_NARRATION[op],
         )
         for i, op in enumerate(ops)
@@ -335,10 +556,19 @@ _SCI_OP_NARRATION: dict[str, str] = {
     ),
 }
 
-_SCI_OP_PHRASE: dict[str, str] = {
-    "round_to_significant_figures": "指定の有効数字で四捨五入する",
-    "locate_decimal_point": "小数点の位置を決める",
-}
+_FROM_SUPERSCRIPT = str.maketrans("⁰¹²³⁴⁵⁶⁷⁸⁹", "0123456789")
+
+
+def _sci_phrase(n: int, sig: int | None, disp: str) -> dict[str, str]:
+    """科学的記数法の手の括弧（四捨五入した数・動かした桁数）。"""
+    mantissa, superscript = disp.split("×10")
+    exponent = int(superscript.translate(_FROM_SUPERSCRIPT))
+    digits = mantissa.replace(".", "")
+    rounded = digits + "0" * (exponent + 1 - len(digits))
+    return {
+        "round_to_significant_figures": rounded,
+        "locate_decimal_point": f"{mantissa}（小数点を{exponent}桁動かす）",
+    }
 
 
 def scientific_forms(n: int, sig_figs: int | None) -> tuple[str, str]:
@@ -399,7 +629,7 @@ def scientific_notation(value: object, mode: object, sig_figs: object = None) ->
             op=op,
             args=[],
             result_srepr=srepr,
-            result_display=disp if i == len(ops) - 1 else _SCI_OP_PHRASE.get(op, ""),
+            result_display=disp if i == len(ops) - 1 else _sci_phrase(n, sig, disp)[op],
             narration=_SCI_OP_NARRATION[op],
         )
         for i, op in enumerate(ops)
@@ -446,7 +676,7 @@ def read_number_line_point(a: object, k: object, i: object) -> Solution:
             op="identify_interval",
             args=[],
             result_srepr="",
-            result_display="点Pをはさむ目もりを読む",
+            result_display=f"{a_i} と {a_i + 1} の間",
             narration="点Pをはさむ両側の整数の目もりを数直線から読み取る。",
         ),
         Step(

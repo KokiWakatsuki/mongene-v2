@@ -36,6 +36,12 @@ levels:
       count_target_domain: {int_range: [2, 10]}
       count_other_domain: {int_range: [1, 10]}
       color_pairs: [[赤, 白], [赤, 青], [白, 青], [赤, 黒], [白, 黒], [青, 黒]]
+    # 確率の答えは約分した分数で書くのが作法で、分母は「同じ確からしさで起こる
+    # 場合の数」そのもの。数を小さくする方向では直せない（`engine.eval.answer_size`）。
+    answer_size_max: {denominator: 190, numerator: 190}
+    answer_size_reason: |
+      玉の総数（最大20個）から2個を同時に取り出す組合せなので、分母は最大 ₂₀C₂=190。
+      余事象を使う問題では分子も同じ大きさになる（189/190 など）。
     given: [condition]
     asked: [value]
     visual: none

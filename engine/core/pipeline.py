@@ -28,6 +28,8 @@ from engine.core.rng import Rng, derive_rng, issue_seed
 from engine.core.signature import fingerprint_hash
 from engine.core.spec.loader import load_family_dir
 from engine.core.verify.gates import GateFailure, TextStageInput, VisualStageInput, run_gates
+from engine.core.verify.statement_size import limits_for as statement_limits_for
+from engine.core.verify.statement_size import statement_is_too_big
 
 if TYPE_CHECKING:  # pragma: no cover - 型のみ
     from engine.core.contracts import MR, SpecFamily
@@ -36,6 +38,16 @@ _DEFAULT_FAMILIES_DIR = "engine/curriculum/math/families"
 
 # 有界リトライの上限（§5.3）。recipe が `_bounded_retry` 属性を宣言した場合のみ使う。
 _MAX_BOUNDED_RETRY = 3
+
+# **問題文の数が大きすぎたときに組み直す回数。**
+# 「1辺445cmの正三角形」「3辺が 220cm, 1200cm, 1220cm の三角形」は、答えが正しく
+# 割り切れていても教材にならない（3mの正三角形は作図もできない）。定義域を狭めると
+# dup_rate が跳ねるので、**定義域は広いまま、出来上がった問題文を測って組み直す**
+# （`answer_size` を答えに対してやっているのと同じ考えを、問題文に対してやる）。
+#
+# 記録・母集団・測定値のように**大きいのが正しい**セルは family YAML の
+# `statement_size_max` で宣言してあり、そこは1回目でそのまま通る。
+_STATEMENT_SIZE_REDRAWS = 40
 
 
 def _default_families() -> dict[str, "SpecFamily"]:
@@ -233,7 +245,7 @@ class GeneratorSupplier:
 
     def supply(self, ctx: CellContext, seed: int, *, registry: _Registry = REGISTRY) -> Problem:
         rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
-        mr = _construct_with_bounded_retry(ctx, rng, registry=registry)
+        mr = _construct_with_statement_size(ctx, rng, registry=registry)
         # recipe は (ctx, rng) のみを受け取り外側の seed 値を知らないため、pipeline が
         # 採番した seed を MR に刻印する（MR.seed = 再現の正。H8）。
         mr = mr.model_copy(update={"seed": seed})
@@ -251,6 +263,31 @@ class GeneratorSupplier:
         )
 
         return assemble_problem(mr, text, svg, ctx)
+
+
+def _construct_with_statement_size(ctx: CellContext, rng: Rng, *, registry: _Registry) -> "MR":
+    """recipe を呼び、**問題文の数が単位ごとの上限に収まるまで組み直す**。
+
+    測るのは `mr.given`（場面文・条件文＝生徒が読む文）だけ。単位のついた数だけを見て、
+    単位ごとの上限（`engine/core/verify/statement_size.py`）と比べる。
+
+    上限内の組が引けなければ**最後の組をそのまま使う**（1セル丸ごと消えるより軽い。
+    常態化していれば `python -m engine.eval.statement_size` が上限超えとして見つける）。
+    ここで seed→問題 の対応が変わるのは**上限を超えていたセルだけ**で、
+    収まっているセルは1回目で返るので golden は動かない。
+    """
+    limits = statement_limits_for(ctx.spec_level)
+    last: MR | None = None
+    for attempt in range(_STATEMENT_SIZE_REDRAWS):
+        # recipe 内の有界リトライ（`spawn(0..2)`）と別の枝を使う（1000 番台）。
+        attempt_rng = rng.spawn(1000 + attempt) if attempt else rng
+        mr = _construct_with_bounded_retry(ctx, attempt_rng, registry=registry)
+        last = mr
+        text = " ".join(str(v) for v in mr.given.values())
+        if not statement_is_too_big(text, limits):
+            return mr
+    assert last is not None
+    return last
 
 
 def _construct_with_bounded_retry(ctx: CellContext, rng: Rng, *, registry: _Registry) -> "MR":

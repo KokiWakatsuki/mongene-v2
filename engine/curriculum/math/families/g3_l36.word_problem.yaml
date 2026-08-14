@@ -50,6 +50,12 @@ levels:
       stop_distance_range: [1, 40]
       max_speed: 120
       vehicle_candidates: [自動車, バス, トラック, 乗用車, ワゴン車, タクシー, 郵便車, 消防車]
+    # 答えの分母・根号の中がこの単元では構造的に大きくなる（`engine.eval.answer_size`）。
+    answer_size_max: {denominator: 250}
+    answer_size_reason: |
+      停止距離は速さの2乗に比例するので、比例定数は y0/x0² の単位分数（1/20〜1/250）に
+      なる。現実の停止距離（20km/h で 16m など）から決まる値で、分母を12以下にすると
+      「速さ10km/hで停止距離8m」のような、場面として成り立たない組しか残らない。
     given: [scenario, quantities]
     asked: [formulation, value]
     visual: none

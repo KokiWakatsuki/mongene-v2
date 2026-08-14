@@ -40,7 +40,7 @@ def similarity_ratio_transfer(ratio_num: object, ratio_den: object, known_side: 
     steps = [
         Step(
             op="identify_similarity_ratio",
-            args=[], result_srepr="", result_display="相似比とわかっている辺の長さを読み取る",
+            args=[], result_srepr="", result_display=f"相似比 {m}:{n}、辺の長さ {sympy.sstr(v)}",
             narration="2つの図形の相似比と、わかっている辺の長さを読み取る。",
         ),
         Step(
@@ -68,7 +68,7 @@ def identify_similar_corresponding_vertex(labels1: object, labels2: object, inde
     steps = [
         Step(
             op="identify_correspondence_order",
-            args=[], result_srepr="", result_display="頂点の対応する並びを確認する",
+            args=[], result_srepr="", result_display=f"{str(labels1)} と {lb2}",
             narration="相似を表す式で、頂点がどの順に対応づけられているかを確認する。",
         ),
         Step(
