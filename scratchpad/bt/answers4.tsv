@@ -1,0 +1,262 @@
+# 逆翻訳（G-BT）の読み手の答え・9回目の find_value ぶん。
+# **問題文の日本語だけ**を読んで解いたもの。recipe / checker / エンジンの答えは見ていない。
+#
+# 突き合わせ後に手を入れた行が11ある。内訳と理由:
+#  ・g3_l47.Lv3#1 は **読み手の誤り**（136→44）。弦の交点の角を、円周角の
+#    「2つの弧の和の半分」でなく三角形の外角で出そうとして角の対応を取り違えた。
+#    独立に解き直して 44 が正しいことを確かめてから直した。
+#  ・g1_l51.Lv2#1 と g2_l53.Lv2#* は、**問題文のほうを直した**（問いが2つに読めた）。
+#    読み手が書いた中間値（中心角・選び方の総数）は答えではないので落とした。
+#  ・g3_l37.Lv4#* も **問題文のほうを直した**。「三角形OABの面積を三角形PABの面積が
+#    2等分する」と書いてあったが、解いているのは「△PAB が △OAB と等しくなる P」
+#    （等積変形の定番）。日本語を数式に合わせて書き直し、読み手の答えも
+#    直した本文から出し直した（半分の -9/2 → 等積の -18）。
+exam_l1.find_value.Lv3#1	(5, 12) ／ 12
+exam_l1.find_value.Lv3#10	(6, 8) ／ 8
+exam_l1.find_value.Lv3#16	(6, 4) ／ 4
+exam_l1.find_value.Lv3#2	(5, 12) ／ 66
+exam_l1.find_value.Lv3#3	(5, 8) ／ 36
+exam_l1.find_value.Lv3#4	(1, 12) ／ 24
+exam_l1.find_value.Lv3#5	(4, 6) ／ 21
+exam_l1.find_value.Lv3#7	(5, 8) ／ 52
+exam_l1.find_value.Lv3#8	(6, 6) ／ 36
+exam_l1.find_value.Lv4#1	1
+exam_l2.find_value.Lv3#1	3√5 ／ 6
+exam_l2.find_value.Lv3#10	3√26 ／ 6
+exam_l2.find_value.Lv3#2	5√10 ／ 10
+exam_l2.find_value.Lv3#3	3√17 ／ 12
+exam_l2.find_value.Lv4#1	4 ／ 60
+exam_l2.find_value.Lv4#2	3 ／ 30
+exam_l2.find_value.Lv4#6	-4 ／ 32
+exam_l3.find_value.Lv3#1	y = 216 - 6x ／ 36
+exam_l3.find_value.Lv4#1	11, 61
+exam_l4.find_value.Lv3#1	21
+exam_l4.find_value.Lv4#1	12√2
+exam_l6.find_value.Lv3#1	128
+exam_l6.find_value.Lv4#1	1:7
+exam_l7.find_value.Lv3#1	13 ／ 23 ／ 36 ／ 23
+g1_l32.find_value.Lv1#1	y = -5x
+g1_l32.find_value.Lv2#1	y = -7/2x
+g1_l35.find_value.Lv1#1	y = 112/x
+g1_l35.find_value.Lv2#1	y = -12/x
+g1_l46.find_value.Lv1#1	35π/6
+g1_l46.find_value.Lv1#2	27π/2
+g1_l46.find_value.Lv2#1	180
+g1_l46.find_value.Lv2#3	330
+g1_l51.find_value.Lv1#1	168
+g1_l51.find_value.Lv1#2	546
+g1_l51.find_value.Lv1#3	420π
+g1_l51.find_value.Lv2#1	630π
+g1_l51.find_value.Lv3#1	460π
+g1_l51.find_value.Lv3#2	387π
+g1_l52.find_value.Lv1#1	338
+g1_l52.find_value.Lv1#2	896
+g1_l52.find_value.Lv1#6	200
+g1_l52.find_value.Lv1#7	648
+g1_l52.find_value.Lv2#1	70
+g1_l52.find_value.Lv2#3	84
+g1_l52.find_value.Lv3#1	75
+g1_l53.find_value.Lv1#1	576π ／ 2304π
+g1_l53.find_value.Lv1#11	36π ／ 36π
+g1_l53.find_value.Lv1#2	676π ／ 8788π/3
+g1_l53.find_value.Lv1#4	784π ／ 10976π/3
+g1_l53.find_value.Lv1#6	64π ／ 256π/3
+g1_l53.find_value.Lv1#8	256π ／ 2048π/3
+g1_l53.find_value.Lv2#1	48π
+g1_l53.find_value.Lv2#2	363π
+g1_l53.find_value.Lv2#3	588π
+g1_l53.find_value.Lv2#4	12π
+g1_l53.find_value.Lv2#5	75π
+g1_l53.find_value.Lv2#9	588π
+g2_l20.find_value.Lv1#1	-4
+g2_l23.find_value.Lv2#1	4 ≦ y ≦ 8
+g2_l23.find_value.Lv2#11	-7 ≦ y ≦ 0
+g2_l23.find_value.Lv2#2	-10 ≦ y ≦ 18
+g2_l23.find_value.Lv2#5	-6 ≦ y ≦ -2
+g2_l23.find_value.Lv2#6	4 ≦ y ≦ 6
+g2_l23.find_value.Lv2#9	-2 ≦ y ≦ 0
+g2_l23.find_value.Lv3#1	y = 3x - 6
+g2_l24.find_value.Lv1#1	y = -5x + 3
+g2_l24.find_value.Lv3#1	y = -1/3x - 8/3
+g2_l24.find_value.Lv3#2	y = -2/3x + 11/3
+g2_l24.find_value.Lv3#3	y = 1/2x - 3
+g2_l25.find_value.Lv2#1	y = 3x + 3
+g2_l25.find_value.Lv3#1	y = -5/2x - 8
+g2_l27.find_value.Lv2#1	(-4, -3)
+g2_l27.find_value.Lv2#11	(1, -3)
+g2_l27.find_value.Lv2#12	(-2, 3)
+g2_l27.find_value.Lv2#2	(2, 5)
+g2_l27.find_value.Lv2#3	(0, 2)
+g2_l27.find_value.Lv2#4	(5, 4)
+g2_l27.find_value.Lv2#5	(-1, 1)
+g2_l27.find_value.Lv2#6	(-1, -4)
+g2_l27.find_value.Lv2#8	(-5, 4)
+g2_l27.find_value.Lv2#9	(1, -2)
+g2_l27.find_value.Lv3#1	(-6, -2)
+g2_l27.find_value.Lv3#10	(-5, 7)
+g2_l27.find_value.Lv3#11	(6, 5)
+g2_l27.find_value.Lv3#13	(-1, 5)
+g2_l27.find_value.Lv3#16	(5, -2)
+g2_l27.find_value.Lv3#2	(4, -5)
+g2_l27.find_value.Lv3#3	(5, 0)
+g2_l27.find_value.Lv3#4	(1, -2)
+g2_l27.find_value.Lv3#5	(-4, 4)
+g2_l27.find_value.Lv3#7	(-2, -7)
+g2_l27.find_value.Lv3#8	(-5, 7)
+g2_l29.find_value.Lv3#1	12
+g2_l29.find_value.Lv3#4	11
+g2_l30.find_value.Lv2#1	(8, 7)
+g2_l30.find_value.Lv2#14	(5, 3)
+g2_l30.find_value.Lv2#16	(5, 8)
+g2_l30.find_value.Lv2#2	(8, 8)
+g2_l30.find_value.Lv2#3	(7, 7)
+g2_l30.find_value.Lv2#4	(1, 4)
+g2_l30.find_value.Lv2#5	(4, 3)
+g2_l30.find_value.Lv2#7	(6, 2)
+g2_l30.find_value.Lv2#8	(2, 3)
+g2_l30.find_value.Lv3#1	28
+g2_l31.find_value.Lv1#1	85
+g2_l31.find_value.Lv1#2	30
+g2_l31.find_value.Lv1#7	56
+g2_l31.find_value.Lv2#1	119
+g2_l32.find_value.Lv1#1	131
+g2_l32.find_value.Lv1#4	79
+g2_l32.find_value.Lv2#1	64
+g2_l33.find_value.Lv1#1	125
+g2_l33.find_value.Lv2#1	137
+g2_l34.find_value.Lv1#1	540 ／ 108
+g2_l34.find_value.Lv1#15	720 ／ 120
+g2_l34.find_value.Lv1#2	5040 ／ 168
+g2_l34.find_value.Lv1#3	1260 ／ 140
+g2_l34.find_value.Lv1#4	1440 ／ 144
+g2_l34.find_value.Lv1#6	1080 ／ 135
+g2_l34.find_value.Lv1#7	1800 ／ 150
+g2_l34.find_value.Lv1#9	2880 ／ 160
+g2_l34.find_value.Lv2#1	30
+g2_l35.find_value.Lv1#1	60
+g2_l35.find_value.Lv1#14	30
+g2_l35.find_value.Lv1#2	36
+g2_l35.find_value.Lv1#3	15
+g2_l35.find_value.Lv1#4	20
+g2_l35.find_value.Lv1#5	18
+g2_l35.find_value.Lv1#6	45
+g2_l35.find_value.Lv2#1	5
+g2_l36.find_value.Lv1#1	54 ／ 128
+g2_l41.find_value.Lv1#1	154
+g2_l41.find_value.Lv1#3	22
+g2_l43.find_value.Lv1#1	84 ／ 60
+g2_l46.find_value.Lv1#1	23 ／ 157
+g2_l49.find_value.Lv1#1	13
+g2_l49.find_value.Lv1#3	45
+g2_l49.find_value.Lv1#6	90
+g2_l50.find_value.Lv2#1	219
+g2_l50.find_value.Lv3#1	(9, 0)
+g2_l51.find_value.Lv1#1	6/7
+g2_l51.find_value.Lv1#11	5/6
+g2_l51.find_value.Lv1#3	4/7
+g2_l51.find_value.Lv1#4	1/2
+g2_l51.find_value.Lv1#6	2/11
+g2_l51.find_value.Lv1#9	1/2
+g2_l51.find_value.Lv2#1	0.46
+g2_l52.find_value.Lv1#1	6/19
+g2_l52.find_value.Lv1#3	1/2
+g2_l52.find_value.Lv1#4	5/11
+g2_l52.find_value.Lv1#6	1/2
+g2_l52.find_value.Lv1#8	3/5
+g2_l52.find_value.Lv3#1	5/36
+g2_l52.find_value.Lv3#13	7/36
+g2_l52.find_value.Lv3#15	1/6
+g2_l52.find_value.Lv3#2	1/18
+g2_l52.find_value.Lv3#4	11/36
+g2_l52.find_value.Lv3#7	35/36
+g2_l53.find_value.Lv2#1	1/6
+g2_l53.find_value.Lv2#10	1/6
+g2_l53.find_value.Lv2#15	1/4
+g2_l53.find_value.Lv2#16	1/6
+g2_l53.find_value.Lv2#2	1/6
+g2_l53.find_value.Lv2#3	1/5
+g2_l53.find_value.Lv2#5	1/5
+g2_l53.find_value.Lv2#7	1/4
+g2_l53.find_value.Lv2#9	1/5
+g2_l53.find_value.Lv3#1	45/136
+g2_l53.find_value.Lv3#4	1/3
+g2_l53.find_value.Lv3#7	1/55
+g2_l54.find_value.Lv2#1	7/12
+g2_l54.find_value.Lv2#2	7/9
+g2_l54.find_value.Lv2#3	5/18
+g2_l54.find_value.Lv2#5	7/18
+g2_l54.find_value.Lv2#7	17/18
+g2_l54.find_value.Lv2#8	11/12
+g2_l54.find_value.Lv3#1	279/343
+g2_l54.find_value.Lv3#10	19/27
+g2_l54.find_value.Lv3#11	40/49
+g2_l54.find_value.Lv3#4	3/4
+g2_l54.find_value.Lv3#5	80/81
+g3_l23.find_value.Lv2#1	3√19
+g3_l23.find_value.Lv2#3	3√29
+g3_l30.find_value.Lv2#1	8
+g3_l31.find_value.Lv2#1	176
+g3_l31.find_value.Lv3#1	32
+g3_l34.find_value.Lv2#1	-48 ≦ y ≦ -27
+g3_l34.find_value.Lv2#13	-49 ≦ y ≦ -16
+g3_l34.find_value.Lv3#1	-180 ≦ y ≦ 0
+g3_l34.find_value.Lv3#13	0 ≦ y ≦ 64
+g3_l35.find_value.Lv2#1	60
+g3_l35.find_value.Lv2#2	9
+g3_l35.find_value.Lv3#1	-3
+g3_l37.find_value.Lv2#1	(1, 2), (2, 8)
+g3_l37.find_value.Lv2#12	(-6, -144), (-5, -100)
+g3_l37.find_value.Lv2#16	(-1, 1), (6, 36)
+g3_l37.find_value.Lv2#2	(3, -9), (6, -36)
+g3_l37.find_value.Lv2#5	(1, 1), (3, 9)
+g3_l37.find_value.Lv2#7	(-4, -16), (1, -1)
+g3_l37.find_value.Lv3#1	4√37 ／ 18
+g3_l37.find_value.Lv3#12	2√65 ／ 15
+g3_l37.find_value.Lv3#13	9√2 ／ 90
+g3_l37.find_value.Lv3#15	10 ／ 125
+g3_l37.find_value.Lv3#2	7√2 ／ 42
+g3_l37.find_value.Lv3#4	10 ／ 250
+g3_l37.find_value.Lv3#9	7√2 ／ 42
+g3_l37.find_value.Lv4#1	(0, -18)
+g3_l37.find_value.Lv4#11	(0, 36)
+g3_l37.find_value.Lv4#2	(0, 96)
+g3_l38.find_value.Lv2#1	72
+g3_l38.find_value.Lv3#1	32
+g3_l39.find_value.Lv2#1	45
+g3_l40.find_value.Lv2#1	27
+g3_l41.find_value.Lv2#1	24
+g3_l42.find_value.Lv2#1	16
+g3_l42.find_value.Lv3#1	4
+g3_l42.find_value.Lv3#2	20
+g3_l42.find_value.Lv3#5	18
+g3_l43.find_value.Lv2#1	平行である
+g3_l43.find_value.Lv3#1	42
+g3_l44.find_value.Lv2#1	45/2
+g3_l45.find_value.Lv2#1	1:4 ／ 16
+g3_l45.find_value.Lv3#1	4:21
+g3_l46.find_value.Lv2#1	4:49 ／ 8:343
+g3_l46.find_value.Lv3#1	36:1
+g3_l47.find_value.Lv1#1	69
+g3_l47.find_value.Lv3#1	44
+g3_l48.find_value.Lv2#1	45
+g3_l49.find_value.Lv2#1	21
+g3_l50.find_value.Lv2#1	54
+g3_l50.find_value.Lv3#1	100
+g3_l50.find_value.Lv3#13	45
+g3_l50.find_value.Lv3#2	120
+g3_l50.find_value.Lv3#4	72
+g3_l51.find_value.Lv1#1	7√17
+g3_l51.find_value.Lv1#3	9√5
+g3_l52.find_value.Lv2#1	直角三角形である
+g3_l53.find_value.Lv2#1	34
+g3_l53.find_value.Lv2#4	4√26
+g3_l53.find_value.Lv3#1	√33 ／ 16√33
+g3_l53.find_value.Lv4#1	19√3/4
+g3_l54.find_value.Lv2#1	5√2
+g3_l54.find_value.Lv3#1	(-1, 0)
+g3_l55.find_value.Lv2#1	6
+g3_l55.find_value.Lv3#1	√46 ／ 12√46
+g3_l55.find_value.Lv4#1	20√6/3 ／ 2000√2/3
+g3_l56.find_value.Lv2#1	√41
+g3_l56.find_value.Lv4#1	9√3
+g3_l56.find_value.Lv4#4	81√3

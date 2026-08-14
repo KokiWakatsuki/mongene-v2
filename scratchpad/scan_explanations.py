@@ -79,7 +79,11 @@ def _answer_parts(a: str) -> list[str]:
 
 
 # 1手ぶん = 「…（指示の文）。（結果）」
-_STEP_RE = re.compile(r"([^。\n]*)。（([^（）]*)）")
+#
+# 括弧の中にさらに括弧が入ることがある（「（点Dを中心とする同じ半径の弧（先の弧との
+# 交点2つ））」）。入れ子を1段だけ許さないと、その手を丸ごと取りこぼして
+# **手の数を数え違える**（作図9セルで「ヒントの数が合わない」と誤検出した）。
+_STEP_RE = re.compile(r"([^。\n]*)。（((?:[^（）]|（[^（）]*）)*)）")
 
 
 def _overlap(a: str, b: str) -> float:
@@ -90,6 +94,14 @@ def _overlap(a: str, b: str) -> float:
     ca, cb = Counter(a), Counter(b)
     common = sum(min(cb[ch], ca[ch]) for ch in cb)
     return common / len(b)
+
+
+# 指示の語尾（`scan_step_values.py` と同じ考え方。句点で終わる証明文は外す）。
+_INSTRUCTION_TAIL = re.compile(
+    r"(する|読み取る|読みとる|読む|求める|考える|数える|比べる|見比べる|そろえる|もどす|"
+    r"わける|分ける|使う|調べる|作る|つくる|当てはめる|あてはめる|確かめる|たしかめる|"
+    r"決める|きめる|選ぶ|えらぶ|示す|しめす|まとめる|見分ける|見つける|書き出す|結ぶ)$"
+)
 
 
 def _restated_steps(e: str) -> list[str]:
@@ -105,10 +117,77 @@ def _restated_steps(e: str) -> list[str]:
         instruction, result = m.group(1).strip(), m.group(2).strip()
         # 「まず、」「次に、」「最後に、」は指示文の飾りなので外す
         instruction = re.sub(r"^(まず|次に|最後に)、", "", instruction)
+        # **動詞で終わっていないものは結果**（`同一円周上にあるといえる`・
+        # `垂直二等分線の作図`）。文字の重なりだけで見ていたころは、判断を答える
+        # セルの正しい括弧を 231 問ぶん挙げていた（`scan_step_values.py` と同じ規約）。
+        if not _INSTRUCTION_TAIL.search(result):
+            continue
         if len(result) >= 6 and _overlap(instruction, result) >= 0.9:
             out.append(result)
     return out
 
+
+
+def _steps_of(e: str) -> list[str]:
+    """解説の手（「…。（結果）」）の一覧。"""
+    return [m.group(0) for m in _STEP_RE.finditer(e)]
+
+
+def _hint_count_mismatch(e: str, h: str) -> bool:
+    """ヒントの数が「解説の手数 − 1」になっていないか。
+
+    小問が複数あるセルは解説もヒストも小問ぶん並ぶので、この検査は
+    **手が2つ以上あり、ヒントが1つ以上ある単問**だけを見る（`／` で割れる
+    複数小問は対象外）。
+    """
+    if "／" in h or "／" in e:
+        return False
+    steps = _steps_of(e)
+    hints = [x for x in h.split(" / ") if x.strip()]
+    if len(steps) < 2 or not hints:
+        return False
+    return len(hints) != len(steps) - 1
+
+
+def _tail_of_last_step(e: str) -> str:
+    steps = _STEP_RE.findall(e)
+    return steps[-1][1].strip() if steps else ""
+
+
+# グラフ・作図の答えは「key 説明 値」を並べた特徴の一覧（`slope 比例定数 4、
+# point 通る点 (-3, -12)`）で、最後の手は「点をとる」「直線をひく」という描く指示。
+# 値の一致では測れないので対象外にする。
+_FEATURE_ANSWER = re.compile(r"[a-z_]{3,} [^\x00-\x7F]")
+_DIGITS = re.compile(r"\d+")
+
+
+def _last_step_not_answer(a: str, e: str) -> bool:
+    """解説の最後の手の括弧に出る数が、答えの数と1つも重ならないか。
+
+    包含では測れない（連立方程式は答え `(4, 6)` に対し最後の手が `（y = 6）` で
+    正しい。2値のうち片方で終わるのが自然）。**数の集合が交わるか**で見る。
+    """
+    last = _tail_of_last_step(e)
+    if not last or not a or _FEATURE_ANSWER.search(a):
+        return False
+    tail_nums = set(_DIGITS.findall(last))
+    if not tail_nums:
+        # 括弧が言葉だけ（作図・証明・選択肢）の手は対象外
+        return False
+    answer_nums = set(_DIGITS.findall(a))
+    return bool(answer_nums) and not (tail_nums & answer_nums)
+
+
+def _hint_leaks_answer(a: str, h: str) -> bool:
+    """ヒントに答えの文字列がそのまま出ていないか（先出し）。
+
+    2文字以下の答え（「正」「誤」など）は偶然の一致が多いので見ない。
+    """
+    for part in _answer_parts(a):
+        token = part.strip()
+        if len(token) >= 3 and token in h:
+            return True
+    return False
 
 
 # q, a, e（解説）, h（ヒント）を受け取る
@@ -136,12 +215,27 @@ _CHECKS: dict[str, object] = {
     "解説に英字の変数名が残る": lambda q, a, e, h: bool(
         re.search(r"\b(lhs|rhs|expr|val|tmp|res|ans|obj|params?|kind)\b", e + h)
     ),
-    "解説の分母が13以上": lambda q, a, e, h: bool(
-        re.search(r"-?\d+/(1[3-9]|[2-9]\d+)\b", e)
-    ),
+    # 「解説の分母が13以上」はここから外した（2026-08-14）。
+    # 答えの大きさは **6つ目のゲート `engine.eval.answer_size`** が、セルごとの
+    # 宣言（`answer_size_max`）込みで測る。文だけを見るこの検査は、確率の答え
+    # （`5/36`・`21/55`）や累乗（`4/81`）まで挙げてしまい、実物は13セルすべてが
+    # 正当だった。**同じことを2か所で測らない**（片方が必ず古くなる）。
     "解説が1文しかない": lambda q, a, e, h: bool(
         e.strip() and e.count("。") <= 1 and len(e) < 24
     ),
+    # --- ここから 2026-08-13b に足した3検査（ヒントと解説の対応・小問の整合） ---
+    #
+    # 「ヒントの数＝解説の手数−1」は `t1_template._build_hints` が
+    # `[step.narration for step in sq.steps[:-1]]` を返すことで**コードが保証している**。
+    # 走査で確かめようとしたが、括弧の無い手（`result_display` が空）と複数文の
+    # narration を、書き上がった文から区別できず**誤検出しか出なかった**ので外した。
+    # 確かめるなら MR（構造）を見る側＝`text_quality` でやること。
+    # 解説の**最後の手の括弧**は答えそのものでなければならない（解説は答えに至る道
+    # なので、最後に答えが出ないなら道が途切れている）。
+    "解説の最後の手が答えで終わっていない": lambda q, a, e, h: _last_step_not_answer(a, e),
+    # ヒントに答えが入っていたら先出し（G-Q5t の走査版。ゲートは問題文とヒントを
+    # 見るが、こちらは**答えの文字列そのもの**が現れていないかを見る）。
+    "ヒントに答えがそのまま出ている": lambda q, a, e, h: _hint_leaks_answer(a, h),
 }
 
 

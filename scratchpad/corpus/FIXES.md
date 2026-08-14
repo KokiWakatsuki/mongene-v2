@@ -756,3 +756,187 @@ def _is_triangle(a: int, b: int, c: int) -> bool:
 | 効かない数 | `g2_l49.find_value.Lv1`「ひし形 NF=174cm のとき ∠NOQ は」 | 与えた長さが答え（90°）に効かない。ただし**性質だけで答えさせる**のは教科書にある形 |
 | 図形の飾りの長さ | `g2_l36` 122cm・`g2_l43` 339cm・`g2_l46` 23cm | 合同・平行四辺形の**性質**を問うセルで、長さは対応関係を書かせるための飾り |
 | ゲート化 | `scan_big_numbers` | 走査としては動くが**合否の基準を持たない**。ゲートにするなら「答えの大きさ」側で測る設計が要る（`scan_point_names` と `scan_empty_hints` は `text_quality` に昇格済み） |
+
+---
+
+# 9周目の修正（2026-08-13b・`answer_size` ゲート化）
+
+## 原則⓪を「ゲート」にした（D-32）
+
+これまで原則⓪（答えの大きさで測る）は**セルを直すときの手**でしかなく、
+歯止めが無かった。`scan_big_numbers.py` は数を並べるだけで合否を持たない。
+
+- `engine/core/verify/answer_size.py` — **測り方の単一の真実**。
+  recipe（組み直しの判定）と eval（歯止め）が同じ関数を通る。別々に持つと
+  「生成側が通す形」と「検査側が落とす形」がずれる
+- `engine/eval/answer_size.py` — 6つ目のゲート（`python -m engine.eval` に組み込み済み）
+- `SpecLevel.answer_size_max` / `answer_size_reason` — `dup_rate_max` と同じ形の宣言
+  （理由が無いとロードで落ちる）
+
+既定の上限は **分母12 / 分子100 / 根号の中60**。整数そのものは測らない。
+
+### recipe 側の型（5つの recipe に同じ形で入れた）
+
+```python
+limits = limits_for(ctx.spec_level)          # 宣言があればそれ、無ければ既定
+for attempt in range(40):
+    attempt_rng = rng.spawn(attempt) if attempt else rng
+    ... 引く → solver で解く ...
+    if not answer_is_too_big(display, limits):
+        break                                 # 収まったら採用
+# 40回で収まらなければ最後の組で通す（1セル消えるより軽い。ゲートが見つける）
+```
+
+入れた recipe: `pythagorean_find_value` / `word_problem_pythagorean` /
+`simplify_radical` / `solve_quadratic` / `compute_signed_arithmetic` /
+`evaluate_inverse_proportion`。**1つ入れるたびに複数セルが直った**
+（三平方は 12 セル、平方根は 3 セル、二次方程式は 4 セル）。
+
+**実測**: 三平方10セルは rejects 0/120・dup ≤ 0.13（引き直しは dup を悪くしない）。
+平方根は dup ≤ 0.17、二次方程式は ≤ 0.16、正負の数は ≤ 0.14。
+
+### 例外は累乗だけだった
+
+累乗は底の分母をそのまま2乗・3乗するので、既定の分母12では**分数の底が1つも
+使えない**（`(3/4)² = 9/16` が落ちる）。dup が 0.37/0.42 に跳ねた。
+
+1. 上限を 216（=6³）に宣言（`(11/12)³ = -1331/1728` はこれでも落ちる）→ 0.16/0.25
+2. Lv2 だけまだ 0.25 だったので、**道具を1つ増やした**（小数の底。Lv1 は前から
+   持っていた）→ **0.17**。定義域は広げていない
+
+## 量の表示を1か所に集めた（`fmt_measure`）
+
+**同じ量が、セルによって小数と仮分数で書かれていた。**
+
+| どこ | 前 | 後 |
+|---|---|---|
+| 四分位数・中央値（3 solver） | `27/2` | `13.5`（`_fmt_half` を通す） |
+| 累積相対度数の割合 | `185/2%` | `92.5%`（`_fmt_relative` を通す） |
+| 三角柱の体積 | `225/2 cm³` | `112.5 cm³` |
+| 長方形の対角線の半分・中点連結・平行線と比 | `333/2` | `166.5` |
+| 動点の三角形の面積 | `2065/2` | `1032.5` |
+
+**量には小数、式の中の数には分数**が作法。`fmt_measure`（`solvers/arithmetic.py`）に
+集約し、割り切れない値は分数のまま出す（量として書けない形を隠さない）。
+srepr は変えていない＝**答えの値は1つも変わっていない**（表示だけ）。
+
+## 宣言した25セル
+
+確率14（分母＝場合の数）・有理化1（分母＝根号の中）・循環小数1（分母＝循環節）・
+大小比較1（並べ直すだけ）・累乗2（底のn乗）・座標平面の2点間距離2（1+傾き²）・
+比例定数1（停止距離）・面積比1・その他2。**すべて `answer_size_reason` に
+「なぜ大きいのが正しいか」を書いた。**
+
+## 解説を読んで見つけた分（D-33）
+
+`scratchpad/dump_explanation_texts.py`（新規）で**文型ごとに束ねて**読んだ
+（4,169手 → 1,131文型。文型を読み切れば日本語は読み切ったことになる）。
+
+- **問いと答えの食い違い**（g1_l34.knowledge.Lv1）。正誤を問うているのに答えが
+  場所の記述。問いを答えの形に合わせ、比例定数を ±500 → ±60 に戻して
+  `dup_rate_max: 0.40` を宣言（実測 0.36）
+- **「象限」は中学の教科書に無い**（高校で扱う）。選択肢と解説の2か所を
+  「右上と左下の部分」に直した
+- **「へこませて立体に組み立てられる」**（正多面体の条件）→「折り曲げて立体の頂点に
+  できる」。折るのであって、へこませるのではない
+
+---
+
+# 10周目の修正（2026-08-13c）
+
+## 原則⓪を問題文にも広げた（D-34）— **パイプラインで組み直す**
+
+`answer_size` は recipe ごとに引き直しの loop を入れた（6か所）。問題文は
+**どの recipe も `mr.given` に置く**ので、パイプライン1か所で済んだ:
+
+```python
+# engine/core/pipeline.py _construct_with_statement_size
+limits = statement_limits_for(ctx.spec_level)
+for attempt in range(40):
+    attempt_rng = rng.spawn(1000 + attempt) if attempt else rng   # recipe 側の spawn と別枝
+    mr = _construct_with_bounded_retry(ctx, attempt_rng, registry=registry)
+    if not statement_is_too_big(" ".join(mr.given.values()), limits):
+        return mr
+return last          # 収まらなければ最後の組（1セル消えるより軽い。ゲートが見つける）
+```
+
+**上限内のセルは1回目で返るので、goldenは動かない**（実際に動いたのは31セル中の
+上限超えだけ＝17 golden）。定義域は1つも狭めていないので **dup も動かない**
+（実測: 14セルすべて 0.00〜0.13。`g2_l34` の 0.86 は前からの宣言つき）。
+
+**単位ごとの上限**にしたのが効いた。裸の数に一律の上限は置けない（標本調査の
+「76000人」・有効数字の「615cm」・内角の和の「5040°」は大きくて正しい）が、
+**単位を見れば「その大きさの図形はありえない」が言える**。
+
+## 証明の日本語（D-35）
+
+| 前 | 後 | なぜ |
+|---|---|---|
+| `(10b + h) - (b + h) = 9b = 9 × b` | `= 9b` で止める | 同じ式を書き方だけ変えて並べていた。単項の商は並置（`9b`）。数字で始まる商（`2n`）は `×` のまま（`92n` と読めるため） |
+| 「②、①、③より」 | 「①、②、③より」 | 前向き推論の並び順のまま出していた。`sorted` を入れ、**153問で乱れ0**を確認 |
+
+## 逆翻訳ゲート（D-36）の道具
+
+```
+scratchpad/bt_dump.py    問題文だけを書き出す（答え・式・recipe は見せない）
+scratchpad/bt/answers.tsv 読み手が日本語だけから解いた答え
+scratchpad/bt_check.py    エンジンの答えと突き合わせ、**値**で比べる（表記差を吸収）
+```
+
+`bt_check.py` は「読み手の値がエンジンの答えに1つも欠けていないか」で見る。
+エンジン側は単位や見出し（「12%の食塩水は500g」）で数が増えるので、集合の一致では
+測れない。**日本語が数式と食い違っていれば、読み手の値のどれかが必ず外れる。**
+
+**この検査は自動では回せない**（読み手が要る）。回帰の歯止めではなく、
+**文型を足したときに1回通す関門**として使う。
+
+## D-37 解説の途中の値（2026-08-14）
+
+- 新規 `engine/packs/math/solvers/_step_text.py`（`top_level_parts`/`flatten_factors`/
+  `fmt_expr`/`join_signed`）
+- 直した solver/recipe: arithmetic・polynomial・letter_expr・quadratic・quadratic_function・
+  linear・equation・radical・motion・probability・quartile・statistics_distribution・
+  statistics_inquiry・distribution_chart・sample_survey・solid_view・solid_figure・
+  plane_geometry・plane_transform・pythagorean・pythagorean_find_value・angle_tracking・
+  inscribed_angle・triangle_properties・quadrilateral_properties・congruence_correspondence・
+  similarity・similarity_scale_ratio・similarity_conditions・parallel_line_ratio・
+  figure_reading・g1_space・number_proof 系・tree_diagram・rational_form・proposition_logic・
+  exam_linear_figure・word_problem_pythagorean・word_problem_probability・
+  word_problem_quadratic_function・word_problem_proportion_frequency・word_problem_sqrt_misc
+- 走査ツール新規 `scratchpad/scan_step_values.py`（op 別・該当セル一覧つき）
+- `scratchpad/approve_all.sh`（golden 281 family を1プロセスで再承認）
+- `scan_explanations.py`: 「解説の分母が13以上」を削除（`engine.eval.answer_size` が
+  宣言込みで測るので二重）・「括弧が指示の言い直し」に語尾の条件を足した
+
+## D-38 図の読みやすさ（2026-08-14）
+
+- 新規 `engine/packs/math/visuals/_label_place.py`
+  （`outward`＝重心と反対側へ逃がす／`centroid`／`haloed_text`＝白フチ2枚重ね）
+- `visuals/graph.py`: 目盛の数字に白フチ・`grid_tick_anchors()` を公開・
+  2点の点名を重心の反対側へ
+- `visuals/solid.py`: 見取図の頂点名を立体の重心と反対側へ＋白フチ
+- `visuals/plane_transform.py`: 多角形の頂点名を重心の反対側へ＋目盛の位置を避ける
+- `visuals/distribution_chart.py`: 度数折れ線のぶん軸を半階級広げる・目盛に白フチ
+- `visuals/plane_figure.py`: 直線名が重なる間は自分の線に沿って手前へ下げる・白フチ
+- 新規 `scratchpad/scan_figure_legibility.py`（重なり・はみ出し・貫通・小さい文字・点名の対応）
+- 新規テスト `engine_tests/unit/test_visuals.py::test_frequency_polygon_stays_inside_the_axes`
+
+## D-39 問題文と数式の食い違い（2026-08-14）
+
+- `recipes/quadratic_function.py`・`solvers/quadratic_function.py`・
+  `curriculum/math/families/g3_l37.find_value.yaml`:
+  「2等分」→「等しくなる」／mode 名 `bisecting_point` → `equal_area_point`
+- `recipes/solid_figure.py`: 「中心角を求め、表面積を求めよ」→「中心角を使って、表面積を求めよ」
+- `recipes/probability.py`: 「樹形図で数え、」→「樹形図で数えて、」
+- 新規 `scratchpad/bt_patterns.py`（逆翻訳の対象を文型で数え、未読だけを書き出す）
+- `scratchpad/bt_check.py`: `answers*.tsv` を全部読む・`patterns.json` も index に混ぜる・
+  `3a/10` と `0.3a`／`a/8` と `0.125a` を同じ値として読む・
+  **「数で比べられない」を別に数える**（記号だけを答えさせるセル）
+- 新規 `scratchpad/scan_asks_vs_answers.py`（読む先を絞る道具。欠陥判定はしない）
+- 読み手の答え: `scratchpad/bt/answers3.tsv`（word_problem 106）・
+  `answers4.tsv`（find_value 249）
+
+## D-40 証明の解説の締め（2026-08-14）
+
+- `recipes/geometry_proof.py`: `_claim_tail()` を足し、主張の形から
+  「何が分かるか」を決める（「次がいえる」をやめた）

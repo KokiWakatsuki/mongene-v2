@@ -1,0 +1,102 @@
+# 逆翻訳（G-BT）の読み手の答え。**問題文の日本語だけ**を読んで解いたもの。
+# recipe / checker / エンジンの答えは見ていない。図が要る問題は N/A。
+exam_l1.word_problem.Lv3#1	(6, 6) ／ (9, 0), (4, 0) ／ 15
+exam_l1.word_problem.Lv4#1	(6, 0)
+exam_l2.word_problem.Lv3#1	y = 24x + 45 ／ 45 ／ -8
+exam_l2.word_problem.Lv4#1	-2
+exam_l3.word_problem.Lv3#1	y = 11x ／ y = 242 ／ 9, 57
+exam_l3.word_problem.Lv4#1	15, 75
+exam_l4.word_problem.Lv3#1	20√3 ／ 200√3 ／ 20√5
+exam_l4.word_problem.Lv4#1	2√6 ／ 18√2
+exam_l5.word_problem.Lv3#1	36 ／ 1/9 ／ 1/2
+exam_l5.word_problem.Lv4#1	9/10
+exam_l6.word_problem.Lv3#1	2:5 ／ 4:25 ／ 63
+exam_l6.word_problem.Lv4#1	1:9 ／ 1/3
+exam_l7.word_problem.Lv3#1	N/A
+exam_l7.word_problem.Lv4#1	N/A
+g1_l1.word_problem.Lv1#1	+2300 ／ -1300
+g1_l11.word_problem.Lv2#1	2 × 3 × 7² × 13 ／ 78
+g1_l12.word_problem.Lv1#1	39x
+g1_l12.word_problem.Lv2#1	0.3a
+g1_l15.word_problem.Lv1#1	9x
+g1_l15.word_problem.Lv2#1	0.125a
+g1_l15.word_problem.Lv3#1	am - x
+g1_l19.word_problem.Lv1#1	7x = 1624
+g1_l19.word_problem.Lv2#1	2x + 20 = x + 9
+g1_l20.word_problem.Lv1#1	8x ≦ 1153
+g1_l20.word_problem.Lv2#1	37 < 3x - 9 < x + 23
+g1_l24.word_problem.Lv2#1	10:5 = 800:x ／ 400
+g1_l24.word_problem.Lv3#1	40
+g1_l25.word_problem.Lv2#1	130x + 110(10 - x) = 1200 ／ 5
+g1_l25.word_problem.Lv3#1	7
+g1_l26.word_problem.Lv2#1	5x + 2 = 6x - 9 ／ 11
+g1_l26.word_problem.Lv3#1	66
+g1_l27.word_problem.Lv2#1	x/5 + x/15 = 4 ／ 15
+g1_l27.word_problem.Lv3#1	15
+g1_l27.word_problem.Lv4#1	20 ／ 8
+g1_l29.word_problem.Lv2#1	y = 15x ／ 45
+g1_l29.word_problem.Lv3#1	3
+g1_l33.word_problem.Lv2#1	y = 77/x ／ 11
+g1_l33.word_problem.Lv3#1	8
+g1_l36.word_problem.Lv2#1	y = 9x ／ 108
+g1_l36.word_problem.Lv3#1	6
+g1_l36.word_problem.Lv4#1	4 ≦ x ≦ 8 のとき 128 ／ 3, 9
+g1_l58.word_problem.Lv2#1	9, 9 ／ 2, 6 ／ A
+g1_l58.word_problem.Lv3#1	66, 70 ／ A
+g1_l58.word_problem.Lv4#1	イ
+g1_l59.word_problem.Lv2#1	0.34 ／ 204
+g1_l59.word_problem.Lv3#1	750
+g2_l16.word_problem.Lv2#1	x + y = 12, 140x + 90y = 1530 ／ 9, 3
+g2_l16.word_problem.Lv3#1	3, 5
+g2_l17.word_problem.Lv2#1	x + y = 44, x/4 + y/12 = 5 ／ 8, 36
+g2_l17.word_problem.Lv3#1	1440, 1200
+g2_l17.word_problem.Lv4#1	125, 75
+g2_l18.word_problem.Lv2#1	x + y = 700, 0.12x - 0.04y = 28 ／ 350, 350
+g2_l18.word_problem.Lv3#1	500, 100
+g2_l18.word_problem.Lv4#1	24, 10
+g2_l28.word_problem.Lv2#1	y = 1.5x + 9 ／ 99
+g2_l28.word_problem.Lv3#1	y = 2x ／ y = 7x - 60 ／ 15
+g2_l28.word_problem.Lv4#1	3 ／ 30
+g2_l29.word_problem.Lv3#1	y = 24x ／ 5
+g2_l29.word_problem.Lv4#1	N/A
+g2_l30.word_problem.Lv3#1	y = 80x ／ 8
+g2_l30.word_problem.Lv4#1	13
+g2_l51.word_problem.Lv2#1	8 ／ 1/2
+g2_l51.word_problem.Lv3#1	13/22
+g2_l52.word_problem.Lv2#1	16 ／ 3/8
+g2_l52.word_problem.Lv3#1	1/18
+g2_l53.word_problem.Lv2#1	20 ／ 1/5
+g2_l53.word_problem.Lv3#1	34/55
+g2_l54.word_problem.Lv2#1	1/10 ／ 9/10
+g2_l54.word_problem.Lv3#1	11/36
+g2_l54.word_problem.Lv4#1	129/140
+g2_l57.word_problem.Lv2#1	N/A
+g2_l57.word_problem.Lv3#1	N/A
+g2_l57.word_problem.Lv4#1	N/A
+g3_l23.word_problem.Lv2#1	2√7 ／ 5.3
+g3_l23.word_problem.Lv3#1	2√5
+g3_l29.word_problem.Lv2#1	x(x + 2) = 675 ／ 25, 27
+g3_l29.word_problem.Lv3#1	18
+g3_l30.word_problem.Lv2#1	x(x + 6) = 55 ／ 5
+g3_l30.word_problem.Lv3#1	9
+g3_l31.word_problem.Lv3#1	y = 8x² ／ 6
+g3_l31.word_problem.Lv4#1	7, 17
+g3_l32.word_problem.Lv2#1	144 ／ 4
+g3_l36.word_problem.Lv2#1	y = (1/25)x² ／ 144
+g3_l36.word_problem.Lv3#1	14
+g3_l37.word_problem.Lv3#1	y = 4x - 120 ／ 660 ／ -1
+g3_l37.word_problem.Lv4#1	8:1
+g3_l38.word_problem.Lv3#1	y = 50x ／ y = 200
+g3_l38.word_problem.Lv4#1	N/A ／ 8, 22
+g3_l53.word_problem.Lv3#1	6 ／ 24
+g3_l53.word_problem.Lv4#1	8 ／ 84
+g3_l55.word_problem.Lv3#1	2√31 ／ 96√31
+g3_l55.word_problem.Lv4#1	7√3
+g3_l56.word_problem.Lv3#1	3√41 ／ 180
+g3_l56.word_problem.Lv4#1	11√2
+g3_l57.word_problem.Lv2#1	標本調査
+g3_l58.word_problem.Lv2#1	イ
+g3_l59.word_problem.Lv2#1	1/20 ／ 900
+g3_l59.word_problem.Lv3#1	720
+g3_l60.word_problem.Lv3#1	1/40 ／ 1600
+g3_l60.word_problem.Lv4#1	900

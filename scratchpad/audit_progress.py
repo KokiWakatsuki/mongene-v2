@@ -155,6 +155,8 @@ def main() -> int:
     for form, n in sorted(by_form.items(), key=lambda kv: -kv[1]):
         print(f"    {form:<14}{n}")
 
+    _print_curriculum_content()
+
     print()
     if failures:
         print("=== 監査 NG ===")
@@ -163,6 +165,44 @@ def main() -> int:
         return 1
     print("=== 監査 OK（実装済みなのに載っていない資産・配線切れ・古い除外記述は無い）===")
     return 0
+
+
+def _print_curriculum_content() -> None:
+    """カリキュラムモデル（共有データ資産）の充足率を出す。
+
+    要件定義（`docs/requirements_2026-07-11.html` §3②）では、**知識グラフ（前提関係DAG）と
+    誤答要因の語彙は「教育者が編集できる形式」の共有データ資産**で、エンジンの担当は
+    「要因 → 戻り先座標を解決して問題を供給する」（F-7）ほう。**配線は動いている**のに
+    中身がほぼ空なので、UC-2（誤答からの戻り）が事実上使えない。
+
+    ここに出しておかないと**穴が見えない**（台帳は 630/630 で埋まって見える）。
+    """
+    import yaml
+
+    from engine.core.spec.loader import load_family_dir
+
+    d = Path("engine/curriculum/math")
+    concepts = yaml.safe_load((d / "concepts.yaml").read_text(encoding="utf-8")) or {}
+    prereqs = yaml.safe_load((d / "prerequisites.yaml").read_text(encoding="utf-8")) or {}
+    causes = yaml.safe_load((d / "error_causes.yaml").read_text(encoding="utf-8")) or {}
+    families = load_family_dir(Path("engine/curriculum/math/families"))
+
+    levels = [lv for spec in families.values() for lv in spec.levels.values()]
+    tagged = sum(1 for lv in levels if lv.cause_tags)
+
+    n_concepts = len(concepts.get("concepts") or [])
+    n_prereq = len(prereqs.get("prerequisites") or [])
+    n_causes = len(causes.get("error_causes") or [])
+    print("\n--- カリキュラムモデルの充足率（教育者が入れる中身・要件定義 §3②）---")
+    print(f"    概念                 {n_concepts}")
+    print(f"    前提関係の辺          {n_prereq}"
+          f"{'   ← 概念の数に対して空（UC-2 の「前提単元へ戻る」が動かない）' if n_prereq < n_concepts // 10 else ''}")
+    print(f"    誤答要因              {n_causes}"
+          f"{'   ← 空（原因の選択肢が出せない）' if n_causes < 10 else ''}")
+    print(f"    要因タグ付きのセル      {tagged} / {len(levels)}"
+          f"{'   ← ほぼ空（問題から要因を引けない）' if tagged * 10 < len(levels) else ''}")
+    print("    ※ ここはエンジンの欠陥ではなく、共有データ資産の未入力。"
+          "配線（要因→戻り先→供給）は動くことを実測済み")
 
 
 if __name__ == "__main__":
