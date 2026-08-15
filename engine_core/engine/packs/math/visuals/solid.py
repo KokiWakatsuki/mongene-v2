@@ -549,8 +549,17 @@ def _rotation_source_parts(params: dict[str, Any]) -> list[str]:
     shape = str(params.get("shape", "rectangle"))
     w = float(params["width_px"])
     h = float(params["height_px"])
+    # **図形の実際の幅で中央を決める。** 半円は幅が半径ぶん（h/2）しかないのに
+    # 幅 w で中央を出していたので、枠の中で小さく片寄っていた（占有率 9%）。
+    # 軸から右へ張り出す量が、その図形の幅である。
+    body_w = h / 2 if shape == "semicircle" else w
+    # 枠に対して小さすぎるときは、収まる範囲で拡大する（余白は上下左右 60px）。
+    fit = min((_W - 120) / max(body_w, 1.0), (_H - 120) / max(h, 1.0))
+    if fit > 1.0:
+        scale = min(fit, 1.8)  # 元の指定を大きく裏切らない範囲で
+        w, h, body_w = w * scale, h * scale, body_w * scale
     cx, cy = _W / 2, _H / 2
-    x0 = cx - w / 2
+    x0 = cx - body_w / 2      # 軸の位置（図形はここから右へ body_w だけ張り出す）
     y_top = cy - h / 2
     y_bot = cy + h / 2
     if shape == "semicircle":

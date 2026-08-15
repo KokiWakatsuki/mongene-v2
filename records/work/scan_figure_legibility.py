@@ -285,6 +285,17 @@ def main() -> int:
                     if a / small > 0.15:
                         here("ラベルが重なる",
                              f"{p['label']!r} × {q['label']!r} 重なり {a / small:.0%}")
+                # **点マーカーの真上にラベルが乗っていないか。**
+                # ラベル同士と線しか見ていなかったので、点が1つだけの図で
+                # ラベルの向きが (0,0) になり、文字が点に重なっていたのを
+                # 見逃していた（g1_l43 の作図。目で見て初めて分かった）。
+                for cm in re.finditer(
+                        r'<circle[^>]*cx="([\d.]+)"[^>]*cy="([\d.]+)"[^>]*r="([\d.]+)"[^>]*fill="#0', svg):
+                    mx, my, mr = (float(cm.group(i)) for i in (1, 2, 3))
+                    if (p["x0"] - mr <= mx <= p["x1"] + mr
+                            and p["y0"] - mr <= my <= p["y1"] + mr):
+                        here("ラベルが点に重なる", f"{p['label']!r} at ({mx:.0f},{my:.0f})")
+                        break
                 for s in segs:
                     if _crosses(s, p):
                         # 白フチ付きは、線が通っても文字は浮いて読める（目視で確認済み）。

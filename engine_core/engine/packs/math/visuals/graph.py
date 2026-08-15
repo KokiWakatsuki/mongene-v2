@@ -127,6 +127,11 @@ def compute_grid_spec_from_params(params: dict[str, Any]) -> _GridSpec:
     """
     pts_raw = params["pts"]
     pts = [_parse_point(s) for s in pts_raw]
+    # **描かないが枠には入れたい点**（移動後の図形など）。
+    # 平行移動・回転の問題で、方眼の範囲を「元の図形」だけから決めていたため、
+    # **移動後の三角形が方眼の外に出て生徒が描けない**状態だった（60 seed 中 43 件）。
+    # 移動先は答えなので描かないが、枠には入っていなければならない。
+    pts += [_parse_point(s) for s in params.get("bbox_pts", [])]
     xs = [p[0] for p in pts]
     ys = [p[1] for p in pts]
     if params.get("grid_mode") == "quantity":

@@ -202,7 +202,13 @@ def _label_pos(pt: Pt, incident: list[Pt], center: Pt) -> Pt:
     """点名を、その点から出ている線の**すきまが最も広い向き**に置く（線に埋もれない）。"""
     if not incident:
         dx, dy = pt[0] - center[0], pt[1] - center[1]
-        n = math.hypot(dx, dy) or 1.0
+        n = math.hypot(dx, dy)
+        if n < 1e-6:
+            # **点が中心そのもののとき（図の中の点が1つだけのとき）に向きが (0,0) になり、
+            # ラベルが点マーカーの真上に重なっていた**（`n = hypot(...) or 1.0` だと
+            # 0 が 1.0 に化けて、そのまま 0 方向に 15px 進む＝進まない）。
+            # 左上へ逃がす（教科書が点名を置く既定の向き）。
+            dx, dy, n = -0.7071, -0.7071, 1.0
         return (pt[0] + dx / n * 15.0, pt[1] + dy / n * 15.0 + 4.5)
     angles = sorted(math.atan2(d[1], d[0]) for d in incident)
     gaps = [(angles[(i + 1) % len(angles)] - a) % (2 * math.pi) for i, a in enumerate(angles)]

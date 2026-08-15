@@ -132,7 +132,7 @@ def _translate_polygon_recipe(ctx: CellContext, rng: Rng, *, style: str) -> MR:
     )
     visual_plan = VisualPlan(
         style="grid" if style == "grid_only" else "coordinate",
-        labels=(_VERTEX_LABELS if style == "grid_only" else _VERTEX_LABELS + _tick_labels(pts)),
+        labels=(_VERTEX_LABELS if style == "grid_only" else _VERTEX_LABELS + _tick_labels(pts, _new_pts_from_features(sol.answer))),
         elements=[
             VisualElement(kind="grid", attrs={}),
             VisualElement(kind="polygon", attrs={"role": "original"}),
@@ -144,6 +144,10 @@ def _translate_polygon_recipe(ctx: CellContext, rng: Rng, *, style: str) -> MR:
         params={
             "pts": _pts_strs(pts), "vertex_labels": _VERTEX_LABELS,
             "dx": dx, "dy": dy,
+            # **移動後の図形も方眼に収める。** 描かないが枠には入れる
+            # （`bbox_pts`）。ここを渡していなかったので、方眼の範囲が元の図形
+            # だけから決まり、移動後の三角形が枠の外に出ていた（生徒が描けない）。
+            "bbox_pts": _new_pts_from_features(sol.answer),
         },
         given=given, sub_questions=[sub_question], visual_plan=visual_plan,
         provenance=Provenance(recipe=f"math.translate_polygon_{_RECIPE_KEY_SUFFIX[style]}"),
@@ -159,11 +163,15 @@ def _int_pts(pts_strs: list[str]) -> list[tuple[int, int]]:
     return out
 
 
-def _tick_labels(pts: list[tuple[int, int]]) -> list[str]:
-    """coordinate スタイルの目盛ラベル一覧（graph.py の tick_labels_from_params と同型）。"""
+def _tick_labels(pts: list[tuple[int, int]], bbox: list[str] | None = None) -> list[str]:
+    """coordinate スタイルの目盛ラベル一覧（graph.py の tick_labels_from_params と同型）。
+
+    `bbox` は**描かないが枠には入れる点**（移動後の図形）。渡さないと、
+    目盛ラベルと実際に描かれる方眼の範囲が食い違う（G-Q5v が落ちる）。
+    """
     from engine.packs.math.visuals.graph import tick_labels_from_params
 
-    return tick_labels_from_params({"pts": _pts_strs(pts)})
+    return tick_labels_from_params({"pts": _pts_strs(pts), "bbox_pts": bbox or []})
 
 
 @register_recipe("math.translate_polygon_grid", provides_concepts=_TRANSLATE_CONCEPTS)
@@ -212,7 +220,7 @@ def _rotate_polygon_recipe(ctx: CellContext, rng: Rng, *, style: str) -> MR:
         coord_text = "、".join(f"{lb}{pt}" for lb, pt in zip(_VERTEX_LABELS, _pts_strs(pts)))
         polygon_given = f"座標平面上に三角形ABCがあり、{coord_text}である。"
         given = {"polygon_coordinates": polygon_given, "move_spec": move_spec}
-        visual_labels = _VERTEX_LABELS + _tick_labels(pts)
+        visual_labels = _VERTEX_LABELS + _tick_labels(pts, _new_pts_from_features(sol.answer))
 
     render_params = {
         "pts": _pts_strs(pts), "vertex_labels": _VERTEX_LABELS,
@@ -240,6 +248,8 @@ def _rotate_polygon_recipe(ctx: CellContext, rng: Rng, *, style: str) -> MR:
         purpose=ctx.purpose, seed=0,
         params={
             "pts": _pts_strs(pts), "vertex_labels": _VERTEX_LABELS,
+            # 移動後の図形も方眼に収める（描かないが枠には入れる）。
+            "bbox_pts": _new_pts_from_features(sol.answer),
             "center": str(center_pt), "angle": angle,
             "center_label": center_label,
             "center_pt": str(center_pt) if style == "grid_only" else None,
@@ -301,7 +311,7 @@ def _reflect_polygon_recipe(ctx: CellContext, rng: Rng, *, style: str) -> MR:
     )
     visual_plan = VisualPlan(
         style="grid" if style == "grid_only" else "coordinate",
-        labels=(_VERTEX_LABELS if style == "grid_only" else _VERTEX_LABELS + _tick_labels(pts)),
+        labels=(_VERTEX_LABELS if style == "grid_only" else _VERTEX_LABELS + _tick_labels(pts, _new_pts_from_features(sol.answer))),
         elements=[
             VisualElement(kind="grid", attrs={}),
             VisualElement(kind="polygon", attrs={"role": "original"}),
@@ -312,6 +322,8 @@ def _reflect_polygon_recipe(ctx: CellContext, rng: Rng, *, style: str) -> MR:
         purpose=ctx.purpose, seed=0,
         params={
             "pts": _pts_strs(pts), "vertex_labels": _VERTEX_LABELS,
+            # 移動後の図形も方眼に収める（描かないが枠には入れる）。
+            "bbox_pts": _new_pts_from_features(sol.answer),
             "axis": axis, "reflect_axis": axis if style == "grid_only" else None,
         },
         given=given, sub_questions=[sub_question], visual_plan=visual_plan,
@@ -417,6 +429,8 @@ def find_rotation_center_recipe(ctx: CellContext, rng: Rng) -> MR:
         purpose=ctx.purpose, seed=0,
         params={
             "pts": _pts_strs(pts), "vertex_labels": _VERTEX_LABELS,
+            # 移動後の図形も方眼に収める（描かないが枠には入れる）。
+            "bbox_pts": _new_pts_from_features(sol.answer),
             "new_pts": new_pts, "vertex_labels_prime": _VERTEX_LABELS_PRIME,
             "center_label": center_label,
         },

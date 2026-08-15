@@ -145,7 +145,11 @@ def _label_offset(
     """
     if not incident:
         dx, dy = pt[0] - centroid[0], pt[1] - centroid[1]
-        n = math.hypot(dx, dy) or 1.0
+        n = math.hypot(dx, dy)
+        if n < 1e-6:
+            # 点が重心そのものだと向きが (0,0) になり、ラベルが点マーカーに重なる
+            # （`or 1.0` は 0 を 1.0 に化けさせるだけで、進む距離は 0 のまま）。
+            dx, dy, n = -0.7071, -0.7071, 1.0
         return pt[0] + dx / n * 15.0, pt[1] + dy / n * 15.0 + 4.0
     angles = sorted(math.atan2(dy, dx) for dx, dy in incident)
     gaps = [(angles[(i + 1) % len(angles)] - a) % (2 * math.pi) for i, a in enumerate(angles)]

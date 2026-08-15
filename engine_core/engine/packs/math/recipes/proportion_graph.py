@@ -155,8 +155,11 @@ def read_coordinate_on_plane(ctx: CellContext, rng: Rng) -> MR:
     mr_params = {"x0": x0, "y0": y0, "pts": [_pt_str(x0, y0), _pt_str(-x0, -y0)]}
     given = {
         "situation_params": (
-            f"座標平面上に点Aがある。点Aのx座標は{fmt_number(sympy.Integer(x0))}、"
-            f"y座標は{fmt_number(sympy.Integer(y0))}である"
+            # **「点Aがある」と書いていたが、図には点が描かれていない**（問題図は
+            # 目盛だけの空の座標平面で、点をとるのは生徒の仕事）。読み手は図の中を
+            # 探すことになる。座標を与えて「とれ」と言う形に直す。
+            f"x座標が{fmt_number(sympy.Integer(x0))}、"
+            f"y座標が{fmt_number(sympy.Integer(y0))}である点をAとする"
         )
     }
     return _mr(

@@ -87,22 +87,23 @@ sub_questions:
     result_display: (1, -1)、(0, -4)、(-7, 4)
     result_srepr: ''
 visual_svg: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400" font-family="Hiragino Sans, Hiragino Kaku Gothic ProN, Noto Sans JP, Yu Gothic, Meiryo, sans-serif"><rect
-  x="0" y="0" width="400" height="400" fill="#ffffff" stroke="none"/><line x1="28.00" y1="28.00" x2="28.00" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="52.57" y1="28.00" x2="52.57" y2="372.00"
-  stroke="#bbbbbb" stroke-width="0.5"/><line x1="77.14" y1="28.00" x2="77.14" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="101.71" y1="28.00" x2="101.71" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line
-  x1="126.29" y1="28.00" x2="126.29" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="150.86" y1="28.00" x2="150.86" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="175.43" y1="28.00"
-  x2="175.43" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="200.00" y1="28.00" x2="200.00" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="224.57" y1="28.00" x2="224.57" y2="372.00"
-  stroke="#bbbbbb" stroke-width="0.5"/><line x1="249.14" y1="28.00" x2="249.14" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="273.71" y1="28.00" x2="273.71" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line
-  x1="298.29" y1="28.00" x2="298.29" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="322.86" y1="28.00" x2="322.86" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="347.43" y1="28.00"
-  x2="347.43" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="372.00" y1="28.00" x2="372.00" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="372.00" x2="372.00" y2="372.00"
-  stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="347.43" x2="372.00" y2="347.43" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="322.86" x2="372.00" y2="322.86" stroke="#bbbbbb" stroke-width="0.5"/><line
-  x1="28.00" y1="298.29" x2="372.00" y2="298.29" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="273.71" x2="372.00" y2="273.71" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="249.14"
-  x2="372.00" y2="249.14" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="224.57" x2="372.00" y2="224.57" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="200.00" x2="372.00" y2="200.00"
-  stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="175.43" x2="372.00" y2="175.43" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="150.86" x2="372.00" y2="150.86" stroke="#bbbbbb" stroke-width="0.5"/><line
-  x1="28.00" y1="126.29" x2="372.00" y2="126.29" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="101.71" x2="372.00" y2="101.71" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="77.14"
-  x2="372.00" y2="77.14" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="52.57" x2="372.00" y2="52.57" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="28.00" x2="372.00" y2="28.00" stroke="#bbbbbb"
-  stroke-width="0.5"/><path d="M 200.00 101.71 L 273.71 126.29 L 77.14 298.29 Z" fill="none" stroke="#000000" stroke-width="2"/><circle cx="200.00" cy="101.71" r="2.5" fill="#000000"/><text x="202.60" y="88.00"
-  font-size="13" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">A</text><text x="202.60" y="88.00" font-size="13" text-anchor="middle" fill="#000000">A</text><circle
-  cx="273.71" cy="126.29" r="2.5" fill="#000000"/><text x="284.25" y="118.54" font-size="13" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">B</text><text x="284.25"
-  y="118.54" font-size="13" text-anchor="start" fill="#000000">B</text><circle cx="77.14" cy="298.29" r="2.5" fill="#000000"/><text x="69.28" y="316.35" font-size="13" text-anchor="end" stroke="#ffffff"
-  stroke-width="3" stroke-linejoin="round" fill="#ffffff">C</text><text x="69.28" y="316.35" font-size="13" text-anchor="end" fill="#000000">C</text><circle cx="150.86" cy="175.43" r="2.5" fill="#000000"/><text
-  x="156.86" y="169.43" font-size="13" fill="#000000">P</text></svg>
+  x="0" y="0" width="400" height="400" fill="#ffffff" stroke="none"/><line x1="28.00" y1="28.00" x2="28.00" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="49.50" y1="28.00" x2="49.50" y2="372.00"
+  stroke="#bbbbbb" stroke-width="0.5"/><line x1="71.00" y1="28.00" x2="71.00" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="92.50" y1="28.00" x2="92.50" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line
+  x1="114.00" y1="28.00" x2="114.00" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="135.50" y1="28.00" x2="135.50" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="157.00" y1="28.00"
+  x2="157.00" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="178.50" y1="28.00" x2="178.50" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="200.00" y1="28.00" x2="200.00" y2="372.00"
+  stroke="#bbbbbb" stroke-width="0.5"/><line x1="221.50" y1="28.00" x2="221.50" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="243.00" y1="28.00" x2="243.00" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line
+  x1="264.50" y1="28.00" x2="264.50" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="286.00" y1="28.00" x2="286.00" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="307.50" y1="28.00"
+  x2="307.50" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="329.00" y1="28.00" x2="329.00" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="350.50" y1="28.00" x2="350.50" y2="372.00"
+  stroke="#bbbbbb" stroke-width="0.5"/><line x1="372.00" y1="28.00" x2="372.00" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="372.00" x2="372.00" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line
+  x1="28.00" y1="350.50" x2="372.00" y2="350.50" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="329.00" x2="372.00" y2="329.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="307.50"
+  x2="372.00" y2="307.50" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="286.00" x2="372.00" y2="286.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="264.50" x2="372.00" y2="264.50"
+  stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="243.00" x2="372.00" y2="243.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="221.50" x2="372.00" y2="221.50" stroke="#bbbbbb" stroke-width="0.5"/><line
+  x1="28.00" y1="200.00" x2="372.00" y2="200.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="178.50" x2="372.00" y2="178.50" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="157.00"
+  x2="372.00" y2="157.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="135.50" x2="372.00" y2="135.50" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="114.00" x2="372.00" y2="114.00"
+  stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="92.50" x2="372.00" y2="92.50" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="71.00" x2="372.00" y2="71.00" stroke="#bbbbbb" stroke-width="0.5"/><line
+  x1="28.00" y1="49.50" x2="372.00" y2="49.50" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="28.00" x2="372.00" y2="28.00" stroke="#bbbbbb" stroke-width="0.5"/><path d="M 221.50 114.00 L 286.00
+  135.50 L 114.00 286.00 Z" fill="none" stroke="#000000" stroke-width="2"/><circle cx="221.50" cy="114.00" r="2.5" fill="#000000"/><text x="224.10" y="100.29" font-size="13" text-anchor="middle" stroke="#ffffff"
+  stroke-width="3" stroke-linejoin="round" fill="#ffffff">A</text><text x="224.10" y="100.29" font-size="13" text-anchor="middle" fill="#000000">A</text><circle cx="286.00" cy="135.50" r="2.5" fill="#000000"/><text
+  x="296.53" y="127.75" font-size="13" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">B</text><text x="296.53" y="127.75" font-size="13" text-anchor="start"
+  fill="#000000">B</text><circle cx="114.00" cy="286.00" r="2.5" fill="#000000"/><text x="106.14" y="304.07" font-size="13" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">C</text><text
+  x="106.14" y="304.07" font-size="13" text-anchor="end" fill="#000000">C</text><circle cx="178.50" cy="178.50" r="2.5" fill="#000000"/><text x="184.50" y="172.50" font-size="13" fill="#000000">P</text></svg>
