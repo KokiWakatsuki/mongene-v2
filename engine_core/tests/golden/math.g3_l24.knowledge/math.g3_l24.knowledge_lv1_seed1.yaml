@@ -30,6 +30,8 @@ sub_questions:
     correct: 二次方程式
     distractors:
     - 解
+    - 一次方程式
+    - 係数
     fact_id: quadratic_terms.term.quadratic_equation
     kind: choice
   cause_tags: []

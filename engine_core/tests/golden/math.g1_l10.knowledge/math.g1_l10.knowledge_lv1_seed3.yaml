@@ -30,6 +30,8 @@ sub_questions:
     correct: 自然数
     distractors:
     - 整数
+    - 有理数
+    - 正の数
     fact_id: number_set.term.natural_number
     kind: choice
   cause_tags: []

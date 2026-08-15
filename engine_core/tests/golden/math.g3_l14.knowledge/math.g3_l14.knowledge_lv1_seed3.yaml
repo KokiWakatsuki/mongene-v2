@@ -30,6 +30,8 @@ sub_questions:
     correct: 平方根
     distractors:
     - 根号
+    - 絶対値
+    - 自乗
     fact_id: square_root.term.square_root
     kind: choice
   cause_tags: []

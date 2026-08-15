@@ -30,6 +30,8 @@ sub_questions:
     correct: 角の二等分線
     distractors:
     - 垂直二等分線
+    - 垂線
+    - 円
     fact_id: construction_choice_terms.term.equidistant_sides
     kind: choice
   cause_tags: []

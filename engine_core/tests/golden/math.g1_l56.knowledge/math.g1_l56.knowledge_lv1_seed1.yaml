@@ -30,6 +30,8 @@ sub_questions:
     correct: 累積度数
     distractors:
     - 累積相対度数
+    - 相対度数
+    - 総度数
     fact_id: cumulative_frequency_terms.term.cumulative_frequency
     kind: choice
   cause_tags: []

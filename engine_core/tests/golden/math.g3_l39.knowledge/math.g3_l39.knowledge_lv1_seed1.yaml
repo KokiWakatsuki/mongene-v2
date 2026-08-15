@@ -28,7 +28,10 @@ problem_text: 図形Fと図形Gが相似であるとき、対応する辺の長�
 sub_questions:
 - answer:
     correct: 相似比
-    distractors: []
+    distractors:
+    - 相似の中心
+    - 相似の位置
+    - 対応する角
     fact_id: similarity_terms.term.similarity_ratio
     kind: choice
   cause_tags: []

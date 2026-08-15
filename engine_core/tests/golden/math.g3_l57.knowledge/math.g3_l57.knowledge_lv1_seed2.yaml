@@ -30,6 +30,8 @@ sub_questions:
     correct: 全数調査
     distractors:
     - 標本調査
+    - 無作為抽出
+    - 母集団
     fact_id: survey_method_terms.term.census
     kind: choice
   cause_tags: []

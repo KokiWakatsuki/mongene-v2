@@ -30,6 +30,8 @@ sub_questions:
     correct: 根号
     distractors:
     - 平方根
+    - 絶対値
+    - 自乗
     fact_id: square_root.term.radical_sign
     kind: choice
   cause_tags: []

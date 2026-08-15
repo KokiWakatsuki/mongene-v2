@@ -318,7 +318,10 @@ _TERM_MAPS: dict[str, dict[str, str]] = {
     # 大小の関係（説明された phrase）に対応する不等号（＝名前の代わりに記号）を答える。
     "inequality": {"at_least": "≧", "at_most": "≦", "less_than": "<", "greater_than": ">"},
     # g1_l10 数の集合（自然数・整数）
-    "number_set": {"natural_number": "自然数", "integer": "整数"},
+    "number_set": {
+        "natural_number": "自然数", "integer": "整数",
+        "rational_number": "有理数", "positive_number": "正の数",
+    },
     # g1_l7 累乗の用語（指数・底・累乗）
     "power": {"exponent": "指数", "base": "底", "power": "累乗"},
     # g1_l9 計算法則（交換・結合・分配法則）
@@ -330,13 +333,19 @@ _TERM_MAPS: dict[str, dict[str, str]] = {
         "approximation": "近似値", "error": "誤差", "significant_figures": "有効数字",
     },
     # g3_l14 平方根の用語（平方根・根号）。答えは漢字＝digit-free（鉄則①）。
-    "square_root": {"square_root": "平方根", "radical_sign": "根号"},
+    "square_root": {
+        "square_root": "平方根", "radical_sign": "根号",
+        "absolute_value": "絶対値", "square": "自乗",
+    },
     # g3_l16 実数の分類の用語（有理数・無理数・循環小数）。
     "real_numbers": {
         "rational": "有理数", "irrational": "無理数", "repeating_decimal": "循環小数",
     },
     # g3_l24 2次方程式の用語（2次方程式・解）。答えは漢数字「二次方程式」で digit-free。
-    "quadratic_terms": {"quadratic_equation": "二次方程式", "solution": "解"},
+    "quadratic_terms": {
+        "quadratic_equation": "二次方程式", "solution": "解",
+        "linear_equation": "一次方程式", "coefficient": "係数",
+    },
     # g3_l26 2次方程式 ax²+bx+c=0 の係数の対応（a・b・c）。答えは単一の文字＝digit-free。
     "quadratic_coefficient": {
         "coeff_a": "a", "coeff_b": "b", "coeff_c": "c",
@@ -350,10 +359,14 @@ _TERM_MAPS: dict[str, dict[str, str]] = {
         "variable": "変数", "function": "関数", "domain_range": "変域",
     },
     # g1_l29 比例の用語（比例・比例定数）。答えは漢字＝digit-free。
-    "direct_proportion": {"proportion": "比例", "proportionality_constant": "比例定数"},
+    "direct_proportion": {
+        "proportion": "比例", "proportionality_constant": "比例定数",
+        "inverse": "反比例", "function": "関数",
+    },
     # g1_l33 反比例の用語（反比例・比例定数）。答えは漢字＝digit-free。
     "inverse_proportion": {
         "inverse_proportion": "反比例", "proportionality_constant": "比例定数",
+        "proportion": "比例", "domain_of_x": "変域",
     },
     # g1_l59/g2_l51 確率まわりの用語（試行・確率・同様に確からしい）。答えは漢字＝digit-free。
     "probability_terms": {
@@ -366,10 +379,12 @@ _TERM_MAPS: dict[str, dict[str, str]] = {
     # g1_l55 相対度数まわりの用語（相対度数・度数折れ線）。
     "relative_frequency_terms": {
         "relative_frequency": "相対度数", "frequency_polygon": "度数折れ線",
+        "frequency": "度数", "class_value": "階級値",
     },
     # g1_l56 累積度数まわりの用語（累積度数・累積相対度数）。
     "cumulative_frequency_terms": {
         "cumulative_frequency": "累積度数", "cumulative_relative_frequency": "累積相対度数",
+        "relative_frequency": "相対度数", "total_frequency": "総度数",
     },
     # g1_l57 代表値の用語（平均値・中央値・最頻値）。
     "representative_value_terms": {
@@ -385,7 +400,10 @@ _TERM_MAPS: dict[str, dict[str, str]] = {
         "whisker_min": "最小値", "whisker_max": "最大値",
     },
     # g3_l57 標本調査の用語（全数調査・標本調査）。
-    "survey_method_terms": {"census": "全数調査", "sample_survey": "標本調査"},
+    "survey_method_terms": {
+        "census": "全数調査", "sample_survey": "標本調査",
+        "random_sampling": "無作為抽出", "population": "母集団",
+    },
     # g3_l58 標本の取り出し方の用語（母集団・標本・無作為抽出）。
     "sampling_terms": {
         "population": "母集団", "sample": "標本", "random_sampling": "無作為抽出",
@@ -402,10 +420,12 @@ _TERM_MAPS: dict[str, dict[str, str]] = {
     # g1_l37/l43 垂線まわりの用語（垂線の足・点と直線の距離＝垂線の長さ）。
     "perpendicular_terms": {
         "foot": "垂線の足", "distance": "垂線の長さ",
+        "perpendicular": "垂線", "midpoint": "中点",
     },
     # g1_l44 条件に対応する基本作図の用語（等距離の条件→使う基本作図）。
     "construction_choice_terms": {
         "equidistant_points": "垂直二等分線", "equidistant_sides": "角の二等分線",
+        "perpendicular_line": "垂線", "circle": "円",
     },
     # g1_l45 円まわりの用語（半径・弦・弧・おうぎ形・中心角）。
     "circle_terms": {
@@ -422,6 +442,13 @@ _TERM_MAPS: dict[str, dict[str, str]] = {
         "sas": "二辺とその間の角がそれぞれ等しい",
         "asa": "一辺とその両端の角がそれぞれ等しい",
     },
+    # **誤答は同じ domain の他の用語から作る**（`distractors = 他の値`）。
+    # だから用語が2つしか無い domain は誤答が1つしか出ず、1つの domain
+    # （similarity_terms）は**誤答が0個**で、必ず正解する問題になっていた。
+    # 生成物を読んで見つけた（2026-08-16）。同じ種類の用語を足して、
+    # どの用語想起も誤答が2つ以上になるようにする。
+    # ここに足した語は family の concept_set に無いので、**問われることはなく
+    # 誤答としてだけ使われる**（surface を書く必要がない）。
     # g2_l38 仮定・結論・反例の用語。
     "proof_logic_terms": {
         "assumption": "仮定", "conclusion": "結論", "counterexample": "反例",
@@ -429,6 +456,8 @@ _TERM_MAPS: dict[str, dict[str, str]] = {
     # g3_l39 相似な図形の用語（対応する辺の長さの比＝相似比）。
     "similarity_terms": {
         "similarity_ratio": "相似比",
+        "center_of_similarity": "相似の中心", "similar_position": "相似の位置",
+        "corresponding_angle": "対応する角",
     },
     # C8 g1 空間図形クラスタ（g1_l47〜l50 の knowledge Lv1 用語想起）。
     # g1_l47 立体の名称（底面の形を明示しない一般名＋正多面体5種）。1レベル＝1 domain

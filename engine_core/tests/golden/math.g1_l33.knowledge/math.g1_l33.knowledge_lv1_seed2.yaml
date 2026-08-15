@@ -30,6 +30,8 @@ sub_questions:
     correct: 反比例
     distractors:
     - 比例定数
+    - 比例
+    - 変域
     fact_id: inverse_proportion.term.inverse_proportion
     kind: choice
   cause_tags: []

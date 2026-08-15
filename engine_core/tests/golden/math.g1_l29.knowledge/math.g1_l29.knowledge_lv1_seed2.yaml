@@ -30,6 +30,8 @@ sub_questions:
     correct: 比例
     distractors:
     - 比例定数
+    - 反比例
+    - 関数
     fact_id: direct_proportion.term.proportion
     kind: choice
   cause_tags: []

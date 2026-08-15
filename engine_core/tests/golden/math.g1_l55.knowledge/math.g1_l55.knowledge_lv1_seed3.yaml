@@ -30,6 +30,8 @@ sub_questions:
     correct: 度数折れ線
     distractors:
     - 相対度数
+    - 度数
+    - 階級値
     fact_id: relative_frequency_terms.term.frequency_polygon
     kind: choice
   cause_tags: []

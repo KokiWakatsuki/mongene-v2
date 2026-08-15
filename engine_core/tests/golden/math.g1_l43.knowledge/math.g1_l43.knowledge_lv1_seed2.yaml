@@ -30,6 +30,8 @@ sub_questions:
     correct: 垂線の長さ
     distractors:
     - 垂線の足
+    - 垂線
+    - 中点
     fact_id: perpendicular_terms.term.distance
     kind: choice
   cause_tags: []
