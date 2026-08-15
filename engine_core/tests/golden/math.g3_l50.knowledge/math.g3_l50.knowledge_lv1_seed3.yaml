@@ -24,7 +24,7 @@ meta:
   seed: 3
   signature: arc_angle_proportion_rule_recall
 problem_ref: f878bfea5e231470
-problem_text: 1つの円で、弧HMと弧CGの長さと、それぞれに対する円周角の大きさの関係。正しく述べているものを1つ選べ。
+problem_text: 1つの円で、弧HMと弧CGの長さと、それぞれに対する円周角の大きさの関係として、正しく述べているものを1つ選べ。
 sub_questions:
 - answer:
     correct: 弧の長さは、その弧に対する円周角の大きさに比例する

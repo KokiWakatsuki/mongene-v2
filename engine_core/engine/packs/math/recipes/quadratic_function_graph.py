@@ -312,21 +312,45 @@ def draw_parabola_domain(ctx: CellContext, rng: Rng) -> MR:
 # ---------------------------------------------------------------------------
 _PHENOMENON_CONCEPTS = ["parabola_graph.phenomenon_table"]
 
-# (場面文の書式, x の単位ラベル, y の単位ラベル)。{a} は比例定数を入れない
-# （式は与えず表だけを与える＝表からグラフをかく題材）。
-_PHENOMENON_SCENES: list[tuple[str, str, str]] = [
-    ("ある斜面でボールを転がすとき、転がり始めてからの時間 x 秒と、その間に転がる距離 y m", "秒", "m"),
-    ("ある高さから物体を落とすとき、落ち始めてからの時間 x 秒と、その間に落ちる距離 y m", "秒", "m"),
-    (
-        "ある自動車がブレーキをかけ始めるときの速さ x m/秒 と、止まるまでに進む距離 y m",
-        "m/秒",
-        "m",
-    ),
-    (
-        "ある自転車がブレーキをかけ始めるときの速さ x m/秒 と、止まるまでに進む距離 y m",
-        "m/秒",
-        "m",
-    ),
+# (場面文の書式, x の単位ラベル, y の単位ラベル, 比例定数の決まり方)。
+# {a} は比例定数を入れない（式は与えず表だけを与える＝表からグラフをかく題材）。
+#
+# **場面によっては比例定数が現実で決まっている。** 前は a を 1〜20 から自由に引いて
+# いたので、
+#
+#   「ある高さから物体を落とすとき… x: 0,1,2,3 ／ y: 0,13,52,117」 → y = 13x²
+#
+# が出ていた。自由落下は y ≒ 4.9x²（教材は 5x²）で、13x² の世界は存在しない。
+# 制動距離の版は実際の 40 倍だった。
+#
+# 4つ目は取りうる比例定数の集合。5つ目は表の x が 0 から始まるか
+# （動き出しの 0 秒は自然だが、「1辺 0cm の正方形」は図形にならない）。
+#
+# **斜面も「自由」ではない。** 一度そう書いて y = 13x² の坂を出した。
+# 斜面を下る運動は a = (1/2)g·sinθ なので、**自由落下の 5 を超えられない**。
+# 傾きで変わるのは 1〜4 の範囲だけ。
+_SLOPE_A = (1, 2, 3, 4)
+# 6つ目は題材（`{o}` に入る語）。**ありえる比例定数だけにすると組が減るので、
+# 数ではなく題材で軸を戻す**（数を広げると y=13x² の坂に逆戻りする）。
+_PHENOMENON_SCENES: list[tuple[str, str, str, tuple[int, ...], bool, tuple[str, ...]]] = [
+    ("ある斜面で{o}を転がすとき、転がり始めてからの時間 x 秒と、その間に転がる距離 y m",
+     "秒", "m", _SLOPE_A, True, ("ボール", "鉄の球", "ビー玉", "木の球")),
+    ("なめらかな坂を{o}が下るとき、動き始めてからの時間 x 秒と、その間に進む距離 y m",
+     "秒", "m", _SLOPE_A, True, ("台車", "そり", "空き缶")),
+    ("ある高さから{o}を落とすとき、落ち始めてからの時間 x 秒と、その間に落ちる距離 y m",
+     "秒", "m", (5,), True, ("物体", "小石", "おもり")),  # 自由落下 y ≒ 4.9x²（教材は 5x²）
+    ("1辺の長さ x cm と、その{o}の面積 y cm²",
+     "cm", "cm²", (1,), False, ("正方形", "正方形のタイル", "正方形の紙")),
+    ("縦の長さ x cm と、横が縦の2倍である{o}の面積 y cm²",
+     "cm", "cm²", (2,), False, ("長方形", "長方形の板", "長方形の花だん")),
+    ("縦の長さ x cm と、横が縦の3倍である{o}の面積 y cm²",
+     "cm", "cm²", (3,), False, ("長方形", "長方形の板", "長方形の花だん")),
+    ("縦の長さ x cm と、横が縦の4倍である{o}の面積 y cm²",
+     "cm", "cm²", (4,), False, ("長方形", "長方形の板", "長方形の花だん")),
+    ("縦の長さ x cm と、横が縦の5倍である{o}の面積 y cm²",
+     "cm", "cm²", (5,), False, ("長方形", "長方形の板", "長方形の花だん")),
+    ("1辺の長さ x cm と、その{o}の表面積 y cm²",
+     "cm", "cm²", (6,), False, ("立方体", "立方体の箱", "さいころの形の積み木")),
 ]
 
 
@@ -341,14 +365,24 @@ def draw_phenomenon_curve(ctx: CellContext, rng: Rng) -> MR:
     bound = int(cast(int, p["value_bound"]))
     rows = int(draw(p["rows_domain"], rng))
     step = int(draw(p["step_domain"], rng))
+    # **a を先に引き、その a と両立する場面だけから選ぶ。**
+    # 場面を先に選ぶと、a が現実で決まっている場面（落下・図形）に抽選が集中して
+    # 重複率が跳ねる（実測 0.49）。この順にすると a の広さが場面にも行き渡る。
+    # 実在する場面が持てる比例定数だけ（YAML の a_domain との共通部分）。
+    # 場面の側で決まっているので、a_domain を広げても現実の値は増えない。
+    allowed = {v for s in _PHENOMENON_SCENES for v in s[3]}
     a_cands = [
-        v for v in _domain_candidates(p["a_domain"]) if v > 0 and v * (rows * step) ** 2 <= bound
+        v for v in _domain_candidates(p["a_domain"])
+        if v in allowed and v * (rows * step) ** 2 <= bound
     ]
     a = int(draw({"int_set": a_cands}, rng))
-    scene_idx = int(draw({"int_range": [0, len(_PHENOMENON_SCENES) - 1]}, rng))
-    scene, x_unit, y_unit = _PHENOMENON_SCENES[scene_idx]
+    ok = [i for i, s in enumerate(_PHENOMENON_SCENES) if a in s[3]]
+    scene_idx = int(draw({"int_set": ok}, rng))
+    scene, x_unit, y_unit, _allowed_a, from_zero, items = _PHENOMENON_SCENES[scene_idx]
+    item = str(draw(list(items), rng))
+    scene = scene.format(o=item)
 
-    xs = [step * i for i in range(rows + 1)]
+    xs = [step * i for i in range(0 if from_zero else 1, rows + 1)]
     ys = [a * x * x for x in xs]
 
     solver = REGISTRY.solver("math.draw_quantity_curve_features")
@@ -361,7 +395,13 @@ def draw_phenomenon_curve(ctx: CellContext, rng: Rng) -> MR:
         "coeff": str(a),
         "rows": rows,
         "step": step,
+        # 表の x がどこから始まるか。**checker は 0 決め打ちで組み直していた**ので、
+        # 「1辺 0cm の正方形」を避けて 1 から始めた途端に G-Q1 が落ちた。
+        "x_from": 0 if from_zero else 1,
         "scene": scene_idx,
+        # 題材も params に載せる。**載せないと dup_key から見えず、軸を増やしても
+        # 重複率が下がらない**（実測 0.40 → 0.35 で止まったのはこれ）。
+        "item": item,
         "grid_mode": "quantity",
         "pts": [str((sympy.Integer(x), sympy.Integer(y))) for x, y in zip(xs, ys, strict=True)],
     }

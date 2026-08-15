@@ -24,7 +24,7 @@ meta:
   seed: 2
   signature: function_terms_recall
 problem_ref: 1ab2f980b2533841
-problem_text: 1辺の長さが33cmより大きい正方形の1辺の長さを x cm とするときの x のように、いろいろな値をとることができる文字を何といいますか。
+problem_text: 円の直径を x cm とするときの x のように、いろいろな値をとることができる文字を何といいますか。
 sub_questions:
 - answer:
     correct: 変数

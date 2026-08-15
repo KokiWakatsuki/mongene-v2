@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: representative_value_terms_term_recall
 problem_ref: 19ac84064f1b33eb
-problem_text: 148個のデータの中で、もっとも個数が多く現れる値を何といいますか。
+problem_text: 50人の一か月に読んだ本の冊数のデータの中で、もっとも個数が多く現れる値を何といいますか。
 sub_questions:
 - answer:
     correct: 最頻値

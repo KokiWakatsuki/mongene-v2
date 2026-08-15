@@ -24,7 +24,7 @@ meta:
   seed: 3
   signature: subtraction_rule_recall
 problem_ref: 4d9ed6c66da4a959
-problem_text: (+5) - (-8) のような減法（ひき算）を計算するときのやり方について。正しく述べているものを1つ選べ。
+problem_text: (+5) - (-8) のような減法（ひき算）を計算するときのやり方について、正しく述べているものを1つ選べ。
 sub_questions:
 - answer:
     correct: ひく数の符号を変えた数を、ひかれる数にたす計算になおす

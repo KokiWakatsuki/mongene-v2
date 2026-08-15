@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: quartile_terms_term_recall
 problem_ref: ce9d1003969d178b
-problem_text: 378個のデータを大きさの順に並べたときの中央値のよび名を何といいますか。
+problem_text: 15人の通学時間のデータを大きさの順に並べたときの中央値のよび名を何といいますか。
 sub_questions:
 - answer:
     correct: 第二四分位数

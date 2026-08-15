@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: proof_logic_terms_term_recall
 problem_ref: 08612d7f98a545fb
-problem_text: 「a、bが367より大きい数ならば、a+bも367より大きい」という文で、「ならば」の前に書かれている部分を何といいますか。
+problem_text: 「a、bが7より大きい数ならば、a+bも7より大きい」という文で、「ならば」の前に書かれている部分を何といいますか。
 sub_questions:
 - answer:
     correct: 仮定

@@ -16,7 +16,9 @@ levels:
     recipe: math.classify_distribution_statistic
     params:
       concept_set: [median, range, iqr]
-      number_domain: {int_range: [5, 500]}
+      # 装飾の数は教材の粒度に合わせる（答えには一切関係しない）。
+      # 前は広い int_range から引いて、実物に出ない例が並んでいた。
+      number_domain: {int_set: [10, 15, 20, 24, 25, 30, 32, 36, 40, 45, 50]}
     given: [statement]
     asked: [choice]
     visual: none

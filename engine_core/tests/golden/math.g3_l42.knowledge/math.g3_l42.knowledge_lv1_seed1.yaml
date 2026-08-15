@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: parallel_segment_ratio_theorem_rule_recall
 problem_ref: 4dd93fb14c1effa1
-problem_text: 三角形KFDで、辺KF, KD上に点Q, CがありQC∥FDであるとき、線分の比について成り立つ関係。正しく述べているものを1つ選べ。
+problem_text: 三角形KFDで、辺KF, KD上に点Q, CがありQC∥FDであるとき、線分の比について成り立つ関係として、正しく述べているものを1つ選べ。
 sub_questions:
 - answer:
     correct: KQとKFの比、KCとKDの比、QCとFDの比が、すべて等しい

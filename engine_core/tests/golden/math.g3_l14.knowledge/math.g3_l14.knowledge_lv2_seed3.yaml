@@ -24,7 +24,7 @@ meta:
   seed: 3
   signature: sqrt_square_meaning_rule_recall
 problem_ref: 4c22b9097a380103
-problem_text: √((-143)²) の値について。正しく述べているものを1つ選べ。
+problem_text: √((-143)²) の値について、正しく述べているものを1つ選べ。
 sub_questions:
 - answer:
     correct: a を自乗した数の平方根は、a の絶対値 |a| に等しい（a が負の数のときは -a になる）

@@ -24,7 +24,7 @@ meta:
   seed: 2
   signature: letter_meaning_rule_recall
 problem_ref: d247de12b54a4cf0
-problem_text: 1本 425 円の品物を x 本買ったときの代金を 425x 円と表す場面のように、文字を使って数量を表すことの利点。正しく述べているものを1つ選べ。
+problem_text: 1個 120 円の消しゴムを x 個買ったときの代金を 120x 円と表す場面のように、文字を使って数量を表すことの利点として、正しく述べているものを1つ選べ。
 sub_questions:
 - answer:
     correct: どんな数にもあてはまる数量の関係を、文字を使って一般的に表せること

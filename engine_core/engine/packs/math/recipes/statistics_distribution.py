@@ -94,9 +94,22 @@ def frequency_table_value_recipe(ctx: CellContext, rng: Rng) -> MR:
 _STATS_TOTALS = (20, 25, 40, 50, 80, 100, 125, 200, 250)
 
 
+# 1つの階級が占める割合の上限・下限。
+# **割り切れるかどうかだけを見ていたので「125人のうち109人」（相対度数 0.872）が出た。**
+# 1つの階級に87%が入る度数分布は、階級に分ける意味がない。実物の度数分布表で
+# 1階級が占めるのは 0.05〜0.45 くらい（階級は4〜6個）。
+_CLASS_SHARE = (0.04, 0.45)
+
+
 @lru_cache(maxsize=4)
 def _stats_frequency_pairs(totals: tuple[int, ...]) -> tuple[tuple[int, int], ...]:
-    return tuple((t, o) for t in totals for o in range(1, t) if (1000 * o) % t == 0)
+    lo, hi = _CLASS_SHARE
+    return tuple(
+        (t, o)
+        for t in totals
+        for o in range(1, t)
+        if (1000 * o) % t == 0 and lo <= o / t <= hi
+    )
 
 
 def _draw_frequency_pair(p: Mapping[str, object], rng: Rng) -> tuple[int, int]:
@@ -158,8 +171,16 @@ def compare_relative_frequency_recipe(ctx: CellContext, rng: Rng) -> MR:
     # 割合が小数第3位までで書き切れる度数だけを引く。
     total_a = int(draw(p["total_domain"], rng))
     total_b = int(draw({"int_set": [v for v in _domain_int_set(p["total_domain"]) if v != total_a]}, rng))
-    freq_a = int(draw({"int_set": [f for f in range(1, total_a) if (1000 * f) % total_a == 0]}, rng))
-    freq_b = int(draw({"int_set": [f for f in range(1, total_b) if (1000 * f) % total_b == 0]}, rng))
+    # 1階級が占める割合の上限も要る（`_CLASS_SHARE`）。割り切れるかだけを見ていたので
+    # 「通学時間1〜10分の階級に 27/40（68%）と 21/30（70%）」＝全員が10分未満の学校、
+    # という度数分布が出ていた。
+    share_lo, share_hi = _CLASS_SHARE
+    freq_a = int(draw({"int_set": [f for f in range(1, total_a)
+                                   if (1000 * f) % total_a == 0
+                                   and share_lo <= f / total_a <= share_hi]}, rng))
+    freq_b = int(draw({"int_set": [f for f in range(1, total_b)
+                                   if (1000 * f) % total_b == 0
+                                   and share_lo <= f / total_b <= share_hi]}, rng))
     name_a, name_b = _SCHOOL_NAMES[0], _SCHOOL_NAMES[1]
     lo = int(draw(p["class_lo_domain"], rng))
     width = int(draw(p["class_width_domain"], rng))

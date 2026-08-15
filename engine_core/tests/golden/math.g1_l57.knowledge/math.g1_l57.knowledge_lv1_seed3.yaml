@@ -24,7 +24,7 @@ meta:
   seed: 3
   signature: representative_value_terms_term_recall
 problem_ref: ea9c094ac3039405
-problem_text: 212個のデータを大きさの順に並べたときの、中央の位置にある値を何といいますか。
+problem_text: 40人の数学のテストの得点のデータを大きさの順に並べたときの、中央の位置にある値を何といいますか。
 sub_questions:
 - answer:
     correct: 中央値

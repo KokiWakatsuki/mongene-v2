@@ -24,7 +24,7 @@ meta:
   seed: 2
   signature: quadrant_terms_term_recall
 problem_ref: 6ff4555520d7717d
-problem_text: 座標平面上で、x座標が-132のように負、y座標は163のように正である点が含まれる部分を何といいますか。
+problem_text: 座標平面上で、x座標が-2のように負、y座標は3のように正である点が含まれる部分を何といいますか。
 sub_questions:
 - answer:
     correct: 第二象限

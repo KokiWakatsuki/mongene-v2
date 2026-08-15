@@ -24,7 +24,7 @@ meta:
   seed: 3
   signature: relative_frequency_terms_term_recall
 problem_ref: 1fd0b3f1276a1bb8
-problem_text: 総度数48の度数分布表の、各階級の相対度数を折れ線でつないで表したグラフを何といいますか。
+problem_text: 24人の家庭学習の時間を調べた度数分布表の、各階級の相対度数を折れ線でつないで表したグラフを何といいますか。
 sub_questions:
 - answer:
     correct: 度数折れ線

@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: midpoint_connector_theorem_rule_recall
 problem_ref: ce09d601bb0b3b48
-problem_text: 三角形FAPで、辺FA, FPの中点をそれぞれN, Qとするとき、線分NQについて成り立つこと。正しく述べているものを1つ選べ。
+problem_text: 三角形FAPで、辺FA, FPの中点をそれぞれN, Qとするとき、線分NQについて成り立つこととして、正しく述べているものを1つ選べ。
 sub_questions:
 - answer:
     correct: 残りの辺に平行で、その長さは残りの辺の半分に等しい

@@ -44,7 +44,9 @@ def double_solve_draw_parabola_domain(mr: MR) -> Solution:
 def double_solve_draw_phenomenon_curve(mr: MR) -> Solution:
     p = mr.params
     step, rows = int(p["step"]), int(p["rows"])
-    xs = [step * i for i in range(rows + 1)]
+    # 図形の場面は x=1 から始まる（1辺 0cm の正方形は図形にならない）。
+    x_from = int(p.get("x_from", 0))
+    xs = [step * i for i in range(x_from, rows + 1)]
     solver = REGISTRY.solver("math.draw_quantity_curve_features")
     return cast(Solution, solver(sympy.sympify(p["coeff"]), xs))
 

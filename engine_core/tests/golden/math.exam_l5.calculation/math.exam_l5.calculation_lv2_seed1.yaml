@@ -24,16 +24,16 @@ meta:
   seed: 1
   signature: exam_probability_from_counts
 problem_ref: 4348c249eb26c20c
-problem_text: 何枚かの数字カードを並べて整数をつくるとき、起こりうる場合は全部で16通りあり、そのうち偶数になる場合は9通りであった。偶数になる確率を求めよ。
+problem_text: 1から8までの数字が1枚ずつ書かれた紙から2枚を選んで並べ、2けたの整数をつくるとき、起こりうる場合は全部で56通りあり、そのうち奇数になる場合は28通りであった。奇数になる確率を求めよ。
 sub_questions:
 - answer:
-    display: 9/16
+    display: 1/2
     kind: symbolic
-    srepr: Rational(9, 16)
+    srepr: Rational(1, 2)
   cause_tags: []
   concept_tags:
   - exam.probability_from_counts
-  explanation: まず、ことがらが起こった回数を、試行の総回数でわる。（9/16）
+  explanation: まず、ことがらが起こった回数を、試行の総回数でわる。（1/2）
   hints:
   - ことがらが起こった回数を、試行の総回数でわる。
   label: (1)
@@ -42,6 +42,6 @@ sub_questions:
   - args: []
     narration: ことがらが起こった回数を、試行の総回数でわる。
     op: divide_occurred_by_total
-    result_display: 9/16
-    result_srepr: Rational(9, 16)
+    result_display: 1/2
+    result_srepr: Rational(1, 2)
 visual_svg: null

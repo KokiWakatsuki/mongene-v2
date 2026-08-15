@@ -24,7 +24,7 @@ meta:
   seed: 2
   signature: explain_sample_ratio_rationale
 problem_ref: 2ed6cb5cfdfbd7c3
-problem_text: 標本調査で318個(人)の標本を無作為に抽出したとき、標本の中の割合(標本比率)を母集団全体の割合(母比率)のおよその値とみなしてよいのはなぜか、その考え方を説明せよ。
+problem_text: ある工場の製品の不良品の割合を調べるため、大きさ150の標本を無作為に抽出した。標本の中の割合(標本比率)を母集団全体の割合(母比率)のおよその値とみなしてよいのはなぜか、その考え方を説明せよ。
 sub_questions:
 - answer:
     correct: 無作為に抽出すれば、標本は母集団の縮図とみなせるから

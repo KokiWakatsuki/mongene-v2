@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: product_sign_rule_recall
 problem_ref: 69570c7f04a91b96
-problem_text: (-33) × (-31) のように、負の数を偶数個かけ合わせた積の符号について。正しく述べているものを1つ選べ。
+problem_text: (-15) × (-4) のように、負の数を偶数個かけ合わせた積の符号について、正しく述べているものを1つ選べ。
 sub_questions:
 - answer:
     correct: 負の数が偶数個のとき、積の符号は正になる

@@ -24,7 +24,7 @@ meta:
   seed: 2
   signature: subtraction_rule_recall
 problem_ref: 26d04d7c2b38db7e
-problem_text: (+9) - (-2) のような減法（ひき算）を計算するときのやり方について。正しく述べているものを1つ選べ。
+problem_text: (+9) - (-2) のような減法（ひき算）を計算するときのやり方について、正しく述べているものを1つ選べ。
 sub_questions:
 - answer:
     correct: ひく数の符号を変えた数を、ひかれる数にたす計算になおす

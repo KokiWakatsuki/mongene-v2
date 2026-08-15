@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: polygon_interior_sum_reason_rule_recall
 problem_ref: e642c49dea3fad3f
-problem_text: 9角形の内角の和を求めるとき、1つの頂点から対角線をひいて三角形に分けられる、その個数の求め方。正しく述べているものを1つ選べ。
+problem_text: 9角形の内角の和を求めるとき、1つの頂点から対角線をひいて三角形に分けられる、その個数の求め方として、正しく述べているものを1つ選べ。
 sub_questions:
 - answer:
     correct: 一つの頂点からひける対角線によって、三角形に分けられるから

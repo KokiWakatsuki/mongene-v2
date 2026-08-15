@@ -24,7 +24,7 @@ meta:
   seed: 3
   signature: judge_equally_likely
 problem_ref: 714ef22de2a7fce2
-problem_text: 赤玉1個と白玉11個が入った袋から1個取り出して、赤と白のどちらが出るか。
+problem_text: 赤玉1個と白玉11個が入った袋から1個取り出して、赤と白のどちらが出るか。この場面で、起こりうる結果は同様に確からしいといえるか。
 sub_questions:
 - answer:
     correct: 同様に確からしいとはいえない

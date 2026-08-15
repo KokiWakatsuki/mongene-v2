@@ -25,6 +25,14 @@ levels:
       topic: parabola_property
       concept_set: [shape_and_symmetry, opening_direction, opening_width]
       number_domain: {int_range: [-500, 500]}
+    dup_rate_max: 0.40
+    dup_rate_reason: |
+      放物線の開く向き・形 を問う問題で変えられるのは**比例定数だけ**で、実物も同じ
+      （教科書の例は y=2x²・y=-3x²・y=(1/2)x²）。実物に出る 18 通り×符号＝36 通りを
+      並べて実測 0.32。
+      **前はここが通っていたが、それは比例定数を 2〜250 から引いていたから**で、
+      「y = -382x² のグラフは上と下のどちらに開くか」という、実物には無い問題が
+      出ていた。広さのために教材でない数を使うのはやめ、狭さのほうを宣言する。
     given: [statement]
     asked: [choice]
     visual: none

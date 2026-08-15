@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: quadratic_coefficient_term_recall
 problem_ref: d8ba705f7c6644d1
-problem_text: 2次方程式 4x² + 4x - 14 = 0 を一般の形 ax² + bx + c = 0 と見比べたとき、x の項の係数にあたる文字を何といいますか。
+problem_text: 2次方程式 4x² + 10x + 5 = 0 を一般の形 ax² + bx + c = 0 と見比べたとき、x の項の係数にあたる文字を何といいますか。
 sub_questions:
 - answer:
     correct: b

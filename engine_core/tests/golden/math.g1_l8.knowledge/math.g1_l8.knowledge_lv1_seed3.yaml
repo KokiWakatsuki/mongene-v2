@@ -24,7 +24,7 @@ meta:
   seed: 3
   signature: reciprocal_rule_recall
 problem_ref: e3b31de1ebba0fb3
-problem_text: 14 ÷ 4 のように、ある数でわる計算をかけ算になおすやり方について。正しく述べているものを1つ選べ。
+problem_text: 14 ÷ 4 のように、ある数でわる計算をかけ算になおすやり方について、正しく述べているものを1つ選べ。
 sub_questions:
 - answer:
     correct: ある数でわることは、その数の逆数をかけることと同じである

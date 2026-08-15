@@ -24,7 +24,7 @@ meta:
   seed: 3
   signature: quadratic_coefficient_term_recall
 problem_ref: 763e325d34a26d01
-problem_text: 2次方程式 4x² + 16x - 30 = 0 を一般の形 ax² + bx + c = 0 と見比べたとき、x² の項の係数にあたる文字を何といいますか。
+problem_text: 2次方程式 4x² + 10x + 1 = 0 を一般の形 ax² + bx + c = 0 と見比べたとき、x² の項の係数にあたる文字を何といいますか。
 sub_questions:
 - answer:
     correct: a

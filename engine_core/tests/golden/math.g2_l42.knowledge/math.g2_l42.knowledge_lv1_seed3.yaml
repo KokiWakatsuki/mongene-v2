@@ -24,7 +24,7 @@ meta:
   seed: 3
   signature: isosceles_condition_rule_recall
 problem_ref: 2e2a92cf0070e282
-problem_text: 三角形GJDが二等辺三角形になるといえる、角に着目した条件。正しく述べているものを1つ選べ。
+problem_text: 三角形GJDが二等辺三角形になるといえる、角に着目した条件として、正しく述べているものを1つ選べ。
 sub_questions:
 - answer:
     correct: 二つの角が等しい

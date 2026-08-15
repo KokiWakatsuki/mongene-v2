@@ -24,7 +24,7 @@ meta:
   seed: 3
   signature: parallel_segment_ratio_converse_rule_recall
 problem_ref: 55a5e41787b6728c
-problem_text: 三角形NEQの辺NE, NQ上の点M, Hについて、NM:ME=NH:HQが成り立つとき、いえること。正しく述べているものを1つ選べ。
+problem_text: 三角形NEQの辺NE, NQ上の点M, Hについて、NM:ME=NH:HQが成り立つとき、いえることとして、正しく述べているものを1つ選べ。
 sub_questions:
 - answer:
     correct: MHとEQが平行である

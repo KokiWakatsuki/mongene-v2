@@ -446,6 +446,81 @@ _FREQUENCY_TABLE_SCENES = (
     "立ち幅とびの記録",
 )
 
+# 調査の対象と助数詞。
+# **「2200個（人）の対象の集団」と書いていた。** 単位が物か人かを決められないので
+# 両方書いてあった状態で、実物にこの書き方は無い。対象を1つ決めれば助数詞も決まる。
+# （数を丸めた分の重複はここで戻る＝題材の軸）。
+# 対象と助数詞が同じ語になる組は入れない（「3200世帯の世帯の集団」になった）。
+_SURVEY_TARGETS: tuple[tuple[str, str], ...] = (
+    ("製品", "個"), ("缶詰", "個"), ("部品", "個"), ("電球", "個"),
+    ("電池", "本"), ("ねじ", "本"), ("くぎ", "本"), ("ペン", "本"),
+    ("生徒", "人"), ("住民", "人"), ("参加者", "人"), ("来客", "人"),
+    ("会員", "人"), ("みかん", "個"), ("たまご", "個"), ("袋", "袋".replace("袋", "つ")),
+)
+
+
+def _survey_target(rng: Rng) -> tuple[str, str]:
+    return _SURVEY_TARGETS[int(draw({"int_range": [0, len(_SURVEY_TARGETS) - 1]}, rng))]
+
+
+# 装飾に使う数の「自然な集合」。
+#
+# knowledge form の問題文だけが実物から外れていた（末尾0率 12%／実物 34%、
+# 常用数率 41%／実物 61%）。原因は**1つの `number_domain` を、意味の違う量すべてに
+# 使い回していた**こと——道のり(km)・時間・速さ・値段(円)・比例定数・展開の係数を
+# 同じ int_range から引いていたので、こうなった。
+#
+#   y = -382x² のグラフが上と下のどちらに開くか   （実物は y = -3x²）
+#   図形を、点Hを中心として254°回転移動した       （実物は 90°・180°）
+#   1本 79 円の品物を x 本買ったときの代金        （実物は 80円・100円）
+#   (x + 54)(x + 75) を乗法公式を使って展開する   （実物は (x+2)(x+3)）
+#
+# **答えに一切関係しない数**なので、量ごとに自然な集合から引けば質だけが上がる。
+_D_COEFF = tuple(range(1, 13))                     # 比例定数・係数
+_D_MONEY = tuple(range(30, 301, 10))               # 値段（10円刻み・文具や食品の値段）
+_D_ROTATION = (30, 45, 60, 90, 120, 135, 180, 270)  # 回転の角
+_D_SPEED = (4, 5, 6, 10, 12, 15, 20, 30, 40, 50, 60, 80)  # 速さ
+_D_HOURS = tuple(range(1, 9))                      # 時間
+_D_DATA_N = (10, 15, 20, 24, 25, 30, 32, 36, 40, 45, 50)  # データの個数・人数
+_D_SMALL_DEN = (2, 3, 4, 5, 6, 8, 9, 10, 12, 15, 16, 20, 25, 36)  # 確率の分母
+
+
+def _pick(cands: tuple[int, ...], rng: Rng, *, signed: bool = False) -> int:
+    """自然な集合から1つ引く（`signed=True` なら符号も引く）。"""
+    v = int(draw({"int_set": list(cands)}, rng))
+    return -v if signed and int(draw({"int_range": [0, 1]}, rng)) else v
+
+
+# y=ax² の比例定数として実物に出る値（分数も出る。教科書の例が y=(1/2)x²）。
+_D_A_QUADRATIC = ("1", "2", "3", "4", "5", "6", "8", "9", "10", "12",
+                  "(1/2)", "(1/3)", "(2/3)", "(1/4)", "(3/4)", "(3/2)", "(4/3)", "(5/2)")
+
+
+def _pick_a(rng: Rng) -> str:
+    """y=ax² の比例定数を、表示できる形で1つ引く（符号つき）。"""
+    v = str(draw(list(_D_A_QUADRATIC), rng))
+    if int(draw({"int_range": [0, 1]}, rng)):
+        return f"-{v}"
+    return v
+
+
+# 統計の用語想起で使う題材。**データの個数を教材の大きさに絞った分、ここで広さを戻す。**
+# 「148個のデータ」より「30人の身長のデータ」のほうが実物に近く、軸としても正しい
+# （実物の用語説明も、必ず何のデータかを添えている）。
+_DATA_SUBJECTS: tuple[str, ...] = (
+    "身長", "通学時間", "数学のテストの得点", "反復横とびの記録", "握力の記録",
+    "立ち幅とびの記録", "ハンドボール投げの記録", "家庭学習の時間", "睡眠時間",
+    "一か月に読んだ本の冊数",
+)
+
+
+def _data_head(rng: Rng) -> str:
+    """「30人の身長」のような、データの頭書き。"""
+    n = _pick(_D_DATA_N, rng)
+    s = str(draw(list(_DATA_SUBJECTS), rng))
+    return f"{n}人の{s}"
+
+
 def _population_size(n: int) -> int:
     """引いた数を、標本調査が成り立つ母集団の大きさに直す（1000〜50000）。
 
@@ -638,7 +713,9 @@ def _draw_term_statement(domain: str, concept: str, rng: Rng, p: dict[str, objec
         # g3_l26 2次方程式 ax²+bx+c=0 の係数の対応。具体例を埋め込み surface を分散する。
         # b・c は 0 だと項が式から消えて表示できないため非0 に限定する。
         a_cands = [v for v in _domain_candidates(cast("dict[str, object]", p["a_domain"])) if v != 0]
-        bc_cands = [v for v in _domain_candidates(cast("dict[str, object]", p["number_domain"])) if v != 0]
+        # 係数は1桁台（実物の ax²+bx+c は 4x²+4x-14 のような大きさ）。
+        bc_cands = [v for v in _domain_candidates(cast("dict[str, object]", p["number_domain"]))
+                    if v != 0 and abs(v) <= 12]
         a = int(draw({"int_set": a_cands}, rng))
         b = int(draw({"int_set": bc_cands}, rng))
         c = int(draw({"int_set": bc_cands}, rng))
@@ -666,14 +743,20 @@ def _draw_term_statement(domain: str, concept: str, rng: Rng, p: dict[str, objec
         # **定義域は狭めない。** 引いた n は「回数」（10〜500 はどれも実験としてありうる）
         # にそのまま使い、道具の個数には n から作った小さな数を使う。失う組み合わせは
         # 道具（3通り）と2つ目の数で取り戻す（原則①: 軸を増やす）。
-        n = int(draw(p["number_domain"], rng))
+        # **それぞれ独立に引く。** 前は1つの n から回数と個数を派生させていたが、
+        # 数を教材の粒度に絞ったら派生元が11通りになり、dup が 0.40 に跳ねた。
+        # 数を絞ったら、その数から派生させていた軸は引き直す（g1_l56 と同じ）。
         tool = int(draw({"int_set": [0, 1, 2]}, rng))
-        few = 1 + n % 8  # 1〜8（当たり・赤玉の数）
-        many = 2 + int(draw({"int_range": [0, 9]}, rng))  # 2〜11（はずれ・白玉の数）
+        few = int(draw({"int_range": [1, 8]}, rng))   # 当たり・赤玉の数
+        many = int(draw({"int_range": [2, 11]}, rng))  # はずれ・白玉の数
         if concept == "trial":
-            times = max(1, round(n / 10)) * 10  # きりのよい回数（10〜500回）
-            thing = ("さいころ", "硬貨", "画びょう")[tool]
-            verb = "落とす" if tool == 2 else "投げる"
+            # きりのよい回数（教科書は 50・100・500 のような回数で実験する）。
+            times = _pick((20, 30, 50, 100, 150, 200, 300, 400, 500, 1000), rng)
+            # 回数を教材の粒度に絞った分、道具の種類で広さを戻す。
+            thing = str(draw(
+                ["さいころ", "硬貨", "画びょう", "びんのふた", "ペットボトルのふた",
+                 "おはじき", "紙コップ", "10円硬貨", "500円硬貨", "消しゴム"], rng))
+            verb = "落とす" if thing in ("画びょう", "紙コップ", "消しゴム") else "投げる"
             return (
                 f"{thing}を{times}回{verb}実験のように、"
                 "同じ条件のもとで何回もくり返すことができる実験や観察のこと"
@@ -701,9 +784,7 @@ def _draw_term_statement(domain: str, concept: str, rng: Rng, p: dict[str, objec
 
     if domain == "quadratic_function_terms":
         # g3_l32 y=ax² まわりの用語。具体例の比例定数 a(≠0) を埋め込み surface を分散する。
-        a = int(draw({"int_set": [
-            v for v in _domain_candidates(cast("dict[str, object]", p["number_domain"])) if v != 0
-        ]}, rng))
+        a = _pick_a(rng)  # 比例定数は1桁か簡単な分数が実物（-382 は出ない）
         # **体言止めで返すこと。** テンプレートが「〜を何といいますか。」を付けるので、
         # 「〜を何というか」で終えると「を何というか を何といいますか」と二重になる。
         if concept == "proportionality_constant":
@@ -716,10 +797,17 @@ def _draw_term_statement(domain: str, concept: str, rng: Rng, p: dict[str, objec
         # g1_l28 関数まわりの用語（変数・関数・変域）。具体例（正方形の1辺と周の長さ）を
         # 埋め込み surface を分散する（C4 g1 比例・反比例クラスタの導入回）。各 concept で
         # 必ず number_domain から1つ以上引き、無駄引き（未使用の draw）を作らない。
+        # 図形と数量の題材で分散する（下限の節「{m}cm より大きい」は重複率のために
+        # 足した無意味な条件だったので外し、代わりに題材を軸にする）。
+        shape, quantity = str(draw(
+            ["正方形|1辺の長さ", "正三角形|1辺の長さ", "正五角形|1辺の長さ",
+             "正六角形|1辺の長さ", "正八角形|1辺の長さ", "長方形|縦の長さ",
+             "長方形|横の長さ", "ひし形|1辺の長さ", "円|半径", "円|直径",
+             "直方体|高さ", "直方体|縦の長さ", "立方体|1辺の長さ",
+             "平行四辺形|底辺の長さ", "台形|高さ"], rng)).split("|")
         if concept == "variable":
-            m = int(draw(p["number_domain"], rng))
             return (
-                f"1辺の長さが{m}cmより大きい正方形の1辺の長さを x cm とするときの x のように、"
+                f"{shape}の{quantity}を x cm とするときの x のように、"
                 "いろいろな値をとることができる文字"
             )
         if concept == "function":
@@ -732,17 +820,18 @@ def _draw_term_statement(domain: str, concept: str, rng: Rng, p: dict[str, objec
                     f"ある値を1つ決める（例えば{n}のように）と、それに対応してもう一方の値が"
                     "ただ1つに決まるときの、2つの数量の関係"
                 )
+            # 下限の節（「{n}cm より長い」）は重複率のために足した無意味な条件だった。
             return (
-                f"1辺の長さが{n}cmより長い正方形の1辺の長さを x cm、"
-                "周の長さを y cm とするときの、この y と x のような関係"
+                f"{shape}の{quantity}を x cm、周の長さを y cm とするときの、"
+                "この y と x のような関係"
             )
-        n = int(draw(p["number_domain"], rng))
+        # 変域の下限も教材の数にする（「195 以上」は実物の変域の書き方でない）。
+        n = _pick((0, 1, 2, 3, 4, 5, 6, 8, 10, 12, 15, 20, 25, 30, 40, 50), rng)
         return f"x の値が {n} 以上のように限られているときの、その x のとる値の範囲"  # domain_range
 
     if domain == "direct_proportion":
         # g1_l29 比例の用語（比例・比例定数）。具体例 y=ax を埋め込み surface を分散する。
-        cands = [v for v in _domain_candidates(cast("dict[str, object]", p["number_domain"])) if v != 0]
-        a = int(draw({"int_set": cands}, rng))
+        a = _pick(_D_COEFF, rng, signed=True)  # 比例定数は1桁が実物（y=208x は出ない）
         eqx = f"y = {a}x" if a != 1 else "y = x"
         if concept == "proportion":
             return f"{eqx} のように、x の値が2倍、3倍になると、それにともなって y の値も2倍、3倍になる関係"
@@ -750,8 +839,8 @@ def _draw_term_statement(domain: str, concept: str, rng: Rng, p: dict[str, objec
 
     if domain == "inverse_proportion":
         # g1_l33 反比例の用語（反比例・比例定数）。具体例 y=a/x を埋め込み surface を分散する。
-        cands = [v for v in _domain_candidates(cast("dict[str, object]", p["number_domain"])) if v != 0]
-        a = int(draw({"int_set": cands}, rng))
+        # 反比例の比例定数は約数の多い数（y = 190/x のような素数近くの値は出ない）。
+        a = _pick((6, 8, 12, 16, 18, 20, 24, 30, 36, 48, 60), rng, signed=True)
         eqx = f"y = {a}/x"
         if concept == "inverse_proportion":
             return f"{eqx} のように、x の値が2倍、3倍になると、それにともなって y の値が1/2倍、1/3倍になる関係"
@@ -759,7 +848,7 @@ def _draw_term_statement(domain: str, concept: str, rng: Rng, p: dict[str, objec
 
     if domain == "frequency_table_terms":
         # g1_l54 度数分布表の用語。具体例の階級の下端・幅を埋め込み surface を分散する。
-        lo = int(draw(p["number_domain"], rng))
+        lo = _pick(_D_DATA_N, rng)
         width = int(draw(p["width_domain"], rng))
         hi = lo + width
         if concept == "class":
@@ -772,10 +861,10 @@ def _draw_term_statement(domain: str, concept: str, rng: Rng, p: dict[str, objec
 
     if domain == "relative_frequency_terms":
         # g1_l55 相対度数まわりの用語。具体例の総度数 n を埋め込み surface を分散する。
-        n = int(draw(p["number_domain"], rng))
+        head = _data_head(rng)
         if concept == "relative_frequency":
-            return f"総度数が{n}の度数分布表で、各階級の度数の、総度数に対する割合"
-        return f"総度数{n}の度数分布表の、各階級の相対度数を折れ線でつないで表したグラフ"  # frequency_polygon
+            return f"{head}を調べた度数分布表で、各階級の度数の、総度数に対する割合"
+        return f"{head}を調べた度数分布表の、各階級の相対度数を折れ線でつないで表したグラフ"  # frequency_polygon
 
     if domain == "cumulative_frequency_terms":
         # g1_l56 累積度数まわりの用語。具体例の階級数と場面を埋め込み surface を分散する。
@@ -783,11 +872,11 @@ def _draw_term_statement(domain: str, concept: str, rng: Rng, p: dict[str, objec
         # 「337個の階級に分けた度数分布表」が出ていた。教科書の階級は5〜10個で、
         # 度数分布表として成り立つ範囲がある＝D-29 と同じ「場面に対して値がありうるか」）。
         # 定義域は狭めず、引いた n を階級数と場面の2軸に写す（原則①）。
-        n = int(draw(p["number_domain"], rng))
-        # 階級数と場面は**別の桁**から作る（同じ n%8 で両方を決めると完全に連動して
-        # 8通りにしかならず、dup が 0.34 に跳ねる）。
-        classes = 5 + n % 8  # 5〜12個
-        scene = _FREQUENCY_TABLE_SCENES[(n // 8) % len(_FREQUENCY_TABLE_SCENES)]
+        # 階級数と場面は**それぞれ独立に引く**。前は1つの n から別の桁で作っていたが、
+        # データの個数を教材の大きさ（11通り）に絞ったら桁が足りなくなり dup が 0.33 に
+        # 跳ねた。**数を絞ったら、その数から派生させていた軸は引き直す。**
+        classes = int(draw({"int_range": [5, 12]}, rng))  # 教科書の階級は5〜10個
+        scene = str(draw(list(_FREQUENCY_TABLE_SCENES), rng))
         total = int(draw({"int_set": [20, 25, 30, 35, 40, 45, 50]}, rng))
         head = f"生徒{total}人の{scene}を{classes}個の階級に分けた度数分布表で"
         if concept == "cumulative_frequency":
@@ -796,59 +885,64 @@ def _draw_term_statement(domain: str, concept: str, rng: Rng, p: dict[str, objec
 
     if domain == "representative_value_terms":
         # g1_l57 代表値の用語。具体例のデータ個数 n を埋め込み surface を分散する。
-        n = int(draw(p["number_domain"], rng))
+        head = _data_head(rng)
         if concept == "mean":
-            return f"{n}個のデータの値をすべて合計し、データの個数でわった値"
+            return f"{head}のデータの値をすべて合計し、データの個数でわった値"
         if concept == "median":
-            return f"{n}個のデータを大きさの順に並べたときの、中央の位置にある値"
-        return f"{n}個のデータの中で、もっとも個数が多く現れる値"  # mode
+            return f"{head}のデータを大きさの順に並べたときの、中央の位置にある値"
+        return f"{head}のデータの中で、もっとも個数が多く現れる値"  # mode
 
     if domain == "quartile_terms":
         # g2_l55 四分位数の用語。具体例のデータ個数 n を埋め込み surface を分散する。
-        n = int(draw(p["number_domain"], rng))
+        head = _data_head(rng)
         if concept == "q1":
-            return f"{n}個のデータを大きさの順に並べて中央値を境に下組・上組に分けたときの、下組の中央値"
+            return f"{head}のデータを大きさの順に並べて中央値を境に下組・上組に分けたときの、下組の中央値"
         if concept == "q2":
-            return f"{n}個のデータを大きさの順に並べたときの中央値のよび名"
+            return f"{head}のデータを大きさの順に並べたときの中央値のよび名"
         if concept == "q3":
-            return f"{n}個のデータを大きさの順に並べて中央値を境に下組・上組に分けたときの、上組の中央値"
-        return f"{n}個のデータについて、上組の中央値から下組の中央値をひいた差"  # iqr
+            return f"{head}のデータを大きさの順に並べて中央値を境に下組・上組に分けたときの、上組の中央値"
+        return f"{head}のデータについて、上組の中央値から下組の中央値をひいた差"  # iqr
 
     if domain == "box_plot_terms":
         # g2_l56 箱ひげ図の用語。具体例のデータ個数 n を埋め込み surface を分散する。
-        n = int(draw(p["number_domain"], rng))
+        head = _data_head(rng)
         if concept == "box_left":
-            return f"{n}個のデータを表した箱ひげ図で、箱の左端が表す値"
+            return f"{head}のデータを表した箱ひげ図で、箱の左端が表す値"
         if concept == "box_center":
-            return f"{n}個のデータを表した箱ひげ図で、箱の中にひかれた線が表す値"
+            return f"{head}のデータを表した箱ひげ図で、箱の中にひかれた線が表す値"
         if concept == "box_right":
-            return f"{n}個のデータを表した箱ひげ図で、箱の右端が表す値"
+            return f"{head}のデータを表した箱ひげ図で、箱の右端が表す値"
         if concept == "whisker_min":
-            return f"{n}個のデータを表した箱ひげ図で、左側にのびるひげの先端が表す値"
-        return f"{n}個のデータを表した箱ひげ図で、右側にのびるひげの先端が表す値"  # whisker_max
+            return f"{head}のデータを表した箱ひげ図で、左側にのびるひげの先端が表す値"
+        return f"{head}のデータを表した箱ひげ図で、右側にのびるひげの先端が表す値"  # whisker_max
 
     if domain == "survey_method_terms":
         # g3_l57 標本調査の用語。具体例（対象の個数 n）を埋め込み surface を分散する。
-        n = int(draw(p["number_domain"], rng))
+        n = _pick(_D_DATA_N, rng)
+        obj, counter = _survey_target(rng)
         if concept == "census":
             # 全数調査はすべてを調べる調査なので、小さい集団のままでよい。
-            return f"{n}個（人）の対象すべてを、もれなく調べる調査"
+            return f"{n}{counter}の{obj}すべてを、もれなく調べる調査"
         # 標本調査は「全部は調べられない」場面の方法。22個（人）の集団では成り立たない
         # ので、引いた n をそのまま使わず母集団の大きさに直す（D-29 と同じ根）。
         return (
-            f"{_population_size(n)}個（人）の対象の集団から一部を取り出して調べ、"
+            f"{_population_size(n)}{counter}の{obj}の集団から一部を取り出して調べ、"
             "集団全体のようすを推定する調査"
         )  # sample_survey
 
     if domain == "sampling_terms":
         # g3_l58 標本の取り出し方の用語。具体例（対象の個数 n）を埋め込み surface を分散する。
         # 母集団・標本・無作為抽出はどれも標本調査の語なので、母集団の大きさに直す。
-        n = _population_size(int(draw(p["number_domain"], rng)))
+        n = _population_size(_pick(_D_DATA_N, rng))
+        obj, counter = _survey_target(rng)
         if concept == "population":
-            return f"{n}個（人）からなる、調査したい対象全体の集まり"
+            return f"{n}{counter}の{obj}からなる、調査したい対象全体の集まり"
         if concept == "sample":
-            return f"{n}個（人）からなる対象全体から、調査のために取り出した一部分"
-        return f"{n}個（人）からなる対象全体から、かたよりが出ないように偶然にまかせて標本を選び出す方法"  # random_sampling
+            return f"{n}{counter}の{obj}からなる対象全体から、調査のために取り出した一部分"
+        return (
+            f"{n}{counter}の{obj}からなる対象全体から、"
+            "かたよりが出ないように偶然にまかせて標本を選び出す方法"
+        )  # random_sampling
 
     if domain == "quadrant_terms":
         # g1_l30 座標平面の用語（象限・原点）。具体例の座標平面上の点を埋め込み surface を分散する。
@@ -1030,9 +1124,10 @@ def _draw_term_statement(domain: str, concept: str, rng: Rng, p: dict[str, objec
 
     if domain == "proof_logic_terms":
         # g2_l38 仮定・結論・反例の用語。具体例の命題(数量の大小関係)を埋め込み surface を分散する。
-        m = int(draw(p["number_domain"], rng))
+        # しきい値は小さい数（「367 より大きい数ならば」は実物の命題の書き方でない）。
+        m = _pick(tuple(range(1, 21)), rng)
         if concept == "assumption":
-            return f"「a、bが{m}より大きい数ならば、a+bも{m}より大きい」という文で、「ならば」の前に書かれている部分"
+            return f"「a、bが{m}より大きい数ならば、a+bも{m}より大きい」という文で、「ならば」の前に書かれている部分"  # m は小さい数に絞る
         if concept == "conclusion":
             return f"「a、bが{m}より大きい数ならば、a+bも{m}より大きい」という文で、「ならば」の後に書かれている部分"
         return f"あることがらが成り立たないことを示すために挙げる、条件に合うが結論には当てはまらない具体例のこと（{m}を使った例が挙げられることがある）"  # counterexample
@@ -1249,8 +1344,12 @@ def represent_opposite_quantity(ctx: CellContext, rng: Rng) -> MR:
     p = ctx.spec_level.params
     idx = int(draw({"int_set": list(range(len(_OPPOSITE_PAIRS)))}, rng))
     pos_label, neg_label, unit = _OPPOSITE_PAIRS[idx]
-    m0 = int(draw(p["number_domain"], rng))  # 基準の場面（例示）の大きさ
-    m = int(draw(p["number_domain"], rng))   # 問われる量の大きさ
+    # **単位ごとに自然な大きさで引く。** 前は1つの number_domain から引いていて
+    # 「値上がり 449円」「増加 147人」「北へ 121km」が出ていた。
+    # 値の大きさは答え（符号を反転させるだけ）に一切関係しない。
+    dom = _D_MONEY if unit == "円" else tuple(range(2, 31))
+    m0 = _pick(dom, rng)  # 基準の場面（例示）の大きさ
+    m = _pick(dom, rng)   # 問われる量の大きさ
     # 問われる量は必ず反対の向き（neg_label）＝答えは -m（given の正数 m と一致しない）。
     statement = (
         f"「{pos_label} {m0}{unit}」を +{m0}{unit} と表すことにするとき、"
@@ -1392,6 +1491,28 @@ def _signed_paren(sign: str, mag: int) -> str:
     return f"({sign}{mag})"
 
 
+def _as_choice_lead(s: str) -> str:
+    """体言止めの句を、「正しく述べているものを1つ選べ」につながる形にする。
+
+    前はテンプレートが `{statement}。正しく述べているものを1つ選べ。` と組んでいて、
+
+        三角形GDAの頂点Aでの外角の大きさ。正しく述べているものを1つ選べ。
+        平行四辺形HFGQで、対辺・対角・対角線について成り立つこと。正しく述べているものを1つ選べ。
+
+    のように、名詞句で切って句点を打つ形になっていた（44文型）。文として繋がっていない。
+    実物は「〜について、次から1つ選べ」と一文で書く。句の終わり方で繋ぎ方を変える。
+    """
+    if s.endswith(("か", "かどうか")):
+        return s + "。"          # 「〜のはなぜか。」＝すでに問いの文
+    if s.endswith("について"):
+        return s + "、"
+    # 「〜こと」「〜条件」のような、選ぶ対象そのものを指す語で終わる句は
+    # 「として、」で繋ぐ（「成り立つことについて、」より「成り立つこととして、」）。
+    if s.endswith(("こと", "条件", "関係", "性質", "利点", "求め方", "操作", "決まり")):
+        return s + "として、"
+    return s + "について、"
+
+
 def _draw_rule_statement(
     topic: str, concept: str, rng: Rng, p: dict[str, object],
     labels_out: dict[str, str] | None = None,
@@ -1437,9 +1558,11 @@ def _draw_rule_statement(
     if topic == "speed_relation":
         # g1_l15 速さ・道のり・時間。求める量に応じ、残り2量の具体的な場面を surface に
         # 埋め込む（数値は装飾で dup 分散。求める量そのものの数値は与えない）。
-        d = int(draw(p["number_domain"], rng))
-        t = int(draw(p["number_domain"], rng))
-        v = int(draw(p["number_domain"], rng))
+        # **3つを独立に引くと「道のり42kmを速さ44km/時で進む」になる。**
+        # 速さと時間を引き、道のりはその積にする（場面として辻褄が合う）。
+        v = _pick(_D_SPEED, rng)
+        t = _pick(_D_HOURS, rng)
+        d = v * t
         if concept == "speed":
             return f"道のり{d}kmを{t}時間で進む場面のように、道のり・速さ・時間の関係で「速さ」を求める式"
         if concept == "distance":
@@ -1448,8 +1571,14 @@ def _draw_rule_statement(
 
     if topic == "letter_meaning":
         # g1_l12 文字を使った式。1本 price 円の品物を x 本買う場面を surface に埋め込み dup 分散。
-        price = int(draw(p["number_domain"], rng))
-        return f"1本 {price} 円の品物を x 本買ったときの代金を {price}x 円と表す場面のように、文字を使って数量を表すことの利点"
+        price = _pick(_D_MONEY, rng)  # 値段は10円刻み（79円の品物は教材に出ない）
+        # 値段を10円刻みにした分の広さは品名で戻す。
+        # 品名と助数詞は必ず対で決まるので「名前|助数詞」で1トークンに畳む。
+        item, _, counter = str(draw(
+            ["えん筆|本", "ノート|冊", "消しゴム|個", "画用紙|枚", "クリップ|個",
+             "リボン|m", "ジュース|本", "シール|枚"], rng)).partition("|")
+        return (f"1{counter} {price} 円の{item}を x {counter}買ったときの代金を {price}x 円と"
+                f"表す場面のように、文字を使って数量を表すことの利点")
 
     if topic == "product_sign":
         # g1_l6 積の符号。負の数を偶数個／奇数個ふくむ積の具体例を埋め込み dup 分散。
@@ -1553,15 +1682,13 @@ def _draw_rule_statement(
 
     if topic == "quadratic_function_form":
         # g3_l32 y=ax² の形の判別基準。具体例の比例定数 a(≠0) を surface に埋め込み dup 分散。
-        cands = [v for v in _domain_candidates(cast("dict[str, object]", p["number_domain"])) if v != 0]
-        a = int(draw({"int_set": cands}, rng))
+        a = _pick_a(rng)  # 比例定数は1桁か簡単な分数が実物（-382 は出ない）
         return f"y = {a}x² のような式が「y は x の2乗に比例する」といえるための条件"
 
     if topic == "parabola_property":
         # g3_l33 放物線の性質。具体例の比例定数 a(≠0) を surface に埋め込み dup 分散。
         # concept ごとに、問う性質（形と対称性／開く向き／開き方の広さ）を言い分ける。
-        cands = [v for v in _domain_candidates(cast("dict[str, object]", p["number_domain"])) if v != 0]
-        a = int(draw({"int_set": cands}, rng))
+        a = _pick_a(rng)  # 比例定数は1桁か簡単な分数が実物（-382 は出ない）
         if concept == "shape_and_symmetry":
             return f"関数 y = {a}x² のグラフがどのような曲線になるか、その形と対称性について"
         if concept == "opening_direction":
@@ -1570,15 +1697,18 @@ def _draw_rule_statement(
 
     if topic == "quadratic_roc_property":
         # g3_l35 変化の割合の性質。具体例の比例定数 a(≠0) を surface に埋め込み dup 分散。
-        cands = [v for v in _domain_candidates(cast("dict[str, object]", p["number_domain"])) if v != 0]
-        a = int(draw({"int_set": cands}, rng))
+        a = _pick_a(rng)  # 比例定数は1桁か簡単な分数が実物（-382 は出ない）
         return f"関数 y = {a}x² について、x の変域を変えたときの変化の割合の性質"
 
     if topic == "complementary_event":
         # g2_l54 余事象の意味。具体例の確率 p=分数 を surface に埋め込み dup 分散。
-        den = int(draw(p["number_domain"], rng))
+        den = _pick(_D_SMALL_DEN, rng)  # 確率の分母（223/256 は教材の確率でない）
         num = int(draw({"int_range": [1, den - 1]}, rng))
-        return f"あることがらの起こる確率が {num}/{den} であるとき、その「余事象」（そのことがらが起こらないという事象）の確率"
+        # 分母を小さくした分の広さは「ことがら」の名前で戻す。
+        ev = str(draw(["くじが当たる", "表が出る", "赤玉が出る", "偶数の目が出る",
+                       "当番に選ばれる", "同じ色になる"], rng))
+        return (f"{ev}確率が {num}/{den} であるとき、その「余事象」"
+                f"（そのことがらが起こらないという事象）の確率")
 
     if topic == "parallel_angle_property":
         # g2_l32 平行線の性質とその逆。具体例の直線名を埋め込み surface を分散する。
@@ -1768,6 +1898,7 @@ def recall_rule(ctx: CellContext, rng: Rng) -> MR:
         topic, concept, rng, cast("dict[str, object]", p), labels_out
     )
     labels = labels_out.get("labels", "")
+    statement = _as_choice_lead(statement)
 
     solver = REGISTRY.solver("math.recall_rule_statement")
     sol = cast(Solution, solver(topic, concept, labels))

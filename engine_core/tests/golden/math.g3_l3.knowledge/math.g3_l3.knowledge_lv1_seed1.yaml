@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: multiplication_formula_rule_recall
 problem_ref: 51be894ed28158c8
-problem_text: (x + 54)(x + 75) を乗法公式を使って展開するときについて。正しく述べているものを1つ選べ。
+problem_text: (x + 54)(x + 75) を乗法公式を使って展開するときについて、正しく述べているものを1つ選べ。
 sub_questions:
 - answer:
     correct: (x+a)(x+b) の一般の乗法公式がそのまま使える（かっこの中の数が異なり、たがいに反対の符号でもない）

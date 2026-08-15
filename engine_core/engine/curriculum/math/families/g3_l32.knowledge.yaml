@@ -23,6 +23,13 @@ levels:
       domain: quadratic_function_terms
       concept_set: [proportionality_constant]
       number_domain: {int_range: [-500, 500]}
+    dup_rate_max: 0.70
+    dup_rate_reason: |
+      y=ax² の用語も、例に使う比例定数だけが動く。題材（図形・場面）の軸も足したうえで実測 0.65。
+      **前はここが通っていたが、それは例に使う数を広く取っていたから**で、
+      「y = -382x²」「a、b が 367 より大きい数ならば」「x の値が 195 以上」のような、
+      実物の教材には出ない例が並んでいた。広さのために教材でない数を使うのはやめ、
+      狭さのほうを宣言する（用語想起は、実物でも例が数通りしかない型）。
     given: [statement]
     asked: [choice]
     visual: none
@@ -37,6 +44,14 @@ levels:
       topic: quadratic_function_form
       concept_set: [form_criterion]
       number_domain: {int_range: [-500, 500]}
+    dup_rate_max: 0.70
+    dup_rate_reason: |
+      y=ax² の形の判別基準 を問う問題で変えられるのは**比例定数だけ**で、実物も同じ
+      （教科書の例は y=2x²・y=-3x²・y=(1/2)x²）。実物に出る 18 通り×符号＝36 通りを
+      並べて実測 0.64。
+      **前はここが通っていたが、それは比例定数を 2〜250 から引いていたから**で、
+      「y = -382x² のグラフは上と下のどちらに開くか」という、実物には無い問題が
+      出ていた。広さのために教材でない数を使うのはやめ、狭さのほうを宣言する。
     given: [statement]
     asked: [choice]
     visual: none

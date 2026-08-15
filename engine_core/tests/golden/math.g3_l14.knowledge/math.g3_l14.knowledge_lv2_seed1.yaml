@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: sqrt_square_meaning_rule_recall
 problem_ref: 88e34f717bf5b83b
-problem_text: √((96)²) の値について。正しく述べているものを1つ選べ。
+problem_text: √((96)²) の値について、正しく述べているものを1つ選べ。
 sub_questions:
 - answer:
     correct: a を自乗した数の平方根は、a の絶対値 |a| に等しい（a が負の数のときは -a になる）

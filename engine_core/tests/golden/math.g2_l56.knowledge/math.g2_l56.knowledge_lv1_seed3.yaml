@@ -24,7 +24,7 @@ meta:
   seed: 3
   signature: box_plot_terms_term_recall
 problem_ref: ee89003afc4e9a0f
-problem_text: 122個のデータを表した箱ひげ図で、左側にのびるひげの先端が表す値を何といいますか。
+problem_text: 40人の身長のデータを表した箱ひげ図で、左側にのびるひげの先端が表す値を何といいますか。
 sub_questions:
 - answer:
     correct: 最小値

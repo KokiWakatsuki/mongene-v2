@@ -24,7 +24,7 @@ meta:
   seed: 2
   signature: equilateral_property_rule_recall
 problem_ref: 43760da43472f23b
-problem_text: 三角形EBQが正三角形であるときに成り立つ、辺の長さと内角の大きさの関係。正しく述べているものを1つ選べ。
+problem_text: 三角形EBQが正三角形であるときに成り立つ、辺の長さと内角の大きさの関係として、正しく述べているものを1つ選べ。
 sub_questions:
 - answer:
     correct: 三つの辺の長さも三つの内角の大きさも、すべて等しい

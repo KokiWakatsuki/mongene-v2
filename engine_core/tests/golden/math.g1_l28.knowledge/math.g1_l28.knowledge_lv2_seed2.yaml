@@ -24,20 +24,20 @@ meta:
   seed: 2
   signature: judge_functional_relation
 problem_ref: dac412c19512b3c3
-problem_text: 63歳より年上の人の年齢をx歳とするときの、その人の体重y kg について、y は x の関数であるといえるか答えよ。
+problem_text: 1辺の長さがx cmである正方形の周の長さy cm について、y は x の関数であるといえるか答えよ。
 sub_questions:
 - answer:
-    correct: yはxの関数であるとはいえない
+    correct: yはxの関数であるといえる
     distractors:
-    - yはxの関数であるといえる
+    - yはxの関数であるとはいえない
     fact_id: function.judge_functional_relation
     kind: choice
   cause_tags: []
   concept_tags:
   - function.judge_functional_relation
-  explanation: 'まず、xの値を1つ決めたとき、それに対応するyの値がただ1つに決まるかどうかを調べる。（ただ1つには決まらない）
+  explanation: 'まず、xの値を1つ決めたとき、それに対応するyの値がただ1つに決まるかどうかを調べる。（ただ1つに決まる）
 
-    次に、yの値がただ1つに決まるなら関数であるといえ、決まらなければ関数であるとはいえない。（yはxの関数であるとはいえない）'
+    次に、yの値がただ1つに決まるなら関数であるといえ、決まらなければ関数であるとはいえない。（yはxの関数であるといえる）'
   hints:
   - xの値を1つ決めたとき、それに対応するyの値がただ1つに決まるかどうかを調べる。
   label: (1)
@@ -46,11 +46,11 @@ sub_questions:
   - args: []
     narration: xの値を1つ決めたとき、それに対応するyの値がただ1つに決まるかどうかを調べる。
     op: check_unique_determination
-    result_display: ただ1つには決まらない
-    result_srepr: not_functional
+    result_display: ただ1つに決まる
+    result_srepr: functional
   - args: []
     narration: yの値がただ1つに決まるなら関数であるといえ、決まらなければ関数であるとはいえない。
     op: judge_functional
-    result_display: yはxの関数であるとはいえない
-    result_srepr: yはxの関数であるとはいえない
+    result_display: yはxの関数であるといえる
+    result_srepr: yはxの関数であるといえる
 visual_svg: null

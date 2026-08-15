@@ -24,7 +24,7 @@ meta:
   seed: 2
   signature: judge_equally_likely
 problem_ref: f0039fba159c6c90
-problem_text: 赤玉1個と白玉30個が入った袋から1個取り出して、赤と白のどちらが出るか。
+problem_text: 赤玉1個と白玉30個が入った袋から1個取り出して、赤と白のどちらが出るか。この場面で、起こりうる結果は同様に確からしいといえるか。
 sub_questions:
 - answer:
     correct: 同様に確からしいとはいえない

@@ -37,7 +37,7 @@ sub_questions:
 
     次に、それぞれの数が数直線上でどの位置にあるかで大小を比べる（負の数は絶対値が大きいほど小さい）。（-7、-3/5、2/5、5/2）
 
-    最後に、小さい順（または大きい順）に並べかえて答える。（-7, -3/5, 0.4, 5/2）'
+    最後に、小さい順に並べかえて答える。（-7, -3/5, 0.4, 5/2）'
   hints:
   - 分数と小数がまざっているので、大きさを比べやすい形にそろえる。
   - それぞれの数が数直線上でどの位置にあるかで大小を比べる（負の数は絶対値が大きいほど小さい）。
@@ -55,7 +55,7 @@ sub_questions:
     result_display: -7、-3/5、2/5、5/2
     result_srepr: Tuple(Integer(-7), Rational(-3, 5), Rational(2, 5), Rational(5, 2))
   - args: []
-    narration: 小さい順（または大きい順）に並べかえて答える。
+    narration: 小さい順に並べかえて答える。
     op: arrange_in_order
     result_display: -7, -3/5, 0.4, 5/2
     result_srepr: Tuple(Integer(-7), Rational(-3, 5), Rational(2, 5), Rational(5, 2))

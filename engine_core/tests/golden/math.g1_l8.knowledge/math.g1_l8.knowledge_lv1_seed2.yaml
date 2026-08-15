@@ -24,7 +24,7 @@ meta:
   seed: 2
   signature: reciprocal_rule_recall
 problem_ref: 9b92f2c5e5649a42
-problem_text: 21 ÷ 23 のように、ある数でわる計算をかけ算になおすやり方について。正しく述べているものを1つ選べ。
+problem_text: 21 ÷ 23 のように、ある数でわる計算をかけ算になおすやり方について、正しく述べているものを1つ選べ。
 sub_questions:
 - answer:
     correct: ある数でわることは、その数の逆数をかけることと同じである

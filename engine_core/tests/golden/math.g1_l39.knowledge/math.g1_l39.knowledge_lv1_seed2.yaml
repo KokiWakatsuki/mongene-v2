@@ -24,7 +24,7 @@ meta:
   seed: 2
   signature: judge_transformation_invariant_rotation
 problem_ref: 8c23997588d00641
-problem_text: 図形を、点Bを中心として132°回転移動した。移動前後で、対応する点と、回転の中心Bからの距離の関係を答えよ。
+problem_text: 図形を、点Bを中心として60°回転移動した。移動前後で、対応する点と、回転の中心Bからの距離の関係を答えよ。
 sub_questions:
 - answer:
     correct: 等しい

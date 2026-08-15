@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: parallelogram_property_rule_recall
 problem_ref: 260d5c8a9e4d464e
-problem_text: 平行四辺形HFGQで、対辺・対角・対角線について成り立つこと。正しく述べているものを1つ選べ。
+problem_text: 平行四辺形HFGQで、対辺・対角・対角線について成り立つこととして、正しく述べているものを1つ選べ。
 sub_questions:
 - answer:
     correct: 対辺の長さはそれぞれ等しく、対角の大きさもそれぞれ等しい。また、対角線はそれぞれの中点で交わる

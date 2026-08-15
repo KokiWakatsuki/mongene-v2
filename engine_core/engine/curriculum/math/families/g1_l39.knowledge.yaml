@@ -17,7 +17,10 @@ levels:
     recipe: math.judge_transformation_invariant
     params:
       topic: rotation
-      angle_domain: {int_range: [1, 359]}
+      # **回転の角は教材に出る角だけ。** 前は 1〜359 から引いていて
+      # 「点Hを中心として254°回転移動した」が出ていた（実物は 90°・180°）。
+      # 角の値は答え（対応する点と中心からの距離の関係）に一切関係しない。
+      angle_domain: {int_set: [30, 45, 60, 90, 120, 135, 150, 180, 210, 240, 270, 300]}
     given: [statement]
     asked: [choice]
     visual: none

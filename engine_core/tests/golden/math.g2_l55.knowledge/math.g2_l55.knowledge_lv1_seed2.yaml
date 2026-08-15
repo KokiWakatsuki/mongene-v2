@@ -24,7 +24,7 @@ meta:
   seed: 2
   signature: quartile_terms_term_recall
 problem_ref: b3a950c3e4cb1a56
-problem_text: 229個のデータを大きさの順に並べたときの中央値のよび名を何といいますか。
+problem_text: 30人のハンドボール投げの記録のデータを大きさの順に並べたときの中央値のよび名を何といいますか。
 sub_questions:
 - answer:
     correct: 第二四分位数

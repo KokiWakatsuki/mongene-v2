@@ -43,7 +43,9 @@ LF_INEQUALITY_SYMBOL_V1 = (
     "\n{{ given.statement }}"
 )
 # g1_l22.knowledge Lv1: 規則（移項の定義・理由）の正しい記述を選ぶ（規則想起）
-LF_RULE_RECALL_V1 = "{{ given.statement }}。正しく述べているものを1つ選べ。"
+# 句点は statement 側が持つ（`_as_choice_lead`）。名詞句なら「について、」で繋ぎ、
+# 問いの文ならそのまま句点で切る。
+LF_RULE_RECALL_V1 = "{{ given.statement }}正しく述べているものを1つ選べ。"
 # g1_l1.knowledge Lv1: 符号のついた数を正の数・負の数に分類する
 LF_CLASSIFY_SIGN_V1 = "次の数は、正の数・負の数のどちらですか。\n{{ given.statement }}"
 # g1_l1.knowledge Lv2: 反対の性質をもつ量を符号を使って表す

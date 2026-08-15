@@ -119,18 +119,18 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - linear_function.word_problem_piecewise_tank
-  explanation: 'まず、等式の性質を使い、両辺から同じ数をひく（または加える）。（5x = 152 - 42）
+  explanation: 'まず、左辺を x の項だけにするために、両辺に同じ数をたすかひくかする。（5x + 42 - 42 = 152 - 42）
 
     次に、等式の性質を使い、両辺を x の係数でわる。（x = 22）'
   hints:
-  - 等式の性質を使い、両辺から同じ数をひく（または加える）。
+  - 左辺を x の項だけにするために、両辺に同じ数をたすかひくかする。
   label: (3)
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
-    narration: 等式の性質を使い、両辺から同じ数をひく（または加える）。
+    narration: 左辺を x の項だけにするために、両辺に同じ数をたすかひくかする。
     op: subtract_constant_both_sides
-    result_display: 5x = 152 - 42
+    result_display: 5x + 42 - 42 = 152 - 42
     result_srepr: Integer(22)
   - args: []
     narration: 等式の性質を使い、両辺を x の係数でわる。

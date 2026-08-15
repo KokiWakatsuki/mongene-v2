@@ -24,7 +24,7 @@ meta:
   seed: 3
   signature: complementary_event_rule_recall
 problem_ref: 7629d06e5f10e6e8
-problem_text: あることがらの起こる確率が 64/231 であるとき、その「余事象」（そのことがらが起こらないという事象）の確率。正しく述べているものを1つ選べ。
+problem_text: 当番に選ばれる確率が 10/12 であるとき、その「余事象」（そのことがらが起こらないという事象）の確率について、正しく述べているものを1つ選べ。
 sub_questions:
 - answer:
     correct: 全体を表す確率から、あることがらの起こる確率をひいた値に等しい

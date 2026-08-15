@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: judge_transformation_invariant_parallel
 problem_ref: 27a49426b926395f
-problem_text: 図形を、右へ13目盛り、上へ3目盛りだけ平行移動した。移動前後で、対応する辺の長さと図形の大きさの関係を答えよ。
+problem_text: 図形を、右へ3目盛り、上へ3目盛りだけ平行移動した。移動前後で、対応する辺の長さと図形の大きさの関係を答えよ。
 sub_questions:
 - answer:
     correct: 変わらない

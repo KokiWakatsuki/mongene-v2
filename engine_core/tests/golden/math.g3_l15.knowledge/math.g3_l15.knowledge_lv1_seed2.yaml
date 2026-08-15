@@ -24,7 +24,7 @@ meta:
   seed: 2
   signature: sqrt_magnitude_rule_recall
 problem_ref: eff42d60d2572cb9
-problem_text: √3 と √30 のような、正の数の平方根の大小について成り立つこと。正しく述べているものを1つ選べ。
+problem_text: √3 と √30 のような、正の数の平方根の大小について成り立つこととして、正しく述べているものを1つ選べ。
 sub_questions:
 - answer:
     correct: 正の数では、根号の中の数が大きいほど、根号のついた数も大きい

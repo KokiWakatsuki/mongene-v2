@@ -24,7 +24,7 @@ meta:
   seed: 3
   signature: judge_hyperbola_quadrants
 problem_ref: cc665046d11ea7a4
-problem_text: 反比例y=-3/xのグラフである双曲線は、座標平面の右上と左下の部分と、左上と右下の部分の、どちらにあるか答えよ。また、双曲線はx軸・y軸と交わるかどうかも答えよ。
+problem_text: 反比例y=-12/xのグラフである双曲線は、座標平面の右上と左下の部分と、左上と右下の部分の、どちらにあるか答えよ。また、双曲線はx軸・y軸と交わるかどうかも答えよ。
 sub_questions:
 - answer:
     correct: 左上と右下の部分にある（二つの枝からなり、x軸・y軸と交わらない）

@@ -24,7 +24,7 @@ meta:
   seed: 3
   signature: addition_sign_rule_recall
 problem_ref: b17a49aad58df59e
-problem_text: (-19) + (-18) のように、同符号の2数をたすときの和の符号と絶対値の決まりについて。正しく述べているものを1つ選べ。
+problem_text: (-19) + (-18) のように、同符号の2数をたすときの和の符号と絶対値の決まりについて、正しく述べているものを1つ選べ。
 sub_questions:
 - answer:
     correct: 共通の符号をそのままつけ、両方の数の絶対値の和を絶対値とする

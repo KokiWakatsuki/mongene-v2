@@ -24,7 +24,7 @@ meta:
   seed: 2
   signature: parallel_segment_ratio_theorem_rule_recall
 problem_ref: 13c8c969f5137d76
-problem_text: 三角形QBAで、辺QB, QA上に点M, NがありMN∥BAであるとき、線分の比について成り立つ関係。正しく述べているものを1つ選べ。
+problem_text: 三角形QBAで、辺QB, QA上に点M, NがありMN∥BAであるとき、線分の比について成り立つ関係として、正しく述べているものを1つ選べ。
 sub_questions:
 - answer:
     correct: QMとQBの比、QNとQAの比、MNとBAの比が、すべて等しい

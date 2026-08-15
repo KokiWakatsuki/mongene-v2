@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: inverse_proportion_term_recall
 problem_ref: 6164ed152f638658
-problem_text: y = 190/x で、積 xy がつねに等しくなる決まった数 190 のような、反比例の関係を決める定数を何といいますか。
+problem_text: y = -18/x で、積 xy がつねに等しくなる決まった数 -18 のような、反比例の関係を決める定数を何といいますか。
 sub_questions:
 - answer:
     correct: 比例定数

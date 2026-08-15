@@ -47,7 +47,11 @@ _EQUATION_STEPS: dict[str, list[str]] = {
 }
 
 _OP_NARRATION: dict[str, str] = {
-    "subtract_constant_both_sides": "等式の性質を使い、両辺から同じ数をひく（または加える）。",
+    # **何をしたかは式が見せる。narration は「なぜそうするか」を言う。**
+    # 前は「両辺から同じ数をひく（または加える）」で、その問題でどちらを
+    # したのかを言っていなかった（実物は「左辺を x だけにするために」と目的を書く）。
+    # 左辺は `x` とは限らない（`7x - 60 = 45` なら `7x` が残る）ので「x の項」と書く。
+    "subtract_constant_both_sides": "左辺を x の項だけにするために、両辺に同じ数をたすかひくかする。",
     "state_solution": "両辺を計算して、解を求める。",
     "divide_both_sides": "等式の性質を使い、両辺を x の係数でわる。",
     "transpose_constant": "数の項を、符号を変えて反対の辺に移項する。",
@@ -85,7 +89,18 @@ def _apply_step(
     分母をはらった次の手が分数のままの式を見せてしまう（実際そうなっていた）。
     """
     x = sympy.Symbol("x")
-    if op in ("subtract_constant_both_sides", "transpose_constant"):
+    if op == "subtract_constant_both_sides":
+        # **等式の性質を使う手は、両辺に同じ操作をした式をそのまま見せる**
+        # （`x + 5 - 5 = -2 - 5`）。移項の形（`x = -2 - 5`）を見せていたので、
+        # g1_l21（等式の性質）と g1_l22（移項）の解説が同じ式になっていて、
+        # **単元が教えようとしている操作が解説に出ていなかった**。
+        # 実物（佐賀県教委の学習プリント）もここは両辺を書く。
+        const = lhs.subs(x, 0)
+        sign = "-" if const > 0 else "+"
+        a = fmt_expr(abs(const))
+        disp = f"{fmt_expr(lhs)} {sign} {a} = {fmt_expr(rhs)} {sign} {a}"
+        return disp, sympy.expand(lhs - const), sympy.expand(rhs - const)
+    if op == "transpose_constant":
         # 数の項を移した形（`x = 18 - 6`）。**計算はしない**——次の手の仕事なので。
         const = lhs.subs(x, 0)
         sign = "-" if const > 0 else "+"

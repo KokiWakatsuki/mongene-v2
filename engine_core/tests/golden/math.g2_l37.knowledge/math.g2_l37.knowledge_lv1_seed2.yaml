@@ -24,7 +24,7 @@ meta:
   seed: 2
   signature: congruence_conditions_rule_recall
 problem_ref: d4d90d6d8736ec19
-problem_text: 三角形FQMと三角形JLBが合同であることを示すために使える条件。正しく述べているものを1つ選べ。
+problem_text: 三角形FQMと三角形JLBが合同であることを示すために使える条件として、正しく述べているものを1つ選べ。
 sub_questions:
 - answer:
     correct: 三組の辺がそれぞれ等しい、二組の辺とその間の角がそれぞれ等しい、一組の辺とその両端の角がそれぞれ等しい、のいずれか

@@ -24,7 +24,7 @@ meta:
   seed: 2
   signature: quadratic_function_form_rule_recall
 problem_ref: eaa3b67444c63217
-problem_text: y = -62x² のような式が「y は x の2乗に比例する」といえるための条件。正しく述べているものを1つ選べ。
+problem_text: y = (1/2)x² のような式が「y は x の2乗に比例する」といえるための条件として、正しく述べているものを1つ選べ。
 sub_questions:
 - answer:
     correct: x を自乗した項だけがあり、それを比例定数倍した形（他の項をふくまない形）であること

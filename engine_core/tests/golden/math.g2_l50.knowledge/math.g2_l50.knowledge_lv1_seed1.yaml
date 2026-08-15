@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: equal_area_triangles_rule_recall
 problem_ref: 25ca99c9fced2fe0
-problem_text: 三角形KLJと三角形ALJが、共通の底辺LJを持ち、頂点K、Aが底辺に平行な同じ直線上にあるとき、2つの三角形の面積の関係。正しく述べているものを1つ選べ。
+problem_text: 三角形KLJと三角形ALJが、共通の底辺LJを持ち、頂点K、Aが底辺に平行な同じ直線上にあるとき、2つの三角形の面積の関係として、正しく述べているものを1つ選べ。
 sub_questions:
 - answer:
     correct: 面積は等しくなる

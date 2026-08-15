@@ -206,15 +206,57 @@ _JUDGE_FUNCTIONAL_RELATION_CONCEPTS = [
 # (場面の説明テンプレ, is_functional) の対応表。テンプレは {n} に下限値等の数量を埋める
 # 1スロットを持ち、dup 分散（surface の variety）に使う。x を決めても y が一意に決まらない
 # 場面（体重等）は is_functional=False。
-_FUNCTIONAL_SCENARIO_TEMPLATES: list[tuple[str, bool]] = [
-    ("1辺の長さが{n}cmより長い正方形の1辺の長さをx cmとするときの、周の長さy cm", True),
-    ("1辺の長さが{n}cmより長い正方形の1辺の長さをx cmとするときの、面積y cm²", True),
-    ("底辺の長さが{n}cmより長く高さが決まった三角形の底辺の長さをx cmとするときの、面積y cm²", True),
-    ("身長が{n}cmより高い人の身長をx cmとするときの、その人の体重y kg", False),
-    ("{n}日より長い月のその月の日数をx日とするときの、その月の平均気温y℃", False),
-    ("縦の長さが{n}cmより長く横の長さが決まった長方形の縦の長さをx cmとするときの、面積y cm²", True),
-    ("{n}歳より年上の人の年齢をx歳とするときの、その人の体重y kg", False),
-    ("1個{n}円より高い値段の決まっている品物をx個買ったときの、代金y円", True),
+# (場面の説明テンプレ, is_functional, {n} の候補, {o} の候補)。
+#
+# **前は「1辺の長さが{n}cmより長い正方形」「{n}歳より年上の人」と書いていた。**
+# なぜ 34 なのか、なぜ 63 歳なのかに理由が無い。判定は場面の構造だけで決まり、
+# n の値は答えに一切関係しない——**重複率を通すためだけに文へ差し込んだ数**だった。
+# 実物は「人の年齢 x 歳と、その人の体重 y kg」と書く。
+#
+# 直し方は「数を消す」ではなく「**意味のある数量に替える**」。
+# 1個◯円・高さ◯cm・満水◯L はどれも場面が本当に持っている量で、
+# 値が変わっても問いは壊れない。足りない広さは題材（{o}）で戻す。
+_FUNCTIONAL_SCENARIO_TEMPLATES: list[tuple[str, bool, tuple[int, ...], tuple[str, ...]]] = [
+    ("1辺の長さがx cmである{o}の周の長さy cm", True, (),
+     ("正方形", "正三角形", "正五角形", "正六角形", "正八角形", "ひし形")),
+    ("1辺の長さがx cmである{o}", True, (),
+     ("正方形の面積y cm²", "立方体の体積y cm³", "立方体の表面積y cm²",
+      "正方形の対角線の長さy cm", "正三角形の周の長さy cm")),
+    ("半径がx cmである{o}", True, (),
+     ("円の面積y cm²", "円の周の長さy cm", "球の表面積y cm²", "球の体積y cm³")),
+    ("時速{n}kmでx時間走ったときの、進む道のりy km", True,
+     (30, 40, 45, 50, 60, 70, 80, 90), ()),
+    ("正x角形の{o}", True, (),
+     ("内角の和y度", "対角線の本数y本", "辺の数y本", "外角の和y度")),
+    ("面積がx cm²である長方形の、{o}", False, (),
+     ("縦の長さy cm", "横の長さy cm", "周の長さy cm")),
+    ("ある町のx月の、{o}", False, (),
+     ("平均気温y℃", "降水量y mm", "日照時間y時間")),
+    ("高さが{n}cmで決まっている三角形の、底辺の長さをx cmとするときの面積y cm²", True,
+     tuple(range(2, 21)), ()),
+    ("横の長さが{n}cmで決まっている長方形の、縦の長さをx cmとするときの面積y cm²", True,
+     tuple(range(2, 21)), ()),
+    ("1個{n}円の{o}をx個買ったときの、代金y円", True,
+     tuple(range(30, 301, 10)),
+     ("えん筆", "ノート", "消しゴム", "みかん", "りんご", "画用紙", "クリップ")),
+    ("満水が{n}Lの水そうに毎分x Lずつ水を入れるときの、満水になるまでの時間y分", True,
+     tuple(range(20, 201, 10)), ()),
+    ("{n}kmの道のりを時速x kmで進むときの、かかる時間y時間", True,
+     tuple(range(20, 301, 10)), ()),
+    ("面積が{n}cm²である長方形の、縦の長さをx cmとするときの横の長さy cm", True,
+     (12, 18, 24, 36, 48, 60, 72, 96), ()),
+    ("x円の{o}を買って{n}円札で払ったときの、おつりy円", True,
+     (1000, 2000, 5000), ("本", "おかし", "文ぼう具", "ケーキ")),
+    ("自然数xの{o}", True, (),
+     ("約数の個数y個", "正の平方根y", "2倍の数y", "各位の数の和y")),
+    ("人の年齢をx歳とするときの、その人の{o}", False, (),
+     ("体重y kg", "身長y cm", "1か月の読書時間y時間", "通学時間y分")),
+    ("人の身長をx cmとするときの、その人の{o}", False, (),
+     ("体重y kg", "座高y cm", "1日の歩数y歩")),
+    ("ある日の最高気温をx℃とするときの、その日の{o}", False, (),
+     ("最低気温y℃", "降水量y mm", "湿度y％")),
+    ("{o}をx人とするときの、そのうち眼鏡をかけている人数y人", False, (),
+     ("クラスの人数", "部活動の人数", "会場にいる人数")),
 ]
 
 
@@ -230,11 +272,11 @@ def judge_functional_relation(ctx: CellContext, rng: Rng) -> MR:
     is_functional フラグだけから再判定する（double-solve）。答えは ChoiceAnswer
     （数字トークンなし）。図なし。
     """
-    p = ctx.spec_level.params
     idx = int(draw({"int_range": [0, len(_FUNCTIONAL_SCENARIO_TEMPLATES) - 1]}, rng))
-    template, is_functional = _FUNCTIONAL_SCENARIO_TEMPLATES[idx]
-    n = int(draw(p.get("number_domain", {"int_range": [1, 30]}), rng))
-    statement = template.format(n=n)
+    template, is_functional, n_cands, o_cands = _FUNCTIONAL_SCENARIO_TEMPLATES[idx]
+    n = int(draw({"int_set": list(n_cands)}, rng)) if n_cands else 0
+    o = str(draw(list(o_cands), rng)) if o_cands else ""
+    statement = template.format(n=n, o=o)
 
     solver = REGISTRY.solver("math.judge_functional_relation")
     sol = cast(Solution, solver(is_functional))
@@ -260,7 +302,9 @@ def judge_functional_relation(ctx: CellContext, rng: Rng) -> MR:
         level=ctx.level,
         purpose=ctx.purpose,
         seed=0,
-        params={"scenario_index": idx, "n": n, "is_functional": str(is_functional)},
+        # 題材も載せる（載せないと dup_key から見えず、軸を増やしても重複率が下がらない）。
+        params={"scenario_index": idx, "n": n, "item": o,
+                "is_functional": str(is_functional)},
         given={"statement": statement},
         sub_questions=[sub_question],
         visual_plan=None,

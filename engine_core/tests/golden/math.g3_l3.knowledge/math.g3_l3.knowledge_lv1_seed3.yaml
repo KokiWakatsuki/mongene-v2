@@ -24,7 +24,7 @@ meta:
   seed: 3
   signature: multiplication_formula_rule_recall
 problem_ref: 06bec696cf2fe02c
-problem_text: (x + 111)(x - 111) を乗法公式を使って展開するときについて。正しく述べているものを1つ選べ。
+problem_text: (x + 111)(x - 111) を乗法公式を使って展開するときについて、正しく述べているものを1つ選べ。
 sub_questions:
 - answer:
     correct: 和と差の積の公式（かっこの中の数がたがいに反対の符号の形）を使う方が適している

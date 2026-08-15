@@ -422,7 +422,12 @@ def order_signed_numbers(numbers_str: str, ascending: object) -> Solution:
             args=[],
             result_srepr=r_srepr,
             result_display=disp,
-            narration="小さい順（または大きい順）に並べかえて答える。",
+            # **その問題でどちらをしたのかを言う。** `asc` で分かっているのに
+            # 「小さい順（または大きい順）」と両方書いていた。
+            narration=(
+                "小さい順に並べかえて答える。" if asc
+                else "大きい順に並べかえて答える。"
+            ),
         ),
     ]
     answer = SymbolicAnswer(srepr=r_srepr, display=disp)

@@ -24,7 +24,7 @@ meta:
   seed: 2
   signature: quadratic_function_terms_term_recall
 problem_ref: 1875622ce27b5a67
-problem_text: y = -387x² の式で、x² にかけられている数（a にあたる部分）を何といいますか。
+problem_text: y = -12x² の式で、x² にかけられている数（a にあたる部分）を何といいますか。
 sub_questions:
 - answer:
     correct: 比例定数

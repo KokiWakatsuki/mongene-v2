@@ -24,7 +24,7 @@ meta:
   seed: 2
   signature: isosceles_property_rule_recall
 problem_ref: 0f91538296a59ee6
-problem_text: DC=DPの二等辺三角形DCPで、底角どうしの大きさの関係。正しく述べているものを1つ選べ。
+problem_text: DC=DPの二等辺三角形DCPで、底角どうしの大きさの関係として、正しく述べているものを1つ選べ。
 sub_questions:
 - answer:
     correct: 底角の大きさは等しい

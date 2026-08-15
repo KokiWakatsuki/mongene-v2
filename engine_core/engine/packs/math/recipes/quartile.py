@@ -149,13 +149,21 @@ def classify_distribution_statistic_recipe(ctx: CellContext, rng: Rng) -> MR:
     p = ctx.spec_level.params
     concept = str(draw(cast("list[str]", p["concept_set"]), rng))
     n = int(draw(p["number_domain"], rng))
+    # データの個数を教材の粒度に絞った分、題材で広さを戻す
+    # （実物の用語説明も「30人の身長の」のように何のデータかを添える）。
+    subject = str(draw(
+        ["身長", "通学時間", "数学のテストの得点", "反復横とびの記録", "握力の記録",
+         "立ち幅とびの記録", "ハンドボール投げの記録", "家庭学習の時間", "睡眠時間"], rng))
     label = _STATISTIC_LABEL_JP[concept]
 
     solver = REGISTRY.solver("math.classify_distribution_statistic")
     sol = cast(Solution, solver(concept))
     assert isinstance(sol.answer, ChoiceAnswer)
 
-    statement = f"{n}個のデータを表した箱ひげ図における{label}が、データの分布の何を表すかを答えよ"
+    statement = (
+        f"{n}人の{subject}を表した箱ひげ図における{label}が、"
+        "データの分布の何を表すかを答えよ"
+    )
 
     sub_question = SubQuestionMR(
         label="(1)", asked="choice", answer=sol.answer, steps=sol.steps,
@@ -164,7 +172,9 @@ def classify_distribution_statistic_recipe(ctx: CellContext, rng: Rng) -> MR:
     return MR(
         signature=ctx.spec_level.signature, family=ctx.family, level=ctx.level,
         purpose=ctx.purpose, seed=0,
-        params={"concept": concept, "n": n},
+            # **surface をそのまま params に載せる。** 載せないと dup_key から
+            # 見えず、題材の軸を足しても重複率が下がらない（今日2度踏んだ）。
+        params={"concept": concept, "n": n, "statement": statement},
         given={"statement": statement}, sub_questions=[sub_question], visual_plan=None,
         provenance=Provenance(recipe="math.classify_distribution_statistic"),
     )

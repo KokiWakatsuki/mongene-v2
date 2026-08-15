@@ -24,7 +24,7 @@ meta:
   seed: 2
   signature: survey_method_terms_term_recall
 problem_ref: 0b11a27eb4635853
-problem_text: 276個（人）の対象すべてを、もれなく調べる調査を何といいますか。
+problem_text: 50本のねじすべてを、もれなく調べる調査を何といいますか。
 sub_questions:
 - answer:
     correct: 全数調査

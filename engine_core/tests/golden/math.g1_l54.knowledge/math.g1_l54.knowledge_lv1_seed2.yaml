@@ -24,7 +24,7 @@ meta:
   seed: 2
   signature: frequency_table_terms_term_recall
 problem_ref: b452facf5f7f4baa
-problem_text: 度数分布表で、8以上18未満のように区切った、データを整理するための区間を何といいますか。
+problem_text: 度数分布表で、40以上50未満のように区切った、データを整理するための区間を何といいますか。
 sub_questions:
 - answer:
     correct: 階級

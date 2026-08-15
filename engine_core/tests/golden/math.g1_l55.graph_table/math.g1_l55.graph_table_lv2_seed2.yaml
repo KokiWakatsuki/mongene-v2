@@ -24,37 +24,37 @@ meta:
   seed: 2
   signature: relative_frequency_table_and_polygon
 problem_ref: 66f470e9839656ef
-problem_text: 次の度数分布表は、ある中学校の生徒20人の身長を調べたものである。各階級の相対度数を求めて表を完成させ、この分布の度数折れ線をかけ。〔階級と度数：150cm以上155cm未満…4人、155cm以上160cm未満…2人、160cm以上165cm未満…4人、165cm以上170cm未満…8人、170cm以上175cm未満…2人〕。
+problem_text: 次の度数分布表は、ある中学校の生徒20人の身長を調べたものである。各階級の相対度数を求めて表を完成させ、この分布の度数折れ線をかけ。〔階級と度数：150cm以上155cm未満…2人、155cm以上160cm未満…4人、160cm以上165cm未満…8人、165cm以上170cm未満…4人、170cm以上175cm未満…2人〕。
 sub_questions:
 - answer:
     features:
-    - display: 150cm以上155cm未満の相対度数は0.2
+    - display: 150cm以上155cm未満の相対度数は0.1
       kind: relative_frequency
-      srepr: Tuple(Integer(150), Rational(1, 5))
-    - display: 155cm以上160cm未満の相対度数は0.1
+      srepr: Tuple(Integer(150), Rational(1, 10))
+    - display: 155cm以上160cm未満の相対度数は0.2
       kind: relative_frequency
-      srepr: Tuple(Integer(155), Rational(1, 10))
-    - display: 160cm以上165cm未満の相対度数は0.2
+      srepr: Tuple(Integer(155), Rational(1, 5))
+    - display: 160cm以上165cm未満の相対度数は0.4
       kind: relative_frequency
-      srepr: Tuple(Integer(160), Rational(1, 5))
-    - display: 165cm以上170cm未満の相対度数は0.4
+      srepr: Tuple(Integer(160), Rational(2, 5))
+    - display: 165cm以上170cm未満の相対度数は0.2
       kind: relative_frequency
-      srepr: Tuple(Integer(165), Rational(2, 5))
+      srepr: Tuple(Integer(165), Rational(1, 5))
     - display: 170cm以上175cm未満の相対度数は0.1
       kind: relative_frequency
       srepr: Tuple(Integer(170), Rational(1, 10))
-    - display: 折れ線の頂点（階級値152.5cm、度数4人）
+    - display: 折れ線の頂点（階級値152.5cm、度数2人）
       kind: polygon_vertex
-      srepr: Tuple(Rational(305, 2), Integer(4))
-    - display: 折れ線の頂点（階級値157.5cm、度数2人）
+      srepr: Tuple(Rational(305, 2), Integer(2))
+    - display: 折れ線の頂点（階級値157.5cm、度数4人）
       kind: polygon_vertex
-      srepr: Tuple(Rational(315, 2), Integer(2))
-    - display: 折れ線の頂点（階級値162.5cm、度数4人）
+      srepr: Tuple(Rational(315, 2), Integer(4))
+    - display: 折れ線の頂点（階級値162.5cm、度数8人）
       kind: polygon_vertex
-      srepr: Tuple(Rational(325, 2), Integer(4))
-    - display: 折れ線の頂点（階級値167.5cm、度数8人）
+      srepr: Tuple(Rational(325, 2), Integer(8))
+    - display: 折れ線の頂点（階級値167.5cm、度数4人）
       kind: polygon_vertex
-      srepr: Tuple(Rational(335, 2), Integer(8))
+      srepr: Tuple(Rational(335, 2), Integer(4))
     - display: 折れ線の頂点（階級値172.5cm、度数2人）
       kind: polygon_vertex
       srepr: Tuple(Rational(345, 2), Integer(2))
@@ -65,9 +65,9 @@ sub_questions:
       stroke-width="0.5"/><line x1="40.00" y1="212.22" x2="440.00" y2="212.22" stroke="#bbbbbb" stroke-width="0.5"/><line x1="40.00" y1="173.78" x2="440.00" y2="173.78" stroke="#bbbbbb" stroke-width="0.5"/><line
       x1="40.00" y1="135.33" x2="440.00" y2="135.33" stroke="#bbbbbb" stroke-width="0.5"/><line x1="40.00" y1="96.89" x2="440.00" y2="96.89" stroke="#bbbbbb" stroke-width="0.5"/><line x1="40.00" y1="58.44"
       x2="440.00" y2="58.44" stroke="#bbbbbb" stroke-width="0.5"/><line x1="40.00" y1="20.00" x2="440.00" y2="20.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="40.00" y1="366.00" x2="440.00" y2="366.00"
-      stroke="#000000" stroke-width="1.5"/><line x1="40.00" y1="20.00" x2="40.00" y2="366.00" stroke="#000000" stroke-width="1.5"/><polyline points="40.00,366.00 106.67,212.22 173.33,289.11 240.00,212.22
-      306.67,58.44 373.33,289.11 440.00,366.00" fill="none" stroke="#000000" stroke-width="2.5"/><circle cx="40.00" cy="366.00" r="3" fill="#000000"/><circle cx="106.67" cy="212.22" r="3" fill="#000000"/><circle
-      cx="173.33" cy="289.11" r="3" fill="#000000"/><circle cx="240.00" cy="212.22" r="3" fill="#000000"/><circle cx="306.67" cy="58.44" r="3" fill="#000000"/><circle cx="373.33" cy="289.11" r="3" fill="#000000"/><circle
+      stroke="#000000" stroke-width="1.5"/><line x1="40.00" y1="20.00" x2="40.00" y2="366.00" stroke="#000000" stroke-width="1.5"/><polyline points="40.00,366.00 106.67,289.11 173.33,212.22 240.00,58.44
+      306.67,212.22 373.33,289.11 440.00,366.00" fill="none" stroke="#000000" stroke-width="2.5"/><circle cx="40.00" cy="366.00" r="3" fill="#000000"/><circle cx="106.67" cy="289.11" r="3" fill="#000000"/><circle
+      cx="173.33" cy="212.22" r="3" fill="#000000"/><circle cx="240.00" cy="58.44" r="3" fill="#000000"/><circle cx="306.67" cy="212.22" r="3" fill="#000000"/><circle cx="373.33" cy="289.11" r="3" fill="#000000"/><circle
       cx="440.00" cy="366.00" r="3" fill="#000000"/><text x="73.33" y="380.00" font-size="10" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">150</text><text
       x="73.33" y="380.00" font-size="10" text-anchor="middle" fill="#000000">150</text><text x="140.00" y="380.00" font-size="10" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round"
       fill="#ffffff">155</text><text x="140.00" y="380.00" font-size="10" text-anchor="middle" fill="#000000">155</text><text x="206.67" y="380.00" font-size="10" text-anchor="middle" stroke="#ffffff" stroke-width="3"
@@ -91,7 +91,7 @@ sub_questions:
   - frequency_polygon.draw_relative_frequency
   explanation: 'まず、すべての階級の度数を足し合わせ、総度数を求める。（度数の合計は20）
 
-    次に、階級ごとに、その階級の度数を総度数でわって相対度数を求め、表に書き入れる。（0.2、0.1、0.2、0.4、0.1）
+    次に、階級ごとに、その階級の度数を総度数でわって相対度数を求め、表に書き入れる。（0.1、0.2、0.4、0.2、0.1）
 
     最後に、各階級の階級値の位置にその階級の度数の高さで点を打ち、順に線分で結ぶ（両端は度数のない階級まで下ろす）。（度数折れ線）'
   hints:
@@ -108,7 +108,7 @@ sub_questions:
   - args: []
     narration: 階級ごとに、その階級の度数を総度数でわって相対度数を求め、表に書き入れる。
     op: divide_each_by_total
-    result_display: 0.2、0.1、0.2、0.4、0.1
+    result_display: 0.1、0.2、0.4、0.2、0.1
     result_srepr: ''
   - args: []
     narration: 各階級の階級値の位置にその階級の度数の高さで点を打ち、順に線分で結ぶ（両端は度数のない階級まで下ろす）。

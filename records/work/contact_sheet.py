@@ -37,9 +37,15 @@ def main() -> None:
     H = rows * (_CELL[1] + _LABEL_H)
     sheet = Image.new("RGB", (W, H), "white")
     draw = ImageDraw.Draw(sheet)
+    # **拡張子を付けて渡されても受ける。** 前は `.png` 付きの名前を渡すと
+    # `xxx.png.png` を探して1枚も見つからず、それでも「16 枚」と表示していた。
+    # **真っ白なシートを見て「図が空だ」と読み違えた。** 貼れなかった数を必ず出す。
+    stems = [s[:-4] if s.endswith(".png") else s for s in stems]
+    missing: list[str] = []
     for i, stem in enumerate(stems):
         path = _FIGS / f"{stem}.png"
         if not path.exists():
+            missing.append(stem)
             continue
         # SVG に背景が無いので PNG は透過。**白地に合成する**
         # （`convert("RGB")` だけだと透過が黒く潰れて図が全部真っ黒になる）。
@@ -57,7 +63,9 @@ def main() -> None:
         )
     path = _OUT / f"{out_name}.png"
     sheet.save(path)
-    print(f"{len(stems)} 枚 → {path}")
+    print(f"{len(stems) - len(missing)} 枚 → {path}")
+    if missing:
+        print(f"  ！ 見つからず貼れなかった {len(missing)} 枚: {', '.join(missing[:4])} …")
 
 
 if __name__ == "__main__":

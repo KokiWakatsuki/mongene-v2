@@ -8361,10 +8361,15 @@ def test_draw_phenomenon_curve_non_degenerate(seed):
     assert rows >= 3 and step >= 1
     assert mr.params["grid_mode"] == "quantity"
 
+    # 表がどこから始まるかは場面で決まる。動き出しの 0 秒は自然だが、
+    # 「1辺 0cm の正方形の面積」は図形にならないので図形の場面は 1 から始める。
+    x_from = int(mr.params["x_from"])
+    assert x_from in (0, 1)
     features = mr.sub_questions[0].answer.features
-    assert len(features) == rows + 1
-    ys = [a * (step * i) ** 2 for i in range(rows + 1)]
-    assert ys == sorted(ys) and ys[0] == 0 and ys[-1] > 0, "0 から単調増加（値が潰れない）"
+    assert len(features) == rows + 1 - x_from
+    ys = [a * (step * i) ** 2 for i in range(x_from, rows + 1)]
+    assert ys == sorted(ys) and ys[-1] > 0, "単調増加（値が潰れない）"
+    assert ys[0] == 0 if x_from == 0 else ys[0] > 0
     assert ys[-1] <= int(ctx.spec_level.params["value_bound"])
 
 

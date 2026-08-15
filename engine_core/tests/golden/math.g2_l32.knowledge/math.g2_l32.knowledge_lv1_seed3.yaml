@@ -24,7 +24,7 @@ meta:
   seed: 3
   signature: parallel_angle_property_rule_recall
 problem_ref: adad2b50007394a0
-problem_text: 2直線z、wが平行であるとき、直線uがつくる同位角や錯角について成り立つこと。正しく述べているものを1つ選べ。
+problem_text: 2直線z、wが平行であるとき、直線uがつくる同位角や錯角について成り立つこととして、正しく述べているものを1つ選べ。
 sub_questions:
 - answer:
     correct: 二直線が平行ならば、同位角や錯角は等しい

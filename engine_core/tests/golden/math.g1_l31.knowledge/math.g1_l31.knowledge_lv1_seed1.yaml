@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: judge_proportion_graph_direction
 problem_ref: 50e81463a9b782dc
-problem_text: 比例y=-245xのグラフについて、次の文の正誤を答えよ。「a<0のとき、グラフは右上がりの直線になる。」また、比例のグラフは必ずどんな点を通るか答えよ。
+problem_text: 比例y=-2xのグラフについて、次の文の正誤を答えよ。「a<0のとき、グラフは右上がりの直線になる。」また、比例のグラフは必ずどんな点を通るか答えよ。
 sub_questions:
 - answer:
     correct: 右下がりの直線になる（原点を通る）

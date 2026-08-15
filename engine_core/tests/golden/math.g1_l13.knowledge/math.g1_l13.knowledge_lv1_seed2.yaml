@@ -24,7 +24,7 @@ meta:
   seed: 2
   signature: notation_product_rule_recall
 problem_ref: 2b7e95edc9dcdffb
-problem_text: 7 × b のように、数と文字の積を書き表すきまりについて。正しく述べているものを1つ選べ。
+problem_text: 7 × b のように、数と文字の積を書き表すきまりについて、正しく述べているものを1つ選べ。
 sub_questions:
 - answer:
     correct: かけ算の記号 × を省き、数を文字の前に書く

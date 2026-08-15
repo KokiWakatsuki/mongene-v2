@@ -16,7 +16,8 @@ levels:
     recipe: math.judge_transformation_invariant
     params:
       topic: parallel_translation
-      distance_domain: {int_range: [1, 20]}
+      # 方眼の目盛りは1〜10（13目盛りの平行移動は方眼に収まらない）。
+      distance_domain: {int_range: [1, 10]}
     given: [statement]
     asked: [choice]
     visual: none

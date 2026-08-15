@@ -24,7 +24,7 @@ meta:
   seed: 2
   signature: probability_terms_term_recall_g2
 problem_ref: ed01260c474631b6
-problem_text: 赤玉が2個、白玉が9個入っている袋から赤玉を取り出す起こりやすさのように、あることがらの起こりやすさの程度を表す数のことを何といいますか。
+problem_text: 赤玉が5個、白玉が9個入っている袋から赤玉を取り出す起こりやすさのように、あることがらの起こりやすさの程度を表す数のことを何といいますか。
 sub_questions:
 - answer:
     correct: 確率

@@ -24,7 +24,7 @@ meta:
   seed: 3
   signature: quadrant_terms_term_recall
 problem_ref: e25f850abb489a66
-problem_text: 座標平面上で、x座標が-55のように負、y座標も-189のように負である点が含まれる部分を何といいますか。
+problem_text: 座標平面上で、x座標が-5のように負、y座標も-4のように負である点が含まれる部分を何といいますか。
 sub_questions:
 - answer:
     correct: 第三象限

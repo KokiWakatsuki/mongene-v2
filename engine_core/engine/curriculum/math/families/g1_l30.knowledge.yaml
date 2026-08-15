@@ -16,7 +16,9 @@ levels:
     params:
       domain: quadrant_terms
       concept_set: [quadrant1, quadrant2, quadrant3, quadrant4, origin]
-      number_domain: {int_range: [1, 200]}
+      # 装飾の数は教材の粒度に合わせる（答えには一切関係しない）。
+      # 前は広い int_range から引いて、実物に出ない例が並んでいた。
+      number_domain: {int_set: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15, 20, 25, 30]}
     given: [statement]
     asked: [choice]
     visual: none

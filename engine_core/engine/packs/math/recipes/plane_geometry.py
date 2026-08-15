@@ -53,11 +53,14 @@ def judge_transformation_invariant_recipe(ctx: CellContext, rng: Rng) -> MR:
     if topic == "parallel_translation":
         m = int(draw(p["distance_domain"], rng))
         n = int(draw(p["distance_domain"], rng))
+        # 目盛りを1〜10 に狭めた分の広さは**向き**で戻す（実物も4方向を使う）。
+        h = str(draw(["右", "左"], rng))
+        v = str(draw(["上", "下"], rng))
         statement = (
-            f"図形を、右へ{m}目盛り、上へ{n}目盛りだけ平行移動した。移動前後で、"
+            f"図形を、{h}へ{m}目盛り、{v}へ{n}目盛りだけ平行移動した。移動前後で、"
             "対応する辺の長さと図形の大きさの関係を答えよ"
         )
-        surface = {"m": m, "n": n}
+        surface = {"m": m, "n": n, "h": h, "v": v}
     elif topic == "rotation":
         o = _draw_distinct_points(1, rng)[0]
         deg = int(draw(p["angle_domain"], rng))

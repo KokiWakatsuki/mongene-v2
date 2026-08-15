@@ -24,20 +24,20 @@ meta:
   seed: 2
   signature: number_opposite_quantity
 problem_ref: 7d44e617fcbce28c
-problem_text: 「収入 103円」を +103円 と表すことにするとき、「支出 431円」を、符号を使って表せ。
+problem_text: 「東へ 19km」を +19km と表すことにするとき、「西へ 17km」を、符号を使って表せ。
 sub_questions:
 - answer:
-    correct: '-431'
+    correct: '-17'
     distractors:
-    - '+431'
+    - '+17'
     fact_id: number.opposite_quantity
     kind: choice
   cause_tags: []
   concept_tags:
   - number.opposite_quantity
-  explanation: 'まず、どちらの向き（性質）を正の数で表すことにしたかを読み取る。（収入）
+  explanation: 'まず、どちらの向き（性質）を正の数で表すことにしたかを読み取る。（東へ）
 
-    次に、正の数で表す向きと反対の向きの量には、反対の符号をつけて表す。（-431）'
+    次に、正の数で表す向きと反対の向きの量には、反対の符号をつけて表す。（-17）'
   hints:
   - どちらの向き（性質）を正の数で表すことにしたかを読み取る。
   label: (1)
@@ -46,11 +46,11 @@ sub_questions:
   - args: []
     narration: どちらの向き（性質）を正の数で表すことにしたかを読み取る。
     op: identify_base_direction
-    result_display: 収入
-    result_srepr: 収入
+    result_display: 東へ
+    result_srepr: 東へ
   - args: []
     narration: 正の数で表す向きと反対の向きの量には、反対の符号をつけて表す。
     op: assign_opposite_sign
-    result_display: '-431'
-    result_srepr: Integer(-431)
+    result_display: '-17'
+    result_srepr: Integer(-17)
 visual_svg: null

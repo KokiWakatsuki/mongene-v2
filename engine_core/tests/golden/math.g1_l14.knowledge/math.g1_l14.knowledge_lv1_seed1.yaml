@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: notation_quotient_rule_recall
 problem_ref: bd82560ea7fa36aa
-problem_text: m ÷ 25 のように、文字をふくむ式のわり算を書き表すきまりについて。正しく述べているものを1つ選べ。
+problem_text: m ÷ 25 のように、文字をふくむ式のわり算を書き表すきまりについて、正しく述べているものを1つ選べ。
 sub_questions:
 - answer:
     correct: わり算の記号 ÷ を使わず、分数の形で書く

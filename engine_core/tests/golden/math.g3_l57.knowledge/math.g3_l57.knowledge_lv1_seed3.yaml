@@ -24,7 +24,7 @@ meta:
   seed: 3
   signature: survey_method_terms_term_recall
 problem_ref: 28849e79ad59f51d
-problem_text: 25800個（人）の対象の集団から一部を取り出して調べ、集団全体のようすを推定する調査を何といいますか。
+problem_text: 1000人の参加者の集団から一部を取り出して調べ、集団全体のようすを推定する調査を何といいますか。
 sub_questions:
 - answer:
     correct: 標本調査

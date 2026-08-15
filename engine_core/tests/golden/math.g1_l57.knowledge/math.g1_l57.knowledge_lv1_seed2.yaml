@@ -24,7 +24,7 @@ meta:
   seed: 2
   signature: representative_value_terms_term_recall
 problem_ref: e6f0dc244e3ac64a
-problem_text: 81個のデータを大きさの順に並べたときの、中央の位置にある値を何といいますか。
+problem_text: 45人の通学時間のデータを大きさの順に並べたときの、中央の位置にある値を何といいますか。
 sub_questions:
 - answer:
     correct: 中央値

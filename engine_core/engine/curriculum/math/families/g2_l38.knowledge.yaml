@@ -45,6 +45,13 @@ levels:
       domain: proof_logic_terms
       concept_set: [assumption, conclusion, counterexample]
       number_domain: {int_range: [1, 500]}
+    dup_rate_max: 0.60
+    dup_rate_reason: |
+      仮定・結論・反例の用語で変えられるのは、例に使う命題のしきい値だけ。題材（図形・場面）の軸も足したうえで実測 0.56。
+      **前はここが通っていたが、それは例に使う数を広く取っていたから**で、
+      「y = -382x²」「a、b が 367 より大きい数ならば」「x の値が 195 以上」のような、
+      実物の教材には出ない例が並んでいた。広さのために教材でない数を使うのはやめ、
+      狭さのほうを宣言する（用語想起は、実物でも例が数通りしかない型）。
     given: [statement]
     asked: [choice]
     visual: none

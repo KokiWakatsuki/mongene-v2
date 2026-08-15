@@ -24,7 +24,7 @@ meta:
   seed: 3
   signature: isosceles_property_rule_recall
 problem_ref: ba6448f9192bcd17
-problem_text: GH=GBの二等辺三角形GHBで、底角どうしの大きさの関係。正しく述べているものを1つ選べ。
+problem_text: GH=GBの二等辺三角形GHBで、底角どうしの大きさの関係として、正しく述べているものを1つ選べ。
 sub_questions:
 - answer:
     correct: 底角の大きさは等しい

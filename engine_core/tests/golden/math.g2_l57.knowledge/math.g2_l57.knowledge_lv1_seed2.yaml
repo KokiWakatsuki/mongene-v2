@@ -24,7 +24,7 @@ meta:
   seed: 2
   signature: classify_distribution_statistic
 problem_ref: a1e3671877a583a6
-problem_text: 297個のデータを表した箱ひげ図における四分位範囲が、データの分布の何を表すかを答えよ。
+problem_text: 36人の家庭学習の時間を表した箱ひげ図における四分位範囲が、データの分布の何を表すかを答えよ。
 sub_questions:
 - answer:
     correct: データの散らばりの度合いを表す

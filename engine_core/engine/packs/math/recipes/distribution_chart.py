@@ -82,11 +82,20 @@ def _table_text(lo: int, width: int, freqs: list[int], unit: str) -> str:
 
 
 def _unique_peak(freqs: list[int], rng: Rng, bonus: dict[str, Any]) -> tuple[list[int], int]:
-    """度数が最大の階級が一意になるよう1つだけ持ち上げる（分布の形が読める退化防止）。"""
-    out = list(freqs)
-    peak = int(draw({"int_range": [0, len(out) - 1]}, rng))
-    out[peak] = max(out) + int(draw(bonus, rng))
-    return out, peak
+    """最大の階級を一意にし、**山が1つ**の並びに直す。
+
+    前は最大値を1つ持ち上げるだけで、他の階級は独立に引いたままだった。
+    その結果 10・4・11・3・12 のような並びになり、**度数折れ線をかかせる問題で、
+    かいた折れ線がギザギザになっていた**。実物の度数分布はほぼ単峰で、
+    生徒が「分布の形」を読み取れるのはそのため。
+
+    値は変えず、山の左を増加・右を減少に並べ替えるだけ。
+    """
+    peak = int(draw({"int_range": [0, len(freqs) - 1]}, rng))
+    peak_val = max(freqs) + int(draw(bonus, rng))
+    rest = sorted(freqs[1:], reverse=True)  # 1つ分は山の値に置き換わる
+    left, right = rest[:peak], rest[peak:]
+    return [*reversed(left), peak_val, *right], peak
 
 
 def _visual_plan(params: dict[str, Any], *, drawn: bool) -> VisualPlan:
@@ -377,6 +386,26 @@ def _avoid_flat(freqs: list[int], rng: Rng) -> list[int]:
     return out
 
 
+def _as_unimodal(freqs: list[int], rng: Rng) -> list[int]:
+    """度数を**山が1つ**の並びに直す（合計は変えない）。
+
+    階級ごとに独立に引いていたので、度数が 10・4・11・3・12 のような並びになり、
+    **度数折れ線をかかせる問題で、かいた折れ線がギザギザになっていた。**
+    実物の度数分布はほぼ単峰で、生徒が「分布の形」を読み取れるのはそのため。
+
+    値そのものは変えず、並べ替えるだけ（総度数がきりのよい人数になる、という
+    `_draw_terminating_freqs` の条件を壊さない）。大きい順に取り出して、
+    山の左右へ交互に置くと必ず単峰になる。どちら側から置き始めるかで山の位置が動く。
+    """
+    vals = sorted(freqs, reverse=True)
+    left: list[int] = []
+    right: list[int] = []
+    flip = int(draw({"int_range": [0, 1]}, rng))
+    for i, v in enumerate(vals[1:]):
+        (left if (i + flip) % 2 == 0 else right).append(v)
+    return [*reversed(left), vals[0], *right]
+
+
 @register_recipe("math.relative_frequency_polygon", provides_concepts=_RELATIVE_POLYGON_CONCEPTS)
 def relative_frequency_polygon_recipe(ctx: CellContext, rng: Rng) -> MR:
     """度数分布表から相対度数を求め、度数折れ線をかく（answer-first・「かく」）。
@@ -388,7 +417,7 @@ def relative_frequency_polygon_recipe(ctx: CellContext, rng: Rng) -> MR:
     p = ctx.spec_level.params
     n_classes = int(draw(p["n_classes"], rng))
     scene, unit, lo, width = _scene(rng)
-    freqs = _draw_terminating_freqs(p, n_classes, rng)
+    freqs = _as_unimodal(_draw_terminating_freqs(p, n_classes, rng), rng)
 
     solver = REGISTRY.solver("math.relative_frequency_polygon")
     sol = cast(Solution, solver(freqs, lo, width, unit))
@@ -534,7 +563,8 @@ def cumulative_frequency_chart_recipe(ctx: CellContext, rng: Rng) -> MR:
     p = ctx.spec_level.params
     n_classes = int(draw(p["n_classes"], rng))
     scene, unit, lo, width = _scene(rng)
-    freqs = _avoid_flat([int(draw(p["frequency_domain"], rng)) for _ in range(n_classes)], rng)
+    freqs = _as_unimodal(
+        _avoid_flat([int(draw(p["frequency_domain"], rng)) for _ in range(n_classes)], rng), rng)
 
     solver = REGISTRY.solver("math.cumulative_frequency_chart")
     sol = cast(Solution, solver(freqs, lo, width, unit))
@@ -587,7 +617,8 @@ def median_class_from_cumulative_recipe(ctx: CellContext, rng: Rng) -> MR:
     p = ctx.spec_level.params
     n_classes = int(draw(p["n_classes"], rng))
     scene, unit, lo, width = _scene(rng)
-    freqs = _avoid_flat([int(draw(p["frequency_domain"], rng)) for _ in range(n_classes)], rng)
+    freqs = _as_unimodal(
+        _avoid_flat([int(draw(p["frequency_domain"], rng)) for _ in range(n_classes)], rng), rng)
     if sum(freqs) % 2 == 0:
         freqs[int(draw({"int_range": [0, n_classes - 1]}, rng))] += 1
 

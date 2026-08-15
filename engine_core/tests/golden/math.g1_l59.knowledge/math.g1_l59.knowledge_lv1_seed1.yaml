@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: probability_terms_term_recall
 problem_ref: 7b90288eb4cd2b9b
-problem_text: 当たりが5本、はずれが5本入っているくじで当たりを引く起こりやすさのように、あることがらの起こりやすさの程度を表す数のことを何といいますか。
+problem_text: 赤玉が8個、白玉が5個入っている袋から赤玉を取り出す起こりやすさのように、あることがらの起こりやすさの程度を表す数のことを何といいますか。
 sub_questions:
 - answer:
     correct: 確率

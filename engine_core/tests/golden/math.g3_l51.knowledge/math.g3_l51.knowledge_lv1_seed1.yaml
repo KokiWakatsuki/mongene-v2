@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: pythagorean_theorem_rule_recall
 problem_ref: d4d3d87a8dae62bb
-problem_text: 直角三角形AGNで、∠N=90°のとき、斜辺AGと他の2辺GN、NAの長さについて成り立つ関係。正しく述べているものを1つ選べ。
+problem_text: 直角三角形AGNで、∠N=90°のとき、斜辺AGと他の2辺GN、NAの長さについて成り立つ関係として、正しく述べているものを1つ選べ。
 sub_questions:
 - answer:
     correct: 斜辺の長さの二乗が、他の二辺の長さの二乗の和に等しい

@@ -23,7 +23,8 @@ levels:
     params:
       domain: representative_value_terms
       concept_set: [mean, median, mode]
-      number_domain: {int_range: [6, 500]}
+      # 装飾の数は教材の粒度に合わせる（答えには一切関係しない）。
+      number_domain: {int_set: [10, 15, 20, 24, 25, 30, 32, 36, 40, 45, 50]}
     given: [statement]
     asked: [choice]
     visual: none

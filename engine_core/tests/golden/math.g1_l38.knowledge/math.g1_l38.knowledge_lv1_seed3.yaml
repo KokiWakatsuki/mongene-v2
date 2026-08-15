@@ -24,7 +24,7 @@ meta:
   seed: 3
   signature: judge_transformation_invariant_parallel
 problem_ref: d978d1c74b3a06fc
-problem_text: 図形を、右へ7目盛り、上へ2目盛りだけ平行移動した。移動前後で、対応する辺の長さと図形の大きさの関係を答えよ。
+problem_text: 図形を、右へ7目盛り、下へ2目盛りだけ平行移動した。移動前後で、対応する辺の長さと図形の大きさの関係を答えよ。
 sub_questions:
 - answer:
     correct: 変わらない

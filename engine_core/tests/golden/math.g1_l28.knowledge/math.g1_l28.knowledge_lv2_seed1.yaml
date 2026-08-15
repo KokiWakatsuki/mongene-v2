@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: judge_functional_relation
 problem_ref: 6def274ad11776f6
-problem_text: 底辺の長さが74cmより長く高さが決まった三角形の底辺の長さをx cmとするときの、面積y cm² について、y は x の関数であるといえるか答えよ。
+problem_text: 正x角形の対角線の本数y本 について、y は x の関数であるといえるか答えよ。
 sub_questions:
 - answer:
     correct: yはxの関数であるといえる

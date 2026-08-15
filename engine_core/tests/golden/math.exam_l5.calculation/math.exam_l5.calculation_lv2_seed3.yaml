@@ -24,16 +24,16 @@ meta:
   seed: 3
   signature: exam_probability_from_counts
 problem_ref: fa80725b4b9d3edc
-problem_text: 何枚かの数字カードを並べて整数をつくるとき、起こりうる場合は全部で51通りあり、そのうち偶数になる場合は4通りであった。偶数になる確率を求めよ。
+problem_text: 1から5までの数字が1枚ずつ書かれたタイルから2枚を選んで並べ、2けたの整数をつくるとき、起こりうる場合は全部で20通りあり、そのうち奇数になる場合は12通りであった。奇数になる確率を求めよ。
 sub_questions:
 - answer:
-    display: 4/51
+    display: 3/5
     kind: symbolic
-    srepr: Rational(4, 51)
+    srepr: Rational(3, 5)
   cause_tags: []
   concept_tags:
   - exam.probability_from_counts
-  explanation: まず、ことがらが起こった回数を、試行の総回数でわる。（4/51）
+  explanation: まず、ことがらが起こった回数を、試行の総回数でわる。（3/5）
   hints:
   - ことがらが起こった回数を、試行の総回数でわる。
   label: (1)
@@ -42,6 +42,6 @@ sub_questions:
   - args: []
     narration: ことがらが起こった回数を、試行の総回数でわる。
     op: divide_occurred_by_total
-    result_display: 4/51
-    result_srepr: Rational(4, 51)
+    result_display: 3/5
+    result_srepr: Rational(3, 5)
 visual_svg: null

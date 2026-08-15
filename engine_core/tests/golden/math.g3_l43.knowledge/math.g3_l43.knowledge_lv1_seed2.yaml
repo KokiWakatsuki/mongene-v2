@@ -24,7 +24,7 @@ meta:
   seed: 2
   signature: parallel_segment_ratio_converse_rule_recall
 problem_ref: 34ce73e62b57b6f6
-problem_text: 三角形FGDの辺FG, FD上の点Q, Kについて、FQ:QG=FK:KDが成り立つとき、いえること。正しく述べているものを1つ選べ。
+problem_text: 三角形FGDの辺FG, FD上の点Q, Kについて、FQ:QG=FK:KDが成り立つとき、いえることとして、正しく述べているものを1つ選べ。
 sub_questions:
 - answer:
     correct: QKとGDが平行である

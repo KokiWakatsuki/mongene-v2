@@ -24,7 +24,7 @@ meta:
   seed: 2
   signature: direct_proportion_term_recall
 problem_ref: 0e44d4dbd03a0c0a
-problem_text: y = 98x のように、x の値が2倍、3倍になると、それにともなって y の値も2倍、3倍になる関係を何といいますか。
+problem_text: y = 10x のように、x の値が2倍、3倍になると、それにともなって y の値も2倍、3倍になる関係を何といいますか。
 sub_questions:
 - answer:
     correct: 比例

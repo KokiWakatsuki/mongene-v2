@@ -66,6 +66,55 @@ def _tick_marks(p1: tuple[float, float], p2: tuple[float, float], count: int) ->
     return parts
 
 
+def _unit(
+    frm: tuple[float, float], to: tuple[float, float]
+) -> tuple[float, float]:
+    dx, dy = to[0] - frm[0], to[1] - frm[1]
+    n = math.hypot(dx, dy) or 1.0
+    return dx / n, dy / n
+
+
+def _right_angle_mark(
+    v: tuple[float, float], a: tuple[float, float], b: tuple[float, float],
+    size: float = 11.0,
+) -> list[str]:
+    """頂点 v で、v→a と v→b がつくる直角に小さな四角の印をつける。
+
+    **証明の図に直角の印を描く手段が無かった。** 図の要素は line・circle・text・rect
+    だけで、「∠OAP ＝ ∠OBP ＝ 90°」と本文が言っていても図には何も出ていなかった。
+    実物の証明の図は仮定を必ず記号で示す。
+    """
+    ux, uy = _unit(v, a)
+    wx, wy = _unit(v, b)
+    p1 = (v[0] + ux * size, v[1] + uy * size)
+    p2 = (v[0] + (ux + wx) * size, v[1] + (uy + wy) * size)
+    p3 = (v[0] + wx * size, v[1] + wy * size)
+    pts = " ".join(f"{x:.2f},{y:.2f}" for x, y in (p1, p2, p3))
+    return [f'<polyline points="{pts}" fill="none" stroke="#000000" stroke-width="1.2"/>']
+
+
+def _parallel_marks(
+    p1: tuple[float, float], p2: tuple[float, float], count: int
+) -> list[str]:
+    """線分の中央に、平行を表す「>」を count 個つける（同じ組は同じ本数）。"""
+    mx, my = (p1[0] + p2[0]) / 2, (p1[1] + p2[1]) / 2
+    ux, uy = _unit(p1, p2)
+    nx, ny = -uy, ux
+    parts: list[str] = []
+    for i in range(count):
+        off = (i - (count - 1) / 2) * 5.0
+        bx, by = mx + ux * off, my + uy * off
+        tip = (bx + ux * 4.0, by + uy * 4.0)
+        for sx, sy in ((nx, ny), (-nx, -ny)):
+            tail = (bx - ux * 2.0 + sx * 4.5, by - uy * 2.0 + sy * 4.5)
+            parts.append(
+                f'<line x1="{tail[0]:.2f}" y1="{tail[1]:.2f}" '
+                f'x2="{tip[0]:.2f}" y2="{tip[1]:.2f}" '
+                f'stroke="#000000" stroke-width="1.2"/>'
+            )
+    return parts
+
+
 def _on_segment(
     pt: tuple[float, float], a: tuple[float, float], b: tuple[float, float]
 ) -> bool:
@@ -141,6 +190,11 @@ def render_construction_svg(params: dict[str, Any]) -> str:
     for i, group in enumerate(params.get("equal_groups", [])):
         for a, b in group:
             parts.extend(_tick_marks(px[str(a)], px[str(b)], i + 1))
+    for i, group in enumerate(params.get("parallel_groups", [])):
+        for a, b in group:
+            parts.extend(_parallel_marks(px[str(a)], px[str(b)], i + 1))
+    for v, a, b in params.get("right_angles", []):
+        parts.extend(_right_angle_mark(px[str(v)], px[str(a)], px[str(b)]))
     # 各点から線が出ていく向き。端点だけでなく、**線分の途中にある点**も拾う
     # （X字型の交点 O は、どの線分の端点でもないが4方向に線が出ている）。
     # ここは見た目の話なので、座標を見て判定してよい（事実を作っているのではない）。

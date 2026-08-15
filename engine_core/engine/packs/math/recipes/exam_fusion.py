@@ -44,16 +44,73 @@ def _effective_cause_tags(ctx: CellContext) -> list[str]:
 # ---------------------------------------------------------------------------
 # exam_l5.calculation Lv2: 場合の数から確率を計算処理する（既存 math.relative_frequency 再利用）
 # ---------------------------------------------------------------------------
-# 数え上げの場面（数を小さく保ったまま組み合わせを稼ぐ軸。前は場面が無く
-# 「ある試行で起こりうる場合が全部で164通り」という抽象的な文だった）。
-# 場面は**起こりうる場合の数を決めつけないもの**だけを使う（「2個のさいころ」だと
-# 全体が36通りに決まってしまい、本文の「全部で108通り」と食い違う）。
-_COUNT_SCENES: list[tuple[str, str, str]] = [
-    ("箱の中のくじから2本を続けて引くとき、", "通り", "当たりが出る"),
-    ("何枚かの数字カードを並べて整数をつくるとき、", "通り", "偶数になる"),
-    ("袋から玉を続けて2個取り出すとき、", "通り", "同じ色になる"),
-    ("何人かの中から2人の委員を選ぶとき、", "通り", "特定の1人がふくまれる"),
+# 数え上げの場面。
+#
+# **場面を「起こりうる場合の数を決めつけないもの」にするだけでは足りなかった。**
+# 決めつけないつもりでも、場面には必ず取りうる通り数がある。
+#
+#   「何人かの中から2人の委員を選ぶとき、起こりうる場合は全部で31通り」
+#   → nC2 は 1, 3, 6, 10, 15, 21, 28, 36… で、**31 は存在しない**
+#   → しかも「特定の1人がふくまれる場合」は n−1 通りに決まるのに 28 と書いていた
+#
+# 全体と該当の数を独立に引いていたのが原因。ここでは**場面の大きさ n を1つ引いて、
+# 全体も該当もそこから計算する**。こうすると「その場面でありえない数」は原理的に出ない。
+# 引数は n（と、場面が要る内訳）だけ。
+_COUNT_SCENES: list[str] = [
+    "lottery",   # n本のくじに当たり a 本。2本続けて引いて、当たりが出る
+    "card",      # 1〜n の数字カードから2枚並べて2けたの整数。偶数になる
+    "ball",      # 赤 r 個・白 w 個から続けて2個。同じ色になる
+    "committee",  # n人から2人の委員。特定の1人がふくまれる
 ]
+
+
+def _draw_count_scene(kind: str, rng: Rng) -> tuple[str, str, int, int]:
+    """(場面文, 条件の言い方, 全体の通り数, 該当の通り数)。すべて場面の大きさから導く。
+
+    **ありえる値だけにすると組が減るので、場面の中に軸を足して戻す。**
+    最初に大きさ1つだけで書いたら dup_rate が 0.63 に跳ねた（閾 0.20）。
+    定義域を広げて戻すのではなく（それをやると 31通り の問題に逆戻りする）、
+    「聞く条件」を場面ごとに2通り用意して軸を増やした。
+    """
+    if kind == "lottery":
+        n = int(draw({"int_range": [4, 10]}, rng))
+        a = int(draw({"int_range": [1, n - 2]}, rng))
+        item = str(draw(["くじ", "抽選券", "ふくびき券"], rng))
+        total, miss = n * (n - 1), (n - a) * (n - a - 1)
+        scene = f"当たりが{a}本ふくまれる{n}本の{item}から、続けて2本を引くとき、"
+        if int(draw({"int_range": [0, 1]}, rng)):
+            return scene, "当たりが少なくとも1本出る", total, total - miss
+        return scene, "2本とも外れる", total, miss
+    if kind == "card":
+        n = int(draw({"int_range": [4, 9]}, rng))
+        # 直前が「数字が1枚ずつ書かれた」なので、題材の語に「数字」を入れない
+        # （「数字が1枚ずつ書かれた数字の書かれた紙」になった）。
+        item = str(draw(["カード", "番号札", "紙", "タイル"], rng))
+        # 一の位で決まる。1〜n の中の偶数は n//2 個、奇数は (n+1)//2 個。
+        scene = (f"1から{n}までの数字が1枚ずつ書かれた{item}から2枚を選んで並べ、"
+                 f"2けたの整数をつくるとき、")
+        if int(draw({"int_range": [0, 1]}, rng)):
+            return scene, "偶数になる", n * (n - 1), (n // 2) * (n - 1)
+        return scene, "奇数になる", n * (n - 1), ((n + 1) // 2) * (n - 1)
+    if kind == "ball":
+        r = int(draw({"int_range": [2, 7]}, rng))
+        w = int(draw({"int_range": [2, 7]}, rng))
+        ca, cb = (str(x) for x in draw_many(
+            {"int_range": [0, 5], "distinct": ["value"]}, rng, k=2))
+        colors = ["赤", "白", "青", "黄", "緑", "黒"]
+        ca, cb = colors[int(ca)], colors[int(cb)]
+        n = r + w
+        total, same = n * (n - 1), r * (r - 1) + w * (w - 1)
+        scene = f"{ca}玉{r}個と{cb}玉{w}個が入った袋から、続けて2個の玉を取り出すとき、"
+        if int(draw({"int_range": [0, 1]}, rng)):
+            return scene, "2個とも同じ色になる", total, same
+        return scene, "2個の色が異なる", total, total - same
+    n = int(draw({"int_range": [5, 14]}, rng))  # committee
+    role = str(draw(["委員", "係", "代表", "当番"], rng))
+    scene = f"{n}人の中から2人の{role}を選ぶとき、"
+    if int(draw({"int_range": [0, 1]}, rng)):
+        return scene, "特定の1人がふくまれる", n * (n - 1) // 2, n - 1
+    return scene, "特定の2人がともにふくまれる", n * (n - 1) // 2, 1
 
 _EXAM_PROBABILITY_FROM_COUNTS_CONCEPTS = ["exam.probability_from_counts"]
 
@@ -68,11 +125,9 @@ def exam_probability_from_counts_recipe(ctx: CellContext, rng: Rng) -> MR:
     数え上げた結果を確率に直す処理そのものが眼目のセルなので、数え上げは済んで
     いるものとして与えるが、その場面は具体的に書く（くじ・カード・玉）。
     """
-    p = ctx.spec_level.params
     scene_index = int(draw({"int_set": list(range(len(_COUNT_SCENES)))}, rng))
-    scene, unit, cond = _COUNT_SCENES[scene_index]
-    total = int(draw(p["total_domain"], rng))
-    favorable = int(draw({"int_range": [1, total - 1]}, rng))
+    scene, cond, total, favorable = _draw_count_scene(_COUNT_SCENES[scene_index], rng)
+    unit = "通り"
 
     # 確率は分数で答えるのが教材の作法（小数で答えるのは相対度数のほう）。
     solver = REGISTRY.solver("math.relative_frequency")

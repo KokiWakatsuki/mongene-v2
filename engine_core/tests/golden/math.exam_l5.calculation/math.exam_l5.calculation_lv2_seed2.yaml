@@ -24,16 +24,16 @@ meta:
   seed: 2
   signature: exam_probability_from_counts
 problem_ref: aa31c4ed9326dcb3
-problem_text: 袋から玉を続けて2個取り出すとき、起こりうる場合は全部で30通りあり、そのうち同じ色になる場合は18通りであった。同じ色になる確率を求めよ。
+problem_text: 黒玉3個と青玉4個が入った袋から、続けて2個の玉を取り出すとき、起こりうる場合は全部で42通りあり、そのうち2個とも同じ色になる場合は18通りであった。2個とも同じ色になる確率を求めよ。
 sub_questions:
 - answer:
-    display: 3/5
+    display: 3/7
     kind: symbolic
-    srepr: Rational(3, 5)
+    srepr: Rational(3, 7)
   cause_tags: []
   concept_tags:
   - exam.probability_from_counts
-  explanation: まず、ことがらが起こった回数を、試行の総回数でわる。（3/5）
+  explanation: まず、ことがらが起こった回数を、試行の総回数でわる。（3/7）
   hints:
   - ことがらが起こった回数を、試行の総回数でわる。
   label: (1)
@@ -42,6 +42,6 @@ sub_questions:
   - args: []
     narration: ことがらが起こった回数を、試行の総回数でわる。
     op: divide_occurred_by_total
-    result_display: 3/5
-    result_srepr: Rational(3, 5)
+    result_display: 3/7
+    result_srepr: Rational(3, 7)
 visual_svg: null

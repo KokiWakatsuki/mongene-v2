@@ -24,7 +24,7 @@ meta:
   seed: 3
   signature: probability_terms_term_recall
 problem_ref: 5ec6d2c8222310ae
-problem_text: 当たりが7本、はずれが7本入っているくじで当たりを引く起こりやすさのように、あることがらの起こりやすさの程度を表す数のことを何といいますか。
+problem_text: 1から7までの番号のカードから2の倍数のカードを引く起こりやすさのように、あることがらの起こりやすさの程度を表す数のことを何といいますか。
 sub_questions:
 - answer:
     correct: 確率

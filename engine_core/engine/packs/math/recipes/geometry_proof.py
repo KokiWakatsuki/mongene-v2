@@ -40,7 +40,7 @@ from engine.packs.math.geometry import (  # noqa: F401  登録の副作用で構
 from engine.packs.math.geometry.catalog import CONSTRUCTIONS, topics_of
 from engine.packs.math.geometry.construct import figure_quality_problems
 from engine.packs.math.geometry.deduce import saturate
-from engine.packs.math.geometry.facts import fact_text, goal_text
+from engine.packs.math.geometry.facts import fact_text, goal_text, seg_text
 from engine.packs.math.geometry.naturalness import accidental_coincidences, select_goal
 from engine.packs.math.geometry.rules import RULES
 from engine.packs.math.geometry.render_text import (
@@ -175,18 +175,22 @@ def geometry_proof_recipe(ctx: CellContext, rng: Rng) -> MR:
     con, ded, goal, lines = built
     targets = compared_triangles(ded, goal.fact)
     text = render_proof(lines, targets=targets)
+    # 「右の図で、AB ＝ AD、BC ＝ CD である」の形にする（条件を並べるだけだと
+    # 文にならない）。構成が自前の言い方を持つならそれを使う（「平行四辺形ABCDで」）。
+    # **図の印より先に組む。** 印をつけてよいのは「この文が述べている事実」だけで、
+    # 判定にこの文字列が要る（`_stated_facts`）。
+    premise_text = con.description or (
+        "右の図で、" + "、".join(fact_text(f) for f in con.givens) + " である"
+    )
     svg = render_construction_svg(
         {
             "coords": con.coords,
             "segments": con.segments,
             "circles": con.circles,
-            "equal_groups": _equal_groups(con),
+            "equal_groups": _equal_groups(con, premise_text, goal.fact),
+            "parallel_groups": _parallel_groups(con, premise_text, goal.fact),
+            "right_angles": _right_angles(con, premise_text, goal.fact),
         }
-    )
-    # 「右の図で、AB ＝ AD、BC ＝ CD である」の形にする（条件を並べるだけだと
-    # 文にならない）。構成が自前の言い方を持つならそれを使う（「平行四辺形ABCDで」）。
-    premise_text = con.description or (
-        "右の図で、" + "、".join(fact_text(f) for f in con.givens) + " である"
     )
     answer = ProofAnswer(
         text=text,
@@ -285,10 +289,100 @@ def _steps_from_lines(lines) -> list[Step]:
     return out
 
 
-def _equal_groups(con: Construction) -> list[list[tuple[str, str]]]:
-    """図に付ける等長の印。与えられた条件のうち、辺の等式だけを組にする。"""
+def _stated_facts(con: Construction, premise_text: str, goal_fact: Any = None) -> list[Any]:
+    """**問題文が述べている事実だけ**を返す。
+
+    図に印をつける基準はこれ1つ。理由は2つある。
+
+    1. 結論を漏らさない。「このとき AB ＝ CD であることを証明せよ」の AB ＝ CD に
+       印をつけたら答えを図が言ってしまう（幾何的リーク規則）。
+    2. 取りこぼさない。仮定は `con.givens` に入っているとは限らない——構成が自前の
+       言い方を持つとき（「AB ＝ AC ＝ BC である」「∠OAP ＝ ∠OBP ＝ 90° である」）は
+       `con.description` に書かれていて givens は空だった。**最初は givens だけを
+       見ていて、40枚中9枚で印が付かなかった。**
+
+    `premise_text` には結論が入らない（結論は「このとき、〜を証明せよ」として
+    別に足される）ので、ここに出ている事実は必ず仮定である。
+
+    ★**文字列一致だけでは足りない。** 本文は事実を別の言い方で書く:
+      「点Oはそれぞれの中点である」  ← `O は AD の中点` とは書かれていない
+      「頂点Bから辺ACに垂線BDをひく」← `BD ⊥ AC` とは書かれていない
+      「DE ∥ BC」                    ← 事実の側は `BC ∥ DE` の順で正規化されている
+    一致だけを見ていたときは 40 枚中 17 枚で印が付かなかった。言い方も見る。
+    """
+    return [
+        f for f in con.facts
+        # **結論そのものは絶対に印にしない。** 本文の言い方を吸収する側（`_mentioned_in`）は
+        # 「垂線」の一語で perp をすべて拾うので、結論が垂直な回に漏れる道が残る。
+        if f != goal_fact and (f in con.givens or _mentioned_in(f, premise_text))
+    ]
+
+
+def _mentioned_in(f: Any, text: str) -> bool:
+    """事実 f が、この本文で述べられているか（言い方の違いを吸収する）。"""
+    if fact_text(f) in text:
+        return True
+    if f.kind == "midpoint":
+        return "中点" in text
+    if f.kind in ("parallel", "parallel_dir"):
+        a, b = seg_text(f.args[0]), seg_text(f.args[1])
+        return any(s in text for s in (f"{a} ∥ {b}", f"{b} ∥ {a}", f"{a}∥{b}", f"{b}∥{a}"))
+    if f.kind in ("perp", "right_angle"):
+        return "垂線" in text or "⊥" in text or "90°" in text
+    return False
+
+
+def _equal_groups(con: Construction, premise_text: str = "", goal_fact: Any = None) -> list[list[tuple[str, str]]]:
+    """図に付ける等長の印。本文が述べている「辺が等しい」を組にする。
+
+    `midpoint` も等長の言い方である（「点 O は AD の中点」→ AO と OD に印）。
+    """
     groups: list[list[tuple[str, str]]] = []
-    for f in con.givens:
+    seen: set[tuple[tuple[str, str], ...]] = set()
+    for f in (_stated_facts(con, premise_text, goal_fact) if premise_text else con.givens):
         if f.kind == "seg_eq" and f.args[0] != f.args[1]:
-            groups.append([f.args[0], f.args[1]])
+            pair = (tuple(f.args[0]), tuple(f.args[1]))
+        elif f.kind == "midpoint":
+            m, (a, b) = f.args[0], f.args[1]
+            pair = ((a, m), (m, b))
+        else:
+            continue
+        if pair not in seen:
+            seen.add(pair)
+            groups.append(list(pair))
     return groups
+
+
+def _parallel_groups(con: Construction, premise_text: str, goal_fact: Any = None) -> list[list[tuple[str, str]]]:
+    """図に付ける平行の印。本文が述べている「2直線が平行」を組にする。"""
+    groups: list[list[tuple[str, str]]] = []
+    seen: set[tuple[tuple[str, str], ...]] = set()
+    for f in _stated_facts(con, premise_text, goal_fact):
+        if f.kind in ("parallel", "parallel_dir"):
+            pair = (tuple(f.args[0]), tuple(f.args[1]))
+            if pair not in seen:
+                seen.add(pair)
+                groups.append(list(pair))
+    return groups
+
+
+def _right_angles(con: Construction, premise_text: str, goal_fact: Any = None) -> list[tuple[str, str, str]]:
+    """図に付ける直角の印（頂点, 辺1の先, 辺2の先）。
+
+    `right_angle`（∠ABC ＝ 90°）はそのまま頂点が分かる。`perp`（AD ⊥ BC）は
+    2直線の交点が頂点なので、共有している点を探して頂点にする
+    （共有点が無い＝図の上で交わっていないときは印を付けない）。
+    """
+    out: list[tuple[str, str, str]] = []
+    for f in _stated_facts(con, premise_text, goal_fact):
+        if f.kind == "right_angle":
+            v, a1, a2 = f.args[0]
+            out.append((v, a1, a2))
+        elif f.kind == "perp":
+            (p, q), (r, s) = f.args[0], f.args[1]
+            shared = {p, q} & {r, s}
+            if len(shared) != 1:
+                continue
+            v = shared.pop()
+            out.append((v, q if v == p else p, s if v == r else r))
+    return sorted(set(out))

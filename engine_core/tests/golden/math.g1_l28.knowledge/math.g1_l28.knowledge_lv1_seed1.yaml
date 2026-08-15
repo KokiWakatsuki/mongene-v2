@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: function_terms_recall
 problem_ref: f32f337f2d120ac2
-problem_text: 1辺の長さが34cmより長い正方形の1辺の長さを x cm、周の長さを y cm とするときの、この y と x のような関係を何といいますか。
+problem_text: 直方体の縦の長さを x cm、周の長さを y cm とするときの、この y と x のような関係を何といいますか。
 sub_questions:
 - answer:
     correct: 関数

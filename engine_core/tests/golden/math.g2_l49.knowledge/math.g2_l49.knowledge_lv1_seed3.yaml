@@ -24,7 +24,7 @@ meta:
   seed: 3
   signature: special_parallelogram_diagonal_property_rule_recall
 problem_ref: 90bb0d6c5b6558e3
-problem_text: 長方形FDMBの対角線がもつ性質。正しく述べているものを1つ選べ。
+problem_text: 長方形FDMBの対角線がもつ性質として、正しく述べているものを1つ選べ。
 sub_questions:
 - answer:
     correct: 対角線の長さが等しい

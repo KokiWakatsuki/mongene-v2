@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: parallelogram_conditions_rule_recall
 problem_ref: f128d14604c99d51
-problem_text: 四角形GEFPが平行四辺形になるといえる条件。正しく述べているものを1つ選べ。
+problem_text: 四角形GEFPが平行四辺形になるといえる条件として、正しく述べているものを1つ選べ。
 sub_questions:
 - answer:
     correct: 二組の対辺がそれぞれ平行である、二組の対辺の長さがそれぞれ等しい、二組の対角の大きさがそれぞれ等しい、対角線がそれぞれの中点で交わる、一組の対辺が平行でその長さが等しい、のいずれか

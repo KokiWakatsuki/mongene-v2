@@ -24,7 +24,7 @@ meta:
   seed: 2
   signature: quadratic_coefficient_term_recall
 problem_ref: 7122a0c34c163aed
-problem_text: 2次方程式 -4x² - 5x + 13 = 0 を一般の形 ax² + bx + c = 0 と見比べたとき、x の項の係数にあたる文字を何といいますか。
+problem_text: 2次方程式 -4x² + 2x + 7 = 0 を一般の形 ax² + bx + c = 0 と見比べたとき、x の項の係数にあたる文字を何といいますか。
 sub_questions:
 - answer:
     correct: b

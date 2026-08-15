@@ -24,59 +24,59 @@ meta:
   seed: 1
   signature: relative_frequency_table_and_polygon
 problem_ref: dcddfec63cb8fb0c
-problem_text: 次の度数分布表は、ある中学校の生徒40人のハンドボール投げの記録を調べたものである。各階級の相対度数を求めて表を完成させ、この分布の度数折れ線をかけ。〔階級と度数：16m以上20m未満…10人、20m以上24m未満…4人、24m以上28m未満…11人、28m以上32m未満…3人、32m以上36m未満…12人〕。
+problem_text: 次の度数分布表は、ある中学校の生徒40人のハンドボール投げの記録を調べたものである。各階級の相対度数を求めて表を完成させ、この分布の度数折れ線をかけ。〔階級と度数：16m以上20m未満…4人、20m以上24m未満…11人、24m以上28m未満…12人、28m以上32m未満…10人、32m以上36m未満…3人〕。
 sub_questions:
 - answer:
     features:
-    - display: 16m以上20m未満の相対度数は0.25
+    - display: 16m以上20m未満の相対度数は0.1
       kind: relative_frequency
-      srepr: Tuple(Integer(16), Rational(1, 4))
-    - display: 20m以上24m未満の相対度数は0.1
+      srepr: Tuple(Integer(16), Rational(1, 10))
+    - display: 20m以上24m未満の相対度数は0.275
       kind: relative_frequency
-      srepr: Tuple(Integer(20), Rational(1, 10))
-    - display: 24m以上28m未満の相対度数は0.275
+      srepr: Tuple(Integer(20), Rational(11, 40))
+    - display: 24m以上28m未満の相対度数は0.3
       kind: relative_frequency
-      srepr: Tuple(Integer(24), Rational(11, 40))
-    - display: 28m以上32m未満の相対度数は0.075
+      srepr: Tuple(Integer(24), Rational(3, 10))
+    - display: 28m以上32m未満の相対度数は0.25
       kind: relative_frequency
-      srepr: Tuple(Integer(28), Rational(3, 40))
-    - display: 32m以上36m未満の相対度数は0.3
+      srepr: Tuple(Integer(28), Rational(1, 4))
+    - display: 32m以上36m未満の相対度数は0.075
       kind: relative_frequency
-      srepr: Tuple(Integer(32), Rational(3, 10))
-    - display: 折れ線の頂点（階級値18m、度数10人）
+      srepr: Tuple(Integer(32), Rational(3, 40))
+    - display: 折れ線の頂点（階級値18m、度数4人）
       kind: polygon_vertex
-      srepr: Tuple(Integer(18), Integer(10))
-    - display: 折れ線の頂点（階級値22m、度数4人）
+      srepr: Tuple(Integer(18), Integer(4))
+    - display: 折れ線の頂点（階級値22m、度数11人）
       kind: polygon_vertex
-      srepr: Tuple(Integer(22), Integer(4))
-    - display: 折れ線の頂点（階級値26m、度数11人）
+      srepr: Tuple(Integer(22), Integer(11))
+    - display: 折れ線の頂点（階級値26m、度数12人）
       kind: polygon_vertex
-      srepr: Tuple(Integer(26), Integer(11))
-    - display: 折れ線の頂点（階級値30m、度数3人）
+      srepr: Tuple(Integer(26), Integer(12))
+    - display: 折れ線の頂点（階級値30m、度数10人）
       kind: polygon_vertex
-      srepr: Tuple(Integer(30), Integer(3))
-    - display: 折れ線の頂点（階級値34m、度数12人）
+      srepr: Tuple(Integer(30), Integer(10))
+    - display: 折れ線の頂点（階級値34m、度数3人）
       kind: polygon_vertex
-      srepr: Tuple(Integer(34), Integer(12))
+      srepr: Tuple(Integer(34), Integer(3))
     kind: graph
     solution_svg_ref: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 400" width="460" height="400" font-family="Hiragino Sans, Hiragino Kaku Gothic ProN, Noto Sans JP, Yu Gothic, Meiryo, sans-serif"><rect
       x="0" y="0" width="460" height="400" fill="#ffffff" stroke="none"/><line x1="40.00" y1="366.00" x2="440.00" y2="366.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="40.00" y1="316.57" x2="440.00"
       y2="316.57" stroke="#bbbbbb" stroke-width="0.5"/><line x1="40.00" y1="267.14" x2="440.00" y2="267.14" stroke="#bbbbbb" stroke-width="0.5"/><line x1="40.00" y1="217.71" x2="440.00" y2="217.71" stroke="#bbbbbb"
       stroke-width="0.5"/><line x1="40.00" y1="168.29" x2="440.00" y2="168.29" stroke="#bbbbbb" stroke-width="0.5"/><line x1="40.00" y1="118.86" x2="440.00" y2="118.86" stroke="#bbbbbb" stroke-width="0.5"/><line
       x1="40.00" y1="69.43" x2="440.00" y2="69.43" stroke="#bbbbbb" stroke-width="0.5"/><line x1="40.00" y1="20.00" x2="440.00" y2="20.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="40.00" y1="366.00"
-      x2="440.00" y2="366.00" stroke="#000000" stroke-width="1.5"/><line x1="40.00" y1="20.00" x2="40.00" y2="366.00" stroke="#000000" stroke-width="1.5"/><polyline points="40.00,366.00 106.67,118.86 173.33,267.14
-      240.00,94.14 306.67,291.86 373.33,69.43 440.00,366.00" fill="none" stroke="#000000" stroke-width="2.5"/><circle cx="40.00" cy="366.00" r="3" fill="#000000"/><circle cx="106.67" cy="118.86" r="3" fill="#000000"/><circle
-      cx="173.33" cy="267.14" r="3" fill="#000000"/><circle cx="240.00" cy="94.14" r="3" fill="#000000"/><circle cx="306.67" cy="291.86" r="3" fill="#000000"/><circle cx="373.33" cy="69.43" r="3" fill="#000000"/><circle
-      cx="440.00" cy="366.00" r="3" fill="#000000"/><text x="73.33" y="380.00" font-size="10" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">16</text><text
-      x="73.33" y="380.00" font-size="10" text-anchor="middle" fill="#000000">16</text><text x="140.00" y="380.00" font-size="10" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round"
-      fill="#ffffff">20</text><text x="140.00" y="380.00" font-size="10" text-anchor="middle" fill="#000000">20</text><text x="206.67" y="380.00" font-size="10" text-anchor="middle" stroke="#ffffff" stroke-width="3"
-      stroke-linejoin="round" fill="#ffffff">24</text><text x="206.67" y="380.00" font-size="10" text-anchor="middle" fill="#000000">24</text><text x="273.33" y="380.00" font-size="10" text-anchor="middle"
-      stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">28</text><text x="273.33" y="380.00" font-size="10" text-anchor="middle" fill="#000000">28</text><text x="340.00" y="380.00"
-      font-size="10" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">32</text><text x="340.00" y="380.00" font-size="10" text-anchor="middle" fill="#000000">32</text><text
-      x="406.67" y="380.00" font-size="10" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">36</text><text x="406.67" y="380.00" font-size="10" text-anchor="middle"
-      fill="#000000">36</text><text x="34.00" y="369.00" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">0</text><text x="34.00" y="369.00" font-size="10"
-      text-anchor="end" fill="#000000">0</text><text x="34.00" y="319.57" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">2</text><text x="34.00"
-      y="319.57" font-size="10" text-anchor="end" fill="#000000">2</text><text x="34.00" y="270.14" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">4</text><text
+      x2="440.00" y2="366.00" stroke="#000000" stroke-width="1.5"/><line x1="40.00" y1="20.00" x2="40.00" y2="366.00" stroke="#000000" stroke-width="1.5"/><polyline points="40.00,366.00 106.67,267.14 173.33,94.14
+      240.00,69.43 306.67,118.86 373.33,291.86 440.00,366.00" fill="none" stroke="#000000" stroke-width="2.5"/><circle cx="40.00" cy="366.00" r="3" fill="#000000"/><circle cx="106.67" cy="267.14" r="3"
+      fill="#000000"/><circle cx="173.33" cy="94.14" r="3" fill="#000000"/><circle cx="240.00" cy="69.43" r="3" fill="#000000"/><circle cx="306.67" cy="118.86" r="3" fill="#000000"/><circle cx="373.33"
+      cy="291.86" r="3" fill="#000000"/><circle cx="440.00" cy="366.00" r="3" fill="#000000"/><text x="73.33" y="380.00" font-size="10" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round"
+      fill="#ffffff">16</text><text x="73.33" y="380.00" font-size="10" text-anchor="middle" fill="#000000">16</text><text x="140.00" y="380.00" font-size="10" text-anchor="middle" stroke="#ffffff" stroke-width="3"
+      stroke-linejoin="round" fill="#ffffff">20</text><text x="140.00" y="380.00" font-size="10" text-anchor="middle" fill="#000000">20</text><text x="206.67" y="380.00" font-size="10" text-anchor="middle"
+      stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">24</text><text x="206.67" y="380.00" font-size="10" text-anchor="middle" fill="#000000">24</text><text x="273.33" y="380.00"
+      font-size="10" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">28</text><text x="273.33" y="380.00" font-size="10" text-anchor="middle" fill="#000000">28</text><text
+      x="340.00" y="380.00" font-size="10" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">32</text><text x="340.00" y="380.00" font-size="10" text-anchor="middle"
+      fill="#000000">32</text><text x="406.67" y="380.00" font-size="10" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">36</text><text x="406.67" y="380.00"
+      font-size="10" text-anchor="middle" fill="#000000">36</text><text x="34.00" y="369.00" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">0</text><text
+      x="34.00" y="369.00" font-size="10" text-anchor="end" fill="#000000">0</text><text x="34.00" y="319.57" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">2</text><text
+      x="34.00" y="319.57" font-size="10" text-anchor="end" fill="#000000">2</text><text x="34.00" y="270.14" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">4</text><text
       x="34.00" y="270.14" font-size="10" text-anchor="end" fill="#000000">4</text><text x="34.00" y="220.71" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">6</text><text
       x="34.00" y="220.71" font-size="10" text-anchor="end" fill="#000000">6</text><text x="34.00" y="171.29" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">8</text><text
       x="34.00" y="171.29" font-size="10" text-anchor="end" fill="#000000">8</text><text x="34.00" y="121.86" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">10</text><text
@@ -88,7 +88,7 @@ sub_questions:
   - frequency_polygon.draw_relative_frequency
   explanation: 'まず、すべての階級の度数を足し合わせ、総度数を求める。（度数の合計は40）
 
-    次に、階級ごとに、その階級の度数を総度数でわって相対度数を求め、表に書き入れる。（0.25、0.1、0.275、0.075、0.3）
+    次に、階級ごとに、その階級の度数を総度数でわって相対度数を求め、表に書き入れる。（0.1、0.275、0.3、0.25、0.075）
 
     最後に、各階級の階級値の位置にその階級の度数の高さで点を打ち、順に線分で結ぶ（両端は度数のない階級まで下ろす）。（度数折れ線）'
   hints:
@@ -105,7 +105,7 @@ sub_questions:
   - args: []
     narration: 階級ごとに、その階級の度数を総度数でわって相対度数を求め、表に書き入れる。
     op: divide_each_by_total
-    result_display: 0.25、0.1、0.275、0.075、0.3
+    result_display: 0.1、0.275、0.3、0.25、0.075
     result_srepr: ''
   - args: []
     narration: 各階級の階級値の位置にその階級の度数の高さで点を打ち、順に線分で結ぶ（両端は度数のない階級まで下ろす）。

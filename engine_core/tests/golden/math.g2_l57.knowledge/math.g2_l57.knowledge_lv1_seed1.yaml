@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: classify_distribution_statistic
 problem_ref: 6016621bccba5fef
-problem_text: 204個のデータを表した箱ひげ図における範囲が、データの分布の何を表すかを答えよ。
+problem_text: 15人の反復横とびの記録を表した箱ひげ図における範囲が、データの分布の何を表すかを答えよ。
 sub_questions:
 - answer:
     correct: データの散らばりの度合いを表す

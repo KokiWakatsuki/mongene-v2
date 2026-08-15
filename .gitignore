@@ -77,3 +77,7 @@ records/work/ref/*.txt
 
 # 旧プロジェクトの秘密（LLM の API キー。archive/ 側でだけ使う）
 archive/.env
+
+# 逆翻訳・解説の読み込み用ダンプと、目視用の一覧画像（生成物）。
+records/work/bt/
+records/work/sheets/

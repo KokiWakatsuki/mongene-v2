@@ -24,7 +24,7 @@ meta:
   seed: 3
   signature: notation_product_rule_recall
 problem_ref: 76f5954a354a0910
-problem_text: 39 × n × n のように、同じ文字をふくむ積を書き表すきまりについて。正しく述べているものを1つ選べ。
+problem_text: 39 × n × n のように、同じ文字をふくむ積を書き表すきまりについて、正しく述べているものを1つ選べ。
 sub_questions:
 - answer:
     correct: 同じ文字の積は、指数を使って累乗の形で書く

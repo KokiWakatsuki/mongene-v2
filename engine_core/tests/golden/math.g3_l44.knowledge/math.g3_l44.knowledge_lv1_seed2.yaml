@@ -24,7 +24,7 @@ meta:
   seed: 2
   signature: midpoint_connector_theorem_rule_recall
 problem_ref: 54c1ce455cb205c7
-problem_text: 三角形MJGで、辺MJ, MGの中点をそれぞれR, Aとするとき、線分RAについて成り立つこと。正しく述べているものを1つ選べ。
+problem_text: 三角形MJGで、辺MJ, MGの中点をそれぞれR, Aとするとき、線分RAについて成り立つこととして、正しく述べているものを1つ選べ。
 sub_questions:
 - answer:
     correct: 残りの辺に平行で、その長さは残りの辺の半分に等しい

@@ -24,7 +24,7 @@ meta:
   seed: 2
   signature: box_plot_terms_term_recall
 problem_ref: 2bcee62f31379482
-problem_text: 138個のデータを表した箱ひげ図で、箱の左端が表す値を何といいますか。
+problem_text: 45人の睡眠時間のデータを表した箱ひげ図で、箱の左端が表す値を何といいますか。
 sub_questions:
 - answer:
     correct: 第一四分位数

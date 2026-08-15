@@ -24,7 +24,7 @@ meta:
   seed: 3
   signature: quadratic_solving_method_rule_recall
 problem_ref: e070c6a0ae1a021e
-problem_text: 2次方程式 x² - 3x - 54 = 0 を解くときについて。正しく述べているものを1つ選べ。
+problem_text: 2次方程式 x² - 3x - 54 = 0 を解くときについて、正しく述べているものを1つ選べ。
 sub_questions:
 - answer:
     correct: 左辺が整数の範囲でそのまま因数分解できる形だから、因数分解を使う方がよい

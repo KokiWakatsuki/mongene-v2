@@ -19,7 +19,9 @@ levels:
       topic: product_sign
       concept_set: [even_count, odd_count]
       # 具体例の積の因数の大きさを surface に埋め込み dup 分散する。
-      number_domain: {int_range: [2, 40]}
+      # 装飾の数は教材の粒度に合わせる（答えには一切関係しない）。
+      # 前は広い int_range から引いて、実物に出ない例が並んでいた。
+      number_domain: {int_set: [2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15, 20]}
     given: [statement]
     asked: [choice]
     visual: none

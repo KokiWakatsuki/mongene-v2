@@ -24,7 +24,7 @@ meta:
   seed: 2
   signature: relative_frequency_terms_term_recall
 problem_ref: 68d6d6fac4735fc8
-problem_text: 総度数81の度数分布表の、各階級の相対度数を折れ線でつないで表したグラフを何といいますか。
+problem_text: 10人の反復横とびの記録を調べた度数分布表の、各階級の相対度数を折れ線でつないで表したグラフを何といいますか。
 sub_questions:
 - answer:
     correct: 度数折れ線

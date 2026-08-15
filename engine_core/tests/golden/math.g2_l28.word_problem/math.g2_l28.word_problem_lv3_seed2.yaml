@@ -119,18 +119,18 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - linear_function.word_problem_piecewise_tank
-  explanation: 'まず、等式の性質を使い、両辺から同じ数をひく（または加える）。（2x = 67 - 15）
+  explanation: 'まず、左辺を x の項だけにするために、両辺に同じ数をたすかひくかする。（2x + 15 - 15 = 67 - 15）
 
     次に、等式の性質を使い、両辺を x の係数でわる。（x = 26）'
   hints:
-  - 等式の性質を使い、両辺から同じ数をひく（または加える）。
+  - 左辺を x の項だけにするために、両辺に同じ数をたすかひくかする。
   label: (3)
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
-    narration: 等式の性質を使い、両辺から同じ数をひく（または加える）。
+    narration: 左辺を x の項だけにするために、両辺に同じ数をたすかひくかする。
     op: subtract_constant_both_sides
-    result_display: 2x = 67 - 15
+    result_display: 2x + 15 - 15 = 67 - 15
     result_srepr: Integer(26)
   - args: []
     narration: 等式の性質を使い、両辺を x の係数でわる。

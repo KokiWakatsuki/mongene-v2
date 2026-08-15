@@ -24,7 +24,7 @@ meta:
   seed: 3
   signature: interpret_relative_frequency_limit
 problem_ref: 23970a7d039f7c6e
-problem_text: びんのふたを405回より多く投げて表が出た相対度数を調べたところ、投げる回数を増やすにつれてその値がしだいに一定の値に近づいた。この一定の値は何を表していると考えられるか。
+problem_text: びんのふたを150回投げて表になった相対度数を調べたところ、投げる回数を増やすにつれてその値がしだいに一定の値に近づいた。この一定の値は何を表していると考えられるか。
 sub_questions:
 - answer:
     correct: その事象の起こる確率

@@ -624,7 +624,11 @@ def judge_equally_likely_recipe(ctx: CellContext, rng: Rng) -> MR:
     template, is_equally_likely = _EQUALLY_LIKELY_SCENARIOS[idx]
     # カードや玉の個数は教材の大きさに（87枚のカードは教材にならない。D-13 と同じ）。
     n = int(draw({"int_range": [3, 30]}, rng))
-    statement = template.format(n=n) if "{n}" in template else template
+    scene = template.format(n=n) if "{n}" in template else template
+    # **場面だけで切らない。** 前は「…17本のくじから1本引いて、当たりか外れか。」で
+    # 問題文が終わっていて、生徒はどこにも「同様に確からしいか」と聞かれていなかった
+    # （選択肢を見て初めて何を問われているか分かる状態）。問いを本文に書く。
+    statement = f"{scene}。この場面で、起こりうる結果は同様に確からしいといえるか"
 
     solver = REGISTRY.solver("math.judge_equally_likely")
     sol = cast(Solution, solver(is_equally_likely))
@@ -658,8 +662,14 @@ def interpret_relative_frequency_limit_recipe(ctx: CellContext, rng: Rng) -> MR:
     """試行回数を増やすと相対度数が近づく値の意味を解釈する（g1_l59.knowledge Lv2）。"""
     p = ctx.spec_level.params
     n = int(draw(p["number_domain"], rng))
+    # 回数を教材の粒度（きりのよい回数）に絞った分、道具で広さを戻す。
+    tool = str(draw(["びんのふた", "画びょう", "ペットボトルのふた", "おはじき",
+                     "10円硬貨", "コイン", "紙コップ", "消しゴム"], rng))
+    face = str(draw(["表", "上向き"], rng))
     statement = (
-        f"びんのふたを{n}回より多く投げて表が出た相対度数を調べたところ、投げる回数を"
+        # 「{n}回より多く投げて」は重複率のために足した無意味な条件だった
+        # （投げた回数は答え＝相対度数が近づく値の意味に関係しない）。
+        f"{tool}を{n}回投げて{face}になった相対度数を調べたところ、投げる回数を"
         f"増やすにつれてその値がしだいに一定の値に近づいた。この一定の値は何を表していると考えられるか"
     )
 
@@ -674,7 +684,8 @@ def interpret_relative_frequency_limit_recipe(ctx: CellContext, rng: Rng) -> MR:
     return MR(
         signature=ctx.spec_level.signature, family=ctx.family, level=ctx.level,
         purpose=ctx.purpose, seed=0,
-        params={"n": n},
+        # surface も params に載せる（載せないと dup_key から見えない）。
+        params={"n": n, "tool": tool, "face": face},
         given={"statement": statement}, sub_questions=[sub_question], visual_plan=None,
         provenance=Provenance(recipe="math.interpret_relative_frequency_limit"),
     )

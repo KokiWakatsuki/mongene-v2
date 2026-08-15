@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: triangle_angle_properties_rule_recall
 problem_ref: 8fec2e978e34919b
-problem_text: 三角形GDAの頂点Aでの外角の大きさ。正しく述べているものを1つ選べ。
+problem_text: 三角形GDAの頂点Aでの外角の大きさについて、正しく述べているものを1つ選べ。
 sub_questions:
 - answer:
     correct: それととなり合わない二つの内角の和に等しい

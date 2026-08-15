@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: judge_equally_likely
 problem_ref: 201b586d0d257a43
-problem_text: 当たりが1本だけ入っている17本のくじから1本引いて、当たりか外れか。
+problem_text: 当たりが1本だけ入っている17本のくじから1本引いて、当たりか外れか。この場面で、起こりうる結果は同様に確からしいといえるか。
 sub_questions:
 - answer:
     correct: 同様に確からしいとはいえない

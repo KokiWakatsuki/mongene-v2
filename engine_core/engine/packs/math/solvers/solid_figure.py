@@ -126,7 +126,12 @@ def _handle_l51_direct_surface(values: Mapping[str, object]) -> Solution:
             args=[],
             result_srepr=sympy.srepr(lateral),
             result_display=fmt(lateral, "cm²"),
-            narration="側面の面積を、（底面の周の長さ、または円周）×（高さ）で求める。",
+            # **その立体でどちらなのかを言う。** 角柱なら「底面の周の長さ」、
+            # 円柱なら「底面の円周」。両方書くと、その問題で何をしたのかが伝わらない。
+            narration=(
+                "側面の面積を、（底面の円周）×（高さ）で求める。" if shape == "cylinder"
+                else "側面の面積を、（底面の周の長さ）×（高さ）で求める。"
+            ),
         ),
         Step(
             op="sum_surface_area",

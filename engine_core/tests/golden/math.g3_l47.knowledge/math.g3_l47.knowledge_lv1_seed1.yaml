@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: circle_inscribed_angle_theorem_rule_recall
 problem_ref: ed335eeb682f71eb
-problem_text: 円Pで、弧ANに対する中心角と、同じ弧ANに対する円周角∠AMNの大きさの関係。正しく述べているものを1つ選べ。
+problem_text: 円Pで、弧ANに対する中心角と、同じ弧ANに対する円周角∠AMNの大きさの関係として、正しく述べているものを1つ選べ。
 sub_questions:
 - answer:
     correct: 中心角の半分であり、同じ弧に対する円周角の大きさはすべて等しい

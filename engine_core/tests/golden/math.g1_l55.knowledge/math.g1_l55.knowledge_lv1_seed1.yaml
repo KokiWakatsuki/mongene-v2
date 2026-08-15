@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: relative_frequency_terms_term_recall
 problem_ref: 77de130d7a6b82dc
-problem_text: 総度数が123の度数分布表で、各階級の度数の、総度数に対する割合を何といいますか。
+problem_text: 20人の身長を調べた度数分布表で、各階級の度数の、総度数に対する割合を何といいますか。
 sub_questions:
 - answer:
     correct: 相対度数

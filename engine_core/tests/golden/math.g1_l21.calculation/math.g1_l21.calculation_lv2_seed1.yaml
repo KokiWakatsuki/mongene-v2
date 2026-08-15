@@ -35,18 +35,18 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - equation.solve_by_equality_property_multi
-  explanation: 'まず、等式の性質を使い、両辺から同じ数をひく（または加える）。（8x = -53 - 3）
+  explanation: 'まず、左辺を x の項だけにするために、両辺に同じ数をたすかひくかする。（8x + 3 - 3 = -53 - 3）
 
     次に、等式の性質を使い、両辺を x の係数でわる。（x = -7）'
   hints:
-  - 等式の性質を使い、両辺から同じ数をひく（または加える）。
+  - 左辺を x の項だけにするために、両辺に同じ数をたすかひくかする。
   label: (1)
   prompt_text: 解を求めなさい。
   solution_steps:
   - args: []
-    narration: 等式の性質を使い、両辺から同じ数をひく（または加える）。
+    narration: 左辺を x の項だけにするために、両辺に同じ数をたすかひくかする。
     op: subtract_constant_both_sides
-    result_display: 8x = -53 - 3
+    result_display: 8x + 3 - 3 = -53 - 3
     result_srepr: Integer(-7)
   - args: []
     narration: 等式の性質を使い、両辺を x の係数でわる。

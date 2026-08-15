@@ -23,7 +23,9 @@ levels:
     params:
       domain: probability_terms
       concept_set: [trial, probability]
-      number_domain: {int_range: [10, 500]}
+      # 装飾の数は教材の粒度に合わせる（答えには一切関係しない）。
+      # 実験の回数は 100・500 のようなきりのよい回数（教科書の書き方）。
+      number_domain: {int_set: [50, 100, 150, 200, 300, 400, 500, 600, 800, 1000]}
     given: [statement]
     asked: [choice]
     visual: none
@@ -35,7 +37,9 @@ levels:
     signature: interpret_relative_frequency_limit
     recipe: math.interpret_relative_frequency_limit
     params:
-      number_domain: {int_range: [10, 500]}
+      # 装飾の数は教材の粒度に合わせる（答えには一切関係しない）。
+      # 実験の回数は 100・500 のようなきりのよい回数（教科書の書き方）。
+      number_domain: {int_set: [50, 100, 150, 200, 300, 400, 500, 600, 800, 1000]}
     given: [statement]
     asked: [choice]
     visual: none

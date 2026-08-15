@@ -24,7 +24,7 @@ meta:
   seed: 3
   signature: classify_distribution_statistic
 problem_ref: 9c2c9c928079caa4
-problem_text: 89個のデータを表した箱ひげ図における四分位範囲が、データの分布の何を表すかを答えよ。
+problem_text: 10人の睡眠時間を表した箱ひげ図における四分位範囲が、データの分布の何を表すかを答えよ。
 sub_questions:
 - answer:
     correct: データの散らばりの度合いを表す

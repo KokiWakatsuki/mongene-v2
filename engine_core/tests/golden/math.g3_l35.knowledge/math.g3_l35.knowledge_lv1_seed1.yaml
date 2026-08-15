@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: quadratic_roc_property_rule_recall
 problem_ref: f8eb6e29e5360942
-problem_text: 関数 y = 411x² について、x の変域を変えたときの変化の割合の性質。正しく述べているものを1つ選べ。
+problem_text: 関数 y = (2/3)x² について、x の変域を変えたときの変化の割合の性質として、正しく述べているものを1つ選べ。
 sub_questions:
 - answer:
     correct: 一次関数とちがい、区間によって変化の割合が変わり、一定にならない

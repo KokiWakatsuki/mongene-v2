@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: interpret_relative_frequency_limit
 problem_ref: edbedbc2aabe3f5c
-problem_text: びんのふたを222回より多く投げて表が出た相対度数を調べたところ、投げる回数を増やすにつれてその値がしだいに一定の値に近づいた。この一定の値は何を表していると考えられるか。
+problem_text: 画びょうを150回投げて上向きになった相対度数を調べたところ、投げる回数を増やすにつれてその値がしだいに一定の値に近づいた。この一定の値は何を表していると考えられるか。
 sub_questions:
 - answer:
     correct: その事象の起こる確率

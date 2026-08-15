@@ -24,7 +24,7 @@ meta:
   seed: 3
   signature: judge_appropriate_survey_method
 problem_ref: d7d05eeef5608e8a
-problem_text: テレビ番組の視聴率を、240世帯の中から一部を選んで調べたい。この調査は全数調査と標本調査のどちらで行うのが適切か、理由とともに答えよ。
+problem_text: ある地域の240世帯を対象に、テレビ番組の視聴率を調べたい。この調査は全数調査と標本調査のどちらで行うのが適切か、理由とともに答えよ。
 sub_questions:
 - answer:
     correct: 標本調査で行うのが適切
