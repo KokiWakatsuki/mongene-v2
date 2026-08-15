@@ -1,0 +1,3859 @@
+[
+ {
+  "要因": "－（３x－２y）を＋３x＋２yと捉え，５x＋６y＋３x＋２yと計算した",
+  "実物の単元": "文字を用いた式の四則計算",
+  "出典": "nier_r21_kaisetsu",
+  "候補": [
+   {
+    "unit": "g3_l6",
+    "一致語": [
+     "文字"
+    ],
+    "概念": [
+     "polynomial.expand_various"
+    ]
+   },
+   {
+    "unit": "g3_l3",
+    "一致語": [
+     "計算"
+    ],
+    "概念": [
+     "polynomial.expand_formula_sum_product",
+     "multiplication_formula_choice.rule_recall"
+    ]
+   },
+   {
+    "unit": "g3_l29",
+    "一致語": [
+     "文字"
+    ],
+    "概念": [
+     "quadratic.solve_from_word_setup",
+     "quadratic.word_problem_consecutive_integers",
+     "quadratic.word_problem_number_relation"
+    ]
+   }
+  ]
+ },
+ {
+  "要因": "－（３x－２y）を＋３x－２yと捉え，５x＋６y＋３x－２yと計算した",
+  "実物の単元": "文字を用いた式の四則計算",
+  "出典": "nier_r21_kaisetsu",
+  "候補": [
+   {
+    "unit": "g3_l6",
+    "一致語": [
+     "文字"
+    ],
+    "概念": [
+     "polynomial.expand_various"
+    ]
+   },
+   {
+    "unit": "g3_l3",
+    "一致語": [
+     "計算"
+    ],
+    "概念": [
+     "polynomial.expand_formula_sum_product",
+     "multiplication_formula_choice.rule_recall"
+    ]
+   },
+   {
+    "unit": "g3_l29",
+    "一致語": [
+     "文字"
+    ],
+    "概念": [
+     "quadratic.solve_from_word_setup",
+     "quadratic.word_problem_consecutive_integers",
+     "quadratic.word_problem_number_relation"
+    ]
+   }
+  ]
+ },
+ {
+  "要因": "項の意味を誤って捉え，xを含む項とyを含む項を１つにまとめて計算した",
+  "実物の単元": "文字を用いた式の四則計算",
+  "出典": "nier_r21_kaisetsu",
+  "候補": [
+   {
+    "unit": "g1_l9",
+    "一致語": [
+     "意味",
+     "計算"
+    ],
+    "概念": [
+     "laws.term_recall",
+     "signed_number.four_operations",
+     "signed_number.distributive_trick"
+    ]
+   },
+   {
+    "unit": "g1_l7",
+    "一致語": [
+     "意味",
+     "計算"
+    ],
+    "概念": [
+     "power.term_recall",
+     "signed_number.power_single",
+     "signed_number.power_sign_contrast"
+    ]
+   },
+   {
+    "unit": "g1_l59",
+    "一致語": [
+     "意味",
+     "計算"
+    ],
+    "概念": [
+     "probability.relative_frequency_basic",
+     "probability_terms.term_recall",
+     "probability.interpret_relative_frequency_limit"
+    ]
+   }
+  ]
+ },
+ {
+  "要因": "ノート２冊と８００円の筆箱１個を買ったときの代金，又は，ノート４冊と５００円のシャープペンシル１本を買ったときの代金を，文字を用いた式に表した",
+  "実物の単元": "方程式",
+  "出典": "nier_r21_kaisetsu",
+  "候補": [
+   {
+    "unit": "g1_l25",
+    "一致語": [
+     "代金",
+     "文字"
+    ],
+    "概念": [
+     "equation.solve_word_price",
+     "equation.word_problem_price_count",
+     "equation.word_problem_price_count_diff"
+    ]
+   },
+   {
+    "unit": "g1_l22",
+    "一致語": [
+     "文字",
+     "方程式"
+    ],
+    "概念": [
+     "transposition.rule_recall",
+     "equation.solve_by_transpose",
+     "equation.solve_by_transpose_both_sides"
+    ]
+   },
+   {
+    "unit": "g1_l12",
+    "一致語": [
+     "代金",
+     "文字"
+    ],
+    "概念": [
+     "letter_meaning.rule_recall",
+     "letter_meaning.interpret_expression",
+     "letter_expr.word_problem_price_count_letter"
+    ]
+   }
+  ]
+ },
+ {
+  "要因": "中心角６０°のおうぎ形の弧の長さは，同じ半径の円の円周の長さの１倍であると捉えた",
+  "実物の単元": "空間図形",
+  "出典": "nier_r21_kaisetsu",
+  "候補": [
+   {
+    "unit": "g1_l51",
+    "一致語": [
+     "中心角",
+     "半径"
+    ],
+    "概念": [
+     "solid_surface.direct",
+     "solid_surface.cone_central_angle",
+     "solid_surface.composite_or_reverse"
+    ]
+   },
+   {
+    "unit": "g1_l46",
+    "一致語": [
+     "中心角",
+     "半径"
+    ],
+    "概念": [
+     "sector.arc_length_or_area",
+     "sector.solve_central_angle"
+    ]
+   },
+   {
+    "unit": "g1_l45",
+    "一致語": [
+     "中心角",
+     "半径"
+    ],
+    "概念": [
+     "circle_terms.term_recall",
+     "circle_property.judge"
+    ]
+   }
+  ]
+ },
+ {
+  "要因": "中心角６０°のおうぎ形の弧の長さは，同じ半径の円の円周の長さの１倍であると捉えた",
+  "実物の単元": "空間図形",
+  "出典": "nier_r21_kaisetsu",
+  "候補": [
+   {
+    "unit": "g1_l51",
+    "一致語": [
+     "中心角",
+     "半径"
+    ],
+    "概念": [
+     "solid_surface.direct",
+     "solid_surface.cone_central_angle",
+     "solid_surface.composite_or_reverse"
+    ]
+   },
+   {
+    "unit": "g1_l46",
+    "一致語": [
+     "中心角",
+     "半径"
+    ],
+    "概念": [
+     "sector.arc_length_or_area",
+     "sector.solve_central_angle"
+    ]
+   },
+   {
+    "unit": "g1_l45",
+    "一致語": [
+     "中心角",
+     "半径"
+    ],
+    "概念": [
+     "circle_terms.term_recall",
+     "circle_property.judge"
+    ]
+   }
+  ]
+ },
+ {
+  "要因": "中心角６０°のおうぎ形の弧の長さは，同じ半径の円の円周の長さの１倍であると捉えた",
+  "実物の単元": "空間図形",
+  "出典": "nier_r21_kaisetsu",
+  "候補": [
+   {
+    "unit": "g1_l51",
+    "一致語": [
+     "中心角",
+     "半径"
+    ],
+    "概念": [
+     "solid_surface.direct",
+     "solid_surface.cone_central_angle",
+     "solid_surface.composite_or_reverse"
+    ]
+   },
+   {
+    "unit": "g1_l46",
+    "一致語": [
+     "中心角",
+     "半径"
+    ],
+    "概念": [
+     "sector.arc_length_or_area",
+     "sector.solve_central_angle"
+    ]
+   },
+   {
+    "unit": "g1_l45",
+    "一致語": [
+     "中心角",
+     "半径"
+    ],
+    "概念": [
+     "circle_terms.term_recall",
+     "circle_property.judge"
+    ]
+   }
+  ]
+ },
+ {
+  "要因": "中心角６０°のおうぎ形の弧の長さは，同じ半径の円の円周の長さの１倍であると捉えた",
+  "実物の単元": "空間図形",
+  "出典": "nier_r21_kaisetsu",
+  "候補": [
+   {
+    "unit": "g1_l51",
+    "一致語": [
+     "中心角",
+     "半径"
+    ],
+    "概念": [
+     "solid_surface.direct",
+     "solid_surface.cone_central_angle",
+     "solid_surface.composite_or_reverse"
+    ]
+   },
+   {
+    "unit": "g1_l46",
+    "一致語": [
+     "中心角",
+     "半径"
+    ],
+    "概念": [
+     "sector.arc_length_or_area",
+     "sector.solve_central_angle"
+    ]
+   },
+   {
+    "unit": "g1_l45",
+    "一致語": [
+     "中心角",
+     "半径"
+    ],
+    "概念": [
+     "circle_terms.term_recall",
+     "circle_property.judge"
+    ]
+   }
+  ]
+ },
+ {
+  "要因": "経過した時間を従属変数と誤って捉え，影の長さを独立変数と誤って捉えた",
+  "実物の単元": "比例，反比例",
+  "出典": "nier_r21_kaisetsu",
+  "候補": [
+   {
+    "unit": "g1_l36",
+    "一致語": [
+     "反比例",
+     "比例"
+    ],
+    "概念": [
+     "proportion.word_problem_max_area_and_times",
+     "proportion.word_problem_judge_and_use",
+     "proportion.word_problem_meet_two_motions"
+    ]
+   },
+   {
+    "unit": "g3_l50",
+    "一致語": [
+     "比例"
+    ],
+    "概念": [
+     "circle.arc_proportional_angle",
+     "arc_angle_proportion.rule_recall",
+     "circle.equal_arc_inscribed_angle"
+    ]
+   },
+   {
+    "unit": "g3_l38",
+    "一致語": [
+     "時間"
+    ],
+    "概念": [
+     "quadratic_function.motion_area",
+     "parabola_graph.read_area_time",
+     "parabola_graph.piecewise_area"
+    ]
+   }
+  ]
+ },
+ {
+  "要因": "中央値を記録の最大値と最小値の平均の値と捉えた",
+  "実物の単元": "資料の散らばりと代表値",
+  "出典": "nier_r21_kaisetsu",
+  "候補": [
+   {
+    "unit": "g1_l57",
+    "一致語": [
+     "中央値",
+     "代表値"
+    ],
+    "概念": [
+     "representative_value.compute_raw",
+     "representative_value.compute_grouped_mean",
+     "representative_value_terms.term_recall"
+    ]
+   },
+   {
+    "unit": "g2_l57",
+    "一致語": [
+     "中央値"
+    ],
+    "概念": [
+     "distribution_statistic.classify_role",
+     "box_plot.compare_center_spread",
+     "box_plot.compare_iqr"
+    ]
+   },
+   {
+    "unit": "g2_l55",
+    "一致語": [
+     "中央値"
+    ],
+    "概念": [
+     "quartile.compute_median",
+     "quartile.compute_q1_q3_iqr",
+     "quartile_terms.term_recall"
+    ]
+   }
+  ]
+ },
+ {
+  "要因": "中央値と平均値を混同している",
+  "実物の単元": "資料の散らばりと代表値",
+  "出典": "nier_r21_kaisetsu",
+  "候補": [
+   {
+    "unit": "g1_l57",
+    "一致語": [
+     "中央値",
+     "代表値",
+     "平均値"
+    ],
+    "概念": [
+     "representative_value.compute_raw",
+     "representative_value.compute_grouped_mean",
+     "representative_value_terms.term_recall"
+    ]
+   },
+   {
+    "unit": "g2_l57",
+    "一致語": [
+     "中央値"
+    ],
+    "概念": [
+     "distribution_statistic.classify_role",
+     "box_plot.compare_center_spread",
+     "box_plot.compare_iqr"
+    ]
+   },
+   {
+    "unit": "g2_l55",
+    "一致語": [
+     "中央値"
+    ],
+    "概念": [
+     "quartile.compute_median",
+     "quartile.compute_q1_q3_iqr",
+     "quartile_terms.term_recall"
+    ]
+   }
+  ]
+ },
+ {
+  "要因": "中央値と最頻値を混同している",
+  "実物の単元": "資料の散らばりと代表値",
+  "出典": "nier_r21_kaisetsu",
+  "候補": [
+   {
+    "unit": "g1_l57",
+    "一致語": [
+     "中央値",
+     "代表値",
+     "最頻値"
+    ],
+    "概念": [
+     "representative_value.compute_raw",
+     "representative_value.compute_grouped_mean",
+     "representative_value_terms.term_recall"
+    ]
+   },
+   {
+    "unit": "g2_l57",
+    "一致語": [
+     "中央値"
+    ],
+    "概念": [
+     "distribution_statistic.classify_role",
+     "box_plot.compare_center_spread",
+     "box_plot.compare_iqr"
+    ]
+   },
+   {
+    "unit": "g2_l55",
+    "一致語": [
+     "中央値"
+    ],
+    "概念": [
+     "quartile.compute_median",
+     "quartile.compute_q1_q3_iqr",
+     "quartile_terms.term_recall"
+    ]
+   }
+  ]
+ },
+ {
+  "要因": "１２，１３，１７，１８の和が何の４倍であるかに着目し，６０÷４と表した",
+  "実物の単元": "構想を立てて説明し，発展的に考察すること（",
+  "出典": "nier_r21_kaisetsu",
+  "候補": [
+   {
+    "unit": "g3_l49",
+    "一致語": [
+     "着目"
+    ],
+    "概念": [
+     "circle_proof.inscribed_direct",
+     "circle_proof.two_step",
+     "circle_proof.construct"
+    ]
+   }
+  ]
+ },
+ {
+  "要因": "１２，１３，１７，１８の和を，４×１５以外で，積が６０になる乗法の式で表した",
+  "実物の単元": "構想を立てて説明し，発展的に考察すること（",
+  "出典": "nier_r21_kaisetsu",
+  "候補": [
+   {
+    "unit": "g2_l5",
+    "一致語": [
+     "乗法"
+    ],
+    "概念": [
+     "polynomial.distribute_multiply",
+     "polynomial.divide_polynomial"
+    ]
+   },
+   {
+    "unit": "g2_l4",
+    "一致語": [
+     "乗法"
+    ],
+    "概念": [
+     "polynomial.multiply_monomials",
+     "polynomial.multiply_monomials_powers",
+     "polynomial.monomial_mul_div_chain"
+    ]
+   },
+   {
+    "unit": "g1_l8",
+    "一致語": [
+     "乗法"
+    ],
+    "概念": [
+     "reciprocal.rule_recall",
+     "signed_number.divide_pair",
+     "signed_number.divide_chain"
+    ]
+   }
+  ]
+ },
+ {
+  "要因": "気温差の度数分布表において，２つの分布の傾向を比べるために相対度数を用いるのは，日照時間が「６時間未満」と「６時間以上」の日照時間が違うからであると捉えた",
+  "実物の単元": "日常的な事象の数学化と問題解決の方法（砂時計）",
+  "出典": "nier_r21_kaisetsu",
+  "候補": [
+   {
+    "unit": "g1_l54",
+    "一致語": [
+     "傾向",
+     "分布",
+     "度数分布表"
+    ],
+    "概念": [
+     "frequency_table.compute_value",
+     "frequency_table_terms.term_recall",
+     "frequency_chart.read_histogram"
+    ]
+   },
+   {
+    "unit": "g2_l57",
+    "一致語": [
+     "傾向",
+     "分布"
+    ],
+    "概念": [
+     "distribution_statistic.classify_role",
+     "box_plot.compare_center_spread",
+     "box_plot.compare_iqr"
+    ]
+   },
+   {
+    "unit": "g1_l58",
+    "一致語": [
+     "傾向",
+     "分布"
+    ],
+    "概念": [
+     "distribution_comparison.read_overlaid_charts",
+     "distribution_comparison.construct_overlaid_charts",
+     "data_inquiry.compare_mean_and_range"
+    ]
+   }
+  ]
+ },
+ {
+  "要因": "気温差の度数分布表において，２つの分布の傾向を比べるために相対度数を用いるのは，日照時間が「６時間未満」と「６時間以上」の気温差が違うからであると捉えた",
+  "実物の単元": "日常的な事象の数学化と問題解決の方法（砂時計）",
+  "出典": "nier_r21_kaisetsu",
+  "候補": [
+   {
+    "unit": "g1_l54",
+    "一致語": [
+     "傾向",
+     "分布",
+     "度数分布表"
+    ],
+    "概念": [
+     "frequency_table.compute_value",
+     "frequency_table_terms.term_recall",
+     "frequency_chart.read_histogram"
+    ]
+   },
+   {
+    "unit": "g2_l57",
+    "一致語": [
+     "傾向",
+     "分布"
+    ],
+    "概念": [
+     "distribution_statistic.classify_role",
+     "box_plot.compare_center_spread",
+     "box_plot.compare_iqr"
+    ]
+   },
+   {
+    "unit": "g1_l58",
+    "一致語": [
+     "傾向",
+     "分布"
+    ],
+    "概念": [
+     "distribution_comparison.read_overlaid_charts",
+     "distribution_comparison.construct_overlaid_charts",
+     "data_inquiry.compare_mean_and_range"
+    ]
+   }
+  ]
+ },
+ {
+  "要因": "気温差の度数分布表において，２つの分布の傾向を比べるために相対度数を用いるのは，日照時間が「６時間未満」と「６時間以上」の階級ごとの度数が違うからであると捉えた",
+  "実物の単元": "日常的な事象の数学化と問題解決の方法（砂時計）",
+  "出典": "nier_r21_kaisetsu",
+  "候補": [
+   {
+    "unit": "g1_l54",
+    "一致語": [
+     "傾向",
+     "分布",
+     "度数",
+     "度数分布表",
+     "階級"
+    ],
+    "概念": [
+     "frequency_table.compute_value",
+     "frequency_table_terms.term_recall",
+     "frequency_chart.read_histogram"
+    ]
+   },
+   {
+    "unit": "g1_l55",
+    "一致語": [
+     "分布",
+     "度数",
+     "相対度数"
+    ],
+    "概念": [
+     "relative_frequency.compute_single",
+     "relative_frequency.compare_groups",
+     "relative_frequency_terms.term_recall"
+    ]
+   },
+   {
+    "unit": "g2_l57",
+    "一致語": [
+     "傾向",
+     "分布"
+    ],
+    "概念": [
+     "distribution_statistic.classify_role",
+     "box_plot.compare_center_spread",
+     "box_plot.compare_iqr"
+    ]
+   }
+  ]
+ },
+ {
+  "要因": "錯角が等しくなるための関係に，ＦＥ＝ＢＣが用いられていると捉えた",
+  "実物の単元": "平行線や角の性質を基に，図形を考察すること（三角定規）",
+  "出典": "nier_r21_kaisetsu",
+  "候補": [
+   {
+    "unit": "g2_l32",
+    "一致語": [
+     "平行線",
+     "錯角",
+     "関係"
+    ],
+    "概念": [
+     "parallel_lines.identify_parallel_from_figure",
+     "parallel_angle_property.rule_recall",
+     "parallel_lines.judge_from_angle"
+    ]
+   },
+   {
+    "unit": "g3_l42",
+    "一致語": [
+     "平行線",
+     "関係"
+    ],
+    "概念": [
+     "parallel_ratio_proof.ratio_from_similarity",
+     "parallel_segment.ratio_length",
+     "parallel_segment_ratio_theorem.rule_recall"
+    ]
+   },
+   {
+    "unit": "g2_l50",
+    "一致語": [
+     "図形",
+     "平行線"
+    ],
+    "概念": [
+     "equal_area_proof.parallel_direct",
+     "equal_area_proof.chain",
+     "equal_area.transform_value"
+    ]
+   }
+  ]
+ },
+ {
+  "要因": "∠ＡＲＧと∠ＡＳＧの和はいつでも１８０°になることのほかに，∠ＡＲＧ，∠ＡＳＧの大きさについていつでもいえることを見いだすことができなかった",
+  "実物の単元": "平行線や角の性質を基に，図形を考察すること（三角定規）",
+  "出典": "nier_r21_kaisetsu",
+  "候補": [
+   {
+    "unit": "g2_l50",
+    "一致語": [
+     "図形",
+     "平行線"
+    ],
+    "概念": [
+     "equal_area_proof.parallel_direct",
+     "equal_area_proof.chain",
+     "equal_area.transform_value"
+    ]
+   },
+   {
+    "unit": "g1_l40",
+    "一致語": [
+     "図形",
+     "性質"
+    ],
+    "概念": [
+     "transformation_invariant.reflection",
+     "polygon_transform.reflect"
+    ]
+   },
+   {
+    "unit": "g1_l39",
+    "一致語": [
+     "図形",
+     "性質"
+    ],
+    "概念": [
+     "transformation_invariant.rotation",
+     "polygon_transform.rotate",
+     "polygon_transform.find_rotation_center"
+    ]
+   }
+  ]
+ },
+ {
+  "要因": "△ＧＨＩを動かしたとき，∠ＡＲＧ，∠ＡＳＧの大きさは変化すると捉えた",
+  "実物の単元": "平行線や角の性質を基に，図形を考察すること（三角定規）",
+  "出典": "nier_r21_kaisetsu",
+  "候補": [
+   {
+    "unit": "g2_l50",
+    "一致語": [
+     "図形",
+     "平行線"
+    ],
+    "概念": [
+     "equal_area_proof.parallel_direct",
+     "equal_area_proof.chain",
+     "equal_area.transform_value"
+    ]
+   },
+   {
+    "unit": "g1_l40",
+    "一致語": [
+     "図形",
+     "性質"
+    ],
+    "概念": [
+     "transformation_invariant.reflection",
+     "polygon_transform.reflect"
+    ]
+   },
+   {
+    "unit": "g1_l39",
+    "一致語": [
+     "図形",
+     "性質"
+    ],
+    "概念": [
+     "transformation_invariant.rotation",
+     "polygon_transform.rotate",
+     "polygon_transform.find_rotation_center"
+    ]
+   }
+  ]
+ },
+ {
+  "要因": "素因数に１が含まれるとして表した",
+  "実物の単元": "素因数分解",
+  "出典": "nier_r22_kaisetsu",
+  "候補": [
+   {
+    "unit": "g1_l11",
+    "一致語": [
+     "素因数",
+     "素因数分解"
+    ],
+    "概念": [
+     "prime_concepts.term_recall",
+     "prime_factorization.execute_basic",
+     "prime_factorization.execute_advanced"
+    ]
+   },
+   {
+    "unit": "g3_l18",
+    "一致語": [
+     "素因数分解"
+    ],
+    "概念": [
+     "radical.simplify_form"
+    ]
+   }
+  ]
+ },
+ {
+  "要因": "素因数分解をいくつかの数の和で表すことと捉えた",
+  "実物の単元": "素因数分解",
+  "出典": "nier_r22_kaisetsu",
+  "候補": [
+   {
+    "unit": "g3_l18",
+    "一致語": [
+     "素因数分解"
+    ],
+    "概念": [
+     "radical.simplify_form"
+    ]
+   },
+   {
+    "unit": "g1_l11",
+    "一致語": [
+     "素因数分解"
+    ],
+    "概念": [
+     "prime_concepts.term_recall",
+     "prime_factorization.execute_basic",
+     "prime_factorization.execute_advanced"
+    ]
+   }
+  ]
+ },
+ {
+  "要因": "連立二元一次方程式のxとyの値を求める際に，xとyを混同した",
+  "実物の単元": "連立二元一次方程式",
+  "出典": "nier_r22_kaisetsu",
+  "候補": []
+ },
+ {
+  "要因": "計算の過程で，xの値の符号を誤り，そのxの値を二つの式のどちらか一方の式に代入し，yの値を求めたもの",
+  "実物の単元": "連立二元一次方程式",
+  "出典": "nier_r22_kaisetsu",
+  "候補": [
+   {
+    "unit": "g3_l26",
+    "一致語": [
+     "代入",
+     "計算"
+    ],
+    "概念": [
+     "quadratic.solve_by_formula",
+     "quadratic_coefficient.term_recall"
+    ]
+   },
+   {
+    "unit": "g2_l13",
+    "一致語": [
+     "一方",
+     "代入"
+    ],
+    "概念": [
+     "simultaneous_equations.solve_by_substitution"
+    ]
+   },
+   {
+    "unit": "g1_l52",
+    "一致語": [
+     "代入",
+     "計算"
+    ],
+    "概念": [
+     "solid_volume.cylinder_substitution",
+     "solid_volume.prism_pyramid_direct",
+     "solid_volume.right_triangle_multistep"
+    ]
+   }
+  ]
+ },
+ {
+  "要因": "計算の過程で，yの値の符号を誤り，そのyの値を二つの式のどちらか一方の式に代入し，xの値を求めたもの",
+  "実物の単元": "連立二元一次方程式",
+  "出典": "nier_r22_kaisetsu",
+  "候補": [
+   {
+    "unit": "g3_l26",
+    "一致語": [
+     "代入",
+     "計算"
+    ],
+    "概念": [
+     "quadratic.solve_by_formula",
+     "quadratic_coefficient.term_recall"
+    ]
+   },
+   {
+    "unit": "g2_l13",
+    "一致語": [
+     "一方",
+     "代入"
+    ],
+    "概念": [
+     "simultaneous_equations.solve_by_substitution"
+    ]
+   },
+   {
+    "unit": "g1_l52",
+    "一致語": [
+     "代入",
+     "計算"
+    ],
+    "概念": [
+     "solid_volume.cylinder_substitution",
+     "solid_volume.prism_pyramid_direct",
+     "solid_volume.right_triangle_multistep"
+    ]
+   }
+  ]
+ },
+ {
+  "要因": "予想がいつでも成り立つことを示すためには，図のように平行四辺形になる四角形ＡＢＣＤが１つかければよいと捉えた",
+  "実物の単元": "反例",
+  "出典": "nier_r22_kaisetsu",
+  "候補": [
+   {
+    "unit": "g2_l49",
+    "一致語": [
+     "四角形"
+    ],
+    "概念": [
+     "special_quad_proof.condition_given",
+     "special_quad_proof.condition_choose",
+     "special_parallelogram.diagonal_value"
+    ]
+   },
+   {
+    "unit": "g2_l48",
+    "一致語": [
+     "平行四辺形"
+    ],
+    "概念": [
+     "parallelogram_proof.apply_condition",
+     "parallelogram_proof.apply_via_congruence",
+     "parallelogram_proof.apply_construct"
+    ]
+   },
+   {
+    "unit": "g2_l47",
+    "一致語": [
+     "平行四辺形"
+    ],
+    "概念": [
+     "parallelogram_proof.condition_given",
+     "parallelogram_proof.condition_choose",
+     "parallelogram_conditions.rule_recall"
+    ]
+   }
+  ]
+ },
+ {
+  "要因": "予想がいつでも成り立つことを示すためには，点Ａ，Ｂ，Ｄの位置を変えて，図の平行四辺形ＡＢＣＤのほかに，平行四辺形になる四角形をかく必要があると捉えた",
+  "実物の単元": "反例",
+  "出典": "nier_r22_kaisetsu",
+  "候補": [
+   {
+    "unit": "g3_l53",
+    "一致語": [
+     "必要"
+    ],
+    "概念": [
+     "pythagorean.word_problem_rhombus_diagonal_area",
+     "pythagorean.word_problem_triangle_height_area_solo",
+     "pythagorean.missing_side_in_right_triangle"
+    ]
+   },
+   {
+    "unit": "g3_l51",
+    "一致語": [
+     "位置"
+    ],
+    "概念": [
+     "pythagorean.hypotenuse_from_legs",
+     "pythagorean_theorem.rule_recall",
+     "pythagorean.identify_hypotenuse"
+    ]
+   },
+   {
+    "unit": "g3_l31",
+    "一致語": [
+     "位置"
+    ],
+    "概念": [
+     "motion.area_single_segment",
+     "motion.area_two_segment",
+     "motion.area_time_graph_segment"
+    ]
+   }
+  ]
+ },
+ {
+  "要因": "予想がいつでも成り立つとはいえないことを示すためには，点Ａ，Ｂ，Ｄの位置を変えて，図の四角形ＡＢＥＤのほかに，平行四辺形にならない四角形をかく必要があると捉えた",
+  "実物の単元": "反例",
+  "出典": "nier_r22_kaisetsu",
+  "候補": [
+   {
+    "unit": "g3_l53",
+    "一致語": [
+     "必要"
+    ],
+    "概念": [
+     "pythagorean.word_problem_rhombus_diagonal_area",
+     "pythagorean.word_problem_triangle_height_area_solo",
+     "pythagorean.missing_side_in_right_triangle"
+    ]
+   },
+   {
+    "unit": "g3_l51",
+    "一致語": [
+     "位置"
+    ],
+    "概念": [
+     "pythagorean.hypotenuse_from_legs",
+     "pythagorean_theorem.rule_recall",
+     "pythagorean.identify_hypotenuse"
+    ]
+   },
+   {
+    "unit": "g3_l31",
+    "一致語": [
+     "位置"
+    ],
+    "概念": [
+     "motion.area_single_segment",
+     "motion.area_two_segment",
+     "motion.area_time_graph_segment"
+    ]
+   }
+  ]
+ },
+ {
+  "要因": "変化の割合を，表の隣り合う二つのyの値の差と捉えた",
+  "実物の単元": "変化の割合",
+  "出典": "nier_r22_kaisetsu",
+  "候補": [
+   {
+    "unit": "g3_l35",
+    "一致語": [
+     "割合",
+     "変化"
+    ],
+    "概念": [
+     "quadratic_function.rate_of_change",
+     "quadratic_roc_property.rule_recall"
+    ]
+   },
+   {
+    "unit": "g2_l21",
+    "一致語": [
+     "割合",
+     "変化"
+    ],
+    "概念": [
+     "graph.read_slope_intercept",
+     "linear_function.slope_sign_to_direction",
+     "linear_function.classify_line_by_signs"
+    ]
+   },
+   {
+    "unit": "g2_l20",
+    "一致語": [
+     "割合",
+     "変化"
+    ],
+    "概念": [
+     "linear_function.rate_of_change",
+     "linear_function.rate_of_change_is_constant"
+    ]
+   }
+  ]
+ },
+ {
+  "要因": "変化の割合を，と捉えた",
+  "実物の単元": "変化の割合",
+  "出典": "nier_r22_kaisetsu",
+  "候補": [
+   {
+    "unit": "g3_l35",
+    "一致語": [
+     "割合",
+     "変化"
+    ],
+    "概念": [
+     "quadratic_function.rate_of_change",
+     "quadratic_roc_property.rule_recall"
+    ]
+   },
+   {
+    "unit": "g2_l21",
+    "一致語": [
+     "割合",
+     "変化"
+    ],
+    "概念": [
+     "graph.read_slope_intercept",
+     "linear_function.slope_sign_to_direction",
+     "linear_function.classify_line_by_signs"
+    ]
+   },
+   {
+    "unit": "g2_l20",
+    "一致語": [
+     "割合",
+     "変化"
+    ],
+    "概念": [
+     "linear_function.rate_of_change",
+     "linear_function.rate_of_change_is_constant"
+    ]
+   }
+  ]
+ },
+ {
+  "要因": "変化の割合を，x＝０のときのyの値と捉えた",
+  "実物の単元": "変化の割合",
+  "出典": "nier_r22_kaisetsu",
+  "候補": [
+   {
+    "unit": "g3_l35",
+    "一致語": [
+     "割合",
+     "変化"
+    ],
+    "概念": [
+     "quadratic_function.rate_of_change",
+     "quadratic_roc_property.rule_recall"
+    ]
+   },
+   {
+    "unit": "g2_l21",
+    "一致語": [
+     "割合",
+     "変化"
+    ],
+    "概念": [
+     "graph.read_slope_intercept",
+     "linear_function.slope_sign_to_direction",
+     "linear_function.classify_line_by_signs"
+    ]
+   },
+   {
+    "unit": "g2_l20",
+    "一致語": [
+     "割合",
+     "変化"
+    ],
+    "概念": [
+     "linear_function.rate_of_change",
+     "linear_function.rate_of_change_is_constant"
+    ]
+   }
+  ]
+ },
+ {
+  "要因": "下向きになる確率がおよそ０．５と捉えた",
+  "実物の単元": "確率",
+  "出典": "nier_r22_kaisetsu",
+  "候補": [
+   {
+    "unit": "g2_l54",
+    "一致語": [
+     "確率"
+    ],
+    "概念": [
+     "probability.complement",
+     "probability.at_least_one_via_complement",
+     "complementary_event.rule_recall"
+    ]
+   },
+   {
+    "unit": "g2_l53",
+    "一致語": [
+     "確率"
+    ],
+    "概念": [
+     "probability.count_ordered_selection",
+     "probability.count_combination_selection",
+     "counting.tree_diagram_draws"
+    ]
+   },
+   {
+    "unit": "g2_l52",
+    "一致語": [
+     "確率"
+    ],
+    "概念": [
+     "probability.count_two_dice",
+     "counting.tree_diagram_coins",
+     "probability.word_problem_two_dice_product"
+    ]
+   }
+  ]
+ },
+ {
+  "要因": "下向きになる確率がおよそ０．７と捉えた",
+  "実物の単元": "確率",
+  "出典": "nier_r22_kaisetsu",
+  "候補": [
+   {
+    "unit": "g2_l54",
+    "一致語": [
+     "確率"
+    ],
+    "概念": [
+     "probability.complement",
+     "probability.at_least_one_via_complement",
+     "complementary_event.rule_recall"
+    ]
+   },
+   {
+    "unit": "g2_l53",
+    "一致語": [
+     "確率"
+    ],
+    "概念": [
+     "probability.count_ordered_selection",
+     "probability.count_combination_selection",
+     "counting.tree_diagram_draws"
+    ]
+   },
+   {
+    "unit": "g2_l52",
+    "一致語": [
+     "確率"
+    ],
+    "概念": [
+     "probability.count_two_dice",
+     "counting.tree_diagram_coins",
+     "probability.word_problem_two_dice_product"
+    ]
+   }
+  ]
+ },
+ {
+  "要因": "下向きになる確率がおよそ１．０と捉えた",
+  "実物の単元": "確率",
+  "出典": "nier_r22_kaisetsu",
+  "候補": [
+   {
+    "unit": "g2_l54",
+    "一致語": [
+     "確率"
+    ],
+    "概念": [
+     "probability.complement",
+     "probability.at_least_one_via_complement",
+     "complementary_event.rule_recall"
+    ]
+   },
+   {
+    "unit": "g2_l53",
+    "一致語": [
+     "確率"
+    ],
+    "概念": [
+     "probability.count_ordered_selection",
+     "probability.count_combination_selection",
+     "counting.tree_diagram_draws"
+    ]
+   },
+   {
+    "unit": "g2_l52",
+    "一致語": [
+     "確率"
+    ],
+    "概念": [
+     "probability.count_two_dice",
+     "counting.tree_diagram_coins",
+     "probability.word_problem_two_dice_product"
+    ]
+   }
+  ]
+ },
+ {
+  "要因": "２n＋２nにn＝９を代入した式を表した",
+  "実物の単元": "構想を立てて説明し，統合的・発展的に考察すること（",
+  "出典": "nier_r22_kaisetsu",
+  "候補": [
+   {
+    "unit": "g3_l52",
+    "一致語": [
+     "代入"
+    ],
+    "概念": [
+     "pythagorean.verify_right_triangle",
+     "pythagorean_converse.rule_recall",
+     "pythagorean.judge_right_triangle"
+    ]
+   },
+   {
+    "unit": "g3_l36",
+    "一致語": [
+     "代入"
+    ],
+    "概念": [
+     "parabola_graph.phenomenon_table",
+     "quadratic_function.word_problem_determine_then_evaluate",
+     "quadratic_function.word_problem_determine_then_inverse"
+    ]
+   },
+   {
+    "unit": "g3_l32",
+    "一致語": [
+     "代入"
+    ],
+    "概念": [
+     "quadratic_function.evaluate",
+     "quadratic_function_terms.term_recall",
+     "quadratic_function_form.rule_recall"
+    ]
+   }
+  ]
+ },
+ {
+  "要因": "２n＋２nや４nにn＝９を代入して計算し，その結果を表した",
+  "実物の単元": "構想を立てて説明し，統合的・発展的に考察すること（",
+  "出典": "nier_r22_kaisetsu",
+  "候補": [
+   {
+    "unit": "g3_l26",
+    "一致語": [
+     "代入",
+     "計算"
+    ],
+    "概念": [
+     "quadratic.solve_by_formula",
+     "quadratic_coefficient.term_recall"
+    ]
+   },
+   {
+    "unit": "g1_l52",
+    "一致語": [
+     "代入",
+     "計算"
+    ],
+    "概念": [
+     "solid_volume.cylinder_substitution",
+     "solid_volume.prism_pyramid_direct",
+     "solid_volume.right_triangle_multistep"
+    ]
+   },
+   {
+    "unit": "g3_l52",
+    "一致語": [
+     "代入"
+    ],
+    "概念": [
+     "pythagorean.verify_right_triangle",
+     "pythagorean_converse.rule_recall",
+     "pythagorean.judge_right_triangle"
+    ]
+   }
+  ]
+ },
+ {
+  "要因": "２n＋２n＝４nについて，n＝９のとき９＋９＝１８になると捉えた",
+  "実物の単元": "構想を立てて説明し，統合的・発展的に考察すること（",
+  "出典": "nier_r22_kaisetsu",
+  "候補": []
+ },
+ {
+  "要因": "データの個数は高位置よりも中位置の方が少なく，データの散らばりの程度は，高位置よりも中位置の方が小さいと捉えた",
+  "実物の単元": "構想を立てて説明し，統合的・発展的に考察すること（",
+  "出典": "nier_r22_kaisetsu",
+  "候補": [
+   {
+    "unit": "g3_l24",
+    "一致語": [
+     "個数"
+    ],
+    "概念": [
+     "quadratic.evaluate_solution",
+     "quadratic_terms.term_recall",
+     "quadratic.verify_solution"
+    ]
+   },
+   {
+    "unit": "g2_l56",
+    "一致語": [
+     "データ"
+    ],
+    "概念": [
+     "quartile.compute_five_number_summary",
+     "box_plot_terms.term_recall",
+     "box_plot.read_values"
+    ]
+   },
+   {
+    "unit": "g2_l55",
+    "一致語": [
+     "データ"
+    ],
+    "概念": [
+     "quartile.compute_median",
+     "quartile.compute_q1_q3_iqr",
+     "quartile_terms.term_recall"
+    ]
+   }
+  ]
+ },
+ {
+  "要因": "データの個数は高位置よりも中位置の方が少なく，データの散らばりの程度は，高位置よりも中位置の方が大きいと捉えた",
+  "実物の単元": "構想を立てて説明し，統合的・発展的に考察すること（",
+  "出典": "nier_r22_kaisetsu",
+  "候補": [
+   {
+    "unit": "g3_l24",
+    "一致語": [
+     "個数"
+    ],
+    "概念": [
+     "quadratic.evaluate_solution",
+     "quadratic_terms.term_recall",
+     "quadratic.verify_solution"
+    ]
+   },
+   {
+    "unit": "g2_l56",
+    "一致語": [
+     "データ"
+    ],
+    "概念": [
+     "quartile.compute_five_number_summary",
+     "box_plot_terms.term_recall",
+     "box_plot.read_values"
+    ]
+   },
+   {
+    "unit": "g2_l55",
+    "一致語": [
+     "データ"
+    ],
+    "概念": [
+     "quartile.compute_median",
+     "quartile.compute_q1_q3_iqr",
+     "quartile_terms.term_recall"
+    ]
+   }
+  ]
+ },
+ {
+  "要因": "与えられた表やグラフから，x座標のみ適切に読み取った",
+  "実物の単元": "日常的な事象の数学化と問題解決の方法（二酸化炭素量の削減の取り組み）",
+  "出典": "nier_r22_kaisetsu",
+  "候補": [
+   {
+    "unit": "g3_l33",
+    "一致語": [
+     "グラフ",
+     "座標"
+    ],
+    "概念": [
+     "parabola_property.rule_recall",
+     "parabola_graph.read_points",
+     "parabola_graph.draw_from_table"
+    ]
+   },
+   {
+    "unit": "g2_l25",
+    "一致語": [
+     "グラフ",
+     "座標"
+    ],
+    "概念": [
+     "linear_function.slope_from_two_points",
+     "linear_function.expression_from_two_points",
+     "graph.read_lattice_points"
+    ]
+   },
+   {
+    "unit": "g1_l35",
+    "一致語": [
+     "グラフ",
+     "座標"
+    ],
+    "概念": [
+     "inverse_proportion.solve_from_point",
+     "inverse_proportion.read_lattice_point"
+    ]
+   }
+  ]
+ },
+ {
+  "要因": "２組の辺と１組の角がそれぞれ等しい二つの三角形は，いつでも合同であると捉えた",
+  "実物の単元": "見いだした図形の性質を，与えられた条件を基に考察すること（四角形と正三角形）",
+  "出典": "nier_r22_kaisetsu",
+  "候補": [
+   {
+    "unit": "g2_l49",
+    "一致語": [
+     "四角形",
+     "性質",
+     "条件"
+    ],
+    "概念": [
+     "special_quad_proof.condition_given",
+     "special_quad_proof.condition_choose",
+     "special_parallelogram.diagonal_value"
+    ]
+   },
+   {
+    "unit": "g2_l43",
+    "一致語": [
+     "合同",
+     "条件",
+     "正三角形"
+    ],
+    "概念": [
+     "equilateral_proof.property_and_condition",
+     "equilateral_proof.construct",
+     "equilateral.properties_from_side"
+    ]
+   },
+   {
+    "unit": "g1_l39",
+    "一致語": [
+     "図形",
+     "性質",
+     "条件"
+    ],
+    "概念": [
+     "transformation_invariant.rotation",
+     "polygon_transform.rotate",
+     "polygon_transform.find_rotation_center"
+    ]
+   }
+  ]
+ },
+ {
+  "要因": "一つの偶数を「２n」や「２n＋（具体的な数）」を用いた式で表すことはできたが、その数ともう一つの数との差を１と捉えた",
+  "実物の単元": "連続する",
+  "出典": "nier_r24_kaisetsu",
+  "候補": [
+   {
+    "unit": "g3_l57",
+    "一致語": [
+     "具体的"
+    ],
+    "概念": [
+     "survey_method_terms.term_recall",
+     "survey_method.judge_appropriate",
+     "sample_survey.judge_method_word_problem"
+    ]
+   },
+   {
+    "unit": "g2_l7",
+    "一致語": [
+     "偶数"
+    ],
+    "概念": [
+     "polynomial.consecutive_number_sum",
+     "polynomial.proof_consecutive_integers",
+     "polynomial.proof_parity_operation"
+    ]
+   },
+   {
+    "unit": "g2_l55",
+    "一致語": [
+     "偶数"
+    ],
+    "概念": [
+     "quartile.compute_median",
+     "quartile.compute_q1_q3_iqr",
+     "quartile_terms.term_recall"
+    ]
+   }
+  ]
+ },
+ {
+  "要因": "二つの偶数を「２n」や「２n＋（具体的な数）」を用いた式で表すことはできたが、連続する二つの偶数の差を２と捉えることができなかった",
+  "実物の単元": "連続する",
+  "出典": "nier_r24_kaisetsu",
+  "候補": [
+   {
+    "unit": "g3_l57",
+    "一致語": [
+     "具体的"
+    ],
+    "概念": [
+     "survey_method_terms.term_recall",
+     "survey_method.judge_appropriate",
+     "sample_survey.judge_method_word_problem"
+    ]
+   },
+   {
+    "unit": "g2_l7",
+    "一致語": [
+     "偶数"
+    ],
+    "概念": [
+     "polynomial.consecutive_number_sum",
+     "polynomial.proof_consecutive_integers",
+     "polynomial.proof_parity_operation"
+    ]
+   },
+   {
+    "unit": "g2_l55",
+    "一致語": [
+     "偶数"
+    ],
+    "概念": [
+     "quartile.compute_median",
+     "quartile.compute_q1_q3_iqr",
+     "quartile_terms.term_recall"
+    ]
+   }
+  ]
+ },
+ {
+  "要因": "解答類型１～４以外で、「２n」や「２n＋（具体的な数）」を用いた式で二つの整数を表した",
+  "実物の単元": "連続する",
+  "出典": "nier_r24_kaisetsu",
+  "候補": [
+   {
+    "unit": "g3_l57",
+    "一致語": [
+     "具体的"
+    ],
+    "概念": [
+     "survey_method_terms.term_recall",
+     "survey_method.judge_appropriate",
+     "sample_survey.judge_method_word_problem"
+    ]
+   },
+   {
+    "unit": "g3_l15",
+    "一致語": [
+     "整数"
+    ],
+    "概念": [
+     "radical.compare_magnitude",
+     "sqrt_magnitude.rule_recall"
+    ]
+   },
+   {
+    "unit": "g2_l5",
+    "一致語": [
+     "整数"
+    ],
+    "概念": [
+     "polynomial.distribute_multiply",
+     "polynomial.divide_polynomial"
+    ]
+   }
+  ]
+ },
+ {
+  "要因": "解答類型１、４以外で、nを用いた式で二つの偶数を表した",
+  "実物の単元": "連続する",
+  "出典": "nier_r24_kaisetsu",
+  "候補": [
+   {
+    "unit": "g2_l7",
+    "一致語": [
+     "偶数"
+    ],
+    "概念": [
+     "polynomial.consecutive_number_sum",
+     "polynomial.proof_consecutive_integers",
+     "polynomial.proof_parity_operation"
+    ]
+   },
+   {
+    "unit": "g2_l55",
+    "一致語": [
+     "偶数"
+    ],
+    "概念": [
+     "quartile.compute_median",
+     "quartile.compute_q1_q3_iqr",
+     "quartile_terms.term_recall"
+    ]
+   }
+  ]
+ },
+ {
+  "要因": "二つの数の差を２と捉えているが、二つの偶数を「n」や「n＋（具体的な数）」を用いて表した",
+  "実物の単元": "連続する",
+  "出典": "nier_r24_kaisetsu",
+  "候補": [
+   {
+    "unit": "g3_l57",
+    "一致語": [
+     "具体的"
+    ],
+    "概念": [
+     "survey_method_terms.term_recall",
+     "survey_method.judge_appropriate",
+     "sample_survey.judge_method_word_problem"
+    ]
+   },
+   {
+    "unit": "g2_l7",
+    "一致語": [
+     "偶数"
+    ],
+    "概念": [
+     "polynomial.consecutive_number_sum",
+     "polynomial.proof_consecutive_integers",
+     "polynomial.proof_parity_operation"
+    ]
+   },
+   {
+    "unit": "g2_l55",
+    "一致語": [
+     "偶数"
+    ],
+    "概念": [
+     "quartile.compute_median",
+     "quartile.compute_q1_q3_iqr",
+     "quartile_terms.term_recall"
+    ]
+   }
+  ]
+ },
+ {
+  "要因": "連続する二つの偶数を、連続する二つの整数と捉えた",
+  "実物の単元": "連続する",
+  "出典": "nier_r24_kaisetsu",
+  "候補": [
+   {
+    "unit": "g3_l15",
+    "一致語": [
+     "整数"
+    ],
+    "概念": [
+     "radical.compare_magnitude",
+     "sqrt_magnitude.rule_recall"
+    ]
+   },
+   {
+    "unit": "g2_l7",
+    "一致語": [
+     "偶数"
+    ],
+    "概念": [
+     "polynomial.consecutive_number_sum",
+     "polynomial.proof_consecutive_integers",
+     "polynomial.proof_parity_operation"
+    ]
+   },
+   {
+    "unit": "g2_l55",
+    "一致語": [
+     "偶数"
+    ],
+    "概念": [
+     "quartile.compute_median",
+     "quartile.compute_q1_q3_iqr",
+     "quartile_terms.term_recall"
+    ]
+   }
+  ]
+ },
+ {
+  "要因": "解答類型１～８以外で、nを用いた式で二つの整数を表した",
+  "実物の単元": "連続する",
+  "出典": "nier_r24_kaisetsu",
+  "候補": [
+   {
+    "unit": "g3_l15",
+    "一致語": [
+     "整数"
+    ],
+    "概念": [
+     "radical.compare_magnitude",
+     "sqrt_magnitude.rule_recall"
+    ]
+   },
+   {
+    "unit": "g2_l5",
+    "一致語": [
+     "整数"
+    ],
+    "概念": [
+     "polynomial.distribute_multiply",
+     "polynomial.divide_polynomial"
+    ]
+   },
+   {
+    "unit": "g1_l10",
+    "一致語": [
+     "整数"
+    ],
+    "概念": [
+     "number_set.term_recall",
+     "number_set.closure"
+    ]
+   }
+  ]
+ },
+ {
+  "要因": "一つの偶数を「２n」や「２n＋（具体的な数）」を用いた式で表すことはできたが、連続する偶数を表すためには、同じ文字を用いて表す必要があることを捉えることができなかった",
+  "実物の単元": "連続する",
+  "出典": "nier_r24_kaisetsu",
+  "候補": [
+   {
+    "unit": "g2_l7",
+    "一致語": [
+     "偶数",
+     "文字"
+    ],
+    "概念": [
+     "polynomial.consecutive_number_sum",
+     "polynomial.proof_consecutive_integers",
+     "polynomial.proof_parity_operation"
+    ]
+   },
+   {
+    "unit": "g3_l6",
+    "一致語": [
+     "文字"
+    ],
+    "概念": [
+     "polynomial.expand_various"
+    ]
+   },
+   {
+    "unit": "g3_l57",
+    "一致語": [
+     "具体的"
+    ],
+    "概念": [
+     "survey_method_terms.term_recall",
+     "survey_method.judge_appropriate",
+     "sample_survey.judge_method_word_problem"
+    ]
+   }
+  ]
+ },
+ {
+  "要因": "二つの数を、n以外の一つの文字を用いた式で表した",
+  "実物の単元": "連続する",
+  "出典": "nier_r24_kaisetsu",
+  "候補": [
+   {
+    "unit": "g3_l6",
+    "一致語": [
+     "文字"
+    ],
+    "概念": [
+     "polynomial.expand_various"
+    ]
+   },
+   {
+    "unit": "g3_l29",
+    "一致語": [
+     "文字"
+    ],
+    "概念": [
+     "quadratic.solve_from_word_setup",
+     "quadratic.word_problem_consecutive_integers",
+     "quadratic.word_problem_number_relation"
+    ]
+   },
+   {
+    "unit": "g3_l13",
+    "一致語": [
+     "文字"
+    ],
+    "概念": [
+     "polynomial.proof_diff_squares_linear",
+     "polynomial.proof_expand_number_property",
+     "polynomial.proof_factor_to_square"
+    ]
+   }
+  ]
+ },
+ {
+  "要因": "連続する二つの偶数を、具体的な数で表した",
+  "実物の単元": "連続する",
+  "出典": "nier_r24_kaisetsu",
+  "候補": [
+   {
+    "unit": "g3_l57",
+    "一致語": [
+     "具体的"
+    ],
+    "概念": [
+     "survey_method_terms.term_recall",
+     "survey_method.judge_appropriate",
+     "sample_survey.judge_method_word_problem"
+    ]
+   },
+   {
+    "unit": "g2_l7",
+    "一致語": [
+     "偶数"
+    ],
+    "概念": [
+     "polynomial.consecutive_number_sum",
+     "polynomial.proof_consecutive_integers",
+     "polynomial.proof_parity_operation"
+    ]
+   },
+   {
+    "unit": "g2_l55",
+    "一致語": [
+     "偶数"
+    ],
+    "概念": [
+     "quartile.compute_median",
+     "quartile.compute_q1_q3_iqr",
+     "quartile_terms.term_recall"
+    ]
+   }
+  ]
+ },
+ {
+  "要因": "等式６x＋２y＝１を２y＝６x＋１と変形した",
+  "実物の単元": "等式の変形",
+  "出典": "nier_r24_kaisetsu",
+  "候補": [
+   {
+    "unit": "g3_l18",
+    "一致語": [
+     "変形"
+    ],
+    "概念": [
+     "radical.simplify_form"
+    ]
+   },
+   {
+    "unit": "g3_l15",
+    "一致語": [
+     "変形"
+    ],
+    "概念": [
+     "radical.compare_magnitude",
+     "sqrt_magnitude.rule_recall"
+    ]
+   },
+   {
+    "unit": "g3_l12",
+    "一致語": [
+     "変形"
+    ],
+    "概念": [
+     "polynomial.arithmetic_via_diff_of_squares",
+     "polynomial.symmetric_expression_from_sum_product"
+    ]
+   }
+  ]
+ },
+ {
+  "要因": "等式６x＋２y＝１を２y＝６x－１と変形した",
+  "実物の単元": "等式の変形",
+  "出典": "nier_r24_kaisetsu",
+  "候補": [
+   {
+    "unit": "g3_l18",
+    "一致語": [
+     "変形"
+    ],
+    "概念": [
+     "radical.simplify_form"
+    ]
+   },
+   {
+    "unit": "g3_l15",
+    "一致語": [
+     "変形"
+    ],
+    "概念": [
+     "radical.compare_magnitude",
+     "sqrt_magnitude.rule_recall"
+    ]
+   },
+   {
+    "unit": "g3_l12",
+    "一致語": [
+     "変形"
+    ],
+    "概念": [
+     "polynomial.arithmetic_via_diff_of_squares",
+     "polynomial.symmetric_expression_from_sum_product"
+    ]
+   }
+  ]
+ },
+ {
+  "要因": "等式６x＋２y＝１を２y＝－６x＋１とした上で、両辺にを２１かける際に、y＝－６x＋１×と計算した",
+  "実物の単元": "等式の変形",
+  "出典": "nier_r24_kaisetsu",
+  "候補": [
+   {
+    "unit": "g1_l21",
+    "一致語": [
+     "両辺",
+     "等式"
+    ],
+    "概念": [
+     "equation.solve_by_equality_property",
+     "equation.solve_by_equality_property_multi",
+     "equation.term_recall"
+    ]
+   },
+   {
+    "unit": "g3_l3",
+    "一致語": [
+     "計算"
+    ],
+    "概念": [
+     "polynomial.expand_formula_sum_product",
+     "multiplication_formula_choice.rule_recall"
+    ]
+   },
+   {
+    "unit": "g3_l26",
+    "一致語": [
+     "計算"
+    ],
+    "概念": [
+     "quadratic.solve_by_formula",
+     "quadratic_coefficient.term_recall"
+    ]
+   }
+  ]
+ },
+ {
+  "要因": "等式６x＋２y＝１を２y＝－６x＋１とした上で、両辺にを２１かける際に、y＝－６x×＋１と計算した",
+  "実物の単元": "等式の変形",
+  "出典": "nier_r24_kaisetsu",
+  "候補": [
+   {
+    "unit": "g1_l21",
+    "一致語": [
+     "両辺",
+     "等式"
+    ],
+    "概念": [
+     "equation.solve_by_equality_property",
+     "equation.solve_by_equality_property_multi",
+     "equation.term_recall"
+    ]
+   },
+   {
+    "unit": "g3_l3",
+    "一致語": [
+     "計算"
+    ],
+    "概念": [
+     "polynomial.expand_formula_sum_product",
+     "multiplication_formula_choice.rule_recall"
+    ]
+   },
+   {
+    "unit": "g3_l26",
+    "一致語": [
+     "計算"
+    ],
+    "概念": [
+     "quadratic.solve_by_formula",
+     "quadratic_coefficient.term_recall"
+    ]
+   }
+  ]
+ },
+ {
+  "要因": "等式６x＋２y＝１の項「２y」を「２＋y」とした",
+  "実物の単元": "等式の変形",
+  "出典": "nier_r24_kaisetsu",
+  "候補": [
+   {
+    "unit": "g3_l18",
+    "一致語": [
+     "変形"
+    ],
+    "概念": [
+     "radical.simplify_form"
+    ]
+   },
+   {
+    "unit": "g3_l15",
+    "一致語": [
+     "変形"
+    ],
+    "概念": [
+     "radical.compare_magnitude",
+     "sqrt_magnitude.rule_recall"
+    ]
+   },
+   {
+    "unit": "g3_l12",
+    "一致語": [
+     "変形"
+    ],
+    "概念": [
+     "polynomial.arithmetic_via_diff_of_squares",
+     "polynomial.symmetric_expression_from_sum_product"
+    ]
+   }
+  ]
+ },
+ {
+  "要因": "等式６x＋２y＝１を２y＝－６x＋１と変形して留まっている",
+  "実物の単元": "等式の変形",
+  "出典": "nier_r24_kaisetsu",
+  "候補": [
+   {
+    "unit": "g3_l18",
+    "一致語": [
+     "変形"
+    ],
+    "概念": [
+     "radical.simplify_form"
+    ]
+   },
+   {
+    "unit": "g3_l15",
+    "一致語": [
+     "変形"
+    ],
+    "概念": [
+     "radical.compare_magnitude",
+     "sqrt_magnitude.rule_recall"
+    ]
+   },
+   {
+    "unit": "g3_l12",
+    "一致語": [
+     "変形"
+    ],
+    "概念": [
+     "polynomial.arithmetic_via_diff_of_squares",
+     "polynomial.symmetric_expression_from_sum_product"
+    ]
+   }
+  ]
+ },
+ {
+  "要因": "等式６x＋２y＝１の文字を含む項のみに着目して「－３x」と計算したり、２y＝－６x＋１の「－６x＋１」を「－５x」と計算したりした",
+  "実物の単元": "等式の変形",
+  "出典": "nier_r24_kaisetsu",
+  "候補": [
+   {
+    "unit": "g2_l9",
+    "一致語": [
+     "変形",
+     "文字"
+    ],
+    "概念": [
+     "polynomial.rearrange_move",
+     "polynomial.rearrange_divide",
+     "polynomial.rearrange_product"
+    ]
+   },
+   {
+    "unit": "g2_l13",
+    "一致語": [
+     "変形",
+     "文字"
+    ],
+    "概念": [
+     "simultaneous_equations.solve_by_substitution"
+    ]
+   },
+   {
+    "unit": "g3_l6",
+    "一致語": [
+     "文字"
+    ],
+    "概念": [
+     "polynomial.expand_various"
+    ]
+   }
+  ]
+ },
+ {
+  "要因": "等式６x＋２y＝１をyについて解くことを、yの値を求めることと捉えた",
+  "実物の単元": "等式の変形",
+  "出典": "nier_r24_kaisetsu",
+  "候補": [
+   {
+    "unit": "g3_l18",
+    "一致語": [
+     "変形"
+    ],
+    "概念": [
+     "radical.simplify_form"
+    ]
+   },
+   {
+    "unit": "g3_l15",
+    "一致語": [
+     "変形"
+    ],
+    "概念": [
+     "radical.compare_magnitude",
+     "sqrt_magnitude.rule_recall"
+    ]
+   },
+   {
+    "unit": "g3_l12",
+    "一致語": [
+     "変形"
+    ],
+    "概念": [
+     "polynomial.arithmetic_via_diff_of_squares",
+     "polynomial.symmetric_expression_from_sum_product"
+    ]
+   }
+  ]
+ },
+ {
+  "要因": "一次関数y＝ax＋bのグラフについて、aの値を１より大きくするとグラフはy軸の正の方向に平行移動すると捉えている",
+  "実物の単元": "一次関数",
+  "出典": "nier_r24_kaisetsu",
+  "候補": [
+   {
+    "unit": "g1_l38",
+    "一致語": [
+     "平行移動",
+     "方向"
+    ],
+    "概念": [
+     "transformation_invariant.parallel_translation",
+     "polygon_transform.translate"
+    ]
+   },
+   {
+    "unit": "g3_l38",
+    "一致語": [
+     "グラフ"
+    ],
+    "概念": [
+     "quadratic_function.motion_area",
+     "parabola_graph.read_area_time",
+     "parabola_graph.piecewise_area"
+    ]
+   },
+   {
+    "unit": "g3_l37",
+    "一致語": [
+     "グラフ"
+    ],
+    "概念": [
+     "quadratic_function.intersection_with_line",
+     "parabola_graph.enclosed_region",
+     "quadratic_function.word_problem_parabola_line_guided"
+    ]
+   }
+  ]
+ },
+ {
+  "要因": "一次関数y＝ax＋bのグラフについて、aの値を１より大きくするとグラフの傾き具合は小さくなると捉えている",
+  "実物の単元": "一次関数",
+  "出典": "nier_r24_kaisetsu",
+  "候補": [
+   {
+    "unit": "g3_l38",
+    "一致語": [
+     "グラフ"
+    ],
+    "概念": [
+     "quadratic_function.motion_area",
+     "parabola_graph.read_area_time",
+     "parabola_graph.piecewise_area"
+    ]
+   },
+   {
+    "unit": "g3_l37",
+    "一致語": [
+     "グラフ"
+    ],
+    "概念": [
+     "quadratic_function.intersection_with_line",
+     "parabola_graph.enclosed_region",
+     "quadratic_function.word_problem_parabola_line_guided"
+    ]
+   },
+   {
+    "unit": "g3_l36",
+    "一致語": [
+     "グラフ"
+    ],
+    "概念": [
+     "parabola_graph.phenomenon_table",
+     "quadratic_function.word_problem_determine_then_evaluate",
+     "quadratic_function.word_problem_determine_then_inverse"
+    ]
+   }
+  ]
+ },
+ {
+  "要因": "一次関数y＝ax＋bのグラフについて、aの値を１より大きくするとグラフはx軸の正の方向に平行移動すると捉えている",
+  "実物の単元": "一次関数",
+  "出典": "nier_r24_kaisetsu",
+  "候補": [
+   {
+    "unit": "g1_l38",
+    "一致語": [
+     "平行移動",
+     "方向"
+    ],
+    "概念": [
+     "transformation_invariant.parallel_translation",
+     "polygon_transform.translate"
+    ]
+   },
+   {
+    "unit": "g3_l38",
+    "一致語": [
+     "グラフ"
+    ],
+    "概念": [
+     "quadratic_function.motion_area",
+     "parabola_graph.read_area_time",
+     "parabola_graph.piecewise_area"
+    ]
+   },
+   {
+    "unit": "g3_l37",
+    "一致語": [
+     "グラフ"
+    ],
+    "概念": [
+     "quadratic_function.intersection_with_line",
+     "parabola_graph.enclosed_region",
+     "quadratic_function.word_problem_parabola_line_guided"
+    ]
+   }
+  ]
+ },
+ {
+  "要因": "２枚の１０円硬貨を同時に投げたときの硬貨の表と裏の出方の起こり得るすべての場合を「２枚とも表」、「１枚が表で１枚が裏」、「２枚とも裏」の３通りと捉１え、２枚とも裏の出る出方は１通りであることから、確率を求めた",
+  "実物の単元": "（正答率",
+  "出典": "nier_r24_kaisetsu",
+  "候補": [
+   {
+    "unit": "g2_l53",
+    "一致語": [
+     "同時",
+     "場合",
+     "確率"
+    ],
+    "概念": [
+     "probability.count_ordered_selection",
+     "probability.count_combination_selection",
+     "counting.tree_diagram_draws"
+    ]
+   },
+   {
+    "unit": "g2_l52",
+    "一致語": [
+     "場合",
+     "硬貨",
+     "確率"
+    ],
+    "概念": [
+     "probability.count_two_dice",
+     "counting.tree_diagram_coins",
+     "probability.word_problem_two_dice_product"
+    ]
+   },
+   {
+    "unit": "exam_l5",
+    "一致語": [
+     "場合",
+     "確率"
+    ],
+    "概念": [
+     "exam.probability_from_counts",
+     "exam.dice_guided_total_and_events",
+     "exam.at_least_one_by_complement"
+    ]
+   }
+  ]
+ },
+ {
+  "要因": "２枚の１０円硬貨を同時に投げたときの硬貨の表と裏の出方の起こり得るすべての場合を「２枚とも表」、「２枚とも裏」の２通りであると捉えたり、１枚の１０１円硬貨の出方が「表」、「裏」であることから２通りであると捉えたりして、確率を求め２た",
+  "実物の単元": "（正答率",
+  "出典": "nier_r24_kaisetsu",
+  "候補": [
+   {
+    "unit": "g2_l53",
+    "一致語": [
+     "同時",
+     "場合",
+     "確率"
+    ],
+    "概念": [
+     "probability.count_ordered_selection",
+     "probability.count_combination_selection",
+     "counting.tree_diagram_draws"
+    ]
+   },
+   {
+    "unit": "g2_l52",
+    "一致語": [
+     "場合",
+     "硬貨",
+     "確率"
+    ],
+    "概念": [
+     "probability.count_two_dice",
+     "counting.tree_diagram_coins",
+     "probability.word_problem_two_dice_product"
+    ]
+   },
+   {
+    "unit": "exam_l5",
+    "一致語": [
+     "場合",
+     "確率"
+    ],
+    "概念": [
+     "exam.probability_from_counts",
+     "exam.dice_guided_total_and_events",
+     "exam.at_least_one_by_complement"
+    ]
+   }
+  ]
+ },
+ {
+  "要因": "２枚とも裏の出る確率を、起こり得る場合の数などの整数で答えた",
+  "実物の単元": "（正答率",
+  "出典": "nier_r24_kaisetsu",
+  "候補": [
+   {
+    "unit": "g2_l53",
+    "一致語": [
+     "場合",
+     "確率"
+    ],
+    "概念": [
+     "probability.count_ordered_selection",
+     "probability.count_combination_selection",
+     "counting.tree_diagram_draws"
+    ]
+   },
+   {
+    "unit": "g2_l52",
+    "一致語": [
+     "場合",
+     "確率"
+    ],
+    "概念": [
+     "probability.count_two_dice",
+     "counting.tree_diagram_coins",
+     "probability.word_problem_two_dice_product"
+    ]
+   },
+   {
+    "unit": "exam_l5",
+    "一致語": [
+     "場合",
+     "確率"
+    ],
+    "概念": [
+     "exam.probability_from_counts",
+     "exam.dice_guided_total_and_events",
+     "exam.at_least_one_by_complement"
+    ]
+   }
+  ]
+ },
+ {
+  "要因": "－５と３の和を、－（５＋３）と計算した",
+  "実物の単元": "構想を立てて説明し、統合的・発展的に考察すること（頂点の数の和）",
+  "出典": "nier_r24_kaisetsu",
+  "候補": [
+   {
+    "unit": "g3_l55",
+    "一致語": [
+     "頂点"
+    ],
+    "概念": [
+     "pythagorean.word_problem_square_pyramid_volume",
+     "pythagorean.word_problem_cube_vertex_to_plane",
+     "box_view.section"
+    ]
+   },
+   {
+    "unit": "g3_l34",
+    "一致語": [
+     "頂点"
+    ],
+    "概念": [
+     "quadratic_function.y_range",
+     "parabola_graph.domain_on_graph"
+    ]
+   },
+   {
+    "unit": "g3_l33",
+    "一致語": [
+     "頂点"
+    ],
+    "概念": [
+     "parabola_property.rule_recall",
+     "parabola_graph.read_points",
+     "parabola_graph.draw_from_table"
+    ]
+   }
+  ]
+ },
+ {
+  "要因": "－５と３の和を、５＋３と計算した",
+  "実物の単元": "構想を立てて説明し、統合的・発展的に考察すること（頂点の数の和）",
+  "出典": "nier_r24_kaisetsu",
+  "候補": [
+   {
+    "unit": "g3_l55",
+    "一致語": [
+     "頂点"
+    ],
+    "概念": [
+     "pythagorean.word_problem_square_pyramid_volume",
+     "pythagorean.word_problem_cube_vertex_to_plane",
+     "box_view.section"
+    ]
+   },
+   {
+    "unit": "g3_l34",
+    "一致語": [
+     "頂点"
+    ],
+    "概念": [
+     "quadratic_function.y_range",
+     "parabola_graph.domain_on_graph"
+    ]
+   },
+   {
+    "unit": "g3_l33",
+    "一致語": [
+     "頂点"
+    ],
+    "概念": [
+     "parabola_property.rule_recall",
+     "parabola_graph.read_points",
+     "parabola_graph.draw_from_table"
+    ]
+   }
+  ]
+ },
+ {
+  "要因": "１０ｃｍの位置から進んだ距離の最頻値と最小値を混同した",
+  "実物の単元": "構想を立てて説明し、統合的・発展的に考察すること（頂点の数の和）",
+  "出典": "nier_r24_kaisetsu",
+  "候補": [
+   {
+    "unit": "g3_l55",
+    "一致語": [
+     "頂点"
+    ],
+    "概念": [
+     "pythagorean.word_problem_square_pyramid_volume",
+     "pythagorean.word_problem_cube_vertex_to_plane",
+     "box_view.section"
+    ]
+   },
+   {
+    "unit": "g3_l54",
+    "一致語": [
+     "距離"
+    ],
+    "概念": [
+     "pythagorean.coordinate_distance",
+     "pythagorean.coordinate_right_triangle",
+     "pythagorean.equidistant_point_on_x_axis"
+    ]
+   },
+   {
+    "unit": "g3_l51",
+    "一致語": [
+     "位置"
+    ],
+    "概念": [
+     "pythagorean.hypotenuse_from_legs",
+     "pythagorean_theorem.rule_recall",
+     "pythagorean.identify_hypotenuse"
+    ]
+   }
+  ]
+ },
+ {
+  "要因": "１０ｃｍの位置から進んだ距離の最頻値と最大値を混同した",
+  "実物の単元": "構想を立てて説明し、統合的・発展的に考察すること（頂点の数の和）",
+  "出典": "nier_r24_kaisetsu",
+  "候補": [
+   {
+    "unit": "g3_l55",
+    "一致語": [
+     "頂点"
+    ],
+    "概念": [
+     "pythagorean.word_problem_square_pyramid_volume",
+     "pythagorean.word_problem_cube_vertex_to_plane",
+     "box_view.section"
+    ]
+   },
+   {
+    "unit": "g3_l54",
+    "一致語": [
+     "距離"
+    ],
+    "概念": [
+     "pythagorean.coordinate_distance",
+     "pythagorean.coordinate_right_triangle",
+     "pythagorean.equidistant_point_on_x_axis"
+    ]
+   },
+   {
+    "unit": "g3_l51",
+    "一致語": [
+     "位置"
+    ],
+    "概念": [
+     "pythagorean.hypotenuse_from_legs",
+     "pythagorean_theorem.rule_recall",
+     "pythagorean.identify_hypotenuse"
+    ]
+   }
+  ]
+ },
+ {
+  "要因": "１０ｃｍの位置から進んだ距離の最頻値と中央値を混同した",
+  "実物の単元": "構想を立てて説明し、統合的・発展的に考察すること（頂点の数の和）",
+  "出典": "nier_r24_kaisetsu",
+  "候補": [
+   {
+    "unit": "g2_l55",
+    "一致語": [
+     "中央値",
+     "位置"
+    ],
+    "概念": [
+     "quartile.compute_median",
+     "quartile.compute_q1_q3_iqr",
+     "quartile_terms.term_recall"
+    ]
+   },
+   {
+    "unit": "g1_l57",
+    "一致語": [
+     "中央値",
+     "最頻値"
+    ],
+    "概念": [
+     "representative_value.compute_raw",
+     "representative_value.compute_grouped_mean",
+     "representative_value_terms.term_recall"
+    ]
+   },
+   {
+    "unit": "g3_l55",
+    "一致語": [
+     "頂点"
+    ],
+    "概念": [
+     "pythagorean.word_problem_square_pyramid_volume",
+     "pythagorean.word_problem_cube_vertex_to_plane",
+     "box_view.section"
+    ]
+   }
+  ]
+ },
+ {
+  "要因": "複数の集団のデータの分布から、範囲に着目した",
+  "実物の単元": "構想を立てて説明し、統合的・発展的に考察すること（頂点の数の和）",
+  "出典": "nier_r24_kaisetsu",
+  "候補": [
+   {
+    "unit": "g2_l57",
+    "一致語": [
+     "分布",
+     "範囲",
+     "複数"
+    ],
+    "概念": [
+     "distribution_statistic.classify_role",
+     "box_plot.compare_center_spread",
+     "box_plot.compare_iqr"
+    ]
+   },
+   {
+    "unit": "g1_l54",
+    "一致語": [
+     "データ",
+     "分布",
+     "複数"
+    ],
+    "概念": [
+     "frequency_table.compute_value",
+     "frequency_table_terms.term_recall",
+     "frequency_chart.read_histogram"
+    ]
+   },
+   {
+    "unit": "exam_l7",
+    "一致語": [
+     "データ",
+     "範囲",
+     "複数"
+    ],
+    "概念": [
+     "exam.relative_frequency_ratio",
+     "exam.quartiles_full_summary",
+     "exam.box_plot_guided_three"
+    ]
+   }
+  ]
+ },
+ {
+  "要因": "複数の集団のデータの分布から、第１四分位数や第３四分位数に着目した",
+  "実物の単元": "構想を立てて説明し、統合的・発展的に考察すること（頂点の数の和）",
+  "出典": "nier_r24_kaisetsu",
+  "候補": [
+   {
+    "unit": "g1_l54",
+    "一致語": [
+     "データ",
+     "分布",
+     "複数"
+    ],
+    "概念": [
+     "frequency_table.compute_value",
+     "frequency_table_terms.term_recall",
+     "frequency_chart.read_histogram"
+    ]
+   },
+   {
+    "unit": "exam_l7",
+    "一致語": [
+     "データ",
+     "四分位数",
+     "複数"
+    ],
+    "概念": [
+     "exam.relative_frequency_ratio",
+     "exam.quartiles_full_summary",
+     "exam.box_plot_guided_three"
+    ]
+   },
+   {
+    "unit": "g3_l49",
+    "一致語": [
+     "着目",
+     "複数"
+    ],
+    "概念": [
+     "circle_proof.inscribed_direct",
+     "circle_proof.two_step",
+     "circle_proof.construct"
+    ]
+   }
+  ]
+ },
+ {
+  "要因": "交点Ｐのy座標と交点Ｐのx座標を混同した",
+  "実物の単元": "日常的な事象における問題について、関数関係に着目し構想を立て解決すること（スト",
+  "出典": "nier_r24_kaisetsu",
+  "候補": [
+   {
+    "unit": "g3_l54",
+    "一致語": [
+     "座標"
+    ],
+    "概念": [
+     "pythagorean.coordinate_distance",
+     "pythagorean.coordinate_right_triangle",
+     "pythagorean.equidistant_point_on_x_axis"
+    ]
+   },
+   {
+    "unit": "g3_l49",
+    "一致語": [
+     "着目"
+    ],
+    "概念": [
+     "circle_proof.inscribed_direct",
+     "circle_proof.two_step",
+     "circle_proof.construct"
+    ]
+   },
+   {
+    "unit": "g3_l37",
+    "一致語": [
+     "交点"
+    ],
+    "概念": [
+     "quadratic_function.intersection_with_line",
+     "parabola_graph.enclosed_region",
+     "quadratic_function.word_problem_parabola_line_guided"
+    ]
+   }
+  ]
+ },
+ {
+  "要因": "交点Ｐのy座標は「強」の場合のストーブの１時間あたりの灯油使用量を表していると捉えた",
+  "実物の単元": "日常的な事象における問題について、関数関係に着目し構想を立て解決すること（スト",
+  "出典": "nier_r24_kaisetsu",
+  "候補": [
+   {
+    "unit": "g3_l54",
+    "一致語": [
+     "座標"
+    ],
+    "概念": [
+     "pythagorean.coordinate_distance",
+     "pythagorean.coordinate_right_triangle",
+     "pythagorean.equidistant_point_on_x_axis"
+    ]
+   },
+   {
+    "unit": "g3_l49",
+    "一致語": [
+     "着目"
+    ],
+    "概念": [
+     "circle_proof.inscribed_direct",
+     "circle_proof.two_step",
+     "circle_proof.construct"
+    ]
+   },
+   {
+    "unit": "g3_l38",
+    "一致語": [
+     "時間"
+    ],
+    "概念": [
+     "quadratic_function.motion_area",
+     "parabola_graph.read_area_time",
+     "parabola_graph.piecewise_area"
+    ]
+   }
+  ]
+ },
+ {
+  "要因": "交点Ｐのy座標は「弱」の場合のストーブの１時間あたりの灯油使用量を表していると捉えた",
+  "実物の単元": "日常的な事象における問題について、関数関係に着目し構想を立て解決すること（スト",
+  "出典": "nier_r24_kaisetsu",
+  "候補": [
+   {
+    "unit": "g3_l54",
+    "一致語": [
+     "座標"
+    ],
+    "概念": [
+     "pythagorean.coordinate_distance",
+     "pythagorean.coordinate_right_triangle",
+     "pythagorean.equidistant_point_on_x_axis"
+    ]
+   },
+   {
+    "unit": "g3_l49",
+    "一致語": [
+     "着目"
+    ],
+    "概念": [
+     "circle_proof.inscribed_direct",
+     "circle_proof.two_step",
+     "circle_proof.construct"
+    ]
+   },
+   {
+    "unit": "g3_l38",
+    "一致語": [
+     "時間"
+    ],
+    "概念": [
+     "quadratic_function.motion_area",
+     "parabola_graph.read_area_time",
+     "parabola_graph.piecewise_area"
+    ]
+   }
+  ]
+ },
+ {
+  "要因": "２、３、５、７のうち、２は素数に含まれないと捉えている",
+  "実物の単元": "素数",
+  "出典": "nier_r7_kaisetsu",
+  "候補": [
+   {
+    "unit": "g1_l11",
+    "一致語": [
+     "素数"
+    ],
+    "概念": [
+     "prime_concepts.term_recall",
+     "prime_factorization.execute_basic",
+     "prime_factorization.execute_advanced"
+    ]
+   }
+  ]
+ },
+ {
+  "要因": "２、３、５、７に加えて、９も素数に含まれると捉えている",
+  "実物の単元": "素数",
+  "出典": "nier_r7_kaisetsu",
+  "候補": [
+   {
+    "unit": "g1_l11",
+    "一致語": [
+     "素数"
+    ],
+    "概念": [
+     "prime_concepts.term_recall",
+     "prime_factorization.execute_basic",
+     "prime_factorization.execute_advanced"
+    ]
+   }
+  ]
+ },
+ {
+  "要因": "２、３、５、７に加えて、１も素数に含まれると捉えている",
+  "実物の単元": "素数",
+  "出典": "nier_r7_kaisetsu",
+  "候補": [
+   {
+    "unit": "g1_l11",
+    "一致語": [
+     "素数"
+    ],
+    "概念": [
+     "prime_concepts.term_recall",
+     "prime_factorization.execute_basic",
+     "prime_factorization.execute_advanced"
+    ]
+   }
+  ]
+ },
+ {
+  "要因": "１から９までの奇数のうち、９以外の数を素数と捉えている",
+  "実物の単元": "素数",
+  "出典": "nier_r7_kaisetsu",
+  "候補": [
+   {
+    "unit": "g2_l55",
+    "一致語": [
+     "奇数"
+    ],
+    "概念": [
+     "quartile.compute_median",
+     "quartile.compute_q1_q3_iqr",
+     "quartile_terms.term_recall"
+    ]
+   },
+   {
+    "unit": "g1_l11",
+    "一致語": [
+     "素数"
+    ],
+    "概念": [
+     "prime_concepts.term_recall",
+     "prime_factorization.execute_basic",
+     "prime_factorization.execute_advanced"
+    ]
+   }
+  ]
+ },
+ {
+  "要因": "素数と奇数を混同している",
+  "実物の単元": "素数",
+  "出典": "nier_r7_kaisetsu",
+  "候補": [
+   {
+    "unit": "g2_l55",
+    "一致語": [
+     "奇数"
+    ],
+    "概念": [
+     "quartile.compute_median",
+     "quartile.compute_q1_q3_iqr",
+     "quartile_terms.term_recall"
+    ]
+   },
+   {
+    "unit": "g1_l11",
+    "一致語": [
+     "素数"
+    ],
+    "概念": [
+     "prime_concepts.term_recall",
+     "prime_factorization.execute_basic",
+     "prime_factorization.execute_advanced"
+    ]
+   }
+  ]
+ },
+ {
+  "要因": "頂点Ａにおける外角は、３６０°から頂点Ａにおける内角をひいた角であると捉えている",
+  "実物の単元": "外角",
+  "出典": "nier_r7_kaisetsu",
+  "候補": [
+   {
+    "unit": "g2_l35",
+    "一致語": [
+     "内角",
+     "外角"
+    ],
+    "概念": [
+     "polygon_angle.regular_exterior_angle",
+     "polygon_angle.sides_from_interior_angle",
+     "polygon_exterior_sum_property.rule_recall"
+    ]
+   },
+   {
+    "unit": "g2_l33",
+    "一致語": [
+     "内角",
+     "外角"
+    ],
+    "概念": [
+     "triangle_angle.third_angle",
+     "triangle_angle.arrowhead_multi_step",
+     "triangle_angle_properties.rule_recall"
+    ]
+   },
+   {
+    "unit": "g3_l55",
+    "一致語": [
+     "頂点"
+    ],
+    "概念": [
+     "pythagorean.word_problem_square_pyramid_volume",
+     "pythagorean.word_problem_cube_vertex_to_plane",
+     "box_view.section"
+    ]
+   }
+  ]
+ },
+ {
+  "要因": "頂点Ａにおける外角と内角を混同している",
+  "実物の単元": "外角",
+  "出典": "nier_r7_kaisetsu",
+  "候補": [
+   {
+    "unit": "g2_l35",
+    "一致語": [
+     "内角",
+     "外角"
+    ],
+    "概念": [
+     "polygon_angle.regular_exterior_angle",
+     "polygon_angle.sides_from_interior_angle",
+     "polygon_exterior_sum_property.rule_recall"
+    ]
+   },
+   {
+    "unit": "g2_l33",
+    "一致語": [
+     "内角",
+     "外角"
+    ],
+    "概念": [
+     "triangle_angle.third_angle",
+     "triangle_angle.arrowhead_multi_step",
+     "triangle_angle_properties.rule_recall"
+    ]
+   },
+   {
+    "unit": "g3_l55",
+    "一致語": [
+     "頂点"
+    ],
+    "概念": [
+     "pythagorean.word_problem_square_pyramid_volume",
+     "pythagorean.word_problem_cube_vertex_to_plane",
+     "box_view.section"
+    ]
+   }
+  ]
+ },
+ {
+  "要因": "頂点Ａにおける外角の大きさは、頂点Ａにおける二つの外角の大きさの和であると捉えている",
+  "実物の単元": "外角",
+  "出典": "nier_r7_kaisetsu",
+  "候補": [
+   {
+    "unit": "g3_l55",
+    "一致語": [
+     "頂点"
+    ],
+    "概念": [
+     "pythagorean.word_problem_square_pyramid_volume",
+     "pythagorean.word_problem_cube_vertex_to_plane",
+     "box_view.section"
+    ]
+   },
+   {
+    "unit": "g3_l47",
+    "一致語": [
+     "外角"
+    ],
+    "概念": [
+     "circle.inscribed_angle_from_central",
+     "circle_inscribed_angle_theorem.rule_recall",
+     "circle.two_chords_intersection_angle"
+    ]
+   },
+   {
+    "unit": "g3_l34",
+    "一致語": [
+     "頂点"
+    ],
+    "概念": [
+     "quadratic_function.y_range",
+     "parabola_graph.domain_on_graph"
+    ]
+   }
+  ]
+ },
+ {
+  "要因": "頂点Ａにおける外角の大きさを多角形の外角の和と捉えた",
+  "実物の単元": "外角",
+  "出典": "nier_r7_kaisetsu",
+  "候補": [
+   {
+    "unit": "g2_l35",
+    "一致語": [
+     "外角",
+     "多角形"
+    ],
+    "概念": [
+     "polygon_angle.regular_exterior_angle",
+     "polygon_angle.sides_from_interior_angle",
+     "polygon_exterior_sum_property.rule_recall"
+    ]
+   },
+   {
+    "unit": "g3_l55",
+    "一致語": [
+     "頂点"
+    ],
+    "概念": [
+     "pythagorean.word_problem_square_pyramid_volume",
+     "pythagorean.word_problem_cube_vertex_to_plane",
+     "box_view.section"
+    ]
+   },
+   {
+    "unit": "g3_l47",
+    "一致語": [
+     "外角"
+    ],
+    "概念": [
+     "circle.inscribed_angle_from_central",
+     "circle_inscribed_angle_theorem.rule_recall",
+     "circle.two_chords_intersection_angle"
+    ]
+   }
+  ]
+ },
+ {
+  "要因": "x＝２のときのyの値を求めた",
+  "実物の単元": "変化の割合",
+  "出典": "nier_r7_kaisetsu",
+  "候補": [
+   {
+    "unit": "g3_l35",
+    "一致語": [
+     "割合",
+     "変化"
+    ],
+    "概念": [
+     "quadratic_function.rate_of_change",
+     "quadratic_roc_property.rule_recall"
+    ]
+   },
+   {
+    "unit": "g2_l21",
+    "一致語": [
+     "割合",
+     "変化"
+    ],
+    "概念": [
+     "graph.read_slope_intercept",
+     "linear_function.slope_sign_to_direction",
+     "linear_function.classify_line_by_signs"
+    ]
+   },
+   {
+    "unit": "g2_l20",
+    "一致語": [
+     "割合",
+     "変化"
+    ],
+    "概念": [
+     "linear_function.rate_of_change",
+     "linear_function.rate_of_change_is_constant"
+    ]
+   }
+  ]
+ },
+ {
+  "要因": "yの増加量とxの増加量を混同している",
+  "実物の単元": "変化の割合",
+  "出典": "nier_r7_kaisetsu",
+  "候補": [
+   {
+    "unit": "g3_l35",
+    "一致語": [
+     "割合",
+     "変化"
+    ],
+    "概念": [
+     "quadratic_function.rate_of_change",
+     "quadratic_roc_property.rule_recall"
+    ]
+   },
+   {
+    "unit": "g2_l21",
+    "一致語": [
+     "割合",
+     "変化"
+    ],
+    "概念": [
+     "graph.read_slope_intercept",
+     "linear_function.slope_sign_to_direction",
+     "linear_function.classify_line_by_signs"
+    ]
+   },
+   {
+    "unit": "g2_l20",
+    "一致語": [
+     "割合",
+     "変化"
+    ],
+    "概念": [
+     "linear_function.rate_of_change",
+     "linear_function.rate_of_change_is_constant"
+    ]
+   }
+  ]
+ },
+ {
+  "要因": "変化の割合をxの増加量で割った商を求めた",
+  "実物の単元": "変化の割合",
+  "出典": "nier_r7_kaisetsu",
+  "候補": [
+   {
+    "unit": "g3_l35",
+    "一致語": [
+     "割合",
+     "変化"
+    ],
+    "概念": [
+     "quadratic_function.rate_of_change",
+     "quadratic_roc_property.rule_recall"
+    ]
+   },
+   {
+    "unit": "g2_l21",
+    "一致語": [
+     "割合",
+     "変化"
+    ],
+    "概念": [
+     "graph.read_slope_intercept",
+     "linear_function.slope_sign_to_direction",
+     "linear_function.classify_line_by_signs"
+    ]
+   },
+   {
+    "unit": "g2_l20",
+    "一致語": [
+     "割合",
+     "変化"
+    ],
+    "概念": [
+     "linear_function.rate_of_change",
+     "linear_function.rate_of_change_is_constant"
+    ]
+   }
+  ]
+ },
+ {
+  "要因": "yの増加量をy＝ax＋bのbであると捉えている",
+  "実物の単元": "変化の割合",
+  "出典": "nier_r7_kaisetsu",
+  "候補": [
+   {
+    "unit": "g3_l35",
+    "一致語": [
+     "割合",
+     "変化"
+    ],
+    "概念": [
+     "quadratic_function.rate_of_change",
+     "quadratic_roc_property.rule_recall"
+    ]
+   },
+   {
+    "unit": "g2_l21",
+    "一致語": [
+     "割合",
+     "変化"
+    ],
+    "概念": [
+     "graph.read_slope_intercept",
+     "linear_function.slope_sign_to_direction",
+     "linear_function.classify_line_by_signs"
+    ]
+   },
+   {
+    "unit": "g2_l20",
+    "一致語": [
+     "割合",
+     "変化"
+    ],
+    "概念": [
+     "linear_function.rate_of_change",
+     "linear_function.rate_of_change_is_constant"
+    ]
+   }
+  ]
+ },
+ {
+  "要因": "総度数を２０ｍ以上２５ｍ未満の階級の度数で割った商を求めた",
+  "実物の単元": "相対度数",
+  "出典": "nier_r7_kaisetsu",
+  "候補": [
+   {
+    "unit": "g1_l55",
+    "一致語": [
+     "度数",
+     "相対度数",
+     "総度数"
+    ],
+    "概念": [
+     "relative_frequency.compute_single",
+     "relative_frequency.compare_groups",
+     "relative_frequency_terms.term_recall"
+    ]
+   },
+   {
+    "unit": "g2_l51",
+    "一致語": [
+     "以上",
+     "相対度数"
+    ],
+    "概念": [
+     "probability.count_single_space",
+     "probability.relative_frequency_estimate",
+     "probability.judge_equally_likely"
+    ]
+   },
+   {
+    "unit": "g1_l56",
+    "一致語": [
+     "未満",
+     "階級"
+    ],
+    "概念": [
+     "cumulative_frequency.compute",
+     "cumulative_frequency.compute_relative_and_complement",
+     "cumulative_frequency_terms.term_recall"
+    ]
+   }
+  ]
+ },
+ {
+  "要因": "最小の階級から２０ｍ以上２５ｍ未満の階級までの累積相対度数を求めた",
+  "実物の単元": "相対度数",
+  "出典": "nier_r7_kaisetsu",
+  "候補": [
+   {
+    "unit": "g1_l56",
+    "一致語": [
+     "未満",
+     "累積相対度数",
+     "階級"
+    ],
+    "概念": [
+     "cumulative_frequency.compute",
+     "cumulative_frequency.compute_relative_and_complement",
+     "cumulative_frequency_terms.term_recall"
+    ]
+   },
+   {
+    "unit": "g2_l51",
+    "一致語": [
+     "以上",
+     "相対度数"
+    ],
+    "概念": [
+     "probability.count_single_space",
+     "probability.relative_frequency_estimate",
+     "probability.judge_equally_likely"
+    ]
+   },
+   {
+    "unit": "g1_l20",
+    "一致語": [
+     "以上",
+     "未満"
+    ],
+    "概念": [
+     "inequality.term_recall",
+     "inequality.word_problem_simple",
+     "inequality.word_problem_both_sides"
+    ]
+   }
+  ]
+ },
+ {
+  "要因": "最小の階級から２０ｍ以上２５ｍ未満の階級までの累積度数を求めた",
+  "実物の単元": "相対度数",
+  "出典": "nier_r7_kaisetsu",
+  "候補": [
+   {
+    "unit": "g1_l56",
+    "一致語": [
+     "未満",
+     "累積度数",
+     "階級"
+    ],
+    "概念": [
+     "cumulative_frequency.compute",
+     "cumulative_frequency.compute_relative_and_complement",
+     "cumulative_frequency_terms.term_recall"
+    ]
+   },
+   {
+    "unit": "g2_l51",
+    "一致語": [
+     "以上",
+     "相対度数"
+    ],
+    "概念": [
+     "probability.count_single_space",
+     "probability.relative_frequency_estimate",
+     "probability.judge_equally_likely"
+    ]
+   },
+   {
+    "unit": "g1_l20",
+    "一致語": [
+     "以上",
+     "未満"
+    ],
+    "概念": [
+     "inequality.term_recall",
+     "inequality.word_problem_simple",
+     "inequality.word_problem_both_sides"
+    ]
+   }
+  ]
+ },
+ {
+  "要因": "階級の幅を求めた",
+  "実物の単元": "相対度数",
+  "出典": "nier_r7_kaisetsu",
+  "候補": [
+   {
+    "unit": "g2_l51",
+    "一致語": [
+     "相対度数"
+    ],
+    "概念": [
+     "probability.count_single_space",
+     "probability.relative_frequency_estimate",
+     "probability.judge_equally_likely"
+    ]
+   },
+   {
+    "unit": "g1_l59",
+    "一致語": [
+     "相対度数"
+    ],
+    "概念": [
+     "probability.relative_frequency_basic",
+     "probability_terms.term_recall",
+     "probability.interpret_relative_frequency_limit"
+    ]
+   },
+   {
+    "unit": "g1_l56",
+    "一致語": [
+     "階級"
+    ],
+    "概念": [
+     "cumulative_frequency.compute",
+     "cumulative_frequency.compute_relative_and_complement",
+     "cumulative_frequency_terms.term_recall"
+    ]
+   }
+  ]
+ },
+ {
+  "要因": "階級の相対度数と総度数を混同している",
+  "実物の単元": "相対度数",
+  "出典": "nier_r7_kaisetsu",
+  "候補": [
+   {
+    "unit": "g1_l55",
+    "一致語": [
+     "相対度数",
+     "総度数"
+    ],
+    "概念": [
+     "relative_frequency.compute_single",
+     "relative_frequency.compare_groups",
+     "relative_frequency_terms.term_recall"
+    ]
+   },
+   {
+    "unit": "g2_l51",
+    "一致語": [
+     "相対度数"
+    ],
+    "概念": [
+     "probability.count_single_space",
+     "probability.relative_frequency_estimate",
+     "probability.judge_equally_likely"
+    ]
+   },
+   {
+    "unit": "g1_l59",
+    "一致語": [
+     "相対度数"
+    ],
+    "概念": [
+     "probability.relative_frequency_basic",
+     "probability_terms.term_recall",
+     "probability.interpret_relative_frequency_limit"
+    ]
+   }
+  ]
+ },
+ {
+  "要因": "２０ｍ以上２５ｍ未満の階級値を求めた",
+  "実物の単元": "相対度数",
+  "出典": "nier_r7_kaisetsu",
+  "候補": [
+   {
+    "unit": "g2_l51",
+    "一致語": [
+     "以上",
+     "相対度数"
+    ],
+    "概念": [
+     "probability.count_single_space",
+     "probability.relative_frequency_estimate",
+     "probability.judge_equally_likely"
+    ]
+   },
+   {
+    "unit": "g1_l20",
+    "一致語": [
+     "以上",
+     "未満"
+    ],
+    "概念": [
+     "inequality.term_recall",
+     "inequality.word_problem_simple",
+     "inequality.word_problem_both_sides"
+    ]
+   },
+   {
+    "unit": "g1_l59",
+    "一致語": [
+     "相対度数"
+    ],
+    "概念": [
+     "probability.relative_frequency_basic",
+     "probability_terms.term_recall",
+     "probability.interpret_relative_frequency_limit"
+    ]
+   }
+  ]
+ },
+ {
+  "要因": "和が９の倍数にならない二つの３の倍数をあげたが、連続する二つの３の倍数をあげることができなかった",
+  "実物の単元": "構想を立てて説明し、統合的・発展的に考察すること（連続する",
+  "出典": "nier_r7_kaisetsu",
+  "候補": []
+ },
+ {
+  "要因": "文字を用いて説明する必要があると考え、具体的な数で反例をあげることができなかった",
+  "実物の単元": "構想を立てて説明し、統合的・発展的に考察すること（連続する",
+  "出典": "nier_r7_kaisetsu",
+  "候補": [
+   {
+    "unit": "g3_l6",
+    "一致語": [
+     "文字"
+    ],
+    "概念": [
+     "polynomial.expand_various"
+    ]
+   },
+   {
+    "unit": "g3_l57",
+    "一致語": [
+     "具体的"
+    ],
+    "概念": [
+     "survey_method_terms.term_recall",
+     "survey_method.judge_appropriate",
+     "sample_survey.judge_method_word_problem"
+    ]
+   },
+   {
+    "unit": "g3_l53",
+    "一致語": [
+     "必要"
+    ],
+    "概念": [
+     "pythagorean.word_problem_rhombus_diagonal_area",
+     "pythagorean.word_problem_triangle_height_area_solo",
+     "pythagorean.missing_side_in_right_triangle"
+    ]
+   }
+  ]
+ },
+ {
+  "要因": "じゃんけんの結果についての「勝ち」、「負け」、「あいこ」の３通り、カードの表の絵の「グー」、「チョキ」、「パー」の３種類、手元のカードが３枚など、「３」１に着目して、１回目にＡが勝つ確率はと求めた",
+  "実物の単元": "不確定な事象の起こりやすさを捉え考察し判断すること（じゃんけんカ",
+  "出典": "nier_r7_kaisetsu",
+  "候補": [
+   {
+    "unit": "g3_l49",
+    "一致語": [
+     "着目"
+    ],
+    "概念": [
+     "circle_proof.inscribed_direct",
+     "circle_proof.two_step",
+     "circle_proof.construct"
+    ]
+   },
+   {
+    "unit": "g3_l17",
+    "一致語": [
+     "結果"
+    ],
+    "概念": [
+     "radical.multiply_divide"
+    ]
+   },
+   {
+    "unit": "g2_l54",
+    "一致語": [
+     "確率"
+    ],
+    "概念": [
+     "probability.complement",
+     "probability.at_least_one_via_complement",
+     "complementary_event.rule_recall"
+    ]
+   }
+  ]
+ },
+ {
+  "要因": "じゃんけんの勝敗についての「勝ち」、「負け」の２通りなど、「２」１に着目して、１回目にＡが勝つ確率はと求めた",
+  "実物の単元": "不確定な事象の起こりやすさを捉え考察し判断すること（じゃんけんカ",
+  "出典": "nier_r7_kaisetsu",
+  "候補": [
+   {
+    "unit": "g3_l49",
+    "一致語": [
+     "着目"
+    ],
+    "概念": [
+     "circle_proof.inscribed_direct",
+     "circle_proof.two_step",
+     "circle_proof.construct"
+    ]
+   },
+   {
+    "unit": "g2_l54",
+    "一致語": [
+     "確率"
+    ],
+    "概念": [
+     "probability.complement",
+     "probability.at_least_one_via_complement",
+     "complementary_event.rule_recall"
+    ]
+   },
+   {
+    "unit": "g2_l53",
+    "一致語": [
+     "確率"
+    ],
+    "概念": [
+     "probability.count_ordered_selection",
+     "probability.count_combination_selection",
+     "counting.tree_diagram_draws"
+    ]
+   }
+  ]
+ },
+ {
+  "要因": "この問題の仮定である線分についての関係を、新たに分かることと捉えた",
+  "実物の単元": "証明を振り返り、統合的・発展的に考察すること（平行四辺形）",
+  "出典": "nier_r7_kaisetsu",
+  "候補": [
+   {
+    "unit": "g3_l44",
+    "一致語": [
+     "線分",
+     "証明",
+     "関係"
+    ],
+    "概念": [
+     "midline_proof.direct",
+     "midline_proof.auxiliary",
+     "midpoint_connector.length"
+    ]
+   },
+   {
+    "unit": "g3_l51",
+    "一致語": [
+     "証明",
+     "関係"
+    ],
+    "概念": [
+     "pythagorean.hypotenuse_from_legs",
+     "pythagorean_theorem.rule_recall",
+     "pythagorean.identify_hypotenuse"
+    ]
+   },
+   {
+    "unit": "g3_l42",
+    "一致語": [
+     "線分",
+     "関係"
+    ],
+    "概念": [
+     "parallel_ratio_proof.ratio_from_similarity",
+     "parallel_segment.ratio_length",
+     "parallel_segment_ratio_theorem.rule_recall"
+    ]
+   }
+  ]
+ },
+ {
+  "要因": "仮定より導かれた証明に用いた辺についての関係を、新たに分かることと捉えた",
+  "実物の単元": "証明を振り返り、統合的・発展的に考察すること（平行四辺形）",
+  "出典": "nier_r7_kaisetsu",
+  "候補": [
+   {
+    "unit": "g3_l51",
+    "一致語": [
+     "証明",
+     "関係"
+    ],
+    "概念": [
+     "pythagorean.hypotenuse_from_legs",
+     "pythagorean_theorem.rule_recall",
+     "pythagorean.identify_hypotenuse"
+    ]
+   },
+   {
+    "unit": "g3_l44",
+    "一致語": [
+     "証明",
+     "関係"
+    ],
+    "概念": [
+     "midline_proof.direct",
+     "midline_proof.auxiliary",
+     "midpoint_connector.length"
+    ]
+   },
+   {
+    "unit": "g3_l13",
+    "一致語": [
+     "証明",
+     "関係"
+    ],
+    "概念": [
+     "polynomial.proof_diff_squares_linear",
+     "polynomial.proof_expand_number_property",
+     "polynomial.proof_factor_to_square"
+    ]
+   }
+  ]
+ },
+ {
+  "要因": "条件を変えた場合について、元の証明を振り返り、書き直すことが必要な部分は捉えているが、証明の一部を書き直すことができなかった",
+  "実物の単元": "証明を振り返り、統合的・発展的に考察すること（平行四辺形）",
+  "出典": "nier_r7_kaisetsu",
+  "候補": [
+   {
+    "unit": "g2_l48",
+    "一致語": [
+     "平行四辺形",
+     "条件",
+     "証明"
+    ],
+    "概念": [
+     "parallelogram_proof.apply_condition",
+     "parallelogram_proof.apply_via_congruence",
+     "parallelogram_proof.apply_construct"
+    ]
+   },
+   {
+    "unit": "g2_l53",
+    "一致語": [
+     "場合",
+     "条件"
+    ],
+    "概念": [
+     "probability.count_ordered_selection",
+     "probability.count_combination_selection",
+     "counting.tree_diagram_draws"
+    ]
+   },
+   {
+    "unit": "g2_l52",
+    "一致語": [
+     "場合",
+     "条件"
+    ],
+    "概念": [
+     "probability.count_two_dice",
+     "counting.tree_diagram_coins",
+     "probability.word_problem_two_dice_product"
+    ]
+   }
+  ]
+ }
+]
