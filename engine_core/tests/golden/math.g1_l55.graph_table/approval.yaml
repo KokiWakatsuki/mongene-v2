@@ -1,0 +1,14 @@
+approved_at: '2026-08-15T09:31:52.128861'
+approver: koki
+content_sha256: 3fab84be1dfc5b1f1b329f48dd803f4b61c76120b882a809e1a50fd01dc132aa
+family: math.g1_l55.graph_table
+files:
+- /Users/koki/workspace/mongene-v2/engine_core/tests/golden/math.g1_l55.graph_table/math.g1_l55.graph_table_lv1_seed1.yaml
+- /Users/koki/workspace/mongene-v2/engine_core/tests/golden/math.g1_l55.graph_table/math.g1_l55.graph_table_lv1_seed2.yaml
+- /Users/koki/workspace/mongene-v2/engine_core/tests/golden/math.g1_l55.graph_table/math.g1_l55.graph_table_lv1_seed3.yaml
+- /Users/koki/workspace/mongene-v2/engine_core/tests/golden/math.g1_l55.graph_table/math.g1_l55.graph_table_lv2_seed1.yaml
+- /Users/koki/workspace/mongene-v2/engine_core/tests/golden/math.g1_l55.graph_table/math.g1_l55.graph_table_lv2_seed2.yaml
+- /Users/koki/workspace/mongene-v2/engine_core/tests/golden/math.g1_l55.graph_table/math.g1_l55.graph_table_lv2_seed3.yaml
+- /Users/koki/workspace/mongene-v2/engine_core/tests/golden/math.g1_l55.graph_table/math.g1_l55.graph_table_lv3_seed1.yaml
+- /Users/koki/workspace/mongene-v2/engine_core/tests/golden/math.g1_l55.graph_table/math.g1_l55.graph_table_lv3_seed2.yaml
+- /Users/koki/workspace/mongene-v2/engine_core/tests/golden/math.g1_l55.graph_table/math.g1_l55.graph_table_lv3_seed3.yaml

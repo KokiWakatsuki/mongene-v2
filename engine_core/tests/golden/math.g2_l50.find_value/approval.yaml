@@ -1,0 +1,11 @@
+approved_at: '2026-08-15T09:39:25.599599'
+approver: koki
+content_sha256: 45f1d4daa5ad5503dfb8b8131d9e00d61d14cd62b2ba7366329df6c54129b7b3
+family: math.g2_l50.find_value
+files:
+- /Users/koki/workspace/mongene-v2/engine_core/tests/golden/math.g2_l50.find_value/math.g2_l50.find_value_lv2_seed1.yaml
+- /Users/koki/workspace/mongene-v2/engine_core/tests/golden/math.g2_l50.find_value/math.g2_l50.find_value_lv2_seed2.yaml
+- /Users/koki/workspace/mongene-v2/engine_core/tests/golden/math.g2_l50.find_value/math.g2_l50.find_value_lv2_seed3.yaml
+- /Users/koki/workspace/mongene-v2/engine_core/tests/golden/math.g2_l50.find_value/math.g2_l50.find_value_lv3_seed1.yaml
+- /Users/koki/workspace/mongene-v2/engine_core/tests/golden/math.g2_l50.find_value/math.g2_l50.find_value_lv3_seed2.yaml
+- /Users/koki/workspace/mongene-v2/engine_core/tests/golden/math.g2_l50.find_value/math.g2_l50.find_value_lv3_seed3.yaml

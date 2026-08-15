@@ -1,0 +1,8 @@
+approved_at: '2026-08-15T09:44:31.246474'
+approver: koki
+content_sha256: f700bd0a062c6bae129f87fe3f3a639093a6a51dae3c50c8acadfa8e3fe81fb0
+family: math.g3_l31.graph_table
+files:
+- /Users/koki/workspace/mongene-v2/engine_core/tests/golden/math.g3_l31.graph_table/math.g3_l31.graph_table_lv2_seed1.yaml
+- /Users/koki/workspace/mongene-v2/engine_core/tests/golden/math.g3_l31.graph_table/math.g3_l31.graph_table_lv2_seed2.yaml
+- /Users/koki/workspace/mongene-v2/engine_core/tests/golden/math.g3_l31.graph_table/math.g3_l31.graph_table_lv2_seed3.yaml

@@ -1,8 +1,0 @@
-approved_at: '2026-08-14T14:35:16.009617'
-approver: koki
-content_sha256: 039ee7b43cb87f986868b006493aa736da19fb0ca6fb7c192c4bfe6ade91217f
-family: math.g3_l29.calculation
-files:
-- engine_tests/golden/math.g3_l29.calculation/math.g3_l29.calculation_lv2_seed1.yaml
-- engine_tests/golden/math.g3_l29.calculation/math.g3_l29.calculation_lv2_seed2.yaml
-- engine_tests/golden/math.g3_l29.calculation/math.g3_l29.calculation_lv2_seed3.yaml

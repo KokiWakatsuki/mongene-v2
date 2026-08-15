@@ -1,0 +1,11 @@
+approved_at: '2026-08-15T09:30:51.690821'
+approver: koki
+content_sha256: cdfe392af627ea490e1a7e669b82fc5ad6572aa67b3f279beb88360609694b35
+family: math.g1_l40.graph_table
+files:
+- /Users/koki/workspace/mongene-v2/engine_core/tests/golden/math.g1_l40.graph_table/math.g1_l40.graph_table_lv1_seed1.yaml
+- /Users/koki/workspace/mongene-v2/engine_core/tests/golden/math.g1_l40.graph_table/math.g1_l40.graph_table_lv1_seed2.yaml
+- /Users/koki/workspace/mongene-v2/engine_core/tests/golden/math.g1_l40.graph_table/math.g1_l40.graph_table_lv1_seed3.yaml
+- /Users/koki/workspace/mongene-v2/engine_core/tests/golden/math.g1_l40.graph_table/math.g1_l40.graph_table_lv2_seed1.yaml
+- /Users/koki/workspace/mongene-v2/engine_core/tests/golden/math.g1_l40.graph_table/math.g1_l40.graph_table_lv2_seed2.yaml
+- /Users/koki/workspace/mongene-v2/engine_core/tests/golden/math.g1_l40.graph_table/math.g1_l40.graph_table_lv2_seed3.yaml

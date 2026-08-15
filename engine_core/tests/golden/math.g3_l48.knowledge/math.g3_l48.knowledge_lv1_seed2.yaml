@@ -1,0 +1,57 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - circle_inscribed_angle_converse.rule_recall
+  provenance:
+    git_commit: ''
+    recipe: math.recall_rule
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_rule_recall_v1
+    tier: T1
+  requested:
+    form: knowledge
+    level: 1
+    subject: math
+    unit: g3_l48
+  resolved:
+    form: knowledge
+    level: 1
+    subject: math
+    unit: g3_l48
+  seed: 2
+  signature: circle_inscribed_angle_converse_rule_recall
+problem_ref: 263f38de29c86e3c
+problem_text: 直線PLについて同じ側にある2点N, Kについて、∠PNL=∠PKLが成り立つとき、いえること。正しく述べているものを1つ選べ。
+sub_questions:
+- answer:
+    correct: 四つの点は同じ円周上にある
+    distractors:
+    - 四つの点は同じ直線上にある
+    - 四つの点は同じ弧の上にある
+    fact_id: circle_inscribed_angle_converse.rule.statement
+    kind: choice
+  cause_tags: []
+  concept_tags:
+  - circle_inscribed_angle_converse.rule_recall
+  explanation: 'まず、問題で問われている規則や約束が、何についてのものかを読み取る。
+
+    次に、その規則の正しい内容を思い出して選ぶ。（四つの点は同じ円周上にある）'
+  hints:
+  - 問題で問われている規則や約束が、何についてのものかを読み取る。
+  label: (1)
+  prompt_text: 正しいものを選びなさい。
+  solution_steps:
+  - args: []
+    narration: 問題で問われている規則や約束が、何についてのものかを読み取る。
+    op: read_rule_context
+    result_display: ''
+    result_srepr: statement
+  - args: []
+    narration: その規則の正しい内容を思い出して選ぶ。
+    op: recall_correct_rule
+    result_display: 四つの点は同じ円周上にある
+    result_srepr: 四つの点は同じ円周上にある
+visual_svg: null

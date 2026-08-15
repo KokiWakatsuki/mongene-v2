@@ -1,0 +1,8 @@
+approved_at: '2026-08-15T09:48:28.829797'
+approver: koki
+content_sha256: d55b3a647d3cb813c27dbb83d8596405c49bef63cd6d7a6fe6e5effe611f60fd
+family: math.g3_l60.calculation
+files:
+- /Users/koki/workspace/mongene-v2/engine_core/tests/golden/math.g3_l60.calculation/math.g3_l60.calculation_lv2_seed1.yaml
+- /Users/koki/workspace/mongene-v2/engine_core/tests/golden/math.g3_l60.calculation/math.g3_l60.calculation_lv2_seed2.yaml
+- /Users/koki/workspace/mongene-v2/engine_core/tests/golden/math.g3_l60.calculation/math.g3_l60.calculation_lv2_seed3.yaml

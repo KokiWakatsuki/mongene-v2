@@ -1,0 +1,57 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - parallelogram_property.rule_recall
+  provenance:
+    git_commit: ''
+    recipe: math.recall_rule
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_rule_recall_v1
+    tier: T1
+  requested:
+    form: knowledge
+    level: 1
+    subject: math
+    unit: g2_l46
+  resolved:
+    form: knowledge
+    level: 1
+    subject: math
+    unit: g2_l46
+  seed: 1
+  signature: parallelogram_property_rule_recall
+problem_ref: 260d5c8a9e4d464e
+problem_text: 平行四辺形HFGQで、対辺・対角・対角線について成り立つこと。正しく述べているものを1つ選べ。
+sub_questions:
+- answer:
+    correct: 対辺の長さはそれぞれ等しく、対角の大きさもそれぞれ等しい。また、対角線はそれぞれの中点で交わる
+    distractors:
+    - 対辺の長さは異なるが、対角の大きさはそれぞれ等しい
+    - 対角線はそれぞれの中点で交わるが、直角に交わる
+    fact_id: parallelogram_property.rule.all
+    kind: choice
+  cause_tags: []
+  concept_tags:
+  - parallelogram_property.rule_recall
+  explanation: 'まず、問題で問われている規則や約束が、何についてのものかを読み取る。
+
+    次に、その規則の正しい内容を思い出して選ぶ。（対辺の長さはそれぞれ等しく、対角の大きさもそれぞれ等しい。また、対角線はそれぞれの中点で交わる）'
+  hints:
+  - 問題で問われている規則や約束が、何についてのものかを読み取る。
+  label: (1)
+  prompt_text: 正しいものを選びなさい。
+  solution_steps:
+  - args: []
+    narration: 問題で問われている規則や約束が、何についてのものかを読み取る。
+    op: read_rule_context
+    result_display: ''
+    result_srepr: all
+  - args: []
+    narration: その規則の正しい内容を思い出して選ぶ。
+    op: recall_correct_rule
+    result_display: 対辺の長さはそれぞれ等しく、対角の大きさもそれぞれ等しい。また、対角線はそれぞれの中点で交わる
+    result_srepr: 対辺の長さはそれぞれ等しく、対角の大きさもそれぞれ等しい。また、対角線はそれぞれの中点で交わる
+visual_svg: null

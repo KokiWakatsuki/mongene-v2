@@ -1,0 +1,11 @@
+approved_at: '2026-08-15T09:45:21.197147'
+approver: koki
+content_sha256: d682d26791c3caabdc830d34ddbf1a409c26c70022766f7a4ae99198987631f4
+family: math.g3_l38.find_value
+files:
+- /Users/koki/workspace/mongene-v2/engine_core/tests/golden/math.g3_l38.find_value/math.g3_l38.find_value_lv2_seed1.yaml
+- /Users/koki/workspace/mongene-v2/engine_core/tests/golden/math.g3_l38.find_value/math.g3_l38.find_value_lv2_seed2.yaml
+- /Users/koki/workspace/mongene-v2/engine_core/tests/golden/math.g3_l38.find_value/math.g3_l38.find_value_lv2_seed3.yaml
+- /Users/koki/workspace/mongene-v2/engine_core/tests/golden/math.g3_l38.find_value/math.g3_l38.find_value_lv3_seed1.yaml
+- /Users/koki/workspace/mongene-v2/engine_core/tests/golden/math.g3_l38.find_value/math.g3_l38.find_value_lv3_seed2.yaml
+- /Users/koki/workspace/mongene-v2/engine_core/tests/golden/math.g3_l38.find_value/math.g3_l38.find_value_lv3_seed3.yaml

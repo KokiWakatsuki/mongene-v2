@@ -1,0 +1,57 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - right_triangle_congruence_conditions.rule_recall
+  provenance:
+    git_commit: ''
+    recipe: math.recall_rule
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_rule_recall_v1
+    tier: T1
+  requested:
+    form: knowledge
+    level: 1
+    subject: math
+    unit: g2_l44
+  resolved:
+    form: knowledge
+    level: 1
+    subject: math
+    unit: g2_l44
+  seed: 2
+  signature: right_triangle_congruence_conditions_rule_recall
+problem_ref: 8b16ef446cfdd7ea
+problem_text: 直角三角形DQBと直角三角形KFGが合同であることを示すために使える条件。正しく述べているものを1つ選べ。
+sub_questions:
+- answer:
+    correct: 斜辺と一つの鋭角がそれぞれ等しい、または、斜辺と他の一辺がそれぞれ等しい、のいずれか
+    distractors:
+    - 一つの鋭角と他の一辺がそれぞれ等しいことだけで、合同であるといえる
+    - 斜辺の長さだけが等しいことで、合同であるといえる
+    fact_id: right_triangle_congruence_conditions.rule.both
+    kind: choice
+  cause_tags: []
+  concept_tags:
+  - right_triangle_congruence_conditions.rule_recall
+  explanation: 'まず、問題で問われている規則や約束が、何についてのものかを読み取る。
+
+    次に、その規則の正しい内容を思い出して選ぶ。（斜辺と一つの鋭角がそれぞれ等しい、または、斜辺と他の一辺がそれぞれ等しい、のいずれか）'
+  hints:
+  - 問題で問われている規則や約束が、何についてのものかを読み取る。
+  label: (1)
+  prompt_text: 正しいものを選びなさい。
+  solution_steps:
+  - args: []
+    narration: 問題で問われている規則や約束が、何についてのものかを読み取る。
+    op: read_rule_context
+    result_display: ''
+    result_srepr: both
+  - args: []
+    narration: その規則の正しい内容を思い出して選ぶ。
+    op: recall_correct_rule
+    result_display: 斜辺と一つの鋭角がそれぞれ等しい、または、斜辺と他の一辺がそれぞれ等しい、のいずれか
+    result_srepr: 斜辺と一つの鋭角がそれぞれ等しい、または、斜辺と他の一辺がそれぞれ等しい、のいずれか
+visual_svg: null

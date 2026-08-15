@@ -1,0 +1,11 @@
+approved_at: '2026-08-15T09:34:17.281993'
+approver: koki
+content_sha256: 98220038f53fced3e1cf8fe13c1635ae0a47f50669bac1c8ae8a381236b27586
+family: math.g2_l16.word_problem
+files:
+- /Users/koki/workspace/mongene-v2/engine_core/tests/golden/math.g2_l16.word_problem/math.g2_l16.word_problem_lv2_seed1.yaml
+- /Users/koki/workspace/mongene-v2/engine_core/tests/golden/math.g2_l16.word_problem/math.g2_l16.word_problem_lv2_seed2.yaml
+- /Users/koki/workspace/mongene-v2/engine_core/tests/golden/math.g2_l16.word_problem/math.g2_l16.word_problem_lv2_seed3.yaml
+- /Users/koki/workspace/mongene-v2/engine_core/tests/golden/math.g2_l16.word_problem/math.g2_l16.word_problem_lv3_seed1.yaml
+- /Users/koki/workspace/mongene-v2/engine_core/tests/golden/math.g2_l16.word_problem/math.g2_l16.word_problem_lv3_seed2.yaml
+- /Users/koki/workspace/mongene-v2/engine_core/tests/golden/math.g2_l16.word_problem/math.g2_l16.word_problem_lv3_seed3.yaml

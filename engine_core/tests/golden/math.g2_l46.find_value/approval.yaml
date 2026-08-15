@@ -1,0 +1,8 @@
+approved_at: '2026-08-15T09:38:54.280044'
+approver: koki
+content_sha256: aba46b1070b459c8d4cdd30e7d4485dadd63948fdcf2d5bf63daae8082227613
+family: math.g2_l46.find_value
+files:
+- /Users/koki/workspace/mongene-v2/engine_core/tests/golden/math.g2_l46.find_value/math.g2_l46.find_value_lv1_seed1.yaml
+- /Users/koki/workspace/mongene-v2/engine_core/tests/golden/math.g2_l46.find_value/math.g2_l46.find_value_lv1_seed2.yaml
+- /Users/koki/workspace/mongene-v2/engine_core/tests/golden/math.g2_l46.find_value/math.g2_l46.find_value_lv1_seed3.yaml

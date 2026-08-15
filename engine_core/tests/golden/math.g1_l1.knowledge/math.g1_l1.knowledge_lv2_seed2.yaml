@@ -1,0 +1,56 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - number.opposite_quantity
+  provenance:
+    git_commit: ''
+    recipe: math.represent_opposite_quantity
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_opposite_quantity_v1
+    tier: T1
+  requested:
+    form: knowledge
+    level: 2
+    subject: math
+    unit: g1_l1
+  resolved:
+    form: knowledge
+    level: 2
+    subject: math
+    unit: g1_l1
+  seed: 2
+  signature: number_opposite_quantity
+problem_ref: 7d44e617fcbce28c
+problem_text: 「収入 103円」を +103円 と表すことにするとき、「支出 431円」を、符号を使って表せ。
+sub_questions:
+- answer:
+    correct: '-431'
+    distractors:
+    - '+431'
+    fact_id: number.opposite_quantity
+    kind: choice
+  cause_tags: []
+  concept_tags:
+  - number.opposite_quantity
+  explanation: 'まず、どちらの向き（性質）を正の数で表すことにしたかを読み取る。（収入）
+
+    次に、正の数で表す向きと反対の向きの量には、反対の符号をつけて表す。（-431）'
+  hints:
+  - どちらの向き（性質）を正の数で表すことにしたかを読み取る。
+  label: (1)
+  prompt_text: 正しいものを選びなさい。
+  solution_steps:
+  - args: []
+    narration: どちらの向き（性質）を正の数で表すことにしたかを読み取る。
+    op: identify_base_direction
+    result_display: 収入
+    result_srepr: 収入
+  - args: []
+    narration: 正の数で表す向きと反対の向きの量には、反対の符号をつけて表す。
+    op: assign_opposite_sign
+    result_display: '-431'
+    result_srepr: Integer(-431)
+visual_svg: null

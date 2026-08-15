@@ -1,0 +1,8 @@
+approved_at: '2026-08-15T09:36:14.697292'
+approver: koki
+content_sha256: 0524cb276e6583eff185d93a490885253f4b63e5ee30c153e9be6fcb9ef4f2fd
+family: math.g2_l27.graph_table
+files:
+- /Users/koki/workspace/mongene-v2/engine_core/tests/golden/math.g2_l27.graph_table/math.g2_l27.graph_table_lv2_seed1.yaml
+- /Users/koki/workspace/mongene-v2/engine_core/tests/golden/math.g2_l27.graph_table/math.g2_l27.graph_table_lv2_seed2.yaml
+- /Users/koki/workspace/mongene-v2/engine_core/tests/golden/math.g2_l27.graph_table/math.g2_l27.graph_table_lv2_seed3.yaml

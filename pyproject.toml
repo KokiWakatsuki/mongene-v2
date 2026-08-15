@@ -30,16 +30,26 @@ requires = ["setuptools>=68.0"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools.packages.find]
-where = ["."]
-include = ["apps*"]
+# エンジンは engine_core/ に置く（1つのディレクトリだけを持ち出せば動く形）。
+# 旧世代の apps/ は archive/legacy_app/ へ移した（もう配布物ではない）。
+where = ["engine_core"]
+include = ["engine*"]
 
 [tool.ruff]
 line-length = 120
 target-version = "py312"
 
 [tool.pytest.ini_options]
-testpaths = ["tests"]
-addopts = "-v --cov=apps --cov-report=term-missing --cov-fail-under=80"
+testpaths = ["engine_core/tests"]
+# **カバレッジは既定で切る。** 前は `--cov=apps` が既定に入っていて、
+# engine を1行も測らないのに計測の重さだけ乗っていた（実測 2.6倍）。さらに
+# `--cov-fail-under=80` のせいで**テストが全部通っても終了コードが 1** になり、
+# 終了コードによる自動判定が書けなかった。測りたいときだけ明示して付ける。
+#
+# 並列は `-n 4 --dist worksteal`。既定の `--dist load` だと
+# tests/eval/test_eval_suite.py の重い群が1本のワーカーに固まり、
+# 残り3本が遊んだまま終盤で止まる（直列だと1時間37分たっても 0%）。
+addopts = "-q -p no:cacheprovider --no-cov -n 4 --dist worksteal"
 
 [tool.mypy]
 python_version = "3.12"

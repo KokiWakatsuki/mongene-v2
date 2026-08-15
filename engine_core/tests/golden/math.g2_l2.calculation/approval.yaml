@@ -1,0 +1,11 @@
+approved_at: '2026-08-15T09:34:50.808548'
+approver: koki
+content_sha256: 39a2cad25a00f0301d8791fa0b1548c55766cfcd4fe805cd8f2cef05553722ad
+family: math.g2_l2.calculation
+files:
+- /Users/koki/workspace/mongene-v2/engine_core/tests/golden/math.g2_l2.calculation/math.g2_l2.calculation_lv1_seed1.yaml
+- /Users/koki/workspace/mongene-v2/engine_core/tests/golden/math.g2_l2.calculation/math.g2_l2.calculation_lv1_seed2.yaml
+- /Users/koki/workspace/mongene-v2/engine_core/tests/golden/math.g2_l2.calculation/math.g2_l2.calculation_lv1_seed3.yaml
+- /Users/koki/workspace/mongene-v2/engine_core/tests/golden/math.g2_l2.calculation/math.g2_l2.calculation_lv2_seed1.yaml
+- /Users/koki/workspace/mongene-v2/engine_core/tests/golden/math.g2_l2.calculation/math.g2_l2.calculation_lv2_seed2.yaml
+- /Users/koki/workspace/mongene-v2/engine_core/tests/golden/math.g2_l2.calculation/math.g2_l2.calculation_lv2_seed3.yaml

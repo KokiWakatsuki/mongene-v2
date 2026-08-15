@@ -1,8 +1,0 @@
-approved_at: '2026-08-14T14:18:54.151303'
-approver: koki
-content_sha256: c213449a713d0b0071d00e68defcf44f324ad53037dc7f344accf9db34930236
-family: math.g1_l2.graph_table
-files:
-- engine_tests/golden/math.g1_l2.graph_table/math.g1_l2.graph_table_lv1_seed1.yaml
-- engine_tests/golden/math.g1_l2.graph_table/math.g1_l2.graph_table_lv1_seed2.yaml
-- engine_tests/golden/math.g1_l2.graph_table/math.g1_l2.graph_table_lv1_seed3.yaml

@@ -1,0 +1,58 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - complementary_event.rule_recall
+  provenance:
+    git_commit: ''
+    recipe: math.recall_rule
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_rule_recall_v1
+    tier: T1
+  requested:
+    form: knowledge
+    level: 1
+    subject: math
+    unit: g2_l54
+  resolved:
+    form: knowledge
+    level: 1
+    subject: math
+    unit: g2_l54
+  seed: 1
+  signature: complementary_event_rule_recall
+problem_ref: ac34572cfc271bf1
+problem_text: あることがらの起こる確率が 223/256 であるとき、その「余事象」（そのことがらが起こらないという事象）の確率。正しく述べているものを1つ選べ。
+sub_questions:
+- answer:
+    correct: 全体を表す確率から、あることがらの起こる確率をひいた値に等しい
+    distractors:
+    - あることがらの起こる確率に等しい
+    - あることがらの起こる確率と、全体を表す確率とをたした値に等しい
+    - あることがらの起こりやすさとは関係なく、つねに一定である
+    fact_id: complementary_event.rule.definition
+    kind: choice
+  cause_tags: []
+  concept_tags:
+  - complementary_event.rule_recall
+  explanation: 'まず、問題で問われている規則や約束が、何についてのものかを読み取る。
+
+    次に、その規則の正しい内容を思い出して選ぶ。（全体を表す確率から、あることがらの起こる確率をひいた値に等しい）'
+  hints:
+  - 問題で問われている規則や約束が、何についてのものかを読み取る。
+  label: (1)
+  prompt_text: 正しいものを選びなさい。
+  solution_steps:
+  - args: []
+    narration: 問題で問われている規則や約束が、何についてのものかを読み取る。
+    op: read_rule_context
+    result_display: ''
+    result_srepr: definition
+  - args: []
+    narration: その規則の正しい内容を思い出して選ぶ。
+    op: recall_correct_rule
+    result_display: 全体を表す確率から、あることがらの起こる確率をひいた値に等しい
+    result_srepr: 全体を表す確率から、あることがらの起こる確率をひいた値に等しい
+visual_svg: null

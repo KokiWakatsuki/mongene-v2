@@ -1,8 +1,0 @@
-approved_at: '2026-08-14T14:29:53.365342'
-approver: koki
-content_sha256: 2174861ce34232c5a9198791c7d0ad447e8f88b9615260c44d5f3afa4d1303ed
-family: math.g2_l41.find_value
-files:
-- engine_tests/golden/math.g2_l41.find_value/math.g2_l41.find_value_lv1_seed1.yaml
-- engine_tests/golden/math.g2_l41.find_value/math.g2_l41.find_value_lv1_seed2.yaml
-- engine_tests/golden/math.g2_l41.find_value/math.g2_l41.find_value_lv1_seed3.yaml

@@ -1,0 +1,8 @@
+approved_at: '2026-08-15T09:48:44.657150'
+approver: koki
+content_sha256: 9c9c65fff254f3380ed4df1603bddf12321d2a77d956137399517cf8343df292
+family: math.g3_l7.knowledge
+files:
+- /Users/koki/workspace/mongene-v2/engine_core/tests/golden/math.g3_l7.knowledge/math.g3_l7.knowledge_lv1_seed1.yaml
+- /Users/koki/workspace/mongene-v2/engine_core/tests/golden/math.g3_l7.knowledge/math.g3_l7.knowledge_lv1_seed2.yaml
+- /Users/koki/workspace/mongene-v2/engine_core/tests/golden/math.g3_l7.knowledge/math.g3_l7.knowledge_lv1_seed3.yaml

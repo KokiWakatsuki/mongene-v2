@@ -1,8 +1,0 @@
-approved_at: '2026-08-14T14:36:06.611619'
-approver: koki
-content_sha256: 13e1de54a6c35230826514e6ac0044d60baadeecd26782435a720deb76de4cc4
-family: math.g3_l32.word_problem
-files:
-- engine_tests/golden/math.g3_l32.word_problem/math.g3_l32.word_problem_lv2_seed1.yaml
-- engine_tests/golden/math.g3_l32.word_problem/math.g3_l32.word_problem_lv2_seed2.yaml
-- engine_tests/golden/math.g3_l32.word_problem/math.g3_l32.word_problem_lv2_seed3.yaml

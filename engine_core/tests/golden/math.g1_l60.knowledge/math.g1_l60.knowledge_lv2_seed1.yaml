@@ -1,0 +1,57 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - approximation.judge_significant_figures
+  provenance:
+    git_commit: ''
+    recipe: math.count_significant_figures
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_sigfig_judge_v1
+    tier: T1
+  requested:
+    form: knowledge
+    level: 2
+    subject: math
+    unit: g1_l60
+  resolved:
+    form: knowledge
+    level: 2
+    subject: math
+    unit: g1_l60
+  seed: 1
+  signature: approximation_judge_sigfig
+problem_ref: c901a2a368a22ce0
+problem_text: ある量を測定して 2.8 kg と表した。この測定値の有効数字は何けたか、正しいものを1つ選べ。
+sub_questions:
+- answer:
+    correct: 二けた
+    distractors:
+    - 一けた
+    - 三けた
+    fact_id: approximation.significant_figures
+    kind: choice
+  cause_tags: []
+  concept_tags:
+  - approximation.judge_significant_figures
+  explanation: 'まず、左から見て、最初の0でない数字が有効数字の始まりである（位取りの0は数えない）。（2）
+
+    次に、そこから末尾までの数字の個数を数える（小数点以下の末尾の0も有効数字に含める）。（二けた）'
+  hints:
+  - 左から見て、最初の0でない数字が有効数字の始まりである（位取りの0は数えない）。
+  label: (1)
+  prompt_text: 正しいものを選びなさい。
+  solution_steps:
+  - args: []
+    narration: 左から見て、最初の0でない数字が有効数字の始まりである（位取りの0は数えない）。
+    op: find_first_significant_digit
+    result_display: '2'
+    result_srepr: sigfig:2
+  - args: []
+    narration: そこから末尾までの数字の個数を数える（小数点以下の末尾の0も有効数字に含める）。
+    op: count_significant_digits
+    result_display: 二けた
+    result_srepr: 二けた
+visual_svg: null

@@ -1,0 +1,14 @@
+approved_at: '2026-08-15T09:34:26.165804'
+approver: koki
+content_sha256: 8907fa4426657028e3811cafe3b7790861ac389f4d0d7388ce0fda700e09ba5d
+family: math.g2_l17.word_problem
+files:
+- /Users/koki/workspace/mongene-v2/engine_core/tests/golden/math.g2_l17.word_problem/math.g2_l17.word_problem_lv2_seed1.yaml
+- /Users/koki/workspace/mongene-v2/engine_core/tests/golden/math.g2_l17.word_problem/math.g2_l17.word_problem_lv2_seed2.yaml
+- /Users/koki/workspace/mongene-v2/engine_core/tests/golden/math.g2_l17.word_problem/math.g2_l17.word_problem_lv2_seed3.yaml
+- /Users/koki/workspace/mongene-v2/engine_core/tests/golden/math.g2_l17.word_problem/math.g2_l17.word_problem_lv3_seed1.yaml
+- /Users/koki/workspace/mongene-v2/engine_core/tests/golden/math.g2_l17.word_problem/math.g2_l17.word_problem_lv3_seed2.yaml
+- /Users/koki/workspace/mongene-v2/engine_core/tests/golden/math.g2_l17.word_problem/math.g2_l17.word_problem_lv3_seed3.yaml
+- /Users/koki/workspace/mongene-v2/engine_core/tests/golden/math.g2_l17.word_problem/math.g2_l17.word_problem_lv4_seed1.yaml
+- /Users/koki/workspace/mongene-v2/engine_core/tests/golden/math.g2_l17.word_problem/math.g2_l17.word_problem_lv4_seed2.yaml
+- /Users/koki/workspace/mongene-v2/engine_core/tests/golden/math.g2_l17.word_problem/math.g2_l17.word_problem_lv4_seed3.yaml

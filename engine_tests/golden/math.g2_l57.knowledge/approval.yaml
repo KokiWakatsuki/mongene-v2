@@ -1,8 +1,0 @@
-approved_at: '2026-08-14T14:32:15.555973'
-approver: koki
-content_sha256: e187f18fc803a2a8fe2343cde9b7dbd749ac8ebdeee339443265de473e5a11fd
-family: math.g2_l57.knowledge
-files:
-- engine_tests/golden/math.g2_l57.knowledge/math.g2_l57.knowledge_lv1_seed1.yaml
-- engine_tests/golden/math.g2_l57.knowledge/math.g2_l57.knowledge_lv1_seed2.yaml
-- engine_tests/golden/math.g2_l57.knowledge/math.g2_l57.knowledge_lv1_seed3.yaml

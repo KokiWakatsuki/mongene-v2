@@ -1,0 +1,58 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - notation_product_rule.rule_recall
+  provenance:
+    git_commit: ''
+    recipe: math.recall_rule
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_rule_recall_v1
+    tier: T1
+  requested:
+    form: knowledge
+    level: 1
+    subject: math
+    unit: g1_l13
+  resolved:
+    form: knowledge
+    level: 1
+    subject: math
+    unit: g1_l13
+  seed: 3
+  signature: notation_product_rule_recall
+problem_ref: 76f5954a354a0910
+problem_text: 39 × n × n のように、同じ文字をふくむ積を書き表すきまりについて。正しく述べているものを1つ選べ。
+sub_questions:
+- answer:
+    correct: 同じ文字の積は、指数を使って累乗の形で書く
+    distractors:
+    - 同じ文字の積は、文字の個数を数字にして文字の後ろに書く
+    - 同じ文字の積は、そのまま × でつないで書く
+    - 同じ文字の積は、文字を大文字にして書く
+    fact_id: notation_product_rule.rule.power
+    kind: choice
+  cause_tags: []
+  concept_tags:
+  - notation_product_rule.rule_recall
+  explanation: 'まず、問題で問われている規則や約束が、何についてのものかを読み取る。
+
+    次に、その規則の正しい内容を思い出して選ぶ。（同じ文字の積は、指数を使って累乗の形で書く）'
+  hints:
+  - 問題で問われている規則や約束が、何についてのものかを読み取る。
+  label: (1)
+  prompt_text: 正しいものを選びなさい。
+  solution_steps:
+  - args: []
+    narration: 問題で問われている規則や約束が、何についてのものかを読み取る。
+    op: read_rule_context
+    result_display: ''
+    result_srepr: power
+  - args: []
+    narration: その規則の正しい内容を思い出して選ぶ。
+    op: recall_correct_rule
+    result_display: 同じ文字の積は、指数を使って累乗の形で書く
+    result_srepr: 同じ文字の積は、指数を使って累乗の形で書く
+visual_svg: null

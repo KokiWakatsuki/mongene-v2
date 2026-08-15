@@ -1,0 +1,58 @@
+meta:
+  cause_tags: []
+  concept_tags:
+  - letter_meaning.interpret_expression
+  provenance:
+    git_commit: ''
+    recipe: math.interpret_expression
+    recipe_version: v1
+    spec_version: v1
+  purpose: base
+  render_keys:
+    template: lf_interpret_expr_v1
+    tier: T1
+  requested:
+    form: knowledge
+    level: 2
+    subject: math
+    unit: g1_l12
+  resolved:
+    form: knowledge
+    level: 2
+    subject: math
+    unit: g1_l12
+  seed: 3
+  signature: letter_meaning_interpret
+problem_ref: 12c5a20eb125f08c
+problem_text: 1個 x 円のノートを 7 個と、1個 y 円のみかんを 3 個買った。このとき、式 7x＋3y は何を表していますか。正しいものを1つ選べ。
+sub_questions:
+- answer:
+    correct: 買ったノート全部の代金と、買ったみかん全部の代金を合わせた金額
+    distractors:
+    - ノートとみかんをそれぞれひとつずつ買ったときの代金の合計
+    - 買ったノートとみかんの個数を合わせた数
+    - 買ったノート全部の代金と、買ったみかん全部の代金の差
+    fact_id: letter_meaning.interpret_expression
+    kind: choice
+  cause_tags: []
+  concept_tags:
+  - letter_meaning.interpret_expression
+  explanation: 'まず、式の各項は、買った個数にひとつあたりの値段をかけた「代金」を表すことを読み取る。（ノートの代金とみかんの代金）
+
+    次に、項どうしが和で結ばれているので、式全体は代金の合計を表すと判断する。（買ったノート全部の代金と、買ったみかん全部の代金を合わせた金額）'
+  hints:
+  - 式の各項は、買った個数にひとつあたりの値段をかけた「代金」を表すことを読み取る。
+  label: (1)
+  prompt_text: 正しいものを選びなさい。
+  solution_steps:
+  - args: []
+    narration: 式の各項は、買った個数にひとつあたりの値段をかけた「代金」を表すことを読み取る。
+    op: read_each_term_meaning
+    result_display: ノートの代金とみかんの代金
+    result_srepr: term_meaning
+  - args: []
+    narration: 項どうしが和で結ばれているので、式全体は代金の合計を表すと判断する。
+    op: combine_term_meanings
+    result_display: 買ったノート全部の代金と、買ったみかん全部の代金を合わせた金額
+    result_srepr: 買ったノート全部の代金と、買ったみかん全部の代金を合わせた金額
+visual_svg: null

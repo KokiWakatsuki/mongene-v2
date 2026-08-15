@@ -1,0 +1,11 @@
+approved_at: '2026-08-15T09:43:59.142105'
+approver: koki
+content_sha256: b7290f2567edb4bbcaf9ff85b2dc450d9e4d914b083388bb4113540019467f35
+family: math.g3_l29.word_problem
+files:
+- /Users/koki/workspace/mongene-v2/engine_core/tests/golden/math.g3_l29.word_problem/math.g3_l29.word_problem_lv2_seed1.yaml
+- /Users/koki/workspace/mongene-v2/engine_core/tests/golden/math.g3_l29.word_problem/math.g3_l29.word_problem_lv2_seed2.yaml
+- /Users/koki/workspace/mongene-v2/engine_core/tests/golden/math.g3_l29.word_problem/math.g3_l29.word_problem_lv2_seed3.yaml
+- /Users/koki/workspace/mongene-v2/engine_core/tests/golden/math.g3_l29.word_problem/math.g3_l29.word_problem_lv3_seed1.yaml
+- /Users/koki/workspace/mongene-v2/engine_core/tests/golden/math.g3_l29.word_problem/math.g3_l29.word_problem_lv3_seed2.yaml
+- /Users/koki/workspace/mongene-v2/engine_core/tests/golden/math.g3_l29.word_problem/math.g3_l29.word_problem_lv3_seed3.yaml

@@ -3,7 +3,7 @@ venv/
 __pycache__/
 *.pyc
 .env
-master_data/cache/
+archive/legacy_master_data/cache/
 .pytest_cache/
 .coverage
 htmlcov/
@@ -21,38 +21,59 @@ dist/
 tests/fixtures/real_problems/
 
 # 性能評価用（大容量・非コミット）
-reports/perf_eval/
+archive/reports/perf_eval/
 
 # macOS
 **/.DS_Store
 
 # 評価成果物（LLM評価バッチ・レポート等。再生成可能なため非コミット）
-reports/*.json
-reports/*.jsonl
-reports/*.csv
-reports/*.md
-reports/*.txt
-reports/visual_snapshots/
-reports/visual_snapshots_png/
-reports/mr_dump/
-reports/quality_audit.jsonl
+archive/reports/*.json
+archive/reports/*.jsonl
+archive/reports/*.csv
+archive/reports/*.md
+archive/reports/*.txt
+archive/reports/visual_snapshots/
+archive/reports/visual_snapshots_png/
+archive/reports/mr_dump/
+archive/reports/quality_audit.jsonl
 
 # フェーズ2 評価ハーネス: ground truth / product コーパス（seedが非決定論的なため
 # `build_ground_truth_corpus.py` / `build_product_corpus.py` で再生成可能。大容量のため非コミット）
-tests/fixtures/reference_corpus/
+archive/legacy_tests/fixtures/reference_corpus/
 
-# scratchpad の生成物（道具から作り直せるもの。**道具と記録だけを追跡する**）
+# records/work の生成物（道具から作り直せるもの。**道具と記録だけを追跡する**）
 #   コーパスは build_corpus.py が10分で作り直す。図は走査が作り直す。
 #   ログを追跡下に置くと、実行のたびに1,000件規模の雑音が git status を埋める。
-scratchpad/*.log
-scratchpad/*.png
-scratchpad/*.svg
-scratchpad/*.err
-scratchpad/out_*.txt
-scratchpad/corpus/figs/
-scratchpad/corpus/INDEX.md
-scratchpad/corpus/ONELINE.txt
-scratchpad/corpus/mongene_problems.html
-scratchpad/bt/problems*.md
-scratchpad/bt/*.json
-scratchpad/fig_scan/
+records/work/*.log
+records/work/*.png
+records/work/*.svg
+records/work/*.err
+records/work/out_*.txt
+records/work/corpus/figs/
+records/work/corpus/INDEX.md
+records/work/corpus/ONELINE.txt
+records/work/corpus/mongene_problems.html
+records/work/bt/problems*.md
+records/work/bt/*.json
+records/work/fig_scan/
+
+# 表記の慣習を測るために落とした実物（他社の著作物。**貯めない**）。
+#   残すのは測定値（conventions.json）と出典一覧（sources.tsv）だけ。
+#   集め直すときは sources.tsv の URL から取る。
+records/work/ref/*.pdf
+records/work/ref/*.txt
+
+# macOS / エディタ
+.DS_Store
+
+# 再生成される作業物（消しても困らない）
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+
+# 道具そのものの状態（この場所でないと道具が動かない。中身はプロジェクトではない）
+.claude/
+
+# 旧プロジェクトの秘密（LLM の API キー。archive/ 側でだけ使う）
+archive/.env
