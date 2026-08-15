@@ -1,0 +1,30 @@
+# 表記の慣習を測るために取得した実物の一覧（2026-08-14 取得）
+# **本文は追跡しない**（他社の著作物）。測定値は conventions.json、規範は records/docs/。
+# 集め直すときはこの URL を ref_collect の要領で取り、pdftotext -layout でテキストにする。
+系統	ファイル名	URL
+chousa	nier_r7_mondai	https://www.nier.go.jp/25chousa/pdf/25mondai_chuu_suugaku.pdf
+chousa	nier_r7_seitourei	https://www.nier.go.jp/25chousa/pdf/25seitourei_chuu_suugaku.pdf
+chousa	nier_r7_kaisetsu	https://www.nier.go.jp/25chousa/pdf/25kaisetsu_chuu_suugaku.pdf
+chousa	nier_r24_mondai	https://www.nier.go.jp/24chousa/pdf/24mondai_chuu_suugaku.pdf
+chousa	nier_r24_seitourei	https://www.nier.go.jp/24chousa/pdf/24seitourei_chuu_suugaku.pdf
+chousa	nier_r23_mondai	https://www.nier.go.jp/23chousa/pdf/23mondai_chuu_suugaku.pdf
+chousa	nier_r23_seitourei	https://www.nier.go.jp/23chousa/pdf/23seitourei_chuu_suugaku.pdf
+chousa	nier_r22_mondai	https://www.nier.go.jp/22chousa/pdf/22mondai_chuu_suugaku.pdf
+chousa	nier_r22_seitourei	https://www.nier.go.jp/22chousa/pdf/22seitourei_chuu_suugaku.pdf
+nyushi	pref_tokyo_r7_mondai	https://www.kyoiku.metro.tokyo.lg.jp/documents/d/kyoiku/yu20250221_su002
+nyushi	pref_tokyo_r7_seitou	https://www.kyoiku.metro.tokyo.lg.jp/documents/d/kyoiku/yu20250221_su004
+nyushi	pref_saitama_r8_mondai	https://www.pref.saitama.lg.jp/documents/279416/2_08_suugaku.pdf
+nyushi	pref_saitama_r8_sentaku	https://www.pref.saitama.lg.jp/documents/279416/2_08_suugaku_sentaku.pdf
+nyushi	pref_saitama_r8_tebiki	https://www.pref.saitama.lg.jp/documents/279416/2_08_suugaku_tebiki.pdf
+kyokasho	kyokasho_dainippon	https://www.dainippon-tosho.co.jp/newsletter/files/fundamental_exercise.pdf
+kyokasho	kyokasho_keirinkan	https://www.shinko-keirin.co.jp/keirinkan/chu_r7/math/file/guide_book_digest.pdf
+kyoiku	kyoiku_saga_h23_eq	https://www.saga-ed.jp/kenkyu/kenkyu_chousa/h23/04%20chu_suugaku/documents/ikatsu_1nen3_ren_chishiki.pdf
+kyoiku	kyoiku_saga_h24_prob	https://www.saga-ed.jp/kenkyu/kenkyu_chousa/h24/04%20chu_suugaku/documents/purinto2-6-ikatsu-chishiki-ren.pdf
+kyoiku	kyoiku_tokushima	https://school.e-tokushima.or.jp/file/attachment/1249126.pdf
+kyoiku	kyoiku_asahikawa	https://www.city.asahikawa.hokkaido.jp/kurashi/218/251/257/d056900_d/fil/R4sugaku_mondai.pdf
+market	market_manabihiroba	https://chugaku.manabihiroba.net/wp/wp-content/uploads/2016/08/keisannrensyu1_1.pdf
+market	005net_mondai	https://math.005net.com/mondai.php
+market	chibimusu_math1	https://happylilac.net/jhs-math1.html
+market	mathfree_units	https://math-free.work/1621/
+cram	yorikuwa_mm1200	https://jhs.yorikuwa.com/mm1200/
+cram	eboard_list	https://www.eboard.jp/list/1/
