@@ -24,13 +24,13 @@ meta:
   seed: 3
   signature: congruence_symbol_and_side
 problem_ref: bed64c7d16ced294
-problem_text: 2つの図形が合同であることを表す記号を答えよ。また、三角形LQC≡三角形FJEと書くとき、辺LQに対応する辺はどれか答えよ。
+problem_text: 2つの図形が合同であることを表す記号を答えよ。また、三角形PQR≡三角形TUVと書くとき、辺QRに対応する辺はどれか答えよ。
 sub_questions:
 - answer:
-    correct: 合同を表す記号は≡であり、辺LQに対応する辺は辺FJである
+    correct: 合同を表す記号は≡であり、辺QRに対応する辺は辺UVである
     distractors:
-    - 合同を表す記号は∽であり、辺LQに対応する辺は辺FJである
-    - 合同を表す記号は≡であり、辺LQに対応する辺は辺JEである
+    - 合同を表す記号は∽であり、辺QRに対応する辺は辺UVである
+    - 合同を表す記号は≡であり、辺QRに対応する辺は辺TUである
     fact_id: congruence.symbol_and_correspondence
     kind: choice
   cause_tags: []
@@ -38,9 +38,9 @@ sub_questions:
   - congruence.symbol_and_correspondence
   explanation: 'まず、2つの図形が合同であることを表すのに使う記号を思い出す。（合同を表す記号を思い出す）
 
-    次に、合同を表す式で、頂点がどの順に対応づけられているかを確認する。（LQC と FJE）
+    次に、合同を表す式で、頂点がどの順に対応づけられているかを確認する。（PQR と TUV）
 
-    最後に、対応する位置にある頂点どうしが結ぶ辺が、対応する辺になることから読み取る。（合同を表す記号は≡であり、辺LQに対応する辺は辺FJである）'
+    最後に、対応する位置にある頂点どうしが結ぶ辺が、対応する辺になることから読み取る。（合同を表す記号は≡であり、辺QRに対応する辺は辺UVである）'
   hints:
   - 2つの図形が合同であることを表すのに使う記号を思い出す。
   - 合同を表す式で、頂点がどの順に対応づけられているかを確認する。
@@ -55,11 +55,11 @@ sub_questions:
   - args: []
     narration: 合同を表す式で、頂点がどの順に対応づけられているかを確認する。
     op: identify_side_correspondence
-    result_display: LQC と FJE
+    result_display: PQR と TUV
     result_srepr: ''
   - args: []
     narration: 対応する位置にある頂点どうしが結ぶ辺が、対応する辺になることから読み取る。
     op: name_corresponding_side
-    result_display: 合同を表す記号は≡であり、辺LQに対応する辺は辺FJである
-    result_srepr: 合同を表す記号は≡であり、辺LQに対応する辺は辺FJである
+    result_display: 合同を表す記号は≡であり、辺QRに対応する辺は辺UVである
+    result_srepr: 合同を表す記号は≡であり、辺QRに対応する辺は辺UVである
 visual_svg: null

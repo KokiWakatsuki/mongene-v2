@@ -24,18 +24,18 @@ meta:
   seed: 1
   signature: angle_equality_g2_l32
 problem_ref: 86eb1833a8594da5
-problem_text: 2直線ℓ、mが平行であり、直線nが交わっている。∠aの大きさは131°である。∠aの同位角にあたる∠xの大きさを求めよ。
+problem_text: 2直線ℓ、mが平行であり、直線nが交わっている。∠aの大きさは78°である。∠aの同位角にあたる∠xの大きさを求めよ。
 sub_questions:
 - answer:
-    display: '131'
+    display: '78'
     kind: symbolic
-    srepr: Integer(131)
+    srepr: Integer(78)
   cause_tags: []
   concept_tags:
   - angle_pair.solve_by_equality
   explanation: 'まず、平行な2直線と1本の直線がつくる同位角の関係を確認する。（同位角）
 
-    次に、その関係にある角は等しいという性質から、求める角の大きさを決める。（131）'
+    次に、その関係にある角は等しいという性質から、求める角の大きさを決める。（78）'
   hints:
   - 平行な2直線と1本の直線がつくる同位角の関係を確認する。
   label: (1)
@@ -49,6 +49,6 @@ sub_questions:
   - args: []
     narration: その関係にある角は等しいという性質から、求める角の大きさを決める。
     op: apply_angle_equality
-    result_display: '131'
-    result_srepr: Integer(131)
+    result_display: '78'
+    result_srepr: Integer(78)
 visual_svg: null

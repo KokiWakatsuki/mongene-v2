@@ -1,6 +1,6 @@
-approved_at: '2026-08-15T22:41:36.949595'
+approved_at: '2026-08-16T03:59:02.367747'
 approver: koki
-content_sha256: 3e466a8616117d8b63d0b024555dddde4580480ba36b86947fe1fed97834b98b
+content_sha256: 40f0483948a2ed8b1f679463d2871d30012daf0462808b43a4734801407b83dc
 family: math.g1_l27.calculation
 files:
 - /Users/koki/workspace/mongene-v2/engine_core/tests/golden/math.g1_l27.calculation/math.g1_l27.calculation_lv2_seed1.yaml

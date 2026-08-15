@@ -23,7 +23,7 @@ meta:
     unit: g1_l27
   seed: 2
   signature: speed_fraction_equation
-problem_ref: 3c1376ce9aa68eb8
+problem_ref: c720316a62606f00
 problem_text: '次の方程式を解け。
 
   x/10 + x/6 = 8'
@@ -37,7 +37,7 @@ sub_questions:
   - equation.solve_speed_fraction
   explanation: 'まず、分母の最小公倍数を両辺にかけて、分母をはらう。（4x = 120）
 
-    次に、同類項をまとめ、x の係数で両辺をわって解を求める。（x = 30）'
+    次に、等式の性質を使い、両辺を x の係数でわる。（x = 30）'
   hints:
   - 分母の最小公倍数を両辺にかけて、分母をはらう。
   label: (1)
@@ -49,8 +49,8 @@ sub_questions:
     result_display: 4x = 120
     result_srepr: Integer(30)
   - args: []
-    narration: 同類項をまとめ、x の係数で両辺をわって解を求める。
-    op: combine_and_solve
+    narration: 等式の性質を使い、両辺を x の係数でわる。
+    op: divide_both_sides
     result_display: x = 30
     result_srepr: Integer(30)
 visual_svg: null

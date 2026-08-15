@@ -24,7 +24,7 @@ meta:
   seed: 3
   signature: word_problem_area_graph_and_times
 problem_ref: c3a16ad9e7584af0
-problem_text: '1辺が12cmの正方形CKDFの周上を、点EがCを出発してC→K→D→Fの順に毎秒4cmの速さでFまで動く。点Eが動き始めてからx秒後の三角形CEFの面積をy cm²とする。
+problem_text: '1辺が12cmの正方形LMNPの周上を、点YがLを出発してL→M→N→Pの順に毎秒4cmの速さでPまで動く。点Yが動き始めてからx秒後の三角形LYPの面積をy cm²とする。
 
   xとyの関係をグラフに表し、面積が24cm²になる時刻をすべて求めよ。'
 sub_questions:
@@ -104,7 +104,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - quadratic_function.word_problem_area_graph_and_times
-  explanation: 'まず、点Eがどの辺の上にあるかで時間を区間に分け、区間ごとに面積の式が変わることを確かめる。（0〜3秒、3〜6秒、6〜9秒）
+  explanation: 'まず、点Yがどの辺の上にあるかで時間を区間に分け、区間ごとに面積の式が変わることを確かめる。（0〜3秒、3〜6秒、6〜9秒）
 
     次に、はじめの辺の上では高さが時間に比例するので、面積の式を方程式とみて解く。（1秒後）
 
@@ -114,7 +114,7 @@ sub_questions:
 
     最後に、求めた時刻がそれぞれの区間の中にあることを確かめ、答えをすべて並べる。（1秒後、8秒後）'
   hints:
-  - 点Eがどの辺の上にあるかで時間を区間に分け、区間ごとに面積の式が変わることを確かめる。
+  - 点Yがどの辺の上にあるかで時間を区間に分け、区間ごとに面積の式が変わることを確かめる。
   - はじめの辺の上では高さが時間に比例するので、面積の式を方程式とみて解く。
   - 次の辺の上では底辺も高さも変わらず面積が一定なので、その値と比べて解があるかを調べる。
   - 最後の辺の上では高さが減っていくので、その区間の式を方程式とみて解く。
@@ -122,7 +122,7 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
-    narration: 点Eがどの辺の上にあるかで時間を区間に分け、区間ごとに面積の式が変わることを確かめる。
+    narration: 点Yがどの辺の上にあるかで時間を区間に分け、区間ごとに面積の式が変わることを確かめる。
     op: identify_intervals
     result_display: 0〜3秒、3〜6秒、6〜9秒
     result_srepr: ''

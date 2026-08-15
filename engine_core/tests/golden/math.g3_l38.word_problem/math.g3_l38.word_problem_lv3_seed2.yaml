@@ -24,9 +24,9 @@ meta:
   seed: 2
   signature: word_problem_quadratic_moving_point_area
 problem_ref: 5d74b3b2af43f8f2
-problem_text: '1辺が16cmの正方形GDFPがある。点Qは頂点Dを出発し、辺DF、辺FPの上を毎秒4cmの速さでPまで動く。
+problem_text: '1辺が16cmの正方形LMNPがある。点Tは頂点Mを出発し、辺MN、辺NPの上を毎秒4cmの速さでPまで動く。
 
-  出発してから x 秒後の三角形GDQの面積を y cm²とする。
+  出発してから x 秒後の三角形LMTの面積を y cm²とする。
 
   (1) 0≦x≦4 のとき、y を x の式で表せ。
 

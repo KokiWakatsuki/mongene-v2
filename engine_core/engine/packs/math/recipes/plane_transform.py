@@ -38,7 +38,7 @@ from engine.core.contracts import (
 )
 from engine.core.registry import REGISTRY, register_recipe
 from engine.core.rng import Rng, draw
-from engine.packs.math.recipes.letter_expr import _draw_distinct_points
+from engine.packs.math.recipes.letter_expr import _draw_named_figures
 from engine.packs.math.visuals.plane_transform import render_polygon_transform_solution_svg
 
 _VERTEX_LABELS = ["A", "B", "C"]
@@ -203,7 +203,7 @@ def _rotate_polygon_recipe(ctx: CellContext, rng: Rng, *, style: str) -> MR:
             break
     else:
         raise ValueError("_rotate_polygon_recipe: 三角形の頂点と重ならない回転の中心を構成できず")
-    center_label = _draw_distinct_points(1, rng)[0] if style == "grid_only" else None
+    center_label = _draw_named_figures([1], rng)[0] if style == "grid_only" else None
 
     solver = REGISTRY.solver("math.rotate_polygon_features")
     sol = cast(Solution, solver(_pts_strs(pts), str(center_pt), str(angle)))
@@ -390,7 +390,7 @@ def find_rotation_center_recipe(ctx: CellContext, rng: Rng) -> MR:
     )
     assert isinstance(sol.answer, GraphAnswer)
 
-    center_label = _draw_distinct_points(1, rng)[0]
+    center_label = _draw_named_figures([1], rng)[0]
     render_params = {
         "pts": _pts_strs(pts), "vertex_labels": _VERTEX_LABELS,
         "new_pts": new_pts, "vertex_labels_prime": _VERTEX_LABELS_PRIME,

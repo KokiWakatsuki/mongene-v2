@@ -24,18 +24,18 @@ meta:
   seed: 3
   signature: evaluate_symmetric_sum_of_squares
 problem_ref: 56cb2e05d0beb056
-problem_text: x + y = -1, xy = 8 のとき、x² + y² の値を求めよ。
+problem_text: x + y = -15, xy = 15 のとき、x² + y² の値を求めよ。
 sub_questions:
 - answer:
-    display: '-15'
+    display: '195'
     kind: symbolic
-    srepr: Integer(-15)
+    srepr: Integer(195)
   cause_tags: []
   concept_tags:
   - polynomial.symmetric_expression_from_sum_product
   explanation: 'まず、求める式を、和と積だけで表せる形に変形する。（(x + y)² - 2xy）
 
-    次に、和と積の値をあてはめて計算する。（-15）'
+    次に、和と積の値をあてはめて計算する。（195）'
   hints:
   - 求める式を、和と積だけで表せる形に変形する。
   label: (1)
@@ -49,6 +49,6 @@ sub_questions:
   - args: []
     narration: 和と積の値をあてはめて計算する。
     op: substitute_and_compute
-    result_display: '-15'
-    result_srepr: Integer(-15)
+    result_display: '195'
+    result_srepr: Integer(195)
 visual_svg: null

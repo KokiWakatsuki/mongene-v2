@@ -26,18 +26,18 @@ meta:
 problem_ref: 27d657599024fc99
 problem_text: '次の式を展開せよ。
 
-  (y + 8)² - (y - 2)(y - 2)'
+  (p + 8)² - (p - 2)(p - 2)'
 sub_questions:
 - answer:
-    display: 20y + 60
+    display: 20p + 60
     kind: symbolic
-    srepr: Add(Mul(Integer(20), Symbol('y')), Integer(60))
+    srepr: Add(Mul(Integer(20), Symbol('p')), Integer(60))
   cause_tags: []
   concept_tags:
   - polynomial.expand_various
-  explanation: 'まず、それぞれのかっこを乗法公式で展開する。（(y² + 16y + 64) - (y² - 4y + 4)）
+  explanation: 'まず、それぞれのかっこを乗法公式で展開する。（(p² + 16p + 64) - (p² - 4p + 4)）
 
-    次に、同類項をまとめて計算する。（20y + 60）'
+    次に、同類項をまとめて計算する。（20p + 60）'
   hints:
   - それぞれのかっこを乗法公式で展開する。
   label: (1)
@@ -46,11 +46,11 @@ sub_questions:
   - args: []
     narration: それぞれのかっこを乗法公式で展開する。
     op: expand_each_part
-    result_display: (y² + 16y + 64) - (y² - 4y + 4)
+    result_display: (p² + 16p + 64) - (p² - 4p + 4)
     result_srepr: ''
   - args: []
     narration: 同類項をまとめて計算する。
     op: combine_like_terms
-    result_display: 20y + 60
-    result_srepr: Add(Mul(Integer(20), Symbol('y')), Integer(60))
+    result_display: 20p + 60
+    result_srepr: Add(Mul(Integer(20), Symbol('p')), Integer(60))
 visual_svg: null

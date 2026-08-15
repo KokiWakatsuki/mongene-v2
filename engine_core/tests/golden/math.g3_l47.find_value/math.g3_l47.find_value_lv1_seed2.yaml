@@ -24,18 +24,18 @@ meta:
   seed: 2
   signature: inscribed_angle_from_central
 problem_ref: b5b95d80a6e56514
-problem_text: 円Jの周上に点Aがある。弧FNに対する中心角∠FJN=96° のとき、同じ弧FNに対する円周角∠FANの大きさを求めよ。
+problem_text: 円Vの周上に点Yがある。弧WXに対する中心角∠WVX=70° のとき、同じ弧WXに対する円周角∠WYXの大きさを求めよ。
 sub_questions:
 - answer:
-    display: 48°
+    display: 35°
     kind: symbolic
-    srepr: Integer(48)
+    srepr: Integer(35)
   cause_tags: []
   concept_tags:
   - circle.inscribed_angle_from_central
-  explanation: 'まず、弧に対する中心角の大きさを読み取る。（96°）
+  explanation: 'まず、弧に対する中心角の大きさを読み取る。（70°）
 
-    次に、同じ弧に対する円周角の大きさは、中心角の大きさの半分に等しいことから、円周角の大きさを求める。（48°）'
+    次に、同じ弧に対する円周角の大きさは、中心角の大きさの半分に等しいことから、円周角の大きさを求める。（35°）'
   hints:
   - 弧に対する中心角の大きさを読み取る。
   label: (1)
@@ -44,11 +44,11 @@ sub_questions:
   - args: []
     narration: 弧に対する中心角の大きさを読み取る。
     op: identify_central_angle
-    result_display: 96°
+    result_display: 70°
     result_srepr: ''
   - args: []
     narration: 同じ弧に対する円周角の大きさは、中心角の大きさの半分に等しいことから、円周角の大きさを求める。
     op: apply_inscribed_angle_theorem
-    result_display: 48°
-    result_srepr: Integer(48)
+    result_display: 35°
+    result_srepr: Integer(35)
 visual_svg: null

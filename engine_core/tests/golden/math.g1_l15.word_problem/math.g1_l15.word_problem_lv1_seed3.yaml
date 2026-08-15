@@ -24,20 +24,20 @@ meta:
   seed: 3
   signature: word_problem_expression_distance
 problem_ref: cc338e7f03b66f37
-problem_text: '時速28kmでm時間走る。
+problem_text: '時速31kmでp時間自動車で進む。
 
-  進む道のりを、mを使った式で表せ。'
+  進む道のりを、pを使った式で表せ。'
 sub_questions:
 - answer:
-    display: 28m
+    display: 31p
     kind: symbolic
-    srepr: Mul(Integer(28), Symbol('m'))
+    srepr: Mul(Integer(31), Symbol('p'))
   cause_tags: []
   concept_tags:
   - letter_expr.word_problem_distance_letter
   explanation: 'まず、速さに時間をかけると、道のりになる。（速さ × 時間 = 道のり）
 
-    次に、数を文字の前に書き、乗法の記号 × を省いて表す。（28m）'
+    次に、数を文字の前に書き、乗法の記号 × を省いて表す。（31p）'
   hints:
   - 速さに時間をかけると、道のりになる。
   label: (1)
@@ -51,6 +51,6 @@ sub_questions:
   - args: []
     narration: 数を文字の前に書き、乗法の記号 × を省いて表す。
     op: apply_product_rule
-    result_display: 28m
-    result_srepr: Mul(Integer(28), Symbol('m'))
+    result_display: 31p
+    result_srepr: Mul(Integer(31), Symbol('p'))
 visual_svg: null

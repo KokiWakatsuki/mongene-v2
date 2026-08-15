@@ -22,7 +22,7 @@ from engine.core.contracts import (
 )
 from engine.core.registry import REGISTRY, register_recipe
 from engine.core.rng import Rng, draw
-from engine.packs.math.recipes.letter_expr import _draw_distinct_points
+from engine.packs.math.recipes.letter_expr import _draw_named_figures
 from engine.packs.math.solvers.plane_geometry import _fmt_pi_display
 
 
@@ -62,7 +62,7 @@ def judge_transformation_invariant_recipe(ctx: CellContext, rng: Rng) -> MR:
         )
         surface = {"m": m, "n": n, "h": h, "v": v}
     elif topic == "rotation":
-        o = _draw_distinct_points(1, rng)[0]
+        (o,) = _draw_named_figures([1], rng)
         deg = int(draw(p["angle_domain"], rng))
         statement = (
             f"図形を、点{o}を中心として{deg}°回転移動した。移動前後で、対応する点と、"
@@ -71,7 +71,8 @@ def judge_transformation_invariant_recipe(ctx: CellContext, rng: Rng) -> MR:
         surface = {"center": o, "deg": deg}
     else:  # reflection
         line = str(draw(cast("list[str]", p["line_domain"]), rng))
-        pa, pb = _draw_distinct_points(2, rng)
+        (v,) = _draw_named_figures([2], rng)
+        pa, pb = v
         statement = (
             f"図形を、直線{line}を対称の軸として対称移動した。移動前後で、対応する2点"
             f"{pa}、{pb}を結ぶ線分と、対称の軸{line}との関係を答えよ"
@@ -112,19 +113,40 @@ def judge_construction_property_recipe(ctx: CellContext, rng: Rng) -> MR:
     p = ctx.spec_level.params
     topic = str(p["topic"])
     if topic == "perpendicular_bisector":
-        a, b, pt = _draw_distinct_points(3, rng)
-        statement = (
-            f"線分{a}{b}の垂直二等分線上に点{pt}をとる。このとき、{pt}{a}と{pt}{b}の"
-            "長さの関係を、その理由となる性質の名前とともに答えよ"
-        )
-        surface = {"a": a, "b": b, "pt": pt}
+        seg, extra = _draw_named_figures([2, 1], rng)
+        a, b = seg
+        pt = extra
+        # 点名をアルファベット順に直したぶん、言い回しを軸に足す（実物も
+        # 「〜上に点Pをとる」「〜をひき、その上の点をPとする」の両方を使う）。
+        phrasing = int(draw({"int_set": [0, 1]}, rng))
+        if phrasing:
+            statement = (
+                f"線分{a}{b}の垂直二等分線をひき、その線上の点を{pt}とする。このとき、"
+                f"{pt}{a}と{pt}{b}の長さの関係を、その理由となる性質の名前とともに答えよ"
+            )
+        else:
+            statement = (
+                f"線分{a}{b}の垂直二等分線上に点{pt}をとる。このとき、{pt}{a}と{pt}{b}の"
+                "長さの関係を、その理由となる性質の名前とともに答えよ"
+            )
+        # 言い回しは場面の違いなので params に記録する（dup_key は params だけを見る）。
+        surface = {"a": a, "b": b, "pt": pt, "phrasing": str(phrasing)}
     else:  # angle_bisector
-        o, a, b, pt = _draw_distinct_points(4, rng)
-        statement = (
-            f"∠{a}{o}{b}の二等分線上に点{pt}をとり、{pt}から2辺{o}{a}、{o}{b}に垂線を"
-            f"引く。このとき、{pt}から2辺までの距離の関係を答えよ"
-        )
-        surface = {"o": o, "a": a, "b": b, "pt": pt}
+        tri, extra = _draw_named_figures([3, 1], rng)
+        o, a, b = tri
+        pt = extra
+        phrasing = int(draw({"int_set": [0, 1]}, rng))
+        if phrasing:
+            statement = (
+                f"∠{a}{o}{b}の二等分線をひき、その線上の点を{pt}とする。{pt}から2辺"
+                f"{o}{a}、{o}{b}に垂線を引くとき、{pt}から2辺までの距離の関係を答えよ"
+            )
+        else:
+            statement = (
+                f"∠{a}{o}{b}の二等分線上に点{pt}をとり、{pt}から2辺{o}{a}、{o}{b}に垂線を"
+                f"引く。このとき、{pt}から2辺までの距離の関係を答えよ"
+            )
+        surface = {"o": o, "a": a, "b": b, "pt": pt, "phrasing": str(phrasing)}
 
     solver = REGISTRY.solver("math.judge_construction_property")
     sol = cast(Solution, solver(topic))
@@ -153,7 +175,10 @@ _POINT_LINE_DISTANCE_MEANING_CONCEPTS = ["point_line_distance.meaning"]
 )
 def judge_point_line_distance_meaning_recipe(ctx: CellContext, rng: Rng) -> MR:
     """「点と直線との距離」がどの線分の長さを指すかを判別する（g1_l37.knowledge Lv2）。"""
-    pt, a, b = _draw_distinct_points(3, rng)
+    # 実物は「点Pと直線ABとの距離」——直線は連続した2文字、点は別の1文字。
+    line, extra = _draw_named_figures([2, 1], rng)
+    a, b = line
+    pt = extra
     statement = (
         f"点{pt}と直線{a}{b}がある。「点{pt}と直線{a}{b}との距離」とは、どの線分の"
         "長さのことか、図に即して答えよ"
@@ -187,7 +212,7 @@ def judge_circle_property_recipe(ctx: CellContext, rng: Rng) -> MR:
     p = ctx.spec_level.params
     concept = str(draw(cast("list[str]", p["concept_set"]), rng))
     if concept == "arc_central_angle_proportional":
-        o = _draw_distinct_points(1, rng)[0]
+        (o,) = _draw_named_figures([1], rng)
         r = int(draw(p["number_domain"], rng))
         # **問いの形と答えの形をそろえる**（EVALUATION R-8）。答えは「正しい／誤り」の
         # 判別（`math.judge_circle_property`）なのに、問題文が「どうなるか、答えよ」と
@@ -198,7 +223,10 @@ def judge_circle_property_recipe(ctx: CellContext, rng: Rng) -> MR:
         )
         surface = {"center": o, "r": r}
     else:  # tangent_perpendicular
-        o, t = _draw_distinct_points(2, rng)
+        # 円の中心と接点は続きの文字である必要がない（実物は「中心Oの円に点Aで
+        # 接する接線」）。離れていてよい2つとして引くと組合せが広がる。
+        one, other = _draw_named_figures([1, 1], rng)
+        o, t = one, other
         statement = (
             f"中心{o}の円に、点{t}で接する接線がある。この接線と、点{t}を通る半径"
             f"{o}{t}がつくる角の大きさの性質を答えよ"
@@ -231,9 +259,23 @@ _SECTOR_ARC_LENGTH_OR_AREA_CONCEPTS = ["sector.arc_length_or_area"]
 def sector_arc_length_or_area_recipe(ctx: CellContext, rng: Rng) -> MR:
     """半径・中心角からおうぎ形の弧の長さ/面積を求める（g1_l46.find_value Lv1・answer-first）。"""
     p = ctx.spec_level.params
-    r = int(draw(p["radius_domain"], rng))
-    angle = int(draw(cast("list[int]", p["angle_domain"]), rng))
-    target = str(draw(cast("list[str]", p["target_set"]), rng))
+    # **答えの π の前の数の分母を小さく保つ。** 半径と中心角を無関係に引いていたので
+    # 「半径13cm・中心角150° → 845π/12」のような、教材では出さない答えが出ていた。
+    # 弧の長さは 2rθ/360、面積は r²θ/360。どちらも分母 ≤ 4 に収まる組だけを採る
+    # （Lv2 が「分母 ≤ 12」で同じ手を使っているのと同型）。
+    den_max = int(p.get("coefficient_denominator_max", 4))
+    for _ in range(400):
+        r = int(draw(p["radius_domain"], rng))
+        angle = int(draw(cast("list[int]", p["angle_domain"]), rng))
+        target = str(draw(cast("list[str]", p["target_set"]), rng))
+        coeff = (
+            sympy.Rational(2 * r * angle, 360) if target == "arc_length"
+            else sympy.Rational(r * r * angle, 360)
+        )
+        if coeff.q <= den_max:
+            break
+    else:
+        raise ValueError("sector_arc_length_or_area_recipe: 係数の分母が小さい組を構成できず")
 
     solver = REGISTRY.solver("math.sector_arc_length_or_area")
     sol = cast(Solution, solver(str(r), str(angle), target))
@@ -278,7 +320,9 @@ def sector_solve_central_angle_recipe(ctx: CellContext, rng: Rng) -> MR:
         r = int(draw(p["radius_domain"], rng))
         angle = int(draw(cast("list[int]", p["angle_domain"]), rng))
         k = sympy.Rational(r * r * angle, 360)
-        if k.q <= 12:
+        # **与える面積の係数は分母 2 まで。** 上限12だと「面積が 44π/3 cm²」
+        # 「32π/5 cm²」という、実物の教材が与件として書かない形になっていた。
+        if k.q <= 2:
             break
     else:
         raise ValueError("sector_solve_central_angle: 分母が小さい面積を構成できず")

@@ -23,7 +23,7 @@ meta:
     unit: g1_l22
   seed: 2
   signature: transpose_both
-problem_ref: 49724f1e61be3a0b
+problem_ref: a04462188271acf1
 problem_text: '次の方程式を解け。
 
   4x + 9 = 3x + 15'
@@ -37,9 +37,12 @@ sub_questions:
   - equation.solve_by_transpose_both_sides
   explanation: 'まず、文字の項を左辺に、数の項を右辺に、符号を変えて移項する。（4x - 3x = 15 - 9）
 
-    次に、両辺をそれぞれ整理し、x の係数で両辺をわって解を求める。（x = 6）'
+    次に、両辺の同類項をそれぞれまとめて、ax = b の形にする。（x = 6）
+
+    最後に、等式の性質を使い、両辺を x の係数でわる。（x = 6）'
   hints:
   - 文字の項を左辺に、数の項を右辺に、符号を変えて移項する。
+  - 両辺の同類項をそれぞれまとめて、ax = b の形にする。
   label: (1)
   prompt_text: 解を求めなさい。
   solution_steps:
@@ -49,8 +52,13 @@ sub_questions:
     result_display: 4x - 3x = 15 - 9
     result_srepr: Integer(6)
   - args: []
-    narration: 両辺をそれぞれ整理し、x の係数で両辺をわって解を求める。
-    op: combine_and_divide
+    narration: 両辺の同類項をそれぞれまとめて、ax = b の形にする。
+    op: combine_like_terms
+    result_display: x = 6
+    result_srepr: Integer(6)
+  - args: []
+    narration: 等式の性質を使い、両辺を x の係数でわる。
+    op: divide_both_sides
     result_display: x = 6
     result_srepr: Integer(6)
 visual_svg: null

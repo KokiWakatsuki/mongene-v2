@@ -316,31 +316,48 @@ def _scene_direct_unit_convert(p: Mapping[str, Any], rng: Rng) -> ProportionScen
     cands = _direct_unit_convert_candidates(p)
     rate, minutes = cast("tuple[int, int]", _draw_index(cands, rng))
     person = str(_draw_index(list(p["person_candidates"]), rng))
+    # 速さを人が歩ける範囲に絞った分、歩く場面で広さを戻す。
+    where = str(_draw_index(
+        ["通学路", "公園の周り", "川ぞいの道", "商店街", "海ぞいの道",
+         "town".replace("town", "町の中"), "学校のまわり", "遊歩道"], rng))
     return ProportionScene(
         numbers={"rate": rate, "minutes": minutes},
-        scenario=f"分速{rate}mで歩く{person}がいる。歩いた時間と進んだ道のりは比例する。",
+        scenario=(f"{where}を分速{rate}mで歩く{person}がいる。"
+                  "歩いた時間と進んだ道のりは比例する。"),
         quantities="",
         ask_formulation="",
         ask_value=f"この{person}が{minutes}分で歩く道のりは何kmか。式を立てて求めよ。",
-        slots={"person": person},
+        slots={"person": person, "where": where},
     )
 
 
 def _inverse_area_candidates(p: Mapping[str, Any]) -> list[tuple[int, int]]:
     """(面積, 縦の長さ) の組。縦=横（正方形）になる組は「長方形」の題材と
     合わないので除く。横も長さの範囲内に収まる組だけを残す。
+
+    **さらに、面積は約数の多い数に限り、縦横の比は `ratio_max` までにする。**
+    前はこの2つが無く、「面積が77cm²の長方形」（7×11 の1通りしかない）や
+    「面積72cm²・縦が36cmのとき横は2cm」（36:2＝18倍の細長い帯）が出ていた。
+    実物の反比例の長方形は、面積が 24・36・48・60 のような約数の多い数で、
+    縦横の比も紙に描ける範囲に収まっている。
     """
     area_lo, area_hi = (int(v) for v in p["area_range"])
     side_lo, side_hi = (int(v) for v in p["side_range"])
+    min_divisors = int(p.get("area_min_divisors", 0))
+    ratio_max = float(p.get("ratio_max", 1e9))
     out: list[tuple[int, int]] = []
     for area in range(area_lo, area_hi + 1):
-        for side in range(side_lo, side_hi + 1):
-            if area % side:
-                continue
-            other = area // side
-            if other == side or not (side_lo <= other <= side_hi):
-                continue
-            out.append((area, side))
+        pairs = [
+            (side, area // side)
+            for side in range(side_lo, side_hi + 1)
+            if area % side == 0 and area // side != side and side_lo <= area // side <= side_hi
+        ]
+        if len(pairs) < min_divisors:
+            continue
+        out.extend(
+            (area, side) for side, other in pairs
+            if max(side, other) / min(side, other) <= ratio_max
+        )
     return out
 
 

@@ -20,7 +20,7 @@ from engine.core.contracts import (
 )
 from engine.core.registry import REGISTRY, register_recipe
 from engine.core.rng import Rng, draw
-from engine.packs.math.recipes.letter_expr import _draw_distinct_points
+from engine.packs.math.recipes.letter_expr import _draw_named_figures
 from engine.packs.math.recipes.similarity import _proportional_lengths
 
 
@@ -47,7 +47,10 @@ def similar_triangle_x_shape_recipe(ctx: CellContext, rng: Rng) -> MR:
     p = ctx.spec_level.params
     # OD = OB·OC/OA なので、OC を OA の倍数にとらないと答えが分数になる
     # （OA=168, OB=195, OC=97 で OD=6630/133 が出ていた）。
-    pa, pb, pc, pd, po = _draw_distinct_points(5, rng)
+    # 図形の頂点はアルファベット順に名づける（実物は「正方形ABCD」「△ABC∽△DEF」）。
+    # 無作為に引くと「正方形ERDJ」「三角形JQBと三角形CMH」になる。
+    (v,) = _draw_named_figures([5], rng)
+    pa, pb, pc, pd, po = v
     oa, ob, oc, _ = _proportional_lengths(
         rng,
         ratio_max=int(p["ratio_max"]),
@@ -102,7 +105,9 @@ def identify_similarity_condition_recipe(ctx: CellContext, rng: Rng) -> MR:
     """
     p = ctx.spec_level.params
     condition_key = str(draw(list(_SIMILARITY_CONDITION_TEXT.keys()), rng))
-    pa, pb, pc, pd, pe, pf = _draw_distinct_points(6, rng)
+    f1, f2 = _draw_named_figures([3, 3], rng)
+    pa, pb, pc = f1
+    pd, pe, pf = f2
     m = int(draw(p["ratio_domain"], rng))
     n = int(draw([v for v in range(1, 8) if v != m], rng))
     condition_text = _SIMILARITY_CONDITION_TEXT[condition_key].format(

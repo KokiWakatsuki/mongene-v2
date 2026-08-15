@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: motion_area_time_graph_segment
 problem_ref: 1415a22d7860c872
-problem_text: 1辺が18cmの正方形ERDJで、点KはEを出発し、辺ER上を毎秒6cmの速さでRまで動く。出発してからの時間をx秒、三角形EKJの面積をy cm²とするとき、xが0から3まで変化するときのxとyの関係を表すグラフをかけ。
+problem_text: 1辺が18cmの正方形STUVで、点WはSを出発し、辺ST上を毎秒6cmの速さでTまで動く。出発してからの時間をx秒、三角形SWVの面積をy cm²とするとき、xが0から3まで変化するときのxとyの関係を表すグラフをかけ。
 sub_questions:
 - answer:
     features:

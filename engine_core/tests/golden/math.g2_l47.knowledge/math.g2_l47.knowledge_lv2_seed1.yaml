@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: identify_parallelogram_condition
 problem_ref: c09ef53596d891ba
-problem_text: 四角形QNJHで、∠Q=∠J かつ ∠N=∠Hが成り立っているとき、この四角形が平行四辺形といえるのはどの条件によるか答えよ。
+problem_text: 四角形UVWXで、∠U=∠W かつ ∠V=∠Xが成り立っているとき、この四角形が平行四辺形といえるのはどの条件によるか答えよ。
 sub_questions:
 - answer:
     correct: 二組の対角の大きさがそれぞれ等しい条件

@@ -24,7 +24,7 @@ meta:
   seed: 3
   signature: identify_parallelogram_condition
 problem_ref: 10e4ebab4e94ada7
-problem_text: 四角形QDRGで、QD∥GR かつ DR∥QGが成り立っているとき、この四角形が平行四辺形といえるのはどの条件によるか答えよ。
+problem_text: 四角形UVWXで、UV∥XW かつ VW∥UXが成り立っているとき、この四角形が平行四辺形といえるのはどの条件によるか答えよ。
 sub_questions:
 - answer:
     correct: 二組の対辺がそれぞれ平行である条件

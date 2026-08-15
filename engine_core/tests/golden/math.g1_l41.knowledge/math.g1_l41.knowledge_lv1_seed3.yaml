@@ -24,7 +24,7 @@ meta:
   seed: 3
   signature: judge_construction_property_perpendicular_bisector
 problem_ref: 62143fd50471ae57
-problem_text: 線分PRの垂直二等分線上に点Aをとる。このとき、APとARの長さの関係を、その理由となる性質の名前とともに答えよ。
+problem_text: 線分KLの垂直二等分線上に点Nをとる。このとき、NKとNLの長さの関係を、その理由となる性質の名前とともに答えよ。
 sub_questions:
 - answer:
     correct: 等しい

@@ -24,22 +24,22 @@ meta:
   seed: 2
   signature: arrowhead_angle
 problem_ref: 39a188dd3dabbde9
-problem_text: 三角形ABCの内部に点Dがあり、点Bと点D、点Cと点Dをそれぞれ結ぶ。∠BAC=10°、∠ABD=30°、∠ACD=16°のとき、∠BDCの大きさを求めよ。
+problem_text: 三角形ABCの内部に点Dがあり、点Bと点D、点Cと点Dをそれぞれ結ぶ。∠BAC=28°、∠ABD=22°、∠ACD=32°のとき、∠BDCの大きさを求めよ。
 sub_questions:
 - answer:
-    display: '56'
+    display: '82'
     kind: symbolic
-    srepr: Integer(56)
+    srepr: Integer(82)
   cause_tags: []
   concept_tags:
   - triangle_angle.arrowhead_multi_step
   explanation: 'まず、頂点Aと内部の点Dを結んだ直線を、Dの向こう側までのばす補助線を引く。この1本で、もとの図が2つの三角形に分かれる。（点Aと点Dを結んでのばした線）
 
-    次に、一方の三角形について、外角は隣り合わない2つの内角の和に等しいことを使い、のばした線とDBがつくる角を求める。（10° の一部と 30° の和）
+    次に、一方の三角形について、外角は隣り合わない2つの内角の和に等しいことを使い、のばした線とDBがつくる角を求める。（28° の一部と 22° の和）
 
-    次に、もう一方の三角形についても同じように、のばした線とDCがつくる角を求める。（10° の残りと 16° の和）
+    次に、もう一方の三角形についても同じように、のばした線とDCがつくる角を求める。（28° の残りと 32° の和）
 
-    最後に、求める角は、いま求めた2つの角を合わせたものだから、それらをたして求める。（56）'
+    最後に、求める角は、いま求めた2つの角を合わせたものだから、それらをたして求める。（82）'
   hints:
   - 頂点Aと内部の点Dを結んだ直線を、Dの向こう側までのばす補助線を引く。この1本で、もとの図が2つの三角形に分かれる。
   - 一方の三角形について、外角は隣り合わない2つの内角の和に等しいことを使い、のばした線とDBがつくる角を求める。
@@ -55,16 +55,16 @@ sub_questions:
   - args: []
     narration: 一方の三角形について、外角は隣り合わない2つの内角の和に等しいことを使い、のばした線とDBがつくる角を求める。
     op: apply_exterior_angle_first
-    result_display: 10° の一部と 30° の和
+    result_display: 28° の一部と 22° の和
     result_srepr: ''
   - args: []
     narration: もう一方の三角形についても同じように、のばした線とDCがつくる角を求める。
     op: apply_exterior_angle_second
-    result_display: 10° の残りと 16° の和
+    result_display: 28° の残りと 32° の和
     result_srepr: ''
   - args: []
     narration: 求める角は、いま求めた2つの角を合わせたものだから、それらをたして求める。
     op: sum_two_exterior_angles
-    result_display: '56'
-    result_srepr: Integer(56)
+    result_display: '82'
+    result_srepr: Integer(82)
 visual_svg: null

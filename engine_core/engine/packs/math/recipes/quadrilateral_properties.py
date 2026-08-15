@@ -20,7 +20,7 @@ from engine.core.contracts import (
 )
 from engine.core.registry import REGISTRY, register_recipe
 from engine.core.rng import Rng, draw
-from engine.packs.math.recipes.letter_expr import _draw_distinct_points
+from engine.packs.math.recipes.letter_expr import _draw_named_figures
 
 
 def _effective_concept_tags(ctx: CellContext) -> list[str]:
@@ -43,7 +43,10 @@ _PARALLELOGRAM_OPPOSITE_CONCEPTS = ["parallelogram.opposite_properties"]
 def parallelogram_opposite_properties_recipe(ctx: CellContext, rng: Rng) -> MR:
     """平行四辺形の対辺の長さ・対角の大きさを求める（g2_l46.find_value Lv1・answer-first）。"""
     p = ctx.spec_level.params
-    pa, pb, pc, pd = _draw_distinct_points(4, rng)
+    # 実物は「平行四辺形ABCD」のように頂点をアルファベット順に名づける
+    # （無作為に引くと「平行四辺形NKRF」になる）。
+    (v,) = _draw_named_figures([4], rng)
+    pa, pb, pc, pd = v
     side_value = int(draw(p["side_domain"], rng))
     angle_value = int(draw(p["angle_domain"], rng))
 
@@ -93,7 +96,10 @@ def identify_parallelogram_condition_recipe(ctx: CellContext, rng: Rng) -> MR:
     （g2_l47.knowledge Lv2・answer-first）。
     """
     condition_key = str(draw(list(_PARALLELOGRAM_CONDITION_TEXT.keys()), rng))
-    pa, pb, pc, pd = _draw_distinct_points(4, rng)
+    # 実物は「平行四辺形ABCD」のように頂点をアルファベット順に名づける
+    # （無作為に引くと「平行四辺形NKRF」になる）。
+    (v,) = _draw_named_figures([4], rng)
+    pa, pb, pc, pd = v
     condition_text = _PARALLELOGRAM_CONDITION_TEXT[condition_key].format(a=pa, b=pb, c=pc, d=pd)
     statement = (
         f"四角形{pa}{pb}{pc}{pd}で、{condition_text}とき、"
@@ -134,7 +140,10 @@ def special_parallelogram_diagonal_value_recipe(ctx: CellContext, rng: Rng) -> M
     """
     p = ctx.spec_level.params
     shape = str(draw(["rectangle", "square", "rhombus"], rng))
-    pa, pb, pc, pd = _draw_distinct_points(4, rng)
+    # 実物は「平行四辺形ABCD」のように頂点をアルファベット順に名づける
+    # （無作為に引くと「平行四辺形NKRF」になる）。
+    (v,) = _draw_named_figures([4], rng)
+    pa, pb, pc, pd = v
     value = int(draw(p["value_domain"], rng))
 
     solver = REGISTRY.solver("math.special_parallelogram_diagonal_value")
@@ -145,7 +154,7 @@ def special_parallelogram_diagonal_value_recipe(ctx: CellContext, rng: Rng) -> M
     if shape == "rhombus":
         statement = (
             f"{shape_disp}{pa}{pb}{pc}{pd}で対角線{pa}{pc}と{pb}{pd}の交点をOとする。"
-            f"{pa}{pc}={value}cm のとき、∠{pa}O{pb}の大きさを求めよ"
+            f"{pa}{pc}={value}cm のとき、線分O{pa}の長さと∠{pa}O{pb}の大きさを求めよ"
         )
     else:
         statement = (
@@ -183,7 +192,10 @@ def classify_quadrilateral_from_diagonal_condition_recipe(ctx: CellContext, rng:
     """
     equal = bool(draw([True, False], rng))
     perpendicular = bool(draw([True, False], rng))
-    pa, pb, pc, pd = _draw_distinct_points(4, rng)
+    # 実物は「平行四辺形ABCD」のように頂点をアルファベット順に名づける
+    # （無作為に引くと「平行四辺形NKRF」になる）。
+    (v,) = _draw_named_figures([4], rng)
+    pa, pb, pc, pd = v
 
     clauses = []
     if equal:
@@ -232,18 +244,23 @@ _EQUAL_AREA_TRANSFORM_CONCEPTS = ["equal_area.transform_value"]
 def equal_area_transform_value_recipe(ctx: CellContext, rng: Rng) -> MR:
     """四角形と等積変形でつくった三角形の面積を求める（g2_l50.find_value Lv2・answer-first）。"""
     p = ctx.spec_level.params
-    pa, pb, pc, pd, pe = _draw_distinct_points(5, rng)
+    (v,) = _draw_named_figures([5], rng)
+    pa, pb, pc, pd, pe = v
     area_value = int(draw(p["area_domain"], rng))
 
     solver = REGISTRY.solver("math.equal_area_transform_value")
     sol = cast(Solution, solver(area_value))
     assert isinstance(sol.answer, SymbolicAnswer)
 
+    # **「面積の等しい三角形をつくったとき」と書いてはいけない。**
+    # 等積であることこそ生徒が導く結論なのに、問題文がそれを先に言ってしまい、
+    # 「四角形の面積が424cm² ならば三角形の面積を求めよ」＝答えを本文が告げていた。
+    # 実物は作図の手順だけを述べ、等積になる理由（底辺共通・高さ等しい）を問う。
     statement = (
-        f"四角形{pa}{pb}{pc}{pd}で、頂点{pd}を通り対角線{pa}{pc}に平行な直線と、"
-        f"辺{pb}{pc}の延長との交点を{pe}とする。四角形{pa}{pb}{pc}{pd}と面積の等しい"
-        f"三角形{pa}{pb}{pe}をつくったとき、四角形{pa}{pb}{pc}{pd}の面積が{area_value}cm² "
-        f"ならば三角形{pa}{pb}{pe}の面積を求めよ"
+        f"四角形{pa}{pb}{pc}{pd}で、頂点{pd}を通り対角線{pa}{pc}に平行な直線をひき、"
+        f"辺{pb}{pc}の延長との交点を{pe}とする。"
+        f"四角形{pa}{pb}{pc}{pd}の面積が{area_value}cm²であるとき、"
+        f"三角形{pa}{pb}{pe}の面積を求めよ"
     )
 
     sub_question = SubQuestionMR(
@@ -253,7 +270,7 @@ def equal_area_transform_value_recipe(ctx: CellContext, rng: Rng) -> MR:
     return MR(
         signature=ctx.spec_level.signature, family=ctx.family, level=ctx.level,
         purpose=ctx.purpose, seed=0,
-        params={"area_value": area_value},
+        params={"area_value": area_value, "labels": pa + pb + pc + pd + pe},
         given={"condition": statement}, sub_questions=[sub_question], visual_plan=None,
         provenance=Provenance(recipe="math.equal_area_transform_value"),
     )

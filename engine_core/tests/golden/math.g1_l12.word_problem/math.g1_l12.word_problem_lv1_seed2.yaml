@@ -24,20 +24,20 @@ meta:
   seed: 2
   signature: word_problem_expression_price_count
 problem_ref: b95292d6a7f9be95
-problem_text: '1本96円のボールペンをx本買う。
+problem_text: '1本110円の牛乳をx本買う。
 
   代金を、xを使った式で表せ。'
 sub_questions:
 - answer:
-    display: 96x
+    display: 110x
     kind: symbolic
-    srepr: Mul(Integer(96), Symbol('x'))
+    srepr: Mul(Integer(110), Symbol('x'))
   cause_tags: []
   concept_tags:
   - letter_expr.word_problem_price_count_letter
   explanation: 'まず、1つあたりの値段に個数をかけると、代金になる。（1つあたりの値段 × 個数 = 代金）
 
-    次に、数を文字の前に書き、乗法の記号 × を省いて表す。（96x）'
+    次に、数を文字の前に書き、乗法の記号 × を省いて表す。（110x）'
   hints:
   - 1つあたりの値段に個数をかけると、代金になる。
   label: (1)
@@ -51,6 +51,6 @@ sub_questions:
   - args: []
     narration: 数を文字の前に書き、乗法の記号 × を省いて表す。
     op: apply_product_rule
-    result_display: 96x
-    result_srepr: Mul(Integer(96), Symbol('x'))
+    result_display: 110x
+    result_srepr: Mul(Integer(110), Symbol('x'))
 visual_svg: null

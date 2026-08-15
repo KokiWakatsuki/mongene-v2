@@ -24,18 +24,18 @@ meta:
   seed: 1
   signature: congruence_transfer_values
 problem_ref: 2bc515baa8be6faf
-problem_text: 三角形EAQ≡三角形PBRで、辺EA=54cm、∠A=128°である。このとき、辺PBの長さと∠Bの大きさを求めよ。
+problem_text: 三角形ABC≡三角形LMNで、辺AB=30cm、∠B=142°である。このとき、辺LMの長さと∠Mの大きさを求めよ。
 sub_questions:
 - answer:
-    display: 辺の長さ 54、角の大きさ 128°
+    display: 辺の長さ 30、角の大きさ 142°
     kind: symbolic
-    srepr: Tuple(Integer(54), Integer(128))
+    srepr: Tuple(Integer(30), Integer(142))
   cause_tags: []
   concept_tags:
   - congruence.transfer_values
-  explanation: 'まず、合同である2つの図形のうち、わかっている辺の長さと角の大きさが、それぞれどの辺・角に対応するかを読み取る。（54 と 128°）
+  explanation: 'まず、合同である2つの図形のうち、わかっている辺の長さと角の大きさが、それぞれどの辺・角に対応するかを読み取る。（30 と 142°）
 
-    次に、合同な図形では対応する辺の長さ・角の大きさがそれぞれ等しいことから、求める辺の長さと角の大きさを求める。（辺の長さ 54、角の大きさ 128°）'
+    次に、合同な図形では対応する辺の長さ・角の大きさがそれぞれ等しいことから、求める辺の長さと角の大きさを求める。（辺の長さ 30、角の大きさ 142°）'
   hints:
   - 合同である2つの図形のうち、わかっている辺の長さと角の大きさが、それぞれどの辺・角に対応するかを読み取る。
   label: (1)
@@ -44,11 +44,11 @@ sub_questions:
   - args: []
     narration: 合同である2つの図形のうち、わかっている辺の長さと角の大きさが、それぞれどの辺・角に対応するかを読み取る。
     op: identify_given_correspondence
-    result_display: 54 と 128°
+    result_display: 30 と 142°
     result_srepr: ''
   - args: []
     narration: 合同な図形では対応する辺の長さ・角の大きさがそれぞれ等しいことから、求める辺の長さと角の大きさを求める。
     op: transfer_by_congruence
-    result_display: 辺の長さ 54、角の大きさ 128°
-    result_srepr: Tuple(Integer(54), Integer(128))
+    result_display: 辺の長さ 30、角の大きさ 142°
+    result_srepr: Tuple(Integer(30), Integer(142))
 visual_svg: null

@@ -137,6 +137,11 @@ def _draw_spring(p: dict[str, Any], rng: Rng) -> tuple[dict[str, int], str]:
         y0 = num * k0 * unit + b
         if y0 in (x1, y1, x2, y2, x0, b):
             continue
+        # **ばねが伸びすぎる組は外す。** 傾きと重さを無関係に引いていたので
+        # 「自然長9cmのばねが60gで99cm」（11倍に伸びる）が出ていた。実物の
+        # ばねの問題は 1g あたり 0.2〜1cm 伸び、全体で 60cm を超えない。
+        if num > den or max(y1, y2, y0) > int(p.get("max_length_cm", 60)):
+            continue
         obj = str(draw(p["object_candidates"], rng))
         return {"x1": x1, "y1": y1, "x2": x2, "y2": y2, "x0": x0}, obj
     raise ValueError("spring construction: 500回試行しても条件を満たす組が見つからない")
@@ -341,11 +346,13 @@ def _draw_meeting(p: dict[str, Any], rng: Rng) -> tuple[dict[str, int], str, str
 
     出会う時刻(meet_time)を先に引き、そこから距離(distance)を逆算する。
     """
-    speed_lo, speed_hi = (int(v) for v in p["speed_range"])
+    # **速さは候補集合（5m 刻み）から引く。** 前は整数域から引いていたので
+    # 「毎分71m」「毎分62m」が出て、逆算した道のりも 1208m と端数になっていた。
+    speeds = [int(v) for v in p["speed_set"]]
     time_lo, time_hi = (int(v) for v in p["meet_time_range"])
     distance_max = int(p["distance_max"])
     for _ in range(500):
-        va, vb = draw_many({"int_range": [speed_lo, speed_hi], "distinct": ["value"]}, rng, k=2)
+        va, vb = draw_many({"int_set": speeds, "distinct": ["value"]}, rng, k=2)
         va, vb = int(va), int(vb)
         meet_time = int(draw({"int_range": [time_lo, time_hi]}, rng))
         distance = meet_time * (va + vb)

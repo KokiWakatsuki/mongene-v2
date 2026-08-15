@@ -26,9 +26,9 @@ meta:
 problem_ref: 6212817c6a19aca9
 problem_text: '次の表は x と y の対応を表している。y は x に反比例するといえるか答えよ。
 
-  x：2　7　9　11
+  x：1　2　6　12
 
-  y：693　198　154　129'
+  y：96　48　16　11'
 sub_questions:
 - answer:
     correct: 反比例するとはいえない
@@ -39,7 +39,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - inverse_proportion.judge_table
-  explanation: 'まず、表の対応するxとyについて、積xyをそれぞれ計算する。（1386、1386、1386、1419）
+  explanation: 'まず、表の対応するxとyについて、積xyをそれぞれ計算する。（96、96、96、132）
 
     次に、積xyがすべて等しければ反比例するといえる。等しくなければ反比例するとはいえない。（反比例するとはいえない）'
   hints:
@@ -50,8 +50,8 @@ sub_questions:
   - args: []
     narration: 表の対応するxとyについて、積xyをそれぞれ計算する。
     op: compute_product_xy
-    result_display: 1386、1386、1386、1419
-    result_srepr: '[''Integer(1386)'', ''Integer(1386)'', ''Integer(1386)'', ''Integer(1419)'']'
+    result_display: 96、96、96、132
+    result_srepr: '[''Integer(96)'', ''Integer(96)'', ''Integer(96)'', ''Integer(132)'']'
   - args: []
     narration: 積xyがすべて等しければ反比例するといえる。等しくなければ反比例するとはいえない。
     op: judge_constant_product

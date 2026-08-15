@@ -24,7 +24,7 @@ meta:
   seed: 2
   signature: equal_arc_inscribed_angle
 problem_ref: 59a06c2befa30654
-problem_text: 円周を6等分する点を順にCEGLJMとする。これらの点を頂点とする六角形について、∠MCEの大きさを求めよ。
+problem_text: 円周を6等分する点を順にCDEFGHとする。これらの点を頂点とする六角形について、∠HCDの大きさを求めよ。
 sub_questions:
 - answer:
     display: 120°

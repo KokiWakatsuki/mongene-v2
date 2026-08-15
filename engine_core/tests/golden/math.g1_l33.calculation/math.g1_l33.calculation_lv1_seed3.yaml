@@ -24,18 +24,18 @@ meta:
   seed: 3
   signature: inverse_proportion_evaluate_forward
 problem_ref: 17e721e0713ee6b4
-problem_text: 反比例の式 y = 48/x について、x = -9 のときの、もう一方の値を求めよ。
+problem_text: 反比例の式 y = 48/x について、x = -2 のときの、もう一方の値を求めよ。
 sub_questions:
 - answer:
-    display: -16/3
+    display: '-24'
     kind: symbolic
-    srepr: Rational(-16, 3)
+    srepr: Integer(-24)
   cause_tags: []
   concept_tags:
   - inverse_proportion.evaluate_at_x
-  explanation: 'まず、比例定数と x の値を、反比例の式 y=a/x の x にあてはめる。（y = 48 / (-9)）
+  explanation: 'まず、比例定数と x の値を、反比例の式 y=a/x の x にあてはめる。（y = 48 / (-2)）
 
-    次に、わり算を計算して y の値を求める。（y = -16/3）'
+    次に、わり算を計算して y の値を求める。（y = -24）'
   hints:
   - 比例定数と x の値を、反比例の式 y=a/x の x にあてはめる。
   label: (1)
@@ -43,15 +43,15 @@ sub_questions:
   solution_steps:
   - args:
     - '48'
-    - '-9'
+    - '-2'
     narration: 比例定数と x の値を、反比例の式 y=a/x の x にあてはめる。
     op: substitute_x
-    result_display: y = 48 / (-9)
-    result_srepr: Rational(-16, 3)
+    result_display: y = 48 / (-2)
+    result_srepr: Integer(-24)
   - args:
-    - y = 48 / (-9)
+    - y = 48 / (-2)
     narration: わり算を計算して y の値を求める。
     op: evaluate
-    result_display: y = -16/3
-    result_srepr: Rational(-16, 3)
+    result_display: y = -24
+    result_srepr: Integer(-24)
 visual_svg: null

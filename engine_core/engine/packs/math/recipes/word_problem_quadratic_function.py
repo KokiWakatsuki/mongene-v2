@@ -68,7 +68,7 @@ from engine.core.contracts import (
 )
 from engine.core.registry import REGISTRY, register_recipe, register_template
 from engine.core.rng import Rng, draw
-from engine.packs.math.recipes.letter_expr import _draw_distinct_points
+from engine.packs.math.recipes.letter_expr import _draw_named_figures
 
 RECIPE_NAME = "math.word_problem_quadratic_function"
 
@@ -579,7 +579,10 @@ def _scene_moving_point_area(p: Mapping[str, Any], rng: Rng) -> QuadraticFunctio
     """
     s, speed = _pick(_moving_point_candidates(p), rng)
     t1, t2 = s // speed, 2 * (s // speed)
-    a, b, c, d, pt = _draw_distinct_points(5, rng)
+    # 正方形はアルファベット順（実物は「正方形ABCD」）＋動く点。
+    quad, pts = _draw_named_figures([4, 1], rng)
+    a, b, c, d = quad
+    pt = pts[0]
     scenario = (
         f"1辺が{s}cmの正方形{a}{b}{c}{d}がある。点{pt}は頂点{b}を出発し、"
         f"辺{b}{c}、辺{c}{d}の上を毎秒{speed}cmの速さで{d}まで動く。"

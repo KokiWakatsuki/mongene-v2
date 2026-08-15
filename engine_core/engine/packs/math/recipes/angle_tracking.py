@@ -214,13 +214,17 @@ def triangle_third_angle_recipe(ctx: CellContext, rng: Rng) -> MR:
     2つの内角 a,b(a+b<180) を先に引き、c=180-a-b(>0) を計算する。
     """
     p = ctx.spec_level.params
+    # **残る第3の角も、紙に描ける大きさでなければならない。**
+    # 前は a+b<180 だけを見ていたので「∠A=122°、∠B=54°、∠C=4°」という、
+    # 三角形として描けない組が出ていた。3つ目の角にも下限を課す。
+    third_min = int(p.get("third_angle_min", 1))
     for _ in range(200):
         a = int(draw(p["angle_domain"], rng))
         b = int(draw(p["angle_domain"], rng))
-        if a + b < 180:
+        if 180 - a - b >= third_min:
             break
     else:
-        raise ValueError("triangle_third_angle_recipe: a+b<180 を満たす組を構成できず")
+        raise ValueError("triangle_third_angle_recipe: 3つ目の角が下限を満たす組を構成できず")
 
     solver = REGISTRY.solver("math.triangle_third_angle")
     sol = cast(Solution, solver(str(a), str(b)))
@@ -248,14 +252,20 @@ def triangle_third_angle_recipe(ctx: CellContext, rng: Rng) -> MR:
 _POLYGON_INTERIOR_CONCEPTS = ["polygon_angle.interior_sum_and_angle"]
 _POLYGON_SIDES_CONCEPTS = ["polygon_angle.sides_from_interior_sum"]
 
+# **多角形の名前は漢数字。** 前は 3・4・24・30・36 が辞書に無く、
+# 「正3角形」「正30角形」のように算用数字で出ていた（同じ問題の中で
+# 「正五角形」と混ざる）。実物の教材は必ず漢数字で書く。
 _POLYGON_NAME_JP = {
-    5: "五角形", 6: "六角形", 7: "七角形", 8: "八角形", 9: "九角形", 10: "十角形",
-    11: "十一角形", 12: "十二角形", 15: "十五角形", 18: "十八角形", 20: "二十角形",
+    3: "三角形", 4: "四角形", 5: "五角形", 6: "六角形", 7: "七角形", 8: "八角形",
+    9: "九角形", 10: "十角形", 11: "十一角形", 12: "十二角形", 13: "十三角形",
+    14: "十四角形", 15: "十五角形", 16: "十六角形", 18: "十八角形", 20: "二十角形",
 }
 
 
 def _polygon_name(n: int) -> str:
-    return _POLYGON_NAME_JP.get(n, f"{n}角形")
+    if n not in _POLYGON_NAME_JP:
+        raise ValueError(f"多角形の漢数字名が未登録: {n}（sides_domain を見直すこと）")
+    return _POLYGON_NAME_JP[n]
 
 
 @register_recipe("math.polygon_interior_sum_and_angle", provides_concepts=_POLYGON_INTERIOR_CONCEPTS)

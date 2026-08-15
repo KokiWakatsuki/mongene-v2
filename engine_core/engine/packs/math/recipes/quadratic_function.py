@@ -13,7 +13,7 @@ import sympy
 from engine.core.contracts import MR, CellContext, Provenance, Solution, SubQuestionMR, SymbolicAnswer
 from engine.core.registry import REGISTRY, register_recipe
 from engine.core.rng import Rng, draw, draw_many
-from engine.packs.math.recipes.letter_expr import _draw_distinct_points
+from engine.packs.math.recipes.letter_expr import _draw_named_figures
 from engine.packs.math.recipes.polynomial import _domain_candidates, _fmt_poly_x_terms
 from engine.packs.math.solvers.quadratic_function import _shoelace_area
 
@@ -515,7 +515,8 @@ def exam_parabola_coefficient_from_intersection_recipe(ctx: CellContext, rng: Rn
     idx = int(draw({"int_set": list(range(len(cands)))}, rng))
     a, xa, xb = cands[idx]
     m, b = a * (xa + xb), -a * xa * xb
-    la, lb = _draw_distinct_points(2, rng)
+    (v,) = _draw_named_figures([2], rng)
+    la, lb = v
 
     sol = cast(
         Solution, REGISTRY.solver("math.parabola_coefficient_from_intersection")(m, b, xa, la + lb)

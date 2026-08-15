@@ -24,47 +24,47 @@ meta:
   seed: 3
   signature: parallel_ratio_judge_then_length
 problem_ref: 61a7df8011a13b9b
-problem_text: 三角形PBDで、辺PB, PD上に点J, Mがある。PJ=3cm, JB=6cm, PM=12cm, MD=24cm である。JM=15cm のとき、JMとBDが平行であることを確かめたうえで、辺BDの長さを求めよ。
+problem_text: 三角形PQRで、辺PQ, PR上に点S, Tがある。PS=8cm, SQ=9cm, PT=32cm, TR=36cm である。ST=8cm のとき、STとQRが平行であることを確かめたうえで、辺QRの長さを求めよ。
 sub_questions:
 - answer:
-    display: '45'
+    display: '17'
     kind: symbolic
-    srepr: Integer(45)
+    srepr: Integer(17)
   cause_tags: []
   concept_tags:
   - parallel_segment.judge_then_length
-  explanation: 'まず、PJ:JBとPM:MDの比が等しいかどうかを比べる。（3:6 と 12:24）
+  explanation: 'まず、PS:SQとPT:TRの比が等しいかどうかを比べる。（8:9 と 32:36）
 
-    次に、平行線と線分の比の定理の逆から、JMとBDが平行であるかどうかを判別する。（平行である）
+    次に、平行線と線分の比の定理の逆から、STとQRが平行であるかどうかを判別する。（平行である）
 
-    次に、JM∥BD であることから、三角形PJMと三角形PBDが相似になることを見つける。（三角形PJM と 三角形PBD）
+    次に、ST∥QR であることから、三角形PSTと三角形PQRが相似になることを見つける。（三角形PST と 三角形PQR）
 
-    最後に、PJ:PB=JM:BD が成り立つことから、辺BDの長さを求める。（45）'
+    最後に、PS:PQ=ST:QR が成り立つことから、辺QRの長さを求める。（17）'
   hints:
-  - PJ:JBとPM:MDの比が等しいかどうかを比べる。
-  - 平行線と線分の比の定理の逆から、JMとBDが平行であるかどうかを判別する。
-  - JM∥BD であることから、三角形PJMと三角形PBDが相似になることを見つける。
+  - PS:SQとPT:TRの比が等しいかどうかを比べる。
+  - 平行線と線分の比の定理の逆から、STとQRが平行であるかどうかを判別する。
+  - ST∥QR であることから、三角形PSTと三角形PQRが相似になることを見つける。
   label: (1)
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
-    narration: PJ:JBとPM:MDの比が等しいかどうかを比べる。
+    narration: PS:SQとPT:TRの比が等しいかどうかを比べる。
     op: compare_division_ratios
-    result_display: 3:6 と 12:24
+    result_display: 8:9 と 32:36
     result_srepr: ''
   - args: []
-    narration: 平行線と線分の比の定理の逆から、JMとBDが平行であるかどうかを判別する。
+    narration: 平行線と線分の比の定理の逆から、STとQRが平行であるかどうかを判別する。
     op: judge_by_parallel_ratio_converse
     result_display: 平行である
     result_srepr: 'true'
   - args: []
-    narration: JM∥BD であることから、三角形PJMと三角形PBDが相似になることを見つける。
+    narration: ST∥QR であることから、三角形PSTと三角形PQRが相似になることを見つける。
     op: identify_similar_triangles_from_parallel
-    result_display: 三角形PJM と 三角形PBD
+    result_display: 三角形PST と 三角形PQR
     result_srepr: ''
   - args: []
-    narration: PJ:PB=JM:BD が成り立つことから、辺BDの長さを求める。
+    narration: PS:PQ=ST:QR が成り立つことから、辺QRの長さを求める。
     op: apply_parallel_segment_ratio
-    result_display: '45'
-    result_srepr: Integer(45)
+    result_display: '17'
+    result_srepr: Integer(17)
 visual_svg: null

@@ -23,7 +23,7 @@ meta:
     unit: g1_l26
   seed: 1
   signature: shortage_equation
-problem_ref: 88a047c230305e41
+problem_ref: 0292a4f12f165f59
 problem_text: '次の方程式を解け。
 
   5x + 5 = 7x - 13'
@@ -37,9 +37,12 @@ sub_questions:
   - equation.solve_shortage
   explanation: 'まず、文字の項を左辺に、数の項を右辺に、符号を変えて移項する。（5x - 7x = -13 - 5）
 
-    次に、両辺をそれぞれ整理し、x の係数で両辺をわって解を求める。（x = 9）'
+    次に、両辺の同類項をそれぞれまとめて、ax = b の形にする。（-2x = -18）
+
+    最後に、等式の性質を使い、両辺を x の係数でわる。（x = 9）'
   hints:
   - 文字の項を左辺に、数の項を右辺に、符号を変えて移項する。
+  - 両辺の同類項をそれぞれまとめて、ax = b の形にする。
   label: (1)
   prompt_text: 解を求めなさい。
   solution_steps:
@@ -49,8 +52,13 @@ sub_questions:
     result_display: 5x - 7x = -13 - 5
     result_srepr: Integer(9)
   - args: []
-    narration: 両辺をそれぞれ整理し、x の係数で両辺をわって解を求める。
-    op: combine_and_divide
+    narration: 両辺の同類項をそれぞれまとめて、ax = b の形にする。
+    op: combine_like_terms
+    result_display: -2x = -18
+    result_srepr: Integer(9)
+  - args: []
+    narration: 等式の性質を使い、両辺を x の係数でわる。
+    op: divide_both_sides
     result_display: x = 9
     result_srepr: Integer(9)
 visual_svg: null

@@ -17,7 +17,10 @@ levels:
     signature: polygon_interior_sum_and_angle
     recipe: math.polygon_interior_sum_and_angle
     params:
-      sides_domain: {int_set: [3, 4, 5, 6, 8, 9, 10, 12, 15, 18, 20, 24, 30, 36]}
+      # **20角形まで。** 前は 24・30・36 まで引いていて「正30角形の内角の和」
+      # 「1つの内角が170°である正多角形」（正36角形）が出ていた。実物の教材が
+      # 扱う正多角形は正二十角形あたりまで。名前は漢数字で書く。
+      sides_domain: {int_set: [3, 4, 5, 6, 8, 9, 10, 12, 15, 16, 18, 20]}
     given: [condition]
     asked: [value]
     visual: none
@@ -32,7 +35,10 @@ levels:
     signature: polygon_sides_from_interior_sum
     recipe: math.polygon_sides_from_interior_sum
     params:
-      sides_domain: {int_set: [3, 4, 5, 6, 8, 9, 10, 12, 15, 18, 20, 24, 30, 36]}
+      # **20角形まで。** 前は 24・30・36 まで引いていて「正30角形の内角の和」
+      # 「1つの内角が170°である正多角形」（正36角形）が出ていた。実物の教材が
+      # 扱う正多角形は正二十角形あたりまで。名前は漢数字で書く。
+      sides_domain: {int_set: [3, 4, 5, 6, 8, 9, 10, 12, 15, 16, 18, 20]}
     given: [condition]
     asked: [value]
     visual: none

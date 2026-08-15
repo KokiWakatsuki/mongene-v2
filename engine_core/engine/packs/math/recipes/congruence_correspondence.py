@@ -18,7 +18,7 @@ from engine.core.contracts import (
 )
 from engine.core.registry import REGISTRY, register_recipe
 from engine.core.rng import Rng, draw
-from engine.packs.math.recipes.letter_expr import _draw_distinct_points
+from engine.packs.math.recipes.letter_expr import _draw_named_figures
 
 _SIDE_PAIRS: list[tuple[int, int]] = [(0, 1), (1, 2), (2, 0)]
 
@@ -44,7 +44,11 @@ def congruence_transfer_values_recipe(ctx: CellContext, rng: Rng) -> MR:
     （g2_l36.find_value Lv1・answer-first）。
     """
     p = ctx.spec_level.params
-    pa, pb, pc, qa, qb, qc = _draw_distinct_points(6, rng)
+    # 点名を無作為に引くと「三角形EAQ≡三角形PBR」になる。実物は
+    # 「△ABC≡△DEF」のように頂点をアルファベット順に並べて名づける。
+    p_labels, q_labels = _draw_named_figures([3, 3], rng)
+    pa, pb, pc = p_labels
+    qa, qb, qc = q_labels
     side_value = int(draw(p["side_domain"], rng))
     angle_value = int(draw(p["angle_domain"], rng))
 
@@ -81,8 +85,7 @@ _CONGRUENCE_SYMBOL_SIDE_CONCEPTS = ["congruence.symbol_and_correspondence"]
 )
 def congruence_symbol_and_side_recipe(ctx: CellContext, rng: Rng) -> MR:
     """合同を表す記号と、指定した辺に対応する辺を判別する（g2_l36.knowledge Lv1）。"""
-    pa, pb, pc, qa, qb, qc = _draw_distinct_points(6, rng)
-    p_labels, q_labels = pa + pb + pc, qa + qb + qc
+    p_labels, q_labels = _draw_named_figures([3, 3], rng)
     i, j = _SIDE_PAIRS[int(draw({"int_set": [0, 1, 2]}, rng))]
 
     solver = REGISTRY.solver("math.congruence_symbol_and_side")
@@ -116,8 +119,7 @@ _CONGRUENCE_PAIR_CONCEPTS = ["congruence.identify_corresponding_pair"]
 @register_recipe("math.congruence_corresponding_pair", provides_concepts=_CONGRUENCE_PAIR_CONCEPTS)
 def congruence_corresponding_pair_recipe(ctx: CellContext, rng: Rng) -> MR:
     """合同な図形で、指定した角・辺に対応する角・辺をそれぞれ判別する（g2_l36.knowledge Lv2）。"""
-    pa, pb, pc, qa, qb, qc = _draw_distinct_points(6, rng)
-    p_labels, q_labels = pa + pb + pc, qa + qb + qc
+    p_labels, q_labels = _draw_named_figures([3, 3], rng)
     angle_i = int(draw({"int_set": [0, 1, 2]}, rng))
     side_i, side_j = _SIDE_PAIRS[int(draw({"int_set": [0, 1, 2]}, rng))]
 

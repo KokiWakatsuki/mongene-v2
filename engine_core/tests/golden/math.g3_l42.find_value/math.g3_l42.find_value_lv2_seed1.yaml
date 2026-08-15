@@ -24,31 +24,31 @@ meta:
   seed: 1
   signature: parallel_segment_ratio_length
 problem_ref: 503192cfaf37dfe4
-problem_text: 三角形EABで、辺EA, EB上に点F, Pがあり、FP∥ABである。EF=3cm, FA=5cm, FP=6cm のとき、辺ABの長さを求めよ。
+problem_text: 三角形EFGで、辺EF, EG上に点H, Jがあり、HJ∥FGである。EH=6cm, HF=12cm, HJ=6cm のとき、辺FGの長さを求めよ。
 sub_questions:
 - answer:
-    display: '16'
+    display: '18'
     kind: symbolic
-    srepr: Integer(16)
+    srepr: Integer(18)
   cause_tags: []
   concept_tags:
   - parallel_segment.ratio_length
-  explanation: 'まず、FP∥AB であることから、三角形EFPと三角形EABが相似になることを見つける。（三角形EFP と 三角形EAB）
+  explanation: 'まず、HJ∥FG であることから、三角形EHJと三角形EFGが相似になることを見つける。（三角形EHJ と 三角形EFG）
 
-    次に、EF:EA=FP:AB が成り立つことから、辺ABの長さを求める。（16）'
+    次に、EH:EF=HJ:FG が成り立つことから、辺FGの長さを求める。（18）'
   hints:
-  - FP∥AB であることから、三角形EFPと三角形EABが相似になることを見つける。
+  - HJ∥FG であることから、三角形EHJと三角形EFGが相似になることを見つける。
   label: (1)
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
-    narration: FP∥AB であることから、三角形EFPと三角形EABが相似になることを見つける。
+    narration: HJ∥FG であることから、三角形EHJと三角形EFGが相似になることを見つける。
     op: identify_similar_triangles_from_parallel
-    result_display: 三角形EFP と 三角形EAB
+    result_display: 三角形EHJ と 三角形EFG
     result_srepr: ''
   - args: []
-    narration: EF:EA=FP:AB が成り立つことから、辺ABの長さを求める。
+    narration: EH:EF=HJ:FG が成り立つことから、辺FGの長さを求める。
     op: apply_parallel_segment_ratio
-    result_display: '16'
-    result_srepr: Integer(16)
+    result_display: '18'
+    result_srepr: Integer(18)
 visual_svg: null

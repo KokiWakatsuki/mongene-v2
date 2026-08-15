@@ -26,18 +26,18 @@ meta:
 problem_ref: d17a05d614b26b0d
 problem_text: '次の式を計算せよ。
 
-  √20 × √10'
+  √11 × √2'
 sub_questions:
 - answer:
-    display: 10√2
+    display: √22
     kind: symbolic
-    srepr: Mul(Integer(10), Pow(Integer(2), Rational(1, 2)))
+    srepr: Pow(Integer(22), Rational(1, 2))
   cause_tags: []
   concept_tags:
   - radical.multiply_divide
-  explanation: 'まず、根号の積を、1つの根号の中の積にまとめる。（√200）
+  explanation: 'まず、根号の積を、1つの根号の中の積にまとめる。（√22）
 
-    次に、根号の中を素因数分解し、平方の因数を根号の外に出す。（10√2）'
+    次に、根号の中を素因数分解し、平方の因数を根号の外に出す。（√22）'
   hints:
   - 根号の積を、1つの根号の中の積にまとめる。
   label: (1)
@@ -46,11 +46,11 @@ sub_questions:
   - args: []
     narration: 根号の積を、1つの根号の中の積にまとめる。
     op: multiply_under_one_root
-    result_display: √200
+    result_display: √22
     result_srepr: ''
   - args: []
     narration: 根号の中を素因数分解し、平方の因数を根号の外に出す。
     op: simplify_root
-    result_display: 10√2
-    result_srepr: Mul(Integer(10), Pow(Integer(2), Rational(1, 2)))
+    result_display: √22
+    result_srepr: Pow(Integer(22), Rational(1, 2))
 visual_svg: null

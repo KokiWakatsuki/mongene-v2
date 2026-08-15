@@ -24,9 +24,9 @@ meta:
   seed: 3
   signature: word_problem_quadratic_moving_point_area
 problem_ref: 11392bed8e5f2910
-problem_text: '1辺が24cmの正方形FBEKがある。点Cは頂点Bを出発し、辺BE、辺EKの上を毎秒1cmの速さでKまで動く。
+problem_text: '1辺が24cmの正方形BCDEがある。点Lは頂点Cを出発し、辺CD、辺DEの上を毎秒1cmの速さでEまで動く。
 
-  出発してから x 秒後の三角形FBCの面積を y cm²とする。
+  出発してから x 秒後の三角形BCLの面積を y cm²とする。
 
   (1) 0≦x≦24 のとき、y を x の式で表せ。
 

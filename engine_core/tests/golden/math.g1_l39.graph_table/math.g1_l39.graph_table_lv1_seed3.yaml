@@ -24,7 +24,7 @@ meta:
   seed: 3
   signature: rotate_polygon_grid
 problem_ref: bea8afe061546945
-problem_text: 方眼上に三角形ABCと点Dがある。この三角形を、点Dを中心として反時計回りに180°回転移動した三角形A'B'C'をかけ。
+problem_text: 方眼上に三角形ABCと点Mがある。この三角形を、点Mを中心として反時計回りに180°回転移動した三角形A'B'C'をかけ。
 sub_questions:
 - answer:
     features:
@@ -62,7 +62,7 @@ sub_questions:
       x="308.85" y="214.69" font-size="13" text-anchor="start" fill="#000000">A'</text><circle cx="150.86" cy="101.71" r="2.5" fill="#000000"/><text x="142.37" y="91.23" font-size="13" text-anchor="end"
       stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">B'</text><text x="142.37" y="91.23" font-size="13" text-anchor="end" fill="#000000">B'</text><circle cx="126.29" cy="126.29"
       r="2.5" fill="#000000"/><text x="114.64" y="127.38" font-size="13" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">C'</text><text x="114.64" y="127.38" font-size="13"
-      text-anchor="end" fill="#000000">C'</text><circle cx="224.57" cy="175.43" r="2.5" fill="#000000"/><text x="230.57" y="169.43" font-size="13" fill="#000000">D</text></svg>
+      text-anchor="end" fill="#000000">C'</text><circle cx="224.57" cy="175.43" r="2.5" fill="#000000"/><text x="230.57" y="169.43" font-size="13" fill="#000000">M</text></svg>
   cause_tags: []
   concept_tags:
   - polygon_transform.rotate
@@ -103,4 +103,4 @@ visual_svg: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width=
   cx="298.29" cy="249.14" r="2.5" fill="#000000"/><text x="306.77" y="266.63" font-size="13" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">B</text><text x="306.77"
   y="266.63" font-size="13" text-anchor="start" fill="#000000">B</text><circle cx="322.86" cy="224.57" r="2.5" fill="#000000"/><text x="334.50" y="231.48" font-size="13" text-anchor="start" stroke="#ffffff"
   stroke-width="3" stroke-linejoin="round" fill="#ffffff">C</text><text x="334.50" y="231.48" font-size="13" text-anchor="start" fill="#000000">C</text><circle cx="224.57" cy="175.43" r="2.5" fill="#000000"/><text
-  x="230.57" y="169.43" font-size="13" fill="#000000">D</text></svg>
+  x="230.57" y="169.43" font-size="13" fill="#000000">M</text></svg>

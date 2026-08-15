@@ -24,20 +24,20 @@ meta:
   seed: 1
   signature: word_problem_expression_distance
 problem_ref: 02b7b46bfa97139d
-problem_text: '時速9kmでx時間歩く。
+problem_text: '時速12kmでx時間自転車で進む。
 
   進む道のりを、xを使った式で表せ。'
 sub_questions:
 - answer:
-    display: 9x
+    display: 12x
     kind: symbolic
-    srepr: Mul(Integer(9), Symbol('x'))
+    srepr: Mul(Integer(12), Symbol('x'))
   cause_tags: []
   concept_tags:
   - letter_expr.word_problem_distance_letter
   explanation: 'まず、速さに時間をかけると、道のりになる。（速さ × 時間 = 道のり）
 
-    次に、数を文字の前に書き、乗法の記号 × を省いて表す。（9x）'
+    次に、数を文字の前に書き、乗法の記号 × を省いて表す。（12x）'
   hints:
   - 速さに時間をかけると、道のりになる。
   label: (1)
@@ -51,6 +51,6 @@ sub_questions:
   - args: []
     narration: 数を文字の前に書き、乗法の記号 × を省いて表す。
     op: apply_product_rule
-    result_display: 9x
-    result_srepr: Mul(Integer(9), Symbol('x'))
+    result_display: 12x
+    result_srepr: Mul(Integer(12), Symbol('x'))
 visual_svg: null

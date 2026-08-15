@@ -29,7 +29,10 @@ levels:
     recipe: math.word_problem_quadratic_function
     params:
       scenario_kind: given_equation
-      a_candidates: [2, 3, 4, 5]
+      # **斜面を転がる比例定数は 3 まで。** 5 だと y=5x²＝自由落下と同じ加速度に
+      # なり、「斜面を転がす」場面と合わない（斜面は重力の分力なので必ず
+      # 自由落下より小さい）。
+      a_candidates: [1, 2, 3]
       x0_range: [2, 6]
       root_range: [2, 9]
       object_candidates: [ボール, 台車, 鉄球]

@@ -26,18 +26,18 @@ meta:
 problem_ref: 80389184cee872ca
 problem_text: '次の式を展開せよ。
 
-  (x + 5)² - (x + 8)(x - 6)'
+  (n + 5)² - (n + 8)(n - 6)'
 sub_questions:
 - answer:
-    display: 8x + 73
+    display: 8n + 73
     kind: symbolic
-    srepr: Add(Mul(Integer(8), Symbol('x')), Integer(73))
+    srepr: Add(Mul(Integer(8), Symbol('n')), Integer(73))
   cause_tags: []
   concept_tags:
   - polynomial.expand_various
-  explanation: 'まず、それぞれのかっこを乗法公式で展開する。（(x² + 10x + 25) - (x² + 2x - 48)）
+  explanation: 'まず、それぞれのかっこを乗法公式で展開する。（(n² + 10n + 25) - (n² + 2n - 48)）
 
-    次に、同類項をまとめて計算する。（8x + 73）'
+    次に、同類項をまとめて計算する。（8n + 73）'
   hints:
   - それぞれのかっこを乗法公式で展開する。
   label: (1)
@@ -46,11 +46,11 @@ sub_questions:
   - args: []
     narration: それぞれのかっこを乗法公式で展開する。
     op: expand_each_part
-    result_display: (x² + 10x + 25) - (x² + 2x - 48)
+    result_display: (n² + 10n + 25) - (n² + 2n - 48)
     result_srepr: ''
   - args: []
     narration: 同類項をまとめて計算する。
     op: combine_like_terms
-    result_display: 8x + 73
-    result_srepr: Add(Mul(Integer(8), Symbol('x')), Integer(73))
+    result_display: 8n + 73
+    result_srepr: Add(Mul(Integer(8), Symbol('n')), Integer(73))
 visual_svg: null

@@ -24,31 +24,31 @@ meta:
   seed: 2
   signature: similar_triangle_x_shape
 problem_ref: a0143e35e27b225f
-problem_text: 線分GHと線分LAが点Kで交わり、GL∥HAである。KG=4cm, KL=3cm, KH=44cm のとき、相似な三角形を見つけて線分KAの長さを求めよ。
+problem_text: 線分CEと線分DFが点Gで交わり、CD∥EFである。GC=8cm, GD=3cm, GE=48cm のとき、相似な三角形を見つけて線分GFの長さを求めよ。
 sub_questions:
 - answer:
-    display: '33'
+    display: '18'
     kind: symbolic
-    srepr: Integer(33)
+    srepr: Integer(18)
   cause_tags: []
   concept_tags:
   - similarity.x_shape_length
-  explanation: 'まず、GL∥HA であることから、対頂角と錯角がそれぞれ等しくなる相似な三角形（三角形KGLと三角形KHA）の組を見つける。
+  explanation: 'まず、CD∥EF であることから、対頂角と錯角がそれぞれ等しくなる相似な三角形（三角形GCDと三角形GEF）の組を見つける。
 
-    次に、相似な三角形の対応する辺の長さの比が等しい（KG:KH=KL:KA）ことから、求める辺の長さを求める。（33）'
+    次に、相似な三角形の対応する辺の長さの比が等しい（GC:GE=GD:GF）ことから、求める辺の長さを求める。（18）'
   hints:
-  - GL∥HA であることから、対頂角と錯角がそれぞれ等しくなる相似な三角形（三角形KGLと三角形KHA）の組を見つける。
+  - CD∥EF であることから、対頂角と錯角がそれぞれ等しくなる相似な三角形（三角形GCDと三角形GEF）の組を見つける。
   label: (1)
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
-    narration: GL∥HA であることから、対頂角と錯角がそれぞれ等しくなる相似な三角形（三角形KGLと三角形KHA）の組を見つける。
+    narration: CD∥EF であることから、対頂角と錯角がそれぞれ等しくなる相似な三角形（三角形GCDと三角形GEF）の組を見つける。
     op: identify_similar_triangles_in_x_shape
     result_display: ''
     result_srepr: ''
   - args: []
-    narration: 相似な三角形の対応する辺の長さの比が等しい（KG:KH=KL:KA）ことから、求める辺の長さを求める。
+    narration: 相似な三角形の対応する辺の長さの比が等しい（GC:GE=GD:GF）ことから、求める辺の長さを求める。
     op: apply_proportion
-    result_display: '33'
-    result_srepr: Integer(33)
+    result_display: '18'
+    result_srepr: Integer(18)
 visual_svg: null

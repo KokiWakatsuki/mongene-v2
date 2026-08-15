@@ -24,25 +24,25 @@ meta:
   seed: 1
   signature: congruence_corresponding_pair
 problem_ref: d99189acdfc73e90
-problem_text: 三角形DCG≡三角形HRJであるとき、∠Gに対応する角と、辺CGに対応する辺をそれぞれ答えよ。
+problem_text: 三角形STU≡三角形XYZであるとき、∠Sに対応する角と、辺TUに対応する辺をそれぞれ答えよ。
 sub_questions:
 - answer:
-    correct: ∠Gに対応する角は∠J、辺CGに対応する辺は辺RJ
+    correct: ∠Sに対応する角は∠X、辺TUに対応する辺は辺YZ
     distractors:
-    - ∠Gに対応する角は∠H、辺CGに対応する辺は辺RJ
-    - ∠Gに対応する角は∠J、辺CGに対応する辺は辺HR
+    - ∠Sに対応する角は∠Y、辺TUに対応する辺は辺YZ
+    - ∠Sに対応する角は∠X、辺TUに対応する辺は辺XY
     fact_id: congruence.identify_corresponding_pair
     kind: choice
   cause_tags: []
   concept_tags:
   - congruence.identify_corresponding_pair
-  explanation: 'まず、合同を表す式で、角の頂点がどの位置に対応づけられているかを確認する。（DCG と HRJ）
+  explanation: 'まず、合同を表す式で、角の頂点がどの位置に対応づけられているかを確認する。（STU と XYZ）
 
-    次に、対応する位置にある頂点にできる角が、対応する角になることから読み取る。（∠J）
+    次に、対応する位置にある頂点にできる角が、対応する角になることから読み取る。（∠X）
 
-    次に、合同を表す式で、辺の両端の頂点がどの位置に対応づけられているかを確認する。（DCG と HRJ）
+    次に、合同を表す式で、辺の両端の頂点がどの位置に対応づけられているかを確認する。（STU と XYZ）
 
-    最後に、対応する位置にある頂点どうしが結ぶ辺が、対応する辺になることから読み取る。（辺RJ）'
+    最後に、対応する位置にある頂点どうしが結ぶ辺が、対応する辺になることから読み取る。（辺YZ）'
   hints:
   - 合同を表す式で、角の頂点がどの位置に対応づけられているかを確認する。
   - 対応する位置にある頂点にできる角が、対応する角になることから読み取る。
@@ -53,21 +53,21 @@ sub_questions:
   - args: []
     narration: 合同を表す式で、角の頂点がどの位置に対応づけられているかを確認する。
     op: identify_angle_correspondence
-    result_display: DCG と HRJ
+    result_display: STU と XYZ
     result_srepr: ''
   - args: []
     narration: 対応する位置にある頂点にできる角が、対応する角になることから読み取る。
     op: name_corresponding_angle
-    result_display: ∠J
-    result_srepr: ∠J
+    result_display: ∠X
+    result_srepr: ∠X
   - args: []
     narration: 合同を表す式で、辺の両端の頂点がどの位置に対応づけられているかを確認する。
     op: identify_side_correspondence
-    result_display: DCG と HRJ
+    result_display: STU と XYZ
     result_srepr: ''
   - args: []
     narration: 対応する位置にある頂点どうしが結ぶ辺が、対応する辺になることから読み取る。
     op: name_corresponding_side
-    result_display: 辺RJ
-    result_srepr: 辺RJ
+    result_display: 辺YZ
+    result_srepr: 辺YZ
 visual_svg: null

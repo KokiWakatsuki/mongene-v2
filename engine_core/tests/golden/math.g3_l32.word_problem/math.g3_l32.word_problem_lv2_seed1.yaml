@@ -26,22 +26,22 @@ meta:
 problem_ref: bed5442834a32ac1
 problem_text: 'ある斜面で鉄球を転がす実験をした。
 
-  転がり始めてから x 秒間に鉄球が進む距離を y m とすると、y = 4x² の関係が成り立つという。
+  転がり始めてから x 秒間に鉄球が進む距離を y m とすると、y = 2x² の関係が成り立つという。
 
   (1) 6秒間に進む距離を求めよ。
 
-  (2) 進んだ距離が64mになるのは、転がり始めてから何秒後か求めよ。'
+  (2) 進んだ距離が32mになるのは、転がり始めてから何秒後か求めよ。'
 sub_questions:
 - answer:
-    display: 144m
+    display: 72m
     kind: symbolic
-    srepr: Integer(144)
+    srepr: Integer(72)
   cause_tags: []
   concept_tags:
   - quadratic_function.word_problem_given_equation
-  explanation: 'まず、式の x に、与えられた値をあてはめる。（4 × (6)²）
+  explanation: 'まず、式の x に、与えられた値をあてはめる。（2 × (6)²）
 
-    次に、2乗を計算してから比例定数をかけ、y の値を求める。（144）'
+    次に、2乗を計算してから比例定数をかけ、y の値を求める。（72）'
   hints:
   - 式の x に、与えられた値をあてはめる。
   label: (1)
@@ -50,13 +50,13 @@ sub_questions:
   - args: []
     narration: 式の x に、与えられた値をあてはめる。
     op: substitute_x
-    result_display: 4 × (6)²
+    result_display: 2 × (6)²
     result_srepr: ''
   - args: []
     narration: 2乗を計算してから比例定数をかけ、y の値を求める。
     op: compute_y
-    result_display: '144'
-    result_srepr: Integer(144)
+    result_display: '72'
+    result_srepr: Integer(72)
 - answer:
     display: 4秒後
     kind: symbolic
@@ -64,7 +64,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - quadratic_function.word_problem_given_equation
-  explanation: 'まず、求める時刻を x とみて、距離を表す式に、与えられている距離をあてはめて方程式をつくる。（4x² = 64）
+  explanation: 'まず、求める時刻を x とみて、距離を表す式に、与えられている距離をあてはめて方程式をつくる。（2x² = 32）
 
     次に、両辺を x の2乗にかかっている数でわり、平方根の考え方で x を求める。（x² = 16）
 
@@ -78,7 +78,7 @@ sub_questions:
   - args: []
     narration: 求める時刻を x とみて、距離を表す式に、与えられている距離をあてはめて方程式をつくる。
     op: set_up_equation
-    result_display: 4x² = 64
+    result_display: 2x² = 32
     result_srepr: ''
   - args: []
     narration: 両辺を x の2乗にかかっている数でわり、平方根の考え方で x を求める。

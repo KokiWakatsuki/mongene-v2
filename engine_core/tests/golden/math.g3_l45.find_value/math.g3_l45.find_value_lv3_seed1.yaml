@@ -24,39 +24,39 @@ meta:
   seed: 1
   signature: similar_triangle_trapezoid_area_ratio
 problem_ref: 39032dc7be43d93c
-problem_text: 三角形ABMで、辺AB, AM上に点K, JがありKJ∥BM、AK:KB=2:3である。三角形AKJの面積と、台形KBMJの面積の比を求めよ。
+problem_text: 三角形NPQで、辺NP, NQ上に点R, SがありRS∥PQ、NR:RP=1:10である。三角形NRSの面積と、台形RPQSの面積の比を求めよ。
 sub_questions:
 - answer:
-    display: 三角形AKJ:台形KBMJ = 4:21
+    display: 三角形NRS:台形RPQS = 1:120
     kind: symbolic
-    srepr: Tuple(Integer(4), Integer(21))
+    srepr: Tuple(Integer(1), Integer(120))
   cause_tags: []
   concept_tags:
   - similarity.trapezoid_area_ratio
-  explanation: 'まず、AKとKBの比から、AKとAB全体の比になおす。（AK:AB = 2:5）
+  explanation: 'まず、NRとRPの比から、NRとNP全体の比になおす。（NR:NP = 1:11）
 
-    次に、三角形AKJと三角形ABMは相似であることから、面積比は相似比の二乗に等しいことを使って、三角形AKJと三角形ABM全体の面積比を求める。（4:25）
+    次に、三角形NRSと三角形NPQは相似であることから、面積比は相似比の二乗に等しいことを使って、三角形NRSと三角形NPQ全体の面積比を求める。（1:121）
 
-    最後に、三角形ABM全体の面積から三角形AKJの面積を除いた残りが台形の面積になることから、三角形AKJと台形の面積比を求める。（三角形AKJ:台形KBMJ = 4:21）'
+    最後に、三角形NPQ全体の面積から三角形NRSの面積を除いた残りが台形の面積になることから、三角形NRSと台形の面積比を求める。（三角形NRS:台形RPQS = 1:120）'
   hints:
-  - AKとKBの比から、AKとAB全体の比になおす。
-  - 三角形AKJと三角形ABMは相似であることから、面積比は相似比の二乗に等しいことを使って、三角形AKJと三角形ABM全体の面積比を求める。
+  - NRとRPの比から、NRとNP全体の比になおす。
+  - 三角形NRSと三角形NPQは相似であることから、面積比は相似比の二乗に等しいことを使って、三角形NRSと三角形NPQ全体の面積比を求める。
   label: (1)
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
-    narration: AKとKBの比から、AKとAB全体の比になおす。
+    narration: NRとRPの比から、NRとNP全体の比になおす。
     op: convert_partial_to_whole_ratio
-    result_display: AK:AB = 2:5
+    result_display: NR:NP = 1:11
     result_srepr: ''
   - args: []
-    narration: 三角形AKJと三角形ABMは相似であることから、面積比は相似比の二乗に等しいことを使って、三角形AKJと三角形ABM全体の面積比を求める。
+    narration: 三角形NRSと三角形NPQは相似であることから、面積比は相似比の二乗に等しいことを使って、三角形NRSと三角形NPQ全体の面積比を求める。
     op: square_similarity_ratio
-    result_display: '4:25'
+    result_display: 1:121
     result_srepr: ''
   - args: []
-    narration: 三角形ABM全体の面積から三角形AKJの面積を除いた残りが台形の面積になることから、三角形AKJと台形の面積比を求める。
+    narration: 三角形NPQ全体の面積から三角形NRSの面積を除いた残りが台形の面積になることから、三角形NRSと台形の面積比を求める。
     op: compute_trapezoid_remainder_ratio
-    result_display: 三角形AKJ:台形KBMJ = 4:21
-    result_srepr: Tuple(Integer(4), Integer(21))
+    result_display: 三角形NRS:台形RPQS = 1:120
+    result_srepr: Tuple(Integer(1), Integer(120))
 visual_svg: null

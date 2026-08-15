@@ -24,47 +24,47 @@ meta:
   seed: 1
   signature: parallel_ratio_judge_then_length
 problem_ref: e0eb3f24220a9937
-problem_text: 三角形QEMで、辺QE, QM上に点R, Bがある。QR=9cm, RE=5cm, QB=36cm, BM=20cm である。RB=27cm のとき、RBとEMが平行であることを確かめたうえで、辺EMの長さを求めよ。
+problem_text: 三角形QRSで、辺QR, QS上に点T, Uがある。QT=10cm, TR=10cm, QU=50cm, US=50cm である。TU=16cm のとき、TUとRSが平行であることを確かめたうえで、辺RSの長さを求めよ。
 sub_questions:
 - answer:
-    display: '42'
+    display: '32'
     kind: symbolic
-    srepr: Integer(42)
+    srepr: Integer(32)
   cause_tags: []
   concept_tags:
   - parallel_segment.judge_then_length
-  explanation: 'まず、QR:REとQB:BMの比が等しいかどうかを比べる。（9:5 と 36:20）
+  explanation: 'まず、QT:TRとQU:USの比が等しいかどうかを比べる。（10:10 と 50:50）
 
-    次に、平行線と線分の比の定理の逆から、RBとEMが平行であるかどうかを判別する。（平行である）
+    次に、平行線と線分の比の定理の逆から、TUとRSが平行であるかどうかを判別する。（平行である）
 
-    次に、RB∥EM であることから、三角形QRBと三角形QEMが相似になることを見つける。（三角形QRB と 三角形QEM）
+    次に、TU∥RS であることから、三角形QTUと三角形QRSが相似になることを見つける。（三角形QTU と 三角形QRS）
 
-    最後に、QR:QE=RB:EM が成り立つことから、辺EMの長さを求める。（42）'
+    最後に、QT:QR=TU:RS が成り立つことから、辺RSの長さを求める。（32）'
   hints:
-  - QR:REとQB:BMの比が等しいかどうかを比べる。
-  - 平行線と線分の比の定理の逆から、RBとEMが平行であるかどうかを判別する。
-  - RB∥EM であることから、三角形QRBと三角形QEMが相似になることを見つける。
+  - QT:TRとQU:USの比が等しいかどうかを比べる。
+  - 平行線と線分の比の定理の逆から、TUとRSが平行であるかどうかを判別する。
+  - TU∥RS であることから、三角形QTUと三角形QRSが相似になることを見つける。
   label: (1)
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
-    narration: QR:REとQB:BMの比が等しいかどうかを比べる。
+    narration: QT:TRとQU:USの比が等しいかどうかを比べる。
     op: compare_division_ratios
-    result_display: 9:5 と 36:20
+    result_display: 10:10 と 50:50
     result_srepr: ''
   - args: []
-    narration: 平行線と線分の比の定理の逆から、RBとEMが平行であるかどうかを判別する。
+    narration: 平行線と線分の比の定理の逆から、TUとRSが平行であるかどうかを判別する。
     op: judge_by_parallel_ratio_converse
     result_display: 平行である
     result_srepr: 'true'
   - args: []
-    narration: RB∥EM であることから、三角形QRBと三角形QEMが相似になることを見つける。
+    narration: TU∥RS であることから、三角形QTUと三角形QRSが相似になることを見つける。
     op: identify_similar_triangles_from_parallel
-    result_display: 三角形QRB と 三角形QEM
+    result_display: 三角形QTU と 三角形QRS
     result_srepr: ''
   - args: []
-    narration: QR:QE=RB:EM が成り立つことから、辺EMの長さを求める。
+    narration: QT:QR=TU:RS が成り立つことから、辺RSの長さを求める。
     op: apply_parallel_segment_ratio
-    result_display: '42'
-    result_srepr: Integer(42)
+    result_display: '32'
+    result_srepr: Integer(32)
 visual_svg: null

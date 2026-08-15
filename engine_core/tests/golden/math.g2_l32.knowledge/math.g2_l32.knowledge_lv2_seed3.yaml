@@ -24,7 +24,7 @@ meta:
   seed: 3
   signature: judge_parallel_from_angle_condition
 problem_ref: d62c66e4142d0818
-problem_text: 2直線ℓ、mに1本の直線nが交わっている。同位角がそれぞれ165°、192°であるとき、ℓとmは平行であるといえるか、答えよ。
+problem_text: 2直線ℓ、mに1本の直線nが交わっている。同位角がそれぞれ68°、95°であるとき、ℓとmは平行であるといえるか、答えよ。
 sub_questions:
 - answer:
     correct: 平行であるとはいえない

@@ -26,22 +26,22 @@ meta:
 problem_ref: 363ffa80f3155db6
 problem_text: 'ある斜面で台車を転がす実験をした。
 
-  転がり始めてから x 秒間に台車が進む距離を y m とすると、y = 5x² の関係が成り立つという。
+  転がり始めてから x 秒間に台車が進む距離を y m とすると、y = 1x² の関係が成り立つという。
 
   (1) 3秒間に進む距離を求めよ。
 
-  (2) 進んだ距離が125mになるのは、転がり始めてから何秒後か求めよ。'
+  (2) 進んだ距離が25mになるのは、転がり始めてから何秒後か求めよ。'
 sub_questions:
 - answer:
-    display: 45m
+    display: 9m
     kind: symbolic
-    srepr: Integer(45)
+    srepr: Integer(9)
   cause_tags: []
   concept_tags:
   - quadratic_function.word_problem_given_equation
-  explanation: 'まず、式の x に、与えられた値をあてはめる。（5 × (3)²）
+  explanation: 'まず、式の x に、与えられた値をあてはめる。（1 × (3)²）
 
-    次に、2乗を計算してから比例定数をかけ、y の値を求める。（45）'
+    次に、2乗を計算してから比例定数をかけ、y の値を求める。（9）'
   hints:
   - 式の x に、与えられた値をあてはめる。
   label: (1)
@@ -50,13 +50,13 @@ sub_questions:
   - args: []
     narration: 式の x に、与えられた値をあてはめる。
     op: substitute_x
-    result_display: 5 × (3)²
+    result_display: 1 × (3)²
     result_srepr: ''
   - args: []
     narration: 2乗を計算してから比例定数をかけ、y の値を求める。
     op: compute_y
-    result_display: '45'
-    result_srepr: Integer(45)
+    result_display: '9'
+    result_srepr: Integer(9)
 - answer:
     display: 5秒後
     kind: symbolic
@@ -64,7 +64,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - quadratic_function.word_problem_given_equation
-  explanation: 'まず、求める時刻を x とみて、距離を表す式に、与えられている距離をあてはめて方程式をつくる。（5x² = 125）
+  explanation: 'まず、求める時刻を x とみて、距離を表す式に、与えられている距離をあてはめて方程式をつくる。（1x² = 25）
 
     次に、両辺を x の2乗にかかっている数でわり、平方根の考え方で x を求める。（x² = 25）
 
@@ -78,7 +78,7 @@ sub_questions:
   - args: []
     narration: 求める時刻を x とみて、距離を表す式に、与えられている距離をあてはめて方程式をつくる。
     op: set_up_equation
-    result_display: 5x² = 125
+    result_display: 1x² = 25
     result_srepr: ''
   - args: []
     narration: 両辺を x の2乗にかかっている数でわり、平方根の考え方で x を求める。

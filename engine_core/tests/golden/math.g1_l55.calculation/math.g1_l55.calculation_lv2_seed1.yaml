@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: compare_relative_frequency
 problem_ref: 8e0dd662ca5012c0
-problem_text: A中学は生徒40人、B中学は生徒30人で通学時間を調べた。1分以上10分未満の階級の度数がA中学は2人、B中学は9人であった。それぞれの相対度数を求め、この階級の割合が大きいのはどちらの中学か答えよ。
+problem_text: A中学は生徒40人、B中学は生徒30人で通学時間を調べた。35分以上40分未満の階級の度数がA中学は2人、B中学は9人であった。それぞれの相対度数を求め、この階級の割合が大きいのはどちらの中学か答えよ。
 sub_questions:
 - answer:
     display: 'A: 0.05、B: 0.3（Bのほうが大きい）'

@@ -24,18 +24,18 @@ meta:
   seed: 1
   signature: parallel_lines_transversal_ratio
 problem_ref: 778a0a4b20a07660
-problem_text: 3本の直線z, n, ℓは平行である。直線sはz, n, ℓとそれぞれ点A, K, Rで交わり、直線uはz, n, ℓとそれぞれ点C, B, Dで交わる。AK=5cm, CB=20cm, BD=16cm のとき、線分KRの長さを求めよ。
+problem_text: 3本の直線z, n, ℓは平行である。直線sはz, n, ℓとそれぞれ点C, D, Eで交わり、直線uはz, n, ℓとそれぞれ点F, G, Hで交わる。CD=15cm, FG=18cm, GH=12cm のとき、線分DEの長さを求めよ。
 sub_questions:
 - answer:
-    display: '4'
+    display: '10'
     kind: symbolic
-    srepr: Integer(4)
+    srepr: Integer(10)
   cause_tags: []
   concept_tags:
   - parallel_segment.transversal_ratio
-  explanation: 'まず、3本の平行な直線が2本の直線と交わるとき、対応する線分の比が等しくなることを見つける。（5:20 = x:16）
+  explanation: 'まず、3本の平行な直線が2本の直線と交わるとき、対応する線分の比が等しくなることを見つける。（15:18 = x:12）
 
-    次に、対応する線分の比が等しいことから、比例式を立てて長さを求める。（4）'
+    次に、対応する線分の比が等しいことから、比例式を立てて長さを求める。（10）'
   hints:
   - 3本の平行な直線が2本の直線と交わるとき、対応する線分の比が等しくなることを見つける。
   label: (1)
@@ -44,11 +44,11 @@ sub_questions:
   - args: []
     narration: 3本の平行な直線が2本の直線と交わるとき、対応する線分の比が等しくなることを見つける。
     op: identify_parallel_lines_cut_transversals
-    result_display: 5:20 = x:16
+    result_display: 15:18 = x:12
     result_srepr: ''
   - args: []
     narration: 対応する線分の比が等しいことから、比例式を立てて長さを求める。
     op: apply_transversal_ratio
-    result_display: '4'
-    result_srepr: Integer(4)
+    result_display: '10'
+    result_srepr: Integer(10)
 visual_svg: null

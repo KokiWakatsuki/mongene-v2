@@ -26,9 +26,9 @@ meta:
 problem_ref: 53a00bd89f51a731
 problem_text: '次の表は x と y の対応を表している。y は x に反比例するといえるか答えよ。
 
-  x：1　7　8　9
+  x：1　4　5　10
 
-  y：1008　144　126　113'
+  y：21　5　4　2'
 sub_questions:
 - answer:
     correct: 反比例するとはいえない
@@ -39,7 +39,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - inverse_proportion.judge_table
-  explanation: 'まず、表の対応するxとyについて、積xyをそれぞれ計算する。（1008、1008、1008、1017）
+  explanation: 'まず、表の対応するxとyについて、積xyをそれぞれ計算する。（21、20、20、20）
 
     次に、積xyがすべて等しければ反比例するといえる。等しくなければ反比例するとはいえない。（反比例するとはいえない）'
   hints:
@@ -50,8 +50,8 @@ sub_questions:
   - args: []
     narration: 表の対応するxとyについて、積xyをそれぞれ計算する。
     op: compute_product_xy
-    result_display: 1008、1008、1008、1017
-    result_srepr: '[''Integer(1008)'', ''Integer(1008)'', ''Integer(1008)'', ''Integer(1017)'']'
+    result_display: 21、20、20、20
+    result_srepr: '[''Integer(21)'', ''Integer(20)'', ''Integer(20)'', ''Integer(20)'']'
   - args: []
     narration: 積xyがすべて等しければ反比例するといえる。等しくなければ反比例するとはいえない。
     op: judge_constant_product

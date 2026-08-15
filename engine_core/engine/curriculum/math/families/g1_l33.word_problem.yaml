@@ -40,8 +40,13 @@ levels:
       # (面積, 縦の長さ) は「面積を縦で割り切れる・縦≠横・横も範囲内」で絞り込む
       # （recipe が候補列挙する）。area 139通り × side 39通りの掛け合わせから
       # 条件を満たす組を残すので、実効の組合せ数は十分広い（check_cell.py で実測）。
-      area_range: [12, 150]
-      side_range: [2, 40]
+      # **面積は約数の多い数だけ・縦横の比は6倍まで。** 前はこの2つが無く、
+      # 「面積が77cm²の長方形」（7×11 の1通りしかない）や「面積72cm²・縦36cm→横2cm」
+      # （18倍の細長い帯）が出ていた。実物の面積は 24・36・48・60 のような数。
+      area_range: [12, 360]
+      side_range: [2, 60]
+      area_min_divisors: 6
+      ratio_max: 6
     given: [scenario, quantities]
     asked: [formulation, value]
     visual: none

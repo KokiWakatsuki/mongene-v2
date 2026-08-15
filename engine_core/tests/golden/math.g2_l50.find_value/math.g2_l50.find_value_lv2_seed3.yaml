@@ -24,18 +24,18 @@ meta:
   seed: 3
   signature: equal_area_transform_value
 problem_ref: 8dfaa3548ae386d7
-problem_text: 四角形QLBDで、頂点Dを通り対角線QBに平行な直線と、辺LBの延長との交点をEとする。四角形QLBDと面積の等しい三角形QLEをつくったとき、四角形QLBDの面積が101cm² ならば三角形QLEの面積を求めよ。
+problem_text: 四角形UVWXで、頂点Xを通り対角線UWに平行な直線をひき、辺VWの延長との交点をYとする。四角形UVWXの面積が200cm²であるとき、三角形UVYの面積を求めよ。
 sub_questions:
 - answer:
-    display: '101'
+    display: '200'
     kind: symbolic
-    srepr: Integer(101)
+    srepr: Integer(200)
   cause_tags: []
   concept_tags:
   - equal_area.transform_value
-  explanation: 'まず、等積変形をする前の、もとの図形の面積を読み取る。（101）
+  explanation: 'まず、等積変形をする前の、もとの図形の面積を読み取る。（200）
 
-    次に、等積変形は面積を変えずに図形の形だけを変える操作であることから、つくった三角形の面積を求める。（101）'
+    次に、等積変形は面積を変えずに図形の形だけを変える操作であることから、つくった三角形の面積を求める。（200）'
   hints:
   - 等積変形をする前の、もとの図形の面積を読み取る。
   label: (1)
@@ -44,11 +44,11 @@ sub_questions:
   - args: []
     narration: 等積変形をする前の、もとの図形の面積を読み取る。
     op: identify_original_area
-    result_display: '101'
+    result_display: '200'
     result_srepr: ''
   - args: []
     narration: 等積変形は面積を変えずに図形の形だけを変える操作であることから、つくった三角形の面積を求める。
     op: apply_equal_area_transform
-    result_display: '101'
-    result_srepr: Integer(101)
+    result_display: '200'
+    result_srepr: Integer(200)
 visual_svg: null

@@ -26,18 +26,18 @@ meta:
 problem_ref: 86eea6067d406fbb
 problem_text: '工夫して、次の式の値を求めよ。
 
-  10² - 9²'
+  10² - 8²'
 sub_questions:
 - answer:
-    display: '19'
+    display: '36'
     kind: symbolic
-    srepr: Integer(19)
+    srepr: Integer(36)
   cause_tags: []
   concept_tags:
   - polynomial.arithmetic_via_diff_of_squares
-  explanation: 'まず、2つの数の平方の差を、和と差の積の形になおす。（(10 + 9)(10 - 9)）
+  explanation: 'まず、2つの数の平方の差を、和と差の積の形になおす。（(10 + 8)(10 - 8)）
 
-    次に、和と差の積を計算し、値を求める。（19）'
+    次に、和と差の積を計算し、値を求める。（36）'
   hints:
   - 2つの数の平方の差を、和と差の積の形になおす。
   label: (1)
@@ -46,11 +46,11 @@ sub_questions:
   - args: []
     narration: 2つの数の平方の差を、和と差の積の形になおす。
     op: factor_difference_of_squares
-    result_display: (10 + 9)(10 - 9)
+    result_display: (10 + 8)(10 - 8)
     result_srepr: ''
   - args: []
     narration: 和と差の積を計算し、値を求める。
     op: multiply_factors
-    result_display: '19'
-    result_srepr: Integer(19)
+    result_display: '36'
+    result_srepr: Integer(36)
 visual_svg: null

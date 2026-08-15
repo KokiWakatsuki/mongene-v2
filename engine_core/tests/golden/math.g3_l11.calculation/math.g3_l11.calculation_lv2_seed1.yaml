@@ -26,18 +26,18 @@ meta:
 problem_ref: 653ac4514e8d009f
 problem_text: '次の式を因数分解せよ。
 
-  2x² - 288'
+  2n² - 288'
 sub_questions:
 - answer:
-    display: 2(x - 12)(x + 12)
+    display: 2(n - 12)(n + 12)
     kind: symbolic
-    srepr: Mul(Integer(2), Add(Symbol('x'), Integer(-12)), Add(Symbol('x'), Integer(12)))
+    srepr: Mul(Integer(2), Add(Symbol('n'), Integer(-12)), Add(Symbol('n'), Integer(12)))
   cause_tags: []
   concept_tags:
   - polynomial.factor_various
-  explanation: 'まず、各項に共通する因数をかっこの外にくくり出す。（2(x² - 144)）
+  explanation: 'まず、各項に共通する因数をかっこの外にくくり出す。（2(n² - 144)）
 
-    次に、くくり出した後のかっこの中を乗法公式の逆で因数分解する。（2(x - 12)(x + 12)）'
+    次に、くくり出した後のかっこの中を乗法公式の逆で因数分解する。（2(n - 12)(n + 12)）'
   hints:
   - 各項に共通する因数をかっこの外にくくり出す。
   label: (1)
@@ -46,11 +46,11 @@ sub_questions:
   - args: []
     narration: 各項に共通する因数をかっこの外にくくり出す。
     op: factor_out_common
-    result_display: 2(x² - 144)
+    result_display: 2(n² - 144)
     result_srepr: ''
   - args: []
     narration: くくり出した後のかっこの中を乗法公式の逆で因数分解する。
     op: apply_formula
-    result_display: 2(x - 12)(x + 12)
-    result_srepr: Mul(Integer(2), Add(Symbol('x'), Integer(-12)), Add(Symbol('x'), Integer(12)))
+    result_display: 2(n - 12)(n + 12)
+    result_srepr: Mul(Integer(2), Add(Symbol('n'), Integer(-12)), Add(Symbol('n'), Integer(12)))
 visual_svg: null

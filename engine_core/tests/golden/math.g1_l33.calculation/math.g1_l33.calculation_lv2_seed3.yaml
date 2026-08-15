@@ -24,18 +24,18 @@ meta:
   seed: 3
   signature: inverse_proportion_evaluate_backward
 problem_ref: 11cb9e390c700534
-problem_text: 反比例の式 y = 48/x について、y = -6 のときの、もう一方の値を求めよ。
+problem_text: 反比例の式 y = 48/x について、y = 6 のときの、もう一方の値を求めよ。
 sub_questions:
 - answer:
-    display: '-8'
+    display: '8'
     kind: symbolic
-    srepr: Integer(-8)
+    srepr: Integer(8)
   cause_tags: []
   concept_tags:
   - inverse_proportion.solve_for_x
-  explanation: 'まず、比例定数と y の値を、反比例の式 y=a/x の y にあてはめる。（-6 = 48 / x）
+  explanation: 'まず、比例定数と y の値を、反比例の式 y=a/x の y にあてはめる。（6 = 48 / x）
 
-    次に、式を x について整理し直して、x の値を求める。（x = -8）'
+    次に、式を x について整理し直して、x の値を求める。（x = 8）'
   hints:
   - 比例定数と y の値を、反比例の式 y=a/x の y にあてはめる。
   label: (1)
@@ -43,15 +43,15 @@ sub_questions:
   solution_steps:
   - args:
     - '48'
-    - '-6'
+    - '6'
     narration: 比例定数と y の値を、反比例の式 y=a/x の y にあてはめる。
     op: substitute_y
-    result_display: -6 = 48 / x
-    result_srepr: Integer(-8)
+    result_display: 6 = 48 / x
+    result_srepr: Integer(8)
   - args:
-    - -6 = 48 / x
+    - 6 = 48 / x
     narration: 式を x について整理し直して、x の値を求める。
     op: solve_for_x
-    result_display: x = -8
-    result_srepr: Integer(-8)
+    result_display: x = 8
+    result_srepr: Integer(8)
 visual_svg: null

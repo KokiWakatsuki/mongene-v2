@@ -24,11 +24,11 @@ meta:
   seed: 2
   signature: word_problem_system_price_count
 problem_ref: 8168b9405f67c316
-problem_text: '1個90円のなしと1個150円のかきを合わせて7個買ったところ、代金の合計は810円だった。なしの個数を x 個、かきの個数を y 個とする。
+problem_text: '1個90円のおにぎりと1個150円のグレープフルーツを合わせて7個買ったところ、代金の合計は810円だった。おにぎりの個数を x 個、グレープフルーツの個数を y 個とする。
 
   (1) 個数と代金の関係を表す2つの式をつくれ。
 
-  (2) なしとかきをそれぞれ何個買ったか求めよ。'
+  (2) おにぎりとグレープフルーツをそれぞれ何個買ったか求めよ。'
 sub_questions:
 - answer:
     display: x + y = 7、90x + 150y = 810
@@ -37,21 +37,21 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - simultaneous_equations.word_problem_price_count
-  explanation: 'まず、なしの個数を x、かきの個数を y とおく。（x, y）
+  explanation: 'まず、おにぎりの個数を x、グレープフルーツの個数を y とおく。（x, y）
 
     次に、個数の関係から、x と y の和が合わせて買った個数に等しいという式をつくる。（x + y = 7）
 
     最後に、代金の関係から、それぞれの単価と個数の積の和が代金の合計に等しいという式をつくる。（90x + 150y = 810）'
   hints:
-  - なしの個数を x、かきの個数を y とおく。
+  - おにぎりの個数を x、グレープフルーツの個数を y とおく。
   - 個数の関係から、x と y の和が合わせて買った個数に等しいという式をつくる。
   label: (1)
   prompt_text: 式に表しなさい。
   solution_steps:
   - args:
-    - なし
-    - かき
-    narration: なしの個数を x、かきの個数を y とおく。
+    - おにぎり
+    - グレープフルーツ
+    narration: おにぎりの個数を x、グレープフルーツの個数を y とおく。
     op: set_variables
     result_display: x, y
     result_srepr: Tuple(Symbol('x'), Symbol('y'))

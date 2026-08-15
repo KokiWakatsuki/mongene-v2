@@ -119,7 +119,10 @@ def solid_cone_surface_central_angle_recipe(ctx: CellContext, rng: Rng) -> MR:
     for _ in range(500):
         r = int(draw(p["radius_domain"], rng))
         l = int(draw(p["slant_domain"], rng))
-        if l <= r:
+        # **母線は半径の 4 倍まで。** 前は l > r とだけ見ていたので
+        # 「底面の半径10cm、母線の長さ80cm」（針のように細い円錐）が出ていた。
+        # 実物の円錐は母線が半径の 1.5〜3 倍あたり（中心角 90°〜240°）。
+        if l <= r or l > 4 * r:
             continue
         if (360 * r) % l != 0:
             continue
@@ -317,7 +320,9 @@ def solid_composite_or_reverse_volume_recipe(ctx: CellContext, rng: Rng) -> MR:
     for _ in range(300):
         a = int(draw(p["edge_domain"], rng))
         h2 = int(draw(p["pyramid_height_domain"], rng))
-        if (a * a * h2) % 3 == 0:
+        # **錐の高さは立方体の1辺の 0.5〜2.5 倍。** 前は無関係に引いていたので
+        # 「1辺3cmの立方体の上に高さ16cmの正四角錐」（針のような立体）が出ていた。
+        if (a * a * h2) % 3 == 0 and a <= 2 * h2 <= 5 * a:
             break
     else:
         raise ValueError("solid_composite_or_reverse_volume: 3の倍数になる組合せを構成できず")
@@ -362,7 +367,9 @@ _SPHERE_SCENES: list[tuple[str, tuple[str, ...]]] = [
     ("地球儀", ("cm",)),
     ("風船", ("cm",)),
     ("鉄球", ("cm", "mm")),
-    ("シャボン玉", ("cm", "mm")),
+    # シャボン玉は「中心を通る平面で半分に切る」場面が成り立たないので入れない
+    # （半球の表面積セルが同じ場面リストを使う）。
+    ("スーパーボール", ("cm", "mm")),
     ("ゴムまり", ("cm",)),
 ]
 

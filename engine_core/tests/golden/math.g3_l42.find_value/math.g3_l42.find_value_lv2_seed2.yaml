@@ -24,31 +24,31 @@ meta:
   seed: 2
   signature: parallel_segment_ratio_length
 problem_ref: b87d36425aee4d26
-problem_text: 三角形AJHで、辺AJ, AH上に点Q, Pがあり、QP∥JHである。AQ=4cm, QJ=8cm, QP=6cm のとき、辺JHの長さを求めよ。
+problem_text: 三角形JKLで、辺JK, JL上に点M, Nがあり、MN∥KLである。JM=3cm, MK=9cm, MN=2cm のとき、辺KLの長さを求めよ。
 sub_questions:
 - answer:
-    display: '18'
+    display: '8'
     kind: symbolic
-    srepr: Integer(18)
+    srepr: Integer(8)
   cause_tags: []
   concept_tags:
   - parallel_segment.ratio_length
-  explanation: 'まず、QP∥JH であることから、三角形AQPと三角形AJHが相似になることを見つける。（三角形AQP と 三角形AJH）
+  explanation: 'まず、MN∥KL であることから、三角形JMNと三角形JKLが相似になることを見つける。（三角形JMN と 三角形JKL）
 
-    次に、AQ:AJ=QP:JH が成り立つことから、辺JHの長さを求める。（18）'
+    次に、JM:JK=MN:KL が成り立つことから、辺KLの長さを求める。（8）'
   hints:
-  - QP∥JH であることから、三角形AQPと三角形AJHが相似になることを見つける。
+  - MN∥KL であることから、三角形JMNと三角形JKLが相似になることを見つける。
   label: (1)
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
-    narration: QP∥JH であることから、三角形AQPと三角形AJHが相似になることを見つける。
+    narration: MN∥KL であることから、三角形JMNと三角形JKLが相似になることを見つける。
     op: identify_similar_triangles_from_parallel
-    result_display: 三角形AQP と 三角形AJH
+    result_display: 三角形JMN と 三角形JKL
     result_srepr: ''
   - args: []
-    narration: AQ:AJ=QP:JH が成り立つことから、辺JHの長さを求める。
+    narration: JM:JK=MN:KL が成り立つことから、辺KLの長さを求める。
     op: apply_parallel_segment_ratio
-    result_display: '18'
-    result_srepr: Integer(18)
+    result_display: '8'
+    result_srepr: Integer(8)
 visual_svg: null

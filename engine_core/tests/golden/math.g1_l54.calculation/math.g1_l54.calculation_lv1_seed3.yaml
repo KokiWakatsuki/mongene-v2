@@ -24,18 +24,18 @@ meta:
   seed: 3
   signature: frequency_table_value
 problem_ref: 516c62382ae06d4f
-problem_text: 次の度数分布表について、34分以上43分未満の階級の階級値を求めよ。また、度数の合計を求めよ。〔階級と度数：7分以上16分未満…12人、16分以上25分未満…13人、25分以上34分未満…7人、34分以上43分未満…12人〕。
+problem_text: 次の度数分布表について、60分以上70分未満の階級の階級値を求めよ。また、度数の合計を求めよ。〔階級と度数：30分以上40分未満…12人、40分以上50分未満…13人、50分以上60分未満…12人、60分以上70分未満…7人〕。
 sub_questions:
 - answer:
-    display: 階級値 77/2、度数の合計 44
+    display: 階級値 65、度数の合計 44
     kind: symbolic
-    srepr: Tuple(Rational(77, 2), Integer(44))
+    srepr: Tuple(Integer(65), Integer(44))
   cause_tags: []
   concept_tags:
   - frequency_table.compute_value
-  explanation: 'まず、対象の階級の下端と上端の値の平均を求め、階級値とする。（77/2）
+  explanation: 'まず、対象の階級の下端と上端の値の平均を求め、階級値とする。（65）
 
-    次に、すべての階級の度数を足し合わせ、度数の合計を求める。（階級値 77/2、度数の合計 44）'
+    次に、すべての階級の度数を足し合わせ、度数の合計を求める。（階級値 65、度数の合計 44）'
   hints:
   - 対象の階級の下端と上端の値の平均を求め、階級値とする。
   label: (1)
@@ -44,11 +44,11 @@ sub_questions:
   - args: []
     narration: 対象の階級の下端と上端の値の平均を求め、階級値とする。
     op: compute_class_value
-    result_display: 77/2
-    result_srepr: Rational(77, 2)
+    result_display: '65'
+    result_srepr: Integer(65)
   - args: []
     narration: すべての階級の度数を足し合わせ、度数の合計を求める。
     op: sum_frequencies
-    result_display: 階級値 77/2、度数の合計 44
-    result_srepr: Tuple(Rational(77, 2), Integer(44))
+    result_display: 階級値 65、度数の合計 44
+    result_srepr: Tuple(Integer(65), Integer(44))
 visual_svg: null

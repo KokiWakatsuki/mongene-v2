@@ -42,7 +42,10 @@ levels:
     recipe: math.word_problem_linear_function
     params:
       scenario_kind: meeting_intersection
-      speed_range: [45, 95]
+      # **速さは 5m 刻み。** 前は 45〜95 の整数で「毎分71m」「毎分62m」が出て、
+      # そこから逆算した道のりも 1208m・2176m と端数になっていた。
+      # 実物の教材の速さは 毎分50m・60m・80m のような区切りのいい数。
+      speed_set: [45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95]
       meet_time_range: [5, 20]
       distance_max: 3000
       place_pair_candidates: [P地点|Q地点, A地点|B地点, 甲地点|乙地点, X地点|Y地点]

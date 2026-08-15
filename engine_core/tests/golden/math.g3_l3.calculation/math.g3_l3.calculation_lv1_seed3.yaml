@@ -26,18 +26,18 @@ meta:
 problem_ref: d9eee904e434d831
 problem_text: '次の式を展開せよ。
 
-  (a + 11)(a + 6)'
+  (b + 11)(b + 6)'
 sub_questions:
 - answer:
-    display: a² + 17a + 66
+    display: b² + 17b + 66
     kind: symbolic
-    srepr: Add(Pow(Symbol('a'), Integer(2)), Mul(Integer(17), Symbol('a')), Integer(66))
+    srepr: Add(Pow(Symbol('b'), Integer(2)), Mul(Integer(17), Symbol('b')), Integer(66))
   cause_tags: []
   concept_tags:
   - polynomial.expand_formula_sum_product
   explanation: 'まず、2つの定数の和と積を求める。（和 17、積 66）
 
-    次に、乗法公式にあてはめて展開した式を書く。（a² + 17a + 66）'
+    次に、乗法公式にあてはめて展開した式を書く。（b² + 17b + 66）'
   hints:
   - 2つの定数の和と積を求める。
   label: (1)
@@ -51,6 +51,6 @@ sub_questions:
   - args: []
     narration: 乗法公式にあてはめて展開した式を書く。
     op: write_expansion
-    result_display: a² + 17a + 66
-    result_srepr: Add(Pow(Symbol('a'), Integer(2)), Mul(Integer(17), Symbol('a')), Integer(66))
+    result_display: b² + 17b + 66
+    result_srepr: Add(Pow(Symbol('b'), Integer(2)), Mul(Integer(17), Symbol('b')), Integer(66))
 visual_svg: null

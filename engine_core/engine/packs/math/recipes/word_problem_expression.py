@@ -62,7 +62,7 @@ from engine.packs.math.recipes.letter_expr import (
     _draw_distinct_from_pool,
     _leaks,
 )
-from engine.packs.math.recipes.word_problem_linear import _draw_pair_token
+from engine.packs.math.recipes.word_problem_linear import _draw_pair_token, _draw_priced_item
 from engine.packs.math.solvers.polynomial import _fmt_poly_display
 
 RECIPE_NAME = "math.word_problem_expression"
@@ -285,8 +285,12 @@ class ExpressionScene:
 
 
 def _scene_price_count_letter(p: Mapping[str, Any], rng: Rng) -> ExpressionScene:
-    price = int(draw(p["price_domain"], rng))
-    item, counter = _draw_pair_token(list(p["item_candidates"]), rng)
+    # **値段は品物ごとの相場から 10円刻みで引く。**
+    # 前は品物と無関係に 20〜300 の整数を引いていて「1本277円の鉛筆」「1本39円の
+    # 輪ゴム」が出ていた。実物の問題集の値段は 10円刻み（80円・120円・150円）で、
+    # しかも品物の相場に収まっている。品名と相場を1つのトークン
+    # （`鉛筆|本|50|150`）に持たせ、品物を引いてから値段を引く。
+    item, counter, price = _draw_priced_item(list(p["item_candidates"]), rng)
     return ExpressionScene(
         numbers={"price": str(price)},
         scenario=f"1{counter}{price}円の{item}をx{counter}買う。",
@@ -308,9 +312,20 @@ def _scene_discount(p: Mapping[str, Any], rng: Rng) -> ExpressionScene:
     )
 
 
+def _draw_motion(tokens: list[Any], rng: Rng) -> tuple[str, int, int]:
+    """`動作|下限|上限` を引く（速さの相場つき）。
+
+    動作と速さを別々に引くと「時速9kmで歩く」「時速39kmで走る」「分速125mで歩く」
+    が出る。人が歩くのは時速3〜6km（分速50〜100m）、走るのは時速8〜15km
+    （分速150〜250m）で、動作ごとに速さの範囲が決まっている。
+    """
+    name, lo, hi = str(draw(list(tokens), rng)).split("|")
+    return name, int(lo), int(hi)
+
+
 def _scene_distance_letter(p: Mapping[str, Any], rng: Rng) -> ExpressionScene:
-    speed = int(draw(p["speed_domain"], rng))
-    verb = str(draw(list(p["verb_candidates"]), rng))
+    verb, lo, hi = _draw_motion(list(p["motion_candidates"]), rng)
+    speed = int(draw({"int_range": [lo, hi]}, rng))
     letter = str(draw(list(p["letter_candidates"]), rng))
     return ExpressionScene(
         numbers={"speed": str(speed), "letter": letter},
@@ -324,7 +339,10 @@ def _scene_distance_letter(p: Mapping[str, Any], rng: Rng) -> ExpressionScene:
 # 単位変換（m→km）の答えの分母の上限。台帳の例「分速60m → 3a/50」が分母50なので、
 # そこまでを教材の範囲とする。**速さの定義域は狭めない**（原則⓪: 壊れているのは答えの
 # 大きさであって定義域の広さではない。分速106m だと `53a/500` になっていた＝D-31）。
-_MAX_UNIT_CONVERT_DENOMINATOR = 50
+# 動作ごとに速さを相場に縛った（`_draw_motion`）ぶん、上限を 100 に緩める
+# ——分速70m（7a/100）は教材にある書き方。狭いままだと候補が10通りを切って
+# dup_rate が跳ねる。
+_MAX_UNIT_CONVERT_DENOMINATOR = 100
 
 
 def _unit_convert_speeds(domain: Mapping[str, Any]) -> list[int]:
@@ -334,8 +352,9 @@ def _unit_convert_speeds(domain: Mapping[str, Any]) -> list[int]:
 
 
 def _scene_unit_convert(p: Mapping[str, Any], rng: Rng) -> ExpressionScene:
-    speed = int(draw({"int_set": _unit_convert_speeds(p["speed_domain"])}, rng))
-    verb = str(draw(list(p["verb_candidates"]), rng))
+    # 動作ごとの速さの相場（`_draw_motion`）と、答えの分母の上限の両方を満たす速さ。
+    verb, lo, hi = _draw_motion(list(p["motion_candidates"]), rng)
+    speed = int(draw({"int_set": _unit_convert_speeds({"int_range": [lo, hi]})}, rng))
     # 答えの分母を絞ったぶん、**文字の選び方**を軸に足して組み合わせを取り戻す
     # （Lv1 と同じ手。原則①: 軸を増やす）。
     letter = str(draw(list(p["letter_candidates"]), rng))

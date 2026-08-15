@@ -26,18 +26,18 @@ meta:
 problem_ref: e7091c2ce2a73b9c
 problem_text: '次の式を因数分解せよ。
 
-  a² - 60a + 900'
+  b² - 60b + 900'
 sub_questions:
 - answer:
-    display: (a - 30)²
+    display: (b - 30)²
     kind: symbolic
-    srepr: Pow(Add(Symbol('a'), Integer(-30)), Integer(2))
+    srepr: Pow(Add(Symbol('b'), Integer(-30)), Integer(2))
   cause_tags: []
   concept_tags:
   - polynomial.factor_perfect_square
-  explanation: 'まず、はじめと終わりが平方で、中央が積の2倍になっていることを確かめる。（a² と 30²、中央は 2 × a × (-30)）
+  explanation: 'まず、はじめと終わりが平方で、中央が積の2倍になっていることを確かめる。（b² と 30²、中央は 2 × b × (-30)）
 
-    次に、1次式の平方の形で表す。（(a - 30)²）'
+    次に、1次式の平方の形で表す。（(b - 30)²）'
   hints:
   - はじめと終わりが平方で、中央が積の2倍になっていることを確かめる。
   label: (1)
@@ -46,11 +46,11 @@ sub_questions:
   - args: []
     narration: はじめと終わりが平方で、中央が積の2倍になっていることを確かめる。
     op: recognize_perfect_square
-    result_display: a² と 30²、中央は 2 × a × (-30)
+    result_display: b² と 30²、中央は 2 × b × (-30)
     result_srepr: ''
   - args: []
     narration: 1次式の平方の形で表す。
     op: write_square
-    result_display: (a - 30)²
-    result_srepr: Pow(Add(Symbol('a'), Integer(-30)), Integer(2))
+    result_display: (b - 30)²
+    result_srepr: Pow(Add(Symbol('b'), Integer(-30)), Integer(2))
 visual_svg: null

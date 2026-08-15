@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: knowledge_classify_line_signs
 problem_ref: 7aba05a20e920ef6
-problem_text: 1次関数 y = 25x + 1 のグラフのようすとして正しいものを、次のア〜エから選べ。ア 右上がりで、y 軸の正の部分で y 軸と交わる イ 右上がりで、y 軸の負の部分で y 軸と交わる ウ 右下がりで、y 軸の正の部分で y 軸と交わる エ 右下がりで、y 軸の負の部分で y 軸と交わる
+problem_text: 1次関数 y = 5x + 12 のグラフのようすとして正しいものを、次のア〜エから選べ。ア 右上がりで、y 軸の正の部分で y 軸と交わる イ 右上がりで、y 軸の負の部分で y 軸と交わる ウ 右下がりで、y 軸の正の部分で y 軸と交わる エ 右下がりで、y 軸の負の部分で y 軸と交わる
 sub_questions:
 - answer:
     correct: 右上がりで、y 軸の正の部分で y 軸と交わる

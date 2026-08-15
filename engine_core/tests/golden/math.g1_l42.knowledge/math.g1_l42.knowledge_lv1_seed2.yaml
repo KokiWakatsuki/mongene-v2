@@ -24,7 +24,7 @@ meta:
   seed: 2
   signature: judge_construction_property_angle_bisector
 problem_ref: be2dbf05f9666f0c
-problem_text: ∠HQMの二等分線上に点Fをとり、Fから2辺QH、QMに垂線を引く。このとき、Fから2辺までの距離の関係を答えよ。
+problem_text: ∠HGJの二等分線上に点Sをとり、Sから2辺GH、GJに垂線を引く。このとき、Sから2辺までの距離の関係を答えよ。
 sub_questions:
 - answer:
     correct: 等しい

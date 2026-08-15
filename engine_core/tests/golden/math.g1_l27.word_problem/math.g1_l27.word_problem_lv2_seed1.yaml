@@ -23,7 +23,7 @@ meta:
     unit: g1_l27
   seed: 1
   signature: word_problem_round_trip_distance
-problem_ref: d081463c678bc8c1
+problem_ref: d50991723b79cc79
 problem_text: '家から駅まで、行きは時速5km、帰りは同じ道を時速15kmの速さで進んだところ、進むのにかかった時間は合わせて4時間だった。
 
   家から駅までの道のりを x km とする。
@@ -66,7 +66,7 @@ sub_questions:
   - equation.word_problem_round_trip
   explanation: 'まず、分母の最小公倍数を両辺にかけて、分母をはらう。（4x = 60）
 
-    次に、同類項をまとめ、x の係数で両辺をわって解を求める。（x = 15）'
+    次に、等式の性質を使い、両辺を x の係数でわる。（x = 15）'
   hints:
   - 分母の最小公倍数を両辺にかけて、分母をはらう。
   label: (2)
@@ -78,8 +78,8 @@ sub_questions:
     result_display: 4x = 60
     result_srepr: Integer(15)
   - args: []
-    narration: 同類項をまとめ、x の係数で両辺をわって解を求める。
-    op: combine_and_solve
+    narration: 等式の性質を使い、両辺を x の係数でわる。
+    op: divide_both_sides
     result_display: x = 15
     result_srepr: Integer(15)
 visual_svg: null

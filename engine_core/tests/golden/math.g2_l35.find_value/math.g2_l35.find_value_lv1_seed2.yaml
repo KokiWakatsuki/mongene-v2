@@ -24,18 +24,18 @@ meta:
   seed: 2
   signature: regular_polygon_exterior_angle
 problem_ref: ee33bb0dde23dfcd
-problem_text: 正十角形の1つの外角の大きさを求めよ。
+problem_text: 正八角形の1つの外角の大きさを求めよ。
 sub_questions:
 - answer:
-    display: '36'
+    display: '45'
     kind: symbolic
-    srepr: Integer(36)
+    srepr: Integer(45)
   cause_tags: []
   concept_tags:
   - polygon_angle.regular_exterior_angle
   explanation: 'まず、多角形の外角の和は、辺の数によらずつねに一定であることを思い出す。（多角形の外角の和がつねに一定であることを思い出す）
 
-    次に、正多角形はすべての外角が等しいことから、外角の和を辺の数でわって1つの外角を求める。（36）'
+    次に、正多角形はすべての外角が等しいことから、外角の和を辺の数でわって1つの外角を求める。（45）'
   hints:
   - 多角形の外角の和は、辺の数によらずつねに一定であることを思い出す。
   label: (1)
@@ -49,6 +49,6 @@ sub_questions:
   - args: []
     narration: 正多角形はすべての外角が等しいことから、外角の和を辺の数でわって1つの外角を求める。
     op: divide_by_sides
-    result_display: '36'
-    result_srepr: Integer(36)
+    result_display: '45'
+    result_srepr: Integer(45)
 visual_svg: null

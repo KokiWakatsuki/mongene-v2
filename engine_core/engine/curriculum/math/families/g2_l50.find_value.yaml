@@ -30,7 +30,13 @@ levels:
     signature: equal_area_transform_value
     recipe: math.equal_area_transform_value
     params:
-      area_domain: {int_range: [1, 500]}
+      # **面積は 10cm² 刻み。** 前は 1〜500 の整数で「四角形の面積が1cm²」
+      # 「291cm²」のような端数が出ていた。実物の等積変形の面積は
+      # 20・36・48cm² のような数。狭めたぶんは頂点名の軸で戻す（params に載せる）。
+      area_domain: {int_set: [12, 16, 18, 20, 24, 28, 30, 32, 36, 40, 42, 45, 48, 50,
+                              54, 56, 60, 64, 66, 70, 72, 75, 80, 84, 88, 90, 96, 100,
+                              108, 110, 120, 126, 132, 140, 144, 150, 160, 168, 180,
+                              192, 200, 210, 216, 224, 240, 252, 264, 270, 280, 288]}
     given: [condition]
     asked: [value]
     visual: none

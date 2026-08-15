@@ -24,26 +24,26 @@ meta:
   seed: 3
   signature: word_problem_linear_two_point_eval
 problem_ref: 57a5dd76222c95c7
-problem_text: 'あるゴムひもに10gのおもりをつるすと全体の長さが25cmになり、30gのおもりをつるすと65cmになった。
+problem_text: 'あるばねに15gのおもりをつるすと全体の長さが34cmになり、30gのおもりをつるすと49cmになった。
 
-  ゴムひもの長さ y cm はおもりの重さ x g の1次関数であるとする。
+  ばねの長さ y cm はおもりの重さ x g の1次関数であるとする。
 
   (1) y を x の式で表せ。
 
-  (2) 5gのおもりをつるしたときのゴムひもの長さを求めよ。'
+  (2) 10gのおもりをつるしたときのばねの長さを求めよ。'
 sub_questions:
 - answer:
-    display: y = 2x + 5
+    display: y = x + 19
     kind: symbolic
-    srepr: Add(Mul(Integer(2), Symbol('x')), Integer(5))
+    srepr: Add(Symbol('x'), Integer(19))
   cause_tags: []
   concept_tags:
   - linear_function.word_problem_two_point_eval
-  explanation: 'まず、2点の y 座標の差を x 座標の差で割り、傾きを求める。（傾き a = 2）
+  explanation: 'まず、2点の y 座標の差を x 座標の差で割り、傾きを求める。（傾き a = 1）
 
-    次に、傾きと通る1点を y = ax + b に代入し、切片を求める。（切片 b = 5）
+    次に、傾きと通る1点を y = ax + b に代入し、切片を求める。（切片 b = 19）
 
-    最後に、傾きと切片から一次関数の式を組み立てる。（y = 2x + 5）'
+    最後に、傾きと切片から一次関数の式を組み立てる。（y = x + 19）'
   hints:
   - 2点の y 座標の差を x 座標の差で割り、傾きを求める。
   - 傾きと通る1点を y = ax + b に代入し、切片を求める。
@@ -51,53 +51,53 @@ sub_questions:
   prompt_text: 式に表しなさい。
   solution_steps:
   - args:
-    - (10, 25)
-    - (30, 65)
+    - (15, 34)
+    - (30, 49)
     narration: 2点の y 座標の差を x 座標の差で割り、傾きを求める。
     op: compute_slope
-    result_display: 傾き a = 2
-    result_srepr: Integer(2)
+    result_display: 傾き a = 1
+    result_srepr: Integer(1)
   - args:
-    - '2'
-    - (10, 25)
+    - '1'
+    - (15, 34)
     narration: 傾きと通る1点を y = ax + b に代入し、切片を求める。
     op: compute_intercept
-    result_display: 切片 b = 5
-    result_srepr: Integer(5)
+    result_display: 切片 b = 19
+    result_srepr: Integer(19)
   - args:
-    - '2'
-    - '5'
+    - '1'
+    - '19'
     narration: 傾きと切片から一次関数の式を組み立てる。
     op: form_expression
-    result_display: y = 2x + 5
-    result_srepr: Add(Mul(Integer(2), Symbol('x')), Integer(5))
+    result_display: y = x + 19
+    result_srepr: Add(Symbol('x'), Integer(19))
 - answer:
-    display: 15cm
+    display: 29cm
     kind: symbolic
-    srepr: Integer(15)
+    srepr: Integer(29)
   cause_tags: []
   concept_tags:
   - linear_function.word_problem_two_point_eval
-  explanation: 'まず、x の値を式に代入する。（y = 2 × 5 + 5）
+  explanation: 'まず、x の値を式に代入する。（y = 1 × 10 + 19）
 
-    次に、計算して y の値を求める。（y = 15）'
+    次に、計算して y の値を求める。（y = 29）'
   hints:
   - x の値を式に代入する。
   label: (2)
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args:
-    - '2'
-    - '5'
-    - '5'
+    - '1'
+    - '19'
+    - '10'
     narration: x の値を式に代入する。
     op: substitute_x
-    result_display: y = 2 × 5 + 5
-    result_srepr: Integer(15)
+    result_display: y = 1 × 10 + 19
+    result_srepr: Integer(29)
   - args:
-    - y = 2 × 5 + 5
+    - y = 1 × 10 + 19
     narration: 計算して y の値を求める。
     op: evaluate
-    result_display: y = 15
-    result_srepr: Integer(15)
+    result_display: y = 29
+    result_srepr: Integer(29)
 visual_svg: null

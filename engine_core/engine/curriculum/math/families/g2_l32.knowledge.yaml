@@ -31,7 +31,9 @@ levels:
     signature: judge_parallel_from_angle_condition
     recipe: math.judge_parallel_from_angle_condition
     params:
-      angle_domain: {int_range: [1, 179]}
+      # **同位角は 25〜155°。** 前は 1〜179 で「同位角がそれぞれ165°、192°」
+      # （192°は同位角になりえない）や 1°が出ていた。
+      angle_domain: {int_range: [25, 155]}
       diff_domain: {int_range: [1, 30]}
     given: [statement]
     asked: [choice]

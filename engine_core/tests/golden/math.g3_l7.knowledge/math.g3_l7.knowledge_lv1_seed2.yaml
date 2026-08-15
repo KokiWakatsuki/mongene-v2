@@ -24,7 +24,7 @@ meta:
   seed: 2
   signature: factorization_relation_rule_recall
 problem_ref: 1c4f648c8832d2c9
-problem_text: 多項式 x² + 7x + 25 を扱うときの「因数分解」は、どのような操作か。正しく述べているものを1つ選べ。
+problem_text: 多項式 t² + t - 30 を扱うときの「因数分解」は、どのような操作か。正しく述べているものを1つ選べ。
 sub_questions:
 - answer:
     correct: 多項式を因数の積の形に表すことで、展開のちょうど逆にあたる操作

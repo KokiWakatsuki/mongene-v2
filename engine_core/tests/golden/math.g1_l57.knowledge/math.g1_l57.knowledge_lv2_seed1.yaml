@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: judge_appropriate_representative_value
 problem_ref: b0e0fa112d4f1ffe
-problem_text: 1つだけ極端に大きい値が混じっている251人のテストの得点のデータで、集団の「まん中あたり」を表す代表値としては平均値と中央値のどちらが適切か、理由とともに答えよ。
+problem_text: 少数のきわめて高い値が混じっている70世帯の貯蓄額のデータで、集団の「まん中あたり」を表す代表値としては平均値と中央値のどちらが適切か、理由とともに答えよ。
 sub_questions:
 - answer:
     correct: 中央値

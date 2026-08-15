@@ -24,18 +24,18 @@ meta:
   seed: 1
   signature: sector_arc_length_or_area
 problem_ref: f67c357d47879c0d
-problem_text: 半径5cm、中心角210°のおうぎ形がある。このおうぎ形の弧の長さを求めよ。ただし円周率はπとする。
+problem_text: 半径3cm、中心角30°のおうぎ形がある。このおうぎ形の弧の長さを求めよ。ただし円周率はπとする。
 sub_questions:
 - answer:
-    display: 35π/6
+    display: π/2
     kind: symbolic
-    srepr: Mul(Rational(35, 6), pi)
+    srepr: Mul(Rational(1, 2), pi)
   cause_tags: []
   concept_tags:
   - sector.arc_length_or_area
-  explanation: 'まず、おうぎ形の半径と中心角の大きさを読み取る。（半径 5、中心角 210°）
+  explanation: 'まず、おうぎ形の半径と中心角の大きさを読み取る。（半径 3、中心角 30°）
 
-    次に、弧の長さの公式（半径×中心角の割合×2π）にあてはめて計算する。（35π/6）'
+    次に、弧の長さの公式（半径×中心角の割合×2π）にあてはめて計算する。（π/2）'
   hints:
   - おうぎ形の半径と中心角の大きさを読み取る。
   label: (1)
@@ -44,11 +44,11 @@ sub_questions:
   - args: []
     narration: おうぎ形の半径と中心角の大きさを読み取る。
     op: identify_radius_and_angle
-    result_display: 半径 5、中心角 210°
+    result_display: 半径 3、中心角 30°
     result_srepr: ''
   - args: []
     narration: 弧の長さの公式（半径×中心角の割合×2π）にあてはめて計算する。
     op: apply_sector_formula
-    result_display: 35π/6
-    result_srepr: Mul(Rational(35, 6), pi)
+    result_display: π/2
+    result_srepr: Mul(Rational(1, 2), pi)
 visual_svg: null

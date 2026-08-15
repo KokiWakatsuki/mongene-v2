@@ -19,7 +19,10 @@ levels:
     params:
       topic: multiplication_formula_choice
       concept_set: [general_form, perfect_square_form, diff_of_squares_form]
-      number_domain: {int_range: [1, 120]}
+      # **かっこの中の数は 1桁〜2桁前半。** 前は 120 まで引いていて
+      # 「(x + 54)(x + 75)」「(x + 111)(x - 111)」という、乗法公式を
+      # 見分けるだけの問いには大きすぎる式が出ていた。
+      number_domain: {int_range: [1, 15]}
     given: [statement]
     asked: [choice]
     visual: none

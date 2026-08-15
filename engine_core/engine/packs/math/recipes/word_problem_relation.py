@@ -50,7 +50,7 @@ from engine.core.contracts import (
 )
 from engine.core.registry import register_recipe
 from engine.core.rng import Rng, draw
-from engine.packs.math.recipes.word_problem_linear import _draw_pair_token
+from engine.packs.math.recipes.word_problem_linear import _draw_pair_token, _draw_priced_item
 
 RECIPE_NAME = "math.word_problem_relation"
 
@@ -157,10 +157,11 @@ def _scene_equality_price_count(p: Mapping[str, Any], rng: Rng) -> RelationScene
     """g1_l19 Lv1: 1個 x 円の品を count 個買って total 円でちょうど払えた。"""
     count = int(draw(p["count_domain"], rng))
     # x0（単価）は場面文には出ない（x で表されるため）。total を answer-first で
-    # 逆算するためだけに引く。
-    price = int(draw(p["price_domain"], rng))
+    # 逆算するためだけに引く。**値段は品物ごとの相場から 10円刻みで引く**——前は
+    # 20〜300 の整数だったので「7本買って1624円ちょうど払えた」＝1本232円の
+    # ボールペンになっていた。
+    item, counter, price = _draw_priced_item(list(p["item_candidates"]), rng)
     total = price * count
-    item, counter = _draw_pair_token(list(p["item_candidates"]), rng)
     return RelationScene(
         numbers={"count": count, "total": total},
         scenario=(
@@ -193,8 +194,14 @@ def _scene_equality_both_sides(p: Mapping[str, Any], rng: Rng) -> RelationScene:
 def _scene_inequality_price_count(p: Mapping[str, Any], rng: Rng) -> RelationScene:
     """g1_l20 Lv1: 1個 x 円の品を count 個買った代金が total 円以下。"""
     count = int(draw(p["count_domain"], rng))
-    total = int(draw(p["total_domain"], rng))
-    item, counter = _draw_pair_token(list(p["item_candidates"]), rng)
+    # **予算は 100円刻みで、しかも品物の相場に合わせる。** 前は 100〜3000 の整数を
+    # 個数と無関係に引いていて「代金が1153円以下であった」（端数）や「おにぎりを
+    # 8個買った代金が400円以下」（1個50円のおにぎり）が出ていた。実物の「〜円以下」
+    # は区切りのいい額で、しかも暗に想定している単価が場面としてありうる。
+    # 相場の単価 × 個数を 100円単位に切り上げ、余裕分（0〜300円）を足す。
+    item, counter, price = _draw_priced_item(list(p["item_candidates"]), rng)
+    margin = int(draw(list(range(0, 4)), rng))
+    total = -(-price * count // 100) * 100 + margin * 100
     return RelationScene(
         numbers={"count": count, "total": total},
         scenario=(
@@ -211,10 +218,21 @@ def _scene_inequality_both_sides(p: Mapping[str, Any], rng: Rng) -> RelationScen
     """g1_l20 Lv2: x を mult 倍して sub を引いた数が bound より大きく、x に add を
     加えた数未満である。
     """
-    mult = int(draw(p["mult_domain"], rng))
-    sub = int(draw(p["sub_domain"], rng))
-    bound = int(draw(p["bound_domain"], rng))
-    add = int(draw(p["add_domain"], rng))
+    # **満たす数が実際に存在する組だけを残す。** 前は4つを独立に引いていたので
+    # 「32 < 3x - 2 < x + 4」（x > 34/3 かつ x < 3 ＝ 解なし）が出ていた。
+    # 「ある数 x」と言っておいて、そんな数が1つも無いのは場面として成り立たない。
+    # bound < mult·x - sub < x + add の解は (bound+sub)/mult < x < (add+sub)/(mult-1)。
+    for _ in range(200):
+        mult = int(draw(p["mult_domain"], rng))
+        sub = int(draw(p["sub_domain"], rng))
+        bound = int(draw(p["bound_domain"], rng))
+        add = int(draw(p["add_domain"], rng))
+        lo = (bound + sub) / mult
+        hi = (add + sub) / (mult - 1)
+        if hi - lo >= 1:  # 整数解が少なくとも1つ入る幅
+            break
+    else:
+        raise ValueError("_scene_inequality_both_sides: 解が存在する組を構成できず")
     return RelationScene(
         numbers={"mult": mult, "sub": sub, "bound": bound, "add": add},
         scenario=(

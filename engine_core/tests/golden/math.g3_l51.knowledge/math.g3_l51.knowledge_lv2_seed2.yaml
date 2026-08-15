@@ -24,21 +24,21 @@ meta:
   seed: 2
   signature: identify_hypotenuse
 problem_ref: 7071619fdf68b264
-problem_text: ∠A=90°の三角形PGAで斜辺はどの辺か答えよ。
+problem_text: ∠H=90°の三角形HJKで斜辺はどの辺か答えよ。
 sub_questions:
 - answer:
-    correct: 辺PG
+    correct: 辺JK
     distractors:
-    - 辺AP
-    - 辺AG
+    - 辺HJ
+    - 辺HK
     fact_id: pythagorean.identify_hypotenuse
     kind: choice
   cause_tags: []
   concept_tags:
   - pythagorean.identify_hypotenuse
-  explanation: 'まず、直角三角形で、直角の頂点がどこかを読み取る。（頂点A）
+  explanation: 'まず、直角三角形で、直角の頂点がどこかを読み取る。（頂点H）
 
-    次に、直角の頂点に接していない辺が斜辺になることから、斜辺を答える。（辺PG）'
+    次に、直角の頂点に接していない辺が斜辺になることから、斜辺を答える。（辺JK）'
   hints:
   - 直角三角形で、直角の頂点がどこかを読み取る。
   label: (1)
@@ -47,11 +47,11 @@ sub_questions:
   - args: []
     narration: 直角三角形で、直角の頂点がどこかを読み取る。
     op: identify_right_angle_vertex
-    result_display: 頂点A
+    result_display: 頂点H
     result_srepr: ''
   - args: []
     narration: 直角の頂点に接していない辺が斜辺になることから、斜辺を答える。
     op: name_hypotenuse
-    result_display: 辺PG
-    result_srepr: 辺PG
+    result_display: 辺JK
+    result_srepr: 辺JK
 visual_svg: null

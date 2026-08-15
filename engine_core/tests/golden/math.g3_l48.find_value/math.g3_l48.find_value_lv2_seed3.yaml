@@ -24,18 +24,18 @@ meta:
   seed: 3
   signature: inscribed_angle_transfer_same_arc
 problem_ref: 2e97691f8ceb66ea
-problem_text: ∠AEP=∠ALP=48°であり、4点A, P, E, Lは同一円周上にある。∠LAE=38°のとき、∠LPEの大きさを求めよ。
+problem_text: ∠NQP=∠NRP=79°であり、4点N, P, Q, Rは同一円周上にある。∠RNQ=47°のとき、∠RPQの大きさを求めよ。
 sub_questions:
 - answer:
-    display: 38°
+    display: 47°
     kind: symbolic
-    srepr: Integer(38)
+    srepr: Integer(47)
   cause_tags: []
   concept_tags:
   - circle.inscribed_angle_transfer_same_arc
-  explanation: 'まず、4点が同一円周上にあることから、同じ弧に対応する角の大きさを読み取る。（38°）
+  explanation: 'まず、4点が同一円周上にあることから、同じ弧に対応する角の大きさを読み取る。（47°）
 
-    次に、同じ弧に対する円周角の大きさはすべて等しいことから、求める角の大きさを求める。（38°）'
+    次に、同じ弧に対する円周角の大きさはすべて等しいことから、求める角の大きさを求める。（47°）'
   hints:
   - 4点が同一円周上にあることから、同じ弧に対応する角の大きさを読み取る。
   label: (1)
@@ -44,11 +44,11 @@ sub_questions:
   - args: []
     narration: 4点が同一円周上にあることから、同じ弧に対応する角の大きさを読み取る。
     op: identify_same_arc_angle
-    result_display: 38°
+    result_display: 47°
     result_srepr: ''
   - args: []
     narration: 同じ弧に対する円周角の大きさはすべて等しいことから、求める角の大きさを求める。
     op: transfer_by_inscribed_angle_equality
-    result_display: 38°
-    result_srepr: Integer(38)
+    result_display: 47°
+    result_srepr: Integer(47)
 visual_svg: null

@@ -25,7 +25,7 @@ from engine.core.contracts import (
 )
 from engine.core.registry import REGISTRY, register_recipe
 from engine.core.rng import Rng, draw
-from engine.packs.math.recipes.letter_expr import _draw_distinct_points
+from engine.packs.math.recipes.letter_expr import _draw_named_figures
 
 
 def _effective_concept_tags(ctx: CellContext) -> list[str]:
@@ -118,7 +118,10 @@ def similar_solid_surface_volume_ratio_recipe(ctx: CellContext, rng: Rng) -> MR:
     p = ctx.spec_level.params
     ratio_num, ratio_den = _draw_coprime_ratio(rng, p["ratio_domain"], int(p["ratio_max"]))
     solid = str(draw(cast("list[str]", p["solid_set"]), rng))
-    ls, lt = _draw_distinct_points(2, rng)
+    # 図形の頂点はアルファベット順に名づける（実物は「正方形ABCD」「△ABC∽△DEF」）。
+    # 無作為に引くと「正方形ERDJ」「三角形JQBと三角形CMH」になる。
+    f1, f2 = _draw_named_figures([1, 1], rng)
+    ls, lt = f1, f2
 
     solver = REGISTRY.solver("math.similar_solid_surface_volume_ratio")
     sol = cast(Solution, solver(ratio_num, ratio_den))
@@ -164,7 +167,8 @@ def similar_triangle_trapezoid_area_ratio_recipe(ctx: CellContext, rng: Rng) -> 
     からADEを除いた残りが台形になるという合成を加えた多段構成。
     """
     p = ctx.spec_level.params
-    pa, pb, pc, pd, pe = _draw_distinct_points(5, rng)
+    (v,) = _draw_named_figures([5], rng)
+    pa, pb, pc, pd, pe = v
     for _ in range(200):
         ad = int(draw(p["ratio_domain"], rng))
         db = int(draw(p["ratio_domain"], rng))
@@ -559,7 +563,9 @@ def exam_trapezoid_diagonal_ratios_recipe(ctx: CellContext, rng: Rng) -> MR:
     """台形の対角線の交点まわりの面積比（exam_l6.word_problem Lv4・answer-first）。"""
     p = ctx.spec_level.params
     ad, bc = _draw_coprime_ratio(rng, p["length_domain"], 15)
-    height = int(draw(p["height_domain"], rng))
+    # **高さは下底の 0.4〜1.2 倍**（「AD=1cm、BC=3cm、高さ9cm」は紙に描けない）。
+    lo, hi = max(2, (2 * bc) // 5), max(3, (6 * bc) // 5)
+    height = int(draw({"int_range": [lo, hi]}, rng))
     statement = (
         f"ADとBCが平行な台形ABCDがあり、AD={ad}cm、BC={bc}cm、高さは{height}cmである。"
         "対角線ACとBDの交点をPとする。"

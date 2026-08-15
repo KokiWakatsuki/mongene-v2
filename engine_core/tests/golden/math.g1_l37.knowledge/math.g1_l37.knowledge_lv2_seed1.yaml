@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: judge_point_line_distance_meaning
 problem_ref: 006c17c60f8056f7
-problem_text: 点Qと直線FJがある。「点Qと直線FJとの距離」とは、どの線分の長さのことか、図に即して答えよ。
+problem_text: 点Wと直線UVがある。「点Wと直線UVとの距離」とは、どの線分の長さのことか、図に即して答えよ。
 sub_questions:
 - answer:
     correct: 垂線の長さ

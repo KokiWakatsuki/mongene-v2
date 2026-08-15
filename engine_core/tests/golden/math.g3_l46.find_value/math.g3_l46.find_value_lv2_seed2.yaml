@@ -24,7 +24,7 @@ meta:
   seed: 2
   signature: similar_solid_surface_volume_ratio
 problem_ref: 7bf649de777bcb81
-problem_text: 相似な2つの円錐P, Dがあり、相似比は 1:5 である。PとDの表面積の比と体積の比をそれぞれ求めよ。
+problem_text: 相似な2つの円錐S, Xがあり、相似比は 1:5 である。SとXの表面積の比と体積の比をそれぞれ求めよ。
 sub_questions:
 - answer:
     display: 表面積の比 1:25、体積の比 1:125

@@ -29,6 +29,14 @@ levels:
     signature: identify_parallelogram_condition
     recipe: math.identify_parallelogram_condition
     params: {}
+    # 頂点名をアルファベット順（実物の書き方）に直したぶん、名前の組合せが減った。
+    # 数と名前を現実に戻すのが先で、狭さは仕様として宣言する。
+    dup_rate_max: 0.5
+    dup_rate_reason: |
+      平行四辺形になるための条件は**5つしかない**（教科書がそう定めている）。
+      変えられるのは「どの条件を出すか」5通り × 頂点名（連続した文字＝21通り）で、
+      100 seed では実測 0.36 が重なる。頂点名を無作為にすれば下がるが、
+      「四角形NKRF」は実物の教材に出てこない書き方なので、そちらは戻さない。
     given: [statement]
     asked: [choice]
     visual: none

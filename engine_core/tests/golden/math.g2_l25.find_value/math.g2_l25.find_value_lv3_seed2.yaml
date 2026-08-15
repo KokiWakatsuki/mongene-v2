@@ -28,12 +28,12 @@ meta:
   seed: 2
   signature: lf_expr_two_points_simultaneous
 problem_ref: 672ee264de682ee9
-problem_text: 2点 (1, -14/3) と (-4, -4/3) を通る直線の式を求めよ。
+problem_text: 2点 (-3, -2) と (0, 0) を通る直線の式を求めよ。
 sub_questions:
 - answer:
-    display: y = -2/3x - 4
+    display: y = 2/3x
     kind: symbolic
-    srepr: Add(Mul(Integer(-1), Rational(2, 3), Symbol('x')), Integer(-4))
+    srepr: Mul(Rational(2, 3), Symbol('x'))
   cause_tags:
   - lf.confused_with_proportional
   - lf.substitution_error
@@ -41,11 +41,11 @@ sub_questions:
   - linear_function.slope_from_two_points
   - linear_function.intercept_from_point
   - linear_function.expression_from_two_points
-  explanation: 'まず、2点をそれぞれ y = ax + b に代入し、a, b の連立方程式を立てる。（a + b = -14/3, -4a + b = -4/3）
+  explanation: 'まず、2点をそれぞれ y = ax + b に代入し、a, b の連立方程式を立てる。（-3a + b = -2, b = 0）
 
-    次に、連立方程式を解いて a, b を同時に求める。（a = -2/3, b = -4）
+    次に、連立方程式を解いて a, b を同時に求める。（a = 2/3, b = 0）
 
-    最後に、求めた a, b から一次関数の式を組み立てる。（y = -2/3x - 4）'
+    最後に、求めた a, b から一次関数の式を組み立てる。（y = 2/3x）'
   hints:
   - 2点をそれぞれ y = ax + b に代入し、a, b の連立方程式を立てる。
   - 連立方程式を解いて a, b を同時に求める。
@@ -53,24 +53,24 @@ sub_questions:
   prompt_text: 式に表しなさい。
   solution_steps:
   - args:
-    - (1, -14/3)
-    - (-4, -4/3)
+    - (-3, -2)
+    - (0, 0)
     narration: 2点をそれぞれ y = ax + b に代入し、a, b の連立方程式を立てる。
     op: setup_simultaneous
-    result_display: a + b = -14/3, -4a + b = -4/3
-    result_srepr: '[Equality(Add(Symbol(''a''), Symbol(''b'')), Rational(-14, 3)), Equality(Add(Mul(Integer(-1), Integer(4), Symbol(''a'')), Symbol(''b'')), Rational(-4, 3))]'
+    result_display: -3a + b = -2, b = 0
+    result_srepr: '[Equality(Add(Mul(Integer(-1), Integer(3), Symbol(''a'')), Symbol(''b'')), Integer(-2)), Equality(Symbol(''b''), Integer(0))]'
   - args:
-    - Eq(a + b, -14/3)
-    - Eq(-4*a + b, -4/3)
+    - Eq(-3*a + b, -2)
+    - Eq(b, 0)
     narration: 連立方程式を解いて a, b を同時に求める。
     op: solve_simultaneous
-    result_display: a = -2/3, b = -4
-    result_srepr: '{''a'': Rational(-2, 3), ''b'': Integer(-4)}'
+    result_display: a = 2/3, b = 0
+    result_srepr: '{''a'': Rational(2, 3), ''b'': Integer(0)}'
   - args:
-    - -2/3
-    - '-4'
+    - 2/3
+    - '0'
     narration: 求めた a, b から一次関数の式を組み立てる。
     op: form_expression
-    result_display: y = -2/3x - 4
-    result_srepr: Add(Mul(Integer(-1), Rational(2, 3), Symbol('x')), Integer(-4))
+    result_display: y = 2/3x
+    result_srepr: Mul(Rational(2, 3), Symbol('x'))
 visual_svg: null

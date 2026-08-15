@@ -15,7 +15,11 @@ levels:
     signature: special_parallelogram_diagonal_value
     recipe: math.special_parallelogram_diagonal_value
     params:
-      value_domain: {int_range: [1, 500]}
+      # **対角線は 4〜40cm の偶数。** 前は 1〜500 の整数で「対角線88cm」
+      # 「RQ=97cm（答え 48.5）」が出ていた。実物の図形の対角線は紙に描ける
+      # 大きさで、半分が整数になるように偶数でとる。
+      value_domain: {int_set: [4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30,
+                               32, 34, 36, 38, 40]}
     given: [condition]
     asked: [value]
     visual: none

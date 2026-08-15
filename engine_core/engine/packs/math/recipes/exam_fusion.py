@@ -29,7 +29,7 @@ from engine.core.contracts import (
 )
 from engine.core.registry import REGISTRY, register_recipe
 from engine.core.rng import Rng, draw, draw_many
-from engine.packs.math.recipes.letter_expr import _draw_distinct_points
+from engine.packs.math.recipes.letter_expr import _draw_named_figures
 from engine.packs.math.visuals.graph import tick_labels_from_params
 
 
@@ -342,7 +342,8 @@ def exam_linear_intersection_area_recipe(ctx: CellContext, rng: Rng) -> MR:
     ]
     idx = int(draw({"int_set": list(range(len(cands)))}, rng))
     m1, b1, m2, b2, _px, _py = cands[idx]
-    lp, lq = _draw_distinct_points(2, rng)
+    (v,) = _draw_named_figures([2], rng)
+    lp, lq = v
 
     sol = cast(
         Solution, REGISTRY.solver("math.lines_intersection_and_triangle_area")(m1, b1, m2, b2, lp + lq)
@@ -389,7 +390,8 @@ def exam_linear_coefficient_from_area_recipe(ctx: CellContext, rng: Rng) -> MR:
             cands.append((a_i, b_i, area))
     idx = int(draw({"int_set": list(range(len(cands)))}, rng))
     a, b, area = cands[idx]
-    la, lb = _draw_distinct_points(2, rng)
+    (v,) = _draw_named_figures([2], rng)
+    la, lb = v
 
     sol = cast(Solution, REGISTRY.solver("math.slope_from_triangle_area")(b, area))
     assert isinstance(sol.answer, SymbolicAnswer)
@@ -442,7 +444,8 @@ def exam_linear_line_through_triangle_recipe(ctx: CellContext, rng: Rng) -> MR:
     assert 0 < n_pass < len(cands), "判定が一方に偏っている（図を見ずに答えられる）"
     idx = int(draw({"int_set": list(range(len(cands)))}, rng))
     m, b, verts, _passes = cands[idx]
-    l1, l2, l3 = _draw_distinct_points(3, rng)
+    (v,) = _draw_named_figures([3], rng)
+    l1, l2, l3 = v
 
     sol = cast(
         Solution, REGISTRY.solver("math.judge_line_through_triangle")(m, b, verts)
@@ -499,7 +502,8 @@ def exam_linear_guided_triangle_recipe(ctx: CellContext, rng: Rng) -> MR:
     ]
     idx = int(draw({"int_set": list(range(len(cands)))}, rng))
     m1, b1, m2, b2, _px, _py = cands[idx]
-    la, lb, lc = _draw_distinct_points(3, rng)
+    (v,) = _draw_named_figures([3], rng)
+    la, lb, lc = v
 
     pt_sol = cast(
         Solution, REGISTRY.solver("math.intersection_point_of_two_lines")(m1, b1, m2, b2)
@@ -561,13 +565,19 @@ def exam_linear_area_multiple_point_recipe(ctx: CellContext, rng: Rng) -> MR:
                     continue
                 if (b_i * (k_i - 1)) % m_i:
                     continue  # 求める点の x 座標を整数にする
+                # **直線と x 軸の交点も格子点にする。** 前は答えの点だけを見ていたので
+                # 「y=6x+2 と x軸の交点」＝(-1/3, 0) という、図に取りにくい点が
+                # 本文に出ていた（実物の入試問題の切片は整数）。
+                if b_i % m_i:
+                    continue
                 cx = b_i * (k_i - 1) // m_i
                 if cx <= 0 or not _no_leak({cx}, {m_i, b_i, k_i}):
                     continue
                 cands.append((m_i, b_i, k_i))
     idx = int(draw({"int_set": list(range(len(cands)))}, rng))
     m, b, k = cands[idx]
-    la, lb, lc = _draw_distinct_points(3, rng)
+    (v,) = _draw_named_figures([3], rng)
+    la, lb, lc = v
 
     sol = cast(
         Solution, REGISTRY.solver("math.point_on_x_axis_for_area_multiple")(m, b, k)

@@ -23,7 +23,7 @@ meta:
     unit: g1_l26
   seed: 3
   signature: word_problem_surplus_shortage
-problem_ref: ab5c3592654e49b0
+problem_ref: e54139dfbd2ca644
 problem_text: '何人かの部員にシールを配る。1人に3枚ずつ配ると2枚余り、1人に4枚ずつ配ると5枚足りない。
 
   部員の人数を x 人とする。
@@ -66,9 +66,12 @@ sub_questions:
   - equation.word_problem_surplus_shortage
   explanation: 'まず、文字の項を左辺に、数の項を右辺に、符号を変えて移項する。（3x - 4x = -5 - 2）
 
-    次に、両辺をそれぞれ整理し、x の係数で両辺をわって解を求める。（x = 7）'
+    次に、両辺の同類項をそれぞれまとめて、ax = b の形にする。（-x = -7）
+
+    最後に、等式の性質を使い、両辺を x の係数でわる。（x = 7）'
   hints:
   - 文字の項を左辺に、数の項を右辺に、符号を変えて移項する。
+  - 両辺の同類項をそれぞれまとめて、ax = b の形にする。
   label: (2)
   prompt_text: 答えを求めなさい。
   solution_steps:
@@ -78,8 +81,13 @@ sub_questions:
     result_display: 3x - 4x = -5 - 2
     result_srepr: Integer(7)
   - args: []
-    narration: 両辺をそれぞれ整理し、x の係数で両辺をわって解を求める。
-    op: combine_and_divide
+    narration: 両辺の同類項をそれぞれまとめて、ax = b の形にする。
+    op: combine_like_terms
+    result_display: -x = -7
+    result_srepr: Integer(7)
+  - args: []
+    narration: 等式の性質を使い、両辺を x の係数でわる。
+    op: divide_both_sides
     result_display: x = 7
     result_srepr: Integer(7)
 visual_svg: null

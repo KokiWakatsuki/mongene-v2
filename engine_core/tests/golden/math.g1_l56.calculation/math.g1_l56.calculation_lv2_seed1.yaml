@@ -24,18 +24,18 @@ meta:
   seed: 1
   signature: cumulative_relative_frequency_and_complement
 problem_ref: 165c1de7ecab4ce2
-problem_text: 生徒40人の睡眠時間を調べた度数分布表がある。7時間未満の生徒までの累積相対度数を求めよ。また、睡眠時間が7時間以上の生徒は全体の何％か求めよ。〔階級と度数：6時間以上7時間未満…18人、7時間以上8時間未満…4人、8時間以上9時間未満…7人、9時間以上10時間未満…11人〕。
+problem_text: 生徒40人の睡眠時間を調べた度数分布表がある。7時間未満の生徒までの累積相対度数を求めよ。また、睡眠時間が7時間以上の生徒は全体の何％か求めよ。〔階級と度数：6時間以上7時間未満…4人、7時間以上8時間未満…11人、8時間以上9時間未満…18人、9時間以上10時間未満…7人〕。
 sub_questions:
 - answer:
-    display: 累積相対度数 0.45、超える部分の割合 55%
+    display: 累積相対度数 0.1、超える部分の割合 90%
     kind: symbolic
-    srepr: Tuple(Rational(9, 20), Integer(55))
+    srepr: Tuple(Rational(1, 10), Integer(90))
   cause_tags: []
   concept_tags:
   - cumulative_frequency.compute_relative_and_complement
-  explanation: 'まず、対象の階級までの累積度数を求め、総度数でわって累積相対度数を求める。（0.45）
+  explanation: 'まず、対象の階級までの累積度数を求め、総度数でわって累積相対度数を求める。（0.1）
 
-    次に、全体の割合から累積相対度数を除いた残りを百分率になおし、超える部分の割合を求める。（累積相対度数 0.45、超える部分の割合 55%）'
+    次に、全体の割合から累積相対度数を除いた残りを百分率になおし、超える部分の割合を求める。（累積相対度数 0.1、超える部分の割合 90%）'
   hints:
   - 対象の階級までの累積度数を求め、総度数でわって累積相対度数を求める。
   label: (1)
@@ -44,11 +44,11 @@ sub_questions:
   - args: []
     narration: 対象の階級までの累積度数を求め、総度数でわって累積相対度数を求める。
     op: accumulate_relative_frequency
-    result_display: '0.45'
+    result_display: '0.1'
     result_srepr: ''
   - args: []
     narration: 全体の割合から累積相対度数を除いた残りを百分率になおし、超える部分の割合を求める。
     op: compute_complement_percent
-    result_display: 累積相対度数 0.45、超える部分の割合 55%
-    result_srepr: Tuple(Rational(9, 20), Integer(55))
+    result_display: 累積相対度数 0.1、超える部分の割合 90%
+    result_srepr: Tuple(Rational(1, 10), Integer(90))
 visual_svg: null

@@ -24,20 +24,20 @@ meta:
   seed: 1
   signature: word_problem_inequality_price_count
 problem_ref: c499a8c34013e42a
-problem_text: '1個 x 円のおにぎりを8個買ったときの代金が、1153円以下であった。
+problem_text: '1個 x 円のりんごを8個買ったときの代金が、1300円以下であった。
 
   この関係を不等式で表せ。'
 sub_questions:
 - answer:
-    display: 8x ≦ 1153
+    display: 8x ≦ 1300
     kind: symbolic
-    srepr: LessThan(Mul(Integer(8), Symbol('x')), Integer(1153))
+    srepr: LessThan(Mul(Integer(8), Symbol('x')), Integer(1300))
   cause_tags: []
   concept_tags:
   - inequality.word_problem_simple
   explanation: 'まず、場面の中で、比べられている、または等しくなっている数量に着目する。（代金の合計）
 
-    次に、その数量を x を使った式で表し、等式または不等式をつくる。（8x ≦ 1153）'
+    次に、その数量を x を使った式で表し、等式または不等式をつくる。（8x ≦ 1300）'
   hints:
   - 場面の中で、比べられている、または等しくなっている数量に着目する。
   label: (1)
@@ -51,6 +51,6 @@ sub_questions:
   - args: []
     narration: その数量を x を使った式で表し、等式または不等式をつくる。
     op: formulate_relation
-    result_display: 8x ≦ 1153
-    result_srepr: LessThan(Mul(Integer(8), Symbol('x')), Integer(1153))
+    result_display: 8x ≦ 1300
+    result_srepr: LessThan(Mul(Integer(8), Symbol('x')), Integer(1300))
 visual_svg: null

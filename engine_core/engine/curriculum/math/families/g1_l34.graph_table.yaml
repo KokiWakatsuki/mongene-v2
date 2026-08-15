@@ -25,6 +25,7 @@ levels:
       x_abs_max: 12
       y_abs_max: 12
       coeff_abs_max: 48
+      coeff_abs_min: 6
     given: [expression, situation_params]
     asked: [read_point]
     visual: required

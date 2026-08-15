@@ -23,7 +23,7 @@ meta:
     unit: g1_l24
   seed: 1
   signature: proportion_cross_multiply_expand
-problem_ref: 591209669feb5b66
+problem_ref: 3bbbc768a5f4fd5e
 problem_text: '次の比例式を解け。
 
   (x - 1) : 9 = 1 : 3'
@@ -39,10 +39,16 @@ sub_questions:
 
     次に、分配法則を使って、かっこを外す。（3x - 3 = 9）
 
-    最後に、文字の項を左辺に、数の項を右辺に移項し、両辺を整理して解く。（x = 4）'
+    次に、文字の項を左辺に、数の項を右辺に、符号を変えて移項する。（3x = 9 + 3）
+
+    次に、両辺の同類項をそれぞれまとめて、ax = b の形にする。（3x = 12）
+
+    最後に、等式の性質を使い、両辺を x の係数でわる。（x = 4）'
   hints:
   - 比例式の性質を使い、外項の積と内項の積が等しい式（たすきがけ）をつくる。
   - 分配法則を使って、かっこを外す。
+  - 文字の項を左辺に、数の項を右辺に、符号を変えて移項する。
+  - 両辺の同類項をそれぞれまとめて、ax = b の形にする。
   label: (1)
   prompt_text: 解を求めなさい。
   solution_steps:
@@ -57,8 +63,18 @@ sub_questions:
     result_display: 3x - 3 = 9
     result_srepr: Integer(4)
   - args: []
-    narration: 文字の項を左辺に、数の項を右辺に移項し、両辺を整理して解く。
-    op: transpose_and_solve
+    narration: 文字の項を左辺に、数の項を右辺に、符号を変えて移項する。
+    op: transpose_terms
+    result_display: 3x = 9 + 3
+    result_srepr: Integer(4)
+  - args: []
+    narration: 両辺の同類項をそれぞれまとめて、ax = b の形にする。
+    op: combine_like_terms
+    result_display: 3x = 12
+    result_srepr: Integer(4)
+  - args: []
+    narration: 等式の性質を使い、両辺を x の係数でわる。
+    op: divide_both_sides
     result_display: x = 4
     result_srepr: Integer(4)
 visual_svg: null

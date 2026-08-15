@@ -26,18 +26,18 @@ meta:
 problem_ref: df47707cbdbeb7ae
 problem_text: '工夫して、次の式の値を求めよ。
 
-  28² - 2²'
+  28² - 8²'
 sub_questions:
 - answer:
-    display: '780'
+    display: '720'
     kind: symbolic
-    srepr: Integer(780)
+    srepr: Integer(720)
   cause_tags: []
   concept_tags:
   - polynomial.arithmetic_via_diff_of_squares
-  explanation: 'まず、2つの数の平方の差を、和と差の積の形になおす。（(28 + 2)(28 - 2)）
+  explanation: 'まず、2つの数の平方の差を、和と差の積の形になおす。（(28 + 8)(28 - 8)）
 
-    次に、和と差の積を計算し、値を求める。（780）'
+    次に、和と差の積を計算し、値を求める。（720）'
   hints:
   - 2つの数の平方の差を、和と差の積の形になおす。
   label: (1)
@@ -46,11 +46,11 @@ sub_questions:
   - args: []
     narration: 2つの数の平方の差を、和と差の積の形になおす。
     op: factor_difference_of_squares
-    result_display: (28 + 2)(28 - 2)
+    result_display: (28 + 8)(28 - 8)
     result_srepr: ''
   - args: []
     narration: 和と差の積を計算し、値を求める。
     op: multiply_factors
-    result_display: '780'
-    result_srepr: Integer(780)
+    result_display: '720'
+    result_srepr: Integer(720)
 visual_svg: null

@@ -24,18 +24,18 @@ meta:
   seed: 2
   signature: compare_relative_frequency
 problem_ref: 014bdba7888ced39
-problem_text: A中学は生徒30人、B中学は生徒70人で通学時間を調べた。30分以上35分未満の階級の度数がA中学は12人、B中学は28人であった。それぞれの相対度数を求め、この階級の割合が大きいのはどちらの中学か答えよ。
+problem_text: A中学は生徒30人、B中学は生徒70人で通学時間を調べた。40分以上50分未満の階級の度数がA中学は12人、B中学は21人であった。それぞれの相対度数を求め、この階級の割合が大きいのはどちらの中学か答えよ。
 sub_questions:
 - answer:
-    display: 'A: 0.4、B: 0.4（Bのほうが大きい）'
+    display: 'A: 0.4、B: 0.3（Aのほうが大きい）'
     kind: symbolic
-    srepr: Tuple(Rational(2, 5), Rational(2, 5))
+    srepr: Tuple(Rational(2, 5), Rational(3, 10))
   cause_tags: []
   concept_tags:
   - relative_frequency.compare_groups
-  explanation: 'まず、それぞれの集団について、対象の階級の度数を総度数でわり、相対度数を求める。（A 0.4、B 0.4）
+  explanation: 'まず、それぞれの集団について、対象の階級の度数を総度数でわり、相対度数を求める。（A 0.4、B 0.3）
 
-    次に、求めた相対度数どうしを比べ、値が大きいほうを答える。（A: 0.4、B: 0.4（Bのほうが大きい））'
+    次に、求めた相対度数どうしを比べ、値が大きいほうを答える。（A: 0.4、B: 0.3（Aのほうが大きい））'
   hints:
   - それぞれの集団について、対象の階級の度数を総度数でわり、相対度数を求める。
   label: (1)
@@ -44,11 +44,11 @@ sub_questions:
   - args: []
     narration: それぞれの集団について、対象の階級の度数を総度数でわり、相対度数を求める。
     op: compute_relative_frequency_each
-    result_display: A 0.4、B 0.4
+    result_display: A 0.4、B 0.3
     result_srepr: ''
   - args: []
     narration: 求めた相対度数どうしを比べ、値が大きいほうを答える。
     op: compare_relative_frequency
-    result_display: 'A: 0.4、B: 0.4（Bのほうが大きい）'
-    result_srepr: Tuple(Rational(2, 5), Rational(2, 5))
+    result_display: 'A: 0.4、B: 0.3（Aのほうが大きい）'
+    result_srepr: Tuple(Rational(2, 5), Rational(3, 10))
 visual_svg: null

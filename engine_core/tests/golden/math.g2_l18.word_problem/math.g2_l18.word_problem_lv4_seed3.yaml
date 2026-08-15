@@ -24,28 +24,28 @@ meta:
   seed: 3
   signature: word_problem_two_containers
 problem_ref: 44ff6547fd7a4b3f
-problem_text: '容器Aには濃度のわからない食塩水が150g、容器Bには別の濃度の食塩水が450g入っている。AとBをすべて混ぜると6%の食塩水になり、Aの食塩水100gとBの食塩水100gだけを混ぜると5%の食塩水になる。
+problem_text: '容器Aには濃度のわからない食塩水が200g、容器Bには別の濃度の食塩水が600g入っている。AとBをすべて混ぜると9%の食塩水になり、Aの食塩水100gとBの食塩水100gだけを混ぜると7%の食塩水になる。
 
   容器A、Bの食塩水の濃度をそれぞれ求めよ。'
 sub_questions:
 - answer:
-    display: 容器Aの濃度は3%、容器Bの濃度は7%
+    display: 容器Aの濃度は3%、容器Bの濃度は11%
     kind: symbolic
-    srepr: Tuple(Integer(3), Integer(7))
+    srepr: Tuple(Integer(3), Integer(11))
   cause_tags: []
   concept_tags:
   - simultaneous_equations.word_problem_two_containers
   explanation: 'まず、容器Aの濃度を x %、容器Bの濃度を y %とおく。（x, y）
 
-    次に、すべて混ぜたときの食塩の重さの関係に着目して、1つめの式をつくる。（150x/100 + 450y/100 = 36）
+    次に、すべて混ぜたときの食塩の重さの関係に着目して、1つめの式をつくる。（200x/100 + 600y/100 = 72）
 
-    次に、100gずつ混ぜたときの食塩の重さの関係に着目して、2つめの式をつくる。（100x/100 + 100y/100 = 5×200/100）
+    次に、100gずつ混ぜたときの食塩の重さの関係に着目して、2つめの式をつくる。（100x/100 + 100y/100 = 7×200/100）
 
-    次に、2つめの式は両辺を100でわれるので、簡単な形に直す。（x + y = 10）
+    次に、2つめの式は両辺を100でわれるので、簡単な形に直す。（x + y = 14）
 
     次に、係数をそろえて一方の文字を消去し、残った文字を求める。（x = 3）
 
-    最後に、求めた値をもとの式に代入し、もう一方の文字を求める。（y = 7）'
+    最後に、求めた値をもとの式に代入し、もう一方の文字を求める。（y = 11）'
   hints:
   - 容器Aの濃度を x %、容器Bの濃度を y %とおく。
   - すべて混ぜたときの食塩の重さの関係に着目して、1つめの式をつくる。
@@ -63,21 +63,21 @@ sub_questions:
   - args: []
     narration: すべて混ぜたときの食塩の重さの関係に着目して、1つめの式をつくる。
     op: formulate_first
-    result_display: 150x/100 + 450y/100 = 36
-    result_srepr: Equality(Add(Mul(Rational(3, 2), Symbol('x')), Mul(Rational(9, 2), Symbol('y'))), Integer(36))
+    result_display: 200x/100 + 600y/100 = 72
+    result_srepr: Equality(Add(Mul(Integer(2), Symbol('x')), Mul(Integer(6), Symbol('y'))), Integer(72))
   - args: []
     narration: 100gずつ混ぜたときの食塩の重さの関係に着目して、2つめの式をつくる。
     op: formulate_second
-    result_display: 100x/100 + 100y/100 = 5×200/100
-    result_srepr: Equality(Add(Symbol('x'), Symbol('y')), Integer(10))
+    result_display: 100x/100 + 100y/100 = 7×200/100
+    result_srepr: Equality(Add(Symbol('x'), Symbol('y')), Integer(14))
   - args: []
     narration: 2つめの式は両辺を100でわれるので、簡単な形に直す。
     op: reduce_equation
-    result_display: x + y = 10
-    result_srepr: Equality(Add(Symbol('x'), Symbol('y')), Integer(10))
+    result_display: x + y = 14
+    result_srepr: Equality(Add(Symbol('x'), Symbol('y')), Integer(14))
   - args:
-    - Eq(3*x/2 + 9*y/2, 36)
-    - Eq(x + y, 10)
+    - Eq(2*x + 6*y, 72)
+    - Eq(x + y, 14)
     narration: 係数をそろえて一方の文字を消去し、残った文字を求める。
     op: eliminate_variable
     result_display: x = 3
@@ -86,6 +86,6 @@ sub_questions:
     - '3'
     narration: 求めた値をもとの式に代入し、もう一方の文字を求める。
     op: back_substitute
-    result_display: y = 7
-    result_srepr: Integer(7)
+    result_display: y = 11
+    result_srepr: Integer(11)
 visual_svg: null

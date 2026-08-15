@@ -24,26 +24,26 @@ meta:
   seed: 1
   signature: word_problem_round_trip_average_speed
 problem_ref: 843f9cc05764e7f5
-problem_text: '駅から美術館まで、行きは時速6km、帰りは同じ道を時速12kmの速さで進んだところ、往復にかかった時間は5時間だった。
+problem_text: '学校から体育館まで、行きは時速3km、帰りは同じ道を時速15kmの速さで進んだところ、往復にかかった時間は2時間だった。
 
-  駅から美術館までの片道の道のりと、往復の平均の速さを求めよ。'
+  学校から体育館までの片道の道のりと、往復の平均の速さを求めよ。'
 sub_questions:
 - answer:
-    display: 片道の道のりは20km、往復の平均の速さは時速8km
+    display: 片道の道のりは5km、往復の平均の速さは時速5km
     kind: symbolic
-    srepr: Tuple(Integer(20), Integer(8))
+    srepr: Tuple(Integer(5), Integer(5))
   cause_tags: []
   concept_tags:
   - equation.word_problem_round_trip_average_speed
-  explanation: 'まず、片道の道のりを x とおき、行きにかかる時間と帰りにかかる時間の和が往復の時間に等しいという方程式をつくる。（x/6 + x/12 = 5）
+  explanation: 'まず、片道の道のりを x とおき、行きにかかる時間と帰りにかかる時間の和が往復の時間に等しいという方程式をつくる。（x/3 + x/15 = 2）
 
-    次に、両辺に分母の最小公倍数をかけて、分数のない形に直す。（2x + 1x = 60）
+    次に、両辺に分母の最小公倍数をかけて、分数のない形に直す。（5x + 1x = 30）
 
-    次に、方程式を解いて片道の道のりを求める。（x = 20）
+    次に、方程式を解いて片道の道のりを求める。（x = 5）
 
-    次に、片道の道のりを二倍して、往復の道のり全体を求める。（40km）
+    次に、片道の道のりを二倍して、往復の道のり全体を求める。（10km）
 
-    最後に、往復の道のりを往復にかかった時間でわって、往復の平均の速さを求める。（片道の道のりは20km、往復の平均の速さは時速8km）'
+    最後に、往復の道のりを往復にかかった時間でわって、往復の平均の速さを求める。（片道の道のりは5km、往復の平均の速さは時速5km）'
   hints:
   - 片道の道のりを x とおき、行きにかかる時間と帰りにかかる時間の和が往復の時間に等しいという方程式をつくる。
   - 両辺に分母の最小公倍数をかけて、分数のない形に直す。
@@ -55,26 +55,26 @@ sub_questions:
   - args: []
     narration: 片道の道のりを x とおき、行きにかかる時間と帰りにかかる時間の和が往復の時間に等しいという方程式をつくる。
     op: set_up_round_trip_equation
-    result_display: x/6 + x/12 = 5
+    result_display: x/3 + x/15 = 2
     result_srepr: ''
   - args: []
     narration: 両辺に分母の最小公倍数をかけて、分数のない形に直す。
     op: clear_denominators
-    result_display: 2x + 1x = 60
+    result_display: 5x + 1x = 30
     result_srepr: ''
   - args: []
     narration: 方程式を解いて片道の道のりを求める。
     op: solve_for_one_way_distance
-    result_display: x = 20
+    result_display: x = 5
     result_srepr: ''
   - args: []
     narration: 片道の道のりを二倍して、往復の道のり全体を求める。
     op: compute_round_trip_distance
-    result_display: 40km
+    result_display: 10km
     result_srepr: ''
   - args: []
     narration: 往復の道のりを往復にかかった時間でわって、往復の平均の速さを求める。
     op: compute_average_speed
-    result_display: 片道の道のりは20km、往復の平均の速さは時速8km
-    result_srepr: Tuple(Integer(20), Integer(8))
+    result_display: 片道の道のりは5km、往復の平均の速さは時速5km
+    result_srepr: Tuple(Integer(5), Integer(5))
 visual_svg: null

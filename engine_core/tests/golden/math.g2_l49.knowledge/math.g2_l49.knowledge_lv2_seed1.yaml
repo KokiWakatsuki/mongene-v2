@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: classify_quadrilateral_from_diagonal_condition
 problem_ref: 5dbb87f266a2d81d
-problem_text: 平行四辺形QJFHで、対角線の長さが等しく、垂直に交わるとき、この四角形はどんな四角形になるか答えよ。
+problem_text: 平行四辺形PQRSで、対角線の長さが等しく、垂直に交わるとき、この四角形はどんな四角形になるか答えよ。
 sub_questions:
 - answer:
     correct: 正方形

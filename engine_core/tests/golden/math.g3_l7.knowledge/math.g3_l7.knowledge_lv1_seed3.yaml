@@ -24,7 +24,7 @@ meta:
   seed: 3
   signature: factorization_relation_rule_recall
 problem_ref: cda8641d163d2533
-problem_text: 多項式 x² + 25x + 16 を扱うときの「因数分解」は、どのような操作か。正しく述べているものを1つ選べ。
+problem_text: 多項式 m² + 8m - 9 を扱うときの「因数分解」は、どのような操作か。正しく述べているものを1つ選べ。
 sub_questions:
 - answer:
     correct: 多項式を因数の積の形に表すことで、展開のちょうど逆にあたる操作

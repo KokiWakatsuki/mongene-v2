@@ -24,7 +24,7 @@ meta:
   seed: 2
   signature: word_problem_max_area_and_times
 problem_ref: aa88e35dd00e42b7
-problem_text: '1辺が20cmの正方形DFRJの周上を、点NがDを出発してD→F→R→Jの順に毎秒1cmの速さでJまで動く。点NがDを出発してからx秒後の三角形DNJの面積をy cm²とする。
+problem_text: '1辺が20cmの正方形RSTUの周上を、点ZがRを出発してR→S→T→Uの順に毎秒1cmの速さでUまで動く。点ZがRを出発してからx秒後の三角形RZUの面積をy cm²とする。
 
   面積が最大になるのはxがどの範囲にあるときかとそのときの面積、および面積が90cm²になるときのxの値をすべて求めよ。'
 sub_questions:

@@ -9,6 +9,7 @@ C3（g3 数と式・2次方程式）クラスタ。乱数は `engine.core.rng.dr
 """
 from __future__ import annotations
 
+import math
 from typing import cast
 
 import sympy
@@ -127,7 +128,13 @@ def _quadratic_construct(mode: str, rng: Rng) -> tuple[str, str, str | None]:
         b = int(draw(small, rng))
         c = int(draw(small, rng))
         # 判別式>0 かつ非平方（無理数解＝解の公式が要る・因数分解で割り切れない）に絞る。
-        while not (b * b - 4 * a * c > 0 and not _is_square(b * b - 4 * a * c)):
+        # **3つの係数が共通の因数を持つ組は除く**（2x² - 2x - 2 = 0 は、まず2でわって
+        # から解くのが正しく、解の公式をそのまま当てる練習にならない）。
+        while not (
+            b * b - 4 * a * c > 0
+            and not _is_square(b * b - 4 * a * c)
+            and math.gcd(math.gcd(abs(a), abs(b)), abs(c)) == 1
+        ):
             b = int(draw(small, rng))
             c = int(draw(small, rng))
         eq = f"({a})*x**2+({b})*x+({c})=0"
@@ -149,8 +156,11 @@ def _quadratic_construct(mode: str, rng: Rng) -> tuple[str, str, str | None]:
 
     if mode == "solve_factoring_common":
         # 自由度が (a,b) のみで少ないため広くとる（a∈2..6・b∈[-40,40]で 400 通り）。
-        a = int(draw({"int_set": list(range(2, 7))}, rng))
-        b = int(draw({"int_set": [n for n in range(-40, 41) if n != 0]}, rng))
+        # **b は a の倍数に限る。** 前は無関係に引いていたので「5x² + 37x = 0」
+        # → 解 -37/5 のように、共通因数でくくる練習なのに答えが半端な分数に
+        # なる式が出ていた（実物は 6x² - 15x = 0 → 0, 5/2 のように約分が効く）。
+        a = int(draw({"int_set": list(range(2, 9))}, rng))
+        b = a * int(draw({"int_set": [n for n in range(-20, 21) if n != 0]}, rng))
         eq = f"({a})*x**2+({b})*x=0"
         disp = f"{_quad_lhs(a, b, 0)} = 0"
         return eq, disp, None
@@ -179,7 +189,10 @@ def _quadratic_construct(mode: str, rng: Rng) -> tuple[str, str, str | None]:
         k = int(draw({"int_set": [v for v in range(-9, 10) if v != 0]}, rng))
         binom = f"({m})*x+({n})"
         eq = f"({binom})**2={k}*({binom})"
-        disp = f"{_lin_binomial(m, n)}² = {k}{_lin_binomial(m, n)}"
+        # **係数 ±1 は書かない。** `(3x - 3)² = 1(3x - 3)` が出ていた
+        # （実物は `(3x - 3)² = 3x - 3`・`= -(3x - 3)` と書く）。
+        head = "" if k == 1 else ("-" if k == -1 else str(k))
+        disp = f"{_lin_binomial(m, n)}² = {head}{_lin_binomial(m, n)}"
         return eq, disp, None
 
     if mode == "solve_product_form":

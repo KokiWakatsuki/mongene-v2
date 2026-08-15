@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: factorization_relation_rule_recall
 problem_ref: c3953e6a5da981a2
-problem_text: 多項式 x² + 17x + 36 を扱うときの「因数分解」は、どのような操作か。正しく述べているものを1つ選べ。
+problem_text: 多項式 n² + 5n - 24 を扱うときの「因数分解」は、どのような操作か。正しく述べているものを1つ選べ。
 sub_questions:
 - answer:
     correct: 多項式を因数の積の形に表すことで、展開のちょうど逆にあたる操作

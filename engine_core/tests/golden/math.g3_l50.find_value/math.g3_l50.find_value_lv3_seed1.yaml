@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: equal_arc_inscribed_angle
 problem_ref: 1d307bc502ead95a
-problem_text: 円周を9等分する点を順にRLFDMPJKAとする。これらの点を頂点とする九角形について、∠ARDの大きさを求めよ。
+problem_text: 円周を9等分する点を順にRSTUVWXYZとする。これらの点を頂点とする九角形について、∠ZRUの大きさを求めよ。
 sub_questions:
 - answer:
     display: 100°

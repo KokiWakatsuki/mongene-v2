@@ -17,7 +17,8 @@ levels:
     signature: inscribed_angle_transfer_same_arc
     recipe: math.inscribed_angle_transfer_same_arc
     params:
-      angle_domain: {int_range: [1, 89]}
+      # **円周角は 20〜80°。** 前は 1〜89 で 1°の円周角が出ていた。
+      angle_domain: {int_range: [20, 80]}
     given: [condition]
     asked: [value]
     visual: none

@@ -24,7 +24,7 @@ meta:
   seed: 3
   signature: classify_quadrilateral_from_diagonal_condition
 problem_ref: e31969f8118dc97e
-problem_text: 平行四辺形FGLKで、対角線の長さが等しく、垂直には交わらないとき、この四角形はどんな四角形になるか答えよ。
+problem_text: 平行四辺形UVWXで、対角線の長さが等しく、垂直には交わらないとき、この四角形はどんな四角形になるか答えよ。
 sub_questions:
 - answer:
     correct: 長方形

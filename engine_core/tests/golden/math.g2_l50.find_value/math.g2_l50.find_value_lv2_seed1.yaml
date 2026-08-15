@@ -24,18 +24,18 @@ meta:
   seed: 1
   signature: equal_area_transform_value
 problem_ref: 07e0c100112f30f4
-problem_text: 四角形CQLGで、頂点Gを通り対角線CLに平行な直線と、辺QLの延長との交点をRとする。四角形CQLGと面積の等しい三角形CQRをつくったとき、四角形CQLGの面積が219cm² ならば三角形CQRの面積を求めよ。
+problem_text: 四角形LMNPで、頂点Pを通り対角線LNに平行な直線をひき、辺MNの延長との交点をQとする。四角形LMNPの面積が84cm²であるとき、三角形LMQの面積を求めよ。
 sub_questions:
 - answer:
-    display: '219'
+    display: '84'
     kind: symbolic
-    srepr: Integer(219)
+    srepr: Integer(84)
   cause_tags: []
   concept_tags:
   - equal_area.transform_value
-  explanation: 'まず、等積変形をする前の、もとの図形の面積を読み取る。（219）
+  explanation: 'まず、等積変形をする前の、もとの図形の面積を読み取る。（84）
 
-    次に、等積変形は面積を変えずに図形の形だけを変える操作であることから、つくった三角形の面積を求める。（219）'
+    次に、等積変形は面積を変えずに図形の形だけを変える操作であることから、つくった三角形の面積を求める。（84）'
   hints:
   - 等積変形をする前の、もとの図形の面積を読み取る。
   label: (1)
@@ -44,11 +44,11 @@ sub_questions:
   - args: []
     narration: 等積変形をする前の、もとの図形の面積を読み取る。
     op: identify_original_area
-    result_display: '219'
+    result_display: '84'
     result_srepr: ''
   - args: []
     narration: 等積変形は面積を変えずに図形の形だけを変える操作であることから、つくった三角形の面積を求める。
     op: apply_equal_area_transform
-    result_display: '219'
-    result_srepr: Integer(219)
+    result_display: '84'
+    result_srepr: Integer(84)
 visual_svg: null

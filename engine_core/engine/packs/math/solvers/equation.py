@@ -23,21 +23,30 @@ from engine.packs.math.solvers.arithmetic import fmt_number
 _EQUATION_STEPS: dict[str, list[str]] = {
     # g1_l21 等式の性質
     "equality_add": ["subtract_constant_both_sides", "state_solution"],
-    "equality_multi": ["subtract_constant_both_sides", "divide_both_sides"],
+    "equality_multi": ["subtract_constant_both_sides", "combine_like_terms",
+                       "divide_both_sides"],
     # g1_l22 移項（+ g1_l26 過不足の解く＝同構造を別 signature で流用）
     "transpose_constant": ["transpose_constant", "state_solution"],
-    "transpose_both": ["transpose_terms", "combine_and_divide"],
+    "transpose_both": ["transpose_terms", "combine_like_terms", "divide_both_sides"],
     # g1_l23 Lv2 かっこ展開 / g1_l25 利用（代金）＝かっこを外してから解く
-    "expand_parens": ["expand_parentheses", "transpose_and_solve"],
-    "word_linear": ["expand_parentheses", "transpose_and_solve"],
+    "expand_parens": ["expand_parentheses", "transpose_terms", "combine_like_terms",
+                      "divide_both_sides"],
+    "word_linear": ["expand_parentheses", "transpose_terms", "combine_like_terms",
+                    "divide_both_sides"],
     # g1_l27 Lv2 速さ（分数係数）＝分母を払ってから解く
-    "clear_denominators_simple": ["clear_denominators", "combine_and_solve"],
+    # 分母をはらう手は sympy が展開・整理まで行うので、その直後に「かっこを外す」
+    # 「同類項をまとめる」を置くと**同じ式が2回出る**。手の数が seed で変わると
+    # G-FP（同じ signature の fingerprint が一定であること）が落ちるので、
+    # 飛ばすのではなく**最初から置かない**。
+    "clear_denominators_simple": ["clear_denominators", "divide_both_sides"],
     # g1_l23 Lv3 かっこ＋分数＝分母を払い、かっこを外して移項してから解く
-    "clear_denominators_two": ["clear_denominators", "expand_and_transpose", "solve"],
+    "clear_denominators_two": ["clear_denominators", "transpose_terms",
+                               "combine_like_terms", "divide_both_sides"],
     # g1_l24 Lv1 比例式＝たすきがけ（外項の積＝内項の積）1手
     "cross_multiply": ["cross_multiply", "solve_proportion"],
     # g1_l24 Lv2 比例式（文字を含む項）＝たすきがけ後にかっこを外して移項して解く
-    "cross_multiply_expand": ["cross_multiply", "expand_parentheses", "transpose_and_solve"],
+    "cross_multiply_expand": ["cross_multiply", "expand_parentheses", "transpose_terms",
+                              "combine_like_terms", "divide_both_sides"],
     # g3_l54.find_value Lv3（C10 三平方 横展開）＝ x 軸上の等距離点。「PA²=PB²」の
     # 両辺の (x-定数)² を展開すると x² が消えて一次方程式になるので、この汎用ソルバに
     # そのまま渡せる（既存 op 列を再利用）。呼び出し側の recipe
@@ -56,7 +65,7 @@ _OP_NARRATION: dict[str, str] = {
     "divide_both_sides": "等式の性質を使い、両辺を x の係数でわる。",
     "transpose_constant": "数の項を、符号を変えて反対の辺に移項する。",
     "transpose_terms": "文字の項を左辺に、数の項を右辺に、符号を変えて移項する。",
-    "combine_and_divide": "両辺をそれぞれ整理し、x の係数で両辺をわって解を求める。",
+    "combine_like_terms": "両辺の同類項をそれぞれまとめて、ax = b の形にする。",
     "expand_parentheses": "分配法則を使って、かっこを外す。",
     "transpose_and_solve": "文字の項を左辺に、数の項を右辺に移項し、両辺を整理して解く。",
     "clear_denominators": "分母の最小公倍数を両辺にかけて、分母をはらう。",
@@ -113,8 +122,18 @@ def _apply_step(
         # 文字は左辺・数は右辺（`2x - 4x = 11 - 9`）。
         lx, rx = lhs - lhs.subs(x, 0), rhs - rhs.subs(x, 0)
         lc, rc = lhs.subs(x, 0), rhs.subs(x, 0)
-        disp = f"{join_signed([lx, -rx])} = {join_signed([rc, -lc])}"
+        # **0 の項は書かない。** 右辺に文字が無いと `7x + 0 = 54 + 2` になっていた。
+        left = [v for v in (lx, -rx) if v != 0] or [sympy.Integer(0)]
+        right = [v for v in (rc, -lc) if v != 0] or [sympy.Integer(0)]
+        disp = f"{join_signed(left)} = {join_signed(right)}"
         return disp, sympy.expand(lx - rx), sympy.expand(rc - lc)
+    if op == "combine_like_terms":
+        # **「整理」と「わる」を分ける。** 実物（佐賀県教委の学習プリント）は
+        #   2x + 3 = 9  →  2x = 9 - 3  →  2x = 6  →  x = 3
+        # と1手ずつ見せる。ここを1手にまとめていたので `2x - 4x = 11 - 9` から
+        # いきなり `x = -1` に飛んでいた（`-2x = 2` が抜けていた）。
+        new_l, new_r = sympy.expand(lhs), sympy.expand(rhs)
+        return f"{fmt_expr(new_l)} = {fmt_expr(new_r)}", new_l, new_r
     if op == "expand_parentheses":
         new_l, new_r = sympy.expand(lhs), sympy.expand(rhs)
         return f"{fmt_expr(new_l)} = {fmt_expr(new_r)}", new_l, new_r
@@ -146,13 +165,13 @@ def _equation_step_displays(ops: list[str], equation_str: str, final: str) -> li
     lhs_s, rhs_s = equation_str.split("=")
     lhs = sympy.sympify(lhs_s, rational=True)
     rhs = sympy.sympify(rhs_s, rational=True)
-    out: list[str] = []
+    out: list[tuple[str, str]] = []
     for i, op in enumerate(ops):
         if i == len(ops) - 1:
-            out.append(final)
+            out.append((op, final))
             break
         disp, lhs, rhs = _apply_step(op, lhs, rhs, equation_str)
-        out.append(disp)
+        out.append((op, disp))
     return out
 
 
@@ -178,7 +197,9 @@ def solve_linear_equation(equation_str: str, mode: object) -> Solution:
     r_disp = f"x = {fmt_number(value)}"
 
     ops = _EQUATION_STEPS[mode_s]
-    displays = _equation_step_displays(ops, equation_str, r_disp)
+    shown = _equation_step_displays(ops, equation_str, r_disp)
+    ops = [o for o, _d in shown]
+    displays = [d for _o, d in shown]
     steps = [
         Step(
             op=op,

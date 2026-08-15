@@ -26,18 +26,18 @@ meta:
 problem_ref: 3655d44f3361d8b3
 problem_text: '次の2次方程式を解け。
 
-  4x² + 23x = 0'
+  7x² + 21x = 0'
 sub_questions:
 - answer:
-    display: x = -23/4, x = 0
+    display: x = -3, x = 0
     kind: symbolic
-    srepr: Tuple(Rational(-23, 4), Integer(0))
+    srepr: Tuple(Integer(-3), Integer(0))
   cause_tags: []
   concept_tags:
   - quadratic.solve_by_factoring
-  explanation: 'まず、左辺の共通因数をくくり出す。（x(4x + 23) = 0）
+  explanation: 'まず、左辺の共通因数をくくり出す。（7x(x + 3) = 0）
 
-    次に、積が 0 になるのは各因数が 0 のときだから、それぞれを 0 とおいて x を求める。（x = -23/4, x = 0）'
+    次に、積が 0 になるのは各因数が 0 のときだから、それぞれを 0 とおいて x を求める。（x = -3, x = 0）'
   hints:
   - 左辺の共通因数をくくり出す。
   label: (1)
@@ -46,11 +46,11 @@ sub_questions:
   - args: []
     narration: 左辺の共通因数をくくり出す。
     op: factor_out_common
-    result_display: x(4x + 23) = 0
+    result_display: 7x(x + 3) = 0
     result_srepr: ''
   - args: []
     narration: 積が 0 になるのは各因数が 0 のときだから、それぞれを 0 とおいて x を求める。
     op: apply_zero_product
-    result_display: x = -23/4, x = 0
-    result_srepr: Tuple(Rational(-23, 4), Integer(0))
+    result_display: x = -3, x = 0
+    result_srepr: Tuple(Integer(-3), Integer(0))
 visual_svg: null

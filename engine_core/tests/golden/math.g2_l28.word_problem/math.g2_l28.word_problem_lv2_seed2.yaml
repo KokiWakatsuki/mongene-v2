@@ -24,26 +24,26 @@ meta:
   seed: 2
   signature: word_problem_linear_two_point_eval
 problem_ref: 029864fad89ce963
-problem_text: 'あるつる巻きばねに125gのおもりをつるすと全体の長さが86cmになり、150gのおもりをつるすと101cmになった。
+problem_text: 'あるゴムひもに5gのおもりをつるすと全体の長さが23cmになり、35gのおもりをつるすと53cmになった。
 
-  つる巻きばねの長さ y cm はおもりの重さ x g の1次関数であるとする。
+  ゴムひもの長さ y cm はおもりの重さ x g の1次関数であるとする。
 
   (1) y を x の式で表せ。
 
-  (2) 75gのおもりをつるしたときのつる巻きばねの長さを求めよ。'
+  (2) 15gのおもりをつるしたときのゴムひもの長さを求めよ。'
 sub_questions:
 - answer:
-    display: y = 3/5x + 11
+    display: y = x + 18
     kind: symbolic
-    srepr: Add(Mul(Rational(3, 5), Symbol('x')), Integer(11))
+    srepr: Add(Symbol('x'), Integer(18))
   cause_tags: []
   concept_tags:
   - linear_function.word_problem_two_point_eval
-  explanation: 'まず、2点の y 座標の差を x 座標の差で割り、傾きを求める。（傾き a = 3/5）
+  explanation: 'まず、2点の y 座標の差を x 座標の差で割り、傾きを求める。（傾き a = 1）
 
-    次に、傾きと通る1点を y = ax + b に代入し、切片を求める。（切片 b = 11）
+    次に、傾きと通る1点を y = ax + b に代入し、切片を求める。（切片 b = 18）
 
-    最後に、傾きと切片から一次関数の式を組み立てる。（y = 3/5x + 11）'
+    最後に、傾きと切片から一次関数の式を組み立てる。（y = x + 18）'
   hints:
   - 2点の y 座標の差を x 座標の差で割り、傾きを求める。
   - 傾きと通る1点を y = ax + b に代入し、切片を求める。
@@ -51,53 +51,53 @@ sub_questions:
   prompt_text: 式に表しなさい。
   solution_steps:
   - args:
-    - (125, 86)
-    - (150, 101)
+    - (5, 23)
+    - (35, 53)
     narration: 2点の y 座標の差を x 座標の差で割り、傾きを求める。
     op: compute_slope
-    result_display: 傾き a = 3/5
-    result_srepr: Rational(3, 5)
+    result_display: 傾き a = 1
+    result_srepr: Integer(1)
   - args:
-    - 3/5
-    - (125, 86)
+    - '1'
+    - (5, 23)
     narration: 傾きと通る1点を y = ax + b に代入し、切片を求める。
     op: compute_intercept
-    result_display: 切片 b = 11
-    result_srepr: Integer(11)
+    result_display: 切片 b = 18
+    result_srepr: Integer(18)
   - args:
-    - 3/5
-    - '11'
+    - '1'
+    - '18'
     narration: 傾きと切片から一次関数の式を組み立てる。
     op: form_expression
-    result_display: y = 3/5x + 11
-    result_srepr: Add(Mul(Rational(3, 5), Symbol('x')), Integer(11))
+    result_display: y = x + 18
+    result_srepr: Add(Symbol('x'), Integer(18))
 - answer:
-    display: 56cm
+    display: 33cm
     kind: symbolic
-    srepr: Integer(56)
+    srepr: Integer(33)
   cause_tags: []
   concept_tags:
   - linear_function.word_problem_two_point_eval
-  explanation: 'まず、x の値を式に代入する。（y = 3/5 × 75 + 11）
+  explanation: 'まず、x の値を式に代入する。（y = 1 × 15 + 18）
 
-    次に、計算して y の値を求める。（y = 56）'
+    次に、計算して y の値を求める。（y = 33）'
   hints:
   - x の値を式に代入する。
   label: (2)
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args:
-    - 3/5
-    - '11'
-    - '75'
+    - '1'
+    - '18'
+    - '15'
     narration: x の値を式に代入する。
     op: substitute_x
-    result_display: y = 3/5 × 75 + 11
-    result_srepr: Integer(56)
+    result_display: y = 1 × 15 + 18
+    result_srepr: Integer(33)
   - args:
-    - y = 3/5 × 75 + 11
+    - y = 1 × 15 + 18
     narration: 計算して y の値を求める。
     op: evaluate
-    result_display: y = 56
-    result_srepr: Integer(56)
+    result_display: y = 33
+    result_srepr: Integer(33)
 visual_svg: null

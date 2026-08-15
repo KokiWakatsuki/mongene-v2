@@ -475,17 +475,19 @@ def compare_relative_frequency_chart_recipe(ctx: CellContext, rng: Rng) -> MR:
     scene, unit, lo, width = _scene(rng)
 
     def _is_decimal(freq: int, total: int) -> bool:
-        """相対度数が小数第3位までで書き切れるか（**相対度数は小数で答える**・D-24）。"""
-        q = int(sympy.Rational(freq, total).q)
-        while q % 2 == 0:
-            q //= 2
-        while q % 5 == 0:
-            q //= 5
-        return q == 1
+        """相対度数が**小数第2位まで**で書き切れるか（グラフから読み取る問題なので）。
+
+        前は「小数第3位まで」としていて 7/32 = 0.21875 が通っていた。5桁の
+        相対度数はグラフの目盛からは読めない。実物の度数分布は総度数を
+        20・25・40・50 のようにとり、相対度数は 0.35・0.20 と2桁で書ける。
+        """
+        return (sympy.Rational(freq, total) * 100).q == 1
 
     # 総度数を独立に決めていたので「A: 7/36、B: 3/35」という、割合として比べにくい
     # 答えが出ていた。**両方の相対度数が小数で書ける組**になるまで引き直す。
-    for _ in range(200):
+    # 相対度数を小数第2位までに絞ったぶん試行回数を増やす（200 回では 100 seed 中
+    # 3 回まで構成に失敗していた＝`retry_stats` が拾った）。
+    for _ in range(2000):
         freq_a = [int(draw(p["frequency_domain"], rng)) for _ in range(n_classes)]
         freq_b = [int(draw(p["frequency_domain"], rng)) for _ in range(n_classes)]
         target = int(draw({"int_range": [0, n_classes - 1]}, rng))

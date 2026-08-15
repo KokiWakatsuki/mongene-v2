@@ -26,16 +26,16 @@ meta:
 problem_ref: 4178228d139506c0
 problem_text: '次の式を計算せよ。
 
-  √2209'
+  (√491)²'
 sub_questions:
 - answer:
-    display: '47'
+    display: '491'
     kind: symbolic
-    srepr: Integer(47)
+    srepr: Integer(491)
   cause_tags: []
   concept_tags:
   - radical.square_of_root
-  explanation: まず、根号のついた数を2乗し、根号の中の数にもどす。（47）
+  explanation: まず、根号のついた数を2乗し、根号の中の数にもどす。（491）
   hints:
   - 根号のついた数を2乗し、根号の中の数にもどす。
   label: (1)
@@ -44,6 +44,6 @@ sub_questions:
   - args: []
     narration: 根号のついた数を2乗し、根号の中の数にもどす。
     op: square_the_root
-    result_display: '47'
-    result_srepr: Integer(47)
+    result_display: '491'
+    result_srepr: Integer(491)
 visual_svg: null

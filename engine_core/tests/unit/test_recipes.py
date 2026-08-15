@@ -2510,7 +2510,8 @@ def test_read_number_line_point_double_solve_property(seed):
     assert sol.answer.srepr == mr.sub_questions[0].answer.srepr
     # 恒真: 答えは a + i/k（既約分数）で、目盛位置 i は 1..k-1 に収まる。
     assert sympy.sympify(sol.answer.srepr) == sympy.Rational(a * k + i, k)
-    assert 2 <= k <= 5
+    # 等分数は 2・4・5・10（3等分は答えが循環小数になり数直線から読めない）。
+    assert k in (2, 4, 5, 10)
     assert 1 <= i <= k - 1
 
 
@@ -3910,7 +3911,7 @@ def test_equation_equality_multi_lv2_construct():
     mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
     assert mr.signature == "equality_multi"
     assert [s.op for s in mr.sub_questions[0].steps] == [
-        "subtract_constant_both_sides", "divide_both_sides",
+        "subtract_constant_both_sides", "combine_like_terms", "divide_both_sides",
     ]
 
 
@@ -3927,7 +3928,9 @@ def test_equation_transpose_both_lv2_construct():
     rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
     mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
     assert mr.signature == "transpose_both"
-    assert [s.op for s in mr.sub_questions[0].steps] == ["transpose_terms", "combine_and_divide"]
+    assert [s.op for s in mr.sub_questions[0].steps] == [
+        "transpose_terms", "combine_like_terms", "divide_both_sides",
+    ]
     # 両辺に文字がある（右辺にも x）。
     assert "x" in mr.given["equation"].split("=")[1]
 
@@ -3967,7 +3970,7 @@ def test_equation_expand_parens_l23_lv2_construct():
     mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
     assert mr.signature == "expand_parens"
     assert [s.op for s in mr.sub_questions[0].steps] == [
-        "expand_parentheses", "transpose_and_solve",
+        "expand_parentheses", "transpose_terms", "combine_like_terms", "divide_both_sides",
     ]
     assert "(" in mr.given["equation"]  # かっこを含む
 
@@ -3978,7 +3981,7 @@ def test_equation_word_price_l25_lv1_construct():
     mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
     assert mr.signature == "word_price_equation"
     assert [s.op for s in mr.sub_questions[0].steps] == [
-        "expand_parentheses", "transpose_and_solve",
+        "expand_parentheses", "transpose_terms", "combine_like_terms", "divide_both_sides",
     ]
 
 
@@ -3988,7 +3991,9 @@ def test_equation_shortage_l26_lv1_construct():
     mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
     assert mr.signature == "shortage_equation"
     # 過不足＝両辺に文字（transpose_both を流用）。
-    assert [s.op for s in mr.sub_questions[0].steps] == ["transpose_terms", "combine_and_divide"]
+    assert [s.op for s in mr.sub_questions[0].steps] == [
+        "transpose_terms", "combine_like_terms", "divide_both_sides",
+    ]
     assert "x" in mr.given["equation"].split("=")[1]
 
 
@@ -3997,7 +4002,9 @@ def test_equation_speed_fraction_l27_lv2_construct():
     rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed=1)
     mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
     assert mr.signature == "speed_fraction_equation"
-    assert [s.op for s in mr.sub_questions[0].steps] == ["clear_denominators", "combine_and_solve"]
+    assert [s.op for s in mr.sub_questions[0].steps] == [
+        "clear_denominators", "divide_both_sides",
+    ]
     assert "/" in mr.given["equation"]  # 分数係数
 
 
@@ -4007,7 +4014,7 @@ def test_equation_clear_denominators_two_l23_lv3_construct():
     mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
     assert mr.signature == "clear_denominators_two"
     assert [s.op for s in mr.sub_questions[0].steps] == [
-        "clear_denominators", "expand_and_transpose", "solve",
+        "clear_denominators", "transpose_terms", "combine_like_terms", "divide_both_sides",
     ]
     assert "/" in mr.given["equation"]  # かっこ＋分数
 
@@ -4029,7 +4036,8 @@ def test_equation_proportion_expand_l24_lv2_construct():
     mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
     assert mr.signature == "proportion_cross_multiply_expand"
     assert [s.op for s in mr.sub_questions[0].steps] == [
-        "cross_multiply", "expand_parentheses", "transpose_and_solve",
+        "cross_multiply", "expand_parentheses", "transpose_terms",
+        "combine_like_terms", "divide_both_sides",
     ]
     assert ":" in mr.given["equation"] and "(" in mr.given["equation"]  # (x+p):b=c:d
 
@@ -5987,7 +5995,11 @@ def test_special_parallelogram_diagonal_value_construct():
     sq = mr.sub_questions[0]
     assert sq.asked == "value"
     if mr.params["shape"] == "rhombus":
-        assert sq.answer.srepr == sympy.srepr(sympy.Integer(90))
+        # ひし形は「交点から頂点までの長さ」と「交点にできる角」の2つを問う
+        # （与えられた対角線の長さを使わない飾りにしないため）。
+        assert sq.answer.srepr == sympy.srepr(
+            sympy.Tuple(sympy.Rational(int(mr.params["value"]), 2), sympy.Integer(90))
+        )
     else:
         assert sq.answer.srepr == sympy.srepr(sympy.Rational(mr.params["value"], 2))
 
@@ -6010,7 +6022,10 @@ def test_special_parallelogram_diagonal_value_rhombus_construct():
         mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
         if mr.params["shape"] == "rhombus":
             found_rhombus = True
-            assert mr.sub_questions[0].answer.srepr == sympy.srepr(sympy.Integer(90))
+            # 対角線の長さの半分と直角の2つを答える（与件を使う問いにするため）。
+            assert mr.sub_questions[0].answer.srepr == sympy.srepr(
+                sympy.Tuple(sympy.Rational(int(mr.params["value"]), 2), sympy.Integer(90))
+            )
             break
     assert found_rhombus, "20 seed 中に shape=rhombus が1つも出なかった"
 
@@ -8504,7 +8519,11 @@ def test_judge_polyhedron_claim_double_solve_property(seed):
     if mr.params["mode"] == "element_count":
         # 主張されている個数は本文に出ている（params は「本文に出ている値」だけ）。
         assert mr.params["candidate"] in mr.given["statement"]
-        assert mr.params["n"] in mr.given["statement"]
+        # 底面の多角形の名前は漢数字で本文に出る（「底面が十角形の角柱」）ので、
+        # params の n（算用数字）そのものは本文に現れない。漢数字名で照合する。
+        from engine.packs.math.recipes.g1_space import _polygon_name_jp
+
+        assert _polygon_name_jp(int(mr.params["n"])) in mr.given["statement"]
     else:
         assert mr.params["vertex"] in mr.given["statement"]
 

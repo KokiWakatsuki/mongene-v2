@@ -32,10 +32,42 @@ def _effective_cause_tags(ctx: CellContext) -> list[str]:
     return list(ctx.spec_level.cause_tags)
 
 
-def _draw_frequency_table(rng: Rng, p: dict[str, object], n_classes: int) -> tuple[int, int, list[int]]:
-    start = int(draw(p["class_start_domain"], rng))
-    width = int(draw(p["class_width_domain"], rng))
-    freqs = [int(draw(p["frequency_domain"], rng)) for _ in range(n_classes)]
+def _as_unimodal(freqs: list[int], rng: Rng) -> list[int]:
+    """度数を**山が1つ**の並びに直す（値は変えず並べ替えるだけ）。
+
+    階級ごとに独立に引くと 3・12・2・8 のようなギザギザの表になる。実物の度数分布は
+    ほぼ単峰で、生徒が「分布の形」を読み取れるのはそのため。大きい順に取り出して
+    山の左右へ交互に置くと必ず単峰になる（`distribution_chart._as_unimodal` と同じ手）。
+    """
+    vals = sorted(freqs, reverse=True)
+    left: list[int] = []
+    right: list[int] = []
+    flip = int(draw({"int_range": [0, 1]}, rng))
+    for i, v in enumerate(vals[1:]):
+        (left if (i + flip) % 2 == 0 else right).append(v)
+    return [*reversed(left), vals[0], *right]
+
+
+def _draw_frequency_table(
+    rng: Rng, p: dict[str, object], n_classes: int
+) -> tuple[int, int, list[int]]:
+    """度数分布表の（下端, 階級の幅, 度数列）を引く。
+
+    **階級の幅は候補から引き、下端はその幅の倍数にする。** 前は幅を 5〜10 の整数、
+    下端を 0〜20 の整数から独立に引いていたので「3分以上13分未満」（幅10なのに
+    3から始まる）や「7分以上16分未満」（幅9）が出て、階級値が 77/2 のような
+    分数になっていた。実物の度数分布表は 0・10・20…のように区切りのいい所から
+    始まり、幅は 5・10・20 のどれかである。
+
+    **度数は単峰に並べ替える。** 独立に引くと 3・12・2・8 のギザギザになる。
+    """
+    width = int(draw(p["class_width_candidates"], rng))
+    start_max = int(p.get("class_start_max", 0))
+    starts = [v for v in range(0, start_max + 1, width)] or [0]
+    start = int(draw({"int_set": starts}, rng))
+    freqs = _as_unimodal(
+        [int(draw(p["frequency_domain"], rng)) for _ in range(n_classes)], rng
+    )
     return start, width, freqs
 
 
@@ -91,7 +123,9 @@ def frequency_table_value_recipe(ctx: CellContext, rng: Rng) -> MR:
 # g1_l55.calculation Lv1: 1階級の相対度数（既存 math.relative_frequency を再利用）
 # ---------------------------------------------------------------------------
 # 度数分布表の総度数（きりのよい人数で調べる）。相対度数が小数で書き切れる組だけを引く。
-_STATS_TOTALS = (20, 25, 40, 50, 80, 100, 125, 200, 250)
+# 相対度数を小数第2位までに絞ったぶん、総度数の候補を増やして組を確保する。
+_STATS_TOTALS = (20, 25, 40, 50, 60, 75, 80, 100, 120, 125, 150, 160, 175,
+                 200, 240, 250, 300, 400, 500)
 
 
 # 1つの階級が占める割合の上限・下限。
@@ -103,12 +137,18 @@ _CLASS_SHARE = (0.04, 0.45)
 
 @lru_cache(maxsize=4)
 def _stats_frequency_pairs(totals: tuple[int, ...]) -> tuple[tuple[int, int], ...]:
+    """相対度数が**小数第2位まで**で書ける組（`(100·o) % t == 0`）。
+
+    前は第3位まで許していたので「125人のうち29人 → 0.232」が出ていた。
+    実物の度数分布表の相対度数は 0.35・0.20 と2桁で書く（合計が 1.00 になる表を
+    作るため、教科書はそもそも総度数を 20・25・40・50 のようにとる）。
+    """
     lo, hi = _CLASS_SHARE
     return tuple(
         (t, o)
         for t in totals
         for o in range(1, t)
-        if (1000 * o) % t == 0 and lo <= o / t <= hi
+        if (100 * o) % t == 0 and lo <= o / t <= hi
     )
 
 
@@ -178,12 +218,19 @@ def compare_relative_frequency_recipe(ctx: CellContext, rng: Rng) -> MR:
     freq_a = int(draw({"int_set": [f for f in range(1, total_a)
                                    if (1000 * f) % total_a == 0
                                    and share_lo <= f / total_a <= share_hi]}, rng))
+    # **相対度数が同じになる組は除く。** 「A: 0.4、B: 0.4」なのに答えが
+    # 「Bのほうが大きい」になっていた（solver が非厳密比較で B を返す）。
+    # 割合が等しい場合は「どちらが大きいか」という問い自体が成り立たない。
     freq_b = int(draw({"int_set": [f for f in range(1, total_b)
                                    if (1000 * f) % total_b == 0
-                                   and share_lo <= f / total_b <= share_hi]}, rng))
+                                   and share_lo <= f / total_b <= share_hi
+                                   and f * total_a != freq_a * total_b]}, rng))
     name_a, name_b = _SCHOOL_NAMES[0], _SCHOOL_NAMES[1]
-    lo = int(draw(p["class_lo_domain"], rng))
-    width = int(draw(p["class_width_domain"], rng))
+    # **階級は幅の倍数の所から始める。** 前は下端 0〜40・幅 5〜10 を独立に引いていて
+    # 「10分以上17分未満」「31分以上40分未満」が出ていた。実物の階級は
+    # 0・10・20…から始まり、幅は 5・10 のどれか。
+    width = int(draw(p["class_width_candidates"], rng))
+    lo = int(draw({"int_set": list(range(0, int(p["class_lo_max"]) + 1, width))}, rng))
     hi = lo + width
 
     solver = REGISTRY.solver("math.compare_relative_frequency")
@@ -236,8 +283,12 @@ def cumulative_frequency_value_recipe(ctx: CellContext, rng: Rng) -> MR:
     assert isinstance(sol.answer, SymbolicAnswer)
 
     table_text = _format_frequency_table_text(start, width, freqs, "分")
-    lo = start
-    hi = start + width * (target_index + 1)
+    # **「〜の階級まで」が指すのは、対象の階級そのものの区間。**
+    # 前は下端を表の先頭に固定していたので「20分以上60分未満の階級まで」と書いていた
+    # ——20〜60 は階級ではない（表の階級は 20〜30・30〜40…）。実物は
+    # 「40分以上50分未満の階級までの累積度数」と、最後に足す階級の名前で書く。
+    lo = start + width * target_index
+    hi = lo + width
     statement = (
         f"次の度数分布表で、{lo}分以上{hi}分未満の階級までの累積度数を求めよ。"
         f"〔階級と度数：{table_text}〕"
@@ -281,6 +332,9 @@ def cumulative_relative_frequency_and_complement_recipe(ctx: CellContext, rng: R
         freqs = [base] * n_classes
         for i in range(total - base * n_classes):
             freqs[i] += 1
+    # 按分の重みを独立に引くと 18・27・9・46 のようなギザギザになる。実物の睡眠時間の
+    # 分布は単峰（真ん中の階級がいちばん多い）なので、値を変えずに並べ替える。
+    freqs = _as_unimodal(freqs, rng)
     target_index = int(draw({"int_range": [0, n_classes - 2]}, rng))
     # 階級を「1区間目…」と書き、境界の時刻を別に引いていたので、どの区間が
     # 「8時間未満」なのかが表から読めず、問題として解けなかった。階級に実際の
@@ -419,13 +473,22 @@ def mean_from_grouped_table_recipe(ctx: CellContext, rng: Rng) -> MR:
 # g1_l57.knowledge Lv2: 分布の特徴に応じて適切な代表値を判別する
 # ---------------------------------------------------------------------------
 _JUDGE_APPROPRIATE_REPRESENTATIVE_VALUE_CONCEPTS = ["representative_value.judge_appropriate"]
+# 人数を教材の数（きりのよい人数）に絞ったぶん、場面の種類で組合せを戻す。
 _REPRESENTATIVE_VALUE_SCENARIOS: list[tuple[str, bool]] = [
     ("少数の非常に高い値が混じっている{n}人の年収のデータ", True),
     ("少数のきわめて大きい記録が混じっている{n}人の資産額のデータ", True),
     ("1つだけ極端に大きい値が混じっている{n}人のテストの得点のデータ", True),
+    ("1人だけ飛びぬけて長い{n}人の通学時間のデータ", True),
+    ("少数のとても大きい値が混じっている{n}人の1か月の読書時間のデータ", True),
+    ("1つだけ極端に大きい記録が混じっている{n}人のハンドボール投げの記録のデータ", True),
+    ("少数のきわめて高い値が混じっている{n}世帯の貯蓄額のデータ", True),
     ("{n}人の身長がどれも近い範囲に集まっているデータ", False),
     ("{n}人の体重が大きく偏りなく分布しているデータ", False),
     ("{n}人の通学時間がどれも近い範囲に集まっているデータ", False),
+    ("{n}人の握力の記録がどれも近い範囲に集まっているデータ", False),
+    ("{n}人の反復横とびの記録が大きく偏りなく分布しているデータ", False),
+    ("{n}人の睡眠時間がどれも近い範囲に集まっているデータ", False),
+    ("{n}人の数学のテストの得点が大きく偏りなく分布しているデータ", False),
 ]
 
 

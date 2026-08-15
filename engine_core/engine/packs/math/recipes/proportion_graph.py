@@ -512,12 +512,16 @@ def _draw_hyperbola_lattice(p: dict[str, Any], rng: Rng) -> tuple[int, int, int]
     x_abs = int(p["x_abs_max"])
     y_abs = int(p["y_abs_max"])
     c_abs = int(p["coeff_abs_max"])
+    # **比例定数が小さすぎる双曲線は方眼に描いても読めない。**
+    # a=1（y = 1/x）だと曲線が両軸に張りついた細い鉤形になり、「グラフから
+    # 読み取る」問題として成立しない。実物の双曲線は a が 6〜24 くらい。
+    c_min = int(p.get("coeff_abs_min", 1))
     combos = [
         (x, y)
         for x in range(-x_abs, x_abs + 1)
         if x != 0
         for y in range(-y_abs, y_abs + 1)
-        if y != 0 and abs(x * y) <= c_abs
+        if y != 0 and c_min <= abs(x * y) <= c_abs
     ]
     x0, y0 = combos[int(draw({"int_set": list(range(len(combos)))}, rng))]
     return x0, y0, x0 * y0

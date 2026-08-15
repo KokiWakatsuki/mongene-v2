@@ -24,7 +24,7 @@ meta:
   seed: 3
   signature: judge_proportion_graph_direction
 problem_ref: 92c8448b5b148fa9
-problem_text: 比例y=-9xのグラフについて、次の文の正誤を答えよ。「a<0のとき、グラフは右上がりの直線になる。」また、比例のグラフは必ずどんな点を通るか答えよ。
+problem_text: 比例y=-9xのグラフは、右上がり・右下がりのどちらの直線になるか答えよ。また、比例のグラフは必ずどんな点を通るか答えよ。
 sub_questions:
 - answer:
     correct: 右下がりの直線になる（原点を通る）

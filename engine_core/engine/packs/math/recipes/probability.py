@@ -6,6 +6,7 @@ C12（確率）クラスタの非 visual セル群（g1_l59・g2_l51〜54）に�
 from __future__ import annotations
 
 import itertools
+import math
 from collections.abc import Mapping
 from functools import lru_cache
 from typing import cast
@@ -23,6 +24,7 @@ from engine.core.contracts import (
 )
 from engine.core.registry import REGISTRY, register_recipe
 from engine.core.rng import Rng, draw
+from engine.packs.math.recipes.polynomial import _domain_candidates
 
 
 def _effective_concept_tags(ctx: CellContext) -> list[str]:
@@ -37,7 +39,8 @@ def _effective_cause_tags(ctx: CellContext) -> list[str]:
 # math.relative_frequency（g1_l59.calculation Lv1 / g2_l51.find_value Lv2）
 # ---------------------------------------------------------------------------
 # 相対度数の実験の回数（教科書は 100・500・1000 のようなきりのよい回数で調べる）。
-_FREQUENCY_TOTALS = (50, 100, 200, 250, 400, 500, 800, 1000, 1250, 2000)
+_FREQUENCY_TOTALS = (50, 80, 100, 120, 150, 160, 200, 240, 250, 300, 320, 400,
+                     480, 500, 600, 750, 800, 1000, 1200, 1250, 1500, 1600, 2000)
 # 投げる道具と、その道具で実際に起こりうる相対度数の幅（千分率で持つ）。
 # 「さいころを800回投げて1の目が756回出た（相対度数0.945）」は実験の記録として
 # ありえない。**数が小さいだけでは足りず、値が場面に対して現実的である必要がある。**
@@ -49,20 +52,35 @@ _FREQUENCY_TOOLS: list[tuple[str, int, int]] = [
     ("10円硬貨", 450, 550),
 ]
 # さいころの1の目（理論値 1/6 のまわり）。
-_DIE_FACE_BAND = (130, 210)
+# 幅は回数で縮む（`_frequency_pairs`）。ここは 100回のときの幅。
+_DIE_FACE_BAND = (110, 230)
 
 
 @lru_cache(maxsize=16)
 def _frequency_pairs(
     totals: tuple[int, ...], lo_permille: int, hi_permille: int
 ) -> tuple[tuple[int, int], ...]:
-    """相対度数が小数第3位までで書き切れ、かつ場面としてありうる幅に入る組。"""
-    return tuple(
-        (t, o)
-        for t in totals
-        for o in range(1, t)
-        if (1000 * o) % t == 0 and lo_permille * t <= 1000 * o <= hi_permille * t
-    )
+    """相対度数が小数第3位までで書き切れ、かつ場面としてありうる幅に入る組。
+
+    **幅は回数が増えるほど狭める。** 幅を回数と無関係に持っていたので
+    「さいころを2000回投げて1の目が262回（相対度数 0.131）」が出ていた。
+    実験の記録は回数が増えるほど理論値に寄る（これがこの単元の見せ場そのもの）。
+    許す幅を「真ん中 ± 半幅 × sqrt(100/回数)」にすると、100回で元の幅、
+    2000回では 1/4.5 の幅になり、教科書の表と同じ寄り方をする。
+    """
+    center = (lo_permille + hi_permille) / 2
+    half = (hi_permille - lo_permille) / 2
+    out: list[tuple[int, int]] = []
+    for t in totals:
+        shrink = min(1.0, (100 / t) ** 0.5)
+        lo = center - half * shrink
+        hi = center + half * shrink
+        out.extend(
+            (t, o)
+            for o in range(1, t)
+            if (1000 * o) % t == 0 and lo * t <= 1000 * o <= hi * t
+        )
+    return tuple(out)
 
 
 def _draw_frequency_pair(
@@ -89,6 +107,9 @@ def relative_frequency_g1_recipe(ctx: CellContext, rng: Rng) -> MR:
     """さいころの相対度数（g1_l59.calculation Lv1・answer-first）。"""
     p = ctx.spec_level.params
     total, occurred = _draw_frequency_pair(p, rng, _DIE_FACE_BAND)
+    # 相対度数を回数に応じて理論値へ寄せたぶん組が減るので、**どの目を調べたか**を
+    # 軸に足す（実物の教科書の表も「1の目」「2の目」…と目ごとに調べている）。
+    face = str(draw(["1", "2", "3", "4", "5", "6"], rng))
 
     solver = REGISTRY.solver("math.relative_frequency")
     sol = cast(Solution, solver(occurred, total))
@@ -96,8 +117,8 @@ def relative_frequency_g1_recipe(ctx: CellContext, rng: Rng) -> MR:
     assert sol.answer.srepr == sympy.srepr(sympy.Rational(occurred, total))
 
     statement = (
-        f"さいころを{total}回投げたところ、1の目が{occurred}回出た。"
-        "1の目が出た相対度数を小数で求めよ"
+        f"さいころを{total}回投げたところ、{face}の目が{occurred}回出た。"
+        f"{face}の目が出た相対度数を小数で求めよ"
     )
 
     sub_question = SubQuestionMR(
@@ -107,7 +128,7 @@ def relative_frequency_g1_recipe(ctx: CellContext, rng: Rng) -> MR:
     return MR(
         signature=ctx.spec_level.signature, family=ctx.family, level=ctx.level,
         purpose=ctx.purpose, seed=0,
-        params={"occurred": occurred, "total": total},
+        params={"occurred": occurred, "total": total, "face": face},
         given={"expressions": statement}, sub_questions=[sub_question], visual_plan=None,
         provenance=Provenance(recipe="math.relative_frequency_g1"),
     )
@@ -347,8 +368,15 @@ def probability_ordered_selection_recipe(ctx: CellContext, rng: Rng) -> MR:
     構成そのものは相異なる場面として妥当）。
     """
     p = ctx.spec_level.params
-    n = int(draw(p["n_domain"], rng))
-    r = int(draw({"int_range": [2, min(4, n - 1)]}, rng))
+    # **樹形図で数えられる規模に収める。** 人数を4〜6に絞っても、役職を4つにすると
+    # 6P4 = 360通りになり「樹形図で数えて」という指示が成り立たない。
+    # 実物は「4人から委員長と副委員長」12通り〜「6人から2人」30通りくらい。
+    # 人数と役職の数を**組で**選ぶ（片方だけ絞っても組み合わせで破綻する）。
+    pairs = [(n_, r_) for n_ in _domain_candidates(cast("dict[str, object]", p["n_domain"]))
+             for r_ in (2, 3, 4)
+             if r_ < n_ and math.perm(int(n_), r_) <= 30]
+    idx = int(draw({"int_range": [0, len(pairs) - 1]}, rng))
+    n, r = int(pairs[idx][0]), int(pairs[idx][1])
     target_index = int(draw({"int_range": [0, r - 1]}, rng))
     group = str(draw(_SELECTION_GROUPS, rng))
     person = str(draw(_SELECTION_PERSONS, rng))

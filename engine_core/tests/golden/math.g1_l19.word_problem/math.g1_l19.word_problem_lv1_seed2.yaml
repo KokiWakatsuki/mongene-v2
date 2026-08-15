@@ -24,20 +24,20 @@ meta:
   seed: 2
   signature: word_problem_equality_price_count
 problem_ref: 42f7be784795d610
-problem_text: '1冊 x 円のノートを7冊買って、602円出したところちょうど払えた。
+problem_text: '1個 x 円の消しゴムを7個買って、560円出したところちょうど払えた。
 
   この関係を等式で表せ。'
 sub_questions:
 - answer:
-    display: 7x = 602
+    display: 7x = 560
     kind: symbolic
-    srepr: Equality(Mul(Integer(7), Symbol('x')), Integer(602))
+    srepr: Equality(Mul(Integer(7), Symbol('x')), Integer(560))
   cause_tags: []
   concept_tags:
   - equality.word_problem_equality_simple
   explanation: 'まず、場面の中で、比べられている、または等しくなっている数量に着目する。（代金の合計）
 
-    次に、その数量を x を使った式で表し、等式または不等式をつくる。（7x = 602）'
+    次に、その数量を x を使った式で表し、等式または不等式をつくる。（7x = 560）'
   hints:
   - 場面の中で、比べられている、または等しくなっている数量に着目する。
   label: (1)
@@ -51,6 +51,6 @@ sub_questions:
   - args: []
     narration: その数量を x を使った式で表し、等式または不等式をつくる。
     op: formulate_relation
-    result_display: 7x = 602
-    result_srepr: Equality(Mul(Integer(7), Symbol('x')), Integer(602))
+    result_display: 7x = 560
+    result_srepr: Equality(Mul(Integer(7), Symbol('x')), Integer(560))
 visual_svg: null

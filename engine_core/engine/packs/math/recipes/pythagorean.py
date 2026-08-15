@@ -21,7 +21,7 @@ from engine.core.contracts import (
 )
 from engine.core.registry import REGISTRY, register_recipe
 from engine.core.rng import Rng, draw
-from engine.packs.math.recipes.letter_expr import _draw_distinct_points
+from engine.packs.math.recipes.letter_expr import _draw_named_figures
 
 def _is_triangle(a: int, b: int, c: int) -> bool:
     """3辺が三角形をつくるか（正で、いちばん長い辺が他の2辺の和より短い）。"""
@@ -100,7 +100,10 @@ def pythagorean_hypotenuse_recipe(ctx: CellContext, rng: Rng) -> MR:
     leg_a, leg_b = pairs[int(draw({"int_set": list(range(len(pairs)))}, rng))]
     # 言い回しを2つ持つ（辺の名前で問う形は教科書の定番で、点名の軸も乗る）。
     wording = str(draw(["plain", "named"], rng))
-    pa, pb, pc = _draw_distinct_points(3, rng)
+    # 図形の頂点はアルファベット順に名づける（実物は「正方形ABCD」「△ABC∽△DEF」）。
+    # 無作為に引くと「正方形ERDJ」「三角形JQBと三角形CMH」になる。
+    (v,) = _draw_named_figures([3], rng)
+    pa, pb, pc = v
 
     solver = REGISTRY.solver("math.pythagorean_hypotenuse")
     sol = cast(Solution, solver(leg_a, leg_b))
@@ -139,18 +142,30 @@ _IDENTIFY_HYPOTENUSE_CONCEPTS = ["pythagorean.identify_hypotenuse"]
 @register_recipe("math.identify_hypotenuse", provides_concepts=_IDENTIFY_HYPOTENUSE_CONCEPTS)
 def identify_hypotenuse_recipe(ctx: CellContext, rng: Rng) -> MR:
     """直角の頂点の位置から、斜辺がどの辺かを判別する（g3_l51.knowledge Lv2・answer-first）。"""
-    pa, pb, pc = _draw_distinct_points(3, rng)
+    # 頂点名をアルファベット順に直したぶん組合せが減ったので、**問いの言い回し**を
+    # 軸に足す（実物も「斜辺はどの辺か」「いちばん長い辺はどれか」と言い分ける）。
+    (v,) = _draw_named_figures([3], rng)
+    pa, pb, pc = v
     labels = pa + pb + pc
     right_angle_index = int(draw({"int_set": [0, 1, 2]}, rng))
+    phrasing = int(draw({"int_set": [0, 1, 2]}, rng))
 
     solver = REGISTRY.solver("math.identify_hypotenuse")
     sol = cast(Solution, solver(labels, right_angle_index))
     assert isinstance(sol.answer, ChoiceAnswer)
-
     right_angle_vertex = labels[right_angle_index]
-    statement = (
-        f"∠{right_angle_vertex}=90°の三角形{labels}で斜辺はどの辺か答えよ"
-    )
+    if phrasing == 0:
+        statement = f"∠{right_angle_vertex}=90°の三角形{labels}で斜辺はどの辺か答えよ"
+    elif phrasing == 1:
+        statement = (
+            f"三角形{labels}が∠{right_angle_vertex}=90°の直角三角形であるとき、"
+            "斜辺はどの辺か答えよ"
+        )
+    else:
+        statement = (
+            f"直角三角形{labels}で直角の頂点が{right_angle_vertex}であるとき、"
+            "斜辺はどの辺か答えよ"
+        )
 
     sub_question = SubQuestionMR(
         label="(1)", asked="choice", answer=sol.answer, steps=sol.steps,
@@ -159,7 +174,8 @@ def identify_hypotenuse_recipe(ctx: CellContext, rng: Rng) -> MR:
     return MR(
         signature=ctx.spec_level.signature, family=ctx.family, level=ctx.level,
         purpose=ctx.purpose, seed=0,
-        params={"labels": labels, "right_angle_index": right_angle_index},
+        params={"labels": labels, "right_angle_index": right_angle_index,
+                "phrasing": str(phrasing)},
         given={"statement": statement}, sub_questions=[sub_question], visual_plan=None,
         provenance=Provenance(recipe="math.identify_hypotenuse"),
     )

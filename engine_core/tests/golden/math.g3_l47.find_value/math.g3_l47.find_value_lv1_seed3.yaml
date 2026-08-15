@@ -24,18 +24,18 @@ meta:
   seed: 3
   signature: inscribed_angle_from_central
 problem_ref: df095e8c1d704b43
-problem_text: 円Qの周上に点Kがある。弧PHに対する中心角∠PQH=28° のとき、同じ弧PHに対する円周角∠PKHの大きさを求めよ。
+problem_text: 円Uの周上に点Xがある。弧VWに対する中心角∠VUW=86° のとき、同じ弧VWに対する円周角∠VXWの大きさを求めよ。
 sub_questions:
 - answer:
-    display: 14°
+    display: 43°
     kind: symbolic
-    srepr: Integer(14)
+    srepr: Integer(43)
   cause_tags: []
   concept_tags:
   - circle.inscribed_angle_from_central
-  explanation: 'まず、弧に対する中心角の大きさを読み取る。（28°）
+  explanation: 'まず、弧に対する中心角の大きさを読み取る。（86°）
 
-    次に、同じ弧に対する円周角の大きさは、中心角の大きさの半分に等しいことから、円周角の大きさを求める。（14°）'
+    次に、同じ弧に対する円周角の大きさは、中心角の大きさの半分に等しいことから、円周角の大きさを求める。（43°）'
   hints:
   - 弧に対する中心角の大きさを読み取る。
   label: (1)
@@ -44,11 +44,11 @@ sub_questions:
   - args: []
     narration: 弧に対する中心角の大きさを読み取る。
     op: identify_central_angle
-    result_display: 28°
+    result_display: 86°
     result_srepr: ''
   - args: []
     narration: 同じ弧に対する円周角の大きさは、中心角の大きさの半分に等しいことから、円周角の大きさを求める。
     op: apply_inscribed_angle_theorem
-    result_display: 14°
-    result_srepr: Integer(14)
+    result_display: 43°
+    result_srepr: Integer(43)
 visual_svg: null

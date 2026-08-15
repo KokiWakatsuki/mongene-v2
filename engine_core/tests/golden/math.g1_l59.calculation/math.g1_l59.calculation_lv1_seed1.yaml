@@ -24,16 +24,16 @@ meta:
   seed: 1
   signature: relative_frequency_basic
 problem_ref: a812f986c68e5ab2
-problem_text: さいころを1250回投げたところ、1の目が200回出た。1の目が出た相対度数を小数で求めよ。
+problem_text: さいころを1500回投げたところ、6の目が237回出た。6の目が出た相対度数を小数で求めよ。
 sub_questions:
 - answer:
-    display: '0.16'
+    display: '0.158'
     kind: symbolic
-    srepr: Rational(4, 25)
+    srepr: Rational(79, 500)
   cause_tags: []
   concept_tags:
   - probability.relative_frequency_basic
-  explanation: まず、ことがらが起こった回数を、試行の総回数でわる。（0.16）
+  explanation: まず、ことがらが起こった回数を、試行の総回数でわる。（0.158）
   hints:
   - ことがらが起こった回数を、試行の総回数でわる。
   label: (1)
@@ -42,6 +42,6 @@ sub_questions:
   - args: []
     narration: ことがらが起こった回数を、試行の総回数でわる。
     op: divide_occurred_by_total
-    result_display: '0.16'
-    result_srepr: Rational(4, 25)
+    result_display: '0.158'
+    result_srepr: Rational(79, 500)
 visual_svg: null

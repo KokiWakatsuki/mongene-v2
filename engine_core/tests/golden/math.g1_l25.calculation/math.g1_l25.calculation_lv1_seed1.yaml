@@ -23,7 +23,7 @@ meta:
     unit: g1_l25
   seed: 1
   signature: word_price_equation
-problem_ref: 720077482e789bb2
+problem_ref: cfa852492c6927f6
 problem_text: '次の方程式を解け。
 
   40x + 130(14 - x) = 920'
@@ -37,9 +37,15 @@ sub_questions:
   - equation.solve_word_price
   explanation: 'まず、分配法則を使って、かっこを外す。（1820 - 90x = 920）
 
-    次に、文字の項を左辺に、数の項を右辺に移項し、両辺を整理して解く。（x = 10）'
+    次に、文字の項を左辺に、数の項を右辺に、符号を変えて移項する。（-90x = 920 - 1820）
+
+    次に、両辺の同類項をそれぞれまとめて、ax = b の形にする。（-90x = -900）
+
+    最後に、等式の性質を使い、両辺を x の係数でわる。（x = 10）'
   hints:
   - 分配法則を使って、かっこを外す。
+  - 文字の項を左辺に、数の項を右辺に、符号を変えて移項する。
+  - 両辺の同類項をそれぞれまとめて、ax = b の形にする。
   label: (1)
   prompt_text: 解を求めなさい。
   solution_steps:
@@ -49,8 +55,18 @@ sub_questions:
     result_display: 1820 - 90x = 920
     result_srepr: Integer(10)
   - args: []
-    narration: 文字の項を左辺に、数の項を右辺に移項し、両辺を整理して解く。
-    op: transpose_and_solve
+    narration: 文字の項を左辺に、数の項を右辺に、符号を変えて移項する。
+    op: transpose_terms
+    result_display: -90x = 920 - 1820
+    result_srepr: Integer(10)
+  - args: []
+    narration: 両辺の同類項をそれぞれまとめて、ax = b の形にする。
+    op: combine_like_terms
+    result_display: -90x = -900
+    result_srepr: Integer(10)
+  - args: []
+    narration: 等式の性質を使い、両辺を x の係数でわる。
+    op: divide_both_sides
     result_display: x = 10
     result_srepr: Integer(10)
 visual_svg: null

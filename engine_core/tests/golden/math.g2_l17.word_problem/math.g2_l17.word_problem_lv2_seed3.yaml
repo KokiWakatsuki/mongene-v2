@@ -24,7 +24,7 @@ meta:
   seed: 3
   signature: word_problem_distance_time_guided
 problem_ref: 716b795fde9b92b0
-problem_text: '駅から市役所を通って美術館まで行った。駅から市役所までは時速6kmで歩き、市役所から美術館までは時速18kmの自転車で進んだところ、全体で24km進むのに2時間かかった。
+problem_text: '駅から市役所を通って美術館まで行った。駅から市役所までは時速5kmで歩き、市役所から美術館までは時速12kmの自転車で進んだところ、全体で34km進むのに4時間かかった。
 
   歩いた道のりを x km、自転車で進んだ道のりを y km とする。
 
@@ -33,17 +33,17 @@ problem_text: '駅から市役所を通って美術館まで行った。駅か�
   (2) 歩いた道のりと自転車で進んだ道のりをそれぞれ求めよ。'
 sub_questions:
 - answer:
-    display: x + y = 24、x/6 + y/18 = 2
+    display: x + y = 34、x/5 + y/12 = 4
     kind: symbolic
-    srepr: Tuple(Equality(Add(Symbol('x'), Symbol('y')), Integer(24)), Equality(Add(Mul(Rational(1, 6), Symbol('x')), Mul(Rational(1, 18), Symbol('y'))), Integer(2)))
+    srepr: Tuple(Equality(Add(Symbol('x'), Symbol('y')), Integer(34)), Equality(Add(Mul(Rational(1, 5), Symbol('x')), Mul(Rational(1, 12), Symbol('y'))), Integer(4)))
   cause_tags: []
   concept_tags:
   - simultaneous_equations.word_problem_distance_time
   explanation: 'まず、歩いた道のりを x km、自転車で進んだ道のりを y km とおく。（x, y）
 
-    次に、道のりの関係に着目して、1つめの式をつくる。（x + y = 24）
+    次に、道のりの関係に着目して、1つめの式をつくる。（x + y = 34）
 
-    最後に、かかった時間の関係に着目して、2つめの式をつくる。（x/6 + y/18 = 2）'
+    最後に、かかった時間の関係に着目して、2つめの式をつくる。（x/5 + y/12 = 4）'
   hints:
   - 歩いた道のりを x km、自転車で進んだ道のりを y km とおく。
   - 道のりの関係に着目して、1つめの式をつくる。
@@ -58,39 +58,39 @@ sub_questions:
   - args: []
     narration: 道のりの関係に着目して、1つめの式をつくる。
     op: formulate_first
-    result_display: x + y = 24
-    result_srepr: Equality(Add(Symbol('x'), Symbol('y')), Integer(24))
+    result_display: x + y = 34
+    result_srepr: Equality(Add(Symbol('x'), Symbol('y')), Integer(34))
   - args: []
     narration: かかった時間の関係に着目して、2つめの式をつくる。
     op: formulate_second
-    result_display: x/6 + y/18 = 2
-    result_srepr: Equality(Add(Mul(Rational(1, 6), Symbol('x')), Mul(Rational(1, 18), Symbol('y'))), Integer(2))
+    result_display: x/5 + y/12 = 4
+    result_srepr: Equality(Add(Mul(Rational(1, 5), Symbol('x')), Mul(Rational(1, 12), Symbol('y'))), Integer(4))
 - answer:
-    display: 歩いた道のりは6km、自転車で進んだ道のりは18km
+    display: 歩いた道のりは10km、自転車で進んだ道のりは24km
     kind: symbolic
-    srepr: Tuple(Integer(6), Integer(18))
+    srepr: Tuple(Integer(10), Integer(24))
   cause_tags: []
   concept_tags:
   - simultaneous_equations.word_problem_distance_time
-  explanation: 'まず、係数をそろえて一方の文字を消去し、残った文字を求める。（x = 6）
+  explanation: 'まず、係数をそろえて一方の文字を消去し、残った文字を求める。（x = 10）
 
-    次に、求めた値をもとの式に代入し、もう一方の文字を求める。（y = 18）'
+    次に、求めた値をもとの式に代入し、もう一方の文字を求める。（y = 24）'
   hints:
   - 係数をそろえて一方の文字を消去し、残った文字を求める。
   label: (2)
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args:
-    - Eq(x + y, 24)
-    - Eq(x/6 + y/18, 2)
+    - Eq(x + y, 34)
+    - Eq(x/5 + y/12, 4)
     narration: 係数をそろえて一方の文字を消去し、残った文字を求める。
     op: eliminate_variable
-    result_display: x = 6
-    result_srepr: Equality(Symbol('x'), Integer(6))
+    result_display: x = 10
+    result_srepr: Equality(Symbol('x'), Integer(10))
   - args:
-    - '6'
+    - '10'
     narration: 求めた値をもとの式に代入し、もう一方の文字を求める。
     op: back_substitute
-    result_display: y = 18
-    result_srepr: Integer(18)
+    result_display: y = 24
+    result_srepr: Integer(24)
 visual_svg: null

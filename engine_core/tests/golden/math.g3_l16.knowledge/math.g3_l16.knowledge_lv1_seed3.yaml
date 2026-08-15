@@ -24,7 +24,7 @@ meta:
   seed: 3
   signature: real_numbers_term_recall
 problem_ref: b362be943c0ecaee
-problem_text: 75/25 のように、整数を使った分数の形で表すことができる数を何といいますか。
+problem_text: 75/100 のように、整数を使った分数の形で表すことができる数を何といいますか。
 sub_questions:
 - answer:
     correct: 有理数

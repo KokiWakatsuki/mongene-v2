@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: identify_similarity_condition
 problem_ref: 4c62f0e10a1287fa
-problem_text: 三角形JHEと三角形BGFについて、JH:BG=HE:GF=EJ:FB=2:5が成り立っているとき、この2つの三角形が相似であることがいえる。用いた相似条件を答えよ。
+problem_text: 三角形PQRと三角形TUVについて、PQ:TU=QR:UV=RP:VT=4:5が成り立っているとき、この2つの三角形が相似であることがいえる。用いた相似条件を答えよ。
 sub_questions:
 - answer:
     correct: 三組の辺の比がすべて等しい条件

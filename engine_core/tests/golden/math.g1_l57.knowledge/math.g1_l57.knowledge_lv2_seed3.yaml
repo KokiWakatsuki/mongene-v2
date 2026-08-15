@@ -24,7 +24,7 @@ meta:
   seed: 3
   signature: judge_appropriate_representative_value
 problem_ref: f68c35c784cd1292
-problem_text: 1つだけ極端に大きい値が混じっている190人のテストの得点のデータで、集団の「まん中あたり」を表す代表値としては平均値と中央値のどちらが適切か、理由とともに答えよ。
+problem_text: 少数のとても大きい値が混じっている80人の1か月の読書時間のデータで、集団の「まん中あたり」を表す代表値としては平均値と中央値のどちらが適切か、理由とともに答えよ。
 sub_questions:
 - answer:
     correct: 中央値

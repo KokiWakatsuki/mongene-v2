@@ -24,7 +24,7 @@ meta:
   seed: 2
   signature: solve_time_from_area
 problem_ref: 1c3dddd71137ee45
-problem_text: 動点が辺上を動くとき、三角形の面積 y cm² と時間 x 秒の関係が y = x で表され、この区間は 0 ≦ x ≦ 13 である。この区間で面積が 12 cm² となる時刻 x を求めよ。
+problem_text: 動点が辺上を動くとき、三角形の面積 y cm² と時間 x 秒の関係が y = 3x で表され、この区間は 0 ≦ x ≦ 13 である。この区間で面積が 36 cm² となる時刻 x を求めよ。
 sub_questions:
 - answer:
     display: '12'
@@ -33,7 +33,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - linear_function.solve_time_from_area
-  explanation: 'まず、面積の式に、求める面積の値を代入して、時刻 x についての方程式をつくる。（x = 12）
+  explanation: 'まず、面積の式に、求める面積の値を代入して、時刻 x についての方程式をつくる。（3x = 36）
 
     次に、両辺を x の係数で割って、時刻 x を求める。（x = 12）'
   hints:
@@ -44,8 +44,8 @@ sub_questions:
   - args: []
     narration: 面積の式に、求める面積の値を代入して、時刻 x についての方程式をつくる。
     op: set_up_equation
-    result_display: x = 12
-    result_srepr: Equality(Symbol('x'), Integer(12))
+    result_display: 3x = 36
+    result_srepr: Equality(Mul(Integer(3), Symbol('x')), Integer(36))
   - args: []
     narration: 両辺を x の係数で割って、時刻 x を求める。
     op: solve_for_x

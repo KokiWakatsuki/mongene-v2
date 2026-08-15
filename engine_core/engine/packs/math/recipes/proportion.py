@@ -146,12 +146,19 @@ def evaluate_inverse_proportion(ctx: CellContext, rng: Rng) -> MR:
     # 比例定数は約数の多い数（12の倍数中心）を並べてあるのに、x は −10〜10 を独立に
     # 引いていたので `y = 240/x` に `x = 7` が当たって `240/7` が出ていた。
     # 反比例の値を求める問題の答えが「240/7」では、割り算をした形にならない。
+    # **さらに、割り切れる組だけにする。** 大きさの検査だけでは
+    # `y = 240/x` に `x = -9` が当たって `-80/3` が出ていた。実物の反比例の代入は、
+    # 代入する値が比例定数の約数（240 なら 1,2,3,4,5,6,8,10…）で、答えは整数になる。
     limits = limits_for(ctx.spec_level)
     a = known = None
     for attempt in range(_ANSWER_SIZE_REDRAWS):
         attempt_rng = rng.spawn(attempt) if attempt else rng
         a = draw(p["slope_domain"], attempt_rng)
-        known = draw(p["known_domain"], attempt_rng)
+        divisors = [
+            v for v in _domain_candidates(cast("dict[str, object]", p["known_domain"]))
+            if v != 0 and int(a) % int(v) == 0
+        ]
+        known = draw({"int_set": divisors}, attempt_rng)
         if not answer_is_too_big(str(sympy.nsimplify(a) / sympy.nsimplify(known)), limits):
             break
     a_s, k_s = sympy.nsimplify(a), sympy.nsimplify(known)
@@ -426,20 +433,23 @@ def judge_inverse_proportion_table(ctx: CellContext, rng: Rng) -> MR:
     """
     p = ctx.spec_level.params
     is_inverse = bool(int(draw({"int_set": [0, 1]}, rng)))
-    x_cands = [v for v in _domain_candidates(cast("dict[str, object]", p["x_domain"])) if v != 0]
 
+    # **比例定数を先に引き、その約数から x を4つ選ぶ。**
+    # 前は x を 1〜12 から4つ引き、その最小公倍数の整数倍を a にしていた。
+    # x に 7・9・11 のような互いに素な数が混ざると最小公倍数が跳ね、
+    # a = 1008（x：1 7 8 9 → y：1008 144 126 112）のような、実物の反比例の表に
+    # 出てこない数になる。実物の表は a が約数の多い数（24・36・60）で、
+    # x はその約数（1・2・3・4・6）が並ぶ。
+    a_val = int(draw(list(p["constant_candidates"]), rng))
+    x_max = int(p["x_max"])
+    divisors = [d for d in range(1, x_max + 1) if a_val % d == 0]
     xs_set: set[int] = set()
     for _ in range(200):
-        v = int(draw({"int_set": x_cands}, rng))
-        xs_set.add(v)
+        xs_set.add(int(draw({"int_set": divisors}, rng)))
         if len(xs_set) >= 4:
             break
     xs = sorted(xs_set)[:4]
-    lcm_x = 1
-    for v in xs:
-        lcm_x = sympy.ilcm(lcm_x, v)
-    multiplier = int(draw(p["multiplier_domain"], rng))  # ≧1
-    a_s = sympy.Integer(lcm_x * multiplier)
+    a_s = sympy.Integer(a_val)
 
     xs_s = [sympy.Integer(v) for v in xs]
     ys_s = [a_s / x for x in xs_s]
@@ -567,10 +577,24 @@ def solve_inverse_proportion_from_point_recipe(ctx: CellContext, rng: Rng) -> MR
     """
     p = ctx.spec_level.params
     mode = str(p["mode"])
-    domain_key = "xy_domain" if mode == "basic" else "xy_signed_domain"
-    xy_cands = [v for v in _domain_candidates(cast("dict[str, object]", p[domain_key])) if v != 0]
-    x0 = int(draw({"int_set": xy_cands}, rng))
-    y0 = int(draw({"int_set": xy_cands}, rng))
+    if "constant_candidates" in p:
+        # **比例定数のほうを先に引き、その約数を x0 にする。**
+        # x0・y0 を独立に引くと a = x0·y0 が 741（=57×13）や 1408 のような、
+        # 実物の反比例に出てこない数になる。実物の a は約数の多い数
+        # （12・24・36・60・120）で、通る点はその約数の組。
+        a_val = int(draw(list(p["constant_candidates"]), rng))
+        x_max, y_max = int(p["x_max"]), int(p["y_max"])
+        divisors = [d for d in range(1, a_val + 1)
+                    if a_val % d == 0 and d <= x_max and a_val // d <= y_max]
+        x0 = int(draw({"int_set": divisors}, rng))
+        y0 = a_val // x0
+    else:
+        domain_key = "xy_domain" if mode == "basic" else "xy_signed_domain"
+        xy_cands = [
+            v for v in _domain_candidates(cast("dict[str, object]", p[domain_key])) if v != 0
+        ]
+        x0 = int(draw({"int_set": xy_cands}, rng))
+        y0 = int(draw({"int_set": xy_cands}, rng))
 
     x0_s, y0_s = sympy.Integer(x0), sympy.Integer(y0)
     a_expected = x0_s * y0_s
@@ -618,9 +642,12 @@ def judge_proportion_graph_direction_recipe(ctx: CellContext, rng: Rng) -> MR:
     sol = cast(Solution, solver(is_a_positive))
     assert isinstance(sol.answer, ChoiceAnswer)
 
+    # **問いと答えの形をそろえる。** 前は「次の文の正誤を答えよ。「a<0のとき…」」と
+    # 書いていたのに、答えは「右下がりの直線になる（原点を通る）」で正誤になって
+    # おらず、しかも本文の a が正のときも「a<0のとき」を問うていて対象がずれていた。
     statement = (
-        f"比例y={fmt_number(sympy.Integer(a))}xのグラフについて、次の文の正誤を答えよ。"
-        "「a<0のとき、グラフは右上がりの直線になる。」また、比例のグラフは必ずどんな点を通るか答えよ"
+        f"比例y={fmt_number(sympy.Integer(a))}xのグラフは、右上がり・右下がりの"
+        "どちらの直線になるか答えよ。また、比例のグラフは必ずどんな点を通るか答えよ"
     )
 
     sub_question = SubQuestionMR(

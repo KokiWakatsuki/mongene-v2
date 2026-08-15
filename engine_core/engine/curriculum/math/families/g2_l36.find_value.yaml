@@ -15,8 +15,12 @@ levels:
     signature: congruence_transfer_values
     recipe: math.congruence_transfer_values
     params:
-      side_domain: {int_range: [1, 300]}
-      angle_domain: {int_range: [1, 178]}
+      # **紙の図形の辺の長さ（3〜30cm）。** 前は 1〜300（1〜500）で
+      # 「1辺84cmの正三角形」「辺AB=96cm」のような、教材には出てこない
+      # 大きさが出ていた。実物の図形問題の辺は 3〜20cm あたり。
+      side_domain: {int_range: [3, 30]}
+      # **合同な三角形の角は 25〜150°。** 前は 1〜178 で「∠R=157°」が出ていた。
+      angle_domain: {int_range: [25, 150]}
     given: [condition]
     asked: [value]
     visual: none

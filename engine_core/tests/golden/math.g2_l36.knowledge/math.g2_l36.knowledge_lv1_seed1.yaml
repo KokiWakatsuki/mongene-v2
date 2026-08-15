@@ -24,13 +24,13 @@ meta:
   seed: 1
   signature: congruence_symbol_and_side
 problem_ref: e7ffb1aba6b0231f
-problem_text: 2つの図形が合同であることを表す記号を答えよ。また、三角形DEJ≡三角形BHQと書くとき、辺JDに対応する辺はどれか答えよ。
+problem_text: 2つの図形が合同であることを表す記号を答えよ。また、三角形QRS≡三角形WXYと書くとき、辺SQに対応する辺はどれか答えよ。
 sub_questions:
 - answer:
-    correct: 合同を表す記号は≡であり、辺JDに対応する辺は辺QBである
+    correct: 合同を表す記号は≡であり、辺SQに対応する辺は辺YWである
     distractors:
-    - 合同を表す記号は∽であり、辺JDに対応する辺は辺QBである
-    - 合同を表す記号は≡であり、辺JDに対応する辺は辺BHである
+    - 合同を表す記号は∽であり、辺SQに対応する辺は辺YWである
+    - 合同を表す記号は≡であり、辺SQに対応する辺は辺WXである
     fact_id: congruence.symbol_and_correspondence
     kind: choice
   cause_tags: []
@@ -38,9 +38,9 @@ sub_questions:
   - congruence.symbol_and_correspondence
   explanation: 'まず、2つの図形が合同であることを表すのに使う記号を思い出す。（合同を表す記号を思い出す）
 
-    次に、合同を表す式で、頂点がどの順に対応づけられているかを確認する。（DEJ と BHQ）
+    次に、合同を表す式で、頂点がどの順に対応づけられているかを確認する。（QRS と WXY）
 
-    最後に、対応する位置にある頂点どうしが結ぶ辺が、対応する辺になることから読み取る。（合同を表す記号は≡であり、辺JDに対応する辺は辺QBである）'
+    最後に、対応する位置にある頂点どうしが結ぶ辺が、対応する辺になることから読み取る。（合同を表す記号は≡であり、辺SQに対応する辺は辺YWである）'
   hints:
   - 2つの図形が合同であることを表すのに使う記号を思い出す。
   - 合同を表す式で、頂点がどの順に対応づけられているかを確認する。
@@ -55,11 +55,11 @@ sub_questions:
   - args: []
     narration: 合同を表す式で、頂点がどの順に対応づけられているかを確認する。
     op: identify_side_correspondence
-    result_display: DEJ と BHQ
+    result_display: QRS と WXY
     result_srepr: ''
   - args: []
     narration: 対応する位置にある頂点どうしが結ぶ辺が、対応する辺になることから読み取る。
     op: name_corresponding_side
-    result_display: 合同を表す記号は≡であり、辺JDに対応する辺は辺QBである
-    result_srepr: 合同を表す記号は≡であり、辺JDに対応する辺は辺QBである
+    result_display: 合同を表す記号は≡であり、辺SQに対応する辺は辺YWである
+    result_srepr: 合同を表す記号は≡であり、辺SQに対応する辺は辺YWである
 visual_svg: null

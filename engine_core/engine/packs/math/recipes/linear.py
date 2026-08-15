@@ -105,13 +105,21 @@ def linear_from_two_points(ctx: CellContext, rng: Rng) -> MR:
     p = ctx.spec_level.params
     method: str = p["method"]
 
-    a = draw(p["slope_domain"], rng)
-    b = draw({"int_range": [-8, 8]}, rng)
-    (x1, _y1), (x2, _y2) = draw_many(p["point_domain"], rng, k=2)
-
-    a_s = sympy.nsimplify(a)
-    b_s = sympy.nsimplify(b)
-    x1_s, x2_s = sympy.nsimplify(x1), sympy.nsimplify(x2)
+    # **通る2点は格子点でなければならない。** 傾きが分数のとき x を無条件に引くと
+    # 「2点 (5, -41/2) と (0, -8) を通る直線の式を求めよ」のように、本文の点の
+    # y 座標が分数になっていた（実物の教材の与点は必ず格子点）。
+    # 傾き a=p/q なら x が q の倍数のときだけ y が整数になるので、そこから引く。
+    for _ in range(200):
+        a = draw(p["slope_domain"], rng)
+        b = draw({"int_range": [-8, 8]}, rng)
+        (x1, _y1), (x2, _y2) = draw_many(p["point_domain"], rng, k=2)
+        a_s = sympy.nsimplify(a)
+        b_s = sympy.nsimplify(b)
+        x1_s, x2_s = sympy.nsimplify(x1), sympy.nsimplify(x2)
+        if all((a_s * x + b_s).is_Integer for x in (x1_s, x2_s)):
+            break
+    else:
+        raise ValueError("linear_from_two_points: 2点とも格子点になる組を構成できず")
     pts = [(x1_s, a_s * x1_s + b_s), (x2_s, a_s * x2_s + b_s)]
 
     solver = REGISTRY.solver("math.linear_expr_from_two_points")

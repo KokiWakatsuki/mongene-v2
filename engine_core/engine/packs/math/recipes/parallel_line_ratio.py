@@ -21,7 +21,7 @@ from engine.core.contracts import (
 )
 from engine.core.registry import REGISTRY, register_recipe
 from engine.core.rng import Rng, draw
-from engine.packs.math.recipes.letter_expr import _draw_distinct_lines, _draw_distinct_points
+from engine.packs.math.recipes.letter_expr import _draw_distinct_lines, _draw_named_figures
 
 
 def _effective_concept_tags(ctx: CellContext) -> list[str]:
@@ -75,7 +75,8 @@ _PARALLEL_SEGMENT_RATIO_LENGTH_CONCEPTS = ["parallel_segment.ratio_length"]
 def parallel_segment_ratio_length_recipe(ctx: CellContext, rng: Rng) -> MR:
     """DE∥BC のとき、AD,DB,DE から辺BCの長さを求める（g3_l42.find_value Lv2・answer-first）。"""
     p = ctx.spec_level.params
-    pa, pb, pc, pd, pe = _draw_distinct_points(5, rng)
+    (v,) = _draw_named_figures([5], rng)
+    pa, pb, pc, pd, pe = v
     ad, db, de, _bc = _segment_lengths(
         rng, part_max=int(p["part_max"]), side_max=int(p["side_max"])
     )
@@ -123,7 +124,8 @@ def judge_parallel_from_ratio_recipe(ctx: CellContext, rng: Rng) -> MR:
     構成か、片方をずらして一致しない構成かを切り替える。
     """
     p = ctx.spec_level.params
-    pa, pb, pc, pd, pe = _draw_distinct_points(5, rng)
+    (v,) = _draw_named_figures([5], rng)
+    pa, pb, pc, pd, pe = v
     is_parallel = bool(draw([True, False], rng))
     expected = "平行である" if is_parallel else "平行ではない"
     for _ in range(200):
@@ -185,7 +187,10 @@ def parallel_lines_transversal_ratio_recipe(ctx: CellContext, rng: Rng) -> MR:
     """
     p = ctx.spec_level.params
     pl1, pl2, pl3, pt1, pt2 = _draw_distinct_lines(5, rng)
-    pa, pb, pc, pd, pe, pf = _draw_distinct_points(6, rng)
+    # 図形の頂点はアルファベット順に名づける（実物は「正方形ABCD」「△ABC∽△DEF」）。
+    # 無作為に引くと「正方形ERDJ」「三角形JQBと三角形CMH」になる。
+    (v,) = _draw_named_figures([6], rng)
+    pa, pb, pc, pd, pe, pf = v
     # BC = AB·EF/DE が整数になる組だけを列挙してから引く（前は 105/19 が出ていた）。
     hi = int(p["length_max"])
     cands = [
@@ -248,7 +253,8 @@ def parallel_ratio_judge_then_length_recipe(ctx: CellContext, rng: Rng) -> MR:
     計算は増やさない）。
     """
     p = ctx.spec_level.params
-    pa, pb, pc, pd, pe = _draw_distinct_points(5, rng)
+    (v,) = _draw_named_figures([5], rng)
+    pa, pb, pc, pd, pe = v
     # 辺BCの長さが整数になる (AD, DB, DE) だけを組む（前は DE を独立に引いていて
     # 「RB=13cm のとき EM=39/2」のような答えが出ていた）。
     ad, db, de, _bc = _segment_lengths(
@@ -298,8 +304,10 @@ _MIDPOINT_CONNECTOR_LENGTH_CONCEPTS = ["midpoint_connector.length"]
 def midpoint_connector_length_recipe(ctx: CellContext, rng: Rng) -> MR:
     """三角形の2辺の中点を結ぶ線分の長さを求める（g3_l44.find_value Lv2・answer-first）。"""
     p = ctx.spec_level.params
-    pa, pb, pc, pm, pn = _draw_distinct_points(5, rng)
-    bc = int(draw(p["side_domain"], rng))
+    (v,) = _draw_named_figures([5], rng)
+    pa, pb, pc, pm, pn = v
+    # **辺の長さは偶数**（中点連結定理の答えは半分なので、奇数だと 7.5cm になる）。
+    bc = 2 * int(draw(p["half_domain"], rng))
 
     solver = REGISTRY.solver("math.midpoint_connector_length")
     sol = cast(Solution, solver(bc))

@@ -24,18 +24,18 @@ meta:
   seed: 1
   signature: inverse_proportion_evaluate_forward
 problem_ref: eb0dabb2dbe5e2f7
-problem_text: 反比例の式 y = 240/x について、x = -9 のときの、もう一方の値を求めよ。
+problem_text: 反比例の式 y = 240/x について、x = 6 のときの、もう一方の値を求めよ。
 sub_questions:
 - answer:
-    display: -80/3
+    display: '40'
     kind: symbolic
-    srepr: Rational(-80, 3)
+    srepr: Integer(40)
   cause_tags: []
   concept_tags:
   - inverse_proportion.evaluate_at_x
-  explanation: 'まず、比例定数と x の値を、反比例の式 y=a/x の x にあてはめる。（y = 240 / (-9)）
+  explanation: 'まず、比例定数と x の値を、反比例の式 y=a/x の x にあてはめる。（y = 240 / 6）
 
-    次に、わり算を計算して y の値を求める。（y = -80/3）'
+    次に、わり算を計算して y の値を求める。（y = 40）'
   hints:
   - 比例定数と x の値を、反比例の式 y=a/x の x にあてはめる。
   label: (1)
@@ -43,15 +43,15 @@ sub_questions:
   solution_steps:
   - args:
     - '240'
-    - '-9'
+    - '6'
     narration: 比例定数と x の値を、反比例の式 y=a/x の x にあてはめる。
     op: substitute_x
-    result_display: y = 240 / (-9)
-    result_srepr: Rational(-80, 3)
+    result_display: y = 240 / 6
+    result_srepr: Integer(40)
   - args:
-    - y = 240 / (-9)
+    - y = 240 / 6
     narration: わり算を計算して y の値を求める。
     op: evaluate
-    result_display: y = -80/3
-    result_srepr: Rational(-80, 3)
+    result_display: y = 40
+    result_srepr: Integer(40)
 visual_svg: null

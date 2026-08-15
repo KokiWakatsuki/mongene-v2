@@ -24,18 +24,18 @@ meta:
   seed: 2
   signature: equal_area_transform_value
 problem_ref: 9a70e8a0d12b6f13
-problem_text: 四角形ELQMで、頂点Mを通り対角線EQに平行な直線と、辺LQの延長との交点をKとする。四角形ELQMと面積の等しい三角形ELKをつくったとき、四角形ELQMの面積が91cm² ならば三角形ELKの面積を求めよ。
+problem_text: 四角形ABCDで、頂点Dを通り対角線ACに平行な直線をひき、辺BCの延長との交点をEとする。四角形ABCDの面積が192cm²であるとき、三角形ABEの面積を求めよ。
 sub_questions:
 - answer:
-    display: '91'
+    display: '192'
     kind: symbolic
-    srepr: Integer(91)
+    srepr: Integer(192)
   cause_tags: []
   concept_tags:
   - equal_area.transform_value
-  explanation: 'まず、等積変形をする前の、もとの図形の面積を読み取る。（91）
+  explanation: 'まず、等積変形をする前の、もとの図形の面積を読み取る。（192）
 
-    次に、等積変形は面積を変えずに図形の形だけを変える操作であることから、つくった三角形の面積を求める。（91）'
+    次に、等積変形は面積を変えずに図形の形だけを変える操作であることから、つくった三角形の面積を求める。（192）'
   hints:
   - 等積変形をする前の、もとの図形の面積を読み取る。
   label: (1)
@@ -44,11 +44,11 @@ sub_questions:
   - args: []
     narration: 等積変形をする前の、もとの図形の面積を読み取る。
     op: identify_original_area
-    result_display: '91'
+    result_display: '192'
     result_srepr: ''
   - args: []
     narration: 等積変形は面積を変えずに図形の形だけを変える操作であることから、つくった三角形の面積を求める。
     op: apply_equal_area_transform
-    result_display: '91'
-    result_srepr: Integer(91)
+    result_display: '192'
+    result_srepr: Integer(192)
 visual_svg: null

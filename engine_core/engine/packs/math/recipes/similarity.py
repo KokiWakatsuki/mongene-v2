@@ -21,7 +21,7 @@ from engine.core.contracts import (
 )
 from engine.core.registry import REGISTRY, register_recipe
 from engine.core.rng import Rng, draw
-from engine.packs.math.recipes.letter_expr import _draw_distinct_points
+from engine.packs.math.recipes.letter_expr import _draw_named_figures
 
 
 def _effective_concept_tags(ctx: CellContext) -> list[str]:
@@ -86,7 +86,11 @@ _SIMILARITY_RATIO_TRANSFER_CONCEPTS = ["similarity.ratio_transfer"]
 def similarity_ratio_transfer_recipe(ctx: CellContext, rng: Rng) -> MR:
     """相似比を用い、対応する辺の長さを比例式で求める（g3_l39.find_value Lv2・answer-first）。"""
     p = ctx.spec_level.params
-    pa, pb, pc, pd, pe, pf = _draw_distinct_points(6, rng)
+    # 図形の頂点はアルファベット順に名づける（実物は「正方形ABCD」「△ABC∽△DEF」）。
+    # 無作為に引くと「正方形ERDJ」「三角形JQBと三角形CMH」になる。
+    f1, f2 = _draw_named_figures([3, 3], rng)
+    pa, pb, pc = f1
+    pd, pe, pf = f2
     ratio_num, ratio_den, known_side, _ = _proportional_lengths(
         rng,
         ratio_max=int(p["ratio_max"]),
@@ -133,7 +137,9 @@ _IDENTIFY_SIMILAR_VERTEX_CONCEPTS = ["similarity.identify_corresponding_vertex"]
 )
 def identify_similar_corresponding_vertex_recipe(ctx: CellContext, rng: Rng) -> MR:
     """相似な四角形で、指定した頂点に対応する頂点を判別する（g3_l39.knowledge Lv2・answer-first）。"""
-    pa, pb, pc, pd, pe, pf, pg, ph = _draw_distinct_points(8, rng)
+    f1, f2 = _draw_named_figures([4, 4], rng)
+    pa, pb, pc, pd = f1
+    pe, pf, pg, ph = f2
     labels1, labels2 = pa + pb + pc + pd, pe + pf + pg + ph
     index = int(draw({"int_set": [0, 1, 2, 3]}, rng))
 
@@ -177,7 +183,8 @@ def similarity_proven_ratio_length_recipe(ctx: CellContext, rng: Rng) -> MR:
     `math.similarity_ratio_transfer` にそのまま渡し、DE から対応する BC を求める。
     """
     p = ctx.spec_level.params
-    pa, pb, pc, pd, pe = _draw_distinct_points(5, rng)
+    (v,) = _draw_named_figures([5], rng)
+    pa, pb, pc, pd, pe = v
     # 点Dは辺AB上にあるので AD < AB（独立に引くと AD > AB という図にならない組が出る）。
     ae, ab, de, _ = _proportional_lengths(
         rng,
@@ -231,7 +238,9 @@ def circle_similar_chord_length_recipe(ctx: CellContext, rng: Rng) -> MR:
     `math.similarity_ratio_transfer` にそのまま渡し、PB から対応する PC を求める。
     """
     p = ctx.spec_level.params
-    pp, pa, pb, pc, pd = _draw_distinct_points(5, rng)
+    one, rest = _draw_named_figures([1, 4], rng)
+    pp = one
+    pa, pb, pc, pd = rest
     pa_len, pd_len, pb_len, _ = _proportional_lengths(
         rng,
         ratio_max=int(p["ratio_max"]),

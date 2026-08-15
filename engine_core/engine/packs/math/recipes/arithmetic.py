@@ -526,9 +526,17 @@ def _draw_add_sub_terms(
 # 対象数 N を「最大素因数」で層別して mode ごとに引く。候補は最大素因数のふるい
 # （lpf[n]==n ⇔ n は素数）でモジュール読込時に一度だけ算出する（factorint を N 個回さない）。
 #   factorize_basic    : 合成数・最大素因数 ≤ 13・[12, 3000]（C≈409）。
-#   factorize_advanced : 合成数・17 ≤ 最大素因数 ≤ 47・[200, 3000]（大きめ＋大きい素数）。
-# dup_key は params の N のみで分散するため、候補プールを 400+ 取り dup に余裕を持たせる
+#   factorize_advanced : 合成数・[200, 3000]・**13 より大きい素因数がちょうど1つ**で
+#                        それが 37 以下・素因数の総数（重複こみ）3つ以上（C≈387）。
+# dup_key は params の N のみで分散するため、候補プールを 300+ 取り dup に余裕を持たせる
 # （100-seed 実測は推定よりやや高く出るため、推定 ~0.11 で実測を 0.20 未満に収める）。
+#
+# **advanced の条件は「大きい素因数が1つだけ」が肝。** 前は 17 ≤ 最大素因数 ≤ 47 と
+# しか書いておらず、1927 = 41 × 47、2697 = 3 × 29 × 31、1615 = 5 × 17 × 19 が出ていた。
+# 大きい素因数が2つあると、小さい素数で割り切った後に残る数（例: 1927 そのもの）を
+# 41 まで試し割りしないと素数でないと分からない＝中1の手数を超える。実物の
+# 「大きめの数の素因数分解」（504・675・1080）は、小さい素数で割り切っていくと
+# 最後に素数が1つ残る形になっている。
 # ---------------------------------------------------------------------------
 _FACTORIZE_SIEVE_LIMIT = 3000
 
@@ -548,8 +556,23 @@ _LPF = _largest_prime_factor_sieve(_FACTORIZE_SIEVE_LIMIT)
 _FACTORIZE_BASIC_NUMBERS = [
     n for n in range(12, _FACTORIZE_SIEVE_LIMIT + 1) if _LPF[n] != n and _LPF[n] <= 13
 ]
+def _advanced_ok(n: int) -> bool:
+    """13 より大きい素因数がちょうど1つ（≤29）で、素因数が重複こみ3つ以上か。"""
+    rest, big, total = n, [], 0
+    for pr in (2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47):
+        while rest % pr == 0:
+            rest //= pr
+            total += 1
+            if pr > 13:
+                big.append(pr)
+    if rest != 1:  # 47 より大きい素因数が残った
+        return False
+    return len(set(big)) == 1 and big.count(big[0]) == len(big) and total >= 3
+
+
 _FACTORIZE_ADVANCED_NUMBERS = [
-    n for n in range(200, _FACTORIZE_SIEVE_LIMIT + 1) if _LPF[n] != n and 17 <= _LPF[n] <= 47
+    n for n in range(200, _FACTORIZE_SIEVE_LIMIT + 1)
+    if _LPF[n] != n and 17 <= _LPF[n] <= 37 and _advanced_ok(n)
 ]
 
 _FACTORIZE_CANDIDATES: dict[str, list[int]] = {

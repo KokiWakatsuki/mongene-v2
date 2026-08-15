@@ -23,7 +23,7 @@ meta:
     unit: g1_l26
   seed: 2
   signature: shortage_equation
-problem_ref: 0a587aaafcfbc2fa
+problem_ref: a60021b85cc2da9f
 problem_text: '次の方程式を解け。
 
   2x - 7 = 5x - 40'
@@ -37,9 +37,12 @@ sub_questions:
   - equation.solve_shortage
   explanation: 'まず、文字の項を左辺に、数の項を右辺に、符号を変えて移項する。（2x - 5x = -40 + 7）
 
-    次に、両辺をそれぞれ整理し、x の係数で両辺をわって解を求める。（x = 11）'
+    次に、両辺の同類項をそれぞれまとめて、ax = b の形にする。（-3x = -33）
+
+    最後に、等式の性質を使い、両辺を x の係数でわる。（x = 11）'
   hints:
   - 文字の項を左辺に、数の項を右辺に、符号を変えて移項する。
+  - 両辺の同類項をそれぞれまとめて、ax = b の形にする。
   label: (1)
   prompt_text: 解を求めなさい。
   solution_steps:
@@ -49,8 +52,13 @@ sub_questions:
     result_display: 2x - 5x = -40 + 7
     result_srepr: Integer(11)
   - args: []
-    narration: 両辺をそれぞれ整理し、x の係数で両辺をわって解を求める。
-    op: combine_and_divide
+    narration: 両辺の同類項をそれぞれまとめて、ax = b の形にする。
+    op: combine_like_terms
+    result_display: -3x = -33
+    result_srepr: Integer(11)
+  - args: []
+    narration: 等式の性質を使い、両辺を x の係数でわる。
+    op: divide_both_sides
     result_display: x = 11
     result_srepr: Integer(11)
 visual_svg: null

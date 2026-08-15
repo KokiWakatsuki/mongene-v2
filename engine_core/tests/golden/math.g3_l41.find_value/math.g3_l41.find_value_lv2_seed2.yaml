@@ -24,18 +24,18 @@ meta:
   seed: 2
   signature: similarity_proven_ratio_length
 problem_ref: 41c8caf622aadf87
-problem_text: 三角形AJL∽三角形ADNであることが証明されている。AD=5cm, AJ=9cm, DN=10cm のとき、辺JLの長さを求めよ。
+problem_text: 三角形NPQ∽三角形NRSであることが証明されている。NR=4cm, NP=5cm, RS=44cm のとき、辺PQの長さを求めよ。
 sub_questions:
 - answer:
-    display: '18'
+    display: '55'
     kind: symbolic
-    srepr: Integer(18)
+    srepr: Integer(55)
   cause_tags: []
   concept_tags:
   - similarity.proven_ratio_length
-  explanation: 'まず、2つの図形の相似比と、わかっている辺の長さを読み取る。（相似比 5:9、辺の長さ 10）
+  explanation: 'まず、2つの図形の相似比と、わかっている辺の長さを読み取る。（相似比 4:5、辺の長さ 44）
 
-    次に、相似な図形では対応する辺の長さの比が相似比に等しいことから、対応する辺の長さを求める。（18）'
+    次に、相似な図形では対応する辺の長さの比が相似比に等しいことから、対応する辺の長さを求める。（55）'
   hints:
   - 2つの図形の相似比と、わかっている辺の長さを読み取る。
   label: (1)
@@ -44,11 +44,11 @@ sub_questions:
   - args: []
     narration: 2つの図形の相似比と、わかっている辺の長さを読み取る。
     op: identify_similarity_ratio
-    result_display: 相似比 5:9、辺の長さ 10
+    result_display: 相似比 4:5、辺の長さ 44
     result_srepr: ''
   - args: []
     narration: 相似な図形では対応する辺の長さの比が相似比に等しいことから、対応する辺の長さを求める。
     op: apply_similarity_ratio
-    result_display: '18'
-    result_srepr: Integer(18)
+    result_display: '55'
+    result_srepr: Integer(55)
 visual_svg: null

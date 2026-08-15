@@ -19,7 +19,8 @@ levels:
     recipe: math.solve_angle_by_equality_relation
     params:
       relation_set: [corresponding, alternate]
-      angle_domain: {int_range: [1, 179]}
+      # **紙の図で測れる角にする（20〜160°）。** 前は 1〜179 だった。
+      angle_domain: {int_range: [20, 160]}
     given: [condition]
     asked: [value]
     visual: none
@@ -31,7 +32,7 @@ levels:
     signature: zigzag_angle_sum_g2_l32
     recipe: math.solve_zigzag_angle_sum
     params:
-      angle_domain: {int_range: [1, 89]}
+      angle_domain: {int_range: [20, 75]}
     given: [condition]
     asked: [value]
     visual: none

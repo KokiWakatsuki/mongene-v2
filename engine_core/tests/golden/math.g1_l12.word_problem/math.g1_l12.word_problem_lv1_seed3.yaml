@@ -24,20 +24,20 @@ meta:
   seed: 3
   signature: word_problem_expression_price_count
 problem_ref: 1da29b5f32d6594c
-problem_text: '1枚104円のシールをx枚買う。
+problem_text: '1個160円のパンをx個買う。
 
   代金を、xを使った式で表せ。'
 sub_questions:
 - answer:
-    display: 104x
+    display: 160x
     kind: symbolic
-    srepr: Mul(Integer(104), Symbol('x'))
+    srepr: Mul(Integer(160), Symbol('x'))
   cause_tags: []
   concept_tags:
   - letter_expr.word_problem_price_count_letter
   explanation: 'まず、1つあたりの値段に個数をかけると、代金になる。（1つあたりの値段 × 個数 = 代金）
 
-    次に、数を文字の前に書き、乗法の記号 × を省いて表す。（104x）'
+    次に、数を文字の前に書き、乗法の記号 × を省いて表す。（160x）'
   hints:
   - 1つあたりの値段に個数をかけると、代金になる。
   label: (1)
@@ -51,6 +51,6 @@ sub_questions:
   - args: []
     narration: 数を文字の前に書き、乗法の記号 × を省いて表す。
     op: apply_product_rule
-    result_display: 104x
-    result_srepr: Mul(Integer(104), Symbol('x'))
+    result_display: 160x
+    result_srepr: Mul(Integer(160), Symbol('x'))
 visual_svg: null

@@ -24,34 +24,34 @@ meta:
   seed: 2
   signature: solve_inverse_proportion_basic
 problem_ref: f600d0adcfbd24a2
-problem_text: yはxに反比例し、x=3のときy=56である。yをxの式で表せ。
+problem_text: yはxに反比例し、x=9のときy=16である。yをxの式で表せ。
 sub_questions:
 - answer:
-    display: y = 168/x
+    display: y = 144/x
     kind: symbolic
-    srepr: Mul(Integer(168), Pow(Symbol('x'), Integer(-1)))
+    srepr: Mul(Integer(144), Pow(Symbol('x'), Integer(-1)))
   cause_tags: []
   concept_tags:
   - inverse_proportion.solve_from_point
-  explanation: 'まず、反比例の式 y=a/x に、通る点の x, y の値をあてはめ、比例定数を求める式をつくる。（a = 3 × 56）
+  explanation: 'まず、反比例の式 y=a/x に、通る点の x, y の値をあてはめ、比例定数を求める式をつくる。（a = 9 × 16）
 
-    次に、求めた比例定数を使って、反比例の式を組み立てる。（y = 168/x）'
+    次に、求めた比例定数を使って、反比例の式を組み立てる。（y = 144/x）'
   hints:
   - 反比例の式 y=a/x に、通る点の x, y の値をあてはめ、比例定数を求める式をつくる。
   label: (1)
   prompt_text: 式に表しなさい。
   solution_steps:
   - args:
-    - '3'
-    - '56'
+    - '9'
+    - '16'
     narration: 反比例の式 y=a/x に、通る点の x, y の値をあてはめ、比例定数を求める式をつくる。
     op: substitute_point
-    result_display: a = 3 × 56
-    result_srepr: Integer(168)
+    result_display: a = 9 × 16
+    result_srepr: Integer(144)
   - args:
-    - '168'
+    - '144'
     narration: 求めた比例定数を使って、反比例の式を組み立てる。
     op: form_expression
-    result_display: y = 168/x
-    result_srepr: Mul(Integer(168), Pow(Symbol('x'), Integer(-1)))
+    result_display: y = 144/x
+    result_srepr: Mul(Integer(144), Pow(Symbol('x'), Integer(-1)))
 visual_svg: null

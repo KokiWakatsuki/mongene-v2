@@ -26,6 +26,7 @@ import sympy
 
 from engine.core.contracts import ChoiceAnswer, Solution, Step, SymbolicAnswer
 from engine.core.registry import register_solver
+from engine.packs.math.solvers.arithmetic import fmt_measure
 
 
 def _class_midpoint(class_start: int, class_width: int, index: int) -> sympy.Rational:
@@ -49,14 +50,15 @@ def frequency_table_value(class_start: object, class_width: object, frequencies:
     idx = int(str(target_index))
     midpoint = _class_midpoint(start, width, idx)
     total = sympy.Integer(sum(freqs))
-    disp = f"階級値 {sympy.sstr(midpoint)}、度数の合計 {total}"
+    # 階級値は「量」なので有限小数で書く（実物は 57.5 と書き、115/2 とは書かない）。
+    disp = f"階級値 {fmt_measure(midpoint)}、度数の合計 {total}"
     srepr = sympy.srepr(sympy.Tuple(midpoint, total))
     steps = [
         Step(
             op="compute_class_value",
             args=[],
             result_srepr=sympy.srepr(midpoint),
-            result_display=sympy.sstr(midpoint),
+            result_display=fmt_measure(midpoint),
             narration="対象の階級の下端と上端の値の平均を求め、階級値とする。",
         ),
         Step(
@@ -279,7 +281,7 @@ def mean_from_grouped_table(class_start: object, class_width: object, frequencie
             args=[],
             result_srepr="",
             result_display="、".join(
-                sympy.sstr(_class_midpoint(start, width, i) * f)
+                fmt_measure(_class_midpoint(start, width, i) * f)
                 for i, f in enumerate(freqs)
             ),
             narration="各階級の階級値に、その階級の度数をかける。",

@@ -28,7 +28,10 @@ levels:
     recipe: math.identify_parallel_line
     params:
       transversal_name: "m"
-      base_name: "l"
+      # **基準の直線は ℓ（花文字）。** 半角の l は数字の1と紛れるうえ、
+      # 同じ単元の他セル（g2_l31/l32.find_value）が「2直線ℓ、m」と書いていて
+      # 字形が食い違っていた。実物の教材も ℓ を使う。
+      base_name: "ℓ"
       line_name_candidates: ["a", "b", "c", "d"]
       candidate_count_domain: {int_range: [3, 4]}
       angle_domain: {int_range: [35, 80]}

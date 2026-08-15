@@ -24,18 +24,18 @@ meta:
   seed: 3
   signature: arc_proportional_angle
 problem_ref: ab6db59a2f3ada0e
-problem_text: 1つの円で、弧JRの長さは弧FDの長さの3倍である。弧FDに対する円周角が1°のとき、弧JRに対する円周角の大きさを求めよ。
+problem_text: 1つの円で、弧STの長さは弧UVの長さの6倍である。弧UVに対する円周角が25°のとき、弧STに対する円周角の大きさを求めよ。
 sub_questions:
 - answer:
-    display: 3°
+    display: 150°
     kind: symbolic
-    srepr: Integer(3)
+    srepr: Integer(150)
   cause_tags: []
   concept_tags:
   - circle.arc_proportional_angle
-  explanation: 'まず、2つの弧の長さの比を読み取る。（3倍）
+  explanation: 'まず、2つの弧の長さの比を読み取る。（6倍）
 
-    次に、弧の長さは、その弧に対する円周角の大きさに比例することから、求める円周角の大きさを求める。（3°）'
+    次に、弧の長さは、その弧に対する円周角の大きさに比例することから、求める円周角の大きさを求める。（150°）'
   hints:
   - 2つの弧の長さの比を読み取る。
   label: (1)
@@ -44,11 +44,11 @@ sub_questions:
   - args: []
     narration: 2つの弧の長さの比を読み取る。
     op: identify_arc_length_ratio
-    result_display: 3倍
+    result_display: 6倍
     result_srepr: ''
   - args: []
     narration: 弧の長さは、その弧に対する円周角の大きさに比例することから、求める円周角の大きさを求める。
     op: apply_arc_angle_proportion
-    result_display: 3°
-    result_srepr: Integer(3)
+    result_display: 150°
+    result_srepr: Integer(150)
 visual_svg: null

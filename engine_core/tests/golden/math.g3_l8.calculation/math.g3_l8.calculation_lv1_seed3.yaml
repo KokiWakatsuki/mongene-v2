@@ -26,18 +26,18 @@ meta:
 problem_ref: d75849e4aa550c5d
 problem_text: '次の式を因数分解せよ。
 
-  x² + 21x + 110'
+  n² + 21n + 110'
 sub_questions:
 - answer:
-    display: (x + 10)(x + 11)
+    display: (n + 10)(n + 11)
     kind: symbolic
-    srepr: Mul(Add(Symbol('x'), Integer(10)), Add(Symbol('x'), Integer(11)))
+    srepr: Mul(Add(Symbol('n'), Integer(10)), Add(Symbol('n'), Integer(11)))
   cause_tags: []
   concept_tags:
   - polynomial.factor_sum_product
   explanation: 'まず、たすと1次の係数、かけると定数になる2つの数を見つける。（10 と 11）
 
-    次に、見つけた2つの数を使い、2つの1次式の積で表す。（(x + 10)(x + 11)）'
+    次に、見つけた2つの数を使い、2つの1次式の積で表す。（(n + 10)(n + 11)）'
   hints:
   - たすと1次の係数、かけると定数になる2つの数を見つける。
   label: (1)
@@ -51,6 +51,6 @@ sub_questions:
   - args: []
     narration: 見つけた2つの数を使い、2つの1次式の積で表す。
     op: write_factors
-    result_display: (x + 10)(x + 11)
-    result_srepr: Mul(Add(Symbol('x'), Integer(10)), Add(Symbol('x'), Integer(11)))
+    result_display: (n + 10)(n + 11)
+    result_srepr: Mul(Add(Symbol('n'), Integer(10)), Add(Symbol('n'), Integer(11)))
 visual_svg: null

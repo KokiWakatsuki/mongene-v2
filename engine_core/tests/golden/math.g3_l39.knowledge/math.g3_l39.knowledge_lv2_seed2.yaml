@@ -24,22 +24,22 @@ meta:
   seed: 2
   signature: identify_similar_corresponding_vertex
 problem_ref: 4275b5b719185e95
-problem_text: 四角形ELMHと四角形PQBKが相似で、その順に対応しているとき、頂点Hに対応する頂点はどれか答えよ。
+problem_text: 四角形KLMNと四角形PQRSが相似で、その順に対応しているとき、頂点Nに対応する頂点はどれか答えよ。
 sub_questions:
 - answer:
-    correct: K
+    correct: S
     distractors:
     - P
     - Q
-    - B
+    - R
     fact_id: similarity.identify_corresponding_vertex
     kind: choice
   cause_tags: []
   concept_tags:
   - similarity.identify_corresponding_vertex
-  explanation: 'まず、相似を表す式で、頂点がどの順に対応づけられているかを確認する。（ELMH と PQBK）
+  explanation: 'まず、相似を表す式で、頂点がどの順に対応づけられているかを確認する。（KLMN と PQRS）
 
-    次に、対応する位置にある頂点どうしが対応することから、対応する頂点を答える。（K）'
+    次に、対応する位置にある頂点どうしが対応することから、対応する頂点を答える。（S）'
   hints:
   - 相似を表す式で、頂点がどの順に対応づけられているかを確認する。
   label: (1)
@@ -48,11 +48,11 @@ sub_questions:
   - args: []
     narration: 相似を表す式で、頂点がどの順に対応づけられているかを確認する。
     op: identify_correspondence_order
-    result_display: ELMH と PQBK
+    result_display: KLMN と PQRS
     result_srepr: ''
   - args: []
     narration: 対応する位置にある頂点どうしが対応することから、対応する頂点を答える。
     op: name_corresponding_vertex
-    result_display: K
-    result_srepr: K
+    result_display: S
+    result_srepr: S
 visual_svg: null

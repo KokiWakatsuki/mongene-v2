@@ -24,20 +24,20 @@ meta:
   seed: 1
   signature: word_problem_equality_price_count
 problem_ref: 51beaa630a0be6bf
-problem_text: '1本 x 円のボールペンを7本買って、1624円出したところちょうど払えた。
+problem_text: '1本 x 円のボールペンを7本買って、1260円出したところちょうど払えた。
 
   この関係を等式で表せ。'
 sub_questions:
 - answer:
-    display: 7x = 1624
+    display: 7x = 1260
     kind: symbolic
-    srepr: Equality(Mul(Integer(7), Symbol('x')), Integer(1624))
+    srepr: Equality(Mul(Integer(7), Symbol('x')), Integer(1260))
   cause_tags: []
   concept_tags:
   - equality.word_problem_equality_simple
   explanation: 'まず、場面の中で、比べられている、または等しくなっている数量に着目する。（代金の合計）
 
-    次に、その数量を x を使った式で表し、等式または不等式をつくる。（7x = 1624）'
+    次に、その数量を x を使った式で表し、等式または不等式をつくる。（7x = 1260）'
   hints:
   - 場面の中で、比べられている、または等しくなっている数量に着目する。
   label: (1)
@@ -51,6 +51,6 @@ sub_questions:
   - args: []
     narration: その数量を x を使った式で表し、等式または不等式をつくる。
     op: formulate_relation
-    result_display: 7x = 1624
-    result_srepr: Equality(Mul(Integer(7), Symbol('x')), Integer(1624))
+    result_display: 7x = 1260
+    result_srepr: Equality(Mul(Integer(7), Symbol('x')), Integer(1260))
 visual_svg: null

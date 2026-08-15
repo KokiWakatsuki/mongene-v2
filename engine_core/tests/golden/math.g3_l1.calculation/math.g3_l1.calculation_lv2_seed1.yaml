@@ -26,18 +26,18 @@ meta:
 problem_ref: 09292009d8291587
 problem_text: '次の式を展開せよ。
 
-  3t(4t² - 4t + 3) - 2t(3t² + 5t)'
+  3s(4s² - 4s + 3) - 2s(3s² + 5s)'
 sub_questions:
 - answer:
-    display: 6t³ - 22t² + 9t
+    display: 6s³ - 22s² + 9s
     kind: symbolic
-    srepr: Add(Mul(Integer(6), Pow(Symbol('t'), Integer(3))), Mul(Integer(-1), Integer(22), Pow(Symbol('t'), Integer(2))), Mul(Integer(9), Symbol('t')))
+    srepr: Add(Mul(Integer(6), Pow(Symbol('s'), Integer(3))), Mul(Integer(-1), Integer(22), Pow(Symbol('s'), Integer(2))), Mul(Integer(9), Symbol('s')))
   cause_tags: []
   concept_tags:
   - polynomial.expand_mono_poly
-  explanation: 'まず、それぞれの単項式を、対応するかっこの中の各項にかける。（12t³ - 12t² + 9t - 6t³ - 10t²）
+  explanation: 'まず、それぞれの単項式を、対応するかっこの中の各項にかける。（12s³ - 12s² + 9s - 6s³ - 10s²）
 
-    次に、同類項をまとめて計算する。（6t³ - 22t² + 9t）'
+    次に、同類項をまとめて計算する。（6s³ - 22s² + 9s）'
   hints:
   - それぞれの単項式を、対応するかっこの中の各項にかける。
   label: (1)
@@ -46,11 +46,11 @@ sub_questions:
   - args: []
     narration: それぞれの単項式を、対応するかっこの中の各項にかける。
     op: distribute_each_monomial
-    result_display: 12t³ - 12t² + 9t - 6t³ - 10t²
+    result_display: 12s³ - 12s² + 9s - 6s³ - 10s²
     result_srepr: ''
   - args: []
     narration: 同類項をまとめて計算する。
     op: combine_like_terms
-    result_display: 6t³ - 22t² + 9t
-    result_srepr: Add(Mul(Integer(6), Pow(Symbol('t'), Integer(3))), Mul(Integer(-1), Integer(22), Pow(Symbol('t'), Integer(2))), Mul(Integer(9), Symbol('t')))
+    result_display: 6s³ - 22s² + 9s
+    result_srepr: Add(Mul(Integer(6), Pow(Symbol('s'), Integer(3))), Mul(Integer(-1), Integer(22), Pow(Symbol('s'), Integer(2))), Mul(Integer(9), Symbol('s')))
 visual_svg: null

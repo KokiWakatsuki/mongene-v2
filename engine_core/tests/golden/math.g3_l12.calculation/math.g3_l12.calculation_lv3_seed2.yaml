@@ -24,18 +24,18 @@ meta:
   seed: 2
   signature: evaluate_symmetric_sum_of_squares
 problem_ref: a531c568651f105a
-problem_text: x + y = -1, xy = -4 のとき、x² + y² の値を求めよ。
+problem_text: x + y = 5, xy = -6 のとき、x² + y² の値を求めよ。
 sub_questions:
 - answer:
-    display: '9'
+    display: '37'
     kind: symbolic
-    srepr: Integer(9)
+    srepr: Integer(37)
   cause_tags: []
   concept_tags:
   - polynomial.symmetric_expression_from_sum_product
   explanation: 'まず、求める式を、和と積だけで表せる形に変形する。（(x + y)² - 2xy）
 
-    次に、和と積の値をあてはめて計算する。（9）'
+    次に、和と積の値をあてはめて計算する。（37）'
   hints:
   - 求める式を、和と積だけで表せる形に変形する。
   label: (1)
@@ -49,6 +49,6 @@ sub_questions:
   - args: []
     narration: 和と積の値をあてはめて計算する。
     op: substitute_and_compute
-    result_display: '9'
-    result_srepr: Integer(9)
+    result_display: '37'
+    result_srepr: Integer(37)
 visual_svg: null

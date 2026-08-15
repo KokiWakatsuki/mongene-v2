@@ -249,6 +249,24 @@ def _draw_pair_token(candidates: list[Any], rng: Rng) -> tuple[str, str]:
     return _split_pair(str(draw(list(candidates), rng)))
 
 
+def _draw_priced_item(candidates: list[Any], rng: Rng) -> tuple[str, str, int]:
+    """`品名|助数詞|下限|上限` から (品名, 助数詞, 値段) を引く。
+
+    値段を品物と無関係に引くと「1本277円の鉛筆」「1本39円の輪ゴム」が出る。
+    実物の問題集の値段は 10円刻みで、しかも品物の相場に収まっている。
+
+    **品物→値段の2段で引かず、(品物,値段) の組を平らにして1回で引く。**
+    2段だと相場の狭い品物（シール 10〜100 の10通り）が、広い品物（りんご
+    100〜300 の21通り）と同じ確率で選ばれ、組の分布が偏って dup_rate が跳ねる。
+    """
+    pairs: list[tuple[str, str, int]] = []
+    for tok in candidates:
+        name, counter, lo, hi = str(tok).split("|")
+        pairs.extend((name, counter, price) for price in range(int(lo), int(hi) + 1, 10))
+    idx = int(draw({"int_range": [0, len(pairs) - 1]}, rng))
+    return pairs[idx]
+
+
 def _draw_distinct(candidates: list[Any], rng: Rng, k: int) -> list[Any]:
     """候補配列から相異な k 個（文字列はドメイン記法外なので添字で引く）。"""
     idxs = draw_many({"int_range": [0, len(candidates) - 1], "distinct": ["value"]}, rng, k=k)
@@ -439,7 +457,10 @@ def _catch_up_candidates(p: Mapping[str, Any]) -> list[tuple[int, int, int]]:
             for x0 in minutes:
                 vf = sympy.Rational(vs * (x0 + d), x0)
                 # vf > vs（でないと追いつけない）かつ自転車として自然な速さの範囲。
-                if vf.q == 1 and vs < int(vf) and vf_min <= int(vf) <= vf_max:
+                # **さらに 5m 刻み。** 前は整数でありさえすればよかったので
+                # 「分速184mの自転車」「分速165m」「分速175m」のような端数が出ていた。
+                # 実物の教材の速さは分速 150m・200m・240m のような区切りのいい数。
+                if vf.q == 1 and vs < int(vf) and vf_min <= int(vf) <= vf_max and int(vf) % 5 == 0:
                     out.append((vs, d, x0))
     return out
 
@@ -857,9 +878,20 @@ def _draw_round_trip_average_scene(
                 if {int(d), int(avg)} & {a, b, t}:
                     continue  # 答えが本文の数値と一致する組は外す
                 cands.append((a, b, t))
-    idx = int(draw({"int_set": list(range(len(cands)))}, rng))
-    a, b, t = cands[idx]
+    # **場所に対して道のりがありうる組だけにする。**
+    # 前は「家から公園まで片道45km」「駅から港まで片道180km・往復15時間」が出ていた。
+    # 場所によって「ありうる距離」が違うので、場所を先に引いてから組を絞る。
     start, goal = _split_pair(str(draw(list(p["place_candidates"]), rng)))
+    near = {"家|駅", "学校|図書館", "家|公園", "学校|体育館", "家|市役所",
+            "家|スーパー", "学校|駅", "家|図書館", "家|コンビニ", "学校|公園"}
+    far = {"キャンプ場|山頂", "宿|展望台", "町|となり町", "駅|空港",
+           "ふもと|山小屋", "港|島", "家|温泉"}
+    key = f"{start}|{goal}"
+    d_max = 5 if key in near else (30 if key in far else 15)
+    ok = [(a, b, t_) for a, b, t_ in cands
+          if int(sympy.Rational(t_ * a * b, a + b)) <= d_max]
+    idx = int(draw({"int_set": list(range(len(ok)))}, rng))
+    a, b, t = ok[idx]
     return a, b, t, start, goal
 
 

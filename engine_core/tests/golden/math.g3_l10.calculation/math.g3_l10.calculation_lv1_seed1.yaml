@@ -26,16 +26,16 @@ meta:
 problem_ref: 06ce695d3ca37c59
 problem_text: '次の式を因数分解せよ。
 
-  16a² - 81'
+  16b² - 81'
 sub_questions:
 - answer:
-    display: (4a - 9)(4a + 9)
+    display: (4b - 9)(4b + 9)
     kind: symbolic
-    srepr: Mul(Add(Mul(Integer(4), Symbol('a')), Integer(-9)), Add(Mul(Integer(4), Symbol('a')), Integer(9)))
+    srepr: Mul(Add(Mul(Integer(4), Symbol('b')), Integer(-9)), Add(Mul(Integer(4), Symbol('b')), Integer(9)))
   cause_tags: []
   concept_tags:
   - polynomial.factor_diff_squares
-  explanation: まず、平方の差を、和と差の積の形になおす。（(4a - 9)(4a + 9)）
+  explanation: まず、平方の差を、和と差の積の形になおす。（(4b - 9)(4b + 9)）
   hints:
   - 平方の差を、和と差の積の形になおす。
   label: (1)
@@ -44,6 +44,6 @@ sub_questions:
   - args: []
     narration: 平方の差を、和と差の積の形になおす。
     op: apply_diff_of_squares_factor
-    result_display: (4a - 9)(4a + 9)
-    result_srepr: Mul(Add(Mul(Integer(4), Symbol('a')), Integer(-9)), Add(Mul(Integer(4), Symbol('a')), Integer(9)))
+    result_display: (4b - 9)(4b + 9)
+    result_srepr: Mul(Add(Mul(Integer(4), Symbol('b')), Integer(-9)), Add(Mul(Integer(4), Symbol('b')), Integer(9)))
 visual_svg: null

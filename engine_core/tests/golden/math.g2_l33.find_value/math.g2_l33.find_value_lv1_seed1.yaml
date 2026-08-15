@@ -24,18 +24,18 @@ meta:
   seed: 1
   signature: triangle_third_angle
 problem_ref: f86bf332c2b42250
-problem_text: 三角形ABCで、∠A=44°、∠B=11°のとき、∠Cの大きさを求めよ。
+problem_text: 三角形ABCで、∠A=81°、∠B=60°のとき、∠Cの大きさを求めよ。
 sub_questions:
 - answer:
-    display: '125'
+    display: '39'
     kind: symbolic
-    srepr: Integer(125)
+    srepr: Integer(39)
   cause_tags: []
   concept_tags:
   - triangle_angle.third_angle
-  explanation: 'まず、わかっている2つの内角の大きさを読み取る。（44° と 11°）
+  explanation: 'まず、わかっている2つの内角の大きさを読み取る。（81° と 60°）
 
-    次に、三角形の内角の和が一直線の角(平角)に等しいことから、残りの内角の大きさを求める。（125）'
+    次に、三角形の内角の和が一直線の角(平角)に等しいことから、残りの内角の大きさを求める。（39）'
   hints:
   - わかっている2つの内角の大きさを読み取る。
   label: (1)
@@ -44,11 +44,11 @@ sub_questions:
   - args: []
     narration: わかっている2つの内角の大きさを読み取る。
     op: identify_two_interior_angles
-    result_display: 44° と 11°
+    result_display: 81° と 60°
     result_srepr: ''
   - args: []
     narration: 三角形の内角の和が一直線の角(平角)に等しいことから、残りの内角の大きさを求める。
     op: subtract_from_sum
-    result_display: '125'
-    result_srepr: Integer(125)
+    result_display: '39'
+    result_srepr: Integer(39)
 visual_svg: null

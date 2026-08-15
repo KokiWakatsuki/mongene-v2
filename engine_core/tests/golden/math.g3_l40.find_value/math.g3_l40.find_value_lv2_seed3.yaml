@@ -24,31 +24,31 @@ meta:
   seed: 3
   signature: similar_triangle_x_shape
 problem_ref: 86e2c4e105132842
-problem_text: 線分HKと線分LMが点Dで交わり、HL∥KMである。DH=7cm, DL=9cm, DK=35cm のとき、相似な三角形を見つけて線分DMの長さを求めよ。
+problem_text: 線分HKと線分JLが点Mで交わり、HJ∥KLである。MH=7cm, MJ=5cm, MK=35cm のとき、相似な三角形を見つけて線分MLの長さを求めよ。
 sub_questions:
 - answer:
-    display: '45'
+    display: '25'
     kind: symbolic
-    srepr: Integer(45)
+    srepr: Integer(25)
   cause_tags: []
   concept_tags:
   - similarity.x_shape_length
-  explanation: 'まず、HL∥KM であることから、対頂角と錯角がそれぞれ等しくなる相似な三角形（三角形DHLと三角形DKM）の組を見つける。
+  explanation: 'まず、HJ∥KL であることから、対頂角と錯角がそれぞれ等しくなる相似な三角形（三角形MHJと三角形MKL）の組を見つける。
 
-    次に、相似な三角形の対応する辺の長さの比が等しい（DH:DK=DL:DM）ことから、求める辺の長さを求める。（45）'
+    次に、相似な三角形の対応する辺の長さの比が等しい（MH:MK=MJ:ML）ことから、求める辺の長さを求める。（25）'
   hints:
-  - HL∥KM であることから、対頂角と錯角がそれぞれ等しくなる相似な三角形（三角形DHLと三角形DKM）の組を見つける。
+  - HJ∥KL であることから、対頂角と錯角がそれぞれ等しくなる相似な三角形（三角形MHJと三角形MKL）の組を見つける。
   label: (1)
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
-    narration: HL∥KM であることから、対頂角と錯角がそれぞれ等しくなる相似な三角形（三角形DHLと三角形DKM）の組を見つける。
+    narration: HJ∥KL であることから、対頂角と錯角がそれぞれ等しくなる相似な三角形（三角形MHJと三角形MKL）の組を見つける。
     op: identify_similar_triangles_in_x_shape
     result_display: ''
     result_srepr: ''
   - args: []
-    narration: 相似な三角形の対応する辺の長さの比が等しい（DH:DK=DL:DM）ことから、求める辺の長さを求める。
+    narration: 相似な三角形の対応する辺の長さの比が等しい（MH:MK=MJ:ML）ことから、求める辺の長さを求める。
     op: apply_proportion
-    result_display: '45'
-    result_srepr: Integer(45)
+    result_display: '25'
+    result_srepr: Integer(25)
 visual_svg: null

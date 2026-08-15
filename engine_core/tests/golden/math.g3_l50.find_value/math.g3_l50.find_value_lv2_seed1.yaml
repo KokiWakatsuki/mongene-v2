@@ -24,18 +24,18 @@ meta:
   seed: 1
   signature: arc_proportional_angle
 problem_ref: 646487f3453857a2
-problem_text: 1つの円で、弧MKの長さは弧EGの長さの6倍である。弧EGに対する円周角が9°のとき、弧MKに対する円周角の大きさを求めよ。
+problem_text: 1つの円で、弧NPの長さは弧QRの長さの6倍である。弧QRに対する円周角が24°のとき、弧NPに対する円周角の大きさを求めよ。
 sub_questions:
 - answer:
-    display: 54°
+    display: 144°
     kind: symbolic
-    srepr: Integer(54)
+    srepr: Integer(144)
   cause_tags: []
   concept_tags:
   - circle.arc_proportional_angle
   explanation: 'まず、2つの弧の長さの比を読み取る。（6倍）
 
-    次に、弧の長さは、その弧に対する円周角の大きさに比例することから、求める円周角の大きさを求める。（54°）'
+    次に、弧の長さは、その弧に対する円周角の大きさに比例することから、求める円周角の大きさを求める。（144°）'
   hints:
   - 2つの弧の長さの比を読み取る。
   label: (1)
@@ -49,6 +49,6 @@ sub_questions:
   - args: []
     narration: 弧の長さは、その弧に対する円周角の大きさに比例することから、求める円周角の大きさを求める。
     op: apply_arc_angle_proportion
-    result_display: 54°
-    result_srepr: Integer(54)
+    result_display: 144°
+    result_srepr: Integer(144)
 visual_svg: null

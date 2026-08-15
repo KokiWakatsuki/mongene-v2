@@ -28,12 +28,12 @@ meta:
   seed: 1
   signature: lf_expr_two_points_simultaneous
 problem_ref: aad7c0eac3a1f8c1
-problem_text: 2点 (5, -41/2) と (0, -8) を通る直線の式を求めよ。
+problem_text: 2点 (-6, -9) と (2, 11) を通る直線の式を求めよ。
 sub_questions:
 - answer:
-    display: y = -5/2x - 8
+    display: y = 5/2x + 6
     kind: symbolic
-    srepr: Add(Mul(Integer(-1), Rational(5, 2), Symbol('x')), Integer(-8))
+    srepr: Add(Mul(Rational(5, 2), Symbol('x')), Integer(6))
   cause_tags:
   - lf.confused_with_proportional
   - lf.substitution_error
@@ -41,11 +41,11 @@ sub_questions:
   - linear_function.slope_from_two_points
   - linear_function.intercept_from_point
   - linear_function.expression_from_two_points
-  explanation: 'まず、2点をそれぞれ y = ax + b に代入し、a, b の連立方程式を立てる。（5a + b = -41/2, b = -8）
+  explanation: 'まず、2点をそれぞれ y = ax + b に代入し、a, b の連立方程式を立てる。（-6a + b = -9, 2a + b = 11）
 
-    次に、連立方程式を解いて a, b を同時に求める。（a = -5/2, b = -8）
+    次に、連立方程式を解いて a, b を同時に求める。（a = 5/2, b = 6）
 
-    最後に、求めた a, b から一次関数の式を組み立てる。（y = -5/2x - 8）'
+    最後に、求めた a, b から一次関数の式を組み立てる。（y = 5/2x + 6）'
   hints:
   - 2点をそれぞれ y = ax + b に代入し、a, b の連立方程式を立てる。
   - 連立方程式を解いて a, b を同時に求める。
@@ -53,24 +53,24 @@ sub_questions:
   prompt_text: 式に表しなさい。
   solution_steps:
   - args:
-    - (5, -41/2)
-    - (0, -8)
+    - (-6, -9)
+    - (2, 11)
     narration: 2点をそれぞれ y = ax + b に代入し、a, b の連立方程式を立てる。
     op: setup_simultaneous
-    result_display: 5a + b = -41/2, b = -8
-    result_srepr: '[Equality(Add(Mul(Integer(5), Symbol(''a'')), Symbol(''b'')), Rational(-41, 2)), Equality(Symbol(''b''), Integer(-8))]'
+    result_display: -6a + b = -9, 2a + b = 11
+    result_srepr: '[Equality(Add(Mul(Integer(-1), Integer(6), Symbol(''a'')), Symbol(''b'')), Integer(-9)), Equality(Add(Mul(Integer(2), Symbol(''a'')), Symbol(''b'')), Integer(11))]'
   - args:
-    - Eq(5*a + b, -41/2)
-    - Eq(b, -8)
+    - Eq(-6*a + b, -9)
+    - Eq(2*a + b, 11)
     narration: 連立方程式を解いて a, b を同時に求める。
     op: solve_simultaneous
-    result_display: a = -5/2, b = -8
-    result_srepr: '{''a'': Rational(-5, 2), ''b'': Integer(-8)}'
+    result_display: a = 5/2, b = 6
+    result_srepr: '{''a'': Rational(5, 2), ''b'': Integer(6)}'
   - args:
-    - -5/2
-    - '-8'
+    - 5/2
+    - '6'
     narration: 求めた a, b から一次関数の式を組み立てる。
     op: form_expression
-    result_display: y = -5/2x - 8
-    result_srepr: Add(Mul(Integer(-1), Rational(5, 2), Symbol('x')), Integer(-8))
+    result_display: y = 5/2x + 6
+    result_srepr: Add(Mul(Rational(5, 2), Symbol('x')), Integer(6))
 visual_svg: null

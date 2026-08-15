@@ -27,7 +27,9 @@ levels:
     params:
       scenario_kind: box_diagonal
       # 縦・横・高さの3軸 × 20 値 ＝ 8000 通り（閾 0.20 に必要な約250通りを大きく超える）。
-      edge_domain: {int_range: [1, 20]}
+      # **直方体の辺は 2cm 以上**（1cm×1cm×5cm は棒であって直方体の図に
+      # ならない）。実物の直方体の問題は 3〜12cm あたり。
+      edge_domain: {int_range: [2, 20]}
     given: [condition]
     asked: [value]
     visual: none
@@ -43,8 +45,10 @@ levels:
       # 底面の1辺は偶数（対角線の半分の二乗が整数）2..30 の 15 値、側辺は
       # (側辺² − 1辺²/2) >= 4 を満たすもの。列挙して **434 通り**（実測）。
       # 頂点名（連続5文字 22 通り）も params に載るので実際は 9548 通り。
+      # **側辺は底辺の 0.8〜3倍**（recipe が絞る）。前は無関係に引いていたので
+      # 「底面4cm・辺29cmの正四角錐」（針のような立体）が出ていた。
       base_edge_domain: {int_range: [2, 30]}
-      lateral_edge_domain: {int_range: [1, 40]}
+      lateral_edge_domain: {int_range: [2, 40]}
       min_height_squared: 4
     given: [condition]
     asked: [value]

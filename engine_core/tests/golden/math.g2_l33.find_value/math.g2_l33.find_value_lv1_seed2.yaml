@@ -24,18 +24,18 @@ meta:
   seed: 2
   signature: triangle_third_angle
 problem_ref: 212ba81a55d5c269
-problem_text: 三角形ABCで、∠A=90°、∠B=22°のとき、∠Cの大きさを求めよ。
+problem_text: 三角形ABCで、∠A=97°、∠B=46°のとき、∠Cの大きさを求めよ。
 sub_questions:
 - answer:
-    display: '68'
+    display: '37'
     kind: symbolic
-    srepr: Integer(68)
+    srepr: Integer(37)
   cause_tags: []
   concept_tags:
   - triangle_angle.third_angle
-  explanation: 'まず、わかっている2つの内角の大きさを読み取る。（90° と 22°）
+  explanation: 'まず、わかっている2つの内角の大きさを読み取る。（97° と 46°）
 
-    次に、三角形の内角の和が一直線の角(平角)に等しいことから、残りの内角の大きさを求める。（68）'
+    次に、三角形の内角の和が一直線の角(平角)に等しいことから、残りの内角の大きさを求める。（37）'
   hints:
   - わかっている2つの内角の大きさを読み取る。
   label: (1)
@@ -44,11 +44,11 @@ sub_questions:
   - args: []
     narration: わかっている2つの内角の大きさを読み取る。
     op: identify_two_interior_angles
-    result_display: 90° と 22°
+    result_display: 97° と 46°
     result_srepr: ''
   - args: []
     narration: 三角形の内角の和が一直線の角(平角)に等しいことから、残りの内角の大きさを求める。
     op: subtract_from_sum
-    result_display: '68'
-    result_srepr: Integer(68)
+    result_display: '37'
+    result_srepr: Integer(37)
 visual_svg: null

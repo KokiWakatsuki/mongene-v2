@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: word_problem_area_graph_and_times
 problem_ref: c7c8f5d17d3cd4c4
-problem_text: '1辺が10cmの正方形CNKAの周上を、点JがCを出発してC→N→K→Aの順に毎秒1cmの速さでAまで動く。点Jが動き始めてからx秒後の三角形CJAの面積をy cm²とする。
+problem_text: '1辺が10cmの正方形LMNPの周上を、点RがLを出発してL→M→N→Pの順に毎秒1cmの速さでPまで動く。点Rが動き始めてからx秒後の三角形LRPの面積をy cm²とする。
 
   xとyの関係をグラフに表し、面積が40cm²になる時刻をすべて求めよ。'
 sub_questions:
@@ -104,7 +104,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - quadratic_function.word_problem_area_graph_and_times
-  explanation: 'まず、点Jがどの辺の上にあるかで時間を区間に分け、区間ごとに面積の式が変わることを確かめる。（0〜10秒、10〜20秒、20〜30秒）
+  explanation: 'まず、点Rがどの辺の上にあるかで時間を区間に分け、区間ごとに面積の式が変わることを確かめる。（0〜10秒、10〜20秒、20〜30秒）
 
     次に、はじめの辺の上では高さが時間に比例するので、面積の式を方程式とみて解く。（8秒後）
 
@@ -114,7 +114,7 @@ sub_questions:
 
     最後に、求めた時刻がそれぞれの区間の中にあることを確かめ、答えをすべて並べる。（8秒後、22秒後）'
   hints:
-  - 点Jがどの辺の上にあるかで時間を区間に分け、区間ごとに面積の式が変わることを確かめる。
+  - 点Rがどの辺の上にあるかで時間を区間に分け、区間ごとに面積の式が変わることを確かめる。
   - はじめの辺の上では高さが時間に比例するので、面積の式を方程式とみて解く。
   - 次の辺の上では底辺も高さも変わらず面積が一定なので、その値と比べて解があるかを調べる。
   - 最後の辺の上では高さが減っていくので、その区間の式を方程式とみて解く。
@@ -122,7 +122,7 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
-    narration: 点Jがどの辺の上にあるかで時間を区間に分け、区間ごとに面積の式が変わることを確かめる。
+    narration: 点Rがどの辺の上にあるかで時間を区間に分け、区間ごとに面積の式が変わることを確かめる。
     op: identify_intervals
     result_display: 0〜10秒、10〜20秒、20〜30秒
     result_srepr: ''

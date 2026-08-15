@@ -32,7 +32,9 @@ levels:
     params:
       scenario_kind: box_surface_shortest_path
       # 縦・横・高さの3軸 × 20 値 ＝ 8000 通り（閾 0.20 に必要な約250通りを大きく超える）。
-      edge_domain: {int_range: [1, 20]}
+      # **直方体の辺は 2cm 以上**（1cm×1cm×5cm は棒であって直方体の図に
+      # ならない）。実物の直方体の問題は 3〜12cm あたり。
+      edge_domain: {int_range: [2, 20]}
     given: [condition]
     asked: [value]
     visual: none

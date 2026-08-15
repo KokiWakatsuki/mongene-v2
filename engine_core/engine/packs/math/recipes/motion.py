@@ -26,7 +26,7 @@ from engine.core.contracts import (
 )
 from engine.core.registry import REGISTRY, register_recipe
 from engine.core.rng import Rng, draw
-from engine.packs.math.recipes.letter_expr import _draw_distinct_points
+from engine.packs.math.recipes.letter_expr import _draw_named_figures
 from engine.packs.math.visuals.graph import (
     compute_grid_spec_from_params,
     render_polyline_solution_svg,
@@ -259,7 +259,9 @@ def _construct_graph_segment(
     v, t_end = pairs[idx]
     s = v * t_end
 
-    la, lb, lc, ld, lp = _draw_distinct_points(5, rng)
+    quad, pts = _draw_named_figures([4, 1], rng)
+    la, lb, lc, ld = quad
+    lp = pts[0]
     condition = (
         f"1辺が{s}cmの正方形{la}{lb}{lc}{ld}で、点{lp}は{la}を出発し、"
         f"辺{la}{lb}上を毎秒{v}cmの速さで{lb}まで動く。出発してからの時間をx秒、"
@@ -388,7 +390,11 @@ def _construct_two_points(
     s = int(draw({"int_set": s_cands}, rng))
     assert t0 != area, "答えの時刻が本文の面積と一致している"
 
-    la, lb, lc, ld, lp, lq = _draw_distinct_points(6, rng)
+    # 図形の頂点はアルファベット順に名づける（実物は「正方形ABCD」「△ABC∽△DEF」）。
+    # 無作為に引くと「正方形ERDJ」「三角形JQBと三角形CMH」になる。
+    quad, pts = _draw_named_figures([4, 2], rng)
+    la, lb, lc, ld = quad
+    lp, lq = pts
     scenario = (
         f"1辺が{s}cmの正方形{la}{lb}{lc}{ld}で、点{lp}は{la}を出発して辺{la}{lb}上を"
         f"{lb}まで毎秒{v}cmの速さで動き、点{lq}は同時に{la}を出発して辺{la}{ld}上を"
@@ -470,7 +476,9 @@ def _construct_all_times(p: dict[str, Any], rng: Rng) -> tuple[int, int, int, st
     idx = int(draw({"int_set": list(range(len(triples)))}, rng))
     s, v, area = triples[idx]
 
-    la, lb, lc, ld, lp = _draw_distinct_points(5, rng)
+    quad, pts = _draw_named_figures([4, 1], rng)
+    la, lb, lc, ld = quad
+    lp = pts[0]
     scenario = (
         f"1辺が{s}cmの正方形{la}{lb}{lc}{ld}の周上を、点{lp}が{la}を出発して"
         f"{la}→{lb}→{lc}→{ld}の順に毎秒{v}cmの速さで{ld}まで動く。"
@@ -587,7 +595,9 @@ def _construct_graph_and_times(
                 triples.append((s_i, v_i, area_i))
     idx = int(draw({"int_set": list(range(len(triples)))}, rng))
     s, v, area = triples[idx]
-    la, lb, lc, ld, lp = _draw_distinct_points(5, rng)
+    quad, pts = _draw_named_figures([4, 1], rng)
+    la, lb, lc, ld = quad
+    lp = pts[0]
     labels_txt = la + lb + lc + ld + lp
     scenario = (
         f"1辺が{s}cmの正方形{la}{lb}{lc}{ld}の周上を、点{lp}が{la}を出発して"
@@ -639,7 +649,9 @@ def _single_interval_scene(p: dict[str, Any], rng: Rng) -> tuple[int, int, int, 
                 cands.append((s_i, v_i, area_i))
     idx = int(draw({"int_set": list(range(len(cands)))}, rng))
     s, v, area = cands[idx]
-    la, lb, lc, ld, lp = _draw_distinct_points(5, rng)
+    quad, pts = _draw_named_figures([4, 1], rng)
+    la, lb, lc, ld = quad
+    lp = pts[0]
     scenario = (
         f"1辺が{s}cmの正方形{la}{lb}{lc}{ld}で、点{lp}は{lb}を出発して"
         f"{lb}から{lc}まで辺{lb}{lc}上を毎秒{v}cmの速さで動く。"
@@ -730,7 +742,9 @@ def _three_interval_scene(
                 cands.append((s_i, v_i, area_i))
     idx = int(draw({"int_set": list(range(len(cands)))}, rng))
     s, v, area = cands[idx]
-    la, lb, lc, ld, lp = _draw_distinct_points(5, rng)
+    quad, pts = _draw_named_figures([4, 1], rng)
+    la, lb, lc, ld = quad
+    lp = pts[0]
     scenario = (
         f"1辺が{s}cmの正方形{la}{lb}{lc}{ld}の周上を、点{lp}が{la}を出発して"
         f"{la}→{lb}→{lc}→{ld}の順に毎秒{v}cmの速さで{ld}まで動く。"
@@ -951,7 +965,9 @@ def exam_interval_area_and_value_recipe(ctx: CellContext, rng: Rng) -> MR:
                 cands.append((s_i, v_i, x0))
     idx = int(draw({"int_set": list(range(len(cands)))}, rng))
     s, v, x0 = cands[idx]
-    la, lb, lc, ld, lp = _draw_distinct_points(5, rng)
+    quad, pts = _draw_named_figures([4, 1], rng)
+    la, lb, lc, ld = quad
+    lp = pts[0]
 
     sol = cast(
         Solution, REGISTRY.solver("math.express_interval_area_and_value")(s, v, x0)
@@ -1059,7 +1075,9 @@ def exam_read_area_graph_recipe(ctx: CellContext, rng: Rng) -> MR:
                 cands.append((s_i, v_i, x0))
     idx = int(draw({"int_set": list(range(len(cands)))}, rng))
     s, v, x0 = cands[idx]
-    la, lb, lc, ld, lp = _draw_distinct_points(5, rng)
+    quad, pts = _draw_named_figures([4, 1], rng)
+    la, lb, lc, ld = quad
+    lp = pts[0]
 
     sol = cast(Solution, REGISTRY.solver("math.read_area_graph_values")(s, v, x0))
     assert isinstance(sol.answer, SymbolicAnswer)
@@ -1191,7 +1209,9 @@ def exam_word_problem_quarter_area_recipe(ctx: CellContext, rng: Rng) -> MR:
             cands.append((s_i, v_i))
     idx = int(draw({"int_set": list(range(len(cands)))}, rng))
     s, v = cands[idx]
-    la, lb, lc, ld, lp = _draw_distinct_points(5, rng)
+    quad, pts = _draw_named_figures([4, 1], rng)
+    la, lb, lc, ld = quad
+    lp = pts[0]
     labels_txt = la + lb + lc + ld + lp
     area = s * s // 4
 

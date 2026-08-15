@@ -24,18 +24,18 @@ meta:
   seed: 3
   signature: circle_similar_chord_length
 problem_ref: 3f33b8e908ac7aad
-problem_text: 円周上の4点P, J, L, Bについて三角形FPJ∽三角形FBLが示されている。弦PLと弦JBの交点をFとし、FP=8cm, FJ=48cm, FB=3cm のとき、線分FLの長さを求めよ。
+problem_text: 円周上の4点S, T, U, Vについて三角形KST∽三角形KVUが示されている。弦SUと弦TVの交点をKとし、KS=8cm, KT=56cm, KV=3cm のとき、線分KUの長さを求めよ。
 sub_questions:
 - answer:
-    display: '18'
+    display: '21'
     kind: symbolic
-    srepr: Integer(18)
+    srepr: Integer(21)
   cause_tags: []
   concept_tags:
   - circle.similar_chord_length
-  explanation: 'まず、2つの図形の相似比と、わかっている辺の長さを読み取る。（相似比 8:3、辺の長さ 48）
+  explanation: 'まず、2つの図形の相似比と、わかっている辺の長さを読み取る。（相似比 8:3、辺の長さ 56）
 
-    次に、相似な図形では対応する辺の長さの比が相似比に等しいことから、対応する辺の長さを求める。（18）'
+    次に、相似な図形では対応する辺の長さの比が相似比に等しいことから、対応する辺の長さを求める。（21）'
   hints:
   - 2つの図形の相似比と、わかっている辺の長さを読み取る。
   label: (1)
@@ -44,11 +44,11 @@ sub_questions:
   - args: []
     narration: 2つの図形の相似比と、わかっている辺の長さを読み取る。
     op: identify_similarity_ratio
-    result_display: 相似比 8:3、辺の長さ 48
+    result_display: 相似比 8:3、辺の長さ 56
     result_srepr: ''
   - args: []
     narration: 相似な図形では対応する辺の長さの比が相似比に等しいことから、対応する辺の長さを求める。
     op: apply_similarity_ratio
-    result_display: '18'
-    result_srepr: Integer(18)
+    result_display: '21'
+    result_srepr: Integer(21)
 visual_svg: null

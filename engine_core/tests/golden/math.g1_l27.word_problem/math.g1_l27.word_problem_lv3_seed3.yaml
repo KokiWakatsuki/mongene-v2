@@ -23,29 +23,35 @@ meta:
     unit: g1_l27
   seed: 3
   signature: word_problem_catch_up_time
-problem_ref: 04a8a4c3b5760353
-problem_text: '兄は分速75mで家を出発し、その6分後に弟が分速165mの自転車で同じ道を追いかけた。
+problem_ref: dd53d8252b31ef8a
+problem_text: '兄は分速90mで家を出発し、その6分後に弟が分速180mの自転車で同じ道を追いかけた。
 
   弟が兄に追いつくのは、弟が出発してから何分後か求めよ。'
 sub_questions:
 - answer:
-    display: 5分
+    display: 6分
     kind: symbolic
-    srepr: Integer(5)
+    srepr: Integer(6)
   cause_tags: []
   concept_tags:
   - equation.word_problem_catch_up
   explanation: 'まず、場面の中で、どちらの見方でも同じになる（等しくなっている）量に着目する。（追いついたときに2人が進んだ道のり）
 
-    次に、その量を x を使って両辺に表し、方程式をつくる。（75(x + 6) = 165x）
+    次に、その量を x を使って両辺に表し、方程式をつくる。（90(x + 6) = 180x）
 
-    次に、分配法則を使って、かっこを外す。（75x + 450 = 165x）
+    次に、分配法則を使って、かっこを外す。（90x + 540 = 180x）
 
-    最後に、文字の項を左辺に、数の項を右辺に移項し、両辺を整理して解く。（x = 5）'
+    次に、文字の項を左辺に、数の項を右辺に、符号を変えて移項する。（90x - 180x = -540）
+
+    次に、両辺の同類項をそれぞれまとめて、ax = b の形にする。（-90x = -540）
+
+    最後に、等式の性質を使い、両辺を x の係数でわる。（x = 6）'
   hints:
   - 場面の中で、どちらの見方でも同じになる（等しくなっている）量に着目する。
   - その量を x を使って両辺に表し、方程式をつくる。
   - 分配法則を使って、かっこを外す。
+  - 文字の項を左辺に、数の項を右辺に、符号を変えて移項する。
+  - 両辺の同類項をそれぞれまとめて、ax = b の形にする。
   label: (1)
   prompt_text: 答えを求めなさい。
   solution_steps:
@@ -57,16 +63,26 @@ sub_questions:
   - args: []
     narration: その量を x を使って両辺に表し、方程式をつくる。
     op: formulate_equation
-    result_display: 75(x + 6) = 165x
-    result_srepr: Equality(Add(Mul(Integer(75), Symbol('x')), Integer(450)), Mul(Integer(165), Symbol('x')))
+    result_display: 90(x + 6) = 180x
+    result_srepr: Equality(Add(Mul(Integer(90), Symbol('x')), Integer(540)), Mul(Integer(180), Symbol('x')))
   - args: []
     narration: 分配法則を使って、かっこを外す。
     op: expand_parentheses
-    result_display: 75x + 450 = 165x
-    result_srepr: Integer(5)
+    result_display: 90x + 540 = 180x
+    result_srepr: Integer(6)
   - args: []
-    narration: 文字の項を左辺に、数の項を右辺に移項し、両辺を整理して解く。
-    op: transpose_and_solve
-    result_display: x = 5
-    result_srepr: Integer(5)
+    narration: 文字の項を左辺に、数の項を右辺に、符号を変えて移項する。
+    op: transpose_terms
+    result_display: 90x - 180x = -540
+    result_srepr: Integer(6)
+  - args: []
+    narration: 両辺の同類項をそれぞれまとめて、ax = b の形にする。
+    op: combine_like_terms
+    result_display: -90x = -540
+    result_srepr: Integer(6)
+  - args: []
+    narration: 等式の性質を使い、両辺を x の係数でわる。
+    op: divide_both_sides
+    result_display: x = 6
+    result_srepr: Integer(6)
 visual_svg: null

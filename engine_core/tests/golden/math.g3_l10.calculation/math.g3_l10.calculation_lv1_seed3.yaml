@@ -26,16 +26,16 @@ meta:
 problem_ref: 6d677057d36364ce
 problem_text: '次の式を因数分解せよ。
 
-  16y² - 225'
+  16p² - 225'
 sub_questions:
 - answer:
-    display: (4y - 15)(4y + 15)
+    display: (4p - 15)(4p + 15)
     kind: symbolic
-    srepr: Mul(Add(Mul(Integer(4), Symbol('y')), Integer(-15)), Add(Mul(Integer(4), Symbol('y')), Integer(15)))
+    srepr: Mul(Add(Mul(Integer(4), Symbol('p')), Integer(-15)), Add(Mul(Integer(4), Symbol('p')), Integer(15)))
   cause_tags: []
   concept_tags:
   - polynomial.factor_diff_squares
-  explanation: まず、平方の差を、和と差の積の形になおす。（(4y - 15)(4y + 15)）
+  explanation: まず、平方の差を、和と差の積の形になおす。（(4p - 15)(4p + 15)）
   hints:
   - 平方の差を、和と差の積の形になおす。
   label: (1)
@@ -44,6 +44,6 @@ sub_questions:
   - args: []
     narration: 平方の差を、和と差の積の形になおす。
     op: apply_diff_of_squares_factor
-    result_display: (4y - 15)(4y + 15)
-    result_srepr: Mul(Add(Mul(Integer(4), Symbol('y')), Integer(-15)), Add(Mul(Integer(4), Symbol('y')), Integer(15)))
+    result_display: (4p - 15)(4p + 15)
+    result_srepr: Mul(Add(Mul(Integer(4), Symbol('p')), Integer(-15)), Add(Mul(Integer(4), Symbol('p')), Integer(15)))
 visual_svg: null

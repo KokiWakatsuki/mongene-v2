@@ -24,9 +24,9 @@ meta:
   seed: 1
   signature: word_problem_quadratic_moving_point_area
 problem_ref: 15bf6f1a94ce11c6
-problem_text: '1辺が20cmの正方形QJEGがある。点Nは頂点Jを出発し、辺JE、辺EGの上を毎秒5cmの速さでGまで動く。
+problem_text: '1辺が20cmの正方形CDEFがある。点Wは頂点Dを出発し、辺DE、辺EFの上を毎秒5cmの速さでFまで動く。
 
-  出発してから x 秒後の三角形QJNの面積を y cm²とする。
+  出発してから x 秒後の三角形CDWの面積を y cm²とする。
 
   (1) 0≦x≦4 のとき、y を x の式で表せ。
 

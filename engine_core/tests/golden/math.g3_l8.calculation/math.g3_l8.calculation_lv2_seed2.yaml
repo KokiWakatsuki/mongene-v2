@@ -26,12 +26,12 @@ meta:
 problem_ref: 4ed0959ad13c14b3
 problem_text: '次の式を因数分解せよ。
 
-  x² - 8x - 9'
+  n² - 8n - 9'
 sub_questions:
 - answer:
-    display: (x - 9)(x + 1)
+    display: (n - 9)(n + 1)
     kind: symbolic
-    srepr: Mul(Add(Symbol('x'), Integer(-9)), Add(Symbol('x'), Integer(1)))
+    srepr: Mul(Add(Symbol('n'), Integer(-9)), Add(Symbol('n'), Integer(1)))
   cause_tags: []
   concept_tags:
   - polynomial.factor_sum_product
@@ -39,7 +39,7 @@ sub_questions:
 
     次に、たすと1次の係数、かけると定数になる2つの数を見つける。（-9 と 1）
 
-    最後に、見つけた2つの数を使い、2つの1次式の積で表す。（(x - 9)(x + 1)）'
+    最後に、見つけた2つの数を使い、2つの1次式の積で表す。（(n - 9)(n + 1)）'
   hints:
   - 定数の符号から、2つの数の符号を決める。
   - たすと1次の係数、かけると定数になる2つの数を見つける。
@@ -59,6 +59,6 @@ sub_questions:
   - args: []
     narration: 見つけた2つの数を使い、2つの1次式の積で表す。
     op: write_factors
-    result_display: (x - 9)(x + 1)
-    result_srepr: Mul(Add(Symbol('x'), Integer(-9)), Add(Symbol('x'), Integer(1)))
+    result_display: (n - 9)(n + 1)
+    result_srepr: Mul(Add(Symbol('n'), Integer(-9)), Add(Symbol('n'), Integer(1)))
 visual_svg: null

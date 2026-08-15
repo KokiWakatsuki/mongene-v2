@@ -24,24 +24,24 @@ meta:
   seed: 1
   signature: word_problem_square_plot_approx
 problem_ref: eda3b55edadfa22d
-problem_text: '面積が28cm²の正方形の花だんの囲いをつくる。ただし、√7=2.65として計算してよいものとする。
+problem_text: '面積が128cm²の正方形の花だんの囲いをつくる。ただし、√2=1.41として計算してよいものとする。
 
   (1) この正方形の花だんの囲いの1辺の長さを、根号を使って表せ。
 
   (2) その長さを、小数第一位まで求めよ。'
 sub_questions:
 - answer:
-    display: 2√7
+    display: 8√2
     kind: symbolic
-    srepr: Mul(Integer(2), Pow(Integer(7), Rational(1, 2)))
+    srepr: Mul(Integer(8), Pow(Integer(2), Rational(1, 2)))
   cause_tags: []
   concept_tags:
   - radical.word_problem_square_plot_approx
-  explanation: 'まず、正方形の面積は1辺の長さを2乗した値だから、1辺の長さは面積の正の平方根で表せる。（√28）
+  explanation: 'まず、正方形の面積は1辺の長さを2乗した値だから、1辺の長さは面積の正の平方根で表せる。（√128）
 
-    次に、根号の中を素因数分解し、平方の因数を見つける。（√(4 × 7)）
+    次に、根号の中を素因数分解し、平方の因数を見つける。（√(64 × 2)）
 
-    最後に、平方の因数を根号の外に出して a√b の形にする。（2√7）'
+    最後に、平方の因数を根号の外に出して a√b の形にする。（8√2）'
   hints:
   - 正方形の面積は1辺の長さを2乗した値だから、1辺の長さは面積の正の平方根で表せる。
   - 根号の中を素因数分解し、平方の因数を見つける。
@@ -51,28 +51,28 @@ sub_questions:
   - args: []
     narration: 正方形の面積は1辺の長さを2乗した値だから、1辺の長さは面積の正の平方根で表せる。
     op: express_side_as_square_root
-    result_display: √28
+    result_display: √128
     result_srepr: ''
   - args: []
     narration: 根号の中を素因数分解し、平方の因数を見つける。
     op: factor_out_square
-    result_display: √(4 × 7)
+    result_display: √(64 × 2)
     result_srepr: ''
   - args: []
     narration: 平方の因数を根号の外に出して a√b の形にする。
     op: take_root_outside
-    result_display: 2√7
-    result_srepr: Mul(Integer(2), Pow(Integer(7), Rational(1, 2)))
+    result_display: 8√2
+    result_srepr: Mul(Integer(8), Pow(Integer(2), Rational(1, 2)))
 - answer:
-    display: '5.3'
+    display: '11.3'
     kind: symbolic
-    srepr: Rational(53, 10)
+    srepr: Rational(113, 10)
   cause_tags: []
   concept_tags:
   - radical.word_problem_square_plot_approx
-  explanation: 'まず、根号のついた数を、与えられた近似の値におきかえてかけ算をする。（5.3）
+  explanation: 'まず、根号のついた数を、与えられた近似の値におきかえてかけ算をする。（11.28）
 
-    次に、小数第2位を四捨五入して、小数第1位までの値にする。（5.3）'
+    次に、小数第2位を四捨五入して、小数第1位までの値にする。（11.3）'
   hints:
   - 根号のついた数を、与えられた近似の値におきかえてかけ算をする。
   label: (2)
@@ -81,11 +81,11 @@ sub_questions:
   - args: []
     narration: 根号のついた数を、与えられた近似の値におきかえてかけ算をする。
     op: substitute_root_approximation
-    result_display: '5.3'
+    result_display: '11.28'
     result_srepr: ''
   - args: []
     narration: 小数第2位を四捨五入して、小数第1位までの値にする。
     op: round_to_first_decimal
-    result_display: '5.3'
-    result_srepr: Rational(53, 10)
+    result_display: '11.3'
+    result_srepr: Rational(113, 10)
 visual_svg: null

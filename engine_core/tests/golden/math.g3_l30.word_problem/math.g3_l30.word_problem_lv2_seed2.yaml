@@ -24,7 +24,7 @@ meta:
   seed: 2
   signature: word_problem_quadratic_rectangle_area
 problem_ref: db3e6022bdb931f0
-problem_text: '横が縦より10cm長い長方形の板がある。その面積は171cm²である。
+problem_text: '横が縦より10cm長い長方形のタイルがある。その面積は171cm²である。
 
   縦の長さを x cm とする。
 

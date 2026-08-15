@@ -23,7 +23,7 @@ meta:
     unit: g1_l27
   seed: 3
   signature: word_problem_round_trip_distance
-problem_ref: d82ffab2c7bed8c8
+problem_ref: cc14cda273562765
 problem_text: '家から工場まで、行きは時速3km、帰りは同じ道を時速9kmの速さで進んだところ、進むのにかかった時間は合わせて8時間だった。
 
   家から工場までの道のりを x km とする。
@@ -66,7 +66,7 @@ sub_questions:
   - equation.word_problem_round_trip
   explanation: 'まず、分母の最小公倍数を両辺にかけて、分母をはらう。（4x = 72）
 
-    次に、同類項をまとめ、x の係数で両辺をわって解を求める。（x = 18）'
+    次に、等式の性質を使い、両辺を x の係数でわる。（x = 18）'
   hints:
   - 分母の最小公倍数を両辺にかけて、分母をはらう。
   label: (2)
@@ -78,8 +78,8 @@ sub_questions:
     result_display: 4x = 72
     result_srepr: Integer(18)
   - args: []
-    narration: 同類項をまとめ、x の係数で両辺をわって解を求める。
-    op: combine_and_solve
+    narration: 等式の性質を使い、両辺を x の係数でわる。
+    op: divide_both_sides
     result_display: x = 18
     result_srepr: Integer(18)
 visual_svg: null

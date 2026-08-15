@@ -23,29 +23,35 @@ meta:
     unit: g1_l27
   seed: 1
   signature: word_problem_catch_up_time
-problem_ref: 631dfdf511aa706a
-problem_text: '姉は分速120mで家を出発し、その8分後に妹が分速184mの自転車で同じ道を追いかけた。
+problem_ref: a25a6c92cfdb676a
+problem_text: '姉は分速60mで家を出発し、その12分後に妹が分速300mの自転車で同じ道を追いかけた。
 
   妹が姉に追いつくのは、妹が出発してから何分後か求めよ。'
 sub_questions:
 - answer:
-    display: 15分
+    display: 3分
     kind: symbolic
-    srepr: Integer(15)
+    srepr: Integer(3)
   cause_tags: []
   concept_tags:
   - equation.word_problem_catch_up
   explanation: 'まず、場面の中で、どちらの見方でも同じになる（等しくなっている）量に着目する。（追いついたときに2人が進んだ道のり）
 
-    次に、その量を x を使って両辺に表し、方程式をつくる。（120(x + 8) = 184x）
+    次に、その量を x を使って両辺に表し、方程式をつくる。（60(x + 12) = 300x）
 
-    次に、分配法則を使って、かっこを外す。（120x + 960 = 184x）
+    次に、分配法則を使って、かっこを外す。（60x + 720 = 300x）
 
-    最後に、文字の項を左辺に、数の項を右辺に移項し、両辺を整理して解く。（x = 15）'
+    次に、文字の項を左辺に、数の項を右辺に、符号を変えて移項する。（60x - 300x = -720）
+
+    次に、両辺の同類項をそれぞれまとめて、ax = b の形にする。（-240x = -720）
+
+    最後に、等式の性質を使い、両辺を x の係数でわる。（x = 3）'
   hints:
   - 場面の中で、どちらの見方でも同じになる（等しくなっている）量に着目する。
   - その量を x を使って両辺に表し、方程式をつくる。
   - 分配法則を使って、かっこを外す。
+  - 文字の項を左辺に、数の項を右辺に、符号を変えて移項する。
+  - 両辺の同類項をそれぞれまとめて、ax = b の形にする。
   label: (1)
   prompt_text: 答えを求めなさい。
   solution_steps:
@@ -57,16 +63,26 @@ sub_questions:
   - args: []
     narration: その量を x を使って両辺に表し、方程式をつくる。
     op: formulate_equation
-    result_display: 120(x + 8) = 184x
-    result_srepr: Equality(Add(Mul(Integer(120), Symbol('x')), Integer(960)), Mul(Integer(184), Symbol('x')))
+    result_display: 60(x + 12) = 300x
+    result_srepr: Equality(Add(Mul(Integer(60), Symbol('x')), Integer(720)), Mul(Integer(300), Symbol('x')))
   - args: []
     narration: 分配法則を使って、かっこを外す。
     op: expand_parentheses
-    result_display: 120x + 960 = 184x
-    result_srepr: Integer(15)
+    result_display: 60x + 720 = 300x
+    result_srepr: Integer(3)
   - args: []
-    narration: 文字の項を左辺に、数の項を右辺に移項し、両辺を整理して解く。
-    op: transpose_and_solve
-    result_display: x = 15
-    result_srepr: Integer(15)
+    narration: 文字の項を左辺に、数の項を右辺に、符号を変えて移項する。
+    op: transpose_terms
+    result_display: 60x - 300x = -720
+    result_srepr: Integer(3)
+  - args: []
+    narration: 両辺の同類項をそれぞれまとめて、ax = b の形にする。
+    op: combine_like_terms
+    result_display: -240x = -720
+    result_srepr: Integer(3)
+  - args: []
+    narration: 等式の性質を使い、両辺を x の係数でわる。
+    op: divide_both_sides
+    result_display: x = 3
+    result_srepr: Integer(3)
 visual_svg: null

@@ -26,18 +26,18 @@ meta:
 problem_ref: bc0a104037645c69
 problem_text: '次の式を展開せよ。
 
-  (x + 5)²'
+  (n - 8)²'
 sub_questions:
 - answer:
-    display: x² + 10x + 25
+    display: n² - 16n + 64
     kind: symbolic
-    srepr: Add(Pow(Symbol('x'), Integer(2)), Mul(Integer(10), Symbol('x')), Integer(25))
+    srepr: Add(Pow(Symbol('n'), Integer(2)), Mul(Integer(-1), Integer(16), Symbol('n')), Integer(64))
   cause_tags: []
   concept_tags:
   - polynomial.expand_formula_square
-  explanation: 'まず、はじめの項の平方・積の2倍・終わりの項の平方を求める。（x²、10x、25）
+  explanation: 'まず、はじめの項の平方・積の2倍・終わりの項の平方を求める。（n²、-16n、64）
 
-    次に、乗法公式にあてはめて展開した式を書く。（x² + 10x + 25）'
+    次に、乗法公式にあてはめて展開した式を書く。（n² - 16n + 64）'
   hints:
   - はじめの項の平方・積の2倍・終わりの項の平方を求める。
   label: (1)
@@ -46,11 +46,11 @@ sub_questions:
   - args: []
     narration: はじめの項の平方・積の2倍・終わりの項の平方を求める。
     op: compute_square_terms
-    result_display: x²、10x、25
+    result_display: n²、-16n、64
     result_srepr: ''
   - args: []
     narration: 乗法公式にあてはめて展開した式を書く。
     op: write_expansion
-    result_display: x² + 10x + 25
-    result_srepr: Add(Pow(Symbol('x'), Integer(2)), Mul(Integer(10), Symbol('x')), Integer(25))
+    result_display: n² - 16n + 64
+    result_srepr: Add(Pow(Symbol('n'), Integer(2)), Mul(Integer(-1), Integer(16), Symbol('n')), Integer(64))
 visual_svg: null

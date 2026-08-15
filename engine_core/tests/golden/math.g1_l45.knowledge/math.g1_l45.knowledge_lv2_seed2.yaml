@@ -24,7 +24,7 @@ meta:
   seed: 2
   signature: judge_circle_property
 problem_ref: c1d3228d0b91fd66
-problem_text: 中心Kの円に、点Qで接する接線がある。この接線と、点Qを通る半径KQがつくる角の大きさの性質を答えよ。
+problem_text: 中心Qの円に、点Vで接する接線がある。この接線と、点Vを通る半径QVがつくる角の大きさの性質を答えよ。
 sub_questions:
 - answer:
     correct: 垂直

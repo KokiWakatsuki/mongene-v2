@@ -24,18 +24,18 @@ meta:
   seed: 1
   signature: similarity_proven_ratio_length
 problem_ref: badcb5299091f852
-problem_text: 三角形RFN∽三角形RBAであることが証明されている。RB=5cm, RF=8cm, BA=15cm のとき、辺FNの長さを求めよ。
+problem_text: 三角形VWX∽三角形VYZであることが証明されている。VY=2cm, VW=9cm, YZ=8cm のとき、辺WXの長さを求めよ。
 sub_questions:
 - answer:
-    display: '24'
+    display: '36'
     kind: symbolic
-    srepr: Integer(24)
+    srepr: Integer(36)
   cause_tags: []
   concept_tags:
   - similarity.proven_ratio_length
-  explanation: 'まず、2つの図形の相似比と、わかっている辺の長さを読み取る。（相似比 5:8、辺の長さ 15）
+  explanation: 'まず、2つの図形の相似比と、わかっている辺の長さを読み取る。（相似比 2:9、辺の長さ 8）
 
-    次に、相似な図形では対応する辺の長さの比が相似比に等しいことから、対応する辺の長さを求める。（24）'
+    次に、相似な図形では対応する辺の長さの比が相似比に等しいことから、対応する辺の長さを求める。（36）'
   hints:
   - 2つの図形の相似比と、わかっている辺の長さを読み取る。
   label: (1)
@@ -44,11 +44,11 @@ sub_questions:
   - args: []
     narration: 2つの図形の相似比と、わかっている辺の長さを読み取る。
     op: identify_similarity_ratio
-    result_display: 相似比 5:8、辺の長さ 15
+    result_display: 相似比 2:9、辺の長さ 8
     result_srepr: ''
   - args: []
     narration: 相似な図形では対応する辺の長さの比が相似比に等しいことから、対応する辺の長さを求める。
     op: apply_similarity_ratio
-    result_display: '24'
-    result_srepr: Integer(24)
+    result_display: '36'
+    result_srepr: Integer(36)
 visual_svg: null

@@ -23,29 +23,35 @@ meta:
     unit: g1_l27
   seed: 2
   signature: word_problem_catch_up_time
-problem_ref: d15163031547131f
-problem_text: 'Aさんは分速120mで家を出発し、その3分後にBさんが分速160mの自転車で同じ道を追いかけた。
+problem_ref: cc87d31da0773870
+problem_text: 'Aさんは分速100mで家を出発し、その3分後にBさんが分速160mの自転車で同じ道を追いかけた。
 
   BさんがAさんに追いつくのは、Bさんが出発してから何分後か求めよ。'
 sub_questions:
 - answer:
-    display: 9分
+    display: 5分
     kind: symbolic
-    srepr: Integer(9)
+    srepr: Integer(5)
   cause_tags: []
   concept_tags:
   - equation.word_problem_catch_up
   explanation: 'まず、場面の中で、どちらの見方でも同じになる（等しくなっている）量に着目する。（追いついたときに2人が進んだ道のり）
 
-    次に、その量を x を使って両辺に表し、方程式をつくる。（120(x + 3) = 160x）
+    次に、その量を x を使って両辺に表し、方程式をつくる。（100(x + 3) = 160x）
 
-    次に、分配法則を使って、かっこを外す。（120x + 360 = 160x）
+    次に、分配法則を使って、かっこを外す。（100x + 300 = 160x）
 
-    最後に、文字の項を左辺に、数の項を右辺に移項し、両辺を整理して解く。（x = 9）'
+    次に、文字の項を左辺に、数の項を右辺に、符号を変えて移項する。（100x - 160x = -300）
+
+    次に、両辺の同類項をそれぞれまとめて、ax = b の形にする。（-60x = -300）
+
+    最後に、等式の性質を使い、両辺を x の係数でわる。（x = 5）'
   hints:
   - 場面の中で、どちらの見方でも同じになる（等しくなっている）量に着目する。
   - その量を x を使って両辺に表し、方程式をつくる。
   - 分配法則を使って、かっこを外す。
+  - 文字の項を左辺に、数の項を右辺に、符号を変えて移項する。
+  - 両辺の同類項をそれぞれまとめて、ax = b の形にする。
   label: (1)
   prompt_text: 答えを求めなさい。
   solution_steps:
@@ -57,16 +63,26 @@ sub_questions:
   - args: []
     narration: その量を x を使って両辺に表し、方程式をつくる。
     op: formulate_equation
-    result_display: 120(x + 3) = 160x
-    result_srepr: Equality(Add(Mul(Integer(120), Symbol('x')), Integer(360)), Mul(Integer(160), Symbol('x')))
+    result_display: 100(x + 3) = 160x
+    result_srepr: Equality(Add(Mul(Integer(100), Symbol('x')), Integer(300)), Mul(Integer(160), Symbol('x')))
   - args: []
     narration: 分配法則を使って、かっこを外す。
     op: expand_parentheses
-    result_display: 120x + 360 = 160x
-    result_srepr: Integer(9)
+    result_display: 100x + 300 = 160x
+    result_srepr: Integer(5)
   - args: []
-    narration: 文字の項を左辺に、数の項を右辺に移項し、両辺を整理して解く。
-    op: transpose_and_solve
-    result_display: x = 9
-    result_srepr: Integer(9)
+    narration: 文字の項を左辺に、数の項を右辺に、符号を変えて移項する。
+    op: transpose_terms
+    result_display: 100x - 160x = -300
+    result_srepr: Integer(5)
+  - args: []
+    narration: 両辺の同類項をそれぞれまとめて、ax = b の形にする。
+    op: combine_like_terms
+    result_display: -60x = -300
+    result_srepr: Integer(5)
+  - args: []
+    narration: 等式の性質を使い、両辺を x の係数でわる。
+    op: divide_both_sides
+    result_display: x = 5
+    result_srepr: Integer(5)
 visual_svg: null

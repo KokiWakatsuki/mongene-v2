@@ -23,7 +23,7 @@ meta:
     unit: g1_l24
   seed: 3
   signature: proportion_cross_multiply_expand
-problem_ref: ffdf3d9362b03275
+problem_ref: 41c38e8e90c1ae93
 problem_text: '次の比例式を解け。
 
   (x - 1) : 9 = 5 : 9'
@@ -39,10 +39,16 @@ sub_questions:
 
     次に、分配法則を使って、かっこを外す。（9x - 9 = 45）
 
-    最後に、文字の項を左辺に、数の項を右辺に移項し、両辺を整理して解く。（x = 6）'
+    次に、文字の項を左辺に、数の項を右辺に、符号を変えて移項する。（9x = 45 + 9）
+
+    次に、両辺の同類項をそれぞれまとめて、ax = b の形にする。（9x = 54）
+
+    最後に、等式の性質を使い、両辺を x の係数でわる。（x = 6）'
   hints:
   - 比例式の性質を使い、外項の積と内項の積が等しい式（たすきがけ）をつくる。
   - 分配法則を使って、かっこを外す。
+  - 文字の項を左辺に、数の項を右辺に、符号を変えて移項する。
+  - 両辺の同類項をそれぞれまとめて、ax = b の形にする。
   label: (1)
   prompt_text: 解を求めなさい。
   solution_steps:
@@ -57,8 +63,18 @@ sub_questions:
     result_display: 9x - 9 = 45
     result_srepr: Integer(6)
   - args: []
-    narration: 文字の項を左辺に、数の項を右辺に移項し、両辺を整理して解く。
-    op: transpose_and_solve
+    narration: 文字の項を左辺に、数の項を右辺に、符号を変えて移項する。
+    op: transpose_terms
+    result_display: 9x = 45 + 9
+    result_srepr: Integer(6)
+  - args: []
+    narration: 両辺の同類項をそれぞれまとめて、ax = b の形にする。
+    op: combine_like_terms
+    result_display: 9x = 54
+    result_srepr: Integer(6)
+  - args: []
+    narration: 等式の性質を使い、両辺を x の係数でわる。
+    op: divide_both_sides
     result_display: x = 6
     result_srepr: Integer(6)
 visual_svg: null

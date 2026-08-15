@@ -24,18 +24,18 @@ meta:
   seed: 3
   signature: similarity_proven_ratio_length
 problem_ref: 1b375dacfc2c7d0a
-problem_text: 三角形KAE∽三角形KDPであることが証明されている。KD=5cm, KA=7cm, DP=10cm のとき、辺AEの長さを求めよ。
+problem_text: 三角形BCD∽三角形BEFであることが証明されている。BE=4cm, BC=9cm, EF=8cm のとき、辺CDの長さを求めよ。
 sub_questions:
 - answer:
-    display: '14'
+    display: '18'
     kind: symbolic
-    srepr: Integer(14)
+    srepr: Integer(18)
   cause_tags: []
   concept_tags:
   - similarity.proven_ratio_length
-  explanation: 'まず、2つの図形の相似比と、わかっている辺の長さを読み取る。（相似比 5:7、辺の長さ 10）
+  explanation: 'まず、2つの図形の相似比と、わかっている辺の長さを読み取る。（相似比 4:9、辺の長さ 8）
 
-    次に、相似な図形では対応する辺の長さの比が相似比に等しいことから、対応する辺の長さを求める。（14）'
+    次に、相似な図形では対応する辺の長さの比が相似比に等しいことから、対応する辺の長さを求める。（18）'
   hints:
   - 2つの図形の相似比と、わかっている辺の長さを読み取る。
   label: (1)
@@ -44,11 +44,11 @@ sub_questions:
   - args: []
     narration: 2つの図形の相似比と、わかっている辺の長さを読み取る。
     op: identify_similarity_ratio
-    result_display: 相似比 5:7、辺の長さ 10
+    result_display: 相似比 4:9、辺の長さ 8
     result_srepr: ''
   - args: []
     narration: 相似な図形では対応する辺の長さの比が相似比に等しいことから、対応する辺の長さを求める。
     op: apply_similarity_ratio
-    result_display: '14'
-    result_srepr: Integer(14)
+    result_display: '18'
+    result_srepr: Integer(18)
 visual_svg: null

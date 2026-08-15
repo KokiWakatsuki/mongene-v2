@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: judge_construction_property_angle_bisector
 problem_ref: b1d1816d4a440b25
-problem_text: ∠EQHの二等分線上に点Mをとり、Mから2辺QE、QHに垂線を引く。このとき、Mから2辺までの距離の関係を答えよ。
+problem_text: ∠EDFの二等分線上に点Lをとり、Lから2辺DE、DFに垂線を引く。このとき、Lから2辺までの距離の関係を答えよ。
 sub_questions:
 - answer:
     correct: 等しい

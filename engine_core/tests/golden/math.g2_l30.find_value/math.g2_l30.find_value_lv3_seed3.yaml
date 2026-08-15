@@ -24,7 +24,7 @@ meta:
   seed: 3
   signature: meeting_time_two_segment
 problem_ref: 4b5730ef74fd4441
-problem_text: AさんはP地点を出発しQ地点へ毎分89mで進む。BさんはAさんより12分おくれてQ地点を出発し、はじめの6分は毎分97mで、その後は毎分48mでP地点へ向かう。PQ間の道のりを2595mとするとき、2人が出会う時刻を求めよ。
+problem_text: AさんはP地点を出発しQ地点へ毎分60mで進む。BさんはAさんより12分おくれてQ地点を出発し、はじめの6分は毎分80mで、その後は毎分75mでP地点へ向かう。PQ間の道のりを1965mとするとき、2人が出会う時刻を求めよ。
 sub_questions:
 - answer:
     display: '21'

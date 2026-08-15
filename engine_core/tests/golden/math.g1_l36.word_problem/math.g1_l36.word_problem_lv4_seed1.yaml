@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: word_problem_max_area_and_times
 problem_ref: 8941808618de029a
-problem_text: '1辺が16cmの正方形KLMGの周上を、点QがKを出発してK→L→M→Gの順に毎秒4cmの速さでGまで動く。点QがKを出発してからx秒後の三角形KQGの面積をy cm²とする。
+problem_text: '1辺が16cmの正方形KLMNの周上を、点VがKを出発してK→L→M→Nの順に毎秒4cmの速さでNまで動く。点VがKを出発してからx秒後の三角形KVNの面積をy cm²とする。
 
   面積が最大になるのはxがどの範囲にあるときかとそのときの面積、および面積が96cm²になるときのxの値をすべて求めよ。'
 sub_questions:

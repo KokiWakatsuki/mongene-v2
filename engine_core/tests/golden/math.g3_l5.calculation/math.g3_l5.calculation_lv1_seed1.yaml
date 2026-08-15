@@ -26,16 +26,16 @@ meta:
 problem_ref: 186162a3e9292332
 problem_text: '次の式を展開せよ。
 
-  (2a + 13)(2a - 13)'
+  (2b + 13)(2b - 13)'
 sub_questions:
 - answer:
-    display: 4a² - 169
+    display: 4b² - 169
     kind: symbolic
-    srepr: Add(Mul(Integer(4), Pow(Symbol('a'), Integer(2))), Integer(-169))
+    srepr: Add(Mul(Integer(4), Pow(Symbol('b'), Integer(2))), Integer(-169))
   cause_tags: []
   concept_tags:
   - polynomial.expand_formula_diff_squares
-  explanation: まず、和と差の積の公式で、はじめの項の平方から終わりの項の平方をひく。（4a² - 169）
+  explanation: まず、和と差の積の公式で、はじめの項の平方から終わりの項の平方をひく。（4b² - 169）
   hints:
   - 和と差の積の公式で、はじめの項の平方から終わりの項の平方をひく。
   label: (1)
@@ -44,6 +44,6 @@ sub_questions:
   - args: []
     narration: 和と差の積の公式で、はじめの項の平方から終わりの項の平方をひく。
     op: apply_diff_of_squares
-    result_display: 4a² - 169
-    result_srepr: Add(Mul(Integer(4), Pow(Symbol('a'), Integer(2))), Integer(-169))
+    result_display: 4b² - 169
+    result_srepr: Add(Mul(Integer(4), Pow(Symbol('b'), Integer(2))), Integer(-169))
 visual_svg: null

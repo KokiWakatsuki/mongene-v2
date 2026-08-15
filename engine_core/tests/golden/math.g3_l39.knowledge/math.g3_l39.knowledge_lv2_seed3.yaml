@@ -24,22 +24,22 @@ meta:
   seed: 3
   signature: identify_similar_corresponding_vertex
 problem_ref: 578919e0e5701403
-problem_text: 四角形BEQCと四角形DJALが相似で、その順に対応しているとき、頂点Cに対応する頂点はどれか答えよ。
+problem_text: 四角形ABCDと四角形WXYZが相似で、その順に対応しているとき、頂点Cに対応する頂点はどれか答えよ。
 sub_questions:
 - answer:
-    correct: L
+    correct: Y
     distractors:
-    - D
-    - J
-    - A
+    - W
+    - X
+    - Z
     fact_id: similarity.identify_corresponding_vertex
     kind: choice
   cause_tags: []
   concept_tags:
   - similarity.identify_corresponding_vertex
-  explanation: 'まず、相似を表す式で、頂点がどの順に対応づけられているかを確認する。（BEQC と DJAL）
+  explanation: 'まず、相似を表す式で、頂点がどの順に対応づけられているかを確認する。（ABCD と WXYZ）
 
-    次に、対応する位置にある頂点どうしが対応することから、対応する頂点を答える。（L）'
+    次に、対応する位置にある頂点どうしが対応することから、対応する頂点を答える。（Y）'
   hints:
   - 相似を表す式で、頂点がどの順に対応づけられているかを確認する。
   label: (1)
@@ -48,11 +48,11 @@ sub_questions:
   - args: []
     narration: 相似を表す式で、頂点がどの順に対応づけられているかを確認する。
     op: identify_correspondence_order
-    result_display: BEQC と DJAL
+    result_display: ABCD と WXYZ
     result_srepr: ''
   - args: []
     narration: 対応する位置にある頂点どうしが対応することから、対応する頂点を答える。
     op: name_corresponding_vertex
-    result_display: L
-    result_srepr: L
+    result_display: Y
+    result_srepr: Y
 visual_svg: null

@@ -26,16 +26,16 @@ meta:
 problem_ref: b9019747aa6e4938
 problem_text: '次の式を因数分解せよ。
 
-  54x² + 63x'
+  54n² + 63n'
 sub_questions:
 - answer:
-    display: 9x(6x + 7)
+    display: 9n(6n + 7)
     kind: symbolic
-    srepr: Mul(Integer(9), Symbol('x'), Add(Mul(Integer(6), Symbol('x')), Integer(7)))
+    srepr: Mul(Integer(9), Symbol('n'), Add(Mul(Integer(6), Symbol('n')), Integer(7)))
   cause_tags: []
   concept_tags:
   - polynomial.factor_common
-  explanation: まず、各項に共通する因数をかっこの外にくくり出す。（9x(6x + 7)）
+  explanation: まず、各項に共通する因数をかっこの外にくくり出す。（9n(6n + 7)）
   hints:
   - 各項に共通する因数をかっこの外にくくり出す。
   label: (1)
@@ -44,6 +44,6 @@ sub_questions:
   - args: []
     narration: 各項に共通する因数をかっこの外にくくり出す。
     op: factor_out_common
-    result_display: 9x(6x + 7)
-    result_srepr: Mul(Integer(9), Symbol('x'), Add(Mul(Integer(6), Symbol('x')), Integer(7)))
+    result_display: 9n(6n + 7)
+    result_srepr: Mul(Integer(9), Symbol('n'), Add(Mul(Integer(6), Symbol('n')), Integer(7)))
 visual_svg: null

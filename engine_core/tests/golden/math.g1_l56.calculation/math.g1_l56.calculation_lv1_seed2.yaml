@@ -24,16 +24,16 @@ meta:
   seed: 2
   signature: cumulative_frequency_value
 problem_ref: 252025be432ba407
-problem_text: 次の度数分布表で、7分以上19分未満の階級までの累積度数を求めよ。〔階級と度数：7分以上13分未満…13人、13分以上19分未満…13人、19分以上25分未満…3人、25分以上31分未満…14人〕。
+problem_text: 次の度数分布表で、20分以上30分未満の階級までの累積度数を求めよ。〔階級と度数：10分以上20分未満…13人、20分以上30分未満…14人、30分以上40分未満…13人、40分以上50分未満…3人〕。
 sub_questions:
 - answer:
-    display: '26'
+    display: '27'
     kind: symbolic
-    srepr: Integer(26)
+    srepr: Integer(27)
   cause_tags: []
   concept_tags:
   - cumulative_frequency.compute
-  explanation: まず、いちばん小さい階級から対象の階級まで、度数を順に足し合わせる。（26）
+  explanation: まず、いちばん小さい階級から対象の階級まで、度数を順に足し合わせる。（27）
   hints:
   - いちばん小さい階級から対象の階級まで、度数を順に足し合わせる。
   label: (1)
@@ -42,6 +42,6 @@ sub_questions:
   - args: []
     narration: いちばん小さい階級から対象の階級まで、度数を順に足し合わせる。
     op: accumulate_frequency
-    result_display: '26'
-    result_srepr: Integer(26)
+    result_display: '27'
+    result_srepr: Integer(27)
 visual_svg: null

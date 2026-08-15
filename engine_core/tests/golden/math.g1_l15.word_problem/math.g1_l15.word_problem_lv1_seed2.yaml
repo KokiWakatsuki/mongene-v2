@@ -24,20 +24,20 @@ meta:
   seed: 2
   signature: word_problem_expression_distance
 problem_ref: 2a401a2991ac8bd3
-problem_text: '時速39kmでt時間走る。
+problem_text: '時速8kmでt時間ジョギングで進む。
 
   進む道のりを、tを使った式で表せ。'
 sub_questions:
 - answer:
-    display: 39t
+    display: 8t
     kind: symbolic
-    srepr: Mul(Integer(39), Symbol('t'))
+    srepr: Mul(Integer(8), Symbol('t'))
   cause_tags: []
   concept_tags:
   - letter_expr.word_problem_distance_letter
   explanation: 'まず、速さに時間をかけると、道のりになる。（速さ × 時間 = 道のり）
 
-    次に、数を文字の前に書き、乗法の記号 × を省いて表す。（39t）'
+    次に、数を文字の前に書き、乗法の記号 × を省いて表す。（8t）'
   hints:
   - 速さに時間をかけると、道のりになる。
   label: (1)
@@ -51,6 +51,6 @@ sub_questions:
   - args: []
     narration: 数を文字の前に書き、乗法の記号 × を省いて表す。
     op: apply_product_rule
-    result_display: 39t
-    result_srepr: Mul(Integer(39), Symbol('t'))
+    result_display: 8t
+    result_srepr: Mul(Integer(8), Symbol('t'))
 visual_svg: null

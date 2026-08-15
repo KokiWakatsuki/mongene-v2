@@ -14,13 +14,19 @@ levels:
     signature: midpoint_connector_length
     recipe: math.midpoint_connector_length
     params:
-      side_domain: {int_range: [1, 400]}
+      # **紙の図形の辺の長さ（BC は 6〜40cm の偶数）。** 前は 1〜400 で
+      # 「BC=317cm」のような教材には出てこない大きさが出ていた。
+      # 偶数に限るのは、答えが半分なので奇数だと 7.5cm になるため
+      # （recipe が 2 倍する＝ここは半分の値の域）。
+      half_domain: {int_range: [3, 20]}
     # 図形の寸法を教材の大きさに戻した結果、組の数が減った（`statement_size`）。
     # 数を現実に戻すのが先で、重複は仕様として宣言する。
-    dup_rate_max: 0.5
+    dup_rate_max: 0.9
     dup_rate_reason: |
       中点連結定理の求値は「残りの辺 N cm → その半分」なので、変えられるのは N だけ。
-      図形の寸法を教材の大きさに戻すと N は約100通り（実測 0.42）。
+      図形の寸法を教材の大きさ（6〜40cm の偶数＝18通り）に戻すと、100 seed では
+      ほとんどが重なる（実測 0.82・相異18通り）。**数を現実に戻すほうを優先した**——
+      317cm の中点連結定理は実物の教材に存在しない。
       頂点名は変わるが、同じ問題の書き換えなので dup_key には入れない。
     given: [condition]
     asked: [value]

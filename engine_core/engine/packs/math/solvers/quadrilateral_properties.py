@@ -109,9 +109,17 @@ def special_parallelogram_diagonal_value(shape: object, value: object) -> Soluti
     sh = str(shape)
     v = sympy.sympify(str(value))
     if sh == "rhombus":
-        result = sympy.Integer(90)
-        disp = f"{sympy.sstr(result)}°"
-        narration = "ひし形の対角線は垂直に交わることから、その交点にできる角の大きさを求める。"
+        # **与えられた対角線の長さを使う問いにする。** 前は答えが 90° だけで、
+        # 本文の「AC=24cm」がどこにも使われない飾りになっていた（実物の問題は
+        # 与件を必ず使う）。ひし形も対角線がそれぞれの中点で交わるので、
+        # 半分の長さと直角の両方を問える。
+        half = sympy.Rational(v, 2)
+        result = sympy.Tuple(half, sympy.Integer(90))
+        disp = f"線分の長さ {fmt_measure(half)}、角の大きさ 90°"
+        narration = (
+            "ひし形の対角線はそれぞれの中点で交わり、しかも垂直に交わることから、"
+            "交点から頂点までの長さと、交点にできる角の大きさを求める。"
+        )
     else:
         result = sympy.Rational(v, 2)
         disp = fmt_measure(result)

@@ -33,8 +33,13 @@ levels:
     signature: mean_from_grouped_table
     recipe: math.mean_from_grouped_table
     params:
-      class_start_domain: {int_range: [0, 20]}
-      class_width_domain: {int_range: [5, 10]}
+      # **階級の幅は候補から引き、下端はその幅の倍数にする。**
+      # 前は幅 5〜10・下端 0〜20 を独立に引いていたので「3分以上13分未満」
+      # （幅10なのに3から始まる）や幅9（階級値が 77/2 の分数）が出ていた。
+      # 実物は 0・10・20…から始まり、幅は 5・10・20 のどれか。
+      # 度数は recipe 側で単峰に並べ替える（3・12・2・8 のギザギザを避ける）。
+      class_width_candidates: [5, 10, 20]
+      class_start_max: 40
       frequency_domain: {int_range: [1, 15]}
     given: [expressions]
     asked: [value]

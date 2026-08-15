@@ -24,18 +24,18 @@ meta:
   seed: 1
   signature: zigzag_angle_sum_g2_l32
 problem_ref: 2b8eb96f249fb990
-problem_text: 2直線ℓ、mが平行である。折れ曲がった線の途中の角がそれぞれ35°、29°であるとき、補助線をひいて∠xの大きさを求めよ。
+problem_text: 2直線ℓ、mが平行である。折れ曲がった線の途中の角がそれぞれ71°、32°であるとき、補助線をひいて∠xの大きさを求めよ。
 sub_questions:
 - answer:
-    display: '64'
+    display: '103'
     kind: symbolic
-    srepr: Integer(64)
+    srepr: Integer(103)
   cause_tags: []
   concept_tags:
   - angle_pair.solve_zigzag
   explanation: 'まず、折れ曲がった点を通り、2直線に平行な補助線をひく。（2直線に平行な補助線）
 
-    次に、補助線で分けられた2つの角がそれぞれ錯角として等しいことから、求める角の大きさを合計して決める。（64）'
+    次に、補助線で分けられた2つの角がそれぞれ錯角として等しいことから、求める角の大きさを合計して決める。（103）'
   hints:
   - 折れ曲がった点を通り、2直線に平行な補助線をひく。
   label: (1)
@@ -49,6 +49,6 @@ sub_questions:
   - args: []
     narration: 補助線で分けられた2つの角がそれぞれ錯角として等しいことから、求める角の大きさを合計して決める。
     op: sum_alternate_angles
-    result_display: '64'
-    result_srepr: Integer(64)
+    result_display: '103'
+    result_srepr: Integer(103)
 visual_svg: null

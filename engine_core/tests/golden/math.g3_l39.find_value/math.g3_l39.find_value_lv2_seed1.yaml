@@ -24,18 +24,18 @@ meta:
   seed: 1
   signature: similarity_ratio_transfer
 problem_ref: 548fd983f25a17f7
-problem_text: 三角形JQBと三角形CMHは相似で、相似比は 7:9 である。JQ=35cm のとき、対応する辺CMの長さを求めよ。
+problem_text: 三角形JKLと三角形UVWは相似で、相似比は 7:5 である。JK=28cm のとき、対応する辺UVの長さを求めよ。
 sub_questions:
 - answer:
-    display: '45'
+    display: '20'
     kind: symbolic
-    srepr: Integer(45)
+    srepr: Integer(20)
   cause_tags: []
   concept_tags:
   - similarity.ratio_transfer
-  explanation: 'まず、2つの図形の相似比と、わかっている辺の長さを読み取る。（相似比 7:9、辺の長さ 35）
+  explanation: 'まず、2つの図形の相似比と、わかっている辺の長さを読み取る。（相似比 7:5、辺の長さ 28）
 
-    次に、相似な図形では対応する辺の長さの比が相似比に等しいことから、対応する辺の長さを求める。（45）'
+    次に、相似な図形では対応する辺の長さの比が相似比に等しいことから、対応する辺の長さを求める。（20）'
   hints:
   - 2つの図形の相似比と、わかっている辺の長さを読み取る。
   label: (1)
@@ -44,11 +44,11 @@ sub_questions:
   - args: []
     narration: 2つの図形の相似比と、わかっている辺の長さを読み取る。
     op: identify_similarity_ratio
-    result_display: 相似比 7:9、辺の長さ 35
+    result_display: 相似比 7:5、辺の長さ 28
     result_srepr: ''
   - args: []
     narration: 相似な図形では対応する辺の長さの比が相似比に等しいことから、対応する辺の長さを求める。
     op: apply_similarity_ratio
-    result_display: '45'
-    result_srepr: Integer(45)
+    result_display: '20'
+    result_srepr: Integer(20)
 visual_svg: null

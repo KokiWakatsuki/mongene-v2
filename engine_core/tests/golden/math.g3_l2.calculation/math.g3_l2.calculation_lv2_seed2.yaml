@@ -26,20 +26,20 @@ meta:
 problem_ref: a7f39b2f55a4a837
 problem_text: '次の式を展開せよ。
 
-  (3y + 6)(3y + 5)'
+  (3p + 6)(3p + 5)'
 sub_questions:
 - answer:
-    display: 9y² + 33y + 30
+    display: 9p² + 33p + 30
     kind: symbolic
-    srepr: Add(Mul(Integer(9), Pow(Symbol('y'), Integer(2))), Mul(Integer(33), Symbol('y')), Integer(30))
+    srepr: Add(Mul(Integer(9), Pow(Symbol('p'), Integer(2))), Mul(Integer(33), Symbol('p')), Integer(30))
   cause_tags: []
   concept_tags:
   - polynomial.expand_product
-  explanation: 'まず、分配法則で、前のかっこの各項を後ろのかっこの各項にすべてかける。（9y² + 15y + 18y + 30）
+  explanation: 'まず、分配法則で、前のかっこの各項を後ろのかっこの各項にすべてかける。（9p² + 15p + 18p + 30）
 
-    次に、文字の1次の項どうしを集める。（9y² + (15 + 18)y + 30）
+    次に、文字の1次の項どうしを集める。（9p² + (15 + 18)p + 30）
 
-    最後に、同類項をまとめて計算する。（9y² + 33y + 30）'
+    最後に、同類項をまとめて計算する。（9p² + 33p + 30）'
   hints:
   - 分配法則で、前のかっこの各項を後ろのかっこの各項にすべてかける。
   - 文字の1次の項どうしを集める。
@@ -49,16 +49,16 @@ sub_questions:
   - args: []
     narration: 分配法則で、前のかっこの各項を後ろのかっこの各項にすべてかける。
     op: expand_all_products
-    result_display: 9y² + 15y + 18y + 30
+    result_display: 9p² + 15p + 18p + 30
     result_srepr: ''
   - args: []
     narration: 文字の1次の項どうしを集める。
     op: collect_x_terms
-    result_display: 9y² + (15 + 18)y + 30
+    result_display: 9p² + (15 + 18)p + 30
     result_srepr: ''
   - args: []
     narration: 同類項をまとめて計算する。
     op: combine_like_terms
-    result_display: 9y² + 33y + 30
-    result_srepr: Add(Mul(Integer(9), Pow(Symbol('y'), Integer(2))), Mul(Integer(33), Symbol('y')), Integer(30))
+    result_display: 9p² + 33p + 30
+    result_srepr: Add(Mul(Integer(9), Pow(Symbol('p'), Integer(2))), Mul(Integer(33), Symbol('p')), Integer(30))
 visual_svg: null

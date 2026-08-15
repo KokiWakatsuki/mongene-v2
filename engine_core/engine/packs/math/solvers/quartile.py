@@ -181,7 +181,12 @@ def five_number_summary(data: object) -> Solution:
     q3 = _median_of(upper)
     v_min = sympy.Integer(ordered[0])
     v_max = sympy.Integer(ordered[-1])
-    disp = f"最小値 {v_min}、最大値 {v_max}、第1四分位数 {q1}、第3四分位数 {q3}"
+    # 四分位数は「量」なので x.5 は小数で書く（ここだけ `_fmt_half` を
+    # 通しておらず、「第3四分位数 71/2」と仮分数で出ていた）。
+    disp = (
+        f"最小値 {v_min}、最大値 {v_max}、"
+        f"第1四分位数 {_fmt_half(q1)}、第3四分位数 {_fmt_half(q3)}"
+    )
     srepr = sympy.srepr(sympy.Tuple(v_min, v_max, q1, q3))
     steps = [
         Step(

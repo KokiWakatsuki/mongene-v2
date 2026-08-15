@@ -26,12 +26,12 @@ meta:
 problem_ref: 610f815b41a5c8a7
 problem_text: '次の式を展開せよ。
 
-  (m - 8)(m - 1)'
+  (k - 8)(k - 1)'
 sub_questions:
 - answer:
-    display: m² - 9m + 8
+    display: k² - 9k + 8
     kind: symbolic
-    srepr: Add(Pow(Symbol('m'), Integer(2)), Mul(Integer(-1), Integer(9), Symbol('m')), Integer(8))
+    srepr: Add(Pow(Symbol('k'), Integer(2)), Mul(Integer(-1), Integer(9), Symbol('k')), Integer(8))
   cause_tags: []
   concept_tags:
   - polynomial.expand_formula_sum_product
@@ -39,7 +39,7 @@ sub_questions:
 
     次に、2つの定数の和と積を求める。（和 -9、積 8）
 
-    最後に、乗法公式にあてはめて展開した式を書く。（m² - 9m + 8）'
+    最後に、乗法公式にあてはめて展開した式を書く。（k² - 9k + 8）'
   hints:
   - それぞれの定数の符号を確かめる。
   - 2つの定数の和と積を求める。
@@ -59,6 +59,6 @@ sub_questions:
   - args: []
     narration: 乗法公式にあてはめて展開した式を書く。
     op: write_expansion
-    result_display: m² - 9m + 8
-    result_srepr: Add(Pow(Symbol('m'), Integer(2)), Mul(Integer(-1), Integer(9), Symbol('m')), Integer(8))
+    result_display: k² - 9k + 8
+    result_srepr: Add(Pow(Symbol('k'), Integer(2)), Mul(Integer(-1), Integer(9), Symbol('k')), Integer(8))
 visual_svg: null

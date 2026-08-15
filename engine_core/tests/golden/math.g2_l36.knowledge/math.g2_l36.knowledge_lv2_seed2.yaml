@@ -24,25 +24,25 @@ meta:
   seed: 2
   signature: congruence_corresponding_pair
 problem_ref: f44a5b60445601bc
-problem_text: 三角形KLA≡三角形JFGであるとき、∠Aに対応する角と、辺LAに対応する辺をそれぞれ答えよ。
+problem_text: 三角形KLM≡三角形XYZであるとき、∠Mに対応する角と、辺KLに対応する辺をそれぞれ答えよ。
 sub_questions:
 - answer:
-    correct: ∠Aに対応する角は∠G、辺LAに対応する辺は辺FG
+    correct: ∠Mに対応する角は∠Z、辺KLに対応する辺は辺XY
     distractors:
-    - ∠Aに対応する角は∠J、辺LAに対応する辺は辺FG
-    - ∠Aに対応する角は∠G、辺LAに対応する辺は辺JF
+    - ∠Mに対応する角は∠X、辺KLに対応する辺は辺XY
+    - ∠Mに対応する角は∠Z、辺KLに対応する辺は辺YZ
     fact_id: congruence.identify_corresponding_pair
     kind: choice
   cause_tags: []
   concept_tags:
   - congruence.identify_corresponding_pair
-  explanation: 'まず、合同を表す式で、角の頂点がどの位置に対応づけられているかを確認する。（KLA と JFG）
+  explanation: 'まず、合同を表す式で、角の頂点がどの位置に対応づけられているかを確認する。（KLM と XYZ）
 
-    次に、対応する位置にある頂点にできる角が、対応する角になることから読み取る。（∠G）
+    次に、対応する位置にある頂点にできる角が、対応する角になることから読み取る。（∠Z）
 
-    次に、合同を表す式で、辺の両端の頂点がどの位置に対応づけられているかを確認する。（KLA と JFG）
+    次に、合同を表す式で、辺の両端の頂点がどの位置に対応づけられているかを確認する。（KLM と XYZ）
 
-    最後に、対応する位置にある頂点どうしが結ぶ辺が、対応する辺になることから読み取る。（辺FG）'
+    最後に、対応する位置にある頂点どうしが結ぶ辺が、対応する辺になることから読み取る。（辺XY）'
   hints:
   - 合同を表す式で、角の頂点がどの位置に対応づけられているかを確認する。
   - 対応する位置にある頂点にできる角が、対応する角になることから読み取る。
@@ -53,21 +53,21 @@ sub_questions:
   - args: []
     narration: 合同を表す式で、角の頂点がどの位置に対応づけられているかを確認する。
     op: identify_angle_correspondence
-    result_display: KLA と JFG
+    result_display: KLM と XYZ
     result_srepr: ''
   - args: []
     narration: 対応する位置にある頂点にできる角が、対応する角になることから読み取る。
     op: name_corresponding_angle
-    result_display: ∠G
-    result_srepr: ∠G
+    result_display: ∠Z
+    result_srepr: ∠Z
   - args: []
     narration: 合同を表す式で、辺の両端の頂点がどの位置に対応づけられているかを確認する。
     op: identify_side_correspondence
-    result_display: KLA と JFG
+    result_display: KLM と XYZ
     result_srepr: ''
   - args: []
     narration: 対応する位置にある頂点どうしが結ぶ辺が、対応する辺になることから読み取る。
     op: name_corresponding_side
-    result_display: 辺FG
-    result_srepr: 辺FG
+    result_display: 辺XY
+    result_srepr: 辺XY
 visual_svg: null

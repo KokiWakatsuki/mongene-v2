@@ -69,17 +69,26 @@ def _radical_construct(mode: str, rng: Rng) -> tuple[str, str]:
     """mode ごとに (expr_str[sympy用], given_display[未簡約の表示]) を構成する。"""
     if mode == "square_of_root":
         # DOF が n（と2形式）のみで少ないため n を広くとる（dup 分散）。
-        form = str(draw(["squared", "sqrt_square"], rng))
+        # √(k²) 側は k を 30 までに絞った（√2209 を出さない）ぶん候補が少ないので、
+        # (√n)² 側を 2 倍の重みで引く（候補数の偏りで dup が跳ねるのを防ぐ）。
+        form = str(draw(["squared", "squared", "sqrt_square"], rng))
         if form == "squared":
-            n = int(draw({"int_set": [k for k in range(2, 300)
+            # (√n)² の n は 500 まで（平方数は除く）。√(k²) 側を 25 までに
+            # 狭めたぶんの組合せをこちらの幅で戻す。
+            n = int(draw({"int_set": [k for k in range(2, 500)
                                       if int(k**0.5) ** 2 != k]}, rng))
             return f"(sqrt({n}))**2", f"(√{n})²"
-        k = int(draw({"int_set": list(range(2, 60))}, rng))
+        # **√(k²) の k は 25 まで。** 前は 59 まで引いていて「√2209 = 47」という、
+        # 4桁の平方数を暗算させる式が出ていた（教科書は √144・√400 のあたり）。
+        k = int(draw({"int_set": list(range(2, 31))}, rng))
         return f"sqrt({k * k})", f"√{k * k}"
 
     if mode == "root_mult":
-        a = int(draw({"int_set": list(range(2, 21))}, rng))
-        b = int(draw({"int_set": list(range(2, 21))}, rng))
+        # **根号の中に平方数を置かない**（教科書は √9 とは書かず 3 と書く）。
+        # 前は 2〜20 をそのまま引いていて「√9 × √16」「√15 × √9」が出ていた。
+        radicands = [n for n in range(2, 21) if int(n**0.5) ** 2 != n]
+        a = int(draw({"int_set": radicands}, rng))
+        b = int(draw({"int_set": radicands}, rng))
         return f"sqrt({a})*sqrt({b})", f"√{a} × √{b}"
 
     if mode == "root_mult_div":
@@ -100,7 +109,9 @@ def _radical_construct(mode: str, rng: Rng) -> tuple[str, str]:
         # 「3√4617」（=3√(9²×57)）のように、中学の手に負えない素因数分解を
         # 要求する式が出ていた（教科書は √72・√180 のあたり）。
         krange = list(range(2, 6)) if mode == "simplify_root" else list(range(2, 10))
-        n_max = 300 if mode == "simplify_root" else 800
+        # **大きいほうも 400 まで。** 800 だと「√688 = 4√43」のように、
+        # 43 という素因数を見つけさせる式が出ていた（教科書は √180・√320 まで）。
+        n_max = 300 if mode == "simplify_root" else 400
         pairs = [(k, m) for k in krange for m in _SQUAREFREE if k * k * m <= n_max]
         c = int(draw({"int_set": list(range(1, 10))}, rng))
         k, m = pairs[int(draw({"int_set": list(range(len(pairs)))}, rng))]

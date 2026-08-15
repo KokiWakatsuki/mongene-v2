@@ -23,7 +23,7 @@ meta:
     unit: g1_l21
   seed: 2
   signature: equality_multi
-problem_ref: 6843f1173f46d482
+problem_ref: 507c10f5d01bc1ef
 problem_text: '等式の性質を使って、次の方程式を解け。
 
   7x - 4 = -32'
@@ -37,9 +37,12 @@ sub_questions:
   - equation.solve_by_equality_property_multi
   explanation: 'まず、左辺を x の項だけにするために、両辺に同じ数をたすかひくかする。（7x - 4 + 4 = -32 + 4）
 
-    次に、等式の性質を使い、両辺を x の係数でわる。（x = -4）'
+    次に、両辺の同類項をそれぞれまとめて、ax = b の形にする。（7x = -28）
+
+    最後に、等式の性質を使い、両辺を x の係数でわる。（x = -4）'
   hints:
   - 左辺を x の項だけにするために、両辺に同じ数をたすかひくかする。
+  - 両辺の同類項をそれぞれまとめて、ax = b の形にする。
   label: (1)
   prompt_text: 解を求めなさい。
   solution_steps:
@@ -47,6 +50,11 @@ sub_questions:
     narration: 左辺を x の項だけにするために、両辺に同じ数をたすかひくかする。
     op: subtract_constant_both_sides
     result_display: 7x - 4 + 4 = -32 + 4
+    result_srepr: Integer(-4)
+  - args: []
+    narration: 両辺の同類項をそれぞれまとめて、ax = b の形にする。
+    op: combine_like_terms
+    result_display: 7x = -28
     result_srepr: Integer(-4)
   - args: []
     narration: 等式の性質を使い、両辺を x の係数でわる。

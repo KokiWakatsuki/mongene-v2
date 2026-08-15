@@ -26,18 +26,18 @@ meta:
 problem_ref: c2514bef45f2a960
 problem_text: '次の式を計算せよ。
 
-  √15 × √5'
+  √8 × √17'
 sub_questions:
 - answer:
-    display: 5√3
+    display: 2√34
     kind: symbolic
-    srepr: Mul(Integer(5), Pow(Integer(3), Rational(1, 2)))
+    srepr: Mul(Integer(2), Pow(Integer(34), Rational(1, 2)))
   cause_tags: []
   concept_tags:
   - radical.multiply_divide
-  explanation: 'まず、根号の積を、1つの根号の中の積にまとめる。（√75）
+  explanation: 'まず、根号の積を、1つの根号の中の積にまとめる。（√136）
 
-    次に、根号の中を素因数分解し、平方の因数を根号の外に出す。（5√3）'
+    次に、根号の中を素因数分解し、平方の因数を根号の外に出す。（2√34）'
   hints:
   - 根号の積を、1つの根号の中の積にまとめる。
   label: (1)
@@ -46,11 +46,11 @@ sub_questions:
   - args: []
     narration: 根号の積を、1つの根号の中の積にまとめる。
     op: multiply_under_one_root
-    result_display: √75
+    result_display: √136
     result_srepr: ''
   - args: []
     narration: 根号の中を素因数分解し、平方の因数を根号の外に出す。
     op: simplify_root
-    result_display: 5√3
-    result_srepr: Mul(Integer(5), Pow(Integer(3), Rational(1, 2)))
+    result_display: 2√34
+    result_srepr: Mul(Integer(2), Pow(Integer(34), Rational(1, 2)))
 visual_svg: null

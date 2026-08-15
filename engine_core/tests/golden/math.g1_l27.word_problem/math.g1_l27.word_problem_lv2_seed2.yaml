@@ -23,7 +23,7 @@ meta:
     unit: g1_l27
   seed: 2
   signature: word_problem_round_trip_distance
-problem_ref: 0ce754b6f1b9e430
+problem_ref: 6265ee4100a26c30
 problem_text: '学校から体育館まで、行きは時速10km、帰りは同じ道を時速15kmの速さで進んだところ、進むのにかかった時間は合わせて4時間だった。
 
   学校から体育館までの道のりを x km とする。
@@ -66,7 +66,7 @@ sub_questions:
   - equation.word_problem_round_trip
   explanation: 'まず、分母の最小公倍数を両辺にかけて、分母をはらう。（x = 24）
 
-    次に、同類項をまとめ、x の係数で両辺をわって解を求める。（x = 24）'
+    次に、等式の性質を使い、両辺を x の係数でわる。（x = 24）'
   hints:
   - 分母の最小公倍数を両辺にかけて、分母をはらう。
   label: (2)
@@ -78,8 +78,8 @@ sub_questions:
     result_display: x = 24
     result_srepr: Integer(24)
   - args: []
-    narration: 同類項をまとめ、x の係数で両辺をわって解を求める。
-    op: combine_and_solve
+    narration: 等式の性質を使い、両辺を x の係数でわる。
+    op: divide_both_sides
     result_display: x = 24
     result_srepr: Integer(24)
 visual_svg: null

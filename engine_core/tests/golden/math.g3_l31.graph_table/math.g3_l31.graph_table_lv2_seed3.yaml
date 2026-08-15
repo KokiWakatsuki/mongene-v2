@@ -24,7 +24,7 @@ meta:
   seed: 3
   signature: motion_area_time_graph_segment
 problem_ref: f1093004a7f0f27c
-problem_text: 1辺が18cmの正方形DFBGで、点QはDを出発し、辺DF上を毎秒3cmの速さでFまで動く。出発してからの時間をx秒、三角形DQGの面積をy cm²とするとき、xが0から6まで変化するときのxとyの関係を表すグラフをかけ。
+problem_text: 1辺が18cmの正方形MNPQで、点VはMを出発し、辺MN上を毎秒3cmの速さでNまで動く。出発してからの時間をx秒、三角形MVQの面積をy cm²とするとき、xが0から6まで変化するときのxとyの関係を表すグラフをかけ。
 sub_questions:
 - answer:
     features:

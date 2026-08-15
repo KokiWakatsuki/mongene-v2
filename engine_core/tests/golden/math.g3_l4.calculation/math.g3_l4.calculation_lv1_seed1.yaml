@@ -26,18 +26,18 @@ meta:
 problem_ref: cf190174c269406b
 problem_text: '次の式を展開せよ。
 
-  (t - 28)²'
+  (t + 9)²'
 sub_questions:
 - answer:
-    display: t² - 56t + 784
+    display: t² + 18t + 81
     kind: symbolic
-    srepr: Add(Pow(Symbol('t'), Integer(2)), Mul(Integer(-1), Integer(56), Symbol('t')), Integer(784))
+    srepr: Add(Pow(Symbol('t'), Integer(2)), Mul(Integer(18), Symbol('t')), Integer(81))
   cause_tags: []
   concept_tags:
   - polynomial.expand_formula_square
-  explanation: 'まず、はじめの項の平方・積の2倍・終わりの項の平方を求める。（t²、-56t、784）
+  explanation: 'まず、はじめの項の平方・積の2倍・終わりの項の平方を求める。（t²、18t、81）
 
-    次に、乗法公式にあてはめて展開した式を書く。（t² - 56t + 784）'
+    次に、乗法公式にあてはめて展開した式を書く。（t² + 18t + 81）'
   hints:
   - はじめの項の平方・積の2倍・終わりの項の平方を求める。
   label: (1)
@@ -46,11 +46,11 @@ sub_questions:
   - args: []
     narration: はじめの項の平方・積の2倍・終わりの項の平方を求める。
     op: compute_square_terms
-    result_display: t²、-56t、784
+    result_display: t²、18t、81
     result_srepr: ''
   - args: []
     narration: 乗法公式にあてはめて展開した式を書く。
     op: write_expansion
-    result_display: t² - 56t + 784
-    result_srepr: Add(Pow(Symbol('t'), Integer(2)), Mul(Integer(-1), Integer(56), Symbol('t')), Integer(784))
+    result_display: t² + 18t + 81
+    result_srepr: Add(Pow(Symbol('t'), Integer(2)), Mul(Integer(18), Symbol('t')), Integer(81))
 visual_svg: null

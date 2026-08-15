@@ -24,7 +24,7 @@ meta:
   seed: 2
   signature: motion_area_time_graph_segment
 problem_ref: e3f4510cf02b6a68
-problem_text: 1辺が24cmの正方形NKEMで、点DはNを出発し、辺NK上を毎秒6cmの速さでKまで動く。出発してからの時間をx秒、三角形NDMの面積をy cm²とするとき、xが0から4まで変化するときのxとyの関係を表すグラフをかけ。
+problem_text: 1辺が24cmの正方形NPQRで、点TはNを出発し、辺NP上を毎秒6cmの速さでPまで動く。出発してからの時間をx秒、三角形NTRの面積をy cm²とするとき、xが0から4まで変化するときのxとyの関係を表すグラフをかけ。
 sub_questions:
 - answer:
     features:

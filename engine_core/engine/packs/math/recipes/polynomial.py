@@ -719,7 +719,14 @@ def _sympy_poly_x(terms: list[tuple[int, int]]) -> str:
 
 
 def _fmt_poly_x_terms(terms: list[tuple[int, int]]) -> str:
-    """x の項 [(係数, 指数), ...] を教材表記に（例 [(2,2),(-5,1),(1,0)] -> "2x² - 5x + 1")。"""
+    """x の項 [(係数, 指数), ...] を教材表記に（例 [(2,2),(-5,1),(1,0)] -> "2x² - 5x + 1")。
+
+    **係数が 0 の項は書かない。** `x² + 0x - 25 = 0` `y = 0x + 16` のような式が
+    出ていた（実物にこの書き方は無い）。項がすべて消えたときだけ "0" を返す。
+    """
+    terms = [(c, e) for c, e in terms if c != 0]
+    if not terms:
+        return "0"
     out = ""
     for i, (c, e) in enumerate(terms):
         mag = _fmt_monomial_factor(abs(c), {"x": e})
@@ -1228,7 +1235,9 @@ _EXPAND_CONCEPTS = [
     "polynomial.proof_diff_squares_linear",
 ]
 
-_EXPAND_VARS = ["x", "a", "y", "m", "t"]
+# 展開の練習で使う文字（(x+a)² のように、数を教材の大きさに絞ったぶん
+# 文字の種類で組合せを確保する）。
+_EXPAND_VARS = ["x", "a", "y", "m", "t", "n", "b", "p", "k", "s"]
 _EXPAND_VAR_PAIRS = [("a", "b"), ("x", "y"), ("m", "n"), ("p", "q"), ("s", "t")]
 
 
@@ -1314,7 +1323,9 @@ def _expand_construct(mode: str, rng: Rng, p: dict[str, Any]) -> tuple[str, str]
     if mode == "square_binomial":
         var = str(draw(_EXPAND_VARS, rng))
         # (x+a)² は自由度が a と文字種のみで少ない → a を広くとって dup を分散する。
-        a = int(draw({"int_set": [n for n in range(-30, 31) if n != 0]}, rng))
+        # **ただし ±18 まで。** ±30 まで引いていて「(t - 28)² = t² - 56t + 784」
+        # という、乗法公式の練習としては数が大きすぎる式が出ていた。
+        a = int(draw({"int_set": [n for n in range(-18, 19) if n != 0]}, rng))
         expr = f"({var}+({a}))**2"
         disp = f"({var}{_const_tail(a)})²"
         return expr, disp
@@ -1581,8 +1592,21 @@ def evaluate_arithmetic_via_identity(ctx: CellContext, rng: Rng) -> MR:
 
 def _evaluate_diff_of_squares_arithmetic(ctx: CellContext, rng: Rng, mode: str) -> MR:
     p = ctx.spec_level.params
-    a = int(draw(p["a_domain"], rng))
-    b_cands = [v for v in _domain_candidates(p["b_domain"]) if v != a]
+    # **「工夫して」と言う以上、工夫が効く組だけにする。** a,b を無関係に引いて
+    # いたので「80² - 9²」（a+b=89・a-b=71 でどちらもきりが悪い）が出ていた。
+    # 実物は 98²-2²（a+b=100）や 51²-49²（a-b=2）のように、和か差の一方が
+    # 10の倍数になっていて暗算できる組を選ぶ。
+    for _ in range(200):
+        a = int(draw(p["a_domain"], rng))
+        b_cands = [
+            v for v in _domain_candidates(p["b_domain"])
+            # b < a（a² - b² が負になる「19² - 31²」は実物の工夫の問題に無い）。
+            if 0 < v < a and ((a + v) % 10 == 0 or (a - v) % 10 == 0 or a - v <= 2)
+        ]
+        if b_cands:
+            break
+    else:
+        raise ValueError("diff_of_squares_arithmetic: 工夫が効く (a,b) を構成できず")
     b = int(draw({"int_set": b_cands}, rng))
 
     expression = f"{a}² - {b}²"
@@ -1625,7 +1649,12 @@ def _evaluate_diff_of_squares_arithmetic(ctx: CellContext, rng: Rng, mode: str) 
 def _evaluate_symmetric_sum_of_squares(ctx: CellContext, rng: Rng, mode: str) -> MR:
     p = ctx.spec_level.params
     s = int(draw(p["sum_domain"], rng))
-    prod_cands = _domain_candidates(p["product_domain"])
+    # **実数の x, y が存在する組だけを引く。** 和と積を独立に引いていたので
+    # 「x + y = -1, xy = 8 のとき x² + y²」→ 答え -15 が出ていた。
+    # 実数の平方の和が負になることはなく、この条件を満たす x, y は存在しない
+    # （判別式 s² - 4p < 0）。数学として成り立たない問題だった。
+    prod_cands = [v for v in _domain_candidates(p["product_domain"])
+                  if s * s - 4 * int(v) >= 0]
     prod = int(draw({"int_set": prod_cands}, rng))
 
     equation_a = f"x + y = {s}"

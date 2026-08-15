@@ -24,7 +24,7 @@ meta:
   seed: 2
   signature: knowledge_classify_line_signs
 problem_ref: 47cb7115f3a26866
-problem_text: 1次関数 y = 19 - 4x のグラフのようすとして正しいものを、次のア〜エから選べ。ア 右上がりで、y 軸の正の部分で y 軸と交わる イ 右上がりで、y 軸の負の部分で y 軸と交わる ウ 右下がりで、y 軸の正の部分で y 軸と交わる エ 右下がりで、y 軸の負の部分で y 軸と交わる
+problem_text: 1次関数 y = 4 - x のグラフのようすとして正しいものを、次のア〜エから選べ。ア 右上がりで、y 軸の正の部分で y 軸と交わる イ 右上がりで、y 軸の負の部分で y 軸と交わる ウ 右下がりで、y 軸の正の部分で y 軸と交わる エ 右下がりで、y 軸の負の部分で y 軸と交わる
 sub_questions:
 - answer:
     correct: 右下がりで、y 軸の正の部分で y 軸と交わる

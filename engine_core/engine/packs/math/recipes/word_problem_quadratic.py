@@ -257,7 +257,12 @@ def _scene_square_relation(p: Mapping[str, Any], rng: Rng) -> QuadScene:
     )
 
 
-_RECTANGLE_SCENES = ["長方形", "長方形の紙", "長方形の板", "長方形の花だん", "長方形の畑"]
+# **cm² で語れる題材だけにする。** 「面積が312cm²の畑」「456cm²の花だん」が出ていた
+# （畑・花だんは m² で測る大きさ）。紙・板・カード・写真は cm² が自然。
+_RECTANGLE_SCENES = [
+    "長方形", "長方形の紙", "長方形の板", "長方形のカード", "長方形の写真",
+    "長方形のシール", "長方形のタイル", "長方形の布",
+]
 
 
 def _scene_rectangle_area(p: Mapping[str, Any], rng: Rng) -> QuadScene:

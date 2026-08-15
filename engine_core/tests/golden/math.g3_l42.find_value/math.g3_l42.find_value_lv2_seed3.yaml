@@ -24,31 +24,31 @@ meta:
   seed: 3
   signature: parallel_segment_ratio_length
 problem_ref: 55dffc67bead2dd4
-problem_text: 三角形BAKで、辺BA, BK上に点G, Fがあり、GF∥AKである。BG=11cm, GA=6cm, GF=11cm のとき、辺AKの長さを求めよ。
+problem_text: 三角形BCDで、辺BC, BD上に点E, Fがあり、EF∥CDである。BE=10cm, EC=10cm, EF=12cm のとき、辺CDの長さを求めよ。
 sub_questions:
 - answer:
-    display: '17'
+    display: '24'
     kind: symbolic
-    srepr: Integer(17)
+    srepr: Integer(24)
   cause_tags: []
   concept_tags:
   - parallel_segment.ratio_length
-  explanation: 'まず、GF∥AK であることから、三角形BGFと三角形BAKが相似になることを見つける。（三角形BGF と 三角形BAK）
+  explanation: 'まず、EF∥CD であることから、三角形BEFと三角形BCDが相似になることを見つける。（三角形BEF と 三角形BCD）
 
-    次に、BG:BA=GF:AK が成り立つことから、辺AKの長さを求める。（17）'
+    次に、BE:BC=EF:CD が成り立つことから、辺CDの長さを求める。（24）'
   hints:
-  - GF∥AK であることから、三角形BGFと三角形BAKが相似になることを見つける。
+  - EF∥CD であることから、三角形BEFと三角形BCDが相似になることを見つける。
   label: (1)
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
-    narration: GF∥AK であることから、三角形BGFと三角形BAKが相似になることを見つける。
+    narration: EF∥CD であることから、三角形BEFと三角形BCDが相似になることを見つける。
     op: identify_similar_triangles_from_parallel
-    result_display: 三角形BGF と 三角形BAK
+    result_display: 三角形BEF と 三角形BCD
     result_srepr: ''
   - args: []
-    narration: BG:BA=GF:AK が成り立つことから、辺AKの長さを求める。
+    narration: BE:BC=EF:CD が成り立つことから、辺CDの長さを求める。
     op: apply_parallel_segment_ratio
-    result_display: '17'
-    result_srepr: Integer(17)
+    result_display: '24'
+    result_srepr: Integer(24)
 visual_svg: null

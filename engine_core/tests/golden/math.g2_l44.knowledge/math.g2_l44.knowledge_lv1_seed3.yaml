@@ -29,8 +29,8 @@ sub_questions:
 - answer:
     correct: 斜辺と一つの鋭角がそれぞれ等しい、または、斜辺と他の一辺がそれぞれ等しい、のいずれか
     distractors:
-    - 一つの鋭角と他の一辺がそれぞれ等しいことだけで、合同であるといえる
-    - 斜辺の長さだけが等しいことで、合同であるといえる
+    - 斜辺と一つの鋭角がそれぞれ等しい、または、一つの鋭角と他の一辺がそれぞれ等しい、のいずれか
+    - 斜辺の長さがそれぞれ等しい、または、斜辺と他の一辺がそれぞれ等しい、のいずれか
     fact_id: right_triangle_congruence_conditions.rule.both
     kind: choice
   cause_tags: []

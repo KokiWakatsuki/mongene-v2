@@ -33,6 +33,11 @@ levels:
     signature: classify_quadrilateral_from_diagonal_condition
     recipe: math.classify_quadrilateral_from_diagonal_condition
     params: {}
+    # 同上（頂点名をアルファベット順に直した）。
+    dup_rate_max: 0.5
+    dup_rate_reason: |
+      対角線の条件は「長さが等しいか」「垂直に交わるか」の2×2＝**4通りしかない**。
+      変えられるのはそれと頂点名（連続した文字＝21通り）だけで、実測 0.38。
     given: [statement]
     asked: [choice]
     visual: none

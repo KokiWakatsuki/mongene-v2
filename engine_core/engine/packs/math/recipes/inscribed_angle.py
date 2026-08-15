@@ -24,7 +24,7 @@ from engine.core.contracts import (
 )
 from engine.core.registry import REGISTRY, register_recipe
 from engine.core.rng import Rng, draw
-from engine.packs.math.recipes.letter_expr import _draw_distinct_points
+from engine.packs.math.recipes.letter_expr import _draw_named_figures
 
 
 def _effective_concept_tags(ctx: CellContext) -> list[str]:
@@ -47,7 +47,9 @@ _INSCRIBED_ANGLE_FROM_CENTRAL_CONCEPTS = ["circle.inscribed_angle_from_central"]
 def inscribed_angle_from_central_recipe(ctx: CellContext, rng: Rng) -> MR:
     """中心角から、同じ弧に対する円周角の大きさを求める（g3_l47.find_value Lv1・answer-first）。"""
     p = ctx.spec_level.params
-    po, pa, pb, pp = _draw_distinct_points(4, rng)
+    # 円周上の点はアルファベット順に名づける（実物は「円Oの周上に点P」）。
+    (v,) = _draw_named_figures([4], rng)
+    po, pa, pb, pp = v
     central_angle = int(draw(p["central_angle_domain"], rng))
 
     solver = REGISTRY.solver("math.inscribed_angle_from_central")
@@ -90,7 +92,8 @@ def inscribed_angle_two_chords_intersection_recipe(ctx: CellContext, rng: Rng) -
     2つの円周角から対応する弧を求めたうえで交点の角を求める新規solverを使う。
     """
     p = ctx.spec_level.params
-    pa, pb, pc, pd, pp = _draw_distinct_points(5, rng)
+    (v,) = _draw_named_figures([5], rng)
+    pa, pb, pc, pd, pp = v
     for _ in range(200):
         bac = int(draw(p["angle_domain"], rng))
         acd = int(draw(p["angle_domain"], rng))
@@ -140,7 +143,8 @@ def inscribed_angle_transfer_same_arc_recipe(ctx: CellContext, rng: Rng) -> MR:
     （g3_l48.find_value Lv2・answer-first）。
     """
     p = ctx.spec_level.params
-    pa, pb, pc, pd = _draw_distinct_points(4, rng)
+    (v,) = _draw_named_figures([4], rng)
+    pa, pb, pc, pd = v
     v1 = int(draw(p["angle_domain"], rng))
     v2 = int(draw(p["angle_domain"], rng))
 
@@ -179,7 +183,8 @@ def judge_concyclic_from_angle_recipe(ctx: CellContext, rng: Rng) -> MR:
     あるかを判別する（g3_l48.knowledge Lv2・answer-first）。
     """
     p = ctx.spec_level.params
-    pa, pb, pc, pd = _draw_distinct_points(4, rng)
+    (v,) = _draw_named_figures([4], rng)
+    pa, pb, pc, pd = v
     is_concyclic = bool(draw([True, False], rng))
     for _ in range(200):
         angle_c = int(draw(p["angle_domain"], rng))
@@ -226,7 +231,8 @@ _ARC_PROPORTIONAL_ANGLE_CONCEPTS = ["circle.arc_proportional_angle"]
 def arc_proportional_angle_recipe(ctx: CellContext, rng: Rng) -> MR:
     """弧の長さの倍率から、対応する円周角の大きさを求める（g3_l50.find_value Lv2・answer-first）。"""
     p = ctx.spec_level.params
-    pa, pb, pc, pd = _draw_distinct_points(4, rng)
+    (v,) = _draw_named_figures([4], rng)
+    pa, pb, pc, pd = v
     multiplier = int(draw(p["multiplier_domain"], rng))
     known_angle = int(draw(p["angle_domain"], rng))
 
@@ -288,7 +294,8 @@ def equal_arc_inscribed_angle_recipe(ctx: CellContext, rng: Rng) -> MR:
             break
     else:
         raise ValueError("equal_arc_inscribed_angle_recipe: 有効な分割を構成できず")
-    points = _draw_distinct_points(n, rng)
+    (run,) = _draw_named_figures([n], rng)
+    points = list(run)
     labels = "".join(points)
 
     vertex = points[0]

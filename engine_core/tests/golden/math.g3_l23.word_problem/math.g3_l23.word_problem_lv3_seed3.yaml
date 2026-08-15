@@ -24,26 +24,26 @@ meta:
   seed: 3
   signature: word_problem_rectangle_ratio_side
 problem_ref: a897d2eafbfde7ea
-problem_text: '縦と横の長さの比が1：3である長方形の花だんがあり、その面積は240m²である。
+problem_text: '縦と横の長さの比が1：3である長方形の花だんがあり、その面積は324m²である。
 
   この花だんの縦の長さを、根号を使って表せ。'
 sub_questions:
 - answer:
-    display: 4√5
+    display: 6√3
     kind: symbolic
-    srepr: Mul(Integer(4), Pow(Integer(5), Rational(1, 2)))
+    srepr: Mul(Integer(6), Pow(Integer(3), Rational(1, 2)))
   cause_tags: []
   concept_tags:
   - radical.word_problem_rectangle_ratio_side
   explanation: 'まず、縦の長さを x とおき、比を使って横の長さを x の何倍かで表す。（x）
 
-    次に、縦と横の長さの積が面積になることから、面積の関係を式に表す。（3x² = 240）
+    次に、縦と横の長さの積が面積になることから、面積の関係を式に表す。（3x² = 324）
 
-    次に、両辺を比から出てきた数でわって、縦の長さの2乗の値を求める。（x² = 80）
+    次に、両辺を比から出てきた数でわって、縦の長さの2乗の値を求める。（x² = 108）
 
-    次に、根号の中を素因数分解し、平方の因数を見つける。（√(16 × 5)）
+    次に、根号の中を素因数分解し、平方の因数を見つける。（√(36 × 3)）
 
-    最後に、平方の因数を根号の外に出して a√b の形にする。（4√5）'
+    最後に、平方の因数を根号の外に出して a√b の形にする。（6√3）'
   hints:
   - 縦の長さを x とおき、比を使って横の長さを x の何倍かで表す。
   - 縦と横の長さの積が面積になることから、面積の関係を式に表す。
@@ -60,21 +60,21 @@ sub_questions:
   - args: []
     narration: 縦と横の長さの積が面積になることから、面積の関係を式に表す。
     op: formulate_area_equation
-    result_display: 3x² = 240
+    result_display: 3x² = 324
     result_srepr: ''
   - args: []
     narration: 両辺を比から出てきた数でわって、縦の長さの2乗の値を求める。
     op: isolate_squared_side
-    result_display: x² = 80
+    result_display: x² = 108
     result_srepr: ''
   - args: []
     narration: 根号の中を素因数分解し、平方の因数を見つける。
     op: factor_out_square
-    result_display: √(16 × 5)
+    result_display: √(36 × 3)
     result_srepr: ''
   - args: []
     narration: 平方の因数を根号の外に出して a√b の形にする。
     op: take_root_outside
-    result_display: 4√5
-    result_srepr: Mul(Integer(4), Pow(Integer(5), Rational(1, 2)))
+    result_display: 6√3
+    result_srepr: Mul(Integer(6), Pow(Integer(3), Rational(1, 2)))
 visual_svg: null

@@ -24,18 +24,18 @@ meta:
   seed: 1
   signature: isosceles_base_angle
 problem_ref: fd4f173851238100
-problem_text: AB=ACの二等辺三角形ABCで、底角∠Bの大きさが13°のとき、頂角∠Aの大きさを求めよ。
+problem_text: RS=RTの二等辺三角形RSTで、底角∠Sの大きさが41°のとき、頂角∠Rの大きさを求めよ。
 sub_questions:
 - answer:
-    display: '154'
+    display: '98'
     kind: symbolic
-    srepr: Integer(154)
+    srepr: Integer(98)
   cause_tags: []
   concept_tags:
   - isosceles.base_angle_from_apex
-  explanation: 'まず、二等辺三角形の頂角・底角のうち、わかっているほうの大きさを読み取る。（13°）
+  explanation: 'まず、二等辺三角形の頂角・底角のうち、わかっているほうの大きさを読み取る。（41°）
 
-    次に、等しい2つの底角の大きさを2つ分合わせてひくと、残りが頂角の大きさになることから頂角を求める。（154）'
+    次に、等しい2つの底角の大きさを2つ分合わせてひくと、残りが頂角の大きさになることから頂角を求める。（98）'
   hints:
   - 二等辺三角形の頂角・底角のうち、わかっているほうの大きさを読み取る。
   label: (1)
@@ -44,11 +44,11 @@ sub_questions:
   - args: []
     narration: 二等辺三角形の頂角・底角のうち、わかっているほうの大きさを読み取る。
     op: identify_known_angle
-    result_display: 13°
+    result_display: 41°
     result_srepr: ''
   - args: []
     narration: 等しい2つの底角の大きさを2つ分合わせてひくと、残りが頂角の大きさになることから頂角を求める。
     op: solve_remaining_angle
-    result_display: '154'
-    result_srepr: Integer(154)
+    result_display: '98'
+    result_srepr: Integer(98)
 visual_svg: null

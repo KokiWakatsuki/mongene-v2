@@ -48,7 +48,9 @@ levels:
       # x = k・den・weight_unit_gram と置くことで y が常に整数になる。
       weight_unit_gram: 5
       weight_k_range: [1, 7]
-      intercept_domain: {int_range: [5, 12]}
+      intercept_domain: {int_range: [5, 20]}
+      # ばね全体の長さの上限（1gあたりの伸びは num/den ≦ 1cm）。
+      max_length_cm: 60
       object_candidates: [ばね, ゴムひも, つる巻きばね]
     # 問題文の数が、この単元では単位の上限を超えるのが正しい
     # （`engine.eval.statement_size`）。

@@ -36,7 +36,10 @@ levels:
     signature: triangle_third_angle
     recipe: math.triangle_third_angle
     params:
-      angle_domain: {int_range: [1, 178]}
+      # **三角形の内角は 20〜130°。** 前は 1〜178 で「∠B=11°」のような
+      # 紙に描けない細い三角形が出ていた。
+      angle_domain: {int_range: [20, 130]}
+      third_angle_min: 20
     given: [condition]
     asked: [value]
     visual: none
@@ -48,7 +51,8 @@ levels:
     signature: arrowhead_angle
     recipe: math.arrowhead_angle
     params:
-      angle_domain: {int_range: [10, 120]}
+      # 20 未満だと「∠BAC=10°」のような紙に描けない図になる。
+      angle_domain: {int_range: [20, 110]}
     given: [condition]
     asked: [value]
     visual: none

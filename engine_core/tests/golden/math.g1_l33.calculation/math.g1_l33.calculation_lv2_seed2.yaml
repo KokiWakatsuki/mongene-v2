@@ -24,18 +24,18 @@ meta:
   seed: 2
   signature: inverse_proportion_evaluate_backward
 problem_ref: bf38ff5ea2f7fb01
-problem_text: 反比例の式 y = -12/x について、y = 6 のときの、もう一方の値を求めよ。
+problem_text: 反比例の式 y = -12/x について、y = -2 のときの、もう一方の値を求めよ。
 sub_questions:
 - answer:
-    display: '-2'
+    display: '6'
     kind: symbolic
-    srepr: Integer(-2)
+    srepr: Integer(6)
   cause_tags: []
   concept_tags:
   - inverse_proportion.solve_for_x
-  explanation: 'まず、比例定数と y の値を、反比例の式 y=a/x の y にあてはめる。（6 = -12 / x）
+  explanation: 'まず、比例定数と y の値を、反比例の式 y=a/x の y にあてはめる。（-2 = -12 / x）
 
-    次に、式を x について整理し直して、x の値を求める。（x = -2）'
+    次に、式を x について整理し直して、x の値を求める。（x = 6）'
   hints:
   - 比例定数と y の値を、反比例の式 y=a/x の y にあてはめる。
   label: (1)
@@ -43,15 +43,15 @@ sub_questions:
   solution_steps:
   - args:
     - '-12'
-    - '6'
+    - '-2'
     narration: 比例定数と y の値を、反比例の式 y=a/x の y にあてはめる。
     op: substitute_y
-    result_display: 6 = -12 / x
-    result_srepr: Integer(-2)
+    result_display: -2 = -12 / x
+    result_srepr: Integer(6)
   - args:
-    - 6 = -12 / x
+    - -2 = -12 / x
     narration: 式を x について整理し直して、x の値を求める。
     op: solve_for_x
-    result_display: x = -2
-    result_srepr: Integer(-2)
+    result_display: x = 6
+    result_srepr: Integer(6)
 visual_svg: null

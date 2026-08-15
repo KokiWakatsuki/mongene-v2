@@ -26,20 +26,20 @@ meta:
 problem_ref: 3cb12880f3330de7
 problem_text: '次の数を素因数分解し、累乗を使って表せ。
 
-  1216'
+  2299'
 sub_questions:
 - answer:
-    display: 2⁶×19
+    display: 11²×19
     kind: symbolic
-    srepr: 2**6*19
+    srepr: 11**2*19
   cause_tags: []
   concept_tags:
   - prime_factorization.execute_advanced
-  explanation: 'まず、小さい素数でわり切れなくなったら、次に大きい素数を順に試して、わり切れる素数があるか（残った数が素数かどうか）を調べる。（19）
+  explanation: 'まず、小さい素数でわり切れなくなったら、次に大きい素数を順に試して、わり切れる素数があるか（残った数が素数かどうか）を調べる。（11、19）
 
-    次に、小さい素数から順にわり、商が素数になるまでわり続ける。（2）
+    次に、小さい素数から順にわり、商が素数になるまでわり続ける。（わり切れない）
 
-    最後に、現れた素数を、同じ素数の個数を指数にして、累乗の積の形に表す。（2⁶×19）'
+    最後に、現れた素数を、同じ素数の個数を指数にして、累乗の積の形に表す。（11²×19）'
   hints:
   - 小さい素数でわり切れなくなったら、次に大きい素数を順に試して、わり切れる素数があるか（残った数が素数かどうか）を調べる。
   - 小さい素数から順にわり、商が素数になるまでわり続ける。
@@ -49,16 +49,16 @@ sub_questions:
   - args: []
     narration: 小さい素数でわり切れなくなったら、次に大きい素数を順に試して、わり切れる素数があるか（残った数が素数かどうか）を調べる。
     op: test_successive_prime_divisors
-    result_display: '19'
-    result_srepr: 2**6*19
+    result_display: 11、19
+    result_srepr: 11**2*19
   - args: []
     narration: 小さい素数から順にわり、商が素数になるまでわり続ける。
     op: divide_out_primes_in_order
-    result_display: '2'
-    result_srepr: 2**6*19
+    result_display: わり切れない
+    result_srepr: 11**2*19
   - args: []
     narration: 現れた素数を、同じ素数の個数を指数にして、累乗の積の形に表す。
     op: write_prime_power_form
-    result_display: 2⁶×19
-    result_srepr: 2**6*19
+    result_display: 11²×19
+    result_srepr: 11**2*19
 visual_svg: null

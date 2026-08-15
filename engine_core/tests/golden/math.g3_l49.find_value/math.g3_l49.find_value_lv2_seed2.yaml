@@ -24,18 +24,18 @@ meta:
   seed: 2
   signature: circle_similar_chord_length
 problem_ref: 19db7ca9d84846ce
-problem_text: 円周上の4点K, N, G, Lについて三角形JKN∽三角形JLGが示されている。弦KGと弦NLの交点をJとし、JK=5cm, JN=50cm, JL=2cm のとき、線分JGの長さを求めよ。
+problem_text: 円周上の4点V, W, X, Yについて三角形SVW∽三角形SYXが示されている。弦VXと弦WYの交点をSとし、SV=3cm, SW=24cm, SY=2cm のとき、線分SXの長さを求めよ。
 sub_questions:
 - answer:
-    display: '20'
+    display: '16'
     kind: symbolic
-    srepr: Integer(20)
+    srepr: Integer(16)
   cause_tags: []
   concept_tags:
   - circle.similar_chord_length
-  explanation: 'まず、2つの図形の相似比と、わかっている辺の長さを読み取る。（相似比 5:2、辺の長さ 50）
+  explanation: 'まず、2つの図形の相似比と、わかっている辺の長さを読み取る。（相似比 3:2、辺の長さ 24）
 
-    次に、相似な図形では対応する辺の長さの比が相似比に等しいことから、対応する辺の長さを求める。（20）'
+    次に、相似な図形では対応する辺の長さの比が相似比に等しいことから、対応する辺の長さを求める。（16）'
   hints:
   - 2つの図形の相似比と、わかっている辺の長さを読み取る。
   label: (1)
@@ -44,11 +44,11 @@ sub_questions:
   - args: []
     narration: 2つの図形の相似比と、わかっている辺の長さを読み取る。
     op: identify_similarity_ratio
-    result_display: 相似比 5:2、辺の長さ 50
+    result_display: 相似比 3:2、辺の長さ 24
     result_srepr: ''
   - args: []
     narration: 相似な図形では対応する辺の長さの比が相似比に等しいことから、対応する辺の長さを求める。
     op: apply_similarity_ratio
-    result_display: '20'
-    result_srepr: Integer(20)
+    result_display: '16'
+    result_srepr: Integer(16)
 visual_svg: null

@@ -34,8 +34,10 @@ levels:
     recipe: math.compare_relative_frequency
     params:
       total_domain: {int_set: [30, 40, 50, 60, 70, 80, 90, 100, 120, 150]}
-      class_lo_domain: {int_range: [0, 40]}
-      class_width_domain: {int_range: [5, 10]}
+      # **階級は幅の倍数の所から始める。** 前は下端 0〜40・幅 5〜10 を独立に引いていて
+      # 「10分以上17分未満」「31分以上40分未満」が出ていた。
+      class_width_candidates: [5, 10]
+      class_lo_max: 40
     given: [expressions]
     asked: [value]
     visual: none

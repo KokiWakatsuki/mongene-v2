@@ -23,7 +23,7 @@ meta:
     unit: g1_l24
   seed: 2
   signature: proportion_cross_multiply_expand
-problem_ref: 856507600e61a504
+problem_ref: 12255f8039ff3534
 problem_text: '次の比例式を解け。
 
   (x - 5) : 5 = 1 : 5'
@@ -39,10 +39,16 @@ sub_questions:
 
     次に、分配法則を使って、かっこを外す。（5x - 25 = 5）
 
-    最後に、文字の項を左辺に、数の項を右辺に移項し、両辺を整理して解く。（x = 6）'
+    次に、文字の項を左辺に、数の項を右辺に、符号を変えて移項する。（5x = 5 + 25）
+
+    次に、両辺の同類項をそれぞれまとめて、ax = b の形にする。（5x = 30）
+
+    最後に、等式の性質を使い、両辺を x の係数でわる。（x = 6）'
   hints:
   - 比例式の性質を使い、外項の積と内項の積が等しい式（たすきがけ）をつくる。
   - 分配法則を使って、かっこを外す。
+  - 文字の項を左辺に、数の項を右辺に、符号を変えて移項する。
+  - 両辺の同類項をそれぞれまとめて、ax = b の形にする。
   label: (1)
   prompt_text: 解を求めなさい。
   solution_steps:
@@ -57,8 +63,18 @@ sub_questions:
     result_display: 5x - 25 = 5
     result_srepr: Integer(6)
   - args: []
-    narration: 文字の項を左辺に、数の項を右辺に移項し、両辺を整理して解く。
-    op: transpose_and_solve
+    narration: 文字の項を左辺に、数の項を右辺に、符号を変えて移項する。
+    op: transpose_terms
+    result_display: 5x = 5 + 25
+    result_srepr: Integer(6)
+  - args: []
+    narration: 両辺の同類項をそれぞれまとめて、ax = b の形にする。
+    op: combine_like_terms
+    result_display: 5x = 30
+    result_srepr: Integer(6)
+  - args: []
+    narration: 等式の性質を使い、両辺を x の係数でわる。
+    op: divide_both_sides
     result_display: x = 6
     result_srepr: Integer(6)
 visual_svg: null

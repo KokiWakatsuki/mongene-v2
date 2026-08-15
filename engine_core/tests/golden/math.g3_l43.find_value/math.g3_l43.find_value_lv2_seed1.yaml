@@ -24,31 +24,31 @@ meta:
   seed: 1
   signature: judge_parallel_from_ratio
 problem_ref: 067aa2c5550623e7
-problem_text: 三角形DNFで、辺DN, DF上に点L, Bがある。DL=16cm, LN=6cm, DB=16cm, BF=6cm であるとき、LBとNFが平行であるかどうかを、比を調べて答えよ。
+problem_text: 三角形MNPで、辺MN, MP上に点Q, Rがある。MQ=9cm, QN=10cm, MR=45cm, RP=53cm であるとき、QRとNPが平行であるかどうかを、比を調べて答えよ。
 sub_questions:
 - answer:
-    display: 平行である
+    display: 平行ではない
     kind: symbolic
-    srepr: 'true'
+    srepr: 'false'
   cause_tags: []
   concept_tags:
   - parallel_segment.judge_from_ratio
-  explanation: 'まず、DL:LNとDB:BFの比が等しいかどうかを比べる。（16:6 と 16:6）
+  explanation: 'まず、MQ:QNとMR:RPの比が等しいかどうかを比べる。（9:10 と 45:53）
 
-    次に、平行線と線分の比の定理の逆から、LBとNFが平行であるかどうかを判別する。（平行である）'
+    次に、平行線と線分の比の定理の逆から、QRとNPが平行であるかどうかを判別する。（平行ではない）'
   hints:
-  - DL:LNとDB:BFの比が等しいかどうかを比べる。
+  - MQ:QNとMR:RPの比が等しいかどうかを比べる。
   label: (1)
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
-    narration: DL:LNとDB:BFの比が等しいかどうかを比べる。
+    narration: MQ:QNとMR:RPの比が等しいかどうかを比べる。
     op: compare_division_ratios
-    result_display: 16:6 と 16:6
+    result_display: 9:10 と 45:53
     result_srepr: ''
   - args: []
-    narration: 平行線と線分の比の定理の逆から、LBとNFが平行であるかどうかを判別する。
+    narration: 平行線と線分の比の定理の逆から、QRとNPが平行であるかどうかを判別する。
     op: judge_by_parallel_ratio_converse
-    result_display: 平行である
-    result_srepr: 'true'
+    result_display: 平行ではない
+    result_srepr: 'false'
 visual_svg: null

@@ -18,6 +18,8 @@ from __future__ import annotations
 
 from typing import cast
 
+import math
+
 import sympy
 
 from engine.core.contracts import (
@@ -300,6 +302,10 @@ _POINT_LETTERS = [
 # 図形の直線を表す小文字（C9 平行と合同クラスタの用語想起・surface の variety 用）。
 _LINE_LABELS = ["ℓ", "m", "n", "p", "q", "r", "s", "t", "u", "v", "w", "z"]
 
+# 名前のついた図形の頂点に使う文字の並び（`_draw_named_figures`）。
+# I と O は 1・0 と紛らわしいので実物の教材でも使わない。
+_FIGURE_LETTERS = "ABCDEFGHJKLMNPQRSTUVWXYZ"
+
 
 def _draw_distinct_from_pool(pool_source: list[str], k: int, rng: Rng) -> list[str]:
     """pool_source から相異なる k 個を引く（_draw_distinct_points の汎用版）。"""
@@ -314,6 +320,31 @@ def _draw_distinct_from_pool(pool_source: list[str], k: int, rng: Rng) -> list[s
 def _draw_distinct_points(k: int, rng: Rng) -> list[str]:
     """相異なる k 個の点名（大文字）を引く（_draw_distinct_from_pool の点名版）。"""
     return _draw_distinct_from_pool(_POINT_LETTERS, k, rng)
+
+
+def _draw_named_figures(sizes: list[int], rng: Rng) -> list[str]:
+    """**名前のついた図形**の頂点名を、連続した文字の並びで引く。
+
+    実物の問題集は図形の頂点をアルファベット順に並べて名づける（△ABC・□ABCD・
+    △ABC≡△DEF・△ABC∽△PQR）。点名を無作為に引くと「三角形EAQ≡三角形PBR」
+    「平行四辺形NKRF」のような、教材には出てこない名前になる。
+
+    `sizes` は図形ごとの頂点数（合同・相似の2つなら `[3, 3]`）。各図形は文字の並びの
+    **連続した区間**を切り出すが、図形と図形のあいだは離れていてよい（△ABC≡△DEF も
+    △ABC≡△PQR も実物にある）。区間は重ならず、左から順に並ぶ。
+    戻り値は図形ごとの文字列（"ABC" など）。
+    """
+    letters = _FIGURE_LETTERS
+    if sum(sizes) > len(letters):
+        raise ValueError(f"_draw_named_figures: 文字が足りない（{sum(sizes)} 個）")
+    out: list[str] = []
+    pos = 0
+    for i, n in enumerate(sizes):
+        rest = sum(sizes[i + 1:])
+        start = int(draw({"int_range": [pos, len(letters) - n - rest]}, rng))
+        out.append(letters[start:start + n])
+        pos = start + n
+    return out
 
 
 def _draw_distinct_lines(k: int, rng: Rng) -> list[str]:
@@ -496,12 +527,30 @@ _D_A_QUADRATIC = ("1", "2", "3", "4", "5", "6", "8", "9", "10", "12",
                   "(1/2)", "(1/3)", "(2/3)", "(1/4)", "(3/4)", "(3/2)", "(4/3)", "(5/2)")
 
 
+# **多角形の名前は漢数字**（実物の教材は「八角形」と書き、「8角形」とは書かない）。
+_POLYGON_NAME_JP = {
+    3: "三角形", 4: "四角形", 5: "五角形", 6: "六角形", 7: "七角形", 8: "八角形",
+    9: "九角形", 10: "十角形", 11: "十一角形", 12: "十二角形",
+}
+
+
+def _polygon_name_jp(n: int) -> str:
+    if n not in _POLYGON_NAME_JP:
+        raise ValueError(f"多角形の漢数字名が未登録: {n}")
+    return _POLYGON_NAME_JP[n]
+
+
 def _pick_a(rng: Rng) -> str:
-    """y=ax² の比例定数を、表示できる形で1つ引く（符号つき）。"""
+    """y=ax² の比例定数を、表示できる形で1つ引く（符号つき）。
+
+    **a=1 は係数を書かない**（`y = 1x²` が出ていた。実物は `y = x²`）。
+    a=-1 は `y = -x²`。
+    """
     v = str(draw(list(_D_A_QUADRATIC), rng))
-    if int(draw({"int_range": [0, 1]}, rng)):
-        return f"-{v}"
-    return v
+    neg = bool(int(draw({"int_range": [0, 1]}, rng)))
+    if v == "1":
+        return "-" if neg else ""
+    return f"-{v}" if neg else v
 
 
 # 統計の用語想起で使う題材。**データの個数を教材の大きさに絞った分、ここで広さを戻す。**
@@ -682,9 +731,34 @@ def _draw_term_statement(domain: str, concept: str, rng: Rng, p: dict[str, objec
 
     if domain == "square_root":
         # g3_l14 平方根の用語。具体例の正の数 n を埋め込み surface を分散する。
+        # **2乗した数は 2桁まで**（n ≤ 12）。前は n をそのまま2乗していたので
+        # 「2乗すると 23716 になる数」「32400 になる数」という、用語の説明に
+        # 添える例としてありえない数が出ていた。
         n = int(draw(p["number_domain"], rng))
         if concept == "square_root":
-            return f"2乗すると {n * n} になる数のように、2乗するとその数になるもとの数（正と負の2つがある）"
+            # 数を2桁までに絞ったぶん、**言い回し**を軸に足す（実物の教科書も
+            # 「2乗すると9になる数」「9の◯◯」「面積9cm²の正方形の1辺」と言い分ける）。
+            k = 2 + n % 24
+            variant = int(draw({"int_set": [0, 1, 2, 3]}, rng))
+            if variant == 0:
+                return (
+                    f"2乗すると {k * k} になる数のように、"
+                    "2乗するとその数になるもとの数（正と負の2つがある）"
+                )
+            if variant == 1:
+                return (
+                    f"{k * k} に対する {k} と -{k} のように、"
+                    "2乗するとその数になるもとの数（正と負の2つがある）"
+                )
+            if variant == 2:
+                return (
+                    f"面積が {k * k} cm² の正方形の1辺の長さ {k} cm のように、"
+                    "2乗するとその数になるもとの数（正と負の2つがある）"
+                )
+            return (
+                f"{k} を2乗すると {k * k} になるときの {k} のように、"
+                "2乗するとその数になるもとの数（正と負の2つがある）"
+            )
         return f"√{n} の √ のように、平方根を表すために使う記号"  # radical_sign
 
     if domain == "real_numbers":
@@ -692,19 +766,23 @@ def _draw_term_statement(domain: str, concept: str, rng: Rng, p: dict[str, objec
         n = int(draw(p["number_domain"], rng))
         if concept == "rational":
             b = int(draw(p["number_domain"], rng))
-            return f"{n}/{b + 1} のように、整数を使った分数の形で表すことができる数"
+            # 約分すると整数になる分数（75/25）は「分数の形で表せる数」の例として
+            # 分かりにくいので、分母を分子より大きくとる。
+            return f"{n}/{n + b + 1} のように、整数を使った分数の形で表すことができる数"
         if concept == "irrational":
-            nsq = n * n + 1  # 平方数でない数を確実に作る
+            # **無理数の例も 3桁まで**（√4357 は実物の説明に出てこない）。
+            nsq = (2 + n % 30) ** 2 + int(draw({"int_set": [1, 2, 3, -1, -2]}, rng))
             return f"√{nsq} や π のように、分数の形で表すことができない数"
         return f"0.{n}{n}{n}… のように、小数点以下で同じ数字の並びがくり返し続く小数"  # repeating_decimal
 
     if domain == "quadratic_terms":
         # g3_l24 2次方程式の用語。具体例の x²+bx+c=0 を埋め込み surface を分散する。
-        b = int(draw(p["number_domain"], rng))
-        c = int(draw(p["number_domain"], rng))
-        sign_b = f"+ {b}" if b >= 0 else f"- {-b}"
-        sign_c = f"+ {c}" if c >= 0 else f"- {-c}"
-        eqx = f"x² {sign_b}x {sign_c} = 0"
+        # **係数 1 は書かない・0 の項は出さない。** `x² + 1x - 6 = 0` `x² + 0x - 25 = 0`
+        # のような式が出ていた（実物にこの書き方は無い）。式の組み立ては
+        # `_fmt_poly_x_terms` に任せる（そちらで 1 と 0 を落としている）。
+        b = _pick(tuple(v for v in range(-12, 13) if v != 0), rng)
+        c = _pick(tuple(v for v in range(-12, 13) if v != 0), rng)
+        eqx = f"{_fmt_poly_x_terms([(1, 2), (b, 1), (c, 0)])} = 0"
         if concept == "quadratic_equation":
             return f"移項して整理すると {eqx} のように、x の2乗をふくむ形になる方程式"
         return f"方程式 {eqx} を成り立たせる x の値"  # solution
@@ -799,12 +877,17 @@ def _draw_term_statement(domain: str, concept: str, rng: Rng, p: dict[str, objec
         # 必ず number_domain から1つ以上引き、無駄引き（未使用の draw）を作らない。
         # 図形と数量の題材で分散する（下限の節「{m}cm より大きい」は重複率のために
         # 足した無意味な条件だったので外し、代わりに題材を軸にする）。
+        # **「周の長さ」を持たない立体は入れない。** 直方体・立方体を入れていたので
+        # 「直方体の縦の長さを x cm、周の長さを y cm とするとき」という、
+        # 定義されていない量を使う文が出ていた（周の長さがあるのは平面図形だけ）。
+        # 立体は「表面積」「体積」の言い回しを別に持たせるほうが正しいが、
+        # ここは「周の長さ」の1文型なので平面図形だけに絞る。
         shape, quantity = str(draw(
             ["正方形|1辺の長さ", "正三角形|1辺の長さ", "正五角形|1辺の長さ",
              "正六角形|1辺の長さ", "正八角形|1辺の長さ", "長方形|縦の長さ",
              "長方形|横の長さ", "ひし形|1辺の長さ", "円|半径", "円|直径",
-             "直方体|高さ", "直方体|縦の長さ", "立方体|1辺の長さ",
-             "平行四辺形|底辺の長さ", "台形|高さ"], rng)).split("|")
+             "平行四辺形|底辺の長さ", "平行四辺形|1辺の長さ", "台形|上底の長さ",
+             "台形|下底の長さ", "正十角形|1辺の長さ"], rng)).split("|")
         if concept == "variable":
             return (
                 f"{shape}の{quantity}を x cm とするときの x のように、"
@@ -1000,15 +1083,16 @@ def _draw_term_statement(domain: str, concept: str, rng: Rng, p: dict[str, objec
         h = int(draw(p["length_domain"], rng))
         if concept == "prism":
             n = int(draw(p["base_sides_domain"], rng))
+            # **多角形の名前は漢数字**（「底面が8角形」は実物に無い書き方）。
             return (
-                f"底面が{n}角形で高さが{h}cmの立体のうち、2つの底面が平行で合同であり、"
-                "側面がすべて長方形になっているもの"
+                f"底面が{_polygon_name_jp(n)}で高さが{h}cmの立体のうち、"
+                "2つの底面が平行で合同であり、側面がすべて長方形になっているもの"
             )
         if concept == "pyramid":
             n = int(draw(p["base_sides_domain"], rng))
             return (
-                f"底面が{n}角形で高さが{h}cmの立体のうち、側面がすべて三角形で、"
-                "1つの頂点に集まっているもの"
+                f"底面が{_polygon_name_jp(n)}で高さが{h}cmの立体のうち、"
+                "側面がすべて三角形で、1つの頂点に集まっているもの"
             )
         if concept == "cylinder":
             r = int(draw(p["length_domain"], rng))
@@ -1130,7 +1214,14 @@ def _draw_term_statement(domain: str, concept: str, rng: Rng, p: dict[str, objec
             return f"「a、bが{m}より大きい数ならば、a+bも{m}より大きい」という文で、「ならば」の前に書かれている部分"  # m は小さい数に絞る
         if concept == "conclusion":
             return f"「a、bが{m}より大きい数ならば、a+bも{m}より大きい」という文で、「ならば」の後に書かれている部分"
-        return f"あることがらが成り立たないことを示すために挙げる、条件に合うが結論には当てはまらない具体例のこと（{m}を使った例が挙げられることがある）"  # counterexample
+        # **具体例の数を宙に浮かせない。** 前は「（4を使った例が挙げられることがある）」
+        # とだけ書いていて、4 が何の例なのか本文のどこにも根拠が無かった。
+        # 反例は必ず「どの命題に対する反例か」とセットで述べる。
+        return (
+            f"「a、bが{m}より大きい数ならば、a+bも{m}より大きい」のような文について、"
+            "それが成り立たないことを示すために挙げる、仮定には合うが結論には"
+            "当てはまらない具体例のこと"
+        )  # counterexample
 
     if domain == "similarity_terms":
         # g3_l39 相似な図形の用語。具体例の図形名を埋め込み surface を分散する。
@@ -1149,9 +1240,23 @@ def _draw_term_statement(domain: str, concept: str, rng: Rng, p: dict[str, objec
             n2 = int(draw({"int_set": [v for v in _COMPOSITES if v != n1]}, rng))
             return f"{n1} や {n2} のように、1 とその数自身のほかにも約数をもつ整数"
         # prime_factor
-        p1 = int(draw({"int_set": _PRIMES}, rng))
-        p2 = int(draw({"int_set": _PRIMES}, rng))
-        return f"整数 {p1 * p2} を {p1} × {p2} のように素数だけの積で表したときの、その1つ1つの素数"
+        # **例に出す積は 2桁まで。** 素数を 97 まで引いて掛けていたので
+        # 「整数 4087 を 61 × 67 のように」という、素因数分解の説明の例として
+        # ありえない数が出ていた（実物は「30 を 2×3×5 のように」）。
+        # 3つの素因数の形も混ぜて組合せを確保する。
+        small = [v for v in _PRIMES if v <= 13]
+        p1 = int(draw({"int_set": small}, rng))
+        p2 = int(draw({"int_set": small}, rng))
+        p3 = int(draw({"int_set": [*small, 1]}, rng))
+        if p3 == 1:
+            return (
+                f"整数 {p1 * p2} を {p1} × {p2} のように素数だけの積で表したときの、"
+                "その1つ1つの素数"
+            )
+        return (
+            f"整数 {p1 * p2 * p3} を {p1} × {p2} × {p3} のように素数だけの積で"
+            "表したときの、その1つ1つの素数"
+        )
 
     if domain == "number_set":
         # g1_l10 数の集合。相異なる2つの正の整数を例に埋め込み surface を分散する
@@ -1628,7 +1733,13 @@ def _draw_rule_statement(
         # （2数を直接係数・定数に使い、distinct な組を多く確保する）。
         a = int(draw(p["number_domain"], rng))
         b = int(draw(p["number_domain"], rng))
-        return f"多項式 x² + {a}x + {b} を扱うときの「因数分解」は、どのような操作か"
+        # 因数分解できる式にする（`x² + 7x + 25` は因数分解できず、例にならない）。
+        r1 = _pick(tuple(v for v in range(-9, 10) if v != 0), rng)
+        r2 = _pick(tuple(v for v in range(-9, 10) if v != 0), rng)
+        poly = _fmt_poly_x_terms([(1, 2), (r1 + r2, 1), (r1 * r2, 0)])
+        # 例に使う文字も軸にする（実物も x・a・m を使い分ける）。
+        v = str(draw(["x", "a", "m", "t", "y", "n"], rng))
+        return f"多項式 {poly.replace('x', v)} を扱うときの「因数分解」は、どのような操作か"
 
     if topic == "sqrt_magnitude":
         # g3_l15 平方根の大小。相異なる2つの正の数を surface として埋め込み dup 分散。
@@ -1658,7 +1769,9 @@ def _draw_rule_statement(
             b = int(draw({"int_set": b_cands}, rng))
         sa = f"+ {a}" if a >= 0 else f"- {-a}"
         sb = f"+ {b}" if b >= 0 else f"- {-b}"
-        return f"(x {sa})(x {sb}) を乗法公式を使って展開するときについて"
+        # 数を1〜15に絞ったぶん、**文字**を軸に足す（実物も x・a・m を使い分ける）。
+        v = str(draw(["x", "a", "m", "t", "y", "n", "b", "p"], rng))
+        return f"({v} {sa})({v} {sb}) を乗法公式を使って展開するときについて"
 
     if topic == "quadratic_solving_method_choice":
         # g3_l28 2次方程式の解き方の選択。concept に応じて因数分解しやすい形／
@@ -1703,7 +1816,9 @@ def _draw_rule_statement(
     if topic == "complementary_event":
         # g2_l54 余事象の意味。具体例の確率 p=分数 を surface に埋め込み dup 分散。
         den = _pick(_D_SMALL_DEN, rng)  # 確率の分母（223/256 は教材の確率でない）
-        num = int(draw({"int_range": [1, den - 1]}, rng))
+        # **約分できる組は引き直す。** 「確率が 10/12 であるとき」が出ていた
+        # （実物は必ず既約分数で書く）。
+        num = int(draw({"int_set": [n for n in range(1, den) if math.gcd(n, den) == 1]}, rng))
         # 分母を小さくした分の広さは「ことがら」の名前で戻す。
         ev = str(draw(["くじが当たる", "表が出る", "赤玉が出る", "偶数の目が出る",
                        "当番に選ばれる", "同じ色になる"], rng))

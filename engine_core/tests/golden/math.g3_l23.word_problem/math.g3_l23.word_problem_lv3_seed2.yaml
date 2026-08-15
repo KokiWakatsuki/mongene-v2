@@ -24,26 +24,26 @@ meta:
   seed: 2
   signature: word_problem_rectangle_ratio_side
 problem_ref: 0bc6f86e3a5ead24
-problem_text: '縦と横の長さの比が1：4である長方形の空き地があり、その面積は96m²である。
+problem_text: '縦と横の長さの比が1：4である長方形の空き地があり、その面積は68m²である。
 
   この空き地の縦の長さを、根号を使って表せ。'
 sub_questions:
 - answer:
-    display: 2√6
+    display: √17
     kind: symbolic
-    srepr: Mul(Integer(2), Pow(Integer(6), Rational(1, 2)))
+    srepr: Pow(Integer(17), Rational(1, 2))
   cause_tags: []
   concept_tags:
   - radical.word_problem_rectangle_ratio_side
   explanation: 'まず、縦の長さを x とおき、比を使って横の長さを x の何倍かで表す。（x）
 
-    次に、縦と横の長さの積が面積になることから、面積の関係を式に表す。（4x² = 96）
+    次に、縦と横の長さの積が面積になることから、面積の関係を式に表す。（4x² = 68）
 
-    次に、両辺を比から出てきた数でわって、縦の長さの2乗の値を求める。（x² = 24）
+    次に、両辺を比から出てきた数でわって、縦の長さの2乗の値を求める。（x² = 17）
 
-    次に、根号の中を素因数分解し、平方の因数を見つける。（√(4 × 6)）
+    次に、根号の中を素因数分解し、平方の因数を見つける。（√(1 × 17)）
 
-    最後に、平方の因数を根号の外に出して a√b の形にする。（2√6）'
+    最後に、平方の因数を根号の外に出して a√b の形にする。（√17）'
   hints:
   - 縦の長さを x とおき、比を使って横の長さを x の何倍かで表す。
   - 縦と横の長さの積が面積になることから、面積の関係を式に表す。
@@ -60,21 +60,21 @@ sub_questions:
   - args: []
     narration: 縦と横の長さの積が面積になることから、面積の関係を式に表す。
     op: formulate_area_equation
-    result_display: 4x² = 96
+    result_display: 4x² = 68
     result_srepr: ''
   - args: []
     narration: 両辺を比から出てきた数でわって、縦の長さの2乗の値を求める。
     op: isolate_squared_side
-    result_display: x² = 24
+    result_display: x² = 17
     result_srepr: ''
   - args: []
     narration: 根号の中を素因数分解し、平方の因数を見つける。
     op: factor_out_square
-    result_display: √(4 × 6)
+    result_display: √(1 × 17)
     result_srepr: ''
   - args: []
     narration: 平方の因数を根号の外に出して a√b の形にする。
     op: take_root_outside
-    result_display: 2√6
-    result_srepr: Mul(Integer(2), Pow(Integer(6), Rational(1, 2)))
+    result_display: √17
+    result_srepr: Pow(Integer(17), Rational(1, 2))
 visual_svg: null

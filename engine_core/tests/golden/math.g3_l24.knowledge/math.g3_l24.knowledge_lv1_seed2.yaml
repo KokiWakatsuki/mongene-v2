@@ -24,7 +24,7 @@ meta:
   seed: 2
   signature: quadratic_terms_term_recall
 problem_ref: e3077317f643e057
-problem_text: 方程式 x² + 9x - 3 = 0 を成り立たせる x の値を何といいますか。
+problem_text: 方程式 x² + 8x - 9 = 0 を成り立たせる x の値を何といいますか。
 sub_questions:
 - answer:
     correct: 解

@@ -24,18 +24,18 @@ meta:
   seed: 3
   signature: inscribed_angle_two_chords_intersection
 problem_ref: 07d0b9bf35dfa3af
-problem_text: 4点R, K, D, Cがこの順に円周上にある。∠KRD=6°、∠RDC=37° であるとき、2本の弦RC, KDの交点をFとして、∠RFKの大きさを求めよ。
+problem_text: 4点D, E, F, Gがこの順に円周上にある。∠EDF=24°、∠DFG=65° であるとき、2本の弦DG, EFの交点をHとして、∠DHEの大きさを求めよ。
 sub_questions:
 - answer:
-    display: 137°
+    display: 91°
     kind: symbolic
-    srepr: Integer(137)
+    srepr: Integer(91)
   cause_tags: []
   concept_tags:
   - circle.two_chords_intersection_angle
-  explanation: 'まず、円周角の定理から、それぞれの円周角に対応する弧の大きさを求める。（12° と 74°）
+  explanation: 'まず、円周角の定理から、それぞれの円周角に対応する弧の大きさを求める。（48° と 130°）
 
-    次に、円周の全体と2つの弧の大きさの関係から、2本の弦の交点にできる角の大きさを求める。（137°）'
+    次に、円周の全体と2つの弧の大きさの関係から、2本の弦の交点にできる角の大きさを求める。（91°）'
   hints:
   - 円周角の定理から、それぞれの円周角に対応する弧の大きさを求める。
   label: (1)
@@ -44,11 +44,11 @@ sub_questions:
   - args: []
     narration: 円周角の定理から、それぞれの円周角に対応する弧の大きさを求める。
     op: identify_arcs_from_inscribed_angles
-    result_display: 12° と 74°
+    result_display: 48° と 130°
     result_srepr: ''
   - args: []
     narration: 円周の全体と2つの弧の大きさの関係から、2本の弦の交点にできる角の大きさを求める。
     op: apply_intersecting_chords_angle
-    result_display: 137°
-    result_srepr: Integer(137)
+    result_display: 91°
+    result_srepr: Integer(91)
 visual_svg: null

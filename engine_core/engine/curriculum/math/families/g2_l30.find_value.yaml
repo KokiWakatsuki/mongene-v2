@@ -42,11 +42,12 @@ levels:
     signature: meeting_time_two_segment
     recipe: math.solve_meeting_time_two_segment
     params:
-      va_domain: {int_range: [50, 90]}
+      # **速さは 5m 刻み**（毎分62m・71m・79m・97m が出ていた）。
+      va_domain: {int_set: [50, 55, 60, 65, 70, 75, 80, 85, 90]}
       delay_domain: {int_range: [5, 15]}
-      v1_domain: {int_range: [70, 110]}
+      v1_domain: {int_set: [70, 75, 80, 85, 90, 95, 100, 105, 110]}
       p1_domain: {int_range: [3, 8]}
-      v2_domain: {int_range: [40, 80]}
+      v2_domain: {int_set: [40, 45, 50, 55, 60, 65, 70, 75, 80]}
       extra_domain: {int_range: [1, 10]}
     # 問題文の数が、この単元では単位の上限を超えるのが正しい
     # （`engine.eval.statement_size`）。

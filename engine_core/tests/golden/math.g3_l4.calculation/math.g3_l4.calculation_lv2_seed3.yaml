@@ -26,20 +26,20 @@ meta:
 problem_ref: d5fa61c99fb530fc
 problem_text: '次の式を展開せよ。
 
-  (2m - 1)²'
+  (2k - 1)²'
 sub_questions:
 - answer:
-    display: 4m² - 4m + 1
+    display: 4k² - 4k + 1
     kind: symbolic
-    srepr: Add(Mul(Integer(4), Pow(Symbol('m'), Integer(2))), Mul(Integer(-1), Integer(4), Symbol('m')), Integer(1))
+    srepr: Add(Mul(Integer(4), Pow(Symbol('k'), Integer(2))), Mul(Integer(-1), Integer(4), Symbol('k')), Integer(1))
   cause_tags: []
   concept_tags:
   - polynomial.expand_formula_square
-  explanation: 'まず、係数のついたはじめの項を平方する。（4m²）
+  explanation: 'まず、係数のついたはじめの項を平方する。（4k²）
 
-    次に、2つの項の積の2倍（中間の項）を求める。（-4m）
+    次に、2つの項の積の2倍（中間の項）を求める。（-4k）
 
-    最後に、乗法公式にあてはめて展開した式を書く。（4m² - 4m + 1）'
+    最後に、乗法公式にあてはめて展開した式を書く。（4k² - 4k + 1）'
   hints:
   - 係数のついたはじめの項を平方する。
   - 2つの項の積の2倍（中間の項）を求める。
@@ -49,16 +49,16 @@ sub_questions:
   - args: []
     narration: 係数のついたはじめの項を平方する。
     op: square_leading_term
-    result_display: 4m²
+    result_display: 4k²
     result_srepr: ''
   - args: []
     narration: 2つの項の積の2倍（中間の項）を求める。
     op: compute_cross_term
-    result_display: -4m
+    result_display: -4k
     result_srepr: ''
   - args: []
     narration: 乗法公式にあてはめて展開した式を書く。
     op: write_expansion
-    result_display: 4m² - 4m + 1
-    result_srepr: Add(Mul(Integer(4), Pow(Symbol('m'), Integer(2))), Mul(Integer(-1), Integer(4), Symbol('m')), Integer(1))
+    result_display: 4k² - 4k + 1
+    result_srepr: Add(Mul(Integer(4), Pow(Symbol('k'), Integer(2))), Mul(Integer(-1), Integer(4), Symbol('k')), Integer(1))
 visual_svg: null

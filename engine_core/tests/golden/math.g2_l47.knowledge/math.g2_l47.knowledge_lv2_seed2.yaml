@@ -24,7 +24,7 @@ meta:
   seed: 2
   signature: identify_parallelogram_condition
 problem_ref: 2514e7e7b71df6e1
-problem_text: 四角形PGRKで、対角線PRとGKの交点が、それぞれの中点になっているとき、この四角形が平行四辺形といえるのはどの条件によるか答えよ。
+problem_text: 四角形RSTUで、対角線RTとSUの交点が、それぞれの中点になっているとき、この四角形が平行四辺形といえるのはどの条件によるか答えよ。
 sub_questions:
 - answer:
     correct: 対角線がそれぞれの中点で交わる条件

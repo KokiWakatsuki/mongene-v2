@@ -24,18 +24,18 @@ meta:
   seed: 1
   signature: mean_from_grouped_table
 problem_ref: d2106903710c145d
-problem_text: 次の度数分布表について、各階級の階級値を用いて平均値を求めよ。〔階級と度数：12点以上20点未満…11人、20点以上28点未満…1人、28点以上36点未満…1人、36点以上44点未満…2人〕。
+problem_text: 次の度数分布表について、各階級の階級値を用いて平均値を求めよ。〔階級と度数：40点以上45点未満…3人、45点以上50点未満…7人、50点以上55点未満…4人、55点以上60点未満…1人〕。
 sub_questions:
 - answer:
-    display: '20.8'
+    display: '48.5'
     kind: symbolic
-    srepr: Rational(104, 5)
+    srepr: Rational(97, 2)
   cause_tags: []
   concept_tags:
   - representative_value.compute_grouped_mean
-  explanation: 'まず、各階級の階級値に、その階級の度数をかける。（176、24、32、80）
+  explanation: 'まず、各階級の階級値に、その階級の度数をかける。（127.5、332.5、210、57.5）
 
-    次に、それらの積をすべて足し合わせ、度数の合計でわって平均値を求める。（20.8）'
+    次に、それらの積をすべて足し合わせ、度数の合計でわって平均値を求める。（48.5）'
   hints:
   - 各階級の階級値に、その階級の度数をかける。
   label: (1)
@@ -44,11 +44,11 @@ sub_questions:
   - args: []
     narration: 各階級の階級値に、その階級の度数をかける。
     op: weight_by_class_value
-    result_display: 176、24、32、80
+    result_display: 127.5、332.5、210、57.5
     result_srepr: ''
   - args: []
     narration: それらの積をすべて足し合わせ、度数の合計でわって平均値を求める。
     op: divide_by_total
-    result_display: '20.8'
-    result_srepr: Rational(104, 5)
+    result_display: '48.5'
+    result_srepr: Rational(97, 2)
 visual_svg: null

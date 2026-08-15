@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: complementary_event_rule_recall
 problem_ref: ac34572cfc271bf1
-problem_text: 当番に選ばれる確率が 13/36 であるとき、その「余事象」（そのことがらが起こらないという事象）の確率について、正しく述べているものを1つ選べ。
+problem_text: 当番に選ばれる確率が 11/36 であるとき、その「余事象」（そのことがらが起こらないという事象）の確率について、正しく述べているものを1つ選べ。
 sub_questions:
 - answer:
     correct: 全体を表す確率から、あることがらの起こる確率をひいた値に等しい

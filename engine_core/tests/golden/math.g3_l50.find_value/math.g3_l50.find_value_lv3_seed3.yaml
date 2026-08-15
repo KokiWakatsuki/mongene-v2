@@ -24,7 +24,7 @@ meta:
   seed: 3
   signature: equal_arc_inscribed_angle
 problem_ref: 83e850e73df1890a
-problem_text: 円周を6等分する点を順にBHPJCLとする。これらの点を頂点とする六角形について、∠JBHの大きさを求めよ。
+problem_text: 円周を6等分する点を順にGHJKLMとする。これらの点を頂点とする六角形について、∠KGHの大きさを求めよ。
 sub_questions:
 - answer:
     display: 60°

@@ -23,7 +23,7 @@ from engine.core.contracts import (
 )
 from engine.core.registry import REGISTRY, register_recipe
 from engine.core.rng import Rng, draw
-from engine.packs.math.recipes.letter_expr import _draw_distinct_points
+from engine.packs.math.recipes.letter_expr import _draw_named_figures
 from engine.packs.math.recipes.polynomial import _domain_candidates
 from engine.packs.math.solvers.g1_space import (
     CUBOID_EDGE_INDICES,
@@ -41,6 +41,19 @@ def _effective_concept_tags(ctx: CellContext) -> list[str]:
 
 def _effective_cause_tags(ctx: CellContext) -> list[str]:
     return list(ctx.spec_level.cause_tags)
+
+
+# **多角形の名前は漢数字**（実物の教材は「八角形」と書き、「8角形」とは書かない）。
+_POLYGON_NAME_JP = {
+    3: "三角形", 4: "四角形", 5: "五角形", 6: "六角形", 7: "七角形", 8: "八角形",
+    9: "九角形", 10: "十角形", 11: "十一角形", 12: "十二角形",
+}
+
+
+def _polygon_name_jp(n: int) -> str:
+    if n not in _POLYGON_NAME_JP:
+        raise ValueError(f"多角形の漢数字名が未登録: {n}")
+    return _POLYGON_NAME_JP[n]
 
 
 # ---------------------------------------------------------------------------
@@ -75,8 +88,9 @@ def judge_polyhedron_claim(ctx: CellContext, rng: Rng) -> MR:
                 if d != 0 and true_value + int(d) >= 1
             ]
             candidate = true_value + int(draw(offsets, rng))
+        # **多角形の名前は漢数字**（「底面が8角形の角柱」は実物に無い書き方）。
         statement = (
-            f"底面が{n}角形の{SOLID_LABEL_JA[solid_type]}について、"
+            f"底面が{_polygon_name_jp(n)}の{SOLID_LABEL_JA[solid_type]}について、"
             f"{ELEMENT_LABEL_JA[quantity]}の数は{candidate}である"
         )
         solver = REGISTRY.solver("math.judge_polyhedron_element_count")
@@ -103,10 +117,10 @@ def judge_polyhedron_claim(ctx: CellContext, rng: Rng) -> MR:
         ]
         idx = int(draw({"int_set": list(range(len(pairs)))}, rng))
         m, k = pairs[idx]
-        (vertex,) = _draw_distinct_points(1, rng)
+        (vertex,) = _draw_named_figures([1], rng)
         statement = (
-            f"1つの頂点{vertex}のまわりに正{m}角形の面が{k}つ集まるようにすれば、"
-            "すきまなく折り曲げて正多面体を組み立てることができる"
+            f"1つの頂点{vertex}のまわりに正{_polygon_name_jp(m)}の面が{k}つ"
+            "集まるようにすれば、すきまなく折り曲げて正多面体を組み立てることができる"
         )
         solver = REGISTRY.solver("math.judge_regular_polyhedron_condition")
         sol = cast(Solution, solver(m, k))
@@ -154,7 +168,8 @@ def judge_solid_position(ctx: CellContext, rng: Rng) -> MR:
     """
     p = ctx.spec_level.params
     mode = str(draw(cast("list[str]", p["mode_set"]), rng))
-    labels = "".join(sorted(_draw_distinct_points(8, rng)))
+    # 立体の頂点はアルファベット順（実物は「立方体ABCD-EFGH」）。
+    (labels,) = _draw_named_figures([8], rng)
     solid_name = f"{labels[:4]}-{labels[4:]}"
     edges = [labels[i] + labels[j] for i, j in CUBOID_EDGE_INDICES]
 

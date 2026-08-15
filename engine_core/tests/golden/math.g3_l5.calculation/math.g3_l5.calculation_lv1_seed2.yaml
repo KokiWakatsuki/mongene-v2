@@ -26,16 +26,16 @@ meta:
 problem_ref: cfdfad43e52aa056
 problem_text: '次の式を展開せよ。
 
-  (m + 10)(m - 10)'
+  (k + 10)(k - 10)'
 sub_questions:
 - answer:
-    display: m² - 100
+    display: k² - 100
     kind: symbolic
-    srepr: Add(Pow(Symbol('m'), Integer(2)), Integer(-100))
+    srepr: Add(Pow(Symbol('k'), Integer(2)), Integer(-100))
   cause_tags: []
   concept_tags:
   - polynomial.expand_formula_diff_squares
-  explanation: まず、和と差の積の公式で、はじめの項の平方から終わりの項の平方をひく。（m² - 100）
+  explanation: まず、和と差の積の公式で、はじめの項の平方から終わりの項の平方をひく。（k² - 100）
   hints:
   - 和と差の積の公式で、はじめの項の平方から終わりの項の平方をひく。
   label: (1)
@@ -44,6 +44,6 @@ sub_questions:
   - args: []
     narration: 和と差の積の公式で、はじめの項の平方から終わりの項の平方をひく。
     op: apply_diff_of_squares
-    result_display: m² - 100
-    result_srepr: Add(Pow(Symbol('m'), Integer(2)), Integer(-100))
+    result_display: k² - 100
+    result_srepr: Add(Pow(Symbol('k'), Integer(2)), Integer(-100))
 visual_svg: null

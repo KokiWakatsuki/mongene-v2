@@ -24,18 +24,18 @@ meta:
   seed: 1
   signature: inscribed_angle_transfer_same_arc
 problem_ref: bb8b454dffe82d01
-problem_text: ∠RMC=∠REC=86°であり、4点R, C, M, Eは同一円周上にある。∠ERM=45°のとき、∠ECMの大きさを求めよ。
+problem_text: ∠PRQ=∠PSQ=76°であり、4点P, Q, R, Sは同一円周上にある。∠SPR=41°のとき、∠SQRの大きさを求めよ。
 sub_questions:
 - answer:
-    display: 45°
+    display: 41°
     kind: symbolic
-    srepr: Integer(45)
+    srepr: Integer(41)
   cause_tags: []
   concept_tags:
   - circle.inscribed_angle_transfer_same_arc
-  explanation: 'まず、4点が同一円周上にあることから、同じ弧に対応する角の大きさを読み取る。（45°）
+  explanation: 'まず、4点が同一円周上にあることから、同じ弧に対応する角の大きさを読み取る。（41°）
 
-    次に、同じ弧に対する円周角の大きさはすべて等しいことから、求める角の大きさを求める。（45°）'
+    次に、同じ弧に対する円周角の大きさはすべて等しいことから、求める角の大きさを求める。（41°）'
   hints:
   - 4点が同一円周上にあることから、同じ弧に対応する角の大きさを読み取る。
   label: (1)
@@ -44,11 +44,11 @@ sub_questions:
   - args: []
     narration: 4点が同一円周上にあることから、同じ弧に対応する角の大きさを読み取る。
     op: identify_same_arc_angle
-    result_display: 45°
+    result_display: 41°
     result_srepr: ''
   - args: []
     narration: 同じ弧に対する円周角の大きさはすべて等しいことから、求める角の大きさを求める。
     op: transfer_by_inscribed_angle_equality
-    result_display: 45°
-    result_srepr: Integer(45)
+    result_display: 41°
+    result_srepr: Integer(41)
 visual_svg: null

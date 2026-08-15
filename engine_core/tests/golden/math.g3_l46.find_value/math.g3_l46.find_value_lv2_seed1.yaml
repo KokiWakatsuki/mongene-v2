@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: similar_solid_surface_volume_ratio
 problem_ref: 402ced844c52ca4f
-problem_text: 相似な2つの円柱C, Mがあり、相似比は 2:7 である。CとMの表面積の比と体積の比をそれぞれ求めよ。
+problem_text: 相似な2つの円柱W, Yがあり、相似比は 2:7 である。WとYの表面積の比と体積の比をそれぞれ求めよ。
 sub_questions:
 - answer:
     display: 表面積の比 4:49、体積の比 8:343

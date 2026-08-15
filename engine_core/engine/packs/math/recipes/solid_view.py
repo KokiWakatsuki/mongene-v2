@@ -32,7 +32,7 @@ from engine.core.contracts import (
 )
 from engine.core.registry import REGISTRY, register_recipe
 from engine.core.rng import Rng, draw
-from engine.packs.math.recipes.letter_expr import _draw_distinct_points
+from engine.packs.math.recipes.letter_expr import _draw_named_figures
 from engine.packs.math.visuals.solid import render_solid_solution_svg, solid_labels
 
 _REVOLUTION_CONCEPTS = [
@@ -81,7 +81,9 @@ def _scene(p: dict[str, Any], rng: Rng) -> tuple[str, int, int, list[str]]:
     axis_len = int(draw({"int_range": [lo, hi]}, rng))
     other_cands = [v for v in range(lo, hi + 1) if v != axis_len]
     other_len = int(draw({"int_set": other_cands}, rng))
-    names = _draw_distinct_points(_SHAPE_VERTEX_COUNT[shape], rng)
+    # 立体の頂点はアルファベット順（実物は「直方体ABCD-EFGH」）。
+    (run,) = _draw_named_figures([_SHAPE_VERTEX_COUNT[shape]], rng)
+    names = list(run)
     return shape, axis_len, other_len, names
 
 
@@ -517,7 +519,8 @@ def _box_scene(p: dict[str, Any], rng: Rng) -> tuple[int, int, int, list[str]]:
     a = int(draw({"int_range": [lo, hi]}, rng))
     b = int(draw({"int_set": [v for v in range(lo, hi + 1) if v != a]}, rng))
     h = int(draw({"int_set": [v for v in range(lo, hi + 1) if v not in (a, b)]}, rng))
-    names = _draw_distinct_points(8, rng)
+    (run,) = _draw_named_figures([8], rng)
+    names = list(run)
     return a, b, h, names
 
 

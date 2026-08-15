@@ -24,18 +24,18 @@ meta:
   seed: 2
   signature: polygon_sides_from_interior_sum
 problem_ref: f9ba8bc103b2c7f5
-problem_text: 内角の和が1440°である多角形は何角形か求めよ。
+problem_text: 内角の和が180°である多角形は何角形か求めよ。
 sub_questions:
 - answer:
-    display: '10'
+    display: '3'
     kind: symbolic
-    srepr: Integer(10)
+    srepr: Integer(3)
   cause_tags: []
   concept_tags:
   - polygon_angle.sides_from_interior_sum
-  explanation: 'まず、内角の和の公式に、わからない辺の数をあてはめて方程式をつくる。（180° × (n - 2) = 1440°）
+  explanation: 'まず、内角の和の公式に、わからない辺の数をあてはめて方程式をつくる。（180° × (n - 2) = 180°）
 
-    次に、方程式を辺の数について解き、何角形かを求める。（10）'
+    次に、方程式を辺の数について解き、何角形かを求める。（3）'
   hints:
   - 内角の和の公式に、わからない辺の数をあてはめて方程式をつくる。
   label: (1)
@@ -44,11 +44,11 @@ sub_questions:
   - args: []
     narration: 内角の和の公式に、わからない辺の数をあてはめて方程式をつくる。
     op: form_interior_sum_equation
-    result_display: 180° × (n - 2) = 1440°
+    result_display: 180° × (n - 2) = 180°
     result_srepr: ''
   - args: []
     narration: 方程式を辺の数について解き、何角形かを求める。
     op: solve_for_sides
-    result_display: '10'
-    result_srepr: Integer(10)
+    result_display: '3'
+    result_srepr: Integer(3)
 visual_svg: null

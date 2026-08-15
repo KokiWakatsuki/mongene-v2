@@ -24,7 +24,7 @@ meta:
   seed: 2
   signature: rotate_polygon_grid
 problem_ref: 426fb0e62f207f8c
-problem_text: 方眼上に三角形ABCと点Pがある。この三角形を、点Pを中心として反時計回りに270°回転移動した三角形A'B'C'をかけ。
+problem_text: 方眼上に三角形ABCと点Xがある。この三角形を、点Xを中心として反時計回りに270°回転移動した三角形A'B'C'をかけ。
 sub_questions:
 - answer:
     features:
@@ -64,7 +64,7 @@ sub_questions:
       cx="221.50" cy="286.00" r="2.5" fill="#000000"/><text x="227.25" y="305.53" font-size="13" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">B'</text><text
       x="227.25" y="305.53" font-size="13" text-anchor="start" fill="#000000">B'</text><circle cx="71.00" cy="114.00" r="2.5" fill="#000000"/><text x="61.93" y="104.14" font-size="13" text-anchor="end"
       stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">C'</text><text x="61.93" y="104.14" font-size="13" text-anchor="end" fill="#000000">C'</text><circle cx="178.50" cy="178.50"
-      r="2.5" fill="#000000"/><text x="184.50" y="172.50" font-size="13" fill="#000000">P</text></svg>
+      r="2.5" fill="#000000"/><text x="184.50" y="172.50" font-size="13" fill="#000000">X</text></svg>
   cause_tags: []
   concept_tags:
   - polygon_transform.rotate
@@ -106,4 +106,4 @@ visual_svg: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width=
   stroke-width="3" stroke-linejoin="round" fill="#ffffff">A</text><text x="224.10" y="100.29" font-size="13" text-anchor="middle" fill="#000000">A</text><circle cx="286.00" cy="135.50" r="2.5" fill="#000000"/><text
   x="296.53" y="127.75" font-size="13" text-anchor="start" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">B</text><text x="296.53" y="127.75" font-size="13" text-anchor="start"
   fill="#000000">B</text><circle cx="114.00" cy="286.00" r="2.5" fill="#000000"/><text x="106.14" y="304.07" font-size="13" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">C</text><text
-  x="106.14" y="304.07" font-size="13" text-anchor="end" fill="#000000">C</text><circle cx="178.50" cy="178.50" r="2.5" fill="#000000"/><text x="184.50" y="172.50" font-size="13" fill="#000000">P</text></svg>
+  x="106.14" y="304.07" font-size="13" text-anchor="end" fill="#000000">C</text><circle cx="178.50" cy="178.50" r="2.5" fill="#000000"/><text x="184.50" y="172.50" font-size="13" fill="#000000">X</text></svg>

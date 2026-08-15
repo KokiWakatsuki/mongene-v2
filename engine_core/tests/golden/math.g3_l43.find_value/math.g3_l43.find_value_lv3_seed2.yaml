@@ -24,47 +24,47 @@ meta:
   seed: 2
   signature: parallel_ratio_judge_then_length
 problem_ref: 91c8b02444195953
-problem_text: 三角形BLDで、辺BL, BD上に点H, Nがある。BH=12cm, HL=12cm, BN=36cm, ND=36cm である。HN=14cm のとき、HNとLDが平行であることを確かめたうえで、辺LDの長さを求めよ。
+problem_text: 三角形TUVで、辺TU, TV上に点W, Xがある。TW=7cm, WU=7cm, TX=28cm, XV=28cm である。WX=9cm のとき、WXとUVが平行であることを確かめたうえで、辺UVの長さを求めよ。
 sub_questions:
 - answer:
-    display: '28'
+    display: '18'
     kind: symbolic
-    srepr: Integer(28)
+    srepr: Integer(18)
   cause_tags: []
   concept_tags:
   - parallel_segment.judge_then_length
-  explanation: 'まず、BH:HLとBN:NDの比が等しいかどうかを比べる。（12:12 と 36:36）
+  explanation: 'まず、TW:WUとTX:XVの比が等しいかどうかを比べる。（7:7 と 28:28）
 
-    次に、平行線と線分の比の定理の逆から、HNとLDが平行であるかどうかを判別する。（平行である）
+    次に、平行線と線分の比の定理の逆から、WXとUVが平行であるかどうかを判別する。（平行である）
 
-    次に、HN∥LD であることから、三角形BHNと三角形BLDが相似になることを見つける。（三角形BHN と 三角形BLD）
+    次に、WX∥UV であることから、三角形TWXと三角形TUVが相似になることを見つける。（三角形TWX と 三角形TUV）
 
-    最後に、BH:BL=HN:LD が成り立つことから、辺LDの長さを求める。（28）'
+    最後に、TW:TU=WX:UV が成り立つことから、辺UVの長さを求める。（18）'
   hints:
-  - BH:HLとBN:NDの比が等しいかどうかを比べる。
-  - 平行線と線分の比の定理の逆から、HNとLDが平行であるかどうかを判別する。
-  - HN∥LD であることから、三角形BHNと三角形BLDが相似になることを見つける。
+  - TW:WUとTX:XVの比が等しいかどうかを比べる。
+  - 平行線と線分の比の定理の逆から、WXとUVが平行であるかどうかを判別する。
+  - WX∥UV であることから、三角形TWXと三角形TUVが相似になることを見つける。
   label: (1)
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
-    narration: BH:HLとBN:NDの比が等しいかどうかを比べる。
+    narration: TW:WUとTX:XVの比が等しいかどうかを比べる。
     op: compare_division_ratios
-    result_display: 12:12 と 36:36
+    result_display: 7:7 と 28:28
     result_srepr: ''
   - args: []
-    narration: 平行線と線分の比の定理の逆から、HNとLDが平行であるかどうかを判別する。
+    narration: 平行線と線分の比の定理の逆から、WXとUVが平行であるかどうかを判別する。
     op: judge_by_parallel_ratio_converse
     result_display: 平行である
     result_srepr: 'true'
   - args: []
-    narration: HN∥LD であることから、三角形BHNと三角形BLDが相似になることを見つける。
+    narration: WX∥UV であることから、三角形TWXと三角形TUVが相似になることを見つける。
     op: identify_similar_triangles_from_parallel
-    result_display: 三角形BHN と 三角形BLD
+    result_display: 三角形TWX と 三角形TUV
     result_srepr: ''
   - args: []
-    narration: BH:BL=HN:LD が成り立つことから、辺LDの長さを求める。
+    narration: TW:TU=WX:UV が成り立つことから、辺UVの長さを求める。
     op: apply_parallel_segment_ratio
-    result_display: '28'
-    result_srepr: Integer(28)
+    result_display: '18'
+    result_srepr: Integer(18)
 visual_svg: null

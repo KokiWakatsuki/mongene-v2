@@ -32,7 +32,9 @@ levels:
     signature: judge_isosceles_from_angle_condition
     recipe: math.judge_isosceles_from_angle_condition
     params:
-      angle_domain: {int_range: [1, 178]}
+      # **底角として成り立つ 25〜85°。** 前は 1〜178 だった（2つの角の和が
+      # 180°を超える組も、1°の角も出た）。
+      angle_domain: {int_range: [25, 85]}
       diff_domain: {int_range: [1, 30]}
     given: [statement]
     asked: [choice]

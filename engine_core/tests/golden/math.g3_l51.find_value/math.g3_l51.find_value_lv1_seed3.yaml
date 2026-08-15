@@ -24,7 +24,7 @@ meta:
   seed: 3
   signature: pythagorean_hypotenuse
 problem_ref: dafd140b2339b4c0
-problem_text: ∠N=90°の直角三角形EDNで、EN=9cm, DN=18cm である。斜辺EDの長さを求めよ。
+problem_text: ∠G=90°の直角三角形EFGで、EG=9cm, FG=18cm である。斜辺EFの長さを求めよ。
 sub_questions:
 - answer:
     display: 9√5 cm

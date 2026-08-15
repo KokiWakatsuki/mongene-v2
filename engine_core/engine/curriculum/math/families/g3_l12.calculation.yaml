@@ -19,8 +19,10 @@ levels:
     recipe: math.evaluate_arithmetic_via_identity
     params:
       mode: diff_of_squares_arithmetic
+      # **工夫が効く組だけを残す**（和か差の一方が10の倍数・または差が2以下。
+      # recipe が絞る）。狭めたぶんを b の幅で戻す（98²-52² のような組も入る）。
       a_domain: {int_range: [10, 99]}
-      b_domain: {int_range: [1, 9]}
+      b_domain: {int_range: [1, 60]}
     given: [expression]
     asked: [value]
     visual: none
@@ -33,8 +35,9 @@ levels:
     recipe: math.evaluate_arithmetic_via_identity
     params:
       mode: symmetric_sum_of_squares
-      sum_domain: {int_range: [-9, 9]}
-      product_domain: {int_range: [-9, 9]}
+      # 実数 x,y が存在する組（s²-4p ≧ 0）だけを残すぶん、幅を広げる。
+      sum_domain: {int_range: [-15, 15]}
+      product_domain: {int_range: [-20, 20]}
     given: [equation_a, equation_b, expression]
     asked: [value]
     visual: none

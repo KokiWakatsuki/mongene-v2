@@ -16,8 +16,12 @@ levels:
     signature: isosceles_base_angle
     recipe: math.isosceles_base_angle
     params:
-      apex_domain: {int_range: [1, 178]}
-      base_domain: {int_range: [1, 89]}
+      # **紙に描ける三角形の角にする。** 前は 1〜178・1〜89 だったので
+      # 「底角7°の二等辺三角形」（頂角166°の針のような図形）が出ていた。
+      # 実物の二等辺三角形は底角 25〜80°・頂角 20〜130°の範囲に収まる。
+      # 角を狭めたぶん、頂点の名前（recipe が連続した文字で引く）が軸に加わる。
+      apex_domain: {int_range: [20, 130]}
+      base_domain: {int_range: [25, 80]}
     given: [condition]
     asked: [value]
     visual: none

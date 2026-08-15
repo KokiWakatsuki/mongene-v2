@@ -1,6 +1,6 @@
-approved_at: '2026-08-15T22:44:56.029927'
+approved_at: '2026-08-16T04:02:22.884573'
 approver: koki
-content_sha256: 46537cc2a671686975a6af22815376bac416e4c6b7fbfd2637cbb4c11917734f
+content_sha256: eb491f2e8357f6db217b77136b906ac56e2b3c4a0eb51d8dcc9b41da12700913
 family: math.g1_l55.graph_table
 files:
 - /Users/koki/workspace/mongene-v2/engine_core/tests/golden/math.g1_l55.graph_table/math.g1_l55.graph_table_lv1_seed1.yaml

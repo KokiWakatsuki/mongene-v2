@@ -24,7 +24,7 @@ from engine.core.contracts import (
 )
 from engine.core.registry import REGISTRY, register_recipe
 from engine.core.rng import Rng, draw
-from engine.packs.math.recipes.letter_expr import _draw_distinct_points
+from engine.packs.math.recipes.letter_expr import _draw_distinct_points, _draw_named_figures
 
 
 def _effective_concept_tags(ctx: CellContext) -> list[str]:
@@ -52,22 +52,32 @@ def isosceles_base_angle_recipe(ctx: CellContext, rng: Rng) -> MR:
     """
     p = ctx.spec_level.params
     direction = str(draw(["apex_to_base", "base_to_apex"], rng))
+    # 角の定義域を紙に描ける範囲（底角25〜80°）に狭めたぶん、頂点の名前を題材の軸に
+    # 足して組合せを確保する（実物の問題集も ABC / PQR / DEF を使い分けている）。
+    (v,) = _draw_named_figures([3], rng)
+    a, b, c = v[0], v[1], v[2]
     if direction == "apex_to_base":
         apex = int(draw(p["apex_domain"], rng))
         solver = REGISTRY.solver("math.isosceles_base_angle")
         sol = cast(Solution, solver("apex", str(apex)))
         assert isinstance(sol.answer, SymbolicAnswer)
         assert sol.answer.srepr == sympy.srepr(sympy.Rational(180 - apex, 2))
-        statement = f"AB=ACの二等辺三角形ABCで、頂角∠Aの大きさが{apex}°のとき、底角∠Bの大きさを求めよ"
-        params = {"known_type": "apex", "known_value": apex}
+        statement = (
+            f"{a}{b}={a}{c}の二等辺三角形{v}で、頂角∠{a}の大きさが{apex}°のとき、"
+            f"底角∠{b}の大きさを求めよ"
+        )
+        params = {"known_type": "apex", "known_value": apex, "vertices": v}
     else:
         base = int(draw(p["base_domain"], rng))
         solver = REGISTRY.solver("math.isosceles_base_angle")
         sol = cast(Solution, solver("base", str(base)))
         assert isinstance(sol.answer, SymbolicAnswer)
         assert sol.answer.srepr == sympy.srepr(sympy.Integer(180 - 2 * base))
-        statement = f"AB=ACの二等辺三角形ABCで、底角∠Bの大きさが{base}°のとき、頂角∠Aの大きさを求めよ"
-        params = {"known_type": "base", "known_value": base}
+        statement = (
+            f"{a}{b}={a}{c}の二等辺三角形{v}で、底角∠{b}の大きさが{base}°のとき、"
+            f"頂角∠{a}の大きさを求めよ"
+        )
+        params = {"known_type": "base", "known_value": base, "vertices": v}
 
     sub_question = SubQuestionMR(
         label="(1)", asked="value", answer=sol.answer, steps=sol.steps,
@@ -98,14 +108,23 @@ def equilateral_triangle_properties_recipe(ctx: CellContext, rng: Rng) -> MR:
     """
     p = ctx.spec_level.params
     side = int(draw(p["side_domain"], rng))
+    # 辺の長さを教材の大きさに戻したぶん、**問う辺と角**を軸に足す（実物の問題集も
+    # 「辺BCと∠A」「辺CAと∠B」のように、どの辺・どの角を問うかを変えている）。
+    (v,) = _draw_named_figures([3], rng)
+    side_i = int(draw({"int_set": [0, 1, 2]}, rng))
+    angle_i = int(draw({"int_set": [0, 1, 2]}, rng))
+    asked_side = v[side_i] + v[(side_i + 1) % 3]
 
     solver = REGISTRY.solver("math.equilateral_triangle_properties")
-    sol = cast(Solution, solver(str(side)))
+    sol = cast(Solution, solver(str(side), v[angle_i]))
     assert isinstance(sol.answer, SymbolicAnswer)
     expected = sympy.Tuple(sympy.Integer(side), sympy.Rational(180, 3))
     assert sol.answer.srepr == sympy.srepr(expected)
 
-    statement = f"1辺の長さが{side}cmの正三角形ABCで、辺BCの長さと∠Aの大きさを求めよ"
+    statement = (
+        f"1辺の長さが{side}cmの正三角形{v}で、辺{asked_side}の長さと"
+        f"∠{v[angle_i]}の大きさを求めよ"
+    )
 
     sub_question = SubQuestionMR(
         label="(1)", asked="value", answer=sol.answer, steps=sol.steps,
@@ -114,7 +133,7 @@ def equilateral_triangle_properties_recipe(ctx: CellContext, rng: Rng) -> MR:
     return MR(
         signature=ctx.spec_level.signature, family=ctx.family, level=ctx.level,
         purpose=ctx.purpose, seed=0,
-        params={"side": side},
+        params={"side": side, "vertices": v, "side_i": side_i, "angle_i": angle_i},
         given={"condition": statement}, sub_questions=[sub_question], visual_plan=None,
         provenance=Provenance(recipe="math.equilateral_triangle_properties"),
     )

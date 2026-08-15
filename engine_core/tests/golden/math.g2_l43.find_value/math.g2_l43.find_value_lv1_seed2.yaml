@@ -24,18 +24,18 @@ meta:
   seed: 2
   signature: equilateral_triangle_properties
 problem_ref: 4dfab853ad4e04ec
-problem_text: 1辺の長さが62cmの正三角形ABCで、辺BCの長さと∠Aの大きさを求めよ。
+problem_text: 1辺の長さが25cmの正三角形XYZで、辺XYの長さと∠Zの大きさを求めよ。
 sub_questions:
 - answer:
-    display: 辺の長さ 62、∠A 60°
+    display: 辺の長さ 25、∠Z 60°
     kind: symbolic
-    srepr: Tuple(Integer(62), Integer(60))
+    srepr: Tuple(Integer(25), Integer(60))
   cause_tags: []
   concept_tags:
   - equilateral.properties_from_side
-  explanation: 'まず、正三角形の与えられた1辺の長さを読み取る。（62）
+  explanation: 'まず、正三角形の与えられた1辺の長さを読み取る。（25）
 
-    次に、正三角形は3辺の長さがすべて等しく、3つの内角もすべて等しく分け合うことから、もう1辺の長さと1つの内角の大きさを求める。（辺の長さ 62、∠A 60°）'
+    次に、正三角形は3辺の長さがすべて等しく、3つの内角もすべて等しく分け合うことから、もう1辺の長さと1つの内角の大きさを求める。（辺の長さ 25、∠Z 60°）'
   hints:
   - 正三角形の与えられた1辺の長さを読み取る。
   label: (1)
@@ -44,11 +44,11 @@ sub_questions:
   - args: []
     narration: 正三角形の与えられた1辺の長さを読み取る。
     op: identify_given_side
-    result_display: '62'
+    result_display: '25'
     result_srepr: ''
   - args: []
     narration: 正三角形は3辺の長さがすべて等しく、3つの内角もすべて等しく分け合うことから、もう1辺の長さと1つの内角の大きさを求める。
     op: apply_equilateral_property
-    result_display: 辺の長さ 62、∠A 60°
-    result_srepr: Tuple(Integer(62), Integer(60))
+    result_display: 辺の長さ 25、∠Z 60°
+    result_srepr: Tuple(Integer(25), Integer(60))
 visual_svg: null

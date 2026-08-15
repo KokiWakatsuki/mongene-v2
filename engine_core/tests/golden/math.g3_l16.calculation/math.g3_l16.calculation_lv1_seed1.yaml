@@ -26,18 +26,18 @@ meta:
 problem_ref: b855fa59d4113a30
 problem_text: '次の分数を小数で表し、循環小数の記号を用いて書け。
 
-  17/30'
+  1/3'
 sub_questions:
 - answer:
-    display: 0.56̇
+    display: 0.3̇
     kind: symbolic
-    srepr: 0.5(6)
+    srepr: 0.(3)
   cause_tags: []
   concept_tags:
   - rational_form.fraction_to_decimal
   explanation: 'まず、分子を分母で割り進め、そのつど現れる余りを記録していく。（余りを記録しながら割り進める）
 
-    次に、同じ余りが再び現れた区間の商の並びを、循環節として書き出す。（0.56̇）'
+    次に、同じ余りが再び現れた区間の商の並びを、循環節として書き出す。（0.3̇）'
   hints:
   - 分子を分母で割り進め、そのつど現れる余りを記録していく。
   label: (1)
@@ -51,6 +51,6 @@ sub_questions:
   - args: []
     narration: 同じ余りが再び現れた区間の商の並びを、循環節として書き出す。
     op: identify_repeating_block
-    result_display: 0.56̇
-    result_srepr: 0.5(6)
+    result_display: 0.3̇
+    result_srepr: 0.(3)
 visual_svg: null

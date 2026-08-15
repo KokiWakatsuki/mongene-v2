@@ -323,7 +323,7 @@ SOLVE_BUILDERS: dict[str, Callable[[Mapping[str, Any], Mapping[str, str]], list[
 # 場面の抽選（recipe 側のみ。数値を引いて場面文と numbers を組む）
 # ---------------------------------------------------------------------------
 @lru_cache(maxsize=None)
-def _square_plot_candidates(area_max: int) -> tuple[int, ...]:
+def _square_plot_candidates(area_max: int, area_min: int = 1) -> tuple[int, ...]:
     """正方形の面積 S=k²a の候補列挙（k≥2・a は近似値表にある squarefree）。
 
     残す条件:
@@ -350,10 +350,14 @@ def _square_plot_candidates(area_max: int) -> tuple[int, ...]:
 
 
 def _scene_square_plot_approx(p: Mapping[str, Any], rng: Rng) -> SqrtMiscScene:
-    cands = list(_square_plot_candidates(int(p["area_max"])))
+    # **題材を先に引き、その単位で面積の下限を変える。** 面積を単位と無関係に
+    # 引いていたので「面積が28cm²の正方形の花だんの囲い」（1辺5.3cm の花だん）が
+    # 出ていた。m² で測る土地は 20m² 以上、cm² で測る物は 100cm² 以上にする。
+    subject, unit = _split_tokens(str(_draw_index(list(p["subject_candidates"]), rng)))
+    area_min = int(p.get("area_min_m2", 20)) if unit == "m" else int(p.get("area_min_cm2", 100))
+    cands = [v for v in _square_plot_candidates(int(p["area_max"])) if v >= area_min]
     area = int(draw({"int_set": cands}, rng))
     _, a = _decompose_square_factor(area)
-    subject, unit = _split_tokens(str(_draw_index(list(p["subject_candidates"]), rng)))
     approx_disp = _fmt_hundredths(_ROOT_APPROX_HUNDREDTHS[a])
     # 近似値（√a=…）も given.scenario に置く（G-Q5t の whitelist は mr.given だけを
     # 見るため、ask 側にしか出さない数値は whitelist されず偽陽性になる＝踏んだ罠）。
@@ -395,6 +399,9 @@ def _scene_rectangle_ratio_side(p: Mapping[str, Any], rng: Rng) -> SqrtMiscScene
     cands = _rectangle_ratio_candidates(
         tuple(int(v) for v in p["ratio_candidates"]), int(p["area_max"])
     )
+    # **m² で語る土地なので、面積に下限を置く**（「面積は10m²である畑」が出ていた）。
+    area_min = int(p.get("area_min", 40))
+    cands = tuple((r, a) for r, a in cands if a >= area_min)
     ratio, area = cands[int(draw({"int_range": [0, len(cands) - 1]}, rng))]
     subject = str(_draw_index(list(p["subject_candidates"]), rng))
     scenario = (

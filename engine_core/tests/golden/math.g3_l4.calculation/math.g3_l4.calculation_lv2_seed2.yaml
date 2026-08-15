@@ -26,20 +26,20 @@ meta:
 problem_ref: ca8eae9726be3971
 problem_text: '次の式を展開せよ。
 
-  (5m - 5)²'
+  (5k - 5)²'
 sub_questions:
 - answer:
-    display: 25m² - 50m + 25
+    display: 25k² - 50k + 25
     kind: symbolic
-    srepr: Add(Mul(Integer(25), Pow(Symbol('m'), Integer(2))), Mul(Integer(-1), Integer(50), Symbol('m')), Integer(25))
+    srepr: Add(Mul(Integer(25), Pow(Symbol('k'), Integer(2))), Mul(Integer(-1), Integer(50), Symbol('k')), Integer(25))
   cause_tags: []
   concept_tags:
   - polynomial.expand_formula_square
-  explanation: 'まず、係数のついたはじめの項を平方する。（25m²）
+  explanation: 'まず、係数のついたはじめの項を平方する。（25k²）
 
-    次に、2つの項の積の2倍（中間の項）を求める。（-50m）
+    次に、2つの項の積の2倍（中間の項）を求める。（-50k）
 
-    最後に、乗法公式にあてはめて展開した式を書く。（25m² - 50m + 25）'
+    最後に、乗法公式にあてはめて展開した式を書く。（25k² - 50k + 25）'
   hints:
   - 係数のついたはじめの項を平方する。
   - 2つの項の積の2倍（中間の項）を求める。
@@ -49,16 +49,16 @@ sub_questions:
   - args: []
     narration: 係数のついたはじめの項を平方する。
     op: square_leading_term
-    result_display: 25m²
+    result_display: 25k²
     result_srepr: ''
   - args: []
     narration: 2つの項の積の2倍（中間の項）を求める。
     op: compute_cross_term
-    result_display: -50m
+    result_display: -50k
     result_srepr: ''
   - args: []
     narration: 乗法公式にあてはめて展開した式を書く。
     op: write_expansion
-    result_display: 25m² - 50m + 25
-    result_srepr: Add(Mul(Integer(25), Pow(Symbol('m'), Integer(2))), Mul(Integer(-1), Integer(50), Symbol('m')), Integer(25))
+    result_display: 25k² - 50k + 25
+    result_srepr: Add(Mul(Integer(25), Pow(Symbol('k'), Integer(2))), Mul(Integer(-1), Integer(50), Symbol('k')), Integer(25))
 visual_svg: null

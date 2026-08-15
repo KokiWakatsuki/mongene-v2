@@ -36,7 +36,7 @@ from engine.core.contracts import (
 )
 from engine.core.registry import REGISTRY, register_recipe
 from engine.core.rng import Rng, draw, draw_many
-from engine.packs.math.recipes.letter_expr import _draw_distinct_points
+from engine.packs.math.recipes.letter_expr import _draw_named_figures
 from engine.packs.math.recipes.polynomial import _domain_candidates, _fmt_poly_x_terms
 from engine.packs.math.visuals.graph import (
     render_curve_domain_solution_svg,
@@ -134,7 +134,8 @@ def read_two_points_on_parabola(ctx: CellContext, rng: Rng) -> MR:
     a = int(draw({"int_set": a_ok}, rng))
     x_ok = [x for x in x_cands if abs(a) * x * x <= bound]
     x1, x2 = sorted(int(v) for v in draw_many({"int_set": x_ok, "distinct": ["value"]}, rng, k=2))
-    n1, n2 = _draw_distinct_points(2, rng)
+    (v,) = _draw_named_figures([2], rng)
+    n1, n2 = v
 
     a_s = sympy.Integer(a)
     pt1 = (sympy.Integer(x1), a_s * x1**2)
@@ -443,7 +444,8 @@ def draw_parabola_and_line(ctx: CellContext, rng: Rng) -> MR:
     a = int(draw({"int_set": a_ok}, rng))
     x_ok = [x for x in x_cands if abs(a) * x * x <= bound]
     xa, xb = sorted(int(v) for v in draw_many({"int_set": x_ok, "distinct": ["value"]}, rng, k=2))
-    n1, n2 = _draw_distinct_points(2, rng)
+    (v,) = _draw_named_figures([2], rng)
+    n1, n2 = v
 
     m = a * (xa + xb)
     b = -a * xa * xb
@@ -541,7 +543,8 @@ def read_area_time_graph(ctx: CellContext, rng: Rng) -> MR:
     t1, t2 = sorted(
         int(v) for v in draw_many({"int_range": [1, total], "distinct": ["value"]}, rng, k=2)
     )
-    names = _draw_distinct_points(5, rng)
+    (run,) = _draw_named_figures([5], rng)
+    names = list(run)
     na, nb, nc, nd, np_ = names
 
     y1 = _rect_area_at(p_side, q_side, t1)
@@ -614,7 +617,8 @@ def draw_piecewise_area_graph(ctx: CellContext, rng: Rng) -> MR:
     s = int(draw({"int_set": s_cands}, rng))
     v_cands = [v for v in _domain_candidates(p["speed_domain"]) if v > 0 and s % v == 0]
     v = int(draw({"int_set": v_cands}, rng))
-    names = _draw_distinct_points(5, rng)
+    (run,) = _draw_named_figures([5], rng)
+    names = list(run)
     na, nb, nc, nd, np_ = names
 
     solver = REGISTRY.solver("math.draw_piecewise_area_graph_features")

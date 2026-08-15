@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: judge_parallel_from_angle_condition
 problem_ref: 6ae5f98d675e9a03
-problem_text: 2直線ℓ、mに1本の直線nが交わっている。同位角がそれぞれ144°、144°であるとき、ℓとmは平行であるといえるか、答えよ。
+problem_text: 2直線ℓ、mに1本の直線nが交わっている。同位角がそれぞれ52°、52°であるとき、ℓとmは平行であるといえるか、答えよ。
 sub_questions:
 - answer:
     correct: 平行であるといえる

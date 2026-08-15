@@ -26,18 +26,18 @@ meta:
 problem_ref: ae833a78845b203b
 problem_text: '次の式を展開せよ。
 
-  (a + 7)²'
+  (a - 6)²'
 sub_questions:
 - answer:
-    display: a² + 14a + 49
+    display: a² - 12a + 36
     kind: symbolic
-    srepr: Add(Pow(Symbol('a'), Integer(2)), Mul(Integer(14), Symbol('a')), Integer(49))
+    srepr: Add(Pow(Symbol('a'), Integer(2)), Mul(Integer(-1), Integer(12), Symbol('a')), Integer(36))
   cause_tags: []
   concept_tags:
   - polynomial.expand_formula_square
-  explanation: 'まず、はじめの項の平方・積の2倍・終わりの項の平方を求める。（a²、14a、49）
+  explanation: 'まず、はじめの項の平方・積の2倍・終わりの項の平方を求める。（a²、-12a、36）
 
-    次に、乗法公式にあてはめて展開した式を書く。（a² + 14a + 49）'
+    次に、乗法公式にあてはめて展開した式を書く。（a² - 12a + 36）'
   hints:
   - はじめの項の平方・積の2倍・終わりの項の平方を求める。
   label: (1)
@@ -46,11 +46,11 @@ sub_questions:
   - args: []
     narration: はじめの項の平方・積の2倍・終わりの項の平方を求める。
     op: compute_square_terms
-    result_display: a²、14a、49
+    result_display: a²、-12a、36
     result_srepr: ''
   - args: []
     narration: 乗法公式にあてはめて展開した式を書く。
     op: write_expansion
-    result_display: a² + 14a + 49
-    result_srepr: Add(Pow(Symbol('a'), Integer(2)), Mul(Integer(14), Symbol('a')), Integer(49))
+    result_display: a² - 12a + 36
+    result_srepr: Add(Pow(Symbol('a'), Integer(2)), Mul(Integer(-1), Integer(12), Symbol('a')), Integer(36))
 visual_svg: null

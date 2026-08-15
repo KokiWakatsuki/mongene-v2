@@ -70,15 +70,20 @@ def isosceles_base_angle(known_type: object, known_value: object) -> Solution:
 
 
 @register_solver("math.equilateral_triangle_properties")
-def equilateral_triangle_properties(side: object) -> Solution:
+def equilateral_triangle_properties(side: object, angle_label: object = "") -> Solution:
     """正三角形の1辺の長さから、もう1辺の長さと1つの内角の大きさを求める
 
     （g2_l43.find_value Lv1）。1辺の長さだけから計算する（double-solve、正三角形は
     3辺が等しく3内角も等しい）。答えは Tuple(辺の長さ, 内角) の SymbolicAnswer。
+
+    `angle_label` は答えに書く頂点の名前（「∠G」）。頂点名を recipe 側で引くように
+    したので、ここに "A" を焼き込んだままだと本文（正三角形GHJ）と答え（∠A）の
+    記号が食い違う（`engine.eval.text_quality` が拾う）。
     """
     m = sympy.sympify(str(side))
     angle = sympy.Rational(180, 3)
-    disp = f"辺の長さ {sympy.sstr(m)}、∠A {sympy.sstr(angle)}°"
+    label = str(angle_label) or "A"
+    disp = f"辺の長さ {sympy.sstr(m)}、∠{label} {sympy.sstr(angle)}°"
     srepr = sympy.srepr(sympy.Tuple(m, angle))
     steps = [
         Step(

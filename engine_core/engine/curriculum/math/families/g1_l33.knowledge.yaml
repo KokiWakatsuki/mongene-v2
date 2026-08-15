@@ -45,10 +45,13 @@ levels:
     signature: judge_inverse_proportion_table
     recipe: math.judge_inverse_proportion_table
     params:
-      # 4つの相異なる正の整数 x（小さめの値・約数の多様性のため）。整数倍率 m(1〜4)。
+      # **比例定数を先に引き、その約数（x_max 以下）から x を4つ選ぶ。**
+      # 前は x を 1〜12 から引いて最小公倍数の整数倍を a にしていたので、
+      # x に 7・9・11 が混ざると a = 1008 のような数になっていた。
       # 偽の場合の摂動量 perturb_domain(≠0)。
-      x_domain: {int_range: [1, 12]}
-      multiplier_domain: {int_range: [1, 4]}
+      constant_candidates: [12, 16, 18, 20, 24, 30, 36, 40, 48, 54, 60, 72, 80, 90,
+                            96, 100, 120, 144, 180, 240]
+      x_max: 20
       perturb_domain: {int_range: [1, 5]}
     given: [statement]
     asked: [choice]

@@ -15,8 +15,13 @@ levels:
     signature: parallelogram_opposite_properties
     recipe: math.parallelogram_opposite_properties
     params:
-      side_domain: {int_range: [1, 300]}
-      angle_domain: {int_range: [1, 178]}
+      # **紙の図形の辺の長さ（3〜30cm）。** 前は 1〜300（1〜500）で
+      # 「1辺84cmの正三角形」「辺AB=96cm」のような、教材には出てこない
+      # 大きさが出ていた。実物の図形問題の辺は 3〜20cm あたり。
+      side_domain: {int_range: [3, 30]}
+      # **平行四辺形の内角は 35〜145°。** 前は 1〜178 で「∠K=157°」
+      # （となりの角が23°のつぶれた平行四辺形）が出ていた。
+      angle_domain: {int_range: [35, 145]}
     given: [condition]
     asked: [value]
     visual: none

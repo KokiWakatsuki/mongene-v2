@@ -24,7 +24,7 @@ meta:
   seed: 2
   signature: judge_construction_property_perpendicular_bisector
 problem_ref: d08c72704b4ac19e
-problem_text: 線分HJの垂直二等分線上に点Gをとる。このとき、GHとGJの長さの関係を、その理由となる性質の名前とともに答えよ。
+problem_text: 線分DEの垂直二等分線上に点Wをとる。このとき、WDとWEの長さの関係を、その理由となる性質の名前とともに答えよ。
 sub_questions:
 - answer:
     correct: 等しい

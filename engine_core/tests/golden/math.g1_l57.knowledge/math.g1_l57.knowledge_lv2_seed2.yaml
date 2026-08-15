@@ -24,7 +24,7 @@ meta:
   seed: 2
   signature: judge_appropriate_representative_value
 problem_ref: 3b7d811ff27c371a
-problem_text: 308人の通学時間がどれも近い範囲に集まっているデータで、集団の「まん中あたり」を表す代表値としては平均値と中央値のどちらが適切か、理由とともに答えよ。
+problem_text: 60人の通学時間がどれも近い範囲に集まっているデータで、集団の「まん中あたり」を表す代表値としては平均値と中央値のどちらが適切か、理由とともに答えよ。
 sub_questions:
 - answer:
     correct: 平均値

@@ -24,18 +24,18 @@ meta:
   seed: 3
   signature: special_parallelogram_diagonal_value
 problem_ref: bfdb5ce082403108
-problem_text: 長方形KEPMで対角線KPとEMの交点をOとする。KP=90cm のとき、線分OEの長さを求めよ。
+problem_text: ひし形TUVWで対角線TVとUWの交点をOとする。TV=34cm のとき、線分OTの長さと∠TOUの大きさを求めよ。
 sub_questions:
 - answer:
-    display: '45'
+    display: 線分の長さ 17、角の大きさ 90°
     kind: symbolic
-    srepr: Integer(45)
+    srepr: Tuple(Integer(17), Integer(90))
   cause_tags: []
   concept_tags:
   - special_parallelogram.diagonal_value
-  explanation: 'まず、対角線についてわかっている長さや、四角形の種類を読み取る。（90）
+  explanation: 'まず、対角線についてわかっている長さや、四角形の種類を読み取る。（34）
 
-    次に、対角線の長さが等しく、それぞれの中点で交わることから、交点から頂点までの長さを求める。（45）'
+    次に、ひし形の対角線はそれぞれの中点で交わり、しかも垂直に交わることから、交点から頂点までの長さと、交点にできる角の大きさを求める。（線分の長さ 17、角の大きさ 90°）'
   hints:
   - 対角線についてわかっている長さや、四角形の種類を読み取る。
   label: (1)
@@ -44,11 +44,11 @@ sub_questions:
   - args: []
     narration: 対角線についてわかっている長さや、四角形の種類を読み取る。
     op: identify_given_diagonal_value
-    result_display: '90'
+    result_display: '34'
     result_srepr: ''
   - args: []
-    narration: 対角線の長さが等しく、それぞれの中点で交わることから、交点から頂点までの長さを求める。
+    narration: ひし形の対角線はそれぞれの中点で交わり、しかも垂直に交わることから、交点から頂点までの長さと、交点にできる角の大きさを求める。
     op: apply_diagonal_property
-    result_display: '45'
-    result_srepr: Integer(45)
+    result_display: 線分の長さ 17、角の大きさ 90°
+    result_srepr: Tuple(Integer(17), Integer(90))
 visual_svg: null

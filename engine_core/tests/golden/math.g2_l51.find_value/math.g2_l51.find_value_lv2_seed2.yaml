@@ -24,16 +24,16 @@ meta:
   seed: 2
   signature: relative_frequency_estimate
 problem_ref: 744aad390d055742
-problem_text: ある10円硬貨を500回投げたところ、表が向いた回数が235回であった。この結果から、この10円硬貨を投げたとき表が出る確率を小数で推定せよ。
+problem_text: ある10円硬貨を500回投げたところ、表が向いた回数が250回であった。この結果から、この10円硬貨を投げたとき表が出る確率を小数で推定せよ。
 sub_questions:
 - answer:
-    display: '0.47'
+    display: '0.5'
     kind: symbolic
-    srepr: Rational(47, 100)
+    srepr: Rational(1, 2)
   cause_tags: []
   concept_tags:
   - probability.relative_frequency_estimate
-  explanation: まず、ことがらが起こった回数を、試行の総回数でわる。（0.47）
+  explanation: まず、ことがらが起こった回数を、試行の総回数でわる。（0.5）
   hints:
   - ことがらが起こった回数を、試行の総回数でわる。
   label: (1)
@@ -42,6 +42,6 @@ sub_questions:
   - args: []
     narration: ことがらが起こった回数を、試行の総回数でわる。
     op: divide_occurred_by_total
-    result_display: '0.47'
-    result_srepr: Rational(47, 100)
+    result_display: '0.5'
+    result_srepr: Rational(1, 2)
 visual_svg: null

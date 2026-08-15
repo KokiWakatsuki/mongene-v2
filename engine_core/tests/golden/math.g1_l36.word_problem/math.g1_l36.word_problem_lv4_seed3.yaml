@@ -24,7 +24,7 @@ meta:
   seed: 3
   signature: word_problem_max_area_and_times
 problem_ref: 0abe4831e41b64c8
-problem_text: '1辺が14cmの正方形NLBDの周上を、点QがNを出発してN→L→B→Dの順に毎秒1cmの速さでDまで動く。点QがNを出発してからx秒後の三角形NQDの面積をy cm²とする。
+problem_text: '1辺が14cmの正方形EFGHの周上を、点LがEを出発してE→F→G→Hの順に毎秒1cmの速さでHまで動く。点LがEを出発してからx秒後の三角形ELHの面積をy cm²とする。
 
   面積が最大になるのはxがどの範囲にあるときかとそのときの面積、および面積が84cm²になるときのxの値をすべて求めよ。'
 sub_questions:

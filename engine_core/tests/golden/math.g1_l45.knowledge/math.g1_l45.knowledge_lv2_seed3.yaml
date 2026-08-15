@@ -24,7 +24,7 @@ meta:
   seed: 3
   signature: judge_circle_property
 problem_ref: d14610c8fa81688e
-problem_text: 中心Mの円に、点Nで接する接線がある。この接線と、点Nを通る半径MNがつくる角の大きさの性質を答えよ。
+problem_text: 中心Uの円に、点Wで接する接線がある。この接線と、点Wを通る半径UWがつくる角の大きさの性質を答えよ。
 sub_questions:
 - answer:
     correct: 垂直

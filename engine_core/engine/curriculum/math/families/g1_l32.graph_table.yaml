@@ -19,7 +19,9 @@ levels:
       # 格子点になる。|y0| <= value_abs_max・|x0| <= x_abs_max で方眼の目盛数を有界化した
       # 上で 436 通り（scratchpad/count_domains.py で数え上げ）。value_abs_max は方眼の
       # 目盛が細かくなりすぎない上限（既存の直線セルと同じ 30 目盛前後に収める）。
-      numerator_domain: {int_range: [-11, 11], exclude: [0]}
+      # **傾きは ±6 まで。** 前は分子 ±11 まで許していたので、傾き -11 の
+      # ほとんど垂直な直線から格子点を読ませる問題（(1, -11)）が出ていた。
+      numerator_domain: {int_range: [-6, 6], exclude: [0]}
       denominator_domain: {int_set: [1, 2, 3, 4, 5]}
       value_abs_max: 16
       x_abs_max: 12

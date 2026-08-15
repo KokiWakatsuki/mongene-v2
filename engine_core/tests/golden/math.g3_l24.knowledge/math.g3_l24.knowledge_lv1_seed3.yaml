@@ -24,7 +24,7 @@ meta:
   seed: 3
   signature: quadratic_terms_term_recall
 problem_ref: 7a736660242b8cd8
-problem_text: 移項して整理すると x² - 6x + 4 = 0 のように、x の2乗をふくむ形になる方程式を何といいますか。
+problem_text: 移項して整理すると x² - 12x + 11 = 0 のように、x の2乗をふくむ形になる方程式を何といいますか。
 sub_questions:
 - answer:
     correct: 二次方程式

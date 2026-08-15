@@ -26,18 +26,18 @@ meta:
 problem_ref: 5274365c450e2d78
 problem_text: '次の式を因数分解せよ。
 
-  t² + 15t + 36'
+  s² + 15s + 36'
 sub_questions:
 - answer:
-    display: (t + 3)(t + 12)
+    display: (s + 3)(s + 12)
     kind: symbolic
-    srepr: Mul(Add(Symbol('t'), Integer(3)), Add(Symbol('t'), Integer(12)))
+    srepr: Mul(Add(Symbol('s'), Integer(3)), Add(Symbol('s'), Integer(12)))
   cause_tags: []
   concept_tags:
   - polynomial.factor_sum_product
   explanation: 'まず、たすと1次の係数、かけると定数になる2つの数を見つける。（3 と 12）
 
-    次に、見つけた2つの数を使い、2つの1次式の積で表す。（(t + 3)(t + 12)）'
+    次に、見つけた2つの数を使い、2つの1次式の積で表す。（(s + 3)(s + 12)）'
   hints:
   - たすと1次の係数、かけると定数になる2つの数を見つける。
   label: (1)
@@ -51,6 +51,6 @@ sub_questions:
   - args: []
     narration: 見つけた2つの数を使い、2つの1次式の積で表す。
     op: write_factors
-    result_display: (t + 3)(t + 12)
-    result_srepr: Mul(Add(Symbol('t'), Integer(3)), Add(Symbol('t'), Integer(12)))
+    result_display: (s + 3)(s + 12)
+    result_srepr: Mul(Add(Symbol('s'), Integer(3)), Add(Symbol('s'), Integer(12)))
 visual_svg: null

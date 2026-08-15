@@ -26,18 +26,18 @@ meta:
 problem_ref: bd983b5d7f61b0d2
 problem_text: '次の式を因数分解せよ。
 
-  7t² - 252'
+  7s² - 252'
 sub_questions:
 - answer:
-    display: 7(t - 6)(t + 6)
+    display: 7(s - 6)(s + 6)
     kind: symbolic
-    srepr: Mul(Integer(7), Add(Symbol('t'), Integer(-6)), Add(Symbol('t'), Integer(6)))
+    srepr: Mul(Integer(7), Add(Symbol('s'), Integer(-6)), Add(Symbol('s'), Integer(6)))
   cause_tags: []
   concept_tags:
   - polynomial.factor_various
-  explanation: 'まず、各項に共通する因数をかっこの外にくくり出す。（7(t² - 36)）
+  explanation: 'まず、各項に共通する因数をかっこの外にくくり出す。（7(s² - 36)）
 
-    次に、くくり出した後のかっこの中を乗法公式の逆で因数分解する。（7(t - 6)(t + 6)）'
+    次に、くくり出した後のかっこの中を乗法公式の逆で因数分解する。（7(s - 6)(s + 6)）'
   hints:
   - 各項に共通する因数をかっこの外にくくり出す。
   label: (1)
@@ -46,11 +46,11 @@ sub_questions:
   - args: []
     narration: 各項に共通する因数をかっこの外にくくり出す。
     op: factor_out_common
-    result_display: 7(t² - 36)
+    result_display: 7(s² - 36)
     result_srepr: ''
   - args: []
     narration: くくり出した後のかっこの中を乗法公式の逆で因数分解する。
     op: apply_formula
-    result_display: 7(t - 6)(t + 6)
-    result_srepr: Mul(Integer(7), Add(Symbol('t'), Integer(-6)), Add(Symbol('t'), Integer(6)))
+    result_display: 7(s - 6)(s + 6)
+    result_srepr: Mul(Integer(7), Add(Symbol('s'), Integer(-6)), Add(Symbol('s'), Integer(6)))
 visual_svg: null

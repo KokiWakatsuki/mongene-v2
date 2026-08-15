@@ -24,31 +24,31 @@ meta:
   seed: 1
   signature: similar_triangle_x_shape
 problem_ref: 0f245c8a52916ae3
-problem_text: 線分EKと線分RFが点Nで交わり、ER∥KFである。NE=4cm, NR=9cm, NK=12cm のとき、相似な三角形を見つけて線分NFの長さを求めよ。
+problem_text: 線分NQと線分PRが点Sで交わり、NP∥QRである。SN=4cm, SP=9cm, SQ=8cm のとき、相似な三角形を見つけて線分SRの長さを求めよ。
 sub_questions:
 - answer:
-    display: '27'
+    display: '18'
     kind: symbolic
-    srepr: Integer(27)
+    srepr: Integer(18)
   cause_tags: []
   concept_tags:
   - similarity.x_shape_length
-  explanation: 'まず、ER∥KF であることから、対頂角と錯角がそれぞれ等しくなる相似な三角形（三角形NERと三角形NKF）の組を見つける。
+  explanation: 'まず、NP∥QR であることから、対頂角と錯角がそれぞれ等しくなる相似な三角形（三角形SNPと三角形SQR）の組を見つける。
 
-    次に、相似な三角形の対応する辺の長さの比が等しい（NE:NK=NR:NF）ことから、求める辺の長さを求める。（27）'
+    次に、相似な三角形の対応する辺の長さの比が等しい（SN:SQ=SP:SR）ことから、求める辺の長さを求める。（18）'
   hints:
-  - ER∥KF であることから、対頂角と錯角がそれぞれ等しくなる相似な三角形（三角形NERと三角形NKF）の組を見つける。
+  - NP∥QR であることから、対頂角と錯角がそれぞれ等しくなる相似な三角形（三角形SNPと三角形SQR）の組を見つける。
   label: (1)
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
-    narration: ER∥KF であることから、対頂角と錯角がそれぞれ等しくなる相似な三角形（三角形NERと三角形NKF）の組を見つける。
+    narration: NP∥QR であることから、対頂角と錯角がそれぞれ等しくなる相似な三角形（三角形SNPと三角形SQR）の組を見つける。
     op: identify_similar_triangles_in_x_shape
     result_display: ''
     result_srepr: ''
   - args: []
-    narration: 相似な三角形の対応する辺の長さの比が等しい（NE:NK=NR:NF）ことから、求める辺の長さを求める。
+    narration: 相似な三角形の対応する辺の長さの比が等しい（SN:SQ=SP:SR）ことから、求める辺の長さを求める。
     op: apply_proportion
-    result_display: '27'
-    result_srepr: Integer(27)
+    result_display: '18'
+    result_srepr: Integer(18)
 visual_svg: null

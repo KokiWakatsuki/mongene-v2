@@ -24,18 +24,18 @@ meta:
   seed: 3
   signature: polygon_sides_from_interior_sum
 problem_ref: 3ec37586d1265743
-problem_text: 内角の和が3960°である多角形は何角形か求めよ。
+problem_text: 内角の和が1260°である多角形は何角形か求めよ。
 sub_questions:
 - answer:
-    display: '24'
+    display: '9'
     kind: symbolic
-    srepr: Integer(24)
+    srepr: Integer(9)
   cause_tags: []
   concept_tags:
   - polygon_angle.sides_from_interior_sum
-  explanation: 'まず、内角の和の公式に、わからない辺の数をあてはめて方程式をつくる。（180° × (n - 2) = 3960°）
+  explanation: 'まず、内角の和の公式に、わからない辺の数をあてはめて方程式をつくる。（180° × (n - 2) = 1260°）
 
-    次に、方程式を辺の数について解き、何角形かを求める。（24）'
+    次に、方程式を辺の数について解き、何角形かを求める。（9）'
   hints:
   - 内角の和の公式に、わからない辺の数をあてはめて方程式をつくる。
   label: (1)
@@ -44,11 +44,11 @@ sub_questions:
   - args: []
     narration: 内角の和の公式に、わからない辺の数をあてはめて方程式をつくる。
     op: form_interior_sum_equation
-    result_display: 180° × (n - 2) = 3960°
+    result_display: 180° × (n - 2) = 1260°
     result_srepr: ''
   - args: []
     narration: 方程式を辺の数について解き、何角形かを求める。
     op: solve_for_sides
-    result_display: '24'
-    result_srepr: Integer(24)
+    result_display: '9'
+    result_srepr: Integer(9)
 visual_svg: null

@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: judge_isosceles_from_angle_condition
 problem_ref: 4451c1a298996c46
-problem_text: 三角形ABCで、∠B=77°、∠C=77°であるとき、この三角形は二等辺三角形であるといえるか、答えよ。
+problem_text: 三角形ABCで、∠B=67°、∠C=67°であるとき、この三角形は二等辺三角形であるといえるか、答えよ。
 sub_questions:
 - answer:
     correct: 二等辺三角形であるといえる

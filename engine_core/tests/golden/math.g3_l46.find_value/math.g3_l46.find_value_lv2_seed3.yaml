@@ -24,7 +24,7 @@ meta:
   seed: 3
   signature: similar_solid_surface_volume_ratio
 problem_ref: 346fd47dd6d3808a
-problem_text: 相似な2つの円錐R, Fがあり、相似比は 2:7 である。RとFの表面積の比と体積の比をそれぞれ求めよ。
+problem_text: 相似な2つの円錐Y, Zがあり、相似比は 2:7 である。YとZの表面積の比と体積の比をそれぞれ求めよ。
 sub_questions:
 - answer:
     display: 表面積の比 4:49、体積の比 8:343

@@ -767,6 +767,10 @@ def _square_pyramid_candidates(
     out: list[tuple[int, int]] = []
     for base_edge in range(base_lo + base_lo % 2, base_hi + 1, 2):
         for lateral_edge in range(lat_lo, lat_hi + 1):
+            # **側辺は底辺の 3 倍まで。** 高さの下限しか見ていなかったので
+            # 「底面が1辺4cm・側辺29cm の正四角錐」（針のような立体）が出ていた。
+            if lateral_edge > 3 * base_edge:
+                continue
             if lateral_edge**2 - base_edge**2 // 2 >= min_height_squared:
                 out.append((base_edge, lateral_edge))
     return tuple(out)

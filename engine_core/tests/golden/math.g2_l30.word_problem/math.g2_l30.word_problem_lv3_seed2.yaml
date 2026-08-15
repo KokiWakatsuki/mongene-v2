@@ -24,7 +24,7 @@ meta:
   seed: 2
   signature: word_problem_linear_meeting_intersection
 problem_ref: 70a9f2649f01ced9
-problem_text: '姉と妹は2176mはなれた甲地点と乙地点にいる。姉は甲地点を出発して乙地点へ毎分84mで、妹は姉と同時に乙地点を出発して甲地点へ毎分52mで進む。
+problem_text: '姉と妹は1760mはなれた甲地点と乙地点にいる。姉は甲地点を出発して乙地点へ毎分50mで、妹は姉と同時に乙地点を出発して甲地点へ毎分60mで進む。
 
   出発してから x 分後とする。
 
@@ -33,17 +33,17 @@ problem_text: '姉と妹は2176mはなれた甲地点と乙地点にいる。姉
   (2) 2人が出会うのは出発してから何分後か求めよ。'
 sub_questions:
 - answer:
-    display: y = 84x
+    display: y = 50x
     kind: symbolic
-    srepr: Mul(Integer(84), Symbol('x'))
+    srepr: Mul(Integer(50), Symbol('x'))
   cause_tags: []
   concept_tags:
   - linear_function.word_problem_meeting_intersection
-  explanation: 'まず、傾きと通る点の座標を y = ax + b に代入する。（84 × 0 + b = 0）
+  explanation: 'まず、傾きと通る点の座標を y = ax + b に代入する。（50 × 0 + b = 0）
 
     次に、代入した式を b について解き、切片を求める。（切片 b = 0）
 
-    最後に、傾きと切片から一次関数の式を組み立てる。（y = 84x）'
+    最後に、傾きと切片から一次関数の式を組み立てる。（y = 50x）'
   hints:
   - 傾きと通る点の座標を y = ax + b に代入する。
   - 代入した式を b について解き、切片を求める。
@@ -51,26 +51,26 @@ sub_questions:
   prompt_text: 式に表しなさい。
   solution_steps:
   - args:
-    - '84'
+    - '50'
     - (0, 0)
     narration: 傾きと通る点の座標を y = ax + b に代入する。
     op: substitute_point
-    result_display: 84 × 0 + b = 0
+    result_display: 50 × 0 + b = 0
     result_srepr: Equality(Symbol('b'), Integer(0))
   - args:
-    - '84'
+    - '50'
     - (0, 0)
     narration: 代入した式を b について解き、切片を求める。
     op: compute_intercept
     result_display: 切片 b = 0
     result_srepr: Integer(0)
   - args:
-    - '84'
+    - '50'
     - '0'
     narration: 傾きと切片から一次関数の式を組み立てる。
     op: form_expression
-    result_display: y = 84x
-    result_srepr: Mul(Integer(84), Symbol('x'))
+    result_display: y = 50x
+    result_srepr: Mul(Integer(50), Symbol('x'))
 - answer:
     display: 16分後
     kind: symbolic
@@ -78,7 +78,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - linear_function.word_problem_meeting_intersection
-  explanation: 'まず、もう一方の人が出発地点から相手に向かって進むようすを、道のりの式で表す。（y = 2176 - 52x）
+  explanation: 'まず、もう一方の人が出発地点から相手に向かって進むようすを、道のりの式で表す。（y = 1760 - 60x）
 
     次に、2つの直線の y を等しいとおき、x についての方程式を解く。（x = 16）
 
@@ -92,11 +92,11 @@ sub_questions:
   - args: []
     narration: もう一方の人が出発地点から相手に向かって進むようすを、道のりの式で表す。
     op: formulate_line_b
-    result_display: y = 2176 - 52x
-    result_srepr: Equality(Symbol('y'), Add(Integer(2176), Mul(Integer(-1), Integer(52), Symbol('x'))))
+    result_display: y = 1760 - 60x
+    result_srepr: Equality(Symbol('y'), Add(Integer(1760), Mul(Integer(-1), Integer(60), Symbol('x'))))
   - args:
-    - Eq(84*x - y, 0)
-    - Eq(52*x + y, 2176)
+    - Eq(50*x - y, 0)
+    - Eq(60*x + y, 1760)
     narration: 2つの直線の y を等しいとおき、x についての方程式を解く。
     op: equate_expressions
     result_display: x = 16

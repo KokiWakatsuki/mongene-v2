@@ -24,18 +24,18 @@ meta:
   seed: 2
   signature: polygon_interior_sum_and_angle
 problem_ref: 78a9c5957f55d251
-problem_text: 正30角形の内角の和を求めよ。また、正30角形の1つの内角の大きさを求めよ。
+problem_text: 正三角形の内角の和を求めよ。また、正三角形の1つの内角の大きさを求めよ。
 sub_questions:
 - answer:
-    display: 内角の和 5040°、1つの内角 168°
+    display: 内角の和 180°、1つの内角 60°
     kind: symbolic
-    srepr: Tuple(Integer(5040), Integer(168))
+    srepr: Tuple(Integer(180), Integer(60))
   cause_tags: []
   concept_tags:
   - polygon_angle.interior_sum_and_angle
-  explanation: 'まず、一直線の角(平角)を、頂点の数より二少ない数だけ集めた大きさが内角の和になる、という公式に辺の数をあてはめる。（180° × (30 - 2) = 5040°）
+  explanation: 'まず、一直線の角(平角)を、頂点の数より二少ない数だけ集めた大きさが内角の和になる、という公式に辺の数をあてはめる。（180° × (3 - 2) = 180°）
 
-    次に、正多角形はすべての内角が等しいことから、内角の和を辺の数でわって1つの内角を求める。（内角の和 5040°、1つの内角 168°）'
+    次に、正多角形はすべての内角が等しいことから、内角の和を辺の数でわって1つの内角を求める。（内角の和 180°、1つの内角 60°）'
   hints:
   - 一直線の角(平角)を、頂点の数より二少ない数だけ集めた大きさが内角の和になる、という公式に辺の数をあてはめる。
   label: (1)
@@ -44,11 +44,11 @@ sub_questions:
   - args: []
     narration: 一直線の角(平角)を、頂点の数より二少ない数だけ集めた大きさが内角の和になる、という公式に辺の数をあてはめる。
     op: apply_interior_sum_formula
-    result_display: 180° × (30 - 2) = 5040°
+    result_display: 180° × (3 - 2) = 180°
     result_srepr: ''
   - args: []
     narration: 正多角形はすべての内角が等しいことから、内角の和を辺の数でわって1つの内角を求める。
     op: divide_for_one_angle
-    result_display: 内角の和 5040°、1つの内角 168°
-    result_srepr: Tuple(Integer(5040), Integer(168))
+    result_display: 内角の和 180°、1つの内角 60°
+    result_srepr: Tuple(Integer(180), Integer(60))
 visual_svg: null

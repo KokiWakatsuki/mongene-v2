@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: judge_transformation_invariant_reflection
 problem_ref: b719cbee30477e52
-problem_text: 図形を、直線ℓを対称の軸として対称移動した。移動前後で、対応する2点C、Nを結ぶ線分と、対称の軸ℓとの関係を答えよ。
+problem_text: 図形を、直線ℓを対称の軸として対称移動した。移動前後で、対応する2点F、Gを結ぶ線分と、対称の軸ℓとの関係を答えよ。
 sub_questions:
 - answer:
     correct: 垂直に二等分される

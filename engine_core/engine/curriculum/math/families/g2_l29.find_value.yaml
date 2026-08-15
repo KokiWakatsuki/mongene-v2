@@ -19,7 +19,9 @@ levels:
       # 比例定数 a(>0)・答えの時刻 x_ans(区間内)・区間上端までの余白 margin(>0)。
       # y_target=a*x_ans は区間内で到達する面積。組合せ a(9)*x_ans(12)*margin(6)=648 で
       # dup_rate に十分な余裕（狭域だと衝突が跳ねるため広めにとる）。
-      slope_domain: {int_range: [1, 9]}
+      # **比例定数 1 は除く。** y = x だと「面積が12cm²となる時刻」の答えが
+      # そのまま 12 になり、問いが答えを言っているのと変わらない。
+      slope_domain: {int_range: [2, 9]}
       x_answer_domain: {int_range: [1, 12]}
       margin_domain: {int_range: [1, 6]}
     given: [expression, x_domain, condition]
