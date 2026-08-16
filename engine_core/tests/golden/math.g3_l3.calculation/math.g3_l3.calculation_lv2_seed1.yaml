@@ -26,20 +26,20 @@ meta:
 problem_ref: ff6576595808d3a6
 problem_text: '次の式を展開せよ。
 
-  (m - 5)(m + 7)'
+  (m - 5)(m - 10)'
 sub_questions:
 - answer:
-    display: m² + 2m - 35
+    display: m² - 15m + 50
     kind: symbolic
-    srepr: Add(Pow(Symbol('m'), Integer(2)), Mul(Integer(2), Symbol('m')), Integer(-35))
+    srepr: Add(Pow(Symbol('m'), Integer(2)), Mul(Integer(-1), Integer(15), Symbol('m')), Integer(50))
   cause_tags: []
   concept_tags:
   - polynomial.expand_formula_sum_product
-  explanation: 'まず、それぞれの定数の符号を確かめる。（-5 と 7）
+  explanation: 'まず、それぞれの定数の符号を確かめる。（-5 と -10）
 
-    次に、2つの定数の和と積を求める。（和 2、積 -35）
+    次に、2つの定数の和と積を求める。（和 -15、積 50）
 
-    最後に、乗法公式にあてはめて展開した式を書く。（m² + 2m - 35）'
+    最後に、乗法公式にあてはめて展開した式を書く。（m² - 15m + 50）'
   hints:
   - それぞれの定数の符号を確かめる。
   - 2つの定数の和と積を求める。
@@ -49,16 +49,16 @@ sub_questions:
   - args: []
     narration: それぞれの定数の符号を確かめる。
     op: determine_constant_signs
-    result_display: -5 と 7
+    result_display: -5 と -10
     result_srepr: ''
   - args: []
     narration: 2つの定数の和と積を求める。
     op: compute_sum_and_product
-    result_display: 和 2、積 -35
+    result_display: 和 -15、積 50
     result_srepr: ''
   - args: []
     narration: 乗法公式にあてはめて展開した式を書く。
     op: write_expansion
-    result_display: m² + 2m - 35
-    result_srepr: Add(Pow(Symbol('m'), Integer(2)), Mul(Integer(2), Symbol('m')), Integer(-35))
+    result_display: m² - 15m + 50
+    result_srepr: Add(Pow(Symbol('m'), Integer(2)), Mul(Integer(-1), Integer(15), Symbol('m')), Integer(50))
 visual_svg: null

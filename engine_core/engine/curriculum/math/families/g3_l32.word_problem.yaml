@@ -32,10 +32,12 @@ levels:
       # **斜面を転がる比例定数は 3 まで。** 5 だと y=5x²＝自由落下と同じ加速度に
       # なり、「斜面を転がす」場面と合わない（斜面は重力の分力なので必ず
       # 自由落下より小さい）。
-      a_candidates: [1, 2, 3]
-      x0_range: [2, 6]
-      root_range: [2, 9]
-      object_candidates: [ボール, 台車, 鉄球]
+      # 1 は入れない——`y = x²` と書くと係数が本文に現れず、
+      # 「params の数値はすべて本文に出ている」という契約が崩れる。
+      a_candidates: [2, 3]
+      x0_range: [2, 8]
+      root_range: [2, 12]
+      object_candidates: [ボール, 台車, 鉄球, 鉄の球, 木の球, ビー玉, おもり]
     given: [scenario, quantities]
     asked: [value, value]
     visual: none

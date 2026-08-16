@@ -83,7 +83,7 @@ def equilateral_triangle_properties(side: object, angle_label: object = "") -> S
     m = sympy.sympify(str(side))
     angle = sympy.Rational(180, 3)
     label = str(angle_label) or "A"
-    disp = f"辺の長さ {sympy.sstr(m)}、∠{label} {sympy.sstr(angle)}°"
+    disp = f"辺の長さ {sympy.sstr(m)}cm、∠{label} {sympy.sstr(angle)}°"
     srepr = sympy.srepr(sympy.Tuple(m, angle))
     steps = [
         Step(

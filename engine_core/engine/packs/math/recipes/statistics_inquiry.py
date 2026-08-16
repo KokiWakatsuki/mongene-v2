@@ -117,10 +117,13 @@ def _draw_population(spec: str, rng: Rng) -> int:
 
 # 記録の種目と、中学生の記録として実際にありうる値の幅（単位は十分の一秒）。
 # 「立ち幅とびの助走時間」は立ち幅とびに助走が無いので外した。
+# **種目名の末尾に「の記録」を入れない**（本文が「{種目}の記録が次のように」と
+# 続けるので「…の記録（十分の一秒）の記録が」と重複していた）。
+# 距離は算用数字で揃える（「二十メートル走」だけ漢数字になっていた）。
 _TIMED_EVENTS: list[tuple[str, int, int]] = [
-    ("50m走の記録（十分の一秒）", 75, 95),
-    ("100m走の記録（十分の一秒）", 140, 180),
-    ("二十メートル走の記録（十分の一秒）", 33, 45),
+    ("50m走のタイム（十分の一秒）", 75, 95),
+    ("100m走のタイム（十分の一秒）", 140, 180),
+    ("20m走のタイム（十分の一秒）", 33, 45),
     ("シャトルランの折り返しにかかる時間（十分の一秒）", 60, 90),
     ("反復横とびの一往復にかかる時間（十分の一秒）", 10, 18),
 ]
@@ -223,9 +226,13 @@ def statistics_inquiry_recipe(ctx: CellContext, rng: Rng) -> MR:
         range_sol = cast(Solution, REGISTRY.solver("math.datasets_range_pair")(data_a, data_b))
         judge_sol = cast(Solution, REGISTRY.solver("math.judge_more_stable")(data_a, data_b))
         scenario = (
+            # 名前が「A」「B」のときは「A（Aさん）」と同じ記号が二重になるので、
+            # そのときだけ添え書きを落とす。
             f"{names[0]}さんと{names[1]}さんの{subject}の記録が次のようにまとめられている。"
-            f"A（{names[0]}さん）: {'、'.join(str(v) for v in data_a)}／"
-            f"B（{names[1]}さん）: {'、'.join(str(v) for v in data_b)}"
+            f"A{'' if names[0] == 'A' else f'（{names[0]}さん）'}: "
+            f"{'、'.join(str(v) for v in data_a)}／"
+            f"B{'' if names[1] == 'B' else f'（{names[1]}さん）'}: "
+            f"{'、'.join(str(v) for v in data_b)}"
         )
         return _mr(
             ctx,
@@ -256,7 +263,7 @@ def statistics_inquiry_recipe(ctx: CellContext, rng: Rng) -> MR:
             REGISTRY.solver("math.judge_group_by_any_statistic")(data_a, data_b, smaller),
         )
         scenario = (
-            f"A組とB組の{subject}の記録が次のようにまとめられている。"
+            f"A組とB組の{subject}が次のようにまとめられている。"
             f"A組: {'、'.join(str(v) for v in data_a)}／"
             f"B組: {'、'.join(str(v) for v in data_b)}"
         )

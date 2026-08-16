@@ -27,7 +27,7 @@ problem_ref: d06890fd9c6ff8f5
 problem_text: 1辺の長さが13cmの正三角形GHJで、辺GHの長さと∠Gの大きさを求めよ。
 sub_questions:
 - answer:
-    display: 辺の長さ 13、∠G 60°
+    display: 辺の長さ 13cm、∠G 60°
     kind: symbolic
     srepr: Tuple(Integer(13), Integer(60))
   cause_tags: []
@@ -35,7 +35,7 @@ sub_questions:
   - equilateral.properties_from_side
   explanation: 'まず、正三角形の与えられた1辺の長さを読み取る。（13）
 
-    次に、正三角形は3辺の長さがすべて等しく、3つの内角もすべて等しく分け合うことから、もう1辺の長さと1つの内角の大きさを求める。（辺の長さ 13、∠G 60°）'
+    次に、正三角形は3辺の長さがすべて等しく、3つの内角もすべて等しく分け合うことから、もう1辺の長さと1つの内角の大きさを求める。（辺の長さ 13cm、∠G 60°）'
   hints:
   - 正三角形の与えられた1辺の長さを読み取る。
   label: (1)
@@ -49,6 +49,6 @@ sub_questions:
   - args: []
     narration: 正三角形は3辺の長さがすべて等しく、3つの内角もすべて等しく分け合うことから、もう1辺の長さと1つの内角の大きさを求める。
     op: apply_equilateral_property
-    result_display: 辺の長さ 13、∠G 60°
+    result_display: 辺の長さ 13cm、∠G 60°
     result_srepr: Tuple(Integer(13), Integer(60))
 visual_svg: null

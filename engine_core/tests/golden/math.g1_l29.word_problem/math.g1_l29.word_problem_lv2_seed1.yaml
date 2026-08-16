@@ -24,13 +24,13 @@ meta:
   seed: 1
   signature: word_problem_direct_proportion_rate
 problem_ref: 0c35b8ddd215cee0
-problem_text: '1mの重さが15gのたこ糸がある。
+problem_text: '1mの重さが15gの銅線がある。
 
-  このたこ糸xmの重さをygとする。
+  この銅線xmの重さをygとする。
 
   (1) yをxの式で表せ。
 
-  (2) このたこ糸3mの重さは何gか求めよ。'
+  (2) この銅線3mの重さは何gか求めよ。'
 sub_questions:
 - answer:
     display: y = 15x

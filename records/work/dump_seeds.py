@@ -66,8 +66,11 @@ def main() -> int:
             if isinstance(res, Unsupported):
                 continue
             body = res.problem_text.replace("\n", " ")
+            # **答えは切り詰めない。** 60字で切っていたので、長い答え
+            # （選択肢の列挙・区間ごとの式・「3秒後と9秒後」）が途中で終わって見え、
+            # 読んだ側が「答えが欠けている」と誤って報告する事故が起きた。
             ans = "／".join(
-                str(getattr(sq.answer, "display", getattr(sq.answer, "correct", "")))[:60]
+                str(getattr(sq.answer, "display", getattr(sq.answer, "correct", "")))
                 for sq in res.sub_questions
             )
             lines.append(f"  [{s}] {body}")

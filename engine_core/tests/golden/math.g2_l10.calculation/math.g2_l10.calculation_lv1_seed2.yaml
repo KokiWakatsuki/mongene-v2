@@ -24,7 +24,7 @@ meta:
   seed: 2
   signature: substitute_into_equation_lhs
 problem_ref: 43b5d5d2e0e12c16
-problem_text: 2元1次方程式 4x - 2y = -4 の左辺に x = -2, y = -2 を代入して、左辺の値を求めよ。
+problem_text: 式 4x - 2y に x = -2, y = -2 を代入したときの値を求めよ。
 sub_questions:
 - answer:
     display: '-4'

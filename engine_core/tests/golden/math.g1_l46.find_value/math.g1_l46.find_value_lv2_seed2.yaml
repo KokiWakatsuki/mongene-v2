@@ -27,7 +27,7 @@ problem_ref: 4774b9fea2d1f31e
 problem_text: 半径3cmのおうぎ形の面積が6πcm²である。このおうぎ形の中心角の大きさを求めよ。
 sub_questions:
 - answer:
-    display: '240'
+    display: 240°
     kind: symbolic
     srepr: Integer(240)
   cause_tags: []
@@ -35,7 +35,7 @@ sub_questions:
   - sector.solve_central_angle
   explanation: 'まず、おうぎ形の面積の公式に、半径と分からない中心角をあてはめて方程式をつくる。（3² × π × x/360 = 6π）
 
-    次に、方程式を中心角について解き、その大きさを求める。（240）'
+    次に、方程式を中心角について解き、その大きさを求める。（240°）'
   hints:
   - おうぎ形の面積の公式に、半径と分からない中心角をあてはめて方程式をつくる。
   label: (1)
@@ -49,6 +49,6 @@ sub_questions:
   - args: []
     narration: 方程式を中心角について解き、その大きさを求める。
     op: solve_for_central_angle
-    result_display: '240'
+    result_display: 240°
     result_srepr: Integer(240)
 visual_svg: null

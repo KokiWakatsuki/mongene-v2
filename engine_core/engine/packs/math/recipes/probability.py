@@ -482,9 +482,13 @@ def probability_complement_recipe(ctx: CellContext, rng: Rng) -> MR:
 
     # 「〜になる確率を求めよ」を「〜になる確率が p である。〜にならない確率を求めよ」に組み替える。
     happens = text.split("確率")[0]
+    # **与える確率は既約分数で書く。** 前は 15/36・8/36 と約分せずに出していて、
+    # 答えの側（7/12・7/9）だけが約分済みという、同じ問題の中で書き方が食い違う
+    # 状態になっていた。実物の教材は与件も答えも必ず既約分数。
+    p_shown = sympy.Rational(p_num, p_den)
     condition = (
         f"大小2個のさいころを同時に投げるとき、{happens}確率が"
-        f"{p_num}/{p_den}である。{happens}ことがない確率を求めよ"
+        f"{p_shown.p}/{p_shown.q}である。{happens}ことがない確率を求めよ"
     )
 
     solver = REGISTRY.solver("math.probability_complement")

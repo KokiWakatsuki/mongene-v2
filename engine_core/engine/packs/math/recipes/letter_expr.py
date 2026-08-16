@@ -530,7 +530,9 @@ _D_A_QUADRATIC = ("1", "2", "3", "4", "5", "6", "8", "9", "10", "12",
 # **多角形の名前は漢数字**（実物の教材は「八角形」と書き、「8角形」とは書かない）。
 _POLYGON_NAME_JP = {
     3: "三角形", 4: "四角形", 5: "五角形", 6: "六角形", 7: "七角形", 8: "八角形",
-    9: "九角形", 10: "十角形", 11: "十一角形", 12: "十二角形",
+    9: "九角形", 10: "十角形", 11: "十一角形", 12: "十二角形", 13: "十三角形",
+    14: "十四角形", 15: "十五角形", 16: "十六角形", 17: "十七角形", 18: "十八角形",
+    19: "十九角形", 20: "二十角形",
 }
 
 
@@ -538,6 +540,11 @@ def _polygon_name_jp(n: int) -> str:
     if n not in _POLYGON_NAME_JP:
         raise ValueError(f"多角形の漢数字名が未登録: {n}")
     return _POLYGON_NAME_JP[n]
+
+
+def _regular_polygon_name_jp(n: int) -> str:
+    """正n角形の呼び名。**n=4 は「正四角形」ではなく「正方形」**（日本語の数学用語）。"""
+    return "正方形" if n == 4 else f"正{_polygon_name_jp(n)}"
 
 
 def _pick_a(rng: Rng) -> str:
@@ -931,16 +938,22 @@ def _draw_term_statement(domain: str, concept: str, rng: Rng, p: dict[str, objec
 
     if domain == "frequency_table_terms":
         # g1_l54 度数分布表の用語。具体例の階級の下端・幅を埋め込み surface を分散する。
-        lo = _pick(_D_DATA_N, rng)
-        width = int(draw(p["width_domain"], rng))
+        # **階級は幅の倍数の所から始め、幅は 5・10・20 のどれか。**
+        # 前は下端を「データの個数」の集合から、幅を 5〜15 から独立に引いていたので
+        # 「32以上47未満」（幅15）「36以上50未満」（幅14）という、度数分布表の
+        # 区切りとしてありえない階級が出ていた。
+        width = int(draw({"int_set": [5, 10, 20]}, rng))
+        lo = width * int(draw({"int_range": [0, 8]}, rng))
         hi = lo + width
+        # 階級を教材の切り方に絞ったぶん、**何を調べた表か**を軸に足す。
+        subject = _data_head(rng)
         if concept == "class":
-            return f"度数分布表で、{lo}以上{hi}未満のように区切った、データを整理するための区間"
+            return f"{subject}の度数分布表で、{lo}以上{hi}未満のように区切った、データを整理するための区間"
         if concept == "class_value":
-            return f"度数分布表で、{lo}以上{hi}未満の階級の区間の中央の値"
+            return f"{subject}の度数分布表で、{lo}以上{hi}未満の階級の区間の中央の値"
         if concept == "frequency":
-            return f"度数分布表で、{lo}以上{hi}未満の階級に入るデータの個数"
-        return f"度数分布表で、{lo}以上{hi}未満のように区切ったときの区間の大きさ（{width}）"  # class_width
+            return f"{subject}の度数分布表で、{lo}以上{hi}未満の階級に入るデータの個数"
+        return f"{subject}の度数分布表で、{lo}以上{hi}未満のように区切ったときの区間の大きさ（{width}）"  # class_width
 
     if domain == "relative_frequency_terms":
         # g1_l55 相対度数まわりの用語。具体例の総度数 n を埋め込み surface を分散する。
@@ -958,7 +971,8 @@ def _draw_term_statement(domain: str, concept: str, rng: Rng, p: dict[str, objec
         # 階級数と場面は**それぞれ独立に引く**。前は1つの n から別の桁で作っていたが、
         # データの個数を教材の大きさ（11通り）に絞ったら桁が足りなくなり dup が 0.33 に
         # 跳ねた。**数を絞ったら、その数から派生させていた軸は引き直す。**
-        classes = int(draw({"int_range": [5, 12]}, rng))  # 教科書の階級は5〜10個
+        # 40人のデータを12階級に分けるのは度数分布表の作り方として成り立たない。
+        classes = int(draw({"int_range": [5, 8]}, rng))  # 教科書の階級は5〜8個
         scene = str(draw(list(_FREQUENCY_TABLE_SCENES), rng))
         total = int(draw({"int_set": [20, 25, 30, 35, 40, 45, 50]}, rng))
         head = f"生徒{total}人の{scene}を{classes}個の階級に分けた度数分布表で"
@@ -1613,7 +1627,7 @@ def _as_choice_lead(s: str) -> str:
         return s + "、"
     # 「〜こと」「〜条件」のような、選ぶ対象そのものを指す語で終わる句は
     # 「として、」で繋ぐ（「成り立つことについて、」より「成り立つこととして、」）。
-    if s.endswith(("こと", "条件", "関係", "性質", "利点", "求め方", "操作", "決まり")):
+    if s.endswith(("こと", "条件", "関係", "性質", "利点", "求め方", "操作", "決まり", "式", "理由")):
         return s + "として、"
     return s + "について、"
 
@@ -1842,12 +1856,21 @@ def _draw_rule_statement(
     if topic == "polygon_interior_sum_reason":
         # g2_l34 多角形の内角の和の公式のしくみ。具体例の辺の数 n を surface に埋め込み dup 分散。
         n = int(draw(p["sides_domain"], rng))
-        return f"{n}角形の内角の和を求めるとき、1つの頂点から対角線をひいて三角形に分けられる、その個数の求め方"
+        # **問いと答えの形をそろえる。** 前は「その個数の求め方」と数を尋ねる文だったのに、
+        # 答えは「一つの頂点からひける対角線によって、三角形に分けられるから」という
+        # 理由文だった。多角形の名前も漢数字にする（「18角形」は実物に無い書き方）。
+        return (
+            f"{_polygon_name_jp(n)}の内角の和が「180°×(辺の数-2)」で求められるのは"
+            "なぜか、その理由"
+        )
 
     if topic == "polygon_exterior_sum_property":
         # g2_l35 多角形の外角の和が辺の数によらず一定であること。具体例の辺の数 n を埋め込み dup 分散。
         n = int(draw(p["sides_domain"], rng))
-        return f"{n}角形の外角の和は、辺の数を変えた他の多角形の外角の和と比べてどうなるか"
+        return (
+            f"{_polygon_name_jp(n)}の外角の和は、辺の数を変えた他の多角形の外角の和と"
+            "比べてどうなるか"
+        )
 
     if topic == "congruence_conditions":
         # g2_l37 三角形の合同条件(3つすべて)。具体例の三角形の点名を埋め込み surface を分散する。
@@ -1983,12 +2006,19 @@ def _draw_rule_statement(
 
     if topic == "sphere_formula":
         # g1_l53 球の表面積・体積の公式。具体例の球（中心の点名・半径）を埋め込み分散する。
-        (po,) = _draw_distinct_points(1, rng)
-        n = int(draw(p["length_domain"], rng))
+        # **「求めたい」と言った半径が答えに使われない飾りだったので落とす。**
+        # また、テンプレが「{statement}として正しいものを1つ選べ」なので、
+        # statement の末尾を「〜について」で終えると「について、として」と
+        # 助詞が二重になっていた（実際に出ていた）。名詞句で終える。
+        (po,) = _draw_named_figures([1], rng)
         target = "表面積" if concept == "surface_area" else "体積"
+        # 半径の具体例を落としたぶん、**球の言い方**を軸に足す（実物も「球」
+        # 「ボール」「地球儀」と場面を変えて同じ公式を問う）。
+        thing = str(draw(["球", "ボール", "地球儀", "ゴムまり", "鉄球", "木の球",
+                          "ビー玉", "すいか", "メロン", "スーパーボール"], rng))
         return (
-            f"半径が{n}cmの球の{target}を求めたい。中心が点{po}、半径が r cm の球の"
-            f"{target}を、r と円周率 π を使って表した式"
+            f"中心が点{po}、半径が r cm の{thing}の{target}を、r と円周率 π を使って"
+            f"表した式"
         )
 
     raise ValueError(f"未知の topic: {topic!r}")

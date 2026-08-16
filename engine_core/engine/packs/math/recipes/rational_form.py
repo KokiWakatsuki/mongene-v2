@@ -95,6 +95,15 @@ def _valid_repeating_pairs() -> list[tuple[str, str]]:
                     # （"55" は実質周期1の 0.5̇ と同値。鉄則⑤: 構成時に排除）。
                     if repeating[0] == "0" or (n > 1 and len(set(repeating)) == 1):
                         continue
+                    # **循環節の打ち方が正準でない組は外す。**
+                    # 非循環部の最後の桁と循環節の最後の桁が同じだと、循環節を
+                    # 1桁ずらして短く書ける（0.242̇4̇ は 0.2̇4̇ と同じ数）。
+                    # 実物は必ず最初に循環が始まる所から点を打つ。
+                    if non_repeating and non_repeating[-1] == repeating[-1]:
+                        continue
+                    # 循環節が 9 だけの数は、実際には有限小数（0.019̇ = 0.02）。
+                    if set(repeating) == {"9"}:
+                        continue
                     if (
                         _decimal_to_fraction_denominator(non_repeating, repeating)
                         <= _MAX_ANSWER_DENOMINATOR

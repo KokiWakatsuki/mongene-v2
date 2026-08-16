@@ -202,7 +202,11 @@ def draw_two_parabolas(ctx: CellContext, rng: Rng) -> MR:
     x_lo = int(draw(p["table_lo_domain"], rng))
     x_hi = int(draw(p["table_hi_domain"], rng))
     m = max(abs(x_lo), abs(x_hi)) ** 2
-    cands = [a for a in _rational_candidates(p["a_den_set"], p["a_num_domain"]) if abs(a) * m <= bound]
+    a_abs_max = p.get("a_abs_max")
+    cands = [
+        a for a in _rational_candidates(p["a_den_set"], p["a_num_domain"])
+        if abs(a) * m <= bound and (a_abs_max is None or abs(a) <= int(a_abs_max))
+    ]
     a1 = sympy.nsimplify(draw({"int_set": cands}, rng))
     # a2 は |a2| ≠ |a1| に絞る（a1=a2 は2本が重なり、a1=-a2 は開き方の広さが等しいため
     # 「どちらの開き方がせまいか」の答えが一意に決まらない＝退化。構成時に排除する）。
@@ -271,7 +275,11 @@ def draw_parabola_domain(ctx: CellContext, rng: Rng) -> MR:
         int(v) for v in draw_many({**cast("dict[str, Any]", p["x_domain"]), "distinct": ["value"]}, rng, k=2)
     )
     m = max(abs(x_lo), abs(x_hi)) ** 2
-    cands = [a for a in _rational_candidates(p["a_den_set"], p["a_num_domain"]) if abs(a) * m <= bound]
+    a_abs_max = p.get("a_abs_max")
+    cands = [
+        a for a in _rational_candidates(p["a_den_set"], p["a_num_domain"])
+        if abs(a) * m <= bound and (a_abs_max is None or abs(a) <= int(a_abs_max))
+    ]
     a = sympy.nsimplify(draw({"int_set": cands}, rng))
 
     solver = REGISTRY.solver("math.draw_parabola_domain_features")

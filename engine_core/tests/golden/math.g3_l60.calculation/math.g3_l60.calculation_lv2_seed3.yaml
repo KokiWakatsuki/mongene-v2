@@ -24,18 +24,18 @@ meta:
   seed: 3
   signature: sample_ratio_solve_population
 problem_ref: 96d88ee0feb395e3
-problem_text: 無作為に取り出した標本の大きさが495で、そのうち目的のものが177個であった。母集団の大きさを x として、母集団に含まれる目的のもののおよその個数が1770であることから x を、比例式を使って求めよ。
+problem_text: 箱に入っている玉の総数を調べるため、玉50個に印をつけて箱にもどし、よくかき混ぜた。そこから96個の玉を取り出したところ、印のついた玉は12個であった。箱に入っている玉の総数を x として、この関係を比例式で表し x を求めよ。
 sub_questions:
 - answer:
-    display: '4950'
+    display: '400'
     kind: symbolic
-    srepr: Integer(4950)
+    srepr: Integer(400)
   cause_tags: []
   concept_tags:
   - sample_survey.solve_population_size
-  explanation: 'まず、標本での該当する個数の割合が、母集団全体でもおよそ等しいとみて、母集団の大きさ x を含む比例式をつくる。（177 : 495 = 1770 : x）
+  explanation: 'まず、標本での該当する個数の割合が、母集団全体でもおよそ等しいとみて、母集団の大きさ x を含む比例式をつくる。（12 : 50 = 96 : x）
 
-    次に、比例式を解き、母集団の大きさ x を求める。（4950）'
+    次に、比例式を解き、母集団の大きさ x を求める。（400）'
   hints:
   - 標本での該当する個数の割合が、母集団全体でもおよそ等しいとみて、母集団の大きさ x を含む比例式をつくる。
   label: (1)
@@ -44,11 +44,11 @@ sub_questions:
   - args: []
     narration: 標本での該当する個数の割合が、母集団全体でもおよそ等しいとみて、母集団の大きさ x を含む比例式をつくる。
     op: form_ratio_equation_for_x
-    result_display: '177 : 495 = 1770 : x'
+    result_display: '12 : 50 = 96 : x'
     result_srepr: ''
   - args: []
     narration: 比例式を解き、母集団の大きさ x を求める。
     op: solve_for_x
-    result_display: '4950'
-    result_srepr: Integer(4950)
+    result_display: '400'
+    result_srepr: Integer(400)
 visual_svg: null

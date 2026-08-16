@@ -49,7 +49,8 @@ def congruence_transfer_values(side_value: object, angle_value: object) -> Solut
     """
     sv = sympy.sympify(str(side_value))
     av = sympy.sympify(str(angle_value))
-    disp = f"辺の長さ {sympy.sstr(sv)}、角の大きさ {sympy.sstr(av)}°"
+    # 角に ° を付けるなら長さにも cm を付ける（答えだけ単位が落ちていた）。
+    disp = f"辺の長さ {sympy.sstr(sv)}cm、角の大きさ {sympy.sstr(av)}°"
     srepr = sympy.srepr(sympy.Tuple(sv, av))
     steps = [
         Step(

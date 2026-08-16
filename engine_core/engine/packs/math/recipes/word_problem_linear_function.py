@@ -140,7 +140,9 @@ def _draw_spring(p: dict[str, Any], rng: Rng) -> tuple[dict[str, int], str]:
         # **ばねが伸びすぎる組は外す。** 傾きと重さを無関係に引いていたので
         # 「自然長9cmのばねが60gで99cm」（11倍に伸びる）が出ていた。実物の
         # ばねの問題は 1g あたり 0.2〜1cm 伸び、全体で 60cm を超えない。
-        if num > den or max(y1, y2, y0) > int(p.get("max_length_cm", 60)):
+        # 1g あたりの伸びは 1/2cm まで（`y = x + 19` ＝1g で1cm 伸びるばねが
+        # 出ていた。実物の教材のばねは 0.2〜0.5cm/g）。
+        if 2 * num > den or max(y1, y2, y0) > int(p.get("max_length_cm", 60)):
             continue
         obj = str(draw(p["object_candidates"], rng))
         return {"x1": x1, "y1": y1, "x2": x2, "y2": y2, "x0": x0}, obj

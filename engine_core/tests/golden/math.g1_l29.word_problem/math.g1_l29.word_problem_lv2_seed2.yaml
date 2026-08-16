@@ -24,13 +24,13 @@ meta:
   seed: 2
   signature: word_problem_direct_proportion_rate
 problem_ref: 03ef517054e519c5
-problem_text: '1mの重さが7gの針金がある。
+problem_text: '1mの重さが7gのひもがある。
 
-  この針金xmの重さをygとする。
+  このひもxmの重さをygとする。
 
   (1) yをxの式で表せ。
 
-  (2) この針金6mの重さは何gか求めよ。'
+  (2) このひも6mの重さは何gか求めよ。'
 sub_questions:
 - answer:
     display: y = 7x

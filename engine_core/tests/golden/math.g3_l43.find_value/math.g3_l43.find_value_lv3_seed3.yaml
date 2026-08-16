@@ -24,22 +24,22 @@ meta:
   seed: 3
   signature: parallel_ratio_judge_then_length
 problem_ref: 61a7df8011a13b9b
-problem_text: 三角形PQRで、辺PQ, PR上に点S, Tがある。PS=8cm, SQ=9cm, PT=32cm, TR=36cm である。ST=8cm のとき、STとQRが平行であることを確かめたうえで、辺QRの長さを求めよ。
+problem_text: 三角形PQRで、辺PQ, PR上に点S, Tがある。PS=9cm, SQ=5cm, PT=18cm, TR=10cm である。ST=18cm のとき、STとQRが平行であることを確かめたうえで、辺QRの長さを求めよ。
 sub_questions:
 - answer:
-    display: '17'
+    display: '28'
     kind: symbolic
-    srepr: Integer(17)
+    srepr: Integer(28)
   cause_tags: []
   concept_tags:
   - parallel_segment.judge_then_length
-  explanation: 'まず、PS:SQとPT:TRの比が等しいかどうかを比べる。（8:9 と 32:36）
+  explanation: 'まず、PS:SQとPT:TRの比が等しいかどうかを比べる。（9:5 と 18:10）
 
     次に、平行線と線分の比の定理の逆から、STとQRが平行であるかどうかを判別する。（平行である）
 
     次に、ST∥QR であることから、三角形PSTと三角形PQRが相似になることを見つける。（三角形PST と 三角形PQR）
 
-    最後に、PS:PQ=ST:QR が成り立つことから、辺QRの長さを求める。（17）'
+    最後に、PS:PQ=ST:QR が成り立つことから、辺QRの長さを求める。（28）'
   hints:
   - PS:SQとPT:TRの比が等しいかどうかを比べる。
   - 平行線と線分の比の定理の逆から、STとQRが平行であるかどうかを判別する。
@@ -50,7 +50,7 @@ sub_questions:
   - args: []
     narration: PS:SQとPT:TRの比が等しいかどうかを比べる。
     op: compare_division_ratios
-    result_display: 8:9 と 32:36
+    result_display: 9:5 と 18:10
     result_srepr: ''
   - args: []
     narration: 平行線と線分の比の定理の逆から、STとQRが平行であるかどうかを判別する。
@@ -65,6 +65,6 @@ sub_questions:
   - args: []
     narration: PS:PQ=ST:QR が成り立つことから、辺QRの長さを求める。
     op: apply_parallel_segment_ratio
-    result_display: '17'
-    result_srepr: Integer(17)
+    result_display: '28'
+    result_srepr: Integer(28)
 visual_svg: null

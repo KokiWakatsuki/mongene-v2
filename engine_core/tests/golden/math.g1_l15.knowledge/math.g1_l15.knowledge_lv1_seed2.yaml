@@ -24,7 +24,7 @@ meta:
   seed: 2
   signature: speed_relation_rule_recall
 problem_ref: ed32406049491dfd
-problem_text: 速さ20km/時で7時間進む場面のように、道のり・速さ・時間の関係で「道のり」を求める式について、正しく述べているものを1つ選べ。
+problem_text: 速さ20km/時で7時間進む場面のように、道のり・速さ・時間の関係で「道のり」を求める式として、正しく述べているものを1つ選べ。
 sub_questions:
 - answer:
     correct: （道のり）＝（速さ）×（時間）

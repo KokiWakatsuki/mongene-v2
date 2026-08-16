@@ -24,7 +24,7 @@ meta:
   seed: 3
   signature: judge_sampling_bias
 problem_ref: 97c3c284988d44e8
-problem_text: 85個の製品から、抽選機を使って無作為に製品を選んで検査した。この標本の選び方は、母集団の様子を調べる方法として適切か、理由とともに答えよ。
+problem_text: 550人の生徒全員に番号をつけ、くじ引きで無作為に選んで調査した。この標本の選び方は、母集団の様子を調べる方法として適切か、理由とともに答えよ。
 sub_questions:
 - answer:
     correct: 偏りが生じにくく、適切といえる

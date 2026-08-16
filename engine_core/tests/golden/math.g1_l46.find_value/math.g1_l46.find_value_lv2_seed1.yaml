@@ -27,7 +27,7 @@ problem_ref: ed4921bdc91a33cf
 problem_text: 半径16cmのおうぎ形の面積が128πcm²である。このおうぎ形の中心角の大きさを求めよ。
 sub_questions:
 - answer:
-    display: '180'
+    display: 180°
     kind: symbolic
     srepr: Integer(180)
   cause_tags: []
@@ -35,7 +35,7 @@ sub_questions:
   - sector.solve_central_angle
   explanation: 'まず、おうぎ形の面積の公式に、半径と分からない中心角をあてはめて方程式をつくる。（16² × π × x/360 = 128π）
 
-    次に、方程式を中心角について解き、その大きさを求める。（180）'
+    次に、方程式を中心角について解き、その大きさを求める。（180°）'
   hints:
   - おうぎ形の面積の公式に、半径と分からない中心角をあてはめて方程式をつくる。
   label: (1)
@@ -49,6 +49,6 @@ sub_questions:
   - args: []
     narration: 方程式を中心角について解き、その大きさを求める。
     op: solve_for_central_angle
-    result_display: '180'
+    result_display: 180°
     result_srepr: Integer(180)
 visual_svg: null

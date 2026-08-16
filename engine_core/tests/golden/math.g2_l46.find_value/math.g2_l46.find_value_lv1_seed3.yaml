@@ -27,7 +27,7 @@ problem_ref: 4bc3e01ce5439a2f
 problem_text: 平行四辺形WXYZで、WX=26cm、∠X=119°であるとき、辺YZの長さと∠Zの大きさを求めよ。
 sub_questions:
 - answer:
-    display: 辺の長さ 26、角の大きさ 119°
+    display: 辺の長さ 26cm、角の大きさ 119°
     kind: symbolic
     srepr: Tuple(Integer(26), Integer(119))
   cause_tags: []
@@ -35,7 +35,7 @@ sub_questions:
   - parallelogram.opposite_properties
   explanation: 'まず、平行四辺形のうち、わかっている辺の長さと角の大きさを読み取る。（26 と 119°）
 
-    次に、平行四辺形では対辺の長さ・対角の大きさがそれぞれ等しいことから、求める辺の長さと角の大きさを求める。（辺の長さ 26、角の大きさ 119°）'
+    次に、平行四辺形では対辺の長さ・対角の大きさがそれぞれ等しいことから、求める辺の長さと角の大きさを求める。（辺の長さ 26cm、角の大きさ 119°）'
   hints:
   - 平行四辺形のうち、わかっている辺の長さと角の大きさを読み取る。
   label: (1)
@@ -49,6 +49,6 @@ sub_questions:
   - args: []
     narration: 平行四辺形では対辺の長さ・対角の大きさがそれぞれ等しいことから、求める辺の長さと角の大きさを求める。
     op: apply_opposite_side_and_angle_property
-    result_display: 辺の長さ 26、角の大きさ 119°
+    result_display: 辺の長さ 26cm、角の大きさ 119°
     result_srepr: Tuple(Integer(26), Integer(119))
 visual_svg: null

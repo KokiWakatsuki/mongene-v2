@@ -17,7 +17,8 @@ levels:
     params:
       topic: polygon_exterior_sum_property
       concept_set: [constant]
-      sides_domain: {int_set: [3, 4, 5, 6, 8, 9, 10, 12, 15, 18, 20, 24, 30, 36]}
+      # **20角形まで・名前は漢数字**（「30角形」「18角形」が出ていた）。
+      sides_domain: {int_set: [3, 4, 5, 6, 8, 9, 10, 12, 15, 16, 18, 20]}
     given: [statement]
     asked: [choice]
     visual: none

@@ -420,7 +420,8 @@ def _scene_given_equation(p: Mapping[str, Any], rng: Rng) -> QuadraticFunctionSc
     scenario = f"ある斜面で{obj}を転がす実験をした。"
     quantities = (
         f"転がり始めてから x 秒間に{obj}が進む距離を y m とすると、"
-        f"y = {a}x² の関係が成り立つという。"
+        # 係数 1 は書かない（`y = 1x²` が出ていた）。
+        f"y = {'' if a == 1 else a}x² の関係が成り立つという。"
     )
     ask_texts = (
         f"{x0}秒間に進む距離を求めよ。",
@@ -462,6 +463,13 @@ def _braking_candidates(p: Mapping[str, Any]) -> list[tuple[int, int, int]]:
                     continue
                 y1 = k * k * y0
                 if y1 in (x0, y0, x1):
+                    continue
+                # **停止距離は実際の車の値に近づける。** 前は比例定数を自由に
+                # 引いていたので「30km/h で36m」「90km/h で324m」（実際は
+                # 約14m・約85m）や「40km/h で8m」（短すぎ）が出ていた。
+                # 実物の停止距離は速さの2乗に比例し、係数はおよそ 1/100
+                # （60km/h で約36m・120km/h で約144m）。1/70〜1/150 に収める。
+                if not (x0 * x0 / 150 <= y0 <= x0 * x0 / 70):
                     continue
                 out.append((x0, y0, x1))
     return out
@@ -514,6 +522,10 @@ def _free_fall_candidates(p: Mapping[str, Any]) -> list[tuple[int, int, int]]:
                     continue
                 target = num // (x0 * x0)
                 if t in (x0, y0, target) or target in (x0, y0):
+                    continue
+                # **落とす高さは 500m まで。** 前は t を 20 秒まで振っていたので
+                # 「消しゴムを1805m落とす」（東京タワーの5倍）が出ていた。
+                if target > int(p.get("fall_distance_max", 500)):
                     continue
                 out.append((x0, y0, t))
     return out

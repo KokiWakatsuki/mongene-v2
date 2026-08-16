@@ -24,7 +24,7 @@ meta:
   seed: 2
   signature: cumulative_frequency_terms_term_recall
 problem_ref: fa885025bf7994a7
-problem_text: 生徒40人の一日の読書時間を12個の階級に分けた度数分布表で、いちばん小さい階級から対象の階級までの相対度数を合計した値を何といいますか。
+problem_text: 生徒40人の一日の読書時間を8個の階級に分けた度数分布表で、いちばん小さい階級から対象の階級までの相対度数を合計した値を何といいますか。
 sub_questions:
 - answer:
     correct: 累積相対度数

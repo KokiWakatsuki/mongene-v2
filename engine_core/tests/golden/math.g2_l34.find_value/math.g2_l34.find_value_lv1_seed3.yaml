@@ -24,7 +24,7 @@ meta:
   seed: 3
   signature: polygon_interior_sum_and_angle
 problem_ref: 1dd8bd4be6776a45
-problem_text: 正四角形の内角の和を求めよ。また、正四角形の1つの内角の大きさを求めよ。
+problem_text: 正方形の内角の和を求めよ。また、正方形の1つの内角の大きさを求めよ。
 sub_questions:
 - answer:
     display: 内角の和 360°、1つの内角 90°

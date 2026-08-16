@@ -24,20 +24,20 @@ meta:
   seed: 1
   signature: lf_intersection_elimination
 problem_ref: 7fa727256fc27214
-problem_text: 2つの直線 3x - y = -16 と 2x + y = -14 の交点の座標を求めよ。
+problem_text: 2つの直線 2x - y = -1 と x - y = -3 の交点の座標を求めよ。
 sub_questions:
 - answer:
-    display: (-6, -2)
+    display: (2, 5)
     kind: symbolic
-    srepr: Tuple(Integer(-6), Integer(-2))
+    srepr: Tuple(Integer(2), Integer(5))
   cause_tags: []
   concept_tags:
   - linear_function.intersection_of_two_lines
-  explanation: 'まず、2つの直線を ax + by = c の形にそろえて連立方程式を立てる。（3x - y = -16, 2x + y = -14）
+  explanation: 'まず、2つの直線を ax + by = c の形にそろえて連立方程式を立てる。（2x - y = -1, x - y = -3）
 
-    次に、係数をそろえて一方の文字を消去し、残った文字を求める。（x = -6）
+    次に、係数をそろえて一方の文字を消去し、残った文字を求める。（x = 2）
 
-    最後に、求めた値をもとの式に代入し、もう一方の文字を求める。（y = -2）'
+    最後に、求めた値をもとの式に代入し、もう一方の文字を求める。（y = 5）'
   hints:
   - 2つの直線を ax + by = c の形にそろえて連立方程式を立てる。
   - 係数をそろえて一方の文字を消去し、残った文字を求める。
@@ -45,23 +45,23 @@ sub_questions:
   prompt_text: 交点の座標を求めなさい。
   solution_steps:
   - args:
-    - Eq(3*x - y, -16)
-    - Eq(2*x + y, -14)
+    - Eq(2*x - y, -1)
+    - Eq(x - y, -3)
     narration: 2つの直線を ax + by = c の形にそろえて連立方程式を立てる。
     op: setup_system
-    result_display: 3x - y = -16, 2x + y = -14
-    result_srepr: '[Equality(Add(Mul(Integer(3), Symbol(''x'')), Mul(Integer(-1), Symbol(''y''))), Integer(-16)), Equality(Add(Mul(Integer(2), Symbol(''x'')), Symbol(''y'')), Integer(-14))]'
+    result_display: 2x - y = -1, x - y = -3
+    result_srepr: '[Equality(Add(Mul(Integer(2), Symbol(''x'')), Mul(Integer(-1), Symbol(''y''))), Integer(-1)), Equality(Add(Symbol(''x''), Mul(Integer(-1), Symbol(''y''))), Integer(-3))]'
   - args:
-    - Eq(3*x - y, -16)
-    - Eq(2*x + y, -14)
+    - Eq(2*x - y, -1)
+    - Eq(x - y, -3)
     narration: 係数をそろえて一方の文字を消去し、残った文字を求める。
     op: eliminate_variable
-    result_display: x = -6
-    result_srepr: Equality(Symbol('x'), Integer(-6))
+    result_display: x = 2
+    result_srepr: Equality(Symbol('x'), Integer(2))
   - args:
-    - '-6'
+    - '2'
     narration: 求めた値をもとの式に代入し、もう一方の文字を求める。
     op: back_substitute
-    result_display: y = -2
-    result_srepr: Integer(-2)
+    result_display: y = 5
+    result_srepr: Integer(5)
 visual_svg: null

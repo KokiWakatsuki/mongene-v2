@@ -24,18 +24,18 @@ meta:
   seed: 2
   signature: sample_ratio_solve_population
 problem_ref: fb299af065498db7
-problem_text: 湖にいるコイの数を調べるため、100匹のコイを捕まえて印をつけて湖にもどした。数日後に同じ湖で48匹のコイを捕まえたところ、そのうち印のついたコイは6匹であった。湖にいるコイの総数を x として、この関係を比例式で表し x を求めよ。
+problem_text: 湖にいるコイの数を調べるため、60匹のコイを捕まえて印をつけて湖にもどした。数日後に同じ湖で16匹のコイを捕まえたところ、そのうち印のついたコイは4匹であった。湖にいるコイの総数を x として、この関係を比例式で表し x を求めよ。
 sub_questions:
 - answer:
-    display: '800'
+    display: '240'
     kind: symbolic
-    srepr: Integer(800)
+    srepr: Integer(240)
   cause_tags: []
   concept_tags:
   - sample_survey.solve_population_size
-  explanation: 'まず、標本での該当する個数の割合が、母集団全体でもおよそ等しいとみて、母集団の大きさ x を含む比例式をつくる。（6 : 100 = 48 : x）
+  explanation: 'まず、標本での該当する個数の割合が、母集団全体でもおよそ等しいとみて、母集団の大きさ x を含む比例式をつくる。（4 : 60 = 16 : x）
 
-    次に、比例式を解き、母集団の大きさ x を求める。（800）'
+    次に、比例式を解き、母集団の大きさ x を求める。（240）'
   hints:
   - 標本での該当する個数の割合が、母集団全体でもおよそ等しいとみて、母集団の大きさ x を含む比例式をつくる。
   label: (1)
@@ -44,11 +44,11 @@ sub_questions:
   - args: []
     narration: 標本での該当する個数の割合が、母集団全体でもおよそ等しいとみて、母集団の大きさ x を含む比例式をつくる。
     op: form_ratio_equation_for_x
-    result_display: '6 : 100 = 48 : x'
+    result_display: '4 : 60 = 16 : x'
     result_srepr: ''
   - args: []
     narration: 比例式を解き、母集団の大きさ x を求める。
     op: solve_for_x
-    result_display: '800'
-    result_srepr: Integer(800)
+    result_display: '240'
+    result_srepr: Integer(240)
 visual_svg: null

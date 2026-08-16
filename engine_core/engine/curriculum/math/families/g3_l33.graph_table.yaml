@@ -54,11 +54,14 @@ levels:
       # 比例定数 a は既約分数 n/d（d∈{1,2,3}・n∈[-8,8]\{0}）＝36 候補。対応表の範囲
       # (x_lo, x_hi) は 3×3=9 通り。|a|·max(|x_lo|,|x_hi|)² ≦ 12 で絞った上で
       # 相異2つを引くと、順序つきで合計 3366 通り（数え上げ実測・期待 dup=0.015）。
+      # **比例定数は |a| ≦ 4**（-7/2・-5/2 は教科書の放物線に出てこない）。
+      # **対応表は5点以上**（x=-1、0、1 の3点だけでは放物線をかけない）。
       a_den_set: [1, 2, 3]
-      a_num_domain: {int_range: [-8, 8]}
-      table_lo_domain: {int_set: [-3, -2, -1]}
-      table_hi_domain: {int_set: [1, 2, 3]}
-      value_bound: 12
+      a_num_domain: {int_range: [-6, 6]}
+      a_abs_max: 4
+      table_lo_domain: {int_set: [-3, -2]}
+      table_hi_domain: {int_set: [2, 3]}
+      value_bound: 16
     given: [expression, situation_params]
     asked: [draw_graph]
     visual: required

@@ -138,7 +138,13 @@ def judge_parallel_from_ratio_recipe(ctx: CellContext, rng: Rng) -> MR:
             ec += delta
         # 線分の長さなので正でなければならない（deltaが負のとき0以下になりうる）。
         # 図に描ける大きさに収めるため、いちばん長い線分の上限でも引き直す。
+        # **2辺（AB と AC）の長さの比が3倍を超える図は避ける。**
+        # 前は各線分の上限しか見ておらず「FG=14cm・FH=114cm」（8倍）のような、
+        # 紙に描けない細長い三角形が出ていた。
+        ab, ac = ad + db, ae + ec
         if ec <= 0 or max(ad, db, ae, ec) > _MAX_SEGMENT_LENGTH:
+            continue
+        if max(ab, ac) > 3 * min(ab, ac):
             continue
         solver = REGISTRY.solver("math.judge_parallel_from_ratio")
         sol = cast(Solution, solver(ad, db, ae, ec, pa + pb + pc + pd + pe))
@@ -257,15 +263,24 @@ def parallel_ratio_judge_then_length_recipe(ctx: CellContext, rng: Rng) -> MR:
     pa, pb, pc, pd, pe = v
     # 辺BCの長さが整数になる (AD, DB, DE) だけを組む（前は DE を独立に引いていて
     # 「RB=13cm のとき EM=39/2」のような答えが出ていた）。
-    ad, db, de, _bc = _segment_lengths(
-        rng, part_max=int(p["part_max"]), side_max=int(p["side_max"])
-    )
-    for _ in range(200):
+    # **三角形として成立する組だけを残す。**
+    # AE=AD·k, EC=DB·k と置くので AC = k·AB になり、k を大きく引くと
+    # 「QR=20cm, QS=100cm, RS=32cm」（20+32 < 100）という、三角形不等式を
+    # 満たさない図が出ていた（6 seed 全部がそうだった）。
+    # AB=AD+DB, AC=AE+EC, BC=DE·AB/AD の3辺で不等式を確かめる。
+    for _ in range(300):
+        ad, db, de, bc = _segment_lengths(
+            rng, part_max=int(p["part_max"]), side_max=int(p["side_max"])
+        )
         scale = int(draw(p["scale_domain"], rng))
-        if scale != 1:  # AE:ECがAD:DBと同じ数字の繰り返しになる退化を避ける
+        if scale == 1:  # AE:ECがAD:DBと同じ数字の繰り返しになる退化を避ける
+            continue
+        ab = ad + db
+        ac = scale * ab
+        if ab + bc > ac and ab + ac > bc and ac + bc > ab:
             break
     else:
-        raise ValueError("parallel_ratio_judge_then_length_recipe: 有効な比を構成できず")
+        raise ValueError("parallel_ratio_judge_then_length_recipe: 三角形になる比を構成できず")
     ae, ec = ad * scale, db * scale
 
     solver = REGISTRY.solver("math.parallel_ratio_judge_then_length")

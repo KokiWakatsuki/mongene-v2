@@ -24,7 +24,7 @@ meta:
   seed: 2
   signature: polygon_exterior_sum_property_rule_recall
 problem_ref: 92a7160ec5b7005d
-problem_text: 3角形の外角の和は、辺の数を変えた他の多角形の外角の和と比べてどうなるか。正しく述べているものを1つ選べ。
+problem_text: 八角形の外角の和は、辺の数を変えた他の多角形の外角の和と比べてどうなるか。正しく述べているものを1つ選べ。
 sub_questions:
 - answer:
     correct: どんな多角形であっても常に一定である

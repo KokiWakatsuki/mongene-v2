@@ -60,6 +60,8 @@ levels:
     params:
       # 半径は教科書の大きさに。組み合わせは場面（_SPHERE_SCENES）の軸で稼ぐ。
       radius_domain: {int_range: [2, 15]}
+      # **切れる物だけ**（風船を「中心を通る平面で半分に切る」場面は成り立たない）。
+      cuttable_scene_only: true
       given_as_set: [radius, diameter]
     given: [condition]
     asked: [value]

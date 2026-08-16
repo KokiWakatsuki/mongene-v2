@@ -44,10 +44,12 @@ levels:
       # 比例定数が単位分数 1/den になるよう y0 = x0²/den から逆算する（recipe が列挙）。
       # 初稿の候補23×車種3＝69通りでは実測 dup_rate 0.47（閾値 0.20 の2倍超）だった
       # ため、速さ・分母・停止距離の域と車種を広げた（候補44×車種8＝352・実測 0.06）。
-      speed_candidates: [10, 15, 20, 25, 30, 35, 40, 45, 50, 60]
-      denominator_candidates: [20, 25, 40, 50, 80, 100, 125, 200, 250]
-      ratio_candidates: [2, 3]
-      stop_distance_range: [1, 40]
+      # **停止距離は実際の車の値に近い組だけ**（recipe が x²/150〜x²/70 に絞る）。
+      # 絞ったぶん、基準の速さ・倍率・車の種類の幅で組合せを戻す。
+      speed_candidates: [10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 70, 75, 80]
+      denominator_candidates: [70, 75, 80, 90, 100, 110, 120, 125, 140, 150]
+      ratio_candidates: [2, 3, 4]
+      stop_distance_range: [1, 80]
       max_speed: 120
       vehicle_candidates: [自動車, バス, トラック, 乗用車, ワゴン車, タクシー, 郵便車, 消防車]
     # 答えの分母・根号の中がこの単元では構造的に大きくなる（`engine.eval.answer_size`）。
@@ -77,6 +79,8 @@ levels:
       # という設定が出ていた。落とす物と時刻の軸で組合せは足りている。
       coefficient_candidates: [5]
       root_range: [3, 20]
+      # 落とす高さの上限（m）。実際に物を落とせる高さに収める。
+      fall_distance_max: 300
       object_candidates: [ボール, 小石, 鉄球, おもり, ビー玉, くり, りんご, 木の実,
                           どんぐり, 石, おはじき, ゴムまり, 消しゴム, 鉄のかたまり]
     given: [scenario]

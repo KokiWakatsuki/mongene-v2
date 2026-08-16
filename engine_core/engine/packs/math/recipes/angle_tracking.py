@@ -268,6 +268,11 @@ def _polygon_name(n: int) -> str:
     return _POLYGON_NAME_JP[n]
 
 
+def _regular_polygon_name(n: int) -> str:
+    """正n角形の呼び名。**n=4 は「正四角形」ではなく「正方形」**（日本語の数学用語）。"""
+    return "正方形" if n == 4 else f"正{_polygon_name(n)}"
+
+
 @register_recipe("math.polygon_interior_sum_and_angle", provides_concepts=_POLYGON_INTERIOR_CONCEPTS)
 def polygon_interior_sum_and_angle_recipe(ctx: CellContext, rng: Rng) -> MR:
     """正n角形の内角の和と1つの内角を求める（g2_l34.find_value Lv1・answer-first）。"""
@@ -280,7 +285,8 @@ def polygon_interior_sum_and_angle_recipe(ctx: CellContext, rng: Rng) -> MR:
     expected = sympy.Tuple(180 * (n - 2), sympy.Rational(180 * (n - 2), n))
     assert sol.answer.srepr == sympy.srepr(expected)
 
-    statement = f"正{_polygon_name(n)}の内角の和を求めよ。また、正{_polygon_name(n)}の1つの内角の大きさを求めよ"
+    name = _regular_polygon_name(n)
+    statement = f"{name}の内角の和を求めよ。また、{name}の1つの内角の大きさを求めよ"
 
     sub_question = SubQuestionMR(
         label="(1)", asked="value", answer=sol.answer, steps=sol.steps,
@@ -343,7 +349,7 @@ def regular_polygon_exterior_angle_recipe(ctx: CellContext, rng: Rng) -> MR:
     assert isinstance(sol.answer, SymbolicAnswer)
     assert sol.answer.srepr == sympy.srepr(sympy.Rational(360, n))
 
-    statement = f"正{_polygon_name(n)}の1つの外角の大きさを求めよ"
+    statement = f"{_regular_polygon_name(n)}の1つの外角の大きさを求めよ"
 
     sub_question = SubQuestionMR(
         label="(1)", asked="value", answer=sol.answer, steps=sol.steps,
@@ -375,7 +381,10 @@ def polygon_sides_from_interior_angle_recipe(ctx: CellContext, rng: Rng) -> MR:
     for _ in range(200):
         n = int(draw(cast("list[int]", p["sides_domain"]), rng))
         ext = sympy.Rational(360, n)
-        if ext.q <= 90:
+        # **内角が整数になる n だけ。** 前は分母90まで許していたので
+        # 「1つの内角が 315/2°」（157.5°）が出ていた。実物の教材は
+        # 360 の約数の n（内角も整数）だけを扱う。
+        if ext.q == 1:
             break
     else:
         raise ValueError("polygon_sides_from_interior_angle_recipe: 分母が大きすぎない外角を構成できず")

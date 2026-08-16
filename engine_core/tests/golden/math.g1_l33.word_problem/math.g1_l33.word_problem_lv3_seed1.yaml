@@ -24,24 +24,24 @@ meta:
   seed: 1
   signature: word_problem_inverse_proportion_worker_days
 problem_ref: de6e89206bc66e9b
-problem_text: 'ある草むしりを3人ですると24日かかる。この草むしりをする人数x人と、かかる日数y日は反比例する。
+problem_text: 'ある草むしりを3人ですると6日かかる。この草むしりをする人数x人と、かかる日数y日は反比例する。
 
-  この草むしりを9人でするとき、何日で終わるか。式を立てて求めよ。'
+  この草むしりを2人でするとき、何日で終わるか。式を立てて求めよ。'
 sub_questions:
 - answer:
-    display: 8日
+    display: 9日
     kind: symbolic
-    srepr: Integer(8)
+    srepr: Integer(9)
   cause_tags: []
   concept_tags:
   - inverse_proportion.word_problem_worker_days
-  explanation: 'まず、反比例の式 y=a/x に、通る点の x, y の値をあてはめ、比例定数を求める式をつくる。（a = 3 × 24）
+  explanation: 'まず、反比例の式 y=a/x に、通る点の x, y の値をあてはめ、比例定数を求める式をつくる。（a = 3 × 6）
 
-    次に、求めた比例定数を使って、反比例の式を組み立てる。（y = 72/x）
+    次に、求めた比例定数を使って、反比例の式を組み立てる。（y = 18/x）
 
-    次に、比例定数と x の値を、反比例の式 y=a/x の x にあてはめる。（y = 72 / 9）
+    次に、比例定数と x の値を、反比例の式 y=a/x の x にあてはめる。（y = 18 / 2）
 
-    最後に、わり算を計算して y の値を求める。（y = 8）'
+    最後に、わり算を計算して y の値を求める。（y = 9）'
   hints:
   - 反比例の式 y=a/x に、通る点の x, y の値をあてはめ、比例定数を求める式をつくる。
   - 求めた比例定数を使って、反比例の式を組み立てる。
@@ -51,28 +51,28 @@ sub_questions:
   solution_steps:
   - args:
     - '3'
-    - '24'
+    - '6'
     narration: 反比例の式 y=a/x に、通る点の x, y の値をあてはめ、比例定数を求める式をつくる。
     op: substitute_point
-    result_display: a = 3 × 24
-    result_srepr: Integer(72)
+    result_display: a = 3 × 6
+    result_srepr: Integer(18)
   - args:
-    - '72'
+    - '18'
     narration: 求めた比例定数を使って、反比例の式を組み立てる。
     op: form_expression
-    result_display: y = 72/x
-    result_srepr: Mul(Integer(72), Pow(Symbol('x'), Integer(-1)))
+    result_display: y = 18/x
+    result_srepr: Mul(Integer(18), Pow(Symbol('x'), Integer(-1)))
   - args:
-    - '72'
-    - '9'
+    - '18'
+    - '2'
     narration: 比例定数と x の値を、反比例の式 y=a/x の x にあてはめる。
     op: substitute_x
-    result_display: y = 72 / 9
-    result_srepr: Integer(8)
+    result_display: y = 18 / 2
+    result_srepr: Integer(9)
   - args:
-    - y = 72 / 9
+    - y = 18 / 2
     narration: わり算を計算して y の値を求める。
     op: evaluate
-    result_display: y = 8
-    result_srepr: Integer(8)
+    result_display: y = 9
+    result_srepr: Integer(9)
 visual_svg: null

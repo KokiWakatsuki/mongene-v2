@@ -24,18 +24,18 @@ meta:
   seed: 3
   signature: polygon_sides_from_interior_angle
 problem_ref: d22c6b3e8c85ddd2
-problem_text: 1つの内角が315/2°である正多角形は正何角形か、外角の和を使って求めよ。
+problem_text: 1つの内角が162°である正多角形は正何角形か、外角の和を使って求めよ。
 sub_questions:
 - answer:
-    display: '16'
+    display: '20'
     kind: symbolic
-    srepr: Integer(16)
+    srepr: Integer(20)
   cause_tags: []
   concept_tags:
   - polygon_angle.sides_from_interior_angle
-  explanation: 'まず、内角ととなり合う外角は、一直線の角(平角)から内角をひいて求める。（45/2°）
+  explanation: 'まず、内角ととなり合う外角は、一直線の角(平角)から内角をひいて求める。（18°）
 
-    次に、外角の和がつねに一定であることから、その値を1つの外角でわって辺の数を求める。（16）'
+    次に、外角の和がつねに一定であることから、その値を1つの外角でわって辺の数を求める。（20）'
   hints:
   - 内角ととなり合う外角は、一直線の角(平角)から内角をひいて求める。
   label: (1)
@@ -44,11 +44,11 @@ sub_questions:
   - args: []
     narration: 内角ととなり合う外角は、一直線の角(平角)から内角をひいて求める。
     op: compute_exterior_from_interior
-    result_display: 45/2°
+    result_display: 18°
     result_srepr: ''
   - args: []
     narration: 外角の和がつねに一定であることから、その値を1つの外角でわって辺の数を求める。
     op: divide_exterior_sum
-    result_display: '16'
-    result_srepr: Integer(16)
+    result_display: '20'
+    result_srepr: Integer(20)
 visual_svg: null

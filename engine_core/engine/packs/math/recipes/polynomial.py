@@ -361,7 +361,10 @@ def distribute_or_divide(ctx: CellContext, rng: Rng) -> MR:
         ry = int(draw({"int_set": inner_cands}, rng))
         group = [(rx * d, "x"), (ry * d, "y")]  # 割り切れる被除数
         expr_str = f"({_sympy_str_from_terms(group)})/({d})"
-        given_display = f"({_fmt_expr_from_terms(group)}) ÷ ({d})"
+        # **正の数の除数にかっこは付けない**（`÷ (2)` が出ていた。
+        # かっこが要るのは負の数のときだけ）。
+        d_disp = f"({d})" if d < 0 else f"{d}"
+        given_display = f"({_fmt_expr_from_terms(group)}) ÷ {d_disp}"
         is_division = True
 
     simplified = sympy.expand(sympy.sympify(expr_str))
@@ -1241,6 +1244,11 @@ _EXPAND_VARS = ["x", "a", "y", "m", "t", "n", "b", "p", "k", "s"]
 _EXPAND_VAR_PAIRS = [("a", "b"), ("x", "y"), ("m", "n"), ("p", "q"), ("s", "t")]
 
 
+def _domain_values(dom: dict[str, object]) -> list[int]:
+    """`{"int_set": [...]}` の中身を取り出す（同じ値を2回引かない絞り込み用）。"""
+    return [int(v) for v in cast("list[object]", dom["int_set"])]
+
+
 def _mono(c: int, var: str) -> str:
     """単項式 c·var の表示（c≠0）。例: (1,"x")->"x" / (-1,"x")->"-x" / (3,"a")->"3a"。"""
     if c == 1:
@@ -1305,7 +1313,9 @@ def _expand_construct(mode: str, rng: Rng, p: dict[str, Any]) -> tuple[str, str]
         else:
             dom = {"int_set": [n for n in range(-12, 13) if n != 0]}
         a = int(draw(dom, rng))
-        b = int(draw(dom, rng))
+        # **同じ定数を2回引かない。** `(t + 4)(t + 4)` が出ていた——実物は
+        # 同じ因数の積を `(t + 4)²` と書き、平方の公式のセル（g3_l4）で扱う。
+        b = int(draw({"int_set": [v for v in _domain_values(dom) if v != a]}, rng))
         expr = f"({var}+({a}))*({var}+({b}))"
         disp = f"({var}{_const_tail(a)})({var}{_const_tail(b)})"
         return expr, disp
@@ -1454,7 +1464,9 @@ def _factor_construct(mode: str, rng: Rng, p: dict[str, Any]) -> tuple[str, str]
 
     if mode == "factor_perfect_square":
         var = str(draw(_EXPAND_VARS, rng))
-        a = int(draw({"int_set": [n for n in range(-30, 31) if n != 0]}, rng))
+        # **±18 まで。** ±30 まで引いていて「m² + 54m + 729」（27²）のように、
+        # 定数項が3桁になって平方数を見つけにくい式が出ていた。
+        a = int(draw({"int_set": [n for n in range(-18, 19) if n != 0]}, rng))
         return _expanded_pair(f"({var}+({a}))**2")
 
     if mode == "factor_diff_squares":

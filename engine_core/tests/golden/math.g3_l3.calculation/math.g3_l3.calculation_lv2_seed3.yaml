@@ -26,20 +26,20 @@ meta:
 problem_ref: 610f815b41a5c8a7
 problem_text: '次の式を展開せよ。
 
-  (k - 8)(k - 1)'
+  (k - 8)(k + 11)'
 sub_questions:
 - answer:
-    display: k² - 9k + 8
+    display: k² + 3k - 88
     kind: symbolic
-    srepr: Add(Pow(Symbol('k'), Integer(2)), Mul(Integer(-1), Integer(9), Symbol('k')), Integer(8))
+    srepr: Add(Pow(Symbol('k'), Integer(2)), Mul(Integer(3), Symbol('k')), Integer(-88))
   cause_tags: []
   concept_tags:
   - polynomial.expand_formula_sum_product
-  explanation: 'まず、それぞれの定数の符号を確かめる。（-8 と -1）
+  explanation: 'まず、それぞれの定数の符号を確かめる。（-8 と 11）
 
-    次に、2つの定数の和と積を求める。（和 -9、積 8）
+    次に、2つの定数の和と積を求める。（和 3、積 -88）
 
-    最後に、乗法公式にあてはめて展開した式を書く。（k² - 9k + 8）'
+    最後に、乗法公式にあてはめて展開した式を書く。（k² + 3k - 88）'
   hints:
   - それぞれの定数の符号を確かめる。
   - 2つの定数の和と積を求める。
@@ -49,16 +49,16 @@ sub_questions:
   - args: []
     narration: それぞれの定数の符号を確かめる。
     op: determine_constant_signs
-    result_display: -8 と -1
+    result_display: -8 と 11
     result_srepr: ''
   - args: []
     narration: 2つの定数の和と積を求める。
     op: compute_sum_and_product
-    result_display: 和 -9、積 8
+    result_display: 和 3、積 -88
     result_srepr: ''
   - args: []
     narration: 乗法公式にあてはめて展開した式を書く。
     op: write_expansion
-    result_display: k² - 9k + 8
-    result_srepr: Add(Pow(Symbol('k'), Integer(2)), Mul(Integer(-1), Integer(9), Symbol('k')), Integer(8))
+    result_display: k² + 3k - 88
+    result_srepr: Add(Pow(Symbol('k'), Integer(2)), Mul(Integer(3), Symbol('k')), Integer(-88))
 visual_svg: null

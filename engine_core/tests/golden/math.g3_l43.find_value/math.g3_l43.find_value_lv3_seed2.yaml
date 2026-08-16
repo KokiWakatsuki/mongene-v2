@@ -24,22 +24,22 @@ meta:
   seed: 2
   signature: parallel_ratio_judge_then_length
 problem_ref: 91c8b02444195953
-problem_text: 三角形TUVで、辺TU, TV上に点W, Xがある。TW=7cm, WU=7cm, TX=28cm, XV=28cm である。WX=9cm のとき、WXとUVが平行であることを確かめたうえで、辺UVの長さを求めよ。
+problem_text: 三角形TUVで、辺TU, TV上に点W, Xがある。TW=4cm, WU=12cm, TX=8cm, XV=24cm である。WX=10cm のとき、WXとUVが平行であることを確かめたうえで、辺UVの長さを求めよ。
 sub_questions:
 - answer:
-    display: '18'
+    display: '40'
     kind: symbolic
-    srepr: Integer(18)
+    srepr: Integer(40)
   cause_tags: []
   concept_tags:
   - parallel_segment.judge_then_length
-  explanation: 'まず、TW:WUとTX:XVの比が等しいかどうかを比べる。（7:7 と 28:28）
+  explanation: 'まず、TW:WUとTX:XVの比が等しいかどうかを比べる。（4:12 と 8:24）
 
     次に、平行線と線分の比の定理の逆から、WXとUVが平行であるかどうかを判別する。（平行である）
 
     次に、WX∥UV であることから、三角形TWXと三角形TUVが相似になることを見つける。（三角形TWX と 三角形TUV）
 
-    最後に、TW:TU=WX:UV が成り立つことから、辺UVの長さを求める。（18）'
+    最後に、TW:TU=WX:UV が成り立つことから、辺UVの長さを求める。（40）'
   hints:
   - TW:WUとTX:XVの比が等しいかどうかを比べる。
   - 平行線と線分の比の定理の逆から、WXとUVが平行であるかどうかを判別する。
@@ -50,7 +50,7 @@ sub_questions:
   - args: []
     narration: TW:WUとTX:XVの比が等しいかどうかを比べる。
     op: compare_division_ratios
-    result_display: 7:7 と 28:28
+    result_display: 4:12 と 8:24
     result_srepr: ''
   - args: []
     narration: 平行線と線分の比の定理の逆から、WXとUVが平行であるかどうかを判別する。
@@ -65,6 +65,6 @@ sub_questions:
   - args: []
     narration: TW:TU=WX:UV が成り立つことから、辺UVの長さを求める。
     op: apply_parallel_segment_ratio
-    result_display: '18'
-    result_srepr: Integer(18)
+    result_display: '40'
+    result_srepr: Integer(40)
 visual_svg: null

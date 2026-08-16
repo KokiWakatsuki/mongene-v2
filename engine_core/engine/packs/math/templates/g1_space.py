@@ -15,7 +15,10 @@ SP_POLYHEDRON_CLAIM_V1 = (
 # g1_l48.knowledge Lv2: 直方体の 辺と辺／辺と面 の位置関係を判別する
 SP_POSITION_RELATION_V1 = "{{ given.statement }}を、次の中から1つ選べ。"
 # g1_l53.knowledge Lv1: 球の表面積・体積の公式を想起する
-SP_SPHERE_FORMULA_V1 = "{{ given.statement }}として正しいものを1つ選べ。"
+# **「として」はテンプレでは足さない。** statement 側が句の終わり方に応じて
+# 「〜について、」「〜として、」を付けているので、ここでも足すと
+# 「表した式について、として正しいものを1つ選べ」と助詞が二重になる。
+SP_SPHERE_FORMULA_V1 = "{{ given.statement }}正しいものを1つ選べ。"
 
 
 def _register_all() -> None:

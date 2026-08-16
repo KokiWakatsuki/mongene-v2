@@ -24,18 +24,18 @@ meta:
   seed: 3
   signature: sample_ratio_estimate
 problem_ref: 7dcff13f52f98900
-problem_text: 無作為に抽出した171個の製品のうち、不良品が105個あった。製品6498個の中に含まれる不良品のおよその個数を、比例式を使って求めよ。
+problem_text: 無作為に抽出した125個の製品のうち、不良品が9個あった。製品1500個の中に含まれる不良品のおよその個数を、比例式を使って求めよ。
 sub_questions:
 - answer:
-    display: '3990'
+    display: '108'
     kind: symbolic
-    srepr: Integer(3990)
+    srepr: Integer(108)
   cause_tags: []
   concept_tags:
   - sample_survey.ratio_estimate
-  explanation: 'まず、標本での該当する個数の割合が、母集団全体でもおよそ等しいとみて比例式をつくる。（105 : 171 = x : 6498）
+  explanation: 'まず、標本での該当する個数の割合が、母集団全体でもおよそ等しいとみて比例式をつくる。（9 : 125 = x : 1500）
 
-    次に、比例式を解き、母集団に含まれるおよその個数を求める。（3990）'
+    次に、比例式を解き、母集団に含まれるおよその個数を求める。（108）'
   hints:
   - 標本での該当する個数の割合が、母集団全体でもおよそ等しいとみて比例式をつくる。
   label: (1)
@@ -44,11 +44,11 @@ sub_questions:
   - args: []
     narration: 標本での該当する個数の割合が、母集団全体でもおよそ等しいとみて比例式をつくる。
     op: form_ratio_equation
-    result_display: '105 : 171 = x : 6498'
+    result_display: '9 : 125 = x : 1500'
     result_srepr: ''
   - args: []
     narration: 比例式を解き、母集団に含まれるおよその個数を求める。
     op: solve_for_estimate
-    result_display: '3990'
-    result_srepr: Integer(3990)
+    result_display: '108'
+    result_srepr: Integer(108)
 visual_svg: null

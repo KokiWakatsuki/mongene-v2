@@ -29,7 +29,7 @@ problem_text: 'ある文房具をx個仕入れ、1個あたりa円で全部売�
   全体の利益を、x, a, pを使った式で表せ。'
 sub_questions:
 - answer:
-    display: ax - p
+    display: xa - p
     kind: symbolic
     srepr: Add(Mul(Symbol('a'), Symbol('x')), Mul(Integer(-1), Symbol('p')))
   cause_tags: []

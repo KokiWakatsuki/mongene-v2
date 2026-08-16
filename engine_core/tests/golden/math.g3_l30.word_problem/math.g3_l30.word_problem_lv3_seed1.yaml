@@ -24,28 +24,28 @@ meta:
   seed: 1
   signature: word_problem_quadratic_square_cut
 problem_ref: 22faed5e8bc1ff17
-problem_text: '1辺が37cmの正方形がある。縦を x cm 短くし、横を x cm 長くして長方形をつくったところ、面積が1288cm²になった。
+problem_text: '1辺が45cmの正方形がある。縦を x cm 短くし、横を x cm 長くして長方形をつくったところ、面積が1904cm²になった。
 
   x の値を求めよ。'
 sub_questions:
 - answer:
-    display: 9cm
+    display: 11cm
     kind: symbolic
-    srepr: Tuple(Integer(9))
+    srepr: Tuple(Integer(11))
   cause_tags: []
   concept_tags:
   - quadratic.word_problem_square_cut
   explanation: 'まず、場面の中で、どちらの見方でも同じになる（等しくなっている）量に着目する。（変形後の長方形の面積）
 
-    次に、その量を x を使って両辺に表し、方程式をつくる。（(37 - x)(37 + x) = 1288）
+    次に、その量を x を使って両辺に表し、方程式をつくる。（(45 - x)(45 + x) = 1904）
 
-    次に、かっこを展開し、右辺を左辺に移項して、=0 の形に整理する。（81 - x² = 0）
+    次に、かっこを展開し、右辺を左辺に移項して、=0 の形に整理する。（121 - x² = 0）
 
-    次に、左辺を因数分解する。（-(x - 9)(x + 9) = 0）
+    次に、左辺を因数分解する。（-(x - 11)(x + 11) = 0）
 
-    次に、積が 0 になるのは各因数が 0 のときだから、それぞれを 0 とおいて x を求める。（x - 9 = 0、x + 9 = 0）
+    次に、積が 0 になるのは各因数が 0 のときだから、それぞれを 0 とおいて x を求める。（x - 11 = 0、x + 11 = 0）
 
-    最後に、求めるものは正の数だから、2つの解のうち条件に合う正の解を選ぶ。（9）'
+    最後に、求めるものは正の数だから、2つの解のうち条件に合う正の解を選ぶ。（11）'
   hints:
   - 場面の中で、どちらの見方でも同じになる（等しくなっている）量に着目する。
   - その量を x を使って両辺に表し、方程式をつくる。
@@ -63,26 +63,26 @@ sub_questions:
   - args: []
     narration: その量を x を使って両辺に表し、方程式をつくる。
     op: formulate_equation
-    result_display: (37 - x)(37 + x) = 1288
-    result_srepr: Equality(Mul(Add(Integer(37), Mul(Integer(-1), Symbol('x'))), Add(Symbol('x'), Integer(37))), Integer(1288))
+    result_display: (45 - x)(45 + x) = 1904
+    result_srepr: Equality(Mul(Add(Integer(45), Mul(Integer(-1), Symbol('x'))), Add(Symbol('x'), Integer(45))), Integer(1904))
   - args: []
     narration: かっこを展開し、右辺を左辺に移項して、=0 の形に整理する。
     op: expand_and_rearrange
-    result_display: 81 - x² = 0
+    result_display: 121 - x² = 0
     result_srepr: ''
   - args: []
     narration: 左辺を因数分解する。
     op: factor_left_side
-    result_display: -(x - 9)(x + 9) = 0
+    result_display: -(x - 11)(x + 11) = 0
     result_srepr: ''
   - args: []
     narration: 積が 0 になるのは各因数が 0 のときだから、それぞれを 0 とおいて x を求める。
     op: apply_zero_product
-    result_display: x - 9 = 0、x + 9 = 0
+    result_display: x - 11 = 0、x + 11 = 0
     result_srepr: ''
   - args: []
     narration: 求めるものは正の数だから、2つの解のうち条件に合う正の解を選ぶ。
     op: select_positive_root
-    result_display: '9'
-    result_srepr: Integer(9)
+    result_display: '11'
+    result_srepr: Integer(11)
 visual_svg: null

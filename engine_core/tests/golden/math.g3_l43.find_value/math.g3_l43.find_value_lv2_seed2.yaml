@@ -24,7 +24,7 @@ meta:
   seed: 2
   signature: judge_parallel_from_ratio
 problem_ref: 1bf15102f38b95fb
-problem_text: 三角形FGHで、辺FG, FH上に点J, Kがある。FJ=11cm, JG=3cm, FK=88cm, KH=26cm であるとき、JKとGHが平行であるかどうかを、比を調べて答えよ。
+problem_text: 三角形FGHで、辺FG, FH上に点J, Kがある。FJ=17cm, JG=11cm, FK=51cm, KH=28cm であるとき、JKとGHが平行であるかどうかを、比を調べて答えよ。
 sub_questions:
 - answer:
     display: 平行ではない
@@ -33,7 +33,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - parallel_segment.judge_from_ratio
-  explanation: 'まず、FJ:JGとFK:KHの比が等しいかどうかを比べる。（11:3 と 88:26）
+  explanation: 'まず、FJ:JGとFK:KHの比が等しいかどうかを比べる。（17:11 と 51:28）
 
     次に、平行線と線分の比の定理の逆から、JKとGHが平行であるかどうかを判別する。（平行ではない）'
   hints:
@@ -44,7 +44,7 @@ sub_questions:
   - args: []
     narration: FJ:JGとFK:KHの比が等しいかどうかを比べる。
     op: compare_division_ratios
-    result_display: 11:3 と 88:26
+    result_display: 17:11 と 51:28
     result_srepr: ''
   - args: []
     narration: 平行線と線分の比の定理の逆から、JKとGHが平行であるかどうかを判別する。

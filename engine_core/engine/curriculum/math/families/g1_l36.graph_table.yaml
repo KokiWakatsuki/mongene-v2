@@ -41,8 +41,9 @@ levels:
       # 組合せは (B社の単価 pb, 単価の差 d, 交点の枚数 x0) の3軸で 14*7*20 = 1960 通り。
       # 固定費 fixed = d*x0 を逆算するので交点は必ず格子点（グラフから読める）。
       # x0 >= 21 > 単価の上限なので、答えの座標が本文の単価と一致する退化も起きない。
-      unit_price_domain: {int_range: [2, 15]}
-      price_diff_domain: {int_range: [2, 8]}
+      # コピー1枚の値段は 5〜12円（19円・14円は実勢からかけ離れている）。
+      unit_price_domain: {int_range: [5, 12]}
+      price_diff_domain: {int_range: [2, 6]}
       crossover_domain: {int_range: [21, 40]}
     given: [condition]
     asked: [read_intersection]

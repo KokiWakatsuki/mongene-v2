@@ -27,7 +27,7 @@ problem_ref: ab8bbcb96e612f32
 problem_text: 1辺の長さが27cmの正三角形MNPで、辺PMの長さと∠Nの大きさを求めよ。
 sub_questions:
 - answer:
-    display: 辺の長さ 27、∠N 60°
+    display: 辺の長さ 27cm、∠N 60°
     kind: symbolic
     srepr: Tuple(Integer(27), Integer(60))
   cause_tags: []
@@ -35,7 +35,7 @@ sub_questions:
   - equilateral.properties_from_side
   explanation: 'まず、正三角形の与えられた1辺の長さを読み取る。（27）
 
-    次に、正三角形は3辺の長さがすべて等しく、3つの内角もすべて等しく分け合うことから、もう1辺の長さと1つの内角の大きさを求める。（辺の長さ 27、∠N 60°）'
+    次に、正三角形は3辺の長さがすべて等しく、3つの内角もすべて等しく分け合うことから、もう1辺の長さと1つの内角の大きさを求める。（辺の長さ 27cm、∠N 60°）'
   hints:
   - 正三角形の与えられた1辺の長さを読み取る。
   label: (1)
@@ -49,6 +49,6 @@ sub_questions:
   - args: []
     narration: 正三角形は3辺の長さがすべて等しく、3つの内角もすべて等しく分け合うことから、もう1辺の長さと1つの内角の大きさを求める。
     op: apply_equilateral_property
-    result_display: 辺の長さ 27、∠N 60°
+    result_display: 辺の長さ 27cm、∠N 60°
     result_srepr: Tuple(Integer(27), Integer(60))
 visual_svg: null

@@ -26,18 +26,18 @@ meta:
 problem_ref: bedb97b65a8e72c2
 problem_text: '次の式を展開せよ。
 
-  (t + 4)(t + 4)'
+  (t + 4)(t + 2)'
 sub_questions:
 - answer:
-    display: t² + 8t + 16
+    display: t² + 6t + 8
     kind: symbolic
-    srepr: Add(Pow(Symbol('t'), Integer(2)), Mul(Integer(8), Symbol('t')), Integer(16))
+    srepr: Add(Pow(Symbol('t'), Integer(2)), Mul(Integer(6), Symbol('t')), Integer(8))
   cause_tags: []
   concept_tags:
   - polynomial.expand_formula_sum_product
-  explanation: 'まず、2つの定数の和と積を求める。（和 8、積 16）
+  explanation: 'まず、2つの定数の和と積を求める。（和 6、積 8）
 
-    次に、乗法公式にあてはめて展開した式を書く。（t² + 8t + 16）'
+    次に、乗法公式にあてはめて展開した式を書く。（t² + 6t + 8）'
   hints:
   - 2つの定数の和と積を求める。
   label: (1)
@@ -46,11 +46,11 @@ sub_questions:
   - args: []
     narration: 2つの定数の和と積を求める。
     op: compute_sum_and_product
-    result_display: 和 8、積 16
+    result_display: 和 6、積 8
     result_srepr: ''
   - args: []
     narration: 乗法公式にあてはめて展開した式を書く。
     op: write_expansion
-    result_display: t² + 8t + 16
-    result_srepr: Add(Pow(Symbol('t'), Integer(2)), Mul(Integer(8), Symbol('t')), Integer(16))
+    result_display: t² + 6t + 8
+    result_srepr: Add(Pow(Symbol('t'), Integer(2)), Mul(Integer(6), Symbol('t')), Integer(8))
 visual_svg: null

@@ -35,7 +35,9 @@ levels:
       # **底角として成り立つ 25〜85°。** 前は 1〜178 だった（2つの角の和が
       # 180°を超える組も、1°の角も出た）。
       angle_domain: {int_range: [25, 85]}
-      diff_domain: {int_range: [1, 30]}
+      # **差は 5°以上。** 1〜2°差は図では区別がつかず、「同位角が48°と49°」
+      # のような、図から平行でないと読み取れない問いになっていた。
+      diff_domain: {int_range: [5, 30]}
     given: [statement]
     asked: [choice]
     visual: none

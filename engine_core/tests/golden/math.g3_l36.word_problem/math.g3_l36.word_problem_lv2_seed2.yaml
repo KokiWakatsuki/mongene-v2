@@ -24,26 +24,26 @@ meta:
   seed: 2
   signature: word_problem_quadratic_determine_then_evaluate
 problem_ref: 69a213746f09e51d
-problem_text: '車がブレーキをかけてから止まるまでに進む距離を停止距離という。あるワゴン車は、速さが40km/hのとき停止距離が8mであった。
+problem_text: '車がブレーキをかけてから止まるまでに進む距離を停止距離という。あるワゴン車は、速さが20km/hのとき停止距離が4mであった。
 
   停止距離 y m は、ブレーキをかけたときの速さ x km/h の2乗に比例するものとする。
 
   (1) y を x の式で表せ。
 
-  (2) 速さが120km/hのときの停止距離を求めよ。'
+  (2) 速さが40km/hのときの停止距離を求めよ。'
 sub_questions:
 - answer:
-    display: y = (1/200)x²
+    display: y = (1/100)x²
     kind: symbolic
-    srepr: Mul(Rational(1, 200), Pow(Symbol('x'), Integer(2)))
+    srepr: Mul(Rational(1, 100), Pow(Symbol('x'), Integer(2)))
   cause_tags: []
   concept_tags:
   - quadratic_function.word_problem_determine_then_evaluate
   explanation: 'まず、y は x の2乗に比例するから、比例定数を a とおいて y=ax² と表し、与えられている x と y の値を代入する。（y = ax²）
 
-    次に、代入してできた式を a について解いて、比例定数を求める。（a = 1/200）
+    次に、代入してできた式を a について解いて、比例定数を求める。（a = 1/100）
 
-    最後に、求めた比例定数を y=ax² にもどして、y を x の式で表す。（y = (1/200)x²）'
+    最後に、求めた比例定数を y=ax² にもどして、y を x の式で表す。（y = (1/100)x²）'
   hints:
   - y は x の2乗に比例するから、比例定数を a とおいて y=ax² と表し、与えられている x と y の値を代入する。
   - 代入してできた式を a について解いて、比例定数を求める。
@@ -58,23 +58,23 @@ sub_questions:
   - args: []
     narration: 代入してできた式を a について解いて、比例定数を求める。
     op: solve_for_coefficient
-    result_display: a = 1/200
-    result_srepr: Rational(1, 200)
+    result_display: a = 1/100
+    result_srepr: Rational(1, 100)
   - args: []
     narration: 求めた比例定数を y=ax² にもどして、y を x の式で表す。
     op: form_expression
-    result_display: y = (1/200)x²
-    result_srepr: Mul(Rational(1, 200), Pow(Symbol('x'), Integer(2)))
+    result_display: y = (1/100)x²
+    result_srepr: Mul(Rational(1, 100), Pow(Symbol('x'), Integer(2)))
 - answer:
-    display: 72m
+    display: 16m
     kind: symbolic
-    srepr: Integer(72)
+    srepr: Integer(16)
   cause_tags: []
   concept_tags:
   - quadratic_function.word_problem_determine_then_evaluate
-  explanation: 'まず、式の x に、与えられた値をあてはめる。（1/200 × (120)²）
+  explanation: 'まず、式の x に、与えられた値をあてはめる。（1/100 × (40)²）
 
-    次に、2乗を計算してから比例定数をかけ、y の値を求める。（72）'
+    次に、2乗を計算してから比例定数をかけ、y の値を求める。（16）'
   hints:
   - 式の x に、与えられた値をあてはめる。
   label: (2)
@@ -83,11 +83,11 @@ sub_questions:
   - args: []
     narration: 式の x に、与えられた値をあてはめる。
     op: substitute_x
-    result_display: 1/200 × (120)²
+    result_display: 1/100 × (40)²
     result_srepr: ''
   - args: []
     narration: 2乗を計算してから比例定数をかけ、y の値を求める。
     op: compute_y
-    result_display: '72'
-    result_srepr: Integer(72)
+    result_display: '16'
+    result_srepr: Integer(16)
 visual_svg: null

@@ -26,18 +26,18 @@ meta:
 problem_ref: b3615d65b7697e2e
 problem_text: '次の式を展開せよ。
 
-  (a - 5)(a + 8)'
+  (a - 5)(a - 2)'
 sub_questions:
 - answer:
-    display: a² + 3a - 40
+    display: a² - 7a + 10
     kind: symbolic
-    srepr: Add(Pow(Symbol('a'), Integer(2)), Mul(Integer(3), Symbol('a')), Integer(-40))
+    srepr: Add(Pow(Symbol('a'), Integer(2)), Mul(Integer(-1), Integer(7), Symbol('a')), Integer(10))
   cause_tags: []
   concept_tags:
   - polynomial.expand_product
-  explanation: 'まず、分配法則で、前のかっこの各項を後ろのかっこの各項にすべてかける。（a² + 8a - 5a - 40）
+  explanation: 'まず、分配法則で、前のかっこの各項を後ろのかっこの各項にすべてかける。（a² - 2a - 5a + 10）
 
-    次に、同類項をまとめて計算する。（a² + 3a - 40）'
+    次に、同類項をまとめて計算する。（a² - 7a + 10）'
   hints:
   - 分配法則で、前のかっこの各項を後ろのかっこの各項にすべてかける。
   label: (1)
@@ -46,11 +46,11 @@ sub_questions:
   - args: []
     narration: 分配法則で、前のかっこの各項を後ろのかっこの各項にすべてかける。
     op: expand_all_products
-    result_display: a² + 8a - 5a - 40
+    result_display: a² - 2a - 5a + 10
     result_srepr: ''
   - args: []
     narration: 同類項をまとめて計算する。
     op: combine_like_terms
-    result_display: a² + 3a - 40
-    result_srepr: Add(Pow(Symbol('a'), Integer(2)), Mul(Integer(3), Symbol('a')), Integer(-40))
+    result_display: a² - 7a + 10
+    result_srepr: Add(Pow(Symbol('a'), Integer(2)), Mul(Integer(-1), Integer(7), Symbol('a')), Integer(10))
 visual_svg: null

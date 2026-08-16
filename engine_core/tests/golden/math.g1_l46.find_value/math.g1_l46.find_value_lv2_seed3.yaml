@@ -27,7 +27,7 @@ problem_ref: 42125326e88e774a
 problem_text: 半径6cmのおうぎ形の面積が27πcm²である。このおうぎ形の中心角の大きさを求めよ。
 sub_questions:
 - answer:
-    display: '270'
+    display: 270°
     kind: symbolic
     srepr: Integer(270)
   cause_tags: []
@@ -35,7 +35,7 @@ sub_questions:
   - sector.solve_central_angle
   explanation: 'まず、おうぎ形の面積の公式に、半径と分からない中心角をあてはめて方程式をつくる。（6² × π × x/360 = 27π）
 
-    次に、方程式を中心角について解き、その大きさを求める。（270）'
+    次に、方程式を中心角について解き、その大きさを求める。（270°）'
   hints:
   - おうぎ形の面積の公式に、半径と分からない中心角をあてはめて方程式をつくる。
   label: (1)
@@ -49,6 +49,6 @@ sub_questions:
   - args: []
     narration: 方程式を中心角について解き、その大きさを求める。
     op: solve_for_central_angle
-    result_display: '270'
+    result_display: 270°
     result_srepr: Integer(270)
 visual_svg: null

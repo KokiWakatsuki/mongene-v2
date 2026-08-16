@@ -26,18 +26,18 @@ meta:
 problem_ref: 8830c1f91a0d4077
 problem_text: '次の式を展開せよ。
 
-  (y + 5)(y + 11)'
+  (y + 5)(y + 1)'
 sub_questions:
 - answer:
-    display: y² + 16y + 55
+    display: y² + 6y + 5
     kind: symbolic
-    srepr: Add(Pow(Symbol('y'), Integer(2)), Mul(Integer(16), Symbol('y')), Integer(55))
+    srepr: Add(Pow(Symbol('y'), Integer(2)), Mul(Integer(6), Symbol('y')), Integer(5))
   cause_tags: []
   concept_tags:
   - polynomial.expand_formula_sum_product
-  explanation: 'まず、2つの定数の和と積を求める。（和 16、積 55）
+  explanation: 'まず、2つの定数の和と積を求める。（和 6、積 5）
 
-    次に、乗法公式にあてはめて展開した式を書く。（y² + 16y + 55）'
+    次に、乗法公式にあてはめて展開した式を書く。（y² + 6y + 5）'
   hints:
   - 2つの定数の和と積を求める。
   label: (1)
@@ -46,11 +46,11 @@ sub_questions:
   - args: []
     narration: 2つの定数の和と積を求める。
     op: compute_sum_and_product
-    result_display: 和 16、積 55
+    result_display: 和 6、積 5
     result_srepr: ''
   - args: []
     narration: 乗法公式にあてはめて展開した式を書く。
     op: write_expansion
-    result_display: y² + 16y + 55
-    result_srepr: Add(Pow(Symbol('y'), Integer(2)), Mul(Integer(16), Symbol('y')), Integer(55))
+    result_display: y² + 6y + 5
+    result_srepr: Add(Pow(Symbol('y'), Integer(2)), Mul(Integer(6), Symbol('y')), Integer(5))
 visual_svg: null

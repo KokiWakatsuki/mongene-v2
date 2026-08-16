@@ -153,8 +153,13 @@ def inscribed_angle_transfer_same_arc_recipe(ctx: CellContext, rng: Rng) -> MR:
     assert isinstance(sol.answer, SymbolicAnswer)
 
     statement = (
-        f"∠{pa}{pc}{pb}=∠{pa}{pd}{pb}={v1}°であり、4点{pa}, {pb}, {pc}, {pd}は"
-        f"同一円周上にある。∠{pd}{pa}{pc}={v2}°のとき、∠{pd}{pb}{pc}の大きさを求めよ"
+        # **「同一円周上にある」と書いてしまうと、前半の等しい角が飾りになる。**
+        # 前は結論まで書いていたので、76° がどこにも使われず、答えは与えられた
+        # 41° をそのまま言い直すだけだった。等しい角から4点が同一円周上にあると
+        # 気づく所を、生徒に残す。
+        f"直線{pa}{pb}について同じ側に点{pc}、{pd}があり、"
+        f"∠{pa}{pc}{pb}=∠{pa}{pd}{pb}={v1}°である。"
+        f"∠{pd}{pa}{pc}={v2}°のとき、∠{pd}{pb}{pc}の大きさを求めよ"
     )
 
     sub_question = SubQuestionMR(

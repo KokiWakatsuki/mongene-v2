@@ -24,24 +24,24 @@ meta:
   seed: 3
   signature: word_problem_inverse_proportion_worker_days
 problem_ref: 274a90dc1e92382a
-problem_text: 'ある仕事を12人ですると12日かかる。この仕事をする人数x人と、かかる日数y日は反比例する。
+problem_text: 'ある仕事を12人ですると3日かかる。この仕事をする人数x人と、かかる日数y日は反比例する。
 
-  この仕事を3人でするとき、何日で終わるか。式を立てて求めよ。'
+  この仕事を4人でするとき、何日で終わるか。式を立てて求めよ。'
 sub_questions:
 - answer:
-    display: 48日
+    display: 9日
     kind: symbolic
-    srepr: Integer(48)
+    srepr: Integer(9)
   cause_tags: []
   concept_tags:
   - inverse_proportion.word_problem_worker_days
-  explanation: 'まず、反比例の式 y=a/x に、通る点の x, y の値をあてはめ、比例定数を求める式をつくる。（a = 12 × 12）
+  explanation: 'まず、反比例の式 y=a/x に、通る点の x, y の値をあてはめ、比例定数を求める式をつくる。（a = 12 × 3）
 
-    次に、求めた比例定数を使って、反比例の式を組み立てる。（y = 144/x）
+    次に、求めた比例定数を使って、反比例の式を組み立てる。（y = 36/x）
 
-    次に、比例定数と x の値を、反比例の式 y=a/x の x にあてはめる。（y = 144 / 3）
+    次に、比例定数と x の値を、反比例の式 y=a/x の x にあてはめる。（y = 36 / 4）
 
-    最後に、わり算を計算して y の値を求める。（y = 48）'
+    最後に、わり算を計算して y の値を求める。（y = 9）'
   hints:
   - 反比例の式 y=a/x に、通る点の x, y の値をあてはめ、比例定数を求める式をつくる。
   - 求めた比例定数を使って、反比例の式を組み立てる。
@@ -51,28 +51,28 @@ sub_questions:
   solution_steps:
   - args:
     - '12'
-    - '12'
+    - '3'
     narration: 反比例の式 y=a/x に、通る点の x, y の値をあてはめ、比例定数を求める式をつくる。
     op: substitute_point
-    result_display: a = 12 × 12
-    result_srepr: Integer(144)
+    result_display: a = 12 × 3
+    result_srepr: Integer(36)
   - args:
-    - '144'
+    - '36'
     narration: 求めた比例定数を使って、反比例の式を組み立てる。
     op: form_expression
-    result_display: y = 144/x
-    result_srepr: Mul(Integer(144), Pow(Symbol('x'), Integer(-1)))
+    result_display: y = 36/x
+    result_srepr: Mul(Integer(36), Pow(Symbol('x'), Integer(-1)))
   - args:
-    - '144'
-    - '3'
+    - '36'
+    - '4'
     narration: 比例定数と x の値を、反比例の式 y=a/x の x にあてはめる。
     op: substitute_x
-    result_display: y = 144 / 3
-    result_srepr: Integer(48)
+    result_display: y = 36 / 4
+    result_srepr: Integer(9)
   - args:
-    - y = 144 / 3
+    - y = 36 / 4
     narration: わり算を計算して y の値を求める。
     op: evaluate
-    result_display: y = 48
-    result_srepr: Integer(48)
+    result_display: y = 9
+    result_srepr: Integer(9)
 visual_svg: null

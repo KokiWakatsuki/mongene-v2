@@ -105,6 +105,8 @@ class ExpressionFormulation:
     use_solver_steps: bool
     final_narration: str
     answer_unit: str
+    # 答えの表示を場面の順で書きたいときだけ指定する（空なら solver の表示を使う）。
+    answer_display: str = ""
 
 
 def _relation_step(op: str, display: str, narration: str) -> Step:
@@ -205,6 +207,10 @@ def formulate_profit_multi_letter(
     ではない（同じ文字の積ではない）ので、「同類項をまとめる」という説明は場面に合わ
     ない。solver は double-solve の独立検証にのみ使い、steps は場面の言葉で書く。
     """
+    # **答えの表示は場面の順（売上 − 仕入）で書く。** sympy の正準順に任せると
+    # 文字のアルファベット順に並び替えられて `-a + nx` になり、「売上から仕入れを
+    # ひく」という場面の順序と逆になっていた。
+    display = f"{count_letter}{price_letter} - {cost_letter}"
     return ExpressionFormulation(
         expr_str=f"{count_letter}*{price_letter} - {cost_letter}",
         setup_steps=[
@@ -219,6 +225,7 @@ def formulate_profit_multi_letter(
         use_solver_steps=False,
         final_narration="求めた売り上げから、仕入れにかかった総額をひいて、利益を表す式にする。",
         answer_unit="",
+        answer_display=display,
     )
 
 
@@ -244,7 +251,8 @@ def build_answer(formulation: ExpressionFormulation, sol: Solution) -> SymbolicA
     # 単位の前は空ける。答えが分数の式（`a/8`）だと詰めたときに `a/8km` となり、
     # km が分母に続いて読める（EVALUATION D-20 と同じ読めなさ）。
     unit = f" {formulation.answer_unit}" if formulation.answer_unit else ""
-    return SymbolicAnswer(srepr=sol.answer.srepr, display=f"{sol.answer.display}{unit}")
+    body = formulation.answer_display or sol.answer.display
+    return SymbolicAnswer(srepr=sol.answer.srepr, display=f"{body}{unit}")
 
 
 def build_steps(formulation: ExpressionFormulation, sol: Solution) -> list[Step]:

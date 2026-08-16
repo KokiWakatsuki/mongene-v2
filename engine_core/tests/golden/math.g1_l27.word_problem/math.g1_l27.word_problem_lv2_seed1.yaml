@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: word_problem_round_trip_distance
 problem_ref: d50991723b79cc79
-problem_text: '家から駅まで、行きは時速5km、帰りは同じ道を時速15kmの速さで進んだところ、進むのにかかった時間は合わせて4時間だった。
+problem_text: '家から駅まで、行きは時速3km、帰りは同じ道を時速6kmの速さで進んだところ、進むのにかかった時間は合わせて2時間だった。
 
   家から駅までの道のりを x km とする。
 
@@ -33,15 +33,15 @@ problem_text: '家から駅まで、行きは時速5km、帰りは同じ道を�
   (2) 家から駅までの道のりを求めよ。'
 sub_questions:
 - answer:
-    display: x/5 + x/15 = 4
+    display: x/3 + x/6 = 2
     kind: symbolic
-    srepr: Equality(Mul(Rational(4, 15), Symbol('x')), Integer(4))
+    srepr: Equality(Mul(Rational(1, 2), Symbol('x')), Integer(2))
   cause_tags: []
   concept_tags:
   - equation.word_problem_round_trip
   explanation: 'まず、場面の中で、どちらの見方でも同じになる（等しくなっている）量に着目する。（進むのにかかった時間の合計）
 
-    次に、その量を x を使って両辺に表し、方程式をつくる。（x/5 + x/15 = 4）'
+    次に、その量を x を使って両辺に表し、方程式をつくる。（x/3 + x/6 = 2）'
   hints:
   - 場面の中で、どちらの見方でも同じになる（等しくなっている）量に着目する。
   label: (1)
@@ -55,18 +55,18 @@ sub_questions:
   - args: []
     narration: その量を x を使って両辺に表し、方程式をつくる。
     op: formulate_equation
-    result_display: x/5 + x/15 = 4
-    result_srepr: Equality(Mul(Rational(4, 15), Symbol('x')), Integer(4))
+    result_display: x/3 + x/6 = 2
+    result_srepr: Equality(Mul(Rational(1, 2), Symbol('x')), Integer(2))
 - answer:
-    display: 15km
+    display: 4km
     kind: symbolic
-    srepr: Integer(15)
+    srepr: Integer(4)
   cause_tags: []
   concept_tags:
   - equation.word_problem_round_trip
-  explanation: 'まず、分母の最小公倍数を両辺にかけて、分母をはらう。（4x = 60）
+  explanation: 'まず、分母の最小公倍数を両辺にかけて、分母をはらう。（x = 4）
 
-    次に、等式の性質を使い、両辺を x の係数でわる。（x = 15）'
+    次に、等式の性質を使い、両辺を x の係数でわる。（x = 4）'
   hints:
   - 分母の最小公倍数を両辺にかけて、分母をはらう。
   label: (2)
@@ -75,11 +75,11 @@ sub_questions:
   - args: []
     narration: 分母の最小公倍数を両辺にかけて、分母をはらう。
     op: clear_denominators
-    result_display: 4x = 60
-    result_srepr: Integer(15)
+    result_display: x = 4
+    result_srepr: Integer(4)
   - args: []
     narration: 等式の性質を使い、両辺を x の係数でわる。
     op: divide_both_sides
-    result_display: x = 15
-    result_srepr: Integer(15)
+    result_display: x = 4
+    result_srepr: Integer(4)
 visual_svg: null

@@ -381,10 +381,16 @@ def _inverse_worker_days_candidates(p: Mapping[str, Any]) -> list[tuple[int, int
     """
     workers = [int(v) for v in p["workers_candidates"]]
     days = [int(v) for v in p["days_candidates"]]
+    # **のべ人日に上限を置く。** 前は人数と日数を独立に引いていたので
+    # 「草むしりを3人ですると24日」＝のべ72人日という、場面として成り立たない
+    # 仕事量になっていた。
+    total_max = int(p.get("person_days_max", 10**9))
     out: list[tuple[int, int, int]] = []
     for w0 in workers:
         for d0 in days:
             total = w0 * d0
+            if total > total_max:
+                continue
             for w1 in workers:
                 if w1 == w0 or total % w1:
                     continue

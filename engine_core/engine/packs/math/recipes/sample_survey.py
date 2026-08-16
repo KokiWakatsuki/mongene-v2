@@ -32,10 +32,23 @@ def _effective_cause_tags(ctx: CellContext) -> list[str]:
 # g3_l59.calculation Lv1: 標本比率・比例式による推定値
 # ---------------------------------------------------------------------------
 _SAMPLE_RATIO_ESTIMATE_CONCEPTS = ["sample_survey.ratio_estimate"]
-_SAMPLE_RATIO_SCENARIOS = [
-    ("標本の大きさが{s}で、そのうち当たりが{c}個であった。母集団{n}個の中に含まれる当たりのおよその個数を、比例式を使って求めよ", "個"),
-    ("無作為に抽出した{s}個の製品のうち、不良品が{c}個あった。製品{n}個の中に含まれる不良品のおよその個数を、比例式を使って求めよ", "個"),
-    ("池から無作為に{s}匹の魚をすくったところ、体長10cm以上の魚が{c}匹いた。この池にいる魚{n}匹のうち体長10cm以上の魚のおよその数を、比例式を使って求めよ", "匹"),
+# 場面と、標本の中で「当たる」割合としてありうる帯（下限, 上限）。
+# 割合を場面と無関係に引いていたので「171個のうち不良品が105個」＝不良率61%の
+# 工場が出ていた。不良品はまれ、当たりくじは1〜3割、というように場面ごとに帯がある。
+_SAMPLE_RATIO_SCENARIOS: list[tuple[str, str, tuple[float, float]]] = [
+    ("箱の中のくじから無作為に{s}本を引いたところ、当たりが{c}本であった。"
+     "この箱に入っているくじ{n}本の中に含まれる当たりのおよその本数を、比例式を使って求めよ",
+     "本", (0.05, 0.35)),
+    ("無作為に抽出した{s}個の製品のうち、不良品が{c}個あった。"
+     "製品{n}個の中に含まれる不良品のおよその個数を、比例式を使って求めよ",
+     "個", (0.01, 0.08)),
+    ("ある工場でつくった製品から無作為に{s}個を選んだところ、"
+     "赤い印のついた製品が{c}個あった。製品{n}個の中に含まれる赤い印のついた製品の"
+     "およその個数を、比例式を使って求めよ",
+     "個", (0.1, 0.4)),
+    ("袋の中の玉から無作為に{s}個を取り出したところ、白玉が{c}個であった。"
+     "この袋に入っている玉{n}個の中に含まれる白玉のおよその個数を、比例式を使って求めよ",
+     "個", (0.2, 0.6)),
 ]
 
 
@@ -44,9 +57,10 @@ def sample_ratio_estimate_recipe(ctx: CellContext, rng: Rng) -> MR:
     """標本比率から母集団に含まれるおよその個数を推定する（g3_l59.calculation Lv1・answer-first）。"""
     p = ctx.spec_level.params
     idx = int(draw({"int_range": [0, len(_SAMPLE_RATIO_SCENARIOS) - 1]}, rng))
-    template, _unit = _SAMPLE_RATIO_SCENARIOS[idx]
+    template, _unit, (lo, hi) = _SAMPLE_RATIO_SCENARIOS[idx]
     s = int(draw(p["sample_size_domain"], rng))
-    c = int(draw({"int_range": [1, s - 1]}, rng))
+    # 標本の中の割合は場面の帯に収める（不良率61%の工場は場面として成り立たない）。
+    c = int(draw({"int_set": [v for v in range(1, s) if lo <= v / s <= hi]}, rng))
     k = int(draw(p["multiplier_domain"], rng))
     n = s * k
 
@@ -74,9 +88,12 @@ def sample_ratio_estimate_recipe(ctx: CellContext, rng: Rng) -> MR:
 # ---------------------------------------------------------------------------
 _SAMPLE_RATIO_SOLVE_POPULATION_CONCEPTS = ["sample_survey.solve_population_size"]
 _SOLVE_POPULATION_SCENARIOS = [
-    "無作為に取り出した標本の大きさが{s}で、そのうち目的のものが{c}個であった。"
-    "母集団の大きさを x として、母集団に含まれる目的のもののおよその個数が{e}であることから "
-    "x を、比例式を使って求めよ",
+    # **母集団の中の目的物の数が既知で母集団の大きさが未知、という逆立ちした場面は
+    # 落とした**（「目的のもののおよその個数が1050であることから x を求めよ」）。
+    # x = s·e/c を導く自然な場面は、印をつけてもどす（標識再捕獲）の型しかない。
+    "箱に入っている玉の総数を調べるため、玉{s}個に印をつけて箱にもどし、よくかき混ぜた。"
+    "そこから{e}個の玉を取り出したところ、印のついた玉は{c}個であった。"
+    "箱に入っている玉の総数を x として、この関係を比例式で表し x を求めよ",
     # **標識再捕獲は手順が決まっている。** 前はこう書いていた——
     #   「{s}匹に印をつけてもどした。数日後に調べたところ、印のついたコイが{c}匹、
     #     印のついたコイをふくむ湖のコイのおよその総数が{e}匹と推定されている」
@@ -96,18 +113,16 @@ def sample_ratio_solve_population_recipe(ctx: CellContext, rng: Rng) -> MR:
     p = ctx.spec_level.params
     idx = int(draw({"int_range": [0, len(_SOLVE_POPULATION_SCENARIOS) - 1]}, rng))
     template = _SOLVE_POPULATION_SCENARIOS[idx]
-    if idx == 1:
-        # 標識再捕獲の場面は数の大きさが決まっている（印をつけるのは数十匹、
-        # 後日捕まえるのも数十匹、そのうち印つきは数匹）。標本調査の一般の場面と
-        # 同じ定義域を使うと「後日 10908 匹捕まえた」になる。
-        s = int(draw({"int_set": [40, 50, 60, 80, 100, 120]}, rng))
-        c = int(draw({"int_set": [3, 4, 5, 6, 8, 10]}, rng))
-        k = int(draw({"int_set": [8, 10, 12, 15, 20]}, rng))
-    else:
-        s = int(draw(p["sample_size_domain"], rng))
-        c = int(draw({"int_range": [1, s - 1]}, rng))
-        k = int(draw(p["multiplier_domain"], rng))
+    # **2つの場面はどちらも標識再捕獲**（印をつけてもどす → もう一度取り出す）。
+    # 印をつけた数 s・2回目に取り出した数 e・そのうち印つき c で、どれも数十
+    # （e は s の 2倍まで）。前は一般の標本調査の定義域を流用していたので
+    # 「玉120個に印をつけて…そこから1050個を取り出した」になっていた。
+    s = int(draw({"int_set": [40, 50, 60, 75, 80, 100, 120, 150]}, rng))
+    c = int(draw({"int_set": [3, 4, 5, 6, 8, 10, 12, 15]}, rng))
+    k = int(draw({"int_set": [4, 5, 6, 8, 10, 12, 15, 20]}, rng))
     e = c * k
+    if e > 2 * s:  # 2回目に取り出す数は、印をつけた数の2倍まで
+        e = c * max(1, (2 * s) // c)
 
     solver = REGISTRY.solver("math.sample_ratio_solve_population")
     sol = cast(Solution, solver(s, c, e))
@@ -178,13 +193,21 @@ def judge_appropriate_survey_method_recipe(ctx: CellContext, rng: Rng) -> MR:
 # g3_l58.knowledge Lv2: 抽出方法に偏りがあるかを判別する
 # ---------------------------------------------------------------------------
 _JUDGE_SAMPLING_BIAS_CONCEPTS = ["sampling.judge_bias"]
+# 母集団の大きさをきりのいい数に絞ったぶん、場面の種類で組合せを戻す。
 _SAMPLING_BIAS_SCENARIOS: list[tuple[str, bool]] = [
     ("{n}人の全校生徒の意見を調べるのに、野球部に所属する生徒だけにアンケートをとった", True),
     ("ある市の住民{n}人の意見を調べるのに、平日の昼間に商店街で聞き取り調査をした", True),
     ("{n}人の生徒の意見を調べるのに、図書館を利用している生徒だけに聞いた", True),
+    ("{n}人の生徒の通学時間を調べるのに、自転車で通学している生徒だけに聞いた", True),
+    ("{n}人の来場者の感想を調べるのに、最後まで残っていた人だけに聞いた", True),
+    ("{n}世帯のテレビの視聴時間を調べるのに、テレビ局に電話をかけてきた人だけに聞いた", True),
+    ("ある町の住民{n}人の意見を調べるのに、駅前で朝に通勤している人だけに聞いた", True),
     ("{n}人の住民の意見を調べるのに、乱数表を使って住民全体から無作為に選んで聞いた", False),
     ("{n}個の製品から、抽選機を使って無作為に製品を選んで検査した", False),
     ("{n}人の生徒の中から、出席番号にもとづいて作った乱数で無作為に選んで調査した", False),
+    ("{n}世帯の中から、住民基本台帳をもとに無作為に選んで調査した", False),
+    ("{n}個の商品の中から、コンピュータの乱数で無作為に選んで検査した", False),
+    ("{n}人の生徒全員に番号をつけ、くじ引きで無作為に選んで調査した", False),
 ]
 
 

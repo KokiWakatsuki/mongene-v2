@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: inscribed_angle_transfer_same_arc
 problem_ref: bb8b454dffe82d01
-problem_text: ∠PRQ=∠PSQ=76°であり、4点P, Q, R, Sは同一円周上にある。∠SPR=41°のとき、∠SQRの大きさを求めよ。
+problem_text: 直線PQについて同じ側に点R、Sがあり、∠PRQ=∠PSQ=76°である。∠SPR=41°のとき、∠SQRの大きさを求めよ。
 sub_questions:
 - answer:
     display: 41°

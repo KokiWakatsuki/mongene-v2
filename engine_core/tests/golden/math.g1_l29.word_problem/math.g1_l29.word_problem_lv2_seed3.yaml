@@ -24,13 +24,13 @@ meta:
   seed: 3
   signature: word_problem_direct_proportion_rate
 problem_ref: 2909cf91dbf8ffa0
-problem_text: '1mの重さが9gの針金がある。
+problem_text: '1mの重さが9gの毛糸がある。
 
-  この針金xmの重さをygとする。
+  この毛糸xmの重さをygとする。
 
   (1) yをxの式で表せ。
 
-  (2) この針金21mの重さは何gか求めよ。'
+  (2) この毛糸21mの重さは何gか求めよ。'
 sub_questions:
 - answer:
     display: y = 9x

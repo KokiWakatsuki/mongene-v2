@@ -46,7 +46,9 @@ def _effective_cause_tags(ctx: CellContext) -> list[str]:
 # **多角形の名前は漢数字**（実物の教材は「八角形」と書き、「8角形」とは書かない）。
 _POLYGON_NAME_JP = {
     3: "三角形", 4: "四角形", 5: "五角形", 6: "六角形", 7: "七角形", 8: "八角形",
-    9: "九角形", 10: "十角形", 11: "十一角形", 12: "十二角形",
+    9: "九角形", 10: "十角形", 11: "十一角形", 12: "十二角形", 13: "十三角形",
+    14: "十四角形", 15: "十五角形", 16: "十六角形", 17: "十七角形", 18: "十八角形",
+    19: "十九角形", 20: "二十角形",
 }
 
 
@@ -54,6 +56,11 @@ def _polygon_name_jp(n: int) -> str:
     if n not in _POLYGON_NAME_JP:
         raise ValueError(f"多角形の漢数字名が未登録: {n}")
     return _POLYGON_NAME_JP[n]
+
+
+def _regular_polygon_name_jp(n: int) -> str:
+    """正n角形の呼び名。**n=4 は「正四角形」ではなく「正方形」**。"""
+    return "正方形" if n == 4 else f"正{_polygon_name_jp(n)}"
 
 
 # ---------------------------------------------------------------------------
@@ -119,7 +126,7 @@ def judge_polyhedron_claim(ctx: CellContext, rng: Rng) -> MR:
         m, k = pairs[idx]
         (vertex,) = _draw_named_figures([1], rng)
         statement = (
-            f"1つの頂点{vertex}のまわりに正{_polygon_name_jp(m)}の面が{k}つ"
+            f"1つの頂点{vertex}のまわりに{_regular_polygon_name_jp(m)}の面が{k}つ"
             "集まるようにすれば、すきまなく折り曲げて正多面体を組み立てることができる"
         )
         solver = REGISTRY.solver("math.judge_regular_polyhedron_condition")

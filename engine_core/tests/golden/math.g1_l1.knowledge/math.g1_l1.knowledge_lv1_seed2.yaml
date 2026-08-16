@@ -26,20 +26,20 @@ meta:
 problem_ref: 67a81dec30f845e1
 problem_text: '次の数は、正の数・負の数のどちらですか。
 
-  +228'
+  -70'
 sub_questions:
 - answer:
-    correct: 正の数
+    correct: 負の数
     distractors:
-    - 負の数
+    - 正の数
     fact_id: number.classify_sign
     kind: choice
   cause_tags: []
   concept_tags:
   - number.classify_sign
-  explanation: 'まず、数の前についている符号（＋か－か）を読み取る。（+）
+  explanation: 'まず、数の前についている符号（＋か－か）を読み取る。（-）
 
-    次に、符号が＋なら正の数、－なら負の数と分類する。（正の数）'
+    次に、符号が＋なら正の数、－なら負の数と分類する。（負の数）'
   hints:
   - 数の前についている符号（＋か－か）を読み取る。
   label: (1)
@@ -48,11 +48,11 @@ sub_questions:
   - args: []
     narration: 数の前についている符号（＋か－か）を読み取る。
     op: read_number_sign
-    result_display: +
-    result_srepr: +
+    result_display: '-'
+    result_srepr: '-'
   - args: []
     narration: 符号が＋なら正の数、－なら負の数と分類する。
     op: classify_positive_negative
-    result_display: 正の数
-    result_srepr: 正の数
+    result_display: 負の数
+    result_srepr: 負の数
 visual_svg: null

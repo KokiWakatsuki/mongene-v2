@@ -24,18 +24,18 @@ meta:
   seed: 2
   signature: sample_ratio_estimate
 problem_ref: 0727c064d938dce9
-problem_text: 池から無作為に168匹の魚をすくったところ、体長10cm以上の魚が136匹いた。この池にいる魚5712匹のうち体長10cm以上の魚のおよその数を、比例式を使って求めよ。
+problem_text: ある工場でつくった製品から無作為に75個を選んだところ、赤い印のついた製品が15個あった。製品1125個の中に含まれる赤い印のついた製品のおよその個数を、比例式を使って求めよ。
 sub_questions:
 - answer:
-    display: '4624'
+    display: '225'
     kind: symbolic
-    srepr: Integer(4624)
+    srepr: Integer(225)
   cause_tags: []
   concept_tags:
   - sample_survey.ratio_estimate
-  explanation: 'まず、標本での該当する個数の割合が、母集団全体でもおよそ等しいとみて比例式をつくる。（136 : 168 = x : 5712）
+  explanation: 'まず、標本での該当する個数の割合が、母集団全体でもおよそ等しいとみて比例式をつくる。（15 : 75 = x : 1125）
 
-    次に、比例式を解き、母集団に含まれるおよその個数を求める。（4624）'
+    次に、比例式を解き、母集団に含まれるおよその個数を求める。（225）'
   hints:
   - 標本での該当する個数の割合が、母集団全体でもおよそ等しいとみて比例式をつくる。
   label: (1)
@@ -44,11 +44,11 @@ sub_questions:
   - args: []
     narration: 標本での該当する個数の割合が、母集団全体でもおよそ等しいとみて比例式をつくる。
     op: form_ratio_equation
-    result_display: '136 : 168 = x : 5712'
+    result_display: '15 : 75 = x : 1125'
     result_srepr: ''
   - args: []
     narration: 比例式を解き、母集団に含まれるおよその個数を求める。
     op: solve_for_estimate
-    result_display: '4624'
-    result_srepr: Integer(4624)
+    result_display: '225'
+    result_srepr: Integer(225)
 visual_svg: null

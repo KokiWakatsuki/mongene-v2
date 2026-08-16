@@ -23,7 +23,8 @@ levels:
     recipe: math.classify_number_sign
     params:
       # 符号のついた整数（0 除外）。域を広くとり dup を下げる（分類は2値のため surface 数で分散）。
-      number_domain: {int_range: [-999, 999]}
+      # **符号を見るだけの導入問題なので2桁まで**（+281・-744 が出ていた）。
+      number_domain: {int_range: [-150, 150]}
     given: [statement]
     asked: [choice]
     visual: none

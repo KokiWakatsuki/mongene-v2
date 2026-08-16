@@ -26,7 +26,7 @@ meta:
 problem_ref: 3f774a97b176107a
 problem_text: '次の数は、正の数・負の数のどちらですか。
 
-  -296'
+  -101'
 sub_questions:
 - answer:
     correct: 負の数

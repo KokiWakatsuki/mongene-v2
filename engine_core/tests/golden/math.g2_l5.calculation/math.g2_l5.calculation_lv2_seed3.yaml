@@ -26,7 +26,7 @@ meta:
 problem_ref: f0e6b2ddabdfbf93
 problem_text: '次の計算をせよ。
 
-  (-12x - 8y) ÷ (2)'
+  (-12x - 8y) ÷ 2'
 sub_questions:
 - answer:
     display: -6x - 4y

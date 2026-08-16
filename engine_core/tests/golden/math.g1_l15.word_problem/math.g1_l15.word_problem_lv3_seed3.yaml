@@ -29,7 +29,7 @@ problem_text: 'あるえん筆をn個仕入れ、1個あたりx円で全部売�
   全体の利益を、n, x, aを使った式で表せ。'
 sub_questions:
 - answer:
-    display: -a + nx
+    display: nx - a
     kind: symbolic
     srepr: Add(Mul(Integer(-1), Symbol('a')), Mul(Symbol('n'), Symbol('x')))
   cause_tags: []

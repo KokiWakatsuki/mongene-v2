@@ -26,18 +26,18 @@ meta:
 problem_ref: dbd9181454b8f239
 problem_text: '次の式を因数分解せよ。
 
-  k² + 52k + 676'
+  k² - 22k + 121'
 sub_questions:
 - answer:
-    display: (k + 26)²
+    display: (k - 11)²
     kind: symbolic
-    srepr: Pow(Add(Symbol('k'), Integer(26)), Integer(2))
+    srepr: Pow(Add(Symbol('k'), Integer(-11)), Integer(2))
   cause_tags: []
   concept_tags:
   - polynomial.factor_perfect_square
-  explanation: 'まず、はじめと終わりが平方で、中央が積の2倍になっていることを確かめる。（k² と 26²、中央は 2 × k × 26）
+  explanation: 'まず、はじめと終わりが平方で、中央が積の2倍になっていることを確かめる。（k² と 11²、中央は 2 × k × (-11)）
 
-    次に、1次式の平方の形で表す。（(k + 26)²）'
+    次に、1次式の平方の形で表す。（(k - 11)²）'
   hints:
   - はじめと終わりが平方で、中央が積の2倍になっていることを確かめる。
   label: (1)
@@ -46,11 +46,11 @@ sub_questions:
   - args: []
     narration: はじめと終わりが平方で、中央が積の2倍になっていることを確かめる。
     op: recognize_perfect_square
-    result_display: k² と 26²、中央は 2 × k × 26
+    result_display: k² と 11²、中央は 2 × k × (-11)
     result_srepr: ''
   - args: []
     narration: 1次式の平方の形で表す。
     op: write_square
-    result_display: (k + 26)²
-    result_srepr: Pow(Add(Symbol('k'), Integer(26)), Integer(2))
+    result_display: (k - 11)²
+    result_srepr: Pow(Add(Symbol('k'), Integer(-11)), Integer(2))
 visual_svg: null

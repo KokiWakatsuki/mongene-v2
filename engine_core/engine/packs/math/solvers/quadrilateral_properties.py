@@ -50,7 +50,7 @@ def parallelogram_opposite_properties(side_value: object, angle_value: object) -
     """
     sv = sympy.sympify(str(side_value))
     av = sympy.sympify(str(angle_value))
-    disp = f"辺の長さ {sympy.sstr(sv)}、角の大きさ {sympy.sstr(av)}°"
+    disp = f"辺の長さ {sympy.sstr(sv)}cm、角の大きさ {sympy.sstr(av)}°"
     srepr = sympy.srepr(sympy.Tuple(sv, av))
     steps = [
         Step(

@@ -26,18 +26,18 @@ meta:
 problem_ref: 013a9e5e6f11d6cf
 problem_text: '次の式を展開せよ。
 
-  (a - 9)(a - 3)'
+  (a - 9)(a - 8)'
 sub_questions:
 - answer:
-    display: a² - 12a + 27
+    display: a² - 17a + 72
     kind: symbolic
-    srepr: Add(Pow(Symbol('a'), Integer(2)), Mul(Integer(-1), Integer(12), Symbol('a')), Integer(27))
+    srepr: Add(Pow(Symbol('a'), Integer(2)), Mul(Integer(-1), Integer(17), Symbol('a')), Integer(72))
   cause_tags: []
   concept_tags:
   - polynomial.expand_product
-  explanation: 'まず、分配法則で、前のかっこの各項を後ろのかっこの各項にすべてかける。（a² - 3a - 9a + 27）
+  explanation: 'まず、分配法則で、前のかっこの各項を後ろのかっこの各項にすべてかける。（a² - 8a - 9a + 72）
 
-    次に、同類項をまとめて計算する。（a² - 12a + 27）'
+    次に、同類項をまとめて計算する。（a² - 17a + 72）'
   hints:
   - 分配法則で、前のかっこの各項を後ろのかっこの各項にすべてかける。
   label: (1)
@@ -46,11 +46,11 @@ sub_questions:
   - args: []
     narration: 分配法則で、前のかっこの各項を後ろのかっこの各項にすべてかける。
     op: expand_all_products
-    result_display: a² - 3a - 9a + 27
+    result_display: a² - 8a - 9a + 72
     result_srepr: ''
   - args: []
     narration: 同類項をまとめて計算する。
     op: combine_like_terms
-    result_display: a² - 12a + 27
-    result_srepr: Add(Pow(Symbol('a'), Integer(2)), Mul(Integer(-1), Integer(12), Symbol('a')), Integer(27))
+    result_display: a² - 17a + 72
+    result_srepr: Add(Pow(Symbol('a'), Integer(2)), Mul(Integer(-1), Integer(17), Symbol('a')), Integer(72))
 visual_svg: null

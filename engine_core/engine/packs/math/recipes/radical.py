@@ -71,11 +71,11 @@ def _radical_construct(mode: str, rng: Rng) -> tuple[str, str]:
         # DOF が n（と2形式）のみで少ないため n を広くとる（dup 分散）。
         # √(k²) 側は k を 30 までに絞った（√2209 を出さない）ぶん候補が少ないので、
         # (√n)² 側を 2 倍の重みで引く（候補数の偏りで dup が跳ねるのを防ぐ）。
-        form = str(draw(["squared", "squared", "sqrt_square"], rng))
+        form = str(draw(["squared", "squared", "squared", "sqrt_square"], rng))
         if form == "squared":
-            # (√n)² の n は 500 まで（平方数は除く）。√(k²) 側を 25 までに
-            # 狭めたぶんの組合せをこちらの幅で戻す。
-            n = int(draw({"int_set": [k for k in range(2, 500)
+            # (√n)² の n は 300 まで（平方数は除く）。500 まで許していたので
+            # 「(√491)²」という、根号の中が3桁後半の式が出ていた。
+            n = int(draw({"int_set": [k for k in range(2, 300)
                                       if int(k**0.5) ** 2 != k]}, rng))
             return f"(sqrt({n}))**2", f"(√{n})²"
         # **√(k²) の k は 25 まで。** 前は 59 まで引いていて「√2209 = 47」という、

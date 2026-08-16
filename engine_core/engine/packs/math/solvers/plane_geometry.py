@@ -264,7 +264,9 @@ def sector_solve_central_angle(radius: object, area_pi_coeff: object) -> Solutio
     r = sympy.Integer(int(str(radius)))
     k = sympy.Rational(str(area_pi_coeff))
     angle = k * 360 / (r * r)
-    disp = sympy.sstr(angle)
+    # 角の答えには「°」を付ける（同じセルの面積・体積は cm²・cm³ を付けている
+    # のに、中心角だけ単位が落ちていた）。
+    disp = f"{sympy.sstr(angle)}°"
     srepr = sympy.srepr(angle)
     steps = [
         Step(

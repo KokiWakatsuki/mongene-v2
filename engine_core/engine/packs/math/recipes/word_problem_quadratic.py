@@ -295,10 +295,11 @@ def _square_cut_candidates(p: Mapping[str, Any]) -> list[tuple[int, int, int]]:
 
     x0 < s（縦の長さが正）を保証する組だけを残す。
     """
-    s_lo, s_hi = (int(v) for v in p["side_range"])
+    # 1辺はきりのいい数の集合から（37cm・23cm のような半端な正方形を避ける）。
+    sides = [int(v) for v in p["side_set"]]
     x_lo, x_hi = (int(v) for v in p["shrink_range"])
     out: list[tuple[int, int, int]] = []
-    for s in range(s_lo, s_hi + 1):
+    for s in sides:
         for x0 in range(x_lo, min(x_hi, s - 1) + 1):
             out.append((s, x0, s * s - x0 * x0))
     return out

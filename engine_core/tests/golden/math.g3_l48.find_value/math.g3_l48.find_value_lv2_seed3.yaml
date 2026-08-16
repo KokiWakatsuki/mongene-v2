@@ -24,7 +24,7 @@ meta:
   seed: 3
   signature: inscribed_angle_transfer_same_arc
 problem_ref: 2e97691f8ceb66ea
-problem_text: ∠NQP=∠NRP=79°であり、4点N, P, Q, Rは同一円周上にある。∠RNQ=47°のとき、∠RPQの大きさを求めよ。
+problem_text: 直線NPについて同じ側に点Q、Rがあり、∠NQP=∠NRP=79°である。∠RNQ=47°のとき、∠RPQの大きさを求めよ。
 sub_questions:
 - answer:
     display: 47°

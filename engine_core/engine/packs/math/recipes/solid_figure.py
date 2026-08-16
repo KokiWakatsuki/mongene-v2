@@ -360,17 +360,26 @@ _L53_DIRECT_MODE = "l53_sphere_direct"
 
 # 球の場面と、その場面に合う単位。**半径を教科書の大きさに戻したぶんを、場面で稼ぐ。**
 # 前は半径を 2〜60 まで振っていて「直径94cmの球 → 体積 415292π/3 cm³」が出ていた。
-_SPHERE_SCENES: list[tuple[str, tuple[str, ...]]] = [
-    ("球", ("cm", "m", "mm")),
-    ("ボール", ("cm",)),
-    ("ビー玉", ("mm", "cm")),
-    ("地球儀", ("cm",)),
-    ("風船", ("cm",)),
-    ("鉄球", ("cm", "mm")),
-    # シャボン玉は「中心を通る平面で半分に切る」場面が成り立たないので入れない
-    # （半球の表面積セルが同じ場面リストを使う）。
-    ("スーパーボール", ("cm", "mm")),
-    ("ゴムまり", ("cm",)),
+# 場面と、その場面に合う単位と、**その場面としてありうる半径の幅（cm 換算の目安）**。
+# 単位と半径を無関係に引いていたので「直径24cmのスーパーボール」「半径14cmのビー玉」が
+# 出ていた。物には大きさの相場がある。
+# シャボン玉は「中心を通る平面で半分に切る」場面が成り立たないので入れない
+# （半球の表面積セルが同じ場面リストを使う）。
+# 4つ目は「中心を通る平面で半分に切れるか」。風船・シャボン玉は切れないので、
+# 半球のセル（`cuttable_only=True`）では使わない。
+_SPHERE_SCENES: list[tuple[str, tuple[str, ...], tuple[int, int], bool]] = [
+    ("球", ("cm", "m", "mm"), (2, 15), True),
+    ("ボール", ("cm",), (3, 15), True),
+    ("ビー玉", ("mm",), (5, 12), True),
+    ("地球儀", ("cm",), (10, 15), True),
+    ("風船", ("cm",), (8, 15), False),
+    ("鉄球", ("cm", "mm"), (2, 8), True),
+    ("スーパーボール", ("mm",), (10, 15), True),
+    ("ゴムまり", ("cm",), (4, 10), True),
+    ("木の球", ("cm",), (3, 12), True),
+    ("ねんどの玉", ("cm",), (2, 10), True),
+    ("メロン", ("cm",), (7, 12), True),
+    ("すいか", ("cm",), (10, 15), True),
 ]
 
 
@@ -386,10 +395,20 @@ def _draw_sphere_scene(p: Any, rng: Rng) -> tuple[int, str, str, str]:
     与え方は op 列を変えない（solver の第1手 read_radius_from_statement が
     variant 中立なので、どちらでも同じ手順になる）＝G-FP は安定する。
     """
-    r = int(draw(p["radius_domain"], rng))
     given_as = str(draw(list(p["given_as_set"]), rng))
-    pairs = [(name, u) for name, units in _SPHERE_SCENES for u in units]
-    scene, unit = pairs[int(draw({"int_set": list(range(len(pairs)))}, rng))]
+    cuttable_only = bool(p.get("cuttable_scene_only", False))
+    dom_lo, dom_hi = (int(v) for v in p["radius_domain"]["int_range"])
+    # **(場面, 単位, 半径) の組を平らにして1回で引く。** 場面を先に引いてから半径を
+    # 引くと、相場の狭い場面（ビー玉 5〜12mm）が広い場面と同じ確率で選ばれ、
+    # 組の分布が偏って dup_rate が跳ねる（値段の相場で踏んだのと同じ罠）。
+    triples = [
+        (name, u, r)
+        for name, units, (lo, hi), cuttable in _SPHERE_SCENES
+        if cuttable or not cuttable_only
+        for u in units
+        for r in range(max(lo, dom_lo), min(hi, dom_hi) + 1)
+    ]
+    scene, unit, r = triples[int(draw({"int_set": list(range(len(triples)))}, rng))]
     return r, given_as, unit, scene
 
 

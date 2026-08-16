@@ -839,14 +839,21 @@ def read_intersection_from_graph(ctx: CellContext, rng: Rng) -> MR:
     問題図は空の方眼（生徒が2直線をかいて読む）、steps はグラフ読解の手順。
     """
     p = ctx.spec_level.params
-    x0 = draw(p["x_domain"], rng)
-    y0 = draw(p["y_domain"], rng)
-    a1, a2 = draw_many(p["slope_pair_domain"], rng, k=2)  # distinct:[value] で相異保証
-
-    x0_s, y0_s = sympy.nsimplify(x0), sympy.nsimplify(y0)
-    a1_s, a2_s = sympy.nsimplify(a1), sympy.nsimplify(a2)
-    b1_s = y0_s - a1_s * x0_s
-    b2_s = y0_s - a2_s * x0_s
+    # **x=0 での道のりが負になる式は出さない。** 交点だけを見て切片を逆算して
+    # いたので「Aさんは y = 3x - 16」＝出発時の道のりが -16m という、
+    # 「P地点からの道のり」として成り立たない式が出ていた。
+    for _ in range(300):
+        x0 = draw(p["x_domain"], rng)
+        y0 = draw(p["y_domain"], rng)
+        a1, a2 = draw_many(p["slope_pair_domain"], rng, k=2)  # distinct:[value] で相異保証
+        x0_s, y0_s = sympy.nsimplify(x0), sympy.nsimplify(y0)
+        a1_s, a2_s = sympy.nsimplify(a1), sympy.nsimplify(a2)
+        b1_s = y0_s - a1_s * x0_s
+        b2_s = y0_s - a2_s * x0_s
+        if b1_s >= 0 and b2_s >= 0:
+            break
+    else:
+        raise ValueError("meeting graph: 出発時の道のりが負にならない組を構成できず")
 
     # 一般形係数（y = a x + b ⇔ -a x + y = b）で solver に渡す。
     coeffs1 = [-a1_s, sympy.Integer(1), b1_s]
@@ -2439,6 +2446,13 @@ _SUBSTITUTE_INTO_EQUATION_CONCEPTS = [
 ]
 
 
+def _format_two_var_lhs(a: sympy.Expr, b: sympy.Expr) -> str:
+    """ax + by の表示（右辺は出さない）。例: (2,4)->"2x + 4y" / (3,-1)->"3x - y"。"""
+    head = "x" if a == 1 else ("-x" if a == -1 else f"{_fmt_number(a)}x")
+    mag = "y" if abs(b) == 1 else f"{_fmt_number(abs(b))}y"
+    return f"{head} {'+' if b > 0 else '-'} {mag}"
+
+
 @register_recipe(
     "math.substitute_into_equation", provides_concepts=_SUBSTITUTE_INTO_EQUATION_CONCEPTS
 )
@@ -2454,15 +2468,9 @@ def substitute_into_equation(ctx: CellContext, rng: Rng) -> MR:
     b = draw(p["b_coeff_domain"], rng)     # y の係数（≠0）
     x_cand = draw(p["x_cand_domain"], rng)
     y_cand = draw(p["y_cand_domain"], rng)
-    holds = draw(p["holds_domain"], rng)   # [true, false]
-
     a_s, b_s = sympy.nsimplify(a), sympy.nsimplify(b)
     x_s, y_s = sympy.nsimplify(x_cand), sympy.nsimplify(y_cand)
     lhs = a_s * x_s + b_s * y_s
-    if holds:
-        c_s = lhs
-    else:
-        c_s = lhs + sympy.nsimplify(draw(p["delta_domain"], rng))  # ≠0 の δ で成り立たない
 
     solver = REGISTRY.solver("math.evaluate_two_var_lhs")
     sol = cast(Solution, solver(a_s, b_s, x_s, y_s))
@@ -2471,7 +2479,12 @@ def substitute_into_equation(ctx: CellContext, rng: Rng) -> MR:
         f"double-solve 不一致: 構成左辺 {lhs} != solver 再計算 {sol.answer.srepr}"
     )
 
-    equation_disp = _format_general_form(a_s, b_s, c_s)
+    # **右辺を書かない。** 前は「2x + 4y = -20 の左辺に x=0, y=-5 を代入して
+    # 左辺の値を求めよ」と右辺つきで出していたので、代入した組が解のときは
+    # 答え（-20）が本文にそのまま印刷されていた（計算せずに写せる）。
+    # 実物もこの技能は「2x + 4y に x=0, y=-5 を代入した値を求めよ」と左辺だけを出す。
+    # 「解かどうかを確かめる」文脈は g2_l10.knowledge Lv2 が受け持つ。
+    equation_disp = _format_two_var_lhs(a_s, b_s)
     candidate_disp = f"x = {_fmt_number(x_s)}, y = {_fmt_number(y_s)}"
 
     sub_question = SubQuestionMR(
@@ -3097,14 +3110,21 @@ def intersection(ctx: CellContext, rng: Rng) -> MR:
     p = ctx.spec_level.params
     method: str = p["method"]
 
-    x0 = draw(p["x_domain"], rng)
-    y0 = draw(p["y_domain"], rng)
-    a1, a2 = draw_many(p["slope_pair_domain"], rng, k=2)  # distinct:[value] で相異保証
-
-    x0_s, y0_s = sympy.nsimplify(x0), sympy.nsimplify(y0)
-    a1_s, a2_s = sympy.nsimplify(a1), sympy.nsimplify(a2)
-    b1_s = y0_s - a1_s * x0_s
-    b2_s = y0_s - a2_s * x0_s
+    # **x=0 での道のりが負になる式は出さない。** 交点だけを見て切片を逆算して
+    # いたので「Aさんは y = 3x - 16」＝出発時の道のりが -16m という、
+    # 「P地点からの道のり」として成り立たない式が出ていた。
+    for _ in range(300):
+        x0 = draw(p["x_domain"], rng)
+        y0 = draw(p["y_domain"], rng)
+        a1, a2 = draw_many(p["slope_pair_domain"], rng, k=2)  # distinct:[value] で相異保証
+        x0_s, y0_s = sympy.nsimplify(x0), sympy.nsimplify(y0)
+        a1_s, a2_s = sympy.nsimplify(a1), sympy.nsimplify(a2)
+        b1_s = y0_s - a1_s * x0_s
+        b2_s = y0_s - a2_s * x0_s
+        if b1_s >= 0 and b2_s >= 0:
+            break
+    else:
+        raise ValueError("meeting graph: 出発時の道のりが負にならない組を構成できず")
 
     def to_coeffs_and_display(a_slope: sympy.Expr, b_int: sympy.Expr) -> tuple[list[sympy.Expr], str]:
         # 傾き切片 y = a x + b ⇔ -a x + y = b。一般形は先頭係数を正に正規化する。

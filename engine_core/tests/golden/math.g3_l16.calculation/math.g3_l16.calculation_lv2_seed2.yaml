@@ -26,18 +26,18 @@ meta:
 problem_ref: 21d589bff227c0cc
 problem_text: '次の循環小数を分数で表せ。
 
-  0.28̇7̇'
+  0.783̇'
 sub_questions:
 - answer:
-    display: 19/66
+    display: 47/60
     kind: symbolic
-    srepr: Rational(19, 66)
+    srepr: Rational(47, 60)
   cause_tags: []
   concept_tags:
   - rational_form.decimal_to_fraction
   explanation: 'まず、循環小数を文字でおき、桁をずらした式との差を作って循環部分を消す。（1000倍した式との差）
 
-    次に、できた等式を整理し、分数の形に直して約分する。（19/66）'
+    次に、できた等式を整理し、分数の形に直して約分する。（47/60）'
   hints:
   - 循環小数を文字でおき、桁をずらした式との差を作って循環部分を消す。
   label: (1)
@@ -51,6 +51,6 @@ sub_questions:
   - args: []
     narration: できた等式を整理し、分数の形に直して約分する。
     op: solve_for_fraction
-    result_display: 19/66
-    result_srepr: Rational(19, 66)
+    result_display: 47/60
+    result_srepr: Rational(47, 60)
 visual_svg: null

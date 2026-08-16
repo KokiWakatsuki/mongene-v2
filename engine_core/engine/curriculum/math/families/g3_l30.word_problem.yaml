@@ -56,8 +56,11 @@ levels:
       scenario_kind: square_cut
       guided: false
       # 1辺 s（8〜60cm）・短く/長くする量 x0（1〜12cm、s>x0 を保証するため範囲を分離）。
-      side_range: [8, 60]
-      shrink_range: [1, 12]
+      # **正方形の1辺は 2cm 刻みのきりのいい数**（1辺37cm・44cm・23cm という
+      # 半端な正方形が出ていた）。実物の図形問題は 10cm・12cm・20cm。
+      side_set: [8, 10, 12, 14, 15, 16, 18, 20, 24, 25, 28, 30, 32, 35, 36, 40,
+                 42, 45, 48, 50, 54, 56, 60, 64, 70, 72, 75, 80]
+      shrink_range: [1, 20]
     given: [scenario]
     asked: [value]
     visual: none

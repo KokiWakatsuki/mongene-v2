@@ -24,20 +24,20 @@ meta:
   seed: 3
   signature: read_intersection_two_lines_graph
 problem_ref: 42408708a1a843fc
-problem_text: 2本の直線 y = -x + 1 と y = -3x - 3 を同じ座標平面にかき、その交点の座標を読み取れ。
+problem_text: 2本の直線 y = x + 3 と y = 2x + 2 を同じ座標平面にかき、その交点の座標を読み取れ。
 sub_questions:
 - answer:
-    display: (-2, 3)
+    display: (1, 4)
     kind: symbolic
-    srepr: Tuple(Integer(-2), Integer(3))
+    srepr: Tuple(Integer(1), Integer(4))
   cause_tags: []
   concept_tags:
   - linear_function.read_intersection_from_graph
-  explanation: 'まず、1本目の直線を座標平面にかく。（y = -x + 1）
+  explanation: 'まず、1本目の直線を座標平面にかく。（y = x + 3）
 
-    次に、2本目の直線を同じ平面にかく。（y = -3x - 3）
+    次に、2本目の直線を同じ平面にかく。（y = 2x + 2）
 
-    最後に、2本の直線が交わる点の座標を読み取る。（(-2, 3)）'
+    最後に、2本の直線が交わる点の座標を読み取る。（(1, 4)）'
   hints:
   - 1本目の直線を座標平面にかく。
   - 2本目の直線を同じ平面にかく。
@@ -45,22 +45,22 @@ sub_questions:
   prompt_text: 交点の座標を読み取りなさい。
   solution_steps:
   - args:
-    - y = -x + 1
+    - y = x + 3
     narration: 1本目の直線を座標平面にかく。
     op: draw_line_1
-    result_display: y = -x + 1
-    result_srepr: Add(Integer(1), Mul(Integer(-1), Symbol('x')))
+    result_display: y = x + 3
+    result_srepr: Add(Symbol('x'), Integer(3))
   - args:
-    - y = -3x - 3
+    - y = 2x + 2
     narration: 2本目の直線を同じ平面にかく。
     op: draw_line_2
-    result_display: y = -3x - 3
-    result_srepr: Add(Mul(Integer(-1), Integer(3), Symbol('x')), Integer(-3))
+    result_display: y = 2x + 2
+    result_srepr: Add(Mul(Integer(2), Symbol('x')), Integer(2))
   - args: []
     narration: 2本の直線が交わる点の座標を読み取る。
     op: read_intersection
-    result_display: (-2, 3)
-    result_srepr: Tuple(Integer(-2), Integer(3))
+    result_display: (1, 4)
+    result_srepr: Tuple(Integer(1), Integer(4))
 visual_svg: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400" font-family="Hiragino Sans, Hiragino Kaku Gothic ProN, Noto Sans JP, Yu Gothic, Meiryo, sans-serif"><rect
   x="0" y="0" width="400" height="400" fill="#ffffff" stroke="none"/><line x1="28.00" y1="28.00" x2="28.00" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="52.57" y1="28.00" x2="52.57" y2="372.00"
   stroke="#bbbbbb" stroke-width="0.5"/><line x1="77.14" y1="28.00" x2="77.14" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="101.71" y1="28.00" x2="101.71" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line

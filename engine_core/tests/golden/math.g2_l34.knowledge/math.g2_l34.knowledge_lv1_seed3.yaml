@@ -24,7 +24,7 @@ meta:
   seed: 3
   signature: polygon_interior_sum_reason_rule_recall
 problem_ref: 07287cf7d349eb26
-problem_text: 30角形の内角の和を求めるとき、1つの頂点から対角線をひいて三角形に分けられる、その個数の求め方として、正しく述べているものを1つ選べ。
+problem_text: 八角形の内角の和が「180°×(辺の数-2)」で求められるのはなぜか、その理由として、正しく述べているものを1つ選べ。
 sub_questions:
 - answer:
     correct: 一つの頂点からひける対角線によって、三角形に分けられるから

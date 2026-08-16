@@ -26,18 +26,18 @@ meta:
 problem_ref: d2f9ca0925e8b980
 problem_text: '次の循環小数を分数で表せ。
 
-  0.72̇'
+  0.6̇4̇'
 sub_questions:
 - answer:
-    display: 13/18
+    display: 64/99
     kind: symbolic
-    srepr: Rational(13, 18)
+    srepr: Rational(64, 99)
   cause_tags: []
   concept_tags:
   - rational_form.decimal_to_fraction
   explanation: 'まず、循環小数を文字でおき、桁をずらした式との差を作って循環部分を消す。（100倍した式との差）
 
-    次に、できた等式を整理し、分数の形に直して約分する。（13/18）'
+    次に、できた等式を整理し、分数の形に直して約分する。（64/99）'
   hints:
   - 循環小数を文字でおき、桁をずらした式との差を作って循環部分を消す。
   label: (1)
@@ -51,6 +51,6 @@ sub_questions:
   - args: []
     narration: できた等式を整理し、分数の形に直して約分する。
     op: solve_for_fraction
-    result_display: 13/18
-    result_srepr: Rational(13, 18)
+    result_display: 64/99
+    result_srepr: Rational(64, 99)
 visual_svg: null

@@ -24,7 +24,7 @@ meta:
   seed: 3
   signature: regular_polygon_exterior_angle
 problem_ref: 2d595ed2081d5ae6
-problem_text: 正四角形の1つの外角の大きさを求めよ。
+problem_text: 正方形の1つの外角の大きさを求めよ。
 sub_questions:
 - answer:
     display: '90'

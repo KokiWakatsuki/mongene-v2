@@ -27,7 +27,7 @@ problem_ref: 33a1af0a6743614e
 problem_text: 平行四辺形GHJKで、GH=29cm、∠H=104°であるとき、辺JKの長さと∠Kの大きさを求めよ。
 sub_questions:
 - answer:
-    display: 辺の長さ 29、角の大きさ 104°
+    display: 辺の長さ 29cm、角の大きさ 104°
     kind: symbolic
     srepr: Tuple(Integer(29), Integer(104))
   cause_tags: []
@@ -35,7 +35,7 @@ sub_questions:
   - parallelogram.opposite_properties
   explanation: 'まず、平行四辺形のうち、わかっている辺の長さと角の大きさを読み取る。（29 と 104°）
 
-    次に、平行四辺形では対辺の長さ・対角の大きさがそれぞれ等しいことから、求める辺の長さと角の大きさを求める。（辺の長さ 29、角の大きさ 104°）'
+    次に、平行四辺形では対辺の長さ・対角の大きさがそれぞれ等しいことから、求める辺の長さと角の大きさを求める。（辺の長さ 29cm、角の大きさ 104°）'
   hints:
   - 平行四辺形のうち、わかっている辺の長さと角の大きさを読み取る。
   label: (1)
@@ -49,6 +49,6 @@ sub_questions:
   - args: []
     narration: 平行四辺形では対辺の長さ・対角の大きさがそれぞれ等しいことから、求める辺の長さと角の大きさを求める。
     op: apply_opposite_side_and_angle_property
-    result_display: 辺の長さ 29、角の大きさ 104°
+    result_display: 辺の長さ 29cm、角の大きさ 104°
     result_srepr: Tuple(Integer(29), Integer(104))
 visual_svg: null

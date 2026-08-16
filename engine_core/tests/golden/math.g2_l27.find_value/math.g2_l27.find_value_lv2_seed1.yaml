@@ -24,20 +24,20 @@ meta:
   seed: 1
   signature: lf_intersection_substitute
 problem_ref: 3c65ae82a579a477
-problem_text: 2つの直線 y = x + 1 と y = -2x - 11 の交点の座標を求めよ。
+problem_text: 2つの直線 y = -3x + 7 と y = -2x + 5 の交点の座標を求めよ。
 sub_questions:
 - answer:
-    display: (-4, -3)
+    display: (2, 1)
     kind: symbolic
-    srepr: Tuple(Integer(-4), Integer(-3))
+    srepr: Tuple(Integer(2), Integer(1))
   cause_tags: []
   concept_tags:
   - linear_function.intersection_of_two_lines
-  explanation: 'まず、2つの直線の y を等しいとおき、x についての方程式を解く。（x = -4）
+  explanation: 'まず、2つの直線の y を等しいとおき、x についての方程式を解く。（x = 2）
 
-    次に、x の値を求める。（x = -4）
+    次に、x の値を求める。（x = 2）
 
-    最後に、求めた x をどちらかの式に代入し、y を求める。（y = -3）'
+    最後に、求めた x をどちらかの式に代入し、y を求める。（y = 1）'
   hints:
   - 2つの直線の y を等しいとおき、x についての方程式を解く。
   - x の値を求める。
@@ -45,22 +45,22 @@ sub_questions:
   prompt_text: 交点の座標を求めなさい。
   solution_steps:
   - args:
-    - Eq(x - y, -1)
-    - Eq(2*x + y, -11)
+    - Eq(3*x + y, 7)
+    - Eq(2*x + y, 5)
     narration: 2つの直線の y を等しいとおき、x についての方程式を解く。
     op: equate_expressions
-    result_display: x = -4
-    result_srepr: Equality(Symbol('x'), Integer(-4))
+    result_display: x = 2
+    result_srepr: Equality(Symbol('x'), Integer(2))
   - args:
-    - '-4'
+    - '2'
     narration: x の値を求める。
     op: solve_for_x
-    result_display: x = -4
-    result_srepr: Integer(-4)
+    result_display: x = 2
+    result_srepr: Integer(2)
   - args:
-    - '-4'
+    - '2'
     narration: 求めた x をどちらかの式に代入し、y を求める。
     op: compute_y
-    result_display: y = -3
-    result_srepr: Integer(-3)
+    result_display: y = 1
+    result_srepr: Integer(1)
 visual_svg: null

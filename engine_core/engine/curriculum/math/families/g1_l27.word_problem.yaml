@@ -51,7 +51,10 @@ levels:
       scenario_kind: round_trip
       guided: true
       # (行き, 帰り, 道のり) の候補は recipe が列挙する（t が整数になる組だけ）。
+      # **往復の速さの比は3倍まで**（recipe が絞る）。「行きは時速3km、帰りは
+      # 時速15km」＝同じ人が同じ道を5倍の速さで帰る場面はありえない。
       speed_candidates: [3, 4, 5, 6, 8, 9, 10, 12, 15, 16, 18, 20]
+      speed_ratio_max: 3
       distance_max: 40
       time_range: [2, 12]
       place_candidates: [家|駅, 学校|図書館, 家|公園, 駅|港, キャンプ場|山頂, 家|海岸,

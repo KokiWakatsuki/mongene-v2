@@ -404,9 +404,12 @@ def _round_trip_candidates(p: Mapping[str, Any]) -> list[tuple[int, int, int]]:
     t_lo, t_hi = (int(v) for v in p["time_range"])
     d_max = int(p["distance_max"])
     out: list[tuple[int, int, int]] = []
+    # **往復の速さの比に上限を置く。** 「行きは時速3km、帰りは時速15km」＝
+    # 同じ人が同じ道を5倍の速さで帰る場面はありえない（実物は 2〜3倍まで）。
+    ratio_max = float(p.get("speed_ratio_max", 1e9))
     for a in speeds:
         for b in speeds:
-            if a >= b:
+            if a >= b or b > ratio_max * a:
                 continue
             for d in range(1, d_max + 1):
                 t = sympy.Rational(d * (a + b), a * b)
@@ -863,9 +866,12 @@ def _draw_round_trip_average_scene(
     speeds = [int(v) for v in p["speed_candidates"]]
     t_lo, t_hi = (int(v) for v in p["time_range"])
     cands: list[tuple[int, int, int]] = []
+    # **往復の速さの比に上限を置く。** 「行きは時速3km、帰りは時速15km」＝
+    # 同じ人が同じ道を5倍の速さで帰る場面はありえない（実物は 2〜3倍まで）。
+    ratio_max = float(p.get("speed_ratio_max", 1e9))
     for a in speeds:
         for b in speeds:
-            if a >= b:
+            if a >= b or b > ratio_max * a:
                 continue
             avg = sympy.Rational(2 * a * b, a + b)
             if avg.q != 1:

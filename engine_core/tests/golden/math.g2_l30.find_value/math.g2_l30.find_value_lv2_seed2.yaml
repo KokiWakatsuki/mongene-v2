@@ -24,12 +24,12 @@ meta:
   seed: 2
   signature: lf_intersection_diagram_substitute
 problem_ref: eba978f4d9fdcc29
-problem_text: AさんとBさんが動くようすを、出発してからの時間 x とP地点からの道のり y の関係で表すと、Aさんは y = 3x - 16、Bさんは y = -x + 16 である。2人が同じ地点にいる（2つの直線が交わる）ときの時間 x と道のり y を求めよ。
+problem_text: AさんとBさんが動くようすを、出発してからの時間 x とP地点からの道のり y の関係で表すと、Aさんは y = -3x + 34、Bさんは y = -x + 18 である。2人が同じ地点にいる（2つの直線が交わる）ときの時間 x と道のり y を求めよ。
 sub_questions:
 - answer:
-    display: (8, 8)
+    display: (8, 10)
     kind: symbolic
-    srepr: Tuple(Integer(8), Integer(8))
+    srepr: Tuple(Integer(8), Integer(10))
   cause_tags: []
   concept_tags:
   - linear_function.diagram_intersection
@@ -37,7 +37,7 @@ sub_questions:
 
     次に、x の値を求める。（x = 8）
 
-    最後に、求めた x をどちらかの式に代入し、y を求める。（y = 8）'
+    最後に、求めた x をどちらかの式に代入し、y を求める。（y = 10）'
   hints:
   - 2つの直線の y を等しいとおき、x についての方程式を解く。
   - x の値を求める。
@@ -45,8 +45,8 @@ sub_questions:
   prompt_text: 交点の座標を求めなさい。
   solution_steps:
   - args:
-    - Eq(3*x - y, 16)
-    - Eq(x + y, 16)
+    - Eq(3*x + y, 34)
+    - Eq(x + y, 18)
     narration: 2つの直線の y を等しいとおき、x についての方程式を解く。
     op: equate_expressions
     result_display: x = 8
@@ -61,6 +61,6 @@ sub_questions:
     - '8'
     narration: 求めた x をどちらかの式に代入し、y を求める。
     op: compute_y
-    result_display: y = 8
-    result_srepr: Integer(8)
+    result_display: y = 10
+    result_srepr: Integer(10)
 visual_svg: null

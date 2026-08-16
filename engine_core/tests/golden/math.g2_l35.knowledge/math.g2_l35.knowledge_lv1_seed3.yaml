@@ -24,7 +24,7 @@ meta:
   seed: 3
   signature: polygon_exterior_sum_property_rule_recall
 problem_ref: 003bad5f3faf31bb
-problem_text: 24角形の外角の和は、辺の数を変えた他の多角形の外角の和と比べてどうなるか。正しく述べているものを1つ選べ。
+problem_text: 九角形の外角の和は、辺の数を変えた他の多角形の外角の和と比べてどうなるか。正しく述べているものを1つ選べ。
 sub_questions:
 - answer:
     correct: どんな多角形であっても常に一定である

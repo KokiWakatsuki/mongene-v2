@@ -24,7 +24,7 @@ meta:
   seed: 2
   signature: inscribed_angle_transfer_same_arc
 problem_ref: 0f338e4334d93dd1
-problem_text: ∠JLK=∠JMK=73°であり、4点J, K, L, Mは同一円周上にある。∠MJL=71°のとき、∠MKLの大きさを求めよ。
+problem_text: 直線JKについて同じ側に点L、Mがあり、∠JLK=∠JMK=73°である。∠MJL=71°のとき、∠MKLの大きさを求めよ。
 sub_questions:
 - answer:
     display: 71°

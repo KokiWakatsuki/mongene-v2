@@ -34,7 +34,9 @@ levels:
       # **同位角は 25〜155°。** 前は 1〜179 で「同位角がそれぞれ165°、192°」
       # （192°は同位角になりえない）や 1°が出ていた。
       angle_domain: {int_range: [25, 155]}
-      diff_domain: {int_range: [1, 30]}
+      # **差は 5°以上。** 1〜2°差は図では区別がつかず、「同位角が48°と49°」
+      # のような、図から平行でないと読み取れない問いになっていた。
+      diff_domain: {int_range: [5, 30]}
     given: [statement]
     asked: [choice]
     visual: none

@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: judge_parallel_from_ratio
 problem_ref: 067aa2c5550623e7
-problem_text: 三角形MNPで、辺MN, MP上に点Q, Rがある。MQ=9cm, QN=10cm, MR=45cm, RP=53cm であるとき、QRとNPが平行であるかどうかを、比を調べて答えよ。
+problem_text: 三角形MNPで、辺MN, MP上に点Q, Rがある。MQ=6cm, QN=16cm, MR=12cm, RP=38cm であるとき、QRとNPが平行であるかどうかを、比を調べて答えよ。
 sub_questions:
 - answer:
     display: 平行ではない
@@ -33,7 +33,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - parallel_segment.judge_from_ratio
-  explanation: 'まず、MQ:QNとMR:RPの比が等しいかどうかを比べる。（9:10 と 45:53）
+  explanation: 'まず、MQ:QNとMR:RPの比が等しいかどうかを比べる。（6:16 と 12:38）
 
     次に、平行線と線分の比の定理の逆から、QRとNPが平行であるかどうかを判別する。（平行ではない）'
   hints:
@@ -44,7 +44,7 @@ sub_questions:
   - args: []
     narration: MQ:QNとMR:RPの比が等しいかどうかを比べる。
     op: compare_division_ratios
-    result_display: 9:10 と 45:53
+    result_display: 6:16 と 12:38
     result_srepr: ''
   - args: []
     narration: 平行線と線分の比の定理の逆から、QRとNPが平行であるかどうかを判別する。

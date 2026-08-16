@@ -24,14 +24,14 @@ meta:
   seed: 3
   signature: word_problem_quadratic_determine_then_inverse
 problem_ref: 4f45390dad247e88
-problem_text: '高いところから石を静かに落とすとき、落ち始めてから x 秒間に落下する距離 y m は、x の2乗に比例する。この石は3秒間に45m落下した。
+problem_text: '高いところから石を静かに落とすとき、落ち始めてから x 秒間に落下する距離 y m は、x の2乗に比例する。この石は2秒間に20m落下した。
 
-  落下距離が1620mになるのは、落ち始めてから何秒後か求めよ。'
+  落下距離が245mになるのは、落ち始めてから何秒後か求めよ。'
 sub_questions:
 - answer:
-    display: 18秒後
+    display: 7秒後
     kind: symbolic
-    srepr: Integer(18)
+    srepr: Integer(7)
   cause_tags: []
   concept_tags:
   - quadratic_function.word_problem_determine_then_inverse
@@ -41,11 +41,11 @@ sub_questions:
 
     次に、求めた比例定数を y=ax² にもどして、y を x の式で表す。（y = 5x²）
 
-    次に、求める時刻を x とみて、距離を表す式に、与えられている距離をあてはめて方程式をつくる。（5x² = 1620）
+    次に、求める時刻を x とみて、距離を表す式に、与えられている距離をあてはめて方程式をつくる。（5x² = 245）
 
-    次に、両辺を x の2乗にかかっている数でわり、平方根の考え方で x を求める。（x² = 324）
+    次に、両辺を x の2乗にかかっている数でわり、平方根の考え方で x を求める。（x² = 49）
 
-    最後に、時刻は正の数だから、求めた解のうち正の解を選ぶ。（18秒後）'
+    最後に、時刻は正の数だから、求めた解のうち正の解を選ぶ。（7秒後）'
   hints:
   - y は x の2乗に比例するから、比例定数を a とおいて y=ax² と表し、与えられている x と y の値を代入する。
   - 代入してできた式を a について解いて、比例定数を求める。
@@ -73,16 +73,16 @@ sub_questions:
   - args: []
     narration: 求める時刻を x とみて、距離を表す式に、与えられている距離をあてはめて方程式をつくる。
     op: set_up_equation
-    result_display: 5x² = 1620
+    result_display: 5x² = 245
     result_srepr: ''
   - args: []
     narration: 両辺を x の2乗にかかっている数でわり、平方根の考え方で x を求める。
     op: solve_for_x
-    result_display: x² = 324
+    result_display: x² = 49
     result_srepr: ''
   - args: []
     narration: 時刻は正の数だから、求めた解のうち正の解を選ぶ。
     op: select_positive_root
-    result_display: 18秒後
-    result_srepr: Integer(18)
+    result_display: 7秒後
+    result_srepr: Integer(7)
 visual_svg: null

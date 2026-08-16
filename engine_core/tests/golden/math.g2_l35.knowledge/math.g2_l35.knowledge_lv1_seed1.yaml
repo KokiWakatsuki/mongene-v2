@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: polygon_exterior_sum_property_rule_recall
 problem_ref: 2453f68e15addfeb
-problem_text: 5角形の外角の和は、辺の数を変えた他の多角形の外角の和と比べてどうなるか。正しく述べているものを1つ選べ。
+problem_text: 十八角形の外角の和は、辺の数を変えた他の多角形の外角の和と比べてどうなるか。正しく述べているものを1つ選べ。
 sub_questions:
 - answer:
     correct: どんな多角形であっても常に一定である

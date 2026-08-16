@@ -164,8 +164,7 @@ LF_SOLVE_SYSTEM_ELIM_V1 = (
 
 # g2_l10.calculation Lv1: 2元1次方程式の左辺に (x,y) を代入して左辺の値を求める（P1/C2）
 LF_SUBSTITUTE_INTO_EQUATION_V1 = (
-    "2元1次方程式 {{ given.equation }} の左辺に {{ given.candidate }} を代入して、"
-    "左辺の値を求めよ。"
+    "式 {{ given.equation }} に {{ given.candidate }} を代入したときの値を求めよ。"
 )
 
 # g2_l13.calculation Lv1/Lv2: 連立方程式を代入法で解く（横展開#12）

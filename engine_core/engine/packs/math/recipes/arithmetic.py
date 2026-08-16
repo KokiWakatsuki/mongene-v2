@@ -461,6 +461,12 @@ def _build_order_numbers(ctx: CellContext, rng: Rng, p: dict[str, object]) -> MR
     if len(tokens) < count:
         raise ValueError("相異する数を確保できず")
 
+    # **提示順が答えと同じになる組は並べ替える。** 引いた順のまま出していたので
+    # 「-7, -3/5, 0.4, 5/2 を小さい順に並べよ」→答えがそのまま同じ並び、という
+    # 並べ替える作業の無い問題が出ていた。
+    order = sorted(range(len(values)), key=lambda i: values[i], reverse=not ascending)
+    if order == list(range(len(values))):
+        tokens = [tokens[i] for i in reversed(range(len(tokens)))]
     numbers_str = ", ".join(tokens)
     order_word = "小さい" if ascending else "大きい"
     given_display = f"{numbers_str} を{order_word}順に並べよ"
