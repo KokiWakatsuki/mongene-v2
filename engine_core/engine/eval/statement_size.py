@@ -20,7 +20,6 @@ from __future__ import annotations
 
 import argparse
 import json
-import re
 import sys
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
@@ -32,7 +31,7 @@ from engine.core.verify.statement_size import (
     limits_for,
     statement_hits,
 )
-from engine.eval._harness import EvalEnv, capability_cells, cell_request, make_env
+from engine.eval._harness import EvalEnv, cell_request, make_env, select_cells
 from engine.eval._parallel import pmap
 
 _DEFAULT_SEEDS = 5
@@ -116,10 +115,7 @@ def run_statement_size(
     jobs: int | None = None,
 ) -> StatementSizeReport:
     env = env if env is not None else make_env()
-    coords = capability_cells(env)
-    if only:
-        pat = re.compile(only)
-        coords = [c for c in coords if pat.search(f"{c.unit}.{c.form}.Lv{c.level}")]
+    coords = select_cells(env, only)
     return StatementSizeReport(
         seeds=seeds, cells=pmap(_cell_job, [(c, seeds) for c in coords], jobs=jobs)
     )

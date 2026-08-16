@@ -42,6 +42,21 @@ _DEFAULT_FAMILIES_DIR = (
 _MAX_BOUNDED_RETRY = 3
 
 
+def select_cells(env: "EvalEnv", only: str | None = None) -> list[Coordinate]:
+    """走査するセル。`only` があれば「unit.form.LvN」に対する正規表現で絞る。
+
+    テストが**縦串スライス**（数十セル）で回れるようにするための入口。
+    全セルの保証は `python -m engine.eval`（CI の別ステップ）が持つ。
+    """
+    import re as _re
+
+    coords = list(capability_cells(env))
+    if not only:
+        return coords
+    pat = _re.compile(only)
+    return [c for c in coords if pat.search(f"{c.unit}.{c.form}.Lv{c.level}")]
+
+
 @dataclass(frozen=True)
 class EvalEnv:
     """eval が使う不変環境（bootstrap 済みの registry + curriculum + families）。"""

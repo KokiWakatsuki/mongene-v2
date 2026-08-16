@@ -24,9 +24,9 @@ from engine.eval._parallel import pmap
 from engine.eval._harness import (
     EvalEnv,
     build_mr,
-    capability_cells,
     cell_request,
     make_env,
+    select_cells,
 )
 
 _DEFAULT_SEEDS = 100
@@ -123,9 +123,10 @@ def run_retry_stats(
     seeds: int = _DEFAULT_SEEDS,
     threshold: float = _DEFAULT_THRESHOLD,
     jobs: int | None = None,
+    only: str | None = None,
 ) -> RetryStatsReport:
     env = env if env is not None else make_env()
-    coords = list(capability_cells(env))
+    coords = select_cells(env, only)
     cells = pmap(_cell_job, [(c, seeds, threshold) for c in coords], jobs=jobs)
     return RetryStatsReport(seeds=seeds, threshold=threshold, cells=cells)
 
@@ -151,12 +152,20 @@ def _format_text(report: RetryStatsReport) -> str:
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="retry_stats", description="有界リトライ発動率・構成失敗分布")
     parser.add_argument("--seeds", type=int, default=_DEFAULT_SEEDS)
+    parser.add_argument(
+        "--only", default=None,
+        help="セル名（unit.form.LvN）の正規表現で走査を絞る（テスト・部分確認用）",
+    )
+    parser.add_argument(
+        "--jobs", type=int, default=None,
+        help="並列プロセス数（既定はコア数-1）。1 で逐次",
+    )
     parser.add_argument("--threshold", type=float, default=_DEFAULT_THRESHOLD)
     parser.add_argument("--json", action="store_true")
     parser.add_argument("--out", type=Path, default=None)
     args = parser.parse_args(argv)
 
-    report = run_retry_stats(seeds=args.seeds, threshold=args.threshold)
+    report = run_retry_stats(seeds=args.seeds, threshold=args.threshold, only=args.only, jobs=args.jobs)
     payload = report.to_json()
 
     if args.out is not None:

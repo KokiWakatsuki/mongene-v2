@@ -22,13 +22,14 @@ from engine.core.contracts import Problem
 from engine.core.pipeline import generate
 from engine.eval._parallel import pmap
 from engine.eval._harness import (
+    Coordinate,
     EvalEnv,
-    capability_cells,
     cell_request,
     make_env,
     remedial_cases,
     remedial_request,
     unreferenced_causes,
+    select_cells,
 )
 
 _DEFAULT_SEEDS = 5
@@ -66,9 +67,11 @@ def _stage_gate_counts(env: EvalEnv) -> dict[str, int]:
     return {stage: len(env.registry.gates(stage)) for stage in ("mr", "text", "visual")}
 
 
-def scan_cells(env: EvalEnv, seeds: int, *, jobs: int | None = None) -> list[CellResult]:
+def scan_cells(
+    env: EvalEnv, seeds: int, *, jobs: int | None = None, only: str | None = None
+) -> list[CellResult]:
     """セル単位で並列に走らせる（セルどうしは独立）。"""
-    return pmap(_cell_job, [(c, seeds) for c in capability_cells(env)], jobs=jobs)
+    return pmap(_cell_job, [(c, seeds) for c in select_cells(env, only)], jobs=jobs)
 
 
 def _cell_job(env: EvalEnv, coord: Coordinate, seeds: int) -> CellResult:
@@ -154,12 +157,16 @@ class CoverageReport:
 
 
 def run_coverage_scan(
-    env: EvalEnv | None = None, *, seeds: int = _DEFAULT_SEEDS, jobs: int | None = None
+    env: EvalEnv | None = None,
+    *,
+    seeds: int = _DEFAULT_SEEDS,
+    jobs: int | None = None,
+    only: str | None = None,
 ) -> CoverageReport:
     env = env if env is not None else make_env()
     return CoverageReport(
         seeds=seeds,
-        cells=scan_cells(env, seeds, jobs=jobs),
+        cells=scan_cells(env, seeds, jobs=jobs, only=only),
         remedial=scan_remedial(env, seeds),
         unreferenced_causes=unreferenced_causes(env),
         gate_counts=_stage_gate_counts(env),
@@ -192,11 +199,19 @@ def _format_text(report: CoverageReport) -> str:
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="coverage_scan", description="生成不能0・ゲート素通り0 の検証")
     parser.add_argument("--seeds", type=int, default=_DEFAULT_SEEDS)
+    parser.add_argument(
+        "--only", default=None,
+        help="セル名（unit.form.LvN）の正規表現で走査を絞る（テスト・部分確認用）",
+    )
+    parser.add_argument(
+        "--jobs", type=int, default=None,
+        help="並列プロセス数（既定はコア数-1）。1 で逐次",
+    )
     parser.add_argument("--json", action="store_true", help="JSON でレポート出力")
     parser.add_argument("--out", type=Path, default=None, help="JSON レポートの保存先")
     args = parser.parse_args(argv)
 
-    report = run_coverage_scan(seeds=args.seeds)
+    report = run_coverage_scan(seeds=args.seeds, only=args.only, jobs=args.jobs)
     payload = report.to_json()
 
     if args.out is not None:

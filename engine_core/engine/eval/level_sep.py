@@ -23,7 +23,7 @@ from pathlib import Path
 
 from engine.core.contracts import Coordinate
 from engine.core.signature import fingerprint_hash
-from engine.eval._harness import EvalEnv, build_mr, capability_cells, family_of, make_env
+from engine.eval._harness import EvalEnv, build_mr, family_of, make_env, select_cells
 from engine.eval._parallel import pmap
 
 _DEFAULT_SEEDS = 5
@@ -121,11 +121,15 @@ def _family_job(
 
 
 def run_level_sep(
-    env: EvalEnv | None = None, *, seeds: int = _DEFAULT_SEEDS, jobs: int | None = None
+    env: EvalEnv | None = None,
+    *,
+    seeds: int = _DEFAULT_SEEDS,
+    jobs: int | None = None,
+    only: str | None = None,
 ) -> LevelSepReport:
     env = env if env is not None else make_env()
     by_family: dict[str, list[Coordinate]] = defaultdict(list)
-    for coord in capability_cells(env):
+    for coord in select_cells(env, only):
         by_family[family_of(coord)].append(coord)
     families = pmap(
         _family_job, [(fam, coords, seeds) for fam, coords in sorted(by_family.items())], jobs=jobs
@@ -154,11 +158,19 @@ def _format_text(report: LevelSepReport) -> str:
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="level_sep", description="レベル分離（署名相異[静的]+fp相異[必須]）")
     parser.add_argument("--seeds", type=int, default=_DEFAULT_SEEDS)
+    parser.add_argument(
+        "--only", default=None,
+        help="セル名（unit.form.LvN）の正規表現で走査を絞る（テスト・部分確認用）",
+    )
+    parser.add_argument(
+        "--jobs", type=int, default=None,
+        help="並列プロセス数（既定はコア数-1）。1 で逐次",
+    )
     parser.add_argument("--json", action="store_true")
     parser.add_argument("--out", type=Path, default=None)
     args = parser.parse_args(argv)
 
-    report = run_level_sep(seeds=args.seeds)
+    report = run_level_sep(seeds=args.seeds, only=args.only, jobs=args.jobs)
     payload = report.to_json()
 
     if args.out is not None:

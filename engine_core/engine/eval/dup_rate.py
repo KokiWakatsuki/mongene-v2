@@ -32,6 +32,7 @@ from engine.eval._harness import (
     capability_cells,
     family_of,
     make_env,
+    select_cells,
 )
 
 _DEFAULT_SEEDS = 100
@@ -171,9 +172,10 @@ def run_dup_rate(
     seeds: int = _DEFAULT_SEEDS,
     threshold: float = _DEFAULT_THRESHOLD,
     jobs: int | None = None,
+    only: str | None = None,
 ) -> DupRateReport:
     env = env if env is not None else make_env()
-    coords = list(capability_cells(env))
+    coords = select_cells(env, only)
     # **セルどうしは独立**（`cell_dup_rate` はそのセルの seed からしか読まない）ので、
     # プロセスに配っても測る値は変わらない。
     pairs = pmap(_cell_job, [(c, seeds, threshold) for c in coords], jobs=jobs)
@@ -220,12 +222,20 @@ def _format_text(report: DupRateReport) -> str:
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="dup_rate", description="重複率の2系統測定（dup_key / fp）")
     parser.add_argument("--seeds", type=int, default=_DEFAULT_SEEDS)
+    parser.add_argument(
+        "--only", default=None,
+        help="セル名（unit.form.LvN）の正規表現で走査を絞る（テスト・部分確認用）",
+    )
+    parser.add_argument(
+        "--jobs", type=int, default=None,
+        help="並列プロセス数（既定はコア数-1）。1 で逐次",
+    )
     parser.add_argument("--threshold", type=float, default=_DEFAULT_THRESHOLD)
     parser.add_argument("--json", action="store_true")
     parser.add_argument("--out", type=Path, default=None)
     args = parser.parse_args(argv)
 
-    report = run_dup_rate(seeds=args.seeds, threshold=args.threshold)
+    report = run_dup_rate(seeds=args.seeds, threshold=args.threshold, only=args.only, jobs=args.jobs)
     payload = report.to_json()
 
     if args.out is not None:
