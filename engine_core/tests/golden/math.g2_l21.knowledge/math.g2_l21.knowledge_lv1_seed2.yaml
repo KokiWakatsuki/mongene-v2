@@ -45,11 +45,13 @@ sub_questions:
   solution_steps:
   - args:
     - '-4'
+    detail: ''
     narration: 傾き a の符号に注目する。
     op: identify_slope_sign
     result_display: 傾きは負
     result_srepr: Integer(-1)
   - args: []
+    detail: ''
     narration: 傾きが正なら右上がり、傾きが負なら右下がりになる。
     op: determine_direction
     result_display: 右下がり

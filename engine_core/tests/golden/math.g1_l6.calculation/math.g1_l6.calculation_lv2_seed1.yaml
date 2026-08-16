@@ -44,11 +44,13 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 負の数の個数を数え、積の符号を決める（偶数個なら正、奇数個なら負）。
     op: count_negative_factors
     result_display: -(1/6 × 8 × 7/2)
     result_srepr: Rational(-14, 3)
   - args: []
+    detail: ''
     narration: すべての絶対値をかけ合わせて、積を求める。
     op: multiply_all_magnitudes
     result_display: -14/3

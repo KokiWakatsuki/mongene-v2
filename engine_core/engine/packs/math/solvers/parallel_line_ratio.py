@@ -27,6 +27,12 @@ from engine.core.registry import register_solver
 from engine.packs.math.solvers.arithmetic import fmt_measure
 
 
+def _simplest_ratio(a: int, b: int) -> str:
+    """比を最も簡単な整数の比にする（`17:11` はそのまま、`12:38` → `6:19`）。"""
+    g = sympy.igcd(a, b)
+    return f"{a // g}:{b // g}"
+
+
 def _points(labels: object, default: str = "ABCDE") -> tuple[str, str, str, str, str]:
     """頂点の記号（A,B,C,D,E の順）。
 
@@ -67,11 +73,24 @@ def parallel_segment_ratio_length(
             narration=f"{pd}{pe}∥{pb}{pc} であることから、三角形{pa}{pd}{pe}と"
             f"三角形{pa}{pb}{pc}が相似になることを見つける。",
         ),
+        # **`AB` は問題文に無い（AD と DB しか与えられていない）。** ここを
+        # 黙って使っていたので、中学生がいちばん落ちる `AB = AD + DB` の1行が
+        # 解説のどこにも無かった。独立した手にして見せる。
+        Step(
+            op="compose_whole_side",
+            args=[], result_srepr="",
+            result_display=f"{pa}{pb} = {fmt_measure(a)} + {fmt_measure(b)} = {fmt_measure(a + b)}",
+            narration=f"{pa}{pd}と{pd}{pb}をたして、辺{pa}{pb}全体の長さを求める。",
+        ),
         Step(
             op="apply_parallel_segment_ratio",
             args=[], result_srepr=srepr, result_display=disp,
             narration=f"{pa}{pd}:{pa}{pb}={pd}{pe}:{pb}{pc} が成り立つことから、"
             f"辺{pb}{pc}の長さを求める。",
+            detail=(
+                f"{fmt_measure(a)}:{fmt_measure(a + b)} = {fmt_measure(e)}:{pb}{pc} "
+                f"を解いて、辺{pb}{pc}の長さを求める。"
+            ),
         ),
     ]
     return Solution(answer=SymbolicAnswer(srepr=srepr, display=disp), steps=steps)
@@ -100,6 +119,17 @@ def judge_parallel_from_ratio(
             args=[], result_srepr="",
             result_display=f"{a}:{b} と {c}:{d}",
             narration=f"{pa}{pd}:{pd}{pb}と{pa}{pe}:{pe}{pc}の比が等しいかどうかを比べる。",
+            # **どう比べたのかが1行も無かった**（`17:11 と 51:28` を見て
+            # 「平行ではない」と言うだけ）。比は暗算で見分けられないので、
+            # それぞれを最も簡単な形にそろえて見せる。
+            # detail は narration を置きかえるので、**目的（何を比べているか）を
+            # 落とさない**（相対度数で1手のセルの解説が「27 を 100 でわる」だけに
+            # なったのと同じ失敗をしないため）。
+            detail=(
+                f"{pa}{pd}:{pd}{pb}と{pa}{pe}:{pe}{pc}を、それぞれ簡単な比にすると "
+                f"{_simplest_ratio(a, b)} と {_simplest_ratio(c, d)} で、"
+                + ("等しい。" if a * d == b * c else "等しくない。")
+            ),
         ),
         Step(
             op="judge_by_parallel_ratio_converse",

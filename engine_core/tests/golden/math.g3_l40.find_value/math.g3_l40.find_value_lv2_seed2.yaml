@@ -33,20 +33,22 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - similarity.x_shape_length
-  explanation: 'まず、CD∥EF であることから、対頂角と錯角がそれぞれ等しくなる相似な三角形（三角形GCDと三角形GEF）の組を見つける。
+  explanation: 'まず、CD∥EF であることから、対頂角と錯角がそれぞれ等しくなる相似な三角形の組を見つける。（三角形GCD と 三角形GEF）
 
-    次に、相似な三角形の対応する辺の長さの比が等しい（GC:GE=GD:GF）ことから、求める辺の長さを求める。（18）'
+    次に、GC:GE=GD:GF に値を入れて 8:48 = 3:GF を解き、求める辺の長さを求める。（18）'
   hints:
-  - CD∥EF であることから、対頂角と錯角がそれぞれ等しくなる相似な三角形（三角形GCDと三角形GEF）の組を見つける。
+  - CD∥EF であることから、対頂角と錯角がそれぞれ等しくなる相似な三角形の組を見つける。
   label: (1)
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
-    narration: CD∥EF であることから、対頂角と錯角がそれぞれ等しくなる相似な三角形（三角形GCDと三角形GEF）の組を見つける。
+    detail: ''
+    narration: CD∥EF であることから、対頂角と錯角がそれぞれ等しくなる相似な三角形の組を見つける。
     op: identify_similar_triangles_in_x_shape
-    result_display: ''
+    result_display: 三角形GCD と 三角形GEF
     result_srepr: ''
   - args: []
+    detail: GC:GE=GD:GF に値を入れて 8:48 = 3:GF を解き、求める辺の長さを求める。
     narration: 相似な三角形の対応する辺の長さの比が等しい（GC:GE=GD:GF）ことから、求める辺の長さを求める。
     op: apply_proportion
     result_display: '18'

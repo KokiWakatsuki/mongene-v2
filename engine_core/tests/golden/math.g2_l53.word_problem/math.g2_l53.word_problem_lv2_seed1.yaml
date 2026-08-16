@@ -44,6 +44,7 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 十の位に置くカードの選び方それぞれについて、残ったカードから一の位を選ぶ選び方を枝分かれで書き出し、総数を数える。
     op: enumerate_all_two_digit_numbers
     result_display: 20通り
@@ -67,16 +68,19 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 十の位と一の位に置くカードの選び方を枝分かれで書き出し、できる整数をすべて数え上げる。
     op: enumerate_all_two_digit_numbers
     result_display: 20通り
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 書き出した整数のうち、一の位が偶数になっているものの個数を数える。
     op: count_favorable_numbers
     result_display: 4通り
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 条件にあてはまる整数の個数を、できる整数の総数でわる。
     op: compute_probability
     result_display: 1/5

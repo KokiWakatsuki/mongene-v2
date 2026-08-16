@@ -42,11 +42,13 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 二等辺三角形の頂角・底角のうち、わかっているほうの大きさを読み取る。
     op: identify_known_angle
     result_display: 122°
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 三角形の内角の和から頂角をひいた残りを、等しい2つの底角で半分ずつに分けて底角の大きさを求める。
     op: solve_remaining_angle
     result_display: '29'

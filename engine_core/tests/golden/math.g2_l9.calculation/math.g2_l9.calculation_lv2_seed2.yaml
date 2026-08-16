@@ -44,11 +44,13 @@ sub_questions:
   prompt_text: 式に表しなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 解く文字の項だけを片方の辺に残すよう、ほかの項を移項する。
     op: isolate_target
     result_display: -6x = 6y + 10
     result_srepr: Add(Mul(Integer(-1), Symbol('y')), Rational(-5, 3))
   - args: []
+    detail: ''
     narration: 両辺を、解く文字にかかっている係数でわる。
     op: divide_by_coefficient
     result_display: x = -y - 5/3

@@ -44,11 +44,13 @@ sub_questions:
   prompt_text: 式を簡単にしなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: かっこの前が + なので、そのままかっこを外す。
     op: remove_parentheses
     result_display: -x - 3y + 4x + 6y
     result_srepr: Add(Mul(Integer(3), Symbol('x')), Mul(Integer(3), Symbol('y')))
   - args: []
+    detail: ''
     narration: 同類項をまとめて計算する。
     op: add_like_terms
     result_display: 3x + 3y

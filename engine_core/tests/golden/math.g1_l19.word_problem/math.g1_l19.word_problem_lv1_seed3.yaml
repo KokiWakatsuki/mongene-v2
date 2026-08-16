@@ -44,11 +44,13 @@ sub_questions:
   prompt_text: 式に表しなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 場面の中で、比べられている、または等しくなっている数量に着目する。
     op: find_relation
     result_display: 代金の合計
     result_srepr: Symbol('x')
   - args: []
+    detail: ''
     narration: その数量を x を使った式で表し、等式または不等式をつくる。
     op: formulate_relation
     result_display: 7x = 1540

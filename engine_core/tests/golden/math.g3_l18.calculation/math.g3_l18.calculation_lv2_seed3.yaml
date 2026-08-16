@@ -47,16 +47,19 @@ sub_questions:
   prompt_text: 式を簡単にしなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 根号の中の大きな数を、平方の因数と残りに分ける。
     op: factor_into_squares
     result_display: 6 × √(16 × 3)
     result_srepr: ''
   - args: []
+    detail: ''
     narration: それぞれの平方の因数を根号の外に出す。
     op: take_roots_outside
     result_display: 6 × 4√3
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 根号の中をできるだけ簡単な形に直す。
     op: simplify_result
     result_display: 24√3

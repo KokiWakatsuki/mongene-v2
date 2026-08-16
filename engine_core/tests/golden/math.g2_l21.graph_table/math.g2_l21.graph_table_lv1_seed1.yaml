@@ -44,6 +44,7 @@ sub_questions:
   - args:
     - (-2, -7)
     - (3, 8)
+    detail: ''
     narration: グラフ上の格子点で、右へ進む量に対する上下の変化の割合を読み取り、傾きとする。
     op: read_slope
     result_display: 傾き a = 3
@@ -51,6 +52,7 @@ sub_questions:
   - args:
     - '3'
     - (-2, -7)
+    detail: ''
     narration: グラフが y 軸と交わる点の y 座標を読み取り、切片とする。
     op: read_intercept
     result_display: 切片 b = -1

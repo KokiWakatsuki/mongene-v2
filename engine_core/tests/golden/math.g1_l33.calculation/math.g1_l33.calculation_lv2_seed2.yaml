@@ -24,7 +24,7 @@ meta:
   seed: 2
   signature: inverse_proportion_evaluate_backward
 problem_ref: bf38ff5ea2f7fb01
-problem_text: 反比例の式 y = -12/x について、y = -2 のときの、もう一方の値を求めよ。
+problem_text: 反比例の式 y = -12/x について、y = -2 のときの x の値を求めよ。
 sub_questions:
 - answer:
     display: '6'
@@ -44,12 +44,14 @@ sub_questions:
   - args:
     - '-12'
     - '-2'
+    detail: ''
     narration: 比例定数と y の値を、反比例の式 y=a/x の y にあてはめる。
     op: substitute_y
     result_display: -2 = -12 / x
     result_srepr: Integer(6)
   - args:
     - -2 = -12 / x
+    detail: ''
     narration: 式を x について整理し直して、x の値を求める。
     op: solve_for_x
     result_display: x = 6

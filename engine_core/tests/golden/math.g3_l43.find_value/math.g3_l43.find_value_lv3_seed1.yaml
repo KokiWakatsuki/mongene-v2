@@ -23,7 +23,7 @@ meta:
     unit: g3_l43
   seed: 1
   signature: parallel_ratio_judge_then_length
-problem_ref: e0eb3f24220a9937
+problem_ref: 35b78c6574804f2e
 problem_text: 三角形QRSで、辺QR, QS上に点T, Uがある。QT=2cm, TR=6cm, QU=8cm, US=24cm である。TU=9cm のとき、TUとRSが平行であることを確かめたうえで、辺RSの長さを求めよ。
 sub_questions:
 - answer:
@@ -33,36 +33,49 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - parallel_segment.judge_then_length
-  explanation: 'まず、QT:TRとQU:USの比が等しいかどうかを比べる。（2:6 と 8:24）
+  explanation: 'まず、QT:TRとQU:USを、それぞれ簡単な比にすると 1:3 と 1:3 で、等しい。（2:6 と 8:24）
 
     次に、平行線と線分の比の定理の逆から、TUとRSが平行であるかどうかを判別する。（平行である）
 
     次に、TU∥RS であることから、三角形QTUと三角形QRSが相似になることを見つける。（三角形QTU と 三角形QRS）
 
-    最後に、QT:QR=TU:RS が成り立つことから、辺RSの長さを求める。（36）'
+    次に、QTとTRをたして、辺QR全体の長さを求める。（QR = 2 + 6 = 8）
+
+    最後に、2:8 = 9:RS を解いて、辺RSの長さを求める。（36）'
   hints:
   - QT:TRとQU:USの比が等しいかどうかを比べる。
   - 平行線と線分の比の定理の逆から、TUとRSが平行であるかどうかを判別する。
   - TU∥RS であることから、三角形QTUと三角形QRSが相似になることを見つける。
+  - QTとTRをたして、辺QR全体の長さを求める。
   label: (1)
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: QT:TRとQU:USを、それぞれ簡単な比にすると 1:3 と 1:3 で、等しい。
     narration: QT:TRとQU:USの比が等しいかどうかを比べる。
     op: compare_division_ratios
     result_display: 2:6 と 8:24
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 平行線と線分の比の定理の逆から、TUとRSが平行であるかどうかを判別する。
     op: judge_by_parallel_ratio_converse
     result_display: 平行である
     result_srepr: 'true'
   - args: []
+    detail: ''
     narration: TU∥RS であることから、三角形QTUと三角形QRSが相似になることを見つける。
     op: identify_similar_triangles_from_parallel
     result_display: 三角形QTU と 三角形QRS
     result_srepr: ''
   - args: []
+    detail: ''
+    narration: QTとTRをたして、辺QR全体の長さを求める。
+    op: compose_whole_side
+    result_display: QR = 2 + 6 = 8
+    result_srepr: ''
+  - args: []
+    detail: 2:8 = 9:RS を解いて、辺RSの長さを求める。
     narration: QT:QR=TU:RS が成り立つことから、辺RSの長さを求める。
     op: apply_parallel_segment_ratio
     result_display: '36'

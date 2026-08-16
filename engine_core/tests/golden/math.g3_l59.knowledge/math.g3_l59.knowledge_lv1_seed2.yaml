@@ -43,6 +43,7 @@ sub_questions:
   prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 無作為に抽出された標本は、母集団のようすを偏りなく反映した縮図とみなせることを確認する。
     op: explain_sample_ratio_rationale
     result_display: 無作為に抽出すれば、標本は母集団の縮図とみなせるから

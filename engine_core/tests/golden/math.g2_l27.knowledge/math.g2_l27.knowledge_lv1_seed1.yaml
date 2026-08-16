@@ -45,11 +45,13 @@ sub_questions:
   prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 連立方程式の解が、2つの式のグラフのどこにあたるかを思い出す。
     op: recall_property
     result_display: 連立の解とグラフの関係を思い出す
     result_srepr: solution_is_intersection
   - args: []
+    detail: ''
     narration: 連立方程式の解は、2つの直線の交点の座標である。
     op: select_correct
     result_display: 2つの直線の交点

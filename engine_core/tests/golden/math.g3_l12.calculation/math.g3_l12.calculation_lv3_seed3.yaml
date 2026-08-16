@@ -42,11 +42,13 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 求める式を、和と積だけで表せる形に変形する。
     op: express_via_elementary_symmetric
     result_display: (x + y)² - 2xy
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 和と積の値をあてはめて計算する。
     op: substitute_and_compute
     result_display: '195'

@@ -46,17 +46,20 @@ sub_questions:
   solution_steps:
   - args:
     - y = 3x - 5
+    detail: ''
     narration: Aさんの進むようすを表す直線を座標平面にかく。
     op: draw_line_a
     result_display: y = 3x - 5
     result_srepr: Add(Mul(Integer(3), Symbol('x')), Integer(-5))
   - args:
     - y = 2x - 3
+    detail: ''
     narration: Bさんの進むようすを表す直線を同じ平面にかく。
     op: draw_line_b
     result_display: y = 2x - 3
     result_srepr: Add(Mul(Integer(2), Symbol('x')), Integer(-3))
   - args: []
+    detail: ''
     narration: 2つの直線が交わる点の座標（同じ地点にいる時間と道のり）を読み取る。
     op: read_intersection
     result_display: (2, 1)

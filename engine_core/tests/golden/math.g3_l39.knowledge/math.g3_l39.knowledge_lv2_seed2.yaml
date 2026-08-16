@@ -46,11 +46,13 @@ sub_questions:
   prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 相似を表す式で、頂点がどの順に対応づけられているかを確認する。
     op: identify_correspondence_order
     result_display: KLMN と PQRS
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 対応する位置にある頂点どうしが対応することから、対応する頂点を答える。
     op: name_corresponding_vertex
     result_display: S

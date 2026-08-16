@@ -42,11 +42,13 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 相似な図形の面積比は相似比の二乗に等しいことから、面積比を求める。
     op: square_similarity_ratio
     result_display: '1:4'
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 求めた面積比と、わかっている一方の面積から、もう一方の面積を求める。
     op: apply_area_ratio
     result_display: 面積比 1:4、大きいほうの面積 16

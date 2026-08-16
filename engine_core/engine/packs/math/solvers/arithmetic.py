@@ -121,7 +121,10 @@ _OP_NARRATION: dict[str, str] = {
     "rewrite_as_round_plus_offset": "計算しやすいように、片方の数をきりのよい数と小さな数の和や差に分ける。",
     "distribute_over_round": "分配法則を使って、きりのよい数の積と小さな数の積に分けて計算する。",
     "combine_easy_parts": "2つの積を合わせて、答えを求める。",
-    "locate_on_number_line": "その数が数直線上で 0 からどちら側にあるかを見る。",
+    # **「0 からどちら側か」は絶対値に無関係**（左右が変わっても絶対値は同じ）。
+    # しかもこの手の結果が次の手でまったく使われず、誤誘導になっていた。
+    # 見るべきは「0 からどれだけ離れているか」。
+    "locate_on_number_line": "その数が数直線上で 0 からどれだけ離れているかを見る。",
     "read_distance_from_zero": "0 からの距離が絶対値なので、符号を取り去った大きさを答える。",
 }
 
@@ -219,6 +222,60 @@ def _round_split(base: int) -> tuple[int, int]:
     return base, 0
 
 
+def _terms_of(expr_str: str) -> list[sympy.Rational]:
+    return [(-_rat(t) if op == "-" else _rat(t)) for op, t in top_level_parts(expr_str, "+-")]
+
+
+def _signed_step_details(expr_str: str, mode: str, ops: list[str]) -> list[str]:
+    """解説にだけ出る、**実際の値で操作を名指しした**指示文（`Step` の docstring）。
+
+    ここで埋めているのは、通読で出た2つの穴:
+
+    1. **通分した合計と約分の行が飛ぶ。** `24/40 - 4/40 - 5/40 + 10/40` の次が
+       いきなり `5/8` で、`25/40` も約分も出ていなかった。教科書は
+       `= 25/40 = 5/8` と1行に書くので、detail で名指しする。
+    2. **片方の符号しか項が無いのに「正の合計と負の合計を合わせて」と言う。**
+       `(-8) - 3 + (-9)` に正の項は1つも無い。
+    """
+    dec = "." in expr_str
+    details = ["" for _ in ops]
+    if mode not in ("addition_terms", "subtraction_terms", "add_sub_terms",
+                    "add_sub_terms_rational"):
+        return details
+
+    terms = _terms_of(expr_str)
+    total = sum(terms, sympy.Integer(0))
+    lcm = 1
+    for t in terms:
+        lcm = sympy.ilcm(lcm, int(t.q))
+
+    pos = [t for t in terms if t > 0]
+    neg = [t for t in terms if t < 0]
+    one_sided = not pos or not neg
+    side = "正" if pos else "負"
+    unreduced = f"{int(total * lcm)}/{lcm}" if lcm != 1 else ""
+
+    for i, op in enumerate(ops):
+        if op == "group_by_sign" and one_sided:
+            details[i] = f"{side}の項しかないので、絶対値の和に{side}の符号をつける。"
+        elif op == "total_terms":
+            prev = ops[i - 1] if i else ""
+            if one_sided:
+                # 「正の合計と負の合計を合わせて」と言えるのは両方あるときだけ。
+                details[i] = f"かっこの中を計算し、{side}の符号をつけて答えを求める。"
+            elif prev == "group_by_sign" and lcm != 1:
+                # **ここが飛んでいた。** `1/2 + (-13/5)` から `-21/10` へ1行で
+                # 跳んでいて、通分（`5/10 + (-26/10)`）が解説に出ていなかった。
+                p, n = sum(pos, sympy.Integer(0)), sum(neg, sympy.Integer(0))
+                details[i] = (
+                    f"通分すると {int(p * lcm)}/{lcm} + (-{int(-n * lcm)}/{lcm}) "
+                    f"になるので、合わせて答えを求める。"
+                )
+            elif prev == "align_fractions" and unreduced and unreduced != fmt_number(total):
+                details[i] = f"分子どうしを計算すると {unreduced} になるので、約分して答えを求める。"
+    return details
+
+
 def _signed_step_displays(expr_str: str, mode: str, final: str) -> list[str]:
     """mode ごとの、各手の括弧に入れる表示（最後は答え）。"""
     dec = "." in expr_str
@@ -306,8 +363,7 @@ def _signed_step_displays(expr_str: str, mode: str, final: str) -> list[str]:
 
     if mode == "absolute_value":
         inner = _rat(expr_str[len("Abs("):-1])
-        side = "左" if inner < 0 else "右"
-        return [f"{_disp(inner, dec)} は 0 より{side}", final]
+        return [f"{_disp(inner, dec)} は 0 から {_disp(abs(inner), dec)} 離れている", final]
 
     raise ValueError(f"途中の表示を組めない mode: {mode!r}")
 
@@ -368,6 +424,7 @@ def evaluate_numeric_expression(expr_str: str, mode: object) -> Solution:
 
     ops = _MODE_STEPS[mode_s]
     displays = _signed_step_displays(expr_str, mode_s, r_disp)
+    details = _signed_step_details(expr_str, mode_s, ops)
     assert len(displays) == len(ops), (
         f"{mode_s}: 手の数 {len(ops)} と途中の表示 {len(displays)} が合わない"
     )
@@ -378,6 +435,7 @@ def evaluate_numeric_expression(expr_str: str, mode: object) -> Solution:
             result_srepr=r_srepr,
             result_display=displays[i],
             narration=_OP_NARRATION[op],
+            detail=details[i],
         )
         for i, op in enumerate(ops)
     ]
@@ -485,15 +543,35 @@ _FACTORIZE_OP_NARRATION: dict[str, str] = {
     ),
 }
 
+_SMALL_PRIMES = (2, 3, 5, 7)
+
+
 def _factorize_phrase(n: int) -> dict[str, str]:
-    """素因数分解の手の括弧（わり出した素数そのもの・面③）。"""
-    primes = sorted(sympy.factorint(n))
-    # 「小さい素数から順にわる」＝1桁の素数、「次に大きい素数を順に試す」＝2桁以上。
-    small = [p for p in primes if p < 10]
-    large = [p for p in primes if p >= 10]
+    """素因数分解の手の括弧。
+
+    **わり算の行そのものを出す。** 以前はわり出した素数の並び（`2、3、5`）だけで、
+    `180 ÷ 2 = 90`… という筆算が1行も無かった。素数の並びからは**それぞれ何個あるか**
+    が読めないので、次の手の指数（`2²×3²`）の根拠が生徒に渡っていなかった。
+
+    あわせて advanced（2桁の素数が要る数）の**手の順序の取り違え**を直す。以前は
+    1手目の括弧に答えの素数（`11、19`）が出て、2手目が `わり切れない` だった
+    ——「小さい素数で試す → だめだった → 大きい素数でわる」の順に直す。
+    """
+    # **商が素数になったら止める**（narration が「商が素数になるまで」と言っている）。
+    # 1 になるまでわると最後に `5 ÷ 5 = 1` が出て、言っていることと合わない。
+    rows = []
+    m = n
+    for p in sorted(sympy.factorint(n)):
+        while m % p == 0 and not sympy.isprime(m):
+            rows.append(f"{m} ÷ {p} = {m // p}")
+            m //= p
+    tried = [p for p in _SMALL_PRIMES if n % p != 0]
     return {
-        "divide_out_primes_in_order": "、".join(str(p) for p in small) or "わり切れない",
-        "test_successive_prime_divisors": "、".join(str(p) for p in large) or "残りは素数",
+        "divide_out_primes_in_order": "、".join(rows),
+        "test_successive_prime_divisors": (
+            "、".join(str(p) for p in tried) + " ではわり切れない"
+            if tried else "小さい素数でわり切れる"
+        ),
     }
 
 
@@ -521,6 +599,16 @@ def factorize_integer(value: object, mode: object) -> Solution:
             result_srepr=srepr,
             result_display=disp if i == len(ops) - 1 else _factorize_phrase(n)[op],
             narration=_FACTORIZE_OP_NARRATION[op],
+            # advanced は1手目で「小さい素数ではわり切れない」と言ったばかりなので、
+            # ここで「小さい素数から順に」と書くと前の手と矛盾する。実際にわった素数を言う。
+            detail=(
+                (
+                    f"{n} を小さい素数から順にわっていく。"
+                    if mode_s == "factorize_basic"
+                    else f"{n} を、わり切れる素数 {min(sympy.factorint(n))} からわっていく。"
+                )
+                if op == "divide_out_primes_in_order" else ""
+            ),
         )
         for i, op in enumerate(ops)
     ]
@@ -554,7 +642,9 @@ _SCI_OP_NARRATION: dict[str, str] = {
         "指定された有効数字の桁になるように、その次の位を四捨五入する。"
     ),
     "locate_decimal_point": (
-        "小数点を、一の位が1以上10未満になる位置まで動かし、動かした桁数を数える。"
+        # 「一の位が1以上10未満」は日本語として成り立たない（一の位は 0〜9 の
+        # 数字1つ）。言いたいのは「小数点より前の数が1以上10未満」。
+        "小数点を、小数点より前の数が1以上10未満になる位置まで動かし、動かした桁数を数える。"
     ),
     "write_scientific_form": (
         "1以上10未満の数と、10を動かした桁数だけ累乗した数との積の形に表す。"

@@ -26,6 +26,7 @@ from dataclasses import dataclass, field
 from engine.packs.math.geometry.facts import (
     Fact,
     Point,
+    between,
     collinear,
     midpoint,
     on_circle,
@@ -129,6 +130,7 @@ class Construction:
             if draw_center and _is_diameter(placements[a], placements[b]):
                 self.facts.add(midpoint(center, seg(a, b)))
                 self.facts.add(collinear(a, center, b))
+                self.facts.add(between(center, a, b))
             for p, q in itertools.combinations([n for n in names if n not in (a, b)], 2):
                 if _on_same_arc(placements[a], placements[b], placements[p], placements[q]):
                     self.facts.add(same_arc((a, b), p, q))
@@ -212,6 +214,20 @@ class Construction:
         self.steps.append(
             f"直線{line1[0]}{line1[1]}と直線{line2[0]}{line2[1]}の交点を{name}とする"
         )
+
+    def between_facts(self) -> frozenset[Fact]:
+        """「点 m が2点の間にある」事実の一覧。
+
+        **`collinear_order` から1か所で出す。** `collinear` は3点を並べ替えて持つので
+        どれが真ん中かを持っておらず、対頂角の規則がそれだけで当たると
+        「交わっていない配置」にも当たってしまう（`facts.between` の docstring）。
+
+        真ん中がどれかを知っているのは作図の手順で、それは `collinear_order` に
+        入っている。**各作図の関数で個別に足すと、足し忘れた図だけ対頂角が使えなくなる**
+        ——実際 `constructions_similarity._line` を足し忘れて g3_l41.proof.Lv3
+        （砂時計型）が生成できなくなった。出す場所を1つにして、忘れる余地を消す。
+        """
+        return frozenset(between(m, a, b) for a, m, b in self.collinear_order)
 
     def ray_classes(self) -> dict[tuple[Point, Point], tuple[Point, ...]]:
         """「頂点から見て**同じ半直線の上にある点**」の組を返す。

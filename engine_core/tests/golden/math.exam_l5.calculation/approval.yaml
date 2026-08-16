@@ -1,6 +1,6 @@
-approved_at: '2026-08-16T15:21:48.831842'
+approved_at: '2026-08-17T03:51:36.924040'
 approver: koki
-content_sha256: 940804d2481e2d3d6fb00bf37c21b7b512cda4dc6a8cd70d15b274f3b128c13f
+content_sha256: 6740c6e2e015856d090425260cb63c3a511616f9495d0304c6021deb4bdc21ae
 family: math.exam_l5.calculation
 files:
 - /Users/koki/workspace/mongene-v2/engine_core/tests/golden/math.exam_l5.calculation/math.exam_l5.calculation_lv2_seed1.yaml

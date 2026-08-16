@@ -45,11 +45,13 @@ sub_questions:
   prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 説明されている項が、2次方程式のどの位置（x²・x・定数項）にあるかを読み取る。
     op: identify_description
     result_display: ''
     result_srepr: coeff_b
   - args: []
+    detail: ''
     narration: ax²+bx+c=0 の形と見比べて、その位置に対応する文字を思い出す。
     op: name_concept
     result_display: b

@@ -44,11 +44,13 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 式の2つの文字に、根号を含む共役な値の組をそれぞれあてはめる。
     op: substitute_conjugate_pair_values
     result_display: (√34+(-10))²+(√34-(-10))²
     result_srepr: ''
   - args: []
+    detail: ''
     narration: かっこを展開し、根号を含む項どうしを整理して式の値を求める。
     op: expand_and_simplify
     result_display: '268'

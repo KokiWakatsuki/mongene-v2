@@ -35,7 +35,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - equation.solve_by_equality_property
-  explanation: 'まず、左辺を x の項だけにするために、両辺に同じ数をたすかひくかする。（x - 10 + 10 = 1 + 10）
+  explanation: 'まず、左辺を x の項だけにするために、両辺に 10 をたす。（x - 10 + 10 = 1 + 10）
 
     次に、両辺を計算して、解を求める。（x = 11）'
   hints:
@@ -44,11 +44,13 @@ sub_questions:
   prompt_text: 解を求めなさい。
   solution_steps:
   - args: []
+    detail: 左辺を x の項だけにするために、両辺に 10 をたす。
     narration: 左辺を x の項だけにするために、両辺に同じ数をたすかひくかする。
     op: subtract_constant_both_sides
     result_display: x - 10 + 10 = 1 + 10
     result_srepr: Integer(11)
   - args: []
+    detail: ''
     narration: 両辺を計算して、解を求める。
     op: state_solution
     result_display: x = 11

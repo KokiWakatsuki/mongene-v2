@@ -42,11 +42,13 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 根号の中を素因数分解し、平方の因数を見つける。
     op: factor_out_square
     result_display: √(9 × 46)
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 平方の因数を根号の外に出して a√b の形にする。
     op: take_root_outside
     result_display: 3√46

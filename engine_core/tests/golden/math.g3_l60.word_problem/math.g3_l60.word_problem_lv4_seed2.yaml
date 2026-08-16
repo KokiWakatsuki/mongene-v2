@@ -53,26 +53,31 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 標本の中で、該当するものの個数と標本全体の個数を確認する。
     op: identify_sample_ratio_terms
     result_display: 標本の大きさと、そのうち該当するものの個数
     result_srepr: Symbol('r')
   - args: []
+    detail: ''
     narration: 該当するものの個数を標本の大きさでわり、標本での割合を求める。
     op: compute_sample_ratio
     result_display: '0.075'
     result_srepr: Rational(3, 40)
   - args: []
+    detail: ''
     narration: 標本での該当する個数の割合が、母集団全体でもおよそ等しいとみて、母集団の大きさ x を含む比例式をつくる。
     op: form_ratio_equation_for_x
     result_display: '3 : 40 = 120 : x'
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 比例式を解き、母集団の大きさ x を求める。
     op: solve_for_x
     result_display: '1600'
     result_srepr: Integer(1600)
   - args: []
+    detail: ''
     narration: 求めた全体の個数から、はじめに加えた赤玉の個数を引いて、もとからあった白玉の総数を求める。
     op: derive_asked_quantity
     result_display: 1480個

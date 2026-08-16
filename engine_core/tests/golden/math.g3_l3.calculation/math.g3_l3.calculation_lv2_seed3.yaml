@@ -47,16 +47,19 @@ sub_questions:
   prompt_text: 式を簡単にしなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: それぞれの定数の符号を確かめる。
     op: determine_constant_signs
     result_display: -8 と 11
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 2つの定数の和と積を求める。
     op: compute_sum_and_product
     result_display: 和 3、積 -88
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 乗法公式にあてはめて展開した式を書く。
     op: write_expansion
     result_display: k² + 3k - 88

@@ -44,11 +44,13 @@ sub_questions:
   prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: その集合の数どうしでその演算をした結果が、いつでもその集合に入るかを調べる。
     op: check_operation_result
     result_display: 入らない場合がある
     result_srepr: natural.sub
   - args: []
+    detail: ''
     narration: 結果がいつでもその集合に入るなら閉じている、そうでなければ閉じていないと判断する。
     op: judge_closure
     result_display: 閉じていない

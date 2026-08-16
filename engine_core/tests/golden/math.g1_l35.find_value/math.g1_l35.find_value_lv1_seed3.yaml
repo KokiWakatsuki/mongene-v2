@@ -35,7 +35,7 @@ sub_questions:
   - inverse_proportion.solve_from_point
   explanation: 'まず、反比例の式 y=a/x に、通る点の x, y の値をあてはめ、比例定数を求める式をつくる。（a = 2 × 50）
 
-    次に、求めた比例定数を使って、反比例の式を組み立てる。（y = 100/x）'
+    次に、比例定数は a = 100 なので、y = a/x にあてはめる。（y = 100/x）'
   hints:
   - 反比例の式 y=a/x に、通る点の x, y の値をあてはめ、比例定数を求める式をつくる。
   label: (1)
@@ -44,12 +44,14 @@ sub_questions:
   - args:
     - '2'
     - '50'
+    detail: ''
     narration: 反比例の式 y=a/x に、通る点の x, y の値をあてはめ、比例定数を求める式をつくる。
     op: substitute_point
     result_display: a = 2 × 50
     result_srepr: Integer(100)
   - args:
     - '100'
+    detail: 比例定数は a = 100 なので、y = a/x にあてはめる。
     narration: 求めた比例定数を使って、反比例の式を組み立てる。
     op: form_expression
     result_display: y = 100/x

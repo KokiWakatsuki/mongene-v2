@@ -35,7 +35,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - equation.solve_by_equality_property
-  explanation: 'まず、左辺を x の項だけにするために、両辺に同じ数をたすかひくかする。（x + 5 - 5 = -2 - 5）
+  explanation: 'まず、左辺を x の項だけにするために、両辺から 5 をひく。（x + 5 - 5 = -2 - 5）
 
     次に、両辺を計算して、解を求める。（x = -7）'
   hints:
@@ -44,11 +44,13 @@ sub_questions:
   prompt_text: 解を求めなさい。
   solution_steps:
   - args: []
+    detail: 左辺を x の項だけにするために、両辺から 5 をひく。
     narration: 左辺を x の項だけにするために、両辺に同じ数をたすかひくかする。
     op: subtract_constant_both_sides
     result_display: x + 5 - 5 = -2 - 5
     result_srepr: Integer(-7)
   - args: []
+    detail: ''
     narration: 両辺を計算して、解を求める。
     op: state_solution
     result_display: x = -7

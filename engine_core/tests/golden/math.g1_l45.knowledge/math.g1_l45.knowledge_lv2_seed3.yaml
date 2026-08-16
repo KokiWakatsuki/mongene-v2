@@ -45,11 +45,13 @@ sub_questions:
   prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 円の接線と、接点を通る半径との位置関係を見比べる。
     op: identify_circle_property
     result_display: ''
     result_srepr: tangent_perpendicular
   - args: []
+    detail: ''
     narration: その性質がつねに成り立つ関係かどうかを判別する。
     op: judge_circle_property
     result_display: 垂直

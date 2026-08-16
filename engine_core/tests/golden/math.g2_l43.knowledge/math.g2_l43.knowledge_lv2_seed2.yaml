@@ -44,11 +44,13 @@ sub_questions:
   prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 示されている辺と角の条件が、その形になるための条件を満たしているかを確認する。
     op: check_side_and_angle_condition
     result_display: 条件を満たす
     result_srepr: 'yes'
   - args: []
+    detail: ''
     narration: 二等辺三角形の性質を重ね合わせて、正三角形であるといえるかどうかを判別する。
     op: judge_equilateral
     result_display: 正三角形であるといえる

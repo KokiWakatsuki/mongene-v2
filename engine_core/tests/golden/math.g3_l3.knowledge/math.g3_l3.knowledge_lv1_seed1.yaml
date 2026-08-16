@@ -46,11 +46,13 @@ sub_questions:
   prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 問題で問われている規則や約束が、何についてのものかを読み取る。
     op: read_rule_context
     result_display: ''
     result_srepr: general_form
   - args: []
+    detail: ''
     narration: その規則の正しい内容を思い出して選ぶ。
     op: recall_correct_rule
     result_display: (x+a)(x+b) の一般の乗法公式がそのまま使える（かっこの中の数が異なり、たがいに反対の符号でもない）

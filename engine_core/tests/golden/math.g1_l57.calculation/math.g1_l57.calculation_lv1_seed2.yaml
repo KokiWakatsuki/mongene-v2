@@ -33,11 +33,11 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - representative_value.compute_raw
-  explanation: 'まず、データの値をすべて足し合わせ、個数でわって平均値を求める。（17）
+  explanation: 'まず、153 ÷ 9 を計算して、平均値を求める。（17）
 
     次に、データを大きさの順に並べ、中央の値（個数が偶数のときは中央に並ぶ値どうしの平均）を求める。（13）
 
-    最後に、もっとも個数が多く現れる値を求める。（平均値 17、中央値 13、最頻値 5）'
+    最後に、5 が 2 回で、いちばん多く現れる。（5）'
   hints:
   - データの値をすべて足し合わせ、個数でわって平均値を求める。
   - データを大きさの順に並べ、中央の値（個数が偶数のときは中央に並ぶ値どうしの平均）を求める。
@@ -45,18 +45,21 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: 153 ÷ 9 を計算して、平均値を求める。
     narration: データの値をすべて足し合わせ、個数でわって平均値を求める。
     op: compute_mean
     result_display: '17'
     result_srepr: ''
   - args: []
+    detail: ''
     narration: データを大きさの順に並べ、中央の値（個数が偶数のときは中央に並ぶ値どうしの平均）を求める。
     op: compute_median
     result_display: '13'
     result_srepr: ''
   - args: []
+    detail: 5 が 2 回で、いちばん多く現れる。
     narration: もっとも個数が多く現れる値を求める。
     op: compute_mode
-    result_display: 平均値 17、中央値 13、最頻値 5
+    result_display: '5'
     result_srepr: Tuple(Integer(17), Integer(13), Integer(5))
 visual_svg: null

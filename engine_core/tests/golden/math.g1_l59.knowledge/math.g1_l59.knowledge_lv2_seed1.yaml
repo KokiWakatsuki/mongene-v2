@@ -44,6 +44,7 @@ sub_questions:
   prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 試行回数を増やしたときに相対度数が近づく値が、何を表すかを思い出す。
     op: recall_relative_frequency_limit
     result_display: その事象の起こる確率

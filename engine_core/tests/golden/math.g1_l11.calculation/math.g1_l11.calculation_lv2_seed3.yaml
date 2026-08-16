@@ -35,9 +35,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - prime_factorization.execute_advanced
-  explanation: 'まず、小さい素数でわり切れなくなったら、次に大きい素数を順に試して、わり切れる素数があるか（残った数が素数かどうか）を調べる。（17）
+  explanation: 'まず、小さい素数でわり切れなくなったら、次に大きい素数を順に試して、わり切れる素数があるか（残った数が素数かどうか）を調べる。（7 ではわり切れない）
 
-    次に、小さい素数から順にわり、商が素数になるまでわり続ける。（2、3、5）
+    次に、1020 を、わり切れる素数 2 からわっていく。（1020 ÷ 2 = 510、510 ÷ 2 = 255、255 ÷ 3 = 85、85 ÷ 5 = 17）
 
     最後に、現れた素数を、同じ素数の個数を指数にして、累乗の積の形に表す。（2²×3×5×17）'
   hints:
@@ -47,16 +47,19 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 小さい素数でわり切れなくなったら、次に大きい素数を順に試して、わり切れる素数があるか（残った数が素数かどうか）を調べる。
     op: test_successive_prime_divisors
-    result_display: '17'
+    result_display: 7 ではわり切れない
     result_srepr: 2**2*3*5*17
   - args: []
+    detail: 1020 を、わり切れる素数 2 からわっていく。
     narration: 小さい素数から順にわり、商が素数になるまでわり続ける。
     op: divide_out_primes_in_order
-    result_display: 2、3、5
+    result_display: 1020 ÷ 2 = 510、510 ÷ 2 = 255、255 ÷ 3 = 85、85 ÷ 5 = 17
     result_srepr: 2**2*3*5*17
   - args: []
+    detail: ''
     narration: 現れた素数を、同じ素数の個数を指数にして、累乗の積の形に表す。
     op: write_prime_power_form
     result_display: 2²×3×5×17

@@ -35,9 +35,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - simultaneous_equations.solve_by_substitution
-  explanation: 'まず、一方の式の y を、もう一方の式に代入して x だけの方程式にする。（-5x = -20）
+  explanation: 'まず、もう一方の式の y に 10 - 2x を代入すると、-3x + (10 - 2x) = -10 になる。（-5x = -20）
 
-    次に、x の値を求める。（x = 4）
+    次に、両辺を x の係数 -5 でわる。（x = 4）
 
     最後に、求めた x を y = … の式に代入して y を求める。（y = 2）'
   hints:
@@ -49,18 +49,21 @@ sub_questions:
   - args:
     - y = 10 - 2x
     - -3x + y = -10
+    detail: もう一方の式の y に 10 - 2x を代入すると、-3x + (10 - 2x) = -10 になる。
     narration: 一方の式の y を、もう一方の式に代入して x だけの方程式にする。
     op: substitute_expr
     result_display: -5x = -20
     result_srepr: Equality(Mul(Integer(-1), Integer(5), Symbol('x')), Integer(-20))
   - args:
     - -5x = -20
+    detail: 両辺を x の係数 -5 でわる。
     narration: x の値を求める。
     op: solve_for_x
     result_display: x = 4
     result_srepr: Integer(4)
   - args:
     - '4'
+    detail: ''
     narration: 求めた x を y = … の式に代入して y を求める。
     op: back_substitute
     result_display: y = 2

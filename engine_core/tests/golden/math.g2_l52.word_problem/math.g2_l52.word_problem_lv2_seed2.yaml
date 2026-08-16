@@ -44,6 +44,7 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 硬貨を区別して、1枚ごとに表と裏の2通りがあることを枝分かれで書き出し、出方の総数を数える。
     op: enumerate_all_outcomes
     result_display: 8通り
@@ -67,16 +68,19 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 硬貨を区別して、表と裏の出方をすべて書き出す。
     op: enumerate_all_outcomes
     result_display: 全部で8通り
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 書き出した出方のうち、条件にあてはまるものの数を数える。
     op: count_favorable_outcomes
     result_display: あてはまるのは3通り
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 条件にあてはまる出方の数を、すべての出方の数でわる。
     op: compute_probability
     result_display: 3/8

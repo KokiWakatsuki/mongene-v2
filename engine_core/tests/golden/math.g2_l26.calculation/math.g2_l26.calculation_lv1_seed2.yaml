@@ -43,12 +43,14 @@ sub_questions:
   solution_steps:
   - args:
     - -8x + 2y = -16
+    detail: ''
     narration: x の項を右辺に移項し、y の項だけを左辺に残す。
     op: isolate_y_term
     result_display: 2y = 8x - 16
     result_srepr: Equality(Mul(Integer(2), Symbol('y')), Add(Mul(Integer(8), Symbol('x')), Integer(-16)))
   - args:
     - '2'
+    detail: ''
     narration: 両辺を y の係数で割り、y = の形にする。
     op: divide_by_coefficient
     result_display: y = 4x - 8

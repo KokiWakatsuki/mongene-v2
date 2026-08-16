@@ -10,11 +10,14 @@
 """
 from __future__ import annotations
 
+import os
 import re
 from collections import defaultdict
 from pathlib import Path
 
-_SRC = Path("records/work/corpus/INDEX.md")
+# 出力先は `build_corpus.py --out` / 環境変数で動かせる。読む側も同じ場所を見る
+# （engine_core だけをメインへ移したとき、置き場がずれても走査が追えるように）。
+_SRC = Path(os.environ.get("MONGENE_CORPUS_DIR", "records/work/corpus")) / "INDEX.md"
 _CELL_RE = re.compile(r"^##\s+((?:exam|g[123])_l\d+\.\w+\.Lv\d+)")
 
 
@@ -178,14 +181,64 @@ def _last_step_not_answer(a: str, e: str) -> bool:
     return bool(answer_nums) and not (tail_nums & answer_nums)
 
 
+# 数え方（助数詞）につく数。答えの値ではないので、漏洩の判定から外す。
+_COUNTER_NUM = re.compile(r"\d+\s*[辺つ個本回枚人組桁番面点色台冊]")
+
+# 手の**目的**を述べている語（「〜を求める」「〜に直す」…）。
+_PURPOSE_VERB = re.compile(
+    r"(求める|表す|直す|なおす|そろえる|確かめる|たしかめる|調べる|見つける|"
+    r"読み取る|まとめる|つくる|作る|かく|えらぶ|選ぶ|移項|代入|"
+    r"約分|通分|消える|消去|はらう|外す|分ける|加える|あてはめ|当てはめ|"
+    r"書き出す|並べる|判別|とおく|置く|の形|公式|定理|性質|条件)"
+)
+# 計算だけの指示文（`27 を 100 でわる。`）。数と演算しか入っていない。
+# π・√・上付きも「式の一部」として数える（`2π × 3 × 30/360 を計算する` を捕まえる）。
+_BARE_ARITHMETIC = re.compile(r"^[\s\d()+\-×÷/.,、=²³π√２-９]*[をで][^。]{0,12}[るす]。?$")
+
+
+def _instruction_is_bare_arithmetic(e: str) -> list[str]:
+    """指示文が**計算式だけ**になっていないか（何を求めた数なのかが消えている）。
+
+    `Step.detail` は narration を置きかえるので、detail に値だけを書くと
+    **目的が落ちる**。実際に3回踏んだ:
+
+      × まず、27 を 100 でわる。（0.27）            ← 何の数か分からない
+      ○ まず、注目していることがらの数 27 を、全体の数 100 でわって、相対度数を求める。
+
+    「計算式＋動詞」だけで、目的を述べる語が1つも無い指示文を挙げる。
+    """
+    out = []
+    for m in _STEP_RE.finditer(e):
+        instruction = re.sub(r"^(まず|次に|最後に)、", "", m.group(1).strip())
+        if not re.search(r"\d", instruction):
+            continue
+        if _PURPOSE_VERB.search(instruction):
+            continue
+        if _BARE_ARITHMETIC.match(instruction + "。"):
+            out.append(instruction)
+    return out
+
+
 def _hint_leaks_answer(a: str, h: str) -> bool:
     """ヒントに答えの文字列がそのまま出ていないか（先出し）。
 
     2文字以下の答え（「正」「誤」など）は偶然の一致が多いので見ない。
+
+    **値を含む断片だけを見る。** 証明の答えは地の文なので、`、` で割ると
+    「3辺のうち」のような**ただの言い回し**が断片として出てくる。それがヒントに
+    あるだけで「答えが漏れている」と挙げていた（g3_l52.proof.Lv3 で3問の誤検出）。
+    先出しになるのは**答えの値・式**が見えたときなので、数字か記号を含む断片に絞る。
     """
     for part in _answer_parts(a):
         token = part.strip()
-        if len(token) >= 3 and token in h:
+        if len(token) < 3 or token not in h:
+            continue
+        # **助数詞につく数は「値」ではない。** 「3辺のうち」の 3 は数え方であって
+        # 答えではないのに、数字が入っているというだけで挙げていた
+        # （g3_l52.proof.Lv3 で3問の誤検出。G-Q5t が「桁」を counter として
+        # 除いているのと同じ考え方）。
+        stripped = _COUNTER_NUM.sub("", token)
+        if re.search(r"[0-9=＝∥⊥≡∽√°]", stripped):
             return True
     return False
 
@@ -236,6 +289,8 @@ _CHECKS: dict[str, object] = {
     # ヒントに答えが入っていたら先出し（G-Q5t の走査版。ゲートは問題文とヒントを
     # 見るが、こちらは**答えの文字列そのもの**が現れていないかを見る）。
     "ヒントに答えがそのまま出ている": lambda q, a, e, h: _hint_leaks_answer(a, h),
+    # `Step.detail` を入れるときに**目的を落とす**退行の見張り（3回踏んだ）。
+    "解説の指示文が計算式だけ": lambda q, a, e, h: bool(_instruction_is_bare_arithmetic(e)),
 }
 
 

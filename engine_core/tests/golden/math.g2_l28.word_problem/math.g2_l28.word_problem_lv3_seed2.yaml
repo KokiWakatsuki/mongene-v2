@@ -55,6 +55,7 @@ sub_questions:
   - args:
     - '3'
     - (0, 0)
+    detail: ''
     narration: 傾きと通る点の座標を y = ax + b に代入する。
     op: substitute_point
     result_display: 3 × 0 + b = 0
@@ -62,6 +63,7 @@ sub_questions:
   - args:
     - '3'
     - (0, 0)
+    detail: ''
     narration: 代入した式を b について解き、切片を求める。
     op: compute_intercept
     result_display: 切片 b = 0
@@ -69,6 +71,7 @@ sub_questions:
   - args:
     - '3'
     - '0'
+    detail: ''
     narration: 傾きと切片から一次関数の式を組み立てる。
     op: form_expression
     result_display: y = 3x
@@ -94,6 +97,7 @@ sub_questions:
   - args:
     - '2'
     - (15, 45)
+    detail: ''
     narration: 傾きと通る点の座標を y = ax + b に代入する。
     op: substitute_point
     result_display: 2 × 15 + b = 45
@@ -101,6 +105,7 @@ sub_questions:
   - args:
     - '2'
     - (15, 45)
+    detail: ''
     narration: 代入した式を b について解き、切片を求める。
     op: compute_intercept
     result_display: 切片 b = 15
@@ -108,6 +113,7 @@ sub_questions:
   - args:
     - '2'
     - '15'
+    detail: ''
     narration: 傾きと切片から一次関数の式を組み立てる。
     op: form_expression
     result_display: y = 2x + 15
@@ -119,11 +125,11 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - linear_function.word_problem_piecewise_tank
-  explanation: 'まず、左辺を x の項だけにするために、両辺に同じ数をたすかひくかする。（2x + 15 - 15 = 67 - 15）
+  explanation: 'まず、左辺を x の項だけにするために、両辺から 15 をひく。（2x + 15 - 15 = 67 - 15）
 
     次に、両辺の同類項をそれぞれまとめて、ax = b の形にする。（2x = 52）
 
-    最後に、等式の性質を使い、両辺を x の係数でわる。（x = 26）'
+    最後に、等式の性質を使い、両辺を x の係数 2 でわる。（x = 26）'
   hints:
   - 左辺を x の項だけにするために、両辺に同じ数をたすかひくかする。
   - 両辺の同類項をそれぞれまとめて、ax = b の形にする。
@@ -131,16 +137,19 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: 左辺を x の項だけにするために、両辺から 15 をひく。
     narration: 左辺を x の項だけにするために、両辺に同じ数をたすかひくかする。
     op: subtract_constant_both_sides
     result_display: 2x + 15 - 15 = 67 - 15
     result_srepr: Integer(26)
   - args: []
+    detail: ''
     narration: 両辺の同類項をそれぞれまとめて、ax = b の形にする。
     op: combine_like_terms
     result_display: 2x = 52
     result_srepr: Integer(26)
   - args: []
+    detail: 等式の性質を使い、両辺を x の係数 2 でわる。
     narration: 等式の性質を使い、両辺を x の係数でわる。
     op: divide_both_sides
     result_display: x = 26

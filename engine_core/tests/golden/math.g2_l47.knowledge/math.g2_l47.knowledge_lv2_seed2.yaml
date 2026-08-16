@@ -47,11 +47,13 @@ sub_questions:
   prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 四角形で示されている、等しい・平行である要素が何かを読み取る。
     op: identify_given_elements
     result_display: ''
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 平行四辺形になるための5条件のうち、示されている要素がどれに当てはまるかを判別する。
     op: match_parallelogram_condition
     result_display: 対角線がそれぞれの中点で交わる条件

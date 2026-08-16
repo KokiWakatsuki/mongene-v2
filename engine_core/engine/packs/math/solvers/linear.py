@@ -315,16 +315,21 @@ def intersection_of_two_lines(
                 op="equate_expressions",
                 args=[sympy.sstr(eq1), sympy.sstr(eq2)],
                 result_srepr=sympy.srepr(sympy.Eq(x_sym, x0)),
-                result_display=f"x = {_format_number(x0)}",
+                # **立てた方程式そのものを見せる。** ここが `x = 2`（＝解）だったので、
+                # 1手目で答えが出てしまい、次の手「x の値を求める」が
+                # **同じ値をもう一度書くだけの空手**になっていた。
+                result_display=_format_equation_display(
+                    sympy.Eq((C1 - A1 * x_sym) / B1, (C2 - A2 * x_sym) / B2)
+                ),
                 # 「2つの直線」: 助数詞「つ」除外により先頭 "2" が答えと衝突する偽陽性を避ける。
-                narration="2つの直線の y を等しいとおき、x についての方程式を解く。",
+                narration="2つの直線の y を等しいとおき、x についての方程式をつくる。",
             ),
             Step(
                 op="solve_for_x",
                 args=[_format_number(x0)],
                 result_srepr=sympy.srepr(x0),
                 result_display=f"x = {_format_number(x0)}",
-                narration="x の値を求める。",
+                narration="その方程式を解いて、x の値を求める。",
             ),
             Step(
                 op="compute_y",
@@ -1047,14 +1052,16 @@ def evaluate_two_var_lhs(a: object, b: object, x_cand: object, y_cand: object) -
                 f"{_format_number(a_s)} × {_paren_number(x_s)}"
                 f" + {_format_number(b_s)} × {_paren_number(y_s)}"
             ),
-            narration="左辺の x と y に、与えられた値をそれぞれ代入する。",
+            # **この問題は等式ではなく「式の値」**（2x + 4y に代入する）。
+            # 「左辺」と呼ぶと、ありもしない右辺があるように読める。
+            narration="式の x と y に、与えられた値をそれぞれ代入する。",
         ),
         Step(
             op="compute_lhs",
             args=[],
             result_srepr=sympy.srepr(lhs),
             result_display=_format_number(lhs),
-            narration="代入した左辺を計算して、その値を求める。",
+            narration="代入した式を計算して、その値を求める。",
         ),
     ]
     answer = SymbolicAnswer(srepr=sympy.srepr(lhs), display=_format_number(lhs))
@@ -1154,11 +1161,18 @@ def linear_slope_as_rate(a: object) -> Solution:
             op="compute_increment",
             args=[],
             result_srepr=sympy.srepr(a_s),
+            # `×` は数とかっこの間には書かない（教科書の書き方）。
             result_display=(
-                f"({_format_number(a_s)} × (x + 1) + b) - ({_format_number(a_s)} × x + b)"
+                f"({_format_number(a_s)}(x + 1) + b) - ({_format_number(a_s)}x + b)"
             ),
             # 数字を出さない（§5-#9: narration/ヒントに数値を書かない）。
             narration="x が1増えると y がいくつ増えるかを、式の変化から調べる。",
+            # **b が何なのかを言う。** 断りなく `b` が現れていたので、
+            # 問題文（y = -9x - 1）に無い文字が突然出てくるように読めた。
+            detail=(
+                f"切片を b とおくと、x を 1 増やしたときの y の変化は "
+                f"({_format_number(a_s)}(x + 1) + b) - ({_format_number(a_s)}x + b) になる。"
+            ),
         ),
         Step(
             op="state_rate_of_change",
@@ -1166,6 +1180,11 @@ def linear_slope_as_rate(a: object) -> Solution:
             result_srepr=sympy.srepr(a_s),
             result_display=_format_number(a_s),
             narration="1次関数では、x が1増えるときの y の増加量は傾きに等しい。",
+            # **計算せずに結論だけ言っていた。** b どうし・x の項どうしが消えることを見せる。
+            detail=(
+                f"b どうしも {_format_number(a_s)}x どうしも消えるので、"
+                f"残るのは {_format_number(a_s)} になる。"
+            ),
         ),
     ]
     answer = SymbolicAnswer(srepr=sympy.srepr(a_s), display=_format_number(a_s))

@@ -42,11 +42,13 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 4点が同一円周上にあることから、同じ弧に対応する角の大きさを読み取る。
     op: identify_same_arc_angle
     result_display: 71°
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 同じ弧に対する円周角の大きさはすべて等しいことから、求める角の大きさを求める。
     op: transfer_by_inscribed_angle_equality
     result_display: 71°

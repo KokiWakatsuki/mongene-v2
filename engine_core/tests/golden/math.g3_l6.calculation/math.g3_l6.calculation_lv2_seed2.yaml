@@ -44,11 +44,13 @@ sub_questions:
   prompt_text: 式を簡単にしなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: それぞれのかっこを乗法公式で展開する。
     op: expand_each_part
     result_display: (t² - 12t + 36) - (t² + 14t + 48)
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 同類項をまとめて計算する。
     op: combine_like_terms
     result_display: -26t - 12

@@ -35,18 +35,20 @@ sub_questions:
   - sector.arc_length_or_area
   explanation: 'まず、おうぎ形の半径と中心角の大きさを読み取る。（半径 9、中心角 60°）
 
-    次に、おうぎ形の面積の公式（半径の2乗×中心角の割合×π）にあてはめて計算する。（27π/2）'
+    次に、おうぎ形の面積の公式にあてはめて、π × 9² × 60/360 を計算する。（27π/2）'
   hints:
   - おうぎ形の半径と中心角の大きさを読み取る。
   label: (1)
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: おうぎ形の半径と中心角の大きさを読み取る。
     op: identify_radius_and_angle
     result_display: 半径 9、中心角 60°
     result_srepr: ''
   - args: []
+    detail: おうぎ形の面積の公式にあてはめて、π × 9² × 60/360 を計算する。
     narration: おうぎ形の面積の公式（半径の2乗×中心角の割合×π）にあてはめて計算する。
     op: apply_sector_formula
     result_display: 27π/2

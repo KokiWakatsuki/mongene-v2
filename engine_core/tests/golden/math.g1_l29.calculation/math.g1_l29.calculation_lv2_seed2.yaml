@@ -33,31 +33,34 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - direct_proportion.evaluate_at_x
-  explanation: 'まず、比例定数とxの値、それぞれの符号（正か負か）を確認する。（aは正、xは正）
+  explanation: 'まず、比例定数と x の値、それぞれの符号（正か負か）を確認する。（aは正、xは正）
 
     次に、比例定数と x の値を、比例の式 y=ax の x にあてはめる。（y = 1/4 × 1）
 
     最後に、かけ算を計算して y の値を求める。（y = 1/4）'
   hints:
-  - 比例定数とxの値、それぞれの符号（正か負か）を確認する。
+  - 比例定数と x の値、それぞれの符号（正か負か）を確認する。
   - 比例定数と x の値を、比例の式 y=ax の x にあてはめる。
   label: (1)
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
-    narration: 比例定数とxの値、それぞれの符号（正か負か）を確認する。
+    detail: ''
+    narration: 比例定数と x の値、それぞれの符号（正か負か）を確認する。
     op: check_signs
     result_display: aは正、xは正
     result_srepr: Rational(1, 4)
   - args:
     - 1/4
     - '1'
+    detail: ''
     narration: 比例定数と x の値を、比例の式 y=ax の x にあてはめる。
     op: substitute_x
     result_display: y = 1/4 × 1
     result_srepr: Rational(1, 4)
   - args:
     - y = 1/4 × 1
+    detail: ''
     narration: かけ算を計算して y の値を求める。
     op: evaluate
     result_display: y = 1/4

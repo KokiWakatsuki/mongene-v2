@@ -53,6 +53,7 @@ sub_questions:
   - args:
     - '1'
     - (2, 8)
+    detail: ''
     narration: 傾きと通る点の座標を y = ax + b に代入する。
     op: substitute_point
     result_display: 1 × 2 + b = 8
@@ -60,6 +61,7 @@ sub_questions:
   - args:
     - '1'
     - (2, 8)
+    detail: ''
     narration: 代入した式を b について解き、切片を求める。
     op: compute_intercept
     result_display: 切片 b = 6
@@ -67,6 +69,7 @@ sub_questions:
   - args:
     - '1'
     - '6'
+    detail: ''
     narration: 傾きと切片から一次関数の式を組み立てる。
     op: form_expression
     result_display: y = x + 6

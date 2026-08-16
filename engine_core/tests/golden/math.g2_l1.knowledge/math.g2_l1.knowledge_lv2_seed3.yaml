@@ -44,11 +44,13 @@ sub_questions:
   prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 式が、単独の項か、いくつかの項の和かを見分ける。
     op: count_terms
     result_display: 2項
     result_srepr: Add(Mul(Integer(7), Symbol('b')), Integer(8))
   - args: []
+    detail: ''
     narration: 単独の項なら単項式、いくつかの項の和なら多項式である。
     op: classify_type
     result_display: 多項式

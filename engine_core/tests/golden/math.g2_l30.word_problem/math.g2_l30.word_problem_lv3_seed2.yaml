@@ -53,6 +53,7 @@ sub_questions:
   - args:
     - '50'
     - (0, 0)
+    detail: ''
     narration: 傾きと通る点の座標を y = ax + b に代入する。
     op: substitute_point
     result_display: 50 × 0 + b = 0
@@ -60,6 +61,7 @@ sub_questions:
   - args:
     - '50'
     - (0, 0)
+    detail: ''
     narration: 代入した式を b について解き、切片を求める。
     op: compute_intercept
     result_display: 切片 b = 0
@@ -67,6 +69,7 @@ sub_questions:
   - args:
     - '50'
     - '0'
+    detail: ''
     narration: 傾きと切片から一次関数の式を組み立てる。
     op: form_expression
     result_display: y = 50x
@@ -80,16 +83,17 @@ sub_questions:
   - linear_function.word_problem_meeting_intersection
   explanation: 'まず、もう一方の人が出発地点から相手に向かって進むようすを、道のりの式で表す。（y = 1760 - 60x）
 
-    次に、2つの直線の y を等しいとおき、x についての方程式を解く。（x = 16）
+    次に、2つの直線の y を等しいとおき、x についての方程式をつくる。（50x = 1760 - 60x）
 
-    最後に、x の値を求める。（x = 16）'
+    最後に、その方程式を解いて、x の値を求める。（x = 16）'
   hints:
   - もう一方の人が出発地点から相手に向かって進むようすを、道のりの式で表す。
-  - 2つの直線の y を等しいとおき、x についての方程式を解く。
+  - 2つの直線の y を等しいとおき、x についての方程式をつくる。
   label: (2)
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: もう一方の人が出発地点から相手に向かって進むようすを、道のりの式で表す。
     op: formulate_line_b
     result_display: y = 1760 - 60x
@@ -97,13 +101,15 @@ sub_questions:
   - args:
     - Eq(50*x - y, 0)
     - Eq(60*x + y, 1760)
-    narration: 2つの直線の y を等しいとおき、x についての方程式を解く。
+    detail: ''
+    narration: 2つの直線の y を等しいとおき、x についての方程式をつくる。
     op: equate_expressions
-    result_display: x = 16
+    result_display: 50x = 1760 - 60x
     result_srepr: Equality(Symbol('x'), Integer(16))
   - args:
     - '16'
-    narration: x の値を求める。
+    detail: ''
+    narration: その方程式を解いて、x の値を求める。
     op: solve_for_x
     result_display: x = 16
     result_srepr: Integer(16)

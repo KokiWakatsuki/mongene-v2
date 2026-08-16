@@ -35,9 +35,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - prime_factorization.execute_advanced
-  explanation: 'まず、小さい素数でわり切れなくなったら、次に大きい素数を順に試して、わり切れる素数があるか（残った数が素数かどうか）を調べる。（11、19）
+  explanation: 'まず、小さい素数でわり切れなくなったら、次に大きい素数を順に試して、わり切れる素数があるか（残った数が素数かどうか）を調べる。（2、3、5、7 ではわり切れない）
 
-    次に、小さい素数から順にわり、商が素数になるまでわり続ける。（わり切れない）
+    次に、2299 を、わり切れる素数 11 からわっていく。（2299 ÷ 11 = 209、209 ÷ 11 = 19）
 
     最後に、現れた素数を、同じ素数の個数を指数にして、累乗の積の形に表す。（11²×19）'
   hints:
@@ -47,16 +47,19 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 小さい素数でわり切れなくなったら、次に大きい素数を順に試して、わり切れる素数があるか（残った数が素数かどうか）を調べる。
     op: test_successive_prime_divisors
-    result_display: 11、19
+    result_display: 2、3、5、7 ではわり切れない
     result_srepr: 11**2*19
   - args: []
+    detail: 2299 を、わり切れる素数 11 からわっていく。
     narration: 小さい素数から順にわり、商が素数になるまでわり続ける。
     op: divide_out_primes_in_order
-    result_display: わり切れない
+    result_display: 2299 ÷ 11 = 209、209 ÷ 11 = 19
     result_srepr: 11**2*19
   - args: []
+    detail: ''
     narration: 現れた素数を、同じ素数の個数を指数にして、累乗の積の形に表す。
     op: write_prime_power_form
     result_display: 11²×19

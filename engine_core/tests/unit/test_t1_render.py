@@ -205,6 +205,50 @@ def test_explanation_is_deterministic_concatenation_of_narration_and_display():
 
 
 # ---------------------------------------------------------------------------
+# Step.detail: 解説だけに出る（ヒント・問題文には流れない）
+#
+# detail は**実際の値で操作を名指しする**ための欄なので、数字を持つ。ヒントや
+# 問題文に漏れると G-Q5t（答えの先出し）の穴になる。「解説にしか出ない」を
+# 検査で固定する（`Step` の docstring・鉄則⑦）。
+# ---------------------------------------------------------------------------
+def _mk_mr_with_detail() -> MR:
+    mr = _mk_mr(steps_count=2)
+    mr.sub_questions[0].steps[0].detail = "両辺から 5 をひく。"
+    return mr
+
+
+def test_explanation_prefers_detail_over_narration():
+    registry = _registry_with_template("stem")
+    explanation = render_text(_mk_mr_with_detail(), _mk_ctx(), registry=registry).explanations["(1)"]
+
+    assert "両辺から 5 をひく。" in explanation
+    # detail を書いた手は narration が出ない（二重に出ると同じことを2回言う）
+    assert "narration0" not in explanation
+    # 書いていない手は従来どおり narration が出る
+    assert "narration1" in explanation
+
+
+def test_detail_never_reaches_hints():
+    registry = _registry_with_template("stem")
+    hints = render_text(_mk_mr_with_detail(), _mk_ctx(hints=["steps_prefix"]), registry=registry).hints["(1)"]
+
+    assert hints == ["narration0"]
+    assert not any("5" in h for h in hints), hints
+
+
+def test_detail_is_not_exposed_to_templates():
+    """テンプレートから detail を書けない＝問題文に漏れないことを構造で保つ。"""
+    tctx = TemplateContext.from_mr(_mk_mr_with_detail())
+    assert not hasattr(tctx.sub_questions[0], "detail")
+    assert not hasattr(tctx.sub_questions[0], "details")
+
+    # テンプレートが detail を参照しても、Jinja は未定義として空を返す（本文に出ない）
+    registry = _registry_with_template("{{ sub_questions[0].details }}stem")
+    text = render_text(_mk_mr_with_detail(), _mk_ctx(), registry=registry).problem_text
+    assert "5" not in text, text
+
+
+# ---------------------------------------------------------------------------
 # explanation の接続詞列: 「最後に、」は最終ステップ専用（steps>=3）
 # steps が4個以上でも「最後に、」が途中に出ないことを pin する
 # ---------------------------------------------------------------------------

@@ -44,11 +44,13 @@ sub_questions:
   prompt_text: 式を簡単にしなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 根号どうしの乗除を先に計算して、1つの根号にまとめる。
     op: multiply_and_simplify_roots
     result_display: √1600 + √40
     result_srepr: ''
   - args: []
+    detail: ''
     narration: それぞれの根号を簡単にし、根号の中が同じ項をまとめる。
     op: combine_like_radicals_final
     result_display: 2√10 + 40

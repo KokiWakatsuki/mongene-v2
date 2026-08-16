@@ -49,16 +49,19 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 底面は正方形だから、となり合う辺を直角をはさむ2辺とみて、三平方の定理から底面の対角線の長さを求める。
     op: compute_base_diagonal
     result_display: 16√2 cm
     result_srepr: Mul(Integer(16), Pow(Integer(2), Rational(1, 2)))
   - args: []
+    detail: ''
     narration: 頂点から底面に下ろした垂線の足は底面の対角線の交点だから、対角線の長さの半分が、直角三角形の直角をはさむ一方の辺になる。
     op: halve_base_diagonal
     result_display: 8√2 cm
     result_srepr: Mul(Integer(8), Pow(Integer(2), Rational(1, 2)))
   - args: []
+    detail: ''
     narration: 側面の辺を斜辺、いま求めた長さを直角をはさむ一方の辺とする直角三角形で、三平方の定理から高さを求める。
     op: apply_pythagorean_theorem
     result_display: 2√17 cm
@@ -79,11 +82,13 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 底面は正方形だから、その1辺の長さから底面積を求める。
     op: compute_base_area
     result_display: 256 cm²
     result_srepr: Integer(256)
   - args: []
+    detail: ''
     narration: 角錐の体積は、底面積と高さの積の三分の一で求められることを使って、体積を求める。
     op: apply_pyramid_volume_rule
     result_display: 512√17/3 cm³

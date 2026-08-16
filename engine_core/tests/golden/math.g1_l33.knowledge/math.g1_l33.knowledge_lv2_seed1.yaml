@@ -48,11 +48,13 @@ sub_questions:
   prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 表の対応するxとyについて、積xyをそれぞれ計算する。
     op: compute_product_xy
     result_display: 96、96、96、132
     result_srepr: '[''Integer(96)'', ''Integer(96)'', ''Integer(96)'', ''Integer(132)'']'
   - args: []
+    detail: ''
     narration: 積xyがすべて等しければ反比例するといえる。等しくなければ反比例するとはいえない。
     op: judge_constant_product
     result_display: 反比例するとはいえない

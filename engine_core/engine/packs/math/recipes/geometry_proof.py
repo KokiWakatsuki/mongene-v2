@@ -87,7 +87,12 @@ def build_problem(
     con = builder(params)
     rules = tuple(r for r in RULES if r.name not in exclude_rules)
     ded = saturate(
-        con.points, frozenset(con.facts), rules=rules, ray_classes=con.ray_classes()
+        con.points,
+        # 「間にある」は作図の手順が持っている事実（`Construction.between_facts`）。
+        # 対頂角の規則が「本当に交わっているか」を見るのに要る。
+        frozenset(con.facts) | con.between_facts(),
+        rules=rules,
+        ray_classes=con.ray_classes(),
     )
     goal = select_goal(
         ded, level=level, allowed_topics=topics_of(topic_set), prefer=prefer, depth=depth

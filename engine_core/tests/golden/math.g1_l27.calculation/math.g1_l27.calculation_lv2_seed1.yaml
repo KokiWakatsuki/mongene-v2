@@ -35,20 +35,22 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - equation.solve_speed_fraction
-  explanation: 'まず、分母の最小公倍数を両辺にかけて、分母をはらう。（11x = 594）
+  explanation: 'まず、分母の最小公倍数 18 を両辺にかけて、分母をはらう。（11x = 594）
 
-    次に、等式の性質を使い、両辺を x の係数でわる。（x = 54）'
+    次に、等式の性質を使い、両辺を x の係数 11 でわる。（x = 54）'
   hints:
   - 分母の最小公倍数を両辺にかけて、分母をはらう。
   label: (1)
   prompt_text: 解を求めなさい。
   solution_steps:
   - args: []
+    detail: 分母の最小公倍数 18 を両辺にかけて、分母をはらう。
     narration: 分母の最小公倍数を両辺にかけて、分母をはらう。
     op: clear_denominators
     result_display: 11x = 594
     result_srepr: Integer(54)
   - args: []
+    detail: 等式の性質を使い、両辺を x の係数 11 でわる。
     narration: 等式の性質を使い、両辺を x の係数でわる。
     op: divide_both_sides
     result_display: x = 54

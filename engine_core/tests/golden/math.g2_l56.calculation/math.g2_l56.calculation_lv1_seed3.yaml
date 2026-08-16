@@ -35,20 +35,22 @@ sub_questions:
   - quartile.compute_five_number_summary
   explanation: 'まず、データを大きさの順に並べ、いちばん小さい値といちばん大きい値を求める。（最小値 2、最大値 49）
 
-    次に、中央値を境に下組と上組に分け、それぞれの中央値を第一四分位数・第三四分位数とする。（最小値 2、最大値 49、第1四分位数 10、第3四分位数 41）'
+    次に、下組 2、10、10、13、21 の中央値が第1四分位数、上組 30、31、41、46、49 の中央値が第3四分位数になる。（第1四分位数 10、第3四分位数 41）'
   hints:
   - データを大きさの順に並べ、いちばん小さい値といちばん大きい値を求める。
   label: (1)
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: データを大きさの順に並べ、いちばん小さい値といちばん大きい値を求める。
     op: identify_min_max
     result_display: 最小値 2、最大値 49
     result_srepr: ''
   - args: []
-    narration: 中央値を境に下組と上組に分け、それぞれの中央値を第一四分位数・第三四分位数とする。
+    detail: 下組 2、10、10、13、21 の中央値が第1四分位数、上組 30、31、41、46、49 の中央値が第3四分位数になる。
+    narration: 中央値を境に下組と上組に分け、それぞれの中央値を第1四分位数・第3四分位数とする。
     op: compute_q1_q3
-    result_display: 最小値 2、最大値 49、第1四分位数 10、第3四分位数 41
+    result_display: 第1四分位数 10、第3四分位数 41
     result_srepr: Tuple(Integer(2), Integer(49), Integer(10), Integer(41))
 visual_svg: null

@@ -44,11 +44,13 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: わる数の逆数をかけるかけ算に直す。
     op: rewrite_division_as_reciprocal
     result_display: (-40) × (-1/5)
     result_srepr: Integer(8)
   - args: []
+    detail: ''
     narration: 符号に注意してかけ算を計算する。
     op: multiply_signed
     result_display: '8'

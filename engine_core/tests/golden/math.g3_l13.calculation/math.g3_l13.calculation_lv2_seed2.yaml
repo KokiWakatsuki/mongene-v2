@@ -44,11 +44,13 @@ sub_questions:
   prompt_text: 式を簡単にしなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 2つの平方の差を、和と差の積の形になおす。
     op: apply_diff_of_squares_formula
     result_display: ((3n - 8) + (3n - 5))((3n - 8) - (3n - 5))
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 積の形を計算し、式を簡単にする。
     op: simplify_result
     result_display: 39 - 18n

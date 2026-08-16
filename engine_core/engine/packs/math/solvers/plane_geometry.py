@@ -245,6 +245,16 @@ def sector_arc_length_or_area(radius: object, angle: object, target: object) -> 
             result_srepr=srepr,
             result_display=disp,
             narration=narration,
+            # **公式に値を入れた式が1行も無かった。** 「公式にあてはめて計算する」と
+            # 言うだけで、`2π × 3 × 30/360` が出ていない（実物は必ず代入式を書く）。
+            # detail は narration を置きかえるので、**目的（何の公式か）を落とさない**。
+            detail=(
+                f"弧の長さの公式にあてはめて、2π × {sympy.sstr(r)} × "
+                f"{sympy.sstr(a)}/360 を計算する。"
+                if t == "arc_length"
+                else f"おうぎ形の面積の公式にあてはめて、π × {sympy.sstr(r)}² × "
+                     f"{sympy.sstr(a)}/360 を計算する。"
+            ),
         ),
     ]
     answer = SymbolicAnswer(srepr=srepr, display=disp)

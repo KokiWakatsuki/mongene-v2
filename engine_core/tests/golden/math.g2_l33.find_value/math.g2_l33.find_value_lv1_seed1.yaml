@@ -42,11 +42,13 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: わかっている2つの内角の大きさを読み取る。
     op: identify_two_interior_angles
     result_display: 81° と 60°
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 三角形の内角の和が一直線の角(平角)に等しいことから、残りの内角の大きさを求める。
     op: subtract_from_sum
     result_display: '39'

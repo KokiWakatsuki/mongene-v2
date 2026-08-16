@@ -33,20 +33,22 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - similarity.x_shape_length
-  explanation: 'まず、HJ∥KL であることから、対頂角と錯角がそれぞれ等しくなる相似な三角形（三角形MHJと三角形MKL）の組を見つける。
+  explanation: 'まず、HJ∥KL であることから、対頂角と錯角がそれぞれ等しくなる相似な三角形の組を見つける。（三角形MHJ と 三角形MKL）
 
-    次に、相似な三角形の対応する辺の長さの比が等しい（MH:MK=MJ:ML）ことから、求める辺の長さを求める。（25）'
+    次に、MH:MK=MJ:ML に値を入れて 7:35 = 5:ML を解き、求める辺の長さを求める。（25）'
   hints:
-  - HJ∥KL であることから、対頂角と錯角がそれぞれ等しくなる相似な三角形（三角形MHJと三角形MKL）の組を見つける。
+  - HJ∥KL であることから、対頂角と錯角がそれぞれ等しくなる相似な三角形の組を見つける。
   label: (1)
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
-    narration: HJ∥KL であることから、対頂角と錯角がそれぞれ等しくなる相似な三角形（三角形MHJと三角形MKL）の組を見つける。
+    detail: ''
+    narration: HJ∥KL であることから、対頂角と錯角がそれぞれ等しくなる相似な三角形の組を見つける。
     op: identify_similar_triangles_in_x_shape
-    result_display: ''
+    result_display: 三角形MHJ と 三角形MKL
     result_srepr: ''
   - args: []
+    detail: MH:MK=MJ:ML に値を入れて 7:35 = 5:ML を解き、求める辺の長さを求める。
     narration: 相似な三角形の対応する辺の長さの比が等しい（MH:MK=MJ:ML）ことから、求める辺の長さを求める。
     op: apply_proportion
     result_display: '25'

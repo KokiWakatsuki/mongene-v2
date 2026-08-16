@@ -56,21 +56,25 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 容器Aの濃度を x %、容器Bの濃度を y %とおく。
     op: set_variables
     result_display: x, y
     result_srepr: Tuple(Symbol('x'), Symbol('y'))
   - args: []
+    detail: ''
     narration: すべて混ぜたときの食塩の重さの関係に着目して、1つめの式をつくる。
     op: formulate_first
     result_display: 450x/100 + 350y/100 = 80
     result_srepr: Equality(Add(Mul(Rational(9, 2), Symbol('x')), Mul(Rational(7, 2), Symbol('y'))), Integer(80))
   - args: []
+    detail: ''
     narration: 100gずつ混ぜたときの食塩の重さの関係に着目して、2つめの式をつくる。
     op: formulate_second
     result_display: 100x/100 + 100y/100 = 11×200/100
     result_srepr: Equality(Add(Symbol('x'), Symbol('y')), Integer(22))
   - args: []
+    detail: ''
     narration: 2つめの式は両辺を100でわれるので、簡単な形に直す。
     op: reduce_equation
     result_display: x + y = 22
@@ -78,12 +82,14 @@ sub_questions:
   - args:
     - Eq(9*x/2 + 7*y/2, 80)
     - Eq(x + y, 22)
+    detail: ''
     narration: 係数をそろえて一方の文字を消去し、残った文字を求める。
     op: eliminate_variable
     result_display: x = 3
     result_srepr: Equality(Symbol('x'), Integer(3))
   - args:
     - '3'
+    detail: ''
     narration: 求めた値をもとの式に代入し、もう一方の文字を求める。
     op: back_substitute
     result_display: y = 19

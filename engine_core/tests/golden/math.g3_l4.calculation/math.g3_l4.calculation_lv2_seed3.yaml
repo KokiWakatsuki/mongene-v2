@@ -47,16 +47,19 @@ sub_questions:
   prompt_text: 式を簡単にしなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 係数のついたはじめの項を平方する。
     op: square_leading_term
     result_display: 4k²
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 2つの項の積の2倍（中間の項）を求める。
     op: compute_cross_term
     result_display: -4k
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 乗法公式にあてはめて展開した式を書く。
     op: write_expansion
     result_display: 4k² - 4k + 1

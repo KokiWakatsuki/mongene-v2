@@ -48,11 +48,13 @@ sub_questions:
   prompt_text: 式に表しなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 点が最初の辺の上にある間は、速さと経過時間から、動いた道のりを x を使って表す。
     op: locate_point_p
     result_display: 動いた道のりを x で表す
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 三角形の底辺を正方形の1つの辺とみると、高さは動いた道のりに等しいから、面積を x の式で表す。
     op: express_area_on_first_side
     result_display: y = 50x
@@ -73,11 +75,13 @@ sub_questions:
   prompt_text: 式に表しなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 点が次の辺の上に移ったあと、三角形の底辺と高さがどうなるかを確かめる。
     op: determine_which_segment
     result_display: 次の辺の上
     result_srepr: ''
   - args: []
+    detail: ''
     narration: この区間では高さが正方形の1つの辺の長さのまま変わらないので、面積は x によらず一定の値になる。
     op: express_constant_area
     result_display: y = 200

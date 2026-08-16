@@ -44,11 +44,13 @@ sub_questions:
   prompt_text: 式を簡単にしなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 各項の係数と文字に共通する因数を見つける。
     op: identify_common_factor
     result_display: 3st
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 各項に共通する因数をかっこの外にくくり出す。
     op: factor_out_common
     result_display: -3st(4s + t + 1)

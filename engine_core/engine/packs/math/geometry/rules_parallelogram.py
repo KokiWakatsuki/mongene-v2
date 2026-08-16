@@ -364,6 +364,8 @@ PARALLELOGRAM_RULES: tuple[Rule, ...] = (
         "1組の対辺が平行でその長さが等しい",
         _apply_cond_one_pair,
         ("parallelogram",),
+        # 根拠の文が「平行で」と言っているので、その平行を行にして見せる。
+        shows_structural_premises=True,
     ),
     # -- 補助 ---------------------------------------------------------------
     Rule(

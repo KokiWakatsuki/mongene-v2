@@ -49,16 +49,19 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 正方形の面積は1辺の長さを2乗した値だから、1辺の長さは面積の正の平方根で表せる。
     op: express_side_as_square_root
     result_display: √128
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 根号の中を素因数分解し、平方の因数を見つける。
     op: factor_out_square
     result_display: √(64 × 2)
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 平方の因数を根号の外に出して a√b の形にする。
     op: take_root_outside
     result_display: 8√2
@@ -79,11 +82,13 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 根号のついた数を、与えられた近似の値におきかえてかけ算をする。
     op: substitute_root_approximation
     result_display: '11.28'
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 小数第2位を四捨五入して、小数第1位までの値にする。
     op: round_to_first_decimal
     result_display: '11.3'

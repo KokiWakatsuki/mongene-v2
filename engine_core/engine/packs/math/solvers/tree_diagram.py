@@ -18,20 +18,48 @@ from engine.core.registry import register_solver
 
 _TREE_OPS = ["list_first_choices", "branch_second_choices", "count_all_paths"]
 
-_TREE_NARRATION: dict[str, str] = {
-    "list_first_choices": "1回目に起こりうるものをすべて書き出して、"
-                          "はじめの点から枝を分ける。",
-    "branch_second_choices": "その枝それぞれの先で、2回目に起こりうるものを"
+# **「1回目・2回目」と言えるのは、続けて取り出す場面だけ。** 2枚の硬貨を
+# **同時に**投げる問題にも同じ文を当てていたので、問題文と食い違っていた。
+# もとに戻すかどうか（`replace`）が、そのまま2つの場面の区別になる。
+_TREE_NARRATION_SIMULTANEOUS: dict[str, str] = {
+    "list_first_choices": "一方の出方をすべて書き出して、はじめの点から枝を分ける。",
+    "branch_second_choices": "その枝それぞれの先で、もう一方の出方を"
                              "書き出してさらに枝を分ける。",
     "count_all_paths": "枝の先まで進んだ道すじが1つの場合にあたるので、"
                        "それを順に読み上げて、全部で何通りかを数える。",
 }
 
-def _tree_phrase(firsts: list[str], seconds: list[str]) -> dict[str, str]:
+_TREE_NARRATION_SEQUENTIAL: dict[str, str] = {
+    "list_first_choices": "1回目に取り出せるものをすべて書き出して、"
+                          "はじめの点から枝を分ける。",
+    # **もとに戻さないので、2回目の選択肢は枝ごとに変わる。** ここを
+    # 「2回目に起こりうるもの」とだけ書き、括弧にも3色を平らに並べていたので、
+    # 生徒が「2回目も3通り＝9通り」と読めてしまい、答えの6通りと衝突していた。
+    "branch_second_choices": "その枝それぞれの先で、1回目に取り出したものを除いて、"
+                             "2回目に取り出せるものを書き出す。",
+    "count_all_paths": "枝の先まで進んだ道すじが1つの場合にあたるので、"
+                       "それを順に読み上げて、全部で何通りかを数える。",
+}
+
+
+def _tree_phrase(
+    tuples: list[tuple[str, ...]], *, with_replacement: bool
+) -> dict[str, str]:
     """樹形図の手の括弧（枝そのもの）。指示の言い直しは置かない（面③）。"""
+    firsts = list(dict.fromkeys(t[0] for t in tuples))
+    if with_replacement:
+        seconds = list(dict.fromkeys(t[1] for t in tuples if len(t) > 1))
+        second_text = "、".join(seconds)
+    else:
+        # 枝ごとに書く（`白のあとは 黒、青 ／ 黒のあとは 白、青 …`）。
+        per_branch = []
+        for f in firsts:
+            opts = [t[1] for t in tuples if t[0] == f and len(t) > 1]
+            per_branch.append(f"{f}のあとは {'、'.join(opts)}")
+        second_text = " ／ ".join(per_branch)
     return {
         "list_first_choices": "、".join(firsts),
-        "branch_second_choices": "、".join(seconds),
+        "branch_second_choices": second_text,
     }
 
 
@@ -77,11 +105,11 @@ def tree_diagram_outcomes(items: object, draws: object, replace: object) -> Solu
             op=op, args=[],
             result_srepr=srepr if i == len(_TREE_OPS) - 1 else "",
             result_display=disp if i == len(_TREE_OPS) - 1
-            else _tree_phrase(
-                list(dict.fromkeys(t[0] for t in tuples)),
-                list(dict.fromkeys(t[1] for t in tuples if len(t) > 1)),
+            else _tree_phrase(tuples, with_replacement=with_replacement)[op],
+            narration=(
+                _TREE_NARRATION_SIMULTANEOUS if with_replacement
+                else _TREE_NARRATION_SEQUENTIAL
             )[op],
-            narration=_TREE_NARRATION[op],
         )
         for i, op in enumerate(_TREE_OPS)
     ]

@@ -45,16 +45,19 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: RUとUSの比から、RUとRS全体の比になおす。
     op: convert_partial_to_whole_ratio
     result_display: RU:RS = 3:8
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 三角形RUVと三角形RSTは相似であることから、面積比は相似比の二乗に等しいことを使って、三角形RUVと三角形RST全体の面積比を求める。
     op: square_similarity_ratio
     result_display: 9:64
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 三角形RST全体の面積から三角形RUVの面積を除いた残りが台形の面積になることから、三角形RUVと台形の面積比を求める。
     op: compute_trapezoid_remainder_ratio
     result_display: 三角形RUV:台形USTV = 9:55

@@ -44,11 +44,13 @@ sub_questions:
   prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 候補の値を方程式の x にあてはめる。
     op: substitute_candidate
     result_display: 左辺 -47、右辺 -47
     result_srepr: Integer(8)
   - args: []
+    detail: ''
     narration: 左辺と右辺の値が等しければ解、等しくなければ解ではない。
     op: judge_solution
     result_display: 解である

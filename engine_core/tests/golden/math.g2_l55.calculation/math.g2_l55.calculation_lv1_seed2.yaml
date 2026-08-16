@@ -42,11 +42,13 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: データを大きさの順に並べかえる。
     op: sort_data
     result_display: 7、9、14、29、34、48、50
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 並べたデータの中央にある値（中央値）を求める。
     op: compute_median
     result_display: '29'

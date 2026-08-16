@@ -32,8 +32,12 @@ def _fmt_poly_display(expr: sympy.Expr) -> str:
     例: 6*x -> "6x" / x - 5*y -> "x - 5y" / -x**2 -> "-x²"。
     `engine.packs.math.recipes.linear._fmt_expr` と同方針の独立実装
     （linear.py は編集禁止のため、本モジュール専用にヘルパを複製する）。
+
+    **降べきの順で書く（`order="grlex"`）。** 既定の `sstr` は定数を先に置くので
+    `-3(7x - 2)` の答えが `6 - 21x`、`(5n-7)(5n+6)` 型の答えが `13 - 130n` と、
+    中学の答案では書かない並びになっていた。次数の高い項から並べる。
     """
-    s = str(sympy.sstr(expr))
+    s = str(sympy.sstr(expr, order="grlex"))
     s = s.replace("**2", "²").replace("**3", "³")
     return s.replace("*", "")
 
@@ -95,6 +99,23 @@ def grouped_by_variable_part(written_terms: list[sympy.Expr]) -> str:
     return " + ".join(chunks)
 
 
+def _like_terms_detail(terms: list[sympy.Expr]) -> str:
+    """どの項が同類項なのかを名指しする（「-7x と -9x は文字の部分が同じ」）。"""
+    groups: dict[str, list[str]] = {}
+    for t in terms:
+        coeff, rest = t.as_coeff_Mul()
+        key = _fmt_monomial_display(rest) if rest != 1 else "定数"
+        groups.setdefault(key, []).append(_fmt_monomial_display(t))
+    # 文字の前後は空ける（本文の書き方が「x の項」なので、ここも合わせる）。
+    named = [
+        f"{'、'.join(v)} は{k}の項" if k == "定数" else f"{'、'.join(v)} は {k} の項"
+        for k, v in groups.items() if len(v) >= 2
+    ]
+    if not named:
+        return ""
+    return "、".join(named) + "なので、同類項としてまとめる。"
+
+
 @register_solver("math.simplify_polynomial")
 def simplify_polynomial(expr_str: str) -> Solution:
     """同類項をまとめて式を簡単にする（g2_l2.calculation）。
@@ -114,6 +135,9 @@ def simplify_polynomial(expr_str: str) -> Solution:
             result_display=grouped_by_variable_part(_terms_in_written_order(expr_str)),
             # narration に数字を書かない（G-Q5t 偽陽性の元・§5-#9）。
             narration="文字の部分が同じ項（同類項）どうしをまとめる。",
+            # **同類項が1組しかないと、括弧が与式にかっこを付けただけに見える。**
+            # どの項が同類項なのかを名指しして、手に中身を持たせる。
+            detail=_like_terms_detail(_terms_in_written_order(expr_str)),
         ),
         Step(
             op="add_coefficients",
@@ -257,8 +281,14 @@ def compute_monomial_expression(expr_str: str, mode: object) -> Solution:
         f"({fmt_expr(1 / sympy.sympify(t))})" if op == "/" else f"({fmt_expr(sympy.sympify(t))})"
         for op, t in flatten_factors(expr_str)
     )
+    # **符号を先に決める手があるときは、係数の積は絶対値で書く。**
+    # 「符号は -」と決めた直後に `-18` と符号つきで出していたので、
+    # 同じ判断を2回しているように読めた。
+    has_sign_step = "determine_sign" in _MONOMIAL_STEPS[mode_s]
     displays = {
-        "multiply_coefficients": fmt_expr(coeff_product),
+        "multiply_coefficients": fmt_expr(
+            abs(coeff_product) if has_sign_step else coeff_product
+        ),
         "combine_powers": r_disp,
         "determine_sign": f"符号は {'-' if result.as_coeff_Mul()[0] < 0 else '+'}",
         "convert_divisions_to_reciprocal": reciprocal_form,
@@ -474,8 +504,19 @@ def express_number_property(expr_str: str) -> Solution:
             op="expand_expression",
             args=[],
             result_srepr=sympy.srepr(expr),
+            # **かっこを外す前の形を書く。** 「かっこを外して書き出す」と言いながら
+            # 外したあとの `2n + 2n + 2 + 2n + 4` しか出しておらず、
+            # `(2n) + (2n + 2) + (2n + 4)` という**外す前の1行が無かった**
+            # （もとの式にかっこが1つも無いように読める）。
+            result_display=_written_operands(expr_str),
+            narration="それぞれの数を表す式を、かっこをつけて和の形に並べる。",
+        ),
+        Step(
+            op="drop_parentheses",
+            args=[],
+            result_srepr=sympy.srepr(expr),
             result_display=join_signed(_terms_in_written_order(expr_str)),
-            narration="それぞれの数を表す式の和を、かっこを外して書き出す。",
+            narration="かっこを外して、項の和の形にする。",
         ),
         Step(
             op="combine_like_terms",
@@ -487,6 +528,24 @@ def express_number_property(expr_str: str) -> Solution:
     ]
     answer = SymbolicAnswer(srepr=sympy.srepr(simplified), display=disp)
     return Solution(answer=answer, steps=steps)
+
+
+def _written_operands(expr_str: str) -> str:
+    """与式を、**かっこを開く前の書かれた形**にする（`(10d + t) - (10t + d)`）。
+
+    式全体を sympy に渡すと打ち消し合いまで済んでしまうので、深さ0の +- で
+    項に割ってから、項ごとに sympy を通す（項の中では打ち消しが起きない）。
+    """
+    shown: list[tuple[str, str]] = []
+    for op, part in top_level_parts(expr_str, "+-"):
+        inner = part.strip()
+        while inner.startswith("(") and inner.endswith(")"):
+            inner = inner[1:-1].strip()
+        shown.append((op, f"({fmt_expr(sympy.sympify(inner))})"))
+    out = shown[0][1]
+    for op, term in shown[1:]:
+        out += f" {op or '+'} {term}"
+    return out
 
 
 @register_solver("math.combine_digit_number")
@@ -506,7 +565,11 @@ def combine_digit_number(expr_str: str, operation: object) -> Solution:
             op="express_swapped_number",
             args=[],
             result_srepr=sympy.srepr(expr),
-            result_display=fmt_expr(expr),
+            # **かっこを開く前の形を見せる。** `sympy.sympify` は
+            # `(10*d+t)-(10*t+d)` をその場で `9d - 9t` に整理してしまうので、
+            # 「書き出す」と言っている1手目に**もう答えが出ていた**（2手とも `9d - 9t`）。
+            # ここは与式の文字列を項ごとに読んで、`(10d + t) - (10t + d)` を出す。
+            result_display=_written_operands(expr_str),
             narration="もとの数と、位を入れかえた数を、それぞれ文字式で書き出す。",
         ),
         Step(

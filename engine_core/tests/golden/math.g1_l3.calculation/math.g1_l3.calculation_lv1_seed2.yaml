@@ -44,11 +44,13 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: たがいの数の符号を見て、和の符号を先に決める（同符号なら絶対値の和、異符号なら絶対値の差）。
     op: determine_sum_sign
     result_display: +(13 - 1)
     result_srepr: Integer(12)
   - args: []
+    detail: ''
     narration: 決めた符号のもとで絶対値を計算し、和を求める。
     op: add_magnitudes
     result_display: '12'

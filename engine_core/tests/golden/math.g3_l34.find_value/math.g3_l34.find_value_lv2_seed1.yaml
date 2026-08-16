@@ -42,11 +42,13 @@ sub_questions:
   prompt_text: 変域を求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: x の変域の両端の値を、それぞれ式に代入して y の値を求める。
     op: evaluate_endpoints
     result_display: x = 3 のとき y = -27、x = 4 のとき y = -48
     result_srepr: ''
   - args: []
+    detail: ''
     narration: a の符号に注意して、2つの端点の y の値を大小の順に並べる。
     op: order_by_magnitude
     result_display: -48 ≦ y ≦ -27

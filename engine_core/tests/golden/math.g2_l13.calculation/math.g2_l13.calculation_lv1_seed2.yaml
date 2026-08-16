@@ -35,9 +35,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - simultaneous_equations.solve_by_substitution
-  explanation: 'まず、一方の式の y を、もう一方の式に代入して x だけの方程式にする。（4x = -24）
+  explanation: 'まず、もう一方の式の y に x + 6 を代入すると、3x + (x + 6) = -18 になる。（4x = -24）
 
-    次に、x の値を求める。（x = -6）
+    次に、両辺を x の係数 4 でわる。（x = -6）
 
     最後に、求めた x を y = … の式に代入して y を求める。（y = 0）'
   hints:
@@ -49,18 +49,21 @@ sub_questions:
   - args:
     - y = x + 6
     - 3x + y = -18
+    detail: もう一方の式の y に x + 6 を代入すると、3x + (x + 6) = -18 になる。
     narration: 一方の式の y を、もう一方の式に代入して x だけの方程式にする。
     op: substitute_expr
     result_display: 4x = -24
     result_srepr: Equality(Mul(Integer(4), Symbol('x')), Integer(-24))
   - args:
     - 4x = -24
+    detail: 両辺を x の係数 4 でわる。
     narration: x の値を求める。
     op: solve_for_x
     result_display: x = -6
     result_srepr: Integer(-6)
   - args:
     - '-6'
+    detail: ''
     narration: 求めた x を y = … の式に代入して y を求める。
     op: back_substitute
     result_display: y = 0

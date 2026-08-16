@@ -56,31 +56,37 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: y は x の2乗に比例するから、比例定数を a とおいて y=ax² と表し、与えられている x と y の値を代入する。
     op: set_up_proportion_equation
     result_display: y = ax²
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 代入してできた式を a について解いて、比例定数を求める。
     op: solve_for_coefficient
     result_display: a = 5
     result_srepr: Integer(5)
   - args: []
+    detail: ''
     narration: 求めた比例定数を y=ax² にもどして、y を x の式で表す。
     op: form_expression
     result_display: y = 5x²
     result_srepr: Mul(Integer(5), Pow(Symbol('x'), Integer(2)))
   - args: []
+    detail: ''
     narration: 求める時刻を x とみて、距離を表す式に、与えられている距離をあてはめて方程式をつくる。
     op: set_up_equation
     result_display: 5x² = 180
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 両辺を x の2乗にかかっている数でわり、平方根の考え方で x を求める。
     op: solve_for_x
     result_display: x² = 36
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 時刻は正の数だから、求めた解のうち正の解を選ぶ。
     op: select_positive_root
     result_display: 6秒後

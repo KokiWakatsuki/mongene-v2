@@ -45,16 +45,19 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: NRとRPの比から、NRとNP全体の比になおす。
     op: convert_partial_to_whole_ratio
     result_display: NR:NP = 1:11
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 三角形NRSと三角形NPQは相似であることから、面積比は相似比の二乗に等しいことを使って、三角形NRSと三角形NPQ全体の面積比を求める。
     op: square_similarity_ratio
     result_display: 1:121
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 三角形NPQ全体の面積から三角形NRSの面積を除いた残りが台形の面積になることから、三角形NRSと台形の面積比を求める。
     op: compute_trapezoid_remainder_ratio
     result_display: 三角形NRS:台形RPQS = 1:120

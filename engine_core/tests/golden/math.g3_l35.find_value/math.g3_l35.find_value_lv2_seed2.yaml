@@ -42,11 +42,13 @@ sub_questions:
   prompt_text: 変化の割合を求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: x の変域の両端の値を、それぞれ式に代入して y の値を求める。
     op: evaluate_endpoints_roc
     result_display: x = 4 のとき y = 16、x = 5 のとき y = 25
     result_srepr: ''
   - args: []
+    detail: ''
     narration: y の増加量を x の増加量で割り、変化の割合を求める。
     op: compute_rate_of_change
     result_display: '9'

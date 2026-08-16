@@ -44,11 +44,13 @@ sub_questions:
   prompt_text: 式を簡単にしなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 分母と分子に、分母と同じ根号をかける。
     op: multiply_by_same_root
     result_display: (2 × √5) / (√5 × √5)
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 分母を根号のない形にし、約分して簡単にする。
     op: simplify_fraction
     result_display: 2√5/5

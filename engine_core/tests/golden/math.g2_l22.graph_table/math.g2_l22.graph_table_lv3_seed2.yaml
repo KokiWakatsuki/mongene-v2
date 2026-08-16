@@ -109,26 +109,31 @@ sub_questions:
   prompt_text: グラフをかきなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: y 軸との交点（切片）に点をとる。
     op: plot_intercept
     result_display: (0, -1)
     result_srepr: Tuple(Integer(0), Integer(-1))
   - args: []
+    detail: ''
     narration: 切片から、傾きの分母のぶんだけ x 軸の正の向きに進む。
     op: apply_slope_denominator
     result_display: x 方向に 2
     result_srepr: Integer(2)
   - args: []
+    detail: ''
     narration: そこから、傾きの分子のぶんだけ y 軸方向に進む（分子の符号にしたがう）。
     op: apply_slope_numerator
     result_display: y 方向に -5
     result_srepr: Integer(-5)
   - args: []
+    detail: ''
     narration: 進んだ先の格子点に印をつける。
     op: mark_lattice_point
     result_display: (2, -6)
     result_srepr: Tuple(Integer(2), Integer(-6))
   - args: []
+    detail: ''
     narration: 切片と格子点の2点を通る直線をひく。
     op: draw_line
     result_display: -5/2x - 1

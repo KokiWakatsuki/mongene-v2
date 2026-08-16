@@ -39,7 +39,7 @@ sub_questions:
 
     次に、分数・小数を通分してそろえる。（-20/30 - 135/30 - 40/30 + 12/30）
 
-    最後に、正の合計と負の合計を合わせて、答えを求める。（-61/10）'
+    最後に、分子どうしを計算すると -183/30 になるので、約分して答えを求める。（-61/10）'
   hints:
   - かっこを外して、符号のついた項の和とみなす。
   - 分数・小数を通分してそろえる。
@@ -47,16 +47,19 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: かっこを外して、符号のついた項の和とみなす。
     op: drop_parentheses_to_terms
     result_display: -2/3 - 9/2 - 4/3 + 2/5
     result_srepr: Rational(-61, 10)
   - args: []
+    detail: ''
     narration: 分数・小数を通分してそろえる。
     op: align_fractions
     result_display: -20/30 - 135/30 - 40/30 + 12/30
     result_srepr: Rational(-61, 10)
   - args: []
+    detail: 分子どうしを計算すると -183/30 になるので、約分して答えを求める。
     narration: 正の合計と負の合計を合わせて、答えを求める。
     op: total_terms
     result_display: -61/10

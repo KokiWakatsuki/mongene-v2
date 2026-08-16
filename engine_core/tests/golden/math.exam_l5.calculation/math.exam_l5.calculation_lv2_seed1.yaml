@@ -33,14 +33,15 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - exam.probability_from_counts
-  explanation: まず、ことがらが起こった回数を、試行の総回数でわる。（1/2）
+  explanation: まず、あてはまる場合の数 28 を、起こりうる場合の数 56 でわって、確率を求める。（1/2）
   hints:
-  - ことがらが起こった回数を、試行の総回数でわる。
+  - あてはまる場合の数を、起こりうる場合の数でわって、確率を求める。
   label: (1)
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
-    narration: ことがらが起こった回数を、試行の総回数でわる。
+    detail: あてはまる場合の数 28 を、起こりうる場合の数 56 でわって、確率を求める。
+    narration: あてはまる場合の数を、起こりうる場合の数でわって、確率を求める。
     op: divide_occurred_by_total
     result_display: 1/2
     result_srepr: Rational(1, 2)

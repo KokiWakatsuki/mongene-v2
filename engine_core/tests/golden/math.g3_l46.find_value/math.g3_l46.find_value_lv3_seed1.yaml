@@ -45,16 +45,19 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: PとQの体積の比を、最も簡単な整数の比に直す。
     op: reduce_volume_ratio
     result_display: '216:1'
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 体積の比は相似比の三乗に等しいことから、相似比を求める。
     op: extract_similarity_ratio_via_cube_root
     result_display: '6:1'
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 相似な立体の表面積の比は相似比の二乗に等しいことから、表面積の比を求める。
     op: square_ratio_for_surface_area
     result_display: 表面積の比 36:1

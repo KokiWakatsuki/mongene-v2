@@ -44,11 +44,13 @@ sub_questions:
   prompt_text: 式を簡単にしなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: はじめの項の平方・積の2倍・終わりの項の平方を求める。
     op: compute_square_terms
     result_display: n²、-16n、64
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 乗法公式にあてはめて展開した式を書く。
     op: write_expansion
     result_display: n² - 16n + 64

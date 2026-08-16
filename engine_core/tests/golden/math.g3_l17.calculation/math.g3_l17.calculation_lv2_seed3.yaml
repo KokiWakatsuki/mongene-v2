@@ -47,16 +47,19 @@ sub_questions:
   prompt_text: 式を簡単にしなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: わり算を、逆数をかけるかけ算に直す。
     op: rewrite_division_as_multiplication
     result_display: 2 × √12 × √2 × 1/√5
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 係数どうし・根号の中どうしをそれぞれまとめる。
     op: combine_roots
     result_display: 2√(12 × 2 / 5)
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 根号の中をできるだけ簡単な形に直す。
     op: simplify_result
     result_display: 4√30/5

@@ -110,16 +110,19 @@ sub_questions:
   prompt_text: グラフをかきなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 表から x と y の値の組を読み取り、座標平面上の点とみる。
     op: read_table_points
     result_display: 表の x と y の組
     result_srepr: Tuple(Tuple(Integer(0), Integer(7)), Tuple(Integer(2), Integer(15)), Tuple(Integer(4), Integer(23)), Tuple(Integer(6), Integer(31)))
   - args: []
+    detail: ''
     narration: 読み取った点を座標平面にとる。
     op: plot_points
     result_display: 表の各点
     result_srepr: Tuple(Integer(0), Integer(2), Integer(4), Integer(6))
   - args: []
+    detail: ''
     narration: とった点を通る直線をひく。
     op: draw_line
     result_display: y = 4x + 7

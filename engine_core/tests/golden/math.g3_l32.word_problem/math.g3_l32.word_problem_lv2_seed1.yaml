@@ -48,11 +48,13 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 式の x に、与えられた値をあてはめる。
     op: substitute_x
     result_display: 3 × (5)²
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 2乗を計算してから比例定数をかけ、y の値を求める。
     op: compute_y
     result_display: '75'
@@ -76,16 +78,19 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 求める時刻を x とみて、距離を表す式に、与えられている距離をあてはめて方程式をつくる。
     op: set_up_equation
     result_display: 3x² = 12
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 両辺を x の2乗にかかっている数でわり、平方根の考え方で x を求める。
     op: solve_for_x
     result_display: x² = 4
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 時刻は正の数だから、求めた解のうち正の解を選ぶ。
     op: select_positive_root
     result_display: 2秒後

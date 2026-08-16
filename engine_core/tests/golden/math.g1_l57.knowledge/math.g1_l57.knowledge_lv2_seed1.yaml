@@ -45,11 +45,13 @@ sub_questions:
   prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 分布の中に、極端に大きい値や小さい値が混じっているかどうかを調べる。
     op: check_outliers
     result_display: 極端な値がある
     result_srepr: has_outliers
   - args: []
+    detail: ''
     narration: 極端な値に影響されにくい代表値ほど、集団の「まん中あたり」を適切に表す。
     op: judge_appropriate_representative_value
     result_display: 中央値

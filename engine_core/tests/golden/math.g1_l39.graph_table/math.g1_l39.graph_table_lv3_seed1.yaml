@@ -100,16 +100,19 @@ sub_questions:
   prompt_text: 点の座標を読み取りなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 回転の中心は、対応する2点から同じ距離にある。だから1組の対応する点を結び、その線分の垂直二等分線を引く。中心はこの直線上のどこかにある。
     op: draw_perpendicular_bisector_first
     result_display: 1組目の垂直二等分線
     result_srepr: ''
   - args: []
+    detail: ''
     narration: もう1組の対応する点についても同じように垂直二等分線を引く。中心はこの直線上にもある。
     op: draw_perpendicular_bisector_second
     result_display: 2組目の垂直二等分線
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 2本の垂直二等分線の交点が、両方の条件を同時に満たす点、つまり回転の中心である。
     op: intersect_bisectors
     result_display: (2, -4)

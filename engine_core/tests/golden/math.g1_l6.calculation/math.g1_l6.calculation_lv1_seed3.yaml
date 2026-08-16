@@ -44,11 +44,13 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: かけ合わせる数の符号から、積の符号を先に決める。
     op: determine_product_sign
     result_display: +(8 × 10)
     result_srepr: Integer(80)
   - args: []
+    detail: ''
     narration: 絶対値どうしをかけて、積を求める。
     op: multiply_magnitudes
     result_display: '80'

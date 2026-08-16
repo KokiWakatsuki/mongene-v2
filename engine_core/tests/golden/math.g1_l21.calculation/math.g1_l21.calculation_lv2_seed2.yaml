@@ -35,11 +35,11 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - equation.solve_by_equality_property_multi
-  explanation: 'まず、左辺を x の項だけにするために、両辺に同じ数をたすかひくかする。（7x - 4 + 4 = -32 + 4）
+  explanation: 'まず、左辺を x の項だけにするために、両辺に 4 をたす。（7x - 4 + 4 = -32 + 4）
 
     次に、両辺の同類項をそれぞれまとめて、ax = b の形にする。（7x = -28）
 
-    最後に、等式の性質を使い、両辺を x の係数でわる。（x = -4）'
+    最後に、等式の性質を使い、両辺を x の係数 7 でわる。（x = -4）'
   hints:
   - 左辺を x の項だけにするために、両辺に同じ数をたすかひくかする。
   - 両辺の同類項をそれぞれまとめて、ax = b の形にする。
@@ -47,16 +47,19 @@ sub_questions:
   prompt_text: 解を求めなさい。
   solution_steps:
   - args: []
+    detail: 左辺を x の項だけにするために、両辺に 4 をたす。
     narration: 左辺を x の項だけにするために、両辺に同じ数をたすかひくかする。
     op: subtract_constant_both_sides
     result_display: 7x - 4 + 4 = -32 + 4
     result_srepr: Integer(-4)
   - args: []
+    detail: ''
     narration: 両辺の同類項をそれぞれまとめて、ax = b の形にする。
     op: combine_like_terms
     result_display: 7x = -28
     result_srepr: Integer(-4)
   - args: []
+    detail: 等式の性質を使い、両辺を x の係数 7 でわる。
     narration: 等式の性質を使い、両辺を x の係数でわる。
     op: divide_both_sides
     result_display: x = -4

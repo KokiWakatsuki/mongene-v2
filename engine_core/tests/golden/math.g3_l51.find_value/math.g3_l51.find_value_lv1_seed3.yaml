@@ -42,11 +42,13 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 直角三角形で、直角をはさむ2辺の長さを読み取る。
     op: identify_two_legs
     result_display: 9 と 18
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 直角をはさむ2辺の長さの二乗の和が、斜辺の長さの二乗に等しいという三平方の定理から、斜辺の長さを求める。
     op: apply_pythagorean_theorem
     result_display: 9√5 cm

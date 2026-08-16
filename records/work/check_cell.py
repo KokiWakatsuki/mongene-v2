@@ -57,8 +57,15 @@ def main() -> int:
                 print(f"\n--- {unit}.{form}.Lv{lv} sample (seed{seed}) ---")
                 print(f"  prompt : {sq.prompt_text!r}")
                 print(f"  answer : {ans_repr!r}")
+                # **生徒が読むものをそのまま出す。** 以前はここが `st.narration`
+                # だったので、解説にしか出ない `Step.detail` が見えず、
+                # 「直したのに変わっていない」と読み違える口になっていた。
+                for line in str(sq.explanation).splitlines():
+                    print(f"    解説 {line}")
+                for hint in sq.hints:
+                    print(f"    ヒント {hint}")
                 for st in sq.solution_steps:
-                    print(f"    step[{st.op}] {st.result_display!r} :: {st.narration}")
+                    print(f"      step[{st.op}] {st.result_display!r}")
         # 2) dup_rate @100
         dr = cell_dup_rate(env, coord, _DUP_SEEDS, _DUP_THRESHOLD)
 

@@ -48,21 +48,25 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 頂点Aと内部の点Dを結んだ直線を、Dの向こう側までのばす補助線を引く。この1本で、もとの図が2つの三角形に分かれる。
     op: draw_auxiliary_line
     result_display: 点Aと点Dを結んでのばした線
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 一方の三角形について、外角は隣り合わない2つの内角の和に等しいことを使い、のばした線とDBがつくる角を求める。
     op: apply_exterior_angle_first
     result_display: 91° の一部と 43° の和
     result_srepr: ''
   - args: []
+    detail: ''
     narration: もう一方の三角形についても同じように、のばした線とDCがつくる角を求める。
     op: apply_exterior_angle_second
     result_display: 91° の残りと 31° の和
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 求める角は、いま求めた2つの角を合わせたものだから、それらをたして求める。
     op: sum_two_exterior_angles
     result_display: '165'

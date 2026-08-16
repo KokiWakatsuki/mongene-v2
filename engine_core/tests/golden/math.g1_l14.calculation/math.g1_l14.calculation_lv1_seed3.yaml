@@ -42,6 +42,7 @@ sub_questions:
   prompt_text: 式を簡単にしなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 除法の記号 ÷ を使わず、分数の形で表す。
     op: rewrite_as_fraction
     result_display: m/y

@@ -46,11 +46,13 @@ sub_questions:
   prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 問題で問われている規則や約束が、何についてのものかを読み取る。
     op: read_rule_context
     result_display: ''
     result_srepr: abs_value_rule
   - args: []
+    detail: ''
     narration: その規則の正しい内容を思い出して選ぶ。
     op: recall_correct_rule
     result_display: a を自乗した数の平方根は、a の絶対値 |a| に等しい（a が負の数のときは -a になる）

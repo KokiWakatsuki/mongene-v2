@@ -45,16 +45,19 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 起こりうるすべての場合を数え上げる。
     op: enumerate_all_outcomes
     result_display: 全部で12通り
     result_srepr: ''
   - args: []
+    detail: ''
     narration: そのうち、求める条件にあてはまる場合の数を数える。
     op: count_favorable
     result_display: あてはまるのは9通り
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 条件にあてはまる場合の数を、すべての場合の数でわる。
     op: compute_probability
     result_display: 3/4

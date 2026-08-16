@@ -53,15 +53,24 @@ def similar_triangle_x_shape(
     steps = [
         Step(
             op="identify_similar_triangles_in_x_shape",
-            args=[], result_srepr="", result_display="",
+            args=[], result_srepr="",
+            # **括弧を空にしない。** 他のセルはすべて `。（…）` で終わるのに、
+            # ここだけ手の産物が無く、見つけた三角形の組が文中の括弧に紛れていた。
+            result_display=f"三角形{po}{pa}{pb} と 三角形{po}{pc}{pd}",
             narration=f"{pa}{pb}∥{pc}{pd} であることから、対頂角と錯角がそれぞれ等しくなる"
-            f"相似な三角形（三角形{po}{pa}{pb}と三角形{po}{pc}{pd}）の組を見つける。",
+            f"相似な三角形の組を見つける。",
         ),
         Step(
             op="apply_proportion",
             args=[], result_srepr=srepr, result_display=disp,
             narration=f"相似な三角形の対応する辺の長さの比が等しい（{po}{pa}:{po}{pc}="
             f"{po}{pb}:{po}{pd}）ことから、求める辺の長さを求める。",
+            # 数値を入れた比例式を見せる（`4:8 = 9:SR` が1行も無かった）。
+            detail=(
+                f"{po}{pa}:{po}{pc}={po}{pb}:{po}{pd} に値を入れて "
+                f"{sympy.sstr(a)}:{sympy.sstr(c)} = {sympy.sstr(b)}:{po}{pd} "
+                f"を解き、求める辺の長さを求める。"
+            ),
         ),
     ]
     return Solution(answer=SymbolicAnswer(srepr=srepr, display=disp), steps=steps)

@@ -42,11 +42,13 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 正三角形の与えられた1辺の長さを読み取る。
     op: identify_given_side
     result_display: '13'
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 正三角形は3辺の長さがすべて等しく、3つの内角もすべて等しく分け合うことから、もう1辺の長さと1つの内角の大きさを求める。
     op: apply_equilateral_property
     result_display: 辺の長さ 13cm、∠G 60°

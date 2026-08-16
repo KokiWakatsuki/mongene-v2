@@ -42,11 +42,13 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 対角線についてわかっている長さや、四角形の種類を読み取る。
     op: identify_given_diagonal_value
     result_display: '34'
     result_srepr: ''
   - args: []
+    detail: ''
     narration: ひし形の対角線はそれぞれの中点で交わり、しかも垂直に交わることから、交点から頂点までの長さと、交点にできる角の大きさを求める。
     op: apply_diagonal_property
     result_display: 線分の長さ 17、角の大きさ 90°

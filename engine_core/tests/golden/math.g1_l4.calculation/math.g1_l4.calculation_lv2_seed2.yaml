@@ -37,9 +37,9 @@ sub_questions:
   - signed_number.subtract_terms
   explanation: 'まず、すべてのひき算を、符号を変えてたし算に直す。（(-1/2) + (-3/8) + (-2)）
 
-    次に、正の項どうし、負の項どうしをそれぞれまとめる。（-(1/2 + 3/8 + 2)）
+    次に、負の項しかないので、絶対値の和に負の符号をつける。（-(1/2 + 3/8 + 2)）
 
-    最後に、正の合計と負の合計を合わせて、答えを求める。（-23/8）'
+    最後に、かっこの中を計算し、負の符号をつけて答えを求める。（-23/8）'
   hints:
   - すべてのひき算を、符号を変えてたし算に直す。
   - 正の項どうし、負の項どうしをそれぞれまとめる。
@@ -47,16 +47,19 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: すべてのひき算を、符号を変えてたし算に直す。
     op: rewrite_all_as_addition
     result_display: (-1/2) + (-3/8) + (-2)
     result_srepr: Rational(-23, 8)
   - args: []
+    detail: 負の項しかないので、絶対値の和に負の符号をつける。
     narration: 正の項どうし、負の項どうしをそれぞれまとめる。
     op: group_by_sign
     result_display: -(1/2 + 3/8 + 2)
     result_srepr: Rational(-23, 8)
   - args: []
+    detail: かっこの中を計算し、負の符号をつけて答えを求める。
     narration: 正の合計と負の合計を合わせて、答えを求める。
     op: total_terms
     result_display: -23/8

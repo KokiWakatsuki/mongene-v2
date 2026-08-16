@@ -37,7 +37,7 @@ sub_questions:
   - polynomial.multiply_monomials_powers
   explanation: 'まず、かけ合わせる式の符号から、答えの符号を先に決める。（符号は -）
 
-    次に、係数どうしをかけ算する。（-10）
+    次に、係数どうしをかけ算する。（10）
 
     最後に、同じ文字は指数の和にまとめ、1つの単項式にする。（-10a²b）'
   hints:
@@ -47,16 +47,19 @@ sub_questions:
   prompt_text: 式を簡単にしなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: かけ合わせる式の符号から、答えの符号を先に決める。
     op: determine_sign
     result_display: 符号は -
     result_srepr: Mul(Integer(-1), Integer(10), Pow(Symbol('a'), Integer(2)), Symbol('b'))
   - args: []
+    detail: ''
     narration: 係数どうしをかけ算する。
     op: multiply_coefficients
-    result_display: '-10'
+    result_display: '10'
     result_srepr: Mul(Integer(-1), Integer(10), Pow(Symbol('a'), Integer(2)), Symbol('b'))
   - args: []
+    detail: ''
     narration: 同じ文字は指数の和にまとめ、1つの単項式にする。
     op: combine_powers
     result_display: -10a²b

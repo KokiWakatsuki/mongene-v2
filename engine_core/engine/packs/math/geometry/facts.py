@@ -50,7 +50,8 @@ FactKind = Literal[
     "parallel_dir",  # 2つの**向きつき**の線分が同じ向きに平行
     "perp",        # 2直線が垂直
     "midpoint",    # ある点が線分の中点
-    "collinear",   # 3点が一直線上
+    "collinear",   # 3点が一直線上（**どれが真ん中かは持たない**）
+    "between",     # ある点が、他の2点の**間**にある（作図の手順が知っている）
     "right_angle",   # ある角が直角
     "parallelogram",  # 四角形が平行四辺形
     "rectangle",   # 四角形が長方形
@@ -133,9 +134,25 @@ def tri_sim(t1: tuple[Point, Point, Point], t2: tuple[Point, Point, Point]) -> F
     return Fact("tri_sim", _canonical_correspondence(t1, t2))
 
 
+def _canonical_segment(s: tuple[Point, Point]) -> tuple[Point, Point]:
+    """線分の端点を並べ直す。**向きを持たない関係の正規形**。
+
+    線分 BC と CB は同じ直線なので、同じ事実にならなければならない。
+    """
+    return s if s[0] <= s[1] else (s[1], s[0])
+
+
 def parallel(s1: tuple[Point, Point], s2: tuple[Point, Point]) -> Fact:
-    a, b = (s1, s2) if s1 <= s2 else (s2, s1)
-    return Fact("parallel", (a, b))
+    """2直線が平行（向きは問わない）。
+
+    **端点の並びまで正規化する。** 組の入れかえだけを正規化していたため、
+    `BC ∥ MN` と `CB ∥ MN` が別々の Fact になっていた。同じ主張が別物として
+    2度導けるので、推論器が**いちど示した結論をもう一度導いて深さを稼ぐ**
+    ——g3_l44.proof.Lv2 が「BC ∥ MN を示す → その平行から同位角 → 錯角が
+    等しいから BC ∥ MN」という循環論法を出していた原因がこれ。
+    """
+    a, b = _canonical_segment(s1), _canonical_segment(s2)
+    return Fact("parallel", (a, b) if a <= b else (b, a))
 
 
 def parallel_dir(
@@ -154,8 +171,25 @@ def parallel_dir(
 
 
 def perp(s1: tuple[Point, Point], s2: tuple[Point, Point]) -> Fact:
-    a, b = (s1, s2) if s1 <= s2 else (s2, s1)
-    return Fact("perp", (a, b))
+    """2直線が垂直（向きは問わない）。端点の並びも正規化する（`parallel` と同じ理由）。"""
+    a, b = _canonical_segment(s1), _canonical_segment(s2)
+    return Fact("perp", (a, b) if a <= b else (b, a))
+
+
+def between(m: Point, a: Point, b: Point) -> Fact:
+    """点 m が線分 ab の**間**にある。
+
+    `collinear` は3点を並べ替えて持つので、**どれが真ん中かを持っていない**。
+    対頂角が成り立つのは交点が2点の間にあるときだけなので、それだけでは
+    「∠AOB ＝ ∠COD（対頂角）」と「∠BAC ＝ ∠MAN（同じ角の別名）」を区別できない
+    ——`use_vertical_angles` が後者にも当たり、△ABC で AB 上の M・AC 上の N について
+    「対頂角は等しいから ∠BAC ＝ ∠MAN」という**存在しない根拠**を書いていた。
+
+    どちらが真ん中かは座標を測って決めるのではなく、**作図の手順が知っている**
+    （`Construction.collinear_order`）。それをそのまま事実にする。
+    """
+    x, y = (a, b) if a <= b else (b, a)
+    return Fact("between", (m, (x, y)))
 
 
 def midpoint(m: Point, s: tuple[Point, Point]) -> Fact:
@@ -359,6 +393,10 @@ def fact_text(f: Fact) -> str:
     if f.kind == "tri_area_eq":
         # 教科書は面積の等しさも「△ABC ＝ △DBC」と書く（≡ ではない）。
         return f"{tri_text(f.args[0])} ＝ {tri_text(f.args[1])}"
+    if f.kind == "between":
+        # 作図の手順が持つ補助事実。証明文の行にはしない（definitional 扱い）。
+        m, (a, b) = f.args
+        return f"点{m} は線分{a}{b}上にある"
     if f.kind == "same_arc":
         (a, b), (p, q) = f.args
         return f"点{p} と点{q} は弦{a}{b}について同じ側の弧の上にある"
@@ -372,6 +410,7 @@ __all__ = [
     "ang",
     "ang_eq",
     "ang_text",
+    "between",
     "collinear",
     "fact_text",
     "goal_text",

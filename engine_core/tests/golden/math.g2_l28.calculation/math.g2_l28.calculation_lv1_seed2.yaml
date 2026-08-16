@@ -45,12 +45,14 @@ sub_questions:
     - 3/2
     - '-5'
     - '8'
+    detail: ''
     narration: x の値を式に代入する。
     op: substitute_x
     result_display: y = 3/2 × 8 - 5
     result_srepr: Integer(7)
   - args:
     - y = 3/2 × 8 - 5
+    detail: ''
     narration: 計算して y の値を求める。
     op: evaluate
     result_display: y = 7

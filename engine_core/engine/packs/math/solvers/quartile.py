@@ -150,14 +150,23 @@ def quartiles_iqr(data: object) -> Solution:
             args=[],
             result_srepr="",
             result_display=f"第1四分位数 {_fmt_half(q1)}、第3四分位数 {_fmt_half(q3)}",
-            narration="下組の中央値を第一四分位数、上組の中央値を第三四分位数とする。",
+            # **漢数字と算用数字を混ぜない。** 同じ解説の中で「第一四分位数」と
+            # 「第1四分位数」が並んでいた（答えの表記は算用数字）。
+            narration="下組の中央値を第1四分位数、上組の中央値を第3四分位数とする。",
         ),
         Step(
             op="compute_iqr",
             args=[],
             result_srepr=srepr,
-            result_display=disp,
-            narration="上組の中央値から下組の中央値をひき、四分位範囲を求める。",
+            # **この手で得たのは四分位範囲だけ。** 答え全体を写していたので、
+            # 前の手で出した第1・第3四分位数が最後にもう一度並んでいた。
+            result_display=_fmt_half(iqr),
+            # 直前の手で「第1四分位数・第3四分位数」と名づけたのだから、その語で書く
+            # （「上組の中央値から下組の中央値をひき」は定義の言い換えで回りくどい）。
+            narration="第3四分位数から第1四分位数をひき、四分位範囲を求める。",
+            detail=(
+                f"{_fmt_half(q3)} - {_fmt_half(q1)} を計算して、四分位範囲を求める。"
+            ),
         ),
     ]
     answer = SymbolicAnswer(srepr=srepr, display=disp)
@@ -200,8 +209,14 @@ def five_number_summary(data: object) -> Solution:
             op="compute_q1_q3",
             args=[],
             result_srepr=srepr,
-            result_display=disp,
-            narration="中央値を境に下組と上組に分け、それぞれの中央値を第一四分位数・第三四分位数とする。",
+            # この手で得たのは四分位数だけ（最小値・最大値は前の手）。
+            result_display=f"第1四分位数 {_fmt_half(q1)}、第3四分位数 {_fmt_half(q3)}",
+            # 漢数字と算用数字を混ぜない（答えの表記は算用数字）。
+            narration="中央値を境に下組と上組に分け、それぞれの中央値を第1四分位数・第3四分位数とする。",
+            detail=(
+                f"下組 {'、'.join(str(v) for v in lower)} の中央値が第1四分位数、"
+                f"上組 {'、'.join(str(v) for v in upper)} の中央値が第3四分位数になる。"
+            ),
         ),
     ]
     answer = SymbolicAnswer(srepr=srepr, display=disp)
@@ -245,7 +260,7 @@ def quartiles_full_summary(data: object) -> Solution:
             args=[],
             result_srepr="",
             result_display=f"第2四分位数(中央値) {_fmt_half(q2)}",
-            narration="データを大きさの順に並べ、データ全体の中央値（第二四分位数）を求める。",
+            narration="データを大きさの順に並べ、データ全体の中央値（第2四分位数）を求める。",
         ),
         Step(
             op="split_into_halves",
@@ -262,7 +277,7 @@ def quartiles_full_summary(data: object) -> Solution:
             args=[],
             result_srepr=srepr,
             result_display=disp,
-            narration="下組・上組それぞれの中央値を第一・第三四分位数とし、その差から四分位範囲を求める。",
+            narration="下組・上組それぞれの中央値を第1・第3四分位数とし、その差から四分位範囲を求める。",
         ),
     ]
     answer = SymbolicAnswer(srepr=srepr, display=disp)

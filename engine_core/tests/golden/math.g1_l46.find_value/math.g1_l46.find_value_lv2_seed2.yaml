@@ -42,11 +42,13 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: おうぎ形の面積の公式に、半径と分からない中心角をあてはめて方程式をつくる。
     op: form_area_equation
     result_display: 3² × π × x/360 = 6π
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 方程式を中心角について解き、その大きさを求める。
     op: solve_for_central_angle
     result_display: 240°

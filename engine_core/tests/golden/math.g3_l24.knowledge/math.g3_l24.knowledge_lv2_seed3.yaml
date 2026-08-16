@@ -44,11 +44,13 @@ sub_questions:
   prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 候補の値を2次方程式の x にあてはめる。
     op: substitute_candidate
     result_display: 左辺 20
     result_srepr: Integer(-2)
   - args: []
+    detail: ''
     narration: 左辺の値が0になれば解、0にならなければ解ではない。
     op: judge_solution
     result_display: 解ではない

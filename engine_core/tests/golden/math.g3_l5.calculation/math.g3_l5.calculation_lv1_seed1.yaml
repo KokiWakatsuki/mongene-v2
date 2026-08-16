@@ -42,6 +42,7 @@ sub_questions:
   prompt_text: 式を簡単にしなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 和と差の積の公式で、はじめの項の平方から終わりの項の平方をひく。
     op: apply_diff_of_squares
     result_display: 4b² - 169

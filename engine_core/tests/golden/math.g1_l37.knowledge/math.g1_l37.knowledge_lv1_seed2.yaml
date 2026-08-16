@@ -46,11 +46,13 @@ sub_questions:
   prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 説明されている式や数の部分がどれかを読み取る。
     op: identify_description
     result_display: ''
     result_srepr: segment
   - args: []
+    detail: ''
     narration: その対象を表す用語の名前を思い出す。
     op: name_concept
     result_display: 線分

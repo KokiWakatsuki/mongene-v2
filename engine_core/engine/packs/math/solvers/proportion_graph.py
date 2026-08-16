@@ -377,7 +377,7 @@ def draw_hyperbola_features(a: object, xs: object) -> Solution:
             args=[fmt_number(v) for v in sorted(x_list)],
             result_srepr=sympy.srepr(sympy.Tuple(*[_int(v) for v in sorted(x_list)])),
             result_display=table_display,
-            narration="表のそれぞれのxの値を式にあてはめ、対応するyの値を求めて表にまとめる。",
+            narration="表のそれぞれの x の値を式にあてはめ、対応する y の値を求めて表にまとめる。",
         ),
         Step(
             op="plot_table_points",
@@ -503,7 +503,7 @@ def read_situation_value_from_graph(a: object, x_q: object) -> Solution:
             args=[],
             result_srepr=sympy.srepr(a_s),
             result_display=_fmt_direct(a_s),
-            narration="測った組を表にまとめ、対応するyの値をxの値で割った商がいつも同じかどうかを確かめる。",
+            narration="測った組を表にまとめ、対応する y の値を x の値で割った商がいつも同じかどうかを確かめる。",
         ),
         Step(
             op="plot_situation_points",

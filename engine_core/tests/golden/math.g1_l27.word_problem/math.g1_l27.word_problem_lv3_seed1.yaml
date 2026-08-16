@@ -41,11 +41,11 @@ sub_questions:
 
     次に、分配法則を使って、かっこを外す。（60x + 720 = 300x）
 
-    次に、文字の項を左辺に、数の項を右辺に、符号を変えて移項する。（60x - 300x = -720）
+    次に、右辺の +300x を左辺に、左辺の +720 を右辺に、符号を変えて移項する。（60x - 300x = -720）
 
     次に、両辺の同類項をそれぞれまとめて、ax = b の形にする。（-240x = -720）
 
-    最後に、等式の性質を使い、両辺を x の係数でわる。（x = 3）'
+    最後に、等式の性質を使い、両辺を x の係数 -240 でわる。（x = 3）'
   hints:
   - 場面の中で、どちらの見方でも同じになる（等しくなっている）量に着目する。
   - その量を x を使って両辺に表し、方程式をつくる。
@@ -56,31 +56,37 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 場面の中で、どちらの見方でも同じになる（等しくなっている）量に着目する。
     op: find_equal_relation
     result_display: 追いついたときに2人が進んだ道のり
     result_srepr: Symbol('x')
   - args: []
+    detail: ''
     narration: その量を x を使って両辺に表し、方程式をつくる。
     op: formulate_equation
     result_display: 60(x + 12) = 300x
     result_srepr: Equality(Add(Mul(Integer(60), Symbol('x')), Integer(720)), Mul(Integer(300), Symbol('x')))
   - args: []
+    detail: ''
     narration: 分配法則を使って、かっこを外す。
     op: expand_parentheses
     result_display: 60x + 720 = 300x
     result_srepr: Integer(3)
   - args: []
+    detail: 右辺の +300x を左辺に、左辺の +720 を右辺に、符号を変えて移項する。
     narration: 文字の項を左辺に、数の項を右辺に、符号を変えて移項する。
     op: transpose_terms
     result_display: 60x - 300x = -720
     result_srepr: Integer(3)
   - args: []
+    detail: ''
     narration: 両辺の同類項をそれぞれまとめて、ax = b の形にする。
     op: combine_like_terms
     result_display: -240x = -720
     result_srepr: Integer(3)
   - args: []
+    detail: 等式の性質を使い、両辺を x の係数 -240 でわる。
     narration: 等式の性質を使い、両辺を x の係数でわる。
     op: divide_both_sides
     result_display: x = 3

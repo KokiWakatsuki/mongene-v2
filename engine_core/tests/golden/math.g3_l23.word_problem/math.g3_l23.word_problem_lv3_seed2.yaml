@@ -53,26 +53,31 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 縦の長さを x とおき、比を使って横の長さを x の何倍かで表す。
     op: set_variable
     result_display: x
     result_srepr: Symbol('x')
   - args: []
+    detail: ''
     narration: 縦と横の長さの積が面積になることから、面積の関係を式に表す。
     op: formulate_area_equation
     result_display: 4x² = 68
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 両辺を比から出てきた数でわって、縦の長さの2乗の値を求める。
     op: isolate_squared_side
     result_display: x² = 17
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 根号の中を素因数分解し、平方の因数を見つける。
     op: factor_out_square
     result_display: √(1 × 17)
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 平方の因数を根号の外に出して a√b の形にする。
     op: take_root_outside
     result_display: √17

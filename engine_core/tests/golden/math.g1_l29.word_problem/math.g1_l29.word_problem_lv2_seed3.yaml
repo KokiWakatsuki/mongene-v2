@@ -41,7 +41,7 @@ sub_questions:
   - direct_proportion.word_problem_rate
   explanation: 'まず、比例の式 y=ax に、通る点の x, y の値をあてはめ、比例定数を求める式をつくる。（a = 9 / 1）
 
-    次に、求めた比例定数を使って、比例の式を組み立てる。（y = 9x）'
+    次に、比例定数は a = 9 なので、y = ax にあてはめる。（y = 9x）'
   hints:
   - 比例の式 y=ax に、通る点の x, y の値をあてはめ、比例定数を求める式をつくる。
   label: (1)
@@ -50,12 +50,14 @@ sub_questions:
   - args:
     - '1'
     - '9'
+    detail: ''
     narration: 比例の式 y=ax に、通る点の x, y の値をあてはめ、比例定数を求める式をつくる。
     op: substitute_point
     result_display: a = 9 / 1
     result_srepr: Integer(9)
   - args:
     - '9'
+    detail: 比例定数は a = 9 なので、y = ax にあてはめる。
     narration: 求めた比例定数を使って、比例の式を組み立てる。
     op: form_expression
     result_display: y = 9x
@@ -78,12 +80,14 @@ sub_questions:
   - args:
     - '9'
     - '21'
+    detail: ''
     narration: 比例定数と x の値を、比例の式 y=ax の x にあてはめる。
     op: substitute_x
     result_display: y = 9 × 21
     result_srepr: Integer(189)
   - args:
     - y = 9 × 21
+    detail: ''
     narration: かけ算を計算して y の値を求める。
     op: evaluate
     result_display: y = 189

@@ -45,16 +45,19 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 分数と小数がまざっているので、大きさを比べやすい形にそろえる。
     op: convert_to_common_form
     result_display: 3、4/7、17/10、-3/2
     result_srepr: Tuple(Rational(-3, 2), Rational(4, 7), Rational(17, 10), Integer(3))
   - args: []
+    detail: ''
     narration: それぞれの数が数直線上でどの位置にあるかで大小を比べる（負の数は絶対値が大きいほど小さい）。
     op: compare_on_number_line
     result_display: -3/2、4/7、17/10、3
     result_srepr: Tuple(Rational(-3, 2), Rational(4, 7), Rational(17, 10), Integer(3))
   - args: []
+    detail: ''
     narration: 小さい順に並べかえて答える。
     op: arrange_in_order
     result_display: -3/2, 4/7, 1.7, 3

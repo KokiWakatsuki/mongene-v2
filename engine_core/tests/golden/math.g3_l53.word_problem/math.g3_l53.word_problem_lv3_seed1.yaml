@@ -49,16 +49,19 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: ひし形の対角線は、それぞれの中点で垂直に交わるから、与えられた対角線の長さの半分をとって、直角三角形の直角をはさむ辺の長さを求める。
     op: halve_given_diagonal
     result_display: 4 cm
     result_srepr: Integer(4)
   - args: []
+    detail: ''
     narration: ひし形の辺を斜辺、いま求めた長さを直角をはさむ一方の辺とする直角三角形で、三平方の定理からもう一方の辺の長さを求める。
     op: apply_pythagorean_theorem
     result_display: 3 cm
     result_srepr: Integer(3)
   - args: []
+    detail: ''
     narration: 求めた長さは対角線の半分だから、これをもとにもどして、対角線全体の長さを求める。
     op: restore_full_diagonal
     result_display: 6 cm
@@ -79,11 +82,13 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: ひし形の面積は、対角線どうしの積の半分で求められることを使う。
     op: recall_rhombus_area_rule
     result_display: （対角線）×（対角線）÷ 2
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 与えられた対角線の長さと、いま求めた対角線の長さをかけ、その半分をとってひし形の面積を求める。
     op: compute_rhombus_area
     result_display: 24 cm²

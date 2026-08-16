@@ -37,7 +37,7 @@ sub_questions:
   - simultaneous_equations.solve_abc_form
   explanation: 'まず、A=B=C を A=C と B=C の2つの式に分けて連立方程式にする。（-3x + 2y = 9 , -2x + 3y = 1）
 
-    次に、連立方程式を解いて x を求める。（x = -5）
+    次に、はじめの式の両辺を 3 倍、もう一方の式の両辺を 2 倍して y の係数の大きさをそろえ、辺々を引く。整理すると -5x = 25 になるので、両辺を -5 でわる。（x = -5）
 
     最後に、求めた x をもとの式に代入して y を求める。（y = -3）'
   hints:
@@ -48,6 +48,7 @@ sub_questions:
   solution_steps:
   - args:
     - -3x + 2y = -2x + 3y + 8 = 9
+    detail: ''
     narration: A=B=C を A=C と B=C の2つの式に分けて連立方程式にする。
     op: split_abc_equation
     result_display: -3x + 2y = 9 , -2x + 3y = 1
@@ -55,12 +56,14 @@ sub_questions:
       Integer(1))]'
   - args:
     - -3x + 2y = 9 , -2x + 3y = 1
+    detail: はじめの式の両辺を 3 倍、もう一方の式の両辺を 2 倍して y の係数の大きさをそろえ、辺々を引く。整理すると -5x = 25 になるので、両辺を -5 でわる。
     narration: 連立方程式を解いて x を求める。
     op: eliminate_and_solve_x
     result_display: x = -5
     result_srepr: Integer(-5)
   - args:
     - '-5'
+    detail: ''
     narration: 求めた x をもとの式に代入して y を求める。
     op: back_substitute
     result_display: y = -3

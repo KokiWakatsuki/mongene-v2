@@ -46,11 +46,13 @@ sub_questions:
   prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 数の前についている符号（＋か－か）を読み取る。
     op: read_number_sign
     result_display: '-'
     result_srepr: '-'
   - args: []
+    detail: ''
     narration: 符号が＋なら正の数、－なら負の数と分類する。
     op: classify_positive_negative
     result_display: 負の数

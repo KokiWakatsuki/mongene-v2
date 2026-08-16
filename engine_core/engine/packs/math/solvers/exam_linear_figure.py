@@ -28,14 +28,34 @@ def _fmt(v: sympy.Expr) -> str:
     return sympy.sstr(sympy.nsimplify(v))
 
 
+def _line_rhs(m: sympy.Expr, b: sympy.Expr) -> str:
+    """直線の右辺を教材の書き方で（`3x - 3`）。
+
+    `f"{m}x + {b}"` と組んでいたので、切片が負のときに **`3x + -3`** と出ていた。
+    """
+    if b == 0:
+        return f"{_fmt(m)}x"
+    return f"{_fmt(m)}x {'-' if b < 0 else '+'} {_fmt(abs(b))}"
+
+
 def _fmt_pt(pt: tuple[sympy.Expr, sympy.Expr]) -> str:
     return f"({_fmt(pt[0])}, {_fmt(pt[1])})"
 
 
-def _steps(rows: list[tuple[str, str, str, str]]) -> list[Step]:
+def _steps(rows: list[tuple[str, ...]]) -> list[Step]:
+    """(op, srepr, display, narration[, detail]) から Step を組む。
+
+    **narration はヒントに流れるので数字を書けない**（鉄則⑦・G-Q5t）。
+    `x 軸上の点は y 座標が 0` と書いたら、答えの y 座標 0 の漏洩として
+    coverage_scan が exam_l1 の2セルを丸ごと落とした。具体の値は解説にしか
+    出ない `detail` に置く。
+    """
     return [
-        Step(op=op, args=[], result_srepr=srepr, result_display=disp, narration=narr)
-        for op, srepr, disp, narr in rows
+        Step(
+            op=row[0], args=[], result_srepr=row[1], result_display=row[2],
+            narration=row[3], detail=(row[4] if len(row) > 4 else ""),
+        )
+        for row in rows
     ]
 
 
@@ -91,15 +111,17 @@ def lines_intersection_and_triangle_area(
         answer=SymbolicAnswer(srepr=srepr, display=disp),
         steps=_steps([
             ("set_up_equation", "",
-             f"{_fmt(m1_s)}x + {_fmt(b1_s)} = {_fmt(m2_s)}x + {_fmt(b2_s)}",
+             f"{_line_rhs(m1_s, b1_s)} = {_line_rhs(m2_s, b2_s)}",
              "2つの直線の式の右辺どうしを等しいとおいて、方程式を立てる。"),
             ("solve_for_x", "", f"x = {_fmt(px)}",
              "その方程式を解いて、交点の x 座標を求める。"),
             ("compute_y", "", f"{lp}{_fmt_pt((px, py))}",
              "求めた x の値をどちらかの式に代入して、交点の y 座標を求める。"),
             ("find_x_intercept", "", f"{lq}{_fmt_pt((qx, sympy.Integer(0)))}",
-             "x 軸上の点は y 座標がゼロなので、y にゼロを代入して交わる点の座標を求める。"),
-            ("compute_triangle_area", srepr, disp,
+             "x 軸上の点は y 座標がゼロなので、y にその値を代入して交わる点の座標を求める。",
+             "x 軸上の点は y 座標が 0 なので、y に 0 を代入して交わる点の座標を求める。"),
+            # この手で得たのは面積だけ（交点の座標は前の手で出している）。
+            ("compute_triangle_area", srepr, f"△O{lp}{lq} = {_fmt(area)}",
              "3つの頂点の座標がそろったので、三角形の面積を求める公式で面積を計算する。"),
         ]),
     )
@@ -137,6 +159,8 @@ def slope_from_triangle_area(b: object, area: object) -> Solution:
         steps=_steps([
             ("express_intercepts", "", "両軸との交点を a で表す",
              "x 軸との交点は y がゼロ、y 軸との交点は x がゼロになるところなので、"
+             "それぞれの座標を a を使って表す。",
+             "x 軸との交点は y が 0、y 軸との交点は x が 0 になるところなので、"
              "それぞれの座標を a を使って表す。"),
             ("set_up_area_equation", "", f"{_fmt(b_s)} × x切片 ÷ 2 = {_fmt(area_s)}",
              "2つの交点と原点を頂点とする三角形の面積を a の式で表し、"
@@ -206,7 +230,7 @@ def intersection_point_of_two_lines(
         answer=SymbolicAnswer(srepr=srepr, display=disp),
         steps=_steps([
             ("set_up_equation", "",
-             f"{_fmt(m1_s)}x + {_fmt(b1_s)} = {_fmt(m2_s)}x + {_fmt(b2_s)}",
+             f"{_line_rhs(m1_s, b1_s)} = {_line_rhs(m2_s, b2_s)}",
              "2つの直線の式の右辺どうしを等しいとおいて、方程式を立てる。"),
             ("solve_for_x", "", f"x = {_fmt(px)}",
              "その方程式を解いて、交点の x 座標を求める。"),
@@ -234,8 +258,9 @@ def x_intercepts_of_two_lines(
         answer=SymbolicAnswer(srepr=srepr, display=disp),
         steps=_steps([
             ("substitute_zero_for_y", "",
-             f"{_fmt(m1_s)}x + {_fmt(b1_s)} = 0、{_fmt(m2_s)}x + {_fmt(b2_s)} = 0",
-             "x 軸上の点は y 座標がゼロなので、それぞれの式の y にゼロを代入する。"),
+             f"{_line_rhs(m1_s, b1_s)} = 0、{_line_rhs(m2_s, b2_s)} = 0",
+             "x 軸上の点は y 座標がゼロなので、それぞれの式の y にその値を代入する。",
+             "x 軸上の点は y 座標が 0 なので、それぞれの式の y に 0 を代入する。"),
             ("solve_for_x_intercepts", srepr, disp,
              "できた方程式をそれぞれ解いて、x 軸と交わる点の座標を求める。"),
         ]),
@@ -308,6 +333,8 @@ def point_on_x_axis_for_area_multiple(m: object, b: object, k: object) -> Soluti
         steps=_steps([
             ("find_intercepts", "", f"{_fmt_pt((ax, zero))}、{_fmt_pt((zero, b_s))}",
              "x 軸との交点は y がゼロ、y 軸との交点は x がゼロになるところなので、"
+             "それぞれの座標を求める。",
+             "x 軸との交点は y が 0、y 軸との交点は x が 0 になるところなので、"
              "それぞれの座標を求める。"),
             ("note_common_height", "", "高さが共通であることに気づく",
              "底辺をどちらも x 軸上にとると、2つの三角形の高さはどちらも同じ点の"

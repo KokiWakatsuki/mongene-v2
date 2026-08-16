@@ -48,11 +48,13 @@ sub_questions:
   prompt_text: 式に表しなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 場面の中で、どちらの見方でも同じになる（等しくなっている）量に着目する。
     op: find_equal_relation
     result_display: 2つの数の積
     result_srepr: Symbol('x')
   - args: []
+    detail: ''
     narration: その量を x を使って両辺に表し、方程式をつくる。
     op: formulate_equation
     result_display: x(x + 2) = 323
@@ -82,26 +84,31 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: かっこを展開し、右辺を左辺に移項して、=0 の形に整理する。
     op: expand_and_rearrange
     result_display: x² + 2x - 323 = 0
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 左辺を因数分解する。
     op: factor_left_side
     result_display: (x - 17)(x + 19) = 0
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 積が 0 になるのは各因数が 0 のときだから、それぞれを 0 とおいて x を求める。
     op: apply_zero_product
     result_display: x - 17 = 0、x + 19 = 0
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 求めるものは正の数だから、2つの解のうち条件に合う正の解を選ぶ。
     op: select_positive_root
     result_display: '17'
     result_srepr: Integer(17)
   - args: []
+    detail: ''
     narration: 求めた x をもとに、問われている量を計算する。
     op: derive_asked_quantity
     result_display: 小さい方の数は17、大きい方の数は19

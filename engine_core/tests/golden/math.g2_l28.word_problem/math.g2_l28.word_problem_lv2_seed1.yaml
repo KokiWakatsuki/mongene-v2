@@ -53,6 +53,7 @@ sub_questions:
   - args:
     - (40, 26)
     - (100, 41)
+    detail: ''
     narration: 2点の y 座標の差を x 座標の差で割り、傾きを求める。
     op: compute_slope
     result_display: 傾き a = 1/4
@@ -60,6 +61,7 @@ sub_questions:
   - args:
     - 1/4
     - (40, 26)
+    detail: ''
     narration: 傾きと通る1点を y = ax + b に代入し、切片を求める。
     op: compute_intercept
     result_display: 切片 b = 16
@@ -67,6 +69,7 @@ sub_questions:
   - args:
     - 1/4
     - '16'
+    detail: ''
     narration: 傾きと切片から一次関数の式を組み立てる。
     op: form_expression
     result_display: y = 1/4x + 16
@@ -90,12 +93,14 @@ sub_questions:
     - 1/4
     - '16'
     - '20'
+    detail: ''
     narration: x の値を式に代入する。
     op: substitute_x
     result_display: y = 1/4 × 20 + 16
     result_srepr: Integer(21)
   - args:
     - y = 1/4 × 20 + 16
+    detail: ''
     narration: 計算して y の値を求める。
     op: evaluate
     result_display: y = 21

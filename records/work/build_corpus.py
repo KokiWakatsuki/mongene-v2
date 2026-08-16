@@ -25,7 +25,9 @@ family YAML の params にある列挙のうち、**話の骨格が変わる軸*
 from __future__ import annotations
 
 import glob
+import argparse
 import json
+import os
 import re
 from pathlib import Path
 
@@ -35,8 +37,11 @@ from engine.core.contracts import Coordinate, GenerateRequest, Unsupported
 from engine.core.pipeline import generate
 from engine.eval._harness import build_mr, make_env
 
-_OUT = Path("records/work/corpus")
-_FIGS = _OUT / "figs"
+# **出力先は外から差せる。** ここが `records/work/corpus` 固定だったので、
+# `engine_core/` だけをメインプロジェクトへ移すと「生成はできるが結果がどこにも
+# 残らない」状態になっていた（引き継ぎ書 §3 の穴）。
+# 優先順: 引数 --out > 環境変数 MONGENE_CORPUS_DIR > 既定（このリポジトリの場所）。
+_DEFAULT_OUT = Path(os.environ.get("MONGENE_CORPUS_DIR", "records/work/corpus"))
 
 # 名前は `_set` でも、中身の差し替えでしかない軸。
 _FILLER_HINTS = ("person", "subject", "item", "color", "place", "object", "name")
@@ -153,7 +158,17 @@ def match_axis_keys(rows: list[dict], catalogs: list[set]) -> list[str]:
 
 
 def main() -> None:
-    _FIGS.mkdir(parents=True, exist_ok=True)
+    parser = argparse.ArgumentParser(
+        prog="build_corpus", description="全セルの型を書き出す（生成物の置き場は --out）"
+    )
+    parser.add_argument(
+        "--out", type=Path, default=_DEFAULT_OUT,
+        help="生成物の出力先（既定: 環境変数 MONGENE_CORPUS_DIR か records/work/corpus）",
+    )
+    args = parser.parse_args()
+    out_dir: Path = args.out
+    figs_dir = out_dir / "figs"
+    figs_dir.mkdir(parents=True, exist_ok=True)
     env = make_env()
     try:
         import cairosvg  # noqa: PLC0415
@@ -228,25 +243,38 @@ def main() -> None:
                 continue
             n_problems += 1
             sq = res.sub_questions[0]
+            multi = len(res.sub_questions) > 1
             # **答えは全小問ぶん出す。** 1つ目しか出していなかったので、(2)(3) の答えを
             # 走査が一度も見ていなかった。選択肢の答え（ChoiceAnswer）と作図の答え
             # （GraphAnswer）も出す——これらが空欄だったため「答えが空」が213セルに
             # 出ていて、その中の欠陥は文面の走査に一度もかからなかった。
             ans = " ／ ".join(
-                f"{s.label} {_answer_text(s.answer)}" if len(res.sub_questions) > 1
-                else _answer_text(s.answer)
+                f"{s.label} {_answer_text(s.answer)}" if multi else _answer_text(s.answer)
                 for s in res.sub_questions
+            )
+            # **解説とヒントも全小問ぶん出す（2026-08-16）。** 答えだけを直して
+            # ここを `sub_questions[0]` のままにしていたので、(2) 以降の解説を
+            # 走査も読み手も一度も見ていなかった。連立方程式の「消去して解く」段は
+            # 小問(2)にあるのに、読むと「式を立てて終わっている」ように見えていた
+            # ——**同じ根（1つ目しか出さない）の別の出口**。
+            exp = "\n\n".join(
+                (f"{s.label} {s.explanation}" if multi else str(s.explanation))
+                for s in res.sub_questions if s.explanation
+            )
+            hints = " ／ ".join(
+                (f"{s.label} " if multi else "") + " / ".join(s.hints)
+                for s in res.sub_questions if s.hints
             )
 
             fig = "（図なし）"
             if res.visual_svg:
                 stem = f"{unit}_{form}_Lv{level}_{i}"
-                (_FIGS / f"{stem}.svg").write_text(res.visual_svg, encoding="utf-8")
+                (figs_dir / f"{stem}.svg").write_text(res.visual_svg, encoding="utf-8")
                 fig = f"records/work/corpus/figs/{stem}.svg"
                 if cairosvg is not None:
                     cairosvg.svg2png(
                         bytestring=res.visual_svg.encode("utf-8"),
-                        write_to=str(_FIGS / f"{stem}.png"), output_width=520,
+                        write_to=str(figs_dir / f"{stem}.png"), output_width=520,
                     )
                     fig = f"records/work/corpus/figs/{stem}.png"
                 n_figs += 1
@@ -256,17 +284,17 @@ def main() -> None:
             lines.append(f"**問い** {sq.prompt_text}\n")
             lines.append(f"**図** {fig}\n")
             lines.append(f"**答え** {ans}\n")
-            lines.append(f"**解説**\n\n{sq.explanation}\n")
-            if sq.hints:
-                lines.append("**ヒント** " + " / ".join(sq.hints) + "\n")
+            lines.append(f"**解説**\n\n{exp}\n")
+            if hints:
+                lines.append(f"**ヒント** {hints}\n")
 
     if shortfalls:
         lines.insert(2, "\n## 取りこぼした型（seed を引き切れなかったセル）\n\n"
                      + "\n".join(f"- {s}" for s in shortfalls) + "\n")
 
-    _OUT.mkdir(parents=True, exist_ok=True)
-    (_OUT / "INDEX.md").write_text("\n".join(lines), encoding="utf-8")
-    print(f"問題 {n_problems} 個 / 図 {n_figs} 枚 → records/work/corpus/INDEX.md")
+    out_dir.mkdir(parents=True, exist_ok=True)
+    (out_dir / "INDEX.md").write_text("\n".join(lines), encoding="utf-8")
+    print(f"問題 {n_problems} 個 / 図 {n_figs} 枚 → {out_dir / 'INDEX.md'}")
     if shortfalls:
         print(f"取りこぼし {len(shortfalls)} セル（INDEX.md の冒頭に列挙した）")
 

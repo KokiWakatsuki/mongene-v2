@@ -44,11 +44,13 @@ sub_questions:
   prompt_text: 式を簡単にしなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 数を文字の前に書き、乗法の記号 × を省いて表す。
     op: apply_product_rule
     result_display: 8nnnbbcbc
     result_srepr: Mul(Integer(8), Pow(Symbol('b'), Integer(3)), Pow(Symbol('c'), Integer(2)), Pow(Symbol('n'), Integer(3)))
   - args: []
+    detail: ''
     narration: 同じ文字の積は、累乗の指数を使ってまとめる。
     op: combine_powers
     result_display: 8b³c²n³

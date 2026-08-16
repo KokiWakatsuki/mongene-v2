@@ -47,16 +47,19 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 計算しやすいように、片方の数をきりのよい数と小さな数の和や差に分ける。
     op: rewrite_as_round_plus_offset
     result_display: (300 - 3) × 8
     result_srepr: Integer(2376)
   - args: []
+    detail: ''
     narration: 分配法則を使って、きりのよい数の積と小さな数の積に分けて計算する。
     op: distribute_over_round
     result_display: 300 × 8 - 3 × 8
     result_srepr: Integer(2376)
   - args: []
+    detail: ''
     narration: 2つの積を合わせて、答えを求める。
     op: combine_easy_parts
     result_display: '2376'

@@ -40,6 +40,7 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 1から、もとのことがらの起こる確率をひく。
     op: subtract_from_one
     result_display: 7/9

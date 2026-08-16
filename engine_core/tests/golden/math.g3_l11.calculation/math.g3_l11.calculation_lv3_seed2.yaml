@@ -47,16 +47,19 @@ sub_questions:
   prompt_text: 式を簡単にしなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 共通する部分をひとかたまりとみる。
     op: substitute_common_part
     result_display: (x + 2)² - 3²
     result_srepr: ''
   - args: []
+    detail: ''
     narration: かたまりのままの式を公式の逆で因数分解する。
     op: apply_formula_factor
     result_display: ((x + 2) + 3)((x + 2) - 3)
     result_srepr: ''
   - args: []
+    detail: ''
     narration: かたまりをもとの式にもどして整理する。
     op: restore_factors
     result_display: (x - 1)(x + 5)

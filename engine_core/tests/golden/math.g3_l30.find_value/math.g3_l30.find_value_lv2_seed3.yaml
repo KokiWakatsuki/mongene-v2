@@ -48,21 +48,25 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: かっこを展開し、右辺を左辺に移項して、=0 の形に整理する。
     op: expand_and_rearrange
     result_display: x² + 5x - 84 = 0
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 左辺を因数分解する。
     op: factor_left_side
     result_display: (x - 7)(x + 12) = 0
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 積が 0 になるのは各因数が 0 のときだから、それぞれを 0 とおいて x を求める。
     op: apply_zero_product
     result_display: x - 7 = 0、x + 12 = 0
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 求めるものは正の数だから、2つの解のうち条件に合う正の解を選ぶ。
     op: select_positive_root
     result_display: '7'

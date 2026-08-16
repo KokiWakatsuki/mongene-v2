@@ -47,16 +47,19 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 三角錐の体積を、直角をはさむ三つの辺を使う見方と、求める垂線を高さとみる見方の二通りで表すことにする。
     op: express_volume_two_ways
     result_display: 3087/2 cm³
     result_srepr: Rational(3087, 2)
   - args: []
+    detail: ''
     narration: 底面とみる三角形は正三角形なので、その一辺の長さから面積を求める。
     op: compute_equilateral_face_area
     result_display: 441√3/2 cm²
     result_srepr: Mul(Rational(441, 2), Pow(Integer(3), Rational(1, 2)))
   - args: []
+    detail: ''
     narration: 二通りに表した体積が等しいとおいて、垂線の長さについて解く。
     op: solve_for_perpendicular
     result_display: 7√3 cm

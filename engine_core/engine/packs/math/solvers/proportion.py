@@ -91,7 +91,7 @@ def evaluate_direct_proportion(a: object, x0: object, mode: object) -> Solution:
                 result_display=(
                     f"aは{'正' if a_s > 0 else '負'}、xは{'正' if x_s > 0 else '負'}"
                 ),
-                narration="比例定数とxの値、それぞれの符号（正か負か）を確認する。",
+                narration="比例定数と x の値、それぞれの符号（正か負か）を確認する。",
             )
         )
     steps.append(
@@ -195,14 +195,14 @@ def judge_functional_relation(is_functional: object) -> Solution:
             args=[],
             result_srepr=("functional" if truthy else "not_functional"),
             result_display=("ただ1つに決まる" if truthy else "ただ1つには決まらない"),
-            narration="xの値を1つ決めたとき、それに対応するyの値がただ1つに決まるかどうかを調べる。",
+            narration="x の値を1つ決めたとき、それに対応する y の値がただ1つに決まるかどうかを調べる。",
         ),
         Step(
             op="judge_functional",
             args=[],
             result_srepr=correct,
             result_display=correct,
-            narration="yの値がただ1つに決まるなら関数であるといえ、決まらなければ関数であるとはいえない。",
+            narration="y の値がただ1つに決まるなら関数であるといえ、決まらなければ関数であるとはいえない。",
         ),
     ]
     answer = ChoiceAnswer(correct=correct, distractors=[other], fact_id="function.judge_functional_relation")
@@ -337,6 +337,10 @@ def solve_direct_proportion_from_point(x0: object, y0: object, mode: object) -> 
             result_srepr=sympy.srepr(expr),
             result_display=disp,
             narration="求めた比例定数を使って、比例の式を組み立てる。",
+            # **`a = -5` の行が無かった。** `a = -20 / 4` の次がいきなり `y = -5x` で、
+            # 比例定数の値そのものが解説に一度も出ていない（Lv2 には約分の手があるのに
+            # Lv1 には無い、という単元内の食い違いでもあった）。
+            detail=f"比例定数は a = {fmt_number(a)} なので、y = ax にあてはめる。",
         )
     )
     answer = SymbolicAnswer(srepr=sympy.srepr(expr), display=disp)
@@ -371,9 +375,9 @@ def solve_inverse_proportion_from_point(x0: object, y0: object, mode: object) ->
                 args=[],
                 result_srepr=sympy.srepr(a),
                 result_display=(
-                    f"xは{'正' if x0_s > 0 else '負'}、yは{'正' if y0_s > 0 else '負'}"
+                    f"x は{'正' if x0_s > 0 else '負'}、y は{'正' if y0_s > 0 else '負'}"
                 ),
-                narration="通る点のx座標とy座標、それぞれの符号（正か負か）を確認する。",
+                narration="通る点の x 座標と y 座標、それぞれの符号（正か負か）を確認する。",
             )
         )
     steps.append(
@@ -392,6 +396,7 @@ def solve_inverse_proportion_from_point(x0: object, y0: object, mode: object) ->
             result_srepr=sympy.srepr(expr),
             result_display=disp,
             narration="求めた比例定数を使って、反比例の式を組み立てる。",
+            detail=f"比例定数は a = {fmt_number(a)} なので、y = a/x にあてはめる。",
         )
     )
     answer = SymbolicAnswer(srepr=sympy.srepr(expr), display=disp)

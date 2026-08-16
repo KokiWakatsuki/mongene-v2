@@ -53,16 +53,19 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 12%の食塩水を x g、18%の食塩水を y g とおく。
     op: set_variables
     result_display: x, y
     result_srepr: Tuple(Symbol('x'), Symbol('y'))
   - args: []
+    detail: ''
     narration: 食塩水の重さの関係に着目して、1つめの式をつくる。
     op: formulate_first
     result_display: x + y = 600
     result_srepr: Equality(Add(Symbol('x'), Symbol('y')), Integer(600))
   - args: []
+    detail: ''
     narration: 溶けている食塩の重さの関係に着目して、2つめの式をつくる。
     op: formulate_second
     result_display: 12x/100 + 18y/100 = 78
@@ -70,12 +73,14 @@ sub_questions:
   - args:
     - Eq(x + y, 600)
     - Eq(3*x/25 + 9*y/50, 78)
+    detail: ''
     narration: 係数をそろえて一方の文字を消去し、残った文字を求める。
     op: eliminate_variable
     result_display: x = 500
     result_srepr: Equality(Symbol('x'), Integer(500))
   - args:
     - '500'
+    detail: ''
     narration: 求めた値をもとの式に代入し、もう一方の文字を求める。
     op: back_substitute
     result_display: y = 100

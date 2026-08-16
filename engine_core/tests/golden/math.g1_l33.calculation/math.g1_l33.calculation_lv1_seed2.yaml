@@ -24,7 +24,7 @@ meta:
   seed: 2
   signature: inverse_proportion_evaluate_forward
 problem_ref: 6de087c7f99625fc
-problem_text: 反比例の式 y = 18/x について、x = -3 のときの、もう一方の値を求めよ。
+problem_text: 反比例の式 y = 18/x について、x = -3 のときの y の値を求めよ。
 sub_questions:
 - answer:
     display: '-6'
@@ -44,12 +44,14 @@ sub_questions:
   - args:
     - '18'
     - '-3'
+    detail: ''
     narration: 比例定数と x の値を、反比例の式 y=a/x の x にあてはめる。
     op: substitute_x
     result_display: y = 18 / (-3)
     result_srepr: Integer(-6)
   - args:
     - y = 18 / (-3)
+    detail: ''
     narration: わり算を計算して y の値を求める。
     op: evaluate
     result_display: y = -6

@@ -42,11 +42,13 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 多角形の外角の和は、辺の数によらずつねに一定であることを思い出す。
     op: recall_exterior_sum_constant
     result_display: 多角形の外角の和がつねに一定であることを思い出す
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 正多角形はすべての外角が等しいことから、外角の和を辺の数でわって1つの外角を求める。
     op: divide_by_sides
     result_display: '45'

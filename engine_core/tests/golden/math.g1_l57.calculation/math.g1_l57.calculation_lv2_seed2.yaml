@@ -33,20 +33,22 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - representative_value.compute_grouped_mean
-  explanation: 'まず、各階級の階級値に、その階級の度数をかける。（250、455、495、330）
+  explanation: 'まず、各階級の階級値に度数をかけて、25 × 10、35 × 13、45 × 11、55 × 6 をそれぞれ計算する。（250、455、495、330）
 
-    次に、それらの積をすべて足し合わせ、度数の合計でわって平均値を求める。（38.25）'
+    次に、1530 ÷ 40 を計算して、平均値を求める。（38.25）'
   hints:
   - 各階級の階級値に、その階級の度数をかける。
   label: (1)
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: 各階級の階級値に度数をかけて、25 × 10、35 × 13、45 × 11、55 × 6 をそれぞれ計算する。
     narration: 各階級の階級値に、その階級の度数をかける。
     op: weight_by_class_value
     result_display: 250、455、495、330
     result_srepr: ''
   - args: []
+    detail: 1530 ÷ 40 を計算して、平均値を求める。
     narration: それらの積をすべて足し合わせ、度数の合計でわって平均値を求める。
     op: divide_by_total
     result_display: '38.25'

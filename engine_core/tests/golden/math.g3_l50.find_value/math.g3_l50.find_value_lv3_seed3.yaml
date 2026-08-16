@@ -45,16 +45,19 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 円周をn等分してできる1つの弧に対する中心角から、その弧に対する円周角を求める。
     op: identify_unit_arc_from_equal_division
     result_display: 30°
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 角の頂点をふくまない側の弧が、等分した弧の何個分にあたるかを数える。
     op: identify_arc_span_excluding_vertex
     result_display: 2個分
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 弧の長さは円周角の大きさに比例することから、求める角の大きさを求める。
     op: apply_inscribed_angle_theorem
     result_display: 60°

@@ -33,13 +33,14 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - cumulative_frequency.compute
-  explanation: まず、いちばん小さい階級から対象の階級まで、度数を順に足し合わせる。（19）
+  explanation: まず、いちばん小さい階級から順に 2 + 4 + 11 + 2 を足して、累積度数を求める。（19）
   hints:
   - いちばん小さい階級から対象の階級まで、度数を順に足し合わせる。
   label: (1)
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: いちばん小さい階級から順に 2 + 4 + 11 + 2 を足して、累積度数を求める。
     narration: いちばん小さい階級から対象の階級まで、度数を順に足し合わせる。
     op: accumulate_frequency
     result_display: '19'

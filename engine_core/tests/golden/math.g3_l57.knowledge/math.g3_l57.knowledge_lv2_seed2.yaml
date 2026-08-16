@@ -44,11 +44,13 @@ sub_questions:
   prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 対象すべてを調べることが、手間や対象の性質から現実的に可能かどうかを調べる。
     op: check_feasibility
     result_display: 全部を調べられる
     result_srepr: needs_census
   - args: []
+    detail: ''
     narration: 全部を調べるのが難しい・不要な場合は標本調査、そうでない場合は全数調査が適切と判断する。
     op: judge_appropriate_survey_method
     result_display: 全数調査で行うのが適切

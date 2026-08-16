@@ -44,11 +44,13 @@ sub_questions:
   prompt_text: 式を簡単にしなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: ÷ の計算を、その数の逆数をかっこにかける計算に直す。
     op: convert_division_to_multiplication
     result_display: (15x - 5y) × (-1/5)
     result_srepr: Add(Mul(Integer(-1), Integer(3), Symbol('x')), Symbol('y'))
   - args: []
+    detail: ''
     narration: 逆数をかっこの中の各項にかけて計算する。
     op: distribute
     result_display: -3x + y

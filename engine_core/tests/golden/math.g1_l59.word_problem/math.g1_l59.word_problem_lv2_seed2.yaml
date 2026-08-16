@@ -46,11 +46,13 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 表が出た回数を、投げた回数の合計でわって相対度数を求める。
     op: divide_occurred_by_total
     result_display: '0.645'
     result_srepr: Rational(129, 200)
   - args: []
+    detail: ''
     narration: 投げた回数がじゅうぶんに多いので、この相対度数は一定の値に近づいたとみなせる。その値を、表が出る確率の見積もりとする。
     op: regard_as_probability
     result_display: '0.645'
@@ -71,11 +73,13 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 見積もった確率を、投げる回数と表が出る回数を結ぶ一定の割合とみる。
     op: regard_as_constant_rate
     result_display: '0.645'
     result_srepr: Rational(129, 200)
   - args: []
+    detail: ''
     narration: その割合に、これから投げる回数をかけて、表が出る回数を予測する。
     op: evaluate
     result_display: 387回

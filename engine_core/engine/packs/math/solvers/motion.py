@@ -142,7 +142,11 @@ def draw_piecewise_area_graph_features(s: object, v: object) -> Solution:
         Feature(
             kind="breakpoint",
             srepr=sympy.srepr(sympy.Tuple(x, y)),
-            display=f"({x}, {y})",
+            # **display に日本語のラベルを入れる。** 他の solver は
+            # 「傾き 3」「通る点 (-3, -12)」と入れており、答えの表示は
+            # `kind + display` で組まれる。ここだけ裸の座標だったので、
+            # 生徒に見せる答えが「breakpoint (0, 0)」と内部語のまま出ていた。
+            display=f"折れ点 ({x}, {y})",
         )
         for x, y in breakpoints
     ]
@@ -323,6 +327,35 @@ def _all_times_display(op: str, t1, t2, t3, const_area, t_first, t_third) -> str
     raise ValueError(f"途中の表示を組めない op: {op!r}")
 
 
+def _all_times_detail(
+    op: str, s_v: sympy.Rational, v_v: sympy.Rational, area_v: sympy.Rational
+) -> str:
+    """区間ごとの面積の式と、解く方程式そのもの。
+
+    辺AB上: y = (s·v/2)x（増加）／辺BC上: y = s²/2（一定）／
+    辺CD上: y = -(s·v/2)x + 3s²/2（減少）。
+    """
+    k = sympy.nsimplify(s_v * v_v / 2)
+    const = sympy.nsimplify(s_v**2 / 2)
+    intercept = sympy.nsimplify(3 * s_v**2 / 2)
+    if op == "solve_on_increasing_interval":
+        return (
+            f"はじめの辺の上の面積の式は y = {sympy.sstr(k)}x なので、"
+            f"{sympy.sstr(k)}x = {sympy.sstr(area_v)} を解く。"
+        )
+    if op == "check_constant_interval":
+        return (
+            f"次の辺の上の面積はつねに {sympy.sstr(const)} なので、"
+            f"{sympy.sstr(area_v)} にはならない。"
+        )
+    if op == "solve_on_decreasing_interval":
+        return (
+            f"最後の辺の上の面積の式は y = -{sympy.sstr(k)}x + {sympy.sstr(intercept)} なので、"
+            f"-{sympy.sstr(k)}x + {sympy.sstr(intercept)} = {sympy.sstr(area_v)} を解く。"
+        )
+    return ""
+
+
 @register_solver("math.solve_moving_point_area_all_times")
 def solve_moving_point_area_all_times(
     s: object, v: object, area: object, labels: object = None
@@ -386,6 +419,9 @@ def solve_moving_point_area_all_times(
                 s_v**2 / 2, sympy.nsimplify(t_first), sympy.nsimplify(t_third),
             ),
             narration=narration[op],
+            # **「方程式とみて解く」と言いながら、その方程式が1行も無かった。**
+            # 区間ごとの面積の式と、それを = 面積 とおいた式を名指しする。
+            detail=_all_times_detail(op, s_v, v_v, area_v),
         )
         for i, op in enumerate(_ALL_TIMES_OPS)
     ]
@@ -429,7 +465,8 @@ def draw_three_interval_area_graph_features(s: object, v: object) -> Solution:
         raise ValueError("区間ごとの式と shoelace 再計算が一致しない")
 
     features = [
-        Feature(kind="breakpoint", srepr=sympy.srepr(sympy.Tuple(x, y)), display=f"({x}, {y})")
+        # display に日本語のラベルを入れる（143 行目と同じ理由）。
+        Feature(kind="breakpoint", srepr=sympy.srepr(sympy.Tuple(x, y)), display=f"折れ点 ({x}, {y})")
         for x, y in breakpoints
     ]
     ops = [
@@ -762,8 +799,14 @@ def express_interval_area_and_value(s: object, v: object, x0: object) -> Solutio
         Step(
             op=op, args=[],
             result_srepr=srepr if i == len(ops) - 1 else "",
-            result_display=disp if i == len(ops) - 1 else phrase[op],
+            # **最後の手で得たのは代入した面積だけ。** 答え全体（区間と式も）を
+            # 括弧に写していたので、2手目で出した式が最後にもう一度並んでいた。
+            result_display=f"{sympy.sstr(value)}cm²" if i == len(ops) - 1 else phrase[op],
             narration=narration[op],
+            detail=(
+                f"{expr_disp} の x に {sympy.sstr(x_v)} を代入して計算する。"
+                if op == "substitute_time" else ""
+            ),
         )
         for i, op in enumerate(ops)
     ]

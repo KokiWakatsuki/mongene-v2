@@ -39,7 +39,7 @@ sub_questions:
 
     次に、正の項どうし、負の項どうしをそれぞれまとめる。（7/4 + (-15/2)）
 
-    最後に、正の合計と負の合計を合わせて、答えを求める。（-23/4）'
+    最後に、通分すると 7/4 + (-30/4) になるので、合わせて答えを求める。（-23/4）'
   hints:
   - すべてのひき算を、符号を変えてたし算に直す。
   - 正の項どうし、負の項どうしをそれぞれまとめる。
@@ -47,16 +47,19 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: すべてのひき算を、符号を変えてたし算に直す。
     op: rewrite_all_as_addition
     result_display: 7/4 + (-1/2) + (-7)
     result_srepr: Rational(-23, 4)
   - args: []
+    detail: ''
     narration: 正の項どうし、負の項どうしをそれぞれまとめる。
     op: group_by_sign
     result_display: 7/4 + (-15/2)
     result_srepr: Rational(-23, 4)
   - args: []
+    detail: 通分すると 7/4 + (-30/4) になるので、合わせて答えを求める。
     narration: 正の合計と負の合計を合わせて、答えを求める。
     op: total_terms
     result_display: -23/4

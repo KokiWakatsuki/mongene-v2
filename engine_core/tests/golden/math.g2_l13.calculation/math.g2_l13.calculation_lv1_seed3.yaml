@@ -35,9 +35,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - simultaneous_equations.solve_by_substitution
-  explanation: 'まず、一方の式の y を、もう一方の式に代入して x だけの方程式にする。（3x = -9）
+  explanation: 'まず、もう一方の式の y に 2x + 11 を代入すると、x + (2x + 11) = 2 になる。（3x = -9）
 
-    次に、x の値を求める。（x = -3）
+    次に、両辺を x の係数 3 でわる。（x = -3）
 
     最後に、求めた x を y = … の式に代入して y を求める。（y = 5）'
   hints:
@@ -49,18 +49,21 @@ sub_questions:
   - args:
     - y = 2x + 11
     - x + y = 2
+    detail: もう一方の式の y に 2x + 11 を代入すると、x + (2x + 11) = 2 になる。
     narration: 一方の式の y を、もう一方の式に代入して x だけの方程式にする。
     op: substitute_expr
     result_display: 3x = -9
     result_srepr: Equality(Mul(Integer(3), Symbol('x')), Integer(-9))
   - args:
     - 3x = -9
+    detail: 両辺を x の係数 3 でわる。
     narration: x の値を求める。
     op: solve_for_x
     result_display: x = -3
     result_srepr: Integer(-3)
   - args:
     - '-3'
+    detail: ''
     narration: 求めた x を y = … の式に代入して y を求める。
     op: back_substitute
     result_display: y = 5

@@ -42,11 +42,13 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 一直線の角(平角)を、頂点の数より二少ない数だけ集めた大きさが内角の和になる、という公式に辺の数をあてはめる。
     op: apply_interior_sum_formula
     result_display: 180° × (3 - 2) = 180°
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 正多角形はすべての内角が等しいことから、内角の和を辺の数でわって1つの内角を求める。
     op: divide_for_one_angle
     result_display: 内角の和 180°、1つの内角 60°

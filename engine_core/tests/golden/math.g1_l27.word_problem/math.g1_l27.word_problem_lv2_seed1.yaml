@@ -48,11 +48,13 @@ sub_questions:
   prompt_text: 式に表しなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 場面の中で、どちらの見方でも同じになる（等しくなっている）量に着目する。
     op: find_equal_relation
     result_display: 進むのにかかった時間の合計
     result_srepr: Symbol('x')
   - args: []
+    detail: ''
     narration: その量を x を使って両辺に表し、方程式をつくる。
     op: formulate_equation
     result_display: x/3 + x/6 = 2
@@ -64,7 +66,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - equation.word_problem_round_trip
-  explanation: 'まず、分母の最小公倍数を両辺にかけて、分母をはらう。（x = 4）
+  explanation: 'まず、分母の最小公倍数 2 を両辺にかけて、分母をはらう。（x = 4）
 
     次に、等式の性質を使い、両辺を x の係数でわる。（x = 4）'
   hints:
@@ -73,11 +75,13 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: 分母の最小公倍数 2 を両辺にかけて、分母をはらう。
     narration: 分母の最小公倍数を両辺にかけて、分母をはらう。
     op: clear_denominators
     result_display: x = 4
     result_srepr: Integer(4)
   - args: []
+    detail: ''
     narration: 等式の性質を使い、両辺を x の係数でわる。
     op: divide_both_sides
     result_display: x = 4

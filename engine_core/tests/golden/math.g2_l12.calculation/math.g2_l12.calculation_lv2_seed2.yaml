@@ -35,9 +35,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - simultaneous_equations.solve_by_elimination_scaled
-  explanation: 'まず、y の係数をそろえるため、一方の式を何倍かする。（-6x + 3y = -15）
+  explanation: 'まず、はじめの式の両辺を 3 倍して、y の係数を 3 にそろえる。（-6x + 3y = -15）
 
-    次に、2式を加減して y を消去し、x を求める。（x = 3）
+    次に、y の係数がそろったので辺々を引く。整理すると -9x = -27 になるので、両辺を -9 でわる。（x = 3）
 
     最後に、求めた x をもとの式に代入して y を求める。（y = 1）'
   hints:
@@ -49,18 +49,21 @@ sub_questions:
   - args:
     - -2x + y = -5
     - 3x + 3y = 12
+    detail: はじめの式の両辺を 3 倍して、y の係数を 3 にそろえる。
     narration: y の係数をそろえるため、一方の式を何倍かする。
     op: scale_one_equation
     result_display: -6x + 3y = -15
     result_srepr: Integer(3)
   - args:
     - -6x + 3y = -15
+    detail: y の係数がそろったので辺々を引く。整理すると -9x = -27 になるので、両辺を -9 でわる。
     narration: 2式を加減して y を消去し、x を求める。
     op: eliminate_and_solve_x
     result_display: x = 3
     result_srepr: Integer(3)
   - args:
     - '3'
+    detail: ''
     narration: 求めた x をもとの式に代入して y を求める。
     op: back_substitute
     result_display: y = 1

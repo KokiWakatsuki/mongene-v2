@@ -44,11 +44,13 @@ sub_questions:
   prompt_text: 式を簡単にしなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 分母の最小公倍数を求めて通分する。
     op: find_common_denominator
     result_display: (8x - 12y + (9x - 9y)) / 12
     result_srepr: Mul(Rational(1, 12), Add(Mul(Integer(17), Symbol('x')), Mul(Integer(-1), Integer(21), Symbol('y'))))
   - args: []
+    detail: ''
     narration: 分子どうしを計算し、1つの分数にまとめる。
     op: combine_numerators
     result_display: (17x - 21y)/12

@@ -44,11 +44,13 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 整数や係数つきの根号もふくめ、すべての数を2乗した値に直す。
     op: convert_to_squared_form
     result_display: 4、12、19
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 2乗した値の大小の順に、もとの数を並べる。
     op: compare_and_order
     result_display: 2 < 2√3 < √19

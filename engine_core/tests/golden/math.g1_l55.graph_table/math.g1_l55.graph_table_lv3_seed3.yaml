@@ -42,11 +42,13 @@ sub_questions:
   prompt_text: 表から読み取りなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: それぞれの集団について、対象の階級の度数を総度数でわり、相対度数を求める。
     op: compute_relative_frequency_each
     result_display: A 0.16、B 0.25
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 求めた相対度数どうしを比べ、値が大きいほうを答える。
     op: compare_relative_frequency
     result_display: 'A: 0.16、B: 0.25（Bのほうが大きい）'

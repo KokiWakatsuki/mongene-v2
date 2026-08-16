@@ -35,13 +35,13 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - equation.solve_by_clear_denominators
-  explanation: 'まず、分母の最小公倍数を両辺にかけて、分母をはらう。（3 - 3x = 24）
+  explanation: 'まず、分母の最小公倍数 4 を両辺にかけて、分母をはらう。（3 - 3x = 24）
 
-    次に、文字の項を左辺に、数の項を右辺に、符号を変えて移項する。（-3x = 24 - 3）
+    次に、左辺の +3 を右辺に、符号を変えて移項する。（-3x = 24 - 3）
 
     次に、両辺の同類項をそれぞれまとめて、ax = b の形にする。（-3x = 21）
 
-    最後に、等式の性質を使い、両辺を x の係数でわる。（x = -7）'
+    最後に、等式の性質を使い、両辺を x の係数 -3 でわる。（x = -7）'
   hints:
   - 分母の最小公倍数を両辺にかけて、分母をはらう。
   - 文字の項を左辺に、数の項を右辺に、符号を変えて移項する。
@@ -50,21 +50,25 @@ sub_questions:
   prompt_text: 解を求めなさい。
   solution_steps:
   - args: []
+    detail: 分母の最小公倍数 4 を両辺にかけて、分母をはらう。
     narration: 分母の最小公倍数を両辺にかけて、分母をはらう。
     op: clear_denominators
     result_display: 3 - 3x = 24
     result_srepr: Integer(-7)
   - args: []
+    detail: 左辺の +3 を右辺に、符号を変えて移項する。
     narration: 文字の項を左辺に、数の項を右辺に、符号を変えて移項する。
     op: transpose_terms
     result_display: -3x = 24 - 3
     result_srepr: Integer(-7)
   - args: []
+    detail: ''
     narration: 両辺の同類項をそれぞれまとめて、ax = b の形にする。
     op: combine_like_terms
     result_display: -3x = 21
     result_srepr: Integer(-7)
   - args: []
+    detail: 等式の性質を使い、両辺を x の係数 -3 でわる。
     narration: 等式の性質を使い、両辺を x の係数でわる。
     op: divide_both_sides
     result_display: x = -7

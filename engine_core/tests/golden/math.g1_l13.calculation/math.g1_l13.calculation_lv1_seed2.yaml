@@ -42,6 +42,7 @@ sub_questions:
   prompt_text: 式を簡単にしなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 数を文字の前に書き、乗法の記号 × を省いて表す。
     op: apply_product_rule
     result_display: 8kx

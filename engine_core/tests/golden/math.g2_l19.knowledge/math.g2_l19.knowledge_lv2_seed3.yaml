@@ -44,11 +44,13 @@ sub_questions:
   prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 式の形から、x が増えるときに y がどのように変わるかを調べる。
     op: inspect_rate_of_change
     result_display: 変化の割合が一定でない
     result_srepr: Mul(Integer(23), Pow(Symbol('x'), Integer(-2)))
   - args: []
+    detail: ''
     narration: 変化の割合がつねに一定なら1次関数、一定でなければ1次関数でない。
     op: judge_linear
     result_display: 1次関数ではない

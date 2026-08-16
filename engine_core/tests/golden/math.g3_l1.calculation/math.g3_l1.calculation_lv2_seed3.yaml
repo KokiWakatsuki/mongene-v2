@@ -44,11 +44,13 @@ sub_questions:
   prompt_text: 式を簡単にしなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: それぞれの単項式を、対応するかっこの中の各項にかける。
     op: distribute_each_monomial
     result_display: -12a³ - 20a² + 8a - 4a³ - 4a²
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 同類項をまとめて計算する。
     op: combine_like_terms
     result_display: -16a³ - 24a² + 8a

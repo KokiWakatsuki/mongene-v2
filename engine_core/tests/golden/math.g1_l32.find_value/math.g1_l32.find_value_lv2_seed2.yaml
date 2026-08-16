@@ -37,7 +37,7 @@ sub_questions:
 
     次に、求めた商を約分し、比例定数を最も簡単な分数の形に整理する。（a = -1/2）
 
-    最後に、求めた比例定数を使って、比例の式を組み立てる。（y = (-1/2)x）'
+    最後に、比例定数は a = -1/2 なので、y = ax にあてはめる。（y = (-1/2)x）'
   hints:
   - 比例の式 y=ax に、通る点の x, y の値をあてはめ、比例定数を求める式をつくる。
   - 求めた商を約分し、比例定数を最も簡単な分数の形に整理する。
@@ -47,17 +47,20 @@ sub_questions:
   - args:
     - '2'
     - '-1'
+    detail: ''
     narration: 比例の式 y=ax に、通る点の x, y の値をあてはめ、比例定数を求める式をつくる。
     op: substitute_point
     result_display: a = -1 / 2
     result_srepr: Rational(-1, 2)
   - args: []
+    detail: ''
     narration: 求めた商を約分し、比例定数を最も簡単な分数の形に整理する。
     op: simplify_fraction
     result_display: a = -1/2
     result_srepr: Rational(-1, 2)
   - args:
     - -1/2
+    detail: 比例定数は a = -1/2 なので、y = ax にあてはめる。
     narration: 求めた比例定数を使って、比例の式を組み立てる。
     op: form_expression
     result_display: y = (-1/2)x

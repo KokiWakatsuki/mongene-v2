@@ -33,31 +33,34 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - inverse_proportion.solve_from_point
-  explanation: 'まず、通る点のx座標とy座標、それぞれの符号（正か負か）を確認する。（xは負、yは正）
+  explanation: 'まず、通る点の x 座標と y 座標、それぞれの符号（正か負か）を確認する。（x は負、y は正）
 
     次に、反比例の式 y=a/x に、通る点の x, y の値をあてはめ、比例定数を求める式をつくる。（a = (-3) × 12）
 
-    最後に、求めた比例定数を使って、反比例の式を組み立てる。（y = -36/x）'
+    最後に、比例定数は a = -36 なので、y = a/x にあてはめる。（y = -36/x）'
   hints:
-  - 通る点のx座標とy座標、それぞれの符号（正か負か）を確認する。
+  - 通る点の x 座標と y 座標、それぞれの符号（正か負か）を確認する。
   - 反比例の式 y=a/x に、通る点の x, y の値をあてはめ、比例定数を求める式をつくる。
   label: (1)
   prompt_text: 式に表しなさい。
   solution_steps:
   - args: []
-    narration: 通る点のx座標とy座標、それぞれの符号（正か負か）を確認する。
+    detail: ''
+    narration: 通る点の x 座標と y 座標、それぞれの符号（正か負か）を確認する。
     op: check_signs
-    result_display: xは負、yは正
+    result_display: x は負、y は正
     result_srepr: Integer(-36)
   - args:
     - '-3'
     - '12'
+    detail: ''
     narration: 反比例の式 y=a/x に、通る点の x, y の値をあてはめ、比例定数を求める式をつくる。
     op: substitute_point
     result_display: a = (-3) × 12
     result_srepr: Integer(-36)
   - args:
     - '-36'
+    detail: 比例定数は a = -36 なので、y = a/x にあてはめる。
     narration: 求めた比例定数を使って、反比例の式を組み立てる。
     op: form_expression
     result_display: y = -36/x

@@ -42,6 +42,7 @@ sub_questions:
   prompt_text: 式を簡単にしなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 根号の中が同じ項を、同類項のようにまとめる。
     op: combine_like_radicals
     result_display: 6√7

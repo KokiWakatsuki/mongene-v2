@@ -42,11 +42,13 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 平行な2直線と1本の直線がつくる同位角の関係を確認する。
     op: identify_angle_relation
     result_display: 同位角
     result_srepr: corresponding
   - args: []
+    detail: ''
     narration: その関係にある角は等しいという性質から、求める角の大きさを決める。
     op: apply_angle_equality
     result_display: '78'

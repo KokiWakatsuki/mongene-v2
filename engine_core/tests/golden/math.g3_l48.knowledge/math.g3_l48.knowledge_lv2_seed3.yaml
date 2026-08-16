@@ -44,11 +44,13 @@ sub_questions:
   prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 直線WXの同じ側にある2点Y, Zでできる角が、等しいかどうかを確認する。
     op: compare_angles_on_same_side
     result_display: 等しくない
     result_srepr: not_equal
   - args: []
+    detail: ''
     narration: 円周角の定理の逆から、4点が同一円周上にあるといえるかどうかを判別する。
     op: judge_by_inscribed_angle_converse
     result_display: 同一円周上にあるとはいえない

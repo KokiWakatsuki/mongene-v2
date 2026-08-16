@@ -44,11 +44,13 @@ sub_questions:
   prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 場面に登場するそれぞれの結果の起こりやすさに、違いがあるかどうかを調べる。
     op: check_symmetry
     result_display: 違いがある
     result_srepr: not_equally_likely
   - args: []
+    detail: ''
     narration: どの結果も同じ程度に起こると考えられるなら同様に確からしいといえ、そうでなければいえない。
     op: judge_equally_likely
     result_display: 同様に確からしいとはいえない

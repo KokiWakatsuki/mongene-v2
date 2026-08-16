@@ -42,11 +42,13 @@ sub_questions:
   prompt_text: 面積を求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 動いた道のりから、点 P の位置の座標を決める。
     op: locate_point_p
     result_display: P(18, 8)
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 3点の座標から、三角形の面積を求める公式で面積を計算する。
     op: compute_triangle_area
     result_display: '72'

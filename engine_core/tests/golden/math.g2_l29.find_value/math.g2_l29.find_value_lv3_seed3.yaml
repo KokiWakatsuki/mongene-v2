@@ -42,11 +42,13 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 面積の式に、求める面積の値を代入して、時刻 x についての方程式をつくる。
     op: set_up_equation
     result_display: 4x = 28
     result_srepr: Equality(Mul(Integer(4), Symbol('x')), Integer(28))
   - args: []
+    detail: ''
     narration: 両辺を x の係数で割って、時刻 x を求める。
     op: solve_for_x
     result_display: x = 7

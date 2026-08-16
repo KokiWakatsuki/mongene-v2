@@ -35,28 +35,31 @@ sub_questions:
   - quartile.compute_q1_q3_iqr
   explanation: 'まず、データを大きさの順に並べ、中央値を境に下組と上組に分ける。（下組 7、9、11、13、29 / 上組 32、35、36、42、47）
 
-    次に、下組の中央値を第一四分位数、上組の中央値を第三四分位数とする。（第1四分位数 11、第3四分位数 36）
+    次に、下組の中央値を第1四分位数、上組の中央値を第3四分位数とする。（第1四分位数 11、第3四分位数 36）
 
-    最後に、上組の中央値から下組の中央値をひき、四分位範囲を求める。（第1四分位数 11、第3四分位数 36、四分位範囲 25）'
+    最後に、36 - 11 を計算して、四分位範囲を求める。（25）'
   hints:
   - データを大きさの順に並べ、中央値を境に下組と上組に分ける。
-  - 下組の中央値を第一四分位数、上組の中央値を第三四分位数とする。
+  - 下組の中央値を第1四分位数、上組の中央値を第3四分位数とする。
   label: (1)
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: データを大きさの順に並べ、中央値を境に下組と上組に分ける。
     op: split_into_halves
     result_display: 下組 7、9、11、13、29 / 上組 32、35、36、42、47
     result_srepr: ''
   - args: []
-    narration: 下組の中央値を第一四分位数、上組の中央値を第三四分位数とする。
+    detail: ''
+    narration: 下組の中央値を第1四分位数、上組の中央値を第3四分位数とする。
     op: compute_q1_q3
     result_display: 第1四分位数 11、第3四分位数 36
     result_srepr: ''
   - args: []
-    narration: 上組の中央値から下組の中央値をひき、四分位範囲を求める。
+    detail: 36 - 11 を計算して、四分位範囲を求める。
+    narration: 第3四分位数から第1四分位数をひき、四分位範囲を求める。
     op: compute_iqr
-    result_display: 第1四分位数 11、第3四分位数 36、四分位範囲 25
+    result_display: '25'
     result_srepr: Tuple(Integer(11), Integer(36), Integer(25))
 visual_svg: null

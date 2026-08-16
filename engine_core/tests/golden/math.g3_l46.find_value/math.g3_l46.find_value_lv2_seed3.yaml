@@ -42,11 +42,13 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 相似な立体の表面積の比は相似比の二乗に等しいことから、表面積の比を求める。
     op: square_ratio_for_surface_area
     result_display: '4:49'
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 相似な立体の体積の比は相似比の三乗に等しいことから、体積の比を求める。
     op: cube_ratio_for_volume
     result_display: 表面積の比 4:49、体積の比 8:343

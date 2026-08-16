@@ -45,11 +45,13 @@ sub_questions:
   prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 左から見て、最初の0でない数字が有効数字の始まりである（位取りの0は数えない）。
     op: find_first_significant_digit
     result_display: '6'
     result_srepr: sigfig:2
   - args: []
+    detail: ''
     narration: そこから末尾までの数字の個数を数える（小数点以下の末尾の0も有効数字に含める）。
     op: count_significant_digits
     result_display: 二けた

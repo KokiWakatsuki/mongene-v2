@@ -44,11 +44,13 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 指数がどの数にかかっているか（かっこの有無）を見分ける。
     op: identify_base_scope
     result_display: (-7/8) × (-7/8)
     result_srepr: Rational(49, 64)
   - args: []
+    detail: ''
     narration: 符号に注意して計算し、累乗の値を求める。
     op: evaluate_power_with_sign
     result_display: 49/64

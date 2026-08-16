@@ -51,16 +51,19 @@ sub_questions:
   - args:
     - りんご
     - レモン
+    detail: ''
     narration: りんごの個数を x、レモンの個数を y とおく。
     op: set_variables
     result_display: x, y
     result_srepr: Tuple(Symbol('x'), Symbol('y'))
   - args: []
+    detail: ''
     narration: 個数の関係から、x と y の和が合わせて買った個数に等しいという式をつくる。
     op: formulate_count
     result_display: x + y = 12
     result_srepr: Equality(Add(Symbol('x'), Symbol('y')), Integer(12))
   - args: []
+    detail: ''
     narration: 代金の関係から、それぞれの単価と個数の積の和が代金の合計に等しいという式をつくる。
     op: formulate_cost
     result_display: 140x + 90y = 1530
@@ -84,16 +87,19 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 個数の式の両辺を x の単価だけ倍して、x の係数を代金の式とそろえる。
     op: scale_count_equation
     result_display: 140x + 140y = 1680
     result_srepr: Equality(Add(Mul(Integer(140), Symbol('x')), Mul(Integer(140), Symbol('y'))), Integer(1680))
   - args: []
+    detail: ''
     narration: 辺々を引いて x を消去し、残った y の値を求める。
     op: eliminate_and_solve
     result_display: y = 3
     result_srepr: Equality(Symbol('y'), Integer(3))
   - args: []
+    detail: ''
     narration: 求めた y を個数の式に代入して、x の値を求める。
     op: back_substitute
     result_display: x = 9

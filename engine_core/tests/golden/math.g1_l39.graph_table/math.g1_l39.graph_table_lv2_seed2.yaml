@@ -99,11 +99,13 @@ sub_questions:
   prompt_text: 移した図形をかきなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 回転の中心と、反時計回りの回転角を読み取る。
     op: identify_center_and_angle
     result_display: 中心 (0, -3)、90°
     result_srepr: ''
   - args: []
+    detail: ''
     narration: もとの図形の各頂点を、回転の中心のまわりに同じ角だけ回転させる。
     op: rotate_each_vertex
     result_display: (-7, -8)、(2, -9)、(3, -6)

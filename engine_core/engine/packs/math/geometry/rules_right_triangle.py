@@ -115,6 +115,13 @@ def _apply_third_angles(points: list[Point], facts: frozenset[Fact]) -> Iterable
                 u1, u2 = frozenset(a2), frozenset(b2)
                 if t1 != t2 or u1 != u2 or a1[0] == b1[0] or a2[0] == b2[0]:
                     continue
+                # **「2つの三角形で」なので、同じ三角形の中で使ってはいけない。**
+                # 正三角形（AB＝AC＝BC）で ∠ABC＝∠ACB と ∠BAC＝∠ACB から
+                # ∠BAC＝∠ABC を出すのに当たっていた——これは推移律であって
+                # 内角の和とは関係が無く、「三角形の内角の和は180°で、他の2組の角が
+                # それぞれ等しいので」という**使っていない根拠**を書いていた。
+                if t1 == u1:
+                    continue
                 if t1 in collinear_triples or u1 in collinear_triples:
                     continue  # 一直線に並んだ3点は三角形ではない
                 third1 = ang(*_third_vertex(a1, b1))
@@ -122,6 +129,29 @@ def _apply_third_angles(points: list[Point], facts: frozenset[Fact]) -> Iterable
                 concl = ang_eq(third1, third2)
                 if concl.args[0] != concl.args[1]:
                     yield concl, (f, g)
+
+
+def _apply_angle_transitive(points: list[Point], facts: frozenset[Fact]) -> Iterable[Derivation]:
+    """角の等しいことをつなぐ（∠X ＝ ∠Z と ∠Y ＝ ∠Z から ∠X ＝ ∠Y）。
+
+    **推移律を規則として持たせる。** 無かったので、正三角形（AB＝AC・BA＝BC）で
+    2つの底角の等式をつなぐところに `use_third_angles`（三角形の内角の和）が
+    当たり、「三角形の内角の和は180°で、他の2組の角がそれぞれ等しいので」という
+    **使っていない根拠**が書かれていた。教科書はここを「③、④より」とだけ書く
+    ——つないでいるのは内角の和ではなく、同じ角に等しいという関係である。
+
+    面積の `use_equal_area_transitive` と同じ形（そちらは先に入っていた）。
+    """
+    eqs = [f for f in facts if f.kind == "ang_eq" and f.args[0] != f.args[1]]
+    for f1, f2 in itertools.permutations(eqs, 2):
+        shared = set(f1.args) & set(f2.args)
+        if len(shared) != 1:
+            continue
+        a = next(x for x in f1.args if x not in shared)
+        b = next(x for x in f2.args if x not in shared)
+        if a == b:
+            continue
+        yield ang_eq(a, b), (f1, f2)
 
 
 def _third_vertex(
@@ -149,6 +179,12 @@ RIGHT_TRIANGLE_RULES: tuple[Rule, ...] = (
         "use_third_angles",
         "三角形の内角の和は180°で、他の2組の角がそれぞれ等しい",
         _apply_third_angles,
+        ("angle",),
+    ),
+    Rule(
+        "use_equal_angle_transitive",
+        "同じ角に等しい角どうしは等しい",
+        _apply_angle_transitive,
         ("angle",),
     ),
 )

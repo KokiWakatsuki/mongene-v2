@@ -45,16 +45,19 @@ sub_questions:
   prompt_text: 変域を求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: x の変域が、頂点である原点をまたいでいるかどうかを確かめる。
     op: check_domain_contains_vertex
     result_display: またぐので y = 0 も候補
     result_srepr: ''
   - args: []
+    detail: ''
     narration: x の変域の両端の値を、それぞれ式に代入して y の値を求める。
     op: evaluate_endpoints
     result_display: x = -8 のとき y = 256、x = 3 のとき y = 36
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 頂点の y の値と両端の y の値を合わせて、変域の両端を決める。
     op: combine_with_vertex
     result_display: 0 ≦ y ≦ 256

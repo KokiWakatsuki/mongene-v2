@@ -23,7 +23,7 @@ meta:
     unit: g2_l7
   seed: 3
   signature: consecutive_number_sum
-problem_ref: f8ac6885f1d5eab7
+problem_ref: e3c6f980061f9851
 problem_text: 整数 p を使って表した、連続する2つの5の倍数 5p, 5p+5 の和を計算し、1つの式で表せ。
 sub_questions:
 - answer:
@@ -33,20 +33,31 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - polynomial.consecutive_number_sum
-  explanation: 'まず、それぞれの数を表す式の和を、かっこを外して書き出す。（5p + 5p + 5）
+  explanation: 'まず、それぞれの数を表す式を、かっこをつけて和の形に並べる。（(5p) + (5p + 5)）
 
-    次に、同類項をまとめて、1つの式にする。（10p + 5）'
+    次に、かっこを外して、項の和の形にする。（5p + 5p + 5）
+
+    最後に、同類項をまとめて、1つの式にする。（10p + 5）'
   hints:
-  - それぞれの数を表す式の和を、かっこを外して書き出す。
+  - それぞれの数を表す式を、かっこをつけて和の形に並べる。
+  - かっこを外して、項の和の形にする。
   label: (1)
   prompt_text: 式を簡単にしなさい。
   solution_steps:
   - args: []
-    narration: それぞれの数を表す式の和を、かっこを外して書き出す。
+    detail: ''
+    narration: それぞれの数を表す式を、かっこをつけて和の形に並べる。
     op: expand_expression
+    result_display: (5p) + (5p + 5)
+    result_srepr: Add(Mul(Integer(10), Symbol('p')), Integer(5))
+  - args: []
+    detail: ''
+    narration: かっこを外して、項の和の形にする。
+    op: drop_parentheses
     result_display: 5p + 5p + 5
     result_srepr: Add(Mul(Integer(10), Symbol('p')), Integer(5))
   - args: []
+    detail: ''
     narration: 同類項をまとめて、1つの式にする。
     op: combine_like_terms
     result_display: 10p + 5

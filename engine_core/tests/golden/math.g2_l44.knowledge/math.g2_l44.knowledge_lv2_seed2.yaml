@@ -44,11 +44,13 @@ sub_questions:
   prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 図から読み取れる条件が、直角三角形の合同条件（斜辺と1つの鋭角、または斜辺と他の1辺）を満たしているかを確認する。
     op: check_right_triangle_condition
     result_display: 合同条件にあてはまらない
     result_srepr: 'no'
   - args: []
+    detail: ''
     narration: 直角がすでに等しいことと合わせて、直角三角形の合同条件を満たすかどうかを判別する。
     op: judge_right_triangle_congruence
     result_display: 合同であるとはいえない

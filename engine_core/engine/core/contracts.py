@@ -71,17 +71,37 @@ class Unsupported(BaseModel):
 # MR（中間表現）— §4.2
 # ---------------------------------------------------------------------------
 class Step(BaseModel):
+    """解き方の1手。
+
+    ## narration と detail を分ける理由
+
+    `narration` は**ヒントにそのまま流れる**（`t1_template._build_hints`）。ヒントは
+    G-Q5t（漏洩）の検査対象なので、narration に数字を書くと答えの先出しとして落ちる
+    ——これが「narration には数字を書かない」規約（鉄則⑦）。その結果、解説の指示文が
+    「両辺に同じ数をたすかひくかする」のように**その問題で実際に何をしたのかを
+    言わない**形になっていた。実物（佐賀県教委の学習プリント・005net）は逆に
+    「両辺から ５ をひいて」と操作を名指しする。
+
+    `detail` は**解説にしか出ない**（ヒントにも問題文にも流れない）。だから実際の値で
+    操作を名指しできる。解説の行は `detail or narration` で組む＝detail を書いた手は
+    そちらが勝ち、書かない手は従来どおり narration が出る。
+
+      narration  左辺を x の項だけにするために、両辺に同じ数をたすかひくかする。（ヒント）
+      detail     左辺を x の項だけにするために、両辺から 5 をひく。            （解説）
+    """
+
     model_config = ConfigDict(extra="forbid")
     op: str                # ソルバ演算名（例 "solve_linear_eq"）
     args: list[str] = Field(default_factory=list)  # 入力（表示可能形）
     result_srepr: str      # sympy srepr（機械厳密形 = moat）
     result_display: str    # 表示形（例 "x = 3"）
     narration: str         # 「なぜこの計算か」1文（T1/T3・ヒントの素材）
+    detail: str = ""       # 同じ手を**実際の値で名指しした**1文（解説だけに出る。下記）
 
-    @field_validator("narration")
+    @field_validator("narration", "detail")
     @classmethod
     def _narration_owns_no_connective(cls, v: str) -> str:
-        """narration は「文の本体」だけを持つ。接続詞はレンダラの持ち物。
+        """narration/detail は「文の本体」だけを持つ。接続詞はレンダラの持ち物。
 
         T1 は解説を組むとき先頭に「まず、／次に、／最後に、」を付ける（`_connective`）。
         narration 自体が接続詞で始まると「次に、次に、乗法と除法を…」と二重になる
@@ -91,7 +111,7 @@ class Step(BaseModel):
         for connective in ("まず、", "次に、", "最後に、", "さらに、"):
             if v.startswith(connective):
                 raise ValueError(
-                    f"narration は接続詞 {connective!r} で始めない"
+                    f"narration/detail は接続詞 {connective!r} で始めない"
                     f"（順序はレンダラが付ける）: {v!r}"
                 )
         return v

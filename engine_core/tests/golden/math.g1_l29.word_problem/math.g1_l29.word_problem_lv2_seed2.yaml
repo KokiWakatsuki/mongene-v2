@@ -41,7 +41,7 @@ sub_questions:
   - direct_proportion.word_problem_rate
   explanation: 'まず、比例の式 y=ax に、通る点の x, y の値をあてはめ、比例定数を求める式をつくる。（a = 7 / 1）
 
-    次に、求めた比例定数を使って、比例の式を組み立てる。（y = 7x）'
+    次に、比例定数は a = 7 なので、y = ax にあてはめる。（y = 7x）'
   hints:
   - 比例の式 y=ax に、通る点の x, y の値をあてはめ、比例定数を求める式をつくる。
   label: (1)
@@ -50,12 +50,14 @@ sub_questions:
   - args:
     - '1'
     - '7'
+    detail: ''
     narration: 比例の式 y=ax に、通る点の x, y の値をあてはめ、比例定数を求める式をつくる。
     op: substitute_point
     result_display: a = 7 / 1
     result_srepr: Integer(7)
   - args:
     - '7'
+    detail: 比例定数は a = 7 なので、y = ax にあてはめる。
     narration: 求めた比例定数を使って、比例の式を組み立てる。
     op: form_expression
     result_display: y = 7x
@@ -78,12 +80,14 @@ sub_questions:
   - args:
     - '7'
     - '6'
+    detail: ''
     narration: 比例定数と x の値を、比例の式 y=ax の x にあてはめる。
     op: substitute_x
     result_display: y = 7 × 6
     result_srepr: Integer(42)
   - args:
     - y = 7 × 6
+    detail: ''
     narration: かけ算を計算して y の値を求める。
     op: evaluate
     result_display: y = 42

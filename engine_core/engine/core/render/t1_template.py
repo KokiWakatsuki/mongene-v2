@@ -31,7 +31,9 @@ if TYPE_CHECKING:  # pragma: no cover - 型のみ
 class SubQuestionView:
     """テンプレートに公開する小問ビュー。asked と steps の narration のみ。
 
-    answer/srepr は載せない（Q5 を構造で防ぐ）。
+    answer/srepr は載せない（Q5 を構造で防ぐ）。**`Step.detail` も載せない**
+    ——detail は実際の値を名指しする欄なので、問題文から書けてしまうと漏洩の口になる。
+    載せないことで「解説にしか出ない」を構造で保つ（`Step` の docstring）。
     """
 
     label: str
@@ -174,8 +176,12 @@ def _explanation_line(index: int, total: int, step: "Step") -> str:
     「…に着目する。 冊数と値段の比次に、その量を…」と読めない文になっていた
     （narration は句点で終わるが result_display は「x = 125」のような裸の断片で
     終わるため）。括弧で閉じることで、result_display が結果でも言い換えでも文が切れる。
+
+    **指示文は `detail` が勝つ。** detail は解説にしか出ない欄なので、実際の値で
+    操作を名指しできる（「両辺から 5 をひく」）。ヒントは narration しか見ないので、
+    ここで値を出しても先出しにはならない（`Step` の docstring・鉄則⑦）。
     """
-    body = f"{_connective(index, total)}{step.narration}"
+    body = f"{_connective(index, total)}{step.detail or step.narration}"
     if not step.result_display:
         return body
     return f"{body}（{step.result_display}）"

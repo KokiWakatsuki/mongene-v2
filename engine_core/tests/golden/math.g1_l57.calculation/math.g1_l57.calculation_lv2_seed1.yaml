@@ -33,20 +33,22 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - representative_value.compute_grouped_mean
-  explanation: 'まず、各階級の階級値に、その階級の度数をかける。（127.5、332.5、210、57.5）
+  explanation: 'まず、各階級の階級値に度数をかけて、42.5 × 3、47.5 × 7、52.5 × 4、57.5 × 1 をそれぞれ計算する。（127.5、332.5、210、57.5）
 
-    次に、それらの積をすべて足し合わせ、度数の合計でわって平均値を求める。（48.5）'
+    次に、727.5 ÷ 15 を計算して、平均値を求める。（48.5）'
   hints:
   - 各階級の階級値に、その階級の度数をかける。
   label: (1)
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: 各階級の階級値に度数をかけて、42.5 × 3、47.5 × 7、52.5 × 4、57.5 × 1 をそれぞれ計算する。
     narration: 各階級の階級値に、その階級の度数をかける。
     op: weight_by_class_value
     result_display: 127.5、332.5、210、57.5
     result_srepr: ''
   - args: []
+    detail: 727.5 ÷ 15 を計算して、平均値を求める。
     narration: それらの積をすべて足し合わせ、度数の合計でわって平均値を求める。
     op: divide_by_total
     result_display: '48.5'

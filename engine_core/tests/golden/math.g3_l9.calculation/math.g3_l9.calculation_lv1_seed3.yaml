@@ -44,11 +44,13 @@ sub_questions:
   prompt_text: 式を簡単にしなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: はじめと終わりが平方で、中央が積の2倍になっていることを確かめる。
     op: recognize_perfect_square
     result_display: m² と 1²、中央は 2 × m × 1
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 1次式の平方の形で表す。
     op: write_square
     result_display: (m + 1)²

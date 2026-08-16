@@ -37,7 +37,7 @@ sub_questions:
   - polynomial.combine_like_terms_mixed
   explanation: 'まず、式の中から、文字の部分が同じ項（同類項）の組を見分ける。（a の項、b の項）
 
-    次に、文字の部分が同じ項（同類項）どうしをまとめる。（(8a - 3a) + (-9b + 6b - 9b)）
+    次に、8a、-3a は a の項、-9b、6b、-9b は b の項なので、同類項としてまとめる。（(8a - 3a) + (-9b + 6b - 9b)）
 
     最後に、まとめた同類項の係数を計算し、式を簡単にする。（5a - 12b）'
   hints:
@@ -47,16 +47,19 @@ sub_questions:
   prompt_text: 式を簡単にしなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 式の中から、文字の部分が同じ項（同類項）の組を見分ける。
     op: identify_like_terms
     result_display: a の項、b の項
     result_srepr: ''
   - args: []
+    detail: 8a、-3a は a の項、-9b、6b、-9b は b の項なので、同類項としてまとめる。
     narration: 文字の部分が同じ項（同類項）どうしをまとめる。
     op: group_like_terms
     result_display: (8a - 3a) + (-9b + 6b - 9b)
     result_srepr: Add(Mul(Integer(5), Symbol('a')), Mul(Integer(-1), Integer(12), Symbol('b')))
   - args: []
+    detail: ''
     narration: まとめた同類項の係数を計算し、式を簡単にする。
     op: add_coefficients
     result_display: 5a - 12b

@@ -35,17 +35,17 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - equation.solve_proportion_linear
-  explanation: 'まず、比例式の性質を使い、外項の積と内項の積が等しい式（たすきがけ）をつくる。（9 × (x - 1) = 9 × 5）
+  explanation: 'まず、比例式の性質を使い、外項の積と内項の積が等しい式をつくる。（9 × (x - 1) = 9 × 5）
 
     次に、分配法則を使って、かっこを外す。（9x - 9 = 45）
 
-    次に、文字の項を左辺に、数の項を右辺に、符号を変えて移項する。（9x = 45 + 9）
+    次に、左辺の -9 を右辺に、符号を変えて移項する。（9x = 45 + 9）
 
     次に、両辺の同類項をそれぞれまとめて、ax = b の形にする。（9x = 54）
 
-    最後に、等式の性質を使い、両辺を x の係数でわる。（x = 6）'
+    最後に、等式の性質を使い、両辺を x の係数 9 でわる。（x = 6）'
   hints:
-  - 比例式の性質を使い、外項の積と内項の積が等しい式（たすきがけ）をつくる。
+  - 比例式の性質を使い、外項の積と内項の積が等しい式をつくる。
   - 分配法則を使って、かっこを外す。
   - 文字の項を左辺に、数の項を右辺に、符号を変えて移項する。
   - 両辺の同類項をそれぞれまとめて、ax = b の形にする。
@@ -53,26 +53,31 @@ sub_questions:
   prompt_text: 解を求めなさい。
   solution_steps:
   - args: []
-    narration: 比例式の性質を使い、外項の積と内項の積が等しい式（たすきがけ）をつくる。
+    detail: ''
+    narration: 比例式の性質を使い、外項の積と内項の積が等しい式をつくる。
     op: cross_multiply
     result_display: 9 × (x - 1) = 9 × 5
     result_srepr: Integer(6)
   - args: []
+    detail: ''
     narration: 分配法則を使って、かっこを外す。
     op: expand_parentheses
     result_display: 9x - 9 = 45
     result_srepr: Integer(6)
   - args: []
+    detail: 左辺の -9 を右辺に、符号を変えて移項する。
     narration: 文字の項を左辺に、数の項を右辺に、符号を変えて移項する。
     op: transpose_terms
     result_display: 9x = 45 + 9
     result_srepr: Integer(6)
   - args: []
+    detail: ''
     narration: 両辺の同類項をそれぞれまとめて、ax = b の形にする。
     op: combine_like_terms
     result_display: 9x = 54
     result_srepr: Integer(6)
   - args: []
+    detail: 等式の性質を使い、両辺を x の係数 9 でわる。
     narration: 等式の性質を使い、両辺を x の係数でわる。
     op: divide_both_sides
     result_display: x = 6

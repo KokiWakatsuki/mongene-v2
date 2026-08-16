@@ -53,11 +53,13 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 満水の量を空になるまでの時間でわって、水を抜く割合を求める。
     op: find_drain_rate
     result_display: 毎分6L
     result_srepr: Integer(6)
   - args: []
+    detail: ''
     narration: 減っていく水そうと増えていく水そうの量を、それぞれ経過した時間の式で表す。
     op: formulate_two_lines
     result_display: 二つの水そうの量を x の式で表す
@@ -65,6 +67,7 @@ sub_questions:
   - args:
     - Eq(6*x + y, 120)
     - Eq(-9*x + y, 0)
+    detail: ''
     narration: 2つの直線を ax + by = c の形にそろえて連立方程式を立てる。
     op: setup_system
     result_display: 6x + y = 120, -9x + y = 0
@@ -72,12 +75,14 @@ sub_questions:
   - args:
     - Eq(6*x + y, 120)
     - Eq(-9*x + y, 0)
+    detail: ''
     narration: 係数をそろえて一方の文字を消去し、残った文字を求める。
     op: eliminate_variable
     result_display: x = 8
     result_srepr: Equality(Symbol('x'), Integer(8))
   - args:
     - '8'
+    detail: ''
     narration: 求めた値をもとの式に代入し、もう一方の文字を求める。
     op: back_substitute
     result_display: y = 72

@@ -49,16 +49,19 @@ sub_questions:
   prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 傾き a の符号から、グラフが右上がりか右下がりかを判断する。
     op: identify_slope_sign
     result_display: 傾きは負
     result_srepr: Integer(-1)
   - args: []
+    detail: ''
     narration: 切片 b の符号から、y 軸の正の部分・負の部分のどちらで交わるかを判断する。
     op: identify_intercept_sign
     result_display: 切片は正
     result_srepr: Integer(1)
   - args: []
+    detail: ''
     narration: 傾きと切片の符号を合わせて、グラフのようすを選ぶ。
     op: combine_signs
     result_display: 右下がりで、y 軸の正の部分で y 軸と交わる

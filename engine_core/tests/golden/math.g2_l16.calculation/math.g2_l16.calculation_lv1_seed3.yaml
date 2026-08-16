@@ -35,9 +35,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - simultaneous_equations.solve_by_elimination_add
-  explanation: 'まず、y の係数が絶対値が等しく符号が逆なので、辺々を足して y を消去する。（y の係数は 3 と -3）
+  explanation: 'まず、y の係数が 3 と -3 なので、辺々を足すと y が消える。（(5x + 3y) + (4x - 3y) = 10 + 8）
 
-    次に、足してできた式から x の値を求める。（x = 2）
+    次に、整理すると 9x = 18 になるので、両辺を 9 でわる。（x = 2）
 
     最後に、求めた x を一方の式に代入して y を求める。（y = 0）'
   hints:
@@ -49,17 +49,20 @@ sub_questions:
   - args:
     - 5x + 3y = 10
     - 4x - 3y = 8
+    detail: y の係数が 3 と -3 なので、辺々を足すと y が消える。
     narration: y の係数が絶対値が等しく符号が逆なので、辺々を足して y を消去する。
     op: identify_opposite_coeff
-    result_display: y の係数は 3 と -3
+    result_display: (5x + 3y) + (4x - 3y) = 10 + 8
     result_srepr: Integer(3)
   - args: []
+    detail: 整理すると 9x = 18 になるので、両辺を 9 でわる。
     narration: 足してできた式から x の値を求める。
     op: add_and_solve_x
     result_display: x = 2
     result_srepr: Integer(2)
   - args:
     - '2'
+    detail: ''
     narration: 求めた x を一方の式に代入して y を求める。
     op: back_substitute
     result_display: y = 0

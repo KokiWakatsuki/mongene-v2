@@ -44,11 +44,13 @@ sub_questions:
   prompt_text: 式を簡単にしなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 分母と分子に、分母の共役な式をかける。
     op: multiply_by_conjugate
     result_display: (9 × (√7 + √10)) / ((√7 - √10) × (√7 + √10))
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 分母を根号のない形にし、約分して簡単にする。
     op: simplify_fraction
     result_display: -3√10 - 3√7

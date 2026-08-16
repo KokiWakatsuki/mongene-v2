@@ -48,12 +48,14 @@ sub_questions:
     - '-5'
     - '2'
     - '-1'
+    detail: ''
     narration: x の値を式に代入する。
     op: substitute_x
     result_display: y = (-5) × (-1) + 2
     result_srepr: Integer(7)
   - args:
     - y = (-5) × (-1) + 2
+    detail: ''
     narration: 計算して y の値を求める。
     op: evaluate
     result_display: y = 7
@@ -61,6 +63,7 @@ sub_questions:
   - args:
     - '-1'
     - '7'
+    detail: ''
     narration: 与えられた x の値と求めた y の値を組にして、通過点の座標とする。
     op: form_coordinate
     result_display: (-1, 7)

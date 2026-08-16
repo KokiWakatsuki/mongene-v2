@@ -47,16 +47,19 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 負の数を代入するときは、かっこをつけて文字とおきかえる。
     op: substitute_with_parentheses
     result_display: -4 × (-8)² - 8 × (-8)
     result_srepr: Integer(-192)
   - args: []
+    detail: ''
     narration: 累乗はかっこの中の数をその回数だけかけ合わせ、符号に注意して計算する。
     op: evaluate_powers
     result_display: -4 × 64 - 8 × (-8)
     result_srepr: Integer(-192)
   - args: []
+    detail: ''
     narration: あてはめた式を計算して、式の値を求める。
     op: compute_value
     result_display: '-192'

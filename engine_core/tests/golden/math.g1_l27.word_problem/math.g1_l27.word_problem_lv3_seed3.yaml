@@ -41,11 +41,11 @@ sub_questions:
 
     次に、分配法則を使って、かっこを外す。（90x + 540 = 180x）
 
-    次に、文字の項を左辺に、数の項を右辺に、符号を変えて移項する。（90x - 180x = -540）
+    次に、右辺の +180x を左辺に、左辺の +540 を右辺に、符号を変えて移項する。（90x - 180x = -540）
 
     次に、両辺の同類項をそれぞれまとめて、ax = b の形にする。（-90x = -540）
 
-    最後に、等式の性質を使い、両辺を x の係数でわる。（x = 6）'
+    最後に、等式の性質を使い、両辺を x の係数 -90 でわる。（x = 6）'
   hints:
   - 場面の中で、どちらの見方でも同じになる（等しくなっている）量に着目する。
   - その量を x を使って両辺に表し、方程式をつくる。
@@ -56,31 +56,37 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 場面の中で、どちらの見方でも同じになる（等しくなっている）量に着目する。
     op: find_equal_relation
     result_display: 追いついたときに2人が進んだ道のり
     result_srepr: Symbol('x')
   - args: []
+    detail: ''
     narration: その量を x を使って両辺に表し、方程式をつくる。
     op: formulate_equation
     result_display: 90(x + 6) = 180x
     result_srepr: Equality(Add(Mul(Integer(90), Symbol('x')), Integer(540)), Mul(Integer(180), Symbol('x')))
   - args: []
+    detail: ''
     narration: 分配法則を使って、かっこを外す。
     op: expand_parentheses
     result_display: 90x + 540 = 180x
     result_srepr: Integer(6)
   - args: []
+    detail: 右辺の +180x を左辺に、左辺の +540 を右辺に、符号を変えて移項する。
     narration: 文字の項を左辺に、数の項を右辺に、符号を変えて移項する。
     op: transpose_terms
     result_display: 90x - 180x = -540
     result_srepr: Integer(6)
   - args: []
+    detail: ''
     narration: 両辺の同類項をそれぞれまとめて、ax = b の形にする。
     op: combine_like_terms
     result_display: -90x = -540
     result_srepr: Integer(6)
   - args: []
+    detail: 等式の性質を使い、両辺を x の係数 -90 でわる。
     narration: 等式の性質を使い、両辺を x の係数でわる。
     op: divide_both_sides
     result_display: x = 6

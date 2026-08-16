@@ -110,9 +110,26 @@ _FRACTION_TO_DECIMAL_NARRATION: dict[str, str] = {
     "identify_repeating_block": "同じ余りが再び現れた区間の商の並びを、循環節として書き出す。",
 }
 
-_FRACTION_TO_DECIMAL_PHRASE: dict[str, str] = {
-    "long_division_track_remainders": "余りを記録しながら割り進める",
-}
+def _long_division_line(p: int, q: int, *, max_steps: int = 8) -> str:
+    """筆算そのもの（`10 ÷ 3 = 3 余り 1`）を並べて書く。
+
+    以前この手の括弧は `余りを記録しながら割り進める` ＝**指示の言い直し**で、
+    わり算が1行も出ていなかった。余りが再び現れたところで循環が決まる、という
+    この単元の要は**余りの並びを見せて初めて伝わる**。
+    """
+    seen: dict[int, int] = {}
+    parts: list[str] = []
+    r = p % q
+    for _ in range(max_steps):
+        if r == 0 or r in seen:
+            break
+        seen[r] = len(parts)
+        digit, nxt = divmod(r * 10, q)
+        parts.append(f"{r * 10} ÷ {q} = {digit} 余り {nxt}")
+        r = nxt
+    # 解説の行は全体が `（…）` で囲まれるので、ここで括弧を使うと二重になる。
+    tail = f" → 余り {r} が再び現れる" if r in seen else " → わり切れる"
+    return "、".join(parts) + tail
 
 
 @register_solver("math.fraction_to_repeating_decimal")
@@ -136,8 +153,9 @@ def fraction_to_repeating_decimal(p: int, q: int) -> Solution:
             op=op,
             args=[],
             result_srepr=srepr if i == len(ops) - 1 else "",
-            result_display=disp if i == len(ops) - 1 else _FRACTION_TO_DECIMAL_PHRASE.get(op, ""),
+            result_display=disp if i == len(ops) - 1 else _long_division_line(p, q),
             narration=_FRACTION_TO_DECIMAL_NARRATION[op],
+            detail=f"{p} を {q} でわり進め、余りを順に書き出す。" if i == 0 else "",
         )
         for i, op in enumerate(ops)
     ]
@@ -148,16 +166,35 @@ def fraction_to_repeating_decimal(p: int, q: int) -> Solution:
 # ---------------------------------------------------------------------------
 # math.repeating_decimal_to_fraction（g3_l16.calculation Lv2）
 # ---------------------------------------------------------------------------
-_DECIMAL_TO_FRACTION_STEPS: list[str] = ["set_up_algebraic_equation", "solve_for_fraction"]
+# **この単元の本体は「文字でおいて、桁をずらして、差をとる」の3行**である。
+# 以前は2手で、しかも括弧が `100倍した式との差` という**式ですらない言い直し**
+# だったので、`x = 0.646464…` も `100x = 64.646464…` も `99x = 64` も
+# 解説に一度も出ていなかった（＝この単元で教えることが解説に無い）。
+_DECIMAL_TO_FRACTION_STEPS: list[str] = [
+    "set_variable", "align_repeating_parts", "subtract_to_cancel", "solve_for_fraction",
+]
 
 _DECIMAL_TO_FRACTION_NARRATION: dict[str, str] = {
-    "set_up_algebraic_equation": "循環小数を文字でおき、桁をずらした式との差を作って循環部分を消す。",
-    "solve_for_fraction": "できた等式を整理し、分数の形に直して約分する。",
+    "set_variable": "求める循環小数を x とおく。",
+    "align_repeating_parts": "小数点より下が同じ並びになる2つの式を、10 倍をくり返してつくる。",
+    "subtract_to_cancel": "2つの式の差をとって、循環する小数部分を消す。",
+    "solve_for_fraction": "両辺を x の係数でわり、約分して分数の形にする。",
 }
 
-def _decimal_to_fraction_phrase(shift: int) -> dict[str, str]:
-    """循環小数を分数にする手の括弧（何倍した式との差か）。"""
-    return {"set_up_algebraic_equation": f"{shift}倍した式との差"}
+
+def _shifted_decimal(non_rep: str, rep: str, k: int, *, cycles: int = 3) -> str:
+    """10^k 倍した循環小数を「426.666…」の形で書く。
+
+    小数の桁は `非循環部 + 循環節のくり返し` そのものなので、文字列を作って
+    小数点を k けた右にずらすだけでよい（浮動小数にはしない）。
+    """
+    need = k + len(non_rep) + cycles * len(rep) + len(rep)
+    digits = non_rep
+    while len(digits) < need:
+        digits += rep
+    int_part = digits[:k].lstrip("0") or "0"
+    frac = digits[k:k + len(non_rep) + cycles * len(rep)]
+    return f"{int_part}.{frac}…"
 
 
 @register_solver("math.repeating_decimal_to_fraction")
@@ -174,17 +211,47 @@ def repeating_decimal_to_fraction(non_repeating: str, repeating: str) -> Solutio
     srepr = sympy.srepr(rational)
     disp = str(rational)
 
+    n, r = len(non_repeating), len(repeating)
+    lo, hi = 10 ** n, 10 ** (n + r)          # 小数部分がそろう2つの倍率
+    coeff = hi - lo                          # 差をとったあとの x の係数
+    rhs = int(non_repeating + repeating) - int(non_repeating or "0")
+
+    def times(k: int) -> str:
+        """「100x」の書き方（1 倍のときは係数を書かない）。"""
+        return "x" if k == 1 else f"{k}x"
+
+    displays = {
+        "set_variable": f"x = {_shifted_decimal(non_repeating, repeating, 0)}",
+        # 非循環部が無いときは 1 倍の式＝1手目の x そのものなので、書き直さない。
+        "align_repeating_parts": (
+            f"{times(hi)} = {_shifted_decimal(non_repeating, repeating, n + r)}"
+            if lo == 1 else
+            f"{times(lo)} = {_shifted_decimal(non_repeating, repeating, n)}、"
+            f"{times(hi)} = {_shifted_decimal(non_repeating, repeating, n + r)}"
+        ),
+        "subtract_to_cancel": f"{coeff}x = {rhs}",
+        "solve_for_fraction": disp,
+    }
+    details = {
+        "align_repeating_parts": (
+            f"両辺を {hi} 倍した式と {lo} 倍した式をつくる。"
+            if lo != 1 else f"両辺を {hi} 倍した式をつくる。"
+        ),
+        "subtract_to_cancel": (
+            f"{times(hi)} から {times(lo)} をひくと、小数部分が同じなので消える。"
+        ),
+        "solve_for_fraction": f"両辺を {coeff} でわる。",
+    }
+
     ops = _DECIMAL_TO_FRACTION_STEPS
     steps = [
         Step(
             op=op,
             args=[],
             result_srepr=srepr if i == len(ops) - 1 else "",
-            result_display=disp if i == len(ops) - 1
-            else _decimal_to_fraction_phrase(
-                10 ** (len(non_repeating) + len(repeating))
-            )[op],
+            result_display=displays[op],
             narration=_DECIMAL_TO_FRACTION_NARRATION[op],
+            detail=details.get(op, ""),
         )
         for i, op in enumerate(ops)
     ]

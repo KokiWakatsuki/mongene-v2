@@ -33,20 +33,22 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - linear_function.slope_as_rate_of_change
-  explanation: 'まず、x が1増えると y がいくつ増えるかを、式の変化から調べる。（(-9 × (x + 1) + b) - (-9 × x + b)）
+  explanation: 'まず、切片を b とおくと、x を 1 増やしたときの y の変化は (-9(x + 1) + b) - (-9x + b) になる。（(-9(x + 1) + b) - (-9x + b)）
 
-    次に、1次関数では、x が1増えるときの y の増加量は傾きに等しい。（-9）'
+    次に、b どうしも -9x どうしも消えるので、残るのは -9 になる。（-9）'
   hints:
   - x が1増えると y がいくつ増えるかを、式の変化から調べる。
   label: (1)
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: 切片を b とおくと、x を 1 増やしたときの y の変化は (-9(x + 1) + b) - (-9x + b) になる。
     narration: x が1増えると y がいくつ増えるかを、式の変化から調べる。
     op: compute_increment
-    result_display: (-9 × (x + 1) + b) - (-9 × x + b)
+    result_display: (-9(x + 1) + b) - (-9x + b)
     result_srepr: Integer(-9)
   - args: []
+    detail: b どうしも -9x どうしも消えるので、残るのは -9 になる。
     narration: 1次関数では、x が1増えるときの y の増加量は傾きに等しい。
     op: state_rate_of_change
     result_display: '-9'

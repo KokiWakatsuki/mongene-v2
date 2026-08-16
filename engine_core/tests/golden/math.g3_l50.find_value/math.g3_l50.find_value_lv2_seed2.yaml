@@ -42,11 +42,13 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 2つの弧の長さの比を読み取る。
     op: identify_arc_length_ratio
     result_display: 3倍
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 弧の長さは、その弧に対する円周角の大きさに比例することから、求める円周角の大きさを求める。
     op: apply_arc_angle_proportion
     result_display: 69°

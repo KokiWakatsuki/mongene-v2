@@ -44,11 +44,13 @@ sub_questions:
   prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 反比例の式 y=a/x の比例定数 a の符号（正か負か）を確認する。
     op: check_sign
     result_display: aは負
     result_srepr: negative
   - args: []
+    detail: ''
     narration: aが正なら右上と左下、負なら左上と右下の部分に双曲線がある。どちらも二つの枝からなり、x軸・y軸と交わらない。
     op: judge_hyperbola_quadrants
     result_display: 左上と右下の部分にある（二つの枝からなり、x軸・y軸と交わらない）

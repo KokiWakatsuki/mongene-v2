@@ -35,7 +35,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - rational_form.fraction_to_decimal
-  explanation: 'まず、分子を分母で割り進め、そのつど現れる余りを記録していく。（余りを記録しながら割り進める）
+  explanation: 'まず、17 を 30 でわり進め、余りを順に書き出す。（170 ÷ 30 = 5 余り 20、200 ÷ 30 = 6 余り 20 → 余り 20 が再び現れる）
 
     次に、同じ余りが再び現れた区間の商の並びを、循環節として書き出す。（0.56̇）'
   hints:
@@ -44,11 +44,13 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: 17 を 30 でわり進め、余りを順に書き出す。
     narration: 分子を分母で割り進め、そのつど現れる余りを記録していく。
     op: long_division_track_remainders
-    result_display: 余りを記録しながら割り進める
+    result_display: 170 ÷ 30 = 5 余り 20、200 ÷ 30 = 6 余り 20 → 余り 20 が再び現れる
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 同じ余りが再び現れた区間の商の並びを、循環節として書き出す。
     op: identify_repeating_block
     result_display: 0.56̇

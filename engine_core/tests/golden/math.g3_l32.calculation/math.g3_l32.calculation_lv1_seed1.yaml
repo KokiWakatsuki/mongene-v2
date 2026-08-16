@@ -42,11 +42,13 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 式の x に、与えられた値をあてはめる。
     op: substitute_x
     result_display: 4 × (5)²
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 2乗を計算してから比例定数をかけ、y の値を求める。
     op: compute_y
     result_display: '100'

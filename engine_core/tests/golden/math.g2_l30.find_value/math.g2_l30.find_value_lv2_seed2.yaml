@@ -33,32 +33,35 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - linear_function.diagram_intersection
-  explanation: 'まず、2つの直線の y を等しいとおき、x についての方程式を解く。（x = 8）
+  explanation: 'まず、2つの直線の y を等しいとおき、x についての方程式をつくる。（34 - 3x = 18 - x）
 
-    次に、x の値を求める。（x = 8）
+    次に、その方程式を解いて、x の値を求める。（x = 8）
 
     最後に、求めた x をどちらかの式に代入し、y を求める。（y = 10）'
   hints:
-  - 2つの直線の y を等しいとおき、x についての方程式を解く。
-  - x の値を求める。
+  - 2つの直線の y を等しいとおき、x についての方程式をつくる。
+  - その方程式を解いて、x の値を求める。
   label: (1)
   prompt_text: 交点の座標を求めなさい。
   solution_steps:
   - args:
     - Eq(3*x + y, 34)
     - Eq(x + y, 18)
-    narration: 2つの直線の y を等しいとおき、x についての方程式を解く。
+    detail: ''
+    narration: 2つの直線の y を等しいとおき、x についての方程式をつくる。
     op: equate_expressions
-    result_display: x = 8
+    result_display: 34 - 3x = 18 - x
     result_srepr: Equality(Symbol('x'), Integer(8))
   - args:
     - '8'
-    narration: x の値を求める。
+    detail: ''
+    narration: その方程式を解いて、x の値を求める。
     op: solve_for_x
     result_display: x = 8
     result_srepr: Integer(8)
   - args:
     - '8'
+    detail: ''
     narration: 求めた x をどちらかの式に代入し、y を求める。
     op: compute_y
     result_display: y = 10

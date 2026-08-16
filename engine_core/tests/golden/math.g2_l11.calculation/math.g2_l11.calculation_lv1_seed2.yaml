@@ -35,9 +35,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - simultaneous_equations.solve_by_elimination
-  explanation: 'まず、y の係数が等しいので、辺々を引いて y を消去する。（y の係数はどちらも 1）
+  explanation: 'まず、y の係数がどちらも 1 なので、辺々を引くと y が消える。（(-3x + y) - (-x + y) = 14 - 4）
 
-    次に、残った式から x の値を求める。（x = -5）
+    次に、整理すると -2x = 10 になるので、両辺を -2 でわる。（x = -5）
 
     最後に、求めた x を一方の式に代入して y を求める。（y = -1）'
   hints:
@@ -49,17 +49,20 @@ sub_questions:
   - args:
     - -3x + y = 14
     - -x + y = 4
+    detail: y の係数がどちらも 1 なので、辺々を引くと y が消える。
     narration: y の係数が等しいので、辺々を引いて y を消去する。
     op: identify_equal_coeff
-    result_display: y の係数はどちらも 1
+    result_display: (-3x + y) - (-x + y) = 14 - 4
     result_srepr: Integer(1)
   - args: []
+    detail: 整理すると -2x = 10 になるので、両辺を -2 でわる。
     narration: 残った式から x の値を求める。
     op: eliminate_and_solve_x
     result_display: x = -5
     result_srepr: Integer(-5)
   - args:
     - '-5'
+    detail: ''
     narration: 求めた x を一方の式に代入して y を求める。
     op: back_substitute
     result_display: y = -1

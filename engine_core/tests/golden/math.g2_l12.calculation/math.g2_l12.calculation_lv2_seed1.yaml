@@ -35,9 +35,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - simultaneous_equations.solve_by_elimination_scaled
-  explanation: 'まず、y の係数をそろえるため、一方の式を何倍かする。（4x + 2y = -16）
+  explanation: 'まず、はじめの式の両辺を 2 倍して、y の係数を 2 にそろえる。（4x + 2y = -16）
 
-    次に、2式を加減して y を消去し、x を求める。（x = -2）
+    次に、y の係数がそろったので辺々を引く。整理すると 7x = -14 になるので、両辺を 7 でわる。（x = -2）
 
     最後に、求めた x をもとの式に代入して y を求める。（y = -4）'
   hints:
@@ -49,18 +49,21 @@ sub_questions:
   - args:
     - 2x + y = -8
     - -3x + 2y = -2
+    detail: はじめの式の両辺を 2 倍して、y の係数を 2 にそろえる。
     narration: y の係数をそろえるため、一方の式を何倍かする。
     op: scale_one_equation
     result_display: 4x + 2y = -16
     result_srepr: Integer(2)
   - args:
     - 4x + 2y = -16
+    detail: y の係数がそろったので辺々を引く。整理すると 7x = -14 になるので、両辺を 7 でわる。
     narration: 2式を加減して y を消去し、x を求める。
     op: eliminate_and_solve_x
     result_display: x = -2
     result_srepr: Integer(-2)
   - args:
     - '-2'
+    detail: ''
     narration: 求めた x をもとの式に代入して y を求める。
     op: back_substitute
     result_display: y = -4

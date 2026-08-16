@@ -44,11 +44,13 @@ sub_questions:
   prompt_text: 式に表しなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 分母をなくすため、両辺に分母をかける。
     op: multiply_both_sides
     result_display: 4n = pr
     result_srepr: Mul(Integer(4), Symbol('n'), Pow(Symbol('p'), Integer(-1)))
   - args: []
+    detail: ''
     narration: 両辺を、解く文字にかかっている係数でわる。
     op: divide_by_coefficient
     result_display: r = 4n/p

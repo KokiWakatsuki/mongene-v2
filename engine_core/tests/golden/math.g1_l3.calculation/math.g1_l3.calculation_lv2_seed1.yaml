@@ -39,7 +39,7 @@ sub_questions:
 
     次に、正の項どうし、負の項どうしをそれぞれまとめる。（1/2 + (-13/5)）
 
-    最後に、正の合計と負の合計を合わせて、答えを求める。（-21/10）'
+    最後に、通分すると 5/10 + (-26/10) になるので、合わせて答えを求める。（-21/10）'
   hints:
   - かっこを外し、それぞれの数を符号のついた項として並べる。
   - 正の項どうし、負の項どうしをそれぞれまとめる。
@@ -47,16 +47,19 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: かっこを外し、それぞれの数を符号のついた項として並べる。
     op: rewrite_as_term_sum
     result_display: 1/2 - 3/5 - 2
     result_srepr: Rational(-21, 10)
   - args: []
+    detail: ''
     narration: 正の項どうし、負の項どうしをそれぞれまとめる。
     op: group_by_sign
     result_display: 1/2 + (-13/5)
     result_srepr: Rational(-21, 10)
   - args: []
+    detail: 通分すると 5/10 + (-26/10) になるので、合わせて答えを求める。
     narration: 正の合計と負の合計を合わせて、答えを求める。
     op: total_terms
     result_display: -21/10

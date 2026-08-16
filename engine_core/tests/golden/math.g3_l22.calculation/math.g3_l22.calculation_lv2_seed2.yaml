@@ -44,11 +44,13 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 式の文字に、根号を含む値をそのままあてはめる。
     op: substitute_root_value
     result_display: (√15+(-12))²-2(-12)(√15+(-12))
     result_srepr: ''
   - args: []
+    detail: ''
     narration: かっこを展開し、根号を含む項どうしを整理して式の値を求める。
     op: expand_and_simplify
     result_display: '-129'

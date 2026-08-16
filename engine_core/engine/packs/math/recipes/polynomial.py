@@ -939,7 +939,11 @@ def express_number_property(ctx: CellContext, rng: Rng) -> MR:
     assert sol.answer.srepr == sympy.srepr(sympy.expand(sympy.sympify(expr_str))), (
         "double-solve 不一致"
     )
-    assert [s.op for s in sol.steps] == ["expand_expression", "combine_like_terms"]
+    # かっこを外す前の行を足したので3手（`(2n) + (2n + 2) + (2n + 4)` →
+    # かっこを外す → 同類項をまとめる）。
+    assert [s.op for s in sol.steps] == [
+        "expand_expression", "drop_parentheses", "combine_like_terms",
+    ]
     assert sympy.sympify(sol.answer.srepr).free_symbols, "和が定数に退化した"
 
     sub_question = SubQuestionMR(

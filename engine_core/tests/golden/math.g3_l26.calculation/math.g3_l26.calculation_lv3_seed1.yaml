@@ -23,7 +23,7 @@ meta:
     unit: g3_l26
   seed: 1
   signature: quad_solve_formula_hard
-problem_ref: 4fd13e13267bd967
+problem_ref: 38e0feb7fe02a4d4
 problem_text: '次の2次方程式を解け。
 
   3x² + 4x - 6 = 0'
@@ -37,27 +37,39 @@ sub_questions:
   - quadratic.solve_by_formula
   explanation: 'まず、与式を整理して、それぞれの項の係数 a・b・c を読み取る。（a = 3、b = 4、c = -6）
 
+    次に、読み取った a・b・c を、解の公式にそのまま代入する。（x = (-4 ± √(4² - 4 × 3 × (-6))) / (2 × 3)）
+
     次に、根号の中の値（判別式）を計算する。（4² - 4 × 3 × (-6) = 88）
 
-    最後に、a・b・c を解の公式に代入して x を求める。（x = (-√22 - 2)/3, x = (-2 + √22)/3）'
+    最後に、根号の中を計算し、約分できるところを約分して x を求める。（x = (-√22 - 2)/3, x = (-2 + √22)/3）'
   hints:
   - 与式を整理して、それぞれの項の係数 a・b・c を読み取る。
+  - 読み取った a・b・c を、解の公式にそのまま代入する。
   - 根号の中の値（判別式）を計算する。
   label: (1)
   prompt_text: 解を求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 与式を整理して、それぞれの項の係数 a・b・c を読み取る。
     op: identify_coefficients
     result_display: a = 3、b = 4、c = -6
     result_srepr: ''
   - args: []
+    detail: ''
+    narration: 読み取った a・b・c を、解の公式にそのまま代入する。
+    op: substitute_into_formula
+    result_display: x = (-4 ± √(4² - 4 × 3 × (-6))) / (2 × 3)
+    result_srepr: ''
+  - args: []
+    detail: ''
     narration: 根号の中の値（判別式）を計算する。
     op: compute_discriminant
     result_display: 4² - 4 × 3 × (-6) = 88
     result_srepr: ''
   - args: []
-    narration: a・b・c を解の公式に代入して x を求める。
+    detail: ''
+    narration: 根号の中を計算し、約分できるところを約分して x を求める。
     op: apply_quadratic_formula
     result_display: x = (-√22 - 2)/3, x = (-2 + √22)/3
     result_srepr: Tuple(Add(Mul(Integer(-1), Rational(1, 3), Pow(Integer(22), Rational(1, 2))), Rational(-2, 3)), Add(Rational(-2, 3), Mul(Rational(1, 3), Pow(Integer(22), Rational(1, 2)))))

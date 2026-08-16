@@ -50,21 +50,25 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 二人の位置を、出発してからの時間を使ってそれぞれ式で表す。
     op: express_positions_in_time
     result_display: 先に出た人は 120x、あとの人は 1200 - 90(x - 9)
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 向かい合って進む間に位置が等しくなる時刻を求め、これが一回目の出会いであることを確かめる。
     op: find_first_meeting
     result_display: 67/7分後
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 折り返したあとの位置は、折り返す地点までの道のりから、折り返してから進んだ道のりを引いて表す。
     op: express_position_after_turn
     result_display: 折り返した人は 2400 - 120x
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 折り返したあとの位置と、向かってくる相手の位置が等しいとおいて方程式を解く。
     op: solve_for_second_meeting
     result_display: 13分後

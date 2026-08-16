@@ -42,6 +42,7 @@ sub_questions:
   prompt_text: 式を簡単にしなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: かっこの前の数を、かっこの中の各項にかけて計算する。
     op: distribute_multiplication
     result_display: -12x + 10y

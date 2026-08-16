@@ -44,11 +44,13 @@ sub_questions:
   prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 対象の統計量が、データのどのような性質から求められた値かを読み取る。
     op: identify_statistic
     result_display: ''
     result_srepr: iqr
   - args: []
+    detail: ''
     narration: その値が、データの中心の位置と散らばりの度合いのどちらを表すかを判別する。
     op: classify_distribution_statistic
     result_display: データの散らばりの度合いを表す

@@ -55,6 +55,7 @@ sub_questions:
   - args:
     - (-6, -9)
     - (2, 11)
+    detail: ''
     narration: 2点をそれぞれ y = ax + b に代入し、a, b の連立方程式を立てる。
     op: setup_simultaneous
     result_display: -6a + b = -9, 2a + b = 11
@@ -62,6 +63,7 @@ sub_questions:
   - args:
     - Eq(-6*a + b, -9)
     - Eq(2*a + b, 11)
+    detail: ''
     narration: 連立方程式を解いて a, b を同時に求める。
     op: solve_simultaneous
     result_display: a = 5/2, b = 6
@@ -69,6 +71,7 @@ sub_questions:
   - args:
     - 5/2
     - '6'
+    detail: ''
     narration: 求めた a, b から一次関数の式を組み立てる。
     op: form_expression
     result_display: y = 5/2x + 6

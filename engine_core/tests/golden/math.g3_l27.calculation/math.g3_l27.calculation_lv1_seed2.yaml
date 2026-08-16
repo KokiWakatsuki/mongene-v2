@@ -44,11 +44,13 @@ sub_questions:
   prompt_text: 解を求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 左辺を因数分解する。
     op: factor_left_side
     result_display: (x - 7)(x + 7) = 0
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 積が 0 になるのは各因数が 0 のときだから、それぞれを 0 とおいて x を求める。
     op: apply_zero_product
     result_display: x = -7, x = 7

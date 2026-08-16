@@ -46,11 +46,13 @@ sub_questions:
   prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: その数が、整数を使った分数（p/q）の形で表せるかどうかを調べる。
     op: evaluate_representability
     result_display: 分数では表せない
     result_srepr: irrational
   - args: []
+    detail: ''
     narration: 分数の形で表せれば有理数、表せなければ無理数と分類する。
     op: classify_rational_irrational
     result_display: 無理数

@@ -35,11 +35,11 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - equation.solve_by_transpose_both_sides
-  explanation: 'まず、文字の項を左辺に、数の項を右辺に、符号を変えて移項する。（2x - 3x = 8 - 3）
+  explanation: 'まず、右辺の +3x を左辺に、左辺の +3 を右辺に、符号を変えて移項する。（2x - 3x = 8 - 3）
 
     次に、両辺の同類項をそれぞれまとめて、ax = b の形にする。（-x = 5）
 
-    最後に、等式の性質を使い、両辺を x の係数でわる。（x = -5）'
+    最後に、等式の性質を使い、両辺を x の係数 -1 でわる。（x = -5）'
   hints:
   - 文字の項を左辺に、数の項を右辺に、符号を変えて移項する。
   - 両辺の同類項をそれぞれまとめて、ax = b の形にする。
@@ -47,16 +47,19 @@ sub_questions:
   prompt_text: 解を求めなさい。
   solution_steps:
   - args: []
+    detail: 右辺の +3x を左辺に、左辺の +3 を右辺に、符号を変えて移項する。
     narration: 文字の項を左辺に、数の項を右辺に、符号を変えて移項する。
     op: transpose_terms
     result_display: 2x - 3x = 8 - 3
     result_srepr: Integer(-5)
   - args: []
+    detail: ''
     narration: 両辺の同類項をそれぞれまとめて、ax = b の形にする。
     op: combine_like_terms
     result_display: -x = 5
     result_srepr: Integer(-5)
   - args: []
+    detail: 等式の性質を使い、両辺を x の係数 -1 でわる。
     narration: 等式の性質を使い、両辺を x の係数でわる。
     op: divide_both_sides
     result_display: x = -5

@@ -19,7 +19,9 @@ import math
 
 from engine.packs.math.geometry.construct import Construction
 from engine.packs.math.geometry.deduce import Deduction
-from engine.packs.math.geometry.facts import Fact, ang, ang_eq, is_common_segment, seg, seg_eq
+from engine.packs.math.geometry.facts import (
+    Fact, ang, ang_eq, fact_text, is_common_segment, seg, seg_eq,
+)
 
 # Lv → 導出の深さ（docs の §1「難易度と補助線の機械的な定義」）。
 DEPTH_BY_LEVEL: dict[int, int] = {2: 1, 3: 2, 4: 3}
@@ -54,12 +56,36 @@ def goal_candidates(ded: Deduction) -> list[GoalCandidate]:
     return out
 
 
+def _restates_something_already_written(f: Fact, ded: Deduction) -> bool:
+    """結論が、**その証明の途中ですでに書いた行**の言い直しになっていないか。
+
+    証明文に出るのは Fact そのものではなく `fact_text` の日本語なので、
+    **同じ文が2度出るかどうか**で見る。種類が違っても同じ文になる組があり
+    （`parallel` と `parallel_dir` はどちらも「BC ∥ MN」と書かれる）、
+    Fact の同一性だけでは捕まらない。
+
+    これを見ていなかったので、g3_l44.proof.Lv2 が
+
+        ①、②より、中点連結定理が成り立つので  BC ∥ MN  …③
+        ③より、平行線の同位角は等しいので     ∠ABC ＝ ∠AMN  …④
+        ④より、錯角が等しいので               BC ∥ MN        ← ③の言い直し
+
+    という**循環論法**を出していた（③で証明は終わっている）。深さを稼ぐために
+    「いちど示した結論をもう一度導く」枝を選んでしまうのが原因。
+    """
+    claim = fact_text(f)
+    if any(fact_text(g) == claim for g in ded.given):
+        return True
+    return any(fact_text(c) == claim for c in ded.proof_chain(f) if c != f)
+
+
 def _is_worth_asking(f: Fact, ded: Deduction) -> bool:
     """「聞く価値のある命題か」。
 
     - 仮定そのままは結論にしない（証明することがない）
     - 「AC ＝ AC」のような同じものどうしの等号は結論にしない
     - 同じ三角形どうしの合同（△ABC≡△ABC）は結論にしない
+    - **途中ですでに書いた行の言い直しは結論にしない**（循環論法）
     """
     if f in ded.given:
         return False
@@ -69,6 +95,14 @@ def _is_worth_asking(f: Fact, ded: Deduction) -> bool:
         f.kind in ("seg_eq", "ang_eq", "tri_cong", "tri_sim", "tri_area_eq")
         and f.args[0] == f.args[1]
     ):
+        return False
+    # **同じ角を別の点の名前で書いただけの等式**は、証明することが無い。
+    # 引き算では捕まらない（∠BAC と ∠BAN はタプルとして別物）ので、
+    # 半直線の組（ray_classes）で見る。△ABC の辺AC上に N をとった図で
+    # 「∠BAC ＝ ∠BAN であることを証明せよ」という問題が出ていた。
+    if f.kind == "ang_eq" and ded.same_angle(f.args[0], f.args[1]):
+        return False
+    if _restates_something_already_written(f, ded):
         return False
     return True
 

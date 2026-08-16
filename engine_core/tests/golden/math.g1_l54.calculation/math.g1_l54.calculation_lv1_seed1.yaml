@@ -33,22 +33,24 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - frequency_table.compute_value
-  explanation: 'まず、対象の階級の下端と上端の値の平均を求め、階級値とする。（57.5）
+  explanation: 'まず、(55 + 60) ÷ 2 を計算して、階級値を求める。（57.5）
 
-    次に、すべての階級の度数を足し合わせ、度数の合計を求める。（階級値 57.5、度数の合計 25）'
+    次に、2 + 8 + 12 + 3 を計算して、度数の合計を求める。（25）'
   hints:
   - 対象の階級の下端と上端の値の平均を求め、階級値とする。
   label: (1)
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: (55 + 60) ÷ 2 を計算して、階級値を求める。
     narration: 対象の階級の下端と上端の値の平均を求め、階級値とする。
     op: compute_class_value
     result_display: '57.5'
     result_srepr: Rational(115, 2)
   - args: []
+    detail: 2 + 8 + 12 + 3 を計算して、度数の合計を求める。
     narration: すべての階級の度数を足し合わせ、度数の合計を求める。
     op: sum_frequencies
-    result_display: 階級値 57.5、度数の合計 25
+    result_display: '25'
     result_srepr: Tuple(Rational(115, 2), Integer(25))
 visual_svg: null

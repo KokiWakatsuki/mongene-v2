@@ -41,11 +41,11 @@ sub_questions:
 
     次に、分配法則を使って、かっこを外す。（310x + 650 = 2510）
 
-    次に、文字の項を左辺に、数の項を右辺に、符号を変えて移項する。（310x = 2510 - 650）
+    次に、左辺の +650 を右辺に、符号を変えて移項する。（310x = 2510 - 650）
 
     次に、両辺の同類項をそれぞれまとめて、ax = b の形にする。（310x = 1860）
 
-    最後に、等式の性質を使い、両辺を x の係数でわる。（x = 6）'
+    最後に、等式の性質を使い、両辺を x の係数 310 でわる。（x = 6）'
   hints:
   - 場面の中で、どちらの見方でも同じになる（等しくなっている）量に着目する。
   - その量を x を使って両辺に表し、方程式をつくる。
@@ -56,31 +56,37 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 場面の中で、どちらの見方でも同じになる（等しくなっている）量に着目する。
     op: find_equal_relation
     result_display: 代金の合計
     result_srepr: Symbol('x')
   - args: []
+    detail: ''
     narration: その量を x を使って両辺に表し、方程式をつくる。
     op: formulate_equation
     result_display: 180x + 130(x + 5) = 2510
     result_srepr: Equality(Add(Mul(Integer(310), Symbol('x')), Integer(650)), Integer(2510))
   - args: []
+    detail: ''
     narration: 分配法則を使って、かっこを外す。
     op: expand_parentheses
     result_display: 310x + 650 = 2510
     result_srepr: Integer(6)
   - args: []
+    detail: 左辺の +650 を右辺に、符号を変えて移項する。
     narration: 文字の項を左辺に、数の項を右辺に、符号を変えて移項する。
     op: transpose_terms
     result_display: 310x = 2510 - 650
     result_srepr: Integer(6)
   - args: []
+    detail: ''
     narration: 両辺の同類項をそれぞれまとめて、ax = b の形にする。
     op: combine_like_terms
     result_display: 310x = 1860
     result_srepr: Integer(6)
   - args: []
+    detail: 等式の性質を使い、両辺を x の係数 310 でわる。
     narration: 等式の性質を使い、両辺を x の係数でわる。
     op: divide_both_sides
     result_display: x = 6

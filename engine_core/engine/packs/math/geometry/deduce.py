@@ -39,6 +39,14 @@ class Deduction:
     # 同じ角を別の点の名前で書いただけの控え（`saturate` の docstring を見よ）。
     # 規則が引き当てるためだけに持つので、**結論の候補にはしない**。
     aliases: set[Fact] = field(default_factory=set)
+    # 「頂点から見て同じ半直線の上にある点」の組。**結論の資格の判定にも要る**
+    # ので持ち回る（∠BAC と ∠BAN が同じ角かどうかは、これが無いと分からない）。
+    ray_classes: dict[tuple[str, str], tuple[str, ...]] = field(default_factory=dict)
+
+    def same_angle(self, a1: tuple[str, str, str], a2: tuple[str, str, str]) -> bool:
+        """2つの角が、**同じ角を別の点の名前で書いたもの**か。"""
+        return bool(set(_angle_writings(a1, self.ray_classes))
+                    & set(_angle_writings(a2, self.ray_classes)))
 
     @property
     def facts(self) -> frozenset[Fact]:
@@ -145,7 +153,7 @@ def saturate(
     ∠BAP と ∠BAC の2通り出てくると、同じ問題が2つあることになってしまう。
     """
     ray_classes = ray_classes or {}
-    ded = Deduction(given=given)
+    ded = Deduction(given=given, ray_classes=dict(ray_classes))
     for f in given:
         for i, g in enumerate(_writings(f, ray_classes)):
             if g in ded.why:

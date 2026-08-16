@@ -37,11 +37,11 @@ sub_questions:
   - equation.solve_word_price
   explanation: 'まず、分配法則を使って、かっこを外す。（50x + 840 = 1390）
 
-    次に、文字の項を左辺に、数の項を右辺に、符号を変えて移項する。（50x = 1390 - 840）
+    次に、左辺の +840 を右辺に、符号を変えて移項する。（50x = 1390 - 840）
 
     次に、両辺の同類項をそれぞれまとめて、ax = b の形にする。（50x = 550）
 
-    最後に、等式の性質を使い、両辺を x の係数でわる。（x = 11）'
+    最後に、等式の性質を使い、両辺を x の係数 50 でわる。（x = 11）'
   hints:
   - 分配法則を使って、かっこを外す。
   - 文字の項を左辺に、数の項を右辺に、符号を変えて移項する。
@@ -50,21 +50,25 @@ sub_questions:
   prompt_text: 解を求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 分配法則を使って、かっこを外す。
     op: expand_parentheses
     result_display: 50x + 840 = 1390
     result_srepr: Integer(11)
   - args: []
+    detail: 左辺の +840 を右辺に、符号を変えて移項する。
     narration: 文字の項を左辺に、数の項を右辺に、符号を変えて移項する。
     op: transpose_terms
     result_display: 50x = 1390 - 840
     result_srepr: Integer(11)
   - args: []
+    detail: ''
     narration: 両辺の同類項をそれぞれまとめて、ax = b の形にする。
     op: combine_like_terms
     result_display: 50x = 550
     result_srepr: Integer(11)
   - args: []
+    detail: 等式の性質を使い、両辺を x の係数 50 でわる。
     narration: 等式の性質を使い、両辺を x の係数でわる。
     op: divide_both_sides
     result_display: x = 11

@@ -44,11 +44,13 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 2つの数の平方の差を、和と差の積の形になおす。
     op: factor_difference_of_squares
     result_display: (10 + 8)(10 - 8)
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 和と差の積を計算し、値を求める。
     op: multiply_factors
     result_display: '36'

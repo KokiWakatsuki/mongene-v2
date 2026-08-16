@@ -109,11 +109,13 @@ sub_questions:
   prompt_text: 移した図形をかきなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 平行移動の向きと距離を読み取る。
     op: identify_translation_vector
     result_display: x 方向に -5、y 方向に 1
     result_srepr: ''
   - args: []
+    detail: ''
     narration: もとの図形の各頂点を、同じ向きに同じ距離だけ移動する。
     op: translate_each_vertex
     result_display: (1, 4)、(-1, 0)、(1, -1)

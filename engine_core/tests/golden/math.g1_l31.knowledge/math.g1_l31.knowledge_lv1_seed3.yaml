@@ -44,11 +44,13 @@ sub_questions:
   prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 比例の式 y=ax の比例定数 a の符号（正か負か）を確認する。
     op: check_sign
     result_display: aは負
     result_srepr: negative
   - args: []
+    detail: ''
     narration: aが正なら右上がり、負なら右下がりの直線になる。どちらも必ず原点を通る。
     op: judge_proportion_graph_direction
     result_display: 右下がりの直線になる（原点を通る）

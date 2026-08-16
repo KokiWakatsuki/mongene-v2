@@ -23,7 +23,7 @@ meta:
     unit: g2_l7
   seed: 2
   signature: consecutive_number_sum
-problem_ref: 105520b9680a2ae7
+problem_ref: 0507050e090260a3
 problem_text: 整数 f を使って表した、連続する2つの整数 f, f+1 の和を計算し、1つの式で表せ。
 sub_questions:
 - answer:
@@ -33,20 +33,31 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - polynomial.consecutive_number_sum
-  explanation: 'まず、それぞれの数を表す式の和を、かっこを外して書き出す。（f + f + 1）
+  explanation: 'まず、それぞれの数を表す式を、かっこをつけて和の形に並べる。（(f) + (f + 1)）
 
-    次に、同類項をまとめて、1つの式にする。（2f + 1）'
+    次に、かっこを外して、項の和の形にする。（f + f + 1）
+
+    最後に、同類項をまとめて、1つの式にする。（2f + 1）'
   hints:
-  - それぞれの数を表す式の和を、かっこを外して書き出す。
+  - それぞれの数を表す式を、かっこをつけて和の形に並べる。
+  - かっこを外して、項の和の形にする。
   label: (1)
   prompt_text: 式を簡単にしなさい。
   solution_steps:
   - args: []
-    narration: それぞれの数を表す式の和を、かっこを外して書き出す。
+    detail: ''
+    narration: それぞれの数を表す式を、かっこをつけて和の形に並べる。
     op: expand_expression
+    result_display: (f) + (f + 1)
+    result_srepr: Add(Mul(Integer(2), Symbol('f')), Integer(1))
+  - args: []
+    detail: ''
+    narration: かっこを外して、項の和の形にする。
+    op: drop_parentheses
     result_display: f + f + 1
     result_srepr: Add(Mul(Integer(2), Symbol('f')), Integer(1))
   - args: []
+    detail: ''
     narration: 同類項をまとめて、1つの式にする。
     op: combine_like_terms
     result_display: 2f + 1

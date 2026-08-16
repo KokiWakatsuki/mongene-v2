@@ -29,21 +29,22 @@ problem_text: '次の計算をせよ。
   -3(7x - 2)'
 sub_questions:
 - answer:
-    display: 6 - 21x
+    display: -21x + 6
     kind: symbolic
     srepr: Add(Integer(6), Mul(Integer(-1), Integer(21), Symbol('x')))
   cause_tags: []
   concept_tags:
   - letter_expr.distribute_linear
-  explanation: まず、かっこの前の数を、かっこの中の各項にかけて計算する。（6 - 21x）
+  explanation: まず、かっこの前の数を、かっこの中の各項にかけて計算する。（-21x + 6）
   hints:
   - かっこの前の数を、かっこの中の各項にかけて計算する。
   label: (1)
   prompt_text: 式を簡単にしなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: かっこの前の数を、かっこの中の各項にかけて計算する。
     op: distribute_multiplication
-    result_display: 6 - 21x
+    result_display: -21x + 6
     result_srepr: Add(Integer(6), Mul(Integer(-1), Integer(21), Symbol('x')))
 visual_svg: null

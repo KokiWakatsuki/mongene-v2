@@ -47,16 +47,19 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 累乗とかっこの中を先に計算する。
     op: evaluate_powers_and_parentheses
     result_display: 2 - 25 × 6 + (-12) ÷ (-4)
     result_srepr: Integer(-145)
   - args: []
+    detail: ''
     narration: 乗法と除法を計算する。
     op: multiply_and_divide
     result_display: 2 - 150 + 3
     result_srepr: Integer(-145)
   - args: []
+    detail: ''
     narration: 加法と減法を計算して答えを求める。
     op: add_and_subtract
     result_display: '-145'

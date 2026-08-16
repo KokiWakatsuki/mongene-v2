@@ -47,16 +47,19 @@ sub_questions:
   prompt_text: 式に表しなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 定価から、割引きの割合の分だけ差し引いた代金を考える。
     op: identify_relation
     result_display: 定価 − 割引き額 = 代金
     result_srepr: 定価 − 割引き額 = 代金
   - args: []
+    detail: ''
     narration: 文字の部分が同じ項（同類項）どうしをまとめる。
     op: group_like_terms
     result_display: (a - 2a/5)
     result_srepr: Mul(Rational(3, 5), Symbol('a'))
   - args: []
+    detail: ''
     narration: まとめた同類項の係数を計算して、式を簡単にする。
     op: add_coefficients
     result_display: 3a/5

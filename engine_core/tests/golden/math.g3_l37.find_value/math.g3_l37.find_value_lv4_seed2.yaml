@@ -51,26 +51,31 @@ sub_questions:
   prompt_text: 座標を求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 放物線の式と直線の式の右辺どうしを等しいとおき、方程式を立てる。
     op: set_up_equation
     result_display: 4x² = 48 - 16x
     result_srepr: ''
   - args: []
+    detail: ''
     narration: その方程式を解いて、交点の x 座標を求める。
     op: solve_for_x
     result_display: x = -6, x = 2
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 求めた x の値を式に代入して、交点の y 座標を求める。
     op: compute_y
     result_display: A(-6, 144), B(2, 16)
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 頂点の座標から、三角形の面積を求める公式で面積を計算する。
     op: compute_triangle_area
     result_display: △OAB = 192
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 三角形 PAB の面積が三角形 OAB の面積と等しくなる条件から方程式を立て、点 P の座標を決める。
     op: solve_for_equal_area_point
     result_display: P(0, 96)

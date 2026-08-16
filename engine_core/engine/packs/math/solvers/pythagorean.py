@@ -83,7 +83,7 @@ def identify_hypotenuse(labels: object, right_angle_index: object) -> Solution:
     """直角の頂点の位置から、斜辺がどの辺かを判別する（g3_l51.knowledge Lv2）。
 
     labels（3頂点の文字列）と right_angle_index（直角の頂点の位置）だけから、
-    「直角の頂点に接していない辺が斜辺になる」という定義に従って機械的に決まる
+    「直角に対する辺が斜辺になる」という定義に従って機械的に決まる
     （double-solve）。答えは ChoiceAnswer。
     """
     lb = str(labels)
@@ -100,7 +100,9 @@ def identify_hypotenuse(labels: object, right_angle_index: object) -> Solution:
         Step(
             op="name_hypotenuse",
             args=[], result_srepr=correct, result_display=correct,
-            narration="直角の頂点に接していない辺が斜辺になることから、斜辺を答える。",
+            # 「接する」は円と直線の関係に使う語。辺と頂点には使わない
+            # （「直角に対する辺」が教科書の言い方）。
+            narration="直角に対する辺（直角の頂点を通らない辺）が斜辺になることから、斜辺を答える。",
         ),
     ]
     answer = ChoiceAnswer(correct=correct, distractors=distractors, fact_id="pythagorean.identify_hypotenuse")

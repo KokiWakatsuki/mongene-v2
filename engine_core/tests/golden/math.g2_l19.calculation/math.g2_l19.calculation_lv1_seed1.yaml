@@ -45,12 +45,14 @@ sub_questions:
     - '-2'
     - '4'
     - '3'
+    detail: ''
     narration: x の値を式に代入する。
     op: substitute_x
     result_display: y = (-2) × 3 + 4
     result_srepr: Integer(-2)
   - args:
     - y = (-2) × 3 + 4
+    detail: ''
     narration: 計算して y の値を求める。
     op: evaluate
     result_display: y = -2

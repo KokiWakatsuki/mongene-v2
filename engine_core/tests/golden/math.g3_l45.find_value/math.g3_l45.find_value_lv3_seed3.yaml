@@ -45,16 +45,19 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: MQとQNの比から、MQとMN全体の比になおす。
     op: convert_partial_to_whole_ratio
     result_display: MQ:MN = 1:2
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 三角形MQRと三角形MNPは相似であることから、面積比は相似比の二乗に等しいことを使って、三角形MQRと三角形MNP全体の面積比を求める。
     op: square_similarity_ratio
     result_display: '1:4'
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 三角形MNP全体の面積から三角形MQRの面積を除いた残りが台形の面積になることから、三角形MQRと台形の面積比を求める。
     op: compute_trapezoid_remainder_ratio
     result_display: 三角形MQR:台形QNPR = 1:3

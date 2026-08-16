@@ -51,16 +51,19 @@ sub_questions:
   prompt_text: 式に表しなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 昨年の男子の人数を x 人、女子の人数を y 人とおく。
     op: set_variables
     result_display: x, y
     result_srepr: Tuple(Symbol('x'), Symbol('y'))
   - args: []
+    detail: ''
     narration: 昨年の人数の関係に着目して、1つめの式をつくる。
     op: formulate_first
     result_display: x + y = 200
     result_srepr: Equality(Add(Symbol('x'), Symbol('y')), Integer(200))
   - args: []
+    detail: ''
     narration: 増減した人数の関係に着目して、2つめの式をつくる。
     op: formulate_second
     result_display: 12x/100 - 6y/100 = 6
@@ -83,12 +86,14 @@ sub_questions:
   - args:
     - Eq(x + y, 200)
     - Eq(3*x/25 - 3*y/50, 6)
+    detail: ''
     narration: 係数をそろえて一方の文字を消去し、残った文字を求める。
     op: eliminate_variable
     result_display: x = 100
     result_srepr: Equality(Symbol('x'), Integer(100))
   - args:
     - '100'
+    detail: ''
     narration: 求めた値をもとの式に代入し、もう一方の文字を求める。
     op: back_substitute
     result_display: y = 100

@@ -42,11 +42,13 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 折れ曲がった点を通り、2直線に平行な補助線をひく。
     op: draw_auxiliary_line
     result_display: 2直線に平行な補助線
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 補助線で分けられた2つの角がそれぞれ錯角として等しいことから、求める角の大きさを合計して決める。
     op: sum_alternate_angles
     result_display: '103'

@@ -51,16 +51,19 @@ sub_questions:
   prompt_text: 式に表しなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 歩いた道のりを x km、自転車で進んだ道のりを y km とおく。
     op: set_variables
     result_display: x, y
     result_srepr: Tuple(Symbol('x'), Symbol('y'))
   - args: []
+    detail: ''
     narration: 道のりの関係に着目して、1つめの式をつくる。
     op: formulate_first
     result_display: x + y = 18
     result_srepr: Equality(Add(Symbol('x'), Symbol('y')), Integer(18))
   - args: []
+    detail: ''
     narration: かかった時間の関係に着目して、2つめの式をつくる。
     op: formulate_second
     result_display: x/3 + y/15 = 2
@@ -83,12 +86,14 @@ sub_questions:
   - args:
     - Eq(x + y, 18)
     - Eq(x/3 + y/15, 2)
+    detail: ''
     narration: 係数をそろえて一方の文字を消去し、残った文字を求める。
     op: eliminate_variable
     result_display: x = 3
     result_srepr: Equality(Symbol('x'), Integer(3))
   - args:
     - '3'
+    detail: ''
     narration: 求めた値をもとの式に代入し、もう一方の文字を求める。
     op: back_substitute
     result_display: y = 15

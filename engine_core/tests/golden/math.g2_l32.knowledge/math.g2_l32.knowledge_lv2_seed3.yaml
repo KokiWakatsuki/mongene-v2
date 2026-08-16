@@ -44,11 +44,13 @@ sub_questions:
   prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 示されている同位角や錯角が、等しいといえる条件を満たしているかを確認する。
     op: check_angle_equality
     result_display: 等しくない
     result_srepr: not_equal
   - args: []
+    detail: ''
     narration: その条件を満たしていれば2直線は平行であるという性質から判別する。
     op: judge_parallel
     result_display: 平行であるとはいえない

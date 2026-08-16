@@ -35,9 +35,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - simultaneous_equations.solve_by_elimination_scaled
-  explanation: 'まず、y の係数を最小公倍数にそろえるため、両方の式をそれぞれ何倍かする。（-9x - 6y = -3 , 4x - 6y = -16）
+  explanation: 'まず、はじめの式の両辺を -3 倍、もう一方の式の両辺を 2 倍して、y の係数を -6 にそろえる。（-9x - 6y = -3 , 4x - 6y = -16）
 
-    次に、2式を加減して y を消去し、x を求める。（x = -1）
+    次に、y の係数がそろったので辺々を引く。整理すると -13x = 13 になるので、両辺を -13 でわる。（x = -1）
 
     最後に、求めた x をもとの式に代入して y を求める。（y = 2）'
   hints:
@@ -49,18 +49,21 @@ sub_questions:
   - args:
     - 3x + 2y = 1
     - 2x - 3y = -8
+    detail: はじめの式の両辺を -3 倍、もう一方の式の両辺を 2 倍して、y の係数を -6 にそろえる。
     narration: y の係数を最小公倍数にそろえるため、両方の式をそれぞれ何倍かする。
     op: scale_both_equations
     result_display: -9x - 6y = -3 , 4x - 6y = -16
     result_srepr: Integer(-6)
   - args:
     - -9x - 6y = -3 , 4x - 6y = -16
+    detail: y の係数がそろったので辺々を引く。整理すると -13x = 13 になるので、両辺を -13 でわる。
     narration: 2式を加減して y を消去し、x を求める。
     op: eliminate_and_solve_x
     result_display: x = -1
     result_srepr: Integer(-1)
   - args:
     - '-1'
+    detail: ''
     narration: 求めた x をもとの式に代入して y を求める。
     op: back_substitute
     result_display: y = 2

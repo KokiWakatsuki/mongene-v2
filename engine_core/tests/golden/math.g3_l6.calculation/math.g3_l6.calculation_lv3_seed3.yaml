@@ -48,16 +48,19 @@ sub_questions:
   prompt_text: 式を簡単にしなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 共通する部分をひとかたまりとみる。
     op: substitute_common_part
     result_display: ((m + n) - 1)((m + n) - 9)
     result_srepr: ''
   - args: []
+    detail: ''
     narration: かたまりのままの式に乗法公式をあてはめる。
     op: apply_formula
     result_display: (m + n)² - 10(m + n) + 9
     result_srepr: ''
   - args: []
+    detail: ''
     narration: かたまりをもとの式にもどして、展開した式を整理する。
     op: restore_expansion
     result_display: m² + 2mn - 10m + n² - 10n + 9

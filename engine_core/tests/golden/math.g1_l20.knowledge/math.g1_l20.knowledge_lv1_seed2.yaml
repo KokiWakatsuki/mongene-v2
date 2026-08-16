@@ -48,11 +48,13 @@ sub_questions:
   prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 説明されている、数量の間の大小の関係を読み取る。
     op: identify_description
     result_display: ''
     result_srepr: less_than
   - args: []
+    detail: ''
     narration: その関係を表す不等号の記号を思い出す。
     op: name_concept
     result_display: <

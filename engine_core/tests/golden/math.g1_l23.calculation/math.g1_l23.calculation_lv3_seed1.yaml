@@ -35,13 +35,13 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - equation.solve_by_clear_denominators
-  explanation: 'まず、分母の最小公倍数を両辺にかけて、分母をはらう。（7x - 2 = 54）
+  explanation: 'まず、分母の最小公倍数 6 を両辺にかけて、分母をはらう。（7x - 2 = 54）
 
-    次に、文字の項を左辺に、数の項を右辺に、符号を変えて移項する。（7x = 54 + 2）
+    次に、左辺の -2 を右辺に、符号を変えて移項する。（7x = 54 + 2）
 
     次に、両辺の同類項をそれぞれまとめて、ax = b の形にする。（7x = 56）
 
-    最後に、等式の性質を使い、両辺を x の係数でわる。（x = 8）'
+    最後に、等式の性質を使い、両辺を x の係数 7 でわる。（x = 8）'
   hints:
   - 分母の最小公倍数を両辺にかけて、分母をはらう。
   - 文字の項を左辺に、数の項を右辺に、符号を変えて移項する。
@@ -50,21 +50,25 @@ sub_questions:
   prompt_text: 解を求めなさい。
   solution_steps:
   - args: []
+    detail: 分母の最小公倍数 6 を両辺にかけて、分母をはらう。
     narration: 分母の最小公倍数を両辺にかけて、分母をはらう。
     op: clear_denominators
     result_display: 7x - 2 = 54
     result_srepr: Integer(8)
   - args: []
+    detail: 左辺の -2 を右辺に、符号を変えて移項する。
     narration: 文字の項を左辺に、数の項を右辺に、符号を変えて移項する。
     op: transpose_terms
     result_display: 7x = 54 + 2
     result_srepr: Integer(8)
   - args: []
+    detail: ''
     narration: 両辺の同類項をそれぞれまとめて、ax = b の形にする。
     op: combine_like_terms
     result_display: 7x = 56
     result_srepr: Integer(8)
   - args: []
+    detail: 等式の性質を使い、両辺を x の係数 7 でわる。
     narration: 等式の性質を使い、両辺を x の係数でわる。
     op: divide_both_sides
     result_display: x = 8

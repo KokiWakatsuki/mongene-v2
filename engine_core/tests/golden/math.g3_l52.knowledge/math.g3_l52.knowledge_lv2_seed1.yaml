@@ -44,11 +44,13 @@ sub_questions:
   prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 最も長い辺の長さの二乗と、他の2辺の長さの二乗の和を比べる。
     op: compute_squares_and_compare
     result_display: 24² + 45² ≠ 58²
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 三平方の定理の逆から、直角三角形であるかどうかを判別する。
     op: judge_by_pythagorean_converse
     result_display: 直角三角形ではない

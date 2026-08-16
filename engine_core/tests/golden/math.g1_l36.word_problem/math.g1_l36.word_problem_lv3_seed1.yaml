@@ -47,16 +47,19 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 追いかけた側が出発してからの時間をxとおき、2人それぞれの家からの道のりyを、xの式で表す。
     op: form_expression
     result_display: 2人それぞれについて、時間と道のりの関係を式に表す
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 2つの関係を同じ座標平面上のグラフとみて、道のりが等しくなる点、つまり交点を求める。
     op: equate_expressions
     result_display: (6, 900)
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 交点のx座標が、追いついたときの時間を表している。
     op: read_x_coordinate
     result_display: 6分後

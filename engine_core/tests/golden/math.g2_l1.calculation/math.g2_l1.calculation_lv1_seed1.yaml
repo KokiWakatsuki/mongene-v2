@@ -44,11 +44,13 @@ sub_questions:
   prompt_text: 次数を答えなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 式の中で、文字の指数がもっとも高い項を見つける。
     op: find_highest_degree_term
     result_display: -x
     result_srepr: Integer(1)
   - args: []
+    detail: ''
     narration: その項の文字の指数（の和）が、この式の次数になる。
     op: read_degree
     result_display: '1'

@@ -320,11 +320,20 @@ _COMPLETE_NARRATION = {
     "identify_solid_from_partial": "その形になる立体をすべて挙げ、もう一方の図についての条件に合うものを一つに絞る。",
     "draw_missing_view": "絞りこんだ立体を、与えられていないほうの向きから見た形にかく。",
 }
+def _plan_candidates(plan_shape: str) -> list[str]:
+    """その平面図になる立体を、対応表からすべて挙げる（`_PROJECTION` が唯一の出典）。"""
+    return [_SOLID_JP[k] for k, (_elev, plan) in _PROJECTION.items() if plan == plan_shape]
+
+
 def _complete_phrase(plan_shape: str, name: str) -> dict[str, str]:
     """投影図を補う手の括弧（読み取った形と絞りこんだ立体）。"""
     return {
         "read_given_view": _SHAPE_JP[plan_shape],
-        "identify_solid_from_partial": name,
+        # **「すべて挙げ」と言うなら挙げる。** 候補を1つも書かずに答えの立体へ
+        # 飛んでいたので、「絞る」作業が解説の中に存在しなかった。
+        "identify_solid_from_partial": (
+            "、".join(_plan_candidates(plan_shape)) + f" → {name}"
+        ),
     }
 
 

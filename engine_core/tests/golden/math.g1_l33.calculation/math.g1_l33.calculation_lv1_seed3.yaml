@@ -24,7 +24,7 @@ meta:
   seed: 3
   signature: inverse_proportion_evaluate_forward
 problem_ref: 17e721e0713ee6b4
-problem_text: 反比例の式 y = 48/x について、x = -2 のときの、もう一方の値を求めよ。
+problem_text: 反比例の式 y = 48/x について、x = -2 のときの y の値を求めよ。
 sub_questions:
 - answer:
     display: '-24'
@@ -44,12 +44,14 @@ sub_questions:
   - args:
     - '48'
     - '-2'
+    detail: ''
     narration: 比例定数と x の値を、反比例の式 y=a/x の x にあてはめる。
     op: substitute_x
     result_display: y = 48 / (-2)
     result_srepr: Integer(-24)
   - args:
     - y = 48 / (-2)
+    detail: ''
     narration: わり算を計算して y の値を求める。
     op: evaluate
     result_display: y = -24

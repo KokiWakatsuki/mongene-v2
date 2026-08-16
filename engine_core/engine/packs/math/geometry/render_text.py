@@ -29,7 +29,11 @@ from engine.packs.math.geometry.facts import (
 # 書かない。図を見れば分かることなので、番号を振って引用すると証明が冗長になる。
 # （「弧BCに対する円周角は等しいから ∠BAC＝∠BDC」と書くのであって、その前に
 # 「点Aと点Dは弦BCについて同じ側の弧の上にある …①」の行は立てない。）
-_STRUCTURAL_KINDS = frozenset({"collinear", "parallel_dir", "on_circle", "same_arc"})
+# 証明文の行にしない事実（図の組み立てを表すだけで、教科書は書かない）。
+# `between` は「点M は線分AB上にある」＝作図の手順そのものなので、ここに入れる。
+_STRUCTURAL_KINDS = frozenset(
+    {"collinear", "between", "parallel_dir", "on_circle", "same_arc"}
+)
 
 
 @dataclass(frozen=True)
@@ -103,8 +107,14 @@ def build_proof_lines(
     given_of_segment: dict[int, list[Fact]] = {s: [] for s in range(n_segments)}
     placed: set[Fact] = set()
     for i, f in enumerate(chain):
+        rule_of_f = ded.rule_of(f)
+        # 根拠の文が前提を名指ししている規則（「1組の対辺が**平行で**…」）では、
+        # 図の組み立ての事実であっても行にする（`Rule.shows_structural_premises`）。
+        show_structural = bool(rule_of_f is not None and rule_of_f.shows_structural_premises)
         for p in ded.premises_of(f):
-            if ded.rule_of(p) is not None or p.kind in _STRUCTURAL_KINDS:
+            if ded.rule_of(p) is not None:
+                continue
+            if p.kind in _STRUCTURAL_KINDS and not show_structural:
                 continue
             if p in folded.values() or p in placed:
                 continue  # 畳んだ行の中に書くので、単独の仮定の行にはしない

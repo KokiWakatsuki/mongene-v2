@@ -42,11 +42,13 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 等積変形をする前の、もとの図形の面積を読み取る。
     op: identify_original_area
     result_display: '84'
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 等積変形は面積を変えずに図形の形だけを変える操作であることから、つくった三角形の面積を求める。
     op: apply_equal_area_transform
     result_display: '84'

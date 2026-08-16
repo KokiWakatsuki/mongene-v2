@@ -2021,7 +2021,10 @@ def test_express_number_property_lv1_construct():
     assert mr.signature == "consecutive_number_sum"
     sq = mr.sub_questions[0]
     assert sq.asked == "simplified_expr"
-    assert [s.op for s in sq.steps] == ["expand_expression", "combine_like_terms"]
+    # かっこを外す前の行（`(2n) + (2n + 2) + (2n + 4)`）を足したので3手。
+    assert [s.op for s in sq.steps] == [
+        "expand_expression", "drop_parentheses", "combine_like_terms",
+    ]
 
 
 @pytest.mark.parametrize("seed", range(100))
@@ -2880,7 +2883,11 @@ def test_convert_rational_decimal_form_lv2_construct():
     assert set(mr.given.keys()) == {"expression"}
     sq = mr.sub_questions[0]
     assert sq.asked == "value"
-    assert [s.op for s in sq.steps] == ["set_up_algebraic_equation", "solve_for_fraction"]
+    # **この単元の本体（文字でおく → 桁をずらす → 差をとる）を1行ずつ見せる。**
+    # 以前は2手で、括弧が `100倍した式との差` という式ですらない言い直しだった。
+    assert [s.op for s in sq.steps] == [
+        "set_variable", "align_repeating_parts", "subtract_to_cancel", "solve_for_fraction",
+    ]
     # 答えは既約分数（sympy Rational）で、自由変数を含まない。
     assert not sympy.sympify(sq.answer.srepr).free_symbols
 

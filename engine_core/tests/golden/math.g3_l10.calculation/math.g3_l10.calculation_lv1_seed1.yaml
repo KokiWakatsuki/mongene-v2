@@ -42,6 +42,7 @@ sub_questions:
   prompt_text: 式を簡単にしなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 平方の差を、和と差の積の形になおす。
     op: apply_diff_of_squares_factor
     result_display: (4b - 9)(4b + 9)

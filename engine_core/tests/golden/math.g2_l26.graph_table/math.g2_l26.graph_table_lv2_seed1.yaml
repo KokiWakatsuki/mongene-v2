@@ -105,22 +105,26 @@ sub_questions:
   prompt_text: グラフをかきなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: グラフが x 軸と交わる点（x 軸との交点）を求める。
     op: find_x_intercept
     result_display: (2, 0)
     result_srepr: Tuple(Integer(2), Integer(0))
   - args: []
+    detail: ''
     narration: グラフが y 軸と交わる点（y 軸との交点）を求める。
     op: find_y_intercept
     result_display: (0, 4)
     result_srepr: Tuple(Integer(0), Integer(4))
   - args: []
+    detail: ''
     narration: 求めた2つの交点を通る直線をひく。
     op: draw_line
     result_display: 2つの交点を通る直線
     result_srepr: Tuple(Tuple(Integer(2), Integer(0)), Tuple(Integer(0), Integer(4)))
   - args:
     - x = -3
+    detail: ''
     narration: 「x = 定数」のグラフは、y 軸に平行な縦の直線としてかく。
     op: draw_special_line
     result_display: x = -3

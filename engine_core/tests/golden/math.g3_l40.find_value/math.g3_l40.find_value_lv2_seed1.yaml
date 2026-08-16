@@ -33,20 +33,22 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - similarity.x_shape_length
-  explanation: 'まず、NP∥QR であることから、対頂角と錯角がそれぞれ等しくなる相似な三角形（三角形SNPと三角形SQR）の組を見つける。
+  explanation: 'まず、NP∥QR であることから、対頂角と錯角がそれぞれ等しくなる相似な三角形の組を見つける。（三角形SNP と 三角形SQR）
 
-    次に、相似な三角形の対応する辺の長さの比が等しい（SN:SQ=SP:SR）ことから、求める辺の長さを求める。（18）'
+    次に、SN:SQ=SP:SR に値を入れて 4:8 = 9:SR を解き、求める辺の長さを求める。（18）'
   hints:
-  - NP∥QR であることから、対頂角と錯角がそれぞれ等しくなる相似な三角形（三角形SNPと三角形SQR）の組を見つける。
+  - NP∥QR であることから、対頂角と錯角がそれぞれ等しくなる相似な三角形の組を見つける。
   label: (1)
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
-    narration: NP∥QR であることから、対頂角と錯角がそれぞれ等しくなる相似な三角形（三角形SNPと三角形SQR）の組を見つける。
+    detail: ''
+    narration: NP∥QR であることから、対頂角と錯角がそれぞれ等しくなる相似な三角形の組を見つける。
     op: identify_similar_triangles_in_x_shape
-    result_display: ''
+    result_display: 三角形SNP と 三角形SQR
     result_srepr: ''
   - args: []
+    detail: SN:SQ=SP:SR に値を入れて 4:8 = 9:SR を解き、求める辺の長さを求める。
     narration: 相似な三角形の対応する辺の長さの比が等しい（SN:SQ=SP:SR）ことから、求める辺の長さを求める。
     op: apply_proportion
     result_display: '18'

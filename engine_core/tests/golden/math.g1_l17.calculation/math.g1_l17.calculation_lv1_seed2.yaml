@@ -29,7 +29,7 @@ problem_text: '次の計算をせよ。
   3x + 5 - 8x - 4'
 sub_questions:
 - answer:
-    display: 1 - 5x
+    display: -5x + 1
     kind: symbolic
     srepr: Add(Integer(1), Mul(Integer(-1), Integer(5), Symbol('x')))
   cause_tags: []
@@ -37,20 +37,22 @@ sub_questions:
   - letter_expr.combine_linear
   explanation: 'まず、文字の部分が同じ項（同類項）どうしをまとめる。（(3x - 8x) + (5 - 4)）
 
-    次に、まとめた同類項の係数を計算して、式を簡単にする。（1 - 5x）'
+    次に、まとめた同類項の係数を計算して、式を簡単にする。（-5x + 1）'
   hints:
   - 文字の部分が同じ項（同類項）どうしをまとめる。
   label: (1)
   prompt_text: 式を簡単にしなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 文字の部分が同じ項（同類項）どうしをまとめる。
     op: group_like_terms
     result_display: (3x - 8x) + (5 - 4)
     result_srepr: Add(Integer(1), Mul(Integer(-1), Integer(5), Symbol('x')))
   - args: []
+    detail: ''
     narration: まとめた同類項の係数を計算して、式を簡単にする。
     op: add_coefficients
-    result_display: 1 - 5x
+    result_display: -5x + 1
     result_srepr: Add(Integer(1), Mul(Integer(-1), Integer(5), Symbol('x')))
 visual_svg: null

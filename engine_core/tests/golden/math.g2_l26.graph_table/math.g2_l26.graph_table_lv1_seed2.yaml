@@ -105,29 +105,34 @@ sub_questions:
   solution_steps:
   - args:
     - -4x + 2y = -10
+    detail: ''
     narration: x の項を右辺に移項し、y の項だけを左辺に残す。
     op: isolate_y_term
     result_display: 2y = 4x - 10
     result_srepr: Equality(Mul(Integer(2), Symbol('y')), Add(Mul(Integer(4), Symbol('x')), Integer(-10)))
   - args:
     - '2'
+    detail: ''
     narration: 両辺を y の係数で割り、y = の形にする。
     op: divide_by_coefficient
     result_display: y = 2x - 5
     result_srepr: Add(Mul(Integer(2), Symbol('x')), Integer(-5))
   - args:
     - '-5'
+    detail: ''
     narration: y 軸との交点（切片）に点をとる。
     op: plot_intercept
     result_display: (0, -5)
     result_srepr: Tuple(Integer(0), Integer(-5))
   - args:
     - '2'
+    detail: ''
     narration: 傾きにしたがって、右へ進んだときの上下の変化の分だけ動いた点をとる。
     op: apply_slope
     result_display: 傾き 2
     result_srepr: Integer(2)
   - args: []
+    detail: ''
     narration: とった2点を通る直線をひく。
     op: draw_line
     result_display: y = 2x - 5

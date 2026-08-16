@@ -29,21 +29,22 @@ problem_text: '次の計算をせよ。
   -4(5x - 7)'
 sub_questions:
 - answer:
-    display: 28 - 20x
+    display: -20x + 28
     kind: symbolic
     srepr: Add(Integer(28), Mul(Integer(-1), Integer(20), Symbol('x')))
   cause_tags: []
   concept_tags:
   - letter_expr.distribute_linear
-  explanation: まず、かっこの前の数を、かっこの中の各項にかけて計算する。（28 - 20x）
+  explanation: まず、かっこの前の数を、かっこの中の各項にかけて計算する。（-20x + 28）
   hints:
   - かっこの前の数を、かっこの中の各項にかけて計算する。
   label: (1)
   prompt_text: 式を簡単にしなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: かっこの前の数を、かっこの中の各項にかけて計算する。
     op: distribute_multiplication
-    result_display: 28 - 20x
+    result_display: -20x + 28
     result_srepr: Add(Integer(28), Mul(Integer(-1), Integer(20), Symbol('x')))
 visual_svg: null

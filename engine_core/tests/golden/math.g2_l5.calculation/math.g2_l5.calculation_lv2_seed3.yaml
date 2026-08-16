@@ -44,11 +44,13 @@ sub_questions:
   prompt_text: 式を簡単にしなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: ÷ の計算を、その数の逆数をかっこにかける計算に直す。
     op: convert_division_to_multiplication
     result_display: (-12x - 8y) × (1/2)
     result_srepr: Add(Mul(Integer(-1), Integer(6), Symbol('x')), Mul(Integer(-1), Integer(4), Symbol('y')))
   - args: []
+    detail: ''
     narration: 逆数をかっこの中の各項にかけて計算する。
     op: distribute
     result_display: -6x - 4y

@@ -42,11 +42,13 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 内角ととなり合う外角は、一直線の角(平角)から内角をひいて求める。
     op: compute_exterior_from_interior
     result_display: 24°
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 外角の和がつねに一定であることから、その値を1つの外角でわって辺の数を求める。
     op: divide_exterior_sum
     result_display: '15'

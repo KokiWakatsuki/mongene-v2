@@ -33,11 +33,11 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - representative_value.compute_raw
-  explanation: 'まず、データの値をすべて足し合わせ、個数でわって平均値を求める。（35）
+  explanation: 'まず、280 ÷ 8 を計算して、平均値を求める。（35）
 
     次に、データを大きさの順に並べ、中央の値（個数が偶数のときは中央に並ぶ値どうしの平均）を求める。（36）
 
-    最後に、もっとも個数が多く現れる値を求める。（平均値 35、中央値 36、最頻値 48）'
+    最後に、48 が 2 回で、いちばん多く現れる。（48）'
   hints:
   - データの値をすべて足し合わせ、個数でわって平均値を求める。
   - データを大きさの順に並べ、中央の値（個数が偶数のときは中央に並ぶ値どうしの平均）を求める。
@@ -45,18 +45,21 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: 280 ÷ 8 を計算して、平均値を求める。
     narration: データの値をすべて足し合わせ、個数でわって平均値を求める。
     op: compute_mean
     result_display: '35'
     result_srepr: ''
   - args: []
+    detail: ''
     narration: データを大きさの順に並べ、中央の値（個数が偶数のときは中央に並ぶ値どうしの平均）を求める。
     op: compute_median
     result_display: '36'
     result_srepr: ''
   - args: []
+    detail: 48 が 2 回で、いちばん多く現れる。
     narration: もっとも個数が多く現れる値を求める。
     op: compute_mode
-    result_display: 平均値 35、中央値 36、最頻値 48
+    result_display: '48'
     result_srepr: Tuple(Integer(35), Integer(36), Integer(48))
 visual_svg: null

@@ -51,26 +51,31 @@ sub_questions:
   prompt_text: 面積を求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 放物線の式と直線の式の右辺どうしを等しいとおき、方程式を立てる。
     op: set_up_equation
     result_display: -4x² = -8x - 96
     result_srepr: ''
   - args: []
+    detail: ''
     narration: その方程式を解いて、交点の x 座標を求める。
     op: solve_for_x
     result_display: x = -4, x = 6
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 求めた x の値を式に代入して、交点の y 座標を求める。
     op: compute_y
     result_display: A(-4, -64), B(6, -144)
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 2点の座標の差から、線分の長さを求める。
     op: compute_segment_length
     result_display: AB = 10√65
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 頂点の座標から、三角形の面積を求める公式で面積を計算する。
     op: compute_triangle_area
     result_display: AB = 10√65, △OAB = 480

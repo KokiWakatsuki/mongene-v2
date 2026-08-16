@@ -75,11 +75,13 @@ sub_questions:
   prompt_text: 移した図形をかきなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 対称移動の軸がどこにあるかを読み取る。
     op: identify_axis
     result_display: ''
     result_srepr: ''
   - args: []
+    detail: ''
     narration: もとの図形の各頂点を、軸について反対側の同じ距離の位置に折り返す。
     op: reflect_each_vertex
     result_display: (4, -1)、(4, 6)、(0, 2)

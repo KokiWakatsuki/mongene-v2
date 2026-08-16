@@ -65,6 +65,56 @@ def _fmt_number(v: Any) -> str:
     return str(sympy.sstr(sympy.nsimplify(v)))
 
 
+def _eliminate_y_detail(A1: Any, B1: Any, C1: Any, A2: Any, B2: Any, C2: Any) -> str:
+    """整数係数の連立を y について消去する手順を、実際の倍率と式で言い切る。
+
+    **「加減法で解いて x を求める」だけでは中身がブラックボックス。**
+    y の係数の絶対値を最小公倍数にそろえ、符号が同じなら引く・違うなら足す、
+    という生徒がやる手順そのものを書く。
+    """
+    b1, b2 = sympy.nsimplify(B1), sympy.nsimplify(B2)
+    lcm = sympy.ilcm(int(abs(b1)), int(abs(b2)))
+    m1, m2 = sympy.Integer(lcm // int(abs(b1))), sympy.Integer(lcm // int(abs(b2)))
+    same_sign = (b1 > 0) == (b2 > 0)
+    a1n, c1n = sympy.nsimplify(A1) * m1, sympy.nsimplify(C1) * m1
+    a2n, c2n = sympy.nsimplify(A2) * m2, sympy.nsimplify(C2) * m2
+    k = a1n - a2n if same_sign else a1n + a2n
+    r = c1n - c2n if same_sign else c1n + c2n
+    scale = []
+    if m1 != 1:
+        scale.append(f"はじめの式の両辺を {_fmt_number(m1)} 倍")
+    if m2 != 1:
+        scale.append(f"もう一方の式の両辺を {_fmt_number(m2)} 倍")
+    head = ("、".join(scale) + "して y の係数の大きさをそろえ、") if scale else ""
+    op_word = "辺々を引く" if same_sign else "辺々を足す"
+    tail = (
+        f"整理すると {_fmt_number(k)}x = {_fmt_number(r)} になるので、"
+        f"両辺を {_fmt_number(k)} でわる。"
+    ) if k != 1 else f"整理すると x = {_fmt_number(r)} になる。"
+    return f"{head}{op_word}。{tail}"
+
+
+def _divide_detail(coeff: Any, var: str = "x") -> str:
+    """すでに式が見えているとき、わる操作だけを名指しする。"""
+    k = sympy.nsimplify(coeff)
+    if k == 1:
+        return ""
+    return f"両辺を {var} の係数 {_fmt_number(k)} でわる。"
+
+
+def _eliminated_detail(x_coeff: Any, rhs: Any) -> str:
+    """消去したあとに残る1文字の式と、そこから x を出す操作を名指しする。
+
+    **`(2x + y) - (x + y) = 14 - 10` の次が `x = 4` では1行足りない。**
+    整理した `x = 4`（係数1）や `7x = 14` を見せてから、わる操作を言う。
+    """
+    k = sympy.nsimplify(x_coeff)
+    r = sympy.nsimplify(rhs)
+    if k == 1:
+        return f"整理すると x = {_fmt_number(r)} になる。"
+    return f"整理すると {_fmt_number(k)}x = {_fmt_number(r)} になるので、両辺を {_fmt_number(k)} でわる。"
+
+
 def _fmt_expr(expr: Any) -> str:
     """1次式を教材表記に整形（sympy sstr の乗算記号 * を除去）。
 
@@ -1575,8 +1625,16 @@ def solve_system_elimination(ctx: CellContext, rng: Rng) -> MR:
             op="identify_equal_coeff",
             args=[disp1, disp2],
             result_srepr=sympy.srepr(b_s),
-            result_display=f"y の係数はどちらも {_fmt_number(b_s)}",
+            # **引き算そのものを書く。** 括弧が `y の係数はどちらも 1` という
+            # 観察のメモで、消去の式が1行も無かった（この単元の核心が解説に無い）。
+            result_display=(
+                f"({disp1.split(' = ')[0]}) - ({disp2.split(' = ')[0]})"
+                f" = {_fmt_number(c1_s)} - {_fmt_number(c2_s)}"
+            ),
             narration="y の係数が等しいので、辺々を引いて y を消去する。",
+            detail=(
+                f"y の係数がどちらも {_fmt_number(b_s)} なので、辺々を引くと y が消える。"
+            ),
         ),
         Step(
             op="eliminate_and_solve_x",
@@ -1584,6 +1642,7 @@ def solve_system_elimination(ctx: CellContext, rng: Rng) -> MR:
             result_srepr=sympy.srepr(x0_s),
             result_display=f"x = {_fmt_number(x0_s)}",
             narration="残った式から x の値を求める。",
+            detail=_eliminated_detail(a1_s - a2_s, c1_s - c2_s),
         ),
         Step(
             op="back_substitute",
@@ -1672,8 +1731,16 @@ def solve_system_elimination_add(ctx: CellContext, rng: Rng) -> MR:
             op="identify_opposite_coeff",
             args=[disp1, disp2],
             result_srepr=sympy.srepr(b_s),
-            result_display=f"y の係数は {_fmt_number(b_s)} と {_fmt_number(-b_s)}",
+            # 足し算そのものを書く（`y の係数は 2 と -2` は観察のメモで式ではない）。
+            result_display=(
+                f"({disp1.split(' = ')[0]}) + ({disp2.split(' = ')[0]})"
+                f" = {_fmt_number(c1_s)} + {_fmt_number(c2_s)}"
+            ),
             narration="y の係数が絶対値が等しく符号が逆なので、辺々を足して y を消去する。",
+            detail=(
+                f"y の係数が {_fmt_number(b_s)} と {_fmt_number(-b_s)} なので、"
+                f"辺々を足すと y が消える。"
+            ),
         ),
         Step(
             op="add_and_solve_x",
@@ -1681,6 +1748,7 @@ def solve_system_elimination_add(ctx: CellContext, rng: Rng) -> MR:
             result_srepr=sympy.srepr(x0_s),
             result_display=f"x = {_fmt_number(x0_s)}",
             narration="足してできた式から x の値を求める。",
+            detail=_eliminated_detail(a1_s + a2_s, c1_s + c2_s),
         ),
         Step(
             op="back_substitute",
@@ -1769,6 +1837,13 @@ def solve_system_substitution(ctx: CellContext, rng: Rng) -> MR:
                 result_srepr=sympy.srepr(sympy.Eq(coef_x * x_sym, c2_s - k_s)),
                 result_display=sub_eq_disp,
                 narration="一方の式の y を、もう一方の式に代入して x だけの方程式にする。",
+                # **代入したままの式が無かった。** いきなり整理後の `-5x = -20` に
+                # 飛んでいて、代入という操作そのものが解説に出ていなかった。
+                detail=(
+                    f"もう一方の式の y に {_fmt_expr(m_s * x_sym + k_s)} を代入すると、"
+                    f"{_fmt_expr(q_coef * x_sym)} + ({_fmt_expr(m_s * x_sym + k_s)})"
+                    f" = {_fmt_number(c2_s)} になる。"
+                ),
             ),
             Step(
                 op="solve_for_x",
@@ -1776,6 +1851,7 @@ def solve_system_substitution(ctx: CellContext, rng: Rng) -> MR:
                 result_srepr=sympy.srepr(x0),
                 result_display=f"x = {_fmt_number(x0)}",
                 narration="x の値を求める。",
+                detail=_divide_detail(coef_x, "x"),
             ),
             Step(
                 op="back_substitute",
@@ -1816,6 +1892,11 @@ def solve_system_substitution(ctx: CellContext, rng: Rng) -> MR:
                 result_srepr=sympy.srepr(sympy.Eq(coef_y * y_sym, c2_s - a2_s * c1_s)),
                 result_display=sub_eq_disp,
                 narration="これをもう一方の式に代入して y だけの方程式にする。",
+                detail=(
+                    f"もう一方の式の x に {_fmt_expr(c1_s - b1_s * y_sym)} を代入すると、"
+                    f"{_fmt_number(a2_s)}({_fmt_expr(c1_s - b1_s * y_sym)})"
+                    f" + {_fmt_expr(b2_s * y_sym)} = {_fmt_number(c2_s)} になる。"
+                ),
             ),
             Step(
                 op="solve_for_y",
@@ -1823,6 +1904,7 @@ def solve_system_substitution(ctx: CellContext, rng: Rng) -> MR:
                 result_srepr=sympy.srepr(y0),
                 result_display=f"y = {_fmt_number(y0)}",
                 narration="y の値を求める。",
+                detail=_divide_detail(coef_y, "y"),
             ),
             Step(
                 op="back_substitute",
@@ -1918,6 +2000,11 @@ def solve_system_elim_scaled(ctx: CellContext, rng: Rng) -> MR:
         b2 = sympy.Integer(draw(p["eqb_y_coeff_mag_domain"], rng)) * sign()  # |b2| ∈ {2,3}
         first_op = "scale_one_equation"
         scale_narr = "y の係数をそろえるため、一方の式を何倍かする。"
+        # **何倍したのかを言う。**「何倍かする」ではその問題で何をしたか読めない。
+        scale_detail = (
+            f"はじめの式の両辺を {_fmt_number(b2)} 倍して、"
+            f"y の係数を {_fmt_number(b2)} にそろえる。"
+        )
         # eq_a を b2 倍して y 係数を b2 にそろえた式（表示用）。
         scaled_disp = _fmt_eq(a1 * b2 * x_sym + b2 * y_sym, (x0 * a1 + b1 * y0) * b2)
     elif mode == "scale_both":
@@ -1929,6 +2016,10 @@ def solve_system_elim_scaled(ctx: CellContext, rng: Rng) -> MR:
         b2 = sympy.Integer(3) * sign()
         first_op = "scale_both_equations"
         scale_narr = "y の係数を最小公倍数にそろえるため、両方の式をそれぞれ何倍かする。"
+        scale_detail = (
+            f"はじめの式の両辺を {_fmt_number(b2)} 倍、もう一方の式の両辺を "
+            f"{_fmt_number(b1)} 倍して、y の係数を {_fmt_number(b1 * b2)} にそろえる。"
+        )
         c1_tmp = x0 * a1 + b1 * y0
         c2_tmp = x0 * a2 + b2 * y0
         # eq_a を b2 倍・eq_b を b1 倍し、y 係数を b1·b2 にそろえた2式（表示用）。
@@ -1952,6 +2043,7 @@ def solve_system_elim_scaled(ctx: CellContext, rng: Rng) -> MR:
             result_srepr=sympy.srepr(b1 * b2),
             result_display=scaled_disp,
             narration=scale_narr,
+            detail=scale_detail,
         ),
         Step(
             op="eliminate_and_solve_x",
@@ -1959,6 +2051,14 @@ def solve_system_elim_scaled(ctx: CellContext, rng: Rng) -> MR:
             result_srepr=sympy.srepr(x0),
             result_display=f"x = {_fmt_number(x0)}",
             narration="2式を加減して y を消去し、x を求める。",
+            # そろえたあとの2式は y の係数が同じなので、辺々を引けば消える。
+            detail=(
+                "y の係数がそろったので辺々を引く。"
+                + _eliminated_detail(
+                    a1 * b2 - a2 * (b1 if mode == "scale_both" else 1),
+                    c1 * b2 - c2 * (b1 if mode == "scale_both" else 1),
+                )
+            ),
         ),
         Step(
             op="back_substitute",
@@ -2107,6 +2207,7 @@ def solve_system_preprocessed(ctx: CellContext, rng: Rng) -> MR:
             result_srepr=sympy.srepr(x0),
             result_display=f"x = {_fmt_number(x0)}",
             narration="整理した連立方程式を加減法で解いて x を求める。",
+            detail=_eliminate_y_detail(A1, B1, C1, A2, B2, C2),
         ),
         Step(
             op="back_substitute",
@@ -2212,6 +2313,7 @@ def solve_system_abc(ctx: CellContext, rng: Rng) -> MR:
             result_srepr=sympy.srepr(x0),
             result_display=f"x = {_fmt_number(x0)}",
             narration="連立方程式を解いて x を求める。",
+            detail=_eliminate_y_detail(A1, B1, C1, A2, B2, C2),
         ),
         Step(
             op="back_substitute",

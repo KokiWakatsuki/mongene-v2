@@ -56,16 +56,19 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 歩いた時間を x 分、走った時間を y 分とおく。
     op: set_variables
     result_display: x, y
     result_srepr: Tuple(Symbol('x'), Symbol('y'))
   - args: []
+    detail: ''
     narration: かかった時間の関係に着目して、1つめの式をつくる。
     op: formulate_first
     result_display: x + y = 26
     result_srepr: Equality(Add(Symbol('x'), Symbol('y')), Integer(26))
   - args: []
+    detail: ''
     narration: 道のりの関係に着目して、2つめの式をつくる。
     op: formulate_second
     result_display: 80x + 150y = 2640
@@ -73,17 +76,20 @@ sub_questions:
   - args:
     - Eq(x + y, 26)
     - Eq(80*x + 150*y, 2640)
+    detail: ''
     narration: 係数をそろえて一方の文字を消去し、残った文字を求める。
     op: eliminate_variable
     result_display: x = 18
     result_srepr: Equality(Symbol('x'), Integer(18))
   - args:
     - '18'
+    detail: ''
     narration: 求めた値をもとの式に代入し、もう一方の文字を求める。
     op: back_substitute
     result_display: y = 8
     result_srepr: Integer(8)
   - args: []
+    detail: ''
     narration: 求めた x、y をもとに、問われている量を計算する。
     op: derive_asked_quantities
     result_display: 歩いた道のりは1440m、走った道のりは1200m

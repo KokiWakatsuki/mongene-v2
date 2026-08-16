@@ -37,7 +37,7 @@ sub_questions:
   - direct_proportion.word_problem_unit_convert
   explanation: 'まず、比例の式 y=ax に、通る点の x, y の値をあてはめ、比例定数を求める式をつくる。（a = 50 / 1）
 
-    次に、求めた比例定数を使って、比例の式を組み立てる。（y = 50x）
+    次に、比例定数は a = 50 なので、y = ax にあてはめる。（y = 50x）
 
     次に、比例定数と x の値を、比例の式 y=ax の x にあてはめる。（y = 50 × 100）
 
@@ -55,12 +55,14 @@ sub_questions:
   - args:
     - '1'
     - '50'
+    detail: ''
     narration: 比例の式 y=ax に、通る点の x, y の値をあてはめ、比例定数を求める式をつくる。
     op: substitute_point
     result_display: a = 50 / 1
     result_srepr: Integer(50)
   - args:
     - '50'
+    detail: 比例定数は a = 50 なので、y = ax にあてはめる。
     narration: 求めた比例定数を使って、比例の式を組み立てる。
     op: form_expression
     result_display: y = 50x
@@ -68,17 +70,20 @@ sub_questions:
   - args:
     - '50'
     - '100'
+    detail: ''
     narration: 比例定数と x の値を、比例の式 y=ax の x にあてはめる。
     op: substitute_x
     result_display: y = 50 × 100
     result_srepr: Integer(5000)
   - args:
     - y = 50 × 100
+    detail: ''
     narration: かけ算を計算して y の値を求める。
     op: evaluate
     result_display: y = 5000
     result_srepr: Integer(5000)
   - args: []
+    detail: ''
     narration: 道のりの単位を m から km に直す。
     op: convert_unit
     result_display: 5km

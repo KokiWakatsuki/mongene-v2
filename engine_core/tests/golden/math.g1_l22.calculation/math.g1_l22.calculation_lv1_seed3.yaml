@@ -35,7 +35,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - equation.solve_by_transpose
-  explanation: 'まず、数の項を、符号を変えて反対の辺に移項する。（x = 2 - 10）
+  explanation: 'まず、左辺の +10 を、符号を変えて右辺に移項する。（x = 2 - 10）
 
     次に、両辺を計算して、解を求める。（x = -8）'
   hints:
@@ -44,11 +44,13 @@ sub_questions:
   prompt_text: 解を求めなさい。
   solution_steps:
   - args: []
+    detail: 左辺の +10 を、符号を変えて右辺に移項する。
     narration: 数の項を、符号を変えて反対の辺に移項する。
     op: transpose_constant
     result_display: x = 2 - 10
     result_srepr: Integer(-8)
   - args: []
+    detail: ''
     narration: 両辺を計算して、解を求める。
     op: state_solution
     result_display: x = -8

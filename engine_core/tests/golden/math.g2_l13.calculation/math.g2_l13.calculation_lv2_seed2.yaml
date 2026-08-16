@@ -37,9 +37,9 @@ sub_questions:
   - simultaneous_equations.solve_by_substitution
   explanation: 'まず、はじめの式を x について解く。（x = 3y - 8）
 
-    次に、これをもう一方の式に代入して y だけの方程式にする。（-6y = -24）
+    次に、もう一方の式の x に 3y - 8 を代入すると、-3(3y - 8) + 3y = 0 になる。（-6y = -24）
 
-    次に、y の値を求める。（y = 4）
+    次に、両辺を y の係数 -6 でわる。（y = 4）
 
     最後に、求めた y を x = … の式に代入して x を求める。（x = 4）'
   hints:
@@ -51,6 +51,7 @@ sub_questions:
   solution_steps:
   - args:
     - x - 3y = -8
+    detail: ''
     narration: はじめの式を x について解く。
     op: isolate_variable
     result_display: x = 3y - 8
@@ -58,18 +59,21 @@ sub_questions:
   - args:
     - x = 3y - 8
     - -3x + 3y = 0
+    detail: もう一方の式の x に 3y - 8 を代入すると、-3(3y - 8) + 3y = 0 になる。
     narration: これをもう一方の式に代入して y だけの方程式にする。
     op: substitute_expr
     result_display: -6y = -24
     result_srepr: Equality(Mul(Integer(-1), Integer(6), Symbol('y')), Integer(-24))
   - args:
     - -6y = -24
+    detail: 両辺を y の係数 -6 でわる。
     narration: y の値を求める。
     op: solve_for_y
     result_display: y = 4
     result_srepr: Integer(4)
   - args:
     - '4'
+    detail: ''
     narration: 求めた y を x = … の式に代入して x を求める。
     op: back_substitute
     result_display: x = 4

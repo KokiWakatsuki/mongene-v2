@@ -23,7 +23,7 @@ meta:
     unit: g3_l42
   seed: 1
   signature: parallel_segment_ratio_length
-problem_ref: 503192cfaf37dfe4
+problem_ref: 1e300346354ca736
 problem_text: 三角形EFGで、辺EF, EG上に点H, Jがあり、HJ∥FGである。EH=6cm, HF=12cm, HJ=6cm のとき、辺FGの長さを求めよ。
 sub_questions:
 - answer:
@@ -35,18 +35,29 @@ sub_questions:
   - parallel_segment.ratio_length
   explanation: 'まず、HJ∥FG であることから、三角形EHJと三角形EFGが相似になることを見つける。（三角形EHJ と 三角形EFG）
 
-    次に、EH:EF=HJ:FG が成り立つことから、辺FGの長さを求める。（18）'
+    次に、EHとHFをたして、辺EF全体の長さを求める。（EF = 6 + 12 = 18）
+
+    最後に、6:18 = 6:FG を解いて、辺FGの長さを求める。（18）'
   hints:
   - HJ∥FG であることから、三角形EHJと三角形EFGが相似になることを見つける。
+  - EHとHFをたして、辺EF全体の長さを求める。
   label: (1)
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: HJ∥FG であることから、三角形EHJと三角形EFGが相似になることを見つける。
     op: identify_similar_triangles_from_parallel
     result_display: 三角形EHJ と 三角形EFG
     result_srepr: ''
   - args: []
+    detail: ''
+    narration: EHとHFをたして、辺EF全体の長さを求める。
+    op: compose_whole_side
+    result_display: EF = 6 + 12 = 18
+    result_srepr: ''
+  - args: []
+    detail: 6:18 = 6:FG を解いて、辺FGの長さを求める。
     narration: EH:EF=HJ:FG が成り立つことから、辺FGの長さを求める。
     op: apply_parallel_segment_ratio
     result_display: '18'

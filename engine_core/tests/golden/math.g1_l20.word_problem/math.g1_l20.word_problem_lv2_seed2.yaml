@@ -47,16 +47,19 @@ sub_questions:
   prompt_text: 式に表しなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 比べられている数量のうち、一方を x を使った式で表す。
     op: express_first_quantity
     result_display: 5x - 3
     result_srepr: ''
   - args: []
+    detail: ''
     narration: もう一方の数量も、同じように x を使った式で表す。
     op: express_second_quantity
     result_display: x + 22
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 表した式どうしを、場面が示す大小や等しさのとおりに等号・不等号で結ぶ。
     op: formulate_relation
     result_display: 13 < 5x - 3 < x + 22

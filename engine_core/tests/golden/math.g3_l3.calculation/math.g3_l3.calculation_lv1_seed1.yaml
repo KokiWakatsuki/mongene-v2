@@ -44,11 +44,13 @@ sub_questions:
   prompt_text: 式を簡単にしなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 2つの定数の和と積を求める。
     op: compute_sum_and_product
     result_display: 和 6、積 8
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 乗法公式にあてはめて展開した式を書く。
     op: write_expansion
     result_display: t² + 6t + 8

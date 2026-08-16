@@ -44,11 +44,13 @@ sub_questions:
   prompt_text: 式を簡単にしなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 乗法の部分を先にまとめてから、分数の形に表す。
     op: collect_numerator
     result_display: 7cx
     result_srepr: Mul(Integer(7), Symbol('c'), Pow(Symbol('n'), Integer(-1)), Symbol('x'))
   - args: []
+    detail: ''
     narration: 除法の記号 ÷ を使わず、分数の形で表す。
     op: rewrite_as_fraction
     result_display: 7cx/n

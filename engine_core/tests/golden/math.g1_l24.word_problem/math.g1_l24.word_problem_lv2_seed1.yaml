@@ -48,11 +48,13 @@ sub_questions:
   prompt_text: 式に表しなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 場面の中で、どちらの見方でも同じになる（等しくなっている）量に着目する。
     op: find_equal_relation
     result_display: 冊数と値段の比
     result_srepr: Symbol('x')
   - args: []
+    detail: ''
     narration: その量を x を使って両辺に表し、方程式をつくる。
     op: formulate_equation
     result_display: 10:800 = 5:x
@@ -64,20 +66,22 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - equation.word_problem_proportion_pair
-  explanation: 'まず、比例式の性質を使い、外項の積と内項の積が等しい式（たすきがけ）をつくる。（10 × x = 800 × 5）
+  explanation: 'まず、比例式の性質を使い、外項の積と内項の積が等しい式をつくる。（10 × x = 800 × 5）
 
-    次に、x の係数で両辺をわって、x の値を求める。（x = 400）'
+    次に、x の係数 10 で両辺をわって、x の値を求める。（x = 400）'
   hints:
-  - 比例式の性質を使い、外項の積と内項の積が等しい式（たすきがけ）をつくる。
+  - 比例式の性質を使い、外項の積と内項の積が等しい式をつくる。
   label: (2)
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
-    narration: 比例式の性質を使い、外項の積と内項の積が等しい式（たすきがけ）をつくる。
+    detail: ''
+    narration: 比例式の性質を使い、外項の積と内項の積が等しい式をつくる。
     op: cross_multiply
     result_display: 10 × x = 800 × 5
     result_srepr: Integer(400)
   - args: []
+    detail: x の係数 10 で両辺をわって、x の値を求める。
     narration: x の係数で両辺をわって、x の値を求める。
     op: solve_proportion
     result_display: x = 400

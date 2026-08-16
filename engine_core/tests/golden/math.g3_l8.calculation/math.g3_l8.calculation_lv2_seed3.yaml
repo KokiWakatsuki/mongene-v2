@@ -47,16 +47,19 @@ sub_questions:
   prompt_text: 式を簡単にしなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 定数の符号から、2つの数の符号を決める。
     op: determine_signs
     result_display: 積 36、和 -15 なのでどちらも負
     result_srepr: ''
   - args: []
+    detail: ''
     narration: たすと1次の係数、かけると定数になる2つの数を見つける。
     op: find_two_numbers
     result_display: -12 と -3
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 見つけた2つの数を使い、2つの1次式の積で表す。
     op: write_factors
     result_display: (x - 12)(x - 3)

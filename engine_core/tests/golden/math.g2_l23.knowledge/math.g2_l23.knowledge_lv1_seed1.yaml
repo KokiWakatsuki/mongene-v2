@@ -44,11 +44,13 @@ sub_questions:
   prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 変域の不等号に等号がついているか（≦・≧か、<・>か）に注目する。
     op: identify_inequality_type
     result_display: 等号なし（<・>）
     result_srepr: open
   - args: []
+    detail: ''
     narration: 等号つきの不等号なら端の点はふくまれ、等号がなければふくまれない。
     op: determine_inclusion
     result_display: ふくまれない

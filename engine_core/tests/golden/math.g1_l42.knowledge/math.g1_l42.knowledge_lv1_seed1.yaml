@@ -44,11 +44,13 @@ sub_questions:
   prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 角の二等分線上の点から、角をつくる2辺までの距離を見比べる。
     op: identify_construction_property
     result_display: ''
     result_srepr: angle_bisector
   - args: []
+    detail: ''
     narration: その距離どうしの関係を判別する。
     op: judge_construction_property
     result_display: 等しい

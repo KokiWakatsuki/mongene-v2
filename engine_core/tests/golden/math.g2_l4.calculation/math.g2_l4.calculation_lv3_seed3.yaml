@@ -47,16 +47,19 @@ sub_questions:
   prompt_text: 式を簡単にしなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: ÷ を、その式の逆数をかけるかけ算に直す。
     op: convert_divisions_to_reciprocal
     result_display: (-4x³y²) × (3/(2x²y)) × (-4x²y)
     result_srepr: Mul(Integer(24), Pow(Symbol('x'), Integer(3)), Pow(Symbol('y'), Integer(2)))
   - args: []
+    detail: ''
     narration: 係数どうしをかけ算する。
     op: multiply_coefficients
     result_display: '24'
     result_srepr: Mul(Integer(24), Pow(Symbol('x'), Integer(3)), Pow(Symbol('y'), Integer(2)))
   - args: []
+    detail: ''
     narration: 同じ文字は指数の和にまとめ、1つの単項式にする。
     op: combine_powers
     result_display: 24x³y²

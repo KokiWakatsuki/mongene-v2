@@ -55,10 +55,12 @@ _EQUATION_STEPS: dict[str, list[str]] = {
     "pythagorean_equidistant_point_x_axis": ["expand_and_transpose", "solve"],
 }
 
+# **ここはヒントに出る文**（`t1_template._build_hints` は narration しか見ない）。
+# 数字を書けないので操作を名指しできず、「たすかひくか」のようにぼかす形が残る。
+# **解説に出る文は `_apply_step` / `_final_detail` が組む `detail`** で、そちらは
+# 実際の値で名指しする（「両辺から 5 をひく」）。ヒントで先出しにならないのは
+# detail が解説にしか流れないため（`Step` の docstring・鉄則⑦）。
 _OP_NARRATION: dict[str, str] = {
-    # **何をしたかは式が見せる。narration は「なぜそうするか」を言う。**
-    # 前は「両辺から同じ数をひく（または加える）」で、その問題でどちらを
-    # したのかを言っていなかった（実物は「左辺を x だけにするために」と目的を書く）。
     # 左辺は `x` とは限らない（`7x - 60 = 45` なら `7x` が残る）ので「x の項」と書く。
     "subtract_constant_both_sides": "左辺を x の項だけにするために、両辺に同じ数をたすかひくかする。",
     "state_solution": "両辺を計算して、解を求める。",
@@ -72,7 +74,9 @@ _OP_NARRATION: dict[str, str] = {
     "combine_and_solve": "同類項をまとめ、x の係数で両辺をわって解を求める。",
     "expand_and_transpose": "分配法則でかっこを外し、文字の項を左辺・数の項を右辺に移項する。",
     "solve": "同類項をまとめ、x の係数で両辺をわって解を求める。",
-    "cross_multiply": "比例式の性質を使い、外項の積と内項の積が等しい式（たすきがけ）をつくる。",
+    # 「たすきがけ」は因数分解（ax² + bx + c）の用語なので、比例式では使わない
+    # （同じ語を別の操作に当てると、生徒がどちらの手続きか取り違える）。
+    "cross_multiply": "比例式の性質を使い、外項の積と内項の積が等しい式をつくる。",
     "solve_proportion": "x の係数で両辺をわって、x の値を求める。",
 }
 
@@ -89,13 +93,23 @@ def _denominator_lcm(*exprs: sympy.Expr) -> int:
     return lcm
 
 
+def _signed(v: sympy.Expr) -> str:
+    """項を符号つきで書く（`+6`・`-4x`）。移項する項を名指しするときに使う。"""
+    s = fmt_expr(v)
+    return s if s.startswith("-") else f"+{s}"
+
+
 def _apply_step(
     op: str, lhs: sympy.Expr, rhs: sympy.Expr, equation_str: str
-) -> tuple[str, sympy.Expr, sympy.Expr]:
-    """1手ぶんの (括弧の中身, 直したあとの左辺, 右辺)。
+) -> tuple[str, str, sympy.Expr, sympy.Expr]:
+    """1手ぶんの (括弧の中身, 指示文の detail, 直したあとの左辺, 右辺)。
 
     **手をつないで持ち回る**。前の手の結果でなく元の式から毎回組むと、
     分母をはらった次の手が分数のままの式を見せてしまう（実際そうなっていた）。
+
+    detail は**その手で実際にやった操作を、実際の値で名指しした1文**（`Step` の
+    docstring）。何をしたかを決めているのはこの関数なので、言うのもここでやる。
+    `""` を返した手は従来どおり `_OP_NARRATION` が解説に出る。
     """
     x = sympy.Symbol("x")
     if op == "subtract_constant_both_sides":
@@ -108,7 +122,11 @@ def _apply_step(
         sign = "-" if const > 0 else "+"
         a = fmt_expr(abs(const))
         disp = f"{fmt_expr(lhs)} {sign} {a} = {fmt_expr(rhs)} {sign} {a}"
-        return disp, sympy.expand(lhs - const), sympy.expand(rhs - const)
+        # **どちらをしたのかを言う。** 「たすかひくか」ではその問題で何をしたのかが
+        # 読み手に分からない（実物は「両辺から ５ をひいて」と名指しする）。
+        did = f"両辺から {a} をひく" if const > 0 else f"両辺に {a} をたす"
+        detail = f"左辺を x の項だけにするために、{did}。"
+        return disp, detail, sympy.expand(lhs - const), sympy.expand(rhs - const)
     if op == "transpose_constant":
         # 数の項を移した形（`x = 18 - 6`）。**計算はしない**——次の手の仕事なので。
         const = lhs.subs(x, 0)
@@ -117,7 +135,8 @@ def _apply_step(
             f"{fmt_expr(sympy.expand(lhs - const))} = "
             f"{fmt_expr(rhs)} {sign} {fmt_expr(abs(const))}"
         )
-        return disp, sympy.expand(lhs - const), sympy.expand(rhs - const)
+        detail = f"左辺の {_signed(const)} を、符号を変えて右辺に移項する。"
+        return disp, detail, sympy.expand(lhs - const), sympy.expand(rhs - const)
     if op == "transpose_terms":
         # 文字は左辺・数は右辺（`2x - 4x = 11 - 9`）。
         lx, rx = lhs - lhs.subs(x, 0), rhs - rhs.subs(x, 0)
@@ -126,26 +145,36 @@ def _apply_step(
         left = [v for v in (lx, -rx) if v != 0] or [sympy.Integer(0)]
         right = [v for v in (rc, -lc) if v != 0] or [sympy.Integer(0)]
         disp = f"{join_signed(left)} = {join_signed(right)}"
-        return disp, sympy.expand(lx - rx), sympy.expand(rc - lc)
+        # **動かした項だけを名指しする。** 動いていない項まで並べると、
+        # 何が移項されたのかがかえって読めない。
+        moved = []
+        if rx != 0:
+            moved.append(f"右辺の {_signed(rx)} を左辺に")
+        if lc != 0:
+            moved.append(f"左辺の {_signed(lc)} を右辺に")
+        detail = f"{'、'.join(moved)}、符号を変えて移項する。" if moved else ""
+        return disp, detail, sympy.expand(lx - rx), sympy.expand(rc - lc)
     if op == "combine_like_terms":
         # **「整理」と「わる」を分ける。** 実物（佐賀県教委の学習プリント）は
         #   2x + 3 = 9  →  2x = 9 - 3  →  2x = 6  →  x = 3
         # と1手ずつ見せる。ここを1手にまとめていたので `2x - 4x = 11 - 9` から
         # いきなり `x = -1` に飛んでいた（`-2x = 2` が抜けていた）。
         new_l, new_r = sympy.expand(lhs), sympy.expand(rhs)
-        return f"{fmt_expr(new_l)} = {fmt_expr(new_r)}", new_l, new_r
+        return f"{fmt_expr(new_l)} = {fmt_expr(new_r)}", "", new_l, new_r
     if op == "expand_parentheses":
         new_l, new_r = sympy.expand(lhs), sympy.expand(rhs)
-        return f"{fmt_expr(new_l)} = {fmt_expr(new_r)}", new_l, new_r
+        return f"{fmt_expr(new_l)} = {fmt_expr(new_r)}", "", new_l, new_r
     if op == "clear_denominators":
         m = _denominator_lcm(lhs, rhs)
         new_l, new_r = sympy.expand(m * lhs), sympy.expand(m * rhs)
-        return f"{fmt_expr(new_l)} = {fmt_expr(new_r)}", new_l, new_r
+        # **かける数を名指しする。** 実物は必ず「両辺に 6 をかけて」と数を書く。
+        detail = f"分母の最小公倍数 {m} を両辺にかけて、分母をはらう。"
+        return f"{fmt_expr(new_l)} = {fmt_expr(new_r)}", detail, new_l, new_r
     if op == "expand_and_transpose":
         moved = sympy.expand(lhs - rhs)
         coeff = moved.coeff(x, 1) * x
         const = moved.subs(x, 0)
-        return f"{fmt_expr(coeff)} = {fmt_expr(-const)}", coeff, -const
+        return f"{fmt_expr(coeff)} = {fmt_expr(-const)}", "", coeff, -const
     if op == "cross_multiply":
         # 比例式の外項の積＝内項の積。**かけ算をした形のまま**見せる
         # （`3(x - 1) = 9 × 1`）——展開は次の手の仕事。
@@ -156,22 +185,45 @@ def _apply_step(
             text = str(sympy.sstr(sympy.sympify(part, evaluate=False)))
             return text.replace("*", " × ")
 
-        return f"{shown(lhs_s)} = {shown(rhs_s)}", lhs, rhs
+        return f"{shown(lhs_s)} = {shown(rhs_s)}", "", lhs, rhs
     raise ValueError(f"途中の表示を組めない op: {op!r}")
 
 
-def _equation_step_displays(ops: list[str], equation_str: str, final: str) -> list[str]:
-    """各手の括弧の中身（最後は答え）。"""
+def _final_detail(op: str, lhs: sympy.Expr, rhs: sympy.Expr) -> str:
+    """**最後の手**の指示文を、実際の値で名指しする。
+
+    最後の手は `_apply_step` を通らない（括弧に答えを入れて打ち切るため）ので、
+    ここで持ち回ってきた左辺・右辺から係数を読む。実物は「両辺を 8 でわって」と
+    わる数を必ず書く。
+    """
+    coeff = sympy.expand(lhs).coeff(sympy.Symbol("x"), 1)
+    if coeff in (0, 1):
+        # 係数が 1 なら「わる」手がそもそも要らない。名指しできることが無い。
+        return ""
+    a = fmt_expr(coeff)
+    if op == "divide_both_sides":
+        return f"等式の性質を使い、両辺を x の係数 {a} でわる。"
+    if op == "solve_proportion":
+        return f"x の係数 {a} で両辺をわって、x の値を求める。"
+    if op in ("solve", "combine_and_solve"):
+        return f"同類項をまとめ、x の係数 {a} で両辺をわって解を求める。"
+    return ""
+
+
+def _equation_step_displays(
+    ops: list[str], equation_str: str, final: str
+) -> list[tuple[str, str, str]]:
+    """各手の (op, 括弧の中身, 指示文の detail)。最後の手の括弧は答え。"""
     lhs_s, rhs_s = equation_str.split("=")
     lhs = sympy.sympify(lhs_s, rational=True)
     rhs = sympy.sympify(rhs_s, rational=True)
-    out: list[tuple[str, str]] = []
+    out: list[tuple[str, str, str]] = []
     for i, op in enumerate(ops):
         if i == len(ops) - 1:
-            out.append((op, final))
+            out.append((op, final, _final_detail(op, lhs, rhs)))
             break
-        disp, lhs, rhs = _apply_step(op, lhs, rhs, equation_str)
-        out.append((op, disp))
+        disp, detail, lhs, rhs = _apply_step(op, lhs, rhs, equation_str)
+        out.append((op, disp, detail))
     return out
 
 
@@ -196,19 +248,17 @@ def solve_linear_equation(equation_str: str, mode: object) -> Solution:
     r_srepr = sympy.srepr(value)
     r_disp = f"x = {fmt_number(value)}"
 
-    ops = _EQUATION_STEPS[mode_s]
-    shown = _equation_step_displays(ops, equation_str, r_disp)
-    ops = [o for o, _d in shown]
-    displays = [d for _o, d in shown]
+    shown = _equation_step_displays(_EQUATION_STEPS[mode_s], equation_str, r_disp)
     steps = [
         Step(
             op=op,
             args=[],
             result_srepr=r_srepr,
-            result_display=displays[i],
+            result_display=display,
             narration=_OP_NARRATION[op],
+            detail=detail,
         )
-        for i, op in enumerate(ops)
+        for op, display, detail in shown
     ]
     answer = SymbolicAnswer(srepr=r_srepr, display=r_disp)
     return Solution(answer=answer, steps=steps)

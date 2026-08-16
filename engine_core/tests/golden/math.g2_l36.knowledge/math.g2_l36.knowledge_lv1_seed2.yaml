@@ -48,16 +48,19 @@ sub_questions:
   prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 2つの図形が合同であることを表すのに使う記号を思い出す。
     op: recall_congruence_symbol
     result_display: 合同を表す記号を思い出す
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 合同を表す式で、頂点がどの順に対応づけられているかを確認する。
     op: identify_side_correspondence
     result_display: HJK と WXY
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 対応する位置にある頂点どうしが結ぶ辺が、対応する辺になることから読み取る。
     op: name_corresponding_side
     result_display: 合同を表す記号は≡であり、辺HJに対応する辺は辺WXである

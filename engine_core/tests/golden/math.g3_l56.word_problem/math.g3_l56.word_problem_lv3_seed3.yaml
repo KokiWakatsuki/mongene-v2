@@ -49,16 +49,19 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 表面上の最短の道のりを考えるために、通る二つの側面を一つの平面に開いた展開図をかく。
     op: unfold_two_side_faces
     result_display: 横 20、縦 10 の長方形
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 開いた図では二つの側面が横に並んだ長方形になり、道のりが最も短くなるのは出発点と到着点を結ぶ線分のときだから、その線分を斜辺とする直角三角形をとらえる。
     op: identify_right_triangle
     result_display: 20 cm
     result_srepr: Integer(20)
   - args: []
+    detail: ''
     narration: 直角をはさむ2辺は、底面の二つの辺の長さの和と、直方体の高さだから、三平方の定理から最短の道のりを求める。
     op: apply_pythagorean_theorem
     result_display: 10√5 cm
@@ -79,11 +82,13 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 開いた二つの側面は、あわせて横が底面の二つの辺の長さの和、縦が直方体の高さである一つの長方形になる。
     op: combine_two_side_faces
     result_display: 20 cm
     result_srepr: Integer(20)
   - args: []
+    detail: ''
     narration: その長方形の縦と横の長さをかけて、通る側面の面積の和を求める。
     op: compute_rectangle_area
     result_display: 200 cm²

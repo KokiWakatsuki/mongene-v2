@@ -44,6 +44,7 @@ sub_questions:
   - args:
     - (-5, -9)
     - (3, 7)
+    detail: ''
     narration: 2点から y の増加量と x の増加量をそれぞれ求める。
     op: compute_differences
     result_display: y の増加量 = 16, x の増加量 = 8
@@ -51,6 +52,7 @@ sub_questions:
   - args:
     - '16'
     - '8'
+    detail: ''
     narration: y の増加量を x の増加量で割り、変化の割合を求める。
     op: compute_rate_of_change
     result_display: 変化の割合 = 2

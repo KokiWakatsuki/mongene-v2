@@ -45,11 +45,13 @@ sub_questions:
   prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 問題で問われている規則や約束が、何についてのものかを読み取る。
     op: read_rule_context
     result_display: ''
     result_srepr: all_five
   - args: []
+    detail: ''
     narration: その規則の正しい内容を思い出して選ぶ。
     op: recall_correct_rule
     result_display: 二組の対辺がそれぞれ平行である、二組の対辺の長さがそれぞれ等しい、二組の対角の大きさがそれぞれ等しい、対角線がそれぞれの中点で交わる、一組の対辺が平行でその長さが等しい、のいずれか

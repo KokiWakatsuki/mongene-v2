@@ -41,11 +41,11 @@ sub_questions:
 
     次に、分配法則を使って、かっこを外す。（240x + 450 = 930）
 
-    次に、文字の項を左辺に、数の項を右辺に、符号を変えて移項する。（240x = 930 - 450）
+    次に、左辺の +450 を右辺に、符号を変えて移項する。（240x = 930 - 450）
 
     次に、両辺の同類項をそれぞれまとめて、ax = b の形にする。（240x = 480）
 
-    最後に、等式の性質を使い、両辺を x の係数でわる。（x = 2）'
+    最後に、等式の性質を使い、両辺を x の係数 240 でわる。（x = 2）'
   hints:
   - 場面の中で、どちらの見方でも同じになる（等しくなっている）量に着目する。
   - その量を x を使って両辺に表し、方程式をつくる。
@@ -56,31 +56,37 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 場面の中で、どちらの見方でも同じになる（等しくなっている）量に着目する。
     op: find_equal_relation
     result_display: 代金の合計
     result_srepr: Symbol('x')
   - args: []
+    detail: ''
     narration: その量を x を使って両辺に表し、方程式をつくる。
     op: formulate_equation
     result_display: 90x + 150(x + 3) = 930
     result_srepr: Equality(Add(Mul(Integer(240), Symbol('x')), Integer(450)), Integer(930))
   - args: []
+    detail: ''
     narration: 分配法則を使って、かっこを外す。
     op: expand_parentheses
     result_display: 240x + 450 = 930
     result_srepr: Integer(2)
   - args: []
+    detail: 左辺の +450 を右辺に、符号を変えて移項する。
     narration: 文字の項を左辺に、数の項を右辺に、符号を変えて移項する。
     op: transpose_terms
     result_display: 240x = 930 - 450
     result_srepr: Integer(2)
   - args: []
+    detail: ''
     narration: 両辺の同類項をそれぞれまとめて、ax = b の形にする。
     op: combine_like_terms
     result_display: 240x = 480
     result_srepr: Integer(2)
   - args: []
+    detail: 等式の性質を使い、両辺を x の係数 240 でわる。
     narration: 等式の性質を使い、両辺を x の係数でわる。
     op: divide_both_sides
     result_display: x = 2

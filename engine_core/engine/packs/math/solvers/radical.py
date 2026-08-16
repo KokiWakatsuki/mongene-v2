@@ -105,6 +105,30 @@ def _square_split(n: int) -> tuple[int, int]:
     return square, rest
 
 
+def _simplify_root_detail(op: str, expr: sympy.Expr) -> str:
+    """「平方の因数を外に出す」手が、**この問題では何もしていない**ときに言う。
+
+    `√11 × √2 = √22` のように 22 に平方の因数が無いと、この手の括弧が前の手と
+    同じ `√22` になり、**定型の手を無条件に並べているのが露出する**。
+    平方の因数があるかを確かめること自体がこの単元の技能なので、
+    「無かった」ことを言い切る（手を消すより教材として正しい）。
+    """
+    # `simplify_result` はこの手で係数どうしもまとめている（`3 × 5√3` → `15√3`）ので
+    # 「何もしていない」とは言えない。当てるのは `simplify_root` だけ。
+    if op != "simplify_root":
+        return ""
+    radicands = [
+        int(a.args[0]) for a in expr.atoms(sympy.Pow)
+        if a.exp == sympy.Rational(1, 2) and a.base.is_Integer
+    ]
+    if len(radicands) != 1:
+        return ""
+    square, rest = _square_split(radicands[0])
+    if square == 1:
+        return f"{radicands[0]} に平方の因数は無いので、これ以上簡単にできない。"
+    return f"{radicands[0]} = {square} × {rest} なので、{sympy.sqrt(square)} を根号の外に出す。"
+
+
 def _parse_factors(text: str) -> tuple[sympy.Integer, list[int]]:
     """`4*sqrt(6)*sqrt(2)` を（係数 4, 根号の中 [6, 2]）に分ける。
 
@@ -280,6 +304,7 @@ def simplify_radical(expr_str: str, mode: object) -> Solution:
             result_display=disp if i == len(ops) - 1
             else _radical_step_display(op, expr_str, expr),
             narration=_RADICAL_OP_NARRATION[op],
+            detail=_simplify_root_detail(op, expr),
         )
         for i, op in enumerate(ops)
     ]

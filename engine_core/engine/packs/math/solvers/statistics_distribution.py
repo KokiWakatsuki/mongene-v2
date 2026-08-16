@@ -60,13 +60,20 @@ def frequency_table_value(class_start: object, class_width: object, frequencies:
             result_srepr=sympy.srepr(midpoint),
             result_display=fmt_measure(midpoint),
             narration="対象の階級の下端と上端の値の平均を求め、階級値とする。",
+            detail=(
+                f"({start + width * idx} + {start + width * (idx + 1)}) ÷ 2 を計算して、"
+                f"階級値を求める。"
+            ),
         ),
         Step(
             op="sum_frequencies",
             args=[],
             result_srepr=srepr,
-            result_display=disp,
+            # **この手で得たのは度数の合計だけ。** 答え全体（階級値も含む）を
+            # 括弧に写していたので、1手目で出した 57.5 が2度出ていた。
+            result_display=str(total),
             narration="すべての階級の度数を足し合わせ、度数の合計を求める。",
+            detail=f"{' + '.join(str(f) for f in freqs)} を計算して、度数の合計を求める。",
         ),
     ]
     answer = SymbolicAnswer(srepr=srepr, display=disp)
@@ -150,6 +157,10 @@ def cumulative_frequency_value(frequencies: object, target_index: object) -> Sol
             result_srepr=sympy.srepr(cum),
             result_display=str(cum),
             narration="いちばん小さい階級から対象の階級まで、度数を順に足し合わせる。",
+            detail=(
+                f"いちばん小さい階級から順に "
+                f"{' + '.join(str(f) for f in freqs[: idx + 1])} を足して、累積度数を求める。"
+            ),
         ),
     ]
     answer = SymbolicAnswer(srepr=sympy.srepr(cum), display=str(cum))
@@ -186,13 +197,19 @@ def cumulative_relative_frequency_and_complement(frequencies: object, target_ind
             result_srepr="",
             result_display=_fmt_relative(cum_rel),
             narration="対象の階級までの累積度数を求め、総度数でわって累積相対度数を求める。",
+            detail=f"累積度数 {cum} を総度数 {total} でわる（{cum} ÷ {total}）。",
         ),
         Step(
             op="compute_complement_percent",
             args=[],
             result_srepr=srepr,
-            result_display=disp,
-            narration="全体の割合から累積相対度数を除いた残りを百分率になおし、超える部分の割合を求める。",
+            # この手で得たのは「超える部分の割合」だけ（累積相対度数は前の手）。
+            result_display=f"{_fmt_relative(percent_over)}%",
+            # 「除く」は「わる」とも読める語なので、ひき算は「ひく」と書く。
+            narration="全体の割合から累積相対度数をひいた残りを百分率になおし、超える部分の割合を求める。",
+            detail=(
+                f"1 - {_fmt_relative(cum_rel)} を計算し、100 をかけて百分率になおす。"
+            ),
         ),
     ]
     answer = SymbolicAnswer(srepr=srepr, display=disp)
@@ -235,6 +252,7 @@ def representative_values_raw(data: object) -> Solution:
             result_srepr="",
             result_display=_fmt_relative(mean),
             narration="データの値をすべて足し合わせ、個数でわって平均値を求める。",
+            detail=f"{sum(vals)} ÷ {n} を計算して、平均値を求める。",
         ),
         Step(
             op="compute_median",
@@ -247,8 +265,11 @@ def representative_values_raw(data: object) -> Solution:
             op="compute_mode",
             args=[],
             result_srepr=srepr,
-            result_display=disp,
+            # **この手で得たのは最頻値だけ。** 答え全体を写していたので、
+            # 前の2手で出した平均値・中央値が最後にもう一度並んでいた。
+            result_display=str(mode),
             narration="もっとも個数が多く現れる値を求める。",
+            detail=f"{mode} が {counts[int(mode)]} 回で、いちばん多く現れる。",
         ),
     ]
     answer = SymbolicAnswer(srepr=srepr, display=disp)
@@ -285,6 +306,10 @@ def mean_from_grouped_table(class_start: object, class_width: object, frequencie
                 for i, f in enumerate(freqs)
             ),
             narration="各階級の階級値に、その階級の度数をかける。",
+            detail="各階級の階級値に度数をかけて、" + "、".join(
+                f"{fmt_measure(_class_midpoint(start, width, i))} × {f}"
+                for i, f in enumerate(freqs)
+            ) + " をそれぞれ計算する。",
         ),
         Step(
             op="divide_by_total",
@@ -292,6 +317,10 @@ def mean_from_grouped_table(class_start: object, class_width: object, frequencie
             result_srepr=srepr,
             result_display=disp,
             narration="それらの積をすべて足し合わせ、度数の合計でわって平均値を求める。",
+            detail=(
+                f"{fmt_measure(sympy.Rational(weighted_sum))} ÷ {total} を計算して、"
+                f"平均値を求める。"
+            ),
         ),
     ]
     answer = SymbolicAnswer(srepr=srepr, display=disp)

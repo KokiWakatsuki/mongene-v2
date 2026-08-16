@@ -53,26 +53,31 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 3辺の長さしかわかっていないので、頂点から底辺に垂線を引く補助線を自分で入れる。底辺が2つに分かれて、高さを共有する直角三角形が2つできる。
     op: draw_auxiliary_perpendicular
     result_display: 頂点から底辺への垂線
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 分かれた底辺の一方の長さを文字でおくと、もう一方は底辺の長さからその分をひいた残りになる。
     op: set_unknown_on_base
     result_display: 7 cm
     result_srepr: Integer(7)
   - args: []
+    detail: ''
     narration: 2つの直角三角形それぞれで、高さの二乗を三平方の定理で表す。高さは共通だから、その2つの式は等しい。この方程式を解いて、分けた底辺の長さを求める。
     op: express_height_two_ways
     result_display: 25² - x² = 26² - (17 - x)²
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 求めた長さを一方の直角三角形にあてはめて、三平方の定理から高さを求める。
     op: apply_pythagorean_theorem
     result_display: 24 cm
     result_srepr: Integer(24)
   - args: []
+    detail: ''
     narration: 底辺と、いま求めた高さから、三角形の面積を求める。
     op: compute_triangle_area
     result_display: 高さ 24 cm、面積 204 cm²

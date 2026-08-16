@@ -23,7 +23,7 @@ meta:
     unit: g3_l26
   seed: 2
   signature: quad_solve_formula
-problem_ref: 25b595e7fbcef044
+problem_ref: 35c3121c128d6608
 problem_text: '次の2次方程式を解け。
 
   5x² + 3x - 1 = 0'
@@ -37,19 +37,30 @@ sub_questions:
   - quadratic.solve_by_formula
   explanation: 'まず、与式を整理して、それぞれの項の係数 a・b・c を読み取る。（a = 5、b = 3、c = -1）
 
-    次に、a・b・c を解の公式に代入して x を求める。（x = (-√29 - 3)/10, x = (-3 + √29)/10）'
+    次に、読み取った a・b・c を、解の公式にそのまま代入する。（x = (-3 ± √(3² - 4 × 5 × (-1))) / (2 × 5)）
+
+    最後に、根号の中を計算し、約分できるところを約分して x を求める。（x = (-√29 - 3)/10, x = (-3 + √29)/10）'
   hints:
   - 与式を整理して、それぞれの項の係数 a・b・c を読み取る。
+  - 読み取った a・b・c を、解の公式にそのまま代入する。
   label: (1)
   prompt_text: 解を求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 与式を整理して、それぞれの項の係数 a・b・c を読み取る。
     op: identify_coefficients
     result_display: a = 5、b = 3、c = -1
     result_srepr: ''
   - args: []
-    narration: a・b・c を解の公式に代入して x を求める。
+    detail: ''
+    narration: 読み取った a・b・c を、解の公式にそのまま代入する。
+    op: substitute_into_formula
+    result_display: x = (-3 ± √(3² - 4 × 5 × (-1))) / (2 × 5)
+    result_srepr: ''
+  - args: []
+    detail: ''
+    narration: 根号の中を計算し、約分できるところを約分して x を求める。
     op: apply_quadratic_formula
     result_display: x = (-√29 - 3)/10, x = (-3 + √29)/10
     result_srepr: Tuple(Add(Mul(Integer(-1), Rational(1, 10), Pow(Integer(29), Rational(1, 2))), Rational(-3, 10)), Add(Rational(-3, 10), Mul(Rational(1, 10), Pow(Integer(29), Rational(1, 2)))))

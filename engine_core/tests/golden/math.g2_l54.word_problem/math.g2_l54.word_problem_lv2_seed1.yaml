@@ -49,16 +49,19 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 玉を区別して、取り出し方をすべて数え上げる。
     op: enumerate_all_combinations
     result_display: 全部で10通り
     result_srepr: ''
   - args: []
+    detail: ''
     narration: そのうち、求める条件にあてはまる取り出し方の数を数える。
     op: count_favorable_combinations
     result_display: あてはまるのは1通り
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 条件にあてはまる取り出し方の数を、すべての取り出し方の数でわる。
     op: compute_probability
     result_display: 1/10
@@ -77,6 +80,7 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 1から、もとのことがらの起こる確率をひく。
     op: subtract_from_one
     result_display: 9/10

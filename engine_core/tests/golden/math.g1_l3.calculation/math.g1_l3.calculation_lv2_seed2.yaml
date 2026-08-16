@@ -37,9 +37,9 @@ sub_questions:
   - signed_number.add_terms
   explanation: 'まず、かっこを外し、それぞれの数を符号のついた項として並べる。（-4/5 - 17/10 - 3）
 
-    次に、正の項どうし、負の項どうしをそれぞれまとめる。（-(4/5 + 17/10 + 3)）
+    次に、負の項しかないので、絶対値の和に負の符号をつける。（-(4/5 + 17/10 + 3)）
 
-    最後に、正の合計と負の合計を合わせて、答えを求める。（-11/2）'
+    最後に、かっこの中を計算し、負の符号をつけて答えを求める。（-11/2）'
   hints:
   - かっこを外し、それぞれの数を符号のついた項として並べる。
   - 正の項どうし、負の項どうしをそれぞれまとめる。
@@ -47,16 +47,19 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: かっこを外し、それぞれの数を符号のついた項として並べる。
     op: rewrite_as_term_sum
     result_display: -4/5 - 17/10 - 3
     result_srepr: Rational(-11, 2)
   - args: []
+    detail: 負の項しかないので、絶対値の和に負の符号をつける。
     narration: 正の項どうし、負の項どうしをそれぞれまとめる。
     op: group_by_sign
     result_display: -(4/5 + 17/10 + 3)
     result_srepr: Rational(-11, 2)
   - args: []
+    detail: かっこの中を計算し、負の符号をつけて答えを求める。
     narration: 正の合計と負の合計を合わせて、答えを求める。
     op: total_terms
     result_display: -11/2

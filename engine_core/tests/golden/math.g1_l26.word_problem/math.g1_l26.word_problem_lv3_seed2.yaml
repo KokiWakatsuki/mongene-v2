@@ -41,11 +41,11 @@ sub_questions:
 
     次に、分配法則を使って、かっこを外す。（4x + 14 = 5x - 4）
 
-    次に、文字の項を左辺に、数の項を右辺に、符号を変えて移項する。（4x - 5x = -4 - 14）
+    次に、右辺の +5x を左辺に、左辺の +14 を右辺に、符号を変えて移項する。（4x - 5x = -4 - 14）
 
     次に、両辺の同類項をそれぞれまとめて、ax = b の形にする。（-x = -18）
 
-    次に、等式の性質を使い、両辺を x の係数でわる。（x = 18）
+    次に、等式の性質を使い、両辺を x の係数 -1 でわる。（x = 18）
 
     最後に、求めた x をもとに、問われている量を計算する。（86人）'
   hints:
@@ -59,36 +59,43 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 場面の中で、どちらの見方でも同じになる（等しくなっている）量に着目する。
     op: find_equal_relation
     result_display: 参加者の全体の人数
     result_srepr: Symbol('x')
   - args: []
+    detail: ''
     narration: その量を x を使って両辺に表し、方程式をつくる。
     op: formulate_equation
     result_display: 4x + 14 = 5(x - 1) + 1
     result_srepr: Equality(Add(Mul(Integer(4), Symbol('x')), Integer(14)), Add(Mul(Integer(5), Symbol('x')), Integer(-4)))
   - args: []
+    detail: ''
     narration: 分配法則を使って、かっこを外す。
     op: expand_parentheses
     result_display: 4x + 14 = 5x - 4
     result_srepr: Integer(18)
   - args: []
+    detail: 右辺の +5x を左辺に、左辺の +14 を右辺に、符号を変えて移項する。
     narration: 文字の項を左辺に、数の項を右辺に、符号を変えて移項する。
     op: transpose_terms
     result_display: 4x - 5x = -4 - 14
     result_srepr: Integer(18)
   - args: []
+    detail: ''
     narration: 両辺の同類項をそれぞれまとめて、ax = b の形にする。
     op: combine_like_terms
     result_display: -x = -18
     result_srepr: Integer(18)
   - args: []
+    detail: 等式の性質を使い、両辺を x の係数 -1 でわる。
     narration: 等式の性質を使い、両辺を x の係数でわる。
     op: divide_both_sides
     result_display: x = 18
     result_srepr: Integer(18)
   - args: []
+    detail: ''
     narration: 求めた x をもとに、問われている量を計算する。
     op: derive_asked_quantity
     result_display: 86人

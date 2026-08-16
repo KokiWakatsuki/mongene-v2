@@ -44,11 +44,13 @@ sub_questions:
   prompt_text: 式を簡単にしなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 分配法則で、前のかっこの各項を後ろのかっこの各項にすべてかける。
     op: expand_all_products
     result_display: a² - 8a - 9a + 72
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 同類項をまとめて計算する。
     op: combine_like_terms
     result_display: a² - 17a + 72

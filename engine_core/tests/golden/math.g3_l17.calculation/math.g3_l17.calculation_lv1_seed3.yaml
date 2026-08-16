@@ -37,18 +37,20 @@ sub_questions:
   - radical.multiply_divide
   explanation: 'まず、根号の積を、1つの根号の中の積にまとめる。（√120）
 
-    次に、根号の中を素因数分解し、平方の因数を根号の外に出す。（2√30）'
+    次に、30 に平方の因数は無いので、これ以上簡単にできない。（2√30）'
   hints:
   - 根号の積を、1つの根号の中の積にまとめる。
   label: (1)
   prompt_text: 式を簡単にしなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 根号の積を、1つの根号の中の積にまとめる。
     op: multiply_under_one_root
     result_display: √120
     result_srepr: ''
   - args: []
+    detail: 30 に平方の因数は無いので、これ以上簡単にできない。
     narration: 根号の中を素因数分解し、平方の因数を根号の外に出す。
     op: simplify_root
     result_display: 2√30

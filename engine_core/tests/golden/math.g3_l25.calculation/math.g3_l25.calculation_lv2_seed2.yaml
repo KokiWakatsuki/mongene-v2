@@ -23,7 +23,7 @@ meta:
     unit: g3_l25
   seed: 2
   signature: quad_solve_complete_square
-problem_ref: aa2e29f628300eeb
+problem_ref: 7836aaa3505fe7ff
 problem_text: '次の2次方程式を解け。
 
   x² + 4x - 7 = 0'
@@ -35,28 +35,49 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - quadratic.solve_by_square_root
-  explanation: 'まず、定数項を移項し、両辺に同じ数を加えて左辺を平方の形にする。（(x + 2)² = 11）
+  explanation: 'まず、定数項を、符号を変えて右辺に移項する。（x² + 4x = 7）
+
+    次に、左辺を平方の形にするために、x の係数の半分を平方した数を両辺に加える。（x² + 4x + 4 = 7 + 4）
+
+    次に、左辺を、かっこの平方の形にまとめる。（(x + 2)² = 11）
 
     次に、平方根の考え方で、両辺の平方根をとる。（x + 2 = ±√11）
 
     最後に、正の場合と負の場合に分けて x を求める。（x = -√11 - 2, x = -2 + √11）'
   hints:
-  - 定数項を移項し、両辺に同じ数を加えて左辺を平方の形にする。
+  - 定数項を、符号を変えて右辺に移項する。
+  - 左辺を平方の形にするために、x の係数の半分を平方した数を両辺に加える。
+  - 左辺を、かっこの平方の形にまとめる。
   - 平方根の考え方で、両辺の平方根をとる。
   label: (1)
   prompt_text: 解を求めなさい。
   solution_steps:
   - args: []
-    narration: 定数項を移項し、両辺に同じ数を加えて左辺を平方の形にする。
+    detail: ''
+    narration: 定数項を、符号を変えて右辺に移項する。
+    op: move_constant
+    result_display: x² + 4x = 7
+    result_srepr: ''
+  - args: []
+    detail: ''
+    narration: 左辺を平方の形にするために、x の係数の半分を平方した数を両辺に加える。
+    op: add_square_both_sides
+    result_display: x² + 4x + 4 = 7 + 4
+    result_srepr: ''
+  - args: []
+    detail: ''
+    narration: 左辺を、かっこの平方の形にまとめる。
     op: complete_the_square
     result_display: (x + 2)² = 11
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 平方根の考え方で、両辺の平方根をとる。
     op: take_square_root
     result_display: x + 2 = ±√11
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 正の場合と負の場合に分けて x を求める。
     op: solve_two_cases
     result_display: x = -√11 - 2, x = -2 + √11

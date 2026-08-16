@@ -44,11 +44,13 @@ sub_questions:
   prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 1次関数の式の、x の係数の部分か、定数項の部分かを確かめる。
     op: locate_part
     result_display: x の係数の部分
     result_srepr: slope
   - args: []
+    detail: ''
     narration: x の係数は傾き、定数項は切片を表すことを思い出す。
     op: recall_term
     result_display: 傾き

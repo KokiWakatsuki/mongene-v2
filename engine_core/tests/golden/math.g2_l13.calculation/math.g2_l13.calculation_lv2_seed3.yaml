@@ -37,9 +37,9 @@ sub_questions:
   - simultaneous_equations.solve_by_substitution
   explanation: 'まず、はじめの式を x について解く。（x = -3y）
 
-    次に、これをもう一方の式に代入して y だけの方程式にする。（12y = 12）
+    次に、もう一方の式の x に -3y を代入すると、-3(-3y) + 3y = 12 になる。（12y = 12）
 
-    次に、y の値を求める。（y = 1）
+    次に、両辺を y の係数 12 でわる。（y = 1）
 
     最後に、求めた y を x = … の式に代入して x を求める。（x = -3）'
   hints:
@@ -51,6 +51,7 @@ sub_questions:
   solution_steps:
   - args:
     - x + 3y = 0
+    detail: ''
     narration: はじめの式を x について解く。
     op: isolate_variable
     result_display: x = -3y
@@ -58,18 +59,21 @@ sub_questions:
   - args:
     - x = -3y
     - -3x + 3y = 12
+    detail: もう一方の式の x に -3y を代入すると、-3(-3y) + 3y = 12 になる。
     narration: これをもう一方の式に代入して y だけの方程式にする。
     op: substitute_expr
     result_display: 12y = 12
     result_srepr: Equality(Mul(Integer(12), Symbol('y')), Integer(12))
   - args:
     - 12y = 12
+    detail: 両辺を y の係数 12 でわる。
     narration: y の値を求める。
     op: solve_for_y
     result_display: y = 1
     result_srepr: Integer(1)
   - args:
     - '1'
+    detail: ''
     narration: 求めた y を x = … の式に代入して x を求める。
     op: back_substitute
     result_display: x = -3

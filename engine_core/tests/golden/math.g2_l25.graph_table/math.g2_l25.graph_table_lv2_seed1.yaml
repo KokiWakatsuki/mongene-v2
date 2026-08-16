@@ -44,11 +44,13 @@ sub_questions:
   prompt_text: 点の座標を読み取りなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: グラフ上の格子点の座標を読み取る。
     op: read_point
     result_display: (4, -8)
     result_srepr: Tuple(Integer(4), Integer(-8))
   - args: []
+    detail: ''
     narration: グラフ上の別の格子点の座標を読み取る。
     op: read_point
     result_display: (-4, 8)

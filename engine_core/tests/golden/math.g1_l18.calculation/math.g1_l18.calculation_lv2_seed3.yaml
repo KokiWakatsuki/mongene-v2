@@ -47,16 +47,19 @@ sub_questions:
   prompt_text: 式を簡単にしなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: かっこの前の数を、かっこの中の各項にかけて計算する。
     op: distribute_multiplication
     result_display: 8x - 20 + (12x - 15) ÷ 3
     result_srepr: Add(Mul(Integer(12), Symbol('x')), Integer(-25))
   - args: []
+    detail: ''
     narration: ÷ の計算を、その数の逆数をかっこの中の各項にかける計算に直す。
     op: convert_division_to_multiplication
     result_display: 8x - 20 + (4x - 5)
     result_srepr: Add(Mul(Integer(12), Symbol('x')), Integer(-25))
   - args: []
+    detail: ''
     narration: 同類項をまとめて計算する。
     op: add_like_terms
     result_display: 12x - 25

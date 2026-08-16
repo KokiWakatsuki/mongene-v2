@@ -44,11 +44,13 @@ sub_questions:
   prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 図形を平行移動する前と後で、対応する部分を見比べる。
     op: compare_before_after
     result_display: ''
     result_srepr: parallel_translation
   - args: []
+    detail: ''
     narration: 移動の性質として、その関係がつねに成り立つかどうかを判別する。
     op: judge_transformation_invariant
     result_display: 変わらない

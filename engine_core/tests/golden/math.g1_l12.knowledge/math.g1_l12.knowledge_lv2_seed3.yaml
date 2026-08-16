@@ -46,11 +46,13 @@ sub_questions:
   prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 式の各項は、買った個数にひとつあたりの値段をかけた「代金」を表すことを読み取る。
     op: read_each_term_meaning
     result_display: ノートの代金とみかんの代金
     result_srepr: term_meaning
   - args: []
+    detail: ''
     narration: 項どうしが和で結ばれているので、式全体は代金の合計を表すと判断する。
     op: combine_term_meanings
     result_display: 買ったノート全部の代金と、買ったみかん全部の代金を合わせた金額

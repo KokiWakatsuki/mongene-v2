@@ -42,6 +42,7 @@ sub_questions:
   prompt_text: 式を簡単にしなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 単項式を、かっこの中の各項にそれぞれかける。
     op: distribute_monomial
     result_display: 12m² - 8m

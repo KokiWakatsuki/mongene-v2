@@ -44,11 +44,13 @@ sub_questions:
   prompt_text: 式を簡単にしなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 各項に共通する因数をかっこの外にくくり出す。
     op: factor_out_common
     result_display: 7(s² - 36)
     result_srepr: ''
   - args: []
+    detail: ''
     narration: くくり出した後のかっこの中を乗法公式の逆で因数分解する。
     op: apply_formula
     result_display: 7(s - 6)(s + 6)

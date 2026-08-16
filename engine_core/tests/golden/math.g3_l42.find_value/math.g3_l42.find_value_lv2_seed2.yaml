@@ -23,7 +23,7 @@ meta:
     unit: g3_l42
   seed: 2
   signature: parallel_segment_ratio_length
-problem_ref: b87d36425aee4d26
+problem_ref: 9f8b44114992394c
 problem_text: 三角形JKLで、辺JK, JL上に点M, Nがあり、MN∥KLである。JM=3cm, MK=9cm, MN=2cm のとき、辺KLの長さを求めよ。
 sub_questions:
 - answer:
@@ -35,18 +35,29 @@ sub_questions:
   - parallel_segment.ratio_length
   explanation: 'まず、MN∥KL であることから、三角形JMNと三角形JKLが相似になることを見つける。（三角形JMN と 三角形JKL）
 
-    次に、JM:JK=MN:KL が成り立つことから、辺KLの長さを求める。（8）'
+    次に、JMとMKをたして、辺JK全体の長さを求める。（JK = 3 + 9 = 12）
+
+    最後に、3:12 = 2:KL を解いて、辺KLの長さを求める。（8）'
   hints:
   - MN∥KL であることから、三角形JMNと三角形JKLが相似になることを見つける。
+  - JMとMKをたして、辺JK全体の長さを求める。
   label: (1)
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: MN∥KL であることから、三角形JMNと三角形JKLが相似になることを見つける。
     op: identify_similar_triangles_from_parallel
     result_display: 三角形JMN と 三角形JKL
     result_srepr: ''
   - args: []
+    detail: ''
+    narration: JMとMKをたして、辺JK全体の長さを求める。
+    op: compose_whole_side
+    result_display: JK = 3 + 9 = 12
+    result_srepr: ''
+  - args: []
+    detail: 3:12 = 2:KL を解いて、辺KLの長さを求める。
     narration: JM:JK=MN:KL が成り立つことから、辺KLの長さを求める。
     op: apply_parallel_segment_ratio
     result_display: '8'

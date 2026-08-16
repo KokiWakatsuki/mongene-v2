@@ -44,11 +44,13 @@ sub_questions:
   prompt_text: 式を簡単にしなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: うしろのかっこの前が - なので、かっこの中の各項の符号を変えてかっこを外す。
     op: distribute_negative_sign
     result_display: 6a + 5b - 1 - 4a - 6b + 3
     result_srepr: Add(Mul(Integer(2), Symbol('a')), Mul(Integer(-1), Symbol('b')), Integer(2))
   - args: []
+    detail: ''
     narration: 同類項をまとめて計算する。
     op: add_like_terms
     result_display: 2a - b + 2

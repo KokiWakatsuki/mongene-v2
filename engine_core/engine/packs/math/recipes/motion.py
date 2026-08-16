@@ -827,7 +827,7 @@ def word_problem_max_area_and_times_recipe(ctx: CellContext, rng: Rng) -> MR:
         context_slots={
             "ask_value": (
                 f"面積が最大になるのはxがどの範囲にあるときかとそのときの面積、"
-                f"および面積が{area}cm²になるときのxの値をすべて求めよ。"
+                f"および面積が{area}cm²になるときの x の値をすべて求めよ。"
             )
         },
         sub_questions=[_wp_sub(ctx, label="(1)", asked="value", sol=sol)],
@@ -1026,7 +1026,7 @@ def exam_area_all_times_recipe(ctx: CellContext, rng: Rng) -> MR:
         f"1辺が{s}cmの正方形{la}{lb}{lc}{ld}の周上を、点{lp}が{la}を出発して"
         f"{la}→{lb}→{lc}→{ld}の順に毎秒{v}cmの速さで{ld}まで動く。"
         f"点{lp}が{la}を出発してからx秒後の三角形{la}{lp}{ld}の面積が{area}cm²になるのは"
-        f"いつか、点{lp}がどの辺上にあるかで場合分けして、xの値をすべて求めよ"
+        f"いつか、点{lp}がどの辺上にあるかで場合分けして、x の値をすべて求めよ"
     )
     return MR(
         signature=ctx.spec_level.signature,
@@ -1169,7 +1169,7 @@ def exam_word_problem_three_intervals_recipe(ctx: CellContext, rng: Rng) -> MR:
         context_slots={
             "ask_1": f"点{lp}が辺{la}{lb}上にあるとき、yをxの式で表せ。",
             "ask_2": f"点{lp}が辺{lb}{lc}上にあるとき、yをxの式で表せ。",
-            "ask_3": f"y={area}となるxの値をすべて求めよ。",
+            "ask_3": f"y={area}となる x の値をすべて求めよ。",
         },
         sub_questions=[
             _wp_sub(ctx, label="(1)", asked="formulation", sol=first),
@@ -1240,7 +1240,7 @@ def exam_word_problem_quarter_area_recipe(ctx: CellContext, rng: Rng) -> MR:
         context_slots={
             "ask_value": (
                 f"三角形{la}{lp}{ld}の面積が正方形{la}{lb}{lc}{ld}の面積の4分の1に"
-                "なるときのxの値をすべて求めよ。"
+                "なるときの x の値をすべて求めよ。"
             )
         },
         sub_questions=[_wp_sub(ctx, label="(1)", asked="value", sol=sol)],

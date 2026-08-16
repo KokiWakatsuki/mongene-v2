@@ -45,16 +45,19 @@ sub_questions:
   prompt_text: 座標を求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: まわりの座標から四角形全体の面積を求める。
     op: compute_quadrilateral_area
     result_display: '63'
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 頂点を通る直線が面積を2等分するのだから、分けられた一方の三角形の面積が全体の半分になる、という式を立てる。
     op: set_half_area_condition
     result_display: △ABP = 63/2（△ABC = 77/2）
     result_srepr: ''
   - args: []
+    detail: ''
     narration: その三角形は辺の上の点までの長さを底辺とみられるので、面積の式を長さについて解いて、点の位置を求める。
     op: solve_for_point_on_side
     result_display: P(9, 0)（BP:PC = 9:2）

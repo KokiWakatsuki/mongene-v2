@@ -35,7 +35,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - prime_factorization.execute_basic
-  explanation: 'まず、小さい素数から順にわり、商が素数になるまでわり続ける。（2、3）
+  explanation: 'まず、858 を小さい素数から順にわっていく。（858 ÷ 2 = 429、429 ÷ 3 = 143、143 ÷ 11 = 13）
 
     次に、現れた素数を、同じ素数の個数を指数にして、累乗の積の形に表す。（2×3×11×13）'
   hints:
@@ -44,11 +44,13 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: 858 を小さい素数から順にわっていく。
     narration: 小さい素数から順にわり、商が素数になるまでわり続ける。
     op: divide_out_primes_in_order
-    result_display: 2、3
+    result_display: 858 ÷ 2 = 429、429 ÷ 3 = 143、143 ÷ 11 = 13
     result_srepr: 2*3*11*13
   - args: []
+    detail: ''
     narration: 現れた素数を、同じ素数の個数を指数にして、累乗の積の形に表す。
     op: write_prime_power_form
     result_display: 2×3×11×13

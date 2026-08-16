@@ -44,11 +44,13 @@ sub_questions:
   prompt_text: 式を簡単にしなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: それぞれのかっこを、前の符号に注意して外す（前が - のときは中の各項の符号を変える）。
     op: remove_parentheses
     result_display: 5x - 6 - 6x - 6
     result_srepr: Add(Mul(Integer(-1), Symbol('x')), Integer(-12))
   - args: []
+    detail: ''
     narration: 同類項をまとめて計算する。
     op: add_like_terms
     result_display: -x - 12

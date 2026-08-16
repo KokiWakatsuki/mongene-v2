@@ -44,11 +44,13 @@ sub_questions:
   prompt_text: 式に表しなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 速さに時間をかけると、道のりになる。
     op: identify_relation
     result_display: 速さ × 時間 = 道のり
     result_srepr: 速さ × 時間 = 道のり
   - args: []
+    detail: ''
     narration: 数を文字の前に書き、乗法の記号 × を省いて表す。
     op: apply_product_rule
     result_display: 31p

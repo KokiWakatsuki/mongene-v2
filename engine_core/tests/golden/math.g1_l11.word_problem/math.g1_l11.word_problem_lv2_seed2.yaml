@@ -37,7 +37,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - prime_factorization.word_problem_square_multiplier
-  explanation: 'まず、小さい素数から順にわり、商が素数になるまでわり続ける。（2、3、7）
+  explanation: 'まず、1176 を小さい素数から順にわっていく。（1176 ÷ 2 = 588、588 ÷ 2 = 294、294 ÷ 2 = 147、147 ÷ 3 = 49、49 ÷ 7 = 7）
 
     次に、現れた素数を、同じ素数の個数を指数にして、累乗の積の形に表す。（2³×3×7²）'
   hints:
@@ -46,11 +46,13 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: 1176 を小さい素数から順にわっていく。
     narration: 小さい素数から順にわり、商が素数になるまでわり続ける。
     op: divide_out_primes_in_order
-    result_display: 2、3、7
+    result_display: 1176 ÷ 2 = 588、588 ÷ 2 = 294、294 ÷ 2 = 147、147 ÷ 3 = 49、49 ÷ 7 = 7
     result_srepr: 2**3*3*7**2
   - args: []
+    detail: ''
     narration: 現れた素数を、同じ素数の個数を指数にして、累乗の積の形に表す。
     op: write_prime_power_form
     result_display: 2³×3×7²
@@ -71,11 +73,13 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 素因数分解した結果から、指数が奇数になっている素因数を選び出す。
     op: collect_odd_exponent_primes
     result_display: 2、3
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 選び出した素因数をすべてかけ合わせて、かける数を求める。かけたあとはすべての素因数の指数が偶数になり、平方数になる。
     op: multiply_to_make_square
     result_display: '6'

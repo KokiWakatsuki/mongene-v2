@@ -39,7 +39,7 @@ sub_questions:
 
     次に、分数・小数を通分してそろえる。（8/20 + 18/20 - 5/20 + 4/20）
 
-    最後に、正の合計と負の合計を合わせて、答えを求める。（5/4）'
+    最後に、分子どうしを計算すると 25/20 になるので、約分して答えを求める。（5/4）'
   hints:
   - かっこを外して、符号のついた項の和とみなす。
   - 分数・小数を通分してそろえる。
@@ -47,16 +47,19 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: かっこを外して、符号のついた項の和とみなす。
     op: drop_parentheses_to_terms
     result_display: 2/5 + 9/10 - 1/4 + 1/5
     result_srepr: Rational(5, 4)
   - args: []
+    detail: ''
     narration: 分数・小数を通分してそろえる。
     op: align_fractions
     result_display: 8/20 + 18/20 - 5/20 + 4/20
     result_srepr: Rational(5, 4)
   - args: []
+    detail: 分子どうしを計算すると 25/20 になるので、約分して答えを求める。
     narration: 正の合計と負の合計を合わせて、答えを求める。
     op: total_terms
     result_display: 5/4

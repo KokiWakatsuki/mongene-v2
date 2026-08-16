@@ -44,11 +44,13 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 式の文字に、代入する数をあてはめる。
     op: substitute_value
     result_display: 6 × 9 - 3
     result_srepr: Integer(51)
   - args: []
+    detail: ''
     narration: あてはめた式を計算して、式の値を求める。
     op: compute_value
     result_display: '51'

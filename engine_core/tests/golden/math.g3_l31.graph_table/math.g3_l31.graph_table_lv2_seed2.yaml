@@ -72,16 +72,19 @@ sub_questions:
   prompt_text: 線分をかきなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 変域の左端の x に対応する点をとり、端をふくむなら●、ふくまないなら○で表す。
     op: plot_endpoint_lo
     result_display: (0, 0)
     result_srepr: Tuple(Integer(0), Integer(0))
   - args: []
+    detail: ''
     narration: 変域の右端の x に対応する点をとり、端をふくむなら●、ふくまないなら○で表す。
     op: plot_endpoint_hi
     result_display: (4, 288)
     result_srepr: Tuple(Integer(4), Integer(288))
   - args: []
+    detail: ''
     narration: とった2つの端点を結ぶ線分をひく。
     op: draw_segment
     result_display: 両端点を結ぶ線分

@@ -44,12 +44,14 @@ sub_questions:
   - args:
     - '15'
     - '9'
+    detail: ''
     narration: 比例定数と x の値を、比例の式 y=ax の x にあてはめる。
     op: substitute_x
     result_display: y = 15 × 9
     result_srepr: Integer(135)
   - args:
     - y = 15 × 9
+    detail: ''
     narration: かけ算を計算して y の値を求める。
     op: evaluate
     result_display: y = 135

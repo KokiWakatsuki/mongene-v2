@@ -51,16 +51,19 @@ sub_questions:
   prompt_text: 式に表しなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: y は x の2乗に比例するから、比例定数を a とおいて y=ax² と表し、与えられている x と y の値を代入する。
     op: set_up_proportion_equation
     result_display: y = ax²
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 代入してできた式を a について解いて、比例定数を求める。
     op: solve_for_coefficient
     result_display: a = 1/100
     result_srepr: Rational(1, 100)
   - args: []
+    detail: ''
     narration: 求めた比例定数を y=ax² にもどして、y を x の式で表す。
     op: form_expression
     result_display: y = (1/100)x²
@@ -81,11 +84,13 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 式の x に、与えられた値をあてはめる。
     op: substitute_x
     result_display: 1/100 × (40)²
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 2乗を計算してから比例定数をかけ、y の値を求める。
     op: compute_y
     result_display: '16'

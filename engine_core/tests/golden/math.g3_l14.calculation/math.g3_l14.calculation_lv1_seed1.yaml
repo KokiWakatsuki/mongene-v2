@@ -42,6 +42,7 @@ sub_questions:
   prompt_text: 式を簡単にしなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 根号のついた数を2乗し、根号の中の数にもどす。
     op: square_the_root
     result_display: '105'

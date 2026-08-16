@@ -33,22 +33,24 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - frequency_table.compute_value
-  explanation: 'まず、対象の階級の下端と上端の値の平均を求め、階級値とする。（15）
+  explanation: 'まず、(10 + 20) ÷ 2 を計算して、階級値を求める。（15）
 
-    次に、すべての階級の度数を足し合わせ、度数の合計を求める。（階級値 15、度数の合計 22）'
+    次に、2 + 6 + 8 + 6 を計算して、度数の合計を求める。（22）'
   hints:
   - 対象の階級の下端と上端の値の平均を求め、階級値とする。
   label: (1)
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: (10 + 20) ÷ 2 を計算して、階級値を求める。
     narration: 対象の階級の下端と上端の値の平均を求め、階級値とする。
     op: compute_class_value
     result_display: '15'
     result_srepr: Integer(15)
   - args: []
+    detail: 2 + 6 + 8 + 6 を計算して、度数の合計を求める。
     narration: すべての階級の度数を足し合わせ、度数の合計を求める。
     op: sum_frequencies
-    result_display: 階級値 15、度数の合計 22
+    result_display: '22'
     result_srepr: Tuple(Integer(15), Integer(22))
 visual_svg: null

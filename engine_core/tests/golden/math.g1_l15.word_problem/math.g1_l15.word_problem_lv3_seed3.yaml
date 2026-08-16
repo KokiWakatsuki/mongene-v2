@@ -37,20 +37,22 @@ sub_questions:
   - letter_expr.word_problem_profit_multi_letter
   explanation: 'まず、仕入れた個数と1個あたりの売り値をかけて、売り上げを求める式をつくる。（nx）
 
-    次に、求めた売り上げから、仕入れにかかった総額をひいて、利益を表す式にする。（-a + nx）'
+    次に、求めた売り上げから、仕入れにかかった総額をひいて、利益を表す式にする。（nx - a）'
   hints:
   - 仕入れた個数と1個あたりの売り値をかけて、売り上げを求める式をつくる。
   label: (1)
   prompt_text: 式に表しなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 仕入れた個数と1個あたりの売り値をかけて、売り上げを求める式をつくる。
     op: compute_revenue
     result_display: nx
     result_srepr: nx
   - args: []
+    detail: ''
     narration: 求めた売り上げから、仕入れにかかった総額をひいて、利益を表す式にする。
     op: derive_expression
-    result_display: -a + nx
+    result_display: nx - a
     result_srepr: Add(Mul(Integer(-1), Symbol('a')), Mul(Symbol('n'), Symbol('x')))
 visual_svg: null

@@ -45,11 +45,13 @@ sub_questions:
   prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 2元1次方程式の解を座標とする点をすべて集めると、どんな形になるかを思い出す。
     op: recall_property
     result_display: 解の集合の形を思い出す
     result_srepr: solution_set_is_line
   - args: []
+    detail: ''
     narration: 2元1次方程式の解の集合は直線になる。
     op: select_correct
     result_display: 直線

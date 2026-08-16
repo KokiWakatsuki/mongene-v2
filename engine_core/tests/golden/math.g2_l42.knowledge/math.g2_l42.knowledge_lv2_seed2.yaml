@@ -44,11 +44,13 @@ sub_questions:
   prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 示されている2つの角が、等しいといえる条件を満たしているかを確認する。
     op: check_two_angles_equal
     result_display: 等しくない
     result_srepr: not_equal
   - args: []
+    detail: ''
     narration: 2つの角が等しければ、その対辺どうしも等しく二等辺三角形になるという性質から判別する。
     op: judge_isosceles
     result_display: 二等辺三角形であるとはいえない

@@ -42,6 +42,7 @@ sub_questions:
   prompt_text: 式に表しなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 解く文字の項だけを片方の辺に残すよう、ほかの項を移項する。
     op: isolate_target
     result_display: y = 9x - 1

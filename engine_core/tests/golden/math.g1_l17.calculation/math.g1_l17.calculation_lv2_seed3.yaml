@@ -29,7 +29,7 @@ problem_text: '次の計算をせよ。
   (-5x + 8) - (-4x + 3)'
 sub_questions:
 - answer:
-    display: 5 - x
+    display: -x + 5
     kind: symbolic
     srepr: Add(Integer(5), Mul(Integer(-1), Symbol('x')))
   cause_tags: []
@@ -37,20 +37,22 @@ sub_questions:
   - letter_expr.add_sub_linear_paren
   explanation: 'まず、それぞれのかっこを、前の符号に注意して外す（前が - のときは中の各項の符号を変える）。（8 - 5x + 4x - 3）
 
-    次に、同類項をまとめて計算する。（5 - x）'
+    次に、同類項をまとめて計算する。（-x + 5）'
   hints:
   - それぞれのかっこを、前の符号に注意して外す（前が - のときは中の各項の符号を変える）。
   label: (1)
   prompt_text: 式を簡単にしなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: それぞれのかっこを、前の符号に注意して外す（前が - のときは中の各項の符号を変える）。
     op: remove_parentheses
     result_display: 8 - 5x + 4x - 3
     result_srepr: Add(Integer(5), Mul(Integer(-1), Symbol('x')))
   - args: []
+    detail: ''
     narration: 同類項をまとめて計算する。
     op: add_like_terms
-    result_display: 5 - x
+    result_display: -x + 5
     result_srepr: Add(Integer(5), Mul(Integer(-1), Symbol('x')))
 visual_svg: null

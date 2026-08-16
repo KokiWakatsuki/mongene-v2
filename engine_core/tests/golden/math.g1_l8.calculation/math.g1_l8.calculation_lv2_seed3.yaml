@@ -47,16 +47,19 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: すべてのわり算を、逆数をかけるかけ算に直す。
     op: rewrite_all_as_reciprocal
     result_display: 3/7 × 8/3 × 5/8
     result_srepr: Rational(5, 7)
   - args: []
+    detail: ''
     narration: かけ合わせる数の符号から、積の符号を先に決める。
     op: determine_product_sign
     result_display: +(3/7 × 8/3 × 5/8)
     result_srepr: Rational(5, 7)
   - args: []
+    detail: ''
     narration: すべての絶対値をかけ合わせて、積を求める。
     op: multiply_all_magnitudes
     result_display: 5/7

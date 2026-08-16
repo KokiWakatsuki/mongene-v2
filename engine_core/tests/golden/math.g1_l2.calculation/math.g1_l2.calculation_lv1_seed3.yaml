@@ -35,20 +35,22 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - signed_number.absolute_value
-  explanation: 'まず、その数が数直線上で 0 からどちら側にあるかを見る。（14 は 0 より右）
+  explanation: 'まず、その数が数直線上で 0 からどれだけ離れているかを見る。（14 は 0 から 14 離れている）
 
     次に、0 からの距離が絶対値なので、符号を取り去った大きさを答える。（14）'
   hints:
-  - その数が数直線上で 0 からどちら側にあるかを見る。
+  - その数が数直線上で 0 からどれだけ離れているかを見る。
   label: (1)
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
-    narration: その数が数直線上で 0 からどちら側にあるかを見る。
+    detail: ''
+    narration: その数が数直線上で 0 からどれだけ離れているかを見る。
     op: locate_on_number_line
-    result_display: 14 は 0 より右
+    result_display: 14 は 0 から 14 離れている
     result_srepr: Integer(14)
   - args: []
+    detail: ''
     narration: 0 からの距離が絶対値なので、符号を取り去った大きさを答える。
     op: read_distance_from_zero
     result_display: '14'

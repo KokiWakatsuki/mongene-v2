@@ -46,17 +46,20 @@ sub_questions:
   solution_steps:
   - args:
     - y = -2x + 11
+    detail: ''
     narration: 1本目の直線を座標平面にかく。
     op: draw_line_1
     result_display: y = -2x + 11
     result_srepr: Add(Integer(11), Mul(Integer(-1), Integer(2), Symbol('x')))
   - args:
     - y = -x + 7
+    detail: ''
     narration: 2本目の直線を同じ平面にかく。
     op: draw_line_2
     result_display: y = -x + 7
     result_srepr: Add(Integer(7), Mul(Integer(-1), Symbol('x')))
   - args: []
+    detail: ''
     narration: 2本の直線が交わる点の座標を読み取る。
     op: read_intersection
     result_display: (4, 3)

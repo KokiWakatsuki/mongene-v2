@@ -14,6 +14,7 @@ from engine.packs.math.geometry.deduce import saturate
 from engine.packs.math.geometry.facts import (
     ang,
     ang_eq,
+    between,
     collinear,
     fact_text,
     midpoint,
@@ -102,10 +103,33 @@ def test_midpoint_rule_gives_equal_halves():
 
 
 def test_vertical_angles_rule():
-    """2直線が O で交わるとき、対頂角が等しいことが出る。"""
-    given = frozenset({collinear("A", "O", "C"), collinear("B", "O", "D")})
+    """2直線が O で**交わる**とき、対頂角が等しいことが出る。
+
+    交わっている＝O が2点の間にある。`collinear` はどれが真ん中かを持たないので、
+    `between` も渡す（本番も `Construction.between_facts()` を渡している）。
+    """
+    given = frozenset({
+        collinear("A", "O", "C"), collinear("B", "O", "D"),
+        between("O", "A", "C"), between("O", "B", "D"),
+    })
     ded = saturate(["A", "B", "C", "D", "O"], given)
     assert ang_eq(ang("O", "A", "B"), ang("O", "C", "D")) in ded.facts
+
+
+def test_vertical_angles_need_a_real_crossing():
+    """**交わっていない配置に対頂角を使わない。**
+
+    △ABC の辺AB上に M、辺AC上に N をとった図。「A,M,B が一直線」「A,N,C が一直線」は
+    成り立つが、A は M と B の間に無い（交わっていない）。ここで対頂角を使うと
+    ∠MAN ＝ ∠BAC を「対頂角は等しいから」と書くことになるが、この2つは**同じ角**で
+    あって対頂角ではない（g2_l45.proof が実際にそう書いていた）。
+    """
+    given = frozenset({
+        collinear("A", "M", "B"), collinear("A", "N", "C"),
+        between("M", "A", "B"), between("N", "A", "C"),
+    })
+    ded = saturate(["A", "B", "C", "M", "N"], given)
+    assert ang_eq(ang("A", "M", "N"), ang("A", "B", "C")) not in ded.facts
 
 
 def test_isosceles_rules_are_two_way():
@@ -257,7 +281,8 @@ def test_midpoint_line_is_folded_into_one_textbook_line():
     c.free_point("B", -1.4, -2.0)
     c.reflected_point("D", "A", "O")
     c.reflected_point("C", "B", "O")
-    ded = saturate(c.points, frozenset(c.facts))
+    # 本番（`geometry_proof` recipe）と同じ渡し方にする。
+    ded = saturate(c.points, frozenset(c.facts) | c.between_facts())
     goal = select_goal(ded, level=3, allowed_topics=_CONGRUENCE_TOPICS, prefer="tri_cong")
     assert goal is not None and goal.fact.kind == "tri_cong"
     text = render_proof(
@@ -330,3 +355,51 @@ def test_proof_header_uses_the_compared_triangles_even_for_angle_goals():
     assert targets == (("A", "B", "C"), ("A", "D", "C"))
     text = render_proof(build_proof_lines(ded, goal.fact), targets=targets)
     assert text.splitlines()[0] == "（証明）△ABC と △ADC において"
+
+
+def test_proof_never_states_the_same_claim_twice():
+    """**証明は、いちど書いた行をもう一度結論しない。**
+
+    `naturalness._restates_something_already_written` が結論の資格として見ている。
+    これが無かったので g3_l44.proof.Lv2 が
+
+        ①、②より、中点連結定理が成り立つので  BC ∥ MN  …③
+        ③より、平行線の同位角は等しいので     ∠ABC ＝ ∠AMN  …④
+        ④より、錯角が等しいので               BC ∥ MN        ← ③の言い直し
+
+    という循環論法を出していた。全 proof セルについて、証明文の中に同じ主張の行が
+    2度出ないことを固定する（種類が違っても同じ日本語になる組がある＝
+    `parallel` と `parallel_dir` はどちらも「BC ∥ MN」と書かれる）。
+    """
+    import glob
+    import re
+
+    import yaml
+
+    from engine.core.contracts import GenerateRequest, Unsupported
+    from engine.core.pipeline import generate
+    from engine.eval._harness import make_env
+
+    env = make_env()
+    for path in sorted(glob.glob("engine_core/engine/curriculum/math/families/*.proof.yaml")):
+        spec = yaml.safe_load(open(path, encoding="utf-8"))
+        unit = spec["family"].split(".")[1]
+        for lv in spec["levels"]:
+            res = generate(
+                GenerateRequest(subject="math", unit=unit, form="proof", level=int(lv), seed=1),
+                curriculum=env.curriculum, families=env.families, registry=env.registry,
+            )
+            if isinstance(res, Unsupported):
+                continue
+            text = str(getattr(res.sub_questions[0].answer, "text", "") or "")
+            # 各行の「主張」だけを取り出す（番号と根拠は落とす）。
+            claims = []
+            for line in text.splitlines():
+                body = re.sub(r"　*…[①-⑳]\s*$", "", line.strip())
+                if not body or body.startswith(("（証明）", "次に、")) or body.endswith("において"):
+                    continue
+                if "より、" in body or body.endswith("だから") or body.endswith("から"):
+                    continue  # 根拠だけの行
+                claims.append(body)
+            dup = [c for c in set(claims) if claims.count(c) > 1]
+            assert not dup, f"{unit}.proof.Lv{lv}: 同じ主張を2度書いている {dup}"

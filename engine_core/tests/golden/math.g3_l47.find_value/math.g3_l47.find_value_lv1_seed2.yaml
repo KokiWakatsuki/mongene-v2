@@ -42,11 +42,13 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 弧に対する中心角の大きさを読み取る。
     op: identify_central_angle
     result_display: 70°
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 同じ弧に対する円周角の大きさは、中心角の大きさの半分に等しいことから、円周角の大きさを求める。
     op: apply_inscribed_angle_theorem
     result_display: 35°

@@ -37,9 +37,9 @@ sub_questions:
   - signed_number.add_sub_terms_basic
   explanation: 'まず、かっこを外して、符号のついた項の和とみなす。（6 + 6 + 7）
 
-    次に、正の項どうし、負の項どうしをそれぞれまとめる。（+(6 + 6 + 7)）
+    次に、正の項しかないので、絶対値の和に正の符号をつける。（+(6 + 6 + 7)）
 
-    最後に、正の合計と負の合計を合わせて、答えを求める。（19）'
+    最後に、かっこの中を計算し、正の符号をつけて答えを求める。（19）'
   hints:
   - かっこを外して、符号のついた項の和とみなす。
   - 正の項どうし、負の項どうしをそれぞれまとめる。
@@ -47,16 +47,19 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: かっこを外して、符号のついた項の和とみなす。
     op: drop_parentheses_to_terms
     result_display: 6 + 6 + 7
     result_srepr: Integer(19)
   - args: []
+    detail: 正の項しかないので、絶対値の和に正の符号をつける。
     narration: 正の項どうし、負の項どうしをそれぞれまとめる。
     op: group_by_sign
     result_display: +(6 + 6 + 7)
     result_srepr: Integer(19)
   - args: []
+    detail: かっこの中を計算し、正の符号をつけて答えを求める。
     narration: 正の合計と負の合計を合わせて、答えを求める。
     op: total_terms
     result_display: '19'

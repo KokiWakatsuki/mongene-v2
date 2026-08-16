@@ -51,21 +51,25 @@ sub_questions:
   prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 合同を表す式で、角の頂点がどの位置に対応づけられているかを確認する。
     op: identify_angle_correspondence
     result_display: KLM と XYZ
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 対応する位置にある頂点にできる角が、対応する角になることから読み取る。
     op: name_corresponding_angle
     result_display: ∠Z
     result_srepr: ∠Z
   - args: []
+    detail: ''
     narration: 合同を表す式で、辺の両端の頂点がどの位置に対応づけられているかを確認する。
     op: identify_side_correspondence
     result_display: KLM と XYZ
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 対応する位置にある頂点どうしが結ぶ辺が、対応する辺になることから読み取る。
     op: name_corresponding_side
     result_display: 辺XY

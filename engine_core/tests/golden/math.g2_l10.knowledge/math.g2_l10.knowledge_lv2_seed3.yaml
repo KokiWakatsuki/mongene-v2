@@ -46,11 +46,13 @@ sub_questions:
   - args:
     - '-5'
     - '3'
+    detail: ''
     narration: 組の x, y の値を2つの式の左辺にそれぞれ代入する。
     op: substitute_candidate
     result_display: -9 と -19
     result_srepr: Tuple(Integer(-9), Integer(-19))
   - args: []
+    detail: ''
     narration: 両方の式が成り立てば解、片方でも成り立たなければ解でない。
     op: judge_solution
     result_display: 解である

@@ -47,6 +47,7 @@ sub_questions:
   - args:
     - Eq(3*x + y, 17)
     - Eq(x - y, -1)
+    detail: ''
     narration: 2つの直線を ax + by = c の形にそろえて連立方程式を立てる。
     op: setup_system
     result_display: 3x + y = 17, x - y = -1
@@ -54,12 +55,14 @@ sub_questions:
   - args:
     - Eq(3*x + y, 17)
     - Eq(x - y, -1)
+    detail: ''
     narration: 係数をそろえて一方の文字を消去し、残った文字を求める。
     op: eliminate_variable
     result_display: x = 4
     result_srepr: Equality(Symbol('x'), Integer(4))
   - args:
     - '4'
+    detail: ''
     narration: 求めた値をもとの式に代入し、もう一方の文字を求める。
     op: back_substitute
     result_display: y = 5

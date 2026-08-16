@@ -42,6 +42,7 @@ sub_questions:
   prompt_text: 式を簡単にしなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 各項に共通する因数をかっこの外にくくり出す。
     op: factor_out_common
     result_display: 9n(6n + 7)

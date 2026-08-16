@@ -42,11 +42,13 @@ sub_questions:
   prompt_text: 表から読み取りなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 対象の階級の位置をグラフの横軸で見つけ、その高さを縦軸の目盛で読み取る。
     op: read_class_frequency
     result_display: 対象の階級の度数は5
     result_srepr: Integer(5)
   - args: []
+    detail: ''
     narration: グラフでいちばん高くなっている階級を探し、その階級の範囲を横軸から読み取る。
     op: find_modal_class
     result_display: 20m以上24m未満の階級の度数は5人、度数が最も大きい階級は16m以上20m未満

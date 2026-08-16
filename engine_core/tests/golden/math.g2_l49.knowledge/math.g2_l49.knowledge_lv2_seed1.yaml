@@ -46,11 +46,13 @@ sub_questions:
   prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 対角線が等しいか、垂直に交わるか、それぞれの条件を確認する。
     op: check_diagonal_conditions
     result_display: 長さは等しい／垂直に交わる
     result_srepr: yesyes
   - args: []
+    detail: ''
     narration: 対角線の条件の組み合わせから、平行四辺形がどんな四角形になるかを判別する。
     op: classify_quadrilateral
     result_display: 正方形

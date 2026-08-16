@@ -23,7 +23,7 @@ meta:
     unit: g3_l26
   seed: 1
   signature: quad_solve_formula
-problem_ref: 16866444c9c9a302
+problem_ref: b5f44d66fc120551
 problem_text: '次の2次方程式を解け。
 
   2x² - 4x - 7 = 0'
@@ -37,19 +37,30 @@ sub_questions:
   - quadratic.solve_by_formula
   explanation: 'まず、与式を整理して、それぞれの項の係数 a・b・c を読み取る。（a = 2、b = -4、c = -7）
 
-    次に、a・b・c を解の公式に代入して x を求める。（x = (2 - 3√2)/2, x = (2 + 3√2)/2）'
+    次に、読み取った a・b・c を、解の公式にそのまま代入する。（x = (-(-4) ± √((-4)² - 4 × 2 × (-7))) / (2 × 2)）
+
+    最後に、根号の中を計算し、約分できるところを約分して x を求める。（x = (2 - 3√2)/2, x = (2 + 3√2)/2）'
   hints:
   - 与式を整理して、それぞれの項の係数 a・b・c を読み取る。
+  - 読み取った a・b・c を、解の公式にそのまま代入する。
   label: (1)
   prompt_text: 解を求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 与式を整理して、それぞれの項の係数 a・b・c を読み取る。
     op: identify_coefficients
     result_display: a = 2、b = -4、c = -7
     result_srepr: ''
   - args: []
-    narration: a・b・c を解の公式に代入して x を求める。
+    detail: ''
+    narration: 読み取った a・b・c を、解の公式にそのまま代入する。
+    op: substitute_into_formula
+    result_display: x = (-(-4) ± √((-4)² - 4 × 2 × (-7))) / (2 × 2)
+    result_srepr: ''
+  - args: []
+    detail: ''
+    narration: 根号の中を計算し、約分できるところを約分して x を求める。
     op: apply_quadratic_formula
     result_display: x = (2 - 3√2)/2, x = (2 + 3√2)/2
     result_srepr: Tuple(Add(Integer(1), Mul(Integer(-1), Rational(3, 2), Pow(Integer(2), Rational(1, 2)))), Add(Integer(1), Mul(Rational(3, 2), Pow(Integer(2), Rational(1, 2)))))

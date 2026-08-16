@@ -41,7 +41,7 @@ sub_questions:
   - proportion.word_problem_judge_and_use
   explanation: 'まず、反比例の式 y=a/x に、通る点の x, y の値をあてはめ、比例定数を求める式をつくる。（a = 15 × 16）
 
-    次に、求めた比例定数を使って、反比例の式を組み立てる。（y = 240/x）'
+    次に、比例定数は a = 240 なので、y = a/x にあてはめる。（y = 240/x）'
   hints:
   - 反比例の式 y=a/x に、通る点の x, y の値をあてはめ、比例定数を求める式をつくる。
   label: (1)
@@ -50,12 +50,14 @@ sub_questions:
   - args:
     - '15'
     - '16'
+    detail: ''
     narration: 反比例の式 y=a/x に、通る点の x, y の値をあてはめ、比例定数を求める式をつくる。
     op: substitute_point
     result_display: a = 15 × 16
     result_srepr: Integer(240)
   - args:
     - '240'
+    detail: 比例定数は a = 240 なので、y = a/x にあてはめる。
     narration: 求めた比例定数を使って、反比例の式を組み立てる。
     op: form_expression
     result_display: y = 240/x
@@ -78,12 +80,14 @@ sub_questions:
   - args:
     - '240'
     - '2'
+    detail: ''
     narration: 比例定数と x の値を、反比例の式 y=a/x の x にあてはめる。
     op: substitute_x
     result_display: y = 240 / 2
     result_srepr: Integer(120)
   - args:
     - y = 240 / 2
+    detail: ''
     narration: わり算を計算して y の値を求める。
     op: evaluate
     result_display: y = 120

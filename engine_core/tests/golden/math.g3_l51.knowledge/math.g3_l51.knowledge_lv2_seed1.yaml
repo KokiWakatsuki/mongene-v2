@@ -38,19 +38,21 @@ sub_questions:
   - pythagorean.identify_hypotenuse
   explanation: 'まず、直角三角形で、直角の頂点がどこかを読み取る。（頂点E）
 
-    次に、直角の頂点に接していない辺が斜辺になることから、斜辺を答える。（辺FG）'
+    次に、直角に対する辺（直角の頂点を通らない辺）が斜辺になることから、斜辺を答える。（辺FG）'
   hints:
   - 直角三角形で、直角の頂点がどこかを読み取る。
   label: (1)
   prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 直角三角形で、直角の頂点がどこかを読み取る。
     op: identify_right_angle_vertex
     result_display: 頂点E
     result_srepr: ''
   - args: []
-    narration: 直角の頂点に接していない辺が斜辺になることから、斜辺を答える。
+    detail: ''
+    narration: 直角に対する辺（直角の頂点を通らない辺）が斜辺になることから、斜辺を答える。
     op: name_hypotenuse
     result_display: 辺FG
     result_srepr: 辺FG

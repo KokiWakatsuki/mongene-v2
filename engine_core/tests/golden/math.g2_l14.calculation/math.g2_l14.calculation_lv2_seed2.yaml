@@ -37,7 +37,7 @@ sub_questions:
   - simultaneous_equations.solve_with_preprocessing
   explanation: 'まず、かっこを展開して整数の連立方程式に直す。（2x + 3y = 14 , 3x - y = -1）
 
-    次に、整理した連立方程式を加減法で解いて x を求める。（x = 1）
+    次に、もう一方の式の両辺を 3 倍して y の係数の大きさをそろえ、辺々を足す。整理すると 11x = 11 になるので、両辺を 11 でわる。（x = 1）
 
     最後に、求めた x をもとの式に代入して y を求める。（y = 4）'
   hints:
@@ -49,18 +49,21 @@ sub_questions:
   - args:
     - 2(x + 3) + 3y = 20
     - 3x - (y + 1) = -2
+    detail: ''
     narration: かっこを展開して整数の連立方程式に直す。
     op: expand_parentheses
     result_display: 2x + 3y = 14 , 3x - y = -1
     result_srepr: '[Equality(Add(Mul(Integer(2), Symbol(''x'')), Mul(Integer(3), Symbol(''y''))), Integer(14)), Equality(Add(Mul(Integer(3), Symbol(''x'')), Mul(Integer(-1), Symbol(''y''))), Integer(-1))]'
   - args:
     - 2x + 3y = 14 , 3x - y = -1
+    detail: もう一方の式の両辺を 3 倍して y の係数の大きさをそろえ、辺々を足す。整理すると 11x = 11 になるので、両辺を 11 でわる。
     narration: 整理した連立方程式を加減法で解いて x を求める。
     op: eliminate_and_solve_x
     result_display: x = 1
     result_srepr: Integer(1)
   - args:
     - '1'
+    detail: ''
     narration: 求めた x をもとの式に代入して y を求める。
     op: back_substitute
     result_display: y = 4

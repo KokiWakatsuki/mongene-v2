@@ -35,7 +35,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - prime_factorization.execute_basic
-  explanation: 'まず、小さい素数から順にわり、商が素数になるまでわり続ける。（2、5、7）
+  explanation: 'まず、70 を小さい素数から順にわっていく。（70 ÷ 2 = 35、35 ÷ 5 = 7）
 
     次に、現れた素数を、同じ素数の個数を指数にして、累乗の積の形に表す。（2×5×7）'
   hints:
@@ -44,11 +44,13 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: 70 を小さい素数から順にわっていく。
     narration: 小さい素数から順にわり、商が素数になるまでわり続ける。
     op: divide_out_primes_in_order
-    result_display: 2、5、7
+    result_display: 70 ÷ 2 = 35、35 ÷ 5 = 7
     result_srepr: 2*5*7
   - args: []
+    detail: ''
     narration: 現れた素数を、同じ素数の個数を指数にして、累乗の積の形に表す。
     op: write_prime_power_form
     result_display: 2×5×7

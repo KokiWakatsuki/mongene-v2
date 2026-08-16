@@ -48,11 +48,13 @@ sub_questions:
   prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 表の対応するxとyについて、商y/xをそれぞれ計算する。
     op: compute_ratio_y_over_x
     result_display: 8、8、8、8
     result_srepr: '[''Integer(8)'', ''Integer(8)'', ''Integer(8)'', ''Integer(8)'']'
   - args: []
+    detail: ''
     narration: 商y/xがすべて等しければ比例するといえる。等しくなければ比例するとはいえない。
     op: judge_constant_ratio
     result_display: 比例するといえる

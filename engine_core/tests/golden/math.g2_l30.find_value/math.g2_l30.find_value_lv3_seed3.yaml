@@ -42,11 +42,13 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: Bが速さを変えた後の式と、Aの式が等しくなる方程式をつくる。
     op: set_up_second_segment_equation
     result_display: 2区間目の式どうしを等号でつなぐ
     result_srepr: Integer(21)
   - args: []
+    detail: ''
     narration: 方程式を整理して、出会う時刻 x を求める。
     op: solve_for_x
     result_display: x = 21

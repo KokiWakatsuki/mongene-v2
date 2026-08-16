@@ -96,16 +96,19 @@ sub_questions:
   prompt_text: グラフをかきなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: すべての階級の度数を足し合わせ、総度数を求める。
     op: compute_total_frequency
     result_display: 度数の合計は25
     result_srepr: Integer(25)
   - args: []
+    detail: ''
     narration: 階級ごとに、その階級の度数を総度数でわって相対度数を求め、表に書き入れる。
     op: divide_each_by_total
     result_display: 0.08、0.2、0.4、0.2、0.12
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 各階級の階級値の位置にその階級の度数の高さで点を打ち、順に線分で結ぶ（両端は度数のない階級まで下ろす）。
     op: draw_frequency_polygon
     result_display: 度数折れ線

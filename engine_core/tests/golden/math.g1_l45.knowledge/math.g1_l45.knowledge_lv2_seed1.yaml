@@ -44,11 +44,13 @@ sub_questions:
   prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 1つの円で中心角と弧の長さが比例するかどうかを見比べる。
     op: identify_circle_property
     result_display: ''
     result_srepr: arc_central_angle_proportional
   - args: []
+    detail: ''
     narration: その性質がつねに成り立つ関係かどうかを判別する。
     op: judge_circle_property
     result_display: 正しい

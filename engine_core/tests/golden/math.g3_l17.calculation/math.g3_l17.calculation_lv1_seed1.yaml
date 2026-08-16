@@ -37,18 +37,20 @@ sub_questions:
   - radical.multiply_divide
   explanation: 'まず、根号の積を、1つの根号の中の積にまとめる。（√22）
 
-    次に、根号の中を素因数分解し、平方の因数を根号の外に出す。（√22）'
+    次に、22 に平方の因数は無いので、これ以上簡単にできない。（√22）'
   hints:
   - 根号の積を、1つの根号の中の積にまとめる。
   label: (1)
   prompt_text: 式を簡単にしなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 根号の積を、1つの根号の中の積にまとめる。
     op: multiply_under_one_root
     result_display: √22
     result_srepr: ''
   - args: []
+    detail: 22 に平方の因数は無いので、これ以上簡単にできない。
     narration: 根号の中を素因数分解し、平方の因数を根号の外に出す。
     op: simplify_root
     result_display: √22

@@ -44,11 +44,13 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 指定された値を左辺の文字に代入する。
     op: substitute_value
     result_display: (2)² + 2(2) + 2
     result_srepr: ''
   - args: []
+    detail: ''
     narration: 左辺を計算して、その値を求める（値が 0 なら等式が成り立つ）。
     op: evaluate_left_side
     result_display: '10'

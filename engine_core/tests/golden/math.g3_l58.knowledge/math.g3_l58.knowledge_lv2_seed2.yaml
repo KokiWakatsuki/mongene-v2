@@ -44,11 +44,13 @@ sub_questions:
   prompt_text: 正しいものを選びなさい。
   solution_steps:
   - args: []
+    detail: ''
     narration: 母集団に含まれるすべての対象が、同じ機会で選ばれる方法になっているかを調べる。
     op: check_random_coverage
     result_display: 同じ機会にならない
     result_srepr: biased
   - args: []
+    detail: ''
     narration: 一部の対象だけが選ばれやすい方法になっていれば偏りが生じ、適切とはいえないと判断する。
     op: judge_sampling_bias
     result_display: 偏りが生じやすく、適切とはいえない

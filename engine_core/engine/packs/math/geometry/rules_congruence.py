@@ -137,16 +137,32 @@ def _apply_midpoint(points: list[Point], facts: frozenset[Fact]) -> Iterable[Der
 # 対頂角・平行線の錯角/同位角
 # ---------------------------------------------------------------------------
 def _apply_vertical_angles(points: list[Point], facts: frozenset[Fact]) -> Iterable[Derivation]:
-    """2直線が点 O で交わるとき、対頂角は等しい。
+    """2直線が点 O で**交わる**とき、対頂角は等しい。
 
-    「A,O,C が一直線」「B,O,D が一直線」の2つが揃っていれば ∠AOB=∠COD。
+    「A,O,C が一直線」「B,O,D が一直線」に加えて、**O が A と C の間・B と D の間**に
+    あることが要る。`collinear` は3点を並べ替えて持ち、どれが真ん中かを持っていない
+    ので、それだけで当てると**交わっていない配置にも当たってしまう**：
+    △ABC の辺AB上に M、辺AC上に N をとった図で「A,M,B が一直線」「A,N,C が一直線」から
+    ∠MAN ＝ ∠BAC を出し、「対頂角は等しいから」と書いていた——この2つは**同じ角**で
+    あって対頂角ではない（頂点 A は M と B の間にない）。g2_l45.proof の
+    「対頂角は等しいから ∠BAD ＝ ∠CAE」がこれで、正しくは「∠A は共通」。
     """
     collinears = [f for f in facts if f.kind == "collinear"]
+    betweens = {f.args for f in facts if f.kind == "between"}
+
+    def crosses_at(o: Point, ends: tuple[Point, ...]) -> bool:
+        x, y = sorted(ends)
+        return (o, (x, y)) in betweens
+
     for f1, f2 in itertools.combinations(collinears, 2):
         common = set(f1.args) & set(f2.args)
         if len(common) != 1:
             continue
         o = next(iter(common))
+        ends1 = tuple(p for p in f1.args if p != o)
+        ends2 = tuple(p for p in f2.args if p != o)
+        if not (crosses_at(o, ends1) and crosses_at(o, ends2)):
+            continue
         a, c = (p for p in f1.args if p != o)
         b, d = (p for p in f2.args if p != o)
         concl = ang_eq(ang(o, a, b), ang(o, c, d))
