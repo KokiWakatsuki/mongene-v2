@@ -25,6 +25,7 @@ from pathlib import Path
 
 from engine.core.contracts import Coordinate
 from engine.core.signature import dup_key, fingerprint_hash
+from engine.eval._parallel import pmap
 from engine.eval._harness import (
     EvalEnv,
     build_mr,
@@ -145,19 +146,53 @@ class DupRateReport:
         }
 
 
+def _cell_job(
+    env: EvalEnv, coord: Coordinate, seeds: int, threshold: float
+) -> tuple[CellDupRate, list[tuple[str, str, str]]]:
+    """ワーカー1つが担当するセル1つ分（`_parallel.pmap` から呼ばれる）。
+
+    dup_rate の集計と fp の収集を**1回の呼び出しでまとめて**返す。別々の pmap に
+    すると、そのたびにワーカーを起こし直して bootstrap のぶんだけ実時間が伸びる。
+    """
+    cell = cell_dup_rate(env, coord, seeds, threshold)
+    fam = family_of(coord)
+    fps: list[tuple[str, str, str]] = []
+    for seed in range(1, min(seeds, 5) + 1):
+        r = build_mr(coord, seed, env)
+        if not r.ok or r.mr is None:
+            continue
+        fps.append((fam, fingerprint_hash(r.mr), r.mr.signature))
+    return cell, fps
+
+
 def run_dup_rate(
     env: EvalEnv | None = None,
     *,
     seeds: int = _DEFAULT_SEEDS,
     threshold: float = _DEFAULT_THRESHOLD,
+    jobs: int | None = None,
 ) -> DupRateReport:
     env = env if env is not None else make_env()
-    cells = [cell_dup_rate(env, coord, seeds, threshold) for coord in capability_cells(env)]
+    coords = list(capability_cells(env))
+    # **セルどうしは独立**（`cell_dup_rate` はそのセルの seed からしか読まない）ので、
+    # プロセスに配っても測る値は変わらない。
+    pairs = pmap(_cell_job, [(c, seeds, threshold) for c in coords], jobs=jobs)
+    cells = [c for c, _ in pairs]
+    by_family: dict[str, dict[str, set[str]]] = defaultdict(lambda: defaultdict(set))
+    for _, rows in pairs:
+        for fam, fp, sig in rows:
+            by_family[fam][fp].add(sig)
+    collisions = [
+        FamilyFpCollision(family=fam, fp=fp, signatures=sorted(sigs))
+        for fam, fp_map in sorted(by_family.items())
+        for fp, sigs in sorted(fp_map.items())
+        if len(sigs) >= 2
+    ]
     return DupRateReport(
         seeds=seeds,
         threshold=threshold,
         cells=cells,
-        fp_collisions=family_fp_collisions(env, seeds),
+        fp_collisions=collisions,
     )
 
 

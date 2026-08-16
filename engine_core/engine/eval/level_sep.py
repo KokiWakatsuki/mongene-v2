@@ -24,6 +24,7 @@ from pathlib import Path
 from engine.core.contracts import Coordinate
 from engine.core.signature import fingerprint_hash
 from engine.eval._harness import EvalEnv, build_mr, capability_cells, family_of, make_env
+from engine.eval._parallel import pmap
 
 _DEFAULT_SEEDS = 5
 
@@ -108,12 +109,27 @@ class LevelSepReport:
         }
 
 
-def run_level_sep(env: EvalEnv | None = None, *, seeds: int = _DEFAULT_SEEDS) -> LevelSepReport:
+def _family_job(
+    env: EvalEnv, fam: str, coords: list[Coordinate], seeds: int
+) -> FamilyLevelSep:
+    """ワーカー1つが担当する family 1つ分（`_parallel.pmap` から呼ばれる）。
+
+    level_sep は **family の中で** レベル同士を見比べるので、配る単位はセルでなく
+    family（family どうしは独立）。
+    """
+    return family_level_sep(env, fam, coords, seeds)
+
+
+def run_level_sep(
+    env: EvalEnv | None = None, *, seeds: int = _DEFAULT_SEEDS, jobs: int | None = None
+) -> LevelSepReport:
     env = env if env is not None else make_env()
     by_family: dict[str, list[Coordinate]] = defaultdict(list)
     for coord in capability_cells(env):
         by_family[family_of(coord)].append(coord)
-    families = [family_level_sep(env, fam, coords, seeds) for fam, coords in sorted(by_family.items())]
+    families = pmap(
+        _family_job, [(fam, coords, seeds) for fam, coords in sorted(by_family.items())], jobs=jobs
+    )
     return LevelSepReport(seeds=seeds, families=families)
 
 

@@ -20,6 +20,7 @@ from dataclasses import asdict, dataclass, field
 from pathlib import Path
 
 from engine.core.contracts import Coordinate
+from engine.eval._parallel import pmap
 from engine.eval._harness import (
     EvalEnv,
     build_mr,
@@ -111,14 +112,21 @@ class RetryStatsReport:
         }
 
 
+def _cell_job(env: EvalEnv, coord: Coordinate, seeds: int, threshold: float) -> CellRetryStats:
+    """ワーカー1つが担当するセル1つ分（`_parallel.pmap` から呼ばれる）。"""
+    return cell_retry_stats(env, coord, seeds, threshold)
+
+
 def run_retry_stats(
     env: EvalEnv | None = None,
     *,
     seeds: int = _DEFAULT_SEEDS,
     threshold: float = _DEFAULT_THRESHOLD,
+    jobs: int | None = None,
 ) -> RetryStatsReport:
     env = env if env is not None else make_env()
-    cells = [cell_retry_stats(env, coord, seeds, threshold) for coord in capability_cells(env)]
+    coords = list(capability_cells(env))
+    cells = pmap(_cell_job, [(c, seeds, threshold) for c in coords], jobs=jobs)
     return RetryStatsReport(seeds=seeds, threshold=threshold, cells=cells)
 
 

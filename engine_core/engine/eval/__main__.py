@@ -57,6 +57,10 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--dup-seeds", type=int, default=100, help="dup_rate / retry_stats の seed 数")
     parser.add_argument("--text-seeds", type=int, default=5, help="text_quality の seed 数")
     parser.add_argument("--size-seeds", type=int, default=10, help="answer_size の seed 数")
+    parser.add_argument(
+        "--jobs", type=int, default=None,
+        help="並列プロセス数（既定はコア数-1）。1 で逐次",
+    )
     parser.add_argument("--json", action="store_true", help="統合 JSON レポートを出力")
     parser.add_argument("--out", type=Path, default=None, help="統合 JSON レポートの保存先")
     args = parser.parse_args(argv)
@@ -64,13 +68,16 @@ def main(argv: list[str] | None = None) -> int:
     # bootstrap + curriculum/families を一度だけ読んで4プログラムで共有する。
     env = make_env()
 
-    coverage = run_coverage_scan(env, seeds=args.seeds)
-    dup = run_dup_rate(env, seeds=args.dup_seeds)
-    level = run_level_sep(env, seeds=args.seeds)
-    retry = run_retry_stats(env, seeds=args.dup_seeds)
-    text = run_text_quality(env, seeds=args.text_seeds)
-    size = run_answer_size(env, seeds=args.size_seeds)
-    stmt = run_statement_size(env, seeds=args.size_seeds)
+    # 7つのゲートはどれも「セル（または family）ごとに閉じた測定」なので、
+    # セルをプロセスに配っても測る値は変わらない（`engine.eval._parallel`）。
+    j = args.jobs
+    coverage = run_coverage_scan(env, seeds=args.seeds, jobs=j)
+    dup = run_dup_rate(env, seeds=args.dup_seeds, jobs=j)
+    level = run_level_sep(env, seeds=args.seeds, jobs=j)
+    retry = run_retry_stats(env, seeds=args.dup_seeds, jobs=j)
+    text = run_text_quality(env, seeds=args.text_seeds, jobs=j)
+    size = run_answer_size(env, seeds=args.size_seeds, jobs=j)
+    stmt = run_statement_size(env, seeds=args.size_seeds, jobs=j)
 
     overall_ok = (
         coverage.ok and dup.ok and level.ok and retry.ok and text.ok and size.ok and stmt.ok

@@ -24,18 +24,18 @@ meta:
   seed: 3
   signature: motion_area_single_segment
 problem_ref: d4928a631dd497df
-problem_text: 1辺が 12cm の正方形ABCDで、点PはAを出発し辺AB上を毎秒1cmで動く。出発してから4秒後の三角形APDの面積を求めよ。
+problem_text: 1辺が 10cm の正方形ABCDで、点PはAを出発し辺AB上を毎秒1cmで動く。出発してから2秒後の三角形APDの面積を求めよ。
 sub_questions:
 - answer:
-    display: '24'
+    display: '10'
     kind: symbolic
-    srepr: Integer(24)
+    srepr: Integer(10)
   cause_tags: []
   concept_tags:
   - motion.area_single_segment
-  explanation: 'まず、経過した時間と速さから、点 P が動いた道のりを求め、その位置の座標を決める。（P(4, 0)）
+  explanation: 'まず、経過した時間と速さから、点 P が動いた道のりを求め、その位置の座標を決める。（P(2, 0)）
 
-    次に、3点の座標から、三角形の面積を求める公式で面積を計算する。（24）'
+    次に、3点の座標から、三角形の面積を求める公式で面積を計算する。（10）'
   hints:
   - 経過した時間と速さから、点 P が動いた道のりを求め、その位置の座標を決める。
   label: (1)
@@ -44,11 +44,11 @@ sub_questions:
   - args: []
     narration: 経過した時間と速さから、点 P が動いた道のりを求め、その位置の座標を決める。
     op: locate_point_p
-    result_display: P(4, 0)
+    result_display: P(2, 0)
     result_srepr: ''
   - args: []
     narration: 3点の座標から、三角形の面積を求める公式で面積を計算する。
     op: compute_triangle_area
-    result_display: '24'
-    result_srepr: Integer(24)
+    result_display: '10'
+    result_srepr: Integer(10)
 visual_svg: null

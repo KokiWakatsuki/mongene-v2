@@ -44,6 +44,7 @@ from engine.core.verify.answer_size import (
     limits_for,
 )
 from engine.eval._harness import EvalEnv, capability_cells, cell_request, make_env
+from engine.eval._parallel import pmap
 
 _DEFAULT_SEEDS = 5
 
@@ -144,15 +145,24 @@ class AnswerSizeReport:
         }
 
 
+def _cell_job(env: EvalEnv, coord: Coordinate, seeds: int) -> CellAnswerSize:
+    """ワーカー1つが担当するセル1つ分（`_parallel.pmap` から呼ばれる）。"""
+    return cell_answer_size(env, coord, seeds)
+
+
 def run_answer_size(
-    env: EvalEnv | None = None, *, seeds: int = _DEFAULT_SEEDS, only: str | None = None
+    env: EvalEnv | None = None,
+    *,
+    seeds: int = _DEFAULT_SEEDS,
+    only: str | None = None,
+    jobs: int | None = None,
 ) -> AnswerSizeReport:
     env = env if env is not None else make_env()
     coords = capability_cells(env)
     if only:
         pat = re.compile(only)
         coords = [c for c in coords if pat.search(f"{c.unit}.{c.form}.Lv{c.level}")]
-    cells = [cell_answer_size(env, coord, seeds) for coord in coords]
+    cells = pmap(_cell_job, [(c, seeds) for c in coords], jobs=jobs)
     return AnswerSizeReport(seeds=seeds, cells=cells)
 
 

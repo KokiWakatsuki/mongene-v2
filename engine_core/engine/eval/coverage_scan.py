@@ -20,6 +20,7 @@ from pathlib import Path
 
 from engine.core.contracts import Problem
 from engine.core.pipeline import generate
+from engine.eval._parallel import pmap
 from engine.eval._harness import (
     EvalEnv,
     capability_cells,
@@ -65,32 +66,33 @@ def _stage_gate_counts(env: EvalEnv) -> dict[str, int]:
     return {stage: len(env.registry.gates(stage)) for stage in ("mr", "text", "visual")}
 
 
-def scan_cells(env: EvalEnv, seeds: int) -> list[CellResult]:
+def scan_cells(env: EvalEnv, seeds: int, *, jobs: int | None = None) -> list[CellResult]:
+    """セル単位で並列に走らせる（セルどうしは独立）。"""
+    return pmap(_cell_job, [(c, seeds) for c in capability_cells(env)], jobs=jobs)
+
+
+def _cell_job(env: EvalEnv, coord: Coordinate, seeds: int) -> CellResult:
+    """ワーカー1つが担当するセル1つ分（`_parallel.pmap` から呼ばれる）。"""
     gate_counts = _stage_gate_counts(env)
-    results: list[CellResult] = []
-    for coord in capability_cells(env):
-        res = CellResult(cell=f"{coord.unit}.{coord.form}.Lv{coord.level}", seeds=seeds, generated=0)
-        uses_visual = False
-        for seed in range(1, seeds + 1):
-            problem = generate(
-                cell_request(coord, seed),
-                curriculum=env.curriculum,
-                families=env.families,
-                registry=env.registry,
-            )
-            if isinstance(problem, Problem):
-                res.generated += 1
-                if problem.visual_svg is not None:
-                    uses_visual = True
-            else:
-                res.failures.append(
-                    {"seed": seed, "code": problem.code, "detail": problem.detail}
-                )
-        # ゲート素通り検査: 実際に使われた段のゲートが 0 なら素通り（自明通過）。
-        required_stages = ["mr", "text"] + (["visual"] if uses_visual else [])
-        res.passthrough_stages = [s for s in required_stages if gate_counts[s] == 0]
-        results.append(res)
-    return results
+    res = CellResult(cell=f"{coord.unit}.{coord.form}.Lv{coord.level}", seeds=seeds, generated=0)
+    uses_visual = False
+    for seed in range(1, seeds + 1):
+        problem = generate(
+            cell_request(coord, seed),
+            curriculum=env.curriculum,
+            families=env.families,
+            registry=env.registry,
+        )
+        if isinstance(problem, Problem):
+            res.generated += 1
+            if problem.visual_svg is not None:
+                uses_visual = True
+        else:
+            res.failures.append({"seed": seed, "code": problem.code, "detail": problem.detail})
+    # ゲート素通り検査: 実際に使われた段のゲートが 0 なら素通り（自明通過）。
+    required_stages = ["mr", "text"] + (["visual"] if uses_visual else [])
+    res.passthrough_stages = [s for s in required_stages if gate_counts[s] == 0]
+    return res
 
 
 def scan_remedial(env: EvalEnv, seeds: int) -> list[RemedialResult]:
@@ -151,11 +153,13 @@ class CoverageReport:
         }
 
 
-def run_coverage_scan(env: EvalEnv | None = None, *, seeds: int = _DEFAULT_SEEDS) -> CoverageReport:
+def run_coverage_scan(
+    env: EvalEnv | None = None, *, seeds: int = _DEFAULT_SEEDS, jobs: int | None = None
+) -> CoverageReport:
     env = env if env is not None else make_env()
     return CoverageReport(
         seeds=seeds,
-        cells=scan_cells(env, seeds),
+        cells=scan_cells(env, seeds, jobs=jobs),
         remedial=scan_remedial(env, seeds),
         unreferenced_causes=unreferenced_causes(env),
         gate_counts=_stage_gate_counts(env),

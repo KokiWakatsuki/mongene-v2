@@ -58,14 +58,28 @@ def _effective_cause_tags(ctx: CellContext) -> list[str]:
 
 
 def _draw_triangle(coord_domain: object, rng: Rng) -> list[tuple[int, int]]:
-    """非退化(面積≠0)な三角形の3頂点を引く（有界リトライ・compare_signed_numbers と同型）。"""
-    for _ in range(200):
+    """図として読める三角形の3頂点を引く（有界リトライ）。
+
+    **面積が0でないだけでは足りない。** 面積≠0 の条件しか課していなかったので、
+    3点がほとんど一直線に並んだ「細い破片」のような三角形が図に出ていた
+    （移動の前後を見比べる問題で、形が読めないと何も比べられない）。
+    面積が最短辺の長さに対して十分あることを確かめる——具体的には、
+    2·面積 ÷ 最長辺 = 最長辺への高さ が 2 目盛以上あること。
+    """
+    for _ in range(400):
         pts = [(int(draw(coord_domain, rng)), int(draw(coord_domain, rng))) for _ in range(3)]
         (x1, y1), (x2, y2), (x3, y3) = pts
-        area2 = (x2 - x1) * (y3 - y1) - (x3 - x1) * (y2 - y1)
-        if area2 != 0:
+        area2 = abs((x2 - x1) * (y3 - y1) - (x3 - x1) * (y2 - y1))
+        if area2 == 0:
+            continue
+        sides = [
+            ((x2 - x1) ** 2 + (y2 - y1) ** 2) ** 0.5,
+            ((x3 - x2) ** 2 + (y3 - y2) ** 2) ** 0.5,
+            ((x1 - x3) ** 2 + (y1 - y3) ** 2) ** 0.5,
+        ]
+        if area2 / max(sides) >= 2.0 and min(sides) >= 2.0:
             return pts
-    raise ValueError("_draw_triangle: 非退化な三角形を構成できず")
+    raise ValueError("_draw_triangle: 図として読める三角形を構成できず")
 
 
 def _pts_strs(pts: list[tuple[int, int]]) -> list[str]:

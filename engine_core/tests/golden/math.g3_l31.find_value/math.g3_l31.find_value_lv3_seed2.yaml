@@ -24,20 +24,20 @@ meta:
   seed: 2
   signature: motion_area_two_segment
 problem_ref: 5206de19590053da
-problem_text: 1辺が 38cm の正方形ABCDの辺上を、点PがA→B→Cの順に毎秒3cmで動く。出発してから18秒後の三角形APDの面積を求めよ。
+problem_text: 1辺が 14cm の正方形ABCDの辺上を、点PがA→B→Cの順に毎秒3cmで動く。出発してから9秒後の三角形APDの面積を求めよ。
 sub_questions:
 - answer:
-    display: '722'
+    display: '98'
     kind: symbolic
-    srepr: Integer(722)
+    srepr: Integer(98)
   cause_tags: []
   concept_tags:
   - motion.area_two_segment
   explanation: 'まず、点 P が動いた道のりから、今どの辺の上にいるかを判断する。（次の辺の上）
 
-    次に、経過した時間と速さから、点 P が動いた道のりを求め、その位置の座標を決める。（P(38, 16)）
+    次に、経過した時間と速さから、点 P が動いた道のりを求め、その位置の座標を決める。（P(14, 13)）
 
-    最後に、3点の座標から、三角形の面積を求める公式で面積を計算する。（722）'
+    最後に、3点の座標から、三角形の面積を求める公式で面積を計算する。（98）'
   hints:
   - 点 P が動いた道のりから、今どの辺の上にいるかを判断する。
   - 経過した時間と速さから、点 P が動いた道のりを求め、その位置の座標を決める。
@@ -52,11 +52,11 @@ sub_questions:
   - args: []
     narration: 経過した時間と速さから、点 P が動いた道のりを求め、その位置の座標を決める。
     op: locate_point_p
-    result_display: P(38, 16)
+    result_display: P(14, 13)
     result_srepr: ''
   - args: []
     narration: 3点の座標から、三角形の面積を求める公式で面積を計算する。
     op: compute_triangle_area
-    result_display: '722'
-    result_srepr: Integer(722)
+    result_display: '98'
+    result_srepr: Integer(98)
 visual_svg: null

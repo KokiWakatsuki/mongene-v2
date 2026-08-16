@@ -123,9 +123,11 @@ def _construct_single_segment(rng: Rng) -> tuple[int, int, int, str]:
     （面積 p·s/2 を整数にするため・鉄則⑤: 構成時に整数解を保証）に絞って引く。
     """
     v = int(draw({"int_range": [1, 5]}, rng))
-    t = int(draw({"int_range": [2, 10]}, rng))
+    t = int(draw({"int_range": [2, 14]}, rng))
     p = v * t
-    s_cands = [x for x in range(p + 2, p + 42) if x % 2 == 0]
+    # **正方形の1辺は 30cm まで。** 前は p+42 まで許していたので「1辺44cm」
+    # 「1辺58cm」の正方形が出ていた（実物の動点の問題は 8〜20cm）。
+    s_cands = [x for x in range(p + 2, min(p + 42, 37)) if x % 2 == 0] or [p + 2 + (p % 2)]
     s = int(draw({"int_set": s_cands}, rng))
     condition = (
         f"1辺が {s}cm の正方形ABCDで、点PはAを出発し辺AB上を毎秒{v}cmで動く。"
@@ -141,7 +143,7 @@ def _construct_two_segment(rng: Rng) -> tuple[int, int, int, str]:
     d=v·t が s<d<2s（確実に2区間目）となる t の範囲を計算し、その範囲から引く
     （鉄則⑤: 実行時の場合分け判定ではなく構成時に区間を保証）。
     """
-    s = int(draw({"int_set": list(range(6, 41, 2))}, rng))
+    s = int(draw({"int_set": list(range(6, 37, 2))}, rng))
     v = int(draw({"int_range": [1, 4]}, rng))
     t_lo = s // v + 1
     t_hi = (2 * s - 1) // v

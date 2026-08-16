@@ -33,6 +33,7 @@ from engine.core.verify.statement_size import (
     statement_hits,
 )
 from engine.eval._harness import EvalEnv, capability_cells, cell_request, make_env
+from engine.eval._parallel import pmap
 
 _DEFAULT_SEEDS = 5
 
@@ -102,8 +103,17 @@ class StatementSizeReport:
         }
 
 
+def _cell_job(env: EvalEnv, coord: Coordinate, seeds: int) -> CellStatementSize:
+    """ワーカー1つが担当するセル1つ分（`_parallel.pmap` から呼ばれる）。"""
+    return cell_statement_size(env, coord, seeds)
+
+
 def run_statement_size(
-    env: EvalEnv | None = None, *, seeds: int = _DEFAULT_SEEDS, only: str | None = None
+    env: EvalEnv | None = None,
+    *,
+    seeds: int = _DEFAULT_SEEDS,
+    only: str | None = None,
+    jobs: int | None = None,
 ) -> StatementSizeReport:
     env = env if env is not None else make_env()
     coords = capability_cells(env)
@@ -111,7 +121,7 @@ def run_statement_size(
         pat = re.compile(only)
         coords = [c for c in coords if pat.search(f"{c.unit}.{c.form}.Lv{c.level}")]
     return StatementSizeReport(
-        seeds=seeds, cells=[cell_statement_size(env, c, seeds) for c in coords]
+        seeds=seeds, cells=pmap(_cell_job, [(c, seeds) for c in coords], jobs=jobs)
     )
 
 

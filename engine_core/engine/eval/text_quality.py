@@ -31,6 +31,7 @@ from pathlib import Path
 from engine.core.contracts import Coordinate, Unsupported
 from engine.core.pipeline import generate
 from engine.eval._harness import EvalEnv, capability_cells, cell_request, make_env
+from engine.eval._parallel import pmap
 
 _DEFAULT_SEEDS = 3
 
@@ -146,9 +147,16 @@ class TextQualityReport:
         }
 
 
-def run_text_quality(env: EvalEnv | None = None, *, seeds: int = _DEFAULT_SEEDS) -> TextQualityReport:
+def _cell_job(env: EvalEnv, coord: Coordinate, seeds: int) -> CellTextQuality:
+    """ワーカー1つが担当するセル1つ分（`_parallel.pmap` から呼ばれる）。"""
+    return cell_text_quality(env, coord, seeds)
+
+
+def run_text_quality(
+    env: EvalEnv | None = None, *, seeds: int = _DEFAULT_SEEDS, jobs: int | None = None
+) -> TextQualityReport:
     env = env if env is not None else make_env()
-    cells = [cell_text_quality(env, coord, seeds) for coord in capability_cells(env)]
+    cells = pmap(_cell_job, [(c, seeds) for c in capability_cells(env)], jobs=jobs)
     return TextQualityReport(seeds=seeds, cells=cells)
 
 
