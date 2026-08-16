@@ -195,6 +195,13 @@ h1 { margin-bottom: 0; }
 
 _DUP_RATE_WARN_THRESHOLD = 0.20  # M0 は警告止まり（§8.3 D-1 仮値）
 
+# check が回す seed 数。既定はセル制作で使う本番の値。
+# **テストからは小さい値を渡す**（CLI の入出力が正しいかを見る場所であって、
+# 全 seed の合否を見るのは eval のゲートの仕事。既定のままだと重い family 1本で
+# 500 秒かかり、pytest 全走の下限をこのテスト1つが決めてしまっていた）。
+_DEFAULT_SMOKE_SEEDS = 20
+_DEFAULT_DUP_SEEDS = 100
+
 
 @dataclass
 class CheckReport:
@@ -216,7 +223,13 @@ class CheckReport:
         }
 
 
-def _run_check(family_name: str, families_dir: Path = _DEFAULT_FAMILIES_DIR) -> tuple[int, CheckReport]:
+def _run_check(
+    family_name: str,
+    families_dir: Path = _DEFAULT_FAMILIES_DIR,
+    *,
+    smoke_seeds: int = _DEFAULT_SMOKE_SEEDS,
+    dup_seeds: int = _DEFAULT_DUP_SEEDS,
+) -> tuple[int, CheckReport]:
     bootstrap()
     report = CheckReport(family=family_name)
 
@@ -251,10 +264,10 @@ def _run_check(family_name: str, families_dir: Path = _DEFAULT_FAMILIES_DIR) -> 
 
     unit = _unit_from_family(family_name)
 
-    # --- smoke: 全 level x 20 seed ---
+    # --- smoke: 全 level x smoke_seeds ---
     for level_key, level_num in _sorted_levels(spec):
         failures_for_level = 0
-        for seed in range(1, 21):
+        for seed in range(1, smoke_seeds + 1):
             req = GenerateRequest(subject="math", unit=unit, form=spec.form, level=level_num, seed=seed)
             result = generate(req)
             if isinstance(result, Unsupported):
@@ -275,7 +288,7 @@ def _run_check(family_name: str, families_dir: Path = _DEFAULT_FAMILIES_DIR) -> 
     # 割り切る（本格的な dup_rate は eval/dup_rate.py が MR に直接アクセスして測る。§8.3）。
     for level_key, level_num in _sorted_levels(spec):
         refs: list[str] = []
-        for seed in range(1, 101):
+        for seed in range(1, dup_seeds + 1):
             req = GenerateRequest(subject="math", unit=unit, form=spec.form, level=level_num, seed=seed)
             result = generate(req)
             if isinstance(result, Problem):
@@ -402,6 +415,14 @@ def build_parser() -> argparse.ArgumentParser:
     p_check = sub.add_parser("check", help="spec_lint + smoke + 簡易dup_rate")
     p_check.add_argument("family")
     p_check.add_argument("--families-dir", type=Path, default=_DEFAULT_FAMILIES_DIR)
+    p_check.add_argument(
+        "--smoke-seeds", type=int, default=_DEFAULT_SMOKE_SEEDS,
+        help="smoke で回す seed 数（既定 %(default)s）",
+    )
+    p_check.add_argument(
+        "--dup-seeds", type=int, default=_DEFAULT_DUP_SEEDS,
+        help="簡易 dup_rate で回す seed 数（既定 %(default)s）",
+    )
 
     p_approve = sub.add_parser("approve", help="golden(seed1-3)を承認保存")
     p_approve.add_argument("family")
@@ -421,7 +442,12 @@ def main(argv: list[str] | None = None) -> int:
         return _run_preview(args.family, args.seeds, out, families_dir=args.families_dir)
 
     if args.command == "check":
-        exit_code, report = _run_check(args.family, families_dir=args.families_dir)
+        exit_code, report = _run_check(
+            args.family,
+            families_dir=args.families_dir,
+            smoke_seeds=args.smoke_seeds,
+            dup_seeds=args.dup_seeds,
+        )
         print(json.dumps(report.to_json(), ensure_ascii=False, indent=2))
         return exit_code
 

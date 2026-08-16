@@ -43,7 +43,11 @@ def test_preview_default_out_path(tmp_path: Path, monkeypatch) -> None:
 
 
 def test_check_find_value_family_succeeds(capsys) -> None:
-    exit_code = main(["check", "math.g2_l25.find_value"])
+    # seed 数は既定（20/100）でなく小さく。ここは CLI の入出力を見る場所で、
+    # 全 seed の合否は eval のゲートが見る（既定のままだと 500 秒かかっていた）。
+    exit_code = main(
+        ["check", "math.g2_l25.find_value", "--smoke-seeds", "3", "--dup-seeds", "12"]
+    )
     captured = capsys.readouterr()
     assert exit_code == 0
     report = yaml.safe_load(captured.out) if captured.out.strip().startswith("family") else None
