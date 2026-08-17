@@ -24,28 +24,28 @@ meta:
   seed: 3
   signature: word_problem_quadratic_moving_point_area
 problem_ref: 11392bed8e5f2910
-problem_text: '1辺が24cmの正方形BCDEがある。点Lは頂点Cを出発し、辺CD、辺DEの上を毎秒1cmの速さでEまで動く。
+problem_text: '1辺が18cmの正方形BCDEがある。点Lは頂点Cを出発し、辺CD、辺DEの上を毎秒1cmの速さでEまで動く。
 
   出発してから x 秒後の三角形BCLの面積を y cm²とする。
 
-  (1) 0≦x≦24 のとき、y を x の式で表せ。
+  (1) 0≦x≦18 のとき、y を x の式で表せ。
 
-  (2) 24≦x≦48 のとき、y を x の式で表せ。'
+  (2) 18≦x≦36 のとき、y を x の式で表せ。'
 sub_questions:
 - answer:
-    display: y = 12x
+    display: y = 9x
     kind: symbolic
-    srepr: Mul(Integer(12), Symbol('x'))
+    srepr: Mul(Integer(9), Symbol('x'))
   cause_tags: []
   concept_tags:
   - quadratic_function.word_problem_moving_point_area
   explanation: 'まず、点が最初の辺の上にある間は、速さと経過時間から、動いた道のりを x を使って表す。（進んだ道のり = x）
 
-    次に、三角形の底辺を正方形の1つの辺とみると、高さは動いた道のりに等しいから、面積を x の式で表す。（y = 12x）'
+    次に、三角形の底辺を正方形の1つの辺とみると、高さは動いた道のりに等しいから、面積を x の式で表す。（y = 9x）'
   hints:
   - 点が最初の辺の上にある間は、速さと経過時間から、動いた道のりを x を使って表す。
   label: (1)
-  prompt_text: 式に表しなさい。
+  prompt_text: 答えなさい。
   solution_steps:
   - args: []
     detail: ''
@@ -57,22 +57,22 @@ sub_questions:
     detail: ''
     narration: 三角形の底辺を正方形の1つの辺とみると、高さは動いた道のりに等しいから、面積を x の式で表す。
     op: express_area_on_first_side
-    result_display: y = 12x
-    result_srepr: Mul(Integer(12), Symbol('x'))
+    result_display: y = 9x
+    result_srepr: Mul(Integer(9), Symbol('x'))
 - answer:
-    display: y = 288
+    display: y = 162
     kind: symbolic
-    srepr: Integer(288)
+    srepr: Integer(162)
   cause_tags: []
   concept_tags:
   - quadratic_function.word_problem_moving_point_area
   explanation: 'まず、点が次の辺の上に移ったあと、三角形の底辺と高さがどうなるかを確かめる。（次の辺の上）
 
-    次に、この区間では高さが正方形の1つの辺の長さのまま変わらないので、面積は x によらず一定の値になる。（y = 288）'
+    次に、この区間では高さが正方形の1つの辺の長さのまま変わらないので、面積は x によらず一定の値になる。（y = 162）'
   hints:
   - 点が次の辺の上に移ったあと、三角形の底辺と高さがどうなるかを確かめる。
   label: (2)
-  prompt_text: 式に表しなさい。
+  prompt_text: 答えなさい。
   solution_steps:
   - args: []
     detail: ''
@@ -84,6 +84,6 @@ sub_questions:
     detail: ''
     narration: この区間では高さが正方形の1つの辺の長さのまま変わらないので、面積は x によらず一定の値になる。
     op: express_constant_area
-    result_display: y = 288
-    result_srepr: Integer(288)
+    result_display: y = 162
+    result_srepr: Integer(162)
 visual_svg: null

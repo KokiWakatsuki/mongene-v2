@@ -24,18 +24,18 @@ meta:
   seed: 1
   signature: similar_solid_surface_volume_ratio
 problem_ref: 402ced844c52ca4f
-problem_text: 相似な2つの円柱W, Yがあり、相似比は 2:7 である。WとYの表面積の比と体積の比をそれぞれ求めよ。
+problem_text: 相似な2つの三角錐V, Xがあり、相似比は 1:2 である。VとXの表面積の比と体積の比をそれぞれ求めよ。
 sub_questions:
 - answer:
-    display: 表面積の比 4:49、体積の比 8:343
+    display: 表面積の比 1:4、体積の比 1:8
     kind: symbolic
-    srepr: Tuple(Integer(4), Integer(49), Integer(8), Integer(343))
+    srepr: Tuple(Integer(1), Integer(4), Integer(1), Integer(8))
   cause_tags: []
   concept_tags:
   - similarity.solid_surface_volume_ratio
-  explanation: 'まず、相似な立体の表面積の比は相似比の二乗に等しいことから、表面積の比を求める。（4:49）
+  explanation: 'まず、相似な立体の表面積の比は相似比の二乗に等しいことから、表面積の比を求める。（1:4）
 
-    次に、相似比 2:7 を三乗して、2³:7³ = 8:343 を求める。（8:343）'
+    次に、相似比 1:2 を三乗して、1³:2³ = 1:8 を求める。（1:8）'
   hints:
   - 相似な立体の表面積の比は相似比の二乗に等しいことから、表面積の比を求める。
   label: (1)
@@ -45,12 +45,12 @@ sub_questions:
     detail: ''
     narration: 相似な立体の表面積の比は相似比の二乗に等しいことから、表面積の比を求める。
     op: square_ratio_for_surface_area
-    result_display: '4:49'
+    result_display: '1:4'
     result_srepr: ''
   - args: []
-    detail: 相似比 2:7 を三乗して、2³:7³ = 8:343 を求める。
+    detail: 相似比 1:2 を三乗して、1³:2³ = 1:8 を求める。
     narration: 相似な立体の体積の比は相似比の三乗に等しいことから、体積の比を求める。
     op: cube_ratio_for_volume
-    result_display: 8:343
-    result_srepr: Tuple(Integer(4), Integer(49), Integer(8), Integer(343))
+    result_display: '1:8'
+    result_srepr: Tuple(Integer(1), Integer(4), Integer(1), Integer(8))
 visual_svg: null

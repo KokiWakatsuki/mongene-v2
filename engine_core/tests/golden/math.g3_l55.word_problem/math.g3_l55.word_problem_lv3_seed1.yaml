@@ -24,73 +24,73 @@ meta:
   seed: 1
   signature: word_problem_square_pyramid_height_volume_guided
 problem_ref: 4796a26e289d12fe
-problem_text: '底面が1辺12cmの正方形KLMNで、底面以外の辺の長さがすべて14cmである正四角錐P-KLMNがある。
+problem_text: '底面が1辺6cmの正方形KLMNで、底面以外の辺の長さがすべて8cmである正四角錐P-KLMNがある。
 
   (1) この正四角錐の高さを求めよ。
 
   (2) この正四角錐の体積を求めよ。'
 sub_questions:
 - answer:
-    display: 2√31 cm
+    display: √46 cm
     kind: symbolic
-    srepr: Mul(Integer(2), Pow(Integer(31), Rational(1, 2)))
+    srepr: Pow(Integer(46), Rational(1, 2))
   cause_tags: []
   concept_tags:
   - pythagorean.word_problem_square_pyramid_volume
-  explanation: 'まず、底面は正方形だから、となり合う辺を直角をはさむ2辺とみて、三平方の定理から底面の対角線の長さを求める。（12√2 cm）
+  explanation: 'まず、底面は正方形だから、となり合う辺を直角をはさむ2辺とみて、三平方の定理から底面の対角線の長さを求める。（6√2 cm）
 
-    次に、頂点から底面に下ろした垂線の足は底面の対角線の交点だから、対角線の長さの半分が、直角三角形の直角をはさむ一方の辺になる。（6√2 cm）
+    次に、頂点から底面に下ろした垂線の足は底面の対角線の交点だから、対角線の長さの半分が、直角三角形の直角をはさむ一方の辺になる。（3√2 cm）
 
-    最後に、側面の辺を斜辺、いま求めた長さを直角をはさむ一方の辺とする直角三角形で、三平方の定理から高さを求める。（2√31 cm）'
+    最後に、側面の辺を斜辺、いま求めた長さを直角をはさむ一方の辺とする直角三角形で、三平方の定理から高さを求める。（√46 cm）'
   hints:
   - 底面は正方形だから、となり合う辺を直角をはさむ2辺とみて、三平方の定理から底面の対角線の長さを求める。
   - 頂点から底面に下ろした垂線の足は底面の対角線の交点だから、対角線の長さの半分が、直角三角形の直角をはさむ一方の辺になる。
   label: (1)
-  prompt_text: 答えを求めなさい。
+  prompt_text: 答えなさい。
   solution_steps:
   - args: []
     detail: ''
     narration: 底面は正方形だから、となり合う辺を直角をはさむ2辺とみて、三平方の定理から底面の対角線の長さを求める。
     op: compute_base_diagonal
-    result_display: 12√2 cm
-    result_srepr: Mul(Integer(12), Pow(Integer(2), Rational(1, 2)))
-  - args: []
-    detail: ''
-    narration: 頂点から底面に下ろした垂線の足は底面の対角線の交点だから、対角線の長さの半分が、直角三角形の直角をはさむ一方の辺になる。
-    op: halve_base_diagonal
     result_display: 6√2 cm
     result_srepr: Mul(Integer(6), Pow(Integer(2), Rational(1, 2)))
   - args: []
     detail: ''
+    narration: 頂点から底面に下ろした垂線の足は底面の対角線の交点だから、対角線の長さの半分が、直角三角形の直角をはさむ一方の辺になる。
+    op: halve_base_diagonal
+    result_display: 3√2 cm
+    result_srepr: Mul(Integer(3), Pow(Integer(2), Rational(1, 2)))
+  - args: []
+    detail: ''
     narration: 側面の辺を斜辺、いま求めた長さを直角をはさむ一方の辺とする直角三角形で、三平方の定理から高さを求める。
     op: apply_pythagorean_theorem
-    result_display: 2√31 cm
-    result_srepr: Mul(Integer(2), Pow(Integer(31), Rational(1, 2)))
+    result_display: √46 cm
+    result_srepr: Pow(Integer(46), Rational(1, 2))
 - answer:
-    display: 96√31 cm³
+    display: 12√46 cm³
     kind: symbolic
-    srepr: Mul(Integer(96), Pow(Integer(31), Rational(1, 2)))
+    srepr: Mul(Integer(12), Pow(Integer(46), Rational(1, 2)))
   cause_tags: []
   concept_tags:
   - pythagorean.word_problem_square_pyramid_volume
-  explanation: 'まず、底面は正方形だから、その1辺の長さから底面積を求める。（144 cm²）
+  explanation: 'まず、底面は正方形だから、その1辺の長さから底面積を求める。（36 cm²）
 
-    次に、角錐の体積は、底面積と高さの積の三分の一で求められることを使って、体積を求める。（96√31 cm³）'
+    次に、角錐の体積は、底面積と高さの積の三分の一で求められることを使って、体積を求める。（12√46 cm³）'
   hints:
   - 底面は正方形だから、その1辺の長さから底面積を求める。
   label: (2)
-  prompt_text: 答えを求めなさい。
+  prompt_text: 答えなさい。
   solution_steps:
   - args: []
     detail: ''
     narration: 底面は正方形だから、その1辺の長さから底面積を求める。
     op: compute_base_area
-    result_display: 144 cm²
-    result_srepr: Integer(144)
+    result_display: 36 cm²
+    result_srepr: Integer(36)
   - args: []
     detail: ''
     narration: 角錐の体積は、底面積と高さの積の三分の一で求められることを使って、体積を求める。
     op: apply_pyramid_volume_rule
-    result_display: 96√31 cm³
-    result_srepr: Mul(Integer(96), Pow(Integer(31), Rational(1, 2)))
+    result_display: 12√46 cm³
+    result_srepr: Mul(Integer(12), Pow(Integer(46), Rational(1, 2)))
 visual_svg: null

@@ -24,20 +24,20 @@ meta:
   seed: 2
   signature: word_problem_inequality_price_count
 problem_ref: d4679d1c4e65e36e
-problem_text: '1本 x 円の鉛筆を2本買ったときの代金が、300円以下であった。
+problem_text: '1本 x 円の鉛筆を3本買ったときの代金が、400円以下であった。
 
   この関係を不等式で表せ。'
 sub_questions:
 - answer:
-    display: 2x ≦ 300
+    display: 3x ≦ 400
     kind: symbolic
-    srepr: LessThan(Mul(Integer(2), Symbol('x')), Integer(300))
+    srepr: LessThan(Mul(Integer(3), Symbol('x')), Integer(400))
   cause_tags: []
   concept_tags:
   - inequality.word_problem_simple
   explanation: 'まず、場面の中で、比べられている、または等しくなっている数量に着目する。（代金の合計）
 
-    次に、その数量を x を使った式で表し、等式または不等式をつくる。（2x ≦ 300）'
+    次に、その数量を x を使った式で表し、等式または不等式をつくる。（3x ≦ 400）'
   hints:
   - 場面の中で、比べられている、または等しくなっている数量に着目する。
   label: (1)
@@ -53,6 +53,6 @@ sub_questions:
     detail: ''
     narration: その数量を x を使った式で表し、等式または不等式をつくる。
     op: formulate_relation
-    result_display: 2x ≦ 300
-    result_srepr: LessThan(Mul(Integer(2), Symbol('x')), Integer(300))
+    result_display: 3x ≦ 400
+    result_srepr: LessThan(Mul(Integer(3), Symbol('x')), Integer(400))
 visual_svg: null

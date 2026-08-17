@@ -24,30 +24,30 @@ meta:
   seed: 1
   signature: word_problem_seat_shortage_exact
 problem_ref: 571f385ff53e61af
-problem_text: '長いすに見学者を座らせる。1脚に3人ずつ座ると5人が座れず、1脚に4人ずつ座ると最後の1脚だけ1人になり、いすはちょうど埋まった。
+problem_text: '長いすに見学者を座らせる。1脚に5人ずつ座ると25人が座れず、1脚に6人ずつ座ると最後の1脚だけ5人になり、いすはちょうど埋まった。
 
   見学者の人数を求めよ。'
 sub_questions:
 - answer:
-    display: 29人
+    display: 155人
     kind: symbolic
-    srepr: Integer(29)
+    srepr: Integer(155)
   cause_tags: []
   concept_tags:
   - equation.word_problem_seat_shortage
   explanation: 'まず、場面の中で、どちらの見方でも同じになる（等しくなっている）量に着目する。（見学者の全体の人数）
 
-    次に、その量を x を使って両辺に表し、方程式をつくる。（3x + 5 = 4(x - 1) + 1）
+    次に、その量を x を使って両辺に表し、方程式をつくる。（5x + 25 = 6(x - 1) + 5）
 
-    次に、分配法則を使って、かっこを外す。（3x + 5 = 4x - 3）
+    次に、分配法則を使って、かっこを外す。（5x + 25 = 6x - 1）
 
-    次に、右辺の +4x を左辺に、左辺の +5 を右辺に、符号を変えて移項する。（3x - 4x = -3 - 5）
+    次に、右辺の +6x を左辺に、左辺の +25 を右辺に、符号を変えて移項する。（5x - 6x = -1 - 25）
 
-    次に、両辺の同類項をそれぞれまとめて、ax = b の形にする。（-x = -8）
+    次に、両辺の同類項をそれぞれまとめて、ax = b の形にする。（-x = -26）
 
-    次に、等式の性質を使い、両辺を x の係数 -1 でわる。（x = 8）
+    次に、等式の性質を使い、両辺を x の係数 -1 でわる。（x = 26）
 
-    最後に、求めた x をもとに、問われている量を計算する。（29人）'
+    最後に、求めた x をもとに、問われている量を計算する。（155人）'
   hints:
   - 場面の中で、どちらの見方でも同じになる（等しくなっている）量に着目する。
   - その量を x を使って両辺に表し、方程式をつくる。
@@ -68,36 +68,36 @@ sub_questions:
     detail: ''
     narration: その量を x を使って両辺に表し、方程式をつくる。
     op: formulate_equation
-    result_display: 3x + 5 = 4(x - 1) + 1
-    result_srepr: Equality(Add(Mul(Integer(3), Symbol('x')), Integer(5)), Add(Mul(Integer(4), Symbol('x')), Integer(-3)))
+    result_display: 5x + 25 = 6(x - 1) + 5
+    result_srepr: Equality(Add(Mul(Integer(5), Symbol('x')), Integer(25)), Add(Mul(Integer(6), Symbol('x')), Integer(-1)))
   - args: []
     detail: ''
     narration: 分配法則を使って、かっこを外す。
     op: expand_parentheses
-    result_display: 3x + 5 = 4x - 3
-    result_srepr: Integer(8)
+    result_display: 5x + 25 = 6x - 1
+    result_srepr: Integer(26)
   - args: []
-    detail: 右辺の +4x を左辺に、左辺の +5 を右辺に、符号を変えて移項する。
+    detail: 右辺の +6x を左辺に、左辺の +25 を右辺に、符号を変えて移項する。
     narration: 文字の項を左辺に、数の項を右辺に、符号を変えて移項する。
     op: transpose_terms
-    result_display: 3x - 4x = -3 - 5
-    result_srepr: Integer(8)
+    result_display: 5x - 6x = -1 - 25
+    result_srepr: Integer(26)
   - args: []
     detail: ''
     narration: 両辺の同類項をそれぞれまとめて、ax = b の形にする。
     op: combine_like_terms
-    result_display: -x = -8
-    result_srepr: Integer(8)
+    result_display: -x = -26
+    result_srepr: Integer(26)
   - args: []
     detail: 等式の性質を使い、両辺を x の係数 -1 でわる。
     narration: 等式の性質を使い、両辺を x の係数でわる。
     op: divide_both_sides
-    result_display: x = 8
-    result_srepr: Integer(8)
+    result_display: x = 26
+    result_srepr: Integer(26)
   - args: []
     detail: ''
     narration: 求めた x をもとに、問われている量を計算する。
     op: derive_asked_quantity
-    result_display: 29人
-    result_srepr: Integer(29)
+    result_display: 155人
+    result_srepr: Integer(155)
 visual_svg: null

@@ -46,7 +46,7 @@ sub_questions:
   - おにぎりの個数を x、グレープフルーツの個数を y とおく。
   - 個数の関係から、x と y の和が合わせて買った個数に等しいという式をつくる。
   label: (1)
-  prompt_text: 式に表しなさい。
+  prompt_text: 答えなさい。
   solution_steps:
   - args:
     - おにぎり
@@ -84,7 +84,7 @@ sub_questions:
   - 個数の式の両辺を x の単価だけ倍して、x の係数を代金の式とそろえる。
   - 辺々を引いて x を消去し、残った y の値を求める。
   label: (2)
-  prompt_text: 答えを求めなさい。
+  prompt_text: 答えなさい。
   solution_steps:
   - args: []
     detail: ''

@@ -24,20 +24,20 @@ meta:
   seed: 3
   signature: word_problem_lottery_at_least_one
 problem_ref: 33faf5316c552253
-problem_text: '当たりくじ3本を含む9本のくじから、太郎さんと花子さんがこの順に1本ずつ引く。引いたくじはもとにもどさないものとする。
+problem_text: '当たりくじ5本を含む13本のくじから、太郎さんと花子さんがこの順に1本ずつ引く。引いたくじはもとにもどさないものとする。
 
   少なくとも一方が当たる確率を求めよ。'
 sub_questions:
 - answer:
-    display: 7/12
+    display: 25/39
     kind: symbolic
-    srepr: Rational(7, 12)
+    srepr: Rational(25, 39)
   cause_tags: []
   concept_tags:
   - probability.word_problem_lottery_at_least_one
-  explanation: 'まず、戻さずに2本引いたとき、2本とも外れる場合を数えて、その確率を求める。（5/12）
+  explanation: 'まず、戻さずに2本引いたとき、2本とも外れる場合を数えて、その確率を求める。（14/39）
 
-    次に、1から、2本とも外れる確率をひいて、少なくとも一方が当たる確率を求める。（7/12）'
+    次に、1から、2本とも外れる確率をひいて、少なくとも一方が当たる確率を求める。（25/39）'
   hints:
   - 戻さずに2本引いたとき、2本とも外れる場合を数えて、その確率を求める。
   label: (1)
@@ -47,12 +47,12 @@ sub_questions:
     detail: ''
     narration: 戻さずに2本引いたとき、2本とも外れる場合を数えて、その確率を求める。
     op: compute_both_lose_probability
-    result_display: 5/12
+    result_display: 14/39
     result_srepr: ''
   - args: []
     detail: ''
     narration: 1から、2本とも外れる確率をひいて、少なくとも一方が当たる確率を求める。
     op: subtract_from_one
-    result_display: 7/12
-    result_srepr: Rational(7, 12)
+    result_display: 25/39
+    result_srepr: Rational(25, 39)
 visual_svg: null

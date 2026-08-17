@@ -24,65 +24,65 @@ meta:
   seed: 3
   signature: word_problem_coin_toss_count_and_probability
 problem_ref: c2118d44c6fb141b
-problem_text: '5円硬貨、100円硬貨、1円硬貨、10円硬貨、500円硬貨の5枚を同時に投げる。どの硬貨も表と裏の出方は同様に確からしいものとする。ちょうど3枚が裏になる場合に注目する。
+problem_text: '5円硬貨、100円硬貨、1円硬貨、10円硬貨の4枚を同時に投げる。どの硬貨も表と裏の出方は同様に確からしいものとする。ちょうど3枚が裏になる場合に注目する。
 
   (1) 表と裏の出方は全部で何通りあるか答えよ。
 
   (2) 注目している場合が起こる確率を求めよ。'
 sub_questions:
 - answer:
-    display: 32通り
+    display: 16通り
     kind: symbolic
-    srepr: Integer(32)
+    srepr: Integer(16)
   cause_tags: []
   concept_tags:
   - probability.word_problem_coin_toss_count_and_probability
-  explanation: まず、硬貨を区別して、1枚ごとに表と裏の2通りがあることを枝分かれで書き出し、出方の総数を数える。（32通り）
+  explanation: まず、硬貨を区別して、1枚ごとに表と裏の2通りがあることを枝分かれで書き出し、出方の総数を数える。（16通り）
   hints:
   - 硬貨を区別して、1枚ごとに表と裏の2通りがあることを枝分かれで書き出し、出方の総数を数える。
   label: (1)
-  prompt_text: 答えを求めなさい。
+  prompt_text: 答えなさい。
   solution_steps:
   - args: []
     detail: ''
     narration: 硬貨を区別して、1枚ごとに表と裏の2通りがあることを枝分かれで書き出し、出方の総数を数える。
     op: enumerate_all_outcomes
-    result_display: 32通り
-    result_srepr: Integer(32)
+    result_display: 16通り
+    result_srepr: Integer(16)
 - answer:
-    display: 5/16
+    display: 1/4
     kind: symbolic
-    srepr: Rational(5, 16)
+    srepr: Rational(1, 4)
   cause_tags: []
   concept_tags:
   - probability.word_problem_coin_toss_count_and_probability
-  explanation: 'まず、硬貨を区別して、表と裏の出方をすべて書き出す。（全部で32通り）
+  explanation: 'まず、硬貨を区別して、表と裏の出方をすべて書き出す。（全部で16通り）
 
-    次に、書き出した出方のうち、条件にあてはまるものの数を数える。（あてはまるのは10通り）
+    次に、書き出した出方のうち、条件にあてはまるものの数を数える。（あてはまるのは4通り）
 
-    最後に、条件にあてはまる出方の数を、すべての出方の数でわる。（5/16）'
+    最後に、条件にあてはまる出方の数を、すべての出方の数でわる。（1/4）'
   hints:
   - 硬貨を区別して、表と裏の出方をすべて書き出す。
   - 書き出した出方のうち、条件にあてはまるものの数を数える。
   label: (2)
-  prompt_text: 答えを求めなさい。
+  prompt_text: 答えなさい。
   solution_steps:
   - args: []
     detail: ''
     narration: 硬貨を区別して、表と裏の出方をすべて書き出す。
     op: enumerate_all_outcomes
-    result_display: 全部で32通り
+    result_display: 全部で16通り
     result_srepr: ''
   - args: []
     detail: ''
     narration: 書き出した出方のうち、条件にあてはまるものの数を数える。
     op: count_favorable_outcomes
-    result_display: あてはまるのは10通り
+    result_display: あてはまるのは4通り
     result_srepr: ''
   - args: []
     detail: ''
     narration: 条件にあてはまる出方の数を、すべての出方の数でわる。
     op: compute_probability
-    result_display: 5/16
-    result_srepr: Rational(5, 16)
+    result_display: 1/4
+    result_srepr: Rational(1, 4)
 visual_svg: null

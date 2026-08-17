@@ -26,73 +26,73 @@ meta:
 problem_ref: 363ffa80f3155db6
 problem_text: 'ある斜面で鉄の球を転がす実験をした。
 
-  転がり始めてから x 秒間に鉄の球が進む距離を y m とすると、y = 3x² の関係が成り立つという。
+  転がり始めてから x 秒間に鉄の球が進む距離を y m とすると、y = 2x² の関係が成り立つという。
 
-  (1) 6秒間に進む距離を求めよ。
+  (1) 5秒間に進む距離を求めよ。
 
-  (2) 進んだ距離が147mになるのは、転がり始めてから何秒後か求めよ。'
+  (2) 進んだ距離が32mになるのは、転がり始めてから何秒後か求めよ。'
 sub_questions:
 - answer:
-    display: 108m
+    display: 50m
     kind: symbolic
-    srepr: Integer(108)
+    srepr: Integer(50)
   cause_tags: []
   concept_tags:
   - quadratic_function.word_problem_given_equation
-  explanation: 'まず、式の x に、与えられた値をあてはめる。（3 × (6)²）
+  explanation: 'まず、式の x に、与えられた値をあてはめる。（2 × (5)²）
 
-    次に、2乗を計算してから比例定数をかけ、y の値を求める。（108）'
+    次に、2乗を計算してから比例定数をかけ、y の値を求める。（50）'
   hints:
   - 式の x に、与えられた値をあてはめる。
   label: (1)
-  prompt_text: 答えを求めなさい。
+  prompt_text: 答えなさい。
   solution_steps:
   - args: []
     detail: ''
     narration: 式の x に、与えられた値をあてはめる。
     op: substitute_x
-    result_display: 3 × (6)²
+    result_display: 2 × (5)²
     result_srepr: ''
   - args: []
     detail: ''
     narration: 2乗を計算してから比例定数をかけ、y の値を求める。
     op: compute_y
-    result_display: '108'
-    result_srepr: Integer(108)
+    result_display: '50'
+    result_srepr: Integer(50)
 - answer:
-    display: 7秒後
+    display: 4秒後
     kind: symbolic
-    srepr: Integer(7)
+    srepr: Integer(4)
   cause_tags: []
   concept_tags:
   - quadratic_function.word_problem_given_equation
-  explanation: 'まず、求める時刻を x とみて、距離を表す式に、与えられている距離をあてはめて方程式をつくる。（3x² = 147）
+  explanation: 'まず、求める時刻を x とみて、距離を表す式に、与えられている距離をあてはめて方程式をつくる。（2x² = 32）
 
-    次に、両辺を x の2乗にかかっている数でわり、平方根の考え方で x を求める。（x² = 49）
+    次に、両辺を x の2乗にかかっている数でわり、平方根の考え方で x を求める。（x² = 16）
 
-    最後に、時刻は正の数だから、求めた解のうち正の解を選ぶ。（7秒後）'
+    最後に、時刻は正の数だから、求めた解のうち正の解を選ぶ。（4秒後）'
   hints:
   - 求める時刻を x とみて、距離を表す式に、与えられている距離をあてはめて方程式をつくる。
   - 両辺を x の2乗にかかっている数でわり、平方根の考え方で x を求める。
   label: (2)
-  prompt_text: 答えを求めなさい。
+  prompt_text: 答えなさい。
   solution_steps:
   - args: []
     detail: ''
     narration: 求める時刻を x とみて、距離を表す式に、与えられている距離をあてはめて方程式をつくる。
     op: set_up_equation
-    result_display: 3x² = 147
+    result_display: 2x² = 32
     result_srepr: ''
   - args: []
     detail: ''
     narration: 両辺を x の2乗にかかっている数でわり、平方根の考え方で x を求める。
     op: solve_for_x
-    result_display: x² = 49
+    result_display: x² = 16
     result_srepr: ''
   - args: []
     detail: ''
     narration: 時刻は正の数だから、求めた解のうち正の解を選ぶ。
     op: select_positive_root
-    result_display: 7秒後
-    result_srepr: Integer(7)
+    result_display: 4秒後
+    result_srepr: Integer(4)
 visual_svg: null

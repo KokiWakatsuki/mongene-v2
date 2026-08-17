@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: word_problem_quadratic_rectangle_area
 problem_ref: b64ef35443ae5d40
-problem_text: '横が縦より6cm長い長方形の写真がある。その面積は55cm²である。
+problem_text: '横が縦より10cm長い長方形の写真がある。その面積は75cm²である。
 
   縦の長さを x cm とする。
 
@@ -33,19 +33,19 @@ problem_text: '横が縦より6cm長い長方形の写真がある。その面�
   (2) 縦の長さを求めよ。'
 sub_questions:
 - answer:
-    display: x(x + 6) = 55
+    display: x(x + 10) = 75
     kind: symbolic
-    srepr: Equality(Mul(Symbol('x'), Add(Symbol('x'), Integer(6))), Integer(55))
+    srepr: Equality(Mul(Symbol('x'), Add(Symbol('x'), Integer(10))), Integer(75))
   cause_tags: []
   concept_tags:
   - quadratic.word_problem_rectangle_area
   explanation: 'まず、場面の中で、どちらの見方でも同じになる（等しくなっている）量に着目する。（長方形の面積）
 
-    次に、その量を x を使って両辺に表し、方程式をつくる。（x(x + 6) = 55）'
+    次に、その量を x を使って両辺に表し、方程式をつくる。（x(x + 10) = 75）'
   hints:
   - 場面の中で、どちらの見方でも同じになる（等しくなっている）量に着目する。
   label: (1)
-  prompt_text: 式に表しなさい。
+  prompt_text: 答えなさい。
   solution_steps:
   - args: []
     detail: ''
@@ -57,8 +57,8 @@ sub_questions:
     detail: ''
     narration: その量を x を使って両辺に表し、方程式をつくる。
     op: formulate_equation
-    result_display: x(x + 6) = 55
-    result_srepr: Equality(Mul(Symbol('x'), Add(Symbol('x'), Integer(6))), Integer(55))
+    result_display: x(x + 10) = 75
+    result_srepr: Equality(Mul(Symbol('x'), Add(Symbol('x'), Integer(10))), Integer(75))
 - answer:
     display: 5cm
     kind: symbolic
@@ -66,11 +66,11 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - quadratic.word_problem_rectangle_area
-  explanation: 'まず、かっこを展開し、右辺を左辺に移項して、=0 の形に整理する。（x² + 6x - 55 = 0）
+  explanation: 'まず、かっこを展開し、右辺を左辺に移項して、=0 の形に整理する。（x² + 10x - 75 = 0）
 
-    次に、左辺を因数分解する。（(x - 5)(x + 11) = 0）
+    次に、左辺を因数分解する。（(x - 5)(x + 15) = 0）
 
-    次に、積が 0 になるのは各因数が 0 のときだから、それぞれを 0 とおいて x を求める。（x - 5 = 0、x + 11 = 0）
+    次に、積が 0 になるのは各因数が 0 のときだから、それぞれを 0 とおいて x を求める。（x - 5 = 0、x + 15 = 0）
 
     最後に、求めるものは正の数だから、2つの解のうち条件に合う正の解を選ぶ。（5）'
   hints:
@@ -78,25 +78,25 @@ sub_questions:
   - 左辺を因数分解する。
   - 積が 0 になるのは各因数が 0 のときだから、それぞれを 0 とおいて x を求める。
   label: (2)
-  prompt_text: 答えを求めなさい。
+  prompt_text: 答えなさい。
   solution_steps:
   - args: []
     detail: ''
     narration: かっこを展開し、右辺を左辺に移項して、=0 の形に整理する。
     op: expand_and_rearrange
-    result_display: x² + 6x - 55 = 0
+    result_display: x² + 10x - 75 = 0
     result_srepr: ''
   - args: []
     detail: ''
     narration: 左辺を因数分解する。
     op: factor_left_side
-    result_display: (x - 5)(x + 11) = 0
+    result_display: (x - 5)(x + 15) = 0
     result_srepr: ''
   - args: []
     detail: ''
     narration: 積が 0 になるのは各因数が 0 のときだから、それぞれを 0 とおいて x を求める。
     op: apply_zero_product
-    result_display: x - 5 = 0、x + 11 = 0
+    result_display: x - 5 = 0、x + 15 = 0
     result_srepr: ''
   - args: []
     detail: ''

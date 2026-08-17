@@ -24,55 +24,55 @@ meta:
   seed: 1
   signature: word_problem_quadratic_moving_point_area
 problem_ref: 15bf6f1a94ce11c6
-problem_text: '1辺が20cmの正方形CDEFがある。点Wは頂点Dを出発し、辺DE、辺EFの上を毎秒5cmの速さでFまで動く。
+problem_text: '1辺が14cmの正方形CDEFがある。点Wは頂点Dを出発し、辺DE、辺EFの上を毎秒1cmの速さでFまで動く。
 
   出発してから x 秒後の三角形CDWの面積を y cm²とする。
 
-  (1) 0≦x≦4 のとき、y を x の式で表せ。
+  (1) 0≦x≦14 のとき、y を x の式で表せ。
 
-  (2) 4≦x≦8 のとき、y を x の式で表せ。'
+  (2) 14≦x≦28 のとき、y を x の式で表せ。'
 sub_questions:
 - answer:
-    display: y = 50x
+    display: y = 7x
     kind: symbolic
-    srepr: Mul(Integer(50), Symbol('x'))
+    srepr: Mul(Integer(7), Symbol('x'))
   cause_tags: []
   concept_tags:
   - quadratic_function.word_problem_moving_point_area
-  explanation: 'まず、点が最初の辺の上にある間は、速さと経過時間から、動いた道のりを x を使って表す。（進んだ道のり = 5x）
+  explanation: 'まず、点が最初の辺の上にある間は、速さと経過時間から、動いた道のりを x を使って表す。（進んだ道のり = x）
 
-    次に、三角形の底辺を正方形の1つの辺とみると、高さは動いた道のりに等しいから、面積を x の式で表す。（y = 50x）'
+    次に、三角形の底辺を正方形の1つの辺とみると、高さは動いた道のりに等しいから、面積を x の式で表す。（y = 7x）'
   hints:
   - 点が最初の辺の上にある間は、速さと経過時間から、動いた道のりを x を使って表す。
   label: (1)
-  prompt_text: 式に表しなさい。
+  prompt_text: 答えなさい。
   solution_steps:
   - args: []
     detail: ''
     narration: 点が最初の辺の上にある間は、速さと経過時間から、動いた道のりを x を使って表す。
     op: locate_point_p
-    result_display: 進んだ道のり = 5x
+    result_display: 進んだ道のり = x
     result_srepr: ''
   - args: []
     detail: ''
     narration: 三角形の底辺を正方形の1つの辺とみると、高さは動いた道のりに等しいから、面積を x の式で表す。
     op: express_area_on_first_side
-    result_display: y = 50x
-    result_srepr: Mul(Integer(50), Symbol('x'))
+    result_display: y = 7x
+    result_srepr: Mul(Integer(7), Symbol('x'))
 - answer:
-    display: y = 200
+    display: y = 98
     kind: symbolic
-    srepr: Integer(200)
+    srepr: Integer(98)
   cause_tags: []
   concept_tags:
   - quadratic_function.word_problem_moving_point_area
   explanation: 'まず、点が次の辺の上に移ったあと、三角形の底辺と高さがどうなるかを確かめる。（次の辺の上）
 
-    次に、この区間では高さが正方形の1つの辺の長さのまま変わらないので、面積は x によらず一定の値になる。（y = 200）'
+    次に、この区間では高さが正方形の1つの辺の長さのまま変わらないので、面積は x によらず一定の値になる。（y = 98）'
   hints:
   - 点が次の辺の上に移ったあと、三角形の底辺と高さがどうなるかを確かめる。
   label: (2)
-  prompt_text: 式に表しなさい。
+  prompt_text: 答えなさい。
   solution_steps:
   - args: []
     detail: ''
@@ -84,6 +84,6 @@ sub_questions:
     detail: ''
     narration: この区間では高さが正方形の1つの辺の長さのまま変わらないので、面積は x によらず一定の値になる。
     op: express_constant_area
-    result_display: y = 200
-    result_srepr: Integer(200)
+    result_display: y = 98
+    result_srepr: Integer(98)
 visual_svg: null

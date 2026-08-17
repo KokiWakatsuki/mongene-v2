@@ -24,26 +24,26 @@ meta:
   seed: 1
   signature: word_problem_max_area_and_times
 problem_ref: 8941808618de029a
-problem_text: '1辺が16cmの正方形KLMNの周上を、点VがKを出発してK→L→M→Nの順に毎秒4cmの速さでNまで動く。点VがKを出発してからx秒後の三角形KVNの面積をy cm²とする。
+problem_text: '1辺が36cmの正方形KLMNの周上を、点VがKを出発してK→L→M→Nの順に毎秒1cmの速さでNまで動く。点VがKを出発してからx秒後の三角形KVNの面積をy cm²とする。
 
-  面積が最大になるのはxがどの範囲にあるときかとそのときの面積、および面積が96cm²になるときの x の値をすべて求めよ。'
+  面積が最大になるのはxがどの範囲にあるときかとそのときの面積、および面積が342cm²になるときの x の値をすべて求めよ。'
 sub_questions:
 - answer:
-    display: 面積が最大になるのは x が 4 から 8 までのときで、そのときの面積は 128cm²。指定された面積になるのは 3秒後と9秒後
+    display: 面積が最大になるのは x が 36 から 72 までのときで、そのときの面積は 648cm²。指定された面積になるのは 19秒後と89秒後
     kind: symbolic
-    srepr: Tuple(Integer(128), Integer(4), Integer(8), Integer(3), Integer(9))
+    srepr: Tuple(Integer(648), Integer(36), Integer(72), Integer(19), Integer(89))
   cause_tags: []
   concept_tags:
   - proportion.word_problem_max_area_and_times
-  explanation: 'まず、動く点がどの辺の上にあるかで時間を区間に分け、面積が増える区間・変わらない区間・減る区間を見つける。（0〜4秒、4〜8秒、8〜12秒）
+  explanation: 'まず、動く点がどの辺の上にあるかで時間を区間に分け、面積が増える区間・変わらない区間・減る区間を見つける。（0〜36秒、36〜72秒、72〜108秒）
 
-    次に、面積が変わらない区間で最大になるので、その面積の値と、区間の始まりと終わりの時刻を求める。（128cm²）
+    次に、面積が変わらない区間で最大になるので、その面積の値と、区間の始まりと終わりの時刻を求める。（648cm²）
 
-    次に、増えていく区間の式を方程式とみて、指定された面積になる時刻を求める。（3秒後）
+    次に、増えていく区間の式を方程式とみて、指定された面積になる時刻を求める。（19秒後）
 
-    次に、減っていく区間の式を方程式とみて、指定された面積になる時刻を求める。（9秒後）
+    次に、減っていく区間の式を方程式とみて、指定された面積になる時刻を求める。（89秒後）
 
-    最後に、求めた時刻がそれぞれの区間の中にあることを確かめ、答えを並べる。（面積が最大になるのは x が 4 から 8 までのときで、そのときの面積は 128cm²。指定された面積になるのは 3秒後と9秒後）'
+    最後に、求めた時刻がそれぞれの区間の中にあることを確かめ、答えを並べる。（面積が最大になるのは x が 36 から 72 までのときで、そのときの面積は 648cm²。指定された面積になるのは 19秒後と89秒後）'
   hints:
   - 動く点がどの辺の上にあるかで時間を区間に分け、面積が増える区間・変わらない区間・減る区間を見つける。
   - 面積が変わらない区間で最大になるので、その面積の値と、区間の始まりと終わりの時刻を求める。
@@ -56,30 +56,30 @@ sub_questions:
     detail: ''
     narration: 動く点がどの辺の上にあるかで時間を区間に分け、面積が増える区間・変わらない区間・減る区間を見つける。
     op: identify_intervals
-    result_display: 0〜4秒、4〜8秒、8〜12秒
+    result_display: 0〜36秒、36〜72秒、72〜108秒
     result_srepr: ''
   - args: []
     detail: ''
     narration: 面積が変わらない区間で最大になるので、その面積の値と、区間の始まりと終わりの時刻を求める。
     op: find_maximum_area
-    result_display: 128cm²
+    result_display: 648cm²
     result_srepr: ''
   - args: []
     detail: ''
     narration: 増えていく区間の式を方程式とみて、指定された面積になる時刻を求める。
     op: solve_on_increasing_interval
-    result_display: 3秒後
+    result_display: 19秒後
     result_srepr: ''
   - args: []
     detail: ''
     narration: 減っていく区間の式を方程式とみて、指定された面積になる時刻を求める。
     op: solve_on_decreasing_interval
-    result_display: 9秒後
+    result_display: 89秒後
     result_srepr: ''
   - args: []
     detail: ''
     narration: 求めた時刻がそれぞれの区間の中にあることを確かめ、答えを並べる。
     op: collect_answers
-    result_display: 面積が最大になるのは x が 4 から 8 までのときで、そのときの面積は 128cm²。指定された面積になるのは 3秒後と9秒後
-    result_srepr: Tuple(Integer(128), Integer(4), Integer(8), Integer(3), Integer(9))
+    result_display: 面積が最大になるのは x が 36 から 72 までのときで、そのときの面積は 648cm²。指定された面積になるのは 19秒後と89秒後
+    result_srepr: Tuple(Integer(648), Integer(36), Integer(72), Integer(19), Integer(89))
 visual_svg: null

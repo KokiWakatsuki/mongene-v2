@@ -24,24 +24,24 @@ meta:
   seed: 1
   signature: word_problem_inverse_proportion_worker_days
 problem_ref: de6e89206bc66e9b
-problem_text: 'ある草むしりを3人ですると6日かかる。この草むしりをする人数x人と、かかる日数y日は反比例する。
+problem_text: 'ある草むしりを4人ですると9日かかる。この草むしりをする人数x人と、かかる日数y日は反比例する。
 
   この草むしりを2人でするとき、何日で終わるか。式を立てて求めよ。'
 sub_questions:
 - answer:
-    display: 9日
+    display: 18日
     kind: symbolic
-    srepr: Integer(9)
+    srepr: Integer(18)
   cause_tags: []
   concept_tags:
   - inverse_proportion.word_problem_worker_days
-  explanation: 'まず、反比例の式 y=a/x に、通る点の x, y の値をあてはめ、比例定数を求める式をつくる。（a = 3 × 6）
+  explanation: 'まず、反比例の式 y=a/x に、通る点の x, y の値をあてはめ、比例定数を求める式をつくる。（a = 4 × 9）
 
-    次に、比例定数は a = 18 なので、y = a/x にあてはめる。（y = 18/x）
+    次に、比例定数は a = 36 なので、y = a/x にあてはめる。（y = 36/x）
 
-    次に、比例定数と x の値を、反比例の式 y=a/x の x にあてはめる。（y = 18 / 2）
+    次に、比例定数と x の値を、反比例の式 y=a/x の x にあてはめる。（y = 36 / 2）
 
-    最後に、わり算を計算して y の値を求める。（y = 9）'
+    最後に、わり算を計算して y の値を求める。（y = 18）'
   hints:
   - 反比例の式 y=a/x に、通る点の x, y の値をあてはめ、比例定数を求める式をつくる。
   - 求めた比例定数を使って、反比例の式を組み立てる。
@@ -50,33 +50,33 @@ sub_questions:
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args:
-    - '3'
-    - '6'
+    - '4'
+    - '9'
     detail: ''
     narration: 反比例の式 y=a/x に、通る点の x, y の値をあてはめ、比例定数を求める式をつくる。
     op: substitute_point
-    result_display: a = 3 × 6
-    result_srepr: Integer(18)
+    result_display: a = 4 × 9
+    result_srepr: Integer(36)
   - args:
-    - '18'
-    detail: 比例定数は a = 18 なので、y = a/x にあてはめる。
+    - '36'
+    detail: 比例定数は a = 36 なので、y = a/x にあてはめる。
     narration: 求めた比例定数を使って、反比例の式を組み立てる。
     op: form_expression
-    result_display: y = 18/x
-    result_srepr: Mul(Integer(18), Pow(Symbol('x'), Integer(-1)))
+    result_display: y = 36/x
+    result_srepr: Mul(Integer(36), Pow(Symbol('x'), Integer(-1)))
   - args:
-    - '18'
+    - '36'
     - '2'
     detail: ''
     narration: 比例定数と x の値を、反比例の式 y=a/x の x にあてはめる。
     op: substitute_x
-    result_display: y = 18 / 2
-    result_srepr: Integer(9)
+    result_display: y = 36 / 2
+    result_srepr: Integer(18)
   - args:
-    - y = 18 / 2
+    - y = 36 / 2
     detail: ''
     narration: わり算を計算して y の値を求める。
     op: evaluate
-    result_display: y = 9
-    result_srepr: Integer(9)
+    result_display: y = 18
+    result_srepr: Integer(18)
 visual_svg: null

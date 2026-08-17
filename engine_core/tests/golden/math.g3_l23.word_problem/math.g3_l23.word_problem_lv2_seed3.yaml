@@ -46,7 +46,7 @@ sub_questions:
   - 正方形の面積は1辺の長さを2乗した値だから、1辺の長さは面積の正の平方根で表せる。
   - 根号の中を素因数分解し、平方の因数を見つける。
   label: (1)
-  prompt_text: 答えを求めなさい。
+  prompt_text: 答えなさい。
   solution_steps:
   - args: []
     detail: ''
@@ -79,7 +79,7 @@ sub_questions:
   hints:
   - 根号のついた数を、与えられた近似の値におきかえてかけ算をする。
   label: (2)
-  prompt_text: 答えを求めなさい。
+  prompt_text: 答えなさい。
   solution_steps:
   - args: []
     detail: ''

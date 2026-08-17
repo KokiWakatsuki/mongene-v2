@@ -24,28 +24,28 @@ meta:
   seed: 2
   signature: word_problem_round_trip_distance
 problem_ref: 6265ee4100a26c30
-problem_text: '学校から体育館まで、行きは時速5km、帰りは同じ道を時速10kmの速さで進んだところ、進むのにかかった時間は合わせて12時間だった。
+problem_text: 'キャンプ場から山頂まで、行きは時速3km、帰りは同じ道を時速6kmの速さで進んだところ、進むのにかかった時間は合わせて3時間だった。
 
-  学校から体育館までの道のりを x km とする。
+  キャンプ場から山頂までの道のりを x km とする。
 
   (1) かかった時間の関係を、x を使った方程式で表せ。
 
-  (2) 学校から体育館までの道のりを求めよ。'
+  (2) キャンプ場から山頂までの道のりを求めよ。'
 sub_questions:
 - answer:
-    display: x/5 + x/10 = 12
+    display: x/3 + x/6 = 3
     kind: symbolic
-    srepr: Equality(Mul(Rational(3, 10), Symbol('x')), Integer(12))
+    srepr: Equality(Mul(Rational(1, 2), Symbol('x')), Integer(3))
   cause_tags: []
   concept_tags:
   - equation.word_problem_round_trip
   explanation: 'まず、場面の中で、どちらの見方でも同じになる（等しくなっている）量に着目する。（進むのにかかった時間の合計）
 
-    次に、その量を x を使って両辺に表し、方程式をつくる。（x/5 + x/10 = 12）'
+    次に、その量を x を使って両辺に表し、方程式をつくる。（x/3 + x/6 = 3）'
   hints:
   - 場面の中で、どちらの見方でも同じになる（等しくなっている）量に着目する。
   label: (1)
-  prompt_text: 式に表しなさい。
+  prompt_text: 答えなさい。
   solution_steps:
   - args: []
     detail: ''
@@ -57,33 +57,33 @@ sub_questions:
     detail: ''
     narration: その量を x を使って両辺に表し、方程式をつくる。
     op: formulate_equation
-    result_display: x/5 + x/10 = 12
-    result_srepr: Equality(Mul(Rational(3, 10), Symbol('x')), Integer(12))
+    result_display: x/3 + x/6 = 3
+    result_srepr: Equality(Mul(Rational(1, 2), Symbol('x')), Integer(3))
 - answer:
-    display: 40km
+    display: 6km
     kind: symbolic
-    srepr: Integer(40)
+    srepr: Integer(6)
   cause_tags: []
   concept_tags:
   - equation.word_problem_round_trip
-  explanation: 'まず、分母の最小公倍数 10 を両辺にかけて、分母をはらう。（3x = 120）
+  explanation: 'まず、分母の最小公倍数 6 を両辺にかけて、分母をはらう。（3x = 18）
 
-    次に、等式の性質を使い、両辺を x の係数 3 でわる。（x = 40）'
+    次に、等式の性質を使い、両辺を x の係数 3 でわる。（x = 6）'
   hints:
   - 分母の最小公倍数を両辺にかけて、分母をはらう。
   label: (2)
-  prompt_text: 答えを求めなさい。
+  prompt_text: 答えなさい。
   solution_steps:
   - args: []
-    detail: 分母の最小公倍数 10 を両辺にかけて、分母をはらう。
+    detail: 分母の最小公倍数 6 を両辺にかけて、分母をはらう。
     narration: 分母の最小公倍数を両辺にかけて、分母をはらう。
     op: clear_denominators
-    result_display: 3x = 120
-    result_srepr: Integer(40)
+    result_display: 3x = 18
+    result_srepr: Integer(6)
   - args: []
     detail: 等式の性質を使い、両辺を x の係数 3 でわる。
     narration: 等式の性質を使い、両辺を x の係数でわる。
     op: divide_both_sides
-    result_display: x = 40
-    result_srepr: Integer(40)
+    result_display: x = 6
+    result_srepr: Integer(6)
 visual_svg: null

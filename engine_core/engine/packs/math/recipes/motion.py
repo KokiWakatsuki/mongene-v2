@@ -808,11 +808,18 @@ def word_problem_interval_exprs_and_graph_recipe(ctx: CellContext, rng: Rng) -> 
 def word_problem_max_area_and_times_recipe(ctx: CellContext, rng: Rng) -> MR:
     """面積が最大になるところと、指定の面積になる時刻をすべて求める（g1_l36.word_problem Lv4）。"""
     p = cast("dict[str, Any]", ctx.spec_level.params)
-    s, v, area, labels_txt, scenario = _three_interval_scene(p, rng, with_area=True)
-
-    sol = cast(Solution, REGISTRY.solver("math.max_area_and_times")(s, v, area))
-    assert isinstance(sol.answer, SymbolicAnswer)
-    peak, t_lo, t_hi, t_a, t_b = sympy.sympify(sol.answer.srepr)
+    # **答えの時刻が、与えた数（1辺・速さ・面積）と一致してはいけない。**
+    # 一致すると、問題を読まずに本文の数を書き写して当たってしまう。
+    # 1辺の範囲を広げたら「速さ 4cm/s、答え 4秒後」が出た（テストが捕まえた）。
+    for _ in range(300):
+        s, v, area, labels_txt, scenario = _three_interval_scene(p, rng, with_area=True)
+        sol = cast(Solution, REGISTRY.solver("math.max_area_and_times")(s, v, area))
+        assert isinstance(sol.answer, SymbolicAnswer)
+        peak, t_lo, t_hi, t_a, t_b = sympy.sympify(sol.answer.srepr)
+        if not {int(t_a), int(t_b)} & {int(s), int(v), int(area)}:
+            break
+    else:
+        raise ValueError("答えの時刻が与えた数と重ならない組を構成できず")
     assert t_lo < t_hi and 0 < t_a < t_lo and t_hi < t_b, "区間と解の位置関係が壊れている"
     assert area < peak
 

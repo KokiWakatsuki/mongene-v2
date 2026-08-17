@@ -26,12 +26,12 @@ meta:
 problem_ref: fa3336e5b9d204c6
 problem_text: '川ぞいの道を分速100mで歩く生徒がいる。歩いた時間と進んだ道のりは比例する。
 
-  この生徒が10分で歩く道のりは何kmか。式を立てて求めよ。'
+  この生徒が30分で歩く道のりは何kmか。式を立てて求めよ。'
 sub_questions:
 - answer:
-    display: 1km
+    display: 3km
     kind: symbolic
-    srepr: Integer(1)
+    srepr: Integer(3)
   cause_tags: []
   concept_tags:
   - direct_proportion.word_problem_unit_convert
@@ -39,11 +39,11 @@ sub_questions:
 
     次に、比例定数は a = 100 なので、y = ax にあてはめる。（y = 100x）
 
-    次に、比例定数と x の値を、比例の式 y=ax の x にあてはめる。（y = 100 × 10）
+    次に、比例定数と x の値を、比例の式 y=ax の x にあてはめる。（y = 100 × 30）
 
-    次に、かけ算を計算して y の値を求める。（y = 1000）
+    次に、かけ算を計算して y の値を求める。（y = 3000）
 
-    最後に、道のりの単位を m から km に直す。（1km）'
+    最後に、道のりの単位を m から km に直す。（3km）'
   hints:
   - 比例の式 y=ax に、通る点の x, y の値をあてはめ、比例定数を求める式をつくる。
   - 求めた比例定数を使って、比例の式を組み立てる。
@@ -69,23 +69,23 @@ sub_questions:
     result_srepr: Mul(Integer(100), Symbol('x'))
   - args:
     - '100'
-    - '10'
+    - '30'
     detail: ''
     narration: 比例定数と x の値を、比例の式 y=ax の x にあてはめる。
     op: substitute_x
-    result_display: y = 100 × 10
-    result_srepr: Integer(1000)
+    result_display: y = 100 × 30
+    result_srepr: Integer(3000)
   - args:
-    - y = 100 × 10
+    - y = 100 × 30
     detail: ''
     narration: かけ算を計算して y の値を求める。
     op: evaluate
-    result_display: y = 1000
-    result_srepr: Integer(1000)
+    result_display: y = 3000
+    result_srepr: Integer(3000)
   - args: []
     detail: ''
     narration: 道のりの単位を m から km に直す。
     op: convert_unit
-    result_display: 1km
-    result_srepr: Integer(1)
+    result_display: 3km
+    result_srepr: Integer(3)
 visual_svg: null

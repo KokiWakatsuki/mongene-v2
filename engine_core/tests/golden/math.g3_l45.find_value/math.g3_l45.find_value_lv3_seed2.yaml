@@ -24,20 +24,20 @@ meta:
   seed: 2
   signature: similar_triangle_trapezoid_area_ratio
 problem_ref: 90ba171f962d0d12
-problem_text: 三角形RSTで、辺RS, RT上に点U, VがありUV∥ST、RU:US=3:5である。三角形RUVの面積と、台形USTVの面積の比を求めよ。
+problem_text: 三角形RSTで、辺RS, RT上に点U, VがありUV∥ST、RU:US=9:13である。三角形RUVの面積と、台形USTVの面積の比を求めよ。
 sub_questions:
 - answer:
-    display: 三角形RUV:台形USTV = 9:55
+    display: 三角形RUV:台形USTV = 81:403
     kind: symbolic
-    srepr: Tuple(Integer(9), Integer(55))
+    srepr: Tuple(Integer(81), Integer(403))
   cause_tags: []
   concept_tags:
   - similarity.trapezoid_area_ratio
-  explanation: 'まず、RUとUSの比から、RUとRS全体の比になおす。（RU:RS = 3:8）
+  explanation: 'まず、RUとUSの比から、RUとRS全体の比になおす。（RU:RS = 9:22）
 
-    次に、三角形RUVと三角形RSTは相似であることから、面積比は相似比の二乗に等しいことを使って、三角形RUVと三角形RST全体の面積比を求める。（9:64）
+    次に、三角形RUVと三角形RSTは相似であることから、面積比は相似比の二乗に等しいことを使って、三角形RUVと三角形RST全体の面積比を求める。（81:484）
 
-    最後に、三角形RST全体の面積から三角形RUVの面積を除いた残りが台形の面積になることから、三角形RUVと台形の面積比を求める。（三角形RUV:台形USTV = 9:55）'
+    最後に、三角形RST全体の面積から三角形RUVの面積を除いた残りが台形の面積になることから、三角形RUVと台形の面積比を求める。（三角形RUV:台形USTV = 81:403）'
   hints:
   - RUとUSの比から、RUとRS全体の比になおす。
   - 三角形RUVと三角形RSTは相似であることから、面積比は相似比の二乗に等しいことを使って、三角形RUVと三角形RST全体の面積比を求める。
@@ -48,18 +48,18 @@ sub_questions:
     detail: ''
     narration: RUとUSの比から、RUとRS全体の比になおす。
     op: convert_partial_to_whole_ratio
-    result_display: RU:RS = 3:8
+    result_display: RU:RS = 9:22
     result_srepr: ''
   - args: []
     detail: ''
     narration: 三角形RUVと三角形RSTは相似であることから、面積比は相似比の二乗に等しいことを使って、三角形RUVと三角形RST全体の面積比を求める。
     op: square_similarity_ratio
-    result_display: 9:64
+    result_display: 81:484
     result_srepr: ''
   - args: []
     detail: ''
     narration: 三角形RST全体の面積から三角形RUVの面積を除いた残りが台形の面積になることから、三角形RUVと台形の面積比を求める。
     op: compute_trapezoid_remainder_ratio
-    result_display: 三角形RUV:台形USTV = 9:55
-    result_srepr: Tuple(Integer(9), Integer(55))
+    result_display: 三角形RUV:台形USTV = 81:403
+    result_srepr: Tuple(Integer(81), Integer(403))
 visual_svg: null

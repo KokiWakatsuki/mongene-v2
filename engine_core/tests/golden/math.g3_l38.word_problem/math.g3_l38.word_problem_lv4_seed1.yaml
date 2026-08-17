@@ -24,38 +24,38 @@ meta:
   seed: 1
   signature: word_problem_area_graph_and_times
 problem_ref: c7c8f5d17d3cd4c4
-problem_text: '1辺が10cmの正方形LMNPの周上を、点RがLを出発してL→M→N→Pの順に毎秒1cmの速さでPまで動く。点Rが動き始めてからx秒後の三角形LRPの面積をy cm²とする。
+problem_text: '1辺が26cmの正方形LMNPの周上を、点RがLを出発してL→M→N→Pの順に毎秒1cmの速さでPまで動く。点Rが動き始めてからx秒後の三角形LRPの面積をy cm²とする。
 
-  xとyの関係をグラフに表し、面積が40cm²になる時刻をすべて求めよ。'
+  xとyの関係をグラフに表し、面積が312cm²になる時刻をすべて求めよ。'
 sub_questions:
 - answer:
     features:
     - display: 折れ点 (0, 0)
       kind: breakpoint
       srepr: Tuple(Integer(0), Integer(0))
-    - display: 折れ点 (10, 50)
+    - display: 折れ点 (26, 338)
       kind: breakpoint
-      srepr: Tuple(Integer(10), Integer(50))
-    - display: 折れ点 (20, 50)
+      srepr: Tuple(Integer(26), Integer(338))
+    - display: 折れ点 (52, 338)
       kind: breakpoint
-      srepr: Tuple(Integer(20), Integer(50))
-    - display: 折れ点 (30, 0)
+      srepr: Tuple(Integer(52), Integer(338))
+    - display: 折れ点 (78, 0)
       kind: breakpoint
-      srepr: Tuple(Integer(30), Integer(0))
+      srepr: Tuple(Integer(78), Integer(0))
     kind: graph
     solution_svg_ref: ''
   cause_tags: []
   concept_tags:
   - quadratic_function.word_problem_area_graph_and_times
-  explanation: 'まず、動く点がどの辺の上にあるかで、時間を区間に分ける。（0〜10秒、10〜20秒、20〜30秒）
+  explanation: 'まず、動く点がどの辺の上にあるかで、時間を区間に分ける。（0〜26秒、26〜52秒、52〜78秒）
 
-    次に、はじめの区間では高さが時間に比例するので、面積を時間の1次式で表す。（y = 5x）
+    次に、はじめの区間では高さが時間に比例するので、面積を時間の1次式で表す。（y = 13x）
 
-    次に、次の区間では底辺も高さも変わらないので、面積が一定になることを確かめる。（y = 50）
+    次に、次の区間では底辺も高さも変わらないので、面積が一定になることを確かめる。（y = 338）
 
-    次に、最後の区間では高さが減っていくので、面積を時間の1次式で表す。（y = -5x + 150）
+    次に、最後の区間では高さが減っていくので、面積を時間の1次式で表す。（y = -13x + 1014）
 
-    次に、区間の境目と両端で面積を求め、その組を座標とみて点をとる。（(0, 0)、(10, 50)、(20, 50)、(30, 0)）
+    次に、区間の境目と両端で面積を求め、その組を座標とみて点をとる。（(0, 0)、(26, 338)、(52, 338)、(78, 0)）
 
     最後に、とった点を順に線分で結び、区間ごとに式が変わるグラフをかく。（区間の境目を折れ点とする折れ線）'
   hints:
@@ -71,54 +71,54 @@ sub_questions:
     detail: ''
     narration: 動く点がどの辺の上にあるかで、時間を区間に分ける。
     op: identify_intervals
-    result_display: 0〜10秒、10〜20秒、20〜30秒
+    result_display: 0〜26秒、26〜52秒、52〜78秒
     result_srepr: ''
   - args: []
     detail: ''
     narration: はじめの区間では高さが時間に比例するので、面積を時間の1次式で表す。
     op: express_area_on_increasing_interval
-    result_display: y = 5x
+    result_display: y = 13x
     result_srepr: ''
   - args: []
     detail: ''
     narration: 次の区間では底辺も高さも変わらないので、面積が一定になることを確かめる。
     op: express_area_on_constant_interval
-    result_display: y = 50
+    result_display: y = 338
     result_srepr: ''
   - args: []
     detail: ''
     narration: 最後の区間では高さが減っていくので、面積を時間の1次式で表す。
     op: express_area_on_decreasing_interval
-    result_display: y = -5x + 150
+    result_display: y = -13x + 1014
     result_srepr: ''
   - args: []
     detail: ''
     narration: 区間の境目と両端で面積を求め、その組を座標とみて点をとる。
     op: plot_breakpoints
-    result_display: (0, 0)、(10, 50)、(20, 50)、(30, 0)
+    result_display: (0, 0)、(26, 338)、(52, 338)、(78, 0)
     result_srepr: ''
   - args: []
     detail: ''
     narration: とった点を順に線分で結び、区間ごとに式が変わるグラフをかく。
     op: draw_polyline
     result_display: 区間の境目を折れ点とする折れ線
-    result_srepr: Tuple(Tuple(Integer(0), Integer(0)), Tuple(Integer(10), Integer(50)), Tuple(Integer(20), Integer(50)), Tuple(Integer(30), Integer(0)))
+    result_srepr: Tuple(Tuple(Integer(0), Integer(0)), Tuple(Integer(26), Integer(338)), Tuple(Integer(52), Integer(338)), Tuple(Integer(78), Integer(0)))
 - answer:
-    display: 8秒後、22秒後
+    display: 24秒後、54秒後
     kind: symbolic
-    srepr: Tuple(Integer(8), Integer(22))
+    srepr: Tuple(Integer(24), Integer(54))
   cause_tags: []
   concept_tags:
   - quadratic_function.word_problem_area_graph_and_times
-  explanation: 'まず、点Rがどの辺の上にあるかで時間を区間に分け、区間ごとに面積の式が変わることを確かめる。（0〜10秒、10〜20秒、20〜30秒）
+  explanation: 'まず、点Rがどの辺の上にあるかで時間を区間に分け、区間ごとに面積の式が変わることを確かめる。（0〜26秒、26〜52秒、52〜78秒）
 
-    次に、はじめの辺の上の面積の式は y = 5x なので、5x = 40 を解く。（8秒後）
+    次に、はじめの辺の上の面積の式は y = 13x なので、13x = 312 を解く。（24秒後）
 
-    次に、次の辺の上の面積はつねに 50 なので、40 にはならない。（面積は 50 のままなので解なし）
+    次に、次の辺の上の面積はつねに 338 なので、312 にはならない。（面積は 338 のままなので解なし）
 
-    次に、最後の辺の上の面積の式は y = -5x + 150 なので、-5x + 150 = 40 を解く。（22秒後）
+    次に、最後の辺の上の面積の式は y = -13x + 1014 なので、-13x + 1014 = 312 を解く。（54秒後）
 
-    最後に、求めた時刻がそれぞれの区間の中にあることを確かめ、答えをすべて並べる。（8秒後、22秒後）'
+    最後に、求めた時刻がそれぞれの区間の中にあることを確かめ、答えをすべて並べる。（24秒後、54秒後）'
   hints:
   - 点Rがどの辺の上にあるかで時間を区間に分け、区間ごとに面積の式が変わることを確かめる。
   - はじめの辺の上では高さが時間に比例するので、面積の式を方程式とみて解く。
@@ -131,30 +131,30 @@ sub_questions:
     detail: ''
     narration: 点Rがどの辺の上にあるかで時間を区間に分け、区間ごとに面積の式が変わることを確かめる。
     op: identify_intervals
-    result_display: 0〜10秒、10〜20秒、20〜30秒
+    result_display: 0〜26秒、26〜52秒、52〜78秒
     result_srepr: ''
   - args: []
-    detail: はじめの辺の上の面積の式は y = 5x なので、5x = 40 を解く。
+    detail: はじめの辺の上の面積の式は y = 13x なので、13x = 312 を解く。
     narration: はじめの辺の上では高さが時間に比例するので、面積の式を方程式とみて解く。
     op: solve_on_increasing_interval
-    result_display: 8秒後
+    result_display: 24秒後
     result_srepr: ''
   - args: []
-    detail: 次の辺の上の面積はつねに 50 なので、40 にはならない。
+    detail: 次の辺の上の面積はつねに 338 なので、312 にはならない。
     narration: 次の辺の上では底辺も高さも変わらず面積が一定なので、その値と比べて解があるかを調べる。
     op: check_constant_interval
-    result_display: 面積は 50 のままなので解なし
+    result_display: 面積は 338 のままなので解なし
     result_srepr: ''
   - args: []
-    detail: 最後の辺の上の面積の式は y = -5x + 150 なので、-5x + 150 = 40 を解く。
+    detail: 最後の辺の上の面積の式は y = -13x + 1014 なので、-13x + 1014 = 312 を解く。
     narration: 最後の辺の上では高さが減っていくので、その区間の式を方程式とみて解く。
     op: solve_on_decreasing_interval
-    result_display: 22秒後
+    result_display: 54秒後
     result_srepr: ''
   - args: []
     detail: ''
     narration: 求めた時刻がそれぞれの区間の中にあることを確かめ、答えをすべて並べる。
     op: collect_all_times
-    result_display: 8秒後、22秒後
-    result_srepr: Tuple(Integer(8), Integer(22))
+    result_display: 24秒後、54秒後
+    result_srepr: Tuple(Integer(24), Integer(54))
 visual_svg: null

@@ -43,7 +43,7 @@ sub_questions:
   hints:
   - どちらの向き（性質）を正の数で表すことにしたかを読み取る。
   label: (1)
-  prompt_text: 答えを求めなさい。
+  prompt_text: 答えなさい。
   solution_steps:
   - args: []
     detail: ''
@@ -70,7 +70,7 @@ sub_questions:
   hints:
   - どちらの向き（性質）を正の数で表すことにしたかを読み取る。
   label: (2)
-  prompt_text: 答えを求めなさい。
+  prompt_text: 答えなさい。
   solution_steps:
   - args: []
     detail: ''

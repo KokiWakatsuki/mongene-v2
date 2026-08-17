@@ -24,20 +24,20 @@ meta:
   seed: 3
   signature: word_problem_inequality_price_count
 problem_ref: cee5d42b72a3e9f1
-problem_text: '1個 x 円のパンを4個買ったときの代金が、1000円以下であった。
+problem_text: '1個 x 円のパンを7個買ったときの代金が、1700円以下であった。
 
   この関係を不等式で表せ。'
 sub_questions:
 - answer:
-    display: 4x ≦ 1000
+    display: 7x ≦ 1700
     kind: symbolic
-    srepr: LessThan(Mul(Integer(4), Symbol('x')), Integer(1000))
+    srepr: LessThan(Mul(Integer(7), Symbol('x')), Integer(1700))
   cause_tags: []
   concept_tags:
   - inequality.word_problem_simple
   explanation: 'まず、場面の中で、比べられている、または等しくなっている数量に着目する。（代金の合計）
 
-    次に、その数量を x を使った式で表し、等式または不等式をつくる。（4x ≦ 1000）'
+    次に、その数量を x を使った式で表し、等式または不等式をつくる。（7x ≦ 1700）'
   hints:
   - 場面の中で、比べられている、または等しくなっている数量に着目する。
   label: (1)
@@ -53,6 +53,6 @@ sub_questions:
     detail: ''
     narration: その数量を x を使った式で表し、等式または不等式をつくる。
     op: formulate_relation
-    result_display: 4x ≦ 1000
-    result_srepr: LessThan(Mul(Integer(4), Symbol('x')), Integer(1000))
+    result_display: 7x ≦ 1700
+    result_srepr: LessThan(Mul(Integer(7), Symbol('x')), Integer(1700))
 visual_svg: null

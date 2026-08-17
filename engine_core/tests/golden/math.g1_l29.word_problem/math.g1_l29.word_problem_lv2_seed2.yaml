@@ -45,7 +45,7 @@ sub_questions:
   hints:
   - 比例の式 y=ax に、通る点の x, y の値をあてはめ、比例定数を求める式をつくる。
   label: (1)
-  prompt_text: 式に表しなさい。
+  prompt_text: 答えなさい。
   solution_steps:
   - args:
     - '1'
@@ -75,7 +75,7 @@ sub_questions:
   hints:
   - 比例定数と x の値を、比例の式 y=ax の x にあてはめる。
   label: (2)
-  prompt_text: 答えを求めなさい。
+  prompt_text: 答えなさい。
   solution_steps:
   - args:
     - '7'

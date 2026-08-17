@@ -24,20 +24,20 @@ meta:
   seed: 1
   signature: word_problem_lottery_at_least_one
 problem_ref: f4c1acf93b574bef
-problem_text: '当たりくじ4本を含む11本のくじから、姉と妹がこの順に1本ずつ引く。引いたくじはもとにもどさないものとする。
+problem_text: '当たりくじ3本を含む15本のくじから、姉と妹がこの順に1本ずつ引く。引いたくじはもとにもどさないものとする。
 
   少なくとも一方が当たる確率を求めよ。'
 sub_questions:
 - answer:
-    display: 34/55
+    display: 13/35
     kind: symbolic
-    srepr: Rational(34, 55)
+    srepr: Rational(13, 35)
   cause_tags: []
   concept_tags:
   - probability.word_problem_lottery_at_least_one
-  explanation: 'まず、戻さずに2本引いたとき、2本とも外れる場合を数えて、その確率を求める。（21/55）
+  explanation: 'まず、戻さずに2本引いたとき、2本とも外れる場合を数えて、その確率を求める。（22/35）
 
-    次に、1から、2本とも外れる確率をひいて、少なくとも一方が当たる確率を求める。（34/55）'
+    次に、1から、2本とも外れる確率をひいて、少なくとも一方が当たる確率を求める。（13/35）'
   hints:
   - 戻さずに2本引いたとき、2本とも外れる場合を数えて、その確率を求める。
   label: (1)
@@ -47,12 +47,12 @@ sub_questions:
     detail: ''
     narration: 戻さずに2本引いたとき、2本とも外れる場合を数えて、その確率を求める。
     op: compute_both_lose_probability
-    result_display: 21/55
+    result_display: 22/35
     result_srepr: ''
   - args: []
     detail: ''
     narration: 1から、2本とも外れる確率をひいて、少なくとも一方が当たる確率を求める。
     op: subtract_from_one
-    result_display: 34/55
-    result_srepr: Rational(34, 55)
+    result_display: 13/35
+    result_srepr: Rational(13, 35)
 visual_svg: null

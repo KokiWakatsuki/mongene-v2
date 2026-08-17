@@ -24,7 +24,7 @@ meta:
   seed: 3
   signature: word_problem_quadratic_rectangle_area
 problem_ref: da7cc6cbb1f6c11c
-problem_text: '横が縦より1cm長い長方形の写真がある。その面積は20cm²である。
+problem_text: '横が縦より9cm長い長方形の写真がある。その面積は190cm²である。
 
   縦の長さを x cm とする。
 
@@ -33,19 +33,19 @@ problem_text: '横が縦より1cm長い長方形の写真がある。その面�
   (2) 縦の長さを求めよ。'
 sub_questions:
 - answer:
-    display: x(x + 1) = 20
+    display: x(x + 9) = 190
     kind: symbolic
-    srepr: Equality(Mul(Symbol('x'), Add(Symbol('x'), Integer(1))), Integer(20))
+    srepr: Equality(Mul(Symbol('x'), Add(Symbol('x'), Integer(9))), Integer(190))
   cause_tags: []
   concept_tags:
   - quadratic.word_problem_rectangle_area
   explanation: 'まず、場面の中で、どちらの見方でも同じになる（等しくなっている）量に着目する。（長方形の面積）
 
-    次に、その量を x を使って両辺に表し、方程式をつくる。（x(x + 1) = 20）'
+    次に、その量を x を使って両辺に表し、方程式をつくる。（x(x + 9) = 190）'
   hints:
   - 場面の中で、どちらの見方でも同じになる（等しくなっている）量に着目する。
   label: (1)
-  prompt_text: 式に表しなさい。
+  prompt_text: 答えなさい。
   solution_steps:
   - args: []
     detail: ''
@@ -57,51 +57,51 @@ sub_questions:
     detail: ''
     narration: その量を x を使って両辺に表し、方程式をつくる。
     op: formulate_equation
-    result_display: x(x + 1) = 20
-    result_srepr: Equality(Mul(Symbol('x'), Add(Symbol('x'), Integer(1))), Integer(20))
+    result_display: x(x + 9) = 190
+    result_srepr: Equality(Mul(Symbol('x'), Add(Symbol('x'), Integer(9))), Integer(190))
 - answer:
-    display: 4cm
+    display: 10cm
     kind: symbolic
-    srepr: Tuple(Integer(4))
+    srepr: Tuple(Integer(10))
   cause_tags: []
   concept_tags:
   - quadratic.word_problem_rectangle_area
-  explanation: 'まず、かっこを展開し、右辺を左辺に移項して、=0 の形に整理する。（x² + x - 20 = 0）
+  explanation: 'まず、かっこを展開し、右辺を左辺に移項して、=0 の形に整理する。（x² + 9x - 190 = 0）
 
-    次に、左辺を因数分解する。（(x - 4)(x + 5) = 0）
+    次に、左辺を因数分解する。（(x - 10)(x + 19) = 0）
 
-    次に、積が 0 になるのは各因数が 0 のときだから、それぞれを 0 とおいて x を求める。（x - 4 = 0、x + 5 = 0）
+    次に、積が 0 になるのは各因数が 0 のときだから、それぞれを 0 とおいて x を求める。（x - 10 = 0、x + 19 = 0）
 
-    最後に、求めるものは正の数だから、2つの解のうち条件に合う正の解を選ぶ。（4）'
+    最後に、求めるものは正の数だから、2つの解のうち条件に合う正の解を選ぶ。（10）'
   hints:
   - かっこを展開し、右辺を左辺に移項して、=0 の形に整理する。
   - 左辺を因数分解する。
   - 積が 0 になるのは各因数が 0 のときだから、それぞれを 0 とおいて x を求める。
   label: (2)
-  prompt_text: 答えを求めなさい。
+  prompt_text: 答えなさい。
   solution_steps:
   - args: []
     detail: ''
     narration: かっこを展開し、右辺を左辺に移項して、=0 の形に整理する。
     op: expand_and_rearrange
-    result_display: x² + x - 20 = 0
+    result_display: x² + 9x - 190 = 0
     result_srepr: ''
   - args: []
     detail: ''
     narration: 左辺を因数分解する。
     op: factor_left_side
-    result_display: (x - 4)(x + 5) = 0
+    result_display: (x - 10)(x + 19) = 0
     result_srepr: ''
   - args: []
     detail: ''
     narration: 積が 0 になるのは各因数が 0 のときだから、それぞれを 0 とおいて x を求める。
     op: apply_zero_product
-    result_display: x - 4 = 0、x + 5 = 0
+    result_display: x - 10 = 0、x + 19 = 0
     result_srepr: ''
   - args: []
     detail: ''
     narration: 求めるものは正の数だから、2つの解のうち条件に合う正の解を選ぶ。
     op: select_positive_root
-    result_display: '4'
-    result_srepr: Integer(4)
+    result_display: '10'
+    result_srepr: Integer(10)
 visual_svg: null

@@ -48,7 +48,7 @@ sub_questions:
   - 昨年の男子の人数を x 人、女子の人数を y 人とおく。
   - 昨年の人数の関係に着目して、1つめの式をつくる。
   label: (1)
-  prompt_text: 式に表しなさい。
+  prompt_text: 答えなさい。
   solution_steps:
   - args: []
     detail: ''
@@ -81,7 +81,7 @@ sub_questions:
   hints:
   - 係数をそろえて一方の文字を消去し、残った文字を求める。
   label: (2)
-  prompt_text: 答えを求めなさい。
+  prompt_text: 答えなさい。
   solution_steps:
   - args:
     - Eq(x + y, 200)

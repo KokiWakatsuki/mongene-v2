@@ -45,7 +45,7 @@ sub_questions:
   hints:
   - 場面の中で、どちらの見方でも同じになる（等しくなっている）量に着目する。
   label: (1)
-  prompt_text: 式に表しなさい。
+  prompt_text: 答えなさい。
   solution_steps:
   - args: []
     detail: ''
@@ -72,7 +72,7 @@ sub_questions:
   hints:
   - 比例式の性質を使い、外項の積と内項の積が等しい式をつくる。
   label: (2)
-  prompt_text: 答えを求めなさい。
+  prompt_text: 答えなさい。
   solution_steps:
   - args: []
     detail: ''
