@@ -45,7 +45,7 @@ sub_questions:
   hints:
   - 表の対応するxとyについて、商y/xをそれぞれ計算する。
   label: (1)
-  prompt_text: 正しいものを選びなさい。
+  prompt_text: 答えなさい。
   solution_steps:
   - args: []
     detail: ''

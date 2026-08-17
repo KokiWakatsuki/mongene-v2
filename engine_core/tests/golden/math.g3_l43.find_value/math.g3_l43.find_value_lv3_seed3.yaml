@@ -33,7 +33,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - parallel_segment.judge_then_length
-  explanation: 'まず、PS:SQとPT:TRを、それぞれ簡単な比にすると 9:5 と 9:5 で、等しい。（9:5 と 18:10）
+  explanation: 'まず、PS:SQとPT:TRを、それぞれ簡単な比にすると 9:5 と 9:5 で、等しい。（9:5 と 9:5）
 
     次に、平行線と線分の比の定理の逆から、STとQRが平行であるかどうかを判別する。（平行である）
 
@@ -54,7 +54,7 @@ sub_questions:
     detail: PS:SQとPT:TRを、それぞれ簡単な比にすると 9:5 と 9:5 で、等しい。
     narration: PS:SQとPT:TRの比が等しいかどうかを比べる。
     op: compare_division_ratios
-    result_display: 9:5 と 18:10
+    result_display: 9:5 と 9:5
     result_srepr: ''
   - args: []
     detail: ''

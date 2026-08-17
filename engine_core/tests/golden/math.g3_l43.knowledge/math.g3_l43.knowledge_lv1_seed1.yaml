@@ -42,7 +42,13 @@ sub_questions:
   hints:
   - 問題で問われている規則や約束が、何についてのものかを読み取る。
   label: (1)
-  prompt_text: 正しいものを選びなさい。
+  prompt_text: '次の中から正しいものを選びなさい。
+
+    ・LPとGCが垂直に交わる
+
+    ・三角形BGCと三角形BLPが合同である
+
+    ・LPとGCが平行である'
   solution_steps:
   - args: []
     detail: ''

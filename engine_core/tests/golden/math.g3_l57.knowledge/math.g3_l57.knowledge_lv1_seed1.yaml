@@ -37,19 +37,19 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - survey_method_terms.term_recall
-  explanation: 'まず、説明されている式や数の部分がどれかを読み取る。（一部を調べて推定する）
+  explanation: 'まず、説明されている式や数の部分がどれかを読み取る。（一部から全体を推定する調査）
 
     次に、一部を取り出して調べ、全体を推定する調査を標本調査という。全数を調べるのが難しいときに使う。（標本調査）'
   hints:
   - 説明されている式や数の部分がどれかを読み取る。
   label: (1)
-  prompt_text: 正しいものを選びなさい。
+  prompt_text: 答えなさい。
   solution_steps:
   - args: []
     detail: ''
     narration: 説明されている式や数の部分がどれかを読み取る。
     op: identify_description
-    result_display: 一部を調べて推定する
+    result_display: 一部から全体を推定する調査
     result_srepr: sample_survey
   - args: []
     detail: 一部を取り出して調べ、全体を推定する調査を標本調査という。全数を調べるのが難しいときに使う。

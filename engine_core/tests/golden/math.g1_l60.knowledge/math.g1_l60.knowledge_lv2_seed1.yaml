@@ -42,7 +42,13 @@ sub_questions:
   hints:
   - 左から見て、最初の0でない数字が有効数字の始まりである（位取りの0は数えない）。
   label: (1)
-  prompt_text: 正しいものを選びなさい。
+  prompt_text: '次の中から正しいものを選びなさい。
+
+    ・一けた
+
+    ・三けた
+
+    ・二けた'
   solution_steps:
   - args: []
     detail: ''

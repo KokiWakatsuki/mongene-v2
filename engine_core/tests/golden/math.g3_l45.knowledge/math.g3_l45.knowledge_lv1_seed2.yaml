@@ -42,7 +42,13 @@ sub_questions:
   hints:
   - 問題で問われている規則や約束が、何についてのものかを読み取る。
   label: (1)
-  prompt_text: 正しいものを選びなさい。
+  prompt_text: '次の中から正しいものを選びなさい。
+
+    ・相似比と同じ比に等しい
+
+    ・相似比を二乗した比に等しい
+
+    ・相似比を二倍した比に等しい'
   solution_steps:
   - args: []
     detail: ''

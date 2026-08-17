@@ -35,13 +35,13 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - equation.solve_by_clear_denominators
-  explanation: 'まず、分母の最小公倍数 10 を両辺にかけて、分母をはらう。（7x - 23 = -30）
+  explanation: 'まず、分母の最小公倍数 20 を両辺にかけて、分母をはらう。（14x - 46 = -60）
 
-    次に、左辺の -23 を右辺に、符号を変えて移項する。（7x = -30 + 23）
+    次に、左辺の -46 を右辺に、符号を変えて移項する。（14x = -60 + 46）
 
-    次に、両辺の同類項をそれぞれまとめて、ax = b の形にする。（7x = -7）
+    次に、両辺の同類項をそれぞれまとめて、ax = b の形にする。（14x = -14）
 
-    最後に、等式の性質を使い、両辺を x の係数 7 でわる。（x = -1）'
+    最後に、等式の性質を使い、両辺を x の係数 14 でわる。（x = -1）'
   hints:
   - 分母の最小公倍数を両辺にかけて、分母をはらう。
   - 文字の項を左辺に、数の項を右辺に、符号を変えて移項する。
@@ -50,25 +50,25 @@ sub_questions:
   prompt_text: 解を求めなさい。
   solution_steps:
   - args: []
-    detail: 分母の最小公倍数 10 を両辺にかけて、分母をはらう。
+    detail: 分母の最小公倍数 20 を両辺にかけて、分母をはらう。
     narration: 分母の最小公倍数を両辺にかけて、分母をはらう。
     op: clear_denominators
-    result_display: 7x - 23 = -30
+    result_display: 14x - 46 = -60
     result_srepr: Integer(-1)
   - args: []
-    detail: 左辺の -23 を右辺に、符号を変えて移項する。
+    detail: 左辺の -46 を右辺に、符号を変えて移項する。
     narration: 文字の項を左辺に、数の項を右辺に、符号を変えて移項する。
     op: transpose_terms
-    result_display: 7x = -30 + 23
+    result_display: 14x = -60 + 46
     result_srepr: Integer(-1)
   - args: []
     detail: ''
     narration: 両辺の同類項をそれぞれまとめて、ax = b の形にする。
     op: combine_like_terms
-    result_display: 7x = -7
+    result_display: 14x = -14
     result_srepr: Integer(-1)
   - args: []
-    detail: 等式の性質を使い、両辺を x の係数 7 でわる。
+    detail: 等式の性質を使い、両辺を x の係数 14 でわる。
     narration: 等式の性質を使い、両辺を x の係数でわる。
     op: divide_both_sides
     result_display: x = -1

@@ -35,22 +35,22 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - construction_property.angle_bisector
-  explanation: 'まず、角の二等分線上の点から、角をつくる2辺までの距離を見比べる。
+  explanation: 'まず、角の二等分線上の点から、角をつくる2辺までの距離を見比べる。（2辺までの距離）
 
-    次に、その距離どうしの関係を判別する。（等しい）'
+    次に、角の二等分線上の点は、その角をつくる2辺から等しい距離にある（角の二等分線の性質）。距離ははかる相手の辺に垂線を下ろした長さで見る。（等しい）'
   hints:
   - 角の二等分線上の点から、角をつくる2辺までの距離を見比べる。
   label: (1)
-  prompt_text: 正しいものを選びなさい。
+  prompt_text: 答えなさい。
   solution_steps:
   - args: []
     detail: ''
     narration: 角の二等分線上の点から、角をつくる2辺までの距離を見比べる。
     op: identify_construction_property
-    result_display: ''
+    result_display: 2辺までの距離
     result_srepr: angle_bisector
   - args: []
-    detail: ''
+    detail: 角の二等分線上の点は、その角をつくる2辺から等しい距離にある（角の二等分線の性質）。距離ははかる相手の辺に垂線を下ろした長さで見る。
     narration: その距離どうしの関係を判別する。
     op: judge_construction_property
     result_display: 等しい

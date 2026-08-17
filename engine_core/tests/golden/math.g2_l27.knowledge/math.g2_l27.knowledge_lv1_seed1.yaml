@@ -36,9 +36,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - linear_function.system_solution_is_intersection
-  explanation: 'まず、連立方程式の解が、2つの式のグラフのどこにあたるかを思い出す。（連立の解とグラフの関係を思い出す）
+  explanation: 'まず、連立方程式の解が、2つの式のグラフのどこにあたるかを思い出す。（どちらの式も成り立たせる値の組）
 
-    次に、連立方程式の解は、2つの直線の交点の座標である。（2つの直線の交点）'
+    次に、それぞれの式のグラフは、その式を成り立たせる点だけを集めた直線である。どちらの式も成り立たせる点は、両方の直線にのっている点だから、2つの直線が交わる点にあたる。（2つの直線の交点）'
   hints:
   - 連立方程式の解が、2つの式のグラフのどこにあたるかを思い出す。
   label: (1)
@@ -48,10 +48,10 @@ sub_questions:
     detail: ''
     narration: 連立方程式の解が、2つの式のグラフのどこにあたるかを思い出す。
     op: recall_property
-    result_display: 連立の解とグラフの関係を思い出す
+    result_display: どちらの式も成り立たせる値の組
     result_srepr: solution_is_intersection
   - args: []
-    detail: ''
+    detail: それぞれの式のグラフは、その式を成り立たせる点だけを集めた直線である。どちらの式も成り立たせる点は、両方の直線にのっている点だから、2つの直線が交わる点にあたる。
     narration: 連立方程式の解は、2つの直線の交点の座標である。
     op: select_correct
     result_display: 2つの直線の交点

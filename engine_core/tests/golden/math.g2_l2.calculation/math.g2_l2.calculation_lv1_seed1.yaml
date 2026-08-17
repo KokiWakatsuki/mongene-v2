@@ -35,7 +35,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - polynomial.combine_like_terms_basic
-  explanation: 'まず、-7x、-9x は x の項なので、同類項としてまとめる。（(-7x - 9x)）
+  explanation: 'まず、-7x、-9x は x の項なので、同類項としてまとめる。（-7x - 9x）
 
     次に、まとめた同類項の係数を計算し、式を簡単にする。（-16x）'
   hints:
@@ -47,7 +47,7 @@ sub_questions:
     detail: -7x、-9x は x の項なので、同類項としてまとめる。
     narration: 文字の部分が同じ項（同類項）どうしをまとめる。
     op: group_like_terms
-    result_display: (-7x - 9x)
+    result_display: -7x - 9x
     result_srepr: Mul(Integer(-1), Integer(16), Symbol('x'))
   - args: []
     detail: ''

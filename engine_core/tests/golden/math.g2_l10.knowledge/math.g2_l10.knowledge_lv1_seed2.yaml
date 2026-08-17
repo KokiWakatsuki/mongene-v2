@@ -36,22 +36,22 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - polynomial.system_term_recall
-  explanation: 'まず、説明されている方程式や値の組がどれかを読み取る。
+  explanation: 'まず、説明されている方程式や値の組がどれかを読み取る。（文字が2つある1次方程式）
 
-    次に、その対象を表す用語の名前を思い出す。（2元1次方程式）'
+    次に、x と y のように文字が2つあり、どちらも1次である方程式を2元1次方程式という。解は1組に決まらず、いくつもある。（2元1次方程式）'
   hints:
   - 説明されている方程式や値の組がどれかを読み取る。
   label: (1)
-  prompt_text: 正しいものを選びなさい。
+  prompt_text: 答えなさい。
   solution_steps:
   - args: []
     detail: ''
     narration: 説明されている方程式や値の組がどれかを読み取る。
     op: identify_description
-    result_display: ''
+    result_display: 文字が2つある1次方程式
     result_srepr: two_var_eq
   - args: []
-    detail: ''
+    detail: x と y のように文字が2つあり、どちらも1次である方程式を2元1次方程式という。解は1組に決まらず、いくつもある。
     narration: その対象を表す用語の名前を思い出す。
     op: name_concept
     result_display: 2元1次方程式

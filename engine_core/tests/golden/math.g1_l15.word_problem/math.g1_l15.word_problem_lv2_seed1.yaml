@@ -39,7 +39,7 @@ sub_questions:
 
     次に、1kmは1000mなので、mの式を1000でわるとkmの式になる。（道のり(m) ÷ 1000 = 道のり(km)）
 
-    次に、÷ を、その式の逆数をかけるかけ算に直す。（(170) × (b) × (1/1000)）
+    次に、÷ を、その式の逆数をかけるかけ算に直す。（170 × b × (1/1000)）
 
     次に、係数どうしをかけ算する。（17/100）
 
@@ -68,7 +68,7 @@ sub_questions:
     detail: ''
     narration: ÷ を、その式の逆数をかけるかけ算に直す。
     op: convert_divisions_to_reciprocal
-    result_display: (170) × (b) × (1/1000)
+    result_display: 170 × b × (1/1000)
     result_srepr: Mul(Rational(17, 100), Symbol('b'))
   - args: []
     detail: ''

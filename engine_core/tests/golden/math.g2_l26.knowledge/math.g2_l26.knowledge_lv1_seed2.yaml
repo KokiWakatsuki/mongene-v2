@@ -36,9 +36,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - linear_function.equation_solution_set_is_line
-  explanation: 'まず、2元1次方程式の解を座標とする点をすべて集めると、どんな形になるかを思い出す。（解の集合の形を思い出す）
+  explanation: 'まず、2元1次方程式の解を座標とする点をすべて集めると、どんな形になるかを思い出す。（解は1組に決まらず、いくつもある）
 
-    次に、2元1次方程式の解の集合は直線になる。（直線）'
+    次に、2元1次方程式は、片方の文字にどんな値を入れても、もう片方の値がそれに応じて1つ決まる。その組を座標とみて点をとっていくと、点はまっすぐに並ぶので、集めた形は直線になる。（直線）'
   hints:
   - 2元1次方程式の解を座標とする点をすべて集めると、どんな形になるかを思い出す。
   label: (1)
@@ -48,10 +48,10 @@ sub_questions:
     detail: ''
     narration: 2元1次方程式の解を座標とする点をすべて集めると、どんな形になるかを思い出す。
     op: recall_property
-    result_display: 解の集合の形を思い出す
+    result_display: 解は1組に決まらず、いくつもある
     result_srepr: solution_set_is_line
   - args: []
-    detail: ''
+    detail: 2元1次方程式は、片方の文字にどんな値を入れても、もう片方の値がそれに応じて1つ決まる。その組を座標とみて点をとっていくと、点はまっすぐに並ぶので、集めた形は直線になる。
     narration: 2元1次方程式の解の集合は直線になる。
     op: select_correct
     result_display: 直線

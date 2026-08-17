@@ -30,7 +30,7 @@ problem_ref: 5bf1fd686bb4ccc5
 problem_text: 点 (-4, -5) を通り、直線 y = 1/2x + 2 に平行な直線の式を求めよ。
 sub_questions:
 - answer:
-    display: y = 1/2x - 3
+    display: y = (1/2)x - 3
     kind: symbolic
     srepr: Add(Mul(Rational(1, 2), Symbol('x')), Integer(-3))
   cause_tags:
@@ -43,7 +43,7 @@ sub_questions:
 
     次に、傾きと通る1点を y = ax + b に代入し、切片を求める。（切片 b = -3）
 
-    最後に、傾きと切片から一次関数の式を組み立てる。（y = 1/2x - 3）'
+    最後に、傾きと切片から一次関数の式を組み立てる。（y = (1/2)x - 3）'
   hints:
   - 平行な直線は傾きが等しいので、与えられた直線の傾きをそのまま用いる。
   - 傾きと通る1点を y = ax + b に代入し、切片を求める。
@@ -71,6 +71,6 @@ sub_questions:
     detail: ''
     narration: 傾きと切片から一次関数の式を組み立てる。
     op: form_expression
-    result_display: y = 1/2x - 3
+    result_display: y = (1/2)x - 3
     result_srepr: Add(Mul(Rational(1, 2), Symbol('x')), Integer(-3))
 visual_svg: null

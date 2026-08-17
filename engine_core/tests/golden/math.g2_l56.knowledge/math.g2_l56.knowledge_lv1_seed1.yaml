@@ -40,11 +40,11 @@ sub_questions:
   - box_plot_terms.term_recall
   explanation: 'まず、説明されている式や数の部分がどれかを読み取る。（箱の右の辺）
 
-    次に、箱ひげ図の箱の右の辺は第3四分位数を表す。（第三四分位数）'
+    次に、箱ひげ図の箱の右の辺は第三四分位数を表す。（第三四分位数）'
   hints:
   - 説明されている式や数の部分がどれかを読み取る。
   label: (1)
-  prompt_text: 正しいものを選びなさい。
+  prompt_text: 答えなさい。
   solution_steps:
   - args: []
     detail: ''
@@ -53,7 +53,7 @@ sub_questions:
     result_display: 箱の右の辺
     result_srepr: box_right
   - args: []
-    detail: 箱ひげ図の箱の右の辺は第3四分位数を表す。
+    detail: 箱ひげ図の箱の右の辺は第三四分位数を表す。
     narration: その対象を表す用語の名前を思い出す。
     op: name_concept
     result_display: 第三四分位数

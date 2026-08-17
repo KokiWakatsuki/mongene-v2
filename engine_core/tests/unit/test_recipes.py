@@ -23,6 +23,7 @@ from engine.core.curriculum import load_curriculum
 from engine.core.registry import REGISTRY
 from engine.core.rng import derive_rng
 from engine.core.spec.loader import load_family_dir
+from engine.core.verify.quality_gates import _strip_counter_expressions
 from engine.packs.math.visuals.graph import (
     compute_grid_spec_from_params,
     tick_labels_from_params,
@@ -5316,7 +5317,8 @@ def test_judge_construction_property_perpendicular_bisector_construct():
     sq = mr.sub_questions[0]
     assert sq.asked == "choice"
     assert mr.params["topic"] == "perpendicular_bisector"
-    assert sq.answer.correct == "等しい"
+    # 本文が「その理由となる性質の名前とともに答えよ」と言うので、性質の名前が前に付く。
+    assert sq.answer.correct == "垂直二等分線の性質より等しい"
     assert len({mr.params["a"], mr.params["b"], mr.params["pt"]}) == 3
 
 
@@ -6480,7 +6482,11 @@ def test_judge_concyclic_from_angle_construct():
     assert mr.signature == "judge_concyclic_from_angle"
     sq = mr.sub_questions[0]
     assert sq.asked == "choice"
-    assert not any(ch.isdigit() for ch in sq.answer.correct)
+    # 答えに算用数字を出さない（鉄則①・G-Q5t の偽陽性よけ）。ただし本文が
+    # 「理由とともに答えよ」と言うので、理由の中に「2つの角」のような**助数詞**が
+    # 入る。漏洩ゲート自身が助数詞を数えない（`_COUNTER_EXPR_RE`）ので、テストも
+    # 同じ規則で見る——別の規則で見ると、ゲートが通す形をここだけで落とす。
+    assert not any(ch.isdigit() for ch in _strip_counter_expressions(sq.answer.correct))
     assert sq.answer.correct not in sq.answer.distractors
 
 
@@ -9336,8 +9342,11 @@ def test_word_problem_box_plot_trend_property(seed):
 
     answer = mr.sub_questions[0].answer
     assert answer.kind == "choice"
-    assert answer.correct == expected
-    assert answer.distractors == [("いえない" if expected == "いえる" else "いえる")]
+    # 本文が「根拠とともに」と言うので、判断のあとに理由が続く。
+    assert answer.correct.startswith(expected)
+    assert [d.split("（")[0] for d in answer.distractors] == [
+        ("いえない" if expected == "いえる" else "いえる")
+    ]
     # 答えが params から直に読めないこと（構成時に狙った結論は params に置かない）。
     assert "supported" not in mr.params and "verdict" not in mr.params
 
@@ -9370,7 +9379,8 @@ def test_word_problem_box_plot_stability_property(seed):
 
     answer = mr.sub_questions[0].answer
     assert answer.kind == "choice"
-    assert answer.correct == expected
+    # 本文が「根拠とともに」と言うので、判断のあとに理由が続く。
+    assert answer.correct.startswith(expected)
     assert "valid" not in mr.params and "verdict" not in mr.params
 
     checker = REGISTRY.checker("math.word_problem_box_plot_stability.double_solve")
@@ -9383,7 +9393,9 @@ def test_word_problem_box_plot_answers_are_not_degenerate():
         seen = set()
         for seed in range(1, 61):
             _, mr = _box_plot_mr("math.g2_l57.word_problem", level, seed)
-            seen.add(mr.sub_questions[0].answer.correct)
+            # 本文が「根拠とともに」と言うので、判断のあとに理由が続く。
+            # 見るのは**どちらの結論に転んだか**なので、理由の前までで数える。
+            seen.add(mr.sub_questions[0].answer.correct.split("（")[0])
         assert seen == pool, f"Lv{level} の結論が偏っている: {seen}"
 
 
@@ -10327,7 +10339,8 @@ def test_g3_l57_judge_survey_method_property(seed):
     sq = mr.sub_questions[0]
     needs_sample = str(mr.params["needs_sample"]).lower() in ("true", "1")
     expected = "標本調査で行うのが適切" if needs_sample else "全数調査で行うのが適切"
-    assert sq.answer.correct == expected
+    # 本文が「理由とともに答えよ」と言うので、判断のあとに理由が続く。
+    assert sq.answer.correct.startswith(expected)
     assert sq.answer.correct not in sq.answer.distractors
     # 母集団の大きさは本文に出る数なので numbers に載っている（params 忠実性契約）。
     assert set(mr.params["numbers"]) == {"population"}
@@ -10353,8 +10366,11 @@ def test_choice_cells_have_exactly_one_correct(seed):
         assert sum(flags) == 1, (family, flags)
         assert len(labels) == 3
         sq = mr.sub_questions[0]
-        assert sq.answer.correct == labels[flags.index(1)]
-        assert sorted(sq.answer.distractors) == sorted(
+        # 本文が「理由とともに答えよ」と言うので、答えは判断のあとに理由を続ける
+        # （「…を使って選ぶ（母集団のどの対象も同じ機会で選ばれ、偏りが生じにくいから）」）。
+        # 見るのは**どのラベルを選んだか**なので、理由の前までで照合する。
+        assert sq.answer.correct.startswith(labels[flags.index(1)])
+        assert sorted(d.split("（")[0] for d in sq.answer.distractors) == sorted(
             l for i, l in enumerate(labels) if not flags[i]
         )
         # 選択肢はすべて本文に出ている。

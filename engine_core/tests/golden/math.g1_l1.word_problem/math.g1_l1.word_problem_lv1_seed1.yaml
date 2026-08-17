@@ -39,7 +39,7 @@ sub_questions:
   - number.word_problem_signed_reference
   explanation: 'まず、どちらの向き（性質）を正の数で表すことにしたかを読み取る。（値上がり）
 
-    次に、正の数で表す向きと反対の向きの量には、反対の符号をつけて表す。（+2300）'
+    次に、正の数で表すことにした向きと同じ向きの量なので、そのまま + をつけて表す。（+2300）'
   hints:
   - どちらの向き（性質）を正の数で表すことにしたかを読み取る。
   label: (1)
@@ -53,7 +53,7 @@ sub_questions:
     result_srepr: 値上がり
   - args: []
     detail: ''
-    narration: 正の数で表す向きと反対の向きの量には、反対の符号をつけて表す。
+    narration: 正の数で表すことにした向きと同じ向きの量なので、そのまま + をつけて表す。
     op: assign_opposite_sign
     result_display: '+2300'
     result_srepr: Integer(2300)
@@ -66,7 +66,7 @@ sub_questions:
   - number.word_problem_signed_reference
   explanation: 'まず、どちらの向き（性質）を正の数で表すことにしたかを読み取る。（値上がり）
 
-    次に、正の数で表す向きと反対の向きの量には、反対の符号をつけて表す。（-1300）'
+    次に、正の数で表すことにした向きと反対の向きの量なので、- をつけて表す。（-1300）'
   hints:
   - どちらの向き（性質）を正の数で表すことにしたかを読み取る。
   label: (2)
@@ -80,7 +80,7 @@ sub_questions:
     result_srepr: 値上がり
   - args: []
     detail: ''
-    narration: 正の数で表す向きと反対の向きの量には、反対の符号をつけて表す。
+    narration: 正の数で表すことにした向きと反対の向きの量なので、- をつけて表す。
     op: assign_opposite_sign
     result_display: '-1300'
     result_srepr: Integer(-1300)

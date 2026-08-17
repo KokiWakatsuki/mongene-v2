@@ -41,7 +41,7 @@ sub_questions:
   hints:
   - 反比例の式 y=a/x の比例定数 a の符号（正か負か）を確認する。
   label: (1)
-  prompt_text: 正しいものを選びなさい。
+  prompt_text: 答えなさい。
   solution_steps:
   - args: []
     detail: ''

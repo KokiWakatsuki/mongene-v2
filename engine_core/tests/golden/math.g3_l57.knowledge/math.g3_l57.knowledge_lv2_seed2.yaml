@@ -27,9 +27,9 @@ problem_ref: 2a06771842c11880
 problem_text: 学校で305人の生徒全員に身体測定を行いたい。この調査は全数調査と標本調査のどちらで行うのが適切か、理由とともに答えよ。
 sub_questions:
 - answer:
-    correct: 全数調査で行うのが適切
+    correct: 全数調査で行うのが適切（すべてを調べることができ、正確さが要るから）
     distractors:
-    - 標本調査で行うのが適切
+    - 標本調査で行うのが適切（すべてを調べることができないから）
     fact_id: survey_method.judge_appropriate
     kind: choice
   cause_tags: []
@@ -37,11 +37,11 @@ sub_questions:
   - survey_method.judge_appropriate
   explanation: 'まず、対象すべてを調べることが、手間や対象の性質から現実的に可能かどうかを調べる。（全部を調べられる）
 
-    次に、全部を調べるのが難しい・不要な場合は標本調査、そうでない場合は全数調査が適切と判断する。（全数調査で行うのが適切）'
+    次に、全部を調べるのが難しい・不要な場合は標本調査、そうでない場合は全数調査が適切と判断する。（全数調査で行うのが適切（すべてを調べることができ、正確さが要るから））'
   hints:
   - 対象すべてを調べることが、手間や対象の性質から現実的に可能かどうかを調べる。
   label: (1)
-  prompt_text: 正しいものを選びなさい。
+  prompt_text: 答えなさい。
   solution_steps:
   - args: []
     detail: ''
@@ -53,6 +53,6 @@ sub_questions:
     detail: ''
     narration: 全部を調べるのが難しい・不要な場合は標本調査、そうでない場合は全数調査が適切と判断する。
     op: judge_appropriate_survey_method
-    result_display: 全数調査で行うのが適切
-    result_srepr: 全数調査で行うのが適切
+    result_display: 全数調査で行うのが適切（すべてを調べることができ、正確さが要るから）
+    result_srepr: 全数調査で行うのが適切（すべてを調べることができ、正確さが要るから）
 visual_svg: null

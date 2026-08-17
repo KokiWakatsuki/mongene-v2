@@ -39,7 +39,7 @@ sub_questions:
   hints:
   - 点Pをはさむ両側の整数の目もりを数直線から読み取る。
   label: (1)
-  prompt_text: 点の座標を読み取りなさい。
+  prompt_text: 答えなさい。
   solution_steps:
   - args: []
     detail: ''

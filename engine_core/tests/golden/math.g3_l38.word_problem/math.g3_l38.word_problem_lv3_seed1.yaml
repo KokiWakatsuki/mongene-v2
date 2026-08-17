@@ -39,7 +39,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - quadratic_function.word_problem_moving_point_area
-  explanation: 'まず、点が最初の辺の上にある間は、速さと経過時間から、動いた道のりを x を使って表す。（動いた道のりを x で表す）
+  explanation: 'まず、点が最初の辺の上にある間は、速さと経過時間から、動いた道のりを x を使って表す。（進んだ道のり = 5x）
 
     次に、三角形の底辺を正方形の1つの辺とみると、高さは動いた道のりに等しいから、面積を x の式で表す。（y = 50x）'
   hints:
@@ -51,7 +51,7 @@ sub_questions:
     detail: ''
     narration: 点が最初の辺の上にある間は、速さと経過時間から、動いた道のりを x を使って表す。
     op: locate_point_p
-    result_display: 動いた道のりを x で表す
+    result_display: 進んだ道のり = 5x
     result_srepr: ''
   - args: []
     detail: ''

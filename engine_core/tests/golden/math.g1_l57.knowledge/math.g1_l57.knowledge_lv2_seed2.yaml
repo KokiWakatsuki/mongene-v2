@@ -27,10 +27,10 @@ problem_ref: 3b7d811ff27c371a
 problem_text: 60人の通学時間がどれも近い範囲に集まっているデータで、集団の「まん中あたり」を表す代表値としては平均値と中央値のどちらが適切か、理由とともに答えよ。
 sub_questions:
 - answer:
-    correct: 平均値
+    correct: 平均値（すべての値を使うから）
     distractors:
-    - 中央値
-    - 最頻値
+    - 中央値（極端な値に影響されにくいから）
+    - 最頻値（もっとも多く現れる値だから）
     fact_id: representative_value.judge_appropriate
     kind: choice
   cause_tags: []
@@ -38,11 +38,11 @@ sub_questions:
   - representative_value.judge_appropriate
   explanation: 'まず、分布の中に、極端に大きい値や小さい値が混じっているかどうかを調べる。（極端な値はない）
 
-    次に、極端な値に影響されにくい代表値ほど、集団の「まん中あたり」を適切に表す。（平均値）'
+    次に、極端な値に影響されにくい代表値ほど、集団の「まん中あたり」を適切に表す。（平均値（すべての値を使うから））'
   hints:
   - 分布の中に、極端に大きい値や小さい値が混じっているかどうかを調べる。
   label: (1)
-  prompt_text: 正しいものを選びなさい。
+  prompt_text: 答えなさい。
   solution_steps:
   - args: []
     detail: ''
@@ -54,6 +54,6 @@ sub_questions:
     detail: ''
     narration: 極端な値に影響されにくい代表値ほど、集団の「まん中あたり」を適切に表す。
     op: judge_appropriate_representative_value
-    result_display: 平均値
-    result_srepr: 平均値
+    result_display: 平均値（すべての値を使うから）
+    result_srepr: 平均値（すべての値を使うから）
 visual_svg: null

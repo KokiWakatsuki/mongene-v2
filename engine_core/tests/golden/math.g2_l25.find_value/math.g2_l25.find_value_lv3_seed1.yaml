@@ -31,7 +31,7 @@ problem_ref: aad7c0eac3a1f8c1
 problem_text: 2点 (-6, -9) と (2, 11) を通る直線の式を求めよ。
 sub_questions:
 - answer:
-    display: y = 5/2x + 6
+    display: y = (5/2)x + 6
     kind: symbolic
     srepr: Add(Mul(Rational(5, 2), Symbol('x')), Integer(6))
   cause_tags:
@@ -45,7 +45,7 @@ sub_questions:
 
     次に、連立方程式を解いて a, b を同時に求める。（a = 5/2, b = 6）
 
-    最後に、求めた a, b から一次関数の式を組み立てる。（y = 5/2x + 6）'
+    最後に、求めた a, b から一次関数の式を組み立てる。（y = (5/2)x + 6）'
   hints:
   - 2点をそれぞれ y = ax + b に代入し、a, b の連立方程式を立てる。
   - 連立方程式を解いて a, b を同時に求める。
@@ -74,6 +74,6 @@ sub_questions:
     detail: ''
     narration: 求めた a, b から一次関数の式を組み立てる。
     op: form_expression
-    result_display: y = 5/2x + 6
+    result_display: y = (5/2)x + 6
     result_srepr: Add(Mul(Rational(5, 2), Symbol('x')), Integer(6))
 visual_svg: null

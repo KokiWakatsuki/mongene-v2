@@ -43,7 +43,7 @@ sub_questions:
   hints:
   - 数の前についている符号（＋か－か）を読み取る。
   label: (1)
-  prompt_text: 正しいものを選びなさい。
+  prompt_text: 答えなさい。
   solution_steps:
   - args: []
     detail: ''

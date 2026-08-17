@@ -35,19 +35,19 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - transformation_invariant.parallel_translation
-  explanation: 'まず、図形を平行移動する前と後で、対応する部分を見比べる。
+  explanation: 'まず、図形を平行移動する前と後で、対応する部分を見比べる。（対応する辺の長さと図形の大きさ）
 
     次に、移動の性質として、その関係がつねに成り立つかどうかを判別する。（変わらない）'
   hints:
   - 図形を平行移動する前と後で、対応する部分を見比べる。
   label: (1)
-  prompt_text: 正しいものを選びなさい。
+  prompt_text: 答えなさい。
   solution_steps:
   - args: []
     detail: ''
     narration: 図形を平行移動する前と後で、対応する部分を見比べる。
     op: compare_before_after
-    result_display: ''
+    result_display: 対応する辺の長さと図形の大きさ
     result_srepr: parallel_translation
   - args: []
     detail: ''

@@ -27,9 +27,9 @@ problem_ref: 0d4ac5d71214069d
 problem_text: 2つの直角三角形RBMとDNJについて、1つの鋭角だけが等しいことが図から読み取れるとき、これらが合同といえるか、根拠とともに答えよ。
 sub_questions:
 - answer:
-    correct: 合同であるとはいえない
+    correct: 合同であるとはいえない（斜辺が等しいことが分かっていないから）
     distractors:
-    - 合同であるといえる
+    - 合同であるといえる（直角三角形の合同条件を満たすから）
     fact_id: right_triangle.judge_congruence
     kind: choice
   cause_tags: []
@@ -37,11 +37,11 @@ sub_questions:
   - right_triangle.judge_congruence
   explanation: 'まず、図から読み取れる条件が、直角三角形の合同条件（斜辺と1つの鋭角、または斜辺と他の1辺）を満たしているかを確認する。（合同条件にあてはまらない）
 
-    次に、直角がすでに等しいことと合わせて、直角三角形の合同条件を満たすかどうかを判別する。（合同であるとはいえない）'
+    次に、直角がすでに等しいことと合わせて、直角三角形の合同条件を満たすかどうかを判別する。（合同であるとはいえない（斜辺が等しいことが分かっていないから））'
   hints:
   - 図から読み取れる条件が、直角三角形の合同条件（斜辺と1つの鋭角、または斜辺と他の1辺）を満たしているかを確認する。
   label: (1)
-  prompt_text: 正しいものを選びなさい。
+  prompt_text: 答えなさい。
   solution_steps:
   - args: []
     detail: ''
@@ -53,6 +53,6 @@ sub_questions:
     detail: ''
     narration: 直角がすでに等しいことと合わせて、直角三角形の合同条件を満たすかどうかを判別する。
     op: judge_right_triangle_congruence
-    result_display: 合同であるとはいえない
-    result_srepr: 合同であるとはいえない
+    result_display: 合同であるとはいえない（斜辺が等しいことが分かっていないから）
+    result_srepr: 合同であるとはいえない（斜辺が等しいことが分かっていないから）
 visual_svg: null

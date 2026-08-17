@@ -33,23 +33,23 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - frequency_polygon.read_chart
-  explanation: 'まず、対象の階級の位置をグラフの横軸で見つけ、その高さを縦軸の目盛で読み取る。（対象の階級の度数は4）
+  explanation: 'まず、対象の階級の位置をグラフの横軸で見つけ、その高さを縦軸の目盛で読み取る。（20分以上30分未満の階級の度数は4）
 
-    次に、グラフでいちばん高くなっている階級を探し、その階級の範囲を横軸から読み取る。（20分以上30分未満の階級の度数は4人、度数が最も大きい階級は40分以上50分未満）'
+    次に、グラフでいちばん高くなっている階級を探してその範囲を横軸から読み取り、先に読んだ度数とあわせて答える。（20分以上30分未満の階級の度数は4人、度数が最も大きい階級は40分以上50分未満）'
   hints:
   - 対象の階級の位置をグラフの横軸で見つけ、その高さを縦軸の目盛で読み取る。
   label: (1)
-  prompt_text: 表から読み取りなさい。
+  prompt_text: 読み取って答えなさい。
   solution_steps:
   - args: []
     detail: ''
     narration: 対象の階級の位置をグラフの横軸で見つけ、その高さを縦軸の目盛で読み取る。
     op: read_class_frequency
-    result_display: 対象の階級の度数は4
+    result_display: 20分以上30分未満の階級の度数は4
     result_srepr: Integer(4)
   - args: []
     detail: ''
-    narration: グラフでいちばん高くなっている階級を探し、その階級の範囲を横軸から読み取る。
+    narration: グラフでいちばん高くなっている階級を探してその範囲を横軸から読み取り、先に読んだ度数とあわせて答える。
     op: find_modal_class
     result_display: 20分以上30分未満の階級の度数は4人、度数が最も大きい階級は40分以上50分未満
     result_srepr: Tuple(Integer(4), Integer(40))

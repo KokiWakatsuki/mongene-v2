@@ -37,22 +37,22 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - polynomial.term_recall
-  explanation: 'まず、説明されている式や数の部分がどれかを読み取る。
+  explanation: 'まず、説明されている式や数の部分がどれかを読み取る。（文字にかけてある数）
 
-    次に、その対象を表す用語の名前を思い出す。（係数）'
+    次に、単項式で文字にかけ合わされている数を係数という。-2m³ の係数は -2。（係数）'
   hints:
   - 説明されている式や数の部分がどれかを読み取る。
   label: (1)
-  prompt_text: 正しいものを選びなさい。
+  prompt_text: 答えなさい。
   solution_steps:
   - args: []
     detail: ''
     narration: 説明されている式や数の部分がどれかを読み取る。
     op: identify_description
-    result_display: ''
+    result_display: 文字にかけてある数
     result_srepr: coefficient
   - args: []
-    detail: ''
+    detail: 単項式で文字にかけ合わされている数を係数という。-2m³ の係数は -2。
     narration: その対象を表す用語の名前を思い出す。
     op: name_concept
     result_display: 係数

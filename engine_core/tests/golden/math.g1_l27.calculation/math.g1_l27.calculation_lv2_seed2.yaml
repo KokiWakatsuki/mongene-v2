@@ -35,22 +35,22 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - equation.solve_speed_fraction
-  explanation: 'まず、分母の最小公倍数 15 を両辺にかけて、分母をはらう。（4x = 120）
+  explanation: 'まず、分母の最小公倍数 30 を両辺にかけて、分母をはらう。（8x = 240）
 
-    次に、等式の性質を使い、両辺を x の係数 4 でわる。（x = 30）'
+    次に、等式の性質を使い、両辺を x の係数 8 でわる。（x = 30）'
   hints:
   - 分母の最小公倍数を両辺にかけて、分母をはらう。
   label: (1)
   prompt_text: 解を求めなさい。
   solution_steps:
   - args: []
-    detail: 分母の最小公倍数 15 を両辺にかけて、分母をはらう。
+    detail: 分母の最小公倍数 30 を両辺にかけて、分母をはらう。
     narration: 分母の最小公倍数を両辺にかけて、分母をはらう。
     op: clear_denominators
-    result_display: 4x = 120
+    result_display: 8x = 240
     result_srepr: Integer(30)
   - args: []
-    detail: 等式の性質を使い、両辺を x の係数 4 でわる。
+    detail: 等式の性質を使い、両辺を x の係数 8 でわる。
     narration: 等式の性質を使い、両辺を x の係数でわる。
     op: divide_both_sides
     result_display: x = 30

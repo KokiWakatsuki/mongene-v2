@@ -24,7 +24,7 @@ meta:
   seed: 3
   signature: similarity_proven_ratio_length
 problem_ref: 1b375dacfc2c7d0a
-problem_text: 三角形BCD∽三角形BEFであることが証明されている。BE=4cm, BC=9cm, EF=8cm のとき、辺CDの長さを求めよ。
+problem_text: 三角形BEF∽三角形BCDであることが証明されている。BE=4cm, BC=9cm, EF=8cm のとき、辺CDの長さを求めよ。
 sub_questions:
 - answer:
     display: '18'

@@ -35,20 +35,20 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - probability.word_problem_two_dice_product
-  explanation: 'まず、大小2個のさいころの目の組合せを、表などを使ってすべて数え上げる。（全部で36通り）
+  explanation: 'まず、2個のさいころの目の組合せを、表などを使ってすべて数え上げる。（全部で36通り）
 
     次に、そのうち、求める条件にあてはまる組合せの数を数える。（あてはまるのは2通り）
 
     最後に、条件にあてはまる組合せの数を、すべての組合せの数でわる。（1/18）'
   hints:
-  - 大小2個のさいころの目の組合せを、表などを使ってすべて数え上げる。
+  - 2個のさいころの目の組合せを、表などを使ってすべて数え上げる。
   - そのうち、求める条件にあてはまる組合せの数を数える。
   label: (1)
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
     detail: ''
-    narration: 大小2個のさいころの目の組合せを、表などを使ってすべて数え上げる。
+    narration: 2個のさいころの目の組合せを、表などを使ってすべて数え上げる。
     op: enumerate_all_pairs
     result_display: 全部で36通り
     result_srepr: ''

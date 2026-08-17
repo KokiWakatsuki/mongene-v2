@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: similarity_proven_ratio_length
 problem_ref: badcb5299091f852
-problem_text: 三角形VWX∽三角形VYZであることが証明されている。VY=2cm, VW=9cm, YZ=8cm のとき、辺WXの長さを求めよ。
+problem_text: 三角形VYZ∽三角形VWXであることが証明されている。VY=2cm, VW=9cm, YZ=8cm のとき、辺WXの長さを求めよ。
 sub_questions:
 - answer:
     display: '36'

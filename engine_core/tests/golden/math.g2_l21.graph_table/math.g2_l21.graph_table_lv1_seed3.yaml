@@ -39,7 +39,7 @@ sub_questions:
   hints:
   - グラフ上の格子点で、右へ進む量に対する上下の変化の割合を読み取り、傾きとする。
   label: (1)
-  prompt_text: 傾きと切片を読み取りなさい。
+  prompt_text: グラフから読み取って答えなさい。
   solution_steps:
   - args:
     - (-3, 7)
@@ -73,7 +73,7 @@ visual_svg: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width=
   x2="372.00" y2="157.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="135.50" x2="372.00" y2="135.50" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="114.00" x2="372.00" y2="114.00"
   stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="92.50" x2="372.00" y2="92.50" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="71.00" x2="372.00" y2="71.00" stroke="#bbbbbb" stroke-width="0.5"/><line
   x1="28.00" y1="49.50" x2="372.00" y2="49.50" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="28.00" x2="372.00" y2="28.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="221.50" x2="372.00"
-  y2="221.50" stroke="#000000" stroke-width="1.5"/><line x1="200.00" y1="28.00" x2="200.00" y2="372.00" stroke="#000000" stroke-width="1.5"/><line x1="28.00" y1="-144.00" x2="372.00" y2="544.00" stroke="#000000"
+  y2="221.50" stroke="#000000" stroke-width="1.5"/><line x1="200.00" y1="28.00" x2="200.00" y2="372.00" stroke="#000000" stroke-width="1.5"/><line x1="114.00" y1="28.00" x2="286.00" y2="372.00" stroke="#000000"
   stroke-width="2.5"/><text x="28.00" y="233.50" font-size="10" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">-8</text><text x="28.00" y="233.50" font-size="10"
   text-anchor="middle" fill="#000000">-8</text><text x="49.50" y="233.50" font-size="10" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">-7</text><text x="49.50"
   y="233.50" font-size="10" text-anchor="middle" fill="#000000">-7</text><text x="71.00" y="233.50" font-size="10" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">-6</text><text

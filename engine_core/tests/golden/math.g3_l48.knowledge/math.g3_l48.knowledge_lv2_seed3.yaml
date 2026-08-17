@@ -27,9 +27,9 @@ problem_ref: 0bd0d47e4aaec49f
 problem_text: 直線WXについて同じ側に点Y, Zがある。∠WYX=39°、∠WZX=27° のとき、4点W, X, Y, Zが同一円周上にあるといえるかどうかを、理由とともに答えよ。
 sub_questions:
 - answer:
-    correct: 同一円周上にあるとはいえない
+    correct: 同一円周上にあるとはいえない（同じ側にできる2つの角が等しくないから）
     distractors:
-    - 同一円周上にあるといえる
+    - 同一円周上にあるといえる（同じ側にできる2つの角が等しく、円周角の定理の逆にあてはまるから）
     fact_id: circle.judge_concyclic
     kind: choice
   cause_tags: []
@@ -37,11 +37,11 @@ sub_questions:
   - circle.judge_concyclic
   explanation: 'まず、直線WXの同じ側にある2点Y, Zでできる角が、等しいかどうかを確認する。（等しくない）
 
-    次に、円周角の定理の逆から、4点が同一円周上にあるといえるかどうかを判別する。（同一円周上にあるとはいえない）'
+    次に、円周角の定理の逆から、4点が同一円周上にあるといえるかどうかを判別する。（同一円周上にあるとはいえない（同じ側にできる2つの角が等しくないから））'
   hints:
   - 直線WXの同じ側にある2点Y, Zでできる角が、等しいかどうかを確認する。
   label: (1)
-  prompt_text: 正しいものを選びなさい。
+  prompt_text: 答えなさい。
   solution_steps:
   - args: []
     detail: ''
@@ -53,6 +53,6 @@ sub_questions:
     detail: ''
     narration: 円周角の定理の逆から、4点が同一円周上にあるといえるかどうかを判別する。
     op: judge_by_inscribed_angle_converse
-    result_display: 同一円周上にあるとはいえない
-    result_srepr: 同一円周上にあるとはいえない
+    result_display: 同一円周上にあるとはいえない（同じ側にできる2つの角が等しくないから）
+    result_srepr: 同一円周上にあるとはいえない（同じ側にできる2つの角が等しくないから）
 visual_svg: null

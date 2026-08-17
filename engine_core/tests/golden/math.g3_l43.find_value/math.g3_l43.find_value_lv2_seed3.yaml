@@ -33,7 +33,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - parallel_segment.judge_from_ratio
-  explanation: 'まず、LP:PMとLQ:QNを、それぞれ簡単な比にすると 1:14 と 1:14 で、等しい。（1:14 と 2:28）
+  explanation: 'まず、LP:PMとLQ:QNを、それぞれ簡単な比にすると 1:14 と 1:14 で、等しい。（1:14 と 1:14）
 
     次に、平行線と線分の比の定理の逆から、PQとMNが平行であるかどうかを判別する。（平行である）'
   hints:
@@ -45,7 +45,7 @@ sub_questions:
     detail: LP:PMとLQ:QNを、それぞれ簡単な比にすると 1:14 と 1:14 で、等しい。
     narration: LP:PMとLQ:QNの比が等しいかどうかを比べる。
     op: compare_division_ratios
-    result_display: 1:14 と 2:28
+    result_display: 1:14 と 1:14
     result_srepr: ''
   - args: []
     detail: ''

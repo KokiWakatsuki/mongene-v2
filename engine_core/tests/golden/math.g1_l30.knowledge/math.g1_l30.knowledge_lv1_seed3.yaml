@@ -40,11 +40,11 @@ sub_questions:
   - quadrant_terms.term_recall
   explanation: 'まず、説明されている式や数の部分がどれかを読み取る。（x も y も負の部分）
 
-    次に、x < 0、y < 0 の部分を第3象限という。原点の左下。（第三象限）'
+    次に、x < 0、y < 0 の部分を第三象限という。原点の左下。（第三象限）'
   hints:
   - 説明されている式や数の部分がどれかを読み取る。
   label: (1)
-  prompt_text: 正しいものを選びなさい。
+  prompt_text: 答えなさい。
   solution_steps:
   - args: []
     detail: ''
@@ -53,7 +53,7 @@ sub_questions:
     result_display: x も y も負の部分
     result_srepr: quadrant3
   - args: []
-    detail: x < 0、y < 0 の部分を第3象限という。原点の左下。
+    detail: x < 0、y < 0 の部分を第三象限という。原点の左下。
     narration: その対象を表す用語の名前を思い出す。
     op: name_concept
     result_display: 第三象限

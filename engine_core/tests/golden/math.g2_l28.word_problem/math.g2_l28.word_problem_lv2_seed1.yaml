@@ -33,7 +33,7 @@ problem_text: 'あるばねに40gのおもりをつるすと全体の長さが26
   (2) 20gのおもりをつるしたときのばねの長さを求めよ。'
 sub_questions:
 - answer:
-    display: y = 1/4x + 16
+    display: y = (1/4)x + 16
     kind: symbolic
     srepr: Add(Mul(Rational(1, 4), Symbol('x')), Integer(16))
   cause_tags: []
@@ -43,7 +43,7 @@ sub_questions:
 
     次に、傾きと通る1点を y = ax + b に代入し、切片を求める。（切片 b = 16）
 
-    最後に、傾きと切片から一次関数の式を組み立てる。（y = 1/4x + 16）'
+    最後に、傾きと切片から一次関数の式を組み立てる。（y = (1/4)x + 16）'
   hints:
   - 2点の y 座標の差を x 座標の差で割り、傾きを求める。
   - 傾きと通る1点を y = ax + b に代入し、切片を求める。
@@ -72,7 +72,7 @@ sub_questions:
     detail: ''
     narration: 傾きと切片から一次関数の式を組み立てる。
     op: form_expression
-    result_display: y = 1/4x + 16
+    result_display: y = (1/4)x + 16
     result_srepr: Add(Mul(Rational(1, 4), Symbol('x')), Integer(16))
 - answer:
     display: 21cm

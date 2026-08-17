@@ -41,7 +41,7 @@ sub_questions:
   hints:
   - 1つの円で中心角と弧の長さが比例するかどうかを見比べる。
   label: (1)
-  prompt_text: 正しいものを選びなさい。
+  prompt_text: 答えなさい。
   solution_steps:
   - args: []
     detail: ''

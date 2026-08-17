@@ -39,11 +39,11 @@ sub_questions:
   - quartile_terms.term_recall
   explanation: 'まず、説明されている式や数の部分がどれかを読み取る。（全体のまんなかの値）
 
-    次に、データ全体の中央値を第2四分位数という。中央値と同じもの。（第二四分位数）'
+    次に、データ全体の中央値を第二四分位数という。中央値と同じもの。（第二四分位数）'
   hints:
   - 説明されている式や数の部分がどれかを読み取る。
   label: (1)
-  prompt_text: 正しいものを選びなさい。
+  prompt_text: 答えなさい。
   solution_steps:
   - args: []
     detail: ''
@@ -52,7 +52,7 @@ sub_questions:
     result_display: 全体のまんなかの値
     result_srepr: q2
   - args: []
-    detail: データ全体の中央値を第2四分位数という。中央値と同じもの。
+    detail: データ全体の中央値を第二四分位数という。中央値と同じもの。
     narration: その対象を表す用語の名前を思い出す。
     op: name_concept
     result_display: 第二四分位数

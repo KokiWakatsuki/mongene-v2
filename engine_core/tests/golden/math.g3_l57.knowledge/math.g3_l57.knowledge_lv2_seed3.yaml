@@ -27,9 +27,9 @@ problem_ref: d7d05eeef5608e8a
 problem_text: ある地域の240世帯を対象に、テレビ番組の視聴率を調べたい。この調査は全数調査と標本調査のどちらで行うのが適切か、理由とともに答えよ。
 sub_questions:
 - answer:
-    correct: 標本調査で行うのが適切
+    correct: 標本調査で行うのが適切（すべてを調べることができないから）
     distractors:
-    - 全数調査で行うのが適切
+    - 全数調査で行うのが適切（すべてを調べることができ、正確さが要るから）
     fact_id: survey_method.judge_appropriate
     kind: choice
   cause_tags: []
@@ -37,11 +37,11 @@ sub_questions:
   - survey_method.judge_appropriate
   explanation: 'まず、対象すべてを調べることが、手間や対象の性質から現実的に可能かどうかを調べる。（全部を調べるのは難しい）
 
-    次に、全部を調べるのが難しい・不要な場合は標本調査、そうでない場合は全数調査が適切と判断する。（標本調査で行うのが適切）'
+    次に、全部を調べるのが難しい・不要な場合は標本調査、そうでない場合は全数調査が適切と判断する。（標本調査で行うのが適切（すべてを調べることができないから））'
   hints:
   - 対象すべてを調べることが、手間や対象の性質から現実的に可能かどうかを調べる。
   label: (1)
-  prompt_text: 正しいものを選びなさい。
+  prompt_text: 答えなさい。
   solution_steps:
   - args: []
     detail: ''
@@ -53,6 +53,6 @@ sub_questions:
     detail: ''
     narration: 全部を調べるのが難しい・不要な場合は標本調査、そうでない場合は全数調査が適切と判断する。
     op: judge_appropriate_survey_method
-    result_display: 標本調査で行うのが適切
-    result_srepr: 標本調査で行うのが適切
+    result_display: 標本調査で行うのが適切（すべてを調べることができないから）
+    result_srepr: 標本調査で行うのが適切（すべてを調べることができないから）
 visual_svg: null

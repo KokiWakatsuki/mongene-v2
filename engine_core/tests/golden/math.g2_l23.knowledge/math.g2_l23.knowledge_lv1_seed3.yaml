@@ -41,7 +41,7 @@ sub_questions:
   hints:
   - 変域の不等号に等号がついているか（≦・≧か、<・>か）に注目する。
   label: (1)
-  prompt_text: 正しいものを選びなさい。
+  prompt_text: 答えなさい。
   solution_steps:
   - args: []
     detail: ''

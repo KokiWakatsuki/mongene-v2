@@ -39,7 +39,7 @@ sub_questions:
   - number.word_problem_signed_reference
   explanation: 'まず、どちらの向き（性質）を正の数で表すことにしたかを読み取る。（得点）
 
-    次に、正の数で表す向きと反対の向きの量には、反対の符号をつけて表す。（+3）'
+    次に、正の数で表すことにした向きと同じ向きの量なので、そのまま + をつけて表す。（+3）'
   hints:
   - どちらの向き（性質）を正の数で表すことにしたかを読み取る。
   label: (1)
@@ -53,7 +53,7 @@ sub_questions:
     result_srepr: 得点
   - args: []
     detail: ''
-    narration: 正の数で表す向きと反対の向きの量には、反対の符号をつけて表す。
+    narration: 正の数で表すことにした向きと同じ向きの量なので、そのまま + をつけて表す。
     op: assign_opposite_sign
     result_display: '+3'
     result_srepr: Integer(3)
@@ -66,7 +66,7 @@ sub_questions:
   - number.word_problem_signed_reference
   explanation: 'まず、どちらの向き（性質）を正の数で表すことにしたかを読み取る。（得点）
 
-    次に、正の数で表す向きと反対の向きの量には、反対の符号をつけて表す。（-15）'
+    次に、正の数で表すことにした向きと反対の向きの量なので、- をつけて表す。（-15）'
   hints:
   - どちらの向き（性質）を正の数で表すことにしたかを読み取る。
   label: (2)
@@ -80,7 +80,7 @@ sub_questions:
     result_srepr: 得点
   - args: []
     detail: ''
-    narration: 正の数で表す向きと反対の向きの量には、反対の符号をつけて表す。
+    narration: 正の数で表すことにした向きと反対の向きの量なので、- をつけて表す。
     op: assign_opposite_sign
     result_display: '-15'
     result_srepr: Integer(-15)

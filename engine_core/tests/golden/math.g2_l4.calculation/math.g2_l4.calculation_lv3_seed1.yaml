@@ -35,7 +35,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - polynomial.monomial_mul_div_chain
-  explanation: 'まず、÷ を、その式の逆数をかけるかけ算に直す。（(-12x²y) × (-2/(3x)) × (6xy)）
+  explanation: 'まず、÷ を、その式の逆数をかけるかけ算に直す。（(-12x²y) × (-2/(3x)) × 6xy）
 
     次に、係数どうしをかけ算する。（48）
 
@@ -50,7 +50,7 @@ sub_questions:
     detail: ''
     narration: ÷ を、その式の逆数をかけるかけ算に直す。
     op: convert_divisions_to_reciprocal
-    result_display: (-12x²y) × (-2/(3x)) × (6xy)
+    result_display: (-12x²y) × (-2/(3x)) × 6xy
     result_srepr: Mul(Integer(48), Pow(Symbol('x'), Integer(2)), Pow(Symbol('y'), Integer(2)))
   - args: []
     detail: ''

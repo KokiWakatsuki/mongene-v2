@@ -69,7 +69,7 @@ sub_questions:
     result_display: 140x + 90y = 1530
     result_srepr: Equality(Add(Mul(Integer(140), Symbol('x')), Mul(Integer(90), Symbol('y'))), Integer(1530))
 - answer:
-    display: (9, 3)
+    display: りんごは9個、レモンは3個
     kind: symbolic
     srepr: Tuple(Integer(9), Integer(3))
   cause_tags: []
@@ -79,7 +79,7 @@ sub_questions:
 
     次に、辺々を引いて x を消去し、残った y の値を求める。（y = 3）
 
-    最後に、求めた y を個数の式に代入して、x の値を求める。（x = 9）'
+    最後に、求めた y を個数の式に代入して x の値を求めると x = 9。x はりんごの個数、y はレモンの個数だったので、りんごは9個、レモンは3個。（りんごは9個、レモンは3個）'
   hints:
   - 個数の式の両辺を x の単価だけ倍して、x の係数を代金の式とそろえる。
   - 辺々を引いて x を消去し、残った y の値を求める。
@@ -99,9 +99,9 @@ sub_questions:
     result_display: y = 3
     result_srepr: Equality(Symbol('y'), Integer(3))
   - args: []
-    detail: ''
-    narration: 求めた y を個数の式に代入して、x の値を求める。
+    detail: 求めた y を個数の式に代入して x の値を求めると x = 9。x はりんごの個数、y はレモンの個数だったので、りんごは9個、レモンは3個。
+    narration: 求めた y を個数の式に代入して x の値を求め、文字が表していたものに戻して答える。
     op: back_substitute
-    result_display: x = 9
+    result_display: りんごは9個、レモンは3個
     result_srepr: Equality(Symbol('x'), Integer(9))
 visual_svg: null

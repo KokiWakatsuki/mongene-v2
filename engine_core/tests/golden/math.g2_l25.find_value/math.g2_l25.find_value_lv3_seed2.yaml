@@ -31,7 +31,7 @@ problem_ref: 672ee264de682ee9
 problem_text: 2点 (-3, -2) と (0, 0) を通る直線の式を求めよ。
 sub_questions:
 - answer:
-    display: y = 2/3x
+    display: y = (2/3)x
     kind: symbolic
     srepr: Mul(Rational(2, 3), Symbol('x'))
   cause_tags:
@@ -45,7 +45,7 @@ sub_questions:
 
     次に、連立方程式を解いて a, b を同時に求める。（a = 2/3, b = 0）
 
-    最後に、求めた a, b から一次関数の式を組み立てる。（y = 2/3x）'
+    最後に、求めた a, b から一次関数の式を組み立てる。（y = (2/3)x）'
   hints:
   - 2点をそれぞれ y = ax + b に代入し、a, b の連立方程式を立てる。
   - 連立方程式を解いて a, b を同時に求める。
@@ -74,6 +74,6 @@ sub_questions:
     detail: ''
     narration: 求めた a, b から一次関数の式を組み立てる。
     op: form_expression
-    result_display: y = 2/3x
+    result_display: y = (2/3)x
     result_srepr: Mul(Rational(2, 3), Symbol('x'))
 visual_svg: null

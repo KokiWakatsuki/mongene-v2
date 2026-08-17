@@ -42,7 +42,13 @@ sub_questions:
   hints:
   - 問題で問われている規則や約束が、何についてのものかを読み取る。
   label: (1)
-  prompt_text: 正しいものを選びなさい。
+  prompt_text: '次の中から正しいものを選びなさい。
+
+    ・QKとGDが垂直に交わる
+
+    ・QKとGDが平行である
+
+    ・三角形FGDと三角形FQKが合同である'
   solution_steps:
   - args: []
     detail: ''

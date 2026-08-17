@@ -24,7 +24,7 @@ meta:
   seed: 2
   signature: similarity_proven_ratio_length
 problem_ref: 41c8caf622aadf87
-problem_text: 三角形NPQ∽三角形NRSであることが証明されている。NR=4cm, NP=5cm, RS=44cm のとき、辺PQの長さを求めよ。
+problem_text: 三角形NRS∽三角形NPQであることが証明されている。NR=4cm, NP=5cm, RS=44cm のとき、辺PQの長さを求めよ。
 sub_questions:
 - answer:
     display: '55'

@@ -24,20 +24,20 @@ meta:
   seed: 1
   signature: read_diagram_intersection_graph
 problem_ref: 5955087c211731b2
-problem_text: AさんとBさんが動くようすを、出発してからの時間 x とP地点からの道のり y の関係で表す。Aさんの進むようすは y = 3x - 5、Bさんの進むようすは y = 2x - 3 である。この2つの直線を同じ座標平面にかき、2つの直線が交わる点の座標（2人が同じ地点にいる時間と、そのときの道のり）を読み取れ。
+problem_text: AさんとBさんが動くようすを、出発してからの時間 x とP地点からの道のり y の関係で表す。Aさんの進むようすは y = 4x + 4、Bさんの進むようすは y = 2x + 6 である。この2つの直線を同じ座標平面にかき、2つの直線が交わる点の座標（2人が同じ地点にいる時間と、そのときの道のり）を読み取れ。
 sub_questions:
 - answer:
-    display: (2, 1)
+    display: (1, 8)
     kind: symbolic
-    srepr: Tuple(Integer(2), Integer(1))
+    srepr: Tuple(Integer(1), Integer(8))
   cause_tags: []
   concept_tags:
   - linear_function.diagram_intersection
-  explanation: 'まず、Aさんの進むようすを表す直線を座標平面にかく。（y = 3x - 5）
+  explanation: 'まず、Aさんの進むようすを表す直線を座標平面にかく。（y = 4x + 4）
 
-    次に、Bさんの進むようすを表す直線を同じ平面にかく。（y = 2x - 3）
+    次に、Bさんの進むようすを表す直線を同じ平面にかく。（y = 2x + 6）
 
-    最後に、2つの直線が交わる点の座標（同じ地点にいる時間と道のり）を読み取る。（(2, 1)）'
+    最後に、2つの直線が交わる点の座標（同じ地点にいる時間と道のり）を読み取る。（(1, 8)）'
   hints:
   - Aさんの進むようすを表す直線を座標平面にかく。
   - Bさんの進むようすを表す直線を同じ平面にかく。
@@ -45,68 +45,75 @@ sub_questions:
   prompt_text: 交点の座標を読み取りなさい。
   solution_steps:
   - args:
-    - y = 3x - 5
+    - y = 4x + 4
     detail: ''
     narration: Aさんの進むようすを表す直線を座標平面にかく。
     op: draw_line_a
-    result_display: y = 3x - 5
-    result_srepr: Add(Mul(Integer(3), Symbol('x')), Integer(-5))
+    result_display: y = 4x + 4
+    result_srepr: Add(Mul(Integer(4), Symbol('x')), Integer(4))
   - args:
-    - y = 2x - 3
+    - y = 2x + 6
     detail: ''
     narration: Bさんの進むようすを表す直線を同じ平面にかく。
     op: draw_line_b
-    result_display: y = 2x - 3
-    result_srepr: Add(Mul(Integer(2), Symbol('x')), Integer(-3))
+    result_display: y = 2x + 6
+    result_srepr: Add(Mul(Integer(2), Symbol('x')), Integer(6))
   - args: []
     detail: ''
     narration: 2つの直線が交わる点の座標（同じ地点にいる時間と道のり）を読み取る。
     op: read_intersection
-    result_display: (2, 1)
-    result_srepr: Tuple(Integer(2), Integer(1))
+    result_display: (1, 8)
+    result_srepr: Tuple(Integer(1), Integer(8))
 visual_svg: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400" font-family="Hiragino Sans, Hiragino Kaku Gothic ProN, Noto Sans JP, Yu Gothic, Meiryo, sans-serif"><rect
-  x="0" y="0" width="400" height="400" fill="#ffffff" stroke="none"/><line x1="28.00" y1="28.00" x2="28.00" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="52.57" y1="28.00" x2="52.57" y2="372.00"
-  stroke="#bbbbbb" stroke-width="0.5"/><line x1="77.14" y1="28.00" x2="77.14" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="101.71" y1="28.00" x2="101.71" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line
-  x1="126.29" y1="28.00" x2="126.29" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="150.86" y1="28.00" x2="150.86" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="175.43" y1="28.00"
-  x2="175.43" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="200.00" y1="28.00" x2="200.00" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="224.57" y1="28.00" x2="224.57" y2="372.00"
-  stroke="#bbbbbb" stroke-width="0.5"/><line x1="249.14" y1="28.00" x2="249.14" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="273.71" y1="28.00" x2="273.71" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line
-  x1="298.29" y1="28.00" x2="298.29" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="322.86" y1="28.00" x2="322.86" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="347.43" y1="28.00"
-  x2="347.43" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="372.00" y1="28.00" x2="372.00" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="372.00" x2="372.00" y2="372.00"
-  stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="347.43" x2="372.00" y2="347.43" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="322.86" x2="372.00" y2="322.86" stroke="#bbbbbb" stroke-width="0.5"/><line
-  x1="28.00" y1="298.29" x2="372.00" y2="298.29" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="273.71" x2="372.00" y2="273.71" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="249.14"
-  x2="372.00" y2="249.14" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="224.57" x2="372.00" y2="224.57" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="200.00" x2="372.00" y2="200.00"
-  stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="175.43" x2="372.00" y2="175.43" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="150.86" x2="372.00" y2="150.86" stroke="#bbbbbb" stroke-width="0.5"/><line
-  x1="28.00" y1="126.29" x2="372.00" y2="126.29" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="101.71" x2="372.00" y2="101.71" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="77.14"
-  x2="372.00" y2="77.14" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="52.57" x2="372.00" y2="52.57" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="28.00" x2="372.00" y2="28.00" stroke="#bbbbbb"
-  stroke-width="0.5"/><line x1="28.00" y1="200.00" x2="372.00" y2="200.00" stroke="#000000" stroke-width="1.5"/><line x1="200.00" y1="28.00" x2="200.00" y2="372.00" stroke="#000000" stroke-width="1.5"/><text
-  x="28.00" y="212.00" font-size="10" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">-7</text><text x="28.00" y="212.00" font-size="10" text-anchor="middle"
-  fill="#000000">-7</text><text x="52.57" y="212.00" font-size="10" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">-6</text><text x="52.57" y="212.00" font-size="10"
-  text-anchor="middle" fill="#000000">-6</text><text x="77.14" y="212.00" font-size="10" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">-5</text><text x="77.14"
-  y="212.00" font-size="10" text-anchor="middle" fill="#000000">-5</text><text x="101.71" y="212.00" font-size="10" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">-4</text><text
-  x="101.71" y="212.00" font-size="10" text-anchor="middle" fill="#000000">-4</text><text x="126.29" y="212.00" font-size="10" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round"
-  fill="#ffffff">-3</text><text x="126.29" y="212.00" font-size="10" text-anchor="middle" fill="#000000">-3</text><text x="150.86" y="212.00" font-size="10" text-anchor="middle" stroke="#ffffff" stroke-width="3"
-  stroke-linejoin="round" fill="#ffffff">-2</text><text x="150.86" y="212.00" font-size="10" text-anchor="middle" fill="#000000">-2</text><text x="175.43" y="212.00" font-size="10" text-anchor="middle"
-  stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">-1</text><text x="175.43" y="212.00" font-size="10" text-anchor="middle" fill="#000000">-1</text><text x="224.57" y="212.00" font-size="10"
-  text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">1</text><text x="224.57" y="212.00" font-size="10" text-anchor="middle" fill="#000000">1</text><text x="249.14"
-  y="212.00" font-size="10" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">2</text><text x="249.14" y="212.00" font-size="10" text-anchor="middle" fill="#000000">2</text><text
-  x="273.71" y="212.00" font-size="10" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">3</text><text x="273.71" y="212.00" font-size="10" text-anchor="middle"
-  fill="#000000">3</text><text x="298.29" y="212.00" font-size="10" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">4</text><text x="298.29" y="212.00" font-size="10"
-  text-anchor="middle" fill="#000000">4</text><text x="322.86" y="212.00" font-size="10" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">5</text><text x="322.86"
-  y="212.00" font-size="10" text-anchor="middle" fill="#000000">5</text><text x="347.43" y="212.00" font-size="10" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">6</text><text
-  x="347.43" y="212.00" font-size="10" text-anchor="middle" fill="#000000">6</text><text x="372.00" y="212.00" font-size="10" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round"
-  fill="#ffffff">7</text><text x="372.00" y="212.00" font-size="10" text-anchor="middle" fill="#000000">7</text><text x="192.00" y="375.00" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3"
-  stroke-linejoin="round" fill="#ffffff">-7</text><text x="192.00" y="375.00" font-size="10" text-anchor="end" fill="#000000">-7</text><text x="192.00" y="350.43" font-size="10" text-anchor="end" stroke="#ffffff"
-  stroke-width="3" stroke-linejoin="round" fill="#ffffff">-6</text><text x="192.00" y="350.43" font-size="10" text-anchor="end" fill="#000000">-6</text><text x="192.00" y="325.86" font-size="10" text-anchor="end"
-  stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">-5</text><text x="192.00" y="325.86" font-size="10" text-anchor="end" fill="#000000">-5</text><text x="192.00" y="301.29" font-size="10"
-  text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">-4</text><text x="192.00" y="301.29" font-size="10" text-anchor="end" fill="#000000">-4</text><text x="192.00"
-  y="276.71" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">-3</text><text x="192.00" y="276.71" font-size="10" text-anchor="end" fill="#000000">-3</text><text
-  x="192.00" y="252.14" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">-2</text><text x="192.00" y="252.14" font-size="10" text-anchor="end" fill="#000000">-2</text><text
-  x="192.00" y="227.57" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">-1</text><text x="192.00" y="227.57" font-size="10" text-anchor="end" fill="#000000">-1</text><text
-  x="192.00" y="203.00" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">0</text><text x="192.00" y="203.00" font-size="10" text-anchor="end" fill="#000000">0</text><text
-  x="192.00" y="178.43" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">1</text><text x="192.00" y="178.43" font-size="10" text-anchor="end" fill="#000000">1</text><text
-  x="192.00" y="153.86" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">2</text><text x="192.00" y="153.86" font-size="10" text-anchor="end" fill="#000000">2</text><text
-  x="192.00" y="129.29" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">3</text><text x="192.00" y="129.29" font-size="10" text-anchor="end" fill="#000000">3</text><text
-  x="192.00" y="104.71" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">4</text><text x="192.00" y="104.71" font-size="10" text-anchor="end" fill="#000000">4</text><text
-  x="192.00" y="80.14" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">5</text><text x="192.00" y="80.14" font-size="10" text-anchor="end" fill="#000000">5</text><text
-  x="192.00" y="55.57" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">6</text><text x="192.00" y="55.57" font-size="10" text-anchor="end" fill="#000000">6</text><text
-  x="192.00" y="31.00" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">7</text><text x="192.00" y="31.00" font-size="10" text-anchor="end" fill="#000000">7</text></svg>
+  x="0" y="0" width="400" height="400" fill="#ffffff" stroke="none"/><line x1="28.00" y1="28.00" x2="28.00" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="49.50" y1="28.00" x2="49.50" y2="372.00"
+  stroke="#bbbbbb" stroke-width="0.5"/><line x1="71.00" y1="28.00" x2="71.00" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="92.50" y1="28.00" x2="92.50" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line
+  x1="114.00" y1="28.00" x2="114.00" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="135.50" y1="28.00" x2="135.50" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="157.00" y1="28.00"
+  x2="157.00" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="178.50" y1="28.00" x2="178.50" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="200.00" y1="28.00" x2="200.00" y2="372.00"
+  stroke="#bbbbbb" stroke-width="0.5"/><line x1="221.50" y1="28.00" x2="221.50" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="243.00" y1="28.00" x2="243.00" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line
+  x1="264.50" y1="28.00" x2="264.50" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="286.00" y1="28.00" x2="286.00" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="307.50" y1="28.00"
+  x2="307.50" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="329.00" y1="28.00" x2="329.00" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="350.50" y1="28.00" x2="350.50" y2="372.00"
+  stroke="#bbbbbb" stroke-width="0.5"/><line x1="372.00" y1="28.00" x2="372.00" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="372.00" x2="372.00" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line
+  x1="28.00" y1="351.76" x2="372.00" y2="351.76" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="331.53" x2="372.00" y2="331.53" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="311.29"
+  x2="372.00" y2="311.29" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="291.06" x2="372.00" y2="291.06" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="270.82" x2="372.00" y2="270.82"
+  stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="250.59" x2="372.00" y2="250.59" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="230.35" x2="372.00" y2="230.35" stroke="#bbbbbb" stroke-width="0.5"/><line
+  x1="28.00" y1="210.12" x2="372.00" y2="210.12" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="189.88" x2="372.00" y2="189.88" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="169.65"
+  x2="372.00" y2="169.65" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="149.41" x2="372.00" y2="149.41" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="129.18" x2="372.00" y2="129.18"
+  stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="108.94" x2="372.00" y2="108.94" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="88.71" x2="372.00" y2="88.71" stroke="#bbbbbb" stroke-width="0.5"/><line
+  x1="28.00" y1="68.47" x2="372.00" y2="68.47" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="48.24" x2="372.00" y2="48.24" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="28.00" x2="372.00"
+  y2="28.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="28.00" y1="230.35" x2="372.00" y2="230.35" stroke="#000000" stroke-width="1.5"/><line x1="200.00" y1="28.00" x2="200.00" y2="372.00" stroke="#000000"
+  stroke-width="1.5"/><text x="28.00" y="242.35" font-size="10" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">-8</text><text x="28.00" y="242.35" font-size="10"
+  text-anchor="middle" fill="#000000">-8</text><text x="49.50" y="242.35" font-size="10" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">-7</text><text x="49.50"
+  y="242.35" font-size="10" text-anchor="middle" fill="#000000">-7</text><text x="71.00" y="242.35" font-size="10" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">-6</text><text
+  x="71.00" y="242.35" font-size="10" text-anchor="middle" fill="#000000">-6</text><text x="92.50" y="242.35" font-size="10" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round"
+  fill="#ffffff">-5</text><text x="92.50" y="242.35" font-size="10" text-anchor="middle" fill="#000000">-5</text><text x="114.00" y="242.35" font-size="10" text-anchor="middle" stroke="#ffffff" stroke-width="3"
+  stroke-linejoin="round" fill="#ffffff">-4</text><text x="114.00" y="242.35" font-size="10" text-anchor="middle" fill="#000000">-4</text><text x="135.50" y="242.35" font-size="10" text-anchor="middle"
+  stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">-3</text><text x="135.50" y="242.35" font-size="10" text-anchor="middle" fill="#000000">-3</text><text x="157.00" y="242.35" font-size="10"
+  text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">-2</text><text x="157.00" y="242.35" font-size="10" text-anchor="middle" fill="#000000">-2</text><text x="178.50"
+  y="242.35" font-size="10" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">-1</text><text x="178.50" y="242.35" font-size="10" text-anchor="middle" fill="#000000">-1</text><text
+  x="221.50" y="242.35" font-size="10" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">1</text><text x="221.50" y="242.35" font-size="10" text-anchor="middle"
+  fill="#000000">1</text><text x="243.00" y="242.35" font-size="10" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">2</text><text x="243.00" y="242.35" font-size="10"
+  text-anchor="middle" fill="#000000">2</text><text x="264.50" y="242.35" font-size="10" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">3</text><text x="264.50"
+  y="242.35" font-size="10" text-anchor="middle" fill="#000000">3</text><text x="286.00" y="242.35" font-size="10" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">4</text><text
+  x="286.00" y="242.35" font-size="10" text-anchor="middle" fill="#000000">4</text><text x="307.50" y="242.35" font-size="10" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round"
+  fill="#ffffff">5</text><text x="307.50" y="242.35" font-size="10" text-anchor="middle" fill="#000000">5</text><text x="329.00" y="242.35" font-size="10" text-anchor="middle" stroke="#ffffff" stroke-width="3"
+  stroke-linejoin="round" fill="#ffffff">6</text><text x="329.00" y="242.35" font-size="10" text-anchor="middle" fill="#000000">6</text><text x="350.50" y="242.35" font-size="10" text-anchor="middle" stroke="#ffffff"
+  stroke-width="3" stroke-linejoin="round" fill="#ffffff">7</text><text x="350.50" y="242.35" font-size="10" text-anchor="middle" fill="#000000">7</text><text x="372.00" y="242.35" font-size="10" text-anchor="middle"
+  stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">8</text><text x="372.00" y="242.35" font-size="10" text-anchor="middle" fill="#000000">8</text><text x="192.00" y="375.00" font-size="10"
+  text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">-7</text><text x="192.00" y="375.00" font-size="10" text-anchor="end" fill="#000000">-7</text><text x="192.00"
+  y="354.76" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">-6</text><text x="192.00" y="354.76" font-size="10" text-anchor="end" fill="#000000">-6</text><text
+  x="192.00" y="334.53" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">-5</text><text x="192.00" y="334.53" font-size="10" text-anchor="end" fill="#000000">-5</text><text
+  x="192.00" y="314.29" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">-4</text><text x="192.00" y="314.29" font-size="10" text-anchor="end" fill="#000000">-4</text><text
+  x="192.00" y="294.06" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">-3</text><text x="192.00" y="294.06" font-size="10" text-anchor="end" fill="#000000">-3</text><text
+  x="192.00" y="273.82" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">-2</text><text x="192.00" y="273.82" font-size="10" text-anchor="end" fill="#000000">-2</text><text
+  x="192.00" y="253.59" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">-1</text><text x="192.00" y="253.59" font-size="10" text-anchor="end" fill="#000000">-1</text><text
+  x="192.00" y="233.35" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">0</text><text x="192.00" y="233.35" font-size="10" text-anchor="end" fill="#000000">0</text><text
+  x="192.00" y="213.12" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">1</text><text x="192.00" y="213.12" font-size="10" text-anchor="end" fill="#000000">1</text><text
+  x="192.00" y="192.88" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">2</text><text x="192.00" y="192.88" font-size="10" text-anchor="end" fill="#000000">2</text><text
+  x="192.00" y="172.65" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">3</text><text x="192.00" y="172.65" font-size="10" text-anchor="end" fill="#000000">3</text><text
+  x="192.00" y="152.41" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">4</text><text x="192.00" y="152.41" font-size="10" text-anchor="end" fill="#000000">4</text><text
+  x="192.00" y="132.18" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">5</text><text x="192.00" y="132.18" font-size="10" text-anchor="end" fill="#000000">5</text><text
+  x="192.00" y="111.94" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">6</text><text x="192.00" y="111.94" font-size="10" text-anchor="end" fill="#000000">6</text><text
+  x="192.00" y="91.71" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">7</text><text x="192.00" y="91.71" font-size="10" text-anchor="end" fill="#000000">7</text><text
+  x="192.00" y="71.47" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">8</text><text x="192.00" y="71.47" font-size="10" text-anchor="end" fill="#000000">8</text><text
+  x="192.00" y="51.24" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">9</text><text x="192.00" y="51.24" font-size="10" text-anchor="end" fill="#000000">9</text><text
+  x="192.00" y="31.00" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">10</text><text x="192.00" y="31.00" font-size="10" text-anchor="end" fill="#000000">10</text></svg>

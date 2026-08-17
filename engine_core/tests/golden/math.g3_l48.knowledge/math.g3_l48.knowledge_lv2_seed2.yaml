@@ -27,9 +27,9 @@ problem_ref: 59ff46bb5ede92af
 problem_text: 直線UVについて同じ側に点W, Xがある。∠UWV=38°、∠UXV=38° のとき、4点U, V, W, Xが同一円周上にあるといえるかどうかを、理由とともに答えよ。
 sub_questions:
 - answer:
-    correct: 同一円周上にあるといえる
+    correct: 同一円周上にあるといえる（同じ側にできる2つの角が等しく、円周角の定理の逆にあてはまるから）
     distractors:
-    - 同一円周上にあるとはいえない
+    - 同一円周上にあるとはいえない（同じ側にできる2つの角が等しくないから）
     fact_id: circle.judge_concyclic
     kind: choice
   cause_tags: []
@@ -37,11 +37,11 @@ sub_questions:
   - circle.judge_concyclic
   explanation: 'まず、直線UVの同じ側にある2点W, Xでできる角が、等しいかどうかを確認する。（等しい）
 
-    次に、円周角の定理の逆から、4点が同一円周上にあるといえるかどうかを判別する。（同一円周上にあるといえる）'
+    次に、円周角の定理の逆から、4点が同一円周上にあるといえるかどうかを判別する。（同一円周上にあるといえる（同じ側にできる2つの角が等しく、円周角の定理の逆にあてはまるから））'
   hints:
   - 直線UVの同じ側にある2点W, Xでできる角が、等しいかどうかを確認する。
   label: (1)
-  prompt_text: 正しいものを選びなさい。
+  prompt_text: 答えなさい。
   solution_steps:
   - args: []
     detail: ''
@@ -53,6 +53,6 @@ sub_questions:
     detail: ''
     narration: 円周角の定理の逆から、4点が同一円周上にあるといえるかどうかを判別する。
     op: judge_by_inscribed_angle_converse
-    result_display: 同一円周上にあるといえる
-    result_srepr: 同一円周上にあるといえる
+    result_display: 同一円周上にあるといえる（同じ側にできる2つの角が等しく、円周角の定理の逆にあてはまるから）
+    result_srepr: 同一円周上にあるといえる（同じ側にできる2つの角が等しく、円周角の定理の逆にあてはまるから）
 visual_svg: null

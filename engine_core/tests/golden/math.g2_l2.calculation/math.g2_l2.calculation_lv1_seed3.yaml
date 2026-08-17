@@ -35,7 +35,7 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - polynomial.combine_like_terms_basic
-  explanation: 'まず、-x、3x、-7x は x の項なので、同類項としてまとめる。（(-x + 3x - 7x)）
+  explanation: 'まず、-x、3x、-7x は x の項なので、同類項としてまとめる。（-x + 3x - 7x）
 
     次に、まとめた同類項の係数を計算し、式を簡単にする。（-5x）'
   hints:
@@ -47,7 +47,7 @@ sub_questions:
     detail: -x、3x、-7x は x の項なので、同類項としてまとめる。
     narration: 文字の部分が同じ項（同類項）どうしをまとめる。
     op: group_like_terms
-    result_display: (-x + 3x - 7x)
+    result_display: -x + 3x - 7x
     result_srepr: Mul(Integer(-1), Integer(5), Symbol('x'))
   - args: []
     detail: ''

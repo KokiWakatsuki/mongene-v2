@@ -30,7 +30,7 @@ problem_ref: 1c7e5803a311ef57
 problem_text: 点 (-5, 7) を通り、直線 y = -2/3x に平行な直線の式を求めよ。
 sub_questions:
 - answer:
-    display: y = -2/3x + 11/3
+    display: y = -(2/3)x + 11/3
     kind: symbolic
     srepr: Add(Rational(11, 3), Mul(Integer(-1), Rational(2, 3), Symbol('x')))
   cause_tags:
@@ -43,7 +43,7 @@ sub_questions:
 
     次に、傾きと通る1点を y = ax + b に代入し、切片を求める。（切片 b = 11/3）
 
-    最後に、傾きと切片から一次関数の式を組み立てる。（y = -2/3x + 11/3）'
+    最後に、傾きと切片から一次関数の式を組み立てる。（y = -(2/3)x + 11/3）'
   hints:
   - 平行な直線は傾きが等しいので、与えられた直線の傾きをそのまま用いる。
   - 傾きと通る1点を y = ax + b に代入し、切片を求める。
@@ -71,6 +71,6 @@ sub_questions:
     detail: ''
     narration: 傾きと切片から一次関数の式を組み立てる。
     op: form_expression
-    result_display: y = -2/3x + 11/3
+    result_display: y = -(2/3)x + 11/3
     result_srepr: Add(Rational(11, 3), Mul(Integer(-1), Rational(2, 3), Symbol('x')))
 visual_svg: null

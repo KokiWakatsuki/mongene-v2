@@ -42,7 +42,13 @@ sub_questions:
   hints:
   - 問題で問われている規則や約束が、何についてのものかを読み取る。
   label: (1)
-  prompt_text: 正しいものを選びなさい。
+  prompt_text: '次の中から正しいものを選びなさい。
+
+    ・四つの点は同じ直線上にある
+
+    ・四つの点は同じ円周上にある
+
+    ・四つの点は同じ弧の上にある'
   solution_steps:
   - args: []
     detail: ''

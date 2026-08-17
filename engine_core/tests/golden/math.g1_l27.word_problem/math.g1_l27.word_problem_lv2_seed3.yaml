@@ -66,22 +66,22 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - equation.word_problem_round_trip
-  explanation: 'まず、分母の最小公倍数 2 を両辺にかけて、分母をはらう。（x = 10）
+  explanation: 'まず、分母の最小公倍数 6 を両辺にかけて、分母をはらう。（3x = 30）
 
-    次に、等式の性質を使い、両辺を x の係数でわる。（x = 10）'
+    次に、等式の性質を使い、両辺を x の係数 3 でわる。（x = 10）'
   hints:
   - 分母の最小公倍数を両辺にかけて、分母をはらう。
   label: (2)
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
-    detail: 分母の最小公倍数 2 を両辺にかけて、分母をはらう。
+    detail: 分母の最小公倍数 6 を両辺にかけて、分母をはらう。
     narration: 分母の最小公倍数を両辺にかけて、分母をはらう。
     op: clear_denominators
-    result_display: x = 10
+    result_display: 3x = 30
     result_srepr: Integer(10)
   - args: []
-    detail: ''
+    detail: 等式の性質を使い、両辺を x の係数 3 でわる。
     narration: 等式の性質を使い、両辺を x の係数でわる。
     op: divide_both_sides
     result_display: x = 10

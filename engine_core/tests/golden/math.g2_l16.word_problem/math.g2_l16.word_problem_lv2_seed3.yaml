@@ -69,7 +69,7 @@ sub_questions:
     result_display: 140x + 110y = 1670
     result_srepr: Equality(Add(Mul(Integer(140), Symbol('x')), Mul(Integer(110), Symbol('y'))), Integer(1670))
 - answer:
-    display: (8, 5)
+    display: みかんは8個、パンは5個
     kind: symbolic
     srepr: Tuple(Integer(8), Integer(5))
   cause_tags: []
@@ -79,7 +79,7 @@ sub_questions:
 
     次に、辺々を引いて x を消去し、残った y の値を求める。（y = 5）
 
-    最後に、求めた y を個数の式に代入して、x の値を求める。（x = 8）'
+    最後に、求めた y を個数の式に代入して x の値を求めると x = 8。x はみかんの個数、y はパンの個数だったので、みかんは8個、パンは5個。（みかんは8個、パンは5個）'
   hints:
   - 個数の式の両辺を x の単価だけ倍して、x の係数を代金の式とそろえる。
   - 辺々を引いて x を消去し、残った y の値を求める。
@@ -99,9 +99,9 @@ sub_questions:
     result_display: y = 5
     result_srepr: Equality(Symbol('y'), Integer(5))
   - args: []
-    detail: ''
-    narration: 求めた y を個数の式に代入して、x の値を求める。
+    detail: 求めた y を個数の式に代入して x の値を求めると x = 8。x はみかんの個数、y はパンの個数だったので、みかんは8個、パンは5個。
+    narration: 求めた y を個数の式に代入して x の値を求め、文字が表していたものに戻して答える。
     op: back_substitute
-    result_display: x = 8
+    result_display: みかんは8個、パンは5個
     result_srepr: Equality(Symbol('x'), Integer(8))
 visual_svg: null

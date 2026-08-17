@@ -37,7 +37,7 @@ sub_questions:
   - linear_function.word_problem_tank_race
   explanation: 'まず、満水の量を空になるまでの時間でわって、水を抜く割合を求める。（毎分10L）
 
-    次に、減っていく水そうと増えていく水そうの量を、それぞれ経過した時間の式で表す。（二つの水そうの量を x の式で表す）
+    次に、減っていく水そうと増えていく水そうの量を、それぞれ経過した時間の式で表す。（減る側 y = 90 - 10x、増える側 y = 5x）
 
     次に、2つの直線を ax + by = c の形にそろえて連立方程式を立てる。（10x + y = 90, -5x + y = 0）
 
@@ -62,7 +62,7 @@ sub_questions:
     detail: ''
     narration: 減っていく水そうと増えていく水そうの量を、それぞれ経過した時間の式で表す。
     op: formulate_two_lines
-    result_display: 二つの水そうの量を x の式で表す
+    result_display: 減る側 y = 90 - 10x、増える側 y = 5x
     result_srepr: ''
   - args:
     - Eq(10*x + y, 90)

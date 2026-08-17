@@ -41,7 +41,7 @@ sub_questions:
   hints:
   - 示されている2つの角が、等しいといえる条件を満たしているかを確認する。
   label: (1)
-  prompt_text: 正しいものを選びなさい。
+  prompt_text: 答えなさい。
   solution_steps:
   - args: []
     detail: ''

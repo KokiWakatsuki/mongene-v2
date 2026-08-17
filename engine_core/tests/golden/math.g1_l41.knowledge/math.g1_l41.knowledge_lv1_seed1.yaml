@@ -27,32 +27,33 @@ problem_ref: 473515266eb48f15
 problem_text: 線分CDの垂直二等分線上に点Sをとる。このとき、SCとSDの長さの関係を、その理由となる性質の名前とともに答えよ。
 sub_questions:
 - answer:
-    correct: 等しい
+    correct: 垂直二等分線の性質より等しい
     distractors:
     - 等しくない
+    - 角の二等分線の性質より等しい
     fact_id: construction_property.perpendicular_bisector
     kind: choice
   cause_tags: []
   concept_tags:
   - construction_property.perpendicular_bisector
-  explanation: 'まず、垂直二等分線上の点から、線分の両端までの距離を見比べる。
+  explanation: 'まず、垂直二等分線上の点から、線分の両端までの距離を見比べる。（両端までの距離）
 
-    次に、その距離どうしの関係を判別する。（等しい）'
+    次に、線分の垂直二等分線上の点は、その線分の両端から等しい距離にある（垂直二等分線の性質）。逆に、両端から等しい距離にある点はすべて垂直二等分線の上にある。（垂直二等分線の性質より等しい）'
   hints:
   - 垂直二等分線上の点から、線分の両端までの距離を見比べる。
   label: (1)
-  prompt_text: 正しいものを選びなさい。
+  prompt_text: 答えなさい。
   solution_steps:
   - args: []
     detail: ''
     narration: 垂直二等分線上の点から、線分の両端までの距離を見比べる。
     op: identify_construction_property
-    result_display: ''
+    result_display: 両端までの距離
     result_srepr: perpendicular_bisector
   - args: []
-    detail: ''
+    detail: 線分の垂直二等分線上の点は、その線分の両端から等しい距離にある（垂直二等分線の性質）。逆に、両端から等しい距離にある点はすべて垂直二等分線の上にある。
     narration: その距離どうしの関係を判別する。
     op: judge_construction_property
-    result_display: 等しい
-    result_srepr: 等しい
+    result_display: 垂直二等分線の性質より等しい
+    result_srepr: 垂直二等分線の性質より等しい
 visual_svg: null

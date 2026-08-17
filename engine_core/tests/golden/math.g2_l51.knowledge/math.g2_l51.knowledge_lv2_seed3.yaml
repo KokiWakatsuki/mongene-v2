@@ -41,7 +41,7 @@ sub_questions:
   hints:
   - 場面に登場するそれぞれの結果の起こりやすさに、違いがあるかどうかを調べる。
   label: (1)
-  prompt_text: 正しいものを選びなさい。
+  prompt_text: 答えなさい。
   solution_steps:
   - args: []
     detail: ''

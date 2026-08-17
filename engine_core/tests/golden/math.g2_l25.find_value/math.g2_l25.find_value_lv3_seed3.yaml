@@ -31,7 +31,7 @@ problem_ref: 30e689554f43673e
 problem_text: 2点 (0, 7) と (4, 9) を通る直線の式を求めよ。
 sub_questions:
 - answer:
-    display: y = 1/2x + 7
+    display: y = (1/2)x + 7
     kind: symbolic
     srepr: Add(Mul(Rational(1, 2), Symbol('x')), Integer(7))
   cause_tags:
@@ -45,7 +45,7 @@ sub_questions:
 
     次に、連立方程式を解いて a, b を同時に求める。（a = 1/2, b = 7）
 
-    最後に、求めた a, b から一次関数の式を組み立てる。（y = 1/2x + 7）'
+    最後に、求めた a, b から一次関数の式を組み立てる。（y = (1/2)x + 7）'
   hints:
   - 2点をそれぞれ y = ax + b に代入し、a, b の連立方程式を立てる。
   - 連立方程式を解いて a, b を同時に求める。
@@ -74,6 +74,6 @@ sub_questions:
     detail: ''
     narration: 求めた a, b から一次関数の式を組み立てる。
     op: form_expression
-    result_display: y = 1/2x + 7
+    result_display: y = (1/2)x + 7
     result_srepr: Add(Mul(Rational(1, 2), Symbol('x')), Integer(7))
 visual_svg: null

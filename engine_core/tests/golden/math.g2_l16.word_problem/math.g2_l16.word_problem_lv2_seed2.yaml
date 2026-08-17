@@ -69,7 +69,7 @@ sub_questions:
     result_display: 90x + 150y = 810
     result_srepr: Equality(Add(Mul(Integer(90), Symbol('x')), Mul(Integer(150), Symbol('y'))), Integer(810))
 - answer:
-    display: (4, 3)
+    display: おにぎりは4個、グレープフルーツは3個
     kind: symbolic
     srepr: Tuple(Integer(4), Integer(3))
   cause_tags: []
@@ -79,7 +79,7 @@ sub_questions:
 
     次に、辺々を引いて x を消去し、残った y の値を求める。（y = 3）
 
-    最後に、求めた y を個数の式に代入して、x の値を求める。（x = 4）'
+    最後に、求めた y を個数の式に代入して x の値を求めると x = 4。x はおにぎりの個数、y はグレープフルーツの個数だったので、おにぎりは4個、グレープフルーツは3個。（おにぎりは4個、グレープフルーツは3個）'
   hints:
   - 個数の式の両辺を x の単価だけ倍して、x の係数を代金の式とそろえる。
   - 辺々を引いて x を消去し、残った y の値を求める。
@@ -99,9 +99,9 @@ sub_questions:
     result_display: y = 3
     result_srepr: Equality(Symbol('y'), Integer(3))
   - args: []
-    detail: ''
-    narration: 求めた y を個数の式に代入して、x の値を求める。
+    detail: 求めた y を個数の式に代入して x の値を求めると x = 4。x はおにぎりの個数、y はグレープフルーツの個数だったので、おにぎりは4個、グレープフルーツは3個。
+    narration: 求めた y を個数の式に代入して x の値を求め、文字が表していたものに戻して答える。
     op: back_substitute
-    result_display: x = 4
+    result_display: おにぎりは4個、グレープフルーツは3個
     result_srepr: Equality(Symbol('x'), Integer(4))
 visual_svg: null

@@ -39,7 +39,7 @@ sub_questions:
   hints:
   - それぞれの集団について、対象の階級の度数を総度数でわり、相対度数を求める。
   label: (1)
-  prompt_text: 表から読み取りなさい。
+  prompt_text: 読み取って答えなさい。
   solution_steps:
   - args: []
     detail: ''
