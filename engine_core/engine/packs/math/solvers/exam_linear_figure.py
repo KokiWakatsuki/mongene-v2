@@ -209,9 +209,18 @@ def judge_line_through_triangle(m: object, b: object, verts: object) -> Solution
             correct=correct, distractors=[other], fact_id="linear_figure.line_through_triangle"
         ),
         steps=_steps([
-            ("plot_line_and_triangle", "", "直線と三角形をかき入れる",
+            # 「直線と三角形をかき入れる」は指示の言い直し。かいた直線が通る
+            # 2点（両軸との交点）を出す。
+            ("plot_line_and_triangle", "",
+             f"直線は {_fmt_pt((_x_intercept(m_s, b_s), sympy.Integer(0)))} と "
+             f"{_fmt_pt((sympy.Integer(0), b_s))} を通る",
              "直線が両軸と交わる点をとって直線をかき、与えられた3つの頂点を結んで三角形をかく。"),
-            ("compare_vertices_to_line", "", ("同じ側" if correct == "通らない" else "分かれている"),
+            # 「同じ側」「分かれている」では、どの頂点がどちら側かが分からない。
+            ("compare_vertices_to_line", "",
+             "、".join(
+                 f"{_fmt_pt(pt)} は{'上' if d > 0 else '下'}"
+                 for pt, d in zip(pts, diffs, strict=True)
+             ),
              "それぞれの頂点について、直線より上にあるか下にあるかを調べる。"),
             ("conclude_position", correct, correct,
              "3つの頂点が直線の同じ側にそろえば直線は三角形を通らず、"

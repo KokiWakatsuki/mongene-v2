@@ -512,14 +512,17 @@ def read_situation_value_from_graph(a: object, x_q: object) -> Solution:
             op="make_situation_table",
             args=[],
             result_srepr=sympy.srepr(a_s),
-            result_display=_fmt_direct(a_s),
+            # **3手続けて括弧が「y = 8x」だった。** どの手も同じものを出していたので、
+            # 表を作る手・点をとる手・直線をひく手の区別が解説から消えていた。
+            # ここで確かめたのは商である。
+            result_display=f"商はどれも {fmt_number(a_s)}",
             narration="測った組を表にまとめ、対応する y の値を x の値で割った商がいつも同じかどうかを確かめる。",
         ),
         Step(
             op="plot_situation_points",
             args=[],
             result_srepr=sympy.srepr(a_s),
-            result_display=_fmt_direct(a_s),
+            result_display="とった点は原点を通る一直線に並ぶ",
             narration="表にまとめた組を座標とみて、座標平面上に点をとる。",
         ),
         Step(

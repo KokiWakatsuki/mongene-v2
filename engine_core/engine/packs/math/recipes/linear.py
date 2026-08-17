@@ -1281,14 +1281,20 @@ def draw_from_table(ctx: CellContext, rng: Rng) -> MR:
             op="read_table_points",
             args=[],
             result_srepr=sympy.srepr(sympy.Tuple(*[sympy.Tuple(x, y) for x, y in zip(xs, ys)])),
-            result_display="表の x と y の組",
+            # 「表の x と y の組」「表の各点」は指示の言い直しで、
+            # 組も点も1つも出ていなかった。実際の組を出す。
+            result_display="、".join(
+                f"({_fmt_number(x)}, {_fmt_number(y)})" for x, y in zip(xs, ys)
+            ),
             narration="表から x と y の値の組を読み取り、座標平面上の点とみる。",
         ),
         Step(
             op="plot_points",
             args=[],
             result_srepr=sympy.srepr(sympy.Tuple(*xs)),
-            result_display="表の各点",
+            result_display="、".join(
+                f"({_fmt_number(x)}, {_fmt_number(y)})" for x, y in zip(xs, ys)
+            ),
             narration="読み取った点を座標平面にとる。",
         ),
         Step(
