@@ -282,9 +282,20 @@ def compute_monomial_expression(expr_str: str, mode: object) -> Solution:
     coeff_product = sympy.Integer(1)
     for f in factors:
         coeff_product *= f.as_coeff_Mul()[0]
+    def _factor(op: str, t: str) -> str:
+        """かけ算の因子1つ。**かっこは要るときだけ。**
+
+        すべての因子をかっこで囲んでいたので `(170) × (b) × (1/1000)` と出ていた。
+        数1つ・文字1つを囲む必要はない。分数と負の数は囲む（`1/1000` を
+        裸で書くと `× 1/1000` の割り算に見え、`-3` は前の × とくっつく）。
+        """
+        v = 1 / sympy.sympify(t) if op == "/" else sympy.sympify(t)
+        text = fmt_expr(v)
+        need = "/" in text or text.startswith("-") or "+" in text or " " in text
+        return f"({text})" if need else text
+
     reciprocal_form = " × ".join(
-        f"({fmt_expr(1 / sympy.sympify(t))})" if op == "/" else f"({fmt_expr(sympy.sympify(t))})"
-        for op, t in flatten_factors(expr_str)
+        _factor(op, t) for op, t in flatten_factors(expr_str)
     )
     # **符号を先に決める手があるときは、係数の積は絶対値で書く。**
     # 「符号は -」と決めた直後に `-18` と符号つきで出していたので、

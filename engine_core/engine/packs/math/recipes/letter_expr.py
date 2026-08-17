@@ -1787,7 +1787,15 @@ def _draw_rule_statement(
         # g3_l14 √(a²)=|a| の意味。負の数を含む具体例を surface として埋め込み dup 分散。
         cands = [v for v in _domain_candidates(cast("dict[str, object]", p["number_domain"])) if v != 0]
         n = int(draw({"int_set": cands}, rng))
-        return f"√(({n})²) の値について"
+        # 数1つをかっこで囲む必要はない（`√((96)²)` と二重になっていた）が、
+        # **負の数は囲む**——`√(-143²)` は `√(-(143²))` と読めてしまい、
+        # 根号の中が負になる（このセルが問うているのは √a² ＝ |a| なので、
+        # 負の a こそ要点である）。
+        # **外側のかっこは根号の範囲を示すので落とせない**（`√(-104)²` は
+        # `(√(-104))²` と読める）。落とすべきだったのは、正の数まで
+        # `√((96)²)` と二重に囲んでいた内側のほう。
+        inner = f"({n})²" if int(n) < 0 else f"{n}²"
+        return f"√({inner}) の値について"
 
     if topic == "multiplication_formula_choice":
         # g3_l3 乗法公式の識別。concept に応じて (x+a)(x+b) の a,b の関係を構成する
