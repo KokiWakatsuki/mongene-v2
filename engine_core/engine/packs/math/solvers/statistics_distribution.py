@@ -338,8 +338,17 @@ def judge_appropriate_representative_value(has_outliers: object) -> Solution:
     surface であり double-solve）。答えは ChoiceAnswer。narration に数字は書かない。
     """
     truthy = str(has_outliers).lower() in ("true", "1")
-    correct = "中央値" if truthy else "平均値"
-    other = "平均値" if truthy else "中央値"
+    # **問いは「理由とともに答えよ」。** 答えが「中央値」だけでは、求められた
+    # ものの半分しか返していない。理由を答えに入れる（g3_l58 が同じ形で
+    # 「偏りが生じにくく、適切といえる」と書いていて、そちらが手本）。
+    correct = (
+        "中央値（極端な値に影響されにくいから）" if truthy
+        else "平均値（すべての値を使うから）"
+    )
+    other = (
+        "平均値（すべての値を使うから）" if truthy
+        else "中央値（極端な値に影響されにくいから）"
+    )
     steps = [
         Step(
             op="check_outliers",
@@ -357,7 +366,7 @@ def judge_appropriate_representative_value(has_outliers: object) -> Solution:
         ),
     ]
     answer = ChoiceAnswer(
-        correct=correct, distractors=[other, "最頻値"],
+        correct=correct, distractors=[other, "最頻値（もっとも多く現れる値だから）"],
         fact_id="representative_value.judge_appropriate",
     )
     return Solution(answer=answer, steps=steps)

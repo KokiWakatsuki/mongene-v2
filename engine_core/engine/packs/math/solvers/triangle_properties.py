@@ -171,8 +171,12 @@ def judge_right_triangle_congruence(condition_type: object) -> Solution:
     """
     ct = str(condition_type)
     truthy = ct in _RIGHT_TRIANGLE_VALID_CONDITIONS
-    correct = "合同であるといえる" if truthy else "合同であるとはいえない"
-    other = "合同であるとはいえない" if truthy else "合同であるといえる"
+    # 問いが「根拠とともに答えよ」なので、どの合同条件によるか（満たさないなら
+    # 何が足りないか）まで答えに入れる。
+    yes = "合同であるといえる（直角三角形の合同条件を満たすから）"
+    no = "合同であるとはいえない（斜辺が等しいことが分かっていないから）"
+    correct = yes if truthy else no
+    other = no if truthy else yes
     steps = [
         Step(
             op="check_right_triangle_condition",

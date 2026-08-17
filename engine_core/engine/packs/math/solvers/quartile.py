@@ -603,8 +603,10 @@ def compare_box_plot_statistic(
     return Solution(answer=answer, steps=steps)
 
 
-_TREND_CLAIM_YES = "いえる"
-_TREND_CLAIM_NO = "いえない"
+# **問いは「複数の観点を選んで根拠とともに判断・記述せよ」。** 答えが「いえる」
+# だけでは、求められている「根拠」が返っていない。どの観点で判断したかを入れる。
+_TREND_CLAIM_YES = "いえる（第一四分位数・中央値・第三四分位数のどれも上回っているから）"
+_TREND_CLAIM_NO = "いえない（第一四分位数・中央値・第三四分位数のうち上回っていないものがあるから）"
 
 
 @register_solver("math.judge_box_plot_trend_claim")
@@ -668,6 +670,7 @@ def judge_box_plot_trend_claim(
 
 _VALID_CLAIM_YES = "妥当である"
 _VALID_CLAIM_NO = "妥当でない"
+# （こちらの問いは根拠を求めていないので、結論だけのままにする。）
 
 
 @register_solver("math.judge_box_plot_stability_claim")

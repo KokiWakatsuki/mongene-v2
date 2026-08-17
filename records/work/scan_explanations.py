@@ -21,15 +21,20 @@ from pathlib import Path
 _SRC = Path(os.environ.get("MONGENE_CORPUS_DIR", "records/work/corpus")) / "INDEX.md"
 
 
-def corpus_index(argv: list[str] | None = None) -> Path:
-    """読むコーパス。第1引数があればそれを使う（既定は環境変数）。
+def corpus_index(argv: list[str]) -> Path:
+    """読むコーパス。`argv` に位置引数があればそれ、無ければ環境変数の既定。
 
     ★**引数を黙って捨てないこと。** もとは `load()` が引数を取らず、
     `scan_explanations.py <別のコーパス>` と渡しても既定の場所を読んでいた。
     作り直したコーパスを走査したつもりで**古いほうの 0 件を見て「直った」と
     判断しかけた**。渡されたものは使うか、使えないなら止める。
+
+    ★**`sys.argv` をこの中で読まないこと。** 既定引数で `sys.argv[1:]` を
+    見るようにしたら、`load()` を使うだけの `dump_explanation_slices.py`
+    （第1引数が**出力先**）が、出力先をコーパスと解釈して落ちた。
+    どの argv を見るかは呼び出し側が決める。
     """
-    args = [a for a in (argv if argv is not None else sys.argv[1:]) if not a.startswith("-")]
+    args = [a for a in argv if not a.startswith("-")]
     if not args:
         return _SRC
     if len(args) > 1:
@@ -44,7 +49,7 @@ _CELL_RE = re.compile(r"^##\s+((?:exam|g[123])_l\d+\.\w+\.Lv\d+)")
 
 def load(index: Path | None = None) -> list[tuple[str, str, str, str, str]]:
     """(セル, 問題文, 答え, 解説, ヒント) の一覧。"""
-    src = index if index is not None else corpus_index()
+    src = index if index is not None else _SRC
     out: list[tuple[str, str, str, str, str]] = []
     cell = pending = ""
     buf: dict[str, list[str]] = {"q": [], "a": [], "e": [], "h": []}
@@ -353,7 +358,7 @@ _CHECKS: dict[str, object] = {
 
 
 def main() -> None:
-    rows = load()
+    rows = load(corpus_index(sys.argv[1:]))
     hits: dict[str, list[tuple[str, str, str, str]]] = defaultdict(list)
     for cell, q, a, e, h in rows:
         for name, fn in _CHECKS.items():

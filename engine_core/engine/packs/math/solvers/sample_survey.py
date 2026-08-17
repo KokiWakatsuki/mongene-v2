@@ -106,8 +106,11 @@ def judge_appropriate_survey_method(needs_sample: object) -> Solution:
     surface であり double-solve）。答えは ChoiceAnswer。narration に数字は書かない。
     """
     truthy = str(needs_sample).lower() in ("true", "1")
-    correct = "標本調査で行うのが適切" if truthy else "全数調査で行うのが適切"
-    other = "全数調査で行うのが適切" if truthy else "標本調査で行うのが適切"
+    # 問いは「理由とともに答えよ」。どちらが適切かだけでなく、なぜかを答えに入れる。
+    yes = "標本調査で行うのが適切（すべてを調べることができないから）"
+    no = "全数調査で行うのが適切（すべてを調べることができ、正確さが要るから）"
+    correct = yes if truthy else no
+    other = no if truthy else yes
     steps = [
         Step(
             op="check_feasibility",

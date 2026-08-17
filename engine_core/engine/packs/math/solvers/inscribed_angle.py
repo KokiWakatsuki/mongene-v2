@@ -121,8 +121,12 @@ def judge_concyclic_from_angle(
     c = sympy.sympify(str(angle_c))
     d = sympy.sympify(str(angle_d))
     is_concyclic = bool(c == d)
-    correct = "同一円周上にあるといえる" if is_concyclic else "同一円周上にあるとはいえない"
-    other = "同一円周上にあるとはいえない" if is_concyclic else "同一円周上にあるといえる"
+    # 問いは「理由とともに答えよ」。よりどころ（円周角の定理の逆と、角が等しいか）
+    # まで答えに入れる。点名は入れない（seed ごとに変わる／問題文に無い記号になる）。
+    yes = "同一円周上にあるといえる（同じ側にできる2つの角が等しく、円周角の定理の逆にあてはまるから）"
+    no = "同一円周上にあるとはいえない（同じ側にできる2つの角が等しくないから）"
+    correct = yes if is_concyclic else no
+    other = no if is_concyclic else yes
     steps = [
         Step(
             op="compare_angles_on_same_side",
