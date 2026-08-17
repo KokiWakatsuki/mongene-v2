@@ -78,7 +78,7 @@ levels:
       # 扱う）。4 や 6 を許していたので「1秒間に6m落下した」（実際より2割速い）
       # という設定が出ていた。落とす物と時刻の軸で組合せは足りている。
       coefficient_candidates: [5]
-      root_range: [3, 20]
+      root_range: [3, 30]
       # 落とす高さの上限（m）。実際に物を落とせる高さに収める。
       fall_distance_max: 300
       object_candidates: [ボール, 小石, 鉄球, おもり, ビー玉, くり, りんご, 木の実,

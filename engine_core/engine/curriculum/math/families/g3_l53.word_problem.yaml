@@ -69,7 +69,7 @@ levels:
       scenario_kind: triangle_height_area_solo
       # 3辺の範囲。**高さが整数に落ちる**組だけを recipe が残す（3〜30 で16通り）。
       # 高さが無理数だと、補助線を引く筋道より式の処理に目が行ってしまう。
-      side_range: [3, 30]
+      side_range: [3, 42]
     given: [scenario]
     asked: [value]
     visual: none

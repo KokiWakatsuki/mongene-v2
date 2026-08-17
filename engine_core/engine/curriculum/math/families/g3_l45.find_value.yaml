@@ -36,7 +36,7 @@ levels:
     signature: similar_triangle_trapezoid_area_ratio
     recipe: math.similar_triangle_trapezoid_area_ratio
     params:
-      ratio_domain: {int_range: [1, 10]}
+      ratio_domain: {int_range: [1, 16]}
     given: [condition]
     asked: [value]
     visual: none

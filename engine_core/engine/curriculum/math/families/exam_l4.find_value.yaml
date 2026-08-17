@@ -48,7 +48,7 @@ levels:
     params:
       scenario_kind: exam_box_space_diagonal
       given_key: condition
-      edge_range: [2, 20]
+      edge_range: [2, 32]
     given: [condition]
     asked: [value]
     visual: none

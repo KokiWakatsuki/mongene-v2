@@ -31,7 +31,7 @@ levels:
     params:
       scenario_kind: coin_toss_guided
       # 枚数は3〜5（樹形図で書き出せる範囲。2枚だと出方4通りで数え上げの練習にならない）。
-      coins_domain: {int_range: [3, 5]}
+      coins_domain: {int_range: [2, 6]}
       # 金種は実在する6種。recipe は「同じ金種を n 枚」と「異なる金種 n 枚」の2枠組みを
       # 引く（枚数と枚数条件だけでは9通りしかなく実測 dup_rate 0.55 だったため）。
       coin_candidates: [1円硬貨, 5円硬貨, 10円硬貨, 50円硬貨, 100円硬貨, 500円硬貨]

@@ -24,8 +24,8 @@ levels:
       # |a·x²| ≦ 16 を満たす (a, xA, xB) が 96 通り（a: ±1..±6、x: ±1..±4 の相異2つ）。
       # 交点の点名2つ（16 個から順に選ぶ＝240 通り）を掛けて params 総組合せ 23040 通り
       # ＝dup_rate ほぼ 0（数え上げ実測）。
-      a_domain: {int_range: [-6, 6], exclude: [0]}
-      x_domain: {int_range: [-4, 4], exclude: [0]}
+      a_domain: {int_range: [-10, 10], exclude: [0]}
+      x_domain: {int_range: [-6, 6], exclude: [0]}
       value_bound: 16
     given: [expression, line_a, situation_params]
     asked: [draw_graph]

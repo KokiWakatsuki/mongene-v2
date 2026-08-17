@@ -37,8 +37,8 @@ levels:
       # **座標平面は縦横が等スケール**なので、|a| が大きいと放物線が細くなりすぎ、
       # 読み取る点が枠の隅に潰れる（|a|=4 で x=±2 が枠の下端に達していた）。
       # 教科書が y=x²・y=2x²・y=(1/2)x² を使うのはこのため。
-      a_domain: {int_set: [-3, -2, -1, 1, 2, 3]}
-      x_domain: {int_range: [-5, 5], exclude: [0]}
+      a_domain: {int_set: [-5, -4, -3, -2, -1, 1, 2, 3, 4, 5]}
+      x_domain: {int_range: [-7, 7], exclude: [0]}
       value_bound: 16
     given: [situation_params]
     asked: [read_point]

@@ -21,7 +21,7 @@ levels:
     recipe: math.probability_ordered_selection
     params:
       # 樹形図でかける人数に限る（51人だと124,950通りで、指示が破綻する）。
-      n_domain: {int_range: [4, 6]}
+      n_domain: {int_range: [4, 10]}
     given: [condition]
     asked: [value]
     visual: none

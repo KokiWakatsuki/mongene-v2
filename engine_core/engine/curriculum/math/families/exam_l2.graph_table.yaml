@@ -16,8 +16,8 @@ levels:
     signature: exam_parabola_line_enclosed_region
     recipe: math.draw_parabola_and_line
     params:
-      a_domain: {int_range: [-6, 6], exclude: [0]}
-      x_domain: {int_range: [-4, 4], exclude: [0]}
+      a_domain: {int_range: [-10, 10], exclude: [0]}
+      x_domain: {int_range: [-6, 6], exclude: [0]}
       value_bound: 16
     given: [expression, line_a, situation_params]
     asked: [draw_graph]

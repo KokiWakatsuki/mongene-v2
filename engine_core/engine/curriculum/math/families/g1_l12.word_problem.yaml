@@ -58,7 +58,7 @@ levels:
     params:
       scenario_kind: discount
       # **割引きは1〜5割**（9割引き・8割引きは小売の場面として成り立たない）。
-      discount_domain: {int_range: [1, 5]}
+      discount_domain: {int_range: [1, 9]}
       item_candidates: [シャツ, かばん, くつ, ぼうし, マフラー, 手ぶくろ, セーター,
                         上着, くつ下, ネクタイ, スカーフ, ベルト, スニーカー, ジーンズ,
                         スカート, ブラウス, さいふ, うで時計, かさ, リュック, コート,
