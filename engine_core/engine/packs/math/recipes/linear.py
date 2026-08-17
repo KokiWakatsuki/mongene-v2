@@ -1005,19 +1005,32 @@ def read_diagram_intersection(ctx: CellContext, rng: Rng) -> MR:
     問題図は空の方眼（生徒が2直線をかいて交点を読む）。steps はグラフ読解の手順（数字を含めない）。
     """
     p = ctx.spec_level.params
-    x0 = draw(p["x_domain"], rng)
-    y0 = draw(p["y_domain"], rng)
-    scenario = draw(p["scenario_domain"], rng)  # 素の配列 [meet, catchup] からの一様選択
-    if scenario == "meet":
-        a1 = draw(p["pos_slope_domain"], rng)  # 向かい合う: 一方は正の傾き
-        a2 = draw(p["neg_slope_domain"], rng)  # もう一方は負の傾き（異符号）
-    else:  # catchup: 同方向（同符号）で傾きが相異＝速い方が追いつく
-        a1, a2 = draw_many(p["pos_slope_domain"], rng, k=2)  # distinct:[value] で相異保証
+    # **x=0 での道のりが負になる式は出さない。** 交点だけを見て切片を逆算して
+    # いたので「Aさんの進むようすは y = 3x - 5」＝出発した瞬間の道のりが -5 という、
+    # 「P地点からの道のり」として成り立たない式が出ていた。
+    #
+    # ★同じ直しが `_build_two_line_intersection_graph`（上）と
+    # `_build_intersection_point`（下）には入っていて、**ここだけ抜けていた**。
+    # 3つとも「交点を先に決めて切片を逆算する」同じ骨組みなので、1か所直しても
+    # 残りの出口から同じ文が出る。
+    for _ in range(300):
+        x0 = draw(p["x_domain"], rng)
+        y0 = draw(p["y_domain"], rng)
+        scenario = draw(p["scenario_domain"], rng)  # 素の配列 [meet, catchup] からの一様選択
+        if scenario == "meet":
+            a1 = draw(p["pos_slope_domain"], rng)  # 向かい合う: 一方は正の傾き
+            a2 = draw(p["neg_slope_domain"], rng)  # もう一方は負の傾き（異符号）
+        else:  # catchup: 同方向（同符号）で傾きが相異＝速い方が追いつく
+            a1, a2 = draw_many(p["pos_slope_domain"], rng, k=2)  # distinct:[value] で相異保証
 
-    x0_s, y0_s = sympy.nsimplify(x0), sympy.nsimplify(y0)
-    a1_s, a2_s = sympy.nsimplify(a1), sympy.nsimplify(a2)
-    b1_s = y0_s - a1_s * x0_s
-    b2_s = y0_s - a2_s * x0_s
+        x0_s, y0_s = sympy.nsimplify(x0), sympy.nsimplify(y0)
+        a1_s, a2_s = sympy.nsimplify(a1), sympy.nsimplify(a2)
+        b1_s = y0_s - a1_s * x0_s
+        b2_s = y0_s - a2_s * x0_s
+        if b1_s >= 0 and b2_s >= 0:
+            break
+    else:
+        raise ValueError("meeting graph: 出発時の道のりが負にならない組を構成できず")
 
     # 一般形係数（y = a x + b ⇔ -a x + y = b）で solver に渡す（g2_l27 と同じ規約）。
     coeffs1 = [-a1_s, sympy.Integer(1), b1_s]

@@ -42,8 +42,27 @@ def true_element_count(n: int, solid_type: str, quantity: str) -> int:
     raise ValueError(f"未知の solid_type: {solid_type!r}")
 
 
-def _judge_steps(correct: str, s1_display: str, s1_narration: str, s2_narration: str) -> list[Step]:
-    """g1_l47 Lv2 共通の op 列 [read_claim, judge_claim]（mode 間で不変＝G-FP 安定）。"""
+#: 正多角形の実物の呼び方（「正3角形」とは書かない／4は「正方形」）。
+_REGULAR_POLYGON_JP = {
+    3: "正三角形", 4: "正方形", 5: "正五角形", 6: "正六角形",
+    7: "正七角形", 8: "正八角形", 9: "正九角形", 10: "正十角形",
+}
+
+
+def _judge_steps(
+    correct: str,
+    s1_display: str,
+    s1_narration: str,
+    s2_narration: str,
+    s2_detail: str = "",
+) -> list[Step]:
+    """g1_l47 Lv2 共通の op 列 [read_claim, judge_claim]（mode 間で不変＝G-FP 安定）。
+
+    `s2_detail` は**実際に計算した数**を解説だけに出すためのもの。
+    「公式で実際の個数を求め、主張されている個数と比べて」と言いながら、
+    括弧には「誤り」しか出ておらず、**生徒が自分の答えと突き合わせる数が
+    どこにも無かった**。narration には入れない（ヒントに流れて G-Q5t に触る）。
+    """
     return [
         Step(
             op="read_claim",
@@ -58,6 +77,7 @@ def _judge_steps(correct: str, s1_display: str, s1_narration: str, s2_narration:
             result_srepr=correct,
             result_display=correct,
             narration=s2_narration,
+            detail=s2_detail or s2_narration,
         ),
     ]
 
@@ -80,14 +100,22 @@ def judge_polyhedron_element_count(
         raise ValueError(f"底面の辺の数は3以上であること: {n_i!r}")
     if q not in ELEMENT_QUANTITIES:
         raise ValueError(f"未知の quantity: {q!r}")
-    is_true = cand == true_element_count(n_i, st, q)
+    actual = true_element_count(n_i, st, q)
+    is_true = cand == actual
     correct = "正しい" if is_true else "誤り"
     other = "誤り" if is_true else "正しい"
+    solid_jp = "角柱" if st == "prism" else "角錐"
+    verdict = "主張と同じなので正しい" if is_true else f"主張の {cand} とちがうので誤り"
     steps = _judge_steps(
         correct,
         f"{_QUANTITY_JP[q]}の数の主張",
         "立体の種類（角柱か角錐か）と、数を主張されている量（面・辺・頂点のどれか）を読み取る。",
         "底面の辺の数から公式で実際の個数を求め、主張されている個数と比べて正誤を判別する。",
+        s2_detail=(
+            "底面の辺の数から公式で実際の個数を求め、主張されている個数と比べる。"
+            f"底面の辺が {n_i} の{solid_jp}なので、{_QUANTITY_JP[q]}の数は {actual}。"
+            f"{verdict}。"
+        ),
     )
     answer = ChoiceAnswer(
         correct=correct, distractors=[other], fact_id=f"polyhedron_element_count.{st}.{q}"
@@ -111,16 +139,34 @@ def judge_regular_polyhedron_condition(shape_sides: object, count_at_vertex: obj
     if m < 3 or k < 3:
         raise ValueError(f"多角形の辺の数・頂点に集まる面の数は3以上であること: m={m!r}, k={k!r}")
     interior_angle = sympy.Rational((m - 2) * 180, m)
-    can_form = bool(interior_angle * k < 360)
+    total = interior_angle * k
+    can_form = bool(total < 360)
     correct = "正しい" if can_form else "誤り"
     other = "誤り" if can_form else "正しい"
+    # **「正3角形」と書いていた。** 問題文は「正三角形」なので、括弧だけ算用数字に
+    # なっていた。三・四・五・六は漢数字が実物の書き方（四角形は「正方形」）。
+    poly_jp = _REGULAR_POLYGON_JP.get(m, f"正{m}角形")
     steps = _judge_steps(
         correct,
-        f"正{m}角形が{k}枚",
+        f"{poly_jp}が{k}枚",
         "面になっている正多角形の種類と、1つの頂点に集まる面の数を読み取る。",
         (
             "その正多角形の1つの内角の大きさに、集まる面の数をかけた角の和を求め、"
             "それが一まわりの角より小さいときだけ、折り曲げて立体の頂点にできると判別する。"
+        ),
+        # **なぜそうするかを落とさない。** 数だけを入れると
+        # 「正三角形の1つの内角は 60°、…（正しい）」となって、
+        # 何のためにこの計算をしているのかが解説から消える。目的の文を先に置く。
+        s2_detail=(
+            "その正多角形の1つの内角の大きさに、集まる面の数をかけた角の和を求め、"
+            "それが一まわりの角より小さいかどうかを見る。"
+            f"{poly_jp}の1つの内角は {interior_angle}° だから "
+            f"{interior_angle}° × {k} = {total}°。"
+            + (
+                "一まわりの 360° より小さいので、折り曲げて立体の頂点にできる。"
+                if can_form
+                else "一まわりの 360° より小さくないので、折り曲げて立体の頂点にできない。"
+            )
         ),
     )
     answer = ChoiceAnswer(

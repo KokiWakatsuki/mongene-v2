@@ -65,7 +65,12 @@ def _answer_text(answer: object) -> str:
         return str(correct)
     features = getattr(answer, "features", None)
     if features:
-        return "、".join(f"{f.kind} {f.display}" for f in features)
+        # **`f.kind` を前に足さない。** 足していたので `intersection 交点 (-1, 6)`・
+        # `min 最小値 6` と出て、「答えに英語のスロット名が漏れている」と読み違えた。
+        # 漏れていたのはこの道具のほうで、engine は `f.display` しか出していない
+        # （どの display も日本語のラベルを持っている）。
+        # 読む道具が足したものは、読む人には engine の出力と区別できない。
+        return "、".join(f.display for f in features)
     return str(getattr(answer, "text", "") or "")
 
 

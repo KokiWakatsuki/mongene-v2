@@ -568,14 +568,14 @@ def read_plan_crossover_from_graph(pa: object, pb: object, fixed: object) -> Sol
             args=[fmt_number(pa_s)],
             result_srepr=sympy.srepr(pa_s * sympy.Symbol("x")),
             result_display=_fmt_direct(pa_s),
-            narration="Aの料金は個数に比例するので、一個あたりの値段を比例定数として式に表す。",
+            narration="Aの料金は枚数に比例するので、1枚あたりの値段を比例定数として式に表す。",
         ),
         Step(
             op="express_plan_b",
             args=[fmt_number(pb_s), fmt_number(f_s)],
             result_srepr=sympy.srepr(pb_s * sympy.Symbol("x") + f_s),
             result_display=f"y = {fmt_number(pb_s)}x + {fmt_number(f_s)}",
-            narration="Bの料金は個数に比例する分に、個数によらずかかる分をたした式になる。",
+            narration="Bの料金は枚数に比例する分に、枚数によらずかかる分をたした式になる。",
         ),
         Step(
             op="draw_both_plan_graphs",
@@ -589,7 +589,7 @@ def read_plan_crossover_from_graph(pa: object, pb: object, fixed: object) -> Sol
             args=[],
             result_srepr=sympy.srepr(pt),
             result_display=_pt_display(pt),
-            narration="二本のグラフが交わる点の目もりを読むと、どちらの料金も等しくなる個数と、そのときの料金がわかる。",
+            narration="二本のグラフが交わる点の目もりを読むと、どちらの料金も等しくなる枚数と、そのときの料金がわかる。",
         ),
     ]
     return Solution(

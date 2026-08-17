@@ -314,9 +314,50 @@ def _hypothesis_narration(claim: str) -> str:
     return "仮定から、与えられていることを書き出す。"
 
 
+#: 「仮定から、○を書き出す。」の○に、二度目であることを差しこむ言い方。
+#: 数字は使わない——narration はヒントに流れるので、算用数字を入れると
+#: G-Q5t が答え由来の値と衝突を起こしうる（鉄則①）。
+_SECOND_TIME_HYPOTHESIS = {
+    "等しい辺": "もう一組の等しい辺",
+    "等しい角": "もう一組の等しい角",
+    "平行な直線": "もう一組の平行な直線",
+    "垂直な直線": "もう一組の垂直な直線",
+    "辺の比": "もう一組の辺の比",
+    "中点であること": "もう一つの中点であること",
+    "角の大きさ": "もう一つの角の大きさ",
+    "四角形の種類": "もう一つの四角形の種類",
+    "与えられていること": "ほかに与えられていること",
+}
+
+
+def _mark_repeat(narration: str, nth: int) -> str:
+    """同じ言い方が続くとき、何度目かが分かるようにする。
+
+    **同じ文が2回続くと、ヒントが2行とも同じ文になる。** 実物を読むと
+    「仮定から、等しい辺を書き出す。／仮定から、等しい辺を書き出す。」
+    「平行線の錯角は等しいことから、等しい角が分かる。」×2 が 23 セルに出ていた。
+    生徒には二度目が別の組についての話だと分からない。
+
+    仮定の行は目的語に「もう一組の」を差しこみ、規則の行は頭に「別の組でも、」を
+    置く。文の骨組みは変えない（level_sep は op 列で測るので影響しない）。
+    """
+    if nth <= 1:
+        return narration
+    if narration.startswith("仮定から、"):
+        for obj, replaced in _SECOND_TIME_HYPOTHESIS.items():
+            head = f"仮定から、{obj}"
+            if narration.startswith(head):
+                lead = "さらに" if nth >= 3 else ""
+                return f"仮定から、{lead}{replaced}" + narration[len(head):]
+        return narration
+    lead = "さらに別の組でも、" if nth >= 3 else "別の組でも、"
+    return lead + narration
+
+
 def _steps_from_lines(lines) -> list[Step]:
     """証明の行を採点粒度の Step にする（op 列＝level_sep の材料になる）。"""
     out: list[Step] = []
+    seen: dict[str, int] = {}
     for line in lines:
         narration = _STEP_NARRATION.get(line.op)
         if line.op == "cite_hypothesis":
@@ -329,6 +370,10 @@ def _steps_from_lines(lines) -> list[Step]:
                 narration = f"{line.reason}、{_claim_tail(line.claim)}"
             else:
                 narration = f"{line.reason}ことから、{_claim_tail(line.claim)}"
+        # **数えるのは「続けて」でなく「この証明の中で」。** 間に別の行がはさまっても
+        # 同じ文が二度出れば、ヒントの並びとしては同じ読みにくさになる。
+        seen[narration] = seen.get(narration, 0) + 1
+        narration = _mark_repeat(narration, seen[narration])
         out.append(
             Step(op=line.op, args=[], result_srepr="", result_display=line.claim,
                  narration=narration)

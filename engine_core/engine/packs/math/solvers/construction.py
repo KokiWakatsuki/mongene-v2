@@ -493,7 +493,7 @@ def circumcenter_of_three_points(
             args=[nc_s],
             result_srepr=_srepr_pt(c),
             result_display=f"点{nc_s}を中心とする弧",
-            narration=f"次の組についても、点{nc_s}を中心に同じ要領で弧をかく。",
+            narration=f"もう一組についても、点{nc_s}を中心に同じ要領で弧をかく。",
         ),
         Step(
             op="arc_from_shared_point",

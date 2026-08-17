@@ -515,6 +515,14 @@ _D_HOURS = tuple(range(1, 9))                      # 時間
 _D_DATA_N = (10, 15, 20, 24, 25, 30, 32, 36, 40, 45, 50)  # データの個数・人数
 _D_SMALL_DEN = (2, 3, 4, 5, 6, 8, 9, 10, 12, 15, 16, 20, 25, 36)  # 確率の分母
 
+#: 長さを1つ決めれば周の長さが決まる図形（＝「周は1辺の関数だ」と言ってよい題材）。
+#: 長方形・平行四辺形・台形は、辺を1つ決めても残りの辺が決まらないので入れない。
+_PERIMETER_FIXED_BY_ONE_LENGTH = [
+    "正方形|1辺の長さ", "正三角形|1辺の長さ", "正五角形|1辺の長さ",
+    "正六角形|1辺の長さ", "正八角形|1辺の長さ", "正十角形|1辺の長さ",
+    "ひし形|1辺の長さ", "円|半径", "円|直径",
+]
+
 
 def _pick(cands: tuple[int, ...], rng: Rng, *, signed: bool = False) -> int:
     """自然な集合から1つ引く（`signed=True` なら符号も引く）。"""
@@ -911,6 +919,18 @@ def _draw_term_statement(domain: str, concept: str, rng: Rng, p: dict[str, objec
                     "ただ1つに決まるときの、2つの数量の関係"
                 )
             # 下限の節（「{n}cm より長い」）は重複率のために足した無意味な条件だった。
+            #
+            # **ここだけは題材を絞る。** この文は「y は x の関数である」と言って
+            # いるので、**1つの長さから周の長さが決まる図形でないと文が偽になる**。
+            # 上の一覧には「長方形|縦の長さ」「平行四辺形|1辺の長さ」
+            # 「台形|上底の長さ」が入っていて、縦を決めても周は決まらないのに
+            # 「この y と x のような関係」＝関数と答えさせていた（15例中6例）。
+            # 一覧そのものは狭めない——variable と domain_range では
+            # 「長方形の縦の長さを x cm とするとき」は正しい文だから。
+            if f"{shape}|{quantity}" not in _PERIMETER_FIXED_BY_ONE_LENGTH:
+                shape, quantity = str(
+                    draw(_PERIMETER_FIXED_BY_ONE_LENGTH, rng)
+                ).split("|")
             return (
                 f"{shape}の{quantity}を x cm、周の長さを y cm とするときの、"
                 "この y と x のような関係"
