@@ -94,9 +94,13 @@ def grouped_by_variable_part(written_terms: list[sympy.Expr]) -> str:
         _coeff, rest = t.as_coeff_Mul()
         groups.setdefault(fmt_expr(rest), []).append(t)
     chunks = []
+    # **組が1つしかないならかっこで囲まない。** `(a - 2a/5)` のように、
+    # 区切る相手がいないのに外側だけかっこがついていた（g1_l12 の割引きの式）。
+    only_one_group = len(groups) == 1
     for terms in groups.values():
         body = join_signed(terms)
-        chunks.append(f"({body})" if len(terms) > 1 or body.startswith("-") else body)
+        need = (len(terms) > 1 or body.startswith("-")) and not only_one_group
+        chunks.append(f"({body})" if need else body)
     return " + ".join(chunks)
 
 

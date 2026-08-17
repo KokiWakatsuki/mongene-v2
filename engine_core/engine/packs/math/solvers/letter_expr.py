@@ -1351,7 +1351,15 @@ def represent_opposite_quantity(
             args=[],
             result_srepr=sympy.srepr(val),
             result_display=correct,
-            narration="正の数で表す向きと反対の向きの量には、反対の符号をつけて表す。",
+            # **同じ向きの量にも「反対の符号をつける」と言っていた。**
+            # 「値上がりを正の数で表す」場面で「値上がり2300円」を問われたとき、
+            # 答えは +2300（同じ向き）なのに、解説は「反対の向きの量には反対の
+            # 符号をつけて表す」と、この問題に当てはまらないことを言っていた。
+            narration=(
+                "正の数で表すことにした向きと同じ向きの量なので、そのまま + をつけて表す。"
+                if sign > 0
+                else "正の数で表すことにした向きと反対の向きの量なので、- をつけて表す。"
+            ),
         ),
     ]
     answer = ChoiceAnswer(correct=correct, distractors=[other], fact_id="number.opposite_quantity")
