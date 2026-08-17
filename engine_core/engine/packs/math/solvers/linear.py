@@ -1281,7 +1281,7 @@ def equation_solution_set_shape(_marker: object = None) -> Solution:
             op="recall_property",
             args=[],
             result_srepr="solution_set_is_line",
-            result_display="解の集合の形を思い出す",
+            result_display="解は1組に決まらず、いくつもある",
             narration="2元1次方程式の解を座標とする点をすべて集めると、どんな形になるかを思い出す。",
         ),
         Step(
@@ -1290,6 +1290,11 @@ def equation_solution_set_shape(_marker: object = None) -> Solution:
             result_srepr=correct,
             result_display=correct,
             narration="2元1次方程式の解の集合は直線になる。",
+            detail=(
+                "2元1次方程式は、片方の文字にどんな値を入れても、"
+                "もう片方の値がそれに応じて1つ決まる。その組を座標とみて"
+                "点をとっていくと、点はまっすぐに並ぶので、集めた形は直線になる。"
+            ),
         ),
     ]
     answer = ChoiceAnswer(
@@ -1313,7 +1318,7 @@ def system_solution_is_intersection(_marker: object = None) -> Solution:
             op="recall_property",
             args=[],
             result_srepr="solution_is_intersection",
-            result_display="連立の解とグラフの関係を思い出す",
+            result_display="どちらの式も成り立たせる値の組",
             narration="連立方程式の解が、2つの式のグラフのどこにあたるかを思い出す。",
         ),
         Step(
@@ -1322,6 +1327,11 @@ def system_solution_is_intersection(_marker: object = None) -> Solution:
             result_srepr=correct,
             result_display=correct,
             narration="連立方程式の解は、2つの直線の交点の座標である。",
+            detail=(
+                "それぞれの式のグラフは、その式を成り立たせる点だけを集めた直線である。"
+                "どちらの式も成り立たせる点は、両方の直線にのっている点だから、"
+                "2つの直線が交わる点にあたる。"
+            ),
         ),
     ]
     answer = ChoiceAnswer(

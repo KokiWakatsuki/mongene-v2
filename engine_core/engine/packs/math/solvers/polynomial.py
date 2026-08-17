@@ -21,6 +21,7 @@ from engine.packs.math.solvers._step_text import (
     join_signed,
     top_level_parts,
 )
+from engine.packs.math.solvers.term_definitions import definition_for
 
 # 任意桁の指数を上付き数字へ（単項式の乗除は 4 次以上も生じうる）。
 _SUPERSCRIPT = str.maketrans("0123456789", "⁰¹²³⁴⁵⁶⁷⁸⁹")
@@ -615,12 +616,16 @@ def poly_term_definition(concept: object) -> Solution:
         raise ValueError(f"未知の concept: {c!r}")
     correct = _POLY_TERM_NAMES[c]
     distractors = [v for k, v in _POLY_TERM_NAMES.items() if k != c]
+    # **なぜその用語なのかを言う。** 1手目は括弧が空で産物が無く、2手目は
+    # 「その対象を表す用語の名前を思い出す。（次数）」＝設問の言い直しだった。
+    # 定義は解説にしか出ない `detail` に置く（narration はヒントに流れる・鉄則⑦）。
+    read_target, definition = definition_for("poly_terms", c)
     steps = [
         Step(
             op="identify_description",
             args=[],
             result_srepr=c,
-            result_display="",
+            result_display=read_target,
             narration="説明されている式や数の部分がどれかを読み取る。",
         ),
         Step(
@@ -629,6 +634,7 @@ def poly_term_definition(concept: object) -> Solution:
             result_srepr=correct,
             result_display=correct,
             narration="その対象を表す用語の名前を思い出す。",
+            detail=definition or "その対象を表す用語の名前を思い出す。",
         ),
     ]
     answer = ChoiceAnswer(correct=correct, distractors=distractors, fact_id=f"poly.term.{c}")
@@ -717,12 +723,13 @@ def system_term_definition(concept: object) -> Solution:
         raise ValueError(f"未知の concept: {c!r}")
     correct = _SYSTEM_TERM_NAMES[c]
     distractors = [v for k, v in _SYSTEM_TERM_NAMES.items() if k != c]
+    read_target, definition = definition_for("system_terms", c)
     steps = [
         Step(
             op="identify_description",
             args=[],
             result_srepr=c,
-            result_display="",
+            result_display=read_target,
             narration="説明されている方程式や値の組がどれかを読み取る。",
         ),
         Step(
@@ -731,6 +738,7 @@ def system_term_definition(concept: object) -> Solution:
             result_srepr=correct,
             result_display=correct,
             narration="その対象を表す用語の名前を思い出す。",
+            detail=definition or "その対象を表す用語の名前を思い出す。",
         ),
     ]
     answer = ChoiceAnswer(correct=correct, distractors=distractors, fact_id=f"system.term.{c}")

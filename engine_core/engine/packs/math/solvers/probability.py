@@ -485,13 +485,27 @@ def interpret_relative_frequency_limit(dummy: object) -> Solution:
     （double-solve・恒真）。答えは ChoiceAnswer。narration に数字は書かない。
     """
     correct = "その事象の起こる確率"
+    # **手が1つしかなく、その1手がもう答えだった。** 読み取る手と、意味を言う手に分ける
+    # （実物の解説はこの2段になっている）。
     steps = [
+        Step(
+            op="read_relative_frequency_behavior",
+            args=[],
+            result_srepr="converges",
+            result_display="回数を増やすと一定の値に近づいた",
+            narration="投げる回数を増やしたときに、相対度数がどう変わっていったかを読み取る。",
+        ),
         Step(
             op="recall_relative_frequency_limit",
             args=[],
             result_srepr=correct,
             result_display=correct,
             narration="試行回数を増やしたときに相対度数が近づく値が、何を表すかを思い出す。",
+            detail=(
+                "回数が少ないうちは相対度数がばらつくが、くり返す回数を増やしていくと"
+                "ある値のまわりに落ち着いていく。この落ち着き先が、そのことがらの"
+                "起こりやすさの程度を表す数、つまり確率である。"
+            ),
         ),
     ]
     answer = ChoiceAnswer(

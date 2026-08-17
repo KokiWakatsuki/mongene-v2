@@ -88,9 +88,15 @@ def congruence_symbol_and_side(p_labels: object, q_labels: object, i: object, j:
     wrong_correspondence = f"合同を表す記号は≡であり、{given_side}に対応する辺は{wrong_side}である"
     steps = [
         Step(
+            # **括弧は「その手で得たもの」。** 「合同を表す記号を思い出す」＝指示の
+            # 言い直しで、記号そのものが出ていなかった。
             op="recall_congruence_symbol",
-            args=[], result_srepr="", result_display="合同を表す記号を思い出す",
+            args=[], result_srepr="", result_display="≡",
             narration="2つの図形が合同であることを表すのに使う記号を思い出す。",
+            detail=(
+                "2つの図形が合同であることは ≡ で表す。"
+                "形が同じで大きさがちがう相似の ∽ と書き分ける。"
+            ),
         ),
         Step(
             op="identify_side_correspondence",
@@ -98,8 +104,10 @@ def congruence_symbol_and_side(p_labels: object, q_labels: object, i: object, j:
             narration="合同を表す式で、頂点がどの順に対応づけられているかを確認する。",
         ),
         Step(
+            # 最後の手の括弧に答え全体（記号＋対応する辺）を入れていたが、
+            # この手で得たのは**対応する辺だけ**。記号は1手目で出している。
             op="name_corresponding_side",
-            args=[], result_srepr=correct, result_display=correct,
+            args=[], result_srepr=correct, result_display=correct_side,
             narration="対応する位置にある頂点どうしが結ぶ辺が、対応する辺になることから読み取る。",
         ),
     ]
