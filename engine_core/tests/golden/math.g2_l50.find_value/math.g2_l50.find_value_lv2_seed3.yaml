@@ -33,19 +33,19 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - equal_area.transform_value
-  explanation: 'まず、等積変形をする前の、もとの図形の面積を読み取る。（200）
+  explanation: 'まず、等積変形をする前の、面積がわかっている図形はどれかを確かめる。
 
     次に、もとの四角形を対角線で2つの三角形に分けると、一方は平行な直線にはさまれた三角形になる。その三角形を平行線にそって移しても底辺と高さが変わらないので面積は同じ。だから全体の面積も変わらない。（200）'
   hints:
-  - 等積変形をする前の、もとの図形の面積を読み取る。
+  - 等積変形をする前の、面積がわかっている図形はどれかを確かめる。
   label: (1)
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
     detail: ''
-    narration: 等積変形をする前の、もとの図形の面積を読み取る。
+    narration: 等積変形をする前の、面積がわかっている図形はどれかを確かめる。
     op: identify_original_area
-    result_display: '200'
+    result_display: ''
     result_srepr: ''
   - args: []
     detail: もとの四角形を対角線で2つの三角形に分けると、一方は平行な直線にはさまれた三角形になる。その三角形を平行線にそって移しても底辺と高さが変わらないので面積は同じ。だから全体の面積も変わらない。

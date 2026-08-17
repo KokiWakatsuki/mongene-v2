@@ -24,9 +24,9 @@ meta:
   seed: 1
   signature: word_problem_quadratic_given_equation
 problem_ref: bed5442834a32ac1
-problem_text: 'ある斜面でビー玉を転がす実験をした。
+problem_text: 'ある斜面でタイヤを転がす実験をした。
 
-  転がり始めてから x 秒間にビー玉が進む距離を y m とすると、y = 2x² の関係が成り立つという。
+  転がり始めてから x 秒間にタイヤが進む距離を y m とすると、y = 2x² の関係が成り立つという。
 
   (1) 3秒間に進む距離を求めよ。
 

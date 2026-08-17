@@ -24,9 +24,9 @@ meta:
   seed: 2
   signature: word_problem_quadratic_given_equation
 problem_ref: 96b9d856dd64cb91
-problem_text: 'ある斜面で木の球を転がす実験をした。
+problem_text: 'ある斜面でタイヤを転がす実験をした。
 
-  転がり始めてから x 秒間に木の球が進む距離を y m とすると、y = 2x² の関係が成り立つという。
+  転がり始めてから x 秒間にタイヤが進む距離を y m とすると、y = 2x² の関係が成り立つという。
 
   (1) 2秒間に進む距離を求めよ。
 

@@ -195,8 +195,11 @@ def equal_area_transform_value(area_value: object) -> Solution:
     steps = [
         Step(
             op="identify_original_area",
-            args=[], result_srepr="", result_display=fmt_measure(v),
-            narration="等積変形をする前の、もとの図形の面積を読み取る。",
+            args=[], result_srepr="", result_display="",
+            # **1手目に面積の値を出さない。** 等積変形では答えがもとの面積と同じ値に
+            # なるので、値を出すと**解説の1行目がもう答え**になる（走査が指摘）。
+            # ここで確かめるのは「どの図形の面積がわかっているか」であって値ではない。
+            narration="等積変形をする前の、面積がわかっている図形はどれかを確かめる。",
         ),
         Step(
             op="apply_equal_area_transform",

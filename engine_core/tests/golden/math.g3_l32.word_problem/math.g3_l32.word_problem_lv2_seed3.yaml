@@ -24,9 +24,9 @@ meta:
   seed: 3
   signature: word_problem_quadratic_given_equation
 problem_ref: 363ffa80f3155db6
-problem_text: 'ある斜面で鉄の球を転がす実験をした。
+problem_text: 'ある斜面で空き缶を転がす実験をした。
 
-  転がり始めてから x 秒間に鉄の球が進む距離を y m とすると、y = 2x² の関係が成り立つという。
+  転がり始めてから x 秒間に空き缶が進む距離を y m とすると、y = 2x² の関係が成り立つという。
 
   (1) 5秒間に進む距離を求めよ。
 
