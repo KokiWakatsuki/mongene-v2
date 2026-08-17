@@ -327,14 +327,30 @@ def _plan_candidates(plan_shape: str) -> list[str]:
 
 def _complete_phrase(plan_shape: str, name: str) -> dict[str, str]:
     """投影図を補う手の括弧（読み取った形と絞りこんだ立体）。"""
+    cands = _plan_candidates(plan_shape)
     return {
         "read_given_view": _SHAPE_JP[plan_shape],
         # **「すべて挙げ」と言うなら挙げる。** 候補を1つも書かずに答えの立体へ
         # 飛んでいたので、「絞る」作業が解説の中に存在しなかった。
+        #
+        # **候補が1つのときは矢印を書かない。** 「（正四角錐 → 正四角錐）」と
+        # 出ていて、絞る作業が無いのに絞ったように見えていた。
         "identify_solid_from_partial": (
-            "、".join(_plan_candidates(plan_shape)) + f" → {name}"
+            name if len(cands) == 1 else "、".join(cands) + f" → {name}"
         ),
     }
+
+
+def _complete_narration(plan_shape: str) -> dict[str, str]:
+    """候補が1つしかない図では、「絞る」と言わない（空回りの手になる）。"""
+    if len(_plan_candidates(plan_shape)) == 1:
+        return {
+            **_COMPLETE_NARRATION,
+            "identify_solid_from_partial": (
+                "その形の平面図になる立体は一つしかないので、立体はそれに決まる。"
+            ),
+        }
+    return _COMPLETE_NARRATION
 
 
 @register_solver("math.complete_projection")
@@ -359,7 +375,10 @@ def complete_projection(plan: object, elevation: object) -> Solution:
     srepr = sympy.srepr(sympy.Tuple(sympy.Symbol(name), sympy.Symbol(elev_s)))
     return Solution(
         answer=GraphAnswer(features=features, solution_svg_ref=""),
-        steps=_steps(_COMPLETE_OPS, _COMPLETE_NARRATION, _complete_phrase(plan_s, name), srepr, disp),
+        steps=_steps(
+            _COMPLETE_OPS, _complete_narration(plan_s),
+            _complete_phrase(plan_s, name), srepr, disp,
+        ),
     )
 
 

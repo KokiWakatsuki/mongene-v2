@@ -42,21 +42,20 @@ _TREE_NARRATION_SEQUENTIAL: dict[str, str] = {
 }
 
 
-def _tree_phrase(
-    tuples: list[tuple[str, ...]], *, with_replacement: bool
-) -> dict[str, str]:
+def _tree_phrase(tuples: list[tuple[str, ...]]) -> dict[str, str]:
     """樹形図の手の括弧（枝そのもの）。指示の言い直しは置かない（面③）。"""
     firsts = list(dict.fromkeys(t[0] for t in tuples))
-    if with_replacement:
-        seconds = list(dict.fromkeys(t[1] for t in tuples if len(t) > 1))
-        second_text = "、".join(seconds)
-    else:
-        # 枝ごとに書く（`白のあとは 黒、青 ／ 黒のあとは 白、青 …`）。
-        per_branch = []
-        for f in firsts:
-            opts = [t[1] for t in tuples if t[0] == f and len(t) > 1]
-            per_branch.append(f"{f}のあとは {'、'.join(opts)}")
-        second_text = " ／ ".join(per_branch)
+    # **枝ごとに書く**（`白のあとは 黒、青 ／ 黒のあとは 白、青 …`）。
+    #
+    # もとに戻す場面（硬貨）だけ「表、裏」と平らに並べていたので、1手目の括弧と
+    # 2手目の括弧が同じ文字列になり、枝が分かれるようすが見えなかった。
+    # 戻す・戻さないで書き方を変える理由は無い——**どちらも枝ごとに書けば、
+    # 戻す場面ではどの枝も同じ、戻さない場面では枝ごとに違う**ことが目で分かる。
+    per_branch = []
+    for f in firsts:
+        opts = [t[1] for t in tuples if t[0] == f and len(t) > 1]
+        per_branch.append(f"{f}のあとは {'、'.join(opts)}")
+    second_text = " ／ ".join(per_branch)
     return {
         "list_first_choices": "、".join(firsts),
         "branch_second_choices": second_text,
@@ -105,7 +104,7 @@ def tree_diagram_outcomes(items: object, draws: object, replace: object) -> Solu
             op=op, args=[],
             result_srepr=srepr if i == len(_TREE_OPS) - 1 else "",
             result_display=disp if i == len(_TREE_OPS) - 1
-            else _tree_phrase(tuples, with_replacement=with_replacement)[op],
+            else _tree_phrase(tuples)[op],
             narration=(
                 _TREE_NARRATION_SIMULTANEOUS if with_replacement
                 else _TREE_NARRATION_SEQUENTIAL

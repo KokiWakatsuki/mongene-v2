@@ -124,7 +124,8 @@ def read_distribution_chart(
             op="read_class_frequency",
             args=[],
             result_srepr=sympy.srepr(target_freq),
-            result_display=f"対象の階級の度数は{target_freq}",
+            # 「対象の階級」では、どの階級のことか括弧から分からない。
+            result_display=f"{t_lo}{u}以上{t_hi}{u}未満の階級の度数は{target_freq}",
             narration="対象の階級の位置をグラフの横軸で見つけ、その高さを縦軸の目盛で読み取る。",
         ),
         Step(
@@ -132,7 +133,12 @@ def read_distribution_chart(
             args=[],
             result_srepr=srepr,
             result_display=disp,
-            narration="グラフでいちばん高くなっている階級を探し、その階級の範囲を横軸から読み取る。",
+            # 括弧には答え全体（度数＋最頻の階級）が出るので、narration も
+            # 両方に触れる。片方しか言っていないと括弧の中身と噛み合わない。
+            narration=(
+                "グラフでいちばん高くなっている階級を探してその範囲を横軸から読み取り、"
+                "先に読んだ度数とあわせて答える。"
+            ),
         ),
     ]
     return Solution(answer=SymbolicAnswer(srepr=srepr, display=disp), steps=steps)
@@ -264,7 +270,10 @@ def compare_distribution_shape(
             args=[],
             result_srepr=correct,
             result_display=correct,
-            narration="山がいちばん高くなる階級が、両方のグラフでどちら寄りにあるかを見比べる。",
+            narration=(
+                "山がいちばん高くなる階級が、両方のグラフでどちら寄りにあるかを見比べ、"
+                "先に見た散らばりとあわせて答える。"
+            ),
         ),
     ]
     answer = ChoiceAnswer(
