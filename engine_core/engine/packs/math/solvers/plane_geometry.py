@@ -43,6 +43,12 @@ _TRANSFORMATION_NARRATION_S1: dict[str, str] = {
     "rotation": "図形を回転移動する前と後で、対応する点と回転の中心との関係を見比べる。",
     "reflection": "図形を対称移動する前と後で、対応する点を結ぶ線分と対称の軸との関係を見比べる。",
 }
+#: 1手目の括弧に出す「見比べた当のもの」。空にしていたので、その手に産物が無かった。
+_TRANSFORMATION_TARGET_S1: dict[str, str] = {
+    "parallel_translation": "対応する辺の長さと図形の大きさ",
+    "rotation": "対応する点から回転の中心までの距離",
+    "reflection": "対応する2点を結ぶ線分と対称の軸",
+}
 
 
 @register_solver("math.judge_transformation_invariant")
@@ -61,8 +67,9 @@ def judge_transformation_invariant(topic: object) -> Solution:
             op="compare_before_after",
             args=[],
             result_srepr=t,
-            # 見比べた結果（＝答えそのもの）は次の手なので、ここは括弧なしにする。
-            result_display="",
+            # 見比べた**結果**（＝答え）は次の手だが、**何を見比べたか**はこの手の
+            # 産物である。空にしていたので、この手だけ括弧が無かった。
+            result_display=_TRANSFORMATION_TARGET_S1[t],
             narration=_TRANSFORMATION_NARRATION_S1[t],
         ),
         Step(
@@ -208,7 +215,8 @@ def judge_point_line_distance_meaning(dummy: object) -> Solution:
             op="identify_point_and_line",
             args=[],
             result_srepr="",
-            result_display="",
+            # 1手目の括弧が空で、読み取った当のものが出ていなかった。
+            result_display="点は直線の上に無い",
             narration="点と直線の位置関係を読み取る。",
         ),
         Step(

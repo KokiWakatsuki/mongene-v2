@@ -49,9 +49,11 @@ def identify_distance_segment(
     steps = _steps(
         [
             (
+                # 括弧が指示の言い直しだった。この手で見るのは「どれが垂線か」なので、
+                # 図の中でそれにあたるもの（点と垂線の足）を出す。
                 "recall_distance_definition",
                 "点と直線の距離は、その点から直線に引いた垂線の長さであることを思い出す。",
-                "距離の定義を思い出す",
+                f"垂線は点{p}から下ろした線、その足は{h}",
             ),
             (
                 "identify_perpendicular_segment",

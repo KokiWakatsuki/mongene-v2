@@ -860,15 +860,36 @@ def number_property_proof(
         ln.op == "expand_expression" and ln.claim.lstrip("= ") == combination
         for ln in lines
     )
+    # **整理した形が、そのまま示したい形になっていることがある。**
+    # `(10f + h) - (f + h) = 9f` は 9f の時点で「9の倍数」の形なので、
+    # 次の「示したい性質が読み取れる形に書き直す」の手が同じ `= 9f` を出していた
+    # （答えの側は `_chain_segments` が重複を落としているのに、手は落としていない）。
+    expand_claim = next(
+        (ln.claim for ln in lines if ln.op == "expand_expression"), ""
+    )
+    goal_claim = next(
+        (ln.claim for ln in lines if ln.op == "rewrite_to_goal_form"), ""
+    )
+    goal_same = bool(expand_claim) and expand_claim.rstrip().endswith(
+        goal_claim.lstrip("= ").rstrip()
+    )
     steps = [
         Step(
             op=ln.op,
             args=[],
             result_srepr="",
-            result_display=ln.claim,
+            # 何もしていない手は括弧を出さない（同じ式が2行続いて見える）。
+            result_display=(
+                ""
+                if (ln.op == "rewrite_to_goal_form" and goal_same)
+                or (ln.op == "expand_expression" and expanded_same)
+                else ln.claim
+            ),
             narration=(
                 "かっこが無く、同類項もすでにまとまっているので、式はこのまま。"
                 if (ln.op == "expand_expression" and expanded_same)
+                else "整理した式がそのまま示したい形になっているので、書き直す必要はない。"
+                if (ln.op == "rewrite_to_goal_form" and goal_same)
                 else _NARRATION[ln.op]
             ),
         )
