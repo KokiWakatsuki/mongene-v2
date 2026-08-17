@@ -127,8 +127,19 @@ def word_problem_price_count(ctx: CellContext, rng: Rng) -> MR:
         SubQuestionMR(
             label="(2)",
             asked="value",
-            answer=sol.answer,
-            steps=_solve_steps(total, price_a, price_b, cost, count_a, count_b),
+            # **「それぞれ何個買ったか」に (9, 3) と座標の形で答えていた。**
+            # 兄弟の g2_l17（「歩いた道のりは3km、自転車で進んだ道のりは15km」）・
+            # g2_l18（「昨年の男子は350人、…」）は場面の言葉で答えているのに、
+            # ここだけ solver の返す組をそのまま出していた。
+            # srepr は変えない（checker が解き直して突き合わせる）。
+            answer=SymbolicAnswer(
+                srepr=sol.answer.srepr,
+                display=f"{item_a}は{count_a}個、{item_b}は{count_b}個",
+            ),
+            steps=_solve_steps(
+                total, price_a, price_b, cost, count_a, count_b,
+                item_a=item_a, item_b=item_b,
+            ),
             concept_tags=_effective_concept_tags(ctx),
             cause_tags=_effective_cause_tags(ctx),
         ),
@@ -205,7 +216,8 @@ def _formulation_steps(
 
 
 def _solve_steps(
-    total: int, price_a: int, price_b: int, cost: int, count_a: int, count_b: int
+    total: int, price_a: int, price_b: int, cost: int, count_a: int, count_b: int,
+    *, item_a: str = "", item_b: str = "",
 ) -> list[Step]:
     """(2) 加減法で解く手順。
 
@@ -235,8 +247,21 @@ def _solve_steps(
             op="back_substitute",
             args=[],
             result_srepr=sympy.srepr(sympy.Eq(x, sympy.Integer(count_a))),
-            result_display=f"x = {count_a}",
-            narration="求めた y を個数の式に代入して、x の値を求める。",
+            # **解説を答えの形で締める。** `x = 9` で終わっていたので、
+            # 「それぞれ何個買ったか」という問いに戻らないまま終わっていた。
+            # 文字が何を表していたかに戻すのが、文章題の最後の手である。
+            result_display=(
+                f"{item_a}は{count_a}個、{item_b}は{count_b}個"
+                if item_a and item_b
+                else f"x = {count_a}"
+            ),
+            narration="求めた y を個数の式に代入して x の値を求め、"
+            "文字が表していたものに戻して答える。",
+            detail=(
+                f"求めた y を個数の式に代入して x の値を求めると x = {count_a}。"
+                f"x は{item_a}の個数、y は{item_b}の個数だったので、"
+                f"{item_a}は{count_a}個、{item_b}は{count_b}個。"
+            ) if item_a and item_b else "",
         ),
     ]
 
