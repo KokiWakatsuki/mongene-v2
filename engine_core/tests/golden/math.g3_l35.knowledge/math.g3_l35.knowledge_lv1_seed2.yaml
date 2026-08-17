@@ -37,9 +37,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - quadratic_roc_property.rule_recall
-  explanation: 'まず、問題で問われている規則や約束が、何についてのものかを読み取る。
+  explanation: 'まず、問題で問われている規則や約束が、何についてのものかを読み取る。（変化の割合）
 
-    次に、その規則の正しい内容を思い出して選ぶ。（一次関数とちがい、区間によって変化の割合が変わり、一定にならない）'
+    次に、y = ax² の変化の割合は一定でなく、x の値によって変わる。1次関数との違いはここ。（一次関数とちがい、区間によって変化の割合が変わり、一定にならない）'
   hints:
   - 問題で問われている規則や約束が、何についてのものかを読み取る。
   label: (1)
@@ -49,10 +49,10 @@ sub_questions:
     detail: ''
     narration: 問題で問われている規則や約束が、何についてのものかを読み取る。
     op: read_rule_context
-    result_display: ''
+    result_display: 変化の割合
     result_srepr: variability
   - args: []
-    detail: ''
+    detail: y = ax² の変化の割合は一定でなく、x の値によって変わる。1次関数との違いはここ。
     narration: その規則の正しい内容を思い出して選ぶ。
     op: recall_correct_rule
     result_display: 一次関数とちがい、区間によって変化の割合が変わり、一定にならない

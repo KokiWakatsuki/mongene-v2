@@ -37,9 +37,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - quadratic_terms.term_recall
-  explanation: 'まず、説明されている式や数の部分がどれかを読み取る。
+  explanation: 'まず、説明されている式や数の部分がどれかを読み取る。（成り立たせる値）
 
-    次に、その対象を表す用語の名前を思い出す。（解）'
+    次に、2次方程式を成り立たせる文字の値を解という。ふつう2つある。（解）'
   hints:
   - 説明されている式や数の部分がどれかを読み取る。
   label: (1)
@@ -49,10 +49,10 @@ sub_questions:
     detail: ''
     narration: 説明されている式や数の部分がどれかを読み取る。
     op: identify_description
-    result_display: ''
+    result_display: 成り立たせる値
     result_srepr: solution
   - args: []
-    detail: ''
+    detail: 2次方程式を成り立たせる文字の値を解という。ふつう2つある。
     narration: その対象を表す用語の名前を思い出す。
     op: name_concept
     result_display: 解

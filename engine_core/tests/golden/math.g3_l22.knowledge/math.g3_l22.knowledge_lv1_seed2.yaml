@@ -36,9 +36,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - approximation.term_recall_g3
-  explanation: 'まず、説明されている式や数の部分がどれかを読み取る。
+  explanation: 'まず、説明されている式や数の部分がどれかを読み取る。（近似値と真の値の差）
 
-    次に、その対象を表す用語の名前を思い出す。（誤差）'
+    次に、近似値から真の値をひいた差を誤差という。（誤差）'
   hints:
   - 説明されている式や数の部分がどれかを読み取る。
   label: (1)
@@ -48,10 +48,10 @@ sub_questions:
     detail: ''
     narration: 説明されている式や数の部分がどれかを読み取る。
     op: identify_description
-    result_display: ''
+    result_display: 近似値と真の値の差
     result_srepr: error
   - args: []
-    detail: ''
+    detail: 近似値から真の値をひいた差を誤差という。
     narration: その対象を表す用語の名前を思い出す。
     op: name_concept
     result_display: 誤差

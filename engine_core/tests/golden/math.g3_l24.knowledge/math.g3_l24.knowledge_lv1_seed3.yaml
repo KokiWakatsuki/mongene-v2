@@ -37,9 +37,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - quadratic_terms.term_recall
-  explanation: 'まず、説明されている式や数の部分がどれかを読み取る。
+  explanation: 'まず、説明されている式や数の部分がどれかを読み取る。（2次の項をふくむ方程式）
 
-    次に、その対象を表す用語の名前を思い出す。（二次方程式）'
+    次に、移項して整理すると ax² + bx + c = 0（a ≠ 0）の形になる方程式を2次方程式という。（二次方程式）'
   hints:
   - 説明されている式や数の部分がどれかを読み取る。
   label: (1)
@@ -49,10 +49,10 @@ sub_questions:
     detail: ''
     narration: 説明されている式や数の部分がどれかを読み取る。
     op: identify_description
-    result_display: ''
+    result_display: 2次の項をふくむ方程式
     result_srepr: quadratic_equation
   - args: []
-    detail: ''
+    detail: 移項して整理すると ax² + bx + c = 0（a ≠ 0）の形になる方程式を2次方程式という。
     narration: その対象を表す用語の名前を思い出す。
     op: name_concept
     result_display: 二次方程式

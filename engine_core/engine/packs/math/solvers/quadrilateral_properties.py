@@ -201,8 +201,14 @@ def equal_area_transform_value(area_value: object) -> Solution:
         Step(
             op="apply_equal_area_transform",
             args=[], result_srepr=srepr, result_display=disp,
-            narration="等積変形は面積を変えずに図形の形だけを変える操作であることから、"
-            "つくった三角形の面積を求める。",
+            # **「等積変形だから等積」はトートロジーで、教えることが1つも無い。**
+            # 実際に効いているのは「平行だから底辺が共通で高さが等しい」で、
+            # そこがこの単元の中身。理由を述べる形に直す。
+            narration="対角線をひいて分けると、平行な直線にはさまれた三角形は"
+            "底辺が共通で高さも等しいので、面積が変わらない。",
+            detail="もとの四角形を対角線で2つの三角形に分けると、一方は"
+            "平行な直線にはさまれた三角形になる。その三角形を平行線にそって移しても"
+            "底辺と高さが変わらないので面積は同じ。だから全体の面積も変わらない。",
         ),
     ]
     return Solution(answer=SymbolicAnswer(srepr=srepr, display=disp), steps=steps)

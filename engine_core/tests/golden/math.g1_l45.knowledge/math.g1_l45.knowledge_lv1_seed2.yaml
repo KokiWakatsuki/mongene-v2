@@ -38,9 +38,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - circle_terms.term_recall
-  explanation: 'まず、説明されている式や数の部分がどれかを読み取る。
+  explanation: 'まず、説明されている式や数の部分がどれかを読み取る。（円周上の2点を結ぶ線分）
 
-    次に、その対象を表す用語の名前を思い出す。（弦）'
+    次に、円周上の2点を結ぶ線分を弦という。最も長い弦が直径。（弦）'
   hints:
   - 説明されている式や数の部分がどれかを読み取る。
   label: (1)
@@ -50,10 +50,10 @@ sub_questions:
     detail: ''
     narration: 説明されている式や数の部分がどれかを読み取る。
     op: identify_description
-    result_display: ''
+    result_display: 円周上の2点を結ぶ線分
     result_srepr: chord
   - args: []
-    detail: ''
+    detail: 円周上の2点を結ぶ線分を弦という。最も長い弦が直径。
     narration: その対象を表す用語の名前を思い出す。
     op: name_concept
     result_display: 弦

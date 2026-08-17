@@ -37,9 +37,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - direct_proportion.term_recall
-  explanation: 'まず、説明されている式や数の部分がどれかを読み取る。
+  explanation: 'まず、説明されている式や数の部分がどれかを読み取る。（y = ax の関係）
 
-    次に、その対象を表す用語の名前を思い出す。（比例）'
+    次に、x が2倍3倍になると y も2倍3倍になる関係を比例という。式は y = ax。（比例）'
   hints:
   - 説明されている式や数の部分がどれかを読み取る。
   label: (1)
@@ -49,10 +49,10 @@ sub_questions:
     detail: ''
     narration: 説明されている式や数の部分がどれかを読み取る。
     op: identify_description
-    result_display: ''
+    result_display: y = ax の関係
     result_srepr: proportion
   - args: []
-    detail: ''
+    detail: x が2倍3倍になると y も2倍3倍になる関係を比例という。式は y = ax。
     narration: その対象を表す用語の名前を思い出す。
     op: name_concept
     result_display: 比例

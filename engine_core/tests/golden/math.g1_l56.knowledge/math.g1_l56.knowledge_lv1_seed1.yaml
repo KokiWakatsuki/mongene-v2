@@ -37,9 +37,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - cumulative_frequency_terms.term_recall
-  explanation: 'まず、説明されている式や数の部分がどれかを読み取る。
+  explanation: 'まず、説明されている式や数の部分がどれかを読み取る。（その階級までの度数の合計）
 
-    次に、その対象を表す用語の名前を思い出す。（累積度数）'
+    次に、いちばん小さい階級からその階級までの度数を足したものを累積度数という。（累積度数）'
   hints:
   - 説明されている式や数の部分がどれかを読み取る。
   label: (1)
@@ -49,10 +49,10 @@ sub_questions:
     detail: ''
     narration: 説明されている式や数の部分がどれかを読み取る。
     op: identify_description
-    result_display: ''
+    result_display: その階級までの度数の合計
     result_srepr: cumulative_frequency
   - args: []
-    detail: ''
+    detail: いちばん小さい階級からその階級までの度数を足したものを累積度数という。
     narration: その対象を表す用語の名前を思い出す。
     op: name_concept
     result_display: 累積度数

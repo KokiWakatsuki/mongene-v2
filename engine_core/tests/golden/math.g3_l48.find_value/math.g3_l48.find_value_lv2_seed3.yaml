@@ -33,22 +33,22 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - circle.inscribed_angle_transfer_same_arc
-  explanation: 'まず、4点が同一円周上にあることから、同じ弧に対応する角の大きさを読み取る。（47°）
+  explanation: 'まず、∠NQP と ∠NRP が等しく、Q と R は直線NPの同じ側にあるので、4点N、P、Q、R は同一円周上にある。（4点N、P、Q、R は同一円周上にある）
 
-    次に、同じ弧に対する円周角の大きさはすべて等しいことから、求める角の大きさを求める。（47°）'
+    次に、∠RNQ と ∠RPQ はどちらも弧RQに対する円周角なので、等しい。（47°）'
   hints:
-  - 4点が同一円周上にあることから、同じ弧に対応する角の大きさを読み取る。
+  - 直線NPの同じ側にある2つの角が等しいので、円周角の定理の逆から、4点が同一円周上にあると分かる。
   label: (1)
   prompt_text: 答えを求めなさい。
   solution_steps:
   - args: []
-    detail: ''
-    narration: 4点が同一円周上にあることから、同じ弧に対応する角の大きさを読み取る。
+    detail: ∠NQP と ∠NRP が等しく、Q と R は直線NPの同じ側にあるので、4点N、P、Q、R は同一円周上にある。
+    narration: 直線NPの同じ側にある2つの角が等しいので、円周角の定理の逆から、4点が同一円周上にあると分かる。
     op: identify_same_arc_angle
-    result_display: 47°
+    result_display: 4点N、P、Q、R は同一円周上にある
     result_srepr: ''
   - args: []
-    detail: ''
+    detail: ∠RNQ と ∠RPQ はどちらも弧RQに対する円周角なので、等しい。
     narration: 同じ弧に対する円周角の大きさはすべて等しいことから、求める角の大きさを求める。
     op: transfer_by_inscribed_angle_equality
     result_display: 47°

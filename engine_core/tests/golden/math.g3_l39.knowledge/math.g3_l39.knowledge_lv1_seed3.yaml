@@ -37,9 +37,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - similarity_terms.term_recall
-  explanation: 'まず、説明されている式や数の部分がどれかを読み取る。
+  explanation: 'まず、説明されている式や数の部分がどれかを読み取る。（対応する辺の長さの比）
 
-    次に、その対象を表す用語の名前を思い出す。（相似比）'
+    次に、相似な図形で、対応する辺の長さの比を相似比という。面積比は相似比の2乗、体積比は3乗になる。（相似比）'
   hints:
   - 説明されている式や数の部分がどれかを読み取る。
   label: (1)
@@ -49,10 +49,10 @@ sub_questions:
     detail: ''
     narration: 説明されている式や数の部分がどれかを読み取る。
     op: identify_description
-    result_display: ''
+    result_display: 対応する辺の長さの比
     result_srepr: similarity_ratio
   - args: []
-    detail: ''
+    detail: 相似な図形で、対応する辺の長さの比を相似比という。面積比は相似比の2乗、体積比は3乗になる。
     narration: その対象を表す用語の名前を思い出す。
     op: name_concept
     result_display: 相似比

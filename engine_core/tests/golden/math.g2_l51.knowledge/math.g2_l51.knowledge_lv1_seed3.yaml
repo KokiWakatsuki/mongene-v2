@@ -36,9 +36,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - probability_terms.term_recall
-  explanation: 'まず、説明されている式や数の部分がどれかを読み取る。
+  explanation: 'まず、説明されている式や数の部分がどれかを読み取る。（どれも同じ程度に起こる）
 
-    次に、その対象を表す用語の名前を思い出す。（同様に確からしい）'
+    次に、どの結果も同じ程度に起こると考えられることを同様に確からしいという。確率を数え上げで求める前提になる。（同様に確からしい）'
   hints:
   - 説明されている式や数の部分がどれかを読み取る。
   label: (1)
@@ -48,10 +48,10 @@ sub_questions:
     detail: ''
     narration: 説明されている式や数の部分がどれかを読み取る。
     op: identify_description
-    result_display: ''
+    result_display: どれも同じ程度に起こる
     result_srepr: equally_likely
   - args: []
-    detail: ''
+    detail: どの結果も同じ程度に起こると考えられることを同様に確からしいという。確率を数え上げで求める前提になる。
     narration: その対象を表す用語の名前を思い出す。
     op: name_concept
     result_display: 同様に確からしい

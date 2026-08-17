@@ -36,9 +36,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - quadratic_function_terms.term_recall
-  explanation: 'まず、説明されている式や数の部分がどれかを読み取る。
+  explanation: 'まず、説明されている式や数の部分がどれかを読み取る。（y = ax² の a）
 
-    次に、その対象を表す用語の名前を思い出す。（比例定数）'
+    次に、y = ax² の a を比例定数という。x が2倍になると y は4倍になる。（比例定数）'
   hints:
   - 説明されている式や数の部分がどれかを読み取る。
   label: (1)
@@ -48,10 +48,10 @@ sub_questions:
     detail: ''
     narration: 説明されている式や数の部分がどれかを読み取る。
     op: identify_description
-    result_display: ''
+    result_display: y = ax² の a
     result_srepr: proportionality_constant
   - args: []
-    detail: ''
+    detail: y = ax² の a を比例定数という。x が2倍になると y は4倍になる。
     narration: その対象を表す用語の名前を思い出す。
     op: name_concept
     result_display: 比例定数

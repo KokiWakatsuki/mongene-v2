@@ -37,9 +37,9 @@ sub_questions:
   - polynomial.combine_fractions_signed
   explanation: 'まず、分母の最小公倍数を求めて通分する。（(-3a + b - (15a + 9b) + (-6a)) / 6）
 
-    次に、うしろの分数の前が - なので、その分子の各項の符号を変える。（(-12a - 4b)/3）
+    次に、うしろの分数の前が - なので、その分子の各項の符号を変える。（(-3a + b - 15a - 9b - 6a) / 6）
 
-    最後に、整数をふくむ項も同じ分母にそろえて、分子に加える。（(-12a - 4b)/3）'
+    最後に、分子の同類項をまとめ、約分して1つの分数にする。（(-12a - 4b)/3）'
   hints:
   - 分母の最小公倍数を求めて通分する。
   - うしろの分数の前が - なので、その分子の各項の符号を変える。
@@ -56,11 +56,11 @@ sub_questions:
     detail: ''
     narration: うしろの分数の前が - なので、その分子の各項の符号を変える。
     op: distribute_signs
-    result_display: (-12a - 4b)/3
+    result_display: (-3a + b - 15a - 9b - 6a) / 6
     result_srepr: Mul(Rational(4, 3), Add(Mul(Integer(-1), Integer(3), Symbol('a')), Mul(Integer(-1), Symbol('b'))))
   - args: []
     detail: ''
-    narration: 整数をふくむ項も同じ分母にそろえて、分子に加える。
+    narration: 分子の同類項をまとめ、約分して1つの分数にする。
     op: add_integer_term
     result_display: (-12a - 4b)/3
     result_srepr: Mul(Rational(4, 3), Add(Mul(Integer(-1), Integer(3), Symbol('a')), Mul(Integer(-1), Symbol('b'))))

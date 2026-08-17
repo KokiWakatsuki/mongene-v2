@@ -36,9 +36,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - similarity_conditions.rule_recall
-  explanation: 'まず、問題で問われている規則や約束が、何についてのものかを読み取る。
+  explanation: 'まず、問題で問われている規則や約束が、何についてのものかを読み取る。（三角形の相似条件）
 
-    次に、その規則の正しい内容を思い出して選ぶ。（二組の角がそれぞれ等しい、二組の辺の比とその間の角がそれぞれ等しい、三組の辺の比がすべて等しい、のいずれか）'
+    次に、3組の辺の比／2組の辺の比とその間の角／2組の角、の3つ。合同条件と対応させて覚える。（二組の角がそれぞれ等しい、二組の辺の比とその間の角がそれぞれ等しい、三組の辺の比がすべて等しい、のいずれか）'
   hints:
   - 問題で問われている規則や約束が、何についてのものかを読み取る。
   label: (1)
@@ -48,10 +48,10 @@ sub_questions:
     detail: ''
     narration: 問題で問われている規則や約束が、何についてのものかを読み取る。
     op: read_rule_context
-    result_display: ''
+    result_display: 三角形の相似条件
     result_srepr: all_three
   - args: []
-    detail: ''
+    detail: 3組の辺の比／2組の辺の比とその間の角／2組の角、の3つ。合同条件と対応させて覚える。
     narration: その規則の正しい内容を思い出して選ぶ。
     op: recall_correct_rule
     result_display: 二組の角がそれぞれ等しい、二組の辺の比とその間の角がそれぞれ等しい、三組の辺の比がすべて等しい、のいずれか

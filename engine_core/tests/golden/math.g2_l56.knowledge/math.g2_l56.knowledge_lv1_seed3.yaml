@@ -38,9 +38,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - box_plot_terms.term_recall
-  explanation: 'まず、説明されている式や数の部分がどれかを読み取る。
+  explanation: 'まず、説明されている式や数の部分がどれかを読み取る。（左のひげの先）
 
-    次に、その対象を表す用語の名前を思い出す。（最小値）'
+    次に、箱ひげ図の左のひげの先は最小値を表す。（最小値）'
   hints:
   - 説明されている式や数の部分がどれかを読み取る。
   label: (1)
@@ -50,10 +50,10 @@ sub_questions:
     detail: ''
     narration: 説明されている式や数の部分がどれかを読み取る。
     op: identify_description
-    result_display: ''
+    result_display: 左のひげの先
     result_srepr: whisker_min
   - args: []
-    detail: ''
+    detail: 箱ひげ図の左のひげの先は最小値を表す。
     narration: その対象を表す用語の名前を思い出す。
     op: name_concept
     result_display: 最小値

@@ -37,9 +37,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - notation_product_rule.rule_recall
-  explanation: 'まず、問題で問われている規則や約束が、何についてのものかを読み取る。
+  explanation: 'まず、問題で問われている規則や約束が、何についてのものかを読み取る。（同じ文字の積）
 
-    次に、その規則の正しい内容を思い出して選ぶ。（同じ文字の積は、指数を使って累乗の形で書く）'
+    次に、同じ文字の積は、指数を使って累乗の形に書く。（同じ文字の積は、指数を使って累乗の形で書く）'
   hints:
   - 問題で問われている規則や約束が、何についてのものかを読み取る。
   label: (1)
@@ -49,10 +49,10 @@ sub_questions:
     detail: ''
     narration: 問題で問われている規則や約束が、何についてのものかを読み取る。
     op: read_rule_context
-    result_display: ''
+    result_display: 同じ文字の積
     result_srepr: power
   - args: []
-    detail: ''
+    detail: 同じ文字の積は、指数を使って累乗の形に書く。
     narration: その規則の正しい内容を思い出して選ぶ。
     op: recall_correct_rule
     result_display: 同じ文字の積は、指数を使って累乗の形で書く

@@ -37,9 +37,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - sqrt_magnitude.rule_recall
-  explanation: 'まず、問題で問われている規則や約束が、何についてのものかを読み取る。
+  explanation: 'まず、問題で問われている規則や約束が、何についてのものかを読み取る。（平方根の大小）
 
-    次に、その規則の正しい内容を思い出して選ぶ。（正の数では、根号の中の数が大きいほど、根号のついた数も大きい）'
+    次に、正の数どうしなら、根号の中が大きいほど値も大きい。（正の数では、根号の中の数が大きいほど、根号のついた数も大きい）'
   hints:
   - 問題で問われている規則や約束が、何についてのものかを読み取る。
   label: (1)
@@ -49,10 +49,10 @@ sub_questions:
     detail: ''
     narration: 問題で問われている規則や約束が、何についてのものかを読み取る。
     op: read_rule_context
-    result_display: ''
+    result_display: 平方根の大小
     result_srepr: rule
   - args: []
-    detail: ''
+    detail: 正の数どうしなら、根号の中が大きいほど値も大きい。
     narration: その規則の正しい内容を思い出して選ぶ。
     op: recall_correct_rule
     result_display: 正の数では、根号の中の数が大きいほど、根号のついた数も大きい

@@ -36,9 +36,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - approximation.term_recall
-  explanation: 'まず、説明されている式や数の部分がどれかを読み取る。
+  explanation: 'まず、説明されている式や数の部分がどれかを読み取る。（意味のある桁の数字）
 
-    次に、その対象を表す用語の名前を思い出す。（有効数字）'
+    次に、測定で信頼できる桁の数字を有効数字という。位取りの 0 は数えない。（有効数字）'
   hints:
   - 説明されている式や数の部分がどれかを読み取る。
   label: (1)
@@ -48,10 +48,10 @@ sub_questions:
     detail: ''
     narration: 説明されている式や数の部分がどれかを読み取る。
     op: identify_description
-    result_display: ''
+    result_display: 意味のある桁の数字
     result_srepr: significant_figures
   - args: []
-    detail: ''
+    detail: 測定で信頼できる桁の数字を有効数字という。位取りの 0 は数えない。
     narration: その対象を表す用語の名前を思い出す。
     op: name_concept
     result_display: 有効数字

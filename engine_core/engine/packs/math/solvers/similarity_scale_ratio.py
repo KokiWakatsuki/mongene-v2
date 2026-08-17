@@ -49,8 +49,13 @@ def similar_area_ratio(ratio_num: object, ratio_den: object, known_area: object)
         ),
         Step(
             op="apply_area_ratio",
-            args=[], result_srepr=srepr, result_display=disp,
+            # この手で得たのは面積だけ（面積比は前の手）。答え全体を写さない。
+            args=[], result_srepr=srepr, result_display=sympy.sstr(other_area),
             narration="求めた面積比と、わかっている一方の面積から、もう一方の面積を求める。",
+            detail=(
+                f"{sympy.sstr(a)} × {area_ratio_den}/{area_ratio_num} を計算して、"
+                f"もう一方の面積を求める。"
+            ),
         ),
     ]
     return Solution(answer=SymbolicAnswer(srepr=srepr, display=disp), steps=steps)
@@ -79,8 +84,12 @@ def similar_solid_surface_volume_ratio(ratio_num: object, ratio_den: object) -> 
         ),
         Step(
             op="cube_ratio_for_volume",
-            args=[], result_srepr=srepr, result_display=disp,
+            # この手で得たのは体積の比だけ（表面積の比は前の手）。
+            args=[], result_srepr=srepr, result_display=f"{volume_num}:{volume_den}",
             narration="相似な立体の体積の比は相似比の三乗に等しいことから、体積の比を求める。",
+            detail=(
+                f"相似比 {m}:{n} を三乗して、{m}³:{n}³ = {volume_num}:{volume_den} を求める。"
+            ),
         ),
     ]
     return Solution(answer=SymbolicAnswer(srepr=srepr, display=disp), steps=steps)
@@ -235,7 +244,9 @@ def trapezoid_diagonal_area_ratios(ad: object, bc: object) -> Solution:
         ),
         Step(
             op="compare_triangles_sharing_apex",
-            args=[], result_srepr=srepr, result_display=disp,
+            # この手で得たのは「何倍か」だけ（面積の比は前の手）。
+            args=[], result_srepr=srepr,
+            result_display=f"三角形APDは三角形APBの{sympy.sstr(times)}倍",
             narration="対角線上の2つの線分の比が相似比と同じであることを使う。"
             "頂点を共有する2つの三角形の面積の比は、その底辺の比に等しいので、"
             "一方が他方の何倍かが求まる。",

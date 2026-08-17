@@ -293,16 +293,20 @@ def read_lattice_point_on_proportion(a: object, p: object) -> Solution:
         Step(
             op="find_lattice_point",
             args=[],
-            result_srepr=sympy.srepr(pt),
-            result_display=_pt_display(pt),
-            narration="直線と方眼の交点のうち、たて・よこの目もりがどちらもちょうど整数になる点をさがす。",
+            result_srepr="",
+            # **与えられた条件（x 座標）を使う手にする。** 2手とも答えの座標を
+            # 出していたので、1手目で答えが出て2手目が空手になっていた。
+            result_display=f"x = {sympy.sstr(p_s)} の目もりの位置",
+            narration="問われている x 座標の目もりを横軸で見つけ、そこから縦にたどる。",
+            detail=f"横軸の x = {sympy.sstr(p_s)} のところから、縦にたどって直線と交わる点を見る。",
         ),
         Step(
             op="write_lattice_coordinate",
             args=[],
             result_srepr=sympy.srepr(pt),
             result_display=_pt_display(pt),
-            narration="見つけた点のx座標とy座標を目もりから読み、座標の形に書く。",
+            narration="交わった点の y 座標を目もりから読み、座標の形に書く。",
+            detail=f"交わった点の y 座標は {sympy.sstr(a_s * p_s)} なので、座標は {_pt_display(pt)} になる。",
         ),
     ]
     return Solution(
@@ -471,16 +475,22 @@ def read_lattice_point_on_hyperbola(a: object, x0: object) -> Solution:
         Step(
             op="find_lattice_point_on_curve",
             args=[],
-            result_srepr=sympy.srepr(pt),
-            result_display=_pt_display(pt),
-            narration="曲線と方眼の交点のうち、たて・よこの目もりがどちらもちょうど整数になる点をさがす。",
+            result_srepr="",
+            # 比例のセルと同じ直し（2手とも答えを出していた）。
+            result_display=f"x = {sympy.sstr(x_s)} の目もりの位置",
+            narration="問われている x 座標の目もりを横軸で見つけ、そこから縦にたどる。",
+            detail=f"横軸の x = {sympy.sstr(x_s)} のところから、縦にたどって曲線と交わる点を見る。",
         ),
         Step(
             op="write_lattice_coordinate_on_curve",
             args=[],
             result_srepr=sympy.srepr(pt),
             result_display=_pt_display(pt),
-            narration="見つけた点のx座標とy座標を目もりから読み、座標の形に書く。",
+            narration="交わった点の y 座標を目もりから読み、座標の形に書く。",
+            detail=(
+                f"交わった点の y 座標は {sympy.sstr(sympy.Rational(a_s, x_s))} なので、"
+                f"座標は {_pt_display(pt)} になる。"
+            ),
         ),
     ]
     return Solution(

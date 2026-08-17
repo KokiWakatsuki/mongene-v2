@@ -1,0 +1,241 @@
+"""用語想起セルの**中身**（読み取る対象と、その用語の定義）。
+
+## なぜ要るか
+
+用語を答えるセルの解説が
+
+    まず、説明されている式や数の部分がどれかを読み取る。
+    次に、その対象を表す用語の名前を思い出す。（絶対値）
+
+だった。1手目は問題文の言い換え、2手目は設問そのもので、**なぜその用語なのかを
+1つも説明していない**（38セル）。規則を選ぶセルも同じ形（45セル）。
+市販品はここで**定義を言い切り、必要なら紛らわしい語との違いに触れる**。
+
+## 表の形
+
+`(domain, concept) -> (読み取る対象, 定義)`
+
+- 読み取る対象: 1手目の括弧に入れる短い語（いまは空で、手に産物が無かった）
+- 定義: 2手目の `detail` に入れる1文（解説にだけ出る。ヒントには流れない）
+
+**定義は問題文の言い換えにしない。** 問題文はすでに説明を与えているので、
+そこに無いこと——他の語との違い・記号・具体の当てはめ——を書く。
+"""
+from __future__ import annotations
+
+# (domain, concept) -> (1手目の括弧に出す対象, 2手目の detail に出す定義)
+TERM_DEFINITIONS: dict[tuple[str, str], tuple[str, str]] = {
+    # --- 正負の数 ---------------------------------------------------------
+    ("number", "absolute_value"): ("0 からの距離", "数直線上で 0 からその数までの距離を絶対値という。符号は考えないので、+5 も -5 も絶対値は 5。"),
+    ("number", "number_line"): ("数を点で表した直線", "数を直線上の点で表したものを数直線という。右へ行くほど大きい。"),
+    ("number", "origin"): ("0 にあたる点", "数直線で 0 にあたる点を原点という。正の数と負の数の境目になる。"),
+    ("number", "sign"): ("+ と - の記号", "正か負かを表す + と - を符号という。数の大きさ（絶対値）とは別のもの。"),
+    ("number_set", "integer"): ("正負の整数と 0", "…-2、-1、0、1、2… をまとめて整数という。0 も分数も小数もない数として含む。"),
+    ("number_set", "natural_number"): ("1 以上の整数", "1、2、3… と数えるのに使う数を自然数という。0 と負の数は入らない。"),
+    ("laws", "commutative"): ("順序を入れかえる", "たす順・かける順を入れかえても結果が変わらないことを交換法則という。"),
+    ("laws", "associative"): ("組み合わせを変える", "どこにかっこをつけて先に計算しても結果が変わらないことを結合法則という。"),
+    ("laws", "distributive"): ("かっこの中の和に分けてかける", "かっこの外の数を中の各項にかけて足してよいことを分配法則という。"),
+    ("power", "power"): ("同じ数をくり返しかけた形", "同じ数をいくつかかけ合わせたものを累乗という。"),
+    ("power", "base"): ("くり返しかける数", "累乗でくり返しかけられる数を底という。指数の左下に書く数。"),
+    ("power", "exponent"): ("かける回数", "累乗で何回かけるかを表す右上の小さな数を指数という。"),
+    ("prime_concepts", "prime"): ("1 とその数しか約数がない数", "1 とその数自身のほかに約数をもたない 2 以上の整数を素数という。1 は素数に入れない。"),
+    ("prime_concepts", "composite"): ("素数でない 2 以上の整数", "1 とその数のほかにも約数をもつ整数を合成数という。"),
+    ("prime_concepts", "prime_factor"): ("素数である約数", "ある整数の約数のうち素数であるものを素因数という。"),
+    ("approximation", "approximation"): ("真の値に近い値", "測定や四捨五入で得た、真の値に近い値を近似値という。"),
+    ("approximation", "error"): ("近似値と真の値の差", "近似値から真の値をひいた差を誤差という。"),
+    ("approximation", "significant_figures"): ("意味のある桁の数字", "測定で信頼できる桁の数字を有効数字という。位取りの 0 は数えない。"),
+    # --- 文字と式 ---------------------------------------------------------
+    ("letter", "term"): ("和の形にしたときの一つ一つ", "式を和の形に見たとき、+ で区切られた一つ一つを項という。"),
+    ("letter", "coefficient"): ("文字にかけられた数", "項のうち、文字にかけられている数の部分を係数という。"),
+    ("letter", "degree"): ("かけ合わせた文字の個数", "項でかけ合わされている文字の個数を次数という。多項式では最も高い項の次数をとる。"),
+    ("letter", "like_terms"): ("文字の部分が同じ項", "文字の部分がまったく同じ項どうしを同類項という。係数だけを足し引きしてまとめられる。"),
+    ("equality", "equality"): ("= で結ばれた式", "2つの式を = で結んだものを等式という。"),
+    ("equality", "lhs"): ("= の左側", "等式の = の左側の式を左辺という。"),
+    ("equality", "rhs"): ("= の右側", "等式の = の右側の式を右辺という。"),
+    ("equality", "both_sides"): ("= の両側", "左辺と右辺を合わせて両辺という。等式の性質は両辺に同じ操作をする。"),
+    ("equation", "equation"): ("値によって成り立ったり成り立たなかったりする等式", "文字にあてはめる値によって成り立つかどうかが変わる等式を方程式という。つねに成り立つ等式（恒等式）とは別。"),
+    ("equation", "solution"): ("等式を成り立たせる値", "方程式を成り立たせる文字の値を、その方程式の解という。"),
+    ("inequality", "greater_than"): ("大きい", "「a は b より大きい」は a > b と書く。等号は含まない。"),
+    ("inequality", "less_than"): ("小さい", "「a は b より小さい」は a < b と書く。等号は含まない。"),
+    ("inequality", "at_least"): ("以上", "「a は b 以上」は a ≧ b と書く。b と等しい場合を含む。"),
+    ("inequality", "at_most"): ("以下", "「a は b 以下」は a ≦ b と書く。b と等しい場合を含む。"),
+    # --- 関数 -------------------------------------------------------------
+    ("function_terms", "function"): ("x を決めると y が1つに決まる関係", "x の値を決めると y の値がただ1つに決まるとき、y は x の関数であるという。"),
+    ("function_terms", "variable"): ("いろいろな値をとる文字", "いろいろな値をとりうる文字を変数という。決まった値をとる定数と区別する。"),
+    ("function_terms", "domain_range"): ("変数のとりうる値の範囲", "変数がとりうる値の範囲を変域という。"),
+    ("direct_proportion", "proportion"): ("y = ax の関係", "x が2倍3倍になると y も2倍3倍になる関係を比例という。式は y = ax。"),
+    ("direct_proportion", "proportionality_constant"): ("y = ax の a", "比例の式 y = ax の a を比例定数という。x と y の商 y ÷ x がつねにこの値になる。"),
+    ("inverse_proportion", "inverse_proportion"): ("y = a/x の関係", "x が2倍3倍になると y が 1/2 倍 1/3 倍になる関係を反比例という。式は y = a/x。"),
+    ("inverse_proportion", "proportionality_constant"): ("y = a/x の a", "反比例の式 y = a/x の a を比例定数という。x と y の積 xy がつねにこの値になる。"),
+    ("quadratic_function_terms", "proportionality_constant"): ("y = ax² の a", "y = ax² の a を比例定数という。x が2倍になると y は4倍になる。"),
+    ("quadrant_terms", "origin"): ("2つの軸の交点", "x 軸と y 軸の交わる点を原点という。座標は (0, 0)。"),
+    ("quadrant_terms", "quadrant1"): ("x も y も正の部分", "x > 0、y > 0 の部分を第1象限という。原点の右上。"),
+    ("quadrant_terms", "quadrant2"): ("x が負で y が正の部分", "x < 0、y > 0 の部分を第2象限という。原点の左上。"),
+    ("quadrant_terms", "quadrant3"): ("x も y も負の部分", "x < 0、y < 0 の部分を第3象限という。原点の左下。"),
+    ("quadrant_terms", "quadrant4"): ("x が正で y が負の部分", "x > 0、y < 0 の部分を第4象限という。原点の右下。"),
+    # --- 平面図形 ---------------------------------------------------------
+    ("line_angle_terms", "line"): ("両側にかぎりなくのびるまっすぐな線", "両方向にかぎりなくのびるまっすぐな線を直線という。"),
+    ("line_angle_terms", "segment"): ("2点で区切られた部分", "直線のうち2点で区切られた部分を線分という。長さがある。"),
+    ("line_angle_terms", "ray"): ("片側だけのびる部分", "1点から一方だけにのびる直線の部分を半直線という。"),
+    ("line_angle_terms", "angle"): ("2つの半直線がつくる開き", "1点から出る2つの半直線がつくる開きを角という。"),
+    ("perpendicular_terms", "distance"): ("垂線の長さ", "点から直線にひいた垂線の長さを、点と直線との距離という。ななめの線分では最短にならない。"),
+    ("perpendicular_terms", "foot"): ("垂線と直線の交点", "点から直線にひいた垂線がその直線と交わる点を垂線の足という。"),
+    ("circle_terms", "radius"): ("中心から円周までの線分", "円の中心から円周上の点までの線分を半径という。"),
+    ("circle_terms", "chord"): ("円周上の2点を結ぶ線分", "円周上の2点を結ぶ線分を弦という。最も長い弦が直径。"),
+    ("circle_terms", "arc"): ("円周の一部", "円周の一部分を弧という。"),
+    ("circle_terms", "central_angle"): ("2つの半径がつくる角", "弧の両端と中心を結んでできる角を中心角という。"),
+    ("circle_terms", "sector"): ("2つの半径と弧で囲まれた図形", "2つの半径と弧で囲まれた図形をおうぎ形という。"),
+    ("angle_pair_terms", "vertical"): ("向かい合う角", "2直線が交わってできる、向かい合った位置にある角を対頂角という。つねに等しい。"),
+    ("angle_pair_terms", "corresponding"): ("同じ位置にある角", "2直線に1本の直線が交わるとき、同じ位置にある角を同位角という。2直線が平行なら等しい。"),
+    ("angle_pair_terms", "alternate"): ("斜向かいの内側の角", "2直線に1本の直線が交わるとき、内側で斜向かいにある角を錯角という。2直線が平行なら等しい。"),
+    ("congruence_condition_terms", "sss"): ("3組の辺", "3組の辺がそれぞれ等しいことを使う合同条件。角の情報は要らない。"),
+    ("congruence_condition_terms", "sas"): ("2組の辺とその間の角", "2組の辺と、その2辺ではさまれた角が等しいことを使う合同条件。間の角でないと決まらない。"),
+    ("congruence_condition_terms", "asa"): ("1組の辺とその両端の角", "1組の辺と、その両端の2つの角が等しいことを使う合同条件。"),
+    ("construction_choice_terms", "equidistant_points"): ("2点から等しい距離", "2点から等しい距離にある点の集まりは、その2点を結ぶ線分の垂直二等分線になる。"),
+    ("construction_choice_terms", "equidistant_sides"): ("2辺から等しい距離", "角をつくる2辺から等しい距離にある点の集まりは、その角の二等分線になる。"),
+    ("similarity_terms", "similarity_ratio"): ("対応する辺の長さの比", "相似な図形で、対応する辺の長さの比を相似比という。面積比は相似比の2乗、体積比は3乗になる。"),
+    # --- 空間図形 ---------------------------------------------------------
+    ("space_solid_terms", "prism"): ("2つの合同な多角形が向かい合う立体", "合同で平行な2つの多角形を底面とし、側面が長方形である立体を角柱という。"),
+    ("space_solid_terms", "pyramid"): ("1つの多角形と三角形の側面", "多角形を底面とし、側面がすべて三角形で1点に集まる立体を角錐という。"),
+    ("space_solid_terms", "cone"): ("円を底面とし1点に集まる立体", "円を底面とし、側面が曲面で1点に集まる立体を円錐という。"),
+    ("space_solid_terms", "tetrahedron"): ("面が4つの正多面体", "合同な正三角形4つで囲まれた正多面体を正四面体という。"),
+    ("space_solid_terms", "hexahedron"): ("面が6つの正多面体", "合同な正方形6つで囲まれた正多面体を正六面体（立方体）という。"),
+    ("space_solid_terms", "dodecahedron"): ("面が12の正多面体", "合同な正五角形12で囲まれた正多面体を正十二面体という。"),
+    ("space_solid_terms", "icosahedron"): ("面が20の正多面体", "合同な正三角形20で囲まれた正多面体を正二十面体という。"),
+    ("spatial_position_terms", "parallel"): ("交わらず同じ平面上にある", "同じ平面上にあって交わらない2直線は平行である。"),
+    ("spatial_position_terms", "perpendicular"): ("直角に交わる", "2直線が直角に交わるとき、その2直線は垂直である。"),
+    ("spatial_position_terms", "skew"): ("交わらず平行でもない", "空間内で、平行でなく交わりもしない2直線をねじれの位置にあるという。同じ平面上にない。"),
+    ("rotation_solid_terms", "rotation_solid"): ("回してできる立体", "平面図形を1つの直線のまわりに1回転させてできる立体を回転体という。"),
+    ("rotation_solid_terms", "rotation_axis"): ("回転の軸になる直線", "回転体をつくるとき、まわりに回す直線を回転の軸という。"),
+    ("rotation_solid_terms", "generatrix"): ("側面をつくる線分", "円錐や円柱の側面をつくる線分を母線という。"),
+    ("projection_terms", "projection"): ("2方向から見た図の組", "立面図と平面図を組にして立体を表した図を投影図という。"),
+    ("projection_terms", "front_view"): ("真正面から見た図", "真正面から見た図を立面図という。"),
+    ("projection_terms", "top_view"): ("真上から見た図", "真上から見た図を平面図という。"),
+    # --- データ・確率 -----------------------------------------------------
+    ("frequency_table_terms", "class"): ("区切った範囲", "データを区切った1つ1つの範囲を階級という。"),
+    ("frequency_table_terms", "class_width"): ("区間のはば", "階級の区間のはばを階級の幅という。"),
+    ("frequency_table_terms", "class_value"): ("階級のまんなかの値", "階級の両端の値の平均を階級値という。その階級を代表する値として使う。"),
+    ("frequency_table_terms", "frequency"): ("階級に入る個数", "各階級に入るデータの個数を度数という。"),
+    ("relative_frequency_terms", "relative_frequency"): ("全体に対する割合", "その階級の度数を度数の合計でわった値を相対度数という。合計は 1 になる。"),
+    ("relative_frequency_terms", "frequency_polygon"): ("階級値を結んだ折れ線", "各階級の階級値の位置に度数の高さで点をとり、順に結んだ折れ線を度数折れ線という。"),
+    ("cumulative_frequency_terms", "cumulative_frequency"): ("その階級までの度数の合計", "いちばん小さい階級からその階級までの度数を足したものを累積度数という。"),
+    ("cumulative_frequency_terms", "cumulative_relative_frequency"): ("累積度数の割合", "累積度数を度数の合計でわった値を累積相対度数という。"),
+    ("representative_value_terms", "mean"): ("合計を個数でわった値", "データの値の合計を個数でわった値を平均値という。極端な値の影響を受けやすい。"),
+    ("representative_value_terms", "median"): ("大きさの順のまんなかの値", "大きさの順に並べたときのまんなかの値を中央値という。極端な値の影響を受けにくい。"),
+    ("representative_value_terms", "mode"): ("もっとも多く現れる値", "もっとも多く現れる値を最頻値という。度数分布表では度数が最大の階級の階級値をとる。"),
+    ("quartile_terms", "q1"): ("下組のまんなかの値", "データを中央値で2つに分けたとき、下組の中央値を第1四分位数という。"),
+    ("quartile_terms", "q2"): ("全体のまんなかの値", "データ全体の中央値を第2四分位数という。中央値と同じもの。"),
+    ("quartile_terms", "q3"): ("上組のまんなかの値", "データを中央値で2つに分けたとき、上組の中央値を第3四分位数という。"),
+    ("quartile_terms", "iqr"): ("第3と第1の差", "第3四分位数から第1四分位数をひいた値を四分位範囲という。データのまん中あたりのばらつきを表す。"),
+    ("box_plot_terms", "whisker_min"): ("左のひげの先", "箱ひげ図の左のひげの先は最小値を表す。"),
+    ("box_plot_terms", "whisker_max"): ("右のひげの先", "箱ひげ図の右のひげの先は最大値を表す。"),
+    ("box_plot_terms", "box_left"): ("箱の左の辺", "箱ひげ図の箱の左の辺は第1四分位数を表す。"),
+    ("box_plot_terms", "box_center"): ("箱の中の線", "箱ひげ図の箱の中の線は中央値（第2四分位数）を表す。"),
+    ("box_plot_terms", "box_right"): ("箱の右の辺", "箱ひげ図の箱の右の辺は第3四分位数を表す。"),
+    ("probability_terms", "probability"): ("起こりやすさを表す数", "あることがらの起こりやすさを 0 以上 1 以下の数で表したものを確率という。"),
+    ("probability_terms", "trial"): ("同じ条件でくり返す実験", "同じ条件のもとでくり返すことのできる実験や観察を試行という。"),
+    ("probability_terms", "equally_likely"): ("どれも同じ程度に起こる", "どの結果も同じ程度に起こると考えられることを同様に確からしいという。確率を数え上げで求める前提になる。"),
+    ("sampling_terms", "population"): ("調べたい全体", "調査の対象となる集団全体を母集団という。"),
+    ("sampling_terms", "sample"): ("取り出した一部", "母集団から取り出した一部を標本という。"),
+    ("sampling_terms", "random_sampling"): ("かたよりなく取り出すこと", "どの個体も同じ確率で選ばれるように取り出すことを無作為抽出という。かたよると標本が母集団の縮図にならない。"),
+    ("survey_method_terms", "census"): ("全部を調べる", "対象すべてを調べる調査を全数調査という。"),
+    ("survey_method_terms", "sample_survey"): ("一部を調べて推定する", "一部を取り出して調べ、全体を推定する調査を標本調査という。全数を調べるのが難しいときに使う。"),
+    # --- 数の範囲・平方根・二次 -------------------------------------------
+    ("real_numbers", "rational"): ("分数で表せる数", "整数の分数の形で表せる数を有理数という。有限小数と循環小数はここに入る。"),
+    ("real_numbers", "irrational"): ("分数で表せない数", "整数の分数の形で表せない数を無理数という。循環しない無限小数になる。"),
+    ("real_numbers", "repeating_decimal"): ("同じ並びがくり返す小数", "同じ数字の並びがくり返される無限小数を循環小数という。分数で表せるので有理数。"),
+    ("square_root", "square_root"): ("2乗するとその数になる数", "2乗するとある数になる数を、その数の平方根という。正と負の2つある。"),
+    ("square_root", "radical_sign"): ("√ の記号", "平方根を表す記号 √ を根号という。"),
+    ("quadratic_terms", "quadratic_equation"): ("2次の項をふくむ方程式", "移項して整理すると ax² + bx + c = 0（a ≠ 0）の形になる方程式を2次方程式という。"),
+    ("quadratic_terms", "solution"): ("成り立たせる値", "2次方程式を成り立たせる文字の値を解という。ふつう2つある。"),
+    ("quadratic_coefficient", "coeff_a"): ("x² の係数", "ax² + bx + c = 0 と見比べると、x² の係数が a にあたる。"),
+    ("quadratic_coefficient", "coeff_b"): ("x の係数", "ax² + bx + c = 0 と見比べると、x の係数が b にあたる。"),
+    ("quadratic_coefficient", "coeff_c"): ("定数項", "ax² + bx + c = 0 と見比べると、文字をふくまない項が c にあたる。"),
+    # --- 命題・証明 -------------------------------------------------------
+    ("proof_logic_terms", "assumption"): ("「ならば」の前の部分", "「p ならば q」の p にあたる部分を仮定という。"),
+    ("proof_logic_terms", "conclusion"): ("「ならば」の後の部分", "「p ならば q」の q にあたる部分を結論という。"),
+    ("proof_logic_terms", "counterexample"): ("成り立たない1つの例", "命題が成り立たないことを示す1つの例を反例という。反例が1つあれば命題は正しくない。"),
+}
+
+
+# (topic, concept) -> (1手目に出す「何についての規則か」, 2手目の detail に出す根拠)
+#
+# 規則を選ぶセルの解説も「その規則の正しい内容を思い出して選ぶ。（…）」だけで、
+# **なぜそう言えるのか・どこを間違えやすいのかを1つも言っていなかった**（45セル）。
+# 選択問題なので、実物は「ほかがなぜだめか」に触れる。
+RULE_REASONS: dict[tuple[str, str], tuple[str, str]] = {
+    ("addition_sign", "same_sign"): ("同符号どうしの和", "同符号の和は絶対値がふえるので、共通の符号をそのままつけて絶対値をたす。"),
+    ("addition_sign", "different_sign"): ("異符号どうしの和", "異符号の和は打ち消し合うので、絶対値の大きいほうの符号をつけて絶対値の差をとる。"),
+    ("subtraction", "to_addition"): ("減法の直し方", "ひく数の符号を変えてたし算に直す。ひかれる数の符号は変えないのがまちがえやすいところ。"),
+    ("product_sign", "even_count"): ("負の数が偶数個の積", "負の数を2つかけるごとに符号が正にもどるので、負の数が偶数個なら積は正になる。"),
+    ("product_sign", "odd_count"): ("負の数が奇数個の積", "負の数が奇数個だと1つ分の負が残るので、積は負になる。"),
+    ("reciprocal", "division_rule"): ("除法の直し方", "わる数の逆数をかければ、除法を乗法に直せる。逆数は分母と分子を入れかえた数。"),
+    ("term_in_sum", "definition"): ("項の意味", "式を和の形に見たとき、+ で区切られた一つ一つが項。ひき算は「負の数をたす」と見る。"),
+    ("letter_meaning", "benefit"): ("文字を使う利点", "文字を使うと、数がいくつであっても成り立つ関係を1つの式で表せる。"),
+    ("notation_product_rule", "omit_times"): ("積の書き方", "× を省き、数を文字の前に書く。文字はふつうアルファベット順に並べる。"),
+    ("notation_product_rule", "power"): ("同じ文字の積", "同じ文字の積は、指数を使って累乗の形に書く。"),
+    ("notation_quotient_rule", "as_fraction"): ("商の書き方", "÷ を使わず分数の形で書く。わる数が分母になる。"),
+    ("transposition", "definition"): ("移項とは", "一方の辺の項を、符号を変えて他方の辺に移すことを移項という。"),
+    ("transposition", "sign_reason"): ("移項で符号が変わる理由", "移項は「両辺から同じ数をひく（たす）」を短く書いたものなので、符号が変わる。"),
+    ("speed_relation", "distance"): ("道のりの式", "道のり＝速さ×時間。単位をそろえてからかける。"),
+    ("speed_relation", "speed"): ("速さの式", "速さ＝道のり÷時間。"),
+    ("speed_relation", "time"): ("時間の式", "時間＝道のり÷速さ。"),
+    ("expansion_meaning", "definition"): ("展開とは", "かっこをはずして単項式の和の形に直すことを展開という。因数分解はその逆。"),
+    ("factorization_relation", "relation"): ("因数分解と展開", "因数分解は展開の逆で、和の形を積の形に直す。展開して戻るかで確かめられる。"),
+    ("multiplication_formula_choice", "general_form"): ("(x+a)(x+b) の形", "定数どうしの和が x の係数、積が定数項になる。"),
+    ("multiplication_formula_choice", "perfect_square_form"): ("(x±a)² の形", "同じものどうしの積なので、真ん中の項は 2 倍になる。"),
+    ("multiplication_formula_choice", "diff_of_squares_form"): ("(x+a)(x−a) の形", "和と差の積は、真ん中の項が打ち消し合って平方の差になる。"),
+    ("sqrt_square_meaning", "abs_value_rule"): ("√a² の値", "√a² は a の絶対値になる。a が負のときに -a となる点がまちがえやすい。"),
+    ("sqrt_magnitude", "rule"): ("平方根の大小", "正の数どうしなら、根号の中が大きいほど値も大きい。"),
+    ("quadratic_solving_method_choice", "factoring_suitable"): ("因数分解が向く形", "整数で因数分解できるときは、解の公式より因数分解のほうが速い。"),
+    ("quadratic_solving_method_choice", "formula_suitable"): ("解の公式が向く形", "因数分解できないときは解の公式を使う。判別式が平方数でないときがこれ。"),
+    ("quadratic_function_form", "form_criterion"): ("y = ax² かどうか", "y が x の2乗に比例していれば y = ax² の形。x の1次の項や定数項があれば別の関数。"),
+    ("quadratic_roc_property", "variability"): ("変化の割合", "y = ax² の変化の割合は一定でなく、x の値によって変わる。1次関数との違いはここ。"),
+    ("parabola_property", "shape_and_symmetry"): ("放物線の形", "y = ax² のグラフは原点を通り、y 軸について対称な放物線になる。"),
+    ("parabola_property", "opening_direction"): ("開く向き", "a が正なら上に開き、負なら下に開く。"),
+    ("parabola_property", "opening_width"): ("開き方", "a の絶対値が大きいほど開き方が小さく（とがって）なる。"),
+    ("parallel_angle_property", "property"): ("平行なら角が等しい", "2直線が平行ならば、同位角も錯角も等しい。"),
+    ("parallel_angle_property", "converse"): ("平行線になる条件", "同位角または錯角が等しければ、2直線は平行である。逆も成り立つのがこの定理の要。"),
+    ("triangle_angle_properties", "interior_sum"): ("内角の和", "三角形の3つの内角の和は 180° になる。"),
+    ("triangle_angle_properties", "exterior_property"): ("外角の性質", "三角形の1つの外角は、それととなり合わない2つの内角の和に等しい。"),
+    ("polygon_interior_sum_reason", "diagonal_from_vertex"): ("内角の和の理由", "1つの頂点からひける対角線で三角形に分けられるので、三角形の数だけ 180° を足す。"),
+    ("polygon_exterior_sum_property", "constant"): ("外角の和", "多角形の外角の和は、辺の数によらずつねに 360° になる。"),
+    ("congruence_conditions", "all_three"): ("三角形の合同条件", "3組の辺／2組の辺とその間の角／1組の辺とその両端の角、の3つ。角の位置が条件に入っている点が要。"),
+    ("right_triangle_congruence_conditions", "both"): ("直角三角形の合同条件", "斜辺と1つの鋭角／斜辺と他の1辺、の2つ。直角があるぶん条件が少なくて済む。"),
+    ("isosceles_property", "base_angles_equal"): ("二等辺三角形の性質", "2辺が等しい三角形では、その2辺にはさまれない2つの角（底角）が等しい。"),
+    ("isosceles_condition", "two_angles_equal"): ("二等辺三角形になる条件", "2つの角が等しい三角形は二等辺三角形である。性質の逆。"),
+    ("equilateral_property", "all_equal"): ("正三角形の性質", "3辺が等しいので3つの角も等しく、どれも 60° になる。"),
+    ("parallelogram_property", "all"): ("平行四辺形の性質", "2組の対辺はそれぞれ平行で等しく、2組の対角も等しく、対角線はそれぞれの中点で交わる。"),
+    ("parallelogram_conditions", "all_five"): ("平行四辺形になる条件", "2組の対辺が平行／2組の対辺が等しい／2組の対角が等しい／対角線がそれぞれの中点で交わる／1組の対辺が平行でその長さが等しい、の5つ。"),
+    ("special_parallelogram_diagonal_property", "rectangle"): ("長方形の対角線", "長方形の対角線は長さが等しい。"),
+    ("special_parallelogram_diagonal_property", "rhombus"): ("ひし形の対角線", "ひし形の対角線は垂直に交わる。"),
+    ("special_parallelogram_diagonal_property", "square"): ("正方形の対角線", "正方形は長方形でもひし形でもあるので、対角線は長さが等しく、しかも垂直に交わる。"),
+    ("equal_area_triangles", "common_base_equal_height"): ("等積になる条件", "底辺が共通で、頂点が底辺に平行な直線上にあれば、高さが等しいので面積も等しい。"),
+    ("similarity_conditions", "all_three"): ("三角形の相似条件", "3組の辺の比／2組の辺の比とその間の角／2組の角、の3つ。合同条件と対応させて覚える。"),
+    ("area_ratio_theorem", "statement"): ("面積比と相似比", "相似な図形の面積比は、相似比の2乗に等しい。"),
+    ("volume_ratio_theorem", "statement"): ("体積比と相似比", "相似な立体の体積比は、相似比の3乗に等しい。"),
+    ("parallel_segment_ratio_theorem", "statement"): ("平行線と線分の比", "三角形の2辺上の点を結ぶ線分が残りの辺に平行なら、辺の比は等しくなる。"),
+    ("parallel_segment_ratio_converse", "statement"): ("平行線と線分の比の定理の逆", "辺の比が等しければ、結んだ線分は残りの辺に平行になる。"),
+    ("midpoint_connector_theorem", "statement"): ("中点連結定理", "三角形の2辺の中点を結ぶ線分は、残りの辺に平行で、その長さの半分になる。"),
+    ("circle_inscribed_angle_theorem", "statement"): ("円周角の定理", "同じ弧に対する円周角はすべて等しく、その弧に対する中心角の半分になる。"),
+    ("circle_inscribed_angle_converse", "statement"): ("円周角の定理の逆", "2点が直線の同じ側にあって、その2点から線分を見込む角が等しければ、4点は同一円周上にある。"),
+    ("arc_angle_proportion", "statement"): ("弧と円周角", "同じ円で、弧の長さは中心角（したがって円周角）に比例する。"),
+    ("pythagorean_theorem", "statement"): ("三平方の定理", "直角三角形で、直角をはさむ2辺の平方の和は斜辺の平方に等しい。"),
+    ("pythagorean_converse", "statement"): ("三平方の定理の逆", "3辺の平方について a² + b² = c² が成り立てば、その三角形は直角三角形である。"),
+    ("sphere_formula", "surface_area"): ("球の表面積", "球の表面積は 4πr²。半径の平方に比例する。"),
+    ("sphere_formula", "volume"): ("球の体積", "球の体積は (4/3)πr³。半径の立方に比例する。"),
+    ("complementary_event", "definition"): ("余事象", "「少なくとも1つ」は、その反対（1つも起こらない）の確率を 1 からひくと求めやすい。"),
+}
+
+
+def rule_reason_for(topic: str, concept: str) -> tuple[str, str]:
+    """(1手目に出す「何についての規則か」, 2手目の detail に出す根拠)。"""
+    return RULE_REASONS.get((str(topic), str(concept)), ("", ""))
+
+
+def definition_for(domain: str, concept: str) -> tuple[str, str]:
+    """(1手目に出す対象, 2手目の detail に出す定義)。表に無ければ空の組。"""
+    return TERM_DEFINITIONS.get((str(domain), str(concept)), ("", ""))
+
+
+__all__ = ["TERM_DEFINITIONS", "RULE_REASONS", "definition_for", "rule_reason_for"]

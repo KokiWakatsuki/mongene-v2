@@ -37,9 +37,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - equality.term_recall
-  explanation: 'まず、説明されている式や数の部分がどれかを読み取る。
+  explanation: 'まず、説明されている式や数の部分がどれかを読み取る。（= の左側）
 
-    次に、その対象を表す用語の名前を思い出す。（左辺）'
+    次に、等式の = の左側の式を左辺という。（左辺）'
   hints:
   - 説明されている式や数の部分がどれかを読み取る。
   label: (1)
@@ -49,10 +49,10 @@ sub_questions:
     detail: ''
     narration: 説明されている式や数の部分がどれかを読み取る。
     op: identify_description
-    result_display: ''
+    result_display: = の左側
     result_srepr: lhs
   - args: []
-    detail: ''
+    detail: 等式の = の左側の式を左辺という。
     narration: その対象を表す用語の名前を思い出す。
     op: name_concept
     result_display: 左辺

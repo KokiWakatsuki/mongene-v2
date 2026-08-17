@@ -461,7 +461,9 @@ def _handle_l53_sphere_direct(values: Mapping[str, object]) -> Solution:
         ),
         Step(
             op="apply_sphere_volume_formula",
-            args=[], result_srepr=srepr, result_display=disp,
+            # **この手で得たのは体積だけ。** 答え全体（表面積も）を写していたので、
+            # 前の手で出した表面積が最後にもう一度並んでいた。
+            args=[], result_srepr=srepr, result_display=_fmt_pi(volume, unit + "³"),
             narration="球の体積の公式に半径の値をあてはめて計算する（半径の立方に比例する）。",
         ),
     ]

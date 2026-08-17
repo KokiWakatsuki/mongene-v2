@@ -39,9 +39,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - inequality.term_recall
-  explanation: 'まず、説明されている、数量の間の大小の関係を読み取る。
+  explanation: 'まず、説明されている、数量の間の大小の関係を読み取る。（以下）
 
-    次に、その関係を表す不等号の記号を思い出す。（≦）'
+    次に、「a は b 以下」は a ≦ b と書く。b と等しい場合を含む。（≦）'
   hints:
   - 説明されている、数量の間の大小の関係を読み取る。
   label: (1)
@@ -51,10 +51,10 @@ sub_questions:
     detail: ''
     narration: 説明されている、数量の間の大小の関係を読み取る。
     op: identify_description
-    result_display: ''
+    result_display: 以下
     result_srepr: at_most
   - args: []
-    detail: ''
+    detail: 「a は b 以下」は a ≦ b と書く。b と等しい場合を含む。
     narration: その関係を表す不等号の記号を思い出す。
     op: name_concept
     result_display: ≦

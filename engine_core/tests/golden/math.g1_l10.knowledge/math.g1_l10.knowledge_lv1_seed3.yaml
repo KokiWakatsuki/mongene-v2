@@ -37,9 +37,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - number_set.term_recall
-  explanation: 'まず、説明されている式や数の部分がどれかを読み取る。
+  explanation: 'まず、説明されている式や数の部分がどれかを読み取る。（1 以上の整数）
 
-    次に、その対象を表す用語の名前を思い出す。（自然数）'
+    次に、1、2、3… と数えるのに使う数を自然数という。0 と負の数は入らない。（自然数）'
   hints:
   - 説明されている式や数の部分がどれかを読み取る。
   label: (1)
@@ -49,10 +49,10 @@ sub_questions:
     detail: ''
     narration: 説明されている式や数の部分がどれかを読み取る。
     op: identify_description
-    result_display: ''
+    result_display: 1 以上の整数
     result_srepr: natural_number
   - args: []
-    detail: ''
+    detail: 1、2、3… と数えるのに使う数を自然数という。0 と負の数は入らない。
     narration: その対象を表す用語の名前を思い出す。
     op: name_concept
     result_display: 自然数

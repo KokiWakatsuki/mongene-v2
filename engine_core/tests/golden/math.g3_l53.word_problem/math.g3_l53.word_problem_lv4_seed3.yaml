@@ -43,7 +43,7 @@ sub_questions:
 
     次に、求めた長さを一方の直角三角形にあてはめて、三平方の定理から高さを求める。（24 cm）
 
-    最後に、底辺と、いま求めた高さから、三角形の面積を求める。（高さ 24 cm、面積 204 cm²）'
+    最後に、底辺と、いま求めた高さから、三角形の面積を求める。（204 cm²）'
   hints:
   - 3辺の長さしかわかっていないので、頂点から底辺に垂線を引く補助線を自分で入れる。底辺が2つに分かれて、高さを共有する直角三角形が2つできる。
   - 分かれた底辺の一方の長さを文字でおくと、もう一方は底辺の長さからその分をひいた残りになる。
@@ -80,6 +80,6 @@ sub_questions:
     detail: ''
     narration: 底辺と、いま求めた高さから、三角形の面積を求める。
     op: compute_triangle_area
-    result_display: 高さ 24 cm、面積 204 cm²
+    result_display: 204 cm²
     result_srepr: Tuple(Integer(24), Integer(204))
 visual_svg: null

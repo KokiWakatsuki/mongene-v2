@@ -37,9 +37,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - equation.term_recall
-  explanation: 'まず、説明されている式や数の部分がどれかを読み取る。
+  explanation: 'まず、説明されている式や数の部分がどれかを読み取る。（値によって成り立ったり成り立たなかったりする等式）
 
-    次に、その対象を表す用語の名前を思い出す。（方程式）'
+    次に、文字にあてはめる値によって成り立つかどうかが変わる等式を方程式という。つねに成り立つ等式（恒等式）とは別。（方程式）'
   hints:
   - 説明されている式や数の部分がどれかを読み取る。
   label: (1)
@@ -49,10 +49,10 @@ sub_questions:
     detail: ''
     narration: 説明されている式や数の部分がどれかを読み取る。
     op: identify_description
-    result_display: ''
+    result_display: 値によって成り立ったり成り立たなかったりする等式
     result_srepr: equation
   - args: []
-    detail: ''
+    detail: 文字にあてはめる値によって成り立つかどうかが変わる等式を方程式という。つねに成り立つ等式（恒等式）とは別。
     narration: その対象を表す用語の名前を思い出す。
     op: name_concept
     result_display: 方程式

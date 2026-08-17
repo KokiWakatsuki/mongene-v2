@@ -36,9 +36,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - midpoint_connector_theorem.rule_recall
-  explanation: 'まず、問題で問われている規則や約束が、何についてのものかを読み取る。
+  explanation: 'まず、問題で問われている規則や約束が、何についてのものかを読み取る。（中点連結定理）
 
-    次に、その規則の正しい内容を思い出して選ぶ。（残りの辺に平行で、その長さは残りの辺の半分に等しい）'
+    次に、三角形の2辺の中点を結ぶ線分は、残りの辺に平行で、その長さの半分になる。（残りの辺に平行で、その長さは残りの辺の半分に等しい）'
   hints:
   - 問題で問われている規則や約束が、何についてのものかを読み取る。
   label: (1)
@@ -48,10 +48,10 @@ sub_questions:
     detail: ''
     narration: 問題で問われている規則や約束が、何についてのものかを読み取る。
     op: read_rule_context
-    result_display: ''
+    result_display: 中点連結定理
     result_srepr: statement
   - args: []
-    detail: ''
+    detail: 三角形の2辺の中点を結ぶ線分は、残りの辺に平行で、その長さの半分になる。
     narration: その規則の正しい内容を思い出して選ぶ。
     op: recall_correct_rule
     result_display: 残りの辺に平行で、その長さは残りの辺の半分に等しい

@@ -36,9 +36,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - power.term_recall
-  explanation: 'まず、説明されている式や数の部分がどれかを読み取る。
+  explanation: 'まず、説明されている式や数の部分がどれかを読み取る。（くり返しかける数）
 
-    次に、その対象を表す用語の名前を思い出す。（底）'
+    次に、累乗でくり返しかけられる数を底という。指数の左下に書く数。（底）'
   hints:
   - 説明されている式や数の部分がどれかを読み取る。
   label: (1)
@@ -48,10 +48,10 @@ sub_questions:
     detail: ''
     narration: 説明されている式や数の部分がどれかを読み取る。
     op: identify_description
-    result_display: ''
+    result_display: くり返しかける数
     result_srepr: base
   - args: []
-    detail: ''
+    detail: 累乗でくり返しかけられる数を底という。指数の左下に書く数。
     narration: その対象を表す用語の名前を思い出す。
     op: name_concept
     result_display: 底

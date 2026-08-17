@@ -270,8 +270,48 @@ def _claim_tail(claim: str) -> str:
     if "∠" in claim:
         return "等しい角が分かる。"
     if "＝" in claim or "=" in claim:
+        # **三角形どうしの「＝」は面積の等しさ。** 教科書も面積を「△ABC ＝ △DBC」と
+        # 書くので、辺の等式と同じ扱いにすると「等しい辺が分かる」と言ってしまう
+        # （等積変形の証明 17 問がそうなっていた）。
+        if claim.count("△") >= 2:
+            return "面積が等しいと分かる。"
         return "等しい辺が分かる。"
+    # 「四角形ABCD は平行四辺形である」のような**図形の種類**の結論。
+    # 「次のことが分かる。」では何を示したのかが読めない。
+    for name in ("平行四辺形", "長方形", "ひし形", "正方形"):
+        if name in claim:
+            return f"{name}であると分かる。"
+    if "二等辺三角形" in claim:
+        return "二等辺三角形であると分かる。"
+    if "中点" in claim:
+        return "中点であると分かる。"
     return "次のことが分かる。"
+
+
+def _hypothesis_narration(claim: str) -> str:
+    """仮定の行の言い方を、**その仮定が何であるか**から決める。
+
+    どの仮定も「仮定から、等しい辺（角）を書き出す。」で括っていたので、
+    「O は AC の中点」「四角形ABCD は平行四辺形である」にまで
+    **辺でも角でもないものに「等しい辺（角）」と言っていた**（11 問）。
+    """
+    if "中点" in claim:
+        return "仮定から、中点であることを書き出す。"
+    if any(k in claim for k in ("平行四辺形", "長方形", "ひし形", "正方形")):
+        return "仮定から、四角形の種類を書き出す。"
+    if "∥" in claim:
+        return "仮定から、平行な直線を書き出す。"
+    if "⊥" in claim:
+        return "仮定から、垂直な直線を書き出す。"
+    if "°" in claim:
+        return "仮定から、角の大きさを書き出す。"
+    if "∠" in claim:
+        return "仮定から、等しい角を書き出す。"
+    if "：" in claim or ":" in claim:
+        return "仮定から、辺の比を書き出す。"
+    if "＝" in claim or "=" in claim:
+        return "仮定から、等しい辺を書き出す。"
+    return "仮定から、与えられていることを書き出す。"
 
 
 def _steps_from_lines(lines) -> list[Step]:
@@ -279,6 +319,8 @@ def _steps_from_lines(lines) -> list[Step]:
     out: list[Step] = []
     for line in lines:
         narration = _STEP_NARRATION.get(line.op)
+        if line.op == "cite_hypothesis":
+            narration = _hypothesis_narration(line.claim)
         if narration is None:
             if not line.reason:
                 narration = "図から読み取る。"

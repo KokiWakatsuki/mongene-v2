@@ -586,7 +586,8 @@ def solve_exam_regular_tetrahedron(numbers: Mapping[str, Any]) -> list[Solution]
         ),
         Step(
             op="compute_pyramid_volume", args=[], result_srepr=sympy.srepr(result),
-            result_display=display,
+            # この手で得たのは体積だけ（高さは前の手）。答え全体を写さない。
+            result_display=_fmt(volume, "cm³"),
             narration="底面の正三角形の面積と、いま求めた高さから、"
             "角錐の体積は底面積と高さの積の三分の一であることを使って体積を求める。",
         ),
@@ -647,7 +648,8 @@ def solve_triangle_height_area_solo(numbers: Mapping[str, Any]) -> list[Solution
         ),
         Step(
             op="compute_triangle_area", args=[], result_srepr=sympy.srepr(result),
-            result_display=display,
+            # この手で得たのは面積だけ（高さは前の手）。
+            result_display=_fmt(area, "cm²"),
             narration="底辺と、いま求めた高さから、三角形の面積を求める。",
         ),
     ]

@@ -36,9 +36,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - representative_value_terms.term_recall
-  explanation: 'まず、説明されている式や数の部分がどれかを読み取る。
+  explanation: 'まず、説明されている式や数の部分がどれかを読み取る。（もっとも多く現れる値）
 
-    次に、その対象を表す用語の名前を思い出す。（最頻値）'
+    次に、もっとも多く現れる値を最頻値という。度数分布表では度数が最大の階級の階級値をとる。（最頻値）'
   hints:
   - 説明されている式や数の部分がどれかを読み取る。
   label: (1)
@@ -48,10 +48,10 @@ sub_questions:
     detail: ''
     narration: 説明されている式や数の部分がどれかを読み取る。
     op: identify_description
-    result_display: ''
+    result_display: もっとも多く現れる値
     result_srepr: mode
   - args: []
-    detail: ''
+    detail: もっとも多く現れる値を最頻値という。度数分布表では度数が最大の階級の階級値をとる。
     narration: その対象を表す用語の名前を思い出す。
     op: name_concept
     result_display: 最頻値

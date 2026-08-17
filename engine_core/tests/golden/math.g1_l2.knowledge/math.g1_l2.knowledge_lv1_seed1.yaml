@@ -37,9 +37,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - number.term_recall
-  explanation: 'まず、説明されている式や数の部分がどれかを読み取る。
+  explanation: 'まず、説明されている式や数の部分がどれかを読み取る。（0 からの距離）
 
-    次に、その対象を表す用語の名前を思い出す。（絶対値）'
+    次に、数直線上で 0 からその数までの距離を絶対値という。符号は考えないので、+5 も -5 も絶対値は 5。（絶対値）'
   hints:
   - 説明されている式や数の部分がどれかを読み取る。
   label: (1)
@@ -49,10 +49,10 @@ sub_questions:
     detail: ''
     narration: 説明されている式や数の部分がどれかを読み取る。
     op: identify_description
-    result_display: ''
+    result_display: 0 からの距離
     result_srepr: absolute_value
   - args: []
-    detail: ''
+    detail: 数直線上で 0 からその数までの距離を絶対値という。符号は考えないので、+5 も -5 も絶対値は 5。
     narration: その対象を表す用語の名前を思い出す。
     op: name_concept
     result_display: 絶対値

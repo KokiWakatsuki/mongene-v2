@@ -36,9 +36,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - laws.term_recall
-  explanation: 'まず、説明されている式や数の部分がどれかを読み取る。
+  explanation: 'まず、説明されている式や数の部分がどれかを読み取る。（組み合わせを変える）
 
-    次に、その対象を表す用語の名前を思い出す。（結合法則）'
+    次に、どこにかっこをつけて先に計算しても結果が変わらないことを結合法則という。（結合法則）'
   hints:
   - 説明されている式や数の部分がどれかを読み取る。
   label: (1)
@@ -48,10 +48,10 @@ sub_questions:
     detail: ''
     narration: 説明されている式や数の部分がどれかを読み取る。
     op: identify_description
-    result_display: ''
+    result_display: 組み合わせを変える
     result_srepr: associative
   - args: []
-    detail: ''
+    detail: どこにかっこをつけて先に計算しても結果が変わらないことを結合法則という。
     narration: その対象を表す用語の名前を思い出す。
     op: name_concept
     result_display: 結合法則

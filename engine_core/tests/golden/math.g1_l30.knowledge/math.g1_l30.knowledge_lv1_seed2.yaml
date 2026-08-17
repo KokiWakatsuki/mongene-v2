@@ -38,9 +38,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - quadrant_terms.term_recall
-  explanation: 'まず、説明されている式や数の部分がどれかを読み取る。
+  explanation: 'まず、説明されている式や数の部分がどれかを読み取る。（x が負で y が正の部分）
 
-    次に、その対象を表す用語の名前を思い出す。（第二象限）'
+    次に、x < 0、y > 0 の部分を第2象限という。原点の左上。（第二象限）'
   hints:
   - 説明されている式や数の部分がどれかを読み取る。
   label: (1)
@@ -50,10 +50,10 @@ sub_questions:
     detail: ''
     narration: 説明されている式や数の部分がどれかを読み取る。
     op: identify_description
-    result_display: ''
+    result_display: x が負で y が正の部分
     result_srepr: quadrant2
   - args: []
-    detail: ''
+    detail: x < 0、y > 0 の部分を第2象限という。原点の左上。
     narration: その対象を表す用語の名前を思い出す。
     op: name_concept
     result_display: 第二象限

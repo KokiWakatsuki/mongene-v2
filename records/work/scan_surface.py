@@ -25,6 +25,11 @@ def _steps(e: str) -> list[tuple[str, str]]:
     ]
 
 
+# その手の仕事が「複数の値を集めること」である指示文（答えと一致して当然）。
+_COLLECTING = re.compile(r"(すべて並べ|並べて答え|答えをすべて|まとめて答え|"
+                         r"両端の値を読|それぞれ.{0,6}を読み取|組にして|答えとする)")
+
+
 def _norm(s: str) -> str:
     return re.sub(r"\s+", "", s)
 
@@ -33,14 +38,34 @@ def _norm(s: str) -> str:
 # 括弧には「その手で得たもの」を入れる規約。答えを丸ごと写すと、前の手で出した値が
 # もう一度並ぶ（`階級値 57.5、度数の合計 25`）。**複数の値を並べた答え**のときだけ見る。
 def _last_step_copies_answer(a: str, e: str) -> bool:
+    """最後の手の括弧が、**前の手ですでに出した値をもう一度並べている**か。
+
+    「答えと一致するか」で見ると誤検出が出る。最後の手が本当に複数の値を
+    集める手（「求めた時刻をすべて並べる」「最小値と最大値を読む」）もあり、
+    そこでは答えと一致するのが正しい（37セル挙げて、その多くがこれだった）。
+
+    本当の欠陥は**同じ値が2度出ること**なので、
+    「最後の括弧＝答え」かつ「その答えの一部が前の手の括弧にすでにある」で見る。
+    """
     st = _steps(e)
     if len(st) < 2 or "／" in a:
         return False
-    last = st[-1][1]
-    # 値が2つ以上並んだ答え（「、」で区切られている）でなければ、丸写しでも自然。
-    if a.count("、") < 1:
+    instruction, last = st[-1]
+    if _norm(last) != _norm(a):
         return False
-    return _norm(last) == _norm(a)
+    # **集める手は除く。** 「求めた時刻をすべて並べる」「最小値と最大値を読む」は、
+    # その手の仕事が複数の値を集めることなので、答えと一致するのが正しい。
+    if _COLLECTING.search(instruction):
+        return False
+    earlier = {_norm(d) for _i, d in st[:-1]}
+    # 「表面積 484π cm²」→「484πcm²」。ラベルを外した**値**で、完全一致だけを見る
+    # （部分一致にすると `1.4` が前の手の計算式に出るだけで挙がる＝誤検出）。
+    parts = []
+    for chunk in re.split(r"[、,]", a):
+        v = _norm(re.sub(r"^[^\d\-+(（]*", "", chunk))
+        if len(v) >= 2:
+            parts.append(v)
+    return any(p in earlier for p in parts)
 
 
 # --- ② 1手目の括弧が、もう答えになっている --------------------------------

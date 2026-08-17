@@ -37,9 +37,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - factorization_relation.rule_recall
-  explanation: 'まず、問題で問われている規則や約束が、何についてのものかを読み取る。
+  explanation: 'まず、問題で問われている規則や約束が、何についてのものかを読み取る。（因数分解と展開）
 
-    次に、その規則の正しい内容を思い出して選ぶ。（多項式を因数の積の形に表すことで、展開のちょうど逆にあたる操作）'
+    次に、因数分解は展開の逆で、和の形を積の形に直す。展開して戻るかで確かめられる。（多項式を因数の積の形に表すことで、展開のちょうど逆にあたる操作）'
   hints:
   - 問題で問われている規則や約束が、何についてのものかを読み取る。
   label: (1)
@@ -49,10 +49,10 @@ sub_questions:
     detail: ''
     narration: 問題で問われている規則や約束が、何についてのものかを読み取る。
     op: read_rule_context
-    result_display: ''
+    result_display: 因数分解と展開
     result_srepr: relation
   - args: []
-    detail: ''
+    detail: 因数分解は展開の逆で、和の形を積の形に直す。展開して戻るかで確かめられる。
     narration: その規則の正しい内容を思い出して選ぶ。
     op: recall_correct_rule
     result_display: 多項式を因数の積の形に表すことで、展開のちょうど逆にあたる操作

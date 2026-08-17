@@ -37,9 +37,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - survey_method_terms.term_recall
-  explanation: 'まず、説明されている式や数の部分がどれかを読み取る。
+  explanation: 'まず、説明されている式や数の部分がどれかを読み取る。（一部を調べて推定する）
 
-    次に、その対象を表す用語の名前を思い出す。（標本調査）'
+    次に、一部を取り出して調べ、全体を推定する調査を標本調査という。全数を調べるのが難しいときに使う。（標本調査）'
   hints:
   - 説明されている式や数の部分がどれかを読み取る。
   label: (1)
@@ -49,10 +49,10 @@ sub_questions:
     detail: ''
     narration: 説明されている式や数の部分がどれかを読み取る。
     op: identify_description
-    result_display: ''
+    result_display: 一部を調べて推定する
     result_srepr: sample_survey
   - args: []
-    detail: ''
+    detail: 一部を取り出して調べ、全体を推定する調査を標本調査という。全数を調べるのが難しいときに使う。
     narration: その対象を表す用語の名前を思い出す。
     op: name_concept
     result_display: 標本調査

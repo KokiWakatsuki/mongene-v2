@@ -38,9 +38,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - circle_terms.term_recall
-  explanation: 'まず、説明されている式や数の部分がどれかを読み取る。
+  explanation: 'まず、説明されている式や数の部分がどれかを読み取る。（円周の一部）
 
-    次に、その対象を表す用語の名前を思い出す。（弧）'
+    次に、円周の一部分を弧という。（弧）'
   hints:
   - 説明されている式や数の部分がどれかを読み取る。
   label: (1)
@@ -50,10 +50,10 @@ sub_questions:
     detail: ''
     narration: 説明されている式や数の部分がどれかを読み取る。
     op: identify_description
-    result_display: ''
+    result_display: 円周の一部
     result_srepr: arc
   - args: []
-    detail: ''
+    detail: 円周の一部分を弧という。
     narration: その対象を表す用語の名前を思い出す。
     op: name_concept
     result_display: 弧

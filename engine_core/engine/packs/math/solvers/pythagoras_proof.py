@@ -781,10 +781,22 @@ def converse_proof_lines(case: ConverseCase) -> list[ProofStep]:
 # ---------------------------------------------------------------------------
 # solver（double-solve の再計算経路）
 # ---------------------------------------------------------------------------
+# 解説では**実際にやった操作**を名指しする手（模範解答の `reason` がそれを持っている）。
+# 一律に「両辺に共通する項を消して式を整理する」と書いていたので、
+# 答え側が「両辺に 2aq を加える」「両辺を 2 倍する」と書いているのと食い違っていた
+# （g3_l51.proof の 10 問）。narration はヒントに流れるので一般形のまま残す。
+_DETAIL_FROM_REASON = frozenset({"simplify_equation"})
+
+
 def _steps(lines: list[ProofStep], narration: dict[str, str]) -> list[Step]:
     return [
-        Step(op=ln.op, args=[], result_srepr="", result_display=ln.claim,
-             narration=narration[ln.op])
+        Step(
+            op=ln.op, args=[], result_srepr="", result_display=ln.claim,
+            narration=narration[ln.op],
+            detail=(
+                f"{ln.reason}。" if ln.op in _DETAIL_FROM_REASON and ln.reason else ""
+            ),
+        )
         for ln in lines
     ]
 

@@ -36,9 +36,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - function_terms.term_recall
-  explanation: 'まず、説明されている式や数の部分がどれかを読み取る。
+  explanation: 'まず、説明されている式や数の部分がどれかを読み取る。（x を決めると y が1つに決まる関係）
 
-    次に、その対象を表す用語の名前を思い出す。（関数）'
+    次に、x の値を決めると y の値がただ1つに決まるとき、y は x の関数であるという。（関数）'
   hints:
   - 説明されている式や数の部分がどれかを読み取る。
   label: (1)
@@ -48,10 +48,10 @@ sub_questions:
     detail: ''
     narration: 説明されている式や数の部分がどれかを読み取る。
     op: identify_description
-    result_display: ''
+    result_display: x を決めると y が1つに決まる関係
     result_srepr: function
   - args: []
-    detail: ''
+    detail: x の値を決めると y の値がただ1つに決まるとき、y は x の関数であるという。
     narration: その対象を表す用語の名前を思い出す。
     op: name_concept
     result_display: 関数

@@ -36,9 +36,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - special_parallelogram_diagonal_property.rule_recall
-  explanation: 'まず、問題で問われている規則や約束が、何についてのものかを読み取る。
+  explanation: 'まず、問題で問われている規則や約束が、何についてのものかを読み取る。（長方形の対角線）
 
-    次に、その規則の正しい内容を思い出して選ぶ。（対角線の長さが等しい）'
+    次に、長方形の対角線は長さが等しい。（対角線の長さが等しい）'
   hints:
   - 問題で問われている規則や約束が、何についてのものかを読み取る。
   label: (1)
@@ -48,10 +48,10 @@ sub_questions:
     detail: ''
     narration: 問題で問われている規則や約束が、何についてのものかを読み取る。
     op: read_rule_context
-    result_display: ''
+    result_display: 長方形の対角線
     result_srepr: rectangle
   - args: []
-    detail: ''
+    detail: 長方形の対角線は長さが等しい。
     narration: その規則の正しい内容を思い出して選ぶ。
     op: recall_correct_rule
     result_display: 対角線の長さが等しい

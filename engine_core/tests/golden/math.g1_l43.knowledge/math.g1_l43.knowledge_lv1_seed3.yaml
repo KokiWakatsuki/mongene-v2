@@ -37,9 +37,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - perpendicular_terms.term_recall
-  explanation: 'まず、説明されている式や数の部分がどれかを読み取る。
+  explanation: 'まず、説明されている式や数の部分がどれかを読み取る。（垂線と直線の交点）
 
-    次に、その対象を表す用語の名前を思い出す。（垂線の足）'
+    次に、点から直線にひいた垂線がその直線と交わる点を垂線の足という。（垂線の足）'
   hints:
   - 説明されている式や数の部分がどれかを読み取る。
   label: (1)
@@ -49,10 +49,10 @@ sub_questions:
     detail: ''
     narration: 説明されている式や数の部分がどれかを読み取る。
     op: identify_description
-    result_display: ''
+    result_display: 垂線と直線の交点
     result_srepr: foot
   - args: []
-    detail: ''
+    detail: 点から直線にひいた垂線がその直線と交わる点を垂線の足という。
     narration: その対象を表す用語の名前を思い出す。
     op: name_concept
     result_display: 垂線の足

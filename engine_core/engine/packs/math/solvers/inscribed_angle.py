@@ -59,7 +59,9 @@ def inscribed_angle_from_central(central_angle: object) -> Solution:
 
 
 @register_solver("math.inscribed_angle_transfer_same_arc")
-def inscribed_angle_transfer_same_arc(known_angle: object) -> Solution:
+def inscribed_angle_transfer_same_arc(
+    known_angle: object, labels: object = None
+) -> Solution:
     """同じ弧に対する円周角は等しいことから、角の大きさを転写する
 
     （g3_l48.find_value Lv2）。known_angle だけから、同じ弧に対する円周角は
@@ -68,16 +70,34 @@ def inscribed_angle_transfer_same_arc(known_angle: object) -> Solution:
     v = sympy.sympify(str(known_angle))
     disp = f"{sympy.sstr(v)}°"
     srepr = sympy.srepr(v)
+    # 点名は解説の文言に使うだけ（計算には効かない）。渡されなければ既定の記号。
+    ls = str(labels or "PQRS")
+    pa, pb, pc, pd = (ls + "PQRS")[0], (ls + "PQRS")[1], (ls + "PQRS")[2], (ls + "PQRS")[3]
     steps = [
         Step(
             op="identify_same_arc_angle",
-            args=[], result_srepr="", result_display=f"{sympy.sstr(v)}°",
-            narration="4点が同一円周上にあることから、同じ弧に対応する角の大きさを読み取る。",
+            args=[], result_srepr="",
+            # **この手の産物は「同一円周上にある」という判断**。ここが `41°` だったので、
+            # 2手とも同じ数が並び、しかも**この問題の主題（円周角の定理の逆）が
+            # 既定事実として飛ばされていた**。
+            result_display=f"4点{pa}、{pb}、{pc}、{pd} は同一円周上にある",
+            narration=(
+                f"直線{pa}{pb}の同じ側にある2つの角が等しいので、円周角の定理の逆から、"
+                f"4点が同一円周上にあると分かる。"
+            ),
+            detail=(
+                f"∠{pa}{pc}{pb} と ∠{pa}{pd}{pb} が等しく、{pc} と {pd} は直線{pa}{pb}の"
+                f"同じ側にあるので、4点{pa}、{pb}、{pc}、{pd} は同一円周上にある。"
+            ),
         ),
         Step(
             op="transfer_by_inscribed_angle_equality",
             args=[], result_srepr=srepr, result_display=disp,
             narration="同じ弧に対する円周角の大きさはすべて等しいことから、求める角の大きさを求める。",
+            detail=(
+                f"∠{pd}{pa}{pc} と ∠{pd}{pb}{pc} はどちらも弧{pd}{pc}に対する円周角なので、"
+                f"等しい。"
+            ),
         ),
     ]
     return Solution(answer=SymbolicAnswer(srepr=srepr, display=disp), steps=steps)

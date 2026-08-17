@@ -37,9 +37,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - speed_relation.rule_recall
-  explanation: 'まず、問題で問われている規則や約束が、何についてのものかを読み取る。
+  explanation: 'まず、問題で問われている規則や約束が、何についてのものかを読み取る。（時間の式）
 
-    次に、その規則の正しい内容を思い出して選ぶ。（（時間）＝（道のり）÷（速さ））'
+    次に、時間＝道のり÷速さ。（（時間）＝（道のり）÷（速さ））'
   hints:
   - 問題で問われている規則や約束が、何についてのものかを読み取る。
   label: (1)
@@ -49,10 +49,10 @@ sub_questions:
     detail: ''
     narration: 問題で問われている規則や約束が、何についてのものかを読み取る。
     op: read_rule_context
-    result_display: ''
+    result_display: 時間の式
     result_srepr: time
   - args: []
-    detail: ''
+    detail: 時間＝道のり÷速さ。
     narration: その規則の正しい内容を思い出して選ぶ。
     op: recall_correct_rule
     result_display: （時間）＝（道のり）÷（速さ）

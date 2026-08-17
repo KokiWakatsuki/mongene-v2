@@ -37,9 +37,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - inverse_proportion.term_recall
-  explanation: 'まず、説明されている式や数の部分がどれかを読み取る。
+  explanation: 'まず、説明されている式や数の部分がどれかを読み取る。（y = a/x の関係）
 
-    次に、その対象を表す用語の名前を思い出す。（反比例）'
+    次に、x が2倍3倍になると y が 1/2 倍 1/3 倍になる関係を反比例という。式は y = a/x。（反比例）'
   hints:
   - 説明されている式や数の部分がどれかを読み取る。
   label: (1)
@@ -49,10 +49,10 @@ sub_questions:
     detail: ''
     narration: 説明されている式や数の部分がどれかを読み取る。
     op: identify_description
-    result_display: ''
+    result_display: y = a/x の関係
     result_srepr: inverse_proportion
   - args: []
-    detail: ''
+    detail: x が2倍3倍になると y が 1/2 倍 1/3 倍になる関係を反比例という。式は y = a/x。
     narration: その対象を表す用語の名前を思い出す。
     op: name_concept
     result_display: 反比例

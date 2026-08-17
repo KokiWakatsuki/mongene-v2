@@ -36,9 +36,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - function_terms.term_recall
-  explanation: 'まず、説明されている式や数の部分がどれかを読み取る。
+  explanation: 'まず、説明されている式や数の部分がどれかを読み取る。（変数のとりうる値の範囲）
 
-    次に、その対象を表す用語の名前を思い出す。（変域）'
+    次に、変数がとりうる値の範囲を変域という。（変域）'
   hints:
   - 説明されている式や数の部分がどれかを読み取る。
   label: (1)
@@ -48,10 +48,10 @@ sub_questions:
     detail: ''
     narration: 説明されている式や数の部分がどれかを読み取る。
     op: identify_description
-    result_display: ''
+    result_display: 変数のとりうる値の範囲
     result_srepr: domain_range
   - args: []
-    detail: ''
+    detail: 変数がとりうる値の範囲を変域という。
     narration: その対象を表す用語の名前を思い出す。
     op: name_concept
     result_display: 変域

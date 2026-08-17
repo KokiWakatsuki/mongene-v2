@@ -36,9 +36,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - function_terms.term_recall
-  explanation: 'まず、説明されている式や数の部分がどれかを読み取る。
+  explanation: 'まず、説明されている式や数の部分がどれかを読み取る。（いろいろな値をとる文字）
 
-    次に、その対象を表す用語の名前を思い出す。（変数）'
+    次に、いろいろな値をとりうる文字を変数という。決まった値をとる定数と区別する。（変数）'
   hints:
   - 説明されている式や数の部分がどれかを読み取る。
   label: (1)
@@ -48,10 +48,10 @@ sub_questions:
     detail: ''
     narration: 説明されている式や数の部分がどれかを読み取る。
     op: identify_description
-    result_display: ''
+    result_display: いろいろな値をとる文字
     result_srepr: variable
   - args: []
-    detail: ''
+    detail: いろいろな値をとりうる文字を変数という。決まった値をとる定数と区別する。
     narration: その対象を表す用語の名前を思い出す。
     op: name_concept
     result_display: 変数

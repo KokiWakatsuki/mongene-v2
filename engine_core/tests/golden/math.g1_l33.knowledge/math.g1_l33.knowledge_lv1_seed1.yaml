@@ -37,9 +37,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - inverse_proportion.term_recall
-  explanation: 'まず、説明されている式や数の部分がどれかを読み取る。
+  explanation: 'まず、説明されている式や数の部分がどれかを読み取る。（y = a/x の a）
 
-    次に、その対象を表す用語の名前を思い出す。（比例定数）'
+    次に、反比例の式 y = a/x の a を比例定数という。x と y の積 xy がつねにこの値になる。（比例定数）'
   hints:
   - 説明されている式や数の部分がどれかを読み取る。
   label: (1)
@@ -49,10 +49,10 @@ sub_questions:
     detail: ''
     narration: 説明されている式や数の部分がどれかを読み取る。
     op: identify_description
-    result_display: ''
+    result_display: y = a/x の a
     result_srepr: proportionality_constant
   - args: []
-    detail: ''
+    detail: 反比例の式 y = a/x の a を比例定数という。x と y の積 xy がつねにこの値になる。
     narration: その対象を表す用語の名前を思い出す。
     op: name_concept
     result_display: 比例定数

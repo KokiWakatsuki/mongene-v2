@@ -37,9 +37,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - relative_frequency_terms.term_recall
-  explanation: 'まず、説明されている式や数の部分がどれかを読み取る。
+  explanation: 'まず、説明されている式や数の部分がどれかを読み取る。（全体に対する割合）
 
-    次に、その対象を表す用語の名前を思い出す。（相対度数）'
+    次に、その階級の度数を度数の合計でわった値を相対度数という。合計は 1 になる。（相対度数）'
   hints:
   - 説明されている式や数の部分がどれかを読み取る。
   label: (1)
@@ -49,10 +49,10 @@ sub_questions:
     detail: ''
     narration: 説明されている式や数の部分がどれかを読み取る。
     op: identify_description
-    result_display: ''
+    result_display: 全体に対する割合
     result_srepr: relative_frequency
   - args: []
-    detail: ''
+    detail: その階級の度数を度数の合計でわった値を相対度数という。合計は 1 になる。
     narration: その対象を表す用語の名前を思い出す。
     op: name_concept
     result_display: 相対度数

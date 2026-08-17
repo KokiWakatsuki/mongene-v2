@@ -37,9 +37,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - sqrt_square_meaning.rule_recall
-  explanation: 'まず、問題で問われている規則や約束が、何についてのものかを読み取る。
+  explanation: 'まず、問題で問われている規則や約束が、何についてのものかを読み取る。（√a² の値）
 
-    次に、その規則の正しい内容を思い出して選ぶ。（a を自乗した数の平方根は、a の絶対値 |a| に等しい（a が負の数のときは -a になる））'
+    次に、√a² は a の絶対値になる。a が負のときに -a となる点がまちがえやすい。（a を自乗した数の平方根は、a の絶対値 |a| に等しい（a が負の数のときは -a になる））'
   hints:
   - 問題で問われている規則や約束が、何についてのものかを読み取る。
   label: (1)
@@ -49,10 +49,10 @@ sub_questions:
     detail: ''
     narration: 問題で問われている規則や約束が、何についてのものかを読み取る。
     op: read_rule_context
-    result_display: ''
+    result_display: √a² の値
     result_srepr: abs_value_rule
   - args: []
-    detail: ''
+    detail: √a² は a の絶対値になる。a が負のときに -a となる点がまちがえやすい。
     narration: その規則の正しい内容を思い出して選ぶ。
     op: recall_correct_rule
     result_display: a を自乗した数の平方根は、a の絶対値 |a| に等しい（a が負の数のときは -a になる）

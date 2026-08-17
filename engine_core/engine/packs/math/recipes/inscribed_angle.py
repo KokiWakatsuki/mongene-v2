@@ -149,7 +149,7 @@ def inscribed_angle_transfer_same_arc_recipe(ctx: CellContext, rng: Rng) -> MR:
     v2 = int(draw(p["angle_domain"], rng))
 
     solver = REGISTRY.solver("math.inscribed_angle_transfer_same_arc")
-    sol = cast(Solution, solver(v2))
+    sol = cast(Solution, solver(v2, pa + pb + pc + pd))
     assert isinstance(sol.answer, SymbolicAnswer)
 
     statement = (

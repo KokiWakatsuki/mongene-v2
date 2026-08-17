@@ -36,9 +36,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - proof_logic_terms.term_recall
-  explanation: 'まず、説明されている式や数の部分がどれかを読み取る。
+  explanation: 'まず、説明されている式や数の部分がどれかを読み取る。（「ならば」の前の部分）
 
-    次に、その対象を表す用語の名前を思い出す。（仮定）'
+    次に、「p ならば q」の p にあたる部分を仮定という。（仮定）'
   hints:
   - 説明されている式や数の部分がどれかを読み取る。
   label: (1)
@@ -48,10 +48,10 @@ sub_questions:
     detail: ''
     narration: 説明されている式や数の部分がどれかを読み取る。
     op: identify_description
-    result_display: ''
+    result_display: 「ならば」の前の部分
     result_srepr: assumption
   - args: []
-    detail: ''
+    detail: 「p ならば q」の p にあたる部分を仮定という。
     narration: その対象を表す用語の名前を思い出す。
     op: name_concept
     result_display: 仮定

@@ -36,9 +36,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - angle_pair_terms.term_recall
-  explanation: 'まず、説明されている式や数の部分がどれかを読み取る。
+  explanation: 'まず、説明されている式や数の部分がどれかを読み取る。（向かい合う角）
 
-    次に、その対象を表す用語の名前を思い出す。（対頂角）'
+    次に、2直線が交わってできる、向かい合った位置にある角を対頂角という。つねに等しい。（対頂角）'
   hints:
   - 説明されている式や数の部分がどれかを読み取る。
   label: (1)
@@ -48,10 +48,10 @@ sub_questions:
     detail: ''
     narration: 説明されている式や数の部分がどれかを読み取る。
     op: identify_description
-    result_display: ''
+    result_display: 向かい合う角
     result_srepr: vertical
   - args: []
-    detail: ''
+    detail: 2直線が交わってできる、向かい合った位置にある角を対頂角という。つねに等しい。
     narration: その対象を表す用語の名前を思い出す。
     op: name_concept
     result_display: 対頂角

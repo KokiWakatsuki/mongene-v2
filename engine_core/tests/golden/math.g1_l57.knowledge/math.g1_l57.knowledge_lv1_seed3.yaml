@@ -36,9 +36,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - representative_value_terms.term_recall
-  explanation: 'まず、説明されている式や数の部分がどれかを読み取る。
+  explanation: 'まず、説明されている式や数の部分がどれかを読み取る。（大きさの順のまんなかの値）
 
-    次に、その対象を表す用語の名前を思い出す。（中央値）'
+    次に、大きさの順に並べたときのまんなかの値を中央値という。極端な値の影響を受けにくい。（中央値）'
   hints:
   - 説明されている式や数の部分がどれかを読み取る。
   label: (1)
@@ -48,10 +48,10 @@ sub_questions:
     detail: ''
     narration: 説明されている式や数の部分がどれかを読み取る。
     op: identify_description
-    result_display: ''
+    result_display: 大きさの順のまんなかの値
     result_srepr: median
   - args: []
-    detail: ''
+    detail: 大きさの順に並べたときのまんなかの値を中央値という。極端な値の影響を受けにくい。
     narration: その対象を表す用語の名前を思い出す。
     op: name_concept
     result_display: 中央値

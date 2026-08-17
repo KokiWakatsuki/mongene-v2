@@ -37,9 +37,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - letter_expr.term_recall
-  explanation: 'まず、説明されている式や数の部分がどれかを読み取る。
+  explanation: 'まず、説明されている式や数の部分がどれかを読み取る。（文字にかけられた数）
 
-    次に、その対象を表す用語の名前を思い出す。（係数）'
+    次に、項のうち、文字にかけられている数の部分を係数という。（係数）'
   hints:
   - 説明されている式や数の部分がどれかを読み取る。
   label: (1)
@@ -49,10 +49,10 @@ sub_questions:
     detail: ''
     narration: 説明されている式や数の部分がどれかを読み取る。
     op: identify_description
-    result_display: ''
+    result_display: 文字にかけられた数
     result_srepr: coefficient
   - args: []
-    detail: ''
+    detail: 項のうち、文字にかけられている数の部分を係数という。
     narration: その対象を表す用語の名前を思い出す。
     op: name_concept
     result_display: 係数

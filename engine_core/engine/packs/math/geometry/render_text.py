@@ -176,13 +176,18 @@ def compared_triangles(ded: Deduction, goal: Fact) -> tuple[tuple[str, ...], ...
     """証明の冒頭に書く「△… と △… において」の2三角形を、導出から決める。
 
     目標が合同そのものでなくても（「∠BAC＝∠CAD を示せ」でも）、証明は三角形を
-    比べるところから始まる。**証明の中で最初に出てくる合同**の2三角形を見出しにする
-    ——教科書がそう書いている。合同を経由しない証明なら見出しは付けない。
+    比べるところから始まる。**証明の中で最初に出てくる合同（または相似）**の
+    2三角形を見出しにする——教科書がそう書いている。三角形を比べない証明
+    （平行の証明など）なら見出しは付けない。
+
+    **相似も見る。** 合同だけを見ていたので、相似の証明 8 問が
+    「（証明）」だけで始まり、**どの2つの三角形を比べるのかを宣言しないまま**
+    角の相等を並べ始めていた（合同の証明はすべて宣言しているのに、である）。
     """
     for f in ded.proof_chain(goal):
-        if f.kind == "tri_cong":
+        if f.kind in ("tri_cong", "tri_sim"):
             return f.args
-    if goal.kind == "tri_cong":
+    if goal.kind in ("tri_cong", "tri_sim"):
         return goal.args
     return ()
 

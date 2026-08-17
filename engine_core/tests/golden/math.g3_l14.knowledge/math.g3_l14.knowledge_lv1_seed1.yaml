@@ -37,9 +37,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - square_root.term_recall
-  explanation: 'まず、説明されている式や数の部分がどれかを読み取る。
+  explanation: 'まず、説明されている式や数の部分がどれかを読み取る。（√ の記号）
 
-    次に、その対象を表す用語の名前を思い出す。（根号）'
+    次に、平方根を表す記号 √ を根号という。（根号）'
   hints:
   - 説明されている式や数の部分がどれかを読み取る。
   label: (1)
@@ -49,10 +49,10 @@ sub_questions:
     detail: ''
     narration: 説明されている式や数の部分がどれかを読み取る。
     op: identify_description
-    result_display: ''
+    result_display: √ の記号
     result_srepr: radical_sign
   - args: []
-    detail: ''
+    detail: 平方根を表す記号 √ を根号という。
     narration: その対象を表す用語の名前を思い出す。
     op: name_concept
     result_display: 根号

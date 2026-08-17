@@ -351,7 +351,7 @@ def combine_fractional_expressions(expr_str: str, mode: object) -> Solution:
         "find_common_denominator": "分母の最小公倍数を求めて通分する。",
         "combine_numerators": "分子どうしを計算し、1つの分数にまとめる。",
         "distribute_signs": "うしろの分数の前が - なので、その分子の各項の符号を変える。",
-        "add_integer_term": "整数をふくむ項も同じ分母にそろえて、分子に加える。",
+        "add_integer_term": "分子の同類項をまとめ、約分して1つの分数にする。",
     }
     # 途中の手の括弧には**通分した形**を入れる（面③）。分子はまだ計算しない。
     written = top_level_parts(expr_str, "+-")
@@ -367,10 +367,17 @@ def combine_fractional_expressions(expr_str: str, mode: object) -> Solution:
     aligned = numerators[0]
     for (sign, _t), text in zip(written[1:], numerators[1:], strict=True):
         aligned += f" {'-' if sign == '-' else '+'} ({text})"
+    # **符号を配っただけの形**（まだ同類項はまとめない）。ここが答えそのもの
+    # （`_fmt_fraction_display(num_e, den)`）だったので、2手目と3手目の括弧が
+    # 同じ値になり、最後の手が何もしていないように読めた。
+    distributed = join_signed([
+        -sympy.expand(n * common / d) if sign == "-" else sympy.expand(n * common / d)
+        for (sign, _t), (n, d) in zip(written, fractions, strict=True)
+    ])
     phrases = {
         "find_common_denominator": f"({aligned}) / {_fmt_poly_display(common)}",
         "combine_numerators": "分子を計算して1つの分数にまとめる",
-        "distribute_signs": _fmt_fraction_display(num_e, den),
+        "distribute_signs": f"({distributed}) / {_fmt_poly_display(common)}",
         "add_integer_term": "整数の項も通分して分子に加える",
     }
     r_srepr = sympy.srepr(combined)

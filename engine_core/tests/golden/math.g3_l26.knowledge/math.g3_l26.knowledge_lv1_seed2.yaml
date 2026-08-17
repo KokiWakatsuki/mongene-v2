@@ -36,9 +36,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - quadratic_coefficient.term_recall
-  explanation: 'まず、説明されている項が、2次方程式のどの位置（x²・x・定数項）にあるかを読み取る。
+  explanation: 'まず、説明されている項が、2次方程式のどの位置（x²・x・定数項）にあるかを読み取る。（x の係数）
 
-    次に、ax²+bx+c=0 の形と見比べて、その位置に対応する文字を思い出す。（b）'
+    次に、ax² + bx + c = 0 と見比べると、x の係数が b にあたる。（b）'
   hints:
   - 説明されている項が、2次方程式のどの位置（x²・x・定数項）にあるかを読み取る。
   label: (1)
@@ -48,10 +48,10 @@ sub_questions:
     detail: ''
     narration: 説明されている項が、2次方程式のどの位置（x²・x・定数項）にあるかを読み取る。
     op: identify_description
-    result_display: ''
+    result_display: x の係数
     result_srepr: coeff_b
   - args: []
-    detail: ''
+    detail: ax² + bx + c = 0 と見比べると、x の係数が b にあたる。
     narration: ax²+bx+c=0 の形と見比べて、その位置に対応する文字を思い出す。
     op: name_concept
     result_display: b

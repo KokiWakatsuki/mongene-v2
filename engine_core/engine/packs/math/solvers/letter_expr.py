@@ -16,6 +16,7 @@ import sympy
 
 from engine.core.contracts import ChoiceAnswer, Solution, Step, SymbolicAnswer
 from engine.core.registry import register_solver
+from engine.packs.math.solvers.term_definitions import definition_for, rule_reason_for
 from engine.packs.math.solvers.arithmetic import fmt_number
 from engine.packs.math.solvers._step_text import (
     fmt_expr,
@@ -541,12 +542,17 @@ def term_recall_definition(concept: object, domain: object) -> Solution:
     correct = names[c]
     distractors = [v for k, v in names.items() if k != c]
     txt = _TERM_RECALL_STEP_TEXT_BY_DOMAIN.get(d, _TERM_RECALL_STEP_TEXT_DEFAULT)
+    # **なぜその用語なのかを言う。** 1手目は括弧が空で産物が無く、2手目は
+    # 「その対象を表す用語の名前を思い出す。（絶対値）」＝設問の言い直しだった。
+    # 定義は解説にしか出ない `detail` に置く（narration はヒントに流れるので
+    # 数字・記号を書けない・鉄則⑦）。表は `term_definitions.py`。
+    read_target, definition = definition_for(d, c)
     steps = [
         Step(
             op="identify_description",
             args=[],
             result_srepr=c,
-            result_display=txt["s1_display"],
+            result_display=read_target or txt["s1_display"],
             narration=txt["s1_narration"],
         ),
         Step(
@@ -555,6 +561,7 @@ def term_recall_definition(concept: object, domain: object) -> Solution:
             result_srepr=correct,
             result_display=correct,
             narration=txt["s2_narration"],
+            detail=definition,
         ),
     ]
     answer = ChoiceAnswer(correct=correct, distractors=distractors, fact_id=f"{d}.term.{c}")
@@ -1528,12 +1535,16 @@ def recall_rule_statement(topic: object, concept: object, labels: object = None)
         pts = _rule_points(labels)
         correct = correct.format(**pts)
         distractors = [d.format(**pts) for d in distractors]
+    # **なぜそう言えるか・どこを間違えやすいかを言う。** 1手目は括弧が空、
+    # 2手目は「その規則の正しい内容を思い出して選ぶ。（…）」＝設問の言い直しだった。
+    # 表は `term_definitions.RULE_REASONS`（解説にしか出ない detail に置く）。
+    rule_target, rule_reason = rule_reason_for(t, c)
     steps = [
         Step(
             op="read_rule_context",
             args=[],
             result_srepr=c,
-            result_display="",
+            result_display=rule_target,
             narration="問題で問われている規則や約束が、何についてのものかを読み取る。",
         ),
         Step(
@@ -1542,6 +1553,7 @@ def recall_rule_statement(topic: object, concept: object, labels: object = None)
             result_srepr=correct,
             result_display=correct,
             narration="その規則の正しい内容を思い出して選ぶ。",
+            detail=rule_reason,
         ),
     ]
     answer = ChoiceAnswer(correct=correct, distractors=list(distractors), fact_id=f"{t}.rule.{c}")

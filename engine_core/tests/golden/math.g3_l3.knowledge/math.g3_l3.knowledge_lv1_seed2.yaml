@@ -37,9 +37,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - multiplication_formula_choice.rule_recall
-  explanation: 'まず、問題で問われている規則や約束が、何についてのものかを読み取る。
+  explanation: 'まず、問題で問われている規則や約束が、何についてのものかを読み取る。（(x+a)(x−a) の形）
 
-    次に、その規則の正しい内容を思い出して選ぶ。（和と差の積の公式（かっこの中の数がたがいに反対の符号の形）を使う方が適している）'
+    次に、和と差の積は、真ん中の項が打ち消し合って平方の差になる。（和と差の積の公式（かっこの中の数がたがいに反対の符号の形）を使う方が適している）'
   hints:
   - 問題で問われている規則や約束が、何についてのものかを読み取る。
   label: (1)
@@ -49,10 +49,10 @@ sub_questions:
     detail: ''
     narration: 問題で問われている規則や約束が、何についてのものかを読み取る。
     op: read_rule_context
-    result_display: ''
+    result_display: (x+a)(x−a) の形
     result_srepr: diff_of_squares_form
   - args: []
-    detail: ''
+    detail: 和と差の積は、真ん中の項が打ち消し合って平方の差になる。
     narration: その規則の正しい内容を思い出して選ぶ。
     op: recall_correct_rule
     result_display: 和と差の積の公式（かっこの中の数がたがいに反対の符号の形）を使う方が適している

@@ -35,7 +35,7 @@ sub_questions:
   - similarity.area_ratio
   explanation: 'まず、相似な図形の面積比は相似比の二乗に等しいことから、面積比を求める。（1:9）
 
-    次に、求めた面積比と、わかっている一方の面積から、もう一方の面積を求める。（面積比 1:9、大きいほうの面積 324）'
+    次に、36 × 9/1 を計算して、もう一方の面積を求める。（324）'
   hints:
   - 相似な図形の面積比は相似比の二乗に等しいことから、面積比を求める。
   label: (1)
@@ -48,9 +48,9 @@ sub_questions:
     result_display: '1:9'
     result_srepr: ''
   - args: []
-    detail: ''
+    detail: 36 × 9/1 を計算して、もう一方の面積を求める。
     narration: 求めた面積比と、わかっている一方の面積から、もう一方の面積を求める。
     op: apply_area_ratio
-    result_display: 面積比 1:9、大きいほうの面積 324
+    result_display: '324'
     result_srepr: Tuple(Integer(1), Integer(9), Integer(324))
 visual_svg: null

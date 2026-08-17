@@ -36,9 +36,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - pythagorean_converse.rule_recall
-  explanation: 'まず、問題で問われている規則や約束が、何についてのものかを読み取る。
+  explanation: 'まず、問題で問われている規則や約束が、何についてのものかを読み取る。（三平方の定理の逆）
 
-    次に、その規則の正しい内容を思い出して選ぶ。（cを斜辺とする直角三角形である）'
+    次に、3辺の平方について a² + b² = c² が成り立てば、その三角形は直角三角形である。（cを斜辺とする直角三角形である）'
   hints:
   - 問題で問われている規則や約束が、何についてのものかを読み取る。
   label: (1)
@@ -48,10 +48,10 @@ sub_questions:
     detail: ''
     narration: 問題で問われている規則や約束が、何についてのものかを読み取る。
     op: read_rule_context
-    result_display: ''
+    result_display: 三平方の定理の逆
     result_srepr: statement
   - args: []
-    detail: ''
+    detail: 3辺の平方について a² + b² = c² が成り立てば、その三角形は直角三角形である。
     narration: その規則の正しい内容を思い出して選ぶ。
     op: recall_correct_rule
     result_display: cを斜辺とする直角三角形である

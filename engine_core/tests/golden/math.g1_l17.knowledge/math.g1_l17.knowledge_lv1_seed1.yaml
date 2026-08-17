@@ -37,9 +37,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - letter_expr.term_recall
-  explanation: 'まず、説明されている式や数の部分がどれかを読み取る。
+  explanation: 'まず、説明されている式や数の部分がどれかを読み取る。（和の形にしたときの一つ一つ）
 
-    次に、その対象を表す用語の名前を思い出す。（項）'
+    次に、式を和の形に見たとき、+ で区切られた一つ一つを項という。（項）'
   hints:
   - 説明されている式や数の部分がどれかを読み取る。
   label: (1)
@@ -49,10 +49,10 @@ sub_questions:
     detail: ''
     narration: 説明されている式や数の部分がどれかを読み取る。
     op: identify_description
-    result_display: ''
+    result_display: 和の形にしたときの一つ一つ
     result_srepr: term
   - args: []
-    detail: ''
+    detail: 式を和の形に見たとき、+ で区切られた一つ一つを項という。
     narration: その対象を表す用語の名前を思い出す。
     op: name_concept
     result_display: 項

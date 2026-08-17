@@ -37,9 +37,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - number_set.term_recall
-  explanation: 'まず、説明されている式や数の部分がどれかを読み取る。
+  explanation: 'まず、説明されている式や数の部分がどれかを読み取る。（正負の整数と 0）
 
-    次に、その対象を表す用語の名前を思い出す。（整数）'
+    次に、…-2、-1、0、1、2… をまとめて整数という。0 も分数も小数もない数として含む。（整数）'
   hints:
   - 説明されている式や数の部分がどれかを読み取る。
   label: (1)
@@ -49,10 +49,10 @@ sub_questions:
     detail: ''
     narration: 説明されている式や数の部分がどれかを読み取る。
     op: identify_description
-    result_display: ''
+    result_display: 正負の整数と 0
     result_srepr: integer
   - args: []
-    detail: ''
+    detail: …-2、-1、0、1、2… をまとめて整数という。0 も分数も小数もない数として含む。
     narration: その対象を表す用語の名前を思い出す。
     op: name_concept
     result_display: 整数
