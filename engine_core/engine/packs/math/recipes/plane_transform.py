@@ -292,10 +292,32 @@ _REFLECT_CONCEPTS = ["polygon_transform.reflect"]
 _AXIS_LABEL_JP = {"x_axis": "x軸", "y_axis": "y軸"}
 
 
+def _clear_of_axis(pts: list[tuple[int, int]], axis: str) -> bool:
+    """三角形が対称の軸をまたいでいないか（3頂点とも同じ側にあるか）。
+
+    またぐ配置だと**折り返した図形が元の図形と重なる**ので、生徒はどの線が
+    どちらのものか分からないまま描くことになる。市販の教材は片側に置く。
+
+    軸に接していると、折り返した頂点が元の頂点の隣に来て**ラベルが重なる**
+    （B' と B が並んで読めない図が出ていた）ので、2目盛り離す。
+
+    定義域は狭めない——座標の値はどれも元のまま引き、**組み合わせだけ**を弾く。
+    読める三角形 2,685,768 通りのうち 277,920 通り（10.3%）が、どちらかの軸の
+    片側に2目盛り以上離れて収まる（全数で実測）ので、有界リトライで足りる。
+    """
+    vals = [x for x, _ in pts] if axis == "y_axis" else [y for _, y in pts]
+    return all(v >= 2 for v in vals) or all(v <= -2 for v in vals)
+
+
 def _reflect_polygon_recipe(ctx: CellContext, rng: Rng, *, style: str) -> MR:
     p = ctx.spec_level.params
-    pts = _draw_triangle(p["coord_domain"], rng)
-    axis = str(draw(cast("list[str]", p["axis_domain"]), rng))
+    for _ in range(400):
+        pts = _draw_triangle(p["coord_domain"], rng)
+        axis = str(draw(cast("list[str]", p["axis_domain"]), rng))
+        if _clear_of_axis(pts, axis):
+            break
+    else:
+        raise ValueError("対称の軸をまたがない三角形と軸の組を構成できず")
 
     solver = REGISTRY.solver("math.reflect_polygon_features")
     sol = cast(Solution, solver(_pts_strs(pts), axis))
