@@ -309,6 +309,18 @@ _CHOICE_PROMPT = "次の中から正しいものを選びなさい。"
 _CHOICE_FALLBACK_PROMPT = "答えなさい。"
 
 
+_ENUMERATED = re.compile(r"\(1\)[\s\S]*\(2\)")
+
+
+def _body_enumerates_subquestions(problem_text: str) -> bool:
+    """本文が (1)(2)… と自分で小問を並べているか。
+
+    並べているなら、問いの側が1つの ask を名指しすると必ず食い違う
+    （(1) は「式で表せ」・(3) は「値を求めよ」なのに問いは「式に表しなさい。」）。
+    """
+    return bool(_ENUMERATED.search(problem_text))
+
+
 def _body_asks_choice(problem_text: str) -> bool:
     """本文が「選ぶ」ことを求めているか。
 
@@ -383,6 +395,12 @@ def render_text(mr: "MR", ctx: "CellContext", *, registry: _Registry = REGISTRY)
         asked = tctx.sub_questions[i].asked
         if getattr(sq.answer, "kind", "") == "choice":
             prompts[sq.label] = _choice_prompt(sq.answer, problem_text, mr.seed, sq.label)
+        elif _body_enumerates_subquestions(problem_text):
+            # 本文が (1)(2)(3) と自分で小問を並べているとき、問いは**そのうちの1つ**しか
+            # 名指しできない。「式に表しなさい。」と出ていたのに (3) は「x の値を
+            # すべて求めよ」だった、という食い違いが出ていた。本文が言い切っている
+            # ので、問いの側は言い直さない。
+            prompts[sq.label] = "答えなさい。"
         else:
             prompts[sq.label] = _ASKED_PROMPTS.get(asked, f"{asked} を求めなさい。")
         explanations[sq.label] = _build_explanation(mr, i)

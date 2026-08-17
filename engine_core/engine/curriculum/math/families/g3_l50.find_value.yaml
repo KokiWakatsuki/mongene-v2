@@ -25,10 +25,14 @@ levels:
     signature: arc_proportional_angle
     recipe: math.arc_proportional_angle
     params:
-      multiplier_domain: {int_range: [2, 8]}
+      # ★2026-08-18: 2..8 × 8..40 に広げたら **円周角 231°** が出た（7倍 × 33°）。
+      # 円周角は 180° 未満でなければならず、中心角に直すと 462° で円1周を超える。
+      # **dup のために広げて数学的に成り立たない問題を作った**ので戻す。
+      # 積が 180 未満に収まる範囲（6 × 29 = 174）に限る。
+      multiplier_domain: {int_range: [2, 6]}
       # **円周角は 10°以上。** 前は 1〜29 で「弧FDに対する円周角が1°」が出ていた
       # （1°の円周角は図にかけない）。倍率が最大6なので上限は 29 のまま。
-      angle_domain: {int_range: [8, 40]}
+      angle_domain: {int_range: [10, 29]}
     given: [condition]
     asked: [value]
     visual: none

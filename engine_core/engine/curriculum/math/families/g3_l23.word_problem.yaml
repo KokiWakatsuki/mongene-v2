@@ -49,7 +49,7 @@ levels:
       area_max: 1000
       subject_candidates:
         [花だん|m, 畑|m, 広場|m, 土地|m, 中庭|m, 池|m,
-         タイル|cm, 画用紙|cm, 板|cm, 花だんの囲い|cm, 布|cm, 鏡|cm]
+         タイル|cm, 画用紙|cm, 板|cm, 布|cm, 鏡|cm]
     dup_rate_max: 0.65
     dup_rate_reason: |
       100 seed で相異 40 問（実測）。中身の軸は 40 通り。

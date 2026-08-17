@@ -57,12 +57,13 @@ levels:
       walk_speed_candidates: [3, 4, 5, 6]
       bike_speed_candidates: [10, 12, 15, 16, 18, 20]
       # 区間ごとの所要時間（時間）。道のり = 速さ×時間 なので合計 T は常に整数。
-      hours_range: [1, 6]
+      # ★2026-08-18: 1..6 に広げたら「家から駅まで時速4kmで12km（3時間）歩く」が出た。
+      hours_range: [1, 3]
       # 区間ごとの道のりの上限（「歩いて30km」のような場面を作らない）。
-      walk_distance_max: 15
+      walk_distance_max: 8
       # 歩き＋自転車の1回の移動なので、自転車の道のりも 24km まで
       # （前は40kmで「全体で44km進む」という場面になっていた）。
-      bike_distance_max: 24
+      bike_distance_max: 16
       # 自転車で通れる道でつなぐ場所（登山道のような場面は入れない）。
       place_triple_candidates: [A町|B町|C町, P町|Q町|R町, X町|Y町|Z町,
                                 学校|公園|図書館, 家|駅|港, 家|バス停|海岸,
