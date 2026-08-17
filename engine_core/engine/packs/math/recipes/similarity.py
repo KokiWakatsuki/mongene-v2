@@ -198,8 +198,13 @@ def similarity_proven_ratio_length_recipe(ctx: CellContext, rng: Rng) -> MR:
     sol = cast(Solution, solver(ae, ab, de))
     assert isinstance(sol.answer, SymbolicAnswer)
 
+    # **相似の書き方の順を、solver に渡す相似比の順にそろえる。**
+    # 「三角形ABC∽三角形ADE」と書くと相似比は AB:AD＝ab:ae なのに、
+    # solver には (ae, ab) を渡していて、解説が「相似比 2:9」と逆順に出ていた。
+    # 小さいほうを先に書けば、相似比 ae:ab とそろう（どちらの順に書いても
+    # 正しい式だが、**本文と解説で順が違う**のは生徒が対応を取れない）。
     statement = (
-        f"三角形{pa}{pb}{pc}∽三角形{pa}{pd}{pe}であることが証明されている。"
+        f"三角形{pa}{pd}{pe}∽三角形{pa}{pb}{pc}であることが証明されている。"
         f"{pa}{pd}={ae}cm, {pa}{pb}={ab}cm, {pd}{pe}={de}cm のとき、"
         f"辺{pb}{pc}の長さを求めよ"
     )

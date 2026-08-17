@@ -117,7 +117,9 @@ def judge_parallel_from_ratio(
         Step(
             op="compare_division_ratios",
             args=[], result_srepr="",
-            result_display=f"{a}:{b} と {c}:{d}",
+            # **括弧はその手で得たもの。** もとの比（`6:16 と 12:38`）を出していたが、
+            # それは問題文にある値そのままで、この手が出したのは**簡単にした比**。
+            result_display=f"{_simplest_ratio(a, b)} と {_simplest_ratio(c, d)}",
             narration=f"{pa}{pd}:{pd}{pb}と{pa}{pe}:{pe}{pc}の比が等しいかどうかを比べる。",
             # **どう比べたのかが1行も無かった**（`17:11 と 51:28` を見て
             # 「平行ではない」と言うだけ）。比は暗算で見分けられないので、
