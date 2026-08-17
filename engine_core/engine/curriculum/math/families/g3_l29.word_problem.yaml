@@ -63,7 +63,7 @@ levels:
       scenario_kind: square_relation
       guided: false
       # m = x0² − n·x0（x0 > n で m>0 を保証）。倍率と x0 の2軸で dup を分散。
-      multiplier_candidates: [2, 3, 4, 5, 6, 7, 8, 9]
+      multiplier_candidates: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
       small_max: 60
       # 本文に出る「〜より m 大きい」の上限（EVALUATION D-31。x0 の定義域は狭めず、
       # 答えの側で限る＝原則⓪。以前は「もとの数の5倍より1554大きい」が出ていた）。

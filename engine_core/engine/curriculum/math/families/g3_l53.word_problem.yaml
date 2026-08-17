@@ -52,9 +52,9 @@ levels:
     params:
       scenario_kind: rhombus_diagonal_area
       # 1辺の長さの範囲。対角線の半分より大きい組だけを recipe が残す。
-      side_range: [4, 20]
+      side_range: [4, 32]
       # 与える対角線の範囲（偶数のみ採用＝半分が整数になる）。
-      diagonal_range: [4, 24]
+      diagonal_range: [4, 40]
     given: [scenario]
     asked: [value, value]
     visual: none

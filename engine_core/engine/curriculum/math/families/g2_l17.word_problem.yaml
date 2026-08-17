@@ -106,7 +106,7 @@ levels:
                          175, 180, 200]
       lap_candidates: [600, 720, 800, 900, 1000, 1080, 1200, 1350, 1400, 1440, 1500,
                        1600, 1800, 2000, 2100, 2400, 2700, 3000]
-      meet_time_range: [2, 12]
+      meet_time_range: [2, 20]
       catch_up_time_range: [10, 60]
       person_pair_candidates: [Aさん|Bさん, 兄|弟, 姉|妹, Bさん|Aさん,
                                ゆうとさん|あおいさん, りくさん|ひなさん,

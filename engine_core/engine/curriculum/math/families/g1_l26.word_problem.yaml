@@ -54,11 +54,11 @@ levels:
       scenario_kind: seat_shortage
       guided: false
       # r≥1 の保証（上のコメント）: seat の下限は per の上限より大きく取る。
-      seat_domain: {int_range: [8, 20]}
+      seat_domain: {int_range: [8, 40]}
       # **長いす1脚は 3〜5 人まで。** 前は上限6で「1脚に6人ずつ座ると…
       # 1脚に7人ずつ座ると」（recipe が per+1 も使う）になっていて、
       # 長いす1脚に7人という場面が出ていた。
-      per_domain: {int_range: [3, 4]}
+      per_domain: {int_range: [3, 6]}
       person_candidates: [生徒|人, 部員|人, 参加者|人, 見学者|人]
     given: [scenario]
     asked: [value]

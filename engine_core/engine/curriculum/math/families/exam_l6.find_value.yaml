@@ -39,8 +39,8 @@ levels:
     signature: exam_similar_solid_volume
     recipe: math.exam_similar_solid_volume
     params:
-      ratio_domain: {int_range: [1, 6]}
-      scale_domain: {int_range: [1, 12]}
+      ratio_domain: {int_range: [1, 9]}
+      scale_domain: {int_range: [1, 20]}
       # 体積が整数として自然に与えられる立体だけを並べる（球・正四面体は1辺から
       # 整数体積にならず、場面文の数値が不自然になる）。
       solid_candidates: [立体, 円柱, 円錐, 三角柱, 四角錐, 直方体, 容器, 模型]

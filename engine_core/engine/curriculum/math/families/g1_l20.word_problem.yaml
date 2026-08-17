@@ -24,7 +24,7 @@ levels:
     recipe: math.word_problem_relation
     params:
       scenario_kind: inequality_price_count
-      count_domain: {int_range: [2, 9]}
+      count_domain: {int_range: [2, 20]}
       # **予算は品物の相場 × 個数を 100円単位に切り上げて作る**（recipe が計算する）。
       # 前は 100〜3000 の整数を個数と無関係に引いていて「代金が1153円以下であった」
       # （端数）や「おにぎりを8個買った代金が400円以下」（1個50円のおにぎり）が
