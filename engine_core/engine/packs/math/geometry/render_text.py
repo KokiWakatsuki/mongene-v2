@@ -15,6 +15,8 @@
 """
 from __future__ import annotations
 
+from collections.abc import Callable
+
 from dataclasses import dataclass
 
 from engine.packs.math.geometry.deduce import Deduction
@@ -67,11 +69,20 @@ def build_proof_lines(
     goal: Fact,
     *,
     common_facts: frozenset[Fact] = frozenset(),
+    stated: Callable[[Fact], bool] | None = None,
 ) -> list[ProofLine]:
     """導出から証明の行を組む。
 
     `common_facts` は「共通だから」と書くべき仮定（対角線を共有する等）。ふつうの仮定は
     「仮定より」になるので、根拠の言い方をここで分ける——教科書がそう書き分けている。
+
+    `stated` は「その事実を**問題文が述べているか**」を返す関数。
+
+    ★**述べていないものを「仮定より」と書かない。** g2_l48（平行四辺形の対辺の
+    中点 M、N）の図は `parallel_dir(("M","B"),("D","N"))` を作図の手順として
+    持っているが、問題文は「辺AB、辺DCの中点をそれぞれM、Nとした」としか
+    言っていない。それを「仮定より BM ∥ ND」と書くと、**導かれることを
+    与えられたことのように見せる**——証明として誤りである。
     """
     chain = ded.proof_chain(goal)
     # 「定義を開くだけ」の行は、その前提（仮定）と1行にまとめる。
@@ -133,10 +144,16 @@ def build_proof_lines(
             # 「AC は共通」は主張の中に根拠が入っているので、根拠欄を空にする
             # （「共通　AC は共通」と二重に書かない）。
             common = is_common_segment(f) or f in common_facts
+            from_statement = stated is None or stated(f)
             lines.append(
                 ProofLine(
                     claim=fact_text(f),
-                    reason="" if is_common_segment(f) else ("共通だから" if common else "仮定より"),
+                    reason=(
+                        "" if is_common_segment(f)
+                        else "共通だから" if common
+                        else "仮定より" if from_statement
+                        else "図のかき方から"
+                    ),
                     number=n,
                     op="cite_common" if common else "cite_hypothesis",
                     heading=heading,
@@ -216,7 +233,11 @@ def render_proof(lines: list[ProofLine], *, targets: tuple[tuple[str, ...], ...]
             # 番号を引かない行は「〜から　主張」と書く（「対頂角は等しい　∠…」だと
             # 文がつながらない）。「仮定より」「〜だから」は既に接続の形になっている。
             reason = line.reason
-            if reason != "仮定より" and not reason.endswith("だから"):
+            # 「仮定より」「〜だから」「〜から」は既に接続の形になっている。
+            # `endswith("から")` を見ずに「だから」だけ見ていたので、
+            # 「図のかき方から」に「から」がもう一度ついて
+            # **「図のかき方からから」**と出ていた。
+            if reason != "仮定より" and not reason.endswith(("だから", "から")):
                 reason += "から"
             out.append(f"　　{reason}　　{line.claim}{tail}")
         else:

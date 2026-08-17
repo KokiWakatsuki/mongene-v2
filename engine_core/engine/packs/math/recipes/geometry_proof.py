@@ -14,6 +14,7 @@
 """
 from __future__ import annotations
 
+import re
 from typing import Any
 
 from engine.core.contracts import (
@@ -38,9 +39,14 @@ from engine.packs.math.geometry import (  # noqa: F401  登録の副作用で構
     constructions_similarity,
 )
 from engine.packs.math.geometry.catalog import CONSTRUCTIONS, topics_of
-from engine.packs.math.geometry.construct import figure_quality_problems
+from engine.packs.math.geometry.construct import Construction, figure_quality_problems
 from engine.packs.math.geometry.deduce import saturate
-from engine.packs.math.geometry.facts import fact_text, goal_text, seg_text
+from engine.packs.math.geometry.facts import (
+    fact_text,
+    goal_text,
+    right_angle,
+    seg_text,
+)
 from engine.packs.math.geometry.naturalness import accidental_coincidences, select_goal
 from engine.packs.math.geometry.rules import RULES
 from engine.packs.math.geometry.render_text import (
@@ -104,7 +110,14 @@ def build_problem(
     others = [builder({k: v * f.get(k, 1.0) for k, v in params.items()}) for f in _PERTURBATIONS]
     if accidental_coincidences([con, *others], ded):
         return None
-    return con, ded, goal, build_proof_lines(ded, goal.fact)
+    # 「問題文が述べている事実か」を渡す。作図の手順が持つだけの事実を
+    # 「仮定より」と書かないため（`build_proof_lines` の docstring を見よ）。
+    stated_here = frozenset(_stated_facts(con, con.description or "", goal.fact))
+
+    def _is_stated(f: Any) -> bool:
+        return f in stated_here
+
+    return con, ded, goal, build_proof_lines(ded, goal.fact, stated=_is_stated)
 
 
 # **family が使う概念IDはすべてここに載せる。** 載せ忘れると lint R6 が落ち、
@@ -288,30 +301,32 @@ def _claim_tail(claim: str) -> str:
     return "次のことが分かる。"
 
 
-def _hypothesis_narration(claim: str) -> str:
+def _hypothesis_narration(claim: str, *, from_construction: bool = False) -> str:
     """仮定の行の言い方を、**その仮定が何であるか**から決める。
 
     どの仮定も「仮定から、等しい辺（角）を書き出す。」で括っていたので、
     「O は AC の中点」「四角形ABCD は平行四辺形である」にまで
     **辺でも角でもないものに「等しい辺（角）」と言っていた**（11 問）。
     """
+    # 問題文が述べていない（作図の手順が持つ）事実は「仮定から」と言わない。
+    head = "図のかき方から、" if from_construction else "仮定から、"
     if "中点" in claim:
-        return "仮定から、中点であることを書き出す。"
+        return f"{head}中点であることを書き出す。"
     if any(k in claim for k in ("平行四辺形", "長方形", "ひし形", "正方形")):
-        return "仮定から、四角形の種類を書き出す。"
+        return f"{head}四角形の種類を書き出す。"
     if "∥" in claim:
-        return "仮定から、平行な直線を書き出す。"
+        return f"{head}平行な直線を書き出す。"
     if "⊥" in claim:
-        return "仮定から、垂直な直線を書き出す。"
+        return f"{head}垂直な直線を書き出す。"
     if "°" in claim:
-        return "仮定から、角の大きさを書き出す。"
+        return f"{head}角の大きさを書き出す。"
     if "∠" in claim:
-        return "仮定から、等しい角を書き出す。"
+        return f"{head}等しい角を書き出す。"
     if "：" in claim or ":" in claim:
-        return "仮定から、辺の比を書き出す。"
+        return f"{head}辺の比を書き出す。"
     if "＝" in claim or "=" in claim:
-        return "仮定から、等しい辺を書き出す。"
-    return "仮定から、与えられていることを書き出す。"
+        return f"{head}等しい辺を書き出す。"
+    return f"{head}与えられていることを書き出す。"
 
 
 #: 「仮定から、○を書き出す。」の○に、二度目であることを差しこむ言い方。
@@ -361,7 +376,12 @@ def _steps_from_lines(lines) -> list[Step]:
     for line in lines:
         narration = _STEP_NARRATION.get(line.op)
         if line.op == "cite_hypothesis":
-            narration = _hypothesis_narration(line.claim)
+            # **証明の本文と解説で、根拠の言い方をそろえる。** 本文を
+            # 「図のかき方から」に直したのに、解説だけ「仮定から〜書き出す」の
+            # ままだと、同じ行の説明が2通りになる。
+            narration = _hypothesis_narration(
+                line.claim, from_construction=(line.reason == "図のかき方から")
+            )
         if narration is None:
             if not line.reason:
                 narration = "図から読み取る。"
@@ -406,13 +426,48 @@ def _stated_facts(con: Construction, premise_text: str, goal_fact: Any = None) -
         f for f in con.facts
         # **結論そのものは絶対に印にしない。** 本文の言い方を吸収する側（`_mentioned_in`）は
         # 「垂線」の一語で perp をすべて拾うので、結論が垂直な回に漏れる道が残る。
-        if f != goal_fact and (f in con.givens or _mentioned_in(f, premise_text))
+        if f != goal_fact and (
+            f in con.givens
+            or _mentioned_in(f, premise_text)
+            or _restates_stated(f, con, premise_text)
+        )
     ]
+
+
+def _restates_stated(f: Any, con: Construction, text: str) -> bool:
+    """本文が述べていることの**言い換え**になっている事実か。
+
+    教科書はこれらを1行で書くので、証明でも「仮定より」と書いてよい。
+    図だけを見て言っているのではない。
+
+      「AD ⊥ BC」        → 「∠ADB ＝ ∠ADC（＝ 90°）」
+      「線分ABは円Oの直径」 → 「O は AB の中点」
+
+    ここを見ずに「図のかき方から」と書くと、**本文がはっきり述べている条件を
+    図から読み取ったことにしてしまう**。
+    """
+    if f.kind == "ang_eq" and ("⊥" in text or "垂線" in text):
+        a1, a2 = f.args
+        if a1[0] == a2[0] and all(
+            right_angle(a[0], a[1], a[2]) in con.facts for a in (a1, a2)
+        ):
+            return True
+    if f.kind == "midpoint" and "直径" in text:
+        mid = f.args[0]
+        xy = con.coords.get(mid)
+        if xy is not None and any(
+            abs(cx - xy[0]) < 1e-9 and abs(cy - xy[1]) < 1e-9
+            for (cx, cy), _r in con.circles
+        ):
+            return True
+    return False
 
 
 def _mentioned_in(f: Any, text: str) -> bool:
     """事実 f が、この本文で述べられているか（言い方の違いを吸収する）。"""
     if fact_text(f) in text:
+        return True
+    if f.kind == "seg_eq" and _in_equality_chain(f, text):
         return True
     if f.kind == "midpoint":
         return "中点" in text
@@ -421,6 +476,27 @@ def _mentioned_in(f: Any, text: str) -> bool:
         return any(s in text for s in (f"{a} ∥ {b}", f"{b} ∥ {a}", f"{a}∥{b}", f"{b}∥{a}"))
     if f.kind in ("perp", "right_angle"):
         return "垂線" in text or "⊥" in text or "90°" in text
+    return False
+
+
+#: 「AB ＝ AC ＝ BC」のような、＝ でつないだ辺の連なり。
+_EQ_CHAIN = re.compile(r"[A-Z]{2}(?:\s*＝\s*[A-Z]{2}){2,}")
+
+
+def _in_equality_chain(f: Any, text: str) -> bool:
+    """`AB ＝ BC` が「AB ＝ AC ＝ BC」のような連鎖の中で述べられているか。
+
+    ★**文字列一致だけでは足りない**（`_stated_facts` の注意書きの続き）。
+    正三角形の本文は3辺を1本の式でつないで書くので、`AB ＝ BC` は
+    そのままの形では本文に出てこない。ここを見落としていたために、
+    問題文がはっきり述べている仮定を「図のかき方から」と書いてしまった。
+    """
+    a, b = seg_text(f.args[0]), seg_text(f.args[1])
+    for chain in _EQ_CHAIN.findall(text):
+        members = {t.strip() for t in chain.split("＝")}
+        # 線分は向きを問わない（AB と BA は同じ）。
+        if {a, a[::-1]} & members and {b, b[::-1]} & members:
+            return True
     return False
 
 
