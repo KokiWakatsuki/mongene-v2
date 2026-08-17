@@ -10,8 +10,10 @@ answer・srepr・params は **属性として存在しない**——テンプレ
 """
 from __future__ import annotations
 
+import re
 from dataclasses import dataclass, field
 from fractions import Fraction
+from random import Random
 from typing import TYPE_CHECKING, Any
 
 import sympy
@@ -274,6 +276,71 @@ _ASKED_PROMPTS: dict[str, str] = {
 
 
 # ---------------------------------------------------------------------------
+# 選択肢の印刷（§7.2 の例外を、テンプレートではなく**コード側**に置く理由つき）
+#
+# TemplateContext は answer を属性として持たない——テンプレートから答えを構文的に
+# 書けないことで漏洩を構造的に防ぐ（§7.2）。だから **選択肢はテンプレートからは
+# 出せない**。実際、選択式630セル中163セルのうち、選択肢を印刷できていたのは
+# recipe が本文の文字列に手で書き込んだ27セルだけで、残りは「次のア〜ウから選べ」
+# と言いながら選択肢が1つも無い＝**印刷物として解答不能**だった。
+#
+# ここで出す先を `prompts` にするのは、漏洩ゲート G-Q5t の対象が
+# `problem_text` と `hints` だけだから（`quality_gates._gate_q5t` の docstring）。
+# 選択肢に正解が含まれるのは漏洩ではない——それが選択式の定義である——ので、
+# ゲートの対象外である prompts に置くのが、ゲートを緩めずに済む唯一の場所になる。
+#
+# **本文が選択を求めているときだけ**出す。「何といいますか」「符号を使って表せ」の
+# ような記述式の本文に選択肢を足すと、問題そのものが別物になる（採点の都合で
+# ChoiceAnswer を使っているだけのセルが72ある）。そちらは問いの言い回しを
+# 記述式に戻す。
+# ---------------------------------------------------------------------------
+_ASKS_CHOICE_RE = re.compile(
+    r"選べ|選び(?:なさい|ましょう)|どれ(?:か|ですか|でしょう)|記号で答え|あてはまるものを"
+)
+_CHOICE_PROMPT = "次の中から正しいものを選びなさい。"
+_CHOICE_FALLBACK_PROMPT = "答えなさい。"
+
+
+def _body_asks_choice(problem_text: str) -> bool:
+    """本文が「選ぶ」ことを求めているか。
+
+    「複数の観点を**選び**、根拠とともに判断して」のような、選択肢と無関係な
+    「選び」で誤検出しないよう、文末形（選べ／選びなさい）と「どれか」「記号で
+    答え」に限る。
+    """
+    return bool(_ASKS_CHOICE_RE.search(problem_text))
+
+
+def _choices_already_printed(answer: Any, problem_text: str) -> bool:
+    """recipe が本文に選択肢を手で書き込んでいるか（27セル）。二重に出さない。"""
+    if str(answer.correct) not in problem_text:
+        return False
+    return any(str(d) in problem_text for d in answer.distractors)
+
+
+def _ordered_choices(answer: Any, seed: int, label: str) -> list[str]:
+    """選択肢の並びを seed から決定論的に決める。
+
+    正解を先頭に置いたままでは常に同じ位置に来て、読まずに当たる。`random.Random`
+    は文字列 seed でも実行をまたいで同じ並びを返す（内部で sha512 に通す）ので、
+    再現性は保たれる。
+    """
+    items = [str(answer.correct), *[str(d) for d in answer.distractors]]
+    Random(f"{seed}:{label}").shuffle(items)
+    return items
+
+
+def _choice_prompt(answer: Any, problem_text: str, seed: int, label: str) -> str:
+    if not _body_asks_choice(problem_text):
+        # 本文は記述式。問いの側だけが「選びなさい」と言っている食い違いを直す。
+        return _CHOICE_FALLBACK_PROMPT
+    if _choices_already_printed(answer, problem_text):
+        return _ASKED_PROMPTS["choice"]
+    lines = "\n".join(f"・{c}" for c in _ordered_choices(answer, seed, label))
+    return f"{_CHOICE_PROMPT}\n{lines}"
+
+
+# ---------------------------------------------------------------------------
 # render_text
 # ---------------------------------------------------------------------------
 def render_text(mr: "MR", ctx: "CellContext", *, registry: _Registry = REGISTRY) -> TextResult:
@@ -306,7 +373,10 @@ def render_text(mr: "MR", ctx: "CellContext", *, registry: _Registry = REGISTRY)
     hints: dict[str, list[str]] = {}
     for i, sq in enumerate(mr.sub_questions):
         asked = tctx.sub_questions[i].asked
-        prompts[sq.label] = _ASKED_PROMPTS.get(asked, f"{asked} を求めなさい。")
+        if getattr(sq.answer, "kind", "") == "choice":
+            prompts[sq.label] = _choice_prompt(sq.answer, problem_text, mr.seed, sq.label)
+        else:
+            prompts[sq.label] = _ASKED_PROMPTS.get(asked, f"{asked} を求めなさい。")
         explanations[sq.label] = _build_explanation(mr, i)
         hints[sq.label] = _build_hints(mr, ctx, i)
 
