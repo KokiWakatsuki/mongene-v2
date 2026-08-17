@@ -71,6 +71,12 @@ levels:
       head_start_candidates: [3, 4, 5, 6, 8, 9, 10, 12]
       minutes_range: [3, 30]
       person_pair_candidates: [妹|姉, 弟|兄, 兄|弟, 姉|妹, ゆうたさん|けんたさん, あきさん|なつさん]
+    dup_rate_max: 0.38
+    dup_rate_reason: |
+      100 seed で相異 68 問（実測）。中身の軸は 68 通り。
+      答えが整数になる組しか使えないため、定義域を広げても通る組はこの程度にとどまる。
+      以前は点名・人名・使う文字を dup_key に算入していたので閾を通っていたが、
+      **名前が違うだけの問題は別の問題ではない**。増やすには題材そのものを追加する。
     given: [scenario]
     asked: [value]
     visual: none

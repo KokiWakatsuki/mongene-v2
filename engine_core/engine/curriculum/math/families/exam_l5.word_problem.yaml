@@ -74,6 +74,13 @@ levels:
     answer_size_max: {denominator: 216, numerator: 216}
     answer_size_reason: |
       さいころ3つ（または1つを3回）なので、分母は最大 6³=216。
+    dup_rate_max: 0.58
+    dup_rate_reason: |
+      100 seed で相異 49 問（実測）。中身の軸は さいころの場面 4 通り。
+      確率の問題で、**同様に確からしい場合の数**が小さい（硬貨の枚数・くじの本数・
+      人数はどれも教材として成り立つ範囲が狭い）。
+      以前は点名・人名・使う文字を dup_key に算入していたので閾を通っていたが、
+      **名前が違うだけの問題は別の問題ではない**。増やすには題材そのものを追加する。
     given: [scenario]
     asked: [value]
     visual: none

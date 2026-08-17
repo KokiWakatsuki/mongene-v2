@@ -41,6 +41,13 @@ levels:
     answer_size_max: {denominator: 32}
     answer_size_reason: |
       硬貨3〜5枚の表裏なので、分母は 2^枚数（最大 2⁵=32）で固定。
+    dup_rate_max: 0.78
+    dup_rate_reason: |
+      100 seed で相異 28 問（実測）。中身の軸は (硬貨の枚数, 注目する面, 枚数) 28 通り。
+      確率の問題で、**同様に確からしい場合の数**が小さい（硬貨の枚数・くじの本数・
+      人数はどれも教材として成り立つ範囲が狭い）。
+      以前は点名・人名・使う文字を dup_key に算入していたので閾を通っていたが、
+      **名前が違うだけの問題は別の問題ではない**。増やすには題材そのものを追加する。
     given: [scenario]
     asked: [value, value]
     visual: none

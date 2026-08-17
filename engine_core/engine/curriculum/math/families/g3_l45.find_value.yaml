@@ -37,6 +37,12 @@ levels:
     recipe: math.similar_triangle_trapezoid_area_ratio
     params:
       ratio_domain: {int_range: [1, 16]}
+    dup_rate_max: 0.35
+    dup_rate_reason: |
+      100 seed で相異 71 問（実測）。中身の軸は 比 16 通り × 16 通り。
+      答えが整数になる組しか使えないため、定義域を広げても通る組はこの程度にとどまる。
+      以前は点名・人名・使う文字を dup_key に算入していたので閾を通っていたが、
+      **名前が違うだけの問題は別の問題ではない**。増やすには題材そのものを追加する。
     given: [condition]
     asked: [value]
     visual: none

@@ -64,6 +64,12 @@ levels:
       minutes_range: [5, 120]
       km_max: 12
       person_candidates: [人, 生徒, 男の子, 女の子, 中学生, 先生]
+    dup_rate_max: 0.7
+    dup_rate_reason: |
+      100 seed で相異 36 問（実測）。中身の軸は (速さ, 時間) 36 通り。道のりが km で割り切れる組しか使えない。
+      答えが整数になる組しか使えないため、定義域を広げても通る組はこの程度にとどまる。
+      以前は点名・人名・使う文字を dup_key に算入していたので閾を通っていたが、
+      **名前が違うだけの問題は別の問題ではない**。増やすには題材そのものを追加する。
     given: [scenario]
     asked: [value]
     visual: none

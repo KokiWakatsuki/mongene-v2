@@ -49,6 +49,13 @@ levels:
       scenario_kind: exam_box_space_diagonal
       given_key: condition
       edge_range: [2, 32]
+    dup_rate_max: 0.55
+    dup_rate_reason: |
+      100 seed で相異 53 問（実測）。中身の軸は (縦, 横, 高さ) 53 通り。
+      立体の辺の長さから**対角線や高さが整数になる**組しか使えない（三平方の定理で
+      根号が外れる組合せ）。辺の範囲を広げても、条件を満たす組の数はこの程度にしかならない。
+      以前は点名・人名・使う文字を dup_key に算入していたので閾を通っていたが、
+      **名前が違うだけの問題は別の問題ではない**。増やすには題材そのものを追加する。
     given: [condition]
     asked: [value]
     visual: none

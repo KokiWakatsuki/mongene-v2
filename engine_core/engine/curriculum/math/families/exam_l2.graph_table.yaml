@@ -19,6 +19,15 @@ levels:
       a_domain: {int_range: [-10, 10], exclude: [0]}
       x_domain: {int_range: [-6, 6], exclude: [0]}
       value_bound: 16
+    dup_rate_max: 0.65
+    dup_rate_reason: |
+      100 seed で相異 42 問（実測）。中身の軸は 交点 26 通り。
+      放物線と直線の交点を扱う問題で、**交点の座標が整数になる** (係数, 交点の x) の
+      組しか使えない。係数 ±1〜10・x ±1〜6 を全部当たっての実測。
+      係数を ±6 から ±10 に広げたら 0.52 → 0.58 と**かえって上がった**——広げた分だけ
+      条件に落ちる組が増え、通る組に集中するため。
+      以前は点名・人名・使う文字を dup_key に算入していたので閾を通っていたが、
+      **名前が違うだけの問題は別の問題ではない**。増やすには題材そのものを追加する。
     given: [expression, line_a, situation_params]
     asked: [draw_graph]
     visual: required

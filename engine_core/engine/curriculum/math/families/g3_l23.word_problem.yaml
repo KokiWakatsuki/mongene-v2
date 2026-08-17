@@ -50,6 +50,12 @@ levels:
       subject_candidates:
         [花だん|m, 畑|m, 広場|m, 土地|m, 中庭|m, 池|m,
          タイル|cm, 画用紙|cm, 板|cm, 花だんの囲い|cm, 布|cm, 鏡|cm]
+    dup_rate_max: 0.65
+    dup_rate_reason: |
+      100 seed で相異 40 問（実測）。中身の軸は 40 通り。
+      答えが整数になる組しか使えないため、定義域を広げても通る組はこの程度にとどまる。
+      以前は点名・人名・使う文字を dup_key に算入していたので閾を通っていたが、
+      **名前が違うだけの問題は別の問題ではない**。増やすには題材そのものを追加する。
     given: [scenario]
     asked: [value, value]
     visual: none

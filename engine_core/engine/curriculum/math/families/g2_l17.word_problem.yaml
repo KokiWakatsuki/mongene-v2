@@ -67,6 +67,12 @@ levels:
       place_triple_candidates: [A町|B町|C町, P町|Q町|R町, X町|Y町|Z町,
                                 学校|公園|図書館, 家|駅|港, 家|バス停|海岸,
                                 駅|市役所|美術館, 家|商店街|球場]
+    dup_rate_max: 0.4
+    dup_rate_reason: |
+      100 seed で相異 67 問（実測）。中身の軸は 67 通り。
+      答えが整数になる組しか使えないため、定義域を広げても通る組はこの程度にとどまる。
+      以前は点名・人名・使う文字を dup_key に算入していたので閾を通っていたが、
+      **名前が違うだけの問題は別の問題ではない**。増やすには題材そのものを追加する。
     given: [scenario, quantities]
     asked: [formulation, value]
     visual: none
@@ -111,6 +117,12 @@ levels:
       person_pair_candidates: [Aさん|Bさん, 兄|弟, 姉|妹, Bさん|Aさん,
                                ゆうとさん|あおいさん, りくさん|ひなさん,
                                そうたさん|めいさん, はるとさん|ゆいさん]
+    dup_rate_max: 0.32
+    dup_rate_reason: |
+      100 seed で相異 75 問（実測）。中身の軸は 75 通り。
+      答えが整数になる組しか使えないため、定義域を広げても通る組はこの程度にとどまる。
+      以前は点名・人名・使う文字を dup_key に算入していたので閾を通っていたが、
+      **名前が違うだけの問題は別の問題ではない**。増やすには題材そのものを追加する。
     given: [scenario]
     asked: [value]
     visual: none

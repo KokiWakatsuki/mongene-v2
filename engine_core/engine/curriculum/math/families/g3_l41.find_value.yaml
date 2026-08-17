@@ -20,6 +20,12 @@ levels:
       ratio_max: 9
       scale_max: 12
       side_max: 60
+    dup_rate_max: 0.38
+    dup_rate_reason: |
+      100 seed で相異 68 問（実測）。中身の軸は 既知の辺 25 通り × 比 7×7 通り。
+      答えが整数になる組しか使えないため、定義域を広げても通る組はこの程度にとどまる。
+      以前は点名・人名・使う文字を dup_key に算入していたので閾を通っていたが、
+      **名前が違うだけの問題は別の問題ではない**。増やすには題材そのものを追加する。
     given: [condition]
     asked: [value]
     visual: none

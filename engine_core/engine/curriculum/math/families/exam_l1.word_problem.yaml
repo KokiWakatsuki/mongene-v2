@@ -59,6 +59,13 @@ levels:
       slope_candidates: [2, 3, 4, 5, 6, 7, 8, 9, 10]
       intercept_candidates: [2, 3, 4, 5, 6, 8, 9, 10, 12, 14, 15, 16, 18, 20]
       multiple_candidates: [2, 3, 4, 5, 6, 7, 8]
+    dup_rate_max: 0.25
+    dup_rate_reason: |
+      100 seed で相異 78 問（実測）。中身の軸は (傾き, 切片, 倍率) の 78 通り。
+      一次関数と三角形の面積を組む問題で、**面積が整数になる**組しか使えない。
+      傾き 2〜10・切片 2〜20・倍率 2〜8 を全部当たっての実測。
+      以前は点名を dup_key に算入していたので閾を通っていたが、
+      **名前が違うだけの問題は別の問題ではない**。
     given: [scenario]
     asked: [value]
     visual: none

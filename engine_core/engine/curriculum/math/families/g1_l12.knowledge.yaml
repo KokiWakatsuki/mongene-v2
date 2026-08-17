@@ -39,6 +39,12 @@ levels:
     signature: letter_meaning_interpret
     recipe: math.interpret_expression
     params: {}
+    dup_rate_max: 0.58
+    dup_rate_reason: |
+      100 seed で相異 48 問（実測）。中身の軸は 個数 8 通り × 8 通り。
+      答えが整数になる組しか使えないため、定義域を広げても通る組はこの程度にとどまる。
+      以前は点名・人名・使う文字を dup_key に算入していたので閾を通っていたが、
+      **名前が違うだけの問題は別の問題ではない**。増やすには題材そのものを追加する。
     given: [statement]
     asked: [choice]
     visual: none

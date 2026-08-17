@@ -57,6 +57,14 @@ levels:
       # params 総組合せは実質無限（実測 dup=0.0）。
       side_domain: {int_range: [4, 44]}
       speed_domain: {int_range: [1, 6]}
+    dup_rate_max: 0.5
+    dup_rate_reason: |
+      100 seed で相異 55 問（実測）。中身の軸は 1辺 21 通り。
+      動点が正方形の周を動く問題で、**折れ点と読み取る点が方眼の交点に乗る**
+      (1辺, 速さ) の組しか使えない（目盛の間にある点は読めない）。1辺 6〜40cm・
+      速さ 1〜6cm/s を全部当たっての実測。
+      以前は点名・人名・使う文字を dup_key に算入していたので閾を通っていたが、
+      **名前が違うだけの問題は別の問題ではない**。増やすには題材そのものを追加する。
     given: [condition]
     asked: [draw_graph]
     visual: required
