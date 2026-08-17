@@ -851,13 +851,26 @@ def number_property_proof(
     assert tuple(ln.op for ln in lines) == expected_ops, "op 列が宣言と食い違った"
 
     answer = ProofAnswer(text=render_proof_text(prop, is_guided), lines=lines)
+    # **かっこも同類項も無い式で「かっこをはずして計算し、同類項をまとめる」と
+    # 言わない。** 「2つの偶数の和」は書き出した時点で 2f + 2w なので、この手の
+    # 括弧が前の手と同じ式になり、何もしていない手が1つ挟まっていた。
+    # op 列は変えない（G-FP は手の数が揃っていることを見る）。言い方だけ変える。
+    combination = next(ln.claim for ln in lines if ln.op == "form_expression")
+    expanded_same = any(
+        ln.op == "expand_expression" and ln.claim.lstrip("= ") == combination
+        for ln in lines
+    )
     steps = [
         Step(
             op=ln.op,
             args=[],
             result_srepr="",
             result_display=ln.claim,
-            narration=_NARRATION[ln.op],
+            narration=(
+                "かっこが無く、同類項もすでにまとまっているので、式はこのまま。"
+                if (ln.op == "expand_expression" and expanded_same)
+                else _NARRATION[ln.op]
+            ),
         )
         for ln in lines
     ]
