@@ -84,6 +84,20 @@ _CONSTRUCTION_PROPERTY_NARRATION: dict[str, str] = {
     "perpendicular_bisector": "垂直二等分線上の点から、線分の両端までの距離を見比べる。",
     "angle_bisector": "角の二等分線上の点から、角をつくる2辺までの距離を見比べる。",
 }
+#: 1手目で見比べた当のもの（括弧が空だった）と、2手目でよりどころにする性質の名前。
+_CONSTRUCTION_PROPERTY_DETAIL: dict[str, tuple[str, str]] = {
+    "perpendicular_bisector": (
+        "両端までの距離",
+        "線分の垂直二等分線上の点は、その線分の両端から等しい距離にある"
+        "（垂直二等分線の性質）。逆に、両端から等しい距離にある点は"
+        "すべて垂直二等分線の上にある。",
+    ),
+    "angle_bisector": (
+        "2辺までの距離",
+        "角の二等分線上の点は、その角をつくる2辺から等しい距離にある"
+        "（角の二等分線の性質）。距離ははかる相手の辺に垂線を下ろした長さで見る。",
+    ),
+}
 
 
 @register_solver("math.judge_construction_property")
@@ -96,13 +110,23 @@ def judge_construction_property(topic: object) -> Solution:
     t = str(topic)
     if t not in _CONSTRUCTION_PROPERTY_NARRATION:
         raise ValueError(f"未知の topic: {t!r}")
-    correct, distractor = "等しい", "等しくない"
+    read_target, reason = _CONSTRUCTION_PROPERTY_DETAIL[t]
+    # **g1_l41 の問いは「その理由となる性質の名前とともに答えよ」**（入力仕様の
+    # example がそう書いている）。答えが「等しい」だけだと、問いが求めたものの
+    # 半分しか返していない。g1_l42 の問いは名前を求めていないので topic で分ける。
+    if t == "perpendicular_bisector":
+        # かっこ書きにすると、解説の括弧が「（等しい（垂直二等分線の性質））」と
+        # 二重になる。「〜より等しい」の形にする。
+        correct = "垂直二等分線の性質より等しい"
+        distractors = ["等しくない", "角の二等分線の性質より等しい"]
+    else:
+        correct, distractors = "等しい", ["等しくない"]
     steps = [
         Step(
             op="identify_construction_property",
             args=[],
             result_srepr=t,
-            result_display="",
+            result_display=read_target,
             narration=_CONSTRUCTION_PROPERTY_NARRATION[t],
         ),
         Step(
@@ -111,9 +135,10 @@ def judge_construction_property(topic: object) -> Solution:
             result_srepr=correct,
             result_display=correct,
             narration="その距離どうしの関係を判別する。",
+            detail=reason,
         ),
     ]
-    answer = ChoiceAnswer(correct=correct, distractors=[distractor], fact_id=f"construction_property.{t}")
+    answer = ChoiceAnswer(correct=correct, distractors=distractors, fact_id=f"construction_property.{t}")
     return Solution(answer=answer, steps=steps)
 
 
