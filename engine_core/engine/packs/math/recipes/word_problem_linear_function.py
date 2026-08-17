@@ -469,7 +469,10 @@ def solve_tank_race(capacity: int, empty_minutes: int, fill_rate: int) -> list[S
         op="formulate_two_lines",
         args=[],
         result_srepr="",
-        result_display="二つの水そうの量を x の式で表す",
+        # **括弧は「その手で得たもの」。** 指示の言い直しで、式が1つも出ていなかった。
+        result_display=(
+            f"減る側 y = {capacity} - {drain}x、増える側 y = {fill_rate}x"
+        ),
         narration="減っていく水そうと増えていく水そうの量を、それぞれ経過した時間の式で表す。",
     )
     answer = SymbolicAnswer(

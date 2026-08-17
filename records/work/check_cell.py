@@ -19,9 +19,12 @@ from engine.core.contracts import Coordinate, GenerateRequest, Unsupported
 from engine.core.pipeline import generate
 from engine.eval._harness import make_env
 from engine.eval.dup_rate import cell_dup_rate
+from engine.eval.text_quality import cell_text_quality
 
 _GATE_SEEDS = 120
 _DUP_SEEDS = 100
+# eval の既定は 5。速い確認では多めに見る（点名は seed ごとに変わる）。
+_TQ_SEEDS = 12
 _DUP_THRESHOLD = 0.20  # family YAML の dup_rate_max があればそちらが優先される
 
 
@@ -69,11 +72,27 @@ def main() -> int:
         # 2) dup_rate @100
         dr = cell_dup_rate(env, coord, _DUP_SEEDS, _DUP_THRESHOLD)
 
+        # 3) text_quality（記号の食い違い）
+        #
+        # **ここが無いと、速い確認が素通りさせる種類がある。** 解説の括弧に
+        # 実物の点名を書き写して `KW²`・`X(-10/a, 0)`・`EG : OE` と入れたら、
+        # rejects も dup も通ったまま eval の text_quality だけが落ちた
+        # （問題文が点に名前をつけていないので「問題文に無い記号」になる）。
+        # 検査ごとに見ている面が違う——速い側に無い面は、19分の全走まで見えない。
+        tq = cell_text_quality(env, coord, _TQ_SEEDS)
+
         gate_ok = len(rejects) == 0
         dup_ok = dr.ok
-        mark = "OK" if (gate_ok and dup_ok) else "FAIL"
+        tq_ok = not (tq.stray_symbols or tq.empty_hint)
+        mark = "OK" if (gate_ok and dup_ok and tq_ok) else "FAIL"
         print(f"\n[{mark}] {unit}.{form}.Lv{lv}")
         print(f"  gate: rejects={len(rejects)}/{_GATE_SEEDS}")
+        print(
+            f"  text_quality: 問題文に無い記号={''.join(tq.stray_symbols) or 'なし'}"
+            f" / 中身のないヒント={'あり' if tq.empty_hint else 'なし'}"
+        )
+        for s in tq.stray_samples[:3]:
+            print(f"    ! {s}")
         for r in rejects[:5]:
             print(f"    ! {r}")
         print(
@@ -83,7 +102,7 @@ def main() -> int:
         )
         for bf in dr.build_failures[:3]:
             print(f"    ! build_fail {bf}")
-        if not (gate_ok and dup_ok):
+        if not (gate_ok and dup_ok and tq_ok):
             all_ok = False
 
     print(f"\n=== {'ALL_OK' if all_ok else 'SOME_FAIL'} ===")

@@ -60,11 +60,14 @@ def _range(vals: Sequence[int]) -> sympy.Integer:
     return sympy.Integer(max(vals) - min(vals))
 
 
-def _steps(rows: list[tuple[str, str, str, str]]) -> list[Step]:
-    """(op, result_srepr, result_display, narration) の列から Step を作る。"""
+def _steps(rows: list[tuple[str, ...]]) -> list[Step]:
+    """(op, result_srepr, result_display, narration[, detail]) の列から Step を作る。"""
     return [
-        Step(op=op, args=[], result_srepr=srepr, result_display=disp, narration=narr)
-        for op, srepr, disp, narr in rows
+        Step(
+            op=row[0], args=[], result_srepr=row[1], result_display=row[2],
+            narration=row[3], detail=(row[4] if len(row) > 4 else ""),
+        )
+        for row in rows
     ]
 
 
@@ -173,8 +176,16 @@ def judge_group_by_any_statistic(
              "選んだ指標の値を、二つの組それぞれについて求める。"),
             ("verify_same_conclusion", "", f"中央値でも{correct}",
              "ほかの代表値でも比べてみて、同じ側になることを確かめる。"),
+            # **値の向きを言う。** 時間のように「小さいほうがよい」場面で
+            # `Aの平均値 66、Bの平均値 70` から `A` と結論しても、
+            # **なぜ小さいほうを選ぶのかが1行も無い**（生徒は大きいほうを選ぶ）。
             ("conclude_group", correct, correct,
-             "求めた値を根拠として、どちらの組についていえるかを結論づける。"),
+             "求めた値を根拠として、どちらの組についていえるかを結論づける。",
+             (f"この場面では値が小さいほうがあてはまるので、{ma} と {mb} を比べて"
+              f"小さいほうの {correct} を選ぶ。")
+             if smaller else
+             (f"この場面では値が大きいほうがあてはまるので、{ma} と {mb} を比べて"
+              f"大きいほうの {correct} を選ぶ。")),
         ]),
     )
 

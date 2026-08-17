@@ -236,7 +236,10 @@ def express_moving_points_area(v: object, labels: object = None) -> Solution:
             op=op,
             args=[],
             result_srepr=srepr if i == len(ops) - 1 else "",
-            result_display=disp if i == len(ops) - 1 else f"点{lp}と点{lq}の位置を x で表す",
+            result_display=(
+                disp if i == len(ops) - 1
+                else f"点{lp}・点{lq}の進んだ道のり = {_fmt_speed_times_x(v_v)}"
+            ),
             narration=narration[op],
         )
         for i, op in enumerate(ops)
@@ -574,12 +577,22 @@ def express_single_interval_area(s: object, v: object) -> Solution:
         Step(
             op=op, args=[],
             result_srepr=srepr if i == len(ops) - 1 else "",
-            result_display=disp if i == len(ops) - 1 else "動く点の位置を x で表す",
+            # **括弧は「その手で得たもの」。** `動く点の位置を x で表す` は
+            # 指示の言い直しで、進んだ道のりの式が1つも出ていなかった。
+            result_display=(
+                disp if i == len(ops) - 1
+                else f"進んだ道のり = {_fmt_speed_times_x(v_v)}"
+            ),
             narration=narration[op],
         )
         for i, op in enumerate(ops)
     ]
     return Solution(answer=SymbolicAnswer(srepr=srepr, display=disp), steps=steps)
+
+
+def _fmt_speed_times_x(v: sympy.Rational) -> str:
+    """進んだ道のり（速さ × x）の表示。速さが 1 なら係数を書かない。"""
+    return "x" if v == 1 else f"{sympy.sstr(v)}x"
 
 
 @register_solver("math.express_three_interval_area_exprs")

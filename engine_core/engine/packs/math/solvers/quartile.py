@@ -695,7 +695,8 @@ def judge_box_plot_stability_claim(
             args=[],
             result_srepr="",
             result_display=f"A {_fmt_half(med_a)}、B {_fmt_half(med_b)}",
-            narration="「多い」といえるかを見るために、AとBそれぞれの中央値を読み取る。",
+            # 主張は「得点が高い」なので、「多い」では問題文と語が食い違う。
+            narration="主張の「高い」といえるかを見るために、AとBそれぞれの中央値を読み取る。",
         ),
         Step(
             op="read_iqr_both",

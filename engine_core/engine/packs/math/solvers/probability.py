@@ -209,7 +209,10 @@ def probability_single_die(space_name: object, condition: object, target: object
 _TWO_DICE_STEPS = ["enumerate_all_pairs", "count_favorable_pairs", "compute_probability"]
 
 _TWO_DICE_NARRATION: dict[str, str] = {
-    "enumerate_all_pairs": "大小2個のさいころの目の組合せを、表などを使ってすべて数え上げる。",
+    # **「大小」と決めつけない。** 問題文は「青いさいころと黄色いさいころ」の
+    # ように色で区別することがあり、そのとき解説だけ「大小2個のさいころ」と
+    # 呼ぶと問題文と食い違う。solver は色を知らないので中立に書く。
+    "enumerate_all_pairs": "2個のさいころの目の組合せを、表などを使ってすべて数え上げる。",
     "count_favorable_pairs": "そのうち、求める条件にあてはまる組合せの数を数える。",
     "compute_probability": "条件にあてはまる組合せの数を、すべての組合せの数でわる。",
 }
@@ -698,7 +701,7 @@ _COUNT_PAIRS_STEPS = ["count_outcomes_of_each_die", "multiply_outcome_counts"]
 
 _COUNT_PAIRS_NARRATION: dict[str, str] = {
     "count_outcomes_of_each_die": "一つのさいころで出る目が何通りあるかを数える。",
-    "multiply_outcome_counts": "大小どちらの目も同じだけあるので、樹形図や表で整理すると、"
+    "multiply_outcome_counts": "どちらのさいころも目の数は同じだけあるので、樹形図や表で整理すると、"
                                "組合せの総数はその積になる。",
 }
 
@@ -740,8 +743,10 @@ _AT_LEAST_ONE_DRAW_STEPS = [
 ]
 
 _AT_LEAST_ONE_DRAW_NARRATION: dict[str, str] = {
-    "identify_complement_event": "「少なくとも一つ」を直接数えると場合分けが増えるので、"
-                                 "その反対の「一つも入らない」場合を考える。",
+    # **この場面は「取り出す」。** 「一つも入らない」と書いていたので、
+    # 袋に入れる場面のように読めた（問題文はどれも「取り出す」）。
+    "identify_complement_event": "「少なくとも1つ」を直接数えると場合分けが増えるので、"
+                                 "その反対の「1つも取り出されない」場合を考える。",
     # 題材は玉に限らない（カード・おはじき等）ので、narration は品名に触れない。
     "count_complement_combinations": "対象でないものだけを取り出す組合せが何通りあるかを数える。",
     "compute_complement_probability": "その数を、すべての取り出し方の数でわって、"
@@ -752,9 +757,9 @@ _AT_LEAST_ONE_DRAW_NARRATION: dict[str, str] = {
 def _at_least_one_draw_display(op: str, total: int, none_target: int, q) -> str:
     """余事象で数える手の括弧（この手で得たもの）。"""
     if op == "identify_complement_event":
-        return "一つも入らない場合"
+        return "対象の色が1つも取り出されない場合"
     if op == "count_complement_combinations":
-        return f"{none_target}通り（全部で{total}通り）"
+        return f"あてはまるのは {none_target}通り、全部で {total}通り"
     if op == "compute_complement_probability":
         return _fmt_ratio(q)
     raise ValueError(f"途中の表示を組めない op: {op!r}")

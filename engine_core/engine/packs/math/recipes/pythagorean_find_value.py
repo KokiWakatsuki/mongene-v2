@@ -314,6 +314,24 @@ def solve_coordinate_distance(numbers: Mapping[str, Any]) -> list[Solution]:
     ]
 
 
+def _shifted_x(v: int) -> str:
+    """`(x - a)` の書き方。ずれが 0 なら `x`（`(x + 0)²` とは書かない）。"""
+    if v == 0:
+        return "x²"
+    return f"(x + {v})²" if v > 0 else f"(x - {-v})²"
+
+
+def _square_term(v: int) -> str:
+    """`y の差` の平方の書き方。
+
+    負の数は `(-1)²` とかっこでくくる（`-1²` は -1 の平方でなく -(1²) と読める）。
+    0 のときは項ごと落とす（`+ 0²` は書かない）。
+    """
+    if v == 0:
+        return ""
+    return f" + ({v})²" if v < 0 else f" + {v}²"
+
+
 def solve_equidistant_point_on_x_axis(numbers: Mapping[str, Any]) -> list[Solution]:
     """g3_l54.find_value Lv3: 2点から等しい距離にある x 軸上の点の座標を逆算する。"""
     x1, y1 = int(numbers["x1"]), int(numbers["y1"])
@@ -329,13 +347,28 @@ def solve_equidistant_point_on_x_axis(numbers: Mapping[str, Any]) -> list[Soluti
                     "express_distances_with_unknown",
                     "求める点は x 軸上にあるから、その x 座標を文字でおき、二つの点までの"
                     "距離の二乗を、三平方の定理を使ってその文字の式で表す。",
-                    phrase="（x の差）² ＋（y の差）² の形で表す",
+                    # **3手すべての括弧が記号の言い換えで、式が1本も無かった。**
+                    # 実際の値を入れた式を出す。
+                    #
+                    # **点に名前をつけてはいけない**——この問題文は「座標を求めなさい。」
+                    # だけで、二点に名前がついていない。`KW²` のように書くと
+                    # text_quality が「問題文に無い記号」として落とす（実際に落とした）。
+                    # どの点までの距離かは座標そのもので指す。
+                    phrase=(
+                        f"({_fmt(x1)}, {_fmt(y1)}) まで: "
+                        f"{_shifted_x(-x1)}{_square_term(y1)}、"
+                        f"({_fmt(x2)}, {_fmt(y2)}) まで: "
+                        f"{_shifted_x(-x2)}{_square_term(y2)}"
+                    ),
                 ),
                 _step(
                     "set_up_equation_from_equal_distances",
                     "二つの距離が等しいことは、距離の二乗どうしが等しいことと同じだから、"
                     "その等式を方程式とみる。",
-                    phrase="（一方の距離）² =（もう一方の距離）²",
+                    phrase=(
+                        f"{_shifted_x(-x1)}{_square_term(y1)}"
+                        f" = {_shifted_x(-x2)}{_square_term(y2)}"
+                    ),
                 ),
                 _step(
                     "solve_linear_equation_for_x",

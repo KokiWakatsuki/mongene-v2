@@ -100,14 +100,18 @@ def _overlap(a: str, b: str) -> float:
 
 
 # 指示の語尾（`scan_step_values.py` と同じ考え方。句点で終わる証明文は外す）。
+# **語尾を足すときは、取りこぼしを疑って足す。** `表す` が入っていなかったので
+# 「（動く点の位置を x で表す）」という指示の言い直しが 38 問素通りしていた
+# （読んで初めて見つかった）。
 _INSTRUCTION_TAIL = re.compile(
     r"(する|読み取る|読みとる|読む|求める|考える|数える|比べる|見比べる|そろえる|もどす|"
     r"わける|分ける|使う|調べる|作る|つくる|当てはめる|あてはめる|確かめる|たしかめる|"
-    r"決める|きめる|選ぶ|えらぶ|示す|しめす|まとめる|見分ける|見つける|書き出す|結ぶ)$"
+    r"決める|きめる|選ぶ|えらぶ|示す|しめす|まとめる|見分ける|見つける|書き出す|結ぶ|"
+    r"表す|あらわす|気づく|とる|おく|置く|注目する)$"
 )
 
 
-def _restated_steps(e: str) -> list[str]:
+def _restated_steps(e: str, a: str = "") -> list[str]:
     """括弧の中が、直前の指示文の言い直しになっている手。
 
     括弧には**その手で得たもの**（値・図形・式）が入るのが設計。指示文と
@@ -125,10 +129,40 @@ def _restated_steps(e: str) -> list[str]:
         # セルの正しい括弧を 231 問ぶん挙げていた（`scan_step_values.py` と同じ規約）。
         if not _INSTRUCTION_TAIL.search(result):
             continue
+        # 選択肢を答えるセルは括弧が答えの文そのもの（「データの散らばりの度合いを
+        # 表す」）。指示文と語が似るのは当然なので、答えに含まれるものは除く。
+        if a and result and result in a:
+            continue
         if len(result) >= 6 and _overlap(instruction, result) >= 0.9:
             out.append(result)
     return out
 
+
+
+def _restated_no_value(e: str, a: str) -> list[str]:
+    """括弧が**指示の形で、値も式も持っていない**手。
+
+    `_restated_steps`（文字の重なり）では分けられなかった。実物で測ると
+    直す前が 0.77、直したあとが 0.82 と**逆転する**——「進んだ道のり = 4x」も
+    指示文と同じ語を含むからで、重なりは指示か結果かの手がかりにならない。
+
+    分かれ目は**値や式を持っているか**。指示の語尾で終わり、数も記号も無い括弧は
+    「その手で得たもの」になっていない（動点の「動く点の位置を x で表す」38 問）。
+
+    選択肢を答えるセルは括弧が答えの文そのもの（「全校の名簿から乱数表を使って選ぶ」）
+    なので、答えに含まれるものは除く。
+    """
+    out = []
+    for m in _STEP_RE.finditer(e):
+        result = m.group(2).strip()
+        if not _INSTRUCTION_TAIL.search(result):
+            continue
+        if re.search(r"[0-9=＝∥⊥≡∽√°:：]", result):
+            continue  # 値・式・記号を持っている＝産物になっている
+        if result and result in a:
+            continue  # 選択肢の答えそのもの
+        out.append(result)
+    return out
 
 
 def _steps_of(e: str) -> list[str]:
@@ -260,7 +294,7 @@ _CHECKS: dict[str, object] = {
     # 括弧の中が指示の言い直し（動詞で終わる）だと、読んでも何も分からない。
     #   悪い: まず、…かを読み取る。（どちらの向きを…かを読み取る）
     #   良い: まず、点Cを中心に弧をかく。（点Cを中心とする弧）
-    "解説の括弧が指示の言い直し": lambda q, a, e, h: bool(_restated_steps(e)),
+    "解説の括弧が指示の言い直し": lambda q, a, e, h: bool(_restated_steps(e, a)),
     # 語と助詞の間の半角スペース（D-3 の解説側）。
     "解説にかなと語の間の半角スペース": lambda q, a, e, h: bool(
         re.search(r"[ぁ-んァ-ヶ一-龥] [をがはにでとへのも]", e + h)
@@ -291,6 +325,8 @@ _CHECKS: dict[str, object] = {
     "ヒントに答えがそのまま出ている": lambda q, a, e, h: _hint_leaks_answer(a, h),
     # `Step.detail` を入れるときに**目的を落とす**退行の見張り（3回踏んだ）。
     "解説の指示文が計算式だけ": lambda q, a, e, h: bool(_instruction_is_bare_arithmetic(e)),
+    # 括弧が指示の言い直しで、値も式も無い（`_restated_steps` の取りこぼし）。
+    "解説の括弧に値も式も無い": lambda q, a, e, h: bool(_restated_no_value(e, a)),
 }
 
 

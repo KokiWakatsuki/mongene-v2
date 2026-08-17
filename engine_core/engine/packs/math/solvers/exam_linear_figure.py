@@ -157,12 +157,20 @@ def slope_from_triangle_area(b: object, area: object) -> Solution:
     return Solution(
         answer=SymbolicAnswer(srepr=srepr, display=disp),
         steps=_steps([
-            ("express_intercepts", "", "両軸との交点を a で表す",
+            # **括弧は「その手で得たもの」。** `両軸との交点を a で表す` は指示の
+            # 言い直しで、a を含む座標が1つも出ていなかった。
+            #
+            # **交点に名前をつけてはいけない**——問題文は交点に文字を振っていない。
+            # `X(…)、Y(…)` と書いたら text_quality が「問題文に無い記号」で落とした。
+            # 座標そのもので指す。原点も `O` でなく地の文で「原点」と呼ぶ。
+            ("express_intercepts", "", f"(-{_fmt(b_s)}/a, 0)、(0, {_fmt(b_s)})",
              "x 軸との交点は y がゼロ、y 軸との交点は x がゼロになるところなので、"
              "それぞれの座標を a を使って表す。",
              "x 軸との交点は y が 0、y 軸との交点は x が 0 になるところなので、"
              "それぞれの座標を a を使って表す。"),
-            ("set_up_area_equation", "", f"{_fmt(b_s)} × x切片 ÷ 2 = {_fmt(area_s)}",
+            # `x切片` という語を式に混ぜず、a を含む式として書く。
+            ("set_up_area_equation", "",
+             f"{_fmt(b_s)}/a × {_fmt(b_s)} ÷ 2 = {_fmt(area_s)}",
              "2つの交点と原点を頂点とする三角形の面積を a の式で表し、"
              "与えられた面積に等しいとおく。"),
             ("solve_for_coefficient", srepr, disp,
@@ -336,10 +344,14 @@ def point_on_x_axis_for_area_multiple(m: object, b: object, k: object) -> Soluti
              "それぞれの座標を求める。",
              "x 軸との交点は y が 0、y 軸との交点は x が 0 になるところなので、"
              "それぞれの座標を求める。"),
-            ("note_common_height", "", "高さが共通であることに気づく",
+            ("note_common_height", "", f"高さはどちらも {_fmt(b_s)}",
              "底辺をどちらも x 軸上にとると、2つの三角形の高さはどちらも同じ点の"
              "y 座標になるので、面積の比は底辺の長さの比に等しい。"),
-            ("set_up_ratio_equation", "", f"底辺の比が {_fmt(k_s)} になる位置",
+            # 底辺の比を、実際の長さの式として書く（`〜になる位置` は指示の言い直し）。
+            # 点名は使わない（問題文に無い記号は text_quality が落とす）。
+            ("set_up_ratio_equation", "",
+             f"求める底辺 : もとの底辺 = {_fmt(k_s)} : 1、"
+             f"もとの底辺 = {_fmt(abs(ax))}",
              "面積が指定された倍率になる条件を、底辺の長さの比に置きかえて式にする。"),
             ("solve_for_point", srepr, disp,
              "その方程式を解き、x 軸の正の部分にあるという条件に合う点の座標を求める。"),

@@ -309,7 +309,8 @@ def solve_moving_point_area(numbers: Mapping[str, Any]) -> list[Solution]:
             args=[],
             result_srepr="",
             # 点名は場面ごとに振るので、steps は点名に依存しない言い方にする。
-            result_display="動いた道のりを x で表す",
+            # 括弧は指示の言い直しにせず、進んだ道のりの式そのものを出す。
+            result_display=f"進んだ道のり = {v}x" if v != 1 else "進んだ道のり = x",
             narration="点が最初の辺の上にある間は、速さと経過時間から、動いた道のりを x を使って表す。",
         ),
         Step(
