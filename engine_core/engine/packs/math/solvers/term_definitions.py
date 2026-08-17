@@ -24,6 +24,10 @@
 from __future__ import annotations
 
 # (domain, concept) -> (1手目の括弧に出す対象, 2手目の detail に出す定義)
+#
+# ★**数詞の字種は答えに合わせる。** 答えは算用数字を出せない（鉄則①・G-Q5t）ので
+# 「三組の辺がそれぞれ等しい」と漢数字で書く。定義文だけ「3組の辺／2組の辺…」と
+# 算用数字にしていたため、**同じ行の中で二重表記**になっていた（5セル）。
 TERM_DEFINITIONS: dict[tuple[str, str], tuple[str, str]] = {
     # --- 正負の数 ---------------------------------------------------------
     ("number", "absolute_value"): ("0 からの距離", "数直線上で 0 からその数までの距離を絶対値という。符号は考えないので、+5 も -5 も絶対値は 5。"),
@@ -215,13 +219,13 @@ RULE_REASONS: dict[tuple[str, str], tuple[str, str]] = {
     ("triangle_angle_properties", "exterior_property"): ("外角の性質", "三角形の1つの外角は、それととなり合わない2つの内角の和に等しい。"),
     ("polygon_interior_sum_reason", "diagonal_from_vertex"): ("内角の和の理由", "1つの頂点からひける対角線で三角形に分けられるので、三角形の数だけ 180° を足す。"),
     ("polygon_exterior_sum_property", "constant"): ("外角の和", "多角形の外角の和は、辺の数によらずつねに 360° になる。"),
-    ("congruence_conditions", "all_three"): ("三角形の合同条件", "3組の辺／2組の辺とその間の角／1組の辺とその両端の角、の3つ。角の位置が条件に入っている点が要。"),
-    ("right_triangle_congruence_conditions", "both"): ("直角三角形の合同条件", "斜辺と1つの鋭角／斜辺と他の1辺、の2つ。直角があるぶん条件が少なくて済む。"),
+    ("congruence_conditions", "all_three"): ("三角形の合同条件", "三組の辺／二組の辺とその間の角／一組の辺とその両端の角、の三つ。角の位置が条件に入っている点が要。"),
+    ("right_triangle_congruence_conditions", "both"): ("直角三角形の合同条件", "斜辺と一つの鋭角／斜辺と他の一辺、の二つ。直角があるぶん条件が少なくて済む。"),
     ("isosceles_property", "base_angles_equal"): ("二等辺三角形の性質", "2辺が等しい三角形では、その2辺にはさまれない2つの角（底角）が等しい。"),
-    ("isosceles_condition", "two_angles_equal"): ("二等辺三角形になる条件", "2つの角が等しい三角形は二等辺三角形である。性質の逆。"),
-    ("equilateral_property", "all_equal"): ("正三角形の性質", "3辺が等しいので3つの角も等しく、どれも 60° になる。"),
+    ("isosceles_condition", "two_angles_equal"): ("二等辺三角形になる条件", "二つの角が等しい三角形は二等辺三角形である。性質の逆。"),
+    ("equilateral_property", "all_equal"): ("正三角形の性質", "三辺が等しいので三つの角も等しく、どれも 60° になる。"),
     ("parallelogram_property", "all"): ("平行四辺形の性質", "2組の対辺はそれぞれ平行で等しく、2組の対角も等しく、対角線はそれぞれの中点で交わる。"),
-    ("parallelogram_conditions", "all_five"): ("平行四辺形になる条件", "2組の対辺が平行／2組の対辺が等しい／2組の対角が等しい／対角線がそれぞれの中点で交わる／1組の対辺が平行でその長さが等しい、の5つ。"),
+    ("parallelogram_conditions", "all_five"): ("平行四辺形になる条件", "二組の対辺が平行／二組の対辺が等しい／二組の対角が等しい／対角線がそれぞれの中点で交わる／一組の対辺が平行でその長さが等しい、の五つ。"),
     ("special_parallelogram_diagonal_property", "rectangle"): ("長方形の対角線", "長方形の対角線は長さが等しい。"),
     ("special_parallelogram_diagonal_property", "rhombus"): ("ひし形の対角線", "ひし形の対角線は垂直に交わる。"),
     ("special_parallelogram_diagonal_property", "square"): ("正方形の対角線", "正方形は長方形でもひし形でもあるので、対角線は長さが等しく、しかも垂直に交わる。"),
