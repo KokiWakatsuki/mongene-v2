@@ -31,6 +31,10 @@ levels:
     signature: identify_hypotenuse
     recipe: math.identify_hypotenuse
     params: {}
+    dup_rate_max: 0.93
+    dup_rate_reason: |
+      「直角三角形の斜辺はどれか」を問う問題で、直角の頂点の位置3通り×問い方3通り＝**9通り**。
+      実測 9 通り。以前は頂点名を dup_key に算入していた。
     given: [statement]
     asked: [choice]
     visual: none

@@ -37,6 +37,10 @@ levels:
       guided: true
       proposition_set: [product_plus, square_difference, square_sum, digit_swap_square_difference]
       letter_pool: [a, b, c, d, f, g, h, k, m, n, p, q, r, s, t, u, w, z]
+    dup_rate_max: 0.8
+    dup_rate_reason: |
+      命題は product_plus・square_difference・square_sum・digit_swap_square_difference の**4つ**。
+      数の取り方と合わせて実測 17 通り。以前は使う文字を dup_key に算入していた。
     given: [premises, conclusion]
     asked: [proof_text]
     visual: none
@@ -51,6 +55,9 @@ levels:
       guided: false
       proposition_set: [product_plus, square_difference, square_sum, digit_swap_square_difference]
       letter_pool: [a, b, c, d, f, g, h, k, m, n, p, q, r, s, t, u, w, z]
+    dup_rate_max: 0.8
+    dup_rate_reason: |
+      Lv2 と同じ4命題（誘導が無いだけ）。実測 16 通り。
     given: [conclusion]
     asked: [proof_text]
     visual: none

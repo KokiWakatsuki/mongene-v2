@@ -44,8 +44,8 @@ levels:
     signature: word_problem_single_interval_area
     recipe: math.word_problem_single_interval_area
     params:
-      side_candidates: [6, 8, 10, 12, 14, 16, 18, 20]
-      speed_candidates: [1, 2, 3, 4]
+      side_candidates: [6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40]
+      speed_candidates: [1, 2, 3, 4, 5, 6]
     given: [scenario, quantities]
     asked: [formulation, value]
     visual: none
@@ -57,8 +57,8 @@ levels:
     signature: word_problem_interval_exprs_and_graph
     recipe: math.word_problem_interval_exprs_and_graph
     params:
-      side_candidates: [6, 8, 10, 12, 14, 16, 18, 20, 22, 24]
-      speed_candidates: [1, 2, 3, 4]
+      side_candidates: [6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40]
+      speed_candidates: [1, 2, 3, 4, 5, 6]
     given: [scenario]
     asked: [formulation, draw_graph]
     visual: none

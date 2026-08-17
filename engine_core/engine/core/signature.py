@@ -54,9 +54,39 @@ def normalize_params(params: dict[str, Any]) -> str:
     return json.dumps(norm, ensure_ascii=False, sort_keys=True, default=str)
 
 
+# 表層＝**答えにも解き方にも効かない見た目だけの軸**。dup_key に算入しない。
+#
+# ここを算入していたので、**数値も場面も完全に同じで頂点名だけ違う問題を別物として
+# 数えていた**（コーパスの実測で 26問 / 13組）。点名を params に入れたのは dup_rate を
+# 下げるためだったが、下がったのは見かけの数字だけで、生徒には同じ問題が2回出る。
+#
+# **部分一致で外さない。** `scenario_kind`（問題の型）・`dim_labels`（['7cm','30πcm',…]
+# ＝寸法）・`asked_label`（'少ない'＝答えの符号を決める）・`count_at_vertex` は名前に
+# label/name を含むが**中身**なので、外すと逆に dup が跳ねる。実物のキーを全部
+# 数えて（396種）分類した結果を、明示の集合として置く。
+_SURFACE_PARAM_KEYS = frozenset({
+    # 図形の点名
+    "labels", "labels1", "labels2", "slots", "p_labels", "q_labels", "point_labels",
+    "vertex", "vertex_labels", "vertex_labels_prime", "center_label",
+    "base_name", "line_name", "transversal_name",
+    "name_1", "name_2", "name_a", "name_b", "name_c", "name_h", "name_o", "name_p",
+    "names",
+    # 文字式・証明で使う文字
+    "letters",
+    # 人名・品物・色・見出し
+    "person", "item_a", "item_b", "items",
+    "subject_labels", "subject_caption", "answer_labels", "colors",
+})
+
+
 def dup_key(mr: MR) -> str:
-    """dup_key = sha256(signature + normalize(params))。context_slots は算入しない。"""
-    payload = mr.signature + "|" + normalize_params(mr.params)
+    """dup_key = sha256(signature + normalize(表層を除いた params))。
+
+    context_slots（variant B の題材差）も、表層の params（点名・人名・品物・色）も
+    算入しない——どちらも「同じ問題かどうか」を変えないから。
+    """
+    core = {k: v for k, v in mr.params.items() if k not in _SURFACE_PARAM_KEYS}
+    payload = mr.signature + "|" + normalize_params(core)
     return hashlib.sha256(payload.encode()).hexdigest()[:16]
 
 

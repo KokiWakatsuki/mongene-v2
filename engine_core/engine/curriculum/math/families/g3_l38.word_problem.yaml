@@ -53,7 +53,7 @@ levels:
     params:
       scenario_kind: moving_point_area
       # 1辺は偶数（辺CD上の一定面積 s²/2 が整数）。速さは s の約数（区間の境界が整数）。
-      side_candidates: [6, 8, 10, 12, 14, 16, 18, 20, 22, 24]
+      side_candidates: [6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40]
       min_first_interval: 3
     given: [scenario, quantities]
     asked: [formulation, formulation]
@@ -66,8 +66,8 @@ levels:
     signature: word_problem_area_graph_and_times
     recipe: math.word_problem_area_graph_and_times
     params:
-      side_candidates: [6, 8, 10, 12, 14, 16, 18, 20, 22, 24]
-      speed_candidates: [1, 2, 3, 4]
+      side_candidates: [6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40]
+      speed_candidates: [1, 2, 3, 4, 5, 6]
     given: [scenario]
     asked: [draw_graph, value]
     visual: none

@@ -47,8 +47,8 @@ levels:
     signature: exam_interval_area_and_value
     recipe: math.exam_interval_area_and_value
     params:
-      side_candidates: [6, 8, 10, 12, 14, 16, 18, 20, 22, 24]
-      speed_candidates: [1, 2, 3, 4]
+      side_candidates: [6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40]
+      speed_candidates: [1, 2, 3, 4, 5, 6]
     given: [condition]
     asked: [value]
     visual: none
@@ -60,8 +60,8 @@ levels:
     signature: exam_area_all_times
     recipe: math.exam_area_all_times
     params:
-      side_candidates: [6, 8, 10, 12, 14, 16, 18, 20, 22, 24]
-      speed_candidates: [1, 2, 3, 4]
+      side_candidates: [6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40]
+      speed_candidates: [1, 2, 3, 4, 5, 6]
     given: [condition]
     asked: [value]
     visual: none

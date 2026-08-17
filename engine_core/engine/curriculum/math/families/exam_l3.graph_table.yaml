@@ -32,8 +32,19 @@ levels:
     signature: exam_read_area_graph
     recipe: math.exam_read_area_graph
     params:
-      side_candidates: [6, 8, 10, 12, 14, 16, 18, 20]
-      speed_candidates: [1, 2, 3, 4]
+      # ★2026-08-18: 頂点名を dup_key から外したら、このセルは**実際には7問しか
+      # 無かった**（頂点名35通りで水増しされていた）。読み取る点が方眼の交点に
+      # 乗る組しか使えない（recipe の制約＝目盛の間の点は読めない）ので、
+      # 1辺と速さを広げて候補を 7 → 25 通りにする（実測）。
+      side_candidates: [6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40]
+      speed_candidates: [1, 2, 3, 4, 5, 6]
+    dup_rate_max: 0.80
+    dup_rate_reason: |
+      グラフから面積を読ませる問題なので、**読み取る点も区間の境目も方眼の交点に
+      乗っていなければならない**（目盛の間にあると読めない）。1辺 6〜40cm・
+      速さ 1〜6cm/s を全部当たっても、この条件を満たす (1辺, 速さ, 読む時刻) は
+      25 通りしかない（実測）。広げれば下がるのではなく、**読める問題の数がここまで**。
+      以前は頂点名を dup_key に算入して閾を通していた（実際は7問）。
     given: [condition]
     asked: [read_point]
     visual: required
@@ -45,8 +56,8 @@ levels:
     signature: exam_piecewise_area_graph
     recipe: math.draw_three_interval_area_graph
     params:
-      side_candidates: [6, 8, 10, 12, 14, 16, 18, 20, 22, 24]
-      speed_candidates: [1, 2, 3, 4]
+      side_candidates: [6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40]
+      speed_candidates: [1, 2, 3, 4, 5, 6]
     given: [condition]
     asked: [draw_graph]
     visual: required

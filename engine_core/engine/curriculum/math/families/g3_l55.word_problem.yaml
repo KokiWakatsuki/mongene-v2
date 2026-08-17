@@ -46,13 +46,23 @@ levels:
     params:
       scenario_kind: square_pyramid_height_volume
       # 底面の1辺の範囲（偶数のみ採用＝対角線の半分の二乗が整数になる）。
-      base_edge_range: [4, 16]
+      # ★2026-08-18: 頂点名を dup_key から外したので、名前で稼いでいた分が消えた。
+      # 同じ題材の find_value Lv3 と同じ広さ（2..36 / 2..48）にそろえる。
+      base_edge_range: [4, 36]
       # 側辺（底面以外の辺）の範囲。
-      lateral_edge_range: [4, 22]
+      lateral_edge_range: [4, 48]
       # 高さの二乗の下限（つぶれた錐＝高さがほぼ 0 の退化を避ける）。
       min_height_squared: 4
       # 頂点の名前の候補（底面の連続4文字と重ならないものだけを recipe が残す）。
       apex_candidates: [O, P, T, V, W, X]
+    # 定義域を広げて 0.56 → 0.25 まで下がったが、まだ閾は超える。
+    dup_rate_max: 0.30
+    dup_rate_reason: |
+      正四角錐の「高さ→体積」の誘導つき問題は (底面の1辺, 側辺) の2数だけで決まり、
+      底面は偶数・側辺は底辺の3倍以下・高さがつぶれないという制約がかかる。
+      以前は頂点名を dup_key に算入していたので閾を通っていたが、**数値も場面も
+      同じで名前だけ違う問題を別物として数えていた**だけだった。名前を外し、
+      定義域を find_value Lv3 と同じ広さ（2..36/2..48）にそろえた実測が 0.25。
     given: [scenario]
     asked: [value, value]
     visual: none
@@ -70,6 +80,12 @@ levels:
     params:
       scenario_kind: cube_vertex_to_plane
       edge_domain: {int_range: [2, 30]}
+    dup_rate_max: 0.75
+    dup_rate_reason: |
+      「1辺 a の立方体の、頂点から平面までの垂線の長さ」は **a ひとつで決まる
+      1変数の題材**（答えは (√3/3)a）で、教材として成り立つ 1辺（2〜30cm）が
+      29 通りしかない。第2の軸は数学的に無い。以前は頂点名を dup_key に算入して
+      閾を通していた。**狭いことを隠さず宣言する**のが正しい扱い。
     given: [scenario]
     asked: [value]
     visual: none

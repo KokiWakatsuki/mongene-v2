@@ -32,6 +32,12 @@ levels:
       guided: true
       proposition_set: [digit_swap, digit_minus_digitsum]
       letter_pool: [a, b, c, d, f, g, h, k, m, n, p, q, r, s, t, u, w, z]
+    dup_rate_max: 0.96
+    dup_rate_reason: |
+      証明する命題そのものが軸で、この単元が持つのは digit_swap（2けたの数と入れかえた数の和/差）と
+      digit_minus_digitsum（2けたの数から各位の和をひく）の**2つだけ**。桁の取り方と合わせても
+      実測 5 通り。以前は使う文字（letter_pool 18種）を dup_key に算入していたので閾を通っていたが、
+      **文字が a か g かで問題が変わるわけではない**。増やすには命題を新しく設計する（教材の中身の追加）。
     given: [premises, conclusion]
     asked: [proof_text]
     visual: none
@@ -46,6 +52,9 @@ levels:
       guided: false
       proposition_set: [digit_swap, digit_minus_digitsum]
       letter_pool: [a, b, c, d, f, g, h, k, m, n, p, q, r, s, t, u, w, z]
+    dup_rate_max: 0.96
+    dup_rate_reason: |
+      Lv2 と同じ2命題（誘導が無いだけ）。実測 5 通り。文字の違いは問題の違いではない。
     given: [conclusion]
     asked: [proof_text]
     visual: none

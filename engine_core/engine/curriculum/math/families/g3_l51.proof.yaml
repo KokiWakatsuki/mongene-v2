@@ -49,6 +49,11 @@ levels:
       guided: true
       proof_set: [outer_square, outer_square_subtract, inner_square,
                   inner_square_subtract, trapezoid]
+    dup_rate_max: 0.92
+    dup_rate_reason: |
+      証明の道すじそのものが軸で、面積による三平方の証明は outer_square・outer_square_subtract・
+      inner_square・inner_square_subtract・trapezoid の**5通り**（教科書に載る型を尽くしている）。
+      並べ方の左右反転と合わせて実測 10 通り。以前は点名を dup_key に算入していた。
     given: [premises, conclusion]
     asked: [proof_text]
     visual: none
@@ -63,6 +68,9 @@ levels:
       guided: false
       proof_set: [outer_square, outer_square_subtract, inner_square,
                   inner_square_subtract, trapezoid]
+    dup_rate_max: 0.92
+    dup_rate_reason: |
+      Lv3 と同じ5つの道すじ（誘導が無いだけ）。実測 10 通り。
     given: [premises, conclusion]
     asked: [proof_text]
     visual: none

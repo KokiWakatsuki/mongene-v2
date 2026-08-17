@@ -32,6 +32,10 @@ levels:
     signature: judge_right_triangle_congruence
     recipe: math.judge_right_triangle_congruence
     params: {}
+    dup_rate_max: 0.96
+    dup_rate_reason: |
+      直角三角形の合同を判定する問題で、示せる条件の型が**4通り**（斜辺と1鋭角／斜辺と他の1辺／
+      それ以外の2型）。実測 4 通り。以前は頂点名（40通り）を dup_key に算入していた。
     given: [statement]
     asked: [choice]
     visual: none

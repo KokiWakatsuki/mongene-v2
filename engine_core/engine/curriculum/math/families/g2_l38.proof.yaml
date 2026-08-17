@@ -60,6 +60,9 @@ levels:
       mode: prove
       proposition_set: [conditional_class, pair_condition, consecutive_sum_claim]
       letter_pool: [a, b, c, d, f, g, h, k, m, n, p, q, r, s, t, u, w, z]
+    dup_rate_max: 0.35
+    dup_rate_reason: |
+      命題は conditional_class・pair_condition・consecutive_sum_claim の**3つ**。実測 34 通り。
     given: [premises, conclusion]
     asked: [proof_text]
     visual: none

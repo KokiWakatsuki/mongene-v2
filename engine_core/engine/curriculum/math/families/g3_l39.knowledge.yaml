@@ -34,6 +34,10 @@ levels:
     signature: identify_similar_corresponding_vertex
     recipe: math.identify_similar_corresponding_vertex
     params: {}
+    dup_rate_max: 0.96
+    dup_rate_reason: |
+      「相似な四角形で、指定した頂点に対応する頂点」を答える問題で、**四角形の頂点は4つ**。
+      実測 4 通り。以前は頂点名を dup_key に算入していた。
     given: [statement]
     asked: [choice]
     visual: none

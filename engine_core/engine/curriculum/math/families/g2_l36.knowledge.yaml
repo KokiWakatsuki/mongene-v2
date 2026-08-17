@@ -19,6 +19,12 @@ levels:
     signature: congruence_symbol_and_side
     recipe: math.congruence_symbol_and_side
     params: {}
+    dup_rate_max: 0.98
+    dup_rate_reason: |
+      「合同の記号」＋「指定した辺に対応する辺」を答える問題で、**三角形の辺は3本**しかない。
+      どの辺の対応を問うかが唯一の軸で、実測 3 通り。以前は2つの三角形の頂点名
+      （各17〜15通り）を dup_key に算入していたが、**名前が ABC か BCD かで問題は変わらない**。
+      増やすには四角形に広げる等の新しい題材設計が要る（教材の中身の追加）。
     given: [statement]
     asked: [choice]
     visual: none
@@ -30,6 +36,10 @@ levels:
     signature: congruence_corresponding_pair
     recipe: math.congruence_corresponding_pair
     params: {}
+    dup_rate_max: 0.93
+    dup_rate_reason: |
+      「対応する角」＋「対応する辺」を答える問題で、三角形の角3つ×辺3つ＝**9通り**。
+      実測 9 通り。以前は頂点名を dup_key に算入していた。
     given: [statement]
     asked: [choice]
     visual: none
