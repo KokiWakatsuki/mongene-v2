@@ -632,14 +632,17 @@ def solve_triangle_height_area_solo(numbers: Mapping[str, Any]) -> list[Solution
             "set_unknown_on_base",
             "分かれた底辺の一方の長さを文字でおくと、もう一方は底辺の長さからその分をひいた"
             "残りになる。",
-            x, "cm",
+            # **文字でおく手なのに、解いた値（15 cm）を出していた。**
+            # 次の手で方程式を立てて解くのに、その答えが1手前に出ている。
+            # この手で得たのは「x と 21 - x」という表し方である。
+            note=f"x と {a} - x",
         ),
         _step(
             "express_height_two_ways",
             "2つの直角三角形それぞれで、高さの二乗を三平方の定理で表す。"
             "高さは共通だから、その2つの式は等しい。この方程式を解いて、"
             "分けた底辺の長さを求める。",
-            note=f"{c}² - x² = {b}² - ({a} - x)²",
+            note=f"{c}² - x² = {b}² - ({a} - x)²、x = {_fmt(x, 'cm')}",
         ),
         _step(
             "apply_pythagorean_theorem",
