@@ -37,23 +37,23 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - survey_method_terms.term_recall
-  explanation: 'まず、説明されている式や数の部分がどれかを読み取る。（対象すべてを調べる調査）
+  explanation: 'まず、全部を調べるのか、一部を取り出して全体を推定するのかを読み取る。（対象すべてを調べる調査）
 
     次に、対象すべてを調べる調査を全数調査という。（全数調査）'
   hints:
-  - 説明されている式や数の部分がどれかを読み取る。
+  - 全部を調べるのか、一部を取り出して全体を推定するのかを読み取る。
   label: (1)
   prompt_text: 答えなさい。
   solution_steps:
   - args: []
     detail: ''
-    narration: 説明されている式や数の部分がどれかを読み取る。
+    narration: 全部を調べるのか、一部を取り出して全体を推定するのかを読み取る。
     op: identify_description
     result_display: 対象すべてを調べる調査
     result_srepr: census
   - args: []
     detail: 対象すべてを調べる調査を全数調査という。
-    narration: その対象を表す用語の名前を思い出す。
+    narration: その調べ方を表す用語の名前を思い出す。
     op: name_concept
     result_display: 全数調査
     result_srepr: 全数調査
