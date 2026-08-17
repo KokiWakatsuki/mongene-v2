@@ -95,14 +95,32 @@ def type_axes(params: dict) -> list[str]:
     return sorted(out)
 
 
+def _mask_names(v: object) -> object:
+    """点名（連続する大文字）を伏せる。数字と日本語はそのまま。
+
+    型の鍵に使う。`labels` のような表層の軸が鍵に入っていると、名前だけ違う問題が
+    別の型になる。文字列以外はそのまま返す（数値の軸は伏せてはいけない）。
+    """
+    if isinstance(v, str):
+        return re.sub(r"[A-Z]", "＊", v)
+    if isinstance(v, (list, tuple)):
+        return [_mask_names(x) for x in v]
+    return v
+
+
 def text_skeleton(text: str) -> str:
     """問題文から数字を落とした骨格（話が違えばここが変わる）。
 
     `scene_set` のように**カタログが params に載らない**セルがある（場面は問題文を
     変えるのに、params には数値しか残らない）。名前でも値でも対応づけられないので、
     最後は問題文そのものの形で見分ける。
+
+    ★**点名（大文字）も落とす。** 落としていなかったので、数値も場面も同じで
+    頂点名だけ違う問題を別の型として数え、問題集に同じ問題が2回載っていた
+    （実測 12問/6組）。`dup_key` から表層を外したのと同じ理由——
+    **名前が違うだけの問題は別の問題ではない**。
     """
-    return re.sub(r"\d+", "#", text)
+    return re.sub(r"[A-Z]", "＊", re.sub(r"\d+", "#", text))
 
 
 def load_cells() -> list[tuple[str, str, int, list[set], int]]:
@@ -213,7 +231,12 @@ def main() -> None:
         found: dict[str, int] = {}
         labels: dict[str, str] = {}   # 鍵 → 読めるラベル（鍵を読み直さない）
         for seed, params, narration in seen_rows:
-            parts: list[object] = [[a, params.get(a)] for a in axes] + [list(narration)]
+            # ★点名（大文字）は鍵から落とす。narration には「三角形ABCと三角形EDCで」
+            # のように点名が入るので、落とさないと**数値も場面も同じで名前だけ違う
+            # 問題を別の型として数え、問題集に同じ問題が2回載る**（実測 12問/6組）。
+            # `dup_key` から表層を外したのと同じ理由。
+            masked = [_mask_names(s) for s in narration]
+            parts: list[object] = [[a, _mask_names(params.get(a))] for a in axes] + [masked]
             if use_text:
                 res = generate(
                     GenerateRequest(subject="math", unit=unit, form=form,
