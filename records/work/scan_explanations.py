@@ -12,17 +12,39 @@ from __future__ import annotations
 
 import os
 import re
+import sys
 from collections import defaultdict
 from pathlib import Path
 
 # 出力先は `build_corpus.py --out` / 環境変数で動かせる。読む側も同じ場所を見る
 # （engine_core だけをメインへ移したとき、置き場がずれても走査が追えるように）。
 _SRC = Path(os.environ.get("MONGENE_CORPUS_DIR", "records/work/corpus")) / "INDEX.md"
+
+
+def corpus_index(argv: list[str] | None = None) -> Path:
+    """読むコーパス。第1引数があればそれを使う（既定は環境変数）。
+
+    ★**引数を黙って捨てないこと。** もとは `load()` が引数を取らず、
+    `scan_explanations.py <別のコーパス>` と渡しても既定の場所を読んでいた。
+    作り直したコーパスを走査したつもりで**古いほうの 0 件を見て「直った」と
+    判断しかけた**。渡されたものは使うか、使えないなら止める。
+    """
+    args = [a for a in (argv if argv is not None else sys.argv[1:]) if not a.startswith("-")]
+    if not args:
+        return _SRC
+    if len(args) > 1:
+        raise SystemExit(f"コーパスは1つだけ指定すること: {args}")
+    path = Path(args[0])
+    index = path if path.name == "INDEX.md" else path / "INDEX.md"
+    if not index.exists():
+        raise SystemExit(f"コーパスが見つからない: {index}")
+    return index
 _CELL_RE = re.compile(r"^##\s+((?:exam|g[123])_l\d+\.\w+\.Lv\d+)")
 
 
-def load() -> list[tuple[str, str, str, str, str]]:
+def load(index: Path | None = None) -> list[tuple[str, str, str, str, str]]:
     """(セル, 問題文, 答え, 解説, ヒント) の一覧。"""
+    src = index if index is not None else corpus_index()
     out: list[tuple[str, str, str, str, str]] = []
     cell = pending = ""
     buf: dict[str, list[str]] = {"q": [], "a": [], "e": [], "h": []}
@@ -38,7 +60,7 @@ def load() -> list[tuple[str, str, str, str, str]]:
                 "\n".join(buf["h"]).strip(),
             ))
 
-    for line in _SRC.read_text(encoding="utf-8").splitlines():
+    for line in src.read_text(encoding="utf-8").splitlines():
         m = _CELL_RE.match(line)
         if m:
             cell = m.group(1)

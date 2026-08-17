@@ -14,7 +14,7 @@ from __future__ import annotations
 import re
 from collections import Counter, defaultdict
 
-from scan_explanations import _STEP_RE, load
+from scan_explanations import _STEP_RE, corpus_index, load
 
 
 def _steps(e: str) -> list[tuple[str, str]]:
@@ -130,7 +130,7 @@ def _unused_given_numbers(q: str, a: str, e: str) -> list[str]:
 
 
 def main() -> None:
-    rows = load()
+    rows = load(corpus_index())
     hits: dict[str, list[tuple[str, str]]] = defaultdict(list)
     dup: dict[tuple[str, str], list[str]] = defaultdict(list)
 
