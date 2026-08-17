@@ -276,8 +276,11 @@ def solve_moving_points_area_time(v: object, area: object) -> Solution:
             op=op,
             args=[],
             result_srepr=srepr if i == len(ops) - 1 else "",
+            # **二乗が落ちていた。** 面積は (v²/2)x² なのに、一次の式を作る
+            # `_linear_area_display` を使って「8x = 288」と出していた。
+            # 表示された方程式を解くと x = 36 で、答えの 6秒後 と食い違う。
             result_display=disp if i == len(ops) - 1
-            else f"{_linear_area_display(sympy.Rational(v_v**2, 2))[4:]} = {sympy.sstr(area_v)}",
+            else f"{_coeff_display(sympy.Rational(v_v**2, 2))}x² = {sympy.sstr(area_v)}",
             narration=narration[op],
         )
         for i, op in enumerate(ops)
