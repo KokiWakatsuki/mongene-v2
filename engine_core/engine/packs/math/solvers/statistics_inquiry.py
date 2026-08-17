@@ -214,16 +214,22 @@ def _pick_unique(labels: object, flags: object) -> tuple[str, list[str]]:
 def choose_unbiased_sampling_method(labels: object, flags: object) -> Solution:
     """並んだ抽出方法のうち、偏りが生じにくいものを1つ選ぶ（g3_l58.word_problem Lv2）。"""
     correct, others = _pick_unique(labels, flags)
+    # **問いは「理由を考えたうえで選べ」。** 方法だけを返していたので、
+    # 求められた理由が答えに入っていなかった。
+    reason = "（母集団のどの対象も同じ機会で選ばれ、偏りが生じにくいから）"
+    wrong_reason = "（一部の対象だけが選ばれやすく、偏りが生じるから）"
     return Solution(
         answer=ChoiceAnswer(
-            correct=correct, distractors=others, fact_id="sampling.choose_unbiased"
+            correct=f"{correct}{reason}",
+            distractors=[f"{o}{wrong_reason}" for o in others],
+            fact_id="sampling.choose_unbiased",
         ),
         steps=_steps([
             ("list_candidate_methods", "", "",
              "示されたそれぞれの方法について、どんな人が選ばれることになるかを考える。"),
             ("check_equal_chance", "", f"同じ機会になるのは「{correct}」だけ",
              "母集団にふくまれるすべての対象が、同じ機会で選ばれる方法になっているかを調べる。"),
-            ("choose_unbiased_method", correct, correct,
+            ("choose_unbiased_method", correct, f"{correct}{reason}",
              "一部の対象だけが選ばれやすい方法を除き、偏りが生じにくいものを選ぶ。"),
         ]),
     )

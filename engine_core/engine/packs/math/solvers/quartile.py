@@ -767,8 +767,9 @@ def read_box_plot_single_statistic(
     return Solution(answer=SymbolicAnswer(srepr=srepr, display=disp), steps=steps)
 
 
-_SPREAD_CLAIM_YES = "正しいといえる"
-_SPREAD_CLAIM_NO = "正しいとはいえない"
+# 問いは「理由をつけて答えよ」。結論だけでは求められたものの半分しか返らない。
+_SPREAD_CLAIM_YES = "正しいといえる（四分位範囲も範囲も、どちらも同じ側が大きいから）"
+_SPREAD_CLAIM_NO = "正しいとはいえない（四分位範囲と範囲で大きいほうが食い違うから）"
 
 
 @register_solver("math.judge_spread_claim_by_two_measures")
