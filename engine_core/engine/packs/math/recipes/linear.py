@@ -31,6 +31,7 @@ from engine.core.contracts import (
 from engine.core.registry import REGISTRY, register_recipe
 from engine.core.rng import Rng, draw, draw_many
 from engine.packs.math.visuals.graph import (
+    compute_grid_spec_from_params,
     render_line_solution_svg,
     render_segment_solution_svg,
     render_special_lines_solution_svg,
@@ -1455,6 +1456,27 @@ def _format_segment_x_domain(
     return f"{_fmt_number(x_lo)} {lo_sign} x {hi_sign} {_fmt_number(x_hi)}"
 
 
+# 線分が方眼に対して小さすぎないための下限（辺の比）。0.3 で 5720 通り中 3614 通り
+# （63%）が残る＝どの傾き・切片・変域端も出るまま、読めない組だけが落ちる。
+_SEGMENT_MIN_FILL = 0.3
+
+
+def _segment_fills_grid(a: int, b: int, x_lo: int, x_hi: int) -> bool:
+    """線分が方眼のどれだけを占めるかを見て、小さすぎる組を弾く。
+
+    **定義域は狭めない。** 座標平面は縦横等スケールで、しかも原点が見えるように
+    最小の広さを取るので、端点が原点から遠く（y が -15 付近）かつ線分が短いと、
+    枠の 4% しか使わない図になる（実際に g2_l23 Lv2 で出ていた）。
+    値の範囲ではなく**組み合わせ**を見るので、どの傾き・切片・変域端も出続ける。
+    """
+    y_lo, y_hi = a * x_lo + b, a * x_hi + b
+    spec = compute_grid_spec_from_params({"pts": [f"({x_lo}, {y_lo})", f"({x_hi}, {y_hi})"]})
+    w, h = spec.x_hi - spec.x_lo, spec.y_hi - spec.y_lo
+    if w <= 0 or h <= 0:
+        return False
+    return max((x_hi - x_lo) / w, abs(y_hi - y_lo) / h) >= _SEGMENT_MIN_FILL
+
+
 @register_recipe("math.draw_segment", provides_concepts=_DRAW_SEGMENT_CONCEPTS)
 def draw_segment(ctx: CellContext, rng: Rng) -> MR:
     """変域つき1次関数を端点の開閉を区別して線分としてかく（answer-first・「かく」Lv2）。
@@ -1465,11 +1487,16 @@ def draw_segment(ctx: CellContext, rng: Rng) -> MR:
     つきの線分（render_segment_solution_svg）。
     """
     p = ctx.spec_level.params
-    a = draw(p["slope_domain"], rng)
-    b = draw(p["intercept_domain"], rng)
-    x_lo, x_hi = sorted(draw_many(p["x_domain_endpoints"], rng, k=2))  # 相異な2整数を昇順に
-    closed_lo = draw(p["closed_domain"], rng)  # 素の配列 [True, False]
-    closed_hi = draw(p["closed_domain"], rng)
+    for _ in range(300):
+        a = draw(p["slope_domain"], rng)
+        b = draw(p["intercept_domain"], rng)
+        x_lo, x_hi = sorted(draw_many(p["x_domain_endpoints"], rng, k=2))  # 相異な2整数を昇順に
+        closed_lo = draw(p["closed_domain"], rng)  # 素の配列 [True, False]
+        closed_hi = draw(p["closed_domain"], rng)
+        if _segment_fills_grid(a, b, x_lo, x_hi):
+            break
+    else:
+        raise ValueError("線分が方眼に対して大きく描ける組を構成できず")
 
     a_s, b_s = sympy.nsimplify(a), sympy.nsimplify(b)
     x_lo_s, x_hi_s = sympy.nsimplify(x_lo), sympy.nsimplify(x_hi)

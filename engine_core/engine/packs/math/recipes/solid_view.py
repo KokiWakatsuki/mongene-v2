@@ -627,7 +627,13 @@ def box_view_recipe(ctx: CellContext, rng: Rng) -> MR:
             "width_px": _to_px(a + b, lo, 2 * hi) * 1.4,
             "height_px": params["height_px"],
             "draw_diagonal": True,
-            "vertices": [],
+            # **頂点名を書く。** 空にしていたので、開いた長方形に対角線が1本
+            # 引いてあるだけの図になり、「頂点Aから頂点Gまで」の経路がどれなのか
+            # 読めなかった。並びは断面の場合と同じ「左下→右下→右上→左上」
+            # （対角線は左下と右上を結ぶ）。
+            # 2面 ABFE・BCGF を開くと、下の辺が A→B→C、上の辺が E→F→G になるので、
+            # 左下が A、右上が G ＝ 引かれる対角線がそのまま経路 AG になる。
+            "vertices": [n[0], n[2], n[6], n[4]],
         }
         answer = GraphAnswer(
             features=sol.answer.features,
