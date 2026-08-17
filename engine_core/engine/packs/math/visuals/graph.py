@@ -234,6 +234,39 @@ class _GridScaffold(NamedTuple):
     y_step: int = 1
 
 
+def _line_endpoints_in_grid(
+    a: sympy.Expr, b: sympy.Expr, sc: _GridScaffold
+) -> tuple[float, float, float, float] | None:
+    """直線 y=ax+b を、方眼の枠 [x_lo,x_hi]×[y_lo,y_hi] で切り取った画素座標を返す。
+
+    枠の左端から右端まで引くと、**傾きが大きいとき線が枠の外へはみ出す**
+    （y が y_lo..y_hi に収まらない）。曲線のほうは `_curve_polylines` が枠外を
+    切っているのに、直線だけ切っていなかった。市販の教材では直線は必ず枠内で
+    止まる。枠と交わらない直線は None（引かない）。
+    """
+    x_lo, x_hi = float(sc.x_lo), float(sc.x_hi)
+    y_lo, y_hi = float(sc.y_lo), float(sc.y_hi)
+    a_f, b_f = float(a), float(b)
+
+    if a_f == 0:
+        if not (y_lo <= b_f <= y_hi):
+            return None
+        xs = (x_lo, x_hi)
+    else:
+        # y が枠内に収まる x の区間を、左右の枠と上下の枠の両方から狭める。
+        x_at_y_lo, x_at_y_hi = (y_lo - b_f) / a_f, (y_hi - b_f) / a_f
+        lo = max(x_lo, min(x_at_y_lo, x_at_y_hi))
+        hi = min(x_hi, max(x_at_y_lo, x_at_y_hi))
+        if lo >= hi:
+            return None
+        xs = (lo, hi)
+
+    return (
+        sc.to_px_x(xs[0]), sc.to_px_y(a_f * xs[0] + b_f),
+        sc.to_px_x(xs[1]), sc.to_px_y(a_f * xs[1] + b_f),
+    )
+
+
 def _grid_scaffold(params: dict[str, Any]) -> _GridScaffold:
     """SVG open+rect+グリッド線+軸までを組む（描画要素・目盛の手前まで・決定論）。"""
     spec = compute_grid_spec_from_params(params)
@@ -357,15 +390,13 @@ def render_grid_svg(
     if draw_line:
         a = sympy.nsimplify(sympy.sympify(params["a"]))
         b = sympy.nsimplify(sympy.sympify(params["b"]))
-        x_start, x_end = sc.x_lo, sc.x_hi
-        y_start = a * x_start + b
-        y_end = a * x_end + b
-        px1, py1 = sc.to_px_x(x_start), sc.to_px_y(float(y_start))
-        px2, py2 = sc.to_px_x(x_end), sc.to_px_y(float(y_end))
-        parts.append(
-            f'<line x1="{px1:.2f}" y1="{py1:.2f}" x2="{px2:.2f}" y2="{py2:.2f}" '
-            f'stroke="#000000" stroke-width="2.5"/>'
-        )
+        ends = _line_endpoints_in_grid(a, b, sc)
+        if ends is not None:
+            px1, py1, px2, py2 = ends
+            parts.append(
+                f'<line x1="{px1:.2f}" y1="{py1:.2f}" x2="{px2:.2f}" y2="{py2:.2f}" '
+                f'stroke="#000000" stroke-width="2.5"/>'
+            )
 
     # --- 特殊直線 x=k（垂直）/ y=k（水平）（g2_l26 Lv2・任意） ---
     if vline_x is not None:
@@ -404,12 +435,13 @@ def render_line_and_polygon_svg(params: dict[str, Any], *, draw_line: bool) -> s
     if draw_line:
         a = sympy.nsimplify(sympy.sympify(params["a"]))
         b = sympy.nsimplify(sympy.sympify(params["b"]))
-        y_start, y_end = a * sc.x_lo + b, a * sc.x_hi + b
-        parts.append(
-            f'<line x1="{sc.to_px_x(sc.x_lo):.2f}" y1="{sc.to_px_y(float(y_start)):.2f}" '
-            f'x2="{sc.to_px_x(sc.x_hi):.2f}" y2="{sc.to_px_y(float(y_end)):.2f}" '
-            f'stroke="#000000" stroke-width="2.5"/>'
-        )
+        ends = _line_endpoints_in_grid(a, b, sc)
+        if ends is not None:
+            px1, py1, px2, py2 = ends
+            parts.append(
+                f'<line x1="{px1:.2f}" y1="{py1:.2f}" x2="{px2:.2f}" y2="{py2:.2f}" '
+                f'stroke="#000000" stroke-width="2.5"/>'
+            )
 
     poly = [_parse_point(s) for s in params["polygon_pts"]]
     px = [(sc.to_px_x(float(x)), sc.to_px_y(float(y))) for x, y in poly]
@@ -649,12 +681,13 @@ def render_curve_svg(
     if line is not None:
         m_s = sympy.nsimplify(sympy.sympify(line[0]))
         b_s = sympy.nsimplify(sympy.sympify(line[1]))
-        px1, py1 = sc.to_px_x(sc.x_lo), sc.to_px_y(float(m_s * sc.x_lo + b_s))
-        px2, py2 = sc.to_px_x(sc.x_hi), sc.to_px_y(float(m_s * sc.x_hi + b_s))
-        parts.append(
-            f'<line x1="{px1:.2f}" y1="{py1:.2f}" x2="{px2:.2f}" y2="{py2:.2f}" '
-            f'stroke="#000000" stroke-width="2.5"/>'
-        )
+        ends = _line_endpoints_in_grid(m_s, b_s, sc)
+        if ends is not None:
+            px1, py1, px2, py2 = ends
+            parts.append(
+                f'<line x1="{px1:.2f}" y1="{py1:.2f}" x2="{px2:.2f}" y2="{py2:.2f}" '
+                f'stroke="#000000" stroke-width="2.5"/>'
+            )
 
     # --- 曲線と直線が囲む部分の斜線（境界＝放物線の弧＋直線） ---
     if hatch_between and line is not None:

@@ -40,6 +40,14 @@ def _text(x: float, y: float, s: str, *, size: int = 12, anchor: str = "middle")
     )
 
 
+def _text_width(s: str, size: int) -> float:
+    """文字列の描画幅の見積り（全角は 1em、半角は約 0.55em）。
+
+    SVG は文字を測らずに置くので、円や枠に収めたいときはここで見積る。
+    """
+    return sum(size if ord(ch) > 0x2E80 else size * 0.55 for ch in s)
+
+
 def _circle(cx: float, cy: float, r: float) -> str:
     return (
         f'<circle cx="{cx:.2f}" cy="{cy:.2f}" r="{r:.2f}" fill="none" '
@@ -57,10 +65,16 @@ def render_tree_subject_svg(params: dict[str, Any]) -> str:
     **樹形図は描かない**（それが答え）。
     """
     labels = [str(v) for v in params["subject_labels"]]
-    width, height = 420, 170
+    font = 13
+    # **円の大きさは中の文字に合わせる。** 半径を 30 に固定していたので
+    # 「500円硬貨」（6字）が円からはみ出していた。文字は円の中心の高さに
+    # 書くので、収まる条件は「文字の半分の幅 < 半径」ではなく、文字の高さの
+    # ぶんだけ内側に寄った弦の半分（≒0.85r）に収まること。
+    half_w = max(_text_width(s, font) for s in labels) / 2
+    r = max(30.0, half_w / 0.85 + 4.0)
+    gap = 2 * r + 18.0
+    width, height = max(420, int(gap * (len(labels) - 1) + 2 * r + 40)), 170
     parts = _svg_open(width, height)
-    r = 30.0
-    gap = 78.0
     total = gap * (len(labels) - 1)
     x0 = width / 2 - total / 2
     for i, label in enumerate(labels):

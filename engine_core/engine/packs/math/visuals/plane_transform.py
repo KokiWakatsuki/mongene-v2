@@ -127,17 +127,23 @@ def _polygon_parts(
 
 
 def _axis_line_parts(sc: _GridScaffold, axis: str) -> list[str]:
-    """対称の軸(x軸/y軸に対応する太線)を描く（grid_only スタイルで ℓ を示す用）。"""
+    """対称の軸(x軸/y軸に対応する太線)を描き、端に ℓ と書く。
+
+    **名前が要る。** 本文は「直線ℓを対称の軸として」と呼ぶのに、図には名前の無い
+    線が1本引いてあるだけだった。どの線が ℓ なのかは図から読めない。
+    """
     if axis == "x_axis":
         py = sc.to_px_y(0)
         return [
             f'<line x1="{sc.plot_lo:.2f}" y1="{py:.2f}" x2="{sc.plot_hi:.2f}" y2="{py:.2f}" '
-            f'stroke="#000000" stroke-width="1.5"/>'
+            f'stroke="#000000" stroke-width="1.5"/>',
+            haloed_text(sc.plot_hi - 8, py - 8, "ℓ", size=14, anchor="end"),
         ]
     px = sc.to_px_x(0)
     return [
         f'<line x1="{px:.2f}" y1="{sc.plot_lo:.2f}" x2="{px:.2f}" y2="{sc.plot_hi:.2f}" '
-        f'stroke="#000000" stroke-width="1.5"/>'
+        f'stroke="#000000" stroke-width="1.5"/>',
+        haloed_text(px + 10, sc.plot_lo + 14, "ℓ", size=14, anchor="start"),
     ]
 
 

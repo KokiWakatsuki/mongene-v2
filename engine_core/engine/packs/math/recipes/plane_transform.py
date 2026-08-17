@@ -325,7 +325,9 @@ def _reflect_polygon_recipe(ctx: CellContext, rng: Rng, *, style: str) -> MR:
     )
     visual_plan = VisualPlan(
         style="grid" if style == "grid_only" else "coordinate",
-        labels=(_VERTEX_LABELS if style == "grid_only" else _VERTEX_LABELS + _tick_labels(pts, _new_pts_from_features(sol.answer))),
+        # grid_only では対称の軸を ℓ と名づけて図に書く（本文が「直線ℓ」と呼ぶのに、
+        # 図には名前の無い線が1本引いてあるだけだった）。
+        labels=([*_VERTEX_LABELS, "ℓ"] if style == "grid_only" else _VERTEX_LABELS + _tick_labels(pts, _new_pts_from_features(sol.answer))),
         elements=[
             VisualElement(kind="grid", attrs={}),
             VisualElement(kind="polygon", attrs={"role": "original"}),
