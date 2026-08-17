@@ -12,6 +12,8 @@ C1（g1 数と式・一次方程式）クラスタの解法セル群を1つの�
 """
 from __future__ import annotations
 
+import re
+
 import sympy
 
 from engine.core.contracts import Solution, Step, SymbolicAnswer
@@ -84,13 +86,44 @@ _OP_NARRATION: dict[str, str] = {
 # 途中の手の括弧に入れる**式そのもの**（面③）。以前は「分母をはらう」のような
 # 指示の言い直しが入っていた。`narration` は触らない（ヒントは narration しか見ない）。
 # ---------------------------------------------------------------------------
+def _denominator_lcm_written(equation_str: str) -> int:
+    """**書かれた分母**の最小公倍数（分母が無ければ 1）。
+
+    ★**sympy の式から取ってはいけない。** `x/3 + x/6` は sympify した時点で
+    `x/2` にまとまるので、分母を式から読むと 2 が出る。実際そう書いていて、
+    解説が「分母の最小公倍数 2 を両辺にかけて」＝**数学的に誤り**（3 と 6 の
+    最小公倍数は 6）になっていた。しかも 2 をかけると一足飛びに x = 4 が出て、
+    途中の 3x = 12 が解説から消えていた。
+    `x/5 + x/10` は約めても分母が 10 のままなので、そちらだけ正しく見えていた。
+
+    文字列に書かれている `/<数>` をすべて拾う。
+    """
+    lcm = 1
+    # 分母はかっこで包まれていることがある（`(x+(-6))/(2)`）。
+    # `/` の直後に数字だけを見ていたので、この形の式で 1 が返っていた。
+    for den in re.findall(r"/\s*\(?\s*(\d+)", equation_str):
+        lcm = sympy.ilcm(lcm, int(den))
+    return int(lcm)
+
+
 def _denominator_lcm(*exprs: sympy.Expr) -> int:
-    """式に出てくる分母の最小公倍数（分母が無ければ 1）。"""
+    """式の項に残っている分母の最小公倍数（分母が無ければ 1）。"""
     lcm = 1
     for e in exprs:
         for term in sympy.expand(e).as_ordered_terms():
             lcm = sympy.ilcm(lcm, int(sympy.denom(sympy.together(term))))
-    return lcm
+    return int(lcm)
+
+
+def _clear_multiplier(equation_str: str, lhs: sympy.Expr, rhs: sympy.Expr) -> int:
+    """両辺にかける数。**書かれた分母と、いまの式に残る分母の両方**から取る。
+
+    どちらか一方では足りない:
+      文字列だけ  … かっこを外した後の手では、もとの文字列に無い分母が出る
+      式だけ      … `x/3 + x/6` は sympify した時点で `x/2` にまとまる（→ 2）
+    大きいほうに合わせれば、どちらの場合も分母が払える。
+    """
+    return int(sympy.ilcm(_denominator_lcm_written(equation_str), _denominator_lcm(lhs, rhs)))
 
 
 def _signed(v: sympy.Expr) -> str:
@@ -165,7 +198,7 @@ def _apply_step(
         new_l, new_r = sympy.expand(lhs), sympy.expand(rhs)
         return f"{fmt_expr(new_l)} = {fmt_expr(new_r)}", "", new_l, new_r
     if op == "clear_denominators":
-        m = _denominator_lcm(lhs, rhs)
+        m = _clear_multiplier(equation_str, lhs, rhs)
         new_l, new_r = sympy.expand(m * lhs), sympy.expand(m * rhs)
         # **かける数を名指しする。** 実物は必ず「両辺に 6 をかけて」と数を書く。
         detail = f"分母の最小公倍数 {m} を両辺にかけて、分母をはらう。"
