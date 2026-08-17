@@ -14,6 +14,11 @@ from engine.core.contracts import ChoiceAnswer, Solution, Step
 from engine.core.registry import register_solver
 
 
+def _deg(a: float) -> str:
+    """角を「52°」の形にする（.0 を出さない）。"""
+    return f"{int(a)}°" if float(a).is_integer() else f"{a}°"
+
+
 def _steps(pairs: list[tuple[str, str, str]], final: str) -> list[Step]:
     """(op, narration, phrase) の並びから Step を作る（最後の手だけ答えを持つ）。"""
     return [
@@ -86,9 +91,12 @@ def identify_parallel_line(
     steps = _steps(
         [
             (
+                # 1手目の括弧が空だった。読み取った角をそのまま出す。
                 "read_angles_with_transversal",
                 "それぞれの直線が横断線となす角を図から読み取る。",
-                "",
+                "、".join(
+                    f"直線{n} は {_deg(a)}" for n, a in zip(name_list, angle_list, strict=True)
+                ),
             ),
             (
                 "compare_corresponding_angles",
@@ -133,9 +141,10 @@ def identify_right_triangle_sides(labels: object, right_index: object) -> Soluti
     steps = _steps(
         [
             (
+                # 1手目の括弧が空で、読み取った当のものが出ていなかった。
                 "locate_right_angle",
                 "図の直角の記号から、どの頂点が直角かを確かめる。",
-                "",
+                f"直角は頂点{right}",
             ),
             (
                 "identify_hypotenuse_and_legs",

@@ -30,6 +30,7 @@ from engine.packs.math.geometry.facts import (
     Point,
     ang,
     ang_eq,
+    ang_text,
     collinear,
     parallel_dir,
     parallelogram,
@@ -364,5 +365,10 @@ def pgram_isosceles_diagonal(p: dict[str, Any]) -> Construction:
     f = ang_eq(ang("A", "B", "C"), ang("C", "A", "B"))
     c.facts.add(f)
     c.givens.append(f)
-    c.description = "平行四辺形ABCDで、対角線ACをひいたところ、∠BAC ＝ ∠BCA であった"
+    # 事実は ang_eq(ang("A","B","C"), ang("C","A","B")) ＝ ∠BAC と ∠ACB。
+    # 手書きの「∠BCA」だけ並びが違っていた。
+    c.description = (
+        "平行四辺形ABCDで、対角線ACをひいたところ、"
+        f"{ang_text(ang('A', 'B', 'C'))} ＝ {ang_text(ang('C', 'A', 'B'))} であった"
+    )
     return c

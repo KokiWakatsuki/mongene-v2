@@ -42,6 +42,12 @@ def _format_linear_rhs(a: sympy.Expr, b: sympy.Expr) -> str:
         a_part = "x"
     elif a_s == -1:
         a_part = "-x"
+    elif a_s.is_Rational and a_s.q != 1:
+        # **分数の係数はかっこでくくる。** `-5/4x` と書くと -5/(4x) と読めてしまう。
+        # 問題文の側は「y = -(5/4)x + 4」と書いているので、そちらに合わせる。
+        a_part = (
+            f"-({_format_number(-a_s)})x" if a_s < 0 else f"({_format_number(a_s)})x"
+        )
     else:
         a_part = f"{_format_number(a_s)}x"
     if b_s == 0:
@@ -835,7 +841,9 @@ def draw_linear_features_fraction(p: object, q: object, b: object) -> Solution:
             op="draw_line",
             args=[],
             result_srepr=sympy.srepr(slope * X + b_s),
-            result_display=_format_linear_rhs(slope, b_s),
+            # 兄弟の Lv1 は「（y = 3x + 9）」と y = をつけていて、ここだけ
+            # 右辺だけを出していた。
+            result_display=_format_expr_display(slope, b_s),
             narration="切片と格子点の2点を通る直線をひく。",
         ),
     ]

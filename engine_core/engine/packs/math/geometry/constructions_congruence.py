@@ -10,7 +10,14 @@ from typing import Any
 
 from engine.packs.math.geometry.catalog import register_construction
 from engine.packs.math.geometry.construct import Construction
-from engine.packs.math.geometry.facts import ang, ang_eq, collinear, seg, seg_eq
+from engine.packs.math.geometry.facts import (
+    ang,
+    ang_eq,
+    ang_text,
+    collinear,
+    seg,
+    seg_eq,
+)
 
 
 @register_construction("kite")
@@ -139,7 +146,10 @@ def alternate_angle_cross(p: dict[str, Any]) -> Construction:
     # B は A から見て O の向こう側、D は C から見て O の向こう側（＝錯角の位置）。
     c.coords["B"] = (-arm * math.cos(theta) + other, arm * math.sin(theta) - other * 0.35)
     c.coords["D"] = (arm * math.cos(theta) - other, -arm * math.sin(theta) + other * 0.35)
-    c.steps.append("∠OABと∠OCDが等しくなるように点B、Dをとる")
+    c.steps.append(
+        f"{ang_text(ang('A', 'O', 'B'))}と{ang_text(ang('C', 'O', 'D'))}"
+        "が等しくなるように点B、Dをとる"
+    )
     for triple in (("A", "O", "C"), ("B", "O", "D")):
         c.facts.add(collinear(*triple))
         c.collinear_order.append(triple)
@@ -148,7 +158,13 @@ def alternate_angle_cross(p: dict[str, Any]) -> Construction:
     c.givens.append(equal)
     for x, y in (("A", "C"), ("B", "D"), ("A", "B"), ("C", "D")):
         c.connect(x, y)
-    c.description = "右の図で、2直線ACとBDは点Oで交わっていて、∠OAB ＝ ∠OCD である"
+    # **問題文の角名は、事実の側と同じ書き方にする。** 手で「∠OAB ＝ ∠OCD」と
+    # 書いていたので、証明の「仮定より」の行だけ ∠BAO ＝ ∠DCO と出て、
+    # 生徒が仮定を書き写すときに対応が取れなかった。`ang_text` から組む。
+    c.description = (
+        "右の図で、2直線ACとBDは点Oで交わっていて、"
+        f"{ang_text(ang('A', 'O', 'B'))} ＝ {ang_text(ang('C', 'O', 'D'))} である"
+    )
     return c
 
 
