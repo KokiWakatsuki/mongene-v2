@@ -310,6 +310,9 @@ _CHOICE_FALLBACK_PROMPT = "答えなさい。"
 
 
 _ENUMERATED = re.compile(r"\(1\)[\s\S]*\(2\)")
+# 本文が「〜について解け」と言っているのに、問いが「式に表しなさい。」だった
+# （g2_l9 の3レベル）。**求めるのは新しい式ではなく、指定した文字についての形**。
+_SOLVE_FOR = re.compile(r"について解[けきく]")
 
 
 def _body_enumerates_subquestions(problem_text: str) -> bool:
@@ -395,6 +398,8 @@ def render_text(mr: "MR", ctx: "CellContext", *, registry: _Registry = REGISTRY)
         asked = tctx.sub_questions[i].asked
         if getattr(sq.answer, "kind", "") == "choice":
             prompts[sq.label] = _choice_prompt(sq.answer, problem_text, mr.seed, sq.label)
+        elif _SOLVE_FOR.search(problem_text):
+            prompts[sq.label] = "式を変形しなさい。"
         elif _body_enumerates_subquestions(problem_text):
             # 本文が (1)(2)(3) と自分で小問を並べているとき、問いは**そのうちの1つ**しか
             # 名指しできない。「式に表しなさい。」と出ていたのに (3) は「x の値を

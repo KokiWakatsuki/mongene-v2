@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: word_problem_round_trip_average_speed
 problem_ref: 843f9cc05764e7f5
-problem_text: '町からとなり町まで、行きは時速10km、帰りは同じ道を時速15kmの速さで進んだところ、往復にかかった時間は5時間だった。
+problem_text: '町からとなり町まで、行きは自転車で時速10km、帰りは同じ道を自転車で時速15kmの速さで進んだところ、往復にかかった時間は5時間だった。
 
   町からとなり町までの片道の道のりと、往復の平均の速さを求めよ。'
 sub_questions:

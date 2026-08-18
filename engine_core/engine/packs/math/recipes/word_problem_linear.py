@@ -429,9 +429,9 @@ def _scene_round_trip(p: Mapping[str, Any], rng: Rng) -> LinearScene:
             "speed_go": speed_go, "speed_back": speed_back, "total_time": total_time,
         },
         scenario=(
-            f"{start}から{goal}まで、行きは時速{speed_go}km、帰りは同じ道を"
-            f"時速{speed_back}kmの速さで進んだところ、進むのにかかった時間は"
-            f"合わせて{total_time}時間だった。"
+            f"{start}から{goal}まで、行きは{_travel_means(speed_go)}時速{speed_go}km、"
+            f"帰りは同じ道を{_travel_means(speed_back)}時速{speed_back}kmの速さで"
+            f"進んだところ、進むのにかかった時間は合わせて{total_time}時間だった。"
         ),
         quantities=f"{start}から{goal}までの道のりを x km とする。",
         ask_formulation="かかった時間の関係を、x を使った方程式で表せ。",
@@ -821,8 +821,9 @@ def word_problem_round_trip_average_speed(ctx: CellContext, rng: Rng) -> MR:
         },
         given={
             "scenario": (
-                f"{start}から{goal}まで、行きは時速{speed_go}km、帰りは同じ道を"
-                f"時速{speed_back}kmの速さで進んだところ、往復にかかった時間は"
+                f"{start}から{goal}まで、行きは{_travel_means(speed_go)}時速{speed_go}km、"
+                f"帰りは同じ道を{_travel_means(speed_back)}時速{speed_back}kmの速さで"
+                f"進んだところ、往復にかかった時間は"
                 f"{total_time}時間だった。"
             )
         },
@@ -848,6 +849,20 @@ def word_problem_round_trip_average_speed(ctx: CellContext, rng: Rng) -> MR:
         visual_plan=None,
         provenance=Provenance(recipe=_ROUND_TRIP_AVG_RECIPE),
     )
+
+
+def _travel_means(speed: int) -> str:
+    """時速から移動の手段を決める。
+
+    ★**手段を書かないと場面が壊れる。** 「行きは時速6km、帰りは時速18km」と
+    書くと、時速18km（分速300m＝全力走）を歩きのまま続けることになる。
+    速さが変わるなら、何で移動したのかを本文に書く。
+    """
+    if speed <= 6:
+        return "歩いて"
+    if speed <= 20:
+        return "自転車で"
+    return "車で"
 
 
 def _draw_round_trip_average_scene(

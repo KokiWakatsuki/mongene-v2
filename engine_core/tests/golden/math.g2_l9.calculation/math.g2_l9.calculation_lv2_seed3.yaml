@@ -41,7 +41,7 @@ sub_questions:
   hints:
   - 解く文字の項だけを片方の辺に残すよう、ほかの項を移項する。
   label: (1)
-  prompt_text: 式に表しなさい。
+  prompt_text: 式を変形しなさい。
   solution_steps:
   - args: []
     detail: ''

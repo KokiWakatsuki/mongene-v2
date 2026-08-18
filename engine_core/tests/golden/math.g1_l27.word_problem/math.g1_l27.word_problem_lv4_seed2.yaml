@@ -24,7 +24,7 @@ meta:
   seed: 2
   signature: word_problem_round_trip_average_speed
 problem_ref: 35a6fd577aabdbf9
-problem_text: '港から島まで、行きは時速12km、帰りは同じ道を時速24kmの速さで進んだところ、往復にかかった時間は1時間だった。
+problem_text: '港から島まで、行きは自転車で時速12km、帰りは同じ道を車で時速24kmの速さで進んだところ、往復にかかった時間は1時間だった。
 
   港から島までの片道の道のりと、往復の平均の速さを求めよ。'
 sub_questions:
