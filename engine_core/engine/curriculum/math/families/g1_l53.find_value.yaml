@@ -49,8 +49,8 @@ levels:
       given_as_set: [radius, diameter]
     given: [condition]
     asked: [value]
-    visual: none
-    text: {tier: T1, template: lf_solid_sphere_direct_v1}
+    visual: required
+    text: {tier: T1, template: lf_solid_sphere_direct_v1, visual_builder: math.geometry_construction}
     hints: [steps_prefix]
     concept_tags: [sphere_measure.direct]
     cause_tags: []

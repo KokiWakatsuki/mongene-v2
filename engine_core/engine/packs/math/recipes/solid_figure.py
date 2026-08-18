@@ -61,18 +61,32 @@ _SKETCH_KIND = {
 }
 
 
-def _sketch_svg(values: dict[str, object]) -> str:
+# `values` に "shape" が無いセル（形が mode で決まっているもの）の対応表。
+_SKETCH_KIND_BY_MODE = {
+    "l53_sphere_direct": "sphere",
+    "l52_cylinder_volume_substitution": "cylinder",
+    "l51_cone_central_angle": "cone",
+}
+
+
+def _sketch_svg(values: dict[str, object], mode: str = "") -> str:
     """★**立体の単元も図が1枚も無かった。** 「底面が1辺13cmの正方形、高さ6cmの
     正四角錐の体積を求めよ」——実物の問題集はここに必ず見取図を添える。形が
     見えていないと、どの面が底面でどこが高さなのかを頭の中で組み立てることになる。
 
     描き手（visuals/solid.py の見取図）は既にあるので、寸法を画素に直して渡すだけ。
     """
-    kind = _SKETCH_KIND.get(str(values.get("shape", "")))
+    kind = _SKETCH_KIND.get(str(values.get("shape", ""))) or _SKETCH_KIND_BY_MODE.get(mode)
     if kind is None:
         return ""
     r = float(values.get("radius", 0) or 0)
     edge = float(values.get("edge", 0) or 0)
+    if kind == "sphere":
+        # 球は半径だけで決まる（幅も高さも直径）。
+        return render_solid_svg(
+            {"view": "sketch", "solid_kind": "sphere", "radius_px": 110.0},
+            draw=True,
+        )
     w = float(values.get("width", 0) or edge or 2 * r or 1)
     d = float(values.get("depth", 0) or edge or 2 * r or 1)
     h = float(values.get("height", 0) or values.get("slant", 0) or w)
@@ -94,7 +108,7 @@ def _sketch_svg(values: dict[str, object]) -> str:
 def _make_mr(ctx: CellContext, recipe_name: str, mode: str, values: dict[str, object],
              statement: str, given_key: str, sol: Solution) -> MR:
     assert isinstance(sol.answer, SymbolicAnswer)
-    figure_svg = _sketch_svg(values)
+    figure_svg = _sketch_svg(values, mode)
     sub_question = SubQuestionMR(
         label="(1)", asked="value", answer=sol.answer, steps=sol.steps,
         concept_tags=_effective_concept_tags(ctx), cause_tags=_effective_cause_tags(ctx),

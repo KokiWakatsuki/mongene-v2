@@ -188,11 +188,28 @@ def quadrilateral_with_one_diagonal_svg(
     return render_construction_svg(params)
 
 
+def plain_triangle_svg(names: str, side_labels: list[tuple[str, str, str]] = ()) -> str:
+    """3辺の長さだけを書いた三角形（g3_l52.proof Lv3）。
+
+    「∠PQR が直角であることを説明せよ」という問題なので、**直角の印は描かないし、
+    直角に見える形にも描かない**（描いたら結論を図に書いたことになる）。
+    """
+    a, b, c = names
+    coords = {a: (0.0, 0.0), b: (3.8, 0.6), c: (1.6, 3.0)}
+    params: dict[str, Any] = {
+        "coords": coords,
+        "segments": [(a, b), (b, c), (c, a)],
+        "segment_labels": [list(t) for t in side_labels],
+    }
+    return render_construction_svg(params)
+
+
 __all__ = [
     "congruent_triangles_svg",
     "equal_area_transform_svg",
     "equilateral_svg",
     "parallelogram_svg",
+    "plain_triangle_svg",
     "quadrilateral_with_diagonals_svg",
     "quadrilateral_with_one_diagonal_svg",
     "triangle_with_altitude_svg",

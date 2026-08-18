@@ -35,8 +35,8 @@ levels:
       context_set: [triangle, quadrilateral, field]
     given: [premises, conclusion]
     asked: [proof_text]
-    visual: none
-    text: {tier: T1, template: pf_pythagoras_converse_v1}
+    visual: required
+    text: {tier: T1, template: pf_pythagoras_converse_v1, visual_builder: math.geometry_construction}
     hints: [steps_prefix]
     concept_tags: [pythagorean_converse.explain_right_angle]
     cause_tags: []

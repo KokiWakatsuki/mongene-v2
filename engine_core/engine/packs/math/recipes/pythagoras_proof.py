@@ -40,6 +40,10 @@ from engine.core.contracts import (
 )
 from engine.core.registry import REGISTRY, register_recipe
 from engine.core.rng import Rng, draw
+from engine.packs.math.visuals.quadrilateral_figure import (
+    plain_triangle_svg,
+    quadrilateral_with_one_diagonal_svg,
+)
 from engine.packs.math.visuals.similarity_figure import pythagoras_proof_svg
 from engine.packs.math.solvers.pythagoras_proof import (
     AREA_PROOF_IDS,
@@ -186,6 +190,27 @@ def pythagoras_area_proof_recipe(ctx: CellContext, rng: Rng) -> MR:
     )
 
 
+def _converse_figure(case: object, names: str) -> tuple[str, list[str]]:
+    """三平方の定理の逆の場面の図と、図に出る文字。
+
+    場面は3種類（四角形＋対角線／三角形／実生活の3点）で、四角形だけ頂点が4つ。
+    長さは問題文にあるものをそのまま書き入れる（本文から拾う——場面の型ごとに
+    値の持ち方が違うので、ここでは名前と長さの対だけを取り出す）。
+    """
+    import re as _re
+
+    premises = str(getattr(case, "premises", ""))
+    pairs = _re.findall(r"([A-Z]{2})\s*=\s*(\d+)\s*(cm|m)", premises)
+    labels = [f"{v}{u}" for _, v, u in pairs]
+    if len(names) >= 4:
+        quad = names[:4]
+        seg = [[p[0], p[1], f"{v}{u}"] for p, v, u in pairs]
+        return quadrilateral_with_one_diagonal_svg(quad, seg), [*quad, *labels]
+    tri = names[:3]
+    seg = [[p[0], p[1], f"{v}{u}"] for p, v, u in pairs]
+    return plain_triangle_svg(tri, seg), [*tri, *labels]
+
+
 @register_recipe("math.pythagoras_converse_proof", provides_concepts=_CONVERSE_CONCEPTS)
 def pythagoras_converse_proof_recipe(ctx: CellContext, rng: Rng) -> MR:
     """三平方の定理の逆を用いて、ある角が直角であることを説明する（g3_l52 Lv3）。"""
@@ -212,6 +237,11 @@ def pythagoras_converse_proof_recipe(ctx: CellContext, rng: Rng) -> MR:
     assert rebuilt is not None, "params から場面を組み直せない"
     assert rebuilt.premises == case.premises, "問題文に出す場面と、組み直した場面が食い違っている"
 
+    # ★**直角の印は描かないし、直角に見える形にも描かない。** これは
+    # 「∠PQR が直角であること」を**示す**問題で、図に直角を描いたら結論を
+    # 図に書いたことになる。3辺（と対角線）の長さだけを書き入れる。
+    figure_svg, fig_labels = _converse_figure(case, names)
+
     sub_question = SubQuestionMR(
         label="(1)",
         asked="proof_text",
@@ -233,9 +263,13 @@ def pythagoras_converse_proof_recipe(ctx: CellContext, rng: Rng) -> MR:
             "triple_index": triple_index,
             "swap": swap,
         },
+        context_slots={"figure_svg": figure_svg},
         given={"premises": case.premises, "conclusion": case.conclusion},
         sub_questions=[sub_question],
-        visual_plan=None,
+        visual_plan=VisualPlan(
+            style="figure", labels=fig_labels,
+            elements=[VisualElement(kind="triangle", attrs={"role": "given"})],
+        ),
         provenance=Provenance(recipe="math.pythagoras_converse_proof"),
     )
 
