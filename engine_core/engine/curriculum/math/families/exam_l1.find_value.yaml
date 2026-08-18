@@ -43,8 +43,8 @@ levels:
       slope_candidates: [-4, -3, -2, -1, 1, 2, 3, 4]
     given: [condition]
     asked: [value]
-    visual: none
-    text: {tier: T1, template: lf_exam_linear_figure_v1}
+    visual: required
+    text: {tier: T1, template: lf_exam_linear_figure_v1, visual_builder: math.linear_graph}
     hints: [steps_prefix]
     concept_tags: [exam.linear_intersection_triangle_area]
     cause_tags: []

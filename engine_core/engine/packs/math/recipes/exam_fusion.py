@@ -357,13 +357,29 @@ def exam_linear_intersection_area_recipe(ctx: CellContext, rng: Rng) -> MR:
         f"{_line_text(m2, b2)} と x軸との交点を{lq}、原点をOとする。"
         f"交点{lp}の座標を求め、三角形O{lp}{lq}の面積を求めよ"
     )
+    # ★**入試融合のセルは図が1枚も無かった。** 実物の入試問題は必ずグラフが
+    # 添えてある。2直線と、交点・x切片・原点が収まる範囲で描く。
+    pts = [str((0, b1)), str((0, b2)), str(tuple(int(v) for v in pt)),
+           str((int(-b2 // m2), 0)), str((0, 0))]
+    params = {
+        "m1": m1, "b1": b1, "m2": m2, "b2": b2, "labels": lp + lq,
+        "a": str(m1), "b": str(b1), "extra_lines": [[str(m2), str(b2)]],
+        "pts": pts,
+    }
     return MR(
         signature=ctx.spec_level.signature, family=ctx.family, level=ctx.level,
         purpose=ctx.purpose, seed=0,
-        params={"m1": m1, "b1": b1, "m2": m2, "b2": b2, "labels": lp + lq},
+        params=params,
         given={"condition": condition},
         sub_questions=[_exam_l1_sub(ctx, label="(1)", asked="value", sol=sol)],
-        visual_plan=None,
+        visual_plan=VisualPlan(
+            style="grid", labels=tick_labels_from_params(params),
+            elements=[
+                VisualElement(kind="grid", attrs={}),
+                VisualElement(kind="axis", attrs={}),
+                VisualElement(kind="line", attrs={}),
+            ],
+        ),
         provenance=Provenance(recipe="math.exam_linear_intersection_area"),
     )
 

@@ -407,6 +407,7 @@ def render_grid_svg(
     draw_line: bool,
     vline_x: Any = None,
     hline_y: Any = None,
+    extra_lines: list[tuple[Any, Any]] | None = None,
 ) -> str:
     """params（a, b, pts）と描画範囲から座標平面 SVG を組む（決定論・自己完結）。
 
@@ -432,6 +433,21 @@ def render_grid_svg(
             px1, py1, px2, py2 = ends
             parts.append(
                 f'<line x1="{px1:.2f}" y1="{py1:.2f}" x2="{px2:.2f}" y2="{py2:.2f}" '
+                f'stroke="#000000" stroke-width="2.5"/>'
+            )
+
+    # --- もう1本以上の直線（入試の「2直線の交点」など・任意） ---
+    # ★**入試融合のセルは図が1枚も無かった。** 「2直線 y=3x-3 と y=4x-8 の交点を
+    # N…三角形ONPの面積を求めよ」を、座標平面を思い浮かべながら解くことになる。
+    # 実物の入試問題は必ずグラフが添えてある。主直線と同じ書式で重ねる。
+    for ea, eb in extra_lines or []:
+        ends2 = _line_endpoints_in_grid(
+            sympy.nsimplify(sympy.sympify(ea)), sympy.nsimplify(sympy.sympify(eb)), sc
+        )
+        if ends2 is not None:
+            qx1, qy1, qx2, qy2 = ends2
+            parts.append(
+                f'<line x1="{qx1:.2f}" y1="{qy1:.2f}" x2="{qx2:.2f}" y2="{qy2:.2f}" '
                 f'stroke="#000000" stroke-width="2.5"/>'
             )
 
@@ -510,8 +526,15 @@ def _draw_line_from_plan(mr: "MR") -> bool:
 
 
 def render_linear_graph(mr: "MR", ctx: "CellContext") -> str:
-    """登録 visual（問題図）。visual_plan の line 要素の有無で直線描画を切替える。"""
-    return render_grid_svg(mr.params, draw_line=_draw_line_from_plan(mr))
+    """登録 visual（問題図）。visual_plan の line 要素の有無で直線描画を切替える。
+
+    `params["extra_lines"]` があれば2本目以降も描く（入試の「2直線の交点」）。
+    """
+    extra = mr.params.get("extra_lines")
+    return render_grid_svg(
+        mr.params, draw_line=_draw_line_from_plan(mr),
+        extra_lines=[tuple(e) for e in extra] if extra else None,
+    )
 
 
 def render_line_solution_svg(params: dict[str, Any]) -> str:
