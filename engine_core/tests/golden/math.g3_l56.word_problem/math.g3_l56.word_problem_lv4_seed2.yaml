@@ -44,7 +44,7 @@ sub_questions:
   - となり合う二つの面の開き方が三通りあることを確かめ、それぞれで開いた長方形の縦と横を書き出す。
   - 開いた長方形の対角線の長さを三通りとも式にして比べ、最も短くなるのがどれかを決める。
   label: (1)
-  prompt_text: 答えを求めなさい。
+  prompt_text: ''
   solution_steps:
   - args: []
     detail: ''

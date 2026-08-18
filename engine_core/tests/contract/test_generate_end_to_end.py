@@ -168,6 +168,22 @@ def _spec_family(*, recipe_name: str = "math.dummy_recipe") -> SpecFamily:
     )
 
 
+def _states_an_ask(text: str) -> bool:
+    """その文が「〜しなさい／〜せよ」と指示を言い切っているか（最後の行で見る）。"""
+    import re
+
+    lines = [ln for ln in (text or "").split("\n") if ln.strip()]
+    if not lines:
+        return False
+    return bool(
+        re.search(
+            r"(?:せよ|なさい|ください|ますか|ですか|でしょうか|答えよ|求めよ|かけ|示せ"
+            r"|表せ|選べ)[。．]?\s*$",
+            lines[-1].strip(),
+        )
+    )
+
+
 def _req(*, seed: int | None = 42) -> GenerateRequest:
     return GenerateRequest(subject="math", unit="g2_l25", form="find_value", level=2, seed=seed)
 
@@ -189,7 +205,16 @@ def test_generate_returns_problem_with_expected_field_names():
 
     sq = result.sub_questions[0]
     assert sq.label == "(1)"
-    assert isinstance(sq.prompt_text, str) and sq.prompt_text
+    # ★守りたいのは「問いが必ずある」ことであって「prompt_text が空でない」ことでは
+    # ない。**指示は問題文と問いのどちらか一方に、1つだけあればよい。**
+    # 前は非空だけを見ていたので、本文「次の計算をせよ。」＋問い「答えを求めなさい。」
+    # という**指示の二重**（686小問中439件・実測）を素通りさせていた。
+    # 空を許した代わりに、二重も空欄も両方この1行で捕まえる。
+    assert isinstance(sq.prompt_text, str)
+    assert _states_an_ask(sq.prompt_text) ^ _states_an_ask(result.problem_text), (
+        f"指示は問題文と問いのどちらか一方だけに置くこと: "
+        f"problem_text={result.problem_text!r} prompt_text={sq.prompt_text!r}"
+    )
     assert sq.answer is not None
     assert isinstance(sq.solution_steps, list) and len(sq.solution_steps) == 2
     assert isinstance(sq.explanation, str) and sq.explanation

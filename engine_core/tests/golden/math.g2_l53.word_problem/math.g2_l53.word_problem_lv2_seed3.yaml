@@ -41,7 +41,7 @@ sub_questions:
   hints:
   - 十の位に置くカードの選び方それぞれについて、残ったカードから一の位を選ぶ選び方を枝分かれで書き出し、総数を数える。
   label: (1)
-  prompt_text: 答えなさい。
+  prompt_text: ''
   solution_steps:
   - args: []
     detail: ''
@@ -65,7 +65,7 @@ sub_questions:
   - 十の位と一の位に置くカードの選び方を枝分かれで書き出し、できる整数をすべて数え上げる。
   - 書き出した整数のうち、一の位が奇数になっているものの個数を数える。
   label: (2)
-  prompt_text: 答えなさい。
+  prompt_text: ''
   solution_steps:
   - args: []
     detail: ''

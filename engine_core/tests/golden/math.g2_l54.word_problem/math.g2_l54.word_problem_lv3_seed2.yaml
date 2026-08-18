@@ -44,7 +44,7 @@ sub_questions:
   - 1回の試行で条件が起こらない場合の数を数え、その確率を求める。
   - 独立な試行をくり返すので、すべての回で条件が起こらない確率は1回分の確率を試行回数だけかけ合わせたものになる。
   label: (1)
-  prompt_text: 答えを求めなさい。
+  prompt_text: ''
   solution_steps:
   - args: []
     detail: ''

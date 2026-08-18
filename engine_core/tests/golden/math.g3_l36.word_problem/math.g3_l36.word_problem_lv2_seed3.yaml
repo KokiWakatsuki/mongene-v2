@@ -48,7 +48,7 @@ sub_questions:
   - y は x の2乗に比例するから、比例定数を a とおいて y=ax² と表し、与えられている x と y の値を代入する。
   - 代入してできた式を a について解いて、比例定数を求める。
   label: (1)
-  prompt_text: 答えなさい。
+  prompt_text: ''
   solution_steps:
   - args: []
     detail: ''
@@ -81,7 +81,7 @@ sub_questions:
   hints:
   - 式の x に、与えられた値をあてはめる。
   label: (2)
-  prompt_text: 答えなさい。
+  prompt_text: ''
   solution_steps:
   - args: []
     detail: ''

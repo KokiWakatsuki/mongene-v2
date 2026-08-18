@@ -39,7 +39,7 @@ sub_questions:
   hints:
   - FJ:JGとFK:KHの比が等しいかどうかを比べる。
   label: (1)
-  prompt_text: 答えを求めなさい。
+  prompt_text: ''
   solution_steps:
   - args: []
     detail: FJ:JGとFK:KHを、それぞれ簡単な比にすると 17:11 と 51:28 で、等しくない。

@@ -37,7 +37,7 @@ sub_questions:
   hints:
   - 注目していることがらの数を、全体の数でわって、相対度数を求める。
   label: (1)
-  prompt_text: 答えを求めなさい。
+  prompt_text: ''
   solution_steps:
   - args: []
     detail: 注目していることがらの数 182 を、全体の数 250 でわって、相対度数を求める。

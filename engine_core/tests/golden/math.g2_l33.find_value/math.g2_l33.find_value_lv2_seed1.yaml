@@ -45,7 +45,7 @@ sub_questions:
   - 一方の三角形について、外角は隣り合わない2つの内角の和に等しいことを使い、のばした線とDBがつくる角を求める。
   - もう一方の三角形についても同じように、のばした線とDCがつくる角を求める。
   label: (1)
-  prompt_text: 答えを求めなさい。
+  prompt_text: ''
   solution_steps:
   - args: []
     detail: ''

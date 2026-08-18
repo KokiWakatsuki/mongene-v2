@@ -42,7 +42,7 @@ sub_questions:
   - それぞれの数を表す式を、かっこをつけて和の形に並べる。
   - かっこを外して、項の和の形にする。
   label: (1)
-  prompt_text: 式を簡単にしなさい。
+  prompt_text: ''
   solution_steps:
   - args: []
     detail: ''

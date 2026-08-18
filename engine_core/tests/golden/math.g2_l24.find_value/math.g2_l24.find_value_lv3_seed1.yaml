@@ -48,7 +48,7 @@ sub_questions:
   - 平行な直線は傾きが等しいので、与えられた直線の傾きをそのまま用いる。
   - 傾きと通る1点を y = ax + b に代入し、切片を求める。
   label: (1)
-  prompt_text: 式に表しなさい。
+  prompt_text: ''
   solution_steps:
   - args:
     - -1/3

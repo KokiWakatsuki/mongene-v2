@@ -39,7 +39,7 @@ sub_questions:
   hints:
   - 求める式を、和と積だけで表せる形に変形する。
   label: (1)
-  prompt_text: 答えを求めなさい。
+  prompt_text: ''
   solution_steps:
   - args: []
     detail: ''

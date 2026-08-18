@@ -106,7 +106,7 @@ sub_questions:
   hints:
   - 対称移動の軸がどこにあるかを読み取る。
   label: (1)
-  prompt_text: 移した図形をかきなさい。
+  prompt_text: ''
   solution_steps:
   - args: []
     detail: ''

@@ -39,7 +39,7 @@ sub_questions:
   hints:
   - MQ:QNとMR:RPの比が等しいかどうかを比べる。
   label: (1)
-  prompt_text: 答えを求めなさい。
+  prompt_text: ''
   solution_steps:
   - args: []
     detail: MQ:QNとMR:RPを、それぞれ簡単な比にすると 3:8 と 6:19 で、等しくない。

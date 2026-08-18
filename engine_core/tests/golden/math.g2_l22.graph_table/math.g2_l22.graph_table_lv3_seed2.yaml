@@ -106,7 +106,7 @@ sub_questions:
   - そこから、傾きの分子のぶんだけ y 軸方向に進む（分子の符号にしたがう）。
   - 進んだ先の格子点に印をつける。
   label: (1)
-  prompt_text: グラフをかきなさい。
+  prompt_text: ''
   solution_steps:
   - args: []
     detail: ''

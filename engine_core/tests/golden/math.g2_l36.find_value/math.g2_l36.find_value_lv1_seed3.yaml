@@ -39,7 +39,7 @@ sub_questions:
   hints:
   - 合同である2つの図形のうち、わかっている辺の長さと角の大きさが、それぞれどの辺・角に対応するかを読み取る。
   label: (1)
-  prompt_text: 答えを求めなさい。
+  prompt_text: ''
   solution_steps:
   - args: []
     detail: ''

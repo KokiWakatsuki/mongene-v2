@@ -65,7 +65,7 @@ sub_questions:
   - 最後の区間では高さが減っていくので、面積を時間の1次式で表す。
   - 区間の境目と両端で面積を求め、その組を座標とみて点をとる。
   label: (1)
-  prompt_text: グラフをかきなさい。
+  prompt_text: ''
   solution_steps:
   - args: []
     detail: ''
@@ -125,7 +125,7 @@ sub_questions:
   - 次の辺の上では底辺も高さも変わらず面積が一定なので、その値と比べて解があるかを調べる。
   - 最後の辺の上では高さが減っていくので、その区間の式を方程式とみて解く。
   label: (2)
-  prompt_text: 答えを求めなさい。
+  prompt_text: ''
   solution_steps:
   - args: []
     detail: ''

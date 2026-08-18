@@ -39,7 +39,7 @@ sub_questions:
   hints:
   - LP:PMとLQ:QNの比が等しいかどうかを比べる。
   label: (1)
-  prompt_text: 答えを求めなさい。
+  prompt_text: ''
   solution_steps:
   - args: []
     detail: LP:PMとLQ:QNを、それぞれ簡単な比にすると 1:14 と 1:14 で、等しい。

@@ -39,7 +39,7 @@ sub_questions:
   hints:
   - x の変域の両端の値を、それぞれ式に代入して y の値を求める。
   label: (1)
-  prompt_text: 変化の割合を求めなさい。
+  prompt_text: ''
   solution_steps:
   - args: []
     detail: ''

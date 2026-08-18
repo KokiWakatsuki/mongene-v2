@@ -39,7 +39,7 @@ sub_questions:
   hints:
   - 相似な図形の面積比は相似比の二乗に等しいことから、面積比を求める。
   label: (1)
-  prompt_text: 答えを求めなさい。
+  prompt_text: ''
   solution_steps:
   - args: []
     detail: ''

@@ -48,7 +48,7 @@ sub_questions:
   - WX∥UV であることから、三角形TWXと三角形TUVが相似になることを見つける。
   - TWとWUをたして、辺TU全体の長さを求める。
   label: (1)
-  prompt_text: 答えを求めなさい。
+  prompt_text: ''
   solution_steps:
   - args: []
     detail: TW:WUとTX:XVを、それぞれ簡単な比にすると 1:3 と 1:3 で、等しい。

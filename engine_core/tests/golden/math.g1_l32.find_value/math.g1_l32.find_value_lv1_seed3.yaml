@@ -39,7 +39,7 @@ sub_questions:
   hints:
   - 比例の式 y=ax に、通る点の x, y の値をあてはめ、比例定数を求める式をつくる。
   label: (1)
-  prompt_text: 式に表しなさい。
+  prompt_text: ''
   solution_steps:
   - args:
     - '10'

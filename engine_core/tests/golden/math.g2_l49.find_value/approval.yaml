@@ -1,6 +1,6 @@
-approved_at: '2026-08-18T08:46:56.613587'
+approved_at: '2026-08-18T09:50:34.954545'
 approver: koki
-content_sha256: e1613d65b3c89f6c439a14ec4ae767d9fa1e1b2e5759738591c5054069f1fd32
+content_sha256: 894b2b8abc2c3315d84ed56f4d604b8c40253c07f1b400bfbf8c8392e5d2f514
 family: math.g2_l49.find_value
 files:
 - /Users/koki/workspace/mongene-v2/engine_core/tests/golden/math.g2_l49.find_value/math.g2_l49.find_value_lv1_seed1.yaml

@@ -50,7 +50,7 @@ sub_questions:
   - 比例定数と x の値を、比例の式 y=ax の x にあてはめる。
   - かけ算を計算して y の値を求める。
   label: (1)
-  prompt_text: 答えを求めなさい。
+  prompt_text: ''
   solution_steps:
   - args:
     - '1'

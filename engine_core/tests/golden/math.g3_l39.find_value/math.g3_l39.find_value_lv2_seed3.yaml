@@ -39,7 +39,7 @@ sub_questions:
   hints:
   - 2つの図形の相似比と、わかっている辺の長さを読み取る。
   label: (1)
-  prompt_text: 答えを求めなさい。
+  prompt_text: ''
   solution_steps:
   - args: []
     detail: ''

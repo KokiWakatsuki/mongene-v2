@@ -50,7 +50,7 @@ sub_questions:
   - 両辺を比から出てきた数でわって、縦の長さの2乗の値を求める。
   - 根号の中を素因数分解し、平方の因数を見つける。
   label: (1)
-  prompt_text: 答えを求めなさい。
+  prompt_text: ''
   solution_steps:
   - args: []
     detail: ''

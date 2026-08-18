@@ -56,7 +56,7 @@ sub_questions:
   - 両辺の同類項をそれぞれまとめて、ax = b の形にする。
   - 等式の性質を使い、両辺を x の係数でわる。
   label: (1)
-  prompt_text: 答えを求めなさい。
+  prompt_text: ''
   solution_steps:
   - args: []
     detail: ''

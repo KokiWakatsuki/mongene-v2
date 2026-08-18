@@ -53,7 +53,7 @@ sub_questions:
   - 左辺を因数分解する。
   - 積が 0 になるのは各因数が 0 のときだから、それぞれを 0 とおいて x を求める。
   label: (1)
-  prompt_text: 答えを求めなさい。
+  prompt_text: ''
   solution_steps:
   - args: []
     detail: ''

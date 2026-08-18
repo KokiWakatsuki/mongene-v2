@@ -1,6 +1,6 @@
-approved_at: '2026-08-18T08:44:02.155678'
+approved_at: '2026-08-18T09:47:20.403651'
 approver: koki
-content_sha256: 2de90af807d657a78245b73164e1f9b167be1e0d24e1beaf7ee26cfe93e87873
+content_sha256: 2cb44d850f7ac136393cccaec5b2c66c84b5a6a93670fd3ec1224572f58abc9f
 family: math.g1_l20.word_problem
 files:
 - /Users/koki/workspace/mongene-v2/engine_core/tests/golden/math.g1_l20.word_problem/math.g1_l20.word_problem_lv1_seed1.yaml

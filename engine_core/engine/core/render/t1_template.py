@@ -334,6 +334,28 @@ def _body_asks_choice(problem_text: str) -> bool:
     return bool(_ASKS_CHOICE_RE.search(problem_text))
 
 
+# 本文の末尾が指示で終わっているか（「次の計算をせよ。」「…を求めよ。」）。
+_SELF_CONTAINED_ASK = re.compile(
+    r"(?:せよ|なさい|ください|ますか|ですか|でしょうか|答えよ|求めよ|かけ|示せ|表せ|選べ)"
+    r"[。．]?\s*$"
+)
+
+
+def _body_states_the_ask(problem_text: str) -> bool:
+    """本文が自分で指示を言い切っているか。
+
+    ★**指示を2か所に出さない。** 本文「次の計算をせよ。」＋問い「答えを求めなさい。」
+    のように、同じことを二重に言っている小問が 686 件中 439 件（実測）あった。
+    問題集の体裁にすると並んで表示され、指示が2つあるように読める。
+
+    契約上、指示の置き場は `prompt_text`（小問の問い）だが、テンプレートの多くは
+    本文の末尾に指示を書いている。**本文が言い切っているときは問いを空にする**
+    ——表示側で消すのではなく、出す側で1つに決める。
+    """
+    lines = [ln for ln in (problem_text or "").split("\n") if ln.strip()]
+    return bool(lines) and bool(_SELF_CONTAINED_ASK.search(lines[-1].strip()))
+
+
 def _choices_already_printed(answer: Any, problem_text: str) -> bool:
     """recipe が本文に選択肢を手で書き込んでいるか（27セル）。二重に出さない。"""
     if str(answer.correct) not in problem_text:
@@ -398,6 +420,10 @@ def render_text(mr: "MR", ctx: "CellContext", *, registry: _Registry = REGISTRY)
         asked = tctx.sub_questions[i].asked
         if getattr(sq.answer, "kind", "") == "choice":
             prompts[sq.label] = _choice_prompt(sq.answer, problem_text, mr.seed, sq.label)
+        elif _body_states_the_ask(problem_text):
+            # 本文が言い切っているので、問いの側は空にする（指示は1つ）。
+            # **選択式はここに来ない**——選択肢を載せる欄なので上の分岐で処理する。
+            prompts[sq.label] = ""
         elif _SOLVE_FOR.search(problem_text):
             prompts[sq.label] = "式を変形しなさい。"
         elif _body_enumerates_subquestions(problem_text):

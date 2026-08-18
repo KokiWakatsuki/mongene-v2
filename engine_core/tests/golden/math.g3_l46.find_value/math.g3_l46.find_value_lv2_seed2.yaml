@@ -39,7 +39,7 @@ sub_questions:
   hints:
   - 相似な立体の表面積の比は相似比の二乗に等しいことから、表面積の比を求める。
   label: (1)
-  prompt_text: 答えを求めなさい。
+  prompt_text: ''
   solution_steps:
   - args: []
     detail: ''

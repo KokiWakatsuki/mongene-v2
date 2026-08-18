@@ -47,7 +47,7 @@ sub_questions:
   - 該当するものの個数を標本の大きさでわり、標本での割合を求める。
   - 標本での該当する個数の割合が、母集団全体でもおよそ等しいとみて比例式をつくる。
   label: (1)
-  prompt_text: 答えを求めなさい。
+  prompt_text: ''
   solution_steps:
   - args: []
     detail: ''

@@ -39,7 +39,7 @@ sub_questions:
   hints:
   - 経過した時間と速さから、点 P が動いた道のりを求め、その位置の座標を決める。
   label: (1)
-  prompt_text: 答えを求めなさい。
+  prompt_text: ''
   solution_steps:
   - args: []
     detail: ''

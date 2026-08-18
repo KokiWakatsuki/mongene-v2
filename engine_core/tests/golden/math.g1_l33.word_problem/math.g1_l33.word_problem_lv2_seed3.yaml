@@ -43,7 +43,7 @@ sub_questions:
   hints:
   - 縦と横の積が一定であることから、反比例の式を組み立てる。
   label: (1)
-  prompt_text: 答えなさい。
+  prompt_text: ''
   solution_steps:
   - args: []
     detail: ''
@@ -64,7 +64,7 @@ sub_questions:
   hints:
   - 比例定数と x の値を、反比例の式 y=a/x の x にあてはめる。
   label: (2)
-  prompt_text: 答えなさい。
+  prompt_text: ''
   solution_steps:
   - args:
     - '36'

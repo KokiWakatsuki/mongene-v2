@@ -39,7 +39,7 @@ sub_questions:
   hints:
   - 一直線の角(平角)を、頂点の数より二少ない数だけ集めた大きさが内角の和になる、という公式に辺の数をあてはめる。
   label: (1)
-  prompt_text: 答えを求めなさい。
+  prompt_text: ''
   solution_steps:
   - args: []
     detail: ''

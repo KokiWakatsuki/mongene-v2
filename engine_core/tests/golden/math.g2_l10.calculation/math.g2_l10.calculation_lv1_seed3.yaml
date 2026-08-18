@@ -39,7 +39,7 @@ sub_questions:
   hints:
   - 式の x と y に、与えられた値をそれぞれ代入する。
   label: (1)
-  prompt_text: 答えを求めなさい。
+  prompt_text: ''
   solution_steps:
   - args: []
     detail: ''

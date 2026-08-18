@@ -44,7 +44,7 @@ sub_questions:
   - 2個のさいころの目の組合せを、表などを使ってすべて数え上げる。
   - そのうち、求める条件にあてはまる組合せの数を数える。
   label: (1)
-  prompt_text: 答えを求めなさい。
+  prompt_text: ''
   solution_steps:
   - args: []
     detail: ''

@@ -42,7 +42,7 @@ sub_questions:
   - 2点の y 座標の差を x 座標の差で割り、傾きを求める。
   - 傾きと通る1点を y = ax + b に代入し、切片を求める。
   label: (1)
-  prompt_text: 式に表しなさい。
+  prompt_text: ''
   solution_steps:
   - args:
     - (-4, -6)

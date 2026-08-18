@@ -39,7 +39,7 @@ sub_questions:
   hints:
   - 対象の階級の位置をグラフの横軸で見つけ、その高さを縦軸の目盛で読み取る。
   label: (1)
-  prompt_text: 読み取って答えなさい。
+  prompt_text: ''
   solution_steps:
   - args: []
     detail: ''

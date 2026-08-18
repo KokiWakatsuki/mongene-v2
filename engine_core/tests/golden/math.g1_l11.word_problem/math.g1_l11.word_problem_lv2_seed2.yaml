@@ -43,7 +43,7 @@ sub_questions:
   hints:
   - 小さい素数から順にわり、商が素数になるまでわり続ける。
   label: (1)
-  prompt_text: 答えなさい。
+  prompt_text: ''
   solution_steps:
   - args: []
     detail: 1176 を小さい素数から順にわっていく。
@@ -70,7 +70,7 @@ sub_questions:
   hints:
   - 素因数分解した結果から、指数が奇数になっている素因数を選び出す。
   label: (2)
-  prompt_text: 答えなさい。
+  prompt_text: ''
   solution_steps:
   - args: []
     detail: ''

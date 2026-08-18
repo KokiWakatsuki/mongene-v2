@@ -42,7 +42,7 @@ sub_questions:
   - まわりの座標から四角形全体の面積を求める。
   - 頂点を通る直線が面積を2等分するのだから、分けられた一方の三角形の面積が全体の半分になる、という式を立てる。
   label: (1)
-  prompt_text: 座標を求めなさい。
+  prompt_text: ''
   solution_steps:
   - args: []
     detail: ''

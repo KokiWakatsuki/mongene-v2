@@ -43,7 +43,7 @@ sub_questions:
   hints:
   - 表が出た回数を、投げた回数の合計でわって相対度数を求める。
   label: (1)
-  prompt_text: 答えなさい。
+  prompt_text: ''
   solution_steps:
   - args: []
     detail: ''
@@ -70,7 +70,7 @@ sub_questions:
   hints:
   - 見積もった確率を、投げる回数と表が出る回数を結ぶ一定の割合とみる。
   label: (2)
-  prompt_text: 答えなさい。
+  prompt_text: ''
   solution_steps:
   - args: []
     detail: ''

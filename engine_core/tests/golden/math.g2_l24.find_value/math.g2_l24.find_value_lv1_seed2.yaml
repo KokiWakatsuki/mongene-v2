@@ -48,7 +48,7 @@ sub_questions:
   - 傾きと通る点の座標を y = ax + b に代入する。
   - 代入した式を b について解き、切片を求める。
   label: (1)
-  prompt_text: 式に表しなさい。
+  prompt_text: ''
   solution_steps:
   - args:
     - '1'

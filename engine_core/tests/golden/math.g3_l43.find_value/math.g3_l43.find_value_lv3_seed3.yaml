@@ -48,7 +48,7 @@ sub_questions:
   - ST∥QR であることから、三角形PSTと三角形PQRが相似になることを見つける。
   - PSとSQをたして、辺PQ全体の長さを求める。
   label: (1)
-  prompt_text: 答えを求めなさい。
+  prompt_text: ''
   solution_steps:
   - args: []
     detail: PS:SQとPT:TRを、それぞれ簡単な比にすると 9:5 と 9:5 で、等しい。

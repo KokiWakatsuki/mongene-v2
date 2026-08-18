@@ -41,7 +41,7 @@ sub_questions:
   hints:
   - 硬貨を区別して、1枚ごとに表と裏の2通りがあることを枝分かれで書き出し、出方の総数を数える。
   label: (1)
-  prompt_text: 答えなさい。
+  prompt_text: ''
   solution_steps:
   - args: []
     detail: ''
@@ -65,7 +65,7 @@ sub_questions:
   - 硬貨を区別して、表と裏の出方をすべて書き出す。
   - 書き出した出方のうち、条件にあてはまるものの数を数える。
   label: (2)
-  prompt_text: 答えなさい。
+  prompt_text: ''
   solution_steps:
   - args: []
     detail: ''

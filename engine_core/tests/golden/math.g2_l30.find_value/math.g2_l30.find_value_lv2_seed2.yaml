@@ -42,7 +42,7 @@ sub_questions:
   - 2つの直線の y を等しいとおき、x についての方程式をつくる。
   - その方程式を解いて、x の値を求める。
   label: (1)
-  prompt_text: 交点の座標を求めなさい。
+  prompt_text: ''
   solution_steps:
   - args:
     - Eq(3*x + y, 34)

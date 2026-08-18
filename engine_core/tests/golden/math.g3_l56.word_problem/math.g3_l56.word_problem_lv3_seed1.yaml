@@ -46,7 +46,7 @@ sub_questions:
   - 表面上の最短の道のりを考えるために、通る二つの側面を一つの平面に開いた展開図をかく。
   - 開いた図では二つの側面が横に並んだ長方形になり、道のりが最も短くなるのは出発点と到着点を結ぶ線分のときだから、その線分を斜辺とする直角三角形をとらえる。
   label: (1)
-  prompt_text: 答えなさい。
+  prompt_text: ''
   solution_steps:
   - args: []
     detail: ''
@@ -79,7 +79,7 @@ sub_questions:
   hints:
   - 開いた二つの側面は、あわせて横が底面の二つの辺の長さの和、縦が直方体の高さである一つの長方形になる。
   label: (2)
-  prompt_text: 答えなさい。
+  prompt_text: ''
   solution_steps:
   - args: []
     detail: ''

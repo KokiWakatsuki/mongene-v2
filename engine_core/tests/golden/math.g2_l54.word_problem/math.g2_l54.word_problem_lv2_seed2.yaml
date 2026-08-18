@@ -46,7 +46,7 @@ sub_questions:
   - 玉を区別して、取り出し方をすべて数え上げる。
   - そのうち、求める条件にあてはまる取り出し方の数を数える。
   label: (1)
-  prompt_text: 答えなさい。
+  prompt_text: ''
   solution_steps:
   - args: []
     detail: ''
@@ -77,7 +77,7 @@ sub_questions:
   hints:
   - 1から、もとのことがらの起こる確率をひく。
   label: (2)
-  prompt_text: 答えなさい。
+  prompt_text: ''
   solution_steps:
   - args: []
     detail: ''

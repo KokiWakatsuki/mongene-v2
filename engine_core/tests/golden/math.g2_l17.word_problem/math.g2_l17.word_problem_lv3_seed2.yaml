@@ -53,7 +53,7 @@ sub_questions:
   - 係数をそろえて一方の文字を消去し、残った文字を求める。
   - 求めた値をもとの式に代入し、もう一方の文字を求める。
   label: (1)
-  prompt_text: 答えを求めなさい。
+  prompt_text: ''
   solution_steps:
   - args: []
     detail: ''

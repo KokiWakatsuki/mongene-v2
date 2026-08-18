@@ -96,7 +96,7 @@ sub_questions:
   - 変域の左端の x に対応する点をとり、端をふくむなら●、ふくまないなら○で表す。
   - 変域の右端の x に対応する点をとり、端をふくむなら●、ふくまないなら○で表す。
   label: (1)
-  prompt_text: グラフをかきなさい。
+  prompt_text: ''
   solution_steps:
   - args: []
     detail: ''

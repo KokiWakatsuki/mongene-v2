@@ -37,7 +37,7 @@ sub_questions:
   hints:
   - あてはまる場合の数を、起こりうる場合の数でわって、確率を求める。
   label: (1)
-  prompt_text: 答えを求めなさい。
+  prompt_text: ''
   solution_steps:
   - args: []
     detail: あてはまる場合の数 28 を、起こりうる場合の数 56 でわって、確率を求める。

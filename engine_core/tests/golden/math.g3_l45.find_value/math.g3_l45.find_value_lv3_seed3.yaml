@@ -42,7 +42,7 @@ sub_questions:
   - MQとQNの比から、MQとMN全体の比になおす。
   - 三角形MQRと三角形MNPは相似であることから、面積比は相似比の二乗に等しいことを使って、三角形MQRと三角形MNP全体の面積比を求める。
   label: (1)
-  prompt_text: 答えを求めなさい。
+  prompt_text: ''
   solution_steps:
   - args: []
     detail: ''

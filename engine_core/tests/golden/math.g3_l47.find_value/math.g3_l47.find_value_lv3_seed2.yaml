@@ -39,7 +39,7 @@ sub_questions:
   hints:
   - 円周角の定理から、それぞれの円周角に対応する弧の大きさを求める。
   label: (1)
-  prompt_text: 答えを求めなさい。
+  prompt_text: ''
   solution_steps:
   - args: []
     detail: ''

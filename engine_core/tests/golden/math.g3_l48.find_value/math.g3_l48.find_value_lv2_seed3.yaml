@@ -39,7 +39,7 @@ sub_questions:
   hints:
   - 直線NPの同じ側にある2つの角が等しいので、円周角の定理の逆から、4点が同一円周上にあると分かる。
   label: (1)
-  prompt_text: 答えを求めなさい。
+  prompt_text: ''
   solution_steps:
   - args: []
     detail: ∠NQP と ∠NRP が等しく、Q と R は直線NPの同じ側にあるので、4点N、P、Q、R は同一円周上にある。

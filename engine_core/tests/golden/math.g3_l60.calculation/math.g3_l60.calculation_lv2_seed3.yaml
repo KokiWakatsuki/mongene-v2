@@ -39,7 +39,7 @@ sub_questions:
   hints:
   - 標本での該当する個数の割合が、母集団全体でもおよそ等しいとみて、母集団の大きさ x を含む比例式をつくる。
   label: (1)
-  prompt_text: 答えを求めなさい。
+  prompt_text: ''
   solution_steps:
   - args: []
     detail: ''

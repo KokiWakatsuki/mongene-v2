@@ -39,7 +39,7 @@ sub_questions:
   hints:
   - 2直線が交わってできる対頂角の関係を確認する。
   label: (1)
-  prompt_text: 答えを求めなさい。
+  prompt_text: ''
   solution_steps:
   - args: []
     detail: ''
