@@ -38,6 +38,34 @@ class Rule:
     shows_structural_premises: bool = False
 
 
+def fact_order_key(f: Fact) -> tuple[str, str]:
+    """事実を並べる鍵。`args` は述語ごとに形が違うので、比べる前に文字列にする。"""
+    return (f.kind, repr(f.args))
+
+
+class FactSet(frozenset):
+    """規則に渡す事実の集合。**反復の順序を決める**ためだけに frozenset を包む。
+
+    素の frozenset を回すと、順序が Python の文字列ハッシュ（＝`PYTHONHASHSEED`）で
+    実行ごとに変わる。規則の多くは `for f in facts:` と回して**最初に見つかった
+    事実を使う**ので、seed を固定していても走らせるたびに別の証明が出ていた
+    （2026-08-19 に、コーパスを作り直して差分を取ったら proof の 15 セルだけが
+    変わって見つかった。同一プロセス内では再現するので、テストでは捕まらない）。
+
+    包むだけにしたのは、`p in facts` の速さを保つため。反復の順序だけを
+    `fact_order_key` で固定する。
+    """
+
+    _ordered: tuple[Fact, ...]
+
+    def __init__(self, iterable=()) -> None:  # noqa: ARG002 - 中身は __new__ が入れる
+        super().__init__()
+        self._ordered = tuple(sorted(frozenset.__iter__(self), key=fact_order_key))
+
+    def __iter__(self):
+        return iter(self._ordered)
+
+
 def triangles(points: list[Point]) -> list[tuple[Point, Point, Point]]:
     """図の点から作れる三角形の頂点の三つ組（順序つき）。
 
@@ -65,4 +93,12 @@ def pairs_of_triangles(points: list[Point]) -> Iterable[tuple[tuple, tuple]]:
         yield t1, t2
 
 
-__all__ = ["Derivation", "Rule", "collinear_triples", "pairs_of_triangles", "triangles"]
+__all__ = [
+    "Derivation",
+    "FactSet",
+    "Rule",
+    "collinear_triples",
+    "fact_order_key",
+    "pairs_of_triangles",
+    "triangles",
+]

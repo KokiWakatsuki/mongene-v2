@@ -12,6 +12,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 
 from engine.packs.math.geometry.facts import Fact, ang, ang_eq
+from engine.packs.math.geometry.rule_base import FactSet, fact_order_key
 from engine.packs.math.geometry.rules import RULES, Rule
 
 # 暴走の歯止め（飽和しないことは無い）。**深さではなく事実の数が本当の歯止めである**
@@ -154,7 +155,9 @@ def saturate(
     """
     ray_classes = ray_classes or {}
     ded = Deduction(given=given, ray_classes=dict(ray_classes))
-    for f in given:
+    # 仮定を入れる順序を固定する。ここが frozenset の順（＝ハッシュ順）だと、
+    # 同じ事実が複数の書き方をもつときにどれが代表になるかが実行ごとに変わる。
+    for f in sorted(given, key=fact_order_key):
         for i, g in enumerate(_writings(f, ray_classes)):
             if g in ded.why:
                 continue
@@ -163,7 +166,7 @@ def saturate(
                 ded.aliases.add(g)
 
     for _round in range(_MAX_ROUNDS):
-        current = frozenset(ded.why)
+        current = FactSet(ded.why)
         added = False
         for rule in rules:
             for concl, premises in rule.apply(points, current):

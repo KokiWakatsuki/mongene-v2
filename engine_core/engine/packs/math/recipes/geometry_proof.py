@@ -39,6 +39,7 @@ from engine.packs.math.geometry import (  # noqa: F401  登録の副作用で構
     constructions_similarity,
 )
 from engine.packs.math.geometry.catalog import CONSTRUCTIONS, topics_of
+from engine.packs.math.geometry.rule_base import fact_order_key
 from engine.packs.math.geometry.construct import Construction, figure_quality_problems
 from engine.packs.math.geometry.deduce import saturate
 from engine.packs.math.geometry.facts import (
@@ -422,8 +423,10 @@ def _stated_facts(con: Construction, premise_text: str, goal_fact: Any = None) -
       「DE ∥ BC」                    ← 事実の側は `BC ∥ DE` の順で正規化されている
     一致だけを見ていたときは 40 枚中 17 枚で印が付かなかった。言い方も見る。
     """
+    # `con.facts` は集合なので、そのまま回すと**印の割り当てが実行ごとに変わる**
+    # （どの辺の組に1本線・2本線が付くかが入れ替わる）。並べてから回す。
     return [
-        f for f in con.facts
+        f for f in sorted(con.facts, key=fact_order_key)
         # **結論そのものは絶対に印にしない。** 本文の言い方を吸収する側（`_mentioned_in`）は
         # 「垂線」の一語で perp をすべて拾うので、結論が垂直な回に漏れる道が残る。
         if f != goal_fact and (
