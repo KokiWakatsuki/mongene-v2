@@ -26,6 +26,7 @@ from engine.core.contracts import (
     VisualPlan,
 )
 from engine.core.registry import REGISTRY, register_recipe
+from engine.packs.math.visuals.solid import render_solid_svg
 from engine.packs.math.visuals.similarity_figure import triangle_with_parallel_svg
 from engine.core.rng import Rng, draw
 from engine.packs.math.recipes.letter_expr import _draw_named_figures
@@ -57,6 +58,23 @@ _SIMILAR_AREA_RATIO_CONCEPTS = ["similarity.area_ratio"]
 
 
 @register_recipe("math.similar_area_ratio", provides_concepts=_SIMILAR_AREA_RATIO_CONCEPTS)
+def _similar_solids_svg(ratio_num: object, ratio_den: object) -> str:
+    """相似な2つの立体を、相似比のとおりの大きさで並べた見取図。
+
+    ★**「相似比 1:2 の2つの三角錐」を、形を見ないまま比だけで解くことになっていた。**
+    立体の種類は場面によって変わるが、比を読み取ることがこの問題の中身なので、
+    円錐の骨組みで代表させる（どの立体でも相似比と面積比・体積比の関係は同じ）。
+    """
+    k = float(ratio_den) / float(ratio_num)
+    if k > 1:
+        k = 1 / k
+    return render_solid_svg(
+        {"view": "sketch", "solid_kind": "similar_cones",
+         "radius_px": 78.0, "height_px": 150.0, "ratio": max(k, 0.3)},
+        draw=True,
+    )
+
+
 def similar_area_ratio_recipe(ctx: CellContext, rng: Rng) -> MR:
     """相似比から面積比を求め、既知の面積から対応する面積を求める
 
@@ -131,7 +149,7 @@ def similar_solid_surface_volume_ratio_recipe(ctx: CellContext, rng: Rng) -> MR:
     assert isinstance(sol.answer, SymbolicAnswer)
 
     statement = (
-        f"相似な2つの{solid}{ls}, {lt}があり、相似比は {ratio_num}:{ratio_den} である。"
+        f"下の図のように、相似な2つの{solid}{ls}, {lt}があり、相似比は {ratio_num}:{ratio_den} である。"
         f"{ls}と{lt}の表面積の比と体積の比をそれぞれ求めよ"
     )
 
@@ -147,7 +165,13 @@ def similar_solid_surface_volume_ratio_recipe(ctx: CellContext, rng: Rng) -> MR:
             "ratio_num": ratio_num, "ratio_den": ratio_den,
             "solid": solid, "labels": ls + lt,
         },
-        given={"condition": statement}, sub_questions=[sub_question], visual_plan=None,
+        given={"condition": statement},
+        context_slots={"figure_svg": _similar_solids_svg(ratio_num, ratio_den)},
+        sub_questions=[sub_question],
+        visual_plan=VisualPlan(
+            style="figure", labels=[],
+            elements=[VisualElement(kind="solid_given", attrs={"role": "given"})],
+        ),
         provenance=Provenance(recipe="math.similar_solid_surface_volume_ratio"),
     )
 
@@ -531,14 +555,24 @@ def exam_cone_split_volume_ratio_recipe(ctx: CellContext, rng: Rng) -> MR:
     height = (upper + lower) * int(draw(p["height_unit_domain"], rng))
     radius = int(draw(p["radius_domain"], rng))
     statement = (
-        f"底面の半径が{radius}cm、高さが{height}cmの円錐がある。この円錐を底面に平行な"
-        f"平面で切り、高さを上から{upper}:{lower}に分けた。切り口から上の小さい円錐と、"
-        "下の円錐台の体積の比を求めよ"
+        f"下の図のように、底面の半径が{radius}cm、高さが{height}cmの円錐がある。"
+        f"この円錐を底面に平行な平面で切り、高さを上から{upper}:{lower}に分けた。"
+        "切り口から上の小さい円錐と、下の円錐台の体積の比を求めよ"
+    )
+    # 切り口の位置は与えられた比のとおりに描く（図と本文が食い違わない）。
+    figure_svg = render_solid_svg(
+        {
+            "view": "sketch", "solid_kind": "cut_cone",
+            "radius_px": 95.0, "height_px": 180.0,
+            "cut_ratio": upper / (upper + lower),
+        },
+        draw=True,
     )
     return _exam_l6_mr(
         ctx, kind="cone_split_volume_ratio",
         numbers={"upper_part": upper, "lower_part": lower, "height": height, "radius": radius},
         given={"condition": statement}, ask_texts=("",),
+        figure_svg=figure_svg, figure_labels=[],
     )
 
 

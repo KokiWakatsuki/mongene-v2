@@ -63,8 +63,8 @@ levels:
       radius_domain: {int_range: [2, 12]}
     given: [condition]
     asked: [value]
-    visual: none
-    text: {tier: T1, template: lf_similarity_scale_ratio_condition_v1}
+    visual: required
+    text: {tier: T1, template: lf_similarity_scale_ratio_condition_v1, visual_builder: math.geometry_construction}
     hints: [steps_prefix]
     concept_tags: [exam.cone_split_volume_ratio]
     cause_tags: []

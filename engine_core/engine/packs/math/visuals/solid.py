@@ -398,6 +398,54 @@ def _cube_with_pyramid_sketch(params: dict[str, Any]) -> list[str]:
     ]
 
 
+def _similar_cones_sketch(params: dict[str, Any]) -> list[str]:
+    """相似な2つの円錐を並べた見取図（g3_l46.find_value）。
+
+    ★**「相似比 1:2 の2つの三角錐」を、形を見ないまま比だけで解くことになっていた。**
+    2つ目は相似比のとおりに縮めて描く（比と図が食い違わない）。
+    """
+    r = float(params["radius_px"])
+    h = float(params["height_px"])
+    k = float(params.get("ratio", 0.5))
+    y0 = _H - _PAD - 40
+    out: list[str] = []
+    x = _PAD + 40
+    for scale in (1.0, k):
+        rr, hh = r * scale, h * scale
+        cx = x + rr
+        out += [
+            _ellipse(cx, y0, rr, rr * 0.3, dashed=True),
+            _arc_half(cx, y0, rr, rr * 0.3, lower=True),
+            _line(cx - rr, y0, cx, y0 - hh),
+            _line(cx + rr, y0, cx, y0 - hh),
+        ]
+        x += 2 * rr + 46
+    return out
+
+
+def _cut_cone_sketch(params: dict[str, Any]) -> list[str]:
+    """底面に平行な平面で切った円錐（g3_l46/exam_l6 の相似な立体）。
+
+    切り口の楕円を描く（どこで切ったかが図で分かる）。切った高さの比は
+    `cut_ratio`（上からの割合）。
+    """
+    r = float(params["radius_px"])
+    h = float(params["height_px"])
+    t = float(params.get("cut_ratio", 0.5))
+    cx, y0 = _W / 2, _H - _PAD - 40
+    apex_y = y0 - h
+    # 上から t の高さで切る＝頂点から t の位置。切り口の半径は r*t。
+    cut_y = apex_y + h * t
+    cut_r = r * t
+    return [
+        _ellipse(cx, y0, r, r * 0.3, dashed=True),
+        _arc_half(cx, y0, r, r * 0.3, lower=True),
+        _line(cx - r, y0, cx, apex_y),
+        _line(cx + r, y0, cx, apex_y),
+        _ellipse(cx, cut_y, cut_r, cut_r * 0.3),
+    ]
+
+
 _SKETCH_BY_KIND = {
     "rectangular_prism": _prism_sketch,
     "square_prism": _prism_sketch,
@@ -413,6 +461,8 @@ _SKETCH_BY_KIND = {
     "tetrahedron": _tetrahedron_sketch,
     "hemisphere_on_cylinder": _hemisphere_on_cylinder_sketch,
     "cube_with_pyramid": _cube_with_pyramid_sketch,
+    "similar_cones": _similar_cones_sketch,
+    "cut_cone": _cut_cone_sketch,
 }
 
 
