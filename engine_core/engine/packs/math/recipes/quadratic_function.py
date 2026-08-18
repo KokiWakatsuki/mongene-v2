@@ -28,6 +28,23 @@ from engine.packs.math.recipes.polynomial import _domain_candidates, _fmt_poly_x
 from engine.packs.math.solvers.quadratic_function import _shoelace_area
 
 
+def _parabola_points_params(a: object, x_a: object, x_b: object) -> dict[str, object]:
+    """放物線と、その上の2点A・Bが収まる描画情報。
+
+    ★**直線ABと点Pは描かない。** 直線ABの式は (1) の答えで、P は最後の答え。
+    描いてよいのは本文が与えている放物線と2点まで。
+
+    ★**縦横同じ縮尺では読めない。** x が ±5 なのに y が -75 まで下がるので、
+    `grid_mode="signed_quantity"`（軸ごとに独立な縮尺）で描く。
+    """
+    ai, xa, xb = int(sympy.sympify(a)), int(sympy.sympify(x_a)), int(sympy.sympify(x_b))
+    return {
+        "curve_kind": "parabola", "coeff": str(ai),
+        "grid_mode": "signed_quantity",
+        "pts": [str((0, 0)), str((xa, ai * xa * xa)), str((xb, ai * xb * xb))],
+    }
+
+
 def _effective_concept_tags(ctx: CellContext) -> list[str]:
     return list(ctx.spec_level.concept_tags or ctx.spec_family.concepts_default)
 
@@ -383,7 +400,8 @@ def word_problem_parabola_line_guided_recipe(ctx: CellContext, rng: Rng) -> MR:
         signature=ctx.spec_level.signature, family=ctx.family, level=ctx.level,
         purpose=ctx.purpose, seed=0,
         # 本文に出ている数だけ（傾き m・切片 b・面積・答えの点は導出値なので置かない）。
-        params={"numbers": {"a": str(a), "x_a": str(xA), "x_b": str(xB)}},
+        params={"numbers": {"a": str(a), "x_a": str(xA), "x_b": str(xB)},
+                **_parabola_points_params(a, xA, xB)},
         given={"scenario": scenario},
         context_slots={
             "ask_1": "直線 AB の式を求めよ。",
@@ -398,7 +416,15 @@ def word_problem_parabola_line_guided_recipe(ctx: CellContext, rng: Rng) -> MR:
             SubQuestionMR(label="(2)", asked="value", answer=area_sol.answer, steps=area_sol.steps, **tags),
             SubQuestionMR(label="(3)", asked="value", answer=point_sol.answer, steps=point_sol.steps, **tags),
         ],
-        visual_plan=None,
+        visual_plan=VisualPlan(
+            style="grid",
+            labels=tick_labels_from_params(_parabola_points_params(a, xA, xB)),
+            elements=[
+                VisualElement(kind="grid", attrs={}),
+                VisualElement(kind="axis", attrs={}),
+                VisualElement(kind="curve", attrs={}),
+            ],
+        ),
         provenance=Provenance(recipe="math.word_problem_parabola_line_guided"),
     )
 
@@ -428,7 +454,8 @@ def word_problem_parabola_area_ratio_recipe(ctx: CellContext, rng: Rng) -> MR:
     return MR(
         signature=ctx.spec_level.signature, family=ctx.family, level=ctx.level,
         purpose=ctx.purpose, seed=0,
-        params={"numbers": {"a": str(a), "x_a": str(xA), "x_b": str(xB)}},
+        params={"numbers": {"a": str(a), "x_a": str(xA), "x_b": str(xB)},
+                **_parabola_points_params(a, xA, xB)},
         given={"scenario": scenario},
         context_slots={
             "ask_value": (
@@ -443,7 +470,15 @@ def word_problem_parabola_area_ratio_recipe(ctx: CellContext, rng: Rng) -> MR:
                 cause_tags=_effective_cause_tags(ctx),
             )
         ],
-        visual_plan=None,
+        visual_plan=VisualPlan(
+            style="grid",
+            labels=tick_labels_from_params(_parabola_points_params(a, xA, xB)),
+            elements=[
+                VisualElement(kind="grid", attrs={}),
+                VisualElement(kind="axis", attrs={}),
+                VisualElement(kind="curve", attrs={}),
+            ],
+        ),
         provenance=Provenance(recipe="math.word_problem_parabola_area_ratio"),
     )
 
@@ -632,7 +667,8 @@ def exam_parabola_equal_area_solo_recipe(ctx: CellContext, rng: Rng) -> MR:
     return MR(
         signature=ctx.spec_level.signature, family=ctx.family, level=ctx.level,
         purpose=ctx.purpose, seed=0,
-        params={"numbers": {"a": str(a), "x_a": str(xA), "x_b": str(xB)}},
+        params={"numbers": {"a": str(a), "x_a": str(xA), "x_b": str(xB)},
+                **_parabola_points_params(a, xA, xB)},
         given={"scenario": scenario},
         context_slots={
             "ask_value": (
@@ -648,6 +684,14 @@ def exam_parabola_equal_area_solo_recipe(ctx: CellContext, rng: Rng) -> MR:
                 cause_tags=_effective_cause_tags(ctx),
             )
         ],
-        visual_plan=None,
+        visual_plan=VisualPlan(
+            style="grid",
+            labels=tick_labels_from_params(_parabola_points_params(a, xA, xB)),
+            elements=[
+                VisualElement(kind="grid", attrs={}),
+                VisualElement(kind="axis", attrs={}),
+                VisualElement(kind="curve", attrs={}),
+            ],
+        ),
         provenance=Provenance(recipe="math.exam_parabola_equal_area_solo"),
     )

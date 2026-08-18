@@ -154,6 +154,35 @@ def _quantity_grid_spec(xs: list[sympy.Expr], ys: list[sympy.Expr]) -> _GridSpec
     )
 
 
+def _signed_quantity_grid_spec(xs: list[sympy.Expr], ys: list[sympy.Expr]) -> _GridSpec:
+    """負の値もある座標平面で、**軸ごとに独立な縮尺**を取る。
+
+    ★**縦横を同じ縮尺で描くと読めない図がある。** 放物線 y=-3x² 上の2点が
+    x=±5・y=-75 のとき、正方形の方眼では x が -40〜40 まで広がり、放物線が
+    細い針になった（実際に描いて確認した）。実物の入試問題は、こういう場合に
+    軸ごとに違う目盛を取る。
+
+    `quantity`（第1象限のみ）と違い、負の値をそのまま扱う。既定の座標平面
+    （縦横同じ縮尺）は変えないので、宣言したセルだけがこの経路を通る。
+    """
+    x_lo_v, x_hi_v = min(int(v) for v in xs), max(int(v) for v in xs)
+    y_lo_v, y_hi_v = min(int(v) for v in ys), max(int(v) for v in ys)
+    x_step = _nice_step(max(abs(x_lo_v), abs(x_hi_v)))
+    y_step = _nice_step(max(abs(y_lo_v), abs(y_hi_v)))
+
+    def _round(v: int, step: int, up: bool) -> int:
+        q = -(-v // step) if up else v // step
+        return int(q * step)
+
+    return _GridSpec(
+        x_lo=min(_round(x_lo_v, x_step, up=False) - x_step, 0),
+        x_hi=max(_round(x_hi_v, x_step, up=True) + x_step, 0),
+        y_lo=min(_round(y_lo_v, y_step, up=False) - y_step, 0),
+        y_hi=max(_round(y_hi_v, y_step, up=True) + y_step, 0),
+        x_step=x_step, y_step=y_step,
+    )
+
+
 def compute_grid_spec_from_params(params: dict[str, Any]) -> _GridSpec:
     """params（recipe が MR.params に残す a/b/pts）の pts が収まるグリッド範囲と目盛間隔。
 
@@ -173,6 +202,8 @@ def compute_grid_spec_from_params(params: dict[str, Any]) -> _GridSpec:
     ys = [p[1] for p in pts]
     if params.get("grid_mode") == "quantity":
         return _quantity_grid_spec(xs, ys)
+    if params.get("grid_mode") == "signed_quantity":
+        return _signed_quantity_grid_spec(xs, ys)
     x_lo, x_hi = _compute_range(xs)
     y_lo, y_hi = _compute_range(ys)
     half = max(x_hi - x_lo, y_hi - y_lo)

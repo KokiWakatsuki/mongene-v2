@@ -31,11 +31,9 @@ source_desc: |
   小問数（3 対 1）と given/asked が相異する。
 
   【params】本文に出ている数だけ（a・2点の x 座標）。答え（P の x 座標）は置かない。
-  【放物線の図を付けなかった理由（2026-08-18）】このセルは A・B の x 座標が ±5 程度
-  なのに y 座標が -75 まで下がる。座標平面の描き手は**縦横を同じ縮尺**で描くので、
-  x が -40〜40 まで広がり、放物線が細い針のようになって読めない図になった
-  （実際に描いて確認した）。軸ごとに独立な縮尺を座標平面にも入れるのが次の一手で、
-  それまでは図を付けない。exam_l2.find_value Lv3（|y| が |x| の4倍程度）には付けた。
+  【放物線の図（2026-08-19）】一度は「縦横同じ縮尺では読めない」として図を外したが、
+  `grid_mode="signed_quantity"`（軸ごとに独立な縮尺）を足して付け直した。
+  直線ABと点Pは描かない——ABの式は(1)の答え、Pは最後の答えだから。
 concepts_default: [quadratic_function.word_problem_parabola_line_guided]
 levels:
   "3":
@@ -46,8 +44,8 @@ levels:
       x_domain: {int_range: [-6, 6], exclude: [0]}
     given: [scenario]
     asked: [formulation, value, value]
-    visual: none
-    text: {tier: T1, template: wp_guided_three_v1}
+    visual: required
+    text: {tier: T1, template: wp_guided_three_v1, visual_builder: math.curve_graph}
     hints: [steps_prefix]
     concept_tags: [quadratic_function.word_problem_parabola_line_guided]
     cause_tags: []
@@ -59,8 +57,8 @@ levels:
       x_domain: {int_range: [-6, 6], exclude: [0]}
     given: [scenario]
     asked: [value]
-    visual: none
-    text: {tier: T1, template: wp_linear_solo_v1}
+    visual: required
+    text: {tier: T1, template: wp_linear_solo_v1, visual_builder: math.curve_graph}
     hints: [steps_prefix]
     concept_tags: [exam.parabola_equal_area_point_solo]
     cause_tags: []
