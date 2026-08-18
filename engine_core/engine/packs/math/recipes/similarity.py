@@ -23,6 +23,7 @@ from engine.core.contracts import (
 )
 from engine.core.registry import REGISTRY, register_recipe
 from engine.packs.math.visuals.circle_figure import two_chords_svg
+from engine.packs.math.visuals.similarity_figure import similar_pair_svg
 from engine.core.rng import Rng, draw
 from engine.packs.math.recipes.letter_expr import _draw_named_figures
 
@@ -106,8 +107,15 @@ def similarity_ratio_transfer_recipe(ctx: CellContext, rng: Rng) -> MR:
     assert isinstance(sol.answer, SymbolicAnswer)
 
     statement = (
-        f"三角形{pa}{pb}{pc}と三角形{pd}{pe}{pf}は相似で、相似比は {ratio_num}:{ratio_den} "
-        f"である。{pa}{pb}={known_side}cm のとき、対応する辺{pd}{pe}の長さを求めよ"
+        f"下の図で、三角形{pa}{pb}{pc}と三角形{pd}{pe}{pf}は相似で、"
+        f"相似比は {ratio_num}:{ratio_den} である。{pa}{pb}={known_side}cm のとき、"
+        f"対応する辺{pd}{pe}の長さを求めよ"
+    )
+    # 2つ目は相似比のとおりに縮めて描く（1:2 と書いてあるのに同じ大きさで並んで
+    # いる、という食い違いを作らない）。
+    figure_svg = similar_pair_svg(
+        pa + pb + pc, pd + pe + pf, float(ratio_num), float(ratio_den),
+        f"{known_side}cm",
     )
 
     sub_question = SubQuestionMR(
@@ -122,7 +130,13 @@ def similarity_ratio_transfer_recipe(ctx: CellContext, rng: Rng) -> MR:
             # 数を教材の大きさに戻したぶんの組み合わせは、点名の軸で稼ぐ（原則1・2）。
             "labels": pa + pb + pc + pd + pe + pf,
         },
-        given={"condition": statement}, sub_questions=[sub_question], visual_plan=None,
+        given={"condition": statement},
+        context_slots={"figure_svg": figure_svg},
+        sub_questions=[sub_question],
+        visual_plan=VisualPlan(
+            style="figure", labels=[f"{known_side}cm", pa, pb, pc, pd, pe, pf],
+            elements=[VisualElement(kind="triangle", attrs={"role": "given"})],
+        ),
         provenance=Provenance(recipe="math.similarity_ratio_transfer"),
     )
 

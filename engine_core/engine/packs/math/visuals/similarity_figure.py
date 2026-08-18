@@ -218,10 +218,41 @@ def pythagoras_proof_svg(
     return render_construction_svg(params)
 
 
+def similar_pair_svg(
+    first: str, second: str, ratio_num: float, ratio_den: float,
+    side_label: str = "", second_side_label: str = "",
+) -> str:
+    """相似な2つの三角形を並べた図（g3_l39/g3_l45.find_value）。
+
+    2つ目は相似比のとおりに縮めて描く（1:2 と書いてあるのに同じ大きさで並んでいる、
+    という食い違いを作らない）。向きは変えない——対応する頂点が見比べやすいように。
+    """
+    k = float(ratio_den) / float(ratio_num)
+    base = {0: (0.0, 0.0), 1: (3.4, 0.0), 2: (1.0, 2.6)}
+    coords: dict[str, tuple[float, float]] = {}
+    for i, name in enumerate(first):
+        coords[name] = base[i]
+    dx = 4.6
+    for i, name in enumerate(second):
+        x, y = base[i]
+        coords[name] = (dx + x * k, y * k)
+    a, b, c = first
+    d, e, f = second
+    params: dict[str, Any] = {
+        "coords": coords,
+        "segments": [(a, b), (b, c), (c, a), (d, e), (e, f), (f, d)],
+        "segment_labels": [
+            t for t in ([a, b, side_label], [d, e, second_side_label]) if t[2]
+        ],
+    }
+    return render_construction_svg(params)
+
+
 __all__ = [
     "isosceles_with_altitude_svg",
     "midpoint_connector_svg",
     "pythagoras_proof_svg",
+    "similar_pair_svg",
     "three_parallels_svg",
     "triangle_with_parallel_svg",
     "x_shape_similar_svg",

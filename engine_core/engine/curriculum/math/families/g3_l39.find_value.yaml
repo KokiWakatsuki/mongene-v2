@@ -22,8 +22,8 @@ levels:
       side_max: 60
     given: [condition]
     asked: [value]
-    visual: none
-    text: {tier: T1, template: lf_similarity_condition_v1}
+    visual: required
+    text: {tier: T1, template: lf_similarity_condition_v1, visual_builder: math.geometry_construction}
     hints: [steps_prefix]
     concept_tags: [similarity.ratio_transfer]
     cause_tags: []

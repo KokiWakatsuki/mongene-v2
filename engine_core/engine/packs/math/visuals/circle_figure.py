@@ -142,8 +142,57 @@ def circle_terms_svg(center: str, a: str, b: str, angle_label: str) -> str:
     return render_construction_svg(params)
 
 
+def concyclic_svg(
+    p_: str, q: str, r: str, s: str,
+    equal_label: str, spr_label: str, x_label: str,
+) -> str:
+    """直線PQの同じ側にある2点R、Sから、PQを同じ大きさで見込む図（g3_l48.find_value Lv2）。
+
+    円周角の定理の逆を使う問題なので、**円は描かない**（描いたら「同一円周上に
+    ある」という結論を図に書いたことになる）。R と S が PQ の同じ側にあることと、
+    2つの角が等しいことだけを示す。
+    """
+    coords = {
+        p_: (-2.6, 0.0), q: (2.6, 0.0),
+        r: (-1.0, 2.6), s: (1.4, 2.2),
+    }
+    params: dict[str, Any] = {
+        "coords": coords,
+        "segments": [(p_, q), (p_, r), (r, q), (p_, s), (s, q), (p_, r), (r, s)],
+        "angle_marks": [
+            [r, p_, q, equal_label],
+            [s, p_, q, equal_label],
+            [p_, s, r, spr_label],
+            [q, s, r, x_label],
+        ],
+    }
+    return render_construction_svg(params)
+
+
+def equal_division_polygon_svg(labels: str, vertex: str, a: str, b: str, x_label: str) -> str:
+    """円周を n 等分した点を結んだ多角形（g3_l50.find_value Lv3）。
+
+    どの点とどの点のあいだに弧がいくつ入るかは、図で数えるのがいちばん確かで、
+    そこがこの問題の中身。`vertex` で `a` と `b` を見込む角に名前を付ける。
+    """
+    n = len(labels)
+    coords = {
+        name: _on_circle(90.0 + 360.0 * i / n) for i, name in enumerate(labels)
+    }
+    params: dict[str, Any] = {
+        "coords": coords,
+        "circles": [[[0.0, 0.0], _R]],
+        "segments": [(labels[i], labels[(i + 1) % n]) for i in range(n)]
+        + [(vertex, a), (vertex, b)],
+        "angle_marks": [[vertex, a, b, x_label]],
+    }
+    return render_construction_svg(params)
+
+
 __all__ = [
     "circle_terms_svg",
+    "concyclic_svg",
+    "equal_division_polygon_svg",
     "inscribed_angle_svg",
     "sector_svg",
     "two_chords_svg",

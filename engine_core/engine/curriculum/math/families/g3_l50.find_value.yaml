@@ -51,8 +51,8 @@ levels:
       n_domain: {int_range: [5, 9]}
     given: [condition]
     asked: [value]
-    visual: none
-    text: {tier: T1, template: lf_inscribed_angle_condition_v1}
+    visual: required
+    text: {tier: T1, template: lf_inscribed_angle_condition_v1, visual_builder: math.geometry_construction}
     hints: [steps_prefix]
     concept_tags: [circle.equal_arc_inscribed_angle]
     cause_tags: []

@@ -21,8 +21,8 @@ levels:
       angle_domain: {int_range: [20, 80]}
     given: [condition]
     asked: [value]
-    visual: none
-    text: {tier: T1, template: lf_inscribed_angle_condition_v1}
+    visual: required
+    text: {tier: T1, template: lf_inscribed_angle_condition_v1, visual_builder: math.geometry_construction}
     hints: [steps_prefix]
     concept_tags: [circle.inscribed_angle_transfer_same_arc]
     cause_tags: []

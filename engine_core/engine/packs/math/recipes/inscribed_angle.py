@@ -27,7 +27,12 @@ from engine.core.contracts import (
 from engine.core.registry import REGISTRY, register_recipe
 from engine.core.rng import Rng, draw
 from engine.packs.math.recipes.letter_expr import _draw_named_figures
-from engine.packs.math.visuals.circle_figure import inscribed_angle_svg, two_chords_svg
+from engine.packs.math.visuals.circle_figure import (
+    concyclic_svg,
+    equal_division_polygon_svg,
+    inscribed_angle_svg,
+    two_chords_svg,
+)
 
 
 def _effective_concept_tags(ctx: CellContext) -> list[str]:
@@ -186,10 +191,13 @@ def inscribed_angle_transfer_same_arc_recipe(ctx: CellContext, rng: Rng) -> MR:
         # 前は結論まで書いていたので、76° がどこにも使われず、答えは与えられた
         # 41° をそのまま言い直すだけだった。等しい角から4点が同一円周上にあると
         # 気づく所を、生徒に残す。
-        f"直線{pa}{pb}について同じ側に点{pc}、{pd}があり、"
+        f"下の図で、直線{pa}{pb}について同じ側に点{pc}、{pd}があり、"
         f"∠{pa}{pc}{pb}=∠{pa}{pd}{pb}={v1}°である。"
         f"∠{pd}{pa}{pc}={v2}°のとき、∠{pd}{pb}{pc}の大きさを求めよ"
     )
+    # **円は描かない。** 「4点が同一円周上にある」と気づくところがこの問題の中身で、
+    # 円を描いたら結論を図に書いたことになる。
+    figure_svg = concyclic_svg(pa, pb, pc, pd, f"{v1}°", f"{v2}°", "∠x")
 
     sub_question = SubQuestionMR(
         label="(1)", asked="value", answer=sol.answer, steps=sol.steps,
@@ -199,7 +207,13 @@ def inscribed_angle_transfer_same_arc_recipe(ctx: CellContext, rng: Rng) -> MR:
         signature=ctx.spec_level.signature, family=ctx.family, level=ctx.level,
         purpose=ctx.purpose, seed=0,
         params={"v1": v1, "v2": v2},
-        given={"condition": statement}, sub_questions=[sub_question], visual_plan=None,
+        given={"condition": statement},
+        context_slots={"figure_svg": figure_svg},
+        sub_questions=[sub_question],
+        visual_plan=VisualPlan(
+            style="figure", labels=[f"{v1}°", f"{v2}°", "∠x", pa, pb, pc, pd],
+            elements=[VisualElement(kind="triangle", attrs={"role": "given"})],
+        ),
         provenance=Provenance(recipe="math.inscribed_angle_transfer_same_arc"),
     )
 
@@ -342,9 +356,12 @@ def equal_arc_inscribed_angle_recipe(ctx: CellContext, rng: Rng) -> MR:
 
     polygon_name = _POLYGON_NAMES.get(n, f"{n}角形")
     statement = (
-        f"円周を{n}等分する点を順に{labels}とする。これらの点を頂点とする{polygon_name}"
-        f"について、∠{pa}{vertex}{pc}の大きさを求めよ"
+        f"下の図のように、円周を{n}等分する点を順に{labels}とする。"
+        f"これらの点を頂点とする{polygon_name}について、∠{pa}{vertex}{pc}の大きさを求めよ"
     )
+    # どの点とどの点のあいだに弧がいくつ入るかは、図で数えるのがいちばん確かで、
+    # そこがこの問題の中身。
+    figure_svg = equal_division_polygon_svg(labels, vertex, pa, pc, "∠x")
 
     sub_question = SubQuestionMR(
         label="(1)", asked="value", answer=sol.answer, steps=sol.steps,
@@ -354,6 +371,12 @@ def equal_arc_inscribed_angle_recipe(ctx: CellContext, rng: Rng) -> MR:
         signature=ctx.spec_level.signature, family=ctx.family, level=ctx.level,
         purpose=ctx.purpose, seed=0,
         params={"n": n, "labels": labels, "vertex": vertex, "a": pa, "c": pc},
-        given={"condition": statement}, sub_questions=[sub_question], visual_plan=None,
+        given={"condition": statement},
+        context_slots={"figure_svg": figure_svg},
+        sub_questions=[sub_question],
+        visual_plan=VisualPlan(
+            style="figure", labels=["∠x", *labels],
+            elements=[VisualElement(kind="circle", attrs={"role": "given"})],
+        ),
         provenance=Provenance(recipe="math.equal_arc_inscribed_angle"),
     )
