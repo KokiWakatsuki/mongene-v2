@@ -45,7 +45,7 @@ sub_questions:
   - 共通する部分をひとかたまりとみる。
   - かたまりのままの式に乗法公式をあてはめる。
   label: (1)
-  prompt_text: 式を簡単にしなさい。
+  prompt_text: ''
   solution_steps:
   - args: []
     detail: ''

@@ -42,7 +42,7 @@ sub_questions:
   hints:
   - 円の接線と、接点を通る半径との位置関係を見比べる。
   label: (1)
-  prompt_text: 答えなさい。
+  prompt_text: ''
   solution_steps:
   - args: []
     detail: ''

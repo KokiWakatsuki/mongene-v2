@@ -41,7 +41,7 @@ sub_questions:
   hints:
   - その数が数直線上で 0 からどれだけ離れているかを見る。
   label: (1)
-  prompt_text: 答えを求めなさい。
+  prompt_text: ''
   solution_steps:
   - args: []
     detail: ''

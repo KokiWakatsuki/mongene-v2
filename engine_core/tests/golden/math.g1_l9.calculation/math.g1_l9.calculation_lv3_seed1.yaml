@@ -44,7 +44,7 @@ sub_questions:
   - 計算しやすいように、片方の数をきりのよい数と小さな数の和や差に分ける。
   - 分配法則を使って、きりのよい数の積と小さな数の積に分けて計算する。
   label: (1)
-  prompt_text: 答えを求めなさい。
+  prompt_text: ''
   solution_steps:
   - args: []
     detail: ''

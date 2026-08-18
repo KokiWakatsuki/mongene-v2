@@ -44,7 +44,7 @@ sub_questions:
   - それぞれの定数の符号を確かめる。
   - 2つの定数の和と積を求める。
   label: (1)
-  prompt_text: 式を簡単にしなさい。
+  prompt_text: ''
   solution_steps:
   - args: []
     detail: ''

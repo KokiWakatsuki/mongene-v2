@@ -41,7 +41,7 @@ sub_questions:
   hints:
   - たすと1次の係数、かけると定数になる2つの数を見つける。
   label: (1)
-  prompt_text: 式を簡単にしなさい。
+  prompt_text: ''
   solution_steps:
   - args: []
     detail: ''

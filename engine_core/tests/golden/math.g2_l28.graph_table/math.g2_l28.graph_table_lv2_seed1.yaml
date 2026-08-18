@@ -111,7 +111,7 @@ sub_questions:
   - 表から x と y の値の組を読み取り、座標平面上の点とみる。
   - 読み取った点を座標平面にとる。
   label: (1)
-  prompt_text: グラフをかきなさい。
+  prompt_text: ''
   solution_steps:
   - args: []
     detail: ''

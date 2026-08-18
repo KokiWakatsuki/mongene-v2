@@ -42,7 +42,7 @@ sub_questions:
   hints:
   - 母集団・標本・取り出し方のうち、どれが説明されているかを読み取る。
   label: (1)
-  prompt_text: 答えなさい。
+  prompt_text: ''
   solution_steps:
   - args: []
     detail: ''

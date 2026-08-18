@@ -44,7 +44,7 @@ sub_questions:
   - ÷ を、その式の逆数をかけるかけ算に直す。
   - 係数どうしをかけ算する。
   label: (1)
-  prompt_text: 式を簡単にしなさい。
+  prompt_text: ''
   solution_steps:
   - args: []
     detail: ''

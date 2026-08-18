@@ -44,7 +44,7 @@ sub_questions:
   - 分配法則で、前のかっこの各項を後ろのかっこの各項にすべてかける。
   - 文字の1次の項どうしを集める。
   label: (1)
-  prompt_text: 式を簡単にしなさい。
+  prompt_text: ''
   solution_steps:
   - args: []
     detail: ''

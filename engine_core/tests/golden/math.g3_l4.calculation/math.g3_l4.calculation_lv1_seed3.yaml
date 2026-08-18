@@ -41,7 +41,7 @@ sub_questions:
   hints:
   - はじめの項の平方・積の2倍・終わりの項の平方を求める。
   label: (1)
-  prompt_text: 式を簡単にしなさい。
+  prompt_text: ''
   solution_steps:
   - args: []
     detail: ''

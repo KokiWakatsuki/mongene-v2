@@ -41,9 +41,7 @@ sub_questions:
   hints:
   - その集合の数どうしでその演算をした結果が、いつでもその集合に入るかを調べる。
   label: (1)
-  prompt_text: '次の中から正しいものを選びなさい。
-
-    ・閉じていない
+  prompt_text: '・閉じていない
 
     ・閉じている'
   solution_steps:

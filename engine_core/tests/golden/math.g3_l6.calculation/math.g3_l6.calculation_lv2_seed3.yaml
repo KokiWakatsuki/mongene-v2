@@ -41,7 +41,7 @@ sub_questions:
   hints:
   - それぞれのかっこを乗法公式で展開する。
   label: (1)
-  prompt_text: 式を簡単にしなさい。
+  prompt_text: ''
   solution_steps:
   - args: []
     detail: ''

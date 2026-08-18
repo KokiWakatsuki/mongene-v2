@@ -42,7 +42,7 @@ sub_questions:
   hints:
   - 直角三角形で、直角の頂点がどこかを読み取る。
   label: (1)
-  prompt_text: 答えなさい。
+  prompt_text: ''
   solution_steps:
   - args: []
     detail: ''

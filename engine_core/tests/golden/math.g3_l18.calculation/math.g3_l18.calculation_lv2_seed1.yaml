@@ -44,7 +44,7 @@ sub_questions:
   - 根号の中の大きな数を、平方の因数と残りに分ける。
   - それぞれの平方の因数を根号の外に出す。
   label: (1)
-  prompt_text: 式を簡単にしなさい。
+  prompt_text: ''
   solution_steps:
   - args: []
     detail: ''

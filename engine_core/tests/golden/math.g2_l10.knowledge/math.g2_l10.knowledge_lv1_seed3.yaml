@@ -42,7 +42,7 @@ sub_questions:
   hints:
   - 説明されている方程式や値の組がどれかを読み取る。
   label: (1)
-  prompt_text: 答えなさい。
+  prompt_text: ''
   solution_steps:
   - args: []
     detail: ''

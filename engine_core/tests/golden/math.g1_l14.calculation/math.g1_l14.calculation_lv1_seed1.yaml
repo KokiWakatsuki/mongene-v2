@@ -39,7 +39,7 @@ sub_questions:
   hints:
   - 除法の記号 ÷ を使わず、分数の形で表す。
   label: (1)
-  prompt_text: 式を簡単にしなさい。
+  prompt_text: ''
   solution_steps:
   - args: []
     detail: ''

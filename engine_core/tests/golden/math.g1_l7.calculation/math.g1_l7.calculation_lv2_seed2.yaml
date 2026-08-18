@@ -41,7 +41,7 @@ sub_questions:
   hints:
   - 指数がどの数にかかっているか（かっこの有無）を見分ける。
   label: (1)
-  prompt_text: 答えを求めなさい。
+  prompt_text: ''
   solution_steps:
   - args: []
     detail: ''

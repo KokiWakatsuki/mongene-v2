@@ -42,9 +42,7 @@ sub_questions:
   hints:
   - 問題で問われている規則や約束が、何についてのものかを読み取る。
   label: (1)
-  prompt_text: '次の中から正しいものを選びなさい。
-
-    ・三角形NEQと三角形NMHが合同である
+  prompt_text: '・三角形NEQと三角形NMHが合同である
 
     ・MHとEQが平行である
 

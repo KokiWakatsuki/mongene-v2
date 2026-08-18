@@ -45,7 +45,7 @@ sub_questions:
   hints:
   - 表の対応するxとyについて、積xyをそれぞれ計算する。
   label: (1)
-  prompt_text: 答えなさい。
+  prompt_text: ''
   solution_steps:
   - args: []
     detail: ''

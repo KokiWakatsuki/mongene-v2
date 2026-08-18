@@ -41,7 +41,7 @@ sub_questions:
   hints:
   - 角の二等分線上の点から、角をつくる2辺までの距離を見比べる。
   label: (1)
-  prompt_text: 答えなさい。
+  prompt_text: ''
   solution_steps:
   - args: []
     detail: ''

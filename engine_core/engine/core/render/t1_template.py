@@ -351,9 +351,14 @@ def _body_states_the_ask(problem_text: str) -> bool:
     契約上、指示の置き場は `prompt_text`（小問の問い）だが、テンプレートの多くは
     本文の末尾に指示を書いている。**本文が言い切っているときは問いを空にする**
     ——表示側で消すのではなく、出す側で1つに決める。
+
+    ★**最終行だけを見てはいけない。** 計算のセルは「次の計算をせよ。」が1行目で、
+    最終行は式（`(-4/5)+(-1.7)+(-3)`）である。最終行だけ見ていたら判定を外し、
+    二重のまま出ていた（問題集に並べて初めて気づいた）。どの行でも指示があれば
+    本文は言い切っている。
     """
     lines = [ln for ln in (problem_text or "").split("\n") if ln.strip()]
-    return bool(lines) and bool(_SELF_CONTAINED_ASK.search(lines[-1].strip()))
+    return any(_SELF_CONTAINED_ASK.search(ln.strip()) for ln in lines)
 
 
 def _choices_already_printed(answer: Any, problem_text: str) -> bool:
@@ -376,13 +381,20 @@ def _ordered_choices(answer: Any, seed: int, label: str) -> list[str]:
 
 
 def _choice_prompt(answer: Any, problem_text: str, seed: int, label: str) -> str:
+    """選択式の問い。**指示は本文と問いのどちらか一方にだけ置く。**
+
+    問いの役目は選択肢を載せることで、指示を言い直すことではない。本文が
+    「…から選べ。」と言っているなら、問いは選択肢だけを並べる。
+    """
+    stated = _body_states_the_ask(problem_text)
     if not _body_asks_choice(problem_text):
         # 本文は記述式。問いの側だけが「選びなさい」と言っている食い違いを直す。
-        return _CHOICE_FALLBACK_PROMPT
+        return "" if stated else _CHOICE_FALLBACK_PROMPT
     if _choices_already_printed(answer, problem_text):
-        return _ASKED_PROMPTS["choice"]
+        # 選択肢は本文にある。載せるものが無いので、指示も重ねない。
+        return "" if stated else _ASKED_PROMPTS["choice"]
     lines = "\n".join(f"・{c}" for c in _ordered_choices(answer, seed, label))
-    return f"{_CHOICE_PROMPT}\n{lines}"
+    return lines if stated else f"{_CHOICE_PROMPT}\n{lines}"
 
 
 # ---------------------------------------------------------------------------

@@ -44,7 +44,7 @@ sub_questions:
   - A=B=C を A=C と B=C の2つの式に分けて連立方程式にする。
   - 連立方程式を解いて x を求める。
   label: (1)
-  prompt_text: 解を求めなさい。
+  prompt_text: ''
   solution_steps:
   - args:
     - 3x - 2y = -2x + 3y + 35 = 17

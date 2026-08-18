@@ -43,7 +43,7 @@ sub_questions:
   hints:
   - 全部を調べるのか、一部を取り出して全体を推定するのかを読み取る。
   label: (1)
-  prompt_text: 答えなさい。
+  prompt_text: ''
   solution_steps:
   - args: []
     detail: ''

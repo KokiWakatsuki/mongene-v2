@@ -41,7 +41,7 @@ sub_questions:
   hints:
   - ÷ の計算を、その数の逆数をかっこにかける計算に直す。
   label: (1)
-  prompt_text: 式を簡単にしなさい。
+  prompt_text: ''
   solution_steps:
   - args: []
     detail: ''

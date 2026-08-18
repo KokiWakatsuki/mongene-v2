@@ -169,19 +169,18 @@ def _spec_family(*, recipe_name: str = "math.dummy_recipe") -> SpecFamily:
 
 
 def _states_an_ask(text: str) -> bool:
-    """その文が「〜しなさい／〜せよ」と指示を言い切っているか（最後の行で見る）。"""
+    """その文のどこかが「〜しなさい／〜せよ」と指示を言い切っているか。
+
+    ★**最終行だけを見てはいけない。** 計算のセルは「次の計算をせよ。」が1行目で、
+    最終行は式である。最終行だけ見ると判定を外す（実際に外して二重を通した）。
+    """
     import re
 
-    lines = [ln for ln in (text or "").split("\n") if ln.strip()]
-    if not lines:
-        return False
-    return bool(
-        re.search(
-            r"(?:せよ|なさい|ください|ますか|ですか|でしょうか|答えよ|求めよ|かけ|示せ"
-            r"|表せ|選べ)[。．]?\s*$",
-            lines[-1].strip(),
-        )
+    pat = re.compile(
+        r"(?:せよ|なさい|ください|ますか|ですか|でしょうか|答えよ|求めよ|かけ|示せ"
+        r"|表せ|選べ)[。．]?\s*$"
     )
+    return any(pat.search(ln.strip()) for ln in (text or "").split("\n") if ln.strip())
 
 
 def _req(*, seed: int | None = 42) -> GenerateRequest:

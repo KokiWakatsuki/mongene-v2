@@ -41,7 +41,7 @@ sub_questions:
   hints:
   - 1次関数の式の、x の係数の部分か、定数項の部分かを確かめる。
   label: (1)
-  prompt_text: 答えなさい。
+  prompt_text: ''
   solution_steps:
   - args: []
     detail: ''

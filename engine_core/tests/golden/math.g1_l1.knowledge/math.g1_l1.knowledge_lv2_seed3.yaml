@@ -41,7 +41,7 @@ sub_questions:
   hints:
   - どちらの向き（性質）を正の数で表すことにしたかを読み取る。
   label: (1)
-  prompt_text: 答えなさい。
+  prompt_text: ''
   solution_steps:
   - args: []
     detail: ''

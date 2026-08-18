@@ -1,6 +1,6 @@
-approved_at: '2026-08-18T09:47:45.287061'
+approved_at: '2026-08-18T11:01:33.632031'
 approver: koki
-content_sha256: eebbb52fb3e28104cb4b619057d66c7ddb6dac496d265b4c1a1200c65d7db464
+content_sha256: d2ed5032cdd2d6b00166139c899c4665f923260318fd93000533891c03d69ffc
 family: math.g1_l34.knowledge
 files:
 - /Users/koki/workspace/mongene-v2/engine_core/tests/golden/math.g1_l34.knowledge/math.g1_l34.knowledge_lv1_seed1.yaml

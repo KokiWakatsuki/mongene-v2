@@ -47,7 +47,7 @@ sub_questions:
   - 小数点より下が同じ並びになる2つの式を、10 倍をくり返してつくる。
   - 2つの式の差をとって、循環する小数部分を消す。
   label: (1)
-  prompt_text: 答えを求めなさい。
+  prompt_text: ''
   solution_steps:
   - args: []
     detail: ''

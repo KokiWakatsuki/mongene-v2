@@ -41,7 +41,7 @@ sub_questions:
   hints:
   - x の値を1つ決めたとき、それに対応する y の値がただ1つに決まるかどうかを調べる。
   label: (1)
-  prompt_text: 答えなさい。
+  prompt_text: ''
   solution_steps:
   - args: []
     detail: ''

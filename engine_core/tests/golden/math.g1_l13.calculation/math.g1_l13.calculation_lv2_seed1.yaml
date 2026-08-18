@@ -41,7 +41,7 @@ sub_questions:
   hints:
   - 数を文字の前に書き、乗法の記号 × を省いて表す。
   label: (1)
-  prompt_text: 式を簡単にしなさい。
+  prompt_text: ''
   solution_steps:
   - args: []
     detail: ''

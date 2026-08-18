@@ -45,9 +45,7 @@ sub_questions:
   hints:
   - 説明されている、数量の間の大小の関係を読み取る。
   label: (1)
-  prompt_text: '次の中から正しいものを選びなさい。
-
-    ・≦
+  prompt_text: '・≦
 
     ・≧
 

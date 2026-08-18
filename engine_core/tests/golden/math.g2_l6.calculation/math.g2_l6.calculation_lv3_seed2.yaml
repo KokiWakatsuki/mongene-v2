@@ -44,7 +44,7 @@ sub_questions:
   - 分母の最小公倍数を求めて通分する。
   - うしろの分数の前が - なので、その分子の各項の符号を変える。
   label: (1)
-  prompt_text: 式を簡単にしなさい。
+  prompt_text: ''
   solution_steps:
   - args: []
     detail: ''

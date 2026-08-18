@@ -42,9 +42,7 @@ sub_questions:
   hints:
   - 問題で問われている規則や約束が、何についてのものかを読み取る。
   label: (1)
-  prompt_text: '次の中から正しいものを選びなさい。
-
-    ・QMとMBの比、QNとQAの比が等しい
+  prompt_text: '・QMとMBの比、QNとQAの比が等しい
 
     ・QMとQBの比、QNとQAの比、MNとBAの比が、すべて等しい
 

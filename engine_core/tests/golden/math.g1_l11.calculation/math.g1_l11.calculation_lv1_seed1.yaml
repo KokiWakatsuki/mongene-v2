@@ -41,7 +41,7 @@ sub_questions:
   hints:
   - 小さい素数から順にわり、商が素数になるまでわり続ける。
   label: (1)
-  prompt_text: 答えを求めなさい。
+  prompt_text: ''
   solution_steps:
   - args: []
     detail: 180 を小さい素数から順にわっていく。
