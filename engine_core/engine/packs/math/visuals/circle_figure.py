@@ -123,7 +123,8 @@ def sector_svg(
         "segments": [(center, a), (center, b)]
         + [(chain[i], chain[i + 1]) for i in range(len(chain) - 1)],
         "angle_marks": [[center, a, b, angle_label]],
-        "free_labels": [[a, radius_label, 4, 22]],
+        # 半径の長さは半径の**まん中**に書く（端に書くと点の名前とぶつかる）。
+        "segment_labels": [[center, a, radius_label]],
         "hidden_points": arc_names,
     }
     return render_construction_svg(params)

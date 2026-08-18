@@ -136,13 +136,22 @@ CALCULATION_FRAME = Frame(
     visual="none",
 )
 
-# knowledge: 命題・用語文脈を与え、用語/真偽/選択を問う。図は禁止（M0）。
+# knowledge: 命題・用語文脈を与え、用語/真偽/選択を問う。
 # Answer型: ChoiceAnswer（fact テーブル照合・V2 水準。§6.2 参照）
+#
+# ★**図は「禁止」から「あってもよい」に変えた（2026-08-18）。** M0 では
+# 「knowledge に図は要らない」と決めていたが、実物を読むと要る問いがある——
+# 「直方体PQRS-TUVWで、辺UVと辺SPの位置関係」は、どの辺がどこにあるかを
+# 頭の中で組み立てないと、ねじれの位置かどうかを判断できない。
+#
+# `optional` にしても図が勝手に増えることはない（recipe が visual_plan を
+# 付けたセルにだけ出る）。**用語を答える問い・「〜といえるか」の判定は
+# 図を出すと答えが図に書いてあることになる**ので、そちらは付けない。
 KNOWLEDGE_FRAME = Frame(
     form="knowledge",
     given_vocab=frozenset({"statement", "term_context"}),
     asked_vocab=frozenset({"term", "true_false", "choice"}),
-    visual="none",
+    visual="optional",
 )
 
 # find_value: 座標・傾き・切片・係数・条件・図形仕様を与え、値/式/座標/変化の割合/

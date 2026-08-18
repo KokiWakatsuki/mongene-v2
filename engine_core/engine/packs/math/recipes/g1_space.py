@@ -20,8 +20,11 @@ from engine.core.contracts import (
     Provenance,
     Solution,
     SubQuestionMR,
+    VisualElement,
+    VisualPlan,
 )
 from engine.core.registry import REGISTRY, register_recipe
+from engine.packs.math.visuals.solid import render_solid_svg
 from engine.core.rng import Rng, draw
 from engine.packs.math.recipes.letter_expr import _draw_named_figures
 from engine.packs.math.recipes.polynomial import _domain_candidates
@@ -183,14 +186,27 @@ def judge_solid_position(ctx: CellContext, rng: Rng) -> MR:
     if mode == "edge_edge":
         first = str(draw(edges, rng))
         second = str(draw([e for e in edges if e != first], rng))
-        statement = f"直方体{solid_name}で、辺{first}と辺{second}の位置関係"
+        statement = f"下の図の直方体{solid_name}で、辺{first}と辺{second}の位置関係"
     elif mode == "edge_face":
         first = str(draw(edges, rng))
         faces = ["".join(labels[i] for i in f) for f in CUBOID_FACE_INDICES]
         second = str(draw(faces, rng))
-        statement = f"直方体{solid_name}で、辺{first}と面{second}の位置関係"
+        statement = f"下の図の直方体{solid_name}で、辺{first}と面{second}の位置関係"
     else:  # pragma: no cover - spec で mode_set を縛るため到達しない
         raise ValueError(f"未知の mode: {mode!r}")
+
+    # ★**空間の位置関係は図が要る。** 「直方体PQRS-TUVWで、辺UVと辺SPの位置関係」
+    # ——どの辺がどこにあるかを頭の中で組み立てないと、ねじれの位置かどうかは
+    # 判断できない。見取図の描き手（visuals/solid.py）は頂点名を受け取れるので、
+    # 引いた8文字をそのまま渡す（並びは底面4つ→上面4つで描き手と同じ規約）。
+    figure_svg = render_solid_svg(
+        {
+            "view": "sketch", "solid_kind": "rectangular_prism",
+            "width_px": 190.0, "depth_px": 62.0, "height_px": 140.0,
+            "vertices": list(labels),
+        },
+        draw=True,
+    )
 
     solver = REGISTRY.solver("math.judge_solid_position_relation")
     sol = cast(Solution, solver(labels, mode, first, second))
@@ -209,7 +225,13 @@ def judge_solid_position(ctx: CellContext, rng: Rng) -> MR:
             "mode": mode, "labels": labels, "first": first, "second": second,
             "statement": statement,
         },
-        given={"statement": statement}, sub_questions=[sub_question], visual_plan=None,
+        given={"statement": statement},
+        context_slots={"figure_svg": figure_svg},
+        sub_questions=[sub_question],
+        visual_plan=VisualPlan(
+            style="figure", labels=list(labels),
+            elements=[VisualElement(kind="solid_given", attrs={"role": "given"})],
+        ),
         provenance=Provenance(recipe="math.judge_solid_position"),
     )
 

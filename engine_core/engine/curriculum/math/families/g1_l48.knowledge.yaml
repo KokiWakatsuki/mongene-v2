@@ -47,8 +47,8 @@ levels:
       mode_set: [edge_edge, edge_face]
     given: [statement]
     asked: [choice]
-    visual: none
-    text: {tier: T1, template: sp_position_relation_v1}
+    visual: required
+    text: {tier: T1, template: sp_position_relation_v1, visual_builder: math.geometry_construction}
     hints: [steps_prefix]
     concept_tags: [spatial_position.judge_relation]
     cause_tags: []

@@ -19,8 +19,11 @@ from engine.core.contracts import (
     Solution,
     SubQuestionMR,
     SymbolicAnswer,
+    VisualElement,
+    VisualPlan,
 )
 from engine.core.registry import REGISTRY, register_recipe
+from engine.packs.math.visuals.circle_figure import sector_svg
 from engine.core.rng import Rng, draw
 from engine.packs.math.recipes.letter_expr import _draw_named_figures
 from engine.packs.math.solvers.plane_geometry import _fmt_pi_display
@@ -286,9 +289,12 @@ def sector_arc_length_or_area_recipe(ctx: CellContext, rng: Rng) -> MR:
 
     asked_label = "弧の長さ" if target == "arc_length" else "面積"
     statement = (
-        f"半径{r}cm、中心角{angle}°のおうぎ形がある。このおうぎ形の{asked_label}を"
-        "求めよ。ただし円周率はπとする"
+        f"下の図のように、半径{r}cm、中心角{angle}°のおうぎ形がある。"
+        f"このおうぎ形の{asked_label}を求めよ。ただし円周率はπとする"
     )
+    # おうぎ形は**中心角の大きさが図で見える**ことに意味がある（30°と300°を
+    # ことばだけで受け取るのと、図で見るのとでは、量の見当のつき方が違う）。
+    figure_svg = sector_svg("O", "A", "B", float(angle), f"{r}cm", f"{angle}°")
 
     sub_question = SubQuestionMR(
         label="(1)", asked="value", answer=sol.answer, steps=sol.steps,
@@ -298,7 +304,13 @@ def sector_arc_length_or_area_recipe(ctx: CellContext, rng: Rng) -> MR:
         signature=ctx.spec_level.signature, family=ctx.family, level=ctx.level,
         purpose=ctx.purpose, seed=0,
         params={"radius": r, "angle": angle, "target": target},
-        given={"condition": statement}, sub_questions=[sub_question], visual_plan=None,
+        given={"condition": statement},
+        context_slots={"figure_svg": figure_svg},
+        sub_questions=[sub_question],
+        visual_plan=VisualPlan(
+            style="figure", labels=[f"{r}cm", f"{angle}°", "O", "A", "B"],
+            elements=[VisualElement(kind="sector", attrs={"role": "given"})],
+        ),
         provenance=Provenance(recipe="math.sector_arc_length_or_area"),
     )
 

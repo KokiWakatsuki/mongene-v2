@@ -25,8 +25,8 @@ levels:
       target_set: [arc_length, area]
     given: [condition]
     asked: [value]
-    visual: none
-    text: {tier: T1, template: lf_sector_arc_length_or_area_v1}
+    visual: required
+    text: {tier: T1, template: lf_sector_arc_length_or_area_v1, visual_builder: math.geometry_construction}
     hints: [steps_prefix]
     concept_tags: [sector.arc_length_or_area]
     cause_tags: []
