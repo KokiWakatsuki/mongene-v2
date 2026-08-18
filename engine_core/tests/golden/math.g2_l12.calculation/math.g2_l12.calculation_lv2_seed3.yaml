@@ -39,7 +39,7 @@ sub_questions:
 
     次に、y の係数がそろったので辺々を引く。整理すると -7x = 14 になるので、両辺を -7 でわる。（x = -2）
 
-    最後に、求めた x をもとの式に代入して y を求める。（y = -3）'
+    最後に、求めた x をもとの式に代入して y を求め、解の組にまとめる。（x = -2、y = -3）'
   hints:
   - y の係数をそろえるため、一方の式を何倍かする。
   label: (1)
@@ -63,8 +63,8 @@ sub_questions:
   - args:
     - '-2'
     detail: ''
-    narration: 求めた x をもとの式に代入して y を求める。
+    narration: 求めた x をもとの式に代入して y を求め、解の組にまとめる。
     op: back_substitute
-    result_display: y = -3
+    result_display: x = -2、y = -3
     result_srepr: Integer(-3)
 visual_svg: null

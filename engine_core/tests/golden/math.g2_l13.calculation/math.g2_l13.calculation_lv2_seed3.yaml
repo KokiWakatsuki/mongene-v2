@@ -41,7 +41,7 @@ sub_questions:
 
     次に、両辺を y の係数 12 でわる。（y = 1）
 
-    最後に、求めた y を x = … の式に代入して x を求める。（x = -3）'
+    最後に、求めた y を x = … の式に代入して x を求め、解の組にまとめる。（x = -3、y = 1）'
   hints:
   - はじめの式を x について解く。
   - これをもう一方の式に代入して y だけの方程式にする。
@@ -73,8 +73,8 @@ sub_questions:
   - args:
     - '1'
     detail: ''
-    narration: 求めた y を x = … の式に代入して x を求める。
+    narration: 求めた y を x = … の式に代入して x を求め、解の組にまとめる。
     op: back_substitute
-    result_display: x = -3
+    result_display: x = -3、y = 1
     result_srepr: Integer(-3)
 visual_svg: null

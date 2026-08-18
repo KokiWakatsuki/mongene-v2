@@ -76,7 +76,7 @@ sub_questions:
   - simultaneous_equations.word_problem_distance_time
   explanation: 'まず、係数をそろえて一方の文字を消去し、残った文字を求める。（x = 6）
 
-    次に、求めた値をもとの式に代入し、もう一方の文字を求める。（y = 10）
+    次に、求めた値をもとの式に代入し、もう一方の文字を求めて交点の座標にする。（交点 (6, 10)）
 
     最後に、求めた値を、問題が聞いている量のことばに直して答える。（歩いた道のりは6km、自転車で進んだ道のりは10km）'
   hints:
@@ -95,9 +95,9 @@ sub_questions:
   - args:
     - '6'
     detail: ''
-    narration: 求めた値をもとの式に代入し、もう一方の文字を求める。
+    narration: 求めた値をもとの式に代入し、もう一方の文字を求めて交点の座標にする。
     op: back_substitute
-    result_display: y = 10
+    result_display: 交点 (6, 10)
     result_srepr: Integer(10)
   - args: []
     detail: ''

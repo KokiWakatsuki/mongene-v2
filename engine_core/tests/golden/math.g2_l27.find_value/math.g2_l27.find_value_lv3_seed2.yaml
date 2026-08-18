@@ -37,7 +37,7 @@ sub_questions:
 
     次に、係数をそろえて一方の文字を消去し、残った文字を求める。（x = 0）
 
-    最後に、求めた値をもとの式に代入し、もう一方の文字を求める。（y = 1）'
+    最後に、求めた値をもとの式に代入し、もう一方の文字を求めて交点の座標にする。（交点 (0, 1)）'
   hints:
   - 2つの直線を ax + by = c の形にそろえて連立方程式を立てる。
   label: (1)
@@ -62,8 +62,8 @@ sub_questions:
   - args:
     - '0'
     detail: ''
-    narration: 求めた値をもとの式に代入し、もう一方の文字を求める。
+    narration: 求めた値をもとの式に代入し、もう一方の文字を求めて交点の座標にする。
     op: back_substitute
-    result_display: y = 1
+    result_display: 交点 (0, 1)
     result_srepr: Integer(1)
 visual_svg: null

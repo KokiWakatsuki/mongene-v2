@@ -39,7 +39,7 @@ sub_questions:
 
     次に、はじめの式の両辺を 3 倍、もう一方の式の両辺を 2 倍して y の係数の大きさをそろえ、辺々を足す。整理すると -5x = 0 になるので、両辺を -5 でわる。（x = 0）
 
-    最後に、求めた x をもとの式に代入して y を求める。（y = -1）'
+    最後に、求めた x をもとの式に代入して y を求め、解の組にまとめる。（x = 0、y = -1）'
   hints:
   - 分母を払って整数の連立方程式に直す。
   label: (1)
@@ -64,8 +64,8 @@ sub_questions:
   - args:
     - '0'
     detail: ''
-    narration: 求めた x をもとの式に代入して y を求める。
+    narration: 求めた x をもとの式に代入して y を求め、解の組にまとめる。
     op: back_substitute
-    result_display: y = -1
+    result_display: x = 0、y = -1
     result_srepr: Integer(-1)
 visual_svg: null

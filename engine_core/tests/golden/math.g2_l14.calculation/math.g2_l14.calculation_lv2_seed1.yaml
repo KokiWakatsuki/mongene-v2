@@ -39,7 +39,7 @@ sub_questions:
 
     次に、もう一方の式の両辺を 3 倍して y の係数の大きさをそろえ、辺々を引く。整理すると -4x = -12 になるので、両辺を -4 でわる。（x = 3）
 
-    最後に、求めた x をもとの式に代入して y を求める。（y = -4）'
+    最後に、求めた x をもとの式に代入して y を求め、解の組にまとめる。（x = 3、y = -4）'
   hints:
   - かっこを展開して整数の連立方程式に直す。
   label: (1)
@@ -64,8 +64,8 @@ sub_questions:
   - args:
     - '3'
     detail: ''
-    narration: 求めた x をもとの式に代入して y を求める。
+    narration: 求めた x をもとの式に代入して y を求め、解の組にまとめる。
     op: back_substitute
-    result_display: y = -4
+    result_display: x = 3、y = -4
     result_srepr: Integer(-4)
 visual_svg: null

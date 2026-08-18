@@ -39,7 +39,7 @@ sub_questions:
 
     次に、y の係数がそろったので辺々を引く。整理すると -9x = -27 になるので、両辺を -9 でわる。（x = 3）
 
-    最後に、求めた x をもとの式に代入して y を求める。（y = 1）'
+    最後に、求めた x をもとの式に代入して y を求め、解の組にまとめる。（x = 3、y = 1）'
   hints:
   - y の係数をそろえるため、一方の式を何倍かする。
   label: (1)
@@ -63,8 +63,8 @@ sub_questions:
   - args:
     - '3'
     detail: ''
-    narration: 求めた x をもとの式に代入して y を求める。
+    narration: 求めた x をもとの式に代入して y を求め、解の組にまとめる。
     op: back_substitute
-    result_display: y = 1
+    result_display: x = 3、y = 1
     result_srepr: Integer(1)
 visual_svg: null

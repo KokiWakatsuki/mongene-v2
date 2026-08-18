@@ -43,7 +43,7 @@ sub_questions:
 
     次に、係数をそろえて一方の文字を消去し、残った文字を求める。（x = 6）
 
-    次に、求めた値をもとの式に代入し、もう一方の文字を求める。（y = 9）
+    次に、求めた値をもとの式に代入し、もう一方の文字を求めて交点の座標にする。（交点 (6, 9)）
 
     最後に、求めた値を、問題が聞いている量のことばに直して答える。（おかしは6個、ジュースは9本）'
   hints:
@@ -82,9 +82,9 @@ sub_questions:
   - args:
     - '6'
     detail: ''
-    narration: 求めた値をもとの式に代入し、もう一方の文字を求める。
+    narration: 求めた値をもとの式に代入し、もう一方の文字を求めて交点の座標にする。
     op: back_substitute
-    result_display: y = 9
+    result_display: 交点 (6, 9)
     result_srepr: Integer(9)
   - args: []
     detail: ''

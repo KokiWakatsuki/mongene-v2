@@ -39,7 +39,7 @@ sub_questions:
 
     次に、両辺を x の係数 3 でわる。（x = -3）
 
-    最後に、求めた x を y = … の式に代入して y を求める。（y = 5）'
+    最後に、求めた x を y = … の式に代入して y を求め、解の組にまとめる。（x = -3、y = 5）'
   hints:
   - 一方の式の y を、もう一方の式に代入して x だけの方程式にする。
   label: (1)
@@ -63,8 +63,8 @@ sub_questions:
   - args:
     - '-3'
     detail: ''
-    narration: 求めた x を y = … の式に代入して y を求める。
+    narration: 求めた x を y = … の式に代入して y を求め、解の組にまとめる。
     op: back_substitute
-    result_display: y = 5
+    result_display: x = -3、y = 5
     result_srepr: Integer(5)
 visual_svg: null

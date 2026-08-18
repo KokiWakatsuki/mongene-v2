@@ -43,7 +43,7 @@ sub_questions:
 
     次に、係数をそろえて一方の文字を消去し、残った文字を求める。（x = 13）
 
-    次に、求めた値をもとの式に代入し、もう一方の文字を求める。（y = 5）
+    次に、求めた値をもとの式に代入し、もう一方の文字を求めて交点の座標にする。（交点 (13, 5)）
 
     最後に、求めた x、y をもとに、問われている量を計算して答える。（歩いた道のりは910m、走った道のりは1000m）'
   hints:
@@ -82,9 +82,9 @@ sub_questions:
   - args:
     - '13'
     detail: ''
-    narration: 求めた値をもとの式に代入し、もう一方の文字を求める。
+    narration: 求めた値をもとの式に代入し、もう一方の文字を求めて交点の座標にする。
     op: back_substitute
-    result_display: y = 5
+    result_display: 交点 (13, 5)
     result_srepr: Integer(5)
   - args: []
     detail: ''

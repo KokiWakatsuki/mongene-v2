@@ -27,7 +27,7 @@ problem_ref: 28bb75d4985fbb5a
 problem_text: 座標平面にかかれた直線のグラフから、この直線の傾きと切片を読み取れ。
 sub_questions:
 - answer:
-    display: 傾き 1, 切片 2
+    display: 傾き 1、切片 2
     kind: symbolic
     srepr: Tuple(Integer(1), Integer(2))
   cause_tags: []
@@ -35,7 +35,7 @@ sub_questions:
   - graph.read_slope_intercept
   explanation: 'まず、グラフ上の格子点で、右へ進む量に対する上下の変化の割合を読み取り、傾きとする。（傾き a = 1）
 
-    次に、グラフが y 軸と交わる点の y 座標を読み取り、切片とする。（切片 b = 2）'
+    次に、グラフが y 軸と交わる点の y 座標を読み取って切片とし、傾きと合わせて答える。（傾き 1、切片 2）'
   hints:
   - グラフ上の格子点で、右へ進む量に対する上下の変化の割合を読み取り、傾きとする。
   label: (1)
@@ -53,9 +53,9 @@ sub_questions:
     - '1'
     - (-2, 0)
     detail: ''
-    narration: グラフが y 軸と交わる点の y 座標を読み取り、切片とする。
+    narration: グラフが y 軸と交わる点の y 座標を読み取って切片とし、傾きと合わせて答える。
     op: read_intercept
-    result_display: 切片 b = 2
+    result_display: 傾き 1、切片 2
     result_srepr: Integer(2)
 visual_svg: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400" font-family="Hiragino Sans, Hiragino Kaku Gothic ProN, Noto Sans JP, Yu Gothic, Meiryo, sans-serif"><rect
   x="0" y="0" width="400" height="400" fill="#ffffff" stroke="none"/><line x1="28.00" y1="28.00" x2="28.00" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="52.57" y1="28.00" x2="52.57" y2="372.00"

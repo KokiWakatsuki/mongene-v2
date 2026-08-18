@@ -1694,8 +1694,9 @@ def solve_system_elimination(ctx: CellContext, rng: Rng) -> MR:
             op="back_substitute",
             args=[_fmt_number(x0_s)],
             result_srepr=sympy.srepr(y0_s),
-            result_display=f"y = {_fmt_number(y0_s)}",
-            narration="求めた x を一方の式に代入して y を求める。",
+            # 解説の最後は解の組まで届かせる（op 名は触らない）。
+            result_display=f"x = {_fmt_number(x0_s)}、y = {_fmt_number(y0_s)}",
+            narration="求めた x を一方の式に代入して y を求め、解の組にまとめる。",
         ),
     ]
 
@@ -1800,8 +1801,9 @@ def solve_system_elimination_add(ctx: CellContext, rng: Rng) -> MR:
             op="back_substitute",
             args=[_fmt_number(x0_s)],
             result_srepr=sympy.srepr(y0_s),
-            result_display=f"y = {_fmt_number(y0_s)}",
-            narration="求めた x を一方の式に代入して y を求める。",
+            # 解説の最後は解の組まで届かせる（op 名は触らない）。
+            result_display=f"x = {_fmt_number(x0_s)}、y = {_fmt_number(y0_s)}",
+            narration="求めた x を一方の式に代入して y を求め、解の組にまとめる。",
         ),
     ]
 
@@ -1903,8 +1905,9 @@ def solve_system_substitution(ctx: CellContext, rng: Rng) -> MR:
                 op="back_substitute",
                 args=[_fmt_number(x0)],
                 result_srepr=sympy.srepr(y0),
-                result_display=f"y = {_fmt_number(y0)}",
-                narration="求めた x を y = … の式に代入して y を求める。",
+                # 解説の最後は解の組まで届かせる（op 名は触らない・上の注記と同じ理由）。
+                result_display=f"x = {_fmt_number(x0)}、y = {_fmt_number(y0)}",
+                narration="求めた x を y = … の式に代入して y を求め、解の組にまとめる。",
             ),
         ]
     elif mode == "isolate":
@@ -1956,8 +1959,8 @@ def solve_system_substitution(ctx: CellContext, rng: Rng) -> MR:
                 op="back_substitute",
                 args=[_fmt_number(y0)],
                 result_srepr=sympy.srepr(x0),
-                result_display=f"x = {_fmt_number(x0)}",
-                narration="求めた y を x = … の式に代入して x を求める。",
+                result_display=f"x = {_fmt_number(x0)}、y = {_fmt_number(y0)}",
+                narration="求めた y を x = … の式に代入して x を求め、解の組にまとめる。",
             ),
         ]
     else:
@@ -2110,8 +2113,12 @@ def solve_system_elim_scaled(ctx: CellContext, rng: Rng) -> MR:
             op="back_substitute",
             args=[_fmt_number(x0)],
             result_srepr=sympy.srepr(y0),
-            result_display=f"y = {_fmt_number(y0)}",
-            narration="求めた x をもとの式に代入して y を求める。",
+            # ★**解説の最後は答えに届かせる。** ここが「y = 6」で終わっていて、
+            # 解答欄の「(4, 6)」に対応する行がどこにも無かった（実測9セル）。
+            # 手を1つ足すと op 列が変わって level_sep が落ちるので、
+            # **同じ手の産物を解の組にする**（op 名は触らない）。
+            result_display=f"x = {_fmt_number(x0)}、y = {_fmt_number(y0)}",
+            narration="求めた x をもとの式に代入して y を求め、解の組にまとめる。",
         ),
     ]
 
@@ -2259,8 +2266,12 @@ def solve_system_preprocessed(ctx: CellContext, rng: Rng) -> MR:
             op="back_substitute",
             args=[_fmt_number(x0)],
             result_srepr=sympy.srepr(y0),
-            result_display=f"y = {_fmt_number(y0)}",
-            narration="求めた x をもとの式に代入して y を求める。",
+            # ★**解説の最後は答えに届かせる。** ここが「y = 6」で終わっていて、
+            # 解答欄の「(4, 6)」に対応する行がどこにも無かった（実測9セル）。
+            # 手を1つ足すと op 列が変わって level_sep が落ちるので、
+            # **同じ手の産物を解の組にする**（op 名は触らない）。
+            result_display=f"x = {_fmt_number(x0)}、y = {_fmt_number(y0)}",
+            narration="求めた x をもとの式に代入して y を求め、解の組にまとめる。",
         ),
     ]
 
@@ -2365,8 +2376,12 @@ def solve_system_abc(ctx: CellContext, rng: Rng) -> MR:
             op="back_substitute",
             args=[_fmt_number(x0)],
             result_srepr=sympy.srepr(y0),
-            result_display=f"y = {_fmt_number(y0)}",
-            narration="求めた x をもとの式に代入して y を求める。",
+            # ★**解説の最後は答えに届かせる。** ここが「y = 6」で終わっていて、
+            # 解答欄の「(4, 6)」に対応する行がどこにも無かった（実測9セル）。
+            # 手を1つ足すと op 列が変わって level_sep が落ちるので、
+            # **同じ手の産物を解の組にする**（op 名は触らない）。
+            result_display=f"x = {_fmt_number(x0)}、y = {_fmt_number(y0)}",
+            narration="求めた x をもとの式に代入して y を求め、解の組にまとめる。",
         ),
     ]
 

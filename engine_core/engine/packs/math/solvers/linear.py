@@ -341,8 +341,11 @@ def intersection_of_two_lines(
                 op="compute_y",
                 args=[_format_number(x0)],
                 result_srepr=sympy.srepr(y0),
-                result_display=f"y = {_format_number(y0)}",
-                narration="求めた x をどちらかの式に代入し、y を求める。",
+                # ★解説の最後は答えの形（交点の座標）まで届かせる。「y = 1」で
+                # 終わっていて、解答欄の「(2, 1)」に対応する行が無かった。
+                # 手を足すと op 列が変わるので、同じ手の産物を座標にする。
+                result_display=f"交点 ({_format_number(x0)}, {_format_number(y0)})",
+                narration="求めた x をどちらかの式に代入し、y を求めて交点の座標にする。",
             ),
         ]
     else:  # elimination
@@ -365,8 +368,8 @@ def intersection_of_two_lines(
                 op="back_substitute",
                 args=[_format_number(x0)],
                 result_srepr=sympy.srepr(y0),
-                result_display=f"y = {_format_number(y0)}",
-                narration="求めた値をもとの式に代入し、もう一方の文字を求める。",
+                result_display=f"交点 ({_format_number(x0)}, {_format_number(y0)})",
+                narration="求めた値をもとの式に代入し、もう一方の文字を求めて交点の座標にする。",
             ),
         ]
 
@@ -409,11 +412,13 @@ def read_slope_intercept_from_graph(
             op="read_intercept",
             args=[_format_number(a), str(p1)],
             result_srepr=sympy.srepr(b),
-            result_display=f"切片 b = {_format_number(b)}",
-            narration="グラフが y 軸と交わる点の y 座標を読み取り、切片とする。",
+            # 問われているのは傾きと切片の両方。最後の手に両方を出す。
+            result_display=f"傾き {_format_number(a)}、切片 {_format_number(b)}",
+            narration="グラフが y 軸と交わる点の y 座標を読み取って切片とし、傾きと合わせて答える。",
         ),
     ]
-    display = f"傾き {_format_number(a)}, 切片 {_format_number(b)}"
+    # 区切りは「、」に揃える（ここだけ半角カンマだった）。
+    display = f"傾き {_format_number(a)}、切片 {_format_number(b)}"
     answer = SymbolicAnswer(srepr=sympy.srepr(pair), display=display)
     return Solution(answer=answer, steps=steps)
 

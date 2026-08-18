@@ -41,7 +41,7 @@ sub_questions:
 
     次に、両辺を y の係数 -4 でわる。（y = 2）
 
-    最後に、求めた y を x = … の式に代入して x を求める。（x = 5）'
+    最後に、求めた y を x = … の式に代入して x を求め、解の組にまとめる。（x = 5、y = 2）'
   hints:
   - はじめの式を x について解く。
   - これをもう一方の式に代入して y だけの方程式にする。
@@ -73,8 +73,8 @@ sub_questions:
   - args:
     - '2'
     detail: ''
-    narration: 求めた y を x = … の式に代入して x を求める。
+    narration: 求めた y を x = … の式に代入して x を求め、解の組にまとめる。
     op: back_substitute
-    result_display: x = 5
+    result_display: x = 5、y = 2
     result_srepr: Integer(5)
 visual_svg: null

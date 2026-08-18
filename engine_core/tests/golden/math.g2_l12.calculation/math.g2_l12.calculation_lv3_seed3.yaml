@@ -39,7 +39,7 @@ sub_questions:
 
     次に、y の係数がそろったので辺々を引く。整理すると 13x = 65 になるので、両辺を 13 でわる。（x = 5）
 
-    最後に、求めた x をもとの式に代入して y を求める。（y = -5）'
+    最後に、求めた x をもとの式に代入して y を求め、解の組にまとめる。（x = 5、y = -5）'
   hints:
   - y の係数を最小公倍数にそろえるため、両方の式をそれぞれ何倍かする。
   label: (1)
@@ -63,8 +63,8 @@ sub_questions:
   - args:
     - '5'
     detail: ''
-    narration: 求めた x をもとの式に代入して y を求める。
+    narration: 求めた x をもとの式に代入して y を求め、解の組にまとめる。
     op: back_substitute
-    result_display: y = -5
+    result_display: x = 5、y = -5
     result_srepr: Integer(-5)
 visual_svg: null

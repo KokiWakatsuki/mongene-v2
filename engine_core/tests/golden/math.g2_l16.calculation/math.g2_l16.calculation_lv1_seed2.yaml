@@ -39,7 +39,7 @@ sub_questions:
 
     次に、整理すると 5x = 0 になるので、両辺を 5 でわる。（x = 0）
 
-    最後に、求めた x を一方の式に代入して y を求める。（y = -6）'
+    最後に、求めた x を一方の式に代入して y を求め、解の組にまとめる。（x = 0、y = -6）'
   hints:
   - y の係数が絶対値が等しく符号が逆なので、辺々を足して y を消去する。
   label: (1)
@@ -62,8 +62,8 @@ sub_questions:
   - args:
     - '0'
     detail: ''
-    narration: 求めた x を一方の式に代入して y を求める。
+    narration: 求めた x を一方の式に代入して y を求め、解の組にまとめる。
     op: back_substitute
-    result_display: y = -6
+    result_display: x = 0、y = -6
     result_srepr: Integer(-6)
 visual_svg: null

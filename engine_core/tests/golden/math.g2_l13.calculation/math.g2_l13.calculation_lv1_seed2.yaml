@@ -39,7 +39,7 @@ sub_questions:
 
     次に、両辺を x の係数 4 でわる。（x = -6）
 
-    最後に、求めた x を y = … の式に代入して y を求める。（y = 0）'
+    最後に、求めた x を y = … の式に代入して y を求め、解の組にまとめる。（x = -6、y = 0）'
   hints:
   - 一方の式の y を、もう一方の式に代入して x だけの方程式にする。
   label: (1)
@@ -63,8 +63,8 @@ sub_questions:
   - args:
     - '-6'
     detail: ''
-    narration: 求めた x を y = … の式に代入して y を求める。
+    narration: 求めた x を y = … の式に代入して y を求め、解の組にまとめる。
     op: back_substitute
-    result_display: y = 0
+    result_display: x = -6、y = 0
     result_srepr: Integer(0)
 visual_svg: null

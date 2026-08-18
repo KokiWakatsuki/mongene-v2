@@ -76,7 +76,7 @@ sub_questions:
   - simultaneous_equations.word_problem_percent_change
   explanation: 'まず、係数をそろえて一方の文字を消去し、残った文字を求める。（x = 100）
 
-    次に、求めた値をもとの式に代入し、もう一方の文字を求める。（y = 100）
+    次に、求めた値をもとの式に代入し、もう一方の文字を求めて交点の座標にする。（交点 (100, 100)）
 
     最後に、求めた値を、問題が聞いている量のことばに直して答える。（昨年の男子は100人、昨年の女子は100人）'
   hints:
@@ -95,9 +95,9 @@ sub_questions:
   - args:
     - '100'
     detail: ''
-    narration: 求めた値をもとの式に代入し、もう一方の文字を求める。
+    narration: 求めた値をもとの式に代入し、もう一方の文字を求めて交点の座標にする。
     op: back_substitute
-    result_display: y = 100
+    result_display: 交点 (100, 100)
     result_srepr: Integer(100)
   - args: []
     detail: ''

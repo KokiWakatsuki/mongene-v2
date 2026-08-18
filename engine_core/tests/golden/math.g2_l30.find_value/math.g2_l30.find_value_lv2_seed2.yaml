@@ -37,7 +37,7 @@ sub_questions:
 
     次に、その方程式を解いて、x の値を求める。（x = 8）
 
-    最後に、求めた x をどちらかの式に代入し、y を求める。（y = 10）'
+    最後に、求めた x をどちらかの式に代入し、y を求めて交点の座標にする。（交点 (8, 10)）'
   hints:
   - 2つの直線の y を等しいとおき、x についての方程式をつくる。
   label: (1)
@@ -61,8 +61,8 @@ sub_questions:
   - args:
     - '8'
     detail: ''
-    narration: 求めた x をどちらかの式に代入し、y を求める。
+    narration: 求めた x をどちらかの式に代入し、y を求めて交点の座標にする。
     op: compute_y
-    result_display: y = 10
+    result_display: 交点 (8, 10)
     result_srepr: Integer(10)
 visual_svg: null

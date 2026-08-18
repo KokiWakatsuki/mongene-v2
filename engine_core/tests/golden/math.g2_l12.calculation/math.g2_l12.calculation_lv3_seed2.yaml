@@ -39,7 +39,7 @@ sub_questions:
 
     次に、y の係数がそろったので辺々を引く。整理すると -13x = -78 になるので、両辺を -13 でわる。（x = 6）
 
-    最後に、求めた x をもとの式に代入して y を求める。（y = 3）'
+    最後に、求めた x をもとの式に代入して y を求め、解の組にまとめる。（x = 6、y = 3）'
   hints:
   - y の係数を最小公倍数にそろえるため、両方の式をそれぞれ何倍かする。
   label: (1)
@@ -63,8 +63,8 @@ sub_questions:
   - args:
     - '6'
     detail: ''
-    narration: 求めた x をもとの式に代入して y を求める。
+    narration: 求めた x をもとの式に代入して y を求め、解の組にまとめる。
     op: back_substitute
-    result_display: y = 3
+    result_display: x = 6、y = 3
     result_srepr: Integer(3)
 visual_svg: null

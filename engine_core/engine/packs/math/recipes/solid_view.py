@@ -319,7 +319,7 @@ def solid_projection_recipe(ctx: CellContext, rng: Rng) -> MR:
         sol = cast(Solution, REGISTRY.solver("math.solid_from_projection")(elev, plan))
         return _mr(
             ctx, params=params,
-            statement="ある立体の投影図が右のようになっている。この立体はどれか、選べ",
+            statement="ある立体の投影図が下のようになっている。この立体はどれか、選べ",
             asked="read_solid", sol=sol, recipe="math.solid_projection",
             element_kind="projection",
         )
