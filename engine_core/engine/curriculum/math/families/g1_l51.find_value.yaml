@@ -83,8 +83,8 @@ levels:
       slant_domain: {int_range: [3, 20]}
     given: [condition]
     asked: [value]
-    visual: none
-    text: {tier: T1, template: lf_solid_composite_or_reverse_surface_v1}
+    visual: required
+    text: {tier: T1, template: lf_solid_composite_or_reverse_surface_v1, visual_builder: math.geometry_construction}
     hints: [steps_prefix]
     concept_tags: [solid_surface.composite_or_reverse]
     cause_tags: []

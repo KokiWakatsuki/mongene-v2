@@ -308,6 +308,96 @@ def _vertex_labels(params: dict[str, Any], pts: dict[str, str]) -> list[str]:
     return out
 
 
+def _hemisphere_sketch(params: dict[str, Any]) -> list[str]:
+    """半球の見取図（平らな面を上にした半球）。
+
+    ★**半球・合成した立体は描き手が無かった。** 「半径10cmのボールを中心を通る
+    平面で半分に切った半球」を、形を見ないまま表面積の式に落とすことになっていた。
+    """
+    r = float(params["radius_px"])
+    cx, cy = _W / 2, _H / 2 - r * 0.2
+    return [
+        # 下半分の円弧（球面）と、切り口の楕円。
+        f'<path d="M {cx - r:.2f} {cy:.2f} A {r:.2f} {r:.2f} 0 0 0 {cx + r:.2f} {cy:.2f}" '
+        f'fill="none" stroke="{_STROKE}" stroke-width="{_THIN}"/>',
+        _ellipse(cx, cy, r, r * 0.3),
+    ]
+
+
+def _triangular_pyramid_sketch(params: dict[str, Any]) -> list[str]:
+    """三角錐の見取図（底面が三角形・奥の1辺を破線）。"""
+    w = float(params["width_px"])
+    h = float(params["height_px"])
+    d = float(params["depth_px"])
+    dx, dy = _depth(d)
+    x0 = _PAD + 60
+    y0 = _H - _PAD - 60
+    a = (x0, y0)
+    b = (x0 + w, y0)
+    c = (x0 + w * 0.35 + dx, y0 - dy)          # 奥の頂点
+    apex = (x0 + w * 0.45 + dx * 0.5, y0 - dy * 0.5 - h)
+    return [
+        _line(*a, *b),
+        _line(*a, *c, dashed=True), _line(*b, *c, dashed=True),
+        _line(*a, *apex), _line(*b, *apex), _line(*c, *apex, dashed=True),
+    ]
+
+
+def _tetrahedron_sketch(params: dict[str, Any]) -> list[str]:
+    """正四面体の見取図（三角錐と同じ骨組みで、辺の長さをそろえて描く）。"""
+    w = float(params["width_px"])
+    return _triangular_pyramid_sketch(
+        {"width_px": w, "height_px": w * 0.82, "depth_px": w * 0.55}
+    )
+
+
+def _hemisphere_on_cylinder_sketch(params: dict[str, Any]) -> list[str]:
+    """半球を円柱の上に貼り合わせた立体（g1_l51.find_value Lv3）。"""
+    r = float(params["radius_px"])
+    h = float(params["height_px"])
+    cx = _W / 2
+    y_bottom = _H - _PAD - 40
+    y_top = y_bottom - h
+    ry = r * 0.3
+    return [
+        _ellipse(cx, y_bottom, r, ry, dashed=True),
+        _arc_half(cx, y_bottom, r, ry, lower=True),
+        _line(cx - r, y_bottom, cx - r, y_top),
+        _line(cx + r, y_bottom, cx + r, y_top),
+        _ellipse(cx, y_top, r, ry),
+        # 上に載る半球（切り口は円柱の上面と共有）。
+        f'<path d="M {cx - r:.2f} {y_top:.2f} A {r:.2f} {r:.2f} 0 0 1 {cx + r:.2f} '
+        f'{y_top:.2f}" fill="none" stroke="{_STROKE}" stroke-width="{_THIN}"/>',
+    ]
+
+
+def _cube_with_pyramid_sketch(params: dict[str, Any]) -> list[str]:
+    """立方体の上に正四角錐をのせた立体（g1_l52.find_value Lv3）。"""
+    w = float(params["width_px"])
+    h = float(params["height_px"])      # 角錐の高さ
+    d = float(params["depth_px"])
+    dx, dy = _depth(d)
+    x0 = _PAD + 60
+    y0 = _H - _PAD - 40
+    top = y0 - w                        # 立方体の上面の高さ（1辺 w）
+    fa, fb = (x0, y0), (x0 + w, y0)          # 手前の下
+    ta, tb = (x0, top), (x0 + w, top)        # 手前の上
+    ba, bb = (x0 + dx, top - dy), (x0 + w + dx, top - dy)   # 奥の上
+    kl, kr = (x0 + dx, y0 - dy), (x0 + w + dx, y0 - dy)     # 奥の下
+    apex = (x0 + w / 2 + dx / 2, top - dy / 2 - h)
+    return [
+        # 立方体（手前の面・上の面・右の面を実線、奥の左の辺を破線）
+        _line(*fa, *fb), _line(*fa, *ta), _line(*fb, *tb), _line(*ta, *tb),
+        _line(*ta, *ba), _line(*tb, *bb), _line(*ba, *bb),
+        _line(*fb, *kr), _line(*kr, *bb),
+        _line(*fa, *kl, dashed=True), _line(*kl, *ba, dashed=True),
+        _line(*kl, *kr, dashed=True),
+        # 上にのせた正四角錐
+        _line(*ta, *apex), _line(*tb, *apex), _line(*bb, *apex),
+        _line(*ba, *apex, dashed=True),
+    ]
+
+
 _SKETCH_BY_KIND = {
     "rectangular_prism": _prism_sketch,
     "square_prism": _prism_sketch,
@@ -318,6 +408,11 @@ _SKETCH_BY_KIND = {
     "square_pyramid": _pyramid_sketch,
     # 底面が長方形の角錐も、角錐の描き手で描ける（底面の縦横が違うだけ）。
     "rect_pyramid": _pyramid_sketch,
+    "hemisphere": _hemisphere_sketch,
+    "triangular_pyramid": _triangular_pyramid_sketch,
+    "tetrahedron": _tetrahedron_sketch,
+    "hemisphere_on_cylinder": _hemisphere_on_cylinder_sketch,
+    "cube_with_pyramid": _cube_with_pyramid_sketch,
 }
 
 

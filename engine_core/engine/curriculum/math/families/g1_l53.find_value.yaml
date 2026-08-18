@@ -65,8 +65,8 @@ levels:
       given_as_set: [radius, diameter]
     given: [condition]
     asked: [value]
-    visual: none
-    text: {tier: T1, template: lf_solid_hemisphere_or_reverse_v1}
+    visual: required
+    text: {tier: T1, template: lf_solid_hemisphere_or_reverse_v1, visual_builder: math.geometry_construction}
     hints: [steps_prefix]
     concept_tags: [sphere_measure.hemisphere_or_reverse]
     cause_tags: []

@@ -56,14 +56,23 @@ _SKETCH_KIND = {
     "sphere": "sphere",
     "square_pyramid": "square_pyramid",
     "rect_pyramid": "rect_pyramid",
-    # 三角柱・三角錐は見取図の描き手がまだ無い（底面が三角形の立体）。
-    # 表に載せない＝図を出さない。取りこぼしと区別するためにここに書き残す。
+    # 底面が直角三角形の角柱・角錐（g1_l52 Lv2）。
+    "right_triangle_pyramid": "triangular_pyramid",
 }
 
 
 # `values` に "shape" が無いセル（形が mode で決まっているもの）の対応表。
+# 合成した立体は values["variant"] で形が決まる。
+_SKETCH_KIND_BY_VARIANT = {
+    "hemisphere_cylinder": "hemisphere_on_cylinder",
+    "cube_pyramid_composite": "cube_with_pyramid",
+    # **cylinder_cone（円柱の上に円錐）は載せない。** 上が円錐の合成立体の
+    # 描き手はまだ無く、半球の骨組みで代用すると図と本文が食い違う。
+}
+
 _SKETCH_KIND_BY_MODE = {
     "l53_sphere_direct": "sphere",
+    "l53_hemisphere_or_reverse": "hemisphere",
     "l51_cone_central_angle": "cone",
     # **l52_cylinder_volume_substitution は入れない。** これは calculation の
     # セル（「公式 V=πr²h に代入して求めよ」）で、calculation の frame は
@@ -79,11 +88,35 @@ def _sketch_svg(values: dict[str, object], mode: str = "") -> str:
 
     描き手（visuals/solid.py の見取図）は既にあるので、寸法を画素に直して渡すだけ。
     """
-    kind = _SKETCH_KIND.get(str(values.get("shape", ""))) or _SKETCH_KIND_BY_MODE.get(mode)
+    kind = (
+        _SKETCH_KIND.get(str(values.get("shape", "")))
+        or _SKETCH_KIND_BY_VARIANT.get(str(values.get("variant", "")))
+        or _SKETCH_KIND_BY_MODE.get(mode)
+    )
     if kind is None:
         return ""
     r = float(values.get("radius", 0) or 0)
     edge = float(values.get("edge", 0) or 0)
+    if kind in ("hemisphere_on_cylinder", "cube_with_pyramid"):
+        rr = float(values.get("radius", 0) or 0)
+        hh = float(values.get("height", 0) or 0)
+        ee = float(values.get("edge", 0) or 0)
+        ph = float(values.get("pyramid_height", 0) or 0)
+        sc2 = 170.0 / max(rr * 2, ee, hh, ph, 1.0)
+        return render_solid_svg(
+            {
+                "view": "sketch", "solid_kind": kind,
+                "radius_px": max(rr * sc2, 60.0),
+                "height_px": max((hh if kind == "hemisphere_on_cylinder" else ph) * sc2, 60.0),
+                "width_px": max(ee * sc2, 90.0), "depth_px": max(ee * sc2 * 0.45, 40.0),
+            },
+            draw=True,
+        )
+    if kind == "hemisphere":
+        return render_solid_svg(
+            {"view": "sketch", "solid_kind": "hemisphere", "radius_px": 115.0},
+            draw=True,
+        )
     if kind == "sphere":
         # 球は半径だけで決まる（幅も高さも直径）。
         return render_solid_svg(
