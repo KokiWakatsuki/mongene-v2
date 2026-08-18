@@ -42,9 +42,8 @@ sub_questions:
     最後に、求めた x を y = … の式に代入して y を求める。（y = 5）'
   hints:
   - 一方の式の y を、もう一方の式に代入して x だけの方程式にする。
-  - x の値を求める。
   label: (1)
-  prompt_text: 解を求めなさい。
+  prompt_text: ''
   solution_steps:
   - args:
     - y = 2x + 11

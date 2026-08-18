@@ -42,9 +42,8 @@ sub_questions:
     最後に、等式の性質を使い、両辺を x の係数 7 でわる。（x = -4）'
   hints:
   - 左辺を x の項だけにするために、両辺に同じ数をたすかひくかする。
-  - 両辺の同類項をそれぞれまとめて、ax = b の形にする。
   label: (1)
-  prompt_text: 解を求めなさい。
+  prompt_text: ''
   solution_steps:
   - args: []
     detail: 左辺を x の項だけにするために、両辺に 4 をたす。

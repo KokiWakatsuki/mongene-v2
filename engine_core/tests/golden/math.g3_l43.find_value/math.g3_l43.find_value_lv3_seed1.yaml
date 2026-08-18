@@ -27,7 +27,7 @@ problem_ref: 35b78c6574804f2e
 problem_text: 三角形QRSで、辺QR, QS上に点T, Uがある。QT=2cm, TR=6cm, QU=8cm, US=24cm である。TU=9cm のとき、TUとRSが平行であることを確かめたうえで、辺RSの長さを求めよ。
 sub_questions:
 - answer:
-    display: '36'
+    display: 36cm
     kind: symbolic
     srepr: Integer(36)
   cause_tags: []
@@ -41,12 +41,10 @@ sub_questions:
 
     次に、QTとTRをたして、辺QR全体の長さを求める。（QR = 2 + 6 = 8）
 
-    最後に、2:8 = 9:RS を解いて、辺RSの長さを求める。（36）'
+    最後に、2:8 = 9:RS を解いて、辺RSの長さを求める。（36cm）'
   hints:
   - QT:TRとQU:USの比が等しいかどうかを比べる。
   - 平行線と線分の比の定理の逆から、TUとRSが平行であるかどうかを判別する。
-  - TU∥RS であることから、三角形QTUと三角形QRSが相似になることを見つける。
-  - QTとTRをたして、辺QR全体の長さを求める。
   label: (1)
   prompt_text: ''
   solution_steps:
@@ -78,6 +76,6 @@ sub_questions:
     detail: 2:8 = 9:RS を解いて、辺RSの長さを求める。
     narration: QT:QR=TU:RS が成り立つことから、辺RSの長さを求める。
     op: apply_parallel_segment_ratio
-    result_display: '36'
+    result_display: 36cm
     result_srepr: Integer(36)
 visual_svg: null

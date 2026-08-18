@@ -36,23 +36,23 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - real_numbers.term_recall
-  explanation: 'まず、説明されている式や数の部分がどれかを読み取る。（分数で表せる数）
+  explanation: 'まず、分数で表せる数か、表せない数か、小数の並びの特徴かを読み取る。（分数で表せる数）
 
     次に、整数の分数の形で表せる数を有理数という。有限小数と循環小数はここに入る。（有理数）'
   hints:
-  - 説明されている式や数の部分がどれかを読み取る。
+  - 分数で表せる数か、表せない数か、小数の並びの特徴かを読み取る。
   label: (1)
   prompt_text: ''
   solution_steps:
   - args: []
     detail: ''
-    narration: 説明されている式や数の部分がどれかを読み取る。
+    narration: 分数で表せる数か、表せない数か、小数の並びの特徴かを読み取る。
     op: identify_description
     result_display: 分数で表せる数
     result_srepr: rational
   - args: []
     detail: 整数の分数の形で表せる数を有理数という。有限小数と循環小数はここに入る。
-    narration: その対象を表す用語の名前を思い出す。
+    narration: その種類の数を表す用語の名前を思い出す。
     op: name_concept
     result_display: 有理数
     result_srepr: 有理数

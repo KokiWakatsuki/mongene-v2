@@ -52,7 +52,7 @@ def solve_angle_by_equality_relation(relation: object, angle: object) -> Solutio
     """
     r = str(relation)
     a = sympy.sympify(str(angle))
-    disp = sympy.sstr(a)
+    disp = f"{sympy.sstr(a)}°"
     srepr = sympy.srepr(a)
     steps = [
         Step(
@@ -79,7 +79,7 @@ def solve_zigzag_angle_sum(angle1: object, angle2: object) -> Solution:
     a1 = sympy.sympify(str(angle1))
     a2 = sympy.sympify(str(angle2))
     total = a1 + a2
-    disp = sympy.sstr(total)
+    disp = f"{sympy.sstr(total)}°"
     srepr = sympy.srepr(total)
     steps = [
         Step(
@@ -105,7 +105,7 @@ def triangle_third_angle(angle_a: object, angle_b: object) -> Solution:
     a = sympy.sympify(str(angle_a))
     b = sympy.sympify(str(angle_b))
     c = 180 - a - b
-    disp = sympy.sstr(c)
+    disp = f"{sympy.sstr(c)}°"
     srepr = sympy.srepr(c)
     steps = [
         Step(
@@ -185,7 +185,7 @@ def regular_polygon_exterior_angle(sides: object) -> Solution:
     """
     n = sympy.Integer(int(str(sides)))
     ext = sympy.Rational(360, n)
-    disp = sympy.sstr(ext)
+    disp = f"{sympy.sstr(ext)}°"
     srepr = sympy.srepr(ext)
     steps = [
         Step(
@@ -305,7 +305,7 @@ def arrowhead_angle(angle_a: object, angle_b: object, angle_c: object) -> Soluti
     if total >= 180:
         raise ValueError("内部の点がつくる角が平角以上になり、図が成立しない")
     srepr = sympy.srepr(total)
-    disp = sympy.sstr(total)
+    disp = f"{sympy.sstr(total)}°"
     steps = [
         Step(
             op=op, args=[],

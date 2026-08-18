@@ -23,7 +23,7 @@ meta:
     unit: g2_l17
   seed: 1
   signature: word_problem_distance_time_guided
-problem_ref: c9a6d153899efb6c
+problem_ref: 40ddc2565baa8b85
 problem_text: '家から駅を通って港まで行った。家から駅までは時速4kmで歩き、駅から港までは時速12kmの自転車で進んだところ、全体で20km進むのに3時間かかった。
 
   歩いた道のりを x km、自転車で進んだ道のりを y km とする。
@@ -46,7 +46,6 @@ sub_questions:
     最後に、かかった時間の関係に着目して、2つめの式をつくる。（x/4 + y/12 = 3）'
   hints:
   - 歩いた道のりを x km、自転車で進んだ道のりを y km とおく。
-  - 道のりの関係に着目して、1つめの式をつくる。
   label: (1)
   prompt_text: ''
   solution_steps:
@@ -77,7 +76,9 @@ sub_questions:
   - simultaneous_equations.word_problem_distance_time
   explanation: 'まず、係数をそろえて一方の文字を消去し、残った文字を求める。（x = 8）
 
-    次に、求めた値をもとの式に代入し、もう一方の文字を求める。（y = 12）'
+    次に、求めた値をもとの式に代入し、もう一方の文字を求める。（y = 12）
+
+    最後に、求めた値を、問題が聞いている量のことばに直して答える。（歩いた道のりは8km、自転車で進んだ道のりは12km）'
   hints:
   - 係数をそろえて一方の文字を消去し、残った文字を求める。
   label: (2)
@@ -98,4 +99,10 @@ sub_questions:
     op: back_substitute
     result_display: y = 12
     result_srepr: Integer(12)
+  - args: []
+    detail: ''
+    narration: 求めた値を、問題が聞いている量のことばに直して答える。
+    op: state_answer_in_context
+    result_display: 歩いた道のりは8km、自転車で進んだ道のりは12km
+    result_srepr: Tuple(Integer(8), Integer(12))
 visual_svg: null

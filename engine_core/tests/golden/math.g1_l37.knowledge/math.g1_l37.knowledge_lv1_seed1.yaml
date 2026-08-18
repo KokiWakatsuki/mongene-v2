@@ -37,23 +37,23 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - line_angle_terms.term_recall
-  explanation: 'まず、説明されている式や数の部分がどれかを読み取る。（2つの半直線がつくる開き）
+  explanation: 'まず、両端があるか、片側だけのびるか、両側にのびるかを読み取る。（2つの半直線がつくる開き）
 
     次に、1点から出る2つの半直線がつくる開きを角という。（角）'
   hints:
-  - 説明されている式や数の部分がどれかを読み取る。
+  - 両端があるか、片側だけのびるか、両側にのびるかを読み取る。
   label: (1)
   prompt_text: ''
   solution_steps:
   - args: []
     detail: ''
-    narration: 説明されている式や数の部分がどれかを読み取る。
+    narration: 両端があるか、片側だけのびるか、両側にのびるかを読み取る。
     op: identify_description
     result_display: 2つの半直線がつくる開き
     result_srepr: angle
   - args: []
     detail: 1点から出る2つの半直線がつくる開きを角という。
-    narration: その対象を表す用語の名前を思い出す。
+    narration: その図形を表す用語の名前を思い出す。
     op: name_concept
     result_display: 角
     result_srepr: 角

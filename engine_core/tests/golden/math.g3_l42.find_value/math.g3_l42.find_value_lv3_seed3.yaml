@@ -27,7 +27,7 @@ problem_ref: b0bee7df7a179ef1
 problem_text: 3本の直線w, r, sは平行である。直線uはw, r, sとそれぞれ点U, V, Wで交わり、直線zはw, r, sとそれぞれ点X, Y, Zで交わる。UV=18cm, XY=16cm, YZ=8cm のとき、線分VWの長さを求めよ。
 sub_questions:
 - answer:
-    display: '9'
+    display: 9cm
     kind: symbolic
     srepr: Integer(9)
   cause_tags: []
@@ -35,7 +35,7 @@ sub_questions:
   - parallel_segment.transversal_ratio
   explanation: 'まず、3本の平行な直線が2本の直線と交わるとき、対応する線分の比が等しくなることを見つける。（18:16 = x:8）
 
-    次に、対応する線分の比が等しいことから、比例式を立てて長さを求める。（9）'
+    次に、対応する線分の比が等しいことから、比例式を立てて長さを求める。（9cm）'
   hints:
   - 3本の平行な直線が2本の直線と交わるとき、対応する線分の比が等しくなることを見つける。
   label: (1)
@@ -51,6 +51,6 @@ sub_questions:
     detail: ''
     narration: 対応する線分の比が等しいことから、比例式を立てて長さを求める。
     op: apply_transversal_ratio
-    result_display: '9'
+    result_display: 9cm
     result_srepr: Integer(9)
 visual_svg: null

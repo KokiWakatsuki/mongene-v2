@@ -23,7 +23,7 @@ meta:
     unit: g2_l16
   seed: 2
   signature: word_problem_system_price_count_diff
-problem_ref: c262661f4b5f0e2e
+problem_ref: e547938e14c42967
 problem_text: 'ボールペンを何本かとクリアファイルを何枚か買った。ボールペン1本は70円、クリアファイル1枚は80円で、買った数はボールペンよりクリアファイルのほうが2枚多く、代金の合計は610円だった。
 
   ボールペンとクリアファイルを買った数をそれぞれ求めよ。'
@@ -43,12 +43,13 @@ sub_questions:
 
     次に、係数をそろえて一方の文字を消去し、残った文字を求める。（x = 3）
 
-    最後に、求めた値をもとの式に代入し、もう一方の文字を求める。（y = 5）'
+    次に、求めた値をもとの式に代入し、もう一方の文字を求める。（y = 5）
+
+    最後に、求めた値を、問題が聞いている量のことばに直して答える。（ボールペンは3本、クリアファイルは5枚）'
   hints:
   - ボールペンの数を x 本、クリアファイルの数を y 枚とおく。
   - 買った数の関係に着目して、1つめの式をつくる。
   - 代金の合計の関係に着目して、2つめの式をつくる。
-  - 係数をそろえて一方の文字を消去し、残った文字を求める。
   label: (1)
   prompt_text: ''
   solution_steps:
@@ -85,4 +86,10 @@ sub_questions:
     op: back_substitute
     result_display: y = 5
     result_srepr: Integer(5)
+  - args: []
+    detail: ''
+    narration: 求めた値を、問題が聞いている量のことばに直して答える。
+    op: state_answer_in_context
+    result_display: ボールペンは3本、クリアファイルは5枚
+    result_srepr: Tuple(Integer(3), Integer(5))
 visual_svg: null

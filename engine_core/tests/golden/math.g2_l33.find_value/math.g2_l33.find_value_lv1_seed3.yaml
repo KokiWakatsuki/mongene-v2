@@ -27,7 +27,7 @@ problem_ref: 55ef287cd54987ea
 problem_text: 三角形ABCで、∠A=25°、∠B=87°のとき、∠Cの大きさを求めよ。
 sub_questions:
 - answer:
-    display: '68'
+    display: 68°
     kind: symbolic
     srepr: Integer(68)
   cause_tags: []
@@ -35,7 +35,7 @@ sub_questions:
   - triangle_angle.third_angle
   explanation: 'まず、わかっている2つの内角の大きさを読み取る。（25° と 87°）
 
-    次に、三角形の内角の和が一直線の角(平角)に等しいことから、残りの内角の大きさを求める。（68）'
+    次に、三角形の内角の和が一直線の角(平角)に等しいことから、残りの内角の大きさを求める。（68°）'
   hints:
   - わかっている2つの内角の大きさを読み取る。
   label: (1)
@@ -51,6 +51,6 @@ sub_questions:
     detail: ''
     narration: 三角形の内角の和が一直線の角(平角)に等しいことから、残りの内角の大きさを求める。
     op: subtract_from_sum
-    result_display: '68'
+    result_display: 68°
     result_srepr: Integer(68)
 visual_svg: null

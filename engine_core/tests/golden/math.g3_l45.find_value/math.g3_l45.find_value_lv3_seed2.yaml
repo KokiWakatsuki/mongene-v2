@@ -40,7 +40,6 @@ sub_questions:
     最後に、三角形RST全体の面積から三角形RUVの面積を除いた残りが台形の面積になることから、三角形RUVと台形の面積比を求める。（三角形RUV:台形USTV = 81:403）'
   hints:
   - RUとUSの比から、RUとRS全体の比になおす。
-  - 三角形RUVと三角形RSTは相似であることから、面積比は相似比の二乗に等しいことを使って、三角形RUVと三角形RST全体の面積比を求める。
   label: (1)
   prompt_text: ''
   solution_steps:

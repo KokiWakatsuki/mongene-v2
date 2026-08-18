@@ -315,9 +315,14 @@ def test_explanation_omits_parentheses_when_result_display_is_empty():
 
 
 # ---------------------------------------------------------------------------
-# hints: steps_prefix は steps>=2 で前から k=len-1 個開示
+# hints: steps_prefix は「最後の手を除いた前半」だけを出す
 # ---------------------------------------------------------------------------
-def test_hints_steps_prefix_reveals_all_but_last():
+def test_hints_steps_prefix_reveals_only_the_first_half():
+    """★**ヒントは方針であって、解答の書き写しではない。**
+
+    前は「最後の手以外を全部」を出していたので、8手の作図では7個のヒントが並び、
+    開いた時点で手順が全部わかった（生成物を読んで見つけた）。前半だけにする。
+    """
     registry = _registry_with_template("stem")
     mr = _mk_mr(steps_count=3)
     ctx = _mk_ctx(hints=["steps_prefix"])
@@ -325,7 +330,8 @@ def test_hints_steps_prefix_reveals_all_but_last():
     result = render_text(mr, ctx, registry=registry)
     hints = result.hints["(1)"]
 
-    assert hints == ["narration0", "narration1"]  # 最後の narration2 は開示しない
+    # 開示できるのは narration0/1 の2手だが、その前半＝1個だけ出す。
+    assert hints == ["narration0"]
 
 
 # ---------------------------------------------------------------------------

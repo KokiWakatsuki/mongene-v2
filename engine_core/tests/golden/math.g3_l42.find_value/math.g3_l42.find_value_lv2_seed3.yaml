@@ -27,7 +27,7 @@ problem_ref: fcf329c5fc889d6c
 problem_text: 三角形BCDで、辺BC, BD上に点E, Fがあり、EF∥CDである。BE=10cm, EC=10cm, EF=12cm のとき、辺CDの長さを求めよ。
 sub_questions:
 - answer:
-    display: '24'
+    display: 24cm
     kind: symbolic
     srepr: Integer(24)
   cause_tags: []
@@ -37,10 +37,9 @@ sub_questions:
 
     次に、BEとECをたして、辺BC全体の長さを求める。（BC = 10 + 10 = 20）
 
-    最後に、10:20 = 12:CD を解いて、辺CDの長さを求める。（24）'
+    最後に、10:20 = 12:CD を解いて、辺CDの長さを求める。（24cm）'
   hints:
   - EF∥CD であることから、三角形BEFと三角形BCDが相似になることを見つける。
-  - BEとECをたして、辺BC全体の長さを求める。
   label: (1)
   prompt_text: ''
   solution_steps:
@@ -60,6 +59,6 @@ sub_questions:
     detail: 10:20 = 12:CD を解いて、辺CDの長さを求める。
     narration: BE:BC=EF:CD が成り立つことから、辺CDの長さを求める。
     op: apply_parallel_segment_ratio
-    result_display: '24'
+    result_display: 24cm
     result_srepr: Integer(24)
 visual_svg: null

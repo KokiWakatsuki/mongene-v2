@@ -52,7 +52,7 @@ def isosceles_base_angle(known_type: object, known_value: object) -> Solution:
             "等しい2つの底角の大きさを2つ分合わせてひくと、残りが頂角の大きさになる"
             "ことから頂角を求める。"
         )
-    disp = fmt_measure(result)
+    disp = f"{fmt_measure(result)}°"
     srepr = sympy.srepr(result)
     steps = [
         Step(
@@ -164,7 +164,7 @@ _RIGHT_TRIANGLE_VALID_CONDITIONS = frozenset(
 
 @register_solver("math.judge_right_triangle_congruence")
 def judge_right_triangle_congruence(condition_type: object) -> Solution:
-    """図から読み取れる条件から、直角三角形の合同条件を満たすかを判別する
+    """与えられた条件から、直角三角形の合同条件を満たすかを判別する
 
     （g2_l44.knowledge Lv2）。condition_type だけから判定する（具体的な場面文は
     recipe が構成する surface であり double-solve）。答えは ChoiceAnswer。
@@ -182,7 +182,7 @@ def judge_right_triangle_congruence(condition_type: object) -> Solution:
             op="check_right_triangle_condition",
             args=[], result_srepr=("yes" if truthy else "no"),
             result_display=("合同条件にあてはまる" if truthy else "合同条件にあてはまらない"),
-            narration="図から読み取れる条件が、直角三角形の合同条件（斜辺と1つの鋭角、"
+            narration="与えられた条件が、直角三角形の合同条件（斜辺と1つの鋭角、"
             "または斜辺と他の1辺）を満たしているかを確認する。",
         ),
         Step(

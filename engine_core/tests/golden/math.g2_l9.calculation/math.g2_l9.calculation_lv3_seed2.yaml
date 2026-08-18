@@ -41,7 +41,7 @@ sub_questions:
   hints:
   - 分母をなくすため、両辺に分母をかける。
   label: (1)
-  prompt_text: 式を変形しなさい。
+  prompt_text: ''
   solution_steps:
   - args: []
     detail: ''

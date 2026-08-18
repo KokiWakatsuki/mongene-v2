@@ -365,7 +365,7 @@ def solid_projection_recipe(ctx: CellContext, rng: Rng) -> MR:
             ctx, params=params,
             statement=(
                 f"ある立体の投影図のうち、平面図が{shape_jp[plan]}であることだけが"
-                f"右の図でわかっている。立面図が{shape_jp[elev]}になる立体は何か特定し、"
+                f"下の図でわかっている。立面図が{shape_jp[elev]}になる立体は何か特定し、"
                 "その立面図をかいて示せ"
             ),
             asked="draw_solid", sol=Solution(answer=answer, steps=sol.steps),
@@ -574,7 +574,7 @@ def box_view_recipe(ctx: CellContext, rng: Rng) -> MR:
             statement=(
                 f"辺{n[0]}{n[1]}が{a}{unit}、辺{n[1]}{n[2]}が{b}{unit}、"
                 f"高さが{h}{unit}の直方体{n[0]}{n[1]}{n[2]}{n[3]}-{n[4]}{n[5]}{n[6]}{n[7]}の"
-                f"見取図が右にある。頂点{n[0]}と、向かい合う頂点{n[6]}をふくむ断面"
+                f"見取図が下にある。頂点{n[0]}と、向かい合う頂点{n[6]}をふくむ断面"
                 f"（長方形{n[0]}{n[4]}{n[6]}{n[2]}）を抜き出してかき、対角線{n[0]}{n[6]}を"
                 "求めるのに使う直角三角形を平面上に示せ"
             ),
@@ -609,7 +609,7 @@ def box_view_recipe(ctx: CellContext, rng: Rng) -> MR:
             ctx, params=params,
             statement=(
                 f"1辺が{edge}{unit}の立方体{n[0]}{n[1]}{n[2]}{n[3]}-{n[4]}{n[5]}{n[6]}{n[7]}の"
-                f"見取図が右にある。頂点{n[0]}と{n[6]}を結ぶ対角線{n[0]}{n[6]}をふくむ断面"
+                f"見取図が下にある。頂点{n[0]}と{n[6]}を結ぶ対角線{n[0]}{n[6]}をふくむ断面"
                 f"（長方形{n[0]}{n[4]}{n[6]}{n[2]}）を抜き出して平面上にかき、"
                 f"対角線{n[0]}{n[6]}を求めるのに使う直角三角形の各辺の長さを示せ"
             ),
@@ -644,7 +644,7 @@ def box_view_recipe(ctx: CellContext, rng: Rng) -> MR:
             statement=(
                 f"辺{n[0]}{n[1]}が{a}{unit}、辺{n[1]}{n[2]}が{b}{unit}、"
                 f"高さが{h}{unit}の直方体{n[0]}{n[1]}{n[2]}{n[3]}-{n[4]}{n[5]}{n[6]}{n[7]}の"
-                f"見取図が右にある。頂点{n[0]}から側面{n[0]}{n[1]}{n[5]}{n[4]}と"
+                f"見取図が下にある。頂点{n[0]}から側面{n[0]}{n[1]}{n[5]}{n[4]}と"
                 f"側面{n[1]}{n[2]}{n[6]}{n[5]}を通って頂点{n[6]}まで進む経路について、"
                 "この2つの面を1つの平面に開いた展開図をかき、経路を直線で結べ"
             ),

@@ -29,7 +29,7 @@ def trapezoid_diagonals(p: dict[str, Any]) -> Construction:
     c.givens.append(parallel(("A", "D"), ("B", "C")))
     for x, y in (("A", "B"), ("B", "C"), ("C", "D"), ("A", "D"), ("A", "C"), ("B", "D")):
         c.connect(x, y)
-    c.description = "右の図で、四角形ABCDは AD ∥ BC の台形であり、対角線ACとBDを引いた"
+    c.description = "下の図で、四角形ABCDは AD ∥ BC の台形であり、対角線ACとBDを引いた"
     return c
 
 
@@ -54,7 +54,7 @@ def triangle_median(p: dict[str, Any]) -> Construction:
     for x, y in (("A", "B"), ("B", "C"), ("C", "A"), ("A", "M")):
         c.connect(x, y)
     c.connect("A", "M", shared=True)
-    c.description = "右の図で、△ABCの辺BCの中点をMとし、点Aと点Mを結んだ"
+    c.description = "下の図で、△ABCの辺BCの中点をMとし、点Aと点Mを結んだ"
     return c
 
 

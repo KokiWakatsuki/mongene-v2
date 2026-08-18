@@ -36,17 +36,17 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - function_terms.term_recall
-  explanation: 'まず、説明されている式や数の部分がどれかを読み取る。（いろいろな値をとる文字）
+  explanation: 'まず、ともなって変わる二つの数量のうち、どちらについての説明かを読み取る。（いろいろな値をとる文字）
 
     次に、いろいろな値をとりうる文字を変数という。決まった値をとる定数と区別する。（変数）'
   hints:
-  - 説明されている式や数の部分がどれかを読み取る。
+  - ともなって変わる二つの数量のうち、どちらについての説明かを読み取る。
   label: (1)
   prompt_text: ''
   solution_steps:
   - args: []
     detail: ''
-    narration: 説明されている式や数の部分がどれかを読み取る。
+    narration: ともなって変わる二つの数量のうち、どちらについての説明かを読み取る。
     op: identify_description
     result_display: いろいろな値をとる文字
     result_srepr: variable

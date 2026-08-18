@@ -23,7 +23,7 @@ meta:
     unit: g2_l17
   seed: 3
   signature: word_problem_distance_time_guided
-problem_ref: 716b795fde9b92b0
+problem_ref: da22b99e96e4abd7
 problem_text: '駅から市役所を通って美術館まで行った。駅から市役所までは時速6kmで歩き、市役所から美術館までは時速10kmの自転車で進んだところ、全体で16km進むのに2時間かかった。
 
   歩いた道のりを x km、自転車で進んだ道のりを y km とする。
@@ -46,7 +46,6 @@ sub_questions:
     最後に、かかった時間の関係に着目して、2つめの式をつくる。（x/6 + y/10 = 2）'
   hints:
   - 歩いた道のりを x km、自転車で進んだ道のりを y km とおく。
-  - 道のりの関係に着目して、1つめの式をつくる。
   label: (1)
   prompt_text: ''
   solution_steps:
@@ -77,7 +76,9 @@ sub_questions:
   - simultaneous_equations.word_problem_distance_time
   explanation: 'まず、係数をそろえて一方の文字を消去し、残った文字を求める。（x = 6）
 
-    次に、求めた値をもとの式に代入し、もう一方の文字を求める。（y = 10）'
+    次に、求めた値をもとの式に代入し、もう一方の文字を求める。（y = 10）
+
+    最後に、求めた値を、問題が聞いている量のことばに直して答える。（歩いた道のりは6km、自転車で進んだ道のりは10km）'
   hints:
   - 係数をそろえて一方の文字を消去し、残った文字を求める。
   label: (2)
@@ -98,4 +99,10 @@ sub_questions:
     op: back_substitute
     result_display: y = 10
     result_srepr: Integer(10)
+  - args: []
+    detail: ''
+    narration: 求めた値を、問題が聞いている量のことばに直して答える。
+    op: state_answer_in_context
+    result_display: 歩いた道のりは6km、自転車で進んだ道のりは10km
+    result_srepr: Tuple(Integer(6), Integer(10))
 visual_svg: null

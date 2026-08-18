@@ -43,7 +43,6 @@ sub_questions:
     最後に、かたまりをもとの式にもどして、展開した式を整理する。（m² + 2mn - 4m + n² - 4n - 5）'
   hints:
   - 共通する部分をひとかたまりとみる。
-  - かたまりのままの式に乗法公式をあてはめる。
   label: (1)
   prompt_text: ''
   solution_steps:

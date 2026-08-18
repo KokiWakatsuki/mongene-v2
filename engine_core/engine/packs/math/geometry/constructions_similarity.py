@@ -93,7 +93,7 @@ def similar_hourglass(p: dict[str, Any]) -> Construction:
     c.givens.append(par)
     for x, y in (("A", "C"), ("B", "D"), ("A", "B"), ("D", "C")):
         c.connect(x, y)
-    c.description = "右の図で、線分ACと線分BDは点Oで交わっており、AB ∥ DC である"
+    c.description = "下の図で、線分ACと線分BDは点Oで交わっており、AB ∥ DC である"
     return c
 
 
@@ -138,7 +138,7 @@ def similar_pgram_cross(p: dict[str, Any]) -> Construction:
     ratio = 0.30 + (float(p["angle"]) % 9.0) / 30.0
     c = _pgram_with_point_on_bc(p, ratio)
     c.description = (
-        "右の図の平行四辺形ABCDで、辺BC上に点Mをとり、線分AMと対角線BDの交点をPとした"
+        "下の図の平行四辺形ABCDで、辺BC上に点Mをとり、線分AMと対角線BDの交点をPとした"
     )
     return c
 
@@ -158,7 +158,7 @@ def similar_pgram_median(p: dict[str, Any]) -> Construction:
     c.facts.add(f)
     c.givens.append(f)
     c.description = (
-        "右の図の平行四辺形ABCDで、辺BCの中点をMとし、線分AMと対角線BDの交点をPとした"
+        "下の図の平行四辺形ABCDで、辺BCの中点をMとし、線分AMと対角線BDの交点をPとした"
     )
     return c
 
@@ -195,7 +195,7 @@ def similar_pyramid(p: dict[str, Any]) -> Construction:
     for x, y in (("A", "B"), ("A", "C"), ("B", "C"), ("D", "E")):
         c.connect(x, y)
     c.description = (
-        "右の図の△ABCで、辺AB上に点D、辺AC上に点Eをとると、DE ∥ BC である"
+        "下の図の△ABCで、辺AB上に点D、辺AC上に点Eをとると、DE ∥ BC である"
     )
     return c
 
@@ -223,7 +223,7 @@ def ratio_hourglass(p: dict[str, Any]) -> Construction:
     for x, y in (("A", "C"), ("B", "D"), ("A", "B"), ("D", "C")):
         c.connect(x, y)
     c.description = (
-        "右の図で、線分ACと線分BDは点Oで交わっており、OA：OC ＝ OB：OD である"
+        "下の図で、線分ACと線分BDは点Oで交わっており、OA：OC ＝ OB：OD である"
     )
     return c
 
@@ -248,7 +248,7 @@ def midline_triangle(p: dict[str, Any]) -> Construction:
     c.midpoint_of("N", "A", "C")
     for x, y in (("A", "B"), ("A", "C"), ("B", "C"), ("M", "N")):
         c.connect(x, y)
-    c.description = "右の図の△ABCで、辺AB、辺ACの中点をそれぞれM、Nとし、点Mと点Nを結んだ"
+    c.description = "下の図の△ABCで、辺AB、辺ACの中点をそれぞれM、Nとし、点Mと点Nを結んだ"
     return c
 
 
@@ -269,7 +269,7 @@ def midline_medial(p: dict[str, Any]) -> Construction:
     for x, y in (("A", "B"), ("A", "C"), ("B", "C"), ("M", "N"), ("N", "P"), ("P", "M")):
         c.connect(x, y)
     c.description = (
-        "右の図の△ABCで、辺AB、辺AC、辺BCの中点をそれぞれM、N、Pとし、"
+        "下の図の△ABCで、辺AB、辺AC、辺BCの中点をそれぞれM、N、Pとし、"
         "その3点を結んだ"
     )
     return c

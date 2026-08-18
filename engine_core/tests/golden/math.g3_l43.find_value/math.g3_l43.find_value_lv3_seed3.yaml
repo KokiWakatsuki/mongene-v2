@@ -27,7 +27,7 @@ problem_ref: 947cc4a9790e446a
 problem_text: 三角形PQRで、辺PQ, PR上に点S, Tがある。PS=9cm, SQ=5cm, PT=18cm, TR=10cm である。ST=18cm のとき、STとQRが平行であることを確かめたうえで、辺QRの長さを求めよ。
 sub_questions:
 - answer:
-    display: '28'
+    display: 28cm
     kind: symbolic
     srepr: Integer(28)
   cause_tags: []
@@ -41,12 +41,10 @@ sub_questions:
 
     次に、PSとSQをたして、辺PQ全体の長さを求める。（PQ = 9 + 5 = 14）
 
-    最後に、9:14 = 18:QR を解いて、辺QRの長さを求める。（28）'
+    最後に、9:14 = 18:QR を解いて、辺QRの長さを求める。（28cm）'
   hints:
   - PS:SQとPT:TRの比が等しいかどうかを比べる。
   - 平行線と線分の比の定理の逆から、STとQRが平行であるかどうかを判別する。
-  - ST∥QR であることから、三角形PSTと三角形PQRが相似になることを見つける。
-  - PSとSQをたして、辺PQ全体の長さを求める。
   label: (1)
   prompt_text: ''
   solution_steps:
@@ -78,6 +76,6 @@ sub_questions:
     detail: 9:14 = 18:QR を解いて、辺QRの長さを求める。
     narration: PS:PQ=ST:QR が成り立つことから、辺QRの長さを求める。
     op: apply_parallel_segment_ratio
-    result_display: '28'
+    result_display: 28cm
     result_srepr: Integer(28)
 visual_svg: null

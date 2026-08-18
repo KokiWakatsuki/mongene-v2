@@ -180,8 +180,11 @@ def judge_point_line_distance_meaning_recipe(ctx: CellContext, rng: Rng) -> MR:
     a, b = line
     pt = extra
     statement = (
+        # **図に言及しない。** このセルは visual: none で図が出ない
+        # （「図に即して答えよ」と書きながら図が無かった）。問い自体は
+        # 用語の意味を答えるもので、図が無くても成立する。
         f"点{pt}と直線{a}{b}がある。「点{pt}と直線{a}{b}との距離」とは、どの線分の"
-        "長さのことか、図に即して答えよ"
+        "長さのことか答えよ"
     )
 
     solver = REGISTRY.solver("math.judge_point_line_distance_meaning")

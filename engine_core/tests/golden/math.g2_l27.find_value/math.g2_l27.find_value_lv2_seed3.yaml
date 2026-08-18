@@ -40,7 +40,6 @@ sub_questions:
     最後に、求めた x をどちらかの式に代入し、y を求める。（y = 2）'
   hints:
   - 2つの直線の y を等しいとおき、x についての方程式をつくる。
-  - その方程式を解いて、x の値を求める。
   label: (1)
   prompt_text: ''
   solution_steps:

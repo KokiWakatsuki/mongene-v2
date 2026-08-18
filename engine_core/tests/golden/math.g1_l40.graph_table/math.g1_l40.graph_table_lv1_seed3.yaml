@@ -28,13 +28,13 @@ problem_text: 方眼上に三角形ABCと直線ℓがある。この三角形を
 sub_questions:
 - answer:
     features:
-    - display: (-3, -6)
+    - display: A'はAから下へ12
       kind: point
       srepr: Tuple(Integer(-3), Integer(-6))
-    - display: (3, -6)
+    - display: B'はBから下へ12
       kind: point
       srepr: Tuple(Integer(3), Integer(-6))
-    - display: (4, -3)
+    - display: C'はCから下へ6
       kind: point
       srepr: Tuple(Integer(4), Integer(-3))
     kind: graph
@@ -71,7 +71,7 @@ sub_questions:
   - polygon_transform.reflect
   explanation: 'まず、対称移動の軸がどこにあるかを読み取る。
 
-    次に、もとの図形の各頂点を、軸について反対側の同じ距離の位置に折り返す。（(-3, -6)、(3, -6)、(4, -3)）'
+    次に、もとの図形の各頂点を、軸について反対側の同じ距離の位置に折り返す。（A''はAから下へ12、B''はBから下へ12、C''はCから下へ6）'
   hints:
   - 対称移動の軸がどこにあるかを読み取る。
   label: (1)
@@ -87,7 +87,7 @@ sub_questions:
     detail: ''
     narration: もとの図形の各頂点を、軸について反対側の同じ距離の位置に折り返す。
     op: reflect_each_vertex
-    result_display: (-3, -6)、(3, -6)、(4, -3)
+    result_display: A'はAから下へ12、B'はBから下へ12、C'はCから下へ6
     result_srepr: ''
 visual_svg: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400" font-family="Hiragino Sans, Hiragino Kaku Gothic ProN, Noto Sans JP, Yu Gothic, Meiryo, sans-serif"><rect
   x="0" y="0" width="400" height="400" fill="#ffffff" stroke="none"/><line x1="28.00" y1="28.00" x2="28.00" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="49.50" y1="28.00" x2="49.50" y2="372.00"

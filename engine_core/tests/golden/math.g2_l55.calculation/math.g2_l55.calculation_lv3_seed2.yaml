@@ -40,9 +40,8 @@ sub_questions:
     最後に、41 - 14 を計算して、四分位範囲を求める。（27）'
   hints:
   - データを大きさの順に並べ、中央値を境に下組と上組に分ける。
-  - 下組の中央値を第1四分位数、上組の中央値を第3四分位数とする。
   label: (1)
-  prompt_text: 答えを求めなさい。
+  prompt_text: ''
   solution_steps:
   - args: []
     detail: ''

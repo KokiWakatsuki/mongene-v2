@@ -23,7 +23,7 @@ meta:
     unit: g2_l18
   seed: 3
   signature: word_problem_percent_change_guided
-problem_ref: 38a54a633fa3ad27
+problem_ref: 4436fb34d2b19714
 problem_text: 'ある中学校の昨年の生徒数は男女合わせて650人だった。今年は昨年に比べて男子が8%増え、女子が4%減ったので、全体で10人増えた。
 
   昨年の男子の人数を x 人、女子の人数を y 人とする。
@@ -46,7 +46,6 @@ sub_questions:
     最後に、増減した人数の関係に着目して、2つめの式をつくる。（8x/100 - 4y/100 = 10）'
   hints:
   - 昨年の男子の人数を x 人、女子の人数を y 人とおく。
-  - 昨年の人数の関係に着目して、1つめの式をつくる。
   label: (1)
   prompt_text: ''
   solution_steps:
@@ -77,7 +76,9 @@ sub_questions:
   - simultaneous_equations.word_problem_percent_change
   explanation: 'まず、係数をそろえて一方の文字を消去し、残った文字を求める。（x = 300）
 
-    次に、求めた値をもとの式に代入し、もう一方の文字を求める。（y = 350）'
+    次に、求めた値をもとの式に代入し、もう一方の文字を求める。（y = 350）
+
+    最後に、求めた値を、問題が聞いている量のことばに直して答える。（昨年の男子は300人、昨年の女子は350人）'
   hints:
   - 係数をそろえて一方の文字を消去し、残った文字を求める。
   label: (2)
@@ -98,4 +99,10 @@ sub_questions:
     op: back_substitute
     result_display: y = 350
     result_srepr: Integer(350)
+  - args: []
+    detail: ''
+    narration: 求めた値を、問題が聞いている量のことばに直して答える。
+    op: state_answer_in_context
+    result_display: 昨年の男子は300人、昨年の女子は350人
+    result_srepr: Tuple(Integer(300), Integer(350))
 visual_svg: null

@@ -27,7 +27,7 @@ problem_ref: 9f8b44114992394c
 problem_text: 三角形JKLで、辺JK, JL上に点M, Nがあり、MN∥KLである。JM=3cm, MK=9cm, MN=2cm のとき、辺KLの長さを求めよ。
 sub_questions:
 - answer:
-    display: '8'
+    display: 8cm
     kind: symbolic
     srepr: Integer(8)
   cause_tags: []
@@ -37,10 +37,9 @@ sub_questions:
 
     次に、JMとMKをたして、辺JK全体の長さを求める。（JK = 3 + 9 = 12）
 
-    最後に、3:12 = 2:KL を解いて、辺KLの長さを求める。（8）'
+    最後に、3:12 = 2:KL を解いて、辺KLの長さを求める。（8cm）'
   hints:
   - MN∥KL であることから、三角形JMNと三角形JKLが相似になることを見つける。
-  - JMとMKをたして、辺JK全体の長さを求める。
   label: (1)
   prompt_text: ''
   solution_steps:
@@ -60,6 +59,6 @@ sub_questions:
     detail: 3:12 = 2:KL を解いて、辺KLの長さを求める。
     narration: JM:JK=MN:KL が成り立つことから、辺KLの長さを求める。
     op: apply_parallel_segment_ratio
-    result_display: '8'
+    result_display: 8cm
     result_srepr: Integer(8)
 visual_svg: null

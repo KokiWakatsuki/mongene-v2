@@ -38,23 +38,23 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - circle_terms.term_recall
-  explanation: 'まず、説明されている式や数の部分がどれかを読み取る。（2つの半径がつくる角）
+  explanation: 'まず、円のどの部分（中心からの線・円周上の2点を結ぶ線・円周の一部）の説明かを読み取る。（2つの半径がつくる角）
 
     次に、弧の両端と中心を結んでできる角を中心角という。（中心角）'
   hints:
-  - 説明されている式や数の部分がどれかを読み取る。
+  - 円のどの部分（中心からの線・円周上の2点を結ぶ線・円周の一部）の説明かを読み取る。
   label: (1)
   prompt_text: ''
   solution_steps:
   - args: []
     detail: ''
-    narration: 説明されている式や数の部分がどれかを読み取る。
+    narration: 円のどの部分（中心からの線・円周上の2点を結ぶ線・円周の一部）の説明かを読み取る。
     op: identify_description
     result_display: 2つの半径がつくる角
     result_srepr: central_angle
   - args: []
     detail: 弧の両端と中心を結んでできる角を中心角という。
-    narration: その対象を表す用語の名前を思い出す。
+    narration: その部分を表す用語の名前を思い出す。
     op: name_concept
     result_display: 中心角
     result_srepr: 中心角

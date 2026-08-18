@@ -46,7 +46,6 @@ sub_questions:
     最後に、傾きと切片から一次関数の式を組み立てる。（y = 50x）'
   hints:
   - 傾きと通る点の座標を y = ax + b に代入する。
-  - 代入した式を b について解き、切片を求める。
   label: (1)
   prompt_text: ''
   solution_steps:
@@ -88,7 +87,6 @@ sub_questions:
     最後に、その方程式を解いて、x の値を求める。（x = 16）'
   hints:
   - もう一方の人が出発地点から相手に向かって進むようすを、道のりの式で表す。
-  - 2つの直線の y を等しいとおき、x についての方程式をつくる。
   label: (2)
   prompt_text: ''
   solution_steps:

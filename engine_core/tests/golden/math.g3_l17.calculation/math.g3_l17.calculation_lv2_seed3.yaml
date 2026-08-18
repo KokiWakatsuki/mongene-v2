@@ -42,7 +42,6 @@ sub_questions:
     最後に、根号の中をできるだけ簡単な形に直す。（4√30/5）'
   hints:
   - わり算を、逆数をかけるかけ算に直す。
-  - 係数どうし・根号の中どうしをそれぞれまとめる。
   label: (1)
   prompt_text: ''
   solution_steps:

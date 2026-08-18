@@ -42,9 +42,8 @@ sub_questions:
     最後に、根号の中を計算し、約分できるところを約分して x を求める。（x = (-√29 - 3)/10, x = (-3 + √29)/10）'
   hints:
   - 与式を整理して、それぞれの項の係数 a・b・c を読み取る。
-  - 読み取った a・b・c を、解の公式にそのまま代入する。
   label: (1)
-  prompt_text: 解を求めなさい。
+  prompt_text: ''
   solution_steps:
   - args: []
     detail: ''

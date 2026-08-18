@@ -158,12 +158,27 @@ def main() -> None:
                     continue
                 q_no += 1
                 n_types += 1
-                sq = res.sub_questions[0]
                 fig = ""
                 if res.visual_svg:
                     n_figs += 1
                     fig = f'<div class="fig">{res.visual_svg}</div>'
                 box = _ANSWER_BOX.get(form, 80)
+                # ★**小問は全部出す。** ここが `sub_questions[0]` だったせいで、
+                # (1)(2)(3) の問題 115 問すべてが (1) しか載らず、答えも解説も
+                # (1) の分だけだった（小問 1133 のうち 141 が一度も出ていない）。
+                # 生成物を隠していたのはエンジンではなくこの表示側だった。
+                multi = len(res.sub_questions) > 1
+                asks = "".join(
+                    f'<div class="q-sub">'
+                    + (f'<span class="q-sub-no">{esc(sq.label)}</span>' if multi else "")
+                    + f'<p class="q-ask">{esc(sq.prompt_text)}</p></div>'
+                    for sq in res.sub_questions
+                    if sq.prompt_text or multi
+                )
+                spaces = "".join(
+                    f'<div class="q-space" style="height:{box}px"></div>'
+                    for _ in res.sub_questions
+                )
                 # **問題面に答えは出さない。** 出したら問題集にならない。
                 body.append(
                     f'<article class="q" id="q{q_no}">'
@@ -171,24 +186,33 @@ def main() -> None:
                     f'<span class="q-no">{q_no}</span>'
                     f'<span class="q-tag tag-{form}">{esc(_FORM_JA.get(form, form))}</span>'
                     f'<span class="q-lv">Lv{level}</span></div>'
-                    f'<div class="q-body">{para(res.problem_text)}'
-                    f'<p class="q-ask">{esc(sq.prompt_text)}</p></div>'
+                    f'<div class="q-body">{para(res.problem_text)}{asks}</div>'
                     f'{fig}'
-                    f'<div class="q-space" style="height:{box}px"></div>'
+                    f'{spaces}'
                     f'</article>'
                 )
-                hints = "".join(
-                    f"<li>{esc(h)}</li>" for h in (sq.hints or [])
-                )
+                items = ""
+                for sq in res.sub_questions:
+                    hints = "".join(f"<li>{esc(h)}</li>" for h in (sq.hints or []))
+                    # 「かけ」の答えは**図そのもの**。engine は模範解答図
+                    # （GraphAnswer.solution_svg_ref）を作っているのに、
+                    # ここが出していなかったので解答編に図が1枚も無かった。
+                    sol_fig = getattr(sq.answer, "solution_svg_ref", "") or ""
+                    items += (
+                        '<div class="a-sub">'
+                        + (f'<span class="a-sub-no">{esc(sq.label)}</span>' if multi else "")
+                        + f'<div class="a-ans">{answer_html(sq.answer)}</div>'
+                        + (f'<div class="a-fig">{sol_fig}</div>' if sol_fig else "")
+                        + f'<div class="a-sol">{para(sq.explanation)}</div>'
+                        + (f'<details class="a-hint"><summary>ヒント</summary>'
+                           f'<ul>{hints}</ul></details>' if hints else "")
+                        + "</div>"
+                    )
                 answers.append(
                     f'<article class="a-item">'
                     f'<div class="a-head"><span class="a-num">{q_no}</span>'
                     f'<a class="a-back" href="#q{q_no}">問題へ</a></div>'
-                    f'<div class="a-ans">{answer_html(sq.answer)}</div>'
-                    f'<div class="a-sol">{para(sq.explanation)}</div>'
-                    + (f'<details class="a-hint"><summary>ヒント</summary>'
-                       f'<ul>{hints}</ul></details>' if hints else "")
-                    + "</article>"
+                    f'{items}</article>'
                 )
         body.append("</section>")
         answers.append("</section>")
@@ -272,7 +296,11 @@ h2,h3,.q-no,.a-num,.lesson-no,.t-no {{
 .q-lv {{ font-size:10.5px; color:var(--sub); letter-spacing:.06em; }}
 .q-body {{ padding-left:34px; }}
 .q-body p {{ margin:.35em 0; }}
-.q-ask {{ margin-top:.5em !important; }}
+.q-ask {{ margin:0 !important; }}
+/* 小問。(1)(2)(3) は番号を立てて、答案欄も小問の数だけ取る。 */
+.q-sub {{ display:flex; gap:8px; align-items:baseline; margin-top:.5em; }}
+.q-sub-no {{ font-size:12.5px; color:var(--sub); min-width:26px;
+  font-family:"Hiragino Kaku Gothic ProN",sans-serif; }}
 .fig {{ padding-left:34px; margin:10px 0; }}
 .fig svg {{ max-width:340px; height:auto; }}
 .q-space {{ margin-left:34px; border-left:1px solid var(--line); }}
@@ -292,11 +320,17 @@ h2,h3,.q-no,.a-num,.lesson-no,.t-no {{
 .a-num {{ min-width:24px; height:24px; border-radius:50%; border:1px solid var(--rule);
   font-size:12px; display:grid; place-items:center; }}
 .a-back {{ font-size:9px; color:var(--sub); text-decoration:none; letter-spacing:.04em; }}
-.a-ans {{ grid-column:2; }}
+.a-sub {{ grid-column:2; margin-bottom:10px; }}
+.a-sub-no {{ display:inline-block; font-size:12px; color:var(--accent);
+  margin-right:6px; font-family:"Hiragino Kaku Gothic ProN",sans-serif; }}
+.a-sub .ans-main {{ display:inline; }}
+.a-fig {{ margin:8px 0; }}
+.a-fig svg {{ max-width:260px; height:auto; }}
+.a-ans {{ display:inline; }}
 .ans-main {{ margin:0 0 6px; font-weight:600; }}
-.a-sol {{ grid-column:2; color:#333; font-size:13.5px; line-height:1.8; }}
+.a-sol {{ color:#333; font-size:13.5px; line-height:1.8; }}
 .a-sol p {{ margin:.2em 0; }}
-.a-hint {{ grid-column:2; margin-top:5px; font-size:12px; color:var(--sub); }}
+.a-hint {{ margin-top:5px; font-size:12px; color:var(--sub); }}
 .a-hint ul {{ margin:.3em 0; padding-left:1.2em; }}
 
 @media print {{

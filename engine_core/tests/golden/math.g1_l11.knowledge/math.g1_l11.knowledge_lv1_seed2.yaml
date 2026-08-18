@@ -36,23 +36,23 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - prime_concepts.term_recall
-  explanation: 'まず、説明されている式や数の部分がどれかを読み取る。（素数でない 2 以上の整数）
+  explanation: 'まず、説明されている数が、約数をどれだけ持つ数なのかを読み取る。（素数でない 2 以上の整数）
 
     次に、1 とその数のほかにも約数をもつ整数を合成数という。（合成数）'
   hints:
-  - 説明されている式や数の部分がどれかを読み取る。
+  - 説明されている数が、約数をどれだけ持つ数なのかを読み取る。
   label: (1)
   prompt_text: ''
   solution_steps:
   - args: []
     detail: ''
-    narration: 説明されている式や数の部分がどれかを読み取る。
+    narration: 説明されている数が、約数をどれだけ持つ数なのかを読み取る。
     op: identify_description
     result_display: 素数でない 2 以上の整数
     result_srepr: composite
   - args: []
     detail: 1 とその数のほかにも約数をもつ整数を合成数という。
-    narration: その対象を表す用語の名前を思い出す。
+    narration: その種類の数を表す用語の名前を思い出す。
     op: name_concept
     result_display: 合成数
     result_srepr: 合成数

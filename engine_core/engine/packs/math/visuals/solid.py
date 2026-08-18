@@ -373,6 +373,10 @@ def _projection_parts(params: dict[str, Any], *, draw: bool) -> list[str]:
     cy_elev = _PAD + 60
     cy_plan = _H - _PAD - 80
     shown = str(params.get("shown_view", "none")) if not draw else "both"
+    if shown == "none":
+        # 与えられている図が無く、両方を自分でかくセル。**白紙を返さない**
+        # ——何も見えない空白が出て、図が壊れているのと区別がつかなかった。
+        return _answer_area_parts()
 
     parts: list[str] = []
     if shown in ("both", "elevation"):
@@ -594,6 +598,30 @@ _VIEW_BUILDERS = {
 }
 
 
+def _answer_area_parts() -> list[str]:
+    """「ここにかきなさい」の解答欄。**方眼と外枠を引く。**
+
+    ★ここは長く `_svg([])` を返していた。返っていたのは白い矩形だけの 266 バイトの
+    SVG で、紙面には**何も見えない空白**が出る。図が壊れているのか、そういう問題
+    なのかが読み手に区別できない（点検で「中身のない図8枚」として挙がった）。
+    答えの図を先出ししないという判断は正しいので、**かく場所であることが見える形**
+    にする——市販の問題集の解答欄と同じく、外枠と薄い方眼を引く。
+    """
+    step = 20
+    grid = [
+        f'<line x1="{x}" y1="10" x2="{x}" y2="{_H - 10}" stroke="#e3e6ea" stroke-width="1"/>'
+        for x in range(10 + step, _W - 10, step)
+    ] + [
+        f'<line x1="10" y1="{y}" x2="{_W - 10}" y2="{y}" stroke="#e3e6ea" stroke-width="1"/>'
+        for y in range(10 + step, _H - 10, step)
+    ]
+    frame = (
+        f'<rect x="10" y="10" width="{_W - 20}" height="{_H - 20}" '
+        f'fill="none" stroke="{_STROKE}" stroke-width="{_THIN}"/>'
+    )
+    return grid + [frame]
+
+
 def render_solid_svg(params: dict[str, Any], *, draw: bool) -> str:
     """params の `view` に応じて立体の図を描く。
 
@@ -608,7 +636,8 @@ def render_solid_svg(params: dict[str, Any], *, draw: bool) -> str:
     if view == "rotation_source":
         return _svg(_rotation_source_parts(params))
     if not draw:
-        return _svg([])
+        # 答えの図は出さない。代わりに、かくための方眼の解答欄を出す。
+        return _svg(_answer_area_parts())
     if view == "sketch":
         builder = _SKETCH_BY_KIND.get(str(params["solid_kind"]))
         if builder is None:

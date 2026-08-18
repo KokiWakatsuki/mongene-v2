@@ -38,23 +38,23 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - box_plot_terms.term_recall
-  explanation: 'まず、説明されている式や数の部分がどれかを読み取る。（箱の左の辺）
+  explanation: 'まず、箱ひげ図の、箱の両端・中の線・ひげの先のどこについての説明かを読み取る。（箱の左の辺）
 
     次に、箱ひげ図の箱の左の辺は第一四分位数を表す。（第一四分位数）'
   hints:
-  - 説明されている式や数の部分がどれかを読み取る。
+  - 箱ひげ図の、箱の両端・中の線・ひげの先のどこについての説明かを読み取る。
   label: (1)
   prompt_text: ''
   solution_steps:
   - args: []
     detail: ''
-    narration: 説明されている式や数の部分がどれかを読み取る。
+    narration: 箱ひげ図の、箱の両端・中の線・ひげの先のどこについての説明かを読み取る。
     op: identify_description
     result_display: 箱の左の辺
     result_srepr: box_left
   - args: []
     detail: 箱ひげ図の箱の左の辺は第一四分位数を表す。
-    narration: その対象を表す用語の名前を思い出す。
+    narration: その位置が表す用語の名前を思い出す。
     op: name_concept
     result_display: 第一四分位数
     result_srepr: 第一四分位数

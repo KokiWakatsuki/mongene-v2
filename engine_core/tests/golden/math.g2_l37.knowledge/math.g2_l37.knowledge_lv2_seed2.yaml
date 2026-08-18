@@ -36,23 +36,23 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - congruence_condition_terms.term_recall
-  explanation: 'まず、説明されている式や数の部分がどれかを読み取る。（1組の辺とその両端の角）
+  explanation: 'まず、等しいとわかっているのが辺なのか角なのか、いくつずつかを読み取る。（1組の辺とその両端の角）
 
     次に、1組の辺と、その両端の2つの角が等しいことを使う合同条件。（一辺とその両端の角がそれぞれ等しい）'
   hints:
-  - 説明されている式や数の部分がどれかを読み取る。
+  - 等しいとわかっているのが辺なのか角なのか、いくつずつかを読み取る。
   label: (1)
   prompt_text: ''
   solution_steps:
   - args: []
     detail: ''
-    narration: 説明されている式や数の部分がどれかを読み取る。
+    narration: 等しいとわかっているのが辺なのか角なのか、いくつずつかを読み取る。
     op: identify_description
     result_display: 1組の辺とその両端の角
     result_srepr: asa
   - args: []
     detail: 1組の辺と、その両端の2つの角が等しいことを使う合同条件。
-    narration: その対象を表す用語の名前を思い出す。
+    narration: その組み合わせにあたる三角形の合同条件を思い出す。
     op: name_concept
     result_display: 一辺とその両端の角がそれぞれ等しい
     result_srepr: 一辺とその両端の角がそれぞれ等しい

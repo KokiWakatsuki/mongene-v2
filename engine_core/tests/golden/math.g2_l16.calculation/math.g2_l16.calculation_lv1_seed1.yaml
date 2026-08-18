@@ -42,9 +42,8 @@ sub_questions:
     最後に、求めた x を一方の式に代入して y を求める。（y = -1）'
   hints:
   - y の係数が絶対値が等しく符号が逆なので、辺々を足して y を消去する。
-  - 足してできた式から x の値を求める。
   label: (1)
-  prompt_text: 解を求めなさい。
+  prompt_text: ''
   solution_steps:
   - args:
     - 3x + 2y = 4

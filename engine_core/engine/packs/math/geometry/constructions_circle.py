@@ -39,7 +39,7 @@ def circle_two_chords(p: dict[str, Any]) -> Construction:
     c.intersection("P", ("A", "C"), ("B", "D"))
     for x, y in (("A", "B"), ("C", "D")):
         c.connect(x, y)
-    c.description = "右の図で、4点A、B、C、Dは円Oの周上にあり、弦ACと弦BDの交点をPとする"
+    c.description = "下の図で、4点A、B、C、Dは円Oの周上にあり、弦ACと弦BDの交点をPとする"
     return c
 
 
@@ -65,7 +65,7 @@ def circle_diameter(p: dict[str, Any]) -> Construction:
     )
     for x, y in (("A", "B"), ("A", "C"), ("B", "C"), ("A", "D"), ("B", "D")):
         c.connect(x, y)
-    c.description = "右の図で、線分ABは円Oの直径であり、2点C、Dは円Oの周上にある"
+    c.description = "下の図で、線分ABは円Oの直径であり、2点C、Dは円Oの周上にある"
     return c
 
 
@@ -106,7 +106,7 @@ def circle_equal_chords(p: dict[str, Any]) -> Construction:
         c.connect(x, y)
     c.intersection("P", ("A", "C"), ("B", "D"))
     c.description = (
-        "右の図で、4点A、B、C、Dは円Oの周上にあり、AB ＝ DC である。"
+        "下の図で、4点A、B、C、Dは円Oの周上にあり、AB ＝ DC である。"
         "弦ACと弦BDの交点をPとする"
     )
     return c
@@ -142,7 +142,7 @@ def circle_thales_isosceles(p: dict[str, Any]) -> Construction:
     c.facts.add(fact)
     c.givens.append(fact)
     c.description = (
-        "右の図で、線分ABは円Oの直径であり、2点C、Dは円Oの周上の直径ABの両側に"
+        "下の図で、線分ABは円Oの直径であり、2点C、Dは円Oの周上の直径ABの両側に"
         "AC ＝ AD となるようにとった点である"
     )
     return c
@@ -187,7 +187,7 @@ def circle_diameter_chords(p: dict[str, Any]) -> Construction:
     c.givens.append(fact)
     c.intersection("P", ("A", "C"), ("B", "D"))
     c.description = (
-        "右の図で、線分ABは円Oの直径であり、2点C、Dは円Oの周上のABと同じ側に"
+        "下の図で、線分ABは円Oの直径であり、2点C、Dは円Oの周上のABと同じ側に"
         "AC ＝ BD となるようにとった点である。弦ACと弦BDの交点をPとする"
     )
     return c

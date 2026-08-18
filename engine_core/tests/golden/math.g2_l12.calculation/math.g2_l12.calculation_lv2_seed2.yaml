@@ -42,9 +42,8 @@ sub_questions:
     最後に、求めた x をもとの式に代入して y を求める。（y = 1）'
   hints:
   - y の係数をそろえるため、一方の式を何倍かする。
-  - 2式を加減して y を消去し、x を求める。
   label: (1)
-  prompt_text: 解を求めなさい。
+  prompt_text: ''
   solution_steps:
   - args:
     - -2x + y = -5

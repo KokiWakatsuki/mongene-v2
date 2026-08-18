@@ -48,7 +48,6 @@ sub_questions:
     最後に、求めた a, b から一次関数の式を組み立てる。（y = (5/2)x + 6）'
   hints:
   - 2点をそれぞれ y = ax + b に代入し、a, b の連立方程式を立てる。
-  - 連立方程式を解いて a, b を同時に求める。
   label: (1)
   prompt_text: ''
   solution_steps:

@@ -37,7 +37,7 @@ sub_questions:
   hints:
   - いちばん小さい階級から対象の階級まで、度数を順に足し合わせる。
   label: (1)
-  prompt_text: 答えを求めなさい。
+  prompt_text: ''
   solution_steps:
   - args: []
     detail: いちばん小さい階級から順に 13 + 14 を足して、累積度数を求める。

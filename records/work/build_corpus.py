@@ -270,7 +270,6 @@ def main() -> None:
                 lines.append(f"\n### 型{i}  （生成不可: {res.code}）\n")
                 continue
             n_problems += 1
-            sq = res.sub_questions[0]
             multi = len(res.sub_questions) > 1
             # **答えは全小問ぶん出す。** 1つ目しか出していなかったので、(2)(3) の答えを
             # 走査が一度も見ていなかった。選択肢の答え（ChoiceAnswer）と作図の答え
@@ -309,7 +308,13 @@ def main() -> None:
 
             lines.append(f"\n### 型{i}  `{labels[key]}`  (seed {seed})\n")
             lines.append(f"**問題**\n\n{res.problem_text}\n")
-            lines.append(f"**問い** {sq.prompt_text}\n")
+            # **問いも全小問ぶん。** ここだけ `sub_questions[0]` が残っていて、
+            # (2)(3) の問いが INDEX に一度も出ていなかった。
+            asks = " ／ ".join(
+                (f"{s.label} {s.prompt_text}" if multi else str(s.prompt_text))
+                for s in res.sub_questions
+            )
+            lines.append(f"**問い** {asks}\n")
             lines.append(f"**図** {fig}\n")
             lines.append(f"**答え** {ans}\n")
             lines.append(f"**解説**\n\n{exp}\n")

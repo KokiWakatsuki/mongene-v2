@@ -115,14 +115,14 @@ def special_parallelogram_diagonal_value(shape: object, value: object) -> Soluti
         # 半分の長さと直角の両方を問える。
         half = sympy.Rational(v, 2)
         result = sympy.Tuple(half, sympy.Integer(90))
-        disp = f"線分の長さ {fmt_measure(half)}、角の大きさ 90°"
+        disp = f"線分の長さ {fmt_measure(half)}cm、角の大きさ 90°"
         narration = (
             "ひし形の対角線はそれぞれの中点で交わり、しかも垂直に交わることから、"
             "交点から頂点までの長さと、交点にできる角の大きさを求める。"
         )
     else:
         result = sympy.Rational(v, 2)
-        disp = fmt_measure(result)
+        disp = f"{fmt_measure(result)}cm"
         narration = "対角線の長さが等しく、それぞれの中点で交わることから、交点から頂点までの長さを求める。"
     srepr = sympy.srepr(result)
     # op 名は shape によらず一定にする（G-FP: 同一 signature の fp はセルによらず一定でなければ

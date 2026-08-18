@@ -36,17 +36,17 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - function_terms.term_recall
-  explanation: 'まず、説明されている式や数の部分がどれかを読み取る。（x を決めると y が1つに決まる関係）
+  explanation: 'まず、ともなって変わる二つの数量のうち、どちらについての説明かを読み取る。（x を決めると y が1つに決まる関係）
 
     次に、x の値を決めると y の値がただ1つに決まるとき、y は x の関数であるという。（関数）'
   hints:
-  - 説明されている式や数の部分がどれかを読み取る。
+  - ともなって変わる二つの数量のうち、どちらについての説明かを読み取る。
   label: (1)
   prompt_text: ''
   solution_steps:
   - args: []
     detail: ''
-    narration: 説明されている式や数の部分がどれかを読み取る。
+    narration: ともなって変わる二つの数量のうち、どちらについての説明かを読み取る。
     op: identify_description
     result_display: x を決めると y が1つに決まる関係
     result_srepr: function

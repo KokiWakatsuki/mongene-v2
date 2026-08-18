@@ -28,13 +28,13 @@ problem_text: 方眼上に三角形ABCがかかれている。この三角形を
 sub_questions:
 - answer:
     features:
-    - display: (2, 8)
+    - display: A'はAから右へ4、上へ4
       kind: point
       srepr: Tuple(Integer(2), Integer(8))
-    - display: (0, 3)
+    - display: B'はBから右へ4、上へ4
       kind: point
       srepr: Tuple(Integer(0), Integer(3))
-    - display: (5, 6)
+    - display: C'はCから右へ4、上へ4
       kind: point
       srepr: Tuple(Integer(5), Integer(6))
     kind: graph
@@ -70,7 +70,7 @@ sub_questions:
   - polygon_transform.translate
   explanation: 'まず、平行移動の向きと距離を読み取る。（x 方向に 4、y 方向に 4）
 
-    次に、もとの図形の各頂点を、同じ向きに同じ距離だけ移動する。（(2, 8)、(0, 3)、(5, 6)）'
+    次に、もとの図形の各頂点を、同じ向きに同じ距離だけ移動する。（A''はAから右へ4、上へ4、B''はBから右へ4、上へ4、C''はCから右へ4、上へ4）'
   hints:
   - 平行移動の向きと距離を読み取る。
   label: (1)
@@ -86,7 +86,7 @@ sub_questions:
     detail: ''
     narration: もとの図形の各頂点を、同じ向きに同じ距離だけ移動する。
     op: translate_each_vertex
-    result_display: (2, 8)、(0, 3)、(5, 6)
+    result_display: A'はAから右へ4、上へ4、B'はBから右へ4、上へ4、C'はCから右へ4、上へ4
     result_srepr: ''
 visual_svg: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400" font-family="Hiragino Sans, Hiragino Kaku Gothic ProN, Noto Sans JP, Yu Gothic, Meiryo, sans-serif"><rect
   x="0" y="0" width="400" height="400" fill="#ffffff" stroke="none"/><line x1="28.00" y1="28.00" x2="28.00" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="49.50" y1="28.00" x2="49.50" y2="372.00"

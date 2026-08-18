@@ -40,7 +40,6 @@ sub_questions:
     最後に、求めた値をもとの式に代入し、もう一方の文字を求める。（y = 1）'
   hints:
   - 2つの直線を ax + by = c の形にそろえて連立方程式を立てる。
-  - 係数をそろえて一方の文字を消去し、残った文字を求める。
   label: (1)
   prompt_text: ''
   solution_steps:

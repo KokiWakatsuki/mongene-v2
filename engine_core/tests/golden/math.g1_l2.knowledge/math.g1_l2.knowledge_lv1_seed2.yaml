@@ -37,17 +37,17 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - number.term_recall
-  explanation: 'まず、説明されている式や数の部分がどれかを読み取る。（+ と - の記号）
+  explanation: 'まず、説明されている数が、数直線の上でどこにあるか、どんな符号かを読み取る。（+ と - の記号）
 
     次に、正か負かを表す + と - を符号という。数の大きさ（絶対値）とは別のもの。（符号）'
   hints:
-  - 説明されている式や数の部分がどれかを読み取る。
+  - 説明されている数が、数直線の上でどこにあるか、どんな符号かを読み取る。
   label: (1)
   prompt_text: ''
   solution_steps:
   - args: []
     detail: ''
-    narration: 説明されている式や数の部分がどれかを読み取る。
+    narration: 説明されている数が、数直線の上でどこにあるか、どんな符号かを読み取る。
     op: identify_description
     result_display: + と - の記号
     result_srepr: sign

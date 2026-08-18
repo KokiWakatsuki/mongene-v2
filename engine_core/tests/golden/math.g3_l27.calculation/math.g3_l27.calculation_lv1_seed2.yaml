@@ -41,7 +41,7 @@ sub_questions:
   hints:
   - 左辺を因数分解する。
   label: (1)
-  prompt_text: 解を求めなさい。
+  prompt_text: ''
   solution_steps:
   - args: []
     detail: ''

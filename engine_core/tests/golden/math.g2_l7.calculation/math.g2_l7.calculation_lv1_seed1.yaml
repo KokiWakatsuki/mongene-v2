@@ -40,7 +40,6 @@ sub_questions:
     最後に、同類項をまとめて、1つの式にする。（6n + 6）'
   hints:
   - それぞれの数を表す式を、かっこをつけて和の形に並べる。
-  - かっこを外して、項の和の形にする。
   label: (1)
   prompt_text: ''
   solution_steps:

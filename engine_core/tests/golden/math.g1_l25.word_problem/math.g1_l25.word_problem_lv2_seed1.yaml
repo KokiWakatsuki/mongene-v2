@@ -76,7 +76,6 @@ sub_questions:
   hints:
   - 分配法則を使って、かっこを外す。
   - 文字の項を左辺に、数の項を右辺に、符号を変えて移項する。
-  - 両辺の同類項をそれぞれまとめて、ax = b の形にする。
   label: (2)
   prompt_text: ''
   solution_steps:

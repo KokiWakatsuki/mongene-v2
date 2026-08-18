@@ -45,7 +45,6 @@ sub_questions:
   hints:
   - 反比例の式 y=a/x に、通る点の x, y の値をあてはめ、比例定数を求める式をつくる。
   - 求めた比例定数を使って、反比例の式を組み立てる。
-  - 比例定数と x の値を、反比例の式 y=a/x の x にあてはめる。
   label: (1)
   prompt_text: ''
   solution_steps:

@@ -37,17 +37,17 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - square_root.term_recall
-  explanation: 'まず、説明されている式や数の部分がどれかを読み取る。（2乗するとその数になる数）
+  explanation: 'まず、2乗するともとの数になる数のことか、それを表す記号のことかを読み取る。（2乗するとその数になる数）
 
     次に、2乗するとある数になる数を、その数の平方根という。正と負の2つある。（平方根）'
   hints:
-  - 説明されている式や数の部分がどれかを読み取る。
+  - 2乗するともとの数になる数のことか、それを表す記号のことかを読み取る。
   label: (1)
   prompt_text: ''
   solution_steps:
   - args: []
     detail: ''
-    narration: 説明されている式や数の部分がどれかを読み取る。
+    narration: 2乗するともとの数になる数のことか、それを表す記号のことかを読み取る。
     op: identify_description
     result_display: 2乗するとその数になる数
     result_srepr: square_root

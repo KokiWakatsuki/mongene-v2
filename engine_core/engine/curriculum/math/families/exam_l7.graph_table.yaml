@@ -16,10 +16,12 @@ source_desc: |
   単元が違う（あちらは C11 データの活用、こちらは入試融合）だけで数学も図も同じなので、
   同じ資産を共有する——同じ図を別々に書き起こすと必ず食い違う。
 
-  【台帳 example との差】Lv2 の example は4つの値をまとめて読ませるが、既存 recipe は
-  2つ組（中央値と第三四分位数／第一四分位数と中央値／最小値と最大値）を1組読ませる。
-  どの値を読むかは params の read_target_set から引くので、通しで解けば4つとも
-  読むことになる。図から値を復元する力を測るという点で等価と判断した。
+  【台帳 example どおり4つ読む】Lv2 の example は4つの値をまとめて読ませる。
+  以前はここを g2_l56 Lv1 と同じ2つ組（median_q3／q1_median／min_max）にしていたので、
+  **場面も読み取り対象も同じ＝問題文が完全に一致する問題が 66 問（33組）**出ていた
+  （「入試対策」に新規の出題が1問も無い状態だった）。読み取り対象を4つ組にして、
+  台帳 example に合わせるとともに中2のセルとの複製を解消する。
+  recipe と図は g2_l56 と共有したまま（同じ図を別々に書き起こすと必ず食い違う）。
 concepts_default: [box_plot.read_values]
 levels:
   "2":
@@ -38,7 +40,7 @@ levels:
         - "ある中学校の生徒|上体起こしの回数（回）|5"
         - "水泳部の部員|自由形の記録（秒）|2@12"
         - "ある中学校の生徒|一日のテレビの視聴時間（分）|10"
-      read_target_set: [median_q3, q1_median, min_max]
+      read_target_set: [q1_median_q3_max, min_q1_median_q3]
     given: [situation_params, condition]
     asked: [read_box_plot]
     visual: required

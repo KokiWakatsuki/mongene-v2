@@ -27,7 +27,7 @@ problem_ref: fd4f173851238100
 problem_text: RS=RTの二等辺三角形RSTで、底角∠Sの大きさが41°のとき、頂角∠Rの大きさを求めよ。
 sub_questions:
 - answer:
-    display: '98'
+    display: 98°
     kind: symbolic
     srepr: Integer(98)
   cause_tags: []
@@ -35,7 +35,7 @@ sub_questions:
   - isosceles.base_angle_from_apex
   explanation: 'まず、二等辺三角形の頂角・底角のうち、わかっているほうの大きさを読み取る。（41°）
 
-    次に、等しい2つの底角の大きさを2つ分合わせてひくと、残りが頂角の大きさになることから頂角を求める。（98）'
+    次に、等しい2つの底角の大きさを2つ分合わせてひくと、残りが頂角の大きさになることから頂角を求める。（98°）'
   hints:
   - 二等辺三角形の頂角・底角のうち、わかっているほうの大きさを読み取る。
   label: (1)
@@ -51,6 +51,6 @@ sub_questions:
     detail: ''
     narration: 等しい2つの底角の大きさを2つ分合わせてひくと、残りが頂角の大きさになることから頂角を求める。
     op: solve_remaining_angle
-    result_display: '98'
+    result_display: 98°
     result_srepr: Integer(98)
 visual_svg: null

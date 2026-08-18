@@ -85,11 +85,17 @@ _INSCRIBED_ANGLE_TWO_CHORDS_CONCEPTS = ["circle.two_chords_intersection_angle"]
     provides_concepts=_INSCRIBED_ANGLE_TWO_CHORDS_CONCEPTS,
 )
 def inscribed_angle_two_chords_intersection_recipe(ctx: CellContext, rng: Rng) -> MR:
-    """円周上の4点A,B,C,Dで、弦AD,BCの交点をPとするとき、∠BAC,∠ACDから
+    """円周上の4点A,B,C,Dで、弦AC,BDの交点をPとするとき、∠BAC,∠ACDから
 
     ∠APBの大きさを求める（g3_l47.find_value Lv3・answer-first）。複数の
     円周角を組み合わせる多段構成。central_angleを1回使うLv1とは異なり、
     2つの円周角から対応する弧を求めたうえで交点の角を求める新規solverを使う。
+
+    ★**交わる2本の弦は対角線でなければならない。** ここは弦AD・BCと書いていたが、
+    A,B,C,D がこの順に円周上にあるとき AD と BC は四角形ABCDの**対辺**で、
+    円の内部では交わらない（AD の同じ側に B と C が並ぶ）。図形として存在しない
+    場面を出していた。交点を持つのは対角線 AC と BD で、答えの
+    180°-∠BAC-∠ACD はもともとその交点の角の値である。
     """
     p = ctx.spec_level.params
     (v,) = _draw_named_figures([5], rng)
@@ -111,7 +117,7 @@ def inscribed_angle_two_chords_intersection_recipe(ctx: CellContext, rng: Rng) -
         # 「右の図で」と書いていたが、このセルは visual: none（D-6）。弦の交点を
         # 文で指定しているので配置は決まる——図への言及だけを外す。
         f"4点{pa}, {pb}, {pc}, {pd}がこの順に円周上にある。∠{pb}{pa}{pc}={bac}°、"
-        f"∠{pa}{pc}{pd}={acd}° であるとき、2本の弦{pa}{pd}, {pb}{pc}の交点を{pp}として、"
+        f"∠{pa}{pc}{pd}={acd}° であるとき、2本の弦{pa}{pc}, {pb}{pd}の交点を{pp}として、"
         f"∠{pa}{pp}{pb}の大きさを求めよ"
     )
 

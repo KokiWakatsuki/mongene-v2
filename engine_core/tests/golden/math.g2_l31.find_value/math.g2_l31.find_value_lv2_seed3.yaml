@@ -24,10 +24,10 @@ meta:
   seed: 3
   signature: zigzag_angle_sum_g2_l31
 problem_ref: f57f40480cf8afcf
-problem_text: 2直線ℓ、mが平行である。折れ曲がった線の途中の角がそれぞれ75°、66°であるとき、補助線をひいて∠xの大きさを求めよ。
+problem_text: 平行な2直線ℓ、mの間に、点Pで1回折れ曲がる折れ線がある。この折れ線の一方の端は直線ℓ上の点Aに、もう一方の端は直線m上の点Bにあり、線分PAと直線ℓがつくる角は75°、線分PBと直線mがつくる角は66°で、この2つの角は折れ線から見て同じ側にある。このとき、点Pを通り2直線に平行な補助線をひいて、折れ点の角∠APBの大きさを求めよ。
 sub_questions:
 - answer:
-    display: '141'
+    display: 141°
     kind: symbolic
     srepr: Integer(141)
   cause_tags: []
@@ -35,7 +35,7 @@ sub_questions:
   - angle_pair.solve_zigzag
   explanation: 'まず、折れ曲がった点を通り、2直線に平行な補助線をひく。（2直線に平行な補助線）
 
-    次に、補助線で分けられた2つの角がそれぞれ錯角として等しいことから、求める角の大きさを合計して決める。（141）'
+    次に、補助線で分けられた2つの角がそれぞれ錯角として等しいことから、求める角の大きさを合計して決める。（141°）'
   hints:
   - 折れ曲がった点を通り、2直線に平行な補助線をひく。
   label: (1)
@@ -51,6 +51,6 @@ sub_questions:
     detail: ''
     narration: 補助線で分けられた2つの角がそれぞれ錯角として等しいことから、求める角の大きさを合計して決める。
     op: sum_alternate_angles
-    result_display: '141'
+    result_display: 141°
     result_srepr: Integer(141)
 visual_svg: null

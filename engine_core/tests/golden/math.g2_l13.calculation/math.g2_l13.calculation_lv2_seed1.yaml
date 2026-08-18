@@ -45,9 +45,8 @@ sub_questions:
   hints:
   - はじめの式を x について解く。
   - これをもう一方の式に代入して y だけの方程式にする。
-  - y の値を求める。
   label: (1)
-  prompt_text: 解を求めなさい。
+  prompt_text: ''
   solution_steps:
   - args:
     - x + 2y = 9

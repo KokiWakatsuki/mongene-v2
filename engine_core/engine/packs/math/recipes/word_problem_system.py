@@ -889,9 +889,32 @@ def _formulation_steps(
 def _derive_steps(
     scene: SystemScene, answer_values: tuple[sympy.Expr, sympy.Expr]
 ) -> list[Step]:
-    """求める量が x, y と違う場面だけ足す最後の一手。"""
+    """最後の一手——求めた値を、問題が聞いている量のことばに直す。
+
+    ★以前は「求める量が x, y と違う場面」だけに足していた。x, y がそのまま
+    答えになる場面では最後の手が「y = 5」で終わり、**解説が答えに届いて
+    いなかった**（解説の末尾と解答欄の食い違い 94 件のうち 56 件が これ）。
+    問題が聞いているのは y の値ではなく「皿は何枚か」なので、x・y のままでも
+    言い直す一手が要る。
+
+    ★**「無いか有るか」で分けてはいけない。** 最初はここを「どの場面でも同じ op を
+    1つ足す」に直したが、それだと g2_l17 の Lv3（x, y がそのまま答え）と
+    Lv4（x, y から別の量を出す）の手順が完全に一致し、level_sep と G-FP が落ちた
+    （fp 衝突・実測）。**どちらの場面にも最後の一手はある。違うのはその中身**——
+    x, y のままなら言い直すだけ、違う量なら計算してから言う。op 名でその差を残す。
+    """
     if scene.answer_map == IDENTITY_ANSWER_MAP:
-        return []
+        return [
+            Step(
+                op="state_answer_in_context",
+                args=[],
+                result_srepr=sympy.srepr(sympy.Tuple(*answer_values)),
+                result_display=format_pair_answer(
+                    answer_values, scene.answer_labels, scene.answer_units
+                ),
+                narration="求めた値を、問題が聞いている量のことばに直して答える。",
+            ),
+        ]
     return [
         Step(
             op="derive_asked_quantities",
@@ -900,7 +923,7 @@ def _derive_steps(
             result_display=format_pair_answer(
                 answer_values, scene.answer_labels, scene.answer_units
             ),
-            narration="求めた x、y をもとに、問われている量を計算する。",
+            narration="求めた x、y をもとに、問われている量を計算して答える。",
         ),
     ]
 

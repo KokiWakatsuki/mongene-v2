@@ -37,17 +37,17 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - perpendicular_terms.term_recall
-  explanation: 'まず、説明されている式や数の部分がどれかを読み取る。（垂線と直線の交点）
+  explanation: 'まず、垂線と、それが交わる点や長さのうち、どれについての説明かを読み取る。（垂線と直線の交点）
 
     次に、点から直線にひいた垂線がその直線と交わる点を垂線の足という。（垂線の足）'
   hints:
-  - 説明されている式や数の部分がどれかを読み取る。
+  - 垂線と、それが交わる点や長さのうち、どれについての説明かを読み取る。
   label: (1)
   prompt_text: ''
   solution_steps:
   - args: []
     detail: ''
-    narration: 説明されている式や数の部分がどれかを読み取る。
+    narration: 垂線と、それが交わる点や長さのうち、どれについての説明かを読み取る。
     op: identify_description
     result_display: 垂線と直線の交点
     result_srepr: foot

@@ -114,11 +114,18 @@ _QUANTITY_PARAMS = {"a": "54", "b": "0", "pts": ["(0, 0)", "(3, 162)"], "grid_mo
 
 
 def test_quantity_grid_is_first_quadrant_with_coarse_y_step() -> None:
-    """単位の違う2量のグラフ: 第1象限のみ・y は粗い目盛（1刻みなら方眼が潰れる）。"""
+    """単位の違う2量のグラフ: 第1象限のみ・y は粗い目盛（1刻みなら方眼が潰れる）。
+
+    ★**粗さだけでは足りない。打つ点が方眼の線の上に載ること。** 以前は切りのよい
+    間隔（1/2/5×10ⁿ）だけで決めていたので、y=162 に対して 20 刻み＝
+    **答えの点が1つも打てない方眼**を配っていた（「グラフにかけ」の問題で）。
+    いまは打つ値すべての約数から、切りのよい間隔にいちばん近いものを選ぶ。
+    """
     spec = compute_grid_spec_from_params(_QUANTITY_PARAMS)
     assert (spec.x_lo, spec.y_lo) == (0, 0)
     assert spec.x_step == 1  # x（時間 3 秒）は 1 刻みで足りる
-    assert spec.y_step == 20  # y（面積 162）は 20 刻み＝目盛 10 本
+    assert spec.y_step == 18  # y（面積 162）は 18 刻み＝162 がちょうど線に載る
+    assert 162 % spec.y_step == 0
     # 両軸とも値の 1 目盛先まで（点が枠に貼りつかない）。
     assert spec.x_hi == 4
     assert spec.y_hi == 180

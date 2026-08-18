@@ -37,17 +37,17 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - square_root.term_recall
-  explanation: 'まず、説明されている式や数の部分がどれかを読み取る。（√ の記号）
+  explanation: 'まず、2乗するともとの数になる数のことか、それを表す記号のことかを読み取る。（√ の記号）
 
     次に、平方根を表す記号 √ を根号という。（根号）'
   hints:
-  - 説明されている式や数の部分がどれかを読み取る。
+  - 2乗するともとの数になる数のことか、それを表す記号のことかを読み取る。
   label: (1)
   prompt_text: ''
   solution_steps:
   - args: []
     detail: ''
-    narration: 説明されている式や数の部分がどれかを読み取る。
+    narration: 2乗するともとの数になる数のことか、それを表す記号のことかを読み取る。
     op: identify_description
     result_display: √ の記号
     result_srepr: radical_sign

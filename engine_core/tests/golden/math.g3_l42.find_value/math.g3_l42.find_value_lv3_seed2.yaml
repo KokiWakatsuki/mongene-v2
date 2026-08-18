@@ -27,7 +27,7 @@ problem_ref: 5e5f363c7209659a
 problem_text: 3本の直線u, w, tは平行である。直線qはu, w, tとそれぞれ点K, L, Mで交わり、直線vはu, w, tとそれぞれ点N, P, Qで交わる。KL=9cm, NP=6cm, PQ=12cm のとき、線分LMの長さを求めよ。
 sub_questions:
 - answer:
-    display: '18'
+    display: 18cm
     kind: symbolic
     srepr: Integer(18)
   cause_tags: []
@@ -35,7 +35,7 @@ sub_questions:
   - parallel_segment.transversal_ratio
   explanation: 'まず、3本の平行な直線が2本の直線と交わるとき、対応する線分の比が等しくなることを見つける。（9:6 = x:12）
 
-    次に、対応する線分の比が等しいことから、比例式を立てて長さを求める。（18）'
+    次に、対応する線分の比が等しいことから、比例式を立てて長さを求める。（18cm）'
   hints:
   - 3本の平行な直線が2本の直線と交わるとき、対応する線分の比が等しくなることを見つける。
   label: (1)
@@ -51,6 +51,6 @@ sub_questions:
     detail: ''
     narration: 対応する線分の比が等しいことから、比例式を立てて長さを求める。
     op: apply_transversal_ratio
-    result_display: '18'
+    result_display: 18cm
     result_srepr: Integer(18)
 visual_svg: null

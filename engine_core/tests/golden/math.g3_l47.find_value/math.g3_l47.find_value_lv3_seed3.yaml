@@ -24,7 +24,7 @@ meta:
   seed: 3
   signature: inscribed_angle_two_chords_intersection
 problem_ref: 07d0b9bf35dfa3af
-problem_text: 4点D, E, F, Gがこの順に円周上にある。∠EDF=24°、∠DFG=65° であるとき、2本の弦DG, EFの交点をHとして、∠DHEの大きさを求めよ。
+problem_text: 4点D, E, F, Gがこの順に円周上にある。∠EDF=24°、∠DFG=65° であるとき、2本の弦DF, EGの交点をHとして、∠DHEの大きさを求めよ。
 sub_questions:
 - answer:
     display: 91°
@@ -35,7 +35,7 @@ sub_questions:
   - circle.two_chords_intersection_angle
   explanation: 'まず、円周角の定理から、それぞれの円周角に対応する弧の大きさを求める。（48° と 130°）
 
-    次に、円周の全体と2つの弧の大きさの関係から、2本の弦の交点にできる角の大きさを求める。（91°）'
+    次に、2本の弦の交点にできる角の大きさは、向かい合う2つの弧の大きさの和の半分に等しい。向かい合う弧の和は、円周全体の360°から、先に求めた2つの弧をひいて 182° だから、求める角はその半分になる。（91°）'
   hints:
   - 円周角の定理から、それぞれの円周角に対応する弧の大きさを求める。
   label: (1)
@@ -48,8 +48,8 @@ sub_questions:
     result_display: 48° と 130°
     result_srepr: ''
   - args: []
-    detail: ''
-    narration: 円周の全体と2つの弧の大きさの関係から、2本の弦の交点にできる角の大きさを求める。
+    detail: 2本の弦の交点にできる角の大きさは、向かい合う2つの弧の大きさの和の半分に等しい。向かい合う弧の和は、円周全体の360°から、先に求めた2つの弧をひいて 182° だから、求める角はその半分になる。
+    narration: 交点にできる角は、その角と向かい合う2つの弧を合わせた大きさの半分になる。円周の全体から先に求めた2つの弧をひいて、残りの弧の半分を求める。
     op: apply_intersecting_chords_angle
     result_display: 91°
     result_srepr: Integer(91)

@@ -41,7 +41,7 @@ sub_questions:
   hints:
   - グラフ上の格子点の座標を読み取る。
   label: (1)
-  prompt_text: 答えなさい。
+  prompt_text: ''
   solution_steps:
   - args: []
     detail: ''

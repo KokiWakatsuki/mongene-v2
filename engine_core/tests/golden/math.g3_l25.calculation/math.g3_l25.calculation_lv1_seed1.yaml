@@ -41,7 +41,7 @@ sub_questions:
   hints:
   - 平方根の考え方で、両辺の平方根をとる。
   label: (1)
-  prompt_text: 解を求めなさい。
+  prompt_text: ''
   solution_steps:
   - args: []
     detail: ''

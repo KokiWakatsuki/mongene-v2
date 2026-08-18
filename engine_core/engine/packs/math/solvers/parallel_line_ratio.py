@@ -63,7 +63,7 @@ def parallel_segment_ratio_length(
     b = sympy.sympify(str(db))
     e = sympy.sympify(str(de))
     result = e * (a + b) / a
-    disp = fmt_measure(result)
+    disp = f"{fmt_measure(result)}cm"
     srepr = sympy.srepr(result)
     steps = [
         Step(
@@ -155,7 +155,7 @@ def parallel_lines_transversal_ratio(ab: object, de: object, ef: object) -> Solu
     d = sympy.sympify(str(de))
     e = sympy.sympify(str(ef))
     result = a * e / d
-    disp = fmt_measure(result)
+    disp = f"{fmt_measure(result)}cm"
     srepr = sympy.srepr(result)
     steps = [
         Step(
@@ -200,7 +200,7 @@ def midpoint_connector_length(bc: object) -> Solution:
     """
     v = sympy.sympify(str(bc))
     result = v / 2
-    disp = fmt_measure(result)
+    disp = f"{fmt_measure(result)}cm"
     srepr = sympy.srepr(result)
     steps = [
         Step(

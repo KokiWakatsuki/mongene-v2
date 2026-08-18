@@ -37,17 +37,17 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - cumulative_frequency_terms.term_recall
-  explanation: 'まず、説明されている式や数の部分がどれかを読み取る。（その階級までの度数の合計）
+  explanation: 'まず、小さい階級から足し上げた個数の説明か、その割合の説明かを読み取る。（その階級までの度数の合計）
 
     次に、いちばん小さい階級からその階級までの度数を足したものを累積度数という。（累積度数）'
   hints:
-  - 説明されている式や数の部分がどれかを読み取る。
+  - 小さい階級から足し上げた個数の説明か、その割合の説明かを読み取る。
   label: (1)
   prompt_text: ''
   solution_steps:
   - args: []
     detail: ''
-    narration: 説明されている式や数の部分がどれかを読み取る。
+    narration: 小さい階級から足し上げた個数の説明か、その割合の説明かを読み取る。
     op: identify_description
     result_display: その階級までの度数の合計
     result_srepr: cumulative_frequency

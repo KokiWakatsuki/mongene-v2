@@ -28,13 +28,13 @@ problem_text: 方眼上に三角形ABCと点Yがある。この三角形を、�
 sub_questions:
 - answer:
     features:
-    - display: (4, -3)
+    - display: A'はAから右へ2、下へ4
       kind: point
       srepr: Tuple(Integer(4), Integer(-3))
-    - display: (9, 1)
+    - display: B'はBから右へ11、下へ5
       kind: point
       srepr: Tuple(Integer(9), Integer(1))
-    - display: (5, 4)
+    - display: C'はCから右へ10、上へ2
       kind: point
       srepr: Tuple(Integer(5), Integer(4))
     kind: graph
@@ -69,9 +69,9 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - polygon_transform.rotate
-  explanation: 'まず、回転の中心と、反時計回りの回転角を読み取る。（中心 (1, -2)、270°）
+  explanation: 'まず、回転の中心と、反時計回りの回転角を読み取る。（中心 点Y、270°）
 
-    次に、もとの図形の各頂点を、回転の中心のまわりに同じ角だけ回転させる。（(4, -3)、(9, 1)、(5, 4)）'
+    次に、もとの図形の各頂点を、回転の中心のまわりに同じ角だけ回転させる。（A''はAから右へ2、下へ4、B''はBから右へ11、下へ5、C''はCから右へ10、上へ2）'
   hints:
   - 回転の中心と、反時計回りの回転角を読み取る。
   label: (1)
@@ -81,13 +81,13 @@ sub_questions:
     detail: ''
     narration: 回転の中心と、反時計回りの回転角を読み取る。
     op: identify_center_and_angle
-    result_display: 中心 (1, -2)、270°
+    result_display: 中心 点Y、270°
     result_srepr: ''
   - args: []
     detail: ''
     narration: もとの図形の各頂点を、回転の中心のまわりに同じ角だけ回転させる。
     op: rotate_each_vertex
-    result_display: (4, -3)、(9, 1)、(5, 4)
+    result_display: A'はAから右へ2、下へ4、B'はBから右へ11、下へ5、C'はCから右へ10、上へ2
     result_srepr: ''
 visual_svg: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400" font-family="Hiragino Sans, Hiragino Kaku Gothic ProN, Noto Sans JP, Yu Gothic, Meiryo, sans-serif"><rect
   x="0" y="0" width="400" height="400" fill="#ffffff" stroke="none"/><line x1="28.00" y1="28.00" x2="28.00" y2="372.00" stroke="#bbbbbb" stroke-width="0.5"/><line x1="47.11" y1="28.00" x2="47.11" y2="372.00"

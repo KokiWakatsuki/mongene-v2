@@ -27,7 +27,7 @@ problem_ref: 3f33b8e908ac7aad
 problem_text: 円周上の4点S, T, U, Vについて三角形KST∽三角形KVUが示されている。弦SUと弦TVの交点をKとし、KS=8cm, KT=56cm, KV=3cm のとき、線分KUの長さを求めよ。
 sub_questions:
 - answer:
-    display: '21'
+    display: 21cm
     kind: symbolic
     srepr: Integer(21)
   cause_tags: []
@@ -35,7 +35,7 @@ sub_questions:
   - circle.similar_chord_length
   explanation: 'まず、2つの図形の相似比と、わかっている辺の長さを読み取る。（相似比 8:3、辺の長さ 56）
 
-    次に、相似な図形では対応する辺の長さの比が相似比に等しいことから、対応する辺の長さを求める。（21）'
+    次に、相似な図形では対応する辺の長さの比が相似比に等しいことから、対応する辺の長さを求める。（21cm）'
   hints:
   - 2つの図形の相似比と、わかっている辺の長さを読み取る。
   label: (1)
@@ -51,6 +51,6 @@ sub_questions:
     detail: ''
     narration: 相似な図形では対応する辺の長さの比が相似比に等しいことから、対応する辺の長さを求める。
     op: apply_similarity_ratio
-    result_display: '21'
+    result_display: 21cm
     result_srepr: Integer(21)
 visual_svg: null

@@ -23,7 +23,7 @@ meta:
     unit: g2_l18
   seed: 2
   signature: word_problem_salt_mixture_solo
-problem_ref: 4484eee4ef9bd0db
+problem_ref: e1fc440d2ed6c5a9
 problem_text: '5%の食塩水と14%の食塩水を混ぜて、9%の食塩水を900gつくりたい。
 
   それぞれ何gずつ混ぜればよいか求めよ。'
@@ -43,12 +43,13 @@ sub_questions:
 
     次に、係数をそろえて一方の文字を消去し、残った文字を求める。（x = 500）
 
-    最後に、求めた値をもとの式に代入し、もう一方の文字を求める。（y = 400）'
+    次に、求めた値をもとの式に代入し、もう一方の文字を求める。（y = 400）
+
+    最後に、求めた値を、問題が聞いている量のことばに直して答える。（5%の食塩水は500g、14%の食塩水は400g）'
   hints:
   - 5%の食塩水を x g、14%の食塩水を y g とおく。
   - 食塩水の重さの関係に着目して、1つめの式をつくる。
   - 溶けている食塩の重さの関係に着目して、2つめの式をつくる。
-  - 係数をそろえて一方の文字を消去し、残った文字を求める。
   label: (1)
   prompt_text: ''
   solution_steps:
@@ -85,4 +86,10 @@ sub_questions:
     op: back_substitute
     result_display: y = 400
     result_srepr: Integer(400)
+  - args: []
+    detail: ''
+    narration: 求めた値を、問題が聞いている量のことばに直して答える。
+    op: state_answer_in_context
+    result_display: 5%の食塩水は500g、14%の食塩水は400g
+    result_srepr: Tuple(Integer(500), Integer(400))
 visual_svg: null

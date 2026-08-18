@@ -36,23 +36,23 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - real_numbers.term_recall
-  explanation: 'まず、説明されている式や数の部分がどれかを読み取る。（同じ並びがくり返す小数）
+  explanation: 'まず、分数で表せる数か、表せない数か、小数の並びの特徴かを読み取る。（同じ並びがくり返す小数）
 
     次に、同じ数字の並びがくり返される無限小数を循環小数という。分数で表せるので有理数。（循環小数）'
   hints:
-  - 説明されている式や数の部分がどれかを読み取る。
+  - 分数で表せる数か、表せない数か、小数の並びの特徴かを読み取る。
   label: (1)
   prompt_text: ''
   solution_steps:
   - args: []
     detail: ''
-    narration: 説明されている式や数の部分がどれかを読み取る。
+    narration: 分数で表せる数か、表せない数か、小数の並びの特徴かを読み取る。
     op: identify_description
     result_display: 同じ並びがくり返す小数
     result_srepr: repeating_decimal
   - args: []
     detail: 同じ数字の並びがくり返される無限小数を循環小数という。分数で表せるので有理数。
-    narration: その対象を表す用語の名前を思い出す。
+    narration: その種類の数を表す用語の名前を思い出す。
     op: name_concept
     result_display: 循環小数
     result_srepr: 循環小数

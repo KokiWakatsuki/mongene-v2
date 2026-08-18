@@ -37,17 +37,17 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - perpendicular_terms.term_recall
-  explanation: 'まず、説明されている式や数の部分がどれかを読み取る。（点から直線までの、いちばん短い道のり）
+  explanation: 'まず、垂線と、それが交わる点や長さのうち、どれについての説明かを読み取る。（点から直線までの、いちばん短い道のり）
 
     次に、点から直線にひいた垂線の長さを、点と直線との距離という。ななめの線分では最短にならない。（垂線の長さ）'
   hints:
-  - 説明されている式や数の部分がどれかを読み取る。
+  - 垂線と、それが交わる点や長さのうち、どれについての説明かを読み取る。
   label: (1)
   prompt_text: ''
   solution_steps:
   - args: []
     detail: ''
-    narration: 説明されている式や数の部分がどれかを読み取る。
+    narration: 垂線と、それが交わる点や長さのうち、どれについての説明かを読み取る。
     op: identify_description
     result_display: 点から直線までの、いちばん短い道のり
     result_srepr: distance

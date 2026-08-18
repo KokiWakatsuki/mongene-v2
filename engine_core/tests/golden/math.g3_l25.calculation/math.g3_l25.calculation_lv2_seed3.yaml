@@ -47,10 +47,8 @@ sub_questions:
   hints:
   - 定数項を、符号を変えて右辺に移項する。
   - 左辺を平方の形にするために、x の係数の半分を平方した数を両辺に加える。
-  - 左辺を、かっこの平方の形にまとめる。
-  - 平方根の考え方で、両辺の平方根をとる。
   label: (1)
-  prompt_text: 解を求めなさい。
+  prompt_text: ''
   solution_steps:
   - args: []
     detail: ''

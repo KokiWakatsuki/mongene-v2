@@ -24,7 +24,7 @@ meta:
   seed: 3
   signature: judge_point_line_distance_meaning
 problem_ref: d33c42966ea26b6a
-problem_text: 点Zと直線STがある。「点Zと直線STとの距離」とは、どの線分の長さのことか、図に即して答えよ。
+problem_text: 点Zと直線STがある。「点Zと直線STとの距離」とは、どの線分の長さのことか答えよ。
 sub_questions:
 - answer:
     correct: 垂線の長さ

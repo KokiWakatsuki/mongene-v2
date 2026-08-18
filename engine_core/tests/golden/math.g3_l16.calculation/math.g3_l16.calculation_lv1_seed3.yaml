@@ -41,7 +41,7 @@ sub_questions:
   hints:
   - 分子を分母で割り進め、そのつど現れる余りを記録していく。
   label: (1)
-  prompt_text: 答えを求めなさい。
+  prompt_text: ''
   solution_steps:
   - args: []
     detail: 4 を 11 でわり進め、余りを順に書き出す。

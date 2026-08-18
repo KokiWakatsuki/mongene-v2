@@ -46,7 +46,6 @@ sub_questions:
     最後に、求めた比例定数を y=ax² にもどして、y を x の式で表す。（y = (1/100)x²）'
   hints:
   - y は x の2乗に比例するから、比例定数を a とおいて y=ax² と表し、与えられている x と y の値を代入する。
-  - 代入してできた式を a について解いて、比例定数を求める。
   label: (1)
   prompt_text: ''
   solution_steps:

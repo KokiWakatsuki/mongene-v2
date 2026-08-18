@@ -42,9 +42,8 @@ sub_questions:
     最後に、まとめた同類項の係数を計算し、式を簡単にする。（5a + 9b）'
   hints:
   - 式の中から、文字の部分が同じ項（同類項）の組を見分ける。
-  - 文字の部分が同じ項（同類項）どうしをまとめる。
   label: (1)
-  prompt_text: 式を簡単にしなさい。
+  prompt_text: ''
   solution_steps:
   - args: []
     detail: ''

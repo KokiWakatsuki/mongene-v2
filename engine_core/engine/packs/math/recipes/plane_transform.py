@@ -29,9 +29,11 @@ import sympy
 from engine.core.contracts import (
     MR,
     CellContext,
+    Feature,
     GraphAnswer,
     Provenance,
     Solution,
+    Step,
     SubQuestionMR,
     VisualElement,
     VisualPlan,
@@ -86,6 +88,59 @@ def _pts_strs(pts: list[tuple[int, int]]) -> list[str]:
     return [str((x, y)) for x, y in pts]
 
 
+def _offset_text(dx: int, dy: int) -> str:
+    """方眼で数えられる向きと目盛り数（「右へ3、上へ2」）。"""
+    parts = []
+    if dx:
+        parts.append(f"右へ{dx}" if dx > 0 else f"左へ{-dx}")
+    if dy:
+        parts.append(f"上へ{dy}" if dy > 0 else f"下へ{-dy}")
+    return "、".join(parts) if parts else "同じ位置"
+
+
+def _as_grid_relative(
+    sol: Solution, pts: list[tuple[int, int]], *, center_display: str | None = None
+) -> tuple[GraphAnswer, list[Step]]:
+    """grid_only の答えと手の表示を、**方眼で数えられる形**に書き直す。
+
+    ★Lv1 の図には座標軸も原点も無い（方眼のマス目だけ・この module の冒頭に
+    そう書いてある）。それなのに答えと解説は `(-3, -10)、(1, -1)、(-8, -4)` と
+    **絶対座標**で書かれていて、図から確かめようがなかった（点検の指摘）。
+    どちらかを直すしかないが、軸を足すと Lv1 と Lv2 の差が消えるので、
+    **答えの言い方のほうを図に合わせる**。
+
+    `srepr`（機械の照合に使う値）はそのまま。変えるのは `display` だけ。
+    """
+    labels = _VERTEX_LABELS
+    primes = _VERTEX_LABELS_PRIME
+    texts: list[str] = []
+    feats = []
+    for f, lb, pr, (x0, y0) in zip(sol.answer.features, labels, primes, pts, strict=True):
+        t = sympy.sympify(f.srepr)
+        text = f"{pr}は{lb}から{_offset_text(int(t[0]) - x0, int(t[1]) - y0)}"
+        texts.append(text)
+        feats.append(Feature(kind=f.kind, srepr=f.srepr, display=text))
+    joined = "、".join(texts)
+    steps: list[Step] = []
+    for st in sol.steps:
+        display = st.result_display
+        # 絶対座標を並べていた手だけを差し替える（読み取るだけの手はそのまま）。
+        if display and display.startswith("(") and "), (" in display.replace("、", ", "):
+            display = joined
+        elif center_display is not None and display.startswith("中心 ("):
+            display = center_display
+        steps.append(
+            Step(op=st.op, args=list(st.args), result_srepr=st.result_srepr,
+                 result_display=display, narration=st.narration, detail=st.detail)
+        )
+    if steps and steps[-1].result_display != joined:
+        steps[-1] = Step(
+            op=steps[-1].op, args=list(steps[-1].args), result_srepr=steps[-1].result_srepr,
+            result_display=joined, narration=steps[-1].narration, detail=steps[-1].detail,
+        )
+    return GraphAnswer(features=feats), steps
+
+
 def _new_pts_from_features(answer: GraphAnswer) -> list[str]:
     """GraphAnswer.features(Feature.srepr=Tuple(x,y)) から "(x, y)" 文字列の列を作る
 
@@ -138,10 +193,14 @@ def _translate_polygon_recipe(ctx: CellContext, rng: Rng, *, style: str) -> MR:
         "reflect_axis": None,
     }
     solution_svg = render_polygon_transform_solution_svg(render_params, style=style)
-    answer = GraphAnswer(features=sol.answer.features, solution_svg_ref=solution_svg)
+    if style == "grid_only":
+        base_answer, steps = _as_grid_relative(sol, pts)
+    else:
+        base_answer, steps = cast(GraphAnswer, sol.answer), list(sol.steps)
+    answer = GraphAnswer(features=base_answer.features, solution_svg_ref=solution_svg)
 
     sub_question = SubQuestionMR(
-        label="(1)", asked="draw_transformed_polygon", answer=answer, steps=sol.steps,
+        label="(1)", asked="draw_transformed_polygon", answer=answer, steps=steps,
         concept_tags=_effective_concept_tags(ctx), cause_tags=_effective_cause_tags(ctx),
     )
     visual_plan = VisualPlan(
@@ -243,10 +302,16 @@ def _rotate_polygon_recipe(ctx: CellContext, rng: Rng, *, style: str) -> MR:
         "center_label": center_label, "center_pt": str(center_pt) if style == "grid_only" else None,
     }
     solution_svg = render_polygon_transform_solution_svg(render_params, style=style)
-    answer = GraphAnswer(features=sol.answer.features, solution_svg_ref=solution_svg)
+    if style == "grid_only":
+        base_answer, steps = _as_grid_relative(
+            sol, pts, center_display=f"中心 点{center_label}、{angle}°" if center_label else None
+        )
+    else:
+        base_answer, steps = cast(GraphAnswer, sol.answer), list(sol.steps)
+    answer = GraphAnswer(features=base_answer.features, solution_svg_ref=solution_svg)
 
     sub_question = SubQuestionMR(
-        label="(1)", asked="draw_transformed_polygon", answer=answer, steps=sol.steps,
+        label="(1)", asked="draw_transformed_polygon", answer=answer, steps=steps,
         concept_tags=_effective_concept_tags(ctx), cause_tags=_effective_cause_tags(ctx),
     )
     visual_plan = VisualPlan(
@@ -339,10 +404,14 @@ def _reflect_polygon_recipe(ctx: CellContext, rng: Rng, *, style: str) -> MR:
         "reflect_axis": axis if style == "grid_only" else None,
     }
     solution_svg = render_polygon_transform_solution_svg(render_params, style=style)
-    answer = GraphAnswer(features=sol.answer.features, solution_svg_ref=solution_svg)
+    if style == "grid_only":
+        base_answer, steps = _as_grid_relative(sol, pts)
+    else:
+        base_answer, steps = cast(GraphAnswer, sol.answer), list(sol.steps)
+    answer = GraphAnswer(features=base_answer.features, solution_svg_ref=solution_svg)
 
     sub_question = SubQuestionMR(
-        label="(1)", asked="draw_transformed_polygon", answer=answer, steps=sol.steps,
+        label="(1)", asked="draw_transformed_polygon", answer=answer, steps=steps,
         concept_tags=_effective_concept_tags(ctx), cause_tags=_effective_cause_tags(ctx),
     )
     visual_plan = VisualPlan(

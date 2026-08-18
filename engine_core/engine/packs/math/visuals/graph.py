@@ -11,6 +11,8 @@ matplotlib に依存しない自己完結の SVG 文字列生成。座標平面�
 """
 from __future__ import annotations
 
+import math
+
 from typing import TYPE_CHECKING, Any, Callable, NamedTuple
 
 import sympy
@@ -93,6 +95,40 @@ def _nice_step(v_max: int) -> int:
     raise ValueError(f"目盛間隔を決められない大きさ: {v_max}")  # pragma: no cover - 非現実な値域
 
 
+def _landing_step(values: list[int], v_max: int) -> int:
+    """打つ点が**方眼の線の上に載る**目盛間隔。載せられなければ切りのよい間隔に戻す。
+
+    ★「グラフにかけ」の問題で、答えの折れ点が (36, 648) なのに、方眼は横10刻み・
+    縦100刻みだった。**答えの点が1つも打てない方眼**を配っていたことになる
+    （点検の指摘）。切りのよさ（1/2/5×10ⁿ）は読みやすさのためだが、
+    かく問題では「点が線に載る」ほうが先に来る。
+
+    打つ値すべての最大公約数の約数のうち、目盛の本数が上限を超えず、かつ
+    最も粗いものを選ぶ。1目盛が細かすぎる（本数が上限超え）ものは採らない。
+    """
+    nice = _nice_step(v_max)
+    positives = [v for v in values if v > 0]
+    if not positives:
+        return nice
+    g = positives[0]
+    for v in positives[1:]:
+        g = math.gcd(g, v)
+    if g <= 0:
+        return nice
+    if g % nice == 0:
+        return nice   # すでに載る（細かくする必要がない）
+    # **粗ければよいわけではない。** 最大の約数を採ると、点が2つ（0 と 648）の軸で
+    # 目盛が 648 刻みになり、線が2本の「方眼でないもの」が出た。本数が上限内の
+    # 約数のうち、**切りのよい間隔にいちばん近いもの**を選ぶ。
+    candidates = [
+        d for d in range(1, g + 1)
+        if g % d == 0 and v_max <= _QUANTITY_MAX_TICKS * d
+    ]
+    if not candidates:
+        return nice
+    return min(candidates, key=lambda d: (abs(d - nice), -d))
+
+
 def _quantity_grid_spec(xs: list[sympy.Expr], ys: list[sympy.Expr]) -> _GridSpec:
     """量-量グラフ（x と y で単位が違う）のグリッド範囲＋目盛間隔。
 
@@ -106,7 +142,8 @@ def _quantity_grid_spec(xs: list[sympy.Expr], ys: list[sympy.Expr]) -> _GridSpec
     assert min(int(v) for v in xs) >= 0 and min(int(v) for v in ys) >= 0, (
         "量-量グラフ（grid_mode=quantity）は第1象限のみを描く（負の値は非対応）"
     )
-    x_step, y_step = _nice_step(x_max), _nice_step(y_max)
+    x_step = _landing_step([int(v) for v in xs], x_max)
+    y_step = _landing_step([int(v) for v in ys], y_max)
     return _GridSpec(
         x_lo=0,
         x_hi=(x_max // x_step + 1) * x_step,

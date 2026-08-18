@@ -27,7 +27,7 @@ problem_ref: 6390630791a7fcb0
 problem_text: 三角形TUVで、辺TU, TV上に点W, Xがある。TW=4cm, WU=12cm, TX=8cm, XV=24cm である。WX=10cm のとき、WXとUVが平行であることを確かめたうえで、辺UVの長さを求めよ。
 sub_questions:
 - answer:
-    display: '40'
+    display: 40cm
     kind: symbolic
     srepr: Integer(40)
   cause_tags: []
@@ -41,12 +41,10 @@ sub_questions:
 
     次に、TWとWUをたして、辺TU全体の長さを求める。（TU = 4 + 12 = 16）
 
-    最後に、4:16 = 10:UV を解いて、辺UVの長さを求める。（40）'
+    最後に、4:16 = 10:UV を解いて、辺UVの長さを求める。（40cm）'
   hints:
   - TW:WUとTX:XVの比が等しいかどうかを比べる。
   - 平行線と線分の比の定理の逆から、WXとUVが平行であるかどうかを判別する。
-  - WX∥UV であることから、三角形TWXと三角形TUVが相似になることを見つける。
-  - TWとWUをたして、辺TU全体の長さを求める。
   label: (1)
   prompt_text: ''
   solution_steps:
@@ -78,6 +76,6 @@ sub_questions:
     detail: 4:16 = 10:UV を解いて、辺UVの長さを求める。
     narration: TW:TU=WX:UV が成り立つことから、辺UVの長さを求める。
     op: apply_parallel_segment_ratio
-    result_display: '40'
+    result_display: 40cm
     result_srepr: Integer(40)
 visual_svg: null

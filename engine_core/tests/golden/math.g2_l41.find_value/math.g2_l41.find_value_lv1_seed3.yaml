@@ -27,7 +27,7 @@ problem_ref: 81ccf397a853ce7a
 problem_text: MN=MPの二等辺三角形MNPで、頂角∠Mの大きさが122°のとき、底角∠Nの大きさを求めよ。
 sub_questions:
 - answer:
-    display: '29'
+    display: 29°
     kind: symbolic
     srepr: Integer(29)
   cause_tags: []
@@ -35,7 +35,7 @@ sub_questions:
   - isosceles.base_angle_from_apex
   explanation: 'まず、二等辺三角形の頂角・底角のうち、わかっているほうの大きさを読み取る。（122°）
 
-    次に、三角形の内角の和から頂角をひいた残りを、等しい2つの底角で半分ずつに分けて底角の大きさを求める。（29）'
+    次に、三角形の内角の和から頂角をひいた残りを、等しい2つの底角で半分ずつに分けて底角の大きさを求める。（29°）'
   hints:
   - 二等辺三角形の頂角・底角のうち、わかっているほうの大きさを読み取る。
   label: (1)
@@ -51,6 +51,6 @@ sub_questions:
     detail: ''
     narration: 三角形の内角の和から頂角をひいた残りを、等しい2つの底角で半分ずつに分けて底角の大きさを求める。
     op: solve_remaining_angle
-    result_display: '29'
+    result_display: 29°
     result_srepr: Integer(29)
 visual_svg: null

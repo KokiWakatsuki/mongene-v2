@@ -41,7 +41,7 @@ sub_questions:
   hints:
   - 組の x, y の値を2つの式の左辺にそれぞれ代入する。
   label: (1)
-  prompt_text: 答えなさい。
+  prompt_text: ''
   solution_steps:
   - args:
     - '-5'

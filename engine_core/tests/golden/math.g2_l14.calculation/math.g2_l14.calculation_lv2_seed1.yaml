@@ -42,9 +42,8 @@ sub_questions:
     最後に、求めた x をもとの式に代入して y を求める。（y = -4）'
   hints:
   - かっこを展開して整数の連立方程式に直す。
-  - 整理した連立方程式を加減法で解いて x を求める。
   label: (1)
-  prompt_text: 解を求めなさい。
+  prompt_text: ''
   solution_steps:
   - args:
     - 2(x + 1) - 3y = 20

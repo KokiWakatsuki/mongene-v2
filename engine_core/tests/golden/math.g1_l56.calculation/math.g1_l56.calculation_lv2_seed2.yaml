@@ -39,7 +39,7 @@ sub_questions:
   hints:
   - 対象の階級までの累積度数を求め、総度数でわって累積相対度数を求める。
   label: (1)
-  prompt_text: 答えを求めなさい。
+  prompt_text: ''
   solution_steps:
   - args: []
     detail: 累積度数 9 を総度数 100 でわる（9 ÷ 100）。

@@ -40,9 +40,8 @@ sub_questions:
     最後に、2つの直線が交わる点の座標（同じ地点にいる時間と道のり）を読み取る。（(1, 8)）'
   hints:
   - Aさんの進むようすを表す直線を座標平面にかく。
-  - Bさんの進むようすを表す直線を同じ平面にかく。
   label: (1)
-  prompt_text: 交点の座標を読み取りなさい。
+  prompt_text: ''
   solution_steps:
   - args:
     - y = 4x + 4

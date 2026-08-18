@@ -9305,11 +9305,15 @@ def test_word_problem_box_plot_compare_property(seed):
     answers = [sq.answer for sq in mr.sub_questions]
     assert all(a.kind == "choice" for a in answers)
     assert answers[0].correct == ("A" if ticks_a[2] > ticks_b[2] else "B")
-    assert answers[1].correct == (
-        "A" if (ticks_a[4] - ticks_a[0]) > (ticks_b[4] - ticks_b[0]) else "B"
-    )
-    for a in answers:
-        assert a.distractors == [("B" if a.correct == "A" else "A")]
+    # (2) は「記号で答えよ。また、その違いから読み取れる散らばりのようすを説明せよ」
+    # なので、記号だけでなく読み取れることも答えに入る。
+    range_sym = "A" if (ticks_a[4] - ticks_a[0]) > (ticks_b[4] - ticks_b[0]) else "B"
+    assert answers[1].correct.startswith(range_sym)
+    assert "散らばり" in answers[1].correct
+    assert answers[0].distractors == [("B" if answers[0].correct == "A" else "A")]
+    other_sym = "B" if range_sym == "A" else "A"
+    assert len(answers[1].distractors) == 1
+    assert answers[1].distractors[0].startswith(other_sym)
 
     checker = REGISTRY.checker("math.word_problem_box_plot_compare.double_solve")
     got = checker(mr)

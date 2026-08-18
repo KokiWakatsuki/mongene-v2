@@ -27,7 +27,7 @@ problem_ref: 39a96ae79aad7912
 problem_text: GH=GJの二等辺三角形GHJで、底角∠Hの大きさが71°のとき、頂角∠Gの大きさを求めよ。
 sub_questions:
 - answer:
-    display: '38'
+    display: 38°
     kind: symbolic
     srepr: Integer(38)
   cause_tags: []
@@ -35,7 +35,7 @@ sub_questions:
   - isosceles.base_angle_from_apex
   explanation: 'まず、二等辺三角形の頂角・底角のうち、わかっているほうの大きさを読み取る。（71°）
 
-    次に、等しい2つの底角の大きさを2つ分合わせてひくと、残りが頂角の大きさになることから頂角を求める。（38）'
+    次に、等しい2つの底角の大きさを2つ分合わせてひくと、残りが頂角の大きさになることから頂角を求める。（38°）'
   hints:
   - 二等辺三角形の頂角・底角のうち、わかっているほうの大きさを読み取る。
   label: (1)
@@ -51,6 +51,6 @@ sub_questions:
     detail: ''
     narration: 等しい2つの底角の大きさを2つ分合わせてひくと、残りが頂角の大きさになることから頂角を求める。
     op: solve_remaining_angle
-    result_display: '38'
+    result_display: 38°
     result_srepr: Integer(38)
 visual_svg: null

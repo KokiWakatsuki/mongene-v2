@@ -118,7 +118,7 @@ def bisector_perp_feet(p: dict[str, Any]) -> Construction:
         c.connect(x, y)
     c.connect("O", "P", shared=True)
     c.description = (
-        "右の図で、半直線OPは∠AOBの二等分線であり、∠OAP ＝ ∠OBP ＝ 90° である"
+        "下の図で、半直線OPは∠AOBの二等分線であり、∠OAP ＝ ∠OBP ＝ 90° である"
     )
     return c
 
@@ -221,7 +221,7 @@ def bisector_perp_base(p: dict[str, Any]) -> Construction:
     for x, y in (("A", "B"), ("A", "C"), ("B", "C")):
         c.connect(x, y)
     c.connect("A", "D", shared=True)
-    c.description = "右の図の△ABCで、∠Aの二等分線と辺BCとの交点をDとすると、AD ⊥ BC である"
+    c.description = "下の図の△ABCで、∠Aの二等分線と辺BCとの交点をDとすると、AD ⊥ BC である"
     return c
 
 
@@ -261,7 +261,7 @@ def two_equal_cevians(p: dict[str, Any]) -> Construction:
         c.connect(x, y)
     c.connect("B", "C", shared=True)
     c.description = (
-        "右の図の△ABCで、辺AB上に点D、辺AC上に点Eを、BD ＝ CE、BE ＝ CD となるようにとる"
+        "下の図の△ABCで、辺AB上に点D、辺AC上に点Eを、BD ＝ CE、BE ＝ CD となるようにとる"
     )
     return c
 
@@ -310,7 +310,7 @@ def equilateral(p: dict[str, Any]) -> Construction:
     _equilateral(c, float(p["base"]), rot)
     # 3辺の等しさは description で書く（3辺に別々の印を付けると、同じ辺に本数の違う
     # 印が2種類のることになって図が読めなくなる）。
-    c.description = "右の図の△ABCで、AB ＝ AC ＝ BC である"
+    c.description = "下の図の△ABCで、AB ＝ AC ＝ BC である"
     return c
 
 
@@ -375,7 +375,7 @@ def triangle_equal_angles(p: dict[str, Any]) -> Construction:
         c.facts.add(f)
         c.givens.append(f)
     c.steps.append("∠A、∠B、∠Cが等しくなるように三角形ABCをとる")
-    c.description = "右の図の△ABCで、∠A ＝ ∠B ＝ ∠C である"
+    c.description = "下の図の△ABCで、∠A ＝ ∠B ＝ ∠C である"
     return c
 
 
@@ -432,7 +432,7 @@ def equal_altitudes(p: dict[str, Any]) -> Construction:
         c.connect(x, y)
     c.connect("B", "C", shared=True)
     c.description = (
-        "右の図の△ABCで、頂点Bから辺ACに垂線BDを、頂点Cから辺ABに垂線CEをひくと、"
+        "下の図の△ABCで、頂点Bから辺ACに垂線BDを、頂点Cから辺ABに垂線CEをひくと、"
         "BD ＝ CE であった"
     )
     return c

@@ -23,7 +23,7 @@ meta:
     unit: g2_l18
   seed: 1
   signature: word_problem_salt_mixture_solo
-problem_ref: ff0a5ae7dcc3767c
+problem_ref: a1741585c5e8614e
 problem_text: '12%の食塩水と18%の食塩水を混ぜて、13%の食塩水を600gつくりたい。
 
   それぞれ何gずつ混ぜればよいか求めよ。'
@@ -43,12 +43,13 @@ sub_questions:
 
     次に、係数をそろえて一方の文字を消去し、残った文字を求める。（x = 500）
 
-    最後に、求めた値をもとの式に代入し、もう一方の文字を求める。（y = 100）'
+    次に、求めた値をもとの式に代入し、もう一方の文字を求める。（y = 100）
+
+    最後に、求めた値を、問題が聞いている量のことばに直して答える。（12%の食塩水は500g、18%の食塩水は100g）'
   hints:
   - 12%の食塩水を x g、18%の食塩水を y g とおく。
   - 食塩水の重さの関係に着目して、1つめの式をつくる。
   - 溶けている食塩の重さの関係に着目して、2つめの式をつくる。
-  - 係数をそろえて一方の文字を消去し、残った文字を求める。
   label: (1)
   prompt_text: ''
   solution_steps:
@@ -85,4 +86,10 @@ sub_questions:
     op: back_substitute
     result_display: y = 100
     result_srepr: Integer(100)
+  - args: []
+    detail: ''
+    narration: 求めた値を、問題が聞いている量のことばに直して答える。
+    op: state_answer_in_context
+    result_display: 12%の食塩水は500g、18%の食塩水は100g
+    result_srepr: Tuple(Integer(500), Integer(100))
 visual_svg: null

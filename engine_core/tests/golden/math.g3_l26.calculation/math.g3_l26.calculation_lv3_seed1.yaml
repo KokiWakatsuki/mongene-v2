@@ -45,9 +45,8 @@ sub_questions:
   hints:
   - 与式を整理して、それぞれの項の係数 a・b・c を読み取る。
   - 読み取った a・b・c を、解の公式にそのまま代入する。
-  - 根号の中の値（判別式）を計算する。
   label: (1)
-  prompt_text: 解を求めなさい。
+  prompt_text: ''
   solution_steps:
   - args: []
     detail: ''

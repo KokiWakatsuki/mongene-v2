@@ -535,6 +535,126 @@ _TERM_RECALL_STEP_TEXT_BY_DOMAIN: dict[str, dict[str, str]] = {
         "s1_narration": "立体をどの向きから見てかいた図かを読み取る。",
         "s2_narration": "その図を表す用語の名前を思い出す。",
     },
+    # ★**既定の「説明されている式や数の部分がどれかを読み取る」は、式が1つも
+    # 出てこない用語問題にも付いていた**（35問中24問・実測）。
+    # 「数19について、原点とのきょりを何といいますか」に対して
+    # 「説明されている式や数の部分がどれかを読み取る」では、読み取る手が
+    # 何も指していない。domain ごとに、実際に読み取るものを書く。
+    "number": {
+        "s1_display": "",
+        "s1_narration": "説明されている数が、数直線の上でどこにあるか、どんな符号かを読み取る。",
+        "s2_narration": "その対象を表す用語の名前を思い出す。",
+    },
+    "power": {
+        "s1_display": "",
+        "s1_narration": "同じ数を何回かけ合わせているのかを読み取る。",
+        "s2_narration": "そのかけ方や、かける回数を表す用語の名前を思い出す。",
+    },
+    "prime_concepts": {
+        "s1_display": "",
+        "s1_narration": "説明されている数が、約数をどれだけ持つ数なのかを読み取る。",
+        "s2_narration": "その種類の数を表す用語の名前を思い出す。",
+    },
+    "function_terms": {
+        "s1_display": "",
+        "s1_narration": "ともなって変わる二つの数量のうち、どちらについての説明かを読み取る。",
+        "s2_narration": "その対象を表す用語の名前を思い出す。",
+    },
+    "approximation": {
+        "s1_display": "",
+        "s1_narration": "測って得た値と本当の値のうち、どちらについての説明かを読み取る。",
+        "s2_narration": "その対象を表す用語の名前を思い出す。",
+    },
+    "probability_terms": {
+        "s1_display": "",
+        "s1_narration": "くり返し行う操作と、その結果の起こりやすさのどちらの説明かを読み取る。",
+        "s2_narration": "その対象を表す用語の名前を思い出す。",
+    },
+    "frequency_table_terms": {
+        "s1_display": "",
+        "s1_narration": "度数分布表の、区間・区間の代表の値・個数のどれについての説明かを読み取る。",
+        "s2_narration": "その対象を表す用語の名前を思い出す。",
+    },
+    "relative_frequency_terms": {
+        "s1_display": "",
+        "s1_narration": "度数そのものの説明か、全体に対する割合の説明かを読み取る。",
+        "s2_narration": "その対象を表す用語の名前を思い出す。",
+    },
+    "cumulative_frequency_terms": {
+        "s1_display": "",
+        "s1_narration": "小さい階級から足し上げた個数の説明か、その割合の説明かを読み取る。",
+        "s2_narration": "その対象を表す用語の名前を思い出す。",
+    },
+    "representative_value_terms": {
+        "s1_display": "",
+        "s1_narration": "データ全体をひとつの値で代表させるとき、どんな取り方の説明かを読み取る。",
+        "s2_narration": "その取り方を表す用語の名前を思い出す。",
+    },
+    "quartile_terms": {
+        "s1_display": "",
+        "s1_narration": "データを順に並べて四つに分けたとき、どの区切りについての説明かを読み取る。",
+        "s2_narration": "その区切りを表す用語の名前を思い出す。",
+    },
+    "box_plot_terms": {
+        "s1_display": "",
+        "s1_narration": "箱ひげ図の、箱の両端・中の線・ひげの先のどこについての説明かを読み取る。",
+        "s2_narration": "その位置が表す用語の名前を思い出す。",
+    },
+    "square_root": {
+        "s1_display": "",
+        "s1_narration": "2乗するともとの数になる数のことか、それを表す記号のことかを読み取る。",
+        "s2_narration": "その対象を表す用語の名前を思い出す。",
+    },
+    "real_numbers": {
+        "s1_display": "",
+        "s1_narration": "分数で表せる数か、表せない数か、小数の並びの特徴かを読み取る。",
+        "s2_narration": "その種類の数を表す用語の名前を思い出す。",
+    },
+    "quadrant_terms": {
+        "s1_display": "",
+        "s1_narration": "座標平面を軸で四つに分けたとき、x座標とy座標の符号がどうなる部分かを読み取る。",
+        "s2_narration": "その部分を表す用語の名前を思い出す。",
+    },
+    "line_angle_terms": {
+        "s1_display": "",
+        "s1_narration": "両端があるか、片側だけのびるか、両側にのびるかを読み取る。",
+        "s2_narration": "その図形を表す用語の名前を思い出す。",
+    },
+    "perpendicular_terms": {
+        "s1_display": "",
+        "s1_narration": "垂線と、それが交わる点や長さのうち、どれについての説明かを読み取る。",
+        "s2_narration": "その対象を表す用語の名前を思い出す。",
+    },
+    "construction_choice_terms": {
+        "s1_display": "",
+        "s1_narration": "等しい距離にあるのが、2点からなのか、角の2辺からなのかを読み取る。",
+        "s2_narration": "その条件を満たす点の集まりをかく基本作図の名前を思い出す。",
+    },
+    "circle_terms": {
+        "s1_display": "",
+        "s1_narration": "円のどの部分（中心からの線・円周上の2点を結ぶ線・円周の一部）の説明かを読み取る。",
+        "s2_narration": "その部分を表す用語の名前を思い出す。",
+    },
+    "angle_pair_terms": {
+        "s1_display": "",
+        "s1_narration": "2直線と1本の直線がつくる角のうち、どの位置にある2つの角かを読み取る。",
+        "s2_narration": "その位置関係を表す用語の名前を思い出す。",
+    },
+    "congruence_condition_terms": {
+        "s1_display": "",
+        "s1_narration": "等しいとわかっているのが辺なのか角なのか、いくつずつかを読み取る。",
+        "s2_narration": "その組み合わせにあたる三角形の合同条件を思い出す。",
+    },
+    "proof_logic_terms": {
+        "s1_display": "",
+        "s1_narration": "「ならば」の前か後か、それとも成り立たない例かを読み取る。",
+        "s2_narration": "その部分を表す用語の名前を思い出す。",
+    },
+    "similarity_terms": {
+        "s1_display": "",
+        "s1_narration": "相似な図形の、対応する辺・角・比のどれについての説明かを読み取る。",
+        "s2_narration": "その対象を表す用語の名前を思い出す。",
+    },
 }
 
 

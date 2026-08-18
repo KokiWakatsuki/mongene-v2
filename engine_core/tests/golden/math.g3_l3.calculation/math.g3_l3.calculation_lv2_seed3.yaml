@@ -42,7 +42,6 @@ sub_questions:
     最後に、乗法公式にあてはめて展開した式を書く。（k² + 3k - 88）'
   hints:
   - それぞれの定数の符号を確かめる。
-  - 2つの定数の和と積を求める。
   label: (1)
   prompt_text: ''
   solution_steps:

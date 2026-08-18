@@ -36,23 +36,23 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - angle_pair_terms.term_recall
-  explanation: 'まず、説明されている式や数の部分がどれかを読み取る。（同じ位置にある角）
+  explanation: 'まず、2直線と1本の直線がつくる角のうち、どの位置にある2つの角かを読み取る。（同じ位置にある角）
 
     次に、2直線に1本の直線が交わるとき、同じ位置にある角を同位角という。2直線が平行なら等しい。（同位角）'
   hints:
-  - 説明されている式や数の部分がどれかを読み取る。
+  - 2直線と1本の直線がつくる角のうち、どの位置にある2つの角かを読み取る。
   label: (1)
   prompt_text: ''
   solution_steps:
   - args: []
     detail: ''
-    narration: 説明されている式や数の部分がどれかを読み取る。
+    narration: 2直線と1本の直線がつくる角のうち、どの位置にある2つの角かを読み取る。
     op: identify_description
     result_display: 同じ位置にある角
     result_srepr: corresponding
   - args: []
     detail: 2直線に1本の直線が交わるとき、同じ位置にある角を同位角という。2直線が平行なら等しい。
-    narration: その対象を表す用語の名前を思い出す。
+    narration: その位置関係を表す用語の名前を思い出す。
     op: name_concept
     result_display: 同位角
     result_srepr: 同位角

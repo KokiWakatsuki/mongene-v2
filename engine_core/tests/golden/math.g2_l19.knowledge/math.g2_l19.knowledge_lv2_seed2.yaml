@@ -41,7 +41,7 @@ sub_questions:
   hints:
   - 式の形から、x が増えるときに y がどのように変わるかを調べる。
   label: (1)
-  prompt_text: 答えなさい。
+  prompt_text: ''
   solution_steps:
   - args: []
     detail: ''

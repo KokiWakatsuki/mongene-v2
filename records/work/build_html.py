@@ -161,8 +161,10 @@ def main() -> None:
             if isinstance(res, Unsupported):
                 continue
             n_types += 1
-            sq = res.sub_questions[0]
-            ans_html = answer_html(sq.answer)
+            # ★**小問は全部出す。** `sub_questions[0]` だけを出していたので、
+            # (1)(2)(3) の問題は (2) 以降の問い・答え・解説が一覧に出ておらず、
+            # 点検の目にも走査にも一度もかかっていなかった。
+            multi = len(res.sub_questions) > 1
             fig = ""
             if res.visual_svg:
                 n_figs += 1
@@ -178,12 +180,16 @@ def main() -> None:
                 f'{label_html}<span class="seed">seed {t["seed"]}</span></div>'
                 f'<div class="q">{para(res.problem_text)}</div>'
                 f'{fig}'
-                f'<div class="ask">{esc(sq.prompt_text)}</div>'
-                f'<div class="a"><span class="a-label">答え</span>'
-                f'<div class="a-body">{ans_html}</div></div>'
-                f'<details class="ex"><summary>解説</summary>'
-                f'<div class="ex-body">{para(sq.explanation)}</div></details>'
-                f'</article>'
+                + "".join(
+                    (f'<div class="sub-no">{esc(sq.label)}</div>' if multi else "")
+                    + f'<div class="ask">{esc(sq.prompt_text)}</div>'
+                    f'<div class="a"><span class="a-label">答え</span>'
+                    f'<div class="a-body">{answer_html(sq.answer)}</div></div>'
+                    f'<details class="ex"><summary>解説</summary>'
+                    f'<div class="ex-body">{para(sq.explanation)}</div></details>'
+                    for sq in res.sub_questions
+                )
+                + '</article>'
             )
         body.append("</div>")
 

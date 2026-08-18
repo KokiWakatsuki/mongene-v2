@@ -48,7 +48,6 @@ sub_questions:
     最後に、傾きと切片から一次関数の式を組み立てる。（y = 2x）'
   hints:
   - 傾きと通る点の座標を y = ax + b に代入する。
-  - 代入した式を b について解き、切片を求める。
   label: (1)
   prompt_text: ''
   solution_steps:
@@ -90,7 +89,6 @@ sub_questions:
     最後に、傾きと切片から一次関数の式を組み立てる。（y = 7x - 60）'
   hints:
   - 傾きと通る点の座標を y = ax + b に代入する。
-  - 代入した式を b について解き、切片を求める。
   label: (2)
   prompt_text: ''
   solution_steps:
@@ -132,7 +130,6 @@ sub_questions:
     最後に、等式の性質を使い、両辺を x の係数 7 でわる。（x = 15）'
   hints:
   - 左辺を x の項だけにするために、両辺に同じ数をたすかひくかする。
-  - 両辺の同類項をそれぞれまとめて、ax = b の形にする。
   label: (3)
   prompt_text: ''
   solution_steps:

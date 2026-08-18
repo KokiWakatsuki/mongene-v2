@@ -36,23 +36,23 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - representative_value_terms.term_recall
-  explanation: 'まず、説明されている式や数の部分がどれかを読み取る。（もっとも多く現れる値）
+  explanation: 'まず、データ全体をひとつの値で代表させるとき、どんな取り方の説明かを読み取る。（もっとも多く現れる値）
 
     次に、もっとも多く現れる値を最頻値という。度数分布表では度数が最大の階級の階級値をとる。（最頻値）'
   hints:
-  - 説明されている式や数の部分がどれかを読み取る。
+  - データ全体をひとつの値で代表させるとき、どんな取り方の説明かを読み取る。
   label: (1)
   prompt_text: ''
   solution_steps:
   - args: []
     detail: ''
-    narration: 説明されている式や数の部分がどれかを読み取る。
+    narration: データ全体をひとつの値で代表させるとき、どんな取り方の説明かを読み取る。
     op: identify_description
     result_display: もっとも多く現れる値
     result_srepr: mode
   - args: []
     detail: もっとも多く現れる値を最頻値という。度数分布表では度数が最大の階級の階級値をとる。
-    narration: その対象を表す用語の名前を思い出す。
+    narration: その取り方を表す用語の名前を思い出す。
     op: name_concept
     result_display: 最頻値
     result_srepr: 最頻値

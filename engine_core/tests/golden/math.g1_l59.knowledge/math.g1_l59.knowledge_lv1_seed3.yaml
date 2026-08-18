@@ -36,17 +36,17 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - probability_terms.term_recall
-  explanation: 'まず、説明されている式や数の部分がどれかを読み取る。（起こりやすさを表す数）
+  explanation: 'まず、くり返し行う操作と、その結果の起こりやすさのどちらの説明かを読み取る。（起こりやすさを表す数）
 
     次に、あることがらの起こりやすさを 0 以上 1 以下の数で表したものを確率という。（確率）'
   hints:
-  - 説明されている式や数の部分がどれかを読み取る。
+  - くり返し行う操作と、その結果の起こりやすさのどちらの説明かを読み取る。
   label: (1)
   prompt_text: ''
   solution_steps:
   - args: []
     detail: ''
-    narration: 説明されている式や数の部分がどれかを読み取る。
+    narration: くり返し行う操作と、その結果の起こりやすさのどちらの説明かを読み取る。
     op: identify_description
     result_display: 起こりやすさを表す数
     result_srepr: probability

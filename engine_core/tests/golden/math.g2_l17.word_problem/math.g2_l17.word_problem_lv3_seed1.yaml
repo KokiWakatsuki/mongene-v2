@@ -45,13 +45,11 @@ sub_questions:
 
     次に、求めた値をもとの式に代入し、もう一方の文字を求める。（y = 8）
 
-    最後に、求めた x、y をもとに、問われている量を計算する。（歩いた道のりは1440m、走った道のりは1200m）'
+    最後に、求めた x、y をもとに、問われている量を計算して答える。（歩いた道のりは1440m、走った道のりは1200m）'
   hints:
   - 歩いた時間を x 分、走った時間を y 分とおく。
   - かかった時間の関係に着目して、1つめの式をつくる。
   - 道のりの関係に着目して、2つめの式をつくる。
-  - 係数をそろえて一方の文字を消去し、残った文字を求める。
-  - 求めた値をもとの式に代入し、もう一方の文字を求める。
   label: (1)
   prompt_text: ''
   solution_steps:
@@ -90,7 +88,7 @@ sub_questions:
     result_srepr: Integer(8)
   - args: []
     detail: ''
-    narration: 求めた x、y をもとに、問われている量を計算する。
+    narration: 求めた x、y をもとに、問われている量を計算して答える。
     op: derive_asked_quantities
     result_display: 歩いた道のりは1440m、走った道のりは1200m
     result_srepr: Tuple(Integer(1440), Integer(1200))

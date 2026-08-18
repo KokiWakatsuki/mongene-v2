@@ -24,7 +24,7 @@ meta:
   seed: 2
   signature: judge_point_line_distance_meaning
 problem_ref: 4e35589bf8d44c08
-problem_text: 点Yと直線TUがある。「点Yと直線TUとの距離」とは、どの線分の長さのことか、図に即して答えよ。
+problem_text: 点Yと直線TUがある。「点Yと直線TUとの距離」とは、どの線分の長さのことか答えよ。
 sub_questions:
 - answer:
     correct: 垂線の長さ

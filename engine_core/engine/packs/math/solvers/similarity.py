@@ -21,6 +21,7 @@ import sympy
 
 from engine.core.contracts import ChoiceAnswer, Solution, Step, SymbolicAnswer
 from engine.core.registry import register_solver
+from engine.packs.math.solvers.arithmetic import fmt_measure
 
 
 @register_solver("math.similarity_ratio_transfer")
@@ -35,7 +36,7 @@ def similarity_ratio_transfer(ratio_num: object, ratio_den: object, known_side: 
     n = sympy.sympify(str(ratio_den))
     v = sympy.sympify(str(known_side))
     result = v * n / m
-    disp = sympy.sstr(result)
+    disp = f"{fmt_measure(result)}cm"
     srepr = sympy.srepr(result)
     steps = [
         Step(

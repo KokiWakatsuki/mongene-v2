@@ -27,7 +27,7 @@ problem_ref: 778a0a4b20a07660
 problem_text: 3本の直線z, n, ℓは平行である。直線sはz, n, ℓとそれぞれ点C, D, Eで交わり、直線uはz, n, ℓとそれぞれ点F, G, Hで交わる。CD=15cm, FG=18cm, GH=12cm のとき、線分DEの長さを求めよ。
 sub_questions:
 - answer:
-    display: '10'
+    display: 10cm
     kind: symbolic
     srepr: Integer(10)
   cause_tags: []
@@ -35,7 +35,7 @@ sub_questions:
   - parallel_segment.transversal_ratio
   explanation: 'まず、3本の平行な直線が2本の直線と交わるとき、対応する線分の比が等しくなることを見つける。（15:18 = x:12）
 
-    次に、対応する線分の比が等しいことから、比例式を立てて長さを求める。（10）'
+    次に、対応する線分の比が等しいことから、比例式を立てて長さを求める。（10cm）'
   hints:
   - 3本の平行な直線が2本の直線と交わるとき、対応する線分の比が等しくなることを見つける。
   label: (1)
@@ -51,6 +51,6 @@ sub_questions:
     detail: ''
     narration: 対応する線分の比が等しいことから、比例式を立てて長さを求める。
     op: apply_transversal_ratio
-    result_display: '10'
+    result_display: 10cm
     result_srepr: Integer(10)
 visual_svg: null

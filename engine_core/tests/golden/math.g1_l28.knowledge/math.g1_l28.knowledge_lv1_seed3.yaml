@@ -36,17 +36,17 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - function_terms.term_recall
-  explanation: 'まず、説明されている式や数の部分がどれかを読み取る。（変数のとりうる値の範囲）
+  explanation: 'まず、ともなって変わる二つの数量のうち、どちらについての説明かを読み取る。（変数のとりうる値の範囲）
 
     次に、変数がとりうる値の範囲を変域という。（変域）'
   hints:
-  - 説明されている式や数の部分がどれかを読み取る。
+  - ともなって変わる二つの数量のうち、どちらについての説明かを読み取る。
   label: (1)
   prompt_text: ''
   solution_steps:
   - args: []
     detail: ''
-    narration: 説明されている式や数の部分がどれかを読み取る。
+    narration: ともなって変わる二つの数量のうち、どちらについての説明かを読み取る。
     op: identify_description
     result_display: 変数のとりうる値の範囲
     result_srepr: domain_range

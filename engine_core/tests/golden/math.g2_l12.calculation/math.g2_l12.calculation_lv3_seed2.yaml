@@ -42,9 +42,8 @@ sub_questions:
     最後に、求めた x をもとの式に代入して y を求める。（y = 3）'
   hints:
   - y の係数を最小公倍数にそろえるため、両方の式をそれぞれ何倍かする。
-  - 2式を加減して y を消去し、x を求める。
   label: (1)
-  prompt_text: 解を求めなさい。
+  prompt_text: ''
   solution_steps:
   - args:
     - 3x - 2y = 12

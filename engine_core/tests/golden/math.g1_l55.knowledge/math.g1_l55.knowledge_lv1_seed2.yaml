@@ -37,17 +37,17 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - relative_frequency_terms.term_recall
-  explanation: 'まず、説明されている式や数の部分がどれかを読み取る。（階級値を結んだ折れ線）
+  explanation: 'まず、度数そのものの説明か、全体に対する割合の説明かを読み取る。（階級値を結んだ折れ線）
 
     次に、各階級の階級値の位置に度数の高さで点をとり、順に結んだ折れ線を度数折れ線という。（度数折れ線）'
   hints:
-  - 説明されている式や数の部分がどれかを読み取る。
+  - 度数そのものの説明か、全体に対する割合の説明かを読み取る。
   label: (1)
   prompt_text: ''
   solution_steps:
   - args: []
     detail: ''
-    narration: 説明されている式や数の部分がどれかを読み取る。
+    narration: 度数そのものの説明か、全体に対する割合の説明かを読み取る。
     op: identify_description
     result_display: 階級値を結んだ折れ線
     result_srepr: frequency_polygon

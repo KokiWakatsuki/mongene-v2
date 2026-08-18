@@ -40,7 +40,6 @@ sub_questions:
     最後に、かけ算を計算して y の値を求める。（y = 12）'
   hints:
   - 比例定数と x の値、それぞれの符号（正か負か）を確認する。
-  - 比例定数と x の値を、比例の式 y=ax の x にあてはめる。
   label: (1)
   prompt_text: ''
   solution_steps:

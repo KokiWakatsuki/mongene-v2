@@ -42,7 +42,7 @@ sub_questions:
   hints:
   - 2元1次方程式の解を座標とする点をすべて集めると、どんな形になるかを思い出す。
   label: (1)
-  prompt_text: 正しいものを選びなさい。
+  prompt_text: ''
   solution_steps:
   - args: []
     detail: ''

@@ -23,7 +23,7 @@ meta:
     unit: g2_l18
   seed: 1
   signature: word_problem_two_containers
-problem_ref: ff6199456eedf66a
+problem_ref: 6ca283524f3f80cd
 problem_text: '容器Aには濃度のわからない食塩水が500g、容器Bには別の濃度の食塩水が300g入っている。AとBをすべて混ぜると15%の食塩水になり、Aの食塩水100gとBの食塩水100gだけを混ぜると14%の食塩水になる。
 
   容器A、Bの食塩水の濃度をそれぞれ求めよ。'
@@ -45,13 +45,13 @@ sub_questions:
 
     次に、係数をそろえて一方の文字を消去し、残った文字を求める。（x = 18）
 
-    最後に、求めた値をもとの式に代入し、もう一方の文字を求める。（y = 10）'
+    次に、求めた値をもとの式に代入し、もう一方の文字を求める。（y = 10）
+
+    最後に、求めた値を、問題が聞いている量のことばに直して答える。（容器Aの濃度は18%、容器Bの濃度は10%）'
   hints:
   - 容器Aの濃度を x %、容器Bの濃度を y %とおく。
   - すべて混ぜたときの食塩の重さの関係に着目して、1つめの式をつくる。
   - 100gずつ混ぜたときの食塩の重さの関係に着目して、2つめの式をつくる。
-  - 2つめの式は両辺を100でわれるので、簡単な形に直す。
-  - 係数をそろえて一方の文字を消去し、残った文字を求める。
   label: (1)
   prompt_text: ''
   solution_steps:
@@ -94,4 +94,10 @@ sub_questions:
     op: back_substitute
     result_display: y = 10
     result_srepr: Integer(10)
+  - args: []
+    detail: ''
+    narration: 求めた値を、問題が聞いている量のことばに直して答える。
+    op: state_answer_in_context
+    result_display: 容器Aの濃度は18%、容器Bの濃度は10%
+    result_srepr: Tuple(Integer(18), Integer(10))
 visual_svg: null

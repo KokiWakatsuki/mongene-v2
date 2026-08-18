@@ -204,12 +204,22 @@ def _build_explanation(mr: "MR", sq_index: int) -> str:
 _DEFAULT_MINIMAL_HINT = "問題文の与えられた値をもう一度確認しよう。"
 
 
+# ヒントの上限。これ以上並べると、解き方をたどる余地が残らない。
+_MAX_HINTS = 3
+
+
 def _build_hints(mr: "MR", ctx: "CellContext", sq_index: int) -> list[str]:
     sq = mr.sub_questions[sq_index]
     hint_modes = ctx.spec_level.hints
 
     if "steps_prefix" in hint_modes and len(sq.steps) >= 2:
-        return [step.narration for step in sq.steps[:-1]]
+        # ★**ヒントは方針であって、解答の書き写しではない。** 「最後の手以外を全部」
+        # を出していたので、8手の作図では7個のヒントが並び、開いた時点で
+        # 手順が全部わかった（点検の指摘）。前半だけを出す——どこから手を
+        # つけるかは分かり、続きは自分で追うことになる。
+        prefix = sq.steps[:-1]
+        keep = max(1, min(_MAX_HINTS, (len(prefix) + 1) // 2))
+        return [step.narration for step in prefix[:keep]]
 
     # steps < 2、または steps_prefix が宣言されていない場合はテンプレ定義ヒントを使う
     # （**手で書かれたヒントがあれば、それがいちばん良い**ので最優先）。
@@ -334,11 +344,24 @@ def _body_asks_choice(problem_text: str) -> bool:
     return bool(_ASKS_CHOICE_RE.search(problem_text))
 
 
-# 本文の末尾が指示で終わっているか（「次の計算をせよ。」「…を求めよ。」）。
-_SELF_CONTAINED_ASK = re.compile(
-    r"(?:せよ|なさい|ください|ますか|ですか|でしょうか|答えよ|求めよ|かけ|示せ|表せ|選べ)"
-    r"[。．]?\s*$"
+# 文の終わりが指示・問いの形になっているか。
+#
+# ★**語尾を列挙してはいけない。** 前は「せよ／なさい／求めよ／かけ／示せ／表せ／選べ」
+# という語彙表で判定していたが、実物の指示はそれで尽きない——「小さい順に**並べよ**」
+# 「点Aを**とれ**」「値を**読み取れ**」「比例式を**つくれ**」はどれも表に無く、
+# 判定をすり抜けて指示が二重に出ていた。しかも**直した側と走査が同じ表を使っていた**
+# ので、走査は 0 件と報告した（循環）。ここは語彙でなく**活用形**で見る:
+# 日本語の命令形は「え段で終わる」か「え段＋よ」で、問いは「〜か／〜ますか」で終わる。
+_ASK_SENTENCE_END = re.compile(
+    r"(?:"
+    r"せよ|なさい|ください|ましょう"          # 〜せよ／〜しなさい／〜てください
+    r"|[えけげせぜてでねべめれ]よ"             # 求めよ・答えよ・並べよ・書き入れよ
+    r"|[えかけげせぜてでねべめれ]"             # 選べ・解け・かけ・示せ・読み取れ・〜か
+    r")$"
 )
+_SENTENCE_SPLIT = re.compile(r"[。．\n]")
+# 文末に付く注記。「…求めよ(πはそのまま)」の丸かっこで判定が外れていた。
+_TRAILING_NOTE = re.compile(r"[（(][^（()）]*[)）]\s*$")
 
 
 def _body_states_the_ask(problem_text: str) -> bool:
@@ -352,13 +375,18 @@ def _body_states_the_ask(problem_text: str) -> bool:
     本文の末尾に指示を書いている。**本文が言い切っているときは問いを空にする**
     ——表示側で消すのではなく、出す側で1つに決める。
 
-    ★**最終行だけを見てはいけない。** 計算のセルは「次の計算をせよ。」が1行目で、
-    最終行は式（`(-4/5)+(-1.7)+(-3)`）である。最終行だけ見ていたら判定を外し、
-    二重のまま出ていた（問題集に並べて初めて気づいた）。どの行でも指示があれば
-    本文は言い切っている。
+    ★**行の末尾ではなく、文の末尾で見る。** 実物の本文は指示のあとに条件が続く:
+    「…弧の長さを求めよ。**ただし円周率はπとする。**」「…作図せよ。**用いた線は
+    残すこと。**」。行末だけを見ると、これらは全部「指示なし」と判定され、問いの側に
+    指示がもう一度出た（169小問・実測）。行を `。` で切って、**どれか1文**が
+    指示の形で終わっていれば本文は言い切っている。
     """
-    lines = [ln for ln in (problem_text or "").split("\n") if ln.strip()]
-    return any(_SELF_CONTAINED_ASK.search(ln.strip()) for ln in lines)
+    for sentence in _SENTENCE_SPLIT.split(problem_text or ""):
+        # 末尾のただし書きは指示の一部ではない（「…求めよ(πはそのまま)」）。
+        sentence = _TRAILING_NOTE.sub("", sentence.strip()).strip()
+        if sentence and _ASK_SENTENCE_END.search(sentence):
+            return True
+    return False
 
 
 def _choices_already_printed(answer: Any, problem_text: str) -> bool:

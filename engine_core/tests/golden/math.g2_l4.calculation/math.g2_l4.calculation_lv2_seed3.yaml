@@ -42,7 +42,6 @@ sub_questions:
     最後に、同じ文字は指数の和にまとめ、1つの単項式にする。（36a³）'
   hints:
   - かけ合わせる式の符号から、答えの符号を先に決める。
-  - 係数どうしをかけ算する。
   label: (1)
   prompt_text: ''
   solution_steps:

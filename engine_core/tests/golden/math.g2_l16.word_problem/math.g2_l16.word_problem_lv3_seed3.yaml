@@ -23,7 +23,7 @@ meta:
     unit: g2_l16
   seed: 3
   signature: word_problem_system_price_count_diff
-problem_ref: 07af1875033011da
+problem_ref: d3f5753c7c67d137
 problem_text: 'おかしを何個かとジュースを何本か買った。おかし1個は140円、ジュース1本は70円で、買った数はおかしよりジュースのほうが3本多く、代金の合計は1470円だった。
 
   おかしとジュースを買った数をそれぞれ求めよ。'
@@ -43,12 +43,13 @@ sub_questions:
 
     次に、係数をそろえて一方の文字を消去し、残った文字を求める。（x = 6）
 
-    最後に、求めた値をもとの式に代入し、もう一方の文字を求める。（y = 9）'
+    次に、求めた値をもとの式に代入し、もう一方の文字を求める。（y = 9）
+
+    最後に、求めた値を、問題が聞いている量のことばに直して答える。（おかしは6個、ジュースは9本）'
   hints:
   - おかしの数を x 個、ジュースの数を y 本とおく。
   - 買った数の関係に着目して、1つめの式をつくる。
   - 代金の合計の関係に着目して、2つめの式をつくる。
-  - 係数をそろえて一方の文字を消去し、残った文字を求める。
   label: (1)
   prompt_text: ''
   solution_steps:
@@ -85,4 +86,10 @@ sub_questions:
     op: back_substitute
     result_display: y = 9
     result_srepr: Integer(9)
+  - args: []
+    detail: ''
+    narration: 求めた値を、問題が聞いている量のことばに直して答える。
+    op: state_answer_in_context
+    result_display: おかしは6個、ジュースは9本
+    result_srepr: Tuple(Integer(6), Integer(9))
 visual_svg: null

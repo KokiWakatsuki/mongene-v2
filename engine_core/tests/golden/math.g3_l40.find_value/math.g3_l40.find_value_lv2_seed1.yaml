@@ -27,7 +27,7 @@ problem_ref: 0f245c8a52916ae3
 problem_text: 線分NQと線分PRが点Sで交わり、NP∥QRである。SN=4cm, SP=9cm, SQ=8cm のとき、相似な三角形を見つけて線分SRの長さを求めよ。
 sub_questions:
 - answer:
-    display: '18'
+    display: 18cm
     kind: symbolic
     srepr: Integer(18)
   cause_tags: []
@@ -35,7 +35,7 @@ sub_questions:
   - similarity.x_shape_length
   explanation: 'まず、NP∥QR であることから、対頂角と錯角がそれぞれ等しくなる相似な三角形の組を見つける。（三角形SNP と 三角形SQR）
 
-    次に、SN:SQ=SP:SR に値を入れて 4:8 = 9:SR を解き、求める辺の長さを求める。（18）'
+    次に、SN:SQ=SP:SR に値を入れて 4:8 = 9:SR を解き、求める辺の長さを求める。（18cm）'
   hints:
   - NP∥QR であることから、対頂角と錯角がそれぞれ等しくなる相似な三角形の組を見つける。
   label: (1)
@@ -51,6 +51,6 @@ sub_questions:
     detail: SN:SQ=SP:SR に値を入れて 4:8 = 9:SR を解き、求める辺の長さを求める。
     narration: 相似な三角形の対応する辺の長さの比が等しい（SN:SQ=SP:SR）ことから、求める辺の長さを求める。
     op: apply_proportion
-    result_display: '18'
+    result_display: 18cm
     result_srepr: Integer(18)
 visual_svg: null

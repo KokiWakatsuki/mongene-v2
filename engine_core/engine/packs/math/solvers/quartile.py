@@ -330,10 +330,23 @@ _QUARTILE_LABEL_JP = ("最小値", "第一四分位数", "中央値", "第三四
 # read_target -> (five_number のどの位置を読むか, 表示ラベル)
 # ラベルの序数は**漢数字**で書く（"第3四分位数" と書くと answer.display に数値トークン
 # "3" が生まれ、問題文の "3" と衝突して G-Q5t が誤検出する）。
-_BOX_READ_TARGETS: dict[str, tuple[tuple[int, int], tuple[str, str]]] = {
+# ★読む値は2つとは限らない。入試対策のセル（exam_l7 Lv2）は台帳 example が
+# **4つの値をまとめて読ませる**——そこを2つ組のままにしていたので、
+# 中2の g2_l56 Lv1 と params まで同じになり、**同じ問題が66問（33組）出ていた**
+# （「入試対策」に新規の出題が1問も無い状態）。位置の並びは可変長にする。
+_BOX_READ_TARGETS: dict[str, tuple[tuple[int, ...], tuple[str, ...]]] = {
     "median_q3": ((2, 3), ("中央値", "第三四分位数")),
     "q1_median": ((1, 2), ("第一四分位数", "中央値")),
     "min_max": ((0, 4), ("最小値", "最大値")),
+    # 入試対策用（4つまとめて読む）。
+    "q1_median_q3_max": (
+        (1, 2, 3, 4),
+        ("第一四分位数", "中央値", "第三四分位数", "最大値"),
+    ),
+    "min_q1_median_q3": (
+        (0, 1, 2, 3),
+        ("最小値", "第一四分位数", "中央値", "第三四分位数"),
+    ),
 }
 
 
@@ -357,7 +370,7 @@ def _restore_five(axis_lo: object, axis_step: object, box_ticks: object) -> list
 def read_box_plot_values(
     axis_lo: object, axis_step: object, box_ticks: object, read_target: object
 ) -> Solution:
-    """箱ひげ図から指定された2つの値を読み取る（g2_l56.graph_table Lv1）。
+    """箱ひげ図から、指定された位置の値を読み取る（g2_l56.graph_table Lv1／exam_l7 Lv2）。
 
     図に描かれている情報（目もりの間隔と箱ひげの位置）だけから値を復元する。
     答えは Tuple(値1, 値2) の SymbolicAnswer。
@@ -583,6 +596,15 @@ def compare_box_plot_statistic(
     if va == vb:
         raise ValueError(f"AとBの{name}が等しく、どちらが大きいか定まらない")
     correct, other = ("A", "B") if va > vb else ("B", "A")
+    # **問いが「記号で答えよ。また、その違いから読み取れる散らばりのようすを説明せよ」**
+    # なのに、答えが記号だけだった（範囲を比べる小問・実測8問）。求められている
+    # 「説明」の部分に答えが返っていない。範囲は散らばりの大きさそのものなので、
+    # 記号に読み取れることを添える（_TREND_CLAIM_* と同じ書き方）。
+    if s == "range":
+        label = "{}（{}のほうが範囲が大きいので、散らばりも大きい）"
+        correct_text, other_text = label.format(correct, correct), label.format(other, other)
+    else:
+        correct_text, other_text = correct, other
     steps = [
         Step(
             op=f"read_{s}_both",
@@ -594,12 +616,14 @@ def compare_box_plot_statistic(
         Step(
             op=f"compare_{s}",
             args=[],
-            result_srepr=correct,
-            result_display=correct,
+            result_srepr=correct_text,
+            result_display=correct_text,
             narration=f"読み取った二つの{name}を比べ、大きいほうを答える。",
         ),
     ]
-    answer = ChoiceAnswer(correct=correct, distractors=[other], fact_id=f"box_plot.compare.{s}")
+    answer = ChoiceAnswer(
+        correct=correct_text, distractors=[other_text], fact_id=f"box_plot.compare.{s}"
+    )
     return Solution(answer=answer, steps=steps)
 
 

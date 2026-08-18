@@ -23,7 +23,7 @@ meta:
     unit: g2_l16
   seed: 1
   signature: word_problem_system_price_count_diff
-problem_ref: eb9de69781330def
+problem_ref: 0a3a1e7894b135a6
 problem_text: 'コップを何個かと皿を何枚か買った。コップ1個は80円、皿1枚は150円で、買った数はコップより皿のほうが2枚多く、代金の合計は990円だった。
 
   コップと皿を買った数をそれぞれ求めよ。'
@@ -43,12 +43,13 @@ sub_questions:
 
     次に、係数をそろえて一方の文字を消去し、残った文字を求める。（x = 3）
 
-    最後に、求めた値をもとの式に代入し、もう一方の文字を求める。（y = 5）'
+    次に、求めた値をもとの式に代入し、もう一方の文字を求める。（y = 5）
+
+    最後に、求めた値を、問題が聞いている量のことばに直して答える。（コップは3個、皿は5枚）'
   hints:
   - コップの数を x 個、皿の数を y 枚とおく。
   - 買った数の関係に着目して、1つめの式をつくる。
   - 代金の合計の関係に着目して、2つめの式をつくる。
-  - 係数をそろえて一方の文字を消去し、残った文字を求める。
   label: (1)
   prompt_text: ''
   solution_steps:
@@ -85,4 +86,10 @@ sub_questions:
     op: back_substitute
     result_display: y = 5
     result_srepr: Integer(5)
+  - args: []
+    detail: ''
+    narration: 求めた値を、問題が聞いている量のことばに直して答える。
+    op: state_answer_in_context
+    result_display: コップは3個、皿は5枚
+    result_srepr: Tuple(Integer(3), Integer(5))
 visual_svg: null

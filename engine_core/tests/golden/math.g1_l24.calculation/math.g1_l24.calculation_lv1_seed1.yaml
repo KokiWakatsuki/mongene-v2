@@ -41,7 +41,7 @@ sub_questions:
   hints:
   - 比例式の性質を使い、外項の積と内項の積が等しい式をつくる。
   label: (1)
-  prompt_text: 解を求めなさい。
+  prompt_text: ''
   solution_steps:
   - args: []
     detail: ''

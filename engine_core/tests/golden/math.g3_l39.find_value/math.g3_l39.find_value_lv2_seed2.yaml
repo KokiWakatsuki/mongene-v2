@@ -27,7 +27,7 @@ problem_ref: 3a6864f707aba182
 problem_text: 三角形TUVと三角形WXYは相似で、相似比は 8:3 である。TU=40cm のとき、対応する辺WXの長さを求めよ。
 sub_questions:
 - answer:
-    display: '15'
+    display: 15cm
     kind: symbolic
     srepr: Integer(15)
   cause_tags: []
@@ -35,7 +35,7 @@ sub_questions:
   - similarity.ratio_transfer
   explanation: 'まず、2つの図形の相似比と、わかっている辺の長さを読み取る。（相似比 8:3、辺の長さ 40）
 
-    次に、相似な図形では対応する辺の長さの比が相似比に等しいことから、対応する辺の長さを求める。（15）'
+    次に、相似な図形では対応する辺の長さの比が相似比に等しいことから、対応する辺の長さを求める。（15cm）'
   hints:
   - 2つの図形の相似比と、わかっている辺の長さを読み取る。
   label: (1)
@@ -51,6 +51,6 @@ sub_questions:
     detail: ''
     narration: 相似な図形では対応する辺の長さの比が相似比に等しいことから、対応する辺の長さを求める。
     op: apply_similarity_ratio
-    result_display: '15'
+    result_display: 15cm
     result_srepr: Integer(15)
 visual_svg: null

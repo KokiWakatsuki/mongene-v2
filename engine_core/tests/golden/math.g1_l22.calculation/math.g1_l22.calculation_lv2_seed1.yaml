@@ -42,9 +42,8 @@ sub_questions:
     最後に、等式の性質を使い、両辺を x の係数 -2 でわる。（x = -1）'
   hints:
   - 文字の項を左辺に、数の項を右辺に、符号を変えて移項する。
-  - 両辺の同類項をそれぞれまとめて、ax = b の形にする。
   label: (1)
-  prompt_text: 解を求めなさい。
+  prompt_text: ''
   solution_steps:
   - args: []
     detail: 右辺の +4x を左辺に、左辺の +9 を右辺に、符号を変えて移項する。

@@ -27,7 +27,7 @@ problem_ref: be5dbbc19a8b1253
 problem_text: 円周上の4点Q, R, S, Tについて三角形DQR∽三角形DTSが示されている。弦QSと弦RTの交点をDとし、DQ=7cm, DR=56cm, DT=3cm のとき、線分DSの長さを求めよ。
 sub_questions:
 - answer:
-    display: '24'
+    display: 24cm
     kind: symbolic
     srepr: Integer(24)
   cause_tags: []
@@ -35,7 +35,7 @@ sub_questions:
   - circle.similar_chord_length
   explanation: 'まず、2つの図形の相似比と、わかっている辺の長さを読み取る。（相似比 7:3、辺の長さ 56）
 
-    次に、相似な図形では対応する辺の長さの比が相似比に等しいことから、対応する辺の長さを求める。（24）'
+    次に、相似な図形では対応する辺の長さの比が相似比に等しいことから、対応する辺の長さを求める。（24cm）'
   hints:
   - 2つの図形の相似比と、わかっている辺の長さを読み取る。
   label: (1)
@@ -51,6 +51,6 @@ sub_questions:
     detail: ''
     narration: 相似な図形では対応する辺の長さの比が相似比に等しいことから、対応する辺の長さを求める。
     op: apply_similarity_ratio
-    result_display: '24'
+    result_display: 24cm
     result_srepr: Integer(24)
 visual_svg: null

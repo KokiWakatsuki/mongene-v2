@@ -147,11 +147,15 @@ def judge_concyclic_from_angle(
 
 @register_solver("math.inscribed_angle_two_chords_intersection")
 def inscribed_angle_two_chords_intersection(bac: object, acd: object) -> Solution:
-    """円周上の4点A,B,C,Dで、弦AD,BCの交点をPとするとき、∠BAC,∠ACDから
+    """円周上の4点A,B,C,Dで、弦AC,BDの交点をPとするとき、∠BAC,∠ACDから
 
     ∠APBの大きさを求める（g3_l47.find_value Lv3）。bac/acd だけから、円周角の
     定理で対応する弧の大きさを求め、円周角と弧の関係を組み合わせた恒真の関係
     ∠APB=180°-∠BAC-∠ACD で計算する（double-solve）。
+
+    交わるのは**対角線**AC・BDである（AD と BC は四角形ABCDの対辺で、円の内部
+    では交わらない）。∠BAC は弧BCに、∠ACD は弧ADに対する円周角なので、
+    弧AB+弧CD = 360° - 2∠BAC - 2∠ACD となり、∠APB はその半分になる。
     """
     a = sympy.sympify(str(bac))
     c = sympy.sympify(str(acd))
@@ -167,7 +171,14 @@ def inscribed_angle_two_chords_intersection(bac: object, acd: object) -> Solutio
         Step(
             op="apply_intersecting_chords_angle",
             args=[], result_srepr=srepr, result_display=disp,
-            narration="円周の全体と2つの弧の大きさの関係から、2本の弦の交点にできる角の大きさを求める。",
+            narration="交点にできる角は、その角と向かい合う2つの弧を合わせた大きさの半分になる。"
+            "円周の全体から先に求めた2つの弧をひいて、残りの弧の半分を求める。",
+            # **使う関係を書き残す。** narration だけでは「円周の全体と2つの弧の
+            # 関係」としか言っておらず、どの式で出したのかが読み手に復元できない。
+            # 値を書けるのは detail（解説専用）だけなので、ここに置く。
+            detail="2本の弦の交点にできる角の大きさは、向かい合う2つの弧の大きさの和の"
+            "半分に等しい。向かい合う弧の和は、円周全体の360°から、先に求めた2つの弧を"
+            f"ひいて {sympy.sstr(360 - 2 * a - 2 * c)}° だから、求める角はその半分になる。",
         ),
     ]
     return Solution(answer=SymbolicAnswer(srepr=srepr, display=disp), steps=steps)

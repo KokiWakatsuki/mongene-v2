@@ -37,17 +37,17 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - similarity_terms.term_recall
-  explanation: 'まず、説明されている式や数の部分がどれかを読み取る。（対応する辺の長さの比）
+  explanation: 'まず、相似な図形の、対応する辺・角・比のどれについての説明かを読み取る。（対応する辺の長さの比）
 
     次に、相似な図形で、対応する辺の長さの比を相似比という。面積比は相似比の2乗、体積比は3乗になる。（相似比）'
   hints:
-  - 説明されている式や数の部分がどれかを読み取る。
+  - 相似な図形の、対応する辺・角・比のどれについての説明かを読み取る。
   label: (1)
   prompt_text: ''
   solution_steps:
   - args: []
     detail: ''
-    narration: 説明されている式や数の部分がどれかを読み取る。
+    narration: 相似な図形の、対応する辺・角・比のどれについての説明かを読み取る。
     op: identify_description
     result_display: 対応する辺の長さの比
     result_srepr: similarity_ratio

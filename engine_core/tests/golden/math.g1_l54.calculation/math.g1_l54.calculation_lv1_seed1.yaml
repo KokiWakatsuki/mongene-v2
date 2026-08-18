@@ -39,7 +39,7 @@ sub_questions:
   hints:
   - 対象の階級の下端と上端の値の平均を求め、階級値とする。
   label: (1)
-  prompt_text: 答えを求めなさい。
+  prompt_text: ''
   solution_steps:
   - args: []
     detail: (55 + 60) ÷ 2 を計算して、階級値を求める。

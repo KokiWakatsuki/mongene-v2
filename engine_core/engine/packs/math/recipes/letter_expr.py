@@ -690,7 +690,10 @@ def _draw_term_statement(domain: str, concept: str, rng: Rng, p: dict[str, objec
         # g1_l2 正負の数の用語。具体例の正の数 n を埋め込み surface を分散する。
         n = int(draw(p["number_domain"], rng))
         if concept == "absolute_value":
-            return f"数 {n} について、数直線上でそれに対応する点と原点とのきょり"
+            # 「数 19 について、…を何といいますか」だと、19 が問いに効いていない
+            # ように読める（点検の指摘）。同じ module の他の用語文と同じく
+            # 「〜のように」で例示だと分かる形にする。
+            return f"数 {n} のように、数直線上でそれに対応する点と原点とのきょり"
         if concept == "number_line":
             return f"{n} や -{n} などの数を、点で対応させて表した直線"
         if concept == "origin":

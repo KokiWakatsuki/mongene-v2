@@ -193,12 +193,12 @@ def geometry_proof_recipe(ctx: CellContext, rng: Rng) -> MR:
     con, ded, goal, lines = built
     targets = compared_triangles(ded, goal.fact)
     text = render_proof(lines, targets=targets)
-    # 「右の図で、AB ＝ AD、BC ＝ CD である」の形にする（条件を並べるだけだと
+    # 「下の図で、AB ＝ AD、BC ＝ CD である」の形にする（条件を並べるだけだと
     # 文にならない）。構成が自前の言い方を持つならそれを使う（「平行四辺形ABCDで」）。
     # **図の印より先に組む。** 印をつけてよいのは「この文が述べている事実」だけで、
     # 判定にこの文字列が要る（`_stated_facts`）。
     premise_text = con.description or (
-        "右の図で、" + "、".join(fact_text(f) for f in con.givens) + " である"
+        "下の図で、" + "、".join(fact_text(f) for f in con.givens) + " である"
     )
     svg = render_construction_svg(
         {

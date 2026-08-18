@@ -42,7 +42,6 @@ sub_questions:
     最後に、加法と減法を計算して答えを求める。（-176）'
   hints:
   - 累乗とかっこの中を先に計算する。
-  - 乗法と除法を計算する。
   label: (1)
   prompt_text: ''
   solution_steps:

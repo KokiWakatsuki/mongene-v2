@@ -37,23 +37,23 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - construction_choice_terms.term_recall
-  explanation: 'まず、説明されている式や数の部分がどれかを読み取る。（2辺から等しい距離）
+  explanation: 'まず、等しい距離にあるのが、2点からなのか、角の2辺からなのかを読み取る。（2辺から等しい距離）
 
     次に、角をつくる2辺から等しい距離にある点の集まりは、その角の二等分線になる。（角の二等分線）'
   hints:
-  - 説明されている式や数の部分がどれかを読み取る。
+  - 等しい距離にあるのが、2点からなのか、角の2辺からなのかを読み取る。
   label: (1)
   prompt_text: ''
   solution_steps:
   - args: []
     detail: ''
-    narration: 説明されている式や数の部分がどれかを読み取る。
+    narration: 等しい距離にあるのが、2点からなのか、角の2辺からなのかを読み取る。
     op: identify_description
     result_display: 2辺から等しい距離
     result_srepr: equidistant_sides
   - args: []
     detail: 角をつくる2辺から等しい距離にある点の集まりは、その角の二等分線になる。
-    narration: その対象を表す用語の名前を思い出す。
+    narration: その条件を満たす点の集まりをかく基本作図の名前を思い出す。
     op: name_concept
     result_display: 角の二等分線
     result_srepr: 角の二等分線

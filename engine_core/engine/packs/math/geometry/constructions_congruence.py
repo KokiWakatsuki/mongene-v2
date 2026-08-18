@@ -47,7 +47,7 @@ def x_shape(p: dict[str, Any]) -> Construction:
         c.connect(x, y)
     # 条件を並べるだけだと「O は AD の中点、O は BC の中点 である」になって読めない。
     # 同じ点についての条件は、教科書のように1つの文にまとめる。
-    c.description = "右の図で、線分ADとBCは点Oで交わっていて、点Oはそれぞれの中点である"
+    c.description = "下の図で、線分ADとBCは点Oで交わっていて、点Oはそれぞれの中点である"
     return c
 
 
@@ -162,7 +162,7 @@ def alternate_angle_cross(p: dict[str, Any]) -> Construction:
     # 書いていたので、証明の「仮定より」の行だけ ∠BAO ＝ ∠DCO と出て、
     # 生徒が仮定を書き写すときに対応が取れなかった。`ang_text` から組む。
     c.description = (
-        "右の図で、2直線ACとBDは点Oで交わっていて、"
+        "下の図で、2直線ACとBDは点Oで交わっていて、"
         f"{ang_text(ang('A', 'O', 'B'))} ＝ {ang_text(ang('C', 'O', 'D'))} である"
     )
     return c
@@ -203,7 +203,7 @@ def kite_diagonals(p: dict[str, Any]) -> Construction:
     # 交点Pは仮定ではなく**構成で置いた点**なので、条件を並べる既定の書き方では
     # 問題文に出てこない（結論の BP ＝ DP に、本文に無い点が出てしまう）。
     c.description = (
-        "右の図で、AB ＝ AD、CB ＝ CD である四角形ABCDに対角線AC、BDを引き、"
+        "下の図で、AB ＝ AD、CB ＝ CD である四角形ABCDに対角線AC、BDを引き、"
         "その交点をPとした"
     )
     return c

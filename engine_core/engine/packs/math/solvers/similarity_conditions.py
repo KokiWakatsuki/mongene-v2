@@ -20,6 +20,7 @@ import sympy
 
 from engine.core.contracts import ChoiceAnswer, Solution, Step, SymbolicAnswer
 from engine.core.registry import register_solver
+from engine.packs.math.solvers.arithmetic import fmt_measure
 
 _SIMILARITY_CONDITION_NAMES: dict[str, str] = {
     "aa": "二組の角がそれぞれ等しい条件",
@@ -48,7 +49,7 @@ def similar_triangle_x_shape(
     b = sympy.sympify(str(ob))
     c = sympy.sympify(str(oc))
     result = b * c / a
-    disp = sympy.sstr(result)
+    disp = f"{fmt_measure(result)}cm"
     srepr = sympy.srepr(result)
     steps = [
         Step(

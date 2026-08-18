@@ -40,7 +40,6 @@ sub_questions:
     最後に、三角形MNP全体の面積から三角形MQRの面積を除いた残りが台形の面積になることから、三角形MQRと台形の面積比を求める。（三角形MQR:台形QNPR = 121:455）'
   hints:
   - MQとQNの比から、MQとMN全体の比になおす。
-  - 三角形MQRと三角形MNPは相似であることから、面積比は相似比の二乗に等しいことを使って、三角形MQRと三角形MNP全体の面積比を求める。
   label: (1)
   prompt_text: ''
   solution_steps:

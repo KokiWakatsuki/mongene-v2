@@ -201,7 +201,7 @@ def quad_bisecting_diagonals(p: dict[str, Any]) -> Construction:
     c.connect("A", "C")
     c.connect("B", "D")
     c.description = (
-        "右の図の四角形ABCDで、対角線ACとBDは点Oで交わっていて、点Oはそれぞれの中点である"
+        "下の図の四角形ABCDで、対角線ACとBDは点Oで交わっていて、点Oはそれぞれの中点である"
     )
     return c
 
@@ -223,7 +223,7 @@ def quad_one_parallel_and_angle(p: dict[str, Any]) -> Construction:
     c.facts.add(bisect)
     c.givens.append(bisect)
     c.connect("B", "D", shared=True)
-    c.description = "右の図の四角形ABCDで、AB∥DC、∠ADB ＝ ∠CBD であり、対角線BDをひいた"
+    c.description = "下の図の四角形ABCDで、AB∥DC、∠ADB ＝ ∠CBD であり、対角線BDをひいた"
     return c
 
 

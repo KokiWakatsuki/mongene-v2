@@ -39,7 +39,7 @@ sub_questions:
   hints:
   - グラフ上の格子点で、右へ進む量に対する上下の変化の割合を読み取り、傾きとする。
   label: (1)
-  prompt_text: グラフから読み取って答えなさい。
+  prompt_text: ''
   solution_steps:
   - args:
     - (-2, 0)

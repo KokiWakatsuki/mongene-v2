@@ -250,9 +250,14 @@ def judge_right_triangle_congruence_recipe(ctx: CellContext, rng: Rng) -> MR:
         draw(list(_RIGHT_TRIANGLE_CONDITION_PHRASES.keys()), rng)
     )
     phrase = _RIGHT_TRIANGLE_CONDITION_PHRASES[condition_type]
-    pa, pb, pc, pd, pe, pf = _draw_distinct_points(6, rng)
+    # 頂点名は連続した文字で引く（「直角三角形PKAとHMJ」のような、教材には
+    # 出てこない名前になっていた）。
+    tri1, tri2 = _draw_named_figures([3, 3], rng)
     statement = (
-        f"2つの直角三角形{pa}{pb}{pc}と{pd}{pe}{pf}について、{phrase}ことが図から読み取れる"
+        # **図に言及しない。** このセルは visual: none で図が出ない
+        # （「図から読み取れる」と書きながら図が無かった）。条件は文で与えている
+        # ので、図が無くても問いは成立する。
+        f"2つの直角三角形{tri1}と{tri2}について、{phrase}ことがわかっている"
         "とき、これらが合同といえるか、根拠とともに答えよ"
     )
 
@@ -269,7 +274,7 @@ def judge_right_triangle_congruence_recipe(ctx: CellContext, rng: Rng) -> MR:
         purpose=ctx.purpose, seed=0,
         params={
             "condition_type": condition_type,
-            "labels": pa + pb + pc + pd + pe + pf,
+            "labels": tri1 + tri2,
         },
         given={"statement": statement}, sub_questions=[sub_question], visual_plan=None,
         provenance=Provenance(recipe="math.judge_right_triangle_congruence"),

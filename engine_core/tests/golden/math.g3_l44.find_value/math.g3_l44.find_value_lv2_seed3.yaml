@@ -27,7 +27,7 @@ problem_ref: 14e1f778853c32a7
 problem_text: 三角形TUVで、辺TU, TVの中点をそれぞれW, Xとする。UV=32cm のとき、線分WXの長さを求めよ。
 sub_questions:
 - answer:
-    display: '16'
+    display: 16cm
     kind: symbolic
     srepr: Integer(16)
   cause_tags: []
@@ -35,7 +35,7 @@ sub_questions:
   - midpoint_connector.length
   explanation: 'まず、三角形の2辺の中点を結ぶ線分に対して、残りの辺の長さを読み取る。（32）
 
-    次に、中点を結ぶ線分の長さは、残りの辺の長さの半分に等しいことから、その長さを求める。（16）'
+    次に、中点を結ぶ線分の長さは、残りの辺の長さの半分に等しいことから、その長さを求める。（16cm）'
   hints:
   - 三角形の2辺の中点を結ぶ線分に対して、残りの辺の長さを読み取る。
   label: (1)
@@ -51,6 +51,6 @@ sub_questions:
     detail: ''
     narration: 中点を結ぶ線分の長さは、残りの辺の長さの半分に等しいことから、その長さを求める。
     op: apply_midpoint_connector_theorem
-    result_display: '16'
+    result_display: 16cm
     result_srepr: Integer(16)
 visual_svg: null

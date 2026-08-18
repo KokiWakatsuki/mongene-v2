@@ -27,7 +27,7 @@ problem_ref: 168e156c2841151e
 problem_text: 2直線ℓ、mが平行であり、直線nが交わっている。∠aの大きさは133°である。∠aの同位角にあたる∠xの大きさを求めよ。
 sub_questions:
 - answer:
-    display: '133'
+    display: 133°
     kind: symbolic
     srepr: Integer(133)
   cause_tags: []
@@ -35,7 +35,7 @@ sub_questions:
   - angle_pair.solve_by_equality
   explanation: 'まず、平行な2直線と1本の直線がつくる同位角の関係を確認する。（同位角）
 
-    次に、その関係にある角は等しいという性質から、求める角の大きさを決める。（133）'
+    次に、その関係にある角は等しいという性質から、求める角の大きさを決める。（133°）'
   hints:
   - 平行な2直線と1本の直線がつくる同位角の関係を確認する。
   label: (1)
@@ -51,6 +51,6 @@ sub_questions:
     detail: ''
     narration: その関係にある角は等しいという性質から、求める角の大きさを決める。
     op: apply_angle_equality
-    result_display: '133'
+    result_display: 133°
     result_srepr: Integer(133)
 visual_svg: null

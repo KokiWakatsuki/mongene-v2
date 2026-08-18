@@ -23,7 +23,7 @@ meta:
     unit: g2_l17
   seed: 2
   signature: word_problem_lap_meet_catch_up
-problem_ref: 18aa0f9a2ad6e92f
+problem_ref: c01c83297db32a6f
 problem_text: '1周1200mの池のまわりを、兄と弟が同じ地点から同時に出発する。反対向きに進むと5分後に出会い、同じ向きに進むと兄が弟に10分後に追いつく。
 
   兄と弟の速さはそれぞれ分速何mか求めよ。'
@@ -43,12 +43,13 @@ sub_questions:
 
     次に、係数をそろえて一方の文字を消去し、残った文字を求める。（x = 180）
 
-    最後に、求めた値をもとの式に代入し、もう一方の文字を求める。（y = 60）'
+    次に、求めた値をもとの式に代入し、もう一方の文字を求める。（y = 60）
+
+    最後に、求めた値を、問題が聞いている量のことばに直して答える。（兄の速さは分速180m、弟の速さは分速60m）'
   hints:
   - 兄の速さを分速 x m、弟の速さを分速 y m とおく。
   - 反対向きに進んだときの道のりの関係に着目して、1つめの式をつくる。
   - 同じ向きに進んだときの道のりの関係に着目して、2つめの式をつくる。
-  - 係数をそろえて一方の文字を消去し、残った文字を求める。
   label: (1)
   prompt_text: ''
   solution_steps:
@@ -85,4 +86,10 @@ sub_questions:
     op: back_substitute
     result_display: y = 60
     result_srepr: Integer(60)
+  - args: []
+    detail: ''
+    narration: 求めた値を、問題が聞いている量のことばに直して答える。
+    op: state_answer_in_context
+    result_display: 兄の速さは分速180m、弟の速さは分速60m
+    result_srepr: Tuple(Integer(180), Integer(60))
 visual_svg: null

@@ -37,17 +37,17 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - relative_frequency_terms.term_recall
-  explanation: 'まず、説明されている式や数の部分がどれかを読み取る。（全体に対する割合）
+  explanation: 'まず、度数そのものの説明か、全体に対する割合の説明かを読み取る。（全体に対する割合）
 
     次に、その階級の度数を度数の合計でわった値を相対度数という。合計は 1 になる。（相対度数）'
   hints:
-  - 説明されている式や数の部分がどれかを読み取る。
+  - 度数そのものの説明か、全体に対する割合の説明かを読み取る。
   label: (1)
   prompt_text: ''
   solution_steps:
   - args: []
     detail: ''
-    narration: 説明されている式や数の部分がどれかを読み取る。
+    narration: 度数そのものの説明か、全体に対する割合の説明かを読み取る。
     op: identify_description
     result_display: 全体に対する割合
     result_srepr: relative_frequency

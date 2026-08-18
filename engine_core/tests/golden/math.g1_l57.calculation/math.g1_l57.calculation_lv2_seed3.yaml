@@ -39,7 +39,7 @@ sub_questions:
   hints:
   - 各階級の階級値に、その階級の度数をかける。
   label: (1)
-  prompt_text: 答えを求めなさい。
+  prompt_text: ''
   solution_steps:
   - args: []
     detail: 各階級の階級値に度数をかけて、10 × 6、30 × 9、50 × 7、70 × 3 をそれぞれ計算する。

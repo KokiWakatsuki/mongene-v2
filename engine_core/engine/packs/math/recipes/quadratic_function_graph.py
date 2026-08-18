@@ -150,7 +150,7 @@ def read_two_points_on_parabola(ctx: CellContext, rng: Rng) -> MR:
     )
 
     condition = (
-        f"右の図は、関数 y = ax² のグラフである。このグラフ上で、x 座標が {x1} である点を {n1}、"
+        f"下の図は、関数 y = ax² のグラフである。このグラフ上で、x 座標が {x1} である点を {n1}、"
         f"x 座標が {x2} である点を {n2} とするとき、点 {n1} と点 {n2} の座標を"
         f"それぞれグラフから読み取れ"
     )
@@ -581,7 +581,7 @@ def read_area_time_graph(ctx: CellContext, rng: Rng) -> MR:
         "pts": poly_pts,
     }
     condition = (
-        f"右のグラフは、ある長方形 {na}{nb}{nc}{nd} の周上を点 {np_} が頂点 {nb} から"
+        f"下のグラフは、ある長方形 {na}{nb}{nc}{nd} の周上を点 {np_} が頂点 {nb} から"
         f"{nb}→{nc}→{nd} の順に一定の速さで動くときの、出発してからの時間 x 秒と"
         f"三角形 {na}{nb}{np_} の面積 y cm² の関係を表したものである。"
         f"x = {t1} のときと x = {t2} のときの面積を、それぞれグラフから読み取れ"

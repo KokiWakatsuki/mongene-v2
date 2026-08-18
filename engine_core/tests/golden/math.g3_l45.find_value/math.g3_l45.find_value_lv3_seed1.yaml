@@ -40,7 +40,6 @@ sub_questions:
     最後に、三角形NPQ全体の面積から三角形NRSの面積を除いた残りが台形の面積になることから、三角形NRSと台形の面積比を求める。（三角形NRS:台形RPQS = 49:275）'
   hints:
   - NRとRPの比から、NRとNP全体の比になおす。
-  - 三角形NRSと三角形NPQは相似であることから、面積比は相似比の二乗に等しいことを使って、三角形NRSと三角形NPQ全体の面積比を求める。
   label: (1)
   prompt_text: ''
   solution_steps:

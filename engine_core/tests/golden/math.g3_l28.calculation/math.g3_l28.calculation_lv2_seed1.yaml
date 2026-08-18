@@ -42,9 +42,8 @@ sub_questions:
     最後に、積が 0 になるのは各因数が 0 のときだから、それぞれを 0 とおいて x を求める。（x = -4, x = -1）'
   hints:
   - かっこを展開し、右辺を左辺に移項して、=0 の形に整理する。
-  - 左辺を因数分解する。
   label: (1)
-  prompt_text: 解を求めなさい。
+  prompt_text: ''
   solution_steps:
   - args: []
     detail: ''

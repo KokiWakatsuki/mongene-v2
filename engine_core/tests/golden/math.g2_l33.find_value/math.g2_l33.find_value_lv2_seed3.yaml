@@ -27,7 +27,7 @@ problem_ref: bfca716aa3f383ef
 problem_text: 三角形ABCの内部に点Dがあり、点Bと点D、点Cと点Dをそれぞれ結ぶ。∠BAC=91°、∠ABD=43°、∠ACD=31°のとき、∠BDCの大きさを求めよ。
 sub_questions:
 - answer:
-    display: '165'
+    display: 165°
     kind: symbolic
     srepr: Integer(165)
   cause_tags: []
@@ -39,11 +39,10 @@ sub_questions:
 
     次に、もう一方の三角形についても同じように、のばした線とDCがつくる角を求める。（91° の残りと 31° の和）
 
-    最後に、求める角は、いま求めた2つの角を合わせたものだから、それらをたして求める。（165）'
+    最後に、求める角は、いま求めた2つの角を合わせたものだから、それらをたして求める。（165°）'
   hints:
   - 頂点Aと内部の点Dを結んだ直線を、Dの向こう側までのばす補助線を引く。この1本で、もとの図が2つの三角形に分かれる。
   - 一方の三角形について、外角は隣り合わない2つの内角の和に等しいことを使い、のばした線とDBがつくる角を求める。
-  - もう一方の三角形についても同じように、のばした線とDCがつくる角を求める。
   label: (1)
   prompt_text: ''
   solution_steps:
@@ -69,6 +68,6 @@ sub_questions:
     detail: ''
     narration: 求める角は、いま求めた2つの角を合わせたものだから、それらをたして求める。
     op: sum_two_exterior_angles
-    result_display: '165'
+    result_display: 165°
     result_srepr: Integer(165)
 visual_svg: null
