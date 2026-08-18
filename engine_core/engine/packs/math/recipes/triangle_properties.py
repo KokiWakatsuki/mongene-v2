@@ -21,10 +21,13 @@ from engine.core.contracts import (
     Solution,
     SubQuestionMR,
     SymbolicAnswer,
+    VisualElement,
+    VisualPlan,
 )
 from engine.core.registry import REGISTRY, register_recipe
 from engine.core.rng import Rng, draw
 from engine.packs.math.recipes.letter_expr import _draw_distinct_points, _draw_named_figures
+from engine.packs.math.visuals.angle_figure import isosceles_svg
 
 
 def _effective_concept_tags(ctx: CellContext) -> list[str]:
@@ -63,10 +66,11 @@ def isosceles_base_angle_recipe(ctx: CellContext, rng: Rng) -> MR:
         assert isinstance(sol.answer, SymbolicAnswer)
         assert sol.answer.srepr == sympy.srepr(sympy.Rational(180 - apex, 2))
         statement = (
-            f"{a}{b}={a}{c}の二等辺三角形{v}で、頂角∠{a}の大きさが{apex}°のとき、"
+            f"下の図の{a}{b}={a}{c}の二等辺三角形{v}で、頂角∠{a}の大きさが{apex}°のとき、"
             f"底角∠{b}の大きさを求めよ"
         )
         params = {"known_type": "apex", "known_value": apex, "vertices": v}
+        apex_angle, apex_label, base_label = float(apex), f"{apex}°", "∠x"
     else:
         base = int(draw(p["base_domain"], rng))
         solver = REGISTRY.solver("math.isosceles_base_angle")
@@ -74,10 +78,16 @@ def isosceles_base_angle_recipe(ctx: CellContext, rng: Rng) -> MR:
         assert isinstance(sol.answer, SymbolicAnswer)
         assert sol.answer.srepr == sympy.srepr(sympy.Integer(180 - 2 * base))
         statement = (
-            f"{a}{b}={a}{c}の二等辺三角形{v}で、底角∠{b}の大きさが{base}°のとき、"
+            f"下の図の{a}{b}={a}{c}の二等辺三角形{v}で、底角∠{b}の大きさが{base}°のとき、"
             f"頂角∠{a}の大きさを求めよ"
         )
         params = {"known_type": "base", "known_value": base, "vertices": v}
+        apex_angle, apex_label, base_label = 180.0 - 2 * base, "∠x", f"{base}°"
+
+    # ★**等しい2辺の印は図でしか示せない。** 「AB=ACの二等辺三角形」と文で言うだけ
+    # だったが、実物の問題集は必ず斜線の印で示す。頂角と底角のどちらを問うかも
+    # 図の名前（∠x）で示す。
+    figure_svg = isosceles_svg(v, a, b, c, apex_angle, apex_label, base_label)
 
     sub_question = SubQuestionMR(
         label="(1)", asked="value", answer=sol.answer, steps=sol.steps,
@@ -87,7 +97,13 @@ def isosceles_base_angle_recipe(ctx: CellContext, rng: Rng) -> MR:
         signature=ctx.spec_level.signature, family=ctx.family, level=ctx.level,
         purpose=ctx.purpose, seed=0,
         params=params,
-        given={"condition": statement}, sub_questions=[sub_question], visual_plan=None,
+        given={"condition": statement},
+        context_slots={"figure_svg": figure_svg},
+        sub_questions=[sub_question],
+        visual_plan=VisualPlan(
+            style="figure", labels=[apex_label, base_label, a, b, c],
+            elements=[VisualElement(kind="triangle", attrs={"role": "given"})],
+        ),
         provenance=Provenance(recipe="math.isosceles_base_angle"),
     )
 

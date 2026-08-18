@@ -24,8 +24,15 @@ from engine.core.contracts import (
     SubQuestionMR,
     SymbolicAnswer,
 )
+from engine.core.contracts import VisualElement, VisualPlan
 from engine.core.registry import REGISTRY, register_recipe
 from engine.core.rng import Rng, draw
+from engine.packs.math.visuals.angle_figure import (
+    angle_equality_svg,
+    arrowhead_angle_svg,
+    triangle_third_angle_svg,
+    zigzag_angle_svg,
+)
 
 
 def _effective_concept_tags(ctx: CellContext) -> list[str]:
@@ -62,7 +69,12 @@ def solve_angle_by_equality_relation_recipe(ctx: CellContext, rng: Rng) -> MR:
 
     context = _RELATION_CONTEXT_JP[relation]
     label = _RELATION_LABEL_JP[relation]
-    statement = f"{context}。∠aの大きさは{angle}°である。∠aの{label}にあたる∠xの大きさを求めよ"
+    # ★**配置は図で示す。** 「2直線ℓ、mが1点で交わっている。∠aの大きさは135°である」と
+    # 全部ことばで述べていた（図が1枚も無かった）。どの角が ∠a でどの角が ∠x かは、
+    # 文で言うと長いうえに読み違えやすい——実物の問題集はここを図で示す。
+    statement = f"下の図で、{context}。∠a = {angle}° のとき、∠aの{label}にあたる∠xの大きさを求めよ"
+    figure_svg = angle_equality_svg(relation, "∠a", "∠x")
+    labels = ["∠a", "∠x", "ℓ", "m"] + ([] if relation == "vertical" else ["n"])
 
     sub_question = SubQuestionMR(
         label="(1)", asked="value", answer=sol.answer, steps=sol.steps,
@@ -72,7 +84,13 @@ def solve_angle_by_equality_relation_recipe(ctx: CellContext, rng: Rng) -> MR:
         signature=ctx.spec_level.signature, family=ctx.family, level=ctx.level,
         purpose=ctx.purpose, seed=0,
         params={"relation": relation, "angle": angle},
-        given={"condition": statement}, sub_questions=[sub_question], visual_plan=None,
+        given={"condition": statement},
+        context_slots={"figure_svg": figure_svg},
+        sub_questions=[sub_question],
+        visual_plan=VisualPlan(
+            style="figure", labels=labels,
+            elements=[VisualElement(kind="angle_pair", attrs={"relation": relation})],
+        ),
         provenance=Provenance(recipe="math.solve_angle_by_equality_relation"),
     )
 
@@ -98,19 +116,14 @@ def solve_zigzag_angle_sum_recipe(ctx: CellContext, rng: Rng) -> MR:
     assert isinstance(sol.answer, SymbolicAnswer)
     assert sol.answer.srepr == sympy.srepr(sympy.Integer(a1 + a2))
 
+    # ★**図が付いたので、配置の説明をことばで背負わなくてよくなった。**
+    # 図が無かったころは「折れ線の一方の端は直線ℓ上の点Aに…この2つの角は折れ線から
+    # 見て同じ側にある」と全部書く必要があり、それでも読み違えやすかった。
     statement = (
-        # ★**どの角が {a1}°・{a2}° で、どれが x なのかを文で決める。**
-        # 「折れ曲がった線の途中の角がそれぞれ…」と書いていたが、「途中の角」は
-        # 折れ点の角＝x そのもので、与えた角と求める角の区別がつかなかった。
-        # このセルは visual: none なので、図で補うこともできない
-        # （折れ曲がる向きが決まらず答えが一意にならない、と点検で指摘された）。
-        # 折れ線の2つの端が ℓ・m とつくる角を与え、折れ点の角を問う形に書き直す。
-        f"平行な2直線ℓ、mの間に、点Pで1回折れ曲がる折れ線がある。この折れ線の"
-        f"一方の端は直線ℓ上の点Aに、もう一方の端は直線m上の点Bにあり、"
-        f"線分PAと直線ℓがつくる角は{a1}°、線分PBと直線mがつくる角は{a2}°で、"
-        f"この2つの角は折れ線から見て同じ側にある。このとき、点Pを通り2直線に"
-        f"平行な補助線をひいて、折れ点の角∠APBの大きさを求めよ"
+        f"下の図で、ℓ∥m である。∠a = {a1}°、∠b = {a2}° のとき、"
+        f"点Pを通り2直線に平行な補助線をひいて、∠xの大きさを求めよ"
     )
+    figure_svg = zigzag_angle_svg("∠a", "∠b", "∠x")
 
     sub_question = SubQuestionMR(
         label="(1)", asked="value", answer=sol.answer, steps=sol.steps,
@@ -120,7 +133,13 @@ def solve_zigzag_angle_sum_recipe(ctx: CellContext, rng: Rng) -> MR:
         signature=ctx.spec_level.signature, family=ctx.family, level=ctx.level,
         purpose=ctx.purpose, seed=0,
         params={"angle1": a1, "angle2": a2},
-        given={"condition": statement}, sub_questions=[sub_question], visual_plan=None,
+        given={"condition": statement},
+        context_slots={"figure_svg": figure_svg},
+        sub_questions=[sub_question],
+        visual_plan=VisualPlan(
+            style="figure", labels=["∠a", "∠b", "∠x", "ℓ", "m", "A", "B", "P"],
+            elements=[VisualElement(kind="angle_pair", attrs={"relation": "zigzag"})],
+        ),
         provenance=Provenance(recipe="math.solve_zigzag_angle_sum"),
     )
 
@@ -180,18 +199,22 @@ def arrowhead_angle_recipe(ctx: CellContext, rng: Rng) -> MR:
     """内部の点がつくる角を外角の性質2回で求める（g2_l33.find_value Lv2・answer-first）。
 
     3つの角の和が平角未満になるまで有界リトライする（和が平角以上だと、内部に点を
-    とった図として成立しない）。図は与えず、どの点をどう結ぶかを文で述べる
-    ——文だけで図が一意に決まる構成なので、visual を使わずに成立する。
+    とった図として成立しない）。
+
+    ★**残りの角が小さいと、点Dが底辺に貼りついた図になる。** ∠DBC と ∠DCB に
+    配れるのは 180°-(∠BAC+∠ABD+∠ACD) だけで、これが 20° などだと D は BC の
+    すぐ上に来て、∠BDC の印と名前が底辺に重なって読めない。図を付けるにあたって
+    余りを 40° 以上に絞る（数学は変わらない・図が読めるかどうかの条件）。
     """
     p = ctx.spec_level.params
-    for _ in range(200):
+    for _ in range(400):
         a = int(draw(p["angle_domain"], rng))
         b = int(draw(p["angle_domain"], rng))
         c = int(draw(p["angle_domain"], rng))
-        if a + b + c < 180:
+        if a + b + c <= 140:
             break
     else:
-        raise ValueError("arrowhead_angle_recipe: 和が平角未満の組を構成できず")
+        raise ValueError("arrowhead_angle_recipe: 図が読める角の組を構成できず")
 
     solver = REGISTRY.solver("math.arrowhead_angle")
     sol = cast(Solution, solver(str(a), str(b), str(c)))
@@ -199,9 +222,10 @@ def arrowhead_angle_recipe(ctx: CellContext, rng: Rng) -> MR:
     assert sol.answer.srepr == sympy.srepr(sympy.Integer(a + b + c))
 
     statement = (
-        f"三角形ABCの内部に点Dがあり、点Bと点D、点Cと点Dをそれぞれ結ぶ。"
+        f"下の図で、三角形ABCの内部に点Dがあり、点Bと点D、点Cと点Dをそれぞれ結んだ。"
         f"∠BAC={a}°、∠ABD={b}°、∠ACD={c}°のとき、∠BDCの大きさを求めよ"
     )
+    figure_svg = arrowhead_angle_svg(a, b, c, f"{a}°", f"{b}°", f"{c}°", "∠x")
 
     sub_question = SubQuestionMR(
         label="(1)", asked="value", answer=sol.answer, steps=sol.steps,
@@ -211,7 +235,13 @@ def arrowhead_angle_recipe(ctx: CellContext, rng: Rng) -> MR:
         signature=ctx.spec_level.signature, family=ctx.family, level=ctx.level,
         purpose=ctx.purpose, seed=0,
         params={"angle_a": a, "angle_b": b, "angle_c": c},
-        given={"condition": statement}, sub_questions=[sub_question], visual_plan=None,
+        given={"condition": statement},
+        context_slots={"figure_svg": figure_svg},
+        sub_questions=[sub_question],
+        visual_plan=VisualPlan(
+            style="figure", labels=[f"{a}°", f"{b}°", f"{c}°", "∠x", "A", "B", "C", "D"],
+            elements=[VisualElement(kind="triangle", attrs={"role": "given"})],
+        ),
         provenance=Provenance(recipe="math.arrowhead_angle"),
     )
 
@@ -240,7 +270,8 @@ def triangle_third_angle_recipe(ctx: CellContext, rng: Rng) -> MR:
     assert isinstance(sol.answer, SymbolicAnswer)
     assert sol.answer.srepr == sympy.srepr(sympy.Integer(180 - a - b))
 
-    statement = f"三角形ABCで、∠A={a}°、∠B={b}°のとき、∠Cの大きさを求めよ"
+    statement = f"下の図の三角形ABCで、∠A={a}°、∠B={b}°のとき、∠Cの大きさを求めよ"
+    figure_svg = triangle_third_angle_svg(a, b, f"{a}°", f"{b}°", "∠x")
 
     sub_question = SubQuestionMR(
         label="(1)", asked="value", answer=sol.answer, steps=sol.steps,
@@ -250,7 +281,13 @@ def triangle_third_angle_recipe(ctx: CellContext, rng: Rng) -> MR:
         signature=ctx.spec_level.signature, family=ctx.family, level=ctx.level,
         purpose=ctx.purpose, seed=0,
         params={"angle_a": a, "angle_b": b},
-        given={"condition": statement}, sub_questions=[sub_question], visual_plan=None,
+        given={"condition": statement},
+        context_slots={"figure_svg": figure_svg},
+        sub_questions=[sub_question],
+        visual_plan=VisualPlan(
+            style="figure", labels=[f"{a}°", f"{b}°", "∠x", "A", "B", "C"],
+            elements=[VisualElement(kind="triangle", attrs={"role": "given"})],
+        ),
         provenance=Provenance(recipe="math.triangle_third_angle"),
     )
 

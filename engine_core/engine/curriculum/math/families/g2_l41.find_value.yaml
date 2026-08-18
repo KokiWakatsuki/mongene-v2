@@ -24,8 +24,8 @@ levels:
       base_domain: {int_range: [25, 80]}
     given: [condition]
     asked: [value]
-    visual: none
-    text: {tier: T1, template: lf_isosceles_base_angle_v1}
+    visual: required
+    text: {tier: T1, template: lf_isosceles_base_angle_v1, visual_builder: math.geometry_construction}
     hints: [steps_prefix]
     concept_tags: [isosceles.base_angle_from_apex]
     cause_tags: []

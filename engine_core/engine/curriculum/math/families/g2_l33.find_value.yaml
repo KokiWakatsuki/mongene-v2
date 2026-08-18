@@ -42,8 +42,8 @@ levels:
       third_angle_min: 20
     given: [condition]
     asked: [value]
-    visual: none
-    text: {tier: T1, template: lf_triangle_third_angle_v1}
+    visual: required
+    text: {tier: T1, template: lf_triangle_third_angle_v1, visual_builder: math.geometry_construction}
     hints: [steps_prefix]
     concept_tags: [triangle_angle.third_angle]
     cause_tags: []
@@ -55,8 +55,8 @@ levels:
       angle_domain: {int_range: [20, 110]}
     given: [condition]
     asked: [value]
-    visual: none
-    text: {tier: T1, template: lf_triangle_third_angle_v1}
+    visual: required
+    text: {tier: T1, template: lf_triangle_third_angle_v1, visual_builder: math.geometry_construction}
     hints: [steps_prefix]
     concept_tags: [triangle_angle.arrowhead_multi_step]
     cause_tags: []

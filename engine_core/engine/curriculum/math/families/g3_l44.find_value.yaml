@@ -30,8 +30,8 @@ levels:
       頂点名は変わるが、同じ問題の書き換えなので dup_key には入れない。
     given: [condition]
     asked: [value]
-    visual: none
-    text: {tier: T1, template: lf_parallel_line_ratio_condition_v1}
+    visual: required
+    text: {tier: T1, template: lf_parallel_line_ratio_condition_v1, visual_builder: math.geometry_construction}
     hints: [steps_prefix]
     concept_tags: [midpoint_connector.length]
     cause_tags: []

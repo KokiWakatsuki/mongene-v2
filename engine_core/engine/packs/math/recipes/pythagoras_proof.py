@@ -35,9 +35,12 @@ from engine.core.contracts import (
     Provenance,
     Solution,
     SubQuestionMR,
+    VisualElement,
+    VisualPlan,
 )
 from engine.core.registry import REGISTRY, register_recipe
 from engine.core.rng import Rng, draw
+from engine.packs.math.visuals.similarity_figure import pythagoras_proof_svg
 from engine.packs.math.solvers.pythagoras_proof import (
     AREA_PROOF_IDS,
     CONVERSE_NAME_SETS,
@@ -134,6 +137,19 @@ def pythagoras_area_proof_recipe(ctx: CellContext, rng: Rng) -> MR:
         a, b, c = proof.letters
         premises = f"直角をはさむ2辺の長さが {a}、{b}、斜辺の長さが {c} である直角三角形"
 
+    # ★**この配置は図でしか伝わらない。** 「合同な直角三角形4つを、斜辺がそれぞれ
+    # 1辺になるように並べて…内側にできる四角形は1辺 q-a の正方形になる」を、
+    # 頭の中だけで組み立てるのは中学生には無理がある（点検でも「図がなければ
+    # 読解できない」と挙がった 13 問）。
+    figure_svg = pythagoras_proof_svg(
+        proof.proof_id, proof.letters,
+        name_pair[0] if name_pair else None,
+        name_pair[1] if name_pair else None,
+    )
+    fig_labels = [*proof.letters]
+    if name_pair:
+        fig_labels += [*name_pair[0], *name_pair[1]]
+
     sub_question = SubQuestionMR(
         label="(1)",
         asked="proof_text",
@@ -160,8 +176,12 @@ def pythagoras_area_proof_recipe(ctx: CellContext, rng: Rng) -> MR:
             "guided": guided,
         },
         given={"premises": premises, "conclusion": proof.conclusion_display},
+        context_slots={"figure_svg": figure_svg},
         sub_questions=[sub_question],
-        visual_plan=None,
+        visual_plan=VisualPlan(
+            style="figure", labels=fig_labels,
+            elements=[VisualElement(kind="square", attrs={"role": "given"})],
+        ),
         provenance=Provenance(recipe="math.pythagoras_area_proof"),
     )
 

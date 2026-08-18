@@ -115,6 +115,63 @@ def _parallel_marks(
     return parts
 
 
+def _angle_arc(
+    v: tuple[float, float],
+    a: tuple[float, float],
+    b: tuple[float, float],
+    label: str,
+    *,
+    radius: float = 19.0,
+    label_at: tuple[float, float] | None = None,
+) -> list[str]:
+    """頂点 v の角（v→a と v→b のあいだ）に弧を描き、二等分線の上に名前を置く。
+
+    ★**角の印を描く手段が無かった。** 図の部品は線分・円・点・直角の印だけで、
+    「∠a の対頂角にあたる ∠x」と本文が言っても、図のどこが ∠a でどこが ∠x なのかを
+    示せなかった。だから角の問題は図を出せず、文だけで位置関係を説明していた
+    （「2直線ℓ、mが1点で交わっている」）。実物の問題集は必ず図に印と名前を書く。
+
+    弧は短いほうの角に描く（180°を超える側には描かない）。
+    """
+    ua = _unit(v, a)
+    ub = _unit(v, b)
+    ang_a = math.atan2(-ua[1], ua[0])   # 画素座標は y が下向きなので符号を戻す
+    ang_b = math.atan2(-ub[1], ub[0])
+    delta = (ang_b - ang_a) % (2 * math.pi)
+    if delta > math.pi:                  # 短いほうの角に描く
+        ang_a, ang_b = ang_b, ang_a
+        delta = 2 * math.pi - delta
+    p1 = (v[0] + math.cos(ang_a) * radius, v[1] - math.sin(ang_a) * radius)
+    p2 = (v[0] + math.cos(ang_b) * radius, v[1] - math.sin(ang_b) * radius)
+    parts = [
+        f'<path d="M {p1[0]:.2f} {p1[1]:.2f} A {radius:.2f} {radius:.2f} 0 0 0 '
+        f'{p2[0]:.2f} {p2[1]:.2f}" fill="none" stroke="#000000" stroke-width="1.2"/>'
+    ]
+    if label:
+        if label_at is not None:
+            # **二等分線の上に置けない角がある。** 180°に近い角（三角形の内部の点が
+            # つくる ∠BDC など）は二等分線が底辺の方を向くので、名前が底辺に
+            # 重なって読めない。そういう角だけ、置き場所を呼び出し側が指定する。
+            lx, ly = v[0] + label_at[0], v[1] + label_at[1]
+        else:
+            mid = ang_a + delta / 2
+            lx = v[0] + math.cos(mid) * (radius + 17)
+            ly = v[1] - math.sin(mid) * (radius + 17)
+        parts.append(_haloed_text(lx, ly + 4, label, size=13))
+    return parts
+
+
+def _haloed_text(x: float, y: float, s: str, *, size: int = 13) -> str:
+    """線に重なっても読める文字（白フチを2枚重ねる）。"""
+    common = (
+        f'x="{x:.2f}" y="{y:.2f}" font-size="{size}" text-anchor="middle"'
+    )
+    return (
+        f'<text {common} stroke="#ffffff" stroke-width="3" stroke-linejoin="round" '
+        f'fill="#ffffff">{s}</text><text {common} fill="#000000">{s}</text>'
+    )
+
+
 def _on_segment(
     pt: tuple[float, float], a: tuple[float, float], b: tuple[float, float]
 ) -> bool:
@@ -199,6 +256,31 @@ def render_construction_svg(params: dict[str, Any]) -> str:
             parts.extend(_parallel_marks(px[str(a)], px[str(b)], i + 1))
     for v, a, b in params.get("right_angles", []):
         parts.extend(_right_angle_mark(px[str(v)], px[str(a)], px[str(b)]))
+    # 角の印と名前（∠a・∠x・135° など）。[頂点, 一方の点, もう一方の点, 名前]。
+    for mark in params.get("angle_marks", []):
+        v, a, b, label = mark[0], mark[1], mark[2], mark[3]
+        # 5要素目があれば、名前の置き場所（頂点からの画素のずれ）の指定。
+        at = (float(mark[4][0]), float(mark[4][1])) if len(mark) > 4 else None
+        parts.extend(
+            _angle_arc(px[str(v)], px[str(a)], px[str(b)], str(label), label_at=at)
+        )
+    # 図の中の自由な文字（直線の名前 ℓ・m など）。[点名, 名前, dx, dy]。
+    for name, text, dx, dy in params.get("free_labels", []):
+        bx, by = px[str(name)]
+        parts.append(_haloed_text(bx + float(dx), by + float(dy), str(text)))
+    # 線分の長さ（辺の中点のそば・線から少し外へずらす）。[端1, 端2, 名前]。
+    # **ずらす向きは画素で決める。** 図の座標のままずらすと、描き手が縦横を
+    # 別々に伸ばしたときに線の上に乗ってしまう。
+    for a, b, text in params.get("segment_labels", []):
+        (x1, y1), (x2, y2) = px[str(a)], px[str(b)]
+        mx, my = (x1 + x2) / 2, (y1 + y2) / 2
+        dx, dy = x2 - x1, y2 - y1
+        n = math.hypot(dx, dy) or 1.0
+        # 図の重心と反対側へ出す（内側に書くと他の線や文字とぶつかる）。
+        ox, oy = -dy / n * 14, dx / n * 14
+        if (mx + ox - cx) ** 2 + (my + oy - cy) ** 2 < (mx - ox - cx) ** 2 + (my - oy - cy) ** 2:
+            ox, oy = -ox, -oy
+        parts.append(_haloed_text(mx + ox, my + oy + 4, str(text)))
     # 各点から線が出ていく向き。端点だけでなく、**線分の途中にある点**も拾う
     # （X字型の交点 O は、どの線分の端点でもないが4方向に線が出ている）。
     # ここは見た目の話なので、座標を見て判定してよい（事実を作っているのではない）。
@@ -214,13 +296,18 @@ def render_construction_svg(params: dict[str, Any]) -> str:
                 for other in (pa, pb):
                     n = math.hypot(other[0] - pt[0], other[1] - pt[1]) or 1.0
                     incident[name].append(((other[0] - pt[0]) / n, (other[1] - pt[1]) / n))
+    # 図に出さない点（線の向きを決めるためだけに置いた点）と、
+    # 点は描くが名前は出さない点（角の印と名前がぶつかる交点）。
+    hidden = {str(n) for n in params.get("hidden_points", [])}
+    unnamed = {str(n) for n in params.get("unnamed_points", [])}
     for name, pt in px.items():
+        if name in hidden:
+            continue
         parts.append(f'<circle cx="{pt[0]:.2f}" cy="{pt[1]:.2f}" r="3.2" fill="#000000"/>')
+        if name in unnamed:
+            continue
         lx, ly = _label_offset(pt, (cx, cy), incident[name])
-        parts.append(
-            f'<text x="{lx:.2f}" y="{ly:.2f}" font-size="14" text-anchor="middle" '
-            f'fill="#000000">{name}</text>'
-        )
+        parts.append(_haloed_text(lx, ly, name, size=14))
     parts.append("</svg>")
     return "".join(parts)
 

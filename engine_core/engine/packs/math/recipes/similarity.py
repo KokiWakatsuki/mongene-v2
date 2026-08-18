@@ -18,8 +18,11 @@ from engine.core.contracts import (
     Solution,
     SubQuestionMR,
     SymbolicAnswer,
+    VisualElement,
+    VisualPlan,
 )
 from engine.core.registry import REGISTRY, register_recipe
+from engine.packs.math.visuals.circle_figure import two_chords_svg
 from engine.core.rng import Rng, draw
 from engine.packs.math.recipes.letter_expr import _draw_named_figures
 
@@ -258,9 +261,15 @@ def circle_similar_chord_length_recipe(ctx: CellContext, rng: Rng) -> MR:
     assert isinstance(sol.answer, SymbolicAnswer)
 
     statement = (
-        f"円周上の4点{pa}, {pb}, {pc}, {pd}について三角形{pp}{pa}{pb}∽三角形{pp}{pd}{pc}"
-        f"が示されている。弦{pa}{pc}と弦{pb}{pd}の交点を{pp}とし、{pp}{pa}={pa_len}cm, "
-        f"{pp}{pb}={pb_len}cm, {pp}{pd}={pd_len}cm のとき、線分{pp}{pc}の長さを求めよ"
+        f"下の図で、円周上の4点{pa}, {pb}, {pc}, {pd}について三角形{pp}{pa}{pb}∽"
+        f"三角形{pp}{pd}{pc}が示されている。弦{pa}{pc}と弦{pb}{pd}の交点を{pp}とし、"
+        f"{pp}{pa}={pa_len}cm, {pp}{pb}={pb_len}cm, {pp}{pd}={pd_len}cm のとき、"
+        f"線分{pp}{pc}の長さを求めよ"
+    )
+    # 4点の並びと2本の弦の交わり方を図で示す（対応する三角形がどれかが見える）。
+    figure_svg = two_chords_svg(
+        pa, pb, pc, pd, pp, 40.0, 50.0,
+        f"{pa_len}cm", f"{pb_len}cm", f"{pd_len}cm",
     )
 
     sub_question = SubQuestionMR(
@@ -274,6 +283,13 @@ def circle_similar_chord_length_recipe(ctx: CellContext, rng: Rng) -> MR:
             "ratio_num": pa_len, "ratio_den": pd_len, "known_side": pb_len,
             "labels": pp + pa + pb + pc + pd,
         },
-        given={"condition": statement}, sub_questions=[sub_question], visual_plan=None,
+        given={"condition": statement},
+        context_slots={"figure_svg": figure_svg},
+        sub_questions=[sub_question],
+        visual_plan=VisualPlan(
+            style="figure",
+            labels=[f"{pa_len}cm", f"{pb_len}cm", f"{pd_len}cm", pa, pb, pc, pd, pp],
+            elements=[VisualElement(kind="circle", attrs={"role": "given"})],
+        ),
         provenance=Provenance(recipe="math.circle_similar_chord_length"),
     )

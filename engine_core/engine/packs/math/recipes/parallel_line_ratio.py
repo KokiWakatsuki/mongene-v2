@@ -18,10 +18,17 @@ from engine.core.contracts import (
     Solution,
     SubQuestionMR,
     SymbolicAnswer,
+    VisualElement,
+    VisualPlan,
 )
 from engine.core.registry import REGISTRY, register_recipe
 from engine.core.rng import Rng, draw
 from engine.packs.math.recipes.letter_expr import _draw_distinct_lines, _draw_named_figures
+from engine.packs.math.visuals.similarity_figure import (
+    midpoint_connector_svg,
+    three_parallels_svg,
+    triangle_with_parallel_svg,
+)
 
 
 def _effective_concept_tags(ctx: CellContext) -> list[str]:
@@ -86,9 +93,16 @@ def parallel_segment_ratio_length_recipe(ctx: CellContext, rng: Rng) -> MR:
     assert isinstance(sol.answer, SymbolicAnswer)
 
     statement = (
-        f"三角形{pa}{pb}{pc}で、辺{pa}{pb}, {pa}{pc}上に点{pd}, {pe}があり、"
+        f"下の図の三角形{pa}{pb}{pc}で、辺{pa}{pb}, {pa}{pc}上に点{pd}, {pe}があり、"
         f"{pd}{pe}∥{pb}{pc}である。{pa}{pd}={ad}cm, {pd}{pb}={db}cm, {pd}{pe}={de}cm "
         f"のとき、辺{pb}{pc}の長さを求めよ"
+    )
+    # ★**点が辺のどこにあるかは図で示す。** 文で「辺AB, AC上に点D, Eがあり」と
+    # 述べるだけだと、読み手が配置を組み立て直すことになる。内分の比は与えられた
+    # 長さのとおりに取るので、図と本文が食い違わない。
+    figure_svg = triangle_with_parallel_svg(
+        pa, pb, pc, pd, pe, float(ad) / (float(ad) + float(db)),
+        side_labels=[(pa, pd, f"{ad}cm"), (pd, pb, f"{db}cm"), (pd, pe, f"{de}cm")],
     )
 
     sub_question = SubQuestionMR(
@@ -99,7 +113,13 @@ def parallel_segment_ratio_length_recipe(ctx: CellContext, rng: Rng) -> MR:
         signature=ctx.spec_level.signature, family=ctx.family, level=ctx.level,
         purpose=ctx.purpose, seed=0,
         params={"ad": ad, "db": db, "de": de, "labels": pa + pb + pc + pd + pe},
-        given={"condition": statement}, sub_questions=[sub_question], visual_plan=None,
+        given={"condition": statement},
+        context_slots={"figure_svg": figure_svg},
+        sub_questions=[sub_question],
+        visual_plan=VisualPlan(
+            style="figure", labels=[f"{ad}cm", f"{db}cm", f"{de}cm", pa, pb, pc, pd, pe],
+            elements=[VisualElement(kind="triangle", attrs={"role": "given"})],
+        ),
         provenance=Provenance(recipe="math.parallel_segment_ratio_length"),
     )
 
@@ -155,9 +175,16 @@ def judge_parallel_from_ratio_recipe(ctx: CellContext, rng: Rng) -> MR:
         raise ValueError("judge_parallel_from_ratio_recipe: 有効な比の組を構成できず")
 
     statement = (
-        f"三角形{pa}{pb}{pc}で、辺{pa}{pb}, {pa}{pc}上に点{pd}, {pe}がある。"
+        f"下の図の三角形{pa}{pb}{pc}で、辺{pa}{pb}, {pa}{pc}上に点{pd}, {pe}がある。"
         f"{pa}{pd}={ad}cm, {pd}{pb}={db}cm, {pa}{pe}={ae}cm, {pe}{pc}={ec}cm であるとき、"
         f"{pd}{pe}と{pb}{pc}が平行であるかどうかを、比を調べて答えよ"
+    )
+    # **平行の印は出さない。** これは平行かどうかを調べる問題なので、
+    # 図で平行だと決めつけてはいけない（答えを図に書いたことになる）。
+    figure_svg = triangle_with_parallel_svg(
+        pa, pb, pc, pd, pe, float(ad) / (float(ad) + float(db)), parallel=False,
+        side_labels=[(pa, pd, f"{ad}cm"), (pd, pb, f"{db}cm"),
+                     (pa, pe, f"{ae}cm"), (pe, pc, f"{ec}cm")],
     )
 
     sub_question = SubQuestionMR(
@@ -168,7 +195,13 @@ def judge_parallel_from_ratio_recipe(ctx: CellContext, rng: Rng) -> MR:
         signature=ctx.spec_level.signature, family=ctx.family, level=ctx.level,
         purpose=ctx.purpose, seed=0,
         params={"ad": ad, "db": db, "ae": ae, "ec": ec, "labels": pa + pb + pc + pd + pe},
-        given={"condition": statement}, sub_questions=[sub_question], visual_plan=None,
+        given={"condition": statement},
+        context_slots={"figure_svg": figure_svg},
+        sub_questions=[sub_question],
+        visual_plan=VisualPlan(
+            style="figure", labels=[f"{ad}cm", f"{db}cm", f"{ae}cm", f"{ec}cm", pa, pb, pc, pd, pe],
+            elements=[VisualElement(kind="triangle", attrs={"role": "given"})],
+        ),
         provenance=Provenance(recipe="math.judge_parallel_from_ratio"),
     )
 
@@ -217,11 +250,16 @@ def parallel_lines_transversal_ratio_recipe(ctx: CellContext, rng: Rng) -> MR:
     # 交わる順（どの平行線とどの点が対応するか）は「それぞれ」で文が言い切って
     # いるので、図が無くても配置は決まる。図への言及だけを外す。
     statement = (
-        f"3本の直線{pl1}, {pl2}, {pl3}は平行である。直線{pt1}は"
+        f"下の図で、3本の直線{pl1}, {pl2}, {pl3}は平行である。直線{pt1}は"
         f"{pl1}, {pl2}, {pl3}とそれぞれ点{pa}, {pb}, {pc}で交わり、直線{pt2}は"
         f"{pl1}, {pl2}, {pl3}とそれぞれ点{pd}, {pe}, {pf}で交わる。"
         f"{pa}{pb}={ab}cm, {pd}{pe}={de}cm, {pe}{pf}={ef}cm のとき、"
         f"線分{pb}{pc}の長さを求めよ"
+    )
+
+    figure_svg = three_parallels_svg(
+        (pl1, pl2, pl3), (pa, pb, pc), (pd, pe, pf),
+        side_labels=[(pa, pb, f"{ab}cm"), (pd, pe, f"{de}cm"), (pe, pf, f"{ef}cm")],
     )
 
     sub_question = SubQuestionMR(
@@ -235,7 +273,13 @@ def parallel_lines_transversal_ratio_recipe(ctx: CellContext, rng: Rng) -> MR:
             "ab": ab, "de": de, "ef": ef,
             "labels": pl1 + pl2 + pl3 + pt1 + pt2 + pa + pb + pc + pd + pe + pf,
         },
-        given={"condition": statement}, sub_questions=[sub_question], visual_plan=None,
+        given={"condition": statement},
+        context_slots={"figure_svg": figure_svg},
+        sub_questions=[sub_question],
+        visual_plan=VisualPlan(
+            style="figure", labels=[f"{ab}cm", f"{de}cm", f"{ef}cm", pl1, pl2, pl3, pa, pb, pc, pd, pe, pf],
+            elements=[VisualElement(kind="parallel_lines", attrs={"role": "given"})],
+        ),
         provenance=Provenance(recipe="math.parallel_lines_transversal_ratio"),
     )
 
@@ -288,10 +332,16 @@ def parallel_ratio_judge_then_length_recipe(ctx: CellContext, rng: Rng) -> MR:
     assert isinstance(sol.answer, SymbolicAnswer)
 
     statement = (
-        f"三角形{pa}{pb}{pc}で、辺{pa}{pb}, {pa}{pc}上に点{pd}, {pe}がある。"
+        f"下の図の三角形{pa}{pb}{pc}で、辺{pa}{pb}, {pa}{pc}上に点{pd}, {pe}がある。"
         f"{pa}{pd}={ad}cm, {pd}{pb}={db}cm, {pa}{pe}={ae}cm, {pe}{pc}={ec}cm である。"
         f"{pd}{pe}={de}cm のとき、{pd}{pe}と{pb}{pc}が平行であることを確かめたうえで、"
         f"辺{pb}{pc}の長さを求めよ"
+    )
+    # 平行かどうかを自分で確かめる問題なので、図には平行の印を出さない。
+    figure_svg = triangle_with_parallel_svg(
+        pa, pb, pc, pd, pe, float(ad) / (float(ad) + float(db)), parallel=False,
+        side_labels=[(pa, pd, f"{ad}cm"), (pd, pb, f"{db}cm"),
+                     (pa, pe, f"{ae}cm"), (pe, pc, f"{ec}cm"), (pd, pe, f"{de}cm")],
     )
 
     sub_question = SubQuestionMR(
@@ -302,7 +352,13 @@ def parallel_ratio_judge_then_length_recipe(ctx: CellContext, rng: Rng) -> MR:
         signature=ctx.spec_level.signature, family=ctx.family, level=ctx.level,
         purpose=ctx.purpose, seed=0,
         params={"ad": ad, "db": db, "ae": ae, "ec": ec, "de": de, "labels": pa + pb + pc + pd + pe},
-        given={"condition": statement}, sub_questions=[sub_question], visual_plan=None,
+        given={"condition": statement},
+        context_slots={"figure_svg": figure_svg},
+        sub_questions=[sub_question],
+        visual_plan=VisualPlan(
+            style="figure", labels=[f"{ad}cm", f"{db}cm", f"{ae}cm", f"{ec}cm", f"{de}cm", pa, pb, pc, pd, pe],
+            elements=[VisualElement(kind="triangle", attrs={"role": "given"})],
+        ),
         provenance=Provenance(recipe="math.parallel_ratio_judge_then_length"),
     )
 
@@ -329,9 +385,10 @@ def midpoint_connector_length_recipe(ctx: CellContext, rng: Rng) -> MR:
     assert isinstance(sol.answer, SymbolicAnswer)
 
     statement = (
-        f"三角形{pa}{pb}{pc}で、辺{pa}{pb}, {pa}{pc}の中点をそれぞれ{pm}, {pn}とする。"
+        f"下の図の三角形{pa}{pb}{pc}で、辺{pa}{pb}, {pa}{pc}の中点をそれぞれ{pm}, {pn}とする。"
         f"{pb}{pc}={bc}cm のとき、線分{pm}{pn}の長さを求めよ"
     )
+    figure_svg = midpoint_connector_svg(pa, pb, pc, pm, pn, f"{bc}cm")
 
     sub_question = SubQuestionMR(
         label="(1)", asked="value", answer=sol.answer, steps=sol.steps,
@@ -341,6 +398,12 @@ def midpoint_connector_length_recipe(ctx: CellContext, rng: Rng) -> MR:
         signature=ctx.spec_level.signature, family=ctx.family, level=ctx.level,
         purpose=ctx.purpose, seed=0,
         params={"bc": bc},
-        given={"condition": statement}, sub_questions=[sub_question], visual_plan=None,
+        given={"condition": statement},
+        context_slots={"figure_svg": figure_svg},
+        sub_questions=[sub_question],
+        visual_plan=VisualPlan(
+            style="figure", labels=[f"{bc}cm", pa, pb, pc, pm, pn],
+            elements=[VisualElement(kind="triangle", attrs={"role": "given"})],
+        ),
         provenance=Provenance(recipe="math.midpoint_connector_length"),
     )

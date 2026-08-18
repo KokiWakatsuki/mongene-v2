@@ -17,8 +17,11 @@ from engine.core.contracts import (
     Solution,
     SubQuestionMR,
     SymbolicAnswer,
+    VisualElement,
+    VisualPlan,
 )
 from engine.core.registry import REGISTRY, register_recipe
+from engine.packs.math.visuals.similarity_figure import x_shape_similar_svg
 from engine.core.rng import Rng, draw
 from engine.packs.math.recipes.letter_expr import _draw_named_figures
 from engine.packs.math.recipes.similarity import _proportional_lengths
@@ -65,9 +68,15 @@ def similar_triangle_x_shape_recipe(ctx: CellContext, rng: Rng) -> MR:
     # 交わるのは AC と BD（AB と CD は平行なので交わらない。前は
     # 「線分ABと線分CDが点Oで交わり、AB∥CD」＝図として成り立たない文だった）。
     statement = (
-        f"線分{pa}{pc}と線分{pb}{pd}が点{po}で交わり、{pa}{pb}∥{pc}{pd}である。"
+        f"下の図で、線分{pa}{pc}と線分{pb}{pd}が点{po}で交わり、{pa}{pb}∥{pc}{pd}である。"
         f"{po}{pa}={oa}cm, {po}{pb}={ob}cm, {po}{pc}={oc}cm "
         f"のとき、相似な三角形を見つけて線分{po}{pd}の長さを求めよ"
+    )
+    # ★**「X字型」は名前のとおり形で覚える。** 文だけだと、どの2つの三角形が
+    # 向かい合っているのかが見えない。図にすると対頂角と錯角が一目で分かる。
+    figure_svg = x_shape_similar_svg(
+        pa, pb, pc, pd, po,
+        side_labels=[(po, pa, f"{oa}cm"), (po, pb, f"{ob}cm"), (po, pc, f"{oc}cm")],
     )
 
     sub_question = SubQuestionMR(
@@ -78,7 +87,13 @@ def similar_triangle_x_shape_recipe(ctx: CellContext, rng: Rng) -> MR:
         signature=ctx.spec_level.signature, family=ctx.family, level=ctx.level,
         purpose=ctx.purpose, seed=0,
         params={"oa": oa, "ob": ob, "oc": oc, "labels": pa + pb + pc + pd + po},
-        given={"condition": statement}, sub_questions=[sub_question], visual_plan=None,
+        given={"condition": statement},
+        context_slots={"figure_svg": figure_svg},
+        sub_questions=[sub_question],
+        visual_plan=VisualPlan(
+            style="figure", labels=[f"{oa}cm", f"{ob}cm", f"{oc}cm", pa, pb, pc, pd, po],
+            elements=[VisualElement(kind="triangle", attrs={"role": "given"})],
+        ),
         provenance=Provenance(recipe="math.similar_triangle_x_shape"),
     )
 

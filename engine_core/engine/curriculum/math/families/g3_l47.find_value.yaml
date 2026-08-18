@@ -40,8 +40,8 @@ levels:
       **名前が違うだけの問題は別の問題ではない**。増やすには題材そのものを追加する。
     given: [condition]
     asked: [value]
-    visual: none
-    text: {tier: T1, template: lf_inscribed_angle_condition_v1}
+    visual: required
+    text: {tier: T1, template: lf_inscribed_angle_condition_v1, visual_builder: math.geometry_construction}
     hints: [steps_prefix]
     concept_tags: [circle.inscribed_angle_from_central]
     cause_tags: []
@@ -53,8 +53,8 @@ levels:
       angle_domain: {int_range: [20, 75]}
     given: [condition]
     asked: [value]
-    visual: none
-    text: {tier: T1, template: lf_inscribed_angle_condition_v1}
+    visual: required
+    text: {tier: T1, template: lf_inscribed_angle_condition_v1, visual_builder: math.geometry_construction}
     hints: [steps_prefix]
     concept_tags: [circle.two_chords_intersection_angle]
     cause_tags: []

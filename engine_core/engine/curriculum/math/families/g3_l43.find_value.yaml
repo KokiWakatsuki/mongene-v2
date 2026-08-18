@@ -34,8 +34,8 @@ levels:
       delta_domain: {int_set: [-8, -7, -6, -5, -4, -3, -2, -1, 1, 2, 3, 4, 5, 6, 7, 8]}
     given: [condition]
     asked: [value]
-    visual: none
-    text: {tier: T1, template: lf_parallel_line_ratio_condition_v1}
+    visual: required
+    text: {tier: T1, template: lf_parallel_line_ratio_condition_v1, visual_builder: math.geometry_construction}
     hints: [steps_prefix]
     concept_tags: [parallel_segment.judge_from_ratio]
     cause_tags: []
@@ -48,8 +48,8 @@ levels:
       scale_domain: {int_range: [2, 8]}
     given: [condition]
     asked: [value]
-    visual: none
-    text: {tier: T1, template: lf_parallel_line_ratio_condition_v1}
+    visual: required
+    text: {tier: T1, template: lf_parallel_line_ratio_condition_v1, visual_builder: math.geometry_construction}
     hints: [steps_prefix]
     concept_tags: [parallel_segment.judge_then_length]
     cause_tags: []

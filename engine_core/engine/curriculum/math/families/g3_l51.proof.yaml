@@ -56,8 +56,8 @@ levels:
       並べ方の左右反転と合わせて実測 10 通り。以前は点名を dup_key に算入していた。
     given: [premises, conclusion]
     asked: [proof_text]
-    visual: none
-    text: {tier: T1, template: pf_pythagoras_guided_v1}
+    visual: required
+    text: {tier: T1, template: pf_pythagoras_guided_v1, visual_builder: math.geometry_construction}
     hints: [steps_prefix]
     concept_tags: [pythagorean.prove_theorem_by_area]
     cause_tags: []
@@ -73,8 +73,8 @@ levels:
       Lv3 と同じ5つの道すじ（誘導が無いだけ）。実測 10 通り。
     given: [premises, conclusion]
     asked: [proof_text]
-    visual: none
-    text: {tier: T1, template: pf_pythagoras_open_v1}
+    visual: required
+    text: {tier: T1, template: pf_pythagoras_open_v1, visual_builder: math.geometry_construction}
     hints: [steps_prefix]
     concept_tags: [pythagorean.construct_area_proof]
     cause_tags: []

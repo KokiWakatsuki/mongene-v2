@@ -21,10 +21,13 @@ from engine.core.contracts import (
     Solution,
     SubQuestionMR,
     SymbolicAnswer,
+    VisualElement,
+    VisualPlan,
 )
 from engine.core.registry import REGISTRY, register_recipe
 from engine.core.rng import Rng, draw
 from engine.packs.math.recipes.letter_expr import _draw_named_figures
+from engine.packs.math.visuals.circle_figure import inscribed_angle_svg, two_chords_svg
 
 
 def _effective_concept_tags(ctx: CellContext) -> list[str]:
@@ -57,8 +60,14 @@ def inscribed_angle_from_central_recipe(ctx: CellContext, rng: Rng) -> MR:
     assert isinstance(sol.answer, SymbolicAnswer)
 
     statement = (
-        f"円{po}の周上に点{pp}がある。弧{pa}{pb}に対する中心角∠{pa}{po}{pb}={central_angle}° "
-        f"のとき、同じ弧{pa}{pb}に対する円周角∠{pa}{pp}{pb}の大きさを求めよ"
+        f"下の図で、円{po}の周上に点{pp}がある。弧{pa}{pb}に対する中心角"
+        f"∠{pa}{po}{pb}={central_angle}° のとき、同じ弧{pa}{pb}に対する"
+        f"円周角∠{pa}{pp}{pb}の大きさを求めよ"
+    )
+    # ★**「同じ弧を見ている」ことは図でしか示せない。** 文だけだと、どちらの弧の
+    # 話なのかを読み手が組み立て直すことになる。中心角は与えられた値で描く。
+    figure_svg = inscribed_angle_svg(
+        po, pa, pb, pp, float(central_angle), f"{central_angle}°", "∠x"
     )
 
     sub_question = SubQuestionMR(
@@ -69,7 +78,13 @@ def inscribed_angle_from_central_recipe(ctx: CellContext, rng: Rng) -> MR:
         signature=ctx.spec_level.signature, family=ctx.family, level=ctx.level,
         purpose=ctx.purpose, seed=0,
         params={"central_angle": central_angle, "labels": po + pa + pb + pp},
-        given={"condition": statement}, sub_questions=[sub_question], visual_plan=None,
+        given={"condition": statement},
+        context_slots={"figure_svg": figure_svg},
+        sub_questions=[sub_question],
+        visual_plan=VisualPlan(
+            style="figure", labels=[f"{central_angle}°", "∠x", po, pa, pb, pp],
+            elements=[VisualElement(kind="circle", attrs={"role": "given"})],
+        ),
         provenance=Provenance(recipe="math.inscribed_angle_from_central"),
     )
 
@@ -114,11 +129,13 @@ def inscribed_angle_two_chords_intersection_recipe(ctx: CellContext, rng: Rng) -
     assert isinstance(sol.answer, SymbolicAnswer)
 
     statement = (
-        # 「右の図で」と書いていたが、このセルは visual: none（D-6）。弦の交点を
-        # 文で指定しているので配置は決まる——図への言及だけを外す。
-        f"4点{pa}, {pb}, {pc}, {pd}がこの順に円周上にある。∠{pb}{pa}{pc}={bac}°、"
-        f"∠{pa}{pc}{pd}={acd}° であるとき、2本の弦{pa}{pc}, {pb}{pd}の交点を{pp}として、"
-        f"∠{pa}{pp}{pb}の大きさを求めよ"
+        f"下の図で、4点{pa}, {pb}, {pc}, {pd}がこの順に円周上にある。"
+        f"∠{pb}{pa}{pc}={bac}°、∠{pa}{pc}{pd}={acd}° であるとき、"
+        f"2本の弦{pa}{pc}, {pb}{pd}の交点を{pp}として、∠{pa}{pp}{pb}の大きさを求めよ"
+    )
+    # 4点の位置は、与えた2つの円周角から弧の大きさが決まるので**図と本文が必ず一致する**。
+    figure_svg = two_chords_svg(
+        pa, pb, pc, pd, pp, float(bac), float(acd), f"{bac}°", f"{acd}°", "∠x"
     )
 
     sub_question = SubQuestionMR(
@@ -129,7 +146,13 @@ def inscribed_angle_two_chords_intersection_recipe(ctx: CellContext, rng: Rng) -
         signature=ctx.spec_level.signature, family=ctx.family, level=ctx.level,
         purpose=ctx.purpose, seed=0,
         params={"bac": bac, "acd": acd, "labels": pa + pb + pc + pd + pp},
-        given={"condition": statement}, sub_questions=[sub_question], visual_plan=None,
+        given={"condition": statement},
+        context_slots={"figure_svg": figure_svg},
+        sub_questions=[sub_question],
+        visual_plan=VisualPlan(
+            style="figure", labels=[f"{bac}°", f"{acd}°", "∠x", pa, pb, pc, pd, pp],
+            elements=[VisualElement(kind="circle", attrs={"role": "given"})],
+        ),
         provenance=Provenance(recipe="math.inscribed_angle_two_chords_intersection"),
     )
 

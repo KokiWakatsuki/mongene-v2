@@ -23,8 +23,8 @@ levels:
       angle_domain: {int_range: [20, 160]}
     given: [condition]
     asked: [value]
-    visual: none
-    text: {tier: T1, template: lf_angle_equality_v1}
+    visual: required
+    text: {tier: T1, template: lf_angle_equality_v1, visual_builder: math.geometry_construction}
     hints: [steps_prefix]
     concept_tags: [angle_pair.solve_by_equality]
     cause_tags: []
@@ -35,8 +35,8 @@ levels:
       angle_domain: {int_range: [20, 75]}
     given: [condition]
     asked: [value]
-    visual: none
-    text: {tier: T1, template: lf_zigzag_angle_sum_v1}
+    visual: required
+    text: {tier: T1, template: lf_zigzag_angle_sum_v1, visual_builder: math.geometry_construction}
     hints: [steps_prefix]
     concept_tags: [angle_pair.solve_zigzag]
     cause_tags: []
