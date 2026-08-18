@@ -67,6 +67,7 @@ from engine.core.contracts import (
 )
 from engine.core.registry import REGISTRY, register_recipe
 from engine.packs.math.visuals.quadrilateral_figure import triangle_with_altitude_svg
+from engine.packs.math.visuals.solid import render_solid_svg
 from engine.core.rng import Rng, draw
 from engine.core.verify.answer_size import answer_is_too_big, limits_for
 from engine.packs.math.recipes.pythagorean import (
@@ -806,6 +807,15 @@ def _scene_equidistant_point_on_x_axis(p: Mapping[str, Any], rng: Rng) -> FindVa
     )
 
 
+def _solid_sketch(kind: str, **px: float) -> str:
+    """立体の見取図（visuals/solid.py の描き手を呼ぶだけ）。
+
+    ★**立体の単元は図が要る。** 「1辺 6cm の正四面体GHIJについて、頂点Gから底面
+    HIJに下ろした垂線の足の位置を考え…」を、形を思い浮かべないまま解くことになる。
+    """
+    return render_solid_svg({"view": "sketch", "solid_kind": kind, **px}, draw=True)
+
+
 # --- g3_l55 Lv2 -------------------------------------------------------------
 def _scene_box_diagonal(p: Mapping[str, Any], rng: Rng) -> FindValueScene:
     depth = int(draw(p["edge_domain"], rng))
@@ -817,6 +827,12 @@ def _scene_box_diagonal(p: Mapping[str, Any], rng: Rng) -> FindValueScene:
     return FindValueScene(
         numbers={"depth": depth, "width": width, "height": height},
         statement=statement,
+        figure_svg=_solid_sketch(
+            "rectangular_prism",
+            width_px=190.0, depth_px=70.0,
+            height_px=max(60.0, 190.0 * height / max(width, 1)),
+        ),
+        figure_labels=[],
     )
 
 
@@ -864,6 +880,11 @@ def _scene_square_pyramid_height_volume(p: Mapping[str, Any], rng: Rng) -> FindV
         numbers={"base_edge": base_edge, "lateral_edge": lateral_edge},
         statement=statement,
         slots={"labels": labels},
+        figure_svg=_solid_sketch(
+            "square_pyramid", width_px=170.0, depth_px=70.0, height_px=150.0,
+            vertices=list(base_square) + [apex],
+        ),
+        figure_labels=list(labels),
     )
 
 
@@ -879,6 +900,8 @@ def _scene_regular_tetrahedron_height_volume(p: Mapping[str, Any], rng: Rng) -> 
         numbers={"edge": edge},
         statement=statement,
         slots={"labels": labels},
+        figure_svg=_solid_sketch("tetrahedron", width_px=190.0),
+        figure_labels=[],
     )
 
 

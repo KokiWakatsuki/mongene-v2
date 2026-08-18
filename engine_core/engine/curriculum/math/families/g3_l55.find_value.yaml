@@ -32,8 +32,8 @@ levels:
       edge_domain: {int_range: [2, 20]}
     given: [condition]
     asked: [value]
-    visual: none
-    text: {tier: T1, template: lf_pythagorean_condition_v1}
+    visual: required
+    text: {tier: T1, template: lf_pythagorean_condition_v1, visual_builder: math.geometry_construction}
     hints: [steps_prefix]
     concept_tags: [pythagorean.box_diagonal]
     cause_tags: []
@@ -67,8 +67,8 @@ levels:
       名前を外した実測が 0.30。定義域は 2..30/2..40 から 2..36/2..48 に広げてある。
     given: [condition]
     asked: [value]
-    visual: none
-    text: {tier: T1, template: lf_pythagorean_condition_v1}
+    visual: required
+    text: {tier: T1, template: lf_pythagorean_condition_v1, visual_builder: math.geometry_construction}
     hints: [steps_prefix]
     concept_tags: [pythagorean.square_pyramid_height_volume]
     cause_tags: []
@@ -91,8 +91,8 @@ levels:
       ゆらぎを許さない。**狭いことを隠さず宣言する**のが正しい扱い。
     given: [condition]
     asked: [value]
-    visual: none
-    text: {tier: T1, template: lf_pythagorean_condition_v1}
+    visual: required
+    text: {tier: T1, template: lf_pythagorean_condition_v1, visual_builder: math.geometry_construction}
     hints: [steps_prefix]
     concept_tags: [pythagorean.regular_tetrahedron_height_volume]
     cause_tags: []
