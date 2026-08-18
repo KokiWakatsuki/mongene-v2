@@ -55,8 +55,8 @@ levels:
       base_domain: {int_range: [4, 60]}
     given: [condition]
     asked: [value]
-    visual: none
-    text: {tier: T1, template: lf_pythagorean_condition_v1}
+    visual: required
+    text: {tier: T1, template: lf_pythagorean_condition_v1, visual_builder: math.geometry_construction}
     hints: [steps_prefix]
     concept_tags: [pythagorean.isosceles_height_and_area]
     cause_tags: []
@@ -71,8 +71,8 @@ levels:
       angle_domain: {int_set: [30, 45, 60]}
     given: [condition]
     asked: [value]
-    visual: none
-    text: {tier: T1, template: lf_pythagorean_condition_v1}
+    visual: required
+    text: {tier: T1, template: lf_pythagorean_condition_v1, visual_builder: math.geometry_construction}
     hints: [steps_prefix]
     concept_tags: [pythagorean.height_from_special_angles]
     cause_tags: []

@@ -66,6 +66,7 @@ from engine.core.contracts import (
     VisualPlan,
 )
 from engine.core.registry import REGISTRY, register_recipe
+from engine.packs.math.visuals.quadrilateral_figure import triangle_with_altitude_svg
 from engine.core.rng import Rng, draw
 from engine.core.verify.answer_size import answer_is_too_big, limits_for
 from engine.packs.math.recipes.pythagorean import (
@@ -594,6 +595,11 @@ class FindValueScene:
     numbers: dict[str, Any]
     statement: str
     slots: dict[str, str] = field(default_factory=dict)
+    # ★**図はここに載せる。** このモジュールは10セル分の場面を1つの MR 組み立てに
+    # 集約しているので、場面ごとに図を返せるようにすれば、セルの数だけ配線を
+    # 書かずに済む。図を持たない場面は空のまま（visual: none のセル）。
+    figure_svg: str = ""
+    figure_labels: list[str] = field(default_factory=list)
 
 
 def _draw_from(candidates: list[Any], rng: Rng) -> Any:
@@ -685,10 +691,29 @@ def _scene_isosceles_height_area(p: Mapping[str, Any], rng: Rng) -> FindValueSce
         numbers={"equal_side": equal_side, "base": base},
         statement=statement,
         slots={"triangle": tri, "foot": foot},
+        figure_svg=triangle_with_altitude_svg(
+            a, b, c, foot,
+            side_labels=[(a, b, f"{equal_side}cm"), (b, c, f"{base}cm")],
+            equal_legs=equal_side != base,
+        ),
+        figure_labels=[f"{equal_side}cm", f"{base}cm", a, b, c, foot],
     )
 
 
 # --- g3_l53 Lv4 -------------------------------------------------------------
+def _altitude_foot_x(angle_b: float, angle_c: float, half: float = 2.8) -> float:
+    """底辺の両端の角から、垂線の足が底辺のどこに落ちるかを出す（図の座標）。
+
+    底辺は -half〜half。B 側の角が大きいほど足は B 寄りになる。
+    """
+    import math as _m
+
+    tb, tc = _m.tan(_m.radians(angle_b)), _m.tan(_m.radians(angle_c))
+    # 高さ h に対し、B からの距離は h/tan(B)、C からの距離は h/tan(C)。
+    frac = (1 / tb) / (1 / tb + 1 / tc)
+    return -half + 2 * half * frac
+
+
 def _scene_height_from_special_angles(p: Mapping[str, Any], rng: Rng) -> FindValueScene:
     base = int(draw(p["base_domain"], rng))
     angle_b = int(draw(p["angle_domain"], rng))
@@ -704,6 +729,14 @@ def _scene_height_from_special_angles(p: Mapping[str, Any], rng: Rng) -> FindVal
         numbers={"base": base, "angle_b": angle_b, "angle_c": angle_c},
         statement=statement,
         slots={"triangle": tri, "foot": foot},
+        # 垂線の足が底辺のどこに落ちるかは、与えられた2つの角で決まる。
+        figure_svg=triangle_with_altitude_svg(
+            a, b, c, foot,
+            side_labels=[(b, c, f"{base}cm")],
+            angle_marks=[[b, c, a, f"{angle_b}°"], [c, b, a, f"{angle_c}°"]],
+            apex_x=_altitude_foot_x(angle_b, angle_c),
+        ),
+        figure_labels=[f"{base}cm", f"{angle_b}°", f"{angle_c}°", a, b, c, foot],
     )
 
 
@@ -960,7 +993,17 @@ def pythagorean_find_value_recipe(ctx: CellContext, rng: Rng) -> MR:
         signature=ctx.spec_level.signature, family=ctx.family, level=ctx.level,
         purpose=ctx.purpose, seed=0,
         params={"scenario_kind": kind, "numbers": scene.numbers, "slots": scene.slots},
-        given={"condition": scene.statement}, sub_questions=[sub_question], visual_plan=None,
+        given={"condition": scene.statement},
+        context_slots={"figure_svg": scene.figure_svg} if scene.figure_svg else {},
+        sub_questions=[sub_question],
+        visual_plan=(
+            VisualPlan(
+                style="figure", labels=list(scene.figure_labels),
+                elements=[VisualElement(kind="triangle", attrs={"role": "given"})],
+            )
+            if scene.figure_svg
+            else None
+        ),
         provenance=Provenance(recipe=RECIPE_NAME),
     )
 
