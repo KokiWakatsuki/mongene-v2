@@ -28,8 +28,8 @@ levels:
       **名前が違うだけの問題は別の問題ではない**。増やすには題材そのものを追加する。
     given: [condition]
     asked: [value]
-    visual: none
-    text: {tier: T1, template: lf_quadrilateral_condition_v1}
+    visual: required
+    text: {tier: T1, template: lf_quadrilateral_condition_v1, visual_builder: math.geometry_construction}
     hints: [steps_prefix]
     concept_tags: [special_parallelogram.diagonal_value]
     cause_tags: []

@@ -17,8 +17,15 @@ from engine.core.contracts import (
     Solution,
     SubQuestionMR,
     SymbolicAnswer,
+    VisualElement,
+    VisualPlan,
 )
 from engine.core.registry import REGISTRY, register_recipe
+from engine.packs.math.visuals.quadrilateral_figure import (
+    equal_area_transform_svg,
+    parallelogram_svg,
+    quadrilateral_with_diagonals_svg,
+)
 from engine.core.rng import Rng, draw
 from engine.packs.math.recipes.letter_expr import _draw_named_figures
 
@@ -55,8 +62,13 @@ def parallelogram_opposite_properties_recipe(ctx: CellContext, rng: Rng) -> MR:
     assert isinstance(sol.answer, SymbolicAnswer)
 
     statement = (
-        f"平行四辺形{pa}{pb}{pc}{pd}で、{pa}{pb}={side_value}cm、"
+        f"下の図の平行四辺形{pa}{pb}{pc}{pd}で、{pa}{pb}={side_value}cm、"
         f"∠{pb}={angle_value}°であるとき、辺{pc}{pd}の長さと∠{pd}の大きさを求めよ"
+    )
+    # ★どの辺が対辺でどの角が対角かは、図があれば一目で分かる。
+    # **求めるほうには名前を付けない**（本文に無い記号を図に足さない）。
+    figure_svg = parallelogram_svg(
+        pa + pb + pc + pd, f"{side_value}cm", f"{angle_value}°", "", ""
     )
 
     sub_question = SubQuestionMR(
@@ -67,7 +79,13 @@ def parallelogram_opposite_properties_recipe(ctx: CellContext, rng: Rng) -> MR:
         signature=ctx.spec_level.signature, family=ctx.family, level=ctx.level,
         purpose=ctx.purpose, seed=0,
         params={"side_value": side_value, "angle_value": angle_value},
-        given={"condition": statement}, sub_questions=[sub_question], visual_plan=None,
+        given={"condition": statement},
+        context_slots={"figure_svg": figure_svg},
+        sub_questions=[sub_question],
+        visual_plan=VisualPlan(
+            style="figure", labels=[f"{side_value}cm", f"{angle_value}°", pa, pb, pc, pd],
+            elements=[VisualElement(kind="quadrilateral", attrs={"role": "given"})],
+        ),
         provenance=Provenance(recipe="math.parallelogram_opposite_properties"),
     )
 
@@ -153,14 +171,18 @@ def special_parallelogram_diagonal_value_recipe(ctx: CellContext, rng: Rng) -> M
     shape_disp = {"rectangle": "長方形", "square": "正方形", "rhombus": "ひし形"}[shape]
     if shape == "rhombus":
         statement = (
-            f"{shape_disp}{pa}{pb}{pc}{pd}で対角線{pa}{pc}と{pb}{pd}の交点をOとする。"
+            f"下の図の{shape_disp}{pa}{pb}{pc}{pd}で対角線{pa}{pc}と{pb}{pd}の交点をOとする。"
             f"{pa}{pc}={value}cm のとき、線分O{pa}の長さと∠{pa}O{pb}の大きさを求めよ"
         )
     else:
         statement = (
-            f"{shape_disp}{pa}{pb}{pc}{pd}で対角線{pa}{pc}と{pb}{pd}の交点をOとする。"
+            f"下の図の{shape_disp}{pa}{pb}{pc}{pd}で対角線{pa}{pc}と{pb}{pd}の交点をOとする。"
             f"{pa}{pc}={value}cm のとき、線分O{pb}の長さを求めよ"
         )
+    # 対角線の交点がどこかを図で示す（ひし形は垂直に交わることが図で見える）。
+    figure_svg = quadrilateral_with_diagonals_svg(
+        pa + pb + pc + pd, "O", kind=shape, diagonal_label=f"{value}cm"
+    )
 
     sub_question = SubQuestionMR(
         label="(1)", asked="value", answer=sol.answer, steps=sol.steps,
@@ -170,7 +192,13 @@ def special_parallelogram_diagonal_value_recipe(ctx: CellContext, rng: Rng) -> M
         signature=ctx.spec_level.signature, family=ctx.family, level=ctx.level,
         purpose=ctx.purpose, seed=0,
         params={"shape": shape, "value": value, "labels": pa + pb + pc + pd},
-        given={"condition": statement}, sub_questions=[sub_question], visual_plan=None,
+        given={"condition": statement},
+        context_slots={"figure_svg": figure_svg},
+        sub_questions=[sub_question],
+        visual_plan=VisualPlan(
+            style="figure", labels=[f"{value}cm", pa, pb, pc, pd, "O"],
+            elements=[VisualElement(kind="quadrilateral", attrs={"role": "given"})],
+        ),
         provenance=Provenance(recipe="math.special_parallelogram_diagonal_value"),
     )
 
@@ -257,11 +285,13 @@ def equal_area_transform_value_recipe(ctx: CellContext, rng: Rng) -> MR:
     # 「四角形の面積が424cm² ならば三角形の面積を求めよ」＝答えを本文が告げていた。
     # 実物は作図の手順だけを述べ、等積になる理由（底辺共通・高さ等しい）を問う。
     statement = (
-        f"四角形{pa}{pb}{pc}{pd}で、頂点{pd}を通り対角線{pa}{pc}に平行な直線をひき、"
+        f"下の図の四角形{pa}{pb}{pc}{pd}で、頂点{pd}を通り対角線{pa}{pc}に平行な直線をひき、"
         f"辺{pb}{pc}の延長との交点を{pe}とする。"
         f"四角形{pa}{pb}{pc}{pd}の面積が{area_value}cm²であるとき、"
         f"三角形{pa}{pb}{pe}の面積を求めよ"
     )
+    # 「辺MNの延長」がどちらへ伸びるのかは、ことばだけだと読み取りにくい。
+    figure_svg = equal_area_transform_svg(pa + pb + pc + pd, pe, "")
 
     sub_question = SubQuestionMR(
         label="(1)", asked="value", answer=sol.answer, steps=sol.steps,
@@ -271,6 +301,12 @@ def equal_area_transform_value_recipe(ctx: CellContext, rng: Rng) -> MR:
         signature=ctx.spec_level.signature, family=ctx.family, level=ctx.level,
         purpose=ctx.purpose, seed=0,
         params={"area_value": area_value, "labels": pa + pb + pc + pd + pe},
-        given={"condition": statement}, sub_questions=[sub_question], visual_plan=None,
+        given={"condition": statement},
+        context_slots={"figure_svg": figure_svg},
+        sub_questions=[sub_question],
+        visual_plan=VisualPlan(
+            style="figure", labels=[pa, pb, pc, pd, pe],
+            elements=[VisualElement(kind="quadrilateral", attrs={"role": "given"})],
+        ),
         provenance=Provenance(recipe="math.equal_area_transform_value"),
     )
