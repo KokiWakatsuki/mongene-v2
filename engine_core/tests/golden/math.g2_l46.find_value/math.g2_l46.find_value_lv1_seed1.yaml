@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: parallelogram_opposite_properties
 problem_ref: fb1f37c86d993422
-problem_text: 平行四辺形DEFGで、DE=16cm、∠E=41°であるとき、辺FGの長さと∠Gの大きさを求めよ。
+problem_text: 下の図の平行四辺形DEFGで、DE=16cm、∠E=41°であるとき、辺FGの長さと∠Gの大きさを求めよ。
 sub_questions:
 - answer:
     display: 辺の長さ 16cm、角の大きさ 41°
@@ -53,4 +53,20 @@ sub_questions:
     op: apply_opposite_side_and_angle_property
     result_display: 辺の長さ 16cm、角の大きさ 41°
     result_srepr: Tuple(Integer(16), Integer(41))
-visual_svg: null
+visual_svg: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 340" width="420" height="340" font-family="Hiragino Sans, Hiragino Kaku Gothic ProN, Noto Sans JP, Yu Gothic, Meiryo, sans-serif"><rect
+  x="0" y="0" width="420" height="340" fill="#ffffff" stroke="none"/><line x1="46.00" y1="252.00" x2="292.00" y2="252.00" stroke="#000000" stroke-width="1.6"/><line x1="292.00" y1="252.00" x2="374.00" y2="88.00"
+  stroke="#000000" stroke-width="1.6"/><line x1="374.00" y1="88.00" x2="128.00" y2="88.00" stroke="#000000" stroke-width="1.6"/><line x1="128.00" y1="88.00" x2="46.00" y2="252.00" stroke="#000000" stroke-width="1.6"/><line
+  x1="167.00" y1="256.50" x2="173.00" y2="252.00" stroke="#000000" stroke-width="1.2"/><line x1="167.00" y1="247.50" x2="173.00" y2="252.00" stroke="#000000" stroke-width="1.2"/><line x1="249.00" y1="92.50"
+  x2="255.00" y2="88.00" stroke="#000000" stroke-width="1.2"/><line x1="249.00" y1="83.50" x2="255.00" y2="88.00" stroke="#000000" stroke-width="1.2"/><line x1="335.01" y1="176.04" x2="333.67" y2="168.66"
+  stroke="#000000" stroke-width="1.2"/><line x1="326.96" y1="172.01" x2="333.67" y2="168.66" stroke="#000000" stroke-width="1.2"/><line x1="337.25" y1="171.57" x2="335.91" y2="164.19" stroke="#000000" stroke-width="1.2"/><line
+  x1="329.20" y1="167.54" x2="335.91" y2="164.19" stroke="#000000" stroke-width="1.2"/><line x1="89.01" y1="176.04" x2="87.67" y2="168.66" stroke="#000000" stroke-width="1.2"/><line x1="80.96" y1="172.01"
+  x2="87.67" y2="168.66" stroke="#000000" stroke-width="1.2"/><line x1="91.25" y1="171.57" x2="89.91" y2="164.19" stroke="#000000" stroke-width="1.2"/><line x1="83.20" y1="167.54" x2="89.91" y2="164.19"
+  stroke="#000000" stroke-width="1.2"/><path d="M 300.50 235.01 A 19.00 19.00 0 0 0 273.00 252.00" fill="none" stroke="#000000" stroke-width="1.2"/><text x="273.07" y="225.38" font-size="13" text-anchor="middle"
+  stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">41°</text><text x="273.07" y="225.38" font-size="13" text-anchor="middle" fill="#000000">41°</text><text x="169.00" y="270.00"
+  font-size="13" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">16cm</text><text x="169.00" y="270.00" font-size="13" text-anchor="middle" fill="#000000">16cm</text><circle
+  cx="46.00" cy="252.00" r="3.2" fill="#000000"/><text x="33.24" y="263.89" font-size="14" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">D</text><text x="33.24"
+  y="263.89" font-size="14" text-anchor="middle" fill="#000000">D</text><circle cx="292.00" cy="252.00" r="3.2" fill="#000000"/><text x="299.89" y="268.76" font-size="14" text-anchor="middle" stroke="#ffffff"
+  stroke-width="3" stroke-linejoin="round" fill="#ffffff">E</text><text x="299.89" y="268.76" font-size="14" text-anchor="middle" fill="#000000">E</text><circle cx="374.00" cy="88.00" r="3.2" fill="#000000"/><text
+  x="386.76" y="84.11" font-size="14" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">F</text><text x="386.76" y="84.11" font-size="14" text-anchor="middle"
+  fill="#000000">F</text><circle cx="128.00" cy="88.00" r="3.2" fill="#000000"/><text x="120.11" y="79.24" font-size="14" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">G</text><text
+  x="120.11" y="79.24" font-size="14" text-anchor="middle" fill="#000000">G</text></svg>

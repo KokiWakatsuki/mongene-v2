@@ -8604,7 +8604,10 @@ def test_judge_solid_position_lv2_construct():
     assert mr.signature == "judge_solid_position"
     assert [(sq.label, sq.asked) for sq in mr.sub_questions] == [("(1)", "choice")]
     assert set(mr.given) == {"statement"}
-    assert mr.visual_plan is None
+    # ★図を付けた（頂点名つきの直方体の見取図）。空間の位置関係は、どの辺が
+    # どこにあるかを図で見ないと、ねじれの位置かどうかを判断できない。
+    assert mr.visual_plan is not None
+    assert set(mr.visual_plan.labels) == set(mr.params["labels"])
 
 
 @pytest.mark.parametrize("seed", range(120))
@@ -8692,7 +8695,14 @@ def test_pythagorean_find_value_construct(family, level, signature, asked):
     assert mr.signature == signature
     assert [(sq.label, sq.asked) for sq in mr.sub_questions] == [("(1)", asked)]
     assert set(mr.given) == {"condition"}
-    assert mr.visual_plan is None
+    # ★図を持つ場面と持たない場面がある（`FindValueScene.figure_svg`）。
+    # 図があるときは、図の中の文字がすべて visual_plan に宣言されていること
+    # （G-Q5v は生成時に見るが、ここでも構成の側から確かめる）。
+    if mr.visual_plan is None:
+        assert not mr.context_slots.get("figure_svg")
+    else:
+        assert mr.context_slots["figure_svg"].startswith("<svg")
+        assert mr.visual_plan.labels
     assert set(mr.params) == {"scenario_kind", "numbers", "slots"}
     assert "answer" not in mr.params
 

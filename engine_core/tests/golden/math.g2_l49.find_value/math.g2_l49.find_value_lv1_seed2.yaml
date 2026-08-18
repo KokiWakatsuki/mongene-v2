@@ -24,7 +24,7 @@ meta:
   seed: 2
   signature: special_parallelogram_diagonal_value
 problem_ref: 021930e4330f065d
-problem_text: ひし形RSTUで対角線RTとSUの交点をOとする。RT=40cm のとき、線分ORの長さと∠ROSの大きさを求めよ。
+problem_text: 下の図のひし形RSTUで対角線RTとSUの交点をOとする。RT=40cm のとき、線分ORの長さと∠ROSの大きさを求めよ。
 sub_questions:
 - answer:
     display: 線分の長さ 20cm、角の大きさ 90°
@@ -53,4 +53,17 @@ sub_questions:
     op: apply_diagonal_property
     result_display: 線分の長さ 20cm、角の大きさ 90°
     result_srepr: Tuple(Integer(20), Integer(90))
-visual_svg: null
+visual_svg: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 340" width="420" height="340" font-family="Hiragino Sans, Hiragino Kaku Gothic ProN, Noto Sans JP, Yu Gothic, Meiryo, sans-serif"><rect
+  x="0" y="0" width="420" height="340" fill="#ffffff" stroke="none"/><line x1="210.00" y1="290.27" x2="374.00" y2="170.00" stroke="#000000" stroke-width="1.6"/><line x1="374.00" y1="170.00" x2="210.00"
+  y2="49.73" stroke="#000000" stroke-width="1.6"/><line x1="210.00" y1="49.73" x2="46.00" y2="170.00" stroke="#000000" stroke-width="1.6"/><line x1="46.00" y1="170.00" x2="210.00" y2="290.27" stroke="#000000"
+  stroke-width="1.6"/><line x1="210.00" y1="290.27" x2="210.00" y2="49.73" stroke="#000000" stroke-width="1.6"/><line x1="374.00" y1="170.00" x2="46.00" y2="170.00" stroke="#000000" stroke-width="1.6"/><line
+  x1="293.34" y1="235.35" x2="290.66" y2="224.92" stroke="#000000" stroke-width="1.2"/><line x1="296.57" y1="107.02" x2="287.43" y2="112.72" stroke="#000000" stroke-width="1.2"/><line x1="126.66" y1="104.65"
+  x2="129.34" y2="115.08" stroke="#000000" stroke-width="1.2"/><line x1="123.43" y1="232.98" x2="132.57" y2="227.28" stroke="#000000" stroke-width="1.2"/><text x="224.00" y="174.00" font-size="13" text-anchor="middle"
+  stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">40cm</text><text x="224.00" y="174.00" font-size="13" text-anchor="middle" fill="#000000">40cm</text><circle cx="210.00" cy="290.27"
+  r="3.2" fill="#000000"/><text x="210.00" y="309.27" font-size="14" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">R</text><text x="210.00" y="309.27" font-size="14"
+  text-anchor="middle" fill="#000000">R</text><circle cx="374.00" cy="170.00" r="3.2" fill="#000000"/><text x="389.00" y="174.00" font-size="14" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round"
+  fill="#ffffff">S</text><text x="389.00" y="174.00" font-size="14" text-anchor="middle" fill="#000000">S</text><circle cx="210.00" cy="49.73" r="3.2" fill="#000000"/><text x="210.00" y="38.73" font-size="14"
+  text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">T</text><text x="210.00" y="38.73" font-size="14" text-anchor="middle" fill="#000000">T</text><circle cx="46.00"
+  cy="170.00" r="3.2" fill="#000000"/><text x="31.00" y="174.00" font-size="14" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">U</text><text x="31.00" y="174.00"
+  font-size="14" text-anchor="middle" fill="#000000">U</text><circle cx="210.00" cy="170.00" r="3.2" fill="#000000"/><text x="220.61" y="163.39" font-size="14" text-anchor="middle" stroke="#ffffff" stroke-width="3"
+  stroke-linejoin="round" fill="#ffffff">O</text><text x="220.61" y="163.39" font-size="14" text-anchor="middle" fill="#000000">O</text></svg>

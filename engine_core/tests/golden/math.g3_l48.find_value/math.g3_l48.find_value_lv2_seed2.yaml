@@ -24,7 +24,7 @@ meta:
   seed: 2
   signature: inscribed_angle_transfer_same_arc
 problem_ref: 0f338e4334d93dd1
-problem_text: 直線JKについて同じ側に点L、Mがあり、∠JLK=∠JMK=73°である。∠MJL=71°のとき、∠MKLの大きさを求めよ。
+problem_text: 下の図で、直線JKについて同じ側に点L、Mがあり、∠JLK=∠JMK=73°である。∠MJL=71°のとき、∠MKLの大きさを求めよ。
 sub_questions:
 - answer:
     display: 71°
@@ -53,4 +53,20 @@ sub_questions:
     op: transfer_by_inscribed_angle_equality
     result_display: 71°
     result_srepr: Integer(71)
-visual_svg: null
+visual_svg: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 340" width="420" height="340" font-family="Hiragino Sans, Hiragino Kaku Gothic ProN, Noto Sans JP, Yu Gothic, Meiryo, sans-serif"><rect
+  x="0" y="0" width="420" height="340" fill="#ffffff" stroke="none"/><line x1="46.00" y1="252.00" x2="374.00" y2="252.00" stroke="#000000" stroke-width="1.6"/><line x1="46.00" y1="252.00" x2="146.92" y2="88.00"
+  stroke="#000000" stroke-width="1.6"/><line x1="146.92" y1="88.00" x2="374.00" y2="252.00" stroke="#000000" stroke-width="1.6"/><line x1="46.00" y1="252.00" x2="298.31" y2="113.23" stroke="#000000" stroke-width="1.6"/><line
+  x1="298.31" y1="113.23" x2="374.00" y2="252.00" stroke="#000000" stroke-width="1.6"/><line x1="46.00" y1="252.00" x2="146.92" y2="88.00" stroke="#000000" stroke-width="1.6"/><line x1="146.92" y1="88.00"
+  x2="298.31" y2="113.23" stroke="#000000" stroke-width="1.6"/><path d="M 136.97 104.18 A 19.00 19.00 0 0 0 162.33 99.12" fill="none" stroke="#000000" stroke-width="1.2"/><text x="153.96" y="127.30" font-size="13"
+  text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">73°</text><text x="153.96" y="127.30" font-size="13" text-anchor="middle" fill="#000000">73°</text><path d="M
+  281.66 122.39 A 19.00 19.00 0 0 0 307.41 129.91" fill="none" stroke="#000000" stroke-width="1.2"/><text x="288.21" y="151.79" font-size="13" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round"
+  fill="#ffffff">73°</text><text x="288.21" y="151.79" font-size="13" text-anchor="middle" fill="#000000">73°</text><path d="M 62.65 242.84 A 19.00 19.00 0 0 0 55.96 235.82" fill="none" stroke="#000000"
+  stroke-width="1.2"/><text x="72.07" y="231.17" font-size="13" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">71°</text><text x="72.07" y="231.17" font-size="13"
+  text-anchor="middle" fill="#000000">71°</text><path d="M 364.90 235.32 A 19.00 19.00 0 0 0 358.60 240.88" fill="none" stroke="#000000" stroke-width="1.2"/><text x="350.20" y="228.99" font-size="13" text-anchor="middle"
+  stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">∠x</text><text x="350.20" y="228.99" font-size="13" text-anchor="middle" fill="#000000">∠x</text><circle cx="46.00" cy="252.00"
+  r="3.2" fill="#000000"/><text x="32.91" y="263.32" font-size="14" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">J</text><text x="32.91" y="263.32" font-size="14"
+  text-anchor="middle" fill="#000000">J</text><circle cx="374.00" cy="252.00" r="3.2" fill="#000000"/><text x="386.90" y="263.66" font-size="14" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round"
+  fill="#ffffff">K</text><text x="386.90" y="263.66" font-size="14" text-anchor="middle" fill="#000000">K</text><circle cx="146.92" cy="88.00" r="3.2" fill="#000000"/><text x="140.71" y="78.35" font-size="14"
+  text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">L</text><text x="140.71" y="78.35" font-size="14" text-anchor="middle" fill="#000000">L</text><circle cx="298.31"
+  cy="113.23" r="3.2" fill="#000000"/><text x="307.00" y="105.01" font-size="14" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">M</text><text x="307.00" y="105.01"
+  font-size="14" text-anchor="middle" fill="#000000">M</text></svg>

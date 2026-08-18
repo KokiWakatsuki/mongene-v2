@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: inscribed_angle_from_central
 problem_ref: 3a5570b40ddbf5a6
-problem_text: 円Hの周上に点Lがある。弧JKに対する中心角∠JHK=168° のとき、同じ弧JKに対する円周角∠JLKの大きさを求めよ。
+problem_text: 下の図で、円Hの周上に点Lがある。弧JKに対する中心角∠JHK=168° のとき、同じ弧JKに対する円周角∠JLKの大きさを求めよ。
 sub_questions:
 - answer:
     display: 84°
@@ -53,4 +53,16 @@ sub_questions:
     op: apply_inscribed_angle_theorem
     result_display: 84°
     result_srepr: Integer(84)
-visual_svg: null
+visual_svg: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 340" width="420" height="340" font-family="Hiragino Sans, Hiragino Kaku Gothic ProN, Noto Sans JP, Yu Gothic, Meiryo, sans-serif"><rect
+  x="0" y="0" width="420" height="340" fill="#ffffff" stroke="none"/><circle cx="210.00" cy="170.00" r="124.00" fill="none" stroke="#000000" stroke-width="1.6"/><line x1="210.00" y1="170.00" x2="333.32"
+  y2="157.04" stroke="#000000" stroke-width="1.6"/><line x1="210.00" y1="170.00" x2="86.68" y2="157.04" stroke="#000000" stroke-width="1.6"/><line x1="210.00" y1="294.00" x2="333.32" y2="157.04" stroke="#000000"
+  stroke-width="1.6"/><line x1="210.00" y1="294.00" x2="86.68" y2="157.04" stroke="#000000" stroke-width="1.6"/><path d="M 228.90 168.01 A 19.00 19.00 0 0 0 191.10 168.01" fill="none" stroke="#000000" stroke-width="1.2"/><text
+  x="210.00" y="138.00" font-size="13" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">168°</text><text x="210.00" y="138.00" font-size="13" text-anchor="middle"
+  fill="#000000">168°</text><path d="M 222.71 279.88 A 19.00 19.00 0 0 0 197.29 279.88" fill="none" stroke="#000000" stroke-width="1.2"/><text x="210.00" y="262.00" font-size="13" text-anchor="middle" stroke="#ffffff"
+  stroke-width="3" stroke-linejoin="round" fill="#ffffff">∠x</text><text x="210.00" y="262.00" font-size="13" text-anchor="middle" fill="#000000">∠x</text><circle cx="210.00" cy="170.00" r="3.2" fill="#000000"/><text
+  x="210.00" y="189.00" font-size="14" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">H</text><text x="210.00" y="189.00" font-size="14" text-anchor="middle"
+  fill="#000000">H</text><circle cx="333.32" cy="157.04" r="3.2" fill="#000000"/><text x="346.69" y="154.23" font-size="14" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round"
+  fill="#ffffff">J</text><text x="346.69" y="154.23" font-size="14" text-anchor="middle" fill="#000000">J</text><circle cx="86.68" cy="157.04" r="3.2" fill="#000000"/><text x="73.31" y="154.23" font-size="14"
+  text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">K</text><text x="73.31" y="154.23" font-size="14" text-anchor="middle" fill="#000000">K</text><circle cx="210.00"
+  cy="294.00" r="3.2" fill="#000000"/><text x="210.00" y="313.00" font-size="14" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">L</text><text x="210.00" y="313.00"
+  font-size="14" text-anchor="middle" fill="#000000">L</text></svg>

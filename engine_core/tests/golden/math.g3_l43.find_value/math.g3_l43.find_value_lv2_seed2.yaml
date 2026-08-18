@@ -24,7 +24,7 @@ meta:
   seed: 2
   signature: judge_parallel_from_ratio
 problem_ref: 1bf15102f38b95fb
-problem_text: 三角形FGHで、辺FG, FH上に点J, Kがある。FJ=17cm, JG=11cm, FK=51cm, KH=28cm であるとき、JKとGHが平行であるかどうかを、比を調べて答えよ。
+problem_text: 下の図の三角形FGHで、辺FG, FH上に点J, Kがある。FJ=17cm, JG=11cm, FK=51cm, KH=28cm であるとき、JKとGHが平行であるかどうかを、比を調べて答えよ。
 sub_questions:
 - answer:
     display: 平行ではない
@@ -53,4 +53,18 @@ sub_questions:
     op: judge_by_parallel_ratio_converse
     result_display: 平行ではない
     result_srepr: 'false'
-visual_svg: null
+visual_svg: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 340" width="420" height="340" font-family="Hiragino Sans, Hiragino Kaku Gothic ProN, Noto Sans JP, Yu Gothic, Meiryo, sans-serif"><rect
+  x="0" y="0" width="420" height="340" fill="#ffffff" stroke="none"/><line x1="198.29" y1="70.43" x2="46.00" y2="269.57" stroke="#000000" stroke-width="1.6"/><line x1="198.29" y1="70.43" x2="374.00" y2="269.57"
+  stroke="#000000" stroke-width="1.6"/><line x1="46.00" y1="269.57" x2="374.00" y2="269.57" stroke="#000000" stroke-width="1.6"/><line x1="105.83" y1="191.34" x2="304.97" y2="191.34" stroke="#000000" stroke-width="1.6"/><text
+  x="140.94" y="126.38" font-size="13" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">17cm</text><text x="140.94" y="126.38" font-size="13" text-anchor="middle"
+  fill="#000000">17cm</text><text x="64.79" y="225.95" font-size="13" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">11cm</text><text x="64.79" y="225.95"
+  font-size="13" text-anchor="middle" fill="#000000">11cm</text><text x="262.13" y="125.62" font-size="13" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">51cm</text><text
+  x="262.13" y="125.62" font-size="13" text-anchor="middle" fill="#000000">51cm</text><text x="349.98" y="225.19" font-size="13" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round"
+  fill="#ffffff">28cm</text><text x="349.98" y="225.19" font-size="13" text-anchor="middle" fill="#000000">28cm</text><circle cx="198.29" cy="70.43" r="3.2" fill="#000000"/><text x="197.76" y="59.44" font-size="14"
+  text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">F</text><text x="197.76" y="59.44" font-size="14" text-anchor="middle" fill="#000000">F</text><circle cx="46.00"
+  cy="269.57" r="3.2" fill="#000000"/><text x="32.55" y="280.22" font-size="14" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">G</text><text x="32.55" y="280.22"
+  font-size="14" text-anchor="middle" fill="#000000">G</text><circle cx="374.00" cy="269.57" r="3.2" fill="#000000"/><text x="387.67" y="279.74" font-size="14" text-anchor="middle" stroke="#ffffff" stroke-width="3"
+  stroke-linejoin="round" fill="#ffffff">H</text><text x="387.67" y="279.74" font-size="14" text-anchor="middle" fill="#000000">H</text><circle cx="105.83" cy="191.34" r="3.2" fill="#000000"/><text x="93.91"
+  y="186.22" font-size="14" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">J</text><text x="93.91" y="186.22" font-size="14" text-anchor="middle" fill="#000000">J</text><circle
+  cx="304.97" cy="191.34" r="3.2" fill="#000000"/><text x="316.22" y="185.41" font-size="14" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">K</text><text x="316.22"
+  y="185.41" font-size="14" text-anchor="middle" fill="#000000">K</text></svg>

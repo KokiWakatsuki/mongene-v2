@@ -24,7 +24,7 @@ meta:
   seed: 3
   signature: parallel_ratio_judge_then_length
 problem_ref: 947cc4a9790e446a
-problem_text: 三角形PQRで、辺PQ, PR上に点S, Tがある。PS=9cm, SQ=5cm, PT=18cm, TR=10cm である。ST=18cm のとき、STとQRが平行であることを確かめたうえで、辺QRの長さを求めよ。
+problem_text: 下の図の三角形PQRで、辺PQ, PR上に点S, Tがある。PS=9cm, SQ=5cm, PT=18cm, TR=10cm である。ST=18cm のとき、STとQRが平行であることを確かめたうえで、辺QRの長さを求めよ。
 sub_questions:
 - answer:
     display: 28cm
@@ -78,4 +78,19 @@ sub_questions:
     op: apply_parallel_segment_ratio
     result_display: 28cm
     result_srepr: Integer(28)
-visual_svg: null
+visual_svg: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 340" width="420" height="340" font-family="Hiragino Sans, Hiragino Kaku Gothic ProN, Noto Sans JP, Yu Gothic, Meiryo, sans-serif"><rect
+  x="0" y="0" width="420" height="340" fill="#ffffff" stroke="none"/><line x1="198.29" y1="70.43" x2="46.00" y2="269.57" stroke="#000000" stroke-width="1.6"/><line x1="198.29" y1="70.43" x2="374.00" y2="269.57"
+  stroke="#000000" stroke-width="1.6"/><line x1="46.00" y1="269.57" x2="374.00" y2="269.57" stroke="#000000" stroke-width="1.6"/><line x1="100.39" y1="198.45" x2="311.24" y2="198.45" stroke="#000000" stroke-width="1.6"/><text
+  x="138.22" y="129.93" font-size="13" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">9cm</text><text x="138.22" y="129.93" font-size="13" text-anchor="middle"
+  fill="#000000">9cm</text><text x="62.07" y="229.51" font-size="13" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">5cm</text><text x="62.07" y="229.51" font-size="13"
+  text-anchor="middle" fill="#000000">5cm</text><text x="265.26" y="129.18" font-size="13" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">18cm</text><text
+  x="265.26" y="129.18" font-size="13" text-anchor="middle" fill="#000000">18cm</text><text x="353.12" y="228.75" font-size="13" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round"
+  fill="#ffffff">10cm</text><text x="353.12" y="228.75" font-size="13" text-anchor="middle" fill="#000000">10cm</text><text x="205.82" y="188.45" font-size="13" text-anchor="middle" stroke="#ffffff" stroke-width="3"
+  stroke-linejoin="round" fill="#ffffff">18cm</text><text x="205.82" y="188.45" font-size="13" text-anchor="middle" fill="#000000">18cm</text><circle cx="198.29" cy="70.43" r="3.2" fill="#000000"/><text
+  x="197.76" y="59.44" font-size="14" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">P</text><text x="197.76" y="59.44" font-size="14" text-anchor="middle"
+  fill="#000000">P</text><circle cx="46.00" cy="269.57" r="3.2" fill="#000000"/><text x="32.55" y="280.22" font-size="14" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">Q</text><text
+  x="32.55" y="280.22" font-size="14" text-anchor="middle" fill="#000000">Q</text><circle cx="374.00" cy="269.57" r="3.2" fill="#000000"/><text x="387.67" y="279.74" font-size="14" text-anchor="middle"
+  stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">R</text><text x="387.67" y="279.74" font-size="14" text-anchor="middle" fill="#000000">R</text><circle cx="100.39" cy="198.45"
+  r="3.2" fill="#000000"/><text x="88.47" y="193.34" font-size="14" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">S</text><text x="88.47" y="193.34" font-size="14"
+  text-anchor="middle" fill="#000000">S</text><circle cx="311.24" cy="198.45" r="3.2" fill="#000000"/><text x="322.49" y="192.52" font-size="14" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round"
+  fill="#ffffff">T</text><text x="322.49" y="192.52" font-size="14" text-anchor="middle" fill="#000000">T</text></svg>

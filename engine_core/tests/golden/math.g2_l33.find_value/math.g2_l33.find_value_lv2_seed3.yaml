@@ -24,22 +24,22 @@ meta:
   seed: 3
   signature: arrowhead_angle
 problem_ref: bfca716aa3f383ef
-problem_text: 三角形ABCの内部に点Dがあり、点Bと点D、点Cと点Dをそれぞれ結ぶ。∠BAC=91°、∠ABD=43°、∠ACD=31°のとき、∠BDCの大きさを求めよ。
+problem_text: 下の図で、三角形ABCの内部に点Dがあり、点Bと点D、点Cと点Dをそれぞれ結んだ。∠BAC=22°、∠ABD=65°、∠ACD=29°のとき、∠BDCの大きさを求めよ。
 sub_questions:
 - answer:
-    display: 165°
+    display: 116°
     kind: symbolic
-    srepr: Integer(165)
+    srepr: Integer(116)
   cause_tags: []
   concept_tags:
   - triangle_angle.arrowhead_multi_step
   explanation: 'まず、頂点Aと内部の点Dを結んだ直線を、Dの向こう側までのばす補助線を引く。この1本で、もとの図が2つの三角形に分かれる。（点Aと点Dを結んでのばした線）
 
-    次に、一方の三角形について、外角は隣り合わない2つの内角の和に等しいことを使い、のばした線とDBがつくる角を求める。（91° の一部と 43° の和）
+    次に、一方の三角形について、外角は隣り合わない2つの内角の和に等しいことを使い、のばした線とDBがつくる角を求める。（22° の一部と 65° の和）
 
-    次に、もう一方の三角形についても同じように、のばした線とDCがつくる角を求める。（91° の残りと 31° の和）
+    次に、もう一方の三角形についても同じように、のばした線とDCがつくる角を求める。（22° の残りと 29° の和）
 
-    最後に、求める角は、いま求めた2つの角を合わせたものだから、それらをたして求める。（165°）'
+    最後に、求める角は、いま求めた2つの角を合わせたものだから、それらをたして求める。（116°）'
   hints:
   - 頂点Aと内部の点Dを結んだ直線を、Dの向こう側までのばす補助線を引く。この1本で、もとの図が2つの三角形に分かれる。
   - 一方の三角形について、外角は隣り合わない2つの内角の和に等しいことを使い、のばした線とDBがつくる角を求める。
@@ -56,18 +56,33 @@ sub_questions:
     detail: ''
     narration: 一方の三角形について、外角は隣り合わない2つの内角の和に等しいことを使い、のばした線とDBがつくる角を求める。
     op: apply_exterior_angle_first
-    result_display: 91° の一部と 43° の和
+    result_display: 22° の一部と 65° の和
     result_srepr: ''
   - args: []
     detail: ''
     narration: もう一方の三角形についても同じように、のばした線とDCがつくる角を求める。
     op: apply_exterior_angle_second
-    result_display: 91° の残りと 31° の和
+    result_display: 22° の残りと 29° の和
     result_srepr: ''
   - args: []
     detail: ''
     narration: 求める角は、いま求めた2つの角を合わせたものだから、それらをたして求める。
     op: sum_two_exterior_angles
-    result_display: 165°
-    result_srepr: Integer(165)
-visual_svg: null
+    result_display: 116°
+    result_srepr: Integer(116)
+visual_svg: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 340" width="420" height="340" font-family="Hiragino Sans, Hiragino Kaku Gothic ProN, Noto Sans JP, Yu Gothic, Meiryo, sans-serif"><rect
+  x="0" y="0" width="420" height="340" fill="#ffffff" stroke="none"/><line x1="121.88" y1="46.00" x2="180.96" y2="294.00" stroke="#000000" stroke-width="1.6"/><line x1="180.96" y1="294.00" x2="298.12" y2="294.00"
+  stroke="#000000" stroke-width="1.6"/><line x1="298.12" y1="294.00" x2="121.88" y2="46.00" stroke="#000000" stroke-width="1.6"/><line x1="180.96" y1="294.00" x2="225.10" y2="259.01" stroke="#000000" stroke-width="1.6"/><line
+  x1="298.12" y1="294.00" x2="225.10" y2="259.01" stroke="#000000" stroke-width="1.6"/><path d="M 126.28 64.48 A 19.00 19.00 0 0 0 132.88 61.49" fill="none" stroke="#000000" stroke-width="1.2"/><text x="136.75"
+  y="82.78" font-size="13" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">22°</text><text x="136.75" y="82.78" font-size="13" text-anchor="middle" fill="#000000">22°</text><path
+  d="M 195.85 282.20 A 19.00 19.00 0 0 0 176.56 275.52" fill="none" stroke="#000000" stroke-width="1.2"/><text x="192.74" y="263.98" font-size="13" text-anchor="middle" stroke="#ffffff" stroke-width="3"
+  stroke-linejoin="round" fill="#ffffff">65°</text><text x="192.74" y="263.98" font-size="13" text-anchor="middle" fill="#000000">65°</text><path d="M 287.12 278.51 A 19.00 19.00 0 0 0 280.99 285.79" fill="none"
+  stroke="#000000" stroke-width="1.2"/><text x="270.59" y="274.81" font-size="13" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">29°</text><text x="270.59"
+  y="274.81" font-size="13" text-anchor="middle" fill="#000000">29°</text><path d="M 210.21 270.82 A 19.00 19.00 0 0 0 242.24 267.22" fill="none" stroke="#000000" stroke-width="1.2"/><text x="181.10" y="249.01"
+  font-size="13" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">∠x</text><text x="181.10" y="249.01" font-size="13" text-anchor="middle" fill="#000000">∠x</text><circle
+  cx="180.96" cy="294.00" r="3.2" fill="#000000"/><text x="171.66" y="309.77" font-size="14" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">B</text><text x="171.66"
+  y="309.77" font-size="14" text-anchor="middle" fill="#000000">B</text><circle cx="298.12" cy="294.00" r="3.2" fill="#000000"/><text x="311.45" y="304.88" font-size="14" text-anchor="middle" stroke="#ffffff"
+  stroke-width="3" stroke-linejoin="round" fill="#ffffff">C</text><text x="311.45" y="304.88" font-size="14" text-anchor="middle" fill="#000000">C</text><circle cx="121.88" cy="46.00" r="3.2" fill="#000000"/><text
+  x="115.68" y="36.34" font-size="14" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">A</text><text x="115.68" y="36.34" font-size="14" text-anchor="middle"
+  fill="#000000">A</text><circle cx="225.10" cy="259.01" r="3.2" fill="#000000"/><text x="223.43" y="248.11" font-size="14" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round"
+  fill="#ffffff">D</text><text x="223.43" y="248.11" font-size="14" text-anchor="middle" fill="#000000">D</text></svg>

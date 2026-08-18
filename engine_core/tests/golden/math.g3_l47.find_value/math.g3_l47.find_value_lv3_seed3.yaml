@@ -24,7 +24,7 @@ meta:
   seed: 3
   signature: inscribed_angle_two_chords_intersection
 problem_ref: 07d0b9bf35dfa3af
-problem_text: 4点D, E, F, Gがこの順に円周上にある。∠EDF=24°、∠DFG=65° であるとき、2本の弦DF, EGの交点をHとして、∠DHEの大きさを求めよ。
+problem_text: 下の図で、4点D, E, F, Gがこの順に円周上にある。∠EDF=24°、∠DFG=65° であるとき、2本の弦DF, EGの交点をHとして、∠DHEの大きさを求めよ。
 sub_questions:
 - answer:
     display: 91°
@@ -53,4 +53,18 @@ sub_questions:
     op: apply_intersecting_chords_angle
     result_display: 91°
     result_srepr: Integer(91)
-visual_svg: null
+visual_svg: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 340" width="420" height="340" font-family="Hiragino Sans, Hiragino Kaku Gothic ProN, Noto Sans JP, Yu Gothic, Meiryo, sans-serif"><rect
+  x="0" y="0" width="420" height="340" fill="#ffffff" stroke="none"/><circle cx="210.00" cy="170.00" r="124.00" fill="none" stroke="#000000" stroke-width="1.6"/><line x1="115.01" y1="90.29" x2="333.98"
+  y2="167.84" stroke="#000000" stroke-width="1.6"/><line x1="291.35" y1="76.42" x2="210.00" y2="294.00" stroke="#000000" stroke-width="1.6"/><path d="M 132.92 96.64 A 19.00 19.00 0 0 0 133.95 88.80" fill="none"
+  stroke="#000000" stroke-width="1.2"/><text x="150.70" y="98.99" font-size="13" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">24°</text><text x="150.70"
+  y="98.99" font-size="13" text-anchor="middle" fill="#000000">24°</text><path d="M 316.07 161.49 A 19.00 19.00 0 0 0 320.66 181.39" fill="none" stroke="#000000" stroke-width="1.2"/><text x="298.90" y="179.93"
+  font-size="13" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">65°</text><text x="298.90" y="179.93" font-size="13" text-anchor="middle" fill="#000000">65°</text><path
+  d="M 272.81 126.02 A 19.00 19.00 0 0 0 248.24 137.47" fill="none" stroke="#000000" stroke-width="1.2"/><text x="250.94" y="115.19" font-size="13" text-anchor="middle" stroke="#ffffff" stroke-width="3"
+  stroke-linejoin="round" fill="#ffffff">∠x</text><text x="250.94" y="115.19" font-size="13" text-anchor="middle" fill="#000000">∠x</text><circle cx="115.01" cy="90.29" r="3.2" fill="#000000"/><text x="129.15"
+  y="99.30" font-size="14" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">D</text><text x="129.15" y="99.30" font-size="14" text-anchor="middle" fill="#000000">D</text><circle
+  cx="291.35" cy="76.42" r="3.2" fill="#000000"/><text x="286.10" y="94.47" font-size="14" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">E</text><text x="286.10"
+  y="94.47" font-size="14" text-anchor="middle" fill="#000000">E</text><circle cx="333.98" cy="167.84" r="3.2" fill="#000000"/><text x="319.84" y="166.83" font-size="14" text-anchor="middle" stroke="#ffffff"
+  stroke-width="3" stroke-linejoin="round" fill="#ffffff">F</text><text x="319.84" y="166.83" font-size="14" text-anchor="middle" fill="#000000">F</text><circle cx="210.00" cy="294.00" r="3.2" fill="#000000"/><text
+  x="215.25" y="283.95" font-size="14" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">G</text><text x="215.25" y="283.95" font-size="14" text-anchor="middle"
+  fill="#000000">G</text><circle cx="266.15" cy="143.82" r="3.2" fill="#000000"/><text x="259.81" y="134.22" font-size="14" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round"
+  fill="#ffffff">H</text><text x="259.81" y="134.22" font-size="14" text-anchor="middle" fill="#000000">H</text></svg>

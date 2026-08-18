@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: triangle_third_angle
 problem_ref: f86bf332c2b42250
-problem_text: 三角形ABCで、∠A=81°、∠B=60°のとき、∠Cの大きさを求めよ。
+problem_text: 下の図の三角形ABCで、∠A=81°、∠B=60°のとき、∠Cの大きさを求めよ。
 sub_questions:
 - answer:
     display: 39°
@@ -53,4 +53,15 @@ sub_questions:
     op: subtract_from_sum
     result_display: 39°
     result_srepr: Integer(39)
-visual_svg: null
+visual_svg: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 340" width="420" height="340" font-family="Hiragino Sans, Hiragino Kaku Gothic ProN, Noto Sans JP, Yu Gothic, Meiryo, sans-serif"><rect
+  x="0" y="0" width="420" height="340" fill="#ffffff" stroke="none"/><line x1="150.50" y1="79.50" x2="46.00" y2="260.50" stroke="#000000" stroke-width="1.6"/><line x1="46.00" y1="260.50" x2="374.00" y2="260.50"
+  stroke="#000000" stroke-width="1.6"/><line x1="374.00" y1="260.50" x2="150.50" y2="79.50" stroke="#000000" stroke-width="1.6"/><path d="M 141.00 95.96 A 19.00 19.00 0 0 0 165.26 91.46" fill="none" stroke="#000000"
+  stroke-width="1.2"/><text x="157.06" y="118.90" font-size="13" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">81°</text><text x="157.06" y="118.90" font-size="13"
+  text-anchor="middle" fill="#000000">81°</text><path d="M 65.00 260.50 A 19.00 19.00 0 0 0 55.50 244.04" fill="none" stroke="#000000" stroke-width="1.2"/><text x="77.18" y="246.50" font-size="13" text-anchor="middle"
+  stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">60°</text><text x="77.18" y="246.50" font-size="13" text-anchor="middle" fill="#000000">60°</text><path d="M 359.23 248.54 A 19.00
+  19.00 0 0 0 355.00 260.50" fill="none" stroke="#000000" stroke-width="1.2"/><text x="340.06" y="252.48" font-size="13" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">∠x</text><text
+  x="340.06" y="252.48" font-size="13" text-anchor="middle" fill="#000000">∠x</text><circle cx="46.00" cy="260.50" r="3.2" fill="#000000"/><text x="33.01" y="272.00" font-size="14" text-anchor="middle"
+  stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">B</text><text x="33.01" y="272.00" font-size="14" text-anchor="middle" fill="#000000">B</text><circle cx="374.00" cy="260.50" r="3.2"
+  fill="#000000"/><text x="388.14" y="269.50" font-size="14" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">C</text><text x="388.14" y="269.50" font-size="14"
+  text-anchor="middle" fill="#000000">C</text><circle cx="150.50" cy="79.50" r="3.2" fill="#000000"/><text x="147.76" y="68.76" font-size="14" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round"
+  fill="#ffffff">A</text><text x="147.76" y="68.76" font-size="14" text-anchor="middle" fill="#000000">A</text></svg>

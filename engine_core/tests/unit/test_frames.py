@@ -80,10 +80,17 @@ def test_calculation_vocab_and_visual():
 
 
 def test_knowledge_vocab_and_visual():
+    """★**knowledge の図は「禁止」から「あってもよい」に変えた。**
+
+    M0 では図を禁じていたが、実物を読むと要る問いがある——「直方体PQRS-TUVWで、
+    辺UVと辺SPの位置関係」は、どの辺がどこにあるかを頭の中で組み立てないと
+    判断できない。`optional` にしても図が勝手に増えることはない
+    （recipe が visual_plan を付けたセルにだけ出る）。
+    """
     f = REGISTRY.frame("knowledge")
     assert f.given_vocab == frozenset({"statement", "term_context"})
     assert f.asked_vocab == frozenset({"term", "true_false", "choice"})
-    assert f.visual == "none"
+    assert f.visual == "optional"
 
 
 def test_find_value_vocab_and_visual():

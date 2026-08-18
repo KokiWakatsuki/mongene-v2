@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: parallel_ratio_judge_then_length
 problem_ref: 35b78c6574804f2e
-problem_text: 三角形QRSで、辺QR, QS上に点T, Uがある。QT=2cm, TR=6cm, QU=8cm, US=24cm である。TU=9cm のとき、TUとRSが平行であることを確かめたうえで、辺RSの長さを求めよ。
+problem_text: 下の図の三角形QRSで、辺QR, QS上に点T, Uがある。QT=2cm, TR=6cm, QU=8cm, US=24cm である。TU=9cm のとき、TUとRSが平行であることを確かめたうえで、辺RSの長さを求めよ。
 sub_questions:
 - answer:
     display: 36cm
@@ -78,4 +78,19 @@ sub_questions:
     op: apply_parallel_segment_ratio
     result_display: 36cm
     result_srepr: Integer(36)
-visual_svg: null
+visual_svg: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 340" width="420" height="340" font-family="Hiragino Sans, Hiragino Kaku Gothic ProN, Noto Sans JP, Yu Gothic, Meiryo, sans-serif"><rect
+  x="0" y="0" width="420" height="340" fill="#ffffff" stroke="none"/><line x1="198.29" y1="70.43" x2="46.00" y2="269.57" stroke="#000000" stroke-width="1.6"/><line x1="198.29" y1="70.43" x2="374.00" y2="269.57"
+  stroke="#000000" stroke-width="1.6"/><line x1="46.00" y1="269.57" x2="374.00" y2="269.57" stroke="#000000" stroke-width="1.6"/><line x1="160.21" y1="120.21" x2="242.21" y2="120.21" stroke="#000000" stroke-width="1.6"/><text
+  x="168.13" y="90.82" font-size="13" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">2cm</text><text x="168.13" y="90.82" font-size="13" text-anchor="middle"
+  fill="#000000">2cm</text><text x="91.99" y="190.39" font-size="13" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">6cm</text><text x="91.99" y="190.39" font-size="13"
+  text-anchor="middle" fill="#000000">6cm</text><text x="230.75" y="90.06" font-size="13" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">8cm</text><text x="230.75"
+  y="90.06" font-size="13" text-anchor="middle" fill="#000000">8cm</text><text x="318.60" y="189.63" font-size="13" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">24cm</text><text
+  x="318.60" y="189.63" font-size="13" text-anchor="middle" fill="#000000">24cm</text><text x="201.21" y="110.21" font-size="13" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round"
+  fill="#ffffff">9cm</text><text x="201.21" y="110.21" font-size="13" text-anchor="middle" fill="#000000">9cm</text><circle cx="198.29" cy="70.43" r="3.2" fill="#000000"/><text x="197.76" y="59.44" font-size="14"
+  text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">Q</text><text x="197.76" y="59.44" font-size="14" text-anchor="middle" fill="#000000">Q</text><circle cx="46.00"
+  cy="269.57" r="3.2" fill="#000000"/><text x="32.55" y="280.22" font-size="14" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">R</text><text x="32.55" y="280.22"
+  font-size="14" text-anchor="middle" fill="#000000">R</text><circle cx="374.00" cy="269.57" r="3.2" fill="#000000"/><text x="387.67" y="279.74" font-size="14" text-anchor="middle" stroke="#ffffff" stroke-width="3"
+  stroke-linejoin="round" fill="#ffffff">S</text><text x="387.67" y="279.74" font-size="14" text-anchor="middle" fill="#000000">S</text><circle cx="160.21" cy="120.21" r="3.2" fill="#000000"/><text x="148.30"
+  y="115.10" font-size="14" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">T</text><text x="148.30" y="115.10" font-size="14" text-anchor="middle" fill="#000000">T</text><circle
+  cx="242.21" cy="120.21" r="3.2" fill="#000000"/><text x="253.46" y="114.29" font-size="14" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">U</text><text x="253.46"
+  y="114.29" font-size="14" text-anchor="middle" fill="#000000">U</text></svg>

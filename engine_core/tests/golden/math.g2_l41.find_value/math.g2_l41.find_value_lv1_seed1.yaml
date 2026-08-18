@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: isosceles_base_angle
 problem_ref: fd4f173851238100
-problem_text: RS=RTの二等辺三角形RSTで、底角∠Sの大きさが41°のとき、頂角∠Rの大きさを求めよ。
+problem_text: 下の図のRS=RTの二等辺三角形RSTで、底角∠Sの大きさが41°のとき、頂角∠Rの大きさを求めよ。
 sub_questions:
 - answer:
     display: 98°
@@ -53,4 +53,14 @@ sub_questions:
     op: solve_remaining_angle
     result_display: 98°
     result_srepr: Integer(98)
-visual_svg: null
+visual_svg: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 340" width="420" height="340" font-family="Hiragino Sans, Hiragino Kaku Gothic ProN, Noto Sans JP, Yu Gothic, Meiryo, sans-serif"><rect
+  x="0" y="0" width="420" height="340" fill="#ffffff" stroke="none"/><line x1="210.00" y1="98.72" x2="46.00" y2="241.28" stroke="#000000" stroke-width="1.6"/><line x1="46.00" y1="241.28" x2="374.00" y2="241.28"
+  stroke="#000000" stroke-width="1.6"/><line x1="374.00" y1="241.28" x2="210.00" y2="98.72" stroke="#000000" stroke-width="1.6"/><line x1="126.23" y1="164.91" x2="129.77" y2="175.09" stroke="#000000" stroke-width="1.2"/><line
+  x1="287.21" y1="172.46" x2="296.79" y2="167.54" stroke="#000000" stroke-width="1.2"/><path d="M 195.66 111.18 A 19.00 19.00 0 0 0 224.34 111.18" fill="none" stroke="#000000" stroke-width="1.2"/><text
+  x="210.00" y="138.72" font-size="13" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">∠x</text><text x="210.00" y="138.72" font-size="13" text-anchor="middle"
+  fill="#000000">∠x</text><path d="M 65.00 241.28 A 19.00 19.00 0 0 0 60.34 228.82" fill="none" stroke="#000000" stroke-width="1.2"/><text x="79.72" y="232.67" font-size="13" text-anchor="middle" stroke="#ffffff"
+  stroke-width="3" stroke-linejoin="round" fill="#ffffff">41°</text><text x="79.72" y="232.67" font-size="13" text-anchor="middle" fill="#000000">41°</text><circle cx="210.00" cy="98.72" r="3.2" fill="#000000"/><text
+  x="210.00" y="87.72" font-size="14" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">R</text><text x="210.00" y="87.72" font-size="14" text-anchor="middle"
+  fill="#000000">R</text><circle cx="46.00" cy="241.28" r="3.2" fill="#000000"/><text x="31.95" y="250.53" font-size="14" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">S</text><text
+  x="31.95" y="250.53" font-size="14" text-anchor="middle" fill="#000000">S</text><circle cx="374.00" cy="241.28" r="3.2" fill="#000000"/><text x="388.05" y="250.53" font-size="14" text-anchor="middle"
+  stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">T</text><text x="388.05" y="250.53" font-size="14" text-anchor="middle" fill="#000000">T</text></svg>

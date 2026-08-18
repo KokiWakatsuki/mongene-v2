@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: similarity_ratio_transfer
 problem_ref: 548fd983f25a17f7
-problem_text: 三角形JKLと三角形UVWは相似で、相似比は 7:5 である。JK=28cm のとき、対応する辺UVの長さを求めよ。
+problem_text: 下の図で、三角形JKLと三角形UVWは相似で、相似比は 7:5 である。JK=28cm のとき、対応する辺UVの長さを求めよ。
 sub_questions:
 - answer:
     display: 20cm
@@ -53,4 +53,17 @@ sub_questions:
     op: apply_similarity_ratio
     result_display: 20cm
     result_srepr: Integer(20)
-visual_svg: null
+visual_svg: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 340" width="420" height="340" font-family="Hiragino Sans, Hiragino Kaku Gothic ProN, Noto Sans JP, Yu Gothic, Meiryo, sans-serif"><rect
+  x="0" y="0" width="420" height="340" fill="#ffffff" stroke="none"/><line x1="46.00" y1="230.67" x2="204.67" y2="230.67" stroke="#000000" stroke-width="1.6"/><line x1="204.67" y1="230.67" x2="92.67" y2="109.33"
+  stroke="#000000" stroke-width="1.6"/><line x1="92.67" y1="109.33" x2="46.00" y2="230.67" stroke="#000000" stroke-width="1.6"/><line x1="260.67" y1="230.67" x2="374.00" y2="230.67" stroke="#000000" stroke-width="1.6"/><line
+  x1="374.00" y1="230.67" x2="294.00" y2="144.00" stroke="#000000" stroke-width="1.6"/><line x1="294.00" y1="144.00" x2="260.67" y2="230.67" stroke="#000000" stroke-width="1.6"/><text x="125.33" y="248.67"
+  font-size="13" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">28cm</text><text x="125.33" y="248.67" font-size="13" text-anchor="middle" fill="#000000">28cm</text><circle
+  cx="46.00" cy="230.67" r="3.2" fill="#000000"/><text x="33.64" y="243.16" font-size="14" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">J</text><text x="33.64"
+  y="243.16" font-size="14" text-anchor="middle" fill="#000000">J</text><circle cx="204.67" cy="230.67" r="3.2" fill="#000000"/><text x="218.41" y="240.68" font-size="14" text-anchor="middle" stroke="#ffffff"
+  stroke-width="3" stroke-linejoin="round" fill="#ffffff">K</text><text x="218.41" y="240.68" font-size="14" text-anchor="middle" fill="#000000">K</text><circle cx="92.67" cy="109.33" r="3.2" fill="#000000"/><text
+  x="89.85" y="98.60" font-size="14" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">L</text><text x="89.85" y="98.60" font-size="14" text-anchor="middle" fill="#000000">L</text><circle
+  cx="260.67" cy="230.67" r="3.2" fill="#000000"/><text x="248.30" y="243.16" font-size="14" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">U</text><text x="248.30"
+  y="243.16" font-size="14" text-anchor="middle" fill="#000000">U</text><circle cx="374.00" cy="230.67" r="3.2" fill="#000000"/><text x="387.74" y="240.68" font-size="14" text-anchor="middle" stroke="#ffffff"
+  stroke-width="3" stroke-linejoin="round" fill="#ffffff">V</text><text x="387.74" y="240.68" font-size="14" text-anchor="middle" fill="#000000">V</text><circle cx="294.00" cy="144.00" r="3.2" fill="#000000"/><text
+  x="291.18" y="133.27" font-size="14" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">W</text><text x="291.18" y="133.27" font-size="14" text-anchor="middle"
+  fill="#000000">W</text></svg>
