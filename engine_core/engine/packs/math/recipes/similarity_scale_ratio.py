@@ -57,7 +57,6 @@ def _draw_coprime_ratio(rng: Rng, domain: object, max_den: int) -> tuple[int, in
 _SIMILAR_AREA_RATIO_CONCEPTS = ["similarity.area_ratio"]
 
 
-@register_recipe("math.similar_area_ratio", provides_concepts=_SIMILAR_AREA_RATIO_CONCEPTS)
 def _similar_solids_svg(ratio_num: object, ratio_den: object) -> str:
     """相似な2つの立体を、相似比のとおりの大きさで並べた見取図。
 
@@ -75,6 +74,7 @@ def _similar_solids_svg(ratio_num: object, ratio_den: object) -> str:
     )
 
 
+@register_recipe("math.similar_area_ratio", provides_concepts=_SIMILAR_AREA_RATIO_CONCEPTS)
 def similar_area_ratio_recipe(ctx: CellContext, rng: Rng) -> MR:
     """相似比から面積比を求め、既知の面積から対応する面積を求める
 

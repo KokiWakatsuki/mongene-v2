@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: similar_solid_surface_volume_ratio
 problem_ref: 402ced844c52ca4f
-problem_text: 相似な2つの三角錐V, Xがあり、相似比は 1:2 である。VとXの表面積の比と体積の比をそれぞれ求めよ。
+problem_text: 下の図のように、相似な2つの三角錐V, Xがあり、相似比は 1:2 である。VとXの表面積の比と体積の比をそれぞれ求めよ。
 sub_questions:
 - answer:
     display: 表面積の比 1:4、体積の比 1:8
@@ -53,4 +53,9 @@ sub_questions:
     op: cube_ratio_for_volume
     result_display: '1:8'
     result_srepr: Tuple(Integer(1), Integer(4), Integer(1), Integer(8))
-visual_svg: null
+visual_svg: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 400" width="460" height="400" font-family="Hiragino Sans, Hiragino Kaku Gothic ProN, Noto Sans JP, Yu Gothic, Meiryo, sans-serif"><rect
+  x="0" y="0" width="460" height="400" fill="#ffffff" stroke="none"/><ellipse cx="148.00" cy="330.00" rx="78.00" ry="23.40" fill="none" stroke="#000000" stroke-width="1.2" stroke-dasharray="5 4"/><path
+  d="M 70.00 330.00 A 78.00 23.40 0 0 1 226.00 330.00" fill="none" stroke="#000000" stroke-width="1.2"/><line x1="70.00" y1="330.00" x2="148.00" y2="180.00" stroke="#000000" stroke-width="1.2"/><line x1="226.00"
+  y1="330.00" x2="148.00" y2="180.00" stroke="#000000" stroke-width="1.2"/><ellipse cx="311.00" cy="330.00" rx="39.00" ry="11.70" fill="none" stroke="#000000" stroke-width="1.2" stroke-dasharray="5 4"/><path
+  d="M 272.00 330.00 A 39.00 11.70 0 0 1 350.00 330.00" fill="none" stroke="#000000" stroke-width="1.2"/><line x1="272.00" y1="330.00" x2="311.00" y2="255.00" stroke="#000000" stroke-width="1.2"/><line
+  x1="350.00" y1="330.00" x2="311.00" y2="255.00" stroke="#000000" stroke-width="1.2"/></svg>
