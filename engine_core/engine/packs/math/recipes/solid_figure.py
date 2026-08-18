@@ -64,8 +64,11 @@ _SKETCH_KIND = {
 # `values` に "shape" が無いセル（形が mode で決まっているもの）の対応表。
 _SKETCH_KIND_BY_MODE = {
     "l53_sphere_direct": "sphere",
-    "l52_cylinder_volume_substitution": "cylinder",
     "l51_cone_central_angle": "cone",
+    # **l52_cylinder_volume_substitution は入れない。** これは calculation の
+    # セル（「公式 V=πr²h に代入して求めよ」）で、calculation の frame は
+    # visual: none。図を付けると G-Q2 が落ちる——実際に落として気づいた。
+    # 計算の練習に図は要らない、という M0 の判断はここでは妥当。
 }
 
 
