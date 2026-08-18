@@ -8701,8 +8701,17 @@ def test_pythagorean_find_value_construct(family, level, signature, asked):
     if mr.visual_plan is None:
         assert not mr.context_slots.get("figure_svg")
     else:
-        assert mr.context_slots["figure_svg"].startswith("<svg")
-        assert mr.visual_plan.labels
+        svg = mr.context_slots["figure_svg"]
+        assert svg.startswith("<svg")
+        # ★**「名前が1つ以上ある」を守ってはいけない。** 直方体の対角線や
+        # 正四面体の見取図のように、**文字が1つも無い図**がある（形だけを示す）。
+        # 守りたいのは「図に出る文字はすべて宣言されている」ことのほう。
+        import re as _re
+
+        texts = {t for t in _re.findall(r"<text[^>]*>([^<]*)</text>", svg) if t}
+        assert texts <= set(mr.visual_plan.labels), (
+            f"図の文字が visual_plan.labels に無い: {sorted(texts - set(mr.visual_plan.labels))}"
+        )
     assert set(mr.params) == {"scenario_kind", "numbers", "slots"}
     assert "answer" not in mr.params
 
