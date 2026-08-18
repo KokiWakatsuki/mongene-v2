@@ -316,6 +316,8 @@ _SKETCH_BY_KIND = {
     "cone": _cone_sketch,
     "sphere": _sphere_sketch,
     "square_pyramid": _pyramid_sketch,
+    # 底面が長方形の角錐も、角錐の描き手で描ける（底面の縦横が違うだけ）。
+    "rect_pyramid": _pyramid_sketch,
 }
 
 

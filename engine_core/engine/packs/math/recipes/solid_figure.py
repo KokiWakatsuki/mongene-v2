@@ -22,8 +22,11 @@ from engine.core.contracts import (
     Solution,
     SubQuestionMR,
     SymbolicAnswer,
+    VisualElement,
+    VisualPlan,
 )
 from engine.core.registry import REGISTRY, register_recipe
+from engine.packs.math.visuals.solid import render_solid_svg
 from engine.core.rng import Rng, draw
 from engine.packs.math.solvers.solid_figure import _fmt_pi, _fmt_plain
 
@@ -41,9 +44,57 @@ def _solve(mode: str, values: dict[str, object]) -> Solution:
     return cast(Solution, solver(mode, values))
 
 
+# 本文の shape 名 → 見取図の種類。**表になければ図を出さない**（合成した立体など、
+# 見取図を持たない場面がある）。寸法は「図の中に数値を書かない」——数値は本文にあり、
+# 図は形を示すためのもの（数値を図に書くと G-Q5v の宣言が形ごとに要る）。
+_SKETCH_KIND = {
+    "square_prism": "square_prism",
+    "rect_prism": "rectangular_prism",
+    "cube": "cube",
+    "cylinder": "cylinder",
+    "cone": "cone",
+    "sphere": "sphere",
+    "square_pyramid": "square_pyramid",
+    "rect_pyramid": "rect_pyramid",
+    # 三角柱・三角錐は見取図の描き手がまだ無い（底面が三角形の立体）。
+    # 表に載せない＝図を出さない。取りこぼしと区別するためにここに書き残す。
+}
+
+
+def _sketch_svg(values: dict[str, object]) -> str:
+    """★**立体の単元も図が1枚も無かった。** 「底面が1辺13cmの正方形、高さ6cmの
+    正四角錐の体積を求めよ」——実物の問題集はここに必ず見取図を添える。形が
+    見えていないと、どの面が底面でどこが高さなのかを頭の中で組み立てることになる。
+
+    描き手（visuals/solid.py の見取図）は既にあるので、寸法を画素に直して渡すだけ。
+    """
+    kind = _SKETCH_KIND.get(str(values.get("shape", "")))
+    if kind is None:
+        return ""
+    r = float(values.get("radius", 0) or 0)
+    edge = float(values.get("edge", 0) or 0)
+    w = float(values.get("width", 0) or edge or 2 * r or 1)
+    d = float(values.get("depth", 0) or edge or 2 * r or 1)
+    h = float(values.get("height", 0) or values.get("slant", 0) or w)
+    # 見取図の描き手は左下を基点に描くので、**画面いっぱいになる倍率**で渡す
+    # （小さい値で渡すと、広い白紙の隅に小さな立体が乗った図になる）。
+    scale = 210.0 / max(w, h, 1.0)
+    return render_solid_svg(
+        {
+            "view": "sketch", "solid_kind": kind,
+            "width_px": max(w * scale, 60.0),
+            "depth_px": max(d * scale * 0.45, 34.0),
+            "height_px": max(h * scale, 60.0),
+            "radius_px": max((r or w / 2) * scale, 34.0),
+        },
+        draw=True,
+    )
+
+
 def _make_mr(ctx: CellContext, recipe_name: str, mode: str, values: dict[str, object],
              statement: str, given_key: str, sol: Solution) -> MR:
     assert isinstance(sol.answer, SymbolicAnswer)
+    figure_svg = _sketch_svg(values)
     sub_question = SubQuestionMR(
         label="(1)", asked="value", answer=sol.answer, steps=sol.steps,
         concept_tags=_effective_concept_tags(ctx), cause_tags=_effective_cause_tags(ctx),
@@ -52,7 +103,17 @@ def _make_mr(ctx: CellContext, recipe_name: str, mode: str, values: dict[str, ob
         signature=ctx.spec_level.signature, family=ctx.family, level=ctx.level,
         purpose=ctx.purpose, seed=0,
         params={"mode": mode, **values},
-        given={given_key: statement}, sub_questions=[sub_question], visual_plan=None,
+        given={given_key: statement},
+        context_slots={"figure_svg": figure_svg} if figure_svg else {},
+        sub_questions=[sub_question],
+        visual_plan=(
+            VisualPlan(
+                style="figure", labels=[],
+                elements=[VisualElement(kind="solid_given", attrs={"role": "given"})],
+            )
+            if figure_svg
+            else None
+        ),
         provenance=Provenance(recipe=recipe_name),
     )
 
