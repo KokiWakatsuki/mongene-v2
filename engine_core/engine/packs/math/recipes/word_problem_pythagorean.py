@@ -79,8 +79,11 @@ from engine.core.contracts import (
     Step,
     SubQuestionMR,
     SymbolicAnswer,
+    VisualElement,
+    VisualPlan,
 )
 from engine.core.registry import REGISTRY, register_recipe
+from engine.packs.math.visuals.solid import render_solid_svg
 from engine.core.rng import Rng, draw
 from engine.core.verify.answer_size import answer_is_too_big, limits_for
 
@@ -183,6 +186,10 @@ class PythagoreanScene:
     # Solution の数と一致していなければならない（recipe が assert する）。
     ask_texts: tuple[str, ...]
     slots: dict[str, str]
+    # ★立体の場面は図が要る（形を思い浮かべないまま解くことになる）。場面ごとに
+    # 図を返せるようにして、MR の組み立て側で1か所だけ配線する。
+    figure_svg: str = ""
+    figure_labels: tuple[str, ...] = ()
 
 
 # ---------------------------------------------------------------------------
@@ -880,6 +887,16 @@ def _scene_exam_box_space_diagonal(p: Mapping[str, Any], rng: Rng) -> Pythagorea
     return PythagoreanScene(
         numbers={"edge_a": a, "edge_b": b, "height": h},
         scenario=statement, ask_texts=("",), slots={"solid": solid},
+        figure_svg=render_solid_svg(
+            {
+                "view": "sketch", "solid_kind": "rectangular_prism",
+                "width_px": 190.0, "depth_px": 70.0,
+                "height_px": max(60.0, 190.0 * h / max(b, 1)),
+                "vertices": list(solid.replace("-", "")),
+            },
+            draw=True,
+        ),
+        figure_labels=tuple(solid.replace("-", "")),
     )
 
 
@@ -973,6 +990,15 @@ def _scene_exam_cube_guided(p: Mapping[str, Any], rng: Rng) -> PythagoreanScene:
     return PythagoreanScene(
         numbers={"edge": edge}, scenario=scenario, ask_texts=ask_texts,
         slots={"solid": solid},
+        figure_svg=render_solid_svg(
+            {
+                "view": "sketch", "solid_kind": "cube",
+                "width_px": 165.0, "depth_px": 62.0, "height_px": 165.0,
+                "vertices": list(solid.replace("-", "")),
+            },
+            draw=True,
+        ),
+        figure_labels=tuple(solid.replace("-", "")),
     )
 
 
@@ -1009,6 +1035,10 @@ def _scene_exam_regular_tetrahedron(p: Mapping[str, Any], rng: Rng) -> Pythagore
     return PythagoreanScene(
         numbers={"edge": edge}, scenario=scenario, ask_texts=ask_texts,
         slots={"vertices": n, "foot": foot},
+        figure_svg=render_solid_svg(
+            {"view": "sketch", "solid_kind": "tetrahedron", "width_px": 190.0},
+            draw=True,
+        ),
     )
 
 
@@ -1101,9 +1131,20 @@ def word_problem_pythagorean(ctx: CellContext, rng: Rng) -> MR:
         # find_value の frame は given に "scenario" を許さない（語彙が condition 側）。
         # 場面文の中身は同じなので、どのキーに載せるかだけを family が決める。
         given={str(p.get("given_key", "scenario")): scene.scenario},
-        context_slots=context_slots,
+        context_slots=(
+            {**context_slots, "figure_svg": scene.figure_svg}
+            if scene.figure_svg
+            else context_slots
+        ),
         sub_questions=sub_questions,
-        visual_plan=None,
+        visual_plan=(
+            VisualPlan(
+                style="figure", labels=list(scene.figure_labels),
+                elements=[VisualElement(kind="solid_given", attrs={"role": "given"})],
+            )
+            if scene.figure_svg
+            else None
+        ),
         provenance=Provenance(recipe=RECIPE_NAME),
     )
 

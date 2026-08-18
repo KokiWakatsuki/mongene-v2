@@ -54,8 +54,8 @@ levels:
       **名前が違うだけの問題は別の問題ではない**。増やすには題材そのものを追加する。
     given: [scenario]
     asked: [value]
-    visual: none
-    text: {tier: T1, template: wp_guided_three_v1}
+    visual: required
+    text: {tier: T1, template: wp_guided_three_v1, visual_builder: math.geometry_construction}
     hints: [steps_prefix]
     concept_tags: [exam.cube_guided_diagonal_area_path]
     cause_tags: []
@@ -77,8 +77,8 @@ levels:
       **名前が違うだけの問題は別の問題ではない**。増やすには題材そのものを追加する。
     given: [scenario]
     asked: [value]
-    visual: none
-    text: {tier: T1, template: wp_linear_solo_v1}
+    visual: required
+    text: {tier: T1, template: wp_linear_solo_v1, visual_builder: math.geometry_construction}
     hints: [steps_prefix]
     concept_tags: [exam.regular_tetrahedron_height_volume]
     cause_tags: []
