@@ -48,8 +48,8 @@ levels:
       ならない（傾き8で 65）。g3_l37.find_value.Lv3 と同じ理由。
     given: [condition]
     asked: [area]
-    visual: none
-    text: {tier: T1, template: lf_quadratic_intersection_v1}
+    visual: required
+    text: {tier: T1, template: lf_quadratic_intersection_v1, visual_builder: math.curve_graph}
     hints: [steps_prefix]
     concept_tags: [quadratic_function.intersection_with_line]
     cause_tags: []

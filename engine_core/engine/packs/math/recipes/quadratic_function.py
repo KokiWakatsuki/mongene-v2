@@ -10,9 +10,19 @@ from typing import cast
 
 import sympy
 
-from engine.core.contracts import MR, CellContext, Provenance, Solution, SubQuestionMR, SymbolicAnswer
+from engine.core.contracts import (
+    MR,
+    CellContext,
+    Provenance,
+    Solution,
+    SubQuestionMR,
+    SymbolicAnswer,
+    VisualElement,
+    VisualPlan,
+)
 from engine.core.registry import REGISTRY, register_recipe
 from engine.core.rng import Rng, draw, draw_many
+from engine.packs.math.visuals.graph import tick_labels_from_params
 from engine.packs.math.recipes.letter_expr import _draw_named_figures
 from engine.packs.math.recipes.polynomial import _domain_candidates, _fmt_poly_x_terms
 from engine.packs.math.solvers.quadratic_function import _shoelace_area
@@ -218,6 +228,24 @@ _INTERSECTION_ASKED_BY_MODE: dict[str, str] = {
 }
 
 
+def _parabola_line_pts(a: object, m: object, b: object) -> list[str]:
+    """放物線 y=ax² と直線 y=mx+b の交点・原点が収まる点の並び（描画範囲用）。
+
+    交点は ax² = mx + b の解。図は**与えられた式のとおり**に描くので、
+    本文と図が食い違わない。
+    """
+    xs = sympy.solve(
+        sympy.Eq(sympy.sympify(a) * sympy.Symbol("x") ** 2,
+                 sympy.sympify(m) * sympy.Symbol("x") + sympy.sympify(b)),
+        sympy.Symbol("x"),
+    )
+    pts = [str((0, 0)), str((0, int(sympy.sympify(b))))]
+    for x in xs:
+        xi = int(x)
+        pts.append(str((xi, int(sympy.sympify(a)) * xi * xi)))
+    return pts
+
+
 @register_recipe("math.intersection_parabola_line", provides_concepts=_INTERSECTION_CONCEPTS)
 def intersection_parabola_line_recipe(ctx: CellContext, rng: Rng) -> MR:
     """放物線と直線の交点・線分長・面積・逆算を求める（g3_l37.find_value・answer-first）。"""
@@ -256,8 +284,26 @@ def intersection_parabola_line_recipe(ctx: CellContext, rng: Rng) -> MR:
     return MR(
         signature=ctx.spec_level.signature, family=ctx.family, level=ctx.level,
         purpose=ctx.purpose, seed=0,
-        params={"a": a, "m": m, "b": b, "mode": mode},
-        given={"condition": condition}, sub_questions=[sub_question], visual_plan=None,
+        params={
+            "a": a, "m": m, "b": b, "mode": mode,
+            # 図のための描画情報。交点の x 座標は本文の式から決まるので、
+            # 放物線と直線の両方が収まる範囲を取れる。
+            "curve_kind": "parabola", "coeff": str(a), "line": [str(m), str(b)],
+            "pts": _parabola_line_pts(a, m, b),
+        },
+        given={"condition": condition},
+        sub_questions=[sub_question],
+        visual_plan=VisualPlan(
+            style="grid",
+            labels=tick_labels_from_params(
+                {"pts": _parabola_line_pts(a, m, b)}
+            ),
+            elements=[
+                VisualElement(kind="grid", attrs={}),
+                VisualElement(kind="axis", attrs={}),
+                VisualElement(kind="curve", attrs={}),
+            ],
+        ),
         provenance=Provenance(recipe="math.intersection_parabola_line"),
     )
 

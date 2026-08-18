@@ -867,8 +867,15 @@ def _draw_curve_from_plan(mr: "MR") -> bool:
 
 
 def render_curve_graph(mr: "MR", ctx: "CellContext") -> str:
-    """登録 visual（問題図）。visual_plan の curve 要素の有無で曲線描画を切替える。"""
-    return render_curve_svg(mr.params, draw_curve=_draw_curve_from_plan(mr))
+    """登録 visual（問題図）。visual_plan の curve 要素の有無で曲線描画を切替える。
+
+    `params["line"]` があれば直線も重ねる（入試の「放物線と直線が2点で交わる」）。
+    """
+    ln = mr.params.get("line")
+    return render_curve_svg(
+        mr.params, draw_curve=_draw_curve_from_plan(mr),
+        line=(ln[0], ln[1]) if ln else None,
+    )
 
 
 def render_curve_solution_svg(params: dict[str, Any]) -> str:
