@@ -549,7 +549,11 @@ def exam_linear_guided_triangle_recipe(ctx: CellContext, rng: Rng) -> MR:
         # word_problem の不変条件: 本文に出ている数だけを numbers に置く
         # （傾き ±1 を候補から外してあるのは、"y=x+3" だと 1 が本文に現れないため）。
         params={"numbers": {"m1": m1, "b1": b1, "m2": m2, "b2": b2},
-                "labels": la + lb + lc},
+                "labels": la + lb + lc,
+                # 図のための描画情報（本文に出る数だけ・答えの点は入れない）。
+                "a": str(m1), "b": str(b1), "extra_lines": [[str(m2), str(b2)]],
+                "pts": [str((0, b1)), str((0, b2)), str((0, 0)),
+                        str((int(-b1 // m1), 0)), str((int(-b2 // m2), 0))]},
         given={"scenario": scenario},
         context_slots={
             "ask_1": f"点{la}の座標を求めよ。",
@@ -561,9 +565,33 @@ def exam_linear_guided_triangle_recipe(ctx: CellContext, rng: Rng) -> MR:
             _exam_l1_sub(ctx, label="(2)", asked="value", sol=int_sol),
             _exam_l1_sub(ctx, label="(3)", asked="value", sol=area_sol),
         ],
-        visual_plan=None,
+        visual_plan=VisualPlan(
+            style="grid", labels=tick_labels_from_params(_grid_params(m1, b1, m2, b2)),
+            elements=[
+                VisualElement(kind="grid", attrs={}),
+                VisualElement(kind="axis", attrs={}),
+                VisualElement(kind="line", attrs={}),
+            ],
+        ),
         provenance=Provenance(recipe="math.exam_linear_guided_triangle"),
     )
+
+
+def _grid_params(
+    m1: object, b1: object, m2: object = None, b2: object = None
+) -> dict[str, object]:
+    """入試の座標セルの描画情報（直線1〜2本と、切片・原点が収まる範囲）。
+
+    ★**答えの点は入れない。** 「面積が k 倍になる点 G を求めよ」の G を描いたら、
+    答えを図に書いたことになる。描くのは本文が与えている直線と交点まで。
+    """
+    pts = [str((0, int(b1))), str((0, 0)), str((int(-int(b1) // int(m1)), 0))]
+    out: dict[str, object] = {"a": str(m1), "b": str(b1)}
+    if m2 is not None and b2 is not None:
+        pts += [str((0, int(b2))), str((int(-int(b2) // int(m2)), 0))]
+        out["extra_lines"] = [[str(m2), str(b2)]]
+    out["pts"] = pts
+    return out
 
 
 @register_recipe(
@@ -610,7 +638,8 @@ def exam_linear_area_multiple_point_recipe(ctx: CellContext, rng: Rng) -> MR:
         signature=ctx.spec_level.signature, family=ctx.family, level=ctx.level,
         purpose=ctx.purpose, seed=0,
         params={"numbers": {"slope": m, "intercept": b, "multiple": k},
-                "labels": la + lb + lc},
+                "labels": la + lb + lc,
+                **_grid_params(m, b)},
         given={"scenario": scenario},
         context_slots={
             "ask_value": (
@@ -620,6 +649,14 @@ def exam_linear_area_multiple_point_recipe(ctx: CellContext, rng: Rng) -> MR:
             )
         },
         sub_questions=[_exam_l1_sub(ctx, label="(1)", asked="value", sol=sol)],
-        visual_plan=None,
+        # **点Gは描かない**（それが答え）。与えられた直線と2つの交点までを描く。
+        visual_plan=VisualPlan(
+            style="grid", labels=tick_labels_from_params(_grid_params(m, b)),
+            elements=[
+                VisualElement(kind="grid", attrs={}),
+                VisualElement(kind="axis", attrs={}),
+                VisualElement(kind="line", attrs={}),
+            ],
+        ),
         provenance=Provenance(recipe="math.exam_linear_area_multiple_point"),
     )

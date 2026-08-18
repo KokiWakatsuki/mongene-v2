@@ -32,6 +32,9 @@ source_desc: |
 
   【漏洩の封じ方】答えの値が本文の数値や "cm²" 由来の 2 と一致する組は構成の段階で
   外す（`_no_leak`）。G-Q5t の whitelist は given 由来。
+  【Lv4 に図を付けない理由（2026-08-18）】直線 y=ax+b の a を求めるセルなので、
+  直線を描くと傾き＝答えが図に出てしまう。空の方眼だけを出しても意味がないので
+  図なしのままにする。Lv3（2直線の交点と面積）には図を付けた。
 concepts_default: [exam.linear_intersection_triangle_area]
 levels:
   "3":
