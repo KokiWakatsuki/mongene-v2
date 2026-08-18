@@ -22,8 +22,11 @@ from engine.core.contracts import (
     Step,
     SubQuestionMR,
     SymbolicAnswer,
+    VisualElement,
+    VisualPlan,
 )
 from engine.core.registry import REGISTRY, register_recipe
+from engine.packs.math.visuals.similarity_figure import triangle_with_parallel_svg
 from engine.core.rng import Rng, draw
 from engine.packs.math.recipes.letter_expr import _draw_named_figures
 
@@ -443,6 +446,8 @@ def _exam_l6_mr(
     given: dict[str, str],
     ask_texts: tuple[str, ...],
     slots: dict[str, str] | None = None,
+    figure_svg: str = "",
+    figure_labels: list[str] | None = None,
 ) -> MR:
     """exam_l6 の4セル共通の MR 組み立て（小問数が level_sep の骨）。"""
     solutions = EXAM_L6_SOLVERS[kind](numbers)
@@ -468,8 +473,20 @@ def _exam_l6_mr(
         # 答えは params に入れない（checker が場面の数値だけから解き直せるようにする）。
         params={"kind": kind, "numbers": {k: str(v) for k, v in numbers.items()},
                 "slots": dict(slots or {})},
-        given=given, context_slots=context_slots, sub_questions=sub_questions,
-        visual_plan=None, provenance=Provenance(recipe=ctx.spec_level.recipe),
+        given=given,
+        context_slots=(
+            {**context_slots, "figure_svg": figure_svg} if figure_svg else context_slots
+        ),
+        sub_questions=sub_questions,
+        visual_plan=(
+            VisualPlan(
+                style="figure", labels=list(figure_labels or []),
+                elements=[VisualElement(kind="triangle", attrs={"role": "given"})],
+            )
+            if figure_svg
+            else None
+        ),
+        provenance=Provenance(recipe=ctx.spec_level.recipe),
     )
 
 
@@ -538,8 +555,13 @@ def exam_parallel_line_area_guided_recipe(ctx: CellContext, rng: Rng) -> MR:
     # 四角形DBCEの面積が整数になるよう、三角形ADEの面積を AD² の倍数として構成する。
     area_ade = int(draw(p["scale_domain"], rng)) * ad**2
     statement = (
-        f"三角形ABCで、辺AB上に点D、辺AC上に点Eをとり、DEとBCが平行になるようにする。"
-        f"AD:DB={ad}:{db}であり、三角形ADEの面積は{area_ade}cm²である。"
+        f"下の図の三角形ABCで、辺AB上に点D、辺AC上に点Eをとり、DEとBCが平行になるように"
+        f"する。AD:DB={ad}:{db}であり、三角形ADEの面積は{area_ade}cm²である。"
+    )
+    # 内分の比は与えられた比のとおりに取るので、図と本文が食い違わない。
+    figure_svg = triangle_with_parallel_svg(
+        "A", "B", "C", "D", "E", ad / (ad + db),
+        side_labels=[("A", "D", str(ad)), ("D", "B", str(db))],
     )
     ask_texts = (
         "三角形ADEと三角形ABCの相似比を、最も簡単な整数の比で求めよ。",
@@ -550,6 +572,8 @@ def exam_parallel_line_area_guided_recipe(ctx: CellContext, rng: Rng) -> MR:
         ctx, kind="parallel_line_area_guided",
         numbers={"ad": ad, "db": db, "area_ade": area_ade},
         given={"scenario": statement}, ask_texts=ask_texts,
+        figure_svg=figure_svg,
+        figure_labels=[str(ad), str(db), "A", "B", "C", "D", "E"],
     )
 
 

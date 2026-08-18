@@ -25,6 +25,7 @@ from engine.core.contracts import (
     VisualPlan,
 )
 from engine.core.registry import REGISTRY, register_recipe
+from engine.packs.math.visuals.quadrilateral_figure import moving_point_square_svg
 from engine.core.rng import Rng, draw
 from engine.packs.math.recipes.letter_expr import _draw_named_figures
 from engine.packs.math.visuals.graph import (
@@ -943,6 +944,19 @@ def _quantity_grid_steps(s: int, v: int) -> tuple[int, int]:
     return int(spec.x_step), int(spec.y_step)
 
 
+def _moving_point_plan(labels_txt: str, side: object) -> tuple[str, "VisualPlan"]:
+    """動点の正方形の図と visual_plan（labels は5文字＝正方形4頂点＋動点）。
+
+    ★**「A→B→C→D の順に動く」は、どの向きに回るのかを図で示さないと読み違える。**
+    """
+    quad, pt = labels_txt[:4], labels_txt[4]
+    svg = moving_point_square_svg(quad, quad[0], pt, f"{side}cm")
+    return svg, VisualPlan(
+        style="figure", labels=[f"{side}cm", *quad, pt],
+        elements=[VisualElement(kind="quadrilateral", attrs={"role": "given"})],
+    )
+
+
 @register_recipe(
     "math.exam_interval_area_and_value", provides_concepts=_EXAM_L3_INTERVAL_CONCEPTS
 )
@@ -1005,8 +1019,9 @@ def exam_interval_area_and_value_recipe(ctx: CellContext, rng: Rng) -> MR:
             "labels": la + lb + lc + ld + lp,
         },
         given={"condition": condition},
+        context_slots={"figure_svg": _moving_point_plan(la + lb + lc + ld + lp, s)[0]},
         sub_questions=[_wp_sub(ctx, label="(1)", asked="value", sol=sol)],
-        visual_plan=None,
+        visual_plan=_moving_point_plan(la + lb + lc + ld + lp, s)[1],
         provenance=Provenance(recipe="math.exam_interval_area_and_value"),
     )
 
@@ -1043,8 +1058,9 @@ def exam_area_all_times_recipe(ctx: CellContext, rng: Rng) -> MR:
         seed=0,
         params={"numbers": _wp_numbers(s, v, area), "labels": labels_txt},
         given={"condition": condition},
+        context_slots={"figure_svg": _moving_point_plan(labels_txt, s)[0]},
         sub_questions=[_wp_sub(ctx, label="(1)", asked="value", sol=sol)],
-        visual_plan=None,
+        visual_plan=_moving_point_plan(labels_txt, s)[1],
         provenance=Provenance(recipe="math.exam_area_all_times"),
     )
 
@@ -1177,13 +1193,14 @@ def exam_word_problem_three_intervals_recipe(ctx: CellContext, rng: Rng) -> MR:
             "ask_1": f"点{lp}が辺{la}{lb}上にあるとき、yをxの式で表せ。",
             "ask_2": f"点{lp}が辺{lb}{lc}上にあるとき、yをxの式で表せ。",
             "ask_3": f"y={area}となる x の値をすべて求めよ。",
+            "figure_svg": _moving_point_plan(labels_txt, s)[0],
         },
         sub_questions=[
             _wp_sub(ctx, label="(1)", asked="formulation", sol=first),
             _wp_sub(ctx, label="(2)", asked="formulation", sol=flat),
             _wp_sub(ctx, label="(3)", asked="value", sol=times),
         ],
-        visual_plan=None,
+        visual_plan=_moving_point_plan(labels_txt, s)[1],
         provenance=Provenance(recipe="math.exam_word_problem_three_intervals"),
     )
 
@@ -1248,10 +1265,11 @@ def exam_word_problem_quarter_area_recipe(ctx: CellContext, rng: Rng) -> MR:
             "ask_value": (
                 f"三角形{la}{lp}{ld}の面積が正方形{la}{lb}{lc}{ld}の面積の4分の1に"
                 "なるときの x の値をすべて求めよ。"
-            )
+            ),
+            "figure_svg": _moving_point_plan(labels_txt, s)[0],
         },
         sub_questions=[_wp_sub(ctx, label="(1)", asked="value", sol=sol)],
-        visual_plan=None,
+        visual_plan=_moving_point_plan(labels_txt, s)[1],
         provenance=Provenance(recipe="math.exam_word_problem_quarter_area"),
     )
 

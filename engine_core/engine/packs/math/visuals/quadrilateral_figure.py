@@ -204,10 +204,35 @@ def plain_triangle_svg(names: str, side_labels: list[tuple[str, str, str]] = ())
     return render_construction_svg(params)
 
 
+def moving_point_square_svg(
+    names: str, start: str, point: str, side_label: str
+) -> str:
+    """正方形の周上を動く点の図（exam_l3・g2_l29 などの動点）。
+
+    ★**「A→B→C→D の順に動く」は、どの向きに回るのかを図で示さないと読み違える。**
+    出発点に動く点を置き、進む向きを次の頂点への矢印で示す。動点の**現在位置は
+    描かない**（時刻 x によって変わるものなので、1か所に置くと嘘になる）。
+    """
+    a, b, c, d = names
+    coords = {a: (0.0, 3.4), b: (3.4, 3.4), c: (3.4, 0.0), d: (0.0, 0.0)}
+    # 出発点のそばに動く点の名前を出す（頂点そのものではなく少し内側）。
+    sx, sy = coords[start]
+    ox, oy = coords[b if start == a else a]
+    coords[point] = (sx + (ox - sx) * 0.22, sy + (oy - sy) * 0.22)
+    params: dict[str, Any] = {
+        "coords": coords,
+        "segments": [(a, b), (b, c), (c, d), (d, a)],
+        "equal_groups": [[(a, b), (b, c), (c, d), (d, a)]],
+        "segment_labels": [[a, b, side_label]] if side_label else [],
+    }
+    return render_construction_svg(params)
+
+
 __all__ = [
     "congruent_triangles_svg",
     "equal_area_transform_svg",
     "equilateral_svg",
+    "moving_point_square_svg",
     "parallelogram_svg",
     "plain_triangle_svg",
     "quadrilateral_with_diagonals_svg",

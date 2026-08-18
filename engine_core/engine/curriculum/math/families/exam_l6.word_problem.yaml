@@ -57,8 +57,8 @@ levels:
       scale_domain: {int_range: [1, 20]}
     given: [scenario]
     asked: [value]
-    visual: none
-    text: {tier: T1, template: wp_guided_three_v1}
+    visual: required
+    text: {tier: T1, template: wp_guided_three_v1, visual_builder: math.geometry_construction}
     hints: [steps_prefix]
     concept_tags: [exam.parallel_line_similar_area_guided]
     cause_tags: []
