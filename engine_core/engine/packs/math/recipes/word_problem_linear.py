@@ -55,6 +55,11 @@ from engine.core.contracts import (
 )
 from engine.core.registry import REGISTRY, register_recipe
 from engine.core.rng import Rng, draw, draw_many
+from engine.packs.math.recipes.scene_vocab import (
+    VocabStep,
+    draw_vocab,
+    split_pair,
+)
 
 RECIPE_NAME = "math.word_problem_linear_equation"
 
@@ -266,59 +271,23 @@ class LinearScene:
     prelude_step: tuple[str, str, str] | None = None
 
 
-def _split_pair(token: str) -> tuple[str, str]:
-    """"ノート|冊" → ("ノート", "冊")。"""
-    left, _, right = str(token).partition("|")
-    return left, right
 
 
-def _draw_priced_item(candidates: list[Any], rng: Rng) -> tuple[str, str, int]:
-    """`品名|助数詞|下限|上限` から (品名, 助数詞, 値段) を引く。
-
-    値段を品物と無関係に引くと「1本277円の鉛筆」「1本39円の輪ゴム」が出る。
-    実物の問題集の値段は 10円刻みで、しかも品物の相場に収まっている。
-
-    **品物→値段の2段で引かず、(品物,値段) の組を平らにして1回で引く。**
-    2段だと相場の狭い品物（シール 10〜100 の10通り）が、広い品物（りんご
-    100〜300 の21通り）と同じ確率で選ばれ、組の分布が偏って dup_rate が跳ねる。
-    """
-    pairs: list[tuple[str, str, int]] = []
-    for tok in candidates:
-        name, counter, lo, hi = str(tok).split("|")
-        pairs.extend((name, counter, price) for price in range(int(lo), int(hi) + 1, 10))
-    idx = int(draw({"int_range": [0, len(pairs) - 1]}, rng))
-    return pairs[idx]
 
 
-def _draw_pair_token(candidates: list[Any], rng: Rng) -> tuple[str, str]:
-    """カタログから1つ引いて `名前|助数詞` を割る。
-
-    この module では `draw_vocab` の `"one"` が同じことをする。**他の recipe
-    （word_problem_relation・word_problem_expression）がまだ層に割れていないので、
-    そちらのために残してある。** 割り終えたら消す。
-    """
-    return _split_pair(str(draw(list(candidates), rng)))
 
 
-def _draw_distinct(candidates: list[Any], rng: Rng, k: int) -> list[Any]:
-    """候補配列から相異な k 個（文字列はドメイン記法外なので添字で引く）。"""
-    idxs = draw_many({"int_range": [0, len(candidates) - 1], "distinct": ["value"]}, rng, k=k)
-    return [candidates[int(i)] for i in idxs]
+
+
+
+
 
 
 # ---------------------------------------------------------------------------
 # 語彙の抽選（宣言だけ。日本語はここに書かない）
 # ---------------------------------------------------------------------------
-# 1手 = (引き方, カタログの鍵, 入れる名前の並び)。カタログの値は `名前|助数詞` の形で
-# 詰めてあるので、`|` で割った順に名前へ入る（`_split_pair` と同じ規約）。
-#
-#   "one"       カタログから1つ引いて `|` で割る
-#   "distinct2" 相異な2つを引いて、それぞれ `|` で割って順に並べる
-#
-# ★手の並びは**元のコードが引いていた順のまま**にする（RNG の消費順）。
-_VocabStep = tuple[str, str, tuple[str, ...]]
 
-_SCENE_VOCAB: dict[str, tuple[_VocabStep, ...]] = {
+_SCENE_VOCAB: dict[str, tuple[VocabStep, ...]] = {
     "price_count": (
         ("distinct2", "item_candidates", ("item_a", "counter_a", "item_b", "counter_b")),
     ),
@@ -348,23 +317,7 @@ _SCENE_VOCAB: dict[str, tuple[_VocabStep, ...]] = {
 }
 
 
-def draw_vocab(steps: Sequence[_VocabStep], p: Mapping[str, Any], rng: Rng) -> dict[str, str]:
-    """宣言どおりに語彙を引く。**場面を足すときはここに1行足すだけ。**"""
-    out: dict[str, str] = {}
-    for how, catalog, names in steps:
-        if how == "one":
-            parts = str(draw(list(p[catalog]), rng)).split("|")
-        elif how == "distinct2":
-            parts = [
-                piece
-                for tok in _draw_distinct(list(p[catalog]), rng, 2)
-                for piece in str(tok).split("|")
-            ]
-        else:  # pragma: no cover - 宣言の誤りは構成時に落とす
-            raise ValueError(f"未知の語彙の引き方: {how}")
-        for name, value in zip(names, parts, strict=False):
-            out[name] = value
-    return out
+
 
 
 # ---------------------------------------------------------------------------
@@ -1068,7 +1021,7 @@ def _draw_round_trip_average_scene(
     # **場所に対して道のりがありうる組だけにする。**
     # 前は「家から公園まで片道45km」「駅から港まで片道180km・往復15時間」が出ていた。
     # 場所によって「ありうる距離」が違うので、場所を先に引いてから組を絞る。
-    start, goal = _split_pair(str(draw(list(p["place_candidates"]), rng)))
+    start, goal = split_pair(str(draw(list(p["place_candidates"]), rng)))
     near = {"家|駅", "学校|図書館", "家|公園", "学校|体育館", "家|市役所",
             "家|スーパー", "学校|駅", "家|図書館", "家|コンビニ", "学校|公園"}
     far = {"キャンプ場|山頂", "宿|展望台", "町|となり町", "駅|空港",

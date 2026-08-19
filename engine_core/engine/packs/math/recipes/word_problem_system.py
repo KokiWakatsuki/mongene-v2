@@ -8,10 +8,11 @@ module。数学そのものは既存 solver `math.intersection_of_two_lines` に
 
 `word_problem_linear.py` と同じ償却。params の `scenario_kind` が
 
-  1. 場面の数値を answer-first で引く関数（`_SCENE_DRAWERS`）
+  1. 数を answer-first で引く関数（`RELATION_DRAWERS`）
   2. その数値から連立を組む関数（`FORMULATION_BUILDERS`）
+  3. 引かれた数と語彙から日本語を組む関数（`SCENE_RENDERERS`）
 
-の対を選ぶ。賄うのは g2_l17（速さ）・g2_l18（割合）の Lv2/Lv3/Lv4 の6セル。
+の組を選ぶ。3つは互いを知らない（`draw_scene` が順に呼ぶ）。賄うのは g2_l17（速さ）・g2_l18（割合）の Lv2/Lv3/Lv4 の6セル。
 
 ## g2_l16 の `math.word_problem_price_count` を置き換えない理由
 
@@ -59,7 +60,12 @@ from engine.core.contracts import (
 )
 from engine.core.registry import REGISTRY, register_recipe
 from engine.core.rng import Rng, draw, draw_many
-from engine.packs.math.recipes.word_problem_linear import _split_pair
+from engine.packs.math.recipes.scene_vocab import (
+    VocabStep,
+    draw_index,
+    draw_vocab,
+    split_pair,
+)
 
 RECIPE_NAME = "math.word_problem_system_equations"
 
@@ -276,17 +282,37 @@ FORMULATION_BUILDERS: dict[str, Callable[..., SystemFormulation]] = {
 
 
 # ---------------------------------------------------------------------------
-# 場面の抽選（answer-first。解 (x0, y0) を先に決め、場面の数値を逆算する）
+# 3層に割る（Relation / 語彙の抽選 / Scene）
+#
+# 割り方と理由は word_problem_linear.py の同じ節に書いてある（charter §3）。
+#
+#   Relation  数の引き方・非退化条件・答えの取り出し方（`answer_map`）
+#             日本語を出力に流さない
+#   語彙の抽選 どのカタログからどう引くかの宣言だけ（`scene_vocab.draw_vocab`）
+#   Scene     引かれた数と語彙から日本語を組む。`rng` を受け取らない
+#
+# ## ★この module には引く順番の例外が1つある
+# `price_count_diff` だけは**語彙を先に引いている**（品物の対 → 単価 → 個数 → 差）。
+# 他の6つは「数 → 語彙」。同じ seed から同じ問題が出ることは golden が固定している
+# ので、例外はそのまま残す（`_VOCAB_FIRST`）。新しい場面は「数 → 語彙」で書く。
 # ---------------------------------------------------------------------------
 @dataclass(frozen=True)
-class SystemScene:
-    """場面文と、そこから立式に渡す数値。
+class SystemRelation:
+    """関係（数だけ）。**日本語を持たない。**
 
     `numbers` は `FORMULATION_BUILDERS[kind]` のキーワード引数そのもの（params に
-    そのまま載り、checker が同じ関数へ渡す）。
+    そのまま載り、checker が同じ関数へ渡す）。`answer_map` は「求める量 =
+    m·x + n·y + c」を2つ分で、これも数だけで決まる。
     """
 
     numbers: dict[str, int]
+    answer_map: tuple[tuple[int, int, int], tuple[int, int, int]]
+
+
+@dataclass(frozen=True)
+class SystemScene:
+    """場面（日本語だけ）。数は引かず、引かれた数と語彙を受け取って文を組む。"""
+
     scenario: str
     # 誘導ありのときだけ本文に出す変数の設定（誘導なしは空文字）。
     quantities: str
@@ -296,57 +322,61 @@ class SystemScene:
     ask_value: str
     # 2つの式それぞれの着眼点（narration に使う＝値を含めない）。
     relation_labels: tuple[str, str]
-    # 「求める量 = m·x + n·y + c」を2つ分。恒等なら IDENTITY_ANSWER_MAP。
-    answer_map: tuple[tuple[int, int, int], tuple[int, int, int]]
     answer_labels: tuple[str, str]
     answer_units: tuple[str, str]
     slots: dict[str, str]
 
 
-def _draw_index(candidates: Sequence[Any], rng: Rng) -> Any:
-    return candidates[int(draw({"int_range": [0, len(candidates) - 1]}, rng))]
+# ---------------------------------------------------------------------------
+# 語彙の抽選（宣言だけ。日本語はここに書かない）
+# ---------------------------------------------------------------------------
+_SCENE_VOCAB: dict[str, tuple[VocabStep, ...]] = {
+    "price_count_diff": (
+        ("index", "item_pair_candidates", ("item_a", "counter_a", "item_b", "counter_b")),
+    ),
+    "distance_time": (
+        ("index", "place_triple_candidates", ("place_a", "place_b", "place_c")),
+    ),
+    "time_split": (
+        ("index", "place_candidates", ("start", "goal")),
+    ),
+    "lap_meet_catch_up": (
+        ("index", "person_pair_candidates", ("name_fast", "name_slow")),
+    ),
+    # 割合の3場面は語彙を引かない（登場するのは生徒数・食塩水・容器 A/B だけ）。
+    "percent_change": (),
+    "salt_mixture": (),
+    "two_containers": (),
+}
+
+# ★語彙を先に引く場面（割る前のコードの順番をそのまま残すためだけの宣言）。
+_VOCAB_FIRST = frozenset({"price_count_diff"})
 
 
-def _scene_price_count_diff(p: Mapping[str, Any], rng: Rng) -> SystemScene:
+# ---------------------------------------------------------------------------
+# Relation（数だけ。日本語を1文字も持たない）
+# ---------------------------------------------------------------------------
+def _relation_price_count_diff(p: Mapping[str, Any], rng: Rng) -> SystemRelation:
     """g2_l16 Lv3: 個数と代金（合計個数は与えず「一方が d 個多い」で与える・誘導なし）。
 
     answer-first: 少ないほうの個数 a と差 d を先に引き、多いほうを a+d、合計代金を
     逆算する（端数の出ない綺麗な設定になる）。単価は相異に引く（同じでも det は
     0 にならないが、「2種類の品物」の場面として不自然なため）。
     """
-    item_a, counter_a, item_b, counter_b = str(
-        _draw_index(list(p["item_pair_candidates"]), rng)
-    ).split("|")
     price_a, price_b = (
         int(v) for v in draw_many(p["price_domain"], rng, k=2)
     )
     count_a = int(draw(p["count_domain"], rng))
     diff = int(draw(p["diff_domain"], rng))
     total = price_a * count_a + price_b * (count_a + diff)
-    return SystemScene(
+    return SystemRelation(
         numbers={
             "price_a": price_a,
             "price_b": price_b,
             "diff": diff,
             "total": total,
         },
-        scenario=(
-            f"{item_a}を何{counter_a}かと{item_b}を何{counter_b}か買った。"
-            f"{item_a}1{counter_a}は{price_a}円、{item_b}1{counter_b}は{price_b}円で、"
-            f"買った数は{item_a}より{item_b}のほうが{diff}{counter_b}多く、"
-            f"代金の合計は{total}円だった。"
-        ),
-        quantities="",
-        variables_narration=(
-            f"{item_a}の数を x {counter_a}、{item_b}の数を y {counter_b}とおく。"
-        ),
-        ask_formulation="",
-        ask_value=f"{item_a}と{item_b}を買った数をそれぞれ求めよ。",
-        relation_labels=("買った数の関係", "代金の合計の関係"),
         answer_map=IDENTITY_ANSWER_MAP,
-        answer_labels=(f"{item_a}は", f"{item_b}は"),
-        answer_units=(counter_a, counter_b),
-        slots={"item_a": item_a, "item_b": item_b},
     )
 
 
@@ -375,43 +405,30 @@ def _distance_time_candidates(p: Mapping[str, Any]) -> list[tuple[int, int, int,
     return out
 
 
-def _scene_distance_time(p: Mapping[str, Any], rng: Rng) -> SystemScene:
-    """g2_l17 Lv2: 歩いた区間と走った区間。文字は道のり（時間の式が分数係数）。"""
+def _relation_distance_time(p: Mapping[str, Any], rng: Rng) -> SystemRelation:
+    """g2_l17 Lv2: 歩いた区間と走った区間。文字は道のり（時間の式が分数係数）。
+
+    区間ごとの道のりは場面文に出す（`dist_walk` / `dist_bike`）ので、合計と一緒に
+    numbers へ入れる——場面は数を引かないので、必要な数はここで全部そろえる。
+    """
     cands = _distance_time_candidates(p)
     speed_walk, speed_bike, hours_walk, hours_bike = cands[
         int(draw({"int_range": [0, len(cands) - 1]}, rng))
     ]
-    place_a, place_b, place_c = str(
-        _draw_index(list(p["place_triple_candidates"]), rng)
-    ).split("|")
     dist_walk = speed_walk * hours_walk
     dist_bike = speed_bike * hours_bike
-    return SystemScene(
+    return SystemRelation(
         numbers={
             "speed_walk": speed_walk,
             "speed_bike": speed_bike,
             "distance": dist_walk + dist_bike,
             "total_time": hours_walk + hours_bike,
         },
-        scenario=(
-            f"{place_a}から{place_b}を通って{place_c}まで行った。"
-            f"{place_a}から{place_b}までは時速{speed_walk}kmで歩き、"
-            f"{place_b}から{place_c}までは時速{speed_bike}kmの自転車で進んだところ、"
-            f"全体で{dist_walk + dist_bike}km進むのに{hours_walk + hours_bike}時間かかった。"
-        ),
-        quantities="歩いた道のりを x km、自転車で進んだ道のりを y km とする。",
-        variables_narration="歩いた道のりを x km、自転車で進んだ道のりを y km とおく。",
-        ask_formulation="道のりと時間の関係を表す2つの式をつくれ。",
-        ask_value="歩いた道のりと自転車で進んだ道のりをそれぞれ求めよ。",
-        relation_labels=("道のりの関係", "かかった時間の関係"),
         answer_map=IDENTITY_ANSWER_MAP,
-        answer_labels=("歩いた道のりは", "自転車で進んだ道のりは"),
-        answer_units=("km", "km"),
-        slots={"place_a": place_a, "place_b": place_b, "place_c": place_c},
     )
 
 
-def _scene_time_split(p: Mapping[str, Any], rng: Rng) -> SystemScene:
+def _relation_time_split(p: Mapping[str, Any], rng: Rng) -> SystemRelation:
     """g2_l17 Lv3: 途中から走る。文字は**時間**で、問われるのは**道のり**。
 
     文字を時間に置くと道のりの式が整数係数になり、答えを出すには最後に a·x, b·y を
@@ -420,34 +437,20 @@ def _scene_time_split(p: Mapping[str, Any], rng: Rng) -> SystemScene:
     歩きと走りで時間の範囲を分けているのは場面の自然さのため（「途中から走る」区間が
     歩いた区間より長いと通学の場面として読めない）。分速×分なので端数は出ない。
     """
-    speed_walk = int(_draw_index(list(p["walk_speed_candidates"]), rng))
-    speed_run = int(_draw_index(list(p["run_speed_candidates"]), rng))
+    speed_walk = int(draw_index(list(p["walk_speed_candidates"]), rng))
+    speed_run = int(draw_index(list(p["run_speed_candidates"]), rng))
     minutes_walk = int(draw(p["walk_minutes_domain"], rng))
     minutes_run = int(draw(p["run_minutes_domain"], rng))
-    start, goal = _split_pair(str(_draw_index(list(p["place_candidates"]), rng)))
     distance = speed_walk * minutes_walk + speed_run * minutes_run
-    return SystemScene(
+    return SystemRelation(
         numbers={
             "speed_slow": speed_walk,
             "speed_fast": speed_run,
             "total_time": minutes_walk + minutes_run,
             "distance": distance,
         },
-        scenario=(
-            f"{start}から{goal}まで行くのに、初めは分速{speed_walk}mで歩き、"
-            f"途中から分速{speed_run}mで走ったところ、{start}から{goal}まで"
-            f"{distance}mの道のりを{minutes_walk + minutes_run}分で着いた。"
-        ),
-        quantities="",
-        variables_narration="歩いた時間を x 分、走った時間を y 分とおく。",
-        ask_formulation="",
-        ask_value="歩いた道のりと走った道のりはそれぞれ何mか求めよ。",
-        relation_labels=("かかった時間の関係", "道のりの関係"),
         # 求めるのは道のり＝（速さ）×（時間）。x, y そのものではない。
         answer_map=((speed_walk, 0, 0), (0, speed_run, 0)),
-        answer_labels=("歩いた道のりは", "走った道のりは"),
-        answer_units=("m", "m"),
-        slots={"start": start, "goal": goal},
     )
 
 
@@ -480,32 +483,14 @@ def _lap_candidates(p: Mapping[str, Any]) -> list[tuple[int, int, int]]:
     return out
 
 
-def _scene_lap_meet_catch_up(p: Mapping[str, Any], rng: Rng) -> SystemScene:
+def _relation_lap_meet_catch_up(p: Mapping[str, Any], rng: Rng) -> SystemRelation:
     """g2_l17 Lv4: 池のまわりの出会いと追いつき。文字は速さ（和と差の2式）。"""
     cands = _lap_candidates(p)
     fast, slow, lap = cands[int(draw({"int_range": [0, len(cands) - 1]}, rng))]
     meet_time, catch_up_time = lap // (fast + slow), lap // (fast - slow)
-    name_fast, name_slow = _split_pair(
-        str(_draw_index(list(p["person_pair_candidates"]), rng))
-    )
-    return SystemScene(
+    return SystemRelation(
         numbers={"lap": lap, "meet_time": meet_time, "catch_up_time": catch_up_time},
-        scenario=(
-            f"1周{lap}mの池のまわりを、{name_fast}と{name_slow}が同じ地点から"
-            f"同時に出発する。反対向きに進むと{meet_time}分後に出会い、"
-            f"同じ向きに進むと{name_fast}が{name_slow}に{catch_up_time}分後に追いつく。"
-        ),
-        quantities="",
-        variables_narration=(
-            f"{name_fast}の速さを分速 x m、{name_slow}の速さを分速 y m とおく。"
-        ),
-        ask_formulation="",
-        ask_value=f"{name_fast}と{name_slow}の速さはそれぞれ分速何mか求めよ。",
-        relation_labels=("反対向きに進んだときの道のりの関係", "同じ向きに進んだときの道のりの関係"),
         answer_map=IDENTITY_ANSWER_MAP,
-        answer_labels=(f"{name_fast}の速さは分速", f"{name_slow}の速さは分速"),
-        answer_units=("m", "m"),
-        slots={"name_fast": name_fast, "name_slow": name_slow},
     )
 
 
@@ -534,34 +519,21 @@ def _percent_change_candidates(p: Mapping[str, Any]) -> list[tuple[int, int, int
     return out
 
 
-def _scene_percent_change(p: Mapping[str, Any], rng: Rng) -> SystemScene:
+def _relation_percent_change(p: Mapping[str, Any], rng: Rng) -> SystemRelation:
     """g2_l18 Lv2: 男子が p% 増え女子が q% 減って全体で r 人増えた（誘導あり）。"""
     cands = _percent_change_candidates(p)
     boys, girls, rate_up, rate_down = cands[
         int(draw({"int_range": [0, len(cands) - 1]}, rng))
     ]
     net_change = rate_up * boys // 100 - rate_down * girls // 100
-    return SystemScene(
+    return SystemRelation(
         numbers={
             "total": boys + girls,
             "rate_up": rate_up,
             "rate_down": rate_down,
             "net_change": net_change,
         },
-        scenario=(
-            f"ある中学校の昨年の生徒数は男女合わせて{boys + girls}人だった。"
-            f"今年は昨年に比べて男子が{rate_up}%増え、女子が{rate_down}%減ったので、"
-            f"全体で{net_change}人増えた。"
-        ),
-        quantities="昨年の男子の人数を x 人、女子の人数を y 人とする。",
-        variables_narration="昨年の男子の人数を x 人、女子の人数を y 人とおく。",
-        ask_formulation="人数と増減の関係を表す2つの式をつくれ。",
-        ask_value="昨年の男子と女子の人数をそれぞれ求めよ。",
-        relation_labels=("昨年の人数の関係", "増減した人数の関係"),
         answer_map=IDENTITY_ANSWER_MAP,
-        answer_labels=("昨年の男子は", "昨年の女子は"),
-        answer_units=("人", "人"),
-        slots={"counter": "人"},
     )
 
 
@@ -587,7 +559,7 @@ def _salt_mixture_candidates(p: Mapping[str, Any]) -> list[tuple[int, int, int, 
     return out
 
 
-def _scene_salt_mixture(p: Mapping[str, Any], rng: Rng) -> SystemScene:
+def _relation_salt_mixture(p: Mapping[str, Any], rng: Rng) -> SystemRelation:
     """g2_l18 Lv3: a% と b% を混ぜて c% を W g つくる（誘導なし）。"""
     cands = _salt_mixture_candidates(p)
     percent_a, percent_b, weight_a, weight_b = cands[
@@ -596,28 +568,14 @@ def _scene_salt_mixture(p: Mapping[str, Any], rng: Rng) -> SystemScene:
     weight = weight_a + weight_b
     salt100 = percent_a * weight_a + percent_b * weight_b
     percent_mix = salt100 // weight
-    return SystemScene(
+    return SystemRelation(
         numbers={
             "weight": weight,
             "percent_a": percent_a,
             "percent_b": percent_b,
             "percent_mix": percent_mix,
         },
-        scenario=(
-            f"{percent_a}%の食塩水と{percent_b}%の食塩水を混ぜて、"
-            f"{percent_mix}%の食塩水を{weight}gつくりたい。"
-        ),
-        quantities="",
-        variables_narration=(
-            f"{percent_a}%の食塩水を x g、{percent_b}%の食塩水を y g とおく。"
-        ),
-        ask_formulation="",
-        ask_value="それぞれ何gずつ混ぜればよいか求めよ。",
-        relation_labels=("食塩水の重さの関係", "溶けている食塩の重さの関係"),
         answer_map=IDENTITY_ANSWER_MAP,
-        answer_labels=(f"{percent_a}%の食塩水は", f"{percent_b}%の食塩水は"),
-        answer_units=("g", "g"),
-        slots={"counter": "g"},
     )
 
 
@@ -645,7 +603,7 @@ def _two_containers_candidates(p: Mapping[str, Any]) -> list[tuple[int, int, int
     return out
 
 
-def _scene_two_containers(p: Mapping[str, Any], rng: Rng) -> SystemScene:
+def _relation_two_containers(p: Mapping[str, Any], rng: Rng) -> SystemRelation:
     """g2_l18 Lv4: 濃度そのものを未知数に置く（重さが係数に回る・誘導なし）。"""
     cands = _two_containers_candidates(p)
     weight_a, weight_b, percent_a, percent_b = cands[
@@ -653,32 +611,177 @@ def _scene_two_containers(p: Mapping[str, Any], rng: Rng) -> SystemScene:
     ]
     percent_mix = (weight_a * percent_a + weight_b * percent_b) // (weight_a + weight_b)
     percent_half = (percent_a + percent_b) // 2
-    return SystemScene(
+    return SystemRelation(
         numbers={
             "weight_a": weight_a,
             "weight_b": weight_b,
             "percent_mix": percent_mix,
             "percent_half": percent_half,
         },
+        answer_map=IDENTITY_ANSWER_MAP,
+    )
+
+
+RELATION_DRAWERS: dict[str, Callable[[Mapping[str, Any], Rng], SystemRelation]] = {
+    "price_count_diff": _relation_price_count_diff,
+    "distance_time": _relation_distance_time,
+    "time_split": _relation_time_split,
+    "lap_meet_catch_up": _relation_lap_meet_catch_up,
+    "percent_change": _relation_percent_change,
+    "salt_mixture": _relation_salt_mixture,
+    "two_containers": _relation_two_containers,
+}
+
+
+# ---------------------------------------------------------------------------
+# Scene（日本語だけ。数は引かない＝この節に抽選は1つも無い）
+# ---------------------------------------------------------------------------
+def _scene_price_count_diff(n: Mapping[str, int], v: Mapping[str, str]) -> SystemScene:
+    item_a, counter_a = v["item_a"], v["counter_a"]
+    item_b, counter_b = v["item_b"], v["counter_b"]
+    return SystemScene(
         scenario=(
-            f"容器Aには濃度のわからない食塩水が{weight_a}g、"
-            f"容器Bには別の濃度の食塩水が{weight_b}g入っている。"
-            f"AとBをすべて混ぜると{percent_mix}%の食塩水になり、"
-            f"Aの食塩水100gとBの食塩水100gだけを混ぜると{percent_half}%の食塩水になる。"
+            f"{item_a}を何{counter_a}かと{item_b}を何{counter_b}か買った。"
+            f"{item_a}1{counter_a}は{n['price_a']}円、"
+            f"{item_b}1{counter_b}は{n['price_b']}円で、"
+            f"買った数は{item_a}より{item_b}のほうが{n['diff']}{counter_b}多く、"
+            f"代金の合計は{n['total']}円だった。"
+        ),
+        quantities="",
+        variables_narration=(
+            f"{item_a}の数を x {counter_a}、{item_b}の数を y {counter_b}とおく。"
+        ),
+        ask_formulation="",
+        ask_value=f"{item_a}と{item_b}を買った数をそれぞれ求めよ。",
+        relation_labels=("買った数の関係", "代金の合計の関係"),
+        answer_labels=(f"{item_a}は", f"{item_b}は"),
+        answer_units=(counter_a, counter_b),
+        slots={"item_a": item_a, "item_b": item_b},
+    )
+
+
+def _scene_distance_time(n: Mapping[str, int], v: Mapping[str, str]) -> SystemScene:
+    place_a, place_b, place_c = v["place_a"], v["place_b"], v["place_c"]
+    return SystemScene(
+        scenario=(
+            f"{place_a}から{place_b}を通って{place_c}まで行った。"
+            f"{place_a}から{place_b}までは時速{n['speed_walk']}kmで歩き、"
+            f"{place_b}から{place_c}までは時速{n['speed_bike']}kmの自転車で"
+            f"進んだところ、"
+            f"全体で{n['distance']}km進むのに{n['total_time']}時間かかった。"
+        ),
+        quantities="歩いた道のりを x km、自転車で進んだ道のりを y km とする。",
+        variables_narration="歩いた道のりを x km、自転車で進んだ道のりを y km とおく。",
+        ask_formulation="道のりと時間の関係を表す2つの式をつくれ。",
+        ask_value="歩いた道のりと自転車で進んだ道のりをそれぞれ求めよ。",
+        relation_labels=("道のりの関係", "かかった時間の関係"),
+        answer_labels=("歩いた道のりは", "自転車で進んだ道のりは"),
+        answer_units=("km", "km"),
+        slots={"place_a": place_a, "place_b": place_b, "place_c": place_c},
+    )
+
+
+def _scene_time_split(n: Mapping[str, int], v: Mapping[str, str]) -> SystemScene:
+    start, goal = v["start"], v["goal"]
+    return SystemScene(
+        scenario=(
+            f"{start}から{goal}まで行くのに、初めは分速{n['speed_slow']}mで歩き、"
+            f"途中から分速{n['speed_fast']}mで走ったところ、{start}から{goal}まで"
+            f"{n['distance']}mの道のりを{n['total_time']}分で着いた。"
+        ),
+        quantities="",
+        variables_narration="歩いた時間を x 分、走った時間を y 分とおく。",
+        ask_formulation="",
+        ask_value="歩いた道のりと走った道のりはそれぞれ何mか求めよ。",
+        relation_labels=("かかった時間の関係", "道のりの関係"),
+        answer_labels=("歩いた道のりは", "走った道のりは"),
+        answer_units=("m", "m"),
+        slots={"start": start, "goal": goal},
+    )
+
+
+def _scene_lap_meet_catch_up(n: Mapping[str, int], v: Mapping[str, str]) -> SystemScene:
+    name_fast, name_slow = v["name_fast"], v["name_slow"]
+    return SystemScene(
+        scenario=(
+            f"1周{n['lap']}mの池のまわりを、{name_fast}と{name_slow}が同じ地点から"
+            f"同時に出発する。反対向きに進むと{n['meet_time']}分後に出会い、"
+            f"同じ向きに進むと{name_fast}が{name_slow}に"
+            f"{n['catch_up_time']}分後に追いつく。"
+        ),
+        quantities="",
+        variables_narration=(
+            f"{name_fast}の速さを分速 x m、{name_slow}の速さを分速 y m とおく。"
+        ),
+        ask_formulation="",
+        ask_value=f"{name_fast}と{name_slow}の速さはそれぞれ分速何mか求めよ。",
+        relation_labels=("反対向きに進んだときの道のりの関係", "同じ向きに進んだときの道のりの関係"),
+        answer_labels=(f"{name_fast}の速さは分速", f"{name_slow}の速さは分速"),
+        answer_units=("m", "m"),
+        slots={"name_fast": name_fast, "name_slow": name_slow},
+    )
+
+
+def _scene_percent_change(n: Mapping[str, int], v: Mapping[str, str]) -> SystemScene:
+    return SystemScene(
+        scenario=(
+            f"ある中学校の昨年の生徒数は男女合わせて{n['total']}人だった。"
+            f"今年は昨年に比べて男子が{n['rate_up']}%増え、"
+            f"女子が{n['rate_down']}%減ったので、"
+            f"全体で{n['net_change']}人増えた。"
+        ),
+        quantities="昨年の男子の人数を x 人、女子の人数を y 人とする。",
+        variables_narration="昨年の男子の人数を x 人、女子の人数を y 人とおく。",
+        ask_formulation="人数と増減の関係を表す2つの式をつくれ。",
+        ask_value="昨年の男子と女子の人数をそれぞれ求めよ。",
+        relation_labels=("昨年の人数の関係", "増減した人数の関係"),
+        answer_labels=("昨年の男子は", "昨年の女子は"),
+        answer_units=("人", "人"),
+        slots={"counter": "人"},
+    )
+
+
+def _scene_salt_mixture(n: Mapping[str, int], v: Mapping[str, str]) -> SystemScene:
+    percent_a, percent_b = n["percent_a"], n["percent_b"]
+    return SystemScene(
+        scenario=(
+            f"{percent_a}%の食塩水と{percent_b}%の食塩水を混ぜて、"
+            f"{n['percent_mix']}%の食塩水を{n['weight']}gつくりたい。"
+        ),
+        quantities="",
+        variables_narration=(
+            f"{percent_a}%の食塩水を x g、{percent_b}%の食塩水を y g とおく。"
+        ),
+        ask_formulation="",
+        ask_value="それぞれ何gずつ混ぜればよいか求めよ。",
+        relation_labels=("食塩水の重さの関係", "溶けている食塩の重さの関係"),
+        answer_labels=(f"{percent_a}%の食塩水は", f"{percent_b}%の食塩水は"),
+        answer_units=("g", "g"),
+        slots={"counter": "g"},
+    )
+
+
+def _scene_two_containers(n: Mapping[str, int], v: Mapping[str, str]) -> SystemScene:
+    return SystemScene(
+        scenario=(
+            f"容器Aには濃度のわからない食塩水が{n['weight_a']}g、"
+            f"容器Bには別の濃度の食塩水が{n['weight_b']}g入っている。"
+            f"AとBをすべて混ぜると{n['percent_mix']}%の食塩水になり、"
+            f"Aの食塩水100gとBの食塩水100gだけを混ぜると"
+            f"{n['percent_half']}%の食塩水になる。"
         ),
         quantities="",
         variables_narration="容器Aの濃度を x %、容器Bの濃度を y %とおく。",
         ask_formulation="",
         ask_value="容器A、Bの食塩水の濃度をそれぞれ求めよ。",
         relation_labels=("すべて混ぜたときの食塩の重さの関係", "100gずつ混ぜたときの食塩の重さの関係"),
-        answer_map=IDENTITY_ANSWER_MAP,
         answer_labels=("容器Aの濃度は", "容器Bの濃度は"),
         answer_units=("%", "%"),
         slots={"counter": "%"},
     )
 
 
-_SCENE_DRAWERS: dict[str, Callable[[Mapping[str, Any], Rng], SystemScene]] = {
+SCENE_RENDERERS: dict[str, Callable[[Mapping[str, int], Mapping[str, str]], SystemScene]] = {
     "price_count_diff": _scene_price_count_diff,
     "distance_time": _scene_distance_time,
     "time_split": _scene_time_split,
@@ -687,6 +790,18 @@ _SCENE_DRAWERS: dict[str, Callable[[Mapping[str, Any], Rng], SystemScene]] = {
     "salt_mixture": _scene_salt_mixture,
     "two_containers": _scene_two_containers,
 }
+
+
+def draw_scene(kind: str, p: Mapping[str, Any], rng: Rng) -> tuple[SystemRelation, SystemScene]:
+    """関係 → 語彙 → 場面文 の順に組む（`_VOCAB_FIRST` の場面だけ語彙が先）。"""
+    steps = _SCENE_VOCAB.get(kind, ())
+    if kind in _VOCAB_FIRST:
+        vocab = draw_vocab(steps, p, rng)
+        relation = RELATION_DRAWERS[kind](p, rng)
+    else:
+        relation = RELATION_DRAWERS[kind](p, rng)
+        vocab = draw_vocab(steps, p, rng)
+    return relation, SCENE_RENDERERS[kind](relation.numbers, vocab)
 
 
 # ---------------------------------------------------------------------------
@@ -749,14 +864,14 @@ def word_problem_system_equations(ctx: CellContext, rng: Rng) -> MR:
     p = ctx.spec_level.params
     kind = str(p["scenario_kind"])
     guided = bool(p["guided"])
-    scene = _SCENE_DRAWERS[kind](p, rng)
-    formulation, sol, answer_values = solve_scene(kind, scene.numbers, scene.answer_map)
+    relation, scene = draw_scene(kind, p, rng)
+    formulation, sol, answer_values = solve_scene(kind, relation.numbers, relation.answer_map)
 
     concept_tags = list(ctx.spec_level.concept_tags or ctx.spec_family.concepts_default)
     cause_tags = list(ctx.spec_level.cause_tags)
 
     formulation_steps = _formulation_steps(scene, formulation)
-    derive_steps = _derive_steps(scene, answer_values)
+    derive_steps = _derive_steps(scene, relation.answer_map, answer_values)
     # 誘導なしのセルは (1) が無いので、立式の手順も value 側の模範解答に入れる
     # （でないと「解くところから始まる解説」になる）。
     value_steps = [
@@ -809,8 +924,8 @@ def word_problem_system_equations(ctx: CellContext, rng: Rng) -> MR:
             # 誘導の有無（小問数）。checker はこれを見て返す Solution の数を決める。
             "guided": guided,
             # 場面文が読者に見せている数値だけ（答えは入れない）。
-            "numbers": {k: str(v) for k, v in scene.numbers.items()},
-            "answer_map": [[str(v) for v in row] for row in scene.answer_map],
+            "numbers": {k: str(v) for k, v in relation.numbers.items()},
+            "answer_map": [[str(v) for v in row] for row in relation.answer_map],
             "answer_labels": list(scene.answer_labels),
             "answer_units": list(scene.answer_units),
             # 題材（dup_key は params のみを見る＝context_slots は算入されない）。
@@ -932,7 +1047,9 @@ def _formulation_steps(
 
 
 def _derive_steps(
-    scene: SystemScene, answer_values: tuple[sympy.Expr, sympy.Expr]
+    scene: SystemScene,
+    answer_map: tuple[tuple[int, int, int], tuple[int, int, int]],
+    answer_values: tuple[sympy.Expr, sympy.Expr],
 ) -> list[Step]:
     """最後の一手——求めた値を、問題が聞いている量のことばに直す。
 
@@ -948,7 +1065,7 @@ def _derive_steps(
     （fp 衝突・実測）。**どちらの場面にも最後の一手はある。違うのはその中身**——
     x, y のままなら言い直すだけ、違う量なら計算してから言う。op 名でその差を残す。
     """
-    if scene.answer_map == IDENTITY_ANSWER_MAP:
+    if answer_map == IDENTITY_ANSWER_MAP:
         return [
             Step(
                 op="state_answer_in_context",

@@ -52,7 +52,7 @@ from engine.core.contracts import (
 )
 from engine.core.registry import REGISTRY, register_recipe, register_template
 from engine.core.rng import Rng, draw, draw_many
-from engine.packs.math.recipes.word_problem_linear import _split_pair
+from engine.packs.math.recipes.scene_vocab import split_pair
 
 RECIPE_NAME = "math.word_problem_linear_function"
 
@@ -240,7 +240,7 @@ def _draw_tank(p: dict[str, Any], rng: Rng) -> tuple[dict[str, int], str, str]:
         target = r2 * extra + r1 * t1
         if target in (t1, r1, r2, x0):
             continue
-        container, liquid = _split_pair(str(draw(p["container_liquid_candidates"], rng)))
+        container, liquid = split_pair(str(draw(p["container_liquid_candidates"], rng)))
         return {"t1": t1, "r1": r1, "r2": r2, "target": target}, container, liquid
     raise ValueError("tank construction: 500回試行しても条件を満たす組が見つからない")
 
@@ -362,8 +362,8 @@ def _draw_meeting(p: dict[str, Any], rng: Rng) -> tuple[dict[str, int], str, str
             continue
         if meet_time in (va, vb, distance):
             continue
-        place_a, place_b = _split_pair(str(draw(p["place_pair_candidates"], rng)))
-        name_a, name_b = _split_pair(str(draw(p["person_pair_candidates"], rng)))
+        place_a, place_b = split_pair(str(draw(p["place_pair_candidates"], rng)))
+        name_a, name_b = split_pair(str(draw(p["person_pair_candidates"], rng)))
         return {"va": va, "vb": vb, "distance": distance}, place_a, place_b, name_a, name_b
     raise ValueError("meeting construction: 500回試行しても条件を満たす組が見つからない")
 
@@ -513,7 +513,7 @@ def _draw_tank_race(p: dict[str, Any], rng: Rng) -> tuple[dict[str, int], str, s
                 cands.append((c, m, r))
     idx = int(draw({"int_set": list(range(len(cands)))}, rng))
     capacity, minutes, rate = cands[idx]
-    name_a, name_b = _split_pair(str(draw(list(p["person_pair_candidates"]), rng)))
+    name_a, name_b = split_pair(str(draw(list(p["person_pair_candidates"]), rng)))
     return (
         {"capacity": capacity, "empty_minutes": minutes, "fill_rate": rate},
         name_a,
@@ -611,8 +611,8 @@ def _draw_second_meeting(p: dict[str, Any], rng: Rng) -> tuple[dict[str, int], s
                     cands.append((d, a, b, hs))
     idx = int(draw({"int_set": list(range(len(cands)))}, rng))
     distance, speed_a, speed_b, head_start = cands[idx]
-    place_a, place_b = _split_pair(str(draw(list(p["place_pair_candidates"]), rng)))
-    name_a, name_b = _split_pair(str(draw(list(p["person_pair_candidates"]), rng)))
+    place_a, place_b = split_pair(str(draw(list(p["place_pair_candidates"]), rng)))
+    name_a, name_b = split_pair(str(draw(list(p["person_pair_candidates"]), rng)))
     return (
         {
             "distance": distance, "speed_a": speed_a,

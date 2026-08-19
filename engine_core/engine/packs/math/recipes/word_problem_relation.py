@@ -50,7 +50,7 @@ from engine.core.contracts import (
 )
 from engine.core.registry import register_recipe
 from engine.core.rng import Rng, draw
-from engine.packs.math.recipes.word_problem_linear import _draw_pair_token, _draw_priced_item
+from engine.packs.math.recipes.scene_vocab import draw_priced_item
 
 RECIPE_NAME = "math.word_problem_relation"
 
@@ -160,7 +160,7 @@ def _scene_equality_price_count(p: Mapping[str, Any], rng: Rng) -> RelationScene
     # 逆算するためだけに引く。**値段は品物ごとの相場から 10円刻みで引く**——前は
     # 20〜300 の整数だったので「7本買って1624円ちょうど払えた」＝1本232円の
     # ボールペンになっていた。
-    item, counter, price = _draw_priced_item(list(p["item_candidates"]), rng)
+    item, counter, price = draw_priced_item(list(p["item_candidates"]), rng)
     total = price * count
     return RelationScene(
         numbers={"count": count, "total": total},
@@ -199,7 +199,7 @@ def _scene_inequality_price_count(p: Mapping[str, Any], rng: Rng) -> RelationSce
     # 8個買った代金が400円以下」（1個50円のおにぎり）が出ていた。実物の「〜円以下」
     # は区切りのいい額で、しかも暗に想定している単価が場面としてありうる。
     # 相場の単価 × 個数を 100円単位に切り上げ、余裕分（0〜300円）を足す。
-    item, counter, price = _draw_priced_item(list(p["item_candidates"]), rng)
+    item, counter, price = draw_priced_item(list(p["item_candidates"]), rng)
     margin = int(draw(list(range(0, 4)), rng))
     total = -(-price * count // 100) * 100 + margin * 100
     return RelationScene(

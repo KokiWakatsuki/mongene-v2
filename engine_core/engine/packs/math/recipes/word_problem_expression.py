@@ -62,7 +62,7 @@ from engine.packs.math.recipes.letter_expr import (
     _draw_distinct_from_pool,
     _leaks,
 )
-from engine.packs.math.recipes.word_problem_linear import _draw_pair_token, _draw_priced_item
+from engine.packs.math.recipes.scene_vocab import draw_priced_item
 from engine.packs.math.solvers.polynomial import _fmt_poly_display
 
 RECIPE_NAME = "math.word_problem_expression"
@@ -298,7 +298,7 @@ def _scene_price_count_letter(p: Mapping[str, Any], rng: Rng) -> ExpressionScene
     # 輪ゴム」が出ていた。実物の問題集の値段は 10円刻み（80円・120円・150円）で、
     # しかも品物の相場に収まっている。品名と相場を1つのトークン
     # （`鉛筆|本|50|150`）に持たせ、品物を引いてから値段を引く。
-    item, counter, price = _draw_priced_item(list(p["item_candidates"]), rng)
+    item, counter, price = draw_priced_item(list(p["item_candidates"]), rng)
     return ExpressionScene(
         numbers={"price": str(price)},
         scenario=f"1{counter}{price}円の{item}をx{counter}買う。",
