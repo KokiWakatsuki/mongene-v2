@@ -9,10 +9,11 @@
 `math.compute_linear_equation` が g1_l21〜l27 の calculation セルを `mode` 1つで
 賄っているのと同じ償却をする。ここでは params の `scenario_kind` が
 
-  1. 場面の数値を answer-first で引く関数（`_SCENE_DRAWERS`）
+  1. 数を answer-first で引く関数（`RELATION_DRAWERS`）
   2. その数値から方程式を組む関数（`FORMULATION_BUILDERS`）
+  3. 引かれた数と語彙から日本語を組む関数（`SCENE_RENDERERS`）
 
-の対を選ぶ。level_sep は「場面の型 × solver の op 列（mode）× 小問数」で作る。
+の組を選ぶ。3つは互いを知らない（`draw_scene` が順に呼ぶ）。level_sep は「場面の型 × solver の op 列（mode）× 小問数」で作る。
 
 ## params が持つのは「場面文に出ている数値」だけ
 
@@ -37,7 +38,7 @@ scene が `answer_coeff=(m, n)` を宣言すると、答えは m·x + n にな�
 from __future__ import annotations
 
 import math
-from collections.abc import Callable, Mapping
+from collections.abc import Callable, Mapping, Sequence
 from dataclasses import dataclass
 from typing import Any, cast
 
@@ -213,29 +214,55 @@ FORMULATION_BUILDERS: dict[str, Callable[..., LinearFormulation]] = {
 
 
 # ---------------------------------------------------------------------------
-# 場面の抽選（answer-first。解 x0 を先に引き、場面の数値を逆算する）
+# 3層に割る（Relation / 語彙の抽選 / Scene）
+#
+# ## なぜ割るか
+# 場面（日本語）と関係（数の引き方）が1つの関数に同居していると、場面を1つ足すたびに
+# 数の抽選と非退化条件を書き写すことになり、式の型と場面が1対1に貼りついたままになる。
+# 割ると「1つの関係に何通りもの場面を乗せる」ができる（記録 records/docs の charter §3）。
+#
+# ## 層の境目（この3つは互いを知らない）
+#   Relation  数の引き方・非退化条件・答えの逆算。**日本語を1文字も持たない**
+#   語彙の抽選 どのカタログからどう引くかの宣言だけ。日本語を書かない
+#   Scene     日本語だけ。**数を引かない**（引かれた数と語彙を受け取って文を組む）
+#
+# ## ★引く順番は変えられない
+# 同じ seed から同じ問題が出ることは golden が固定している。層に割るときに
+# `draw` の呼ばれる順番が変わると RNG の消費が変わり、**構造だけ変えたつもりで
+# 中身も変わる**。この module の8場面はすべて「数 → 語彙」の順に引いていたので、
+# 呼び出し側も `_relation_*` → `draw_vocab` → `_scene_*` の順にしてある
+# （順番を測った道具: records/work/scan_scene_draw_order.py）。
 # ---------------------------------------------------------------------------
 @dataclass(frozen=True)
-class LinearScene:
-    """場面文と、そこから立式に渡す数値。
+class LinearRelation:
+    """関係（数だけ）。**日本語を持たない。**
 
     `numbers` は `FORMULATION_BUILDERS[kind]` のキーワード引数そのもの（params に
     そのまま載り、checker が同じ関数へ渡す）。`answer_coeff=(m, n)` は
-    「求める量 = m·x + n」。`answer_unit` は答えの表示に付ける助数詞。
+    「求める量 = m·x + n」で、これも数だけで決まる。
     """
 
     numbers: dict[str, int]
+    answer_coeff: tuple[int, int]
+
+
+@dataclass(frozen=True)
+class LinearScene:
+    """場面（日本語だけ）。数は引かず、引かれた数と語彙を受け取って文を組む。
+
+    `answer_unit` は答えの表示に付ける助数詞（日本語なのでここ）。
+    `prelude_step` は立式の前に1手要る場面だけが使う（連比の和を出す等）。
+    None なら立式は従来どおり2手＝既存セルの steps は変わらない。
+    """
+
     scenario: str
     quantities: str
     ask_formulation: str
     ask_value: str
     # 「2通りに表せる量」の名前（立式の着眼点。解説の最初の一手に出す）。
     relation_label: str
-    answer_coeff: tuple[int, int]
     answer_unit: str
     slots: dict[str, str]
-    # 立式の前に1手要る場面だけが使う（連比の和を出す等）。(op, 表示, narration)。
-    # None なら立式は従来どおり2手＝既存セルの steps は変わらない。
     prelude_step: tuple[str, str, str] | None = None
 
 
@@ -243,10 +270,6 @@ def _split_pair(token: str) -> tuple[str, str]:
     """"ノート|冊" → ("ノート", "冊")。"""
     left, _, right = str(token).partition("|")
     return left, right
-
-
-def _draw_pair_token(candidates: list[Any], rng: Rng) -> tuple[str, str]:
-    return _split_pair(str(draw(list(candidates), rng)))
 
 
 def _draw_priced_item(candidates: list[Any], rng: Rng) -> tuple[str, str, int]:
@@ -267,65 +290,112 @@ def _draw_priced_item(candidates: list[Any], rng: Rng) -> tuple[str, str, int]:
     return pairs[idx]
 
 
+def _draw_pair_token(candidates: list[Any], rng: Rng) -> tuple[str, str]:
+    """カタログから1つ引いて `名前|助数詞` を割る。
+
+    この module では `draw_vocab` の `"one"` が同じことをする。**他の recipe
+    （word_problem_relation・word_problem_expression）がまだ層に割れていないので、
+    そちらのために残してある。** 割り終えたら消す。
+    """
+    return _split_pair(str(draw(list(candidates), rng)))
+
+
 def _draw_distinct(candidates: list[Any], rng: Rng, k: int) -> list[Any]:
     """候補配列から相異な k 個（文字列はドメイン記法外なので添字で引く）。"""
     idxs = draw_many({"int_range": [0, len(candidates) - 1], "distinct": ["value"]}, rng, k=k)
     return [candidates[int(i)] for i in idxs]
 
 
-def _scene_price_count(p: Mapping[str, Any], rng: Rng) -> LinearScene:
+# ---------------------------------------------------------------------------
+# 語彙の抽選（宣言だけ。日本語はここに書かない）
+# ---------------------------------------------------------------------------
+# 1手 = (引き方, カタログの鍵, 入れる名前の並び)。カタログの値は `名前|助数詞` の形で
+# 詰めてあるので、`|` で割った順に名前へ入る（`_split_pair` と同じ規約）。
+#
+#   "one"       カタログから1つ引いて `|` で割る
+#   "distinct2" 相異な2つを引いて、それぞれ `|` で割って順に並べる
+#
+# ★手の並びは**元のコードが引いていた順のまま**にする（RNG の消費順）。
+_VocabStep = tuple[str, str, tuple[str, ...]]
+
+_SCENE_VOCAB: dict[str, tuple[_VocabStep, ...]] = {
+    "price_count": (
+        ("distinct2", "item_candidates", ("item_a", "counter_a", "item_b", "counter_b")),
+    ),
+    "price_count_diff": (
+        ("distinct2", "item_candidates", ("item_a", "counter_a", "item_b", "counter_b")),
+    ),
+    "surplus_shortage": (
+        ("one", "person_candidates", ("person", "person_counter")),
+        ("one", "object_candidates", ("object", "object_counter")),
+    ),
+    "seat_shortage": (
+        ("one", "person_candidates", ("person", "person_counter")),
+    ),
+    "round_trip": (
+        ("one", "place_candidates", ("start", "goal")),
+    ),
+    "catch_up": (
+        ("one", "person_pair_candidates", ("first", "second")),
+    ),
+    "proportion_pair": (
+        ("one", "item_candidates", ("item", "counter")),
+    ),
+    "continued_ratio": (
+        ("one", "object_candidates", ("object", "counter")),
+        ("one", "label_triple_candidates", ("name_1", "name_2", "name_3")),
+    ),
+}
+
+
+def draw_vocab(steps: Sequence[_VocabStep], p: Mapping[str, Any], rng: Rng) -> dict[str, str]:
+    """宣言どおりに語彙を引く。**場面を足すときはここに1行足すだけ。**"""
+    out: dict[str, str] = {}
+    for how, catalog, names in steps:
+        if how == "one":
+            parts = str(draw(list(p[catalog]), rng)).split("|")
+        elif how == "distinct2":
+            parts = [
+                piece
+                for tok in _draw_distinct(list(p[catalog]), rng, 2)
+                for piece in str(tok).split("|")
+            ]
+        else:  # pragma: no cover - 宣言の誤りは構成時に落とす
+            raise ValueError(f"未知の語彙の引き方: {how}")
+        for name, value in zip(names, parts, strict=False):
+            out[name] = value
+    return out
+
+
+# ---------------------------------------------------------------------------
+# Relation（数だけ。日本語を1文字も持たない）
+# ---------------------------------------------------------------------------
+def _relation_price_count(p: Mapping[str, Any], rng: Rng) -> LinearRelation:
     """g1_l25 Lv2: 2種類を合わせて k 個。片方の個数を x とおく。"""
     total = int(draw(p["total_domain"], rng))
     # x0 は 1..k-1（どちらの品も1個以上）。
     count_a = int(draw({"int_range": [2, total - 2]}, rng))
     price_a, price_b = (int(v) for v in draw_many(p["price_domain"], rng, k=2))
-    tok_a, tok_b = _draw_distinct(list(p["item_candidates"]), rng, 2)
-    item_a, counter = _split_pair(str(tok_a))
-    item_b, _ = _split_pair(str(tok_b))
     cost = price_a * count_a + price_b * (total - count_a)
-    return LinearScene(
+    return LinearRelation(
         numbers={"price_a": price_a, "price_b": price_b, "total": total, "cost": cost},
-        scenario=(
-            f"1{counter}{price_a}円の{item_a}と1{counter}{price_b}円の{item_b}を"
-            f"合わせて{total}{counter}買ったところ、代金の合計は{cost}円だった。"
-        ),
-        quantities=f"{item_a}を買った{counter}数を x {counter}とする。",
-        ask_formulation="代金の関係を、x を使った方程式で表せ。",
-        ask_value=f"{item_a}を買った{counter}数を求めよ。",
-        relation_label="代金の合計",
         answer_coeff=(1, 0),
-        answer_unit=counter,
-        slots={"item_a": item_a, "item_b": item_b, "counter": counter},
     )
 
 
-def _scene_price_count_diff(p: Mapping[str, Any], rng: Rng) -> LinearScene:
+def _relation_price_count_diff(p: Mapping[str, Any], rng: Rng) -> LinearRelation:
     """g1_l25 Lv3: B は A より d 個多い（合計個数が与えられない＝読替が要る）。"""
     count_a = int(draw(p["count_domain"], rng))
     diff = int(draw(p["diff_domain"], rng))
     price_a, price_b = (int(v) for v in draw_many(p["price_domain"], rng, k=2))
-    tok_a, tok_b = _draw_distinct(list(p["item_candidates"]), rng, 2)
-    item_a, counter_a = _split_pair(str(tok_a))
-    item_b, counter_b = _split_pair(str(tok_b))
     cost = price_a * count_a + price_b * (count_a + diff)
-    return LinearScene(
+    return LinearRelation(
         numbers={"price_a": price_a, "price_b": price_b, "diff": diff, "cost": cost},
-        scenario=(
-            f"ある店で、1{counter_a}{price_a}円の{item_a}と1{counter_b}{price_b}円の{item_b}を"
-            f"買った。{item_b}は{item_a}より{diff}{counter_b}多く買い、"
-            f"代金の合計は{cost}円だった。"
-        ),
-        quantities="",
-        ask_formulation="",
-        ask_value=f"{item_a}を買った{counter_a}数を求めよ。",
-        relation_label="代金の合計",
         answer_coeff=(1, 0),
-        answer_unit=counter_a,
-        slots={"item_a": item_a, "item_b": item_b, "counter": counter_a},
     )
 
 
-def _scene_surplus_shortage(p: Mapping[str, Any], rng: Rng) -> LinearScene:
+def _relation_surplus_shortage(p: Mapping[str, Any], rng: Rng) -> LinearRelation:
     """g1_l26 Lv2: a 枚ずつで s 枚余り、b 枚ずつで t 枚足りない。
 
     非退化: a<b（`step_domain` が正）でないと x が消える。t≥1 は
@@ -337,32 +407,16 @@ def _scene_surplus_shortage(p: Mapping[str, Any], rng: Rng) -> LinearScene:
     per_b = per_a + int(draw(p["step_domain"], rng))
     surplus = int(draw(p["surplus_domain"], rng))
     shortage = (per_b - per_a) * people - surplus
-    person, _ = _draw_pair_token(list(p["person_candidates"]), rng)
-    obj, obj_counter = _draw_pair_token(list(p["object_candidates"]), rng)
-    return LinearScene(
+    return LinearRelation(
         numbers={
             "per_a": per_a, "surplus": surplus, "per_b": per_b, "shortage": shortage,
         },
-        scenario=(
-            f"何人かの{person}に{obj}を配る。1人に{per_a}{obj_counter}ずつ配ると"
-            f"{surplus}{obj_counter}余り、1人に{per_b}{obj_counter}ずつ配ると"
-            f"{shortage}{obj_counter}足りない。"
-        ),
-        quantities=f"{person}の人数を x 人とする。",
-        ask_formulation=(
-            f"どちらの配り方でも{obj}の全部の{obj_counter}数は同じであることから、"
-            "x についての方程式をつくれ。"
-        ),
-        ask_value=f"{person}の人数を求めよ。",
-        relation_label=f"配る{obj}の全部の{obj_counter}数",
         answer_coeff=(1, 0),
-        answer_unit="人",
-        slots={"person": person, "object": obj, "counter": obj_counter},
     )
 
 
-def _scene_seat_shortage(p: Mapping[str, Any], rng: Rng) -> LinearScene:
-    """g1_l26 Lv3: 文字は脚数・問われるのは人数（`answer_coeff` を使う唯一の場面）。
+def _relation_seat_shortage(p: Mapping[str, Any], rng: Rng) -> LinearRelation:
+    """g1_l26 Lv3: 文字は脚数・問われるのは人数（`answer_coeff` を使う唯一の関係）。
 
     a 人ずつで r 人あふれ、b=a+1 人ずつだと最後の1脚だけ q 人でちょうど埋まる。
     総人数を2通りに表すと a·x + r = b·(x − 1) + q。r は逆算（r = x0 − a − 1 + q）で、
@@ -373,24 +427,12 @@ def _scene_seat_shortage(p: Mapping[str, Any], rng: Rng) -> LinearScene:
     per_b = per_a + 1
     last_seat = int(draw({"int_range": [1, per_a]}, rng))
     left_out = seats - per_a - 1 + last_seat
-    person, _ = _draw_pair_token(list(p["person_candidates"]), rng)
-    return LinearScene(
+    return LinearRelation(
         numbers={
             "per_a": per_a, "left_out": left_out, "per_b": per_b, "last_seat": last_seat,
         },
-        scenario=(
-            f"長いすに{person}を座らせる。1脚に{per_a}人ずつ座ると{left_out}人が座れず、"
-            f"1脚に{per_b}人ずつ座ると最後の1脚だけ{last_seat}人になり、"
-            f"いすはちょうど埋まった。"
-        ),
-        quantities="",
-        ask_formulation="",
-        ask_value=f"{person}の人数を求めよ。",
-        relation_label=f"{person}の全体の人数",
         # 求めるのは人数 = （1脚 a 人）×（脚数 x）＋（座れなかった r 人）。
         answer_coeff=(per_a, left_out),
-        answer_unit="人",
-        slots={"person": person, "counter": "人"},
     )
 
 
@@ -418,28 +460,16 @@ def _round_trip_candidates(p: Mapping[str, Any]) -> list[tuple[int, int, int]]:
     return out
 
 
-def _scene_round_trip(p: Mapping[str, Any], rng: Rng) -> LinearScene:
+def _relation_round_trip(p: Mapping[str, Any], rng: Rng) -> LinearRelation:
     """g1_l27 Lv2: 行き a・帰り b の速さで往復、時間の和が t。"""
     cands = _round_trip_candidates(p)
     speed_go, speed_back, distance = cands[int(draw({"int_range": [0, len(cands) - 1]}, rng))]
     total_time = int(sympy.Rational(distance * (speed_go + speed_back), speed_go * speed_back))
-    start, goal = _split_pair(str(draw(list(p["place_candidates"]), rng)))
-    return LinearScene(
+    return LinearRelation(
         numbers={
             "speed_go": speed_go, "speed_back": speed_back, "total_time": total_time,
         },
-        scenario=(
-            f"{start}から{goal}まで、行きは{_travel_means(speed_go)}時速{speed_go}km、"
-            f"帰りは同じ道を{_travel_means(speed_back)}時速{speed_back}kmの速さで"
-            f"進んだところ、進むのにかかった時間は合わせて{total_time}時間だった。"
-        ),
-        quantities=f"{start}から{goal}までの道のりを x km とする。",
-        ask_formulation="かかった時間の関係を、x を使った方程式で表せ。",
-        ask_value=f"{start}から{goal}までの道のりを求めよ。",
-        relation_label="進むのにかかった時間の合計",
         answer_coeff=(1, 0),
-        answer_unit="km",
-        slots={"start": start, "goal": goal, "counter": "km"},
     )
 
 
@@ -468,29 +498,18 @@ def _catch_up_candidates(p: Mapping[str, Any]) -> list[tuple[int, int, int]]:
     return out
 
 
-def _scene_catch_up(p: Mapping[str, Any], rng: Rng) -> LinearScene:
+def _relation_catch_up(p: Mapping[str, Any], rng: Rng) -> LinearRelation:
     """g1_l27 Lv3: 先に出た側を追いかける（追いつくまでの時間を x とおく）。"""
     cands = _catch_up_candidates(p)
     speed_slow, head_start, minutes = cands[
         int(draw({"int_range": [0, len(cands) - 1]}, rng))
     ]
     speed_fast = int(sympy.Rational(speed_slow * (minutes + head_start), minutes))
-    first, second = _split_pair(str(draw(list(p["person_pair_candidates"]), rng)))
-    return LinearScene(
+    return LinearRelation(
         numbers={
             "speed_slow": speed_slow, "head_start": head_start, "speed_fast": speed_fast,
         },
-        scenario=(
-            f"{first}は分速{speed_slow}mで家を出発し、その{head_start}分後に"
-            f"{second}が分速{speed_fast}mの自転車で同じ道を追いかけた。"
-        ),
-        quantities="",
-        ask_formulation="",
-        ask_value=f"{second}が{first}に追いつくのは、{second}が出発してから何分後か求めよ。",
-        relation_label="追いついたときに2人が進んだ道のり",
         answer_coeff=(1, 0),
-        answer_unit="分",
-        slots={"first": first, "second": second, "counter": "分"},
     )
 
 
@@ -516,24 +535,14 @@ def _proportion_pair_candidates(p: Mapping[str, Any]) -> list[tuple[int, int, in
     return out
 
 
-def _scene_proportion_pair(p: Mapping[str, Any], rng: Rng) -> LinearScene:
+def _relation_proportion_pair(p: Mapping[str, Any], rng: Rng) -> LinearRelation:
     """g1_l24 Lv2: a 個で p 円のとき b 個はいくらか（誘導あり・比例式を立てる）。"""
     cands = _proportion_pair_candidates(p)
     unit, count_a, count_b = cands[int(draw({"int_range": [0, len(cands) - 1]}, rng))]
-    item, counter = _draw_pair_token(list(p["item_candidates"]), rng)
     price_a = unit * count_a
-    return LinearScene(
+    return LinearRelation(
         numbers={"count_a": count_a, "price_a": price_a, "count_b": count_b},
-        scenario=(
-            f"同じ{item}を何{counter}か買う。{item}{count_a}{counter}の値段は{price_a}円である。"
-        ),
-        quantities=f"{item}{count_b}{counter}の値段を x 円とする。",
-        ask_formulation=f"{count_a}{counter}と{count_b}{counter}の値段の比例式をつくれ。",
-        ask_value=f"{item}{count_b}{counter}の値段を求めよ。",
-        relation_label=f"{counter}数と値段の比",
         answer_coeff=(1, 0),
-        answer_unit="円",
-        slots={"item": item, "counter": counter},
     )
 
 
@@ -567,42 +576,186 @@ def _continued_ratio_candidates(p: Mapping[str, Any]) -> list[tuple[int, int, in
     return out
 
 
-def _scene_continued_ratio(p: Mapping[str, Any], rng: Rng) -> LinearScene:
-    """g1_l24 Lv3: 連比 r1:r2:r3 で全体 N のとき、真ん中の個数を求める（誘導なし）。
-
-    Lv2 と違い、比例式に並べる「全体がいくつ分か」（r1+r2+r3）が本文に無い＝
-    自分でたしてから立式する。立式の手数が1つ増えるのを `prelude_step` で表す。
-    """
+def _relation_continued_ratio(p: Mapping[str, Any], rng: Rng) -> LinearRelation:
+    """g1_l24 Lv3: 連比 r1:r2:r3 で全体 N のとき、真ん中の個数を求める（誘導なし）。"""
     cands = _continued_ratio_candidates(p)
     r1, r2, r3, unit = cands[int(draw({"int_range": [0, len(cands) - 1]}, rng))]
-    obj, counter = _draw_pair_token(list(p["object_candidates"]), rng)
-    name_1, name_2, name_3 = str(
-        draw(list(p["label_triple_candidates"]), rng)
-    ).split("|")
-    ratio_total = r1 + r2 + r3
-    total = unit * ratio_total
-    return LinearScene(
+    total = unit * (r1 + r2 + r3)
+    return LinearRelation(
         numbers={"ratio_1": r1, "ratio_2": r2, "ratio_3": r3, "total": total},
+        answer_coeff=(1, 0),
+    )
+
+
+RELATION_DRAWERS: dict[str, Callable[[Mapping[str, Any], Rng], LinearRelation]] = {
+    "price_count": _relation_price_count,
+    "price_count_diff": _relation_price_count_diff,
+    "surplus_shortage": _relation_surplus_shortage,
+    "seat_shortage": _relation_seat_shortage,
+    "round_trip": _relation_round_trip,
+    "catch_up": _relation_catch_up,
+    "proportion_pair": _relation_proportion_pair,
+    "continued_ratio": _relation_continued_ratio,
+}
+
+
+# ---------------------------------------------------------------------------
+# Scene（日本語だけ。数は引かない＝この節に `draw` は1つも無い）
+#
+# 受け取るのは `n`（Relation が引いた数）と `v`（宣言どおりに引かれた語彙）だけ。
+# ここに数の抽選や非退化条件を書くと層が混ざる——**書くのは文だけ**。
+# ---------------------------------------------------------------------------
+def _scene_price_count(n: Mapping[str, int], v: Mapping[str, str]) -> LinearScene:
+    item_a, item_b, counter = v["item_a"], v["item_b"], v["counter_a"]
+    return LinearScene(
+        scenario=(
+            f"1{counter}{n['price_a']}円の{item_a}と1{counter}{n['price_b']}円の{item_b}を"
+            f"合わせて{n['total']}{counter}買ったところ、代金の合計は{n['cost']}円だった。"
+        ),
+        quantities=f"{item_a}を買った{counter}数を x {counter}とする。",
+        ask_formulation="代金の関係を、x を使った方程式で表せ。",
+        ask_value=f"{item_a}を買った{counter}数を求めよ。",
+        relation_label="代金の合計",
+        answer_unit=counter,
+        slots={"item_a": item_a, "item_b": item_b, "counter": counter},
+    )
+
+
+def _scene_price_count_diff(n: Mapping[str, int], v: Mapping[str, str]) -> LinearScene:
+    item_a, counter_a = v["item_a"], v["counter_a"]
+    item_b, counter_b = v["item_b"], v["counter_b"]
+    return LinearScene(
+        scenario=(
+            f"ある店で、1{counter_a}{n['price_a']}円の{item_a}と"
+            f"1{counter_b}{n['price_b']}円の{item_b}を"
+            f"買った。{item_b}は{item_a}より{n['diff']}{counter_b}多く買い、"
+            f"代金の合計は{n['cost']}円だった。"
+        ),
+        quantities="",
+        ask_formulation="",
+        ask_value=f"{item_a}を買った{counter_a}数を求めよ。",
+        relation_label="代金の合計",
+        answer_unit=counter_a,
+        slots={"item_a": item_a, "item_b": item_b, "counter": counter_a},
+    )
+
+
+def _scene_surplus_shortage(n: Mapping[str, int], v: Mapping[str, str]) -> LinearScene:
+    person, obj, obj_counter = v["person"], v["object"], v["object_counter"]
+    return LinearScene(
+        scenario=(
+            f"何人かの{person}に{obj}を配る。1人に{n['per_a']}{obj_counter}ずつ配ると"
+            f"{n['surplus']}{obj_counter}余り、1人に{n['per_b']}{obj_counter}ずつ配ると"
+            f"{n['shortage']}{obj_counter}足りない。"
+        ),
+        quantities=f"{person}の人数を x 人とする。",
+        ask_formulation=(
+            f"どちらの配り方でも{obj}の全部の{obj_counter}数は同じであることから、"
+            "x についての方程式をつくれ。"
+        ),
+        ask_value=f"{person}の人数を求めよ。",
+        relation_label=f"配る{obj}の全部の{obj_counter}数",
+        answer_unit="人",
+        slots={"person": person, "object": obj, "counter": obj_counter},
+    )
+
+
+def _scene_seat_shortage(n: Mapping[str, int], v: Mapping[str, str]) -> LinearScene:
+    person = v["person"]
+    return LinearScene(
+        scenario=(
+            f"長いすに{person}を座らせる。1脚に{n['per_a']}人ずつ座ると"
+            f"{n['left_out']}人が座れず、"
+            f"1脚に{n['per_b']}人ずつ座ると最後の1脚だけ{n['last_seat']}人になり、"
+            f"いすはちょうど埋まった。"
+        ),
+        quantities="",
+        ask_formulation="",
+        ask_value=f"{person}の人数を求めよ。",
+        relation_label=f"{person}の全体の人数",
+        answer_unit="人",
+        slots={"person": person, "counter": "人"},
+    )
+
+
+def _scene_round_trip(n: Mapping[str, int], v: Mapping[str, str]) -> LinearScene:
+    start, goal = v["start"], v["goal"]
+    speed_go, speed_back = n["speed_go"], n["speed_back"]
+    return LinearScene(
+        scenario=(
+            f"{start}から{goal}まで、行きは{_travel_means(speed_go)}時速{speed_go}km、"
+            f"帰りは同じ道を{_travel_means(speed_back)}時速{speed_back}kmの速さで"
+            f"進んだところ、進むのにかかった時間は合わせて{n['total_time']}時間だった。"
+        ),
+        quantities=f"{start}から{goal}までの道のりを x km とする。",
+        ask_formulation="かかった時間の関係を、x を使った方程式で表せ。",
+        ask_value=f"{start}から{goal}までの道のりを求めよ。",
+        relation_label="進むのにかかった時間の合計",
+        answer_unit="km",
+        slots={"start": start, "goal": goal, "counter": "km"},
+    )
+
+
+def _scene_catch_up(n: Mapping[str, int], v: Mapping[str, str]) -> LinearScene:
+    first, second = v["first"], v["second"]
+    return LinearScene(
+        scenario=(
+            f"{first}は分速{n['speed_slow']}mで家を出発し、その{n['head_start']}分後に"
+            f"{second}が分速{n['speed_fast']}mの自転車で同じ道を追いかけた。"
+        ),
+        quantities="",
+        ask_formulation="",
+        ask_value=f"{second}が{first}に追いつくのは、{second}が出発してから何分後か求めよ。",
+        relation_label="追いついたときに2人が進んだ道のり",
+        answer_unit="分",
+        slots={"first": first, "second": second, "counter": "分"},
+    )
+
+
+def _scene_proportion_pair(n: Mapping[str, int], v: Mapping[str, str]) -> LinearScene:
+    item, counter = v["item"], v["counter"]
+    count_a, count_b = n["count_a"], n["count_b"]
+    return LinearScene(
+        scenario=(
+            f"同じ{item}を何{counter}か買う。"
+            f"{item}{count_a}{counter}の値段は{n['price_a']}円である。"
+        ),
+        quantities=f"{item}{count_b}{counter}の値段を x 円とする。",
+        ask_formulation=f"{count_a}{counter}と{count_b}{counter}の値段の比例式をつくれ。",
+        ask_value=f"{item}{count_b}{counter}の値段を求めよ。",
+        relation_label=f"{counter}数と値段の比",
+        answer_unit="円",
+        slots={"item": item, "counter": counter},
+    )
+
+
+def _scene_continued_ratio(n: Mapping[str, int], v: Mapping[str, str]) -> LinearScene:
+    """Lv2 と違い、比例式に並べる「全体がいくつ分か」（r1+r2+r3）が本文に無い＝
+    自分でたしてから立式する。立式の手数が1つ増えるのを `prelude_step` で表す。
+    """
+    obj, counter = v["object"], v["counter"]
+    name_1, name_2, name_3 = v["name_1"], v["name_2"], v["name_3"]
+    r1, r2, r3 = n["ratio_1"], n["ratio_2"], n["ratio_3"]
+    return LinearScene(
         scenario=(
             f"{name_1}・{name_2}・{name_3}の{obj}の{counter}数の比は"
-            f"{r1}:{r2}:{r3}で、全部で{total}{counter}ある。"
+            f"{r1}:{r2}:{r3}で、全部で{n['total']}{counter}ある。"
         ),
         quantities="",
         ask_formulation="",
         ask_value=f"{name_2}の{obj}の{counter}数を求めよ。",
         relation_label=f"{name_2}の{counter}数と全体の{counter}数の比",
-        answer_coeff=(1, 0),
         answer_unit=counter,
         slots={"object": obj, "counter": counter, "label": name_2},
         prelude_step=(
             "sum_ratio_parts",
-            f"全体は{ratio_total}",
+            f"全体は{r1 + r2 + r3}",
             "連比の各項をたして、全体がいくつ分にあたるかを求める。",
         ),
     )
 
 
-_SCENE_DRAWERS: dict[str, Callable[[Mapping[str, Any], Rng], LinearScene]] = {
+SCENE_RENDERERS: dict[str, Callable[[Mapping[str, int], Mapping[str, str]], LinearScene]] = {
     "price_count": _scene_price_count,
     "price_count_diff": _scene_price_count_diff,
     "surplus_shortage": _scene_surplus_shortage,
@@ -612,6 +765,13 @@ _SCENE_DRAWERS: dict[str, Callable[[Mapping[str, Any], Rng], LinearScene]] = {
     "proportion_pair": _scene_proportion_pair,
     "continued_ratio": _scene_continued_ratio,
 }
+
+
+def draw_scene(kind: str, p: Mapping[str, Any], rng: Rng) -> tuple[LinearRelation, LinearScene]:
+    """関係 → 語彙 → 場面文 の順に組む。**この順番が RNG の消費順を決める。**"""
+    relation = RELATION_DRAWERS[kind](p, rng)
+    vocab = draw_vocab(_SCENE_VOCAB.get(kind, ()), p, rng)
+    return relation, SCENE_RENDERERS[kind](relation.numbers, vocab)
 
 
 # ---------------------------------------------------------------------------
@@ -646,8 +806,8 @@ def word_problem_linear_equation(ctx: CellContext, rng: Rng) -> MR:
     p = ctx.spec_level.params
     kind = str(p["scenario_kind"])
     guided = bool(p["guided"])
-    scene = _SCENE_DRAWERS[kind](p, rng)
-    formulation, sol, answer_value = solve_scene(kind, scene.numbers, scene.answer_coeff)
+    relation, scene = draw_scene(kind, p, rng)
+    formulation, sol, answer_value = solve_scene(kind, relation.numbers, relation.answer_coeff)
 
     concept_tags = list(ctx.spec_level.concept_tags or ctx.spec_family.concepts_default)
     cause_tags = list(ctx.spec_level.cause_tags)
@@ -665,7 +825,7 @@ def word_problem_linear_equation(ctx: CellContext, rng: Rng) -> MR:
         steps=[
             *([] if guided else formulation_steps),
             *sol.steps,
-            *_derive_steps(scene, answer_value),
+            *_derive_steps(scene, relation.answer_coeff, answer_value),
         ],
         concept_tags=concept_tags,
         cause_tags=cause_tags,
@@ -703,8 +863,10 @@ def word_problem_linear_equation(ctx: CellContext, rng: Rng) -> MR:
             # 誘導の有無（小問数）。checker はこれを見て返す Solution の数を決める
             # ＝MR の形をなぞらずに独立に決める（G-Q1 が数の不一致を検出できる）。
             "guided": guided,
-            "numbers": {k: str(v) for k, v in scene.numbers.items()},
-            "answer_coeff": [str(scene.answer_coeff[0]), str(scene.answer_coeff[1])],
+            "numbers": {k: str(v) for k, v in relation.numbers.items()},
+            "answer_coeff": [
+                str(relation.answer_coeff[0]), str(relation.answer_coeff[1]),
+            ],
             "answer_unit": scene.answer_unit,
             # 題材（dup_key は params のみを見る＝context_slots は算入されない）。
             "slots": dict(scene.slots),
@@ -758,9 +920,13 @@ def _formulation_steps(scene: LinearScene, formulation: LinearFormulation) -> li
     ]
 
 
-def _derive_steps(scene: LinearScene, answer_value: sympy.Expr) -> list[Step]:
-    """求める量が x と違う場面だけ足す最後の一手（m·x + n）。"""
-    if scene.answer_coeff == (1, 0):
+def _derive_steps(scene: LinearScene, answer_coeff: tuple[int, int],
+                  answer_value: sympy.Expr) -> list[Step]:
+    """求める量が x と違う関係だけ足す最後の一手（m·x + n）。
+
+    `answer_coeff` は Relation が持つ（数だけで決まる）ので、場面から取らずに渡す。
+    """
+    if answer_coeff == (1, 0):
         return []
     return [
         Step(
