@@ -658,7 +658,12 @@ def exam_linear_area_multiple_point_recipe(ctx: CellContext, rng: Rng) -> MR:
         purpose=ctx.purpose, seed=0,
         params={"numbers": {"slope": m, "intercept": b, "multiple": k},
                 "labels": la + lb + lc,
-                **_grid_params(m, b)},
+                **_grid_params(m, b),
+                # ★x切片・y切片・原点は**答えではない**（答えは点 lc の座標）ので
+                # 図に打つ。本文が名前を付けているのに図に無く、どの点を指して
+                # いるのか分からなかった（2026-08-19 の外部評価の指摘）。
+                "label_pts": [str((int(-b // m), 0)), str((0, int(b))), str((0, 0))],
+                "label_names": [la, lb, "O"]},
         given={"scenario": scenario},
         context_slots={
             "ask_value": (
@@ -670,7 +675,10 @@ def exam_linear_area_multiple_point_recipe(ctx: CellContext, rng: Rng) -> MR:
         sub_questions=[_exam_l1_sub(ctx, label="(1)", asked="value", sol=sol)],
         # **点Gは描かない**（それが答え）。与えられた直線と2つの交点までを描く。
         visual_plan=VisualPlan(
-            style="grid", labels=tick_labels_from_params(_grid_params(m, b)),
+            style="grid",
+            labels=tick_labels_from_params(
+                {**_grid_params(m, b), "label_names": [la, lb, "O"]}
+            ),
             elements=[
                 VisualElement(kind="grid", attrs={}),
                 VisualElement(kind="axis", attrs={}),
