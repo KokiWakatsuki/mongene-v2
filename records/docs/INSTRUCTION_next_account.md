@@ -1,5 +1,12 @@
 # 別アカウント Opus への指示文（そのまま貼り付け可）
 
+> **★2026-08-19 追記: この文書は 2026-07-07 時点のもので、局面が変わっている。**
+> いま進行中の作業（式と場面の切り離し）を引き継ぐなら、まず
+> **`records/docs/HANDOFF_scene_split_2026-08-19.md`** を読むこと。
+> 基準は `records/docs/scene_formulation_charter_2026-08-19.md`、
+> 進捗は `records/work/logs/PROGRESS.md`。
+> 以下は当時の記録として残してある（アーキテクチャの背景には今も使える）。
+
 このリポジトリ（mongene-v2 / /Users/koki/workspace/mongene-v2）で進行中の作業を引き継いでください。
 別アカウントからの引き継ぎで、あなたにはメモリも会話履歴もありません。
 

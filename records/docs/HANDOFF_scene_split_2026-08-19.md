@@ -1,0 +1,126 @@
+# 引き継ぎ — 式と場面の切り離し（2026-08-19 開始時点）
+
+**別アカウントに切り替わっても、この1枚から作業を続けられるように書いてある。**
+あなたにはメモリも会話履歴も無い前提。
+
+---
+
+## 0. 最初にこれだけ読む（順番に）
+
+1. **`records/docs/scene_formulation_charter_2026-08-19.md`** ← **唯一の基準**
+   現状（実測）・ゴール（システムとして）・作業内容（6つ）が書いてある。
+   他の資料と食い違ったら**これを正**とする。
+2. `records/work/logs/PROGRESS.md` ← **どこまで進んだか**。1行1エントリ
+3. `git log --oneline -20`
+4. `records/docs/engine_open_items_2026-08-19.md` ← **意図して残したもの**（取りこぼしと区別するため）
+
+古い資料（`scene_formulation_split_design.md` 2026-08-17、`INSTRUCTION_next_account.md`）は
+**前の局面のもの**。参考にはなるが基準ではない。
+
+---
+
+## 1. いまどこにいるか
+
+**エンジンは一度完成とした**（ユーザー判断・2026-08-19）。ただし今後も修正は続ける
+＝そういう設計にする、という意味。
+
+```
+コーパス   630セル / 943問 / 図341
+検証       eval 7ゲート True / golden 280family 失敗0 / pytest 失敗0
+再現性     630セル×3seed×ハッシュ種3通りで差分 0
+作業ツリー clean
+```
+
+**次にやるのは「式と場面の切り離し」。作業0（物差しを直す）から。まだ1行も着手していない。**
+
+### この作業のいちばん大きな数字（実測）
+
+```
+word_problem  100セル / コーパス上 243問
+うち文型       102          ← 差の141は語彙（品名・人名）だけの違い
+文型が1つしかないセル  98 / 100
+```
+
+測り方: `PYTHONPATH=engine_core .venv/bin/python records/work/count_patterns_wp.py`
+
+---
+
+## 2. あなたのタスク＝作業0 から順に
+
+charter の §4 に6つ書いてある。**作業0 → 1 → 2 → 3 で止まる**（作業4「メインプロジェクトへの
+組み込み」の直前まで）。ユーザーは作業0〜3 のあいだ**承認を求めない**方針。
+
+| # | やること | 終わったと言える条件 |
+|:--:|---|---|
+| 0 | 型の数え方を「文型 / 語彙 / 数」に分ける | g2_l16.Lv2 の型が 49 → 文型の数になる |
+| 1 | 構造を3層（Relation / Scene / Formulation）に割る | **approve の差分ゼロ**・`Scene` に `draw(` が無い・`Relation` に日本語が無い |
+| 2 | 検査の仕組み（G-SC1〜5・G-BT） | 合成データで**落ちる場合も出る**ことを確認 |
+| 3 | 場面4つ・式2つを足して量産できるか判断 | **触ったファイル数が1**・文型が増える・dup が下がる・G-BT 0 |
+
+---
+
+## 3. 使う道具（コマンドはそのまま貼れる）
+
+```bash
+# 1セルだけ速く見る（秒）
+PYTHONPATH=engine_core .venv/bin/python records/work/check_cell.py g2_l16 word_problem 2,3
+
+# 全走（ログは records/work/logs/ に日付つきで残る）
+bash records/work/verify_all.sh
+
+# 個別
+PYTHONPATH=engine_core .venv/bin/python -m engine.eval --jobs 7          # 約20分
+PYTHONPATH=engine_core .venv/bin/python records/work/approve_all.py --jobs 7  # 約17分・単独で
+PYTHONPATH=engine_core .venv/bin/python -m pytest engine_core -q -n 7    # 約20分
+PYTHONPATH=engine_core .venv/bin/python records/work/build_corpus.py     # 約5分
+
+# 文型を数える（この作業の物差し）
+PYTHONPATH=engine_core .venv/bin/python records/work/count_patterns_wp.py
+```
+
+**eval の合否は「ゲート見出しの一覧」と最終行 `=== eval 一式: OK ===` で判定する。**
+`tail` だけ見ると前半の FAIL を見落とす。継いだコマンドの exit code も信用しない。
+
+---
+
+## 4. サブエージェントの使い方（ユーザー許可済み）
+
+**G-BT（逆翻訳）の読み手として使う。** 独立した検査になる条件は
+**「場面のコードも答えも見ていないこと」**。冷たい状態から始まるサブエージェントは満たす。
+
+- 渡すのは**問題文だけ**。答え・解説・params・場面のコードは渡さない（引きずられる）
+- 1つの文型につき**複数 seed**（文型が正しくても、seed によって値が場面に合わないことがある）
+- 返ってくるのが数式なので、**engine の式と機械的に突き合わせられる**＝報告を鵜呑みにしない
+- 走査を書く・修正する作業には使わない（文脈を持っているこちらが速い）
+
+---
+
+## 5. 厳守（過去に踏んだもの・理由つき）
+
+1. **作業1の「生成物が同一」を必ず通す。** 飛ばすと構造を変えたのか中身を変えたのかが
+   分からなくなる。golden の差分だけがそれを教えてくれる
+2. **増やした軸は `params` に載せる。** `dup_key` は params だけを見る。場面を5倍にしても
+   params に無ければ dup は1ミリも下がらない
+3. **定義域は狭めない。** dup が下がるのは軸が増えるからで、数を絞るからではない
+4. **同じ規約を複数の場所に複製しない。** 頂点名から `I` を外す作業で4か所に散っていて、
+   1か所直して作り直しても消えなかった（4→2→0）
+5. **0件・過大な数を出す走査は、まず検査が動いているか確かめる。**
+   文型を数える走査は最初 100セルすべて 30 型を返した（＝seed 数と同じ＝動いていない）。
+   **鍵の名前で surface を除くと取りこぼす。値の型で選ぶ**
+6. **図を足したら PNG に起こして見る。** ゲートは図の中身の誤りを検出しない
+7. **落ちたテストは書き直す。消さない。** 落ちるのはたいてい古い挙動を固定しているから
+8. **コミットは節目ごと。push はユーザーの明示依頼まで禁止。** 末尾に
+   `Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>`
+9. **`records/work/logs/PROGRESS.md` に逐次追記。** 長い処理の前後に1行書いておけば、
+   利用制限で切れても次のアカウントが途中から拾える
+
+---
+
+## 6. 環境
+
+```
+リポジトリ   /Users/koki/workspace/mongene-v2
+Python      .venv/bin/python（必ずこれ。PYTHONPATH=engine_core）
+ブランチ     engine-m0-rework（master ではない）
+モック本体   別リポジトリ github.com/yukiwaria/mongene（作業4で扱う）
+```
