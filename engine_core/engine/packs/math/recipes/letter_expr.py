@@ -318,8 +318,24 @@ def _draw_distinct_from_pool(pool_source: list[str], k: int, rng: Rng) -> list[s
 
 
 def _draw_distinct_points(k: int, rng: Rng) -> list[str]:
-    """相異なる k 個の点名（大文字）を引く（_draw_distinct_from_pool の点名版）。"""
-    return _draw_distinct_from_pool(_POINT_LETTERS, k, rng)
+    """相異なる k 個の点名を、**連続した文字の並び**から引く。
+
+    ★もとは 24 文字の袋から無作為に k 個取っていたので、「三角形BJQ」「三角形CQH」
+    「四角形GEFP」のような、実物の教材には出てこない名前が出ていた（2026-08-19 の
+    外部評価で「三角形の頂点名 69 種類」と指摘。実測でも 87 種）。
+
+    実物は図形の頂点をアルファベット順に名づける（△ABC・△DEF・□ABCD）。
+    `_draw_named_figures` は既にそうしていたが、こちらは無作為のままだった。
+    連続した k 文字の区間を引くようにそろえる。
+
+    **点名は dup_key に入っていない**ので、選び方を狭めても重複率は動かない
+    （表層の水増しをやめたときに外してある）。
+    """
+    letters = _FIGURE_LETTERS
+    if k > len(letters):
+        raise ValueError(f"_draw_distinct_points: 文字が足りない（{k} 個）")
+    start = int(draw({"int_range": [0, len(letters) - k]}, rng))
+    return list(letters[start:start + k])
 
 
 def _draw_named_figures(sizes: list[int], rng: Rng) -> list[str]:
@@ -1906,7 +1922,9 @@ def _draw_rule_statement(
 
     if topic == "congruence_conditions":
         # g2_l37 三角形の合同条件(3つすべて)。具体例の三角形の点名を埋め込み surface を分散する。
-        pa, pb, pc, pd, pe, pf = _draw_distinct_points(6, rng)
+        (t1, t2) = _draw_named_figures([3, 3], rng)
+        pa, pb, pc = t1
+        pd, pe, pf = t2
         return f"三角形{pa}{pb}{pc}と三角形{pd}{pe}{pf}が合同であることを示すために使える条件"
 
     if topic == "isosceles_property":
@@ -1926,7 +1944,9 @@ def _draw_rule_statement(
 
     if topic == "right_triangle_congruence_conditions":
         # g2_l44 直角三角形の合同条件(2つとも)。具体例の三角形の点名を埋め込み surface を分散する。
-        pa, pb, pc, pd, pe, pf = _draw_distinct_points(6, rng)
+        (t1, t2) = _draw_named_figures([3, 3], rng)
+        pa, pb, pc = t1
+        pd, pe, pf = t2
         return (
             f"直角三角形{pa}{pb}{pc}と直角三角形{pd}{pe}{pf}が合同であることを示すために"
             "使える条件"

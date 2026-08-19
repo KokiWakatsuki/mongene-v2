@@ -211,6 +211,8 @@ _MAX_HINTS = 3
 
 
 _NUMBER_IN_HINT = re.compile(r"\d")
+# 図形の点名（大文字1文字以上）。概念名にこれが入っていたらヒントに使わない。
+_POINT_NAME_RE = re.compile(r"[A-Z]")
 
 
 def _has_bare_number(text: str) -> bool:
@@ -249,6 +251,11 @@ def _concept_hints(mr: "MR", ctx: "CellContext", sq_index: int) -> list[str]:
     for tag in tags:
         label = str(labels.get(tag, "")).strip()
         if not label or _has_bare_number(label):
+            continue
+        # ★**点名が書かれている概念名は使えない。** 「AB//CD の交わる線分が…」は、
+        # その回の図が別の文字（PQ//RS）で作られていると、本文に無い記号が
+        # ヒントに出る（text_quality が 5 セルで捕まえた）。
+        if _POINT_NAME_RE.search(label):
             continue
         if label not in out:
             out.append(label)

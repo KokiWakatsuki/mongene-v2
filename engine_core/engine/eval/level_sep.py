@@ -39,14 +39,25 @@ class FamilyLevelSep:
     fp_collisions: list[dict[str, object]] = field(default_factory=list)  # (b) 失敗詳細
     monotonicity: str = "not_declared"  # (c)
     build_failures: list[dict[str, object]] = field(default_factory=list)
+    # (d) 最上位レベルが「定型から外れて」いるか。詳細は `_top_level_is_harder`。
+    top_level_gap: list[dict[str, object]] = field(default_factory=list)
 
     @property
     def fp_distinct(self) -> bool:  # (b)
         return not self.fp_collisions
 
     @property
+    def top_level_ok(self) -> bool:  # (d)
+        return not self.top_level_gap
+
+    @property
     def ok(self) -> bool:
-        return self.signatures_distinct and self.fp_distinct and not self.build_failures
+        return (
+            self.signatures_distinct
+            and self.fp_distinct
+            and self.top_level_ok
+            and not self.build_failures
+        )
 
 
 def family_level_sep(env: EvalEnv, family: str, coords: list[Coordinate], seeds: int) -> FamilyLevelSep:
@@ -58,6 +69,9 @@ def family_level_sep(env: EvalEnv, family: str, coords: list[Coordinate], seeds:
     fp_by_sig: dict[str, str] = {}
     fp_per_sig_seen: dict[str, set[str]] = defaultdict(set)
     build_failures: list[dict[str, object]] = []
+    ops_by_level: dict[int, set[str]] = defaultdict(set)
+    subs_by_level: dict[int, set[int]] = defaultdict(set)
+    asked_by_level: dict[int, set[str]] = defaultdict(set)
 
     for coord in coords_typed:
         for seed in range(1, seeds + 1):
@@ -66,9 +80,16 @@ def family_level_sep(env: EvalEnv, family: str, coords: list[Coordinate], seeds:
                 build_failures.append({"level": coord.level, "seed": seed, "error": r.error})
                 continue
             sig_by_level[coord.level] = r.mr.signature
+            for sq in r.mr.sub_questions:
+                ops_by_level[coord.level] |= {st.op for st in (sq.steps or ())}
+            subs_by_level[coord.level].add(len(r.mr.sub_questions))
+            asked_by_level[coord.level] |= {sq.asked for sq in r.mr.sub_questions}
             fp = fingerprint_hash(r.mr)
             fp_per_sig_seen[r.mr.signature].add(fp)
             fp_by_sig[r.mr.signature] = fp
+
+    # (d) 最上位レベルは、その1つ下と**手数以外の面で**違っていること。
+    top_level_gap = _top_level_gap(ops_by_level, subs_by_level, asked_by_level, levels)
 
     signatures = [sig_by_level.get(lv, "?") for lv in levels]
     signatures_distinct = len(set(signatures)) == len(signatures)
@@ -88,8 +109,59 @@ def family_level_sep(env: EvalEnv, family: str, coords: list[Coordinate], seeds:
         signatures_distinct=signatures_distinct,
         fp_by_signature=fp_by_sig,
         fp_collisions=fp_collisions,
+        top_level_gap=top_level_gap,
         build_failures=build_failures,
     )
+
+
+def _top_level_gap(
+    ops_by_level: dict[int, set[str]],
+    subs_by_level: dict[int, set[int]],
+    asked_by_level: dict[int, set[str]],
+    levels: list[int],
+) -> list[dict[str, object]]:
+    """最上位レベルが、その1つ下と**手数以外の面で**違っているかを見る。
+
+    ★**Lv3 と Lv4 が分離していない**という指摘（2026-08-19 の外部評価）。
+    解説の手数の平均差しか無ければ、Lv4 は「作業量が多いだけ」で、入試で差が
+    つく「定型手順から外れる問題」になっていない。
+
+    signature と fp（(a)(b)）は「何かが違う」ことしか言わない——引く数が違えば
+    通ってしまう。ここでは**どちらかが成り立つこと**を求める:
+
+      1. 最上位レベルに、1つ下に無い**操作**がある（新しい道具を使う）
+      2. 最上位レベルの**小問が少ない**（誘導が外れ、筋道を自分で立てる）
+      3. **問うもの（asked）が変わる**（式を答える → グラフをかく など）
+
+    実測では 41 セル中 39 が 1 を、残り 2 が 2 を満たしていた（exam_l2/exam_l3 の
+    word_problem は「Lv3 の最後の小問を誘導なしで出す」形）。どちらも difficulty の
+    上げ方として実物にあるので、両方を認める。
+    """
+    ordered = sorted(set(levels))
+    if len(ordered) < 2:
+        return []
+    top, prev = ordered[-1], ordered[-2]
+    # **Lv4 だけを見る。** 指摘は「Lv3 と Lv4 が分離していない」であって、
+    # Lv1→Lv2 は「方眼にかく／座標で答える」のように**問うものが変わる**ことで
+    # 分離しており、操作や小問数で測る話ではない。
+    if top < 4:
+        return []
+    if not ops_by_level.get(top) or not ops_by_level.get(prev):
+        return []
+    new_ops = ops_by_level[top] - ops_by_level[prev]
+    top_subs = min(subs_by_level.get(top) or {0})
+    prev_subs = max(subs_by_level.get(prev) or {0})
+    new_asked = asked_by_level.get(top, set()) - asked_by_level.get(prev, set())
+    if new_ops or new_asked or top_subs < prev_subs:
+        return []
+    return [{
+        "top_level": top,
+        "prev_level": prev,
+        "reason": "最上位レベルに、1つ下に無い操作が無く、小問も減っていない"
+                  "（手数が増えているだけ）",
+        "top_ops": sorted(ops_by_level[top]),
+        "prev_ops": sorted(ops_by_level[prev]),
+    }]
 
 
 @dataclass

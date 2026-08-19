@@ -23,6 +23,14 @@ levels:
     params:
       topic: similarity_conditions
       concept_set: [all_three]
+    dup_rate_max: 0.90
+    dup_rate_reason: |
+      ★**点名の無作為さで通していた。** もとは 24 文字から点名を無作為に引いていて、
+      「三角形BJQ」「四角形GEFP」のような実物の教材に出てこない名前が出ていた
+      （2026-08-19 の外部評価で「三角形の頂点名 69 種類」と指摘）。点名を実物どおり
+      連続した文字にそろえたところ、このセルの**中身の狭さ**が現れた。
+      中身の軸は実測 19 通り。教材として正しい名前を優先し、狭さをここに宣言する
+      （原則: 場面が成り立つことを dup より優先する。表層で水増しして閾を通さない）。
     given: [statement]
     asked: [choice]
     visual: none

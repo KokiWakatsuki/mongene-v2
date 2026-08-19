@@ -34,7 +34,12 @@ levels:
     params:
       guided: true
       proposition_set: [consecutive_sum, parity_pair_op]
-      letter_pool: [a, b, c, d, f, g, h, k, m, n, p, q, r, s, t, u, w, z]
+      # ★整数を表す文字は m・n・k（と、4文字要る型のための p・q）に限る
+      # （教科書の書き方。2026-08-19 の外部評価で
+      # 「p = 8n、w = 4u」のような組が出ていると指摘された）。文字の種類は
+      # dup_key に入っていない（表層の水増しをやめたときに外してある）ので、
+      # ここを狭めても重複率は動かない。
+      letter_pool: [m, n, k, p, q]
     dup_rate_max: 0.65
     dup_rate_reason: |
       命題は consecutive_sum（連続する整数の和）と parity_pair_op（偶数・奇数の和/積）の**2つ**。
@@ -52,7 +57,12 @@ levels:
     params:
       guided: false
       proposition_set: [consecutive_sum, parity_pair_op]
-      letter_pool: [a, b, c, d, f, g, h, k, m, n, p, q, r, s, t, u, w, z]
+      # ★整数を表す文字は m・n・k（と、4文字要る型のための p・q）に限る
+      # （教科書の書き方。2026-08-19 の外部評価で
+      # 「p = 8n、w = 4u」のような組が出ていると指摘された）。文字の種類は
+      # dup_key に入っていない（表層の水増しをやめたときに外してある）ので、
+      # ここを狭めても重複率は動かない。
+      letter_pool: [m, n, k, p, q]
     dup_rate_max: 0.65
     dup_rate_reason: |
       Lv2 と同じ2命題（誘導が無いだけ）。実測 22 通り。
