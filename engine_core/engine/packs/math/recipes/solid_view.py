@@ -295,6 +295,9 @@ def _projection_params(
         "shown_view": shown,
         "base_len": base,
         "solid_height": height,
+        # 与えられているほうの図に寸法を書く（本文が与えている長さ。並び順は
+        # 描き手の約束＝[底面, 高さ]）。
+        "dim_labels": [f"{base}cm", f"{height}cm"],
     }
 
 

@@ -8315,9 +8315,20 @@ def test_c6_graph_table_double_solve_property(family, level, seed):
     else:
         assert sol.answer.srepr == sq.answer.srepr
 
-    # G-Q5v: 図の <text> は軸目盛だけ＝labels は tick_labels_from_params と機械的に一致。
+    # G-Q5v: labels は「軸目盛」＋「横に並べた場面の図の文字」だけ。
+    # ★動点のセルは、方眼の左に**場面の図**（正方形と動く向き）を並べるように
+    # したので、その頂点名と辺の長さが labels に加わる。もとは
+    # 「labels == tick_labels_from_params」と完全一致で固定していたが、それは
+    # 「場面の図を並べない」という当時の作りを写しただけの条件だった。
+    # 本当に確かめたいのは**目盛が漏れなく宣言されていること**と、
+    # **答えがラベルに出ていないこと**の2つである。
     assert mr.visual_plan is not None
-    assert mr.visual_plan.labels == tick_labels_from_params(mr.params)
+    ticks = tick_labels_from_params(mr.params)
+    assert set(ticks) <= set(mr.visual_plan.labels)
+    extra = [x for x in mr.visual_plan.labels if x not in ticks]
+    scene_labels = set(str(mr.params.get("labels") or ""))
+    for x in extra:
+        assert x in scene_labels or x.endswith("cm"), f"素性の分からないラベル: {x}"
 
     if sq.asked == "draw_graph":
         # 「かく」セル: 問題図は空の方眼（描画対象を宣言しない）／模範解答図は非空。

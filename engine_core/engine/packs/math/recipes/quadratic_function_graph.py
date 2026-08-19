@@ -175,7 +175,8 @@ def read_two_points_on_parabola(ctx: CellContext, rng: Rng) -> MR:
     }
     visual_plan = VisualPlan(
         style="grid",
-        labels=tick_labels_from_params(params) + [na, nb, nc, nd, np_],
+        # 点名 M・N も図に出るので labels に載せる（G-Q5v）。
+        labels=tick_labels_from_params(params),
         elements=[
             VisualElement(kind="grid", attrs={}),
             VisualElement(kind="axis", attrs={}),

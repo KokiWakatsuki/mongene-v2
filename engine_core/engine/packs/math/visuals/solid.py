@@ -388,8 +388,11 @@ def _triangular_pyramid_sketch(params: dict[str, Any]) -> list[str]:
     ]
     dims = _edge_dimension_labels(
         params,
-        [((a[0] + b[0]) / 2, a[1] + 16)],   # 底面の1辺
-        anchors=["middle"],
+        [
+            ((a[0] + b[0]) / 2, a[1] + 16),          # 底面の1辺
+            (apex[0] + 14, (apex[1] + a[1]) / 2),    # 高さ
+        ],
+        anchors=["middle", "start"],
     )
     pts = {"A": a, "B": b, "C": c, "D": apex}
     return parts + dims + _vertex_labels(params, pts)
@@ -422,7 +425,14 @@ def _hemisphere_on_cylinder_sketch(params: dict[str, Any]) -> list[str]:
         # 上に載る半球（切り口は円柱の上面と共有）。
         f'<path d="M {cx - r:.2f} {y_top:.2f} A {r:.2f} {r:.2f} 0 0 1 {cx + r:.2f} '
         f'{y_top:.2f}" fill="none" stroke="{_STROKE}" stroke-width="{_THIN}"/>',
-    ]
+    ] + _edge_dimension_labels(
+        params,
+        [
+            (cx + r / 2, y_top - r - 8),                 # 半球の半径
+            (cx + r + 12, (y_top + y_bottom) / 2),       # 円柱の高さ
+        ],
+        anchors=["middle", "start"],
+    )
 
 
 def _cube_with_pyramid_sketch(params: dict[str, Any]) -> list[str]:
@@ -580,12 +590,19 @@ def _projection_parts(params: dict[str, Any], *, draw: bool) -> list[str]:
         return _answer_area_parts()
 
     parts: list[str] = []
+    labels = [str(v) for v in params.get("dim_labels") or []]
     if shown in ("both", "elevation"):
         parts += _shape_parts(elev, cx, cy_elev, w, h)
         parts.append(_text(cx - w / 2 - 24, cy_elev, "立面図", anchor="end"))
+        # ★与えられているほうの図にも寸法を書く。本文が「底面が1辺7cmの正方形、
+        # 高さ14cm」と与えているのに、図には形しか無かった（外部評価の指摘）。
+        if shown == "elevation" and len(labels) >= 2:
+            parts.append(_text(cx + w / 2 + 12, cy_elev, labels[1], anchor="start"))
     if shown in ("both", "plan"):
         parts += _shape_parts(plan, cx, cy_plan, w, w)
         parts.append(_text(cx - w / 2 - 24, cy_plan, "平面図", anchor="end"))
+        if shown == "plan" and labels:
+            parts.append(_text(cx, cy_plan + w / 2 + 16, labels[0], anchor="middle"))
     if shown == "both":
         # 対応を示す縦の破線（教科書の並べ方）
         for dx in (-w / 2, w / 2):

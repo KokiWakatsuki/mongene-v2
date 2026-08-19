@@ -108,7 +108,9 @@ def _sketch_dim_labels(kind: str, values: dict[str, object]) -> list[str]:
     if kind in ("cylinder", "cone"):
         return [x for x in (cm("radius"), cm("height") or cm("slant")) if x]
     if kind in ("tetrahedron", "triangular_pyramid"):
-        return [x for x in (cm("edge") or cm("width"),) if x]
+        # 底面が直角三角形の三角錐は「直角をはさむ2辺」と高さを持つ。
+        base = cm("edge") or cm("width") or cm("leg1") or cm("base")
+        return [x for x in (base, cm("height")) if x]
     if kind in ("sphere", "hemisphere"):
         # 球・半球は半径だけで決まる。描き手は中心から右へ半径を書く。
         return [x for x in (cm("radius"),) if x]
@@ -145,18 +147,21 @@ def _sketch_svg(values: dict[str, object], mode: str = "") -> str:
                 "radius_px": max(rr * sc2, 60.0),
                 "height_px": max((hh if kind == "hemisphere_on_cylinder" else ph) * sc2, 60.0),
                 "width_px": max(ee * sc2, 90.0), "depth_px": max(ee * sc2 * 0.45, 40.0),
+                "dim_labels": _sketch_dim_labels(kind, values),
             },
             draw=True,
         )
     if kind == "hemisphere":
         return render_solid_svg(
-            {"view": "sketch", "solid_kind": "hemisphere", "radius_px": 115.0},
+            {"view": "sketch", "solid_kind": "hemisphere", "radius_px": 115.0,
+             "dim_labels": _sketch_dim_labels("hemisphere", values)},
             draw=True,
         )
     if kind == "sphere":
         # 球は半径だけで決まる（幅も高さも直径）。
         return render_solid_svg(
-            {"view": "sketch", "solid_kind": "sphere", "radius_px": 110.0},
+            {"view": "sketch", "solid_kind": "sphere", "radius_px": 110.0,
+             "dim_labels": _sketch_dim_labels("sphere", values)},
             draw=True,
         )
     w = float(values.get("width", 0) or edge or 2 * r or 1)
