@@ -12,7 +12,7 @@ C14 送り」と明記されている＝ここがその受け皿）。
 
 `word_problem_linear.py` と同じ償却。params の `scenario_kind` が
 
-  1. 場面の数値を answer-first で引く関数（`_SCENE_DRAWERS`）
+  1. 数を answer-first で引く関数（`RELATION_DRAWERS`）／日本語は `SCENE_RENDERERS`
   2. その数値から2次方程式を組む関数（`FORMULATION_BUILDERS`）
 
 の対を選ぶ。賄うのは g3_l29（数に関する問題）・g3_l30（図形に関する問題）の
@@ -64,6 +64,7 @@ from engine.core.contracts import (
 )
 from engine.core.registry import REGISTRY, register_recipe
 from engine.core.rng import Rng, draw
+from engine.packs.math.recipes.scene_vocab import VocabStep, draw_vocab
 
 RECIPE_NAME = "math.word_problem_quadratic"
 
@@ -139,27 +140,41 @@ FORMULATION_BUILDERS: dict[str, Callable[..., QuadFormulation]] = {
 
 
 # ---------------------------------------------------------------------------
-# 場面の抽選（answer-first。正の解 x0 を先に引き、場面の数値を逆算する）
+# 3層に割る（Relation / 語彙の抽選 / Scene）
+#
+# 割り方と理由は word_problem_linear.py の同じ節に書いてある（charter §3）。
+# この module の4場面はすべて「数 → 語彙」の順に引く。
 # ---------------------------------------------------------------------------
 @dataclass(frozen=True)
-class QuadScene:
-    """場面文と、そこから立式に渡す数値。
+class QuadRelation:
+    """関係（数と構成フラグだけ）。**日本語を持たない。**
 
     `numbers` は `FORMULATION_BUILDERS[kind]` のキーワード引数そのもの（params に
     そのまま載り、checker が同じ関数へ渡す）。`answer_coeffs` は「求める量 = m·x0+n」
-    を1つ（値のみ）または2つ（例: 連続する2整数）持つ。1つなら display は
-    `answer_units[0]` を付けるだけ、2つなら `answer_labels` で組む
-    （word_problem_linear / word_problem_system の書式をそれぞれ踏襲）。
+    を1つ（値のみ）または2つ（例: 連続する2整数）持つ。
+    `variant` は場面文の言い分けに使う構成フラグ（連続する整数／偶数／奇数）。
     """
 
     numbers: dict[str, int]
+    answer_coeffs: tuple[tuple[int, int], ...]
+    variant: str = ""
+
+
+@dataclass(frozen=True)
+class QuadScene:
+    """場面（日本語だけ）。数は引かず、引かれた数と語彙を受け取って文を組む。
+
+    1つの答えなら display は `answer_units[0]` を付けるだけ、2つなら
+    `answer_labels` で組む（word_problem_linear / word_problem_system の書式を
+    それぞれ踏襲）。
+    """
+
     scenario: str
     quantities: str
     ask_formulation: str
     ask_value: str
     # 「2通りに表せる量」の名前（立式の着眼点。解説の最初の一手に出す）。
     relation_label: str
-    answer_coeffs: tuple[tuple[int, int], ...]
     answer_labels: tuple[str, ...]
     answer_units: tuple[str, ...]
     slots: dict[str, str]
@@ -169,7 +184,34 @@ def _index_domain(n: int) -> dict[str, list[int]]:
     return {"int_range": [0, n - 1]}
 
 
-def _scene_consecutive_integers(p: Mapping[str, Any], rng: Rng) -> QuadScene:
+# ---------------------------------------------------------------------------
+# 語彙の抽選（宣言だけ）
+# ---------------------------------------------------------------------------
+# 同じ関係 x² = n·x + m の言い方（原則①: m を絞ったぶんの組み合わせを軸で取り戻す）。
+_SQUARE_RELATION_PHRASINGS = ("larger", "subtract", "sum")
+
+# **cm² で語れる題材だけにする。** 「面積が312cm²の畑」「456cm²の花だん」が出ていた
+# （畑・花だんは m² で測る大きさ）。紙・板・カード・写真は cm² が自然。
+_RECTANGLE_SCENES = [
+    # ★2026-08-18: 「横が縦より10cm長い長方形の写真、面積75cm²」→ 縦5cm×横15cm。
+    # **1:3 の写真は実在しない**（L判は 2:3）。紙・板・カード・布は 1:3 でも成り立つ。
+    "長方形", "長方形の紙", "長方形の板", "長方形のカード", "長方形の布",
+    "長方形のシール", "長方形のタイル", "長方形の布",
+]
+
+_SCENE_VOCAB: dict[str, tuple[VocabStep, ...]] = {
+    # 連続する整数の場面は題材トークンを持たない（言い分けは Relation の variant）。
+    "consecutive_integers": (),
+    "square_relation": (("one", _SQUARE_RELATION_PHRASINGS, ("phrasing",)),),
+    "rectangle_area": (("one", _RECTANGLE_SCENES, ("scene",)),),
+    "square_cut": (),
+}
+
+
+# ---------------------------------------------------------------------------
+# Relation（数と構成フラグだけ。日本語を1文字も持たない）
+# ---------------------------------------------------------------------------
+def _relation_consecutive_integers(p: Mapping[str, Any], rng: Rng) -> QuadRelation:
     """g3_l29 Lv2: 連続する2つの正の整数・偶数・奇数の積が p（誘導あり）。
 
     **積 p は教科書の大きさ（x0 ≤ small_max）に収める。** 以前は x0 を 3〜700 まで
@@ -183,26 +225,18 @@ def _scene_consecutive_integers(p: Mapping[str, Any], rng: Rng) -> QuadScene:
     x0_max = int(p["small_max"])
     if kind == "integers":
         cands = list(range(2, x0_max + 1))
-        gap, noun = 1, "正の整数"
+        gap = 1
     elif kind == "even":
         cands = list(range(2, x0_max + 1, 2))
-        gap, noun = 2, "正の偶数"
+        gap = 2
     else:
         cands = list(range(3, x0_max + 1, 2))
-        gap, noun = 2, "正の奇数"
+        gap = 2
     x0 = cands[int(draw(_index_domain(len(cands)), rng))]
-    product = x0 * (x0 + gap)
-    return QuadScene(
-        numbers={"product": product, "gap": gap},
-        scenario=f"連続する2つの{noun}がある。この2数の積は{product}である。",
-        quantities="小さい方の数を x とする。",
-        ask_formulation="2数の積の関係を、x を使った方程式で表せ。",
-        ask_value="この2つの数を求めよ。",
-        relation_label="2つの数の積",
+    return QuadRelation(
+        numbers={"product": x0 * (x0 + gap), "gap": gap},
         answer_coeffs=((1, 0), (1, gap)),
-        answer_labels=("小さい方の数は", "大きい方の数は"),
-        answer_units=("", ""),
-        slots={},
+        variant=kind,
     )
 
 
@@ -228,46 +262,17 @@ def _square_relation_candidates(p: Mapping[str, Any]) -> list[tuple[int, int]]:
     return out
 
 
-# 同じ関係 x² = n·x + m の言い方（原則①: m を絞ったぶんの組み合わせを軸で取り戻す）。
-_SQUARE_RELATION_PHRASINGS = ("larger", "subtract", "sum")
-
-
-def _scene_square_relation(p: Mapping[str, Any], rng: Rng) -> QuadScene:
+def _relation_square_relation(p: Mapping[str, Any], rng: Rng) -> QuadRelation:
     """g3_l29 Lv3: ある正の整数を2乗した数が、もとの数の n 倍より m 大きい（誘導なし）。"""
     cands = _square_relation_candidates(p)
     n, m = cands[int(draw(_index_domain(len(cands)), rng))]
-    phrasing = str(draw(list(_SQUARE_RELATION_PHRASINGS), rng))
-    relation = {
-        "larger": f"この数を2乗した数は、もとの数の{n}倍より{m}大きい。",
-        "subtract": f"この数を2乗した数から、もとの数の{n}倍をひくと{m}になる。",
-        "sum": f"この数を2乗した数は、もとの数の{n}倍と{m}の和に等しい。",
-    }[phrasing]
-    return QuadScene(
+    return QuadRelation(
         numbers={"multiplier": n, "diff": m},
-        scenario=f"ある正の整数がある。{relation}",
-        quantities="",
-        ask_formulation="",
-        ask_value="この整数を求めよ。",
-        relation_label="2乗した数ともとの数をもとにした数",
         answer_coeffs=((1, 0),),
-        answer_labels=("",),
-        answer_units=("",),
-        # 言い方は場面の違いなので params に記録する（dup_key は params だけを見る）。
-        slots={"phrasing": phrasing},
     )
 
 
-# **cm² で語れる題材だけにする。** 「面積が312cm²の畑」「456cm²の花だん」が出ていた
-# （畑・花だんは m² で測る大きさ）。紙・板・カード・写真は cm² が自然。
-_RECTANGLE_SCENES = [
-    # ★2026-08-18: 「横が縦より10cm長い長方形の写真、面積75cm²」→ 縦5cm×横15cm。
-    # **1:3 の写真は実在しない**（L判は 2:3）。紙・板・カード・布は 1:3 でも成り立つ。
-    "長方形", "長方形の紙", "長方形の板", "長方形のカード", "長方形の布",
-    "長方形のシール", "長方形のタイル", "長方形の布",
-]
-
-
-def _scene_rectangle_area(p: Mapping[str, Any], rng: Rng) -> QuadScene:
+def _relation_rectangle_area(p: Mapping[str, Any], rng: Rng) -> QuadRelation:
     """g3_l30 Lv2: 横が縦より d cm 長い長方形の面積が k（誘導あり）。
 
     縦と差は教科書の大きさに収める（以前は縦40cm・面積2200cm² まで出ていた）。
@@ -275,20 +280,9 @@ def _scene_rectangle_area(p: Mapping[str, Any], rng: Rng) -> QuadScene:
     """
     height = int(draw(p["height_domain"], rng))
     diff = int(draw(p["diff_domain"], rng))
-    area = height * (height + diff)
-    scene = str(draw(_RECTANGLE_SCENES, rng))
-    return QuadScene(
-        numbers={"diff": diff, "area": area},
-        scenario=f"横が縦より{diff}cm長い{scene}がある。その面積は{area}cm²である。",
-        quantities="縦の長さを x cm とする。",
-        ask_formulation="面積の関係を、x を使った方程式で表せ。",
-        ask_value="縦の長さを求めよ。",
-        relation_label="長方形の面積",
+    return QuadRelation(
+        numbers={"diff": diff, "area": height * (height + diff)},
         answer_coeffs=((1, 0),),
-        answer_labels=("",),
-        answer_units=("cm",),
-        # 題材は params の "slots" に入る（numbers は立式の引数そのものなので混ぜられない）。
-        slots={"scene": scene},
     )
 
 
@@ -307,34 +301,119 @@ def _square_cut_candidates(p: Mapping[str, Any]) -> list[tuple[int, int, int]]:
     return out
 
 
-def _scene_square_cut(p: Mapping[str, Any], rng: Rng) -> QuadScene:
+def _relation_square_cut(p: Mapping[str, Any], rng: Rng) -> QuadRelation:
     """g3_l30 Lv3: 1辺 s の正方形を縦 x 短く・横 x 長くした長方形の面積が k（誘導なし）。"""
     cands = _square_cut_candidates(p)
     side, _, area = cands[int(draw(_index_domain(len(cands)), rng))]
-    return QuadScene(
+    return QuadRelation(
         numbers={"side": side, "area": area},
+        answer_coeffs=((1, 0),),
+    )
+
+
+RELATION_DRAWERS: dict[str, Callable[[Mapping[str, Any], Rng], QuadRelation]] = {
+    "consecutive_integers": _relation_consecutive_integers,
+    "square_relation": _relation_square_relation,
+    "rectangle_area": _relation_rectangle_area,
+    "square_cut": _relation_square_cut,
+}
+
+
+# ---------------------------------------------------------------------------
+# Scene（日本語だけ。数は引かない＝この節に抽選は1つも無い）
+# ---------------------------------------------------------------------------
+_CONSECUTIVE_NOUNS = {"integers": "正の整数", "even": "正の偶数", "odd": "正の奇数"}
+
+
+def _scene_consecutive_integers(
+    n: Mapping[str, int], v: Mapping[str, str], variant: str = ""
+) -> QuadScene:
+    noun = _CONSECUTIVE_NOUNS[variant]
+    return QuadScene(
+        scenario=f"連続する2つの{noun}がある。この2数の積は{n['product']}である。",
+        quantities="小さい方の数を x とする。",
+        ask_formulation="2数の積の関係を、x を使った方程式で表せ。",
+        ask_value="この2つの数を求めよ。",
+        relation_label="2つの数の積",
+        answer_labels=("小さい方の数は", "大きい方の数は"),
+        answer_units=("", ""),
+        slots={},
+    )
+
+
+def _scene_square_relation(
+    n: Mapping[str, int], v: Mapping[str, str], variant: str = ""
+) -> QuadScene:
+    phrasing = v["phrasing"]
+    multiplier, diff = n["multiplier"], n["diff"]
+    relation = {
+        "larger": f"この数を2乗した数は、もとの数の{multiplier}倍より{diff}大きい。",
+        "subtract": f"この数を2乗した数から、もとの数の{multiplier}倍をひくと{diff}になる。",
+        "sum": f"この数を2乗した数は、もとの数の{multiplier}倍と{diff}の和に等しい。",
+    }[phrasing]
+    return QuadScene(
+        scenario=f"ある正の整数がある。{relation}",
+        quantities="",
+        ask_formulation="",
+        ask_value="この整数を求めよ。",
+        relation_label="2乗した数ともとの数をもとにした数",
+        answer_labels=("",),
+        answer_units=("",),
+        # 言い方は場面の違いなので params に記録する（dup_key は params だけを見る）。
+        slots={"phrasing": phrasing},
+    )
+
+
+def _scene_rectangle_area(
+    n: Mapping[str, int], v: Mapping[str, str], variant: str = ""
+) -> QuadScene:
+    scene = v["scene"]
+    return QuadScene(
+        scenario=f"横が縦より{n['diff']}cm長い{scene}がある。その面積は{n['area']}cm²である。",
+        quantities="縦の長さを x cm とする。",
+        ask_formulation="面積の関係を、x を使った方程式で表せ。",
+        ask_value="縦の長さを求めよ。",
+        relation_label="長方形の面積",
+        answer_labels=("",),
+        answer_units=("cm",),
+        # 題材は params の "slots" に入る（numbers は立式の引数そのものなので混ぜられない）。
+        slots={"scene": scene},
+    )
+
+
+def _scene_square_cut(
+    n: Mapping[str, int], v: Mapping[str, str], variant: str = ""
+) -> QuadScene:
+    return QuadScene(
         scenario=(
-            f"1辺が{side}cmの正方形がある。縦を x cm 短くし、横を x cm 長くして"
-            f"長方形をつくったところ、面積が{area}cm²になった。"
+            f"1辺が{n['side']}cmの正方形がある。縦を x cm 短くし、横を x cm 長くして"
+            f"長方形をつくったところ、面積が{n['area']}cm²になった。"
         ),
         quantities="",
         ask_formulation="",
         ask_value="x の値を求めよ。",
         relation_label="変形後の長方形の面積",
-        answer_coeffs=((1, 0),),
         answer_labels=("",),
         answer_units=("cm",),
         slots={},
     )
 
 
-_SCENE_DRAWERS: dict[str, Callable[[Mapping[str, Any], Rng], QuadScene]] = {
+SCENE_RENDERERS: dict[
+    str, Callable[[Mapping[str, int], Mapping[str, str], str], QuadScene]
+] = {
     "consecutive_integers": _scene_consecutive_integers,
     "square_relation": _scene_square_relation,
     "rectangle_area": _scene_rectangle_area,
     "square_cut": _scene_square_cut,
 }
 
+
+def draw_scene(kind: str, p: Mapping[str, Any], rng: Rng) -> tuple[QuadRelation, QuadScene]:
+    """関係 → 語彙 → 場面文 の順に組む。**この順番が RNG の消費順を決める。**"""
+    relation = RELATION_DRAWERS[kind](p, rng)
+    vocab = draw_vocab(_SCENE_VOCAB.get(kind, ()), p, rng)
+    return relation, SCENE_RENDERERS[kind](relation.numbers, vocab, relation.variant)
 
 # ---------------------------------------------------------------------------
 # 求める量（m·x0 + n を1つまたは2つ）— recipe と checker が共有
@@ -379,8 +458,10 @@ def word_problem_quadratic(ctx: CellContext, rng: Rng) -> MR:
     p = ctx.spec_level.params
     kind = str(p["scenario_kind"])
     guided = bool(p["guided"])
-    scene = _SCENE_DRAWERS[kind](p, rng)
-    formulation, sol, answer_values = solve_scene(kind, scene.numbers, scene.answer_coeffs)
+    relation, scene = draw_scene(kind, p, rng)
+    formulation, sol, answer_values = solve_scene(
+        kind, relation.numbers, relation.answer_coeffs
+    )
 
     concept_tags = list(ctx.spec_level.concept_tags or ctx.spec_family.concepts_default)
     cause_tags = list(ctx.spec_level.cause_tags)
@@ -398,7 +479,7 @@ def word_problem_quadratic(ctx: CellContext, rng: Rng) -> MR:
         steps=[
             *([] if guided else formulation_steps),
             *sol.steps,
-            *_derive_steps(scene, answer_values),
+            *_derive_steps(scene, relation.answer_coeffs, answer_values),
         ],
         concept_tags=concept_tags,
         cause_tags=cause_tags,
@@ -436,8 +517,8 @@ def word_problem_quadratic(ctx: CellContext, rng: Rng) -> MR:
             # 誘導の有無（小問数）。checker はこれを見て返す Solution の数を決める
             # ＝MR の形をなぞらずに独立に決める（G-Q1 が数の不一致を検出できる）。
             "guided": guided,
-            "numbers": {k: str(v) for k, v in scene.numbers.items()},
-            "answer_coeffs": [[str(m), str(n)] for m, n in scene.answer_coeffs],
+            "numbers": {k: str(v) for k, v in relation.numbers.items()},
+            "answer_coeffs": [[str(m), str(n)] for m, n in relation.answer_coeffs],
             "answer_labels": list(scene.answer_labels),
             "answer_units": list(scene.answer_units),
             # 題材（dup_key は params のみを見る＝context_slots は算入されない）。
@@ -475,9 +556,13 @@ def _formulation_steps(scene: QuadScene, formulation: QuadFormulation) -> list[S
     ]
 
 
-def _derive_steps(scene: QuadScene, answer_values: tuple[sympy.Expr, ...]) -> list[Step]:
+def _derive_steps(
+    scene: QuadScene,
+    answer_coeffs: tuple[tuple[int, int], ...],
+    answer_values: tuple[sympy.Expr, ...],
+) -> list[Step]:
     """求める量が x そのものと違う場面だけ足す最後の一手（複数量への合成）。"""
-    if scene.answer_coeffs == ((1, 0),):
+    if answer_coeffs == ((1, 0),):
         return []
     return [
         Step(

@@ -25,7 +25,13 @@ from pathlib import Path
 
 _DIR = Path("engine_core/engine/packs/math/recipes")
 # 層に割り終えた module（割るたびにここへ足す）
-_SPLIT = ["word_problem_linear.py", "word_problem_system.py"]
+_SPLIT = [
+    "word_problem_linear.py",
+    "word_problem_system.py",
+    "word_problem_proportion_frequency.py",
+    "word_problem_quadratic.py",
+    "word_problem_expression.py",
+]
 
 _JA = re.compile(r"[぀-ヿ一-鿿]")
 

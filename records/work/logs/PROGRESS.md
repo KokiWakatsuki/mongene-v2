@@ -72,3 +72,17 @@
                   （作業5 のゴール「30以下」もこの物差しで測る）。
                   engine_core は未変更＝eval/golden/pytest は影響を受けない。
                   audit_progress は変更前と同じ状態（未使用 solver 2本＝残件メモに追記）
+2026-08-20 --:--  作業1 着手。まず**測り方**を確定: 何も変えずに approve_all を回すと 280family
+                  すべて approved_at のタイムスタンプだけが動き、content_sha256 と
+                  スナップショットは不変。これが「生成物が同一」の判定。
+                  引き順を28場面ぶん測った（scan_scene_draw_order.py）: 数→語彙19 /
+                  語彙を引かない4 / 入り混じる3 / 語彙→数1 / 分けられない1。
+2026-08-20 --:--  word_problem_linear（8場面）を3層に割った。golden 4family 全 seed unchanged。
+                  層の検査 check_layer_split.py を新設（ast で Scene の rng/抽選・Relation の
+                  日本語を見る／**合成データで落ちることを --self-test で確認**）。
+                  コミット 169bdae1
+2026-08-20 --:--  語彙の抽選を scene_vocab.py に集約（5 recipe の複製をやめ、
+                  word_problem_linear への依存も切った）。word_problem_system（7場面）を
+                  3層に割った。golden g2_l16/l17/l18 全 seed unchanged。
+                  ★引き順の例外1つ（price_count_diff が語彙→数）は _VOCAB_FIRST として
+                  宣言だけ残した。コミット 87d64f05

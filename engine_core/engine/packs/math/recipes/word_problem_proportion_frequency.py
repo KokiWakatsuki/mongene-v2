@@ -85,6 +85,11 @@ from engine.core.contracts import (
 )
 from engine.core.registry import REGISTRY, register_recipe
 from engine.core.rng import Rng, draw
+from engine.packs.math.recipes.scene_vocab import (
+    VocabStep,
+    draw_index,
+    draw_vocab,
+)
 
 RECIPE_NAME = "math.word_problem_proportion_frequency"
 
@@ -112,39 +117,6 @@ def _decimal_display(p: sympy.Rational) -> str:
     if frac == 0:
         return str(whole)
     return f"{whole}." + f"{frac:03d}".rstrip("0")
-
-
-# ---------------------------------------------------------------------------
-# 場面（recipe が組む）と、そこから solver に渡す数値
-# ---------------------------------------------------------------------------
-@dataclass(frozen=True)
-class ProportionFrequencyScene:
-    """場面文と、そこから solve に渡す数値。
-
-    `numbers` は `SOLVE_BUILDERS[kind]` にそのまま渡す辞書（params にそのまま載り、
-    checker が同じ関数へ渡す）。`ask_texts` は小問文（誘導なしは長さ1）。
-    `asked` は小問の asked（(1) が立式のセルだけ "formulation" が先頭に来る）。
-    """
-
-    numbers: dict[str, Any]
-    scenario: str
-    ask_texts: tuple[str, ...]
-    asked: tuple[str, ...]
-    slots: dict[str, str] = field(default_factory=dict)
-    # 誘導ありで変数の設定を本文に出すセルだけが持つ（無い場合は空文字）。
-    quantities: str = ""
-    # 数値ではない構成フラグ（numbers に置けない）。空なら params に載せない。
-    variant: str = ""
-
-
-def _draw_index(candidates: list[Any], rng: Rng) -> Any:
-    return candidates[int(draw({"int_range": [0, len(candidates) - 1]}, rng))]
-
-
-def _split_pair(token: str) -> tuple[str, str]:
-    """"姉|妹" → ("姉", "妹")。"""
-    left, _, right = str(token).partition("|")
-    return left, right
 
 
 # ---------------------------------------------------------------------------
@@ -407,7 +379,61 @@ SOLVE_BUILDERS: dict[str, Callable[[Mapping[str, Any]], list[Solution]]] = {
 
 
 # ---------------------------------------------------------------------------
-# 場面の抽選（recipe 側のみ。数値を引いて場面文と numbers を組む）
+# 3層に割る（Relation / 語彙の抽選 / Scene）
+#
+# 割り方と理由は word_problem_linear.py の同じ節に書いてある（charter §3）。
+#
+#   Relation  数の引き方・非退化条件・構成フラグ（`variant`）。日本語を出力に流さない
+#   語彙の抽選 どのカタログからどう引くかの宣言だけ（`scene_vocab.draw_vocab`）
+#   Scene     引かれた数と語彙から日本語を組む。`rng` を受け取らない
+#
+# この module の4場面はすべて「数 → 語彙」の順に引く（`judge_and_use` は
+# `variant` を先に引くが、これも数と同じく Relation の仕事）。
+# ---------------------------------------------------------------------------
+@dataclass(frozen=True)
+class ProportionFrequencyRelation:
+    """関係（数と構成フラグだけ）。**日本語を持たない。**
+
+    `numbers` は `SOLVE_BUILDERS[kind]` にそのまま渡す辞書（params にそのまま載り、
+    checker が同じ関数へ渡す）。`variant` は数値ではない構成フラグなので
+    `numbers` には置けない（`numbers` の値は「本文に現れること」を contract テストが
+    機械検査するため）。空なら params に載せない。
+    """
+
+    numbers: dict[str, Any]
+    variant: str = ""
+
+
+@dataclass(frozen=True)
+class ProportionFrequencyScene:
+    """場面（日本語だけ）。数は引かず、引かれた数と語彙を受け取って文を組む。
+
+    `ask_texts` は小問文（誘導なしは長さ1）。`asked` は小問の asked
+    （(1) が立式のセルだけ "formulation" が先頭に来る）。
+    """
+
+    scenario: str
+    ask_texts: tuple[str, ...]
+    asked: tuple[str, ...]
+    slots: dict[str, str] = field(default_factory=dict)
+    # 誘導ありで変数の設定を本文に出すセルだけが持つ（無い場合は空文字）。
+    quantities: str = ""
+
+
+# ---------------------------------------------------------------------------
+# 語彙の抽選（宣言だけ。日本語はここに書かない）
+# ---------------------------------------------------------------------------
+_SCENE_VOCAB: dict[str, tuple[VocabStep, ...]] = {
+    # 水そうの場面は題材トークンを持たない（水そうで固定）。
+    "judge_and_use": (),
+    "meet_two_motions": (("index", "vessel_candidates", ("vessel",)),),
+    "experiment_frequency_predict": (("index", "item_candidates", ("item",)),),
+    "defect_rate_estimate": (("index", "product_candidates", ("product",)),),
+}
+
+
+# ---------------------------------------------------------------------------
+# Relation（数と構成フラグだけ。日本語を1文字も持たない）
 # ---------------------------------------------------------------------------
 def _inverse_tank_candidates(p: Mapping[str, Any]) -> list[tuple[int, int, int]]:
     """(毎分 r0 L, 満水まで m0 分, 変えたあとの毎分 r1 L) の候補列挙。
@@ -450,37 +476,24 @@ def _direct_tank_candidates(p: Mapping[str, Any]) -> list[tuple[int, int]]:
     return out
 
 
-def _scene_judge_and_use(p: Mapping[str, Any], rng: Rng) -> ProportionFrequencyScene:
-    """g1_l36 Lv2: 水そうの場面。比例か反比例かは seed で変わる（学習点そのもの）。"""
+def _relation_judge_and_use(p: Mapping[str, Any], rng: Rng) -> ProportionFrequencyRelation:
+    """g1_l36 Lv2: 水そうの場面。比例か反比例かは seed で変わる（学習点そのもの）。
+
+    「どちらの関係かを見ぬく」が Lv2 の学習点なので、`variant` を seed で振るのが
+    本質（数値の大小ではなく**関係の型**が動く）。
+    """
     variant = "inverse" if int(draw({"int_range": [0, 1]}, rng)) == 0 else "direct"
-    ask_formulation = "yはxに比例するか、反比例するかを答え、yをxの式で表せ。"
     if variant == "inverse":
         rate0, minutes0, rate1 = cast(
-            "tuple[int, int, int]", _draw_index(_inverse_tank_candidates(p), rng)
+            "tuple[int, int, int]", draw_index(_inverse_tank_candidates(p), rng)
         )
         numbers: dict[str, Any] = {"rate0": rate0, "minutes0": minutes0, "rate1": rate1}
-        scenario = (
-            f"毎分{rate0}Lずつ水を入れると、満水になるまで{minutes0}分かかる水そうがある。"
-        )
-        quantities = "この水そうに毎分xLずつ水を入れるとき、満水になるまでy分かかるとする。"
-        ask_value = f"毎分{rate1}Lずつ水を入れると、何分で満水になるか求めよ。"
     else:
-        rate0, minutes1 = cast("tuple[int, int]", _draw_index(_direct_tank_candidates(p), rng))
+        rate0, minutes1 = cast(
+            "tuple[int, int]", draw_index(_direct_tank_candidates(p), rng)
+        )
         numbers = {"rate0": rate0, "minutes1": minutes1}
-        scenario = f"空の水そうに、毎分{rate0}Lの割合で水を入れる。"
-        quantities = "水を入れ始めてからx分後の、水そうの中の水の量をyLとする。"
-        ask_value = f"水を入れ始めてから{minutes1}分後の水の量は何Lか求めよ。"
-    return ProportionFrequencyScene(
-        numbers=numbers,
-        scenario=scenario,
-        quantities=quantities,
-        ask_texts=(ask_formulation, ask_value),
-        asked=("formulation", "value"),
-        # 題材トークンは無い（水そうで固定）。variant は params 直下に載るので
-        # dup_key は inverse/direct を区別する（slots に重ねて置かない）。
-        slots={},
-        variant=variant,
-    )
+    return ProportionFrequencyRelation(numbers=numbers, variant=variant)
 
 
 def _two_relation_candidates(p: Mapping[str, Any]) -> list[tuple[int, int, int, int]]:
@@ -511,30 +524,20 @@ def _two_relation_candidates(p: Mapping[str, Any]) -> list[tuple[int, int, int, 
     return out
 
 
-def _scene_meet_two_motions(p: Mapping[str, Any], rng: Rng) -> ProportionFrequencyScene:
+def _relation_meet_two_motions(
+    p: Mapping[str, Any], rng: Rng
+) -> ProportionFrequencyRelation:
     """g1_l36 Lv3: 1つの場面から比例と反比例の両方を自分で立式する（誘導なし）。"""
     rate0, minutes0, rate1, minutes1 = cast(
-        "tuple[int, int, int, int]", _draw_index(_two_relation_candidates(p), rng)
+        "tuple[int, int, int, int]", draw_index(_two_relation_candidates(p), rng)
     )
-    vessel = str(_draw_index(list(p["vessel_candidates"]), rng))
-    scenario = (
-        f"空の{vessel}に、毎分{rate0}Lの割合で水を入れると{minutes0}分で満水になる。"
-    )
-    ask_value = (
-        f"毎分{rate1}Lの割合で入れると満水まで何分かかるか求めよ。"
-        f"また、毎分{rate0}Lの割合で入れ始めてから{minutes1}分後の水の量は何Lか求めよ。"
-    )
-    return ProportionFrequencyScene(
+    return ProportionFrequencyRelation(
         numbers={
             "rate0": rate0,
             "minutes0": minutes0,
             "rate1": rate1,
             "minutes1": minutes1,
         },
-        scenario=scenario,
-        ask_texts=(ask_value,),
-        asked=("value",),
-        slots={"vessel": vessel},
     )
 
 
@@ -566,30 +569,15 @@ def _experiment_candidates(p: Mapping[str, Any]) -> list[tuple[int, int, int]]:
     return out
 
 
-def _scene_experiment_frequency_predict(
+def _relation_experiment_frequency_predict(
     p: Mapping[str, Any], rng: Rng
-) -> ProportionFrequencyScene:
+) -> ProportionFrequencyRelation:
     """g1_l59 Lv2: 実験の結果から相対度数を求め、確率とみなして予測する。"""
     total, occurred, future = cast(
-        "tuple[int, int, int]", _draw_index(_experiment_candidates(p), rng)
+        "tuple[int, int, int]", draw_index(_experiment_candidates(p), rng)
     )
-    item = str(_draw_index(list(p["item_candidates"]), rng))
-    scenario = (
-        f"ある{item}を{total}回投げたところ、表が出た回数は{occurred}回であった。"
-        f"この{item}を、さらに{future}回投げるときのことを考える。"
-    )
-    return ProportionFrequencyScene(
+    return ProportionFrequencyRelation(
         numbers={"total": total, "occurred": occurred, "future": future},
-        scenario=scenario,
-        ask_texts=(
-            (
-                "表が出た相対度数を小数で求め、この結果から、表が出る確率はおよそいくつと"
-                "見積もられるか答えよ。"
-            ),
-            f"この{item}をさらに投げるとき、表はおよそ何回出ると予測されるか求めよ。",
-        ),
-        asked=("value", "value"),
-        slots={"item": item},
     )
 
 
@@ -619,20 +607,110 @@ def _defect_candidates(p: Mapping[str, Any]) -> list[tuple[int, int, int]]:
     return out
 
 
-def _scene_defect_rate_estimate(p: Mapping[str, Any], rng: Rng) -> ProportionFrequencyScene:
+def _relation_defect_rate_estimate(
+    p: Mapping[str, Any], rng: Rng
+) -> ProportionFrequencyRelation:
     """g1_l59 Lv3: 抜き取り検査の結果から不良品の個数を予測する（誘導なし）。"""
     sample, defects, future = cast(
-        "tuple[int, int, int]", _draw_index(_defect_candidates(p), rng)
+        "tuple[int, int, int]", draw_index(_defect_candidates(p), rng)
     )
-    product = str(_draw_index(list(p["product_candidates"]), rng))
-    scenario = (
-        f"ある工場で作られた{product}を無作為に{sample}個検査したところ、"
-        f"不良品が{defects}個あった。この工場では、これから{product}をさらに"
-        f"{future}個作る予定である。"
-    )
-    return ProportionFrequencyScene(
+    return ProportionFrequencyRelation(
         numbers={"sample": sample, "defects": defects, "future": future},
+    )
+
+
+RELATION_DRAWERS: dict[
+    str, Callable[[Mapping[str, Any], Rng], ProportionFrequencyRelation]
+] = {
+    "judge_and_use": _relation_judge_and_use,
+    "meet_two_motions": _relation_meet_two_motions,
+    "experiment_frequency_predict": _relation_experiment_frequency_predict,
+    "defect_rate_estimate": _relation_defect_rate_estimate,
+}
+
+
+# ---------------------------------------------------------------------------
+# Scene（日本語だけ。数は引かない＝この節に抽選は1つも無い）
+# ---------------------------------------------------------------------------
+def _scene_judge_and_use(
+    n: Mapping[str, Any], v: Mapping[str, str], variant: str = ""
+) -> ProportionFrequencyScene:
+    ask_formulation = "yはxに比例するか、反比例するかを答え、yをxの式で表せ。"
+    if variant == "inverse":
+        scenario = (
+            f"毎分{n['rate0']}Lずつ水を入れると、"
+            f"満水になるまで{n['minutes0']}分かかる水そうがある。"
+        )
+        quantities = (
+            "この水そうに毎分xLずつ水を入れるとき、満水になるまでy分かかるとする。"
+        )
+        ask_value = f"毎分{n['rate1']}Lずつ水を入れると、何分で満水になるか求めよ。"
+    else:
+        scenario = f"空の水そうに、毎分{n['rate0']}Lの割合で水を入れる。"
+        quantities = "水を入れ始めてからx分後の、水そうの中の水の量をyLとする。"
+        ask_value = f"水を入れ始めてから{n['minutes1']}分後の水の量は何Lか求めよ。"
+    return ProportionFrequencyScene(
         scenario=scenario,
+        quantities=quantities,
+        ask_texts=(ask_formulation, ask_value),
+        asked=("formulation", "value"),
+        # 題材トークンは無い（水そうで固定）。variant は params 直下に載るので
+        # dup_key は inverse/direct を区別する（slots に重ねて置かない）。
+        slots={},
+    )
+
+
+def _scene_meet_two_motions(
+    n: Mapping[str, Any], v: Mapping[str, str], variant: str = ""
+) -> ProportionFrequencyScene:
+    vessel = v["vessel"]
+    return ProportionFrequencyScene(
+        scenario=(
+            f"空の{vessel}に、毎分{n['rate0']}Lの割合で水を入れると"
+            f"{n['minutes0']}分で満水になる。"
+        ),
+        ask_texts=(
+            f"毎分{n['rate1']}Lの割合で入れると満水まで何分かかるか求めよ。"
+            f"また、毎分{n['rate0']}Lの割合で入れ始めてから"
+            f"{n['minutes1']}分後の水の量は何Lか求めよ。",
+        ),
+        asked=("value",),
+        slots={"vessel": vessel},
+    )
+
+
+def _scene_experiment_frequency_predict(
+    n: Mapping[str, Any], v: Mapping[str, str], variant: str = ""
+) -> ProportionFrequencyScene:
+    item = v["item"]
+    return ProportionFrequencyScene(
+        scenario=(
+            f"ある{item}を{n['total']}回投げたところ、"
+            f"表が出た回数は{n['occurred']}回であった。"
+            f"この{item}を、さらに{n['future']}回投げるときのことを考える。"
+        ),
+        ask_texts=(
+            (
+                "表が出た相対度数を小数で求め、この結果から、表が出る確率はおよそいくつと"
+                "見積もられるか答えよ。"
+            ),
+            f"この{item}をさらに投げるとき、表はおよそ何回出ると予測されるか求めよ。",
+        ),
+        asked=("value", "value"),
+        slots={"item": item},
+    )
+
+
+def _scene_defect_rate_estimate(
+    n: Mapping[str, Any], v: Mapping[str, str], variant: str = ""
+) -> ProportionFrequencyScene:
+    product = v["product"]
+    return ProportionFrequencyScene(
+        scenario=(
+            f"ある工場で作られた{product}を無作為に{n['sample']}個検査したところ、"
+            f"不良品が{n['defects']}個あった。この工場では、これから{product}をさらに"
+            f"{n['future']}個作る予定である。"
+        ),
         ask_texts=(
             (
                 "そのうち、およそ何個の不良品が出ると予測されるか。"
@@ -644,7 +722,9 @@ def _scene_defect_rate_estimate(p: Mapping[str, Any], rng: Rng) -> ProportionFre
     )
 
 
-_SCENE_BUILDERS: dict[str, Callable[[Mapping[str, Any], Rng], ProportionFrequencyScene]] = {
+SCENE_RENDERERS: dict[
+    str, Callable[[Mapping[str, Any], Mapping[str, str], str], ProportionFrequencyScene]
+] = {
     "judge_and_use": _scene_judge_and_use,
     "meet_two_motions": _scene_meet_two_motions,
     "experiment_frequency_predict": _scene_experiment_frequency_predict,
@@ -652,6 +732,14 @@ _SCENE_BUILDERS: dict[str, Callable[[Mapping[str, Any], Rng], ProportionFrequenc
 }
 
 
+def draw_scene(
+    kind: str, p: Mapping[str, Any], rng: Rng
+) -> tuple[ProportionFrequencyRelation, ProportionFrequencyScene]:
+    """関係 → 語彙 → 場面文 の順に組む。**この順番が RNG の消費順を決める。**"""
+    relation = RELATION_DRAWERS[kind](p, rng)
+    vocab = draw_vocab(_SCENE_VOCAB.get(kind, ()), p, rng)
+    scene = SCENE_RENDERERS[kind](relation.numbers, vocab, relation.variant)
+    return relation, scene
 # ---------------------------------------------------------------------------
 # recipe（4セル共通。scenario_kind が level_sep を作る）
 # ---------------------------------------------------------------------------
@@ -659,11 +747,11 @@ _SCENE_BUILDERS: dict[str, Callable[[Mapping[str, Any], Rng], ProportionFrequenc
 def word_problem_proportion_frequency(ctx: CellContext, rng: Rng) -> MR:
     p = ctx.spec_level.params
     kind = str(p["scenario_kind"])
-    scene = _SCENE_BUILDERS[kind](p, rng)
+    relation, scene = draw_scene(kind, p, rng)
     # solve に渡すのは「本文の数値」＋（あれば）構成フラグ variant。
-    solve_input: dict[str, Any] = dict(scene.numbers)
-    if scene.variant:
-        solve_input["variant"] = scene.variant
+    solve_input: dict[str, Any] = dict(relation.numbers)
+    if relation.variant:
+        solve_input["variant"] = relation.variant
     solutions = SOLVE_BUILDERS[kind](solve_input)
     assert len(solutions) == len(scene.ask_texts) == len(scene.asked)
 
@@ -700,12 +788,12 @@ def word_problem_proportion_frequency(ctx: CellContext, rng: Rng) -> MR:
         # 本文に出ている数値だけ（答えは入れない）。checker はここから solver を
         # 呼び直す。variant は数値ではない構成フラグなので numbers の外に置く。
         "scenario_kind": kind,
-        "numbers": {k: str(v) for k, v in scene.numbers.items()},
+        "numbers": {k: str(v) for k, v in relation.numbers.items()},
         # 題材（dup_key は params のみを見る＝context_slots は算入されない）。
         "slots": dict(scene.slots),
     }
-    if scene.variant:
-        params["variant"] = scene.variant
+    if relation.variant:
+        params["variant"] = relation.variant
 
     return MR(
         signature=ctx.spec_level.signature,

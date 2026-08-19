@@ -73,27 +73,48 @@ def draw_priced_item(candidates: list[Any], rng: Rng) -> tuple[str, str, int]:
     return pairs[idx]
 
 
-# 1手 = (引き方, カタログの鍵, 入れる名前の並び)。カタログの値は `名前|助数詞` の形で
+# 1手 = (引き方, カタログ, 入れる名前の並び)。カタログの値は `名前|助数詞` の形で
 # 詰めてあるので、`|` で割った順に名前へ入る。
 #
 #   "one"       `draw(list(...))` で1つ引いて `|` で割る
 #   "index"     `draw({"int_range": ...})` で1つ引いて `|` で割る（消費が "one" と違う）
 #   "distinct2" 相異な2つを引いて、それぞれ `|` で割って順に並べる
-VocabStep = tuple[str, str, tuple[str, ...]]
+#   "priced"    `名前|助数詞|下限|上限` から (名前, 助数詞, 値段) を1回で引く
+#               （`draw_priced_item`。**語彙と数を1回で引く**＝分けられない）
+#
+# カタログは**params の鍵（str）でも、その場に書いた並び（tuple/list）でもよい**。
+# 場面の言い方の並び（`("larger", "subtract", "sum")`）のように YAML に載っていない
+# ものがあるため。並びを直接書くほうは、その module の定数を渡す。
+VocabStep = tuple[str, "str | Sequence[Any]", tuple[str, ...]]
+
+
+def _catalog(catalog: str | Sequence[Any], p: Mapping[str, Any]) -> list[Any]:
+    """カタログを解く（params の鍵ならひく／並びならそのまま）。"""
+    return list(p[catalog]) if isinstance(catalog, str) else list(catalog)
 
 
 def draw_vocab(steps: Sequence[VocabStep], p: Mapping[str, Any], rng: Rng) -> dict[str, str]:
-    """宣言どおりに語彙を引く。**場面を足すときはここに1行足すだけ。**"""
+    """宣言どおりに語彙を引く。**場面を足すときはここに1行足すだけ。**
+
+    返す値は**すべて文字列**。相場（値段の上下限・速さの上下限）を一緒に持ってくる手が
+    あり、それを受け取るのは Relation だから——`v["speed_lo"]` を `int()` にして使う。
+    語彙が数の定義域を決める場面（「歩く」なら時速3〜6km）は実際にあり、
+    そこは3層にきれいに割れない（`draw_priced_item` の docstring 参照）。
+    """
     out: dict[str, str] = {}
     for how, catalog, names in steps:
+        values = _catalog(catalog, p)
         if how == "one":
-            parts = str(draw(list(p[catalog]), rng)).split("|")
+            parts = str(draw(values, rng)).split("|")
         elif how == "index":
-            parts = str(draw_index(list(p[catalog]), rng)).split("|")
+            parts = str(draw_index(values, rng)).split("|")
+        elif how == "priced":
+            name, counter, price = draw_priced_item(values, rng)
+            parts = [name, counter, str(price)]
         elif how == "distinct2":
             parts = [
                 piece
-                for tok in draw_distinct(list(p[catalog]), rng, 2)
+                for tok in draw_distinct(values, rng, 2)
                 for piece in str(tok).split("|")
             ]
         else:  # pragma: no cover - 宣言の誤りは構成時に落とす

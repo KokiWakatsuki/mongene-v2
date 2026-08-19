@@ -62,7 +62,7 @@ from engine.packs.math.recipes.letter_expr import (
     _draw_distinct_from_pool,
     _leaks,
 )
-from engine.packs.math.recipes.scene_vocab import draw_priced_item
+from engine.packs.math.recipes.scene_vocab import VocabStep, draw_vocab
 from engine.packs.math.solvers.polynomial import _fmt_poly_display
 
 RECIPE_NAME = "math.word_problem_expression"
@@ -273,82 +273,107 @@ def build_steps(formulation: ExpressionFormulation, sol: Solution) -> list[Step]
 
 
 # ---------------------------------------------------------------------------
-# 場面の抽選（recipe 専用。checker は numbers から式を組み直すだけで RNG は引かない）
+# 3層に割る（Relation / 語彙の抽選 / Scene）
+#
+# 割り方と理由は word_problem_linear.py の同じ節に書いてある（charter §3）。
+#
+# ## ★この module は「語彙が数の定義域を決める」場面が多い
+# 値段は品物の相場に、速さは動作（歩く／走る／自転車）の相場に縛られている。
+# だから**語彙を先に引き、その相場の中で数を引く**——5場面のうち4つがこの形で、
+# `_VOCAB_FIRST` に並べてある（`discount` だけが「数 → 語彙」）。
+# 相場は語彙と一緒に文字列で運ばれてくるので、Relation は `int(v["speed_lo"])` の
+# ように受け取る（`scene_vocab.draw_vocab` の docstring 参照）。
+#
+# `price_count_letter` は品物と値段を**1回の抽選で**引く（相場の広い品物に偏って
+# dup_rate が跳ねるのを防ぐため）。ここは分けられないので、語彙の手
+# （`"priced"`）が数もいっしょに返し、Relation は引かずに受け取るだけにする。
 # ---------------------------------------------------------------------------
 @dataclass(frozen=True)
-class ExpressionScene:
-    """場面文と、そこから式を組む文字/数値。
+class ExpressionRelation:
+    """関係（数と文字だけ）。**日本語を持たない。**
 
     `numbers` は `FORMULATION_BUILDERS[kind]` のキーワード引数そのもの（文字列で
     統一して持つ＝場面文に出ている数値も、g1_l15 Lv3 の文字の選び方も同じ扱いにする）。
+    """
+
+    numbers: dict[str, str]
+
+
+@dataclass(frozen=True)
+class ExpressionScene:
+    """場面（日本語だけ）。数は引かず、引かれた数と語彙を受け取って文を組む。
+
     `slots` は題材（品名など、式の再計算には無関係で dup_key の variety のためだけに
     params に載せる）。
     """
 
-    numbers: dict[str, str]
     scenario: str
     ask: str
     kind: str
     slots: dict[str, str]
 
 
-def _scene_price_count_letter(p: Mapping[str, Any], rng: Rng) -> ExpressionScene:
-    # **値段は品物ごとの相場から 10円刻みで引く。**
-    # 前は品物と無関係に 20〜300 の整数を引いていて「1本277円の鉛筆」「1本39円の
-    # 輪ゴム」が出ていた。実物の問題集の値段は 10円刻み（80円・120円・150円）で、
-    # しかも品物の相場に収まっている。品名と相場を1つのトークン
-    # （`鉛筆|本|50|150`）に持たせ、品物を引いてから値段を引く。
-    item, counter, price = draw_priced_item(list(p["item_candidates"]), rng)
-    return ExpressionScene(
-        numbers={"price": str(price)},
-        scenario=f"1{counter}{price}円の{item}をx{counter}買う。",
-        ask="代金を、xを使った式で表せ。",
-        kind="price_count_letter",
-        slots={"item": item, "counter": counter},
-    )
+# ---------------------------------------------------------------------------
+# 語彙の抽選（宣言だけ。日本語はここに書かない）
+# ---------------------------------------------------------------------------
+_SCENE_VOCAB: dict[str, tuple[VocabStep, ...]] = {
+    # 品名・助数詞・値段を1回で引く（値段は品物の相場から 10円刻み）。
+    "price_count_letter": (
+        ("priced", "item_candidates", ("item", "counter", "price")),
+    ),
+    "discount": (("one", "item_candidates", ("item",)),),
+    # `動作|下限|上限`。動作ごとに速さの相場が決まっている（歩く=時速3〜6km）。
+    "distance_letter": (
+        ("one", "motion_candidates", ("verb", "speed_lo", "speed_hi")),
+    ),
+    "unit_convert": (
+        ("one", "motion_candidates", ("verb", "speed_lo", "speed_hi")),
+    ),
+    "profit_multi_letter": (("one", "item_candidates", ("item",)),),
+}
+
+# ★語彙を先に引く場面（割る前のコードの順番をそのまま残すためだけの宣言）。
+# ここでは「語彙が数の定義域を決める」ので、順番に意味がある。
+_VOCAB_FIRST = frozenset(
+    {"price_count_letter", "distance_letter", "unit_convert", "profit_multi_letter"}
+)
 
 
-def _scene_discount(p: Mapping[str, Any], rng: Rng) -> ExpressionScene:
-    discount = int(draw(p["discount_domain"], rng))
-    item = str(draw(list(p["item_candidates"]), rng))
-    return ExpressionScene(
-        numbers={"discount": str(discount)},
-        scenario=f"定価a円の{item}を、定価の{discount}割引きで買う。",
-        ask="代金を、aを使った式で表せ。",
-        kind="discount",
-        slots={"item": item},
-    )
+# ---------------------------------------------------------------------------
+# Relation（数と文字だけ。日本語を1文字も持たない）
+# ---------------------------------------------------------------------------
+def _relation_price_count_letter(
+    p: Mapping[str, Any], rng: Rng, v: Mapping[str, str]
+) -> ExpressionRelation:
+    """g1_l15 Lv1: 1つあたりの値段 × 個数。値段は語彙と1回で引かれている。"""
+    return ExpressionRelation(numbers={"price": v["price"]})
 
 
-def _draw_motion(tokens: list[Any], rng: Rng) -> tuple[str, int, int]:
-    """`動作|下限|上限` を引く（速さの相場つき）。
+def _relation_discount(
+    p: Mapping[str, Any], rng: Rng, v: Mapping[str, str]
+) -> ExpressionRelation:
+    """g1_l15 Lv2: 定価 a 円の d 割引き。"""
+    return ExpressionRelation(numbers={"discount": str(int(draw(p["discount_domain"], rng)))})
 
-    動作と速さを別々に引くと「時速9kmで歩く」「時速39kmで走る」「分速125mで歩く」
-    が出る。人が歩くのは時速3〜6km（分速50〜100m）、走るのは時速8〜15km
-    （分速150〜250m）で、動作ごとに速さの範囲が決まっている。
+
+def _relation_distance_letter(
+    p: Mapping[str, Any], rng: Rng, v: Mapping[str, str]
+) -> ExpressionRelation:
+    """g1_l15 Lv3: 時速 s km で t 時間。速さは動作の相場の中から引く。
+
+    動作と速さを別々に引くと「時速9kmで歩く」「時速39kmで走る」が出る。
+    人が歩くのは時速3〜6km、走るのは時速8〜15km で、動作ごとに範囲が決まっている。
     """
-    name, lo, hi = str(draw(list(tokens), rng)).split("|")
-    return name, int(lo), int(hi)
-
-
-def _scene_distance_letter(p: Mapping[str, Any], rng: Rng) -> ExpressionScene:
-    verb, lo, hi = _draw_motion(list(p["motion_candidates"]), rng)
-    speed = int(draw({"int_range": [lo, hi]}, rng))
+    speed = int(draw({"int_range": [int(v["speed_lo"]), int(v["speed_hi"])]}, rng))
     letter = str(draw(list(p["letter_candidates"]), rng))
-    return ExpressionScene(
-        numbers={"speed": str(speed), "letter": letter},
-        scenario=f"時速{speed}kmで{letter}時間{verb}。",
-        ask=f"進む道のりを、{letter}を使った式で表せ。",
-        kind="distance_letter",
-        slots={"verb": verb},
-    )
+    return ExpressionRelation(numbers={"speed": str(speed), "letter": letter})
 
 
 # 単位変換（m→km）の答えの分母の上限。台帳の例「分速60m → 3a/50」が分母50なので、
 # そこまでを教材の範囲とする。**速さの定義域は狭めない**（原則⓪: 壊れているのは答えの
 # 大きさであって定義域の広さではない。分速106m だと `53a/500` になっていた＝D-31）。
-# 動作ごとに速さを相場に縛った（`_draw_motion`）ぶん、上限を 100 に緩める
-# ——分速70m（7a/100）は教材にある書き方。狭いままだと候補が10通りを切って
+# 動作ごとに速さを相場に縛った（語彙の手 `"one"` が相場を運ぶ）ぶん、上限を 100 に
+# 緩める——分速70m（7a/100）は教材にある書き方。狭いままだと候補が10通りを切って
 # dup_rate が跳ねる。
 _MAX_UNIT_CONVERT_DENOMINATOR = 100
 
@@ -359,33 +384,107 @@ def _unit_convert_speeds(domain: Mapping[str, Any]) -> list[int]:
     return [v for v in range(lo, hi + 1) if 1000 // gcd(v, 1000) <= _MAX_UNIT_CONVERT_DENOMINATOR]
 
 
-def _scene_unit_convert(p: Mapping[str, Any], rng: Rng) -> ExpressionScene:
-    # 動作ごとの速さの相場（`_draw_motion`）と、答えの分母の上限の両方を満たす速さ。
-    verb, lo, hi = _draw_motion(list(p["motion_candidates"]), rng)
-    speed = int(draw({"int_set": _unit_convert_speeds({"int_range": [lo, hi]})}, rng))
-    # 答えの分母を絞ったぶん、**文字の選び方**を軸に足して組み合わせを取り戻す
-    # （Lv1 と同じ手。原則①: 軸を増やす）。
+def _relation_unit_convert(
+    p: Mapping[str, Any], rng: Rng, v: Mapping[str, str]
+) -> ExpressionRelation:
+    """g1_l19 Lv2: 分速 s m で t 分＝何 km か（単位変換つき）。
+
+    動作ごとの速さの相場と、答えの分母の上限の両方を満たす速さから引く。
+    答えの分母を絞ったぶん、**文字の選び方**を軸に足して組み合わせを取り戻す
+    （Lv1 と同じ手。原則①: 軸を増やす）。
+    """
+    speed = int(
+        draw(
+            {"int_set": _unit_convert_speeds(
+                {"int_range": [int(v["speed_lo"]), int(v["speed_hi"])]}
+            )},
+            rng,
+        )
+    )
     letter = str(draw(list(p["letter_candidates"]), rng))
+    return ExpressionRelation(numbers={"speed": str(speed), "letter": letter})
+
+
+def _relation_profit_multi_letter(
+    p: Mapping[str, Any], rng: Rng, v: Mapping[str, str]
+) -> ExpressionRelation:
+    """g1_l20 Lv2: 3つの文字で利益を表す（文字の選び方が軸）。"""
+    count_letter, price_letter, cost_letter = _draw_distinct_from_pool(
+        list(_NOTATION_LETTERS), 3, rng
+    )
+    return ExpressionRelation(
+        numbers={
+            "count_letter": count_letter,
+            "price_letter": price_letter,
+            "cost_letter": cost_letter,
+        },
+    )
+
+
+RELATION_DRAWERS: dict[
+    str, Callable[[Mapping[str, Any], Rng, Mapping[str, str]], ExpressionRelation]
+] = {
+    "price_count_letter": _relation_price_count_letter,
+    "discount": _relation_discount,
+    "distance_letter": _relation_distance_letter,
+    "unit_convert": _relation_unit_convert,
+    "profit_multi_letter": _relation_profit_multi_letter,
+}
+
+
+# ---------------------------------------------------------------------------
+# Scene（日本語だけ。数は引かない＝この節に抽選は1つも無い）
+# ---------------------------------------------------------------------------
+def _scene_price_count_letter(
+    n: Mapping[str, str], v: Mapping[str, str]
+) -> ExpressionScene:
+    item, counter = v["item"], v["counter"]
     return ExpressionScene(
-        numbers={"speed": str(speed), "letter": letter},
-        scenario=f"分速{speed}mで{letter}分間{verb}。",
+        scenario=f"1{counter}{n['price']}円の{item}をx{counter}買う。",
+        ask="代金を、xを使った式で表せ。",
+        kind="price_count_letter",
+        slots={"item": item, "counter": counter},
+    )
+
+
+def _scene_discount(n: Mapping[str, str], v: Mapping[str, str]) -> ExpressionScene:
+    item = v["item"]
+    return ExpressionScene(
+        scenario=f"定価a円の{item}を、定価の{n['discount']}割引きで買う。",
+        ask="代金を、aを使った式で表せ。",
+        kind="discount",
+        slots={"item": item},
+    )
+
+
+def _scene_distance_letter(n: Mapping[str, str], v: Mapping[str, str]) -> ExpressionScene:
+    verb, letter = v["verb"], n["letter"]
+    return ExpressionScene(
+        scenario=f"時速{n['speed']}kmで{letter}時間{verb}。",
+        ask=f"進む道のりを、{letter}を使った式で表せ。",
+        kind="distance_letter",
+        slots={"verb": verb},
+    )
+
+
+def _scene_unit_convert(n: Mapping[str, str], v: Mapping[str, str]) -> ExpressionScene:
+    verb, letter = v["verb"], n["letter"]
+    return ExpressionScene(
+        scenario=f"分速{n['speed']}mで{letter}分間{verb}。",
         ask=f"進んだ道のりは何kmか、{letter}を使った式で表せ。",
         kind="unit_convert",
         slots={"verb": verb},
     )
 
 
-def _scene_profit_multi_letter(p: Mapping[str, Any], rng: Rng) -> ExpressionScene:
-    item = str(draw(list(p["item_candidates"]), rng))
-    count_letter, price_letter, cost_letter = _draw_distinct_from_pool(
-        list(_NOTATION_LETTERS), 3, rng
-    )
+def _scene_profit_multi_letter(
+    n: Mapping[str, str], v: Mapping[str, str]
+) -> ExpressionScene:
+    item = v["item"]
+    count_letter = n["count_letter"]
+    price_letter = n["price_letter"]
+    cost_letter = n["cost_letter"]
     return ExpressionScene(
-        numbers={
-            "count_letter": count_letter,
-            "price_letter": price_letter,
-            "cost_letter": cost_letter,
-        },
         scenario=(
             f"ある{item}を{count_letter}個仕入れ、1個あたり{price_letter}円で"
             f"全部売った。仕入れ総額が{cost_letter}円である。"
@@ -396,7 +495,9 @@ def _scene_profit_multi_letter(p: Mapping[str, Any], rng: Rng) -> ExpressionScen
     )
 
 
-_SCENE_DRAWERS: dict[str, Callable[[Mapping[str, Any], Rng], ExpressionScene]] = {
+SCENE_RENDERERS: dict[
+    str, Callable[[Mapping[str, str], Mapping[str, str]], ExpressionScene]
+] = {
     "price_count_letter": _scene_price_count_letter,
     "discount": _scene_discount,
     "distance_letter": _scene_distance_letter,
@@ -405,6 +506,19 @@ _SCENE_DRAWERS: dict[str, Callable[[Mapping[str, Any], Rng], ExpressionScene]] =
 }
 
 
+def draw_scene(
+    kind: str, p: Mapping[str, Any], rng: Rng
+) -> tuple[ExpressionRelation, ExpressionScene]:
+    """語彙（＋相場）→ 関係 → 場面文 の順に組む（`discount` だけ関係が先）。"""
+    steps = _SCENE_VOCAB.get(kind, ())
+    if kind in _VOCAB_FIRST:
+        vocab = draw_vocab(steps, p, rng)
+        relation = RELATION_DRAWERS[kind](p, rng, vocab)
+    else:
+        relation = RELATION_DRAWERS[kind](p, rng, {})
+        vocab = draw_vocab(steps, p, rng)
+    return relation, SCENE_RENDERERS[kind](relation.numbers, vocab)
+
 # ---------------------------------------------------------------------------
 # recipe（5セル共通。scenario_kind が level_sep を作る）
 # ---------------------------------------------------------------------------
@@ -412,20 +526,21 @@ _SCENE_DRAWERS: dict[str, Callable[[Mapping[str, Any], Rng], ExpressionScene]] =
 def word_problem_expression(ctx: CellContext, rng: Rng) -> MR:
     p = ctx.spec_level.params
     kind = str(p["scenario_kind"])
-    drawer = _SCENE_DRAWERS[kind]
 
+    relation: ExpressionRelation | None = None
     scene: ExpressionScene | None = None
     formulation: ExpressionFormulation | None = None
     sol: Solution | None = None
     for _ in range(_MAX_ATTEMPTS):
-        candidate = drawer(p, rng)
-        candidate_formulation, candidate_sol = solve_expression(kind, candidate.numbers)
+        cand_relation, cand_scene = draw_scene(kind, p, rng)
+        candidate_formulation, candidate_sol = solve_expression(kind, cand_relation.numbers)
         assert isinstance(candidate_sol.answer, SymbolicAnswer)
-        given_full = candidate.scenario + candidate.ask
+        given_full = cand_scene.scenario + cand_scene.ask
         if not _leaks(candidate_sol.answer.display, given_full):
-            scene, formulation, sol = candidate, candidate_formulation, candidate_sol
+            relation, scene = cand_relation, cand_scene
+            formulation, sol = candidate_formulation, candidate_sol
             break
-    if scene is None or formulation is None or sol is None:
+    if relation is None or scene is None or formulation is None or sol is None:
         raise ValueError(f"非漏洩の場面を構成できず（scenario_kind={kind!r}）")
 
     concept_tags = list(ctx.spec_level.concept_tags or ctx.spec_family.concepts_default)
@@ -449,7 +564,7 @@ def word_problem_expression(ctx: CellContext, rng: Rng) -> MR:
             "scenario_kind": kind,
             # 場面文に出ている数値/文字だけ（答えは入れない）。checker はここから
             # 式を組み直し、同じ既存 solver で再計算する。
-            "numbers": dict(scene.numbers),
+            "numbers": dict(relation.numbers),
             # 題材（dup_key は params のみを見る＝context_slots は算入されない）。
             "slots": dict(scene.slots),
         },
