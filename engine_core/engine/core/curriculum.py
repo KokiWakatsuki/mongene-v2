@@ -96,6 +96,9 @@ class CurriculumModel:
             "concept_ids": self.concept_ids(),
             "cause_ids": self.cause_ids(),
             "unit_concepts": {cid for cid, c in self.concepts.items() if c.unit == unit},
+            # 概念の日本語名。**ヒントをここから作る**——解説の手順を写すのでなく、
+            # 「この問題で使う考え方」を言う（`t1_template._build_hints`）。
+            "concept_labels": {cid: c.label for cid, c in self.concepts.items() if c.label},
         }
 
 

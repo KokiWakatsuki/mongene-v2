@@ -17,6 +17,8 @@ from random import Random
 from typing import TYPE_CHECKING, Any
 
 import sympy
+
+from engine.core.verify.quality_gates import _COUNTER_EXPR_RE
 from jinja2 import DictLoader
 from jinja2.sandbox import SandboxedEnvironment
 
@@ -208,18 +210,68 @@ _DEFAULT_MINIMAL_HINT = "問題文の与えられた値をもう一度確認し�
 _MAX_HINTS = 3
 
 
+_NUMBER_IN_HINT = re.compile(r"\d")
+
+
+def _has_bare_number(text: str) -> bool:
+    """数える語を除いてもなお数字が残るか（残るなら答えの値かもしれない）。
+
+    数える語の表は G-Q5t（漏洩の検査）と**同じものを使う**。別々に持つと、
+    ゲートは通るのにヒントが作られない（あるいはその逆）という食い違いが出る
+    ——実際、別に持っていたときに 232 小問でヒントが作れなかった。
+    `0` だけは例外（narration の規約でも「0 は書いてよい」となっている）。
+    """
+    rest = _COUNTER_EXPR_RE.sub(" ", text)
+    rest = re.sub(r"(?<!\d)0(?!\d)", " ", rest)
+    return bool(_NUMBER_IN_HINT.search(rest))
+
+
+def _concept_hints(mr: "MR", ctx: "CellContext", sq_index: int) -> list[str]:
+    """その小問が使う**考え方の名前**をヒントにする（台帳 concepts.yaml の label）。
+
+    ★**ヒントの 93.6% が解説の手順の逐語コピーだった**（2026-08-19 の外部評価で
+    指摘・実測 1050/1122）。原因は設計にある——`narration` が「解説の行」と
+    「ヒント」の両方を兼ねていて、`detail` を書いていない手ではそのまま同じ文になる。
+
+    直し方は**別の出どころから作る**こと。台帳には概念に日本語の名前が付いていて
+    （577 件）、それは「この問題で使う考え方」であって手順ではない。
+
+      解説   まず、比例式の性質を使い、外項の積と内項の積が等しい式をつくる。
+      ヒント 比例式の性質(a:b=c:d ⇔ ad=bc)を使って方程式にする
+
+    数字を含む名前だけは使わない——ヒントは G-Q5t（本文に無い数を出さない）の
+    検査対象で、「3乗」のような語がそこで落ちる。その場合は従来どおり手順の
+    1手目にもどす。
+    """
+    labels = ctx.curriculum_view.get("concept_labels") or {}
+    tags = list(mr.sub_questions[sq_index].concept_tags) or list(mr.concept_tags or [])
+    out: list[str] = []
+    for tag in tags:
+        label = str(labels.get(tag, "")).strip()
+        if not label or _has_bare_number(label):
+            continue
+        if label not in out:
+            out.append(label)
+    return out[:_MAX_HINTS]
+
+
 def _build_hints(mr: "MR", ctx: "CellContext", sq_index: int) -> list[str]:
     sq = mr.sub_questions[sq_index]
     hint_modes = ctx.spec_level.hints
+
+    concept_hints = _concept_hints(mr, ctx, sq_index)
+    if concept_hints:
+        return concept_hints
 
     if "steps_prefix" in hint_modes and len(sq.steps) >= 2:
         # ★**ヒントは方針であって、解答の書き写しではない。** 「最後の手以外を全部」
         # を出していたので、8手の作図では7個のヒントが並び、開いた時点で
         # 手順が全部わかった（点検の指摘）。前半だけを出す——どこから手を
         # つけるかは分かり、続きは自分で追うことになる。
-        prefix = sq.steps[:-1]
-        keep = max(1, min(_MAX_HINTS, (len(prefix) + 1) // 2))
-        return [step.narration for step in prefix[:keep]]
+        #
+        # 概念の名前が使えないとき（数字を含む名前・タグが無い）だけここへ来る。
+        # そのときは**1手だけ**にする（半分を写すのもヒントとしては出しすぎ）。
+        return [sq.steps[0].narration]
 
     # steps < 2、または steps_prefix が宣言されていない場合はテンプレ定義ヒントを使う
     # （**手で書かれたヒントがあれば、それがいちばん良い**ので最優先）。

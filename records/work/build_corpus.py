@@ -30,6 +30,7 @@ import json
 import os
 import re
 from pathlib import Path
+from typing import Any
 
 import yaml
 
@@ -105,6 +106,18 @@ def _mask_names(v: object) -> object:
         return re.sub(r"[A-Z]", "＊", v)
     if isinstance(v, (list, tuple)):
         return [_mask_names(x) for x in v]
+    return v
+
+
+_NUMBER_RE = re.compile(r"-?\d+(?:\.\d+)?(?:/\d+)?")
+
+
+def _mask_surface(v: object) -> object:
+    """型の鍵に使う表層の伏せ字（点名＋数値）。`_mask_names` の上に数を足したもの。"""
+    if isinstance(v, str):
+        return _NUMBER_RE.sub("＃", str(_mask_names(v)))
+    if isinstance(v, (list, tuple)):
+        return [_mask_surface(x) for x in v]
     return v
 
 
@@ -231,11 +244,20 @@ def main() -> None:
         found: dict[str, int] = {}
         labels: dict[str, str] = {}   # 鍵 → 読めるラベル（鍵を読み直さない）
         for seed, params, narration in seen_rows:
-            # ★点名（大文字）は鍵から落とす。narration には「三角形ABCと三角形EDCで」
-            # のように点名が入るので、落とさないと**数値も場面も同じで名前だけ違う
-            # 問題を別の型として数え、問題集に同じ問題が2回載る**（実測 12問/6組）。
-            # `dup_key` から表層を外したのと同じ理由。
-            masked = [_mask_names(s) for s in narration]
+            # ★点名（大文字）と**数値**は鍵から落とす。
+            #
+            # 点名: narration には「三角形ABCと三角形EDCで」のように点名が入るので、
+            # 落とさないと**数値も場面も同じで名前だけ違う問題を別の型として数え、
+            # 問題集に同じ問題が2回載る**（実測 12問/6組）。
+            #
+            # 数値: 落とさないと、**軸が1本も無いセルで seed ごとに別の型と数える**。
+            # g2_l18.word_problem.Lv3（食塩水）が「軸なし」なのに 38 型として載って
+            # いて、数を伏せると骨格は1つしか無かった（2026-08-19 の外部評価で
+            # 「食塩水38問は数値のみを差し替えた完全同型」と指摘・実測で確認）。
+            # 型は**場面と構造**で数える。数を替えただけのものは同じ型である。
+            # 軸として宣言されている数値は parts[0] に別で入るので、ここで伏せても
+            # 本物の軸は失われない。
+            masked = [_mask_surface(s) for s in narration]
             parts: list[object] = [[a, _mask_names(params.get(a))] for a in axes] + [masked]
             if use_text:
                 res = generate(
@@ -259,13 +281,28 @@ def main() -> None:
         if len(found) < expected:
             shortfalls.append(f"{cell}: 期待 {expected} 型 / 出たのは {len(found)} 型")
 
-        lines.append(f"\n---\n\n## {cell}  — 型 {len(found)} 個"
-                     + (f"（軸: {', '.join(axes)}）" if axes else ""))
-        for i, (key, seed) in enumerate(sorted(found.items(), key=lambda kv: kv[1]), start=1):
+        # ★**問題文と図がどちらも同じものは、同じ問題である。**
+        # 使う文字を b にするか c にするかだけが違う2つが別々の型として載って、
+        # 問題集に同じ問題文が2回出ていた（2026-08-19 の外部評価で指摘）。
+        # 一方で投影図のセルは**問題文が同じで図が違う**＝別の問題なので、
+        # 図まで見て判定する。
+        emitted: set[tuple[str, str]] = set()
+        rendered: list[tuple[str, int, Any]] = []
+        for key, seed in sorted(found.items(), key=lambda kv: kv[1]):
             res = generate(
                 GenerateRequest(subject="math", unit=unit, form=form, level=level, seed=seed),
                 curriculum=env.curriculum, families=env.families, registry=env.registry,
             )
+            if not isinstance(res, Unsupported):
+                mark = (res.problem_text, res.visual_svg or "")
+                if mark in emitted:
+                    continue
+                emitted.add(mark)
+            rendered.append((key, seed, res))
+
+        lines.append(f"\n---\n\n## {cell}  — 型 {len(rendered)} 個"
+                     + (f"（軸: {', '.join(axes)}）" if axes else ""))
+        for i, (key, seed, res) in enumerate(rendered, start=1):
             if isinstance(res, Unsupported):
                 lines.append(f"\n### 型{i}  （生成不可: {res.code}）\n")
                 continue
