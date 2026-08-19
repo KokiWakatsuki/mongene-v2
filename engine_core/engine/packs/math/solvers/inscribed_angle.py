@@ -149,13 +149,21 @@ def judge_concyclic_from_angle(
 def inscribed_angle_two_chords_intersection(bac: object, acd: object) -> Solution:
     """円周上の4点A,B,C,Dで、弦AC,BDの交点をPとするとき、∠BAC,∠ACDから
 
-    ∠APBの大きさを求める（g3_l47.find_value Lv3）。bac/acd だけから、円周角の
-    定理で対応する弧の大きさを求め、円周角と弧の関係を組み合わせた恒真の関係
-    ∠APB=180°-∠BAC-∠ACD で計算する（double-solve）。
+    ∠APBの大きさを求める（g3_l47.find_value Lv3）。bac/acd だけから
+    ∠APB=180°-∠BAC-∠ACD を計算する（double-solve）。
 
     交わるのは**対角線**AC・BDである（AD と BC は四角形ABCDの対辺で、円の内部
-    では交わらない）。∠BAC は弧BCに、∠ACD は弧ADに対する円周角なので、
-    弧AB+弧CD = 360° - 2∠BAC - 2∠ACD となり、∠APB はその半分になる。
+    では交わらない）。
+
+    ★**既習の範囲でいちばん短い道を採る。** ここは「2本の弦の交点にできる角は
+    向かい合う2つの弧の和の半分」という**中学校の範囲外の定理**で解いていた
+    （2026-08-19 の外部評価で指摘）。同じ答えは、交点でできる三角形 APB の
+    内角の和だけで出る:
+
+      ∠ABD と ∠ACD は同じ弧 AD に対する円周角だから等しい
+      △ABP の内角の和より ∠APB = 180° - ∠BAC - ∠ABD
+
+    どちらも中3で既習で、しかも手が1つ減るわけではない（2手のまま）。
     """
     a = sympy.sympify(str(bac))
     c = sympy.sympify(str(acd))
@@ -164,21 +172,20 @@ def inscribed_angle_two_chords_intersection(bac: object, acd: object) -> Solutio
     srepr = sympy.srepr(result)
     steps = [
         Step(
-            op="identify_arcs_from_inscribed_angles",
-            args=[], result_srepr="", result_display=f"{sympy.sstr(2 * a)}° と {sympy.sstr(2 * c)}°",
-            narration="円周角の定理から、それぞれの円周角に対応する弧の大きさを求める。",
+            op="equal_inscribed_angles_on_same_arc",
+            args=[], result_srepr="", result_display=f"{sympy.sstr(c)}°",
+            narration="同じ弧に対する円周角は等しいので、交点でできる三角形の"
+            "もう一つの角の大きさが分かる。",
+            detail="与えられた2つの角のうち一方は、交点でできる三角形の頂点の角と"
+            f"同じ弧に対する円周角である。だからその角も {sympy.sstr(c)}° になる。",
         ),
         Step(
-            op="apply_intersecting_chords_angle",
+            op="apply_triangle_angle_sum",
             args=[], result_srepr=srepr, result_display=disp,
-            narration="交点にできる角は、その角と向かい合う2つの弧を合わせた大きさの半分になる。"
-            "円周の全体から先に求めた2つの弧をひいて、残りの弧の半分を求める。",
-            # **使う関係を書き残す。** narration だけでは「円周の全体と2つの弧の
-            # 関係」としか言っておらず、どの式で出したのかが読み手に復元できない。
-            # 値を書けるのは detail（解説専用）だけなので、ここに置く。
-            detail="2本の弦の交点にできる角の大きさは、向かい合う2つの弧の大きさの和の"
-            "半分に等しい。向かい合う弧の和は、円周全体の360°から、先に求めた2つの弧を"
-            f"ひいて {sympy.sstr(360 - 2 * a - 2 * c)}° だから、求める角はその半分になる。",
+            narration="三角形の内角の和から、残りの角として求める角を計算する。",
+            # 値を書けるのは detail（解説専用）だけなので、式はここに置く。
+            detail="交点でできる三角形の内角の和は 180° だから、"
+            f"180° - {sympy.sstr(a)}° - {sympy.sstr(c)}° = {sympy.sstr(result)}°。",
         ),
     ]
     return Solution(answer=SymbolicAnswer(srepr=srepr, display=disp), steps=steps)

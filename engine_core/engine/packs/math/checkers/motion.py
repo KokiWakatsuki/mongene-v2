@@ -5,7 +5,7 @@ from typing import cast
 
 import sympy
 
-from engine.core.contracts import MR, Solution
+from engine.core.contracts import MR, Solution, SymbolicAnswer
 from engine.core.registry import REGISTRY, register_checker
 
 
@@ -114,10 +114,32 @@ def double_solve_word_problem_interval_exprs_and_graph(mr: MR) -> list[Solution]
 
 @register_checker("math.word_problem_max_area_and_times.double_solve")
 def double_solve_word_problem_max_area_and_times(mr: MR) -> Solution:
+    """本文の (面積, 縦の変域) だけから、式と横の変域を独立に組み直す。
+
+    recipe と同じ solver を、**recipe と違う順で**呼ぶ（変域の端が入れかわることを
+    checker の側でも独立に確かめる）。
+    """
     n = mr.params["numbers"]
-    return cast(
-        Solution,
-        REGISTRY.solver("math.max_area_and_times")(n["side"], n["speed"], n["area"]),
+    area, lo, hi = int(n["area"]), int(n["lo"]), int(n["hi"])
+    ends = []
+    for side in (hi, lo):  # 縦が大きいほうから＝横は小さいほうから
+        sol = cast(
+            Solution,
+            REGISTRY.solver("math.evaluate_inverse_proportion")(area, side, "forward"),
+        )
+        assert isinstance(sol.answer, SymbolicAnswer)
+        ends.append(sympy.sympify(sol.answer.srepr))
+    y_lo, y_hi = ends
+    expr = sympy.Integer(area) / sympy.Symbol("x")
+    return Solution(
+        answer=SymbolicAnswer(
+            srepr=sympy.srepr(sympy.Tuple(expr, y_lo, y_hi)),
+            display=(
+                f"y = {area}/x、"
+                f"横は {sympy.sstr(y_lo)}cm 以上 {sympy.sstr(y_hi)}cm 以下"
+            ),
+        ),
+        steps=[],
     )
 
 

@@ -341,16 +341,32 @@ def _complete_phrase(plan_shape: str, name: str) -> dict[str, str]:
     }
 
 
-def _complete_narration(plan_shape: str) -> dict[str, str]:
-    """候補が1つしかない図では、「絞る」と言わない（空回りの手になる）。"""
+def _complete_narration(plan_shape: str, elev_shape: str) -> dict[str, str]:
+    """立体を絞る手の言い方。**何が立体を決めたのかを必ず名指しする。**
+
+    ★もとは候補が1つのとき「その形の平面図になる立体は一つしかないので、立体は
+    それに決まる」と書いていた。**これは誤りである**——平面図が三角形に見える立体は
+    三角柱だけでなく三角錐もある（内部の線を描き分けて初めて区別できる）。実際に
+    立体を決めているのは問題文が与えた**立面図の条件**のほうで、解説はそこを
+    言っていなかった（2026-08-19 の外部評価で指摘・2問）。
+
+    候補が複数あるときは「挙げて絞る」、1つのときは「絞る」と言わない
+    （空回りの手になる）が、**どちらも立面図の条件を名指しする**。
+    """
+    condition = _SHAPE_JP[elev_shape]
     if len(_plan_candidates(plan_shape)) == 1:
         return {
             **_COMPLETE_NARRATION,
             "identify_solid_from_partial": (
-                "その形の平面図になる立体は一つしかないので、立体はそれに決まる。"
+                f"その形になる立体のうち、立面図が{condition}になるものを選ぶ。"
             ),
         }
-    return _COMPLETE_NARRATION
+    return {
+        **_COMPLETE_NARRATION,
+        "identify_solid_from_partial": (
+            f"その形になる立体をすべて挙げ、立面図が{condition}になるものを一つに絞る。"
+        ),
+    }
 
 
 @register_solver("math.complete_projection")
@@ -376,7 +392,7 @@ def complete_projection(plan: object, elevation: object) -> Solution:
     return Solution(
         answer=GraphAnswer(features=features, solution_svg_ref=""),
         steps=_steps(
-            _COMPLETE_OPS, _complete_narration(plan_s),
+            _COMPLETE_OPS, _complete_narration(plan_s, elev_s),
             _complete_phrase(plan_s, name), srepr, disp,
         ),
     )

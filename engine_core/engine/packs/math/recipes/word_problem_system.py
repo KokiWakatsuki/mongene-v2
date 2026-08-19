@@ -41,6 +41,7 @@ g2_l16 **Lv2** は同じ形をした専用 recipe を持っている（この fo
 """
 from __future__ import annotations
 
+import re
 from collections.abc import Callable, Mapping, Sequence
 from dataclasses import dataclass
 from typing import Any, cast
@@ -827,8 +828,29 @@ def word_problem_system_equations(ctx: CellContext, rng: Rng) -> MR:
     )
 
 
+_INTERSECTION_DISPLAY = re.compile(r"^交点\s*\((.+),\s*(.+)\)$")
+
+# 「交点」はグラフの言葉である。文章題では答えは2つの量であって座標ではない。
+_GRAPH_WORDING = {
+    "compute_y": (
+        "求めた x をどちらかの式に代入し、y を求めて交点の座標にする。",
+        "求めた値をもとの式に代入し、もう一方の文字の値も求める。",
+    ),
+    "back_substitute": (
+        "求めた値をもとの式に代入し、もう一方の文字を求めて交点の座標にする。",
+        "求めた値をもとの式に代入し、もう一方の文字の値も求める。",
+    ),
+    "equate_expressions": (
+        "2つの直線の y を等しいとおき、x についての方程式をつくる。",
+        "2つの式の y を等しいとおき、x についての方程式をつくる。",
+    ),
+}
+
+
 def solving_steps(sol: Solution) -> list[Step]:
-    """solver の steps から、文章題では要らない最初の一手を落とす。
+    """solver の steps を、文章題の言葉に直す。
+
+    ## 最初の一手を落とす
 
     `math.intersection_of_two_lines` の先頭は `setup_system`＝「2つの**直線**を
     ax + by = c の形にそろえて連立方程式を立てる」で、result_display も
@@ -836,11 +858,34 @@ def solving_steps(sol: Solution) -> list[Step]:
     `_formulation_steps` が場面の言葉と未整理の式で見せているので、ここは重複な
     うえに語彙（直線）も表示も合わない。落とすのは表示だけで、答えは solver が
     出したものをそのまま使う（double-solve の独立性は変わらない）。
+
+    ## ★「交点」を落とす
+
+    solver は g2_l27（2直線の交点）と共有しているので、残りの手も
+    「交点の座標にする」「交点 (350, 350)」というグラフの言葉で書かれている。
+    **食塩水の混合量を交点と呼ぶのは端的に誤り**で、g2_l16／l17／l18 の
+    57 小問に漏れていた（2026-08-19 の外部評価で指摘・実測）。
+
+    直すのは narration と result_display だけで、**op は触らない**。op 列は
+    level_sep と G-FP が見ているので、変えると別のセルの合否が動く。
     """
     steps = list(sol.steps)
     if steps and steps[0].op == "setup_system":
-        return steps[1:]
-    return steps
+        steps = steps[1:]
+    out: list[Step] = []
+    for st in steps:
+        narration = st.narration
+        display = st.result_display
+        pair = _GRAPH_WORDING.get(st.op)
+        if pair and narration == pair[0]:
+            narration = pair[1]
+        m = _INTERSECTION_DISPLAY.match(display or "")
+        if m:
+            display = f"x = {m.group(1)}、y = {m.group(2)}"
+        if narration != st.narration or display != st.result_display:
+            st = st.model_copy(update={"narration": narration, "result_display": display})
+        out.append(st)
+    return out
 
 
 def _formulation_steps(

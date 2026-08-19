@@ -782,49 +782,80 @@ def graph_situation_proportion(ctx: CellContext, rng: Rng) -> MR:
 
 # ---------------------------------------------------------------------------
 # math.graph_two_plans_crossover（g1_l36.graph_table Lv3）
-# 2つの料金プランを同じ座標平面にグラフでかき、交点（得の分かれ目）を読む。
+# 比例のグラフ（直線）と反比例のグラフ（曲線）を同じ座標平面にかき、交点を読む。
+#
+# ★もとは「A社は1枚 a 円、B社は1枚 b 円＋基本料金 c 円」の料金プラン比較だった。
+# B社の式は y = bx + c ＝**中2「1次関数」**で、中1 の比例・反比例では立てられない
+# （2026-08-19 の外部評価で指摘。台帳 units.generated.yaml の example 自体が
+# 中2 の内容だった）。台帳 desc「複数の関係を1つのグラフ上で比較し交点等を読む」を
+# 中1 の範囲で満たすには、**一方を反比例にする**しかない——比例どうしのグラフは
+# 原点でしか交わらないので、読ませる交点が生まれない。
+#
+# 場面は長方形にした。「面積が決まっている」＝反比例、「横が縦の決まった倍数」＝比例で、
+# どちらも中1 で扱う関係であり、交点はその両方を満たす長方形になる（意味がある交点）。
 # ---------------------------------------------------------------------------
 _GRAPH_TWO_PLANS_CONCEPTS = ["direct_proportion.compare_two_plans_graph"]
 
 
 @register_recipe("math.graph_two_plans_crossover", provides_concepts=_GRAPH_TWO_PLANS_CONCEPTS)
 def graph_two_plans_crossover(ctx: CellContext, rng: Rng) -> MR:
-    """2つの料金プランのグラフの交点を読む（answer-first・graph_table Lv3）。
+    """比例と反比例のグラフの交点を読む（answer-first・graph_table Lv3）。
 
-    交点の枚数 x0・1枚あたりの差 d(≥2)・B社の単価 pb を先に選び、固定費 fixed=d*x0 を
-    逆算する（交点が必ず格子点になる＝グラフから読める）。x0 は単価より大きい域から
-    引くので、答えの座標が本文の数値と偶然一致する退化も構成で避けている。
-    問題図は空の方眼（read_intersection は両直線入りの図を禁止＝§6.4）。
+    交点の縦 m と倍率 k を先に選び、面積 area = k·m² を逆算する
+    （交点 (m, k·m) が必ず格子点になる＝グラフから読める）。
+    答えの座標が本文の数値（倍率・面積）と一致する退化は構成で外す。
+    問題図は空の方眼（read_intersection は両グラフ入りの図を禁止＝§6.4）。
     """
     p = ctx.spec_level.params
-    pb = int(draw(p["unit_price_domain"], rng))
-    d = int(draw(p["price_diff_domain"], rng))
-    x0 = int(draw(p["crossover_domain"], rng))
-    pa = pb + d
-    fixed = d * x0
-    y0 = pa * x0
+    area_max = int(p["area_max"])
+    scenes = list(p["scene_candidates"])
+    cands = [
+        (k, m)
+        for k in (int(v) for v in p["ratio_candidates"])
+        for m in (int(v) for v in p["height_candidates"])
+        # 面積は方眼に収まる大きさまで（グラフをかかせる問題なので）。
+        if k * m * m <= area_max
+        # 答え (m, k·m) が本文の数（倍率 k・面積 k·m²）と重ならない組だけ。
+        # 重なると、問題を読まずに本文の数を書き写して当たってしまう。
+        and not {m, k * m} & {k, k * m * m}
+    ]
+    idx = int(draw({"int_set": list(range(len(cands)))}, rng))
+    k, m = cands[idx]
+    scene = str(draw(scenes, rng))
+    area = k * m * m
+    y0 = k * m
 
-    solver = REGISTRY.solver("math.read_plan_crossover_from_graph")
-    sol = cast(Solution, solver(pa, pb, fixed))
+    solver = REGISTRY.solver("math.read_proportion_hyperbola_crossover")
+    sol = cast(Solution, solver(k, area))
     assert isinstance(sol.answer, SymbolicAnswer)
-    expected = sympy.Tuple(sympy.Integer(x0), sympy.Integer(y0))
+    expected = sympy.Tuple(sympy.Integer(m), sympy.Integer(y0))
     assert sol.answer.srepr == sympy.srepr(expected), (
         f"double-solve 不一致: 構成 {expected} != solver 再計算 {sol.answer.srepr}"
     )
 
     mr_params = {
-        "pa": pa,
-        "pb": pb,
-        "fixed": fixed,
+        "ratio": k,
+        "area": area,
+        # 場面（何の長方形か）。dup_key は params だけを見るので、ここに載せないと
+        # 場面を変えても「同じ問題」と数えられてしまう。
+        "scene": scene,
         "grid_mode": "quantity",
-        "pts": [_pt_str(x0, y0), _pt_str(0, fixed)],
+        # ★方眼は**横 0〜3m・縦 0〜面積**にする。反比例は x=1 で y=面積、比例は
+        # x=3m あたりで方眼の上端に届くので、この範囲に二本とも収まり、しかも
+        # 交点が中ほどに来る。
+        #
+        # ここは2回外した。交点だけを目もりにしたら x が 0〜3 しかない方眼になり
+        # 曲線が1点しか描けず、正方形の方眼にしたら 0〜50 に広がって交点が
+        # 原点に張りついた。**どちらも check_cell は通る**（ゲートは図の中身を
+        # 見ない）。PNG に起こして見て初めて分かった。
+        "pts": [_pt_str(m, y0), _pt_str(max(3 * m, 6), area)],
     }
     given = {
         "condition": (
-            f"A社はコピー1枚を{fmt_number(sympy.Integer(pa))}円で引き受ける。"
-            f"B社は1枚を{fmt_number(sympy.Integer(pb))}円で引き受けるが、"
-            f"枚数によらず{fmt_number(sympy.Integer(fixed))}円の基本料金がかかる。"
-            "コピーの枚数 x と料金 y の関係"
+            f"面積が{fmt_number(sympy.Integer(area))}cm²の{scene}の、"
+            "縦 x cm と横 y cm の関係と、"
+            f"横が縦の{fmt_number(sympy.Integer(k))}倍である{scene}の、"
+            "縦 x cm と横 y cm の関係"
         )
     }
     return _mr(

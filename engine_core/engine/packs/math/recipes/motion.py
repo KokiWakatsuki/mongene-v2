@@ -19,6 +19,7 @@ from engine.core.contracts import (
     GraphAnswer,
     Provenance,
     Solution,
+    Step,
     SubQuestionMR,
     SymbolicAnswer,
     VisualElement,
@@ -807,35 +808,105 @@ def word_problem_interval_exprs_and_graph_recipe(ctx: CellContext, rng: Rng) -> 
     "math.word_problem_max_area_and_times", provides_concepts=_G1L36_CONCEPTS
 )
 def word_problem_max_area_and_times_recipe(ctx: CellContext, rng: Rng) -> MR:
-    """面積が最大になるところと、指定の面積になる時刻をすべて求める（g1_l36.word_problem Lv4）。"""
-    p = cast("dict[str, Any]", ctx.spec_level.params)
-    # **答えの時刻が、与えた数（1辺・速さ・面積）と一致してはいけない。**
-    # 一致すると、問題を読まずに本文の数を書き写して当たってしまう。
-    # 1辺の範囲を広げたら「速さ 4cm/s、答え 4秒後」が出た（テストが捕まえた）。
-    for _ in range(300):
-        s, v, area, labels_txt, scenario = _three_interval_scene(p, rng, with_area=True)
-        sol = cast(Solution, REGISTRY.solver("math.max_area_and_times")(s, v, area))
-        assert isinstance(sol.answer, SymbolicAnswer)
-        peak, t_lo, t_hi, t_a, t_b = sympy.sympify(sol.answer.srepr)
-        if not {int(t_a), int(t_b)} & {int(s), int(v), int(area)}:
-            break
-    else:
-        raise ValueError("答えの時刻が与えた数と重ならない組を構成できず")
-    assert t_lo < t_hi and 0 < t_a < t_lo and t_hi < t_b, "区間と解の位置関係が壊れている"
-    assert area < peak
+    """反比例の式を立て、変域から相手の変域を求める（g1_l36.word_problem Lv4）。
 
+    ★もとは「正方形の周上を動く点と三角形の面積」だった。面積は区間ごとに
+    増加→一定→減少と変わる**区分線形**で、これは中2「1次関数の利用（動点）」の
+    内容である（2026-08-19 の外部評価で指摘。台帳 example 自体が中2 の内容だった）。
+    実際、ほぼ同型の問題が g2_l29 と入試対策 第3回にも載っていた。
+
+    中1 の「比例・反比例の利用」で最上位に置ける題材として、**反比例の変域**にした。
+    台帳 Lv4 が問うている形（式を立てる＋「どの範囲にあるとき」を答える）はそのまま
+    保てる。反比例は減少する関係なので、変域の**端が入れかわる**（縦が最小のとき
+    横は最大）——ここが「場合分け」にあたる中1 の山場である。
+
+    数学は既存 solver（math.evaluate_inverse_proportion）に委ねる＝新 solver ゼロ。
+    """
+    p = cast("dict[str, Any]", ctx.spec_level.params)
+    cands = [
+        (area, lo, hi)
+        for area in (int(v) for v in p["area_candidates"])
+        for lo in (int(v) for v in p["side_candidates"])
+        for hi in (int(v) for v in p["side_candidates"])
+        # 変域の両端で横の長さが整数になる組だけ（答えが読める形になる）。
+        if lo < hi and area % lo == 0 and area % hi == 0
+        # 答え（両端の横の長さ）が本文の数と重ならない組だけ。重なると、
+        # 問題を読まずに本文の数を書き写して当たってしまう。
+        and not {area // lo, area // hi} & {area, lo, hi}
+    ]
+    idx = int(draw({"int_set": list(range(len(cands)))}, rng))
+    area, lo, hi = cands[idx]
+    shape = str(draw(list(p["shape_candidates"]), rng))
+
+    lo_sol = cast(
+        Solution,
+        REGISTRY.solver("math.evaluate_inverse_proportion")(area, lo, "forward"),
+    )
+    hi_sol = cast(
+        Solution,
+        REGISTRY.solver("math.evaluate_inverse_proportion")(area, hi, "forward"),
+    )
+    assert isinstance(lo_sol.answer, SymbolicAnswer)
+    assert isinstance(hi_sol.answer, SymbolicAnswer)
+    y_hi = sympy.sympify(lo_sol.answer.srepr)   # 縦が最小のとき横は最大
+    y_lo = sympy.sympify(hi_sol.answer.srepr)
+    assert y_lo < y_hi, "変域の端が入れかわっていない"
+    expr = sympy.Integer(area) / sympy.Symbol("x")
+
+    steps = [
+        Step(
+            op="form_inverse_expression",
+            args=[],
+            result_srepr=sympy.srepr(expr),
+            result_display=f"y = {area}/x",
+            narration="面積が決まっているとき、縦と横の積は一定なので、"
+            "横は縦に反比例する。その式に表す。",
+        ),
+        Step(
+            op="evaluate_at_range_ends",
+            args=[],
+            result_srepr=sympy.srepr(sympy.Tuple(y_hi, y_lo)),
+            result_display=f"{sympy.sstr(y_hi)}cm と {sympy.sstr(y_lo)}cm",
+            narration="縦の変域の両端を式にあてはめて、それぞれのときの横の長さを求める。",
+        ),
+        Step(
+            op="order_range_ends",
+            args=[],
+            result_srepr=sympy.srepr(sympy.Tuple(y_lo, y_hi)),
+            result_display=f"{sympy.sstr(y_lo)}cm 以上 {sympy.sstr(y_hi)}cm 以下",
+            narration="反比例では、縦が大きくなるほど横は小さくなる。"
+            "だから縦が最小のときの横が最大、縦が最大のときの横が最小になる。"
+            "その順に並べて変域として答える。",
+        ),
+    ]
+    sol = Solution(
+        answer=SymbolicAnswer(
+            srepr=sympy.srepr(sympy.Tuple(expr, y_lo, y_hi)),
+            display=(
+                f"y = {area}/x、"
+                f"横は {sympy.sstr(y_lo)}cm 以上 {sympy.sstr(y_hi)}cm 以下"
+            ),
+        ),
+        steps=steps,
+    )
+    scenario = (
+        f"面積が{area}cm²の{shape}がある。縦を x cm、横を y cm とする。"
+    )
     return MR(
         signature=ctx.spec_level.signature,
         family=ctx.family,
         level=ctx.level,
         purpose=ctx.purpose,
         seed=0,
-        params={"numbers": _wp_numbers(s, v, area), "labels": labels_txt},
+        params={
+            "numbers": {"area": str(area), "lo": str(lo), "hi": str(hi)},
+            "shape": shape,
+        },
         given={"scenario": scenario},
         context_slots={
             "ask_value": (
-                f"面積が最大になるのはxがどの範囲にあるときかとそのときの面積、"
-                f"および面積が{area}cm²になるときの x の値をすべて求めよ。"
+                f"y を x の式で表せ。また、縦が{lo}cm以上{hi}cm以下であるとき、"
+                "横はどんな範囲になるか求めよ。"
             )
         },
         sub_questions=[_wp_sub(ctx, label="(1)", asked="value", sol=sol)],

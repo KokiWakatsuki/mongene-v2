@@ -205,56 +205,80 @@ def solve_judge_and_use(numbers: Mapping[str, Any]) -> list[Solution]:
 
 
 def solve_meet_two_motions(numbers: Mapping[str, Any]) -> list[Solution]:
-    """g1_l36 Lv3: 2人の「時間と道のり」の関係を直線とみて交点の x 座標を求める。
+    """g1_l36 Lv3: 1つの場面から**比例と反比例の両方**を立式して2つの量を求める。
 
-    速い側 y = vf·x（＝ vf·x − y = 0）、遅い側 y = vs·(x + h)（＝ vs·x − y = −vs·h）を
-    `math.intersection_of_two_lines` に渡す。答えは交点の x 座標（追いつくまでの分）。
+    ★もとは「先に出た人を追いかける」場面で、遅い側の道のりが y = vs·x + vs·h
+    ＝**中2「1次関数」**だった。中1 の比例・反比例では立てられない
+    （2026-08-19 の外部評価で指摘。台帳 units.generated.yaml の example 自体が
+    中2 の内容だった）。台帳 desc「複数量・グラフと絡む場面を自分で立式・場合分け
+    して解く」のうち「複数量を自分で立式」を、中1 で習う2つの関係で満たす。
+
+    場面は水そう（Lv2 と同じ題材だが、Lv2 は**どちらか一方**を見ぬいて誘導つきで
+    解くのに対し、ここは**両方を自分で立てて**誘導なしで2つの量を答える）。
+
+      満水の量 V = rate0 × minutes0            （比例の考えで全体量を出す）
+      毎分 rate1 で入れるときの時間 = V / rate1  （割合と時間は反比例）
+      毎分 rate0 で入れて minutes1 分後の量 = rate0 × minutes1（量は時間に比例）
+
+    使う solver は Lv2 と同じ2本（新 solver ゼロ）。
     """
-    speed_slow = int(numbers["speed_slow"])
-    head_start = int(numbers["head_start"])
-    speed_fast = int(numbers["speed_fast"])
-    sol = cast(
+    rate0 = int(numbers["rate0"])
+    minutes0 = int(numbers["minutes0"])
+    rate1 = int(numbers["rate1"])
+    minutes1 = int(numbers["minutes1"])
+
+    capacity = sympy.Integer(rate0 * minutes0)
+    time_sol = cast(
         Solution,
-        REGISTRY.solver("math.intersection_of_two_lines")(
-            (speed_fast, -1, 0),
-            (speed_slow, -1, -speed_slow * head_start),
-            "substitute",
+        REGISTRY.solver("math.evaluate_inverse_proportion")(capacity, rate1, "forward"),
+    )
+    amount_sol = cast(
+        Solution,
+        REGISTRY.solver("math.evaluate_direct_proportion")(
+            sympy.Integer(rate0), minutes1, "basic"
         ),
     )
-    assert isinstance(sol.answer, SymbolicAnswer)
-    point = sympy.sympify(sol.answer.srepr)
-    minutes = cast(sympy.Expr, point[0])
+    assert isinstance(time_sol.answer, SymbolicAnswer)
+    assert isinstance(amount_sol.answer, SymbolicAnswer)
+    minutes = sympy.sympify(time_sol.answer.srepr)
+    amount = sympy.sympify(amount_sol.answer.srepr)
 
     steps = [
         Step(
-            op="form_expression",
+            op="find_capacity",
             args=[],
-            result_srepr="",
-            result_display="2人それぞれについて、時間と道のりの関係を式に表す",
+            result_srepr=sympy.srepr(capacity),
+            result_display=f"満水の量は {sympy.sstr(capacity)}L",
             narration=(
-                "追いかけた側が出発してからの時間をxとおき、"
-                "2人それぞれの家からの道のりyを、xの式で表す。"
+                "はじめに与えられた割合と、満水までにかかる時間から、"
+                "水そう全体の量を求める。"
             ),
         ),
         Step(
-            op="equate_expressions",
-            args=[],
-            result_srepr="",
-            result_display=f"({sympy.sstr(point[0])}, {sympy.sstr(point[1])})",
-            narration=(
-                "2つの関係を同じ座標平面上のグラフとみて、"
-                "道のりが等しくなる点、つまり交点を求める。"
-            ),
-        ),
-        Step(
-            op="read_x_coordinate",
+            op="use_inverse_relation",
             args=[],
             result_srepr=sympy.srepr(minutes),
-            result_display=f"{minutes}分後",
-            narration="交点のx座標が、追いついたときの時間を表している。",
+            result_display=f"{sympy.sstr(minutes)}分",
+            narration=(
+                "全体の量が決まっているとき、毎分入れる量と満水までの時間は"
+                "反比例する。その関係を使って、割合を変えたときの時間を求める。"
+            ),
+        ),
+        Step(
+            op="use_direct_relation",
+            args=[],
+            result_srepr=sympy.srepr(amount),
+            result_display=f"{sympy.sstr(amount)}L",
+            narration=(
+                "入れる割合が決まっているとき、たまった水の量は時間に比例する。"
+                "その関係を使って、たずねられた時間後の量を求める。"
+            ),
         ),
     ]
-    answer = SymbolicAnswer(srepr=sympy.srepr(minutes), display=f"{minutes}分後")
+    answer = SymbolicAnswer(
+        srepr=sympy.srepr(sympy.Tuple(minutes, amount)),
+        display=f"{sympy.sstr(minutes)}分、{sympy.sstr(amount)}L",
+    )
     return [Solution(answer=answer, steps=steps)]
 
 
@@ -459,60 +483,58 @@ def _scene_judge_and_use(p: Mapping[str, Any], rng: Rng) -> ProportionFrequencyS
     )
 
 
-def _meet_candidates(p: Mapping[str, Any]) -> list[tuple[int, int, int]]:
-    """(遅い側の分速 vs, 何分後に追いかけたか h, 速い側の分速 vf) の候補列挙。
+def _two_relation_candidates(p: Mapping[str, Any]) -> list[tuple[int, int, int, int]]:
+    """(はじめの割合 rate0, 満水までの分 minutes0, 変えた割合 rate1, たずねる分 minutes1)。
 
-    追いつくまでの時間 t = vs·h/(vf − vs) が整数になり、かつ本文の数値
-    （vs・h・vf）のどれとも一致しない組だけを残す（G-Q5t の漏洩誤検出を構成時に
-    潰す）。t が極端に大きい場面（何十分も追いつかない）は除く。
+    満水の量 rate0·minutes0 が rate1 で割り切れる組だけを残す（答えが整数）。
+    答え（時間・水の量）が本文のどの数値とも一致しない組だけを残す
+    ——一致すると、問題を読まずに本文の数を書き写して当たってしまう。
     """
-    slows = [int(v) for v in p["slow_speed_candidates"]]
-    fasts = [int(v) for v in p["fast_speed_candidates"]]
-    heads = [int(v) for v in p["head_start_candidates"]]
-    t_lo, t_hi = (int(v) for v in p["minutes_range"])
-    out: list[tuple[int, int, int]] = []
-    for vs in slows:
-        for vf in fasts:
-            if vf <= vs:
-                continue
-            for h in heads:
-                t = sympy.Rational(vs * h, vf - vs)
-                if t.q != 1:
+    rates = [int(v) for v in p["rate_candidates"]]
+    lo, hi = (int(v) for v in p["minutes_range"])
+    out: list[tuple[int, int, int, int]] = []
+    for rate0 in rates:
+        for minutes0 in range(lo, hi + 1):
+            capacity = rate0 * minutes0
+            for rate1 in rates:
+                if rate1 == rate0 or capacity % rate1:
                     continue
-                minutes = int(t)
-                if not (t_lo <= minutes <= t_hi):
+                minutes = capacity // rate1
+                if not lo <= minutes <= hi * 2:
                     continue
-                if minutes in (vs, vf, h):
-                    continue
-                out.append((vs, h, vf))
+                for minutes1 in range(lo, hi + 1):
+                    amount = rate0 * minutes1
+                    shown = {rate0, minutes0, rate1, minutes1}
+                    if {minutes, amount} & shown:
+                        continue
+                    out.append((rate0, minutes0, rate1, minutes1))
     return out
 
 
 def _scene_meet_two_motions(p: Mapping[str, Any], rng: Rng) -> ProportionFrequencyScene:
-    """g1_l36 Lv3: 先に出た人を追いかける場面（2つの関係をグラフで比較する）。"""
-    speed_slow, head_start, speed_fast = cast(
-        "tuple[int, int, int]", _draw_index(_meet_candidates(p), rng)
+    """g1_l36 Lv3: 1つの場面から比例と反比例の両方を自分で立式する（誘導なし）。"""
+    rate0, minutes0, rate1, minutes1 = cast(
+        "tuple[int, int, int, int]", _draw_index(_two_relation_candidates(p), rng)
     )
-    first, second = _split_pair(str(_draw_index(list(p["person_pair_candidates"]), rng)))
+    vessel = str(_draw_index(list(p["vessel_candidates"]), rng))
     scenario = (
-        f"{first}は分速{speed_slow}mで家を出発した。その{head_start}分後、"
-        f"{second}が分速{speed_fast}mで同じ道を追いかけた。"
-        f"{second}が出発してからx分後の、{first}と{second}それぞれの家からの道のりを考える。"
+        f"空の{vessel}に、毎分{rate0}Lの割合で水を入れると{minutes0}分で満水になる。"
     )
     ask_value = (
-        "2人の関係をそれぞれ式に表して同じ座標平面上のグラフとみたとき、"
-        f"{second}が{first}に追いつくのは、{second}が出発してから何分後か求めよ。"
+        f"毎分{rate1}Lの割合で入れると満水まで何分かかるか求めよ。"
+        f"また、毎分{rate0}Lの割合で入れ始めてから{minutes1}分後の水の量は何Lか求めよ。"
     )
     return ProportionFrequencyScene(
         numbers={
-            "speed_slow": speed_slow,
-            "head_start": head_start,
-            "speed_fast": speed_fast,
+            "rate0": rate0,
+            "minutes0": minutes0,
+            "rate1": rate1,
+            "minutes1": minutes1,
         },
         scenario=scenario,
         ask_texts=(ask_value,),
         asked=("value",),
-        slots={"first": first, "second": second},
+        slots={"vessel": vessel},
     )
 
 

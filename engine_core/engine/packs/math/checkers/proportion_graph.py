@@ -79,8 +79,8 @@ def double_solve_graph_situation_proportion(mr: MR) -> Solution:
 
 @register_checker("math.graph_two_plans_crossover.double_solve")
 def double_solve_graph_two_plans_crossover(mr: MR) -> Solution:
-    solver = REGISTRY.solver("math.read_plan_crossover_from_graph")
-    return cast(Solution, solver(mr.params["pa"], mr.params["pb"], mr.params["fixed"]))
+    solver = REGISTRY.solver("math.read_proportion_hyperbola_crossover")
+    return cast(Solution, solver(mr.params["ratio"], mr.params["area"]))
 
 
 __all__: list[str] = []

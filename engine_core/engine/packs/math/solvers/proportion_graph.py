@@ -548,10 +548,15 @@ def read_situation_value_from_graph(a: object, x_q: object) -> Solution:
 # ---------------------------------------------------------------------------
 # math.read_plan_crossover_from_graph（g1_l36.graph_table Lv3）
 # 2つの料金プラン（比例／固定費つき）のグラフを同じ座標平面にかき、交点を読む。
+#
+# ★このセルでは**使わない**。y = ax + b は中2「1次関数」の内容で、中1 の
+# 「比例・反比例の利用」では立てられない（2026-08-19 の外部評価で指摘）。
+# g1_l36.graph_table Lv3 は `read_proportion_hyperbola_crossover` に移した。
+# solver 自体は中2の単元から使えるので残してある。
 # ---------------------------------------------------------------------------
 @register_solver("math.read_plan_crossover_from_graph")
 def read_plan_crossover_from_graph(pa: object, pb: object, fixed: object) -> Solution:
-    """2つの料金プランのグラフの交点をグラフから読む（g1_l36.graph_table Lv3）。
+    """2つの料金プランのグラフの交点をグラフから読む（中2「1次関数の利用」向け）。
 
     A は 1 個あたり pa 円の比例、B は 1 個あたり pb 円＋固定費 fixed 円。
     交点の x は fixed/(pa-pb)（recipe が整数になるよう構成する）。
@@ -600,6 +605,72 @@ def read_plan_crossover_from_graph(pa: object, pb: object, fixed: object) -> Sol
     )
 
 
+# ---------------------------------------------------------------------------
+# math.read_proportion_hyperbola_crossover（g1_l36.graph_table Lv3）
+# 比例のグラフ（直線）と反比例のグラフ（曲線）を同じ座標平面にかき、交点を読む。
+#
+# 「複数の関係を1つのグラフ上で比較し交点等を読む」（台帳 desc）を、**中1 で
+# 習う2つの関係だけ**で満たす組み合わせがこれである。比例どうしは原点でしか
+# 交わらないので、交点を読ませるには一方を反比例にするしかない。
+# ---------------------------------------------------------------------------
+@register_solver("math.read_proportion_hyperbola_crossover")
+def read_proportion_hyperbola_crossover(k: object, area: object) -> Solution:
+    """比例 y = kx と反比例 y = area/x の交点をグラフから読む（g1_l36.graph_table Lv3）。
+
+    交点の x は area/k の平方根。**recipe が area = k·m² の形で構成する**ので、
+    必ず格子点になる（グラフから読める）。中1 に平方根は無いが、ここで求めるのは
+    式を解いた値ではなく**グラフの交点の目もり**なので、既習の範囲で答えられる。
+    """
+    k_s, a_s = _int(k), _int(area)
+    if k_s <= 0 or a_s <= 0:
+        raise ValueError(f"比例定数・面積は正であること: k={k_s} area={a_s}")
+    sq = sympy.Rational(a_s, k_s)
+    x0 = sympy.sqrt(sq)
+    if not x0.is_Integer:
+        raise ValueError(f"交点のx座標が格子点にならない: k={k_s} area={a_s}")
+    x0 = sympy.Integer(x0)
+    y0 = sympy.Integer(k_s * x0)
+    pt = _pt(x0, y0)
+    x = sympy.Symbol("x")
+    steps = [
+        Step(
+            op="express_inverse_relation",
+            args=[fmt_number(a_s)],
+            result_srepr=sympy.srepr(a_s / x),
+            result_display=_fmt_inverse(a_s),
+            narration="面積が決まっている長方形では、縦と横の積が一定なので、"
+            "横は縦に反比例する。その式に表す。",
+        ),
+        Step(
+            op="express_direct_relation",
+            args=[fmt_number(k_s)],
+            result_srepr=sympy.srepr(k_s * x),
+            result_display=_fmt_direct(k_s),
+            narration="横が縦の決まった倍数になっている長方形では、横は縦に比例する。"
+            "その式に表す。",
+        ),
+        Step(
+            op="draw_both_relation_graphs",
+            args=[],
+            result_srepr=sympy.srepr(pt),
+            result_display=_pt_display(pt),
+            narration="反比例のグラフ（曲線）と比例のグラフ（直線）を、"
+            "同じ座標平面にかいて重ねる。",
+        ),
+        Step(
+            op="read_relation_crossover",
+            args=[],
+            result_srepr=sympy.srepr(pt),
+            result_display=_pt_display(pt),
+            narration="二本のグラフが交わる点の目もりを読むと、"
+            "両方の条件を同時に満たす縦と横がわかる。",
+        ),
+    ]
+    return Solution(
+        answer=SymbolicAnswer(srepr=sympy.srepr(pt), display=_pt_display(pt)), steps=steps
+    )
+
+
 __all__ = [
     "read_coordinate_components",
     "reflect_point_pair",
@@ -613,4 +684,5 @@ __all__ = [
     "read_lattice_point_on_hyperbola",
     "read_situation_value_from_graph",
     "read_plan_crossover_from_graph",
+    "read_proportion_hyperbola_crossover",
 ]
