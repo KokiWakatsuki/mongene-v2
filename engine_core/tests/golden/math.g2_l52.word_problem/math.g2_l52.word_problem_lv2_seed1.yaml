@@ -39,7 +39,7 @@ sub_questions:
   - probability.word_problem_coin_toss_count_and_probability
   explanation: まず、硬貨を区別して、1枚ごとに表と裏の2通りがあることを枝分かれで書き出し、出方の総数を数える。（4通り）
   hints:
-  - 硬貨を区別して、1枚ごとに表と裏の2通りがあることを枝分かれで書き出し、出方の総数を数える。
+  - 硬貨を同時に投げるときの出方の総数と、表がちょうど何枚出るかの確率を求める
   label: (1)
   prompt_text: ''
   solution_steps:
@@ -62,7 +62,7 @@ sub_questions:
 
     最後に、条件にあてはまる出方の数を、すべての出方の数でわる。（1/2）'
   hints:
-  - 硬貨を区別して、表と裏の出方をすべて書き出す。
+  - 硬貨を同時に投げるときの出方の総数と、表がちょうど何枚出るかの確率を求める
   label: (2)
   prompt_text: ''
   solution_steps:

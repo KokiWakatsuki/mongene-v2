@@ -40,7 +40,7 @@ sub_questions:
 
     次に、ax² + bx + c = 0 と見比べると、x² の係数が a にあたる。（a）'
   hints:
-  - 説明されている項が、2次方程式のどの位置（x²・x・定数項）にあるかを読み取る。
+  - 2次方程式ax²+bx+c=0とa・b・cの対応を識別する
   label: (1)
   prompt_text: ''
   solution_steps:

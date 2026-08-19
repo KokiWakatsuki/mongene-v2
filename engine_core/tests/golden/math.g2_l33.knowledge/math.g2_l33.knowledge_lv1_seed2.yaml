@@ -24,7 +24,7 @@ meta:
   seed: 2
   signature: triangle_angle_properties_rule_recall
 problem_ref: 6449e130d135e08c
-problem_text: 三角形GCHの3つの内角をすべてたした大きさについて、正しく述べているものを1つ選べ。
+problem_text: 三角形LMNの3つの内角をすべてたした大きさについて、正しく述べているものを1つ選べ。
 sub_questions:
 - answer:
     correct: 一直線の角(平角)に等しい
@@ -40,7 +40,7 @@ sub_questions:
 
     次に、三角形の3つの内角の和は 180° になる。（一直線の角(平角)に等しい）'
   hints:
-  - 問題で問われている規則や約束が、何についてのものかを読み取る。
+  - 三角形の内角の和・外角の性質を想起する
   label: (1)
   prompt_text: '・直角に等しい
 

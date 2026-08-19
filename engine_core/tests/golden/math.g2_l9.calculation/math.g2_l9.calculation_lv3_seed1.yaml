@@ -39,7 +39,7 @@ sub_questions:
 
     次に、両辺を、解く文字にかかっている係数でわる。（a = 4p/r）'
   hints:
-  - 分母をなくすため、両辺に分母をかける。
+  - 分母・積にある文字について等式を解く
   label: (1)
   prompt_text: ''
   solution_steps:

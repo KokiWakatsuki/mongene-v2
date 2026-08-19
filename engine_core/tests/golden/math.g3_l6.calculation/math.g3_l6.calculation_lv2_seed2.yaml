@@ -39,7 +39,7 @@ sub_questions:
 
     次に、同類項をまとめて計算する。（-26t - 12）'
   hints:
-  - それぞれのかっこを乗法公式で展開する。
+  - 複数の乗法公式や置きかえを使って展開し整理する
   label: (1)
   prompt_text: ''
   solution_steps:

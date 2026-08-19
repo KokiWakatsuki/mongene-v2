@@ -37,7 +37,7 @@ sub_questions:
 
     次に、グラフが y 軸と交わる点の y 座標を読み取って切片とし、傾きと合わせて答える。（傾き 1、切片 2）'
   hints:
-  - グラフ上の格子点で、右へ進む量に対する上下の変化の割合を読み取り、傾きとする。
+  - 直線のグラフから傾きと切片を読み取る
   label: (1)
   prompt_text: ''
   solution_steps:
@@ -102,4 +102,7 @@ visual_svg: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width=
   x="192.00" y="104.71" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">4</text><text x="192.00" y="104.71" font-size="10" text-anchor="end" fill="#000000">4</text><text
   x="192.00" y="80.14" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">5</text><text x="192.00" y="80.14" font-size="10" text-anchor="end" fill="#000000">5</text><text
   x="192.00" y="55.57" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">6</text><text x="192.00" y="55.57" font-size="10" text-anchor="end" fill="#000000">6</text><text
-  x="192.00" y="31.00" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">7</text><text x="192.00" y="31.00" font-size="10" text-anchor="end" fill="#000000">7</text></svg>
+  x="192.00" y="31.00" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">7</text><text x="192.00" y="31.00" font-size="10" text-anchor="end" fill="#000000">7</text><text
+  x="384.00" y="196.00" font-size="13" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">x</text><text x="384.00" y="196.00" font-size="13" text-anchor="middle"
+  fill="#000000">x</text><text x="210.00" y="20.00" font-size="13" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">y</text><text x="210.00" y="20.00" font-size="13"
+  text-anchor="middle" fill="#000000">y</text></svg>

@@ -37,7 +37,7 @@ sub_questions:
 
     次に、a の符号に注意して、2つの端点の y の値を大小の順に並べる。（16 ≦ y ≦ 64）'
   hints:
-  - x の変域の両端の値を、それぞれ式に代入して y の値を求める。
+  - xの変域からy=ax²のyの変域を、頂点を含むか吟味して求める
   label: (1)
   prompt_text: ''
   solution_steps:

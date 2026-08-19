@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: line_angle_terms_term_recall
 problem_ref: 981900fda25c2243
-problem_text: 点Gから出る2つの半直線GJ、GBがつくる図形を何といいますか。
+problem_text: 点Cから出る2つの半直線CA、CBがつくる図形を何といいますか。
 sub_questions:
 - answer:
     correct: 角
@@ -41,7 +41,7 @@ sub_questions:
 
     次に、1点から出る2つの半直線がつくる開きを角という。（角）'
   hints:
-  - 両端があるか、片側だけのびるか、両側にのびるかを読み取る。
+  - 直線・線分・半直線・角の用語を想起する
   label: (1)
   prompt_text: ''
   solution_steps:

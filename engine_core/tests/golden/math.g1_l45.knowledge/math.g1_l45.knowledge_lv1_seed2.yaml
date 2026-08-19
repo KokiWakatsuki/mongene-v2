@@ -24,7 +24,7 @@ meta:
   seed: 2
   signature: circle_terms_term_recall
 problem_ref: 72ce89e59c488eaf
-problem_text: 円周上の2点R、Mを結んだ線分を何といいますか。
+problem_text: 円周上の2点Q、Rを結んだ線分を何といいますか。
 sub_questions:
 - answer:
     correct: 弦
@@ -42,7 +42,7 @@ sub_questions:
 
     次に、円周上の2点を結ぶ線分を弦という。最も長い弦が直径。（弦）'
   hints:
-  - 円のどの部分（中心からの線・円周上の2点を結ぶ線・円周の一部）の説明かを読み取る。
+  - 半径・弦・弧・おうぎ形・中心角の用語を想起する
   label: (1)
   prompt_text: ''
   solution_steps:

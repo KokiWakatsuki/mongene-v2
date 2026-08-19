@@ -35,7 +35,7 @@ sub_questions:
   - probability.relative_frequency_estimate
   explanation: まず、注目していることがらの数 309 を、全体の数 600 でわって、相対度数を求める。（0.515）
   hints:
-  - 注目していることがらの数を、全体の数でわって、相対度数を求める。
+  - 相対度数から確率を推定し分数で整理する
   label: (1)
   prompt_text: ''
   solution_steps:

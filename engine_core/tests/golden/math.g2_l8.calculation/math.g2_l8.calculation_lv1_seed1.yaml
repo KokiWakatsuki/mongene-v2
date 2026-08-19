@@ -24,18 +24,18 @@ meta:
   seed: 1
   signature: two_digit_number_property
 problem_ref: 86df07b0bc938747
-problem_text: 十の位が d、一の位が t の2けたの自然数 10d+t と、位を入れかえた数 10t+d の差を計算し、式を簡単にせよ。
+problem_text: 十の位が n、一の位が p の2けたの自然数 10n+p と、位を入れかえた数 10p+n の差を計算し、式を簡単にせよ。
 sub_questions:
 - answer:
-    display: 9d - 9t
+    display: 9n - 9p
     kind: symbolic
-    srepr: Add(Mul(Integer(9), Symbol('d')), Mul(Integer(-1), Integer(9), Symbol('t')))
+    srepr: Add(Mul(Integer(9), Symbol('n')), Mul(Integer(-1), Integer(9), Symbol('p')))
   cause_tags: []
   concept_tags:
   - polynomial.two_digit_number_property
-  explanation: 'まず、もとの数と、位を入れかえた数を、それぞれ文字式で書き出す。（(10d + t) - (d + 10t)）
+  explanation: 'まず、もとの数と、位を入れかえた数を、それぞれ文字式で書き出す。（(10n + p) - (n + 10p)）
 
-    次に、2つの数の差を計算し、同類項をまとめて1つの式にする。（9d - 9t）'
+    次に、2つの数の差を計算し、同類項をまとめて1つの式にする。（9n - 9p）'
   hints:
   - もとの数と、位を入れかえた数を、それぞれ文字式で書き出す。
   label: (1)
@@ -45,12 +45,12 @@ sub_questions:
     detail: ''
     narration: もとの数と、位を入れかえた数を、それぞれ文字式で書き出す。
     op: express_swapped_number
-    result_display: (10d + t) - (d + 10t)
-    result_srepr: Add(Mul(Integer(9), Symbol('d')), Mul(Integer(-1), Integer(9), Symbol('t')))
+    result_display: (10n + p) - (n + 10p)
+    result_srepr: Add(Mul(Integer(9), Symbol('n')), Mul(Integer(-1), Integer(9), Symbol('p')))
   - args: []
     detail: ''
     narration: 2つの数の差を計算し、同類項をまとめて1つの式にする。
     op: combine_like_terms
-    result_display: 9d - 9t
-    result_srepr: Add(Mul(Integer(9), Symbol('d')), Mul(Integer(-1), Integer(9), Symbol('t')))
+    result_display: 9n - 9p
+    result_srepr: Add(Mul(Integer(9), Symbol('n')), Mul(Integer(-1), Integer(9), Symbol('p')))
 visual_svg: null

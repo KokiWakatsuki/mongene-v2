@@ -40,7 +40,7 @@ sub_questions:
 
     次に、y = ax² の a を比例定数という。x が2倍になると y は4倍になる。（比例定数）'
   hints:
-  - 説明されている式や数の部分がどれかを読み取る。
+  - y=ax²まわりの用語（比例定数・頂点・軸）を想起する
   label: (1)
   prompt_text: ''
   solution_steps:

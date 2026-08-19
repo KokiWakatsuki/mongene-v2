@@ -42,7 +42,7 @@ sub_questions:
 
     最後に、かたまりをもとの式にもどして、展開した式を整理する。（s² + 2st - 7s + t² - 7t - 8）'
   hints:
-  - 共通する部分をひとかたまりとみる。
+  - 複数の乗法公式や置きかえを使って展開し整理する
   label: (1)
   prompt_text: ''
   solution_steps:

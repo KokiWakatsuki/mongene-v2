@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: special_parallelogram_diagonal_property_rule_recall
 problem_ref: 2b748c9abbc1ebe0
-problem_text: ひし形LQKCの対角線がもつ性質として、正しく述べているものを1つ選べ。
+problem_text: ひし形PQRSの対角線がもつ性質として、正しく述べているものを1つ選べ。
 sub_questions:
 - answer:
     correct: 対角線が垂直に交わる
@@ -40,7 +40,7 @@ sub_questions:
 
     次に、ひし形の対角線は垂直に交わる。（対角線が垂直に交わる）'
   hints:
-  - 問題で問われている規則や約束が、何についてのものかを読み取る。
+  - 長方形/ひし形/正方形の対角線の性質を想起する
   label: (1)
   prompt_text: '・対角線の長さが等しい
 

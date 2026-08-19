@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: triangle_angle_properties_rule_recall
 problem_ref: 8fec2e978e34919b
-problem_text: 三角形GDAの頂点Aでの外角の大きさについて、正しく述べているものを1つ選べ。
+problem_text: 三角形WXYの頂点Yでの外角の大きさについて、正しく述べているものを1つ選べ。
 sub_questions:
 - answer:
     correct: それととなり合わない二つの内角の和に等しい
@@ -40,7 +40,7 @@ sub_questions:
 
     次に、三角形の1つの外角は、それととなり合わない2つの内角の和に等しい。（それととなり合わない二つの内角の和に等しい）'
   hints:
-  - 問題で問われている規則や約束が、何についてのものかを読み取る。
+  - 三角形の内角の和・外角の性質を想起する
   label: (1)
   prompt_text: '・それととなり合う二つの内角の和に等しい
 

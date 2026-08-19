@@ -23,61 +23,44 @@ meta:
     unit: g1_l36
   seed: 2
   signature: word_problem_max_area_and_times
-problem_ref: aa88e35dd00e42b7
-problem_text: '1辺が36cmの正方形JKLMの周上を、点XがJを出発してJ→K→L→Mの順に毎秒2cmの速さでMまで動く。点XがJを出発してからx秒後の三角形JXMの面積をy cm²とする。
+problem_ref: d71808d32d7a2f45
+problem_text: '面積が60cm²の長方形の紙がある。縦を x cm、横を y cm とする。
 
-  面積が最大になるのはxがどの範囲にあるときかとそのときの面積、および面積が108cm²になるときの x の値をすべて求めよ。'
+  y を x の式で表せ。また、縦が3cm以上5cm以下であるとき、横はどんな範囲になるか求めよ。'
 sub_questions:
 - answer:
-    display: 面積が最大になるのは x が 18 から 36 までのときで、そのときの面積は 648cm²。指定された面積になるのは 3秒後と51秒後
+    display: y = 60/x、横は 12cm 以上 20cm 以下
     kind: symbolic
-    srepr: Tuple(Integer(648), Integer(18), Integer(36), Integer(3), Integer(51))
+    srepr: Tuple(Mul(Integer(60), Pow(Symbol('x'), Integer(-1))), Integer(12), Integer(20))
   cause_tags: []
   concept_tags:
   - proportion.word_problem_max_area_and_times
-  explanation: 'まず、動く点がどの辺の上にあるかで時間を区間に分け、面積が増える区間・変わらない区間・減る区間を見つける。（0〜18秒、18〜36秒、36〜54秒）
+  explanation: 'まず、面積が決まっているとき、縦と横の積は一定なので、横は縦に反比例する。その式に表す。（y = 60/x）
 
-    次に、面積が変わらない区間で最大になるので、その面積の値と、区間の始まりと終わりの時刻を求める。（648cm²）
+    次に、縦の変域の両端を式にあてはめて、それぞれのときの横の長さを求める。（20cm と 12cm）
 
-    次に、増えていく区間の式を方程式とみて、指定された面積になる時刻を求める。（3秒後）
-
-    次に、減っていく区間の式を方程式とみて、指定された面積になる時刻を求める。（51秒後）
-
-    最後に、求めた時刻がそれぞれの区間の中にあることを確かめ、答えを並べる。（面積が最大になるのは x が 18 から 36 までのときで、そのときの面積は 648cm²。指定された面積になるのは 3秒後と51秒後）'
+    最後に、反比例では、縦が大きくなるほど横は小さくなる。だから縦が最小のときの横が最大、縦が最大のときの横が最小になる。その順に並べて変域として答える。（12cm 以上 20cm 以下）'
   hints:
-  - 動く点がどの辺の上にあるかで時間を区間に分け、面積が増える区間・変わらない区間・減る区間を見つける。
-  - 面積が変わらない区間で最大になるので、その面積の値と、区間の始まりと終わりの時刻を求める。
+  - 動点の面積が最大になる範囲を調べ、指定の面積になる時刻をすべて求める
   label: (1)
   prompt_text: ''
   solution_steps:
   - args: []
     detail: ''
-    narration: 動く点がどの辺の上にあるかで時間を区間に分け、面積が増える区間・変わらない区間・減る区間を見つける。
-    op: identify_intervals
-    result_display: 0〜18秒、18〜36秒、36〜54秒
-    result_srepr: ''
+    narration: 面積が決まっているとき、縦と横の積は一定なので、横は縦に反比例する。その式に表す。
+    op: form_inverse_expression
+    result_display: y = 60/x
+    result_srepr: Mul(Integer(60), Pow(Symbol('x'), Integer(-1)))
   - args: []
     detail: ''
-    narration: 面積が変わらない区間で最大になるので、その面積の値と、区間の始まりと終わりの時刻を求める。
-    op: find_maximum_area
-    result_display: 648cm²
-    result_srepr: ''
+    narration: 縦の変域の両端を式にあてはめて、それぞれのときの横の長さを求める。
+    op: evaluate_at_range_ends
+    result_display: 20cm と 12cm
+    result_srepr: Tuple(Integer(20), Integer(12))
   - args: []
     detail: ''
-    narration: 増えていく区間の式を方程式とみて、指定された面積になる時刻を求める。
-    op: solve_on_increasing_interval
-    result_display: 3秒後
-    result_srepr: ''
-  - args: []
-    detail: ''
-    narration: 減っていく区間の式を方程式とみて、指定された面積になる時刻を求める。
-    op: solve_on_decreasing_interval
-    result_display: 51秒後
-    result_srepr: ''
-  - args: []
-    detail: ''
-    narration: 求めた時刻がそれぞれの区間の中にあることを確かめ、答えを並べる。
-    op: collect_answers
-    result_display: 面積が最大になるのは x が 18 から 36 までのときで、そのときの面積は 648cm²。指定された面積になるのは 3秒後と51秒後
-    result_srepr: Tuple(Integer(648), Integer(18), Integer(36), Integer(3), Integer(51))
+    narration: 反比例では、縦が大きくなるほど横は小さくなる。だから縦が最小のときの横が最大、縦が最大のときの横が最小になる。その順に並べて変域として答える。
+    op: order_range_ends
+    result_display: 12cm 以上 20cm 以下
+    result_srepr: Tuple(Integer(12), Integer(20))
 visual_svg: null

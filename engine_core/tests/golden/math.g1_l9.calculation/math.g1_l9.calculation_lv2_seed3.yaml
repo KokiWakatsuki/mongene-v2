@@ -41,7 +41,7 @@ sub_questions:
 
     最後に、加法と減法を計算して答えを求める。（-145）'
   hints:
-  - 累乗とかっこの中を先に計算する。
+  - 四則の計算順序に従い累乗・かっこを含む式を計算する
   label: (1)
   prompt_text: ''
   solution_steps:

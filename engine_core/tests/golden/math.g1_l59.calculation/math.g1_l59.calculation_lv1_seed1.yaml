@@ -35,7 +35,7 @@ sub_questions:
   - probability.relative_frequency_basic
   explanation: まず、注目していることがらの数 237 を、全体の数 1500 でわって、相対度数を求める。（0.158）
   hints:
-  - 注目していることがらの数を、全体の数でわって、相対度数を求める。
+  - 起こった回数÷試行回数で相対度数(確率)を計算する
   label: (1)
   prompt_text: ''
   solution_steps:

@@ -35,7 +35,7 @@ sub_questions:
   - relative_frequency.compute_single
   explanation: まず、注目していることがらの数 27 を、全体の数 100 でわって、相対度数を求める。（0.27）
   hints:
-  - 注目していることがらの数を、全体の数でわって、相対度数を求める。
+  - 度数分布表の1階級の相対度数を計算する
   label: (1)
   prompt_text: ''
   solution_steps:

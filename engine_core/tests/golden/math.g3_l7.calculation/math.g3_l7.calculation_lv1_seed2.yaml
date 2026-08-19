@@ -37,7 +37,7 @@ sub_questions:
   - polynomial.factor_common
   explanation: まず、各項に共通する因数をかっこの外にくくり出す。（9n(6n + 7)）
   hints:
-  - 各項に共通する因数をかっこの外にくくり出す。
+  - 共通因数をくくり出して因数分解する
   label: (1)
   prompt_text: ''
   solution_steps:

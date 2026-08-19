@@ -37,7 +37,7 @@ sub_questions:
 
     次に、y の増加量を x の増加量で割り、変化の割合を求める。（9）'
   hints:
-  - x の変域の両端の値を、それぞれ式に代入して y の値を求める。
+  - y=ax²の変化の割合を求める・逆算する・区間ごとに比較する
   label: (1)
   prompt_text: ''
   solution_steps:

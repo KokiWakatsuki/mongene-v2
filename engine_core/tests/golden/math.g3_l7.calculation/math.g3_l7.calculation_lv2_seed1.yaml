@@ -39,7 +39,7 @@ sub_questions:
 
     次に、各項に共通する因数をかっこの外にくくり出す。（3pq(4p - 5q + 1)）'
   hints:
-  - 各項の係数と文字に共通する因数を見つける。
+  - 共通因数をくくり出して因数分解する
   label: (1)
   prompt_text: ''
   solution_steps:

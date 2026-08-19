@@ -37,7 +37,7 @@ sub_questions:
   - letter_expr.distribute_linear
   explanation: まず、かっこの前の数を、かっこの中の各項にかけて計算する。（-20x + 28）
   hints:
-  - かっこの前の数を、かっこの中の各項にかけて計算する。
+  - 一次式に数を掛けて分配法則で計算する
   label: (1)
   prompt_text: ''
   solution_steps:

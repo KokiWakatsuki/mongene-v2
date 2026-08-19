@@ -11,6 +11,7 @@ matplotlib に依存しない自己完結の SVG 文字列生成。座標平面�
 """
 from __future__ import annotations
 
+import re
 from collections.abc import Sequence
 
 import math
@@ -609,6 +610,47 @@ def named_point_pixels(sc: _GridScaffold, params: dict[str, Any]) -> list[tuple[
     ]
 
 
+
+_SIDE_BY_SIDE_RE = re.compile(r'viewBox="0 0 ([\d.]+) ([\d.]+)"')
+
+
+def side_by_side_svg(left: str, right: str) -> str:
+    """2枚の SVG を横に並べて1枚にする。
+
+    ★**動点の問題は「場面の図」と「グラフ用紙」の両方が要る。** 「1辺36cmの正方形
+    ABCD の周上を点 Z が動く」と書いてあるのに、図は空の方眼だけで正方形が
+    どこにも無かった（2026-08-19 の外部評価で「問題文が名指しした対象が図に
+    存在しない」と指摘）。MR が持てる図は1枚なので、2枚を並べて1枚にする。
+
+    入れ子の `<svg>` に x/width/height を与えるだけ（座標系はそれぞれの中で閉じる）。
+    """
+    sizes = []
+    for src in (left, right):
+        m = _SIDE_BY_SIDE_RE.search(src)
+        sizes.append((float(m.group(1)), float(m.group(2))) if m else (400.0, 400.0))
+    (lw, lh), (rw, rh) = sizes
+    gap = 24.0
+    height = max(lh, rh)
+    width = lw + gap + rw
+
+    def inner(src: str, x: float, w: float, h: float) -> str:
+        body = src[src.index(">") + 1: src.rindex("</svg>")]
+        return (
+            f'<svg x="{x:.2f}" y="{(height - h) / 2:.2f}" width="{w:.2f}" height="{h:.2f}" '
+            f'viewBox="0 0 {w:.2f} {h:.2f}">{body}</svg>'
+        )
+
+    return (
+        f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {width:.2f} {height:.2f}" '
+        f'width="{width:.2f}" height="{height:.2f}" '
+        f'font-family="Hiragino Sans, Hiragino Kaku Gothic ProN, Noto Sans JP, Yu Gothic, Meiryo, sans-serif">'
+        f'<rect x="0" y="0" width="{width:.2f}" height="{height:.2f}" fill="#ffffff" stroke="none"/>'
+        + inner(left, 0.0, lw, lh)
+        + inner(right, lw + gap, rw, rh)
+        + "</svg>"
+    )
+
+
 def plot_named_points(sc: _GridScaffold, parts: list[str], params: dict[str, Any]) -> None:
     """本文が名前を付けた点を、黒丸と点名で図に打つ。
 
@@ -809,10 +851,11 @@ def render_linear_graph(mr: "MR", ctx: "CellContext") -> str:
     `params["extra_lines"]` があれば2本目以降も描く（入試の「2直線の交点」）。
     """
     extra = mr.params.get("extra_lines")
-    return render_grid_svg(
+    grid = render_grid_svg(
         mr.params, draw_line=_draw_line_from_plan(mr),
         extra_lines=[tuple(e) for e in extra] if extra else None,
     )
+    return _with_scene(mr, grid)
 
 
 def render_line_solution_svg(params: dict[str, Any]) -> str:
@@ -1105,9 +1148,20 @@ def _draw_polyline_from_plan(mr: "MR") -> bool:
     return any(e.kind == "polyline" for e in mr.visual_plan.elements)
 
 
+
+def _with_scene(mr: "MR", grid: str) -> str:
+    """`params["scene_svg"]`（場面の図）があれば、方眼の左に並べて1枚にする。
+
+    動点の問題は「正方形のどこを動くか」と「グラフ用紙」の両方が要る。
+    """
+    scene = mr.params.get("scene_svg")
+    return side_by_side_svg(str(scene), grid) if scene else grid
+
+
 def render_polyline_graph(mr: "MR", ctx: "CellContext") -> str:
     """登録 visual（問題図）。visual_plan の polyline 要素の有無で折れ線描画を切替える。"""
-    return render_polyline_svg(mr.params, draw_polyline=_draw_polyline_from_plan(mr))
+    grid = render_polyline_svg(mr.params, draw_polyline=_draw_polyline_from_plan(mr))
+    return _with_scene(mr, grid)
 
 
 def render_polyline_solution_svg(params: dict[str, Any]) -> str:

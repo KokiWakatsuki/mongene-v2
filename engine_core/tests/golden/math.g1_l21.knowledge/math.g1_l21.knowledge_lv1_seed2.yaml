@@ -41,7 +41,7 @@ sub_questions:
 
     次に、方程式を成り立たせる文字の値を、その方程式の解という。（解）'
   hints:
-  - 説明されている式や数の部分がどれかを読み取る。
+  - 方程式・解の用語を想起する
   label: (1)
   prompt_text: ''
   solution_steps:

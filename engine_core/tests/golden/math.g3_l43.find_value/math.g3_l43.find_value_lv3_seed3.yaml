@@ -44,7 +44,6 @@ sub_questions:
     最後に、9:14 = 18:QR を解いて、辺QRの長さを求める。（28cm）'
   hints:
   - PS:SQとPT:TRの比が等しいかどうかを比べる。
-  - 平行線と線分の比の定理の逆から、STとQRが平行であるかどうかを判別する。
   label: (1)
   prompt_text: ''
   solution_steps:

@@ -37,7 +37,7 @@ sub_questions:
 
     次に、代入した式を計算して、その値を求める。（-4）'
   hints:
-  - 式の x と y に、与えられた値をそれぞれ代入する。
+  - 2元1次方程式の左辺に (x,y) を代入して左辺の値を求める
   label: (1)
   prompt_text: ''
   solution_steps:

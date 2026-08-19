@@ -37,7 +37,7 @@ sub_questions:
 
     次に、890 ÷ 25 を計算して、平均値を求める。（35.6）'
   hints:
-  - 各階級の階級値に、その階級の度数をかける。
+  - 度数分布表の階級値を用いて平均値を計算する
   label: (1)
   prompt_text: ''
   solution_steps:

@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: isosceles_condition_rule_recall
 problem_ref: 74a5ccec1eeb8739
-problem_text: 三角形CFLが二等辺三角形になるといえる、角に着目した条件として、正しく述べているものを1つ選べ。
+problem_text: 三角形LMNが二等辺三角形になるといえる、角に着目した条件として、正しく述べているものを1つ選べ。
 sub_questions:
 - answer:
     correct: 二つの角が等しい
@@ -40,7 +40,7 @@ sub_questions:
 
     次に、二つの角が等しい三角形は二等辺三角形である。性質の逆。（二つの角が等しい）'
   hints:
-  - 問題で問われている規則や約束が、何についてのものかを読み取る。
+  - 2角が等しければ二等辺三角形になる条件を想起する
   label: (1)
   prompt_text: '・三つの角がすべて異なる
 

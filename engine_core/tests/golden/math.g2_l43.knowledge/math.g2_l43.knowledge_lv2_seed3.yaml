@@ -24,7 +24,7 @@ meta:
   seed: 3
   signature: judge_equilateral_from_condition
 problem_ref: b03509480b7aa8b2
-problem_text: 三角形LPCでLP=LCかつ∠L=60°であるとき、この三角形は正三角形であるといえるか、答えよ。
+problem_text: 三角形EFGでEF=EGかつ∠E=60°であるとき、この三角形は正三角形であるといえるか、答えよ。
 sub_questions:
 - answer:
     correct: 正三角形であるといえる
@@ -39,7 +39,7 @@ sub_questions:
 
     次に、二等辺三角形の性質を重ね合わせて、正三角形であるといえるかどうかを判別する。（正三角形であるといえる）'
   hints:
-  - 示されている辺と角の条件が、その形になるための条件を満たしているかを確認する。
+  - 辺と角の条件から正三角形といえるかを判別する
   label: (1)
   prompt_text: ''
   solution_steps:

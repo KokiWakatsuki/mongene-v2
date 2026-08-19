@@ -37,7 +37,7 @@ sub_questions:
 
     次に、その方程式を解いて、比例定数 a の値を求める。（5）'
   hints:
-  - y=ax² の変化の割合を a を使った式で表し、与えられた値と等しいとおく。
+  - y=ax²の変化の割合を求める・逆算する・区間ごとに比較する
   label: (1)
   prompt_text: ''
   solution_steps:

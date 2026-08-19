@@ -37,7 +37,7 @@ sub_questions:
   - radical.square_of_root
   explanation: まず、根号のついた数を2乗し、根号の中の数にもどす。（20）
   hints:
-  - 根号のついた数を2乗し、根号の中の数にもどす。
+  - 根号と平方の相互変換（(√a)²=a・√(a²)=a）
   label: (1)
   prompt_text: ''
   solution_steps:

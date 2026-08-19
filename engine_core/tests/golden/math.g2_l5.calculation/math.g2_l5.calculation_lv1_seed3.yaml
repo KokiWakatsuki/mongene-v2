@@ -37,7 +37,7 @@ sub_questions:
   - polynomial.distribute_multiply
   explanation: まず、かっこの前の数を、かっこの中の各項にかけて計算する。（-8x + 10y）
   hints:
-  - かっこの前の数を、かっこの中の各項にかけて計算する。
+  - 分配法則で整数を多項式にかけて展開する
   label: (1)
   prompt_text: ''
   solution_steps:

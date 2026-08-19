@@ -39,7 +39,7 @@ sub_questions:
 
     次に、数を文字の前に書き、乗法の記号 × を省いて表す。（31p）'
   hints:
-  - 速さに時間をかけると、道のりになる。
+  - 速さと時間(文字)から道のりを文字式で表す
   label: (1)
   prompt_text: ''
   solution_steps:

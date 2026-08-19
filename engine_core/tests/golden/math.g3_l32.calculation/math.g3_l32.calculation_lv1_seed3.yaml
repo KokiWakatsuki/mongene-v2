@@ -37,7 +37,7 @@ sub_questions:
 
     次に、2乗を計算してから比例定数をかけ、y の値を求める。（72）'
   hints:
-  - 式の x に、与えられた値をあてはめる。
+  - y=ax²にxの値を代入してyの値を求める
   label: (1)
   prompt_text: ''
   solution_steps:

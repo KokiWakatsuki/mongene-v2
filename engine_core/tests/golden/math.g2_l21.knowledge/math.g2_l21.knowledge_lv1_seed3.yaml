@@ -39,7 +39,7 @@ sub_questions:
 
     次に、傾きが正なら右上がり、傾きが負なら右下がりになる。（右下がり）'
   hints:
-  - 傾き a の符号に注目する。
+  - 傾きの符号からグラフの向き（右上がり/右下がり）を判別する
   label: (1)
   prompt_text: ''
   solution_steps:

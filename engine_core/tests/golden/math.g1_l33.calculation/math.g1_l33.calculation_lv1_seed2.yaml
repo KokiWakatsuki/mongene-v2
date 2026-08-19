@@ -37,7 +37,7 @@ sub_questions:
 
     次に、わり算を計算して y の値を求める。（y = -6）'
   hints:
-  - 比例定数と x の値を、反比例の式 y=a/x の x にあてはめる。
+  - 反比例 y=a/x にxを代入してyを求める
   label: (1)
   prompt_text: ''
   solution_steps:

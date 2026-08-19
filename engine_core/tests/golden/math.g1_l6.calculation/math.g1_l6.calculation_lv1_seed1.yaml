@@ -39,7 +39,7 @@ sub_questions:
 
     次に、絶対値どうしをかけて、積を求める。（72）'
   hints:
-  - かけ合わせる数の符号から、積の符号を先に決める。
+  - 2数の乗法（符号を決めて絶対値をかける）
   label: (1)
   prompt_text: ''
   solution_steps:

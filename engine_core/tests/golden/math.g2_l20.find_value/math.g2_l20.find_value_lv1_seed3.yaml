@@ -37,7 +37,7 @@ sub_questions:
 
     次に、y の増加量を x の増加量で割り、変化の割合を求める。（変化の割合 = -4）'
   hints:
-  - 2点から y の増加量と x の増加量をそれぞれ求める。
+  - 2点から一次関数の変化の割合（傾き）を求める
   label: (1)
   prompt_text: ''
   solution_steps:

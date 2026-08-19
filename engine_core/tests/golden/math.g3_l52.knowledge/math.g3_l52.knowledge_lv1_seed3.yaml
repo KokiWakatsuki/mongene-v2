@@ -24,7 +24,7 @@ meta:
   seed: 3
   signature: pythagorean_converse_rule_recall
 problem_ref: 12e4e678a4d99f69
-problem_text: 三角形CRKの3辺の長さを a, b, c とするとき、a²+b²=c² が成り立つならば、この三角形はどんな三角形であるといえるか。正しく述べているものを1つ選べ。
+problem_text: 三角形EFGの3辺の長さを a, b, c とするとき、a²+b²=c² が成り立つならば、この三角形はどんな三角形であるといえるか。正しく述べているものを1つ選べ。
 sub_questions:
 - answer:
     correct: cを斜辺とする直角三角形である
@@ -40,7 +40,7 @@ sub_questions:
 
     次に、3辺の平方について a² + b² = c² が成り立てば、その三角形は直角三角形である。（cを斜辺とする直角三角形である）'
   hints:
-  - 問題で問われている規則や約束が、何についてのものかを読み取る。
+  - 三平方の定理の逆(成り立てば直角三角形)を想起する
   label: (1)
   prompt_text: '・cを斜辺とする二等辺三角形である
 

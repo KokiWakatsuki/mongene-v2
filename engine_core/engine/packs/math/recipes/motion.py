@@ -209,6 +209,9 @@ def draw_area_time_graph_segment(ctx: CellContext, rng: Rng) -> MR:
         # 自由度はすべて params に残す＝多様性を測定に反映させる）
         "side": s, "speed": v, "t_end": t_end, "labels": labels_txt,
     }
+    # 場面の図（正方形と動く向き）を方眼の左に並べる。
+    scene_svg, scene_plan = _moving_point_plan(labels_txt, s)
+    params["scene_svg"] = scene_svg
     solution_svg = render_segment_solution_svg(params)
     answer = GraphAnswer(features=sol.answer.features, solution_svg_ref=solution_svg)
 
@@ -223,7 +226,7 @@ def draw_area_time_graph_segment(ctx: CellContext, rng: Rng) -> MR:
 
     visual_plan = VisualPlan(
         style="grid",
-        labels=tick_labels_from_params(params),
+        labels=tick_labels_from_params(params) + list(scene_plan.labels),
         elements=[VisualElement(kind="grid", attrs={}), VisualElement(kind="axis", attrs={})],
     )
 
@@ -954,6 +957,11 @@ def draw_three_interval_area_graph_recipe(ctx: CellContext, rng: Rng) -> MR:
         features=sol.answer.features, solution_svg_ref=render_polyline_solution_svg(params)
     )
     la, lb, lc, ld, lp = (labels_txt[i] for i in range(5))
+    # ★**場面の図（正方形と動く向き）を方眼の左に並べる。** 本文が「正方形ABCDの
+    # 周上を点Zが動く」と言っているのに、図は空の方眼だけで正方形がどこにも
+    # 無かった（2026-08-19 の外部評価の指摘）。
+    scene_svg, scene_plan = _moving_point_plan(labels_txt, s)
+    params["scene_svg"] = scene_svg
     condition = (
         f"1辺が{s}cmの正方形{la}{lb}{lc}{ld}の周上を、点{lp}が{la}を出発して"
         f"{la}→{lb}→{lc}→{ld}の順に毎秒{v}cmの速さで{ld}まで動く。"
@@ -971,7 +979,7 @@ def draw_three_interval_area_graph_recipe(ctx: CellContext, rng: Rng) -> MR:
         sub_questions=[_wp_sub(ctx, label="(1)", asked="draw_graph", sol=Solution(answer=answer, steps=sol.steps))],
         visual_plan=VisualPlan(
             style="grid",
-            labels=tick_labels_from_params(params),
+            labels=tick_labels_from_params(params) + list(scene_plan.labels),
             elements=[VisualElement(kind="grid", attrs={}), VisualElement(kind="axis", attrs={})],
         ),
         provenance=Provenance(recipe="math.draw_three_interval_area_graph"),
@@ -1195,6 +1203,9 @@ def exam_read_area_graph_recipe(ctx: CellContext, rng: Rng) -> MR:
         "poly_pts": poly_pts,
         "pts": poly_pts,
     }
+    # 場面の図（正方形と動く向き）をグラフの左に並べる。
+    scene_svg, scene_plan = _moving_point_plan(la + lb + lc + ld + lp, s)
+    params["scene_svg"] = scene_svg
     condition = (
         f"1辺が{s}cmの正方形{la}{lb}{lc}{ld}の周上を、点{lp}が{la}を出発して"
         f"{la}→{lb}→{lc}→{ld}の順に一定の速さで{ld}まで動くときの、"
@@ -1212,7 +1223,7 @@ def exam_read_area_graph_recipe(ctx: CellContext, rng: Rng) -> MR:
         sub_questions=[_wp_sub(ctx, label="(1)", asked="read_point", sol=sol)],
         visual_plan=VisualPlan(
             style="grid",
-            labels=tick_labels_from_params(params),
+            labels=tick_labels_from_params(params) + list(scene_plan.labels),
             elements=[
                 VisualElement(kind="grid", attrs={}),
                 VisualElement(kind="axis", attrs={}),

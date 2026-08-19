@@ -39,7 +39,7 @@ sub_questions:
 
     次に、分母を根号のない形にし、約分して簡単にする。（2√5/5）'
   hints:
-  - 分母と分子に、分母と同じ根号をかける。
+  - 分母を有理化する
   label: (1)
   prompt_text: ''
   solution_steps:

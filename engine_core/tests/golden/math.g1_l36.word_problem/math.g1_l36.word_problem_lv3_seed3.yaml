@@ -23,44 +23,44 @@ meta:
     unit: g1_l36
   seed: 3
   signature: word_problem_proportion_meet_two_motions
-problem_ref: 32c8d8acf24f0659
-problem_text: 'ゆうたさんは分速75mで家を出発した。その4分後、けんたさんが分速100mで同じ道を追いかけた。けんたさんが出発してからx分後の、ゆうたさんとけんたさんそれぞれの家からの道のりを考える。
+problem_ref: c859d7e00abf0a1e
+problem_text: '空のプールに、毎分16Lの割合で水を入れると7分で満水になる。
 
-  2人の関係をそれぞれ式に表して同じ座標平面上のグラフとみたとき、けんたさんがゆうたさんに追いつくのは、けんたさんが出発してから何分後か求めよ。'
+  毎分4Lの割合で入れると満水まで何分かかるか求めよ。また、毎分16Lの割合で入れ始めてから24分後の水の量は何Lか求めよ。'
 sub_questions:
 - answer:
-    display: 12分後
+    display: 28分、384L
     kind: symbolic
-    srepr: Integer(12)
+    srepr: Tuple(Integer(28), Integer(384))
   cause_tags: []
   concept_tags:
   - proportion.word_problem_meet_two_motions
-  explanation: 'まず、追いかけた側が出発してからの時間をxとおき、2人それぞれの家からの道のりyを、xの式で表す。（2人それぞれについて、時間と道のりの関係を式に表す）
+  explanation: 'まず、はじめに与えられた割合と、満水までにかかる時間から、水そう全体の量を求める。（満水の量は 112L）
 
-    次に、2つの関係を同じ座標平面上のグラフとみて、道のりが等しくなる点、つまり交点を求める。（(12, 1200)）
+    次に、全体の量が決まっているとき、毎分入れる量と満水までの時間は反比例する。その関係を使って、割合を変えたときの時間を求める。（28分）
 
-    最後に、交点のx座標が、追いついたときの時間を表している。（12分後）'
+    最後に、入れる割合が決まっているとき、たまった水の量は時間に比例する。その関係を使って、たずねられた時間後の量を求める。（384L）'
   hints:
-  - 追いかけた側が出発してからの時間をxとおき、2人それぞれの家からの道のりyを、xの式で表す。
+  - 2人の時間と道のりの関係を式にし、グラフの交点から追いつく時間を求める
   label: (1)
   prompt_text: ''
   solution_steps:
   - args: []
     detail: ''
-    narration: 追いかけた側が出発してからの時間をxとおき、2人それぞれの家からの道のりyを、xの式で表す。
-    op: form_expression
-    result_display: 2人それぞれについて、時間と道のりの関係を式に表す
-    result_srepr: ''
+    narration: はじめに与えられた割合と、満水までにかかる時間から、水そう全体の量を求める。
+    op: find_capacity
+    result_display: 満水の量は 112L
+    result_srepr: Integer(112)
   - args: []
     detail: ''
-    narration: 2つの関係を同じ座標平面上のグラフとみて、道のりが等しくなる点、つまり交点を求める。
-    op: equate_expressions
-    result_display: (12, 1200)
-    result_srepr: ''
+    narration: 全体の量が決まっているとき、毎分入れる量と満水までの時間は反比例する。その関係を使って、割合を変えたときの時間を求める。
+    op: use_inverse_relation
+    result_display: 28分
+    result_srepr: Integer(28)
   - args: []
     detail: ''
-    narration: 交点のx座標が、追いついたときの時間を表している。
-    op: read_x_coordinate
-    result_display: 12分後
-    result_srepr: Integer(12)
+    narration: 入れる割合が決まっているとき、たまった水の量は時間に比例する。その関係を使って、たずねられた時間後の量を求める。
+    op: use_direct_relation
+    result_display: 384L
+    result_srepr: Integer(384)
 visual_svg: null

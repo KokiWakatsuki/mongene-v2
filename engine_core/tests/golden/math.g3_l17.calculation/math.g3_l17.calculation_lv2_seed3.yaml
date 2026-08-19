@@ -41,7 +41,7 @@ sub_questions:
 
     最後に、根号の中をできるだけ簡単な形に直す。（4√30/5）'
   hints:
-  - わり算を、逆数をかけるかけ算に直す。
+  - 平方根の乗法・除法（√a×√b=√(ab)）
   label: (1)
   prompt_text: ''
   solution_steps:

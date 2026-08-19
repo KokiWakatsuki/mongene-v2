@@ -39,7 +39,7 @@ sub_questions:
 
     最後に、2本の直線が交わる点の座標を読み取る。（(-1, 4)）'
   hints:
-  - 1本目の直線を座標平面にかく。
+  - 2直線をかき交点の座標をグラフから読み取る
   label: (1)
   prompt_text: ''
   solution_steps:
@@ -109,4 +109,7 @@ visual_svg: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width=
   x="192.00" y="99.80" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">5</text><text x="192.00" y="99.80" font-size="10" text-anchor="end" fill="#000000">5</text><text
   x="192.00" y="76.87" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">6</text><text x="192.00" y="76.87" font-size="10" text-anchor="end" fill="#000000">6</text><text
   x="192.00" y="53.93" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">7</text><text x="192.00" y="53.93" font-size="10" text-anchor="end" fill="#000000">7</text><text
-  x="192.00" y="31.00" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">8</text><text x="192.00" y="31.00" font-size="10" text-anchor="end" fill="#000000">8</text></svg>
+  x="192.00" y="31.00" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">8</text><text x="192.00" y="31.00" font-size="10" text-anchor="end" fill="#000000">8</text><text
+  x="384.00" y="207.47" font-size="13" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">x</text><text x="384.00" y="207.47" font-size="13" text-anchor="middle"
+  fill="#000000">x</text><text x="210.00" y="20.00" font-size="13" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">y</text><text x="210.00" y="20.00" font-size="13"
+  text-anchor="middle" fill="#000000">y</text></svg>

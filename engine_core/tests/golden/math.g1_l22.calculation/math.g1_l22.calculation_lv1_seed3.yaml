@@ -39,7 +39,7 @@ sub_questions:
 
     次に、両辺を計算して、解を求める。（x = -8）'
   hints:
-  - 数の項を、符号を変えて反対の辺に移項する。
+  - 移項を使って一次方程式を解く（1回の移項）
   label: (1)
   prompt_text: ''
   solution_steps:

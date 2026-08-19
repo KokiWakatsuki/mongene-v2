@@ -41,7 +41,7 @@ sub_questions:
 
     次に、反比例の式 y = a/x の a を比例定数という。x と y の積 xy がつねにこの値になる。（比例定数）'
   hints:
-  - 説明されている式や数の部分がどれかを読み取る。
+  - 反比例・比例定数の用語を想起する
   label: (1)
   prompt_text: ''
   solution_steps:

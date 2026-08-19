@@ -39,7 +39,7 @@ sub_questions:
 
     次に、積の形を計算し、式を簡単にする。（12n + 28）'
   hints:
-  - 2つの平方の差を、和と差の積の形になおす。
+  - 証明で用いる展開・因数分解の式変形（(an+b)²-(an+d)²の展開など）
   label: (1)
   prompt_text: ''
   solution_steps:

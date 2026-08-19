@@ -1,6 +1,6 @@
-approved_at: '2026-08-19T08:03:00.598944'
+approved_at: '2026-08-19T14:05:19.417122'
 approver: koki
-content_sha256: 841b5bc75968f51e40e4bcf3ae38c7b6f5618ba216bd4c0c187706e011a90479
+content_sha256: 461787287e5df60039fae37644ca31621df343b8eec2eff4c91dc7b52bfc7e5d
 family: math.g2_l22.graph_table
 files:
 - /Users/koki/workspace/mongene-v2/engine_core/tests/golden/math.g2_l22.graph_table/math.g2_l22.graph_table_lv1_seed1.yaml

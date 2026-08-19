@@ -43,7 +43,7 @@ sub_questions:
 
     最後に、条件にあてはまる取り出し方の数を、すべての取り出し方の数でわる。（1/10）'
   hints:
-  - 玉を区別して、取り出し方をすべて数え上げる。
+  - 2個とも同色である確率を求め、それを利用して少なくとも1個が他色である確率を余事象で求める
   label: (1)
   prompt_text: ''
   solution_steps:
@@ -74,7 +74,7 @@ sub_questions:
   - probability.word_problem_two_balls_complement
   explanation: まず、1から、もとのことがらの起こる確率をひく。（9/10）
   hints:
-  - 1から、もとのことがらの起こる確率をひく。
+  - 2個とも同色である確率を求め、それを利用して少なくとも1個が他色である確率を余事象で求める
   label: (2)
   prompt_text: ''
   solution_steps:

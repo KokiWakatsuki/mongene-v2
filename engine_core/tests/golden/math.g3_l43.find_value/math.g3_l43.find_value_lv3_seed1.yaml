@@ -44,7 +44,6 @@ sub_questions:
     最後に、2:8 = 9:RS を解いて、辺RSの長さを求める。（36cm）'
   hints:
   - QT:TRとQU:USの比が等しいかどうかを比べる。
-  - 平行線と線分の比の定理の逆から、TUとRSが平行であるかどうかを判別する。
   label: (1)
   prompt_text: ''
   solution_steps:

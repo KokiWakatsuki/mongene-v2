@@ -39,7 +39,7 @@ sub_questions:
 
     次に、分子どうしを計算し、1つの分数にまとめる。（(17x - 21y)/12）'
   hints:
-  - 分母の最小公倍数を求めて通分する。
+  - 分数式を通分して分子を1回整理する
   label: (1)
   prompt_text: ''
   solution_steps:

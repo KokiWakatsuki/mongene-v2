@@ -35,7 +35,7 @@ sub_questions:
   - cumulative_frequency.compute
   explanation: まず、いちばん小さい階級から順に 8 + 14 + 14 + 8 を足して、累積度数を求める。（44）
   hints:
-  - いちばん小さい階級から対象の階級まで、度数を順に足し合わせる。
+  - 度数分布表の累積度数を計算する
   label: (1)
   prompt_text: ''
   solution_steps:

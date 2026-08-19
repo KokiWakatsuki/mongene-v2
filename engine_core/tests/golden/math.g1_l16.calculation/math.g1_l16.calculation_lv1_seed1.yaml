@@ -39,7 +39,7 @@ sub_questions:
 
     次に、あてはめた式を計算して、式の値を求める。（51）'
   hints:
-  - 式の文字に、代入する数をあてはめる。
+  - 正の数を1文字に代入して式の値を求める
   label: (1)
   prompt_text: ''
   solution_steps:

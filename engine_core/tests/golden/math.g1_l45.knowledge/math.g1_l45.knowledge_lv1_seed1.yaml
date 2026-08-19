@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: circle_terms_term_recall
 problem_ref: c668301d695ca2af
-problem_text: 円の中心Qと円周上の2点R、Gを結ぶ2つの半径がつくる、中心にできる角を何といいますか。
+problem_text: 円の中心Sと円周上の2点T、Uを結ぶ2つの半径がつくる、中心にできる角を何といいますか。
 sub_questions:
 - answer:
     correct: 中心角
@@ -42,7 +42,7 @@ sub_questions:
 
     次に、弧の両端と中心を結んでできる角を中心角という。（中心角）'
   hints:
-  - 円のどの部分（中心からの線・円周上の2点を結ぶ線・円周の一部）の説明かを読み取る。
+  - 半径・弦・弧・おうぎ形・中心角の用語を想起する
   label: (1)
   prompt_text: ''
   solution_steps:

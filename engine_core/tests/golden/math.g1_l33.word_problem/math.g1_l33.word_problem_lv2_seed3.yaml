@@ -41,7 +41,7 @@ sub_questions:
   - inverse_proportion.word_problem_area
   explanation: まず、縦と横の積が一定であることから、反比例の式を組み立てる。（y = 36/x）
   hints:
-  - 縦と横の積が一定であることから、反比例の式を組み立てる。
+  - 反比例する2量の場面(面積一定)を式にし、値を求める(誘導あり)
   label: (1)
   prompt_text: ''
   solution_steps:
@@ -62,7 +62,7 @@ sub_questions:
 
     次に、わり算を計算して y の値を求める。（y = 3）'
   hints:
-  - 比例定数と x の値を、反比例の式 y=a/x の x にあてはめる。
+  - 反比例する2量の場面(面積一定)を式にし、値を求める(誘導あり)
   label: (2)
   prompt_text: ''
   solution_steps:

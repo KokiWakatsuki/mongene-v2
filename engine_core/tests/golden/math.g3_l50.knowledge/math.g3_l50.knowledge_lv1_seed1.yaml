@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: arc_angle_proportion_rule_recall
 problem_ref: 6a9e3271f810eac1
-problem_text: 1つの円で、弧QKと弧PDの長さと、それぞれに対する円周角の大きさの関係として、正しく述べているものを1つ選べ。
+problem_text: 1つの円で、弧TUと弧VWの長さと、それぞれに対する円周角の大きさの関係として、正しく述べているものを1つ選べ。
 sub_questions:
 - answer:
     correct: 弧の長さは、その弧に対する円周角の大きさに比例する
@@ -40,7 +40,7 @@ sub_questions:
 
     次に、同じ円で、弧の長さは中心角（したがって円周角）に比例する。（弧の長さは、その弧に対する円周角の大きさに比例する）'
   hints:
-  - 問題で問われている規則や約束が、何についてのものかを読み取る。
+  - 弧の長さが円周角に比例することを想起する
   label: (1)
   prompt_text: '・弧の長さは、その弧に対する円周角の大きさに反比例する
 

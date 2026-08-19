@@ -104,7 +104,10 @@ sub_questions:
       stroke-linejoin="round" fill="#ffffff">7</text><text x="161.65" y="91.71" font-size="10" text-anchor="end" fill="#000000">7</text><text x="161.65" y="71.47" font-size="10" text-anchor="end" stroke="#ffffff"
       stroke-width="3" stroke-linejoin="round" fill="#ffffff">8</text><text x="161.65" y="71.47" font-size="10" text-anchor="end" fill="#000000">8</text><text x="161.65" y="51.24" font-size="10" text-anchor="end"
       stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">9</text><text x="161.65" y="51.24" font-size="10" text-anchor="end" fill="#000000">9</text><text x="161.65" y="31.00" font-size="10"
-      text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">10</text><text x="161.65" y="31.00" font-size="10" text-anchor="end" fill="#000000">10</text></svg>
+      text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">10</text><text x="161.65" y="31.00" font-size="10" text-anchor="end" fill="#000000">10</text><text x="384.00"
+      y="226.35" font-size="13" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">x</text><text x="384.00" y="226.35" font-size="13" text-anchor="middle" fill="#000000">x</text><text
+      x="179.65" y="20.00" font-size="13" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">y</text><text x="179.65" y="20.00" font-size="13" text-anchor="middle"
+      fill="#000000">y</text></svg>
   cause_tags: []
   concept_tags:
   - polygon_transform.translate
@@ -112,7 +115,7 @@ sub_questions:
 
     次に、もとの図形の各頂点を、同じ向きに同じ距離だけ移動する。（(-1, 4)、(8, 8)、(6, 4)）'
   hints:
-  - 平行移動の向きと距離を読み取る。
+  - 多角形を平行移動した後の頂点座標を求める/かく
   label: (1)
   prompt_text: ''
   solution_steps:
@@ -186,4 +189,7 @@ visual_svg: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width=
   x="161.65" y="91.71" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">7</text><text x="161.65" y="91.71" font-size="10" text-anchor="end" fill="#000000">7</text><text
   x="161.65" y="71.47" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">8</text><text x="161.65" y="71.47" font-size="10" text-anchor="end" fill="#000000">8</text><text
   x="161.65" y="51.24" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">9</text><text x="161.65" y="51.24" font-size="10" text-anchor="end" fill="#000000">9</text><text
-  x="161.65" y="31.00" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">10</text><text x="161.65" y="31.00" font-size="10" text-anchor="end" fill="#000000">10</text></svg>
+  x="161.65" y="31.00" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">10</text><text x="161.65" y="31.00" font-size="10" text-anchor="end" fill="#000000">10</text><text
+  x="384.00" y="226.35" font-size="13" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">x</text><text x="384.00" y="226.35" font-size="13" text-anchor="middle"
+  fill="#000000">x</text><text x="179.65" y="20.00" font-size="13" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">y</text><text x="179.65" y="20.00" font-size="13"
+  text-anchor="middle" fill="#000000">y</text></svg>

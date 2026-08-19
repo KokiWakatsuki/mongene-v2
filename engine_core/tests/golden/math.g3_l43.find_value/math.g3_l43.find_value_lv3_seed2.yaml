@@ -44,7 +44,6 @@ sub_questions:
     最後に、4:16 = 10:UV を解いて、辺UVの長さを求める。（40cm）'
   hints:
   - TW:WUとTX:XVの比が等しいかどうかを比べる。
-  - 平行線と線分の比の定理の逆から、WXとUVが平行であるかどうかを判別する。
   label: (1)
   prompt_text: ''
   solution_steps:

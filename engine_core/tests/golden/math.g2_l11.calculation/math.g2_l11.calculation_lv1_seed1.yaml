@@ -41,7 +41,7 @@ sub_questions:
 
     最後に、求めた x を一方の式に代入して y を求め、解の組にまとめる。（x = 4、y = 6）'
   hints:
-  - y の係数が等しいので、辺々を引いて y を消去する。
+  - 連立方程式を加減法で解く（係数の絶対値が等しい）
   label: (1)
   prompt_text: ''
   solution_steps:

@@ -37,7 +37,7 @@ sub_questions:
   - polynomial.expand_mono_poly
   explanation: まず、単項式を、かっこの中の各項にそれぞれかける。（16m² + 32m）
   hints:
-  - 単項式を、かっこの中の各項にそれぞれかける。
+  - 単項式×多項式・多項式÷単項式を分配法則で展開する
   label: (1)
   prompt_text: ''
   solution_steps:

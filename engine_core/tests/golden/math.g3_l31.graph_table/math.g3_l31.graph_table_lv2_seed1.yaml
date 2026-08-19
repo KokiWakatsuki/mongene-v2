@@ -73,7 +73,10 @@ sub_questions:
       y="124.82" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">40</text><text x="20.00" y="124.82" font-size="10" text-anchor="end" fill="#000000">40</text><text
       x="20.00" y="93.55" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">45</text><text x="20.00" y="93.55" font-size="10" text-anchor="end" fill="#000000">45</text><text
       x="20.00" y="62.27" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">50</text><text x="20.00" y="62.27" font-size="10" text-anchor="end" fill="#000000">50</text><text
-      x="20.00" y="31.00" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">55</text><text x="20.00" y="31.00" font-size="10" text-anchor="end" fill="#000000">55</text></svg>
+      x="20.00" y="31.00" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">55</text><text x="20.00" y="31.00" font-size="10" text-anchor="end" fill="#000000">55</text><text
+      x="384.00" y="368.00" font-size="13" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">x</text><text x="384.00" y="368.00" font-size="13" text-anchor="middle"
+      fill="#000000">x</text><text x="38.00" y="20.00" font-size="13" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">y</text><text x="38.00" y="20.00" font-size="13"
+      text-anchor="middle" fill="#000000">y</text></svg>
   cause_tags: []
   concept_tags:
   - motion.area_time_graph_segment
@@ -83,7 +86,7 @@ sub_questions:
 
     最後に、とった2つの端点を結ぶ線分をひく。（両端点を結ぶ線分）'
   hints:
-  - 変域の左端の x に対応する点をとり、端をふくむなら●、ふくまないなら○で表す。
+  - 動点がつくる三角形の面積を時間の1次関数と捉え変域つきのグラフ（線分）にかく
   label: (1)
   prompt_text: ''
   solution_steps:
@@ -141,4 +144,7 @@ visual_svg: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width=
   x="20.00" y="124.82" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">40</text><text x="20.00" y="124.82" font-size="10" text-anchor="end" fill="#000000">40</text><text
   x="20.00" y="93.55" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">45</text><text x="20.00" y="93.55" font-size="10" text-anchor="end" fill="#000000">45</text><text
   x="20.00" y="62.27" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">50</text><text x="20.00" y="62.27" font-size="10" text-anchor="end" fill="#000000">50</text><text
-  x="20.00" y="31.00" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">55</text><text x="20.00" y="31.00" font-size="10" text-anchor="end" fill="#000000">55</text></svg>
+  x="20.00" y="31.00" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">55</text><text x="20.00" y="31.00" font-size="10" text-anchor="end" fill="#000000">55</text><text
+  x="384.00" y="368.00" font-size="13" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">x</text><text x="384.00" y="368.00" font-size="13" text-anchor="middle"
+  fill="#000000">x</text><text x="38.00" y="20.00" font-size="13" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">y</text><text x="38.00" y="20.00" font-size="13"
+  text-anchor="middle" fill="#000000">y</text></svg>

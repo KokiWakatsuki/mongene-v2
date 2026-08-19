@@ -24,13 +24,13 @@ meta:
   seed: 2
   signature: parallel_segment_ratio_theorem_rule_recall
 problem_ref: 13c8c969f5137d76
-problem_text: 三角形QBAで、辺QB, QA上に点M, NがありMN∥BAであるとき、線分の比について成り立つ関係として、正しく述べているものを1つ選べ。
+problem_text: 三角形UVWで、辺UV, UW上に点X, YがありXY∥VWであるとき、線分の比について成り立つ関係として、正しく述べているものを1つ選べ。
 sub_questions:
 - answer:
-    correct: QMとQBの比、QNとQAの比、MNとBAの比が、すべて等しい
+    correct: UXとUVの比、UYとUWの比、XYとVWの比が、すべて等しい
     distractors:
-    - QMとMBの比、QNとQAの比が等しい
-    - MNの長さは、BAの長さから一定の数をひいた値に等しい
+    - UXとXVの比、UYとUWの比が等しい
+    - XYの長さは、VWの長さから一定の数をひいた値に等しい
     fact_id: parallel_segment_ratio_theorem.rule.statement
     kind: choice
   cause_tags: []
@@ -38,15 +38,15 @@ sub_questions:
   - parallel_segment_ratio_theorem.rule_recall
   explanation: 'まず、問題で問われている規則や約束が、何についてのものかを読み取る。（平行線と線分の比）
 
-    次に、三角形の2辺上の点を結ぶ線分が残りの辺に平行なら、辺の比は等しくなる。（QMとQBの比、QNとQAの比、MNとBAの比が、すべて等しい）'
+    次に、三角形の2辺上の点を結ぶ線分が残りの辺に平行なら、辺の比は等しくなる。（UXとUVの比、UYとUWの比、XYとVWの比が、すべて等しい）'
   hints:
-  - 問題で問われている規則や約束が、何についてのものかを読み取る。
+  - 平行線と線分の比の定理の内容を想起する
   label: (1)
-  prompt_text: '・QMとMBの比、QNとQAの比が等しい
+  prompt_text: '・UXとXVの比、UYとUWの比が等しい
 
-    ・QMとQBの比、QNとQAの比、MNとBAの比が、すべて等しい
+    ・UXとUVの比、UYとUWの比、XYとVWの比が、すべて等しい
 
-    ・MNの長さは、BAの長さから一定の数をひいた値に等しい'
+    ・XYの長さは、VWの長さから一定の数をひいた値に等しい'
   solution_steps:
   - args: []
     detail: ''
@@ -58,6 +58,6 @@ sub_questions:
     detail: 三角形の2辺上の点を結ぶ線分が残りの辺に平行なら、辺の比は等しくなる。
     narration: その規則の正しい内容を思い出して選ぶ。
     op: recall_correct_rule
-    result_display: QMとQBの比、QNとQAの比、MNとBAの比が、すべて等しい
-    result_srepr: QMとQBの比、QNとQAの比、MNとBAの比が、すべて等しい
+    result_display: UXとUVの比、UYとUWの比、XYとVWの比が、すべて等しい
+    result_srepr: UXとUVの比、UYとUWの比、XYとVWの比が、すべて等しい
 visual_svg: null

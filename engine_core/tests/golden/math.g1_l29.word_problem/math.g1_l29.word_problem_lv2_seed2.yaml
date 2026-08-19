@@ -43,7 +43,7 @@ sub_questions:
 
     次に、比例定数は a = 7 なので、y = ax にあてはめる。（y = 7x）'
   hints:
-  - 比例の式 y=ax に、通る点の x, y の値をあてはめ、比例定数を求める式をつくる。
+  - 比例する2量の場面(単位量あたりの割合)を式にし、値を求める(誘導あり)
   label: (1)
   prompt_text: ''
   solution_steps:
@@ -73,7 +73,7 @@ sub_questions:
 
     次に、かけ算を計算して y の値を求める。（y = 42）'
   hints:
-  - 比例定数と x の値を、比例の式 y=ax の x にあてはめる。
+  - 比例する2量の場面(単位量あたりの割合)を式にし、値を求める(誘導あり)
   label: (2)
   prompt_text: ''
   solution_steps:

@@ -39,7 +39,7 @@ sub_questions:
 
     次に、除法の記号 ÷ を使わず、分数の形で表す。（7a/k）'
   hints:
-  - 乗法の部分を先にまとめてから、分数の形に表す。
+  - 乗除の混じった式を1つの分数の形に表す
   label: (1)
   prompt_text: ''
   solution_steps:

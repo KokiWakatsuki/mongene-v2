@@ -40,7 +40,7 @@ sub_questions:
 
     次に、同じ数をいくつかかけ合わせたものを累乗という。（累乗）'
   hints:
-  - 同じ数を何回かけ合わせているのかを読み取る。
+  - 指数・底・累乗の用語を想起する
   label: (1)
   prompt_text: ''
   solution_steps:

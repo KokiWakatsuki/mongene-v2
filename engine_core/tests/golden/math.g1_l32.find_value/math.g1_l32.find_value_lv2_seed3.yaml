@@ -39,7 +39,7 @@ sub_questions:
 
     最後に、比例定数は a = -23/4 なので、y = ax にあてはめる。（y = (-23/4)x）'
   hints:
-  - 比例の式 y=ax に、通る点の x, y の値をあてはめ、比例定数を求める式をつくる。
+  - 比例が通る1点から比例定数を求め式を決める
   label: (1)
   prompt_text: ''
   solution_steps:

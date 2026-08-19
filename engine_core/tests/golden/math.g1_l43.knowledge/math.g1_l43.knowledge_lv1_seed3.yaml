@@ -24,7 +24,7 @@ meta:
   seed: 3
   signature: perpendicular_terms_term_recall_g1_l43
 problem_ref: d4383a23f4450792
-problem_text: 点Mから直線mに垂線を引いたときの、直線mとの交点Hを何といいますか。
+problem_text: 点Tから直線mに垂線を引いたときの、直線mとの交点Uを何といいますか。
 sub_questions:
 - answer:
     correct: 垂線の足
@@ -41,7 +41,7 @@ sub_questions:
 
     次に、点から直線にひいた垂線がその直線と交わる点を垂線の足という。（垂線の足）'
   hints:
-  - 垂線と、それが交わる点や長さのうち、どれについての説明かを読み取る。
+  - 垂線の足・点と直線の距離(垂線の長さ)の用語を想起する
   label: (1)
   prompt_text: ''
   solution_steps:

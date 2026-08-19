@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: circle_inscribed_angle_converse_rule_recall
 problem_ref: 8d85cb1fa9e9a60c
-problem_text: 直線BFについて同じ側にある2点Q, Gについて、∠BQF=∠BGFが成り立つとき、いえることとして、正しく述べているものを1つ選べ。
+problem_text: 直線WXについて同じ側にある2点Y, Zについて、∠WYX=∠WZXが成り立つとき、いえることとして、正しく述べているものを1つ選べ。
 sub_questions:
 - answer:
     correct: 四つの点は同じ円周上にある
@@ -40,7 +40,7 @@ sub_questions:
 
     次に、2点が直線の同じ側にあって、その2点から線分を見込む角が等しければ、4点は同一円周上にある。（四つの点は同じ円周上にある）'
   hints:
-  - 問題で問われている規則や約束が、何についてのものかを読み取る。
+  - 円周角の定理の逆を想起する
   label: (1)
   prompt_text: '・四つの点は同じ直線上にある
 

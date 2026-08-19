@@ -35,6 +35,7 @@ from engine.core.contracts import (
     VisualPlan,
 )
 from engine.core.registry import REGISTRY, register_recipe
+from engine.packs.math.visuals.quadrilateral_figure import moving_point_square_svg
 from engine.core.rng import Rng, draw, draw_many
 from engine.packs.math.recipes.letter_expr import _draw_named_figures
 from engine.packs.math.recipes.polynomial import _domain_candidates, _fmt_poly_x_terms
@@ -56,11 +57,14 @@ def _effective_cause_tags(ctx: CellContext) -> list[str]:
     return list(ctx.spec_level.cause_tags)
 
 
-def _empty_grid_plan(params: dict[str, Any]) -> VisualPlan:
-    """「かく」セルの問題図＝空の方眼（生徒が描き込む・描画対象を宣言しない）。"""
+def _empty_grid_plan(params: dict[str, Any], extra_labels: list[str] | None = None) -> VisualPlan:
+    """「かく」セルの問題図＝空の方眼（生徒が描き込む・描画対象を宣言しない）。
+
+    `extra_labels` は方眼の横に並べた**場面の図**の文字（頂点名・辺の長さ）。
+    """
     return VisualPlan(
         style="grid",
-        labels=tick_labels_from_params(params),
+        labels=tick_labels_from_params(params) + list(extra_labels or []),
         elements=[VisualElement(kind="grid", attrs={}), VisualElement(kind="axis", attrs={})],
     )
 
@@ -162,10 +166,16 @@ def read_two_points_on_parabola(ctx: CellContext, rng: Rng) -> MR:
         "x1": x1,
         "x2": x2,
         "labels": f"{n1}{n2}",
+        # ★点名を図に打つ。本文は「x 座標が -1 である点を M」と決めているので、
+        # どちらが M かは本文から決まる——ところが図に名前が無いために、
+        # 図の上でどちらを読むのか分からなかった（外部評価の指摘）。
+        # 読み取るのは y 座標のほうで、そこは図から読む作業のまま残る。
+        "label_pts": [str(pt1), str(pt2)],
+        "label_names": [n1, n2],
     }
     visual_plan = VisualPlan(
         style="grid",
-        labels=tick_labels_from_params(params),
+        labels=tick_labels_from_params(params) + [na, nb, nc, nd, np_],
         elements=[
             VisualElement(kind="grid", attrs={}),
             VisualElement(kind="axis", attrs={}),
@@ -580,6 +590,10 @@ def read_area_time_graph(ctx: CellContext, rng: Rng) -> MR:
         "poly_pts": poly_pts,
         "pts": poly_pts,
     }
+    # 場面の図（長方形と動く向き）をグラフの左に並べる。本文が名指しした長方形が
+    # 図のどこにも無かった（2026-08-19 の外部評価の指摘）。
+    scene_svg = moving_point_square_svg(f"{na}{nb}{nc}{nd}", nb, np_, "")
+    params["scene_svg"] = scene_svg
     condition = (
         f"下のグラフは、ある長方形 {na}{nb}{nc}{nd} の周上を点 {np_} が頂点 {nb} から"
         f"{nb}→{nc}→{nd} の順に一定の速さで動くときの、出発してからの時間 x 秒と"
@@ -588,7 +602,8 @@ def read_area_time_graph(ctx: CellContext, rng: Rng) -> MR:
     )
     visual_plan = VisualPlan(
         style="grid",
-        labels=tick_labels_from_params(params),
+        # 方眼の目もりに加えて、横に並べた場面の図の頂点名も載せる（G-Q5v）。
+        labels=tick_labels_from_params(params) + [na, nb, nc, nd, np_],
         elements=[
             VisualElement(kind="grid", attrs={}),
             VisualElement(kind="axis", attrs={}),
@@ -648,6 +663,10 @@ def draw_piecewise_area_graph(ctx: CellContext, rng: Rng) -> MR:
         "poly_pts": poly_pts,
         "pts": poly_pts,
     }
+    # 場面の図（正方形と動く向き）を方眼の左に並べる。
+    params["scene_svg"] = moving_point_square_svg(
+        f"{na}{nb}{nc}{nd}", na, np_, f"{s}cm"
+    )
     solution_svg = render_polyline_solution_svg(params)
     answer = GraphAnswer(features=sol.answer.features, solution_svg_ref=solution_svg)
 
@@ -663,7 +682,8 @@ def draw_piecewise_area_graph(ctx: CellContext, rng: Rng) -> MR:
     )
     return _mr_common(
         ctx, params=params, given={"condition": condition}, sub_question=sub_question,
-        visual_plan=_empty_grid_plan(params), recipe="math.draw_piecewise_area_graph",
+        visual_plan=_empty_grid_plan(params, [na, nb, nc, nd, np_, f"{s}cm"]),
+        recipe="math.draw_piecewise_area_graph",
     )
 
 

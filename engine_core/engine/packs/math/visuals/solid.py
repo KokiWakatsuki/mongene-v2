@@ -286,11 +286,16 @@ def _sphere_sketch(params: dict[str, Any]) -> list[str]:
     """球の見取図。円＋赤道の楕円（手前半分が実線・奥半分が破線）。"""
     r = float(params["radius_px"])
     cx, cy = _W / 2, _H / 2
-    return [
+    parts = [
         _circle(cx, cy, r),
         _arc_half(cx, cy, r, r * 0.32, lower=True),
         _arc_half(cx, cy, r, r * 0.32, lower=False),
     ]
+    # 半径。中心から右へ引いた線分の中ほどに書く。
+    dims = _edge_dimension_labels(params, [(cx + r / 2, cy - 6)], anchors=["middle"])
+    if dims:
+        parts.append(_line(cx, cy, cx + r, cy))
+    return parts + dims
 
 
 def _pyramid_sketch(params: dict[str, Any]) -> list[str]:

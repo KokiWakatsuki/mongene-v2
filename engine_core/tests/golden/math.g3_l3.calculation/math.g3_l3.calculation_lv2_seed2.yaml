@@ -41,7 +41,7 @@ sub_questions:
 
     最後に、乗法公式にあてはめて展開した式を書く。（a² - 3a - 108）'
   hints:
-  - それぞれの定数の符号を確かめる。
+  - 乗法公式 (x+a)(x+b)=x²+(a+b)x+ab を使って展開する
   label: (1)
   prompt_text: ''
   solution_steps:

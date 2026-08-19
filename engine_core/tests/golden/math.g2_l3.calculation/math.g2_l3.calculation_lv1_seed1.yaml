@@ -39,7 +39,7 @@ sub_questions:
 
     次に、同類項をまとめて計算する。（3x + 3y）'
   hints:
-  - かっこの前が + なので、そのままかっこを外す。
+  - 多項式の加法をかっこをそのまま外して整理する
   label: (1)
   prompt_text: ''
   solution_steps:

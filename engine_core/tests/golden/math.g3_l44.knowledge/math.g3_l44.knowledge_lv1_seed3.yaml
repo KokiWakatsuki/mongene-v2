@@ -24,7 +24,7 @@ meta:
   seed: 3
   signature: midpoint_connector_theorem_rule_recall
 problem_ref: 37cf6ed9127642e4
-problem_text: 三角形AMQで、辺AM, AQの中点をそれぞれL, Kとするとき、線分LKについて成り立つこととして、正しく述べているものを1つ選べ。
+problem_text: 三角形EFGで、辺EF, EGの中点をそれぞれH, Jとするとき、線分HJについて成り立つこととして、正しく述べているものを1つ選べ。
 sub_questions:
 - answer:
     correct: 残りの辺に平行で、その長さは残りの辺の半分に等しい
@@ -40,7 +40,7 @@ sub_questions:
 
     次に、三角形の2辺の中点を結ぶ線分は、残りの辺に平行で、その長さの半分になる。（残りの辺に平行で、その長さは残りの辺の半分に等しい）'
   hints:
-  - 問題で問われている規則や約束が、何についてのものかを読み取る。
+  - 中点連結定理の内容を想起する
   label: (1)
   prompt_text: '・残りの辺に平行で、その長さは残りの辺と等しい
 

@@ -39,7 +39,7 @@ sub_questions:
 
     次に、符号に注意して計算し、累乗の値を求める。（0.512）'
   hints:
-  - 累乗を、同じ数を指数の回数だけかけ合わせる積に書き直す。
+  - 正負の数の累乗を計算する（(-a)^n）
   label: (1)
   prompt_text: ''
   solution_steps:

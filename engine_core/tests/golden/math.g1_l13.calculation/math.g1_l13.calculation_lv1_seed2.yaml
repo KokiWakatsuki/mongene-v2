@@ -37,7 +37,7 @@ sub_questions:
   - notation.product_rule_basic
   explanation: まず、数を文字の前に書き、乗法の記号 × を省いて表す。（8kx）
   hints:
-  - 数を文字の前に書き、乗法の記号 × を省いて表す。
+  - 乗法の表し方のきまりで単項の積を簡潔に表す（×省略・数を前に）
   label: (1)
   prompt_text: ''
   solution_steps:

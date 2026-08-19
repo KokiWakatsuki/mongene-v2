@@ -39,7 +39,7 @@ sub_questions:
 
     次に、平方の因数を根号の外に出して a√b の形にする。（3√10）'
   hints:
-  - 根号の中を素因数分解し、平方の因数を見つける。
+  - 根号の中を簡単にして a√b の形にする
   label: (1)
   prompt_text: ''
   solution_steps:

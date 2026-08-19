@@ -24,7 +24,7 @@ meta:
   seed: 2
   signature: construction_choice_terms_term_recall
 problem_ref: b088d9413e4802bc
-problem_text: ∠LNEの2辺NL、NEから等しい距離にある点の集まりを作図するときに使う、基本作図の名前を何といいますか。
+problem_text: ∠VUWの2辺UV、UWから等しい距離にある点の集まりを作図するときに使う、基本作図の名前を何といいますか。
 sub_questions:
 - answer:
     correct: 角の二等分線
@@ -41,7 +41,7 @@ sub_questions:
 
     次に、角をつくる2辺から等しい距離にある点の集まりは、その角の二等分線になる。（角の二等分線）'
   hints:
-  - 等しい距離にあるのが、2点からなのか、角の2辺からなのかを読み取る。
+  - 等距離の条件に対応する基本作図を判別する
   label: (1)
   prompt_text: ''
   solution_steps:

@@ -91,7 +91,9 @@ sub_questions:
       text-anchor="end" fill="#000000">4</text><text x="192.00" y="76.87" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">5</text><text x="192.00"
       y="76.87" font-size="10" text-anchor="end" fill="#000000">5</text><text x="192.00" y="53.93" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">6</text><text
       x="192.00" y="53.93" font-size="10" text-anchor="end" fill="#000000">6</text><text x="192.00" y="31.00" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">7</text><text
-      x="192.00" y="31.00" font-size="10" text-anchor="end" fill="#000000">7</text></svg>
+      x="192.00" y="31.00" font-size="10" text-anchor="end" fill="#000000">7</text><text x="384.00" y="184.53" font-size="13" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round"
+      fill="#ffffff">x</text><text x="384.00" y="184.53" font-size="13" text-anchor="middle" fill="#000000">x</text><text x="210.00" y="20.00" font-size="13" text-anchor="middle" stroke="#ffffff" stroke-width="3"
+      stroke-linejoin="round" fill="#ffffff">y</text><text x="210.00" y="20.00" font-size="13" text-anchor="middle" fill="#000000">y</text></svg>
   cause_tags: []
   concept_tags:
   - polygon_transform.find_rotation_center
@@ -101,7 +103,7 @@ sub_questions:
 
     最後に、2本の垂直二等分線の交点が、両方の条件を同時に満たす点、つまり回転の中心である。（(2, -1)）'
   hints:
-  - 回転の中心は、対応する2点から同じ距離にある。だから1組の対応する点を結び、その線分の垂直二等分線を引く。中心はこの直線上のどこかにある。
+  - 対応する点を結んだ線分の垂直二等分線から、回転の中心を特定する
   label: (1)
   prompt_text: ''
   solution_steps:
@@ -179,4 +181,6 @@ visual_svg: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width=
   x="192.00" y="99.80" font-size="10" text-anchor="end" fill="#000000">4</text><text x="192.00" y="76.87" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">5</text><text
   x="192.00" y="76.87" font-size="10" text-anchor="end" fill="#000000">5</text><text x="192.00" y="53.93" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">6</text><text
   x="192.00" y="53.93" font-size="10" text-anchor="end" fill="#000000">6</text><text x="192.00" y="31.00" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">7</text><text
-  x="192.00" y="31.00" font-size="10" text-anchor="end" fill="#000000">7</text></svg>
+  x="192.00" y="31.00" font-size="10" text-anchor="end" fill="#000000">7</text><text x="384.00" y="184.53" font-size="13" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">x</text><text
+  x="384.00" y="184.53" font-size="13" text-anchor="middle" fill="#000000">x</text><text x="210.00" y="20.00" font-size="13" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round"
+  fill="#ffffff">y</text><text x="210.00" y="20.00" font-size="13" text-anchor="middle" fill="#000000">y</text></svg>

@@ -24,7 +24,7 @@ meta:
   seed: 2
   signature: similarity_terms_term_recall
 problem_ref: 5a30c510da64d101
-problem_text: 図形Hと図形Bが相似であるとき、対応する辺の長さの比のことを何といいますか。
+problem_text: 図形Yと図形Zが相似であるとき、対応する辺の長さの比のことを何といいますか。
 sub_questions:
 - answer:
     correct: 相似比
@@ -41,7 +41,7 @@ sub_questions:
 
     次に、相似な図形で、対応する辺の長さの比を相似比という。面積比は相似比の2乗、体積比は3乗になる。（相似比）'
   hints:
-  - 相似な図形の、対応する辺・角・比のどれについての説明かを読み取る。
+  - 相似な図形の対応する辺の比(相似比)の意味を想起する
   label: (1)
   prompt_text: ''
   solution_steps:

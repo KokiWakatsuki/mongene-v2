@@ -23,7 +23,7 @@ meta:
     unit: g3_l47
   seed: 3
   signature: inscribed_angle_two_chords_intersection
-problem_ref: 07d0b9bf35dfa3af
+problem_ref: d4bc53b0d0b13b75
 problem_text: 下の図で、4点D, E, F, Gがこの順に円周上にある。∠EDF=24°、∠DFG=65° であるとき、2本の弦DF, EGの交点をHとして、∠DHEの大きさを求めよ。
 sub_questions:
 - answer:
@@ -33,24 +33,24 @@ sub_questions:
   cause_tags: []
   concept_tags:
   - circle.two_chords_intersection_angle
-  explanation: 'まず、円周角の定理から、それぞれの円周角に対応する弧の大きさを求める。（48° と 130°）
+  explanation: 'まず、与えられた2つの角のうち一方は、交点でできる三角形の頂点の角と同じ弧に対する円周角である。だからその角も 65° になる。（65°）
 
-    次に、2本の弦の交点にできる角の大きさは、向かい合う2つの弧の大きさの和の半分に等しい。向かい合う弧の和は、円周全体の360°から、先に求めた2つの弧をひいて 182° だから、求める角はその半分になる。（91°）'
+    次に、交点でできる三角形の内角の和は 180° だから、180° - 24° - 65° = 91°。（91°）'
   hints:
-  - 円周角の定理から、それぞれの円周角に対応する弧の大きさを求める。
+  - 2つの円周角から2本の弦の交点にできる角の大きさを求める
   label: (1)
   prompt_text: ''
   solution_steps:
   - args: []
-    detail: ''
-    narration: 円周角の定理から、それぞれの円周角に対応する弧の大きさを求める。
-    op: identify_arcs_from_inscribed_angles
-    result_display: 48° と 130°
+    detail: 与えられた2つの角のうち一方は、交点でできる三角形の頂点の角と同じ弧に対する円周角である。だからその角も 65° になる。
+    narration: 同じ弧に対する円周角は等しいので、交点でできる三角形のもう一つの角の大きさが分かる。
+    op: equal_inscribed_angles_on_same_arc
+    result_display: 65°
     result_srepr: ''
   - args: []
-    detail: 2本の弦の交点にできる角の大きさは、向かい合う2つの弧の大きさの和の半分に等しい。向かい合う弧の和は、円周全体の360°から、先に求めた2つの弧をひいて 182° だから、求める角はその半分になる。
-    narration: 交点にできる角は、その角と向かい合う2つの弧を合わせた大きさの半分になる。円周の全体から先に求めた2つの弧をひいて、残りの弧の半分を求める。
-    op: apply_intersecting_chords_angle
+    detail: 交点でできる三角形の内角の和は 180° だから、180° - 24° - 65° = 91°。
+    narration: 三角形の内角の和から、残りの角として求める角を計算する。
+    op: apply_triangle_angle_sum
     result_display: 91°
     result_srepr: Integer(91)
 visual_svg: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 340" width="420" height="340" font-family="Hiragino Sans, Hiragino Kaku Gothic ProN, Noto Sans JP, Yu Gothic, Meiryo, sans-serif"><rect

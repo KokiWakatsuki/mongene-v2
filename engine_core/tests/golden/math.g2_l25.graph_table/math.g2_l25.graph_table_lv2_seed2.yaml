@@ -39,7 +39,7 @@ sub_questions:
 
     次に、グラフ上の別の格子点の座標を読み取る。（(3, 2)）'
   hints:
-  - グラフ上の格子点の座標を読み取る。
+  - グラフ上の格子点の座標を読み取る
   label: (1)
   prompt_text: ''
   solution_steps:
@@ -93,4 +93,6 @@ visual_svg: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width=
   x="192.00" y="157.74" font-size="10" text-anchor="end" fill="#000000">0</text><text x="192.00" y="121.53" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">2</text><text
   x="192.00" y="121.53" font-size="10" text-anchor="end" fill="#000000">2</text><text x="192.00" y="85.32" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">4</text><text
   x="192.00" y="85.32" font-size="10" text-anchor="end" fill="#000000">4</text><text x="192.00" y="49.11" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">6</text><text
-  x="192.00" y="49.11" font-size="10" text-anchor="end" fill="#000000">6</text></svg>
+  x="192.00" y="49.11" font-size="10" text-anchor="end" fill="#000000">6</text><text x="384.00" y="150.74" font-size="13" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">x</text><text
+  x="384.00" y="150.74" font-size="13" text-anchor="middle" fill="#000000">x</text><text x="210.00" y="20.00" font-size="13" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round"
+  fill="#ffffff">y</text><text x="210.00" y="20.00" font-size="13" text-anchor="middle" fill="#000000">y</text></svg>

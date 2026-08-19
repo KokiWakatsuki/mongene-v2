@@ -41,7 +41,7 @@ sub_questions:
 
     最後に、分子の同類項をまとめ、約分して1つの分数にする。（(6a - 5b)/3）'
   hints:
-  - 分母の最小公倍数を求めて通分する。
+  - 符号処理・整数項を含む分数式の通分と整理
   label: (1)
   prompt_text: ''
   solution_steps:

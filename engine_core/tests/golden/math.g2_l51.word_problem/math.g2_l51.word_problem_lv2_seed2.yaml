@@ -39,7 +39,7 @@ sub_questions:
   - probability.word_problem_bag_one_draw
   explanation: まず、袋の中にある玉の個数をすべて数えて、起こりうる場合の数を求める。（10通り）
   hints:
-  - 袋の中にある玉の個数をすべて数えて、起こりうる場合の数を求める。
+  - 袋から玉を1個取り出す場面を読み、場合の数と該当色の確率を求める
   label: (1)
   prompt_text: ''
   solution_steps:
@@ -62,7 +62,7 @@ sub_questions:
 
     最後に、条件にあてはまる取り出し方の数を、すべての取り出し方の数でわる。（3/10）'
   hints:
-  - 玉を区別して、取り出し方をすべて数え上げる。
+  - 袋から玉を1個取り出す場面を読み、場合の数と該当色の確率を求める
   label: (2)
   prompt_text: ''
   solution_steps:

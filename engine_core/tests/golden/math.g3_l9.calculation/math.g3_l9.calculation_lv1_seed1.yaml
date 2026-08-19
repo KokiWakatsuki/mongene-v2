@@ -39,7 +39,7 @@ sub_questions:
 
     次に、1次式の平方の形で表す。（(b - 18)²）'
   hints:
-  - はじめと終わりが平方で、中央が積の2倍になっていることを確かめる。
+  - 平方の公式の逆で (x±a)² に因数分解する
   label: (1)
   prompt_text: ''
   solution_steps:

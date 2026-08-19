@@ -39,7 +39,7 @@ sub_questions:
 
     次に、根号の中が同じ項を、同類項のようにまとめる。（5√6）'
   hints:
-  - それぞれの根号を a√b の形に直す。
+  - 平方根の加法・減法（同類の根号をまとめる）
   label: (1)
   prompt_text: ''
   solution_steps:

@@ -24,22 +24,22 @@ meta:
   seed: 3
   signature: consecutive_number_sum
 problem_ref: e3c6f980061f9851
-problem_text: 整数 p を使って表した、連続する2つの5の倍数 5p, 5p+5 の和を計算し、1つの式で表せ。
+problem_text: 整数 m を使って表した、連続する2つの5の倍数 5m, 5m+5 の和を計算し、1つの式で表せ。
 sub_questions:
 - answer:
-    display: 10p + 5
+    display: 10m + 5
     kind: symbolic
-    srepr: Add(Mul(Integer(10), Symbol('p')), Integer(5))
+    srepr: Add(Mul(Integer(10), Symbol('m')), Integer(5))
   cause_tags: []
   concept_tags:
   - polynomial.consecutive_number_sum
-  explanation: 'まず、それぞれの数を表す式を、かっこをつけて和の形に並べる。（(5p) + (5p + 5)）
+  explanation: 'まず、それぞれの数を表す式を、かっこをつけて和の形に並べる。（(5m) + (5m + 5)）
 
-    次に、かっこを外して、項の和の形にする。（5p + 5p + 5）
+    次に、かっこを外して、項の和の形にする。（5m + 5m + 5）
 
-    最後に、同類項をまとめて、1つの式にする。（10p + 5）'
+    最後に、同類項をまとめて、1つの式にする。（10m + 5）'
   hints:
-  - それぞれの数を表す式を、かっこをつけて和の形に並べる。
+  - 連続する偶数・奇数・整数などの和を文字式で表し整理する
   label: (1)
   prompt_text: ''
   solution_steps:
@@ -47,18 +47,18 @@ sub_questions:
     detail: ''
     narration: それぞれの数を表す式を、かっこをつけて和の形に並べる。
     op: expand_expression
-    result_display: (5p) + (5p + 5)
-    result_srepr: Add(Mul(Integer(10), Symbol('p')), Integer(5))
+    result_display: (5m) + (5m + 5)
+    result_srepr: Add(Mul(Integer(10), Symbol('m')), Integer(5))
   - args: []
     detail: ''
     narration: かっこを外して、項の和の形にする。
     op: drop_parentheses
-    result_display: 5p + 5p + 5
-    result_srepr: Add(Mul(Integer(10), Symbol('p')), Integer(5))
+    result_display: 5m + 5m + 5
+    result_srepr: Add(Mul(Integer(10), Symbol('m')), Integer(5))
   - args: []
     detail: ''
     narration: 同類項をまとめて、1つの式にする。
     op: combine_like_terms
-    result_display: 10p + 5
-    result_srepr: Add(Mul(Integer(10), Symbol('p')), Integer(5))
+    result_display: 10m + 5
+    result_srepr: Add(Mul(Integer(10), Symbol('m')), Integer(5))
 visual_svg: null

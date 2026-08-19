@@ -39,7 +39,7 @@ sub_questions:
 
     次に、その項の文字の指数（の和）が、この式の次数になる。（3）'
   hints:
-  - 式の中で、文字の指数がもっとも高い項を見つける。
+  - 単項式・多項式の次数を答える
   label: (1)
   prompt_text: ''
   solution_steps:

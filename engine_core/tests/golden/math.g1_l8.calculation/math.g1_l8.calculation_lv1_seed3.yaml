@@ -39,7 +39,7 @@ sub_questions:
 
     次に、符号に注意してかけ算を計算する。（8）'
   hints:
-  - わる数の逆数をかけるかけ算に直す。
+  - 2数の除法（逆数をかけるかけ算に直して計算する）
   label: (1)
   prompt_text: ''
   solution_steps:

@@ -24,7 +24,7 @@ meta:
   seed: 2
   signature: line_angle_terms_term_recall
 problem_ref: 20f9b06af636b434
-problem_text: 2点J、Kを両端とする、まっすぐな線の一部分を何といいますか。
+problem_text: 2点L、Mを両端とする、まっすぐな線の一部分を何といいますか。
 sub_questions:
 - answer:
     correct: 線分
@@ -41,7 +41,7 @@ sub_questions:
 
     次に、直線のうち2点で区切られた部分を線分という。長さがある。（線分）'
   hints:
-  - 両端があるか、片側だけのびるか、両側にのびるかを読み取る。
+  - 直線・線分・半直線・角の用語を想起する
   label: (1)
   prompt_text: ''
   solution_steps:

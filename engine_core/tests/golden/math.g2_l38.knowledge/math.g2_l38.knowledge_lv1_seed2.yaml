@@ -40,7 +40,7 @@ sub_questions:
 
     次に、「p ならば q」の p にあたる部分を仮定という。（仮定）'
   hints:
-  - 「ならば」の前か後か、それとも成り立たない例かを読み取る。
+  - 仮定・結論・反例の用語を想起する
   label: (1)
   prompt_text: ''
   solution_steps:

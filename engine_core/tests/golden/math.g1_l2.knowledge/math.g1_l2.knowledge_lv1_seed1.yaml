@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: number_term_recall
 problem_ref: 2d649e3b673cb5c7
-problem_text: 数 19 のように、数直線上でそれに対応する点と原点とのきょりを何といいますか。
+problem_text: +19 や -19 のように符号のついた数について、数直線上でその数に対応する点と原点との距離を何といいますか。
 sub_questions:
 - answer:
     correct: 絶対値
@@ -41,7 +41,7 @@ sub_questions:
 
     次に、数直線上で 0 からその数までの距離を絶対値という。符号は考えないので、+5 も -5 も絶対値は 5。（絶対値）'
   hints:
-  - 説明されている数が、数直線の上でどこにあるか、どんな符号かを読み取る。
+  - 絶対値・数直線・原点・符号の用語を想起する
   label: (1)
   prompt_text: ''
   solution_steps:

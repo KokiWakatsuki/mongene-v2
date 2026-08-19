@@ -39,7 +39,7 @@ sub_questions:
 
     次に、30 に平方の因数は無いので、これ以上簡単にできない。（2√30）'
   hints:
-  - 根号の積を、1つの根号の中の積にまとめる。
+  - 平方根の乗法・除法（√a×√b=√(ab)）
   label: (1)
   prompt_text: ''
   solution_steps:

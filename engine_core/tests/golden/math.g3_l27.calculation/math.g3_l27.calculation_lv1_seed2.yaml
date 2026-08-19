@@ -39,7 +39,7 @@ sub_questions:
 
     次に、積が 0 になるのは各因数が 0 のときだから、それぞれを 0 とおいて x を求める。（x = -7, x = 7）'
   hints:
-  - 左辺を因数分解する。
+  - 因数分解と積が0の性質で2次方程式を解く
   label: (1)
   prompt_text: ''
   solution_steps:

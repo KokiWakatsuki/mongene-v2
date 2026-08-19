@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: pythagorean_theorem_rule_recall
 problem_ref: d4d3d87a8dae62bb
-problem_text: 直角三角形AGNで、∠N=90°のとき、斜辺AGと他の2辺GN、NAの長さについて成り立つ関係として、正しく述べているものを1つ選べ。
+problem_text: 直角三角形QRSで、∠S=90°のとき、斜辺QRと他の2辺RS、SQの長さについて成り立つ関係として、正しく述べているものを1つ選べ。
 sub_questions:
 - answer:
     correct: 斜辺の長さの二乗が、他の二辺の長さの二乗の和に等しい
@@ -40,7 +40,7 @@ sub_questions:
 
     次に、直角三角形で、直角をはさむ2辺の平方の和は斜辺の平方に等しい。（斜辺の長さの二乗が、他の二辺の長さの二乗の和に等しい）'
   hints:
-  - 問題で問われている規則や約束が、何についてのものかを読み取る。
+  - 三平方の定理の意味(斜辺の二乗=他の2辺の二乗の和)を想起する
   label: (1)
   prompt_text: '・斜辺の長さが、他の二辺の長さの和に等しい
 

@@ -37,7 +37,7 @@ sub_questions:
 
     次に、両辺を x の係数で割って、時刻 x を求める。（x = 7）'
   hints:
-  - 面積の式に、求める面積の値を代入して、時刻 x についての方程式をつくる。
+  - 面積の式 y=ax で目標の面積となる時刻を逆算する
   label: (1)
   prompt_text: ''
   solution_steps:

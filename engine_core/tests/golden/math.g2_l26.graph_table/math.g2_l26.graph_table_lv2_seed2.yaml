@@ -86,7 +86,9 @@ sub_questions:
       y="104.71" font-size="10" text-anchor="end" fill="#000000">4</text><text x="192.00" y="80.14" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">5</text><text
       x="192.00" y="80.14" font-size="10" text-anchor="end" fill="#000000">5</text><text x="192.00" y="55.57" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">6</text><text
       x="192.00" y="55.57" font-size="10" text-anchor="end" fill="#000000">6</text><text x="192.00" y="31.00" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">7</text><text
-      x="192.00" y="31.00" font-size="10" text-anchor="end" fill="#000000">7</text></svg>
+      x="192.00" y="31.00" font-size="10" text-anchor="end" fill="#000000">7</text><text x="384.00" y="196.00" font-size="13" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round"
+      fill="#ffffff">x</text><text x="384.00" y="196.00" font-size="13" text-anchor="middle" fill="#000000">x</text><text x="210.00" y="20.00" font-size="13" text-anchor="middle" stroke="#ffffff" stroke-width="3"
+      stroke-linejoin="round" fill="#ffffff">y</text><text x="210.00" y="20.00" font-size="13" text-anchor="middle" fill="#000000">y</text></svg>
   cause_tags: []
   concept_tags:
   - linear_function.draw_special_lines
@@ -98,8 +100,7 @@ sub_questions:
 
     最後に、「y = 定数」のグラフは、x 軸に平行な横の直線としてかく。（y = 4）'
   hints:
-  - グラフが x 軸と交わる点（x 軸との交点）を求める。
-  - グラフが y 軸と交わる点（y 軸との交点）を求める。
+  - 切片法で2元1次方程式をかき、x=k・y=k の特殊直線もかく
   label: (1)
   prompt_text: ''
   solution_steps:
@@ -173,4 +174,7 @@ visual_svg: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width=
   x="192.00" y="104.71" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">4</text><text x="192.00" y="104.71" font-size="10" text-anchor="end" fill="#000000">4</text><text
   x="192.00" y="80.14" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">5</text><text x="192.00" y="80.14" font-size="10" text-anchor="end" fill="#000000">5</text><text
   x="192.00" y="55.57" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">6</text><text x="192.00" y="55.57" font-size="10" text-anchor="end" fill="#000000">6</text><text
-  x="192.00" y="31.00" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">7</text><text x="192.00" y="31.00" font-size="10" text-anchor="end" fill="#000000">7</text></svg>
+  x="192.00" y="31.00" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">7</text><text x="192.00" y="31.00" font-size="10" text-anchor="end" fill="#000000">7</text><text
+  x="384.00" y="196.00" font-size="13" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">x</text><text x="384.00" y="196.00" font-size="13" text-anchor="middle"
+  fill="#000000">x</text><text x="210.00" y="20.00" font-size="13" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">y</text><text x="210.00" y="20.00" font-size="13"
+  text-anchor="middle" fill="#000000">y</text></svg>

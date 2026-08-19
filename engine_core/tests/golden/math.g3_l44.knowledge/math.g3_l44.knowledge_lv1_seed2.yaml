@@ -24,7 +24,7 @@ meta:
   seed: 2
   signature: midpoint_connector_theorem_rule_recall
 problem_ref: 54c1ce455cb205c7
-problem_text: 三角形MJGで、辺MJ, MGの中点をそれぞれR, Aとするとき、線分RAについて成り立つこととして、正しく述べているものを1つ選べ。
+problem_text: 三角形VWXで、辺VW, VXの中点をそれぞれY, Zとするとき、線分YZについて成り立つこととして、正しく述べているものを1つ選べ。
 sub_questions:
 - answer:
     correct: 残りの辺に平行で、その長さは残りの辺の半分に等しい
@@ -40,7 +40,7 @@ sub_questions:
 
     次に、三角形の2辺の中点を結ぶ線分は、残りの辺に平行で、その長さの半分になる。（残りの辺に平行で、その長さは残りの辺の半分に等しい）'
   hints:
-  - 問題で問われている規則や約束が、何についてのものかを読み取る。
+  - 中点連結定理の内容を想起する
   label: (1)
   prompt_text: '・残りの辺に垂直で、その長さは残りの辺に等しい
 

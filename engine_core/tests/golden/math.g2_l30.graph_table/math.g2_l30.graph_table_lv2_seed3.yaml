@@ -39,7 +39,7 @@ sub_questions:
 
     最後に、2つの直線が交わる点の座標（同じ地点にいる時間と道のり）を読み取る。（(3, 8)）'
   hints:
-  - Aさんの進むようすを表す直線を座標平面にかく。
+  - ダイヤグラム(時間-道のり)の2直線の交点(出会い/追いつき)をグラフから読み取る
   label: (1)
   prompt_text: ''
   solution_steps:
@@ -108,4 +108,7 @@ visual_svg: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width=
   x="192.00" y="120.74" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">10</text><text x="192.00" y="120.74" font-size="10" text-anchor="end" fill="#000000">10</text><text
   x="192.00" y="90.83" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">12</text><text x="192.00" y="90.83" font-size="10" text-anchor="end" fill="#000000">12</text><text
   x="192.00" y="60.91" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">14</text><text x="192.00" y="60.91" font-size="10" text-anchor="end" fill="#000000">14</text><text
-  x="192.00" y="31.00" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">16</text><text x="192.00" y="31.00" font-size="10" text-anchor="end" fill="#000000">16</text></svg>
+  x="192.00" y="31.00" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">16</text><text x="192.00" y="31.00" font-size="10" text-anchor="end" fill="#000000">16</text><text
+  x="384.00" y="263.30" font-size="13" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">x</text><text x="384.00" y="263.30" font-size="13" text-anchor="middle"
+  fill="#000000">x</text><text x="210.00" y="20.00" font-size="13" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">y</text><text x="210.00" y="20.00" font-size="13"
+  text-anchor="middle" fill="#000000">y</text></svg>

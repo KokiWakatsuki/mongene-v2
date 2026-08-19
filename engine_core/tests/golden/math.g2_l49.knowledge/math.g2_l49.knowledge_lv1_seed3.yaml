@@ -24,7 +24,7 @@ meta:
   seed: 3
   signature: special_parallelogram_diagonal_property_rule_recall
 problem_ref: 90bb0d6c5b6558e3
-problem_text: 長方形FDMBの対角線がもつ性質として、正しく述べているものを1つ選べ。
+problem_text: 長方形BCDEの対角線がもつ性質として、正しく述べているものを1つ選べ。
 sub_questions:
 - answer:
     correct: 対角線の長さが等しい
@@ -40,7 +40,7 @@ sub_questions:
 
     次に、長方形の対角線は長さが等しい。（対角線の長さが等しい）'
   hints:
-  - 問題で問われている規則や約束が、何についてのものかを読み取る。
+  - 長方形/ひし形/正方形の対角線の性質を想起する
   label: (1)
   prompt_text: '・対角線の長さが異なる
 

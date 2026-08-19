@@ -39,7 +39,7 @@ sub_questions:
 
     次に、符号に注意して和を計算する。（-6）'
   hints:
-  - ひく数の符号を変えて、たし算に直す。
+  - 2数の減法（ひき算をたし算に直して計算する）
   label: (1)
   prompt_text: ''
   solution_steps:

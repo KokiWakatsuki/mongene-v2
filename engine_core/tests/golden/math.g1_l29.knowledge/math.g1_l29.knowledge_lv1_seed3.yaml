@@ -41,7 +41,7 @@ sub_questions:
 
     次に、x が2倍3倍になると y も2倍3倍になる関係を比例という。式は y = ax。（比例）'
   hints:
-  - 説明されている式や数の部分がどれかを読み取る。
+  - 比例・比例定数の用語を想起する
   label: (1)
   prompt_text: ''
   solution_steps:

@@ -37,7 +37,7 @@ sub_questions:
 
     次に、比例定数は a = 100 なので、y = a/x にあてはめる。（y = 100/x）'
   hints:
-  - 反比例の式 y=a/x に、通る点の x, y の値をあてはめ、比例定数を求める式をつくる。
+  - 反比例が通る1点から比例定数を求め式を決める
   label: (1)
   prompt_text: ''
   solution_steps:

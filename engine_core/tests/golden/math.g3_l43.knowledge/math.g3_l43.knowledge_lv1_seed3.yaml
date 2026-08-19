@@ -24,13 +24,13 @@ meta:
   seed: 3
   signature: parallel_segment_ratio_converse_rule_recall
 problem_ref: 55a5e41787b6728c
-problem_text: 三角形NEQの辺NE, NQ上の点M, Hについて、NM:ME=NH:HQが成り立つとき、いえることとして、正しく述べているものを1つ選べ。
+problem_text: 三角形STUの辺ST, SU上の点V, Wについて、SV:VT=SW:WUが成り立つとき、いえることとして、正しく述べているものを1つ選べ。
 sub_questions:
 - answer:
-    correct: MHとEQが平行である
+    correct: VWとTUが平行である
     distractors:
-    - MHとEQが垂直に交わる
-    - 三角形NEQと三角形NMHが合同である
+    - VWとTUが垂直に交わる
+    - 三角形STUと三角形SVWが合同である
     fact_id: parallel_segment_ratio_converse.rule.statement
     kind: choice
   cause_tags: []
@@ -38,15 +38,15 @@ sub_questions:
   - parallel_segment_ratio_converse.rule_recall
   explanation: 'まず、問題で問われている規則や約束が、何についてのものかを読み取る。（平行線と線分の比の定理の逆）
 
-    次に、辺の比が等しければ、結んだ線分は残りの辺に平行になる。（MHとEQが平行である）'
+    次に、辺の比が等しければ、結んだ線分は残りの辺に平行になる。（VWとTUが平行である）'
   hints:
-  - 問題で問われている規則や約束が、何についてのものかを読み取る。
+  - 平行線と線分の比の定理の逆を想起する
   label: (1)
-  prompt_text: '・三角形NEQと三角形NMHが合同である
+  prompt_text: '・三角形STUと三角形SVWが合同である
 
-    ・MHとEQが平行である
+    ・VWとTUが平行である
 
-    ・MHとEQが垂直に交わる'
+    ・VWとTUが垂直に交わる'
   solution_steps:
   - args: []
     detail: ''
@@ -58,6 +58,6 @@ sub_questions:
     detail: 辺の比が等しければ、結んだ線分は残りの辺に平行になる。
     narration: その規則の正しい内容を思い出して選ぶ。
     op: recall_correct_rule
-    result_display: MHとEQが平行である
-    result_srepr: MHとEQが平行である
+    result_display: VWとTUが平行である
+    result_srepr: VWとTUが平行である
 visual_svg: null

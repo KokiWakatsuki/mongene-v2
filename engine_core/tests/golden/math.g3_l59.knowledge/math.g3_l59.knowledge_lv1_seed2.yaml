@@ -38,7 +38,7 @@ sub_questions:
   - sample_survey.ratio_rationale
   explanation: まず、無作為に抽出された標本は、母集団のようすを偏りなく反映した縮図とみなせることを確認する。（無作為に抽出すれば、標本は母集団の縮図とみなせるから）
   hints:
-  - 無作為に抽出された標本は、母集団のようすを偏りなく反映した縮図とみなせることを確認する。
+  - 標本比率が母比率の近似になる考え方を説明する
   label: (1)
   prompt_text: ''
   solution_steps:

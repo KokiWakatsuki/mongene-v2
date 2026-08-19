@@ -24,7 +24,7 @@ meta:
   seed: 3
   signature: circle_inscribed_angle_theorem_rule_recall
 problem_ref: e1e4939c8a4d67e1
-problem_text: 円Kで、弧MAに対する中心角と、同じ弧MAに対する円周角∠MCAの大きさの関係として、正しく述べているものを1つ選べ。
+problem_text: 円Fで、弧GHに対する中心角と、同じ弧GHに対する円周角∠GJHの大きさの関係として、正しく述べているものを1つ選べ。
 sub_questions:
 - answer:
     correct: 中心角の半分であり、同じ弧に対する円周角の大きさはすべて等しい
@@ -40,7 +40,7 @@ sub_questions:
 
     次に、同じ弧に対する円周角はすべて等しく、その弧に対する中心角の半分になる。（中心角の半分であり、同じ弧に対する円周角の大きさはすべて等しい）'
   hints:
-  - 問題で問われている規則や約束が、何についてのものかを読み取る。
+  - 円周角の定理の内容(中心角の半分・同じ弧なら等しい)を想起する
   label: (1)
   prompt_text: '・中心角の半分であるが、同じ弧に対する円周角の大きさはそれぞれ異なる
 

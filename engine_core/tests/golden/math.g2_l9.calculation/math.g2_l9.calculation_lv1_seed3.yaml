@@ -37,7 +37,7 @@ sub_questions:
   - polynomial.rearrange_move
   explanation: まず、解く文字の項だけを片方の辺に残すよう、ほかの項を移項する。（y = 9x - 1）
   hints:
-  - 解く文字の項だけを片方の辺に残すよう、ほかの項を移項する。
+  - 等式を移項だけで指定文字について解く
   label: (1)
   prompt_text: ''
   solution_steps:

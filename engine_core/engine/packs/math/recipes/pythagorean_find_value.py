@@ -829,10 +829,14 @@ def _scene_box_diagonal(p: Mapping[str, Any], rng: Rng) -> FindValueScene:
         statement=statement,
         figure_svg=_solid_sketch(
             "rectangular_prism",
-            width_px=190.0, depth_px=70.0,
-            height_px=max(60.0, 190.0 * height / max(width, 1)),
+            width_px=190.0,
+            # 奥行きも寸法の比に合わせる（横だけ合わせるとほぼ立方体に見える）。
+            depth_px=min(110.0, max(34.0, 190.0 * depth / max(width, 1))),
+            height_px=min(230.0, max(60.0, 190.0 * height / max(width, 1))),
+            # 本文の寸法を図に書き入れる（並び順は描き手の約束＝横・高さ・奥行き）。
+            dim_labels=[f"{width}cm", f"{height}cm", f"{depth}cm"],
         ),
-        figure_labels=[],
+        figure_labels=[f"{width}cm", f"{height}cm", f"{depth}cm"],
     )
 
 
@@ -883,8 +887,10 @@ def _scene_square_pyramid_height_volume(p: Mapping[str, Any], rng: Rng) -> FindV
         figure_svg=_solid_sketch(
             "square_pyramid", width_px=170.0, depth_px=70.0, height_px=150.0,
             vertices=list(base_square) + [apex],
+            # 底面の1辺と側辺の長さを図に書き入れる。
+            dim_labels=[f"{base_edge}cm", f"{lateral_edge}cm"],
         ),
-        figure_labels=list(labels),
+        figure_labels=list(labels) + [f"{base_edge}cm", f"{lateral_edge}cm"],
     )
 
 
@@ -900,8 +906,11 @@ def _scene_regular_tetrahedron_height_volume(p: Mapping[str, Any], rng: Rng) -> 
         numbers={"edge": edge},
         statement=statement,
         slots={"labels": labels},
-        figure_svg=_solid_sketch("tetrahedron", width_px=190.0),
-        figure_labels=[],
+        figure_svg=_solid_sketch(
+            "tetrahedron", width_px=190.0,
+            vertices=list(labels), dim_labels=[f"{edge}cm"],
+        ),
+        figure_labels=list(labels) + [f"{edge}cm"],
     )
 
 

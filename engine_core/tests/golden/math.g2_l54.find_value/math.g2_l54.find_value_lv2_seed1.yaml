@@ -35,7 +35,7 @@ sub_questions:
   - probability.complement
   explanation: まず、1から、もとのことがらの起こる確率をひく。（7/12）
   hints:
-  - 1から、もとのことがらの起こる確率をひく。
+  - 余事象を利用してあることがらが起こらない確率を求める
   label: (1)
   prompt_text: ''
   solution_steps:

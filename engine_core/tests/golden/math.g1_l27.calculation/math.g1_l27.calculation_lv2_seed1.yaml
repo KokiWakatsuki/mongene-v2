@@ -39,7 +39,7 @@ sub_questions:
 
     次に、等式の性質を使い、両辺を x の係数 11 でわる。（x = 54）'
   hints:
-  - 分母の最小公倍数を両辺にかけて、分母をはらう。
+  - 速さの利用で得た一次方程式（分数係数）を解く
   label: (1)
   prompt_text: ''
   solution_steps:

@@ -24,13 +24,13 @@ meta:
   seed: 2
   signature: parallel_segment_ratio_converse_rule_recall
 problem_ref: 34ce73e62b57b6f6
-problem_text: 三角形FGDの辺FG, FD上の点Q, Kについて、FQ:QG=FK:KDが成り立つとき、いえることとして、正しく述べているものを1つ選べ。
+problem_text: 三角形KLMの辺KL, KM上の点N, Pについて、KN:NL=KP:PMが成り立つとき、いえることとして、正しく述べているものを1つ選べ。
 sub_questions:
 - answer:
-    correct: QKとGDが平行である
+    correct: NPとLMが平行である
     distractors:
-    - QKとGDが垂直に交わる
-    - 三角形FGDと三角形FQKが合同である
+    - NPとLMが垂直に交わる
+    - 三角形KLMと三角形KNPが合同である
     fact_id: parallel_segment_ratio_converse.rule.statement
     kind: choice
   cause_tags: []
@@ -38,15 +38,15 @@ sub_questions:
   - parallel_segment_ratio_converse.rule_recall
   explanation: 'まず、問題で問われている規則や約束が、何についてのものかを読み取る。（平行線と線分の比の定理の逆）
 
-    次に、辺の比が等しければ、結んだ線分は残りの辺に平行になる。（QKとGDが平行である）'
+    次に、辺の比が等しければ、結んだ線分は残りの辺に平行になる。（NPとLMが平行である）'
   hints:
-  - 問題で問われている規則や約束が、何についてのものかを読み取る。
+  - 平行線と線分の比の定理の逆を想起する
   label: (1)
-  prompt_text: '・QKとGDが垂直に交わる
+  prompt_text: '・NPとLMが垂直に交わる
 
-    ・QKとGDが平行である
+    ・NPとLMが平行である
 
-    ・三角形FGDと三角形FQKが合同である'
+    ・三角形KLMと三角形KNPが合同である'
   solution_steps:
   - args: []
     detail: ''
@@ -58,6 +58,6 @@ sub_questions:
     detail: 辺の比が等しければ、結んだ線分は残りの辺に平行になる。
     narration: その規則の正しい内容を思い出して選ぶ。
     op: recall_correct_rule
-    result_display: QKとGDが平行である
-    result_srepr: QKとGDが平行である
+    result_display: NPとLMが平行である
+    result_srepr: NPとLMが平行である
 visual_svg: null

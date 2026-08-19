@@ -41,7 +41,7 @@ sub_questions:
 
     最後に、同じ文字は指数の和にまとめ、1つの単項式にする。（12x²y²）'
   hints:
-  - ÷ を、その式の逆数をかけるかけ算に直す。
+  - 単項式の乗除混在（逆数に直して計算する）
   label: (1)
   prompt_text: ''
   solution_steps:

@@ -24,7 +24,7 @@ meta:
   seed: 2
   signature: congruence_condition_terms_term_recall
 problem_ref: 1908c5406e1e9db0
-problem_text: 三角形MRQと三角形EGHで、1組の辺とその両端の角がそれぞれ等しいとわかっているとき、合同を示すのに使える条件を何といいますか。
+problem_text: 三角形HJKと三角形LMNで、1組の辺とその両端の角がそれぞれ等しいとわかっているとき、合同を示すのに使える条件を何といいますか。
 sub_questions:
 - answer:
     correct: 一辺とその両端の角がそれぞれ等しい
@@ -40,7 +40,7 @@ sub_questions:
 
     次に、1組の辺と、その両端の2つの角が等しいことを使う合同条件。（一辺とその両端の角がそれぞれ等しい）'
   hints:
-  - 等しいとわかっているのが辺なのか角なのか、いくつずつかを読み取る。
+  - 図の等しい要素からどの合同条件が使えるか判別する
   label: (1)
   prompt_text: ''
   solution_steps:

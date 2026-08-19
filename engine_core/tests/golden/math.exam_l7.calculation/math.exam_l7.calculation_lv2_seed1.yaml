@@ -35,7 +35,7 @@ sub_questions:
   - exam.relative_frequency_ratio
   explanation: まず、注目していることがらの数 220 を、全体の数 400 でわって、相対度数を求める。（0.55）
   hints:
-  - 注目していることがらの数を、全体の数でわって、相対度数を求める。
+  - 標本調査の該当数から相対度数(割合)を計算する
   label: (1)
   prompt_text: ''
   solution_steps:

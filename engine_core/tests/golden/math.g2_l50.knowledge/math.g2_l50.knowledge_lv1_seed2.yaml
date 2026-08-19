@@ -24,7 +24,7 @@ meta:
   seed: 2
   signature: equal_area_triangles_rule_recall
 problem_ref: 12511acba3a418bc
-problem_text: 三角形HBAと三角形CBAが、共通の底辺BAを持ち、頂点H、Cが底辺に平行な同じ直線上にあるとき、2つの三角形の面積の関係として、正しく述べているものを1つ選べ。
+problem_text: 三角形STUと三角形VTUが、共通の底辺TUを持ち、頂点S、Vが底辺に平行な同じ直線上にあるとき、2つの三角形の面積の関係として、正しく述べているものを1つ選べ。
 sub_questions:
 - answer:
     correct: 面積は等しくなる
@@ -40,7 +40,7 @@ sub_questions:
 
     次に、底辺が共通で、頂点が底辺に平行な直線上にあれば、高さが等しいので面積も等しい。（面積は等しくなる）'
   hints:
-  - 問題で問われている規則や約束が、何についてのものかを読み取る。
+  - 共通の底辺・等しい高さの三角形は面積が等しいことを想起する
   label: (1)
   prompt_text: '・面積は頂点の位置によって変わる
 

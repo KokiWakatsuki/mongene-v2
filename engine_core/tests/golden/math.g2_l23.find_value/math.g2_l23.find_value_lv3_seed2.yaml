@@ -39,7 +39,7 @@ sub_questions:
 
     最後に、傾きと切片から一次関数の式を組み立てる。（y = 2x + 4）'
   hints:
-  - 2点の y 座標の差を x 座標の差で割り、傾きを求める。
+  - x の変域から y の変域を求める・端点の対応（逆算含む）
   label: (1)
   prompt_text: ''
   solution_steps:

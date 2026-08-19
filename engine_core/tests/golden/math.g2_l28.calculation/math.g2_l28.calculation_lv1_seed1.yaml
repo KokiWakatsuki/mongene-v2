@@ -37,7 +37,7 @@ sub_questions:
 
     次に、計算して y の値を求める。（y = -1）'
   hints:
-  - x の値を式に代入する。
+  - 分数係数の1次関数 y=(p/q)x+b に x を代入して y を求める
   label: (1)
   prompt_text: ''
   solution_steps:

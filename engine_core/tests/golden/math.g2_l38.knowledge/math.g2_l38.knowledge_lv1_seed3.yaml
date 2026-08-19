@@ -40,7 +40,7 @@ sub_questions:
 
     次に、「p ならば q」の q にあたる部分を結論という。（結論）'
   hints:
-  - 「ならば」の前か後か、それとも成り立たない例かを読み取る。
+  - 仮定・結論・反例の用語を想起する
   label: (1)
   prompt_text: ''
   solution_steps:

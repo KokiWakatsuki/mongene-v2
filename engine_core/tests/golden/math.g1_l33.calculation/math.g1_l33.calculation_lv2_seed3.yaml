@@ -37,7 +37,7 @@ sub_questions:
 
     次に、式を x について整理し直して、x の値を求める。（x = 8）'
   hints:
-  - 比例定数と y の値を、反比例の式 y=a/x の y にあてはめる。
+  - 反比例 y=a/x でyの値からxを逆算して求める
   label: (1)
   prompt_text: ''
   solution_steps:

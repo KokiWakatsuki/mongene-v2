@@ -39,7 +39,7 @@ sub_questions:
 
     次に、同じ文字は指数の和にまとめ、1つの単項式にする。（-49x⁴）'
   hints:
-  - 係数どうしをかけ算する。
+  - 単項式どうしの乗法（係数の積・指数の和）
   label: (1)
   prompt_text: ''
   solution_steps:

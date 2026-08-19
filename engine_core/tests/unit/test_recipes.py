@@ -220,7 +220,9 @@ def test_graph_read_two_points_lv2_construct():
     # labels は軸目盛の単独数値のみ（式や座標ペアそのものは載せない）
     for label in mr.visual_plan.labels:
         assert "," not in label  # 座標ペア表記なし
-        assert "y" not in label  # 式（y = ...）なし
+        # 式（y = …）なし。軸名 `x` `y` は図に入れたので labels にも載る。
+        assert "=" not in label
+        assert label in {"x", "y"} or "x" not in label
     # 答えの点マーカー（labeled_answer_point）を elements に含めない（幾何的リーク規則）
     assert all(el.kind != "labeled_answer_point" for el in mr.visual_plan.elements)
 
@@ -259,10 +261,14 @@ def test_read_slope_intercept_lv1_construct():
     # visual_plan は非 None（frame.visual="required" を満たす）
     assert mr.visual_plan is not None
     assert mr.visual_plan.style == "grid"
-    # labels は軸目盛の単独数値のみ（傾き・切片や式そのものは載せない）
+    # labels は軸目盛の数値と軸名だけ（傾き・切片や式そのものは載せない）。
+    # ★軸名 `x` `y` を図に入れたので、labels にも入る（G-Q5v は svg の <text> が
+    # labels に載っていることを見る）。「y という字が無い」ではなく
+    # **「式が無い」**を確かめる——これがこの検査の本当の意図である。
     for label in mr.visual_plan.labels:
         assert "," not in label
-        assert "y" not in label
+        assert "=" not in label, "式そのものが図のラベルに載っている"
+        assert label in {"x", "y"} or "x" not in label
         assert "傾き" not in label and "切片" not in label
     # 答えの点マーカー（labeled_answer_point）を elements に含めない（幾何的リーク規則）
     assert all(el.kind != "labeled_answer_point" for el in mr.visual_plan.elements)
@@ -7808,14 +7814,27 @@ def test_word_problem_proportion_frequency_double_solve_property(seed, family, l
 
 @pytest.mark.parametrize("seed", range(20))
 def test_word_problem_proportion_frequency_non_degenerate(seed):
-    """非退化条件: 追いつきは後発が速い・実験の相対度数は 0<p<1・予測は整数。"""
+    """非退化条件: 比例と反比例が両方立つ・実験の相対度数は 0<p<1・予測は整数。
+
+    ★g1_l36 Lv3 はもと「追いつき」の場面だったが、遅い側の道のりが y = vs·x + vs·h
+    ＝中2「1次関数」だったので、中1 の比例・反比例に差し替えた。ここも新しい
+    不変条件に書き直してある。
+    """
     ctx = _make_ctx("math.g1_l36.word_problem", 3)
     rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
     mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
     numbers = {k: int(sympy.sympify(v)) for k, v in mr.params["numbers"].items()}
-    assert numbers["speed_fast"] > numbers["speed_slow"], "後発が遅いと追いつけない"
-    assert numbers["head_start"] > 0, "先発の出発が同時だと追いつく場面にならない"
-    assert sympy.sympify(mr.sub_questions[0].answer.srepr) > 0
+    rate0, minutes0 = numbers["rate0"], numbers["minutes0"]
+    rate1, minutes1 = numbers["rate1"], numbers["minutes1"]
+    assert rate0 > 0 and rate1 > 0 and minutes0 > 0 and minutes1 > 0
+    assert rate1 != rate0, "割合を変えていないと反比例の場面にならない"
+    capacity = rate0 * minutes0
+    assert capacity % rate1 == 0, "満水までの時間が整数にならない"
+    minutes, amount = sympy.sympify(mr.sub_questions[0].answer.srepr)
+    assert minutes == capacity // rate1, "反比例の側の答えが合っていない"
+    assert amount == rate0 * minutes1, "比例の側の答えが合っていない"
+    # 答えが本文の数と重ならない（読まずに書き写して当たらない）
+    assert not {int(minutes), int(amount)} & {rate0, minutes0, rate1, minutes1}
 
     for family, level in (("math.g1_l59.word_problem", 2), ("math.g1_l59.word_problem", 3)):
         ctx = _make_ctx(family, level)
@@ -8207,13 +8226,20 @@ def test_c4_non_degenerate(seed):
     assert len(set(mr.params["xs"])) == len(mr.params["xs"])
     assert sympy.sympify(mr.sub_questions[0].answer.srepr) == mr.params["a"] * mr.params["x_q"]
 
-    # g1_l36 Lv3: 交点は格子点で、A の単価が高く、固定費は差の倍数（＝グラフで読める）
+    # g1_l36 Lv3: 比例と反比例の交点が格子点になる（＝グラフから読める）。
+    # ★もとは料金プラン（y = bx + c）だったが、中2「1次関数」の内容だったので
+    # 中1 の比例・反比例に差し替えた。ここも新しい不変条件に書き直してある。
     _, mr = _c4_mr("math.g1_l36.graph_table", 3, seed)
-    pa, pb, fixed = mr.params["pa"], mr.params["pb"], mr.params["fixed"]
-    assert pa > pb > 0 and fixed > 0
-    assert fixed % (pa - pb) == 0
+    ratio, area = int(mr.params["ratio"]), int(mr.params["area"])
+    assert ratio > 0 and area > 0
     pt = sympy.sympify(mr.sub_questions[0].answer.srepr)
-    assert pt[0] == fixed // (pa - pb) > 0 and pt[1] == pa * pt[0]
+    m, y0 = pt[0], pt[1]
+    # 交点は「面積が一定」と「横が縦の ratio 倍」の両方を満たす点
+    assert m > 0 and y0 > 0
+    assert m * y0 == area, "交点が反比例のグラフの上にない"
+    assert y0 == ratio * m, "交点が比例のグラフの上にない"
+    # 答えが本文の数（倍率・面積）と重ならない（読まずに書き写して当たらない）
+    assert not {int(m), int(y0)} & {ratio, area}
 
 
 @pytest.mark.parametrize("family", ["math.g1_l30.graph_table", "math.g1_l31.graph_table",
@@ -9809,19 +9835,27 @@ def test_g2_l29_piecewise_area_graph_property(seed):
 
 @pytest.mark.parametrize("seed", range(30))
 def test_g1_l36_max_area_and_times_property(seed):
-    """g1_l36.word_problem Lv4: 最大の区間と、指定の面積になる時刻2つが揃う。"""
+    """g1_l36.word_problem Lv4: 反比例の式と、変域の端が入れかわった横の変域。
+
+    ★もとは「正方形の周上を動く点と三角形の面積」（区分線形）で、これは中2
+    「1次関数の利用」の内容だった。中1 の比例・反比例で最上位に置ける題材として
+    **反比例の変域**に差し替えたので、テストも新しい不変条件に書き直してある。
+    """
     _ctx, mr = _cell_mr("math.g1_l36.word_problem", 4, seed)
     n = mr.params["numbers"]
-    side, speed, area = int(n["side"]), int(n["speed"]), int(n["area"])
+    area, lo, hi = int(n["area"]), int(n["lo"]), int(n["hi"])
     sq = mr.sub_questions[0]
-    peak, t_lo, t_hi, t_a, t_b = sympy.sympify(sq.answer.srepr)
-    assert peak == sympy.Rational(side**2, 2)
-    assert t_lo == sympy.Rational(side, speed) and t_hi == 2 * t_lo
-    # ★退化の封じ: 最大の区間に幅があり、指定の面積になる時刻が両側に1つずつある。
-    assert t_lo < t_hi
-    assert 0 < t_a < t_lo < t_hi < t_b
-    assert area < peak
-    assert not {int(t_a), int(t_b)} & {side, speed, area}
+    expr, y_lo, y_hi = sympy.sympify(sq.answer.srepr)
+    x = sympy.Symbol("x")
+    # 式は y = area/x
+    assert sympy.simplify(expr - sympy.Integer(area) / x) == 0
+    # 変域の両端で横は整数になり、**端が入れかわる**（縦が最小のとき横が最大）
+    assert 0 < lo < hi
+    assert y_hi == sympy.Rational(area, lo) and y_lo == sympy.Rational(area, hi)
+    assert y_lo < y_hi, "反比例なのに変域の端が入れかわっていない"
+    assert y_lo.q == 1 and y_hi.q == 1, "横の長さが整数になっていない"
+    # 答えが本文の数と重ならない（読まずに書き写して当たらない）
+    assert not {int(y_lo), int(y_hi)} & {area, lo, hi}
     checker = REGISTRY.checker("math.word_problem_max_area_and_times.double_solve")
     assert checker(mr).answer.srepr == sq.answer.srepr
 

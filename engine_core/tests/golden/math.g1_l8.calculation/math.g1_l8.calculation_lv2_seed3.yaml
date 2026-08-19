@@ -41,7 +41,7 @@ sub_questions:
 
     最後に、すべての絶対値をかけ合わせて、積を求める。（5/7）'
   hints:
-  - すべてのわり算を、逆数をかけるかけ算に直す。
+  - 分数の除法・乗除混合（逆数で処理する）
   label: (1)
   prompt_text: ''
   solution_steps:

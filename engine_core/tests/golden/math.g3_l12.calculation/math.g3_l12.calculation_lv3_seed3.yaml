@@ -37,7 +37,7 @@ sub_questions:
 
     次に、和と積の値をあてはめて計算する。（195）'
   hints:
-  - 求める式を、和と積だけで表せる形に変形する。
+  - 和と積の値から対称式（x²+y²など）の値を求める
   label: (1)
   prompt_text: ''
   solution_steps:

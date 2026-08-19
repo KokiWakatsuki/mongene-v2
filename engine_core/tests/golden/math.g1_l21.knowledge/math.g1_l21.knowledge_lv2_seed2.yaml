@@ -39,7 +39,7 @@ sub_questions:
 
     次に、左辺と右辺の値が等しければ解、等しくなければ解ではない。（解である）'
   hints:
-  - 候補の値を方程式の x にあてはめる。
+  - ある値が方程式の解かを代入して判別する
   label: (1)
   prompt_text: ''
   solution_steps:

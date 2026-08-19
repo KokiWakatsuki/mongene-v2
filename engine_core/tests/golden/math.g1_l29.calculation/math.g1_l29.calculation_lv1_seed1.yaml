@@ -37,7 +37,7 @@ sub_questions:
 
     次に、かけ算を計算して y の値を求める。（y = 72）'
   hints:
-  - 比例定数と x の値を、比例の式 y=ax の x にあてはめる。
+  - 比例 y=ax にxを代入してyを求める
   label: (1)
   prompt_text: ''
   solution_steps:

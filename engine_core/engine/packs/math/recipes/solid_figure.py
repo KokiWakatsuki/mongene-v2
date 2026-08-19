@@ -109,6 +109,11 @@ def _sketch_dim_labels(kind: str, values: dict[str, object]) -> list[str]:
         return [x for x in (cm("radius"), cm("height") or cm("slant")) if x]
     if kind in ("tetrahedron", "triangular_pyramid"):
         return [x for x in (cm("edge") or cm("width"),) if x]
+    if kind in ("sphere", "hemisphere"):
+        # 球・半球は半径だけで決まる。描き手は中心から右へ半径を書く。
+        return [x for x in (cm("radius"),) if x]
+    if kind in ("hemisphere_on_cylinder", "cube_with_pyramid"):
+        return [x for x in (cm("radius") or cm("edge"), cm("height")) if x]
     return []
 
 

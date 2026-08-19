@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: area_ratio_theorem_rule_recall
 problem_ref: 13f7db880d623b9d
-problem_text: 相似な図形HLと図形DNの相似比がm:nであるとき、面積比はどのように表されるか。正しく述べているものを1つ選べ。
+problem_text: 相似な図形EFと図形GHの相似比がm:nであるとき、面積比はどのように表されるか。正しく述べているものを1つ選べ。
 sub_questions:
 - answer:
     correct: 相似比を二乗した比に等しい
@@ -40,7 +40,7 @@ sub_questions:
 
     次に、相似な図形の面積比は、相似比の2乗に等しい。（相似比を二乗した比に等しい）'
   hints:
-  - 問題で問われている規則や約束が、何についてのものかを読み取る。
+  - 面積比が相似比の2乗であることを想起する
   label: (1)
   prompt_text: '・相似比と同じ比に等しい
 

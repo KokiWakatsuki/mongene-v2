@@ -24,7 +24,7 @@ meta:
   seed: 3
   signature: line_angle_terms_term_recall
 problem_ref: cee3b00324286b63
-problem_text: 点Eを端として、Hの方向へ一方だけ限りなくのばした図形を何といいますか。
+problem_text: 点Aを端として、Bの方向へ一方だけ限りなくのばした図形を何といいますか。
 sub_questions:
 - answer:
     correct: 半直線
@@ -41,7 +41,7 @@ sub_questions:
 
     次に、1点から一方だけにのびる直線の部分を半直線という。（半直線）'
   hints:
-  - 両端があるか、片側だけのびるか、両側にのびるかを読み取る。
+  - 直線・線分・半直線・角の用語を想起する
   label: (1)
   prompt_text: ''
   solution_steps:

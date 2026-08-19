@@ -41,7 +41,7 @@ sub_questions:
 
     次に、x が2倍3倍になると y が 1/2 倍 1/3 倍になる関係を反比例という。式は y = a/x。（反比例）'
   hints:
-  - 説明されている式や数の部分がどれかを読み取る。
+  - 反比例・比例定数の用語を想起する
   label: (1)
   prompt_text: ''
   solution_steps:

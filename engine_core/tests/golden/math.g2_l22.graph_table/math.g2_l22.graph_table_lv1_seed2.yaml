@@ -80,7 +80,9 @@ sub_questions:
       y="96.52" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">10</text><text x="192.00" y="96.52" font-size="10" text-anchor="end" fill="#000000">10</text><text
       x="192.00" y="63.76" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">12</text><text x="192.00" y="63.76" font-size="10" text-anchor="end"
       fill="#000000">12</text><text x="192.00" y="31.00" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">14</text><text x="192.00" y="31.00" font-size="10"
-      text-anchor="end" fill="#000000">14</text></svg>
+      text-anchor="end" fill="#000000">14</text><text x="384.00" y="253.33" font-size="13" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">x</text><text x="384.00"
+      y="253.33" font-size="13" text-anchor="middle" fill="#000000">x</text><text x="210.00" y="20.00" font-size="13" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">y</text><text
+      x="210.00" y="20.00" font-size="13" text-anchor="middle" fill="#000000">y</text></svg>
   cause_tags: []
   concept_tags:
   - linear_function.draw_graph
@@ -90,7 +92,7 @@ sub_questions:
 
     最後に、とった2点を通る直線をひく。（y = -3x + 12）'
   hints:
-  - y 軸との交点（切片）に点をとる。
+  - 傾きと切片を使い y=ax+b のグラフ（直線）をかく
   label: (1)
   prompt_text: ''
   solution_steps:
@@ -156,4 +158,7 @@ visual_svg: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width=
   x="192.00" y="129.29" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">8</text><text x="192.00" y="129.29" font-size="10" text-anchor="end" fill="#000000">8</text><text
   x="192.00" y="96.52" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">10</text><text x="192.00" y="96.52" font-size="10" text-anchor="end" fill="#000000">10</text><text
   x="192.00" y="63.76" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">12</text><text x="192.00" y="63.76" font-size="10" text-anchor="end" fill="#000000">12</text><text
-  x="192.00" y="31.00" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">14</text><text x="192.00" y="31.00" font-size="10" text-anchor="end" fill="#000000">14</text></svg>
+  x="192.00" y="31.00" font-size="10" text-anchor="end" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">14</text><text x="192.00" y="31.00" font-size="10" text-anchor="end" fill="#000000">14</text><text
+  x="384.00" y="253.33" font-size="13" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">x</text><text x="384.00" y="253.33" font-size="13" text-anchor="middle"
+  fill="#000000">x</text><text x="210.00" y="20.00" font-size="13" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">y</text><text x="210.00" y="20.00" font-size="13"
+  text-anchor="middle" fill="#000000">y</text></svg>

@@ -24,7 +24,7 @@ meta:
   seed: 2
   signature: perpendicular_terms_term_recall_g1_l43
 problem_ref: 985ebab1e7abfd37
-problem_text: 点Bから直線mに引いた垂線と、その足Qによってできる線分の長さのことで、点Bと直線mとの距離とよばれる長さを何といいますか。
+problem_text: 点Aから直線mに引いた垂線と、その足Bによってできる線分の長さのことで、点Aと直線mとの距離とよばれる長さを何といいますか。
 sub_questions:
 - answer:
     correct: 垂線の長さ
@@ -41,7 +41,7 @@ sub_questions:
 
     次に、点から直線にひいた垂線の長さを、点と直線との距離という。ななめの線分では最短にならない。（垂線の長さ）'
   hints:
-  - 垂線と、それが交わる点や長さのうち、どれについての説明かを読み取る。
+  - 垂線の足・点と直線の距離(垂線の長さ)の用語を想起する
   label: (1)
   prompt_text: ''
   solution_steps:

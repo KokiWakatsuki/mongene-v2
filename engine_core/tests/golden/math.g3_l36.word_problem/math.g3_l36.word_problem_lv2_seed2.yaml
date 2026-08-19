@@ -45,7 +45,7 @@ sub_questions:
 
     最後に、求めた比例定数を y=ax² にもどして、y を x の式で表す。（y = (1/100)x²）'
   hints:
-  - y は x の2乗に比例するから、比例定数を a とおいて y=ax² と表し、与えられている x と y の値を代入する。
+  - 2乗に比例する場面で1点から式 y=ax² を決め、その式に代入して量を求める
   label: (1)
   prompt_text: ''
   solution_steps:
@@ -78,7 +78,7 @@ sub_questions:
 
     次に、2乗を計算してから比例定数をかけ、y の値を求める。（16）'
   hints:
-  - 式の x に、与えられた値をあてはめる。
+  - 2乗に比例する場面で1点から式 y=ax² を決め、その式に代入して量を求める
   label: (2)
   prompt_text: ''
   solution_steps:

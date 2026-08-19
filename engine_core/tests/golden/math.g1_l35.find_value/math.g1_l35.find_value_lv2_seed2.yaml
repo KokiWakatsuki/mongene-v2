@@ -39,7 +39,7 @@ sub_questions:
 
     最後に、比例定数は a = 60 なので、y = a/x にあてはめる。（y = 60/x）'
   hints:
-  - 通る点の x 座標と y 座標、それぞれの符号（正か負か）を確認する。
+  - 反比例が通る1点から比例定数を求め式を決める
   label: (1)
   prompt_text: ''
   solution_steps:

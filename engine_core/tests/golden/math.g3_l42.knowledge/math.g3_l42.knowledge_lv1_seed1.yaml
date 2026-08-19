@@ -24,13 +24,13 @@ meta:
   seed: 1
   signature: parallel_segment_ratio_theorem_rule_recall
 problem_ref: 4dd93fb14c1effa1
-problem_text: 三角形KFDで、辺KF, KD上に点Q, CがありQC∥FDであるとき、線分の比について成り立つ関係として、正しく述べているものを1つ選べ。
+problem_text: 三角形TUVで、辺TU, TV上に点W, XがありWX∥UVであるとき、線分の比について成り立つ関係として、正しく述べているものを1つ選べ。
 sub_questions:
 - answer:
-    correct: KQとKFの比、KCとKDの比、QCとFDの比が、すべて等しい
+    correct: TWとTUの比、TXとTVの比、WXとUVの比が、すべて等しい
     distractors:
-    - KQとQFの比、KCとKDの比が等しい
-    - QCの長さは、FDの長さから一定の数をひいた値に等しい
+    - TWとWUの比、TXとTVの比が等しい
+    - WXの長さは、UVの長さから一定の数をひいた値に等しい
     fact_id: parallel_segment_ratio_theorem.rule.statement
     kind: choice
   cause_tags: []
@@ -38,15 +38,15 @@ sub_questions:
   - parallel_segment_ratio_theorem.rule_recall
   explanation: 'まず、問題で問われている規則や約束が、何についてのものかを読み取る。（平行線と線分の比）
 
-    次に、三角形の2辺上の点を結ぶ線分が残りの辺に平行なら、辺の比は等しくなる。（KQとKFの比、KCとKDの比、QCとFDの比が、すべて等しい）'
+    次に、三角形の2辺上の点を結ぶ線分が残りの辺に平行なら、辺の比は等しくなる。（TWとTUの比、TXとTVの比、WXとUVの比が、すべて等しい）'
   hints:
-  - 問題で問われている規則や約束が、何についてのものかを読み取る。
+  - 平行線と線分の比の定理の内容を想起する
   label: (1)
-  prompt_text: '・KQとQFの比、KCとKDの比が等しい
+  prompt_text: '・TWとWUの比、TXとTVの比が等しい
 
-    ・QCの長さは、FDの長さから一定の数をひいた値に等しい
+    ・WXの長さは、UVの長さから一定の数をひいた値に等しい
 
-    ・KQとKFの比、KCとKDの比、QCとFDの比が、すべて等しい'
+    ・TWとTUの比、TXとTVの比、WXとUVの比が、すべて等しい'
   solution_steps:
   - args: []
     detail: ''
@@ -58,6 +58,6 @@ sub_questions:
     detail: 三角形の2辺上の点を結ぶ線分が残りの辺に平行なら、辺の比は等しくなる。
     narration: その規則の正しい内容を思い出して選ぶ。
     op: recall_correct_rule
-    result_display: KQとKFの比、KCとKDの比、QCとFDの比が、すべて等しい
-    result_srepr: KQとKFの比、KCとKDの比、QCとFDの比が、すべて等しい
+    result_display: TWとTUの比、TXとTVの比、WXとUVの比が、すべて等しい
+    result_srepr: TWとTUの比、TXとTVの比、WXとUVの比が、すべて等しい
 visual_svg: null
