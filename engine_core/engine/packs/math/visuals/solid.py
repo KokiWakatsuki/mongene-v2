@@ -184,7 +184,39 @@ def _prism_sketch(params: dict[str, Any]) -> list[str]:
         _line(*ba, *bd, dashed=True),
     ]
     pts = {"A": fa, "B": fb, "C": bb, "D": ba, "E": fd, "F": fc, "G": bc, "H": bd}
-    return parts + _vertex_labels(params, pts)
+    dims = _edge_dimension_labels(
+        params,
+        [
+            ((fa[0] + fb[0]) / 2, fa[1] + 16),                       # 横（手前下の辺）
+            (fb[0] + 12, (fb[1] + fc[1]) / 2),                       # 高さ（右の縦棱）
+            ((fb[0] + bb[0]) / 2 + 16, (fb[1] + bb[1]) / 2 + 18),    # 奥行き
+        ],
+        anchors=["middle", "start", "start"],
+    )
+    return parts + dims + _vertex_labels(params, pts)
+
+
+
+def _edge_dimension_labels(
+    params: dict[str, Any], slots: list[tuple[float, float]],
+    *, anchors: list[str] | None = None,
+) -> list[str]:
+    """辺の長さを、決まった位置に順に書き入れる（`dim_labels` の並び順）。
+
+    ★**本文が与えた寸法が図に1つも書かれていない立体の図が 50 問あった**
+    （2026-08-19 の外部評価で指摘・実測）。「縦8cm、横24cm、高さ27cmの直方体」の
+    図に頂点名しか無く、どの辺がどの長さか図からは決まらなかった。
+
+    円柱・円錐は `_dimension_labels`（半径と高さ）が先にあったが、角柱・角錐には
+    仕組みが無かった。位置は立体ごとに決まっているので、名前と同じく**並び順で**
+    受け取る（描画側で本文を読み直さない）。
+    """
+    labels = [str(v) for v in params.get("dim_labels") or []]
+    anchors = anchors or ["middle"] * len(slots)
+    out: list[str] = []
+    for label, (x, y), anchor in zip(labels, slots, anchors, strict=False):
+        out.append(haloed_text(x, y, label, size=12, anchor=anchor))
+    return out
 
 
 def _dimension_labels(
@@ -283,7 +315,15 @@ def _pyramid_sketch(params: dict[str, Any]) -> list[str]:
         _line(*ba, *apex, dashed=True),
     ]
     pts = {"A": fa, "B": fb, "C": bb, "D": ba, "E": apex}
-    return parts + _vertex_labels(params, pts)
+    dims = _edge_dimension_labels(
+        params,
+        [
+            ((fa[0] + fb[0]) / 2, fa[1] + 16),          # 底面の1辺
+            (apex[0] + 12, (apex[1] + fa[1]) / 2),      # 高さ
+        ],
+        anchors=["middle", "start"],
+    )
+    return parts + dims + _vertex_labels(params, pts)
 
 
 def _vertex_labels(params: dict[str, Any], pts: dict[str, str]) -> list[str]:
@@ -336,18 +376,27 @@ def _triangular_pyramid_sketch(params: dict[str, Any]) -> list[str]:
     b = (x0 + w, y0)
     c = (x0 + w * 0.35 + dx, y0 - dy)          # 奥の頂点
     apex = (x0 + w * 0.45 + dx * 0.5, y0 - dy * 0.5 - h)
-    return [
+    parts = [
         _line(*a, *b),
         _line(*a, *c, dashed=True), _line(*b, *c, dashed=True),
         _line(*a, *apex), _line(*b, *apex), _line(*c, *apex, dashed=True),
     ]
+    dims = _edge_dimension_labels(
+        params,
+        [((a[0] + b[0]) / 2, a[1] + 16)],   # 底面の1辺
+        anchors=["middle"],
+    )
+    pts = {"A": a, "B": b, "C": c, "D": apex}
+    return parts + dims + _vertex_labels(params, pts)
 
 
 def _tetrahedron_sketch(params: dict[str, Any]) -> list[str]:
     """正四面体の見取図（三角錐と同じ骨組みで、辺の長さをそろえて描く）。"""
     w = float(params["width_px"])
     return _triangular_pyramid_sketch(
-        {"width_px": w, "height_px": w * 0.82, "depth_px": w * 0.55}
+        {"width_px": w, "height_px": w * 0.82, "depth_px": w * 0.55,
+         # 頂点名と寸法は呼び出し元の指定をそのまま引き継ぐ。
+         "vertices": params.get("vertices"), "dim_labels": params.get("dim_labels")}
     )
 
 

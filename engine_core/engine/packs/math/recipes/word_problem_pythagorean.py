@@ -890,13 +890,21 @@ def _scene_exam_box_space_diagonal(p: Mapping[str, Any], rng: Rng) -> Pythagorea
         figure_svg=render_solid_svg(
             {
                 "view": "sketch", "solid_kind": "rectangular_prism",
-                "width_px": 190.0, "depth_px": 70.0,
-                "height_px": max(60.0, 190.0 * h / max(b, 1)),
+                "width_px": 190.0,
+                # ★奥行きも寸法の比に合わせる（横だけ固定だと 8:24:27 の直方体が
+                # 「ほぼ立方体」に見え、空間把握を問う問題で誤誘導になる）。
+                # 見取図として読める範囲に収める。
+                "depth_px": min(110.0, max(34.0, 190.0 * a / max(b, 1))),
+                "height_px": min(230.0, max(60.0, 190.0 * h / max(b, 1))),
                 "vertices": list(solid.replace("-", "")),
+                # ★本文の寸法を図に書き入れる。頂点名しか無く、どの辺が
+                # 縦・横・高さか図からは決まらなかった（外部評価の指摘）。
+                # 並び順は描き手の約束（横・高さ・奥行き）。
+                "dim_labels": [f"{b}cm", f"{h}cm", f"{a}cm"],
             },
             draw=True,
         ),
-        figure_labels=tuple(solid.replace("-", "")),
+        figure_labels=tuple(solid.replace("-", "")) + (f"{a}cm", f"{b}cm", f"{h}cm"),
     )
 
 
@@ -995,10 +1003,12 @@ def _scene_exam_cube_guided(p: Mapping[str, Any], rng: Rng) -> PythagoreanScene:
                 "view": "sketch", "solid_kind": "cube",
                 "width_px": 165.0, "depth_px": 62.0, "height_px": 165.0,
                 "vertices": list(solid.replace("-", "")),
+                # 立方体は3辺とも同じなので、手前下の辺に1つだけ書く。
+                "dim_labels": [f"{edge}cm"],
             },
             draw=True,
         ),
-        figure_labels=tuple(solid.replace("-", "")),
+        figure_labels=tuple(solid.replace("-", "")) + (f"{edge}cm",),
     )
 
 
@@ -1036,9 +1046,11 @@ def _scene_exam_regular_tetrahedron(p: Mapping[str, Any], rng: Rng) -> Pythagore
         numbers={"edge": edge}, scenario=scenario, ask_texts=ask_texts,
         slots={"vertices": n, "foot": foot},
         figure_svg=render_solid_svg(
-            {"view": "sketch", "solid_kind": "tetrahedron", "width_px": 190.0},
+            {"view": "sketch", "solid_kind": "tetrahedron", "width_px": 190.0,
+             "vertices": list(n), "dim_labels": [f"{edge}cm"]},
             draw=True,
         ),
+        figure_labels=tuple(n) + (f"{edge}cm",),
     )
 
 

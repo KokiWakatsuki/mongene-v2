@@ -81,6 +81,37 @@ _SKETCH_KIND_BY_MODE = {
 }
 
 
+
+def _sketch_dim_labels(kind: str, values: dict[str, object]) -> list[str]:
+    """見取図に書き入れる寸法（描き手が決めた並び順で返す）。
+
+    ★**本文が与えた寸法が図に1つも書かれていなかった**（2026-08-19 の外部評価で
+    指摘・実測 50 問）。「底面が1辺13cmの正方形、高さ6cmの正四角錐」の図に頂点名
+    すら無く、どの辺が13cmでどこが6cmか図からは決まらなかった。
+
+    並び順は描き手の約束:
+      角柱・立方体   [横, 高さ, 奥行き]
+      角錐           [底面の1辺, 高さ]
+      円柱・円錐     [半径, 高さ]（`_dimension_labels` が受ける既存の並び）
+      正四面体・三角錐 [底面の1辺]
+    """
+    def cm(key: str) -> str:
+        v = values.get(key)
+        return f"{v}cm" if v not in (None, "", 0) else ""
+
+    if kind in ("rectangular_prism", "square_prism"):
+        return [x for x in (cm("width") or cm("edge"), cm("height"), cm("depth")) if x]
+    if kind == "cube":
+        return [x for x in (cm("edge"),) if x]
+    if kind in ("square_pyramid", "rect_pyramid"):
+        return [x for x in (cm("width") or cm("edge"), cm("height")) if x]
+    if kind in ("cylinder", "cone"):
+        return [x for x in (cm("radius"), cm("height") or cm("slant")) if x]
+    if kind in ("tetrahedron", "triangular_pyramid"):
+        return [x for x in (cm("edge") or cm("width"),) if x]
+    return []
+
+
 def _sketch_svg(values: dict[str, object], mode: str = "") -> str:
     """★**立体の単元も図が1枚も無かった。** 「底面が1辺13cmの正方形、高さ6cmの
     正四角錐の体積を求めよ」——実物の問題集はここに必ず見取図を添える。形が
@@ -136,6 +167,7 @@ def _sketch_svg(values: dict[str, object], mode: str = "") -> str:
             "depth_px": max(d * scale * 0.45, 34.0),
             "height_px": max(h * scale, 60.0),
             "radius_px": max((r or w / 2) * scale, 34.0),
+            "dim_labels": _sketch_dim_labels(kind, values),
         },
         draw=True,
     )
@@ -158,7 +190,16 @@ def _make_mr(ctx: CellContext, recipe_name: str, mode: str, values: dict[str, ob
         sub_questions=[sub_question],
         visual_plan=(
             VisualPlan(
-                style="figure", labels=[],
+                # 図に書き入れた寸法は labels に載せる（G-Q5v は svg の <text> が
+                # ここに載っていることを見る）。
+                style="figure",
+                labels=_sketch_dim_labels(
+                    _SKETCH_KIND.get(str(values.get("shape", "")))
+                    or _SKETCH_KIND_BY_VARIANT.get(str(values.get("variant", "")))
+                    or _SKETCH_KIND_BY_MODE.get(mode)
+                    or "",
+                    values,
+                ),
                 elements=[VisualElement(kind="solid_given", attrs={"role": "given"})],
             )
             if figure_svg
