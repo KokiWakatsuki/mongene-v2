@@ -42,6 +42,12 @@ def _parabola_points_params(a: object, x_a: object, x_b: object) -> dict[str, ob
         "curve_kind": "parabola", "coeff": str(ai),
         "grid_mode": "signed_quantity",
         "pts": [str((0, 0)), str((xa, ai * xa * xa)), str((xb, ai * xb * xb))],
+        # ★放物線に式を、A・B・O に点名を書く。**本文がすべて与えている情報**
+        # （放物線の式・2点の x 座標・原点）なので、答え（直線 AB の式・点 P）は
+        # 漏れない。図に無いせいで、どの点が A でどの点が B か決まらなかった。
+        "label_equations": True,
+        "label_pts": [str((xa, ai * xa * xa)), str((xb, ai * xb * xb)), str((0, 0))],
+        "label_names": ["A", "B", "O"],
     }
 
 
@@ -307,14 +313,19 @@ def intersection_parabola_line_recipe(ctx: CellContext, rng: Rng) -> MR:
             # 放物線と直線の両方が収まる範囲を取れる。
             "curve_kind": "parabola", "coeff": str(a), "line": [str(m), str(b)],
             "pts": _parabola_line_pts(a, m, b),
+            # 放物線と直線に式を添える（どちらがどの式か図から決まらなかった）。
+            # 点名は付けない——交点 A・B の座標がこのセルの答えである。
+            "label_equations": True,
         },
         given={"condition": condition},
         sub_questions=[sub_question],
         visual_plan=VisualPlan(
             style="grid",
-            labels=tick_labels_from_params(
-                {"pts": _parabola_line_pts(a, m, b)}
-            ),
+            labels=tick_labels_from_params({
+                "pts": _parabola_line_pts(a, m, b),
+                "curve_kind": "parabola", "coeff": str(a), "line": [str(m), str(b)],
+                "label_equations": True,
+            }),
             elements=[
                 VisualElement(kind="grid", attrs={}),
                 VisualElement(kind="axis", attrs={}),

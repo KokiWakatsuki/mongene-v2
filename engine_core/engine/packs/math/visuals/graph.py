@@ -11,6 +11,8 @@ matplotlib に依存しない自己完結の SVG 文字列生成。座標平面�
 """
 from __future__ import annotations
 
+from collections.abc import Sequence
+
 import math
 
 from typing import TYPE_CHECKING, Any, Callable, NamedTuple
@@ -272,6 +274,22 @@ def tick_labels_from_params(params: dict[str, Any]) -> list[str]:
         labels.append(_format_tick(sympy.Integer(gx)))
     for gy in _labelled_ticks(spec.y_lo, spec.y_hi, spec.y_step):
         labels.append(_format_tick(sympy.Integer(gy)))
+    # 軸名。SVG の <text> は必ず visual_plan.labels に載っていなければならない（G-Q5v）。
+    labels.extend(["x", "y"])
+    # 点名と、線に添える式（描くときだけ params に入っている）。
+    labels.extend(str(v) for v in params.get("label_names") or [])
+    if params.get("label_equations"):
+        if params.get("a") is not None and params.get("b") is not None:
+            labels.append(line_equation_text(params["a"], params["b"]))
+        for ea, eb in params.get("extra_lines") or []:
+            labels.append(line_equation_text(ea, eb))
+        if params.get("coeff") is not None:
+            labels.append(
+                curve_equation_text(str(params.get("curve_kind", "parabola")), params["coeff"])
+            )
+        ln = params.get("line")
+        if ln:
+            labels.append(line_equation_text(ln[0], ln[1]))
     return labels
 
 
@@ -387,6 +405,7 @@ def _grid_scaffold(params: dict[str, Any]) -> _GridScaffold:
 
 
 _TICK_FONT = 10.0
+_AXIS_FONT = 13.0  # 軸名 x・y（目盛の数字より少し大きく）
 
 
 def _tick_label(px: float, py: float, anchor: str, text: str) -> str:
@@ -416,8 +435,32 @@ def grid_tick_anchors(sc: _GridScaffold) -> list[tuple[float, float]]:
     return out
 
 
-def _grid_ticks(sc: _GridScaffold) -> list[str]:
-    """軸目盛の数値ラベル（<text> はこれのみ。visual_plan.labels と一致させる）。"""
+def _axis_names(sc: _GridScaffold) -> list[str]:
+    """軸の名前 `x` `y`。
+
+    ★**座標平面の図 173 点すべてに軸名が無かった**（2026-08-19 の外部評価で指摘・
+    実測でも 0/173）。目盛の数字と原点の 0 はあるが、日本の教科書・入試の図版では
+    軸名は必ず入る要素で、無いとどちらが x でどちらが y か図だけでは決まらない。
+
+    置き場所は軸の先端の外側（矢印の先にあたる位置）。目盛の数字とぶつからないよう、
+    x は軸の右外・数字より上、y は軸の上外・数字より右に置く。
+    """
+    py0 = sc.to_px_y(0) if sc.y_lo <= 0 <= sc.y_hi else sc.plot_hi
+    px0 = sc.to_px_x(0) if sc.x_lo <= 0 <= sc.x_hi else sc.plot_lo
+    return [
+        haloed_text(sc.plot_hi + 12, py0 - 4, "x", size=_AXIS_FONT, anchor="middle"),
+        haloed_text(px0 + 10, sc.plot_lo - 8, "y", size=_AXIS_FONT, anchor="middle"),
+    ]
+
+
+def _grid_ticks(sc: _GridScaffold, params: dict[str, Any] | None = None) -> list[str]:
+    """軸目盛の数値ラベル（数字はこれのみ。軸名は `_axis_names`）。
+
+    原点に名前 `O` を書く図では、y 軸の `0` を出さない——教科書でも原点の名前が
+    0 の役目を兼ねる。両方出すと 12px の間に重なって、どちらも読めなくなる。
+    """
+    names = [str(v) for v in (params or {}).get("label_names") or []]
+    skip_zero = "O" in names
     ticks: list[str] = []
     py0 = sc.to_px_y(0) if sc.y_lo <= 0 <= sc.y_hi else sc.plot_hi
     for gx in _labelled_ticks(sc.x_lo, sc.x_hi, sc.x_step):
@@ -427,9 +470,202 @@ def _grid_ticks(sc: _GridScaffold) -> list[str]:
             sc.to_px_x(gx), py0 + 12, "middle", _format_tick(sympy.Integer(gx))))
     px0 = sc.to_px_x(0) if sc.x_lo <= 0 <= sc.x_hi else sc.plot_lo
     for gy in _labelled_ticks(sc.y_lo, sc.y_hi, sc.y_step):
+        if gy == 0 and skip_zero:
+            continue
         ticks.append(_tick_label(
             px0 - 8, sc.to_px_y(gy) + 3, "end", _format_tick(sympy.Integer(gy))))
-    return ticks
+    return ticks + _axis_names(sc)
+
+
+
+
+
+def _label_box_is_clear(
+    pos: tuple[float, float], text: str, sc: _GridScaffold,
+    blocked: Sequence[tuple[float, float]],
+) -> bool:
+    """その位置に書いた文字列が、避けたい点のどれとも重ならないか。
+
+    ★点どうしの距離で見ていたら足りなかった。式は `y = -2x - 4` のように横に
+    長いので、**始点だけ離れていても文字の胴体が目盛の数字を横切る**（PNG に
+    起こして見つけた）。文字の占める箱で判定する。
+    """
+    lx, ly = pos
+    anchor_end = lx > sc.plot_hi - 60.0
+    width = len(text) * 6.4
+    x0 = lx - width if anchor_end else lx
+    x1 = lx if anchor_end else lx + width
+    y0, y1 = ly - 11.0, ly + 4.0
+    return all(
+        not (x0 - 4 <= bx <= x1 + 4 and y0 - 3 <= by <= y1 + 3) for bx, by in blocked
+    )
+
+
+def _equation_label(sc: _GridScaffold, ends: tuple[float, float, float, float],
+                    text: str, index: int = 0,
+                    blocked: Sequence[tuple[float, float]] = ()) -> str:
+    """引いた線のそばに、その線の式を書く。
+
+    ★**どちらの線がどの式か、図から決まらなかった**（2026-08-19 の外部評価。
+    「2直線 y=3x-3 と y=4x-8 の交点をN」の図に、線が2本あるだけで式が無かった）。
+    実物の入試・教科書の図版では、線のそばに必ず式が添えてある。
+
+    置き場所は線の上の点。**線ごとに違う位置に置く**（`index`）——どちらも端に
+    置いたら、傾きの近い2直線で式が重なって両方読めなくなった（PNG に起こして
+    見つけた）。線の向きの右側へ少しずらして、線そのものにも重ねない。
+    """
+    px1, py1, px2, py2 = ends
+    if px2 < px1:
+        px1, py1, px2, py2 = px2, py2, px1, py1
+    dx, dy = px2 - px1, py2 - py1
+    norm = max((dx * dx + dy * dy) ** 0.5, 1e-6)
+    ox, oy = -dy / norm, dx / norm
+    if ox < 0:
+        ox, oy = -ox, -oy
+
+    def place(t: float) -> tuple[float, float]:
+        ax, ay = px1 + dx * t, py1 + dy * t
+        lx = min(max(ax + ox * 16.0, sc.plot_lo + 4.0), sc.plot_hi - 4.0)
+        ly = min(max(ay + oy * 16.0, sc.plot_lo + 12.0), sc.plot_hi - 4.0)
+        return lx, ly
+
+    order = [0.82, 0.62, 0.42, 0.24][index % 4:] + [0.82, 0.62, 0.42, 0.24][: index % 4]
+    lx, ly = place(order[0])
+    for t in order:
+        cand = place(t)
+        if _label_box_is_clear(cand, text, sc, blocked):
+            lx, ly = cand
+            break
+    anchor = "end" if lx > sc.plot_hi - 60.0 else "start"
+    return haloed_text(lx, ly, text, size=_AXIS_FONT, anchor=anchor)
+
+
+def line_equation_text(a: Any, b: Any) -> str:
+    """`y = 3x - 3` の形の表示（図に書く式。本文の書き方にそろえる）。"""
+    a_e = sympy.nsimplify(sympy.sympify(a))
+    b_e = sympy.nsimplify(sympy.sympify(b))
+    if a_e == 0:
+        head = ""
+    elif a_e == 1:
+        head = "x"
+    elif a_e == -1:
+        head = "-x"
+    else:
+        head = f"{_format_tick(a_e)}x"
+    if b_e == 0:
+        return f"y = {head or '0'}"
+    if not head:
+        return f"y = {_format_tick(b_e)}"
+    sign = "+" if b_e > 0 else "-"
+    return f"y = {head} {sign} {_format_tick(abs(b_e))}"
+
+
+
+def curve_equation_text(kind: str, coeff: Any) -> str:
+    """曲線の式の表示（放物線 `y = -3x²` / 双曲線 `y = 12/x`）。"""
+    c = sympy.nsimplify(sympy.sympify(coeff))
+    if kind == "hyperbola":
+        return f"y = {_format_tick(c)}/x"
+    if c == 1:
+        return "y = x²"
+    if c == -1:
+        return "y = -x²"
+    return f"y = {_format_tick(c)}x²"
+
+
+def _curve_equation_label(sc: _GridScaffold, runs: list[list[tuple[float, float]]],
+                          text: str, blocked: list[tuple[float, float]]) -> str:
+    """曲線のそばに式を書く。**名前を付けた点からは離す。**
+
+    はじめは曲線の右端に置いていたが、そこに点 B があって式と点名が重なった
+    （PNG に起こして見つけた）。点の位置を避けて選び直す。
+    """
+    pts = [pt for run in runs for pt in run]
+    inner = [q for q in pts if sc.plot_lo + 24 < q[0] < sc.plot_hi - 24
+             and sc.plot_lo + 24 < q[1] < sc.plot_hi - 24]
+    cands = sorted(inner or pts, key=lambda q: -abs(q[0] - (sc.plot_lo + sc.plot_hi) / 2))
+
+    def place(q: tuple[float, float]) -> tuple[float, float]:
+        return (
+            min(max(q[0] + 12.0, sc.plot_lo + 6.0), sc.plot_hi - 6.0),
+            min(max(q[1] - 10.0, sc.plot_lo + 12.0), sc.plot_hi - 6.0),
+        )
+
+    lx, ly = place(cands[0])
+    for q in cands:
+        cand = place(q)
+        if _label_box_is_clear(cand, text, sc, blocked):
+            lx, ly = cand
+            break
+    anchor = "end" if lx > sc.plot_hi - 60.0 else "start"
+    return haloed_text(lx, ly, text, size=_AXIS_FONT, anchor=anchor)
+
+
+def named_point_pixels(sc: _GridScaffold, params: dict[str, Any]) -> list[tuple[float, float]]:
+    """名前を付けた点の画素位置（他のラベルがそこを避けるために使う）。"""
+    return [
+        (sc.to_px_x(float(x)), sc.to_px_y(float(y)))
+        for x, y in (_parse_point(str(v)) for v in params.get("label_pts") or [])
+    ]
+
+
+def plot_named_points(sc: _GridScaffold, parts: list[str], params: dict[str, Any]) -> None:
+    """本文が名前を付けた点を、黒丸と点名で図に打つ。
+
+    ★**本文が名指しした点が図に無い問題が 21 問あった**（2026-08-19 の外部評価で
+    指摘・実測）。「2直線の交点をN、x軸との交点をP」と書いてあるのに図には目盛の
+    数字しかなく、どちらの直線が y=3x-3 かも図から決まらなかった。
+
+    `params["label_pts"]`（["(x, y)", ...]）と `params["label_names"]`（["N", ...]）が
+    あるときだけ描く。**答えになる点はここに載せない**——「点Aをとれ」「回転の中心を
+    求めよ」のセルは、図に描いたら答えを図が言ってしまう（`render_coordinate_points_svg`
+    が三角形を問題図に描かないのと同じ理由）。
+
+    点名は図の重心と反対側へ逃がし、目盛の数字の位置は避ける（重なると両方読めない）。
+    """
+    raw = params.get("label_pts") or []
+    names = [str(v) for v in params.get("label_names") or []]
+    if not raw:
+        return
+    pts = [_parse_point(str(v)) for v in raw]
+    px_pts = [(sc.to_px_x(float(x)), sc.to_px_y(float(y))) for x, y in pts]
+    ccx, ccy = centroid(px_pts)
+    blocked = grid_tick_anchors(sc)
+    py0 = sc.to_px_y(0) if sc.y_lo <= 0 <= sc.y_hi else sc.plot_hi
+    px0 = sc.to_px_x(0) if sc.x_lo <= 0 <= sc.x_hi else sc.plot_lo
+    for i, (px, py) in enumerate(px_pts):
+        parts.append(f'<circle cx="{px:.2f}" cy="{py:.2f}" r="4" fill="#000000"/>')
+        if i >= len(names):
+            continue
+        if names[i] == "O":
+            # 原点の名前は教科書どおり**左下すぐ**に置く。重心から逃がす規則に
+            # まかせると、軸の上の目盛を避けて何十 px も飛んでいってしまい、
+            # どの点を指しているのか分からなくなった。
+            parts.append(haloed_text(px - 9.0, py + 15.0, "O", size=13, anchor="end"))
+            continue
+        # 軸の上の点は、**軸に沿って**逃がすと目盛の数字を次々に避けて遠くへ
+        # 飛んでいく（P が x=2 の点なのに x=5 のあたりに出ていた）。目盛の数字は
+        # 軸の外側にあるので、内側（上・右）へ少しだけずらせば重ならない。
+        if abs(py - py0) < 2.0:
+            parts.append(haloed_text(px + 5.0, py - 9.0, names[i], size=13, anchor="start"))
+            continue
+        if abs(px - px0) < 2.0:
+            parts.append(haloed_text(px + 9.0, py - 5.0, names[i], size=13, anchor="start"))
+            continue
+        dist = 13.0
+        lx, ly, anchor = outward(px, py, ccx, ccy, dist=dist)
+        for _ in range(3):
+            if all(abs(lx - qx) > 16.0 or abs(ly - qy) > 13.0 for qx, qy in blocked):
+                break
+            dist += 11.0
+            lx, ly, anchor = outward(px, py, ccx, ccy, dist=dist)
+        blocked.append((lx, ly))
+        parts.append(haloed_text(lx, ly, names[i], size=13, anchor=anchor))
+
+
+def point_label_names(params: dict[str, Any]) -> list[str]:
+    """`plot_named_points` が図に書く文字（visual_plan.labels に足すため）。"""
+    return [str(v) for v in params.get("label_names") or []]
 
 
 def render_grid_svg(
@@ -466,12 +702,15 @@ def render_grid_svg(
                 f'<line x1="{px1:.2f}" y1="{py1:.2f}" x2="{px2:.2f}" y2="{py2:.2f}" '
                 f'stroke="#000000" stroke-width="2.5"/>'
             )
+            if params.get("label_equations"):
+                parts.append(_equation_label(
+                    sc, ends, line_equation_text(a, b), 0, grid_tick_anchors(sc)))
 
     # --- もう1本以上の直線（入試の「2直線の交点」など・任意） ---
     # ★**入試融合のセルは図が1枚も無かった。** 「2直線 y=3x-3 と y=4x-8 の交点を
     # N…三角形ONPの面積を求めよ」を、座標平面を思い浮かべながら解くことになる。
     # 実物の入試問題は必ずグラフが添えてある。主直線と同じ書式で重ねる。
-    for ea, eb in extra_lines or []:
+    for extra_i, (ea, eb) in enumerate(extra_lines or [], start=1):
         ends2 = _line_endpoints_in_grid(
             sympy.nsimplify(sympy.sympify(ea)), sympy.nsimplify(sympy.sympify(eb)), sc
         )
@@ -481,6 +720,9 @@ def render_grid_svg(
                 f'<line x1="{qx1:.2f}" y1="{qy1:.2f}" x2="{qx2:.2f}" y2="{qy2:.2f}" '
                 f'stroke="#000000" stroke-width="2.5"/>'
             )
+            if params.get("label_equations"):
+                parts.append(_equation_label(
+                    sc, ends2, line_equation_text(ea, eb), extra_i, grid_tick_anchors(sc)))
 
     # --- 特殊直線 x=k（垂直）/ y=k（水平）（g2_l26 Lv2・任意） ---
     if vline_x is not None:
@@ -498,7 +740,8 @@ def render_grid_svg(
             f'stroke="#000000" stroke-width="2.5"/>'
         )
 
-    parts.extend(_grid_ticks(sc))
+    plot_named_points(sc, parts, params)
+    parts.extend(_grid_ticks(sc, params))
     parts.append("</svg>")
     return "".join(parts)
 
@@ -526,6 +769,9 @@ def render_line_and_polygon_svg(params: dict[str, Any], *, draw_line: bool) -> s
                 f'<line x1="{px1:.2f}" y1="{py1:.2f}" x2="{px2:.2f}" y2="{py2:.2f}" '
                 f'stroke="#000000" stroke-width="2.5"/>'
             )
+            if params.get("label_equations"):
+                parts.append(_equation_label(
+                    sc, ends, line_equation_text(a, b), 0, grid_tick_anchors(sc)))
 
     poly = [_parse_point(s) for s in params["polygon_pts"]]
     px = [(sc.to_px_x(float(x)), sc.to_px_y(float(y))) for x, y in poly]
@@ -534,7 +780,8 @@ def render_line_and_polygon_svg(params: dict[str, Any], *, draw_line: bool) -> s
     for a_, b_ in px:
         parts.append(f'<circle cx="{a_:.2f}" cy="{b_:.2f}" r="4" fill="#000000"/>')
 
-    parts.extend(_grid_ticks(sc))
+    plot_named_points(sc, parts, params)
+    parts.extend(_grid_ticks(sc, params))
     parts.append("</svg>")
     return "".join(parts)
 
@@ -629,7 +876,7 @@ def render_segment_solution_svg(params: dict[str, Any]) -> str:
                 f'stroke="#000000" stroke-width="1.5"/>'
             )
 
-    parts.extend(_grid_ticks(sc))
+    parts.extend(_grid_ticks(sc, params))
     parts.append("</svg>")
     return "".join(parts)
 
@@ -751,12 +998,17 @@ def render_curve_svg(
 
     if draw_curve:
         coeff = sympy.nsimplify(sympy.sympify(params["coeff"]))
-        for run in _curve_polylines(kind, coeff, sc):
+        runs = _curve_polylines(kind, coeff, sc)
+        for run in runs:
             pts = " ".join(f"{px:.2f},{py:.2f}" for px, py in run)
             parts.append(
                 f'<polyline points="{pts}" fill="none" '
                 f'stroke="#000000" stroke-width="2.5"/>'
             )
+        if params.get("label_equations") and runs:
+            parts.append(_curve_equation_label(
+                sc, runs, curve_equation_text(kind, coeff),
+                named_point_pixels(sc, params) + grid_tick_anchors(sc)))
 
     # --- 2本目の曲線（破線・線種で区別） ---
     if second_coeff is not None:
@@ -774,6 +1026,14 @@ def render_curve_svg(
         b_s = sympy.nsimplify(sympy.sympify(line[1]))
         ends = _line_endpoints_in_grid(m_s, b_s, sc)
         if ends is not None:
+            if params.get("label_equations"):
+                # ★重ねた直線の式は、**曲線を避けて**置く。曲線の真上に出て
+                # 両方読めなくなっていた（PNG に起こして見つけた）。
+                curve_px = [q for run in _curve_polylines(
+                    kind, sympy.nsimplify(sympy.sympify(params["coeff"])), sc) for q in run]
+                parts.append(_equation_label(
+                    sc, ends, line_equation_text(m_s, b_s), 0,
+                    curve_px + named_point_pixels(sc, params) + grid_tick_anchors(sc)))
             px1, py1, px2, py2 = ends
             parts.append(
                 f'<line x1="{px1:.2f}" y1="{py1:.2f}" x2="{px2:.2f}" y2="{py2:.2f}" '
@@ -806,7 +1066,8 @@ def render_curve_svg(
             f'stroke="#000000" stroke-width="5"/>'
         )
 
-    parts.extend(_grid_ticks(sc))
+    plot_named_points(sc, parts, params)
+    parts.extend(_grid_ticks(sc, params))
     parts.append("</svg>")
     return "".join(parts)
 
@@ -832,7 +1093,7 @@ def render_polyline_svg(params: dict[str, Any], *, draw_polyline: bool) -> str:
         for a, b in px:
             parts.append(f'<circle cx="{a:.2f}" cy="{b:.2f}" r="4" fill="#000000"/>')
 
-    parts.extend(_grid_ticks(sc))
+    parts.extend(_grid_ticks(sc, params))
     parts.append("</svg>")
     return "".join(parts)
 
@@ -974,7 +1235,7 @@ def render_coordinate_points_svg(params: dict[str, Any], *, draw_triangle: bool)
             blocked.append((lx, ly))
             parts.append(haloed_text(lx, ly, labels[i], size=13, anchor=anchor))
 
-    parts.extend(_grid_ticks(sc))
+    parts.extend(_grid_ticks(sc, params))
     parts.append("</svg>")
     return "".join(parts)
 

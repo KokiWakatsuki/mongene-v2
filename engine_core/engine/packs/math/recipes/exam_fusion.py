@@ -365,6 +365,14 @@ def exam_linear_intersection_area_recipe(ctx: CellContext, rng: Rng) -> MR:
         "m1": m1, "b1": b1, "m2": m2, "b2": b2, "labels": lp + lq,
         "a": str(m1), "b": str(b1), "extra_lines": [[str(m2), str(b2)]],
         "pts": pts,
+        # ★線に式を添える。線が2本あるだけで、どちらが本文のどの式か図から
+        # 決まらなかった（2026-08-19 の外部評価で指摘）。
+        "label_equations": True,
+        # 点名は**原点と x 切片だけ**。交点 lp の座標は (1) の答えなので、
+        # 図に名前を打つと答えを図が言ってしまう（交わる位置は線を引いた時点で
+        # 見えているが、名前を添えるとどの点を指すかまで確定してしまう）。
+        "label_pts": [str((0, 0)), str((int(-b2 // m2), 0))],
+        "label_names": ["O", lq],
     }
     return MR(
         signature=ctx.spec_level.signature, family=ctx.family, level=ctx.level,
@@ -474,6 +482,11 @@ def exam_linear_line_through_triangle_recipe(ctx: CellContext, rng: Rng) -> MR:
         "polygon_pts": polygon_pts,
         "pts": polygon_pts + line_pts,
         "labels": l1 + l2 + l3,
+        # 三角形の頂点名と直線の式を図に書く。**どちらも本文がそのまま書いている**
+        # 情報なので、図に出しても答え（内部を通るかどうか）は漏れない。
+        "label_equations": True,
+        "label_pts": polygon_pts,
+        "label_names": [l1, l2, l3],
     }
     condition = (
         f"座標平面上に直線 {_line_text(m, b)} と、3点{l1}{verts[0]}、{l2}{verts[1]}、"
@@ -553,7 +566,9 @@ def exam_linear_guided_triangle_recipe(ctx: CellContext, rng: Rng) -> MR:
                 # 図のための描画情報（本文に出る数だけ・答えの点は入れない）。
                 "a": str(m1), "b": str(b1), "extra_lines": [[str(m2), str(b2)]],
                 "pts": [str((0, b1)), str((0, b2)), str((0, 0)),
-                        str((int(-b1 // m1), 0)), str((int(-b2 // m2), 0))]},
+                        str((int(-b1 // m1), 0)), str((int(-b2 // m2), 0))],
+                # 線に式を添える（点名は (1)(2) の答えなので付けない）。
+                "label_equations": True},
         given={"scenario": scenario},
         context_slots={
             "ask_1": f"点{la}の座標を求めよ。",
@@ -591,6 +606,10 @@ def _grid_params(
         pts += [str((0, int(b2))), str((int(-int(b2) // int(m2)), 0))]
         out["extra_lines"] = [[str(m2), str(b2)]]
     out["pts"] = pts
+    # ★線には式を添える（どちらの線がどの式か図から決まらなかった）。
+    # **点名は付けない**——このセル群は交点や切片の座標そのものが答えなので、
+    # 名前を打つと答えを図が言ってしまう。
+    out["label_equations"] = True
     return out
 
 
