@@ -83,7 +83,7 @@ from engine.core.contracts import (
     VisualPlan,
 )
 from engine.core.registry import REGISTRY, register_recipe
-from engine.packs.math.visuals.solid import render_solid_svg
+from engine.packs.math.visuals.solid import box_pixels, render_solid_svg
 from engine.core.rng import Rng, draw
 from engine.core.verify.answer_size import answer_is_too_big, limits_for
 
@@ -890,12 +890,9 @@ def _scene_exam_box_space_diagonal(p: Mapping[str, Any], rng: Rng) -> Pythagorea
         figure_svg=render_solid_svg(
             {
                 "view": "sketch", "solid_kind": "rectangular_prism",
-                "width_px": 190.0,
-                # ★奥行きも寸法の比に合わせる（横だけ固定だと 8:24:27 の直方体が
-                # 「ほぼ立方体」に見え、空間把握を問う問題で誤誘導になる）。
-                # 見取図として読める範囲に収める。
-                "depth_px": min(110.0, max(34.0, 190.0 * a / max(b, 1))),
-                "height_px": min(230.0, max(60.0, 190.0 * h / max(b, 1))),
+                # ★3辺は**共通の倍率**で画素に直す。軸ごとに頭打ちにすると
+                # 比が逆転する（`box_pixels` の注記を見よ）。
+                **box_pixels(b, h, a),
                 "vertices": list(solid.replace("-", "")),
                 # ★本文の寸法を図に書き入れる。頂点名しか無く、どの辺が
                 # 縦・横・高さか図からは決まらなかった（外部評価の指摘）。

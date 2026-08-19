@@ -197,6 +197,22 @@ def _prism_sketch(params: dict[str, Any]) -> list[str]:
 
 
 
+
+def box_pixels(width: float, height: float, depth: float) -> dict[str, float]:
+    """直方体の3辺を、**共通の倍率**で画素に直す（大小の順を必ず保つ）。
+
+    ★軸ごとに頭打ちにしていたら、比が逆転した——縦16・横12・高さ15 の直方体で
+    奥行きが上限 110px に張りつき、高さ 142px より短く描かれていた（実測 30 件中
+    9 件で順序が入れかわっていた）。**空間把握を問う問題では誤誘導になる。**
+
+    倍率は「どの辺も枠に収まる」いちばん大きいものを選ぶ。極端に細長い立体は
+    小さく描かれるが、それは形が正しく伝わっているということである。
+    """
+    w, h, d = max(float(width), 1e-9), max(float(height), 1e-9), max(float(depth), 1e-9)
+    scale = min(190.0 / w, 210.0 / h, 100.0 / d)
+    return {"width_px": w * scale, "height_px": h * scale, "depth_px": d * scale}
+
+
 def _edge_dimension_labels(
     params: dict[str, Any], slots: list[tuple[float, float]],
     *, anchors: list[str] | None = None,

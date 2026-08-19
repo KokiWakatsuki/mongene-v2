@@ -67,7 +67,7 @@ from engine.core.contracts import (
 )
 from engine.core.registry import REGISTRY, register_recipe
 from engine.packs.math.visuals.quadrilateral_figure import triangle_with_altitude_svg
-from engine.packs.math.visuals.solid import render_solid_svg
+from engine.packs.math.visuals.solid import box_pixels, render_solid_svg
 from engine.core.rng import Rng, draw
 from engine.core.verify.answer_size import answer_is_too_big, limits_for
 from engine.packs.math.recipes.pythagorean import (
@@ -829,10 +829,8 @@ def _scene_box_diagonal(p: Mapping[str, Any], rng: Rng) -> FindValueScene:
         statement=statement,
         figure_svg=_solid_sketch(
             "rectangular_prism",
-            width_px=190.0,
-            # 奥行きも寸法の比に合わせる（横だけ合わせるとほぼ立方体に見える）。
-            depth_px=min(110.0, max(34.0, 190.0 * depth / max(width, 1))),
-            height_px=min(230.0, max(60.0, 190.0 * height / max(width, 1))),
+            # 3辺は共通の倍率で画素に直す（大小の順を保つ）。
+            **box_pixels(width, height, depth),
             # 本文の寸法を図に書き入れる（並び順は描き手の約束＝横・高さ・奥行き）。
             dim_labels=[f"{width}cm", f"{height}cm", f"{depth}cm"],
         ),
