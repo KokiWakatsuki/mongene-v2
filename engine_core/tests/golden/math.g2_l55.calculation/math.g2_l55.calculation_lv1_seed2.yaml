@@ -37,7 +37,7 @@ sub_questions:
 
     次に、並べたデータの中央にある値（中央値）を求める。（29）'
   hints:
-  - データを大きさの順に並べかえる。
+  - データを並べ中央値(第2四分位数)を求める
   label: (1)
   prompt_text: ''
   solution_steps:

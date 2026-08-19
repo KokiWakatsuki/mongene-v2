@@ -37,7 +37,7 @@ sub_questions:
   - polynomial.expand_formula_diff_squares
   explanation: まず、和と差の積の公式で、はじめの項の平方から終わりの項の平方をひく。（9x² - 144）
   hints:
-  - 和と差の積の公式 (x+a)(x-a)=x²-a² を使って展開する
+  - 和と差の積の公式で、はじめの項の平方から終わりの項の平方をひく。
   label: (1)
   prompt_text: ''
   solution_steps:

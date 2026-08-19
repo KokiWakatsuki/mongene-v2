@@ -314,8 +314,12 @@ def intersection_parabola_line_recipe(ctx: CellContext, rng: Rng) -> MR:
             "curve_kind": "parabola", "coeff": str(a), "line": [str(m), str(b)],
             "pts": _parabola_line_pts(a, m, b),
             # 放物線と直線に式を添える（どちらがどの式か図から決まらなかった）。
-            # 点名は付けない——交点 A・B の座標がこのセルの答えである。
+            # 交点 A・B の座標はこのセルの答えなので**点名を付けない**が、
+            # **原点 O は答えではない**ので打つ（本文が「原点を O とする」と
+            # 名指ししていて、三角形 OAB の頂点になる）。
             "label_equations": True,
+            "label_pts": [str((0, 0))],
+            "label_names": ["O"],
         },
         given={"condition": condition},
         sub_questions=[sub_question],
@@ -324,7 +328,7 @@ def intersection_parabola_line_recipe(ctx: CellContext, rng: Rng) -> MR:
             labels=tick_labels_from_params({
                 "pts": _parabola_line_pts(a, m, b),
                 "curve_kind": "parabola", "coeff": str(a), "line": [str(m), str(b)],
-                "label_equations": True,
+                "label_equations": True, "label_names": ["O"],
             }),
             elements=[
                 VisualElement(kind="grid", attrs={}),

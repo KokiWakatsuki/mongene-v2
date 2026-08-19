@@ -41,7 +41,7 @@ sub_questions:
 
     最後に、乗法公式にあてはめて展開した式を書く。（4k² - 4k + 1）'
   hints:
-  - 係数のついたはじめの項を平方する。
+  - 平方の公式 (x±a)²=x²±2ax+a² を使って展開する
   label: (1)
   prompt_text: ''
   solution_steps:

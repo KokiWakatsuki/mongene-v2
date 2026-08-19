@@ -39,7 +39,7 @@ sub_questions:
 
     次に、乗法公式にあてはめて展開した式を書く。（y² + 6y + 5）'
   hints:
-  - 乗法公式 (x+a)(x+b)=x²+(a+b)x+ab を使って展開する
+  - 2つの定数の和と積を求める。
   label: (1)
   prompt_text: ''
   solution_steps:

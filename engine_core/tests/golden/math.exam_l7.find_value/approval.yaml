@@ -1,6 +1,6 @@
-approved_at: '2026-08-19T19:34:48.411741'
+approved_at: '2026-08-19T20:39:39.812273'
 approver: koki
-content_sha256: 3fde7fba4cec6e9bd727f9629c255835ce75ddb31564f592e6fe00c6b84c4be8
+content_sha256: 76bcee89b70a4299c765b9fc1930a7fb990fa414b5924fa0251b734a48268ca8
 family: math.exam_l7.find_value
 files:
 - /Users/koki/workspace/mongene-v2/engine_core/tests/golden/math.exam_l7.find_value/math.exam_l7.find_value_lv3_seed1.yaml

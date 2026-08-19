@@ -39,7 +39,7 @@ sub_questions:
 
     次に、乗法公式にあてはめて展開した式を書く。（a² - 12a + 36）'
   hints:
-  - はじめの項の平方・積の2倍・終わりの項の平方を求める。
+  - 平方の公式 (x±a)²=x²±2ax+a² を使って展開する
   label: (1)
   prompt_text: ''
   solution_steps:

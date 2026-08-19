@@ -41,7 +41,7 @@ sub_questions:
 
     最後に、求めた x をもとの式に代入して y を求め、解の組にまとめる。（x = 3、y = -4）'
   hints:
-  - A=B=C を A=C と B=C の2つの式に分けて連立方程式にする。
+  - A=B=C 形の等式を連立に組み替えて解く
   label: (1)
   prompt_text: ''
   solution_steps:
