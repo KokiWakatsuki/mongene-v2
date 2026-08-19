@@ -26,7 +26,10 @@ from engine.core.contracts import (
 from engine.core.registry import REGISTRY, register_recipe
 from engine.core.rng import Rng, draw, draw_many
 
-_ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+# ★**I と O は入れない**（1・0 と紛らわしいので実物の教材でも頂点名に使わない）。
+# 他の描き手（`letter_expr._FIGURE_LETTERS`）は既にそうなっていたが、ここだけ
+# 素のアルファベットを使っていて「立方体DEFG-HIJK」「正四面体GHIJ」が出ていた。
+_ALPHABET = "ABCDEFGHJKLMNPQRSTUVWXYZ"
 
 
 def _effective_concept_tags(ctx: CellContext) -> list[str]:

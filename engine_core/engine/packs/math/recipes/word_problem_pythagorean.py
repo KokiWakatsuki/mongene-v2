@@ -106,7 +106,10 @@ _PYTHAGOREAN_WP_CONCEPTS = [
     "pythagorean.word_problem_triangle_height_area_solo",
 ]
 
-_ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+# ★**I と O は入れない**（1・0 と紛らわしいので実物の教材でも頂点名に使わない）。
+# 他の描き手（`letter_expr._FIGURE_LETTERS`）は既にそうなっていたが、ここだけ
+# 素のアルファベットを使っていて「立方体DEFG-HIJK」「正四面体GHIJ」が出ていた。
+_ALPHABET = "ABCDEFGHJKLMNPQRSTUVWXYZ"
 # 正の解をちょうど1つ選ぶ mode（長さは正の数）。g3_l29/l30 の図形立式と同じ経路。
 _POSITIVE_ROOT_MODE = "solve_product_form_positive_root"
 _SQRT_RE = re.compile(r"sqrt\((\d+)\)")

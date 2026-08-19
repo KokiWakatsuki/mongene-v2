@@ -96,7 +96,10 @@ _FIND_VALUE_CONCEPTS = [
 ]
 _KNOWLEDGE_CONCEPTS = ["pythagorean.special_right_triangle_ratio"]
 
-_ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+# ★**I と O は入れない**（1・0 と紛らわしいので実物の教材でも頂点名に使わない）。
+# 他の描き手（`letter_expr._FIGURE_LETTERS`）は既にそうなっていたが、ここだけ
+# 素のアルファベットを使っていて「立方体DEFG-HIJK」「正四面体GHIJ」が出ていた。
+_ALPHABET = "ABCDEFGHJKLMNPQRSTUVWXYZ"
 # 垂線の足に使う点名（三角形の頂点名と重ならないものを引く）。
 _FOOT_LETTERS = ["H", "K", "L", "M", "N", "P", "Q", "R"]
 # 正の解をちょうど1つ選ぶ mode（長さは正の数）。g3_l29/l30 の図形立式と同じ経路。
