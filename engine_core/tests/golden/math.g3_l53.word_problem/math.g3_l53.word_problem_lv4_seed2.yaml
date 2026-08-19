@@ -24,9 +24,9 @@ meta:
   seed: 2
   signature: word_problem_triangle_height_area_solo
 problem_ref: 0f74826248d3df25
-problem_text: 'QRが26cm、RSが28cm、SQが30cmの三角形QRSがある。
+problem_text: 'UVが26cm、VWが28cm、WUが30cmの三角形UVWがある。
 
-  必要な補助線を自分で引き、辺RSを底辺としたときの高さと三角形QRSの面積を求めよ。'
+  必要な補助線を自分で引き、辺VWを底辺としたときの高さと三角形UVWの面積を求めよ。'
 sub_questions:
 - answer:
     display: 高さ 24 cm、面積 336 cm²

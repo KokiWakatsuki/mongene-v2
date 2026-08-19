@@ -24,9 +24,9 @@ meta:
   seed: 3
   signature: word_problem_rhombus_diagonal_area_guided
 problem_ref: e1559d883f0e7ab9
-problem_text: '1辺の長さが20cmのひし形KLMNがあり、対角線KMの長さは32cmである。
+problem_text: '1辺の長さが20cmのひし形TUVWがあり、対角線TVの長さは32cmである。
 
-  (1) 対角線LNの長さを求めよ。
+  (1) 対角線UWの長さを求めよ。
 
   (2) このひし形の面積を求めよ。'
 sub_questions:

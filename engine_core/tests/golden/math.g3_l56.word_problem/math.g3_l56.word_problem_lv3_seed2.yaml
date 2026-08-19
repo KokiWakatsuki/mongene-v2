@@ -24,7 +24,7 @@ meta:
   seed: 2
   signature: word_problem_box_surface_shortest_path_guided
 problem_ref: 6ddcd3a0248f5fa5
-problem_text: '辺FGの長さが5cm、辺GHの長さが4cm、高さが3cmの直方体FGHI-JKLMの形をした箱がある。ここでFGHIは底面、JKLMは上面で、辺FJが高さにあたる。この箱の表面上を、頂点Fから、側面FGKJと側面GHLKを通って、頂点Lまで進む。
+problem_text: '辺MNの長さが5cm、辺NPの長さが4cm、高さが3cmの直方体MNPQ-RSTUの形をした箱がある。ここでMNPQは底面、RSTUは上面で、辺MRが高さにあたる。この箱の表面上を、頂点Mから、側面MNSRと側面NPTSを通って、頂点Tまで進む。
 
   (1) 進む道のりが最も短くなるときの、その道のりの長さを求めよ。
 

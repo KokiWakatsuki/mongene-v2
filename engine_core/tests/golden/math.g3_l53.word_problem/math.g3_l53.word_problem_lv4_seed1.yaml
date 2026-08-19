@@ -24,9 +24,9 @@ meta:
   seed: 1
   signature: word_problem_triangle_height_area_solo
 problem_ref: 85f2b53fbf8defc7
-problem_text: 'EFが15cm、FGが14cm、GEが13cmの三角形EFGがある。
+problem_text: 'QRが15cm、RSが14cm、SQが13cmの三角形QRSがある。
 
-  必要な補助線を自分で引き、辺FGを底辺としたときの高さと三角形EFGの面積を求めよ。'
+  必要な補助線を自分で引き、辺RSを底辺としたときの高さと三角形QRSの面積を求めよ。'
 sub_questions:
 - answer:
     display: 高さ 12 cm、面積 84 cm²

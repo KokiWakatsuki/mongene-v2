@@ -24,7 +24,7 @@ meta:
   seed: 3
   signature: word_problem_box_surface_shortest_path_guided
 problem_ref: 87d9baef852a8de1
-problem_text: '辺MNの長さが12cm、辺NOの長さが8cm、高さが10cmの直方体MNOP-QRSTの形をしたケースがある。ここでMNOPは底面、QRSTは上面で、辺MQが高さにあたる。このケースの表面上を、頂点Mから、側面MNRQと側面NOSRを通って、頂点Sまで進む。
+problem_text: '辺FGの長さが12cm、辺GHの長さが8cm、高さが10cmの直方体FGHJ-KLMNの形をしたケースがある。ここでFGHJは底面、KLMNは上面で、辺FKが高さにあたる。このケースの表面上を、頂点Fから、側面FGLKと側面GHMLを通って、頂点Mまで進む。
 
   (1) 進む道のりが最も短くなるときの、その道のりの長さを求めよ。
 

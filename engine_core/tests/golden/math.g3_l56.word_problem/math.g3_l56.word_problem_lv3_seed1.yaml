@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: word_problem_box_surface_shortest_path_guided
 problem_ref: 5254b759e83945b9
-problem_text: '辺EFの長さが6cm、辺FGの長さが6cm、高さが15cmの直方体EFGH-IJKLの形をした箱がある。ここでEFGHは底面、IJKLは上面で、辺EIが高さにあたる。この箱の表面上を、頂点Eから、側面EFJIと側面FGKJを通って、頂点Kまで進む。
+problem_text: '辺BCの長さが6cm、辺CDの長さが6cm、高さが15cmの直方体BCDE-FGHJの形をした箱がある。ここでBCDEは底面、FGHJは上面で、辺BFが高さにあたる。この箱の表面上を、頂点Bから、側面BCGFと側面CDHGを通って、頂点Hまで進む。
 
   (1) 進む道のりが最も短くなるときの、その道のりの長さを求めよ。
 

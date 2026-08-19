@@ -18,7 +18,13 @@ from typing import TYPE_CHECKING, Any
 
 import sympy
 
-from engine.core.verify.quality_gates import _COUNTER_EXPR_RE
+from engine.core.verify.quality_gates import (
+    _COUNTER_EXPR_RE,
+    _build_given_whitelist,
+    _numeric_answer_tokens,
+    _to_fraction,
+    contains_number,
+)
 from jinja2 import DictLoader
 from jinja2.sandbox import SandboxedEnvironment
 
@@ -211,21 +217,32 @@ _MAX_HINTS = 3
 
 
 _NUMBER_IN_HINT = re.compile(r"\d")
-# 図形の点名（大文字1文字以上）。概念名にこれが入っていたらヒントに使わない。
-_POINT_NAME_RE = re.compile(r"[A-Z]")
+# 図形の点名。**大文字が2つ以上続く**ものだけを点名とみなす（"AB//CD"・"AD:DB"）。
+# ★大文字1文字は一般の記号であって点名ではない——「A=B=C 形の等式」を弾いていた。
+# 図形の辺や線分は必ず2文字以上で書かれるので、この境目で分けられる。
+_POINT_NAME_RE = re.compile(r"[A-Z]{2,}")
 
 
-def _has_bare_number(text: str) -> bool:
-    """数える語を除いてもなお数字が残るか（残るなら答えの値かもしれない）。
+def _leaks_answer(text: str, mr: "MR", sq_index: int) -> bool:
+    """その文が、**その小問の答えの値**を言ってしまっているか。
 
-    数える語の表は G-Q5t（漏洩の検査）と**同じものを使う**。別々に持つと、
-    ゲートは通るのにヒントが作られない（あるいはその逆）という食い違いが出る
-    ——実際、別に持っていたときに 232 小問でヒントが作れなかった。
-    `0` だけは例外（narration の規約でも「0 は書いてよい」となっている）。
+    ★はじめは「数字が1つでもあれば使わない」としていた。それは厳しすぎて、
+    「三角形の内角の和180°」「平行四辺形になるための5条件」「第1四分位数」の
+    ような**語彙の一部の数**まで弾き、61 小問でヒントが手順の写しに戻っていた。
+
+    ゲート（G-Q5t）が見ているのは「答えの値が本文・ヒントに出ていないか」だけで、
+    given に出ている数は許される。ここも**同じ基準**にする——別の基準を持つと、
+    ゲートは通るのにヒントが作れない（あるいはその逆）という食い違いが出る。
     """
-    rest = _COUNTER_EXPR_RE.sub(" ", text)
-    rest = re.sub(r"(?<!\d)0(?!\d)", " ", rest)
-    return bool(_NUMBER_IN_HINT.search(rest))
+    scan = _COUNTER_EXPR_RE.sub(" ", text)
+    allowed = _build_given_whitelist(mr)
+    for tok in _numeric_answer_tokens(mr.sub_questions[sq_index].answer):
+        frac = _to_fraction(tok)
+        if (str(frac) if frac is not None else tok) in allowed:
+            continue
+        if contains_number(scan, tok):
+            return True
+    return False
 
 
 def _concept_hints(mr: "MR", ctx: "CellContext", sq_index: int) -> list[str]:
@@ -250,7 +267,7 @@ def _concept_hints(mr: "MR", ctx: "CellContext", sq_index: int) -> list[str]:
     out: list[str] = []
     for tag in tags:
         label = str(labels.get(tag, "")).strip()
-        if not label or _has_bare_number(label):
+        if not label or _leaks_answer(label, mr, sq_index):
             continue
         # ★**点名が書かれている概念名は使えない。** 「AB//CD の交わる線分が…」は、
         # その回の図が別の文字（PQ//RS）で作られていると、本文に無い記号が

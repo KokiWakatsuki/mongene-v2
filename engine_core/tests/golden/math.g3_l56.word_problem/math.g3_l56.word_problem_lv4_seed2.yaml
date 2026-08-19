@@ -24,9 +24,9 @@ meta:
   seed: 2
   signature: word_problem_box_shortest_path_choose
 problem_ref: 17edb62473f39bae
-problem_text: '辺HIの長さが4cm、辺IJの長さが15cm、高さが2cmの直方体HIJK-LMNOの形をした直方体の積み木がある。ここでHIJKは底面、LMNOは上面で、辺HLが高さにあたる。
+problem_text: '辺LMの長さが4cm、辺MNの長さが15cm、高さが2cmの直方体LMNP-QRSTの形をした直方体の積み木がある。ここでLMNPは底面、QRSTは上面で、辺LQが高さにあたる。
 
-  この直方体の積み木の表面上を頂点Hから頂点Nまで進むとき、どの面をどのように開くと最短になるかを自分で判断し、その最短の道のりを求めよ。'
+  この直方体の積み木の表面上を頂点Lから頂点Sまで進むとき、どの面をどのように開くと最短になるかを自分で判断し、その最短の道のりを求めよ。'
 sub_questions:
 - answer:
     display: 3√29 cm

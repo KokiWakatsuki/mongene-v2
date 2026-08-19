@@ -24,9 +24,9 @@ meta:
   seed: 3
   signature: word_problem_box_shortest_path_choose
 problem_ref: fbaccab99309b420
-problem_text: '辺PQの長さが11cm、辺QRの長さが7cm、高さが12cmの直方体PQRS-TUVWの形をした荷物がある。ここでPQRSは底面、TUVWは上面で、辺PTが高さにあたる。
+problem_text: '辺KLの長さが11cm、辺LMの長さが7cm、高さが12cmの直方体KLMN-PQRSの形をした荷物がある。ここでKLMNは底面、PQRSは上面で、辺KPが高さにあたる。
 
-  この荷物の表面上を頂点Pから頂点Vまで進むとき、どの面をどのように開くと最短になるかを自分で判断し、その最短の道のりを求めよ。'
+  この荷物の表面上を頂点Kから頂点Rまで進むとき、どの面をどのように開くと最短になるかを自分で判断し、その最短の道のりを求めよ。'
 sub_questions:
 - answer:
     display: 6√13 cm

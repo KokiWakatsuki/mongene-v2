@@ -33,7 +33,7 @@ from engine.core.contracts import (
 from engine.core.registry import REGISTRY, register_recipe
 from engine.core.rng import Rng, draw
 from engine.packs.math.recipes.letter_expr import _draw_named_figures
-from engine.packs.math.visuals.solid import render_solid_solution_svg, solid_labels
+from engine.packs.math.visuals.solid import box_pixels, render_solid_solution_svg, solid_labels
 
 _REVOLUTION_CONCEPTS = [
     "solid_revolution.name",
@@ -100,6 +100,9 @@ def _source_params(
         # 構成した長さは params に残す（dup_key は params のみを見る）。
         "axis_len": axis_len,
         "other_len": other_len,
+        # 図にも書き入れる（本文が与えている長さ。並び順は描き手の約束＝
+        # [軸に沿う辺, 軸から離れる辺]）。
+        "dim_labels": [f"{axis_len}cm", f"{other_len}cm"],
     }
 
 
@@ -528,17 +531,17 @@ def _box_scene(p: dict[str, Any], rng: Rng) -> tuple[int, int, int, list[str]]:
 
 
 def _box_sketch_params(a: int, b: int, h: int, names: list[str], p: dict[str, Any]) -> dict[str, Any]:
-    lo, hi = (int(v) for v in p["length_range"])
     return {
         "view": "sketch",
         "solid_kind": "rectangular_prism",
-        "width_px": _to_px(a, lo, hi),
-        "depth_px": _to_px(b, lo, hi) * 0.7,
-        "height_px": _to_px(h, lo, hi),
+        # 3辺は共通の倍率で画素に直す（軸ごとに頭打ちにすると比が逆転する）。
+        **box_pixels(a, b, h),
         "vertices": list(names),
         "side_a": a,
         "side_b": b,
         "box_height": h,
+        # 本文の寸法を図に書き入れる（並び順は描き手の約束＝横・高さ・奥行き）。
+        "dim_labels": [f"{a}cm", f"{h}cm", f"{b}cm"],
     }
 
 

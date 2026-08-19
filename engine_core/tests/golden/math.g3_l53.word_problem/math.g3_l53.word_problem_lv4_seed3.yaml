@@ -24,9 +24,9 @@ meta:
   seed: 3
   signature: word_problem_triangle_height_area_solo
 problem_ref: 8cca770e16740510
-problem_text: 'ABが13cm、BCが21cm、CAが20cmの三角形ABCがある。
+problem_text: 'QRが13cm、RSが21cm、SQが20cmの三角形QRSがある。
 
-  必要な補助線を自分で引き、辺BCを底辺としたときの高さと三角形ABCの面積を求めよ。'
+  必要な補助線を自分で引き、辺RSを底辺としたときの高さと三角形QRSの面積を求めよ。'
 sub_questions:
 - answer:
     display: 高さ 12 cm、面積 126 cm²

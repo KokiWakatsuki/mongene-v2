@@ -302,16 +302,11 @@ def _sphere_sketch(params: dict[str, Any]) -> list[str]:
     """球の見取図。円＋赤道の楕円（手前半分が実線・奥半分が破線）。"""
     r = float(params["radius_px"])
     cx, cy = _W / 2, _H / 2
-    parts = [
+    return [
         _circle(cx, cy, r),
         _arc_half(cx, cy, r, r * 0.32, lower=True),
         _arc_half(cx, cy, r, r * 0.32, lower=False),
-    ]
-    # 半径。中心から右へ引いた線分の中ほどに書く。
-    dims = _edge_dimension_labels(params, [(cx + r / 2, cy - 6)], anchors=["middle"])
-    if dims:
-        parts.append(_line(cx, cy, cx + r, cy))
-    return parts + dims
+    ] + _radius_dimension(params, cx, cy, r)
 
 
 def _pyramid_sketch(params: dict[str, Any]) -> list[str]:
@@ -369,6 +364,13 @@ def _vertex_labels(params: dict[str, Any], pts: dict[str, str]) -> list[str]:
     return out
 
 
+
+def _radius_dimension(params: dict[str, Any], cx: float, cy: float, r: float) -> list[str]:
+    """半径を、中心から右へ引いた線分の上に書く（球・半球で共通）。"""
+    dims = _edge_dimension_labels(params, [(cx + r / 2, cy - 6)], anchors=["middle"])
+    return ([_line(cx, cy, cx + r, cy)] + dims) if dims else []
+
+
 def _hemisphere_sketch(params: dict[str, Any]) -> list[str]:
     """半球の見取図（平らな面を上にした半球）。
 
@@ -382,7 +384,7 @@ def _hemisphere_sketch(params: dict[str, Any]) -> list[str]:
         f'<path d="M {cx - r:.2f} {cy:.2f} A {r:.2f} {r:.2f} 0 0 0 {cx + r:.2f} {cy:.2f}" '
         f'fill="none" stroke="{_STROKE}" stroke-width="{_THIN}"/>',
         _ellipse(cx, cy, r, r * 0.3),
-    ]
+    ] + _radius_dimension(params, cx, cy, r)
 
 
 def _triangular_pyramid_sketch(params: dict[str, Any]) -> list[str]:
@@ -475,7 +477,14 @@ def _cube_with_pyramid_sketch(params: dict[str, Any]) -> list[str]:
         # 上にのせた正四角錐
         _line(*ta, *apex), _line(*tb, *apex), _line(*bb, *apex),
         _line(*ba, *apex, dashed=True),
-    ]
+    ] + _edge_dimension_labels(
+        params,
+        [
+            ((fa[0] + fb[0]) / 2, fa[1] + 16),          # 立方体の1辺（手前下）
+            (apex[0] + 14, (apex[1] + ta[1]) / 2),      # 角錐の高さ
+        ],
+        anchors=["middle", "start"],
+    )
 
 
 def _similar_cones_sketch(params: dict[str, Any]) -> list[str]:
@@ -523,7 +532,14 @@ def _cut_cone_sketch(params: dict[str, Any]) -> list[str]:
         _line(cx - r, y0, cx, apex_y),
         _line(cx + r, y0, cx, apex_y),
         _ellipse(cx, cut_y, cut_r, cut_r * 0.3),
-    ]
+    ] + _edge_dimension_labels(
+        params,
+        [
+            (cx + r / 2, y0 + 16),          # 底面の半径
+            (cx + r + 16, (y0 + apex_y) / 2),  # 高さ
+        ],
+        anchors=["middle", "start"],
+    )
 
 
 _SKETCH_BY_KIND = {
@@ -818,7 +834,18 @@ def _rotation_source_parts(params: dict[str, Any]) -> list[str]:
             pts = [(x0, y_bot), (x0 + w, y_bot), (x0 + w, y_top), (x0, y_top)]
         parts = [_polygon(pts), _chain_line(x0, y_top - 30, x0, y_bot + 30)]
     slots = {chr(ord("A") + i): q for i, q in enumerate(pts)}
-    return parts + _vertex_labels(params, slots)
+    # 回す前の図形の辺の長さ（`dim_labels` = [軸に沿う辺, 軸から離れる辺] の順）。
+    # ★本文が「XVが4cm、VWが11cm」と与えているのに、図には形と頂点名しか
+    # 無かった（2026-08-19 の外部評価の指摘）。
+    dims = _edge_dimension_labels(
+        params,
+        [
+            (x0 - 14, cy),                    # 軸に沿う辺（左）
+            (x0 + body_w / 2, y_bot + 16),    # 軸から離れる辺（下）
+        ],
+        anchors=["end", "middle"],
+    )
+    return parts + dims + _vertex_labels(params, slots)
 
 
 # ---------------------------------------------------------------------------

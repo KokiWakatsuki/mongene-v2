@@ -274,6 +274,9 @@ def equal_area_transform_value_recipe(ctx: CellContext, rng: Rng) -> MR:
     p = ctx.spec_level.params
     (v,) = _draw_named_figures([5], rng)
     pa, pb, pc, pd, pe = v
+    # **面積は図に書かない。** 図に書き入れるのは辺の長さで、面積は辺に沿って
+    # 置ける量ではない（走査が「本文の cm が図に無い」と拾ってくるが、これは
+    # 長さではないので正しい状態である）。
     area_value = int(draw(p["area_domain"], rng))
 
     solver = REGISTRY.solver("math.equal_area_transform_value")

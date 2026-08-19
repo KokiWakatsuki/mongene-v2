@@ -24,7 +24,7 @@ meta:
   seed: 2
   signature: word_problem_square_pyramid_height_volume_guided
 problem_ref: 189cef75791c9f72
-problem_text: '底面が1辺34cmの正方形ABCDで、底面以外の辺の長さがすべて25cmである正四角錐V-ABCDがある。
+problem_text: '底面が1辺34cmの正方形NPQRで、底面以外の辺の長さがすべて25cmである正四角錐W-NPQRがある。
 
   (1) この正四角錐の高さを求めよ。
 

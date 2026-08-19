@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: word_problem_square_pyramid_height_volume_guided
 problem_ref: 4796a26e289d12fe
-problem_text: '底面が1辺6cmの正方形KLMNで、底面以外の辺の長さがすべて8cmである正四角錐P-KLMNがある。
+problem_text: '底面が1辺6cmの正方形NPQRで、底面以外の辺の長さがすべて8cmである正四角錐T-NPQRがある。
 
   (1) この正四角錐の高さを求めよ。
 

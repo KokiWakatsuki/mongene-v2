@@ -24,9 +24,9 @@ meta:
   seed: 1
   signature: word_problem_box_shortest_path_choose
 problem_ref: a5dd8ecbd6418840
-problem_text: '辺LMの長さが11cm、辺MNの長さが2cm、高さが9cmの直方体LMNO-PQRSの形をした容器がある。ここでLMNOは底面、PQRSは上面で、辺LPが高さにあたる。
+problem_text: '辺MNの長さが11cm、辺NPの長さが2cm、高さが9cmの直方体MNPQ-RSTUの形をした容器がある。ここでMNPQは底面、RSTUは上面で、辺MRが高さにあたる。
 
-  この容器の表面上を頂点Lから頂点Rまで進むとき、どの面をどのように開くと最短になるかを自分で判断し、その最短の道のりを求めよ。'
+  この容器の表面上を頂点Mから頂点Tまで進むとき、どの面をどのように開くと最短になるかを自分で判断し、その最短の道のりを求めよ。'
 sub_questions:
 - answer:
     display: 11√2 cm

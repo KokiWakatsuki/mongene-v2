@@ -565,6 +565,8 @@ def exam_cone_split_volume_ratio_recipe(ctx: CellContext, rng: Rng) -> MR:
             "view": "sketch", "solid_kind": "cut_cone",
             "radius_px": 95.0, "height_px": 180.0,
             "cut_ratio": upper / (upper + lower),
+            # 本文の寸法を図に書き入れる（並び順は描き手の約束＝半径・高さ）。
+            "dim_labels": [f"{radius}cm", f"{height}cm"],
         },
         draw=True,
     )
@@ -572,7 +574,7 @@ def exam_cone_split_volume_ratio_recipe(ctx: CellContext, rng: Rng) -> MR:
         ctx, kind="cone_split_volume_ratio",
         numbers={"upper_part": upper, "lower_part": lower, "height": height, "radius": radius},
         given={"condition": statement}, ask_texts=("",),
-        figure_svg=figure_svg, figure_labels=[],
+        figure_svg=figure_svg, figure_labels=[f"{radius}cm", f"{height}cm"],
     )
 
 
@@ -593,6 +595,9 @@ def exam_parallel_line_area_guided_recipe(ctx: CellContext, rng: Rng) -> MR:
         f"する。AD:DB={ad}:{db}であり、三角形ADEの面積は{area_ade}cm²である。"
     )
     # 内分の比は与えられた比のとおりに取るので、図と本文が食い違わない。
+    # **面積（12cm²）は図に書かない。** 図に書き入れるのは辺の長さと比であって、
+    # 面積は辺に沿って置ける量ではない（走査が「本文の cm が図に無い」と
+    # 拾ってくるが、これは長さではないので正しい状態である）。
     figure_svg = triangle_with_parallel_svg(
         "A", "B", "C", "D", "E", ad / (ad + db),
         side_labels=[("A", "D", str(ad)), ("D", "B", str(db))],

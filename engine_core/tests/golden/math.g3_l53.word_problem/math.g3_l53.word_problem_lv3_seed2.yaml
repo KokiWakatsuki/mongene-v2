@@ -24,9 +24,9 @@ meta:
   seed: 2
   signature: word_problem_rhombus_diagonal_area_guided
 problem_ref: db1236b3b7ac9fbb
-problem_text: '1辺の長さが31cmのひし形CDEFがあり、対角線CEの長さは30cmである。
+problem_text: '1辺の長さが31cmのひし形PQRSがあり、対角線PRの長さは30cmである。
 
-  (1) 対角線DFの長さを求めよ。
+  (1) 対角線QSの長さを求めよ。
 
   (2) このひし形の面積を求めよ。'
 sub_questions:

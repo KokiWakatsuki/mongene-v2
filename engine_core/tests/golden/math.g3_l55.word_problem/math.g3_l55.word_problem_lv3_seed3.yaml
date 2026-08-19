@@ -24,7 +24,7 @@ meta:
   seed: 3
   signature: word_problem_square_pyramid_height_volume_guided
 problem_ref: 01eddb00db6a2c2f
-problem_text: '底面が1辺24cmの正方形PQRSで、底面以外の辺の長さがすべて21cmである正四角錐X-PQRSがある。
+problem_text: '底面が1辺24cmの正方形GHJKで、底面以外の辺の長さがすべて21cmである正四角錐P-GHJKがある。
 
   (1) この正四角錐の高さを求めよ。
 
