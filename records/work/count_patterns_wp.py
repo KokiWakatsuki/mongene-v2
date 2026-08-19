@@ -1,56 +1,38 @@
-"""型を「語彙と数を除いた構成」で数え直す（＝文型の数）。
+"""word_problem の**文型**を数える（式と場面の切り離しの物差し）。
 
-いまの型の数え方（build_corpus）は narration の数値だけを伏せている。
-語彙（品物名・人名・場面の名詞）は params の slots に入っていて、これが型として
-数えられている。ユーザーの定義では語彙違いは同じ問題なので、slots も伏せて数える。
+型の数え方そのものは `build_corpus.measure_cell` が持っている。**ここには判定を
+書かない**——同じ規約を2か所に書くと、片方を直しても数字が変わらない
+（頂点名から `I` を外す作業で4か所に散っていて、1か所直しても消えなかった）。
+
+作業0 の前は、この道具だけが「構成フラグだけ」を見て文型を数えていて、本体
+（build_corpus）は語彙違いを別の型として数えていた（g2_l16.word_problem.Lv2 が
+49型／文型は1つ）。作業0 で本体側に語彙の伏せ字を入れ、この道具は本体を呼ぶだけに
+なった。
+
+実行: PYTHONPATH=engine_core .venv/bin/python records/work/count_patterns_wp.py
 """
-import json
-import re
 import sys
-from engine.core.contracts import Coordinate
-from engine.eval._harness import build_mr, make_env
+
+from engine.eval._harness import make_env
+
 sys.path.insert(0, "records/work")
-from build_corpus import load_cells
+from build_corpus import load_cells, measure_cell
 
 env = make_env()
-_FLAG_RE = re.compile(r"^[a-z][a-z0-9_]*$")
-
-
-def structure_key(params) -> str:
-    """文型の骨格＝**構成フラグだけ**（数値でも語彙でもないもの）。
-
-    ★はじめは「surface らしい鍵の名前」を並べて除いていたが、`item_a`（語彙）や
-    `line_cost`（係数の並び）を取りこぼし、seed の数だけ文型があることになった
-    （100セルすべて 30 種＝走査が動いていない証拠）。鍵の名前で選ばず、**値の型**で
-    選ぶ: 真偽値と、ASCII の識別子らしい文字列（mode・variant・method・
-    scenario_kind など）だけを残す。数・数の並び・日本語（語彙）は落とす。
-    """
-    out = {}
-    for k, v in params.items():
-        if isinstance(v, bool):
-            out[k] = v
-        elif isinstance(v, str) and _FLAG_RE.match(v):
-            out[k] = v
-    return json.dumps(out, ensure_ascii=False, sort_keys=True)
-
-
 rows = []
-for unit, form, level, _c, _e in load_cells():
+for unit, form, level, catalogs, expected, filler_words in load_cells():
     if form != "word_problem":
         continue
-    keys, ok = set(), 0
-    for seed in range(1, 31):
-        r = build_mr(Coordinate(subject="math", unit=unit, form=form, level=level), seed, env)
-        if not r.ok or r.mr is None:
-            continue
-        ok += 1
-        keys.add(structure_key(r.mr.params))
-    rows.append((f"{unit}.Lv{level}", len(keys), ok))
+    m = measure_cell(unit, form, level, catalogs, expected, filler_words, env)
+    rows.append((f"{unit}.Lv{level}", len(m.types), len(m.vocab), len(m.numbers),
+                 len(m.rows)))
 
-total_pat = sum(n for _, n, _ in rows)
+total_pat = sum(n for _, n, _, _, _ in rows)
 print(f"word_problem のセル {len(rows)} / 文型の総数 {total_pat}")
-print(f"文型が1つしかないセル: {sum(1 for _, n, _ in rows if n == 1)}")
-print(f"文型が2つ以上あるセル: {sum(1 for _, n, _ in rows if n >= 2)}")
+print(f"文型が1つしかないセル: {sum(1 for _, n, _, _, _ in rows if n == 1)}")
+print(f"文型が2つ以上あるセル: {sum(1 for _, n, _, _, _ in rows if n >= 2)}")
+print(f"（型として数えない）語彙 {sum(v for _, _, v, _, _ in rows)} 通り"
+      f"・数 {sum(x for _, _, _, x, _ in rows)} 通り")
 print("\n文型が多いセル:")
-for k, n, _ in sorted(rows, key=lambda r: -r[1])[:8]:
-    print(f"  {k}: {n} 文型")
+for k, n, v, x, s in sorted(rows, key=lambda r: -r[1])[:10]:
+    print(f"  {k}: {n} 文型（語彙 {v}・数 {x} / {s} seed）")

@@ -63,7 +63,7 @@ def main() -> None:
 
     total = 0
     per: dict[str, int] = {}
-    for unit, form, level, catalogs, expected in load_cells():
+    for unit, form, level, catalogs, expected, _filler in load_cells():
         cell = f"{unit}.{form}.Lv{level}"
         coord = Coordinate(subject="math", unit=unit, form=form, level=level)
         vocab = vocab_of(spec_of.get(cell, {}))

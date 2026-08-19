@@ -69,3 +69,13 @@ family YAML を書いて、既存の proof エンジン（`geometry/deduce.py` �
   唯一の出典にしている。
 - **図はゲートを通っても中身が正しいとは限らない**。今回も方眼の目もりで2回外し、
   式のラベルの重なりで4回直した。付けた図は PNG に起こして必ず見る。
+
+## 5. 使われていない solver が2本ある（2026-08-20 に台帳監査で確認）
+
+`records/work/audit_progress.py` の検査[5] が出す。recipe を書けばセルが増える可能性がある。
+**取りこぼしと意図の区別をつけるためにここに書き残す**（作業0 の時点では手を付けていない）。
+
+```
+math.max_area_and_times
+math.read_plan_crossover_from_graph
+```
