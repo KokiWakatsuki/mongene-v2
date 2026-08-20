@@ -13,7 +13,7 @@ from __future__ import annotations
 
 import re
 import sys
-from collections import Counter, defaultdict
+from collections import defaultdict
 
 from scan_explanations import _STEP_RE, corpus_index, load
 

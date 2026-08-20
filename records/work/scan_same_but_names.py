@@ -52,12 +52,14 @@ def main() -> int:
     for line in lines:
         m = _CELL.match(line)
         if m:
-            flush(); buf.clear()
+            flush()
+            buf.clear()
             cell = m.group(1)
             in_problem = False
             continue
         if _TYPE.match(line):
-            flush(); buf.clear()
+            flush()
+            buf.clear()
             in_problem = False
             continue
         if line.startswith("**図**"):

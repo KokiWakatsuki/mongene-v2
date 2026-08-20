@@ -16,7 +16,6 @@ from __future__ import annotations
 import os
 import sys
 from concurrent.futures import ProcessPoolExecutor
-from pathlib import Path
 
 from engine.tools.spec_cli import _DEFAULT_GOLDEN_DIR, _run_approve
 from engine_paths import GOLDEN_DIR  # エンジンの場所は1か所で解決する

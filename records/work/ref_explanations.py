@@ -93,7 +93,7 @@ def main() -> int:
     print(f"{'コーパス全体':<28}{len(ss):>7}{a/len(ss):>7.1%}{b/len(ss):>8.1%}")
 
     hedged = Counter(s.strip() for s in ss if _HEDGE.search(s))
-    print(f"\n=== ぼかしている解説の文（多い順・上位12）===")
+    print("\n=== ぼかしている解説の文（多い順・上位12）===")
     for s, n in hedged.most_common(12):
         print(f"  {n:>4}回  {s[:76]}")
     return 0

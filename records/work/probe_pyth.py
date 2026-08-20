@@ -1,5 +1,4 @@
 """pythagoras_proof.py の solver を直接叩いて、出来上がりの質を見る。"""
-import sys
 
 from engine.packs.math.solvers.pythagoras_proof import (
     AREA_PROOF_IDS,

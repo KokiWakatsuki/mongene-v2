@@ -170,7 +170,7 @@ def main() -> None:
                 # 生成物を隠していたのはエンジンではなくこの表示側だった。
                 multi = len(res.sub_questions) > 1
                 asks = "".join(
-                    f'<div class="q-sub">'
+                    '<div class="q-sub">'
                     + (f'<span class="q-sub-no">{esc(sq.label)}</span>' if multi else "")
                     + f'<p class="q-ask">{esc(sq.prompt_text)}</p></div>'
                     for sq in res.sub_questions

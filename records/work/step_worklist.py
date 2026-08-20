@@ -13,7 +13,6 @@ from __future__ import annotations
 import re
 import sys
 from collections import defaultdict
-from pathlib import Path
 
 from engine.eval._harness import build_mr, capability_cells, make_env
 

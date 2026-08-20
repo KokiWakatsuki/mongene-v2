@@ -1,5 +1,6 @@
 """未実装セルを unit/form/level で列挙。引数で unit 接頭辞フィルタ。"""
-import sys, yaml
+import sys
+import yaml
 from pathlib import Path
 from engine.bootstrap import bootstrap
 from engine.core.pipeline import capabilities

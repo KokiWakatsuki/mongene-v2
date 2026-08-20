@@ -35,7 +35,6 @@ statement_size）はどれも学年を見ない。
 """
 from __future__ import annotations
 
-import pathlib
 import re
 import sys
 

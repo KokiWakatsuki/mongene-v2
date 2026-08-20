@@ -11,7 +11,8 @@ for unit, lv in cells:
         res = generate(req, curriculum=env.curriculum, families=env.families, registry=env.registry)
         print(f"\n===== {unit}.Lv{lv} seed{seed}")
         if isinstance(res, Unsupported):
-            print("  UNSUPPORTED:", res.code, res.detail); continue
+            print("  UNSUPPORTED:", res.code, res.detail)
+            continue
         print(res.problem_text)
         for sq in res.sub_questions:
             print(f"  {sq.label} 答え: {getattr(sq.answer,'display',None)}")

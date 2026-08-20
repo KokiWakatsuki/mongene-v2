@@ -7,19 +7,14 @@ dependencies = [
     # ★エンジンは別リポジトリ（mongene-engine）にある。ここは記録と走査だけを持つ。
     #   pip install -e ../mongene-engine
     # で入れる（editable。エンジンを直したら即座にこちらの走査へ効く）。
+    # エンジンが連れてくる依存（sympy・pydantic・fastapi 等）はここに書かない。
     "mongene-engine",
-    "matplotlib>=3.9.0",   # 走査の作図
-    "networkx>=3.4.0",     # 前提関係の可視化
-    "google-genai>=2.0.0", # 読み手を API から回すとき
-]>=0.32.0",
-    "pydantic>=2.9.0",
-    "google-genai>=2.0.0",
-    "svgwrite>=1.4.3",
-    "matplotlib>=3.9.0",
-    "networkx>=3.4.0",
-    "pyyaml>=6.0.2",
-    "python-dotenv>=1.0.0",
-    "jinja2>=3.1.0",
+    # ここから下は **records/work の走査が直に import するもの**だけ。
+    # 実測（`grep -rl "import X" records/work`）の結果:
+    "pyyaml>=6.0.2",     # 台帳・family YAML・失敗カタログを読む（20ファイル）
+    "cairosvg>=2.7.0",   # 図を PNG に起こして目で見る（4ファイル）
+    "pillow>=10.0.0",    # 起こした PNG を並べる（contact_sheet）
+    "sympy>=1.13.0",     # 答えの srepr を突き合わせる
 ]
 
 [project.optional-dependencies]

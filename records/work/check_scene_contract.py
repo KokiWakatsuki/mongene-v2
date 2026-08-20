@@ -31,7 +31,6 @@ from __future__ import annotations
 
 import ast
 import sys
-from pathlib import Path
 from engine_paths import RECIPES_DIR  # エンジンの場所は1か所で解決する
 
 _DIR = RECIPES_DIR

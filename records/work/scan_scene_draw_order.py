@@ -9,7 +9,9 @@
 実行: .venv/bin/python records/work/scan_scene_draw_order.py
 """
 import re
-from pathlib import Path
+from collections import Counter
+
+from engine_paths import RECIPES_DIR  # エンジンの場所は1か所で解決する
 
 _DIR = RECIPES_DIR
 _TARGETS = [
@@ -63,8 +65,6 @@ for name in _TARGETS:
         print(f"  {fn:44s} {order:16s} {kind}")
 
 print("\n--- まとめ ---")
-from collections import Counter
-from engine_paths import RECIPES_DIR  # エンジンの場所は1か所で解決する
 c = Counter(r[3] for r in rows)
 for k, v in c.most_common():
     print(f"  {k}: {v}")

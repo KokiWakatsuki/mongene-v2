@@ -110,7 +110,6 @@ def main() -> int:
                             )
 
     # op が書かれているファイル（直す単位）。同じ op 名が複数ファイルに出ることがある。
-    from pathlib import Path
     src_of: dict[str, list[str]] = defaultdict(list)
     for p in sorted(PACKS_DIR.rglob("*.py")):
         txt = p.read_text(encoding="utf-8")
