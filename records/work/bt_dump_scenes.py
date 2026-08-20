@@ -53,7 +53,10 @@ def _declared_kinds() -> set[tuple[str, str]]:
     for mod in (word_problem_linear, word_problem_system,
                 word_problem_proportion_frequency, word_problem_quadratic,
                 word_problem_expression):
-        out |= {(mod.RECIPE_NAME, kind) for kind in mod.SCENE_RENDERERS}
+        # ★出典は `RELATION_DRAWERS`（関係）。以前は `SCENE_RENDERERS` を見ていたが、
+        # 欲しいのは関係の一覧で、たまたま鍵が同じだっただけ。棚に移した module は
+        # `SCENE_RENDERERS` を持たなくなるので、関係の側から引く。
+        out |= {(mod.RECIPE_NAME, kind) for kind in mod.RELATION_DRAWERS}
     return out
 
 

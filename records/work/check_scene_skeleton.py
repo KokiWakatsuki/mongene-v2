@@ -10,9 +10,16 @@
 
 ## 何を見るか
 
-関係ごとに宣言された「必ずある言い方（並びのそれぞれについて、どれか1つ）」と
-「あってはならない言い方」を、場面文（`given.scenario` と小問文）に当てる。
-宣言は recipe 側の `RELATION_PHRASES`（関係の隣に置く＝場面を足すとき同じ file を触る）。
+「必ずある言い方（並びのそれぞれについて、どれか1つ）」と「あってはならない言い方」を、
+場面文（`given.scenario` と小問文）に当てる。宣言は**2か所にあり、役目が違う**。
+
+  - 関係の側 `RELATION_PHRASES`（recipe 内・関係の隣）
+    ＝**式が要求する**言い方。「積」「面積」「合わせて」
+  - 場面の側 棚の `requires` / `forbids`（`SceneSpec.requires`）
+    ＝**この場面に固有の**言い方。「入園料」「小さい方」「1辺」
+
+★2つに分かれているのは、1つの関係に場面が何通りも乗るから。関係の宣言だけでは
+同じ関係の2つの場面を区別できない（どちらも通る）。棚の在り処は `scene_shelves.py`。
 
 実行:
   .venv/bin/python records/work/check_scene_skeleton.py [--seeds N]
@@ -63,15 +70,21 @@ def _declared() -> dict[str, tuple[tuple[tuple[str, ...], ...], tuple[str, ...]]
 
 
 def scene_phrases() -> dict[str, tuple[tuple[tuple[str, ...], ...], tuple[str, ...]]]:
-    """場面ごとの宣言（`scenes.SceneSpec` の requires / forbids）。
+    """場面ごとの宣言（棚の `requires` / `forbids`）。
 
     関係の不変（`RELATION_PHRASES`）とは別に、**場面の側の不変**もある
     （入園料の場面なら「入園料」「大人」「子ども」が出ていること）。
-    場面を足したら `scenes.py` にこれも書く＝触るのは1 file のまま。
-    """
-    from engine.packs.math.recipes.scenes import SCENES  # noqa: PLC0415
+    場面を足したら棚にこれも書く＝触るのは1 file のまま。
 
-    return {s.id: (s.requires, s.forbids) for s in SCENES}
+    ★**棚は module ごとに分かれている**（`scenes.SCENES` と
+    `word_problem_quadratic.SCENE_SHELF`）。以前ここは `scenes.SCENES` だけを
+    見ていたので、2次の場面に当たると「場面の宣言が無い」を20件出した——
+    宣言が無いのではなく**別の棚にあった**。棚の在り処は
+    `scene_shelves.py` が1か所で答える。
+    """
+    from scene_shelves import phrases_by_scene  # noqa: PLC0415
+
+    return phrases_by_scene()
 
 
 def violations(kind: str, text: str, phrases: _Phrases,
@@ -86,7 +99,8 @@ def violations(kind: str, text: str, phrases: _Phrases,
     requires, forbids = spec
     if scene and scenes is not None:
         if scene not in scenes:
-            return [f"{scene}: 場面の宣言が無い（scenes.py に requires を書く）"]
+            return [f"{scene}: 場面の宣言が無い"
+                    "（棚の SceneSpec に requires を書く。棚の一覧は scene_shelves.py）"]
         s_req, s_forbid = scenes[scene]
         requires = requires + s_req
         forbids = forbids + s_forbid
@@ -104,8 +118,14 @@ def _cells() -> list[tuple[str, str, int]]:
     return [(u, f, lv) for u, f, lv, _c, _e, _fl in load_cells() if f == "word_problem"]
 
 
-def self_test(phrases: _Phrases) -> int:
-    """合成した場面文で、**落ちる場合も通る場合も**出ることを確かめる。"""
+def self_test(phrases: _Phrases, scenes: _Phrases | None = None) -> int:
+    """合成した場面文で、**落ちる場合も通る場合も**出ることを確かめる。
+
+    ★後半（`scene_cases`）は**場面の側の宣言**を当てる。棚が複数になったので、
+    「関係は合っているが場面が言うべきことを言っていない」を捕まえられるかを
+    ここで押さえる（実物の走査は 0 件を返すので、それだけでは検査が動いている
+    証拠にならない）。
+    """
     fails = 0
     cases: list[tuple[str, str, str, bool]] = [
         # (名前, kind, 場面文, 合格するか)
@@ -137,6 +157,47 @@ def self_test(phrases: _Phrases) -> int:
     ok = bool(unknown)
     fails += 0 if ok else 1
     print(f"{'OK  ' if ok else 'NG  '}宣言の無い関係は落とす: {unknown}")
+
+    if scenes is None:
+        return fails
+
+    # --- 場面の側の宣言（棚をまたぐ）-----------------------------------------
+    scene_cases: list[tuple[str, str, str, str, bool]] = [
+        # (名前, kind, 場面, 場面文, 合格するか)
+        ("長方形（正しい）", "rectangle_area", "rectangle_small",
+         "横が縦より3cm長い長方形の紙がある。その面積は40cm²である。縦の長さを x cm とする。", True),
+        ("長方形なのに「横」が無い", "rectangle_area", "rectangle_small",
+         "縦より3cm長い長方形の紙がある。その面積は40cm²である。", False),
+        ("長方形なのに正方形と言う", "rectangle_area", "rectangle_small",
+         "横が縦より3cm長い正方形の紙がある。その面積は40cm²である。縦 x cm。", False),
+        ("連続する数（正しい）", "consecutive_integers", "consecutive_numbers",
+         "連続する2つの正の整数がある。この2数の積は56である。小さい方の数を x とする。", True),
+        # ★どちらを x にしたかを言わないと、答えの2つを取り違えても検出できない。
+        ("どちらを x にしたか言っていない", "consecutive_integers", "consecutive_numbers",
+         "連続する2つの正の整数がある。この2数の積は56である。", False),
+        ("数の場面に cm が出る", "consecutive_integers", "consecutive_numbers",
+         "連続する2つの正の整数がある。この2数の積は56cmである。小さい方の数を x とする。", False),
+        ("正方形の変形（正しい）", "square_cut", "square_reshape",
+         "1辺が10cmの正方形がある。縦を x cm 短くし、横を x cm 長くして"
+         "長方形をつくったところ、面積が96cm²になった。", True),
+        # ★片方だけだと (s−x)(s+x) でなく別の式の場面になる。
+        ("「短く」だけで「長く」が無い", "square_cut", "square_reshape",
+         "1辺が10cmの正方形がある。縦を x cm 短くして長方形をつくったところ、"
+         "面積が96cm²になった。", False),
+    ]
+    for name, kind, scene, text, want_ok in scene_cases:
+        got = violations(kind, text, phrases, scene, scenes)
+        ok = (not got) == want_ok
+        fails += 0 if ok else 1
+        print(f"{'OK  ' if ok else 'NG  '}場面「{name}」: "
+              f"期待={'合格' if want_ok else '違反'} / 実際={got or '合格'}")
+
+    # ★棚に無い名前は落とす（棚を足し忘れたまま params に名前が載る事故を捕まえる）。
+    unknown_scene = violations("rectangle_area", "横が縦より3cm長い長方形。面積40cm²。",
+                               phrases, "そんな場面は無い", scenes)
+    ok = bool(unknown_scene)
+    fails += 0 if ok else 1
+    print(f"{'OK  ' if ok else 'NG  '}棚に無い場面は落とす: {unknown_scene}")
     return fails
 
 
@@ -145,7 +206,7 @@ def main(argv: Sequence[str]) -> int:
     phrases = _declared()
     scenes = scene_phrases()
     if "--self-test" in argv:
-        return 1 if self_test(phrases) else 0
+        return 1 if self_test(phrases, scenes) else 0
     seeds = 5
     if "--seeds" in argv:
         seeds = int(argv[argv.index("--seeds") + 1])

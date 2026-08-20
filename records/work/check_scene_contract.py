@@ -8,12 +8,19 @@
 
 ## 見るもの
 
-  - 場面（`_scene_*`）が `v[...]` で読む名前が、`_SCENE_VOCAB` の宣言に全部あるか
+  - 場面（`_scene_*`）が `v[...]` で読む名前が、語彙の宣言に全部あるか
   - 宣言してあるのに誰も読まない名前が無いか（消し忘れ・書き間違い）
   - 場面が `n[...]` で読む名前が、関係（`_relation_*`）の `numbers={...}` にあるか
 
-対応づけは `SCENE_RENDERERS` / `RELATION_DRAWERS` の辞書リテラルから読む
-（関数名の規約ではなく、**実際に登録されている対応**を見る）。
+## 宣言の形が2つある
+
+  - **棚**（`SCENES` / `SCENE_SHELF`）: 場面ごとに `vocab` と `render` を隣に持つ。
+    棚に移した module（`scenes.py`・`word_problem_quadratic.py`）はこちら
+  - **関係で引く形**（`_SCENE_VOCAB` ＋ `SCENE_RENDERERS`）: まだ棚に移していない module
+
+どちらの形も見る。**両方無いときだけ「読めない＝検査が動いていない疑い」を出す。**
+見る file の一覧は `scene_shelves.py` から引く（★棚を足したとき走査対象に
+入れ忘れる事故を防ぐ。作業3 で実際に `scenes.py` の6場面が外れていた）。
 
 自分自身の検査を持つ（`--self-test`）。合成した違反コードで落ちることを確かめる
 ——0件を返す走査は、動いていないのと区別がつかない。
@@ -28,13 +35,33 @@ from pathlib import Path
 from engine_paths import RECIPES_DIR  # エンジンの場所は1か所で解決する
 
 _DIR = RECIPES_DIR
-_MODULES = [
+
+# 関係で引く形（`_SCENE_VOCAB` ＋ `SCENE_RENDERERS`）を持つ module。
+_RELATION_MODULES = [
     "word_problem_linear.py",
     "word_problem_system.py",
     "word_problem_proportion_frequency.py",
     "word_problem_quadratic.py",
     "word_problem_expression.py",
 ]
+
+
+def _modules() -> list[str]:
+    """見る module。**棚のある file は `scene_shelves.py` から引く。**
+
+    ★以前ここは上の並びを直に返していて、`scenes.py` が入っていなかった。
+    作業3 で1元1次の6場面を棚へ移したとき、**その6場面が検査対象から
+    外れたことに誰も気づかなかった**（`word_problem_linear.py` の残りが
+    通るので「違反 0 件」と出る）。棚を足すたびに同じことが起きるので、
+    棚の在り処は1か所（`scene_shelves.py`）から引く。
+    """
+    from scene_shelves import shelf_files  # noqa: PLC0415
+
+    out = list(_RELATION_MODULES)
+    for path in shelf_files():
+        if path.name not in out:
+            out.append(path.name)
+    return out
 
 
 def _dict_of_names(tree: ast.Module, name: str) -> dict[str, str]:
@@ -82,6 +109,48 @@ def _vocab_declared(tree: ast.Module) -> dict[str, set[str]]:
     return out
 
 
+def _shelf_declared(tree: ast.Module) -> dict[str, tuple[set[str], list[str]]]:
+    """棚（`SCENES` / `SCENE_SHELF`）から {場面の名前: (出す語彙, 書き手の関数名)}。
+
+    ★棚の形は関係で引く形（`_SCENE_VOCAB` ＋ `SCENE_RENDERERS`）と**鍵が違う**。
+    棚は場面ごとに `vocab` と `render` を隣に持つので、対応づけが1か所で読める。
+
+    ★この関数が無かったせいで、作業3 で `scenes.py` の棚へ移した6場面は
+    **一度も語彙の契約を検査されていなかった**（走査対象に `scenes.py` が
+    入っておらず、`word_problem_linear.py` 側は通るので「違反 0 件」と出ていた）。
+    """
+    out: dict[str, tuple[set[str], list[str]]] = {}
+    for node in ast.walk(tree):
+        if not isinstance(node, ast.Assign | ast.AnnAssign):
+            continue
+        target = node.targets[0] if isinstance(node, ast.Assign) else node.target
+        if getattr(target, "id", None) not in ("SCENES", "SCENE_SHELF"):
+            continue
+        for call in getattr(node.value, "elts", []):
+            if not isinstance(call, ast.Call):
+                continue
+            kw = {k.arg: k.value for k in call.keywords if k.arg}
+            sid = kw.get("id")
+            if not isinstance(sid, ast.Constant):
+                continue
+            # `vocab=(("one", _CANDIDATES, ("item", "counter")), ...)` の3つめ。
+            names: set[str] = set()
+            for step in getattr(kw.get("vocab"), "elts", []):
+                elts = getattr(step, "elts", [])
+                if len(elts) == 3:
+                    names |= {
+                        str(e.value) for e in getattr(elts[2], "elts", [])
+                        if isinstance(e, ast.Constant)
+                    }
+            # `render={ROLES_X: _scene_x, ...}` の値が書き手。
+            fns = [
+                v.id for v in getattr(kw.get("render"), "values", [])
+                if isinstance(v, ast.Name)
+            ]
+            out[str(sid.value)] = (names, fns)
+    return out
+
+
 def _subscripts(fn: ast.FunctionDef, var: str) -> set[str]:
     """関数の中の `var["名前"]` の名前を集める。"""
     out: set[str] = set()
@@ -122,10 +191,35 @@ def check_source(src: str, label: str) -> list[str]:
     scenes = _dict_of_names(tree, "SCENE_RENDERERS")
     relations = _dict_of_names(tree, "RELATION_DRAWERS")
     declared = _vocab_declared(tree)
+    shelf = _shelf_declared(tree)
     bad: list[str] = []
-    if not scenes or not relations:
-        return [f"{label}: 対応づけが読めない（場面 {len(scenes)} / 関係 {len(relations)}）"
+
+    # --- 棚の形（場面ごとに vocab と render が隣にある）------------------------
+    for sid, (given, fn_names) in sorted(shelf.items()):
+        if not fn_names:
+            bad.append(f"{label}: 場面 {sid} に書き手が無い（render が空）")
+            continue
+        read_v: set[str] = set()
+        for fn_name in fn_names:
+            fn = fns.get(fn_name)
+            if fn is None:
+                bad.append(f"{label}: 場面 {sid} の書き手 {fn_name} が見つからない")
+                continue
+            read_v |= _subscripts(fn, "v")
+        for miss in sorted(read_v - given):
+            bad.append(f"{label}: 場面 {sid} が語彙 {miss!r} を読むが、宣言に無い")
+        for unused in sorted(given - read_v - {"_"}):
+            bad.append(f"{label}: 場面 {sid} の語彙 {unused!r} は宣言されているが誰も読まない")
+
+    # --- 関係で引く形（棚に移していない module）-------------------------------
+    # ★棚だけの module（`scenes.py`）は SCENE_RENDERERS を持たない。
+    # どちらも無いときだけ「読めない」＝**検査が動いていない疑い**を出す。
+    if not shelf and (not scenes or not relations):
+        return [f"{label}: 対応づけが読めない"
+                f"（棚 {len(shelf)} / 場面 {len(scenes)} / 関係 {len(relations)}）"
                 "＝検査が動いていない疑い"]
+    if not scenes or not relations:
+        return bad
     for kind, fn_name in scenes.items():
         fn = fns.get(fn_name)
         if fn is None:
@@ -187,6 +281,43 @@ SCENE_RENDERERS = {"x": _scene_x}
 '''
 
 
+# --- 棚の形（`SCENES` / `SCENE_SHELF`）------------------------------------
+# ★棚の形は鍵が「場面の名前」なので、関係で引く形とは別に試す必要がある。
+# 棚を読めるようにした直後、**実物の走査は 0 件を返した**——通ったのではなく
+# 棚を1つも読んでいなかった、という可能性を消せないので、ここで押さえる。
+_SHELF_BAD_MISSING = '''
+def _scene_x(n, v):
+    return S(f"{v['item']}を{v['counter']}買う")
+SCENES = (
+    SceneSpec(id="x", vocab=(("one", CANDS, ("item",)),), render={ROLES: _scene_x}),
+)
+'''
+_SHELF_BAD_UNUSED = '''
+def _scene_x(n, v):
+    return S(f"{v['item']}を買う")
+SCENES = (
+    SceneSpec(id="x", vocab=(("one", CANDS, ("item", "counter")),), render={ROLES: _scene_x}),
+)
+'''
+_SHELF_NO_WRITER = '''
+SCENES = (
+    SceneSpec(id="x", vocab=(), render={}),
+)
+'''
+_SHELF_LOST_WRITER = '''
+SCENES = (
+    SceneSpec(id="x", vocab=(), render={ROLES: _scene_missing}),
+)
+'''
+_SHELF_GOOD = '''
+def _scene_x(n, v):
+    return S(f"{v['item']}を{v['counter']}買う")
+SCENES = (
+    SceneSpec(id="x", vocab=(("one", CANDS, ("item", "counter")),), render={ROLES: _scene_x}),
+)
+'''
+
+
 def self_test() -> int:
     fails = 0
     for name, src, want in [
@@ -202,6 +333,21 @@ def self_test() -> int:
     ok = got == []
     fails += 0 if ok else 1
     print(f"{'OK  ' if ok else 'NG  '}正しいコードは通る: {got}")
+
+    for name, src, want in [
+        ("宣言に無い語彙を読む", _SHELF_BAD_MISSING, "宣言に無い"),
+        ("誰も読まない語彙", _SHELF_BAD_UNUSED, "誰も読まない"),
+        ("書き手が無い（render が空）", _SHELF_NO_WRITER, "書き手が無い"),
+        ("書き手が見つからない", _SHELF_LOST_WRITER, "見つからない"),
+    ]:
+        got = check_source(src, "synthetic")
+        ok = any(want in g for g in got)
+        fails += 0 if ok else 1
+        print(f"{'OK  ' if ok else 'NG  '}棚「{name}」で落ちる: {got}")
+    got = check_source(_SHELF_GOOD, "synthetic")
+    ok = got == []
+    fails += 0 if ok else 1
+    print(f"{'OK  ' if ok else 'NG  '}正しい棚は通る: {got}")
     return fails
 
 
@@ -209,14 +355,16 @@ def main() -> int:
     if "--self-test" in sys.argv:
         return 1 if self_test() else 0
     bad: list[str] = []
-    for name in _MODULES:
+    modules = _modules()
+    for name in modules:
         bad += check_source((_DIR / name).read_text(encoding="utf-8"), name)
     if bad:
         print(f"=== 契約の違反 {len(bad)} 件 ===")
         for b in bad:
             print(f"  {b}")
         return 1
-    print(f"=== 契約は満たされている（見た module {len(_MODULES)}）===")
+    print(f"=== 契約は満たされている（見た module {len(modules)}: "
+          f"{', '.join(modules)}）===")
     return 0
 
 
