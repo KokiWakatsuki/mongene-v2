@@ -24,7 +24,7 @@ meta:
   seed: 2
   signature: word_problem_expression_profit_multi_letter
 problem_ref: fd7c0145d0273679
-problem_text: 'ある文房具をx個仕入れ、1個あたりa円で全部売った。仕入れ総額がp円である。
+problem_text: 'ある文房具をx点仕入れ、1点あたりa円で全部売った。仕入れ総額がp円である。
 
   全体の利益を、x, a, pを使った式で表せ。'
 sub_questions:

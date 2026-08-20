@@ -24,7 +24,7 @@ meta:
   seed: 3
   signature: word_problem_expression_profit_multi_letter
 problem_ref: 4a814f195a3389e4
-problem_text: 'あるえん筆をn個仕入れ、1個あたりx円で全部売った。仕入れ総額がa円である。
+problem_text: 'あるえん筆をn本仕入れ、1本あたりx円で全部売った。仕入れ総額がa円である。
 
   全体の利益を、n, x, aを使った式で表せ。'
 sub_questions:

@@ -329,7 +329,7 @@ _SCENE_VOCAB: dict[str, tuple[VocabStep, ...]] = {
     "unit_convert": (
         ("one", "motion_candidates", ("verb", "speed_lo", "speed_hi")),
     ),
-    "profit_multi_letter": (("one", "item_candidates", ("item",)),),
+    "profit_multi_letter": (("one", "item_candidates", ("item", "counter")),),
 }
 
 # ★語彙を先に引く場面（割る前のコードの順番をそのまま残すためだけの宣言）。
@@ -480,18 +480,25 @@ def _scene_unit_convert(n: Mapping[str, str], v: Mapping[str, str]) -> Expressio
 def _scene_profit_multi_letter(
     n: Mapping[str, str], v: Mapping[str, str]
 ) -> ExpressionScene:
-    item = v["item"]
+    """★助数詞は**品名のもの**を使う。
+
+    ここは「個」を決め打ちしていて、カタログに助数詞が無かったため
+    「あるノートを n 個仕入れ」「あるえん筆を n 個仕入れ」が出ていた
+    （G-SC4 が 6件出した。ノートは冊・えん筆は本）。
+    """
+    item, counter = v["item"], v["counter"]
     count_letter = n["count_letter"]
     price_letter = n["price_letter"]
     cost_letter = n["cost_letter"]
     return ExpressionScene(
         scenario=(
-            f"ある{item}を{count_letter}個仕入れ、1個あたり{price_letter}円で"
+            f"ある{item}を{count_letter}{counter}仕入れ、"
+            f"1{counter}あたり{price_letter}円で"
             f"全部売った。仕入れ総額が{cost_letter}円である。"
         ),
         ask=f"全体の利益を、{count_letter}, {price_letter}, {cost_letter}を使った式で表せ。",
         kind="profit_multi_letter",
-        slots={"item": item},
+        slots={"item": item, "counter": counter},
     )
 
 

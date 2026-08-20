@@ -75,8 +75,12 @@ levels:
     recipe: math.word_problem_expression
     params:
       scenario_kind: profit_multi_letter
-      item_candidates: [ノート, 消しゴム, えん筆, ボールペン, かさ, タオル, マグカップ,
-                        ぬいぐるみ, 文房具, 雑貨, 貯金箱, コップ]
+      # **品名と助数詞は対で持つ**（pack の `名前|助数詞` 記法）。助数詞を持たせて
+      # いなかったので場面が「個」を決め打ちし、「あるノートを n 個仕入れ」
+      # 「あるえん筆を n 個仕入れ」が出ていた（G-SC4 が検出）。
+      item_candidates: ["ノート|冊", "消しゴム|個", "えん筆|本", "ボールペン|本",
+                        "かさ|本", "タオル|枚", "マグカップ|個", "ぬいぐるみ|個",
+                        "文房具|点", "雑貨|点", "貯金箱|個", "コップ|個"]
     given: [scenario]
     asked: [formulation]
     visual: none
