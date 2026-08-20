@@ -732,6 +732,44 @@ SCENE_RENDERERS: dict[
 }
 
 
+# ---------------------------------------------------------------------------
+# G-SC3（骨格）— 関係が場面文に要求する言い方 / 禁じる言い方
+# 書き方と理由は word_problem_linear.py の同じ節を見る。
+RELATION_PHRASES: dict[str, tuple[tuple[tuple[str, ...], ...], tuple[str, ...]]] = {
+    # 比例か反比例かを見ぬく（枝で式が変わる）。水を入れる場面であることが要る。
+    "judge_and_use": ((("水",), ("毎分",)), ("投げ", "検査")),
+    # 1つの場面から比例と反比例の両方を立式する。満水になることが要る。
+    "meet_two_motions": ((("毎分",), ("満水",)), ("投げ", "検査")),
+    # 実験の相対度数を確率とみなす。**理論確率ではなく試行**であることが要る。
+    "experiment_frequency_predict": ((("投げ",), ("回",)), ("毎分", "検査")),
+    # 抜き取り検査の不良率。検査と不良品が要る。
+    "defect_rate_estimate": ((("検査",), ("不良品",)), ("毎分", "投げ")),
+}
+
+
+# ---------------------------------------------------------------------------
+# G-SC5（場面の妥当性）— 書き方と理由は word_problem_linear.py の同じ節を見る。
+RELATION_BOUNDS: dict[str, tuple[tuple[str, float, float], ...]] = {
+    # 水そう: 毎分の割合は 1〜30L、時間は1時間まで。
+    "judge_and_use": (
+        ("rate0", 1, 30), ("rate1", 1, 30), ("minutes0", 1, 60), ("minutes1", 1, 60),
+    ),
+    "meet_two_motions": (
+        ("rate0", 1, 30), ("rate1", 1, 30), ("minutes0", 1, 60), ("minutes1", 1, 60),
+    ),
+    # 試行: 回数は 5000 回まで（教材で数えられる大きさ）。
+    "experiment_frequency_predict": (
+        ("total", 10, 5000), ("occurred", 1, 5000), ("future", 10, 5000),
+    ),
+    # 抜き取り検査: 検査数は 5000 個、これから作るのは 10万個まで。
+    # 不良品は**検査数の数%**（抜き取り検査として自然な範囲）なので 50 個までにする
+    # ——500 にしていたら実物の最大 23 の20倍で、もう何も言っていなかった。
+    "defect_rate_estimate": (
+        ("sample", 10, 5000), ("defects", 1, 50), ("future", 100, 100000),
+    ),
+}
+
+
 def draw_scene(
     kind: str, p: Mapping[str, Any], rng: Rng
 ) -> tuple[ProportionFrequencyRelation, ProportionFrequencyScene]:

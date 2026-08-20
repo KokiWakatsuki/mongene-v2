@@ -506,6 +506,37 @@ SCENE_RENDERERS: dict[
 }
 
 
+# ---------------------------------------------------------------------------
+# G-SC3（骨格）— 関係が場面文に要求する言い方 / 禁じる言い方
+# 書き方と理由は word_problem_linear.py の同じ節を見る。
+RELATION_PHRASES: dict[str, tuple[tuple[tuple[str, ...], ...], tuple[str, ...]]] = {
+    # 単価 × 個数（文字は個数）。1つあたりの値段と買う数が要る。
+    "price_count_letter": ((("円",), ("買う",)), ("割引き", "時速", "分速")),
+    # 定価の d 割引き。割引きであることが要る。
+    "discount": ((("定価",), ("割引き",)), ("時速", "分速", "仕入れ")),
+    # 時速 × 時間（km）。時速と時間が要る。
+    "distance_letter": ((("時速",), ("時間",)), ("分速", "割引き", "仕入れ")),
+    # 分速 × 分 を km に直す。**分速**であることが要る（時速だと単位変換が無い）。
+    "unit_convert": ((("分速",), ("分間",)), ("時速", "割引き", "仕入れ")),
+    # 3つの文字で利益。仕入れと売りの両方が要る。
+    "profit_multi_letter": ((("仕入れ",), ("売っ", "売り")), ("時速", "分速", "割引き")),
+}
+
+
+# ---------------------------------------------------------------------------
+# G-SC5（場面の妥当性）— 書き方と理由は word_problem_linear.py の同じ節を見る。
+RELATION_BOUNDS: dict[str, tuple[tuple[str, float, float], ...]] = {
+    # 文字式の場面: 値段は3桁、割引きは1桁の割。
+    "price_count_letter": (("price", 10, 1000),),
+    "discount": (("discount", 1, 9),),
+    # 時速は徒歩3km〜自動車60km、分速は徒歩50m〜自転車320m。
+    "distance_letter": (("speed", 1, 60),),
+    "unit_convert": (("speed", 30, 400),),
+    # 3つの文字だけの場面（数は無い）。
+    "profit_multi_letter": (),
+}
+
+
 def draw_scene(
     kind: str, p: Mapping[str, Any], rng: Rng
 ) -> tuple[ExpressionRelation, ExpressionScene]:

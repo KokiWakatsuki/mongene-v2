@@ -91,3 +91,12 @@
                   golden 7family unchanged。★expression は「語彙が数の定義域を決める」形が
                   4/5（値段は品物の相場・速さは動作の相場）＝語彙を先に引き、相場を
                   文字列で運んで Relation が int() で受け取る。コミット a8cbe3ac
+2026-08-20 --:--  作業1 の全走が緑。**golden 全280family の差分は approved_at だけ＝生成物は
+                  完全に同一**／eval 7ゲート OK／pytest FAILED 0／コーパス 854型（不変）／
+                  解説の走査 0件／仮定と食い違う図 0／approve 280family 失敗0。
+                  走査の既存指摘（答えが分母13以上9問など）は**作業1で触った14セルには
+                  1件も無い**ことを確認（＝すべて既存）。台帳監査 NG は未使用 solver 2本のみ。
+2026-08-20 --:--  作業2 先行: G-SC1（契約・check_scene_contract.py）と再現性の検査
+                  （check_reproducible.py）を追加。★G-SC1 は書くあいだに検査自体を3回直した
+                  （注釈つき代入を拾えない／numbers を変数に入れる形／語彙を関係も読む）。
+                  G-SC2（数の出現）は既存 scan_numbers_in_scenario.py が担当。

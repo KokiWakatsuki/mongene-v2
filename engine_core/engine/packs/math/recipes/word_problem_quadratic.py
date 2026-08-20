@@ -409,6 +409,35 @@ SCENE_RENDERERS: dict[
 }
 
 
+# ---------------------------------------------------------------------------
+# G-SC3（骨格）— 関係が場面文に要求する言い方 / 禁じる言い方
+# 書き方と理由は word_problem_linear.py の同じ節を見る。
+RELATION_PHRASES: dict[str, tuple[tuple[tuple[str, ...], ...], tuple[str, ...]]] = {
+    # 連続する2数の積（x(x+gap) = p）。連続していることが要る。
+    "consecutive_integers": ((("連続する",), ("積",)), ("面積", "長方形")),
+    # x² = n·x + m。2乗ともとの数の関係が要る。
+    "square_relation": ((("2乗",),), ("面積", "長方形", "連続する")),
+    # 長方形の面積（x(x+d) = S）。縦横の差と面積が要る。
+    "rectangle_area": ((("長方形",), ("面積",)), ("連続する", "2乗した")),
+    # 正方形を変形（(s−x)(s+x) = S）。正方形と、縦横を変えることが要る。
+    "square_cut": ((("正方形",), ("面積",)), ("連続する",)),
+}
+
+
+# ---------------------------------------------------------------------------
+# G-SC5（場面の妥当性）— 書き方と理由は word_problem_linear.py の同じ節を見る。
+RELATION_BOUNDS: dict[str, tuple[tuple[str, float, float], ...]] = {
+    # 連続する2数: 積は4桁未満（「132860 → 364と365」を出さない）。
+    "consecutive_integers": (("product", 2, 5000), ("gap", 1, 2)),
+    # x² = n·x + m: 倍率は2桁、差は3桁まで（「5倍より1554大きい」を出さない）。
+    "square_relation": (("multiplier", 1, 20), ("diff", 1, 500)),
+    # 長方形: 縦横の差は 2桁、面積は cm² で語れる大きさ。
+    "rectangle_area": (("diff", 1, 30), ("area", 4, 3000)),
+    # 正方形の変形: 1辺は 1m 未満、面積は cm² で語れる大きさ。
+    "square_cut": (("side", 2, 100), ("area", 4, 5000)),
+}
+
+
 def draw_scene(kind: str, p: Mapping[str, Any], rng: Rng) -> tuple[QuadRelation, QuadScene]:
     """関係 → 語彙 → 場面文 の順に組む。**この順番が RNG の消費順を決める。**"""
     relation = RELATION_DRAWERS[kind](p, rng)

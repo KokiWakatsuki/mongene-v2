@@ -792,6 +792,77 @@ SCENE_RENDERERS: dict[str, Callable[[Mapping[str, int], Mapping[str, str]], Syst
 }
 
 
+# ---------------------------------------------------------------------------
+# G-SC3（骨格）— 関係が場面文に要求する言い方 / 禁じる言い方
+#
+# 場面を足すときに壊れるのは「日本語だけが違う問題」ではなく、**日本語が関係と
+# 食い違う問題**である。実際に7回のセッションを生き延びた欠陥がこれで、
+# g3_l37 は「2等分」と書いてあるのに解いているのは等積だった。どのゲートも通る。
+#
+# ここは**関係の側の不変**を書く（テンプレートの文字づかいではない）。
+#   requires: 並びのそれぞれについて、**どれか1つ**が場面文に出ていること
+#   forbids : 出ていてはいけない語（別の関係の言い方）
+#
+# 判定は records/work/check_scene_skeleton.py が全セル×seed で回す。
+RELATION_PHRASES: dict[str, tuple[tuple[tuple[str, ...], ...], tuple[str, ...]]] = {
+    # 総数は与えず差で与える。**「合わせて」が出たら関係が違う。**
+    "price_count_diff": ((("多く", "多い"),), ("合わせて", "あわせて", "全部で")),
+    # 道のりを文字に置く（x + y = D, x/a + y/b = T）。2つの区間と合計が要る。
+    "distance_time": ((("歩き", "歩いて"), ("自転車",)), ("ずつ配", "余り")),
+    # 時間を文字に置く（x + y = T, ax + by = D）。歩きと走りの2区間が要る。
+    "time_split": ((("歩き", "歩いて"), ("走った", "走り")), ("ずつ配", "余り")),
+    # 出会いと追いつき（t1(x+y) = L, t2(x−y) = L）。両方の向きが要る。
+    "lap_meet_catch_up": (
+        (("反対向き",), ("同じ向き",), ("追いつく", "追いつき")),
+        ("ずつ配", "合わせて"),
+    ),
+    # 増減（x + y = N, px/100 − qy/100 = r）。増える側と減る側の両方が要る。
+    "percent_change": ((("増え",), ("減っ", "減り")), ("ずつ配", "余り")),
+    # 混合（x + y = W, ax + by = cW）。混ぜることと食塩水が要る。
+    "salt_mixture": ((("混ぜ",), ("食塩水",)), ("ずつ配", "余り", "増え")),
+    # 濃度を文字に置く（Wa·x + Wb·y = p(Wa+Wb), x + y = 2q）。2つの容器が要る。
+    "two_containers": ((("混ぜ",), ("容器",)), ("ずつ配", "余り", "増え")),
+}
+
+
+# ---------------------------------------------------------------------------
+# G-SC5（場面の妥当性）— 書き方と理由は word_problem_linear.py の同じ節を見る。
+RELATION_BOUNDS: dict[str, tuple[tuple[str, float, float], ...]] = {
+    "price_count_diff": (
+        ("price_a", 10, 1000), ("price_b", 10, 1000),
+        ("diff", 1, 20), ("total", 20, 10000),
+    ),
+    # 通学・遠出: 時速は徒歩3km〜自転車20km、道のりは50km・時間は半日まで。
+    "distance_time": (
+        ("speed_walk", 1, 8), ("speed_bike", 8, 25),
+        ("distance", 2, 50), ("total_time", 1, 12),
+    ),
+    # 途中から走る: 分速は徒歩50m〜走り260m、道のりは5km・時間は1時間まで。
+    "time_split": (
+        ("speed_slow", 30, 120), ("speed_fast", 100, 300),
+        ("distance", 100, 5000), ("total_time", 2, 60),
+    ),
+    # 池のまわり: 1周は5km まで、出会い・追いつきは2時間以内。
+    "lap_meet_catch_up": (
+        ("lap", 200, 5000), ("meet_time", 1, 60), ("catch_up_time", 2, 120),
+    ),
+    # 生徒数の増減: 学校の規模は2000人まで、増減率は2桁未満。
+    "percent_change": (
+        ("total", 20, 2000), ("rate_up", 1, 30), ("rate_down", 1, 30),
+        ("net_change", 1, 100),
+    ),
+    # 食塩水: 濃度は 1〜30%、重さは 5kg まで。
+    "salt_mixture": (
+        ("percent_a", 1, 30), ("percent_b", 1, 30), ("percent_mix", 1, 30),
+        ("weight", 50, 5000),
+    ),
+    "two_containers": (
+        ("weight_a", 50, 5000), ("weight_b", 50, 5000),
+        ("percent_mix", 1, 30), ("percent_half", 1, 30),
+    ),
+}
+
+
 def draw_scene(kind: str, p: Mapping[str, Any], rng: Rng) -> tuple[SystemRelation, SystemScene]:
     """関係 → 語彙 → 場面文 の順に組む（`_VOCAB_FIRST` の場面だけ語彙が先）。"""
     steps = _SCENE_VOCAB.get(kind, ())
