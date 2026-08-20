@@ -46,10 +46,11 @@ charter は「モック側の受け口（関数シグネチャ or エンドポ�
 | 9 | 識別子 | `problem_ref` | `schema_version`/`request_id`/`problem_key`/`lesson_id` | 詰め替えるだけ。**軽い** |
 | 10 | 拒否の返し方 | HTTP **422** ＋ `code` | `errors[]` に `UNSUPPORTED_FORM` 等 | ★下の「再試行」を参照 |
 | 11 | 個別最適化 | `purpose`/`cause_id` | `personalization`（習得度・誤答傾向・自己発見率）／`unlearned_lesson_ids` | エンジンは受け取らない。**無視して縮退できる**（契約に「null時は最適化なし」と明記あり） |
+| 12 | セルの目録 | `GET /units` は **ID だけ**（`g1_l25`） | `LevelCatalog{unit_id, problem_form, levels:[{level, **label**, target_difficulty}]}` | ★**名前が無い**。台帳（`units.generated.yaml`）には `section`（中学1年／数と式／一次方程式）・`title`（方程式の利用）・レベルごとの `desc` があるのに、API が出していない。選択肢を出す側は単元名を作れない（手元で引く道具: `records/work/units_named.py`） |
 
-### 重いのは3つだけ（4・6・7）
+### 重いのは3つだけ（4・6・7）。12 は軽いが**先に要る**（選択肢が出せない）
 
-10 項目のうち、**詰め替えで済むもの（1・2・8・9・11）と、作らなければならないもの
+12 項目のうち、**詰め替えで済むもの（1・2・8・9・11）と、作らなければならないもの
 （4・6・7）と、判断が要るもの（3・5・10）**に分かれる。
 
 - **④ hints が最大**。契約は3段（focus / strategy / last_step）を要求し、しかも本体側に
