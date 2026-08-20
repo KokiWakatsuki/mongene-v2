@@ -1,7 +1,7 @@
 """平行四辺形クラスタの構成を試し撃ちする（結論の候補・深さ・証明文を見る）。
 
 実行:
-  PYTHONPATH=engine_core .venv/bin/python records/work/probe_pgram.py <構成名> <depth> <prefer> [exclude,...]
+  .venv/bin/python records/work/probe_pgram.py <構成名> <depth> <prefer> [exclude,...]
 """
 from __future__ import annotations
 

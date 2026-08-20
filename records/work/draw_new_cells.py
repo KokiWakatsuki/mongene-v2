@@ -4,7 +4,7 @@
 ラベルが線に埋もれていたことも、図に起こして初めて分かった。
 
 実行:
-  PYTHONPATH=engine_core .venv/bin/python records/work/draw_new_cells.py
+  .venv/bin/python records/work/draw_new_cells.py
 """
 from __future__ import annotations
 

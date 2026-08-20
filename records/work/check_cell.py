@@ -6,10 +6,10 @@
 一発で見る。
 
 実行:
-  PYTHONPATH=engine_core .venv/bin/python records/work/check_cell.py <unit> <form> <lv,lv,...>
+  .venv/bin/python records/work/check_cell.py <unit> <form> <lv,lv,...>
 例:
-  PYTHONPATH=engine_core .venv/bin/python records/work/check_cell.py g1_l23 calculation 3
-  PYTHONPATH=engine_core .venv/bin/python records/work/check_cell.py g1_l24 calculation 1,2
+  .venv/bin/python records/work/check_cell.py g1_l23 calculation 3
+  .venv/bin/python records/work/check_cell.py g1_l24 calculation 1,2
 """
 from __future__ import annotations
 

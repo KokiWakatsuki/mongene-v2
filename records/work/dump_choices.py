@@ -17,8 +17,8 @@ knowledge form は選択式で、**選択肢の出来が問題の質そのもの
 これは概念を知らないと判断できないので、機械では出せない。
 
 実行:
-  PYTHONPATH=engine_core .venv/bin/python records/work/dump_choices.py           # 測定
-  PYTHONPATH=engine_core .venv/bin/python records/work/dump_choices.py --dump    # 全文を出す
+  .venv/bin/python records/work/dump_choices.py           # 測定
+  .venv/bin/python records/work/dump_choices.py --dump    # 全文を出す
 """
 from __future__ import annotations
 

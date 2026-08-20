@@ -17,8 +17,8 @@
 信用しないのと同じ理由で、ここで打ち切る。
 
 実行:
-  PYTHONPATH=engine_core:records/work .venv/bin/python records/work/wk_check.py
-  PYTHONPATH=engine_core:records/work .venv/bin/python records/work/wk_check.py --self-test
+  PYTHONPATH=records/work .venv/bin/python records/work/wk_check.py
+  PYTHONPATH=records/work .venv/bin/python records/work/wk_check.py --self-test
 """
 from __future__ import annotations
 

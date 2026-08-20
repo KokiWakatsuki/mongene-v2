@@ -16,7 +16,7 @@
 逆翻訳（`bt_patterns.py` → `bt_check.py`）にかけて確かめる。
 2026-08-14 の走査では 21 セルが出て、実物の欠陥は逆翻訳が見つけた2件だけだった。
 
-実行: PYTHONPATH=engine_core .venv/bin/python records/work/scan_asks_vs_answers.py [--seeds N]
+実行: .venv/bin/python records/work/scan_asks_vs_answers.py [--seeds N]
 """
 from __future__ import annotations
 

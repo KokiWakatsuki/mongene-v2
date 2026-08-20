@@ -14,7 +14,7 @@
   prompt_pick  小問の問いが「正しいものを選びなさい。」になっている
 
 実行:
-  PYTHONPATH=engine_core .venv/bin/python records/work/scan_choice_printing.py [--seeds N]
+  .venv/bin/python records/work/scan_choice_printing.py [--seeds N]
 """
 from __future__ import annotations
 

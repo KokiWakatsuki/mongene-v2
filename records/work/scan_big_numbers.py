@@ -8,7 +8,7 @@
 適切）。**その数が計算に効くのに大きい**ものを見つけるための当たりをつける道具。
 
 実行:
-  PYTHONPATH=engine_core .venv/bin/python records/work/scan_big_numbers.py [--seeds N] [--top N]
+  .venv/bin/python records/work/scan_big_numbers.py [--seeds N] [--top N]
 """
 from __future__ import annotations
 

@@ -3,7 +3,7 @@
 ゲートもテストも**図の内容の誤り**は検出しない（点の並び違い・線が枠外・ラベル消失）。
 この一連でも目視だけで見つけたバグが4件ある。だから図は必ず起こして見る。
 
-実行: PYTHONPATH=engine_core .venv/bin/python records/work/draw_l40_l42.py
+実行: .venv/bin/python records/work/draw_l40_l42.py
 """
 from __future__ import annotations
 

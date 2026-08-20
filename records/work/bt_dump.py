@@ -23,7 +23,7 @@
 **読み手が recipe を読んでしまうと独立でなくなる。** 書き出すのは日本語だけ。
 
 実行:
-  PYTHONPATH=engine_core .venv/bin/python records/work/bt_dump.py [--seeds N]
+  .venv/bin/python records/work/bt_dump.py [--seeds N]
 """
 from __future__ import annotations
 

@@ -3,7 +3,7 @@
 生成し直さない（内容は正しく、順番だけの問題）。節は `## <unit>.<form>.Lv<n>` で
 始まるので、そこで切って並べ替える。
 
-実行: PYTHONPATH=engine_core .venv/bin/python records/work/reorder_corpus.py
+実行: .venv/bin/python records/work/reorder_corpus.py
 """
 from __future__ import annotations
 

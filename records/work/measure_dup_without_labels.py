@@ -12,7 +12,7 @@
 広げる作業に入る前に**何セルが超えるのか**を知らないと見積もれない。
 
 実行:
-  PYTHONPATH=engine_core .venv/bin/python records/work/measure_dup_without_labels.py [--seeds N]
+  .venv/bin/python records/work/measure_dup_without_labels.py [--seeds N]
 """
 from __future__ import annotations
 

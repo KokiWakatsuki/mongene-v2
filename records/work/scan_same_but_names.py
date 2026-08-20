@@ -11,7 +11,7 @@
 大文字1文字（点名）と、その並び（ABC・∠DEF）を伏せて突き合わせる。
 
 実行:
-  PYTHONPATH=engine_core .venv/bin/python records/work/scan_same_but_names.py [コーパスのディレクトリ]
+  .venv/bin/python records/work/scan_same_but_names.py [コーパスのディレクトリ]
 """
 from __future__ import annotations
 

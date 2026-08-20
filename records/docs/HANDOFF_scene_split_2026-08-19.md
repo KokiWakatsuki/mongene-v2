@@ -41,7 +41,7 @@ word_problem  100セル / コーパス上 243問
 文型が1つしかないセル  98 / 100
 ```
 
-測り方: `PYTHONPATH=engine_core .venv/bin/python records/work/count_patterns_wp.py`
+測り方: `.venv/bin/python records/work/count_patterns_wp.py`
 
 ---
 
@@ -63,19 +63,19 @@ charter の §4 に6つ書いてある。**作業0 → 1 → 2 → 3 で止ま�
 
 ```bash
 # 1セルだけ速く見る（秒）
-PYTHONPATH=engine_core .venv/bin/python records/work/check_cell.py g2_l16 word_problem 2,3
+.venv/bin/python records/work/check_cell.py g2_l16 word_problem 2,3
 
 # 全走（ログは records/work/logs/ に日付つきで残る）
 bash records/work/verify_all.sh
 
 # 個別
-PYTHONPATH=engine_core .venv/bin/python -m engine.eval --jobs 7          # 約20分
-PYTHONPATH=engine_core .venv/bin/python records/work/approve_all.py --jobs 7  # 約17分・単独で
-PYTHONPATH=engine_core .venv/bin/python -m pytest engine_core -q -n 7    # 約20分
-PYTHONPATH=engine_core .venv/bin/python records/work/build_corpus.py     # 約5分
+.venv/bin/python -m engine.eval --jobs 7          # 約20分
+.venv/bin/python records/work/approve_all.py --jobs 7  # 約17分・単独で
+.venv/bin/python -m pytest ../mongene-engine/tests -q -n 7    # 約20分
+.venv/bin/python records/work/build_corpus.py     # 約5分
 
 # 文型を数える（この作業の物差し）
-PYTHONPATH=engine_core .venv/bin/python records/work/count_patterns_wp.py
+.venv/bin/python records/work/count_patterns_wp.py
 ```
 
 **eval の合否は「ゲート見出しの一覧」と最終行 `=== eval 一式: OK ===` で判定する。**
@@ -120,7 +120,7 @@ PYTHONPATH=engine_core .venv/bin/python records/work/count_patterns_wp.py
 
 ```
 リポジトリ   /Users/koki/workspace/mongene-v2
-Python      .venv/bin/python（必ずこれ。PYTHONPATH=engine_core）
+Python      .venv/bin/python（必ずこれ。エンジンは pip install -e ../mongene-engine で引く）
 ブランチ     engine-m0-rework（master ではない）
 モック本体   別リポジトリ github.com/yukiwaria/mongene（作業4で扱う）
 ```

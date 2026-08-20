@@ -1,6 +1,6 @@
 """円クラスタの構成から何が導けるかを実測する（作業用）。
 
-  PYTHONPATH=engine_core .venv/bin/python records/work/probe_circle.py <構成名> [depth] [exclude,...]
+  .venv/bin/python records/work/probe_circle.py <構成名> [depth] [exclude,...]
 """
 from __future__ import annotations
 

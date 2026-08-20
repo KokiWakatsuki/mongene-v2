@@ -3,7 +3,7 @@
 1手で解ける問題は「最後の手は答えを明かすので出さない」という規則で候補が空になり、
 `_DEFAULT_MINIMAL_HINT`（「問題文の与えられた値をもう一度確認しよう。」）に落ちる。
 
-実行: PYTHONPATH=engine_core .venv/bin/python records/work/scan_empty_hints.py [--seeds N]
+実行: .venv/bin/python records/work/scan_empty_hints.py [--seeds N]
 """
 from __future__ import annotations
 

@@ -7,7 +7,7 @@
 読んで型が分かったら走査にする、が「同じ根の別の出口」を潰す唯一の方法。
 
 実行:
-  PYTHONPATH=engine_core:records/work .venv/bin/python records/work/scan_surface.py
+  PYTHONPATH=records/work .venv/bin/python records/work/scan_surface.py
 """
 from __future__ import annotations
 

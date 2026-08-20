@@ -14,8 +14,8 @@ Python の `hash()` は起動ごとに変わる（`PYTHONHASHSEED` が random �
 （合計のハッシュだけだと、どこが違うのか分からない）。
 
 実行:
-  PYTHONPATH=engine_core .venv/bin/python records/work/check_reproducible.py          # 3種で比べる
-  PYTHONPATH=engine_core .venv/bin/python records/work/check_reproducible.py --dump    # 1回ぶんを出す
+  .venv/bin/python records/work/check_reproducible.py          # 3種で比べる
+  .venv/bin/python records/work/check_reproducible.py --dump    # 1回ぶんを出す
 """
 from __future__ import annotations
 
@@ -69,7 +69,7 @@ def main() -> int:
         return 0
     runs: list[dict[str, str]] = []
     for hs in _HASH_SEEDS:
-        env = {**os.environ, "PYTHONHASHSEED": hs, "PYTHONPATH": "engine_core"}
+        env = {**os.environ, "PYTHONHASHSEED": hs}
         print(f"--- PYTHONHASHSEED={hs} で走らせる ---", flush=True)
         out = subprocess.run(  # noqa: S603
             [".venv/bin/python", str(Path(__file__)), "--dump"],

@@ -1,6 +1,6 @@
 """構成×パラメータ定義域の当たり率と、選ばれる結論の分布を測る（作業用）。
 
-  PYTHONPATH=engine_core .venv/bin/python records/work/sweep_circle.py <構成名> <depth> <prefer|-> \
+  .venv/bin/python records/work/sweep_circle.py <構成名> <depth> <prefer|-> \
       <base_lo,base_hi> <angle_lo,angle_hi> <offset_lo,offset_hi> [topic_set] [exclude,...]
 """
 from __future__ import annotations

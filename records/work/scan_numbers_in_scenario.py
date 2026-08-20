@@ -26,7 +26,7 @@
 だから**この走査は欠陥を出すのではなく、読む先を絞る**。出たものを1件ずつ見て、
 理由のあるものは recipe 側に「本文に出さない数」と宣言させる（`derived_numbers`）。
 
-実行: PYTHONPATH=engine_core .venv/bin/python records/work/scan_numbers_in_scenario.py [--seeds N]
+実行: .venv/bin/python records/work/scan_numbers_in_scenario.py [--seeds N]
 """
 from __future__ import annotations
 

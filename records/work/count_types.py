@@ -12,7 +12,7 @@ params をそのまま鍵にすると、`eq_str` のような**問題の実体**
   2. **ヒントの列**（＝解く筋道の言葉）。パラメータに出ない型の違いを拾う
      （g2_l38 Lv3 の「証明する枝」と「反例を出す枝」など）。
 
-実行: PYTHONPATH=engine_core .venv/bin/python records/work/count_types.py [seeds]
+実行: .venv/bin/python records/work/count_types.py [seeds]
 """
 from __future__ import annotations
 

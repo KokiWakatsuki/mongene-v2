@@ -14,7 +14,7 @@
 並べて出す（どこで切るかは図を見て決める）。
 
 実行:
-  PYTHONPATH=engine_core .venv/bin/python records/work/scan_figure_fill.py [--seeds N]
+  .venv/bin/python records/work/scan_figure_fill.py [--seeds N]
 """
 from __future__ import annotations
 

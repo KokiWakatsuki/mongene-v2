@@ -3,7 +3,7 @@
 走査の要約だけでは「どのセルが本物か」を選べない。**マッチした文字列そのもの**を
 出して、偽陽性と本物を人が分けられるようにする。
 
-実行: PYTHONPATH=engine_core .venv/bin/python records/work/scan_detail.py <検査名の一部>
+実行: .venv/bin/python records/work/scan_detail.py <検査名の一部>
 """
 from __future__ import annotations
 

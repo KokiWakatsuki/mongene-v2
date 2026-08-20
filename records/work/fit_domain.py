@@ -8,7 +8,7 @@
 超える最大の箱まで貪欲に縮めて、family にそのまま貼れる定義域を出す。
 
 実行:
-  PYTHONPATH=engine_core .venv/bin/python records/work/fit_domain.py <構成名> <depth> \
+  .venv/bin/python records/work/fit_domain.py <構成名> <depth> \
       [--prefer seg_eq] [--topic parallelogram] [--exclude r1,r2]
 """
 from __future__ import annotations

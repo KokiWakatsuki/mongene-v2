@@ -1,6 +1,6 @@
 """複数セルを一度に素で見る。
 
-  PYTHONPATH=engine_core .venv/bin/python records/work/peek_many.py [--seeds N] unit.form.Lv ...
+  .venv/bin/python records/work/peek_many.py [--seeds N] unit.form.Lv ...
 """
 import sys
 

@@ -17,7 +17,7 @@
 `id<TAB>立てた式または答え` を書き、`bt_check.py` がエンジンと突き合わせる。
 
 実行:
-  PYTHONPATH=engine_core .venv/bin/python records/work/bt_dump_scenes.py [--per 5] [--budget 400]
+  .venv/bin/python records/work/bt_dump_scenes.py [--per 5] [--budget 400]
 """
 from __future__ import annotations
 

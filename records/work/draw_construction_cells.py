@@ -6,7 +6,7 @@
   ・点名が線に埋もれていないか
 を目で見るしかない。
 
-  PYTHONPATH=engine_core .venv/bin/python records/work/draw_construction_cells.py [seed ...]
+  .venv/bin/python records/work/draw_construction_cells.py [seed ...]
 """
 from __future__ import annotations
 

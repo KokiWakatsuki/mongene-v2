@@ -7,7 +7,7 @@
 「何も描いていない側」だけだった。
 
 実行:
-  PYTHONPATH=engine_core .venv/bin/python records/work/dump_solution_figs.py <出力ディレクトリ>
+  .venv/bin/python records/work/dump_solution_figs.py <出力ディレクトリ>
 """
 from __future__ import annotations
 

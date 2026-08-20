@@ -14,11 +14,12 @@ phase_status.md
 ## なぜ生成した問題がここなのか
 
 「エンジンの問題点を修復する → 再度問題を生成する → エンジンを修繕する」の
-ループでは、**結果を見たい**が、エンジンを**動かすのには要らない**。だから本体
-（`engine_core/`）には入れない。
+ループでは、**結果を見たい**が、エンジンを**動かすのには要らない**。だから
+エンジン（別リポジトリ `mongene-engine`）には入れない。
 
-**ただし、エンジンだけを持ち出すと保存先が無くなる。** その注意はルートの README と
-`engine_core/README.md` に書いてある（API 化のときに直す）。
+**エンジンだけを持ち出すと保存先が無くなる**——という穴は塞いだ。`build_corpus.py` の
+出力先は `--out` か環境変数 `MONGENE_CORPUS_DIR` で外から差せる（既定はこのリポジトリ）。
+読む側（`scan_explanations.py` ほか）も同じ環境変数を見る。
 
 ## 追跡するもの / しないもの
 
@@ -31,8 +32,19 @@ phase_status.md
 
 ## 走らせ方
 
+**エンジンは `pip install -e ../mongene-engine` で引く。** パスは書かない
+（`records/work/engine_paths.py` が1か所で答える）。まずここが解けるか確かめる:
+
 ```bash
-PYTHONPATH=engine_core            python records/work/audit_progress.py
-PYTHONPATH=engine_core:records/work python records/work/scan_explanations.py
-bash records/work/verify_all.sh   # 全走検証
+PYTHONPATH=records/work .venv/bin/python records/work/engine_paths.py
 ```
+
+```bash
+.venv/bin/python records/work/audit_progress.py
+.venv/bin/python records/work/scan_explanations.py
+bash records/work/verify_all.sh   # 全走検証（最後に段ごとの OK / 落ちた の表が出る）
+```
+
+★`PYTHONPATH=engine_core` と書いてある古い手順書がある（`engine_core/` は
+2026-08-20 に無くなった）。**存在しないパスは Python が黙って無視するので、
+古い書き方でも動いてしまう**——動くからといって正しいわけではない。

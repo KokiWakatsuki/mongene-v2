@@ -14,7 +14,7 @@ charter §4 の作業1 は、生成物が同一であること（golden）に加
 自分自身の検査も持つ（`--self-test`）。合成した違反コードを与えて、ちゃんと落ちることを
 確かめる——0件を返す走査は、動いていないのと区別がつかない。
 
-実行: PYTHONPATH=engine_core .venv/bin/python records/work/check_layer_split.py
+実行: .venv/bin/python records/work/check_layer_split.py
 """
 from __future__ import annotations
 

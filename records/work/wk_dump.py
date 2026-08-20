@@ -29,8 +29,8 @@ engine の宣言からも導けない（施設と料金名の対応はどこに�
 
 実行:
   # 先に (関係×場面) の全組を作る（G-BT と同じ入力を使う）
-  PYTHONPATH=engine_core:records/work .venv/bin/python records/work/bt_dump_scenes.py --per 3
-  PYTHONPATH=engine_core:records/work .venv/bin/python records/work/wk_dump.py
+  PYTHONPATH=records/work .venv/bin/python records/work/bt_dump_scenes.py --per 3
+  PYTHONPATH=records/work .venv/bin/python records/work/wk_dump.py
 """
 from __future__ import annotations
 

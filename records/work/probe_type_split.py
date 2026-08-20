@@ -2,7 +2,7 @@
 
 判定は `build_corpus.measure_cell`（唯一の実装）を呼ぶ。ここには書かない。
 実行例:
-  PYTHONPATH=engine_core .venv/bin/python records/work/probe_type_split.py \
+  .venv/bin/python records/work/probe_type_split.py \
       g2_l16:word_problem:2 exam_l5:word_problem:4
 """
 import sys

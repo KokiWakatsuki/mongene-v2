@@ -3,7 +3,7 @@
 ★語尾・単位は列挙せず思いつきで決めると外す（文末770種を数え上げてから決めた）。
 ここで出た組を見て、「対になっているか」を人が1回判断し、宣言に書く。
 
-実行: PYTHONPATH=engine_core .venv/bin/python records/work/measure_scene_words.py [--seeds N]
+実行: .venv/bin/python records/work/measure_scene_words.py [--seeds N]
 """
 from __future__ import annotations
 

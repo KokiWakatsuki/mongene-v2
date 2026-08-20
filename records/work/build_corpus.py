@@ -20,7 +20,7 @@ family YAML の params にある列挙のうち、**話の骨格が変わる軸*
 型は rng が引くので、狙って出せない。**期待する型数だけ出るまで seed を増やす**
 （上限あり）。取りこぼしたら `log` に出す——黙って打ち切ると「全部見た」と読めてしまう。
 
-実行: PYTHONPATH=engine_core .venv/bin/python records/work/build_corpus.py
+実行: .venv/bin/python records/work/build_corpus.py
 """
 from __future__ import annotations
 
@@ -47,7 +47,7 @@ from engine.eval._harness import build_mr, make_env
 from engine_paths import FAMILIES_DIR  # エンジンの場所は1か所で解決する
 
 # **出力先は外から差せる。** ここが `records/work/corpus` 固定だったので、
-# `engine_core/` だけをメインプロジェクトへ移すと「生成はできるが結果がどこにも
+# エンジンだけを別リポジトリへ移すと「生成はできるが結果がどこにも
 # 残らない」状態になっていた（引き継ぎ書 §3 の穴）。
 # 優先順: 引数 --out > 環境変数 MONGENE_CORPUS_DIR > 既定（このリポジトリの場所）。
 _DEFAULT_OUT = Path(os.environ.get("MONGENE_CORPUS_DIR", "records/work/corpus"))

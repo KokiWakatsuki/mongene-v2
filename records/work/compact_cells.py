@@ -2,7 +2,7 @@
 
 解説・ヒントを落として密度を上げる（精読の1周目用）。
 
-実行: PYTHONPATH=engine_core .venv/bin/python records/work/compact_cells.py word_problem
+実行: .venv/bin/python records/work/compact_cells.py word_problem
 """
 from __future__ import annotations
 

@@ -18,7 +18,7 @@ engine には `bbox_pts`（描かないが枠には入れる点）という仕�
 戻して**測る（方眼の線の端まで）。
 
 実行:
-  PYTHONPATH=engine_core .venv/bin/python records/work/check_grid_covers_asked.py [--seeds N]
+  .venv/bin/python records/work/check_grid_covers_asked.py [--seeds N]
 """
 from __future__ import annotations
 

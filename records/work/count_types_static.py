@@ -9,7 +9,7 @@
   中身      `*_candidates`・`*_range`・`*_domain`・`*_pool`・`concept_set`
             速さ・品物・人名・色・文字・数値の範囲。骨格は変わらない
 
-実行: PYTHONPATH=engine_core .venv/bin/python records/work/count_types_static.py
+実行: .venv/bin/python records/work/count_types_static.py
 """
 from __future__ import annotations
 

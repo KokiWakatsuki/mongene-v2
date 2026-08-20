@@ -6,7 +6,7 @@
 どれも別の作業のついでに人が気づいたもので、**面として走査されたことがない**。
 
 ここは 1,466 型ぶんある。実行:
-    PYTHONPATH=engine_core:records/work .venv/bin/python records/work/scan_explanations.py
+    PYTHONPATH=records/work .venv/bin/python records/work/scan_explanations.py
 """
 from __future__ import annotations
 
@@ -17,7 +17,7 @@ from collections import defaultdict
 from pathlib import Path
 
 # 出力先は `build_corpus.py --out` / 環境変数で動かせる。読む側も同じ場所を見る
-# （engine_core だけをメインへ移したとき、置き場がずれても走査が追えるように）。
+# （エンジンだけを別リポジトリへ移しても、置き場がずれても走査が追えるように）。
 _SRC = Path(os.environ.get("MONGENE_CORPUS_DIR", "records/work/corpus")) / "INDEX.md"
 
 

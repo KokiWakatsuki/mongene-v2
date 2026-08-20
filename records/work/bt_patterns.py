@@ -16,7 +16,7 @@
 g2_l16 の果物の組み合わせだけで 40 通りになり、読む価値のない重複で埋まる。
 
 実行:
-  PYTHONPATH=engine_core .venv/bin/python records/work/bt_patterns.py [--seeds N] [--forms word_problem,find_value]
+  .venv/bin/python records/work/bt_patterns.py [--seeds N] [--forms word_problem,find_value]
 """
 from __future__ import annotations
 

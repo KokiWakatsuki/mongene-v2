@@ -15,8 +15,8 @@
 宣言は recipe 側の `RELATION_PHRASES`（関係の隣に置く＝場面を足すとき同じ file を触る）。
 
 実行:
-  PYTHONPATH=engine_core .venv/bin/python records/work/check_scene_skeleton.py [--seeds N]
-  PYTHONPATH=engine_core .venv/bin/python records/work/check_scene_skeleton.py --self-test
+  .venv/bin/python records/work/check_scene_skeleton.py [--seeds N]
+  .venv/bin/python records/work/check_scene_skeleton.py --self-test
 """
 from __future__ import annotations
 

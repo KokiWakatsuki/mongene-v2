@@ -4,8 +4,8 @@
 282枚を1枚ずつ開くのは現実的でないので、格子に並べて眺め、
 おかしいものだけ個別に拡大する。
 
-実行: PYTHONPATH=engine_core .venv/bin/python records/work/contact_sheet.py <出力名> <図のファイル名...>
-      PYTHONPATH=engine_core .venv/bin/python records/work/contact_sheet.py --list
+実行: .venv/bin/python records/work/contact_sheet.py <出力名> <図のファイル名...>
+      .venv/bin/python records/work/contact_sheet.py --list
 """
 from __future__ import annotations
 

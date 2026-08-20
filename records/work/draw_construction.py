@@ -5,7 +5,7 @@
 必ずこれを回して目で見ること。
 
 実行:
-  PYTHONPATH=engine_core .venv/bin/python records/work/draw_construction.py <構成名> [<構成名>...]
+  .venv/bin/python records/work/draw_construction.py <構成名> [<構成名>...]
 """
 from __future__ import annotations
 

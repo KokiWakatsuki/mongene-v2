@@ -10,7 +10,7 @@
 
 出力先は `mongene_workbook.html`。**既存の `mongene_problems.html` は触らない。**
 
-実行: PYTHONPATH=engine_core .venv/bin/python records/work/build_workbook_html.py
+実行: .venv/bin/python records/work/build_workbook_html.py
 """
 from __future__ import annotations
 

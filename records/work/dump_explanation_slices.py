@@ -5,7 +5,7 @@
 （末尾に総文字数を出して、削っていないことを読み手が確かめられるようにする）。
 
 実行:
-  PYTHONPATH=engine_core:records/work .venv/bin/python \
+  PYTHONPATH=records/work .venv/bin/python \
       records/work/dump_explanation_slices.py <出力ディレクトリ>
 """
 from __future__ import annotations

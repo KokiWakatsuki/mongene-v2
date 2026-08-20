@@ -32,8 +32,8 @@
 ここでは見ない。関係ごとの妥当性は G-SC5（`RELATION_BOUNDS`）が持つ。
 
 実行:
-  PYTHONPATH=engine_core .venv/bin/python records/work/check_scene_words.py [--seeds N]
-  PYTHONPATH=engine_core .venv/bin/python records/work/check_scene_words.py --self-test
+  .venv/bin/python records/work/check_scene_words.py [--seeds N]
+  .venv/bin/python records/work/check_scene_words.py --self-test
 """
 from __future__ import annotations
 

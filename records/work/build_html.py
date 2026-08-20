@@ -6,7 +6,7 @@
 表示は日本語にする: `knowledge` → 知識、`g1_l7` → 中1 第7回「累乗の計算（指数）」。
 単元名・章立て・難易度の帯は台帳（units.generated.yaml）から取る。
 
-実行: PYTHONPATH=engine_core .venv/bin/python records/work/build_html.py
+実行: .venv/bin/python records/work/build_html.py
 """
 from __future__ import annotations
 

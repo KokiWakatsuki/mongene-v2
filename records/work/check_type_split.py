@@ -6,7 +6,7 @@ params・narration・問題文を渡して、**畳む場合と畳まない場合
 `type_key` の `universe`（語彙集合）は**セル共通**で、seed ごとに変えてはいけない。
 だから各ケースは a と b に**同じ universe** を渡す（実装と同じ使い方をする）。
 
-実行: PYTHONPATH=engine_core .venv/bin/python records/work/check_type_split.py
+実行: .venv/bin/python records/work/check_type_split.py
 """
 import sys
 

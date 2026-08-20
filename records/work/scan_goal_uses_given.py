@@ -14,7 +14,7 @@
 （＝壊した120本のぶんの危険を、得るもの無しに背負うところだった）。
 
 実行:
-  PYTHONPATH=engine_core .venv/bin/python records/work/scan_goal_uses_given.py [--seeds N]
+  .venv/bin/python records/work/scan_goal_uses_given.py [--seeds N]
 """
 from __future__ import annotations
 

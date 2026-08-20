@@ -21,7 +21,7 @@
 **判断はしない。分布を出して、外れているものを見に行くための道具。**
 ★図のことは目で見ずに座標で数える（回転した正三角形を「不等辺だ」と読み違えた）。
 
-実行: PYTHONPATH=engine_core .venv/bin/python records/work/scan_figure_layout.py
+実行: .venv/bin/python records/work/scan_figure_layout.py
 """
 from __future__ import annotations
 

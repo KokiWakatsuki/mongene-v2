@@ -11,7 +11,7 @@
 を実測する。
 
 実行:
-  PYTHONPATH=engine_core .venv/bin/python records/work/verify_progress.py [seeds]
+  .venv/bin/python records/work/verify_progress.py [seeds]
 """
 from __future__ import annotations
 

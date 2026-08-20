@@ -15,7 +15,7 @@ example が10件あり、**同じ形の取りこぼしが他にもあるはず**
 
 ## 使い方
 
-    PYTHONPATH=engine_core .venv/bin/python records/work/scan_reason_asked.py
+    .venv/bin/python records/work/scan_reason_asked.py
 """
 from __future__ import annotations
 

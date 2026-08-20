@@ -17,8 +17,8 @@
 そこだけ一覧に出す——黙って通すと、検査があることだけが残って中身が無くなる。
 
 実行:
-  PYTHONPATH=engine_core .venv/bin/python records/work/check_scene_plausible.py [--seeds N]
-  PYTHONPATH=engine_core .venv/bin/python records/work/check_scene_plausible.py --self-test
+  .venv/bin/python records/work/check_scene_plausible.py [--seeds N]
+  .venv/bin/python records/work/check_scene_plausible.py --self-test
 """
 from __future__ import annotations
 

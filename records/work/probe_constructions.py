@@ -10,7 +10,7 @@ family の params（construction / proof_depth / prefer / 定義域）を当て�
 を出しておけば、family は実測を写すだけになる。
 
 実行:
-  PYTHONPATH=engine_core .venv/bin/python records/work/probe_constructions.py [構成名 ...]
+  .venv/bin/python records/work/probe_constructions.py [構成名 ...]
 """
 from __future__ import annotations
 

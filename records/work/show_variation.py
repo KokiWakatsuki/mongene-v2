@@ -1,6 +1,6 @@
 """1セルの中で問題がどう変わるかを、seed を並べて見る。
 
-実行: PYTHONPATH=engine_core .venv/bin/python records/work/show_variation.py g3_l26 calculation 2 8
+実行: .venv/bin/python records/work/show_variation.py g3_l26 calculation 2 8
 """
 from __future__ import annotations
 

@@ -4,7 +4,7 @@
 （既定値で描くと、実際に出題される図と違う形を見て安心してしまう）。
 
 実行:
-  PYTHONPATH=engine_core .venv/bin/python records/work/draw_area.py
+  .venv/bin/python records/work/draw_area.py
 """
 from __future__ import annotations
 

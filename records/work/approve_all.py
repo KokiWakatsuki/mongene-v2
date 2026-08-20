@@ -9,7 +9,7 @@ family ごとに `bootstrap()`（pack 登録・curriculum/families の読み込�
 配る**のでその条件を満たす（golden は family ごとのディレクトリに書かれ、
 family どうしは干渉しない）。禁じているのは「approve_all をまるごと2本走らせる」ほう。
 
-実行: PYTHONPATH=engine_core .venv/bin/python records/work/approve_all.py [--jobs N]
+実行: .venv/bin/python records/work/approve_all.py [--jobs N]
 """
 from __future__ import annotations
 

@@ -8,7 +8,7 @@ solver の表示文が点名を直書きしていると、「三角形AKJ の面
 問題文に出ていれば（別の役割で使われていても）ここでは通す——過検出を避けるため。
 
 実行:
-  PYTHONPATH=engine_core .venv/bin/python records/work/scan_point_names.py [--seeds N] [unit.form.Lv ...]
+  .venv/bin/python records/work/scan_point_names.py [--seeds N] [unit.form.Lv ...]
 """
 from __future__ import annotations
 

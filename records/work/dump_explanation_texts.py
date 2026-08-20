@@ -8,7 +8,7 @@ narration から作られるので、セルが違っても文型は同じ）。
 日本語は読み切ったことになる。多い順に並べるので、上から読むと影響の大きい順になる。
 
 実行:
-  PYTHONPATH=engine_core:records/work .venv/bin/python records/work/dump_explanation_texts.py [--min N]
+  PYTHONPATH=records/work .venv/bin/python records/work/dump_explanation_texts.py [--min N]
 """
 from __future__ import annotations
 

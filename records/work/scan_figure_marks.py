@@ -17,7 +17,7 @@
 （実際 g2_l43 の図を「正三角形に描けていない」と読み違えた。測ったら3辺とも
 303.1 で正しかった）。図のことは必ず座標と要素で数える。
 
-実行: PYTHONPATH=engine_core .venv/bin/python records/work/scan_figure_marks.py
+実行: .venv/bin/python records/work/scan_figure_marks.py
 """
 from __future__ import annotations
 

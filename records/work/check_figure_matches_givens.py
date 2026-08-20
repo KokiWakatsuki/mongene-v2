@@ -9,7 +9,7 @@
   構成の facts にある等長・等角・直角を取り出し、**座標から測った実際の長さ・角度**と
   食い違っていないかを見る。
 
-実行: PYTHONPATH=engine_core .venv/bin/python records/work/check_figure_matches_givens.py
+実行: .venv/bin/python records/work/check_figure_matches_givens.py
 """
 from __future__ import annotations
 

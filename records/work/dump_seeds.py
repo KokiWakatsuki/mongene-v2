@@ -21,7 +21,7 @@
 日本語の骨格は昨日読んだので繰り返さない。
 
 実行:
-  PYTHONPATH=engine_core .venv/bin/python records/work/dump_seeds.py [--seeds N] [--forms a,b]
+  .venv/bin/python records/work/dump_seeds.py [--seeds N] [--forms a,b]
 """
 from __future__ import annotations
 

@@ -9,7 +9,7 @@
 49型／文型は1つ）。作業0 で本体側に語彙の伏せ字を入れ、この道具は本体を呼ぶだけに
 なった。
 
-実行: PYTHONPATH=engine_core .venv/bin/python records/work/count_patterns_wp.py
+実行: .venv/bin/python records/work/count_patterns_wp.py
 """
 import sys
 

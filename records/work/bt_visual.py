@@ -17,7 +17,7 @@
 
 **答えは出さない。** 読み手が図と本文だけから解き、`bt_check.py` が突き合わせる。
 
-実行: PYTHONPATH=engine_core .venv/bin/python records/work/bt_visual.py [--seeds N]
+実行: .venv/bin/python records/work/bt_visual.py [--seeds N]
 """
 from __future__ import annotations
 

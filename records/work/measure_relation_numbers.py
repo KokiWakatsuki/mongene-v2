@@ -4,7 +4,7 @@
 同じ失敗をしている（文末770種を列挙してから決めた）。ここで出た範囲を見て、
 「場面としてありえるか」を人が1回判断し、`RELATION_BOUNDS` に書く。
 
-実行: PYTHONPATH=engine_core .venv/bin/python records/work/measure_relation_numbers.py [--seeds N]
+実行: .venv/bin/python records/work/measure_relation_numbers.py [--seeds N]
 """
 from __future__ import annotations
 

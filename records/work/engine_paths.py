@@ -16,7 +16,7 @@
 **インストールされた `engine` パッケージの位置から引く。** パスを書かない。
 `pip install -e ../mongene-engine` でも、通常の install でも同じように解決する。
 
-    from engine_paths import ENGINE_DIR, FAMILIES_DIR, UNITS_YAML, RECIPES_DIR
+    from engine_paths import ENGINE_DIR, FAMILIES_DIR, UNITS_YAML, RECIPES_DIR, TESTS_DIR
 """
 from __future__ import annotations
 
@@ -34,8 +34,11 @@ UNITS_YAML = CURRICULUM_DIR / "units.generated.yaml"
 PACKS_DIR = ENGINE_DIR / "packs" / "math"
 RECIPES_DIR = PACKS_DIR / "recipes"
 
-# golden はエンジン側の tests にある（清書リポジトリの中）。
-GOLDEN_DIR = ENGINE_DIR.parent / "tests" / "golden"
+# テストと golden はエンジン側にある（清書リポジトリの中）。
+# ★通常の install（site-packages）には tests が入らないので、check() では検査しない。
+#   使う側が `TESTS_DIR.exists()` を見て、無ければその場で落とすこと。
+TESTS_DIR = ENGINE_DIR.parent / "tests"
+GOLDEN_DIR = TESTS_DIR / "golden"
 
 
 def check() -> None:
@@ -59,4 +62,5 @@ if __name__ == "__main__":
     print(f"families   {FAMILIES_DIR}（{len(list(FAMILIES_DIR.glob('*.yaml')))} 枚）")
     print(f"units      {UNITS_YAML}")
     print(f"recipes    {RECIPES_DIR}（{len(list(RECIPES_DIR.glob('*.py')))} 本）")
+    print(f"tests      {TESTS_DIR}（{'在り' if TESTS_DIR.exists() else '無し'}）")
     print(f"golden     {GOLDEN_DIR}（{'在り' if GOLDEN_DIR.exists() else '無し'}）")

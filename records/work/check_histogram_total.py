@@ -12,8 +12,8 @@
 分けるつもりが、1本の rect を切り出す正規表現が入れ子で効かず全部が両方に
 入っていた。**過大に出た数字を鵜呑みにせず生の SVG を見て気づいた。**
 
-    PYTHONPATH=engine_core:records/work .venv/bin/python records/work/check_histogram_total.py [--seeds N]
-    PYTHONPATH=engine_core:records/work .venv/bin/python records/work/check_histogram_total.py --self-test
+    PYTHONPATH=records/work .venv/bin/python records/work/check_histogram_total.py [--seeds N]
+    PYTHONPATH=records/work .venv/bin/python records/work/check_histogram_total.py --self-test
 """
 
 from __future__ import annotations

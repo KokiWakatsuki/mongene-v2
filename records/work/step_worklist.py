@@ -6,7 +6,7 @@
 
 ファイル順・行順に並ぶので、上から順に直せる。
 
-    PYTHONPATH=engine_core .venv/bin/python records/work/step_worklist.py > records/work/worklist.tsv
+    .venv/bin/python records/work/step_worklist.py > records/work/worklist.tsv
 """
 from __future__ import annotations
 

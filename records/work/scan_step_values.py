@@ -13,7 +13,7 @@
 どこを直せばよいか分からない。
 
 実行:
-    PYTHONPATH=engine_core .venv/bin/python records/work/scan_step_values.py [--seeds N]
+    .venv/bin/python records/work/scan_step_values.py [--seeds N]
 """
 from __future__ import annotations
 

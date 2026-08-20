@@ -18,7 +18,7 @@
 
 ## 使い方
 
-    PYTHONPATH=engine_core .venv/bin/python records/work/scan_equation_matches_answer.py
+    .venv/bin/python records/work/scan_equation_matches_answer.py
 """
 from __future__ import annotations
 

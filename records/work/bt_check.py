@@ -19,7 +19,7 @@ g2_l18.word_problem.Lv3#1<TAB>500, 100
 **同じ立式関数を再利用している既存の double-solve では塞げない穴**をここだけが塞ぐ。
 
 実行:
-  PYTHONPATH=engine_core .venv/bin/python records/work/bt_check.py
+  .venv/bin/python records/work/bt_check.py
 """
 from __future__ import annotations
 

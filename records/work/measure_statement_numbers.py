@@ -8,7 +8,7 @@
 そこで数を**直後の単位ごとに**集めて分布を出す。上限はこの実測から決める。
 
 実行:
-  PYTHONPATH=engine_core:records/work .venv/bin/python records/work/measure_statement_numbers.py
+  PYTHONPATH=records/work .venv/bin/python records/work/measure_statement_numbers.py
 """
 from __future__ import annotations
 

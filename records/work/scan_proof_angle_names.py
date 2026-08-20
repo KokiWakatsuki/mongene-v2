@@ -9,7 +9,7 @@
 
 ## 使い方
 
-    PYTHONPATH=engine_core .venv/bin/python records/work/scan_proof_angle_names.py
+    .venv/bin/python records/work/scan_proof_angle_names.py
 
 `--seeds` で seed 数、`--units` で単元を絞れる。
 

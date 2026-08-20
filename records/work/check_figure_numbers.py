@@ -30,8 +30,8 @@ G-BT（図つき）で読み手に図を渡したら、この盲点にあった�
 - 目盛ラベルだけの方眼（点が無い図）は対象外＝角も長さも測れない
 
 実行:
-  PYTHONPATH=engine_core .venv/bin/python records/work/check_figure_numbers.py [--seeds N]
-  PYTHONPATH=engine_core .venv/bin/python records/work/check_figure_numbers.py --self-test
+  .venv/bin/python records/work/check_figure_numbers.py [--seeds N]
+  .venv/bin/python records/work/check_figure_numbers.py --self-test
 """
 from __future__ import annotations
 

@@ -18,7 +18,7 @@
 自分自身の検査を持つ（`--self-test`）。合成した違反コードで落ちることを確かめる
 ——0件を返す走査は、動いていないのと区別がつかない。
 
-実行: PYTHONPATH=engine_core .venv/bin/python records/work/check_scene_contract.py
+実行: .venv/bin/python records/work/check_scene_contract.py
 """
 from __future__ import annotations
 

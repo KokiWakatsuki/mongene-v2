@@ -14,7 +14,7 @@
   2. その cell の `*_candidates` に並んでいる語彙を `@` に伏せる
 をやってから数える。
 
-実行: PYTHONPATH=engine_core .venv/bin/python records/work/count_types_v2.py
+実行: .venv/bin/python records/work/count_types_v2.py
 """
 from __future__ import annotations
 

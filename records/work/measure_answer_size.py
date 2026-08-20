@@ -9,7 +9,7 @@
 「教材として書き写せる形か」に直に効く。
 
 実行:
-  PYTHONPATH=engine_core:records/work .venv/bin/python records/work/measure_answer_size.py
+  PYTHONPATH=records/work .venv/bin/python records/work/measure_answer_size.py
 """
 from __future__ import annotations
 

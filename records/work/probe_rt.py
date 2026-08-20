@@ -1,6 +1,6 @@
 """直角三角形クラスタの構成を推論器にかけて、深さごとの結論候補を見る作業用スクリプト。
 
-  PYTHONPATH=engine_core .venv/bin/python records/work/probe_rt.py <構成名> [depth] [prefer] [exclude,...]
+  .venv/bin/python records/work/probe_rt.py <構成名> [depth] [prefer] [exclude,...]
 """
 from __future__ import annotations
 

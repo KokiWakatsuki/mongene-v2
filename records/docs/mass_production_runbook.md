@@ -66,28 +66,28 @@
 
 ```bash
 # ① 解ける・退化しない（数十秒）
-PYTHONPATH=engine_core .venv/bin/python records/work/check_cell.py <unit> word_problem <lv>
+.venv/bin/python records/work/check_cell.py <unit> word_problem <lv>
 
 # ⑤ 学年に合う（数分）
-PYTHONPATH=engine_core:records/work .venv/bin/python records/work/check_unit_fit.py --seeds 3
+PYTHONPATH=records/work .venv/bin/python records/work/check_unit_fit.py --seeds 3
 
 # ② 経路の独立（一瞬）
 .venv/bin/python records/work/check_write_scope.py --role author
 
 # ③ 日本語と式の一致（読み手が要る）
-PYTHONPATH=engine_core:records/work .venv/bin/python records/work/bt_dump_scenes.py --per 3
+PYTHONPATH=records/work .venv/bin/python records/work/bt_dump_scenes.py --per 3
 #   → 読み手が records/work/bt/answers.tsv を書く（問題文だけを渡す）
-PYTHONPATH=engine_core .venv/bin/python records/work/bt_check.py
+.venv/bin/python records/work/bt_check.py
 
 # ④ 場面が現実に成り立つ（読み手が要る）
-PYTHONPATH=engine_core:records/work .venv/bin/python records/work/wk_dump.py
+PYTHONPATH=records/work .venv/bin/python records/work/wk_dump.py
 #   → 読み手が records/work/wk/verdicts.<model>.tsv を書く
-PYTHONPATH=engine_core:records/work .venv/bin/python records/work/wk_check.py --verdicts <path>
+PYTHONPATH=records/work .venv/bin/python records/work/wk_check.py --verdicts <path>
 
 # 全部通ったら、まとめて1回だけ全走
-PYTHONPATH=engine_core .venv/bin/python -m pytest engine_core/tests -q -n7
-PYTHONPATH=engine_core .venv/bin/python -m engine.eval
-PYTHONPATH=engine_core .venv/bin/python records/work/approve_all.py
+.venv/bin/python -m pytest ../mongene-engine/tests -q -n7
+.venv/bin/python -m engine.eval
+.venv/bin/python records/work/approve_all.py
 ```
 
 ★**小さい修正で全走を回さない。** `check_cell` で確かめ、最後に1回だけ。

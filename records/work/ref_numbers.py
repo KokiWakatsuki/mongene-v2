@@ -30,7 +30,7 @@ y = 208x のように、x の値が2倍、3倍になると…
 丸さが問題になるのは2桁以上の数。
 
 実行:
-  PYTHONPATH=engine_core .venv/bin/python records/work/ref_numbers.py
+  .venv/bin/python records/work/ref_numbers.py
 """
 from __future__ import annotations
 

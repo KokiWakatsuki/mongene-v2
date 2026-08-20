@@ -36,7 +36,7 @@
 教材の解説ではない（前に系統を取り違えて単位の書き方を測り間違えた）。
 
 実行:
-  PYTHONPATH=engine_core:records/work .venv/bin/python records/work/ref_explanations.py
+  PYTHONPATH=records/work .venv/bin/python records/work/ref_explanations.py
 """
 from __future__ import annotations
 

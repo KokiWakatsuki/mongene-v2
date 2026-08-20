@@ -20,7 +20,7 @@
        → 検査3 の結果を gaps と突き合わせる
 
 実行:
-  PYTHONPATH=engine_core .venv/bin/python records/work/audit_progress.py
+  .venv/bin/python records/work/audit_progress.py
 """
 from __future__ import annotations
 

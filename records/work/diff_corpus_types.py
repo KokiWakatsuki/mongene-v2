@@ -1,6 +1,6 @@
 """2つの INDEX.md の型数をセルごとに突き合わせる（作業0 の効き方を見る）。
 
-実行: PYTHONPATH=engine_core .venv/bin/python records/work/diff_corpus_types.py 旧 新
+実行: .venv/bin/python records/work/diff_corpus_types.py 旧 新
 """
 import re
 import sys

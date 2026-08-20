@@ -1,7 +1,7 @@
 """INDEX.md から、指定した条件に合うセルの節だけを抜き出す。
 
 実行例:
-  PYTHONPATH=engine_core .venv/bin/python records/work/extract_cells.py word_problem > /tmp/wp.md
+  .venv/bin/python records/work/extract_cells.py word_problem > /tmp/wp.md
   ... extract_cells.py 'g2_l[0-9]+[.]knowledge'
 """
 import re

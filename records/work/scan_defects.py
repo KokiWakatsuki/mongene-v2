@@ -3,7 +3,7 @@
 読むだけでは規模が分からない。**同じ粗さが何セルに出ているか**を先に測ってから、
 実物と突き合わせる。ここで拾うのは「疑い」であって、確定した欠陥ではない。
 
-実行: PYTHONPATH=engine_core .venv/bin/python records/work/scan_defects.py
+実行: .venv/bin/python records/work/scan_defects.py
 """
 from __future__ import annotations
 

@@ -30,8 +30,8 @@ statement_size）はどれも学年を見ない。
 黙って0件を返さないよう、走査の最初に落とす。
 
 実行:
-  PYTHONPATH=engine_core:records/work .venv/bin/python records/work/check_unit_fit.py [--seeds N]
-  PYTHONPATH=engine_core:records/work .venv/bin/python records/work/check_unit_fit.py --self-test
+  PYTHONPATH=records/work .venv/bin/python records/work/check_unit_fit.py [--seeds N]
+  PYTHONPATH=records/work .venv/bin/python records/work/check_unit_fit.py --self-test
 """
 from __future__ import annotations
 

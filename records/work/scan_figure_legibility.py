@@ -20,7 +20,7 @@ SVG の `<text>` を全部拾い、フォントサイズから文字の箱を見
 普通なので、「近い」で数えると全部が引っかかる。貫いているものだけを出す。
 
 実行:
-  PYTHONPATH=engine_core .venv/bin/python records/work/scan_figure_legibility.py [--seeds N]
+  .venv/bin/python records/work/scan_figure_legibility.py [--seeds N]
 """
 from __future__ import annotations
 

@@ -27,7 +27,7 @@
 ——そこは別の検査（`check_figure_matches_givens` と目視）に任せる。
 
 実行:
-  PYTHONPATH=engine_core .venv/bin/python records/work/bt_dump_figures.py [--per 1] [--limit N]
+  .venv/bin/python records/work/bt_dump_figures.py [--per 1] [--limit N]
 """
 from __future__ import annotations
 

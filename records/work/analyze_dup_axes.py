@@ -15,8 +15,8 @@
 を出し、「増やせる軸があるのか、本当に1変数の題材なのか」を分けてから手を入れる。
 
 実行:
-  PYTHONPATH=engine_core .venv/bin/python records/work/analyze_dup_axes.py <セル名...> [--seeds N]
-  PYTHONPATH=engine_core .venv/bin/python records/work/analyze_dup_axes.py --over <dup一覧のファイル>
+  .venv/bin/python records/work/analyze_dup_axes.py <セル名...> [--seeds N]
+  .venv/bin/python records/work/analyze_dup_axes.py --over <dup一覧のファイル>
 """
 from __future__ import annotations
 
