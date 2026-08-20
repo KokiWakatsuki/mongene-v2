@@ -288,18 +288,19 @@ class LinearScene:
 # ---------------------------------------------------------------------------
 
 _SCENE_VOCAB: dict[str, tuple[VocabStep, ...]] = {
+    # `"_"` は「`|` で割った並びの都合で出るが使わない」位置。
     "price_count": (
-        ("distinct2", "item_candidates", ("item_a", "counter_a", "item_b", "counter_b")),
+        ("distinct2", "item_candidates", ("item_a", "counter_a", "item_b", "_")),
     ),
     "price_count_diff": (
         ("distinct2", "item_candidates", ("item_a", "counter_a", "item_b", "counter_b")),
     ),
     "surplus_shortage": (
-        ("one", "person_candidates", ("person", "person_counter")),
+        ("one", "person_candidates", ("person", "_")),
         ("one", "object_candidates", ("object", "object_counter")),
     ),
     "seat_shortage": (
-        ("one", "person_candidates", ("person", "person_counter")),
+        ("one", "person_candidates", ("person", "_")),
     ),
     "round_trip": (
         ("one", "place_candidates", ("start", "goal")),

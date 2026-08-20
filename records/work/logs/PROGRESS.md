@@ -86,3 +86,8 @@
                   3層に割った。golden g2_l16/l17/l18 全 seed unchanged。
                   ★引き順の例外1つ（price_count_diff が語彙→数）は _VOCAB_FIRST として
                   宣言だけ残した。コミット 87d64f05
+2026-08-20 --:--  作業1: 残る3 recipe（proportion_frequency 4場面・quadratic 4場面・
+                  expression 5場面）を3層に割った。**charter の5 module 28場面すべて完了**。
+                  golden 7family unchanged。★expression は「語彙が数の定義域を決める」形が
+                  4/5（値段は品物の相場・速さは動作の相場）＝語彙を先に引き、相場を
+                  文字列で運んで Relation が int() で受け取る。コミット a8cbe3ac
