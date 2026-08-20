@@ -141,12 +141,38 @@ def _shelf_declared(tree: ast.Module) -> dict[str, tuple[set[str], list[str]]]:
                         str(e.value) for e in getattr(elts[2], "elts", [])
                         if isinstance(e, ast.Constant)
                     }
-            # `render={ROLES_X: _scene_x, ...}` の値が書き手。
+            # `render={ROLES_X: _scene_x, ...}` の値が書き手、鍵が役割の型。
+            render = kw.get("render")
             fns = [
-                v.id for v in getattr(kw.get("render"), "values", [])
-                if isinstance(v, ast.Name)
+                v.id for v in getattr(render, "values", []) if isinstance(v, ast.Name)
             ]
-            out[str(sid.value)] = (names, fns)
+            roles = [
+                k.id for k in getattr(render, "keys", []) if isinstance(k, ast.Name)
+            ]
+            out[str(sid.value)] = (names, fns, roles)
+    return out
+
+
+def _relations_by_roles(tree: ast.Module) -> dict[str, list[str]]:
+    """`_RELATION_ROLES` から {役割の型の識別子: [関係の名前, ...]}。
+
+    ★**語彙は場面だけでなく関係も読む。** 値段や速さの相場は語彙といっしょに
+    1回で引かれて関係へ渡るので（`v["price"]` / `v["speed_lo"]`）、場面の書き手だけを
+    見ると「宣言されているが誰も読まない」を誤って出す。
+    関係で引く形の側には同じ注意書きが既にあった——**棚に移すときに同じ罠を踏んだ**
+    （文字の式で5件出した）。棚のどの場面がどの関係と組むかは、役割の型で分かる。
+    """
+    out: dict[str, list[str]] = {}
+    for node in ast.walk(tree):
+        if not isinstance(node, ast.Assign | ast.AnnAssign):
+            continue
+        target = node.targets[0] if isinstance(node, ast.Assign) else node.target
+        if getattr(target, "id", None) != "_RELATION_ROLES":
+            continue
+        for k, v in zip(getattr(node.value, "keys", []),
+                        getattr(node.value, "values", []), strict=False):
+            if isinstance(k, ast.Constant) and isinstance(v, ast.Name):
+                out.setdefault(v.id, []).append(str(k.value))
     return out
 
 
@@ -194,7 +220,8 @@ def check_source(src: str, label: str) -> list[str]:
     bad: list[str] = []
 
     # --- 棚の形（場面ごとに vocab と render が隣にある）------------------------
-    for sid, (given, fn_names) in sorted(shelf.items()):
+    rel_by_roles = _relations_by_roles(tree)
+    for sid, (given, fn_names, roles) in sorted(shelf.items()):
         if not fn_names:
             bad.append(f"{label}: 場面 {sid} に書き手が無い（render が空）")
             continue
@@ -205,6 +232,12 @@ def check_source(src: str, label: str) -> list[str]:
                 bad.append(f"{label}: 場面 {sid} の書き手 {fn_name} が見つからない")
                 continue
             read_v |= _subscripts(fn, "v")
+        # ★その場面と組む関係が読む語彙も数える（相場は語彙と1回で引かれる）。
+        for role_id in roles:
+            for kind in rel_by_roles.get(role_id, []):
+                rel_fn = fns.get(relations.get(kind, ""))
+                if rel_fn is not None:
+                    read_v |= _subscripts(rel_fn, "v")
         for miss in sorted(read_v - given):
             bad.append(f"{label}: 場面 {sid} が語彙 {miss!r} を読むが、宣言に無い")
         for unused in sorted(given - read_v - {"_"}):

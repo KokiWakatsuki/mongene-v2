@@ -47,6 +47,9 @@ _SHELVES: tuple[tuple[str, str, str], ...] = (
     # (module 名, 棚の変数名, 説明)
     ("scenes", "SCENES", "1元1次（未知数1つ・答え1つ）"),
     ("word_problem_quadratic", "SCENE_SHELF", "2次（答えが2つになりうる）"),
+    ("word_problem_proportion_frequency", "SCENE_SHELF", "比例と度数（問いの数が場面で変わる）"),
+    ("word_problem_system", "SCENE_SHELF", "連立（未知数2つ・答え2つ）"),
+    ("word_problem_expression", "SCENE_SHELF", "文字の式（答えが式・語彙が数を決める）"),
 )
 
 

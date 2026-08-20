@@ -112,6 +112,30 @@ def violations(kind: str, text: str, phrases: _Phrases,
     return bad
 
 
+def hint_violations(kind: str, text: str, phrases: _Phrases,
+                    scene: str = "", scenes: _Phrases | None = None) -> list[str]:
+    """ヒントのもとになる**概念のラベル**に、あってはならない言い方が出ていないか。
+
+    ★`requires` は当てない。ラベルは場面文を言い直すものではないので、
+    「必ずある言い方」を要求すると正しいラベルまで落ちる。
+    見るのは `forbids` だけ——**ラベルが場面と食い違っている**ときに鳴る。
+
+    ★これは実際に起きた欠陥から足した。g1_l36 Lv3 の場面は 2026-08-19 に
+    「先に出た人を追いかける」（中2 の1次関数だった）から「水そう」へ変えたが、
+    **概念の label を直し忘れていた**。label はそのままヒントとして生徒に出るので、
+    水そうの問題に「2人の時間と道のりの関係を式にし、グラフの交点から追いつく
+    時間を求める」というヒントが付いていた。
+    ゲートも既存の走査もこれを見ていない——**場面文の検査はヒントを見ていなかった**。
+    """
+    out: list[str] = []
+    spec = phrases.get(kind)
+    forbids: tuple[str, ...] = spec[1] if spec else ()
+    if scene and scenes is not None and scene in scenes:
+        forbids = forbids + scenes[scene][1]
+    out.extend(f"{kind}: ヒントに出てはいけない {w!r}" for w in forbids if w in text)
+    return out
+
+
 def _cells() -> list[tuple[str, str, int]]:
     from build_corpus import load_cells  # noqa: PLC0415
 
@@ -192,6 +216,26 @@ def self_test(phrases: _Phrases, scenes: _Phrases | None = None) -> int:
         print(f"{'OK  ' if ok else 'NG  '}場面「{name}」: "
               f"期待={'合格' if want_ok else '違反'} / 実際={got or '合格'}")
 
+    # --- ヒント（概念のラベル）の食い違い ---------------------------------
+    # ★実際に起きた欠陥をそのまま置く。g1_l36 の場面は「先に出た人を追いかける」
+    # （中2 の1次関数）から水そうへ変わったが、概念の label が直っていなかった。
+    hint_cases: list[tuple[str, str, str, str, bool]] = [
+        ("直す前のラベル（水そうなのに道のり）", "meet_two_motions", "tank_fill_both",
+         "2人の時間と道のりの関係を式にし、グラフの交点から追いつく時間を求める", False),
+        ("直した後のラベル", "meet_two_motions", "tank_fill_both",
+         "1つの場面から比例と反比例の両方を立式し、2つの量を求める", True),
+        # ★ラベルは場面文を言い直すものではないので、`requires` は当てない。
+        # 「空の」「水」が無くても落ちてはいけない。
+        ("必要な語が無くても落ちない（requires は当てない）", "meet_two_motions",
+         "tank_fill_both", "反比例の関係を使って時間を求める", True),
+    ]
+    for name, kind, scene, label, want_ok in hint_cases:
+        got = hint_violations(kind, label, phrases, scene, scenes)
+        ok = (not got) == want_ok
+        fails += 0 if ok else 1
+        print(f"{'OK  ' if ok else 'NG  '}ヒント「{name}」: "
+              f"期待={'合格' if want_ok else '違反'} / 実際={got or '合格'}")
+
     # ★棚に無い名前は落とす（棚を足し忘れたまま params に名前が載る事故を捕まえる）。
     unknown_scene = violations("rectangle_area", "横が縦より3cm長い長方形。面積40cm²。",
                                phrases, "そんな場面は無い", scenes)
@@ -211,8 +255,12 @@ def main(argv: Sequence[str]) -> int:
     if "--seeds" in argv:
         seeds = int(argv[argv.index("--seeds") + 1])
     env = make_env()
+    # 概念 id → 日本語名。ヒントはこれから作られるので、食い違いはここに出る。
+    from engine.core.curriculum import load_curriculum  # noqa: PLC0415
+    concept_labels = {cid: c.label for cid, c in load_curriculum().concepts.items()}
     bad: list[str] = []
     n_checked = 0
+    n_hints = 0
     kinds_seen: set[str] = set()
     for unit, form, level in _cells():
         coord = Coordinate(subject="math", unit=unit, form=form, level=level)
@@ -240,7 +288,22 @@ def main(argv: Sequence[str]) -> int:
             for v in violations(kind, text, phrases, scene, scenes):
                 bad.append(f"{unit}.{form}.Lv{level} seed{seed}"
                            f"{'[' + scene + ']' if scene else ''}: {v}")
-    print(f"見た問題 {n_checked} 件 / 関係 {len(kinds_seen)} 種"
+            # ★ヒントのもとになる**概念のラベル**も見る。
+            # `SubQuestionMR` はヒントを持たない——ヒントはテンプレートが
+            # `concept_tags` の日本語名から作る。だから欠陥はラベルの側にある。
+            # 場面文の検査はここを見ていなかったので、場面を直してラベルを
+            # 直し忘れた食い違いが通り抜けていた（g1_l36 Lv3）。
+            labels = " ".join(
+                concept_labels[t]
+                for sq in r.mr.sub_questions for t in sq.concept_tags
+                if t in concept_labels
+            )
+            if labels:
+                n_hints += 1
+                for v in hint_violations(kind, labels, phrases, scene, scenes):
+                    bad.append(f"{unit}.{form}.Lv{level} seed{seed}"
+                               f"{'[' + scene + ']' if scene else ''}: {v}")
+    print(f"見た問題 {n_checked} 件（うちヒントつき {n_hints} 件）/ 関係 {len(kinds_seen)} 種"
           f"（宣言は {len(phrases)} 種）/ seed 1..{seeds}")
     if len(kinds_seen) < len(phrases):
         print(f"  一度も出なかった関係: {sorted(set(phrases) - kinds_seen)}")
