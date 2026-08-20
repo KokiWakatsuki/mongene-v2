@@ -23,6 +23,7 @@ import sys
 from collections import Counter, defaultdict
 
 from engine.eval._harness import build_mr, capability_cells, make_env
+from engine_paths import PACKS_DIR  # エンジンの場所は1か所で解決する
 
 _HAS_VALUE = re.compile(r"[0-9=<>≦≧≡∥°√±×÷∠△]")
 
@@ -111,7 +112,7 @@ def main() -> int:
     # op が書かれているファイル（直す単位）。同じ op 名が複数ファイルに出ることがある。
     from pathlib import Path
     src_of: dict[str, list[str]] = defaultdict(list)
-    for p in sorted(Path("engine_core/engine/packs/math").rglob("*.py")):
+    for p in sorted(PACKS_DIR.rglob("*.py")):
         txt = p.read_text(encoding="utf-8")
         for op in per_op:
             if f'"{op}"' in txt or f"'{op}'" in txt:

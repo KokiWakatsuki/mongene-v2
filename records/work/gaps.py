@@ -1,7 +1,8 @@
 import yaml
 from engine.tools.coverage_page import measure
+from engine_paths import UNITS_YAML  # エンジンの場所は1か所で解決する
 units = {u.unit: u for u in measure()}
-doc = yaml.safe_load(open("engine_core/engine/curriculum/math/units.generated.yaml", encoding="utf-8"))
+doc = yaml.safe_load(open(UNITS_YAML, encoding="utf-8"))
 rows = []
 for uid, u in units.items():
     miss = [c for c in u.cells if c.form == "word_problem" and not c.covered]

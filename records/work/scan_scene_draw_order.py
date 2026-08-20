@@ -11,7 +11,7 @@
 import re
 from pathlib import Path
 
-_DIR = Path("engine_core/engine/packs/math/recipes")
+_DIR = RECIPES_DIR
 _TARGETS = [
     "word_problem_linear.py", "word_problem_system.py",
     "word_problem_proportion_frequency.py", "word_problem_quadratic.py",
@@ -64,6 +64,7 @@ for name in _TARGETS:
 
 print("\n--- まとめ ---")
 from collections import Counter
+from engine_paths import RECIPES_DIR  # エンジンの場所は1か所で解決する
 c = Counter(r[3] for r in rows)
 for k, v in c.most_common():
     print(f"  {k}: {v}")

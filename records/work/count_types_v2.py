@@ -28,6 +28,7 @@ from engine.eval._harness import build_mr, make_env
 
 import sys
 sys.path.insert(0, "records/work")
+from engine_paths import FAMILIES_DIR  # エンジンの場所は1か所で解決する
 from build_corpus import load_cells, match_axis_keys  # noqa: E402
 
 _SEEDS = 60
@@ -55,7 +56,7 @@ def main() -> None:
     import yaml
     import glob
     spec_of: dict[str, dict] = {}
-    for path in sorted(glob.glob("engine_core/engine/curriculum/math/families/*.yaml")):
+    for path in sorted(glob.glob(str(FAMILIES_DIR / "*.yaml"))):
         doc = yaml.safe_load(open(path, encoding="utf-8"))
         unit, form = doc["family"].removeprefix("math.").rsplit(".", 1)
         for lv, spec in (doc.get("levels") or {}).items():

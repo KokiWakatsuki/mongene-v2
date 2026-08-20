@@ -1,8 +1,0 @@
-approved_at: '2026-08-20T17:51:52.744861'
-approver: koki
-content_sha256: 90afe7fa64b3afa8a9249a056c8c2b5a330898772e1e46c55f7597819ea4b49c
-family: math.g1_l1.word_problem
-files:
-- /Users/koki/workspace/mongene-v2/engine_core/tests/golden/math.g1_l1.word_problem/math.g1_l1.word_problem_lv1_seed1.yaml
-- /Users/koki/workspace/mongene-v2/engine_core/tests/golden/math.g1_l1.word_problem/math.g1_l1.word_problem_lv1_seed2.yaml
-- /Users/koki/workspace/mongene-v2/engine_core/tests/golden/math.g1_l1.word_problem/math.g1_l1.word_problem_lv1_seed3.yaml

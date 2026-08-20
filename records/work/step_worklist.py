@@ -18,6 +18,7 @@ from pathlib import Path
 from engine.eval._harness import build_mr, capability_cells, make_env
 
 sys.path.insert(0, "records/work")
+from engine_paths import PACKS_DIR  # エンジンの場所は1か所で解決する
 from scan_step_values import classify  # noqa: E402
 
 _SEEDS = 2
@@ -27,7 +28,7 @@ def _op_locations() -> dict[str, list[str]]:
     """op 名 → 「ファイル:行」（`op="…"` が書かれている場所）。"""
     out: dict[str, list[str]] = defaultdict(list)
     pat = re.compile(r'op=["\']([a-z0-9_]+)["\']')
-    for p in sorted(Path("engine_core/engine/packs/math").rglob("*.py")):
+    for p in sorted(PACKS_DIR.rglob("*.py")):
         for i, line in enumerate(p.read_text(encoding="utf-8").splitlines(), 1):
             m = pat.search(line)
             if m:

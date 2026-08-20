@@ -1,6 +1,0 @@
-# 知識グラフ（前提関係 DAG）。正 = このファイル（手書き）。
-# edge {from: A, to: B} = 「A を学ぶには B の理解が前提」。非循環であること（curriculum_lint）。
-# M0 縦串分のみ。B は units.generated.yaml に実在する単元IDであること。
-prerequisites:
-  - {from: g2_l25, to: g2_l24}   # 2点から式 ← 傾きと1点から式
-  - {from: g2_l24, to: g1_l36}   # 1次関数の式決定 ← 比例・反比例の利用（関数の素地）

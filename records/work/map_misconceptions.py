@@ -26,8 +26,9 @@ import sys
 from pathlib import Path
 
 import yaml
+from engine_paths import CURRICULUM_DIR  # エンジンの場所は1か所で解決する
 
-_ROOT = Path("engine_core/engine/curriculum/math")
+_ROOT = CURRICULUM_DIR
 _REF = Path("records/work/ref")
 
 # 照合に使わない語（どの単元にも出るので手がかりにならない）

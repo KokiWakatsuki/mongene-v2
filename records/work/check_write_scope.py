@@ -41,26 +41,26 @@ import sys
 _ROLES: dict[str, tuple[tuple[str, ...], tuple[str, ...]]] = {
     "author": (
         (
-            "engine_core/engine/packs/math/recipes/",
-            "engine_core/engine/packs/math/parts/",
-            "engine_core/engine/curriculum/math/families/",
+            "engine/packs/math/recipes/",
+            "engine/packs/math/parts/",
+            "engine/curriculum/math/families/",
             "records/work/failure_catalog.yaml",
         ),
         (
-            "engine_core/engine/packs/math/checkers/",
-            "engine_core/tests/",
+            "engine/packs/math/checkers/",
+            "tests/",
         ),
     ),
     "checker": (
         (
-            "engine_core/engine/packs/math/checkers/",
-            "engine_core/tests/unit/",
+            "engine/packs/math/checkers/",
+            "tests/unit/",
         ),
         (
-            "engine_core/engine/packs/math/recipes/",
-            "engine_core/engine/packs/math/parts/",
-            "engine_core/engine/curriculum/math/families/",
-            "engine_core/tests/golden/",
+            "engine/packs/math/recipes/",
+            "engine/packs/math/parts/",
+            "engine/curriculum/math/families/",
+            "tests/golden/",
         ),
     ),
 }
@@ -83,14 +83,17 @@ def overlap(author_paths: list[str], checker_paths: list[str]) -> list[str]:
     return [f"両方の役割が同じファイルを書いた: {p}" for p in both]
 
 
-def _changed(rng: str | None) -> list[str]:
-    cmd = ["git", "diff", "--name-only"] + ([rng] if rng else [])
-    out = subprocess.run(cmd, capture_output=True, text=True, check=True).stdout
+def _changed(rng: str | None, repo: str) -> list[str]:
+    """エンジンのリポジトリ（既定 ../mongene-engine）の差分を見る。
+
+    エンジンのコードは mongene-engine にあるので、パスの基準もそちら。
+    """
+    base = ["git", "-C", repo]
+    out = subprocess.run(base + ["diff", "--name-only"] + ([rng] if rng else []),
+                         capture_output=True, text=True, check=True).stdout
     if not rng:
-        out += subprocess.run(
-            ["git", "ls-files", "--others", "--exclude-standard"],
-            capture_output=True, text=True, check=True,
-        ).stdout
+        out += subprocess.run(base + ["ls-files", "--others", "--exclude-standard"],
+                              capture_output=True, text=True, check=True).stdout
     return [line for line in out.splitlines() if line.strip()]
 
 
@@ -98,18 +101,18 @@ def self_test() -> int:
     """★通る側と落ちる側の両方を持つ。"""
     cases = [
         ("author が場面パーツを書いた", "author",
-         ["engine_core/engine/packs/math/recipes/scenes.py"], 0),
+         ["engine/packs/math/recipes/scenes.py"], 0),
         ("author が設計書を書いた", "author",
-         ["engine_core/engine/curriculum/math/families/g1_l25.word_problem.yaml"], 0),
+         ["engine/curriculum/math/families/g1_l25.word_problem.yaml"], 0),
         ("★author が checker を書いた", "author",
-         ["engine_core/engine/packs/math/checkers/word_problem_linear.py"], 1),
+         ["engine/packs/math/checkers/word_problem_linear.py"], 1),
         ("★author が golden を書き換えた", "author",
-         ["engine_core/tests/golden/math.g1_l25.word_problem/approval.yaml"], 1),
+         ["tests/golden/math.g1_l25.word_problem/approval.yaml"], 1),
         ("checker が checker を書いた", "checker",
-         ["engine_core/engine/packs/math/checkers/word_problem_linear.py"], 0),
+         ["engine/packs/math/checkers/word_problem_linear.py"], 0),
         ("★checker が recipe を書いた", "checker",
-         ["engine_core/engine/packs/math/recipes/word_problem_linear.py"], 1),
-        ("★宣言に無い場所", "author", ["engine_core/engine/core/pipeline.py"], 1),
+         ["engine/packs/math/recipes/word_problem_linear.py"], 1),
+        ("★宣言に無い場所", "author", ["engine/core/pipeline.py"], 1),
     ]
     fails = 0
     for name, role, paths, want in cases:
@@ -133,16 +136,17 @@ def main(argv: list[str]) -> int:
     if "--self-test" in argv:
         return 1 if self_test() else 0
     if "--role" not in argv:
-        print(f"usage: check_write_scope.py --role {{{'|'.join(_ROLES)}}} [--range A..B]")
+        print(f"usage: check_write_scope.py --role {{{'|'.join(_ROLES)}}} [--repo PATH] [--range A..B]")
         return 2
     role = argv[argv.index("--role") + 1]
     if role not in _ROLES:
         print(f"知らない役割: {role!r}（{', '.join(_ROLES)}）")
         return 2
     rng = argv[argv.index("--range") + 1] if "--range" in argv else None
+    repo = argv[argv.index("--repo") + 1] if "--repo" in argv else "../mongene-engine"
 
-    paths = _changed(rng)
-    print(f"役割 {role} / 変更 {len(paths)} ファイル（{rng or '作業ツリー'}）")
+    paths = _changed(rng, repo)
+    print(f"役割 {role} / 変更 {len(paths)} ファイル（{repo} の {rng or '作業ツリー'}）")
     if not paths:
         print("★1ファイルも変わっていない＝何も書いていないか、範囲の指定が違う")
         return 1

@@ -22,8 +22,9 @@ import ast
 import re
 import sys
 from pathlib import Path
+from engine_paths import RECIPES_DIR  # エンジンの場所は1か所で解決する
 
-_DIR = Path("engine_core/engine/packs/math/recipes")
+_DIR = RECIPES_DIR
 # 層に割り終えた module（割るたびにここへ足す）
 _SPLIT = [
     "word_problem_linear.py",

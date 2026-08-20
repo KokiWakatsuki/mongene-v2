@@ -1,8 +1,0 @@
-approved_at: '2026-08-20T17:58:07.531769'
-approver: koki
-content_sha256: 1d52f2107fcee67cd512f69b685479048e5afb8c295f8143ede067569b23e5ff
-family: math.g3_l40.find_value
-files:
-- /Users/koki/workspace/mongene-v2/engine_core/tests/golden/math.g3_l40.find_value/math.g3_l40.find_value_lv2_seed1.yaml
-- /Users/koki/workspace/mongene-v2/engine_core/tests/golden/math.g3_l40.find_value/math.g3_l40.find_value_lv2_seed2.yaml
-- /Users/koki/workspace/mongene-v2/engine_core/tests/golden/math.g3_l40.find_value/math.g3_l40.find_value_lv2_seed3.yaml

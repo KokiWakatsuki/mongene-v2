@@ -1,8 +1,0 @@
-approved_at: '2026-08-20T17:58:56.501138'
-approver: koki
-content_sha256: 2029a826f928c7ae44a29670541350def4bd9d540371a0b4f4226c598606e6ef
-family: math.g3_l51.find_value
-files:
-- /Users/koki/workspace/mongene-v2/engine_core/tests/golden/math.g3_l51.find_value/math.g3_l51.find_value_lv1_seed1.yaml
-- /Users/koki/workspace/mongene-v2/engine_core/tests/golden/math.g3_l51.find_value/math.g3_l51.find_value_lv1_seed2.yaml
-- /Users/koki/workspace/mongene-v2/engine_core/tests/golden/math.g3_l51.find_value/math.g3_l51.find_value_lv1_seed3.yaml

@@ -47,8 +47,9 @@ from engine.core.pipeline import generate
 from engine.eval._harness import make_env
 
 sys.path.insert(0, "records/work")
+from engine_paths import UNITS_YAML  # エンジンの場所は1か所で解決する
 
-_UNITS = pathlib.Path("engine_core/engine/curriculum/math/units.generated.yaml")
+_UNITS = UNITS_YAML
 _GRADES = ("g1", "g2", "g3")
 
 # 見る道具の印。値は (正規表現, なぜこの書き方か)。

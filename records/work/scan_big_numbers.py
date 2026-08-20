@@ -21,6 +21,7 @@ import yaml
 from engine.core.contracts import GenerateRequest, Unsupported
 from engine.core.pipeline import generate
 from engine.eval._harness import make_env
+from engine_paths import FAMILIES_DIR  # エンジンの場所は1か所で解決する
 
 _NUM = re.compile(r"\d+")
 _FRAC = re.compile(r"(\d+)\s*/\s*(\d+)")
@@ -28,7 +29,7 @@ _FRAC = re.compile(r"(\d+)\s*/\s*(\d+)")
 
 def all_cells() -> list[tuple[str, str, int]]:
     cells = []
-    for path in sorted(glob.glob("engine_core/engine/curriculum/math/families/*.yaml")):
+    for path in sorted(glob.glob(str(FAMILIES_DIR / "*.yaml"))):
         doc = yaml.safe_load(open(path, encoding="utf-8"))
         unit, form = doc["family"].removeprefix("math.").rsplit(".", 1)
         for lv in (doc.get("levels") or {}):

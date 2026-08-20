@@ -17,6 +17,7 @@ import glob
 from collections import Counter, defaultdict
 
 import yaml
+from engine_paths import FAMILIES_DIR  # エンジンの場所は1か所で解決する
 
 _NOT_A_TYPE_AXIS = {"concept_set"}
 
@@ -32,7 +33,7 @@ def main() -> None:
     axes_used: Counter[str] = Counter()
     detail: dict[str, list[str]] = defaultdict(list)
 
-    for path in sorted(glob.glob("engine_core/engine/curriculum/math/families/*.yaml")):
+    for path in sorted(glob.glob(str(FAMILIES_DIR / "*.yaml"))):
         doc = yaml.safe_load(open(path, encoding="utf-8"))
         family = doc.get("family", path)
         unit_form = family.removeprefix("math.")

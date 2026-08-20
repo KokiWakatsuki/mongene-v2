@@ -1,8 +1,0 @@
-approved_at: '2026-08-20T17:54:02.632225'
-approver: koki
-content_sha256: 93f2c4300338e961dfe04b47bf78e6790b7a07b8280b21e404f0c33419e00b91
-family: math.g1_l59.calculation
-files:
-- /Users/koki/workspace/mongene-v2/engine_core/tests/golden/math.g1_l59.calculation/math.g1_l59.calculation_lv1_seed1.yaml
-- /Users/koki/workspace/mongene-v2/engine_core/tests/golden/math.g1_l59.calculation/math.g1_l59.calculation_lv1_seed2.yaml
-- /Users/koki/workspace/mongene-v2/engine_core/tests/golden/math.g1_l59.calculation/math.g1_l59.calculation_lv1_seed3.yaml

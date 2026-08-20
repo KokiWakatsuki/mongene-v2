@@ -20,6 +20,7 @@ import yaml
 from engine.core.contracts import GenerateRequest, Unsupported
 from engine.core.pipeline import generate
 from engine.eval._harness import make_env
+from engine_paths import UNITS_YAML  # エンジンの場所は1か所で解決する
 
 _SRC = Path("records/work/corpus/INDEX.md")
 _OUT = Path("records/work/corpus/mongene_problems.html")
@@ -97,7 +98,7 @@ def answer_html(answer) -> str:
 
 def main() -> None:
     env = make_env()
-    units = yaml.safe_load(open("engine_core/engine/curriculum/math/units.generated.yaml", encoding="utf-8"))
+    units = yaml.safe_load(open(UNITS_YAML, encoding="utf-8"))
     units = units.get("units", units)
     cells = parse_index()
 

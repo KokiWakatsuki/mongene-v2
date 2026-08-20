@@ -1,8 +1,0 @@
-approved_at: '2026-08-20T17:57:00.523631'
-approver: koki
-content_sha256: 8e72f576629a7f42ffc788fea723b835a43bc675282cd1c940aa2224d4b8e804
-family: math.g3_l14.calculation
-files:
-- /Users/koki/workspace/mongene-v2/engine_core/tests/golden/math.g3_l14.calculation/math.g3_l14.calculation_lv1_seed1.yaml
-- /Users/koki/workspace/mongene-v2/engine_core/tests/golden/math.g3_l14.calculation/math.g3_l14.calculation_lv1_seed2.yaml
-- /Users/koki/workspace/mongene-v2/engine_core/tests/golden/math.g3_l14.calculation/math.g3_l14.calculation_lv1_seed3.yaml

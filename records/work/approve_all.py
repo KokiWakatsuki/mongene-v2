@@ -19,6 +19,7 @@ from concurrent.futures import ProcessPoolExecutor
 from pathlib import Path
 
 from engine.tools.spec_cli import _DEFAULT_GOLDEN_DIR, _run_approve
+from engine_paths import GOLDEN_DIR  # エンジンの場所は1か所で解決する
 
 _SKIP = {"__pycache__"}
 
@@ -46,7 +47,7 @@ def main() -> int:
     if "--jobs" in sys.argv:
         jobs = int(sys.argv[sys.argv.index("--jobs") + 1])
     families = sorted(
-        d.name for d in Path("engine_core/tests/golden").iterdir()
+        d.name for d in GOLDEN_DIR.iterdir()
         if d.is_dir() and d.name not in _SKIP
     )
     fails: list[str] = []

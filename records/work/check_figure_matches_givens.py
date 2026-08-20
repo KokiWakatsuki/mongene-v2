@@ -23,6 +23,7 @@ from engine.packs.math.geometry import (  # noqa: F401  登録の副作用
     constructions_right_triangle,
 )
 from engine.packs.math.recipes.geometry_proof import build_problem
+from engine_paths import FAMILIES_DIR  # エンジンの場所は1か所で解決する
 
 # 相対誤差でこれを超えたら「図が仮定と違う」とみなす。
 _LEN_TOL = 0.05      # 5%
@@ -87,7 +88,7 @@ def problems_for(con, facts) -> list[str]:
 def main() -> None:
     bad = 0
     checked = 0
-    for path in sorted(glob.glob("engine_core/engine/curriculum/math/families/*.proof.yaml")):
+    for path in sorted(glob.glob(str(FAMILIES_DIR / "*.proof.yaml"))):
         doc = yaml.safe_load(open(path, encoding="utf-8"))
         unit = doc["family"].removeprefix("math.").removesuffix(".proof")
         for lv, spec in (doc.get("levels") or {}).items():

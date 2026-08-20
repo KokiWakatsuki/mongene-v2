@@ -1,54 +1,63 @@
 # mongene-v2
 
-中学数学の問題を**決定論的に**（LLM を使わず）作るエンジンと、その開発の記録。
+mongene エンジンの**開発の記録**。設計の経緯・走査（検査の道具）・失敗カタログを持つ。
 
-リポジトリは**3つの大分類**に分かれている。**どこに置くかは「なければ動かない／
-なくても動く」で決める。**
+★**エンジン本体はここには無い。** 別リポジトリ `mongene-engine` にあり、
+ここはそれを**インストールして使う**。
 
 ```
-engine_core/   1. エンジン本体 …… これ1つを持ち出せば動く
-records/       2. 記録群-その他 …… 経緯・進捗・道具・生成した問題
-archive/       3. 過去のもの   …… もう使っていない。過去の例として残す
+mongene-master/
+├── mongene-engine   エンジンの正本（engine・tests・app・API）
+└── mongene-v2       ← ここ。記録と走査だけ
 ```
+
+なぜ分けたか: 同じコードを2か所に置くと**片方だけ直る**。このプロジェクトで
+いちばん多く事故を起こしている形で、1日のうちに「頂点名から I を外す（4か所に散在）」
+「往復の距離の上限（2か所にあり片方だけ直っていた）」が実際に出た。
+**コードの正本は1つ**にする。
+
+## 使い方
+
+```bash
+python -m venv .venv && . .venv/bin/activate
+pip install -e ../mongene-engine     # ★エンジンを editable で入れる
+pip install -e ".[dev]"
+
+# エンジンの場所が解決できるか（走査は全部これを通す）
+PYTHONPATH=records/work python records/work/engine_paths.py
+```
+
+走査の実行例:
+
+```bash
+PYTHONPATH=records/work python records/work/check_cell.py g1_l25 word_problem 2
+PYTHONPATH=records/work python records/work/check_unit_fit.py --seeds 3
+PYTHONPATH=records/work python records/work/check_layer_split.py
+```
+
+★**エンジンのコードを直すのは `mongene-engine` 側。** ここでは直さない。
+`records/work/check_write_scope.py` が、誰がどこを書いたかを差分で見る。
 
 ---
 
-## 1. `engine_core/` — エンジン本体
+## 1. エンジン本体は別リポジトリ
 
-**なければ動かないものだけ**を入れる。最終的に**このディレクトリごと**本命の
-プロジェクトへ移し、そちらで API 化する。
+`mongene-engine` にある。中身:
 
 ```
-engine_core/
+mongene-engine/
 ├── engine/    Python パッケージ（`import engine`）
 │   ├── core/        契約・パイプライン・ゲート・レンダラ
 │   ├── packs/math/  recipe / solver / checker / visuals（教科の中身）
 │   ├── curriculum/  単元・family の spec（YAML）＝**データだが無いと動かない**
 │   ├── eval/        7ゲートの測定
 │   └── tools/       spec_cli（preview / check / approve）
-└── tests/     49,626 件。golden 回帰を含む
+├── app/       FastAPI（GET /health・GET /units・POST /generate）
+└── tests/     golden 回帰を含む
 ```
 
-**エンジンは CWD に依存しない。** family の spec はパッケージからの相対で引く。
-どのディレクトリから呼んでも動く（そうでないと持ち出せない）。
-
-```bash
-PYTHONPATH=engine_core python -c "
-from engine.bootstrap import bootstrap
-from engine.core.contracts import GenerateRequest
-from engine.core.pipeline import generate
-bootstrap()
-print(generate(GenerateRequest(subject='math', unit='g3_l37', form='find_value', level=4, seed=1)).problem_text)"
-```
-
-### `tests/` をなぜ本体に入れたか
-
-厳密には「なくても動く」。それでも本体に置いたのは、**融合したあとに動くことを
-確かめる手段が無いと融合できない**から。golden 回帰（`tests/golden/`）は
-「承認した問題文と再生成が一致するか」を見ていて、これが唯一「出力が変わって
-いない」ことを保証する。分けたい場合は `records/` へ移してよい。
-
----
+走査からエンジンのファイルを読むときは、パスを直書きせず
+`records/work/engine_paths.py` を通す（**場所を答えるのは1か所だけ**）。
 
 ## 2. `records/` — 記録群-その他
 

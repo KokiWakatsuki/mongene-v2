@@ -44,6 +44,7 @@ from engine.core.contracts import (
 )
 from engine.core.pipeline import generate
 from engine.eval._harness import build_mr, make_env
+from engine_paths import FAMILIES_DIR  # エンジンの場所は1か所で解決する
 
 # **出力先は外から差せる。** ここが `records/work/corpus` 固定だったので、
 # `engine_core/` だけをメインプロジェクトへ移すと「生成はできるが結果がどこにも
@@ -494,7 +495,7 @@ def load_cells() -> list[tuple[str, str, int, list[set], int, set[str]]]:
     実測で対応づける（`match_axis_keys`）。
     """
     cells = []
-    for path in sorted(glob.glob("engine_core/engine/curriculum/math/families/*.yaml")):
+    for path in sorted(glob.glob(str(FAMILIES_DIR / "*.yaml"))):
         doc = yaml.safe_load(open(path, encoding="utf-8"))
         unit, form = doc["family"].removeprefix("math.").rsplit(".", 1)
         for lv, spec in (doc.get("levels") or {}).items():

@@ -24,6 +24,7 @@ import yaml
 
 from engine.core.contracts import Coordinate
 from engine.eval._harness import build_mr, make_env
+from engine_paths import FAMILIES_DIR  # エンジンの場所は1か所で解決する
 
 # 表層＝答えにも解き方にも効かない見た目だけの軸。build_corpus の `_FILLER_HINTS`
 # と同じ考え方に、図形の点名（labels/slots/points）を足したもの。
@@ -46,7 +47,7 @@ def main() -> int:
     env = make_env()
 
     cells = []
-    for path in sorted(glob.glob("engine_core/engine/curriculum/math/families/*.yaml")):
+    for path in sorted(glob.glob(str(FAMILIES_DIR / "*.yaml"))):
         doc = yaml.safe_load(open(path, encoding="utf-8"))
         unit, form = doc["family"].removeprefix("math.").rsplit(".", 1)
         for lv in (doc.get("levels") or {}):

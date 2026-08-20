@@ -1,8 +1,0 @@
-approved_at: '2026-08-20T17:53:04.456107'
-approver: koki
-content_sha256: 30b322c5f26490892640f9df2e8915c2b6eeabd8bacea494e29a43ff5ffe041b
-family: math.g1_l39.knowledge
-files:
-- /Users/koki/workspace/mongene-v2/engine_core/tests/golden/math.g1_l39.knowledge/math.g1_l39.knowledge_lv1_seed1.yaml
-- /Users/koki/workspace/mongene-v2/engine_core/tests/golden/math.g1_l39.knowledge/math.g1_l39.knowledge_lv1_seed2.yaml
-- /Users/koki/workspace/mongene-v2/engine_core/tests/golden/math.g1_l39.knowledge/math.g1_l39.knowledge_lv1_seed3.yaml

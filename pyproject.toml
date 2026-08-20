@@ -1,12 +1,17 @@
 [project]
 name = "mongene-v2"
 version = "0.1.0"
-description = "中学数学問題自動生成システム"
+description = "mongene エンジンの開発記録・走査・失敗カタログ（エンジン本体は mongene-engine）"
 requires-python = ">=3.12"
 dependencies = [
-    "sympy>=1.13.0",
-    "fastapi>=0.115.0",
-    "uvicorn[standard]>=0.32.0",
+    # ★エンジンは別リポジトリ（mongene-engine）にある。ここは記録と走査だけを持つ。
+    #   pip install -e ../mongene-engine
+    # で入れる（editable。エンジンを直したら即座にこちらの走査へ効く）。
+    "mongene-engine",
+    "matplotlib>=3.9.0",   # 走査の作図
+    "networkx>=3.4.0",     # 前提関係の可視化
+    "google-genai>=2.0.0", # 読み手を API から回すとき
+]>=0.32.0",
     "pydantic>=2.9.0",
     "google-genai>=2.0.0",
     "svgwrite>=1.4.3",

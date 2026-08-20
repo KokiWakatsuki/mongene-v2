@@ -34,8 +34,9 @@ from engine.bootstrap import bootstrap
 from engine.core.pipeline import capabilities
 from engine.core.registry import REGISTRY
 from engine.tools.goal_progress import _UNITS_PATH
+from engine_paths import CURRICULUM_DIR, FAMILIES_DIR, PACKS_DIR  # エンジンの場所は1か所で解決する
 
-_FAM_DIR = Path("engine_core/engine/curriculum/math/families")
+_FAM_DIR = FAMILIES_DIR
 _EXCLUSION_RE = re.compile(r"意図的に未実装|未実装のまま|本タスクの対象外|担当外|本コミットの担当外")
 
 
@@ -127,7 +128,7 @@ def main() -> int:
 
     src = "\n".join(
         p.read_text()
-        for p in Path("engine_core/engine/packs/math").rglob("*.py")
+        for p in PACKS_DIR.rglob("*.py")
         if "/solvers/" not in str(p)
     )
     orphan_solvers = sorted(s for s in REGISTRY._solvers if f'"{s}"' not in src)
@@ -181,11 +182,11 @@ def _print_curriculum_content() -> None:
 
     from engine.core.spec.loader import load_family_dir
 
-    d = Path("engine_core/engine/curriculum/math")
+    d = CURRICULUM_DIR
     concepts = yaml.safe_load((d / "concepts.yaml").read_text(encoding="utf-8")) or {}
     prereqs = yaml.safe_load((d / "prerequisites.yaml").read_text(encoding="utf-8")) or {}
     causes = yaml.safe_load((d / "error_causes.yaml").read_text(encoding="utf-8")) or {}
-    families = load_family_dir(Path("engine_core/engine/curriculum/math/families"))
+    families = load_family_dir(FAMILIES_DIR)
 
     levels = [lv for spec in families.values() for lv in spec.levels.values()]
     tagged = sum(1 for lv in levels if lv.cause_tags)

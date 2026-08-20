@@ -1,8 +1,0 @@
-approved_at: '2026-08-20T17:57:50.168270'
-approver: koki
-content_sha256: 09b86fafebb08fa2fd40da35f19c8a2f2f2195437d3e5e4b5073bc6e80c95a69
-family: math.g3_l23.calculation
-files:
-- /Users/koki/workspace/mongene-v2/engine_core/tests/golden/math.g3_l23.calculation/math.g3_l23.calculation_lv2_seed1.yaml
-- /Users/koki/workspace/mongene-v2/engine_core/tests/golden/math.g3_l23.calculation/math.g3_l23.calculation_lv2_seed2.yaml
-- /Users/koki/workspace/mongene-v2/engine_core/tests/golden/math.g3_l23.calculation/math.g3_l23.calculation_lv2_seed3.yaml

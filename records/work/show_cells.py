@@ -1,8 +1,9 @@
 import sys
 
 import yaml
+from engine_paths import UNITS_YAML  # エンジンの場所は1か所で解決する
 
-doc = yaml.safe_load(open("engine_core/engine/curriculum/math/units.generated.yaml", encoding="utf-8"))
+doc = yaml.safe_load(open(UNITS_YAML, encoding="utf-8"))
 units = doc["units"]
 for uid in sys.argv[1:]:
     u = units[uid]

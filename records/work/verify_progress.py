@@ -27,8 +27,9 @@ from engine.core.contracts import GenerateRequest, Problem, Unsupported
 from engine.core.pipeline import capabilities, generate
 from engine.eval._harness import make_env
 from engine.tools.goal_progress import _UNITS_PATH
+from engine_paths import FAMILIES_DIR  # エンジンの場所は1か所で解決する
 
-_FAM_DIR = Path("engine_core/engine/curriculum/math/families")
+_FAM_DIR = FAMILIES_DIR
 
 
 def _ledger_cells() -> set[tuple[str, str, int]]:

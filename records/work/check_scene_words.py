@@ -47,6 +47,7 @@ from engine.core.contracts import Coordinate
 from engine.eval._harness import build_mr, make_env
 
 sys.path.insert(0, "records/work")
+from engine_paths import FAMILIES_DIR  # エンジンの場所は1か所で解決する
 
 # 助数詞（閉じた言語の事実。カタログの写しではない）。
 _COUNTERS = frozenset(
@@ -63,7 +64,7 @@ def catalog_pairs() -> dict[str, str]:
     だけ**を採る。助数詞の集合は `_COUNTERS`（言語の事実）で、カタログの写しではない。
     """
     out: dict[str, str] = {}
-    for path in sorted(glob.glob("engine_core/engine/curriculum/math/families/*.yaml")):
+    for path in sorted(glob.glob(str(FAMILIES_DIR / "*.yaml"))):
         doc = yaml.safe_load(open(path, encoding="utf-8"))
         for spec in (doc.get("levels") or {}).values():
             for value in (spec.get("params") or {}).values():
