@@ -31,6 +31,8 @@ from __future__ import annotations
 
 import ast
 import sys
+from collections.abc import Mapping
+from typing import cast
 from engine_paths import RECIPES_DIR  # エンジンの場所は1か所で解決する
 
 _DIR = RECIPES_DIR
@@ -209,8 +211,39 @@ def _numbers_keys(fn: ast.FunctionDef) -> set[str]:
     return out
 
 
-def check_source(src: str, label: str) -> list[str]:
-    """1 module を見る。返すのは違反の並び（空なら合格）。"""
+def _world(sources: Mapping[str, str]) -> dict[str, object]:
+    """**module をまたいだ対応づけ**を1つに集める。
+
+    ★棚は module をまたぐ。`word_problem_linear.py` の8関係はすべて
+    `scenes.py` の棚から場面を引くので、**1ファイルだけ見ると対応づけが読めない**
+    （実際に「棚 0 / 場面 0 / 関係 8」と出た。検査が黙って通らなかったのは正しい）。
+    語彙の契約は「場面の書き手」と「その場面と組む関係」の両方を見ないと判定できない
+    ので、ファイル単位をやめてプログラム全体で持つ。
+    """
+    rel_by_roles: dict[str, list[str]] = {}
+    rel_fns: dict[str, ast.FunctionDef] = {}
+    for label, src in sources.items():
+        tree = ast.parse(src)
+        fns = {n.name: n for n in ast.walk(tree) if isinstance(n, ast.FunctionDef)}
+        drawers = _dict_of_names(tree, "RELATION_DRAWERS")
+        for role_id, kinds in _relations_by_roles(tree).items():
+            rel_by_roles.setdefault(role_id, []).extend(kinds)
+        for kind, fn_name in drawers.items():
+            fn = fns.get(fn_name)
+            if fn is not None:
+                # ★同じ関係の名前が2つの module にあることがある
+                # （`price_count_diff` は1元1次と連立の両方）。**上書きせず両方持つ**
+                # ——片方だけ見ると、もう片方が読む語彙を「誰も読まない」と誤る。
+                rel_fns.setdefault(f"{label}:{kind}", fn)
+    return {"rel_by_roles": rel_by_roles, "rel_fns": rel_fns}
+
+
+def check_source(src: str, label: str, world: Mapping[str, object] | None = None) -> list[str]:
+    """1 module を見る。返すのは違反の並び（空なら合格）。
+
+    `world` があれば、棚の場面と組む関係を**module をまたいで**探す
+    （無ければその file の中だけ＝自己検査の合成データ用）。
+    """
     tree = ast.parse(src)
     fns = {n.name: n for n in ast.walk(tree) if isinstance(n, ast.FunctionDef)}
     scenes = _dict_of_names(tree, "SCENE_RENDERERS")
@@ -220,7 +253,12 @@ def check_source(src: str, label: str) -> list[str]:
     bad: list[str] = []
 
     # --- 棚の形（場面ごとに vocab と render が隣にある）------------------------
-    rel_by_roles = _relations_by_roles(tree)
+    if world is not None:
+        rel_by_roles = cast("dict[str, list[str]]", world["rel_by_roles"])
+        world_fns = cast("dict[str, ast.FunctionDef]", world["rel_fns"])
+    else:
+        rel_by_roles = _relations_by_roles(tree)
+        world_fns = {}
     for sid, (given, fn_names, roles) in sorted(shelf.items()):
         if not fn_names:
             bad.append(f"{label}: 場面 {sid} に書き手が無い（render が空）")
@@ -236,17 +274,53 @@ def check_source(src: str, label: str) -> list[str]:
         for role_id in roles:
             for kind in rel_by_roles.get(role_id, []):
                 rel_fn = fns.get(relations.get(kind, ""))
-                if rel_fn is not None:
+                if rel_fn is None:
+                    # 別の module にある関係（棚は module をまたぐ）。
+                    for key, fn2 in world_fns.items():
+                        if key.endswith(f":{kind}"):
+                            read_v |= _subscripts(fn2, "v")
+                else:
                     read_v |= _subscripts(rel_fn, "v")
         for miss in sorted(read_v - given):
             bad.append(f"{label}: 場面 {sid} が語彙 {miss!r} を読むが、宣言に無い")
         for unused in sorted(given - read_v - {"_"}):
             bad.append(f"{label}: 場面 {sid} の語彙 {unused!r} は宣言されているが誰も読まない")
+        # ★場面が `n[...]` で読む数が、組む関係の `numbers` に在るか。
+        # **この検査は棚の形では効いていなかった**（関係で引く形にしか無かった）。
+        # 棚に移すたびに 33 場面ぶんの穴が広がっていた——生成すれば KeyError で
+        # 落ちるが、落ちるのは**その場面をたまたま引いた seed のとき**だけ。
+        rel_numbers: set[str] = set()
+        seen_rel = False
+        for role_id in roles:
+            for kind in rel_by_roles.get(role_id, []):
+                rel_fn = fns.get(relations.get(kind, ""))
+                if rel_fn is None:
+                    for key, fn2 in world_fns.items():
+                        if key.endswith(f":{kind}"):
+                            rel_numbers |= _numbers_keys(fn2); seen_rel = True
+                else:
+                    rel_numbers |= _numbers_keys(rel_fn); seen_rel = True
+        if seen_rel:
+            read_n: set[str] = set()
+            for fn_name in fn_names:
+                fn = fns.get(fn_name)
+                if fn is not None:
+                    read_n |= _subscripts(fn, "n")
+            for miss in sorted(read_n - rel_numbers):
+                bad.append(f"{label}: 場面 {sid} が数 {miss!r} を読むが、"
+                           f"組む関係が出していない")
 
     # --- 関係で引く形（棚に移していない module）-------------------------------
-    # ★棚だけの module（`scenes.py`）は SCENE_RENDERERS を持たない。
-    # どちらも無いときだけ「読めない」＝**検査が動いていない疑い**を出す。
-    if not shelf and (not scenes or not relations):
+    # ★3通りのどれかで覆われていればよい。
+    #   ① 自分の file に棚がある（`scenes.py` / 各 module の `SCENE_SHELF`）
+    #   ② 関係で引く形を持っている（`SCENE_RENDERERS` ＋ `RELATION_DRAWERS`）
+    #   ③ 関係を持ち、その関係が**別 file の棚に配線されている**
+    #      （`word_problem_linear.py` の8関係は `scenes.py` の棚から引く）
+    # どれでもないときだけ「読めない」＝**検査が動いていない疑い**を出す。
+    wired = bool(relations) and any(
+        kind in kinds for kinds in rel_by_roles.values() for kind in relations
+    )
+    if not shelf and not (scenes and relations) and not wired:
         return [f"{label}: 対応づけが読めない"
                 f"（棚 {len(shelf)} / 場面 {len(scenes)} / 関係 {len(relations)}）"
                 "＝検査が動いていない疑い"]
@@ -350,6 +424,32 @@ SCENES = (
 '''
 
 
+# ★棚の形で「場面が読む数」を見ているかの合成データ。
+# 関係で引く形にはこの検査があったのに、棚の形には無かった（33場面ぶんの穴）。
+_SHELF_BAD_NUMBER = '''
+def _relation_x(p, rng):
+    return R(numbers={"price": 1})
+def _scene_x(n, v):
+    return S(f"{n['total']}個買う")
+RELATION_DRAWERS = {"x": _relation_x}
+_RELATION_ROLES = {"x": ROLES}
+SCENES = (
+    SceneSpec(id="x", vocab=(), render={ROLES: _scene_x}),
+)
+'''
+_SHELF_GOOD_NUMBER = '''
+def _relation_x(p, rng):
+    return R(numbers={"price": 1})
+def _scene_x(n, v):
+    return S(f"{n['price']}円")
+RELATION_DRAWERS = {"x": _relation_x}
+_RELATION_ROLES = {"x": ROLES}
+SCENES = (
+    SceneSpec(id="x", vocab=(), render={ROLES: _scene_x}),
+)
+'''
+
+
 def self_test() -> int:
     fails = 0
     for name, src, want in [
@@ -380,6 +480,15 @@ def self_test() -> int:
     ok = got == []
     fails += 0 if ok else 1
     print(f"{'OK  ' if ok else 'NG  '}正しい棚は通る: {got}")
+
+    got = check_source(_SHELF_BAD_NUMBER, "synthetic")
+    ok = any("組む関係が出していない" in g for g in got)
+    fails += 0 if ok else 1
+    print(f"{'OK  ' if ok else 'NG  '}棚「関係が出していない数を読む」で落ちる: {got}")
+    got = check_source(_SHELF_GOOD_NUMBER, "synthetic")
+    ok = got == []
+    fails += 0 if ok else 1
+    print(f"{'OK  ' if ok else 'NG  '}棚「関係が出している数を読む」は通る: {got}")
     return fails
 
 
@@ -388,8 +497,11 @@ def main() -> int:
         return 1 if self_test() else 0
     bad: list[str] = []
     modules = _modules()
+    sources = {name: (_DIR / name).read_text(encoding="utf-8") for name in modules}
+    # ★棚は module をまたぐので、対応づけは全体で持つ（`_world` の説明を見る）。
+    world = _world(sources)
     for name in modules:
-        bad += check_source((_DIR / name).read_text(encoding="utf-8"), name)
+        bad += check_source(sources[name], name, world)
     if bad:
         print(f"=== 契約の違反 {len(bad)} 件 ===")
         for b in bad:
