@@ -162,7 +162,10 @@ def main(argv: Sequence[str]) -> int:
             r = build_mr(coord, seed, env)
             if not r.ok or r.mr is None:
                 continue
-            kind = str(r.mr.params.get("scenario_kind", ""))
+            # ★式の軸（`form`）があれば**そちらが関係の名前**（1つの関係に式が
+            # 2通り以上あるとき、要求する言い方が変わる）。
+            kind = str(r.mr.params.get("form", "")
+                       or r.mr.params.get("scenario_kind", ""))
             if not kind or kind not in phrases:
                 continue        # 層に割っていない recipe のセルは対象外
             kinds_seen.add(kind)

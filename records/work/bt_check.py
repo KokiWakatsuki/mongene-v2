@@ -67,7 +67,7 @@ def main() -> int:
     rows: dict[str, dict] = {}
     # `scenes.json`（10回目・(関係×場面) の全組×5seed）も混ぜる。
     # id の付け方は同じ（`unit.form.Lv<n>#<seed>`）なので、前の回の答えは生きたまま。
-    for name in ("index.json", "patterns.json", "scenes.json"):
+    for name in ("index.json", "patterns.json", "scenes.json", "figures.json"):
         p = _DIR / name
         if p.exists():
             for r in json.loads(p.read_text(encoding="utf-8")):

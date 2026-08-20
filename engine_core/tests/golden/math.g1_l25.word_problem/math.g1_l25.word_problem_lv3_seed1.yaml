@@ -24,28 +24,28 @@ meta:
   seed: 1
   signature: word_problem_price_count_diff
 problem_ref: 611fb5fdb7924862
-problem_text: '合唱団の会費は、大人1人1500円、中学生1人500円である。中学生は大人より3人多く集まり、会費の合計は15500円になった。
+problem_text: '110円切手と84円切手を買った。84円切手は110円切手より4枚少なく、代金の合計は1216円だった。
 
-  大人の人数を求めよ。'
+  110円切手を買った枚数を求めよ。'
 sub_questions:
 - answer:
-    display: 7人
+    display: 8枚
     kind: symbolic
-    srepr: Integer(7)
+    srepr: Integer(8)
   cause_tags: []
   concept_tags:
   - equation.word_problem_price_count_diff
-  explanation: 'まず、場面の中で、どちらの見方でも同じになる（等しくなっている）量に着目する。（会費の合計）
+  explanation: 'まず、場面の中で、どちらの見方でも同じになる（等しくなっている）量に着目する。（代金の合計）
 
-    次に、その量を x を使って両辺に表し、方程式をつくる。（1500x + 500(x + 3) = 15500）
+    次に、その量を x を使って両辺に表し、方程式をつくる。（110x + 84(x - 4) = 1216）
 
-    次に、分配法則を使って、かっこを外す。（2000x + 1500 = 15500）
+    次に、分配法則を使って、かっこを外す。（194x - 336 = 1216）
 
-    次に、左辺の +1500 を右辺に、符号を変えて移項する。（2000x = 15500 - 1500）
+    次に、左辺の -336 を右辺に、符号を変えて移項する。（194x = 1216 + 336）
 
-    次に、両辺の同類項をそれぞれまとめて、ax = b の形にする。（2000x = 14000）
+    次に、両辺の同類項をそれぞれまとめて、ax = b の形にする。（194x = 1552）
 
-    最後に、等式の性質を使い、両辺を x の係数 2000 でわる。（x = 7）'
+    最後に、等式の性質を使い、両辺を x の係数 194 でわる。（x = 8）'
   hints:
   - 個数の差が与えられた代金の場面を自分で立式して解く（文章題）
   label: (1)
@@ -55,36 +55,36 @@ sub_questions:
     detail: ''
     narration: 場面の中で、どちらの見方でも同じになる（等しくなっている）量に着目する。
     op: find_equal_relation
-    result_display: 会費の合計
+    result_display: 代金の合計
     result_srepr: Symbol('x')
   - args: []
     detail: ''
     narration: その量を x を使って両辺に表し、方程式をつくる。
     op: formulate_equation
-    result_display: 1500x + 500(x + 3) = 15500
-    result_srepr: Equality(Add(Mul(Integer(2000), Symbol('x')), Integer(1500)), Integer(15500))
+    result_display: 110x + 84(x - 4) = 1216
+    result_srepr: Equality(Add(Mul(Integer(194), Symbol('x')), Integer(-336)), Integer(1216))
   - args: []
     detail: ''
     narration: 分配法則を使って、かっこを外す。
     op: expand_parentheses
-    result_display: 2000x + 1500 = 15500
-    result_srepr: Integer(7)
+    result_display: 194x - 336 = 1216
+    result_srepr: Integer(8)
   - args: []
-    detail: 左辺の +1500 を右辺に、符号を変えて移項する。
+    detail: 左辺の -336 を右辺に、符号を変えて移項する。
     narration: 文字の項を左辺に、数の項を右辺に、符号を変えて移項する。
     op: transpose_terms
-    result_display: 2000x = 15500 - 1500
-    result_srepr: Integer(7)
+    result_display: 194x = 1216 + 336
+    result_srepr: Integer(8)
   - args: []
     detail: ''
     narration: 両辺の同類項をそれぞれまとめて、ax = b の形にする。
     op: combine_like_terms
-    result_display: 2000x = 14000
-    result_srepr: Integer(7)
+    result_display: 194x = 1552
+    result_srepr: Integer(8)
   - args: []
-    detail: 等式の性質を使い、両辺を x の係数 2000 でわる。
+    detail: 等式の性質を使い、両辺を x の係数 194 でわる。
     narration: 等式の性質を使い、両辺を x の係数でわる。
     op: divide_both_sides
-    result_display: x = 7
-    result_srepr: Integer(7)
+    result_display: x = 8
+    result_srepr: Integer(8)
 visual_svg: null

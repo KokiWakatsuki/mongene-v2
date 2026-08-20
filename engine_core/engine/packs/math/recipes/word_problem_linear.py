@@ -63,6 +63,8 @@ from engine.packs.math.recipes.scene_vocab import (
 )
 from engine.packs.math.recipes.scenes import (
     ROLES_DIFF,
+    ROLES_GAP,
+    ROLES_LESS,
     ROLES_TOTAL,
     draw_scene_spec,
 )
@@ -126,6 +128,38 @@ def formulate_price_count_diff(
         f"{price_a}*x + {price_b}*(x + {diff})",
         f"{cost}",
         f"{price_a}x + {price_b}(x + {diff}) = {cost}",
+        "word_linear",
+    )
+
+
+def formulate_price_count_gap(
+    *, price_a: int, price_b: int, total: int, gap: int
+) -> LinearFormulation:
+    """pa·x − pb·(k − x) = D（合わせて k 個で、A の代金が B より D 円多い）。
+
+    合わせて k 個という与え方は `formulate_price_count` と同じで、**合計でなく差**を
+    与える（作業3 で足した式）。x = (D + pb·k)/(pa + pb) なので pa+pb ≠ 0 で必ず解ける。
+    """
+    return _formulate(
+        f"{price_a}*x - {price_b}*({total} - x)",
+        f"{gap}",
+        f"{price_a}x - {price_b}({total} - x) = {gap}",
+        "word_linear",
+    )
+
+
+def formulate_price_count_less(
+    *, price_a: int, price_b: int, diff: int, cost: int
+) -> LinearFormulation:
+    """pa·x + pb·(x − d) = c（B は A より d 個**少ない**）。
+
+    `formulate_price_count_diff`（d 個多い）の裏（作業3 で足した式）。
+    x > d でないと B の個数が 0 以下になるので、関係の側で保証する。
+    """
+    return _formulate(
+        f"{price_a}*x + {price_b}*(x - {diff})",
+        f"{cost}",
+        f"{price_a}x + {price_b}(x - {diff}) = {cost}",
         "word_linear",
     )
 
@@ -214,6 +248,9 @@ def formulate_continued_ratio(
 
 FORMULATION_BUILDERS: dict[str, Callable[..., LinearFormulation]] = {
     "price_count": formulate_price_count,
+    # 式の軸（`params["form"]`）で選ぶもの。鍵は form の名前（作業3）。
+    "price_count_gap": formulate_price_count_gap,
+    "price_count_less": formulate_price_count_less,
     "price_count_diff": formulate_price_count_diff,
     "surplus_shortage": formulate_surplus_shortage,
     "seat_shortage": formulate_seat_shortage,
@@ -330,8 +367,33 @@ _SCENE_VOCAB: dict[str, tuple[VocabStep, ...]] = {
 # ---------------------------------------------------------------------------
 # Relation（数だけ。日本語を1文字も持たない）
 # ---------------------------------------------------------------------------
+def _draw_rates(
+    limits: Mapping[str, Any], p: Mapping[str, Any], rng: Rng
+) -> tuple[int, int]:
+    """1つあたりの値段を2つ引く。場面が相場を持っていればそれに従う。
+
+    - `rate_pairs`: **(高い|安い) の対を1回で引く**。大人と子どもの料金のように
+      2つの値が独立でない場面のため（別々に引くと「大人2500円・中学生2000円」の
+      ように差が小さく、区分を分ける意味が無くなる）。並び順は入れ替えて、
+      どちらが x になるかを散らす。
+    - `rate`: ドメイン記法。相異に2つ引く。
+    - どちらも無ければ YAML の既定。
+    """
+    pairs = limits.get("rate_pairs")
+    if pairs:
+        tokens = list(pairs)
+        high, low = (int(v) for v in split_pair(
+            str(tokens[int(draw({"int_range": [0, len(tokens) - 1]}, rng))])
+        ))
+        return (high, low) if int(draw({"int_range": [0, 1]}, rng)) else (low, high)
+    return tuple(  # type: ignore[return-value]
+        int(v) for v in draw_many(limits.get("rate", p["price_domain"]), rng, k=2)
+    )
+
+
 def _relation_price_count(
-    p: Mapping[str, Any], rng: Rng, limits: Mapping[str, Any] = MappingProxyType({})
+    p: Mapping[str, Any], rng: Rng, limits: Mapping[str, Any] = MappingProxyType({}),
+    form: str = "",
 ) -> LinearRelation:
     """g1_l25 Lv2: 2種類を合わせて k 個。片方の個数を x とおく。
 
@@ -342,9 +404,20 @@ def _relation_price_count(
     total = int(draw(p["total_domain"], rng))
     # x0 は 1..k-1（どちらの品も1個以上）。
     count_a = int(draw({"int_range": [2, total - 2]}, rng))
-    price_a, price_b = (
-        int(v) for v in draw_many(limits.get("rate", p["price_domain"]), rng, k=2)
-    )
+    price_a, price_b = _draw_rates(limits, p, rng)
+    if form == "price_count_gap":
+        # ★差を与える式（pa·x − pb·(k − x) = D）は **D > 0** でないと場面が成り立たない。
+        # D > 0 ⟺ x0 > pb·k/(pa+pb) なので、**高いほうを A に置いて**（そうしないと
+        # 単価が大きく離れたとき x0 の範囲が空になる）x0 をその範囲から引き直す。
+        price_a, price_b = max(price_a, price_b), min(price_a, price_b)
+        lo = price_b * total // (price_a + price_b) + 1
+        count_a = int(draw({"int_range": [max(2, lo), total - 2]}, rng))
+        gap = price_a * count_a - price_b * (total - count_a)
+        return LinearRelation(
+            numbers={"price_a": price_a, "price_b": price_b,
+                     "total": total, "gap": gap},
+            answer_coeff=(1, 0),
+        )
     cost = price_a * count_a + price_b * (total - count_a)
     return LinearRelation(
         numbers={"price_a": price_a, "price_b": price_b, "total": total, "cost": cost},
@@ -353,14 +426,24 @@ def _relation_price_count(
 
 
 def _relation_price_count_diff(
-    p: Mapping[str, Any], rng: Rng, limits: Mapping[str, Any] = MappingProxyType({})
+    p: Mapping[str, Any], rng: Rng, limits: Mapping[str, Any] = MappingProxyType({}),
+    form: str = "",
 ) -> LinearRelation:
     """g1_l25 Lv3: B は A より d 個多い（合計個数が与えられない＝読替が要る）。"""
     count_a = int(draw(p["count_domain"], rng))
     diff = int(draw(p["diff_domain"], rng))
-    price_a, price_b = (
-        int(v) for v in draw_many(limits.get("rate", p["price_domain"]), rng, k=2)
-    )
+    price_a, price_b = _draw_rates(limits, p, rng)
+    if form == "price_count_less":
+        # ★「d 個少ない」式（pa·x + pb·(x − d) = c）は **x0 > d** でないと B の個数が
+        # 0 以下になる。d を x0 より小さい範囲から引き直す（定義域は狭めず、
+        # 引く順番で保証する）。
+        diff = int(draw({"int_range": [1, count_a - 1]}, rng))
+        cost = price_a * count_a + price_b * (count_a - diff)
+        return LinearRelation(
+            numbers={"price_a": price_a, "price_b": price_b,
+                     "diff": diff, "cost": cost},
+            answer_coeff=(1, 0),
+        )
     cost = price_a * count_a + price_b * (count_a + diff)
     return LinearRelation(
         numbers={"price_a": price_a, "price_b": price_b, "diff": diff, "cost": cost},
@@ -755,6 +838,16 @@ SCENE_RENDERERS: dict[str, Callable[[Mapping[str, int], Mapping[str, str]], Line
 RELATION_PHRASES: dict[str, tuple[tuple[tuple[str, ...], ...], tuple[str, ...]]] = {
     # 総数が与えられている（ax + b(N−x) = T）。「1人に…ずつ」は別の関係。
     "price_count": ((("合わせて", "あわせて", "全部で"),), ("ずつ配", "ずつ座")),
+    # 総数は同じで**合計でなく差**を与える（ax − b(N−x) = D・作業3 で足した式）。
+    "price_count_gap": (
+        (("合わせて", "あわせて", "全部で"), ("多かった", "多い")),
+        ("ずつ配", "ずつ座"),
+    ),
+    # 「d 個少ない」（ax + b(x − d) = T・作業3 で足した式）。
+    # **「多く」が出たら式が違う。**
+    "price_count_less": (
+        (("少なく", "少ない"),), ("合わせて", "あわせて", "全部で", "多く"),
+    ),
     # 総数は与えず差で与える（ax + b(x+d) = T）。**「合わせて」が出たら関係が違う。**
     "price_count_diff": ((("多く", "多い"),), ("合わせて", "あわせて", "全部で")),
     # 同じ総数を2通りに配る（ax + s = bx − t）。余りと不足の両方が要る。
@@ -796,12 +889,23 @@ RELATION_BOUNDS: dict[str, tuple[tuple[str, float, float], ...]] = {
     # 入園料は数百円〜千円台、会費は数千円）。上限は「場面としてありえる限界」で、
     # 場面ごとの狭い相場は `scenes.SceneSpec.limits` が持つ（作業3）。
     "price_count": (
-        ("price_a", 10, 5000), ("price_b", 10, 5000),
-        ("total", 2, 40), ("cost", 20, 100000),
+        ("price_a", 10, 3500), ("price_b", 10, 3500),
+        ("total", 2, 40), ("cost", 20, 50000),
     ),
     "price_count_diff": (
         ("price_a", 10, 5000), ("price_b", 10, 5000),
         ("diff", 1, 20), ("cost", 20, 100000), ("total", 20, 100000),
+    ),
+    # 作業3 で足した式。差を与えるほうは `gap`（代金の差）が本文に出る。
+    # 乗るのは買い物と切手だけ（相場は数十〜数百円）なので、上限はそこに合わせる
+    # ——広いままだと実物の10倍以上あって何も言わない宣言になる。
+    "price_count_gap": (
+        ("price_a", 10, 1000), ("price_b", 10, 1000),
+        ("total", 2, 40), ("gap", 1, 5000),
+    ),
+    "price_count_less": (
+        ("price_a", 10, 1000), ("price_b", 10, 1000),
+        ("diff", 1, 20), ("cost", 20, 20000),
     ),
     # 配る場面: 1人あたりは1桁、余り・不足は2桁まで（人数は答えなので入らない）。
     "surplus_shortage": (
@@ -853,6 +957,10 @@ RELATION_ORDER: dict[str, tuple[tuple[str, str, str], ...]] = {
     "catch_up": (("speed_slow", "<", "speed_fast"),),
     # 同じ個数を問うと退化する。
     "proportion_pair": (("count_a", "!=", "count_b"),),
+    # 差を与える式は「A の代金のほうが多い」＝高いほうを A に置く（そうしないと
+    # 差が負になり、場面が成り立たない）。
+    "price_count_gap": (("price_b", "<", "price_a"),),
+    "price_count_less": (("price_a", "!=", "price_b"),),
 }
 
 
@@ -872,24 +980,46 @@ _RELATION_ROLES: dict[str, tuple[str, ...]] = {
     "price_count_diff": ROLES_DIFF,
 }
 
+# 式の軸（作業3）。1つの関係に式が2通り以上あるとき、その名前を並べる。
+# 名前は `FORMULATION_BUILDERS` の鍵と同じで、`params["form"]` に載る
+# （★載せないと dup_key に効かない）。
+_RELATION_FORMS: dict[str, tuple[str, ...]] = {
+    "price_count": ("", "price_count_gap"),
+    "price_count_diff": ("", "price_count_less"),
+}
+# 式ごとの役割の型（場面の書き手を選ぶ鍵）。"" は関係の既定。
+_FORM_ROLES: dict[str, tuple[str, ...]] = {
+    "price_count_gap": ROLES_GAP,
+    "price_count_less": ROLES_LESS,
+}
 
-def draw_scene(kind: str, p: Mapping[str, Any], rng: Rng) -> tuple[LinearRelation, LinearScene, str]:
+
+def draw_scene(
+    kind: str, p: Mapping[str, Any], rng: Rng
+) -> tuple[LinearRelation, LinearScene, str, str]:
     """場面選び → 関係 → 語彙 → 場面文 の順に組む。
 
     **この順番が RNG の消費順を決める。** 場面が数の相場を持っているので、
     場面を先に引く。
 
-    3つめの戻り値は場面の名前（params に載る＝`dup_key` の軸になる）。
+    3つめ・4つめの戻り値は場面の名前と式の名前（どちらも params に載る
+    ＝`dup_key` の軸になる）。
     """
     roles = _RELATION_ROLES.get(kind)
     if roles is None:
         relation = RELATION_DRAWERS[kind](p, rng)
         vocab = draw_vocab(_SCENE_VOCAB.get(kind, ()), p, rng)
-        return relation, SCENE_RENDERERS[kind](relation.numbers, vocab), ""
+        return relation, SCENE_RENDERERS[kind](relation.numbers, vocab), "", ""
     # ★場面を**先に**引く。場面が数の相場を持っているため（入園料に買い物の
     # 40〜160円を使うと「大人1人130円の入園料」になる）。
+    # 式を引く（1つの関係に式が2通り以上あるとき）。役割の型が変わるので、
+    # 乗れる場面もここで決まる。
+    forms = _RELATION_FORMS.get(kind, ("",))
+    form = str(draw(list(forms), rng)) if len(forms) > 1 else ""
+    if form:
+        roles = _FORM_ROLES[form]
     spec = draw_scene_spec(roles, rng)
-    relation = RELATION_DRAWERS[kind](p, rng, spec.limits)
+    relation = RELATION_DRAWERS[kind](p, rng, spec.limits, form)
     vocab = draw_vocab(spec.vocab, p, rng)
     text = spec.render[roles](relation.numbers, vocab)
     return relation, LinearScene(
@@ -900,7 +1030,7 @@ def draw_scene(kind: str, p: Mapping[str, Any], rng: Rng) -> tuple[LinearRelatio
         relation_label=text.relation_label,
         answer_unit=text.answer_unit,
         slots=dict(text.slots),
-    ), spec.id
+    ), spec.id, form
 
 
 # ---------------------------------------------------------------------------
@@ -912,14 +1042,15 @@ def apply_answer_coeff(x_value: sympy.Expr, coeff: tuple[int, int]) -> sympy.Exp
 
 
 def solve_scene(
-    kind: str, numbers: Mapping[str, int], coeff: tuple[int, int]
+    kind: str, numbers: Mapping[str, int], coeff: tuple[int, int], form: str = ""
 ) -> tuple[LinearFormulation, Solution, sympy.Expr]:
     """場面の数値から「立式 → x を解く → 求める量」を1本で通す（checker と共有）。
 
     x を解くのは既存 solver `math.solve_linear_equation`。最後の m·x+n だけこちらで
     合成する（solver は方程式を解くまでが仕事）。
     """
-    formulation = FORMULATION_BUILDERS[kind](**numbers)
+    # `form` があればそれで式を選ぶ（1つの関係に式が2通り以上ある＝作業3）。
+    formulation = FORMULATION_BUILDERS[form or kind](**numbers)
     solver = REGISTRY.solver("math.solve_linear_equation")
     sol = cast(Solution, solver(formulation.equation_str, formulation.mode))
     assert isinstance(sol.answer, SymbolicAnswer)
@@ -935,8 +1066,10 @@ def word_problem_linear_equation(ctx: CellContext, rng: Rng) -> MR:
     p = ctx.spec_level.params
     kind = str(p["scenario_kind"])
     guided = bool(p["guided"])
-    relation, scene, scene_id = draw_scene(kind, p, rng)
-    formulation, sol, answer_value = solve_scene(kind, relation.numbers, relation.answer_coeff)
+    relation, scene, scene_id, form = draw_scene(kind, p, rng)
+    formulation, sol, answer_value = solve_scene(
+        kind, relation.numbers, relation.answer_coeff, form
+    )
 
     concept_tags = list(ctx.spec_level.concept_tags or ctx.spec_family.concepts_default)
     cause_tags = list(ctx.spec_level.cause_tags)
@@ -1002,6 +1135,7 @@ def word_problem_linear_equation(ctx: CellContext, rng: Rng) -> MR:
             # ★場面の名前も params に載せる。**載せないと場面を5倍にしても
             # dup は1ミリも下がらない**（dup_key は params だけを見る）。
             **({"scene": scene_id} if scene_id else {}),
+            **({"form": form} if form else {}),
         },
         given=given,
         context_slots={

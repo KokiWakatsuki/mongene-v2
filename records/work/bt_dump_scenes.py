@@ -34,7 +34,9 @@ sys.path.insert(0, "records/work")
 
 _OUT = Path("records/work/bt")
 # 場面の枝を表す params の鍵（数ではない構成フラグ・言い方の選び）。
-_BRANCH_KEYS = ("variant", "phrasing", "guided")
+# ★`scene` と `form` を入れる。作業3 で「1つの関係に場面6つ・式2つ」に
+# したので、これが無いと**新しく足した場面が一度も読まれない**。
+_BRANCH_KEYS = ("variant", "phrasing", "guided", "scene", "form")
 
 
 def _declared_kinds() -> set[tuple[str, str]]:

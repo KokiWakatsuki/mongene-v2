@@ -6651,7 +6651,12 @@ def test_word_problem_linear_double_solve_property(seed, family, level, signatur
     from engine.packs.math.recipes.word_problem_linear import FORMULATION_BUILDERS
 
     numbers = {k: int(sympy.sympify(v)) for k, v in mr.params["numbers"].items()}
-    formulation = FORMULATION_BUILDERS[mr.params["scenario_kind"]](**numbers)
+    # ★式の軸（`params["form"]`）があれば**そちらが式の名前**。1つの関係に式が
+    # 2通り以上あるようにしたので（作業3）、`scenario_kind` だけでは式を選べない
+    # （`price_count` に `price_count_gap` が乗る）。
+    formulation = FORMULATION_BUILDERS[
+        mr.params.get("form") or mr.params["scenario_kind"]
+    ](**numbers)
     answer_value = sympy.sympify(mr.sub_questions[-1].answer.srepr)
     coeff_m, coeff_n = (int(sympy.sympify(c)) for c in mr.params["answer_coeff"])
     x_value = sympy.Rational(answer_value - coeff_n, coeff_m)
@@ -6879,7 +6884,12 @@ def test_word_problem_proportion_display_is_a_ratio(seed, level, guided):
     rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
     mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
     numbers = {k: int(sympy.sympify(v)) for k, v in mr.params["numbers"].items()}
-    formulation = FORMULATION_BUILDERS[mr.params["scenario_kind"]](**numbers)
+    # ★式の軸（`params["form"]`）があれば**そちらが式の名前**。1つの関係に式が
+    # 2通り以上あるようにしたので（作業3）、`scenario_kind` だけでは式を選べない
+    # （`price_count` に `price_count_gap` が乗る）。
+    formulation = FORMULATION_BUILDERS[
+        mr.params.get("form") or mr.params["scenario_kind"]
+    ](**numbers)
     # 表示は比例式（コロンが2つ）／機械表現はたすきがけ後の一次方程式
     assert formulation.display.count(":") == 2
     assert "=" in formulation.display

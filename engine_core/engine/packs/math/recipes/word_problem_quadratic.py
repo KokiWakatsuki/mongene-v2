@@ -178,6 +178,8 @@ class QuadScene:
     answer_labels: tuple[str, ...]
     answer_units: tuple[str, ...]
     slots: dict[str, str]
+    # 場面の言い方（構成の軸）。params 直下に載せる＝dup_key に効く。
+    phrasing: str = ""
 
 
 def _index_domain(n: int) -> dict[str, list[int]]:
@@ -359,8 +361,13 @@ def _scene_square_relation(
         relation_label="2乗した数ともとの数をもとにした数",
         answer_labels=("",),
         answer_units=("",),
-        # 言い方は場面の違いなので params に記録する（dup_key は params だけを見る）。
-        slots={"phrasing": phrasing},
+        # ★**言い方を `slots` に入れてはいけない。** `slots` は
+        # `signature._SURFACE_PARAM_KEYS` に入っていて **dup_key が丸ごと除外する**ので、
+        # 「params に記録すれば dup に効く」つもりで置いた言い方が1ミリも効いていなかった
+        # （文型の数え方を直したときに露見。3通りの言い方が1文型と数えられていた）。
+        # 構成の軸は params 直下に置く。
+        slots={},
+        phrasing=phrasing,
     )
 
 
@@ -561,6 +568,7 @@ def word_problem_quadratic(ctx: CellContext, rng: Rng) -> MR:
             "answer_units": list(scene.answer_units),
             # 題材（dup_key は params のみを見る＝context_slots は算入されない）。
             "slots": dict(scene.slots),
+            **({"phrasing": scene.phrasing} if scene.phrasing else {}),
         },
         given=given,
         context_slots={

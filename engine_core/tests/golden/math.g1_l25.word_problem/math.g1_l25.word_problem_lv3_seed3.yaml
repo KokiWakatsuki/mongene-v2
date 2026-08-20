@@ -24,28 +24,28 @@ meta:
   seed: 3
   signature: word_problem_price_count_diff
 problem_ref: 64ba06825841066a
-problem_text: 'ある店で、1冊130円のファイルと1枚100円の下じきを買った。下じきはファイルより3枚多く買い、代金の合計は990円だった。
+problem_text: 'かざりつけに、1本100円の緑のモールと1本80円の黄色のモールを使った。黄色のモールは緑のモールより2本多く使い、材料費の合計は1060円だった。
 
-  ファイルを買った冊数を求めよ。'
+  緑のモールを使った本数を求めよ。'
 sub_questions:
 - answer:
-    display: 3冊
+    display: 5本
     kind: symbolic
-    srepr: Integer(3)
+    srepr: Integer(5)
   cause_tags: []
   concept_tags:
   - equation.word_problem_price_count_diff
-  explanation: 'まず、場面の中で、どちらの見方でも同じになる（等しくなっている）量に着目する。（代金の合計）
+  explanation: 'まず、場面の中で、どちらの見方でも同じになる（等しくなっている）量に着目する。（材料費の合計）
 
-    次に、その量を x を使って両辺に表し、方程式をつくる。（130x + 100(x + 3) = 990）
+    次に、その量を x を使って両辺に表し、方程式をつくる。（100x + 80(x + 2) = 1060）
 
-    次に、分配法則を使って、かっこを外す。（230x + 300 = 990）
+    次に、分配法則を使って、かっこを外す。（180x + 160 = 1060）
 
-    次に、左辺の +300 を右辺に、符号を変えて移項する。（230x = 990 - 300）
+    次に、左辺の +160 を右辺に、符号を変えて移項する。（180x = 1060 - 160）
 
-    次に、両辺の同類項をそれぞれまとめて、ax = b の形にする。（230x = 690）
+    次に、両辺の同類項をそれぞれまとめて、ax = b の形にする。（180x = 900）
 
-    最後に、等式の性質を使い、両辺を x の係数 230 でわる。（x = 3）'
+    最後に、等式の性質を使い、両辺を x の係数 180 でわる。（x = 5）'
   hints:
   - 個数の差が与えられた代金の場面を自分で立式して解く（文章題）
   label: (1)
@@ -55,36 +55,36 @@ sub_questions:
     detail: ''
     narration: 場面の中で、どちらの見方でも同じになる（等しくなっている）量に着目する。
     op: find_equal_relation
-    result_display: 代金の合計
+    result_display: 材料費の合計
     result_srepr: Symbol('x')
   - args: []
     detail: ''
     narration: その量を x を使って両辺に表し、方程式をつくる。
     op: formulate_equation
-    result_display: 130x + 100(x + 3) = 990
-    result_srepr: Equality(Add(Mul(Integer(230), Symbol('x')), Integer(300)), Integer(990))
+    result_display: 100x + 80(x + 2) = 1060
+    result_srepr: Equality(Add(Mul(Integer(180), Symbol('x')), Integer(160)), Integer(1060))
   - args: []
     detail: ''
     narration: 分配法則を使って、かっこを外す。
     op: expand_parentheses
-    result_display: 230x + 300 = 990
-    result_srepr: Integer(3)
+    result_display: 180x + 160 = 1060
+    result_srepr: Integer(5)
   - args: []
-    detail: 左辺の +300 を右辺に、符号を変えて移項する。
+    detail: 左辺の +160 を右辺に、符号を変えて移項する。
     narration: 文字の項を左辺に、数の項を右辺に、符号を変えて移項する。
     op: transpose_terms
-    result_display: 230x = 990 - 300
-    result_srepr: Integer(3)
+    result_display: 180x = 1060 - 160
+    result_srepr: Integer(5)
   - args: []
     detail: ''
     narration: 両辺の同類項をそれぞれまとめて、ax = b の形にする。
     op: combine_like_terms
-    result_display: 230x = 690
-    result_srepr: Integer(3)
+    result_display: 180x = 900
+    result_srepr: Integer(5)
   - args: []
-    detail: 等式の性質を使い、両辺を x の係数 230 でわる。
+    detail: 等式の性質を使い、両辺を x の係数 180 でわる。
     narration: 等式の性質を使い、両辺を x の係数でわる。
     op: divide_both_sides
-    result_display: x = 3
-    result_srepr: Integer(3)
+    result_display: x = 5
+    result_srepr: Integer(5)
 visual_svg: null

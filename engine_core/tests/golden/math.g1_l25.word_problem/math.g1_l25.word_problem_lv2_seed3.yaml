@@ -24,24 +24,24 @@ meta:
   seed: 3
   signature: word_problem_price_count_one_unknown
 problem_ref: c1bbe08eef43e50a
-problem_text: '科学館の入園料は、大人1人1200円、子ども1人900円である。大人と子どもが合わせて8人で入園し、入園料の合計は8400円だった。
+problem_text: '1個150円のキウイと1個140円のももを合わせて15個買ったところ、キウイの代金はももの代金より220円多かった。
 
-  子どもの人数を x 人とする。
+  キウイを買った個数を x 個とする。
 
-  (1) 入園料の関係を、x を使った方程式で表せ。
+  (1) 代金の差の関係を、x を使った方程式で表せ。
 
-  (2) 子どもの人数を求めよ。'
+  (2) キウイを買った個数を求めよ。'
 sub_questions:
 - answer:
-    display: 900x + 1200(8 - x) = 8400
+    display: 150x - 140(15 - x) = 220
     kind: symbolic
-    srepr: Equality(Add(Integer(9600), Mul(Integer(-1), Integer(300), Symbol('x'))), Integer(8400))
+    srepr: Equality(Add(Mul(Integer(290), Symbol('x')), Integer(-2100)), Integer(220))
   cause_tags: []
   concept_tags:
   - equation.word_problem_price_count
-  explanation: 'まず、場面の中で、どちらの見方でも同じになる（等しくなっている）量に着目する。（入園料の合計）
+  explanation: 'まず、場面の中で、どちらの見方でも同じになる（等しくなっている）量に着目する。（2つの代金の差）
 
-    次に、その量を x を使って両辺に表し、方程式をつくる。（900x + 1200(8 - x) = 8400）'
+    次に、その量を x を使って両辺に表し、方程式をつくる。（150x - 140(15 - x) = 220）'
   hints:
   - 個数と代金の場面を1つの文字で立式して解く（文章題）
   label: (1)
@@ -51,28 +51,28 @@ sub_questions:
     detail: ''
     narration: 場面の中で、どちらの見方でも同じになる（等しくなっている）量に着目する。
     op: find_equal_relation
-    result_display: 入園料の合計
+    result_display: 2つの代金の差
     result_srepr: Symbol('x')
   - args: []
     detail: ''
     narration: その量を x を使って両辺に表し、方程式をつくる。
     op: formulate_equation
-    result_display: 900x + 1200(8 - x) = 8400
-    result_srepr: Equality(Add(Integer(9600), Mul(Integer(-1), Integer(300), Symbol('x'))), Integer(8400))
+    result_display: 150x - 140(15 - x) = 220
+    result_srepr: Equality(Add(Mul(Integer(290), Symbol('x')), Integer(-2100)), Integer(220))
 - answer:
-    display: 4人
+    display: 8個
     kind: symbolic
-    srepr: Integer(4)
+    srepr: Integer(8)
   cause_tags: []
   concept_tags:
   - equation.word_problem_price_count
-  explanation: 'まず、分配法則を使って、かっこを外す。（9600 - 300x = 8400）
+  explanation: 'まず、分配法則を使って、かっこを外す。（290x - 2100 = 220）
 
-    次に、左辺の +9600 を右辺に、符号を変えて移項する。（-300x = 8400 - 9600）
+    次に、左辺の -2100 を右辺に、符号を変えて移項する。（290x = 220 + 2100）
 
-    次に、両辺の同類項をそれぞれまとめて、ax = b の形にする。（-300x = -1200）
+    次に、両辺の同類項をそれぞれまとめて、ax = b の形にする。（290x = 2320）
 
-    最後に、等式の性質を使い、両辺を x の係数 -300 でわる。（x = 4）'
+    最後に、等式の性質を使い、両辺を x の係数 290 でわる。（x = 8）'
   hints:
   - 個数と代金の場面を1つの文字で立式して解く（文章題）
   label: (2)
@@ -82,24 +82,24 @@ sub_questions:
     detail: ''
     narration: 分配法則を使って、かっこを外す。
     op: expand_parentheses
-    result_display: 9600 - 300x = 8400
-    result_srepr: Integer(4)
+    result_display: 290x - 2100 = 220
+    result_srepr: Integer(8)
   - args: []
-    detail: 左辺の +9600 を右辺に、符号を変えて移項する。
+    detail: 左辺の -2100 を右辺に、符号を変えて移項する。
     narration: 文字の項を左辺に、数の項を右辺に、符号を変えて移項する。
     op: transpose_terms
-    result_display: -300x = 8400 - 9600
-    result_srepr: Integer(4)
+    result_display: 290x = 220 + 2100
+    result_srepr: Integer(8)
   - args: []
     detail: ''
     narration: 両辺の同類項をそれぞれまとめて、ax = b の形にする。
     op: combine_like_terms
-    result_display: -300x = -1200
-    result_srepr: Integer(4)
+    result_display: 290x = 2320
+    result_srepr: Integer(8)
   - args: []
-    detail: 等式の性質を使い、両辺を x の係数 -300 でわる。
+    detail: 等式の性質を使い、両辺を x の係数 290 でわる。
     narration: 等式の性質を使い、両辺を x の係数でわる。
     op: divide_both_sides
-    result_display: x = 4
-    result_srepr: Integer(4)
+    result_display: x = 8
+    result_srepr: Integer(8)
 visual_svg: null

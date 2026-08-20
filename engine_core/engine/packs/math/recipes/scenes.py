@@ -34,6 +34,13 @@ from engine.packs.math.recipes.scene_vocab import VocabStep
 # 役割の型。`total` は「合わせて N」、`diff` は「B は A より d 多い」。
 ROLES_TOTAL = ("rate", "rate", "total", "amount")
 ROLES_DIFF = ("rate", "rate", "diff", "amount")
+# 作業3 で足した式の役割の型。
+# ★**新しい式は新しい役割の型を作る。** charter §3 は「役割の型が既存と同じなら
+# 新しい式は既存の場面にそのまま乗る」としていたが、実際には「合わせて N 個」は
+# 同じでも「代金の合計は T 円」が「A は B より D 円多い」に変わるので、
+# **乗せたい場面の数だけ書き手が増える**（1つあたり 12〜16行）。
+ROLES_GAP = ("rate", "rate", "total", "gap")      # 合わせて N 個・代金の差が D
+ROLES_LESS = ("rate", "rate", "less", "amount")   # B は A より d 個少ない
 
 
 @dataclass(frozen=True)
@@ -123,42 +130,112 @@ def _two_tier(n: Mapping[str, int]) -> tuple[str, str, str]:
     return "子ども", "大人", "子ども"
 
 
-def _admission_total(n: Mapping[str, int], v: Mapping[str, str]) -> SceneText:
-    place = v["place"]
-    first, second, asked = _two_tier(n)
-    high, low = max(n["price_a"], n["price_b"]), min(n["price_a"], n["price_b"])
+def _shopping_gap(n: Mapping[str, int], v: Mapping[str, str]) -> SceneText:
+    item_a, item_b, counter = v["item_a"], v["item_b"], v["counter_a"]
     return SceneText(
         scenario=(
-            f"{place}の入園料は、大人1人{high}円、子ども1人{low}円である。"
-            f"大人と子どもが合わせて{n['total']}人で入園し、"
-            f"入園料の合計は{n['cost']}円だった。"
+            f"1{counter}{n['price_a']}円の{item_a}と1{counter}{n['price_b']}円の{item_b}を"
+            f"合わせて{n['total']}{counter}買ったところ、"
+            f"{item_a}の代金は{item_b}の代金より{n['gap']}円多かった。"
+        ),
+        quantities=f"{item_a}を買った{counter}数を x {counter}とする。",
+        ask_formulation="代金の差の関係を、x を使った方程式で表せ。",
+        ask_value=f"{item_a}を買った{counter}数を求めよ。",
+        relation_label="2つの代金の差",
+        answer_unit=counter,
+        slots={"item_a": item_a, "item_b": item_b, "counter": counter},
+    )
+
+
+def _shopping_less(n: Mapping[str, int], v: Mapping[str, str]) -> SceneText:
+    item_a, counter_a = v["item_a"], v["counter_a"]
+    item_b, counter_b = v["item_b"], v["counter_b"]
+    return SceneText(
+        scenario=(
+            f"ある店で、1{counter_a}{n['price_a']}円の{item_a}と"
+            f"1{counter_b}{n['price_b']}円の{item_b}を"
+            f"買った。{item_b}は{item_a}より{n['diff']}{counter_b}少なく買い、"
+            f"代金の合計は{n['cost']}円だった。"
+        ),
+        quantities="",
+        ask_formulation="",
+        ask_value=f"{item_a}を買った{counter_a}数を求めよ。",
+        relation_label="代金の合計",
+        answer_unit=counter_a,
+        slots={"item_a": item_a, "item_b": item_b, "counter": counter_a},
+    )
+
+
+def _stamp_gap(n: Mapping[str, int], v: Mapping[str, str]) -> SceneText:
+    return SceneText(
+        scenario=(
+            f"{n['price_a']}円切手と{n['price_b']}円切手を"
+            f"合わせて{n['total']}枚買ったところ、"
+            f"{n['price_a']}円切手の代金は{n['price_b']}円切手の代金より{n['gap']}円多かった。"
+        ),
+        quantities=f"{n['price_a']}円切手を買った枚数を x 枚とする。",
+        ask_formulation="代金の差の関係を、x を使った方程式で表せ。",
+        ask_value=f"{n['price_a']}円切手を買った枚数を求めよ。",
+        relation_label="2つの代金の差",
+        answer_unit="枚",
+        slots={"counter": "枚"},
+    )
+
+
+def _stamp_less(n: Mapping[str, int], v: Mapping[str, str]) -> SceneText:
+    return SceneText(
+        scenario=(
+            f"{n['price_a']}円切手と{n['price_b']}円切手を買った。"
+            f"{n['price_b']}円切手は{n['price_a']}円切手より{n['diff']}枚少なく、"
+            f"代金の合計は{n['cost']}円だった。"
+        ),
+        quantities="",
+        ask_formulation="",
+        ask_value=f"{n['price_a']}円切手を買った枚数を求めよ。",
+        relation_label="代金の合計",
+        answer_unit="枚",
+        slots={"counter": "枚"},
+    )
+
+
+def _admission_total(n: Mapping[str, int], v: Mapping[str, str]) -> SceneText:
+    place, fee = v["place"], v["fee_name"]
+    first, second, asked = _two_tier(n)
+    high, low = max(n["price_a"], n["price_b"]), min(n["price_a"], n["price_b"])
+    enter = "入園" if fee == "入園料" else "入館"
+    return SceneText(
+        scenario=(
+            f"{place}の{fee}は、大人1人{high}円、子ども1人{low}円である。"
+            f"大人と子どもが合わせて{n['total']}人で{enter}し、"
+            f"{fee}の合計は{n['cost']}円だった。"
         ),
         quantities=f"{asked}の人数を x 人とする。",
-        ask_formulation="入園料の関係を、x を使った方程式で表せ。",
+        ask_formulation=f"{fee}の関係を、x を使った方程式で表せ。",
         ask_value=f"{asked}の人数を求めよ。",
-        relation_label="入園料の合計",
+        relation_label=f"{fee}の合計",
         answer_unit="人",
-        slots={"place": place, "counter": "人", "asked": asked},
+        slots={"place": place, "counter": "人", "asked": asked, "fee_name": fee},
     )
 
 
 def _admission_diff(n: Mapping[str, int], v: Mapping[str, str]) -> SceneText:
-    place = v["place"]
+    place, fee = v["place"], v["fee_name"]
     first, second, asked = _two_tier(n)
     high, low = max(n["price_a"], n["price_b"]), min(n["price_a"], n["price_b"])
     other = "子ども" if asked == "大人" else "大人"
+    enter = "入園" if fee == "入園料" else "入館"
     return SceneText(
         scenario=(
-            f"{place}の入園料は、大人1人{high}円、子ども1人{low}円である。"
-            f"ある団体が入園したところ、{other}は{asked}より{n['diff']}人多く、"
-            f"入園料の合計は{n['cost']}円だった。"
+            f"{place}の{fee}は、大人1人{high}円、子ども1人{low}円である。"
+            f"ある団体が{enter}したところ、{other}は{asked}より{n['diff']}人多く、"
+            f"{fee}の合計は{n['cost']}円だった。"
         ),
         quantities="",
         ask_formulation="",
         ask_value=f"{asked}の人数を求めよ。",
-        relation_label="入園料の合計",
+        relation_label=f"{fee}の合計",
         answer_unit="人",
-        slots={"place": place, "counter": "人", "asked": asked},
+        slots={"place": place, "counter": "人", "asked": asked, "fee_name": fee},
     )
 
 
@@ -266,49 +343,55 @@ def _material_diff(n: Mapping[str, int], v: Mapping[str, str]) -> SceneText:
 
 
 def _ticket_total(n: Mapping[str, int], v: Mapping[str, str]) -> SceneText:
-    line = v["line"]
+    line, ticket = v["line"], v["ticket_name"]
     high, low = max(n["price_a"], n["price_b"]), min(n["price_a"], n["price_b"])
     asked = "おとな" if n["price_a"] >= n["price_b"] else "こども"
     return SceneText(
         scenario=(
-            f"{line}の乗車券は、おとな1枚{high}円、こども1枚{low}円である。"
-            f"おとなとこどもの乗車券を合わせて{n['total']}枚買い、"
+            f"{line}の{ticket}は、おとな1枚{high}円、こども1枚{low}円である。"
+            f"おとなとこどもの{ticket}を合わせて{n['total']}枚買い、"
             f"代金の合計は{n['cost']}円だった。"
         ),
-        quantities=f"{asked}の乗車券の枚数を x 枚とする。",
+        quantities=f"{asked}の{ticket}の枚数を x 枚とする。",
         ask_formulation="代金の関係を、x を使った方程式で表せ。",
-        ask_value=f"{asked}の乗車券の枚数を求めよ。",
-        relation_label="乗車券の代金の合計",
+        ask_value=f"{asked}の{ticket}の枚数を求めよ。",
+        relation_label=f"{ticket}の代金の合計",
         answer_unit="枚",
-        slots={"line": line, "counter": "枚", "asked": asked},
+        slots={"line": line, "counter": "枚", "asked": asked, "ticket_name": ticket},
     )
 
 
 def _ticket_diff(n: Mapping[str, int], v: Mapping[str, str]) -> SceneText:
-    line = v["line"]
+    line, ticket = v["line"], v["ticket_name"]
     high, low = max(n["price_a"], n["price_b"]), min(n["price_a"], n["price_b"])
     asked = "おとな" if n["price_a"] >= n["price_b"] else "こども"
     other = "こども" if asked == "おとな" else "おとな"
     return SceneText(
         scenario=(
-            f"{line}の乗車券は、おとな1枚{high}円、こども1枚{low}円である。"
-            f"{other}の乗車券を{asked}より{n['diff']}枚多く買い、"
+            f"{line}の{ticket}は、おとな1枚{high}円、こども1枚{low}円である。"
+            f"{other}の{ticket}を{asked}より{n['diff']}枚多く買い、"
             f"代金の合計は{n['cost']}円だった。"
         ),
         quantities="",
         ask_formulation="",
-        ask_value=f"{asked}の乗車券の枚数を求めよ。",
-        relation_label="乗車券の代金の合計",
+        ask_value=f"{asked}の{ticket}の枚数を求めよ。",
+        relation_label=f"{ticket}の代金の合計",
         answer_unit="枚",
-        slots={"line": line, "counter": "枚", "asked": asked},
+        slots={"line": line, "counter": "枚", "asked": asked, "ticket_name": ticket},
     )
 
 
 # カタログはこの file が持つ（YAML に足さなくても場面が増える）。
-_PLACES = ("動物園", "植物園", "水族館", "遊園地", "科学館", "美術館")
+# ★**施設と料金名は対で決まる。** 施設名だけを差し替えていたので
+# 「美術館の入園料」「水族館の入園料」「科学館の入園料」が出ていた（園ではないので
+# 実物は「入館料」）。G-BT の読み手が4件挙げた。品名と助数詞と同じ扱いにする。
+_PLACES = ("動物園|入園料", "植物園|入園料", "遊園地|入園料",
+           "水族館|入館料", "科学館|入館料", "美術館|入館料")
 _GROUPS = ("地域のクラブ", "スポーツクラブ", "合唱団", "ボランティア団体", "同好会")
 _WORKS = ("かざりつけ", "工作", "看板づくり", "模型づくり", "花だんの手入れ")
-_LINES = ("市内バス", "路線バス", "遊覧船", "ロープウェイ", "観光電車")
+# ★船は「乗船券」（同じ穴）。
+_LINES = ("市内バス|乗車券", "路線バス|乗車券", "観光電車|乗車券",
+          "ロープウェイ|乗車券", "遊覧船|乗船券")
 _MATERIALS = ("リボン|ひも", "赤いテープ|青いテープ", "太い針金|細い針金",
               "緑のモール|黄色のモール", "麻ひも|ビニールひも")
 
@@ -317,24 +400,31 @@ SCENES: tuple[SceneSpec, ...] = (
         id="shopping",
         vocab=(("distinct2", "item_candidates",
                 ("item_a", "counter_a", "item_b", "counter_b")),),
-        render={ROLES_TOTAL: _shopping_total, ROLES_DIFF: _shopping_diff},
+        render={ROLES_TOTAL: _shopping_total, ROLES_DIFF: _shopping_diff,
+                ROLES_GAP: _shopping_gap, ROLES_LESS: _shopping_less},
     ),
     SceneSpec(
         id="admission",
-        vocab=(("one", _PLACES, ("place",)),),
+        vocab=(("one", _PLACES, ("place", "fee_name")),),
         render={ROLES_TOTAL: _admission_total, ROLES_DIFF: _admission_diff},
-        requires=(("入園料",), ("大人",), ("子ども",)),
+        # 料金名は施設で変わる（園なら入園料・館なら入館料）。
+        requires=(("入園料", "入館料"), ("大人",), ("子ども",)),
         # 入園料は数百円〜千円台（実物の相場）。買い物の 40〜160円では成り立たない。
-        limits={"rate": {"int_set": [300, 400, 500, 600, 700, 800, 900, 1000,
-                                     1200, 1500], "distinct": ["value"]}},
+        # ★**(大人, 子ども) を対で引く。** 別々に引くと「大人2500円・中学生2000円」の
+        # ように差が小さく、区分を分ける意味が無い場面が出る（読み手が指摘）。
+        # (品物,値段) を平らにして1回で引くのと同じ手。
+        limits={"rate_pairs": ("1500|700", "1200|600", "1000|500",
+                               "900|450", "800|400", "600|300")},
     ),
     SceneSpec(
         id="stamp",
         vocab=(),
-        render={ROLES_TOTAL: _stamp_total, ROLES_DIFF: _stamp_diff},
+        render={ROLES_TOTAL: _stamp_total, ROLES_DIFF: _stamp_diff,
+                ROLES_GAP: _stamp_gap, ROLES_LESS: _stamp_less},
         requires=(("切手",),),
         # 切手は実在する額面だけ（1円・63円・84円・94円・110円・180円…）。
-        limits={"rate": {"int_set": [50, 63, 84, 94, 110, 140, 180, 210, 290],
+        # ★実在する額面だけ（180円・290円は実在しない＝読み手が指摘）。
+        limits={"rate": {"int_set": [50, 63, 84, 94, 110, 140, 210, 320],
                          "distinct": ["value"]}},
     ),
     SceneSpec(
@@ -342,18 +432,19 @@ SCENES: tuple[SceneSpec, ...] = (
         vocab=(("one", _GROUPS, ("group",)),),
         render={ROLES_TOTAL: _fee_total, ROLES_DIFF: _fee_diff},
         requires=(("会費",), ("大人",), ("中学生",)),
-        # 会費は数百円〜数千円。
-        limits={"rate": {"int_set": [500, 600, 800, 1000, 1200, 1500, 2000, 2500,
-                                     3000], "distinct": ["value"]}},
+        # 会費は数百円〜数千円。大人と中学生の差は2倍前後（対で引く）。
+        limits={"rate_pairs": ("3000|1500", "2500|1200", "2000|1000",
+                               "1500|800", "1200|600", "1000|500")},
     ),
     SceneSpec(
         id="ticket",
-        vocab=(("one", _LINES, ("line",)),),
+        vocab=(("one", _LINES, ("line", "ticket_name")),),
         render={ROLES_TOTAL: _ticket_total, ROLES_DIFF: _ticket_diff},
-        requires=(("乗車券",), ("おとな",), ("こども",)),
-        # 乗車券は数百円台。
-        limits={"rate": {"int_set": [140, 180, 210, 250, 300, 350, 400, 480, 560],
-                         "distinct": ["value"]}},
+        # 券名は乗り物で変わる（船は乗船券）。
+        requires=(("乗車券", "乗船券"), ("おとな",), ("こども",)),
+        # 乗車券は数百円台。おとなとこどもは2倍（実物の運賃の決まり）。
+        limits={"rate_pairs": ("560|280", "480|240", "400|200",
+                               "350|180", "300|150", "250|130")},
     ),
     SceneSpec(
         id="material",

@@ -36,10 +36,12 @@ source_desc: |
   Lv4 は記号を使わず「大きい正方形」「内側の小さい正方形」と言葉で呼ぶ——
   **誘導なしの問題文は図を与えないので、記号は出どころが無い。**
 
-  【dup_rate】型 × 文字の組 × 記号の組 × 結論の向き。
-    Lv3  型5 × 文字120（10文字から3つ・辞書順）× 記号5 × 向き2 = 6000
-    Lv4  型5 × 文字120 × 向き2 = 1200（記号を使わないぶん狭い）
-  閾 0.20 に要る 250 通りに対して十分広い。
+  【dup_rate】★**文字の組・記号の組・結論の向きは表層で、dup_key に算入されない**
+  （`signature._SURFACE_PARAM_KEYS`。答えにも解き方にも効かない見た目だけの軸）。
+  以前ここに「型5 × 文字120 × 記号5 × 向き2 = 6000」と書いていたが、掛けていた3つは
+  全部表層で、**実際の問題空間は面積による証明の5通りだけ**である
+  （向き＝`flip` は「c² = a² + b²」と「a² + b² = c²」の書き分けで、同じ定理・同じ証明）。
+  閾 0.20 には届かないので、狭さを `dup_rate_max` で宣言する（FIXES.md の原則③）。
 concepts_default: [pythagorean.prove_theorem_by_area]
 levels:
   "3":
@@ -49,11 +51,14 @@ levels:
       guided: true
       proof_set: [outer_square, outer_square_subtract, inner_square,
                   inner_square_subtract, trapezoid]
-    dup_rate_max: 0.92
+    dup_rate_max: 0.95
     dup_rate_reason: |
       証明の道すじそのものが軸で、面積による三平方の証明は outer_square・outer_square_subtract・
       inner_square・inner_square_subtract・trapezoid の**5通り**（教科書に載る型を尽くしている）。
-      並べ方の左右反転と合わせて実測 10 通り。以前は点名を dup_key に算入していた。
+      ★**実測 5 通り**（100 seed で相異 5）。以前は 10 通りと書いていたが、その倍は
+      結論の向き（`flip`）を数えたもので、`flip` は「c² = a² + b²」と「a² + b² = c²」の
+      書き分け＝表層なので dup_key から外した。点名・文字も同じ理由で外れている。
+      **この単元の問題空間は5通りで尽きている**（軸を増やす余地は「別の証明法を足す」しかない）。
     given: [premises, conclusion]
     asked: [proof_text]
     visual: required
@@ -68,9 +73,10 @@ levels:
       guided: false
       proof_set: [outer_square, outer_square_subtract, inner_square,
                   inner_square_subtract, trapezoid]
-    dup_rate_max: 0.92
+    dup_rate_max: 0.95
     dup_rate_reason: |
-      Lv3 と同じ5つの道すじ（誘導が無いだけ）。実測 10 通り。
+      Lv3 と同じ5つの道すじ（誘導が無いだけ）。★**実測 5 通り**
+      （以前の「10 通り」は結論の向き `flip` を数えていた＝表層）。
     given: [premises, conclusion]
     asked: [proof_text]
     visual: required

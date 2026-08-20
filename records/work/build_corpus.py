@@ -341,6 +341,11 @@ def construction_flags(params: Mapping[str, Any], axes: Sequence[str]) -> str:
     型の軸として別に入るもの（`axes`）は重ねない。日本語の値は語彙として扱うので
     ここには入らない（`vocab_of` が拾う）。
     """
+    # ★**表層の軸は文型ではない。** engine が既に宣言している
+    # （`engine.core.signature._SURFACE_PARAM_KEYS`＝「答えにも解き方にも効かない
+    # 見た目だけの軸」で dup_key も除外している）。同じ規約を2か所に書かない。
+    from engine.core.signature import _SURFACE_PARAM_KEYS  # noqa: PLC0415
+
     out: dict[str, object] = {}
 
     def take(path: str, v: object) -> None:
@@ -353,7 +358,7 @@ def construction_flags(params: Mapping[str, Any], axes: Sequence[str]) -> str:
             out[path] = v
 
     for k, v in params.items():
-        if k in axes:
+        if k in axes or k in _SURFACE_PARAM_KEYS:
             continue
         if isinstance(v, dict):
             # `slots` の中にもフラグが入る（`phrasing=larger` は場面の言い方の選び）。

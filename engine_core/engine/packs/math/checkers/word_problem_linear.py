@@ -33,7 +33,13 @@ def double_solve_word_problem_linear(mr: MR) -> list[Solution]:
     coeff_a, coeff_b = (int(sympy.sympify(c)) for c in p["answer_coeff"])
     unit = str(p["answer_unit"])
 
-    formulation, sol, answer_value = solve_scene(kind, numbers, (coeff_a, coeff_b))
+    # `form` があればその式で立て直す（1つの関係に式が2通り以上ある＝作業3）。
+    # ここも recipe と同じ `FORMULATION_BUILDERS` を通るので、二重解きの独立性は
+    # 変わらない（見ているのは「本文の数 → 立式 → 解」の連鎖）。
+    form = str(p.get("form", ""))
+    formulation, sol, answer_value = solve_scene(
+        kind, numbers, (coeff_a, coeff_b), form
+    )
     value = Solution(
         answer=SymbolicAnswer(
             srepr=sympy.srepr(answer_value), display=f"{answer_value}{unit}"

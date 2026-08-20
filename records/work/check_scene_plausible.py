@@ -195,7 +195,9 @@ def main(argv: list[str]) -> int:
             r = build_mr(coord, seed, env)
             if not r.ok or r.mr is None:
                 continue
-            key = (r.mr.provenance.recipe, str(r.mr.params.get("scenario_kind", "")))
+            key = (r.mr.provenance.recipe,
+                   str(r.mr.params.get("form", "")
+                       or r.mr.params.get("scenario_kind", "")))
             numbers = r.mr.params.get("numbers")
             if key not in bounds or not isinstance(numbers, dict):
                 continue        # 層に割っていない recipe のセルは対象外

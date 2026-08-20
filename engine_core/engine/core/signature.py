@@ -73,6 +73,10 @@ _SURFACE_PARAM_KEYS = frozenset({
     "names",
     # 文字式・証明で使う文字
     "letters",
+    # ★結論を `c² = a² + b²` の向きで書くか `a² + b² = c²` で書くかだけを決める軸。
+    # 同じ定理・同じ証明なので、**答えにも解き方にも効かない**。算入していたので
+    # proof の1型が2型に見えていた（文型の数え方を直したときに露見）。
+    "flip",
     # 人名・品物・色・見出し
     "person", "item_a", "item_b", "items",
     "subject_labels", "subject_caption", "answer_labels", "colors",
