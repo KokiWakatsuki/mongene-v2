@@ -24,7 +24,7 @@ meta:
   seed: 3
   signature: word_problem_round_trip_distance
 problem_ref: cc14cda273562765
-problem_text: '家から公園まで、行きは歩いて時速4km、帰りは同じ道を自転車で時速12kmの速さで進んだところ、進むのにかかった時間は合わせて4時間だった。
+problem_text: '家から公園まで、行きは歩いて時速3km、帰りは同じ道を歩いて時速6kmの速さで進んだところ、進むのにかかった時間は合わせて2時間だった。
 
   家から公園までの道のりを x km とする。
 
@@ -33,15 +33,15 @@ problem_text: '家から公園まで、行きは歩いて時速4km、帰りは�
   (2) 家から公園までの道のりを求めよ。'
 sub_questions:
 - answer:
-    display: x/4 + x/12 = 4
+    display: x/3 + x/6 = 2
     kind: symbolic
-    srepr: Equality(Mul(Rational(1, 3), Symbol('x')), Integer(4))
+    srepr: Equality(Mul(Rational(1, 2), Symbol('x')), Integer(2))
   cause_tags: []
   concept_tags:
   - equation.word_problem_round_trip
   explanation: 'まず、場面の中で、どちらの見方でも同じになる（等しくなっている）量に着目する。（進むのにかかった時間の合計）
 
-    次に、その量を x を使って両辺に表し、方程式をつくる。（x/4 + x/12 = 4）'
+    次に、その量を x を使って両辺に表し、方程式をつくる。（x/3 + x/6 = 2）'
   hints:
   - 往復の時間の和から道のりを求める方程式を立て解く（文章題）
   label: (1)
@@ -57,33 +57,33 @@ sub_questions:
     detail: ''
     narration: その量を x を使って両辺に表し、方程式をつくる。
     op: formulate_equation
-    result_display: x/4 + x/12 = 4
-    result_srepr: Equality(Mul(Rational(1, 3), Symbol('x')), Integer(4))
+    result_display: x/3 + x/6 = 2
+    result_srepr: Equality(Mul(Rational(1, 2), Symbol('x')), Integer(2))
 - answer:
-    display: 12km
+    display: 4km
     kind: symbolic
-    srepr: Integer(12)
+    srepr: Integer(4)
   cause_tags: []
   concept_tags:
   - equation.word_problem_round_trip
-  explanation: 'まず、分母の最小公倍数 12 を両辺にかけて、分母をはらう。（4x = 48）
+  explanation: 'まず、分母の最小公倍数 6 を両辺にかけて、分母をはらう。（3x = 12）
 
-    次に、等式の性質を使い、両辺を x の係数 4 でわる。（x = 12）'
+    次に、等式の性質を使い、両辺を x の係数 3 でわる。（x = 4）'
   hints:
   - 往復の時間の和から道のりを求める方程式を立て解く（文章題）
   label: (2)
   prompt_text: ''
   solution_steps:
   - args: []
-    detail: 分母の最小公倍数 12 を両辺にかけて、分母をはらう。
+    detail: 分母の最小公倍数 6 を両辺にかけて、分母をはらう。
     narration: 分母の最小公倍数を両辺にかけて、分母をはらう。
     op: clear_denominators
-    result_display: 4x = 48
-    result_srepr: Integer(12)
+    result_display: 3x = 12
+    result_srepr: Integer(4)
   - args: []
-    detail: 等式の性質を使い、両辺を x の係数 4 でわる。
+    detail: 等式の性質を使い、両辺を x の係数 3 でわる。
     narration: 等式の性質を使い、両辺を x の係数でわる。
     op: divide_both_sides
-    result_display: x = 12
-    result_srepr: Integer(12)
+    result_display: x = 4
+    result_srepr: Integer(4)
 visual_svg: null

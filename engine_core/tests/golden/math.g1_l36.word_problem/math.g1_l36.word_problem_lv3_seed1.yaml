@@ -24,7 +24,7 @@ meta:
   seed: 1
   signature: word_problem_proportion_meet_two_motions
 problem_ref: 901e5d3d6cc4773e
-problem_text: '空の水そうに、毎分12Lの割合で水を入れると25分で満水になる。
+problem_text: '空の貯水そうに、毎分12Lの割合で水を入れると25分で満水になる。
 
   毎分15Lの割合で入れると満水まで何分かかるか求めよ。また、毎分12Lの割合で入れ始めてから21分後の水の量は何Lか求めよ。'
 sub_questions:

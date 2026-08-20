@@ -1,4 +1,4 @@
-"""spec_lint（実装設計 §4.3・§8.1）— FamilySpec の静的検査 R1〜R8。
+"""spec_lint（実装設計 §4.3・§8.1）— FamilySpec の静的検査 R1〜R9。
 
 `engine.core` は `engine.packs` / `engine.curriculum` を import してはならない
 （§3 依存規律）。したがって registry・curriculum ビュー（概念ID集合・要因ID集合）・
@@ -19,7 +19,7 @@ if TYPE_CHECKING:  # pragma: no cover - 型のみ
 
 @dataclass
 class LintError:
-    rule: str                  # "R1".."R8"
+    rule: str                  # "R1".."R9"
     message: str
     level_key: str | None = None
 
@@ -54,6 +54,7 @@ def lint_family(
         errors.extend(_lint_r5_frame_conformance(spec.form, level, level_key, frames))
         errors.extend(_lint_r6_recipe_concepts(spec, level, level_key, registry))
         errors.extend(_lint_r7_hints(level, level_key))
+        errors.extend(_lint_r9_parts_exist(level, level_key, registry))
 
     # R8 は family 単位の規則（levels の有無によらず1回だけ検査）
     errors.extend(_lint_r8_source_desc(spec))
@@ -237,6 +238,42 @@ def _lint_r8_source_desc(spec: SpecFamily) -> list[LintError]:
     errors: list[LintError] = []
     if not spec.source_desc.strip():
         errors.append(LintError("R8", "source_desc が空（input_spec の desc/example 転記が必須）", None))
+    return errors
+
+
+# ---------------------------------------------------------------------------
+# R9: formulas / scenes が recipe の棚にある名前か
+# ---------------------------------------------------------------------------
+def _lint_r9_parts_exist(level: SpecLevel, level_key: str, registry: _Registry) -> list[LintError]:
+    """設計書が選んだ数式・文型が、その recipe の棚に実在するか。
+
+    ★**綴り違いを黙って通してはいけない。** 通すと「絞ったつもりで絞れていない」
+    設計書ができ、生成物を見るまで気づけない（絞りが効いていないことは、
+    出てきた問題を数えないと分からない）。棚が空の recipe に欄を書いた場合も同じ扱い。
+    """
+    errors: list[LintError] = []
+    for field, declared in (
+        ("formulas", registry.recipe_formulas(level.recipe)),
+        ("scenes", registry.recipe_scenes(level.recipe)),
+    ):
+        chosen = getattr(level, field)
+        if not chosen:
+            continue
+        if not declared:
+            errors.append(LintError(
+                "R9",
+                f"{field} を書いているが recipe={level.recipe!r} は棚を宣言していない"
+                f"（register_recipe の provides_{field} が空）",
+                level_key,
+            ))
+            continue
+        unknown = [name for name in chosen if name not in declared]
+        if unknown:
+            errors.append(LintError(
+                "R9",
+                f"{field} に棚に無い名前: {unknown}（棚={sorted(declared)}）",
+                level_key,
+            ))
     return errors
 
 

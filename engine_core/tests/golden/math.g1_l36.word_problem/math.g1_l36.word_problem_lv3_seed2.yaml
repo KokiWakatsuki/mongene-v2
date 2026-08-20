@@ -24,7 +24,7 @@ meta:
   seed: 2
   signature: word_problem_proportion_meet_two_motions
 problem_ref: 8bddbc9fcdb09122
-problem_text: '空の貯水そうに、毎分10Lの割合で水を入れると9分で満水になる。
+problem_text: '空の給水タンクに、毎分10Lの割合で水を入れると9分で満水になる。
 
   毎分2Lの割合で入れると満水まで何分かかるか求めよ。また、毎分10Lの割合で入れ始めてから4分後の水の量は何Lか求めよ。'
 sub_questions:

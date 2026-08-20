@@ -11062,3 +11062,95 @@ def test_g1_l39_lv3_center_is_equidistant_from_corresponding_points(seed):
     assert [e.kind for e in mr.visual_plan.elements] == ["grid", "axis", "polygon", "polygon"]
     checker = REGISTRY.checker("math.find_rotation_center.double_solve")
     assert checker(mr).answer.features[0].srepr == mr.sub_questions[0].answer.features[0].srepr
+
+
+# ---------------------------------------------------------------------------
+# 設計書の欄（formulas / scenes）— 棚から選べることの検査
+#
+# ★**「絞れているか」は、絞らない側と並べて初めて確かめられる。** 絞った側だけを
+# 見ると、欄が読まれずに無視されていても検査は通ってしまう（1種類しか出ない
+# 単元だったのか、欄が効いたのかを区別できない）。だから各テストで
+# 「絞らなければ2種類以上出る」ことを先に確かめる。
+# ---------------------------------------------------------------------------
+def _ctx_with_parts(
+    family: str, level: int, *, formulas: list[str] | None = None,
+    scenes: list[str] | None = None,
+) -> CellContext:
+    ctx = _make_ctx(family, level)
+    spec_level = ctx.spec_level.model_copy(
+        update={"formulas": list(formulas or []), "scenes": list(scenes or [])}
+    )
+    return ctx.model_copy(update={"spec_level": spec_level})
+
+
+def _drawn_parts(ctx: CellContext, seeds: int = 40) -> tuple[set[str], set[str]]:
+    """seeds 回引いて、出た文型 id と式 id の集合を返す。"""
+    scene_ids: set[str] = set()
+    form_ids: set[str] = set()
+    for seed in range(seeds):
+        rng = derive_rng(ctx.family, ctx.level, ctx.purpose, seed)
+        mr = REGISTRY.recipe(ctx.spec_level.recipe)(ctx, rng)
+        scene_ids.add(str(mr.params.get("scene", "")))
+        form_ids.add(str(mr.params.get("form") or mr.params["scenario_kind"]))
+    return scene_ids, form_ids
+
+
+def test_spec_scenes_field_restricts_the_shelf():
+    """設計書の `scenes` が文型を絞る（絞らなければ複数出ることと並べて見る）。"""
+    wide, _ = _drawn_parts(_ctx_with_parts("math.g1_l25.word_problem", 2))
+    assert len(wide) >= 2, "絞る前に複数の文型が出ていないと、絞れたことを確かめられない"
+
+    narrow, _ = _drawn_parts(
+        _ctx_with_parts("math.g1_l25.word_problem", 2, scenes=["stamp"])
+    )
+    assert narrow == {"stamp"}
+
+
+def test_spec_formulas_field_restricts_the_shelf():
+    """設計書の `formulas` が式を絞る。既定の式は関係の名前で呼ぶ。"""
+    _, wide = _drawn_parts(_ctx_with_parts("math.g1_l25.word_problem", 2))
+    assert wide == {"price_count", "price_count_gap"}, wide
+
+    _, only_gap = _drawn_parts(
+        _ctx_with_parts("math.g1_l25.word_problem", 2, formulas=["price_count_gap"])
+    )
+    assert only_gap == {"price_count_gap"}
+
+    _, only_default = _drawn_parts(
+        _ctx_with_parts("math.g1_l25.word_problem", 2, formulas=["price_count"])
+    )
+    assert only_default == {"price_count"}
+
+
+def test_spec_parts_fields_default_to_the_whole_shelf():
+    """欄が空なら棚の全部から引く＝既存セルの生成物は1文字も動かない。
+
+    （生成物の同一そのものは golden が見ている。ここは「空＝制限なし」の意味を固定する。）
+    """
+    ctx = _ctx_with_parts("math.g1_l25.word_problem", 2)
+    assert ctx.spec_level.formulas == []
+    assert ctx.spec_level.scenes == []
+    scene_ids, _ = _drawn_parts(ctx)
+    assert len(scene_ids) >= 3
+
+
+def test_spec_lint_rejects_parts_not_on_the_shelf():
+    """棚に無い名前は spec_lint R9 で落ちる（綴り違いを黙って通さない）。"""
+    from engine.core.spec.lint import lint_family
+
+    families = _families()
+    spec = families["math.g1_l25.word_problem"]
+    bad_level = spec.levels["2"].model_copy(
+        update={"scenes": ["shopping", "shoping"], "formulas": ["price_count_gaps"]}
+    )
+    bad_spec = spec.model_copy(update={"levels": {**spec.levels, "2": bad_level}})
+
+    codes = [e.rule for e in lint_family(bad_spec, registry=REGISTRY)]
+    assert codes.count("R9") == 2, [str(e) for e in lint_family(bad_spec, registry=REGISTRY)]
+
+    # 正しい名前なら R9 は出ない（＝検査が名前を見ていて、常に鳴るわけではない）
+    good_level = spec.levels["2"].model_copy(
+        update={"scenes": ["shopping"], "formulas": ["price_count_gap"]}
+    )
+    good_spec = spec.model_copy(update={"levels": {**spec.levels, "2": good_level}})
+    assert [e.rule for e in lint_family(good_spec, registry=REGISTRY) if e.rule == "R9"] == []

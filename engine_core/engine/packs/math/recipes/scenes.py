@@ -25,7 +25,7 @@
 """
 from __future__ import annotations
 
-from collections.abc import Callable, Mapping
+from collections.abc import Callable, Mapping, Sequence
 from dataclasses import dataclass, field
 
 from engine.core.rng import Rng, draw
@@ -461,9 +461,21 @@ def scenes_for(roles: tuple[str, ...]) -> tuple[SceneSpec, ...]:
     return tuple(s for s in SCENES if roles in s.render)
 
 
-def draw_scene_spec(roles: tuple[str, ...], rng: Rng) -> SceneSpec:
-    """場面を1つ引く（`draw` を1回だけ消費する＝順番の勘定が読める）。"""
+def draw_scene_spec(
+    roles: tuple[str, ...], rng: Rng, allow: Sequence[str] = ()
+) -> SceneSpec:
+    """場面を1つ引く（`draw` を1回だけ消費する＝順番の勘定が読める）。
+
+    `allow` は設計書（family YAML の `scenes`）が選んだ名前。空なら棚の全部から引く
+    ＝これまでの動き。**絞っても `draw` の回数は変わらない**ので、
+    絞っていないセルの生成物は1文字も動かない。
+    """
     pool = scenes_for(roles)
+    if allow:
+        pool = tuple(s for s in pool if s.id in allow)
     if not pool:
-        raise ValueError(f"その役割の型に乗る場面が無い: {roles}")
+        raise ValueError(
+            f"その役割の型に乗る場面が無い: {roles}"
+            + (f"（設計書が選んだ場面={list(allow)}）" if allow else "")
+        )
     return pool[int(draw({"int_range": [0, len(pool) - 1]}, rng))]

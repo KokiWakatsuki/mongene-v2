@@ -24,24 +24,24 @@ meta:
   seed: 2
   signature: word_problem_round_trip_distance
 problem_ref: 6265ee4100a26c30
-problem_text: 'キャンプ場から山頂まで、行きは歩いて時速3km、帰りは同じ道を歩いて時速6kmの速さで進んだところ、進むのにかかった時間は合わせて3時間だった。
+problem_text: '家から公園まで、行きは歩いて時速3km、帰りは同じ道を歩いて時速6kmの速さで進んだところ、進むのにかかった時間は合わせて2時間だった。
 
-  キャンプ場から山頂までの道のりを x km とする。
+  家から公園までの道のりを x km とする。
 
   (1) かかった時間の関係を、x を使った方程式で表せ。
 
-  (2) キャンプ場から山頂までの道のりを求めよ。'
+  (2) 家から公園までの道のりを求めよ。'
 sub_questions:
 - answer:
-    display: x/3 + x/6 = 3
+    display: x/3 + x/6 = 2
     kind: symbolic
-    srepr: Equality(Mul(Rational(1, 2), Symbol('x')), Integer(3))
+    srepr: Equality(Mul(Rational(1, 2), Symbol('x')), Integer(2))
   cause_tags: []
   concept_tags:
   - equation.word_problem_round_trip
   explanation: 'まず、場面の中で、どちらの見方でも同じになる（等しくなっている）量に着目する。（進むのにかかった時間の合計）
 
-    次に、その量を x を使って両辺に表し、方程式をつくる。（x/3 + x/6 = 3）'
+    次に、その量を x を使って両辺に表し、方程式をつくる。（x/3 + x/6 = 2）'
   hints:
   - 往復の時間の和から道のりを求める方程式を立て解く（文章題）
   label: (1)
@@ -57,18 +57,18 @@ sub_questions:
     detail: ''
     narration: その量を x を使って両辺に表し、方程式をつくる。
     op: formulate_equation
-    result_display: x/3 + x/6 = 3
-    result_srepr: Equality(Mul(Rational(1, 2), Symbol('x')), Integer(3))
+    result_display: x/3 + x/6 = 2
+    result_srepr: Equality(Mul(Rational(1, 2), Symbol('x')), Integer(2))
 - answer:
-    display: 6km
+    display: 4km
     kind: symbolic
-    srepr: Integer(6)
+    srepr: Integer(4)
   cause_tags: []
   concept_tags:
   - equation.word_problem_round_trip
-  explanation: 'まず、分母の最小公倍数 6 を両辺にかけて、分母をはらう。（3x = 18）
+  explanation: 'まず、分母の最小公倍数 6 を両辺にかけて、分母をはらう。（3x = 12）
 
-    次に、等式の性質を使い、両辺を x の係数 3 でわる。（x = 6）'
+    次に、等式の性質を使い、両辺を x の係数 3 でわる。（x = 4）'
   hints:
   - 往復の時間の和から道のりを求める方程式を立て解く（文章題）
   label: (2)
@@ -78,12 +78,12 @@ sub_questions:
     detail: 分母の最小公倍数 6 を両辺にかけて、分母をはらう。
     narration: 分母の最小公倍数を両辺にかけて、分母をはらう。
     op: clear_denominators
-    result_display: 3x = 18
-    result_srepr: Integer(6)
+    result_display: 3x = 12
+    result_srepr: Integer(4)
   - args: []
     detail: 等式の性質を使い、両辺を x の係数 3 でわる。
     narration: 等式の性質を使い、両辺を x の係数でわる。
     op: divide_both_sides
-    result_display: x = 6
-    result_srepr: Integer(6)
+    result_display: x = 4
+    result_srepr: Integer(4)
 visual_svg: null

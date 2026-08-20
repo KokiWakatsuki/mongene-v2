@@ -309,6 +309,17 @@ class SpecLevel(BaseModel):
     level: int
     signature: str
     recipe: str
+    # **このレベルで使ってよい数式・文型の名前**（棚から選ぶ）。
+    #
+    # 空なら「recipe が棚に持っているもの全部」＝これまでの動き。名前を並べると
+    # そのぶんだけに絞る。**絞るためだけでなく、増やしたものを届かせるための欄**でもある
+    # ——数式を10本量産しても、設計書が1本しか指せないなら出力には1本しか出ない。
+    #
+    # 名前は recipe が `register_recipe(provides_formulas=..., provides_scenes=...)` で
+    # 宣言したものに限る（綴り違いは spec_lint R9 で落ちる。**黙って通ると、
+    # 絞ったつもりで絞れていない設計書ができる**）。
+    formulas: list[str] = Field(default_factory=list)
+    scenes: list[str] = Field(default_factory=list)
     params: dict[str, Any] = Field(default_factory=dict)
     given: list[str] = Field(default_factory=list)
     asked: list[str] = Field(default_factory=list)

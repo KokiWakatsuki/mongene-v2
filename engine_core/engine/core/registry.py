@@ -31,6 +31,11 @@ class _Registry:
         self._recipes: dict[str, RecipeFn] = {}
         # recipe が「提供できる概念タグ集合」を宣言（spec_lint R6・題材ズレ検出）
         self._recipe_concepts: dict[str, frozenset[str]] = {}
+        # recipe が「棚に持っている数式・文型の名前」を宣言する（spec_lint R9）。
+        # 設計書（family YAML）の `formulas` / `scenes` はここに無い名前を書けない
+        # ——**綴り違いが黙って通ると、絞ったつもりで絞れていない設計書ができる**。
+        self._recipe_formulas: dict[str, frozenset[str]] = {}
+        self._recipe_scenes: dict[str, frozenset[str]] = {}
         self._solvers: dict[str, Callable[..., object]] = {}
         self._templates: dict[str, object] = {}      # 版付き T1 テンプレ
         self._checkers: dict[str, Callable[..., object]] = {}
@@ -42,13 +47,20 @@ class _Registry:
 
     # ---- recipe ----
     def register_recipe(
-        self, name: str, *, provides_concepts: list[str] | None = None
+        self,
+        name: str,
+        *,
+        provides_concepts: list[str] | None = None,
+        provides_formulas: list[str] | None = None,
+        provides_scenes: list[str] | None = None,
     ) -> Callable[[RecipeFn], RecipeFn]:
         def deco(fn: RecipeFn) -> RecipeFn:
             if name in self._recipes:
                 raise ValueError(f"recipe 名の重複登録: {name}")
             self._recipes[name] = fn
             self._recipe_concepts[name] = frozenset(provides_concepts or [])
+            self._recipe_formulas[name] = frozenset(provides_formulas or [])
+            self._recipe_scenes[name] = frozenset(provides_scenes or [])
             return fn
         return deco
 
@@ -59,6 +71,14 @@ class _Registry:
 
     def recipe_concepts(self, name: str) -> frozenset[str]:
         return self._recipe_concepts.get(name, frozenset())
+
+    def recipe_formulas(self, name: str) -> frozenset[str]:
+        """その recipe が棚に持っている数式の名前（設計書が選べる集合）。"""
+        return self._recipe_formulas.get(name, frozenset())
+
+    def recipe_scenes(self, name: str) -> frozenset[str]:
+        """その recipe が棚に持っている文型の名前（設計書が選べる集合）。"""
+        return self._recipe_scenes.get(name, frozenset())
 
     def has_recipe(self, name: str) -> bool:
         return name in self._recipes

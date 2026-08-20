@@ -66,6 +66,7 @@ from engine.packs.math.recipes.scenes import (
     ROLES_GAP,
     ROLES_LESS,
     ROLES_TOTAL,
+    SCENES,
     draw_scene_spec,
 )
 
@@ -492,7 +493,27 @@ def _relation_seat_shortage(p: Mapping[str, Any], rng: Rng) -> LinearRelation:
     )
 
 
-def _round_trip_candidates(p: Mapping[str, Any]) -> list[tuple[int, int, int]]:
+# 行き先ごとの「ありうる片道の道のり」の上限（km）。
+#
+# ★**表はここ1つだけ。** 前は往復の平均の速さ（g1_l27 Lv3）の中だけにこの表があり、
+# 同じ「家から公園まで」を使う往復の方程式（g1_l27 Lv2）には歯止めが無かった。
+# G-WK の読み手が「家から公園まで片道12km・歩いて3時間」を見つけて分かった。
+# **同じ規約を2か所に書くと、片方を直しても消えない。**
+_PLACE_NEAR = {"家|駅", "学校|図書館", "家|公園", "学校|体育館", "家|市役所",
+               "家|スーパー", "学校|駅", "家|図書館", "家|コンビニ", "学校|公園"}
+_PLACE_FAR = {"キャンプ場|山頂", "宿|展望台", "町|となり町", "駅|空港",
+              "ふもと|山小屋", "港|島", "家|温泉"}
+
+
+def place_distance_max(start: str, goal: str) -> int:
+    """その2地点のあいだにありうる片道の道のり（km）の上限。"""
+    key = f"{start}|{goal}"
+    return 5 if key in _PLACE_NEAR else (30 if key in _PLACE_FAR else 15)
+
+
+def _round_trip_candidates(
+    p: Mapping[str, Any], d_max_override: int | None = None
+) -> list[tuple[int, int, int]]:
     """(行きの速さ, 帰りの速さ, 道のり) の候補列挙。
 
     t = d·(a+b)/(a·b) が `time_domain` の範囲の整数になる組だけを残す（構成時に
@@ -500,7 +521,7 @@ def _round_trip_candidates(p: Mapping[str, Any]) -> list[tuple[int, int, int]]:
     """
     speeds = [int(v) for v in p["speed_candidates"]]
     t_lo, t_hi = (int(v) for v in p["time_range"])
-    d_max = int(p["distance_max"])
+    d_max = int(p["distance_max"]) if d_max_override is None else d_max_override
     out: list[tuple[int, int, int]] = []
     # **往復の速さの比に上限を置く。** 「行きは時速3km、帰りは時速15km」＝
     # 同じ人が同じ道を5倍の速さで帰る場面はありえない（実物は 2〜3倍まで）。
@@ -516,9 +537,16 @@ def _round_trip_candidates(p: Mapping[str, Any]) -> list[tuple[int, int, int]]:
     return out
 
 
-def _relation_round_trip(p: Mapping[str, Any], rng: Rng) -> LinearRelation:
-    """g1_l27 Lv2: 行き a・帰り b の速さで往復、時間の和が t。"""
-    cands = _round_trip_candidates(p)
+def _relation_round_trip(
+    p: Mapping[str, Any], rng: Rng, limits: Mapping[str, Any] | None = None
+) -> LinearRelation:
+    """g1_l27 Lv2: 行き a・帰り b の速さで往復、時間の和が t。
+
+    `limits["distance_max"]` は**行き先が決めた**片道の上限（`place_distance_max`）。
+    ★場面を先に引いてから数を引くのは、入園料が数百円台であるのと同じ理由——
+    **語が数の定義域を決める場面が実在する**。
+    """
+    cands = _round_trip_candidates(p, (limits or {}).get("distance_max"))
     speed_go, speed_back, distance = cands[int(draw({"int_range": [0, len(cands) - 1]}, rng))]
     total_time = int(sympy.Rational(distance * (speed_go + speed_back), speed_go * speed_back))
     return LinearRelation(
@@ -992,10 +1020,21 @@ _FORM_ROLES: dict[str, tuple[str, ...]] = {
     "price_count_gap": ROLES_GAP,
     "price_count_less": ROLES_LESS,
 }
+# **語彙を先に引く関係**と、引いた語から数の上限を作る関数。
+# 語が数の定義域を決める場面が実在する（家から公園まで 12km は成り立たない）。
+_VOCAB_FIRST: dict[str, Callable[[Mapping[str, str]], dict[str, Any]]] = {
+    "round_trip": lambda v: {
+        "distance_max": place_distance_max(v["start"], v["goal"])
+    },
+}
 
 
 def draw_scene(
-    kind: str, p: Mapping[str, Any], rng: Rng
+    kind: str,
+    p: Mapping[str, Any],
+    rng: Rng,
+    allow_formulas: Sequence[str] = (),
+    allow_scenes: Sequence[str] = (),
 ) -> tuple[LinearRelation, LinearScene, str, str]:
     """場面選び → 関係 → 語彙 → 場面文 の順に組む。
 
@@ -1007,18 +1046,31 @@ def draw_scene(
     """
     roles = _RELATION_ROLES.get(kind)
     if roles is None:
-        relation = RELATION_DRAWERS[kind](p, rng)
-        vocab = draw_vocab(_SCENE_VOCAB.get(kind, ()), p, rng)
+        if kind in _VOCAB_FIRST:
+            # **語が数の定義域を決める関係**は、語彙を先に引く（順番が変わる）。
+            vocab = draw_vocab(_SCENE_VOCAB.get(kind, ()), p, rng)
+            relation = RELATION_DRAWERS[kind](p, rng, _VOCAB_FIRST[kind](vocab))
+        else:
+            relation = RELATION_DRAWERS[kind](p, rng)
+            vocab = draw_vocab(_SCENE_VOCAB.get(kind, ()), p, rng)
         return relation, SCENE_RENDERERS[kind](relation.numbers, vocab), "", ""
     # ★場面を**先に**引く。場面が数の相場を持っているため（入園料に買い物の
     # 40〜160円を使うと「大人1人130円の入園料」になる）。
     # 式を引く（1つの関係に式が2通り以上あるとき）。役割の型が変わるので、
     # 乗れる場面もここで決まる。
     forms = _RELATION_FORMS.get(kind, ("",))
-    form = str(draw(list(forms), rng)) if len(forms) > 1 else ""
+    if allow_formulas:
+        # 既定の式（"" ）は `FORMULATION_BUILDERS` の鍵が関係の名前なので、
+        # 設計書ではその名前で呼ぶ（`price_count`）。
+        forms = tuple(f for f in forms if (f or kind) in allow_formulas)
+        if not forms:
+            raise ValueError(
+                f"設計書が選んだ数式が関係 {kind!r} に無い: {list(allow_formulas)}"
+            )
+    form = str(draw(list(forms), rng)) if len(forms) > 1 else forms[0]
     if form:
         roles = _FORM_ROLES[form]
-    spec = draw_scene_spec(roles, rng)
+    spec = draw_scene_spec(roles, rng, allow_scenes)
     relation = RELATION_DRAWERS[kind](p, rng, spec.limits, form)
     vocab = draw_vocab(spec.vocab, p, rng)
     text = spec.render[roles](relation.numbers, vocab)
@@ -1061,12 +1113,21 @@ def solve_scene(
 # ---------------------------------------------------------------------------
 # recipe（6セル共通。scenario_kind と guided が level_sep を作る）
 # ---------------------------------------------------------------------------
-@register_recipe(RECIPE_NAME, provides_concepts=_LINEAR_CONCEPTS)
+@register_recipe(
+    RECIPE_NAME,
+    provides_concepts=_LINEAR_CONCEPTS,
+    # 棚（設計書の `formulas` / `scenes` が選べる名前）。
+    # 数式は `FORMULATION_BUILDERS` の鍵、文型は `SCENES` の id と同じ。
+    provides_formulas=sorted(FORMULATION_BUILDERS),
+    provides_scenes=[s.id for s in SCENES],
+)
 def word_problem_linear_equation(ctx: CellContext, rng: Rng) -> MR:
     p = ctx.spec_level.params
     kind = str(p["scenario_kind"])
     guided = bool(p["guided"])
-    relation, scene, scene_id, form = draw_scene(kind, p, rng)
+    relation, scene, scene_id, form = draw_scene(
+        kind, p, rng, ctx.spec_level.formulas, ctx.spec_level.scenes
+    )
     formulation, sol, answer_value = solve_scene(
         kind, relation.numbers, relation.answer_coeff, form
     )
@@ -1331,16 +1392,9 @@ def _draw_round_trip_average_scene(
                 if {int(d), int(avg)} & {a, b, t}:
                     continue  # 答えが本文の数値と一致する組は外す
                 cands.append((a, b, t))
-    # **場所に対して道のりがありうる組だけにする。**
-    # 前は「家から公園まで片道45km」「駅から港まで片道180km・往復15時間」が出ていた。
-    # 場所によって「ありうる距離」が違うので、場所を先に引いてから組を絞る。
+    # **場所に対して道のりがありうる組だけにする。**（表は `place_distance_max`）
     start, goal = split_pair(str(draw(list(p["place_candidates"]), rng)))
-    near = {"家|駅", "学校|図書館", "家|公園", "学校|体育館", "家|市役所",
-            "家|スーパー", "学校|駅", "家|図書館", "家|コンビニ", "学校|公園"}
-    far = {"キャンプ場|山頂", "宿|展望台", "町|となり町", "駅|空港",
-           "ふもと|山小屋", "港|島", "家|温泉"}
-    key = f"{start}|{goal}"
-    d_max = 5 if key in near else (30 if key in far else 15)
+    d_max = place_distance_max(start, goal)
     ok = [(a, b, t_) for a, b, t_ in cands
           if int(sympy.Rational(t_ * a * b, a + b)) <= d_max]
     idx = int(draw({"int_set": list(range(len(ok)))}, rng))
