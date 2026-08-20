@@ -297,9 +297,11 @@ def check_source(src: str, label: str, world: Mapping[str, object] | None = None
                 if rel_fn is None:
                     for key, fn2 in world_fns.items():
                         if key.endswith(f":{kind}"):
-                            rel_numbers |= _numbers_keys(fn2); seen_rel = True
+                            rel_numbers |= _numbers_keys(fn2)
+                            seen_rel = True
                 else:
-                    rel_numbers |= _numbers_keys(rel_fn); seen_rel = True
+                    rel_numbers |= _numbers_keys(rel_fn)
+                    seen_rel = True
         if seen_rel:
             read_n: set[str] = set()
             for fn_name in fn_names:
