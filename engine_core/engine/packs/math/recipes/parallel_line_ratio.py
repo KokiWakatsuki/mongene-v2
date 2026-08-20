@@ -181,8 +181,12 @@ def judge_parallel_from_ratio_recipe(ctx: CellContext, rng: Rng) -> MR:
     )
     # **平行の印は出さない。** これは平行かどうかを調べる問題なので、
     # 図で平行だと決めつけてはいけない（答えを図に書いたことになる）。
+    # **2辺の内分の比を別々に渡す。** 平行の印を消すだけでは足りなかった。
+    # 前は両辺を同じ比で内分していたので、答えが「平行ではない」ときでも
+    # DE と BC のなす角が 0.0°（＝完全に平行）に描かれていた。
     figure_svg = triangle_with_parallel_svg(
         pa, pb, pc, pd, pe, float(ad) / (float(ad) + float(db)), parallel=False,
+        ratio_q=float(ae) / (float(ae) + float(ec)),
         side_labels=[(pa, pd, f"{ad}cm"), (pd, pb, f"{db}cm"),
                      (pa, pe, f"{ae}cm"), (pe, pc, f"{ec}cm")],
     )
@@ -257,9 +261,12 @@ def parallel_lines_transversal_ratio_recipe(ctx: CellContext, rng: Rng) -> MR:
         f"線分{pb}{pc}の長さを求めよ"
     )
 
+    # 上下の間隔は与えられた長さのとおりに（DE:EF）。固定していたので、
+    # DE=15cm・EF=12cm（上が長い）でも上を狭く描く＝比が逆向きの図が出ていた。
     figure_svg = three_parallels_svg(
         (pl1, pl2, pl3), (pa, pb, pc), (pd, pe, pf),
         side_labels=[(pa, pb, f"{ab}cm"), (pd, pe, f"{de}cm"), (pe, pf, f"{ef}cm")],
+        gap_ratio=float(de) / float(ef),
     )
 
     sub_question = SubQuestionMR(

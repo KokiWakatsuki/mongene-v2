@@ -24,18 +24,18 @@ meta:
   seed: 1
   signature: inscribed_angle_transfer_same_arc
 problem_ref: bb8b454dffe82d01
-problem_text: 下の図で、直線PQについて同じ側に点R、Sがあり、∠PRQ=∠PSQ=76°である。∠SPR=41°のとき、∠SQRの大きさを求めよ。
+problem_text: 下の図で、直線PQについて同じ側に点R、Sがあり、∠PRQ=∠PSQ=76°である。∠SPR=16°のとき、∠SQRの大きさを求めよ。
 sub_questions:
 - answer:
-    display: 41°
+    display: 16°
     kind: symbolic
-    srepr: Integer(41)
+    srepr: Integer(16)
   cause_tags: []
   concept_tags:
   - circle.inscribed_angle_transfer_same_arc
   explanation: 'まず、∠PRQ と ∠PSQ が等しく、R と S は直線PQの同じ側にあるので、4点P、Q、R、S は同一円周上にある。（4点P、Q、R、S は同一円周上にある）
 
-    次に、∠SPR と ∠SQR はどちらも弧SRに対する円周角なので、等しい。（41°）'
+    次に、∠SPR と ∠SQR はどちらも弧SRに対する円周角なので、等しい。（16°）'
   hints:
   - 逆で同一円周上と判断し同じ弧の円周角を転写する
   label: (1)
@@ -51,22 +51,22 @@ sub_questions:
     detail: ∠SPR と ∠SQR はどちらも弧SRに対する円周角なので、等しい。
     narration: 同じ弧に対する円周角の大きさはすべて等しいことから、求める角の大きさを求める。
     op: transfer_by_inscribed_angle_equality
-    result_display: 41°
-    result_srepr: Integer(41)
+    result_display: 16°
+    result_srepr: Integer(16)
 visual_svg: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 340" width="420" height="340" font-family="Hiragino Sans, Hiragino Kaku Gothic ProN, Noto Sans JP, Yu Gothic, Meiryo, sans-serif"><rect
-  x="0" y="0" width="420" height="340" fill="#ffffff" stroke="none"/><line x1="46.00" y1="252.00" x2="374.00" y2="252.00" stroke="#000000" stroke-width="1.6"/><line x1="46.00" y1="252.00" x2="146.92" y2="88.00"
-  stroke="#000000" stroke-width="1.6"/><line x1="146.92" y1="88.00" x2="374.00" y2="252.00" stroke="#000000" stroke-width="1.6"/><line x1="46.00" y1="252.00" x2="298.31" y2="113.23" stroke="#000000" stroke-width="1.6"/><line
-  x1="298.31" y1="113.23" x2="374.00" y2="252.00" stroke="#000000" stroke-width="1.6"/><line x1="46.00" y1="252.00" x2="146.92" y2="88.00" stroke="#000000" stroke-width="1.6"/><line x1="146.92" y1="88.00"
-  x2="298.31" y2="113.23" stroke="#000000" stroke-width="1.6"/><path d="M 136.97 104.18 A 19.00 19.00 0 0 0 162.33 99.12" fill="none" stroke="#000000" stroke-width="1.2"/><text x="153.96" y="127.30" font-size="13"
-  text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">76°</text><text x="153.96" y="127.30" font-size="13" text-anchor="middle" fill="#000000">76°</text><path d="M
-  281.66 122.39 A 19.00 19.00 0 0 0 307.41 129.91" fill="none" stroke="#000000" stroke-width="1.2"/><text x="288.21" y="151.79" font-size="13" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round"
-  fill="#ffffff">76°</text><text x="288.21" y="151.79" font-size="13" text-anchor="middle" fill="#000000">76°</text><path d="M 62.65 242.84 A 19.00 19.00 0 0 0 55.96 235.82" fill="none" stroke="#000000"
-  stroke-width="1.2"/><text x="72.07" y="231.17" font-size="13" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">41°</text><text x="72.07" y="231.17" font-size="13"
-  text-anchor="middle" fill="#000000">41°</text><path d="M 364.90 235.32 A 19.00 19.00 0 0 0 358.60 240.88" fill="none" stroke="#000000" stroke-width="1.2"/><text x="350.20" y="228.99" font-size="13" text-anchor="middle"
-  stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">∠x</text><text x="350.20" y="228.99" font-size="13" text-anchor="middle" fill="#000000">∠x</text><circle cx="46.00" cy="252.00"
-  r="3.2" fill="#000000"/><text x="32.91" y="263.32" font-size="14" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">P</text><text x="32.91" y="263.32" font-size="14"
-  text-anchor="middle" fill="#000000">P</text><circle cx="374.00" cy="252.00" r="3.2" fill="#000000"/><text x="386.90" y="263.66" font-size="14" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round"
-  fill="#ffffff">Q</text><text x="386.90" y="263.66" font-size="14" text-anchor="middle" fill="#000000">Q</text><circle cx="146.92" cy="88.00" r="3.2" fill="#000000"/><text x="140.71" y="78.35" font-size="14"
-  text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">R</text><text x="140.71" y="78.35" font-size="14" text-anchor="middle" fill="#000000">R</text><circle cx="298.31"
-  cy="113.23" r="3.2" fill="#000000"/><text x="307.00" y="105.01" font-size="14" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">S</text><text x="307.00" y="105.01"
+  x="0" y="0" width="420" height="340" fill="#ffffff" stroke="none"/><line x1="46.00" y1="273.35" x2="374.00" y2="273.35" stroke="#000000" stroke-width="1.6"/><line x1="46.00" y1="273.35" x2="177.17" y2="66.65"
+  stroke="#000000" stroke-width="1.6"/><line x1="177.17" y1="66.65" x2="374.00" y2="273.35" stroke="#000000" stroke-width="1.6"/><line x1="46.00" y1="273.35" x2="270.02" y2="74.45" stroke="#000000" stroke-width="1.6"/><line
+  x1="270.02" y1="74.45" x2="374.00" y2="273.35" stroke="#000000" stroke-width="1.6"/><line x1="46.00" y1="273.35" x2="177.17" y2="66.65" stroke="#000000" stroke-width="1.6"/><line x1="177.17" y1="66.65"
+  x2="270.02" y2="74.45" stroke="#000000" stroke-width="1.6"/><path d="M 166.99 82.70 A 19.00 19.00 0 0 0 190.27 80.41" fill="none" stroke="#000000" stroke-width="1.2"/><text x="180.68" y="106.48" font-size="13"
+  text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">76°</text><text x="180.68" y="106.48" font-size="13" text-anchor="middle" fill="#000000">76°</text><path d="M
+  255.81 87.07 A 19.00 19.00 0 0 0 278.82 91.29" fill="none" stroke="#000000" stroke-width="1.2"/><text x="263.52" y="113.86" font-size="13" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round"
+  fill="#ffffff">76°</text><text x="263.52" y="113.86" font-size="13" text-anchor="middle" fill="#000000">76°</text><path d="M 60.21 260.73 A 19.00 19.00 0 0 0 56.18 257.30" fill="none" stroke="#000000"
+  stroke-width="1.2"/><text x="69.33" y="249.93" font-size="13" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">16°</text><text x="69.33" y="249.93" font-size="13"
+  text-anchor="middle" fill="#000000">16°</text><path d="M 365.20 256.51 A 19.00 19.00 0 0 0 360.90 259.59" fill="none" stroke="#000000" stroke-width="1.2"/><text x="353.04" y="248.07" font-size="13" text-anchor="middle"
+  stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">∠x</text><text x="353.04" y="248.07" font-size="13" text-anchor="middle" fill="#000000">∠x</text><circle cx="46.00" cy="273.35"
+  r="3.2" fill="#000000"/><text x="32.86" y="284.57" font-size="14" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">P</text><text x="32.86" y="284.57" font-size="14"
+  text-anchor="middle" fill="#000000">P</text><circle cx="374.00" cy="273.35" r="3.2" fill="#000000"/><text x="386.83" y="285.12" font-size="14" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round"
+  fill="#ffffff">Q</text><text x="386.83" y="285.12" font-size="14" text-anchor="middle" fill="#000000">Q</text><circle cx="177.17" cy="66.65" r="3.2" fill="#000000"/><text x="170.50" y="57.22" font-size="14"
+  text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">R</text><text x="170.50" y="57.22" font-size="14" text-anchor="middle" fill="#000000">R</text><circle cx="270.02"
+  cy="74.45" r="3.2" fill="#000000"/><text x="278.32" y="65.96" font-size="14" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">S</text><text x="278.32" y="65.96"
   font-size="14" text-anchor="middle" fill="#000000">S</text></svg>

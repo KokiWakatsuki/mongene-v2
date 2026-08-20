@@ -11,6 +11,7 @@
 from __future__ import annotations
 
 import math
+import re
 from typing import Any
 
 from engine.packs.math.visuals.geometry_figure import render_construction_svg
@@ -142,6 +143,103 @@ def circle_terms_svg(center: str, a: str, b: str, angle_label: str) -> str:
     return render_construction_svg(params)
 
 
+_DEG = re.compile(r"^(\d+(?:\.\d+)?)\s*°$")
+
+
+def _angle_at(v: tuple[float, float], a: tuple[float, float],
+              b: tuple[float, float]) -> float:
+    v1 = (a[0] - v[0], a[1] - v[1])
+    v2 = (b[0] - v[0], b[1] - v[1])
+    n = math.hypot(*v1) * math.hypot(*v2)
+    if not n:
+        return 0.0
+    d = (v1[0] * v2[0] + v1[1] * v2[1]) / n
+    return math.degrees(math.acos(max(-1.0, min(1.0, d))))
+
+
+def _concyclic_coords(
+    p_: str, q: str, r: str, s: str, equal_label: str, spr_label: str
+) -> dict[str, tuple[float, float]]:
+    """P, Q を同じ大きさ θ で見込む弧の上に R, S を置く。
+
+    弦 PQ の半分を a とすると、円周角 θ の円は半径 a/sin θ・中心が弦から
+    a·cos θ/sin θ 離れたところ。**中心がどちら側かは数値で確かめる**（θ が鈍角だと
+    向きが変わるので、式で決め打ちにしない）。
+
+    S は弧の真ん中あたりに置き、R は **∠SPR が与えられた値になる位置**を弧の上で
+    二分探索して決める。見つからない（∠SPR が大きすぎる）ときは、いちばん近い位置。
+    """
+    a = 2.6
+    m_eq = _DEG.match(equal_label.strip())
+    theta = math.radians(float(m_eq.group(1))) if m_eq else math.radians(70.0)
+    theta = max(math.radians(20.0), min(math.radians(160.0), theta))
+    radius = a / math.sin(theta)
+    offset = a * math.cos(theta) / math.sin(theta)
+    P, Q = (-a, 0.0), (a, 0.0)
+
+    def arc_point(centre_y: float, t: float) -> tuple[float, float]:
+        return (radius * math.cos(t), centre_y + radius * math.sin(t))
+
+    # 中心の向きを数値で選ぶ（弧の上の点から見込む角が θ になるほう）。
+    best_centre = None
+    for centre_y in (-offset, offset):
+        top = (0.0, centre_y + radius)
+        if top[1] <= 0.05:
+            continue
+        if abs(_angle_at(top, P, Q) - math.degrees(theta)) < 0.5:
+            best_centre = centre_y
+            break
+    if best_centre is None:
+        best_centre = -offset
+    # 弧の上を、P 側から Q 側へ向かう媒介変数の範囲で取る（y > 0 の側）。
+    t_p = math.atan2(0.0 - best_centre, -a)
+    t_q = math.atan2(0.0 - best_centre, a)
+    if t_p < t_q:
+        t_p += 2 * math.pi
+    # t_q → t_p が y>0 の弧（中心が下なら上側）。両端は P, Q なので内側を使う。
+    def at(frac: float) -> tuple[float, float]:
+        return arc_point(best_centre, t_q + (t_p - t_q) * frac)
+
+    if at(0.5)[1] <= 0.05:      # 選んだ弧が下側だったら反対に回す
+        def at(frac: float) -> tuple[float, float]:  # noqa: F811
+            return arc_point(best_centre, t_q - (t_p - t_q) * frac)
+
+    m_spr = _DEG.match(spr_label.strip())
+    want = float(m_spr.group(1)) if m_spr else 0.0
+    if not want:
+        return {p_: P, q: Q, r: at(0.75), s: at(0.35)}
+    # ★**S の位置は1つに決め打ちしない。** ∠SPR が θ に近い（弧の端まで使う）ときは
+    # S を P 寄りに置かないと届かない。いくつか試して、いちばん近いものを採る
+    # （0.35 固定だと 40seed のうち 2件で 37.5° になっていた）。
+    best: tuple[tuple[bool, float], tuple[float, float], tuple[float, float]] | None = None
+    for f_s in (0.12, 0.18, 0.25, 0.32, 0.40, 0.48):
+        s_try = at(f_s)
+        if s_try[1] < 0.25:
+            continue
+        lo, hi = f_s + 0.05, 0.99
+        for _ in range(40):
+            mid = (lo + hi) / 2
+            if _angle_at(P, s_try, at(mid)) < want:
+                lo = mid
+            else:
+                hi = mid
+        r_try = at((lo + hi) / 2)
+        err = abs(_angle_at(P, s_try, r_try) - want)
+        if r_try[1] < 0.25:
+            continue
+        # ★同じ角度になる置き方は何通りもある。**端（P・Q）から離れたものを採る**——
+        # 近いと点とラベルが重なって、どの角のラベルか読めない
+        # （∠XUW=43°・θ=76° の回で W が U の 65px 手前に来ていた）。
+        room = min(math.dist(pt, end)
+                   for pt in (s_try, r_try) for end in (P, Q))
+        score = (err > 0.5, -room)      # まず角度が合うもの、次に広いもの
+        if best is None or score < best[0]:
+            best = (score, r_try, s_try)
+    if best is None:
+        return {p_: P, q: Q, r: at(0.75), s: at(0.35)}
+    return {p_: P, q: Q, r: best[1], s: best[2]}
+
+
 def concyclic_svg(
     p_: str, q: str, r: str, s: str,
     equal_label: str, spr_label: str, x_label: str,
@@ -151,11 +249,19 @@ def concyclic_svg(
     円周角の定理の逆を使う問題なので、**円は描かない**（描いたら「同一円周上に
     ある」という結論を図に書いたことになる）。R と S が PQ の同じ側にあることと、
     2つの角が等しいことだけを示す。
+
+    ★**「2つの角が等しい」を図でも等しく描く。** 以前は座標を
+    `r:(-1.0,2.6), s:(1.4,2.2)` に決め打ちしていたので、∠PRQ と ∠PSQ は
+    **85.8° と 89.8°**（等しくもない）なのに、どちらにも「76°」と印字していた。
+    この問題の前提そのものが図から読めない状態だった（図つきの逆翻訳で発覚し、
+    点の座標から測って確認）。
+
+    R と S を**PQ を同じ大きさで見込む弧の上**に置くと、∠PRQ = ∠PSQ が図でも
+    成り立つ（円は描かないが、位置は弧の上にとる）。∠SPR も与えられた値になるよう、
+    弧の上で数値的に探す。**厳密に描くと ∠SQR（＝答え）も測れてしまうが、
+    それは角度を追う図では避けられない**——前提が読めないほうが実害が大きい。
     """
-    coords = {
-        p_: (-2.6, 0.0), q: (2.6, 0.0),
-        r: (-1.0, 2.6), s: (1.4, 2.2),
-    }
+    coords = _concyclic_coords(p_, q, r, s, equal_label, spr_label)
     params: dict[str, Any] = {
         "coords": coords,
         "segments": [(p_, q), (p_, r), (r, q), (p_, s), (s, q), (p_, r), (r, s)],

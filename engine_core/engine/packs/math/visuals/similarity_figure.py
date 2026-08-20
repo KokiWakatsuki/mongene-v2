@@ -18,6 +18,7 @@ def triangle_with_parallel_svg(
     apex: str, b: str, c: str, p: str, q: str,
     ratio: float, *, side_labels: list[tuple[str, str, str]] = (),
     parallel: bool = True,
+    ratio_q: float | None = None,
 ) -> str:
     """三角形の2辺上に点をとり、底辺に平行な線分を引いた図。
 
@@ -25,12 +26,18 @@ def triangle_with_parallel_svg(
     `ratio` は頂点から測った内分の比（0〜1）。`side_labels` は [(端1, 端2, 名前)] で
     線分に長さを書き入れる。`parallel` が False なら平行の印を出さない
     （「平行かどうかを調べる」問題では、平行だと決めつけた図にしない）。
+
+    **`ratio_q` は辺 apex-c 側の内分の比**（省略すると `ratio` と同じ＝PQ∥BC）。
+    平行の印を消すだけでは足りない。前は両辺を同じ比で内分していたので、
+    答えが「平行ではない」問題でも PQ と BC がぴったり平行に描かれていた
+    （実測してなす角 0.0°）＝図が答えを否定していた。与えられた長さから
+    それぞれの比を渡せば、平行に見えるかどうかが数と一致する。
     """
     coords = {apex: (0.0, 3.4), b: (-2.6, 0.0), c: (3.0, 0.0)}
     ax, ay = coords[apex]
-    for name, end in ((p, b), (q, c)):
+    for name, end, r in ((p, b, ratio), (q, c, ratio if ratio_q is None else ratio_q)):
         ex, ey = coords[end]
-        coords[name] = (ax + (ex - ax) * ratio, ay + (ey - ay) * ratio)
+        coords[name] = (ax + (ex - ax) * r, ay + (ey - ay) * r)
     params: dict[str, Any] = {
         "coords": coords,
         "segments": [(apex, b), (apex, c), (b, c), (p, q)],
@@ -69,14 +76,30 @@ def x_shape_similar_svg(
 def three_parallels_svg(
     lines: tuple[str, str, str], left: tuple[str, str, str], right: tuple[str, str, str],
     side_labels: list[tuple[str, str, str]] = (),
+    *, gap_ratio: float | None = None,
 ) -> str:
     """3本の平行な直線を2本の直線が横切る図（g3_l42.find_value Lv3）。
 
     `lines` は3直線の名前、`left`/`right` はそれぞれの直線と交わる点の名前
-    （上から順）。線分の比が読めるよう、間隔は与えられた長さに合わせず等間隔にせず、
-    上の間隔を下より広くとる（比が 1:1 に見えると問題にならない）。
+    （上から順）。
+
+    **`gap_ratio` は「上の間隔 : 下の間隔」**（上÷下）。前は間隔が固定
+    （94px : 122px）で、与えられた長さが CD=15cm・DE=10cm（＝上のほうが長い）でも
+    **上を狭く描いていた＝比が逆向き**だった。「1:1 に見えると問題にならない」と
+    書いてあったが、逆向きに描くほうが読み手を惑わせる。長さのとおりに描く
+    （`_triangle_from_angles` と同じ規約）。
     """
-    ys = (2.4, 0.4, -2.2)
+    if gap_ratio is None:
+        ys = (2.4, 0.4, -2.2)
+    else:
+        # 上下の間隔の合計は 4.6 のまま。上が上限を超えないように収める。
+        total = 4.6
+        upper = total * gap_ratio / (1.0 + gap_ratio)
+        # **どちらの間隔も 0.7 は残す**（これより詰めると点名の文字が重なる）。
+        # そのため 2:18 のような極端な比は、向きは合うが図の上では 1:4 程度に
+        # 圧縮される——**宣言しておく限界**。向きが逆になることはもう無い。
+        upper = min(max(upper, 0.7), total - 0.7)
+        ys = (2.4, 2.4 - upper, 2.4 - total)
     coords: dict[str, tuple[float, float]] = {}
     for i, (ln, lp, rp) in enumerate(zip(lines, left, right, strict=True)):
         y = ys[i]

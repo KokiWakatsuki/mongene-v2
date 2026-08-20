@@ -618,6 +618,15 @@ def draw_hyperbola_from_table(ctx: CellContext, rng: Rng) -> MR:
         "curve_kind": "hyperbola",
         "coeff": a,
         "pts": [_pt_str(x1, y1), _pt_str(-x1, -y1), _pt_str(xs[-1], a // xs[-1])],
+        # ★**本文が名指した点は全部、方眼に収まっていなければならない。**
+        # 本文は「x = 2、4、16 および x = −2、−4、−16」と言うのに、`pts` には3点
+        # しか載せていなかったので、方眼が x = −2〜16 でしか取られず
+        # **x = −16 が図の外**になっていた（生徒は指示どおりの点を打てない）。
+        # `bbox_pts`（描かないが枠には入れる点）は、平行移動で同じ穴を塞いだときに
+        # 用意した仕組み——双曲線の負の枝でも同じことが起きていた。
+        "bbox_pts": [
+            _pt_str(sign * x, sign * (a // x)) for x in xs for sign in (1, -1)
+        ],
     }
     answer = GraphAnswer(
         features=sol.answer.features, solution_svg_ref=render_curve_solution_svg(mr_params)

@@ -57,19 +57,36 @@ def _draw_coprime_ratio(rng: Rng, domain: object, max_den: int) -> tuple[int, in
 _SIMILAR_AREA_RATIO_CONCEPTS = ["similarity.area_ratio"]
 
 
-def _similar_solids_svg(ratio_num: object, ratio_den: object) -> str:
+# 本文が言う立体 → 見取図の描き手（`visuals/solid.py` の kind）。
+_SOLID_SKETCH_KIND = {
+    "円柱": "cylinder", "円錐": "cone", "三角柱": "rectangular_prism",
+    "四角柱": "rectangular_prism", "三角錐": "triangular_pyramid",
+    "正四角錐": "square_pyramid",
+}
+
+
+def _similar_solids_svg(
+    ratio_num: object, ratio_den: object, solid: str = "円錐",
+    label_a: str = "", label_b: str = "",
+) -> str:
     """相似な2つの立体を、相似比のとおりの大きさで並べた見取図。
 
-    ★**「相似比 1:2 の2つの三角錐」を、形を見ないまま比だけで解くことになっていた。**
-    立体の種類は場面によって変わるが、比を読み取ることがこの問題の中身なので、
-    円錐の骨組みで代表させる（どの立体でも相似比と面積比・体積比の関係は同じ）。
+    ★**本文が言う立体を描く。** 以前は種類にかかわらず円錐で代表させていたので、
+    「相似な2つの**三角錐** V, X」に円錐の図が付いていた（6種のうち5種が食い違い）。
+    ★**どちらが V でどちらが X かも書く**（比の向きが答えを変える）。
     """
-    k = float(ratio_den) / float(ratio_num)
-    if k > 1:
-        k = 1 / k
+    # ★**比の向きを合わせる。** 「相似比 1:2」なら 2つめ（X）が V の2倍。
+    # 以前は `k = den/num` を 1 以下に丸めていたので、**どちらの比でも1つめが大きく**
+    # 描かれていた（1:2 なのに V が X の2倍。PNG に起こして目で見て気づいた）。
+    num, den = float(ratio_num), float(ratio_den)
+    biggest = max(num, den)
     return render_solid_svg(
-        {"view": "sketch", "solid_kind": "similar_cones",
-         "radius_px": 78.0, "height_px": 150.0, "ratio": max(k, 0.3)},
+        {"view": "sketch", "solid_kind": "similar_pair",
+         "base_kind": _SOLID_SKETCH_KIND.get(solid, "cone"),
+         "radius_px": 78.0, "height_px": 150.0,
+         "width_px": 150.0, "depth_px": 70.0, "base_px": 150.0,
+         "scale_a": num / biggest, "scale_b": den / biggest,
+         "label_a": label_a, "label_b": label_b},
         draw=True,
     )
 
@@ -166,10 +183,14 @@ def similar_solid_surface_volume_ratio_recipe(ctx: CellContext, rng: Rng) -> MR:
             "solid": solid, "labels": ls + lt,
         },
         given={"condition": statement},
-        context_slots={"figure_svg": _similar_solids_svg(ratio_num, ratio_den)},
+        context_slots={
+            "figure_svg": _similar_solids_svg(ratio_num, ratio_den, solid, ls, lt)
+        },
         sub_questions=[sub_question],
         visual_plan=VisualPlan(
-            style="figure", labels=[],
+            # 図に出す文字はここに宣言する（G-Q5v が突き合わせる）。
+            # 立体の名前を図に書くようにしたので、それも宣言に足す。
+            style="figure", labels=[ls, lt],
             elements=[VisualElement(kind="solid_given", attrs={"role": "given"})],
         ),
         provenance=Provenance(recipe="math.similar_solid_surface_volume_ratio"),

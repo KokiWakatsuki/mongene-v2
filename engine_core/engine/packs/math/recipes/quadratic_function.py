@@ -314,9 +314,15 @@ def intersection_parabola_line_recipe(ctx: CellContext, rng: Rng) -> MR:
             "curve_kind": "parabola", "coeff": str(a), "line": [str(m), str(b)],
             "pts": _parabola_line_pts(a, m, b),
             # 放物線と直線に式を添える（どちらがどの式か図から決まらなかった）。
-            # 交点 A・B の座標はこのセルの答えなので**点名を付けない**が、
-            # **原点 O は答えではない**ので打つ（本文が「原点を O とする」と
-            # 名指ししていて、三角形 OAB の頂点になる）。
+            # **交点 A・B には点名を打たない。** mode によって答えは座標・
+            # 線分の長さ・面積と変わるが、どの mode でも**方眼に交点の位置を
+            # 名前つきで打つと、座標を読み取って代数を飛ばせる**。
+            # （前の版は理由を「A・B の座標がこのセルの答えだから」と書いていたが、
+            # mode=segment_and_area では答えは長さと面積で、座標ではない。
+            # 理由が mode 依存だと、後から「この mode なら打てる」と誤って直される。）
+            # 本文は A・B を名指すが、問いは A と B の入れ替えで変わらない
+            # （線分 AB の長さ・三角形 OAB の面積）ので、どちらがどちらかは要らない。
+            # **原点 O は答えではない**ので打つ（三角形 OAB の頂点になる）。
             "label_equations": True,
             "label_pts": [str((0, 0))],
             "label_names": ["O"],

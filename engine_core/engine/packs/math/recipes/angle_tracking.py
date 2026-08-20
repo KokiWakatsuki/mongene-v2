@@ -73,7 +73,7 @@ def solve_angle_by_equality_relation_recipe(ctx: CellContext, rng: Rng) -> MR:
     # 全部ことばで述べていた（図が1枚も無かった）。どの角が ∠a でどの角が ∠x かは、
     # 文で言うと長いうえに読み違えやすい——実物の問題集はここを図で示す。
     statement = f"下の図で、{context}。∠a = {angle}° のとき、∠aの{label}にあたる∠xの大きさを求めよ"
-    figure_svg = angle_equality_svg(relation, "∠a", "∠x")
+    figure_svg = angle_equality_svg(relation, "∠a", "∠x", angle=angle)
     labels = ["∠a", "∠x", "ℓ", "m"] + ([] if relation == "vertical" else ["n"])
 
     sub_question = SubQuestionMR(
@@ -123,7 +123,7 @@ def solve_zigzag_angle_sum_recipe(ctx: CellContext, rng: Rng) -> MR:
         f"下の図で、ℓ∥m である。∠a = {a1}°、∠b = {a2}° のとき、"
         f"点Pを通り2直線に平行な補助線をひいて、∠xの大きさを求めよ"
     )
-    figure_svg = zigzag_angle_svg("∠a", "∠b", "∠x")
+    figure_svg = zigzag_angle_svg("∠a", "∠b", "∠x", angle_a=a1, angle_b=a2)
 
     sub_question = SubQuestionMR(
         label="(1)", asked="value", answer=sol.answer, steps=sol.steps,

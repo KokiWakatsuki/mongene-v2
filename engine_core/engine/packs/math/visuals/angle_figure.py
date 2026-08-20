@@ -21,22 +21,36 @@ _BOTTOM_Y = -2.0
 _HALF_W = 4.0
 
 
-def _parallel_pair_base(line_a: str, line_b: str) -> dict[str, Any]:
+_MAX_RUN = 5.0  # 横断線 n が P から Q まで横に走ってよい幅
+
+
+def _parallel_pair_base(line_a: str, line_b: str, angle: float) -> dict[str, Any]:
     """平行な2直線 ℓ・m と、それを横切る直線 n の骨組み。
 
     P = n と ℓ の交点、Q = n と m の交点。直線は交点の外まで伸ばす
     （伸ばさないと「2直線が交わっている」ではなく「線分がつながっている」に見える）。
+
+    **`angle` は ∠(Lb, P, Q)**——ℓ の右向きと横断線がつくる角。この向きで n を
+    引けば、同位角も錯角も**印を付け替えるだけで角の大きさが `angle` と一致する**。
+    前は傾きが固定（59.0°）で、本文が「∠a = 133°」でも図は 59° を描いていた。
+
+    n が ℓ にほぼ平行なとき（angle が 20° や 160°）は横に長く走るので、
+    ℓ と m の間隔を詰めて幅に収める（間隔を固定すると図が紙から出る）。
     """
-    slant_x = 1.2
+    rad = math.radians(angle)
+    tan = math.tan(rad)
+    height = min(_TOP_Y - _BOTTOM_Y, _MAX_RUN * abs(tan))
+    run = height / tan          # P から Q への横のずれ（angle>90° なら負）
+    top, bottom = height / 2, -height / 2
     ext = 0.9  # 交点の外へ出す長さ（n の向きに対する倍率）
-    dx, dy = 2 * slant_x, _BOTTOM_Y - _TOP_Y
+    dx, dy = run, -height
     coords = {
-        "P": (-slant_x, _TOP_Y),
-        "Q": (slant_x, _BOTTOM_Y),
-        "La": (-_HALF_W, _TOP_Y), "Lb": (_HALF_W, _TOP_Y),
-        "Ma": (-_HALF_W, _BOTTOM_Y), "Mb": (_HALF_W, _BOTTOM_Y),
-        "Na": (-slant_x - dx * ext / 2, _TOP_Y - dy * ext / 2),
-        "Nb": (slant_x + dx * ext / 2, _BOTTOM_Y + dy * ext / 2),
+        "P": (-run / 2, top),
+        "Q": (run / 2, bottom),
+        "La": (-_HALF_W, top), "Lb": (_HALF_W, top),
+        "Ma": (-_HALF_W, bottom), "Mb": (_HALF_W, bottom),
+        "Na": (-run / 2 - dx * ext / 2, top - dy * ext / 2),
+        "Nb": (run / 2 + dx * ext / 2, bottom + dy * ext / 2),
     }
     return {
         "coords": coords,
@@ -52,19 +66,30 @@ def _parallel_pair_base(line_a: str, line_b: str) -> dict[str, Any]:
     }
 
 
-def angle_equality_svg(relation: str, angle_label: str, x_label: str) -> str:
+def angle_equality_svg(
+    relation: str, angle_label: str, x_label: str, *, angle: float
+) -> str:
     """対頂角・同位角・錯角のいずれか1組を示す図（g2_l31/l32.find_value Lv1）。
 
     `relation` は "vertical"（2直線が交わる）／"corresponding"（同位角）／
     "alternate"（錯角）。**どの角が ∠a で どの角が ∠x か**を印と名前で示す。
+
+    **`angle` のとおりに描く**（`_triangle_from_angles` と同じ規約）。前は座標が
+    固定で、∠a が 23° でも 135° でも図の角は 112.6°（対頂角）／59.0°（同位角・錯角）
+    だった。∠x は ∠a と等しいと答えさせる問題なので、**図が答えを否定していた**。
     """
     if relation == "vertical":
         # 2直線 ℓ・m が1点 O で交わる。∠a は上、∠x はその対頂角（下）。
+        # ℓ を +α、m を 180−α の向きに引くと ∠AOC = 180−2α なので α=(180−angle)/2。
+        alpha = math.radians((180.0 - angle) / 2.0)
+        ca, sa = math.cos(alpha), math.sin(alpha)
+        # 紙（±3.4 × ±2.2）に収まる長さをとる。α が小さいと横長、大きいと縦長。
+        r = min(3.4 / max(ca, 1e-6), 2.2 / max(sa, 1e-6))
         params: dict[str, Any] = {
             "coords": {
                 "O": (0.0, 0.0),
-                "A": (3.0, 2.0), "B": (-3.0, -2.0),   # 直線 ℓ
-                "C": (-3.0, 2.0), "D": (3.0, -2.0),   # 直線 m
+                "A": (r * ca, r * sa), "B": (-r * ca, -r * sa),    # 直線 ℓ
+                "C": (-r * ca, r * sa), "D": (r * ca, -r * sa),    # 直線 m
             },
             "segments": [("A", "B"), ("C", "D")],
             "angle_marks": [
@@ -77,7 +102,7 @@ def angle_equality_svg(relation: str, angle_label: str, x_label: str) -> str:
         }
         return render_construction_svg(params)
 
-    params = _parallel_pair_base("ℓ", "m")
+    params = _parallel_pair_base("ℓ", "m", angle)
     if relation == "corresponding":
         # 同位角: 直線 n から見て同じ側・同じ位置（どちらも右下）。
         params["angle_marks"] = [
@@ -95,17 +120,36 @@ def angle_equality_svg(relation: str, angle_label: str, x_label: str) -> str:
     return render_construction_svg(params)
 
 
-def zigzag_angle_svg(a1_label: str, a2_label: str, x_label: str) -> str:
+def zigzag_angle_svg(
+    a1_label: str, a2_label: str, x_label: str, *, angle_a: float, angle_b: float
+) -> str:
     """平行な2直線のあいだで1回折れ曲がる折れ線の図（g2_l31/l32.find_value Lv2）。
 
     A は ℓ 上、B は m 上、P が折れ点。∠A は ℓ と線分PA、∠B は m と線分PB がつくる角で、
     どちらも折れ線から見て同じ側にある。求めるのは折れ点の角 ∠APB。
+
+    **`angle_a`/`angle_b` のとおりに描く**（`_triangle_from_angles` と同じ規約）。
+    前は座標が固定で、本文が「∠a=70°」でも図の角は 32.4°、答えが 106° でも
+    ∠APB は 63.3° に描かれていた。折れ点の角は答えそのものなので、
+    **図が答えを否定していた**。
+    印は名前（∠a）で、値は本文にある形なので、印字された数を測る検査では
+    捕まらない（`check_figure_numbers.py` の盲点）。
+
+    2つの線分 PA・PB を同じ長さにとる。こうすると、片方の角が急でも
+    もう片方の線分が短くなりすぎない（角の弧を描く余地が残る）。
     """
+    ra, rb = math.radians(angle_a), math.radians(angle_b)
+    # PA=PB=L、A は右上へ角 angle_a、B は右下へ角 angle_b。A が ℓ 上・B が m 上
+    # になるので L·sin(a) + L·sin(b) = ℓとmの間隔。
+    length = (_TOP_Y - _BOTTOM_Y) / (math.sin(ra) + math.sin(rb))
+    run_a, run_b = length * math.cos(ra), length * math.cos(rb)
+    px = -max(run_a, run_b) / 2.0  # 折れ線を左右の中央に置く
+    py = _TOP_Y - length * math.sin(ra)
     params: dict[str, Any] = {
         "coords": {
-            "A": (1.4, _TOP_Y),
-            "B": (1.9, _BOTTOM_Y),
-            "P": (-1.6, 0.1),
+            "A": (px + run_a, _TOP_Y),
+            "B": (px + run_b, _BOTTOM_Y),
+            "P": (px, py),
             "La": (-_HALF_W, _TOP_Y), "Lb": (_HALF_W, _TOP_Y),
             "Ma": (-_HALF_W, _BOTTOM_Y), "Mb": (_HALF_W, _BOTTOM_Y),
         },

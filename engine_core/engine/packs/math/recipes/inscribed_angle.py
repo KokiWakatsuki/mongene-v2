@@ -180,7 +180,13 @@ def inscribed_angle_transfer_same_arc_recipe(ctx: CellContext, rng: Rng) -> MR:
     (v,) = _draw_named_figures([4], rng)
     pa, pb, pc, pd = v
     v1 = int(draw(p["angle_domain"], rng))
-    v2 = int(draw(p["angle_domain"], rng))
+    # ★**∠SPR は ∠PRQ を超えられない**（接弦角が上限）。2つを独立に引いていたので
+    # 60seed のうち 28件が ∠SPR ≧ ∠PRQ になり、**図が存在しない問題**を出していた
+    # （答えは計算では出るが、その配置は作れない）。図を固定座標で描いていたため
+    # 今まで表に出ていなかった——図つきの逆翻訳で図の角度を測って発覚した。
+    # 退化（S が P に重なる）も避けるため、余裕を 10° とる。定義域は狭めず、
+    # 引く順番で保証する。
+    v2 = int(draw({"int_range": [10, max(11, v1 - 10)]}, rng))
 
     solver = REGISTRY.solver("math.inscribed_angle_transfer_same_arc")
     sol = cast(Solution, solver(v2, pa + pb + pc + pd))

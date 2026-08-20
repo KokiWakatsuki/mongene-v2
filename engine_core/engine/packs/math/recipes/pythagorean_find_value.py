@@ -705,17 +705,28 @@ def _scene_isosceles_height_area(p: Mapping[str, Any], rng: Rng) -> FindValueSce
 
 
 # --- g3_l53 Lv4 -------------------------------------------------------------
-def _altitude_foot_x(angle_b: float, angle_c: float, half: float = 2.8) -> float:
-    """底辺の両端の角から、垂線の足が底辺のどこに落ちるかを出す（図の座標）。
+def _altitude_apex(
+    angle_b: float, angle_c: float, half: float = 2.8
+) -> tuple[float, float]:
+    """底辺の両端の角から、頂点の位置（垂線の足の x と高さ）を出す（図の座標）。
 
     底辺は -half〜half。B 側の角が大きいほど足は B 寄りになる。
+
+    ★**高さも返す。** 以前は足の x だけを返し、高さは描き手が 3.2 に決め打ちして
+    いたので、「∠B=60°、∠C=60°」の三角形が 48.8° に描かれていた
+    （図の数値照合で発覚）。h = (足の x + half)·tan(∠B) で角度どおりになる。
+    高さが図に収まらないときだけ、両方を同じ率で縮める（形は変えない）。
     """
     import math as _m
 
     tb, tc = _m.tan(_m.radians(angle_b)), _m.tan(_m.radians(angle_c))
-    # 高さ h に対し、B からの距離は h/tan(B)、C からの距離は h/tan(C)。
     frac = (1 / tb) / (1 / tb + 1 / tc)
-    return -half + 2 * half * frac
+    x = -half + 2 * half * frac
+    height = (x + half) * tb
+    if height > 4.6:            # 図が縦に伸びすぎるときは全体を縮める
+        scale = 4.6 / height
+        return x * scale, 4.6
+    return x, height
 
 
 def _scene_height_from_special_angles(p: Mapping[str, Any], rng: Rng) -> FindValueScene:
@@ -738,7 +749,8 @@ def _scene_height_from_special_angles(p: Mapping[str, Any], rng: Rng) -> FindVal
             a, b, c, foot,
             side_labels=[(b, c, f"{base}cm")],
             angle_marks=[[b, c, a, f"{angle_b}°"], [c, b, a, f"{angle_c}°"]],
-            apex_x=_altitude_foot_x(angle_b, angle_c),
+            **dict(zip(("apex_x", "apex_y"), _altitude_apex(angle_b, angle_c),
+                       strict=True)),
         ),
         figure_labels=[f"{base}cm", f"{angle_b}°", f"{angle_c}°", a, b, c, foot],
     )

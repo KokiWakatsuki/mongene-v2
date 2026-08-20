@@ -54,19 +54,19 @@ sub_questions:
     result_display: 辺の長さ 26cm、角の大きさ 119°
     result_srepr: Tuple(Integer(26), Integer(119))
 visual_svg: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 340" width="420" height="340" font-family="Hiragino Sans, Hiragino Kaku Gothic ProN, Noto Sans JP, Yu Gothic, Meiryo, sans-serif"><rect
-  x="0" y="0" width="420" height="340" fill="#ffffff" stroke="none"/><line x1="46.00" y1="252.00" x2="292.00" y2="252.00" stroke="#000000" stroke-width="1.6"/><line x1="292.00" y1="252.00" x2="374.00" y2="88.00"
-  stroke="#000000" stroke-width="1.6"/><line x1="374.00" y1="88.00" x2="128.00" y2="88.00" stroke="#000000" stroke-width="1.6"/><line x1="128.00" y1="88.00" x2="46.00" y2="252.00" stroke="#000000" stroke-width="1.6"/><line
-  x1="167.00" y1="256.50" x2="173.00" y2="252.00" stroke="#000000" stroke-width="1.2"/><line x1="167.00" y1="247.50" x2="173.00" y2="252.00" stroke="#000000" stroke-width="1.2"/><line x1="249.00" y1="92.50"
-  x2="255.00" y2="88.00" stroke="#000000" stroke-width="1.2"/><line x1="249.00" y1="83.50" x2="255.00" y2="88.00" stroke="#000000" stroke-width="1.2"/><line x1="335.01" y1="176.04" x2="333.67" y2="168.66"
-  stroke="#000000" stroke-width="1.2"/><line x1="326.96" y1="172.01" x2="333.67" y2="168.66" stroke="#000000" stroke-width="1.2"/><line x1="337.25" y1="171.57" x2="335.91" y2="164.19" stroke="#000000" stroke-width="1.2"/><line
-  x1="329.20" y1="167.54" x2="335.91" y2="164.19" stroke="#000000" stroke-width="1.2"/><line x1="89.01" y1="176.04" x2="87.67" y2="168.66" stroke="#000000" stroke-width="1.2"/><line x1="80.96" y1="172.01"
-  x2="87.67" y2="168.66" stroke="#000000" stroke-width="1.2"/><line x1="91.25" y1="171.57" x2="89.91" y2="164.19" stroke="#000000" stroke-width="1.2"/><line x1="83.20" y1="167.54" x2="89.91" y2="164.19"
-  stroke="#000000" stroke-width="1.2"/><path d="M 300.50 235.01 A 19.00 19.00 0 0 0 273.00 252.00" fill="none" stroke="#000000" stroke-width="1.2"/><text x="273.07" y="225.38" font-size="13" text-anchor="middle"
-  stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">119°</text><text x="273.07" y="225.38" font-size="13" text-anchor="middle" fill="#000000">119°</text><text x="169.00" y="270.00"
-  font-size="13" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">26cm</text><text x="169.00" y="270.00" font-size="13" text-anchor="middle" fill="#000000">26cm</text><circle
-  cx="46.00" cy="252.00" r="3.2" fill="#000000"/><text x="33.24" y="263.89" font-size="14" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">W</text><text x="33.24"
-  y="263.89" font-size="14" text-anchor="middle" fill="#000000">W</text><circle cx="292.00" cy="252.00" r="3.2" fill="#000000"/><text x="299.89" y="268.76" font-size="14" text-anchor="middle" stroke="#ffffff"
-  stroke-width="3" stroke-linejoin="round" fill="#ffffff">X</text><text x="299.89" y="268.76" font-size="14" text-anchor="middle" fill="#000000">X</text><circle cx="374.00" cy="88.00" r="3.2" fill="#000000"/><text
-  x="386.76" y="84.11" font-size="14" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">Y</text><text x="386.76" y="84.11" font-size="14" text-anchor="middle"
-  fill="#000000">Y</text><circle cx="128.00" cy="88.00" r="3.2" fill="#000000"/><text x="120.11" y="79.24" font-size="14" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">Z</text><text
-  x="120.11" y="79.24" font-size="14" text-anchor="middle" fill="#000000">Z</text></svg>
+  x="0" y="0" width="420" height="340" fill="#ffffff" stroke="none"/><line x1="46.00" y1="249.83" x2="285.50" y2="249.83" stroke="#000000" stroke-width="1.6"/><line x1="285.50" y1="249.83" x2="374.00" y2="90.17"
+  stroke="#000000" stroke-width="1.6"/><line x1="374.00" y1="90.17" x2="134.50" y2="90.17" stroke="#000000" stroke-width="1.6"/><line x1="134.50" y1="90.17" x2="46.00" y2="249.83" stroke="#000000" stroke-width="1.6"/><line
+  x1="163.75" y1="254.33" x2="169.75" y2="249.83" stroke="#000000" stroke-width="1.2"/><line x1="163.75" y1="245.33" x2="169.75" y2="249.83" stroke="#000000" stroke-width="1.2"/><line x1="252.25" y1="94.67"
+  x2="258.25" y2="90.17" stroke="#000000" stroke-width="1.2"/><line x1="252.25" y1="85.67" x2="258.25" y2="90.17" stroke="#000000" stroke-width="1.2"/><line x1="331.50" y1="176.12" x2="330.48" y2="168.69"
+  stroke="#000000" stroke-width="1.2"/><line x1="323.63" y1="171.75" x2="330.48" y2="168.69" stroke="#000000" stroke-width="1.2"/><line x1="333.93" y1="171.74" x2="332.90" y2="164.31" stroke="#000000" stroke-width="1.2"/><line
+  x1="326.05" y1="167.38" x2="332.90" y2="164.31" stroke="#000000" stroke-width="1.2"/><line x1="92.01" y1="176.12" x2="90.98" y2="168.69" stroke="#000000" stroke-width="1.2"/><line x1="84.13" y1="171.75"
+  x2="90.98" y2="168.69" stroke="#000000" stroke-width="1.2"/><line x1="94.43" y1="171.74" x2="93.40" y2="164.31" stroke="#000000" stroke-width="1.2"/><line x1="86.56" y1="167.38" x2="93.40" y2="164.31"
+  stroke="#000000" stroke-width="1.2"/><path d="M 294.71 233.21 A 19.00 19.00 0 0 0 266.50 249.83" fill="none" stroke="#000000" stroke-width="1.2"/><text x="267.23" y="222.81" font-size="13" text-anchor="middle"
+  stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">119°</text><text x="267.23" y="222.81" font-size="13" text-anchor="middle" fill="#000000">119°</text><text x="165.75" y="267.83"
+  font-size="13" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">26cm</text><text x="165.75" y="267.83" font-size="13" text-anchor="middle" fill="#000000">26cm</text><circle
+  cx="46.00" cy="249.83" r="3.2" fill="#000000"/><text x="33.08" y="261.45" font-size="14" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">W</text><text x="33.08"
+  y="261.45" font-size="14" text-anchor="middle" fill="#000000">W</text><circle cx="285.50" cy="249.83" r="3.2" fill="#000000"/><text x="293.11" y="266.76" font-size="14" text-anchor="middle" stroke="#ffffff"
+  stroke-width="3" stroke-linejoin="round" fill="#ffffff">X</text><text x="293.11" y="266.76" font-size="14" text-anchor="middle" fill="#000000">X</text><circle cx="374.00" cy="90.17" r="3.2" fill="#000000"/><text
+  x="386.92" y="86.55" font-size="14" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">Y</text><text x="386.92" y="86.55" font-size="14" text-anchor="middle"
+  fill="#000000">Y</text><circle cx="134.50" cy="90.17" r="3.2" fill="#000000"/><text x="126.89" y="81.24" font-size="14" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">Z</text><text
+  x="126.89" y="81.24" font-size="14" text-anchor="middle" fill="#000000">Z</text></svg>

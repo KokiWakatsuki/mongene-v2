@@ -27,6 +27,7 @@ matplotlib 非依存の自己完結 SVG 文字列生成・決定論・モノク�
 from __future__ import annotations
 
 import math
+import re
 from typing import TYPE_CHECKING, Any
 
 from engine.core.registry import register_visual
@@ -412,7 +413,13 @@ def _triangular_pyramid_sketch(params: dict[str, Any]) -> list[str]:
         ],
         anchors=["middle", "start"],
     )
-    pts = {"A": a, "B": b, "C": c, "D": apex}
+    # ★**頂点の名前の並びは、本文の言い方に合わせる。**
+    # 呼ぶ側はどちらも「正四面体CDEF について、頂点**C**から底面DEF」と書く
+    # （`pythagorean_find_value` と `word_problem_pythagorean`）。以前は4番目を
+    # 頂点に置いていたので、**F が頂点・C D E が底面**に描かれ、本文と入れ替わって
+    # いた（図つきの逆翻訳で読み手が見つけた）。1番目を頂点にする。
+    pts = ({"A": apex, "B": a, "C": b, "D": c} if params.get("apex_first", True)
+           else {"A": a, "B": b, "C": c, "D": apex})
     return parts + dims + _vertex_labels(params, pts)
 
 
@@ -512,6 +519,148 @@ def _similar_cones_sketch(params: dict[str, Any]) -> list[str]:
     return out
 
 
+_NUM_ATTR = re.compile(
+    r'\b(?:x|y|cx|cy|x1|y1|x2|y2|rx|ry|r)="(-?[\d.]+)"'
+)
+_PATH_D = re.compile(r'\bd="([^"]+)"')
+
+
+def _path_points(d: str) -> tuple[list[float], list[float]]:
+    """`path` の `d` から通る点を取り出す。
+
+    ★**数を交互に x/y と読んではいけない。** 円弧は
+    `A rx ry 回転 大弧 向き x y` の**7個**なので、交互に読むと座標が総崩れになる
+    （bbox が canvas 全体 (0,0,320,320) になり、図の配置が全部ずれていた）。
+    命令ごとに引数の数を数える。
+    """
+    xs: list[float] = []
+    ys: list[float] = []
+    tokens = re.findall(r"[A-Za-z]|-?\d+(?:\.\d+)?", d)
+    i = 0
+    cmd = ""
+    while i < len(tokens):
+        t = tokens[i]
+        if t.isalpha():
+            cmd = t.upper()
+            i += 1
+            continue
+        nums = []
+        need = {"M": 2, "L": 2, "T": 2, "A": 7, "C": 6, "S": 4, "Q": 4,
+                "H": 1, "V": 1}.get(cmd, 2)
+        while len(nums) < need and i < len(tokens) and not tokens[i].isalpha():
+            nums.append(float(tokens[i]))
+            i += 1
+        if len(nums) < need:
+            break
+        if cmd == "H":
+            xs.append(nums[0])
+        elif cmd == "V":
+            ys.append(nums[0])
+        elif cmd == "A":
+            # ★**円弧のいちばん外側は端点ではない。** 端点だけを取ると下端を
+            # 過小評価して、下に置いたラベルが底面の楕円に重なる。
+            # 端点のまわりに半径ぶん広げて見る（少し大きめに取る）。
+            rx, ry = abs(nums[0]), abs(nums[1])
+            xs += [nums[-2] - rx, nums[-2] + rx]
+            ys += [nums[-1] - ry, nums[-1] + ry]
+        else:                       # 終点はいつも最後の2つ
+            xs.append(nums[-2])
+            ys.append(nums[-1])
+    return xs, ys
+
+
+def _bbox(parts: list[str]) -> tuple[float, float, float, float]:
+    """描かれた要素が実際に占める範囲（左, 上, 右, 下）。
+
+    要素の座標属性と `path` の `d` から数を拾う。半径（r/rx/ry）は中心から
+    広がるぶんなので、円・楕円は中心±半径で見る。
+    """
+    xs: list[float] = []
+    ys: list[float] = []
+    for el in parts:
+        cx = cy = rx = ry = None
+        for m in re.finditer(r'\b(x|y|cx|cy|x1|y1|x2|y2|rx|ry|r)="(-?[\d.]+)"', el):
+            key, val = m.group(1), float(m.group(2))
+            if key in ("x", "x1", "x2"):
+                xs.append(val)
+            elif key in ("y", "y1", "y2"):
+                ys.append(val)
+            elif key == "cx":
+                cx = val
+            elif key == "cy":
+                cy = val
+            elif key in ("rx", "r"):
+                rx = val if rx is None else max(rx, val)
+            elif key == "ry":
+                ry = val
+        if cx is not None:
+            xs += [cx - (rx or 0.0), cx + (rx or 0.0)]
+        if cy is not None:
+            ys += [cy - (ry or rx or 0.0), cy + (ry or rx or 0.0)]
+        m_d = _PATH_D.search(el)
+        if m_d:
+            px, py = _path_points(m_d.group(1))
+            xs += px
+            ys += py
+    if not xs or not ys:
+        return (0.0, 0.0, float(_W), float(_H))
+    return (min(xs), min(ys), max(xs), max(ys))
+
+
+def _similar_pair_sketch(params: dict[str, Any]) -> list[str]:
+    """相似な2つの立体を並べた見取図（`base_kind` の描き手を2回使う）。
+
+    ★**本文が言う立体を描く。** 以前は種類にかかわらず円錐で代表させていたので、
+    「相似な2つの**三角錐** V, X」に**円錐**の図が付いていた（`solid_set` は
+    円柱・円錐・三角柱・四角柱・三角錐・正四角錐の6種で、5種が食い違っていた）。
+    図つきの逆翻訳で読み手が見つけた。
+
+    ★**どちらが V でどちらが X かを図に書く。** 求めるのは比なので向きが逆だと
+    答えが 4:1 になる。以前は図に文字が1つも無く、判別できなかった。
+
+    種類ごとの描き手を書き足すのではなく、**既存の描き手の出力を
+    `<g transform>` で縮めて2つ並べる**（新しい立体が増えても自動で追随する）。
+    """
+    base = str(params["base_kind"])
+    builder = _SKETCH_BY_KIND.get(base)
+    if builder is None:
+        raise ValueError(f"相似な対に未対応の立体: {base!r}")
+    parts = builder(params)
+    body = "".join(parts)
+    # ★**比の向きは呼ぶ側が決める**（`scale_a`:`scale_b` がそのまま相似比）。
+    # 「1つめを等倍、2つめを k 倍」にすると、どちらの比でも1つめが大きくなる。
+    sa = float(params.get("scale_a", 1.0))
+    sb = float(params.get("scale_b", 0.5))
+    top = max(sa, sb) or 1.0
+    label_a = str(params.get("label_a", ""))
+    label_b = str(params.get("label_b", ""))
+    # ★**canvas 全体を占めると仮定しない。** 元の描き手が実際に使っている範囲
+    # （bbox）を測ってから並べる。仮定で書いたら、縦だけ合わせて右がはみ出し、
+    # 横を足したら上に大きな余白ができた（どちらも PNG に起こして目で見て気づいた）。
+    x0, y0, x1, y1 = _bbox(parts)
+    bw, bh = max(x1 - x0, 1.0), max(y1 - y0, 1.0)
+    gap = 26.0
+    avail_w = _W - 2 * _PAD - gap
+    avail_h = _H - _PAD - 44 - _PAD
+    fit = min(avail_h / (bh * top), avail_w / (bw * (sa + sb)))
+    ka, kb = sa * fit, sb * fit
+    base_y = _H - _PAD - 26
+    # 下端をそろえる（bbox の下端 y1 が base_y に来るように平行移動）。
+    x_a = _PAD
+    x_b = x_a + bw * ka + gap
+    out = [
+        f'<g transform="translate({x_a - x0 * ka},{base_y - y1 * ka}) '
+        f'scale({ka:.3f})">{body}</g>',
+        f'<g transform="translate({x_b - x0 * kb},{base_y - y1 * kb}) '
+        f'scale({kb:.3f})">{body}</g>',
+    ]
+    if label_a:
+        out.append(_text(x_a + bw * ka / 2, base_y + 20, label_a))
+    if label_b:
+        out.append(_text(x_b + bw * kb / 2, base_y + 20, label_b))
+    return out
+
+
 def _cut_cone_sketch(params: dict[str, Any]) -> list[str]:
     """底面に平行な平面で切った円錐（g3_l46/exam_l6 の相似な立体）。
 
@@ -558,6 +707,7 @@ _SKETCH_BY_KIND = {
     "hemisphere_on_cylinder": _hemisphere_on_cylinder_sketch,
     "cube_with_pyramid": _cube_with_pyramid_sketch,
     "similar_cones": _similar_cones_sketch,
+    "similar_pair": _similar_pair_sketch,
     "cut_cone": _cut_cone_sketch,
 }
 

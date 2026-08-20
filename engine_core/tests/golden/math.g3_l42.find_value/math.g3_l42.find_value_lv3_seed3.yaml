@@ -54,23 +54,23 @@ sub_questions:
     result_display: 9cm
     result_srepr: Integer(9)
 visual_svg: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 340" width="420" height="340" font-family="Hiragino Sans, Hiragino Kaku Gothic ProN, Noto Sans JP, Yu Gothic, Meiryo, sans-serif"><rect
-  x="0" y="0" width="420" height="340" fill="#ffffff" stroke="none"/><line x1="46.00" y1="62.23" x2="374.00" y2="62.23" stroke="#000000" stroke-width="1.6"/><line x1="46.00" y1="155.94" x2="374.00" y2="155.94"
+  x="0" y="0" width="420" height="340" fill="#ffffff" stroke="none"/><line x1="46.00" y1="62.23" x2="374.00" y2="62.23" stroke="#000000" stroke-width="1.6"/><line x1="46.00" y1="205.92" x2="374.00" y2="205.92"
   stroke="#000000" stroke-width="1.6"/><line x1="46.00" y1="277.77" x2="374.00" y2="277.77" stroke="#000000" stroke-width="1.6"/><line x1="130.34" y1="62.23" x2="177.20" y2="277.77" stroke="#000000" stroke-width="1.6"/><line
   x1="280.29" y1="62.23" x2="364.63" y2="277.77" stroke="#000000" stroke-width="1.6"/><line x1="208.00" y1="66.73" x2="214.00" y2="62.23" stroke="#000000" stroke-width="1.2"/><line x1="208.00" y1="57.73"
-  x2="214.00" y2="62.23" stroke="#000000" stroke-width="1.2"/><line x1="208.00" y1="160.44" x2="214.00" y2="155.94" stroke="#000000" stroke-width="1.2"/><line x1="208.00" y1="151.44" x2="214.00" y2="155.94"
+  x2="214.00" y2="62.23" stroke="#000000" stroke-width="1.2"/><line x1="208.00" y1="210.42" x2="214.00" y2="205.92" stroke="#000000" stroke-width="1.2"/><line x1="208.00" y1="201.42" x2="214.00" y2="205.92"
   stroke="#000000" stroke-width="1.2"/><line x1="208.00" y1="282.27" x2="214.00" y2="277.77" stroke="#000000" stroke-width="1.2"/><line x1="208.00" y1="273.27" x2="214.00" y2="277.77" stroke="#000000" stroke-width="1.2"/><text
   x="390.00" y="56.23" font-size="13" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">w</text><text x="390.00" y="56.23" font-size="13" text-anchor="middle"
-  fill="#000000">w</text><text x="390.00" y="149.94" font-size="13" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">r</text><text x="390.00" y="149.94" font-size="13"
+  fill="#000000">w</text><text x="390.00" y="199.92" font-size="13" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">r</text><text x="390.00" y="199.92" font-size="13"
   text-anchor="middle" fill="#000000">r</text><text x="390.00" y="271.77" font-size="13" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">s</text><text x="390.00"
-  y="271.77" font-size="13" text-anchor="middle" fill="#000000">s</text><text x="128.48" y="116.48" font-size="13" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">18cm</text><text
-  x="128.48" y="116.48" font-size="13" text-anchor="middle" fill="#000000">18cm</text><text x="314.14" y="107.34" font-size="13" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round"
-  fill="#ffffff">16cm</text><text x="314.14" y="107.34" font-size="13" text-anchor="middle" fill="#000000">16cm</text><text x="356.77" y="216.28" font-size="13" text-anchor="middle" stroke="#ffffff" stroke-width="3"
-  stroke-linejoin="round" fill="#ffffff">8cm</text><text x="356.77" y="216.28" font-size="13" text-anchor="middle" fill="#000000">8cm</text><circle cx="130.34" cy="62.23" r="3.2" fill="#000000"/><text x="130.34"
+  y="271.77" font-size="13" text-anchor="middle" fill="#000000">s</text><text x="128.24" y="140.33" font-size="13" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">18cm</text><text
+  x="128.24" y="140.33" font-size="13" text-anchor="middle" fill="#000000">18cm</text><text x="314.80" y="134.13" font-size="13" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round"
+  fill="#ffffff">16cm</text><text x="314.80" y="134.13" font-size="13" text-anchor="middle" fill="#000000">16cm</text><text x="355.62" y="238.76" font-size="13" text-anchor="middle" stroke="#ffffff" stroke-width="3"
+  stroke-linejoin="round" fill="#ffffff">8cm</text><text x="355.62" y="238.76" font-size="13" text-anchor="middle" fill="#000000">8cm</text><circle cx="130.34" cy="62.23" r="3.2" fill="#000000"/><text x="130.34"
   y="51.23" font-size="14" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">U</text><text x="130.34" y="51.23" font-size="14" text-anchor="middle" fill="#000000">U</text><circle
   cx="280.29" cy="62.23" r="3.2" fill="#000000"/><text x="280.29" y="51.23" font-size="14" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">X</text><text x="280.29"
-  y="51.23" font-size="14" text-anchor="middle" fill="#000000">X</text><circle cx="153.77" cy="155.94" r="3.2" fill="#000000"/><text x="153.77" y="174.94" font-size="14" text-anchor="middle" stroke="#ffffff"
-  stroke-width="3" stroke-linejoin="round" fill="#ffffff">V</text><text x="153.77" y="174.94" font-size="14" text-anchor="middle" fill="#000000">V</text><circle cx="322.46" cy="155.94" r="3.2" fill="#000000"/><text
-  x="322.46" y="174.94" font-size="14" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">Y</text><text x="322.46" y="174.94" font-size="14" text-anchor="middle"
+  y="51.23" font-size="14" text-anchor="middle" fill="#000000">X</text><circle cx="153.77" cy="205.92" r="3.2" fill="#000000"/><text x="153.77" y="224.92" font-size="14" text-anchor="middle" stroke="#ffffff"
+  stroke-width="3" stroke-linejoin="round" fill="#ffffff">V</text><text x="153.77" y="224.92" font-size="14" text-anchor="middle" fill="#000000">V</text><circle cx="322.46" cy="205.92" r="3.2" fill="#000000"/><text
+  x="322.46" y="224.92" font-size="14" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">Y</text><text x="322.46" y="224.92" font-size="14" text-anchor="middle"
   fill="#000000">Y</text><circle cx="177.20" cy="277.77" r="3.2" fill="#000000"/><text x="177.20" y="296.77" font-size="14" text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round"
   fill="#ffffff">W</text><text x="177.20" y="296.77" font-size="14" text-anchor="middle" fill="#000000">W</text><circle cx="364.63" cy="277.77" r="3.2" fill="#000000"/><text x="364.63" y="296.77" font-size="14"
   text-anchor="middle" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" fill="#ffffff">Z</text><text x="364.63" y="296.77" font-size="14" text-anchor="middle" fill="#000000">Z</text></svg>

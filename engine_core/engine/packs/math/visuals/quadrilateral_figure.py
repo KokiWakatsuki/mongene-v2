@@ -12,9 +12,32 @@
 from __future__ import annotations
 
 import math
+import re
 from typing import Any
 
 from engine.packs.math.visuals.geometry_figure import render_construction_svg
+
+
+_ANGLE_LABEL = re.compile(r"^(\d+(?:\.\d+)?)\s*°$")
+
+
+def _parallelogram_coords(
+    names: str, angle_label: str
+) -> dict[str, tuple[float, float]]:
+    """4頂点の座標。`angle_label` が角度なら ∠B がその角になるように作る。
+
+    形が細くなりすぎないよう、隣の辺の長さは角に応じて決める（極端に鋭い角でも
+    図として読める高さを保つ）。角度が読めないラベル（`∠x` など）のときは、
+    どちらとも取れない中間の形（60°）にする——**決め打ちの 116.6° に戻さない**。
+    """
+    a, b, c, d = names
+    m = _ANGLE_LABEL.match(angle_label.strip())
+    theta = math.radians(float(m.group(1))) if m else math.radians(60.0)
+    width = 3.6
+    # 高さを 2.4 前後に保つため、隣の辺は sin θ で割る（鋭角でも潰れない）。
+    side = max(1.6, min(4.4, 2.4 / max(0.35, math.sin(theta))))
+    cx, cy = width - side * math.cos(theta), side * math.sin(theta)
+    return {a: (0.0, 0.0), b: (width, 0.0), c: (cx, cy), d: (cx - width, cy)}
 
 
 def parallelogram_svg(
@@ -25,9 +48,19 @@ def parallelogram_svg(
 
     `names` は4頂点（この順に一周する）。`side_label`/`angle_label` が与えられた辺と角、
     `x_side_label`/`x_angle_label` が求める対辺と対角。
+
+    ★**与えられた角のとおりに描く。** 以前は座標を
+    `{a:(0,0), b:(3.6,0), c:(4.8,2.4), d:(1.2,2.4)}` に決め打ちしていたので、
+    ∠B は**常に 116.6°**なのに、そこへ「41°」と印字していた
+    （図つきの逆翻訳で読み手が見つけ、座標から測って確認した）。生徒は図を見て
+    考えるので、これは解けない問題になる。
+
+    `angle_label` が `NN°` の形なら、その角になるように ∠B を作る。
+    a=(0,0), b=(w,0) と置くと、内角 θ の b から c へ向かう向きは
+    (−cos θ, sin θ)。d は c + (a − b) で決まる（平行四辺形の定義）。
     """
     a, b, c, d = names
-    coords = {a: (0.0, 0.0), b: (3.6, 0.0), c: (4.8, 2.4), d: (1.2, 2.4)}
+    coords = _parallelogram_coords(names, angle_label)
     params: dict[str, Any] = {
         "coords": coords,
         "segments": [(a, b), (b, c), (c, d), (d, a)],
@@ -152,10 +185,18 @@ def triangle_with_altitude_svg(
     apex: str, b: str, c: str, foot: str,
     side_labels: list[tuple[str, str, str]] = (),
     *, angle_marks: list[list[Any]] = (), equal_legs: bool = False,
-    apex_x: float = 0.0,
+    apex_x: float = 0.0, apex_y: float = 3.2,
 ) -> str:
-    """三角形に頂点から底辺へ垂線を引いた図（g3_l53 の各レベル）。"""
-    coords = {apex: (apex_x, 3.2), b: (-2.8, 0.0), c: (2.8, 0.0), foot: (apex_x, 0.0)}
+    """三角形に頂点から底辺へ垂線を引いた図（g3_l53 の各レベル）。
+
+    ★**高さも与えられた値から決める。** 以前は `apex_y` が 3.2 の決め打ちで、
+    垂線の足の位置（`apex_x`）だけを角度から計算していた。そのため
+    「∠R=60°、∠S=60°」の三角形が **48.8°、48.8°** に描かれていた
+    （等しさは守られるが値が守られない。図の数値照合で発覚）。
+    高さは呼ぶ側が計算して渡す——底辺の半分を 2.8 とすると
+    h = (apex_x + 2.8)·tan(∠B)。
+    """
+    coords = {apex: (apex_x, apex_y), b: (-2.8, 0.0), c: (2.8, 0.0), foot: (apex_x, 0.0)}
     params: dict[str, Any] = {
         "coords": coords,
         "segments": [(apex, b), (apex, c), (b, c), (apex, foot)],
