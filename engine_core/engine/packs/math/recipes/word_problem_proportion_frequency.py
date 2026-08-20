@@ -515,7 +515,13 @@ def _two_relation_candidates(p: Mapping[str, Any]) -> list[tuple[int, int, int, 
                 minutes = capacity // rate1
                 if not lo <= minutes <= hi * 2:
                     continue
-                for minutes1 in range(lo, hi + 1):
+                for minutes1 in range(lo, minutes0 + 1):
+                    # ★**満水になる時刻を超えて訊いてはいけない。** minutes1 を
+                    # minutes0 と独立に引いていたので「毎分12Lで12分で満水（容量144L）」
+                    # の水そうに「25分後の水の量は？」→ 300L という場面が出ていた
+                    # （40seed 中 23件）。式としては解けるが場面が成り立たない
+                    # ——**G-BT（逆翻訳）で読み手が見つけた**。数ごとの上下限
+                    # （G-SC5）では捕まらない、数と数の関係の条件である。
                     amount = rate0 * minutes1
                     shown = {rate0, minutes0, rate1, minutes1}
                     if {minutes, amount} & shown:
@@ -767,6 +773,20 @@ RELATION_BOUNDS: dict[str, tuple[tuple[str, float, float], ...]] = {
     "defect_rate_estimate": (
         ("sample", 10, 5000), ("defects", 1, 50), ("future", 100, 100000),
     ),
+}
+
+
+# ---------------------------------------------------------------------------
+# G-SC5b（数と数の関係）— 書き方と理由は word_problem_linear.py の同じ節を見る。
+RELATION_ORDER: dict[str, tuple[tuple[str, str, str], ...]] = {
+    # ★満水になる時刻を超えて訊いてはいけない（G-BT が見つけた欠陥）。
+    "meet_two_motions": (("minutes1", "<=", "minutes0"),),
+    # 変えたあとの割合は元と違う（同じなら問う意味が無い）。反比例の枝だけ rate1 がある。
+    "judge_and_use": (("rate0", "!=", "rate1"),),
+    # 起こった回数は試行回数より少ない。
+    "experiment_frequency_predict": (("occurred", "<", "total"),),
+    # 不良品は検査した個数より少ない。
+    "defect_rate_estimate": (("defects", "<", "sample"),),
 }
 
 

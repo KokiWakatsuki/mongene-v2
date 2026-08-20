@@ -65,13 +65,19 @@ def main() -> int:
     # id → (unit, form, level, seed)。`index.json`（7回目）と `patterns.json`（9回目・
     # 文型ごとの代表）の両方を混ぜる。読み手の答えも `answers*.tsv` を全部読む。
     rows: dict[str, dict] = {}
-    for name in ("index.json", "patterns.json"):
+    # `scenes.json`（10回目・(関係×場面) の全組×5seed）も混ぜる。
+    # id の付け方は同じ（`unit.form.Lv<n>#<seed>`）なので、前の回の答えは生きたまま。
+    for name in ("index.json", "patterns.json", "scenes.json"):
         p = _DIR / name
         if p.exists():
             for r in json.loads(p.read_text(encoding="utf-8")):
                 rows[str(r["id"])] = r
+    # ★過去の回の答えは**そのときの engine の出力**に対するもの。engine を直したあとは
+    # 同じ seed が別の問題になっているので、混ぜると「食い違い」が積み上がる
+    # （実測 373問中100件がそれ）。回を指定して見られるようにする。
+    only = sys.argv[sys.argv.index("--only") + 1] if "--only" in sys.argv else None
     mine: dict[str, str] = {}
-    for path in sorted(_DIR.glob("answers*.tsv")):
+    for path in sorted(_DIR.glob(only or "answers*.tsv")):
         for line in path.read_text(encoding="utf-8").splitlines():
             if not line.strip() or line.startswith("#"):
                 continue

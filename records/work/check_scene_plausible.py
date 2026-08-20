@@ -35,6 +35,49 @@ sys.path.insert(0, "records/work")
 # と連立（word_problem_system）の**両方にあって中身が違う**（前者は本文に代金 `cost`、
 # 後者は合計 `total` が出る）。名前で1つに畳むと、どちらかの宣言が消える。
 _Bounds = dict[tuple[str, str], dict[str, tuple[float, float]]]
+# 数と数の関係（G-SC5b）。鍵は同じ (recipe, scenario_kind)。
+_Order = dict[tuple[str, str], tuple[tuple[str, str, str], ...]]
+
+_OPS = {
+    "<": lambda a, b: a < b,
+    "<=": lambda a, b: a <= b,
+    "!=": lambda a, b: a != b,
+}
+
+
+def declared_order() -> _Order:
+    """層に割れた recipe から `RELATION_ORDER` を集める。"""
+    from engine.packs.math.recipes import (  # noqa: PLC0415
+        word_problem_expression,
+        word_problem_linear,
+        word_problem_proportion_frequency,
+        word_problem_quadratic,
+        word_problem_system,
+    )
+
+    out: _Order = {}
+    for mod in (word_problem_linear, word_problem_system,
+                word_problem_proportion_frequency, word_problem_quadratic,
+                word_problem_expression):
+        for kind, rows in mod.RELATION_ORDER.items():
+            out[(mod.RECIPE_NAME, kind)] = rows
+    return out
+
+
+def order_violations(key: tuple[str, str], numbers: dict, order: _Order) -> list[str]:
+    """数と数の関係を見る。**片方の数だけでは分からない条件**（G-SC5b）。
+
+    名前が無い枝では見ない（`rate1` は反比例の枝にだけある）。
+    """
+    bad: list[str] = []
+    for left, op, right in order.get(key, ()):
+        try:
+            a, b = float(numbers[left]), float(numbers[right])
+        except (KeyError, TypeError, ValueError):
+            continue
+        if not _OPS[op](a, b):
+            bad.append(f"{key[1]}: {left}={a:g} {op} {right}={b:g} が成り立たない")
+    return bad
 
 
 def declared() -> _Bounds:
@@ -77,7 +120,7 @@ def violations(key: tuple[str, str], numbers: dict, bounds: _Bounds) -> list[str
     return bad
 
 
-def self_test(bounds: _Bounds) -> int:
+def self_test(bounds: _Bounds, order: _Order) -> int:
     fails = 0
     L = "math.word_problem_linear_equation"
     S = "math.word_problem_system_equations"
@@ -107,14 +150,34 @@ def self_test(bounds: _Bounds) -> int:
     ok = bool(unknown)
     fails += 0 if ok else 1
     print(f"{'OK  ' if ok else 'NG  '}宣言の無い関係は落とす: {unknown}")
+
+    # G-SC5b（数と数の関係）。★これは G-BT が見つけた欠陥そのもの。
+    P = "math.word_problem_proportion_frequency"
+    order_cases = [
+        ("満水を超えた時刻を訊く", (P, "meet_two_motions"),
+         {"rate0": "12", "minutes0": "12", "rate1": "8", "minutes1": "25"}, False),
+        ("満水までの時刻を訊く", (P, "meet_two_motions"),
+         {"rate0": "12", "minutes0": "12", "rate1": "8", "minutes1": "10"}, True),
+        ("歩きより自転車が遅い", (S, "distance_time"),
+         {"speed_walk": "6", "speed_bike": "4", "distance": "20", "total_time": "3"}, False),
+        ("混ぜた濃度が範囲の外", (S, "salt_mixture"),
+         {"percent_a": "5", "percent_b": "14", "percent_mix": "20", "weight": "900"}, False),
+    ]
+    for name, key, numbers, want_ok in order_cases:
+        got = order_violations(key, numbers, order)
+        ok = (not got) == want_ok
+        fails += 0 if ok else 1
+        print(f"{'OK  ' if ok else 'NG  '}合成「{name}」: "
+              f"期待={'合格' if want_ok else '違反'} / 実際={got or '合格'}")
     return fails
 
 
 def main(argv: list[str]) -> int:
     bootstrap()
     bounds = declared()
+    order = declared_order()
     if "--self-test" in argv:
-        return 1 if self_test(bounds) else 0
+        return 1 if self_test(bounds, order) else 0
     seeds = 20
     if "--seeds" in argv:
         seeds = int(argv[argv.index("--seeds") + 1])
@@ -144,7 +207,8 @@ def main(argv: list[str]) -> int:
                     )
                 except (TypeError, ValueError):
                     continue
-            for v in violations(key, numbers, bounds):
+            for v in (violations(key, numbers, bounds)
+                      + order_violations(key, numbers, order)):
                 bad.append(f"{unit}.{form}.Lv{level} seed{seed}: {v}")
     print(f"見た問題 {n_checked} 件 / 関係 {len(bounds)} 種 / seed 1..{seeds}")
     if not n_checked:

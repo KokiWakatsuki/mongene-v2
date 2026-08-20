@@ -544,6 +544,13 @@ RELATION_BOUNDS: dict[str, tuple[tuple[str, float, float], ...]] = {
 }
 
 
+# ---------------------------------------------------------------------------
+# G-SC5b（数と数の関係）— 書き方と理由は word_problem_linear.py の同じ節を見る。
+RELATION_ORDER: dict[str, tuple[tuple[str, str, str], ...]] = {
+    # 数が1つしか出ない場面ばかりなので、関係の条件は無い。
+}
+
+
 def draw_scene(
     kind: str, p: Mapping[str, Any], rng: Rng
 ) -> tuple[ExpressionRelation, ExpressionScene]:

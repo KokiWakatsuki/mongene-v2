@@ -863,6 +863,25 @@ RELATION_BOUNDS: dict[str, tuple[tuple[str, float, float], ...]] = {
 }
 
 
+# ---------------------------------------------------------------------------
+# G-SC5b（数と数の関係）— 書き方と理由は word_problem_linear.py の同じ節を見る。
+RELATION_ORDER: dict[str, tuple[tuple[str, str, str], ...]] = {
+    "price_count_diff": (("price_a", "!=", "price_b"),),
+    # 歩きより自転車が速い。
+    "distance_time": (("speed_walk", "<", "speed_bike"),),
+    # 歩きより走りが速い。
+    "time_split": (("speed_slow", "<", "speed_fast"),),
+    # 追いつくほうが出会うより遅い（差 < 和）。
+    "lap_meet_catch_up": (("meet_time", "<", "catch_up_time"),),
+    # 混ぜたあとの濃度は2つの濃度のあいだ（加重平均）。
+    "salt_mixture": (
+        ("percent_a", "<", "percent_mix"), ("percent_mix", "<", "percent_b"),
+    ),
+    # 重さが同じだと det が 0 になって解けない。
+    "two_containers": (("weight_a", "!=", "weight_b"),),
+}
+
+
 def draw_scene(kind: str, p: Mapping[str, Any], rng: Rng) -> tuple[SystemRelation, SystemScene]:
     """関係 → 語彙 → 場面文 の順に組む（`_VOCAB_FIRST` の場面だけ語彙が先）。"""
     steps = _SCENE_VOCAB.get(kind, ())

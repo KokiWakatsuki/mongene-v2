@@ -24,22 +24,22 @@ meta:
   seed: 1
   signature: word_problem_proportion_meet_two_motions
 problem_ref: 901e5d3d6cc4773e
-problem_text: '空の水そうに、毎分20Lの割合で水を入れると6分で満水になる。
+problem_text: '空の水そうに、毎分12Lの割合で水を入れると25分で満水になる。
 
-  毎分12Lの割合で入れると満水まで何分かかるか求めよ。また、毎分20Lの割合で入れ始めてから6分後の水の量は何Lか求めよ。'
+  毎分15Lの割合で入れると満水まで何分かかるか求めよ。また、毎分12Lの割合で入れ始めてから21分後の水の量は何Lか求めよ。'
 sub_questions:
 - answer:
-    display: 10分、120L
+    display: 20分、252L
     kind: symbolic
-    srepr: Tuple(Integer(10), Integer(120))
+    srepr: Tuple(Integer(20), Integer(252))
   cause_tags: []
   concept_tags:
   - proportion.word_problem_meet_two_motions
-  explanation: 'まず、はじめに与えられた割合と、満水までにかかる時間から、水そう全体の量を求める。（満水の量は 120L）
+  explanation: 'まず、はじめに与えられた割合と、満水までにかかる時間から、水そう全体の量を求める。（満水の量は 300L）
 
-    次に、全体の量が決まっているとき、毎分入れる量と満水までの時間は反比例する。その関係を使って、割合を変えたときの時間を求める。（10分）
+    次に、全体の量が決まっているとき、毎分入れる量と満水までの時間は反比例する。その関係を使って、割合を変えたときの時間を求める。（20分）
 
-    最後に、入れる割合が決まっているとき、たまった水の量は時間に比例する。その関係を使って、たずねられた時間後の量を求める。（120L）'
+    最後に、入れる割合が決まっているとき、たまった水の量は時間に比例する。その関係を使って、たずねられた時間後の量を求める。（252L）'
   hints:
   - 2人の時間と道のりの関係を式にし、グラフの交点から追いつく時間を求める
   label: (1)
@@ -49,18 +49,18 @@ sub_questions:
     detail: ''
     narration: はじめに与えられた割合と、満水までにかかる時間から、水そう全体の量を求める。
     op: find_capacity
-    result_display: 満水の量は 120L
-    result_srepr: Integer(120)
+    result_display: 満水の量は 300L
+    result_srepr: Integer(300)
   - args: []
     detail: ''
     narration: 全体の量が決まっているとき、毎分入れる量と満水までの時間は反比例する。その関係を使って、割合を変えたときの時間を求める。
     op: use_inverse_relation
-    result_display: 10分
-    result_srepr: Integer(10)
+    result_display: 20分
+    result_srepr: Integer(20)
   - args: []
     detail: ''
     narration: 入れる割合が決まっているとき、たまった水の量は時間に比例する。その関係を使って、たずねられた時間後の量を求める。
     op: use_direct_relation
-    result_display: 120L
-    result_srepr: Integer(120)
+    result_display: 252L
+    result_srepr: Integer(252)
 visual_svg: null

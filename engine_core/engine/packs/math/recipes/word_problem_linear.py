@@ -808,6 +808,33 @@ RELATION_BOUNDS: dict[str, tuple[tuple[str, float, float], ...]] = {
 }
 
 
+# ---------------------------------------------------------------------------
+# G-SC5b（数と数の関係）— 片方の数だけを見ても分からない条件
+#
+# ★**上下限だけでは足りない**。G-BT（逆翻訳）で読み手が見つけた欠陥は
+# 「毎分12Lで12分で満水（容量144L）の水そうに、25分後の水の量は？」だった。
+# どの数も上下限の中に収まっているのに、**数と数の関係**が場面を壊している。
+# 見つかった型は機械検査に1つ足す——以後は自動で捕まる（charter §1 段階4）。
+#
+# 書き方: (左の数, 演算, 右の数)。演算は "<" "<=" "!=" 。
+# 名前が無い枝では見ない（`rate1` は反比例の枝にだけある）。
+# 判定は records/work/check_scene_plausible.py が回す。
+RELATION_ORDER: dict[str, tuple[tuple[str, str, str], ...]] = {
+    # 単価が同じだと x が消える（1次方程式として成り立たない）。
+    "price_count": (("price_a", "!=", "price_b"),),
+    "price_count_diff": (("price_a", "!=", "price_b"),),
+    # 1人あたりが増えないと x が消える。
+    "surplus_shortage": (("per_a", "<", "per_b"),),
+    "seat_shortage": (("per_a", "<", "per_b"), ("last_seat", "<=", "per_a")),
+    # 行きより帰りが速い（同じ速さなら往復の意味が無い）。
+    "round_trip": (("speed_go", "<", "speed_back"),),
+    # 追いかける側が速くないと追いつけない。
+    "catch_up": (("speed_slow", "<", "speed_fast"),),
+    # 同じ個数を問うと退化する。
+    "proportion_pair": (("count_a", "!=", "count_b"),),
+}
+
+
 def draw_scene(kind: str, p: Mapping[str, Any], rng: Rng) -> tuple[LinearRelation, LinearScene]:
     """関係 → 語彙 → 場面文 の順に組む。**この順番が RNG の消費順を決める。**"""
     relation = RELATION_DRAWERS[kind](p, rng)

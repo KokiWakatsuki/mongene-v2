@@ -438,6 +438,15 @@ RELATION_BOUNDS: dict[str, tuple[tuple[str, float, float], ...]] = {
 }
 
 
+# ---------------------------------------------------------------------------
+# G-SC5b（数と数の関係）— 書き方と理由は word_problem_linear.py の同じ節を見る。
+RELATION_ORDER: dict[str, tuple[tuple[str, str, str], ...]] = {
+    # 倍率より解が大きい（m > 0 になる条件）。本文に出るのは multiplier と diff だけ
+    # なので、ここで見られるのは「差が正」のみ。
+    "square_relation": ((("multiplier"), "<", "diff"),),
+}
+
+
 def draw_scene(kind: str, p: Mapping[str, Any], rng: Rng) -> tuple[QuadRelation, QuadScene]:
     """関係 → 語彙 → 場面文 の順に組む。**この順番が RNG の消費順を決める。**"""
     relation = RELATION_DRAWERS[kind](p, rng)
