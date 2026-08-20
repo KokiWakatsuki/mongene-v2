@@ -39,6 +39,7 @@ from __future__ import annotations
 
 import math
 from collections.abc import Callable, Mapping, Sequence
+from types import MappingProxyType
 from dataclasses import dataclass
 from typing import Any, cast
 
@@ -59,6 +60,11 @@ from engine.packs.math.recipes.scene_vocab import (
     VocabStep,
     draw_vocab,
     split_pair,
+)
+from engine.packs.math.recipes.scenes import (
+    ROLES_DIFF,
+    ROLES_TOTAL,
+    draw_scene_spec,
 )
 
 RECIPE_NAME = "math.word_problem_linear_equation"
@@ -324,12 +330,21 @@ _SCENE_VOCAB: dict[str, tuple[VocabStep, ...]] = {
 # ---------------------------------------------------------------------------
 # Relation（数だけ。日本語を1文字も持たない）
 # ---------------------------------------------------------------------------
-def _relation_price_count(p: Mapping[str, Any], rng: Rng) -> LinearRelation:
-    """g1_l25 Lv2: 2種類を合わせて k 個。片方の個数を x とおく。"""
+def _relation_price_count(
+    p: Mapping[str, Any], rng: Rng, limits: Mapping[str, Any] = MappingProxyType({})
+) -> LinearRelation:
+    """g1_l25 Lv2: 2種類を合わせて k 個。片方の個数を x とおく。
+
+    `limits` は**場面が持っている相場**（入園料は数百円〜千円台、切手は実在する額面）。
+    渡されなければ YAML の既定を使う。数の引き方は関係の仕事だが、
+    **どの範囲がありえるかは場面が知っている**（`scenes.SceneSpec.limits`）。
+    """
     total = int(draw(p["total_domain"], rng))
     # x0 は 1..k-1（どちらの品も1個以上）。
     count_a = int(draw({"int_range": [2, total - 2]}, rng))
-    price_a, price_b = (int(v) for v in draw_many(p["price_domain"], rng, k=2))
+    price_a, price_b = (
+        int(v) for v in draw_many(limits.get("rate", p["price_domain"]), rng, k=2)
+    )
     cost = price_a * count_a + price_b * (total - count_a)
     return LinearRelation(
         numbers={"price_a": price_a, "price_b": price_b, "total": total, "cost": cost},
@@ -337,11 +352,15 @@ def _relation_price_count(p: Mapping[str, Any], rng: Rng) -> LinearRelation:
     )
 
 
-def _relation_price_count_diff(p: Mapping[str, Any], rng: Rng) -> LinearRelation:
+def _relation_price_count_diff(
+    p: Mapping[str, Any], rng: Rng, limits: Mapping[str, Any] = MappingProxyType({})
+) -> LinearRelation:
     """g1_l25 Lv3: B は A より d 個多い（合計個数が与えられない＝読替が要る）。"""
     count_a = int(draw(p["count_domain"], rng))
     diff = int(draw(p["diff_domain"], rng))
-    price_a, price_b = (int(v) for v in draw_many(p["price_domain"], rng, k=2))
+    price_a, price_b = (
+        int(v) for v in draw_many(limits.get("rate", p["price_domain"]), rng, k=2)
+    )
     cost = price_a * count_a + price_b * (count_a + diff)
     return LinearRelation(
         numbers={"price_a": price_a, "price_b": price_b, "diff": diff, "cost": cost},
@@ -773,14 +792,16 @@ RELATION_PHRASES: dict[str, tuple[tuple[tuple[str, ...], ...], tuple[str, ...]]]
 #
 # 判定は records/work/check_scene_plausible.py が全セル×seed で回す。
 RELATION_BOUNDS: dict[str, tuple[tuple[str, float, float], ...]] = {
-    # 教材の買い物: 単価は3桁まで、個数は2桁、代金は1万円未満。
+    # 1つあたり × 個数 = 合計。**場面が相場を持つので幅が要る**（買い物は数十円、
+    # 入園料は数百円〜千円台、会費は数千円）。上限は「場面としてありえる限界」で、
+    # 場面ごとの狭い相場は `scenes.SceneSpec.limits` が持つ（作業3）。
     "price_count": (
-        ("price_a", 10, 1000), ("price_b", 10, 1000),
-        ("total", 2, 40), ("cost", 20, 10000),
+        ("price_a", 10, 5000), ("price_b", 10, 5000),
+        ("total", 2, 40), ("cost", 20, 100000),
     ),
     "price_count_diff": (
-        ("price_a", 10, 1000), ("price_b", 10, 1000),
-        ("diff", 1, 20), ("cost", 20, 10000), ("total", 20, 10000),
+        ("price_a", 10, 5000), ("price_b", 10, 5000),
+        ("diff", 1, 20), ("cost", 20, 100000), ("total", 20, 100000),
     ),
     # 配る場面: 1人あたりは1桁、余り・不足は2桁まで（人数は答えなので入らない）。
     "surplus_shortage": (
@@ -835,11 +856,51 @@ RELATION_ORDER: dict[str, tuple[tuple[str, str, str], ...]] = {
 }
 
 
-def draw_scene(kind: str, p: Mapping[str, Any], rng: Rng) -> tuple[LinearRelation, LinearScene]:
-    """関係 → 語彙 → 場面文 の順に組む。**この順番が RNG の消費順を決める。**"""
-    relation = RELATION_DRAWERS[kind](p, rng)
-    vocab = draw_vocab(_SCENE_VOCAB.get(kind, ()), p, rng)
-    return relation, SCENE_RENDERERS[kind](relation.numbers, vocab)
+# ---------------------------------------------------------------------------
+# 場面の置き場につなぐ（作業3）
+#
+# `scenes.py` に置いた場面は**役割の型**で関係に乗る。ここではその対応だけを書く。
+# 場面を1つ足すときに触るのは `scenes.py` だけ——この表も式も checker も動かない。
+#
+#   ax + b(N − x) = T   合わせて N 個      ROLES_TOTAL
+#   ax + b(x + d) = T   B は A より d 多い  ROLES_DIFF
+#
+# 役割の型を持たない関係（配る・往復・追いつき・比例式・連比）は、これまでどおり
+# この module の `SCENE_RENDERERS` が書く（場面が1つしかない）。
+_RELATION_ROLES: dict[str, tuple[str, ...]] = {
+    "price_count": ROLES_TOTAL,
+    "price_count_diff": ROLES_DIFF,
+}
+
+
+def draw_scene(kind: str, p: Mapping[str, Any], rng: Rng) -> tuple[LinearRelation, LinearScene, str]:
+    """場面選び → 関係 → 語彙 → 場面文 の順に組む。
+
+    **この順番が RNG の消費順を決める。** 場面が数の相場を持っているので、
+    場面を先に引く。
+
+    3つめの戻り値は場面の名前（params に載る＝`dup_key` の軸になる）。
+    """
+    roles = _RELATION_ROLES.get(kind)
+    if roles is None:
+        relation = RELATION_DRAWERS[kind](p, rng)
+        vocab = draw_vocab(_SCENE_VOCAB.get(kind, ()), p, rng)
+        return relation, SCENE_RENDERERS[kind](relation.numbers, vocab), ""
+    # ★場面を**先に**引く。場面が数の相場を持っているため（入園料に買い物の
+    # 40〜160円を使うと「大人1人130円の入園料」になる）。
+    spec = draw_scene_spec(roles, rng)
+    relation = RELATION_DRAWERS[kind](p, rng, spec.limits)
+    vocab = draw_vocab(spec.vocab, p, rng)
+    text = spec.render[roles](relation.numbers, vocab)
+    return relation, LinearScene(
+        scenario=text.scenario,
+        quantities=text.quantities,
+        ask_formulation=text.ask_formulation,
+        ask_value=text.ask_value,
+        relation_label=text.relation_label,
+        answer_unit=text.answer_unit,
+        slots=dict(text.slots),
+    ), spec.id
 
 
 # ---------------------------------------------------------------------------
@@ -874,7 +935,7 @@ def word_problem_linear_equation(ctx: CellContext, rng: Rng) -> MR:
     p = ctx.spec_level.params
     kind = str(p["scenario_kind"])
     guided = bool(p["guided"])
-    relation, scene = draw_scene(kind, p, rng)
+    relation, scene, scene_id = draw_scene(kind, p, rng)
     formulation, sol, answer_value = solve_scene(kind, relation.numbers, relation.answer_coeff)
 
     concept_tags = list(ctx.spec_level.concept_tags or ctx.spec_family.concepts_default)
@@ -938,6 +999,9 @@ def word_problem_linear_equation(ctx: CellContext, rng: Rng) -> MR:
             "answer_unit": scene.answer_unit,
             # 題材（dup_key は params のみを見る＝context_slots は算入されない）。
             "slots": dict(scene.slots),
+            # ★場面の名前も params に載せる。**載せないと場面を5倍にしても
+            # dup は1ミリも下がらない**（dup_key は params だけを見る）。
+            **({"scene": scene_id} if scene_id else {}),
         },
         given=given,
         context_slots={

@@ -62,12 +62,34 @@ def _declared() -> dict[str, tuple[tuple[tuple[str, ...], ...], tuple[str, ...]]
     return out
 
 
-def violations(kind: str, text: str, phrases: _Phrases) -> list[str]:
-    """1つの場面文を見る。返すのは違反の並び（空なら合格）。"""
+def scene_phrases() -> dict[str, tuple[tuple[tuple[str, ...], ...], tuple[str, ...]]]:
+    """場面ごとの宣言（`scenes.SceneSpec` の requires / forbids）。
+
+    関係の不変（`RELATION_PHRASES`）とは別に、**場面の側の不変**もある
+    （入園料の場面なら「入園料」「大人」「子ども」が出ていること）。
+    場面を足したら `scenes.py` にこれも書く＝触るのは1 file のまま。
+    """
+    from engine.packs.math.recipes.scenes import SCENES  # noqa: PLC0415
+
+    return {s.id: (s.requires, s.forbids) for s in SCENES}
+
+
+def violations(kind: str, text: str, phrases: _Phrases,
+               scene: str = "", scenes: _Phrases | None = None) -> list[str]:
+    """1つの場面文を見る。返すのは違反の並び（空なら合格）。
+
+    `scene` があれば、その場面が宣言した言い方も合わせて見る。
+    """
     spec = phrases.get(kind)
     if spec is None:
         return [f"{kind}: 宣言が無い（場面を足したら RELATION_PHRASES にも足す）"]
     requires, forbids = spec
+    if scene and scenes is not None:
+        if scene not in scenes:
+            return [f"{scene}: 場面の宣言が無い（scenes.py に requires を書く）"]
+        s_req, s_forbid = scenes[scene]
+        requires = requires + s_req
+        forbids = forbids + s_forbid
     bad: list[str] = []
     for alternatives in requires:
         if not any(a in text for a in alternatives):
@@ -121,6 +143,7 @@ def self_test(phrases: _Phrases) -> int:
 def main(argv: Sequence[str]) -> int:
     bootstrap()
     phrases = _declared()
+    scenes = scene_phrases()
     if "--self-test" in argv:
         return 1 if self_test(phrases) else 0
     seeds = 5
@@ -149,8 +172,10 @@ def main(argv: Sequence[str]) -> int:
                 [*(str(v) for v in r.mr.given.values()),
                  *(str(v) for v in r.mr.context_slots.values())]
             )
-            for v in violations(kind, text, phrases):
-                bad.append(f"{unit}.{form}.Lv{level} seed{seed}: {v}")
+            scene = str(r.mr.params.get("scene", ""))
+            for v in violations(kind, text, phrases, scene, scenes):
+                bad.append(f"{unit}.{form}.Lv{level} seed{seed}"
+                           f"{'[' + scene + ']' if scene else ''}: {v}")
     print(f"見た問題 {n_checked} 件 / 関係 {len(kinds_seen)} 種"
           f"（宣言は {len(phrases)} 種）/ seed 1..{seeds}")
     if len(kinds_seen) < len(phrases):

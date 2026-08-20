@@ -24,24 +24,24 @@ meta:
   seed: 2
   signature: word_problem_price_count_one_unknown
 problem_ref: 33ef6ff5485e5ff3
-problem_text: '1個90円のおにぎりと1個160円のかきを合わせて8個買ったところ、代金の合計は930円だった。
+problem_text: '1個160円のかきと1個150円のオレンジを合わせて15個買ったところ、代金の合計は2320円だった。
 
-  おにぎりを買った個数を x 個とする。
+  かきを買った個数を x 個とする。
 
   (1) 代金の関係を、x を使った方程式で表せ。
 
-  (2) おにぎりを買った個数を求めよ。'
+  (2) かきを買った個数を求めよ。'
 sub_questions:
 - answer:
-    display: 90x + 160(8 - x) = 930
+    display: 160x + 150(15 - x) = 2320
     kind: symbolic
-    srepr: Equality(Add(Integer(1280), Mul(Integer(-1), Integer(70), Symbol('x'))), Integer(930))
+    srepr: Equality(Add(Mul(Integer(10), Symbol('x')), Integer(2250)), Integer(2320))
   cause_tags: []
   concept_tags:
   - equation.word_problem_price_count
   explanation: 'まず、場面の中で、どちらの見方でも同じになる（等しくなっている）量に着目する。（代金の合計）
 
-    次に、その量を x を使って両辺に表し、方程式をつくる。（90x + 160(8 - x) = 930）'
+    次に、その量を x を使って両辺に表し、方程式をつくる。（160x + 150(15 - x) = 2320）'
   hints:
   - 個数と代金の場面を1つの文字で立式して解く（文章題）
   label: (1)
@@ -57,22 +57,22 @@ sub_questions:
     detail: ''
     narration: その量を x を使って両辺に表し、方程式をつくる。
     op: formulate_equation
-    result_display: 90x + 160(8 - x) = 930
-    result_srepr: Equality(Add(Integer(1280), Mul(Integer(-1), Integer(70), Symbol('x'))), Integer(930))
+    result_display: 160x + 150(15 - x) = 2320
+    result_srepr: Equality(Add(Mul(Integer(10), Symbol('x')), Integer(2250)), Integer(2320))
 - answer:
-    display: 5個
+    display: 7個
     kind: symbolic
-    srepr: Integer(5)
+    srepr: Integer(7)
   cause_tags: []
   concept_tags:
   - equation.word_problem_price_count
-  explanation: 'まず、分配法則を使って、かっこを外す。（1280 - 70x = 930）
+  explanation: 'まず、分配法則を使って、かっこを外す。（10x + 2250 = 2320）
 
-    次に、左辺の +1280 を右辺に、符号を変えて移項する。（-70x = 930 - 1280）
+    次に、左辺の +2250 を右辺に、符号を変えて移項する。（10x = 2320 - 2250）
 
-    次に、両辺の同類項をそれぞれまとめて、ax = b の形にする。（-70x = -350）
+    次に、両辺の同類項をそれぞれまとめて、ax = b の形にする。（10x = 70）
 
-    最後に、等式の性質を使い、両辺を x の係数 -70 でわる。（x = 5）'
+    最後に、等式の性質を使い、両辺を x の係数 10 でわる。（x = 7）'
   hints:
   - 個数と代金の場面を1つの文字で立式して解く（文章題）
   label: (2)
@@ -82,24 +82,24 @@ sub_questions:
     detail: ''
     narration: 分配法則を使って、かっこを外す。
     op: expand_parentheses
-    result_display: 1280 - 70x = 930
-    result_srepr: Integer(5)
+    result_display: 10x + 2250 = 2320
+    result_srepr: Integer(7)
   - args: []
-    detail: 左辺の +1280 を右辺に、符号を変えて移項する。
+    detail: 左辺の +2250 を右辺に、符号を変えて移項する。
     narration: 文字の項を左辺に、数の項を右辺に、符号を変えて移項する。
     op: transpose_terms
-    result_display: -70x = 930 - 1280
-    result_srepr: Integer(5)
+    result_display: 10x = 2320 - 2250
+    result_srepr: Integer(7)
   - args: []
     detail: ''
     narration: 両辺の同類項をそれぞれまとめて、ax = b の形にする。
     op: combine_like_terms
-    result_display: -70x = -350
-    result_srepr: Integer(5)
+    result_display: 10x = 70
+    result_srepr: Integer(7)
   - args: []
-    detail: 等式の性質を使い、両辺を x の係数 -70 でわる。
+    detail: 等式の性質を使い、両辺を x の係数 10 でわる。
     narration: 等式の性質を使い、両辺を x の係数でわる。
     op: divide_both_sides
-    result_display: x = 5
-    result_srepr: Integer(5)
+    result_display: x = 7
+    result_srepr: Integer(7)
 visual_svg: null

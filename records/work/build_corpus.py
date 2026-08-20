@@ -332,6 +332,38 @@ def structural_paths(rows: Sequence[tuple], axes: Sequence[str],
     return out
 
 
+_FLAG_RE = re.compile(r"[a-z][a-z0-9_]*")
+
+
+def construction_flags(params: Mapping[str, Any], axes: Sequence[str]) -> str:
+    """構成フラグ（真偽値と ASCII の識別子）。語彙でも数でもない、作りを決める値。
+
+    型の軸として別に入るもの（`axes`）は重ねない。日本語の値は語彙として扱うので
+    ここには入らない（`vocab_of` が拾う）。
+    """
+    out: dict[str, object] = {}
+
+    def take(path: str, v: object) -> None:
+        if isinstance(v, bool):
+            out[path] = v
+        elif isinstance(v, str) and _FLAG_RE.fullmatch(v) and not _vocab_word(v):
+            # ★**語彙とフラグは排他にする。** `cm` は `[a-z]+` に当たるが語彙
+            # （`_vocab_word` が拾う）。両方に入れると、単位が漢字のセル（回・分）と
+            # ASCII のセル（cm）で扱いが変わって型が非対称に割れる。
+            out[path] = v
+
+    for k, v in params.items():
+        if k in axes:
+            continue
+        if isinstance(v, dict):
+            # `slots` の中にもフラグが入る（`phrasing=larger` は場面の言い方の選び）。
+            for k2, v2 in v.items():
+                take(f"{k}.{k2}", v2)
+        else:
+            take(k, v)
+    return json.dumps(out, ensure_ascii=False, sort_keys=True)
+
+
 def type_key(params: Mapping[str, Any], narration: Sequence[str],
              axes: Sequence[str], text: str | None = None,
              universe: Sequence[str] = ()) -> str:
@@ -354,6 +386,14 @@ def type_key(params: Mapping[str, Any], narration: Sequence[str],
     踏みやすい（`count_patterns_wp.py` はここを呼ぶ）。
     """
     parts: list[object] = [[a, _mask_names(params.get(a))] for a in axes]
+    # ★**構成フラグは文型である。** 真偽値と ASCII の識別子（`method=elimination`・
+    # `variant=inverse`・`phrasing=larger`・`scene=admission`・`concept=distributive`）は
+    # 語彙でも数でもなく、問題の作りを決めている。
+    #
+    # ここを入れていなかったので、**場面を5つ足しても文型が1のままだった**
+    # （作業3。`scene` は params に載っているのに鍵に入っていなかった）。
+    # 「場面を足したぶんだけ型が増える」は作業0 のゴールそのものなので、直す。
+    parts.append(construction_flags(params, axes))
     parts.append([_mask_surface(s, universe) for s in narration])
     if text is not None:
         parts.append(text_skeleton(text, universe))

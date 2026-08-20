@@ -24,28 +24,28 @@ meta:
   seed: 2
   signature: word_problem_price_count_diff
 problem_ref: df393f1d58c68005
-problem_text: 'ある店で、1個90円の消しゴムと1冊150円のノートを買った。ノートは消しゴムより3冊多く買い、代金の合計は930円だった。
+problem_text: 'ある店で、1個90円の消しゴムと1冊150円のノートを買った。ノートは消しゴムより6冊多く買い、代金の合計は2580円だった。
 
   消しゴムを買った個数を求めよ。'
 sub_questions:
 - answer:
-    display: 2個
+    display: 7個
     kind: symbolic
-    srepr: Integer(2)
+    srepr: Integer(7)
   cause_tags: []
   concept_tags:
   - equation.word_problem_price_count_diff
   explanation: 'まず、場面の中で、どちらの見方でも同じになる（等しくなっている）量に着目する。（代金の合計）
 
-    次に、その量を x を使って両辺に表し、方程式をつくる。（90x + 150(x + 3) = 930）
+    次に、その量を x を使って両辺に表し、方程式をつくる。（90x + 150(x + 6) = 2580）
 
-    次に、分配法則を使って、かっこを外す。（240x + 450 = 930）
+    次に、分配法則を使って、かっこを外す。（240x + 900 = 2580）
 
-    次に、左辺の +450 を右辺に、符号を変えて移項する。（240x = 930 - 450）
+    次に、左辺の +900 を右辺に、符号を変えて移項する。（240x = 2580 - 900）
 
-    次に、両辺の同類項をそれぞれまとめて、ax = b の形にする。（240x = 480）
+    次に、両辺の同類項をそれぞれまとめて、ax = b の形にする。（240x = 1680）
 
-    最後に、等式の性質を使い、両辺を x の係数 240 でわる。（x = 2）'
+    最後に、等式の性質を使い、両辺を x の係数 240 でわる。（x = 7）'
   hints:
   - 個数の差が与えられた代金の場面を自分で立式して解く（文章題）
   label: (1)
@@ -61,30 +61,30 @@ sub_questions:
     detail: ''
     narration: その量を x を使って両辺に表し、方程式をつくる。
     op: formulate_equation
-    result_display: 90x + 150(x + 3) = 930
-    result_srepr: Equality(Add(Mul(Integer(240), Symbol('x')), Integer(450)), Integer(930))
+    result_display: 90x + 150(x + 6) = 2580
+    result_srepr: Equality(Add(Mul(Integer(240), Symbol('x')), Integer(900)), Integer(2580))
   - args: []
     detail: ''
     narration: 分配法則を使って、かっこを外す。
     op: expand_parentheses
-    result_display: 240x + 450 = 930
-    result_srepr: Integer(2)
+    result_display: 240x + 900 = 2580
+    result_srepr: Integer(7)
   - args: []
-    detail: 左辺の +450 を右辺に、符号を変えて移項する。
+    detail: 左辺の +900 を右辺に、符号を変えて移項する。
     narration: 文字の項を左辺に、数の項を右辺に、符号を変えて移項する。
     op: transpose_terms
-    result_display: 240x = 930 - 450
-    result_srepr: Integer(2)
+    result_display: 240x = 2580 - 900
+    result_srepr: Integer(7)
   - args: []
     detail: ''
     narration: 両辺の同類項をそれぞれまとめて、ax = b の形にする。
     op: combine_like_terms
-    result_display: 240x = 480
-    result_srepr: Integer(2)
+    result_display: 240x = 1680
+    result_srepr: Integer(7)
   - args: []
     detail: 等式の性質を使い、両辺を x の係数 240 でわる。
     narration: 等式の性質を使い、両辺を x の係数でわる。
     op: divide_both_sides
-    result_display: x = 2
-    result_srepr: Integer(2)
+    result_display: x = 7
+    result_srepr: Integer(7)
 visual_svg: null
